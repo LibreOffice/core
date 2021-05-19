@@ -212,6 +212,7 @@ public:
     void testTdf128213ShapeRot();
     void testTdf125560_textDeflate();
     void testTdf125560_textInflateTop();
+    void testTdf96061_textHighlight();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -338,6 +339,7 @@ public:
     CPPUNIT_TEST(testTdf128213ShapeRot);
     CPPUNIT_TEST(testTdf125560_textDeflate);
     CPPUNIT_TEST(testTdf125560_textInflateTop);
+    CPPUNIT_TEST(testTdf96061_textHighlight);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3189,6 +3191,40 @@ void SdOOXMLExportTest2::testTdf125560_textInflateTop()
 
     xmlDocUniquePtr pXmlDocRels = parseExport(tempFile, "content.xml");
     assertXPath(pXmlDocRels, "/office:document-content/office:body/office:presentation/draw:page/draw:custom-shape/draw:enhanced-geometry", "type", "mso-spt164");
+}
+
+void SdOOXMLExportTest2::testTdf96061_textHighlight()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf96061.pptx"), PPTX);
+
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
+    uno::Reference<text::XTextRange> const xParagraph1(getParagraphFromShape(0, xShape));
+    uno::Reference<text::XTextRange> xRun1(getRunFromParagraph(0, xParagraph1));
+    uno::Reference< beans::XPropertySet> xPropSet1(xRun1, uno::UNO_QUERY_THROW);
+    sal_Int32 aColor;
+    xPropSet1->getPropertyValue("CharBackColor") >>= aColor;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(16776960), aColor);
+
+    uno::Reference<text::XTextRange> const xParagraph2(getParagraphFromShape(1, xShape));
+    uno::Reference<text::XTextRange> xRun2(getRunFromParagraph(0, xParagraph2));
+    uno::Reference< beans::XPropertySet> xPropSet2(xRun2, uno::UNO_QUERY_THROW);
+    xPropSet2->getPropertyValue("CharBackColor") >>= aColor;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aColor);
+
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
+
+    uno::Reference<beans::XPropertySet> xShape2(getShapeFromPage(0, 0, xDocShRef));
+    uno::Reference<text::XTextRange> const xParagraph3(getParagraphFromShape(0, xShape2));
+    uno::Reference<text::XTextRange> xRun3(getRunFromParagraph(0, xParagraph3));
+    uno::Reference< beans::XPropertySet> xPropSet3(xRun3, uno::UNO_QUERY_THROW);
+    xPropSet3->getPropertyValue("CharBackColor") >>= aColor;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(16776960), aColor);
+
+    uno::Reference<text::XTextRange> const xParagraph4(getParagraphFromShape(1, xShape2));
+    uno::Reference<text::XTextRange> xRun4(getRunFromParagraph(0, xParagraph4));
+    uno::Reference< beans::XPropertySet> xPropSet4(xRun4, uno::UNO_QUERY_THROW);
+    xPropSet4->getPropertyValue("CharBackColor") >>= aColor;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aColor);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
