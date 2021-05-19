@@ -222,12 +222,7 @@ ChartAxisPanel::ChartAxisPanel(
 
 ChartAxisPanel::~ChartAxisPanel()
 {
-    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
-    xBroadcaster->removeModifyListener(mxModifyListener);
-
-    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
-    if (xSelectionSupplier.is())
-        xSelectionSupplier->removeSelectionChangeListener(mxSelectionListener);
+    doUpdateModel(nullptr);
 
     mxCBShowLabel.reset();
     mxCBReverse.reset();
@@ -311,23 +306,25 @@ void ChartAxisPanel::modelInvalid()
     mbModelValid = false;
 }
 
-void ChartAxisPanel::updateModel(
-        css::uno::Reference<css::frame::XModel> xModel)
+void ChartAxisPanel::doUpdateModel(css::uno::Reference<css::frame::XModel> xModel)
 {
     if (mbModelValid)
     {
         css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
         xBroadcaster->removeModifyListener(mxModifyListener);
-    }
 
-    css::uno::Reference<css::view::XSelectionSupplier> oldSelectionSupplier(
-        mxModel->getCurrentController(), css::uno::UNO_QUERY);
-    if (oldSelectionSupplier.is()) {
-        oldSelectionSupplier->removeSelectionChangeListener(mxSelectionListener.get());
+        css::uno::Reference<css::view::XSelectionSupplier> oldSelectionSupplier(
+            mxModel->getCurrentController(), css::uno::UNO_QUERY);
+        if (oldSelectionSupplier.is()) {
+            oldSelectionSupplier->removeSelectionChangeListener(mxSelectionListener.get());
+        }
     }
 
     mxModel = xModel;
-    mbModelValid = true;
+    mbModelValid = mxModel.is();
+
+    if (!mbModelValid)
+        return;
 
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcasterNew(mxModel, css::uno::UNO_QUERY_THROW);
     xBroadcasterNew->addModifyListener(mxModifyListener);
@@ -335,6 +332,11 @@ void ChartAxisPanel::updateModel(
     css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
     if (xSelectionSupplier.is())
         xSelectionSupplier->addSelectionChangeListener(mxSelectionListener);
+}
+
+void ChartAxisPanel::updateModel(css::uno::Reference<css::frame::XModel> xModel)
+{
+    doUpdateModel(xModel);
 }
 
 void ChartAxisPanel::selectionChanged(bool bCorrectType)

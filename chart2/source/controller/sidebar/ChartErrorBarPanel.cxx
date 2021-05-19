@@ -251,8 +251,7 @@ ChartErrorBarPanel::ChartErrorBarPanel(weld::Widget* pParent, ChartController* p
 
 ChartErrorBarPanel::~ChartErrorBarPanel()
 {
-    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
-    xBroadcaster->removeModifyListener(mxListener);
+    doUpdateModel(nullptr);
 
     mxRBPosAndNeg.reset();
     mxRBPos.reset();
@@ -371,8 +370,7 @@ void ChartErrorBarPanel::modelInvalid()
     mbModelValid = false;
 }
 
-void ChartErrorBarPanel::updateModel(
-        css::uno::Reference<css::frame::XModel> xModel)
+void ChartErrorBarPanel::doUpdateModel(css::uno::Reference<css::frame::XModel> xModel)
 {
     if (mbModelValid)
     {
@@ -381,10 +379,18 @@ void ChartErrorBarPanel::updateModel(
     }
 
     mxModel = xModel;
-    mbModelValid = true;
+    mbModelValid = mxModel.is();
+
+    if (!mbModelValid)
+        return;
 
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcasterNew(mxModel, css::uno::UNO_QUERY_THROW);
     xBroadcasterNew->addModifyListener(mxListener);
+}
+
+void ChartErrorBarPanel::updateModel(css::uno::Reference<css::frame::XModel> xModel)
+{
+    doUpdateModel(xModel);
 }
 
 IMPL_LINK_NOARG(ChartErrorBarPanel, RadioBtnHdl, weld::ToggleButton&, void)

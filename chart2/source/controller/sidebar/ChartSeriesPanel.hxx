@@ -98,6 +98,7 @@ private:
     bool mbModelValid;
 
     void Initialize();
+    void doUpdateModel(css::uno::Reference<css::frame::XModel> xModel);
 
     DECL_LINK(CheckBoxHdl, weld::ToggleButton&, void);
     DECL_LINK(RadioBtnHdl, weld::ToggleButton&, void);

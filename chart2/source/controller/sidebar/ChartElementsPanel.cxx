@@ -339,8 +339,8 @@ ChartElementsPanel::ChartElementsPanel(
 
 ChartElementsPanel::~ChartElementsPanel()
 {
-    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
-    xBroadcaster->removeModifyListener(mxListener);
+    doUpdateModel(nullptr);
+
     mxCBTitle.reset();
     mxEditTitle.reset();
     mxCBSubtitle.reset();
@@ -563,8 +563,7 @@ void ChartElementsPanel::modelInvalid()
     mbModelValid = false;
 }
 
-void ChartElementsPanel::updateModel(
-        css::uno::Reference<css::frame::XModel> xModel)
+void ChartElementsPanel::doUpdateModel(css::uno::Reference<css::frame::XModel> xModel)
 {
     if (mbModelValid)
     {
@@ -573,10 +572,18 @@ void ChartElementsPanel::updateModel(
     }
 
     mxModel = xModel;
-    mbModelValid = true;
+    mbModelValid = mxModel.is();
+
+    if (!mbModelValid)
+        return;
 
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcasterNew(mxModel, css::uno::UNO_QUERY_THROW);
     xBroadcasterNew->addModifyListener(mxListener);
+}
+
+void ChartElementsPanel::updateModel(css::uno::Reference<css::frame::XModel> xModel)
+{
+    doUpdateModel(xModel);
 }
 
 IMPL_LINK(ChartElementsPanel, CheckBoxHdl, weld::ToggleButton&, rCheckBox, void)

@@ -300,11 +300,7 @@ ChartSeriesPanel::ChartSeriesPanel(
 
 ChartSeriesPanel::~ChartSeriesPanel()
 {
-    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
-    xBroadcaster->removeModifyListener(mxListener);
-    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
-    if (xSelectionSupplier.is())
-        xSelectionSupplier->removeSelectionChangeListener(mxSelectionListener);
+    doUpdateModel(nullptr);
 
     mxCBLabel.reset();
     mxCBTrendline.reset();
@@ -409,8 +405,7 @@ void ChartSeriesPanel::modelInvalid()
     mbModelValid = false;
 }
 
-void ChartSeriesPanel::updateModel(
-        css::uno::Reference<css::frame::XModel> xModel)
+void ChartSeriesPanel::doUpdateModel(css::uno::Reference<css::frame::XModel> xModel)
 {
     if (mbModelValid)
     {
@@ -425,7 +420,10 @@ void ChartSeriesPanel::updateModel(
     }
 
     mxModel = xModel;
-    mbModelValid = true;
+    mbModelValid = mxModel.is();
+
+    if (!mbModelValid)
+        return;
 
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcasterNew(mxModel, css::uno::UNO_QUERY_THROW);
     xBroadcasterNew->addModifyListener(mxListener);
@@ -433,6 +431,11 @@ void ChartSeriesPanel::updateModel(
     css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
     if (xSelectionSupplier.is())
         xSelectionSupplier->addSelectionChangeListener(mxSelectionListener);
+}
+
+void ChartSeriesPanel::updateModel(css::uno::Reference<css::frame::XModel> xModel)
+{
+    doUpdateModel(xModel);
 }
 
 void ChartSeriesPanel::selectionChanged(bool bCorrectType)
