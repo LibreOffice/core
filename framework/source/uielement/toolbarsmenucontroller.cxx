@@ -69,6 +69,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::ui;
 
 constexpr OUStringLiteral CMD_RESTOREVISIBILITY = u".cmd:RestoreVisibility";
+constexpr OUStringLiteral CMD_LOCKTOOLBARS = u".uno:ToolbarLock";
 
 constexpr OUStringLiteral STATIC_CMD_PART    = u".uno:AvailableToolbars?Toolbar:string=";
 const char STATIC_INTERNAL_CMD_PART[]    = ".cmd:";
@@ -461,6 +462,8 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
 
     OUString aLabelStr(FwkResId(STR_RESTORE_TOOLBARS));
     addCommand( m_xPopupMenu, CMD_RESTOREVISIBILITY, aLabelStr );
+    aLabelStr = FwkResId(STR_LOCK_TOOLBARS);
+    addCommand( m_xPopupMenu, CMD_LOCKTOOLBARS, aLabelStr );
 }
 
 // XEventListener

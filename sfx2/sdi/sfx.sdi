@@ -5754,3 +5754,19 @@ SfxVoidItem AdditionsDialog SID_ADDITIONS_DIALOG
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Application;
 ]
+
+SfxBoolItem ToolbarLock SID_TOOLBAR_LOCK
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Application;
+]

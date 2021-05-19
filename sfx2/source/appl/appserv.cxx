@@ -1026,7 +1026,10 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             aDialog.run();
             break;
         }
-
+        case SID_TOOLBAR_LOCK:
+        {
+            break;
+        }
         default:
             break;
     }
