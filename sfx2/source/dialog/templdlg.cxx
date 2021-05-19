@@ -745,7 +745,7 @@ void SfxCommonTemplateDialog_Impl::Initialize()
     mxTreeBox->connect_popup_menu(LINK(this, SfxCommonTemplateDialog_Impl, PopupTreeMenuHdl));
     mxTreeBox->connect_key_press(LINK(this, SfxCommonTemplateDialog_Impl, KeyInputHdl));
     mxTreeBox->connect_drag_begin(LINK(this, SfxCommonTemplateDialog_Impl, DragBeginHdl));
-    mxPreviewCheckbox->connect_clicked(LINK(this, SfxCommonTemplateDialog_Impl, PreviewHdl));
+    mxPreviewCheckbox->connect_toggled(LINK(this, SfxCommonTemplateDialog_Impl, PreviewHdl));
     m_xTreeView1DropTargetHelper.reset(new TreeViewDropTarget(*this, *mxFmtLb));
     m_xTreeView2DropTargetHelper.reset(new TreeViewDropTarget(*this, *mxTreeBox));
 
@@ -1935,7 +1935,7 @@ IMPL_LINK_NOARG(SfxCommonTemplateDialog_Impl, TreeListApplyHdl, weld::TreeView&,
     return true;
 }
 
-IMPL_LINK_NOARG(SfxCommonTemplateDialog_Impl, PreviewHdl, weld::Button&, void)
+IMPL_LINK_NOARG(SfxCommonTemplateDialog_Impl, PreviewHdl, weld::ToggleButton&, void)
 {
     std::shared_ptr<comphelper::ConfigurationChanges> batch( comphelper::ConfigurationChanges::create() );
     bool bCustomPreview = mxPreviewCheckbox->get_active();

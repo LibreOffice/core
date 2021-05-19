@@ -60,9 +60,9 @@ private:
                         DECL_DLLPRIVATE_LINK( ToggleOutputPrinterRBHdl, weld::ToggleButton&, void );
                         DECL_DLLPRIVATE_LINK( ToggleOutputPrintFileRBHdl, weld::ToggleButton&, void);
 
-                        DECL_DLLPRIVATE_LINK( ClickReduceTransparencyCBHdl, weld::Button&, void );
-                        DECL_DLLPRIVATE_LINK( ClickReduceGradientsCBHdl, weld::Button&, void );
-                        DECL_DLLPRIVATE_LINK( ClickReduceBitmapsCBHdl, weld::Button&, void );
+                        DECL_DLLPRIVATE_LINK( ClickReduceTransparencyCBHdl, weld::ToggleButton&, void );
+                        DECL_DLLPRIVATE_LINK( ClickReduceGradientsCBHdl, weld::ToggleButton&, void );
+                        DECL_DLLPRIVATE_LINK( ClickReduceBitmapsCBHdl, weld::ToggleButton&, void );
 
                         DECL_DLLPRIVATE_LINK( ToggleReduceGradientsStripesRBHdl, weld::ToggleButton&, void );
                         DECL_DLLPRIVATE_LINK( ToggleReduceBitmapsResolutionRBHdl, weld::ToggleButton&, void );

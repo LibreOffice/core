@@ -170,7 +170,7 @@ SfxVersionDialog::SfxVersionDialog(weld::Window* pParent, SfxViewFrame* pVwFrame
     m_xDeleteButton->connect_clicked( aClickLink );
     m_xCompareButton->connect_clicked( aClickLink );
     m_xOpenButton->connect_clicked( aClickLink );
-    m_xSaveCheckBox->connect_clicked( aClickLink );
+    m_xSaveCheckBox->connect_toggled(LINK(this, SfxVersionDialog, ToggleHdl_Impl));
     m_xCmisButton->connect_clicked( aClickLink );
 
     m_xVersionBox->connect_changed( LINK( this, SfxVersionDialog, SelectHdl_Impl ) );
@@ -312,11 +312,7 @@ IMPL_LINK(SfxVersionDialog, ButtonHdl_Impl, weld::Button&, rButton, void)
 
     int nEntry = m_xVersionBox->get_selected_index();
 
-    if (&rButton == m_xSaveCheckBox.get())
-    {
-        m_bIsSaveVersionOnClose = m_xSaveCheckBox->get_active();
-    }
-    else if (&rButton == m_xSaveButton.get())
+    if (&rButton == m_xSaveButton.get())
     {
         SfxVersionInfo aInfo;
         aInfo.aAuthor = SvtUserOptions().GetFullName();
@@ -377,6 +373,14 @@ IMPL_LINK(SfxVersionDialog, ButtonHdl_Impl, weld::Button&, rButton, void)
     {
         SfxCmisVersionsDialog aDlg(m_xDialog.get(), m_pViewFrame);
         aDlg.run();
+    }
+}
+
+IMPL_LINK(SfxVersionDialog, ToggleHdl_Impl, weld::ToggleButton&, rButton, void)
+{
+    if (&rButton == m_xSaveCheckBox.get())
+    {
+        m_bIsSaveVersionOnClose = m_xSaveCheckBox->get_active();
     }
 }
 

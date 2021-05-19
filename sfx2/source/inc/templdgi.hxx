@@ -132,7 +132,7 @@ protected:
     DECL_LINK(TreeListApplyHdl, weld::TreeView&, bool);
     DECL_LINK(MousePressHdl, const MouseEvent&, bool);
     DECL_LINK(TimeOut, Timer*, void );
-    DECL_LINK(PreviewHdl, weld::Button&, void);
+    DECL_LINK(PreviewHdl, weld::ToggleButton&, void);
     DECL_LINK(PopupFlatMenuHdl, const CommandEvent&, bool);
     DECL_LINK(PopupTreeMenuHdl, const CommandEvent&, bool);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
