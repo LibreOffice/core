@@ -255,10 +255,10 @@
                     "dest-filename": "external/tarballs/libfreehand-0.1.2.tar.xz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/language-subtag-registry-2020-12-18.tar.bz2",
-                    "sha256": "62ce680d5db0f28001b64bd57db47f388c13629cdefc9af8e8af0fbe93689ba1",
+                    "url": "https://dev-www.libreoffice.org/src/language-subtag-registry-2021-03-05.tar.bz2",
+                    "sha256": "ce80e8face06bf2ada363e0c159e3f990c4116fdae9232ca43e6369aa82bf16a",
                     "type": "file",
-                    "dest-filename": "external/tarballs/language-subtag-registry-2020-12-18.tar.bz2"
+                    "dest-filename": "external/tarballs/language-subtag-registry-2021-03-05.tar.bz2"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/liblangtag-0.6.2.tar.bz2",
@@ -573,10 +573,10 @@
                     "dest-filename": "external/tarballs/libatomic_ops-7.6.8.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/skia-m88-59bafeeaa7de9eb753e3778c414e01dcf013dcd8.tar.xz",
-                    "sha256": "f293656a15342a53bb407b932fc907c6894178a162f09728bd383e24d84b1301",
+                    "url": "https://dev-www.libreoffice.org/src/skia-m90-45c57e116ee0ce214bdf78405a4762722e4507d9.tar.xz",
+                    "sha256": "abe0b94d54edb717c58d74263f4ed3d27824d2ce9e9f2ce85a21ab38d993f94d",
                     "type": "file",
-                    "dest-filename": "external/tarballs/skia-m88-59bafeeaa7de9eb753e3778c414e01dcf013dcd8.tar.xz"
+                    "dest-filename": "external/tarballs/skia-m90-45c57e116ee0ce214bdf78405a4762722e4507d9.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/dtoa-20180411.tgz",
