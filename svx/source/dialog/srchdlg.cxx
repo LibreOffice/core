@@ -646,20 +646,20 @@ void SvxSearchDialog::InitControls_Impl()
     m_xSearchComponent1PB->connect_clicked( aLink2 );
     m_xSearchComponent2PB->connect_clicked( aLink2 );
 
-    aLink2 = LINK( this, SvxSearchDialog, FlagHdl_Impl );
-    m_xReplaceBackwardsCB->connect_clicked( aLink2 );
-    m_xWordBtn->connect_clicked( aLink2 );
-    m_xSelectionBtn->connect_clicked( aLink2 );
-    m_xMatchCaseCB->connect_clicked( aLink2 );
-    m_xRegExpBtn->connect_clicked( aLink2 );
-    m_xWildcardBtn->connect_clicked( aLink2 );
-    m_xNotesBtn->connect_clicked( aLink2 );
-    m_xSimilarityBox->connect_clicked( aLink2 );
-    m_xJapOptionsCB->connect_clicked( aLink2 );
-    m_xJapMatchFullHalfWidthCB->connect_clicked( aLink2 );
-    m_xIncludeDiacritics->connect_clicked( aLink2 );
-    m_xIncludeKashida->connect_clicked( aLink2 );
-    m_xLayoutBtn->connect_clicked( LINK( this, SvxSearchDialog, TemplateHdl_Impl ) );
+    Link<weld::ToggleButton&,void> aLink3 = LINK( this, SvxSearchDialog, FlagHdl_Impl );
+    m_xReplaceBackwardsCB->connect_toggled( aLink3 );
+    m_xWordBtn->connect_toggled( aLink3 );
+    m_xSelectionBtn->connect_toggled( aLink3 );
+    m_xMatchCaseCB->connect_toggled( aLink3 );
+    m_xRegExpBtn->connect_toggled( aLink3 );
+    m_xWildcardBtn->connect_toggled( aLink3 );
+    m_xNotesBtn->connect_toggled( aLink3 );
+    m_xSimilarityBox->connect_toggled( aLink3 );
+    m_xJapOptionsCB->connect_toggled( aLink3 );
+    m_xJapMatchFullHalfWidthCB->connect_toggled( aLink3 );
+    m_xIncludeDiacritics->connect_toggled( aLink3 );
+    m_xIncludeKashida->connect_toggled( aLink3 );
+    m_xLayoutBtn->connect_toggled( LINK( this, SvxSearchDialog, TemplateHdl_Impl ) );
     m_xFormatBtn->connect_clicked( LINK( this, SvxSearchDialog, FormatHdl_Impl ) );
     m_xNoFormatBtn->connect_clicked(
         LINK( this, SvxSearchDialog, NoFormatHdl_Impl ) );
@@ -804,12 +804,12 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
     {
         m_xCalcGrid->show();
         m_xSearchFormattedCB->set_active( aOpt.IsSearchFormatted() );
-        Link<weld::Button&,void> aLink = LINK( this, SvxSearchDialog, FlagHdl_Impl );
+        Link<weld::ToggleButton&,void> aLink = LINK( this, SvxSearchDialog, FlagHdl_Impl );
         m_xCalcSearchInLB->connect_changed( LINK( this, SvxSearchDialog, LBSelectHdl_Impl ) );
-        m_xRowsBtn->connect_clicked( aLink );
-        m_xColumnsBtn->connect_clicked( aLink );
-        m_xAllSheetsCB->connect_clicked( aLink );
-        m_xSearchFormattedCB->connect_clicked( aLink );
+        m_xRowsBtn->connect_toggled( aLink );
+        m_xColumnsBtn->connect_toggled( aLink );
+        m_xAllSheetsCB->connect_toggled( aLink );
+        m_xSearchFormattedCB->connect_toggled( aLink );
 
         ModifyFlags nModifyFlagCheck;
         switch ( pSearchItem->GetCellType() )
@@ -1125,7 +1125,7 @@ IMPL_LINK( SvxSearchDialog, LBSelectHdl_Impl, weld::ComboBox&, rCtrl, void )
     ClickHdl_Impl(&rCtrl);
 }
 
-IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, weld::Button&, rCtrl, void )
+IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, weld::ToggleButton&, rCtrl, void )
 {
     ClickHdl_Impl(&rCtrl);
 }
@@ -1479,7 +1479,7 @@ IMPL_LINK( SvxSearchDialog, ModifyHdl_Impl, weld::ComboBox&, rEd, void )
     }
 }
 
-IMPL_LINK_NOARG(SvxSearchDialog, TemplateHdl_Impl, weld::Button&, void)
+IMPL_LINK_NOARG(SvxSearchDialog, TemplateHdl_Impl, weld::ToggleButton&, void)
 {
     if ( pImpl->bSaveToModule )
         SaveToModule_Impl();

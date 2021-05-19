@@ -479,6 +479,7 @@ private:
     std::unique_ptr<weld::CheckButton> mxKernPairs;
     bool mbSettingValue;
 
+    DECL_LINK( KernSelectHdl, weld::ToggleButton&, void );
     DECL_LINK( SelectHdl, weld::ToggleButton&, void );
 
     void    implSetCharacterSpacing( sal_Int32 nCharacterSpacing, bool bEnabled );
@@ -502,9 +503,14 @@ FontworkCharacterSpacingWindow::FontworkCharacterSpacingWindow(svt::PopupWindowC
     , mxKernPairs(m_xBuilder->weld_check_button("kernpairs"))
     , mbSettingValue(false)
 {
+    mxVeryTight->connect_toggled(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
+    mxTight->connect_toggled(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
     mxNormal->connect_toggled(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
+    mxLoose->connect_toggled(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
+    mxVeryLoose->connect_toggled(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
+    mxCustom->connect_toggled(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
 
-    mxKernPairs->connect_toggled(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
+    mxKernPairs->connect_toggled(LINK(this, FontworkCharacterSpacingWindow, KernSelectHdl));
 
     AddStatusListener( gsFontworkCharacterSpacing );
     AddStatusListener( gsFontworkKernCharacterPairs );
@@ -596,8 +602,28 @@ void FontworkCharacterSpacingWindow::statusChanged( const css::frame::FeatureSta
     }
 }
 
-IMPL_LINK_NOARG(FontworkCharacterSpacingWindow, SelectHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(FontworkCharacterSpacingWindow, KernSelectHdl, weld::ToggleButton&, void)
 {
+    if (mbSettingValue)
+        return;
+
+    Sequence< PropertyValue > aArgs( 1 );
+    aArgs[0].Name = OUString(gsFontworkKernCharacterPairs).copy(5);
+    bool bKernOnOff = mxKernPairs->get_active();
+    aArgs[0].Value <<= bKernOnOff;
+
+    mxControl->dispatchCommand( gsFontworkKernCharacterPairs, aArgs );
+
+    implSetKernCharacterPairs(bKernOnOff, true);
+
+    mxControl->EndPopupMode();
+}
+
+IMPL_LINK(FontworkCharacterSpacingWindow, SelectHdl, weld::ToggleButton&, rButton, void)
+{
+    if (!rButton.get_active())
+        return;
+
     if (mbSettingValue)
         return;
 
@@ -610,17 +636,6 @@ IMPL_LINK_NOARG(FontworkCharacterSpacingWindow, SelectHdl, weld::ToggleButton&, 
         rtl::Reference<svt::PopupWindowController> xControl(mxControl);
         xControl->EndPopupMode();
         xControl->dispatchCommand(".uno:FontworkCharacterSpacingDialog", aArgs);
-    }
-    else if (mxKernPairs->get_active())
-    {
-        Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = OUString(gsFontworkKernCharacterPairs).copy(5);
-        bool bKernOnOff = mxKernPairs->get_active();
-        aArgs[0].Value <<= bKernOnOff;
-
-        mxControl->dispatchCommand( gsFontworkKernCharacterPairs, aArgs );
-
-        implSetKernCharacterPairs(bKernOnOff, true);
     }
     else
     {

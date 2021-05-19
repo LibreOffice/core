@@ -148,7 +148,8 @@ private:
     void SaveParams() const;
 
     // Handler for the Controls
-    DECL_LINK(OnClickedFieldRadios, weld::Button&, void);
+    DECL_LINK(OnToggledSearchRadio, weld::ToggleButton&, void);
+    DECL_LINK(OnToggledFieldRadios, weld::ToggleButton&, void);
     DECL_LINK(OnClickedSearchAgain, weld::Button&, void);
     DECL_LINK(OnClickedSpecialSettings, weld::Button&, void);
 

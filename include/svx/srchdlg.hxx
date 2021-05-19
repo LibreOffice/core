@@ -226,9 +226,9 @@ private:
     std::unique_ptr<weld::Label> m_xCalcStrFT;
 
     DECL_DLLPRIVATE_LINK( ModifyHdl_Impl, weld::ComboBox&, void );
-    DECL_DLLPRIVATE_LINK( FlagHdl_Impl, weld::Button&, void );
+    DECL_DLLPRIVATE_LINK( FlagHdl_Impl, weld::ToggleButton&, void );
     DECL_DLLPRIVATE_LINK( CommandHdl_Impl, weld::Button&, void );
-    DECL_DLLPRIVATE_LINK(TemplateHdl_Impl, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(TemplateHdl_Impl, weld::ToggleButton&, void);
     DECL_DLLPRIVATE_LINK( FocusHdl_Impl, weld::Widget&, void );
     DECL_DLLPRIVATE_LINK( LBSelectHdl_Impl, weld::ComboBox&, void );
     DECL_DLLPRIVATE_LINK(LoseFocusHdl_Impl, weld::Widget&, void);
