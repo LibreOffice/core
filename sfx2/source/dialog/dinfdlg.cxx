@@ -1973,6 +1973,15 @@ void SfxCustomPropertiesPage::Reset( const SfxItemSet* rItemSet )
     m_xPropertiesCtrl->ClearAllLines();
     const SfxDocumentInfoItem& rInfoItem = rItemSet->Get(SID_DOCINFO);
     std::vector< std::unique_ptr<CustomProperty> > aCustomProps = rInfoItem.GetCustomProperties();
+    // tdf#123919 - sort custom document properties
+    auto const sort = comphelper::string::NaturalStringSorter(
+        comphelper::getProcessComponentContext(),
+        Application::GetSettings().GetLanguageTag().getLocale());
+    std::sort(aCustomProps.begin(), aCustomProps.end(),
+              [&sort](const std::unique_ptr<CustomProperty>& rLHS,
+                      const std::unique_ptr<CustomProperty>& rRHS) {
+                  return sort.compare(rLHS->m_sName, rRHS->m_sName) < 0;
+              });
     m_xPropertiesCtrl->SetCustomProperties(std::move(aCustomProps));
 }
 
