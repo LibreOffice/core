@@ -931,7 +931,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 		$(if $(ENABLE_SCRIPTING_BEANSHELL),scripting_ScriptsBeanShell) \
 		$(if $(ENABLE_SCRIPTING_JAVASCRIPT),scripting_ScriptsJavaScript) \
 	) \
-	$(if $(DISABLE_SCRIPTING),,scripting_scriptbindinglib) \
+	$(if $(filter SCRIPTING,$(BUILD_TYPE)),scripting_scriptbindinglib) \
 	$(if $(filter $(OS),MACOSX),sysui_osxicons) \
 	wizards_basicshare \
 	wizards_basicsrvaccess2base \

@@ -5522,6 +5522,7 @@ if test "$cross_compiling" = "yes"; then
         --disable-opencl \
         --disable-pdfimport \
         --disable-postgresql-sdbc \
+        --disable-scripting \
         --disable-skia \
         --enable-icecream="$enable_icecream" \
         --without-doxygen \
@@ -5573,7 +5574,6 @@ if test "$cross_compiling" = "yes"; then
         OPENSSL
         ORCUS
         PYTHON
-        SCRIPTING
         ZLIB
 "
     # converts BUILD_TYPE and PERMITTED_BUILD_TARGETS into non-whitespace,
