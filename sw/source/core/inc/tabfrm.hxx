@@ -26,6 +26,22 @@ class SwTable;
 class SwBorderAttrs;
 class SwAttrSetChg;
 
+enum class SwTabFrameInvFlags : sal_uInt8
+{
+    NONE = 0x00,
+    InvalidatePrt = 0x02,
+    InvalidateIndNextPrt = 0x04,
+    InvalidatePrevPrt = 0x08,
+    SetIndNextCompletePaint = 0x10,
+    InvalidateBrowseWidth = 0x20,
+    InvalidatePos = 0x40,
+    InvalidateNextPos = 0x80,
+};
+
+namespace o3tl {
+    template<> struct typed_flags<SwTabFrameInvFlags> : is_typed_flags<SwTabFrameInvFlags, 0xfe> {};
+}
+
 /// SwTabFrame is one table in the document layout, containing rows (which contain cells).
 class SwTabFrame final: public SwLayoutFrame, public SwFlowFrame
 {
@@ -96,7 +112,7 @@ class SwTabFrame final: public SwLayoutFrame, public SwFlowFrame
 
     void UpdateAttr_(
         const SfxPoolItem*,
-        const SfxPoolItem*, sal_uInt8 &,
+        const SfxPoolItem*, SwTabFrameInvFlags &,
         SwAttrSetChg *pa = nullptr,
         SwAttrSetChg *pb = nullptr );
 
