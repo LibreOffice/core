@@ -3129,6 +3129,11 @@ void Window::SetWindowPeer( Reference< css::awt::XWindowPeer > const & xPeer, VC
     // be safe against re-entrance: first clear the old ref, then assign the new one
     if (mpWindowImpl->mxWindowPeer)
     {
+        // first, disconnect the peer from ourself, otherwise disposing it, will dispose us
+        UnoWrapperBase* pWrapper = UnoWrapperBase::GetUnoWrapper();
+        SAL_WARN_IF( !pWrapper, "vcl.window", "SetComponentInterface: No Wrapper!" );
+        if ( pWrapper )
+            pWrapper->SetWindowInterface( nullptr, mpWindowImpl->mxWindowPeer );
         mpWindowImpl->mxWindowPeer->dispose();
         mpWindowImpl->mxWindowPeer.clear();
     }
