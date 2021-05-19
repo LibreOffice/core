@@ -4,7 +4,7 @@ excludelist:
     xmlsecurity/qa/unit/pdfsigning/pdfsigning.cxx:
     # complete type is needed
     - com/sun/star/security/DocumentSignatureInformation.hpp
-    xmlsecurity/inc/xmlsignaturehelper2.hxx:
+    xmlsecurity/inc/UriBindingHelper.hxx:
     # Base class needs complete type
     - com/sun/star/xml/crypto/XUriBinding.hpp
     xmlsecurity/inc/xsecctl.hxx:
@@ -13,7 +13,7 @@ excludelist:
     - com/sun/star/xml/crypto/sax/XSignatureCreationResultListener.hpp
     - com/sun/star/xml/crypto/sax/XSignatureVerifyResultListener.hpp
     # Needed on WIN32 for rtl::Reference<UriBindingHelper> to compile
-    - xmlsignaturehelper2.hxx
+    - UriBindingHelper.hxx
     xmlsecurity/inc/framework/securityengine.hxx:
     # Base class needs complete type
     - com/sun/star/xml/crypto/XXMLSignature.hpp

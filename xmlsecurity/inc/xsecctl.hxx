@@ -30,7 +30,7 @@
 
 #include <vector>
 
-#include "xmlsignaturehelper2.hxx"
+#include "UriBindingHelper.hxx"
 
 namespace com::sun::star::embed { class XStorage; }
 namespace com::sun::star::graphic { class XGraphic; }
