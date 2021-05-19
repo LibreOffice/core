@@ -73,9 +73,9 @@ class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE WeakImplHelper##N \
 public: \
     virtual css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE \
         { return WeakImplHelper_query( rType, (class_data *)&s_cd, this, static_cast<OWeakObject *>(this) ); } \
-    virtual void SAL_CALL acquire() throw () SAL_OVERRIDE \
+    virtual void SAL_CALL acquire() SAL_NOEXCEPT SAL_OVERRIDE \
         { OWeakObject::acquire(); } \
-    virtual void SAL_CALL release() throw () SAL_OVERRIDE \
+    virtual void SAL_CALL release() SAL_NOEXCEPT SAL_OVERRIDE \
         { OWeakObject::release(); } \
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE \
         { return WeakImplHelper_getTypes( (class_data *)&s_cd ); } \
@@ -97,9 +97,9 @@ public: \
         { return OWeakAggObject::queryInterface( rType ); } \
     virtual css::uno::Any SAL_CALL queryAggregation( css::uno::Type const & rType ) SAL_OVERRIDE \
         { return WeakAggImplHelper_queryAgg( rType, (class_data *)&s_cd, this, static_cast<OWeakAggObject *>(this) ); } \
-    virtual void SAL_CALL acquire() throw () SAL_OVERRIDE \
+    virtual void SAL_CALL acquire() SAL_NOEXCEPT SAL_OVERRIDE \
         { OWeakAggObject::acquire(); } \
-    virtual void SAL_CALL release() throw () SAL_OVERRIDE \
+    virtual void SAL_CALL release() SAL_NOEXCEPT SAL_OVERRIDE \
         { OWeakAggObject::release(); } \
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE \
         { return WeakAggImplHelper_getTypes( (class_data *)&s_cd ); } \
@@ -123,9 +123,9 @@ public: \
             return aRet; \
         return BaseClass::queryInterface( rType ); \
     } \
-    virtual void SAL_CALL acquire() throw () \
+    virtual void SAL_CALL acquire() SAL_NOEXCEPT \
         { BaseClass::acquire(); } \
-    virtual void SAL_CALL release() throw () \
+    virtual void SAL_CALL release() SAL_NOEXCEPT \
         { BaseClass::release(); } \
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() \
         { return ImplInhHelper_getTypes( (class_data *)&s_cd, BaseClass::getTypes() ); } \
@@ -151,9 +151,9 @@ public: \
             return aRet; \
         return BaseClass::queryAggregation( rType ); \
     } \
-    virtual void SAL_CALL acquire() throw () \
+    virtual void SAL_CALL acquire() SAL_NOEXCEPT \
         { BaseClass::acquire(); } \
-    virtual void SAL_CALL release() throw () \
+    virtual void SAL_CALL release() SAL_NOEXCEPT \
         { BaseClass::release(); } \
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() \
         { return ImplInhHelper_getTypes( (class_data *)&s_cd, BaseClass::getTypes() ); } \
