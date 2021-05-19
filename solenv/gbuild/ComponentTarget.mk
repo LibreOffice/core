@@ -17,6 +17,8 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
+gb_ComponentTarget__ALLCOMPONENTS :=
+
 gb_ComponentTarget_XSLTCOMMANDFILE := $(SRCDIR)/solenv/bin/createcomponent.xslt
 gb_ComponentTarget_get_source = $(SRCDIR)/$(1).component
 
@@ -57,6 +59,8 @@ $(call gb_ComponentTarget_get_target,$(1)) : LIBFILENAME := $(3)
 $(call gb_ComponentTarget_get_target,$(1)) : COMPONENTSOURCE := $(call gb_ComponentTarget_get_source,$(patsubst CppunitTest/%,%,$(1)))
 
 $(call gb_ComponentTarget_get_target,$(1)) : $(call gb_ComponentTarget_get_source,$(patsubst CppunitTest/%,%,$(1)))
+
+$(if $(filter $(1),$(patsubst CppunitTest/%,%,$(1))),$(eval gb_ComponentTarget__ALLCOMPONENTS += $(1)))
 
 endef
 

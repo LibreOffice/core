@@ -7,6 +7,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+gb_Rdb__URECOMPONENTS :=
+
 gb_Rdb__get_install_target = $(INSTROOT)/$(LIBO_ETC_FOLDER)/services/$(1).rdb
 
 define gb_Rdb__command
@@ -59,7 +61,7 @@ endef
 define gb_Rdb_add_component
 $(call gb_Rdb_get_target,$(1)) : $(call gb_ComponentTarget_get_target,$(2))
 $(call gb_Rdb_get_target,$(1)) : COMPONENTS += $(2)
-
+$(if $(filter ure/services,$(1)),$(eval gb_Rdb__URECOMPONENTS += $(2)))
 endef
 
 define gb_Rdb_add_components
