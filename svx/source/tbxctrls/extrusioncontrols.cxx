@@ -142,8 +142,7 @@ ExtrusionDirectionWindow::ExtrusionDirectionWindow(
     mxDirectionSet->GetDrawingArea()->set_size_request(aSize.Width(), aSize.Height());
     mxDirectionSet->SetOutputSizePixel(aSize);
 
-    mxPerspective->connect_clicked(LINK(this, ExtrusionDirectionWindow, SelectToolbarMenuHdl));
-    mxParallel->connect_clicked(LINK(this, ExtrusionDirectionWindow, SelectToolbarMenuHdl));
+    mxPerspective->connect_toggled(LINK(this, ExtrusionDirectionWindow, SelectToolbarMenuHdl));
 
     AddStatusListener( g_sExtrusionDirection );
     AddStatusListener( g_sExtrusionProjection );
@@ -233,7 +232,7 @@ IMPL_LINK_NOARG(ExtrusionDirectionWindow, SelectValueSetHdl, ValueSet*, void)
     mxControl->EndPopupMode();
 }
 
-IMPL_LINK_NOARG(ExtrusionDirectionWindow, SelectToolbarMenuHdl, weld::Button&, void)
+IMPL_LINK_NOARG(ExtrusionDirectionWindow, SelectToolbarMenuHdl, weld::ToggleButton&, void)
 {
     int nProjection = mxPerspective->get_active() ? 0 : 1;
 
@@ -349,7 +348,7 @@ ExtrusionDepthWindow::ExtrusionDepthWindow(svt::PopupWindowController* pControl,
     mxDepth3->connect_toggled(LINK(this, ExtrusionDepthWindow, SelectHdl));
     mxDepth4->connect_toggled(LINK(this, ExtrusionDepthWindow, SelectHdl));
     mxInfinity->connect_toggled(LINK(this, ExtrusionDepthWindow, SelectHdl));
-    mxCustom->connect_clicked(LINK(this, ExtrusionDepthWindow, ClickHdl));
+    mxCustom->connect_toggled(LINK(this, ExtrusionDepthWindow, SelectHdl));
 
     AddStatusListener( gsExtrusionDepth );
     AddStatusListener( gsMetricUnit );
@@ -444,14 +443,9 @@ void ExtrusionDepthWindow::statusChanged(
     }
 }
 
-IMPL_LINK_NOARG(ExtrusionDepthWindow, ClickHdl, weld::Button&, void)
+IMPL_LINK_NOARG(ExtrusionDepthWindow, SelectHdl, weld::ToggleButton&, void)
 {
-    SelectHdl(*mxCustom);
-}
-
-IMPL_LINK(ExtrusionDepthWindow, SelectHdl, weld::ToggleButton&, rButton, void)
-{
-    if (mbSettingValue || !rButton.get_active())
+    if (mbSettingValue)
         return;
 
     if (mxCustom->get_active())
@@ -609,9 +603,7 @@ ExtrusionLightingWindow::ExtrusionLightingWindow(svt::PopupWindowController* pCo
     mxLightingSet->GetDrawingArea()->set_size_request(aSize.Width(), aSize.Height());
     mxLightingSet->SetOutputSizePixel(aSize);
 
-    mxBright->connect_clicked(LINK(this, ExtrusionLightingWindow, SelectToolbarMenuHdl));
-    mxNormal->connect_clicked(LINK(this, ExtrusionLightingWindow, SelectToolbarMenuHdl));
-    mxDim->connect_clicked(LINK(this, ExtrusionLightingWindow, SelectToolbarMenuHdl));
+    mxBright->connect_toggled(LINK(this, ExtrusionLightingWindow, SelectToolbarMenuHdl));
 
     AddStatusListener( g_sExtrusionLightingDirection );
     AddStatusListener( g_sExtrusionLightingIntensity );
@@ -715,7 +707,7 @@ IMPL_LINK_NOARG(ExtrusionLightingWindow, SelectValueSetHdl, ValueSet*, void)
     mxControl->EndPopupMode();
 }
 
-IMPL_LINK_NOARG(ExtrusionLightingWindow, SelectToolbarMenuHdl, weld::Button&, void)
+IMPL_LINK_NOARG(ExtrusionLightingWindow, SelectToolbarMenuHdl, weld::ToggleButton&, void)
 {
     int nLevel;
     if (mxBright->get_active())
@@ -805,10 +797,7 @@ ExtrusionSurfaceWindow::ExtrusionSurfaceWindow(svt::PopupWindowController* pCont
     , mxPlastic(m_xBuilder->weld_radio_button("plastic"))
     , mxMetal(m_xBuilder->weld_radio_button("metal"))
 {
-    mxWireFrame->connect_clicked(LINK(this, ExtrusionSurfaceWindow, SelectHdl));
-    mxMatt->connect_clicked(LINK(this, ExtrusionSurfaceWindow, SelectHdl));
-    mxPlastic->connect_clicked(LINK(this, ExtrusionSurfaceWindow, SelectHdl));
-    mxMetal->connect_clicked(LINK(this, ExtrusionSurfaceWindow, SelectHdl));
+    mxWireFrame->connect_toggled(LINK(this, ExtrusionSurfaceWindow, SelectHdl));
 
     AddStatusListener( g_sExtrusionSurface );
 }
@@ -849,7 +838,7 @@ void ExtrusionSurfaceWindow::statusChanged(
     }
 }
 
-IMPL_LINK_NOARG(ExtrusionSurfaceWindow, SelectHdl, weld::Button&, void)
+IMPL_LINK_NOARG(ExtrusionSurfaceWindow, SelectHdl, weld::ToggleButton&, void)
 {
     sal_Int32 nSurface;
     if (mxWireFrame->get_active())

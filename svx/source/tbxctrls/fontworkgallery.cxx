@@ -480,7 +480,6 @@ private:
     bool mbSettingValue;
 
     DECL_LINK( SelectHdl, weld::ToggleButton&, void );
-    DECL_LINK( ClickHdl, weld::Button&, void );
 
     void    implSetCharacterSpacing( sal_Int32 nCharacterSpacing, bool bEnabled );
     void    implSetKernCharacterPairs(bool bKernOnOff, bool bEnabled);
@@ -503,12 +502,7 @@ FontworkCharacterSpacingWindow::FontworkCharacterSpacingWindow(svt::PopupWindowC
     , mxKernPairs(m_xBuilder->weld_check_button("kernpairs"))
     , mbSettingValue(false)
 {
-    mxVeryTight->connect_toggled(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
-    mxTight->connect_toggled(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
     mxNormal->connect_toggled(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
-    mxLoose->connect_toggled(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
-    mxVeryLoose->connect_toggled(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
-    mxCustom->connect_clicked(LINK(this, FontworkCharacterSpacingWindow, ClickHdl));
 
     mxKernPairs->connect_toggled(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
 
@@ -602,17 +596,12 @@ void FontworkCharacterSpacingWindow::statusChanged( const css::frame::FeatureSta
     }
 }
 
-IMPL_LINK_NOARG(FontworkCharacterSpacingWindow, ClickHdl, weld::Button&, void)
+IMPL_LINK_NOARG(FontworkCharacterSpacingWindow, SelectHdl, weld::ToggleButton&, void)
 {
-    SelectHdl(*mxCustom);
-}
-
-IMPL_LINK(FontworkCharacterSpacingWindow, SelectHdl, weld::ToggleButton&, rButton, void)
-{
-    if (mbSettingValue || !rButton.get_active())
+    if (mbSettingValue)
         return;
 
-    if (&rButton == mxCustom.get())
+    if (mxCustom->get_active())
     {
         Sequence< PropertyValue > aArgs( 1 );
         aArgs[0].Name = OUString(gsFontworkCharacterSpacing).copy(5);
@@ -622,7 +611,7 @@ IMPL_LINK(FontworkCharacterSpacingWindow, SelectHdl, weld::ToggleButton&, rButto
         xControl->EndPopupMode();
         xControl->dispatchCommand(".uno:FontworkCharacterSpacingDialog", aArgs);
     }
-    else if (&rButton == mxKernPairs.get())
+    else if (mxKernPairs->get_active())
     {
         Sequence< PropertyValue > aArgs( 1 );
         aArgs[0].Name = OUString(gsFontworkKernCharacterPairs).copy(5);
@@ -636,13 +625,13 @@ IMPL_LINK(FontworkCharacterSpacingWindow, SelectHdl, weld::ToggleButton&, rButto
     else
     {
         sal_Int32 nCharacterSpacing;
-        if (&rButton == mxVeryTight.get())
+        if (mxVeryTight->get_active())
             nCharacterSpacing = 80;
-        else if (&rButton == mxTight.get())
+        else if (mxTight->get_active())
             nCharacterSpacing = 90;
-        else if (&rButton == mxLoose.get())
+        else if (mxLoose->get_active())
             nCharacterSpacing = 120;
-        else if (&rButton == mxVeryLoose.get())
+        else if (mxVeryLoose->get_active())
             nCharacterSpacing = 150;
         else
             nCharacterSpacing = 100;
