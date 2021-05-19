@@ -716,6 +716,7 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
         SAL_INFO("xmlsecurity.xmlsec", "Destroying temporary certificate");
         CERT_DestroyCertificate(tmpCert);
     }
+    PORT_FreeArena(log.arena, true);
     return validity ;
 }
 
