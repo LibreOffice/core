@@ -7037,7 +7037,8 @@ void GtkInstanceDialog::asyncresponse(gint ret)
     m_nCancelSignalId = 0;
     m_nSignalDeleteId = 0;
 
-    aFunc(GtkToVcl(ret));
+    if (aFunc)
+        aFunc(GtkToVcl(ret));
 
     if (nResponseSignalId)
         g_signal_handler_disconnect(m_pDialog, nResponseSignalId);
