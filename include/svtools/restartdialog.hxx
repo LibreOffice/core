@@ -65,6 +65,9 @@ enum RestartReason {
     // For restructuring the Form menu,
     // %PRODUCTNAME must be restarted:
     RESTART_REASON_MSCOMPATIBLE_FORMS_MENU,
+    // To apply changes, %PRODUCTNAME,
+    // %PRODUCTNAME must be restarted:
+    RESTART_REASON_UI_CHANGE,
     // No particular reason:
     RESTART_REASON_NONE
 };
