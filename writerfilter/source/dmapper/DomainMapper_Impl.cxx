@@ -1551,6 +1551,15 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     pParaContext->Insert(PROP_PARA_LEFT_MARGIN, uno::makeAny(nParaLeftMargin), /*bOverwrite=*/false);
             }
         }
+
+        if (nListId == 0 && !pList)
+        {
+            // Seems situation with listid=0 and missing list definition is used by MS Word
+            // to remove numbering defined previously. But some default numbering attributes
+            // are still applied. This is first line indent, probably something more?
+            if (!pParaContext->isSet(PROP_PARA_FIRST_LINE_INDENT))
+                pParaContext->Insert(PROP_PARA_FIRST_LINE_INDENT, uno::makeAny(sal_Int16(0)), false);
+        }
     }
 
     // apply AutoSpacing: it has priority over all other margin settings
@@ -2041,7 +2050,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     const bool bLeftSet  = pParaContext->isSet(PROP_PARA_LEFT_MARGIN);
                     const bool bRightSet = pParaContext->isSet(PROP_PARA_RIGHT_MARGIN);
                     const bool bFirstSet = pParaContext->isSet(PROP_PARA_FIRST_LINE_INDENT);
-                    if ( bLeftSet != bRightSet || bRightSet != bFirstSet )
+                    if (bLeftSet != bRightSet || bRightSet != bFirstSet)
                     {
                         if ( !bLeftSet )
                         {

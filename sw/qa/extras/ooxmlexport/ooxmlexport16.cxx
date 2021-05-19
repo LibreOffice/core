@@ -96,6 +96,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf141231_arabicHebrewNumbering, "tdf141231_arabicH
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::CHARS_ARABIC_ABJAD, nActual);
 }
 
+
+DECLARE_OOXMLEXPORT_TEST(testTdf132752, "tdf132752.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1801), getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), getProperty<sal_Int32>(getParagraph(1), "ParaRightMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(1), "ParaFirstLineIndent"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testGutterLeft, "gutter-left.docx")
 {
     uno::Reference<beans::XPropertySet> xPageStyle;
