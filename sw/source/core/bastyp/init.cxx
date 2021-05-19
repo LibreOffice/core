@@ -206,6 +206,8 @@ sal_uInt16 const aTableSetRange[] = {
 
 sal_uInt16 const aTableLineSetRange[] = {
     RES_FILL_ORDER,     RES_FRM_SIZE,
+    // IsNotTracked
+    RES_PRINT,          RES_PRINT,
     RES_LR_SPACE,       RES_UL_SPACE,
     RES_BACKGROUND,     RES_SHADOW,
     RES_ROW_SPLIT,      RES_ROW_SPLIT,

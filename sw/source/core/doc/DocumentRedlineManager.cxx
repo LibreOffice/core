@@ -37,6 +37,8 @@
 #include <authfld.hxx>
 #include <strings.hrc>
 #include <swmodule.hxx>
+#include <osl/diagnose.h>
+#include <editeng/prntitem.hxx>
 
 using namespace com::sun::star;
 
@@ -425,6 +427,36 @@ namespace
         return nullptr;
     }
 
+    // delete the empty tracked table row (i.e. if it's last tracked deletion was accepted)
+    void lcl_DeleteTrackedTableRow ( SwPosition* pPos )
+    {
+        if ( const SwTableBox* pBox = pPos->nNode.GetNode().GetTableBox() )
+        {
+            const SwTableLine* pLine = pBox->GetUpper();
+            const SvxPrintItem *pIsNoTrackedProp =
+                    pLine->GetFrameFormat()->GetAttrSet().GetItem<SvxPrintItem>(RES_PRINT);
+            // table row property "IsNotTracked" is set and its value is false
+            if ( pIsNoTrackedProp && !pIsNoTrackedProp->GetValue() )
+            {
+                bool bEmptyLine = true;
+                const SwTableBoxes & rBoxes = pLine->GetTabBoxes();
+                for (size_t nBox = 0; nBox < rBoxes.size(); ++nBox)
+                {
+                    if ( !rBoxes[nBox]->IsEmpty() )
+                    {
+                        bEmptyLine = false;
+                        break;
+                    }
+                }
+                if ( bEmptyLine )
+                {
+                    SwCursor aCursor( *pPos, nullptr );
+                    pPos->GetDoc().DeleteRow( aCursor );
+                }
+            }
+        }
+    }
+
     bool lcl_AcceptRedline( SwRedlineTable& rArr, SwRedlineTable::size_type& rPos,
                             bool bCallDelete,
                             const SwPosition* pSttRng = nullptr,
@@ -560,7 +592,10 @@ namespace
                     rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld & ~RedlineFlags(RedlineFlags::On | RedlineFlags::Ignore));
 
                     if( pCSttNd && pCEndNd )
+                    {
                         rDoc.getIDocumentContentOperations().DeleteAndJoin( aPam );
+                        lcl_DeleteTrackedTableRow( aPam.End() );
+                    }
                     else if (pCSttNd && !pCEndNd)
                         {
                             aPam.GetBound().nContent.Assign( nullptr, 0 );

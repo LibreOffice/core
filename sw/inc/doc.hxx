@@ -1485,6 +1485,8 @@ public:
     bool BalanceRowHeight( const SwCursor& rCursor, bool bTstOnly, const bool bOptimize );
     void SetRowBackground( const SwCursor& rCursor, const SvxBrushItem &rNew );
     static bool GetRowBackground( const SwCursor& rCursor, std::unique_ptr<SvxBrushItem>& rToFill );
+    /// rNotTracked = false means that the row was deleted or inserted with its tracked cell content
+    void SetRowNotTracked( const SwCursor& rCursor, const SvxPrintItem &rNotTracked );
     void SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet );
     void SetTabLineStyle( const SwCursor& rCursor,
                           const Color* pColor, bool bSetLine,

@@ -1867,6 +1867,21 @@ sal_uLong SwTableBox::GetSttIdx() const
     return m_pStartNode ? m_pStartNode->GetIndex() : 0;
 }
 
+bool SwTableBox::IsEmpty() const
+{
+    const SwStartNode *pSttNd = GetSttNd();
+    if( pSttNd &&
+        pSttNd->GetIndex() + 2 == pSttNd->EndOfSectionIndex() )
+    {
+        const SwContentNode *pCNd =
+            pSttNd->GetNodes()[pSttNd->GetIndex()+1]->GetContentNode();
+        if( pCNd && !pCNd->Len() )
+            return true;
+    }
+
+    return false;
+}
+
     // retrieve information from the client
 bool SwTable::GetInfo( SfxPoolItem& rInfo ) const
 {
