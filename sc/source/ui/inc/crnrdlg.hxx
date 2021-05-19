@@ -83,8 +83,7 @@ private:
     DECL_LINK( RemoveBtnHdl, weld::Button&, void );
     DECL_LINK( Range1SelectHdl, weld::TreeView&, void );
     DECL_LINK( Range1DataModifyHdl, formula::RefEdit&, void );
-    DECL_LINK( ColClickHdl, weld::Button&, void );
-    DECL_LINK( RowClickHdl, weld::Button&, void );
+    DECL_LINK( ColRowToggleHdl, weld::ToggleButton&, void );
     DECL_LINK( Range2DataModifyHdl, formula::RefEdit&, void );
     DECL_LINK( GetEditFocusHdl, formula::RefEdit&, void );
     DECL_LINK( LoseEditFocusHdl, formula::RefEdit&, void );
