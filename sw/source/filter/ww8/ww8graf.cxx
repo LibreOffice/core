@@ -2704,7 +2704,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( tools::Long nGrafAnchorCp )
                 }
             }
         }
-        SwFormatURL* pFormatURL = new SwFormatURL();
+        std::unique_ptr<SwFormatURL> pFormatURL(new SwFormatURL());
         pFormatURL->SetURL( lnName, false );
         if (!aObjName.isEmpty())
             pFormatURL->SetName(aObjName);
