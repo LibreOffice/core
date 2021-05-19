@@ -289,12 +289,7 @@ ChartAreaPanel::ChartAreaPanel(weld::Widget* pParent,
 
 ChartAreaPanel::~ChartAreaPanel()
 {
-    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
-    xBroadcaster->removeModifyListener(mxListener);
-
-    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
-    if (xSelectionSupplier.is())
-        xSelectionSupplier->removeSelectionChangeListener(mxSelectionListener.get());
+    doUpdateModel(nullptr);
 }
 
 void ChartAreaPanel::Initialize()
@@ -512,23 +507,25 @@ void ChartAreaPanel::selectionChanged(bool bCorrectType)
         updateData();
 }
 
-void ChartAreaPanel::updateModel(
-        css::uno::Reference<css::frame::XModel> xModel)
+void ChartAreaPanel::doUpdateModel(css::uno::Reference<css::frame::XModel> xModel)
 {
     if (mbModelValid)
     {
         css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
         xBroadcaster->removeModifyListener(mxListener);
-    }
 
-    css::uno::Reference<css::view::XSelectionSupplier> oldSelectionSupplier(
-        mxModel->getCurrentController(), css::uno::UNO_QUERY);
-    if (oldSelectionSupplier.is()) {
-        oldSelectionSupplier->removeSelectionChangeListener(mxSelectionListener.get());
+        css::uno::Reference<css::view::XSelectionSupplier> oldSelectionSupplier(
+            mxModel->getCurrentController(), css::uno::UNO_QUERY);
+        if (oldSelectionSupplier.is()) {
+            oldSelectionSupplier->removeSelectionChangeListener(mxSelectionListener.get());
+        }
     }
 
     mxModel = xModel;
-    mbModelValid = true;
+    mbModelValid = mxModel.is();
+
+    if (!mbModelValid)
+        return;
 
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcasterNew(mxModel, css::uno::UNO_QUERY_THROW);
     xBroadcasterNew->addModifyListener(mxListener);
@@ -536,6 +533,11 @@ void ChartAreaPanel::updateModel(
     css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
     if (xSelectionSupplier.is())
         xSelectionSupplier->addSelectionChangeListener(mxSelectionListener.get());
+}
+
+void ChartAreaPanel::updateModel( css::uno::Reference<css::frame::XModel> xModel)
+{
+    doUpdateModel(xModel);
 }
 
 

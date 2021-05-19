@@ -121,9 +121,7 @@ ChartTypePanel::ChartTypePanel(weld::Widget* pParent, ::chart::ChartController* 
 
 ChartTypePanel::~ChartTypePanel()
 {
-    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel,
-                                                                    css::uno::UNO_QUERY_THROW);
-    xBroadcaster->removeModifyListener(mxListener);
+    doUpdateModel(nullptr);
 
     //delete all dialog controller
     m_aChartTypeDialogControllerList.clear();
@@ -263,7 +261,7 @@ void ChartTypePanel::HandleContextChange(const vcl::EnumContext& rContext)
 
 void ChartTypePanel::modelInvalid() { mbModelValid = false; }
 
-void ChartTypePanel::updateModel(css::uno::Reference<css::frame::XModel> xModel)
+void ChartTypePanel::doUpdateModel(css::uno::Reference<css::frame::XModel> xModel)
 {
     if (mbModelValid)
     {
@@ -273,11 +271,19 @@ void ChartTypePanel::updateModel(css::uno::Reference<css::frame::XModel> xModel)
     }
 
     mxModel = xModel;
-    mbModelValid = true;
+    mbModelValid = mxModel.is();
+
+    if (!mbModelValid)
+        return;
 
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcasterNew(mxModel,
                                                                        css::uno::UNO_QUERY_THROW);
     xBroadcasterNew->addModifyListener(mxListener);
+}
+
+void ChartTypePanel::updateModel(css::uno::Reference<css::frame::XModel> xModel)
+{
+    doUpdateModel(xModel);
 }
 
 uno::Reference<css::chart2::XChartTypeTemplate> ChartTypePanel::getCurrentTemplate() const
