@@ -392,11 +392,12 @@ sub create_package
             chdir $localfrom;
 
             if ( $ENV{'MACOSX_CODESIGNING_IDENTITY'} ) {
-                my @lp_sign = ('codesign', '--verbose', '--sign', $ENV{'MACOSX_CODESIGNING_IDENTITY'}, '--deep', $appfolder);
-                if (system(@lp_sign) == 0) {
-                    $infoline = "Success: \"@lp_sign\" executed successfully!\n";
+                my $lp_sign = "codesign --verbose --sign $ENV{'MACOSX_CODESIGNING_IDENTITY'} --deep '$appfolder'" ;
+                my $output = `$lp_sign 2>&1`;
+                unless ($?) {
+                    $infoline = "Success: \"$lp_sign\" executed successfully!\n";
                 } else {
-                    $infoline = "ERROR: Could not codesign the languagepack using \"@lp_sign\"!\n";
+                    $infoline = "ERROR: Could not codesign the languagepack using \"$lp_sign\"!\n$output\n";
                 }
                 push( @installer::globals::logfileinfo, $infoline);
             }
