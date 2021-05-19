@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b4b73349_0498d339",
+        "filename": "sc/source/core/inc/arraysumfunctor.hxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-19T16:11:31Z",
+      "side": 1,
+      "message": "We need a unit test that would test these all (at least all available on the host machine) - so that at least partially (for a single test) we would be sure that they all keep giving the same results in the future. And it would be useful here to have several patch sets for testing every implementation: first checking that only executeUnrolled is available and all tests pass; then the same with only executeSSE2 available, etc. - so that at each step we know which one was guaranteed to be used, and all pass.",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 103,
+        "endChar": 1
+      },
+      "revId": "11886f260f3b03fa05ed50d59aebf3e20703dfc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
