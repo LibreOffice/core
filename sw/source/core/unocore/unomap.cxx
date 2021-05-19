@@ -543,6 +543,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { u"" UNO_NAME_SIZE_TYPE, RES_FRM_SIZE,           cppu::UnoType<sal_Int16>::get()  ,         PROPERTY_NONE,   MID_FRMSIZE_SIZE_TYPE  },
                     { u"" UNO_NAME_WIDTH_TYPE, RES_FRM_SIZE,          cppu::UnoType<sal_Int16>::get()  ,         PROPERTY_NONE,   MID_FRMSIZE_WIDTH_TYPE },
                     { u"" UNO_NAME_IS_SPLIT_ALLOWED, RES_ROW_SPLIT,       cppu::UnoType<bool>::get()  , PropertyAttribute::MAYBEVOID, 0},
+                    { u"" UNO_NAME_IS_NOT_TRACKED, RES_PRINT, cppu::UnoType<bool>::get()  , PropertyAttribute::MAYBEVOID, 0},
                     { u"" UNO_NAME_ROW_INTEROP_GRAB_BAG, RES_FRMATR_GRABBAG, cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(), PROPERTY_NONE, 0 },
                     { u"", 0, css::uno::Type(), 0, 0 }
                 };
