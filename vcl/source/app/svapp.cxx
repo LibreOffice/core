@@ -322,13 +322,13 @@ void Application::notifyWindow(vcl::LOKWindowId /*nLOKWindowId*/,
 
 void Application::libreOfficeKitViewCallback(int nType, const char* pPayload) const
 {
-    if (!comphelper::LibreOfficeKit::isActive() || !m_pCallback)
-    {
-        free(static_cast<void*>(const_cast<char*>(pPayload)));
+    if (!comphelper::LibreOfficeKit::isActive())
         return;
-    }
 
-    m_pCallback(nType, pPayload, m_pCallbackData);
+    if (m_pCallback)
+    {
+        m_pCallback(nType, pPayload, m_pCallbackData);
+    }
 }
 
 
