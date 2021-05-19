@@ -62,15 +62,15 @@ SfxEmojiControl::SfxEmojiControl(const EmojiPopup* pControl, weld::Widget* pPare
     ConvertLabelToUnicode(*mxFlagsBtn);
     ConvertLabelToUnicode(*mxUnicode9Btn);
 
-    mxPeopleBtn->connect_clicked(LINK(this, SfxEmojiControl, ActivatePageHdl));
-    mxNatureBtn->connect_clicked(LINK(this, SfxEmojiControl, ActivatePageHdl));
-    mxFoodBtn->connect_clicked(LINK(this, SfxEmojiControl, ActivatePageHdl));
-    mxActivityBtn->connect_clicked(LINK(this, SfxEmojiControl, ActivatePageHdl));
-    mxTravelBtn->connect_clicked(LINK(this, SfxEmojiControl, ActivatePageHdl));
-    mxObjectsBtn->connect_clicked(LINK(this, SfxEmojiControl, ActivatePageHdl));
-    mxSymbolsBtn->connect_clicked(LINK(this, SfxEmojiControl, ActivatePageHdl));
-    mxFlagsBtn->connect_clicked(LINK(this, SfxEmojiControl, ActivatePageHdl));
-    mxUnicode9Btn->connect_clicked(LINK(this, SfxEmojiControl, ActivatePageHdl));
+    mxPeopleBtn->connect_toggled(LINK(this, SfxEmojiControl, ActivatePageHdl));
+    mxNatureBtn->connect_toggled(LINK(this, SfxEmojiControl, ActivatePageHdl));
+    mxFoodBtn->connect_toggled(LINK(this, SfxEmojiControl, ActivatePageHdl));
+    mxActivityBtn->connect_toggled(LINK(this, SfxEmojiControl, ActivatePageHdl));
+    mxTravelBtn->connect_toggled(LINK(this, SfxEmojiControl, ActivatePageHdl));
+    mxObjectsBtn->connect_toggled(LINK(this, SfxEmojiControl, ActivatePageHdl));
+    mxSymbolsBtn->connect_toggled(LINK(this, SfxEmojiControl, ActivatePageHdl));
+    mxFlagsBtn->connect_toggled(LINK(this, SfxEmojiControl, ActivatePageHdl));
+    mxUnicode9Btn->connect_toggled(LINK(this, SfxEmojiControl, ActivatePageHdl));
 
     mxEmojiView->setItemMaxTextLength(ITEM_MAX_TEXT_LENGTH);
     mxEmojiView->setItemDimensions(ITEM_MAX_WIDTH, 0, ITEM_MAX_HEIGHT, ITEM_PADDING);
@@ -99,7 +99,7 @@ void SfxEmojiControl::ConvertLabelToUnicode(weld::ToggleButton& rBtn)
     rBtn.set_label(sHexText.toString());
 }
 
-FILTER_CATEGORY SfxEmojiControl::getFilter(const weld::Button& rCurPageId) const
+FILTER_CATEGORY SfxEmojiControl::getFilter(const weld::ToggleButton& rCurPageId) const
 {
     if (&rCurPageId == mxPeopleBtn.get())
         return FILTER_CATEGORY::PEOPLE;
@@ -123,7 +123,7 @@ FILTER_CATEGORY SfxEmojiControl::getFilter(const weld::Button& rCurPageId) const
     return FILTER_CATEGORY::PEOPLE;
 }
 
-IMPL_LINK(SfxEmojiControl, ActivatePageHdl, weld::Button&, rButton, void)
+IMPL_LINK(SfxEmojiControl, ActivatePageHdl, weld::ToggleButton&, rButton, void)
 {
     mxPeopleBtn->set_active(&rButton == mxPeopleBtn.get());
     mxNatureBtn->set_active(&rButton == mxNatureBtn.get());

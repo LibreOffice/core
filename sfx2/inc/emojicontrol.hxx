@@ -36,9 +36,9 @@ public:
 private:
     static void ConvertLabelToUnicode(weld::ToggleButton& rBtn);
 
-    FILTER_CATEGORY getFilter(const weld::Button& rBtn) const;
+    FILTER_CATEGORY getFilter(const weld::ToggleButton& rBtn) const;
 
-    DECL_LINK(ActivatePageHdl, weld::Button&, void);
+    DECL_LINK(ActivatePageHdl, weld::ToggleButton&, void);
     DECL_STATIC_LINK(SfxEmojiControl, InsertHdl, ThumbnailViewItem*, void);
 
     std::unique_ptr<weld::ToggleButton> mxPeopleBtn;
