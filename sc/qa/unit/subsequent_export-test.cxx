@@ -220,6 +220,7 @@ public:
     void testTdf95640_ods_to_xlsx_with_standard_list();
     void testTdf95640_xlsx_to_xlsx();
     void testDateAutofilterXLSX();
+    void testDateAutofilterODS();
     void testAutofilterColorsODF();
     void testAutofilterColorsOOXML();
     void testAutofilterColorsStyleOOXML();
@@ -410,6 +411,7 @@ public:
     CPPUNIT_TEST(testTdf95640_ods_to_xlsx_with_standard_list);
     CPPUNIT_TEST(testTdf95640_xlsx_to_xlsx);
     CPPUNIT_TEST(testDateAutofilterXLSX);
+    CPPUNIT_TEST(testDateAutofilterODS);
     CPPUNIT_TEST(testAutofilterColorsODF);
     CPPUNIT_TEST(testAutofilterColorsOOXML);
     CPPUNIT_TEST(testAutofilterColorsStyleOOXML);
@@ -4641,6 +4643,18 @@ void ScExportTest::testDateAutofilterXLSX()
     assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[2]", "dateTimeGrouping", "day");
 
     xDocSh->DoClose();
+}
+
+void ScExportTest::testDateAutofilterODS()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf142231.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "content.xml", FORMAT_ODS);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "//table:filter/table:filter-and/table:filter-condition[1]", "value", "Calc");
+    assertXPath(pDoc, "//table:filter/table:filter-and/table:filter-condition[2]", "value", "2021-05-04");
 }
 
 void ScExportTest::testAutofilterColorsODF()
