@@ -64,6 +64,7 @@
 #include <sal/log.hxx>
 #include <osl/file.hxx>
 #include <vcl/EnumContext.hxx>
+#include <vcl/toolbox.hxx>
 
 #include <unotools/moduleoptions.hxx>
 #include <svtools/helpopt.hxx>
@@ -1026,7 +1027,32 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             aDialog.run();
             break;
         }
-
+        case SID_TOOLBAR_LOCK:
+        {
+            SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+            if (pViewFrame)
+            {
+                Reference<XFrame> xCurrentFrame;
+                uno::Reference<uno::XComponentContext> xContext
+                    = ::comphelper::getProcessComponentContext();
+                xCurrentFrame = pViewFrame->GetFrame().GetFrameInterface();
+                const Reference<frame::XModuleManager> xModuleManager
+                    = frame::ModuleManager::create(xContext);
+                const utl::OConfigurationTreeRoot aAppNode(
+                    xContext, "org.openoffice.Office.UI.GlobalSettings/Toolbars/States", true);
+                if (aAppNode.isValid())
+                {
+                    bool isLocked = comphelper::getBOOL(aAppNode.getNodeValue("Locked"));
+                    aAppNode.setNodeValue("Locked", makeAny(!isLocked));
+                    aAppNode.commit();
+                    //TODO: apply immediately w/o restart needed
+                    SolarMutexGuard aGuard;
+                    svtools::executeRestartDialog(comphelper::getProcessComponentContext(), nullptr,
+                                                  svtools::RESTART_REASON_UI_CHANGE);
+                }
+            }
+            break;
+        }
         default:
             break;
     }
@@ -1226,7 +1252,11 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                         rSet.DisableItem(nWhich);
                 }
                 break;
-
+                case SID_TOOLBAR_LOCK:
+                {
+                    rSet.Put( SfxBoolItem( SID_TOOLBAR_LOCK, ToolBox::AlwaysLocked() ));
+                }
+                break;
                 default:
                     break;
             }
