@@ -9818,6 +9818,12 @@ public:
     }
 };
 
+}
+
+#endif
+
+namespace {
+
 class GtkInstanceCheckButton : public GtkInstanceButton, public virtual weld::CheckButton
 {
 private:
@@ -9888,11 +9894,22 @@ public:
 class GtkInstanceRadioButton : public GtkInstanceCheckButton, public virtual weld::RadioButton
 {
 public:
+#if GTK_CHECK_VERSION(4, 0, 0)
+    GtkInstanceRadioButton(GtkCheckButton* pButton, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : GtkInstanceCheckButton(pButton, pBuilder, bTakeOwnership)
+#else
     GtkInstanceRadioButton(GtkRadioButton* pButton, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceCheckButton(GTK_CHECK_BUTTON(pButton), pBuilder, bTakeOwnership)
+#endif
     {
     }
 };
+
+}
+
+namespace {
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
 
 class GtkInstanceScale : public GtkInstanceWidget, public virtual weld::Scale
 {
@@ -10155,9 +10172,10 @@ public:
         g_signal_handler_disconnect(m_pCalendar, m_nDaySelectedSignalId);
     }
 };
-}
 
 #endif
+
+}
 
 namespace
 {
@@ -18890,30 +18908,24 @@ public:
 
     virtual std::unique_ptr<weld::RadioButton> weld_radio_button(const OString &id) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+        GtkCheckButton* pRadioButton = GTK_CHECK_BUTTON(gtk_builder_get_object(m_pBuilder, id.getStr()));
+#else
         GtkRadioButton* pRadioButton = GTK_RADIO_BUTTON(gtk_builder_get_object(m_pBuilder, id.getStr()));
+#endif
         if (!pRadioButton)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pRadioButton));
         return std::make_unique<GtkInstanceRadioButton>(pRadioButton, this, false);
-#else
-        (void)id;
-        return nullptr;
-#endif
     }
 
     virtual std::unique_ptr<weld::CheckButton> weld_check_button(const OString &id) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkCheckButton* pCheckButton = GTK_CHECK_BUTTON(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pCheckButton)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pCheckButton));
         return std::make_unique<GtkInstanceCheckButton>(pCheckButton, this, false);
-#else
-        (void)id;
-        return nullptr;
-#endif
     }
 
     virtual std::unique_ptr<weld::Scale> weld_scale(const OString &id) override
@@ -19290,6 +19302,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/percentdialog.ui" &&
         rUIFile != "sfx/ui/querysavedialog.ui" &&
         rUIFile != "svt/ui/javadisableddialog.ui" &&
+        rUIFile != "modules/smath/ui/alignmentdialog.ui" &&
         rUIFile != "modules/smath/ui/fontsizedialog.ui" &&
         rUIFile != "modules/smath/ui/savedefaultsdialog.ui" &&
         rUIFile != "modules/swriter/ui/gotopagedialog.ui" &&
