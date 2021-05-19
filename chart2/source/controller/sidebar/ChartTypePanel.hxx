@@ -96,6 +96,7 @@ private:
     bool mbModelValid;
 
     void Initialize();
+    void doUpdateModel(css::uno::Reference<css::frame::XModel> xModel);
 
     std::unique_ptr<Dim3DLookResourceGroup> m_pDim3DLookResourceGroup;
     std::unique_ptr<StackingResourceGroup> m_pStackingResourceGroup;

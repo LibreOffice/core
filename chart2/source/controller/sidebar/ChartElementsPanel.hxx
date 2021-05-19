@@ -102,6 +102,7 @@ private:
     OUString maTextSubTitle;
 
     void Initialize();
+    void doUpdateModel(css::uno::Reference<css::frame::XModel> xModel);
 
     void setTitleVisible(TitleHelper::eTitleType eTitle, bool bVisible);
 
