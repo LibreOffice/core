@@ -49,7 +49,6 @@ $(eval $(call gb_Library_use_libraries,xmlsecurity,\
 
 $(eval $(call gb_Library_add_exception_objects,xmlsecurity,\
 	xmlsecurity/source/component/certificatecontainer \
-	xmlsecurity/source/component/documentdigitalsignatures \
 	xmlsecurity/source/dialogs/certificatechooser \
 	xmlsecurity/source/dialogs/certificateviewer \
 	xmlsecurity/source/dialogs/digitalsignaturesdialog \
@@ -68,13 +67,19 @@ $(eval $(call gb_Library_add_exception_objects,xmlsecurity,\
 	xmlsecurity/source/helper/ooxmlsecparser \
 	xmlsecurity/source/helper/ooxmlsecexporter \
 	xmlsecurity/source/helper/pdfsignaturehelper \
-	xmlsecurity/source/helper/xmlsignaturehelper \
     xmlsecurity/source/helper/UriBindingHelper \
 	xmlsecurity/source/helper/xsecctl \
 	xmlsecurity/source/helper/xsecparser \
 	xmlsecurity/source/helper/xsecsign \
-	xmlsecurity/source/helper/xsecverify \
 ))
+
+ifneq (,$(or $(ENABLE_NSS),$(filter WNT,$(OS))))
+$(eval $(call gb_Library_add_exception_objects,xmlsecurity,\
+    xmlsecurity/source/component/documentdigitalsignatures \
+    xmlsecurity/source/helper/xmlsignaturehelper \
+    xmlsecurity/source/helper/xsecverify \
+))
+endif
 
 $(eval $(call gb_Library_use_externals,xmlsecurity,\
     libxml2 \
