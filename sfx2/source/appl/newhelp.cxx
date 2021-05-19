@@ -1648,7 +1648,7 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl(SfxHelpWindow_Impl* pHelpWin, wel
 
     InitToolBoxImages();
     InitOnStartupBox();
-    xOnStartupCB->connect_clicked(LINK(this, SfxHelpTextWindow_Impl, CheckHdl));
+    xOnStartupCB->connect_toggled(LINK(this, SfxHelpTextWindow_Impl, CheckHdl));
 
     aSelectIdle.SetInvokeHandler( LINK( this, SfxHelpTextWindow_Impl, SelectHdl ) );
     aSelectIdle.SetPriority( TaskPriority::LOWEST );
@@ -1951,7 +1951,7 @@ IMPL_LINK_NOARG(SfxHelpTextWindow_Impl, CloseHdl, LinkParamNone*, void)
     m_xSrchDlg.reset();
 }
 
-IMPL_LINK_NOARG(SfxHelpTextWindow_Impl, CheckHdl, weld::Button&, void)
+IMPL_LINK_NOARG(SfxHelpTextWindow_Impl, CheckHdl, weld::ToggleButton&, void)
 {
     if ( !xConfiguration.is() )
         return;
