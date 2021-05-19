@@ -57,10 +57,7 @@ SafeModeDialog::SafeModeDialog(weld::Window* pParent)
     , maBackupFileHelper()
 {
     m_xDialog->set_centered_on_parent(false);
-    mxRadioRestore->connect_clicked(LINK(this, SafeModeDialog, RadioBtnHdl));
-    mxRadioConfigure->connect_clicked(LINK(this, SafeModeDialog, RadioBtnHdl));
-    mxRadioExtensions->connect_clicked(LINK(this, SafeModeDialog, RadioBtnHdl));
-    mxRadioReset->connect_clicked(LINK(this, SafeModeDialog, RadioBtnHdl));
+    mxRadioRestore->connect_toggled(LINK(this, SafeModeDialog, RadioBtnHdl));
 
     mxBtnContinue->connect_clicked(LINK(this, SafeModeDialog, DialogBtnHdl));
     mxBtnRestart->connect_clicked(LINK(this, SafeModeDialog, DialogBtnHdl));
@@ -196,9 +193,9 @@ void SafeModeDialog::applyChanges()
         css::uno::Reference< css::task::XInteractionHandler >());
 }
 
-IMPL_LINK(SafeModeDialog, RadioBtnHdl, weld::Button&, rBtn, void)
+IMPL_LINK_NOARG(SafeModeDialog, RadioBtnHdl, weld::ToggleButton&, void)
 {
-    if (&rBtn == mxRadioRestore.get())
+    if (mxRadioRestore->get_active())
     {
         // Enable the currently selected box
         mxBoxRestore->set_sensitive(true);
@@ -209,7 +206,7 @@ IMPL_LINK(SafeModeDialog, RadioBtnHdl, weld::Button&, rBtn, void)
         mxBoxConfigure->set_sensitive(false);
         mxBoxDeinstall->set_sensitive(false);
     }
-    else if (&rBtn == mxRadioConfigure.get())
+    else if (mxRadioConfigure->get_active())
     {
         // Enable the currently selected box
         mxBoxConfigure->set_sensitive(true);
@@ -221,7 +218,7 @@ IMPL_LINK(SafeModeDialog, RadioBtnHdl, weld::Button&, rBtn, void)
         mxBoxDeinstall->set_sensitive(false);
 
     }
-    else if (&rBtn == mxRadioExtensions.get())
+    else if (mxRadioExtensions->get_active())
     {
         // Enable the currently selected box
         mxBoxDeinstall->set_sensitive(true);
@@ -232,7 +229,7 @@ IMPL_LINK(SafeModeDialog, RadioBtnHdl, weld::Button&, rBtn, void)
         mxBoxConfigure->set_sensitive(false);
         mxBoxReset->set_sensitive(false);
     }
-    else if (&rBtn == mxRadioReset.get())
+    else if (mxRadioReset->get_active())
     {
         // Enable the currently selected box
         mxBoxReset->set_sensitive(true);

@@ -526,12 +526,12 @@ SvxTPFilter::SvxTPFilter(weld::Container* pParent)
     m_xIbClock2->connect_clicked( LINK( this, SvxTPFilter,TimeHdl) );
     m_xBtnRange->connect_clicked( LINK( this, SvxTPFilter, RefHandle));
 
-    Link<weld::Button&,void> aLink=LINK( this, SvxTPFilter, RowEnableHdl) ;
-    m_xCbDate->connect_clicked(aLink);
-    m_xCbAuthor->connect_clicked(aLink);
-    m_xCbRange->connect_clicked(aLink);
-    m_xCbAction->connect_clicked(aLink);
-    m_xCbComment->connect_clicked(aLink);
+    Link<weld::ToggleButton&,void> aLink=LINK( this, SvxTPFilter, RowEnableHdl) ;
+    m_xCbDate->connect_toggled(aLink);
+    m_xCbAuthor->connect_toggled(aLink);
+    m_xCbRange->connect_toggled(aLink);
+    m_xCbAction->connect_toggled(aLink);
+    m_xCbComment->connect_toggled(aLink);
 
     Link<SvtCalendarBox&,void> a2Link=LINK(this, SvxTPFilter, ModifyDate);
     m_xDfDate->connect_activated(a2Link);
@@ -839,7 +839,7 @@ IMPL_LINK_NOARG(SvxTPFilter, SelDateHdl, weld::ComboBox&, void)
     bModified = true;
 }
 
-IMPL_LINK(SvxTPFilter, RowEnableHdl, weld::Button&, rCB, void)
+IMPL_LINK(SvxTPFilter, RowEnableHdl, weld::ToggleButton&, rCB, void)
 {
     if (&rCB == m_xCbDate.get())
     {

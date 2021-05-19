@@ -182,7 +182,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxTPFilter final : public SvxTPage
     std::unique_ptr<weld::Entry> m_xEdComment;
 
     DECL_LINK( SelDateHdl, weld::ComboBox&, void );
-    DECL_LINK( RowEnableHdl, weld::Button&, void );
+    DECL_LINK( RowEnableHdl, weld::ToggleButton&, void );
     DECL_LINK( TimeHdl, weld::Button&, void );
     DECL_LINK( ModifyHdl, weld::Entry&, void );
     DECL_LINK( ModifyListBoxHdl, weld::ComboBox&, void );
