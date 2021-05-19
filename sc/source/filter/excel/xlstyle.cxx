@@ -1693,6 +1693,13 @@ XclCellArea::XclCellArea() :
 {
 }
 
+XclCellArea::XclCellArea(sal_uInt8 nPattern) :
+    mnForeColor( EXC_COLOR_WINDOWTEXT ),
+    mnBackColor( EXC_COLOR_WINDOWBACK ),
+    mnPattern( nPattern )
+{
+}
+
 bool XclCellArea::IsTransparent() const
 {
     return (mnPattern == EXC_PATT_NONE) && (mnBackColor == EXC_COLOR_WINDOWBACK);
