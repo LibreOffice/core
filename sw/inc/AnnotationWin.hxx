@@ -49,6 +49,7 @@ namespace sw::sidebarwindows {
     class SidebarTextControl;
     class AnchorOverlayObject;
     class ShadowOverlayObject;
+    class SidebarWinAccessible;
 }
 
 
@@ -271,6 +272,8 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public InterimItemWindow
 
         SwFormatField*       mpFormatField;
         SwPostItField*       mpField;
+
+        rtl::Reference<sw::sidebarwindows::SidebarWinAccessible> mxSidebarWinAccessible;
 };
 
 } // end of namespace sw::annotation

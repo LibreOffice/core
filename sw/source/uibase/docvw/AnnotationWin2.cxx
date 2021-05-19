@@ -1376,8 +1376,8 @@ void SwAnnotationWin::ChangeSidebarItem( SwSidebarItem const & rSidebarItem )
     mrSidebarItem = rSidebarItem;
     mpAnchorFrame = mrSidebarItem.maLayoutInfo.mpAnchorFrame;
 
-    if (SidebarWinAccessible* pAcc = dynamic_cast<SidebarWinAccessible*>(GetWindowPeer()))
-        pAcc->ChangeSidebarItem( mrSidebarItem );
+    if (mxSidebarWinAccessible)
+        mxSidebarWinAccessible->ChangeSidebarItem( mrSidebarItem );
 
     if ( bAnchorChanged )
     {
@@ -1389,11 +1389,14 @@ void SwAnnotationWin::ChangeSidebarItem( SwSidebarItem const & rSidebarItem )
 
 css::uno::Reference< css::accessibility::XAccessible > SwAnnotationWin::CreateAccessible()
 {
-    rtl::Reference<SidebarWinAccessible> pAcc( new SidebarWinAccessible( *this,
+    // This is rather dodgy code. Normally in CreateAccessible, if we want a custom
+    // object, we return a custom object, but we do no override the default toolkit
+    // window peer.
+    if (!mxSidebarWinAccessible)
+        mxSidebarWinAccessible = new SidebarWinAccessible( *this,
                                                           mrView.GetWrtShell(),
-                                                          mrSidebarItem ) );
-    SetWindowPeer( pAcc, pAcc.get() );
-    return pAcc;
+                                                          mrSidebarItem );
+    return mxSidebarWinAccessible;
 }
 
 } // eof of namespace sw::sidebarwindows
