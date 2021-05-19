@@ -2899,6 +2899,9 @@ OUString StylesBuffer::createDxfStyle( sal_Int32 nDxfId ) const
 
     if (Dxf* pDxf = maDxfs.get(nDxfId).get())
     {
+        // FIXME: How can we know whether this dxf is for conditional formatting,
+        // not for color filter? Currently this style is created for each dxf
+        // (which might only be used by color filter)
         rStyleName = "ConditionalStyle_" + OUString::number(nDxfId + 1);
 
         // Create a cell style. This may overwrite an existing style if
