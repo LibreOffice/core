@@ -333,6 +333,14 @@ bool DefinedName::getAbsoluteRange( ScRange& orRange ) const
     return getFormulaParser().extractCellRange( orRange, aFTokenSeq );
 }
 
+DefinedName::~DefinedName()
+{
+    // this kind of field is owned by us - see lcl_addNewByNameAndTokens
+    if (mpScRangeData && maModel.mbHidden &&
+        (mcBuiltinId == BIFF_DEFNAME_CRITERIA || mcBuiltinId == BIFF_DEFNAME_FILTERDATABASE))
+        delete mpScRangeData;
+}
+
 
 DefinedNamesBuffer::DefinedNamesBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
