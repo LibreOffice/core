@@ -3265,7 +3265,7 @@ void SwTabFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
     auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
     if(!pLegacy)
         return;
-    sal_uInt8 nInvFlags = 0;
+    SwTabFrameInvFlags eInvFlags = SwTabFrameInvFlags::NONE;
     bool bAttrSetChg = pLegacy->m_pNew && RES_ATTRSET_CHG == pLegacy->m_pNew->Which();
 
     if(bAttrSetChg)
@@ -3280,7 +3280,7 @@ void SwTabFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         SwAttrSetChg aNewSet(rNewSetChg);
         do
         {
-            UpdateAttr_(pOItem, pNItem, nInvFlags, &aOldSet, &aNewSet);
+            UpdateAttr_(pOItem, pNItem, eInvFlags, &aOldSet, &aNewSet);
             pNItem = aNIter.NextItem();
             pOItem = aOIter.NextItem();
         } while(pNItem);
@@ -3288,46 +3288,46 @@ void SwTabFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             SwLayoutFrame::SwClientNotify(rMod, sw::LegacyModifyHint(&aOldSet, &aNewSet));
     }
     else
-        UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, nInvFlags);
+        UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, eInvFlags);
 
-    if(nInvFlags == 0)
+    if(eInvFlags == SwTabFrameInvFlags::NONE)
         return;
 
     SwPageFrame* pPage = FindPageFrame();
     InvalidatePage(pPage);
-    if(nInvFlags & 0x02)
+    if(eInvFlags & SwTabFrameInvFlags::InvalidatePrt)
         InvalidatePrt_();
-    if(nInvFlags & 0x40)
+    if(eInvFlags & SwTabFrameInvFlags::InvalidatePos)
         InvalidatePos_();
     SwFrame* pTmp = GetIndNext();
     if(nullptr != pTmp)
     {
-        if(nInvFlags & 0x04)
+        if(eInvFlags & SwTabFrameInvFlags::InvalidateIndNextPrt)
         {
             pTmp->InvalidatePrt_();
             if(pTmp->IsContentFrame())
                 pTmp->InvalidatePage(pPage);
         }
-        if(nInvFlags & 0x10)
+        if(eInvFlags & SwTabFrameInvFlags::SetIndNextCompletePaint)
             pTmp->SetCompletePaint();
     }
-    if(nInvFlags & 0x08 && nullptr != (pTmp = GetPrev()))
+    if(eInvFlags & SwTabFrameInvFlags::InvalidatePrevPrt && nullptr != (pTmp = GetPrev()))
     {
         pTmp->InvalidatePrt_();
         if(pTmp->IsContentFrame())
             pTmp->InvalidatePage( pPage );
     }
-    if(nInvFlags & 0x20)
+    if(eInvFlags & SwTabFrameInvFlags::InvalidateBrowseWidth)
     {
         if(pPage && pPage->GetUpper() && !IsFollow())
             static_cast<SwRootFrame*>(pPage->GetUpper())->InvalidateBrowseWidth();
     }
-    if(nInvFlags & 0x80)
+    if(eInvFlags & SwTabFrameInvFlags::InvalidateNextPos)
         InvalidateNextPos();
 }
 
 void SwTabFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
-                            sal_uInt8 &rInvFlags,
+                            SwTabFrameInvFlags &rInvFlags,
                             SwAttrSetChg *pOldSet, SwAttrSetChg *pNewSet )
 {
     bool bClear = true;
@@ -3356,18 +3356,18 @@ void SwTabFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                     pHeadline->Paste( this, pLowerRow );
                 }
             }
-            rInvFlags |= 0x02;
+            rInvFlags |= static_cast<SwTabFrameInvFlags>(0x02);
             break;
 
         case RES_FRM_SIZE:
         case RES_HORI_ORIENT:
-            rInvFlags |= 0x22;
+            rInvFlags |= static_cast<SwTabFrameInvFlags>(0x22);
             break;
 
         case RES_PAGEDESC:                      //Attribute changes (on/off)
             if ( IsInDocBody() )
             {
-                rInvFlags |= 0x40;
+                rInvFlags |= static_cast<SwTabFrameInvFlags>(0x40);
                 SwPageFrame *pPage = FindPageFrame();
                 if (pPage)
                 {
@@ -3382,23 +3382,23 @@ void SwTabFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             break;
 
         case RES_BREAK:
-            rInvFlags |= 0xC0;
+            rInvFlags |= static_cast<SwTabFrameInvFlags>(0xC0);
             break;
 
         case RES_LAYOUT_SPLIT:
             if ( !IsFollow() )
-                rInvFlags |= 0x40;
+                rInvFlags |= static_cast<SwTabFrameInvFlags>(0x40);
             break;
         case RES_FRAMEDIR :
             SetDerivedR2L( false );
             CheckDirChange();
             break;
         case RES_COLLAPSING_BORDERS :
-            rInvFlags |= 0x02;
+            rInvFlags |= static_cast<SwTabFrameInvFlags>(0x02);
             lcl_InvalidateAllLowersPrt( this );
             break;
         case RES_UL_SPACE:
-            rInvFlags |= 0x1C;
+            rInvFlags |= static_cast<SwTabFrameInvFlags>(0x1C);
             [[fallthrough]];
 
         default:
