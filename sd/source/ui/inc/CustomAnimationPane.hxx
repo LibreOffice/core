@@ -102,6 +102,7 @@ private:
 
     DECL_LINK( implControlListBoxHdl, weld::ComboBox&, void );
     DECL_LINK( implClickHdl, weld::Button&, void );
+    DECL_LINK( implToggleHdl, weld::ToggleButton&, void );
     DECL_LINK( implPropertyHdl, LinkParamNone*, void );
     DECL_LINK( EventMultiplexerListener, tools::EventMultiplexerEvent&, void );
     DECL_LINK( lateInitCallback, Timer *, void );

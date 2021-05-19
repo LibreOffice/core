@@ -182,7 +182,7 @@ void CustomAnimationPane::initialize()
     mxPBMoveUp->connect_clicked( LINK( this, CustomAnimationPane, implClickHdl ) );
     mxPBMoveDown->connect_clicked( LINK( this, CustomAnimationPane, implClickHdl ) );
     mxPBPlay->connect_clicked( LINK( this, CustomAnimationPane, implClickHdl ) );
-    mxCBAutoPreview->connect_clicked( LINK( this, CustomAnimationPane, implClickHdl ) );
+    mxCBAutoPreview->connect_toggled( LINK( this, CustomAnimationPane, implToggleHdl ) );
     mxLBCategory->connect_changed( LINK(this, CustomAnimationPane, UpdateAnimationLB) );
     mxMFStartDelay->connect_value_changed( LINK(this, CustomAnimationPane, DelayModifiedHdl) );
     mxMFStartDelay->connect_focus_out(LINK( this, CustomAnimationPane, DelayLoseFocusHdl));
@@ -2239,6 +2239,11 @@ sal_Int32 CustomAnimationPane::fillAnimationLB( bool bHasText )
         mxLBAnimation->vadjustment_set_value(nOldScrollPos);
 
     return nFirstEffect;
+}
+
+IMPL_LINK(CustomAnimationPane, implToggleHdl, weld::ToggleButton&, rBtn, void)
+{
+    implControlHdl(&rBtn);
 }
 
 IMPL_LINK(CustomAnimationPane, implClickHdl, weld::Button&, rBtn, void)
