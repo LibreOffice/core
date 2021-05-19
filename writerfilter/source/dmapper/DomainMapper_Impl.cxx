@@ -1400,6 +1400,15 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 
         if ( pStyleSheetProperties->GetListLevel() >= 0 )
             pParaContext->Insert( PROP_NUMBERING_LEVEL, uno::makeAny(pStyleSheetProperties->GetListLevel()), false);
+
+        if (nListId == 0 && !pList)
+        {
+            // Seems situation with listid=0 and missing list definition is used by MS Word
+            // to remove numbering defined previously. But some default numbering attributes
+            // are still applied. This is first line indent, probably something more?
+            if (!pParaContext->isSet(PROP_PARA_FIRST_LINE_INDENT))
+                pParaContext->Insert(PROP_PARA_FIRST_LINE_INDENT, uno::makeAny(sal_Int16(0)), false);
+        }
     }
 
     // apply AutoSpacing: it has priority over all other margin settings
