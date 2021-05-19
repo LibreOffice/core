@@ -284,8 +284,10 @@ void SwCommentRuler::NotifyKit()
 
     tools::JsonWriter aJsonWriter;
     CreateJsonNotification(aJsonWriter);
+    char* pJsonData = aJsonWriter.extractData();
     mpViewShell->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_RULER_UPDATE,
-                                                               aJsonWriter.extractData());
+                                                               pJsonData);
+    free(pJsonData);
 }
 
 void SwCommentRuler::Update()
