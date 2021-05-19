@@ -5482,9 +5482,10 @@ if test "$cross_compiling" = "yes"; then
     test -n "$enable_ccache" && sub_conf_opts="$sub_conf_opts --enable-ccache=$enable_ccache"
     test -n "$with_ant_home" && sub_conf_opts="$sub_conf_opts --with-ant-home=$with_ant_home"
     test "$with_junit" = "no" && sub_conf_opts="$sub_conf_opts --without-junit"
+    # While we don't need scripting support, we don't have a PYTHON_FOR_BUILD Java equivalent, so must enable scripting for Java
     if test -n "$ENABLE_JAVA"; then
         case "$_os" in
-        iOS) sub_conf_opts="$sub_conf_opts --without-java" ;; # force it off, like it used to be
+        iOS) sub_conf_opts="$sub_conf_opts --disable-scripting" ;; # force it off, as it used to be
         Android)
             # Hack for Android - the build doesn't need a host JDK, so just forward to build for convenience
             test -n "$with_jdk_home" && sub_conf_opts="$sub_conf_opts --with-jdk-home=$with_jdk_home"
@@ -5496,7 +5497,7 @@ if test "$cross_compiling" = "yes"; then
             ;;
         esac
     else
-        sub_conf_opts="$sub_conf_opts --without-java"
+        sub_conf_opts="$sub_conf_opts --disable-scripting"
     fi
     test -n "$TARFILE_LOCATION" && sub_conf_opts="$sub_conf_opts --with-external-tar=$TARFILE_LOCATION"
     test "$with_system_icu_for_build" = "yes" -o "$with_system_icu_for_build" = "force" && sub_conf_opts="$sub_conf_opts --with-system-icu"
@@ -5573,7 +5574,6 @@ if test "$cross_compiling" = "yes"; then
         OPENSSL
         ORCUS
         PYTHON
-        SCRIPTING
         ZLIB
 "
     # converts BUILD_TYPE and PERMITTED_BUILD_TARGETS into non-whitespace,
