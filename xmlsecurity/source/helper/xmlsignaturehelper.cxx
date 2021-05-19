@@ -23,7 +23,7 @@
 #include <xsecctl.hxx>
 #include <biginteger.hxx>
 
-#include <xmlsignaturehelper2.hxx>
+#include <UriBindingHelper.hxx>
 
 #include <tools/datetime.hxx>
 
