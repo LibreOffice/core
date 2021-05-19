@@ -87,6 +87,7 @@ class DefinedName : public DefinedNameBase
 {
 public:
     explicit            DefinedName( const WorkbookHelper& rHelper );
+    virtual ~DefinedName() override;
 
     /** Sets the attributes for this defined name from the passed attribute set. */
     void                importDefinedName( const AttributeList& rAttribs );
