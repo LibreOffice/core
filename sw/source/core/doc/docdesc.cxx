@@ -753,6 +753,7 @@ void SwDoc::DelPageDesc( size_t i, bool bBroadcast )
     PreDelPageDesc(&rDel); // #i7983#
 
     m_PageDescs.erase(m_PageDescs.begin() + i);
+    delete &rDel;
     getIDocumentState().SetModified();
 }
 
