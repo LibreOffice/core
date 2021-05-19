@@ -94,7 +94,7 @@ class SwAuthenticationSettingsDialog : public SfxDialogController
     DECL_LINK(OKHdl_Impl, weld::Button&, void);
     DECL_LINK(CheckBoxHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(RadioButtonHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(InServerHdl_Impl, weld::Button&, void);
+    DECL_LINK(InServerHdl_Impl, weld::ToggleButton&, void);
 
 public:
     SwAuthenticationSettingsDialog(weld::Window* pParent, SwMailMergeConfigItem& rItem);
@@ -391,9 +391,7 @@ SwAuthenticationSettingsDialog::SwAuthenticationSettingsDialog(
     m_xSeparateAuthenticationRB->connect_toggled( aRBLink );
     m_xSMTPAfterPOPRB->connect_toggled( aRBLink );
     m_xOKPB->connect_clicked( LINK( this, SwAuthenticationSettingsDialog, OKHdl_Impl));
-    Link<weld::Button&,void> aInServerLink = LINK( this, SwAuthenticationSettingsDialog, InServerHdl_Impl );
-    m_xPOP3RB->connect_clicked( aInServerLink );
-    m_xIMAPRB->connect_clicked( aInServerLink );
+    m_xPOP3RB->connect_toggled(LINK(this, SwAuthenticationSettingsDialog, InServerHdl_Impl));
 
     m_xAuthenticationCB->set_active(m_rConfigItem.IsAuthentication());
     if (m_rConfigItem.IsSMTPAfterPOP())
@@ -474,7 +472,7 @@ IMPL_LINK_NOARG(SwAuthenticationSettingsDialog, RadioButtonHdl_Impl, weld::Toggl
     m_xInPasswordED->set_sensitive(bNotSeparate);
 }
 
-IMPL_LINK_NOARG( SwAuthenticationSettingsDialog, InServerHdl_Impl, weld::Button&, void)
+IMPL_LINK_NOARG( SwAuthenticationSettingsDialog, InServerHdl_Impl, weld::ToggleButton&, void)
 {
     bool bPOP = m_xPOP3RB->get_active();
     m_rConfigItem.SetInServerPOP(bPOP);

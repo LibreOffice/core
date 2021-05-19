@@ -108,7 +108,7 @@ public:
     virtual short run() override;
 
 private:
-    DECL_LINK( DirectionHdl, weld::Button&, void );
+    DECL_LINK( DirectionHdl, weld::ToggleButton&, void );
     DECL_LINK( EditFieldsHdl, weld::Entry&, void );
     DECL_LINK( EditFieldsListBoxHdl, weld::ComboBox&, void );
     DECL_LINK( MappingSelectHdl, weld::TreeView&, void );

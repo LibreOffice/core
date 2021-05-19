@@ -391,8 +391,7 @@ ChineseDictionaryDialog::ChineseDictionaryDialog(weld::Window* pParent)
     m_xED_Mapping->connect_changed( LINK( this, ChineseDictionaryDialog, EditFieldsHdl ) );
     m_xLB_Property->connect_changed( LINK( this, ChineseDictionaryDialog, EditFieldsListBoxHdl ) );
 
-    m_xRB_To_Simplified->connect_clicked( LINK( this, ChineseDictionaryDialog, DirectionHdl ) );
-    m_xRB_To_Traditional->connect_clicked( LINK( this, ChineseDictionaryDialog, DirectionHdl ) );
+    m_xRB_To_Simplified->connect_toggled( LINK( this, ChineseDictionaryDialog, DirectionHdl ) );
 
     m_xCT_DictionaryToSimplified->connect_changed( LINK( this, ChineseDictionaryDialog, MappingSelectHdl ));
     m_xCT_DictionaryToTraditional->connect_changed( LINK( this, ChineseDictionaryDialog, MappingSelectHdl ));
@@ -424,7 +423,7 @@ void ChineseDictionaryDialog::setDirectionAndTextConversionOptions( bool bDirect
     updateAfterDirectionChange();
 }
 
-IMPL_LINK_NOARG(ChineseDictionaryDialog, DirectionHdl, weld::Button&, void)
+IMPL_LINK_NOARG(ChineseDictionaryDialog, DirectionHdl, weld::ToggleButton&, void)
 {
     updateAfterDirectionChange();
 }
