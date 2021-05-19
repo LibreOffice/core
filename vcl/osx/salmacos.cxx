@@ -275,6 +275,158 @@ void AquaSalGraphics::SetVirDevGraphics(CGLayerHolder const &rLayer, CGContextRe
              " (" << maShared.mnWidth << "x" << maShared.mnHeight << ") fScale=" << fScale << " mnBitmapDepth=" << maShared.mnBitmapDepth);
 }
 
+void XorEmulation::SetTarget(int nWidth, int nHeight, int nTargetDepth, CGContextRef xTargetContext, CGLayerRef xTargetLayer)
+{
+    SAL_INFO("vcl.quartz", "XorEmulation::SetTarget() this=" << this <<
+             " (" << nWidth << "x" << nHeight << ") depth=" << nTargetDepth <<
+             " context=" << xTargetContext << " layer=" << xTargetLayer);
+
+    // Prepare to replace old mask and temporary context
+
+    if (m_xMaskContext)
+    {
+        CGContextRelease(m_xMaskContext);
+        delete[] m_pMaskBuffer;
+        m_xMaskContext = nullptr;
+        m_pMaskBuffer = nullptr;
+        if (m_xTempContext)
+        {
+            CGContextRelease(m_xTempContext);
+            delete[] m_pTempBuffer;
+            m_xTempContext = nullptr;
+            m_pTempBuffer = nullptr;
+        }
+    }
+
+    // Return early if there is nothing more to do
+
+    if (!xTargetContext)
+        return;
+
+    // Retarget drawing operations to the XOR mask
+
+    m_xTargetLayer = xTargetLayer;
+    m_xTargetContext = xTargetContext;
+
+    // Prepare creation of matching bitmaps
+
+    CGColorSpaceRef aCGColorSpace = GetSalData()->mxRGBSpace;
+    CGBitmapInfo aCGBmpInfo = kCGImageAlphaNoneSkipFirst;
+    int nBitDepth = nTargetDepth;
+    if (!nBitDepth)
+        nBitDepth = 32;
+    int nBytesPerRow = 4;
+    const size_t nBitsPerComponent = (nBitDepth == 16) ? 5 : 8;
+    if (nBitDepth <= 8)
+    {
+        aCGColorSpace = GetSalData()->mxGraySpace;
+        aCGBmpInfo = kCGImageAlphaNone;
+        nBytesPerRow = 1;
+    }
+    float fScale = sal::aqua::getWindowScaling();
+    size_t nScaledWidth = nWidth * fScale;
+    size_t nScaledHeight = nHeight * fScale;
+    nBytesPerRow *= nScaledWidth;
+    m_nBufferLongs = (nScaledHeight * nBytesPerRow + sizeof(sal_uLong) - 1) / sizeof(sal_uLong);
+
+    // Create XOR mask context
+
+    m_pMaskBuffer = new sal_uLong[m_nBufferLongs];
+    m_xMaskContext = CGBitmapContextCreate(m_pMaskBuffer, nScaledWidth, nScaledHeight,
+                                           nBitsPerComponent, nBytesPerRow, aCGColorSpace, aCGBmpInfo);
+    SAL_WARN_IF(!m_xMaskContext, "vcl.quartz", "mask context creation failed");
+
+    // Reset XOR mask to black
+
+    memset(m_pMaskBuffer, 0, m_nBufferLongs * sizeof(sal_uLong));
+
+    // Create bitmap context for manual XOR unless target context is a bitmap context
+
+    if (nTargetDepth)
+        m_pTempBuffer = static_cast<sal_uLong*>(CGBitmapContextGetData(m_xTargetContext));
+    if (!m_pTempBuffer)
+    {
+        m_pTempBuffer = new sal_uLong[m_nBufferLongs];
+        m_xTempContext = CGBitmapContextCreate(m_pTempBuffer, nScaledWidth, nScaledHeight,
+                                               nBitsPerComponent, nBytesPerRow, aCGColorSpace, aCGBmpInfo);
+        SAL_WARN_IF(!m_xTempContext, "vcl.quartz", "temp context creation failed");
+    }
+
+    // Initialize XOR mask context for drawing
+
+    CGContextSetFillColorSpace(m_xMaskContext, aCGColorSpace);
+    CGContextSetStrokeColorSpace(m_xMaskContext, aCGColorSpace);
+    CGContextSetShouldAntialias(m_xMaskContext, false);
+
+    // Improve XOR emulation for monochrome contexts
+
+    if (aCGColorSpace == GetSalData()->mxGraySpace)
+        CGContextSetBlendMode(m_xMaskContext, kCGBlendModeDifference);
+
+    // Initialize XOR mask transformation matrix and apply scale matrix to consider layer scaling
+
+    const CGAffineTransform aCTM = CGContextGetCTM(xTargetContext);
+    CGContextConcatCTM(m_xMaskContext, aCTM);
+    if (m_xTempContext)
+    {
+        CGContextConcatCTM( m_xTempContext, aCTM );
+        CGContextScaleCTM(m_xTempContext, 1 / fScale, 1 / fScale);
+    }
+    CGContextSaveGState(m_xMaskContext);
+}
+
+bool XorEmulation::UpdateTarget()
+{
+    SAL_INFO("vcl.quartz", "XorEmulation::UpdateTarget() this=" << this);
+
+    if (!IsEnabled())
+        return false;
+
+    // Update temporary bitmap buffer
+
+    if (m_xTempContext)
+    {
+        SAL_WARN_IF(m_xTargetContext == nullptr, "vcl.quartz", "Target layer is NULL");
+        CGContextDrawLayerAtPoint(m_xTempContext, CGPointZero, m_xTargetLayer);
+    }
+
+    // XOR using XOR mask (sufficient for simple color manipulations as well as for complex XOR clipping used in metafiles)
+
+    const sal_uLong *pSrc = m_pMaskBuffer;
+    sal_uLong *pDst = m_pTempBuffer;
+    for (int i = m_nBufferLongs; --i >= 0;)
+        *(pDst++) ^= *(pSrc++);
+
+    // Write back XOR results to target context
+
+    if (m_xTempContext)
+    {
+        CGImageRef xXorImage = CGBitmapContextCreateImage(m_xTempContext);
+        size_t nWidth = CGImageGetWidth(xXorImage);
+        size_t nHeight = CGImageGetHeight(xXorImage);
+
+        // Set scale matrix of target context to consider layer scaling and update target context
+        // TODO: Update minimal change rectangle
+
+        const CGRect aFullRect = CGRectMake(0, 0, nWidth, nHeight);
+        CGContextSaveGState(m_xTargetContext);
+        float fScale = sal::aqua::getWindowScaling();
+        CGContextScaleCTM(m_xTargetContext, 1 / fScale, 1 / fScale);
+        CGContextDrawImage(m_xTargetContext, aFullRect, xXorImage);
+        CGContextRestoreGState(m_xTargetContext);
+        CGImageRelease(xXorImage);
+    }
+
+    // Reset XOR mask to black again
+    // TODO: Not needed for last update
+
+    memset(m_pMaskBuffer, 0, m_nBufferLongs * sizeof(sal_uLong));
+
+    // TODO: Return FALSE if target was not changed
+
+    return true;
+}
+
 // From salvd.cxx
 
 void AquaSalVirtualDevice::Destroy()
