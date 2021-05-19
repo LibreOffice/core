@@ -1823,7 +1823,56 @@ PropertyValue* PrintDialog::getValueForWindow( weld::Widget* i_pWindow ) const
 
 IMPL_LINK(PrintDialog, ToggleHdl, weld::ToggleButton&, rButton, void)
 {
-    ClickHdl(rButton);
+    if (&rButton == mxSingleJobsBox.get())
+    {
+        maPController->setValue( "SinglePrintJobs",
+                                 makeAny( isSingleJobs() ) );
+        checkControlDependencies();
+    }
+    else if( &rButton == mxCollateBox.get() )
+    {
+        maPController->setValue( "Collate",
+                                 makeAny( isCollate() ) );
+        checkControlDependencies();
+    }
+    else if( &rButton == mxReverseOrderBox.get() )
+    {
+        bool bChecked = mxReverseOrderBox->get_active();
+        maPController->setReversePrint( bChecked );
+        maPController->setValue( "PrintReverse",
+                                 makeAny( bChecked ) );
+        maUpdatePreviewIdle.Start();
+    }
+    else if( &rButton == mxBrochureBtn.get() )
+    {
+        PropertyValue* pVal = getValueForWindow( &rButton );
+        if( pVal )
+        {
+            bool bVal = mxBrochureBtn->get_active();
+            pVal->Value <<= bVal;
+
+            checkOptionalControlDependencies();
+
+            // update preview and page settings
+            maUpdatePreviewNoCacheIdle.Start();
+        }
+        if( mxBrochureBtn->get_active() )
+        {
+            mxOrientationBox->set_sensitive( false );
+            mxOrientationBox->set_active( ORIENTATION_LANDSCAPE );
+            mxNupPagesBox->set_active( 0 );
+            updateNupFromPages();
+            showAdvancedControls( false );
+            enableNupControls( false );
+        }
+    }
+    else if( &rButton == mxPagesBtn.get() )
+    {
+        mxOrientationBox->set_sensitive( true );
+        mxOrientationBox->set_active( ORIENTATION_AUTOMATIC );
+        enableNupControls( true );
+        updateNupFromPages();
+    }
 }
 
 IMPL_LINK(PrintDialog, ClickHdl, weld::Button&, rButton, void)
@@ -1861,56 +1910,6 @@ IMPL_LINK(PrintDialog, ClickHdl, weld::Button&, rButton, void)
     else if( &rButton == mxLastBtn.get() )
     {
         previewLast();
-    }
-    else if( &rButton == mxBrochureBtn.get() )
-    {
-        PropertyValue* pVal = getValueForWindow( &rButton );
-        if( pVal )
-        {
-            bool bVal = mxBrochureBtn->get_active();
-            pVal->Value <<= bVal;
-
-            checkOptionalControlDependencies();
-
-            // update preview and page settings
-            maUpdatePreviewNoCacheIdle.Start();
-        }
-        if( mxBrochureBtn->get_active() )
-        {
-            mxOrientationBox->set_sensitive( false );
-            mxOrientationBox->set_active( ORIENTATION_LANDSCAPE );
-            mxNupPagesBox->set_active( 0 );
-            updateNupFromPages();
-            showAdvancedControls( false );
-            enableNupControls( false );
-        }
-    }
-    else if( &rButton == mxPagesBtn.get() )
-    {
-        mxOrientationBox->set_sensitive( true );
-        mxOrientationBox->set_active( ORIENTATION_AUTOMATIC );
-        enableNupControls( true );
-        updateNupFromPages();
-    }
-    else if( &rButton == mxCollateBox.get() )
-    {
-        maPController->setValue( "Collate",
-                                 makeAny( isCollate() ) );
-        checkControlDependencies();
-    }
-    else if( &rButton == mxSingleJobsBox.get() )
-    {
-        maPController->setValue( "SinglePrintJobs",
-                                 makeAny( isSingleJobs() ) );
-        checkControlDependencies();
-    }
-    else if( &rButton == mxReverseOrderBox.get() )
-    {
-        bool bChecked = mxReverseOrderBox->get_active();
-        maPController->setReversePrint( bChecked );
-        maPController->setValue( "PrintReverse",
-                                 makeAny( bChecked ) );
-        maUpdatePreviewIdle.Start();
     }
     else if( &rButton == mxBorderCB.get() )
     {
