@@ -9,7 +9,12 @@
 
 $(eval $(call gb_Library_Library,xsec_xmlsec))
 
-$(eval $(call gb_Library_set_componentfile,xsec_xmlsec,xmlsecurity/util/xsec_xmlsec))
+$(eval $(call gb_Library_set_componentfiles,xsec_xmlsec, \
+    $(if $(ENABLE_GPGMEPP),xmlsecurity/util/xsec_xmlsec_gpg) \
+    $(if $(or $(ENABLE_NSS),$(filter WNT,$(OS))),xmlsecurity/util/xsec_xmlsec_mscrypt) \
+    $(if $(ENABLE_NSS),xmlsecurity/util/xsec_xmlsec_nss) \
+    xmlsecurity/util/xsec_xmlsec \
+))
 
 $(eval $(call gb_Library_set_include,xsec_xmlsec,\
 	$$(INCLUDE) \

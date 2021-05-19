@@ -817,6 +817,7 @@ opts.add_option("-j", "--java-guard", action="store_true", help="include externa
 opts.add_option("-g", "--group", action="append", help="group of implementations to make available in application", dest="groups")
 opts.add_option("-r", "--limit-rdb", action="append", help="instead of outputting native-code.cxx, limit the services.rdb only to the services defined by the groups", dest="services")
 opts.add_option("-C", "--pure-c", action="store_true", help="do not print extern \"C\"", dest="pure_c", default=False)
+opts.add_option("-c", "--constructors", help="file with the list of constructors", dest="constructors_file")
 
 (options, args) = opts.parse_args()
 
@@ -829,6 +830,9 @@ if options.groups:
                 full_constructor_map[constructor[0]] = constructor[1]
             else:
                 full_constructor_map[constructor] = True
+
+if not options.groups and options.constructors_file:
+    options.groups = factory_map.keys()
 
 # dict of all the factories that we need according to -g's
 full_factory_map = {}
@@ -845,6 +849,11 @@ if options.groups:
 if options.services:
     limit_rdb(options.services, full_factory_map, full_constructor_map)
     exit(0)
+
+if options.constructors_file:
+    with open(options.constructors_file, "r") as constructors:
+        for line in constructors:
+            full_constructor_map[line.strip()] = True
 
 print ("""/*
  * This is a generated file. Do not edit.

@@ -19,7 +19,10 @@
 
 $(eval $(call gb_Library_Library,svx))
 
-$(eval $(call gb_Library_set_componentfile,svx,svx/util/svx))
+$(eval $(call gb_Library_set_componentfiles,svx, \
+    $(call gb_Helper_optional,BREAKPAD,svx/util/crashreport) \
+    svx/util/svx \
+))
 
 $(eval $(call gb_Library_set_include,svx,\
     -I$(SRCDIR)/svx/inc \

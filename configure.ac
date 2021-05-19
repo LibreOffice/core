@@ -1959,6 +1959,10 @@ AC_ARG_ENABLE(xmlhelp,
         [Disable XML help support]),
 ,enable_xmlhelp=yes)
 
+AC_ARG_ENABLE(services-rdb-from-build,
+    AS_HELP_STRING([--enable-services-rdb-from-build],
+        [Automatically create the services.rdb from all build components. WIP]))
+
 
 dnl ===================================================================
 dnl Optional Packages (--with/without-)
@@ -2546,6 +2550,7 @@ AC_ARG_WITH(locales,
          Very experimental and might well break stuff.
          Just a desperate measure to shrink code and data size.
          By default all the locales available is included.
+         Just works with --disable-dynloading. Defaults to "ALL".
          This option is completely unrelated to --with-lang.])
     [
                           Affects also our character encoding conversion
@@ -2807,7 +2812,6 @@ AC_ARG_WITH(system-icu-for-build,
     AS_HELP_STRING([--with-system-icu-for-build=yes/no/force],
         [Use icu already on system for build tools (cross-compilation only).]))
 
-
 dnl ===================================================================
 dnl Check for incompatible options set by fuzzing, and reset those
 dnl automatically to working combinations
@@ -2925,6 +2929,15 @@ if test $_os != iOS -a $_os != Android -a $_os != Emscripten -a "$enable_fuzzers
     AC_DEFINE(HAVE_FEATURE_DESKTOP)
     AC_DEFINE(HAVE_FEATURE_MULTIUSER_ENVIRONMENT)
 fi
+
+ENABLE_SERVICES_RDB_FROM_BUILD=
+if test "$enable_services_rdb_from_build" = yes; then
+    ENABLE_SERVICES_RDB_FROM_BUILD=TRUE
+    if test -n "$with_locales" -a "$with_locales" != en -a "$with_locales" != ALL; then
+        AC_MSG_ERROR([Currently just --with-locales=all or en is supported with --enable-services-rdb-from-build])
+    fi
+fi
+AC_SUBST(ENABLE_SERVICES_RDB_FROM_BUILD)
 
 # Whether to build "avmedia" functionality or not.
 
@@ -5467,6 +5480,7 @@ if test "$cross_compiling" = "yes"; then
         --disable-pdfimport \
         --disable-postgresql-sdbc \
         --disable-scripting \
+        --disable-services-rdb-from-build \
         --disable-skia \
         --enable-icecream="$enable_icecream" \
         --without-doxygen \
@@ -13821,7 +13835,7 @@ if test -d "$SRC_ROOT/translations/source"; then
 fi
 AC_SUBST(WITH_POOR_HELP_LOCALIZATIONS)
 
-if test -n "$with_locales"; then
+if test -n "$with_locales" -a "$with_locales" != ALL; then
     WITH_LOCALES="$with_locales"
 
     just_langs="`echo $WITH_LOCALES | sed -e 's/_[A-Z]*//g'`"
