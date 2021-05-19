@@ -77,7 +77,7 @@ namespace dbaui
         DECL_LINK( OnIndexAction, const OString&, void );
         DECL_LINK( OnEntryEditing, const weld::TreeIter&, bool );
         DECL_LINK( OnEntryEdited, const IterString&, bool );
-        DECL_LINK( OnModifiedClick, weld::Button&, void );
+        DECL_LINK( OnModifiedClick, weld::ToggleButton&, void );
         DECL_LINK( OnModified, IndexFieldsControl&, void );
         DECL_LINK( OnCloseDialog, weld::Button&, void );
 

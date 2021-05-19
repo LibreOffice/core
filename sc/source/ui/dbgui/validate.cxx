@@ -403,7 +403,7 @@ void ScTPValidationValue::Init()
 {
     m_xLbAllow->connect_changed( LINK( this, ScTPValidationValue, SelectHdl ) );
     m_xLbValue->connect_changed( LINK( this, ScTPValidationValue, SelectHdl ) );
-    m_xCbShow->connect_clicked( LINK( this, ScTPValidationValue, CheckHdl ) );
+    m_xCbShow->connect_toggled( LINK( this, ScTPValidationValue, CheckHdl ) );
 
     // cell range picker
     m_xEdMin->SetGetFocusHdl( LINK( this, ScTPValidationValue, EditSetFocusHdl ) );
@@ -688,7 +688,7 @@ IMPL_LINK_NOARG(ScTPValidationValue, SelectHdl, weld::ComboBox&, void)
     m_xBtnRef->GetWidget()->set_visible( bRange );  // cell range picker
 }
 
-IMPL_LINK_NOARG(ScTPValidationValue, CheckHdl, weld::Button&, void)
+IMPL_LINK_NOARG(ScTPValidationValue, CheckHdl, weld::ToggleButton&, void)
 {
     m_xCbSort->set_sensitive( m_xCbShow->get_active() );
 }

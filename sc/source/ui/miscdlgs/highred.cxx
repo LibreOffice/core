@@ -43,7 +43,7 @@ ScHighlightChgDlg::ScHighlightChgDlg(SfxBindings* pB, SfxChildWindow* pCW, weld:
     m_xRbAssign->SetReferences(this, m_xEdAssign.get());
 
     m_xOkButton->connect_clicked(LINK( this, ScHighlightChgDlg, OKBtnHdl));
-    m_xHighlightBox->connect_clicked(LINK( this, ScHighlightChgDlg, HighlightHandle ));
+    m_xHighlightBox->connect_toggled(LINK( this, ScHighlightChgDlg, HighlightHandle ));
     m_xFilterCtr->SetRefHdl(LINK( this, ScHighlightChgDlg, RefHandle ));
     m_xFilterCtr->HideRange(false);
     m_xFilterCtr->Show();
@@ -161,7 +161,7 @@ bool ScHighlightChgDlg::IsRefInputMode() const
     return m_xEdAssign->GetWidget()->get_visible();
 }
 
-IMPL_LINK_NOARG(ScHighlightChgDlg, HighlightHandle, weld::Button&, void)
+IMPL_LINK_NOARG(ScHighlightChgDlg, HighlightHandle, weld::ToggleButton&, void)
 {
     if (m_xHighlightBox->get_active())
     {

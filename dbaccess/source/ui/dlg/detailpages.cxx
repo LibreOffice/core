@@ -164,7 +164,7 @@ namespace dbaui
         , m_xIndexes(m_xBuilder->weld_button("indiciesButton"))
     {
         m_xIndexes->connect_clicked(LINK(this, ODbaseDetailsPage, OnButtonClicked));
-        m_xShowDeleted->connect_clicked(LINK(this, ODbaseDetailsPage, OnButtonClicked));
+        m_xShowDeleted->connect_toggled(LINK(this, ODbaseDetailsPage, OnButtonToggled));
     }
 
     ODbaseDetailsPage::~ODbaseDetailsPage()
@@ -209,20 +209,19 @@ namespace dbaui
         return bChangedSomething;
     }
 
-    IMPL_LINK(ODbaseDetailsPage, OnButtonClicked, weld::Button&, rButton, void)
+    IMPL_LINK_NOARG(ODbaseDetailsPage, OnButtonClicked, weld::Button&, void)
     {
-        if (m_xIndexes.get() == &rButton)
-        {
-            ODbaseIndexDialog aIndexDialog(GetFrameWeld(), m_sDsn);
-            aIndexDialog.run();
-        }
-        else
-        {
-            m_xFT_Message->set_visible(m_xShowDeleted->get_active());
-            // it was one of the checkboxes -> we count as modified from now on
-            callModifiedHdl();
-        }
+        ODbaseIndexDialog aIndexDialog(GetFrameWeld(), m_sDsn);
+        aIndexDialog.run();
     }
+
+    IMPL_LINK_NOARG(ODbaseDetailsPage, OnButtonToggled, weld::ToggleButton&, void)
+    {
+        m_xFT_Message->set_visible(m_xShowDeleted->get_active());
+        // it was the checkbox -> we count as modified from now on
+        callModifiedHdl();
+    }
+
 
     // OAdoDetailsPage
     OAdoDetailsPage::OAdoDetailsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)

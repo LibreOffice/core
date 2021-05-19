@@ -347,8 +347,7 @@ OAddTableDlg::OAddTableDlg(weld::Window* pParent, IAddTableDialogContext& _rCont
     rTableList.set_size_request(aSize.Width(), aSize.Height());
     m_xQueryList->set_size_request(aSize.Width(), aSize.Height());
 
-    m_xCaseTables->connect_clicked( LINK( this, OAddTableDlg, OnTypeSelected ) );
-    m_xCaseQueries->connect_clicked( LINK( this, OAddTableDlg, OnTypeSelected ) );
+    m_xCaseTables->connect_toggled(LINK(this, OAddTableDlg, OnTypeSelected));
     m_xAddButton->connect_clicked( LINK( this, OAddTableDlg, AddClickHdl ) );
     m_xCloseButton->connect_clicked( LINK( this, OAddTableDlg, CloseClickHdl ) );
     rTableList.connect_row_activated( LINK( this, OAddTableDlg, TableListDoubleClickHdl ) );
@@ -435,7 +434,7 @@ IMPL_LINK_NOARG( OAddTableDlg, CloseClickHdl, weld::Button&, void )
     m_xDialog->response(RET_CLOSE);
 }
 
-IMPL_LINK_NOARG( OAddTableDlg, OnTypeSelected, weld::Button&, void )
+IMPL_LINK_NOARG(OAddTableDlg, OnTypeSelected, weld::ToggleButton&, void)
 {
     if ( m_xCaseTables->get_active() )
         impl_switchTo( Tables );

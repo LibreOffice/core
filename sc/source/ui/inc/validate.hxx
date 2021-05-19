@@ -96,7 +96,7 @@ private:
     void                        SetSecondFormula( const OUString& rFmlaStr );
 
                                 DECL_LINK(SelectHdl, weld::ComboBox&, void);
-                                DECL_LINK(CheckHdl, weld::Button&, void);
+                                DECL_LINK(CheckHdl, weld::ToggleButton&, void);
 
     OUString                    maStrMin;
     OUString                    maStrMax;

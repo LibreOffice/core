@@ -116,7 +116,7 @@ namespace dbaui
 
         fillIndexList();
 
-        m_xUnique->connect_clicked(LINK(this, DbaIndexDialog, OnModifiedClick));
+        m_xUnique->connect_toggled(LINK(this, DbaIndexDialog, OnModifiedClick));
         m_xFields->SetModifyHdl(LINK(this, DbaIndexDialog, OnModified));
 
         m_xClose->connect_clicked(LINK(this, DbaIndexDialog, OnCloseDialog));
@@ -615,7 +615,7 @@ namespace dbaui
         return true;
     }
 
-    IMPL_LINK_NOARG(DbaIndexDialog, OnModifiedClick, weld::Button&, void)
+    IMPL_LINK_NOARG(DbaIndexDialog, OnModifiedClick, weld::ToggleButton&, void)
     {
         OnModified(*m_xFields);
     }
