@@ -446,6 +446,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf120394, "tdf120394.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf132752, "tdf132752.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1801), getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), getProperty<sal_Int32>(getParagraph(1), "ParaRightMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(1), "ParaFirstLineIndent"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testHyphenationAuto, "hyphenation.odt")
 {
     // Explicitly set hyphenation=auto on document level
