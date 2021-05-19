@@ -32,7 +32,9 @@
 #include <fmtornt.hxx>
 #include <frmatr.hxx>
 #include <fesh.hxx>
+#include <wrtsh.hxx>
 #include <doc.hxx>
+#include <docsh.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <cntfrm.hxx>
@@ -325,6 +327,26 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
     }
 
     CurrShell aCurr( this );
+
+    // tracked deletion: remove only textbox content,
+    // and set IsNoTracked table line property to false
+    if ( GetDoc()->GetDocShell()->IsChangeRecording() )
+    {
+        StartUndo(bCompleteTable ? SwUndoId::UI_TABLE_DELETE : SwUndoId::ROW_DELETE);
+        StartAllAction();
+
+        SvxPrintItem aNotTracked(RES_PRINT, false);
+        GetDoc()->SetRowNotTracked( *getShellCursor( false ), aNotTracked );
+
+        if ( SwWrtShell* pWrtShell = dynamic_cast<SwWrtShell*>(this) )
+            pWrtShell->SelectTableRow();
+        GetDoc()->GetEditShell()->Delete();
+
+        EndAllActionAndCall();
+        EndUndo(bCompleteTable ? SwUndoId::UI_TABLE_DELETE : SwUndoId::ROW_DELETE);
+        return true;
+    }
+
     StartAllAction();
 
     // search for boxes via the layout
