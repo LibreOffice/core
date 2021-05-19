@@ -688,14 +688,14 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, const std::shared_ptr<PrinterC
     mxForwardBtn->connect_clicked(LINK(this, PrintDialog, ClickHdl));
     mxFirstBtn->connect_clicked(LINK(this, PrintDialog, ClickHdl));
     mxLastBtn->connect_clicked( LINK( this, PrintDialog, ClickHdl ) );
-    mxPreviewBox->connect_clicked( LINK( this, PrintDialog, ClickHdl ) );
-    mxBorderCB->connect_clicked( LINK( this, PrintDialog, ClickHdl ) );
 
     // setup toggle hdl
     mxReverseOrderBox->connect_toggled( LINK( this, PrintDialog, ToggleHdl ) );
     mxCollateBox->connect_toggled( LINK( this, PrintDialog, ToggleHdl ) );
     mxSingleJobsBox->connect_toggled( LINK( this, PrintDialog, ToggleHdl ) );
     mxBrochureBtn->connect_toggled( LINK( this, PrintDialog, ToggleHdl ) );
+    mxPreviewBox->connect_toggled( LINK( this, PrintDialog, ToggleHdl ) );
+    mxBorderCB->connect_toggled( LINK( this, PrintDialog, ToggleHdl ) );
 
     // setup select hdl
     mxPrinters->connect_changed( LINK( this, PrintDialog, SelectHdl ) );
@@ -1822,7 +1822,15 @@ PropertyValue* PrintDialog::getValueForWindow( weld::Widget* i_pWindow ) const
 
 IMPL_LINK(PrintDialog, ToggleHdl, weld::ToggleButton&, rButton, void)
 {
-    if (&rButton == mxSingleJobsBox.get())
+    if (&rButton == mxPreviewBox.get())
+    {
+        maUpdatePreviewIdle.Start();
+    }
+    else if( &rButton == mxBorderCB.get() )
+    {
+        updateNup();
+    }
+    else if (&rButton == mxSingleJobsBox.get())
     {
         maPController->setValue( "SinglePrintJobs",
                                  makeAny( isSingleJobs() ) );
@@ -1891,10 +1899,6 @@ IMPL_LINK(PrintDialog, ClickHdl, weld::Button&, rButton, void)
             pHelp->Start("vcl/ui/printdialog/PrintDialog", mxOKButton.get());
         }
     }
-    else if ( &rButton == mxPreviewBox.get() )
-    {
-        maUpdatePreviewIdle.Start();
-    }
     else if( &rButton == mxForwardBtn.get() )
     {
         previewForward();
@@ -1910,10 +1914,6 @@ IMPL_LINK(PrintDialog, ClickHdl, weld::Button&, rButton, void)
     else if( &rButton == mxLastBtn.get() )
     {
         previewLast();
-    }
-    else if( &rButton == mxBorderCB.get() )
-    {
-        updateNup();
     }
     else
     {
