@@ -39,7 +39,7 @@
 #include <sal/log.hxx>
 #include <unotools/datetime.hxx>
 #include "ooxmlsecexporter.hxx"
-#include <xmlsignaturehelper2.hxx>
+#include <UriBindingHelper.hxx>
 
 using namespace com::sun::star;
 

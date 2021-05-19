@@ -16174,10 +16174,10 @@ xmlsecurity/inc/framework/xmlsignaturetemplateimpl.hxx
 xmlsecurity/inc/gpg/SEInitializer.hxx
 xmlsecurity/inc/gpg/xmlsignature_gpgimpl.hxx
 xmlsecurity/inc/macrosecurity.hxx
+xmlsecurity/inc/UriBindingHelper.hxx
 xmlsecurity/inc/xmlsec/saxhelper.hxx
 xmlsecurity/inc/xmlsec/xmldocumentwrapper_xmlsecimpl.hxx
 xmlsecurity/inc/xmlsignaturehelper.hxx
-xmlsecurity/inc/xmlsignaturehelper2.hxx
 xmlsecurity/inc/xsecctl.hxx
 xmlsecurity/qa/certext/SanCertExt.cxx
 xmlsecurity/source/component/certificatecontainer.cxx
@@ -16207,8 +16207,8 @@ xmlsecurity/source/gpg/xmlsignature_gpgimpl.cxx
 xmlsecurity/source/helper/documentsignaturehelper.cxx
 xmlsecurity/source/helper/ooxmlsecparser.cxx
 xmlsecurity/source/helper/ooxmlsecparser.hxx
+xmlsecurity/source/helper/UriBindingHelper.cxx
 xmlsecurity/source/helper/xmlsignaturehelper.cxx
-xmlsecurity/source/helper/xmlsignaturehelper2.cxx
 xmlsecurity/source/helper/xsecctl.cxx
 xmlsecurity/source/helper/xsecparser.cxx
 xmlsecurity/source/helper/xsecparser.hxx

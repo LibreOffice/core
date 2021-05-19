@@ -39,7 +39,7 @@ $(eval $(call gb_Module_add_screenshot_targets,xmlsecurity,\
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,xmlsecurity,\
-    Executable_pdfverify \
+    $(if $(DISABLE_DYNLOADING),,Executable_pdfverify) \
 ))
 endif
 
