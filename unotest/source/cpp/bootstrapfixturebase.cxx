@@ -8,11 +8,13 @@
  */
 
 #include <sal/config.h>
+#include <config_features.h>
 
 #include <unotest/bootstrapfixturebase.hxx>
 #include <comphelper/processfactory.hxx>
+#if HAVE_FEATURE_SCRIPTING
 #include <basic/sbstar.hxx>
-#include <config_features.h>
+#endif
 
 using namespace ::com::sun::star;
 
