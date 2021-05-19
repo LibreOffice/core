@@ -133,6 +133,8 @@ endef
 # But the component target also must be delivered; use the target
 # gb_Library_get_exports_target for that purpose, since it is already
 # the "final" target of the Library...
+#
+# call gb_Library_set_componentfile,library,componentfile
 define gb_Library_set_componentfile
 $(call gb_ComponentTarget_ComponentTarget,$(2),\
 	$(call gb_Library__get_componentprefix,$(gb_Library__get_name)),\
@@ -143,6 +145,13 @@ $(call gb_ComponentTarget_get_target,$(2)) :| \
 	$(call gb_Library_get_target,$(gb_Library__get_name))
 $(call gb_Library_get_clean_target,$(gb_Library__get_name)) : \
 	$(call gb_ComponentTarget_get_clean_target,$(2))
+
+endef
+
+# call gb_Library_set_componentfiles,library,componentfiles
+define gb_Library_set_componentfiles
+$(foreach comp,$(2),$(call gb_Library_set_componentfile,$(1),$(comp)))
+
 endef
 
 gb_Library__get_name = $(if $(filter $(1),$(gb_MERGEDLIBS)),merged,$(1))
