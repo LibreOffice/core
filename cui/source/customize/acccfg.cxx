@@ -863,8 +863,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(weld::Container* pPage,
     m_xLoadButton->connect_clicked(LINK(this, SfxAcceleratorConfigPage, Load));
     m_xSaveButton->connect_clicked(LINK(this, SfxAcceleratorConfigPage, Save));
     m_xResetButton->connect_clicked(LINK(this, SfxAcceleratorConfigPage, Default));
-    m_xOfficeButton->connect_clicked(LINK(this, SfxAcceleratorConfigPage, RadioHdl));
-    m_xModuleButton->connect_clicked(LINK(this, SfxAcceleratorConfigPage, RadioHdl));
+    m_xOfficeButton->connect_toggled(LINK(this, SfxAcceleratorConfigPage, RadioHdl));
     m_xSearchEdit->connect_changed(LINK(this, SfxAcceleratorConfigPage, SearchUpdateHdl));
     m_xSearchEdit->connect_focus_out(LINK(this, SfxAcceleratorConfigPage, FocusOut_Impl));
 
@@ -1254,7 +1253,7 @@ IMPL_LINK(SfxAcceleratorConfigPage, SelectHdl, weld::TreeView&, rListBox, void)
     }
 }
 
-IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RadioHdl, weld::Button&, void)
+IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RadioHdl, weld::ToggleButton&, void)
 {
     uno::Reference<ui::XAcceleratorConfiguration> xOld = m_xAct;
 
