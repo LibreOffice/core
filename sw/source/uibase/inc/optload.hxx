@@ -77,7 +77,7 @@ private:
     std::unique_ptr<weld::SpinButton> m_xStandardizedPageSizeNF;
 
     DECL_LINK(MetricHdl, weld::ComboBox&, void);
-    DECL_LINK(StandardizedPageCountCheckHdl, weld::Button&, void);
+    DECL_LINK(StandardizedPageCountCheckHdl, weld::ToggleButton&, void);
 
 public:
     SwLoadOptPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);

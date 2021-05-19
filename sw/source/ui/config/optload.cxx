@@ -131,8 +131,7 @@ SwLoadOptPage::SwLoadOptPage(weld::Container* pPage, weld::DialogController* pCo
         m_xUseCharUnit->hide();
     }
 
-    Link<weld::Button&,void> aLink = LINK(this, SwLoadOptPage, StandardizedPageCountCheckHdl);
-    m_xShowStandardizedPageCount->connect_clicked(aLink);
+    m_xShowStandardizedPageCount->connect_toggled(LINK(this, SwLoadOptPage, StandardizedPageCountCheckHdl));
 }
 
 SwLoadOptPage::~SwLoadOptPage()
@@ -145,7 +144,7 @@ std::unique_ptr<SfxTabPage> SwLoadOptPage::Create( weld::Container* pPage, weld:
     return std::make_unique<SwLoadOptPage>(pPage, pController, *rAttrSet );
 }
 
-IMPL_LINK_NOARG(SwLoadOptPage, StandardizedPageCountCheckHdl, weld::Button&, void)
+IMPL_LINK_NOARG(SwLoadOptPage, StandardizedPageCountCheckHdl, weld::ToggleButton&, void)
 {
     m_xStandardizedPageSizeNF->set_sensitive(m_xShowStandardizedPageCount->get_active());
 }

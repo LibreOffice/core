@@ -101,6 +101,7 @@ namespace dbaui
 
     private:
         DECL_LINK(OnButtonClicked, weld::Button&, void);
+        DECL_LINK(OnButtonToggled, weld::ToggleButton&, void);
     };
 
     // OAdoDetailsPage

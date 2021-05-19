@@ -132,7 +132,7 @@ PasswordToOpenModifyDialog::PasswordToOpenModifyDialog(weld::Window * pParent, s
     if (!bIsPasswordToModify)
         m_xOptionsExpander->hide();
 
-    m_xOpenReadonlyCB->connect_clicked(LINK(this, PasswordToOpenModifyDialog, ReadonlyOnOffHdl));
+    m_xOpenReadonlyCB->connect_toggled(LINK(this, PasswordToOpenModifyDialog, ReadonlyOnOffHdl));
     ReadonlyOnOffHdl(*m_xOpenReadonlyCB);
 }
 
@@ -159,7 +159,7 @@ bool PasswordToOpenModifyDialog::IsRecommendToOpenReadonly() const
     return m_xOpenReadonlyCB->get_active();
 }
 
-IMPL_LINK_NOARG(PasswordToOpenModifyDialog, ReadonlyOnOffHdl, weld::Button&, void)
+IMPL_LINK_NOARG(PasswordToOpenModifyDialog, ReadonlyOnOffHdl, weld::ToggleButton&, void)
 {
     bool bEnable = m_xOpenReadonlyCB->get_active();
     m_xPasswdToModifyED->set_sensitive(bEnable);

@@ -70,7 +70,7 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp(weld::Container* pParent,
     Link<weld::Button&, void> aLink( LINK ( this, SvxHyperlinkInternetTp, Click_SmartProtocol_Impl ) );
     m_xRbtLinktypInternet->connect_clicked( aLink );
     m_xRbtLinktypFTP->connect_clicked( aLink );
-    m_xCbAnonymous->connect_clicked( LINK ( this, SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl ) );
+    m_xCbAnonymous->connect_toggled( LINK ( this, SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl ) );
     m_xEdLogin->connect_changed( LINK ( this, SvxHyperlinkInternetTp, ModifiedLoginHdl_Impl ) );
     m_xCbbTarget->connect_focus_out( LINK ( this, SvxHyperlinkInternetTp, LostFocusTargetHdl_Impl ) );
     m_xCbbTarget->connect_changed( LINK ( this, SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl ) );
@@ -325,7 +325,7 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, Click_SmartProtocol_Impl, weld::Button&,
 |* Click on Checkbox : Anonymous user
 |*
 |************************************************************************/
-IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl, weld::Button&, void)
+IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl, weld::ToggleButton&, void)
 {
     // disable login-editfields if checked
     if ( m_xCbAnonymous->get_active() )

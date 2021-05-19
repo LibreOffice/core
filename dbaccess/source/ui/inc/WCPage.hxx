@@ -42,7 +42,7 @@ namespace dbaui
 
         DECL_LINK( AppendDataClickHdl, weld::Button&, void );
         DECL_LINK( RadioChangeHdl, weld::Button&, void );
-        DECL_LINK( KeyClickHdl, weld::Button&, void );
+        DECL_LINK( KeyClickHdl, weld::ToggleButton&, void );
 
         bool checkAppendData();
         void SetAppendDataRadio();

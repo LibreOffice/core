@@ -92,8 +92,8 @@ void ScSamplingDialog::Init()
     mxPeriodicMethodRadio->connect_toggled( LINK( this, ScSamplingDialog, ToggleSamplingMethod ) );
     mxRandomMethodRadio->connect_toggled( LINK( this, ScSamplingDialog, ToggleSamplingMethod ) );
 
-    mxWithReplacement->connect_clicked( LINK( this, ScSamplingDialog, CheckHdl));
-    mxKeepOrder->connect_clicked( LINK( this, ScSamplingDialog, CheckHdl));
+    mxWithReplacement->connect_toggled( LINK( this, ScSamplingDialog, CheckHdl));
+    mxKeepOrder->connect_toggled( LINK( this, ScSamplingDialog, CheckHdl));
 
     mxOutputRangeEdit->GrabFocus();
     mxPeriodicMethodRadio->set_active(true);
@@ -466,7 +466,7 @@ void ScSamplingDialog::ToggleSamplingMethod()
     }
 }
 
-IMPL_LINK(ScSamplingDialog, CheckHdl, weld::Button&, rBtn, void)
+IMPL_LINK(ScSamplingDialog, CheckHdl, weld::ToggleButton&, rBtn, void)
 {
     // Keep both checkboxes enabled so user can easily switch between the three
     // possible combinations (one or the other or none), just uncheck the other

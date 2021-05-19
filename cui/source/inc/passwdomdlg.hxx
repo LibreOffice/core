@@ -47,7 +47,7 @@ class PasswordToOpenModifyDialog : public SfxDialogController
 
 
     DECL_LINK(OkBtnClickHdl, weld::Button&, void);
-    DECL_LINK(ReadonlyOnOffHdl, weld::Button&, void);
+    DECL_LINK(ReadonlyOnOffHdl, weld::ToggleButton&, void);
     DECL_LINK(ChangeHdl, weld::Entry&, void);
 
     PasswordToOpenModifyDialog( const PasswordToOpenModifyDialog & ) = delete;

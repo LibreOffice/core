@@ -154,7 +154,7 @@ private:
     // Handler:
     DECL_LINK( LbSelectHdl,  weld::ComboBox&, void );
     DECL_LINK( ValModifyHdl, weld::ComboBox&, void );
-    DECL_LINK( CheckBoxHdl,  weld::Button&, void );
+    DECL_LINK( CheckBoxHdl,  weld::ToggleButton&, void );
     DECL_LINK( BtnClearHdl,  weld::Button&, void );
     DECL_LINK( BtnRemoveHdl, weld::Button&, void );
     DECL_LINK( EndDlgHdl,    weld::Button&, void );

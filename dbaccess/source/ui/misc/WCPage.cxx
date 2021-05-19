@@ -72,7 +72,7 @@ OCopyTable::OCopyTable(weld::Container* pPage, OCopyTableWizard* pWizard)
         m_xRB_Def->connect_clicked(          LINK( this, OCopyTable, RadioChangeHdl      ) );
         m_xRB_View->connect_clicked(         LINK( this, OCopyTable, RadioChangeHdl      ) );
 
-        m_xCB_PrimaryColumn->connect_clicked(LINK( this, OCopyTable, KeyClickHdl         ) );
+        m_xCB_PrimaryColumn->connect_toggled(LINK( this, OCopyTable, KeyClickHdl         ) );
 
         m_xFT_KeyName->set_sensitive(false);
         m_xEdKeyName->set_sensitive(false);
@@ -121,7 +121,7 @@ IMPL_LINK(OCopyTable, RadioChangeHdl, weld::Button&, rButton, void)
         m_pParent->setOperation( CopyTableOperation::CreateAsView );
 }
 
-IMPL_LINK_NOARG( OCopyTable, KeyClickHdl, weld::Button&, void )
+IMPL_LINK_NOARG( OCopyTable, KeyClickHdl, weld::ToggleButton&, void )
 {
     m_xEdKeyName->set_sensitive(m_xCB_PrimaryColumn->get_active());
     m_xFT_KeyName->set_sensitive(m_xCB_PrimaryColumn->get_active());

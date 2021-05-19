@@ -50,7 +50,7 @@ private:
     void                    Init();
 
     DECL_LINK( RefHandle, SvxTPFilter*, void );
-    DECL_LINK( HighlightHandle, weld::Button&, void );
+    DECL_LINK( HighlightHandle, weld::ToggleButton&, void );
     DECL_LINK( OKBtnHdl, weld::Button&, void );
 
 protected:

@@ -84,7 +84,7 @@ private:
     DECL_LINK( PeriodValueModified, weld::SpinButton&, void );
     DECL_LINK( ToggleSamplingMethod, weld::ToggleButton&, void );
     DECL_LINK( RefInputModifyHandler, formula::RefEdit&, void );
-    DECL_LINK( CheckHdl, weld::Button&, void );
+    DECL_LINK( CheckHdl, weld::ToggleButton&, void );
     void ToggleSamplingMethod();
 };
 

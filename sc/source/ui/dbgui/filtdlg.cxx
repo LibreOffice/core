@@ -129,8 +129,8 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
     m_xBtnClear->connect_clicked   ( LINK( this, ScFilterDlg, BtnClearHdl ) );
     m_xBtnOk->connect_clicked      ( LINK( this, ScFilterDlg, EndDlgHdl ) );
     m_xBtnCancel->connect_clicked  ( LINK( this, ScFilterDlg, EndDlgHdl ) );
-    m_xBtnHeader->connect_clicked  ( LINK( this, ScFilterDlg, CheckBoxHdl ) );
-    m_xBtnCase->connect_clicked    ( LINK( this, ScFilterDlg, CheckBoxHdl ) );
+    m_xBtnHeader->connect_toggled  ( LINK( this, ScFilterDlg, CheckBoxHdl ) );
+    m_xBtnCase->connect_toggled    ( LINK( this, ScFilterDlg, CheckBoxHdl ) );
 
     m_xLbField1->connect_changed  ( LINK( this, ScFilterDlg, LbSelectHdl ) );
     m_xLbField2->connect_changed  ( LINK( this, ScFilterDlg, LbSelectHdl ) );
@@ -1003,7 +1003,7 @@ IMPL_LINK(ScFilterDlg, LbSelectHdl, weld::ComboBox&, rLb, void)
     }
 }
 
-IMPL_LINK( ScFilterDlg, CheckBoxHdl, weld::Button&, rBox, void )
+IMPL_LINK( ScFilterDlg, CheckBoxHdl, weld::ToggleButton&, rBox, void )
 {
     //  Column headers:
     //      Field list: Columnxx <-> column header string
