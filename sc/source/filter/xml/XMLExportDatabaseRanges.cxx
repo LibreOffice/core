@@ -446,6 +446,10 @@ private:
             const ScQueryEntry::Item& rItem = rItems.front();
             if (rItem.meType == ScQueryEntry::ByString)
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());
+            else if (rItem.meType == ScQueryEntry::ByDate)
+            {
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());
+            }
             else
             {
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_NUMBER);
