@@ -184,7 +184,7 @@ core_constructor_list = [
     ("com_sun_star_form_ORadioButtonModel_get_implementation", "#if HAVE_FEATURE_DBCONNECTIVITY"),
     ("com_sun_star_form_XForms_get_implementation", "#if HAVE_FEATURE_DBCONNECTIVITY"),
 # framework/util/fwk.component
-    "com_sun_star_comp_framework_AutoRecovery_get_implementation",
+    ("com_sun_star_comp_framework_AutoRecovery_get_implementation","#ifndef ENABLE_WASM_STRIP_RECOVERYUI"),
     "com_sun_star_comp_framework_Desktop_get_implementation",
     "com_sun_star_comp_framework_DocumentAcceleratorConfiguration_get_implementation",
     "com_sun_star_comp_framework_Frame_get_implementation",
