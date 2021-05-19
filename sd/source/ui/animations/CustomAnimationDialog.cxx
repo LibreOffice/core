@@ -691,8 +691,8 @@ void SdScalePropertyBox::setValue(const Any& rValue, const OUString&)
     aValues.First >>= fValue1;
     aValues.Second >>= fValue2;
 
-    // 'Size' drop down menu set by mnDirectioin when loading Grow and Shrink Animation
-    // Shouldn't compare a float directly to zero...should be fixed with delta epsilon compare
+    // 'Size' drop down menu set by mnDirection when loading Grow and Shrink Animation
+    // Shouldn't compare a float directly to zero... should be fixed with delta epsilon compare
     // Might be better to just have a flag in the content.xml for this
     if( (fValue1 == 0.0) && (fValue2 == 0.0) )
         mnDirection = 3; // assume 'Both' scaling option when both are zero
