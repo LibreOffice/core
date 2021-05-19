@@ -47,6 +47,7 @@ $(eval $(call gb_Module_add_check_targets,dbaccess,\
 ))
 endif
 
+ifneq ($(filter SCRIPTING,$(BUILD_TYPE)),)
 $(eval $(call gb_Module_add_check_targets,dbaccess,\
 	CppunitTest_dbaccess_dialog_save \
 	CppunitTest_dbaccess_empty_stdlib_save \
@@ -54,6 +55,7 @@ $(eval $(call gb_Module_add_check_targets,dbaccess,\
 	CppunitTest_dbaccess_macros_test \
 	CppunitTest_dbaccess_hsqlschema_import \
 ))
+endif
 
 # this test fails 50% of the time on the mac jenkins buildbots
 ifeq ($(ENABLE_JAVA),TRUE)
