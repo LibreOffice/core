@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ -->
+
+<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
+    prefix="i18npool" xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.i18n.BreakIterator"
+      constructor="com_sun_star_i18n_BreakIterator_get_implementation">
+    <service name="com.sun.star.i18n.BreakIterator"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.BreakIterator_Unicode"
+      constructor="com_sun_star_i18n_BreakIterator_Unicode_get_implementation">
+    <service name="com.sun.star.i18n.BreakIterator_Unicode"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.CalendarImpl"
+    constructor="i18npool_CalendarImpl_get_implementation">
+    <service name="com.sun.star.i18n.LocaleCalendar"/>
+    <service name="com.sun.star.i18n.LocaleCalendar2"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Calendar_ROC"
+    constructor="i18npool_Calendar_ROC_get_implementation">
+    <service name="com.sun.star.i18n.Calendar_ROC"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Calendar_dangi"
+    constructor="i18npool_Calendar_dangi_get_implementation">
+    <service name="com.sun.star.i18n.Calendar_dangi"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Calendar_buddhist"
+    constructor="i18npool_Calendar_buddhist_get_implementation">
+    <service name="com.sun.star.i18n.Calendar_buddhist"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Calendar_gengou"
+    constructor="i18npool_Calendar_gengou_get_implementation">
+    <service name="com.sun.star.i18n.Calendar_gengou"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Calendar_gregorian"
+    constructor="i18npool_Calendar_gregorian_get_implementation">
+    <service name="com.sun.star.i18n.Calendar_gregorian"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Calendar_hanja"
+    constructor="i18npool_Calendar_hanja_get_implementation">
+    <service name="com.sun.star.i18n.Calendar_hanja"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Calendar_hanja_yoil"
+    constructor="i18npool_Calendar_hanja_yoil_get_implementation">
+    <service name="com.sun.star.i18n.Calendar_hanja_yoil"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Calendar_hijri"
+    constructor="i18npool_Calendar_hijri_get_implementation">
+    <service name="com.sun.star.i18n.Calendar_hijri"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Calendar_jewish"
+    constructor="i18npool_Calendar_jewish_get_implementation">
+    <service name="com.sun.star.i18n.Calendar_jewish"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.ChapterCollator"
+    constructor="i18npool_ChapterCollator_get_implementation">
+    <service name="com.sun.star.i18n.ChapterCollator"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.CharacterClassification"
+      constructor="com_sun_star_i18n_CharacterClassification_get_implementation">
+    <service name="com.sun.star.i18n.CharacterClassification"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.CharacterClassification_Unicode"
+      constructor="com_sun_star_i18n_CharacterClassification_Unicode_get_implementation">
+    <service name="com.sun.star.i18n.CharacterClassification_Unicode"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Collator"
+      constructor="com_sun_star_i18n_Collator_get_implementation">
+    <service name="com.sun.star.i18n.Collator"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Collator_Unicode"
+    constructor="i18npool_Collator_Unicode_get_implementation">
+    <service name="com.sun.star.i18n.Collator_Unicode"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.IndexEntrySupplier"
+    constructor="i18npool_IndexEntrySupplier_get_implementation">
+    <service name="com.sun.star.i18n.IndexEntrySupplier"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.IndexEntrySupplier_Unicode"
+    constructor="i18npool_IndexEntrySupplier_Unicode_get_implementation">
+    <service name="com.sun.star.i18n.IndexEntrySupplier_Unicode"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.IndexEntrySupplier_asian"
+    constructor="i18npool_IndexEntrySupplier_asian_get_implementation">
+    <service name="com.sun.star.i18n.IndexEntrySupplier_asian"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.InputSequenceChecker"
+      constructor="com_sun_star_i18n_InputSequenceChecker_get_implementation">
+    <service name="com.sun.star.i18n.InputSequenceChecker"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.LocaleDataImpl"
+      constructor="com_sun_star_i18n_LocaleDataImpl_get_implementation">
+    <service name="com.sun.star.i18n.LocaleData"/>
+    <service name="com.sun.star.i18n.LocaleData2"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.NativeNumberSupplier"
+      constructor="com_sun_star_i18n_NativeNumberSupplier_get_implementation">
+    <service name="com.sun.star.i18n.NativeNumberSupplier"/>
+    <service name="com.sun.star.i18n.NativeNumberSupplier2"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.NumberFormatCodeMapper"
+      constructor="com_sun_star_i18n_NumberFormatCodeMapper_get_implementation">
+    <service name="com.sun.star.i18n.NumberFormatMapper"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.OrdinalSuffix"
+      constructor="com_sun_star_i18n_OrdinalSuffix_get_implementation">
+    <service name="com.sun.star.i18n.OrdinalSuffix"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.ScriptTypeDetector"
+      constructor="com_sun_star_i18n_ScriptTypeDetector_get_implementation">
+    <service name="com.sun.star.i18n.ScriptTypeDetector"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.TextConversion"
+      constructor="com_sun_star_i18n_TextConversion_get_implementation">
+    <service name="com.sun.star.i18n.TextConversion"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration"
+      constructor="com_sun_star_i18n_Transliteration_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToCharFullwidth">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToCharHalfwidth">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextCircledNumber">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.SENTENCE_CASE">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.TITLE_CASE">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.TOGGLE_CASE">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.UPPERCASE_LOWERCASE">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.text.DefaultNumberingProvider"
+      constructor="com_sun_star_text_DefaultNumberingProvider_get_implementation">
+    <service name="com.sun.star.text.DefaultNumberingProvider"/>
+  </implementation>
+</component>
