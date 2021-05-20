@@ -1108,8 +1108,8 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
 
     if (comphelper::LibreOfficeKit::isActive())
     {
-            aPopupMenu->RemoveItem(nAutoCorrId);
-            aPopupMenu->RemoveItem(nAutoCorrectDlgId);
+        aPopupMenu->RemoveItem(nAutoCorrId);
+        aPopupMenu->RemoveItem(nAutoCorrectDlgId);
 
         // For mobile phones, send the context menu structure
         const SfxViewShell* pViewShell = SfxViewShell::Current();

@@ -3863,7 +3863,7 @@ static void lo_setOption(LibreOfficeKit* /*pThis*/, const char *pOption, const c
         else
             pCurrentSalLogOverride = strdup(pValue);
 
-        if (pCurrentSalLogOverride == nullptr || strlen(pCurrentSalLogOverride) == 0)
+        if (pCurrentSalLogOverride == nullptr || pCurrentSalLogOverride[0] == '\0')
             sal_detail_set_log_selector(nullptr);
         else
             sal_detail_set_log_selector(pCurrentSalLogOverride);
