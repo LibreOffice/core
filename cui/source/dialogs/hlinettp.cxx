@@ -67,9 +67,9 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp(weld::Container* pParent,
     m_xRbtLinktypInternet->set_active(true);
 
     // set handlers
-    Link<weld::Button&, void> aLink( LINK ( this, SvxHyperlinkInternetTp, Click_SmartProtocol_Impl ) );
-    m_xRbtLinktypInternet->connect_clicked( aLink );
-    m_xRbtLinktypFTP->connect_clicked( aLink );
+    Link<weld::ToggleButton&, void> aLink( LINK ( this, SvxHyperlinkInternetTp, Click_SmartProtocol_Impl ) );
+    m_xRbtLinktypInternet->connect_toggled( aLink );
+    m_xRbtLinktypFTP->connect_toggled( aLink );
     m_xCbAnonymous->connect_toggled( LINK ( this, SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl ) );
     m_xEdLogin->connect_changed( LINK ( this, SvxHyperlinkInternetTp, ModifiedLoginHdl_Impl ) );
     m_xCbbTarget->connect_focus_out( LINK ( this, SvxHyperlinkInternetTp, LostFocusTargetHdl_Impl ) );
@@ -314,8 +314,10 @@ INetProtocol SvxHyperlinkInternetTp::GetSmartProtocolFromButtons() const
 |* Click on Radiobutton : Internet or FTP
 |*
 |************************************************************************/
-IMPL_LINK_NOARG(SvxHyperlinkInternetTp, Click_SmartProtocol_Impl, weld::Button&, void)
+IMPL_LINK(SvxHyperlinkInternetTp, Click_SmartProtocol_Impl, weld::ToggleButton&, rButton, void)
 {
+    if (!rButton.get_active())
+        return;
     OUString aScheme = GetSchemeFromButtons();
     SetScheme(aScheme);
 }
