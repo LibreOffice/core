@@ -1770,6 +1770,13 @@ void CustomPropertiesWindow::ReloadLinesContent()
         pLine->DoTypeHdl(*pLine->m_xTypeBox);
     }
 
+    // tdf#132667 - grab focus on the last inserted property
+    if (i > 0 && m_aCustomProperties[nDataModelPos + i - 1]->m_sName.isEmpty())
+    {
+        CustomPropertyLine* pLine = m_aCustomPropertiesLines[i - 1].get();
+        pLine->m_xNameBox->grab_focus();
+    }
+
     while (nDataModelPos + i >= GetTotalLineCount() && i < GetExistingLineCount())
     {
         CustomPropertyLine* pLine = m_aCustomPropertiesLines[i].get();
