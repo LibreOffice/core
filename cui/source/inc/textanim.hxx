@@ -67,9 +67,9 @@ private:
     std::unique_ptr<weld::MetricSpinButton> m_xMtrFldDelay;
 
     DECL_LINK( SelectEffectHdl_Impl, weld::ComboBox&, void );
-    DECL_LINK( ClickEndlessHdl_Impl, weld::Button&, void );
-    DECL_LINK( ClickAutoHdl_Impl, weld::Button&, void );
-    DECL_LINK( ClickPixelHdl_Impl, weld::Button&, void );
+    DECL_LINK( ClickEndlessHdl_Impl, weld::ToggleButton&, void );
+    DECL_LINK( ClickAutoHdl_Impl, weld::ToggleButton&, void );
+    DECL_LINK( ClickPixelHdl_Impl, weld::ToggleButton&, void );
     DECL_LINK( ClickDirectionHdl_Impl, weld::Button&, void );
 
     void SelectDirection( SdrTextAniDirection nValue );

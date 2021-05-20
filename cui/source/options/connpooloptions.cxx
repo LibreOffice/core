@@ -65,8 +65,8 @@ namespace offapp
         aWidths.push_back(m_xDriverList->get_approximate_digit_width() * 8);
         m_xDriverList->set_column_fixed_widths(aWidths);
 
-        m_xEnablePooling->connect_clicked( LINK(this, ConnectionPoolOptionsPage, OnEnabledDisabled) );
-        m_xDriverPoolingEnabled->connect_clicked( LINK(this, ConnectionPoolOptionsPage, OnEnabledDisabled) );
+        m_xEnablePooling->connect_toggled( LINK(this, ConnectionPoolOptionsPage, OnEnabledDisabled) );
+        m_xDriverPoolingEnabled->connect_toggled( LINK(this, ConnectionPoolOptionsPage, OnEnabledDisabled) );
 
         m_xDriverList->connect_changed(LINK(this, ConnectionPoolOptionsPage, OnDriverRowChanged));
         m_xTimeout->connect_value_changed(LINK(this, ConnectionPoolOptionsPage, OnSpinValueChanged));
@@ -221,7 +221,7 @@ namespace offapp
         updateCurrentRow();
     }
 
-    IMPL_LINK( ConnectionPoolOptionsPage, OnEnabledDisabled, weld::Button&, rCheckBox, void )
+    IMPL_LINK( ConnectionPoolOptionsPage, OnEnabledDisabled, weld::ToggleButton&, rCheckBox, void )
     {
         bool bGloballyEnabled = m_xEnablePooling->get_active();
         bool bLocalDriverChanged = m_xDriverPoolingEnabled.get() == &rCheckBox;

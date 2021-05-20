@@ -62,7 +62,7 @@ SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage(weld::Container* pPage, weld::Dia
     m_aNeverChecked = m_xNeverChecked->get_label();
 
     m_xAutoCheckCheckBox->connect_toggled( LINK( this, SvxOnlineUpdateTabPage, AutoCheckHdl_Impl ) );
-    m_xExtrasCheckBox->connect_clicked( LINK( this, SvxOnlineUpdateTabPage, ExtrasCheckHdl_Impl ) );
+    m_xExtrasCheckBox->connect_toggled( LINK( this, SvxOnlineUpdateTabPage, ExtrasCheckHdl_Impl ) );
     m_xCheckNowButton->connect_clicked( LINK( this, SvxOnlineUpdateTabPage, CheckNowHdl_Impl ) );
     m_xChangePathButton->connect_clicked( LINK( this, SvxOnlineUpdateTabPage, FileDialogHdl_Impl ) );
 
@@ -320,7 +320,7 @@ IMPL_LINK(SvxOnlineUpdateTabPage, AutoCheckHdl_Impl, weld::ToggleButton&, rBox, 
     m_xEveryMonthButton->set_sensitive(bEnabled && !bReadOnly);
 }
 
-IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, ExtrasCheckHdl_Impl, weld::Button&, void)
+IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, ExtrasCheckHdl_Impl, weld::ToggleButton&, void)
 {
     UpdateUserAgent();
 }

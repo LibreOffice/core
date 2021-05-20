@@ -358,9 +358,9 @@ void SfxInsertFloatingFrameDialog::Init()
     m_xNMMarginHeight = m_xBuilder->weld_spin_button("height");
     m_xCBMarginHeightDefault = m_xBuilder->weld_check_button("defaultheight");
 
-    Link<weld::Button&, void> aLink(LINK(this, SfxInsertFloatingFrameDialog, CheckHdl));
-    m_xCBMarginWidthDefault->connect_clicked(aLink);
-    m_xCBMarginHeightDefault->connect_clicked(aLink);
+    Link<weld::ToggleButton&, void> aLink(LINK(this, SfxInsertFloatingFrameDialog, CheckHdl));
+    m_xCBMarginWidthDefault->connect_toggled(aLink);
+    m_xCBMarginHeightDefault->connect_toggled(aLink);
 
     m_xCBMarginWidthDefault->set_active(true);
     m_xCBMarginHeightDefault->set_active(true);
@@ -545,7 +545,7 @@ short SfxInsertFloatingFrameDialog::run()
     return nRet;
 }
 
-IMPL_LINK(SfxInsertFloatingFrameDialog, CheckHdl, weld::Button&, rButton, void)
+IMPL_LINK(SfxInsertFloatingFrameDialog, CheckHdl, weld::ToggleButton&, rButton, void)
 {
     weld::CheckButton& rCB = dynamic_cast<weld::CheckButton&>(rButton);
     if (&rCB == m_xCBMarginWidthDefault.get())

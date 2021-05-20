@@ -51,7 +51,7 @@ private:
     DECL_LINK(FileDialogHdl_Impl, weld::Button&, void);
     DECL_LINK(CheckNowHdl_Impl, weld::Button&, void);
     DECL_LINK(AutoCheckHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(ExtrasCheckHdl_Impl, weld::Button&, void);
+    DECL_LINK(ExtrasCheckHdl_Impl, weld::ToggleButton&, void);
 
     void                    UpdateLastCheckedText();
     void                    UpdateUserAgent();

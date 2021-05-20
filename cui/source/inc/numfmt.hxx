@@ -135,12 +135,12 @@ private:
     DECL_LINK(DoubleClickHdl_Impl, weld::TreeView&, bool);
     DECL_LINK(SelFormatListBoxHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(SelFormatTreeListBoxHdl_Impl, weld::TreeView&, void);
-    DECL_LINK(SelFormatClickHdl_Impl, weld::Button&, void);
+    DECL_LINK(SelFormatClickHdl_Impl, weld::ToggleButton&, void);
     void SelFormatHdl_Impl(weld::Widget*);
     DECL_LINK(ClickHdl_Impl, weld::Button&, void);
     DECL_LINK(EditModifyHdl_Impl, weld::Entry&, void);
     DECL_LINK(OptEditHdl_Impl, weld::SpinButton&, void);
-    DECL_LINK(OptClickHdl_Impl, weld::Button&, void);
+    DECL_LINK(OptClickHdl_Impl, weld::ToggleButton&, void);
     void EditHdl_Impl(const weld::Entry*);
     void OptHdl_Impl(const weld::Widget*);
 

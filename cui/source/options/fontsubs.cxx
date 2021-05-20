@@ -69,7 +69,7 @@ SvxFontSubstTabPage::SvxFontSubstTabPage(weld::Container* pPage, weld::DialogCon
 
     m_xCheckLB->connect_changed(LINK(this, SvxFontSubstTabPage, TreeListBoxSelectHdl));
     m_xCheckLB->connect_column_clicked(LINK(this, SvxFontSubstTabPage, HeaderBarClick));
-    m_xUseTableCB->connect_clicked(aClickLink);
+    m_xUseTableCB->connect_toggled(LINK(this, SvxFontSubstTabPage, ToggleHdl));
     m_xFont1CB->connect_changed(aLink2);
     m_xFont2CB->connect_changed(aLink2);
     m_xApply->connect_clicked(aClickLink);
@@ -247,6 +247,11 @@ void  SvxFontSubstTabPage::Reset( const SfxItemSet* )
             get()));
     m_xNonPropFontsOnlyCB->save_state();
     m_xFontHeightLB->save_value();
+}
+
+IMPL_LINK(SvxFontSubstTabPage, ToggleHdl, weld::ToggleButton&, rButton, void)
+{
+    SelectHdl(&rButton);
 }
 
 IMPL_LINK(SvxFontSubstTabPage, ClickHdl, weld::Button&, rButton, void)

@@ -31,8 +31,8 @@ class OfaMSFilterTabPage : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xPBasicCodeCB;
     std::unique_ptr<weld::CheckButton> m_xPBasicStgCB;
 
-    DECL_LINK(LoadWordBasicCheckHdl_Impl, weld::Button&, void);
-    DECL_LINK(LoadExcelBasicCheckHdl_Impl, weld::Button&, void);
+    DECL_LINK(LoadWordBasicCheckHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(LoadExcelBasicCheckHdl_Impl, weld::ToggleButton&, void);
 public:
     OfaMSFilterTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet );
     virtual ~OfaMSFilterTabPage() override;
