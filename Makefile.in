@@ -280,9 +280,8 @@ bootstrap: check-if-root compilerplugins
 # Note: this will pipe through all gbuild targets to ... gbuild
 #       with some translations like "check"->"unitcheck subsequentcheck uicheck" for historic reasons
 #
-build: bootstrap fetch $(if $(CROSS_COMPILING),cross-toolset) \
-        $(if $(filter check,$(MAKECMDGOALS)),$(if $(COMPILER_PLUGINS),$(if $(LODE_HOME),clang-format-check))) \
-        install-gdb-printers
+build: bootstrap fetch $(if $(CROSS_COMPILING),cross-toolset,install-gdb-printers) \
+    $(if $(filter check,$(MAKECMDGOALS)),$(if $(COMPILER_PLUGINS),$(if $(LODE_HOME),clang-format-check)))
 	$(MAKE) $(PARALLELISM_OPTION) $(IWYU_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(build_goal)
 ifeq ($(OS),iOS)
 	$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) ios
@@ -293,7 +292,7 @@ build-non-l10n-only build-l10n-only build-nocheck check debugrun translations pa
 help showmodules gbuildtojson:
 	$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
 
-cross-toolset: bootstrap fetch
+cross-toolset: bootstrap fetch install-gdb-printers
 # fetch again in case there are externals only needed on build platform
 ifneq ($(OS),iOS)
 	$(MAKE) gb_Side=build $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(BUILDDIR)/Makefile fetch
@@ -302,6 +301,10 @@ endif
 
 install-gdb-printers:
 ifneq ($(filter-out WNT MACOSX iOS,$(OS)),)
+ifneq ($(INSTDIR_FOR_BUILD),$(INSTDIR))
+	mkdir -p $(INSTDIR_FOR_BUILD)
+	$(SRCDIR)/solenv/bin/install-gdb-printers -a $(INSTDIR_FOR_BUILD) -c
+endif
 	mkdir -p $(INSTDIR)
 	$(SRCDIR)/solenv/bin/install-gdb-printers -a $(INSTDIR) -c
 endif
