@@ -1177,8 +1177,8 @@ bool SwTextFrame::FormatLine( SwTextFormatter &rLine, const bool bPrev )
     SwParaPortion *pPara = rLine.GetInfo().GetParaPortion();
     const SwLineLayout *pOldCur = rLine.GetCurr();
     const TextFrameIndex nOldLen = pOldCur->GetLen();
-    const sal_uInt16 nOldAscent = pOldCur->GetAscent();
-    const sal_uInt16 nOldHeight = pOldCur->Height();
+    const sal_uInt32 nOldAscent = pOldCur->GetAscent();
+    const sal_uInt32 nOldHeight = pOldCur->Height();
     const SwTwips nOldWidth = pOldCur->Width() + pOldCur->GetHangingMargin();
     const bool bOldHyph = pOldCur->IsEndHyph();
     SwTwips nOldTop = 0;

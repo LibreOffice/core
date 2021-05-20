@@ -1574,8 +1574,8 @@ TextFrameIndex SwTextFormatter::FormatLine(TextFrameIndex const nStartPos)
 
     // Recycling must be suppressed by changed line height and also
     // by changed ascent (lowering of baseline).
-    const sal_uInt16 nOldHeight = m_pCurr->Height();
-    const sal_uInt16 nOldAscent = m_pCurr->GetAscent();
+    const sal_uInt32 nOldHeight = m_pCurr->Height();
+    const sal_uInt32 nOldAscent = m_pCurr->GetAscent();
 
     m_pCurr->SetEndHyph( false );
     m_pCurr->SetMidHyph( false );
@@ -1655,7 +1655,7 @@ TextFrameIndex SwTextFormatter::FormatLine(TextFrameIndex const nStartPos)
         if ( IsFlyInCntBase() && (!IsQuick() || (pPorTmp && pPorTmp->IsFlyCntPortion() && !pPorTmp->GetNextPortion() &&
             m_pCurr->Height() > pPorTmp->Height())))
         {
-            sal_uInt16 nTmpAscent, nTmpHeight;
+            sal_uInt32 nTmpAscent, nTmpHeight;
             CalcAscentAndHeight( nTmpAscent, nTmpHeight );
             AlignFlyInCntBase( Y() + tools::Long( nTmpAscent ) );
             m_pCurr->CalcLine( *this, GetInfo() );
@@ -1772,7 +1772,7 @@ void SwTextFormatter::RecalcRealHeight()
 
 void SwTextFormatter::CalcRealHeight( bool bNewLine )
 {
-    sal_uInt16 nLineHeight = m_pCurr->Height();
+    sal_uInt32 nLineHeight = m_pCurr->Height();
     m_pCurr->SetClipping( false );
 
     SwTextGridItem const*const pGrid(GetGridItem(m_pFrame->FindPageFrame()));
@@ -2099,8 +2099,8 @@ void SwTextFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
     SwTwips nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc;
     pCurrent->MaxAscentDescent( nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc );
 
-    const sal_uInt16 nTmpHeight = pCurrent->GetRealHeight();
-    sal_uInt16 nAscent = pCurrent->GetAscent() + nTmpHeight - pCurrent->Height();
+    const sal_uInt32 nTmpHeight = pCurrent->GetRealHeight();
+    sal_uInt32 nAscent = pCurrent->GetAscent() + nTmpHeight - pCurrent->Height();
     AsCharFlags nFlags = AsCharFlags::UlSpace;
     if( GetMulti() )
     {
@@ -2588,7 +2588,7 @@ SwFlyCntPortion *SwTextFormatter::NewFlyCntPortion( SwTextFormatInfo &rInf,
     // we use this one when calculating the base, or the frame would be positioned
     // too much to the top, sliding down after all causing a repaint in an area
     // he actually never was in.
-    sal_uInt16 nAscent = 0;
+    sal_uInt32 nAscent = 0;
 
     const bool bTextFrameVertical = GetInfo().GetTextFrame()->IsVertical();
 
@@ -2598,9 +2598,9 @@ SwFlyCntPortion *SwTextFormatter::NewFlyCntPortion( SwTextFormatInfo &rInf,
                                       pFly->GetRefPoint().Y() );
 
     if ( bUseFlyAscent )
-         nAscent = static_cast<sal_uInt16>( std::abs( int( bTextFrameVertical ?
+         nAscent = std::abs( int( bTextFrameVertical ?
                                                   pFly->GetRelPos().X() :
-                                                  pFly->GetRelPos().Y() ) ) );
+                                                  pFly->GetRelPos().Y() ) );
 
     // Check if be prefer to use the ascent of the last portion:
     if ( IsQuick() ||
