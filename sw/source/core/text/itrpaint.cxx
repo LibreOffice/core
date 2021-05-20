@@ -178,7 +178,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                      && GetDropLines() >= GetLineNr();
     }
 
-    sal_uInt16 nTmpHeight, nTmpAscent;
+    sal_uInt32 nTmpHeight, nTmpAscent;
     CalcAscentAndHeight( nTmpAscent, nTmpHeight );
 
     // bClip decides if there's a need to clip

@@ -398,7 +398,7 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
                         bool bNum = bLineNum && ( aExtra.HasNumber() || aExtra.HasDivider() );
                         if( bRedInMargin || bNum )
                         {
-                            sal_uInt16 nTmpHeight, nTmpAscent;
+                            sal_uInt32 nTmpHeight, nTmpAscent;
                             aLine.CalcAscentAndHeight( nTmpAscent, nTmpHeight );
                             if ( bRedInMargin )
                             {

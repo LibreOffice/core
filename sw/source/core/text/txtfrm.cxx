@@ -3322,7 +3322,7 @@ bool SwTextFrame::WouldFit( SwTwips &rMaxHeight, bool &bSplit, bool bTst )
     return bRet;
 }
 
-sal_uInt16 SwTextFrame::GetParHeight() const
+sal_uInt32 SwTextFrame::GetParHeight() const
 {
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),
             "SwTextFrame::GetParHeight with swapped frame" );
@@ -3343,7 +3343,7 @@ sal_uInt16 SwTextFrame::GetParHeight() const
 
     // TODO: Refactor and improve code
     const SwLineLayout* pLineLayout = GetPara();
-    sal_uInt16 nHeight = pLineLayout ? pLineLayout->GetRealHeight() : 0;
+    sal_uInt32 nHeight = pLineLayout ? pLineLayout->GetRealHeight() : 0;
 
     // Is this paragraph scrolled? Our height until now is at least
     // one line height too low then

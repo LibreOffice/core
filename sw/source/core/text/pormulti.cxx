@@ -1679,7 +1679,7 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
         }
         else if ( rMulti.IsRuby() && rMulti.OnRight() && GetInfo().IsRuby() )
         {
-            SwTwips nLineDiff = std::max(( rMulti.GetRoot().Height() - pPor->Width() ) / 2, 0 );
+            SwTwips nLineDiff = std::max(( rMulti.GetRoot().Height() - pPor->Width() ) / 2, static_cast<sal_uInt32>(0) );
             GetInfo().Y( nOfst + nLineDiff );
             // Draw the ruby text on top of the preserved space.
             GetInfo().X( GetInfo().X() - pPor->Height() );

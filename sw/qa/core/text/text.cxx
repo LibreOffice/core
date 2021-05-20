@@ -135,6 +135,22 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTabOverMarginSection)
     CPPUNIT_ASSERT_LESS(static_cast<sal_Int32>(5000), nWidth);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testLineHeight)
+{
+    // Given a document with an as-char image, height in twips not fitting into sal_uInt16:
+    createSwDoc(DATA_DIRECTORY, "line-height.fodt");
+
+    // When laying out that document:
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // Then make sure its top is the top of the page:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 284
+    // - Actual  : -65252
+    // due to various unsigned integer truncations.
+    assertXPath(pXmlDoc, "//fly/infos/bounds", "top", OUString::number(DOCUMENTBORDER));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
