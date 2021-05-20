@@ -136,7 +136,7 @@ private:
     DECL_LINK(LayoutHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(GutterPositionHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(PaperBinHdl_Impl, weld::Widget&, void);
-    DECL_LINK(SwapOrientation_Impl, weld::Button&, void);
+    DECL_LINK(SwapOrientation_Impl, weld::ToggleButton&, void);
     void SwapFirstValues_Impl( bool bSet );
     DECL_LINK(BorderModify_Impl, weld::MetricSpinButton&, void);
     void InitHeadFoot_Impl( const SfxItemSet& rSet );
