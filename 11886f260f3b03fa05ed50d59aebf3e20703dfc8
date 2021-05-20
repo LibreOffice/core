@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "804d1262_acf975af",
+        "filename": "sc/source/core/inc/arraysumfunctor.hxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-05-20T12:10:16Z",
+      "side": 1,
+      "message": "It\u0027s rather unlikely that somebody will notice this random TODO note and act upon it. You can make a configure check for whether _mm512_abs_pd works, or you can do #if here based on the first known working GCC version.",
+      "revId": "11886f260f3b03fa05ed50d59aebf3e20703dfc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b4b73349_0498d339",
         "filename": "sc/source/core/inc/arraysumfunctor.hxx",
         "patchSetId": 18
@@ -43,6 +60,47 @@
         "endLine": 103,
         "endChar": 1
       },
+      "revId": "11886f260f3b03fa05ed50d59aebf3e20703dfc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "852cf914_dd857c13",
+        "filename": "sc/source/core/inc/arraysumfunctor.hxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-05-20T12:10:16Z",
+      "side": 1,
+      "message": "\u003e Checking AVX512 is not possible. The GCC version we use is too old and there\u0027s an error in the intel intrinsics that prevents it from building (corrected in 2018).\n\nGerrit/GCC is not the only place where we run tests. It can still be tested by Clang or MSVC Gerrit builds if they have the CPU, there are a bunch of tinderboxes testing builds (https://tinderbox.libreoffice.org/MASTER/status.html) and developers including yourself can run tests locally.\n\n\u003e The only problem is I have no idea of that LO CppunitTest stuff.\n\u003e So I have no idea about how to call it.\n\nJust call it like any other function. If those symbols are private, you may need to mark them e.g. SC_DLLPUBLIC . See e.g. enableOpenCL_UnitTestsOnly() in a SC_DLLPUBLIC FormulaGroupInterpreter class .",
+      "parentUuid": "6613d161_497e600c",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 103,
+        "endChar": 1
+      },
+      "revId": "11886f260f3b03fa05ed50d59aebf3e20703dfc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64d7a805_a15535b2",
+        "filename": "sc/source/core/tool/arraysumAVX.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-05-20T12:10:16Z",
+      "side": 1,
+      "message": "This presumably does not belong in an AVX file. And in case this belongs in the AVX512 file and is correct, then just checking for AVX512F is presumably not enough if the code actually also needs the other two sets.",
       "revId": "11886f260f3b03fa05ed50d59aebf3e20703dfc8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
