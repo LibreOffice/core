@@ -3356,18 +3356,18 @@ void SwTabFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                     pHeadline->Paste( this, pLowerRow );
                 }
             }
-            rInvFlags |= static_cast<SwTabFrameInvFlags>(0x02);
+            rInvFlags |= SwTabFrameInvFlags::InvalidatePrt;
             break;
 
         case RES_FRM_SIZE:
         case RES_HORI_ORIENT:
-            rInvFlags |= static_cast<SwTabFrameInvFlags>(0x22);
+            rInvFlags |= SwTabFrameInvFlags::InvalidatePrt | SwTabFrameInvFlags::InvalidateBrowseWidth;
             break;
 
         case RES_PAGEDESC:                      //Attribute changes (on/off)
             if ( IsInDocBody() )
             {
-                rInvFlags |= static_cast<SwTabFrameInvFlags>(0x40);
+                rInvFlags |= SwTabFrameInvFlags::InvalidatePos;
                 SwPageFrame *pPage = FindPageFrame();
                 if (pPage)
                 {
@@ -3382,23 +3382,23 @@ void SwTabFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             break;
 
         case RES_BREAK:
-            rInvFlags |= static_cast<SwTabFrameInvFlags>(0xC0);
+            rInvFlags |= SwTabFrameInvFlags::InvalidatePos | SwTabFrameInvFlags::InvalidateNextPos;
             break;
 
         case RES_LAYOUT_SPLIT:
             if ( !IsFollow() )
-                rInvFlags |= static_cast<SwTabFrameInvFlags>(0x40);
+                rInvFlags |= SwTabFrameInvFlags::InvalidatePos;
             break;
         case RES_FRAMEDIR :
             SetDerivedR2L( false );
             CheckDirChange();
             break;
         case RES_COLLAPSING_BORDERS :
-            rInvFlags |= static_cast<SwTabFrameInvFlags>(0x02);
+            rInvFlags |= SwTabFrameInvFlags::InvalidatePrt;
             lcl_InvalidateAllLowersPrt( this );
             break;
         case RES_UL_SPACE:
-            rInvFlags |= static_cast<SwTabFrameInvFlags>(0x1C);
+            rInvFlags |= SwTabFrameInvFlags::InvalidateIndNextPrt | SwTabFrameInvFlags::InvalidatePrevPrt | SwTabFrameInvFlags::SetIndNextCompletePaint;
             [[fallthrough]];
 
         default:
