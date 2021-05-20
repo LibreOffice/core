@@ -383,8 +383,7 @@ void ImpEditEngine::FormatDoc()
         if ( rParaPortion.MustRepaint() || ( rParaPortion.IsInvalid() && rParaPortion.IsVisible() ) )
         {
             // No formatting should be necessary for MustRepaint()!
-            if ( ( rParaPortion.MustRepaint() && !rParaPortion.IsInvalid() )
-                    || CreateLines( nPara, nY ) )
+            if ( !rParaPortion.IsInvalid() || CreateLines( nPara, nY ) )
             {
                 if ( !bGrow && GetTextRanger() )
                 {
