@@ -113,9 +113,9 @@ SvxTextAnimationPage::SvxTextAnimationPage(weld::Container* pPage, weld::DialogC
     eUnit = pPool->GetMetric( SDRATTR_TEXT_LEFTDIST );
 
     m_xLbEffect->connect_changed( LINK( this, SvxTextAnimationPage, SelectEffectHdl_Impl ) );
-    m_xTsbEndless->connect_clicked( LINK( this, SvxTextAnimationPage, ClickEndlessHdl_Impl ) );
-    m_xTsbAuto->connect_clicked( LINK( this, SvxTextAnimationPage, ClickAutoHdl_Impl ) );
-    m_xTsbPixel->connect_clicked( LINK( this, SvxTextAnimationPage, ClickPixelHdl_Impl ) );
+    m_xTsbEndless->connect_toggled( LINK( this, SvxTextAnimationPage, ClickEndlessHdl_Impl ) );
+    m_xTsbAuto->connect_toggled( LINK( this, SvxTextAnimationPage, ClickAutoHdl_Impl ) );
+    m_xTsbPixel->connect_toggled( LINK( this, SvxTextAnimationPage, ClickPixelHdl_Impl ) );
 
     Link<weld::Button&,void> aLink( LINK( this, SvxTextAnimationPage, ClickDirectionHdl_Impl ) );
     m_xBtnUp->connect_clicked( aLink );
@@ -438,7 +438,7 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, SelectEffectHdl_Impl, weld::ComboBox&, voi
     }
 }
 
-IMPL_LINK_NOARG(SvxTextAnimationPage, ClickEndlessHdl_Impl, weld::Button&, void)
+IMPL_LINK_NOARG(SvxTextAnimationPage, ClickEndlessHdl_Impl, weld::ToggleButton&, void)
 {
     if( eAniKind == SdrTextAniKind::Slide )
         return;
@@ -456,7 +456,7 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, ClickEndlessHdl_Impl, weld::Button&, void)
     }
 }
 
-IMPL_LINK_NOARG(SvxTextAnimationPage, ClickAutoHdl_Impl, weld::Button&, void)
+IMPL_LINK_NOARG(SvxTextAnimationPage, ClickAutoHdl_Impl, weld::ToggleButton&, void)
 {
     TriState eState = m_xTsbAuto->get_state();
     if( eState != TRISTATE_FALSE )
@@ -471,7 +471,7 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, ClickAutoHdl_Impl, weld::Button&, void)
     }
 }
 
-IMPL_LINK_NOARG(SvxTextAnimationPage, ClickPixelHdl_Impl, weld::Button&, void)
+IMPL_LINK_NOARG(SvxTextAnimationPage, ClickPixelHdl_Impl, weld::ToggleButton&, void)
 {
     TriState eState = m_xTsbPixel->get_state();
     if (eState == TRISTATE_TRUE)

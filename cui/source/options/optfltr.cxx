@@ -47,20 +47,20 @@ OfaMSFilterTabPage::OfaMSFilterTabPage(weld::Container* pPage, weld::DialogContr
     , m_xPBasicCodeCB(m_xBuilder->weld_check_button("pp_basic"))
     , m_xPBasicStgCB(m_xBuilder->weld_check_button("pp_saveorig"))
 {
-    m_xWBasicCodeCB->connect_clicked( LINK( this, OfaMSFilterTabPage, LoadWordBasicCheckHdl_Impl ) );
-    m_xEBasicCodeCB->connect_clicked( LINK( this, OfaMSFilterTabPage, LoadExcelBasicCheckHdl_Impl ) );
+    m_xWBasicCodeCB->connect_toggled( LINK( this, OfaMSFilterTabPage, LoadWordBasicCheckHdl_Impl ) );
+    m_xEBasicCodeCB->connect_toggled( LINK( this, OfaMSFilterTabPage, LoadExcelBasicCheckHdl_Impl ) );
 }
 
 OfaMSFilterTabPage::~OfaMSFilterTabPage()
 {
 }
 
-IMPL_LINK_NOARG(OfaMSFilterTabPage, LoadWordBasicCheckHdl_Impl, weld::Button&, void)
+IMPL_LINK_NOARG(OfaMSFilterTabPage, LoadWordBasicCheckHdl_Impl, weld::ToggleButton&, void)
 {
     m_xWBasicWbctblCB->set_sensitive(m_xWBasicCodeCB->get_active());
 }
 
-IMPL_LINK_NOARG(OfaMSFilterTabPage, LoadExcelBasicCheckHdl_Impl, weld::Button&, void)
+IMPL_LINK_NOARG(OfaMSFilterTabPage, LoadExcelBasicCheckHdl_Impl, weld::ToggleButton&, void)
 {
     m_xEBasicExectblCB->set_sensitive(m_xEBasicCodeCB->get_active());
 }

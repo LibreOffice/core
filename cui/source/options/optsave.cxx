@@ -106,7 +106,7 @@ SvxSaveTabPage::SvxSaveTabPage(weld::Container* pPage, weld::DialogController* p
     m_xDocTypeLB->set_id(5, OUString::number(APP_DRAW)         );
     m_xDocTypeLB->set_id(6, OUString::number(APP_MATH)         );
 
-    m_xAutoSaveCB->connect_clicked( LINK( this, SvxSaveTabPage, AutoClickHdl_Impl ) );
+    m_xAutoSaveCB->connect_toggled( LINK( this, SvxSaveTabPage, AutoClickHdl_Impl ) );
 
     SvtModuleOptions aModuleOpt;
     if ( !aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::MATH ) )
@@ -470,7 +470,7 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
     m_xODFVersionLB->save_value();
 }
 
-IMPL_LINK(SvxSaveTabPage, AutoClickHdl_Impl, weld::Button&, rBox, void)
+IMPL_LINK(SvxSaveTabPage, AutoClickHdl_Impl, weld::ToggleButton&, rBox, void)
 {
     if (&rBox != m_xAutoSaveCB.get())
         return;

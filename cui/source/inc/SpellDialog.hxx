@@ -172,7 +172,7 @@ private:
     DECL_LINK(ChangeAllHdl, weld::Button&, void);
     DECL_LINK(IgnoreAllHdl, weld::Button&, void);
     DECL_LINK(IgnoreHdl, weld::Button&, void);
-    DECL_LINK(CheckGrammarHdl, weld::Button&, void);
+    DECL_LINK(CheckGrammarHdl, weld::ToggleButton&, void);
     DECL_LINK(ExtClickHdl, weld::Button&, void);
     DECL_LINK(CancelHdl, weld::Button&, void);
     DECL_LINK(ModifyHdl, LinkParamNone*, void);

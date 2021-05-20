@@ -276,7 +276,7 @@ void SvxNumberFormatTabPage::Init_Impl()
     m_xLbLanguage->connect_focus_in(LINK(this, SvxNumberFormatTabPage, LostFocusHdl_Impl));
     m_xLbCurrency->connect_changed(aLink3);
     m_xLbCurrency->connect_focus_in(LINK(this, SvxNumberFormatTabPage, LostFocusHdl_Impl));
-    m_xCbSourceFormat->connect_clicked(LINK(this, SvxNumberFormatTabPage, SelFormatClickHdl_Impl));
+    m_xCbSourceFormat->connect_toggled(LINK(this, SvxNumberFormatTabPage, SelFormatClickHdl_Impl));
     m_xCbSourceFormat->connect_focus_in(LINK(this, SvxNumberFormatTabPage, LostFocusHdl_Impl));
 
     Link<weld::SpinButton&,void> aLink = LINK( this, SvxNumberFormatTabPage, OptEditHdl_Impl );
@@ -288,11 +288,11 @@ void SvxNumberFormatTabPage::Init_Impl()
     m_xEdLeadZeroes->connect_value_changed(aLink);
     m_xEdLeadZeroes->connect_focus_in(LINK(this, SvxNumberFormatTabPage, LostFocusHdl_Impl));
 
-    m_xBtnNegRed->connect_clicked(LINK(this, SvxNumberFormatTabPage, OptClickHdl_Impl));
+    m_xBtnNegRed->connect_toggled(LINK(this, SvxNumberFormatTabPage, OptClickHdl_Impl));
     m_xBtnNegRed->connect_focus_in(LINK(this, SvxNumberFormatTabPage, LostFocusHdl_Impl));
-    m_xBtnThousand->connect_clicked(LINK(this, SvxNumberFormatTabPage, OptClickHdl_Impl));
+    m_xBtnThousand->connect_toggled(LINK(this, SvxNumberFormatTabPage, OptClickHdl_Impl));
     m_xBtnThousand->connect_focus_in(LINK(this, SvxNumberFormatTabPage, LostFocusHdl_Impl));
-    m_xBtnEngineering->connect_clicked(LINK(this, SvxNumberFormatTabPage, OptClickHdl_Impl));
+    m_xBtnEngineering->connect_toggled(LINK(this, SvxNumberFormatTabPage, OptClickHdl_Impl));
     m_xBtnEngineering->connect_focus_in(LINK(this, SvxNumberFormatTabPage, LostFocusHdl_Impl));
     m_xLbFormat->connect_row_activated(LINK(this, SvxNumberFormatTabPage, DoubleClickHdl_Impl));
     m_xEdFormat->connect_changed(LINK(this, SvxNumberFormatTabPage, EditModifyHdl_Impl));
@@ -1148,7 +1148,7 @@ IMPL_LINK(SvxNumberFormatTabPage, DoubleClickHdl_Impl, weld::TreeView&, rLb, boo
 #*
 #************************************************************************/
 
-IMPL_LINK(SvxNumberFormatTabPage, SelFormatClickHdl_Impl, weld::Button&, rLb, void)
+IMPL_LINK(SvxNumberFormatTabPage, SelFormatClickHdl_Impl, weld::ToggleButton&, rLb, void)
 {
     SelFormatHdl_Impl(&rLb);
 }
@@ -1540,7 +1540,7 @@ void SvxNumberFormatTabPage::EditHdl_Impl(const weld::Entry* pEdFormat)
 #*
 #************************************************************************/
 
-IMPL_LINK(SvxNumberFormatTabPage, OptClickHdl_Impl, weld::Button&, rOptCtrl, void)
+IMPL_LINK(SvxNumberFormatTabPage, OptClickHdl_Impl, weld::ToggleButton&, rOptCtrl, void)
 {
     OptHdl_Impl(&rOptCtrl);
 }

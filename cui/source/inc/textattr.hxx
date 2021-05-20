@@ -63,8 +63,8 @@ private:
     std::unique_ptr<weld::CustomWeld> m_xCtlPosition;
     std::unique_ptr<weld::CheckButton> m_xTsbFullWidth;
 
-    DECL_LINK(ClickFullWidthHdl_Impl, weld::Button&, void);
-    DECL_LINK(ClickHdl_Impl, weld::Button&, void);
+    DECL_LINK(ClickFullWidthHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(ClickHdl_Impl, weld::ToggleButton&, void);
 
     /** Return whether the text direction is from left to right (</sal_True>) or
         top to bottom (</sal_False>).

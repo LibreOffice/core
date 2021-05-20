@@ -24,7 +24,7 @@
 
 // class SvxCTLOptionsPage -----------------------------------------------------
 
-IMPL_LINK_NOARG(SvxCTLOptionsPage, SequenceCheckingCB_Hdl, weld::Button&, void)
+IMPL_LINK_NOARG(SvxCTLOptionsPage, SequenceCheckingCB_Hdl, weld::ToggleButton&, void)
 {
     bool bIsSequenceChecking = m_xSequenceCheckingCB->get_active();
     m_xRestrictedCB->set_sensitive( bIsSequenceChecking );
@@ -46,7 +46,7 @@ SvxCTLOptionsPage::SvxCTLOptionsPage(weld::Container* pPage, weld::DialogControl
     , m_xMovementVisualRB(m_xBuilder->weld_radio_button("movementvisual"))
     , m_xNumeralsLB(m_xBuilder->weld_combo_box("numerals"))
 {
-    m_xSequenceCheckingCB->connect_clicked(LINK(this, SvxCTLOptionsPage, SequenceCheckingCB_Hdl));
+    m_xSequenceCheckingCB->connect_toggled(LINK(this, SvxCTLOptionsPage, SequenceCheckingCB_Hdl));
 }
 
 SvxCTLOptionsPage::~SvxCTLOptionsPage()

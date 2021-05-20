@@ -99,7 +99,7 @@ private:
     std::unique_ptr<weld::CheckButton> m_xCBMarginHeightDefault;
 
     DECL_LINK(OpenHdl, weld::Button&, void);
-    DECL_LINK(CheckHdl, weld::Button&, void);
+    DECL_LINK(CheckHdl, weld::ToggleButton&, void);
 
     void Init();
 

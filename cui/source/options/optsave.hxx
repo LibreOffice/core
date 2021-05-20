@@ -59,7 +59,7 @@ private:
     std::unique_ptr<weld::Widget> m_xODFWarningFI;
     std::unique_ptr<weld::Label> m_xODFWarningFT;
 
-    DECL_LINK( AutoClickHdl_Impl, weld::Button&, void );
+    DECL_LINK( AutoClickHdl_Impl, weld::ToggleButton&, void );
     DECL_LINK( FilterHdl_Impl, weld::ComboBox&, void );
     DECL_LINK(ODFVersionHdl_Impl, weld::ComboBox&, void );
 

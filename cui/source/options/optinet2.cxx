@@ -505,9 +505,9 @@ SvxSecurityTabPage::SvxSecurityTabPage(weld::Container* pPage, weld::DialogContr
     InitControls();
 
     m_xSecurityOptionsPB->connect_clicked( LINK( this, SvxSecurityTabPage, SecurityOptionsHdl ) );
-    m_xSavePasswordsCB->connect_clicked( LINK( this, SvxSecurityTabPage, SavePasswordHdl ) );
+    m_xSavePasswordsCB->connect_toggled( LINK( this, SvxSecurityTabPage, SavePasswordHdl ) );
     m_xMasterPasswordPB->connect_clicked( LINK( this, SvxSecurityTabPage, MasterPasswordHdl ) );
-    m_xMasterPasswordCB->connect_clicked( LINK( this, SvxSecurityTabPage, MasterPasswordCBHdl ) );
+    m_xMasterPasswordCB->connect_toggled( LINK( this, SvxSecurityTabPage, MasterPasswordCBHdl ) );
     m_xShowConnectionsPB->connect_clicked( LINK( this, SvxSecurityTabPage, ShowPasswordsHdl ) );
     m_xMacroSecPB->connect_clicked( LINK( this, SvxSecurityTabPage, MacroSecPBHdl ) );
     m_xCertPathPB->connect_clicked( LINK( this, SvxSecurityTabPage, CertPathPBHdl ) );
@@ -527,7 +527,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, SecurityOptionsHdl, weld::Button&, void)
     m_xSecOptDlg->run();
 }
 
-IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl, weld::Button&, void)
+IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl, weld::ToggleButton&, void)
 {
     try
     {
@@ -606,7 +606,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, MasterPasswordHdl, weld::Button&, void)
     {}
 }
 
-IMPL_LINK_NOARG(SvxSecurityTabPage, MasterPasswordCBHdl, weld::Button&, void)
+IMPL_LINK_NOARG(SvxSecurityTabPage, MasterPasswordCBHdl, weld::ToggleButton&, void)
 {
     try
     {

@@ -39,6 +39,7 @@ class SvxFontSubstTabPage : public SfxTabPage
     std::unique_ptr<weld::ComboBox> m_xFontHeightLB;
 
     DECL_LINK(SelectComboBoxHdl, weld::ComboBox&, void);
+    DECL_LINK(ToggleHdl, weld::ToggleButton&, void);
     DECL_LINK(ClickHdl, weld::Button&, void);
     DECL_LINK(TreeListBoxSelectHdl, weld::TreeView&, void);
     DECL_LINK(NonPropFontsHdl, weld::ToggleButton&, void);

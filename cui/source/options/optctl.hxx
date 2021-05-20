@@ -32,7 +32,7 @@ private:
     std::unique_ptr<weld::RadioButton> m_xMovementVisualRB;
     std::unique_ptr<weld::ComboBox> m_xNumeralsLB;
 
-    DECL_LINK( SequenceCheckingCB_Hdl, weld::Button&, void );
+    DECL_LINK( SequenceCheckingCB_Hdl, weld::ToggleButton&, void );
 
 public:
     SvxCTLOptionsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);

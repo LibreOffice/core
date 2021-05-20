@@ -96,7 +96,7 @@ SvxJavaOptionsPage::SvxJavaOptionsPage(weld::Container* pPage, weld::DialogContr
     aWidths.push_back(m_xJavaList->get_pixel_size("Sun Microsystems Inc.").Width());
     m_xJavaList->set_column_fixed_widths(aWidths);
 
-    m_xJavaEnableCB->connect_clicked( LINK( this, SvxJavaOptionsPage, EnableHdl_Impl ) );
+    m_xJavaEnableCB->connect_toggled( LINK( this, SvxJavaOptionsPage, EnableHdl_Impl ) );
     m_xAddBtn->connect_clicked( LINK( this, SvxJavaOptionsPage, AddHdl_Impl ) );
     m_xParameterBtn->connect_clicked( LINK( this, SvxJavaOptionsPage, ParameterHdl_Impl ) );
     m_xClassPathBtn->connect_clicked( LINK( this, SvxJavaOptionsPage, ClassPathHdl_Impl ) );
@@ -132,7 +132,7 @@ SvxJavaOptionsPage::~SvxJavaOptionsPage()
 #endif
 }
 
-IMPL_LINK_NOARG(SvxJavaOptionsPage, EnableHdl_Impl, weld::Button&, void)
+IMPL_LINK_NOARG(SvxJavaOptionsPage, EnableHdl_Impl, weld::ToggleButton&, void)
 {
     bool bEnable = m_xJavaFrame->get_sensitive() && m_xJavaEnableCB->get_active();
     m_xJavaList->set_sensitive(bEnable);

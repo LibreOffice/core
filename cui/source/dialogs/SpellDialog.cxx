@@ -246,7 +246,7 @@ void SpellDialog::Init_Impl()
     m_xUndoPB->connect_clicked(LINK( this, SpellDialog, UndoHdl ) );
 
     m_xAutoCorrPB->connect_clicked( LINK( this, SpellDialog, ExtClickHdl ) );
-    m_xCheckGrammarCB->connect_clicked( LINK( this, SpellDialog, CheckGrammarHdl ));
+    m_xCheckGrammarCB->connect_toggled( LINK( this, SpellDialog, CheckGrammarHdl ));
     m_xOptionsPB->connect_clicked( LINK( this, SpellDialog, ExtClickHdl ) );
 
     m_xSuggestionLB->connect_row_activated( LINK( this, SpellDialog, DoubleClickChangeHdl ) );
@@ -448,7 +448,7 @@ IMPL_LINK( SpellDialog, ExtClickHdl, weld::Button&, rBtn, void )
     }
 }
 
-IMPL_LINK_NOARG(SpellDialog, CheckGrammarHdl, weld::Button&, void)
+IMPL_LINK_NOARG(SpellDialog, CheckGrammarHdl, weld::ToggleButton&, void)
 {
     rParent.SetGrammarChecking(m_xCheckGrammarCB->get_active());
     Impl_Restore(true);

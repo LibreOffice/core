@@ -57,7 +57,7 @@ namespace offapp
         bool isModifiedDriverList() const;
         void saveDriverList() { m_aSavedSettings = m_aSettings; }
 
-        DECL_LINK(OnEnabledDisabled, weld::Button&, void);
+        DECL_LINK(OnEnabledDisabled, weld::ToggleButton&, void);
         DECL_LINK(OnSpinValueChanged, weld::SpinButton&, void);
         DECL_LINK(OnDriverRowChanged, weld::TreeView&, void);
 

@@ -107,9 +107,9 @@ private:
     std::unique_ptr<weld::Label> m_xNoPasswordSaveFT;
 
     DECL_LINK(SecurityOptionsHdl, weld::Button&, void);
-    DECL_LINK(SavePasswordHdl, weld::Button&, void);
+    DECL_LINK(SavePasswordHdl, weld::ToggleButton&, void);
     DECL_LINK(MasterPasswordHdl, weld::Button&, void);
-    DECL_LINK(MasterPasswordCBHdl, weld::Button&, void);
+    DECL_LINK(MasterPasswordCBHdl, weld::ToggleButton&, void);
     DECL_LINK(ShowPasswordsHdl, weld::Button&, void);
     DECL_LINK(MacroSecPBHdl, weld::Button&, void );
     DECL_LINK(CertPathPBHdl, weld::Button&, void );
