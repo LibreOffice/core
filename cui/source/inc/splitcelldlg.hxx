@@ -35,7 +35,7 @@ private:
 public:
     SvxSplitTableDlg(weld::Window *pParent, bool bIsTableVertical, tools::Long nMaxVertical, tools::Long nMaxHorizontal);
 
-    DECL_LINK(ClickHdl, weld::Button&, void);
+    DECL_LINK(ToggleHdl, weld::ToggleButton&, void);
 
     bool IsHorizontal() const;
     bool IsProportional() const;

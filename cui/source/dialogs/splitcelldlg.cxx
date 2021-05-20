@@ -28,9 +28,8 @@ SvxSplitTableDlg::SvxSplitTableDlg(weld::Window *pParent, bool bIsTableVertical,
     , mnMaxVertical(nMaxVertical)
     , mnMaxHorizontal(nMaxHorizontal)
 {
-    m_xHorzBox->connect_clicked(LINK(this, SvxSplitTableDlg, ClickHdl));
-    m_xPropCB->connect_clicked(LINK(this, SvxSplitTableDlg, ClickHdl));
-    m_xVertBox->connect_clicked(LINK(this, SvxSplitTableDlg, ClickHdl));
+    m_xHorzBox->connect_toggled(LINK(this, SvxSplitTableDlg, ToggleHdl));
+    m_xVertBox->connect_toggled(LINK(this, SvxSplitTableDlg, ToggleHdl));
 
     if (mnMaxVertical < 2)
     {
@@ -51,9 +50,11 @@ SvxSplitTableDlg::SvxSplitTableDlg(weld::Window *pParent, bool bIsTableVertical,
     }
 }
 
-IMPL_LINK(SvxSplitTableDlg, ClickHdl, weld::Button&, rButton, void)
+IMPL_LINK(SvxSplitTableDlg, ToggleHdl, weld::ToggleButton&, rButton, void)
 {
-    const bool bIsVert = &rButton == m_xVertBox.get();
+    if (!rButton.get_active())
+        return;
+    const bool bIsVert = m_xVertBox->get_active();
     tools::Long nMax = bIsVert ? mnMaxVertical : mnMaxHorizontal;
     m_xPropCB->set_sensitive(!bIsVert);
     m_xCountEdit->set_max(nMax);
