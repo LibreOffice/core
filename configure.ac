@@ -1291,7 +1291,7 @@ if test "$_os" = "Emscripten"; then
         EMSCRIPTEN_ERROR=1
     fi
     if test -z "$EMMAKEN_JUST_CONFIGURE"; then
-	AC_MSG_WARN(["\$EMMAKEN_JUST_CONFIGURE wasn't set by emconfigure. Prefix configure or use autogen.sh])
+        AC_MSG_WARN(["\$EMMAKEN_JUST_CONFIGURE wasn't set by emconfigure. Prefix configure or use autogen.sh])
         EMSCRIPTEN_ERROR=1
     fi
     if test $EMSCRIPTEN_ERROR -ne 0; then
@@ -2369,11 +2369,11 @@ AC_ARG_WITH(help,
 
 AC_ARG_WITH(omindex,
    AS_HELP_STRING([--with-omindex],
-	[Enable the support of xapian-omega index for online help.])
+        [Enable the support of xapian-omega index for online help.])
    [
                          Usage: --with-omindex=server prepare the pages for omindex
-				but let xapian-omega be built in server.
-				--with-omindex=noxap do not prepare online pages
+                                but let xapian-omega be built in server.
+                                --with-omindex=noxap do not prepare online pages
                                 for xapian-omega
   ],
 ,)
@@ -10982,17 +10982,17 @@ if test "$with_system_box2d" = "yes"; then
     AC_CHECK_HEADER(box2d/box2d.h, [BOX2D_H_FOUND='TRUE'],
         [BOX2D_H_FOUND='FALSE'])
     if test "$BOX2D_H_FOUND" = "TRUE"; then # 2.4.0+
-    	_BOX2D_LIB=box2d
-    	AC_DEFINE(BOX2D_HEADER,<box2d/box2d.h>)
+        _BOX2D_LIB=box2d
+        AC_DEFINE(BOX2D_HEADER,<box2d/box2d.h>)
     else
-	# fail this. there's no other alternative to check when we are here.
-    	AC_CHECK_HEADER([Box2D/Box2D.h], [],
-		[AC_MSG_ERROR(box2d headers not found.)])
-    	_BOX2D_LIB=Box2D
-    	AC_DEFINE(BOX2D_HEADER,<Box2D/Box2D.h>)
+        # fail this. there's no other alternative to check when we are here.
+        AC_CHECK_HEADER([Box2D/Box2D.h], [],
+            [AC_MSG_ERROR(box2d headers not found.)])
+        _BOX2D_LIB=Box2D
+        AC_DEFINE(BOX2D_HEADER,<Box2D/Box2D.h>)
     fi
     AC_CHECK_LIB([$_BOX2D_LIB], [main], [:],
-    	[ AC_MSG_ERROR(box2d library not found.) ], [])
+        [ AC_MSG_ERROR(box2d library not found.) ], [])
     BOX2D_LIBS=-l$_BOX2D_LIB
     AC_LANG_POP([C++])
     BOX2D_CFLAGS=$(printf '%s' "$BOX2D_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
@@ -12647,7 +12647,7 @@ then
         if test ! -f "$QT5_PLATFORMS_SRCDIR"/wasm_shell.html ; then
             QT5_PLATFORMS_SRCDIR="${QT5_PLATFORMS_SRCDIR/plugins/src\/plugins}/wasm"
         fi
-	if test ! -f "${qt5_platformsdir}"/libqwasm.a -o ! -f "$QT5_PLATFORMS_SRCDIR"/wasm_shell.html; then
+        if test ! -f "${qt5_platformsdir}"/libqwasm.a -o ! -f "$QT5_PLATFORMS_SRCDIR"/wasm_shell.html; then
             AC_MSG_ERROR([No Qt5 WASM QPA plugin found in ${qt5_platformsdir} or ${QT5_PLATFORMS_SRCDIR}])
         fi
     fi
