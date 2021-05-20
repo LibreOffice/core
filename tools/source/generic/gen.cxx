@@ -103,10 +103,8 @@ tools::Rectangle& tools::Rectangle::Union( const tools::Rectangle& rRect )
         *this = rRect;
     else
     {
-        nLeft  =  std::min( std::min( nLeft, rRect.nLeft ), std::min( nRight, rRect.nRight )   );
-        nRight  = std::max( std::max( nLeft, rRect.nLeft ), std::max( nRight, rRect.nRight )   );
-        nTop    = std::min( std::min( nTop, rRect.nTop ),   std::min( nBottom, rRect.nBottom ) );
-        nBottom = std::max( std::max( nTop, rRect.nTop ),   std::max( nBottom, rRect.nBottom ) );
+        std::tie(nLeft, nRight) = std::minmax({ nLeft, rRect.nLeft, nRight, rRect.nRight });
+        std::tie(nTop, nBottom) = std::minmax({ nTop, rRect.nTop, nBottom, rRect.nBottom });
     }
 
     return *this;
