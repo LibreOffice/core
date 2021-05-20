@@ -1,6 +1,10 @@
 ---
 assumeFilename: svtools/source/control/ruler.cxx
 excludelist:
+    svtools/inc/framestatuslistener.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XFrameActionListener.hpp
+    - com/sun/star/frame/XStatusListener.hpp
     svtools/source/control/accessibleruler.hxx:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessible.hpp

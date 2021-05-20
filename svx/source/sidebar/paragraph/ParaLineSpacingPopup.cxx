@@ -19,7 +19,7 @@
 
 #include "ParaLineSpacingControl.hxx"
 
-#include <svx/ParaLineSpacingPopup.hxx>
+#include <ParaLineSpacingPopup.hxx>
 #include <vcl/toolbox.hxx>
 
 using namespace svx;

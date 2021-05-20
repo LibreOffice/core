@@ -24,7 +24,7 @@
 #include <vcl/toolbox.hxx>
 
 #include <svx/strings.hrc>
-#include <svx/layctrl.hxx>
+#include <layctrl.hxx>
 #include <svx/dialmgr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svtools/colorcfg.hxx>

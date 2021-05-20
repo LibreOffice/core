@@ -30,7 +30,7 @@
 #include <svl/intitem.hxx>
 #include <svl/itempool.hxx>
 
-#include <svx/ParaLineSpacingPopup.hxx>
+#include <ParaLineSpacingPopup.hxx>
 
 #define DEFAULT_LINE_SPACING  200
 #define FIX_DIST_DEF          283

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/galleryobjectbinarystorage.hxx>
+#include <galleryobjectbinarystorage.hxx>
 #include <tools/urlobj.hxx>
 
 void GalleryObjectBinaryStorage::setURL(INetURLObject aURL) { m_aURL = aURL; }

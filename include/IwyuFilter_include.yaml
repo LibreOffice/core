@@ -449,10 +449,6 @@ excludelist:
     include/svtools/dialogclosedlistener.hxx:
     # base class has to be a complete type
     - com/sun/star/ui/dialogs/XDialogClosedListener.hpp
-    include/svtools/framestatuslistener.hxx:
-    # base class has to be a complete type
-    - com/sun/star/frame/XFrameActionListener.hpp
-    - com/sun/star/frame/XStatusListener.hpp
     include/svtools/genericunodialog.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XInitialization.hpp

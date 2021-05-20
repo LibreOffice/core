@@ -16,29 +16,24 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#pragma once
 
-#ifndef INCLUDED_SFX2_INC_CHARMAPPOPUP_HXX
-#define INCLUDED_SFX2_INC_CHARMAPPOPUP_HXX
-
-#include <svtools/popupwindowcontroller.hxx>
-
-class CharmapPopup final : public svt::PopupWindowController
+enum class SvxDistributeHorizontal
 {
-public:
-    CharmapPopup(const css::uno::Reference<css::uno::XComponentContext>& rContext);
-    virtual ~CharmapPopup() override;
-
-    virtual VclPtr<vcl::Window> createVclPopupWindow(vcl::Window* pParent) override;
-    virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
-
-    // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
+    NONE = 0,
+    Left,
+    Center,
+    Distance,
+    Right
 };
 
-#endif
+enum class SvxDistributeVertical
+{
+    NONE = 0,
+    Top,
+    Center,
+    Distance,
+    Bottom
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

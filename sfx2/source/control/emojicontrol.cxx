@@ -18,7 +18,7 @@
  */
 
 #include <emojicontrol.hxx>
-#include <sfx2/emojipopup.hxx>
+#include <emojipopup.hxx>
 #include <emojiview.hxx>
 #include <sfx2/thumbnailviewitem.hxx>
 #include <rtl/ustrbuf.hxx>

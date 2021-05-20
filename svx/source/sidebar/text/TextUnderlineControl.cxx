@@ -20,7 +20,7 @@
 #include <svx/svxids.hrc>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svx/TextUnderlinePopup.hxx>
+#include <TextUnderlinePopup.hxx>
 #include <editeng/editids.hrc>
 #include <editeng/udlnitem.hxx>
 #include <helpids.h>

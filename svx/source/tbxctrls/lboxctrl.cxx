@@ -25,7 +25,7 @@
 #include <sfx2/bindings.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/lboxctrl.hxx>
+#include <lboxctrl.hxx>
 #include <tools/urlobj.hxx>
 
 #include <svx/strings.hrc>

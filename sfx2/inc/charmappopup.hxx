@@ -16,21 +16,16 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_SOURCE_SIDEBAR_PARAGRAPH_PARALINESPACINGPOPUP_HXX
-#define INCLUDED_SVX_SOURCE_SIDEBAR_PARAGRAPH_PARALINESPACINGPOPUP_HXX
+
+#pragma once
 
 #include <svtools/popupwindowcontroller.hxx>
 
-namespace svx
-{
-class SvxLineSpacingToolBoxControl final : public svt::PopupWindowController
+class CharmapPopup final : public svt::PopupWindowController
 {
 public:
-    explicit SvxLineSpacingToolBoxControl(
-        const css::uno::Reference<css::uno::XComponentContext>& rContext);
-    virtual ~SvxLineSpacingToolBoxControl() override;
-
-    virtual void SAL_CALL execute(sal_Int16 KeyModifier) override;
+    CharmapPopup(const css::uno::Reference<css::uno::XComponentContext>& rContext);
+    virtual ~CharmapPopup() override;
 
     virtual VclPtr<vcl::Window> createVclPopupWindow(vcl::Window* pParent) override;
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
@@ -42,8 +37,5 @@ public:
     // XInitialization
     virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
 };
-}
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

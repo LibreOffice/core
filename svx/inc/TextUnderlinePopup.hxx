@@ -16,16 +16,17 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_LAYCTRL_HXX
-#define INCLUDED_SVX_LAYCTRL_HXX
+#pragma once
 
 #include <svtools/popupwindowcontroller.hxx>
 
-class SvxTableToolBoxControl final : public svt::PopupWindowController
+namespace svx
+{
+class TextUnderlinePopup final : public svt::PopupWindowController
 {
 public:
-    SvxTableToolBoxControl(const css::uno::Reference<css::uno::XComponentContext>& rContext);
-    virtual ~SvxTableToolBoxControl() override;
+    TextUnderlinePopup(const css::uno::Reference<css::uno::XComponentContext>& rContext);
+    virtual ~TextUnderlinePopup() override;
 
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
     virtual VclPtr<vcl::Window> createVclPopupWindow(vcl::Window* pParent) override;
@@ -36,30 +37,8 @@ public:
 
     // XInitialization
     virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
-
-    void TableDialog(const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
-    void CloseAndShowTableDialog();
 };
 
-class SvxColumnsToolBoxControl final : public svt::PopupWindowController
-{
-public:
-    SvxColumnsToolBoxControl(const css::uno::Reference<css::uno::XComponentContext>& rContext);
-    virtual ~SvxColumnsToolBoxControl() override;
-
-    virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
-    virtual VclPtr<vcl::Window> createVclPopupWindow(vcl::Window* pParent) override;
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
-
-    // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
-
-    void InsertColumns(const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
-};
-
-#endif
+} // end of namespace svx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

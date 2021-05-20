@@ -24,7 +24,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svx/TextCharacterSpacingPopup.hxx>
+#include <TextCharacterSpacingPopup.hxx>
 #include <svl/itempool.hxx>
 #include <helpids.h>
 

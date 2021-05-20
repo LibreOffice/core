@@ -16,27 +16,29 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_DSTRIBUT_ENUM_HXX
-#define INCLUDED_SVX_DSTRIBUT_ENUM_HXX
+#pragma once
 
-enum class SvxDistributeHorizontal
+#include <svtools/popupwindowcontroller.hxx>
+
+namespace svx
 {
-    NONE = 0,
-    Left,
-    Center,
-    Distance,
-    Right
+class TextCharacterSpacingPopup final : public svt::PopupWindowController
+{
+public:
+    TextCharacterSpacingPopup(const css::uno::Reference<css::uno::XComponentContext>& rContext);
+    virtual ~TextCharacterSpacingPopup() override;
+
+    virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
+    virtual VclPtr<vcl::Window> createVclPopupWindow(vcl::Window* pParent) override;
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+
+    // XInitialization
+    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
 };
 
-enum class SvxDistributeVertical
-{
-    NONE = 0,
-    Top,
-    Center,
-    Distance,
-    Bottom
-};
-
-#endif // INCLUDED_SVX_DSTRIBUT_ENUM_HXX
+} // end of namespace svx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
