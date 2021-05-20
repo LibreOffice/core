@@ -428,7 +428,7 @@ void SwTextCursor::GetEndCharRect(SwRect* pOrig, const TextFrameIndex nOfst,
     tools::Long nLast = 0;
     SwLinePortion *pPor = m_pCurr->GetFirstPortion();
 
-    sal_uInt16 nTmpHeight, nTmpAscent;
+    sal_uInt32 nTmpHeight, nTmpAscent;
     CalcAscentAndHeight( nTmpAscent, nTmpHeight );
     sal_uInt16 nPorHeight = nTmpHeight;
     sal_uInt16 nPorAscent = nTmpAscent;
@@ -479,7 +479,7 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
     SwTextSizeInfo aInf( GetInfo(), &aText, m_nStart );
     if( GetPropFont() )
         aInf.GetFont()->SetProportion( GetPropFont() );
-    sal_uInt16 nTmpAscent, nTmpHeight;  // Line height
+    sal_uInt32 nTmpAscent, nTmpHeight;  // Line height
     CalcAscentAndHeight( nTmpAscent, nTmpHeight );
     const Size  aCharSize( 1, nTmpHeight );
     const Point aCharPos;
@@ -505,8 +505,8 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
     }
     else
     {
-        sal_uInt16 nPorHeight = nTmpHeight;
-        sal_uInt16 nPorAscent = nTmpAscent;
+        sal_uInt32 nPorHeight = nTmpHeight;
+        sal_uInt32 nPorAscent = nTmpAscent;
         SwTwips nX = 0;
         SwTwips nTmpFirst = 0;
         SwLinePortion *pPor = m_pCurr->GetFirstPortion();
@@ -1051,7 +1051,7 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
                     nPorHeight = nPorAscent;
                     pOrig->Height( nPorHeight +
                         static_cast<SwDropPortion*>(pPor)->GetDropDescent() );
-                    if( nTmpHeight < pOrig->Height() )
+                    if( static_cast<SwTwips>(nTmpHeight) < pOrig->Height() )
                     {
                         nTmpAscent = nPorAscent;
                         nTmpHeight = sal_uInt16( pOrig->Height() );
