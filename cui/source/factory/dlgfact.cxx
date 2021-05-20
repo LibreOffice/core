@@ -463,7 +463,7 @@ void AbstractHangulHanjaConversionDialog_Impl::SetClickByCharacterHdl( const Lin
     m_xDlg->SetClickByCharacterHdl(_rHdl );
 }
 
-void AbstractHangulHanjaConversionDialog_Impl::SetConversionFormatChangedHdl(const Link<weld::Button&,void>& rHdl)
+void AbstractHangulHanjaConversionDialog_Impl::SetConversionFormatChangedHdl(const Link<weld::ToggleButton&,void>& rHdl)
 {
     m_xDlg->SetConversionFormatChangedHdl(rHdl);
 }
