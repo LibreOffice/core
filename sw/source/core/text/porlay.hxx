@@ -81,7 +81,7 @@ private:
     SwLineLayout *m_pNext;                // The next Line
     std::unique_ptr<std::vector<long>> m_pLLSpaceAdd;     // Used for justified alignment
     std::unique_ptr<std::deque<sal_uInt16>> m_pKanaComp;  // Used for Kana compression
-    sal_uInt16 m_nRealHeight;             // The height resulting from line spacing and register
+    sal_uInt32 m_nRealHeight;             // The height resulting from line spacing and register
     bool m_bFormatAdj : 1;
     bool m_bDummy     : 1;
     bool m_bEndHyph   : 1;
@@ -149,8 +149,8 @@ public:
     // Collects the data for the line
     void CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf );
 
-    void SetRealHeight( sal_uInt16 nNew ) { m_nRealHeight = nNew; }
-    sal_uInt16 GetRealHeight() const { return m_nRealHeight; }
+    void SetRealHeight( sal_uInt32 nNew ) { m_nRealHeight = nNew; }
+    sal_uInt32 GetRealHeight() const { return m_nRealHeight; }
 
     // Creates the glue chain for short lines
     SwMarginPortion *CalcLeftMargin();

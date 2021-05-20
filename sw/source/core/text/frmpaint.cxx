@@ -331,7 +331,7 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
         SwTextPainter  aLine( const_cast<SwTextFrame*>(this), &aInf );
         bool bNoDummy = !aLine.GetNext(); // Only one empty line!
 
-        while( aLine.Y() + aLine.GetLineHeight() <= rRect.Top() )
+        while( aLine.Y() + static_cast<SwTwips>(aLine.GetLineHeight()) <= rRect.Top() )
         {
             if( !aLine.GetCurr()->IsDummy() &&
                 ( rLineInf.IsCountBlankLines() ||
@@ -371,7 +371,7 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
                         if( bLineNum &&
                             ( aExtra.HasNumber() || aExtra.HasDivider() ) )
                         {
-                            sal_uInt16 nTmpHeight, nTmpAscent;
+                            sal_uInt32 nTmpHeight, nTmpAscent;
                             aLine.CalcAscentAndHeight( nTmpAscent, nTmpHeight );
                             aExtra.PaintExtra( aLine.Y(), nTmpAscent,
                                 nTmpHeight, bRed );

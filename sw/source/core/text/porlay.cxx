@@ -358,7 +358,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
         }
         else
         {
-            const sal_uInt16 nLineHeight = Height();
+            const sal_uInt32 nLineHeight = Height();
             Init( GetNextPortion() );
             SwLinePortion *pPos = mpNextPortion;
             SwLinePortion *pLast = this;
@@ -421,8 +421,8 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
 
                 // We had an attribute change: Sum up/build maxima of length and mass
 
-                sal_uInt16 nPosHeight = pPos->Height();
-                sal_uInt16 nPosAscent = pPos->GetAscent();
+                sal_uInt32 nPosHeight = pPos->Height();
+                sal_uInt32 nPosAscent = pPos->GetAscent();
 
                 SAL_WARN_IF( nPosHeight < nPosAscent,
                         "sw.core", "SwLineLayout::CalcLine: bad ascent or height" );

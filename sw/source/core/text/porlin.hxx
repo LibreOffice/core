@@ -54,7 +54,7 @@ protected:
     SwLinePortion *mpNextPortion;
     // Count of chars and spaces on the line
     TextFrameIndex nLineLength;
-    sal_uInt16 nAscent;      // Maximum ascender
+    sal_uInt32 nAscent;      // Maximum ascender
 
     SwLinePortion();
 private:
@@ -74,9 +74,9 @@ public:
     TextFrameIndex GetLen() const { return nLineLength; }
     void SetLen(TextFrameIndex const nLen) { nLineLength = nLen; }
     void SetNextPortion( SwLinePortion *pNew ){ mpNextPortion = pNew; }
-    sal_uInt16 &GetAscent() { return nAscent; }
-    sal_uInt16 GetAscent() const { return nAscent; }
-    void SetAscent( const sal_uInt16 nNewAsc ) { nAscent = nNewAsc; }
+    sal_uInt32 &GetAscent() { return nAscent; }
+    sal_uInt32 GetAscent() const { return nAscent; }
+    void SetAscent( const sal_uInt32 nNewAsc ) { nAscent = nNewAsc; }
     void  PrtWidth( sal_uInt16 nNewWidth ) { Width( nNewWidth ); }
     sal_uInt16 PrtWidth() const { return Width(); }
     void AddPrtWidth( const sal_uInt16 nNew ) { Width( Width() + nNew ); }

@@ -590,7 +590,7 @@ bool SwTextFrame::GetModelPositionForViewPoint_(SwPosition* pPos, const Point& r
         // See comment in AdjustFrame()
         SwTwips nMaxY = getFrameArea().Top() + getFramePrintArea().Top() + getFramePrintArea().Height();
         aLine.TwipsToLine( rPoint.Y() );
-        while( aLine.Y() + aLine.GetLineHeight() > nMaxY )
+        while( aLine.Y() + static_cast<SwTwips>(aLine.GetLineHeight()) > nMaxY )
         {
             if( !aLine.Prev() )
                 break;

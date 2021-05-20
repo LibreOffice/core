@@ -399,7 +399,7 @@ void SwDoubleLinePortion::FormatBrackets( SwTextFormatInfo &rInf, SwTwips& nMaxW
         pBracket->nAscent = rInf.GetAscent();
         pBracket->nHeight = aSize.Height();
         pTmpFnt->SetActual( nActualScr );
-        if( nMaxWidth > aSize.Width() )
+        if( nMaxWidth > static_cast<SwTwips>(aSize.Width()) )
         {
             pBracket->nPreWidth = aSize.Width();
             nMaxWidth -= aSize.Width();
@@ -428,7 +428,7 @@ void SwDoubleLinePortion::FormatBrackets( SwTextFormatInfo &rInf, SwTwips& nMaxW
         }
         if( aSize.Height() > pBracket->nHeight )
             pBracket->nHeight = aSize.Height();
-        if( nMaxWidth > aSize.Width() )
+        if( nMaxWidth > static_cast<SwTwips>(aSize.Width()) )
         {
             pBracket->nPostWidth = aSize.Width();
             nMaxWidth -= aSize.Width();
@@ -1680,7 +1680,7 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
         }
         else if ( rMulti.IsRuby() && rMulti.OnRight() && GetInfo().IsRuby() )
         {
-            SwTwips nLineDiff = std::max(( rMulti.GetRoot().Height() - pPor->Width() ) / 2, 0 );
+            SwTwips nLineDiff = std::max(( rMulti.GetRoot().Height() - pPor->Width() ) / 2, static_cast<sal_uInt32>(0) );
             GetInfo().Y( nOfst + nLineDiff );
             // Draw the ruby text on top of the preserved space.
             GetInfo().X( GetInfo().X() - pPor->Height() );
@@ -2169,7 +2169,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
             // Setting this to the portion width ( = rMulti.Width() )
             // can make GetTextBreak inside SwTextGuess::Guess return too small
             // values. Therefore we add some extra twips.
-            if( nActWidth > nTmpX + rMulti.Width() + 6 )
+            if( nActWidth > nTmpX + static_cast<SwTwips>(rMulti.Width()) + 6 )
                 nActWidth = nTmpX + rMulti.Width() + 6;
             nMaxWidth = nActWidth;
             nActWidth = ( 3 * nMaxWidth + nMinWidth + 3 ) / 4;
@@ -2520,7 +2520,7 @@ SwTextCursorSave::SwTextCursorSave( SwTextCursor* pCursor,
 {
     pCursor->m_nStart = nCurrStart;
     pCursor->m_pCurr = &pMulti->GetRoot();
-    while( pCursor->Y() + pCursor->GetLineHeight() < nY &&
+    while( pCursor->Y() + static_cast<SwTwips>(pCursor->GetLineHeight()) < nY &&
         pCursor->Next() )
         ; // nothing
     nWidth = pCursor->m_pCurr->Width();
