@@ -41,10 +41,10 @@ SwLabPrtPage::SwLabPrtPage(weld::Container* pPage, weld::DialogController* pCont
     SetExchangeSupport();
 
     // Install handlers
-    Link<weld::Button&,void> aLk = LINK(this, SwLabPrtPage, CountHdl);
-    m_xPageButton->connect_clicked( aLk );
-    m_xSingleButton->connect_clicked( aLk );
-    m_xPrtSetup->connect_clicked( aLk );
+    Link<weld::ToggleButton&,void> aLk = LINK(this, SwLabPrtPage, CountHdl);
+    m_xPageButton->connect_toggled(aLk);
+    m_xSingleButton->connect_toggled(aLk);
+    m_xPrtSetup->connect_clicked(LINK(this, SwLabPrtPage, PrtSetupHdl));
 
     SvtCommandOptions aCmdOpts;
     if (aCmdOpts.Lookup(SvtCommandOptions::CMDOPTION_DISABLED, "Print"))
@@ -58,30 +58,30 @@ SwLabPrtPage::~SwLabPrtPage()
     pPrinter.disposeAndClear();
 }
 
-IMPL_LINK( SwLabPrtPage, CountHdl, weld::Button&, rButton, void )
+IMPL_LINK( SwLabPrtPage, PrtSetupHdl, weld::Button&, rButton, void )
 {
-    if (&rButton == m_xPrtSetup.get())
-    {
-        // Call printer setup
-        if (!pPrinter)
-            pPrinter = VclPtr<Printer>::Create();
+    // Call printer setup
+    if (!pPrinter)
+        pPrinter = VclPtr<Printer>::Create();
 
-        PrinterSetupDialog aDlg(GetFrameWeld());
-        aDlg.SetPrinter(pPrinter);
-        aDlg.run();
-        rButton.grab_focus();
-        m_xPrinterInfo->set_label(pPrinter->GetName());
+    PrinterSetupDialog aDlg(GetFrameWeld());
+    aDlg.SetPrinter(pPrinter);
+    aDlg.run();
+    rButton.grab_focus();
+    m_xPrinterInfo->set_label(pPrinter->GetName());
+}
+
+IMPL_LINK(SwLabPrtPage, CountHdl, weld::ToggleButton&, rButton, void)
+{
+    if (!rButton.get_active())
         return;
-    }
-    const bool bEnable = &rButton == m_xSingleButton.get();
+
+    const bool bEnable = m_xSingleButton->get_active();
     m_xSingleGrid->set_sensitive(bEnable);
     m_xSynchronCB->set_sensitive(!bEnable);
 
-    OSL_ENSURE(!bEnable || &rButton == m_xPageButton.get(), "NewButton?" );
-    if ( bEnable )
-    {
+    if (bEnable)
         m_xColField->grab_focus();
-    }
 }
 
 std::unique_ptr<SfxTabPage> SwLabPrtPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet)
