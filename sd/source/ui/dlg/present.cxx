@@ -64,16 +64,16 @@ SdStartPresentationDlg::SdStartPresentationDlg(weld::Window* pWindow, const SfxI
     m_xFormatter->SetExtFormat(ExtTimeFieldFormat::LongDuration);
     m_xFormatter->EnableEmptyField(false);
 
-    Link<weld::Button&,void> aLink( LINK( this, SdStartPresentationDlg, ChangeRangeHdl ) );
+    Link<weld::ToggleButton&,void> aLink( LINK( this, SdStartPresentationDlg, ChangeRangeHdl ) );
 
-    m_xRbtAll->connect_clicked( aLink );
-    m_xRbtAtDia->connect_clicked( aLink );
-    m_xRbtCustomshow->connect_clicked( aLink );
+    m_xRbtAll->connect_toggled( aLink );
+    m_xRbtAtDia->connect_toggled( aLink );
+    m_xRbtCustomshow->connect_toggled( aLink );
 
     aLink = LINK( this, SdStartPresentationDlg, ClickWindowPresentationHdl );
-    m_xRbtStandard->connect_clicked( aLink );
-    m_xRbtWindow->connect_clicked( aLink );
-    m_xRbtAuto->connect_clicked( aLink );
+    m_xRbtStandard->connect_toggled( aLink );
+    m_xRbtWindow->connect_toggled( aLink );
+    m_xRbtAuto->connect_toggled( aLink );
 
     m_xTmfPause->connect_value_changed( LINK( this, SdStartPresentationDlg, ChangePauseHdl ) );
 
@@ -277,7 +277,7 @@ void SdStartPresentationDlg::GetAttr( SfxItemSet& rAttr )
 /**
  *      Handler: Enabled/Disabled Listbox "Dias"
  */
-IMPL_LINK_NOARG(SdStartPresentationDlg, ChangeRangeHdl, weld::Button&, void)
+IMPL_LINK_NOARG(SdStartPresentationDlg, ChangeRangeHdl, weld::ToggleButton&, void)
 {
     m_xLbDias->set_sensitive( m_xRbtAtDia->get_active() );
     m_xLbCustomshow->set_sensitive( m_xRbtCustomshow->get_active() );
@@ -286,12 +286,11 @@ IMPL_LINK_NOARG(SdStartPresentationDlg, ChangeRangeHdl, weld::Button&, void)
 /**
  *      Handler: Enabled/Disabled Checkbox "AlwaysOnTop"
  */
-IMPL_LINK_NOARG(SdStartPresentationDlg, ClickWindowPresentationHdl, weld::Button&, void)
+IMPL_LINK_NOARG(SdStartPresentationDlg, ClickWindowPresentationHdl, weld::ToggleButton&, void)
 {
     const bool bAuto = m_xRbtAuto->get_active();
     const bool bWindow = m_xRbtWindow->get_active();
 
-    // m_xFtPause.set_sensitive( bAuto );
     m_xTmfPause->set_sensitive( bAuto );
     m_xCbxAutoLogo->set_sensitive( bAuto && ( m_xFormatter->GetTime().GetMSFromTime() > 0 ) );
 
