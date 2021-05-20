@@ -174,8 +174,8 @@ AnimationWindow::AnimationWindow(SfxBindings* pInBindings, SfxChildWindow *pCW, 
     m_xBtnRemoveBitmap->connect_clicked( LINK( this, AnimationWindow, ClickRemoveBitmapHdl ) );
     m_xBtnRemoveAll->connect_clicked( LINK( this, AnimationWindow, ClickRemoveBitmapHdl ) );
 
-    m_xRbtGroup->connect_clicked( LINK( this, AnimationWindow, ClickRbtHdl ) );
-    m_xRbtBitmap->connect_clicked( LINK( this, AnimationWindow, ClickRbtHdl ) );
+    m_xRbtGroup->connect_toggled( LINK( this, AnimationWindow, ClickRbtHdl ) );
+    m_xRbtBitmap->connect_toggled( LINK( this, AnimationWindow, ClickRbtHdl ) );
     m_xBtnCreateGroup->connect_clicked( LINK( this, AnimationWindow, ClickCreateGroupHdl ) );
     m_xBtnHelp->connect_clicked( LINK( this, AnimationWindow, ClickHelpHdl ) );
     m_xNumFldBitmap->connect_value_changed( LINK( this, AnimationWindow, ModifyBitmapHdl ) );
@@ -361,7 +361,7 @@ IMPL_LINK_NOARG(AnimationWindow, ClickLastHdl, weld::Button&, void)
     UpdateControl();
 }
 
-IMPL_LINK_NOARG(AnimationWindow, ClickRbtHdl, weld::Button&, void)
+IMPL_LINK_NOARG(AnimationWindow, ClickRbtHdl, weld::ToggleButton&, void)
 {
     if (m_FrameList.empty() || m_xRbtGroup->get_active())
     {
