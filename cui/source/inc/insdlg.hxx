@@ -64,7 +64,7 @@ class SvInsertOleDlg : public InsertObjectDialog_Impl
 
     DECL_LINK(DoubleClickHdl, weld::TreeView&, bool);
     DECL_LINK(BrowseHdl, weld::Button&, void);
-    DECL_LINK(RadioHdl, weld::Button&, void);
+    DECL_LINK(RadioHdl, weld::ToggleButton&, void);
     bool IsCreateNew() const override { return m_xRbNewObject->get_active(); }
 
 public:
