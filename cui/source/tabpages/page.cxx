@@ -316,8 +316,8 @@ void SvxPageDescPage::Init_Impl()
     m_xPaperSizeBox->connect_changed(LINK(this, SvxPageDescPage, PaperSizeSelect_Impl));
     m_xPaperWidthEdit->connect_value_changed( LINK(this, SvxPageDescPage, PaperSizeModify_Impl));
     m_xPaperHeightEdit->connect_value_changed(LINK(this, SvxPageDescPage, PaperSizeModify_Impl));
-    m_xLandscapeBtn->connect_clicked(LINK(this, SvxPageDescPage, SwapOrientation_Impl));
-    m_xPortraitBtn->connect_clicked(LINK(this, SvxPageDescPage, SwapOrientation_Impl));
+    m_xLandscapeBtn->connect_toggled(LINK(this, SvxPageDescPage, SwapOrientation_Impl));
+    m_xPortraitBtn->connect_toggled(LINK(this, SvxPageDescPage, SwapOrientation_Impl));
 
     Link<weld::MetricSpinButton&, void> aLink = LINK(this, SvxPageDescPage, BorderModify_Impl);
     m_xLeftMarginEdit->connect_value_changed(aLink);
@@ -465,14 +465,14 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
 
     // tdf#130548 disable callbacks on the other of a pair of the radiogroup
     // when toggling its partner
-    m_xLandscapeBtn->connect_clicked(Link<weld::Button&, void>());
-    m_xPortraitBtn->connect_clicked(Link<weld::Button&, void>());
+    m_xLandscapeBtn->connect_toggled(Link<weld::ToggleButton&, void>());
+    m_xPortraitBtn->connect_toggled(Link<weld::ToggleButton&, void>());
 
     m_xLandscapeBtn->set_active(bLandscape);
     m_xPortraitBtn->set_active(!bLandscape);
 
-    m_xLandscapeBtn->connect_clicked(LINK(this, SvxPageDescPage, SwapOrientation_Impl));
-    m_xPortraitBtn->connect_clicked(LINK(this, SvxPageDescPage, SwapOrientation_Impl));
+    m_xLandscapeBtn->connect_toggled(LINK(this, SvxPageDescPage, SwapOrientation_Impl));
+    m_xPortraitBtn->connect_toggled(LINK(this, SvxPageDescPage, SwapOrientation_Impl));
 
     m_aBspWin.SetSize( Size( ConvertLong_Impl( aPaperSize.Width(), eUnit ),
                            ConvertLong_Impl( aPaperSize.Height(), eUnit ) ) );
@@ -1010,12 +1010,9 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperSizeModify_Impl, weld::MetricSpinButton&, 
     RangeHdl_Impl();
 }
 
-IMPL_LINK(SvxPageDescPage, SwapOrientation_Impl, weld::Button&, rBtn, void)
+IMPL_LINK(SvxPageDescPage, SwapOrientation_Impl, weld::ToggleButton&, rBtn, void)
 {
-    if (
-        !((!bLandscape && &rBtn == m_xLandscapeBtn.get()) ||
-        (bLandscape  && &rBtn == m_xPortraitBtn.get()))
-       )
+    if (!rBtn.get_active())
         return;
 
     bLandscape = m_xLandscapeBtn->get_active();
