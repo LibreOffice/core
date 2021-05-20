@@ -10289,54 +10289,57 @@ fi
 AC_SUBST(SYSTEM_ODBC_HEADERS)
 
 dnl ===================================================================
-dnl Enable LDAP support
-dnl ===================================================================
-
-if test "$_os" != "WINNT" -a "$_os" != "iOS" -a "$_os" != "Android"; then
-AC_MSG_CHECKING([whether to enable LDAP support])
-    if test "$enable_ldap" != "yes"; then
-        AC_MSG_RESULT([no])
-        ENABLE_LDAP=""
-        enable_ldap=no
-    else
-        AC_MSG_RESULT([yes])
-        ENABLE_LDAP="TRUE"
-    fi
-fi
-AC_SUBST(ENABLE_LDAP)
-
-dnl ===================================================================
-dnl Check for system openldap
-dnl ===================================================================
-
-if test "$_os" != "WINNT" -a "$_os" != "iOS" -a "$_os" != "Android" -a "$ENABLE_LDAP" != ""; then
-AC_MSG_CHECKING([which openldap library to use])
-if test "$with_system_openldap" = "yes"; then
-    AC_MSG_RESULT([external])
-    SYSTEM_OPENLDAP=TRUE
-    AC_CHECK_HEADERS(ldap.h, [], [AC_MSG_ERROR(ldap.h not found. install openldap libs)], [])
-    AC_CHECK_LIB([ldap], [ldap_simple_bind_s], [:], [AC_MSG_ERROR(openldap lib not found or functional)], [])
-    AC_CHECK_LIB([ldap], [ldap_set_option], [:], [AC_MSG_ERROR(openldap lib not found or functional)], [])
-else
-    AC_MSG_RESULT([internal])
-    SYSTEM_OPENLDAP=
-    BUILD_TYPE="$BUILD_TYPE OPENLDAP"
-fi
-fi
-AC_SUBST(SYSTEM_OPENLDAP)
-
-dnl ===================================================================
 dnl Check for system NSS
 dnl ===================================================================
 if test "$enable_fuzzers" != "yes" -a "$enable_nss" = "yes"; then
     libo_CHECK_SYSTEM_MODULE([nss],[NSS],[nss >= 3.9.3 nspr >= 4.8])
     AC_DEFINE(HAVE_FEATURE_NSS)
-    ENABLE_NSS="TRUE"
+    ENABLE_NSS=TRUE
     AC_DEFINE(ENABLE_NSS)
 elif test $_os != iOS ; then
     with_tls=openssl
 fi
+
 AC_SUBST(ENABLE_NSS)
+
+dnl ===================================================================
+dnl Enable LDAP support
+dnl ===================================================================
+
+if test "$_os" != "WINNT" -a "$_os" != "iOS" -a "$_os" != "Android"; then
+    AC_MSG_CHECKING([whether to enable LDAP support])
+    if test "$enable_ldap" = yes -a \( "$ENABLE_NSS" = TRUE -o "$with_system_openldap" = yes \); then
+        AC_MSG_RESULT([yes])
+        ENABLE_LDAP=TRUE
+    else
+        if test "$enable_ldap" != "yes"; then
+            AC_MSG_RESULT([no])
+        else
+            AC_MSG_RESULT([no (needs NSS or system openldap)])
+        fi
+    fi
+
+dnl ===================================================================
+dnl Check for system openldap
+dnl ===================================================================
+
+    if test "$ENABLE_LDAP" = TRUE; then
+        AC_MSG_CHECKING([which openldap library to use])
+        if test "$with_system_openldap" = yes; then
+            AC_MSG_RESULT([external])
+            SYSTEM_OPENLDAP=TRUE
+            AC_CHECK_HEADERS(ldap.h, [], [AC_MSG_ERROR(ldap.h not found. install openldap libs)], [])
+            AC_CHECK_LIB([ldap], [ldap_simple_bind_s], [:], [AC_MSG_ERROR(openldap lib not found or functional)], [])
+            AC_CHECK_LIB([ldap], [ldap_set_option], [:], [AC_MSG_ERROR(openldap lib not found or functional)], [])
+        else
+            AC_MSG_RESULT([internal])
+            BUILD_TYPE="$BUILD_TYPE OPENLDAP"
+        fi
+    fi
+fi
+
+AC_SUBST(ENABLE_LDAP)
+AC_SUBST(SYSTEM_OPENLDAP)
 
 dnl ===================================================================
 dnl Check for TLS/SSL and cryptographic implementation to use
