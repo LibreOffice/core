@@ -1592,7 +1592,7 @@ const sal_Unicode* ScImportExport::ScanNextFieldFromString( const sal_Unicode* p
     rbIsQuoted = false;
     rField.clear();
     const sal_Unicode cBlank = ' ';
-    if (!ScGlobal::UnicodeStrChr( pSeps, cBlank))
+    if (cStr && !ScGlobal::UnicodeStrChr(pSeps, cBlank))
     {
         // Cope with broken generators that put leading blanks before a quoted
         // field, like "field1", "field2", "..."
@@ -1603,7 +1603,7 @@ const sal_Unicode* ScImportExport::ScanNextFieldFromString( const sal_Unicode* p
         if (*pb == cStr)
             p = pb;
     }
-    if ( *p == cStr )           // String in quotes
+    if (cStr && *p == cStr) // String in quotes
     {
         rbIsQuoted = true;
         const sal_Unicode* p1;
