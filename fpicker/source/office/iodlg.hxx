@@ -120,8 +120,8 @@ private:
     DECL_LINK(DblClickHdl_Impl, SvtFileView*, bool);
     DECL_LINK(EntrySelectHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(OpenDoneHdl_Impl, SvtFileView*, void);
-    DECL_LINK(AutoExtensionHdl_Impl, weld::Button&, void);
-    DECL_LINK(ClickHdl_Impl, weld::Button&, void);
+    DECL_LINK(AutoExtensionHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(ClickHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(PlayButtonHdl_Impl, weld::Button&, void);
     DECL_LINK(SizeAllocHdl, const Size&, void);
 

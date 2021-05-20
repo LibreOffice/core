@@ -250,7 +250,7 @@ SaneDlg::SaneDlg(weld::Window* pParent, Sane& rSane, bool bScanEnabled)
     mxDeviceBox->connect_changed( LINK( this, SaneDlg, SelectHdl ) );
     mxOptionBox->connect_changed( LINK( this, SaneDlg, OptionsBoxSelectHdl ) );
     mxCancelButton->connect_clicked( LINK( this, SaneDlg, ClickBtnHdl ) );
-    mxBoolCheckBox->connect_clicked( LINK( this, SaneDlg, ClickBtnHdl ) );
+    mxBoolCheckBox->connect_toggled( LINK( this, SaneDlg, ToggleBtnHdl ) );
     mxStringEdit->connect_changed( LINK( this, SaneDlg, ModifyHdl ) );
     mxNumericEdit->connect_changed( LINK( this, SaneDlg, ModifyHdl ) );
     mxVectorBox->connect_changed( LINK( this, SaneDlg, ModifyHdl ) );
@@ -261,7 +261,7 @@ SaneDlg::SaneDlg(weld::Window* pParent, Sane& rSane, bool bScanEnabled)
     mxRightField->connect_value_changed( LINK( this, SaneDlg, MetricValueModifyHdl) );
     mxTopField->connect_value_changed( LINK( this, SaneDlg, MetricValueModifyHdl) );
     mxBottomField->connect_value_changed( LINK( this, SaneDlg, MetricValueModifyHdl) );
-    mxAdvancedBox->connect_clicked( LINK( this, SaneDlg, ClickBtnHdl ) );
+    mxAdvancedBox->connect_toggled( LINK( this, SaneDlg, ToggleBtnHdl ) );
 
     maOldLink = mrSane.SetReloadOptionsHdl( LINK( this, SaneDlg, ReloadSaneOptionsHdl ) );
 }
@@ -568,11 +568,6 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, weld::Button&, rButton, void )
         }
         else if( &rButton == mxPreviewButton.get() )
             AcquirePreview();
-        else if( &rButton == mxBoolCheckBox.get() )
-        {
-            mrSane.SetOptionValue( mnCurrentOption,
-                                   mxBoolCheckBox->get_active() );
-        }
         else if( &rButton == mxButtonOption.get() )
         {
 
@@ -605,10 +600,6 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, weld::Button&, rButton, void )
                     break;
             }
         }
-        else if( &rButton == mxAdvancedBox.get() )
-        {
-            ReloadSaneOptionsHdl( mrSane );
-        }
     }
     if (&rButton == mxScanButton.get())
     {
@@ -623,6 +614,22 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, weld::Button&, rButton, void )
     {
         mrSane.Close();
         m_xDialog->response(RET_CANCEL);
+    }
+}
+
+IMPL_LINK( SaneDlg, ToggleBtnHdl, weld::ToggleButton&, rButton, void )
+{
+    if( mrSane.IsOpen() )
+    {
+        if( &rButton == mxBoolCheckBox.get() )
+        {
+            mrSane.SetOptionValue( mnCurrentOption,
+                                   mxBoolCheckBox->get_active() );
+        }
+        else if( &rButton == mxAdvancedBox.get() )
+        {
+            ReloadSaneOptionsHdl( mrSane );
+        }
     }
 }
 

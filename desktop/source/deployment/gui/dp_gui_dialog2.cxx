@@ -448,9 +448,9 @@ ExtMgrDialog::ExtMgrDialog(weld::Window *pParent, TheExtensionManager *pManager)
 
     m_xCancelBtn->connect_clicked( LINK( this, ExtMgrDialog, HandleCancelBtn ) );
 
-    m_xBundledCbx->connect_clicked( LINK( this, ExtMgrDialog, HandleExtTypeCbx ) );
-    m_xSharedCbx->connect_clicked( LINK( this, ExtMgrDialog, HandleExtTypeCbx ) );
-    m_xUserCbx->connect_clicked( LINK( this, ExtMgrDialog, HandleExtTypeCbx ) );
+    m_xBundledCbx->connect_toggled( LINK( this, ExtMgrDialog, HandleExtTypeCbx ) );
+    m_xSharedCbx->connect_toggled( LINK( this, ExtMgrDialog, HandleExtTypeCbx ) );
+    m_xUserCbx->connect_toggled( LINK( this, ExtMgrDialog, HandleExtTypeCbx ) );
 
     m_xBundledCbx->set_active(true);
     m_xSharedCbx->set_active(true);
@@ -905,7 +905,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleEnableBtn, weld::Button&, void)
     }
 }
 
-IMPL_LINK_NOARG(ExtMgrDialog, HandleExtTypeCbx, weld::Button&, void)
+IMPL_LINK_NOARG(ExtMgrDialog, HandleExtTypeCbx, weld::ToggleButton&, void)
 {
     // re-creates the list of packages with addEntry selecting the packages
     prepareChecking();
