@@ -362,7 +362,7 @@ private:
     std::unique_ptr<weld::CheckButton> m_xTest10CBox;
 
     void Init();
-    DECL_LINK(AutoClickHdl, weld::Button&, void);
+    DECL_LINK(AutoClickHdl, weld::ToggleButton&, void);
 };
 #endif // DBG_UTIL
 
@@ -377,7 +377,7 @@ class SwCompareOptionsTabPage : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xStoreRsidCB;
 
     DECL_LINK(ComparisonHdl, weld::Button&, void);
-    DECL_LINK(IgnoreHdl, weld::Button&, void);
+    DECL_LINK(IgnoreHdl, weld::ToggleButton&, void);
 
 public:
     SwCompareOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);

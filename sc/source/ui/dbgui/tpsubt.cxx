@@ -82,7 +82,7 @@ void ScTpSubTotalGroup::Init()
     mxLbColumns->connect_changed( LINK( this, ScTpSubTotalGroup, SelectTreeListBoxHdl ) );
     mxLbColumns->connect_toggled( LINK( this, ScTpSubTotalGroup, CheckHdl ) );
     mxLbFunctions->connect_changed( LINK( this, ScTpSubTotalGroup, SelectTreeListBoxHdl) );
-    mxLbSelectAllColumns->connect_clicked( LINK( this, ScTpSubTotalGroup, CheckBoxHdl ) );
+    mxLbSelectAllColumns->connect_toggled( LINK( this, ScTpSubTotalGroup, CheckBoxHdl ) );
 
     mnFieldArr.resize(SC_MAXFIELDS(pDoc->GetSheetLimits()));
     mnFieldArr[0] = 0;
@@ -470,8 +470,8 @@ void ScTpSubTotalOptions::Init()
     pDoc = &pViewData->GetDocument();
     assert(pDoc && "Document not found!");
 
-    m_xBtnSort->connect_clicked( LINK( this, ScTpSubTotalOptions, CheckHdl ) );
-    m_xBtnUserDef->connect_clicked( LINK( this, ScTpSubTotalOptions, CheckHdl ) );
+    m_xBtnSort->connect_toggled( LINK( this, ScTpSubTotalOptions, CheckHdl ) );
+    m_xBtnUserDef->connect_toggled( LINK( this, ScTpSubTotalOptions, CheckHdl ) );
 
     FillUserSortListBox();
 }
@@ -551,7 +551,7 @@ void ScTpSubTotalOptions::FillUserSortListBox()
 
 // Handler:
 
-IMPL_LINK(ScTpSubTotalOptions, CheckHdl, weld::Button&, rBox, void)
+IMPL_LINK(ScTpSubTotalOptions, CheckHdl, weld::ToggleButton&, rBox, void)
 {
     if (&rBox == m_xBtnSort.get())
     {
@@ -588,7 +588,7 @@ IMPL_LINK(ScTpSubTotalOptions, CheckHdl, weld::Button&, rBox, void)
     }
 }
 
-IMPL_LINK(ScTpSubTotalGroup, CheckBoxHdl, weld::Button&, rBox, void)
+IMPL_LINK(ScTpSubTotalGroup, CheckBoxHdl, weld::ToggleButton&, rBox, void)
 {
     if (&rBox != mxLbSelectAllColumns.get())
         return;

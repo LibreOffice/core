@@ -187,7 +187,7 @@ private:
     DECL_LINK(DesignSelectHdl, weld::TreeView&, void);
     DECL_LINK(DesignDeleteHdl, weld::Button&, void);
     DECL_LINK(BaseHdl, weld::Button&, void);
-    DECL_LINK(ContentHdl, weld::Button&, void);
+    DECL_LINK(ContentHdl, weld::ToggleButton&, void);
     DECL_LINK(GfxFormatHdl, weld::Button&, void);
     DECL_LINK(ResolutionHdl, weld::Button&, void);
     DECL_LINK(ButtonsHdl, ValueSet*, void);

@@ -107,7 +107,7 @@ private:
                                 DECL_LINK( FirstRowHdl, weld::SpinButton&, void );
                                 DECL_LINK( RbSepFixHdl, weld::Button&, void );
                                 DECL_LINK( SeparatorEditHdl, weld::Entry&, void );
-                                DECL_LINK( SeparatorClickHdl, weld::Button&, void );
+                                DECL_LINK( SeparatorClickHdl, weld::ToggleButton&, void );
                                 DECL_LINK( SeparatorComboBoxHdl, weld::ComboBox&, void );
                                 void SeparatorHdl(const weld::Widget*);
                                 DECL_LINK( LbColTypeHdl, weld::ComboBox&, void );

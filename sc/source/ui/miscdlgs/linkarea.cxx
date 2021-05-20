@@ -53,7 +53,7 @@ ScLinkedAreaDlg::ScLinkedAreaDlg(weld::Widget* pParent)
     m_xLbRanges->connect_changed(LINK( this, ScLinkedAreaDlg, RangeHdl));
     m_xLbRanges->set_size_request(m_xLbRanges->get_approximate_digit_width() * 54,
                                   m_xLbRanges->get_height_rows(5));
-    m_xBtnReload->connect_clicked(LINK( this, ScLinkedAreaDlg, ReloadHdl));
+    m_xBtnReload->connect_toggled(LINK( this, ScLinkedAreaDlg, ReloadHdl));
     UpdateEnable();
 }
 
@@ -173,7 +173,7 @@ IMPL_LINK_NOARG(ScLinkedAreaDlg, RangeHdl, weld::TreeView&, void)
     UpdateEnable();
 }
 
-IMPL_LINK_NOARG(ScLinkedAreaDlg, ReloadHdl, weld::Button&, void)
+IMPL_LINK_NOARG(ScLinkedAreaDlg, ReloadHdl, weld::ToggleButton&, void)
 {
     UpdateEnable();
 }

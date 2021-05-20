@@ -166,7 +166,7 @@ SwLineNumberingDlg::SwLineNumberingDlg(const SwView& rVw)
     }
 
     // Line Numbering
-    m_xNumberingOnCB->connect_clicked(LINK(this, SwLineNumberingDlg, LineOnOffHdl));
+    m_xNumberingOnCB->connect_toggled(LINK(this, SwLineNumberingDlg, LineOnOffHdl));
     m_xDivisorED->connect_changed(LINK(this, SwLineNumberingDlg, ModifyHdl));
     ModifyHdl(*m_xDivisorED);
     LineOnOffHdl(*m_xNumberingOnCB);
@@ -250,7 +250,7 @@ IMPL_LINK_NOARG(SwLineNumberingDlg, ModifyHdl, weld::Entry&, void)
 }
 
 // On/Off
-IMPL_LINK_NOARG(SwLineNumberingDlg, LineOnOffHdl, weld::Button&, void)
+IMPL_LINK_NOARG(SwLineNumberingDlg, LineOnOffHdl, weld::ToggleButton&, void)
 {
     bool bEnable = m_xNumberingOnCB->get_active();
     m_xBodyContent->set_sensitive(bEnable);
