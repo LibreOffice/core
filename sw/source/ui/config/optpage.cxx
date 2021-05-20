@@ -1028,10 +1028,10 @@ SwTableOptionsTabPage::SwTableOptionsTabPage(weld::Container* pPage, weld::Dialo
     , m_xFixPropRB(m_xBuilder->weld_radio_button("fixprop"))
     , m_xVarRB(m_xBuilder->weld_radio_button("var"))
 {
-    Link<weld::Button&,void> aLnk(LINK(this, SwTableOptionsTabPage, CheckBoxHdl));
-    m_xNumFormattingCB->connect_clicked(aLnk);
-    m_xNumFormatFormattingCB->connect_clicked(aLnk);
-    m_xHeaderCB->connect_clicked(aLnk);
+    Link<weld::ToggleButton&,void> aLnk(LINK(this, SwTableOptionsTabPage, CheckBoxHdl));
+    m_xNumFormattingCB->connect_toggled(aLnk);
+    m_xNumFormatFormattingCB->connect_toggled(aLnk);
+    m_xHeaderCB->connect_toggled(aLnk);
 }
 
 SwTableOptionsTabPage::~SwTableOptionsTabPage()
@@ -1195,7 +1195,7 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet* rSet)
     CheckBoxHdl(*m_xHeaderCB);
 }
 
-IMPL_LINK_NOARG(SwTableOptionsTabPage, CheckBoxHdl, weld::Button&, void)
+IMPL_LINK_NOARG(SwTableOptionsTabPage, CheckBoxHdl, weld::ToggleButton&, void)
 {
     m_xNumFormatFormattingCB->set_sensitive(m_xNumFormattingCB->get_active());
     m_xNumAlignmentCB->set_sensitive(m_xNumFormattingCB->get_active());

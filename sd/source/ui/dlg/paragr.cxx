@@ -47,7 +47,7 @@ private:
     std::unique_ptr<weld::CheckButton> m_xNewStartNumberCB;
     std::unique_ptr<weld::SpinButton> m_xNewStartNF;
 
-    DECL_LINK( ImplNewStartHdl, weld::Button&, void );
+    DECL_LINK( ImplNewStartHdl, weld::ToggleButton&, void );
 };
 
 }
@@ -59,8 +59,8 @@ SdParagraphNumTabPage::SdParagraphNumTabPage(weld::Container* pPage, weld::Dialo
     , m_xNewStartNumberCB(m_xBuilder->weld_check_button("checkbuttonCB_NUMBER_NEW_START"))
     , m_xNewStartNF(m_xBuilder->weld_spin_button("spinbuttonNF_NEW_START"))
 {
-    m_xNewStartCB->connect_clicked(LINK(this, SdParagraphNumTabPage, ImplNewStartHdl));
-    m_xNewStartNumberCB->connect_clicked(LINK(this, SdParagraphNumTabPage, ImplNewStartHdl));
+    m_xNewStartCB->connect_toggled(LINK(this, SdParagraphNumTabPage, ImplNewStartHdl));
+    m_xNewStartNumberCB->connect_toggled(LINK(this, SdParagraphNumTabPage, ImplNewStartHdl));
 }
 
 std::unique_ptr<SfxTabPage> SdParagraphNumTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet * rAttrSet)
@@ -132,7 +132,7 @@ void SdParagraphNumTabPage::Reset( const SfxItemSet* rSet )
     mbModified = false;
 }
 
-IMPL_LINK_NOARG(SdParagraphNumTabPage, ImplNewStartHdl, weld::Button&, void)
+IMPL_LINK_NOARG(SdParagraphNumTabPage, ImplNewStartHdl, weld::ToggleButton&, void)
 {
     bool bEnable = m_xNewStartCB->get_active();
     m_xNewStartNumberCB->set_sensitive(bEnable);

@@ -527,7 +527,7 @@ private:
     std::unique_ptr<weld::CustomWeld> m_xBitmapLBWin;
 
     DECL_LINK( ModifyBitmapHdl, ValueSet*, void );
-    DECL_LINK( ClickScaleHdl, weld::Button&, void );
+    DECL_LINK( ClickScaleHdl, weld::ToggleButton&, void );
     DECL_LINK( ModifyBitmapStyleHdl, weld::ComboBox&, void );
     DECL_LINK( ModifyBitmapSizeHdl, weld::MetricSpinButton&, void );
     DECL_LINK( ModifyBitmapPositionHdl, weld::ComboBox&, void );

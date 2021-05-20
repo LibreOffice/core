@@ -205,7 +205,7 @@ class SwTableOptionsTabPage : public SfxTabPage
     std::unique_ptr<weld::RadioButton> m_xFixPropRB;
     std::unique_ptr<weld::RadioButton> m_xVarRB;
 
-    DECL_LINK(CheckBoxHdl, weld::Button&, void);
+    DECL_LINK(CheckBoxHdl, weld::ToggleButton&, void);
 
 public:
     SwTableOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);

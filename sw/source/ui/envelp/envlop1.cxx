@@ -214,7 +214,7 @@ void SwEnvPage::Init(SwEnvDlg* pDialog)
     m_xDatabaseLB->connect_changed(LINK(this, SwEnvPage, DatabaseHdl));
     m_xTableLB->connect_changed(LINK(this, SwEnvPage, DatabaseHdl));
     m_xInsertBT->connect_clicked(LINK(this, SwEnvPage, FieldHdl));
-    m_xSenderBox->connect_clicked(LINK(this, SwEnvPage, SenderHdl));
+    m_xSenderBox->connect_toggled(LINK(this, SwEnvPage, SenderHdl));
 
     SwDBData aData = m_pSh->GetDBData();
     m_sActDBName = aData.sDataSource + OUStringChar(DB_DELIM) + aData.sCommand;
@@ -256,7 +256,7 @@ IMPL_LINK_NOARG(SwEnvPage, FieldHdl, weld::Button&, void)
     m_xAddrEdit->select_region(nStartPos, nEndPos);
 }
 
-IMPL_LINK_NOARG(SwEnvPage, SenderHdl, weld::Button&, void)
+IMPL_LINK_NOARG(SwEnvPage, SenderHdl, weld::ToggleButton&, void)
 {
     const bool bEnable = m_xSenderBox->get_active();
     GetParentSwEnvDlg()->aEnvItem.m_bSend = bEnable;

@@ -176,12 +176,12 @@ private:
 
     DECL_LINK(ClickInvisibleHdl_Impl, weld::ComboBox&, void);
     void ClickInvisibleHdl_Impl();
-    DECL_LINK(ChangeStartClickHdl_Impl, weld::Button&, void);
+    DECL_LINK(ChangeStartClickHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(ChangeStartListBoxHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(ChangeStartModifyHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(ChangeEndListBoxHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(ChangeEndModifyHdl_Impl, weld::MetricSpinButton&, void);
-    DECL_LINK(ChangeEndClickHdl_Impl, weld::Button&, void);
+    DECL_LINK(ChangeEndClickHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(ChangePreviewListBoxHdl_Impl, ColorListBox&, void);
     DECL_LINK(ChangePreviewModifyHdl_Impl, weld::MetricSpinButton&, void);
     void ChangePreviewHdl_Impl(const weld::MetricSpinButton*);

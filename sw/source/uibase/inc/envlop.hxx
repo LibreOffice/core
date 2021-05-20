@@ -98,7 +98,7 @@ class SwEnvPage : public SfxTabPage
 
     DECL_LINK(DatabaseHdl, weld::ComboBox&, void);
     DECL_LINK(FieldHdl, weld::Button&, void);
-    DECL_LINK(SenderHdl, weld::Button&, void);
+    DECL_LINK(SenderHdl, weld::ToggleButton&, void);
 
     void InitDatabaseBox();
 
