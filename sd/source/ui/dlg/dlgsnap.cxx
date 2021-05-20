@@ -46,9 +46,9 @@ SdSnapLineDlg::SdSnapLineDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs, 
     , m_xRbHorz(m_xBuilder->weld_radio_button("horz"))
     , m_xBtnDelete(m_xBuilder->weld_button("delete"))
 {
-    m_xRbHorz->connect_clicked(LINK(this, SdSnapLineDlg, ClickHdl));
-    m_xRbVert->connect_clicked(LINK(this, SdSnapLineDlg, ClickHdl));
-    m_xRbPoint->connect_clicked(LINK(this, SdSnapLineDlg, ClickHdl));
+    m_xRbHorz->connect_toggled(LINK(this, SdSnapLineDlg, ToggleHdl));
+    m_xRbVert->connect_toggled(LINK(this, SdSnapLineDlg, ToggleHdl));
+    m_xRbPoint->connect_toggled(LINK(this, SdSnapLineDlg, ToggleHdl));
 
     m_xBtnDelete->connect_clicked(LINK(this, SdSnapLineDlg, ClickHdl));
 
@@ -105,12 +105,22 @@ SdSnapLineDlg::~SdSnapLineDlg()
 /**
  * fills provided item sets with dialog box attributes
  */
+IMPL_LINK(SdSnapLineDlg, ToggleHdl, weld::ToggleButton&, rBtn, void)
+{
+    if (!rBtn.get_active())
+        return;
+    if (m_xRbPoint->get_active())
+        SetInputFields(true, true);
+    else if (m_xRbHorz->get_active())
+        SetInputFields(false, true);
+    else if (m_xRbVert->get_active())
+        SetInputFields(true, false);
+}
+
 IMPL_LINK( SdSnapLineDlg, ClickHdl, weld::Button&, rBtn, void )
 {
-    if (&rBtn == m_xRbPoint.get())   SetInputFields(true, true);
-    else if (&rBtn == m_xRbHorz.get())    SetInputFields(false, true);
-    else if (&rBtn == m_xRbVert.get())    SetInputFields(true, false);
-    else if (&rBtn == m_xBtnDelete.get()) m_xDialog->response(RET_SNAP_DELETE);
+    if (&rBtn == m_xBtnDelete.get())
+        m_xDialog->response(RET_SNAP_DELETE);
 }
 
 /**

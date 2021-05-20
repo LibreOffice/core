@@ -138,11 +138,11 @@ SwConvertTableDlg::SwConvertTableDlg(SwView& rView, bool bToTable)
     }
     m_xKeepColumn->save_state();
 
-    Link<weld::Button&, void> aLk(LINK(this, SwConvertTableDlg, BtnHdl));
-    m_xTabBtn->connect_clicked(aLk);
-    m_xSemiBtn->connect_clicked(aLk);
-    m_xParaBtn->connect_clicked(aLk);
-    m_xOtherBtn->connect_clicked(aLk);
+    Link<weld::ToggleButton&, void> aLk(LINK(this, SwConvertTableDlg, BtnHdl));
+    m_xTabBtn->connect_toggled(aLk);
+    m_xSemiBtn->connect_toggled(aLk);
+    m_xParaBtn->connect_toggled(aLk);
+    m_xOtherBtn->connect_toggled(aLk);
     m_xOtherEd->set_sensitive(m_xOtherBtn->get_active());
 
     const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
@@ -172,9 +172,11 @@ IMPL_LINK_NOARG(SwConvertTableDlg, AutoFormatHdl, weld::Button&, void)
         mxTAutoFormat = pDlg->FillAutoFormatOfIndex();
 }
 
-IMPL_LINK(SwConvertTableDlg, BtnHdl, weld::Button&, rButton, void)
+IMPL_LINK(SwConvertTableDlg, BtnHdl, weld::ToggleButton&, rButton, void)
 {
-    if (&rButton == m_xTabBtn.get())
+    if (!rButton.get_active())
+        return;
+    if (m_xTabBtn->get_active())
         m_xKeepColumn->set_state(m_xKeepColumn->get_saved_state());
     else
     {

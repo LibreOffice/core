@@ -322,8 +322,8 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     // when the cursor is inside of a table, table must NEVER be selectable
     if( pView->GetWrtShell().GetTableFormat() )
     {
-        m_xRbAsTable->set_sensitive( false );
         m_xRbAsField->set_active(true);
+        m_xRbAsTable->set_sensitive(false);
         m_xRbDbFormatFromDb->set_active(true);
     }
     else
@@ -338,12 +338,12 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     m_xRbHeadlColnms->set_active(true);
     m_xRbHeadlEmpty->set_active(false);
 
-    m_xRbAsTable->connect_clicked( LINK(this, SwInsertDBColAutoPilot, PageHdl ));
-    m_xRbAsField->connect_clicked( LINK(this, SwInsertDBColAutoPilot, PageHdl ));
-    m_xRbAsText->connect_clicked( LINK(this, SwInsertDBColAutoPilot, PageHdl ));
+    m_xRbAsTable->connect_toggled( LINK(this, SwInsertDBColAutoPilot, PageHdl ));
+    m_xRbAsField->connect_toggled( LINK(this, SwInsertDBColAutoPilot, PageHdl ));
+    m_xRbAsText->connect_toggled( LINK(this, SwInsertDBColAutoPilot, PageHdl ));
 
-    m_xRbDbFormatFromDb->connect_clicked( LINK(this, SwInsertDBColAutoPilot, DBFormatHdl ));
-    m_xRbDbFormatFromUsr->connect_clicked( LINK(this, SwInsertDBColAutoPilot, DBFormatHdl ));
+    m_xRbDbFormatFromDb->connect_toggled( LINK(this, SwInsertDBColAutoPilot, DBFormatHdl ));
+    m_xRbDbFormatFromUsr->connect_toggled( LINK(this, SwInsertDBColAutoPilot, DBFormatHdl ));
 
     m_xPbTableFormat->connect_clicked(LINK(this, SwInsertDBColAutoPilot, TableFormatHdl ));
     m_xPbTableAutofmt->connect_clicked(LINK(this, SwInsertDBColAutoPilot, AutoFormatHdl ));
@@ -387,9 +387,12 @@ SwInsertDBColAutoPilot::~SwInsertDBColAutoPilot()
 {
 }
 
-IMPL_LINK( SwInsertDBColAutoPilot, PageHdl, weld::Button&, rButton, void )
+IMPL_LINK( SwInsertDBColAutoPilot, PageHdl, weld::ToggleButton&, rButton, void )
 {
-    bool bShowTable = &rButton == m_xRbAsTable.get();
+    if (!rButton.get_active())
+        return;
+
+    bool bShowTable = m_xRbAsTable->get_active();
 
     m_xHeadFrame->set_label(MnemonicGenerator::EraseAllMnemonicChars(rButton.get_label().replace('_', '~')));
 
@@ -418,8 +421,11 @@ IMPL_LINK( SwInsertDBColAutoPilot, PageHdl, weld::Button&, rButton, void )
     TVSelectHdl( bShowTable ? *m_xLbTableDbColumn : *m_xLbTextDbColumn );
 }
 
-IMPL_LINK( SwInsertDBColAutoPilot, DBFormatHdl, weld::Button&, rButton, void )
+IMPL_LINK( SwInsertDBColAutoPilot, DBFormatHdl, weld::ToggleButton&, rButton, void )
 {
+    if (!rButton.get_active())
+        return;
+
     weld::TreeView& rBox = m_xRbAsTable->get_active()
                         ? ( m_xLbTableCol->get_id(0).isEmpty()
                             ? *m_xLbTableDbColumn
@@ -429,7 +435,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, DBFormatHdl, weld::Button&, rButton, void )
     SwInsDBColumn aSrch(rBox.get_selected_text());
     SwInsDBColumns::const_iterator it = aDBColumns.find( &aSrch );
 
-    bool bFromDB = m_xRbDbFormatFromDb.get() == &rButton;
+    bool bFromDB = m_xRbDbFormatFromDb->get_active();
     (*it)->bIsDBFormat = bFromDB;
     m_xLbDbFormatFromUsr->set_sensitive( !bFromDB );
 }

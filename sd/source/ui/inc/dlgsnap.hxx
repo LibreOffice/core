@@ -50,6 +50,7 @@ private:
     std::unique_ptr<weld::Button> m_xBtnDelete;
 
     DECL_LINK(ClickHdl, weld::Button&, void);
+    DECL_LINK(ToggleHdl, weld::ToggleButton&, void);
 
 public:
     SdSnapLineDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View const * pView);
