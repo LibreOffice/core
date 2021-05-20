@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e3f837fc_85c685ef",
+        "filename": "offapi/com/sun/star/text/TextTableRow.idl",
+        "patchSetId": 7
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-05-20T07:23:13Z",
+      "side": 1,
+      "message": "What is the semantic meaning when the property\u0027s value is VOID?",
+      "range": {
+        "startLine": 114,
+        "startChar": 29,
+        "endLine": 114,
+        "endChar": 38
+      },
+      "revId": "05366b8e6683363688de8708a3d88cf144c7a2bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
