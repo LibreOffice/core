@@ -113,8 +113,8 @@ SvBaseLinksDlg::SvBaseLinksDlg(weld::Window * pParent, LinkManager* pMgr, bool b
 
     m_xTbLinks->connect_changed( LINK( this, SvBaseLinksDlg, LinksSelectHdl ) );
     m_xTbLinks->connect_row_activated( LINK( this, SvBaseLinksDlg, LinksDoubleClickHdl ) );
-    m_xRbAutomatic->connect_clicked( LINK( this, SvBaseLinksDlg, AutomaticClickHdl ) );
-    m_xRbManual->connect_clicked( LINK( this, SvBaseLinksDlg, ManualClickHdl ) );
+    m_xRbAutomatic->connect_toggled( LINK( this, SvBaseLinksDlg, ToggleHdl ) );
+    m_xRbManual->connect_toggled( LINK( this, SvBaseLinksDlg, ToggleHdl ) );
     m_xPbUpdateNow->connect_clicked( LINK( this, SvBaseLinksDlg, UpdateNowClickHdl ) );
     m_xPbChangeSource->connect_clicked( LINK( this, SvBaseLinksDlg, ChangeSourceClickHdl ) );
     if(!bHtmlMode)
@@ -221,22 +221,26 @@ IMPL_LINK_NOARG( SvBaseLinksDlg, LinksDoubleClickHdl, weld::TreeView&, bool )
     return true;
 }
 
-IMPL_LINK_NOARG( SvBaseLinksDlg, AutomaticClickHdl, weld::Button&, void )
+IMPL_LINK(SvBaseLinksDlg, ToggleHdl, weld::ToggleButton&, rButton, void)
 {
-    int nPos;
-    SvBaseLink* pLink = GetSelEntry( &nPos );
-    if( pLink && !isClientFileType( pLink->GetObjType() ) &&
-        SfxLinkUpdateMode::ALWAYS != pLink->GetUpdateMode() )
-        SetType( *pLink, nPos, SfxLinkUpdateMode::ALWAYS );
-}
+    if (!rButton.get_active())
+        return;
 
-IMPL_LINK_NOARG( SvBaseLinksDlg, ManualClickHdl, weld::Button&, void )
-{
     int nPos;
     SvBaseLink* pLink = GetSelEntry( &nPos );
-    if( pLink && !isClientFileType( pLink->GetObjType() ) &&
-        SfxLinkUpdateMode::ONCALL != pLink->GetUpdateMode())
-        SetType( *pLink, nPos, SfxLinkUpdateMode::ONCALL );
+
+    if (m_xRbAutomatic->get_active())
+    {
+        if( pLink && !isClientFileType( pLink->GetObjType() ) &&
+            SfxLinkUpdateMode::ALWAYS != pLink->GetUpdateMode() )
+            SetType( *pLink, nPos, SfxLinkUpdateMode::ALWAYS );
+    }
+    else
+    {
+        if( pLink && !isClientFileType( pLink->GetObjType() ) &&
+            SfxLinkUpdateMode::ONCALL != pLink->GetUpdateMode())
+            SetType( *pLink, nPos, SfxLinkUpdateMode::ONCALL );
+    }
 }
 
 IMPL_LINK_NOARG(SvBaseLinksDlg, UpdateNowClickHdl, weld::Button&, void)

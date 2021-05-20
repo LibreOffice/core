@@ -105,8 +105,11 @@ IMPL_LINK_NOARG(SvInsertOleDlg, BrowseHdl, weld::Button&, void)
     }
 }
 
-IMPL_LINK_NOARG(SvInsertOleDlg, RadioHdl, weld::Button&, void)
+IMPL_LINK(SvInsertOleDlg, RadioHdl, weld::ToggleButton&, rButton, void)
 {
+    if (!rButton.get_active())
+        return;
+
     if (m_xRbNewObject->get_active())
     {
         m_xObjectTypeFrame->show();
@@ -137,9 +140,9 @@ SvInsertOleDlg::SvInsertOleDlg(weld::Window* pParent, const Reference<embed::XSt
                                       m_xLbObjecttype->get_height_rows(6));
     m_xLbObjecttype->connect_row_activated(LINK(this, SvInsertOleDlg, DoubleClickHdl));
     m_xBtnFilepath->connect_clicked(LINK( this, SvInsertOleDlg, BrowseHdl));
-    Link<weld::Button&,void> aLink( LINK( this, SvInsertOleDlg, RadioHdl ) );
-    m_xRbNewObject->connect_clicked( aLink );
-    m_xRbObjectFromfile->connect_clicked( aLink );
+    Link<weld::ToggleButton&,void> aLink( LINK( this, SvInsertOleDlg, RadioHdl ) );
+    m_xRbNewObject->connect_toggled( aLink );
+    m_xRbObjectFromfile->connect_toggled( aLink );
     m_xRbNewObject->set_active(true);
 }
 
