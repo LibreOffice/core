@@ -179,7 +179,7 @@ namespace dbaui
         void SetupModeSelected();
 
         DECL_LINK( OnEmbeddedDBTypeSelected, weld::ComboBox&, void );
-        DECL_LINK( OnSetupModeSelected, weld::Button&, void );
+        DECL_LINK( OnSetupModeSelected, weld::ToggleButton&, void );
         DECL_LINK( OnDocumentSelected, weld::ComboBox&, void );
         DECL_LINK( OnOpenDocument, weld::Button&, void );
     };

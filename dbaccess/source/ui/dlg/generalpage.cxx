@@ -484,9 +484,9 @@ namespace dbaui
 
         // do some knittings
         m_xEmbeddedDBType->connect_changed(LINK(this, OGeneralPageWizard, OnEmbeddedDBTypeSelected));
-        m_xRB_CreateDatabase->connect_clicked( LINK( this, OGeneralPageWizard, OnSetupModeSelected ) );
-        m_xRB_ConnectDatabase->connect_clicked( LINK( this, OGeneralPageWizard, OnSetupModeSelected ) );
-        m_xRB_OpenExistingDatabase->connect_clicked( LINK( this, OGeneralPageWizard, OnSetupModeSelected ) );
+        m_xRB_CreateDatabase->connect_toggled( LINK( this, OGeneralPageWizard, OnSetupModeSelected ) );
+        m_xRB_ConnectDatabase->connect_toggled( LINK( this, OGeneralPageWizard, OnSetupModeSelected ) );
+        m_xRB_OpenExistingDatabase->connect_toggled( LINK( this, OGeneralPageWizard, OnSetupModeSelected ) );
         m_xLB_DocumentList->connect_changed( LINK( this, OGeneralPageWizard, OnDocumentSelected ) );
         m_xPB_OpenDatabase->connect_clicked( LINK( this, OGeneralPageWizard, OnOpenDocument ) );
         m_xFT_NoEmbeddedDBLabel->hide();
@@ -647,8 +647,10 @@ namespace dbaui
         EnableControls();
     }
 
-    IMPL_LINK_NOARG( OGeneralPageWizard, OnSetupModeSelected, weld::Button&, void )
+    IMPL_LINK(OGeneralPageWizard, OnSetupModeSelected, weld::ToggleButton&, rButton, void)
     {
+        if (!rButton.get_active())
+            return;
         SetupModeSelected();
     }
 
