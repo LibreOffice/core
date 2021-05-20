@@ -404,36 +404,36 @@ SdPublishingDlg::SdPublishingDlg(weld::Window* pWindow, DocumentType eDocType)
     m_xLastPageButton->connect_clicked(LINK(this,SdPublishingDlg,LastPageHdl));
     m_xNextPageButton->connect_clicked(LINK(this,SdPublishingDlg,NextPageHdl));
 
-    m_xPage1_NewDesign->connect_clicked(LINK(this,SdPublishingDlg,DesignHdl));
-    m_xPage1_OldDesign->connect_clicked(LINK(this,SdPublishingDlg,DesignHdl));
+    m_xPage1_NewDesign->connect_toggled(LINK(this,SdPublishingDlg,DesignHdl));
+    m_xPage1_OldDesign->connect_toggled(LINK(this,SdPublishingDlg,DesignHdl));
     m_xPage1_Designs->connect_changed(LINK(this,SdPublishingDlg,DesignSelectHdl));
     m_xPage1_DelDesign->connect_clicked(LINK(this,SdPublishingDlg,DesignDeleteHdl));
 
-    m_xPage2_Standard->connect_clicked(LINK(this,SdPublishingDlg,BaseHdl));
-    m_xPage2_Frames->connect_clicked(LINK(this,SdPublishingDlg,BaseHdl));
-    m_xPage2_SingleDocument->connect_clicked(LINK(this,SdPublishingDlg,BaseHdl));
-    m_xPage2_Kiosk->connect_clicked(LINK(this,SdPublishingDlg,BaseHdl));
-    m_xPage2_WebCast->connect_clicked(LINK(this,SdPublishingDlg,BaseHdl));
+    m_xPage2_Standard->connect_toggled(LINK(this,SdPublishingDlg,BaseHdl));
+    m_xPage2_Frames->connect_toggled(LINK(this,SdPublishingDlg,BaseHdl));
+    m_xPage2_SingleDocument->connect_toggled(LINK(this,SdPublishingDlg,BaseHdl));
+    m_xPage2_Kiosk->connect_toggled(LINK(this,SdPublishingDlg,BaseHdl));
+    m_xPage2_WebCast->connect_toggled(LINK(this,SdPublishingDlg,BaseHdl));
 
     m_xPage2_Content->connect_toggled(LINK(this,SdPublishingDlg,ContentHdl));
 
-    m_xPage2_ASP->connect_clicked(LINK(this,SdPublishingDlg,WebServerHdl));
-    m_xPage2_PERL->connect_clicked(LINK(this,SdPublishingDlg,WebServerHdl));
+    m_xPage2_ASP->connect_toggled(LINK(this,SdPublishingDlg,WebServerHdl));
+    m_xPage2_PERL->connect_toggled(LINK(this,SdPublishingDlg,WebServerHdl));
     m_xPage2_Index->set_text("index" STR_HTMLEXP_DEFAULT_EXTENSION);
     m_xPage2_CGI->set_text("/cgi-bin/");
 
-    m_xPage3_Png->connect_clicked(LINK(this,SdPublishingDlg, GfxFormatHdl));
-    m_xPage3_Gif->connect_clicked(LINK(this,SdPublishingDlg, GfxFormatHdl));
-    m_xPage3_Jpg->connect_clicked(LINK(this,SdPublishingDlg, GfxFormatHdl));
+    m_xPage3_Png->connect_toggled(LINK(this,SdPublishingDlg, GfxFormatHdl));
+    m_xPage3_Gif->connect_toggled(LINK(this,SdPublishingDlg, GfxFormatHdl));
+    m_xPage3_Jpg->connect_toggled(LINK(this,SdPublishingDlg, GfxFormatHdl));
     m_xPage3_Quality->set_sensitive(false);
 
-    m_xPage3_Resolution_1->connect_clicked(LINK(this,SdPublishingDlg, ResolutionHdl ));
-    m_xPage3_Resolution_2->connect_clicked(LINK(this,SdPublishingDlg, ResolutionHdl ));
-    m_xPage3_Resolution_3->connect_clicked(LINK(this,SdPublishingDlg, ResolutionHdl ));
-    m_xPage3_Resolution_4->connect_clicked(LINK(this, SdPublishingDlg, ResolutionHdl));
+    m_xPage3_Resolution_1->connect_toggled(LINK(this,SdPublishingDlg, ResolutionHdl ));
+    m_xPage3_Resolution_2->connect_toggled(LINK(this,SdPublishingDlg, ResolutionHdl ));
+    m_xPage3_Resolution_3->connect_toggled(LINK(this,SdPublishingDlg, ResolutionHdl ));
+    m_xPage3_Resolution_4->connect_toggled(LINK(this, SdPublishingDlg, ResolutionHdl));
 
-    m_xPage2_ChgDefault->connect_clicked(LINK(this,SdPublishingDlg, SlideChgHdl));
-    m_xPage2_ChgAuto->connect_clicked(LINK(this,SdPublishingDlg, SlideChgHdl));
+    m_xPage2_ChgDefault->connect_toggled(LINK(this,SdPublishingDlg, SlideChgHdl));
+    m_xPage2_ChgAuto->connect_toggled(LINK(this,SdPublishingDlg, SlideChgHdl));
 
     m_xPage5_Buttons->SetSelectHdl(LINK(this,SdPublishingDlg, ButtonsHdl ));
     m_xPage5_Buttons->SetStyle( m_xPage5_Buttons->GetStyle() | WB_VSCROLL );
@@ -835,9 +835,12 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
 }
 
 // Clickhandler for the radiobuttons of the design-selection
-IMPL_LINK( SdPublishingDlg, DesignHdl, weld::Button&, rButton, void )
+IMPL_LINK( SdPublishingDlg, DesignHdl, weld::ToggleButton&, rButton, void )
 {
-    if (&rButton == m_xPage1_NewDesign.get())
+    if (!rButton.get_active())
+        return;
+
+    if (m_xPage1_NewDesign->get_active())
     {
         m_xPage1_NewDesign->set_active(true); // because of DesignDeleteHdl
         m_xPage1_OldDesign->set_active(false);
@@ -901,27 +904,35 @@ IMPL_LINK_NOARG(SdPublishingDlg, DesignDeleteHdl, weld::Button&, void)
 }
 
 // Clickhandler for the other servertypes
-IMPL_LINK( SdPublishingDlg, WebServerHdl, weld::Button&, rButton, void )
+IMPL_LINK(SdPublishingDlg, WebServerHdl, weld::ToggleButton&, rButton, void)
 {
-    bool bASP = &rButton == m_xPage2_ASP.get();
+    if (!rButton.get_active())
+        return;
 
+    bool bASP = m_xPage2_ASP->get_active();
     m_xPage2_ASP->set_sensitive( bASP );
     m_xPage2_PERL->set_sensitive( !bASP );
     UpdatePage();
 }
 
 // Clickhandler for the Radiobuttons of the graphicformat choice
-IMPL_LINK( SdPublishingDlg, GfxFormatHdl, weld::Button&, rButton, void )
+IMPL_LINK(SdPublishingDlg, GfxFormatHdl, weld::ToggleButton&, rButton, void)
 {
-    m_xPage3_Png->set_sensitive( &rButton == m_xPage3_Png.get() );
-    m_xPage3_Gif->set_sensitive( &rButton == m_xPage3_Gif.get() );
-    m_xPage3_Jpg->set_sensitive( &rButton == m_xPage3_Jpg.get() );
-    m_xPage3_Quality->set_sensitive(&rButton == m_xPage3_Jpg.get());
+    if (!rButton.get_active())
+        return;
+
+    m_xPage3_Png->set_sensitive(m_xPage3_Png->get_active());
+    m_xPage3_Gif->set_sensitive(m_xPage3_Gif->get_active());
+    m_xPage3_Jpg->set_sensitive(m_xPage3_Jpg->get_active());
+    m_xPage3_Quality->set_sensitive(m_xPage3_Jpg->get_active());
 }
 
 // Clickhandler for the Radiobuttons Standard/Frames
-IMPL_LINK_NOARG(SdPublishingDlg, BaseHdl, weld::Button&, void)
+IMPL_LINK(SdPublishingDlg, BaseHdl, weld::ToggleButton&, rButton, void)
 {
+    if (!rButton.get_active())
+        return;
+
     UpdatePage();
 }
 
@@ -947,12 +958,14 @@ IMPL_LINK_NOARG(SdPublishingDlg, ContentHdl, weld::ToggleButton&, void)
 }
 
 // Clickhandler for the Resolution Radiobuttons
-IMPL_LINK( SdPublishingDlg, ResolutionHdl, weld::Button&, rButton, void )
+IMPL_LINK( SdPublishingDlg, ResolutionHdl, weld::ToggleButton&, rButton, void )
 {
-    m_xPage3_Resolution_1->set_sensitive(&rButton == m_xPage3_Resolution_1.get());
-    m_xPage3_Resolution_2->set_sensitive(&rButton == m_xPage3_Resolution_2.get());
-    m_xPage3_Resolution_3->set_sensitive(&rButton == m_xPage3_Resolution_3.get());
-    m_xPage3_Resolution_4->set_sensitive(&rButton == m_xPage3_Resolution_4.get());
+    if (!rButton.get_active())
+        return;
+    m_xPage3_Resolution_1->set_sensitive(m_xPage3_Resolution_1->get_active());
+    m_xPage3_Resolution_2->set_sensitive(m_xPage3_Resolution_2->get_active());
+    m_xPage3_Resolution_3->set_sensitive(m_xPage3_Resolution_3->get_active());
+    m_xPage3_Resolution_4->set_sensitive(m_xPage3_Resolution_4->get_active());
 }
 
 // Clickhandler for the ValueSet with the bitmap-buttons
@@ -1004,8 +1017,10 @@ IMPL_LINK( SdPublishingDlg, ColorHdl, weld::Button&, rButton, void)
     m_xPage6_Preview->Invalidate();
 }
 
-IMPL_LINK_NOARG(SdPublishingDlg, SlideChgHdl, weld::Button&, void)
+IMPL_LINK(SdPublishingDlg, SlideChgHdl, weld::ToggleButton&, rButton, void)
 {
+    if (!rButton.get_active())
+        return;
     UpdatePage();
 }
 
