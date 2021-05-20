@@ -1485,7 +1485,7 @@ namespace emfio
                 mpGDIMetaFile->AddAction( new MetaPolyLineAction( tools::Polygon( aCenter, aRad.Width(), aRad.Height() ), maLineStyle.aLineInfo ) );
             }
             else
-                mpGDIMetaFile->AddAction( new MetaPolyLineAction( tools::Polygon( aRect, aStart, aEnd, PolyStyle::Arc ), maLineStyle.aLineInfo ) );
+                mpGDIMetaFile->AddAction( new MetaPolyLineAction( tools::Polygon( aRect ), maLineStyle.aLineInfo ) );
         }
         else
             mpGDIMetaFile->AddAction( new MetaArcAction( aRect, aStart, aEnd ) );
@@ -1508,7 +1508,7 @@ namespace emfio
             ImplSetNonPersistentLineColorTransparenz();
             mpGDIMetaFile->AddAction( new MetaPieAction( aRect, aStart, aEnd ) );
             UpdateLineStyle();
-            mpGDIMetaFile->AddAction( new MetaPolyLineAction( tools::Polygon( aRect, aStart, aEnd, PolyStyle::Pie ), maLineStyle.aLineInfo ) );
+            mpGDIMetaFile->AddAction( new MetaPolyLineAction( tools::Polygon( aRect ), maLineStyle.aLineInfo ) );
         }
         else
         {
@@ -1531,7 +1531,7 @@ namespace emfio
             ImplSetNonPersistentLineColorTransparenz();
             mpGDIMetaFile->AddAction( new MetaChordAction( aRect, aStart, aEnd ) );
             UpdateLineStyle();
-            mpGDIMetaFile->AddAction( new MetaPolyLineAction( tools::Polygon( aRect, aStart, aEnd, PolyStyle::Chord ), maLineStyle.aLineInfo ) );
+            mpGDIMetaFile->AddAction( new MetaPolyLineAction( tools::Polygon( aRect ), maLineStyle.aLineInfo ) );
         }
         else
         {

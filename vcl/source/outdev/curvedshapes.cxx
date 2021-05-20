@@ -101,7 +101,7 @@ void OutputDevice::DrawArc( const tools::Rectangle& rRect,
 
     const Point     aStart( ImplLogicToDevicePixel( rStartPt ) );
     const Point     aEnd( ImplLogicToDevicePixel( rEndPt ) );
-    tools::Polygon aArcPoly( aRect, aStart, aEnd, PolyStyle::Arc );
+    tools::Polygon aArcPoly( aRect );
 
     if ( aArcPoly.GetSize() >= 2 )
     {
@@ -143,7 +143,7 @@ void OutputDevice::DrawPie( const tools::Rectangle& rRect,
 
     const Point     aStart( ImplLogicToDevicePixel( rStartPt ) );
     const Point     aEnd( ImplLogicToDevicePixel( rEndPt ) );
-    tools::Polygon aPiePoly( aRect, aStart, aEnd, PolyStyle::Pie );
+    tools::Polygon aPiePoly( aRect  );
 
     if ( aPiePoly.GetSize() >= 2 )
     {
@@ -192,7 +192,7 @@ void OutputDevice::DrawChord( const tools::Rectangle& rRect,
 
     const Point     aStart( ImplLogicToDevicePixel( rStartPt ) );
     const Point     aEnd( ImplLogicToDevicePixel( rEndPt ) );
-    tools::Polygon aChordPoly( aRect, aStart, aEnd, PolyStyle::Chord );
+    tools::Polygon aChordPoly( aRect );
 
     if ( aChordPoly.GetSize() >= 2 )
     {

@@ -56,8 +56,8 @@
 
 static double ImplGetParameter( const Point& rCenter, const Point& rPt, double fWR, double fHR )
 {
-    const tools::Long nDX = rPt.X() - rCenter.X();
-    double fAngle = atan2( o3tl::saturating_toggle_sign(rPt.Y()) + rCenter.Y(), ( ( nDX == 0 ) ? 0.000000001 : nDX ) );
+    const double nDX = rPt.X() - rCenter.X();
+    double fAngle = atan2( o3tl::saturating_toggle_sign(rPt.Y()) + rCenter.Y(), ( ( nDX == 0.0 ) ? 0.000000001 : nDX ) );
 
     return atan2(fWR*sin(fAngle), fHR*cos(fAngle));
 }
@@ -242,14 +242,14 @@ ImplPolygon::ImplPolygon( const tools::Rectangle& rBound, const Point& rStart, c
 
         tools::Long nRadXY;
         const bool bOverflow = o3tl::checked_multiply(nRadX, nRadY, nRadXY);
-        if (!bOverflow)
+/*        if (!bOverflow)
         {
             nPoints = static_cast<sal_uInt16>(MinMax(
                 ( F_PI * ( 1.5 * ( nRadX + nRadY ) -
                            sqrt( static_cast<double>(std::abs(nRadXY)) ) ) ),
                 32, 256 ));
         }
-        else
+        else*/
         {
             nPoints = 256;
         }
@@ -269,14 +269,15 @@ ImplPolygon::ImplPolygon( const tools::Rectangle& rBound, const Point& rStart, c
         double          fStep;
         sal_uInt16      nStart;
         sal_uInt16      nEnd;
-
-        if( fDiff < 0. )
+        // #i73608# If startPoint is equal to endPoint, then draw full circle instead of nothing (as Metafiles spec)
+        if( fDiff <= 0. )
             fDiff += F_2PI;
 
         // Proportionally shrink number of points( fDiff / (2PI) );
-        nPoints = std::max( static_cast<sal_uInt16>( ( fDiff * 0.1591549 ) * nPoints ), sal_uInt16(16) );
+        //nPoints = std::max( static_cast<sal_uInt16>( ( fDiff * 0.1591549 ) * nPoints ), sal_uInt16(32) );
+        nPoints = 2048;
+        // We need to add additinal point to reach endPoint, otherwise the arc could not have correct angle
         fStep = fDiff / ( nPoints - 1 );
-
         if( PolyStyle::Pie == eStyle )
         {
             const Point aCenter2( FRound( fCenterX ), FRound( fCenterY ) );
@@ -297,7 +298,6 @@ ImplPolygon::ImplPolygon( const tools::Rectangle& rBound, const Point& rStart, c
         for(; nStart < nEnd; nStart++, fStart += fStep )
         {
             Point& rPt = mxPointAry[nStart];
-
             rPt.setX( FRound( fCenterX + fRadX * cos( fStart ) ) );
             rPt.setY( FRound( fCenterY - fRadY * sin( fStart ) ) );
         }
@@ -902,10 +902,10 @@ Polygon::Polygon( const Point& rCenter, tools::Long nRadX, tools::Long nRadY )
 {
 }
 
-Polygon::Polygon( const tools::Rectangle& rBound, const Point& rStart, const Point& rEnd,
+/*Polygon::Polygon( const tools::Rectangle& rBound, const Point& rStart, const Point& rEnd,
                   PolyStyle eStyle ) : mpImplPolygon(ImplPolygon(rBound, rStart, rEnd, eStyle))
 {
-}
+}*/
 
 Polygon::Polygon( const Point& rBezPt1, const Point& rCtrlPt1,
                   const Point& rBezPt2, const Point& rCtrlPt2,

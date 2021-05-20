@@ -388,21 +388,15 @@ tools::Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
         }
 
         case MetaActionType::ARC:
-            aActionBounds = tools::Polygon( static_cast<const MetaArcAction&>(rAct).GetRect(),
-                                            static_cast<const MetaArcAction&>(rAct).GetStartPoint(),
-                                            static_cast<const MetaArcAction&>(rAct).GetEndPoint(), PolyStyle::Arc ).GetBoundRect();
+            aActionBounds = tools::Polygon( static_cast<const MetaArcAction&>(rAct).GetRect() ).GetBoundRect();
             break;
 
         case MetaActionType::PIE:
-            aActionBounds = tools::Polygon( static_cast<const MetaPieAction&>(rAct).GetRect(),
-                                            static_cast<const MetaPieAction&>(rAct).GetStartPoint(),
-                                            static_cast<const MetaPieAction&>(rAct).GetEndPoint(), PolyStyle::Pie ).GetBoundRect();
+            aActionBounds = tools::Polygon( static_cast<const MetaPieAction&>(rAct).GetRect()).GetBoundRect();
             break;
 
         case MetaActionType::CHORD:
-            aActionBounds = tools::Polygon( static_cast<const MetaChordAction&>(rAct).GetRect(),
-                                            static_cast<const MetaChordAction&>(rAct).GetStartPoint(),
-                                            static_cast<const MetaChordAction&>(rAct).GetEndPoint(), PolyStyle::Chord ).GetBoundRect();
+            aActionBounds = tools::Polygon( static_cast<const MetaChordAction&>(rAct).GetRect() ).GetBoundRect();
             break;
 
         case MetaActionType::POLYLINE:

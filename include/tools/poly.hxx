@@ -90,9 +90,9 @@ public:
                                  sal_uInt32 nHorzRound, sal_uInt32 nVertRound );
                         Polygon( const Point& rCenter,
                                  tools::Long nRadX, tools::Long nRadY );
-                        Polygon( const tools::Rectangle& rBound,
-                                 const Point& rStart, const Point& rEnd,
-                                 PolyStyle ePolyStyle = PolyStyle::Arc );
+                        //Polygon( const tools::Rectangle& rBound,
+                        //         const Point& rStart, const Point& rEnd,
+                        //         PolyStyle ePolyStyle = PolyStyle::Arc );
                         Polygon( const Point& rBezPt1, const Point& rCtrlPt1,
                                  const Point& rBezPt2, const Point& rCtrlPt2,
                                  sal_uInt16 nPoints );

@@ -1373,12 +1373,12 @@ namespace emfio
                     {
                         sal_uInt32 nStartX, nStartY, nEndX, nEndY;
                         mpInputStream->ReadInt32( nX32 ).ReadInt32( nY32 ).ReadInt32( nx32 ).ReadInt32( ny32 ).ReadUInt32( nStartX ).ReadUInt32( nStartY ).ReadUInt32( nEndX ).ReadUInt32( nEndY );
-                        tools::Polygon aPoly( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ), PolyStyle::Arc );
+                        /*tools::Polygon aPoly( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ), PolyStyle::Arc );
                         aPoly.Optimize( PolyOptimizeFlags::EDGES );
                         if ( nRecType == EMR_CHORD )
                             DrawPolygon( aPoly, mbRecordPath );
                         else
-                            DrawPolyLine( aPoly, nRecType == EMR_ARCTO, mbRecordPath );
+                            DrawPolyLine( aPoly, nRecType == EMR_ARCTO, mbRecordPath );*/
                     }
                     break;
 
@@ -1386,21 +1386,9 @@ namespace emfio
                     {
                         sal_uInt32 nStartX, nStartY, nEndX, nEndY;
                         mpInputStream->ReadInt32( nX32 ).ReadInt32( nY32 ).ReadInt32( nx32 ).ReadInt32( ny32 ).ReadUInt32( nStartX ).ReadUInt32( nStartY ).ReadUInt32( nEndX ).ReadUInt32( nEndY );
-                        tools::Polygon aPoly;
-
-                        // #i73608# OutputDevice deviates from WMF
-                        // semantics. start==end means full ellipse here.
-                        if( nStartX == nEndX && nStartY == nEndY )
-                        {
-                            tools::Long dw = (nx32 - nX32) / 2;
-                            tools::Long dh = (ny32 - nY32) / 2;
-                            Point aCenter( nX32 + dw, nY32 + dh );
-                            aPoly = tools::Polygon( aCenter, dw, dh );
-                        }
-                        else
-                            aPoly = tools::Polygon( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ), PolyStyle::Pie );
+                        /*tools::Polygon aPoly( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ), PolyStyle::Pie );
                         aPoly.Optimize( PolyOptimizeFlags::EDGES );
-                        DrawPolygon( aPoly, mbRecordPath );
+                        DrawPolygon( aPoly, mbRecordPath );*/
                     }
                     break;
 

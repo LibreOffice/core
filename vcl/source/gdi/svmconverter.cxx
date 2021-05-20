@@ -520,7 +520,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                 if( bFatLine )
                 {
-                    const tools::Polygon aPoly( aRect, aPt, aPt1, PolyStyle::Arc );
+                    const tools::Polygon aPoly( aRect );
 
                     rMtf.AddAction( new MetaPushAction( PushFlags::LINECOLOR ) );
                     rMtf.AddAction( new MetaLineColorAction( COL_TRANSPARENT, false ) );
@@ -541,7 +541,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                 if( bFatLine )
                 {
-                    const tools::Polygon aPoly( aRect, aPt, aPt1, PolyStyle::Pie );
+                    const tools::Polygon aPoly( aRect );
 
                     rMtf.AddAction( new MetaPushAction( PushFlags::LINECOLOR ) );
                     rMtf.AddAction( new MetaLineColorAction( COL_TRANSPARENT, false ) );

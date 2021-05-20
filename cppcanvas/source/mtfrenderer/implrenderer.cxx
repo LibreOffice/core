@@ -1998,9 +1998,7 @@ namespace cppcanvas::internal
                     case MetaActionType::ARC:
                     {
                         // TODO(F1): Missing basegfx functionality. Mind empty rects!
-                        const ::tools::Polygon aToolsPoly( static_cast<MetaArcAction*>(pCurrAct)->GetRect(),
-                                                         static_cast<MetaArcAction*>(pCurrAct)->GetStartPoint(),
-                                                         static_cast<MetaArcAction*>(pCurrAct)->GetEndPoint(), PolyStyle::Arc );
+                        const ::tools::Polygon aToolsPoly( static_cast<MetaArcAction*>(pCurrAct)->GetRect() );
                         ::basegfx::B2DPolygon aPoly( aToolsPoly.getB2DPolygon() );
                         aPoly.transform( rStates.getState().mapModeTransform );
 
@@ -2012,9 +2010,7 @@ namespace cppcanvas::internal
                     case MetaActionType::PIE:
                     {
                         // TODO(F1): Missing basegfx functionality. Mind empty rects!
-                        const ::tools::Polygon aToolsPoly( static_cast<MetaPieAction*>(pCurrAct)->GetRect(),
-                                                         static_cast<MetaPieAction*>(pCurrAct)->GetStartPoint(),
-                                                         static_cast<MetaPieAction*>(pCurrAct)->GetEndPoint(), PolyStyle::Pie );
+                        const ::tools::Polygon aToolsPoly( static_cast<MetaPieAction*>(pCurrAct)->GetRect());
                         ::basegfx::B2DPolygon aPoly( aToolsPoly.getB2DPolygon() );
                         aPoly.transform( rStates.getState().mapModeTransform );
 
@@ -2026,9 +2022,7 @@ namespace cppcanvas::internal
                     case MetaActionType::CHORD:
                     {
                         // TODO(F1): Missing basegfx functionality. Mind empty rects!
-                        const ::tools::Polygon aToolsPoly( static_cast<MetaChordAction*>(pCurrAct)->GetRect(),
-                                                         static_cast<MetaChordAction*>(pCurrAct)->GetStartPoint(),
-                                                         static_cast<MetaChordAction*>(pCurrAct)->GetEndPoint(), PolyStyle::Chord );
+                        const ::tools::Polygon aToolsPoly( static_cast<MetaChordAction*>(pCurrAct)->GetRect() );
                         ::basegfx::B2DPolygon aPoly( aToolsPoly.getB2DPolygon() );
                         aPoly.transform( rStates.getState().mapModeTransform );
 

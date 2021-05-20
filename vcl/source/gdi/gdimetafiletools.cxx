@@ -599,10 +599,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     else
                     {
                         const tools::Polygon aToolsPoly(
-                                rRect,
-                                pA->GetStartPoint(),
-                                pA->GetEndPoint(),
-                                PolyStyle::Arc);
+                                rRect);
 
                         bDone = handleGeometricContent(
                             aClips.back(),
@@ -625,10 +622,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     else
                     {
                         const tools::Polygon aToolsPoly(
-                                rRect,
-                                pA->GetStartPoint(),
-                                pA->GetEndPoint(),
-                                PolyStyle::Pie);
+                                rRect);
 
                         bDone = handleGeometricContent(
                             aClips.back(),
@@ -651,10 +645,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     else
                     {
                         const tools::Polygon aToolsPoly(
-                                rRect,
-                                pA->GetStartPoint(),
-                                pA->GetEndPoint(),
-                                PolyStyle::Chord);
+                                rRect);
 
                         bDone = handleGeometricContent(
                             aClips.back(),

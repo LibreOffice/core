@@ -1699,7 +1699,7 @@ namespace wmfemfhelper
                     if(rPropertyHolders.Current().getLineColorActive())
                     {
                         const MetaArcAction* pA = static_cast<const MetaArcAction*>(pAction);
-                        const tools::Polygon aToolsPoly(pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), PolyStyle::Arc);
+                        const tools::Polygon aToolsPoly(pA->GetRect());
                         const basegfx::B2DPolygon aOutline(aToolsPoly.getB2DPolygon());
 
                         createHairlinePrimitive(aOutline, rTargetHolders.Current(), rPropertyHolders.Current());
@@ -1713,7 +1713,7 @@ namespace wmfemfhelper
                     if(rPropertyHolders.Current().getLineOrFillActive())
                     {
                         const MetaPieAction* pA = static_cast<const MetaPieAction*>(pAction);
-                        const tools::Polygon aToolsPoly(pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), PolyStyle::Pie);
+                        const tools::Polygon aToolsPoly(pA->GetRect());
                         const basegfx::B2DPolygon aOutline(aToolsPoly.getB2DPolygon());
 
                         createHairlineAndFillPrimitive(aOutline, rTargetHolders.Current(), rPropertyHolders.Current());
@@ -1727,7 +1727,7 @@ namespace wmfemfhelper
                     if(rPropertyHolders.Current().getLineOrFillActive())
                     {
                         const MetaChordAction* pA = static_cast<const MetaChordAction*>(pAction);
-                        const tools::Polygon aToolsPoly(pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), PolyStyle::Chord);
+                        const tools::Polygon aToolsPoly(pA->GetRect());
                         const basegfx::B2DPolygon aOutline(aToolsPoly.getB2DPolygon());
 
                         createHairlineAndFillPrimitive(aOutline, rTargetHolders.Current(), rPropertyHolders.Current());
