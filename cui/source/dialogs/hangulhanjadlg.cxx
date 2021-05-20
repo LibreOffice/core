@@ -201,7 +201,7 @@ namespace svx
         void set_active(bool active) { m_xControl->set_active(active); }
         bool get_active() const { return m_xControl->get_active(); }
 
-        void connect_clicked(const Link<weld::Button&, void>& rLink) { m_xControl->connect_clicked(rLink); }
+        void connect_toggled(const Link<weld::ToggleButton&, void>& rLink) { m_xControl->connect_toggled(rLink); }
 
     private:
         Size GetOptimalSize() const;
@@ -517,15 +517,15 @@ namespace svx
         m_xFind->connect_clicked(rHdl);
     }
 
-    void HangulHanjaConversionDialog::SetConversionFormatChangedHdl( const Link<weld::Button&,void>& rHdl )
+    void HangulHanjaConversionDialog::SetConversionFormatChangedHdl( const Link<weld::ToggleButton&,void>& rHdl )
     {
-        m_xSimpleConversion->connect_clicked( rHdl );
-        m_xHangulBracketed->connect_clicked( rHdl );
-        m_xHanjaBracketed->connect_clicked( rHdl );
-        m_xHanjaAbove->connect_clicked( rHdl );
-        m_xHanjaBelow->connect_clicked( rHdl );
-        m_xHangulAbove->connect_clicked( rHdl );
-        m_xHangulBelow->connect_clicked( rHdl );
+        m_xSimpleConversion->connect_toggled( rHdl );
+        m_xHangulBracketed->connect_toggled( rHdl );
+        m_xHanjaBracketed->connect_toggled( rHdl );
+        m_xHanjaAbove->connect_toggled( rHdl );
+        m_xHanjaBelow->connect_toggled( rHdl );
+        m_xHangulAbove->connect_toggled( rHdl );
+        m_xHangulBelow->connect_toggled( rHdl );
     }
 
     void HangulHanjaConversionDialog::SetClickByCharacterHdl( const Link<weld::ToggleButton&,void>& _rHdl )

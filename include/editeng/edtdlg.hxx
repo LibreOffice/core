@@ -72,7 +72,7 @@ public:
     virtual void     SetChangeHdl( const Link<weld::Button&,void>& _rHdl ) = 0;
     virtual void     SetChangeAllHdl( const Link<weld::Button&,void>& _rHdl ) = 0;
     virtual void     SetClickByCharacterHdl( const Link<weld::ToggleButton&,void>& _rHdl ) = 0;
-    virtual void     SetConversionFormatChangedHdl( const Link<weld::Button&,void>& _rHdl ) = 0;
+    virtual void     SetConversionFormatChangedHdl( const Link<weld::ToggleButton&,void>& _rHdl ) = 0;
     virtual void     SetFindHdl( const Link<weld::Button&,void>& _rHdl ) = 0;
     virtual bool     GetUseBothDirections() const= 0;
     virtual editeng::HangulHanjaConversion::ConversionDirection

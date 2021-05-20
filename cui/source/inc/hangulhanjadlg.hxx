@@ -129,7 +129,7 @@ namespace svx
         void    SetChangeAllHdl( const Link<weld::Button&,void>& _rHdl );
 
         void    SetClickByCharacterHdl( const Link<weld::ToggleButton&,void>& _rHdl );
-        void    SetConversionFormatChangedHdl( const Link<weld::Button&,void>& _rHdl );
+        void    SetConversionFormatChangedHdl( const Link<weld::ToggleButton&,void>& _rHdl );
         void    SetFindHdl( const Link<weld::Button&,void>& _rHdl );
 
         OUString  GetCurrentString( ) const;
