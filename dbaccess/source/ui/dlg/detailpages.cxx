@@ -215,7 +215,7 @@ namespace dbaui
         aIndexDialog.run();
     }
 
-    IMPL_LINK_NOARG(ODbaseDetailsPage, OnButtonToggled, weld::ToggleButton&, void)
+    IMPL_LINK_NOARG(ODbaseDetailsPage, OnButtonToggled, weld::Toggleable&, void)
     {
         m_xFT_Message->set_visible(m_xShowDeleted->get_active());
         // it was the checkbox -> we count as modified from now on
@@ -309,7 +309,7 @@ namespace dbaui
     {
         OCommonBehaviourTabPage::fillControls(_rControlList);
         _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Entry>(m_xEDHostname.get()));
-        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ToggleButton>(m_xUseCatalog.get()));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Toggleable>(m_xUseCatalog.get()));
         _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::SpinButton>(m_xNFPortNumber.get()));
     }
     void OUserDriverDetailsPage::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
@@ -509,7 +509,7 @@ namespace dbaui
         m_xMySQLSettings->fillControls( _rControlList );
 
         _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Entry>(m_xUserName.get()));
-        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ToggleButton>(m_xPasswordRequired.get()));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Toggleable>(m_xPasswordRequired.get()));
     }
 
     void MySQLNativePage::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
@@ -612,7 +612,7 @@ namespace dbaui
         return bChangedSomething;
     }
 
-    IMPL_LINK(OLDAPDetailsPage, OnCheckBoxClick, weld::ToggleButton&, rCheckBox, void)
+    IMPL_LINK(OLDAPDetailsPage, OnCheckBoxClick, weld::Toggleable&, rCheckBox, void)
     {
         OnControlModifiedButtonClick(rCheckBox);
         callModifiedHdl();

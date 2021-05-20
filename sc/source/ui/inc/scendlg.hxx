@@ -52,7 +52,7 @@ private:
     std::unique_ptr<weld::Label> m_xOnFt;
 
     DECL_LINK(OkHdl, weld::Button&, void);
-    DECL_LINK(EnableHdl, weld::ToggleButton&, void);
+    DECL_LINK(EnableHdl, weld::Toggleable&, void);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

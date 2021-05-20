@@ -46,8 +46,8 @@ private:
     std::unique_ptr<weld::CheckButton> m_xCbxBack;
     std::unique_ptr<weld::CheckButton> m_xCbxPaperbin;
 
-    DECL_LINK(ClickCheckboxHdl, weld::ToggleButton&, void);
-    DECL_LINK(ClickBookletHdl, weld::ToggleButton&, void);
+    DECL_LINK(ClickCheckboxHdl, weld::Toggleable&, void);
+    DECL_LINK(ClickBookletHdl, weld::Toggleable&, void);
 
     void updateControls();
 

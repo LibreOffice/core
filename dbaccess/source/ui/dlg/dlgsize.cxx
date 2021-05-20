@@ -63,7 +63,7 @@ sal_Int32 DlgSize::GetValue() const
     return static_cast<sal_Int32>(m_xMF_VALUE->get_value( FieldUnit::CM ));
 }
 
-IMPL_LINK_NOARG(DlgSize, CbClickHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(DlgSize, CbClickHdl, weld::Toggleable&, void)
 {
     m_xMF_VALUE->set_sensitive(!m_xCB_STANDARD->get_active());
     if (m_xCB_STANDARD->get_active())

@@ -50,7 +50,7 @@ class SmPrintOptionsTabPage final : public SfxTabPage
     std::unique_ptr<weld::CheckButton>      m_xSaveOnlyUsedSymbols;
     std::unique_ptr<weld::CheckButton>      m_xAutoCloseBrackets;
 
-    DECL_LINK(SizeButtonClickHdl, weld::ToggleButton&, void);
+    DECL_LINK(SizeButtonClickHdl, weld::Toggleable&, void);
 
     virtual bool    FillItemSet(SfxItemSet* rSet) override;
     virtual void    Reset(const SfxItemSet* rSet) override;
@@ -89,7 +89,7 @@ class SmFontDialog : public weld::GenericDialogController
     std::unique_ptr<weld::CustomWeld> m_xShowFont;
 
     DECL_LINK(FontSelectHdl, weld::ComboBox&, void);
-    DECL_LINK(AttrChangeHdl, weld::ToggleButton&, void);
+    DECL_LINK(AttrChangeHdl, weld::Toggleable&, void);
 
 public:
     SmFontDialog(weld::Window* pParent, OutputDevice *pFntListDevice, bool bHideCheckboxes);
@@ -206,7 +206,7 @@ class SmDistanceDialog final : public weld::GenericDialogController
     DECL_LINK(GetFocusHdl, weld::Widget&, void);
     DECL_LINK(MenuSelectHdl, const OString&, void);
     DECL_LINK(DefaultButtonClickHdl, weld::Button&, void);
-    DECL_LINK(CheckBoxClickHdl, weld::ToggleButton&, void);
+    DECL_LINK(CheckBoxClickHdl, weld::Toggleable&, void);
 
     void    SetCategory(sal_uInt16 Category);
 

@@ -236,7 +236,7 @@ IMPL_LINK_NOARG( SearchResultsDlg, ListSelectHdl, weld::TreeView&, void )
     pScViewShell->AlignToCursor(aPos.Col(), aPos.Row(), SC_FOLLOW_JUMP);
 }
 
-IMPL_STATIC_LINK( SearchResultsDlg, OnShowToggled, weld::ToggleButton&, rButton, void )
+IMPL_STATIC_LINK( SearchResultsDlg, OnShowToggled, weld::Toggleable&, rButton, void )
 {
     ScTabViewShell* pScViewShell = ScTabViewShell::GetActiveViewShell();
     ScViewOptions aViewOpt( pScViewShell->GetViewData().GetOptions() );

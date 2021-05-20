@@ -69,10 +69,10 @@ class SwMailMergeAddressBlockPage : public vcl::OWizardPage
     DECL_LINK(AddressListHdl_Impl, weld::Button&, void);
     DECL_LINK(SettingsHdl_Impl, weld::Button&, void);
     DECL_LINK(AssignHdl_Impl, weld::Button&, void);
-    DECL_LINK(AddressBlockHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(AddressBlockHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(InsertDataHdl_Impl, weld::Button&, void);
     DECL_LINK(AddressBlockSelectHdl_Impl, LinkParamNone*, void);
-    DECL_LINK(HideParagraphsHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(HideParagraphsHdl_Impl, weld::Toggleable&, void);
 
     void                EnableAddressBlock(bool bAll, bool bSelective);
 
@@ -103,7 +103,7 @@ class SwSelectAddressBlockDialog : public SfxDialogController
 
     DECL_LINK(NewCustomizeHdl_Impl, weld::Button&, void);
     DECL_LINK(DeleteHdl_Impl, weld::Button&, void);
-    DECL_LINK(IncludeHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(IncludeHdl_Impl, weld::Toggleable&, void);
 
 public:
     SwSelectAddressBlockDialog(weld::Window* pParent, SwMailMergeConfigItem& rConfig);

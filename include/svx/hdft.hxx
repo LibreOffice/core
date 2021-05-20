@@ -81,8 +81,8 @@ protected:
     std::unique_ptr<weld::CustomWeld> m_xBspWin;
 
     void            InitHandler();
-    void TurnOn(const weld::ToggleButton* pButton);
-    DECL_LINK(TurnOnHdl, weld::ToggleButton&, void);
+    void TurnOn(const weld::Toggleable* pButton);
+    DECL_LINK(TurnOnHdl, weld::Toggleable&, void);
     DECL_LINK(BackgroundHdl, weld::Button&, void);
     DECL_LINK(ValueChangeHdl, weld::MetricSpinButton&, void);
     void RangeHdl();

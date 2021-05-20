@@ -121,7 +121,7 @@ namespace dbaui
         m_aGetExtensionHandler.Call(this);
     }
 
-    IMPL_LINK_NOARG(OTextConnectionHelper, OnSetExtensionHdl, weld::ToggleButton&, void)
+    IMPL_LINK_NOARG(OTextConnectionHelper, OnSetExtensionHdl, weld::Toggleable&, void)
     {
         bool bDoEnable = m_xAccessOtherFiles->get_active();
         m_xOwnExtension->set_sensitive(bDoEnable);
@@ -135,7 +135,7 @@ namespace dbaui
         _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ComboBox>(m_xTextSeparator.get()));
         _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ComboBox>(m_xDecimalSeparator.get()));
         _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ComboBox>(m_xThousandsSeparator.get()));
-        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ToggleButton>(m_xRowHeader.get()));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Toggleable>(m_xRowHeader.get()));
         _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ComboBox>(m_xCharSet->get_widget()));
     }
 

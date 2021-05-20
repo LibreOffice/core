@@ -277,13 +277,13 @@ IMPL_LINK( SwInsTableDlg, ModifyRowCol, weld::Entry&, rEdit, void )
         m_xRepeatHeaderNF->set_value(std::min(nEnteredValRepeatHeaderNF, nMax));
 }
 
-IMPL_LINK_NOARG(SwInsTableDlg, CheckBoxHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwInsTableDlg, CheckBoxHdl, weld::Toggleable&, void)
 {
     m_xRepeatHeaderCB->set_sensitive(m_xHeaderCB->get_active());
     RepeatHeaderCheckBoxHdl(*m_xRepeatHeaderCB);
 }
 
-IMPL_LINK_NOARG(SwInsTableDlg, RepeatHeaderCheckBoxHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwInsTableDlg, RepeatHeaderCheckBoxHdl, weld::Toggleable&, void)
 {
     m_xRepeatGroup->set_sensitive(m_xHeaderCB->get_active() && m_xRepeatHeaderCB->get_active());
 }

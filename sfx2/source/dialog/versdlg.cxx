@@ -376,7 +376,7 @@ IMPL_LINK(SfxVersionDialog, ButtonHdl_Impl, weld::Button&, rButton, void)
     }
 }
 
-IMPL_LINK(SfxVersionDialog, ToggleHdl_Impl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SfxVersionDialog, ToggleHdl_Impl, weld::Toggleable&, rButton, void)
 {
     if (&rButton == m_xSaveCheckBox.get())
     {

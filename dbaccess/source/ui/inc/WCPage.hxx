@@ -40,8 +40,8 @@ namespace dbaui
         std::unique_ptr<weld::Label> m_xFT_KeyName;
         std::unique_ptr<weld::Entry> m_xEdKeyName;
 
-        DECL_LINK( RadioChangeHdl, weld::ToggleButton&, void );
-        DECL_LINK( KeyClickHdl, weld::ToggleButton&, void );
+        DECL_LINK( RadioChangeHdl, weld::Toggleable&, void );
+        DECL_LINK( KeyClickHdl, weld::Toggleable&, void );
 
         bool checkAppendData();
         void SetAppendDataRadio();

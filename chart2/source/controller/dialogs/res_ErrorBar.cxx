@@ -339,7 +339,7 @@ IMPL_LINK_NOARG( ErrorBarResources, CategoryChosen2, weld::ComboBox&, void )
    CategoryChosen(*m_xRbConst);
 }
 
-IMPL_LINK_NOARG( ErrorBarResources, CategoryChosen, weld::ToggleButton&, void )
+IMPL_LINK_NOARG( ErrorBarResources, CategoryChosen, weld::Toggleable&, void )
 {
     m_bErrorKindUnique = true;
     SvxChartKindError eOldError = m_eErrorKind;
@@ -392,7 +392,7 @@ IMPL_LINK_NOARG( ErrorBarResources, CategoryChosen, weld::ToggleButton&, void )
     UpdateControlStates();
 }
 
-IMPL_LINK_NOARG(ErrorBarResources, SynchronizePosAndNeg, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ErrorBarResources, SynchronizePosAndNeg, weld::Toggleable&, void)
 {
     UpdateControlStates();
     PosValueChanged( *m_xMfPositive );
@@ -412,7 +412,7 @@ IMPL_LINK_NOARG(ErrorBarResources, PosValueChanged, weld::MetricSpinButton&, voi
     }
 }
 
-IMPL_LINK_NOARG(ErrorBarResources, IndicatorChanged, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ErrorBarResources, IndicatorChanged, weld::Toggleable&, void)
 {
     m_bIndicatorUnique = true;
     if( m_xRbBoth->get_active())

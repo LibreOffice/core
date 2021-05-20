@@ -45,7 +45,7 @@ SwMailMergeOutputTypePage::SwMailMergeOutputTypePage(weld::Container* pPage, SwM
     , m_xLetterHint(m_xBuilder->weld_label("letterft"))
     , m_xMailHint(m_xBuilder->weld_label("emailft"))
 {
-    Link<weld::ToggleButton&,void> aLink = LINK(this, SwMailMergeOutputTypePage, TypeHdl_Impl);
+    Link<weld::Toggleable&,void> aLink = LINK(this, SwMailMergeOutputTypePage, TypeHdl_Impl);
     m_xLetterRB->connect_toggled(aLink);
     m_xMailRB->connect_toggled(aLink);
 
@@ -61,7 +61,7 @@ SwMailMergeOutputTypePage::~SwMailMergeOutputTypePage()
 {
 }
 
-IMPL_LINK_NOARG(SwMailMergeOutputTypePage, TypeHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwMailMergeOutputTypePage, TypeHdl_Impl, weld::Toggleable&, void)
 {
     bool bLetter = m_xLetterRB->get_active();
     m_xLetterHint->set_visible(bLetter);

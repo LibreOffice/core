@@ -120,8 +120,8 @@ private:
     std::unique_ptr<weld::RadioButton> m_xBtnRemovePassword;
 
     DECL_LINK(OKHdl, weld::Button&, void);
-    DECL_LINK(RadioBtnHdl, weld::ToggleButton&, void);
-    DECL_LINK(CheckBoxHdl, weld::ToggleButton&, void);
+    DECL_LINK(RadioBtnHdl, weld::Toggleable&, void);
+    DECL_LINK(CheckBoxHdl, weld::Toggleable&, void);
     DECL_LINK(PasswordModifyHdl, weld::Entry&, void);
 };
 

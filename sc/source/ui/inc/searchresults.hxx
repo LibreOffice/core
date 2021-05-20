@@ -30,7 +30,7 @@ class SearchResultsDlg : public SfxDialogController
 
     DECL_LINK(ListSelectHdl, weld::TreeView&, void);
     DECL_LINK(HeaderBarClick, int, void);
-    DECL_STATIC_LINK(SearchResultsDlg, OnShowToggled, weld::ToggleButton&, void);
+    DECL_STATIC_LINK(SearchResultsDlg, OnShowToggled, weld::Toggleable&, void);
 public:
     SearchResultsDlg(SfxBindings* _pBindings, weld::Window* pParent);
     virtual ~SearchResultsDlg() override;

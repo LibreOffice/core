@@ -93,7 +93,7 @@ void ScDPGroupEditHelper::SetValue( bool bAuto, double fValue )
     ImplSetValue( fValue );
 }
 
-IMPL_LINK(ScDPGroupEditHelper, ToggleHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(ScDPGroupEditHelper, ToggleHdl, weld::Toggleable&, rButton, void)
 {
     if (!rButton.get_active())
         return;
@@ -302,7 +302,7 @@ sal_Int32 ScDPDateGroupDlg::GetDatePart() const
     return nDatePart;
 }
 
-IMPL_LINK(ScDPDateGroupDlg, ToggleHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(ScDPDateGroupDlg, ToggleHdl, weld::Toggleable&, rButton, void)
 {
     if (!rButton.get_active())
         return;

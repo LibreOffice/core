@@ -83,7 +83,7 @@ private:
     std::unique_ptr<weld::Widget> m_xMedImg;
     std::unique_ptr<weld::Widget> m_xLowImg;
 
-    DECL_LINK(RadioButtonHdl, weld::ToggleButton&, void);
+    DECL_LINK(RadioButtonHdl, weld::Toggleable&, void);
 public:
     MacroSecurityLevelTP(weld::Container* pParent, MacroSecurity* pDlg);
     virtual void ClosePage() override;

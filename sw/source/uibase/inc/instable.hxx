@@ -71,8 +71,8 @@ class SwInsTableDlg : public SfxDialogController
     DECL_LINK(ModifyName, weld::Entry&, void);
     DECL_LINK(ModifyRowCol, weld::Entry&, void);
     DECL_LINK(OKHdl, weld::Button&, void);
-    DECL_LINK(CheckBoxHdl, weld::ToggleButton&, void);
-    DECL_LINK(RepeatHeaderCheckBoxHdl, weld::ToggleButton&, void);
+    DECL_LINK(CheckBoxHdl, weld::Toggleable&, void);
+    DECL_LINK(RepeatHeaderCheckBoxHdl, weld::Toggleable&, void);
     DECL_LINK(ModifyRepeatHeaderNF_Hdl, weld::SpinButton&, void);
 
 public:

@@ -64,7 +64,7 @@ class SvInsertOleDlg : public InsertObjectDialog_Impl
 
     DECL_LINK(DoubleClickHdl, weld::TreeView&, bool);
     DECL_LINK(BrowseHdl, weld::Button&, void);
-    DECL_LINK(RadioHdl, weld::ToggleButton&, void);
+    DECL_LINK(RadioHdl, weld::Toggleable&, void);
     bool IsCreateNew() const override { return m_xRbNewObject->get_active(); }
 
 public:
@@ -99,7 +99,7 @@ private:
     std::unique_ptr<weld::CheckButton> m_xCBMarginHeightDefault;
 
     DECL_LINK(OpenHdl, weld::Button&, void);
-    DECL_LINK(CheckHdl, weld::ToggleButton&, void);
+    DECL_LINK(CheckHdl, weld::Toggleable&, void);
 
     void Init();
 

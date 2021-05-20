@@ -232,7 +232,7 @@ IMPL_LINK_NOARG(ExtrusionDirectionWindow, SelectValueSetHdl, ValueSet*, void)
     mxControl->EndPopupMode();
 }
 
-IMPL_LINK_NOARG(ExtrusionDirectionWindow, SelectToolbarMenuHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ExtrusionDirectionWindow, SelectToolbarMenuHdl, weld::Toggleable&, void)
 {
     int nProjection = mxPerspective->get_active() ? 0 : 1;
 
@@ -443,7 +443,7 @@ void ExtrusionDepthWindow::statusChanged(
     }
 }
 
-IMPL_LINK(ExtrusionDepthWindow, SelectHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(ExtrusionDepthWindow, SelectHdl, weld::Toggleable&, rButton, void)
 {
     if (mbSettingValue || !rButton.get_active())
         return;
@@ -709,7 +709,7 @@ IMPL_LINK_NOARG(ExtrusionLightingWindow, SelectValueSetHdl, ValueSet*, void)
     mxControl->EndPopupMode();
 }
 
-IMPL_LINK(ExtrusionLightingWindow, SelectToolbarMenuHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(ExtrusionLightingWindow, SelectToolbarMenuHdl, weld::Toggleable&, rButton, void)
 {
     if (!rButton.get_active())
         return;
@@ -846,7 +846,7 @@ void ExtrusionSurfaceWindow::statusChanged(
     }
 }
 
-IMPL_LINK(ExtrusionSurfaceWindow, SelectHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(ExtrusionSurfaceWindow, SelectHdl, weld::Toggleable&, rButton, void)
 {
     if (!rButton.get_active())
         return;

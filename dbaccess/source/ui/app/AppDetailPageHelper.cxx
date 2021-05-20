@@ -1088,7 +1088,7 @@ namespace
     };
 };
 
-IMPL_LINK_NOARG(OAppDetailPageHelper, OnDropdownClickHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(OAppDetailPageHelper, OnDropdownClickHdl, weld::Toggleable&, void)
 {
     if (!m_xMBPreview->get_active())
         return;

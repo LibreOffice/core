@@ -95,7 +95,7 @@ private:
     weld::Entry* CheckValues();
 
     DECL_LINK(OKHdl, weld::Button&, void);
-    DECL_LINK(DisableHdl, weld::ToggleButton&, void);
+    DECL_LINK(DisableHdl, weld::Toggleable&, void);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

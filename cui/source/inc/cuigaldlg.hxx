@@ -251,7 +251,7 @@ class TPGalleryThemeProperties : public SfxTabPage
     void                DoPreview();
     void                EndSearchProgressHdl(sal_Int32 nResult);
 
-    DECL_LINK(ClickPreviewHdl, weld::ToggleButton&, void);
+    DECL_LINK(ClickPreviewHdl, weld::Toggleable&, void);
     DECL_LINK(ClickSearchHdl, weld::Button&, void);
     DECL_LINK(ClickTakeHdl, weld::Button&, void);
     DECL_LINK(ClickTakeAllHdl, weld::Button&, void);

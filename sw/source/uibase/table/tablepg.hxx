@@ -71,8 +71,8 @@ class SwFormatTablePage : public SfxTabPage
     void        Init();
     void ModifyHdl(const weld::MetricSpinButton& rEdit, bool bAllowInconsistencies = false);
 
-    DECL_LINK(AutoClickHdl, weld::ToggleButton&, void);
-    DECL_LINK(RelWidthClickHdl, weld::ToggleButton&, void);
+    DECL_LINK(AutoClickHdl, weld::Toggleable&, void);
+    DECL_LINK(RelWidthClickHdl, weld::Toggleable&, void);
     void RightModify();
     DECL_LINK(ValueChangedHdl, weld::MetricSpinButton&, void);
 
@@ -120,7 +120,7 @@ class SwTableColumnPage : public SfxTabPage
     DECL_LINK(AutoClickHdl, weld::Button&, void);
     void        ModifyHdl(const weld::MetricSpinButton* pEdit);
     DECL_LINK(ValueChangedHdl, weld::MetricSpinButton&, void);
-    DECL_LINK(ModeHdl, weld::ToggleButton&, void);
+    DECL_LINK(ModeHdl, weld::Toggleable&, void);
     void        UpdateCols( sal_uInt16 nCurrentPos );
     SwTwips     GetVisibleWidth(sal_uInt16 nPos);
     void        SetVisibleWidth(sal_uInt16 nPos, SwTwips nNewWidth);
@@ -162,13 +162,13 @@ class SwTextFlowPage : public SfxTabPage
     std::unique_ptr<weld::ComboBox> m_xTextDirectionLB;
     std::unique_ptr<weld::ComboBox> m_xVertOrientLB;
 
-    DECL_LINK(PageBreakHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(ApplyCollClickHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(PageBreakPosHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(PageBreakTypeHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(PageNoClickHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(SplitHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(HeadLineCBClickHdl, weld::ToggleButton&, void);
+    DECL_LINK(PageBreakHdl_Impl, weld::Toggleable&, void);
+    DECL_LINK(ApplyCollClickHdl_Impl, weld::Toggleable&, void);
+    DECL_LINK(PageBreakPosHdl_Impl, weld::Toggleable&, void);
+    DECL_LINK(PageBreakTypeHdl_Impl, weld::Toggleable&, void);
+    DECL_LINK(PageNoClickHdl_Impl, weld::Toggleable&, void);
+    DECL_LINK(SplitHdl_Impl, weld::Toggleable&, void);
+    DECL_LINK(HeadLineCBClickHdl, weld::Toggleable&, void);
 
 public:
     SwTextFlowPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);

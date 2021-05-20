@@ -220,7 +220,7 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, InsertHdl, weld::Button&, void)
     m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK(SwInsertBookmarkDlg, ChangeHideHdl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(SwInsertBookmarkDlg, ChangeHideHdl, weld::Toggleable&, rBox, void)
 {
     bool bHide = rBox.get_active();
     m_xConditionED->set_sensitive(bHide);

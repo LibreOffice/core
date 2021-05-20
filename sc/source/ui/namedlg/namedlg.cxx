@@ -218,10 +218,10 @@ void ScNameDlg::UpdateChecks(const ScRangeData* pData)
     // handlers, triggering handlers while already processing a handler can
     // ( and does in this case ) corrupt the internal data
 
-    m_xBtnCriteria->connect_toggled( Link<weld::ToggleButton&,void>() );
-    m_xBtnPrintArea->connect_toggled( Link<weld::ToggleButton&,void>() );
-    m_xBtnColHeader->connect_toggled( Link<weld::ToggleButton&,void>() );
-    m_xBtnRowHeader->connect_toggled( Link<weld::ToggleButton&,void>() );
+    m_xBtnCriteria->connect_toggled( Link<weld::Toggleable&,void>() );
+    m_xBtnPrintArea->connect_toggled( Link<weld::Toggleable&,void>() );
+    m_xBtnColHeader->connect_toggled( Link<weld::Toggleable&,void>() );
+    m_xBtnRowHeader->connect_toggled( Link<weld::Toggleable&,void>() );
 
     m_xBtnCriteria->set_active( pData->HasType( ScRangeData::Type::Criteria ) );
     m_xBtnPrintArea->set_active( pData->HasType( ScRangeData::Type::PrintArea ) );
@@ -229,7 +229,7 @@ void ScNameDlg::UpdateChecks(const ScRangeData* pData)
     m_xBtnRowHeader->set_active( pData->HasType( ScRangeData::Type::RowHeader ) );
 
     // Restore handlers so user input is processed again
-    Link<weld::ToggleButton&,void> aToggleHandler = LINK( this, ScNameDlg, EdModifyCheckBoxHdl );
+    Link<weld::Toggleable&,void> aToggleHandler = LINK( this, ScNameDlg, EdModifyCheckBoxHdl );
     m_xBtnCriteria->connect_toggled( aToggleHandler );
     m_xBtnPrintArea->connect_toggled( aToggleHandler );
     m_xBtnColHeader->connect_toggled( aToggleHandler );
@@ -472,7 +472,7 @@ IMPL_LINK_NOARG(ScNameDlg, RemoveBtnHdl, weld::Button&, void)
     RemovePushed();
 }
 
-IMPL_LINK_NOARG(ScNameDlg, EdModifyCheckBoxHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ScNameDlg, EdModifyCheckBoxHdl, weld::Toggleable&, void)
 {
     NameModified();
 }

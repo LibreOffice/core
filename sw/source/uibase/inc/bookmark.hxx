@@ -87,7 +87,7 @@ class SwInsertBookmarkDlg : public SfxDialogController
     DECL_LINK(SelectionChangedHdl, weld::TreeView&, void);
     DECL_LINK(DoubleClickHdl, weld::TreeView&, bool);
     DECL_LINK(HeaderBarClick, int, void);
-    DECL_LINK(ChangeHideHdl, weld::ToggleButton&, void);
+    DECL_LINK(ChangeHideHdl, weld::Toggleable&, void);
 
     // Fill table with bookmarks
     void PopulateTable();

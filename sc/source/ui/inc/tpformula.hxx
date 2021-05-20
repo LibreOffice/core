@@ -46,7 +46,7 @@ private:
     bool IsValidSeparator(const OUString& rSep) const;
 
     DECL_LINK(ButtonHdl, weld::Button&, void);
-    DECL_LINK(ToggleHdl, weld::ToggleButton&, void);
+    DECL_LINK(ToggleHdl, weld::Toggleable&, void);
     DECL_LINK(SepInsertTextHdl, OUString&, bool);
     DECL_LINK(ColSepInsertTextHdl, OUString&, bool);
     DECL_LINK(RowSepInsertTextHdl, OUString&, bool);

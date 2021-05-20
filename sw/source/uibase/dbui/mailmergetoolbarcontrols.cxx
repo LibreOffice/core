@@ -191,7 +191,7 @@ public:
         m_xWidget->set_active(bActive);
     }
 
-    void connect_toggled(const Link<weld::ToggleButton&, void>& rLink)
+    void connect_toggled(const Link<weld::Toggleable&, void>& rLink)
     {
         m_xWidget->connect_toggled(rLink);
     }
@@ -212,7 +212,7 @@ class MMExcludeEntryController : public svt::ToolboxController, public lang::XSe
 {
     VclPtr<ExcludeCheckBox> m_xExcludeCheckbox;
 
-    DECL_STATIC_LINK(MMExcludeEntryController, ExcludeHdl, weld::ToggleButton&, void);
+    DECL_STATIC_LINK(MMExcludeEntryController, ExcludeHdl, weld::Toggleable&, void);
 
 public:
     explicit MMExcludeEntryController(const uno::Reference<uno::XComponentContext>& rContext)
@@ -358,7 +358,7 @@ uno::Reference<awt::XWindow> MMExcludeEntryController::createItemWindow(const un
     return VCLUnoHelper::GetInterface(m_xExcludeCheckbox);
 }
 
-IMPL_STATIC_LINK(MMExcludeEntryController, ExcludeHdl, weld::ToggleButton&, rCheckbox, void)
+IMPL_STATIC_LINK(MMExcludeEntryController, ExcludeHdl, weld::Toggleable&, rCheckbox, void)
 {
     SwView* pView = ::GetActiveView();
     std::shared_ptr<SwMailMergeConfigItem> xConfigItem;

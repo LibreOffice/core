@@ -458,12 +458,12 @@ void AbstractHangulHanjaConversionDialog_Impl::SetChangeAllHdl( const Link<weld:
     m_xDlg->SetChangeAllHdl(rHdl);
 }
 
-void AbstractHangulHanjaConversionDialog_Impl::SetClickByCharacterHdl( const Link<weld::ToggleButton&,void>& _rHdl )
+void AbstractHangulHanjaConversionDialog_Impl::SetClickByCharacterHdl( const Link<weld::Toggleable&,void>& _rHdl )
 {
     m_xDlg->SetClickByCharacterHdl(_rHdl );
 }
 
-void AbstractHangulHanjaConversionDialog_Impl::SetConversionFormatChangedHdl(const Link<weld::ToggleButton&,void>& rHdl)
+void AbstractHangulHanjaConversionDialog_Impl::SetConversionFormatChangedHdl(const Link<weld::Toggleable&,void>& rHdl)
 {
     m_xDlg->SetConversionFormatChangedHdl(rHdl);
 }

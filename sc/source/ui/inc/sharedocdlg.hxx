@@ -38,7 +38,7 @@ private:
     std::unique_ptr<weld::Label> m_xFtWarning;
     std::unique_ptr<weld::TreeView> m_xLbUsers;
 
-    DECL_LINK(ToggleHandle, weld::ToggleButton&, void);
+    DECL_LINK(ToggleHandle, weld::Toggleable&, void);
     DECL_LINK(SizeAllocated, const Size&, void);
 
 public:

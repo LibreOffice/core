@@ -165,12 +165,12 @@ public:
     explicit ColorConfigWindow_Impl(weld::Window* pTopLevel, weld::Container* pParent);
 
 public:
-    void SetLinks(Link<weld::ToggleButton&,void> const&,
+    void SetLinks(Link<weld::Toggleable&,void> const&,
                   Link<ColorListBox&,void> const&,
                   Link<weld::Widget&,void> const&,
                   weld::ScrolledWindow& rScroll);
     void Update(EditableColorConfig const*, EditableExtendedColorConfig const*);
-    void ClickHdl(EditableColorConfig*, weld::ToggleButton&);
+    void ClickHdl(EditableColorConfig*, weld::Toggleable&);
     void ColorHdl(EditableColorConfig*, EditableExtendedColorConfig*, const ColorListBox*);
 
     weld::Widget& GetWidget1()
@@ -218,7 +218,7 @@ private:
         }
         void Hide ();
     public:
-        void SetLinks(Link<weld::ToggleButton&,void> const&,
+        void SetLinks(Link<weld::Toggleable&,void> const&,
                       Link<ColorListBox&,void> const&,
                       Link<weld::Widget&,void> const&);
         void Update (ColorConfigValue const&);
@@ -226,7 +226,7 @@ private:
         void ColorChanged (ColorConfigValue&);
         void ColorChanged (ExtendedColorConfigValue&);
     public:
-        bool Is(const weld::ToggleButton* pBox) const { return m_xText.get() == pBox; }
+        bool Is(const weld::Toggleable* pBox) const { return m_xText.get() == pBox; }
         bool Is(const ColorListBox* pBox) const { return m_xColorList.get() == pBox; }
     private:
         // checkbox (CheckBox) or simple text (FixedText)
@@ -310,13 +310,13 @@ void ColorConfigWindow_Impl::Entry::Hide()
 }
 
 // SetLinks()
-void ColorConfigWindow_Impl::Entry::SetLinks(Link<weld::ToggleButton&,void> const& rCheckLink,
+void ColorConfigWindow_Impl::Entry::SetLinks(Link<weld::Toggleable&,void> const& rCheckLink,
                                              Link<ColorListBox&,void> const& rColorLink,
                                              Link<weld::Widget&,void> const& rGetFocusLink)
 {
     m_xColorList->SetSelectHdl(rColorLink);
     m_xColorList->connect_focus_in(rGetFocusLink);
-    if (weld::ToggleButton* pCheckBox = dynamic_cast<weld::ToggleButton*>(m_xText.get()))
+    if (weld::Toggleable* pCheckBox = dynamic_cast<weld::Toggleable*>(m_xText.get()))
     {
         pCheckBox->connect_toggled(rCheckLink);
         pCheckBox->connect_focus_in(rGetFocusLink);
@@ -328,7 +328,7 @@ void ColorConfigWindow_Impl::Entry::Update(ColorConfigValue const& rValue)
 {
     Color aColor(rValue.nColor);
     m_xColorList->SelectEntry(aColor);
-    if (weld::ToggleButton* pCheckBox = dynamic_cast<weld::ToggleButton*>(m_xText.get()))
+    if (weld::Toggleable* pCheckBox = dynamic_cast<weld::Toggleable*>(m_xText.get()))
         pCheckBox->set_active(rValue.bIsVisible);
 }
 
@@ -461,7 +461,7 @@ void ColorConfigWindow_Impl::AdjustExtraWidths(int nTextWidth)
 }
 
 // SetLinks()
-void ColorConfigWindow_Impl::SetLinks(Link<weld::ToggleButton&,void> const& aCheckLink,
+void ColorConfigWindow_Impl::SetLinks(Link<weld::Toggleable&,void> const& aCheckLink,
                                       Link<ColorListBox&,void> const& aColorLink,
                                       Link<weld::Widget&,void> const& rGetFocusLink,
                                       weld::ScrolledWindow& rScroll)
@@ -503,7 +503,7 @@ void ColorConfigWindow_Impl::Update (
 }
 
 // ClickHdl()
-void ColorConfigWindow_Impl::ClickHdl(EditableColorConfig* pConfig, weld::ToggleButton& rBox)
+void ColorConfigWindow_Impl::ClickHdl(EditableColorConfig* pConfig, weld::Toggleable& rBox)
 {
     for (unsigned i = 0; i != ColorConfigEntryCount; ++i)
     {
@@ -591,7 +591,7 @@ class ColorConfigCtrl_Impl
     EditableColorConfig*            pColorConfig;
     EditableExtendedColorConfig*    pExtColorConfig;
 
-    DECL_LINK(ClickHdl, weld::ToggleButton&, void);
+    DECL_LINK(ClickHdl, weld::Toggleable&, void);
     DECL_LINK(ColorHdl, ColorListBox&, void);
     DECL_LINK(ControlFocusHdl, weld::Widget&, void);
 
@@ -629,7 +629,7 @@ ColorConfigCtrl_Impl::ColorConfigCtrl_Impl(weld::Window* pTopLevel, weld::Builde
 {
     m_xBody->set_stack_background();
 
-    Link<weld::ToggleButton&,void> aCheckLink = LINK(this, ColorConfigCtrl_Impl, ClickHdl);
+    Link<weld::Toggleable&,void> aCheckLink = LINK(this, ColorConfigCtrl_Impl, ClickHdl);
     Link<ColorListBox&,void> aColorLink = LINK(this, ColorConfigCtrl_Impl, ColorHdl);
     Link<weld::Widget&,void> const& aGetFocusLink = LINK(this, ColorConfigCtrl_Impl, ControlFocusHdl);
     m_xScrollWindow->SetLinks(aCheckLink, aColorLink, aGetFocusLink, *m_xVScroll);
@@ -641,7 +641,7 @@ void ColorConfigCtrl_Impl::Update ()
     m_xScrollWindow->Update(pColorConfig, pExtColorConfig);
 }
 
-IMPL_LINK(ColorConfigCtrl_Impl, ClickHdl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(ColorConfigCtrl_Impl, ClickHdl, weld::Toggleable&, rBox, void)
 {
     DBG_ASSERT(pColorConfig, "Configuration not set");
     m_xScrollWindow->ClickHdl(pColorConfig, rBox);

@@ -1213,7 +1213,7 @@ IMPL_LINK( SvtFileDialog, OpenDoneHdl_Impl, SvtFileView*, pView, void )
     EnableControl( m_xImpl->m_xBtnUp->getWidget(), bCanTravelUp );
 }
 
-IMPL_LINK_NOARG(SvtFileDialog, AutoExtensionHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvtFileDialog, AutoExtensionHdl_Impl, weld::Toggleable&, void)
 {
     if (m_pFileNotifier)
         m_pFileNotifier->notify(CTRL_STATE_CHANGED, CHECKBOX_AUTOEXTENSION);
@@ -1222,7 +1222,7 @@ IMPL_LINK_NOARG(SvtFileDialog, AutoExtensionHdl_Impl, weld::ToggleButton&, void)
     lcl_autoUpdateFileExtension( this, m_xImpl->GetCurFilter()->GetExtension() );
 }
 
-IMPL_LINK( SvtFileDialog, ClickHdl_Impl, weld::ToggleButton&, rCheckBox, void )
+IMPL_LINK( SvtFileDialog, ClickHdl_Impl, weld::Toggleable&, rCheckBox, void )
 {
     if (!m_pFileNotifier)
         return;

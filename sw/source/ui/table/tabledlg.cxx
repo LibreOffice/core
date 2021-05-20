@@ -128,7 +128,7 @@ void  SwFormatTablePage::Init()
     m_xRightMF->SetMetricFieldMin(-999999);
 
     //handler
-    Link<weld::ToggleButton&,void> aLk2 = LINK( this, SwFormatTablePage, AutoClickHdl );
+    Link<weld::Toggleable&,void> aLk2 = LINK( this, SwFormatTablePage, AutoClickHdl );
     m_xFullBtn->connect_toggled( aLk2 );
     m_xFreeBtn->connect_toggled( aLk2 );
     m_xLeftBtn->connect_toggled( aLk2 );
@@ -146,7 +146,7 @@ void  SwFormatTablePage::Init()
     m_xRelWidthCB->connect_toggled(LINK( this, SwFormatTablePage, RelWidthClickHdl ));
 }
 
-IMPL_LINK( SwFormatTablePage, RelWidthClickHdl, weld::ToggleButton&, rBtn, void )
+IMPL_LINK( SwFormatTablePage, RelWidthClickHdl, weld::Toggleable&, rBtn, void )
 {
     OSL_ENSURE(pTableData, "table data not available?");
     bool bIsChecked = rBtn.get_active();
@@ -180,7 +180,7 @@ IMPL_LINK( SwFormatTablePage, RelWidthClickHdl, weld::ToggleButton&, rBtn, void 
     bModified = true;
 }
 
-IMPL_LINK_NOARG(SwFormatTablePage, AutoClickHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwFormatTablePage, AutoClickHdl, weld::Toggleable&, void)
 {
     bool bRestore = true,
          bLeftEnable = false,
@@ -873,7 +873,7 @@ void  SwTableColumnPage::Init(bool bWeb)
     m_xUpBtn->connect_clicked(aClickLk);
     m_xDownBtn->connect_clicked(aClickLk);
 
-    Link<weld::ToggleButton&,void> aToggleLk = LINK(this, SwTableColumnPage, ModeHdl);
+    Link<weld::Toggleable&,void> aToggleLk = LINK(this, SwTableColumnPage, ModeHdl);
     m_xModifyTableCB->connect_toggled(aToggleLk);
     m_xProportionalCB->connect_toggled(aToggleLk);
 }
@@ -916,7 +916,7 @@ IMPL_LINK(SwTableColumnPage, ValueChangedHdl, weld::MetricSpinButton&, rEdit, vo
     ModifyHdl(&rEdit);
 }
 
-IMPL_LINK(SwTableColumnPage, ModeHdl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(SwTableColumnPage, ModeHdl, weld::Toggleable&, rBox, void)
 {
     const bool bCheck = rBox.get_active();
     if (&rBox == m_xProportionalCB.get())
@@ -1636,7 +1636,7 @@ void SwTextFlowPage::SetShell(SwWrtShell* pSh)
     }
 }
 
-IMPL_LINK_NOARG(SwTextFlowPage, PageBreakHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwTextFlowPage, PageBreakHdl_Impl, weld::Toggleable&, void)
 {
     if (m_xPgBrkCB->get_active())
     {
@@ -1672,7 +1672,7 @@ IMPL_LINK_NOARG(SwTextFlowPage, PageBreakHdl_Impl, weld::ToggleButton&, void)
     }
 }
 
-IMPL_LINK_NOARG(SwTextFlowPage, ApplyCollClickHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwTextFlowPage, ApplyCollClickHdl_Impl, weld::Toggleable&, void)
 {
     bool bEnable = false;
     if (m_xPageCollCB->get_active() && m_xPageCollLB->get_count())
@@ -1692,7 +1692,7 @@ IMPL_LINK_NOARG(SwTextFlowPage, ApplyCollClickHdl_Impl, weld::ToggleButton&, voi
     }
 }
 
-IMPL_LINK_NOARG(SwTextFlowPage, PageBreakPosHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwTextFlowPage, PageBreakPosHdl_Impl, weld::Toggleable&, void)
 {
     if (!m_xPgBrkCB->get_active())
         return;
@@ -1720,7 +1720,7 @@ IMPL_LINK_NOARG(SwTextFlowPage, PageBreakPosHdl_Impl, weld::ToggleButton&, void)
     }
 }
 
-IMPL_LINK_NOARG(SwTextFlowPage, PageBreakTypeHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwTextFlowPage, PageBreakTypeHdl_Impl, weld::Toggleable&, void)
 {
     if (m_xColBrkRB->get_active() || m_xPgBrkAfterRB->get_active())
     {
@@ -1734,17 +1734,17 @@ IMPL_LINK_NOARG(SwTextFlowPage, PageBreakTypeHdl_Impl, weld::ToggleButton&, void
         PageBreakPosHdl_Impl(*m_xPgBrkBeforeRB);
 }
 
-IMPL_LINK_NOARG(SwTextFlowPage, PageNoClickHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwTextFlowPage, PageNoClickHdl_Impl, weld::Toggleable&, void)
 {
     m_xPageNoNF->set_sensitive(m_xPageNoCB->get_active());
 }
 
-IMPL_LINK(SwTextFlowPage, SplitHdl_Impl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(SwTextFlowPage, SplitHdl_Impl, weld::Toggleable&, rBox, void)
 {
     m_xSplitRowCB->set_sensitive(rBox.get_active());
 }
 
-IMPL_LINK_NOARG(SwTextFlowPage, HeadLineCBClickHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwTextFlowPage, HeadLineCBClickHdl, weld::Toggleable&, void)
 {
     m_xRepeatHeaderCombo->set_sensitive(m_xHeadLineCB->get_active());
 }

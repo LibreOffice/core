@@ -76,7 +76,7 @@ protected:
 
     ~SwGreetingsHandler() {}
 
-    DECL_LINK(IndividualHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(IndividualHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(GreetingHdl_Impl, weld::Button&, void);
 
     void Contains(bool bContainsGreeting);
@@ -95,7 +95,7 @@ class SwMailMergeGreetingsPage : public vcl::OWizardPage, public SwGreetingsHand
 
     OUString m_sDocument;
 
-    DECL_LINK(ContainsHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(ContainsHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(InsertDataHdl_Impl, weld::Button&, void);
     DECL_LINK(GreetingSelectComboBoxHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(GreetingSelectListBoxHdl_Impl, weld::ComboBox&, void);
@@ -116,7 +116,7 @@ class SwMailBodyDialog : public SfxDialogController, public SwGreetingsHandler
     std::unique_ptr<weld::TextView> m_xBodyMLE;
     std::unique_ptr<weld::Button> m_xOK;
 
-    DECL_LINK(ContainsHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(ContainsHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(OKHdl, weld::Button&, void);
 
 public:

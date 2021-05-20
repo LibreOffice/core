@@ -562,7 +562,7 @@ IMPL_LINK(ScDPSubtotalDlg, ButtonClicked, weld::Button&, rButton, void)
         response(RET_CANCEL);
 }
 
-IMPL_LINK(ScDPSubtotalDlg, RadioClickHdl, weld::ToggleButton&, rBtn, void)
+IMPL_LINK(ScDPSubtotalDlg, RadioClickHdl, weld::Toggleable&, rBtn, void)
 {
     if (!rBtn.get_active())
         return;
@@ -876,7 +876,7 @@ IMPL_LINK(ScDPSubtotalOptDlg, ButtonClicked, weld::Button&, rButton, void)
         response(RET_CANCEL);
 }
 
-IMPL_LINK(ScDPSubtotalOptDlg, RadioClickHdl, weld::ToggleButton&, rBtn, void)
+IMPL_LINK(ScDPSubtotalOptDlg, RadioClickHdl, weld::Toggleable&, rBtn, void)
 {
     if (!rBtn.get_active())
         return;
@@ -884,7 +884,7 @@ IMPL_LINK(ScDPSubtotalOptDlg, RadioClickHdl, weld::ToggleButton&, rBtn, void)
     m_xLbSortBy->set_sensitive(m_xRbSortMan->get_active());
 }
 
-IMPL_LINK(ScDPSubtotalOptDlg, CheckHdl, weld::ToggleButton&, rCBox, void)
+IMPL_LINK(ScDPSubtotalOptDlg, CheckHdl, weld::Toggleable&, rCBox, void)
 {
     if (&rCBox == m_xCbShow.get())
     {

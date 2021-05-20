@@ -83,7 +83,7 @@ private:
     void EnableControls();
 
     DECL_LINK(SelectAxisTypeHdl, weld::ComboBox&, void);
-    DECL_LINK(EnableValueHdl, weld::ToggleButton&, void);
+    DECL_LINK(EnableValueHdl, weld::Toggleable&, void);
 
     /** shows a warning window due to an invalid input.
 

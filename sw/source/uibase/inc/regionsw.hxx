@@ -88,23 +88,23 @@ class SwEditRegionDlg : public SfxDialogController
     DECL_LINK( ConditionEditHdl, weld::Entry&, void );
 
     void ChangePasswd(bool bChange);
-    DECL_LINK( TogglePasswdHdl, weld::ToggleButton&, void );
+    DECL_LINK( TogglePasswdHdl, weld::Toggleable&, void );
     DECL_LINK( ChangePasswdHdl, weld::Button&, void );
-    DECL_LINK( ChangeProtectHdl, weld::ToggleButton&, void );
-    DECL_LINK( ChangeHideHdl, weld::ToggleButton&, void );
+    DECL_LINK( ChangeProtectHdl, weld::Toggleable&, void );
+    DECL_LINK( ChangeHideHdl, weld::Toggleable&, void );
     // #114856# edit in readonly sections
-    DECL_LINK( ChangeEditInReadonlyHdl, weld::ToggleButton&, void );
+    DECL_LINK( ChangeEditInReadonlyHdl, weld::Toggleable&, void );
     DECL_LINK( ChangeDismissHdl, weld::Button&, void);
-    DECL_LINK( UseFileHdl, weld::ToggleButton&, void );
+    DECL_LINK( UseFileHdl, weld::Toggleable&, void );
     DECL_LINK( FileSearchHdl, weld::Button&, void );
     DECL_LINK( OptionsHdl, weld::Button&, void );
     DECL_LINK( FileNameComboBoxHdl, weld::ComboBox&, void );
     DECL_LINK( FileNameEntryHdl, weld::Entry&, void );
-    DECL_LINK( DDEHdl, weld::ToggleButton&, void );
+    DECL_LINK( DDEHdl, weld::Toggleable&, void );
     DECL_LINK( DlgClosedHdl, sfx2::FileDialogHelper*, void );
     DECL_LINK( SubRegionEventHdl, weld::ComboBox&, void );
 
-    bool CheckPasswd(weld::ToggleButton* pBox = nullptr);
+    bool CheckPasswd(weld::Toggleable* pBox = nullptr);
 
 public:
     SwEditRegionDlg(weld::Window* pParent, SwWrtShell& rWrtSh);
@@ -145,14 +145,14 @@ class SwInsertSectionTabPage : public SfxTabPage
 
     void ChangePasswd(bool bChange);
 
-    DECL_LINK( ChangeHideHdl, weld::ToggleButton&, void );
-    DECL_LINK( ChangeProtectHdl, weld::ToggleButton&, void );
+    DECL_LINK( ChangeHideHdl, weld::Toggleable&, void );
+    DECL_LINK( ChangeProtectHdl, weld::Toggleable&, void );
     DECL_LINK( ChangePasswdHdl, weld::Button&, void );
-    DECL_LINK( TogglePasswdHdl, weld::ToggleButton&, void );
+    DECL_LINK( TogglePasswdHdl, weld::Toggleable&, void );
     DECL_LINK( NameEditHdl, weld::ComboBox&, void );
-    DECL_LINK( UseFileHdl, weld::ToggleButton&, void );
+    DECL_LINK( UseFileHdl, weld::Toggleable&, void );
     DECL_LINK( FileSearchHdl, weld::Button&, void );
-    DECL_LINK( DDEHdl, weld::ToggleButton&, void );
+    DECL_LINK( DDEHdl, weld::Toggleable&, void );
     DECL_LINK( DlgClosedHdl, sfx2::FileDialogHelper*, void );
 
 public:
@@ -191,7 +191,7 @@ class SwSectionFootnoteEndTabPage : public SfxTabPage
     std::unique_ptr<weld::Label> m_xEndSuffixFT;
     std::unique_ptr<weld::Entry> m_xEndSuffixED;
 
-    DECL_LINK(FootEndHdl, weld::ToggleButton&, void);
+    DECL_LINK(FootEndHdl, weld::Toggleable&, void);
     void ResetState( bool bFootnote, const SwFormatFootnoteEndAtTextEnd& );
 
 public:

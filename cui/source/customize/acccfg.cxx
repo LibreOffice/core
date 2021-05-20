@@ -1253,7 +1253,7 @@ IMPL_LINK(SfxAcceleratorConfigPage, SelectHdl, weld::TreeView&, rListBox, void)
     }
 }
 
-IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RadioHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RadioHdl, weld::Toggleable&, void)
 {
     uno::Reference<ui::XAcceleratorConfiguration> xOld = m_xAct;
 

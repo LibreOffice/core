@@ -101,7 +101,7 @@ private:
     std::unique_ptr<weld::MetricSpinButton> mxMtrWidth;
     std::unique_ptr<weld::MetricSpinButton> mxMtrHeight;
     std::unique_ptr<weld::CheckButton> mxCbxEdges;
-    DECL_LINK(CheckBoxModifyHdl, weld::ToggleButton&, void);
+    DECL_LINK(CheckBoxModifyHdl, weld::Toggleable&, void);
     DECL_LINK(EditModifyHdl, weld::MetricSpinButton&, void);
 public:
 
@@ -117,7 +117,7 @@ class GraphicFilterSolarize : public GraphicFilterDialog
 private:
     std::unique_ptr<weld::MetricSpinButton> mxMtrThreshold;
     std::unique_ptr<weld::CheckButton> mxCbxInvert;
-    DECL_LINK(CheckBoxModifyHdl, weld::ToggleButton&, void);
+    DECL_LINK(CheckBoxModifyHdl, weld::Toggleable&, void);
     DECL_LINK(EditModifyHdl, weld::MetricSpinButton&, void);
 
 public:

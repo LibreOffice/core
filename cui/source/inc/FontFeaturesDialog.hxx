@@ -59,7 +59,7 @@ private:
     int fillGrid(std::vector<vcl::font::Feature> const& rFontFeatures);
 
     DECL_LINK(ComboBoxSelectedHdl, weld::ComboBox&, void);
-    DECL_LINK(CheckBoxToggledHdl, weld::ToggleButton&, void);
+    DECL_LINK(CheckBoxToggledHdl, weld::Toggleable&, void);
 
 public:
     FontFeaturesDialog(weld::Window* pParent, OUString const& rFontName);

@@ -63,7 +63,7 @@ private:
     void InsertEntry(const OUString& rTxt);
 
     DECL_LINK(OKHdl, weld::Button&, void);
-    DECL_LINK(CheckBoxHdl, weld::ToggleButton&, void);
+    DECL_LINK(CheckBoxHdl, weld::Toggleable&, void);
     DECL_LINK(PasswordModifyHdl, weld::Entry&, void);
 };
 

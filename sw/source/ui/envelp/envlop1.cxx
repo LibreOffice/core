@@ -256,7 +256,7 @@ IMPL_LINK_NOARG(SwEnvPage, FieldHdl, weld::Button&, void)
     m_xAddrEdit->select_region(nStartPos, nEndPos);
 }
 
-IMPL_LINK_NOARG(SwEnvPage, SenderHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwEnvPage, SenderHdl, weld::Toggleable&, void)
 {
     const bool bEnable = m_xSenderBox->get_active();
     GetParentSwEnvDlg()->aEnvItem.m_bSend = bEnable;

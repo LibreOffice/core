@@ -45,7 +45,7 @@ namespace dbaui
         std::unique_ptr<weld::Entry> m_xSocket;
         std::unique_ptr<weld::Entry> m_xNamedPipe;
         Link<weld::Widget*,void> m_aControlModificationLink;
-        DECL_LINK(RadioToggleHdl, weld::ToggleButton&, void);
+        DECL_LINK(RadioToggleHdl, weld::Toggleable&, void);
         DECL_LINK(SpinModifyHdl, weld::SpinButton&, void);
         DECL_LINK(EditModifyHdl, weld::Entry&, void);
 

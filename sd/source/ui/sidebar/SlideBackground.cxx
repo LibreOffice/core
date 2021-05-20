@@ -1205,14 +1205,14 @@ IMPL_LINK_NOARG(SlideBackground, CloseMasterHdl, weld::Button&, void)
     GetBindings()->GetDispatcher()->Execute( SID_CLOSE_MASTER_VIEW, SfxCallMode::RECORD );
 }
 
-IMPL_LINK_NOARG(SlideBackground, DspBackground, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SlideBackground, DspBackground, weld::Toggleable&, void)
 {
     bool IsChecked = mxDspMasterBackground->get_active();
     const SfxBoolItem aBoolItem(SID_DISPLAY_MASTER_BACKGROUND, IsChecked);
     GetBindings()->GetDispatcher()->ExecuteList(SID_DISPLAY_MASTER_BACKGROUND, SfxCallMode::RECORD, { &aBoolItem });
 }
 
-IMPL_LINK_NOARG(SlideBackground, DspObjects, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SlideBackground, DspObjects, weld::Toggleable&, void)
 {
     bool IsChecked = mxDspMasterObjects->get_active();
     const SfxBoolItem aBoolItem(SID_DISPLAY_MASTER_OBJECTS,IsChecked);

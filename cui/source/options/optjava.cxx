@@ -132,7 +132,7 @@ SvxJavaOptionsPage::~SvxJavaOptionsPage()
 #endif
 }
 
-IMPL_LINK_NOARG(SvxJavaOptionsPage, EnableHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxJavaOptionsPage, EnableHdl_Impl, weld::Toggleable&, void)
 {
     bool bEnable = m_xJavaFrame->get_sensitive() && m_xJavaEnableCB->get_active();
     m_xJavaList->set_sensitive(bEnable);

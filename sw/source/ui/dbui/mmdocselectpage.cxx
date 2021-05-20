@@ -56,7 +56,7 @@ SwMailMergeDocSelectPage::SwMailMergeDocSelectPage(weld::Container* pPage, SwMai
     m_xCurrentDocRB->set_active(true);
     DocSelectHdl(*m_xNewDocRB);
 
-    Link<weld::ToggleButton&,void> aDocSelectLink = LINK(this, SwMailMergeDocSelectPage, DocSelectHdl);
+    Link<weld::Toggleable&,void> aDocSelectLink = LINK(this, SwMailMergeDocSelectPage, DocSelectHdl);
     m_xCurrentDocRB->connect_toggled(aDocSelectLink);
     m_xNewDocRB->connect_toggled(aDocSelectLink);
     m_xLoadDocRB->connect_toggled(aDocSelectLink);
@@ -87,7 +87,7 @@ SwMailMergeDocSelectPage::~SwMailMergeDocSelectPage()
 {
 }
 
-IMPL_LINK_NOARG(SwMailMergeDocSelectPage, DocSelectHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwMailMergeDocSelectPage, DocSelectHdl, weld::Toggleable&, void)
 {
     m_xRecentDocLB->set_sensitive(m_xRecentDocRB->get_active());
     m_pWizard->UpdateRoadmap();

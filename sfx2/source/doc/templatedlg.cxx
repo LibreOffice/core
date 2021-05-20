@@ -819,7 +819,7 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, LoseFocusHdl, weld::Widget&, void)
     }
 }
 
-IMPL_LINK_NOARG ( SfxTemplateManagerDlg, ListViewHdl, weld::ToggleButton&, void )
+IMPL_LINK_NOARG ( SfxTemplateManagerDlg, ListViewHdl, weld::Toggleable&, void )
 {
     setTemplateViewMode(TemplateViewMode::eListView);
 
@@ -829,7 +829,7 @@ IMPL_LINK_NOARG ( SfxTemplateManagerDlg, ListViewHdl, weld::ToggleButton&, void 
         mxSearchView->ListView::grab_focus();
 }
 
-IMPL_LINK_NOARG ( SfxTemplateManagerDlg, ThumbnailViewHdl, weld::ToggleButton&, void )
+IMPL_LINK_NOARG ( SfxTemplateManagerDlg, ThumbnailViewHdl, weld::Toggleable&, void )
 {
     setTemplateViewMode(TemplateViewMode::eThumbnailView);
     bMakeSelItemVisible = true;

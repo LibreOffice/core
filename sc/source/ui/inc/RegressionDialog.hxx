@@ -74,7 +74,7 @@ private:
                     size_t nColsInTable, AddressWalkerWriter& rOutput,
                     const std::function<CellWriter>& rFunc);
 
-    DECL_LINK( CheckBoxHdl, weld::ToggleButton&, void );
+    DECL_LINK( CheckBoxHdl, weld::Toggleable&, void );
     DECL_LINK( NumericFieldHdl, weld::SpinButton&, void );
 };
 

@@ -123,7 +123,7 @@ private:
     bool showDescription( const OUString& rDescription);
 
     DECL_LINK(selectionHandler, weld::TreeView&, void);
-    DECL_LINK(allHandler, weld::ToggleButton&, void);
+    DECL_LINK(allHandler, weld::Toggleable&, void);
     DECL_LINK(okHandler, weld::Button&, void);
     DECL_LINK(closeHandler, weld::Button&, void);
     DECL_LINK(entryToggled, const weld::TreeView::iter_col&, void);

@@ -114,7 +114,7 @@ namespace dbaui
         }
     }
 
-    IMPL_LINK(SpecialSettingsPage, OnTriStateToggleHdl, weld::ToggleButton&, rToggle, void)
+    IMPL_LINK(SpecialSettingsPage, OnTriStateToggleHdl, weld::Toggleable&, rToggle, void)
     {
         auto eOldState = m_aTriStates[&rToggle];
         switch (eOldState)
@@ -133,7 +133,7 @@ namespace dbaui
         OnToggleHdl(rToggle);
     }
 
-    IMPL_LINK(SpecialSettingsPage, OnToggleHdl, weld::ToggleButton&, rBtn, void)
+    IMPL_LINK(SpecialSettingsPage, OnToggleHdl, weld::Toggleable&, rBtn, void)
     {
         if (&rBtn == m_xAppendTableAlias.get() && m_xAsBeforeCorrelationName)
         {
@@ -170,7 +170,7 @@ namespace dbaui
         {
             if (booleanSetting.xControl)
             {
-                _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ToggleButton>(booleanSetting.xControl.get()));
+                _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Toggleable>(booleanSetting.xControl.get()));
             }
         }
 
@@ -297,7 +297,7 @@ namespace dbaui
         m_xAutoRetrieving->connect_changed(LINK(this, OGenericAdministrationPage, OnControlEntryModifyHdl));
     }
 
-    IMPL_LINK(GeneratedValuesPage, OnAutoToggleHdl, weld::ToggleButton&, rBtn, void)
+    IMPL_LINK(GeneratedValuesPage, OnAutoToggleHdl, weld::Toggleable&, rBtn, void)
     {
         m_xGrid->set_sensitive(rBtn.get_active());
         OnControlModifiedButtonClick(rBtn);
@@ -314,7 +314,7 @@ namespace dbaui
 
     void GeneratedValuesPage::fillControls( std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList )
     {
-        _rControlList.emplace_back( new OSaveValueWidgetWrapper<weld::ToggleButton>( m_xAutoRetrievingEnabled.get() ) );
+        _rControlList.emplace_back( new OSaveValueWidgetWrapper<weld::Toggleable>( m_xAutoRetrievingEnabled.get() ) );
         _rControlList.emplace_back( new OSaveValueWidgetWrapper<weld::Entry>( m_xAutoIncrement.get() ) );
         _rControlList.emplace_back( new OSaveValueWidgetWrapper<weld::Entry>( m_xAutoRetrieving.get() ) );
     }

@@ -116,16 +116,16 @@ private:
     std::unique_ptr<weld::CheckButton> m_xTsbAutoGrowWidth;
     std::unique_ptr<weld::CheckButton> m_xTsbAutoGrowHeight;
 
-    DECL_LINK(ChangePosProtectHdl, weld::ToggleButton&, void);
-    DECL_LINK(ChangeSizeProtectHdl, weld::ToggleButton&, void);
+    DECL_LINK(ChangePosProtectHdl, weld::Toggleable&, void);
+    DECL_LINK(ChangeSizeProtectHdl, weld::Toggleable&, void);
 
     void SetMinMaxPosition();
     void GetTopLeftPosition(double& rfX, double& rfY, const basegfx::B2DRange& rRange);
 
     DECL_LINK( ChangeWidthHdl, weld::MetricSpinButton&, void );
     DECL_LINK( ChangeHeightHdl, weld::MetricSpinButton&, void );
-    DECL_LINK( ClickSizeProtectHdl, weld::ToggleButton&, void );
-    DECL_LINK( ClickAutoHdl, weld::ToggleButton&, void );
+    DECL_LINK( ClickSizeProtectHdl, weld::Toggleable&, void );
+    DECL_LINK( ClickAutoHdl, weld::Toggleable&, void );
 
 public:
     SvxPositionSizeTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);

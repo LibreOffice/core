@@ -114,7 +114,7 @@ SvxColorTabPage::SvxColorTabPage(weld::Container* pPage, weld::DialogController*
     m_xMcustom->connect_value_changed(aMetricSpinLink);
     m_xKcustom->connect_value_changed(aMetricSpinLink);
 
-    Link<weld::ToggleButton&,void> aLink2 = LINK( this, SvxColorTabPage, SelectColorModeHdl_Impl );
+    Link<weld::Toggleable&,void> aLink2 = LINK( this, SvxColorTabPage, SelectColorModeHdl_Impl );
     m_xRbRGB->connect_toggled(aLink2);
     m_xRbCMYK->connect_toggled(aLink2);
     SetColorModel( eCM );
@@ -524,7 +524,7 @@ void SvxColorTabPage::ConvertColorValues (Color& rColor, ColorModel eModell)
     }
 }
 
-IMPL_LINK_NOARG(SvxColorTabPage, SelectColorModeHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxColorTabPage, SelectColorModeHdl_Impl, weld::Toggleable&, void)
 {
     if (m_xRbRGB->get_active())
         eCM = ColorModel::RGB;

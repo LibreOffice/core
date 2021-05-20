@@ -137,7 +137,7 @@ IMPL_LINK_NOARG(MacroWarning, DisableBtnHdl, weld::Button&, void)
     m_xDialog->response(RET_CANCEL);
 }
 
-IMPL_LINK_NOARG(MacroWarning, AlwaysTrustCheckHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(MacroWarning, AlwaysTrustCheckHdl, weld::Toggleable&, void)
 {
     const bool bEnable = (mnActSecLevel < 2 || mxAlwaysTrustCB->get_active());
     mxEnableBtn->set_sensitive(bEnable);

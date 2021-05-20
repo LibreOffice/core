@@ -463,7 +463,7 @@ IMPL_LINK( ScPivotFilterDlg, LbSelectHdl, weld::ComboBox&, rLb, void )
     }
 }
 
-IMPL_LINK(ScPivotFilterDlg, CheckBoxHdl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(ScPivotFilterDlg, CheckBoxHdl, weld::Toggleable&, rBox, void)
 {
     // update the value lists when dealing with uppercase/lowercase
 

@@ -48,7 +48,7 @@ private:
     std::unique_ptr<weld::Button> m_xBtnEdit;
 
     DECL_LINK(BtnHdl, weld::Button&, void);
-    DECL_LINK(TurnOnHdl, weld::ToggleButton&, void);
+    DECL_LINK(TurnOnHdl, weld::Toggleable&, void);
 };
 
 class ScHeaderPage : public ScHFPage

@@ -587,7 +587,7 @@ void  SwDropCapsPage::Reset(const SfxItemSet *rSet)
     bModified = false;
 }
 
-IMPL_LINK_NOARG(SwDropCapsPage, ClickHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwDropCapsPage, ClickHdl, weld::Toggleable&, void)
 {
     bool bChecked = m_xDropCapsBox->get_active();
 
@@ -615,7 +615,7 @@ IMPL_LINK_NOARG(SwDropCapsPage, ClickHdl, weld::ToggleButton&, void)
     bModified = true;
 }
 
-IMPL_LINK_NOARG(SwDropCapsPage, WholeWordHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwDropCapsPage, WholeWordHdl, weld::Toggleable&, void)
 {
     m_xDropCapsField->set_sensitive(!m_xWholeWordCB->get_active());
     m_xSwitchText->set_sensitive(!m_xWholeWordCB->get_active());

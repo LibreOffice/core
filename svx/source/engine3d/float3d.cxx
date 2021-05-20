@@ -2194,7 +2194,7 @@ void Svx3DWin::Resize()
     SfxDockingWindow::Resize();
 }
 
-IMPL_LINK_NOARG(Svx3DWin, ClickUpdateHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(Svx3DWin, ClickUpdateHdl, weld::Toggleable&, void)
 {
     bUpdate = m_xBtnUpdate->get_active();
 

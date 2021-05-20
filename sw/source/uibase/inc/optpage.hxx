@@ -61,8 +61,8 @@ class SwContentOptPage : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xFieldHiddenCB;
     std::unique_ptr<weld::CheckButton> m_xFieldHiddenParaCB;
 
-    DECL_LINK(VertRulerHdl, weld::ToggleButton&, void);
-    DECL_LINK(ShowOutlineContentVisibilityButtonHdl, weld::ToggleButton&, void);
+    DECL_LINK(VertRulerHdl, weld::Toggleable&, void);
+    DECL_LINK(ShowOutlineContentVisibilityButtonHdl, weld::Toggleable&, void);
 public:
     SwContentOptPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~SwContentOptPage() override;
@@ -104,7 +104,7 @@ class SwAddPrinterTabPage : public SfxTabPage
     std::unique_ptr<weld::CheckButton>  m_xPaperFromSetupCB;
     std::unique_ptr<weld::ComboBox> m_xFaxLB;
 
-    DECL_LINK(AutoClickHdl, weld::ToggleButton&, void);
+    DECL_LINK(AutoClickHdl, weld::Toggleable&, void);
     DECL_LINK(SelectHdl, weld::ComboBox&, void);
 
 public:
@@ -205,7 +205,7 @@ class SwTableOptionsTabPage : public SfxTabPage
     std::unique_ptr<weld::RadioButton> m_xFixPropRB;
     std::unique_ptr<weld::RadioButton> m_xVarRB;
 
-    DECL_LINK(CheckBoxHdl, weld::ToggleButton&, void);
+    DECL_LINK(CheckBoxHdl, weld::Toggleable&, void);
 
 public:
     SwTableOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
@@ -362,7 +362,7 @@ private:
     std::unique_ptr<weld::CheckButton> m_xTest10CBox;
 
     void Init();
-    DECL_LINK(AutoClickHdl, weld::ToggleButton&, void);
+    DECL_LINK(AutoClickHdl, weld::Toggleable&, void);
 };
 #endif // DBG_UTIL
 
@@ -376,8 +376,8 @@ class SwCompareOptionsTabPage : public SfxTabPage
     std::unique_ptr<weld::SpinButton> m_xLenNF;
     std::unique_ptr<weld::CheckButton> m_xStoreRsidCB;
 
-    DECL_LINK(ComparisonHdl, weld::ToggleButton&, void);
-    DECL_LINK(IgnoreHdl, weld::ToggleButton&, void);
+    DECL_LINK(ComparisonHdl, weld::Toggleable&, void);
+    DECL_LINK(IgnoreHdl, weld::Toggleable&, void);
 
 public:
     SwCompareOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);

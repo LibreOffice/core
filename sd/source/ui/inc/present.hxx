@@ -63,8 +63,8 @@ private:
     std::unique_ptr<weld::Label> m_xMonitorExternal;
     std::unique_ptr<weld::Label> m_xExternal;
 
-    DECL_LINK(ChangeRangeHdl, weld::ToggleButton&, void);
-    DECL_LINK(ClickWindowPresentationHdl, weld::ToggleButton&, void);
+    DECL_LINK(ChangeRangeHdl, weld::Toggleable&, void);
+    DECL_LINK(ClickWindowPresentationHdl, weld::Toggleable&, void);
     void ChangePause();
     DECL_LINK(ChangePauseHdl, weld::FormattedSpinButton&, void);
 

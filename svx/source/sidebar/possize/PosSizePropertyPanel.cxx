@@ -428,7 +428,7 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosYHdl, weld::MetricSpinButton&, v
     }
 }
 
-IMPL_LINK_NOARG( PosSizePropertyPanel, ClickAutoHdl, weld::ToggleButton&, void )
+IMPL_LINK_NOARG( PosSizePropertyPanel, ClickAutoHdl, weld::Toggleable&, void )
 {
     if ( mxCbxScale->get_active() )
     {

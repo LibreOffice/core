@@ -29,7 +29,7 @@ namespace dbaui
         sal_Int32       m_nPrevValue;
         void            SetValue( sal_Int32 nVal );
 
-        DECL_LINK(CbClickHdl, weld::ToggleButton&, void);
+        DECL_LINK(CbClickHdl, weld::Toggleable&, void);
 
         std::unique_ptr<weld::MetricSpinButton> m_xMF_VALUE;
         std::unique_ptr<weld::CheckButton> m_xCB_STANDARD;

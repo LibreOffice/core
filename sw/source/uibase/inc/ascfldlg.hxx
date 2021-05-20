@@ -44,7 +44,7 @@ class SwAsciiFilterDlg : public SfxDialogController
     std::unique_ptr<weld::CheckButton> m_xIncludeBOM_CB;
 
     DECL_LINK(CharSetSelHdl, weld::ComboBox&, void);
-    DECL_LINK(LineEndHdl, weld::ToggleButton&, void);
+    DECL_LINK(LineEndHdl, weld::Toggleable&, void);
     void SetCRLF(LineEnd eEnd);
     LineEnd GetCRLF() const;
     void SetIncludeBOM(bool bIncludeBOM);

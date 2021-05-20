@@ -83,7 +83,7 @@ TrendlineResources::TrendlineResources(weld::Builder& rBuilder, const SfxItemSet
     rInterceptFormatter.ClearMinValue();
     rInterceptFormatter.ClearMaxValue();
 
-    Link<weld::ToggleButton&,void> aLink = LINK(this, TrendlineResources, SelectTrendLine);
+    Link<weld::Toggleable&,void> aLink = LINK(this, TrendlineResources, SelectTrendLine);
     m_xRB_Linear->connect_toggled( aLink );
     m_xRB_Logarithmic->connect_toggled( aLink );
     m_xRB_Exponential->connect_toggled( aLink );
@@ -105,7 +105,7 @@ TrendlineResources::TrendlineResources(weld::Builder& rBuilder, const SfxItemSet
 TrendlineResources::~TrendlineResources()
 {}
 
-IMPL_LINK_NOARG(TrendlineResources, SelectTrendLine, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(TrendlineResources, SelectTrendLine, weld::Toggleable&, void)
 {
     if (m_xRB_Linear->get_active())
         m_eTrendLineType = SvxChartRegress::Linear;
@@ -427,7 +427,7 @@ void TrendlineResources::SetNbPoints( sal_Int32 nNbPoints )
     UpdateControlStates();
 }
 
-IMPL_LINK_NOARG(TrendlineResources, ShowEquation, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(TrendlineResources, ShowEquation, weld::Toggleable&, void)
 {
     m_xEE_XName->set_sensitive(m_xCB_ShowEquation->get_active());
     m_xEE_YName->set_sensitive(m_xCB_ShowEquation->get_active());

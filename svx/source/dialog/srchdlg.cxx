@@ -646,7 +646,7 @@ void SvxSearchDialog::InitControls_Impl()
     m_xSearchComponent1PB->connect_clicked( aLink2 );
     m_xSearchComponent2PB->connect_clicked( aLink2 );
 
-    Link<weld::ToggleButton&,void> aLink3 = LINK( this, SvxSearchDialog, FlagHdl_Impl );
+    Link<weld::Toggleable&,void> aLink3 = LINK( this, SvxSearchDialog, FlagHdl_Impl );
     m_xReplaceBackwardsCB->connect_toggled( aLink3 );
     m_xWordBtn->connect_toggled( aLink3 );
     m_xSelectionBtn->connect_toggled( aLink3 );
@@ -804,7 +804,7 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
     {
         m_xCalcGrid->show();
         m_xSearchFormattedCB->set_active( aOpt.IsSearchFormatted() );
-        Link<weld::ToggleButton&,void> aLink = LINK( this, SvxSearchDialog, FlagHdl_Impl );
+        Link<weld::Toggleable&,void> aLink = LINK( this, SvxSearchDialog, FlagHdl_Impl );
         m_xCalcSearchInLB->connect_changed( LINK( this, SvxSearchDialog, LBSelectHdl_Impl ) );
         m_xRowsBtn->connect_toggled( aLink );
         m_xColumnsBtn->connect_toggled( aLink );
@@ -1125,7 +1125,7 @@ IMPL_LINK( SvxSearchDialog, LBSelectHdl_Impl, weld::ComboBox&, rCtrl, void )
     ClickHdl_Impl(&rCtrl);
 }
 
-IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, weld::ToggleButton&, rCtrl, void )
+IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, weld::Toggleable&, rCtrl, void )
 {
     ClickHdl_Impl(&rCtrl);
 }
@@ -1479,7 +1479,7 @@ IMPL_LINK( SvxSearchDialog, ModifyHdl_Impl, weld::ComboBox&, rEd, void )
     }
 }
 
-IMPL_LINK_NOARG(SvxSearchDialog, TemplateHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxSearchDialog, TemplateHdl_Impl, weld::Toggleable&, void)
 {
     if ( pImpl->bSaveToModule )
         SaveToModule_Impl();

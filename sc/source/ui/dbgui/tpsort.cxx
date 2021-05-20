@@ -796,7 +796,7 @@ void ScTabPageSortOptions::FillUserSortListBox()
 
 // Handler:
 
-IMPL_LINK( ScTabPageSortOptions, EnableHdl, weld::ToggleButton&, rButton, void )
+IMPL_LINK( ScTabPageSortOptions, EnableHdl, weld::Toggleable&, rButton, void )
 {
     if (&rButton == m_xBtnCopyResult.get())
     {
@@ -838,7 +838,7 @@ IMPL_LINK(ScTabPageSortOptions, SelOutPosHdl, weld::ComboBox&, rLb, void)
     }
 }
 
-IMPL_LINK_NOARG(ScTabPageSortOptions, SortDirHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ScTabPageSortOptions, SortDirHdl, weld::Toggleable&, void)
 {
     if (m_xBtnTopDown->get_active())
         m_xBtnHeader->set_label(aStrColLabel);

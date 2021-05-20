@@ -132,7 +132,7 @@ void TitlesAndObjectsTabPage::commitToModel()
     }
 }
 
-IMPL_LINK_NOARG(TitlesAndObjectsTabPage, ChangeCheckBoxHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(TitlesAndObjectsTabPage, ChangeCheckBoxHdl, weld::Toggleable&, void)
 {
     ChangeHdl(nullptr);
 }

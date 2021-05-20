@@ -423,7 +423,7 @@ void ChineseDictionaryDialog::setDirectionAndTextConversionOptions( bool bDirect
     updateAfterDirectionChange();
 }
 
-IMPL_LINK_NOARG(ChineseDictionaryDialog, DirectionHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ChineseDictionaryDialog, DirectionHdl, weld::Toggleable&, void)
 {
     updateAfterDirectionChange();
 }

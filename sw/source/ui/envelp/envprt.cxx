@@ -76,7 +76,7 @@ SwEnvPrtPage::~SwEnvPrtPage()
     m_xPrt.clear();
 }
 
-IMPL_LINK_NOARG(SwEnvPrtPage, ClickHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwEnvPrtPage, ClickHdl, weld::Toggleable&, void)
 {
     // Envelope from bottom, otherwise Envelope from top
     const bool bLowerActive = m_xBottomButton->get_active();
@@ -84,7 +84,7 @@ IMPL_LINK_NOARG(SwEnvPrtPage, ClickHdl, weld::ToggleButton&, void)
     m_xLower->set_visible(bLowerActive);
 }
 
-IMPL_LINK(SwEnvPrtPage, LowerHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SwEnvPrtPage, LowerHdl, weld::Toggleable&, rButton, void)
 {
     for (int i = ENV_HOR_LEFT; i <= ENV_VER_RGHT; ++i)
     {
@@ -96,7 +96,7 @@ IMPL_LINK(SwEnvPrtPage, LowerHdl, weld::ToggleButton&, rButton, void)
     }
 }
 
-IMPL_LINK(SwEnvPrtPage, UpperHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SwEnvPrtPage, UpperHdl, weld::Toggleable&, rButton, void)
 {
     for (int i = ENV_HOR_LEFT; i <= ENV_VER_RGHT; ++i)
     {

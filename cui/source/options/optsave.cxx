@@ -470,7 +470,7 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
     m_xODFVersionLB->save_value();
 }
 
-IMPL_LINK(SvxSaveTabPage, AutoClickHdl_Impl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(SvxSaveTabPage, AutoClickHdl_Impl, weld::Toggleable&, rBox, void)
 {
     if (&rBox != m_xAutoSaveCB.get())
         return;

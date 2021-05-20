@@ -196,7 +196,7 @@ void SafeModeDialog::applyChanges()
         css::uno::Reference< css::task::XInteractionHandler >());
 }
 
-IMPL_LINK(SafeModeDialog, RadioBtnHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SafeModeDialog, RadioBtnHdl, weld::Toggleable&, rButton, void)
 {
     if (!rButton.get_active())
         return;
@@ -324,7 +324,7 @@ IMPL_LINK(SafeModeDialog, CreateZipBtnHdl, weld::Button&, /*rBtn*/, void)
     aDialog.run();
 }
 
-IMPL_LINK(SafeModeDialog, CheckBoxHdl, weld::ToggleButton&, /*pCheckBox*/, void)
+IMPL_LINK(SafeModeDialog, CheckBoxHdl, weld::Toggleable&, /*pCheckBox*/, void)
 {
     const bool bEnable(
         mxCBCheckProfilesafeConfig->get_active() ||

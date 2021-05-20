@@ -664,7 +664,7 @@ namespace svt
 
             case PropFlags::Checked:
             {
-                weld::ToggleButton* pToggleButton = dynamic_cast<weld::ToggleButton*>(pControl);
+                weld::Toggleable* pToggleButton = dynamic_cast<weld::Toggleable*>(pControl);
                 assert(pToggleButton && "OControlAccess::implSetControlProperty: invalid control/property combination!");
 
                 bool bChecked = false;
@@ -752,7 +752,7 @@ namespace svt
 
             case PropFlags::Checked:
             {
-                const weld::ToggleButton* pToggleButton = dynamic_cast<const weld::ToggleButton*>(pControl);
+                const weld::Toggleable* pToggleButton = dynamic_cast<const weld::Toggleable*>(pControl);
                 assert(pToggleButton && "OControlAccess::implGetControlProperty: invalid control/property combination!");
 
                 aReturn <<= pToggleButton->get_active();

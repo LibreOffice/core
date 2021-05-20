@@ -82,16 +82,16 @@ private:
 
     DECL_LINK( ApplyToAllButtonClicked, weld::Button&, void );
     DECL_LINK( PlayButtonClicked, weld::Button&, void );
-    DECL_LINK( AutoPreviewClicked, weld::ToggleButton&, void );
+    DECL_LINK( AutoPreviewClicked, weld::Toggleable&, void );
 
     DECL_LINK( TransitionSelected, ValueSet*, void );
-    DECL_LINK( AdvanceSlideRadioButtonToggled, weld::ToggleButton&, void );
+    DECL_LINK( AdvanceSlideRadioButtonToggled, weld::Toggleable&, void );
     DECL_LINK( AdvanceTimeModified, weld::MetricSpinButton&, void );
     DECL_LINK( VariantListBoxSelected, weld::ComboBox&, void );
     DECL_LINK( DurationModifiedHdl, weld::MetricSpinButton&, void );
     DECL_LINK( DurationLoseFocusHdl, weld::Widget&, void );
     DECL_LINK( SoundListBoxSelected, weld::ComboBox&, void );
-    DECL_LINK( LoopSoundBoxChecked, weld::ToggleButton&, void );
+    DECL_LINK( LoopSoundBoxChecked, weld::Toggleable&, void );
     DECL_LINK( EventMultiplexerListener, tools::EventMultiplexerEvent&, void );
     DECL_LINK(LateInitCallback, Timer *, void);
 

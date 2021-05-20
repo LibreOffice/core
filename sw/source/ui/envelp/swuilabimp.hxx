@@ -44,10 +44,10 @@ class SwLabPage : public SfxTabPage
     std::unique_ptr<weld::ComboBox> m_xHiddenSortTypeBox;
     std::unique_ptr<weld::Label> m_xFormatInfo;
 
-    DECL_LINK(AddrHdl, weld::ToggleButton&, void);
+    DECL_LINK(AddrHdl, weld::Toggleable&, void);
     DECL_LINK(DatabaseHdl, weld::ComboBox&, void);
     DECL_LINK(FieldHdl, weld::Button&, void);
-    DECL_LINK(PageHdl, weld::ToggleButton&, void);
+    DECL_LINK(PageHdl, weld::Toggleable&, void);
     DECL_LINK(MakeHdl, weld::ComboBox&, void);
     DECL_LINK(TypeHdl, weld::ComboBox&, void);
 

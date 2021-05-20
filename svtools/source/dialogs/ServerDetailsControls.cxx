@@ -182,7 +182,7 @@ bool DavDetailsContainer::verifyScheme( const OUString& rScheme )
     return bValid;
 }
 
-IMPL_LINK( DavDetailsContainer, ToggledDavsHdl, weld::ToggleButton&, rCheckBox, void )
+IMPL_LINK( DavDetailsContainer, ToggledDavsHdl, weld::Toggleable&, rCheckBox, void )
 {
     // Change default port if needed
     bool bCheckedDavs = rCheckBox.get_active();

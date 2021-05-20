@@ -47,7 +47,7 @@ private: //methods
     void AdaptControlPositionsAndVisibility();
 
 private: //member
-    DECL_LINK(EnableHdl, weld::ToggleButton&, void );
+    DECL_LINK(EnableHdl, weld::Toggleable&, void );
 
     sal_Int32   m_nAllSeriesAxisIndex;
 

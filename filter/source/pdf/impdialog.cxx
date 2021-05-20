@@ -741,18 +741,18 @@ std::unique_ptr<SfxTabPage> ImpPDFTabGeneralPage::Create( weld::Container* pPage
     return std::make_unique<ImpPDFTabGeneralPage>(pPage, pController, *rAttrSet);
 }
 
-IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleAllHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleAllHdl, weld::Toggleable&, void)
 {
     EnableExportNotesPages();
 }
 
-IMPL_LINK_NOARG(ImpPDFTabGeneralPage, TogglePagesHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, TogglePagesHdl, weld::Toggleable&, void)
 {
     TogglePagesHdl();
     EnableExportNotesPages();
 }
 
-IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleSelectionHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleSelectionHdl, weld::Toggleable&, void)
 {
     EnableExportNotesPages();
 }
@@ -773,27 +773,27 @@ void ImpPDFTabGeneralPage::EnableExportNotesPages()
     }
 }
 
-IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl, weld::Toggleable&, void)
 {
     mxFormsFrame->set_sensitive(mxCbExportFormFields->get_active());
 }
 
-IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportNotesPagesHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportNotesPagesHdl, weld::Toggleable&, void)
 {
     mxCbExportOnlyNotesPages->set_sensitive(mxCbExportNotesPages->get_active());
 }
 
-IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleCompressionHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleCompressionHdl, weld::Toggleable&, void)
 {
     mxQualityFrame->set_sensitive(mxRbJPEGCompression->get_active());
 }
 
-IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleReduceImageResolutionHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleReduceImageResolutionHdl, weld::Toggleable&, void)
 {
     mxCoReduceImageResolution->set_sensitive(mxCbReduceImageResolution->get_active());
 }
 
-IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleWatermarkHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleWatermarkHdl, weld::Toggleable&, void)
 {
     mxEdWatermark->set_sensitive(mxCbWatermark->get_active());
     mxFtWatermark->set_sensitive(mxCbWatermark->get_active());
@@ -801,7 +801,7 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleWatermarkHdl, weld::ToggleButton&, v
         mxEdWatermark->grab_focus();
 }
 
-IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleAddStreamHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleAddStreamHdl, weld::Toggleable&, void)
 {
     if (!mxCbAddStream->get_visible())
         return;
@@ -822,7 +822,7 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleAddStreamHdl, weld::ToggleButton&, v
     }
 }
 
-IMPL_LINK_NOARG(ImpPDFTabGeneralPage, TogglePDFVersionOrUniversalAccessibilityHandle, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, TogglePDFVersionOrUniversalAccessibilityHandle, weld::Toggleable&, void)
 {
     const bool bIsPDFA = mxCbPDFA->get_active();
     const bool bIsPDFUA = mxCbPDFUA->get_active();
@@ -1004,7 +1004,7 @@ void ImpPDFTabOpnFtrPage::SetFilterConfigItem( const  ImpPDFTabDialog* pParent )
     }
 }
 
-IMPL_LINK_NOARG(ImpPDFTabOpnFtrPage, ToggleRbPgLyContinueFacingHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ImpPDFTabOpnFtrPage, ToggleRbPgLyContinueFacingHdl, weld::Toggleable&, void)
 {
     ToggleRbPgLyContinueFacingHdl();
 }
@@ -1014,7 +1014,7 @@ void ImpPDFTabOpnFtrPage::ToggleRbPgLyContinueFacingHdl()
     mxCbPgLyFirstOnLeft->set_sensitive(mxRbPgLyContinueFacing->get_active());
 }
 
-IMPL_LINK_NOARG( ImpPDFTabOpnFtrPage, ToggleRbMagnHdl, weld::ToggleButton&, void )
+IMPL_LINK_NOARG( ImpPDFTabOpnFtrPage, ToggleRbMagnHdl, weld::Toggleable&, void )
 {
     mxNumZoom->set_sensitive(mxRbMagnZoom->get_active());
 }
@@ -1043,7 +1043,7 @@ ImpPDFTabViewerPage::~ImpPDFTabViewerPage()
 {
 }
 
-IMPL_LINK_NOARG( ImpPDFTabViewerPage, ToggleRbBookmarksHdl, weld::ToggleButton&, void )
+IMPL_LINK_NOARG( ImpPDFTabViewerPage, ToggleRbBookmarksHdl, weld::Toggleable&, void )
 {
     m_xNumBookmarkLevels->set_sensitive(m_xRbVisibleBookmarkLevels->get_active());
 }
@@ -1438,7 +1438,7 @@ void ImpPDFTabLinksPage::ImplPDFALinkControl( bool bEnableLaunch )
 }
 
 /// Reset the memory of Launch action present when PDF/A-1 was requested
-IMPL_LINK_NOARG(ImpPDFTabLinksPage, ClickRbOpnLnksDefaultHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ImpPDFTabLinksPage, ClickRbOpnLnksDefaultHdl, weld::Toggleable&, void)
 {
     mbOpnLnksDefaultUserState = m_xRbOpnLnksDefault->get_active();
     mbOpnLnksLaunchUserState = m_xRbOpnLnksLaunch->get_active();
@@ -1446,7 +1446,7 @@ IMPL_LINK_NOARG(ImpPDFTabLinksPage, ClickRbOpnLnksDefaultHdl, weld::ToggleButton
 }
 
 /// Reset the memory of a launch action present when PDF/A-1 was requested
-IMPL_LINK_NOARG(ImpPDFTabLinksPage, ClickRbOpnLnksBrowserHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ImpPDFTabLinksPage, ClickRbOpnLnksBrowserHdl, weld::Toggleable&, void)
 {
     mbOpnLnksDefaultUserState = m_xRbOpnLnksDefault->get_active();
     mbOpnLnksLaunchUserState = m_xRbOpnLnksLaunch->get_active();

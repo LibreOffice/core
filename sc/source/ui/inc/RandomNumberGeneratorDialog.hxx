@@ -78,7 +78,7 @@ private:
     DECL_LINK( Parameter1ValueModified, weld::SpinButton&, void );
     DECL_LINK( Parameter2ValueModified, weld::SpinButton&, void );
     DECL_LINK( DistributionChanged, weld::ComboBox&, void );
-    DECL_LINK( CheckChanged, weld::ToggleButton&, void );
+    DECL_LINK( CheckChanged, weld::Toggleable&, void );
 
 };
 

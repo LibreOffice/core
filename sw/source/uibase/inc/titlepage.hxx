@@ -51,10 +51,10 @@ private:
 
     DECL_LINK(OKHdl, weld::Button&, void);
     DECL_LINK(EditHdl, weld::Button&, void);
-    DECL_LINK(RestartNumberingHdl, weld::ToggleButton&, void);
-    DECL_LINK(SetPageNumberHdl, weld::ToggleButton&, void);
+    DECL_LINK(RestartNumberingHdl, weld::Toggleable&, void);
+    DECL_LINK(SetPageNumberHdl, weld::Toggleable&, void);
     DECL_LINK(ValueChangeHdl, weld::SpinButton&, void);
-    DECL_LINK(StartPageHdl, weld::ToggleButton&, void);
+    DECL_LINK(StartPageHdl, weld::Toggleable&, void);
 
 public:
     SwTitlePageDlg(weld::Window* pParent);

@@ -647,7 +647,7 @@ namespace dbaui
         EnableControls();
     }
 
-    IMPL_LINK(OGeneralPageWizard, OnSetupModeSelected, weld::ToggleButton&, rButton, void)
+    IMPL_LINK(OGeneralPageWizard, OnSetupModeSelected, weld::Toggleable&, rButton, void)
     {
         if (!rButton.get_active())
             return;

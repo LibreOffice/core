@@ -165,8 +165,8 @@ private:
     DECL_LINK(LinesChanged_Impl, LinkParamNone*, void);
     DECL_LINK(ModifyDistanceHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(ModifyWidthHdl_Impl, weld::MetricSpinButton&, void);
-    DECL_LINK(SyncHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(RemoveAdjacentCellBorderHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(SyncHdl_Impl, weld::Toggleable&, void);
+    DECL_LINK(RemoveAdjacentCellBorderHdl_Impl, weld::Toggleable&, void);
 
     sal_uInt16          GetPresetImageId(sal_uInt16 nValueSetIdx) const;
     const char*         GetPresetStringId(sal_uInt16 nValueSetIdx) const;

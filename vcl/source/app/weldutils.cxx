@@ -94,7 +94,7 @@ Dialog* AssistantController::getDialog() { return m_xAssistant.get(); }
 
 AssistantController::~AssistantController() {}
 
-void TriStateEnabled::ButtonToggled(weld::ToggleButton& rToggle)
+void TriStateEnabled::ButtonToggled(weld::Toggleable& rToggle)
 {
     if (bTriStateEnabled)
     {

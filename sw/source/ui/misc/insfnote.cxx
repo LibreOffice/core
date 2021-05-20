@@ -74,7 +74,7 @@ IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberEditHdl, weld::Entry&, void)
     m_xOkBtn->set_sensitive( !m_xNumberCharEdit->get_text().isEmpty() );
 }
 
-IMPL_LINK(SwInsFootNoteDlg, NumberToggleHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SwInsFootNoteDlg, NumberToggleHdl, weld::Toggleable&, rButton, void)
 {
     if (!rButton.get_active())
         return;

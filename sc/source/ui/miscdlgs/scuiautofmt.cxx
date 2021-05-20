@@ -151,7 +151,7 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, DblClkHdl, weld::TreeView&, bool)
     return true;
 }
 
-IMPL_LINK(ScAutoFormatDlg, CheckHdl, weld::ToggleButton&, rBtn, void)
+IMPL_LINK(ScAutoFormatDlg, CheckHdl, weld::Toggleable&, rBtn, void)
 {
     ScAutoFormatData* pData = pFormat->findByIndex(nIndex);
     bool bCheck = rBtn.get_active();

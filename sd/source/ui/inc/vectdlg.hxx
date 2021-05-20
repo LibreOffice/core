@@ -66,7 +66,7 @@ class SdVectorizeDlg : public weld::GenericDialogController
     DECL_LINK( ProgressHdl, tools::Long, void );
     DECL_LINK( ClickPreviewHdl, weld::Button&, void );
     DECL_LINK( ClickOKHdl, weld::Button&, void );
-    DECL_LINK( ToggleHdl, weld::ToggleButton&, void );
+    DECL_LINK( ToggleHdl, weld::Toggleable&, void );
     DECL_LINK( ModifyHdl, weld::SpinButton&, void );
     DECL_LINK( MetricModifyHdl, weld::MetricSpinButton&, void );
 

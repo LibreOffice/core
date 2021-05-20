@@ -54,7 +54,7 @@ ScTpFormulaOptions::ScTpFormulaOptions(weld::Container* pPage, weld::DialogContr
     mxBtnSepReset->connect_clicked(aLink2);
     mxBtnCustomCalcDetails->connect_clicked(aLink2);
 
-    Link<weld::ToggleButton&,void> aToggleLink = LINK( this, ScTpFormulaOptions, ToggleHdl );
+    Link<weld::Toggleable&,void> aToggleLink = LINK( this, ScTpFormulaOptions, ToggleHdl );
     mxBtnCustomCalcDefault->connect_toggled(aToggleLink);
     mxBtnCustomCalcCustom->connect_toggled(aToggleLink);
 
@@ -177,7 +177,7 @@ IMPL_LINK( ScTpFormulaOptions, ButtonHdl, weld::Button&, rBtn, void )
         LaunchCustomCalcSettings();
 }
 
-IMPL_LINK( ScTpFormulaOptions, ToggleHdl, weld::ToggleButton&, rBtn, void )
+IMPL_LINK( ScTpFormulaOptions, ToggleHdl, weld::Toggleable&, rBtn, void )
 {
     if (!rBtn.get_active())
         return;

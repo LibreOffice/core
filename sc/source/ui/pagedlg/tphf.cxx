@@ -128,7 +128,7 @@ DeactivateRC ScHFPage::DeactivatePage( SfxItemSet* pSetP )
 
 // Handler:
 
-IMPL_LINK_NOARG(ScHFPage, TurnOnHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ScHFPage, TurnOnHdl, weld::Toggleable&, void)
 {
     SvxHFPage::TurnOnHdl(*m_xTurnOnBox);
 

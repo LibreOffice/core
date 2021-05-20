@@ -200,7 +200,7 @@ void TableDesignWidget::ApplyStyle()
     }
 }
 
-IMPL_LINK_NOARG(TableDesignWidget, implCheckBoxHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(TableDesignWidget, implCheckBoxHdl, weld::Toggleable&, void)
 {
     ApplyOptions();
     FillDesignPreviewControl();

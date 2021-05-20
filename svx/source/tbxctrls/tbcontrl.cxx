@@ -3843,7 +3843,7 @@ ColorListBox::ColorListBox(std::unique_ptr<weld::MenuButton> pControl, TopLevelP
     ShowPreview(m_aSelectedColor);
 }
 
-IMPL_LINK(ColorListBox, ToggleHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(ColorListBox, ToggleHdl, weld::Toggleable&, rButton, void)
 {
     if (rButton.get_active())
         getColorWindow()->GrabFocus();

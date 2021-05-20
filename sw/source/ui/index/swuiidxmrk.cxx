@@ -666,7 +666,7 @@ IMPL_LINK_NOARG(SwIndexMarkPane, NewUserIdxHdl, weld::Button&, void)
     }
 }
 
-IMPL_LINK( SwIndexMarkPane, SearchTypeHdl, weld::ToggleButton&, rBox, void)
+IMPL_LINK( SwIndexMarkPane, SearchTypeHdl, weld::Toggleable&, rBox, void)
 {
     const bool bEnable = rBox.get_active() && rBox.get_sensitive();
     m_xSearchCaseWordOnlyCB->set_sensitive(bEnable);
@@ -1091,7 +1091,7 @@ class SwCreateAuthEntryDlg_Impl : public weld::GenericDialogController
     DECL_LINK(ShortNameHdl, weld::Entry&, void);
     DECL_LINK(EnableHdl, weld::ComboBox&, void);
     DECL_LINK(BrowseHdl, weld::Button&, void);
-    DECL_LINK(PageNumHdl, weld::ToggleButton&, void);
+    DECL_LINK(PageNumHdl, weld::Toggleable&, void);
 
 public:
     SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
@@ -1373,7 +1373,7 @@ IMPL_LINK(SwAuthorMarkPane, CreateEntryHdl, weld::Button&, rButton, void)
     }
 }
 
-IMPL_LINK_NOARG(SwAuthorMarkPane, ChangeSourceHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwAuthorMarkPane, ChangeSourceHdl, weld::Toggleable&, void)
 {
     bool bFromComp = m_xFromComponentRB->get_active();
     bIsFromComponent = bFromComp;
@@ -1856,7 +1856,7 @@ IMPL_LINK_NOARG(SwCreateAuthEntryDlg_Impl, BrowseHdl, weld::Button&, void)
     }
 };
 
-IMPL_LINK_NOARG(SwCreateAuthEntryDlg_Impl, PageNumHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwCreateAuthEntryDlg_Impl, PageNumHdl, weld::Toggleable&, void)
 {
     if (m_xPageCB->get_active())
     {

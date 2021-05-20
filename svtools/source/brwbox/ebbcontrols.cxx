@@ -231,7 +231,7 @@ namespace svt
         OnToggle(*m_xBox);
     }
 
-    IMPL_LINK_NOARG(CheckBoxControl, OnToggle, weld::ToggleButton&, void)
+    IMPL_LINK_NOARG(CheckBoxControl, OnToggle, weld::Toggleable&, void)
     {
         m_aModeState.ButtonToggled(*m_xBox);
         m_aToggleLink.Call(*m_xBox);
@@ -501,7 +501,7 @@ namespace svt
         }
     }
 
-    IMPL_LINK(DateControl, ToggleHdl, weld::ToggleButton&, rButton, void)
+    IMPL_LINK(DateControl, ToggleHdl, weld::Toggleable&, rButton, void)
     {
         if (rButton.get_active())
             m_xCalendar->set_date(static_cast<weld::DateFormatter&>(get_formatter()).GetDate());

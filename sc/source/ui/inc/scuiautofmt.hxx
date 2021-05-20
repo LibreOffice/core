@@ -65,7 +65,7 @@ private:
     void Init           ();
     void UpdateChecks   ();
 
-    DECL_LINK( CheckHdl, weld::ToggleButton&, void );
+    DECL_LINK( CheckHdl, weld::Toggleable&, void );
     DECL_LINK( AddHdl, weld::Button&, void );
     DECL_LINK( RemoveHdl, weld::Button&, void );
     DECL_LINK( SelFmtHdl, weld::TreeView&, void );

@@ -57,11 +57,11 @@ private:
     std::unique_ptr<weld::CheckButton> m_xBtnHidePrint;
 
     // Handler:
-    DECL_LINK(ProtectClickHdl, weld::ToggleButton&, void);
-    DECL_LINK(HideCellClickHdl, weld::ToggleButton&, void);
-    DECL_LINK(HideFormulaClickHdl, weld::ToggleButton&, void);
-    DECL_LINK(HidePrintClickHdl, weld::ToggleButton&, void);
-    void ButtonClick(weld::ToggleButton& rBox);
+    DECL_LINK(ProtectClickHdl, weld::Toggleable&, void);
+    DECL_LINK(HideCellClickHdl, weld::Toggleable&, void);
+    DECL_LINK(HideFormulaClickHdl, weld::Toggleable&, void);
+    DECL_LINK(HidePrintClickHdl, weld::Toggleable&, void);
+    void ButtonClick(weld::Toggleable& rBox);
     void UpdateButtons();
 };
 

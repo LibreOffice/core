@@ -617,7 +617,7 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, weld::Button&, rButton, void )
     }
 }
 
-IMPL_LINK( SaneDlg, ToggleBtnHdl, weld::ToggleButton&, rButton, void )
+IMPL_LINK( SaneDlg, ToggleBtnHdl, weld::Toggleable&, rButton, void )
 {
     if( mrSane.IsOpen() )
     {

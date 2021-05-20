@@ -928,7 +928,7 @@ IMPL_LINK_NOARG(UpdateDialog, selectionHandler, weld::TreeView&, void)
     showDescription( b.makeStringAndClear() );
 }
 
-IMPL_LINK_NOARG(UpdateDialog, allHandler, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(UpdateDialog, allHandler, weld::Toggleable&, void)
 {
     if (m_xAll->get_active())
     {

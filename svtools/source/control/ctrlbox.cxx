@@ -1453,7 +1453,7 @@ IMPL_LINK_NOARG(SvtLineListBox, FocusHdl, weld::Widget&, void)
         m_xLineSet->GrabFocus();
 }
 
-IMPL_LINK(SvtLineListBox, ToggleHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SvtLineListBox, ToggleHdl, weld::Toggleable&, rButton, void)
 {
     if (rButton.get_active())
         FocusHdl(*m_xTopLevel);

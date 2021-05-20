@@ -111,7 +111,7 @@ void ScCalcOptionsDialog::CoupleEmptyAsZeroToStringConversion()
     }
 }
 
-IMPL_LINK(ScCalcOptionsDialog, AsZeroModifiedHdl, weld::ToggleButton&, rCheckBox, void )
+IMPL_LINK(ScCalcOptionsDialog, AsZeroModifiedHdl, weld::Toggleable&, rCheckBox, void )
 {
     maConfig.mbEmptyStringAsZero = mbSelectedEmptyStringAsZero = rCheckBox.get_active();
 }
@@ -127,7 +127,7 @@ IMPL_LINK(ScCalcOptionsDialog, SyntaxModifiedHdl, weld::ComboBox&, rSyntax, void
     maConfig.SetStringRefSyntax(toAddressConvention(rSyntax.get_active()));
 }
 
-IMPL_LINK(ScCalcOptionsDialog, CurrentDocOnlyHdl, weld::ToggleButton&, rCheckBox, void)
+IMPL_LINK(ScCalcOptionsDialog, CurrentDocOnlyHdl, weld::Toggleable&, rCheckBox, void)
 {
     mbWriteConfig = !rCheckBox.get_active();
 }

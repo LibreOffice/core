@@ -728,7 +728,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range2DataModifyHdl, formula::RefEdit&, v
     }
 }
 
-IMPL_LINK_NOARG(ScColRowNameRangesDlg, ColRowToggleHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ScColRowNameRangesDlg, ColRowToggleHdl, weld::Toggleable&, void)
 {
     if (m_xBtnColHead->get_active())
     {

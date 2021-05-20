@@ -87,7 +87,7 @@ private:
 
     static FieldUnit GetCurrentUnit(SfxItemState eState, const SfxPoolItem* pState);
 
-    DECL_LINK( HeaderToggleHdl, weld::ToggleButton&, void );
+    DECL_LINK( HeaderToggleHdl, weld::Toggleable&, void );
     DECL_LINK( HeaderLRMarginHdl, weld::ComboBox&, void);
     DECL_LINK( HeaderSpacingHdl, weld::ComboBox&, void);
     DECL_LINK( HeaderLayoutHdl, weld::ComboBox&, void);

@@ -121,7 +121,7 @@ const char* ScAnalysisOfVarianceDialog::GetUndoNameId()
     return STR_ANALYSIS_OF_VARIANCE_UNDO_NAME;
 }
 
-IMPL_LINK_NOARG( ScAnalysisOfVarianceDialog, FactorChanged, weld::ToggleButton&, void )
+IMPL_LINK_NOARG( ScAnalysisOfVarianceDialog, FactorChanged, weld::Toggleable&, void )
 {
     FactorChanged();
 }

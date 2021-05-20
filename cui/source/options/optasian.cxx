@@ -335,7 +335,7 @@ IMPL_LINK_NOARG(SvxAsianLayoutPage, LanguageHdl, weld::ComboBox&, void)
     m_xEndED->set_text(sEnd);
 }
 
-IMPL_LINK(SvxAsianLayoutPage, ChangeStandardHdl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(SvxAsianLayoutPage, ChangeStandardHdl, weld::Toggleable&, rBox, void)
 {
     bool bCheck = rBox.get_active();
     m_xStartED->set_sensitive(!bCheck);

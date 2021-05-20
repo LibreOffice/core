@@ -141,31 +141,31 @@ DeactivateRC ScTabPageProtection::DeactivatePage( SfxItemSet* pSetP )
     return DeactivateRC::LeavePage;
 }
 
-IMPL_LINK(ScTabPageProtection, ProtectClickHdl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(ScTabPageProtection, ProtectClickHdl, weld::Toggleable&, rBox, void)
 {
     aProtectState.ButtonToggled(rBox);
     ButtonClick(rBox);
 }
 
-IMPL_LINK(ScTabPageProtection, HideCellClickHdl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(ScTabPageProtection, HideCellClickHdl, weld::Toggleable&, rBox, void)
 {
     aHideCellState.ButtonToggled(rBox);
     ButtonClick(rBox);
 }
 
-IMPL_LINK(ScTabPageProtection, HideFormulaClickHdl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(ScTabPageProtection, HideFormulaClickHdl, weld::Toggleable&, rBox, void)
 {
     aHideFormulaState.ButtonToggled(rBox);
     ButtonClick(rBox);
 }
 
-IMPL_LINK(ScTabPageProtection, HidePrintClickHdl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(ScTabPageProtection, HidePrintClickHdl, weld::Toggleable&, rBox, void)
 {
     aHidePrintState.ButtonToggled(rBox);
     ButtonClick(rBox);
 }
 
-void ScTabPageProtection::ButtonClick(weld::ToggleButton& rBox)
+void ScTabPageProtection::ButtonClick(weld::Toggleable& rBox)
 {
     TriState eState = rBox.get_state();
     if (eState == TRISTATE_INDET)

@@ -2241,7 +2241,7 @@ sal_Int32 CustomAnimationPane::fillAnimationLB( bool bHasText )
     return nFirstEffect;
 }
 
-IMPL_LINK(CustomAnimationPane, implToggleHdl, weld::ToggleButton&, rBtn, void)
+IMPL_LINK(CustomAnimationPane, implToggleHdl, weld::Toggleable&, rBtn, void)
 {
     implControlHdl(&rBtn);
 }

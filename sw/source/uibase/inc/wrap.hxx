@@ -79,8 +79,8 @@ class SwWrapTabPage: public SfxTabPage
     virtual DeactivateRC   DeactivatePage(SfxItemSet *pSet) override;
 
     DECL_LINK(RangeModifyHdl, weld::MetricSpinButton&, void);
-    DECL_LINK(WrapTypeHdl, weld::ToggleButton&, void);
-    DECL_LINK(ContourHdl, weld::ToggleButton&, void);
+    DECL_LINK(WrapTypeHdl, weld::Toggleable&, void);
+    DECL_LINK(ContourHdl, weld::Toggleable&, void);
 
     static const sal_uInt16 m_aWrapPageRg[];
 

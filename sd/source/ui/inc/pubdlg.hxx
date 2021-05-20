@@ -183,17 +183,17 @@ private:
     DECL_LINK(NextPageHdl, weld::Button&, void);
     DECL_LINK(LastPageHdl, weld::Button&, void);
 
-    DECL_LINK(DesignHdl, weld::ToggleButton&, void);
+    DECL_LINK(DesignHdl, weld::Toggleable&, void);
     DECL_LINK(DesignSelectHdl, weld::TreeView&, void);
     DECL_LINK(DesignDeleteHdl, weld::Button&, void);
-    DECL_LINK(BaseHdl, weld::ToggleButton&, void);
-    DECL_LINK(ContentHdl, weld::ToggleButton&, void);
-    DECL_LINK(GfxFormatHdl, weld::ToggleButton&, void);
-    DECL_LINK(ResolutionHdl, weld::ToggleButton&, void);
+    DECL_LINK(BaseHdl, weld::Toggleable&, void);
+    DECL_LINK(ContentHdl, weld::Toggleable&, void);
+    DECL_LINK(GfxFormatHdl, weld::Toggleable&, void);
+    DECL_LINK(ResolutionHdl, weld::Toggleable&, void);
     DECL_LINK(ButtonsHdl, ValueSet*, void);
     DECL_LINK(ColorHdl, weld::Button&, void);
-    DECL_LINK(WebServerHdl, weld::ToggleButton&, void);
-    DECL_LINK(SlideChgHdl, weld::ToggleButton&, void);
+    DECL_LINK(WebServerHdl, weld::Toggleable&, void);
+    DECL_LINK(SlideChgHdl, weld::Toggleable&, void);
 
 public:
     SdPublishingDlg(weld::Window* pWindow, DocumentType eDocType);

@@ -280,7 +280,7 @@ void SwLabPage::SetToBusinessCard()
     m_xAddressFrame->hide();
 };
 
-IMPL_LINK_NOARG(SwLabPage, AddrHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwLabPage, AddrHdl, weld::Toggleable&, void)
 {
     OUString aWriting;
 
@@ -323,7 +323,7 @@ IMPL_LINK_NOARG(SwLabPage, FieldHdl, weld::Button&, void)
     m_xWritingEdit->select_region(nStartPos, nEndPos);
 }
 
-IMPL_LINK_NOARG(SwLabPage, PageHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwLabPage, PageHdl, weld::Toggleable&, void)
 {
     MakeHdl(*m_xMakeBox);
 }

@@ -41,7 +41,7 @@ SwLabPrtPage::SwLabPrtPage(weld::Container* pPage, weld::DialogController* pCont
     SetExchangeSupport();
 
     // Install handlers
-    Link<weld::ToggleButton&,void> aLk = LINK(this, SwLabPrtPage, CountHdl);
+    Link<weld::Toggleable&,void> aLk = LINK(this, SwLabPrtPage, CountHdl);
     m_xPageButton->connect_toggled(aLk);
     m_xSingleButton->connect_toggled(aLk);
     m_xPrtSetup->connect_clicked(LINK(this, SwLabPrtPage, PrtSetupHdl));
@@ -71,7 +71,7 @@ IMPL_LINK( SwLabPrtPage, PrtSetupHdl, weld::Button&, rButton, void )
     m_xPrinterInfo->set_label(pPrinter->GetName());
 }
 
-IMPL_LINK(SwLabPrtPage, CountHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SwLabPrtPage, CountHdl, weld::Toggleable&, rButton, void)
 {
     if (!rButton.get_active())
         return;

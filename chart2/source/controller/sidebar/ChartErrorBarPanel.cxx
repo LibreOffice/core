@@ -273,7 +273,7 @@ void ChartErrorBarPanel::Initialize()
 
     updateData();
 
-    Link<weld::ToggleButton&,void> aLink = LINK(this, ChartErrorBarPanel, RadioBtnHdl);
+    Link<weld::Toggleable&,void> aLink = LINK(this, ChartErrorBarPanel, RadioBtnHdl);
     mxRBPosAndNeg->connect_toggled(aLink);
     mxRBPos->connect_toggled(aLink);
     mxRBNeg->connect_toggled(aLink);
@@ -393,7 +393,7 @@ void ChartErrorBarPanel::updateModel(css::uno::Reference<css::frame::XModel> xMo
     doUpdateModel(xModel);
 }
 
-IMPL_LINK_NOARG(ChartErrorBarPanel, RadioBtnHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ChartErrorBarPanel, RadioBtnHdl, weld::Toggleable&, void)
 {
     OUString aCID = getCID(mxModel);
     bool bPos = mxRBPosAndNeg->get_active() || mxRBPos->get_active();

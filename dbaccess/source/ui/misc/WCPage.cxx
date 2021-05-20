@@ -97,7 +97,7 @@ void OCopyTable::SetAppendDataRadio()
     m_pParent->setOperation(CopyTableOperation::AppendData);
 }
 
-IMPL_LINK(OCopyTable, RadioChangeHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(OCopyTable, RadioChangeHdl, weld::Toggleable&, rButton, void)
 {
     if (!rButton.get_active())
         return;
@@ -122,7 +122,7 @@ IMPL_LINK(OCopyTable, RadioChangeHdl, weld::ToggleButton&, rButton, void)
         m_pParent->setOperation( CopyTableOperation::CreateAsView );
 }
 
-IMPL_LINK_NOARG( OCopyTable, KeyClickHdl, weld::ToggleButton&, void )
+IMPL_LINK_NOARG( OCopyTable, KeyClickHdl, weld::Toggleable&, void )
 {
     m_xEdKeyName->set_sensitive(m_xCB_PrimaryColumn->get_active());
     m_xFT_KeyName->set_sensitive(m_xCB_PrimaryColumn->get_active());

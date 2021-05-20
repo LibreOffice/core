@@ -465,8 +465,8 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
 
     // tdf#130548 disable callbacks on the other of a pair of the radiogroup
     // when toggling its partner
-    m_xLandscapeBtn->connect_toggled(Link<weld::ToggleButton&, void>());
-    m_xPortraitBtn->connect_toggled(Link<weld::ToggleButton&, void>());
+    m_xLandscapeBtn->connect_toggled(Link<weld::Toggleable&, void>());
+    m_xPortraitBtn->connect_toggled(Link<weld::Toggleable&, void>());
 
     m_xLandscapeBtn->set_active(bLandscape);
     m_xPortraitBtn->set_active(!bLandscape);
@@ -1010,7 +1010,7 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperSizeModify_Impl, weld::MetricSpinButton&, 
     RangeHdl_Impl();
 }
 
-IMPL_LINK(SvxPageDescPage, SwapOrientation_Impl, weld::ToggleButton&, rBtn, void)
+IMPL_LINK(SvxPageDescPage, SwapOrientation_Impl, weld::Toggleable&, rBtn, void)
 {
     if (!rBtn.get_active())
         return;
@@ -1522,7 +1522,7 @@ void SvxPageDescPage::CalcMargin_Impl()
     }
 }
 
-IMPL_LINK_NOARG(SvxPageDescPage, CenterHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxPageDescPage, CenterHdl_Impl, weld::Toggleable&, void)
 {
     m_aBspWin.SetHorz(m_xHorzBox->get_active());
     m_aBspWin.SetVert(m_xVertBox->get_active());
@@ -1545,7 +1545,7 @@ void SvxPageDescPage::SetCollectionList(const std::vector<OUString> &aList)
     m_xRegisterCB->connect_toggled(LINK(this, SvxPageDescPage, RegisterModify));
 }
 
-IMPL_LINK(SvxPageDescPage, RegisterModify, weld::ToggleButton&, rBox, void)
+IMPL_LINK(SvxPageDescPage, RegisterModify, weld::Toggleable&, rBox, void)
 {
     bool bEnable = false;
     if (rBox.get_active())

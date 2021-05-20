@@ -37,7 +37,7 @@ class BreakPointDialog final : public weld::GenericDialogController
     std::unique_ptr<weld::SpinButton> m_xNumericField;
 
     void CheckButtons();
-    DECL_LINK(CheckBoxHdl, weld::ToggleButton&, void);
+    DECL_LINK(CheckBoxHdl, weld::Toggleable&, void);
     DECL_LINK(EditModifyHdl, weld::ComboBox&, void);
     DECL_LINK(FieldModifyHdl, weld::SpinButton&, void);
     DECL_LINK(ButtonHdl, weld::Button&, void);

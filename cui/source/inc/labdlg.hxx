@@ -73,7 +73,7 @@ private:
     void            SetupType_Impl( SdrCaptionType nType );
     DECL_LINK(ExtensionSelectHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(PositionSelectHdl_Impl, weld::ComboBox&, void);
-    DECL_LINK(LineOptHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(LineOptHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(SelectCaptTypeHdl_Impl, ValueSet*, void);
 
 public:

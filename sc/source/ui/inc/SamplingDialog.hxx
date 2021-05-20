@@ -82,9 +82,9 @@ private:
     DECL_LINK( LoseButtonFocusHandler, formula::RefButton&, void );
     DECL_LINK( SamplingSizeValueModified, weld::SpinButton&, void );
     DECL_LINK( PeriodValueModified, weld::SpinButton&, void );
-    DECL_LINK( ToggleSamplingMethod, weld::ToggleButton&, void );
+    DECL_LINK( ToggleSamplingMethod, weld::Toggleable&, void );
     DECL_LINK( RefInputModifyHandler, formula::RefEdit&, void );
-    DECL_LINK( CheckHdl, weld::ToggleButton&, void );
+    DECL_LINK( CheckHdl, weld::Toggleable&, void );
     void ToggleSamplingMethod();
 };
 

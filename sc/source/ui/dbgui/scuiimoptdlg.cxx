@@ -305,7 +305,7 @@ sal_uInt16 ScImportOptionsDlg::GetCodeFromCombo(const weld::ComboBox& rEd) const
     return nCode;
 }
 
-IMPL_LINK_NOARG(ScImportOptionsDlg, FixedWidthHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ScImportOptionsDlg, FixedWidthHdl, weld::Toggleable&, void)
 {
     bool bEnable = !m_xCbFixed->get_active();
     m_xFtFieldSep->set_sensitive( bEnable );

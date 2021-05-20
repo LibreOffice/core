@@ -626,7 +626,7 @@ IMPL_STATIC_LINK_NOARG(OfaViewTabPage, OnMoreIconsClick, weld::Button&, void)
     comphelper::dispatchCommand(".uno:AdditionsDialog", aArgs);
 }
 
-IMPL_LINK_NOARG( OfaViewTabPage, OnAntialiasingToggled, weld::ToggleButton&, void )
+IMPL_LINK_NOARG( OfaViewTabPage, OnAntialiasingToggled, weld::Toggleable&, void )
 {
     bool bAAEnabled = m_xFontAntiAliasing->get_active();
 
@@ -634,7 +634,7 @@ IMPL_LINK_NOARG( OfaViewTabPage, OnAntialiasingToggled, weld::ToggleButton&, voi
     m_xAAPointLimit->set_sensitive(bAAEnabled);
 }
 
-IMPL_LINK_NOARG(OfaViewTabPage, OnUseSkiaToggled, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(OfaViewTabPage, OnUseSkiaToggled, weld::Toggleable&, void)
 {
     UpdateSkiaStatus();
 }
@@ -1201,7 +1201,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(weld::Container* pPage, weld::DialogCon
     m_xLocaleSettingLB->connect_changed( LINK( this, OfaLanguagesTabPage, LocaleSettingHdl ) );
     m_xDatePatternsED->connect_changed( LINK( this, OfaLanguagesTabPage, DatePatternsHdl ) );
 
-    Link<weld::ToggleButton&,void> aLink( LINK( this, OfaLanguagesTabPage, SupportHdl ) );
+    Link<weld::Toggleable&,void> aLink( LINK( this, OfaLanguagesTabPage, SupportHdl ) );
     m_xAsianSupportCB->connect_toggled( aLink );
     m_xCTLSupportCB->connect_toggled( aLink );
 
@@ -1638,7 +1638,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
     }
 }
 
-IMPL_LINK(OfaLanguagesTabPage, SupportHdl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(OfaLanguagesTabPage, SupportHdl, weld::Toggleable&, rBox, void)
 {
     bool bCheck = rBox.get_active();
     if ( m_xAsianSupportCB.get() == &rBox )

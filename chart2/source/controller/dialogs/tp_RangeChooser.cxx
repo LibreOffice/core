@@ -316,12 +316,12 @@ IMPL_LINK_NOARG(RangeChooserTabPage, ControlEditedHdl, weld::Entry&, void)
     isValid();
 }
 
-IMPL_LINK_NOARG(RangeChooserTabPage, ControlChangedRadioHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(RangeChooserTabPage, ControlChangedRadioHdl, weld::Toggleable&, void)
 {
     ControlChangedHdl(*m_xED_Range);
 }
 
-IMPL_LINK_NOARG(RangeChooserTabPage, ControlChangedCheckBoxHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(RangeChooserTabPage, ControlChangedCheckBoxHdl, weld::Toggleable&, void)
 {
     ControlChangedHdl(*m_xED_Range);
 }

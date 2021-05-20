@@ -171,17 +171,17 @@ private:
     // handler for gallery popup menu button + size
     DECL_LINK(GraphicHdl_Impl, const OString&, void);
     DECL_LINK(SizeHdl_Impl, weld::MetricSpinButton&, void);
-    DECL_LINK(MenuCreateHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(RatioHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(MenuCreateHdl_Impl, weld::Toggleable&, void);
+    DECL_LINK(RatioHdl_Impl, weld::Toggleable&, void);
 
     DECL_LINK(ClickInvisibleHdl_Impl, weld::ComboBox&, void);
     void ClickInvisibleHdl_Impl();
-    DECL_LINK(ChangeStartClickHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(ChangeStartClickHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(ChangeStartListBoxHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(ChangeStartModifyHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(ChangeEndListBoxHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(ChangeEndModifyHdl_Impl, weld::MetricSpinButton&, void);
-    DECL_LINK(ChangeEndClickHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(ChangeEndClickHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(ChangePreviewListBoxHdl_Impl, ColorListBox&, void);
     DECL_LINK(ChangePreviewModifyHdl_Impl, weld::MetricSpinButton&, void);
     void ChangePreviewHdl_Impl(const weld::MetricSpinButton*);
@@ -282,10 +282,10 @@ private:
     DECL_LINK(ChangeNumber2Hdl_Impl, weld::SpinButton&, void);
     DECL_LINK(ClickLoadHdl_Impl, weld::Button&, void);
     DECL_LINK(ClickSaveHdl_Impl, weld::Button&, void);
-    DECL_LINK(ChangeMetricHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(ChangeMetricHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(SelectTypeListBoxHdl_Impl, weld::ComboBox&, void);
     void SelectTypeHdl_Impl(const weld::ComboBox*);
-    void ChangeMetricHdl_Impl(const weld::ToggleButton*);
+    void ChangeMetricHdl_Impl(const weld::Toggleable*);
 
     void CheckChanges_Impl();
 

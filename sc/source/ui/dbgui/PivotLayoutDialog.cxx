@@ -112,7 +112,7 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
     , mxMore(m_xBuilder->weld_expander("more"))
 {
     // Source UI
-    Link<weld::ToggleButton&,void> aLink2 = LINK(this, ScPivotLayoutDialog, ToggleSource);
+    Link<weld::Toggleable&,void> aLink2 = LINK(this, ScPivotLayoutDialog, ToggleSource);
     mxSourceRadioNamedRange->connect_toggled(aLink2);
     mxSourceRadioSelection->connect_toggled(aLink2);
 
@@ -686,7 +686,7 @@ IMPL_LINK_NOARG(ScPivotLayoutDialog, SourceEditModified, formula::RefEdit&, void
     UpdateSourceRange();
 }
 
-IMPL_LINK_NOARG(ScPivotLayoutDialog, ToggleSource, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ScPivotLayoutDialog, ToggleSource, weld::Toggleable&, void)
 {
     ToggleSource();
 }
@@ -701,7 +701,7 @@ void ScPivotLayoutDialog::ToggleSource()
     UpdateSourceRange();
 }
 
-IMPL_LINK_NOARG(ScPivotLayoutDialog, ToggleDestination, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ScPivotLayoutDialog, ToggleDestination, weld::Toggleable&, void)
 {
     ToggleDestination();
 }

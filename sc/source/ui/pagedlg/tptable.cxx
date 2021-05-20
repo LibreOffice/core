@@ -39,7 +39,7 @@ const sal_uInt16 ScTablePage::pPageTableRanges[] =
 static bool lcl_PutVObjModeItem(sal_uInt16  nWhich,
                           SfxItemSet&       rCoreSet,
                           const SfxItemSet& rOldSet,
-                          const weld::ToggleButton& rBtn);
+                          const weld::Toggleable& rBtn);
 
 static bool lcl_PutScaleItem( sal_uInt16    nWhich,
                        SfxItemSet&          rCoreSet,
@@ -351,17 +351,17 @@ DeactivateRC ScTablePage::DeactivatePage( SfxItemSet* pSetP )
 
 // Handler:
 
-IMPL_LINK_NOARG(ScTablePage, PageDirHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ScTablePage, PageDirHdl, weld::Toggleable&, void)
 {
     ShowImage();
 }
 
-IMPL_LINK(ScTablePage, PageNoHdl, weld::ToggleButton&, rBtn, void)
+IMPL_LINK(ScTablePage, PageNoHdl, weld::Toggleable&, rBtn, void)
 {
     PageNoHdl(&rBtn);
 }
 
-void ScTablePage::PageNoHdl(const weld::ToggleButton* pBtn)
+void ScTablePage::PageNoHdl(const weld::Toggleable* pBtn)
 {
     if (m_xBtnPageNo->get_active())
     {
@@ -385,7 +385,7 @@ IMPL_LINK_NOARG(ScTablePage, ScaleHdl, weld::ComboBox&, void)
     m_xBxScalePageNum->set_visible(m_xLbScaleMode->get_active() == SC_TPTABLE_SCALE_TO_PAGES);
 }
 
-IMPL_LINK(ScTablePage, ToggleHdl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(ScTablePage, ToggleHdl, weld::Toggleable&, rBox, void)
 {
     if (&rBox == m_xCbScalePageWidth.get())
     {
@@ -437,7 +437,7 @@ static bool lcl_PutBoolItem( sal_uInt16            nWhich,
 static bool lcl_PutVObjModeItem( sal_uInt16            nWhich,
                          SfxItemSet&        rCoreSet,
                          const SfxItemSet&  rOldSet,
-                         const weld::ToggleButton&    rBtn )
+                         const weld::Toggleable&    rBtn )
 {
     bool bIsChecked   = rBtn.get_active();
     bool bDataChanged =     rBtn.get_saved_state() == (bIsChecked ? 1 : 0)

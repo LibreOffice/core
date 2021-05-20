@@ -44,7 +44,7 @@ class SwMMResultSaveDialog : public SfxDialogController
     std::unique_ptr<weld::Button> m_xOKButton;
 
     DECL_LINK(SaveOutputHdl_Impl, weld::Button& , void);
-    DECL_LINK(DocumentSelectionHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(DocumentSelectionHdl_Impl, weld::Toggleable&, void);
 
 public:
     SwMMResultSaveDialog(weld::Window* pParent);
@@ -69,7 +69,7 @@ class SwMMResultPrintDialog : public SfxDialogController
     DECL_LINK(PrinterChangeHdl_Impl, weld::ComboBox&, void );
     DECL_LINK(PrintHdl_Impl, weld::Button&, void);
     DECL_LINK(PrinterSetupHdl_Impl, weld::Button&, void );
-    DECL_LINK(DocumentSelectionHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(DocumentSelectionHdl_Impl, weld::Toggleable&, void);
 
     void FillInPrinterSettings();
 
@@ -110,8 +110,8 @@ class SwMMResultEmailDialog : public SfxDialogController
     DECL_LINK(SendTypeHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(SendAsHdl_Impl, weld::Button&, void);
     DECL_LINK(SendDocumentsHdl_Impl, weld::Button&, void);
-    DECL_LINK(DocumentSelectionHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(CheckHdl, weld::ToggleButton&, void );
+    DECL_LINK(DocumentSelectionHdl_Impl, weld::Toggleable&, void);
+    DECL_LINK(CheckHdl, weld::Toggleable&, void );
 
     void FillInEmailSettings();
 

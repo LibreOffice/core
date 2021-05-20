@@ -1239,7 +1239,7 @@ IMPL_LINK_NOARG(GalleryBrowser2, SelectObjectHdl, weld::TreeView&, void)
     ImplUpdateSelection();
 }
 
-IMPL_LINK(GalleryBrowser2, SelectTbxHdl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(GalleryBrowser2, SelectTbxHdl, weld::Toggleable&, rBox, void)
 {
     if (&rBox == mxIconButton.get())
         SetMode(rBox.get_active() ? GALLERYBROWSERMODE_ICON : GALLERYBROWSERMODE_LIST);

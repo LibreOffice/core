@@ -249,7 +249,7 @@ void PageHeaderPanel::NotifyItemUpdate(
     }
 }
 
-IMPL_LINK_NOARG( PageHeaderPanel, HeaderToggleHdl, weld::ToggleButton&, void )
+IMPL_LINK_NOARG( PageHeaderPanel, HeaderToggleHdl, weld::Toggleable&, void )
 {
     bool IsChecked = mxHeaderToggle->get_active();
     mpHeaderItem->SetValue(IsChecked);

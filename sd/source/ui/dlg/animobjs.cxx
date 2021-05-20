@@ -361,7 +361,7 @@ IMPL_LINK_NOARG(AnimationWindow, ClickLastHdl, weld::Button&, void)
     UpdateControl();
 }
 
-IMPL_LINK_NOARG(AnimationWindow, ClickRbtHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(AnimationWindow, ClickRbtHdl, weld::Toggleable&, void)
 {
     if (m_FrameList.empty() || m_xRbtGroup->get_active())
     {

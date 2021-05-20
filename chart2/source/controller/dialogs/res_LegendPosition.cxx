@@ -158,7 +158,7 @@ void LegendPositionResources::writeToModel( const css::uno::Reference< frame::XM
     }
 }
 
-IMPL_LINK_NOARG(LegendPositionResources, PositionEnableHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(LegendPositionResources, PositionEnableHdl, weld::Toggleable&, void)
 {
     bool bEnable = !m_xCbxShow || m_xCbxShow->get_active();
 
@@ -218,7 +218,7 @@ void LegendPositionResources::writeToItemSet( SfxItemSet& rOutAttrs ) const
     rOutAttrs.Put( SfxBoolItem(SCHATTR_LEGEND_SHOW, !m_xCbxShow || m_xCbxShow->get_active()) );
 }
 
-IMPL_LINK (LegendPositionResources, PositionChangeHdl, weld::ToggleButton&, rRadio, void)
+IMPL_LINK (LegendPositionResources, PositionChangeHdl, weld::Toggleable&, rRadio, void)
 {
     //for each radio click there are coming two change events
     //first uncheck of previous button -> ignore that call

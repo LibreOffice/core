@@ -387,14 +387,15 @@ SwInsertDBColAutoPilot::~SwInsertDBColAutoPilot()
 {
 }
 
-IMPL_LINK( SwInsertDBColAutoPilot, PageHdl, weld::ToggleButton&, rButton, void )
+IMPL_LINK( SwInsertDBColAutoPilot, PageHdl, weld::Toggleable&, rButton, void )
 {
     if (!rButton.get_active())
         return;
 
     bool bShowTable = m_xRbAsTable->get_active();
 
-    m_xHeadFrame->set_label(MnemonicGenerator::EraseAllMnemonicChars(rButton.get_label().replace('_', '~')));
+    weld::RadioButton& rRadio = dynamic_cast<weld::RadioButton&>(rButton);
+    m_xHeadFrame->set_label(MnemonicGenerator::EraseAllMnemonicChars(rRadio.get_label().replace('_', '~')));
 
     m_xLbTextDbColumn->set_visible( !bShowTable );
     m_xIbDbcolToEdit->set_visible( !bShowTable );
@@ -421,7 +422,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, PageHdl, weld::ToggleButton&, rButton, void )
     TVSelectHdl( bShowTable ? *m_xLbTableDbColumn : *m_xLbTextDbColumn );
 }
 
-IMPL_LINK( SwInsertDBColAutoPilot, DBFormatHdl, weld::ToggleButton&, rButton, void )
+IMPL_LINK( SwInsertDBColAutoPilot, DBFormatHdl, weld::Toggleable&, rButton, void )
 {
     if (!rButton.get_active())
         return;
@@ -801,7 +802,7 @@ IMPL_LINK_NOARG(SwInsertDBColAutoPilot, CBSelectHdl, weld::ComboBox&, void)
     }
 }
 
-IMPL_LINK_NOARG(SwInsertDBColAutoPilot, HeaderHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwInsertDBColAutoPilot, HeaderHdl, weld::Toggleable&, void)
 {
     bool bEnable = m_xCbTableHeadon->get_active();
     m_xRbHeadlColnms->set_sensitive( bEnable );

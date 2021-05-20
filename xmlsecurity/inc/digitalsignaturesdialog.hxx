@@ -72,7 +72,7 @@ private:
     std::unique_ptr<weld::Button>      m_xStartCertMgrBtn;
     std::unique_ptr<weld::Button>      m_xCloseBtn;
 
-    DECL_LINK(AdESCompliantCheckBoxHdl, weld::ToggleButton&, void);
+    DECL_LINK(AdESCompliantCheckBoxHdl, weld::Toggleable&, void);
     DECL_LINK(ViewButtonHdl, weld::Button&, void);
     DECL_LINK(AddButtonHdl, weld::Button&, void);
     DECL_LINK(RemoveButtonHdl, weld::Button&, void);

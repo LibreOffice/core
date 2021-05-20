@@ -239,7 +239,7 @@ IMPL_LINK( ScFilterOptionsMgr, EdAreaModifyHdl, formula::RefEdit&, rEd, void )
     pLbCopyArea->set_active( 0 );
 }
 
-IMPL_LINK( ScFilterOptionsMgr, BtnCopyResultHdl, weld::ToggleButton&, rBox, void )
+IMPL_LINK( ScFilterOptionsMgr, BtnCopyResultHdl, weld::Toggleable&, rBox, void )
 {
     if ( &rBox != pBtnCopyResult )
         return;

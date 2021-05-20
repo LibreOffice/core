@@ -49,7 +49,7 @@ public:
     void fillParameter(ChartTypeParameter& rParameter);
 
 private:
-    DECL_LINK(Dim3DLookCheckHdl, weld::ToggleButton&, void);
+    DECL_LINK(Dim3DLookCheckHdl, weld::Toggleable&, void);
     DECL_LINK(SelectSchemeHdl, weld::ComboBox&, void);
 
 private:
@@ -68,7 +68,7 @@ public:
     void fillParameter(ChartTypeParameter& rParameter);
 
 private:
-    DECL_LINK(SortByXValuesCheckHdl, weld::ToggleButton&, void);
+    DECL_LINK(SortByXValuesCheckHdl, weld::Toggleable&, void);
 
 private:
     std::unique_ptr<weld::CheckButton> m_xCB_XValueSorting;
@@ -85,8 +85,8 @@ public:
     void fillParameter(ChartTypeParameter& rParameter);
 
 private:
-    DECL_LINK(StackingChangeHdl, weld::ToggleButton&, void);
-    DECL_LINK(StackingEnableHdl, weld::ToggleButton&, void);
+    DECL_LINK(StackingChangeHdl, weld::Toggleable&, void);
+    DECL_LINK(StackingEnableHdl, weld::Toggleable&, void);
 
 private:
     std::unique_ptr<weld::CheckButton> m_xCB_Stacked;

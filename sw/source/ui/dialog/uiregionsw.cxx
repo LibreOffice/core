@@ -398,7 +398,7 @@ SwEditRegionDlg::SwEditRegionDlg(weld::Window* pParent, SwWrtShell& rWrtSh)
     bDontCheckPasswd = false;
 }
 
-bool SwEditRegionDlg::CheckPasswd(weld::ToggleButton* pBox)
+bool SwEditRegionDlg::CheckPasswd(weld::Toggleable* pBox)
 {
     if (bDontCheckPasswd)
         return true;
@@ -799,7 +799,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl, weld::Button&, void)
 }
 
 // Toggle protect
-IMPL_LINK(SwEditRegionDlg, ChangeProtectHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SwEditRegionDlg, ChangeProtectHdl, weld::Toggleable&, rButton, void)
 {
     if (!CheckPasswd(&rButton))
         return;
@@ -816,7 +816,7 @@ IMPL_LINK(SwEditRegionDlg, ChangeProtectHdl, weld::ToggleButton&, rButton, void)
 }
 
 // Toggle hide
-IMPL_LINK( SwEditRegionDlg, ChangeHideHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK( SwEditRegionDlg, ChangeHideHdl, weld::Toggleable&, rButton, void)
 {
     if (!CheckPasswd(&rButton))
         return;
@@ -834,7 +834,7 @@ IMPL_LINK( SwEditRegionDlg, ChangeHideHdl, weld::ToggleButton&, rButton, void)
 }
 
 // Toggle edit in readonly
-IMPL_LINK(SwEditRegionDlg, ChangeEditInReadonlyHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SwEditRegionDlg, ChangeEditInReadonlyHdl, weld::Toggleable&, rButton, void)
 {
     if (!CheckPasswd(&rButton))
         return;
@@ -920,7 +920,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, ChangeDismissHdl, weld::Button&, void)
 }
 
 // link CheckBox to file?
-IMPL_LINK(SwEditRegionDlg, UseFileHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SwEditRegionDlg, UseFileHdl, weld::Toggleable&, rButton, void)
 {
     if (!CheckPasswd(&rButton))
         return;
@@ -1131,7 +1131,7 @@ IMPL_LINK(SwEditRegionDlg, FileNameEntryHdl, weld::Entry&, rEdit, void)
     }
 }
 
-IMPL_LINK(SwEditRegionDlg, DDEHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SwEditRegionDlg, DDEHdl, weld::Toggleable&, rButton, void)
 {
     if (!CheckPasswd(&rButton))
         return;
@@ -1231,7 +1231,7 @@ void SwEditRegionDlg::ChangePasswd(bool bChange)
     });
 }
 
-IMPL_LINK_NOARG(SwEditRegionDlg, TogglePasswdHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwEditRegionDlg, TogglePasswdHdl, weld::Toggleable&, void)
 {
     ChangePasswd(false);
 }
@@ -1593,14 +1593,14 @@ std::unique_ptr<SfxTabPage> SwInsertSectionTabPage::Create(weld::Container* pPag
     return std::make_unique<SwInsertSectionTabPage>(pPage, pController, *rAttrSet);
 }
 
-IMPL_LINK(SwInsertSectionTabPage, ChangeHideHdl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(SwInsertSectionTabPage, ChangeHideHdl, weld::Toggleable&, rBox, void)
 {
     bool bHide = rBox.get_active();
     m_xConditionED->set_sensitive(bHide);
     m_xConditionFT->set_sensitive(bHide);
 }
 
-IMPL_LINK(SwInsertSectionTabPage, ChangeProtectHdl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(SwInsertSectionTabPage, ChangeProtectHdl, weld::Toggleable&, rBox, void)
 {
     bool bCheck = rBox.get_active();
     m_xPasswdCB->set_sensitive(bCheck);
@@ -1639,7 +1639,7 @@ void SwInsertSectionTabPage::ChangePasswd(bool bChange)
         m_aNewPasswd.realloc(0);
 }
 
-IMPL_LINK_NOARG(SwInsertSectionTabPage, TogglePasswdHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwInsertSectionTabPage, TogglePasswdHdl, weld::Toggleable&, void)
 {
     ChangePasswd(false);
 }
@@ -1657,7 +1657,7 @@ IMPL_LINK_NOARG(SwInsertSectionTabPage, NameEditHdl, weld::ComboBox&, void)
             m_xCurName->find_text(aName) == -1);
 }
 
-IMPL_LINK(SwInsertSectionTabPage, UseFileHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SwInsertSectionTabPage, UseFileHdl, weld::Toggleable&, rButton, void)
 {
     if (rButton.get_active())
     {
@@ -1698,7 +1698,7 @@ IMPL_LINK_NOARG(SwInsertSectionTabPage, FileSearchHdl, weld::Button&, void)
     m_pDocInserter->StartExecuteModal( LINK( this, SwInsertSectionTabPage, DlgClosedHdl ) );
 }
 
-IMPL_LINK( SwInsertSectionTabPage, DDEHdl, weld::ToggleButton&, rButton, void )
+IMPL_LINK( SwInsertSectionTabPage, DDEHdl, weld::Toggleable&, rButton, void )
 {
     bool bDDE = rButton.get_active();
     bool bFile = m_xFileCB->get_active();
@@ -1774,7 +1774,7 @@ SwSectionFootnoteEndTabPage::SwSectionFootnoteEndTabPage(weld::Container* pPage,
     m_xFootnoteNumViewBox->Reload(SwInsertNumTypes::Extended);
     m_xEndNumViewBox->Reload(SwInsertNumTypes::Extended);
 
-    Link<weld::ToggleButton&,void> aLk( LINK( this, SwSectionFootnoteEndTabPage, FootEndHdl));
+    Link<weld::Toggleable&,void> aLk( LINK( this, SwSectionFootnoteEndTabPage, FootEndHdl));
     m_xFootnoteNtAtTextEndCB->connect_toggled( aLk );
     m_xFootnoteNtNumCB->connect_toggled( aLk );
     m_xEndNtAtTextEndCB->connect_toggled( aLk );
@@ -1931,7 +1931,7 @@ std::unique_ptr<SfxTabPage> SwSectionFootnoteEndTabPage::Create( weld::Container
     return std::make_unique<SwSectionFootnoteEndTabPage>(pPage, pController, *rAttrSet);
 }
 
-IMPL_LINK( SwSectionFootnoteEndTabPage, FootEndHdl, weld::ToggleButton&, rBox, void )
+IMPL_LINK( SwSectionFootnoteEndTabPage, FootEndHdl, weld::Toggleable&, rBox, void )
 {
     bool bFoot = m_xFootnoteNtAtTextEndCB.get() == &rBox || m_xFootnoteNtNumCB.get() == &rBox ||
                     m_xFootnoteNtNumFormatCB.get() == &rBox ;

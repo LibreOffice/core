@@ -5588,6 +5588,78 @@ public:
     }
 };
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+GtkWidget* find_label_widget(GtkWidget* pContainer)
+{
+    GtkWidget* pLabel = nullptr;
+    for (GtkWidget* pChild = gtk_widget_get_first_child(pContainer);
+         pChild; pChild = gtk_widget_get_next_sibling(pChild))
+    {
+        if (GTK_IS_LABEL(pChild))
+        {
+            pLabel = pChild;
+            break;
+        }
+        else
+        {
+            pLabel = find_label_widget(pChild);
+            if (pLabel)
+                break;
+        }
+    }
+    return pLabel;
+}
+#else
+GtkWidget* find_label_widget(GtkContainer* pContainer)
+{
+    GList* pChildren = gtk_container_get_children(pContainer);
+
+    GtkWidget* pChild = nullptr;
+    for (GList* pCandidate = pChildren; pCandidate; pCandidate = pCandidate->next)
+    {
+        if (GTK_IS_LABEL(pCandidate->data))
+        {
+            pChild = GTK_WIDGET(pCandidate->data);
+            break;
+        }
+        else if (GTK_IS_CONTAINER(pCandidate->data))
+        {
+            pChild = find_label_widget(GTK_CONTAINER(pCandidate->data));
+            if (pChild)
+                break;
+        }
+    }
+    g_list_free(pChildren);
+
+    return pChild;
+}
+#endif
+
+GtkWidget* get_label_widget(GtkWidget* pButton)
+{
+#if !GTK_CHECK_VERSION(4, 0, 0)
+    GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(pButton));
+
+    if (GTK_IS_CONTAINER(pChild))
+        pChild = find_label_widget(GTK_CONTAINER(pChild));
+    else if (!GTK_IS_LABEL(pChild))
+        pChild = nullptr;
+
+    return pChild;
+#else
+    return find_label_widget(pButton);
+#endif
+}
+
+void set_label_wrap(GtkLabel* pLabel, bool bWrap)
+{
+#if GTK_CHECK_VERSION(4, 0, 0)
+    gtk_label_set_wrap(pLabel, bWrap);
+#else
+    gtk_label_set_line_wrap(pLabel, bWrap);
+#endif
+}
+
 class GtkInstanceAssistant : public GtkInstanceDialog, public virtual weld::Assistant
 {
 private:
@@ -5629,11 +5701,7 @@ private:
     {
         if (GTK_IS_LABEL(pWidget))
         {
-#if GTK_CHECK_VERSION(4, 0, 0)
-            gtk_label_set_wrap(GTK_LABEL(pWidget), true);
-#else
-            gtk_label_set_line_wrap(GTK_LABEL(pWidget), true);
-#endif
+            ::set_label_wrap(GTK_LABEL(pWidget), true);
             gtk_label_set_width_chars(GTK_LABEL(pWidget), 22);
             gtk_label_set_max_width_chars(GTK_LABEL(pWidget), 22);
         }
@@ -7716,32 +7784,6 @@ private:
             m_pMouseEventBox = m_pWidget;
     }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    static GtkWidget* find_label_widget(GtkContainer* pContainer)
-    {
-        GList* pChildren = gtk_container_get_children(pContainer);
-
-        GtkWidget* pChild = nullptr;
-        for (GList* pCandidate = pChildren; pCandidate; pCandidate = pCandidate->next)
-        {
-            if (GTK_IS_LABEL(pCandidate->data))
-            {
-                pChild = GTK_WIDGET(pCandidate->data);
-                break;
-            }
-            else if (GTK_IS_CONTAINER(pCandidate->data))
-            {
-                pChild = find_label_widget(GTK_CONTAINER(pCandidate->data));
-                if (pChild)
-                    break;
-            }
-        }
-        g_list_free(pChildren);
-
-        return pChild;
-    }
-#endif
-
     // See: https://developer.gnome.org/Buttons/
     void use_custom_content(VirtualDevice* pDevice)
     {
@@ -7773,23 +7815,6 @@ private:
         css_provider_load_from_data(m_pCustomCssProvider, aResult.getStr(), aResult.getLength());
         gtk_style_context_add_provider(pWidgetContext, GTK_STYLE_PROVIDER(m_pCustomCssProvider),
                                        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    }
-
-protected:
-    GtkWidget* get_label_widget()
-    {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(m_pButton));
-
-        if (GTK_IS_CONTAINER(pChild))
-            pChild = find_label_widget(GTK_CONTAINER(pChild));
-        else if (!GTK_IS_LABEL(pChild))
-            pChild = nullptr;
-
-        return pChild;
-#else
-        return nullptr;
-#endif
     }
 
 public:
@@ -7867,20 +7892,10 @@ public:
         return ::get_label(m_pButton);
     }
 
-    virtual void set_label_wrap(bool wrap) override
-    {
-        GtkWidget* pChild = get_label_widget();
-#if GTK_CHECK_VERSION(4, 0, 0)
-        gtk_label_set_wrap(GTK_LABEL(pChild), wrap);
-#else
-        gtk_label_set_line_wrap(GTK_LABEL(pChild), wrap);
-#endif
-    }
-
     virtual void set_font(const vcl::Font& rFont) override
     {
         m_xFont.reset(new vcl::Font(rFont));
-        GtkWidget* pChild = get_label_widget();
+        GtkWidget* pChild = ::get_label_widget(GTK_WIDGET(m_pButton));
         ::set_font(GTK_LABEL(pChild), rFont);
     }
 
@@ -9878,6 +9893,31 @@ public:
 #else
         return gtk_toggle_button_get_inconsistent(GTK_TOGGLE_BUTTON(m_pCheckButton));
 #endif
+    }
+
+    virtual void set_label(const OUString& rText) override
+    {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_check_button_set_label(m_pCheckButton, MapToGtkAccelerator(rText).getStr());
+#else
+        ::set_label(GTK_BUTTON(m_pCheckButton), rText);
+#endif
+    }
+
+    virtual OUString get_label() const override
+    {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        const gchar* pStr = gtk_check_button_get_label(m_pCheckButton);
+        return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+#else
+        return ::get_label(GTK_BUTTON(m_pCheckButton));
+#endif
+    }
+
+    virtual void set_label_wrap(bool bWrap) override
+    {
+        GtkWidget* pChild = ::get_label_widget(GTK_WIDGET(m_pCheckButton));
+        ::set_label_wrap(GTK_LABEL(pChild), bWrap);
     }
 
     virtual void disable_notify_events() override

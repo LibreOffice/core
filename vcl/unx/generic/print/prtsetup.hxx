@@ -85,7 +85,7 @@ private:
     std::unique_ptr<weld::ComboBox> m_xSlotBox;
 
     DECL_LINK(SelectHdl, weld::ComboBox&, void);
-    DECL_LINK(CheckBoxHdl, weld::ToggleButton&, void);
+    DECL_LINK(CheckBoxHdl, weld::Toggleable&, void);
 
 public:
     RTSPaperPage(weld::Widget* pPage, RTSDialog* pDialog);

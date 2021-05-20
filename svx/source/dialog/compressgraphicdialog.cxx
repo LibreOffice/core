@@ -289,7 +289,7 @@ IMPL_LINK_NOARG( CompressGraphicsDialog, ResolutionModifiedHdl, weld::ComboBox&,
     Update();
 }
 
-IMPL_LINK_NOARG( CompressGraphicsDialog, ToggleCompressionRB, weld::ToggleButton&, void )
+IMPL_LINK_NOARG( CompressGraphicsDialog, ToggleCompressionRB, weld::Toggleable&, void )
 {
     bool choice = m_xLosslessRB->get_active();
     m_xCompressionMF->set_sensitive(choice);
@@ -299,7 +299,7 @@ IMPL_LINK_NOARG( CompressGraphicsDialog, ToggleCompressionRB, weld::ToggleButton
     Update();
 }
 
-IMPL_LINK_NOARG( CompressGraphicsDialog, ToggleReduceResolutionRB, weld::ToggleButton&, void )
+IMPL_LINK_NOARG( CompressGraphicsDialog, ToggleReduceResolutionRB, weld::Toggleable&, void )
 {
     bool choice = m_xReduceResolutionCB->get_active();
     m_xMFNewWidth->set_sensitive(choice);

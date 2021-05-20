@@ -138,7 +138,7 @@ SwConvertTableDlg::SwConvertTableDlg(SwView& rView, bool bToTable)
     }
     m_xKeepColumn->save_state();
 
-    Link<weld::ToggleButton&, void> aLk(LINK(this, SwConvertTableDlg, BtnHdl));
+    Link<weld::Toggleable&, void> aLk(LINK(this, SwConvertTableDlg, BtnHdl));
     m_xTabBtn->connect_toggled(aLk);
     m_xSemiBtn->connect_toggled(aLk);
     m_xParaBtn->connect_toggled(aLk);
@@ -172,7 +172,7 @@ IMPL_LINK_NOARG(SwConvertTableDlg, AutoFormatHdl, weld::Button&, void)
         mxTAutoFormat = pDlg->FillAutoFormatOfIndex();
 }
 
-IMPL_LINK(SwConvertTableDlg, BtnHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SwConvertTableDlg, BtnHdl, weld::Toggleable&, rButton, void)
 {
     if (!rButton.get_active())
         return;
@@ -188,13 +188,13 @@ IMPL_LINK(SwConvertTableDlg, BtnHdl, weld::ToggleButton&, rButton, void)
     m_xOtherEd->set_sensitive(m_xOtherBtn->get_active());
 }
 
-IMPL_LINK_NOARG(SwConvertTableDlg, CheckBoxHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwConvertTableDlg, CheckBoxHdl, weld::Toggleable&, void)
 {
     m_xRepeatHeaderCB->set_sensitive(m_xHeaderCB->get_active());
     RepeatHeaderCheckBoxHdl(*m_xRepeatHeaderCB);
 }
 
-IMPL_LINK_NOARG(SwConvertTableDlg, RepeatHeaderCheckBoxHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwConvertTableDlg, RepeatHeaderCheckBoxHdl, weld::Toggleable&, void)
 {
     bool bEnable = m_xHeaderCB->get_active() && m_xRepeatHeaderCB->get_active();
     m_xRepeatRows->set_sensitive(bEnable);

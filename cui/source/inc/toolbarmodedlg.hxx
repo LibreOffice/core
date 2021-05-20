@@ -30,7 +30,7 @@ private:
 
     void UpdateImage(std::u16string_view sFileName);
     int GetActiveRadioButton();
-    DECL_LINK(SelectToolbarmode, weld::ToggleButton&, void);
+    DECL_LINK(SelectToolbarmode, weld::Toggleable&, void);
     DECL_LINK(OnApplyClick, weld::Button&, void);
 };
 

@@ -1046,7 +1046,7 @@ void SlideTransitionPane::updateVariants( size_t nPresetOffset )
     }
 }
 
-IMPL_LINK_NOARG(SlideTransitionPane, AdvanceSlideRadioButtonToggled, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SlideTransitionPane, AdvanceSlideRadioButtonToggled, weld::Toggleable&, void)
 {
     updateControlState();
     applyToSelectedPages(false);
@@ -1090,12 +1090,12 @@ IMPL_LINK_NOARG(SlideTransitionPane, SoundListBoxSelected, weld::ComboBox&, void
     applyToSelectedPages();
 }
 
-IMPL_LINK_NOARG(SlideTransitionPane, LoopSoundBoxChecked, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SlideTransitionPane, LoopSoundBoxChecked, weld::Toggleable&, void)
 {
     applyToSelectedPages();
 }
 
-IMPL_LINK_NOARG(SlideTransitionPane, AutoPreviewClicked, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SlideTransitionPane, AutoPreviewClicked, weld::Toggleable&, void)
 {
     SdOptions* pOptions = SD_MOD()->GetSdOptions(DocumentType::Impress);
     pOptions->SetPreviewTransitions( mxCB_AUTO_PREVIEW->get_active() );
