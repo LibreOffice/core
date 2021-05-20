@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_oox.h>
 #include <cppunit/plugin/TestPlugIn.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestFixture.h>
@@ -20,11 +21,16 @@
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/binaryoutputstream.hxx>
 
+#if USE_TLS_NSS
+#include <nss.h>
+#endif
+
 using namespace css;
 
 class CryptoTest : public CppUnit::TestFixture
 {
 public:
+    virtual ~CryptoTest() override;
     void testCryptoHash();
     void testRoundUp();
     void testStandard2007();
@@ -56,6 +62,13 @@ std::string toString(std::vector<sal_uInt8> const& aInput)
 
     return aStream.str();
 }
+}
+
+CryptoTest::~CryptoTest()
+{
+#if USE_TLS_NSS
+    NSS_Shutdown();
+#endif
 }
 
 void CryptoTest::testCryptoHash()
