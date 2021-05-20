@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9c81a5f5_1d3a83a1",
+        "filename": "sc/source/core/inc/arraysumfunctor.hxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-05-20T14:53:27Z",
+      "side": 1,
+      "message": "The patch you pointed me was updated in 2018.\nSo I\u0027m taking first 2019 version.\nHowever the TODO stills valid.",
+      "parentUuid": "804d1262_acf975af",
+      "revId": "11886f260f3b03fa05ed50d59aebf3e20703dfc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b4b73349_0498d339",
         "filename": "sc/source/core/inc/arraysumfunctor.hxx",
         "patchSetId": 18
@@ -90,6 +108,30 @@
     },
     {
       "key": {
+        "uuid": "2629585c_0b2cf4c8",
+        "filename": "sc/source/core/inc/arraysumfunctor.hxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-05-20T14:53:27Z",
+      "side": 1,
+      "message": "I\u0027ve added a call for it in the statistics check.",
+      "parentUuid": "852cf914_dd857c13",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 103,
+        "endChar": 1
+      },
+      "revId": "11886f260f3b03fa05ed50d59aebf3e20703dfc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "64d7a805_a15535b2",
         "filename": "sc/source/core/tool/arraysumAVX.cxx",
         "patchSetId": 18
@@ -104,6 +146,24 @@
       "revId": "11886f260f3b03fa05ed50d59aebf3e20703dfc8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a22df84a_e3f317fa",
+        "filename": "sc/source/core/tool/arraysumAVX.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-05-20T14:53:27Z",
+      "side": 1,
+      "message": "It\u0027s no longer valid.\nI did check every fucntion used is AVX512.\nThe AVX512VL was used in one of the first implementation tries.",
+      "parentUuid": "64d7a805_a15535b2",
+      "revId": "11886f260f3b03fa05ed50d59aebf3e20703dfc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
