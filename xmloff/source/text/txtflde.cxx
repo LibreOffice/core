@@ -896,7 +896,7 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
         // export text style with the addition of the combined characters
         DBG_ASSERT(nullptr != pCombinedCharactersPropertyState,
                    "need proper PropertyState for combined characters");
-        const XMLPropertyState *aStates[] = { pCombinedCharactersPropertyState.get(), nullptr };
+        o3tl::span<XMLPropertyState> aStates( pCombinedCharactersPropertyState.get(), 1 );
         GetExport().GetTextParagraphExport()->Add(
             XmlStyleFamily::TEXT_TEXT, xRangePropSet,
             aStates);
