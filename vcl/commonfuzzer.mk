@@ -146,6 +146,7 @@ fuzzer_calc_libraries = \
     scfilt \
     scd \
     vbaevents \
+    vbahelper \
     vbaobj \
     sc \
     for \
