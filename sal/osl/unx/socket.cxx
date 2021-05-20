@@ -38,27 +38,7 @@
 #include "unixerrnostring.hxx"
 #include <oslsocket.hxx>
 
-/* defines for poll */
-#ifdef HAVE_POLL_H
-#undef HAVE_POLL_H
-#endif
-
-#if defined(LINUX) || defined(NETBSD) || defined ( FREEBSD ) || \
-    defined (MACOSX) || defined (OPENBSD) || defined(DRAGONFLY)
-#include <sys/poll.h>
-#define HAVE_POLL_H
-#endif /* HAVE_POLL_H */
-
-#if defined(__sun)
 #include <poll.h>
-#define HAVE_POLL_H
-#endif /* __sun */
-
-#ifndef HAVE_POLL_H
-#define POLLIN  0x0001
-#define POLLOUT 0x0002
-#define POLLPRI 0x0004
-#endif /* HAVE_POLL_H */
 
 /* defines for shutdown */
 #define SD_RECEIVE 0
@@ -1787,8 +1767,6 @@ sal_Int32 SAL_CALL osl_writeSocket(
     return BytesSend;
 }
 
-#ifdef HAVE_POLL_H /* poll() */
-
 static bool socket_poll (
     oslSocket        pSocket,
     const TimeValue* pTimeout,
@@ -1832,58 +1810,6 @@ static bool socket_poll (
 
     return ((fds.revents & nEvent) == nEvent);
 }
-
-#else  /* select() */
-
-static sal_Bool socket_poll (
-    oslSocket        pSocket,
-    const TimeValue* pTimeout,
-    short            nEvent)
-{
-    fd_set         fds;
-    struct timeval tv;
-    int            result;
-
-    SAL_WARN_IF( !pSocket, "sal.osl", "undefined socket" );
-    if (0 == pSocket)
-      return sal_False; /* EINVAL */
-
-    pSocket->m_nLastError = 0;
-
-    FD_ZERO(&fds);
-    FD_SET(pSocket->m_Socket, &fds);
-
-    if (pTimeout)
-    {
-        /* Convert to 'timeval' */
-        tv.tv_sec  = pTimeout->Seconds;
-        tv.tv_usec = pTimeout->Nanosec / 1000;
-    }
-
-    result = select (
-        pSocket->m_Socket + 1,
-        (nEvent == POLLIN ) ? PTR_FD_SET(fds) : NULL,
-        (nEvent == POLLOUT) ? PTR_FD_SET(fds) : NULL,
-        (nEvent == POLLPRI) ? PTR_FD_SET(fds) : NULL,
-        (pTimeout)          ? &tv             : NULL);
-
-    if (result < 0)
-    {
-        pSocket->m_nLastError = errno;
-        int nErrno = errno;
-        SAL_WARN( "sal.osl", "select failed: " << UnixErrnoString(nErrno) );
-        return sal_False;
-    }
-    if (result == 0)
-    {
-        /* Timeout */
-        return sal_False;
-    }
-
-    return (FD_ISSET(pSocket->m_Socket, &fds) ? sal_True : sal_False);
-}
-
-#endif /* HAVE_POLL_H */
 
 sal_Bool SAL_CALL osl_isReceiveReady (
     oslSocket pSocket, const TimeValue* pTimeout)
