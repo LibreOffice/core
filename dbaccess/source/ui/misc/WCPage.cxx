@@ -66,13 +66,12 @@ OCopyTable::OCopyTable(weld::Container* pPage, OCopyTableWizard* pWizard)
 
         m_xCB_PrimaryColumn->set_sensitive(m_bPKeyAllowed);
 
-        m_xRB_AppendData->connect_clicked(   LINK( this, OCopyTable, AppendDataClickHdl  ) );
+        m_xRB_AppendData->connect_toggled(  LINK( this, OCopyTable, RadioChangeHdl ) );
+        m_xRB_DefData->connect_toggled(     LINK( this, OCopyTable, RadioChangeHdl ) );
+        m_xRB_Def->connect_toggled(         LINK( this, OCopyTable, RadioChangeHdl ) );
+        m_xRB_View->connect_toggled(        LINK( this, OCopyTable, RadioChangeHdl ) );
 
-        m_xRB_DefData->connect_clicked(      LINK( this, OCopyTable, RadioChangeHdl      ) );
-        m_xRB_Def->connect_clicked(          LINK( this, OCopyTable, RadioChangeHdl      ) );
-        m_xRB_View->connect_clicked(         LINK( this, OCopyTable, RadioChangeHdl      ) );
-
-        m_xCB_PrimaryColumn->connect_toggled(LINK( this, OCopyTable, KeyClickHdl         ) );
+        m_xCB_PrimaryColumn->connect_toggled(LINK( this, OCopyTable, KeyClickHdl ) );
 
         m_xFT_KeyName->set_sensitive(false);
         m_xEdKeyName->set_sensitive(false);
@@ -89,11 +88,6 @@ OCopyTable::~OCopyTable()
 {
 }
 
-IMPL_LINK_NOARG( OCopyTable, AppendDataClickHdl, weld::Button&, void )
-{
-    SetAppendDataRadio();
-}
-
 void OCopyTable::SetAppendDataRadio()
 {
     m_pParent->EnableNextButton(true);
@@ -103,10 +97,17 @@ void OCopyTable::SetAppendDataRadio()
     m_pParent->setOperation(CopyTableOperation::AppendData);
 }
 
-IMPL_LINK(OCopyTable, RadioChangeHdl, weld::Button&, rButton, void)
+IMPL_LINK(OCopyTable, RadioChangeHdl, weld::ToggleButton&, rButton, void)
 {
-    m_pParent->EnableNextButton(&rButton != m_xRB_View.get());
-    bool bKey = m_bPKeyAllowed && &rButton != m_xRB_View.get();
+    if (!rButton.get_active())
+        return;
+    if (m_xRB_AppendData->get_active())
+    {
+        SetAppendDataRadio();
+        return;
+    }
+    m_pParent->EnableNextButton(m_xRB_View->get_active());
+    bool bKey = m_bPKeyAllowed && m_xRB_View->get_active();
     m_xFT_KeyName->set_sensitive(bKey && m_xCB_PrimaryColumn->get_active());
     m_xEdKeyName->set_sensitive(bKey && m_xCB_PrimaryColumn->get_active());
     m_xCB_PrimaryColumn->set_sensitive(bKey);
