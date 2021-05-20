@@ -114,7 +114,7 @@ public:
     DECL_LINK( ModifyHdl, ParaWin&, void );
     DECL_LINK( FxHdl, ParaWin&, void );
 
-    DECL_LINK( MatrixHdl, weld::Button&, void );
+    DECL_LINK( MatrixHdl, weld::ToggleButton&, void );
     DECL_LINK( FormulaHdl, weld::TextView&, void);
     DECL_LINK( FormulaCursorHdl, weld::TextView&, void );
     DECL_LINK( BtnHdl, weld::Button&, void );
@@ -295,7 +295,7 @@ FormulaDlg_Impl::FormulaDlg_Impl(weld::Dialog& rDialog,
     m_xWndFormResult->set_visible( _bSupportFunctionResult );
 
     if ( _bSupportMatrix )
-        m_xBtnMatrix->connect_clicked( LINK( this, FormulaDlg_Impl, MatrixHdl ) );
+        m_xBtnMatrix->connect_toggled( LINK( this, FormulaDlg_Impl, MatrixHdl ) );
     else
         m_xBtnMatrix->hide();
 
@@ -1655,7 +1655,7 @@ IMPL_LINK_NOARG( FormulaDlg_Impl, StructSelHdl, StructPage&, void)
     m_bStructUpdate = true;
 }
 
-IMPL_LINK_NOARG( FormulaDlg_Impl, MatrixHdl, weld::Button&, void)
+IMPL_LINK_NOARG( FormulaDlg_Impl, MatrixHdl, weld::ToggleButton&, void)
 {
     m_bUserMatrixFlag = true;
     UpdateValues(true);
