@@ -266,12 +266,12 @@ ImplPolygon::ImplPolygon( const tools::Rectangle& rBound, const Point& rStart, c
         double          fStep;
         sal_uInt16      nStart;
         sal_uInt16      nEnd;
-
-        if( fDiff < 0. )
+        // #i73608# If startPoint is equal to endPoint, then draw full circle instead of nothing (as Metafiles spec)
+        if( fDiff <= 0. )
             fDiff += F_2PI;
 
         // Proportionally shrink number of points( fDiff / (2PI) );
-        nPoints = std::max( static_cast<sal_uInt16>( ( fDiff * 0.1591549 ) * nPoints ), sal_uInt16(16) );
+        nPoints = std::max( static_cast<sal_uInt16>( ( fDiff / F_2PI ) * nPoints ), sal_uInt16(16) );
         fStep = fDiff / ( nPoints - 1 );
 
         if( PolyStyle::Pie == eStyle )
