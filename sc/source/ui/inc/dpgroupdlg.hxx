@@ -115,7 +115,7 @@ public:
     sal_Int32 GetDatePart() const;
 
 private:
-    DECL_LINK(ClickHdl, weld::Button&, void);
+    DECL_LINK(ToggleHdl, weld::ToggleButton&, void);
     DECL_LINK(CheckHdl, const weld::TreeView::iter_col&, void);
 
     void Check();

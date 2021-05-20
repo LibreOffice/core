@@ -72,8 +72,8 @@ void ScInsertTableDlg::Init_Impl( bool bFromFile )
 {
     m_xLbTables->set_selection_mode(SelectionMode::Multiple);
     m_xBtnBrowse->connect_clicked( LINK( this, ScInsertTableDlg, BrowseHdl_Impl ) );
-    m_xBtnNew->connect_clicked( LINK( this, ScInsertTableDlg, ChoiceHdl_Impl ) );
-    m_xBtnFromFile->connect_clicked( LINK( this, ScInsertTableDlg, ChoiceHdl_Impl ) );
+    m_xBtnNew->connect_toggled( LINK( this, ScInsertTableDlg, ChoiceHdl_Impl ) );
+    m_xBtnFromFile->connect_toggled( LINK( this, ScInsertTableDlg, ChoiceHdl_Impl ) );
     m_xLbTables->connect_changed( LINK( this, ScInsertTableDlg, SelectHdl_Impl ) );
     m_xNfCount->connect_value_changed( LINK( this, ScInsertTableDlg, CountHdl_Impl));
     m_xBtnOk->connect_clicked( LINK( this, ScInsertTableDlg, DoEnterHdl ));
@@ -249,8 +249,11 @@ IMPL_LINK_NOARG(ScInsertTableDlg, CountHdl_Impl, weld::SpinButton&, void)
     DoEnable_Impl();
 }
 
-IMPL_LINK_NOARG(ScInsertTableDlg, ChoiceHdl_Impl, weld::Button&, void)
+IMPL_LINK(ScInsertTableDlg, ChoiceHdl_Impl, weld::ToggleButton&, rButton, void)
 {
+    if (!rButton.get_active())
+        return;
+
     if ( m_xBtnNew->get_active() )
         SetNewTable_Impl();
     else

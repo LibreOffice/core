@@ -233,7 +233,7 @@ ScDPDateGroupDlg::ScDPDateGroupDlg(weld::Window* pParent,
     if( rInfo.mbDateValues )
     {
         mxRbNumDays->set_active(true);
-        ClickHdl(*mxRbNumDays );
+        ToggleHdl(*mxRbNumDays );
 
         double fNumDays = rInfo.mfStep;
         if( fNumDays < 1.0 )
@@ -245,7 +245,7 @@ ScDPDateGroupDlg::ScDPDateGroupDlg(weld::Window* pParent,
     else
     {
         mxRbUnits->set_active(true);
-        ClickHdl(*mxRbUnits);
+        ToggleHdl(*mxRbUnits);
     }
 
     /*  Set the initial focus, currently it is somewhere after calling all the radio
@@ -259,8 +259,8 @@ ScDPDateGroupDlg::ScDPDateGroupDlg(weld::Window* pParent,
     else if( mxLbUnits->get_sensitive() )
         mxLbUnits->grab_focus();
 
-    mxRbNumDays->connect_clicked( LINK( this, ScDPDateGroupDlg, ClickHdl ) );
-    mxRbUnits->connect_clicked( LINK( this, ScDPDateGroupDlg, ClickHdl ) );
+    mxRbNumDays->connect_toggled( LINK( this, ScDPDateGroupDlg, ToggleHdl ) );
+    mxRbUnits->connect_toggled( LINK( this, ScDPDateGroupDlg, ToggleHdl ) );
     mxLbUnits->connect_toggled( LINK( this, ScDPDateGroupDlg, CheckHdl ) );
 }
 
@@ -302,9 +302,11 @@ sal_Int32 ScDPDateGroupDlg::GetDatePart() const
     return nDatePart;
 }
 
-IMPL_LINK(ScDPDateGroupDlg, ClickHdl, weld::Button&, rButton, void)
+IMPL_LINK(ScDPDateGroupDlg, ToggleHdl, weld::ToggleButton&, rButton, void)
 {
-    if (&rButton == mxRbNumDays.get())
+    if (!rButton.get_active())
+        return;
+    if (mxRbNumDays->get_active())
     {
         mxLbUnits->set_sensitive(false);
         // enable and set focus to edit field on clicking "num of days" radio button
@@ -312,7 +314,7 @@ IMPL_LINK(ScDPDateGroupDlg, ClickHdl, weld::Button&, rButton, void)
         mxEdNumDays->grab_focus();
         mxBtnOk->set_sensitive(true);
     }
-    else if (&rButton == mxRbUnits.get())
+    else if (mxRbUnits->get_active())
     {
         mxEdNumDays->set_sensitive(false);
         // enable and set focus to listbox on clicking "units" radio button

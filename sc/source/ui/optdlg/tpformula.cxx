@@ -52,9 +52,11 @@ ScTpFormulaOptions::ScTpFormulaOptions(weld::Container* pPage, weld::DialogContr
 
     Link<weld::Button&,void> aLink2 = LINK( this, ScTpFormulaOptions, ButtonHdl );
     mxBtnSepReset->connect_clicked(aLink2);
-    mxBtnCustomCalcDefault->connect_clicked(aLink2);
-    mxBtnCustomCalcCustom->connect_clicked(aLink2);
     mxBtnCustomCalcDetails->connect_clicked(aLink2);
+
+    Link<weld::ToggleButton&,void> aToggleLink = LINK( this, ScTpFormulaOptions, ToggleHdl );
+    mxBtnCustomCalcDefault->connect_toggled(aToggleLink);
+    mxBtnCustomCalcCustom->connect_toggled(aToggleLink);
 
     mxEdSepFuncArg->connect_insert_text(LINK( this, ScTpFormulaOptions, SepInsertTextHdl ));
     mxEdSepArrayCol->connect_insert_text(LINK( this, ScTpFormulaOptions, ColSepInsertTextHdl ));
@@ -171,12 +173,18 @@ IMPL_LINK( ScTpFormulaOptions, ButtonHdl, weld::Button&, rBtn, void )
 {
     if (&rBtn == mxBtnSepReset.get())
         ResetSeparators();
-    else if (&rBtn == mxBtnCustomCalcDefault.get())
-        UpdateCustomCalcRadioButtons(true);
-    else if (&rBtn == mxBtnCustomCalcCustom.get())
-        UpdateCustomCalcRadioButtons(false);
     else if (&rBtn == mxBtnCustomCalcDetails.get())
         LaunchCustomCalcSettings();
+}
+
+IMPL_LINK( ScTpFormulaOptions, ToggleHdl, weld::ToggleButton&, rBtn, void )
+{
+    if (!rBtn.get_active())
+        return;
+    if (mxBtnCustomCalcDefault->get_active())
+        UpdateCustomCalcRadioButtons(true);
+    else if (mxBtnCustomCalcCustom->get_active())
+        UpdateCustomCalcRadioButtons(false);
 }
 
 IMPL_LINK(ScTpFormulaOptions, SepInsertTextHdl, OUString&, rTest, bool)

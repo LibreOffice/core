@@ -493,11 +493,11 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, const OUString& aDatNa
     mxTableBox->InitTypes( *mxLbType );
     mxTableBox->SetColTypeHdl( LINK( this, ScImportAsciiDlg, ColTypeHdl ) );
 
-    mxRbSeparated->connect_clicked( LINK( this, ScImportAsciiDlg, RbSepFixHdl ) );
-    mxRbFixed->connect_clicked( LINK( this, ScImportAsciiDlg, RbSepFixHdl ) );
+    mxRbSeparated->connect_toggled( LINK( this, ScImportAsciiDlg, RbSepFixHdl ) );
+    mxRbFixed->connect_toggled( LINK( this, ScImportAsciiDlg, RbSepFixHdl ) );
 
     SetupSeparatorCtrls();
-    RbSepFixHdl(*mxRbFixed);
+    RbSepFix();
 
     UpdateVertical();
 
@@ -696,17 +696,21 @@ void ScImportAsciiDlg::UpdateVertical()
         mpDatStream->SetStreamCharSet(meCharSet);
 }
 
-IMPL_LINK(ScImportAsciiDlg, RbSepFixHdl, weld::Button&, rButton, void)
+void ScImportAsciiDlg::RbSepFix()
 {
-    if (&rButton == mxRbFixed.get() || &rButton == mxRbSeparated.get())
-    {
-        weld::WaitObject aWaitObj(m_xDialog.get());
-        if( mxRbFixed->get_active() )
-            mxTableBox->SetFixedWidthMode();
-        else
-            mxTableBox->SetSeparatorsMode();
-        SetupSeparatorCtrls();
-    }
+    weld::WaitObject aWaitObj(m_xDialog.get());
+    if( mxRbFixed->get_active() )
+        mxTableBox->SetFixedWidthMode();
+    else
+        mxTableBox->SetSeparatorsMode();
+    SetupSeparatorCtrls();
+}
+
+IMPL_LINK(ScImportAsciiDlg, RbSepFixHdl, weld::ToggleButton&, rButton, void)
+{
+    if (!rButton.get_active())
+        return;
+    RbSepFix();
 }
 
 IMPL_LINK(ScImportAsciiDlg, SeparatorClickHdl, weld::ToggleButton&, rCtrl, void)

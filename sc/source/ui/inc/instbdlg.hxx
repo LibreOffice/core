@@ -83,7 +83,7 @@ private:
     void    DoEnable_Impl();
 
     DECL_LINK( BrowseHdl_Impl, weld::Button&, void );
-    DECL_LINK( ChoiceHdl_Impl, weld::Button&, void );
+    DECL_LINK( ChoiceHdl_Impl, weld::ToggleButton&, void );
     DECL_LINK( SelectHdl_Impl, weld::TreeView&, void );
     DECL_LINK( CountHdl_Impl, weld::SpinButton&, void );
     DECL_LINK( DoEnterHdl, weld::Button&, void );

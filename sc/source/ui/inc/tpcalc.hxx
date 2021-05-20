@@ -67,7 +67,7 @@ private:
     void            Init();
 
     // Handler:
-    DECL_LINK( RadioClickHdl, weld::Button&, void );
+    DECL_LINK( RadioClickHdl, weld::ToggleButton&, void );
     DECL_LINK( CheckClickHdl, weld::ToggleButton&, void );
 };
 

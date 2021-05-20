@@ -109,7 +109,7 @@ private:
     void                CloseSubdialog();
 
     DECL_LINK( DblClickHdl, weld::TreeView&, bool );
-    DECL_LINK( RadioClickHdl, weld::Button&, void );
+    DECL_LINK( RadioClickHdl, weld::ToggleButton&, void );
     DECL_LINK( ClickHdl, weld::Button&, void );
     DECL_LINK( ButtonClicked, weld::Button&, void );
 
@@ -151,7 +151,7 @@ private:
     /** Searches for a listbox entry, starts search at specified position. */
     sal_Int32 FindListBoxEntry( const weld::ComboBox& rLBox, std::u16string_view rEntry, sal_Int32 nStartPos ) const;
 
-    DECL_LINK( RadioClickHdl, weld::Button&, void );
+    DECL_LINK( RadioClickHdl, weld::ToggleButton&, void );
     DECL_LINK( CheckHdl, weld::ToggleButton&, void );
     DECL_LINK( SelectHdl, weld::ComboBox&, void );
     DECL_LINK( ButtonClicked, weld::Button&, void );
