@@ -594,10 +594,10 @@ bool SwNumberPortion::Format( SwTextFormatInfo &rInf )
         // Height has to be changed
         if ( rInf.IsMulti() )
         {
-            if ( Height() < nDiff )
+            if ( static_cast<SwTwips>(Height()) < nDiff )
                 Height( sal_uInt16( nDiff ) );
         }
-        else if( Width() < nDiff )
+        else if( static_cast<SwTwips>(Width()) < nDiff )
             Width( sal_uInt16(nDiff) );
     }
     return bFull;
@@ -868,7 +868,7 @@ bool SwGrfNumPortion::Format( SwTextFormatInfo &rInf )
             SetHide( true );
     }
 
-    if( Width() < nDiff )
+    if( static_cast<SwTwips>(Width()) < nDiff )
         Width( sal_uInt16(nDiff) );
     return bFull;
 }
@@ -1257,7 +1257,7 @@ bool SwCombinedPortion::Format( SwTextFormatInfo &rInf )
         Height( Height() + nMainAscent - GetAscent() );
         SetAscent( nMainAscent );
     }
-    if( Height() < nMainAscent + nMainDescent )
+    if( static_cast<SwTwips>(Height()) < nMainAscent + nMainDescent )
         Height( nMainAscent + nMainDescent );
 
     // We calculate the x positions of the characters in both lines...
