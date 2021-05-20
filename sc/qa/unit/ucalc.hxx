@@ -22,6 +22,7 @@ class ScUndoCut;
 class Test : public test::BootstrapFixture
 {
 public:
+    sal_uInt32 getUserDefinedFormat(OUString& rCode);
     void checkPrecisionAsShown(OUString& rCode, double fValue, double fExpectedRoundVal);
 
     Test();
@@ -92,6 +93,7 @@ public:
     void testDataArea();
     void testAutofilter();
     void testAutoFilterTimeValue();
+    void testUserDefinedFormats();
     void testAdvancedFilter();
     void testTdf98642();
     void testMergedCells();
@@ -214,6 +216,7 @@ public:
     CPPUNIT_TEST(testToggleRefFlag);
     CPPUNIT_TEST(testAutofilter);
     CPPUNIT_TEST(testAutoFilterTimeValue);
+    CPPUNIT_TEST(testUserDefinedFormats);
     CPPUNIT_TEST(testAdvancedFilter);
     CPPUNIT_TEST(testTdf98642);
     CPPUNIT_TEST(testMergedCells);

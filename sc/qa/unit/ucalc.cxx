@@ -3312,6 +3312,29 @@ void Test::testAutoFilterTimeValue()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testUserDefinedFormats()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    ScPatternAttr aNewAttrs(m_pDoc->GetPool());
+    SfxItemSet& rSet = aNewAttrs.GetItemSet();
+    { // tdf#123748
+        m_pDoc->SetString(ScAddress(0,0,0), "2/25/2019 12:54:00");
+
+        OUString aCode = "HH:MM:SS.000000";
+        sal_Int32 nFormat = getUserDefinedFormat(aCode);
+        rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
+        m_pDoc->ApplyPattern(0, 0, 0, aNewAttrs);
+
+        // Without the fix in place, this test would have failed with
+        // - Expected: 12:54:00.000000
+        // - Actual  : 12:53:59.999999
+        CPPUNIT_ASSERT_EQUAL(OUString("12:54:00.000000"), m_pDoc->GetString(ScAddress(0,0,0)));
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testAdvancedFilter()
 {
     m_pDoc->InsertTab(0, "Test");
@@ -5885,6 +5908,16 @@ void Test::checkPrecisionAsShown( OUString& rCode, double fValue, double fExpect
         OUStringToOString( rCode, RTL_TEXTENCODING_ASCII_US ) +
         "\" is not correctly rounded";
     CPPUNIT_ASSERT_EQUAL_MESSAGE( aMessage.getStr(), fExpectedRoundVal, fRoundValue );
+}
+
+sal_uInt32 Test::getUserDefinedFormat(OUString& rCode)
+{
+    SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
+    sal_Int32 nCheckPos;
+    SvNumFormatType nType;
+    sal_uInt32 nFormat;
+    pFormatter->PutEntry( rCode, nCheckPos, nType, nFormat );
+    return nFormat;
 }
 
 void Test::testPrecisionAsShown()
