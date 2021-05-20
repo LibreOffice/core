@@ -23,7 +23,7 @@
 #include <svx/gallerybinaryengine.hxx>
 #include <svx/galleryobjectcollection.hxx>
 #include <svx/gallery1.hxx>
-#include <svx/galleryobjectbinarystorage.hxx>
+#include <galleryobjectbinarystorage.hxx>
 #include <osl/thread.hxx>
 #include "codec.hxx"
 #include "gallerydrawmodel.hxx"

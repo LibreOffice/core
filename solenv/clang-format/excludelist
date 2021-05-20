@@ -5789,7 +5789,6 @@ include/svtools/embedtransfer.hxx
 include/svtools/extcolorcfg.hxx
 include/svtools/filechangedchecker.hxx
 include/svtools/fontsubstconfig.hxx
-include/svtools/framestatuslistener.hxx
 include/svtools/genericunodialog.hxx
 include/svtools/helpids.h
 include/svtools/helpopt.hxx
@@ -11254,6 +11253,7 @@ svl/source/undo/undo.cxx
 svl/source/uno/pathservice.cxx
 svl/unx/source/svdde/ddedummy.cxx
 svtools/inc/strings.hxx
+svtools/inc/framestatuslistener.hxx
 svtools/inc/table/defaultinputhandler.hxx
 svtools/inc/table/gridtablerenderer.hxx
 svtools/inc/table/tablecontrol.hxx

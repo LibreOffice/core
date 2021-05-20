@@ -16,18 +16,24 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_TEXTCHARACTERSPACINGPOPUP_HXX
-#define INCLUDED_SVX_TEXTCHARACTERSPACINGPOPUP_HXX
 
+#pragma once
+
+#include <rtl/ustring.hxx>
+#include <vector>
 #include <svtools/popupwindowcontroller.hxx>
 
-namespace svx
+class ToolBox;
+class SvxPopupWindowListBox;
+
+class SvxUndoRedoControl final : public svt::PopupWindowController
 {
-class TextCharacterSpacingPopup final : public svt::PopupWindowController
-{
+    std::vector<OUString> aUndoRedoList;
+    OUString aDefaultTooltip;
+
 public:
-    TextCharacterSpacingPopup(const css::uno::Reference<css::uno::XComponentContext>& rContext);
-    virtual ~TextCharacterSpacingPopup() override;
+    SvxUndoRedoControl(const css::uno::Reference<css::uno::XComponentContext>& rContext);
+    virtual ~SvxUndoRedoControl() override;
 
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
     virtual VclPtr<vcl::Window> createVclPopupWindow(vcl::Window* pParent) override;
@@ -38,10 +44,14 @@ public:
 
     // XInitialization
     virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
+
+    virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
+
+    void Do(sal_Int16 nCount);
+
+    void SetText(const OUString& rText);
+
+    void SetInfo(sal_Int32 nCount);
 };
-
-} // end of namespace svx
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

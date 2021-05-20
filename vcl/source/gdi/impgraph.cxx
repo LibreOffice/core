@@ -20,7 +20,7 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
-#include <vcl/SwapFile.hxx>
+#include <SwapFile.hxx>
 
 #include <comphelper/fileformat.h>
 #include <o3tl/make_shared.hxx>

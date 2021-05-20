@@ -18,7 +18,7 @@
  */
 
 #include <cppuhelper/supportsservice.hxx>
-#include <svx/verttexttbxctrl.hxx>
+#include <verttexttbxctrl.hxx>
 #include <svl/languageoptions.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/weld.hxx>

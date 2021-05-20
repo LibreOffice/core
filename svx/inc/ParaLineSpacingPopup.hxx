@@ -16,17 +16,20 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-#ifndef INCLUDED_SFX2_INC_EMOJIPOPUP_HXX
-#define INCLUDED_SFX2_INC_EMOJIPOPUP_HXX
+#pragma once
 
 #include <svtools/popupwindowcontroller.hxx>
 
-class EmojiPopup final : public svt::PopupWindowController
+namespace svx
+{
+class SvxLineSpacingToolBoxControl final : public svt::PopupWindowController
 {
 public:
-    EmojiPopup(const css::uno::Reference<css::uno::XComponentContext>& rContext);
-    virtual ~EmojiPopup() override;
+    explicit SvxLineSpacingToolBoxControl(
+        const css::uno::Reference<css::uno::XComponentContext>& rContext);
+    virtual ~SvxLineSpacingToolBoxControl() override;
+
+    virtual void SAL_CALL execute(sal_Int16 KeyModifier) override;
 
     virtual VclPtr<vcl::Window> createVclPopupWindow(vcl::Window* pParent) override;
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
@@ -38,7 +41,6 @@ public:
     // XInitialization
     virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
 };
-
-#endif
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

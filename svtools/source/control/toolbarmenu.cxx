@@ -24,7 +24,7 @@
 #include <vcl/taskpanelist.hxx>
 #include <vcl/svapp.hxx>
 
-#include <svtools/framestatuslistener.hxx>
+#include <framestatuslistener.hxx>
 #include <svtools/toolbarmenu.hxx>
 
 using namespace ::com::sun::star::uno;
