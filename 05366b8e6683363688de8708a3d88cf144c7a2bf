@@ -22,6 +22,30 @@
       "revId": "05366b8e6683363688de8708a3d88cf144c7a2bf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5909cabd_f9ceb35d",
+        "filename": "offapi/com/sun/star/text/TextTableRow.idl",
+        "patchSetId": 7
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-05-20T09:49:18Z",
+      "side": 1,
+      "message": "I copied only IsSplitAllowed, which seems to be a similar boolean property.\n\nMaybe VOID could mean later that the row is tracked partially, i.e. it contains tracked deleted/inserted cells, but likely that would be unnecessary/redundant, so I will remove it in my next commit. Thanks for your review!",
+      "parentUuid": "e3f837fc_85c685ef",
+      "range": {
+        "startLine": 114,
+        "startChar": 29,
+        "endLine": 114,
+        "endChar": 38
+      },
+      "revId": "05366b8e6683363688de8708a3d88cf144c7a2bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
