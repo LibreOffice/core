@@ -57,11 +57,11 @@ private:
 
     void                FillUnitLB();
 
-    DECL_LINK(ClickAutoPosHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(ClickAutoPosHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(ChangeAttrEditHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(ChangeAttrSpinHdl_Impl, weld::SpinButton&, void);
     DECL_LINK(ChangeAttrListBoxHdl_Impl, weld::ComboBox&, void);
-    DECL_LINK(ChangeAttrClickHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(ChangeAttrClickHdl_Impl, weld::Toggleable&, void);
     void ChangeAttrHdl_Impl(void const *);
 
 public:

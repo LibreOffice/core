@@ -116,8 +116,8 @@ private:
     std::unique_ptr<weld::ComboBox> m_xMouseMiddleLB;
     std::unique_ptr<weld::Button> m_xMoreIcons;
 
-    DECL_LINK(OnAntialiasingToggled, weld::ToggleButton&, void);
-    DECL_LINK(OnUseSkiaToggled, weld::ToggleButton&, void);
+    DECL_LINK(OnAntialiasingToggled, weld::Toggleable&, void);
+    DECL_LINK(OnUseSkiaToggled, weld::Toggleable&, void);
     DECL_STATIC_LINK(OfaViewTabPage, OnMoreIconsClick, weld::Button&, void);
     void UpdateSkiaStatus();
     void HideSkiaWidgets();
@@ -165,7 +165,7 @@ class OfaLanguagesTabPage : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xCTLSupportCB;
     std::unique_ptr<weld::CheckButton> m_xIgnoreLanguageChangeCB;
 
-    DECL_LINK(SupportHdl, weld::ToggleButton&, void);
+    DECL_LINK(SupportHdl, weld::Toggleable&, void);
     DECL_LINK(LocaleSettingHdl, weld::ComboBox&, void);
     DECL_LINK(DatePatternsHdl, weld::Entry&, void);
 

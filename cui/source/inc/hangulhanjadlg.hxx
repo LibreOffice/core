@@ -96,7 +96,7 @@ namespace svx
         bool                       m_bDocumentMode;
 
         Link<LinkParamNone*,void> m_aOptionsChangedLink;
-        Link<weld::ToggleButton&,void> m_aClickByCharacterLink;
+        Link<weld::Toggleable&,void> m_aClickByCharacterLink;
 
         std::unique_ptr<weld::Button> m_xFind;
         std::unique_ptr<weld::Button> m_xIgnore;
@@ -128,8 +128,8 @@ namespace svx
         void    SetChangeHdl( const Link<weld::Button&,void>& _rHdl );
         void    SetChangeAllHdl( const Link<weld::Button&,void>& _rHdl );
 
-        void    SetClickByCharacterHdl( const Link<weld::ToggleButton&,void>& _rHdl );
-        void    SetConversionFormatChangedHdl( const Link<weld::ToggleButton&,void>& _rHdl );
+        void    SetClickByCharacterHdl( const Link<weld::Toggleable&,void>& _rHdl );
+        void    SetConversionFormatChangedHdl( const Link<weld::Toggleable&,void>& _rHdl );
         void    SetFindHdl( const Link<weld::Button&,void>& _rHdl );
 
         OUString  GetCurrentString( ) const;
@@ -164,8 +164,8 @@ namespace svx
         DECL_LINK( OnOption, weld::Button&, void );
         DECL_LINK( OnSuggestionModified, weld::Entry&, void );
         DECL_LINK( OnSuggestionSelected, SuggestionDisplay&, void );
-        DECL_LINK( OnConversionDirectionClicked, weld::ToggleButton&, void );
-        DECL_LINK( ClickByCharacterHdl, weld::ToggleButton&, void );
+        DECL_LINK( OnConversionDirectionClicked, weld::Toggleable&, void );
+        DECL_LINK( ClickByCharacterHdl, weld::Toggleable&, void );
 
         /// fill the suggestion list box with suggestions for the actual input
         void FillSuggestions( const css::uno::Sequence< OUString >& _rSuggestions );

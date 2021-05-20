@@ -99,11 +99,11 @@ private:
     SfxBindings*                                mpBindings;
 
     DECL_LINK( MFLeftIndentMdyHdl, weld::MetricSpinButton&, void );
-    DECL_LINK( CBOXMergnCellClkHdl, weld::ToggleButton&, void );
-    DECL_LINK( CBOXWrapTextClkHdl, weld::ToggleButton&, void );
+    DECL_LINK( CBOXMergnCellClkHdl, weld::Toggleable&, void );
+    DECL_LINK( CBOXWrapTextClkHdl, weld::Toggleable&, void );
     DECL_LINK( AngleModifiedHdl, weld::MetricSpinButton&, void );
-    DECL_LINK( ClickStackHdl, weld::ToggleButton&, void );
-    DECL_LINK( ReferenceEdgeHdl, weld::ToggleButton&, void );
+    DECL_LINK( ClickStackHdl, weld::Toggleable&, void );
+    DECL_LINK( ReferenceEdgeHdl, weld::Toggleable&, void );
 
     void Initialize();
 };

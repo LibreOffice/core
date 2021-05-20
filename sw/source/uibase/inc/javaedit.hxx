@@ -53,7 +53,7 @@ private:
     DECL_LINK(OKHdl, weld::Button&, void);
     DECL_LINK(PrevHdl, weld::Button&, void);
     DECL_LINK(NextHdl, weld::Button&, void);
-    DECL_LINK(RadioButtonHdl, weld::ToggleButton&, void);
+    DECL_LINK(RadioButtonHdl, weld::Toggleable&, void);
     DECL_LINK(InsertFileHdl, weld::Button&, void);
     DECL_LINK(DlgClosedHdl, sfx2::FileDialogHelper *, void);
 

@@ -30,7 +30,7 @@ namespace weld { class FormattedSpinButton; }
 namespace weld { class Image; }
 namespace weld { class RadioButton; }
 namespace weld { class SpinButton; }
-namespace weld { class ToggleButton; }
+namespace weld { class Toggleable; }
 
 class SvNumberFormatter;
 
@@ -87,10 +87,10 @@ private:
     std::unique_ptr<weld::ComboBox> m_xCB_RegressionMovingType;
 
     void UpdateControlStates();
-    DECL_LINK(SelectTrendLine, weld::ToggleButton&, void);
+    DECL_LINK(SelectTrendLine, weld::Toggleable&, void);
     DECL_LINK(ChangeSpinValue, weld::SpinButton&, void);
     DECL_LINK(ChangeFormattedValue, weld::FormattedSpinButton&, void);
-    DECL_LINK(ShowEquation, weld::ToggleButton&, void);
+    DECL_LINK(ShowEquation, weld::Toggleable&, void);
 };
 
 } //  namespace chart

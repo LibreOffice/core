@@ -46,7 +46,7 @@ namespace dbaui
 
         DECL_LINK(OKClickHdl, weld::Button&, void);
         DECL_LINK(LBChangeHdl, weld::ComboBox&, void);
-        DECL_LINK(NaturalToggleHdl, weld::ToggleButton&, void);
+        DECL_LINK(NaturalToggleHdl, weld::Toggleable&, void);
 
         /** setJoinType enables and set the new join type
             @param  _eNewJoinType   the new jointype

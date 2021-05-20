@@ -54,7 +54,7 @@ namespace dbaui
         std::unique_ptr<weld::Label> m_xMaxRowScanLabel;
         std::unique_ptr<weld::SpinButton> m_xMaxRowScan;
 
-        std::map<weld::ToggleButton*, TriState> m_aTriStates;
+        std::map<weld::Toggleable*, TriState> m_aTriStates;
 
         std::vector< BooleanSettingDesc > m_aBooleanSettings;
 
@@ -62,8 +62,8 @@ namespace dbaui
         bool                m_bHasMaxRowScan;
 
     public:
-        DECL_LINK(OnToggleHdl, weld::ToggleButton&, void);
-        DECL_LINK(OnTriStateToggleHdl, weld::ToggleButton&, void);
+        DECL_LINK(OnToggleHdl, weld::Toggleable&, void);
+        DECL_LINK(OnTriStateToggleHdl, weld::Toggleable&, void);
 
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
 
@@ -100,7 +100,7 @@ namespace dbaui
         virtual ~GeneratedValuesPage() override;
 
     private:
-        DECL_LINK(OnAutoToggleHdl, weld::ToggleButton&, void);
+        DECL_LINK(OnAutoToggleHdl, weld::Toggleable&, void);
 
         // subclasses must override this, but it isn't pure virtual
         virtual void        implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;

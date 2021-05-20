@@ -129,8 +129,8 @@ private:
     DECL_LINK(DelHdl_Impl, weld::Button&, void);
     DECL_LINK(DelAllHdl_Impl, weld::Button&, void);
 
-    DECL_LINK(FillTypeCheckHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(TabTypeCheckHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(FillTypeCheckHdl_Impl, weld::Toggleable&, void);
+    DECL_LINK(TabTypeCheckHdl_Impl, weld::Toggleable&, void);
 
     DECL_LINK(SelectHdl_Impl, weld::TreeView&, bool);
     DECL_LINK(ModifyHdl_Impl, weld::ComboBox&, void);

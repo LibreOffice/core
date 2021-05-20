@@ -61,7 +61,7 @@ private:
 
     DECL_LINK(ButtonClicked, weld::Button&, void);
     DECL_LINK(OkHdl, weld::Button&, void);
-    DECL_LINK(SelectToolboxHdl, weld::ToggleButton&, void);
+    DECL_LINK(SelectToolboxHdl, weld::Toggleable&, void);
     DECL_LINK(SelectClassificationHdl, weld::ComboBox&, void);
     DECL_LINK(SelectMarkingHdl, weld::TreeView&, bool);
     DECL_LINK(SelectIPPartNumbersHdl, weld::TreeView&, bool);

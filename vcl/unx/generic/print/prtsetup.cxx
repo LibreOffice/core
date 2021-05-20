@@ -249,7 +249,7 @@ IMPL_LINK( RTSPaperPage, SelectHdl, weld::ComboBox&, rBox, void )
     m_pParent->SetDataModified( true );
 }
 
-IMPL_LINK( RTSPaperPage, CheckBoxHdl, weld::ToggleButton&, /*cBox*/, void )
+IMPL_LINK_NOARG(RTSPaperPage, CheckBoxHdl, weld::Toggleable&, void)
 {
     bool bFromSetup = m_xCbFromSetup->get_active();
     m_pParent->m_aJobData.m_bPapersizeFromSetup = bFromSetup;
@@ -259,10 +259,10 @@ IMPL_LINK( RTSPaperPage, CheckBoxHdl, weld::ToggleButton&, /*cBox*/, void )
     m_xOrientBox->set_sensitive(bFromSetup);
     m_pParent->SetDataModified(true);
 }
+
 /*
  * RTSDevicePage
  */
-
 RTSDevicePage::RTSDevicePage(weld::Widget* pPage, RTSDialog* pParent)
     : m_xBuilder(Application::CreateBuilder(pPage, "vcl/ui/printerdevicepage.ui"))
     , m_pCustomValue(nullptr)

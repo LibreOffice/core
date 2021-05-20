@@ -221,7 +221,7 @@ IMPL_LINK_NOARG( SvBaseLinksDlg, LinksDoubleClickHdl, weld::TreeView&, bool )
     return true;
 }
 
-IMPL_LINK(SvBaseLinksDlg, ToggleHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SvBaseLinksDlg, ToggleHdl, weld::Toggleable&, rButton, void)
 {
     if (!rButton.get_active())
         return;

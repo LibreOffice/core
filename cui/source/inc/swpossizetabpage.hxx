@@ -84,13 +84,13 @@ class SvxSwPosSizeTabPage : public SfxTabPage
     std::unique_ptr<weld::CustomWeld> m_xExampleWN;
 
     DECL_LINK(RangeModifyHdl, weld::Widget&, void);
-    DECL_LINK(RangeModifyClickHdl, weld::ToggleButton&, void);
-    DECL_LINK(AnchorTypeHdl, weld::ToggleButton&, void);
+    DECL_LINK(RangeModifyClickHdl, weld::Toggleable&, void);
+    DECL_LINK(AnchorTypeHdl, weld::Toggleable&, void);
     DECL_LINK(PosHdl, weld::ComboBox&, void);
     DECL_LINK(RelHdl, weld::ComboBox&, void);
-    DECL_LINK(MirrorHdl, weld::ToggleButton&, void);
+    DECL_LINK(MirrorHdl, weld::Toggleable&, void);
     DECL_LINK(ModifyHdl, weld::MetricSpinButton&, void);
-    DECL_LINK(ProtectHdl, weld::ToggleButton&, void);
+    DECL_LINK(ProtectHdl, weld::Toggleable&, void);
 
     void            InitPos(RndStdIds nAnchorType, sal_uInt16 nH, sal_uInt16 nHRel,
                             sal_uInt16 nV,  sal_uInt16 nVRel,

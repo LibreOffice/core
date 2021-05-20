@@ -211,7 +211,7 @@ namespace dbaui
         std::unique_ptr<weld::RadioButton> m_xNATIVEDatabase;
         Link<OMySQLIntroPageSetup *, void> maClickHdl;
 
-        DECL_LINK(OnSetupModeSelected, weld::ToggleButton&, void);
+        DECL_LINK(OnSetupModeSelected, weld::Toggleable&, void);
     };
 
     // OAuthentificationPageSetup
@@ -249,7 +249,7 @@ namespace dbaui
         bool IsTableWizardToBeStarted() const;
         void enableTableWizardCheckBox( bool _bSupportsTableCreation);
 
-        DECL_LINK(OnOpenSelected, weld::ToggleButton&, void);
+        DECL_LINK(OnOpenSelected, weld::Toggleable&, void);
     protected:
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
         virtual void fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;

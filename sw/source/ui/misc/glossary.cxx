@@ -411,7 +411,7 @@ IMPL_LINK( SwGlossaryDlg, NameDoubleClick, weld::TreeView&, rBox, bool )
     return true;
 }
 
-IMPL_LINK_NOARG( SwGlossaryDlg, EnableHdl, weld::ToggleButton&, void )
+IMPL_LINK_NOARG( SwGlossaryDlg, EnableHdl, weld::Toggleable&, void )
 {
     std::unique_ptr<weld::TreeIter> xEntry = m_xCategoryBox->make_iterator();
     bool bEntry = m_xCategoryBox->get_selected(xEntry.get());
@@ -822,7 +822,7 @@ IMPL_LINK_NOARG(SwNewGlosNameDlg, Rename, weld::Button&, void)
         m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK(SwGlossaryDlg, CheckBoxHdl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(SwGlossaryDlg, CheckBoxHdl, weld::Toggleable&, rBox, void)
 {
     SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
     bool bCheck = rBox.get_active();

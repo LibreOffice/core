@@ -153,7 +153,7 @@ void SetFontStyle(std::u16string_view rStyleName, vcl::Font &rFont)
     rFont.SetWeight((nIndex & 0x2) ? WEIGHT_BOLD : WEIGHT_NORMAL);
 }
 
-IMPL_LINK_NOARG(SmPrintOptionsTabPage, SizeButtonClickHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SmPrintOptionsTabPage, SizeButtonClickHdl, weld::Toggleable&, void)
 {
     m_xZoom->set_sensitive(m_xSizeZoomed->get_active());
 }
@@ -267,7 +267,7 @@ IMPL_LINK( SmFontDialog, FontSelectHdl, weld::ComboBox&, rComboBox, void )
     m_aShowFont.SetFont(maFont);
 }
 
-IMPL_LINK_NOARG(SmFontDialog, AttrChangeHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SmFontDialog, AttrChangeHdl, weld::Toggleable&, void)
 {
     if (m_xBoldCheckBox->get_active())
         maFont.SetWeight(WEIGHT_BOLD);
@@ -644,7 +644,7 @@ IMPL_LINK_NOARG( SmDistanceDialog, DefaultButtonClickHdl, weld::Button&, void )
     }
 }
 
-IMPL_LINK( SmDistanceDialog, CheckBoxClickHdl, weld::ToggleButton&, rCheckBox, void )
+IMPL_LINK( SmDistanceDialog, CheckBoxClickHdl, weld::Toggleable&, rCheckBox, void )
 {
     if (&rCheckBox == m_xCheckBox1.get())
     {

@@ -81,7 +81,7 @@ private:
 
     DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent&, void);
     DECL_LINK(implValueSetHdl, ValueSet*, void);
-    DECL_LINK(implCheckBoxHdl, weld::ToggleButton&, void);
+    DECL_LINK(implCheckBoxHdl, weld::Toggleable&, void);
 
     ViewShellBase& mrBase;
 

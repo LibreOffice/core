@@ -42,10 +42,10 @@ class SwMailConfigPage : public SfxTabPage
     std::unique_ptr<weld::Button> m_xServerAuthenticationPB;
     std::unique_ptr<weld::Button> m_xTestPB;
 
-    DECL_LINK(ReplyToHdl, weld::ToggleButton&, void);
+    DECL_LINK(ReplyToHdl, weld::Toggleable&, void);
     DECL_LINK(AuthenticationHdl, weld::Button&, void);
     DECL_LINK(TestHdl, weld::Button&, void);
-    DECL_LINK(SecureHdl, weld::ToggleButton&, void);
+    DECL_LINK(SecureHdl, weld::Toggleable&, void);
 
 public:
     SwMailConfigPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);

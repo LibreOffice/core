@@ -167,7 +167,7 @@ using namespace ::com::sun::star;
         _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Entry>(m_xETHostServer.get()));
         _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Entry>(m_xETBaseDN.get()));
         _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::SpinButton>(m_xNFPortNumber.get()));
-        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ToggleButton>(m_xCBUseSSL.get()));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Toggleable>(m_xCBUseSSL.get()));
     }
     void OLDAPConnectionPageSetup::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
@@ -223,7 +223,7 @@ using namespace ::com::sun::star;
     {
     }
 
-    IMPL_LINK_NOARG(OMySQLIntroPageSetup, OnSetupModeSelected, weld::ToggleButton&, void)
+    IMPL_LINK_NOARG(OMySQLIntroPageSetup, OnSetupModeSelected, weld::Toggleable&, void)
     {
         maClickHdl.Call( this );
     }
@@ -630,7 +630,7 @@ using namespace ::com::sun::star;
     void OSpreadSheetConnectionPageSetup::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
         OConnectionTabPageSetup::fillControls(_rControlList);
-        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ToggleButton>(m_xPasswordrequired.get()));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Toggleable>(m_xPasswordrequired.get()));
 
     }
 
@@ -673,7 +673,7 @@ using namespace ::com::sun::star;
     void OAuthentificationPageSetup::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
         _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Entry>(m_xETUserName.get()));
-        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ToggleButton>(m_xCBPasswordRequired.get()));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Toggleable>(m_xCBPasswordRequired.get()));
     }
 
     void OAuthentificationPageSetup::implInitControls(const SfxItemSet& _rSet, bool /*_bSaveValue*/)
@@ -754,10 +754,10 @@ using namespace ::com::sun::star;
 
     void OFinalDBPageSetup::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
-        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ToggleButton>(m_xCBOpenAfterwards.get()));
-        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ToggleButton>(m_xCBStartTableWizard.get()));
-        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ToggleButton>(m_xRBRegisterDataSource.get()));
-        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ToggleButton>(m_xRBDontregisterDataSource.get()));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Toggleable>(m_xCBOpenAfterwards.get()));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Toggleable>(m_xCBStartTableWizard.get()));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Toggleable>(m_xRBRegisterDataSource.get()));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Toggleable>(m_xRBDontregisterDataSource.get()));
     }
 
     void OFinalDBPageSetup::implInitControls(const SfxItemSet& /*_rSet*/, bool /*_bSaveValue*/)
@@ -775,7 +775,7 @@ using namespace ::com::sun::star;
         return true;
     }
 
-    IMPL_LINK(OFinalDBPageSetup, OnOpenSelected, weld::ToggleButton&, rBox, void)
+    IMPL_LINK(OFinalDBPageSetup, OnOpenSelected, weld::Toggleable&, rBox, void)
     {
         m_xCBStartTableWizard->set_sensitive(rBox.get_sensitive() && rBox.get_active());
     }

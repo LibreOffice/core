@@ -378,7 +378,7 @@ void ChartElementsPanel::Initialize()
     xBroadcaster->addModifyListener(mxListener);
     updateData();
 
-    Link<weld::ToggleButton&,void> aLink = LINK(this, ChartElementsPanel, CheckBoxHdl);
+    Link<weld::Toggleable&,void> aLink = LINK(this, ChartElementsPanel, CheckBoxHdl);
     mxCBTitle->connect_toggled(aLink);
     mxCBSubtitle->connect_toggled(aLink);
     mxCBXAxis->connect_toggled(aLink);
@@ -586,7 +586,7 @@ void ChartElementsPanel::updateModel(css::uno::Reference<css::frame::XModel> xMo
     doUpdateModel(xModel);
 }
 
-IMPL_LINK(ChartElementsPanel, CheckBoxHdl, weld::ToggleButton&, rCheckBox, void)
+IMPL_LINK(ChartElementsPanel, CheckBoxHdl, weld::Toggleable&, rCheckBox, void)
 {
     bool bChecked = rCheckBox.get_active();
     if (&rCheckBox == mxCBTitle.get())

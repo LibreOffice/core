@@ -67,7 +67,7 @@ class SwAutoFormatDlg : public SfxDialogController
     void Init( const SwTableAutoFormat* pSelFormat );
     void UpdateChecks( const SwTableAutoFormat&, bool bEnableBtn );
 
-    DECL_LINK(CheckHdl, weld::ToggleButton&, void);
+    DECL_LINK(CheckHdl, weld::Toggleable&, void);
     DECL_LINK(AddHdl, weld::Button&, void);
     DECL_LINK(RemoveHdl, weld::Button&, void);
     DECL_LINK(RenameHdl, weld::Button&, void);

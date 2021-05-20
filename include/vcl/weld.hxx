@@ -1381,7 +1381,6 @@ public:
     virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) = 0;
     virtual void set_from_icon_name(const OUString& rIconName) = 0;
     virtual OUString get_label() const = 0;
-    virtual void set_label_wrap(bool wrap) = 0;
     void clicked() { signal_clicked(); }
 
     // font size is in points, not pixels, e.g. see Window::[G]etPointFont
@@ -1399,12 +1398,12 @@ public:
     void connect_clicked(const Link<Button&, void>& rLink) { m_aClickHdl = rLink; }
 };
 
-class VCL_DLLPUBLIC ToggleButton : virtual public Button
+class VCL_DLLPUBLIC Toggleable : virtual public Widget
 {
     friend class ::LOKTrigger;
 
 protected:
-    Link<ToggleButton&, void> m_aToggleHdl;
+    Link<Toggleable&, void> m_aToggleHdl;
     TriState m_eSavedValue = TRISTATE_FALSE;
 
     void signal_toggled() { m_aToggleHdl.Call(*this); }
@@ -1447,7 +1446,12 @@ public:
     TriState get_saved_state() const { return m_eSavedValue; }
     bool get_state_changed_from_saved() const { return m_eSavedValue != get_state(); }
 
-    virtual void connect_toggled(const Link<ToggleButton&, void>& rLink) { m_aToggleHdl = rLink; }
+    virtual void connect_toggled(const Link<Toggleable&, void>& rLink) { m_aToggleHdl = rLink; }
+};
+
+class VCL_DLLPUBLIC ToggleButton : virtual public Button, virtual public Toggleable
+{
+    friend class ::LOKTrigger;
 };
 
 struct VCL_DLLPUBLIC TriStateEnabled
@@ -1459,7 +1463,7 @@ struct VCL_DLLPUBLIC TriStateEnabled
         , bTriStateEnabled(true)
     {
     }
-    void ButtonToggled(ToggleButton& rToggle);
+    void ButtonToggled(Toggleable& rToggle);
 };
 
 class VCL_DLLPUBLIC MenuButton : virtual public ToggleButton
@@ -1517,11 +1521,15 @@ class VCL_DLLPUBLIC MenuToggleButton : virtual public MenuButton
 {
 };
 
-class VCL_DLLPUBLIC CheckButton : virtual public ToggleButton
+class VCL_DLLPUBLIC CheckButton : virtual public Toggleable
 {
+public:
+    virtual void set_label(const OUString& rText) = 0;
+    virtual OUString get_label() const = 0;
+    virtual void set_label_wrap(bool wrap) = 0;
 };
 
-class VCL_DLLPUBLIC RadioButton : virtual public ToggleButton
+class VCL_DLLPUBLIC RadioButton : virtual public CheckButton
 {
 };
 

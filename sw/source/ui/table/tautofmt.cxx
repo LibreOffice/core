@@ -111,7 +111,7 @@ SwAutoFormatDlg::~SwAutoFormatDlg()
 
 void SwAutoFormatDlg::Init( const SwTableAutoFormat* pSelFormat )
 {
-    Link<weld::ToggleButton&, void> aLk(LINK(this, SwAutoFormatDlg, CheckHdl));
+    Link<weld::Toggleable&, void> aLk(LINK(this, SwAutoFormatDlg, CheckHdl));
     m_xBtnBorder->connect_toggled(aLk);
     m_xBtnFont->connect_toggled(aLk);
     m_xBtnPattern->connect_toggled(aLk);
@@ -176,7 +176,7 @@ std::unique_ptr<SwTableAutoFormat> SwAutoFormatDlg::FillAutoFormatOfIndex() cons
 }
 
 // Handler:
-IMPL_LINK(SwAutoFormatDlg, CheckHdl, weld::ToggleButton&, rBtn, void)
+IMPL_LINK(SwAutoFormatDlg, CheckHdl, weld::Toggleable&, rBtn, void)
 {
     if (m_nIndex == 255)
         return;

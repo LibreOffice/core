@@ -144,8 +144,8 @@ private:
     DECL_LINK(PaperSizeModifyHdl, weld::ComboBox&, void);
     DECL_LINK(FillColorHdl, ColorListBox&, void);
     DECL_LINK(AssignMasterPage, weld::ComboBox&, void);
-    DECL_LINK(DspBackground, weld::ToggleButton&, void);
-    DECL_LINK(DspObjects, weld::ToggleButton&, void);
+    DECL_LINK(DspBackground, weld::Toggleable&, void);
+    DECL_LINK(DspObjects, weld::Toggleable&, void);
     DECL_LINK(CloseMasterHdl, weld::Button&, void);
     DECL_LINK(EditMasterHdl, weld::Button&, void);
     DECL_LINK(SelectBgHdl, weld::Button&, void);

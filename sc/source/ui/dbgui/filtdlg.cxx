@@ -1003,7 +1003,7 @@ IMPL_LINK(ScFilterDlg, LbSelectHdl, weld::ComboBox&, rLb, void)
     }
 }
 
-IMPL_LINK( ScFilterDlg, CheckBoxHdl, weld::ToggleButton&, rBox, void )
+IMPL_LINK( ScFilterDlg, CheckBoxHdl, weld::Toggleable&, rBox, void )
 {
     //  Column headers:
     //      Field list: Columnxx <-> column header string

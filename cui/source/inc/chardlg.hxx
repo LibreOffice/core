@@ -205,10 +205,10 @@ private:
 
     void SelectHdl_Impl(const weld::ComboBox*);
     DECL_LINK(SelectListBoxHdl_Impl, weld::ComboBox&, void);
-    DECL_LINK(OutlineBtnClickHdl, weld::ToggleButton&, void);
-    DECL_LINK(ShadowBtnClickHdl, weld::ToggleButton&, void);
-    DECL_LINK(HiddenBtnClickHdl, weld::ToggleButton&, void);
-    DECL_LINK(CbClickHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(OutlineBtnClickHdl, weld::Toggleable&, void);
+    DECL_LINK(ShadowBtnClickHdl, weld::Toggleable&, void);
+    DECL_LINK(HiddenBtnClickHdl, weld::Toggleable&, void);
+    DECL_LINK(CbClickHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(ColorBoxSelectHdl_Impl, ColorListBox&, void);
     DECL_LINK(ModifyFontTransparencyHdl_Impl, weld::MetricSpinButton&, void);
 
@@ -272,10 +272,10 @@ private:
     void                UpdatePreview_Impl( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );
     void                SetEscapement_Impl( SvxEscapement nEsc );
 
-    DECL_LINK(PositionHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(RotationHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(AutoPositionHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(FitToLineHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(PositionHdl_Impl, weld::Toggleable&, void);
+    DECL_LINK(RotationHdl_Impl, weld::Toggleable&, void);
+    DECL_LINK(AutoPositionHdl_Impl, weld::Toggleable&, void);
+    DECL_LINK(FitToLineHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(KerningModifyHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(ValueChangedHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(ScaleWidthModifyHdl_Impl, weld::MetricSpinButton&, void);
@@ -317,7 +317,7 @@ private:
     void                SelectCharacter(weld::TreeView* pBox);
     void                SetBracket(sal_Unicode cBracket, bool bStart);
 
-    DECL_LINK(TwoLinesHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(TwoLinesHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(CharacterMapHdl_Impl, weld::TreeView&, void);
 
 public:

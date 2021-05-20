@@ -85,7 +85,7 @@ SvxTextAttrPage::SvxTextAttrPage(weld::Container* pPage, weld::DialogController*
     SetFieldUnit( *m_xMtrFldTop, eFUnit );
     SetFieldUnit( *m_xMtrFldBottom, eFUnit );
 
-    Link<weld::ToggleButton&,void> aLink( LINK( this, SvxTextAttrPage, ClickHdl_Impl ) );
+    Link<weld::Toggleable&,void> aLink( LINK( this, SvxTextAttrPage, ClickHdl_Impl ) );
     m_xTsbAutoGrowWidth->connect_toggled( aLink );
     m_xTsbAutoGrowHeight->connect_toggled( aLink );
     m_xTsbAutoGrowSize->connect_toggled( aLink );
@@ -528,7 +528,7 @@ void SvxTextAttrPage::PointChanged(weld::DrawingArea*,  RectPoint eRP)
     to be moved to a valid and adjacent position.  This position depends on
     the current anchor position and the text writing direction.
 */
-IMPL_LINK_NOARG(SvxTextAttrPage, ClickFullWidthHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxTextAttrPage, ClickFullWidthHdl_Impl, weld::Toggleable&, void)
 {
     if( m_xTsbFullWidth->get_state() != TRISTATE_TRUE )
         return;
@@ -585,7 +585,7 @@ IMPL_LINK_NOARG(SvxTextAttrPage, ClickFullWidthHdl_Impl, weld::ToggleButton&, vo
 |*
 \************************************************************************/
 
-IMPL_LINK(SvxTextAttrPage, ClickHdl_Impl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SvxTextAttrPage, ClickHdl_Impl, weld::Toggleable&, rButton, void)
 {
     if (&rButton == m_xTsbAutoGrowSize.get())
     {

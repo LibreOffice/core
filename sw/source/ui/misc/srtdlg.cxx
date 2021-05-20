@@ -146,7 +146,7 @@ SwSortDlg::SwSortDlg(weld::Window* pParent, SwWrtShell &rShell)
     m_xColEdt3->set_accessible_name(m_xColLbl->get_label());
 
     // initialise
-    Link<weld::ToggleButton&,void> aLk = LINK(this, SwSortDlg, CheckHdl);
+    Link<weld::Toggleable&,void> aLk = LINK(this, SwSortDlg, CheckHdl);
     m_xKeyCB1->connect_toggled( aLk );
     m_xKeyCB2->connect_toggled( aLk );
     m_xKeyCB3->connect_toggled( aLk );
@@ -314,7 +314,7 @@ void SwSortDlg::Apply()
     }
 }
 
-IMPL_LINK( SwSortDlg, DelimHdl, weld::ToggleButton&, rButton, void )
+IMPL_LINK( SwSortDlg, DelimHdl, weld::Toggleable&, rButton, void )
 {
     bool bEnable = &rButton == m_xDelimFreeRB.get() && m_xDelimFreeRB->get_sensitive();
     m_xDelimEdt->set_sensitive( bEnable );
@@ -335,7 +335,7 @@ IMPL_LINK_NOARG(SwSortDlg, DelimCharHdl, weld::Button&, void)
     }
 }
 
-IMPL_LINK( SwSortDlg, CheckHdl, weld::ToggleButton&, rControl, void )
+IMPL_LINK( SwSortDlg, CheckHdl, weld::Toggleable&, rControl, void )
 {
     if (&rControl == m_xRowRB.get())
     {

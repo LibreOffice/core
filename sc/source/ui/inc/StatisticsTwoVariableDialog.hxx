@@ -79,7 +79,7 @@ private:
     void Init();
     void GetRangeFromSelection();
 
-    DECL_LINK( GroupByChanged, weld::ToggleButton&, void );
+    DECL_LINK( GroupByChanged, weld::Toggleable&, void );
     DECL_LINK( ButtonClicked, weld::Button&, void );
     DECL_LINK( GetEditFocusHandler, formula::RefEdit&, void );
     DECL_LINK( GetButtonFocusHandler, formula::RefButton&, void );

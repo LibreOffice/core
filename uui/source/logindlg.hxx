@@ -58,7 +58,7 @@ class LoginDialog : public weld::GenericDialogController
     void            SetRequest();
 
     DECL_LINK(OKHdl_Impl, weld::Button&, void);
-    DECL_LINK(UseSysCredsHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(UseSysCredsHdl_Impl, weld::Toggleable&, void);
 
 public:
     LoginDialog(weld::Window* pParent, LoginFlags nFlags,

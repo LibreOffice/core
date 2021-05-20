@@ -835,7 +835,7 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
 }
 
 // Clickhandler for the radiobuttons of the design-selection
-IMPL_LINK( SdPublishingDlg, DesignHdl, weld::ToggleButton&, rButton, void )
+IMPL_LINK( SdPublishingDlg, DesignHdl, weld::Toggleable&, rButton, void )
 {
     if (!rButton.get_active())
         return;
@@ -904,7 +904,7 @@ IMPL_LINK_NOARG(SdPublishingDlg, DesignDeleteHdl, weld::Button&, void)
 }
 
 // Clickhandler for the other servertypes
-IMPL_LINK(SdPublishingDlg, WebServerHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SdPublishingDlg, WebServerHdl, weld::Toggleable&, rButton, void)
 {
     if (!rButton.get_active())
         return;
@@ -916,7 +916,7 @@ IMPL_LINK(SdPublishingDlg, WebServerHdl, weld::ToggleButton&, rButton, void)
 }
 
 // Clickhandler for the Radiobuttons of the graphicformat choice
-IMPL_LINK(SdPublishingDlg, GfxFormatHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SdPublishingDlg, GfxFormatHdl, weld::Toggleable&, rButton, void)
 {
     if (!rButton.get_active())
         return;
@@ -928,7 +928,7 @@ IMPL_LINK(SdPublishingDlg, GfxFormatHdl, weld::ToggleButton&, rButton, void)
 }
 
 // Clickhandler for the Radiobuttons Standard/Frames
-IMPL_LINK(SdPublishingDlg, BaseHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SdPublishingDlg, BaseHdl, weld::Toggleable&, rButton, void)
 {
     if (!rButton.get_active())
         return;
@@ -937,7 +937,7 @@ IMPL_LINK(SdPublishingDlg, BaseHdl, weld::ToggleButton&, rButton, void)
 }
 
 // Clickhandler for the Checkbox of the Title page
-IMPL_LINK_NOARG(SdPublishingDlg, ContentHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SdPublishingDlg, ContentHdl, weld::Toggleable&, void)
 {
     if(m_xPage2_Content->get_active())
     {
@@ -958,7 +958,7 @@ IMPL_LINK_NOARG(SdPublishingDlg, ContentHdl, weld::ToggleButton&, void)
 }
 
 // Clickhandler for the Resolution Radiobuttons
-IMPL_LINK( SdPublishingDlg, ResolutionHdl, weld::ToggleButton&, rButton, void )
+IMPL_LINK( SdPublishingDlg, ResolutionHdl, weld::Toggleable&, rButton, void )
 {
     if (!rButton.get_active())
         return;
@@ -1017,7 +1017,7 @@ IMPL_LINK( SdPublishingDlg, ColorHdl, weld::Button&, rButton, void)
     m_xPage6_Preview->Invalidate();
 }
 
-IMPL_LINK(SdPublishingDlg, SlideChgHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SdPublishingDlg, SlideChgHdl, weld::Toggleable&, rButton, void)
 {
     if (!rButton.get_active())
         return;

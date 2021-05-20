@@ -93,8 +93,8 @@ private:
     DECL_LINK(GetButtonFocusHandler, formula::RefButton&, void);
     DECL_LINK(LoseEditFocusHandler, formula::RefEdit&, void);
     DECL_LINK(LoseButtonFocusHandler, formula::RefButton&, void);
-    DECL_LINK(ToggleSource, weld::ToggleButton&, void);
-    DECL_LINK(ToggleDestination, weld::ToggleButton&, void);
+    DECL_LINK(ToggleSource, weld::Toggleable&, void);
+    DECL_LINK(ToggleDestination, weld::Toggleable&, void);
     DECL_LINK(SourceListSelected, weld::ComboBox&, void);
     DECL_LINK(SourceEditModified, formula::RefEdit&, void);
     void ToggleSource();

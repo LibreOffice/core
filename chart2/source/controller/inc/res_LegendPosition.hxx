@@ -26,7 +26,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 namespace weld { class Builder; }
 namespace weld { class CheckButton; }
 namespace weld { class RadioButton; }
-namespace weld { class ToggleButton; }
+namespace weld { class Toggleable; }
 
 namespace chart
 {
@@ -50,8 +50,8 @@ public:
 
     void SetChangeHdl( const Link<LinkParamNone*,void>& rLink );
 
-    DECL_LINK( PositionEnableHdl, weld::ToggleButton&, void );
-    DECL_LINK( PositionChangeHdl, weld::ToggleButton&, void );
+    DECL_LINK( PositionEnableHdl, weld::Toggleable&, void );
+    DECL_LINK( PositionChangeHdl, weld::Toggleable&, void );
 
 private:
     void impl_setRadioButtonToggleHdl();

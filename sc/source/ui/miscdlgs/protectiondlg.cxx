@@ -127,10 +127,9 @@ void ScTableProtectionDlg::EnableOptionalWidgets(bool bEnable)
 {
     m_xPasswords->set_sensitive(bEnable);
     m_xOptions->set_sensitive(bEnable);
-//TODO    m_xOptionsListBox->Invalidate();
 }
 
-IMPL_LINK(ScTableProtectionDlg, CheckBoxHdl, weld::ToggleButton&, rBtn, void)
+IMPL_LINK(ScTableProtectionDlg, CheckBoxHdl, weld::Toggleable&, rBtn, void)
 {
     if (&rBtn == m_xBtnProtect.get())
     {

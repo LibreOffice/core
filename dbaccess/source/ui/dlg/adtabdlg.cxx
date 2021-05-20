@@ -434,7 +434,7 @@ IMPL_LINK_NOARG( OAddTableDlg, CloseClickHdl, weld::Button&, void )
     m_xDialog->response(RET_CLOSE);
 }
 
-IMPL_LINK_NOARG(OAddTableDlg, OnTypeSelected, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(OAddTableDlg, OnTypeSelected, weld::Toggleable&, void)
 {
     if ( m_xCaseTables->get_active() )
         impl_switchTo( Tables );

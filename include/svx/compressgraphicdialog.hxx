@@ -70,8 +70,8 @@ private:
     DECL_LINK( NewWidthModifiedHdl, weld::Entry&, void );
     DECL_LINK( NewHeightModifiedHdl, weld::Entry&, void );
     DECL_LINK( ResolutionModifiedHdl, weld::ComboBox&, void );
-    DECL_LINK( ToggleCompressionRB, weld::ToggleButton&, void );
-    DECL_LINK( ToggleReduceResolutionRB, weld::ToggleButton&, void );
+    DECL_LINK( ToggleCompressionRB, weld::Toggleable&, void );
+    DECL_LINK( ToggleReduceResolutionRB, weld::Toggleable&, void );
 
     DECL_LINK( CalculateClickHdl, weld::Button&, void );
 

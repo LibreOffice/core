@@ -408,7 +408,7 @@ IMPL_LINK(SvxCaptionTabPage, PositionSelectHdl_Impl, weld::ComboBox&, rListBox, 
     }
 }
 
-IMPL_LINK( SvxCaptionTabPage, LineOptHdl_Impl, weld::ToggleButton&, rButton, void )
+IMPL_LINK( SvxCaptionTabPage, LineOptHdl_Impl, weld::Toggleable&, rButton, void )
 {
     if (&rButton != m_xCB_OPTIMAL.get())
         return;

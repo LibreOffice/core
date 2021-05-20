@@ -105,7 +105,7 @@ IMPL_LINK_NOARG(SvInsertOleDlg, BrowseHdl, weld::Button&, void)
     }
 }
 
-IMPL_LINK(SvInsertOleDlg, RadioHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SvInsertOleDlg, RadioHdl, weld::Toggleable&, rButton, void)
 {
     if (!rButton.get_active())
         return;
@@ -140,7 +140,7 @@ SvInsertOleDlg::SvInsertOleDlg(weld::Window* pParent, const Reference<embed::XSt
                                       m_xLbObjecttype->get_height_rows(6));
     m_xLbObjecttype->connect_row_activated(LINK(this, SvInsertOleDlg, DoubleClickHdl));
     m_xBtnFilepath->connect_clicked(LINK( this, SvInsertOleDlg, BrowseHdl));
-    Link<weld::ToggleButton&,void> aLink( LINK( this, SvInsertOleDlg, RadioHdl ) );
+    Link<weld::Toggleable&,void> aLink( LINK( this, SvInsertOleDlg, RadioHdl ) );
     m_xRbNewObject->connect_toggled( aLink );
     m_xRbObjectFromfile->connect_toggled( aLink );
     m_xRbNewObject->set_active(true);
@@ -361,7 +361,7 @@ void SfxInsertFloatingFrameDialog::Init()
     m_xNMMarginHeight = m_xBuilder->weld_spin_button("height");
     m_xCBMarginHeightDefault = m_xBuilder->weld_check_button("defaultheight");
 
-    Link<weld::ToggleButton&, void> aLink(LINK(this, SfxInsertFloatingFrameDialog, CheckHdl));
+    Link<weld::Toggleable&, void> aLink(LINK(this, SfxInsertFloatingFrameDialog, CheckHdl));
     m_xCBMarginWidthDefault->connect_toggled(aLink);
     m_xCBMarginHeightDefault->connect_toggled(aLink);
 
@@ -548,7 +548,7 @@ short SfxInsertFloatingFrameDialog::run()
     return nRet;
 }
 
-IMPL_LINK(SfxInsertFloatingFrameDialog, CheckHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SfxInsertFloatingFrameDialog, CheckHdl, weld::Toggleable&, rButton, void)
 {
     weld::CheckButton& rCB = dynamic_cast<weld::CheckButton&>(rButton);
     if (&rCB == m_xCBMarginWidthDefault.get())

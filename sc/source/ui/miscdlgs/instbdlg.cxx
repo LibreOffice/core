@@ -249,7 +249,7 @@ IMPL_LINK_NOARG(ScInsertTableDlg, CountHdl_Impl, weld::SpinButton&, void)
     DoEnable_Impl();
 }
 
-IMPL_LINK(ScInsertTableDlg, ChoiceHdl_Impl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(ScInsertTableDlg, ChoiceHdl_Impl, weld::Toggleable&, rButton, void)
 {
     if (!rButton.get_active())
         return;

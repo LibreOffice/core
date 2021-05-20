@@ -42,7 +42,7 @@ public:
     void AppendNamedRange(const OUString& rNames);
 
 private:
-    DECL_LINK(RadioClickHdl, weld::ToggleButton&, void);
+    DECL_LINK(RadioClickHdl, weld::Toggleable&, void);
     DECL_LINK(ResponseHdl, weld::Button&, void);
 };
 

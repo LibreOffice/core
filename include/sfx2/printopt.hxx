@@ -57,15 +57,15 @@ private:
     PrinterOptions      maPrinterOptions;
     PrinterOptions      maPrintFileOptions;
 
-                        DECL_DLLPRIVATE_LINK( ToggleOutputPrinterRBHdl, weld::ToggleButton&, void );
-                        DECL_DLLPRIVATE_LINK( ToggleOutputPrintFileRBHdl, weld::ToggleButton&, void);
+                        DECL_DLLPRIVATE_LINK( ToggleOutputPrinterRBHdl, weld::Toggleable&, void );
+                        DECL_DLLPRIVATE_LINK( ToggleOutputPrintFileRBHdl, weld::Toggleable&, void);
 
-                        DECL_DLLPRIVATE_LINK( ClickReduceTransparencyCBHdl, weld::ToggleButton&, void );
-                        DECL_DLLPRIVATE_LINK( ClickReduceGradientsCBHdl, weld::ToggleButton&, void );
-                        DECL_DLLPRIVATE_LINK( ClickReduceBitmapsCBHdl, weld::ToggleButton&, void );
+                        DECL_DLLPRIVATE_LINK( ClickReduceTransparencyCBHdl, weld::Toggleable&, void );
+                        DECL_DLLPRIVATE_LINK( ClickReduceGradientsCBHdl, weld::Toggleable&, void );
+                        DECL_DLLPRIVATE_LINK( ClickReduceBitmapsCBHdl, weld::Toggleable&, void );
 
-                        DECL_DLLPRIVATE_LINK( ToggleReduceGradientsStripesRBHdl, weld::ToggleButton&, void );
-                        DECL_DLLPRIVATE_LINK( ToggleReduceBitmapsResolutionRBHdl, weld::ToggleButton&, void );
+                        DECL_DLLPRIVATE_LINK( ToggleReduceGradientsStripesRBHdl, weld::Toggleable&, void );
+                        DECL_DLLPRIVATE_LINK( ToggleReduceBitmapsResolutionRBHdl, weld::Toggleable&, void );
 
     SAL_DLLPRIVATE void ImplUpdateControls( const PrinterOptions* pCurrentOptions );
     SAL_DLLPRIVATE void ImplSaveControls( PrinterOptions* pCurrentOptions );

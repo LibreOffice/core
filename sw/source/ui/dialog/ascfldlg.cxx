@@ -425,7 +425,7 @@ IMPL_LINK_NOARG(SwAsciiFilterDlg, CharSetSelHdl, weld::ComboBox&, void)
     UpdateIncludeBOMSensitiveState();
 }
 
-IMPL_LINK(SwAsciiFilterDlg, LineEndHdl, weld::ToggleButton&, rBtn, void)
+IMPL_LINK(SwAsciiFilterDlg, LineEndHdl, weld::Toggleable&, rBtn, void)
 {
     if (m_bSaveLineStatus)
         rBtn.save_state();

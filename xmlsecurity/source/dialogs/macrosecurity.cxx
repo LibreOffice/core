@@ -165,7 +165,7 @@ MacroSecurityLevelTP::MacroSecurityLevelTP(weld::Container* pParent, MacroSecuri
     }
 }
 
-IMPL_LINK_NOARG(MacroSecurityLevelTP, RadioButtonHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(MacroSecurityLevelTP, RadioButtonHdl, weld::Toggleable&, void)
 {
     sal_uInt16 nNewLevel = 0;
     if( m_xVeryHighRB->get_active() )

@@ -1742,7 +1742,7 @@ IMPL_LINK(SvxNumOptionsTabPage, OrientHdl_Impl, weld::ComboBox&, rBox, void)
     SetModified(false);
 }
 
-IMPL_LINK(SvxNumOptionsTabPage, SameLevelHdl_Impl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(SvxNumOptionsTabPage, SameLevelHdl_Impl, weld::Toggleable&, rBox, void)
 {
     bool bSet = rBox.get_active();
     pActNum->SetContinuousNumbering(bSet);
@@ -1874,7 +1874,7 @@ IMPL_LINK(SvxNumOptionsTabPage, GraphicHdl_Impl, const OString&, rIdent, void)
     aInvalidateTimer.Start();
 }
 
-IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl, weld::Toggleable&, void)
 {
     if (m_xGalleryMenu)
         return;
@@ -2050,7 +2050,7 @@ IMPL_LINK( SvxNumOptionsTabPage, SizeHdl_Impl, weld::MetricSpinButton&, rField, 
     SetModified(bRepaint);
 }
 
-IMPL_LINK(SvxNumOptionsTabPage, RatioHdl_Impl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(SvxNumOptionsTabPage, RatioHdl_Impl, weld::Toggleable&, rBox, void)
 {
     if (rBox.get_active())
     {
@@ -3100,7 +3100,7 @@ IMPL_LINK(SvxNumPositionTabPage, DistanceHdl_Impl, weld::MetricSpinButton&, rFld
     }
 }
 
-IMPL_LINK(SvxNumPositionTabPage, RelativeHdl_Impl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(SvxNumPositionTabPage, RelativeHdl_Impl, weld::Toggleable&, rBox, void)
 {
     bool bOn = rBox.get_active();
     bool bSingleSelection = m_xLevelLB->count_selected_rows() == 1 && SAL_MAX_UINT16 != nActNumLvl;

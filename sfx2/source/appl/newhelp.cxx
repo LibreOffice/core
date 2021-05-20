@@ -1951,7 +1951,7 @@ IMPL_LINK_NOARG(SfxHelpTextWindow_Impl, CloseHdl, LinkParamNone*, void)
     m_xSrchDlg.reset();
 }
 
-IMPL_LINK_NOARG(SfxHelpTextWindow_Impl, CheckHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SfxHelpTextWindow_Impl, CheckHdl, weld::Toggleable&, void)
 {
     if ( !xConfiguration.is() )
         return;

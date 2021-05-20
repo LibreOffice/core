@@ -61,7 +61,7 @@ IMPL_LINK(SwAnnotationWin, SelectHdl, const OString&, rIdent, void)
     GrabFocusToDocument();
 }
 
-IMPL_LINK_NOARG(SwAnnotationWin, ToggleHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwAnnotationWin, ToggleHdl, weld::Toggleable&, void)
 {
     if (!mxMenuButton->get_active())
         return;

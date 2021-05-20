@@ -452,7 +452,7 @@ void SvxHFPage::InitHandler()
     m_xBackgroundBtn->connect_clicked(LINK(this,SvxHFPage, BackgroundHdl));
 }
 
-void SvxHFPage::TurnOn(const weld::ToggleButton* pBox)
+void SvxHFPage::TurnOn(const weld::Toggleable* pBox)
 {
     if (m_xTurnOnBox->get_active())
     {
@@ -522,7 +522,7 @@ void SvxHFPage::TurnOn(const weld::ToggleButton* pBox)
     UpdateExample();
 }
 
-IMPL_LINK(SvxHFPage, TurnOnHdl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(SvxHFPage, TurnOnHdl, weld::Toggleable&, rBox, void)
 {
     TurnOn(&rBox);
 }

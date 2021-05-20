@@ -646,7 +646,7 @@ IMPL_LINK(SwNumPositionTabPage, DistanceHdl, weld::MetricSpinButton&, rField, vo
         m_xDistBorderMF->set_text(OUString());
 }
 
-IMPL_LINK( SwNumPositionTabPage, RelativeHdl, weld::ToggleButton&, rBox, void )
+IMPL_LINK( SwNumPositionTabPage, RelativeHdl, weld::Toggleable&, rBox, void )
 {
     bool bOn = rBox.get_active();
     bool bSingleSelection = m_xLevelLB->n_children() == 1 && USHRT_MAX != nActNumLvl;

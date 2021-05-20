@@ -262,7 +262,7 @@ IMPL_LINK_NOARG(SdVectorizeDlg, ClickOKHdl, weld::Button&, void)
     m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK( SdVectorizeDlg, ToggleHdl, weld::ToggleButton&, rCb, void )
+IMPL_LINK( SdVectorizeDlg, ToggleHdl, weld::Toggleable&, rCb, void )
 {
     if (rCb.get_active())
     {

@@ -42,7 +42,7 @@ private:
     int nDefaultValue;
     int nCurrentValue;
 
-    DECL_LINK(SetDefValHdl, weld::ToggleButton&, void);
+    DECL_LINK(SetDefValHdl, weld::Toggleable&, void);
     DECL_LINK(ModifyHdl, weld::MetricSpinButton&, void);
 };
 

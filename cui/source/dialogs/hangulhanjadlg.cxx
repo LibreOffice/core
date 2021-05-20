@@ -205,7 +205,7 @@ namespace svx
         void set_active(bool active) { m_xControl->set_active(active); }
         bool get_active() const { return m_xControl->get_active(); }
 
-        void connect_toggled(const Link<weld::ToggleButton&, void>& rLink) { m_xControl->connect_toggled(rLink); }
+        void connect_toggled(const Link<weld::Toggleable&, void>& rLink) { m_xControl->connect_toggled(rLink); }
 
     private:
         Size GetOptimalSize() const;
@@ -527,7 +527,7 @@ namespace svx
         m_xFind->connect_clicked(rHdl);
     }
 
-    void HangulHanjaConversionDialog::SetConversionFormatChangedHdl( const Link<weld::ToggleButton&,void>& rHdl )
+    void HangulHanjaConversionDialog::SetConversionFormatChangedHdl( const Link<weld::Toggleable&,void>& rHdl )
     {
         m_xSimpleConversion->connect_toggled( rHdl );
         m_xHangulBracketed->connect_toggled( rHdl );
@@ -538,7 +538,7 @@ namespace svx
         m_xHangulBelow->connect_toggled( rHdl );
     }
 
-    void HangulHanjaConversionDialog::SetClickByCharacterHdl( const Link<weld::ToggleButton&,void>& _rHdl )
+    void HangulHanjaConversionDialog::SetClickByCharacterHdl( const Link<weld::Toggleable&,void>& _rHdl )
     {
         m_aClickByCharacterLink = _rHdl;
     }
@@ -558,14 +558,14 @@ namespace svx
         m_xReplaceAll->set_sensitive( m_bDocumentMode && bSameLen );
     }
 
-    IMPL_LINK(HangulHanjaConversionDialog, ClickByCharacterHdl, weld::ToggleButton&, rBox, void)
+    IMPL_LINK(HangulHanjaConversionDialog, ClickByCharacterHdl, weld::Toggleable&, rBox, void)
     {
         m_aClickByCharacterLink.Call(rBox);
         bool bByCharacter = rBox.get_active();
         m_xSuggestions->DisplayListBox( !bByCharacter );
     }
 
-    IMPL_LINK(HangulHanjaConversionDialog, OnConversionDirectionClicked, weld::ToggleButton&, rBox, void)
+    IMPL_LINK(HangulHanjaConversionDialog, OnConversionDirectionClicked, weld::Toggleable&, rBox, void)
     {
         weld::CheckButton* pOtherBox = nullptr;
         if (&rBox == m_xHangulOnly.get())

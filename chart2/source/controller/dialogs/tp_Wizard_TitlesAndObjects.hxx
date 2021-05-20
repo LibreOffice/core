@@ -49,7 +49,7 @@ private:
     void commitToModel();
     DECL_LINK( ChangeHdl, LinkParamNone*, void );
     DECL_LINK( ChangeEditHdl, weld::Entry&, void );
-    DECL_LINK( ChangeCheckBoxHdl, weld::ToggleButton&, void );
+    DECL_LINK( ChangeCheckBoxHdl, weld::Toggleable&, void );
 
     std::unique_ptr< TitleResources >            m_xTitleResources;
     std::unique_ptr< LegendPositionResources >   m_xLegendPositionResources;

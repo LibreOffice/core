@@ -84,7 +84,7 @@ private:
     std::unique_ptr<weld::CheckButton> m_xCBCustomLeaderLines;
 
     DECL_LINK(NumberFormatDialogHdl, weld::Button&, void );
-    DECL_LINK(CheckHdl, weld::ToggleButton&, void );
+    DECL_LINK(CheckHdl, weld::Toggleable&, void );
     void EnableControls();
 };
 

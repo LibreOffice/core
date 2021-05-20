@@ -319,12 +319,12 @@ IMPL_LINK(ScInsertContentsDlg, ShortCutHdl, weld::Button&, rBtn, void)
     if (mxImmediately->get_active()) m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK_NOARG(ScInsertContentsDlg, InsAllHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ScInsertContentsDlg, InsAllHdl, weld::Toggleable&, void)
 {
     DisableChecks( mxBtnInsAll->get_active() );
 }
 
-IMPL_LINK_NOARG(ScInsertContentsDlg, LinkBtnHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ScInsertContentsDlg, LinkBtnHdl, weld::Toggleable&, void)
 {
     TestModes();
 }

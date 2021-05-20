@@ -86,8 +86,8 @@ protected:
     DECL_LINK(ImplUpdateDataHdl, Timer*, void);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 
-    DECL_LINK(ListViewHdl, weld::ToggleButton&, void);
-    DECL_LINK(ThumbnailViewHdl, weld::ToggleButton&, void);
+    DECL_LINK(ListViewHdl, weld::Toggleable&, void);
+    DECL_LINK(ThumbnailViewHdl, weld::Toggleable&, void);
     DECL_LINK(FocusRectLocalHdl, weld::Widget&, tools::Rectangle);
     DECL_LINK(FocusRectSearchHdl, weld::Widget&, tools::Rectangle);
 
@@ -146,8 +146,8 @@ protected:
     std::unique_ptr<weld::Menu> mxTemplateDefaultMenu;
     std::unique_ptr<weld::CustomWeld> mxSearchViewWeld;
     std::unique_ptr<weld::CustomWeld> mxLocalViewWeld;
-    std::unique_ptr<weld::ToggleButton> mxListViewButton;
-    std::unique_ptr<weld::ToggleButton> mxThumbnailViewButton;
+    std::unique_ptr<weld::Toggleable> mxListViewButton;
+    std::unique_ptr<weld::Toggleable> mxThumbnailViewButton;
     TemplateViewMode mViewMode;
     bool bMakeSelItemVisible;
 };

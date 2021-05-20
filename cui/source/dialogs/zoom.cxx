@@ -138,14 +138,14 @@ SvxZoomDialog::SvxZoomDialog(weld::Window* pParent, const SfxItemSet& rCoreSet)
     , m_xBookModeChk(m_xBuilder->weld_check_button("bookmode"))
     , m_xOKBtn(m_xBuilder->weld_button("ok"))
 {
-    Link<weld::ToggleButton&, void> aLink = LINK(this, SvxZoomDialog, UserHdl);
+    Link<weld::Toggleable&, void> aLink = LINK(this, SvxZoomDialog, UserHdl);
     m_x100Btn->connect_toggled(aLink);
     m_xOptimalBtn->connect_toggled(aLink);
     m_xPageWidthBtn->connect_toggled(aLink);
     m_xWholePageBtn->connect_toggled(aLink);
     m_xUserBtn->connect_toggled(aLink);
 
-    Link<weld::ToggleButton&, void> aViewLayoutLink = LINK(this, SvxZoomDialog, ViewLayoutUserHdl);
+    Link<weld::Toggleable&, void> aViewLayoutLink = LINK(this, SvxZoomDialog, ViewLayoutUserHdl);
     m_xAutomaticBtn->connect_toggled(aViewLayoutLink);
     m_xSingleBtn->connect_toggled(aViewLayoutLink);
     m_xColumnsBtn->connect_toggled(aViewLayoutLink);
@@ -154,7 +154,7 @@ SvxZoomDialog::SvxZoomDialog(weld::Window* pParent, const SfxItemSet& rCoreSet)
         = LINK(this, SvxZoomDialog, ViewLayoutSpinHdl);
     m_xColumnsEdit->connect_value_changed(aViewLayoutSpinLink);
 
-    Link<weld::ToggleButton&, void> aViewLayoutCheckLink
+    Link<weld::Toggleable&, void> aViewLayoutCheckLink
         = LINK(this, SvxZoomDialog, ViewLayoutCheckHdl);
     m_xBookModeChk->connect_toggled(aViewLayoutCheckLink);
 
@@ -273,7 +273,7 @@ SvxZoomDialog::SvxZoomDialog(weld::Window* pParent, const SfxItemSet& rCoreSet)
     }
 }
 
-IMPL_LINK_NOARG(SvxZoomDialog, UserHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxZoomDialog, UserHdl, weld::Toggleable&, void)
 {
     m_bModified = true;
 
@@ -296,7 +296,7 @@ IMPL_LINK_NOARG(SvxZoomDialog, SpinHdl, weld::MetricSpinButton&, void)
     m_bModified = true;
 }
 
-IMPL_LINK_NOARG(SvxZoomDialog, ViewLayoutUserHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxZoomDialog, ViewLayoutUserHdl, weld::Toggleable&, void)
 {
     m_bModified = true;
 
@@ -332,7 +332,7 @@ IMPL_LINK_NOARG(SvxZoomDialog, ViewLayoutSpinHdl, weld::SpinButton&, void)
     m_bModified = true;
 }
 
-IMPL_LINK_NOARG(SvxZoomDialog, ViewLayoutCheckHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxZoomDialog, ViewLayoutCheckHdl, weld::Toggleable&, void)
 {
     if (!m_xColumnsBtn->get_active())
         return;

@@ -76,7 +76,7 @@ SwTextGridPage::SwTextGridPage(weld::Container* pPage, weld::DialogController* p
     m_xRubySizeMF->connect_value_changed(aSizeLink);
     m_xCharWidthMF->connect_value_changed(aSizeLink);
 
-    Link<weld::ToggleButton&,void> aGridTypeHdl = LINK(this, SwTextGridPage, GridTypeHdl);
+    Link<weld::Toggleable&,void> aGridTypeHdl = LINK(this, SwTextGridPage, GridTypeHdl);
     m_xNoGridRB->connect_toggled(aGridTypeHdl);
     m_xLinesGridRB->connect_toggled(aGridTypeHdl);
     m_xCharsGridRB->connect_toggled(aGridTypeHdl);
@@ -434,7 +434,7 @@ IMPL_LINK(SwTextGridPage, TextSizeChangedHdl, weld::MetricSpinButton&, rField, v
     GridModifyHdl();
 }
 
-IMPL_LINK(SwTextGridPage, GridTypeHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SwTextGridPage, GridTypeHdl, weld::Toggleable&, rButton, void)
 {
     bool bEnable = m_xNoGridRB.get() != &rButton;
     m_xLayoutFL->set_sensitive(bEnable);
@@ -460,14 +460,14 @@ IMPL_LINK(SwTextGridPage, GridTypeHdl, weld::ToggleButton&, rButton, void)
     GridModifyHdl();
 }
 
-IMPL_LINK_NOARG(SwTextGridPage, DisplayGridHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwTextGridPage, DisplayGridHdl, weld::Toggleable&, void)
 {
     bool bChecked = m_xDisplayCB->get_active();
     m_xPrintCB->set_sensitive(bChecked);
     m_xPrintCB->set_active(bChecked);
 }
 
-IMPL_LINK_NOARG(SwTextGridPage, GridModifyClickHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwTextGridPage, GridModifyClickHdl, weld::Toggleable&, void)
 {
     GridModifyHdl();
 }

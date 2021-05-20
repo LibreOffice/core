@@ -527,7 +527,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, SecurityOptionsHdl, weld::Button&, void)
     m_xSecOptDlg->run();
 }
 
-IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl, weld::Toggleable&, void)
 {
     try
     {
@@ -606,7 +606,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, MasterPasswordHdl, weld::Button&, void)
     {}
 }
 
-IMPL_LINK_NOARG(SvxSecurityTabPage, MasterPasswordCBHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxSecurityTabPage, MasterPasswordCBHdl, weld::Toggleable&, void)
 {
     try
     {

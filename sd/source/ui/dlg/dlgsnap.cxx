@@ -105,7 +105,7 @@ SdSnapLineDlg::~SdSnapLineDlg()
 /**
  * fills provided item sets with dialog box attributes
  */
-IMPL_LINK(SdSnapLineDlg, ToggleHdl, weld::ToggleButton&, rBtn, void)
+IMPL_LINK(SdSnapLineDlg, ToggleHdl, weld::Toggleable&, rBtn, void)
 {
     if (!rBtn.get_active())
         return;

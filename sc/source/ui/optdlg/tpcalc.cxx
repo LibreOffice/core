@@ -222,7 +222,7 @@ DeactivateRC ScTpCalcOptions::DeactivatePage( SfxItemSet* pSetP )
 
 // Handler:
 
-IMPL_LINK( ScTpCalcOptions, RadioClickHdl, weld::ToggleButton&, rBtn, void )
+IMPL_LINK( ScTpCalcOptions, RadioClickHdl, weld::Toggleable&, rBtn, void )
 {
     if (!rBtn.get_active())
         return;
@@ -240,7 +240,7 @@ IMPL_LINK( ScTpCalcOptions, RadioClickHdl, weld::ToggleButton&, rBtn, void )
     }
 }
 
-IMPL_LINK(ScTpCalcOptions, CheckClickHdl, weld::ToggleButton&, rBtn, void)
+IMPL_LINK(ScTpCalcOptions, CheckClickHdl, weld::Toggleable&, rBtn, void)
 {
     if (&rBtn == m_xBtnGeneralPrec.get())
     {

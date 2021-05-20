@@ -239,7 +239,7 @@ namespace pcr
         m_xNoAssignment->set_active(sData.isEmpty());
     }
 
-    IMPL_LINK(OSelectLabelDialog, OnNoAssignmentClicked, weld::ToggleButton&, rButton, void)
+    IMPL_LINK(OSelectLabelDialog, OnNoAssignmentClicked, weld::Toggleable&, rButton, void)
     {
         DBG_ASSERT(&rButton == m_xNoAssignment.get(), "OSelectLabelDialog::OnNoAssignmentClicked : where did this come from ?");
 

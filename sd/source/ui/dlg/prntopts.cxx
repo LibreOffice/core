@@ -48,7 +48,7 @@ SdPrintOptions::SdPrintOptions(weld::Container* pPage, weld::DialogController* p
     , m_xCbxBack(m_xBuilder->weld_check_button("backcb"))
     , m_xCbxPaperbin(m_xBuilder->weld_check_button("papertryfrmprntrcb"))
 {
-    Link<weld::ToggleButton&,void> aLink = LINK( this, SdPrintOptions, ClickBookletHdl );
+    Link<weld::Toggleable&,void> aLink = LINK( this, SdPrintOptions, ClickBookletHdl );
     m_xRbtDefault->connect_toggled( aLink );
     m_xRbtPagesize->connect_toggled( aLink );
     m_xRbtPagetile->connect_toggled( aLink );
@@ -181,7 +181,7 @@ std::unique_ptr<SfxTabPage> SdPrintOptions::Create( weld::Container* pPage, weld
     return std::make_unique<SdPrintOptions>( pPage, pController, *rOutAttrs );
 }
 
-IMPL_LINK(SdPrintOptions, ClickCheckboxHdl, weld::ToggleButton&, rCbx, void)
+IMPL_LINK(SdPrintOptions, ClickCheckboxHdl, weld::Toggleable&, rCbx, void)
 {
     // there must be at least one of them checked
     if( !m_xCbxDraw->get_active() && !m_xCbxNotes->get_active() && !m_xCbxOutline->get_active() && !m_xCbxHandout->get_active() )
@@ -190,7 +190,7 @@ IMPL_LINK(SdPrintOptions, ClickCheckboxHdl, weld::ToggleButton&, rCbx, void)
     updateControls();
 }
 
-IMPL_LINK_NOARG(SdPrintOptions, ClickBookletHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SdPrintOptions, ClickBookletHdl, weld::Toggleable&, void)
 {
     updateControls();
 }

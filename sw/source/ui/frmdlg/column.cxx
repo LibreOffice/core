@@ -1015,7 +1015,7 @@ IMPL_LINK(SwColumnPage, EdModify, weld::MetricSpinButton&, rEdit, void)
 
 // Handler behind the Checkbox for automatic width. When the box is checked
 // no explicit values for the column width can be entered.
-IMPL_LINK(SwColumnPage, AutoWidthHdl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(SwColumnPage, AutoWidthHdl, weld::Toggleable&, rBox, void)
 {
     tools::Long nDist = static_cast< tools::Long >(m_xDistEd1->DenormalizePercent(m_xDistEd1->get_value(FieldUnit::TWIP)));
     m_xColMgr->SetCount(m_nCols, static_cast<sal_uInt16>(nDist));

@@ -144,8 +144,8 @@ private:
 
     std::unique_ptr<weld::Button> mxBtnOK;
 
-    DECL_LINK(UpdateHdl, weld::ToggleButton&, void);
-    DECL_LINK(UpdateLock, weld::ToggleButton&, void);
+    DECL_LINK(UpdateHdl, weld::Toggleable&, void);
+    DECL_LINK(UpdateLock, weld::Toggleable&, void);
     DECL_LINK(SelectListBoxHdl, weld::ComboBox&, void);
     DECL_LINK(SelectHdl, weld::SpinButton&, void);
     DECL_LINK(UpdateHdlMtfSizeX, weld::SpinButton&, void);

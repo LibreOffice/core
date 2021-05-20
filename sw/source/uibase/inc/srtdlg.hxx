@@ -73,8 +73,8 @@ class SwSortDlg : public weld::GenericDialogController
     void Apply();
     sal_Unicode GetDelimChar() const;
 
-    DECL_LINK(CheckHdl, weld::ToggleButton&, void);
-    DECL_LINK(DelimHdl, weld::ToggleButton&, void);
+    DECL_LINK(CheckHdl, weld::Toggleable&, void);
+    DECL_LINK(DelimHdl, weld::Toggleable&, void);
     DECL_LINK(LanguageListBoxHdl, weld::ComboBox&, void);
     void LanguageHdl(weld::ComboBox const*);
     DECL_LINK(DelimCharHdl, weld::Button&, void);

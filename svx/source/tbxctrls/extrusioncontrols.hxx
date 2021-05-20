@@ -65,7 +65,7 @@ private:
 
     Image       maImgDirection[9];
 
-    DECL_LINK( SelectToolbarMenuHdl, weld::ToggleButton&, void );
+    DECL_LINK( SelectToolbarMenuHdl, weld::Toggleable&, void );
     DECL_LINK( SelectValueSetHdl, ValueSet*, void );
 
     void implSetDirection( sal_Int32 nSkew, bool bEnabled );
@@ -105,7 +105,7 @@ private:
     double      mfDepth;
     bool        mbSettingValue;
 
-    DECL_LINK( SelectHdl, weld::ToggleButton&, void );
+    DECL_LINK( SelectHdl, weld::Toggleable&, void );
 
     void    implFillStrings( FieldUnit eUnit );
     void    implSetDepth( double fDepth );
@@ -150,7 +150,7 @@ private:
     void    implSetIntensity( int nLevel, bool bEnabled );
     void    implSetDirection( int nDirection, bool bEnabled );
 
-    DECL_LINK( SelectToolbarMenuHdl, weld::ToggleButton&, void );
+    DECL_LINK( SelectToolbarMenuHdl, weld::Toggleable&, void );
     DECL_LINK( SelectValueSetHdl, ValueSet*, void );
 public:
     ExtrusionLightingWindow(svt::PopupWindowController* pControl, weld::Widget* pParentWindow);
@@ -185,7 +185,7 @@ private:
     std::unique_ptr<weld::RadioButton> mxPlastic;
     std::unique_ptr<weld::RadioButton> mxMetal;
 
-    DECL_LINK( SelectHdl, weld::ToggleButton&, void );
+    DECL_LINK( SelectHdl, weld::Toggleable&, void );
 
     void    implSetSurface( int nSurface, bool bEnabled );
 

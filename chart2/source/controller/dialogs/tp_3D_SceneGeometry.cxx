@@ -209,13 +209,13 @@ IMPL_LINK_NOARG(ThreeD_SceneGeometry_TabPage, PerspectiveChanged, Timer *, void)
     applyPerspectiveToModel();
 }
 
-IMPL_LINK_NOARG(ThreeD_SceneGeometry_TabPage, PerspectiveToggled, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ThreeD_SceneGeometry_TabPage, PerspectiveToggled, weld::Toggleable&, void)
 {
     m_xMFPerspective->set_sensitive(m_xCbxPerspective->get_active());
     applyPerspectiveToModel();
 }
 
-IMPL_LINK_NOARG(ThreeD_SceneGeometry_TabPage, RightAngledAxesToggled, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ThreeD_SceneGeometry_TabPage, RightAngledAxesToggled, weld::Toggleable&, void)
 {
     ControllerLockHelperGuard aGuard( m_rControllerLockHelper );
 

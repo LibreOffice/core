@@ -77,7 +77,7 @@ private:
     // Handler:
     DECL_LINK( EdAreaModifyHdl, formula::RefEdit&, void );
     DECL_LINK( LbAreaSelHdl, weld::ComboBox&, void );
-    DECL_LINK( BtnCopyResultHdl, weld::ToggleButton&, void );
+    DECL_LINK( BtnCopyResultHdl, weld::Toggleable&, void );
 };
 
 

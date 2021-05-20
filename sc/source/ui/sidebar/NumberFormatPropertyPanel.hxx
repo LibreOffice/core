@@ -83,7 +83,7 @@ private:
 
     DECL_LINK(NumFormatSelectHdl, weld::ComboBox&, void);
     DECL_LINK(NumFormatValueHdl, weld::SpinButton&, void);
-    DECL_LINK(NumFormatValueClickHdl, weld::ToggleButton&, void);
+    DECL_LINK(NumFormatValueClickHdl, weld::Toggleable&, void);
 
     void Initialize();
     void DisableControls();

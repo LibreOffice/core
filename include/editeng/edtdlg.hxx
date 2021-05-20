@@ -38,9 +38,8 @@ class SvxSpellWrapper;
 class LinkParamNone;
 
 namespace weld { class Button; }
-namespace weld { class ToggleButton; }
+namespace weld { class Toggleable; }
 namespace weld { class Window; }
-
 
 
 class AbstractThesaurusDialog : public VclAbstractDialog
@@ -71,8 +70,8 @@ public:
     virtual void     SetIgnoreAllHdl( const Link<weld::Button&,void>& _rHdl ) = 0;
     virtual void     SetChangeHdl( const Link<weld::Button&,void>& _rHdl ) = 0;
     virtual void     SetChangeAllHdl( const Link<weld::Button&,void>& _rHdl ) = 0;
-    virtual void     SetClickByCharacterHdl( const Link<weld::ToggleButton&,void>& _rHdl ) = 0;
-    virtual void     SetConversionFormatChangedHdl( const Link<weld::ToggleButton&,void>& _rHdl ) = 0;
+    virtual void     SetClickByCharacterHdl( const Link<weld::Toggleable&,void>& _rHdl ) = 0;
+    virtual void     SetConversionFormatChangedHdl( const Link<weld::Toggleable&,void>& _rHdl ) = 0;
     virtual void     SetFindHdl( const Link<weld::Button&,void>& _rHdl ) = 0;
     virtual bool     GetUseBothDirections() const= 0;
     virtual editeng::HangulHanjaConversion::ConversionDirection

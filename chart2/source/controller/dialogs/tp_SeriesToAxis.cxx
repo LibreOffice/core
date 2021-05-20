@@ -60,7 +60,7 @@ SchOptionTabPage::~SchOptionTabPage()
 {
 }
 
-IMPL_LINK_NOARG(SchOptionTabPage, EnableHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SchOptionTabPage, EnableHdl, weld::Toggleable&, void)
 {
     if( m_nAllSeriesAxisIndex == 0 )
         m_xCBAxisSideBySide->set_sensitive( m_xRbtAxis2->get_active());

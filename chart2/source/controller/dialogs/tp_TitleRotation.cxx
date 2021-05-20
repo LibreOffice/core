@@ -60,7 +60,7 @@ SchAlignmentTabPage::SchAlignmentTabPage(weld::Container* pPage, weld::DialogCon
     }
 }
 
-IMPL_LINK_NOARG(SchAlignmentTabPage, StackedToggleHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SchAlignmentTabPage, StackedToggleHdl, weld::Toggleable&, void)
 {
     bool bActive = m_xCbStacked->get_active();
     m_xNfRotate->set_sensitive(!bActive);

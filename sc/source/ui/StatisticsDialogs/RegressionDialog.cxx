@@ -678,7 +678,7 @@ void ScRegressionDialog::WriteTable(const std::function<CellValueGetter>& rCellG
     }
 }
 
-IMPL_LINK_NOARG(ScRegressionDialog, CheckBoxHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ScRegressionDialog, CheckBoxHdl, weld::Toggleable&, void)
 {
     ValidateDialogInput();
 }

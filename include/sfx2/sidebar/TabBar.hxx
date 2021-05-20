@@ -123,7 +123,7 @@ private:
     css::uno::Reference<css::graphic::XGraphic> GetItemImage(const DeckDescriptor& rDeskDescriptor) const;
     void UpdateButtonIcons();
 
-    DECL_LINK(OnToolboxClicked, weld::ToggleButton&, void);
+    DECL_LINK(OnToolboxClicked, weld::Toggleable&, void);
 
     SidebarController* pParentSidebarController;
     std::unique_ptr<svt::AcceleratorExecute> mpAccel;

@@ -596,7 +596,7 @@ IMPL_LINK_NOARG( SvxBitmapTabPage, ModifyBitmapSizeHdl, weld::MetricSpinButton&,
     m_aCtlBitmapPreview.Invalidate();
 }
 
-IMPL_LINK_NOARG( SvxBitmapTabPage, ClickScaleHdl, weld::ToggleButton&, void )
+IMPL_LINK_NOARG( SvxBitmapTabPage, ClickScaleHdl, weld::Toggleable&, void )
 {
     if (m_xTsbScale->get_state() == TRISTATE_TRUE)
     {

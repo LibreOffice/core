@@ -206,7 +206,7 @@ IMPL_LINK_NOARG(SwOutlineTabDialog, CancelHdl, weld::Button&, void)
     m_xDialog->response(RET_CANCEL);
 }
 
-IMPL_LINK_NOARG(SwOutlineTabDialog, FormHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwOutlineTabDialog, FormHdl, weld::Toggleable&, void)
 {
     if (!m_xMenuButton->get_active())
         return;

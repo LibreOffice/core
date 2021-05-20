@@ -221,7 +221,7 @@ IMPL_LINK(DataLabelResources, NumberFormatDialogHdl, weld::Button&, rButton, voi
     }
 }
 
-IMPL_LINK_NOARG(DataLabelResources, CheckHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(DataLabelResources, CheckHdl, weld::Toggleable&, void)
 {
     EnableControls();
 }

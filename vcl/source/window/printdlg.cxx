@@ -1820,7 +1820,7 @@ PropertyValue* PrintDialog::getValueForWindow( weld::Widget* i_pWindow ) const
     return pVal;
 }
 
-IMPL_LINK(PrintDialog, ToggleHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(PrintDialog, ToggleHdl, weld::Toggleable&, rButton, void)
 {
     if (&rButton == mxPreviewBox.get())
     {
@@ -2076,7 +2076,7 @@ IMPL_LINK( PrintDialog, SpinModifyHdl, weld::SpinButton&, rEdit, void )
     }
 }
 
-IMPL_LINK( PrintDialog, UIOption_CheckHdl, weld::ToggleButton&, i_rBox, void )
+IMPL_LINK( PrintDialog, UIOption_CheckHdl, weld::Toggleable&, i_rBox, void )
 {
     PropertyValue* pVal = getValueForWindow( &i_rBox );
     if( pVal )
@@ -2093,7 +2093,7 @@ IMPL_LINK( PrintDialog, UIOption_CheckHdl, weld::ToggleButton&, i_rBox, void )
     }
 }
 
-IMPL_LINK( PrintDialog, UIOption_RadioHdl, weld::ToggleButton&, i_rBtn, void )
+IMPL_LINK( PrintDialog, UIOption_RadioHdl, weld::Toggleable&, i_rBtn, void )
 {
     // this handler gets called for all radiobuttons that get unchecked, too
     // however we only want one notification for the new value (that is for

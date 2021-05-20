@@ -61,7 +61,7 @@ class ODateTimeDialog : public weld::GenericDialogController
     */
     sal_Int32 getFormatKey(bool _bDate) const;
 
-    DECL_LINK(CBClickHdl, weld::ToggleButton&, void);
+    DECL_LINK(CBClickHdl, weld::Toggleable&, void);
     ODateTimeDialog(const ODateTimeDialog&) = delete;
     void operator =(const ODateTimeDialog&) = delete;
 

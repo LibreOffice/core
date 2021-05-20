@@ -369,12 +369,12 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ChangeNumber2Hdl_Impl, weld::SpinButton&, voi
     ChangePreviewHdl_Impl(*m_xMtrLength1);
 }
 
-IMPL_LINK( SvxLineDefTabPage, ChangeMetricHdl_Impl, weld::ToggleButton&, r, void)
+IMPL_LINK( SvxLineDefTabPage, ChangeMetricHdl_Impl, weld::Toggleable&, r, void)
 {
     ChangeMetricHdl_Impl(&r);
 }
 
-void SvxLineDefTabPage::ChangeMetricHdl_Impl(const weld::ToggleButton* p)
+void SvxLineDefTabPage::ChangeMetricHdl_Impl(const weld::Toggleable* p)
 {
     if( !m_xCbxSynchronize->get_active() && m_xMtrLength1->get_unit() != eFUnit )
     {

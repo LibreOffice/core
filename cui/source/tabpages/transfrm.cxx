@@ -1160,7 +1160,7 @@ DeactivateRC SvxPositionSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
 }
 
 
-IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangePosProtectHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangePosProtectHdl, weld::Toggleable&, void)
 {
     // #106572# Remember user's last choice
     m_xTsbSizeProtect->set_state(m_xTsbPosProtect->get_state() == TRISTATE_TRUE ?  TRISTATE_TRUE : mnProtectSizeState);
@@ -1199,7 +1199,7 @@ void SvxPositionSizeTabPage::UpdateControlStates()
     m_aCtlPos.Invalidate();
 }
 
-IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeSizeProtectHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeSizeProtectHdl, weld::Toggleable&, void)
 {
     if (m_xTsbSizeProtect->get_sensitive())
     {
@@ -1561,12 +1561,12 @@ IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeHeightHdl, weld::MetricSpinButton&
     }
 }
 
-IMPL_LINK_NOARG(SvxPositionSizeTabPage, ClickSizeProtectHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxPositionSizeTabPage, ClickSizeProtectHdl, weld::Toggleable&, void)
 {
     UpdateControlStates();
 }
 
-IMPL_LINK_NOARG(SvxPositionSizeTabPage, ClickAutoHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxPositionSizeTabPage, ClickAutoHdl, weld::Toggleable&, void)
 {
     if (m_xCbxScale->get_active())
     {

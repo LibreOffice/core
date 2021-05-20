@@ -992,12 +992,12 @@ IMPL_LINK_NOARG(ExportDialog, SelectListBoxHdl, weld::ComboBox&, void)
     updateControls();
 }
 
-IMPL_LINK_NOARG(ExportDialog, UpdateHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ExportDialog, UpdateHdl, weld::Toggleable&, void)
 {
     updateControls();
 }
 
-IMPL_LINK_NOARG(ExportDialog, UpdateLock, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ExportDialog, UpdateLock, weld::Toggleable&, void)
 {
     if (mxModifyResolution->get_active())
     {

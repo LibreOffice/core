@@ -38,8 +38,8 @@ public:
 
 private:
     DECL_LINK( SelectSchemeHdl, weld::ComboBox&, void );
-    DECL_LINK( SelectShading, weld::ToggleButton&, void );
-    DECL_LINK( SelectRoundedEdgeOrObjectLines, weld::ToggleButton&, void );
+    DECL_LINK( SelectShading, weld::Toggleable&, void );
+    DECL_LINK( SelectRoundedEdgeOrObjectLines, weld::Toggleable&, void );
 
     void initControlsFromModel();
     void applyShadeModeToModel();

@@ -214,20 +214,20 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     std::unique_ptr<weld::Label> mxSlidesFt;
     std::unique_ptr<weld::Label> mxSheetsFt;
 
-    DECL_LINK(ToggleAllHdl, weld::ToggleButton&, void);
-    DECL_LINK(TogglePagesHdl, weld::ToggleButton&, void);
-    DECL_LINK(ToggleSelectionHdl, weld::ToggleButton&, void);
-    DECL_LINK(ToggleCompressionHdl, weld::ToggleButton&, void);
-    DECL_LINK(ToggleReduceImageResolutionHdl, weld::ToggleButton&, void);
-    DECL_LINK(ToggleWatermarkHdl, weld::ToggleButton&, void);
-    DECL_LINK(ToggleAddStreamHdl, weld::ToggleButton&, void);
-    DECL_LINK(ToggleExportFormFieldsHdl, weld::ToggleButton&, void);
-    DECL_LINK(ToggleExportNotesPagesHdl, weld::ToggleButton&, void);
+    DECL_LINK(ToggleAllHdl, weld::Toggleable&, void);
+    DECL_LINK(TogglePagesHdl, weld::Toggleable&, void);
+    DECL_LINK(ToggleSelectionHdl, weld::Toggleable&, void);
+    DECL_LINK(ToggleCompressionHdl, weld::Toggleable&, void);
+    DECL_LINK(ToggleReduceImageResolutionHdl, weld::Toggleable&, void);
+    DECL_LINK(ToggleWatermarkHdl, weld::Toggleable&, void);
+    DECL_LINK(ToggleAddStreamHdl, weld::Toggleable&, void);
+    DECL_LINK(ToggleExportFormFieldsHdl, weld::Toggleable&, void);
+    DECL_LINK(ToggleExportNotesPagesHdl, weld::Toggleable&, void);
 
     void                        TogglePagesHdl();
     void                        EnableExportNotesPages();
 
-    DECL_LINK(TogglePDFVersionOrUniversalAccessibilityHandle, weld::ToggleButton&, void);
+    DECL_LINK(TogglePDFVersionOrUniversalAccessibilityHandle, weld::Toggleable&, void);
 
 public:
 
@@ -263,8 +263,8 @@ class ImpPDFTabOpnFtrPage : public SfxTabPage
     std::unique_ptr<weld::RadioButton> mxRbPgLyContinueFacing;
     std::unique_ptr<weld::CheckButton> mxCbPgLyFirstOnLeft;
 
-    DECL_LINK(ToggleRbPgLyContinueFacingHdl, weld::ToggleButton&, void);
-    DECL_LINK(ToggleRbMagnHdl, weld::ToggleButton&, void);
+    DECL_LINK(ToggleRbPgLyContinueFacingHdl, weld::Toggleable&, void);
+    DECL_LINK(ToggleRbMagnHdl, weld::Toggleable&, void);
 
     void                        ToggleRbPgLyContinueFacingHdl();
 
@@ -295,7 +295,7 @@ class ImpPDFTabViewerPage : public SfxTabPage
     std::unique_ptr<weld::RadioButton> m_xRbVisibleBookmarkLevels;
     std::unique_ptr<weld::SpinButton>m_xNumBookmarkLevels;
 
-    DECL_LINK(ToggleRbBookmarksHdl, weld::ToggleButton&, void);
+    DECL_LINK(ToggleRbBookmarksHdl, weld::Toggleable&, void);
 
 public:
     ImpPDFTabViewerPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
@@ -371,8 +371,8 @@ class ImpPDFTabLinksPage : public SfxTabPage
     std::unique_ptr<weld::RadioButton> m_xRbOpnLnksLaunch;
     std::unique_ptr<weld::RadioButton> m_xRbOpnLnksBrowser;
 
-    DECL_LINK(ClickRbOpnLnksDefaultHdl, weld::ToggleButton&, void);
-    DECL_LINK(ClickRbOpnLnksBrowserHdl, weld::ToggleButton&, void);
+    DECL_LINK(ClickRbOpnLnksDefaultHdl, weld::Toggleable&, void);
+    DECL_LINK(ClickRbOpnLnksBrowserHdl, weld::Toggleable&, void);
 
 public:
     ImpPDFTabLinksPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);

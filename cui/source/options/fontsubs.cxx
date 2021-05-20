@@ -249,7 +249,7 @@ void  SvxFontSubstTabPage::Reset( const SfxItemSet* )
     m_xFontHeightLB->save_value();
 }
 
-IMPL_LINK(SvxFontSubstTabPage, ToggleHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SvxFontSubstTabPage, ToggleHdl, weld::Toggleable&, rButton, void)
 {
     SelectHdl(&rButton);
 }
@@ -362,7 +362,7 @@ void SvxFontSubstTabPage::SelectHdl(const weld::Widget* pWin)
     CheckEnable();
 }
 
-IMPL_LINK(SvxFontSubstTabPage, NonPropFontsHdl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(SvxFontSubstTabPage, NonPropFontsHdl, weld::Toggleable&, rBox, void)
 {
     OUString sFontName = m_xFontNameLB->get_active_text();
     bool bNonPropOnly = rBox.get_active();

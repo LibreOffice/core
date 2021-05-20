@@ -1148,7 +1148,7 @@ IMPL_LINK(SvxNumberFormatTabPage, DoubleClickHdl_Impl, weld::TreeView&, rLb, boo
 #*
 #************************************************************************/
 
-IMPL_LINK(SvxNumberFormatTabPage, SelFormatClickHdl_Impl, weld::ToggleButton&, rLb, void)
+IMPL_LINK(SvxNumberFormatTabPage, SelFormatClickHdl_Impl, weld::Toggleable&, rLb, void)
 {
     SelFormatHdl_Impl(&rLb);
 }
@@ -1540,7 +1540,7 @@ void SvxNumberFormatTabPage::EditHdl_Impl(const weld::Entry* pEdFormat)
 #*
 #************************************************************************/
 
-IMPL_LINK(SvxNumberFormatTabPage, OptClickHdl_Impl, weld::ToggleButton&, rOptCtrl, void)
+IMPL_LINK(SvxNumberFormatTabPage, OptClickHdl_Impl, weld::Toggleable&, rOptCtrl, void)
 {
     OptHdl_Impl(&rOptCtrl);
 }

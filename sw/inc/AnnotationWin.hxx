@@ -213,7 +213,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public InterimItemWindow
         DECL_LINK(ModifyHdl, LinkParamNone*, void);
         DECL_LINK(ScrollHdl, weld::ScrolledWindow&, void);
         DECL_LINK(DeleteHdl, void*, void);
-        DECL_LINK(ToggleHdl, weld::ToggleButton&, void);
+        DECL_LINK(ToggleHdl, weld::Toggleable&, void);
         DECL_LINK(SelectHdl, const OString&, void);
         DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
         DECL_LINK(MouseMoveHdl, const MouseEvent&, bool);

@@ -42,7 +42,7 @@ class OfaHtmlTabPage : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xSaveGrfLocalCB;
     std::unique_ptr<SvxTextEncodingBox> m_xCharSetLB;
 
-    DECL_LINK(CheckBoxHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(CheckBoxHdl_Impl, weld::Toggleable&, void);
 
 public:
     OfaHtmlTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);

@@ -147,7 +147,7 @@ struct SfxSecurityPage_Impl
     std::unique_ptr<weld::Button> m_xProtectPB;               // for record changes
     std::unique_ptr<weld::Button> m_xUnProtectPB;             // for record changes
 
-    DECL_LINK(RecordChangesCBToggleHdl, weld::ToggleButton&, void);
+    DECL_LINK(RecordChangesCBToggleHdl, weld::Toggleable&, void);
     DECL_LINK(ChangeProtectionPBHdl, weld::Button&, void);
 
     SfxSecurityPage_Impl( SfxSecurityPage &rDlg );
@@ -312,7 +312,7 @@ void SfxSecurityPage_Impl::Reset_Impl()
     }
 }
 
-IMPL_LINK_NOARG(SfxSecurityPage_Impl, RecordChangesCBToggleHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SfxSecurityPage_Impl, RecordChangesCBToggleHdl, weld::Toggleable&, void)
 {
     // when change recording gets disabled protection must be disabled as well
     if (m_xRecordChangesCB->get_active())    // the new check state is already present, thus the '!'

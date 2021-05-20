@@ -1255,7 +1255,7 @@ void SvxLineTabPage::ChangePreviewHdl_Impl(const weld::MetricSpinButton* pCntrl)
     m_xBoxEnd->set_sensitive(bHasLineEnd && bHasLineStyle);
 }
 
-IMPL_LINK_NOARG(SvxLineTabPage, ChangeStartClickHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxLineTabPage, ChangeStartClickHdl_Impl, weld::Toggleable&, void)
 {
     if (m_xCbxSynchronize->get_active())
         m_xTsbCenterEnd->set_state(m_xTsbCenterStart->get_state());
@@ -1336,7 +1336,7 @@ void SvxLineTabPage::ClickInvisibleHdl_Impl()
     ChangePreviewHdl_Impl( nullptr );
 }
 
-IMPL_LINK_NOARG(SvxLineTabPage, ChangeEndClickHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxLineTabPage, ChangeEndClickHdl_Impl, weld::Toggleable&, void)
 {
     if (m_xCbxSynchronize->get_active())
         m_xTsbCenterStart->set_state(m_xTsbCenterEnd->get_state());
@@ -1381,7 +1381,7 @@ void SvxLineTabPage::FillUserData()
 // #58425# Symbols on a list (e.g. StarChart)
 // Handler for the symbol selection's popup menu (NumMenueButton)
 // The following link originates from SvxNumOptionsTabPage
-IMPL_LINK_NOARG(SvxLineTabPage, MenuCreateHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxLineTabPage, MenuCreateHdl_Impl, weld::Toggleable&, void)
 {
     ScopedVclPtrInstance< VirtualDevice > pVD;
 
@@ -1656,7 +1656,7 @@ IMPL_LINK( SvxLineTabPage, SizeHdl_Impl, weld::MetricSpinButton&, rField, void)
     m_aSymbolLastSize=m_aSymbolSize;
 }
 
-IMPL_LINK(SvxLineTabPage, RatioHdl_Impl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(SvxLineTabPage, RatioHdl_Impl, weld::Toggleable&, rBox, void)
 {
     if (rBox.get_active())
     {

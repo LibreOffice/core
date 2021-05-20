@@ -64,7 +64,7 @@ SdStartPresentationDlg::SdStartPresentationDlg(weld::Window* pWindow, const SfxI
     m_xFormatter->SetExtFormat(ExtTimeFieldFormat::LongDuration);
     m_xFormatter->EnableEmptyField(false);
 
-    Link<weld::ToggleButton&,void> aLink( LINK( this, SdStartPresentationDlg, ChangeRangeHdl ) );
+    Link<weld::Toggleable&,void> aLink( LINK( this, SdStartPresentationDlg, ChangeRangeHdl ) );
 
     m_xRbtAll->connect_toggled( aLink );
     m_xRbtAtDia->connect_toggled( aLink );
@@ -277,7 +277,7 @@ void SdStartPresentationDlg::GetAttr( SfxItemSet& rAttr )
 /**
  *      Handler: Enabled/Disabled Listbox "Dias"
  */
-IMPL_LINK_NOARG(SdStartPresentationDlg, ChangeRangeHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SdStartPresentationDlg, ChangeRangeHdl, weld::Toggleable&, void)
 {
     m_xLbDias->set_sensitive( m_xRbtAtDia->get_active() );
     m_xLbCustomshow->set_sensitive( m_xRbtCustomshow->get_active() );
@@ -286,7 +286,7 @@ IMPL_LINK_NOARG(SdStartPresentationDlg, ChangeRangeHdl, weld::ToggleButton&, voi
 /**
  *      Handler: Enabled/Disabled Checkbox "AlwaysOnTop"
  */
-IMPL_LINK_NOARG(SdStartPresentationDlg, ClickWindowPresentationHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SdStartPresentationDlg, ClickWindowPresentationHdl, weld::Toggleable&, void)
 {
     const bool bAuto = m_xRbtAuto->get_active();
     const bool bWindow = m_xRbtWindow->get_active();

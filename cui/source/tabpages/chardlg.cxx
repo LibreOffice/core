@@ -1642,7 +1642,7 @@ void SvxCharEffectsPage::SelectHdl_Impl(const weld::ComboBox* pBox)
     UpdatePreview_Impl();
 }
 
-IMPL_LINK(SvxCharEffectsPage, CbClickHdl_Impl, weld::ToggleButton&, rToggle, void)
+IMPL_LINK(SvxCharEffectsPage, CbClickHdl_Impl, weld::Toggleable&, rToggle, void)
 {
     m_aIndividualWordsState.ButtonToggled(rToggle);
     UpdatePreview_Impl();
@@ -2038,18 +2038,18 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
     ChangesApplied();
 }
 
-IMPL_LINK(SvxCharEffectsPage, HiddenBtnClickHdl, weld::ToggleButton&, rToggle, void)
+IMPL_LINK(SvxCharEffectsPage, HiddenBtnClickHdl, weld::Toggleable&, rToggle, void)
 {
     m_aHiddenState.ButtonToggled(rToggle);
 }
 
-IMPL_LINK(SvxCharEffectsPage, OutlineBtnClickHdl, weld::ToggleButton&, rToggle, void)
+IMPL_LINK(SvxCharEffectsPage, OutlineBtnClickHdl, weld::Toggleable&, rToggle, void)
 {
     m_aOutlineState.ButtonToggled(rToggle);
     UpdatePreview_Impl();
 }
 
-IMPL_LINK(SvxCharEffectsPage, ShadowBtnClickHdl, weld::ToggleButton&, rToggle, void)
+IMPL_LINK(SvxCharEffectsPage, ShadowBtnClickHdl, weld::Toggleable&, rToggle, void)
 {
     m_aShadowState.ButtonToggled(rToggle);
     UpdatePreview_Impl();
@@ -2455,7 +2455,7 @@ void SvxCharPositionPage::Initialize()
     m_xNormalPosBtn->set_active(true);
     PositionHdl_Impl(*m_xNormalPosBtn);
 
-    Link<weld::ToggleButton&,void> aLink2 = LINK(this, SvxCharPositionPage, PositionHdl_Impl);
+    Link<weld::Toggleable&,void> aLink2 = LINK(this, SvxCharPositionPage, PositionHdl_Impl);
     m_xHighPosBtn->connect_toggled(aLink2);
     m_xNormalPosBtn->connect_toggled(aLink2);
     m_xLowPosBtn->connect_toggled(aLink2);
@@ -2528,7 +2528,7 @@ void SvxCharPositionPage::SetEscapement_Impl( SvxEscapement nEsc )
 }
 
 
-IMPL_LINK_NOARG(SvxCharPositionPage, PositionHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxCharPositionPage, PositionHdl_Impl, weld::Toggleable&, void)
 {
     SvxEscapement nEsc = SvxEscapement::Off;   // also when pBtn == NULL
 
@@ -2540,7 +2540,7 @@ IMPL_LINK_NOARG(SvxCharPositionPage, PositionHdl_Impl, weld::ToggleButton&, void
     SetEscapement_Impl( nEsc );
 }
 
-IMPL_LINK_NOARG(SvxCharPositionPage, RotationHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxCharPositionPage, RotationHdl_Impl, weld::Toggleable&, void)
 {
     bool bEnable = false;
     if (m_x90degRB->get_active() || m_x270degRB->get_active())
@@ -2558,7 +2558,7 @@ void SvxCharPositionPage::FontModifyHdl_Impl()
     UpdatePreview_Impl( 100, nEscProp, nEsc );
 }
 
-IMPL_LINK(SvxCharPositionPage, AutoPositionHdl_Impl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(SvxCharPositionPage, AutoPositionHdl_Impl, weld::Toggleable&, rBox, void)
 {
     if (rBox.get_active())
     {
@@ -2571,7 +2571,7 @@ IMPL_LINK(SvxCharPositionPage, AutoPositionHdl_Impl, weld::ToggleButton&, rBox, 
                                                                                   : *m_xNormalPosBtn);
 }
 
-IMPL_LINK_NOARG(SvxCharPositionPage, FitToLineHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxCharPositionPage, FitToLineHdl_Impl, weld::Toggleable&, void)
 {
     sal_uInt16 nVal = m_nScaleWidthInitialVal;
     if (m_xFitToLineCB->get_active())
@@ -3115,7 +3115,7 @@ void SvxCharTwoLinesPage::SetBracket( sal_Unicode cBracket, bool bStart )
         m_nEndBracketPosition = nEntryPos;
 }
 
-IMPL_LINK_NOARG(SvxCharTwoLinesPage, TwoLinesHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxCharTwoLinesPage, TwoLinesHdl_Impl, weld::Toggleable&, void)
 {
     bool bChecked = m_xTwoLinesBtn->get_active();
     m_xEnclosingFrame->set_sensitive(bChecked);

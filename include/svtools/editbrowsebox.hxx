@@ -551,7 +551,7 @@ namespace svt
         void Clicked();
 
     private:
-        DECL_LINK(OnToggle, weld::ToggleButton&, void);
+        DECL_LINK(OnToggle, weld::Toggleable&, void);
 
         void CallModifyHdls()
         {
@@ -766,7 +766,7 @@ namespace svt
         std::unique_ptr<weld::Button> m_xTodayBtn;
         std::unique_ptr<weld::Button> m_xNoneBtn;
 
-        DECL_LINK(ToggleHdl, weld::ToggleButton&, void);
+        DECL_LINK(ToggleHdl, weld::Toggleable&, void);
         DECL_LINK(ActivateHdl, weld::Calendar&, void);
         DECL_LINK(ImplClickHdl, weld::Button&, void);
     };

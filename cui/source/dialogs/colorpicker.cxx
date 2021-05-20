@@ -773,7 +773,7 @@ public:
     DECL_LINK(ColorModifyMetricHdl, weld::MetricSpinButton&, void);
     DECL_LINK(ColorModifySpinHdl, weld::SpinButton&, void);
     DECL_LINK(ColorModifyEditHdl, weld::Entry&, void);
-    DECL_LINK(ModeModifyHdl, weld::ToggleButton&, void);
+    DECL_LINK(ModeModifyHdl, weld::Toggleable&, void);
 
     Color GetColor() const;
 
@@ -840,7 +840,7 @@ ColorPickerDialog::ColorPickerDialog(weld::Window* pParent, Color nColor, sal_In
 
     m_xEDHex->connect_changed(LINK(this, ColorPickerDialog, ColorModifyEditHdl));
 
-    Link<weld::ToggleButton&,void> aLink2 = LINK( this, ColorPickerDialog, ModeModifyHdl );
+    Link<weld::Toggleable&,void> aLink2 = LINK( this, ColorPickerDialog, ModeModifyHdl );
     m_xRBRed->connect_toggled( aLink2 );
     m_xRBGreen->connect_toggled( aLink2 );
     m_xRBBlue->connect_toggled( aLink2 );
@@ -1120,7 +1120,7 @@ IMPL_LINK(ColorPickerDialog, ColorModifySpinHdl, weld::SpinButton&, rEdit, void)
 }
 
 
-IMPL_LINK_NOARG(ColorPickerDialog, ModeModifyHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ColorPickerDialog, ModeModifyHdl, weld::Toggleable&, void)
 {
     ColorMode eMode = HUE;
 

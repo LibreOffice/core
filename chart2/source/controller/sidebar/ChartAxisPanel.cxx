@@ -244,7 +244,7 @@ void ChartAxisPanel::Initialize()
 
     updateData();
 
-    Link<weld::ToggleButton&,void> aLink = LINK(this, ChartAxisPanel, CheckBoxHdl);
+    Link<weld::Toggleable&,void> aLink = LINK(this, ChartAxisPanel, CheckBoxHdl);
     mxCBShowLabel->connect_toggled(aLink);
     mxCBReverse->connect_toggled(aLink);
 
@@ -345,7 +345,7 @@ void ChartAxisPanel::selectionChanged(bool bCorrectType)
         updateData();
 }
 
-IMPL_LINK(ChartAxisPanel, CheckBoxHdl, weld::ToggleButton&, rCheckbox, void)
+IMPL_LINK(ChartAxisPanel, CheckBoxHdl, weld::Toggleable&, rCheckbox, void)
 {
     OUString aCID = getCID(mxModel);
     bool bChecked = rCheckbox.get_active();

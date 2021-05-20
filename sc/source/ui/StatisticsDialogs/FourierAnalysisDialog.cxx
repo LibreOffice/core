@@ -223,7 +223,7 @@ void ScFourierAnalysisDialog::genFormula(OUString& rFormula)
                + OUString::boolean(mbInverse) + ";true;" + OUString::number(mfMinMag) + ")";
 }
 
-IMPL_LINK_NOARG(ScFourierAnalysisDialog, CheckBoxHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ScFourierAnalysisDialog, CheckBoxHdl, weld::Toggleable&, void)
 {
     ValidateDialogInput();
 }

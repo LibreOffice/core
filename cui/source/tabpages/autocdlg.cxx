@@ -2079,7 +2079,7 @@ IMPL_LINK_NOARG(OfaAutoCompleteTabPage, DeleteHdl, weld::Button&, void)
     }
 }
 
-IMPL_LINK(OfaAutoCompleteTabPage, CheckHdl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(OfaAutoCompleteTabPage, CheckHdl, weld::Toggleable&, rBox, void)
 {
     bool bEnable = rBox.get_active();
     if (&rBox == m_xCBActiv.get())
@@ -2256,7 +2256,7 @@ IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, ClickHdl, weld::Button&, void)
 
 /** Handler for the check box
 */
-IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, CheckHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, CheckHdl, weld::Toggleable&, void)
 {
     const bool bEnable = m_xMainCB->get_active();
     m_xSmartTagTypesLB->set_sensitive(bEnable);

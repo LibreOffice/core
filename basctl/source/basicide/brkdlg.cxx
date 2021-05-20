@@ -138,7 +138,7 @@ void BreakPointDialog::CheckButtons()
     }
 }
 
-IMPL_LINK(BreakPointDialog, CheckBoxHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(BreakPointDialog, CheckBoxHdl, weld::Toggleable&, rButton, void)
 {
     BreakPoint* pBrk = GetSelectedBreakPoint();
     if (pBrk)

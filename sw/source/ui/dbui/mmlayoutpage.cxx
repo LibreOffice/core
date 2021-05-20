@@ -683,7 +683,7 @@ IMPL_LINK(SwMailMergeLayoutPage, GreetingsHdl_Impl, weld::Button&, rButton, void
     m_xExampleFrame->Invalidate();
 }
 
-IMPL_LINK(SwMailMergeLayoutPage, AlignToTextHdl_Impl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(SwMailMergeLayoutPage, AlignToTextHdl_Impl, weld::Toggleable&, rBox, void)
 {
     bool bCheck = rBox.get_active() && rBox.get_sensitive();
     m_xLeftFT->set_sensitive(!bCheck);

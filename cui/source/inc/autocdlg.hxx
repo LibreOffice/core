@@ -340,7 +340,7 @@ private:
     std::unique_ptr<weld::TreeView> m_xLBEntries;
     std::unique_ptr<weld::Button> m_xPBEntries;
 
-    DECL_LINK(CheckHdl, weld::ToggleButton&, void);
+    DECL_LINK(CheckHdl, weld::Toggleable&, void);
     DECL_LINK(KeyReleaseHdl, const KeyEvent&, bool);
 
 public:
@@ -388,7 +388,7 @@ private:
         Enables/disables all controls in the tab page (except from the
         check box.
     */
-    DECL_LINK(CheckHdl, weld::ToggleButton&, void);
+    DECL_LINK(CheckHdl, weld::Toggleable&, void);
 
     /** Handler for the push button
 

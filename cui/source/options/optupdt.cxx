@@ -310,7 +310,7 @@ void SvxOnlineUpdateTabPage::FillUserData()
 {
 }
 
-IMPL_LINK(SvxOnlineUpdateTabPage, AutoCheckHdl_Impl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(SvxOnlineUpdateTabPage, AutoCheckHdl_Impl, weld::Toggleable&, rBox, void)
 {
     bool bEnabled = rBox.get_active();
     beans::Property aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName("/org.openoffice.Office.Jobs/Jobs/org.openoffice.Office.Jobs:Job['UpdateCheck']/Arguments/CheckInterval");
@@ -320,7 +320,7 @@ IMPL_LINK(SvxOnlineUpdateTabPage, AutoCheckHdl_Impl, weld::ToggleButton&, rBox, 
     m_xEveryMonthButton->set_sensitive(bEnabled && !bReadOnly);
 }
 
-IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, ExtrasCheckHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, ExtrasCheckHdl_Impl, weld::Toggleable&, void)
 {
     UpdateUserAgent();
 }

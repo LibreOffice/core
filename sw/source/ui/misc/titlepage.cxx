@@ -209,7 +209,7 @@ SwTitlePageDlg::SwTitlePageDlg(weld::Window *pParent)
     m_xDocumentStartRB->set_active(true);
     m_xPageStartNF->set_sensitive(false);
     m_xPageStartNF->set_value(lcl_GetCurrentPage(mrSh));
-    Link<weld::ToggleButton&,void> aStartPageHdl = LINK(this, SwTitlePageDlg, StartPageHdl);
+    Link<weld::Toggleable&,void> aStartPageHdl = LINK(this, SwTitlePageDlg, StartPageHdl);
     m_xDocumentStartRB->connect_toggled(aStartPageHdl);
     m_xPageStartRB->connect_toggled(aStartPageHdl);
 
@@ -235,17 +235,17 @@ IMPL_LINK_NOARG(SwTitlePageDlg, ValueChangeHdl, weld::SpinButton&, void)
         FillList();
 }
 
-IMPL_LINK_NOARG(SwTitlePageDlg, RestartNumberingHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwTitlePageDlg, RestartNumberingHdl, weld::Toggleable&, void)
 {
     m_xRestartNumberingNF->set_sensitive(m_xRestartNumberingCB->get_active());
 }
 
-IMPL_LINK_NOARG(SwTitlePageDlg, SetPageNumberHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwTitlePageDlg, SetPageNumberHdl, weld::Toggleable&, void)
 {
     m_xSetPageNumberNF->set_sensitive(m_xSetPageNumberCB->get_active());
 }
 
-IMPL_LINK_NOARG(SwTitlePageDlg, StartPageHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwTitlePageDlg, StartPageHdl, weld::Toggleable&, void)
 {
     m_xPageStartNF->set_sensitive(m_xPageStartRB->get_active());
 }

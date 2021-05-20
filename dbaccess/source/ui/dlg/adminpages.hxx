@@ -45,11 +45,11 @@ namespace dbaui
         virtual void Disable() override { m_pSaveValue->set_sensitive(false); }
     };
 
-    template <> class OSaveValueWidgetWrapper<weld::ToggleButton> : public ISaveValueWrapper
+    template <> class OSaveValueWidgetWrapper<weld::Toggleable> : public ISaveValueWrapper
     {
-        weld::ToggleButton*  m_pSaveValue;
+        weld::Toggleable*  m_pSaveValue;
     public:
-        explicit OSaveValueWidgetWrapper(weld::ToggleButton* _pSaveValue) : m_pSaveValue(_pSaveValue)
+        explicit OSaveValueWidgetWrapper(weld::Toggleable* _pSaveValue) : m_pSaveValue(_pSaveValue)
         { OSL_ENSURE(m_pSaveValue,"Illegal argument!"); }
 
         virtual void SaveValue() override { m_pSaveValue->save_state(); }
@@ -225,7 +225,7 @@ namespace dbaui
         DECL_LINK(OnControlModified, weld::Widget*, void);
         DECL_LINK(OnControlEntryModifyHdl, weld::Entry&, void);
         DECL_LINK(OnControlSpinButtonModifyHdl, weld::SpinButton&, void);
-        DECL_LINK(OnControlModifiedButtonClick, weld::ToggleButton&, void);
+        DECL_LINK(OnControlModifiedButtonClick, weld::Toggleable&, void);
         DECL_LINK(OnTestConnectionButtonClickHdl, weld::Button&, void);
     };
 }   // namespace dbaui

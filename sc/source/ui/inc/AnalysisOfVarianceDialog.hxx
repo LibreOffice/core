@@ -27,7 +27,7 @@ private:
         TWO_FACTOR
     };
 
-    DECL_LINK(FactorChanged, weld::ToggleButton&, void);
+    DECL_LINK(FactorChanged, weld::Toggleable&, void);
     void FactorChanged();
 
     AnovaFactor meFactor;

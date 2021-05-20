@@ -75,7 +75,7 @@ void Dim3DLookResourceGroup::fillParameter(ChartTypeParameter& rParameter)
     }
 }
 
-IMPL_LINK_NOARG(Dim3DLookResourceGroup, Dim3DLookCheckHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(Dim3DLookResourceGroup, Dim3DLookCheckHdl, weld::Toggleable&, void)
 {
     if (m_pChangeListener)
         m_pChangeListener->stateChanged();
@@ -110,7 +110,7 @@ void SortByXValuesResourceGroup::fillParameter(ChartTypeParameter& rParameter)
     rParameter.bSortByXValues = m_xCB_XValueSorting->get_active();
 }
 
-IMPL_LINK_NOARG(SortByXValuesResourceGroup, SortByXValuesCheckHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SortByXValuesResourceGroup, SortByXValuesCheckHdl, weld::Toggleable&, void)
 {
     if (m_pChangeListener)
         m_pChangeListener->stateChanged();
@@ -184,7 +184,7 @@ void StackingResourceGroup::fillParameter(ChartTypeParameter& rParameter)
         rParameter.eStackMode = GlobalStackMode_STACK_Z;
 }
 
-IMPL_LINK(StackingResourceGroup, StackingChangeHdl, weld::ToggleButton&, rRadio, void)
+IMPL_LINK(StackingResourceGroup, StackingChangeHdl, weld::Toggleable&, rRadio, void)
 {
     //for each radio click there are coming two change events
     //first uncheck of previous button -> ignore that call
@@ -193,7 +193,7 @@ IMPL_LINK(StackingResourceGroup, StackingChangeHdl, weld::ToggleButton&, rRadio,
         m_pChangeListener->stateChanged();
 }
 
-IMPL_LINK_NOARG(StackingResourceGroup, StackingEnableHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(StackingResourceGroup, StackingEnableHdl, weld::Toggleable&, void)
 {
     if (m_pChangeListener)
         m_pChangeListener->stateChanged();

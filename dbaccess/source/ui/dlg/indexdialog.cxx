@@ -615,7 +615,7 @@ namespace dbaui
         return true;
     }
 
-    IMPL_LINK_NOARG(DbaIndexDialog, OnModifiedClick, weld::ToggleButton&, void)
+    IMPL_LINK_NOARG(DbaIndexDialog, OnModifiedClick, weld::Toggleable&, void)
     {
         OnModified(*m_xFields);
     }

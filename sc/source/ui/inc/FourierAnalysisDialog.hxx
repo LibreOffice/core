@@ -50,7 +50,7 @@ private:
     void getDataLabel(OUString& rLabel);
     void genFormula(OUString& rFormula);
 
-    DECL_LINK(CheckBoxHdl, weld::ToggleButton&, void);
+    DECL_LINK(CheckBoxHdl, weld::Toggleable&, void);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

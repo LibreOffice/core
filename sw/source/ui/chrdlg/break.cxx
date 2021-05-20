@@ -55,7 +55,7 @@ void SwBreakDlg::rememberResult()
     }
 }
 
-IMPL_LINK_NOARG(SwBreakDlg, ToggleHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwBreakDlg, ToggleHdl, weld::Toggleable&, void)
 {
     CheckEnable();
 }
@@ -66,7 +66,7 @@ IMPL_LINK_NOARG(SwBreakDlg, ChangeHdl, weld::ComboBox&, void)
 }
 
 // Handler for Change Page Number
-IMPL_LINK(SwBreakDlg, PageNumHdl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(SwBreakDlg, PageNumHdl, weld::Toggleable&, rBox, void)
 {
     if (rBox.get_active())
         m_xPageNumEdit->set_value(1);
@@ -136,7 +136,7 @@ SwBreakDlg::SwBreakDlg(weld::Window *pParent, SwWrtShell &rS)
     , nKind(0)
     , bHtmlMode(0 != ::GetHtmlMode(rS.GetView().GetDocShell()))
 {
-    Link<weld::ToggleButton&,void> aLk = LINK(this, SwBreakDlg, ToggleHdl);
+    Link<weld::Toggleable&,void> aLk = LINK(this, SwBreakDlg, ToggleHdl);
     m_xPageBtn->connect_toggled(aLk);
     m_xLineBtn->connect_toggled(aLk);
     m_xColumnBtn->connect_toggled(aLk);

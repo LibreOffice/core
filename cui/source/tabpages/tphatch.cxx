@@ -286,7 +286,7 @@ IMPL_LINK( SvxHatchTabPage, ModifiedColorListBoxHdl_Impl, ColorListBox&, rListBo
     m_xHatchLB->SetNoSelection();
 }
 
-IMPL_LINK_NOARG( SvxHatchTabPage, ToggleHatchBackgroundColor_Impl, weld::ToggleButton&, void )
+IMPL_LINK_NOARG( SvxHatchTabPage, ToggleHatchBackgroundColor_Impl, weld::Toggleable&, void )
 {
     if (m_xCbBackgroundColor->get_active())
         m_xLbBackgroundColor->set_sensitive(true);

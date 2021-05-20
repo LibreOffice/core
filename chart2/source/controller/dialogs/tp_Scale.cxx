@@ -168,7 +168,7 @@ void ScaleTabPage::EnableControls()
     EnableValueHdl(*m_xCbx_AutoTimeResolution);
 }
 
-IMPL_LINK( ScaleTabPage, EnableValueHdl, weld::ToggleButton&, rCbx, void )
+IMPL_LINK( ScaleTabPage, EnableValueHdl, weld::Toggleable&, rCbx, void )
 {
     bool bEnable = !rCbx.get_active() && rCbx.get_sensitive();
     if (&rCbx == m_xCbxAutoMin.get())

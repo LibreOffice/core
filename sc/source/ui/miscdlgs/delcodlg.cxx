@@ -117,7 +117,7 @@ void ScDeleteContentsDlg::DisableObjects()
     m_xBtnDelObjects->set_sensitive(false);
 }
 
-IMPL_LINK_NOARG(ScDeleteContentsDlg, DelAllHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ScDeleteContentsDlg, DelAllHdl, weld::Toggleable&, void)
 {
     DisableChecks( m_xBtnDelAll->get_active() );
 }

@@ -60,7 +60,7 @@ class SwMailMergeLayoutPage : public vcl::OWizardPage
     DECL_LINK(ZoomHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(ChangeAddressHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(GreetingsHdl_Impl, weld::Button&, void);
-    DECL_LINK(AlignToTextHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(AlignToTextHdl_Impl, weld::Toggleable&, void);
 
     static SwFrameFormat* InsertAddressFrame(
                             SwWrtShell& rShell,

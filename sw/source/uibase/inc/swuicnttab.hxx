@@ -84,7 +84,7 @@ class SwMultiTOXTabDialog : public SfxTabDialogController
     std::unique_ptr<SwTOXDescription> CreateTOXDescFromTOXBase(const SwTOXBase*pCurTOX);
 
     DECL_LINK(CreateExample_Hdl, SwOneExampleFrame&, void);
-    DECL_LINK(ShowPreviewHdl, weld::ToggleButton&, void);
+    DECL_LINK(ShowPreviewHdl, weld::Toggleable&, void);
 
 public:
     SwMultiTOXTabDialog(weld::Widget* pParent, const SfxItemSet& rSet,
@@ -190,12 +190,12 @@ class SwTOXSelectTabPage : public SfxTabPage
 
     DECL_LINK(TOXTypeHdl,   weld::ComboBox&, void );
     DECL_LINK(AddStylesHdl, weld::Button&, void );
-    DECL_LINK(MenuEnableHdl, weld::ToggleButton&, void);
+    DECL_LINK(MenuEnableHdl, weld::Toggleable&, void);
     DECL_LINK(MenuExecuteHdl, const OString&, void);
     DECL_LINK(LanguageListBoxHdl, weld::ComboBox&, void);
     void LanguageHdl(const weld::ComboBox*);
-    DECL_LINK(CheckBoxHdl, weld::ToggleButton&, void );
-    DECL_LINK(RadioButtonHdl, weld::ToggleButton&, void);
+    DECL_LINK(CheckBoxHdl, weld::Toggleable&, void );
+    DECL_LINK(RadioButtonHdl, weld::Toggleable&, void);
     DECL_LINK(ModifyEntryHdl, weld::Entry&, void);
     DECL_LINK(ModifySpinHdl, weld::SpinButton&, void);
     DECL_LINK(ModifyListBoxHdl, weld::ComboBox&, void);
@@ -364,12 +364,12 @@ class SwTOXEntryTabPage : public SfxTabPage
     DECL_LINK(EditStyleHdl, weld::Button&, void);
     DECL_LINK(InsertTokenHdl, weld::Button&, void);
     DECL_LINK(LevelHdl, weld::TreeView&, void);
-    DECL_LINK(AutoRightHdl, weld::ToggleButton&, void);
+    DECL_LINK(AutoRightHdl, weld::Toggleable&, void);
     DECL_LINK(TokenSelectedHdl, SwFormToken&, void);
     DECL_LINK(TabPosHdl, weld::MetricSpinButton&, void);
     DECL_LINK(FillCharHdl, weld::ComboBox&, void);
     DECL_LINK(RemoveInsertAuthHdl, weld::Button&, void);
-    DECL_LINK(SortKeyHdl, weld::ToggleButton&, void);
+    DECL_LINK(SortKeyHdl, weld::Toggleable&, void);
     DECL_LINK(ChapterInfoHdl, weld::ComboBox&, void);
     DECL_LINK(ChapterInfoOutlineHdl, weld::SpinButton&, void);
     DECL_LINK(NumberFormatHdl, weld::ComboBox&, void);
@@ -380,7 +380,7 @@ class SwTOXEntryTabPage : public SfxTabPage
     void            UpdateDescriptor();
     DECL_LINK(ModifyHdl, LinkParamNone*, void);
     void OnModify(bool bAllLevels);
-    DECL_LINK(ModifyClickHdl, weld::ToggleButton&, void);
+    DECL_LINK(ModifyClickHdl, weld::Toggleable&, void);
 
 public:
     SwTOXEntryTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttrSet);

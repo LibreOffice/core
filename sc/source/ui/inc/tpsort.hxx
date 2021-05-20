@@ -141,10 +141,10 @@ private:
     void FillUserSortListBox    ();
 
     // Handler ------------------------
-    DECL_LINK( EnableHdl, weld::ToggleButton&, void );
+    DECL_LINK( EnableHdl, weld::Toggleable&, void );
     DECL_LINK( SelOutPosHdl, weld::ComboBox&, void );
     void EdOutPosModHdl();
-    DECL_LINK( SortDirHdl, weld::ToggleButton&, void );
+    DECL_LINK( SortDirHdl, weld::Toggleable&, void );
     void FillAlgor();
     DECL_LINK( FillAlgorHdl, weld::ComboBox&, void );
 };

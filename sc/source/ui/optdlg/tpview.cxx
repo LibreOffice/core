@@ -65,7 +65,7 @@ ScTpContentOptions::ScTpContentOptions(weld::Container* pPage, weld::DialogContr
     m_xDrawLB->connect_changed(aSelObjHdl);
     m_xGridLB->connect_changed( LINK( this, ScTpContentOptions, GridHdl ) );
 
-    Link<weld::ToggleButton&, void> aCBHdl(LINK( this, ScTpContentOptions, CBHdl ) );
+    Link<weld::Toggleable&, void> aCBHdl(LINK( this, ScTpContentOptions, CBHdl ) );
     m_xFormulaCB->connect_toggled(aCBHdl);
     m_xNilCB->connect_toggled(aCBHdl);
     m_xAnnotCB->connect_toggled(aCBHdl);
@@ -232,7 +232,7 @@ IMPL_LINK( ScTpContentOptions, SelLbObjHdl, weld::ComboBox&, rLb, void )
     m_xLocalOptions->SetObjMode( eType, eMode );
 }
 
-IMPL_LINK( ScTpContentOptions, CBHdl, weld::ToggleButton&, rBtn, void )
+IMPL_LINK( ScTpContentOptions, CBHdl, weld::Toggleable&, rBtn, void )
 {
     ScViewOption eOption = VOPT_FORMULAS;
     bool         bChecked = rBtn.get_active();
@@ -603,7 +603,7 @@ IMPL_LINK_NOARG(ScTpLayoutOptions, MetricHdl, weld::ComboBox&, void)
     }
 }
 
-IMPL_LINK(ScTpLayoutOptions, AlignHdl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(ScTpLayoutOptions, AlignHdl, weld::Toggleable&, rBox, void)
 {
     m_xAlignLB->set_sensitive(rBox.get_active());
 }
