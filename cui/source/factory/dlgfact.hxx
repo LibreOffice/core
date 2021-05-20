@@ -210,6 +210,7 @@ public:
     virtual OUString    GetWord() override;
 };
 
+#ifndef ENABLE_WASM_STRIP_HUNSPELL
 class AbstractHyphenWordDialog_Impl: public AbstractHyphenWordDialog
 {
     std::unique_ptr<SvxHyphenWordDialog> m_xDlg;
@@ -220,6 +221,7 @@ public:
     }
     virtual short Execute() override;
 };
+#endif
 
 class FmShowColsDialog;
 class AbstractFmShowColsDialog_Impl : public AbstractFmShowColsDialog
@@ -796,10 +798,12 @@ public:
                                                 css::uno::Reference<css::linguistic2::XThesaurus> xThesaurus,
                                                 const OUString &rWord, LanguageType nLanguage) override;
 
+#ifndef ENABLE_WASM_STRIP_EXTRA
     virtual VclPtr<AbstractHyphenWordDialog> CreateHyphenWordDialog(weld::Widget*,
                                                 const OUString &rWord, LanguageType nLang,
                                                 css::uno::Reference< css::linguistic2::XHyphenator >  &xHyphen,
                                                 SvxSpellWrapper* pWrapper) override;
+#endif
 
     virtual VclPtr<AbstractFmShowColsDialog> CreateFmShowColsDialog(weld::Window* pParent) override;
     virtual VclPtr<AbstractSvxZoomDialog> CreateSvxZoomDialog(weld::Window* pParent, const SfxItemSet& rCoreSet) override;

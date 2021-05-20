@@ -549,6 +549,7 @@ endef
 gb_ExternalProject__use_hunspell :=
 
 else # !SYSTEM_HUNSPELL
+ifneq ($(ENABLE_WASM_STRIP_HUNSPELL),TRUE)
 
 define gb_LinkTarget__use_hunspell
 $(call gb_LinkTarget_add_defs,$(1),\
@@ -576,6 +577,7 @@ $(call gb_ExternalProject_use_external_project,$(1),hunspell)
 
 endef
 
+endif # ENABLE_WASM_STRIP_EXTRA
 endif # SYSTEM_HUNSPELL
 
 

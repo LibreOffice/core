@@ -365,6 +365,17 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 ))
 endif
 
+ifneq ($(ENABLE_WASM_STRIP_HUNSPELL),TRUE)
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
+	hyphen \
+	lnth \
+	spell \
+	$(if $(filter iOS MACOSX,$(OS)), \
+		MacOSXSpell \
+	) \
+))
+endif
+
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(call gb_Helper_optional,AVMEDIA,avmedia) \
 	$(if $(filter MACOSX,$(OS)),\
@@ -409,7 +420,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	fwk \
 	i18npool \
 	i18nsearch \
-	hyphen \
     icg \
 	$(if $(ENABLE_JAVA),jdbc) \
 	$(if $(ENABLE_LDAP),ldapbe2) \
@@ -417,7 +427,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	localebe1 \
 	log \
 	lng \
-	lnth \
 	$(if $(filter $(OS),MACOSX),macbe1) \
 	$(if $(MERGELIBS),merged) \
 	migrationoo2 \
@@ -448,7 +457,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	sfx \
 	slideshow \
 	sot \
-	spell \
 	$(if $(or $(DISABLE_GUI),$(ENABLE_WASM_STRIP_SPLASH)),,spl) \
 	storagefd \
 	$(call gb_Helper_optional,SCRIPTING,stringresource) \
@@ -498,9 +506,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 			AppleRemote \
 		) \
 		fps_aqua \
-	) \
-	$(if $(filter iOS MACOSX,$(OS)), \
-		MacOSXSpell \
 	) \
 ))
 

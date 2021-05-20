@@ -16,12 +16,17 @@ $(eval $(call gb_Module_add_targets,lingucomponent,\
 ))
 endif
 
+ifneq ($(ENABLE_WASM_STRIP_HUNSPELL),TRUE)
 $(eval $(call gb_Module_add_targets,lingucomponent,\
 	Library_hyphen \
 	Library_lnth \
-	$(if $(filter iOS MACOSX,$(OS)),Library_MacOSXSpell) \
 	Library_spell \
 	StaticLibrary_ulingu \
+))
+endif
+
+$(eval $(call gb_Module_add_targets,lingucomponent,\
+	$(if $(filter iOS MACOSX,$(OS)),Library_MacOSXSpell) \
 	Library_numbertext \
 ))
 

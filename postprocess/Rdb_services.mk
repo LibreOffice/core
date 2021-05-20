@@ -103,6 +103,14 @@ $(eval $(call gb_Rdb_add_components,services,\
 ))
 endif
 
+ifneq ($(ENABLE_WASM_STRIP_HUNSPELL),TRUE)
+$(eval $(call gb_Rdb_add_components,services,\
+	lingucomponent/source/hyphenator/hyphen/hyphen \
+	lingucomponent/source/thesaurus/libnth/lnth \
+	lingucomponent/source/spellcheck/spell/spell \
+))
+endif
+
 $(eval $(call gb_Rdb_add_components,services,\
 	animations/source/animcore/animcore \
 	cui/util/cui \
@@ -123,9 +131,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	$(call gb_Helper_optional,DESKTOP,fpicker/source/office/fps_office) \
 	$(if $(filter MACOSX,$(OS)),fpicker/source/aqua/fps_aqua) \
 	hwpfilter/source/hwp \
-	lingucomponent/source/hyphenator/hyphen/hyphen \
-	lingucomponent/source/spellcheck/spell/spell \
-	lingucomponent/source/thesaurus/libnth/lnth \
 	lingucomponent/source/numbertext/numbertext \
 	linguistic/source/lng \
 	$(if $(ENABLE_LWP), \

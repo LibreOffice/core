@@ -249,6 +249,9 @@ void SvxSpellWrapper::InsertHyphen( const sal_Int32 )
 // Testing of the document areas in the order specified by the flags
 void SvxSpellWrapper::SpellDocument( )
 {
+#ifdef ENABLE_WASM_STRIP_HUNSPELL
+    return;
+#else
     if ( bOtherCntnt )
     {
         bReverse = false;
@@ -275,6 +278,7 @@ void SvxSpellWrapper::SpellDocument( )
                         xHyph, this ));
         pDlg->Execute();
     }
+#endif
 }
 
 

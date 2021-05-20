@@ -121,10 +121,12 @@ short AbstractFmShowColsDialog_Impl::Execute()
     return m_xDlg->run();
 }
 
+#ifndef ENABLE_WASM_STRIP_HUNSPELL
 short AbstractHyphenWordDialog_Impl::Execute()
 {
     return m_xDlg->run();
 }
+#endif
 
 short AbstractThesaurusDialog_Impl::Execute()
 {
@@ -1079,6 +1081,7 @@ VclPtr<AbstractThesaurusDialog> AbstractDialogFactory_Impl::CreateThesaurusDialo
     return VclPtr<AbstractThesaurusDialog_Impl>::Create(std::make_shared<SvxThesaurusDialog>(pParent, xThesaurus, rWord, nLanguage));
 }
 
+#ifndef ENABLE_WASM_STRIP_EXTRA
 VclPtr<AbstractHyphenWordDialog> AbstractDialogFactory_Impl::CreateHyphenWordDialog(weld::Widget* pParent,
                                                 const OUString &rWord, LanguageType nLang,
                                                 css::uno::Reference< css::linguistic2::XHyphenator >  &xHyphen,
@@ -1086,6 +1089,7 @@ VclPtr<AbstractHyphenWordDialog> AbstractDialogFactory_Impl::CreateHyphenWordDia
 {
     return VclPtr<AbstractHyphenWordDialog_Impl>::Create(std::make_unique<SvxHyphenWordDialog>(rWord, nLang, pParent, xHyphen, pWrapper));
 }
+#endif
 
 VclPtr<AbstractFmShowColsDialog> AbstractDialogFactory_Impl::CreateFmShowColsDialog(weld::Window* pParent)
 {

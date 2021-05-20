@@ -281,10 +281,10 @@ core_constructor_list = [
 # linguistic/source/spellcheck/MacOSXSpellMacOSXSpell.component
     ("lingucomponent_MacSpellChecker_get_implementation", "#ifdef IOS"),
 # lingucomponent/source/thesaurus/libnth/lnth.component
-    "lingucomponent_Thesaurus_get_implementation",
-    "lingucomponent_SpellChecker_get_implementation",
-    ("lingucomponent_LangGuess_get_implementation", "#ifndef ENABLE_WASM_STRIP_GUESSLANG"),
-    "lingucomponent_Hyphenator_get_implementation",
+    ("lingucomponent_Thesaurus_get_implementation", "#ifndef ENABLE_WASM_STRIP_HUNSPELL"),
+    ("lingucomponent_SpellChecker_get_implementation", "#ifndef ENABLE_WASM_STRIP_HUNSPELL"),
+    ("lingucomponent_LangGuess_get_implementation", "#ifndef ENABLE_WASM_STRIP_HUNSPELL"),
+    ("lingucomponent_Hyphenator_get_implementation", "#ifndef ENABLE_WASM_STRIP_HUNSPELL"),
 # package/source/xstor/xstor.component
     "package_OStorageFactory_get_implementation",
 # package/util/package2.component
@@ -843,10 +843,10 @@ desktop_constructor_list = [
     "framework_ToolbarsMenuController_get_implementation",
     "i18npool_Collator_Unicode_get_implementation",
     "IndexedPropertyValuesContainer_get_implementation",
-    "lingucomponent_Hyphenator_get_implementation",
-    ("lingucomponent_LangGuess_get_implementation", "#ifndef ENABLE_WASM_STRIP_GUESSLANG"),
-    "lingucomponent_SpellChecker_get_implementation",
-    "lingucomponent_Thesaurus_get_implementation",
+    ("lingucomponent_Hyphenator_get_implementation", "#ifndef ENABLE_WASM_STRIP_HUNSPELL"),
+    ("lingucomponent_LangGuess_get_implementation", "#ifndef ENABLE_WASM_STRIP_HUNSPELL"),
+    ("lingucomponent_SpellChecker_get_implementation", "#ifndef ENABLE_WASM_STRIP_HUNSPELL"),
+    ("lingucomponent_Thesaurus_get_implementation", "#ifndef ENABLE_WASM_STRIP_HUNSPELL"),
     "linguistic_DicList_get_implementation",
     "linguistic_GrammarCheckingIterator_get_implementation",
     "linguistic_LinguProps_get_implementation",
