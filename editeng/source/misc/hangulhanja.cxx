@@ -154,7 +154,7 @@ namespace editeng
         DECL_LINK( OnChange, weld::Button&, void );
         DECL_LINK( OnChangeAll, weld::Button&, void );
         DECL_LINK( OnByCharClicked, weld::ToggleButton&, void );
-        DECL_LINK( OnConversionTypeChanged, weld::Button&, void );
+        DECL_LINK( OnConversionTypeChanged, weld::ToggleButton&, void );
         DECL_LINK( OnFind, weld::Button&, void );
 
         /** proceed, after the current convertible has been handled
@@ -868,7 +868,7 @@ namespace editeng
         implProceed( true );
     }
 
-    IMPL_LINK_NOARG(HangulHanjaConversion_Impl, OnConversionTypeChanged, weld::Button&, void)
+    IMPL_LINK_NOARG(HangulHanjaConversion_Impl, OnConversionTypeChanged, weld::ToggleButton&, void)
     {
         DBG_ASSERT( m_pConversionDialog, "we should always have a dialog here!" );
         if( m_pConversionDialog )
