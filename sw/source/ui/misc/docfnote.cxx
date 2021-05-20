@@ -98,8 +98,8 @@ SwEndNoteOptionPage::SwEndNoteOptionPage(weld::Container* pPage, weld::DialogCon
         aNumDoc = m_xNumCountBox->get_text(FTNNUM_DOC);
         aNumPage = m_xNumCountBox->get_text(FTNNUM_PAGE);
         aNumChapter = m_xNumCountBox->get_text(FTNNUM_CHAPTER);
-        m_xPosPageBox->connect_clicked(LINK(this, SwEndNoteOptionPage, PosPageHdl));
-        m_xPosChapterBox->connect_clicked(LINK(this, SwEndNoteOptionPage, PosChapterHdl));
+        m_xPosPageBox->connect_toggled(LINK(this, SwEndNoteOptionPage, ToggleHdl));
+        m_xPosChapterBox->connect_toggled(LINK(this, SwEndNoteOptionPage, ToggleHdl));
     }
     m_xParaTemplBox->make_sorted();
 }
@@ -257,20 +257,41 @@ void SwEndNoteOptionPage::SetShell( SwWrtShell &rShell )
                         pSh->GetView().GetDocShell(), true);
 }
 
-// Handler behind the button to collect the footnote at the page. In this case
-// all kinds of numbering can be used.
-IMPL_LINK_NOARG(SwEndNoteOptionPage, PosPageHdl, weld::Button&, void)
+IMPL_LINK(SwEndNoteOptionPage, ToggleHdl, weld::ToggleButton&, rButton, void)
 {
-    const SwFootnoteNum eNum = GetNumbering();
-    bPosDoc = false;
-    if (m_xNumCountBox->find_text(aNumPage) == -1)
+    if (!rButton.get_active())
+        return;
+
+    if (m_xPosPageBox->get_active())
     {
-        m_xNumCountBox->insert_text(FTNNUM_PAGE, aNumPage);
-        m_xNumCountBox->insert_text(FTNNUM_CHAPTER, aNumChapter);
-        SelectNumbering(eNum);
+        // Handler behind the button to collect the footnote at the page. In this case
+        // all kinds of numbering can be used.
+
+        const SwFootnoteNum eNum = GetNumbering();
+        bPosDoc = false;
+        if (m_xNumCountBox->find_text(aNumPage) == -1)
+        {
+            m_xNumCountBox->insert_text(FTNNUM_PAGE, aNumPage);
+            m_xNumCountBox->insert_text(FTNNUM_CHAPTER, aNumChapter);
+            SelectNumbering(eNum);
+        }
+        m_xPageTemplLbl->set_sensitive(false);
+        m_xPageTemplBox->set_sensitive(false);
     }
-    m_xPageTemplLbl->set_sensitive(false);
-    m_xPageTemplBox->set_sensitive(false);
+    else if (m_xPosChapterBox->get_active())
+    {
+        // Handler behind the button to collect the footnote at the chapter or end of
+        // the document. In this case no pagewise numbering can be used.
+
+        if ( !bPosDoc )
+            SelectNumbering(FTNNUM_DOC);
+
+        bPosDoc = true;
+        m_xNumCountBox->remove_text(aNumPage);
+        m_xNumCountBox->remove_text(aNumChapter);
+        m_xPageTemplLbl->set_sensitive(true);
+        m_xPageTemplBox->set_sensitive(true);
+    }
 }
 
 IMPL_LINK_NOARG(SwEndNoteOptionPage, NumCountHdl, weld::ComboBox&, void)
@@ -283,20 +304,6 @@ IMPL_LINK_NOARG(SwEndNoteOptionPage, NumCountHdl, weld::ComboBox&, void)
     }
     m_xOffsetLbl->set_sensitive(bEnable);
     m_xOffsetField->set_sensitive(bEnable);
-}
-
-// Handler behind the button to collect the footnote at the chapter or end of
-// the document. In this case no pagewise numbering can be used.
-IMPL_LINK_NOARG(SwEndNoteOptionPage, PosChapterHdl, weld::Button&, void)
-{
-    if ( !bPosDoc )
-        SelectNumbering(FTNNUM_DOC);
-
-    bPosDoc = true;
-    m_xNumCountBox->remove_text(aNumPage);
-    m_xNumCountBox->remove_text(aNumChapter);
-    m_xPageTemplLbl->set_sensitive(true);
-    m_xPageTemplBox->set_sensitive(true);
 }
 
 static SwCharFormat* lcl_GetCharFormat( SwWrtShell* pSh, const OUString& rCharFormatName )

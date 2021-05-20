@@ -56,8 +56,7 @@ class SwEndNoteOptionPage : public SfxTabPage
     inline void SelectNumbering(SwFootnoteNum eNum);
     SwFootnoteNum GetNumbering() const;
 
-    DECL_LINK(PosPageHdl, weld::Button&, void);
-    DECL_LINK(PosChapterHdl, weld::Button&, void);
+    DECL_LINK(ToggleHdl, weld::ToggleButton&, void);
     DECL_LINK(NumCountHdl, weld::ComboBox&, void);
 
 public:

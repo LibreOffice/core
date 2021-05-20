@@ -68,21 +68,24 @@ void SwInsFootNoteDlg::Apply()
     bFootnote = m_xFootnoteBtn->get_active();
 }
 
-IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberCharHdl, weld::Button&, void)
-{
-    m_xNumberCharEdit->grab_focus();
-    m_xOkBtn->set_sensitive( !m_xNumberCharEdit->get_text().isEmpty() || m_bExtCharAvailable );
-}
-
 IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberEditHdl, weld::Entry&, void)
 {
     m_xNumberCharBtn->set_active(true);
     m_xOkBtn->set_sensitive( !m_xNumberCharEdit->get_text().isEmpty() );
 }
 
-IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberAutoBtnHdl, weld::Button&, void)
+IMPL_LINK(SwInsFootNoteDlg, NumberToggleHdl, weld::ToggleButton&, rButton, void)
 {
-    m_xOkBtn->set_sensitive(true);
+    if (!rButton.get_active())
+        return;
+
+    if (m_xNumberAutoBtn->get_active())
+        m_xOkBtn->set_sensitive(true);
+    else if (m_xNumberCharBtn->get_active())
+    {
+        m_xNumberCharEdit->grab_focus();
+        m_xOkBtn->set_sensitive( !m_xNumberCharEdit->get_text().isEmpty() || m_bExtCharAvailable );
+    }
 }
 
 IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberExtCharHdl, weld::Button&, void)
@@ -154,9 +157,9 @@ SwInsFootNoteDlg::SwInsFootNoteDlg(weld::Window *pParent, SwWrtShell &rShell, bo
     , m_xPrevBT(m_xBuilder->weld_button("prev"))
     , m_xNextBT(m_xBuilder->weld_button("next"))
 {
-    m_xNumberAutoBtn->connect_clicked(LINK(this,SwInsFootNoteDlg,NumberAutoBtnHdl));
+    m_xNumberAutoBtn->connect_toggled(LINK(this,SwInsFootNoteDlg,NumberToggleHdl));
+    m_xNumberCharBtn->connect_toggled(LINK(this,SwInsFootNoteDlg,NumberToggleHdl));
     m_xNumberExtChar->connect_clicked(LINK(this,SwInsFootNoteDlg,NumberExtCharHdl));
-    m_xNumberCharBtn->connect_clicked(LINK(this,SwInsFootNoteDlg,NumberCharHdl));
     m_xNumberCharEdit->connect_changed(LINK(this,SwInsFootNoteDlg,NumberEditHdl));
 
     m_xPrevBT->connect_clicked(LINK(this, SwInsFootNoteDlg, NextPrevHdl));

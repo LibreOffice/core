@@ -71,7 +71,7 @@ namespace abp
         // OImportPage overridables
         virtual bool        canAdvance() const override;
 
-        DECL_LINK( OnTypeSelected, weld::Button&, void );
+        DECL_LINK( OnTypeSelected, weld::ToggleButton&, void );
 
         void                selectType( AddressSourceType _eType );
     };

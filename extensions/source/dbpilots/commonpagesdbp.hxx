@@ -70,7 +70,7 @@ namespace dbp
         virtual ~OMaybeListSelectionPage() override;
 
     protected:
-        DECL_LINK( OnRadioSelected, weld::Button&, void );
+        DECL_LINK( OnRadioSelected, weld::ToggleButton&, void );
 
         // BuilderPage overridables
         void Activate() override;
