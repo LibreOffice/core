@@ -354,9 +354,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     m_xIbDbcolAllFrom->connect_clicked( LINK(this, SwInsertDBColAutoPilot, TableToFromHdl ));
     m_xIbDbcolToEdit->connect_clicked( LINK(this, SwInsertDBColAutoPilot, TableToFromHdl ));
 
-    m_xCbTableHeadon->connect_clicked( LINK(this, SwInsertDBColAutoPilot, HeaderHdl ));
-    m_xRbHeadlColnms->connect_clicked( LINK(this, SwInsertDBColAutoPilot, HeaderHdl ));
-    m_xRbHeadlEmpty->connect_clicked( LINK(this, SwInsertDBColAutoPilot, HeaderHdl ));
+    m_xCbTableHeadon->connect_toggled( LINK(this, SwInsertDBColAutoPilot, HeaderHdl ));
 
     m_xLbTextDbColumn->connect_changed( LINK( this, SwInsertDBColAutoPilot, TVSelectHdl ));
     m_xLbTableDbColumn->connect_changed( LINK( this, SwInsertDBColAutoPilot, TVSelectHdl ));
@@ -797,15 +795,11 @@ IMPL_LINK_NOARG(SwInsertDBColAutoPilot, CBSelectHdl, weld::ComboBox&, void)
     }
 }
 
-IMPL_LINK( SwInsertDBColAutoPilot, HeaderHdl, weld::Button&, rButton, void )
+IMPL_LINK_NOARG(SwInsertDBColAutoPilot, HeaderHdl, weld::ToggleButton&, void)
 {
-    if (&rButton == m_xCbTableHeadon.get())
-    {
-        bool bEnable = m_xCbTableHeadon->get_active();
-
-        m_xRbHeadlColnms->set_sensitive( bEnable );
-        m_xRbHeadlEmpty->set_sensitive( bEnable );
-    }
+    bool bEnable = m_xCbTableHeadon->get_active();
+    m_xRbHeadlColnms->set_sensitive( bEnable );
+    m_xRbHeadlEmpty->set_sensitive( bEnable );
 }
 
 static void lcl_InsTextInArr( const OUString& rText, DB_Columns& rColArr )
