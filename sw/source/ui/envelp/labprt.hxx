@@ -40,7 +40,8 @@ class SwLabPrtPage : public SfxTabPage
     std::unique_ptr<weld::Label> m_xPrinterInfo;
     std::unique_ptr<weld::Button> m_xPrtSetup;
 
-    DECL_LINK(CountHdl, weld::Button&, void);
+    DECL_LINK(CountHdl, weld::ToggleButton&, void);
+    DECL_LINK(PrtSetupHdl, weld::Button&, void);
 
     SwLabDlg* GetParentSwLabDlg() { return static_cast<SwLabDlg*>(GetDialogController()); }
 
