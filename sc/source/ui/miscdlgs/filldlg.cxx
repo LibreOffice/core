@@ -221,7 +221,7 @@ weld::Entry* ScFillSeriesDlg::CheckValues()
 }
 
 // Handler:
-IMPL_LINK(ScFillSeriesDlg, DisableHdl, weld::ToggleButton&, rBtn, void)
+IMPL_LINK(ScFillSeriesDlg, DisableHdl, weld::Toggleable&, rBtn, void)
 {
     if (&rBtn == m_xBtnDate.get())
     {

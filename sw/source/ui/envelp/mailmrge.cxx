@@ -354,7 +354,7 @@ IMPL_LINK_NOARG(SwMailMergeDlg, ButtonHdl, weld::Button&, void)
         m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK_NOARG(SwMailMergeDlg, OutputTypeHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwMailMergeDlg, OutputTypeHdl, weld::Toggleable&, void)
 {
     bool bPrint = m_xPrinterRB->get_active();
     m_xSingleJobsCB->set_sensitive(bPrint);
@@ -380,7 +380,7 @@ IMPL_LINK_NOARG(SwMailMergeDlg, OutputTypeHdl, weld::ToggleButton&, void)
     }
 }
 
-IMPL_LINK_NOARG(SwMailMergeDlg, SaveTypeHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwMailMergeDlg, SaveTypeHdl, weld::Toggleable&, void)
 {
     bool bIndividual = m_xSaveIndividualRB->get_active();
 
@@ -404,7 +404,7 @@ IMPL_LINK_NOARG(SwMailMergeDlg, SaveTypeHdl, weld::ToggleButton&, void)
     }
 }
 
-IMPL_LINK( SwMailMergeDlg, FilenameHdl, weld::ToggleButton&, rBox, void )
+IMPL_LINK( SwMailMergeDlg, FilenameHdl, weld::Toggleable&, rBox, void )
 {
     bool bEnable = rBox.get_active();
     m_xColumnFT->set_sensitive( bEnable );

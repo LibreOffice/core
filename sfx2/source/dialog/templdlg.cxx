@@ -1935,7 +1935,7 @@ IMPL_LINK_NOARG(SfxCommonTemplateDialog_Impl, TreeListApplyHdl, weld::TreeView&,
     return true;
 }
 
-IMPL_LINK_NOARG(SfxCommonTemplateDialog_Impl, PreviewHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SfxCommonTemplateDialog_Impl, PreviewHdl, weld::Toggleable&, void)
 {
     std::shared_ptr<comphelper::ConfigurationChanges> batch( comphelper::ConfigurationChanges::create() );
     bool bCustomPreview = mxPreviewCheckbox->get_active();

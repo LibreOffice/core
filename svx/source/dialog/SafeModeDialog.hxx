@@ -56,8 +56,8 @@ private:
     void enableDisableWidgets();
     void applyChanges();
 
-    DECL_LINK(RadioBtnHdl, weld::ToggleButton&, void);
-    DECL_LINK(CheckBoxHdl, weld::ToggleButton&, void);
+    DECL_LINK(RadioBtnHdl, weld::Toggleable&, void);
+    DECL_LINK(CheckBoxHdl, weld::Toggleable&, void);
     DECL_LINK(CreateZipBtnHdl, weld::Button&, void);
     DECL_LINK(DialogBtnHdl, weld::Button&, void);
 };

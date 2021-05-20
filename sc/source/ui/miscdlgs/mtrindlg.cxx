@@ -85,7 +85,7 @@ int ScMetricInputDlg::GetInputValue() const
 
 // Handler:
 
-IMPL_LINK_NOARG(ScMetricInputDlg, SetDefValHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ScMetricInputDlg, SetDefValHdl, weld::Toggleable&, void)
 {
     if (m_xBtnDefVal->get_active())
     {

@@ -65,12 +65,12 @@ class SwTextGridPage: public SfxTabPage
 
     void GridModifyHdl();
 
-    DECL_LINK(GridTypeHdl, weld::ToggleButton&, void);
+    DECL_LINK(GridTypeHdl, weld::Toggleable&, void);
     DECL_LINK(CharorLineChangedHdl, weld::SpinButton&, void);
     DECL_LINK(TextSizeChangedHdl, weld::MetricSpinButton&, void);
     DECL_LINK(ColorModifyHdl, ColorListBox&, void);
-    DECL_LINK(GridModifyClickHdl, weld::ToggleButton&, void);
-    DECL_LINK(DisplayGridHdl, weld::ToggleButton&, void);
+    DECL_LINK(GridModifyClickHdl, weld::Toggleable&, void);
+    DECL_LINK(DisplayGridHdl, weld::Toggleable&, void);
 
 public:
     SwTextGridPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet);

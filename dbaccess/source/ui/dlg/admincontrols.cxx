@@ -66,7 +66,7 @@ namespace dbaui
         m_xContainer->show();
     }
 
-    IMPL_LINK(MySQLNativeSettings, RadioToggleHdl, weld::ToggleButton&, rRadioButton, void)
+    IMPL_LINK(MySQLNativeSettings, RadioToggleHdl, weld::Toggleable&, rRadioButton, void)
     {
         m_aControlModificationLink.Call(&rRadioButton);
 

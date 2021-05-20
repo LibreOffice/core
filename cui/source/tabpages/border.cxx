@@ -1517,12 +1517,12 @@ IMPL_LINK( SvxBorderTabPage, ModifyDistanceHdl_Impl, weld::MetricSpinButton&, rF
     }
 }
 
-IMPL_LINK( SvxBorderTabPage, SyncHdl_Impl, weld::ToggleButton&, rBox, void)
+IMPL_LINK( SvxBorderTabPage, SyncHdl_Impl, weld::Toggleable&, rBox, void)
 {
     mbSync = rBox.get_active();
 }
 
-IMPL_LINK( SvxBorderTabPage, RemoveAdjacentCellBorderHdl_Impl, weld::ToggleButton&, rBox, void)
+IMPL_LINK( SvxBorderTabPage, RemoveAdjacentCellBorderHdl_Impl, weld::Toggleable&, rBox, void)
 {
     mbRemoveAdjacentCellBorders = rBox.get_active();
 }

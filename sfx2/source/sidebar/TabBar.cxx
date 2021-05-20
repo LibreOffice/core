@@ -319,7 +319,7 @@ void TabBar::UpdateFocusManager(FocusManager& rFocusManager)
     rFocusManager.SetButtons(aButtons);
 }
 
-IMPL_LINK_NOARG(TabBar, OnToolboxClicked, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(TabBar, OnToolboxClicked, weld::Toggleable&, void)
 {
     if (!mxMenuButton->get_active())
         return;

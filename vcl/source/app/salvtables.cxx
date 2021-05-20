@@ -2944,7 +2944,7 @@ public:
     {
     }
 
-    virtual void connect_toggled(const Link<ToggleButton&, void>& rLink) override
+    virtual void connect_toggled(const Link<Toggleable&, void>& rLink) override
     {
         assert(!m_aToggleHdl.IsSet());
         m_xToggleButton->AddEventListener(LINK(this, SalInstanceToggleButton, ToggleListener));

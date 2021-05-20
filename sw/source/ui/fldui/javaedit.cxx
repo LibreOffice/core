@@ -53,7 +53,7 @@ SwJavaEditDialog::SwJavaEditDialog(weld::Window* pParent, SwWrtShell* pWrtSh)
     m_xNextBtn->connect_clicked( LINK( this, SwJavaEditDialog, NextHdl ) );
     m_xOKBtn->connect_clicked( LINK( this, SwJavaEditDialog, OKHdl ) );
 
-    Link<weld::ToggleButton&,void> aLk = LINK(this, SwJavaEditDialog, RadioButtonHdl);
+    Link<weld::Toggleable&,void> aLk = LINK(this, SwJavaEditDialog, RadioButtonHdl);
     m_xUrlRB->connect_toggled(aLk);
     m_xEditRB->connect_toggled(aLk);
     m_xUrlPB->connect_clicked(LINK(this, SwJavaEditDialog, InsertFileHdl));
@@ -197,7 +197,7 @@ bool SwJavaEditDialog::IsUpdate() const
     return m_pField && ( sal_uInt32(m_bIsUrl ? 1 : 0) != m_pField->GetFormat() || m_pField->GetPar2() != m_aType || m_pField->GetPar1() != m_aText );
 }
 
-IMPL_LINK(SwJavaEditDialog, RadioButtonHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SwJavaEditDialog, RadioButtonHdl, weld::Toggleable&, rButton, void)
 {
     if (!rButton.get_active())
         return;

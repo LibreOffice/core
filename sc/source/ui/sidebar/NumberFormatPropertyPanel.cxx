@@ -103,7 +103,7 @@ IMPL_LINK( NumberFormatPropertyPanel, NumFormatSelectHdl, weld::ComboBox&, rBox,
     }
 }
 
-IMPL_LINK_NOARG( NumberFormatPropertyPanel, NumFormatValueClickHdl, weld::ToggleButton&, void )
+IMPL_LINK_NOARG( NumberFormatPropertyPanel, NumFormatValueClickHdl, weld::Toggleable&, void )
 {
     NumFormatValueHdl(*mxEdDecimals);
 }

@@ -216,7 +216,7 @@ IMPL_LINK_NOARG(ScStatisticsInputOutputDialog, LoseButtonFocusHandler, formula::
     mDialogLostFocus = !m_xDialog->has_toplevel_focus();
 }
 
-IMPL_LINK_NOARG( ScStatisticsInputOutputDialog, GroupByChanged, weld::ToggleButton&, void )
+IMPL_LINK_NOARG( ScStatisticsInputOutputDialog, GroupByChanged, weld::Toggleable&, void )
 {
     if (mxGroupByColumnsRadio->get_active())
         mGroupedBy = BY_COLUMN;

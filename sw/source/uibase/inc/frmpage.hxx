@@ -126,9 +126,9 @@ class SwFramePage: public SfxTabPage
     virtual void    ActivatePage(const SfxItemSet& rSet) override;
     virtual DeactivateRC   DeactivatePage(SfxItemSet *pSet) override;
 
-    DECL_LINK(RangeModifyClickHdl, weld::ToggleButton&, void);
+    DECL_LINK(RangeModifyClickHdl, weld::Toggleable&, void);
     void RangeModifyHdl();
-    DECL_LINK(AnchorTypeHdl, weld::ToggleButton&, void);
+    DECL_LINK(AnchorTypeHdl, weld::Toggleable&, void);
     DECL_LINK(PosHdl, weld::ComboBox&, void);
     DECL_LINK(RelHdl, weld::ComboBox&, void);
     void            InitPos(RndStdIds eId, sal_Int16 nH, sal_Int16 nHRel,
@@ -136,11 +136,11 @@ class SwFramePage: public SfxTabPage
                             tools::Long   nX,  tools::Long   nY);
 
     DECL_LINK(RealSizeHdl, weld::Button&, void);
-    DECL_LINK(RelSizeClickHdl, weld::ToggleButton&, void);
-    DECL_LINK(MirrorHdl, weld::ToggleButton&, void);
+    DECL_LINK(RelSizeClickHdl, weld::Toggleable&, void);
+    DECL_LINK(MirrorHdl, weld::Toggleable&, void);
 
-    DECL_LINK(AutoWidthClickHdl, weld::ToggleButton&, void);
-    DECL_LINK(AutoHeightClickHdl, weld::ToggleButton&, void);
+    DECL_LINK(AutoWidthClickHdl, weld::Toggleable&, void);
+    DECL_LINK(AutoHeightClickHdl, weld::Toggleable&, void);
 
     // update example
     void            UpdateExample();
@@ -225,7 +225,7 @@ class SwGrfExtPage : public SfxTabPage
     std::unique_ptr<weld::Label> m_xLabelGraphicType;
 
     // handler for mirroring
-    DECL_LINK(MirrorHdl, weld::ToggleButton&, void);
+    DECL_LINK(MirrorHdl, weld::Toggleable&, void);
     DECL_LINK(BrowseHdl, weld::Button&, void);
 
     virtual void    ActivatePage(const SfxItemSet& rSet) override;

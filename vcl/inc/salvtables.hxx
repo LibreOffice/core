@@ -1010,6 +1010,9 @@ private:
 
     DECL_LINK(ClickHdl, ::Button*, void);
 
+protected:
+    void set_label_wrap(bool bWrap);
+
 public:
     SalInstanceButton(::Button* pButton, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
 
@@ -1020,8 +1023,6 @@ public:
     virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override;
 
     virtual void set_from_icon_name(const OUString& rIconName) override;
-
-    virtual void set_label_wrap(bool wrap) override;
 
     virtual OUString get_label() const override;
 
@@ -1109,6 +1110,12 @@ public:
     virtual void set_inconsistent(bool inconsistent) override;
 
     virtual bool get_inconsistent() const override;
+
+    virtual void set_label(const OUString& rText) override { SalInstanceButton::set_label(rText); }
+
+    virtual OUString get_label() const override { return SalInstanceButton::get_label(); }
+
+    virtual void set_label_wrap(bool wrap) override { SalInstanceButton::set_label_wrap(wrap); }
 
     virtual ~SalInstanceCheckButton() override;
 };
@@ -1809,6 +1816,12 @@ public:
     virtual void set_inconsistent(bool /*inconsistent*/) override;
 
     virtual bool get_inconsistent() const override;
+
+    virtual void set_label(const OUString& rText) override { SalInstanceButton::set_label(rText); }
+
+    virtual OUString get_label() const override { return SalInstanceButton::get_label(); }
+
+    virtual void set_label_wrap(bool wrap) override { SalInstanceButton::set_label_wrap(wrap); }
 
     virtual ~SalInstanceRadioButton() override;
 };

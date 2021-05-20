@@ -58,7 +58,7 @@ class SvBaseLinksDlg : public weld::GenericDialogController
 
     DECL_LINK(LinksSelectHdl, weld::TreeView&, void);
     DECL_LINK(LinksDoubleClickHdl, weld::TreeView&, bool);
-    DECL_LINK(ToggleHdl, weld::ToggleButton&, void);
+    DECL_LINK(ToggleHdl, weld::Toggleable&, void);
     DECL_LINK(UpdateNowClickHdl, weld::Button&, void);
     DECL_LINK(ChangeSourceClickHdl, weld::Button&, void);
     DECL_LINK(BreakLinkClickHdl, weld::Button&, void);

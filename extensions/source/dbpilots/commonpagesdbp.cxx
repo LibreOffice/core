@@ -367,7 +367,7 @@ namespace dbp
         implEnableWindows();
     }
 
-    IMPL_LINK(OMaybeListSelectionPage, OnRadioSelected, weld::ToggleButton&, rButton, void)
+    IMPL_LINK(OMaybeListSelectionPage, OnRadioSelected, weld::Toggleable&, rButton, void)
     {
         if (!rButton.get_active())
             return;

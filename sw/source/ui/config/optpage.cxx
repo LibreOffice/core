@@ -279,12 +279,12 @@ bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
     return bRet;
 }
 
-IMPL_LINK(SwContentOptPage, VertRulerHdl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(SwContentOptPage, VertRulerHdl, weld::Toggleable&, rBox, void)
 {
     m_xVRulerRightCBox->set_sensitive(rBox.get_sensitive() && rBox.get_active());
 }
 
-IMPL_LINK(SwContentOptPage, ShowOutlineContentVisibilityButtonHdl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(SwContentOptPage, ShowOutlineContentVisibilityButtonHdl, weld::Toggleable&, rBox, void)
 {
     m_xTreatSubOutlineLevelsAsContent->set_sensitive(rBox.get_active());
 }
@@ -317,7 +317,7 @@ SwAddPrinterTabPage::SwAddPrinterTabPage(weld::Container* pPage, weld::DialogCon
     , m_xPaperFromSetupCB(m_xBuilder->weld_check_button("papertray"))
     , m_xFaxLB(m_xBuilder->weld_combo_box("fax"))
 {
-    Link<weld::ToggleButton&,void> aLk = LINK( this, SwAddPrinterTabPage, AutoClickHdl);
+    Link<weld::Toggleable&,void> aLk = LINK( this, SwAddPrinterTabPage, AutoClickHdl);
     m_xGrfCB->connect_toggled( aLk );
     m_xRightPageCB->connect_toggled( aLk );
     m_xLeftPageCB->connect_toggled( aLk );
@@ -454,7 +454,7 @@ void    SwAddPrinterTabPage::Reset( const SfxItemSet*  )
         m_xProspectCB_RTL->set_sensitive( false );
 }
 
-IMPL_LINK_NOARG(SwAddPrinterTabPage, AutoClickHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwAddPrinterTabPage, AutoClickHdl, weld::Toggleable&, void)
 {
     bAttrModified = true;
     bool bIsProspect = m_xProspectCB->get_active();
@@ -1028,7 +1028,7 @@ SwTableOptionsTabPage::SwTableOptionsTabPage(weld::Container* pPage, weld::Dialo
     , m_xFixPropRB(m_xBuilder->weld_radio_button("fixprop"))
     , m_xVarRB(m_xBuilder->weld_radio_button("var"))
 {
-    Link<weld::ToggleButton&,void> aLnk(LINK(this, SwTableOptionsTabPage, CheckBoxHdl));
+    Link<weld::Toggleable&,void> aLnk(LINK(this, SwTableOptionsTabPage, CheckBoxHdl));
     m_xNumFormattingCB->connect_toggled(aLnk);
     m_xNumFormatFormattingCB->connect_toggled(aLnk);
     m_xHeaderCB->connect_toggled(aLnk);
@@ -1195,7 +1195,7 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet* rSet)
     CheckBoxHdl(*m_xHeaderCB);
 }
 
-IMPL_LINK_NOARG(SwTableOptionsTabPage, CheckBoxHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwTableOptionsTabPage, CheckBoxHdl, weld::Toggleable&, void)
 {
     m_xNumFormatFormattingCB->set_sensitive(m_xNumFormattingCB->get_active());
     m_xNumAlignmentCB->set_sensitive(m_xNumFormattingCB->get_active());
@@ -2017,7 +2017,7 @@ SwCompareOptionsTabPage::SwCompareOptionsTabPage(weld::Container* pPage, weld::D
     , m_xLenNF(m_xBuilder->weld_spin_button("ignorelen"))
     , m_xStoreRsidCB(m_xBuilder->weld_check_button("storeRSID"))
 {
-    Link<weld::ToggleButton&,void> aLnk( LINK( this, SwCompareOptionsTabPage, ComparisonHdl ) );
+    Link<weld::Toggleable&,void> aLnk( LINK( this, SwCompareOptionsTabPage, ComparisonHdl ) );
     m_xAutoRB->connect_toggled( aLnk );
     m_xWordRB->connect_toggled( aLnk );
     m_xCharRB->connect_toggled( aLnk );
@@ -2125,7 +2125,7 @@ void SwCompareOptionsTabPage::Reset( const SfxItemSet* )
     m_xStoreRsidCB->save_state();
 }
 
-IMPL_LINK(SwCompareOptionsTabPage, ComparisonHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SwCompareOptionsTabPage, ComparisonHdl, weld::Toggleable&, rButton, void)
 {
     if (!rButton.get_active())
         return;
@@ -2136,7 +2136,7 @@ IMPL_LINK(SwCompareOptionsTabPage, ComparisonHdl, weld::ToggleButton&, rButton, 
     m_xLenNF->set_sensitive( bChecked && m_xIgnoreCB->get_active() );
 }
 
-IMPL_LINK_NOARG(SwCompareOptionsTabPage, IgnoreHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwCompareOptionsTabPage, IgnoreHdl, weld::Toggleable&, void)
 {
     m_xLenNF->set_sensitive(m_xIgnoreCB->get_active());
 }
@@ -2215,7 +2215,7 @@ void SwTestTabPage::Reset( const SfxItemSet* )
 void SwTestTabPage::Init()
 {
     // handler
-    Link<weld::ToggleButton&,void> aLk = LINK( this, SwTestTabPage, AutoClickHdl );
+    Link<weld::Toggleable&,void> aLk = LINK( this, SwTestTabPage, AutoClickHdl );
     m_xTest1CBox->connect_toggled( aLk );
     m_xTest2CBox->connect_toggled( aLk );
     m_xTest3CBox->connect_toggled( aLk );
@@ -2228,7 +2228,7 @@ void SwTestTabPage::Init()
     m_xTest10CBox->connect_toggled( aLk );
 }
 
-IMPL_LINK_NOARG(SwTestTabPage, AutoClickHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwTestTabPage, AutoClickHdl, weld::Toggleable&, void)
 {
     bAttrModified = true;
 }

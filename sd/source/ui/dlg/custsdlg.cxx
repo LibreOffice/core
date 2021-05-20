@@ -100,7 +100,7 @@ void SdCustomShowDlg::CheckState()
         pCustomShowList->Seek( nPos );
 }
 
-IMPL_LINK( SdCustomShowDlg, ToggleButtonHdl, weld::ToggleButton&, r, void )
+IMPL_LINK( SdCustomShowDlg, ToggleButtonHdl, weld::Toggleable&, r, void )
 {
     SelectHdl(&r);
 }

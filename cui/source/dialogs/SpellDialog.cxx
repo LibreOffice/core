@@ -448,7 +448,7 @@ IMPL_LINK( SpellDialog, ExtClickHdl, weld::Button&, rBtn, void )
     }
 }
 
-IMPL_LINK_NOARG(SpellDialog, CheckGrammarHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SpellDialog, CheckGrammarHdl, weld::Toggleable&, void)
 {
     rParent.SetGrammarChecking(m_xCheckGrammarCB->get_active());
     Impl_Restore(true);

@@ -905,7 +905,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleEnableBtn, weld::Button&, void)
     }
 }
 
-IMPL_LINK_NOARG(ExtMgrDialog, HandleExtTypeCbx, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ExtMgrDialog, HandleExtTypeCbx, weld::Toggleable&, void)
 {
     // re-creates the list of packages with addEntry selecting the packages
     prepareChecking();

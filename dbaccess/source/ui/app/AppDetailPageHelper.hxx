@@ -155,7 +155,7 @@ namespace dbaui
         DECL_LINK( OnPasteEntry,          LinkParamNone*, void );
         DECL_LINK( OnDeleteEntry,         LinkParamNone*, void );
 
-        DECL_LINK(OnDropdownClickHdl, weld::ToggleButton&, void);
+        DECL_LINK(OnDropdownClickHdl, weld::Toggleable&, void);
         DECL_LINK(MenuSelectHdl, const OString&, void);
 
         OAppBorderWindow& getBorderWin() const { return m_rBorderWin; }

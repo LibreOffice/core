@@ -288,7 +288,7 @@ IMPL_LINK_NOARG(ThreeD_SceneAppearance_TabPage, SelectSchemeHdl, weld::ComboBox&
     initControlsFromModel();
 }
 
-IMPL_LINK_NOARG(ThreeD_SceneAppearance_TabPage, SelectShading, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ThreeD_SceneAppearance_TabPage, SelectShading, weld::Toggleable&, void)
 {
     if( !m_bUpdateOtherControls )
         return;
@@ -297,7 +297,7 @@ IMPL_LINK_NOARG(ThreeD_SceneAppearance_TabPage, SelectShading, weld::ToggleButto
     updateScheme();
 }
 
-IMPL_LINK(ThreeD_SceneAppearance_TabPage, SelectRoundedEdgeOrObjectLines, weld::ToggleButton&, rCheckBox, void)
+IMPL_LINK(ThreeD_SceneAppearance_TabPage, SelectRoundedEdgeOrObjectLines, weld::Toggleable&, rCheckBox, void)
 {
     if( !m_bUpdateOtherControls )
         return;

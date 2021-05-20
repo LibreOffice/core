@@ -76,7 +76,7 @@ private:
     void    InitDocListBox  ();
     DECL_LINK(OkHdl, weld::Button&, void);
     DECL_LINK(SelHdl, weld::ComboBox&, void);
-    DECL_LINK(CheckBtnHdl, weld::ToggleButton&, void);
+    DECL_LINK(CheckBtnHdl, weld::Toggleable&, void);
     DECL_LINK(CheckNameHdl, weld::Entry&, void);
 };
 

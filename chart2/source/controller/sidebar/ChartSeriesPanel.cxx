@@ -327,13 +327,13 @@ void ChartSeriesPanel::Initialize()
 
     updateData();
 
-    Link<weld::ToggleButton&,void> aLink = LINK(this, ChartSeriesPanel, CheckBoxHdl);
+    Link<weld::Toggleable&,void> aLink = LINK(this, ChartSeriesPanel, CheckBoxHdl);
     mxCBLabel->connect_toggled(aLink);
     mxCBTrendline->connect_toggled(aLink);
     mxCBXError->connect_toggled(aLink);
     mxCBYError->connect_toggled(aLink);
 
-    Link<weld::ToggleButton&,void> aLink2 = LINK(this, ChartSeriesPanel, RadioBtnHdl);
+    Link<weld::Toggleable&,void> aLink2 = LINK(this, ChartSeriesPanel, RadioBtnHdl);
     mxRBPrimaryAxis->connect_toggled(aLink2);
     mxRBSecondaryAxis->connect_toggled(aLink2);
 
@@ -444,7 +444,7 @@ void ChartSeriesPanel::selectionChanged(bool bCorrectType)
         updateData();
 }
 
-IMPL_LINK(ChartSeriesPanel, CheckBoxHdl, weld::ToggleButton&, rCheckBox, void)
+IMPL_LINK(ChartSeriesPanel, CheckBoxHdl, weld::Toggleable&, rCheckBox, void)
 {
     bool bChecked = rCheckBox.get_active();
     OUString aCID = getCID(mxModel);
@@ -458,7 +458,7 @@ IMPL_LINK(ChartSeriesPanel, CheckBoxHdl, weld::ToggleButton&, rCheckBox, void)
         setErrorBarVisible(mxModel, aCID, true, bChecked);
 }
 
-IMPL_LINK_NOARG(ChartSeriesPanel, RadioBtnHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ChartSeriesPanel, RadioBtnHdl, weld::Toggleable&, void)
 {
     OUString aCID = getCID(mxModel);
     bool bChecked = mxRBPrimaryAxis->get_active();

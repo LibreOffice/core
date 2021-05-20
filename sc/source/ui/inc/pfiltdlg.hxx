@@ -87,7 +87,7 @@ private:
     // Handler:
     DECL_LINK( LbSelectHdl, weld::ComboBox&, void );
     DECL_LINK( ValModifyHdl, weld::ComboBox&, void );
-    DECL_LINK( CheckBoxHdl, weld::ToggleButton&, void );
+    DECL_LINK( CheckBoxHdl, weld::Toggleable&, void );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

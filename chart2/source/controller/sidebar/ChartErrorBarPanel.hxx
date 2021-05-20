@@ -80,7 +80,7 @@ private:
     void Initialize();
     void doUpdateModel(css::uno::Reference<css::frame::XModel> xModel);
 
-    DECL_LINK(RadioBtnHdl, weld::ToggleButton&, void);
+    DECL_LINK(RadioBtnHdl, weld::Toggleable&, void);
     DECL_LINK(ListBoxHdl, weld::ComboBox&, void);
     DECL_LINK(NumericFieldHdl, weld::SpinButton&, void);
 };

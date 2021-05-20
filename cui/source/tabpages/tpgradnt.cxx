@@ -264,7 +264,7 @@ IMPL_LINK( SvxGradientTabPage, ModifiedSliderHdl_Impl, weld::Scale&, rSlider, vo
     m_xGradientLB->SetNoSelection();
 }
 
-IMPL_LINK_NOARG( SvxGradientTabPage, ChangeAutoStepHdl_Impl, weld::ToggleButton&, void )
+IMPL_LINK_NOARG( SvxGradientTabPage, ChangeAutoStepHdl_Impl, weld::Toggleable&, void )
 {
     if (m_xCbIncrement->get_active())
     {

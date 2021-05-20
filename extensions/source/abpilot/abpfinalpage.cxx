@@ -204,7 +204,7 @@ namespace abp
         implCheckName();
     }
 
-    IMPL_LINK_NOARG(FinalPage, OnRegister, weld::ToggleButton&, void)
+    IMPL_LINK_NOARG(FinalPage, OnRegister, weld::Toggleable&, void)
     {
         bool bEnable = m_xRegisterName->get_active();
         m_xNameLabel->set_sensitive(bEnable);
@@ -212,7 +212,7 @@ namespace abp
         implCheckName();
     }
 
-    IMPL_LINK_NOARG(FinalPage, OnEmbed, weld::ToggleButton&, void)
+    IMPL_LINK_NOARG(FinalPage, OnEmbed, weld::Toggleable&, void)
     {
         bool bEmbed = m_xEmbed->get_active();
         m_xLocationLabel->set_sensitive(!bEmbed);

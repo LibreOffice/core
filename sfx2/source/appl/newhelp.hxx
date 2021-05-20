@@ -381,7 +381,7 @@ private:
     DECL_LINK(        NotifyHdl, LinkParamNone*, void );
     DECL_LINK(        FindHdl, sfx2::SearchDialog&, void );
     DECL_LINK(        CloseHdl, LinkParamNone*, void );
-    DECL_LINK(        CheckHdl, weld::ToggleButton&, void );
+    DECL_LINK(        CheckHdl, weld::Toggleable&, void );
     void                    FindHdl(sfx2::SearchDialog*);
 
 public:

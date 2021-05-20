@@ -96,7 +96,7 @@ class DavDetailsContainer final : public HostDetailsContainer
     private:
         virtual bool verifyScheme( const OUString& rScheme ) override;
 
-        DECL_LINK(ToggledDavsHdl, weld::ToggleButton&, void);
+        DECL_LINK(ToggledDavsHdl, weld::Toggleable&, void);
 };
 
 class SmbDetailsContainer final : public DetailsContainer

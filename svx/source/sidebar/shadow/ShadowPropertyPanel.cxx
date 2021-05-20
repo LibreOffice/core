@@ -96,7 +96,7 @@ void ShadowPropertyPanel::Initialize()
     InsertAngleValues();
 }
 
-IMPL_LINK_NOARG(ShadowPropertyPanel, ClickShadowHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ShadowPropertyPanel, ClickShadowHdl, weld::Toggleable&, void)
 {
     if( mxShowShadow->get_state() == TRISTATE_FALSE )
     {

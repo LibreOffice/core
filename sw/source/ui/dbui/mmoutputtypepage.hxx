@@ -32,7 +32,7 @@ class SwMailMergeOutputTypePage : public vcl::OWizardPage
     std::unique_ptr<weld::Label> m_xLetterHint;
     std::unique_ptr<weld::Label> m_xMailHint;
 
-    DECL_LINK(TypeHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(TypeHdl_Impl, weld::Toggleable&, void);
 
 public:
     SwMailMergeOutputTypePage(weld::Container* pPage, SwMailMergeWizard* pWizard);

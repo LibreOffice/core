@@ -173,7 +173,7 @@ IMPL_LINK_NOARG(ScLinkedAreaDlg, RangeHdl, weld::TreeView&, void)
     UpdateEnable();
 }
 
-IMPL_LINK_NOARG(ScLinkedAreaDlg, ReloadHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ScLinkedAreaDlg, ReloadHdl, weld::Toggleable&, void)
 {
     UpdateEnable();
 }

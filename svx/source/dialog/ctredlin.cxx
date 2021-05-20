@@ -526,7 +526,7 @@ SvxTPFilter::SvxTPFilter(weld::Container* pParent)
     m_xIbClock2->connect_clicked( LINK( this, SvxTPFilter,TimeHdl) );
     m_xBtnRange->connect_clicked( LINK( this, SvxTPFilter, RefHandle));
 
-    Link<weld::ToggleButton&,void> aLink=LINK( this, SvxTPFilter, RowEnableHdl) ;
+    Link<weld::Toggleable&,void> aLink=LINK( this, SvxTPFilter, RowEnableHdl) ;
     m_xCbDate->connect_toggled(aLink);
     m_xCbAuthor->connect_toggled(aLink);
     m_xCbRange->connect_toggled(aLink);
@@ -839,7 +839,7 @@ IMPL_LINK_NOARG(SvxTPFilter, SelDateHdl, weld::ComboBox&, void)
     bModified = true;
 }
 
-IMPL_LINK(SvxTPFilter, RowEnableHdl, weld::ToggleButton&, rCB, void)
+IMPL_LINK(SvxTPFilter, RowEnableHdl, weld::Toggleable&, rCB, void)
 {
     if (&rCB == m_xCbDate.get())
     {

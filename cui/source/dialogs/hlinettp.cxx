@@ -67,7 +67,7 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp(weld::Container* pParent,
     m_xRbtLinktypInternet->set_active(true);
 
     // set handlers
-    Link<weld::ToggleButton&, void> aLink( LINK ( this, SvxHyperlinkInternetTp, Click_SmartProtocol_Impl ) );
+    Link<weld::Toggleable&, void> aLink( LINK ( this, SvxHyperlinkInternetTp, Click_SmartProtocol_Impl ) );
     m_xRbtLinktypInternet->connect_toggled( aLink );
     m_xRbtLinktypFTP->connect_toggled( aLink );
     m_xCbAnonymous->connect_toggled( LINK ( this, SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl ) );
@@ -314,7 +314,7 @@ INetProtocol SvxHyperlinkInternetTp::GetSmartProtocolFromButtons() const
 |* Click on Radiobutton : Internet or FTP
 |*
 |************************************************************************/
-IMPL_LINK(SvxHyperlinkInternetTp, Click_SmartProtocol_Impl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SvxHyperlinkInternetTp, Click_SmartProtocol_Impl, weld::Toggleable&, rButton, void)
 {
     if (!rButton.get_active())
         return;
@@ -327,7 +327,7 @@ IMPL_LINK(SvxHyperlinkInternetTp, Click_SmartProtocol_Impl, weld::ToggleButton&,
 |* Click on Checkbox : Anonymous user
 |*
 |************************************************************************/
-IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl, weld::Toggleable&, void)
 {
     // disable login-editfields if checked
     if ( m_xCbAnonymous->get_active() )

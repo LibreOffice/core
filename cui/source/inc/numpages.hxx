@@ -265,17 +265,17 @@ class SvxNumOptionsTabPage : public SfxTabPage
     DECL_LINK(NumberTypeSelectHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(LevelHdl_Impl, weld::TreeView&, void);
     DECL_LINK(LevelHdl, void *, void);
-    DECL_LINK(PopupActivateHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(PopupActivateHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(GraphicHdl_Impl, const OString&, void);
     DECL_LINK(BulletHdl_Impl, weld::Button&, void);
     DECL_LINK(SizeHdl_Impl, weld::MetricSpinButton&, void);
-    DECL_LINK(RatioHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(RatioHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(CharFmtHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(EditModifyHdl_Impl, weld::Entry&, void);
     DECL_LINK(SpinModifyHdl_Impl, weld::SpinButton&, void);
     DECL_LINK(AllLevelHdl_Impl, weld::SpinButton&, void);
     DECL_LINK(OrientHdl_Impl, weld::ComboBox&, void);
-    DECL_LINK(SameLevelHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(SameLevelHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(BulColorHdl_Impl, ColorListBox&, void);
     DECL_LINK(BulRelSizeHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(PreviewInvalidateHdl_Impl, Timer*, void);
@@ -354,7 +354,7 @@ class SvxNumPositionTabPage : public SfxTabPage
     DECL_LINK(LevelHdl, void *, void);
     DECL_LINK(EditModifyHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(DistanceHdl_Impl, weld::MetricSpinButton&, void);
-    DECL_LINK(RelativeHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(RelativeHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(StandardHdl_Impl, weld::Button&, void);
 
     void InitPosAndSpaceMode();

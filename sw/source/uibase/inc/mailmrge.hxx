@@ -103,10 +103,10 @@ class SwMailMergeDlg : public SfxDialogController
 
     DECL_LINK( ButtonHdl, weld::Button&, void );
     DECL_LINK( InsertPathHdl, weld::Button&, void );
-    DECL_LINK( OutputTypeHdl, weld::ToggleButton&, void );
-    DECL_LINK( FilenameHdl, weld::ToggleButton&, void );
+    DECL_LINK( OutputTypeHdl, weld::Toggleable&, void );
+    DECL_LINK( FilenameHdl, weld::Toggleable&, void );
     DECL_LINK( ModifyHdl, weld::SpinButton&, void );
-    DECL_LINK( SaveTypeHdl, weld::ToggleButton&, void );
+    DECL_LINK( SaveTypeHdl, weld::Toggleable&, void );
     DECL_LINK( FileFormatHdl, weld::ComboBox&, void );
 
     bool            ExecQryShell();

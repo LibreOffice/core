@@ -84,11 +84,11 @@ class SwGlossaryDlg : public SfxDialogController
     DECL_LINK( NameDoubleClick, weld::TreeView&, bool );
     DECL_LINK( GrpSelect, weld::TreeView&, void );
     DECL_LINK( MenuHdl, const OString&, void );
-    DECL_LINK( EnableHdl, weld::ToggleButton&, void );
+    DECL_LINK( EnableHdl, weld::Toggleable&, void );
     DECL_LINK( BibHdl, weld::Button&, void );
     DECL_LINK( InsertHdl, weld::Button&, void );
     DECL_LINK( PathHdl, weld::Button&, void );
-    DECL_LINK( CheckBoxHdl, weld::ToggleButton&, void );
+    DECL_LINK( CheckBoxHdl, weld::Toggleable&, void );
     DECL_LINK( PreviewLoadedHdl, SwOneExampleFrame&, void );
     DECL_LINK( KeyInputHdl, const KeyEvent&, bool );
     DECL_LINK( TextFilterHdl, OUString&, bool );

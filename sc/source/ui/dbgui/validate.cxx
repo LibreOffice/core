@@ -688,7 +688,7 @@ IMPL_LINK_NOARG(ScTPValidationValue, SelectHdl, weld::ComboBox&, void)
     m_xBtnRef->GetWidget()->set_visible( bRange );  // cell range picker
 }
 
-IMPL_LINK_NOARG(ScTPValidationValue, CheckHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ScTPValidationValue, CheckHdl, weld::Toggleable&, void)
 {
     m_xCbSort->set_sensitive( m_xCbShow->get_active() );
 }

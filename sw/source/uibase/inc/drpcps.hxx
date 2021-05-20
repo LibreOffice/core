@@ -137,12 +137,12 @@ friend class SwDropCapsPict;
 
     void ModifyEntry(weld::Entry& rEdit);
 
-    DECL_LINK(ClickHdl, weld::ToggleButton&, void);
+    DECL_LINK(ClickHdl, weld::Toggleable&, void);
     DECL_LINK(MetricValueChangedHdl, weld::MetricSpinButton&, void);
     DECL_LINK(ValueChangedHdl, weld::SpinButton&, void);
     DECL_LINK(ModifyHdl, weld::Entry&, void);
     DECL_LINK(SelectHdl, weld::ComboBox&, void);
-    DECL_LINK(WholeWordHdl, weld::ToggleButton&, void);
+    DECL_LINK(WholeWordHdl, weld::Toggleable&, void);
 
     static const sal_uInt16 aPageRg[];
 

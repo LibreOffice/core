@@ -148,8 +148,8 @@ private:
     void SaveParams() const;
 
     // Handler for the Controls
-    DECL_LINK(OnToggledSearchRadio, weld::ToggleButton&, void);
-    DECL_LINK(OnToggledFieldRadios, weld::ToggleButton&, void);
+    DECL_LINK(OnToggledSearchRadio, weld::Toggleable&, void);
+    DECL_LINK(OnToggledFieldRadios, weld::Toggleable&, void);
     DECL_LINK(OnClickedSearchAgain, weld::Button&, void);
     DECL_LINK(OnClickedSpecialSettings, weld::Button&, void);
 
@@ -159,7 +159,7 @@ private:
     DECL_LINK(OnFieldSelected, weld::ComboBox&, void);
 
     DECL_LINK(OnFocusGrabbed, weld::Widget&, void);
-    DECL_LINK(OnCheckBoxToggled, weld::ToggleButton&, void);
+    DECL_LINK(OnCheckBoxToggled, weld::Toggleable&, void);
 
     DECL_LINK(OnContextSelection, weld::ComboBox&, void);
 

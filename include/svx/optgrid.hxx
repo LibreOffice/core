@@ -124,10 +124,10 @@ protected:
     std::unique_ptr<weld::MetricSpinButton> m_xMtrFldAngle;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrFldBezAngle;
 
-    DECL_LINK(ClickRotateHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(ClickRotateHdl_Impl, weld::Toggleable&, void);
 private:
     DECL_LINK(ChangeDrawHdl_Impl, weld::MetricSpinButton&, void);
-    DECL_LINK(ChangeGridsnapHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(ChangeGridsnapHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(ChangeDivisionHdl_Impl, weld::SpinButton&, void);
 };
 

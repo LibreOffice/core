@@ -55,12 +55,12 @@ OfaMSFilterTabPage::~OfaMSFilterTabPage()
 {
 }
 
-IMPL_LINK_NOARG(OfaMSFilterTabPage, LoadWordBasicCheckHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(OfaMSFilterTabPage, LoadWordBasicCheckHdl_Impl, weld::Toggleable&, void)
 {
     m_xWBasicWbctblCB->set_sensitive(m_xWBasicCodeCB->get_active());
 }
 
-IMPL_LINK_NOARG(OfaMSFilterTabPage, LoadExcelBasicCheckHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(OfaMSFilterTabPage, LoadExcelBasicCheckHdl_Impl, weld::Toggleable&, void)
 {
     m_xEBasicExectblCB->set_sensitive(m_xEBasicCodeCB->get_active());
 }

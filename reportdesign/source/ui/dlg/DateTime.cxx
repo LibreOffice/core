@@ -167,7 +167,7 @@ OUString ODateTimeDialog::getFormatStringByKey(::sal_Int32 _nNumberFormatKey,con
     return xPreviewer->convertNumberToPreviewString(sFormat,nValue,m_nLocale,true);
 }
 
-IMPL_LINK_NOARG(ODateTimeDialog, CBClickHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ODateTimeDialog, CBClickHdl, weld::Toggleable&, void)
 {
     const bool bDate = m_xDate->get_active();
     m_xFTDateFormat->set_sensitive(bDate);

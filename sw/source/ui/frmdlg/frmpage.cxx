@@ -696,7 +696,7 @@ SwFramePage::SwFramePage(weld::Container* pPage, weld::DialogController* pContro
     m_xAtVertPosED->connect_value_changed( aLk3 );
     m_xFollowTextFlowCB->connect_toggled(LINK(this, SwFramePage, RangeModifyClickHdl));
 
-    Link<weld::ToggleButton&,void> aLk2 = LINK(this, SwFramePage, AnchorTypeHdl);
+    Link<weld::Toggleable&,void> aLk2 = LINK(this, SwFramePage, AnchorTypeHdl);
     m_xAnchorAtPageRB->connect_toggled( aLk2 );
     m_xAnchorAtParaRB->connect_toggled( aLk2 );
     m_xAnchorAtCharRB->connect_toggled( aLk2 );
@@ -1716,13 +1716,13 @@ DeactivateRC SwFramePage::DeactivatePage(SfxItemSet * _pSet)
 }
 
 // swap left/right with inside/outside
-IMPL_LINK_NOARG(SwFramePage, MirrorHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwFramePage, MirrorHdl, weld::Toggleable&, void)
 {
     RndStdIds eId = GetAnchor();
     InitPos(eId, -1, 0, -1, 0, LONG_MAX, LONG_MAX);
 }
 
-IMPL_LINK( SwFramePage, RelSizeClickHdl, weld::ToggleButton&, rBtn, void )
+IMPL_LINK( SwFramePage, RelSizeClickHdl, weld::Toggleable&, rBtn, void )
 {
     if (&rBtn == m_xRelWidthCB.get())
     {
@@ -1748,7 +1748,7 @@ IMPL_LINK( SwFramePage, RelSizeClickHdl, weld::ToggleButton&, rBtn, void )
 }
 
 // range check
-IMPL_LINK_NOARG(SwFramePage, RangeModifyClickHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwFramePage, RangeModifyClickHdl, weld::Toggleable&, void)
 {
     RangeModifyHdl();
 }
@@ -1873,7 +1873,7 @@ void SwFramePage::RangeModifyHdl()
         m_xAtVertPosED->set_value(m_xAtVertPosED->normalize(aVal.nVPos), FieldUnit::TWIP);
 }
 
-IMPL_LINK_NOARG(SwFramePage, AnchorTypeHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwFramePage, AnchorTypeHdl, weld::Toggleable&, void)
 {
     m_xMirrorPagesCB->set_sensitive(!m_xAnchorAsCharRB->get_active());
 
@@ -2036,13 +2036,13 @@ IMPL_LINK_NOARG(SwFramePage, RealSizeHdl, weld::Button&, void)
     UpdateExample();
 }
 
-IMPL_LINK_NOARG(SwFramePage, AutoWidthClickHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwFramePage, AutoWidthClickHdl, weld::Toggleable&, void)
 {
     if( !IsInGraficMode() )
         HandleAutoCB( m_xAutoWidthCB->get_active(), *m_xWidthFT, *m_xWidthAutoFT, *m_xWidthED->get() );
 }
 
-IMPL_LINK_NOARG(SwFramePage, AutoHeightClickHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwFramePage, AutoHeightClickHdl, weld::Toggleable&, void)
 {
     if (!IsInGraficMode())
         HandleAutoCB(m_xAutoHeightCB->get_active(), *m_xHeightFT, *m_xHeightAutoFT, *m_xWidthED->get());
@@ -2563,7 +2563,7 @@ IMPL_LINK_NOARG(SwGrfExtPage, BrowseHdl, weld::Button&, void)
 
 }
 
-IMPL_LINK_NOARG(SwGrfExtPage, MirrorHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwGrfExtPage, MirrorHdl, weld::Toggleable&, void)
 {
     bool bEnable = m_xMirrorHorzBox->get_active();
 

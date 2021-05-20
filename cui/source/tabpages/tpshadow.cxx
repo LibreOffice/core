@@ -444,7 +444,7 @@ std::unique_ptr<SfxTabPage> SvxShadowTabPage::Create( weld::Container* pPage, we
     return std::make_unique<SvxShadowTabPage>(pPage, pController, *rAttrs);
 }
 
-IMPL_LINK_NOARG(SvxShadowTabPage, ClickShadowHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxShadowTabPage, ClickShadowHdl_Impl, weld::Toggleable&, void)
 {
     if (m_xTsbShowShadow->get_state() == TRISTATE_FALSE)
     {

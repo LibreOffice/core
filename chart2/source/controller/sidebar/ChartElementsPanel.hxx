@@ -106,7 +106,7 @@ private:
 
     void setTitleVisible(TitleHelper::eTitleType eTitle, bool bVisible);
 
-    DECL_LINK(CheckBoxHdl, weld::ToggleButton&, void);
+    DECL_LINK(CheckBoxHdl, weld::Toggleable&, void);
     DECL_LINK(EditHdl, weld::Entry&, void);
     DECL_LINK(LegendPosHdl, weld::ComboBox&, void);
 };

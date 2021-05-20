@@ -68,7 +68,7 @@ namespace dbaui
         std::unique_ptr<weld::Label> m_xCharSetLabel;
         std::unique_ptr<CharSetListBox> m_xCharSet;
 
-        DECL_LINK(OnSetExtensionHdl, weld::ToggleButton&, void);
+        DECL_LINK(OnSetExtensionHdl, weld::Toggleable&, void);
         DECL_LINK(OnEditModified, weld::Entry&, void);
 
         OUString    GetSeparator(const weld::ComboBox& rBox, const OUString& rList);

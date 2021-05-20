@@ -112,7 +112,7 @@ SvxTabulatorTabPage::SvxTabulatorTabPage(weld::Container* pPage, weld::DialogCon
     m_xDelBtn->connect_clicked(LINK(this,SvxTabulatorTabPage, DelHdl_Impl));
     m_xDelAllBtn->connect_clicked(LINK(this,SvxTabulatorTabPage, DelAllHdl_Impl));
 
-    Link<weld::ToggleButton&,void> aLink = LINK(this, SvxTabulatorTabPage, TabTypeCheckHdl_Impl);
+    Link<weld::Toggleable&,void> aLink = LINK(this, SvxTabulatorTabPage, TabTypeCheckHdl_Impl);
     m_xLeftTab->connect_toggled(aLink);
     m_xRightTab->connect_toggled(aLink);
     m_xDezTab->connect_toggled(aLink);
@@ -525,7 +525,7 @@ IMPL_LINK_NOARG(SvxTabulatorTabPage, DelAllHdl_Impl, weld::Button&, void)
     }
 }
 
-IMPL_LINK(SvxTabulatorTabPage, TabTypeCheckHdl_Impl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(SvxTabulatorTabPage, TabTypeCheckHdl_Impl, weld::Toggleable&, rBox, void)
 {
     if (!rBox.get_active())
         return;
@@ -558,7 +558,7 @@ IMPL_LINK(SvxTabulatorTabPage, TabTypeCheckHdl_Impl, weld::ToggleButton&, rBox, 
     }
 }
 
-IMPL_LINK(SvxTabulatorTabPage, FillTypeCheckHdl_Impl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(SvxTabulatorTabPage, FillTypeCheckHdl_Impl, weld::Toggleable&, rBox, void)
 {
     if (!rBox.get_active())
         return;

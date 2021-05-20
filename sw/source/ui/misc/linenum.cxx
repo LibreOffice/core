@@ -250,7 +250,7 @@ IMPL_LINK_NOARG(SwLineNumberingDlg, ModifyHdl, weld::Entry&, void)
 }
 
 // On/Off
-IMPL_LINK_NOARG(SwLineNumberingDlg, LineOnOffHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwLineNumberingDlg, LineOnOffHdl, weld::Toggleable&, void)
 {
     bool bEnable = m_xNumberingOnCB->get_active();
     m_xBodyContent->set_sensitive(bEnable);

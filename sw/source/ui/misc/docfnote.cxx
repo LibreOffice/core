@@ -257,7 +257,7 @@ void SwEndNoteOptionPage::SetShell( SwWrtShell &rShell )
                         pSh->GetView().GetDocShell(), true);
 }
 
-IMPL_LINK(SwEndNoteOptionPage, ToggleHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SwEndNoteOptionPage, ToggleHdl, weld::Toggleable&, rButton, void)
 {
     if (!rButton.get_active())
         return;

@@ -155,7 +155,7 @@ void OfaHtmlTabPage::Reset( const SfxItemSet* )
         m_xCharSetLB->SelectTextEncoding( rHtmlOpt.GetTextEncoding() );
 }
 
-IMPL_LINK(OfaHtmlTabPage, CheckBoxHdl_Impl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(OfaHtmlTabPage, CheckBoxHdl_Impl, weld::Toggleable&, rBox, void)
 {
     m_xStarBasicWarningCB->set_sensitive(!rBox.get_active());
 }

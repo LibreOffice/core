@@ -450,7 +450,7 @@ void SwPageBreakWin::Fade( bool bFadeIn )
         m_aFadeTimer.Start( );
 }
 
-IMPL_LINK(SwPageBreakWin, ToggleHdl, weld::ToggleButton&, rMenuButton, void)
+IMPL_LINK(SwPageBreakWin, ToggleHdl, weld::Toggleable&, rMenuButton, void)
 {
     // hide on dropdown, draw fully unfaded if dropdown before fully faded in
     Fade(rMenuButton.get_active());

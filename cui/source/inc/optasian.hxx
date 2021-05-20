@@ -42,7 +42,7 @@ class SvxAsianLayoutPage : public SfxTabPage
     std::unique_ptr<weld::Label> m_xHintFT;
 
     DECL_LINK(LanguageHdl, weld::ComboBox&, void);
-    DECL_LINK(ChangeStandardHdl, weld::ToggleButton&, void);
+    DECL_LINK(ChangeStandardHdl, weld::Toggleable&, void);
     DECL_LINK(ModifyHdl, weld::Entry&, void);
 
 public:

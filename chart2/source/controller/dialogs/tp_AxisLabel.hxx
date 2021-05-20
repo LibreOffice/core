@@ -65,8 +65,8 @@ private:
     std::unique_ptr<svx::DialControl> m_xCtrlDial;
     std::unique_ptr<weld::CustomWeld> m_xCtrlDialWin;
 
-    DECL_LINK(StackedToggleHdl, weld::ToggleButton&, void);
-    DECL_LINK(ToggleShowLabel, weld::ToggleButton&, void);
+    DECL_LINK(StackedToggleHdl, weld::Toggleable&, void);
+    DECL_LINK(ToggleShowLabel, weld::Toggleable&, void);
 
 public:
     SchAxisLabelTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);

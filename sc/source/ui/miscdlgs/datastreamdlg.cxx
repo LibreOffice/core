@@ -58,7 +58,7 @@ IMPL_LINK_NOARG(DataStreamDlg, BrowseHdl, weld::Button&, void)
     UpdateEnable();
 }
 
-IMPL_LINK_NOARG(DataStreamDlg, UpdateClickHdl, weld::ToggleButton&, void) { UpdateEnable(); }
+IMPL_LINK_NOARG(DataStreamDlg, UpdateClickHdl, weld::Toggleable&, void) { UpdateEnable(); }
 
 IMPL_LINK_NOARG(DataStreamDlg, UpdateComboBoxHdl, weld::ComboBox&, void) { UpdateEnable(); }
 

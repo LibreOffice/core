@@ -175,7 +175,7 @@ GraphicFilterMosaic::GraphicFilterMosaic(weld::Window* pParent, const Graphic& r
     mxMtrWidth->grab_focus();
 }
 
-IMPL_LINK_NOARG(GraphicFilterMosaic, CheckBoxModifyHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(GraphicFilterMosaic, CheckBoxModifyHdl, weld::Toggleable&, void)
 {
     GetModifyHdl().Call(nullptr);
 }
@@ -276,7 +276,7 @@ GraphicFilterSolarize::GraphicFilterSolarize(weld::Window* pParent, const Graphi
     mxCbxInvert->connect_toggled(LINK(this, GraphicFilterSolarize, CheckBoxModifyHdl));
 }
 
-IMPL_LINK_NOARG(GraphicFilterSolarize, CheckBoxModifyHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(GraphicFilterSolarize, CheckBoxModifyHdl, weld::Toggleable&, void)
 {
     GetModifyHdl().Call(nullptr);
 }

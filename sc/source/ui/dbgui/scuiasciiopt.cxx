@@ -431,7 +431,7 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, const OUString& aDatNa
     lcl_FillCombo( *mxCbTextSep, gaTextSepList, mcTextSep );
     mxCbTextSep->set_entry_text(sTextSeparators);
 
-    Link<weld::ToggleButton&,void> aSeparatorClickHdl =LINK( this, ScImportAsciiDlg, SeparatorClickHdl );
+    Link<weld::Toggleable&,void> aSeparatorClickHdl =LINK( this, ScImportAsciiDlg, SeparatorClickHdl );
     mxCbTextSep->connect_changed( LINK( this, ScImportAsciiDlg, SeparatorComboBoxHdl ) );
     mxCkbTab->connect_toggled( aSeparatorClickHdl );
     mxCkbSemicolon->connect_toggled( aSeparatorClickHdl );
@@ -706,14 +706,14 @@ void ScImportAsciiDlg::RbSepFix()
     SetupSeparatorCtrls();
 }
 
-IMPL_LINK(ScImportAsciiDlg, RbSepFixHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(ScImportAsciiDlg, RbSepFixHdl, weld::Toggleable&, rButton, void)
 {
     if (!rButton.get_active())
         return;
     RbSepFix();
 }
 
-IMPL_LINK(ScImportAsciiDlg, SeparatorClickHdl, weld::ToggleButton&, rCtrl, void)
+IMPL_LINK(ScImportAsciiDlg, SeparatorClickHdl, weld::Toggleable&, rCtrl, void)
 {
     SeparatorHdl(&rCtrl);
 }

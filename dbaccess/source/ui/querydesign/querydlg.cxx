@@ -230,7 +230,7 @@ IMPL_LINK_NOARG(DlgQryJoin, OKClickHdl, weld::Button&, void)
     m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK_NOARG(DlgQryJoin, NaturalToggleHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(DlgQryJoin, NaturalToggleHdl, weld::Toggleable&, void)
 {
     bool bChecked = m_xCBNatural->get_active();
     static_cast<OQueryTableConnectionData*>(m_pConnData.get())->setNatural(bChecked);

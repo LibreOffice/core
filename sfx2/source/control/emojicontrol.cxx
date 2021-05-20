@@ -99,7 +99,7 @@ void SfxEmojiControl::ConvertLabelToUnicode(weld::ToggleButton& rBtn)
     rBtn.set_label(sHexText.toString());
 }
 
-FILTER_CATEGORY SfxEmojiControl::getFilter(const weld::ToggleButton& rCurPageId) const
+FILTER_CATEGORY SfxEmojiControl::getFilter(const weld::Toggleable& rCurPageId) const
 {
     if (&rCurPageId == mxPeopleBtn.get())
         return FILTER_CATEGORY::PEOPLE;
@@ -123,7 +123,7 @@ FILTER_CATEGORY SfxEmojiControl::getFilter(const weld::ToggleButton& rCurPageId)
     return FILTER_CATEGORY::PEOPLE;
 }
 
-IMPL_LINK(SfxEmojiControl, ActivatePageHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SfxEmojiControl, ActivatePageHdl, weld::Toggleable&, rButton, void)
 {
     mxPeopleBtn->set_active(&rButton == mxPeopleBtn.get());
     mxNatureBtn->set_active(&rButton == mxNatureBtn.get());

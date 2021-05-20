@@ -43,7 +43,7 @@ private:
     virtual bool        ImplGetValue( double& rfValue ) const = 0;
     virtual void        ImplSetValue( double fValue ) = 0;
 
-    DECL_LINK(ToggleHdl, weld::ToggleButton&, void);
+    DECL_LINK(ToggleHdl, weld::Toggleable&, void);
 
 private:
     weld::RadioButton& mrRbAuto;
@@ -115,7 +115,7 @@ public:
     sal_Int32 GetDatePart() const;
 
 private:
-    DECL_LINK(ToggleHdl, weld::ToggleButton&, void);
+    DECL_LINK(ToggleHdl, weld::Toggleable&, void);
     DECL_LINK(CheckHdl, const weld::TreeView::iter_col&, void);
 
     void Check();

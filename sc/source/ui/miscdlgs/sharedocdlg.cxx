@@ -83,7 +83,7 @@ ScShareDocumentDlg::~ScShareDocumentDlg()
 {
 }
 
-IMPL_LINK_NOARG(ScShareDocumentDlg, ToggleHandle, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ScShareDocumentDlg, ToggleHandle, weld::Toggleable&, void)
 {
     m_xFtWarning->set_sensitive(m_xCbShare->get_active());
 }

@@ -382,7 +382,7 @@ IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, Parameter2ValueModified, weld::Sp
     }
 }
 
-IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, CheckChanged, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, CheckChanged, weld::Toggleable&, void)
 {
     mxSeed->set_sensitive(mxEnableSeed->get_active());
     mxDecimalPlaces->set_sensitive(mxEnableRounding->get_active());

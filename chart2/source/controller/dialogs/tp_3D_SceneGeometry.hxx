@@ -47,8 +47,8 @@ public:
     DECL_LINK( PerspectiveChanged, Timer *, void);
     // is called immediately when a field changes
     DECL_LINK( PerspectiveEdited, weld::MetricSpinButton&, void );
-    DECL_LINK( PerspectiveToggled, weld::ToggleButton&, void );
-    DECL_LINK( RightAngledAxesToggled, weld::ToggleButton&, void );
+    DECL_LINK( PerspectiveToggled, weld::Toggleable&, void );
+    DECL_LINK( RightAngledAxesToggled, weld::Toggleable&, void );
 
 private:
     void applyAnglesToModel();

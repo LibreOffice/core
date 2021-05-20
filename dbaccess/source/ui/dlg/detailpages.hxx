@@ -101,7 +101,7 @@ namespace dbaui
 
     private:
         DECL_LINK(OnButtonClicked, weld::Button&, void);
-        DECL_LINK(OnButtonToggled, weld::ToggleButton&, void);
+        DECL_LINK(OnButtonToggled, weld::Toggleable&, void);
     };
 
     // OAdoDetailsPage
@@ -225,7 +225,7 @@ namespace dbaui
         std::unique_ptr<weld::SpinButton> m_xNFPortNumber;
         std::unique_ptr<weld::SpinButton> m_xNFRowCount;
 
-        DECL_LINK(OnCheckBoxClick, weld::ToggleButton&, void);
+        DECL_LINK(OnCheckBoxClick, weld::Toggleable&, void);
     };
 
     // OTextDetailsPage

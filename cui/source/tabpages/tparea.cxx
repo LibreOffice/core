@@ -100,7 +100,7 @@ SvxAreaTabPage::SvxAreaTabPage(weld::Container* pPage, weld::DialogController* p
     maBox.AddButton(m_xBtnHatch.get());
     maBox.AddButton(m_xBtnBitmap.get());
     maBox.AddButton(m_xBtnPattern.get());
-    Link<weld::ToggleButton&, void> aLink = LINK(this, SvxAreaTabPage, SelectFillTypeHdl_Impl);
+    Link<weld::Toggleable&, void> aLink = LINK(this, SvxAreaTabPage, SelectFillTypeHdl_Impl);
     m_xBtnNone->connect_toggled(aLink);
     m_xBtnColor->connect_toggled(aLink);
     m_xBtnGradient->connect_toggled(aLink);
@@ -355,7 +355,7 @@ std::unique_ptr<SfxTabPage> lcl_CreateFillStyleTabPage(sal_uInt16 nId, weld::Con
 
 }
 
-IMPL_LINK(SvxAreaTabPage, SelectFillTypeHdl_Impl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SvxAreaTabPage, SelectFillTypeHdl_Impl, weld::Toggleable&, rButton, void)
 {
     //tdf#124549 - If the button is already active do not toggle it back.
     if(!rButton.get_active())
@@ -365,7 +365,7 @@ IMPL_LINK(SvxAreaTabPage, SelectFillTypeHdl_Impl, weld::ToggleButton&, rButton, 
     m_bBtnClicked = true;
 }
 
-void SvxAreaTabPage::SelectFillType(weld::ToggleButton& rButton, const SfxItemSet* _pSet)
+void SvxAreaTabPage::SelectFillType(weld::Toggleable& rButton, const SfxItemSet* _pSet)
 {
     if (_pSet)
         m_rXFSet.Set(*_pSet);

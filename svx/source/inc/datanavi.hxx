@@ -281,7 +281,7 @@ namespace svxform
 
         DECL_LINK(            ModelSelectListBoxHdl, weld::ComboBox&, void );
         DECL_LINK(            MenuSelectHdl, const OString&, void );
-        DECL_LINK(            MenuActivateHdl, weld::ToggleButton&, void );
+        DECL_LINK(            MenuActivateHdl, weld::Toggleable&, void );
         DECL_LINK(            ActivatePageHdl, const OString&, void);
         DECL_LINK(            UpdateHdl, Timer *, void);
         void ModelSelectHdl(const weld::ComboBox*);
@@ -379,8 +379,8 @@ namespace svxform
         std::unique_ptr<weld::Button> m_xCalculateBtn;
         std::unique_ptr<weld::Button> m_xOKBtn;
 
-        void Check(const weld::ToggleButton* pBox);
-        DECL_LINK(CheckHdl, weld::ToggleButton&, void);
+        void Check(const weld::Toggleable* pBox);
+        DECL_LINK(CheckHdl, weld::Toggleable&, void);
         DECL_LINK(ConditionHdl, weld::Button&, void);
         DECL_LINK(OKHdl, weld::Button&, void);
 

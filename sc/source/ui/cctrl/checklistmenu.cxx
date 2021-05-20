@@ -662,7 +662,7 @@ IMPL_LINK(ScCheckListMenuControl, ButtonHdl, weld::Button&, rBtn, void)
     }
 }
 
-IMPL_LINK_NOARG(ScCheckListMenuControl, TriStateHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ScCheckListMenuControl, TriStateHdl, weld::Toggleable&, void)
 {
     switch (mePrevToggleAllState)
     {

@@ -123,15 +123,15 @@ class SwInsertDBColAutoPilot : public SfxDialogController, public utl::ConfigIte
     std::unique_ptr<weld::Button> m_xPbTableFormat;
     std::unique_ptr<weld::Button> m_xPbTableAutofmt;
 
-    DECL_LINK( PageHdl, weld::ToggleButton&, void );
+    DECL_LINK( PageHdl, weld::Toggleable&, void );
     DECL_LINK( AutoFormatHdl, weld::Button&, void );
     DECL_LINK( TableFormatHdl, weld::Button&, void );
-    DECL_LINK( DBFormatHdl, weld::ToggleButton&, void );
+    DECL_LINK( DBFormatHdl, weld::Toggleable&, void );
     DECL_LINK( TableToFromHdl, weld::Button&, void );
     DECL_LINK( TVSelectHdl, weld::TreeView&, void );
     DECL_LINK( CBSelectHdl, weld::ComboBox&, void );
     DECL_LINK( DblClickHdl, weld::TreeView&, bool );
-    DECL_LINK( HeaderHdl, weld::ToggleButton&, void );
+    DECL_LINK( HeaderHdl, weld::Toggleable&, void );
 
     bool SplitTextToColArr( const OUString& rText, DB_Columns& rColArr, bool bInsField );
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;

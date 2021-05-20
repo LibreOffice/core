@@ -161,7 +161,7 @@ bool ScHighlightChgDlg::IsRefInputMode() const
     return m_xEdAssign->GetWidget()->get_visible();
 }
 
-IMPL_LINK_NOARG(ScHighlightChgDlg, HighlightHandle, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ScHighlightChgDlg, HighlightHandle, weld::Toggleable&, void)
 {
     if (m_xHighlightBox->get_active())
     {

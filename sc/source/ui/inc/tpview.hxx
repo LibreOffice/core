@@ -58,7 +58,7 @@ class ScTpContentOptions : public SfxTabPage
     void    InitGridOpt();
     DECL_LINK( GridHdl, weld::ComboBox&, void );
     DECL_LINK( SelLbObjHdl, weld::ComboBox&, void );
-    DECL_LINK( CBHdl, weld::ToggleButton&, void );
+    DECL_LINK( CBHdl, weld::Toggleable&, void );
 
 public:
     ScTpContentOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet);
@@ -96,7 +96,7 @@ class ScTpLayoutOptions : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xEnterPasteModeCB;
 
     DECL_LINK(MetricHdl, weld::ComboBox&, void );
-    DECL_LINK( AlignHdl, weld::ToggleButton&, void );
+    DECL_LINK( AlignHdl, weld::Toggleable&, void );
 
 
 public:

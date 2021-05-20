@@ -92,9 +92,9 @@ class SwAuthenticationSettingsDialog : public SfxDialogController
     std::unique_ptr<weld::Button>      m_xOKPB;
 
     DECL_LINK(OKHdl_Impl, weld::Button&, void);
-    DECL_LINK(CheckBoxHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(RadioButtonHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(InServerHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(CheckBoxHdl_Impl, weld::Toggleable&, void);
+    DECL_LINK(RadioButtonHdl_Impl, weld::Toggleable&, void);
+    DECL_LINK(InServerHdl_Impl, weld::Toggleable&, void);
 
 public:
     SwAuthenticationSettingsDialog(weld::Window* pParent, SwMailMergeConfigItem& rItem);
@@ -175,7 +175,7 @@ void SwMailConfigPage::Reset( const SfxItemSet* /*rSet*/ )
     m_xSecureCB->save_state();
 }
 
-IMPL_LINK(SwMailConfigPage, ReplyToHdl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(SwMailConfigPage, ReplyToHdl, weld::Toggleable&, rBox, void)
 {
     bool bEnable = rBox.get_active();
     m_xReplyToFT->set_sensitive(bEnable);
@@ -196,7 +196,7 @@ IMPL_LINK_NOARG(SwMailConfigPage, TestHdl, weld::Button&, void)
     aDlg.run();
 }
 
-IMPL_LINK(SwMailConfigPage, SecureHdl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(SwMailConfigPage, SecureHdl, weld::Toggleable&, rBox, void)
 {
     bool bEnable = rBox.get_active();
     m_pConfigItem->SetSecureConnection(bEnable);
@@ -387,7 +387,7 @@ SwAuthenticationSettingsDialog::SwAuthenticationSettingsDialog(
     , m_xOKPB(m_xBuilder->weld_button("ok"))
 {
     m_xAuthenticationCB->connect_toggled( LINK( this, SwAuthenticationSettingsDialog, CheckBoxHdl_Impl));
-    Link<weld::ToggleButton&,void> aRBLink = LINK( this, SwAuthenticationSettingsDialog, RadioButtonHdl_Impl );
+    Link<weld::Toggleable&,void> aRBLink = LINK( this, SwAuthenticationSettingsDialog, RadioButtonHdl_Impl );
     m_xSeparateAuthenticationRB->connect_toggled( aRBLink );
     m_xSMTPAfterPOPRB->connect_toggled( aRBLink );
     m_xOKPB->connect_clicked( LINK( this, SwAuthenticationSettingsDialog, OKHdl_Impl));
@@ -427,7 +427,7 @@ IMPL_LINK_NOARG(SwAuthenticationSettingsDialog, OKHdl_Impl, weld::Button&, void)
     m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK( SwAuthenticationSettingsDialog, CheckBoxHdl_Impl, weld::ToggleButton&, rBox, void)
+IMPL_LINK( SwAuthenticationSettingsDialog, CheckBoxHdl_Impl, weld::Toggleable&, rBox, void)
 {
     bool bChecked = rBox.get_active();
     m_xSeparateAuthenticationRB->set_sensitive(bChecked);
@@ -435,7 +435,7 @@ IMPL_LINK( SwAuthenticationSettingsDialog, CheckBoxHdl_Impl, weld::ToggleButton&
     RadioButtonHdl_Impl(*m_xSeparateAuthenticationRB);
 }
 
-IMPL_LINK_NOARG(SwAuthenticationSettingsDialog, RadioButtonHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwAuthenticationSettingsDialog, RadioButtonHdl_Impl, weld::Toggleable&, void)
 {
     bool bSeparate = m_xSeparateAuthenticationRB->get_active();
     bool bIsEnabled = m_xSeparateAuthenticationRB->get_sensitive();
@@ -472,7 +472,7 @@ IMPL_LINK_NOARG(SwAuthenticationSettingsDialog, RadioButtonHdl_Impl, weld::Toggl
     m_xInPasswordED->set_sensitive(bNotSeparate);
 }
 
-IMPL_LINK_NOARG( SwAuthenticationSettingsDialog, InServerHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG( SwAuthenticationSettingsDialog, InServerHdl_Impl, weld::Toggleable&, void)
 {
     bool bPOP = m_xPOP3RB->get_active();
     m_rConfigItem.SetInServerPOP(bPOP);

@@ -106,7 +106,7 @@ class SwIndexMarkPane
     void ModifyHdl(const weld::Widget& rWidget);
     DECL_LINK( KeyDCBModifyHdl, weld::ComboBox&, void );
     DECL_LINK( NewUserIdxHdl, weld::Button&, void );
-    DECL_LINK( SearchTypeHdl, weld::ToggleButton&, void );
+    DECL_LINK( SearchTypeHdl, weld::Toggleable&, void );
     DECL_LINK( PhoneticEDModifyHdl, weld::Entry&, void );
 
     //this method updates the values from 'nLangForPhoneticReading' and 'bIsPhoneticReadingEnabled'
@@ -194,7 +194,7 @@ class SwAuthorMarkPane
     DECL_LINK(CloseHdl, weld::Button&, void);
     DECL_LINK(CreateEntryHdl, weld::Button&, void);
     DECL_LINK(CompEntryHdl, weld::ComboBox&, void);
-    DECL_LINK(ChangeSourceHdl, weld::ToggleButton&, void);
+    DECL_LINK(ChangeSourceHdl, weld::Toggleable&, void);
     DECL_LINK(IsEditAllowedHdl, weld::Entry&, bool);
     DECL_LINK(IsEntryAllowedHdl, weld::Entry&, bool);
     DECL_LINK(EditModifyHdl, weld::Entry&, void);

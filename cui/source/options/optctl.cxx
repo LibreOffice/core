@@ -24,7 +24,7 @@
 
 // class SvxCTLOptionsPage -----------------------------------------------------
 
-IMPL_LINK_NOARG(SvxCTLOptionsPage, SequenceCheckingCB_Hdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxCTLOptionsPage, SequenceCheckingCB_Hdl, weld::Toggleable&, void)
 {
     bool bIsSequenceChecking = m_xSequenceCheckingCB->get_active();
     m_xRestrictedCB->set_sensitive( bIsSequenceChecking );

@@ -154,7 +154,7 @@ IMPL_LINK_NOARG(ScNewScenarioDlg, OkHdl, weld::Button&, void)
     //! when editing, test whether another table has the name!
 }
 
-IMPL_LINK(ScNewScenarioDlg, EnableHdl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(ScNewScenarioDlg, EnableHdl, weld::Toggleable&, rBox, void)
 {
     if (&rBox == m_xCbShowFrame.get())
         m_xLbColor->set_sensitive(m_xCbShowFrame->get_active());

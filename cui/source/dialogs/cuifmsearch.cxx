@@ -240,14 +240,14 @@ short FmSearchDialog::run()
     return nRet;
 }
 
-IMPL_LINK(FmSearchDialog, OnToggledSearchRadio, weld::ToggleButton&, rButton, void)
+IMPL_LINK(FmSearchDialog, OnToggledSearchRadio, weld::Toggleable&, rButton, void)
 {
     if (!rButton.get_active())
         return;
     EnableSearchForDependees(true);
 }
 
-IMPL_LINK(FmSearchDialog, OnToggledFieldRadios, weld::ToggleButton&, rButton, void)
+IMPL_LINK(FmSearchDialog, OnToggledFieldRadios, weld::Toggleable&, rButton, void)
 {
     if (!rButton.get_active())
         return;
@@ -369,7 +369,7 @@ IMPL_LINK_NOARG(FmSearchDialog, OnFieldSelected, weld::ComboBox&, void)
         m_arrContextFields[nCurrentContext] = m_plbField->get_active_text();
 }
 
-IMPL_LINK(FmSearchDialog, OnCheckBoxToggled, weld::ToggleButton&, rBox, void)
+IMPL_LINK(FmSearchDialog, OnCheckBoxToggled, weld::Toggleable&, rBox, void)
 {
     bool bChecked = rBox.get_active();
 

@@ -62,7 +62,7 @@ bool ScTextImportOptionsDlg::isKeepAskingSet() const
 void ScTextImportOptionsDlg::init()
 {
     m_xBtnOk->connect_clicked(LINK(this, ScTextImportOptionsDlg, OKHdl));
-    Link<weld::ToggleButton&,void> aLink = LINK(this, ScTextImportOptionsDlg, RadioHdl);
+    Link<weld::Toggleable&,void> aLink = LINK(this, ScTextImportOptionsDlg, RadioHdl);
     m_xRbAutomatic->connect_toggled(aLink);
     m_xRbCustom->connect_toggled(aLink);
 
@@ -81,7 +81,7 @@ IMPL_LINK_NOARG(ScTextImportOptionsDlg, OKHdl, weld::Button&, void)
     m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK(ScTextImportOptionsDlg, RadioHdl, weld::ToggleButton&, rBtn, void)
+IMPL_LINK(ScTextImportOptionsDlg, RadioHdl, weld::Toggleable&, rBtn, void)
 {
     if (&rBtn == m_xRbAutomatic.get())
     {

@@ -172,8 +172,8 @@ public:
     bool        IsExecReady() const { return bExecState; }
 
                 DECL_LINK( PipetteHdl, const OString&, void );
-                DECL_LINK( CbxHdl, weld::ToggleButton&, void);
-                DECL_LINK( CbxTransHdl, weld::ToggleButton&, void );
+                DECL_LINK( CbxHdl, weld::Toggleable&, void);
+                DECL_LINK( CbxTransHdl, weld::Toggleable&, void );
                 DECL_LINK( FocusLbHdl, weld::Widget&, void );
                 DECL_LINK(ExecHdl, weld::Button&, void);
 };
@@ -198,7 +198,7 @@ IMPL_LINK( MaskData, PipetteHdl, const OString&, rId, void )
             { &aBItem });
 }
 
-IMPL_LINK( MaskData, CbxHdl, weld::ToggleButton&, rCbx, void )
+IMPL_LINK( MaskData, CbxHdl, weld::Toggleable&, rCbx, void )
 {
     bIsReady =  pMask->m_xCbx1->get_active() || pMask->m_xCbx2->get_active() ||
                 pMask->m_xCbx3->get_active() || pMask->m_xCbx4->get_active();
@@ -230,7 +230,7 @@ IMPL_LINK( MaskData, CbxHdl, weld::ToggleButton&, rCbx, void )
     PipetteHdl("pipette");
 }
 
-IMPL_LINK( MaskData, CbxTransHdl, weld::ToggleButton&, rCbx, void )
+IMPL_LINK( MaskData, CbxTransHdl, weld::Toggleable&, rCbx, void )
 {
     bIsReady = rCbx.get_active();
     if ( bIsReady )

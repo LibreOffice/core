@@ -406,7 +406,7 @@ std::unique_ptr<SwTOXDescription> SwMultiTOXTabDialog::CreateTOXDescFromTOXBase(
     return pDesc;
 }
 
-IMPL_LINK_NOARG(SwMultiTOXTabDialog, ShowPreviewHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwMultiTOXTabDialog, ShowPreviewHdl, weld::Toggleable&, void)
 {
     if (m_xShowExampleCB->get_active())
     {
@@ -765,7 +765,7 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(weld::Container* pPage, weld::DialogContr
     m_xAutoMarkPB->connect_toggled(LINK(this, SwTOXSelectTabPage, MenuEnableHdl));
     m_xAutoMarkPB->connect_selected(LINK(this, SwTOXSelectTabPage, MenuExecuteHdl));
 
-    Link<weld::ToggleButton&,void> aLk =  LINK(this, SwTOXSelectTabPage, CheckBoxHdl);
+    Link<weld::Toggleable&,void> aLk =  LINK(this, SwTOXSelectTabPage, CheckBoxHdl);
     m_xAddStylesCB->connect_toggled(aLk);
     m_xFromHeadingsCB->connect_toggled(aLk);
     m_xTOXMarksCB->connect_toggled(aLk);
@@ -1252,7 +1252,7 @@ IMPL_LINK_NOARG(SwTOXSelectTabPage, ModifySpinHdl, weld::SpinButton&, void)
     ModifyHdl();
 }
 
-IMPL_LINK(SwTOXSelectTabPage, CheckBoxHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SwTOXSelectTabPage, CheckBoxHdl, weld::Toggleable&, rButton, void)
 {
     SwMultiTOXTabDialog* pTOXDlg = static_cast<SwMultiTOXTabDialog*>(GetDialogController());
     const CurTOXType aCurType = pTOXDlg->GetCurrentTOXType();
@@ -1280,7 +1280,7 @@ IMPL_LINK(SwTOXSelectTabPage, CheckBoxHdl, weld::ToggleButton&, rButton, void)
     ModifyHdl();
 };
 
-IMPL_LINK_NOARG(SwTOXSelectTabPage, RadioButtonHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwTOXSelectTabPage, RadioButtonHdl, weld::Toggleable&, void)
 {
     bool bEnable = m_xFromCaptionsRB->get_active();
     m_xCaptionSequenceFT->set_sensitive(bEnable);
@@ -1331,7 +1331,7 @@ IMPL_LINK_NOARG(SwTOXSelectTabPage, AddStylesHdl, weld::Button&, void)
     ModifyHdl();
 }
 
-IMPL_LINK_NOARG(SwTOXSelectTabPage, MenuEnableHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwTOXSelectTabPage, MenuEnableHdl, weld::Toggleable&, void)
 {
     m_xAutoMarkPB->set_item_sensitive("edit", !sAutoMarkURL.isEmpty());
 }
@@ -1905,7 +1905,7 @@ SwTOXEntryTabPage::~SwTOXEntryTabPage()
     m_xTokenWIN.reset();
 }
 
-IMPL_LINK_NOARG(SwTOXEntryTabPage, ModifyClickHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwTOXEntryTabPage, ModifyClickHdl, weld::Toggleable&, void)
 {
     OnModify(true);
 }
@@ -2281,7 +2281,7 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, weld::TreeView&, rBox, void)
     rBox.grab_focus();
 }
 
-IMPL_LINK_NOARG(SwTOXEntryTabPage, SortKeyHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwTOXEntryTabPage, SortKeyHdl, weld::Toggleable&, void)
 {
     bool bEnable = m_xSortContentRB->get_active();
     m_xSortKeyFrame->set_sensitive(bEnable);
@@ -2493,7 +2493,7 @@ IMPL_LINK(SwTOXEntryTabPage, FillCharHdl, weld::ComboBox&, rBox, void)
     ModifyHdl(nullptr);
 }
 
-IMPL_LINK(SwTOXEntryTabPage, AutoRightHdl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(SwTOXEntryTabPage, AutoRightHdl, weld::Toggleable&, rBox, void)
 {
     //the most right style::TabStop is usually right aligned
     SwTOXWidget* pCurCtrl = m_xTokenWIN->GetActiveControl();

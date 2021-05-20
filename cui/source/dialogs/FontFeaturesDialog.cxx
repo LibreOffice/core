@@ -126,7 +126,7 @@ int FontFeaturesDialog::fillGrid(std::vector<vcl::font::Feature> const& rFontFea
 
         Link<weld::ComboBox&, void> aComboBoxSelectHandler
             = LINK(this, FontFeaturesDialog, ComboBoxSelectedHdl);
-        Link<weld::ToggleButton&, void> aCheckBoxToggleHandler
+        Link<weld::Toggleable&, void> aCheckBoxToggleHandler
             = LINK(this, FontFeaturesDialog, CheckBoxToggledHdl);
 
         if (aDefinition.getType() == vcl::font::FeatureParameterType::ENUM)
@@ -172,7 +172,7 @@ void FontFeaturesDialog::updateFontPreview()
     m_aPreviewWindow.SetFont(rPreviewFont, rPreviewFontCJK, rPreviewFontCTL);
 }
 
-IMPL_LINK_NOARG(FontFeaturesDialog, CheckBoxToggledHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(FontFeaturesDialog, CheckBoxToggledHdl, weld::Toggleable&, void)
 {
     updateFontPreview();
 }

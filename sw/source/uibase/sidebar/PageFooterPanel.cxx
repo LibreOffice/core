@@ -246,7 +246,7 @@ void PageFooterPanel::NotifyItemUpdate(
     }
 }
 
-IMPL_LINK_NOARG( PageFooterPanel, FooterToggleHdl, weld::ToggleButton&, void )
+IMPL_LINK_NOARG( PageFooterPanel, FooterToggleHdl, weld::Toggleable&, void )
 {
     bool IsChecked = mxFooterToggle->get_active();
     mpFooterItem->SetValue(IsChecked);

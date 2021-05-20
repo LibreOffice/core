@@ -289,7 +289,7 @@ private:
     std::unique_ptr<weld::RadioButton> mxStretch;
     bool mbSettingValue;
 
-    DECL_LINK( SelectHdl, weld::ToggleButton&, void );
+    DECL_LINK( SelectHdl, weld::Toggleable&, void );
 
     void    implSetAlignment( int nAlignmentMode, bool bEnabled );
 };
@@ -351,7 +351,7 @@ void FontworkAlignmentWindow::statusChanged( const css::frame::FeatureStateEvent
     }
 }
 
-IMPL_LINK(FontworkAlignmentWindow, SelectHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(FontworkAlignmentWindow, SelectHdl, weld::Toggleable&, rButton, void)
 {
     if (mbSettingValue || !rButton.get_active())
         return;
@@ -479,8 +479,8 @@ private:
     std::unique_ptr<weld::CheckButton> mxKernPairs;
     bool mbSettingValue;
 
-    DECL_LINK( KernSelectHdl, weld::ToggleButton&, void );
-    DECL_LINK( SelectHdl, weld::ToggleButton&, void );
+    DECL_LINK( KernSelectHdl, weld::Toggleable&, void );
+    DECL_LINK( SelectHdl, weld::Toggleable&, void );
 
     void    implSetCharacterSpacing( sal_Int32 nCharacterSpacing, bool bEnabled );
     void    implSetKernCharacterPairs(bool bKernOnOff, bool bEnabled);
@@ -602,7 +602,7 @@ void FontworkCharacterSpacingWindow::statusChanged( const css::frame::FeatureSta
     }
 }
 
-IMPL_LINK_NOARG(FontworkCharacterSpacingWindow, KernSelectHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(FontworkCharacterSpacingWindow, KernSelectHdl, weld::Toggleable&, void)
 {
     if (mbSettingValue)
         return;
@@ -619,7 +619,7 @@ IMPL_LINK_NOARG(FontworkCharacterSpacingWindow, KernSelectHdl, weld::ToggleButto
     mxControl->EndPopupMode();
 }
 
-IMPL_LINK(FontworkCharacterSpacingWindow, SelectHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(FontworkCharacterSpacingWindow, SelectHdl, weld::Toggleable&, rButton, void)
 {
     if (!rButton.get_active())
         return;

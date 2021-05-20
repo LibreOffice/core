@@ -670,7 +670,7 @@ IMPL_LINK_NOARG(ClassificationDialog, OkHdl, weld::Button&, void)
     m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK_NOARG(ClassificationDialog, SelectToolboxHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ClassificationDialog, SelectToolboxHdl, weld::Toggleable&, void)
 {
     m_xEditWindow->InvertSelectionWeight();
 }

@@ -46,7 +46,7 @@ private:
     std::unique_ptr<SvxLanguageBox> m_xLbCustomLang;
 
     DECL_LINK(OKHdl, weld::Button&, void);
-    DECL_LINK(RadioHdl, weld::ToggleButton&, void);
+    DECL_LINK(RadioHdl, weld::Toggleable&, void);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

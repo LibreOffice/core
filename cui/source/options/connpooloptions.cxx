@@ -221,7 +221,7 @@ namespace offapp
         updateCurrentRow();
     }
 
-    IMPL_LINK( ConnectionPoolOptionsPage, OnEnabledDisabled, weld::ToggleButton&, rCheckBox, void )
+    IMPL_LINK( ConnectionPoolOptionsPage, OnEnabledDisabled, weld::Toggleable&, rCheckBox, void )
     {
         bool bGloballyEnabled = m_xEnablePooling->get_active();
         bool bLocalDriverChanged = m_xDriverPoolingEnabled.get() == &rCheckBox;

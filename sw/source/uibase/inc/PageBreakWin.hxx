@@ -54,7 +54,7 @@ public:
 private:
     DECL_LINK( FadeHandler, Timer *, void );
     /// Hide the button when the menu is toggled closed, e.g by clicking outside
-    DECL_LINK(ToggleHdl, weld::ToggleButton&, void);
+    DECL_LINK(ToggleHdl, weld::Toggleable&, void);
     DECL_LINK(SelectHdl, const OString&, void);
     void PaintButton();
 };

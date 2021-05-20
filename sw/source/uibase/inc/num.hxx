@@ -79,7 +79,7 @@ class SwNumPositionTabPage : public SfxTabPage
     DECL_LINK(LevelHdl, weld::TreeView&, void);
     DECL_LINK(EditModifyHdl, weld::ComboBox&, void);
     DECL_LINK(DistanceHdl, weld::MetricSpinButton&, void);
-    DECL_LINK(RelativeHdl, weld::ToggleButton&, void);
+    DECL_LINK(RelativeHdl, weld::Toggleable&, void);
     DECL_LINK(StandardHdl, weld::Button&, void);
 
     void InitPosAndSpaceMode();

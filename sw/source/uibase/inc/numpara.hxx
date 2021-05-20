@@ -50,9 +50,9 @@ class SwParagraphNumTabPage final : public SfxTabPage
     std::unique_ptr<weld::Widget> m_xRestartBX;
     std::unique_ptr<weld::SpinButton> m_xRestartNF;
 
-    DECL_LINK(NewStartHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(NewStartHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(StyleHdl_Impl, weld::ComboBox&,void);
-    DECL_LINK(LineCountHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(LineCountHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(EditNumStyleHdl_Impl, weld::Button&, void);
     DECL_LINK(EditNumStyleSelectHdl_Impl, weld::ComboBox&, void);
 

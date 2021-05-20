@@ -1268,7 +1268,7 @@ namespace svxform
         Link<const OString&, void> aLink1 = LINK( this, DataNavigatorWindow, MenuSelectHdl );
         m_xModelBtn->connect_selected(aLink1);
         m_xInstanceBtn->connect_selected(aLink1);
-        Link<weld::ToggleButton&,void> aLink2 = LINK( this, DataNavigatorWindow, MenuActivateHdl );
+        Link<weld::Toggleable&,void> aLink2 = LINK( this, DataNavigatorWindow, MenuActivateHdl );
         m_xModelBtn->connect_toggled( aLink2 );
         m_xInstanceBtn->connect_toggled( aLink2 );
         m_xTabCtrl->connect_enter_page( LINK( this, DataNavigatorWindow, ActivatePageHdl ) );
@@ -1641,7 +1641,7 @@ namespace svxform
         return rIdent.startsWith("additional");
     }
 
-    IMPL_LINK( DataNavigatorWindow, MenuActivateHdl, weld::ToggleButton&, rBtn, void )
+    IMPL_LINK( DataNavigatorWindow, MenuActivateHdl, weld::Toggleable&, rBtn, void )
     {
         if (m_xInstanceBtn.get() == &rBtn)
         {
@@ -2115,12 +2115,12 @@ namespace svxform
         }
     }
 
-    IMPL_LINK(AddDataItemDialog, CheckHdl, weld::ToggleButton&, rBox, void)
+    IMPL_LINK(AddDataItemDialog, CheckHdl, weld::Toggleable&, rBox, void)
     {
         Check(&rBox);
     }
 
-    void AddDataItemDialog::Check(const weld::ToggleButton* pBox)
+    void AddDataItemDialog::Check(const weld::Toggleable* pBox)
     {
         // Condition buttons are only enable if their check box is checked
         m_xReadonlyBtn->set_sensitive( m_xReadonlyCB->get_active() );
@@ -2293,7 +2293,7 @@ namespace svxform
     void AddDataItemDialog::InitDialog()
     {
         // set handler
-        Link<weld::ToggleButton&,void> aLink = LINK( this, AddDataItemDialog, CheckHdl );
+        Link<weld::Toggleable&,void> aLink = LINK( this, AddDataItemDialog, CheckHdl );
         m_xRequiredCB->connect_toggled( aLink );
         m_xRelevantCB->connect_toggled( aLink );
         m_xConstraintCB->connect_toggled( aLink );

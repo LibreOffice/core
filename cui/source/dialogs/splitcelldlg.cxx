@@ -50,7 +50,7 @@ SvxSplitTableDlg::SvxSplitTableDlg(weld::Window *pParent, bool bIsTableVertical,
     }
 }
 
-IMPL_LINK(SvxSplitTableDlg, ToggleHdl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SvxSplitTableDlg, ToggleHdl, weld::Toggleable&, rButton, void)
 {
     if (!rButton.get_active())
         return;

@@ -924,7 +924,7 @@ void SvxStdParagraphTabPage::EnableContextualMode()
     m_xContextualCB->show();
 }
 
-IMPL_LINK(SvxStdParagraphTabPage, AutoHdl_Impl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(SvxStdParagraphTabPage, AutoHdl_Impl, weld::Toggleable&, rBox, void)
 {
     bool bEnable = !rBox.get_active();
     m_xFLineLabel->set_sensitive(bEnable);
@@ -1034,7 +1034,7 @@ SvxParaAlignTabPage::SvxParaAlignTabPage(weld::Container* pPage, weld::DialogCon
     if (m_xLastLineLB->get_count() == LASTLINECOUNT_NEW)
         m_xLastLineLB->remove(nLastLinePos);
 
-    Link<weld::ToggleButton&, void> aLink = LINK( this, SvxParaAlignTabPage, AlignHdl_Impl );
+    Link<weld::Toggleable&, void> aLink = LINK( this, SvxParaAlignTabPage, AlignHdl_Impl );
     m_xLeft->connect_toggled(aLink);
     m_xRight->connect_toggled(aLink);
     m_xCenter->connect_toggled(aLink);
@@ -1254,7 +1254,7 @@ void SvxParaAlignTabPage::ChangesApplied()
     m_xExpandCB->save_state();
 }
 
-IMPL_LINK_NOARG(SvxParaAlignTabPage, AlignHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxParaAlignTabPage, AlignHdl_Impl, weld::Toggleable&, void)
 {
     bool bJustify = m_xJustify->get_active();
     m_xLastLineFT->set_sensitive(bJustify);
@@ -2033,7 +2033,7 @@ void SvxExtParagraphTabPage::PageBreakHdl()
     }
 }
 
-IMPL_LINK(SvxExtParagraphTabPage, PageBreakHdl_Impl, weld::ToggleButton&, rToggle, void)
+IMPL_LINK(SvxExtParagraphTabPage, PageBreakHdl_Impl, weld::Toggleable&, rToggle, void)
 {
     aPageBreakState.ButtonToggled(rToggle);
     PageBreakHdl();
@@ -2046,7 +2046,7 @@ void SvxExtParagraphTabPage::KeepTogetherHdl()
     m_xOrphanBox->set_sensitive(bEnable);
 }
 
-IMPL_LINK(SvxExtParagraphTabPage, KeepTogetherHdl_Impl, weld::ToggleButton&, rToggle, void)
+IMPL_LINK(SvxExtParagraphTabPage, KeepTogetherHdl_Impl, weld::Toggleable&, rToggle, void)
 {
     aKeepTogetherState.ButtonToggled(rToggle);
     KeepTogetherHdl();
@@ -2072,13 +2072,13 @@ void SvxExtParagraphTabPage::WidowHdl()
     }
 }
 
-IMPL_LINK(SvxExtParagraphTabPage, WidowHdl_Impl, weld::ToggleButton&, rToggle, void)
+IMPL_LINK(SvxExtParagraphTabPage, WidowHdl_Impl, weld::Toggleable&, rToggle, void)
 {
     aWidowState.ButtonToggled(rToggle);
     WidowHdl();
 }
 
-IMPL_LINK(SvxExtParagraphTabPage, OrphanHdl_Impl, weld::ToggleButton&, rToggle, void)
+IMPL_LINK(SvxExtParagraphTabPage, OrphanHdl_Impl, weld::Toggleable&, rToggle, void)
 {
     aOrphanState.ButtonToggled(rToggle);
     OrphanHdl();
@@ -2118,7 +2118,7 @@ void SvxExtParagraphTabPage::HyphenClickHdl()
     m_xHyphenBox->set_state(bEnable ? TRISTATE_TRUE : TRISTATE_FALSE);
 }
 
-IMPL_LINK(SvxExtParagraphTabPage, HyphenClickHdl_Impl, weld::ToggleButton&, rToggle, void)
+IMPL_LINK(SvxExtParagraphTabPage, HyphenClickHdl_Impl, weld::Toggleable&, rToggle, void)
 {
     aHyphenState.ButtonToggled(rToggle);
     HyphenClickHdl();
@@ -2144,7 +2144,7 @@ void SvxExtParagraphTabPage::ApplyCollClickHdl()
     }
 }
 
-IMPL_LINK(SvxExtParagraphTabPage, ApplyCollClickHdl_Impl, weld::ToggleButton&, rToggle, void)
+IMPL_LINK(SvxExtParagraphTabPage, ApplyCollClickHdl_Impl, weld::Toggleable&, rToggle, void)
 {
     aApplyCollState.ButtonToggled(rToggle);
     ApplyCollClickHdl();
@@ -2196,13 +2196,13 @@ void SvxExtParagraphTabPage::PageNumBoxClickHdl()
     m_xPagenumEdit->set_sensitive(m_xPageNumBox->get_state() == TRISTATE_TRUE);
 }
 
-IMPL_LINK(SvxExtParagraphTabPage, PageNumBoxClickHdl_Impl, weld::ToggleButton&, rToggle, void)
+IMPL_LINK(SvxExtParagraphTabPage, PageNumBoxClickHdl_Impl, weld::Toggleable&, rToggle, void)
 {
     aPageNumState.ButtonToggled(rToggle);
     PageNumBoxClickHdl();
 }
 
-IMPL_LINK(SvxExtParagraphTabPage, KeepParaBoxClickHdl_Impl, weld::ToggleButton&, rToggle, void)
+IMPL_LINK(SvxExtParagraphTabPage, KeepParaBoxClickHdl_Impl, weld::Toggleable&, rToggle, void)
 {
     aKeepParaState.ButtonToggled(rToggle);
 }

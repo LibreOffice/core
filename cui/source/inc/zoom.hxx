@@ -45,11 +45,11 @@ private:
     std::unique_ptr<weld::CheckButton>        m_xBookModeChk;
     std::unique_ptr<weld::Button>             m_xOKBtn;
 
-    DECL_LINK(UserHdl, weld::ToggleButton&, void);
+    DECL_LINK(UserHdl, weld::Toggleable&, void);
     DECL_LINK(SpinHdl, weld::MetricSpinButton&, void);
-    DECL_LINK(ViewLayoutUserHdl, weld::ToggleButton&, void);
+    DECL_LINK(ViewLayoutUserHdl, weld::Toggleable&, void);
     DECL_LINK(ViewLayoutSpinHdl, weld::SpinButton&, void);
-    DECL_LINK(ViewLayoutCheckHdl, weld::ToggleButton&, void);
+    DECL_LINK(ViewLayoutCheckHdl, weld::Toggleable&, void);
     DECL_LINK(OKHdl, weld::Button&, void);
 
 public:

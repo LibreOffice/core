@@ -56,7 +56,7 @@ static void lcl_StoreGreetingsBox(const weld::ComboBox& rBox,
     rConfig.SetCurrentGreeting(eType, rBox.get_active());
 }
 
-IMPL_LINK_NOARG(SwGreetingsHandler, IndividualHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwGreetingsHandler, IndividualHdl_Impl, weld::Toggleable&, void)
 {
     bool bIndividual = m_xPersonalizedCB->get_sensitive() && m_xPersonalizedCB->get_active();
     m_xFemaleFT->set_sensitive(bIndividual);
@@ -216,7 +216,7 @@ SwMailMergeGreetingsPage::SwMailMergeGreetingsPage(weld::Container* pPage, SwMai
     m_bIsTabPage = true;
 
     m_xGreetingLineCB->connect_toggled(LINK(this, SwMailMergeGreetingsPage, ContainsHdl_Impl));
-    Link<weld::ToggleButton&,void> aIndividualLink = LINK(this, SwGreetingsHandler, IndividualHdl_Impl);
+    Link<weld::Toggleable&,void> aIndividualLink = LINK(this, SwGreetingsHandler, IndividualHdl_Impl);
     m_xPersonalizedCB->connect_toggled(aIndividualLink);
     Link<weld::Button&,void> aGreetingLink = LINK(this, SwGreetingsHandler, GreetingHdl_Impl);
     m_xFemalePB->connect_clicked(aGreetingLink);
@@ -303,7 +303,7 @@ bool SwMailMergeGreetingsPage::commitPage( ::vcl::WizardTypes::CommitPageReason 
     return true;
 }
 
-IMPL_LINK(SwMailMergeGreetingsPage, ContainsHdl_Impl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(SwMailMergeGreetingsPage, ContainsHdl_Impl, weld::Toggleable&, rBox, void)
 {
     bool bContainsGreeting = rBox.get_active();
     SwGreetingsHandler::Contains(bContainsGreeting);
@@ -349,7 +349,7 @@ SwMailBodyDialog::SwMailBodyDialog(weld::Window* pParent)
     m_xBodyMLE->set_size_request(m_xBodyMLE->get_approximate_digit_width() * 45,
                                  m_xBodyMLE->get_height_rows(6));
     m_xGreetingLineCB->connect_toggled(LINK(this, SwMailBodyDialog, ContainsHdl_Impl));
-    Link<weld::ToggleButton&,void> aIndividualLink = LINK(this, SwGreetingsHandler, IndividualHdl_Impl);
+    Link<weld::Toggleable&,void> aIndividualLink = LINK(this, SwGreetingsHandler, IndividualHdl_Impl);
     m_xPersonalizedCB->connect_toggled(aIndividualLink);
     Link<weld::Button&,void> aGreetingLink = LINK(this, SwGreetingsHandler, GreetingHdl_Impl);
     m_xFemalePB->connect_clicked(aGreetingLink);
@@ -387,7 +387,7 @@ SwMailBodyDialog::~SwMailBodyDialog()
 {
 }
 
-IMPL_LINK(SwMailBodyDialog, ContainsHdl_Impl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(SwMailBodyDialog, ContainsHdl_Impl, weld::Toggleable&, rBox, void)
 {
     SwGreetingsHandler::Contains(rBox.get_active());
     m_rConfigItem.SetGreetingLine(rBox.get_active(), true);

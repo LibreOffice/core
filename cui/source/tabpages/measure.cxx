@@ -530,7 +530,7 @@ void SvxMeasurePage::PointChanged(weld::DrawingArea* pDrawingArea, RectPoint /*e
     ChangeAttrHdl_Impl(pDrawingArea);
 }
 
-IMPL_LINK( SvxMeasurePage, ClickAutoPosHdl_Impl, weld::ToggleButton&, rBox, void )
+IMPL_LINK( SvxMeasurePage, ClickAutoPosHdl_Impl, weld::Toggleable&, rBox, void )
 {
     if (m_xTsbAutoPosH->get_state() == TRISTATE_TRUE)
     {
@@ -577,7 +577,7 @@ IMPL_LINK( SvxMeasurePage, ClickAutoPosHdl_Impl, weld::ToggleButton&, rBox, void
     ChangeAttrHdl_Impl(&rBox);
 }
 
-IMPL_LINK(SvxMeasurePage, ChangeAttrClickHdl_Impl, weld::ToggleButton&, r, void)
+IMPL_LINK(SvxMeasurePage, ChangeAttrClickHdl_Impl, weld::Toggleable&, r, void)
 {
     ChangeAttrHdl_Impl(&r);
 }

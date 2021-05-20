@@ -103,7 +103,7 @@ namespace dbaui
         callModifiedHdl(pCtrl);
     }
 
-    IMPL_LINK(OGenericAdministrationPage, OnControlModifiedButtonClick, weld::ToggleButton&, rCtrl, void)
+    IMPL_LINK(OGenericAdministrationPage, OnControlModifiedButtonClick, weld::Toggleable&, rCtrl, void)
     {
         callModifiedHdl(&rCtrl);
     }

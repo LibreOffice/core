@@ -26,7 +26,7 @@ public:
 
     static void trigger_changed(weld::IconView& rIconView) { rIconView.signal_selection_changed(); }
 
-    static void trigger_toggled(weld::ToggleButton& rButton) { rButton.signal_toggled(); }
+    static void trigger_toggled(weld::Toggleable& rButton) { rButton.signal_toggled(); }
 
     static void trigger_row_activated(weld::TreeView& rTreeView)
     {

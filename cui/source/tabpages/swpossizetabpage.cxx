@@ -590,7 +590,7 @@ SvxSwPosSizeTabPage::SvxSwPosSizeTabPage(weld::Container* pPage, weld::DialogCon
     m_xHoriByMF->connect_value_changed( aLk );
     m_xVertByMF->connect_value_changed( aLk );
 
-    Link<weld::ToggleButton&,void> aLk2 = LINK(this, SvxSwPosSizeTabPage, AnchorTypeHdl);
+    Link<weld::Toggleable&,void> aLk2 = LINK(this, SvxSwPosSizeTabPage, AnchorTypeHdl);
     m_xToPageRB->connect_toggled( aLk2 );
     m_xToParaRB->connect_toggled( aLk2 );
     m_xToCharRB->connect_toggled( aLk2 );
@@ -1124,7 +1124,7 @@ RndStdIds SvxSwPosSizeTabPage::GetAnchorType(bool* pbHasChanged)
     return nRet;
 }
 
-IMPL_LINK_NOARG(SvxSwPosSizeTabPage, RangeModifyClickHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxSwPosSizeTabPage, RangeModifyClickHdl, weld::Toggleable&, void)
 {
     RangeModifyHdl(m_xWidthMF->get_widget());
 }
@@ -1204,7 +1204,7 @@ IMPL_LINK_NOARG(SvxSwPosSizeTabPage, RangeModifyHdl, weld::Widget&, void)
         m_xVertByMF->set_value(m_xVertByMF->normalize(aVal.nVPos), FieldUnit::TWIP);
 }
 
-IMPL_LINK_NOARG(SvxSwPosSizeTabPage, AnchorTypeHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxSwPosSizeTabPage, AnchorTypeHdl, weld::Toggleable&, void)
 {
     m_xHoriMirrorCB->set_sensitive(!m_xAsCharRB->get_active() && !m_bIsMultiSelection);
 
@@ -1224,7 +1224,7 @@ IMPL_LINK_NOARG(SvxSwPosSizeTabPage, AnchorTypeHdl, weld::ToggleButton&, void)
     }
 }
 
-IMPL_LINK_NOARG(SvxSwPosSizeTabPage, MirrorHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxSwPosSizeTabPage, MirrorHdl, weld::Toggleable&, void)
 {
     RndStdIds nId = GetAnchorType();
     InitPos( nId, USHRT_MAX, 0, USHRT_MAX, 0, LONG_MAX, LONG_MAX);
@@ -1370,7 +1370,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, ModifyHdl, weld::MetricSpinButton&, rEdit, void 
     UpdateExample();
 }
 
-IMPL_LINK_NOARG(SvxSwPosSizeTabPage, ProtectHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxSwPosSizeTabPage, ProtectHdl, weld::Toggleable&, void)
 {
     if (m_xSizeCB->get_sensitive())
     {

@@ -122,13 +122,13 @@ void AlignmentPropertyPanel::Initialize()
     mxMtrAngle->connect_value_changed(LINK( this, AlignmentPropertyPanel, AngleModifiedHdl));
     mxCBStacked->connect_toggled(LINK(this, AlignmentPropertyPanel, ClickStackHdl));
 
-    Link<weld::ToggleButton&,void> aLink2 = LINK(this, AlignmentPropertyPanel, ReferenceEdgeHdl);
+    Link<weld::Toggleable&,void> aLink2 = LINK(this, AlignmentPropertyPanel, ReferenceEdgeHdl);
     mxRefEdgeBottom->connect_toggled(aLink2);
     mxRefEdgeTop->connect_toggled(aLink2);
     mxRefEdgeStd->connect_toggled(aLink2);
 }
 
-IMPL_LINK(AlignmentPropertyPanel, ReferenceEdgeHdl, weld::ToggleButton&, rToggle, void)
+IMPL_LINK(AlignmentPropertyPanel, ReferenceEdgeHdl, weld::Toggleable&, rToggle, void)
 {
     if (mbSettingToggles)
         return;
@@ -155,7 +155,7 @@ IMPL_LINK_NOARG( AlignmentPropertyPanel, AngleModifiedHdl, weld::MetricSpinButto
         SID_ATTR_ALIGN_DEGREES, SfxCallMode::RECORD, { &aAngleItem });
 }
 
-IMPL_LINK_NOARG( AlignmentPropertyPanel, ClickStackHdl, weld::ToggleButton&, void )
+IMPL_LINK_NOARG( AlignmentPropertyPanel, ClickStackHdl, weld::Toggleable&, void )
 {
     bool bVertical = mxCBStacked->get_active();
     ScVerticalStackCell aStackItem(bVertical);
@@ -172,7 +172,7 @@ IMPL_LINK_NOARG(AlignmentPropertyPanel, MFLeftIndentMdyHdl, weld::MetricSpinButt
             SfxCallMode::RECORD, { &aItem });
 }
 
-IMPL_LINK_NOARG(AlignmentPropertyPanel, CBOXMergnCellClkHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(AlignmentPropertyPanel, CBOXMergnCellClkHdl, weld::Toggleable&, void)
 {
     bool bState = mxCBXMergeCell->get_active();
 
@@ -183,7 +183,7 @@ IMPL_LINK_NOARG(AlignmentPropertyPanel, CBOXMergnCellClkHdl, weld::ToggleButton&
     GetBindings()->Invalidate(FID_MERGE_TOGGLE,true);
 }
 
-IMPL_LINK_NOARG(AlignmentPropertyPanel, CBOXWrapTextClkHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(AlignmentPropertyPanel, CBOXWrapTextClkHdl, weld::Toggleable&, void)
 {
     bool bState = mxCBXWrapText->get_active();
     ScLineBreakCell aItem(bState);

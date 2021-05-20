@@ -70,11 +70,11 @@ private:
 private:
 
     // Handler:
-    DECL_LINK(PageDirHdl, weld::ToggleButton&, void);
-    DECL_LINK(PageNoHdl, weld::ToggleButton&, void);
-    void PageNoHdl(const weld::ToggleButton* pBtn);
+    DECL_LINK(PageDirHdl, weld::Toggleable&, void);
+    DECL_LINK(PageNoHdl, weld::Toggleable&, void);
+    void PageNoHdl(const weld::Toggleable* pBtn);
     DECL_LINK(ScaleHdl, weld::ComboBox&, void);
-    DECL_LINK(ToggleHdl, weld::ToggleButton&, void);
+    DECL_LINK(ToggleHdl, weld::Toggleable&, void);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

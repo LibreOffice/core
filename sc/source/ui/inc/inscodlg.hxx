@@ -94,8 +94,8 @@ private:
     void TestModes();
 
     // Handler
-    DECL_LINK( InsAllHdl, weld::ToggleButton&, void );
-    DECL_LINK( LinkBtnHdl, weld::ToggleButton&, void );
+    DECL_LINK( InsAllHdl, weld::Toggleable&, void );
+    DECL_LINK( LinkBtnHdl, weld::Toggleable&, void );
     DECL_LINK( ShortCutHdl, weld::Button&, void );
 };
 

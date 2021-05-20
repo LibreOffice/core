@@ -43,9 +43,9 @@ class SwBreakDlg : public weld::GenericDialogController
 
     bool bHtmlMode;
 
-    DECL_LINK(ToggleHdl, weld::ToggleButton&, void);
+    DECL_LINK(ToggleHdl, weld::Toggleable&, void);
     DECL_LINK(ChangeHdl, weld::ComboBox&, void);
-    DECL_LINK(PageNumHdl, weld::ToggleButton&, void);
+    DECL_LINK(PageNumHdl, weld::Toggleable&, void);
     DECL_LINK(PageNumModifyHdl, weld::SpinButton&, void);
     DECL_LINK(OkHdl, weld::Button&, void);
 

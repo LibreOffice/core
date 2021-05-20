@@ -86,7 +86,7 @@ private:
     DECL_LINK(LineDistPopupHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(LineDistHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(ModifyHdl_Impl, weld::MetricSpinButton&, void);
-    DECL_LINK(AutoHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(AutoHdl_Impl, weld::Toggleable&, void);
 
     bool m_bLineDistToggled = false;
 
@@ -148,7 +148,7 @@ class SvxParaAlignTabPage : public SfxTabPage
     std::unique_ptr<weld::Widget> m_xPropertiesFL;
     std::unique_ptr<svx::FrameDirectionListBox>  m_xTextDirectionLB;
 
-    DECL_LINK(AlignHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(AlignHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(LastLineHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(TextDirectionHdl_Impl, weld::ComboBox&, void);
 
@@ -264,16 +264,16 @@ private:
     void OrphanHdl();
     void WidowHdl();
 
-    DECL_LINK(PageBreakHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(KeepTogetherHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(WidowHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(OrphanHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(HyphenClickHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(ApplyCollClickHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(PageBreakHdl_Impl, weld::Toggleable&, void);
+    DECL_LINK(KeepTogetherHdl_Impl, weld::Toggleable&, void);
+    DECL_LINK(WidowHdl_Impl, weld::Toggleable&, void);
+    DECL_LINK(OrphanHdl_Impl, weld::Toggleable&, void);
+    DECL_LINK(HyphenClickHdl_Impl, weld::Toggleable&, void);
+    DECL_LINK(ApplyCollClickHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(PageBreakPosHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(PageBreakTypeHdl_Impl, weld::ComboBox&, void);
-    DECL_LINK(PageNumBoxClickHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(KeepParaBoxClickHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(PageNumBoxClickHdl_Impl, weld::Toggleable&, void);
+    DECL_LINK(KeepParaBoxClickHdl_Impl, weld::Toggleable&, void);
 
     virtual void            PageCreated(const SfxAllItemSet& aSet) override;
 };

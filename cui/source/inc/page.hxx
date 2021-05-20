@@ -136,11 +136,11 @@ private:
     DECL_LINK(LayoutHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(GutterPositionHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(PaperBinHdl_Impl, weld::Widget&, void);
-    DECL_LINK(SwapOrientation_Impl, weld::ToggleButton&, void);
+    DECL_LINK(SwapOrientation_Impl, weld::Toggleable&, void);
     void SwapFirstValues_Impl( bool bSet );
     DECL_LINK(BorderModify_Impl, weld::MetricSpinButton&, void);
     void InitHeadFoot_Impl( const SfxItemSet& rSet );
-    DECL_LINK(CenterHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(CenterHdl_Impl, weld::Toggleable&, void);
     void UpdateExample_Impl( bool bResetbackground = false );
 
     DECL_LINK(PaperSizeSelect_Impl, weld::ComboBox&, void );
@@ -153,7 +153,7 @@ private:
     void RangeHdl_Impl();
     void CalcMargin_Impl();
 
-    DECL_LINK(RegisterModify, weld::ToggleButton&, void);
+    DECL_LINK(RegisterModify, weld::Toggleable&, void);
 
     // page direction
     /** Disables vertical page direction entries in the text flow listbox. */

@@ -36,7 +36,7 @@ namespace weld { class Image; }
 namespace weld { class Label; }
 namespace weld { class MetricSpinButton; }
 namespace weld { class RadioButton; }
-namespace weld { class ToggleButton; }
+namespace weld { class Toggleable; }
 namespace weld { class Widget; }
 
 namespace chart
@@ -124,11 +124,11 @@ private:
     std::unique_ptr<weld::Label> m_xUIStringNeg;
     std::unique_ptr<weld::Label> m_xUIStringRbRange;
 
-    DECL_LINK( CategoryChosen, weld::ToggleButton&, void );
+    DECL_LINK( CategoryChosen, weld::Toggleable&, void );
     DECL_LINK( CategoryChosen2, weld::ComboBox&, void );
-    DECL_LINK( SynchronizePosAndNeg, weld::ToggleButton&, void );
+    DECL_LINK( SynchronizePosAndNeg, weld::Toggleable&, void );
     DECL_LINK( PosValueChanged, weld::MetricSpinButton&, void );
-    DECL_LINK( IndicatorChanged, weld::ToggleButton&, void );
+    DECL_LINK( IndicatorChanged, weld::Toggleable&, void );
     DECL_LINK( ChooseRange, weld::Button&, void );
     DECL_LINK( RangeChanged, weld::Entry&, void );
 

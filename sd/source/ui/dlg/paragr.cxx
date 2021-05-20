@@ -47,7 +47,7 @@ private:
     std::unique_ptr<weld::CheckButton> m_xNewStartNumberCB;
     std::unique_ptr<weld::SpinButton> m_xNewStartNF;
 
-    DECL_LINK( ImplNewStartHdl, weld::ToggleButton&, void );
+    DECL_LINK( ImplNewStartHdl, weld::Toggleable&, void );
 };
 
 }
@@ -132,7 +132,7 @@ void SdParagraphNumTabPage::Reset( const SfxItemSet* rSet )
     mbModified = false;
 }
 
-IMPL_LINK_NOARG(SdParagraphNumTabPage, ImplNewStartHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SdParagraphNumTabPage, ImplNewStartHdl, weld::Toggleable&, void)
 {
     bool bEnable = m_xNewStartCB->get_active();
     m_xNewStartNumberCB->set_sensitive(bEnable);

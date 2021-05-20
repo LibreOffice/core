@@ -159,7 +159,7 @@ bool PasswordToOpenModifyDialog::IsRecommendToOpenReadonly() const
     return m_xOpenReadonlyCB->get_active();
 }
 
-IMPL_LINK_NOARG(PasswordToOpenModifyDialog, ReadonlyOnOffHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(PasswordToOpenModifyDialog, ReadonlyOnOffHdl, weld::Toggleable&, void)
 {
     bool bEnable = m_xOpenReadonlyCB->get_active();
     m_xPasswdToModifyED->set_sensitive(bEnable);

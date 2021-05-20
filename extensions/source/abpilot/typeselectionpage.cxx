@@ -115,7 +115,7 @@ namespace abp
         m_aAllTypes.push_back( ButtonItem( m_xMacab.get(), AST_MACAB, bHaveMacab ) );
         m_aAllTypes.push_back( ButtonItem( m_xOther.get(), AST_OTHER, true ) );
 
-        Link<weld::ToggleButton&,void> aTypeSelectionHandler = LINK(this, TypeSelectionPage, OnTypeSelected );
+        Link<weld::Toggleable&,void> aTypeSelectionHandler = LINK(this, TypeSelectionPage, OnTypeSelected );
         for (auto const& elem : m_aAllTypes)
         {
             if (!elem.m_bVisible)
@@ -211,7 +211,7 @@ namespace abp
             &&  (AST_INVALID != getSelectedType());
     }
 
-    IMPL_LINK(TypeSelectionPage, OnTypeSelected, weld::ToggleButton&, rButton, void)
+    IMPL_LINK(TypeSelectionPage, OnTypeSelected, weld::Toggleable&, rButton, void)
     {
         if (!rButton.get_active())
             return;

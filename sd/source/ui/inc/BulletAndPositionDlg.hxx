@@ -101,12 +101,12 @@ class SvxBulletAndPositionDlg : public weld::GenericDialogController
     std::unique_ptr<weld::CheckButton> m_xRelativeCB;
     std::unique_ptr<weld::Label> m_xIndentFT;
     std::unique_ptr<weld::MetricSpinButton> m_xIndentMF;
-    std::unique_ptr<weld::ToggleButton> m_xLeftTB;
-    std::unique_ptr<weld::ToggleButton> m_xCenterTB;
-    std::unique_ptr<weld::ToggleButton> m_xRightTB;
+    std::unique_ptr<weld::Toggleable> m_xLeftTB;
+    std::unique_ptr<weld::Toggleable> m_xCenterTB;
+    std::unique_ptr<weld::Toggleable> m_xRightTB;
     std::unique_ptr<weld::RadioButton> m_xSlideRB;
     std::unique_ptr<weld::RadioButton> m_xSelectionRB;
-    std::unique_ptr<weld::ToggleButton> m_xApplyToMaster;
+    std::unique_ptr<weld::Toggleable> m_xApplyToMaster;
     std::unique_ptr<weld::Button> m_xReset;
 
     void InitControls();
@@ -119,21 +119,21 @@ class SvxBulletAndPositionDlg : public weld::GenericDialogController
 
     DECL_LINK(NumberTypeSelectHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(LevelHdl_Impl, weld::TreeView&, void);
-    DECL_LINK(PopupActivateHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(PopupActivateHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(GraphicHdl_Impl, const OString&, void);
     DECL_LINK(BulletHdl_Impl, weld::Button&, void);
     DECL_LINK(SizeHdl_Impl, weld::MetricSpinButton&, void);
-    DECL_LINK(RatioHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(RatioHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(EditModifyHdl_Impl, weld::Entry&, void);
     DECL_LINK(BulColorHdl_Impl, ColorListBox&, void);
     DECL_LINK(BulRelSizeHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(PreviewInvalidateHdl_Impl, Timer*, void);
     DECL_LINK(DistanceHdl_Impl, weld::MetricSpinButton&, void);
-    DECL_LINK(RelativeHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(SelectLeftAlignmentHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(SelectCenterAlignmentHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(SelectRightAlignmentHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(ApplyToMasterHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(RelativeHdl_Impl, weld::Toggleable&, void);
+    DECL_LINK(SelectLeftAlignmentHdl_Impl, weld::Toggleable&, void);
+    DECL_LINK(SelectCenterAlignmentHdl_Impl, weld::Toggleable&, void);
+    DECL_LINK(SelectRightAlignmentHdl_Impl, weld::Toggleable&, void);
+    DECL_LINK(ApplyToMasterHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(ResetHdl_Impl, weld::Button&, void);
     void EditModifyHdl_Impl(const weld::Entry*);
     void InitPosAndSpaceMode();

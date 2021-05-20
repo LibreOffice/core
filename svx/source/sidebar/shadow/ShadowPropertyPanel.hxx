@@ -73,7 +73,7 @@ private:
     void UpdateControls();
     void ModifyShadowDistance();
 
-    DECL_LINK(ClickShadowHdl, weld::ToggleButton&, void);
+    DECL_LINK(ClickShadowHdl, weld::Toggleable&, void);
     DECL_LINK(ModifyShadowColorHdl, ColorListBox&, void);
     DECL_LINK(ModifyShadowTransMetricHdl, weld::MetricSpinButton&, void);
     DECL_LINK(ModifyShadowAngleHdl, weld::ComboBox&, void);

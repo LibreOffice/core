@@ -440,7 +440,7 @@ IMPL_LINK_NOARG(ScSamplingDialog, LoseButtonFocusHandler, formula::RefButton&, v
     mDialogLostFocus = !m_xDialog->has_toplevel_focus();
 }
 
-IMPL_LINK_NOARG(ScSamplingDialog, ToggleSamplingMethod, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ScSamplingDialog, ToggleSamplingMethod, weld::Toggleable&, void)
 {
     ToggleSamplingMethod();
 }
@@ -466,7 +466,7 @@ void ScSamplingDialog::ToggleSamplingMethod()
     }
 }
 
-IMPL_LINK(ScSamplingDialog, CheckHdl, weld::ToggleButton&, rBtn, void)
+IMPL_LINK(ScSamplingDialog, CheckHdl, weld::Toggleable&, rBtn, void)
 {
     // Keep both checkboxes enabled so user can easily switch between the three
     // possible combinations (one or the other or none), just uncheck the other

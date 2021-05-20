@@ -438,7 +438,7 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, SelectEffectHdl_Impl, weld::ComboBox&, voi
     }
 }
 
-IMPL_LINK_NOARG(SvxTextAnimationPage, ClickEndlessHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxTextAnimationPage, ClickEndlessHdl_Impl, weld::Toggleable&, void)
 {
     if( eAniKind == SdrTextAniKind::Slide )
         return;
@@ -456,7 +456,7 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, ClickEndlessHdl_Impl, weld::ToggleButton&,
     }
 }
 
-IMPL_LINK_NOARG(SvxTextAnimationPage, ClickAutoHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxTextAnimationPage, ClickAutoHdl_Impl, weld::Toggleable&, void)
 {
     TriState eState = m_xTsbAuto->get_state();
     if( eState != TRISTATE_FALSE )
@@ -471,7 +471,7 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, ClickAutoHdl_Impl, weld::ToggleButton&, vo
     }
 }
 
-IMPL_LINK_NOARG(SvxTextAnimationPage, ClickPixelHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxTextAnimationPage, ClickPixelHdl_Impl, weld::Toggleable&, void)
 {
     TriState eState = m_xTsbPixel->get_state();
     if (eState == TRISTATE_TRUE)

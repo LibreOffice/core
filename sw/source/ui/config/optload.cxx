@@ -144,7 +144,7 @@ std::unique_ptr<SfxTabPage> SwLoadOptPage::Create( weld::Container* pPage, weld:
     return std::make_unique<SwLoadOptPage>(pPage, pController, *rAttrSet );
 }
 
-IMPL_LINK_NOARG(SwLoadOptPage, StandardizedPageCountCheckHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwLoadOptPage, StandardizedPageCountCheckHdl, weld::Toggleable&, void)
 {
     m_xStandardizedPageSizeNF->set_sensitive(m_xShowStandardizedPageCount->get_active());
 }

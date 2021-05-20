@@ -102,7 +102,7 @@ SwWrapTabPage::SwWrapTabPage(weld::Container* pPage, weld::DialogController* pCo
     m_xTopMarginED->connect_value_changed(aLk);
     m_xBottomMarginED->connect_value_changed(aLk);
 
-    Link<weld::ToggleButton&,void> aLk2 = LINK(this, SwWrapTabPage, WrapTypeHdl);
+    Link<weld::Toggleable&,void> aLk2 = LINK(this, SwWrapTabPage, WrapTypeHdl);
     m_xNoWrapRB->connect_toggled(aLk2);
     m_xWrapLeftRB->connect_toggled(aLk2);
     m_xWrapRightRB->connect_toggled(aLk2);
@@ -580,7 +580,7 @@ IMPL_LINK(SwWrapTabPage, RangeModifyHdl, weld::MetricSpinButton&, rEdit, void)
     }
 }
 
-IMPL_LINK_NOARG(SwWrapTabPage, WrapTypeHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwWrapTabPage, WrapTypeHdl, weld::Toggleable&, void)
 {
     bool bWrapThrough = m_xWrapThroughRB->get_active();
     m_xWrapTransparentCB->set_sensitive(bWrapThrough && !m_bHtmlMode);
@@ -594,7 +594,7 @@ IMPL_LINK_NOARG(SwWrapTabPage, WrapTypeHdl, weld::ToggleButton&, void)
     ContourHdl(*m_xWrapOutlineCB);
 }
 
-IMPL_LINK_NOARG(SwWrapTabPage, ContourHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwWrapTabPage, ContourHdl, weld::Toggleable&, void)
 {
     bool bEnable = !(m_xWrapOutlineCB->get_active() && m_xWrapOutlineCB->get_sensitive());
 

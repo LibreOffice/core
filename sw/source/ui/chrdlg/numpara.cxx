@@ -273,14 +273,14 @@ void SwParagraphNumTabPage::EnableNewStart()
     m_xNewStartBX->show();
 }
 
-IMPL_LINK_NOARG(SwParagraphNumTabPage, NewStartHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwParagraphNumTabPage, NewStartHdl_Impl, weld::Toggleable&, void)
 {
     bool bEnable = m_xNewStartCB->get_active();
     m_xNewStartNumberCB->set_sensitive(bEnable);
     m_xNewStartNF->set_sensitive(bEnable && m_xNewStartNumberCB->get_active());
 }
 
-IMPL_LINK_NOARG(SwParagraphNumTabPage, LineCountHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwParagraphNumTabPage, LineCountHdl_Impl, weld::Toggleable&, void)
 {
     m_xRestartParaCountCB->set_sensitive(m_xCountParaCB->get_active());
 

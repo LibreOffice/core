@@ -339,7 +339,7 @@ void ScRetypePassInputDlg::CheckPasswordInput()
 
 IMPL_LINK_NOARG(ScRetypePassInputDlg, OKHdl, weld::Button&, void) { m_xDialog->response(RET_OK); }
 
-IMPL_LINK_NOARG(ScRetypePassInputDlg, RadioBtnHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ScRetypePassInputDlg, RadioBtnHdl, weld::Toggleable&, void)
 {
     if (m_xBtnRetypePassword->get_active())
     {
@@ -353,7 +353,7 @@ IMPL_LINK_NOARG(ScRetypePassInputDlg, RadioBtnHdl, weld::ToggleButton&, void)
     }
 }
 
-IMPL_LINK_NOARG(ScRetypePassInputDlg, CheckBoxHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ScRetypePassInputDlg, CheckBoxHdl, weld::Toggleable&, void)
 {
     CheckPasswordInput();
 }

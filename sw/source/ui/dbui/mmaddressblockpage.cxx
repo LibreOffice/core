@@ -230,7 +230,7 @@ void SwMailMergeAddressBlockPage::EnableAddressBlock(bool bAll, bool bSelective)
     m_xStep4->set_sensitive(bSelective);
 }
 
-IMPL_LINK(SwMailMergeAddressBlockPage, AddressBlockHdl_Impl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(SwMailMergeAddressBlockPage, AddressBlockHdl_Impl, weld::Toggleable&, rBox, void)
 {
     EnableAddressBlock(rBox.get_sensitive(), rBox.get_active());
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
@@ -251,7 +251,7 @@ IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressBlockSelectHdl_Impl, LinkPar
     GetWizard()->enableButtons(WizardButtonFlags::NEXT, GetWizard()->isStateEnabled(MM_GREETINGSPAGE));
 }
 
-IMPL_LINK(SwMailMergeAddressBlockPage, HideParagraphsHdl_Impl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(SwMailMergeAddressBlockPage, HideParagraphsHdl_Impl, weld::Toggleable&, rBox, void)
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     rConfigItem.SetHideEmptyParagraphs(rBox.get_active());
@@ -333,7 +333,7 @@ SwSelectAddressBlockDialog::SwSelectAddressBlockDialog(weld::Window* pParent, Sw
 
     m_xDeletePB->connect_clicked(LINK(this, SwSelectAddressBlockDialog, DeleteHdl_Impl));
 
-    Link<weld::ToggleButton&,void> aLk = LINK(this, SwSelectAddressBlockDialog, IncludeHdl_Impl);
+    Link<weld::Toggleable&,void> aLk = LINK(this, SwSelectAddressBlockDialog, IncludeHdl_Impl);
     m_xNeverRB->connect_toggled(aLk);
     m_xAlwaysRB->connect_toggled(aLk);
     m_xDependentRB->connect_toggled(aLk);
@@ -435,7 +435,7 @@ IMPL_LINK(SwSelectAddressBlockDialog, NewCustomizeHdl_Impl, weld::Button&, rButt
     m_xDeletePB->set_sensitive(m_aAddressBlocks.getLength() > 1);
 }
 
-IMPL_LINK_NOARG(SwSelectAddressBlockDialog, IncludeHdl_Impl, weld::ToggleButton&,  void)
+IMPL_LINK_NOARG(SwSelectAddressBlockDialog, IncludeHdl_Impl, weld::Toggleable&,  void)
 {
     m_xCountryED->set_sensitive(m_xDependentRB->get_active());
 }

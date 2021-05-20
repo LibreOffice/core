@@ -52,8 +52,8 @@ private:
     std::unique_ptr<weld::MetricSpinButton> m_xLineLengthEdit;
     std::unique_ptr<weld::MetricSpinButton> m_xLineDistEdit;
 
-    DECL_LINK(HeightPage, weld::ToggleButton&, void);
-    DECL_LINK(HeightMetric, weld::ToggleButton&, void);
+    DECL_LINK(HeightPage, weld::Toggleable&, void);
+    DECL_LINK(HeightMetric, weld::Toggleable&, void);
     DECL_LINK(HeightModify, weld::MetricSpinButton&, void);
     DECL_LINK(LineWidthChanged_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(LineColorSelected_Impl, ColorListBox&, void);

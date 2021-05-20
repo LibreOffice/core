@@ -238,7 +238,7 @@ void ScMoveTableDlg::InitDocListBox()
 
 // Handler:
 
-IMPL_LINK(ScMoveTableDlg, CheckBtnHdl, weld::ToggleButton&, rBtn, void)
+IMPL_LINK(ScMoveTableDlg, CheckBtnHdl, weld::Toggleable&, rBtn, void)
 {
     if (&rBtn == m_xBtnCopy.get())
         ResetRenameInput();

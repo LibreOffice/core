@@ -39,8 +39,8 @@ class ButtonBox
 {
     private:
         sal_Int32 mnCurrentButton;
-        std::vector<weld::ToggleButton*> maButtonList;
-        std::map<weld::ToggleButton*, sal_Int32 > maButtonToPos;
+        std::vector<weld::Toggleable*> maButtonList;
+        std::map<weld::Toggleable*, sal_Int32 > maButtonToPos;
         void SelectButtonImpl( sal_Int32 nPos )
         {
             if(mnCurrentButton != NO_BUTTON_SELECTED)
@@ -55,21 +55,21 @@ class ButtonBox
         {
             mnCurrentButton = NO_BUTTON_SELECTED;
         };
-        void AddButton(weld::ToggleButton* pButton)
+        void AddButton(weld::Toggleable* pButton)
         {
             maButtonList.push_back(pButton);
             maButtonToPos.insert( std::make_pair(pButton, maButtonList.size() - 1) );
         }
         sal_Int32 GetCurrentButtonPos() const { return mnCurrentButton; }
-        sal_Int32 GetButtonPos(weld::ToggleButton* pButton)
+        sal_Int32 GetButtonPos(weld::Toggleable* pButton)
         {
-            std::map<weld::ToggleButton*, sal_Int32>::const_iterator aBtnPos = maButtonToPos.find(pButton);
+            std::map<weld::Toggleable*, sal_Int32>::const_iterator aBtnPos = maButtonToPos.find(pButton);
             if(aBtnPos != maButtonToPos.end())
                 return aBtnPos->second;
             else
                 return -1;
         }
-        void SelectButton(weld::ToggleButton* pButton)
+        void SelectButton(weld::Toggleable* pButton)
         {
             sal_Int32 nPos = GetButtonPos(pButton);
             if(nPos != -1)
@@ -168,9 +168,9 @@ class SvxTransparenceTabPage : public SfxTabPage
     std::unique_ptr<weld::CustomWeld> m_xCtlBitmapPreview;
     std::unique_ptr<weld::CustomWeld> m_xCtlXRectPreview;
 
-    DECL_LINK(ClickTransOffHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(ClickTransLinearHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(ClickTransGradientHdl_Impl, weld::ToggleButton&, void );
+    DECL_LINK(ClickTransOffHdl_Impl, weld::Toggleable&, void);
+    DECL_LINK(ClickTransLinearHdl_Impl, weld::Toggleable&, void);
+    DECL_LINK(ClickTransGradientHdl_Impl, weld::Toggleable&, void );
     DECL_LINK(ModifyTransparentHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(ModifiedTrgrEditHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(ModifiedTrgrListBoxHdl_Impl, weld::ComboBox&, void);
@@ -235,22 +235,22 @@ private:
 
 protected:
     std::unique_ptr<weld::Container> m_xFillTab;
-    std::unique_ptr<weld::ToggleButton> m_xBtnNone;
-    std::unique_ptr<weld::ToggleButton> m_xBtnColor;
-    std::unique_ptr<weld::ToggleButton> m_xBtnGradient;
-    std::unique_ptr<weld::ToggleButton> m_xBtnHatch;
-    std::unique_ptr<weld::ToggleButton> m_xBtnBitmap;
-    std::unique_ptr<weld::ToggleButton> m_xBtnPattern;
+    std::unique_ptr<weld::Toggleable> m_xBtnNone;
+    std::unique_ptr<weld::Toggleable> m_xBtnColor;
+    std::unique_ptr<weld::Toggleable> m_xBtnGradient;
+    std::unique_ptr<weld::Toggleable> m_xBtnHatch;
+    std::unique_ptr<weld::Toggleable> m_xBtnBitmap;
+    std::unique_ptr<weld::Toggleable> m_xBtnPattern;
 
     void SetOptimalSize(weld::DialogController* pController);
 
-    void SelectFillType( weld::ToggleButton& rButton, const SfxItemSet* _pSet = nullptr );
+    void SelectFillType( weld::Toggleable& rButton, const SfxItemSet* _pSet = nullptr );
     SfxTabPage* GetFillTabPage() { return m_xFillTabPage.get(); }
 
     bool IsBtnClicked() const { return m_bBtnClicked; }
 
 private:
-    DECL_LINK(SelectFillTypeHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(SelectFillTypeHdl_Impl, weld::Toggleable&, void);
 
     template< typename TabPage >
     bool FillItemSet_Impl( SfxItemSet* );
@@ -315,7 +315,7 @@ private:
     std::unique_ptr<weld::CustomWeld> m_xCtlPosition;
     std::unique_ptr<weld::CustomWeld> m_xCtlXRectPreview;
 
-    DECL_LINK(ClickShadowHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(ClickShadowHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(ModifyShadowHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(SelectShadowHdl_Impl, ColorListBox&, void);
 
@@ -387,7 +387,7 @@ private:
     DECL_LINK( ModifiedMetricHdl_Impl, weld::MetricSpinButton&, void );
     DECL_LINK( ModifiedColorListBoxHdl_Impl, ColorListBox&, void );
     DECL_LINK( ModifiedListBoxHdl_Impl, weld::ComboBox&, void );
-    DECL_LINK( ChangeAutoStepHdl_Impl, weld::ToggleButton&, void );
+    DECL_LINK( ChangeAutoStepHdl_Impl, weld::Toggleable&, void );
     DECL_LINK( ModifiedSliderHdl_Impl, weld::Scale&, void );
     void ModifiedHdl_Impl(void const *);
 
@@ -451,7 +451,7 @@ private:
     DECL_LINK( ModifiedEditHdl_Impl, weld::MetricSpinButton&, void );
     DECL_LINK( ModifiedListBoxHdl_Impl, weld::ComboBox&, void );
     DECL_LINK( ModifiedColorListBoxHdl_Impl, ColorListBox&, void );
-    DECL_LINK( ToggleHatchBackgroundColor_Impl, weld::ToggleButton&, void );
+    DECL_LINK( ToggleHatchBackgroundColor_Impl, weld::Toggleable&, void );
     DECL_LINK( ModifiedBackgroundHdl_Impl, ColorListBox&, void );
     DECL_LINK( ModifiedSliderHdl_Impl, weld::Scale&, void );
     void ModifiedHdl_Impl(void const *);
@@ -527,7 +527,7 @@ private:
     std::unique_ptr<weld::CustomWeld> m_xBitmapLBWin;
 
     DECL_LINK( ModifyBitmapHdl, ValueSet*, void );
-    DECL_LINK( ClickScaleHdl, weld::ToggleButton&, void );
+    DECL_LINK( ClickScaleHdl, weld::Toggleable&, void );
     DECL_LINK( ModifyBitmapStyleHdl, weld::ComboBox&, void );
     DECL_LINK( ModifyBitmapSizeHdl, weld::MetricSpinButton&, void );
     DECL_LINK( ModifyBitmapPositionHdl, weld::ComboBox&, void );
@@ -695,7 +695,7 @@ private:
 
     DECL_LINK(SelectPaletteLBHdl, weld::ComboBox&, void);
     DECL_LINK( SelectValSetHdl_Impl, ValueSet*, void );
-    DECL_LINK( SelectColorModeHdl_Impl, weld::ToggleButton&, void );
+    DECL_LINK( SelectColorModeHdl_Impl, weld::Toggleable&, void );
     void ChangeColor(const Color &rNewColor, bool bUpdatePreset = true);
     void SetColorModel(ColorModel eModel);
     void ChangeColorModel();

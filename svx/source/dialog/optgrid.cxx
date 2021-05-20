@@ -126,7 +126,7 @@ SvxGridTabPage::SvxGridTabPage(weld::Container* pPage, weld::DialogController* p
 
 
     m_xCbxRotate->connect_toggled(LINK(this, SvxGridTabPage, ClickRotateHdl_Impl));
-    Link<weld::ToggleButton&,void> aLink = LINK(this, SvxGridTabPage, ChangeGridsnapHdl_Impl);
+    Link<weld::Toggleable&,void> aLink = LINK(this, SvxGridTabPage, ChangeGridsnapHdl_Impl);
     m_xCbxUseGridsnap->connect_toggled(aLink);
     m_xCbxSynchronize->connect_toggled(aLink);
     m_xCbxGridVisible->connect_toggled(aLink);
@@ -260,7 +260,7 @@ IMPL_LINK(SvxGridTabPage, ChangeDrawHdl_Impl, weld::MetricSpinButton&, rField, v
     }
 }
 
-IMPL_LINK_NOARG(SvxGridTabPage, ClickRotateHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxGridTabPage, ClickRotateHdl_Impl, weld::Toggleable&, void)
 {
     if (m_xCbxRotate->get_active())
         m_xMtrFldAngle->set_sensitive(true);
@@ -280,7 +280,7 @@ IMPL_LINK(SvxGridTabPage, ChangeDivisionHdl_Impl, weld::SpinButton&, rField, voi
     }
 }
 
-IMPL_LINK_NOARG(SvxGridTabPage, ChangeGridsnapHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxGridTabPage, ChangeGridsnapHdl_Impl, weld::Toggleable&, void)
 {
     bAttrModified = true;
 }

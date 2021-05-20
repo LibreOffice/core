@@ -45,13 +45,13 @@ const sal_uInt16 SwFootNotePage::aPageRg[] = {
 
 // handler to switch between the different possibilities how the footnote
 // region's height can be set.
-IMPL_LINK_NOARG(SwFootNotePage, HeightPage, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwFootNotePage, HeightPage, weld::Toggleable&, void)
 {
     if (m_xMaxHeightPageBtn->get_active())
         m_xMaxHeightEdit->set_sensitive(false);
 }
 
-IMPL_LINK_NOARG(SwFootNotePage, HeightMetric, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwFootNotePage, HeightMetric, weld::Toggleable&, void)
 {
     if (m_xMaxHeightBtn->get_active())
     {

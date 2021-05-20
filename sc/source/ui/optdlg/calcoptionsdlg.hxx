@@ -18,10 +18,10 @@ public:
     ScCalcOptionsDialog(weld::Window* pParent, const ScCalcConfig& rConfig, bool bWriteConfig);
     virtual ~ScCalcOptionsDialog() override;
 
-    DECL_LINK(AsZeroModifiedHdl, weld::ToggleButton&, void);
+    DECL_LINK(AsZeroModifiedHdl, weld::Toggleable&, void);
     DECL_LINK(ConversionModifiedHdl, weld::ComboBox&, void);
     DECL_LINK(SyntaxModifiedHdl, weld::ComboBox&, void);
-    DECL_LINK(CurrentDocOnlyHdl, weld::ToggleButton&, void);
+    DECL_LINK(CurrentDocOnlyHdl, weld::Toggleable&, void);
 
     const ScCalcConfig& GetConfig() const { return maConfig; }
     bool GetWriteCalcConfig() const { return mbWriteConfig; }

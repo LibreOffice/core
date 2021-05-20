@@ -872,7 +872,7 @@ IMPL_LINK(SvxBulletAndPositionDlg, GraphicHdl_Impl, const OString&, rIdent, void
     aInvalidateTimer.Start();
 }
 
-IMPL_LINK_NOARG(SvxBulletAndPositionDlg, PopupActivateHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxBulletAndPositionDlg, PopupActivateHdl_Impl, weld::Toggleable&, void)
 {
     if (m_xGalleryMenu)
         return;
@@ -1056,7 +1056,7 @@ IMPL_LINK(SvxBulletAndPositionDlg, SizeHdl_Impl, weld::MetricSpinButton&, rField
     SetModified(bRepaint);
 }
 
-IMPL_LINK(SvxBulletAndPositionDlg, RatioHdl_Impl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(SvxBulletAndPositionDlg, RatioHdl_Impl, weld::Toggleable&, rBox, void)
 {
     if (rBox.get_active())
     {
@@ -1067,7 +1067,7 @@ IMPL_LINK(SvxBulletAndPositionDlg, RatioHdl_Impl, weld::ToggleButton&, rBox, voi
     }
 }
 
-IMPL_LINK(SvxBulletAndPositionDlg, SelectLeftAlignmentHdl_Impl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SvxBulletAndPositionDlg, SelectLeftAlignmentHdl_Impl, weld::Toggleable&, rButton, void)
 {
     if (rButton.get_active())
     {
@@ -1080,8 +1080,7 @@ IMPL_LINK(SvxBulletAndPositionDlg, SelectLeftAlignmentHdl_Impl, weld::ToggleButt
     }
 }
 
-IMPL_LINK(SvxBulletAndPositionDlg, SelectCenterAlignmentHdl_Impl, weld::ToggleButton&, rButton,
-          void)
+IMPL_LINK(SvxBulletAndPositionDlg, SelectCenterAlignmentHdl_Impl, weld::Toggleable&, rButton, void)
 {
     if (rButton.get_active())
     {
@@ -1094,7 +1093,7 @@ IMPL_LINK(SvxBulletAndPositionDlg, SelectCenterAlignmentHdl_Impl, weld::ToggleBu
     }
 }
 
-IMPL_LINK(SvxBulletAndPositionDlg, SelectRightAlignmentHdl_Impl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SvxBulletAndPositionDlg, SelectRightAlignmentHdl_Impl, weld::Toggleable&, rButton, void)
 {
     if (rButton.get_active())
     {
@@ -1122,7 +1121,7 @@ void SvxBulletAndPositionDlg::SetAlignmentHdl_Impl(SvxAdjust eAdjust)
     }
 }
 
-IMPL_LINK(SvxBulletAndPositionDlg, ApplyToMasterHdl_Impl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SvxBulletAndPositionDlg, ApplyToMasterHdl_Impl, weld::Toggleable&, rButton, void)
 {
     bApplyToMaster = rButton.get_active();
 }
@@ -1196,7 +1195,7 @@ IMPL_LINK(SvxBulletAndPositionDlg, DistanceHdl_Impl, weld::MetricSpinButton&, rF
     m_aPreviewWIN.set_size_request(aLastLevelLSpace, 300);
 }
 
-IMPL_LINK(SvxBulletAndPositionDlg, RelativeHdl_Impl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(SvxBulletAndPositionDlg, RelativeHdl_Impl, weld::Toggleable&, rBox, void)
 {
     bool bOn = rBox.get_active();
     bool bSingleSelection = m_xLevelLB->count_selected_rows() == 1 && SAL_MAX_UINT16 != nActNumLvl;

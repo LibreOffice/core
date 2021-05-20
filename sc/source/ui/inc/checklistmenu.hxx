@@ -219,7 +219,7 @@ private:
     void NotifyCloseLOK();
 
     DECL_LINK(ButtonHdl, weld::Button&, void);
-    DECL_LINK(TriStateHdl, weld::ToggleButton&, void);
+    DECL_LINK(TriStateHdl, weld::Toggleable&, void);
 
     void Check(const weld::TreeIter* pIter);
 

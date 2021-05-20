@@ -146,7 +146,7 @@ private:
     std::unique_ptr<weld::CustomWeld> mxCTPreviewWin;
 
 
-    DECL_LINK( UpdateOnToggleHdl, weld::ToggleButton&, void );
+    DECL_LINK( UpdateOnToggleHdl, weld::Toggleable&, void );
     DECL_LINK( LanguageChangeHdl, weld::ComboBox&, void );
 
     void FillFormatList(sal_Int32 nSelectedPos);
@@ -510,7 +510,7 @@ void HeaderFooterTabPage::update()
     mxCTPreview->update( aSettings );
 }
 
-IMPL_LINK_NOARG(HeaderFooterTabPage, UpdateOnToggleHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(HeaderFooterTabPage, UpdateOnToggleHdl, weld::Toggleable&, void)
 {
     update();
 }

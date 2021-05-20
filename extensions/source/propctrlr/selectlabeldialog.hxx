@@ -55,7 +55,7 @@ namespace pcr
         sal_Int32 InsertEntries(const css::uno::Reference< css::uno::XInterface >& _xContainer, weld::TreeIter& rContainerEntry);
 
         DECL_LINK(OnEntrySelected, weld::TreeView&, void);
-        DECL_LINK(OnNoAssignmentClicked, weld::ToggleButton&, void);
+        DECL_LINK(OnNoAssignmentClicked, weld::Toggleable&, void);
     };
 }   // namespace pcr
 

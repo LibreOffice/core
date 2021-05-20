@@ -551,7 +551,7 @@ void ScTpSubTotalOptions::FillUserSortListBox()
 
 // Handler:
 
-IMPL_LINK(ScTpSubTotalOptions, CheckHdl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(ScTpSubTotalOptions, CheckHdl, weld::Toggleable&, rBox, void)
 {
     if (&rBox == m_xBtnSort.get())
     {
@@ -588,7 +588,7 @@ IMPL_LINK(ScTpSubTotalOptions, CheckHdl, weld::ToggleButton&, rBox, void)
     }
 }
 
-IMPL_LINK(ScTpSubTotalGroup, CheckBoxHdl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(ScTpSubTotalGroup, CheckBoxHdl, weld::Toggleable&, rBox, void)
 {
     if (&rBox != mxLbSelectAllColumns.get())
         return;

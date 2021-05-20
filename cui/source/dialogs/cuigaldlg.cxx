@@ -857,7 +857,7 @@ void TPGalleryThemeProperties::TakeFiles()
     }
 }
 
-IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickPreviewHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickPreviewHdl, weld::Toggleable&, void)
 {
     if ( !bInputAllowed )
         return;

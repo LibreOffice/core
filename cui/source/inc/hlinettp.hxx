@@ -45,8 +45,8 @@ private:
     std::unique_ptr<weld::Entry> m_xEdPassword;
     std::unique_ptr<weld::CheckButton> m_xCbAnonymous;
 
-    DECL_LINK( Click_SmartProtocol_Impl, weld::ToggleButton&, void ); ///< Radiobutton toggled: Type HTTP or FTP
-    DECL_LINK( ClickAnonymousHdl_Impl, weld::ToggleButton&, void ); ///< Checkbox : Anonymous User
+    DECL_LINK( Click_SmartProtocol_Impl, weld::Toggleable&, void ); ///< Radiobutton toggled: Type HTTP or FTP
+    DECL_LINK( ClickAnonymousHdl_Impl, weld::Toggleable&, void ); ///< Checkbox : Anonymous User
     DECL_LINK( ModifiedLoginHdl_Impl, weld::Entry&,   void ); ///< Contents of editfield "Login" modified
     DECL_LINK( LostFocusTargetHdl_Impl, weld::Widget&, void ); ///< Combobox "Target" lost its focus
     DECL_LINK( ModifiedTargetHdl_Impl, weld::ComboBox&, void );    ///< Contents of editfield "Target" modified

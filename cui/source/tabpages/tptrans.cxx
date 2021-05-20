@@ -50,7 +50,7 @@ const sal_uInt16 SvxTransparenceTabPage::pTransparenceRanges[] =
 |*
 \************************************************************************/
 
-IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransOffHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransOffHdl_Impl, weld::Toggleable&, void)
 {
     // disable all other controls
     ActivateLinear(false);
@@ -65,7 +65,7 @@ IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransOffHdl_Impl, weld::ToggleButto
     InvalidatePreview(false);
 }
 
-IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransLinearHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransLinearHdl_Impl, weld::Toggleable&, void)
 {
     // enable linear, disable other
     ActivateLinear(true);
@@ -76,7 +76,7 @@ IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransLinearHdl_Impl, weld::ToggleBu
     ModifyTransparentHdl_Impl(*m_xMtrTransparent);
 }
 
-IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransGradientHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransGradientHdl_Impl, weld::Toggleable&, void)
 {
     // enable gradient, disable other
     ActivateLinear(false);

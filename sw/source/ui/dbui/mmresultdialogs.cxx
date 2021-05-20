@@ -257,7 +257,7 @@ SwMMResultSaveDialog::SwMMResultSaveDialog(weld::Window* pParent)
     , m_xToNF(m_xBuilder->weld_spin_button("to"))
     , m_xOKButton(m_xBuilder->weld_button("ok"))
 {
-    Link<weld::ToggleButton&,void> aLink = LINK(this, SwMMResultSaveDialog, DocumentSelectionHdl_Impl);
+    Link<weld::Toggleable&,void> aLink = LINK(this, SwMMResultSaveDialog, DocumentSelectionHdl_Impl);
     m_xSaveAsOneRB->connect_toggled(aLink);
     m_xSaveIndividualRB->connect_toggled(aLink);
     m_xFromRB->connect_toggled(aLink);
@@ -295,7 +295,7 @@ SwMMResultPrintDialog::SwMMResultPrintDialog(weld::Window* pParent)
     m_xPrinterLB->connect_changed(LINK(this, SwMMResultPrintDialog, PrinterChangeHdl_Impl));
     m_xPrinterSettingsPB->connect_clicked(LINK(this, SwMMResultPrintDialog, PrinterSetupHdl_Impl));
 
-    Link<weld::ToggleButton&,void> aLink = LINK(this, SwMMResultPrintDialog, DocumentSelectionHdl_Impl);
+    Link<weld::Toggleable&,void> aLink = LINK(this, SwMMResultPrintDialog, DocumentSelectionHdl_Impl);
     m_xPrintAllRB->connect_toggled(aLink);
     m_xFromRB->connect_toggled(aLink);
     // m_pPrintAllRB is the default, so disable m_xFromNF and m_xToNF initially.
@@ -338,7 +338,7 @@ SwMMResultEmailDialog::SwMMResultEmailDialog(weld::Window* pParent)
     m_xSendAsLB->connect_changed(LINK(this, SwMMResultEmailDialog, SendTypeHdl_Impl));
     m_xPasswordCB->connect_toggled( LINK( this, SwMMResultEmailDialog, CheckHdl ));
 
-    Link<weld::ToggleButton&,void> aLink = LINK(this, SwMMResultEmailDialog, DocumentSelectionHdl_Impl);
+    Link<weld::Toggleable&,void> aLink = LINK(this, SwMMResultEmailDialog, DocumentSelectionHdl_Impl);
     m_xSendAllRB->connect_toggled(aLink);
     m_xFromRB->connect_toggled(aLink);
     // m_xSendAllRB is the default, so disable m_xFromNF and m_xToNF initially.
@@ -455,7 +455,7 @@ void SwMMResultEmailDialog::FillInEmailSettings()
     m_xToNF->set_value(nCount);
 }
 
-IMPL_LINK_NOARG(SwMMResultSaveDialog, DocumentSelectionHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwMMResultSaveDialog, DocumentSelectionHdl_Impl, weld::Toggleable&, void)
 {
     bool bEnableFromTo = m_xFromRB->get_active();
     m_xFromNF->set_sensitive(bEnableFromTo);
@@ -463,7 +463,7 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, DocumentSelectionHdl_Impl, weld::ToggleBut
     m_xToNF->set_sensitive(bEnableFromTo);
 }
 
-IMPL_LINK_NOARG(SwMMResultEmailDialog, CheckHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwMMResultEmailDialog, CheckHdl, weld::Toggleable&, void)
 {
     bool bEnable = m_xPasswordCB->get_active();
 
@@ -471,7 +471,7 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, CheckHdl, weld::ToggleButton&, void)
     m_xPasswordLB->set_sensitive(bEnable);
 }
 
-IMPL_LINK_NOARG(SwMMResultPrintDialog, DocumentSelectionHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwMMResultPrintDialog, DocumentSelectionHdl_Impl, weld::Toggleable&, void)
 {
     bool bEnableFromTo = m_xFromRB->get_active();
     m_xFromNF->set_sensitive(bEnableFromTo);
@@ -479,7 +479,7 @@ IMPL_LINK_NOARG(SwMMResultPrintDialog, DocumentSelectionHdl_Impl, weld::ToggleBu
     m_xToNF->set_sensitive(bEnableFromTo);
 }
 
-IMPL_LINK_NOARG(SwMMResultEmailDialog, DocumentSelectionHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(SwMMResultEmailDialog, DocumentSelectionHdl_Impl, weld::Toggleable&, void)
 {
     bool bEnableFromTo = m_xFromRB->get_active();
     m_xFromNF->set_sensitive(bEnableFromTo);
