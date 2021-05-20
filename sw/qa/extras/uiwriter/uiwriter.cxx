@@ -346,6 +346,7 @@ public:
     void testMsWordCompTrailingBlanks();
     void testCreateDocxAnnotation();
     void testTdf107976();
+    void testTdf142157();
     void testTdf108524();
     void testRhbz1810732();
     void testTableInSection();
@@ -577,6 +578,7 @@ public:
     CPPUNIT_TEST(testMsWordCompTrailingBlanks);
     CPPUNIT_TEST(testCreateDocxAnnotation);
     CPPUNIT_TEST(testTdf107976);
+    CPPUNIT_TEST(testTdf142157);
     CPPUNIT_TEST(testTdf108524);
     CPPUNIT_TEST(testRhbz1810732);
     CPPUNIT_TEST(testTableInSection);
@@ -6737,6 +6739,23 @@ void SwUiWriterTest::testRhbz1810732()
         uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({ { "Name", uno::makeAny(insertFileid) } }));
         dispatchCommand(mxComponent, ".uno:InsertDoc", aPropertyValues);
     }
+}
+
+void SwUiWriterTest::testTdf142157()
+{
+    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+
+    const OUString insertFileid = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf142157.odt";
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({ { "Name", uno::makeAny(insertFileid) } }));
+    dispatchCommand(mxComponent, ".uno:InsertDoc", aPropertyValues);
+
+    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
 }
 
 void SwUiWriterTest::testTdf108524()
