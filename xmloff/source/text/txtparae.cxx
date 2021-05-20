@@ -510,7 +510,7 @@ void FieldParamExporter::ExportParameter(const OUString& sKey, const OUString& s
 
 void XMLTextParagraphExport::Add( XmlStyleFamily nFamily,
                                   const Reference < XPropertySet > & rPropSet,
-                                  const XMLPropertyState** ppAddStates, bool bDontSeek )
+                                  const o3tl::span<XMLPropertyState> aAddStates, bool bDontSeek )
 {
     rtl::Reference < SvXMLExportPropertyMapper > xPropMapper;
     switch( nFamily )
@@ -537,14 +537,8 @@ void XMLTextParagraphExport::Add( XmlStyleFamily nFamily,
     vector< XMLPropertyState > aPropStates =
             xPropMapper->Filter(GetExport(), rPropSet);
 
-    if( ppAddStates )
-    {
-        while( *ppAddStates )
-        {
-            aPropStates.push_back( **ppAddStates );
-            ppAddStates++;
-        }
-    }
+    for (const XMLPropertyState& rState : aAddStates)
+        aPropStates.push_back( rState );
 
     if( aPropStates.empty() )
         return;
@@ -741,7 +735,7 @@ OUString XMLTextParagraphExport::Find(
         XmlStyleFamily nFamily,
         const Reference < XPropertySet > & rPropSet,
         const OUString& rParent,
-        const XMLPropertyState** ppAddStates) const
+        const o3tl::span<XMLPropertyState> aAddStates) const
 {
     OUString sName( rParent );
     rtl::Reference < SvXMLExportPropertyMapper > xPropMapper;
@@ -765,14 +759,8 @@ OUString XMLTextParagraphExport::Find(
     if( !xPropMapper.is() )
         return sName;
     vector<XMLPropertyState> aPropStates(xPropMapper->Filter(GetExport(), rPropSet));
-    if( ppAddStates )
-    {
-        while( *ppAddStates )
-        {
-            aPropStates.push_back( **ppAddStates );
-            ++ppAddStates;
-        }
-    }
+    for (const XMLPropertyState& rState : aAddStates)
+        aPropStates.push_back( rState );
     if( std::any_of( aPropStates.begin(), aPropStates.end(), lcl_validPropState ) )
         sName = GetAutoStylePool().Find( nFamily, sName, aPropStates );
 
@@ -1438,7 +1426,7 @@ void XMLTextParagraphExport::collectTextAutoStylesOptimized( bool bIsProgress )
                 aAny = xAutoStylesEnum->nextElement();
                 Reference< XAutoStyle > xAutoStyle = *o3tl::doAccess<Reference<XAutoStyle>>(aAny);
                 Reference < XPropertySet > xPSet( xAutoStyle, uno::UNO_QUERY );
-                Add( nFamily, xPSet, nullptr, true );
+                Add( nFamily, xPSet, {}, true );
             }
         };
         collectFamily("CharacterStyles", XmlStyleFamily::TEXT_TEXT);

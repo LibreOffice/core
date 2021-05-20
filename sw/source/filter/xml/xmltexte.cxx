@@ -115,19 +115,17 @@ static void lcl_addURL ( SvXMLExport &rExport, const OUString &rURL,
 
 static void lcl_addAspect(
         const svt::EmbeddedObjectRef& rObj,
-        const XMLPropertyState **pStates,
+        std::vector<XMLPropertyState>& rStates,
         const rtl::Reference < XMLPropertySetMapper >& rMapper )
 {
     sal_Int64 nAspect = rObj.GetViewAspect();
     if ( nAspect )
-    {
-        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_DRAW_ASPECT ), uno::makeAny( nAspect ) );
-    }
+        rStates.emplace_back( rMapper->FindEntryIndex( CTF_OLE_DRAW_ASPECT ), uno::makeAny( nAspect ) );
 }
 
 static void lcl_addOutplaceProperties(
         const svt::EmbeddedObjectRef& rObj,
-        const XMLPropertyState **pStates,
+        std::vector<XMLPropertyState>& rStates,
         const rtl::Reference < XMLPropertySetMapper >& rMapper )
 {
     MapMode aMode( MapUnit::Map100thMM ); // the API expects this map mode for the embedded objects
@@ -136,21 +134,15 @@ static void lcl_addOutplaceProperties(
     if( !(aSize.Width() && aSize.Height()) )
         return;
 
-    *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_LEFT ), Any(sal_Int32(0)) );
-    pStates++;
-
-    *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_TOP ), Any(sal_Int32(0)) );
-    pStates++;
-
-    *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_WIDTH ), Any(static_cast<sal_Int32>(aSize.Width())) );
-    pStates++;
-
-    *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_HEIGHT ), Any(static_cast<sal_Int32>(aSize.Height())) );
+    rStates.emplace_back( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_LEFT ), Any(sal_Int32(0)) );
+    rStates.emplace_back( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_TOP ), Any(sal_Int32(0)) );
+    rStates.emplace_back( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_WIDTH ), Any(static_cast<sal_Int32>(aSize.Width())) );
+    rStates.emplace_back( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_HEIGHT ), Any(static_cast<sal_Int32>(aSize.Height())) );
 }
 
 static void lcl_addFrameProperties(
         const uno::Reference < embed::XEmbeddedObject >& xObj,
-        const XMLPropertyState **pStates,
+        std::vector<XMLPropertyState>& rStates,
         const rtl::Reference < XMLPropertySetMapper >& rMapper )
 {
     if ( !::svt::EmbeddedObjectRef::TryRunningState( xObj ) )
@@ -185,24 +177,13 @@ static void lcl_addFrameProperties(
     aAny >>= nHeight;
 
     if( !bIsAutoScroll )
-    {
-        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_FRAME_DISPLAY_SCROLLBAR ), makeAny(bIsScrollingMode) );
-        pStates++;
-    }
+        rStates.emplace_back( rMapper->FindEntryIndex( CTF_FRAME_DISPLAY_SCROLLBAR ), makeAny(bIsScrollingMode) );
     if( !bIsAutoBorder )
-    {
-        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_FRAME_DISPLAY_BORDER ), makeAny(bIsBorderSet) );
-        pStates++;
-    }
+        rStates.emplace_back( rMapper->FindEntryIndex( CTF_FRAME_DISPLAY_BORDER ), makeAny(bIsBorderSet) );
     if( SIZE_NOT_SET != nWidth )
-    {
-        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_FRAME_MARGIN_HORI ), Any(nWidth) );
-        pStates++;
-    }
+        rStates.emplace_back( rMapper->FindEntryIndex( CTF_FRAME_MARGIN_HORI ), Any(nWidth) );
     if( SIZE_NOT_SET != nHeight )
-    {
-        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_FRAME_MARGIN_VERT ), Any(nHeight) );
-    }
+        rStates.emplace_back( rMapper->FindEntryIndex( CTF_FRAME_MARGIN_VERT ), Any(nHeight) );
 }
 
 void SwXMLTextParagraphExport::_collectTextEmbeddedAutoStyles(
@@ -213,7 +194,8 @@ void SwXMLTextParagraphExport::_collectTextEmbeddedAutoStyles(
     if( !rObjRef.is() )
         return;
 
-    const XMLPropertyState *aStates[8] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
+    std::vector<XMLPropertyState> aStates;
+    aStates.reserve(8);
     SvGlobalName aClassId( rObjRef->getClassID() );
 
     if( aIFrameClassId == aClassId )
@@ -230,14 +212,7 @@ void SwXMLTextParagraphExport::_collectTextEmbeddedAutoStyles(
     lcl_addAspect( rObjRef, aStates,
            GetAutoFramePropMapper()->getPropertySetMapper() );
 
-    Add( XmlStyleFamily::TEXT_FRAME, rPropSet, aStates );
-
-    const XMLPropertyState **pStates = aStates;
-    while( *pStates )
-    {
-        delete *pStates;
-        pStates++;
-    }
+    Add( XmlStyleFamily::TEXT_FRAME, rPropSet, { aStates.data(), aStates.size() } );
 }
 
 void SwXMLTextParagraphExport::_exportTextEmbedded(
@@ -282,7 +257,8 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         aAny >>= sStyle;
     }
 
-    const XMLPropertyState *aStates[8] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
+    std::vector<XMLPropertyState> aStates;
+    aStates.reserve(8);
     switch( nType )
     {
     case SV_EMBEDDED_FRAME:
@@ -301,13 +277,8 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         GetAutoFramePropMapper()->getPropertySetMapper() );
 
     const OUString sAutoStyle = Find( XmlStyleFamily::TEXT_FRAME,
-                                      rPropSet, sStyle, aStates );
-    const XMLPropertyState **pStates = aStates;
-    while( *pStates )
-    {
-        delete *pStates;
-        pStates++;
-    }
+                                      rPropSet, sStyle, { aStates.data(), aStates.size() } );
+    aStates.clear();
 
     if( !sAutoStyle.isEmpty() )
         rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE_NAME, sAutoStyle );

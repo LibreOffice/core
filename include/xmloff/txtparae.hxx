@@ -29,6 +29,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/SinglePropertySetInfoCache.hxx>
 #include <xmloff/XMLTextListAutoStylePool.hxx>
+#include <o3tl/span.hxx>
 #include <memory>
 #include <vector>
 
@@ -385,14 +386,14 @@ public:
     void Add(
         XmlStyleFamily nFamily,
         const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
-        const XMLPropertyState** pAddState = nullptr, bool bDontSeek = false );
+        const o3tl::span<XMLPropertyState> aAddStates = {}, bool bDontSeek = false );
 
     /// find style name for specified family and parent
     OUString Find(
         XmlStyleFamily nFamily,
         const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
         const OUString& rParent,
-        const XMLPropertyState** pAddState = nullptr ) const;
+        const o3tl::span<XMLPropertyState> aAddStates = {} ) const;
 
     static SvXMLExportPropertyMapper *CreateShapeExtPropMapper(
                                                 SvXMLExport& rExport );
