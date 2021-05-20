@@ -123,10 +123,10 @@ class SwInsertDBColAutoPilot : public SfxDialogController, public utl::ConfigIte
     std::unique_ptr<weld::Button> m_xPbTableFormat;
     std::unique_ptr<weld::Button> m_xPbTableAutofmt;
 
-    DECL_LINK( PageHdl, weld::Button&, void );
+    DECL_LINK( PageHdl, weld::ToggleButton&, void );
     DECL_LINK( AutoFormatHdl, weld::Button&, void );
     DECL_LINK( TableFormatHdl, weld::Button&, void );
-    DECL_LINK( DBFormatHdl, weld::Button&, void );
+    DECL_LINK( DBFormatHdl, weld::ToggleButton&, void );
     DECL_LINK( TableToFromHdl, weld::Button&, void );
     DECL_LINK( TVSelectHdl, weld::TreeView&, void );
     DECL_LINK( CBSelectHdl, weld::ComboBox&, void );

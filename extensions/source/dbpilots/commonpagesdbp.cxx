@@ -362,13 +362,15 @@ namespace dbp
         m_pNo = &_rNoButton;
         m_pList = &_rSelection;
 
-        m_pYes->connect_clicked(LINK(this, OMaybeListSelectionPage, OnRadioSelected));
-        m_pNo->connect_clicked(LINK(this, OMaybeListSelectionPage, OnRadioSelected));
+        m_pYes->connect_toggled(LINK(this, OMaybeListSelectionPage, OnRadioSelected));
+        m_pNo->connect_toggled(LINK(this, OMaybeListSelectionPage, OnRadioSelected));
         implEnableWindows();
     }
 
-    IMPL_LINK_NOARG( OMaybeListSelectionPage, OnRadioSelected, weld::Button&, void )
+    IMPL_LINK(OMaybeListSelectionPage, OnRadioSelected, weld::ToggleButton&, rButton, void)
     {
+        if (!rButton.get_active())
+            return;
         implEnableWindows();
     }
 

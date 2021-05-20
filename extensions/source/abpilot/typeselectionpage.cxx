@@ -115,14 +115,14 @@ namespace abp
         m_aAllTypes.push_back( ButtonItem( m_xMacab.get(), AST_MACAB, bHaveMacab ) );
         m_aAllTypes.push_back( ButtonItem( m_xOther.get(), AST_OTHER, true ) );
 
-        Link<weld::Button&,void> aTypeSelectionHandler = LINK(this, TypeSelectionPage, OnTypeSelected );
+        Link<weld::ToggleButton&,void> aTypeSelectionHandler = LINK(this, TypeSelectionPage, OnTypeSelected );
         for (auto const& elem : m_aAllTypes)
         {
             if (!elem.m_bVisible)
                 elem.m_pItem->hide();
             else
             {
-                elem.m_pItem->connect_clicked( aTypeSelectionHandler );
+                elem.m_pItem->connect_toggled( aTypeSelectionHandler );
                 elem.m_pItem->show();
             }
         }
@@ -205,22 +205,20 @@ namespace abp
         return true;
     }
 
-
     bool TypeSelectionPage::canAdvance() const
     {
         return  AddressBookSourcePage::canAdvance()
             &&  (AST_INVALID != getSelectedType());
     }
 
-
-    IMPL_LINK_NOARG( TypeSelectionPage, OnTypeSelected, weld::Button&, void )
+    IMPL_LINK(TypeSelectionPage, OnTypeSelected, weld::ToggleButton&, rButton, void)
     {
+        if (!rButton.get_active())
+            return;
         getDialog()->typeSelectionChanged( getSelectedType() );
         updateDialogTravelUI();
     }
 
-
 }   // namespace abp
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
