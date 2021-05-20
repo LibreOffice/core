@@ -92,6 +92,7 @@ public:
     void testDataArea();
     void testAutofilter();
     void testAutoFilterTimeValue();
+    void testTdf76441();
     void testAdvancedFilter();
     void testTdf98642();
     void testMergedCells();
@@ -214,6 +215,7 @@ public:
     CPPUNIT_TEST(testToggleRefFlag);
     CPPUNIT_TEST(testAutofilter);
     CPPUNIT_TEST(testAutoFilterTimeValue);
+    CPPUNIT_TEST(testTdf76441);
     CPPUNIT_TEST(testAdvancedFilter);
     CPPUNIT_TEST(testTdf98642);
     CPPUNIT_TEST(testMergedCells);
