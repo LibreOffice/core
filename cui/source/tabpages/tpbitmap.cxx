@@ -106,7 +106,7 @@ SvxBitmapTabPage::SvxBitmapTabPage(weld::Container* pPage, weld::DialogControlle
     Link<weld::MetricSpinButton&, void> aLink1( LINK(this, SvxBitmapTabPage, ModifyBitmapSizeHdl) );
     m_xBitmapWidth->connect_value_changed( aLink1 );
     m_xBitmapHeight->connect_value_changed( aLink1 );
-    m_xTsbScale->connect_clicked(LINK(this, SvxBitmapTabPage, ClickScaleHdl));
+    m_xTsbScale->connect_toggled(LINK(this, SvxBitmapTabPage, ClickScaleHdl));
     m_xPositionLB->connect_changed( LINK( this, SvxBitmapTabPage, ModifyBitmapPositionHdl ) );
     Link<weld::MetricSpinButton&, void> aLink( LINK( this, SvxBitmapTabPage, ModifyPositionOffsetHdl ) );
     m_xPositionOffX->connect_value_changed(aLink);
@@ -596,7 +596,7 @@ IMPL_LINK_NOARG( SvxBitmapTabPage, ModifyBitmapSizeHdl, weld::MetricSpinButton&,
     m_aCtlBitmapPreview.Invalidate();
 }
 
-IMPL_LINK_NOARG( SvxBitmapTabPage, ClickScaleHdl, weld::Button&, void )
+IMPL_LINK_NOARG( SvxBitmapTabPage, ClickScaleHdl, weld::ToggleButton&, void )
 {
     if (m_xTsbScale->get_state() == TRISTATE_TRUE)
     {
