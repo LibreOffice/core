@@ -1622,11 +1622,6 @@ AC_ARG_ENABLE(kf5,
          KF5 are available.]),
 ,)
 
-AC_ARG_ENABLE(kde5,
-    AS_HELP_STRING([--enable-kde5],
-        [Compatibility switch for the kde5 => kf5 rename. Use --enable-kf5!])
-,)
-
 AC_ARG_ENABLE(gtk3_kde5,
     AS_HELP_STRING([--enable-gtk3-kde5],
         [Determines whether to use Gtk3 vclplug with KF5 file dialogs on
@@ -5582,12 +5577,6 @@ fi
 if test "$OS" = "HAIKU"; then
     enable_cairo_canvas=yes
     test_kf5=yes
-fi
-
-if test "$test_kf5" = "yes" -a "$enable_kde5" = "yes"; then
-    AC_MSG_WARN([The kde5 VCL plugin was renamed to kf5. Please update your configuration to use --enable-kf5, as --enable-kde5 will be removed after the next major release!])
-    add_warning "The kde5 VCL plugin was renamed to kf5. Please update your configuration to use --enable-kf5, as --enable-kde5 will be removed after the next major release!"
-    enable_kf5=yes
 fi
 
 if test "$test_kf5" = "yes"; then
