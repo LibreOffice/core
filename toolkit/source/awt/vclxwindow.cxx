@@ -220,6 +220,11 @@ VCLXWindowImpl::VCLXWindowImpl( VCLXWindow& _rAntiImpl, bool _bWithDefaultProps 
 void VCLXWindowImpl::disposing()
 {
     SolarMutexGuard aGuard;
+
+    assert(!mbDisposed);
+
+    mbDisposed = true;
+
     if ( mnCallbackEventId )
     {
         Application::RemoveUserEvent( mnCallbackEventId );
@@ -227,8 +232,7 @@ void VCLXWindowImpl::disposing()
         // we acquired our VCLXWindow once before posting the event, release this one ref now
         mrAntiImpl.release();
     }
-
-    mbDisposed = true;
+    maCallbackEvents.clear();
 
     css::lang::EventObject aEvent;
     aEvent.Source = mrAntiImpl;
@@ -243,6 +247,7 @@ void VCLXWindowImpl::disposing()
     maPaintListeners.disposeAndClear( aEvent );
     maContainerListeners.disposeAndClear( aEvent );
     maTopWindowListeners.disposeAndClear( aEvent );
+    maWindow2Listeners.disposeAndClear( aEvent );
 
     ::toolkit::WindowStyleSettings* pStyleSettings = static_cast< ::toolkit::WindowStyleSettings* >( mxWindowStyleSettings.get() );
     if ( pStyleSettings != nullptr )
@@ -334,6 +339,8 @@ VCLXWindow::~VCLXWindow()
 
 void VCLXWindow::ImplExecuteAsyncWithoutSolarLock( const Callback& i_callback )
 {
+    if (mpImpl->mbDisposing)
+        return;
     mpImpl->callBackAsync( i_callback );
 }
 
@@ -345,6 +352,8 @@ void VCLXWindow::ImplExecuteAsyncWithoutSolarLock( const Callback& i_callback )
 
 void VCLXWindow::SetWindow( const VclPtr<vcl::Window> &pWindow )
 {
+    assert(!mpImpl->mbDisposing || !pWindow);
+
     if ( GetWindow() )
     {
         GetWindow()->RemoveEventListener( LINK( this, VCLXWindow, WindowEventListener ) );
@@ -416,6 +425,8 @@ namespace
 
 void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
+    if (mpImpl->mbDisposing)
+        return;
     css::uno::Reference< css::uno::XInterface > xThis( static_cast<cppu::OWeakObject*>(this) );
 
     switch ( rVclWindowEvent.GetId() )
