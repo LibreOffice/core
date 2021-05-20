@@ -283,7 +283,7 @@ core_constructor_list = [
 # lingucomponent/source/thesaurus/libnth/lnth.component
     "lingucomponent_Thesaurus_get_implementation",
     "lingucomponent_SpellChecker_get_implementation",
-    "lingucomponent_LangGuess_get_implementation",
+    ("lingucomponent_LangGuess_get_implementation", "#ifndef ENABLE_WASM_STRIP_GUESSLANG"),
     "lingucomponent_Hyphenator_get_implementation",
 # package/source/xstor/xstor.component
     "package_OStorageFactory_get_implementation",
@@ -844,7 +844,7 @@ desktop_constructor_list = [
     "i18npool_Collator_Unicode_get_implementation",
     "IndexedPropertyValuesContainer_get_implementation",
     "lingucomponent_Hyphenator_get_implementation",
-    "lingucomponent_LangGuess_get_implementation",
+    ("lingucomponent_LangGuess_get_implementation", "#ifndef ENABLE_WASM_STRIP_GUESSLANG"),
     "lingucomponent_SpellChecker_get_implementation",
     "lingucomponent_Thesaurus_get_implementation",
     "linguistic_DicList_get_implementation",

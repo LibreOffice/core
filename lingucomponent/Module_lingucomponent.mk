@@ -10,8 +10,13 @@
 
 $(eval $(call gb_Module_Module,lingucomponent))
 
+ifneq ($(ENABLE_WASM_STRIP_GUESSLANG),TRUE)
 $(eval $(call gb_Module_add_targets,lingucomponent,\
 	Library_guesslang \
+))
+endif
+
+$(eval $(call gb_Module_add_targets,lingucomponent,\
 	Library_hyphen \
 	Library_lnth \
 	$(if $(filter iOS MACOSX,$(OS)),Library_MacOSXSpell) \

@@ -359,6 +359,12 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 ))
 endif
 
+ifneq ($(ENABLE_WASM_STRIP_GUESSLANG),TRUE)
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
+	guesslang \
+))
+endif
+
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(call gb_Helper_optional,AVMEDIA,avmedia) \
 	$(if $(filter MACOSX,$(OS)),\
@@ -401,7 +407,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	frm \
 	fsstorage \
 	fwk \
-	guesslang \
 	i18npool \
 	i18nsearch \
 	hyphen \

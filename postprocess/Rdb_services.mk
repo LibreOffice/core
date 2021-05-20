@@ -97,6 +97,12 @@ $(eval $(call gb_Rdb_add_components,services,\
 ))
 endif
 
+ifneq ($(ENABLE_WASM_STRIP_GUESSLANG),TRUE)
+$(eval $(call gb_Rdb_add_components,services,\
+	lingucomponent/source/languageguessing/guesslang \
+))
+endif
+
 $(eval $(call gb_Rdb_add_components,services,\
 	animations/source/animcore/animcore \
 	cui/util/cui \
@@ -118,7 +124,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	$(if $(filter MACOSX,$(OS)),fpicker/source/aqua/fps_aqua) \
 	hwpfilter/source/hwp \
 	lingucomponent/source/hyphenator/hyphen/hyphen \
-	lingucomponent/source/languageguessing/guesslang \
 	lingucomponent/source/spellcheck/spell/spell \
 	lingucomponent/source/thesaurus/libnth/lnth \
 	lingucomponent/source/numbertext/numbertext \
