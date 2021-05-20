@@ -3312,6 +3312,47 @@ void Test::testAutoFilterTimeValue()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testTdf76441()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    // The result will be different depending on whether the format is set before
+    // or after inserting the string
+
+    OUString aCode = "MM:SS";
+    sal_Int32 nCheckPos;
+    SvNumFormatType nType;
+    sal_uInt32 nFormat;
+    SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
+    pFormatter->PutEntry( aCode, nCheckPos, nType, nFormat );
+
+    ScPatternAttr aNewAttrs(m_pDoc->GetPool());
+    SfxItemSet& rSet = aNewAttrs.GetItemSet();
+    rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
+    {
+        // First insert the string, then the format
+        m_pDoc->SetString(ScAddress(0,0,0), "01:20");
+
+        m_pDoc->ApplyPattern(0, 0, 0, aNewAttrs);
+
+        CPPUNIT_ASSERT_EQUAL(OUString("20:00"), m_pDoc->GetString(ScAddress(0,0,0)));
+    }
+
+    {
+        // First set the format, then insert the string
+        m_pDoc->ApplyPattern(0, 1, 0, aNewAttrs);
+
+        m_pDoc->SetString(ScAddress(0,1,0), "01:20");
+
+        // Without the fix in place, this test would have failed with
+        // - Expected: 01:20
+        // - Actual  : 20:00
+        CPPUNIT_ASSERT_EQUAL(OUString("01:20"), m_pDoc->GetString(ScAddress(0,1,0)));
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testAdvancedFilter()
 {
     m_pDoc->InsertTab(0, "Test");
