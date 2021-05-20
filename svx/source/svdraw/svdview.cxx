@@ -163,7 +163,7 @@ SdrView::~SdrView()
 
 bool SdrView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
 {
-    SetActualWin(pWin->GetOutDev());
+    SetActualWin(pWin ? pWin->GetOutDev() : nullptr);
     bool bRet = SdrCreateView::KeyInput(rKEvt,pWin);
     if (!bRet && !IsExtendedKeyInputDispatcherEnabled()) {
         bRet = true;
