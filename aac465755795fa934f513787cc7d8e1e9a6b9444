@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "52b373f6_15327b19",
+        "filename": "shell/source/unix/misc/senddoc.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-05-20T11:48:41Z",
+      "side": 1,
+      "message": "the \"...\" quoting is redundant here",
+      "range": {
+        "startLine": 397,
+        "startChar": 19,
+        "endLine": 397,
+        "endChar": 20
+      },
+      "revId": "aac465755795fa934f513787cc7d8e1e9a6b9444",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
