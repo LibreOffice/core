@@ -62,8 +62,8 @@ namespace abp
 
         DECL_LINK(OnEntryNameModified, weld::Entry&, void);
         DECL_LINK(OnComboNameModified, weld::ComboBox&, void);
-        DECL_LINK(OnRegister, weld::Button&, void);
-        DECL_LINK(OnEmbed, weld::Button&, void);
+        DECL_LINK(OnRegister, weld::ToggleButton&, void);
+        DECL_LINK(OnEmbed, weld::ToggleButton&, void);
 
         bool isValidName() const;
         void implCheckName();

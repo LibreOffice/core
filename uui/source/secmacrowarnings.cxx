@@ -137,7 +137,7 @@ IMPL_LINK_NOARG(MacroWarning, DisableBtnHdl, weld::Button&, void)
     m_xDialog->response(RET_CANCEL);
 }
 
-IMPL_LINK_NOARG(MacroWarning, AlwaysTrustCheckHdl, weld::Button&, void)
+IMPL_LINK_NOARG(MacroWarning, AlwaysTrustCheckHdl, weld::ToggleButton&, void)
 {
     const bool bEnable = (mnActSecLevel < 2 || mxAlwaysTrustCB->get_active());
     mxEnableBtn->set_sensitive(bEnable);
@@ -154,7 +154,7 @@ void MacroWarning::InitControls()
 
         const SvtSecurityOptions aSecOption;
         if (!aSecOption.IsReadOnly(SvtSecurityOptions::EOption::MacroTrustedAuthors))
-            mxAlwaysTrustCB->connect_clicked(LINK(this, MacroWarning, AlwaysTrustCheckHdl));
+            mxAlwaysTrustCB->connect_toggled(LINK(this, MacroWarning, AlwaysTrustCheckHdl));
         else
             mxAlwaysTrustCB->set_visible(false);
 

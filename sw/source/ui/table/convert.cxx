@@ -156,8 +156,8 @@ SwConvertTableDlg::SwConvertTableDlg(SwView& rView, bool bToTable)
     m_xRepeatHeaderCB->set_active(aInsOpts.mnRowsToRepeat > 0);
     m_xDontSplitCB->set_active(!(nInsTableFlags & SwInsertTableFlags::SplitLayout));
 
-    m_xHeaderCB->connect_clicked(LINK(this, SwConvertTableDlg, CheckBoxHdl));
-    m_xRepeatHeaderCB->connect_clicked(LINK(this, SwConvertTableDlg, RepeatHeaderCheckBoxHdl));
+    m_xHeaderCB->connect_toggled(LINK(this, SwConvertTableDlg, CheckBoxHdl));
+    m_xRepeatHeaderCB->connect_toggled(LINK(this, SwConvertTableDlg, RepeatHeaderCheckBoxHdl));
     RepeatHeaderCheckBoxHdl(*m_xRepeatHeaderCB);
     CheckBoxHdl(*m_xHeaderCB);
 }
@@ -186,13 +186,13 @@ IMPL_LINK(SwConvertTableDlg, BtnHdl, weld::Button&, rButton, void)
     m_xOtherEd->set_sensitive(m_xOtherBtn->get_active());
 }
 
-IMPL_LINK_NOARG(SwConvertTableDlg, CheckBoxHdl, weld::Button&, void)
+IMPL_LINK_NOARG(SwConvertTableDlg, CheckBoxHdl, weld::ToggleButton&, void)
 {
     m_xRepeatHeaderCB->set_sensitive(m_xHeaderCB->get_active());
     RepeatHeaderCheckBoxHdl(*m_xRepeatHeaderCB);
 }
 
-IMPL_LINK_NOARG(SwConvertTableDlg, RepeatHeaderCheckBoxHdl, weld::Button&, void)
+IMPL_LINK_NOARG(SwConvertTableDlg, RepeatHeaderCheckBoxHdl, weld::ToggleButton&, void)
 {
     bool bEnable = m_xHeaderCB->get_active() && m_xRepeatHeaderCB->get_active();
     m_xRepeatRows->set_sensitive(bEnable);

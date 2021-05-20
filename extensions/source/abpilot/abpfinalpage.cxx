@@ -61,9 +61,9 @@ namespace abp
 
         m_xName->connect_changed( LINK(this, FinalPage, OnEntryNameModified) );
         m_xLocation->connect_changed( LINK(this, FinalPage, OnComboNameModified) );
-        m_xRegisterName->connect_clicked( LINK( this, FinalPage, OnRegister ) );
+        m_xRegisterName->connect_toggled( LINK( this, FinalPage, OnRegister ) );
         m_xRegisterName->set_active(true);
-        m_xEmbed->connect_clicked( LINK( this, FinalPage, OnEmbed ) );
+        m_xEmbed->connect_toggled( LINK( this, FinalPage, OnEmbed ) );
         m_xEmbed->set_active(true);
     }
 
@@ -204,7 +204,7 @@ namespace abp
         implCheckName();
     }
 
-    IMPL_LINK_NOARG(FinalPage, OnRegister, weld::Button&, void)
+    IMPL_LINK_NOARG(FinalPage, OnRegister, weld::ToggleButton&, void)
     {
         bool bEnable = m_xRegisterName->get_active();
         m_xNameLabel->set_sensitive(bEnable);
@@ -212,7 +212,7 @@ namespace abp
         implCheckName();
     }
 
-    IMPL_LINK_NOARG(FinalPage, OnEmbed, weld::Button&, void)
+    IMPL_LINK_NOARG(FinalPage, OnEmbed, weld::ToggleButton&, void)
     {
         bool bEmbed = m_xEmbed->get_active();
         m_xLocationLabel->set_sensitive(!bEmbed);

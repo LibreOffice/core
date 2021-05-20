@@ -359,16 +359,16 @@ SvtFileDialog::SvtFileDialog(weld::Window* pParent, PickerFlags nStyle)
     {
         m_xCbReadOnly->set_help_id( HID_FILEOPEN_READONLY );
         m_xCbReadOnly->set_label( FpsResId( STR_SVT_FILEPICKER_READONLY ) );
-        m_xCbReadOnly->connect_clicked( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
+        m_xCbReadOnly->connect_toggled( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
         m_xCbReadOnly->show();
     }
 
     if ( nStyle & PickerFlags::Password )
     {
         m_xImpl->m_xCbPassword->set_label( FpsResId( STR_SVT_FILEPICKER_PASSWORD ) );
-        m_xImpl->m_xCbPassword->connect_clicked( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
+        m_xImpl->m_xCbPassword->connect_toggled( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
         m_xImpl->m_xCbPassword->show();
-        m_xImpl->m_xCbGPGEncrypt->connect_clicked( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
+        m_xImpl->m_xCbGPGEncrypt->connect_toggled( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
         m_xImpl->m_xCbGPGEncrypt->show();
     }
 
@@ -1213,7 +1213,7 @@ IMPL_LINK( SvtFileDialog, OpenDoneHdl_Impl, SvtFileView*, pView, void )
     EnableControl( m_xImpl->m_xBtnUp->getWidget(), bCanTravelUp );
 }
 
-IMPL_LINK_NOARG(SvtFileDialog, AutoExtensionHdl_Impl, weld::Button&, void)
+IMPL_LINK_NOARG(SvtFileDialog, AutoExtensionHdl_Impl, weld::ToggleButton&, void)
 {
     if (m_pFileNotifier)
         m_pFileNotifier->notify(CTRL_STATE_CHANGED, CHECKBOX_AUTOEXTENSION);
@@ -1222,7 +1222,7 @@ IMPL_LINK_NOARG(SvtFileDialog, AutoExtensionHdl_Impl, weld::Button&, void)
     lcl_autoUpdateFileExtension( this, m_xImpl->GetCurFilter()->GetExtension() );
 }
 
-IMPL_LINK( SvtFileDialog, ClickHdl_Impl, weld::Button&, rCheckBox, void )
+IMPL_LINK( SvtFileDialog, ClickHdl_Impl, weld::ToggleButton&, rCheckBox, void )
 {
     if (!m_pFileNotifier)
         return;
@@ -1247,7 +1247,6 @@ IMPL_LINK( SvtFileDialog, ClickHdl_Impl, weld::Button&, rCheckBox, void )
     if ( nId != -1 )
         m_pFileNotifier->notify( CTRL_STATE_CHANGED, nId );
 }
-
 
 IMPL_LINK_NOARG(SvtFileDialog, PlayButtonHdl_Impl, weld::Button&, void)
 {
@@ -2043,7 +2042,7 @@ void SvtFileDialog::AddControls_Impl( )
     {
         m_xCbLinkBox->set_label( FpsResId( STR_SVT_FILEPICKER_INSERT_AS_LINK ) );
         m_xCbLinkBox->set_help_id( HID_FILEDLG_LINK_CB );
-        m_xCbLinkBox->connect_clicked( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
+        m_xCbLinkBox->connect_toggled( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
         m_xCbLinkBox->show();
     }
 
@@ -2055,7 +2054,7 @@ void SvtFileDialog::AddControls_Impl( )
         // "preview"
         m_xCbPreviewBox->set_label( FpsResId( STR_SVT_FILEPICKER_SHOW_PREVIEW ) );
         m_xCbPreviewBox->set_help_id( HID_FILEDLG_PREVIEW_CB );
-        m_xCbPreviewBox->connect_clicked( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
+        m_xCbPreviewBox->connect_toggled( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
         m_xCbPreviewBox->show();
 
         // generate preview window just here
@@ -2070,21 +2069,21 @@ void SvtFileDialog::AddControls_Impl( )
     {
         m_xImpl->m_xCbAutoExtension->set_label( FpsResId( STR_SVT_FILEPICKER_AUTO_EXTENSION ) );
         m_xImpl->m_xCbAutoExtension->set_active(true);
-        m_xImpl->m_xCbAutoExtension->connect_clicked( LINK( this, SvtFileDialog, AutoExtensionHdl_Impl ) );
+        m_xImpl->m_xCbAutoExtension->connect_toggled( LINK( this, SvtFileDialog, AutoExtensionHdl_Impl ) );
         m_xImpl->m_xCbAutoExtension->show();
     }
 
     if ( m_nPickerFlags & PickerFlags::FilterOptions )
     {
         m_xImpl->m_xCbOptions->set_label( FpsResId( STR_SVT_FILEPICKER_FILTER_OPTIONS ) );
-        m_xImpl->m_xCbOptions->connect_clicked( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
+        m_xImpl->m_xCbOptions->connect_toggled( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
         m_xImpl->m_xCbOptions->show();
     }
 
     if ( m_nPickerFlags & PickerFlags::Selection )
     {
         m_xCbSelection->set_label( FpsResId( STR_SVT_FILEPICKER_SELECTION ) );
-        m_xCbSelection->connect_clicked( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
+        m_xCbSelection->connect_toggled( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
         m_xCbSelection->show();
     }
 

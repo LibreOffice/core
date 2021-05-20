@@ -75,6 +75,7 @@ private:
     std::unique_ptr<weld::CustomWeld> mxPreviewWnd;
 
     DECL_LINK( ClickBtnHdl, weld::Button&, void );
+    DECL_LINK( ToggleBtnHdl, weld::ToggleButton&, void );
     DECL_LINK( SelectHdl, weld::ComboBox&, void );
     DECL_LINK( ModifyHdl, weld::Entry&, void );
     DECL_LINK( MetricValueModifyHdl, weld::MetricSpinButton&, void );

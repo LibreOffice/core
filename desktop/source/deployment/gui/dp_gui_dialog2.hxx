@@ -132,7 +132,7 @@ class ExtMgrDialog : public weld::GenericDialogController
     DECL_LINK( HandleUpdateBtn, weld::Button&, void );
     DECL_LINK( HandleCancelBtn, weld::Button&, void );
     DECL_LINK( HandleCloseBtn, weld::Button&, void );
-    DECL_LINK( HandleExtTypeCbx, weld::Button&, void );
+    DECL_LINK( HandleExtTypeCbx, weld::ToggleButton&, void );
     DECL_LINK( TimeOutHdl, Timer *, void );
     DECL_LINK( startProgress, void *, void );
 

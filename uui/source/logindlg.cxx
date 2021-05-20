@@ -105,7 +105,7 @@ IMPL_LINK_NOARG(LoginDialog, OKHdl_Impl, weld::Button&, void)
     m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK_NOARG(LoginDialog, UseSysCredsHdl_Impl, weld::Button&, void)
+IMPL_LINK_NOARG(LoginDialog, UseSysCredsHdl_Impl, weld::ToggleButton&, void)
 {
     EnableUseSysCredsControls_Impl( m_xUseSysCredsCB->get_active() );
 }
@@ -135,7 +135,7 @@ LoginDialog::LoginDialog(weld::Window* pParent, LoginFlags nFlags,
     m_xNameED->set_max_length( _MAX_PATH );
 
     m_xOKBtn->connect_clicked( LINK( this, LoginDialog, OKHdl_Impl ) );
-    m_xUseSysCredsCB->connect_clicked( LINK( this, LoginDialog, UseSysCredsHdl_Impl ) );
+    m_xUseSysCredsCB->connect_toggled( LINK( this, LoginDialog, UseSysCredsHdl_Impl ) );
 
     HideControls_Impl( nFlags );
 }
