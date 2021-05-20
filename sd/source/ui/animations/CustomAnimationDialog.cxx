@@ -1428,9 +1428,7 @@ public:
     void update( STLPropertySet* pSet );
 
     DECL_LINK(implControlHdl, weld::ComboBox&, void);
-    DECL_LINK(implClickHdl, weld::Button&, void);
     DECL_LINK(DurationModifiedHdl, weld::MetricSpinButton&, void);
-    void implHdl(const weld::Widget*);
 
 private:
     const STLPropertySet* mpSet;
@@ -1472,7 +1470,6 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(weld::Container* 
 
     fillRepeatComboBox(*mxCBRepeat);
 
-    mxRBClickSequence->connect_clicked(LINK(this, CustomAnimationDurationTabPage, implClickHdl));
     mxLBTrigger->connect_changed(LINK(this, CustomAnimationDurationTabPage, implControlHdl));
     mxCBXDuration->connect_value_changed(LINK( this, CustomAnimationDurationTabPage, DurationModifiedHdl));
 
@@ -1609,14 +1606,10 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(weld::Container* 
     }
 }
 
-IMPL_LINK(CustomAnimationDurationTabPage, implClickHdl, weld::Button&, rBtn, void)
+IMPL_LINK_NOARG(CustomAnimationDurationTabPage, implControlHdl, weld::ComboBox&, void)
 {
-    implHdl(&rBtn);
-}
-
-IMPL_LINK(CustomAnimationDurationTabPage, implControlHdl, weld::ComboBox&, rListBox, void)
-{
-    implHdl(&rListBox);
+    mxRBInteractive->set_active(true);
+    assert(!mxRBClickSequence->get_active());
 }
 
 IMPL_LINK_NOARG(CustomAnimationDurationTabPage, DurationModifiedHdl, weld::MetricSpinButton&, void)
@@ -1628,15 +1621,6 @@ IMPL_LINK_NOARG(CustomAnimationDurationTabPage, DurationModifiedHdl, weld::Metri
             mxCBXDuration->set_value(1, FieldUnit::NONE);
         else
             mxCBXDuration->set_value(duration_value, FieldUnit::NONE);
-    }
-}
-
-void CustomAnimationDurationTabPage::implHdl(const weld::Widget* pControl)
-{
-    if (pControl == mxLBTrigger.get())
-    {
-        mxRBClickSequence->set_active(false);
-        mxRBInteractive->set_active(true);
     }
 }
 
