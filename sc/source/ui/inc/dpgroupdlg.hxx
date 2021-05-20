@@ -43,7 +43,7 @@ private:
     virtual bool        ImplGetValue( double& rfValue ) const = 0;
     virtual void        ImplSetValue( double fValue ) = 0;
 
-    DECL_LINK(ClickHdl, weld::Button&, void);
+    DECL_LINK(ToggleHdl, weld::ToggleButton&, void);
 
 private:
     weld::RadioButton& mrRbAuto;

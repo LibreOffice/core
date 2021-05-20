@@ -129,7 +129,7 @@ private:
     DECL_LINK( ClickLastHdl, weld::Button&, void );
     DECL_LINK( ClickGetObjectHdl, weld::Button&, void );
     DECL_LINK( ClickRemoveBitmapHdl, weld::Button&, void );
-    DECL_LINK( ClickRbtHdl, weld::Button&, void );
+    DECL_LINK( ClickRbtHdl, weld::ToggleButton&, void );
     DECL_LINK( ClickHelpHdl, weld::Button&, void );
     DECL_LINK( ClickCreateGroupHdl, weld::Button&, void );
     DECL_LINK( ModifyBitmapHdl, weld::SpinButton&, void );

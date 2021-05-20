@@ -61,8 +61,8 @@ ScDPGroupEditHelper::ScDPGroupEditHelper(weld::RadioButton& rRbAuto, weld::Radio
     , mrRbMan(rRbMan)
     , mrEdValue(rEdValue)
 {
-    mrRbAuto.connect_clicked( LINK( this, ScDPGroupEditHelper, ClickHdl ) );
-    mrRbMan.connect_clicked( LINK( this, ScDPGroupEditHelper, ClickHdl ) );
+    mrRbAuto.connect_toggled( LINK( this, ScDPGroupEditHelper, ToggleHdl ) );
+    mrRbMan.connect_toggled( LINK( this, ScDPGroupEditHelper, ToggleHdl ) );
 }
 
 bool ScDPGroupEditHelper::IsAuto() const
@@ -83,24 +83,27 @@ void ScDPGroupEditHelper::SetValue( bool bAuto, double fValue )
     if( bAuto )
     {
         mrRbAuto.set_active(true);
-        ClickHdl(mrRbAuto);
+        ToggleHdl(mrRbAuto);
     }
     else
     {
         mrRbMan.set_active(true);
-        ClickHdl(mrRbMan);
+        ToggleHdl(mrRbMan);
     }
     ImplSetValue( fValue );
 }
 
-IMPL_LINK(ScDPGroupEditHelper, ClickHdl, weld::Button&, rButton, void)
+IMPL_LINK(ScDPGroupEditHelper, ToggleHdl, weld::ToggleButton&, rButton, void)
 {
-    if (&rButton == &mrRbAuto)
+    if (!rButton.get_active())
+        return;
+
+    if (mrRbAuto.get_active())
     {
         // disable edit field on clicking "automatic" radio button
         mrEdValue.set_sensitive(false);
     }
-    else if (&rButton == &mrRbMan)
+    else if (mrRbMan.get_active())
     {
         // enable and set focus to edit field on clicking "manual" radio button
         mrEdValue.set_sensitive(true);
