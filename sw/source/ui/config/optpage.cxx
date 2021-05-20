@@ -2017,10 +2017,10 @@ SwCompareOptionsTabPage::SwCompareOptionsTabPage(weld::Container* pPage, weld::D
     , m_xLenNF(m_xBuilder->weld_spin_button("ignorelen"))
     , m_xStoreRsidCB(m_xBuilder->weld_check_button("storeRSID"))
 {
-    Link<weld::Button&,void> aLnk( LINK( this, SwCompareOptionsTabPage, ComparisonHdl ) );
-    m_xAutoRB->connect_clicked( aLnk );
-    m_xWordRB->connect_clicked( aLnk );
-    m_xCharRB->connect_clicked( aLnk );
+    Link<weld::ToggleButton&,void> aLnk( LINK( this, SwCompareOptionsTabPage, ComparisonHdl ) );
+    m_xAutoRB->connect_toggled( aLnk );
+    m_xWordRB->connect_toggled( aLnk );
+    m_xCharRB->connect_toggled( aLnk );
 
     m_xIgnoreCB->connect_toggled( LINK( this, SwCompareOptionsTabPage, IgnoreHdl) );
 }
@@ -2125,8 +2125,11 @@ void SwCompareOptionsTabPage::Reset( const SfxItemSet* )
     m_xStoreRsidCB->save_state();
 }
 
-IMPL_LINK_NOARG(SwCompareOptionsTabPage, ComparisonHdl, weld::Button&, void)
+IMPL_LINK(SwCompareOptionsTabPage, ComparisonHdl, weld::ToggleButton&, rButton, void)
 {
+    if (!rButton.get_active())
+        return;
+
     bool bChecked = !m_xAutoRB->get_active();
     m_xRsidCB->set_sensitive( bChecked );
     m_xIgnoreCB->set_sensitive( bChecked );

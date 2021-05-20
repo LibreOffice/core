@@ -71,9 +71,9 @@ void ScTpCalcOptions::Init()
 {
     m_xBtnIterate->connect_toggled( LINK( this, ScTpCalcOptions, CheckClickHdl ) );
     m_xBtnGeneralPrec->connect_toggled( LINK(this, ScTpCalcOptions, CheckClickHdl) );
-    m_xBtnDateStd->connect_clicked( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
-    m_xBtnDateSc10->connect_clicked( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
-    m_xBtnDate1904->connect_clicked( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
+    m_xBtnDateStd->connect_toggled( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
+    m_xBtnDateSc10->connect_toggled( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
+    m_xBtnDate1904->connect_toggled( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
     m_xBtnThread->connect_toggled( LINK( this, ScTpCalcOptions, CheckClickHdl ) );
 }
 
@@ -222,17 +222,19 @@ DeactivateRC ScTpCalcOptions::DeactivatePage( SfxItemSet* pSetP )
 
 // Handler:
 
-IMPL_LINK( ScTpCalcOptions, RadioClickHdl, weld::Button&, rBtn, void )
+IMPL_LINK( ScTpCalcOptions, RadioClickHdl, weld::ToggleButton&, rBtn, void )
 {
-    if (&rBtn == m_xBtnDateStd.get())
+    if (!rBtn.get_active())
+        return;
+    if (m_xBtnDateStd->get_active())
     {
         pLocalOptions->SetDate( 30, 12, 1899 );
     }
-    else if (&rBtn == m_xBtnDateSc10.get())
+    else if (m_xBtnDateSc10->get_active())
     {
         pLocalOptions->SetDate( 1, 1, 1900 );
     }
-    else if (&rBtn == m_xBtnDate1904.get())
+    else if (m_xBtnDate1904->get_active())
     {
         pLocalOptions->SetDate( 1, 1, 1904 );
     }

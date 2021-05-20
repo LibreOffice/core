@@ -102,10 +102,11 @@ private:
     bool                        GetLine( sal_uLong nLine, OUString &rText, sal_Unicode& rcDetectSep );
     void                        UpdateVertical();
     inline bool                 Seek( sal_uLong nPos ); // synced to and from mnStreamPos
+    void                        RbSepFix();
 
                                 DECL_LINK( CharSetHdl, weld::ComboBox&, void );
                                 DECL_LINK( FirstRowHdl, weld::SpinButton&, void );
-                                DECL_LINK( RbSepFixHdl, weld::Button&, void );
+                                DECL_LINK( RbSepFixHdl, weld::ToggleButton&, void );
                                 DECL_LINK( SeparatorEditHdl, weld::Entry&, void );
                                 DECL_LINK( SeparatorClickHdl, weld::ToggleButton&, void );
                                 DECL_LINK( SeparatorComboBoxHdl, weld::ComboBox&, void );

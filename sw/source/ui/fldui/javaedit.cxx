@@ -53,9 +53,9 @@ SwJavaEditDialog::SwJavaEditDialog(weld::Window* pParent, SwWrtShell* pWrtSh)
     m_xNextBtn->connect_clicked( LINK( this, SwJavaEditDialog, NextHdl ) );
     m_xOKBtn->connect_clicked( LINK( this, SwJavaEditDialog, OKHdl ) );
 
-    Link<weld::Button&,void> aLk = LINK(this, SwJavaEditDialog, RadioButtonHdl);
-    m_xUrlRB->connect_clicked(aLk);
-    m_xEditRB->connect_clicked(aLk);
+    Link<weld::ToggleButton&,void> aLk = LINK(this, SwJavaEditDialog, RadioButtonHdl);
+    m_xUrlRB->connect_toggled(aLk);
+    m_xEditRB->connect_toggled(aLk);
     m_xUrlPB->connect_clicked(LINK(this, SwJavaEditDialog, InsertFileHdl));
 
     m_pMgr.reset(new SwFieldMgr(m_pSh));
@@ -68,7 +68,7 @@ SwJavaEditDialog::SwJavaEditDialog(weld::Window* pParent, SwWrtShell* pWrtSh)
     if (!m_bNew)
         m_xDialog->set_title(SwResId(STR_JAVA_EDIT));
 
-    RadioButtonHdl(*m_xUrlRB);
+    UpdateFromRadioButtons();
 }
 
 SwJavaEditDialog::~SwJavaEditDialog()
@@ -86,7 +86,7 @@ IMPL_LINK_NOARG(SwJavaEditDialog, PrevHdl, weld::Button&, void)
     m_pMgr->GoPrev();
     m_pField = static_cast<SwScriptField*>(m_pMgr->GetCurField());
     CheckTravel();
-    RadioButtonHdl(*m_xUrlRB);
+    UpdateFromRadioButtons();
 }
 
 IMPL_LINK_NOARG(SwJavaEditDialog, NextHdl, weld::Button&, void)
@@ -97,7 +97,7 @@ IMPL_LINK_NOARG(SwJavaEditDialog, NextHdl, weld::Button&, void)
     m_pMgr->GoNext();
     m_pField = static_cast<SwScriptField*>(m_pMgr->GetCurField());
     CheckTravel();
-    RadioButtonHdl(*m_xUrlRB);
+    UpdateFromRadioButtons();
 }
 
 IMPL_LINK_NOARG(SwJavaEditDialog, OKHdl, weld::Button&, void)
@@ -197,7 +197,14 @@ bool SwJavaEditDialog::IsUpdate() const
     return m_pField && ( sal_uInt32(m_bIsUrl ? 1 : 0) != m_pField->GetFormat() || m_pField->GetPar2() != m_aType || m_pField->GetPar1() != m_aText );
 }
 
-IMPL_LINK_NOARG(SwJavaEditDialog, RadioButtonHdl, weld::Button&, void)
+IMPL_LINK(SwJavaEditDialog, RadioButtonHdl, weld::ToggleButton&, rButton, void)
+{
+    if (!rButton.get_active())
+        return;
+    UpdateFromRadioButtons();
+}
+
+void SwJavaEditDialog::UpdateFromRadioButtons()
 {
     bool bEnable = m_xUrlRB->get_active();
     m_xUrlPB->set_sensitive(bEnable);

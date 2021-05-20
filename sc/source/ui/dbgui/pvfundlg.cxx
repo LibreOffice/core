@@ -527,9 +527,9 @@ void ScDPSubtotalDlg::Init( const ScDPLabelData& rLabelData, const ScPivotFuncDa
     mxFtName->set_label(rLabelData.getDisplayName());
 
     // radio buttons
-    mxRbNone->connect_clicked( LINK( this, ScDPSubtotalDlg, RadioClickHdl ) );
-    mxRbAuto->connect_clicked( LINK( this, ScDPSubtotalDlg, RadioClickHdl ) );
-    mxRbUser->connect_clicked( LINK( this, ScDPSubtotalDlg, RadioClickHdl ) );
+    mxRbNone->connect_toggled( LINK( this, ScDPSubtotalDlg, RadioClickHdl ) );
+    mxRbAuto->connect_toggled( LINK( this, ScDPSubtotalDlg, RadioClickHdl ) );
+    mxRbUser->connect_toggled( LINK( this, ScDPSubtotalDlg, RadioClickHdl ) );
 
     weld::RadioButton* pRBtn = nullptr;
     switch( rFuncData.mnFuncMask )
@@ -562,9 +562,11 @@ IMPL_LINK(ScDPSubtotalDlg, ButtonClicked, weld::Button&, rButton, void)
         response(RET_CANCEL);
 }
 
-IMPL_LINK(ScDPSubtotalDlg, RadioClickHdl, weld::Button&, rBtn, void)
+IMPL_LINK(ScDPSubtotalDlg, RadioClickHdl, weld::ToggleButton&, rBtn, void)
 {
-    mxLbFunc->set_sensitive(&rBtn == mxRbUser.get());
+    if (!rBtn.get_active())
+        return;
+    mxLbFunc->set_sensitive(mxRbUser->get_active());
 }
 
 IMPL_LINK_NOARG(ScDPSubtotalDlg, DblClickHdl, weld::TreeView&, bool)
@@ -765,9 +767,9 @@ void ScDPSubtotalOptDlg::Init( const ScDPNameVec& rDataFields, bool bEnableLayou
     m_xLbSortBy->set_active(nSortPos);
 
     // sorting mode
-    m_xRbSortAsc->connect_clicked( LINK( this, ScDPSubtotalOptDlg, RadioClickHdl ) );
-    m_xRbSortDesc->connect_clicked( LINK( this, ScDPSubtotalOptDlg, RadioClickHdl ) );
-    m_xRbSortMan->connect_clicked( LINK( this, ScDPSubtotalOptDlg, RadioClickHdl ) );
+    m_xRbSortAsc->connect_toggled( LINK( this, ScDPSubtotalOptDlg, RadioClickHdl ) );
+    m_xRbSortDesc->connect_toggled( LINK( this, ScDPSubtotalOptDlg, RadioClickHdl ) );
+    m_xRbSortMan->connect_toggled( LINK( this, ScDPSubtotalOptDlg, RadioClickHdl ) );
 
     weld::RadioButton* pRBtn = nullptr;
     switch( nSortMode )
@@ -874,9 +876,12 @@ IMPL_LINK(ScDPSubtotalOptDlg, ButtonClicked, weld::Button&, rButton, void)
         response(RET_CANCEL);
 }
 
-IMPL_LINK(ScDPSubtotalOptDlg, RadioClickHdl, weld::Button&, rBtn, void)
+IMPL_LINK(ScDPSubtotalOptDlg, RadioClickHdl, weld::ToggleButton&, rBtn, void)
 {
-    m_xLbSortBy->set_sensitive(&rBtn != m_xRbSortMan.get());
+    if (!rBtn.get_active())
+        return;
+
+    m_xLbSortBy->set_sensitive(m_xRbSortMan->get_active());
 }
 
 IMPL_LINK(ScDPSubtotalOptDlg, CheckHdl, weld::ToggleButton&, rCBox, void)

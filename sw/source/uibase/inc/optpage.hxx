@@ -376,7 +376,7 @@ class SwCompareOptionsTabPage : public SfxTabPage
     std::unique_ptr<weld::SpinButton> m_xLenNF;
     std::unique_ptr<weld::CheckButton> m_xStoreRsidCB;
 
-    DECL_LINK(ComparisonHdl, weld::Button&, void);
+    DECL_LINK(ComparisonHdl, weld::ToggleButton&, void);
     DECL_LINK(IgnoreHdl, weld::ToggleButton&, void);
 
 public:
