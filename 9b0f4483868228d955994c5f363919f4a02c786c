@@ -22,6 +22,30 @@
       "revId": "9b0f4483868228d955994c5f363919f4a02c786c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0743a577_051e91c4",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 5414,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-05-20T14:59:46Z",
+      "side": 1,
+      "message": "Thank you! I will use the presetShapeDefinitions.xml next time.\nThere i left it \"adj\" because later (line 5426) i will add the numbering. I did it because if the sdr has for example 2 point and the dml shape has 3 point the numbering must be done later. But, i realized now -- thanks to you -- an if statement is missing because not every points has y and x data, it might have only one of them, and i forget to check it :) thank you, i fix it.",
+      "parentUuid": "434dac9d_5e7657cd",
+      "range": {
+        "startLine": 5414,
+        "startChar": 38,
+        "endLine": 5414,
+        "endChar": 41
+      },
+      "revId": "9b0f4483868228d955994c5f363919f4a02c786c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
