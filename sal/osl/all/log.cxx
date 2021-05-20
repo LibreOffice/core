@@ -179,7 +179,7 @@ std::ofstream * getLogFile() {
 }
 
 
-const std::pair<bool, bool> getTimestampFlags(char const *selector)
+std::pair<bool, bool> getTimestampFlags(char const *selector)
 {
     bool outputTimestamp = false;
     bool outputRelativeTimer = false;

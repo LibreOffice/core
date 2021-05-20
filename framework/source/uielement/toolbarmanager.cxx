@@ -178,8 +178,7 @@ public:
         for ( ToolBox::ImplToolItems::size_type i = 0; i < m_pToolBar->GetItemCount(); i++ )
         {
             sal_uInt16 nItemId = m_pToolBar->GetItemId( i );
-            if ( nItemId > sal_uInt16(0) )
-                delete static_cast< AddonsParams* >( m_pToolBar->GetItemData( nItemId ));
+            delete static_cast< AddonsParams* >( m_pToolBar->GetItemData( nItemId ));
         }
 
         // tdf#119390 this will reparent the toolbar, so focus is restored from a

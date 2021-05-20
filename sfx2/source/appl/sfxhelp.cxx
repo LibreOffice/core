@@ -922,7 +922,7 @@ bool rewriteFlatpakHelpRootUrl(OUString * helpRootUrl) {
 #define SHTML5 "\";</script><title>Help Page Redirection</title></head><body></body></html>"
 
 // use a tempfile since e.g. xdg-open doesn't support URL-parameters with file:// URLs
-static bool impl_showOfflineHelp( const OUString& rURL )
+static bool impl_showOfflineHelp( std::u16string_view rURL )
 {
     OUString aBaseInstallPath = getHelpRootURL();
     // For the flatpak case, find the pathname outside the flatpak sandbox that corresponds to
@@ -932,7 +932,7 @@ static bool impl_showOfflineHelp( const OUString& rURL )
     }
 
     OUString aHelpLink( aBaseInstallPath + "/index.html?" );
-    OUString aTarget = OUString::Concat("Target=") + rURL.subView(RTL_CONSTASCII_LENGTH("vnd.sun.star.help://"));
+    OUString aTarget = OUString::Concat("Target=") + OUString(rURL).subView(RTL_CONSTASCII_LENGTH("vnd.sun.star.help://"));
     aTarget = aTarget.replaceAll("%2F","/").replaceAll("?","&");
     aHelpLink += aTarget;
 
