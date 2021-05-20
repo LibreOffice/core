@@ -146,7 +146,7 @@ private:
     std::unique_ptr<weld::CustomWeld> mxCTPreviewWin;
 
 
-    DECL_LINK( UpdateOnClickHdl, weld::Button&, void );
+    DECL_LINK( UpdateOnToggleHdl, weld::ToggleButton&, void );
     DECL_LINK( LanguageChangeHdl, weld::ComboBox&, void );
 
     void FillFormatList(sal_Int32 nSelectedPos);
@@ -395,12 +395,12 @@ HeaderFooterTabPage::HeaderFooterTabPage(weld::Container* pParent, SdDrawDocumen
     mxHeaderBox->set_visible( mbHandoutMode );
     mxCBNotOnTitle->set_visible( !mbHandoutMode );
 
-    mxCBDateTime->connect_clicked( LINK( this, HeaderFooterTabPage, UpdateOnClickHdl ) );
-    mxRBDateTimeFixed->connect_clicked( LINK( this, HeaderFooterTabPage, UpdateOnClickHdl ) );
-    mxRBDateTimeAutomatic->connect_clicked( LINK( this, HeaderFooterTabPage, UpdateOnClickHdl ) );
-    mxCBFooter->connect_clicked( LINK( this, HeaderFooterTabPage, UpdateOnClickHdl ) );
-    mxCBHeader->connect_clicked( LINK( this, HeaderFooterTabPage, UpdateOnClickHdl ) );
-    mxCBSlideNumber->connect_clicked( LINK( this, HeaderFooterTabPage, UpdateOnClickHdl ) );
+    mxCBDateTime->connect_toggled( LINK( this, HeaderFooterTabPage, UpdateOnToggleHdl ) );
+    mxRBDateTimeFixed->connect_toggled( LINK( this, HeaderFooterTabPage, UpdateOnToggleHdl ) );
+    mxRBDateTimeAutomatic->connect_toggled( LINK( this, HeaderFooterTabPage, UpdateOnToggleHdl ) );
+    mxCBFooter->connect_toggled( LINK( this, HeaderFooterTabPage, UpdateOnToggleHdl ) );
+    mxCBHeader->connect_toggled( LINK( this, HeaderFooterTabPage, UpdateOnToggleHdl ) );
+    mxCBSlideNumber->connect_toggled( LINK( this, HeaderFooterTabPage, UpdateOnToggleHdl ) );
 
     mxCBDateTimeLanguage->SetLanguageList( SvxLanguageListFlags::ALL|SvxLanguageListFlags::ONLY_KNOWN, false, false );
     mxCBDateTimeLanguage->connect_changed( LINK( this, HeaderFooterTabPage, LanguageChangeHdl ) );
@@ -510,7 +510,7 @@ void HeaderFooterTabPage::update()
     mxCTPreview->update( aSettings );
 }
 
-IMPL_LINK_NOARG(HeaderFooterTabPage, UpdateOnClickHdl, weld::Button&, void)
+IMPL_LINK_NOARG(HeaderFooterTabPage, UpdateOnToggleHdl, weld::ToggleButton&, void)
 {
     update();
 }

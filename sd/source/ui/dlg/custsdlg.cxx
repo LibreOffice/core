@@ -55,7 +55,7 @@ SdCustomShowDlg::SdCustomShowDlg(weld::Window* pWindow, SdDrawDocument& rDrawDoc
     m_xBtnEdit->connect_clicked( aLink );
     m_xBtnRemove->connect_clicked( aLink );
     m_xBtnCopy->connect_clicked( aLink );
-    m_xCbxUseCustomShow->connect_clicked( aLink );
+    m_xCbxUseCustomShow->connect_toggled(LINK(this, SdCustomShowDlg, ToggleButtonHdl));
     m_xLbCustomShows->connect_changed( LINK( this, SdCustomShowDlg, SelectListBoxHdl ) );
 
     m_xBtnStartShow->connect_clicked( LINK( this, SdCustomShowDlg, StartShowHdl ) ); // for test
@@ -98,6 +98,11 @@ void SdCustomShowDlg::CheckState()
 
     if (bEnable && pCustomShowList)
         pCustomShowList->Seek( nPos );
+}
+
+IMPL_LINK( SdCustomShowDlg, ToggleButtonHdl, weld::ToggleButton&, r, void )
+{
+    SelectHdl(&r);
 }
 
 IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, weld::Button&, r, void )

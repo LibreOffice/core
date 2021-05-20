@@ -174,8 +174,8 @@ SvxLineTabPage::SvxLineTabPage(weld::Container* pPage, weld::DialogController* p
     m_xLbEndStyle->connect_changed(LINK(this, SvxLineTabPage, ChangeEndListBoxHdl_Impl));
     m_xMtrStartWidth->connect_value_changed(LINK(this, SvxLineTabPage, ChangeStartModifyHdl_Impl));
     m_xMtrEndWidth->connect_value_changed(LINK( this, SvxLineTabPage, ChangeEndModifyHdl_Impl));
-    m_xTsbCenterStart->connect_clicked(LINK(this, SvxLineTabPage, ChangeStartClickHdl_Impl));
-    m_xTsbCenterEnd->connect_clicked(LINK(this, SvxLineTabPage, ChangeEndClickHdl_Impl));
+    m_xTsbCenterStart->connect_toggled(LINK(this, SvxLineTabPage, ChangeStartClickHdl_Impl));
+    m_xTsbCenterEnd->connect_toggled(LINK(this, SvxLineTabPage, ChangeEndClickHdl_Impl));
 
     Link<weld::ComboBox&,void> aEdgeStyle = LINK(this, SvxLineTabPage, ChangeEdgeStyleHdl_Impl);
     m_xLBEdgeStyle->connect_changed(aEdgeStyle);
@@ -1255,7 +1255,7 @@ void SvxLineTabPage::ChangePreviewHdl_Impl(const weld::MetricSpinButton* pCntrl)
     m_xBoxEnd->set_sensitive(bHasLineEnd && bHasLineStyle);
 }
 
-IMPL_LINK_NOARG(SvxLineTabPage, ChangeStartClickHdl_Impl, weld::Button&, void)
+IMPL_LINK_NOARG(SvxLineTabPage, ChangeStartClickHdl_Impl, weld::ToggleButton&, void)
 {
     if (m_xCbxSynchronize->get_active())
         m_xTsbCenterEnd->set_state(m_xTsbCenterStart->get_state());
@@ -1336,7 +1336,7 @@ void SvxLineTabPage::ClickInvisibleHdl_Impl()
     ChangePreviewHdl_Impl( nullptr );
 }
 
-IMPL_LINK_NOARG(SvxLineTabPage, ChangeEndClickHdl_Impl, weld::Button&, void)
+IMPL_LINK_NOARG(SvxLineTabPage, ChangeEndClickHdl_Impl, weld::ToggleButton&, void)
 {
     if (m_xCbxSynchronize->get_active())
         m_xTsbCenterStart->set_state(m_xTsbCenterEnd->get_state());

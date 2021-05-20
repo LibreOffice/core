@@ -255,8 +255,8 @@ void SlideBackground::Initialize()
 
     mxFillStyle->set_active(static_cast< sal_Int32 >(NONE));
 
-    mxDspMasterBackground->connect_clicked(LINK(this, SlideBackground, DspBackground));
-    mxDspMasterObjects->connect_clicked(LINK(this,SlideBackground, DspObjects));
+    mxDspMasterBackground->connect_toggled(LINK(this, SlideBackground, DspBackground));
+    mxDspMasterObjects->connect_toggled(LINK(this, SlideBackground, DspObjects));
 
     //margins
     mxMarginSelectBox->connect_changed(LINK(this, SlideBackground, ModifyMarginHdl));
@@ -1205,14 +1205,14 @@ IMPL_LINK_NOARG(SlideBackground, CloseMasterHdl, weld::Button&, void)
     GetBindings()->GetDispatcher()->Execute( SID_CLOSE_MASTER_VIEW, SfxCallMode::RECORD );
 }
 
-IMPL_LINK_NOARG(SlideBackground, DspBackground, weld::Button&, void)
+IMPL_LINK_NOARG(SlideBackground, DspBackground, weld::ToggleButton&, void)
 {
     bool IsChecked = mxDspMasterBackground->get_active();
     const SfxBoolItem aBoolItem(SID_DISPLAY_MASTER_BACKGROUND, IsChecked);
     GetBindings()->GetDispatcher()->ExecuteList(SID_DISPLAY_MASTER_BACKGROUND, SfxCallMode::RECORD, { &aBoolItem });
 }
 
-IMPL_LINK_NOARG(SlideBackground, DspObjects, weld::Button&, void)
+IMPL_LINK_NOARG(SlideBackground, DspObjects, weld::ToggleButton&, void)
 {
     bool IsChecked = mxDspMasterObjects->get_active();
     const SfxBoolItem aBoolItem(SID_DISPLAY_MASTER_OBJECTS,IsChecked);
