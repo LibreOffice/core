@@ -41,7 +41,7 @@ private:
     static InsertDeleteFlags nPreviousChecks;
 
     void DisableChecks(bool bDelAllChecked);
-    DECL_LINK(DelAllHdl, weld::Button&, void);
+    DECL_LINK(DelAllHdl, weld::ToggleButton&, void);
 
 public:
     ScDeleteContentsDlg(weld::Window* pParent);

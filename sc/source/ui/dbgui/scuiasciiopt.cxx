@@ -431,18 +431,18 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, const OUString& aDatNa
     lcl_FillCombo( *mxCbTextSep, gaTextSepList, mcTextSep );
     mxCbTextSep->set_entry_text(sTextSeparators);
 
-    Link<weld::Button&,void> aSeparatorClickHdl =LINK( this, ScImportAsciiDlg, SeparatorClickHdl );
+    Link<weld::ToggleButton&,void> aSeparatorClickHdl =LINK( this, ScImportAsciiDlg, SeparatorClickHdl );
     mxCbTextSep->connect_changed( LINK( this, ScImportAsciiDlg, SeparatorComboBoxHdl ) );
-    mxCkbTab->connect_clicked( aSeparatorClickHdl );
-    mxCkbSemicolon->connect_clicked( aSeparatorClickHdl );
-    mxCkbComma->connect_clicked( aSeparatorClickHdl );
-    mxCkbAsOnce->connect_clicked( aSeparatorClickHdl );
-    mxCkbQuotedAsText->connect_clicked( aSeparatorClickHdl );
-    mxCkbDetectNumber->connect_clicked( aSeparatorClickHdl );
-    mxCkbSkipEmptyCells->connect_clicked( aSeparatorClickHdl );
-    mxCkbSpace->connect_clicked( aSeparatorClickHdl );
-    mxCkbRemoveSpace->connect_clicked( aSeparatorClickHdl );
-    mxCkbOther->connect_clicked( aSeparatorClickHdl );
+    mxCkbTab->connect_toggled( aSeparatorClickHdl );
+    mxCkbSemicolon->connect_toggled( aSeparatorClickHdl );
+    mxCkbComma->connect_toggled( aSeparatorClickHdl );
+    mxCkbAsOnce->connect_toggled( aSeparatorClickHdl );
+    mxCkbQuotedAsText->connect_toggled( aSeparatorClickHdl );
+    mxCkbDetectNumber->connect_toggled( aSeparatorClickHdl );
+    mxCkbSkipEmptyCells->connect_toggled( aSeparatorClickHdl );
+    mxCkbSpace->connect_toggled( aSeparatorClickHdl );
+    mxCkbRemoveSpace->connect_toggled( aSeparatorClickHdl );
+    mxCkbOther->connect_toggled( aSeparatorClickHdl );
     mxEdOther->connect_changed(LINK(this, ScImportAsciiDlg, SeparatorEditHdl));
 
     // *** text encoding ListBox ***
@@ -709,7 +709,7 @@ IMPL_LINK(ScImportAsciiDlg, RbSepFixHdl, weld::Button&, rButton, void)
     }
 }
 
-IMPL_LINK(ScImportAsciiDlg, SeparatorClickHdl, weld::Button&, rCtrl, void)
+IMPL_LINK(ScImportAsciiDlg, SeparatorClickHdl, weld::ToggleButton&, rCtrl, void)
 {
     SeparatorHdl(&rCtrl);
 }

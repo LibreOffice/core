@@ -415,7 +415,7 @@ SdPublishingDlg::SdPublishingDlg(weld::Window* pWindow, DocumentType eDocType)
     m_xPage2_Kiosk->connect_clicked(LINK(this,SdPublishingDlg,BaseHdl));
     m_xPage2_WebCast->connect_clicked(LINK(this,SdPublishingDlg,BaseHdl));
 
-    m_xPage2_Content->connect_clicked(LINK(this,SdPublishingDlg,ContentHdl));
+    m_xPage2_Content->connect_toggled(LINK(this,SdPublishingDlg,ContentHdl));
 
     m_xPage2_ASP->connect_clicked(LINK(this,SdPublishingDlg,WebServerHdl));
     m_xPage2_PERL->connect_clicked(LINK(this,SdPublishingDlg,WebServerHdl));
@@ -926,7 +926,7 @@ IMPL_LINK_NOARG(SdPublishingDlg, BaseHdl, weld::Button&, void)
 }
 
 // Clickhandler for the Checkbox of the Title page
-IMPL_LINK_NOARG(SdPublishingDlg, ContentHdl, weld::Button&, void)
+IMPL_LINK_NOARG(SdPublishingDlg, ContentHdl, weld::ToggleButton&, void)
 {
     if(m_xPage2_Content->get_active())
     {

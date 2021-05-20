@@ -47,7 +47,7 @@ private:
     DECL_LINK(FileHdl, weld::ComboBox&, bool);
     DECL_LINK(BrowseHdl, weld::Button&, void);
     DECL_LINK(RangeHdl, weld::TreeView&, void);
-    DECL_LINK(ReloadHdl, weld::Button&, void);
+    DECL_LINK(ReloadHdl, weld::ToggleButton&, void);
     DECL_LINK(DialogClosedHdl, sfx2::FileDialogHelper*, void);
 
     void                UpdateSourceRanges();

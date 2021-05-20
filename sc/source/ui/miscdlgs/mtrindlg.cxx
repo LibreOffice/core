@@ -35,7 +35,7 @@ ScMetricInputDlg::ScMetricInputDlg( weld::Window*         pParent,
     , m_xEdValue(m_xBuilder->weld_metric_spin_button("value", FieldUnit::CM))
     , m_xBtnDefVal(m_xBuilder->weld_check_button("default"))
 {
-    m_xBtnDefVal->connect_clicked(LINK(this, ScMetricInputDlg, SetDefValHdl));
+    m_xBtnDefVal->connect_toggled(LINK(this, ScMetricInputDlg, SetDefValHdl));
     m_xEdValue->connect_value_changed(LINK( this, ScMetricInputDlg, ModifyHdl));
 
     m_xEdValue->set_unit(eFUnit);
@@ -85,7 +85,7 @@ int ScMetricInputDlg::GetInputValue() const
 
 // Handler:
 
-IMPL_LINK_NOARG(ScMetricInputDlg, SetDefValHdl, weld::Button&, void)
+IMPL_LINK_NOARG(ScMetricInputDlg, SetDefValHdl, weld::ToggleButton&, void)
 {
     if (m_xBtnDefVal->get_active())
     {

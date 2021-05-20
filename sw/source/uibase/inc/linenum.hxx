@@ -48,7 +48,7 @@ private:
     std::unique_ptr<weld::Widget> m_xNumIntervalFT;
     std::unique_ptr<weld::Widget> m_xNumRowsFT;
     DECL_LINK(OKHdl, weld::Button&, void);
-    DECL_LINK(LineOnOffHdl, weld::Button&, void);
+    DECL_LINK(LineOnOffHdl, weld::ToggleButton&, void);
     DECL_LINK(ModifyHdl, weld::Entry&, void);
 
 public:

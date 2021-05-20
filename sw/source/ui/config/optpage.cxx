@@ -2022,7 +2022,7 @@ SwCompareOptionsTabPage::SwCompareOptionsTabPage(weld::Container* pPage, weld::D
     m_xWordRB->connect_clicked( aLnk );
     m_xCharRB->connect_clicked( aLnk );
 
-    m_xIgnoreCB->connect_clicked( LINK( this, SwCompareOptionsTabPage, IgnoreHdl) );
+    m_xIgnoreCB->connect_toggled( LINK( this, SwCompareOptionsTabPage, IgnoreHdl) );
 }
 
 SwCompareOptionsTabPage::~SwCompareOptionsTabPage()
@@ -2133,7 +2133,7 @@ IMPL_LINK_NOARG(SwCompareOptionsTabPage, ComparisonHdl, weld::Button&, void)
     m_xLenNF->set_sensitive( bChecked && m_xIgnoreCB->get_active() );
 }
 
-IMPL_LINK_NOARG(SwCompareOptionsTabPage, IgnoreHdl, weld::Button&, void)
+IMPL_LINK_NOARG(SwCompareOptionsTabPage, IgnoreHdl, weld::ToggleButton&, void)
 {
     m_xLenNF->set_sensitive(m_xIgnoreCB->get_active());
 }
@@ -2212,20 +2212,20 @@ void SwTestTabPage::Reset( const SfxItemSet* )
 void SwTestTabPage::Init()
 {
     // handler
-    Link<weld::Button&,void> aLk = LINK( this, SwTestTabPage, AutoClickHdl );
-    m_xTest1CBox->connect_clicked( aLk );
-    m_xTest2CBox->connect_clicked( aLk );
-    m_xTest3CBox->connect_clicked( aLk );
-    m_xTest4CBox->connect_clicked( aLk );
-    m_xTest5CBox->connect_clicked( aLk );
-    m_xTest6CBox->connect_clicked( aLk );
-    m_xTest7CBox->connect_clicked( aLk );
-    m_xTest8CBox->connect_clicked( aLk );
-    m_xTest9CBox->connect_clicked( aLk );
-    m_xTest10CBox->connect_clicked( aLk );
+    Link<weld::ToggleButton&,void> aLk = LINK( this, SwTestTabPage, AutoClickHdl );
+    m_xTest1CBox->connect_toggled( aLk );
+    m_xTest2CBox->connect_toggled( aLk );
+    m_xTest3CBox->connect_toggled( aLk );
+    m_xTest4CBox->connect_toggled( aLk );
+    m_xTest5CBox->connect_toggled( aLk );
+    m_xTest6CBox->connect_toggled( aLk );
+    m_xTest7CBox->connect_toggled( aLk );
+    m_xTest8CBox->connect_toggled( aLk );
+    m_xTest9CBox->connect_toggled( aLk );
+    m_xTest10CBox->connect_toggled( aLk );
 }
 
-IMPL_LINK_NOARG(SwTestTabPage, AutoClickHdl, weld::Button&, void)
+IMPL_LINK_NOARG(SwTestTabPage, AutoClickHdl, weld::ToggleButton&, void)
 {
     bAttrModified = true;
 }

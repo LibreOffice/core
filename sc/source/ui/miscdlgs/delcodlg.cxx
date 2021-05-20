@@ -50,7 +50,7 @@ ScDeleteContentsDlg::ScDeleteContentsDlg(weld::Window* pParent)
 
     DisableChecks( m_xBtnDelAll->get_active() );
 
-    m_xBtnDelAll->connect_clicked( LINK( this, ScDeleteContentsDlg, DelAllHdl ) );
+    m_xBtnDelAll->connect_toggled( LINK( this, ScDeleteContentsDlg, DelAllHdl ) );
 }
 
 ScDeleteContentsDlg::~ScDeleteContentsDlg()
@@ -117,7 +117,7 @@ void ScDeleteContentsDlg::DisableObjects()
     m_xBtnDelObjects->set_sensitive(false);
 }
 
-IMPL_LINK_NOARG(ScDeleteContentsDlg, DelAllHdl, weld::Button&, void)
+IMPL_LINK_NOARG(ScDeleteContentsDlg, DelAllHdl, weld::ToggleButton&, void)
 {
     DisableChecks( m_xBtnDelAll->get_active() );
 }
