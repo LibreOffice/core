@@ -23,6 +23,7 @@
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <sal/types.h>
+#include <memory>
 
 class SdrObject;
 class SwFrameFormat;
@@ -97,7 +98,7 @@ class SwHTMLPosFlyFrame
 {
     const SwFrameFormat    *pFrameFormat;  // the frame
     const SdrObject        *pSdrObject;    // maybe Sdr-Object
-    SwNodeIndex            *pNdIdx;        // Node-Index
+    std::unique_ptr<SwNodeIndex> pNdIdx;        // Node-Index
     sal_uInt32              nOrdNum;       // from SwPosFlyFrame
     sal_Int32               nContentIdx;   // its position in content
     AllHtmlFlags            nAllFlags;
