@@ -10053,8 +10053,6 @@ public:
     }
 };
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-
 class GtkInstanceProgressBar : public GtkInstanceWidget, public virtual weld::ProgressBar
 {
 private:
@@ -10084,6 +10082,8 @@ public:
         gtk_progress_bar_set_text(m_pProgressBar, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr());
     }
 };
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
 
 class GtkInstanceSpinner : public GtkInstanceWidget, public virtual weld::Spinner
 {
@@ -19001,16 +19001,11 @@ public:
 
     virtual std::unique_ptr<weld::ProgressBar> weld_progress_bar(const OString &id) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkProgressBar* pProgressBar = GTK_PROGRESS_BAR(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pProgressBar)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pProgressBar));
         return std::make_unique<GtkInstanceProgressBar>(pProgressBar, this, false);
-#else
-        (void)id;
-        return nullptr;
-#endif
     }
 
     virtual std::unique_ptr<weld::Spinner> weld_spinner(const OString &id) override
