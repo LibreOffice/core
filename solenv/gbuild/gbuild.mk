@@ -220,10 +220,6 @@ gb_GLOBALDEFS := \
 	$(gb_COMPILERDEFS) \
 	$(gb_CPUDEFS) \
 
-ifeq ($(ENABLE_WASM_STRIP),TRUE)
-gb_GLOBALDEFS += -DENABLE_WASM_STRIP
-endif
-
 ifeq ($(gb_ENABLE_DBGUTIL),$(true))
 gb_GLOBALDEFS += -DDBG_UTIL
 
