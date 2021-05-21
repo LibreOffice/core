@@ -167,6 +167,7 @@ public:
     void testAutofilter();
     void testAutoFilterTimeValue();
     void testTdf76441();
+    void testTdf142186();
     void testAdvancedFilter();
     void testTdf98642();
     void testMergedCells();
@@ -290,6 +291,7 @@ public:
     CPPUNIT_TEST(testAutofilter);
     CPPUNIT_TEST(testAutoFilterTimeValue);
     CPPUNIT_TEST(testTdf76441);
+    CPPUNIT_TEST(testTdf142186);
     CPPUNIT_TEST(testAdvancedFilter);
     CPPUNIT_TEST(testTdf98642);
     CPPUNIT_TEST(testMergedCells);
@@ -3588,6 +3590,47 @@ void Test::testTdf76441()
         // - Expected: 01:20
         // - Actual  : 20:00
         CPPUNIT_ASSERT_EQUAL(OUString("01:20"), m_pDoc->GetString(ScAddress(0,1,0)));
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testTdf142186()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    // The result will be different depending on whether the format is set before
+    // or after inserting the string
+
+    OUString aCode = "0\".\"0";
+    sal_Int32 nCheckPos;
+    SvNumFormatType nType;
+    sal_uInt32 nFormat;
+    SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
+    pFormatter->PutEntry( aCode, nCheckPos, nType, nFormat );
+
+    ScPatternAttr aNewAttrs(m_pDoc->GetPool());
+    SfxItemSet& rSet = aNewAttrs.GetItemSet();
+    rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
+    {
+        // First insert the string, then the format
+        m_pDoc->SetString(ScAddress(0,0,0), "123.45");
+
+        m_pDoc->ApplyPattern(0, 0, 0, aNewAttrs);
+
+        CPPUNIT_ASSERT_EQUAL(OUString("12.3"), m_pDoc->GetString(ScAddress(0,0,0)));
+    }
+
+    {
+        // First set the format, then insert the string
+        m_pDoc->ApplyPattern(0, 1, 0, aNewAttrs);
+
+        m_pDoc->SetString(ScAddress(0,1,0), "123.45");
+
+        // Without the fix in place, this test would have failed with
+        // - Expected: 12.3
+        // - Actual  : 1234.5
+        CPPUNIT_ASSERT_EQUAL(OUString("12.3"), m_pDoc->GetString(ScAddress(0,1,0)));
     }
 
     m_pDoc->DeleteTab(0);
