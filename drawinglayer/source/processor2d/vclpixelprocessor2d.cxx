@@ -1207,13 +1207,6 @@ void VclPixelProcessor2D::processFillGradientPrimitive2D(
 
     GradientStyle eGradientStyle = convertGradientStyle(rFillGradient.getStyle());
 
-    basegfx::B2DRange aRange(rPrimitive.getOutputRange());
-    aRange.transform(maCurrentTransformation);
-
-    const tools::Rectangle aRectangle(
-        sal_Int32(std::floor(aRange.getMinX())), sal_Int32(std::floor(aRange.getMinY())),
-        sal_Int32(std::ceil(aRange.getMaxX())), sal_Int32(std::ceil(aRange.getMaxY())));
-
     Gradient aGradient(eGradientStyle, Color(rFillGradient.getStartColor()),
                        Color(rFillGradient.getEndColor()));
 
@@ -1223,7 +1216,22 @@ void VclPixelProcessor2D::processFillGradientPrimitive2D(
     aGradient.SetOfsY(rFillGradient.getOffsetY() * 100.0);
     aGradient.SetSteps(rFillGradient.getSteps());
 
-    mpOutputDevice->DrawGradient(aRectangle, aGradient);
+    basegfx::B2DRange aOutputRange(rPrimitive.getOutputRange());
+    aOutputRange.transform(maCurrentTransformation);
+    basegfx::B2DRange aFullRange(rPrimitive.getDefinitionRange());
+    aFullRange.transform(maCurrentTransformation);
+
+    const tools::Rectangle aOutputRectangle(
+        std::floor(aOutputRange.getMinX()), std::floor(aOutputRange.getMinY()),
+        std::ceil(aOutputRange.getMaxX()), std::ceil(aOutputRange.getMaxY()));
+    const tools::Rectangle aFullRectangle(
+        std::floor(aFullRange.getMinX()), std::floor(aFullRange.getMinY()),
+        std::ceil(aFullRange.getMaxX()), std::ceil(aFullRange.getMaxY()));
+
+    mpOutputDevice->Push(PushFlags::CLIPREGION);
+    mpOutputDevice->IntersectClipRegion(aOutputRectangle);
+    mpOutputDevice->DrawGradient(aFullRectangle, aGradient);
+    mpOutputDevice->Pop();
 }
 
 } // end of namespace
