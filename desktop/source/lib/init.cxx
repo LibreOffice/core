@@ -3819,16 +3819,19 @@ static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pA
     static constexpr OUStringLiteral sDownAction(u"DOWN");
     static constexpr OUStringLiteral sValue(u"VALUE");
 
-    bool bIsWeldedDialog = false;
+    bool bExecutedWeldedAction = false;
 
     try
     {
         OString sControlId = OUStringToOString(aMap["id"], RTL_TEXTENCODING_ASCII_US);
 
-        bIsWeldedDialog = jsdialog::ExecuteAction(nWindowId, sControlId, aMap);
-        if (!bIsWeldedDialog)
-            bIsWeldedDialog = jsdialog::ExecuteAction(reinterpret_cast<sal_uInt64>(SfxViewShell::Current()),
+        bExecutedWeldedAction = jsdialog::ExecuteAction(nWindowId, sControlId, aMap);
+        if (!bExecutedWeldedAction)
+            bExecutedWeldedAction = jsdialog::ExecuteAction(reinterpret_cast<sal_uInt64>(SfxViewShell::Current()),
                                                       sControlId, aMap);
+
+        if (bExecutedWeldedAction)
+            return;
 
         if (!pWindow)
         {
@@ -3836,60 +3839,56 @@ static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pA
             return;
         }
 
-        if (!bIsWeldedDialog)
-        {
-            WindowUIObject aUIObject(pWindow);
-            std::unique_ptr<UIObject> pUIWindow(aUIObject.get_visible_child(aMap["id"]));
-            if (pUIWindow) {
-                OUString sAction((aMap.find("cmd") != aMap.end())? aMap["cmd"]: "");
+        WindowUIObject aUIObject(pWindow);
+        std::unique_ptr<UIObject> pUIWindow(aUIObject.get_visible_child(aMap["id"]));
+        if (pUIWindow) {
+            OUString sAction((aMap.find("cmd") != aMap.end())? aMap["cmd"]: "");
 
-                if (sAction == "selected")
-                {
-                    aMap["POS"] = aMap["data"];
-                    aMap["TEXT"] = aMap["data"];
+            if (sAction == "selected")
+            {
+                aMap["POS"] = aMap["data"];
+                aMap["TEXT"] = aMap["data"];
 
-                    pUIWindow->execute(sSelectAction, aMap);
-                }
-                else if (sAction == "plus")
-                {
-                    pUIWindow->execute(sUpAction, aMap);
-                }
-                else if (sAction == "minus")
-                {
-                    pUIWindow->execute(sDownAction, aMap);
-                }
-                else if (sAction == "set")
-                {
-                    aMap["TEXT"] = aMap["data"];
-
-                    pUIWindow->execute(sClearAction, aMap);
-                    pUIWindow->execute(sTypeAction, aMap);
-                }
-                else if (sAction == "value")
-                {
-                    aMap["VALUE"] = aMap["data"];
-                    pUIWindow->execute(sValue, aMap);
-                }
-                else if (sAction == "click" && aMap["type"] == "drawingarea")
-                {
-                    int separatorPos = aMap["data"].indexOf(';');
-                    if (separatorPos > 0)
-                    {
-                        // x;y
-                        aMap["POSX"] = aMap["data"].copy(0, separatorPos);
-                        aMap["POSY"] = aMap["data"].copy(separatorPos + 1);
-                    }
-                    pUIWindow->execute(sClickAction, aMap);
-                }
-                else
-                    pUIWindow->execute(sClickAction, aMap);
+                pUIWindow->execute(sSelectAction, aMap);
             }
+            else if (sAction == "plus")
+            {
+                pUIWindow->execute(sUpAction, aMap);
+            }
+            else if (sAction == "minus")
+            {
+                pUIWindow->execute(sDownAction, aMap);
+            }
+            else if (sAction == "set")
+            {
+                aMap["TEXT"] = aMap["data"];
+
+                pUIWindow->execute(sClearAction, aMap);
+                pUIWindow->execute(sTypeAction, aMap);
+            }
+            else if (sAction == "value")
+            {
+                aMap["VALUE"] = aMap["data"];
+                pUIWindow->execute(sValue, aMap);
+            }
+            else if (sAction == "click" && aMap["type"] == "drawingarea")
+            {
+                int separatorPos = aMap["data"].indexOf(';');
+                if (separatorPos > 0)
+                {
+                    // x;y
+                    aMap["POSX"] = aMap["data"].copy(0, separatorPos);
+                    aMap["POSY"] = aMap["data"].copy(separatorPos + 1);
+                }
+                pUIWindow->execute(sClickAction, aMap);
+            }
+            else
+                pUIWindow->execute(sClickAction, aMap);
         }
     } catch(...) {}
 
     // force resend
-    if (!bIsWeldedDialog)
-        pWindow->Resize();
+    pWindow->Resize();
 }
 
 
