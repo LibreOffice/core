@@ -25,6 +25,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
@@ -95,6 +96,9 @@ VbaGlobalsBase::~VbaGlobalsBase()
             // release application reference, as it is holding onto the context
             xNameContainer->removeByName( gsApplication );
         }
+        uno::Reference< lang::XComponent > xComponent( mxContext, uno::UNO_QUERY );
+        if (xComponent)
+            xComponent->dispose();
     }
     catch ( const uno::Exception& )
     {
