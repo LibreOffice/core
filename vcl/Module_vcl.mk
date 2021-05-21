@@ -31,7 +31,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
         Package_skia_denylist ) \
     $(if $(filter DESKTOP FUZZERS,$(BUILD_TYPE)), \
         StaticLibrary_vclmain \
-        $(if $(DISABLE_GUI),, \
+        $(if $(or $(DISABLE_GUI),$(DISABLE_DYNLOADING)),, \
             $(if $(filter LINUX MACOSX SOLARIS WNT %BSD,$(OS)), \
                 Executable_vcldemo \
                 Executable_icontest \
@@ -60,7 +60,7 @@ $(eval $(call gb_Module_add_l10n_targets,vcl,\
 
 ifeq ($(USING_X11),TRUE)
 $(eval $(call gb_Module_add_targets,vcl,\
-    Library_vclplug_gen \
+    $(if $(ENABLE_GEN),Library_vclplug_gen) \
     Library_desktop_detector \
     StaticLibrary_glxtest \
     Package_fontunxppds \

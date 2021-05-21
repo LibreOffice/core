@@ -83,6 +83,8 @@ fi
 
 unset XENVIRONMENT
 
+test "${STATIC_UNO_HOME+set}" = set || export STATIC_UNO_HOME="file://${sd_prog}"
+
 # uncomment line below to disable anti aliasing of fonts
 # SAL_ANTIALIAS_DISABLE=true; export SAL_ANTIALIAS_DISABLE
 

@@ -65,16 +65,15 @@ oslModule pCloseModule = nullptr;
 
 SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = false )
 {
+#ifdef HEADLESS_VCLPLUG
+    if (rModuleBase == "svp")
+        return svp_create_SalInstance();
+#endif
 #ifdef DISABLE_DYNLOADING
     (void)rModuleBase;
     (void)bForce;
     return create_SalInstance();
 #else // !DISABLE_DYNLOADING
-#ifdef HEADLESS_VCLPLUG
-    if (rModuleBase == "svp")
-        return svp_create_SalInstance();
-#endif
-
     SalInstance* pInst = nullptr;
     OUString aUsedModuleBase(rModuleBase);
     if (aUsedModuleBase == "kde5")
@@ -183,7 +182,9 @@ SalInstance* autodetect_plugin()
 #if ENABLE_GTK3
         "gtk3",
 #endif
+#if ENABLE_GEN
         "gen",
+#endif
         nullptr
     };
 
@@ -192,7 +193,9 @@ SalInstance* autodetect_plugin()
 #if ENABLE_GTK3
         "gtk3",
 #endif
+#if ENABLE_GEN
         "gen",
+#endif
         nullptr
     };
 
@@ -282,26 +285,33 @@ SalInstance *CreateSalInstance()
         pInst = autodetect_plugin();
 #endif
 
+#ifdef DISABLE_DYNLOADING
+    if (!pInst)
+        pInst = tryInstance("");
+#else
     // fallback, try everything
     static const char* const pPlugin[] = {
 #ifdef _WIN32
         "win",
 #elif defined(MACOSX)
         "osx",
-#else
+#else // !_WIN32 && !MACOSX
 #if ENABLE_GTK3
         "gtk3",
 #endif
 #if ENABLE_KF5
         "kf5",
 #endif
+#if ENABLE_GEN
         "gen",
 #endif
+#endif // !_WIN32 && !MACOSX
         nullptr
      };
 
     for (int i = 0; !pInst && pPlugin[i]; ++i)
         pInst = tryInstance( OUString::createFromAscii( pPlugin[ i ] ) );
+#endif // !DISABLE_DYNLOADING
 
     if( ! pInst )
     {

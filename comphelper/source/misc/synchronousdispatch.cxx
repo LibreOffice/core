@@ -65,7 +65,9 @@ uno::Reference< lang::XComponent > SynchronousDispatch::dispatch(
         }
         catch ( uno::Exception& )
         {
-            SAL_WARN("comphelper","SynchronousDispatch::dispatch() Error while dispatching!");
+            // can't use TOOLS_WARN_EXCEPTION, as comphelper is used by libtk!
+            SAL_WARN("comphelper", "SynchronousDispatch::dispatch(): error while dispatching '"
+                                    << sURL << "' for '" << sTarget << "'!");
         }
     }
 

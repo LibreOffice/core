@@ -65,7 +65,7 @@ $(eval $(call gb_Module_add_targets,desktop,\
 endif
 endif
 endif
-endif
+endif # DESKTOP
 
 ifeq ($(OS),WNT)
 

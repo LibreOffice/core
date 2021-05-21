@@ -1136,6 +1136,7 @@ fi
 # Set defaults, if not set by platform
 test "${test_cups+set}" = set || test_cups="$using_x11"
 test "${test_dbus+set}" = set || test_dbus="$using_x11"
+test "${test_gen+set}" = set || test_gen="$using_x11"
 test "${test_gstreamer_1_0+set}" = set || test_gstreamer_1_0="$using_x11"
 test "${test_gtk3+set}" = set || test_gtk3="$using_x11"
 test "${test_gtk4+set}" = set || test_gtk4="$using_x11"
@@ -1164,6 +1165,7 @@ disable_x11_tests()
 {
     test_cups=no
     test_dbus=no
+    test_gen=no
     test_gstreamer_1_0=no
     test_gtk3_kde5=no
     test_gtk3=no
@@ -1712,6 +1714,12 @@ AC_ARG_ENABLE(gtk3_kde5,
          platforms where Gtk3, Qt5 and Plasma is available.]),
 ,)
 
+AC_ARG_ENABLE(gen,
+    AS_HELP_STRING([--enable-gen],
+        [To select the gen backend in case of --disable-dynamic-loading.
+         Per default auto-enabled when X11 is used.]),
+,test "${test_gen}" = no -o "${enable_gen+set}" = set || enable_gen=yes)
+
 AC_ARG_ENABLE(gui,
     AS_HELP_STRING([--disable-gui],
         [Disable use of X11 or Wayland to reduce dependencies (e.g. for building LibreOfficeKit).]),
@@ -1975,7 +1983,7 @@ AC_ARG_ENABLE(xmlhelp,
 
 AC_ARG_ENABLE(customtarget-components,
     AS_HELP_STRING([--enable-customtarget-components],
-        [This is WIP and probably just works together with --enable-wasm-strip.]))
+        [Generates the static UNO object constructor mapping from the build.]))
 
 
 dnl ===================================================================
@@ -2942,15 +2950,6 @@ if test $_os != iOS -a $_os != Android -a $_os != Emscripten -a "$enable_fuzzers
     AC_DEFINE(HAVE_FEATURE_MULTIUSER_ENVIRONMENT)
 fi
 
-ENABLE_CUSTOMTARGET_COMPONENTS=
-if test "$enable_customtarget_components" = yes; then
-    ENABLE_CUSTOMTARGET_COMPONENTS=TRUE
-    if test -n "$with_locales" -a "$with_locales" != en -a "$with_locales" != ALL; then
-        AC_MSG_ERROR([Currently just --with-locales=all or en is supported with --enable-customtarget-components])
-    fi
-fi
-AC_SUBST(ENABLE_CUSTOMTARGET_COMPONENTS)
-
 # Whether to build "avmedia" functionality or not.
 
 if test "$enable_avmedia" = yes; then
@@ -3000,8 +2999,25 @@ if test "$enable_dynamic_loading" = yes; then
     BUILD_TYPE="$BUILD_TYPE DYNLOADING"
 else
     DISABLE_DYNLOADING='TRUE'
+    if test $_os != iOS -a $_os != Android; then
+        enable_database_connectivity=no
+        enable_nss=no
+        enable_odk=no
+        enable_python=no
+        enable_skia=no
+        with_java=no
+    fi
 fi
 AC_SUBST(DISABLE_DYNLOADING)
+
+ENABLE_CUSTOMTARGET_COMPONENTS=
+if test "$enable_customtarget_components" = yes -a "$DISABLE_DYNLOADING" = TRUE; then
+    ENABLE_CUSTOMTARGET_COMPONENTS=TRUE
+    if test -n "$with_locales" -a "$with_locales" != en -a "$with_locales" != ALL; then
+        AC_MSG_ERROR([Currently just --with-locales=all or en is supported with --enable-customtarget-components])
+    fi
+fi
+AC_SUBST(ENABLE_CUSTOMTARGET_COMPONENTS)
 
 if test "$enable_extensions" = yes; then
     BUILD_TYPE="$BUILD_TYPE EXTENSIONS"
@@ -5260,6 +5276,10 @@ if test "$with_x" = "no"; then
     USING_X11=
 fi
 
+if test -z "$USING_X11" -a "$DISABLE_DYNLOADING" = TRUE -a "$enable_gen" = "yes"; then
+    AC_MSG_ERROR([Can't select gen VCL plugin, if --without-x is used!])
+fi
+
 if test "$using_x11" = yes; then
     if test "$USING_X11" = TRUE; then
         AC_DEFINE(USING_X11)
@@ -5555,6 +5575,7 @@ if test "$cross_compiling" = "yes"; then
         --disable-postgresql-sdbc \
         --disable-skia \
         --disable-xmlhelp \
+        --enable-dynamic-loading \
         --enable-icecream="$enable_icecream" \
         --without-doxygen \
         --without-webdav \
@@ -11484,20 +11505,14 @@ dnl ===================================================================
 dnl Show which vclplugs will be built.
 dnl ===================================================================
 R=""
-if test "$USING_X11" != TRUE; then
-    enable_gtk3=no
-fi
 
+libo_ENABLE_VCLPLUG([gen])
 libo_ENABLE_VCLPLUG([gtk3])
 libo_ENABLE_VCLPLUG([gtk3_kde5])
 libo_ENABLE_VCLPLUG([gtk4])
+libo_ENABLE_VCLPLUG([kf5])
 libo_ENABLE_VCLPLUG([qt5])
 libo_ENABLE_VCLPLUG([qt6])
-libo_ENABLE_VCLPLUG([kf5])
-
-if test "x$USING_X11" = "xyes"; then
-    R="$R gen"
-fi
 
 if test "$_os" = "WINNT"; then
     R="$R win"
@@ -11516,6 +11531,10 @@ fi
 AC_MSG_NOTICE([VCLplugs to be built:${build_vcl_plugins}])
 VCL_PLUGIN_INFO=$R
 AC_SUBST([VCL_PLUGIN_INFO])
+
+if test "$DISABLE_DYNLOADING" = TRUE -a -z "$DISABLE_GUI" -a \( -z "$R" -o $(echo "$R" | wc -w) -ne 1 \); then
+    AC_MSG_ERROR([Can't build --disable-dynamic-loading without --disable-gui and a single VCL plugin"])
+fi
 
 dnl ===================================================================
 dnl Check for GTK libraries

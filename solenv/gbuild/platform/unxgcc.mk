@@ -65,9 +65,12 @@ gb_LinkTarget_LDFLAGS += \
 	-Wl,--sysroot=$(SYSBASE)
 endif
 
+ifeq (,$(DISABLE_DYNLOADING))
 gb_LinkTarget_LDFLAGS += \
 	-Wl,-rpath-link,$(SYSBASE)/lib:$(SYSBASE)/usr/lib \
 	-Wl,-z,combreloc \
+
+endif
 
 ifeq ($(HAVE_LD_HASH_STYLE),TRUE)
 gb_LinkTarget_LDFLAGS += \
@@ -112,7 +115,8 @@ $(if $(strip $(and \
     )),$(true))
 endef
 
-gb_LinkTarget__NeedsCxxLinker = $(if $(CXXOBJECTS)$(GENCXXOBJECTS)$(EXTRAOBJECTLISTS)$(filter-out XTRUE,X$(ENABLE_RUNTIME_OPTIMIZATIONS)),$(true))
+# In theory would would need to track, if any of the linked objects is C++ code, so for the static build we assume yes :-(
+gb_LinkTarget__NeedsCxxLinker = $(if $(CXXOBJECTS)$(GENCXXOBJECTS)$(EXTRAOBJECTLISTS)$(filter-out XTRUE,X$(ENABLE_RUNTIME_OPTIMIZATIONS)$(DISABLE_DYNLOADING)),$(true))
 
 # note that `cat $(extraobjectlist)` is needed to build with older gcc versions, e.g. 4.1.2 on SLED10
 # we want to use @$(extraobjectlist) in the long run
@@ -146,7 +150,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		    -Wl$(COMMA)--start-group \
 		    $(patsubst lib%.a,-l%,$(patsubst lib%.so,-l%,$(patsubst %.$(gb_Library_UDK_MAJORVER),%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))))) \
 		    $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
-		    $(T_LIBS) \
+		    $(patsubst $(gb_LinkTarget__syslib),%,$(T_LIBS)) \
 		    $(if $(call gb_LinkTarget__NeedsCxxLinker),$(T_STDLIBS_CXX)) \
 		    -Wl$(COMMA)--end-group \
 		, \
