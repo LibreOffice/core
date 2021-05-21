@@ -5,20 +5,16 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
-#
 
-$(eval $(call gb_Module_Module,cpputools))
+$(eval $(call gb_Module_Module,static))
 
-ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+ifeq ($(ENABLE_CUSTOMTARGET_COMPONENTS),TRUE)
 
-$(eval $(call gb_Module_add_targets,cpputools,\
-    $(call gb_CondBuildSp2bv,Executable_sp2bv) \
-))
-
-$(eval $(call gb_Module_add_targets,cpputools,\
-    $(if $(DISABLE_DYNLOADING),,Executable_uno) \
+$(eval $(call gb_Module_add_targets,static,\
+    CustomTarget_components \
+    Library_components \
 ))
 
 endif
 
-# vim:set noet sw=4 ts=4:
+# vim: set noet sw=4 ts=4:
