@@ -13,7 +13,7 @@ $(eval $(call gb_Module_add_l10n_targets,extensions,\
 	AllLangMoTarget_pcr \
 ))
 
-ifneq ($(filter-out iOS ANDROID,$(OS)),)
+ifeq (,$(DISABLE_DYNLOADING))
 $(eval $(call gb_Module_add_targets,extensions,\
 	Library_abp \
 	Library_scn \

@@ -10,7 +10,9 @@
 $(eval $(call gb_Package_Package,ure_install,$(SRCDIR)/ure/source))
 
 ifneq (,$(filter-out MACOSX WNT,$(OS)))
+ifeq (,$(DISABLE_DYNLOADING))
 $(eval $(call gb_Package_add_file,ure_install,$(LIBO_URE_BIN_FOLDER)/uno,uno))
+endif
 endif
 
 ifeq (MACOSX,$(OS))
