@@ -1200,7 +1200,7 @@ bool SwTextFrame::FormatLine( SwTextFormatter &rLine, const bool bPrev )
                   bOldHyph == pNew->IsEndHyph();
     if ( bUnChg && !bPrev )
     {
-        const tools::Long nWidthDiff = nOldWidth > static_cast<SwTwips>(pNew->Width())
+        const tools::Long nWidthDiff = nOldWidth > o3tl::narrowing<SwTwips>(pNew->Width())
                                 ? nOldWidth - pNew->Width()
                                 : pNew->Width() - nOldWidth;
 
@@ -1254,7 +1254,7 @@ bool SwTextFrame::FormatLine( SwTextFormatter &rLine, const bool bPrev )
                 rLine.SetUnclipped( false );
             }
         }
-        SwTwips nRght = std::max( nOldWidth, static_cast<SwTwips>(pNew->Width()) +
+        SwTwips nRght = std::max( nOldWidth, o3tl::narrowing<SwTwips>(pNew->Width()) +
                              pNew->GetHangingMargin() );
         SwViewShell *pSh = getRootFrame()->GetCurrShell();
         const SwViewOption *pOpt = pSh ? pSh->GetViewOptions() : nullptr;
