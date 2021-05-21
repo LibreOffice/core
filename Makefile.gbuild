@@ -20,8 +20,12 @@ include $(SRCDIR)/solenv/gbuild/gbuild.mk
 
 $(eval $(call gb_Module_make_global_targets,$(SRCDIR)/RepositoryModule_$(gb_Side).mk))
 
-ifneq (,$(DISABLE_DYNLOADING))
+ifeq ($(DISABLE_DYNLOADING),TRUE)
 $(if $(gb_LinkTarget__Lock),$(shell rm -f $(gb_LinkTarget__Lock)))
+ifeq ($(ENABLE_CUSTOMTARGET_COMPONENTS),TRUE)
+include $(SRCDIR)/solenv/gbuild/static.mk
+$(if $(filter a,$(gb_DEBUG_STATIC)),$(error Abort after static.mk))
+endif
 endif
 
 upload-symbols:
