@@ -87,6 +87,27 @@ namespace XSLT
 {
     namespace {
 
+    class XSLTFilter;
+    class XSLTFilterStreamListener : public WeakImplHelper<XStreamListener>
+    {
+    public:
+        XSLTFilterStreamListener(XSLTFilter& rParent) : m_rParent(rParent) {}
+
+        // XStreamListener
+        virtual void SAL_CALL
+        error(const Any& a) override;
+        virtual void SAL_CALL
+        closed() override;
+        virtual void SAL_CALL
+        terminated() override;
+        virtual void SAL_CALL
+        started() override;
+        virtual void SAL_CALL
+        disposing(const EventObject& e) override;
+    private:
+        XSLTFilter& m_rParent;
+    };
+
     /*
      * XSLTFilter reads flat XML streams from the XML filter framework and passes
      * them to an XSLT transformation service. XSLT transformation errors are
@@ -98,8 +119,9 @@ namespace XSLT
      * service must support com.sun.star.xml.xslt.XSLT2Transformer.
      */
     class XSLTFilter : public WeakImplHelper<XImportFilter, XImportFilter2, XExportFilter,
-            XStreamListener, ExtendedDocumentHandlerAdapter, XServiceInfo>
+            ExtendedDocumentHandlerAdapter, XServiceInfo>
     {
+        friend class XSLTFilterStreamListener;
     private:
 
         // the UNO ServiceFactory
@@ -133,18 +155,6 @@ namespace XSLT
         virtual OUString SAL_CALL getImplementationName() override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-        // XStreamListener
-        virtual void SAL_CALL
-        error(const Any& a) override;
-        virtual void SAL_CALL
-        closed() override;
-        virtual void SAL_CALL
-        terminated() override;
-        virtual void SAL_CALL
-        started() override;
-        virtual void SAL_CALL
-        disposing(const EventObject& e) override;
-
         // XImportFilter
         virtual sal_Bool SAL_CALL
         importer(const Sequence<PropertyValue>& aSourceData, const css::uno::Reference<
@@ -176,7 +186,7 @@ namespace XSLT
     {}
 
     void
-    XSLTFilter::disposing(const EventObject&)
+    XSLTFilterStreamListener::disposing(const EventObject&)
     {
     }
 
@@ -249,27 +259,27 @@ namespace XSLT
     }
 
     void
-    XSLTFilter::started()
+    XSLTFilterStreamListener::started()
     {
-        m_cTransformed.reset();
+        m_rParent.m_cTransformed.reset();
     }
     void
-    XSLTFilter::error(const Any& a)
+    XSLTFilterStreamListener::error(const Any& a)
     {
         SAL_WARN("filter.xslt", "XSLTFilter::error was called: " << exceptionToString(a));
-        m_bError = true;
-        m_cTransformed.set();
+        m_rParent.m_bError = true;
+        m_rParent.m_cTransformed.set();
     }
     void
-    XSLTFilter::closed()
+    XSLTFilterStreamListener::closed()
     {
-        m_cTransformed.set();
+        m_rParent.m_cTransformed.set();
     }
     void
-    XSLTFilter::terminated()
+    XSLTFilterStreamListener::terminated()
     {
-        m_bTerminated = true;
-        m_cTransformed.set();
+        m_rParent.m_bTerminated = true;
+        m_rParent.m_cTransformed.set();
     }
 
     OUString
@@ -348,8 +358,7 @@ namespace XSLT
                             xSeek->seek(0);
 
                         // we want to be notified when the processing is done...
-                        m_tcontrol->addListener(css::uno::Reference<XStreamListener> (
-                                this));
+                        m_tcontrol->addListener(new XSLTFilterStreamListener(*this));
 
                         // connect input to transformer
                         m_tcontrol->setInputStream(xInputStream);
@@ -489,8 +498,7 @@ namespace XSLT
                             xSeek->seek(0);
 
                         // we want to be notified when the processing is done...
-                        m_tcontrol->addListener(css::uno::Reference<XStreamListener> (
-                                this));
+                        m_tcontrol->addListener(new XSLTFilterStreamListener(*this));
 
                         // connect input to transformer
                         m_tcontrol->setInputStream(xInputStream);
@@ -618,7 +626,7 @@ namespace XSLT
         if (m_tcontrol.is() && m_rOutputStream.is())
             {
                 // we want to be notified when the processing is done...
-                m_tcontrol->addListener(css::uno::Reference<XStreamListener> (this));
+                m_tcontrol->addListener(new XSLTFilterStreamListener(*this));
 
                 // create pipe
                 css::uno::Reference<XOutputStream> pipeout =
