@@ -1621,7 +1621,7 @@ AC_ARG_ENABLE(python,
 libo_FUZZ_ARG_ENABLE(gtk3,
     AS_HELP_STRING([--disable-gtk3],
         [Determines whether to use Gtk+ 3.0 vclplug on platforms where Gtk+ 3.0 is available.]),
-,test "${enable_gtk3+set}" = set || enable_gtk3=yes)
+,test "${test_gtk3}" = no -o "${enable_gtk3+set}" = set || enable_gtk3=yes)
 
 AC_ARG_ENABLE(gtk4,
     AS_HELP_STRING([--enable-gtk4],
@@ -1692,6 +1692,12 @@ AC_ARG_ENABLE(gtk3_kde5,
     AS_HELP_STRING([--enable-gtk3-kde5],
         [Determines whether to use Gtk3 vclplug with KF5 file dialogs on
          platforms where Gtk3, Qt5 and Plasma is available.]),
+,)
+
+AC_ARG_ENABLE(gen,
+    AS_HELP_STRING([--enable-gen],
+        [To select the gen backend in case of --disable-dynamic-loading.
+         Per default auto-enabled when X11 is used.])
 ,)
 
 AC_ARG_ENABLE(gui,
@@ -2951,15 +2957,6 @@ if test $_os != iOS -a $_os != Android -a $_os != Emscripten -a "$enable_fuzzers
     AC_DEFINE(HAVE_FEATURE_MULTIUSER_ENVIRONMENT)
 fi
 
-ENABLE_CUSTOMTARGET_COMPONENTS=
-if test "$enable_customtarget_components" = yes; then
-    ENABLE_CUSTOMTARGET_COMPONENTS=TRUE
-    if test -n "$with_locales" -a "$with_locales" != en -a "$with_locales" != ALL; then
-        AC_MSG_ERROR([Currently just --with-locales=all or en is supported with --enable-customtarget-components])
-    fi
-fi
-AC_SUBST(ENABLE_CUSTOMTARGET_COMPONENTS)
-
 # Whether to build "avmedia" functionality or not.
 
 if test "$enable_avmedia" = yes; then
@@ -2978,13 +2975,6 @@ else
         AC_MSG_ERROR([Presumly can't disable DB connectivity on iOS.])
     fi
     disable_database_connectivity_dependencies
-fi
-
-if test -z "$enable_extensions"; then
-    # For iOS and Android Viewer, disable extensions unless specifically overridden with --enable-extensions.
-    if test $_os != iOS && test $_os != Android -o "$ENABLE_ANDROID_LOK" = TRUE ; then
-        enable_extensions=yes
-    fi
 fi
 
 DISABLE_SCRIPTING=''
@@ -3009,8 +2999,32 @@ if test "$enable_dynamic_loading" = yes; then
     BUILD_TYPE="$BUILD_TYPE DYNLOADING"
 else
     DISABLE_DYNLOADING='TRUE'
+    if test $_os != iOS -a $_os != Android; then
+        enable_database_connectivity=no
+        enable_nss=no
+        enable_odk=no
+        enable_python=no
+        enable_skia=no
+        with_java=no
+    fi
 fi
 AC_SUBST(DISABLE_DYNLOADING)
+
+ENABLE_CUSTOMTARGET_COMPONENTS=
+if test "$enable_customtarget_components" = yes -a "$DISABLE_DYNLOADING" = TRUE; then
+    ENABLE_CUSTOMTARGET_COMPONENTS=TRUE
+    if test -n "$with_locales" -a "$with_locales" != en -a "$with_locales" != ALL; then
+        AC_MSG_ERROR([Currently just --with-locales=all or en is supported with --enable-customtarget-components])
+    fi
+fi
+AC_SUBST(ENABLE_CUSTOMTARGET_COMPONENTS)
+
+if test -z "$enable_extensions"; then
+    # For iOS and Android Viewer, disable extensions unless specifically overridden with --enable-extensions.
+    if test $_os != iOS && test $_os != Android -o "$ENABLE_ANDROID_LOK" = TRUE ; then
+        enable_extensions=yes
+    fi
+fi
 
 if test "$enable_extensions" = yes; then
     BUILD_TYPE="$BUILD_TYPE EXTENSIONS"
@@ -3805,7 +3819,7 @@ if test -n "$WIN_MULTI_ARCH" -a -n "$WIN_OTHER_ARCH"; then
 fi
 
 
-if test "$_os" = "iOS" -o "$build_cpu" != "$host_cpu"; then
+if test "$_os" = "iOS" -o "$build_cpu" != "$host_cpu" -o \( "$DISABLE_DYNLOADING" = TRUE -a "$enable_fuzzers" != yes \) ; then
     # To allow building Windows multi-arch releases without cross-tooling
     if test -z "$WIN_MULTI_ARCH" -a -z "$WIN_OTHER_ARCH"; then
         cross_compiling="yes"
@@ -5247,11 +5261,18 @@ if test "$with_x" = "no"; then
     USING_X11=
 fi
 
+if test -z "$USING_X11" -a "$DISABLE_DYNLOADING" = TRUE -a "$enable_gen" = "yes"; then
+    AC_MSG_ERROR([Can't select gen VCL plugin, if --without-x is used!])
+fi
+
 if test "$using_x11" = yes; then
     if test "$USING_X11" = TRUE; then
         AC_DEFINE(USING_X11)
     else
         disable_x11_tests
+        if test "$DISABLE_DYNLOADING" = TRUE; then
+            test_qt5=yes
+        fi
     fi
 else
     if test "$USING_X11" = TRUE; then
@@ -5512,6 +5533,7 @@ if test "$cross_compiling" = "yes"; then
     test "$with_system_icu_for_build" = "yes" -o "$with_system_icu_for_build" = "force" && sub_conf_opts="$sub_conf_opts --with-system-icu"
     test "$with_galleries" = "no" -o -z "$WITH_GALLERY_BUILD" && sub_conf_opts="$sub_conf_opts --with-galleries=no --disable-database-connectivity"
     test -n "$with_help" -a "$with_help" != "no" && sub_conf_opts="$sub_conf_opts --with-help=$with_help"
+    test "$enable_xmlhelp" = "no" && sub_conf_opts="$sub_conf_opts --disable-xmlhelp"
     test "$enable_extensions" = yes || sub_conf_opts="$sub_conf_opts --disable-extensions"
     test "$enable_wasm_strip" = "yes" && sub_conf_opts="$sub_conf_opts --enable-wasm-strip"
     test "${with_system_lockfile+set}" = set && sub_conf_opts="$sub_conf_opts --with-system-lockfile=${with_system_lockfile}"
@@ -5521,6 +5543,7 @@ if test "$cross_compiling" = "yes"; then
         --build="$build_alias" \
         --disable-cairo-canvas \
         --disable-cups \
+        --disable-customtarget-components \
         --disable-firebird-sdbc \
         --disable-gpgmepp \
         --disable-gstreamer-1-0 \
@@ -5532,8 +5555,8 @@ if test "$cross_compiling" = "yes"; then
         --disable-opencl \
         --disable-pdfimport \
         --disable-postgresql-sdbc \
-        --disable-customtarget-components \
         --disable-skia \
+        --enable-dynamic-loading \
         --enable-icecream="$enable_icecream" \
         --without-doxygen \
         --without-webdav \
@@ -11538,9 +11561,6 @@ dnl ===================================================================
 dnl Show which vclplugs will be built.
 dnl ===================================================================
 R=""
-if test "$USING_X11" != TRUE; then
-    enable_gtk3=no
-fi
 
 ENABLE_GTK3=""
 if test "x$enable_gtk3" = "xyes"; then
@@ -11570,7 +11590,9 @@ ENABLE_QT5=""
 if test "x$enable_qt5" = "xyes"; then
     ENABLE_QT5="TRUE"
     AC_DEFINE(ENABLE_QT5)
-    R="$R qt5"
+    if test -z "$DISABLE_DYNLOADING" -o \( "$enable_kf5" != "yes" \); then
+        R="$R qt5"
+    fi
 fi
 AC_SUBST(ENABLE_QT5)
 
@@ -11590,9 +11612,12 @@ if test "x$enable_kf5" = "xyes"; then
 fi
 AC_SUBST(ENABLE_KF5)
 
-if test "x$USING_X11" = "xyes"; then
+if test "$USING_X11" = TRUE -a \( -z "$DISABLE_DYNLOADING" -o "$enable_gen" = "yes" \); then
+    ENABLE_GEN=TRUE
+    AC_DEFINE(ENABLE_GEN)
     R="$R gen"
 fi
+AC_SUBST(ENABLE_GEN)
 
 if test "$_os" = "WINNT"; then
     R="$R win"
@@ -11611,6 +11636,10 @@ fi
 AC_MSG_NOTICE([VCLplugs to be built:${build_vcl_plugins}])
 VCL_PLUGIN_INFO=$R
 AC_SUBST([VCL_PLUGIN_INFO])
+
+if test "$DISABLE_DYNLOADING" = TRUE -a -z "$DISABLE_GUI" -a \( -z "$R" -o $(echo "$R" | wc -w) -ne 1 \); then
+    AC_MSG_ERROR([Can't build --disable-dynamic-loading without --disable-gui and a single VCL plugin"])
+fi
 
 dnl ===================================================================
 dnl Check for GTK libraries
@@ -12420,7 +12449,8 @@ elif test "$enable_mpl_subset" = "yes"; then
     AC_MSG_RESULT([no (MPL only])
 elif test "$enable_fuzzers" = "yes"; then
     AC_MSG_RESULT([no (oss-fuzz)])
-elif test "$_os" = "Linux" -o "$_os" = "Darwin" -o "$_os" = "WINNT" ; then
+elif test \( \( "$_os" = "Linux" -o "$_os" = "Darwin" \) -a "$ENABLE_NSS" = TRUE \) -o "$_os" = "WINNT" ; then
+    AC_MSG_RESULT([yes])
     dnl ===================================================================
     dnl Check for system gpgme
     dnl ===================================================================
@@ -12496,7 +12526,7 @@ elif test "$_os" = "Linux" -o "$_os" = "Darwin" -o "$_os" = "WINNT" ; then
      fi
    fi
 else
-    AC_MSG_RESULT([no (unsupported OS)])
+    AC_MSG_RESULT([no (unsupported OS or missing NSS)])
 fi
 AC_SUBST(ENABLE_GPGMEPP)
 AC_SUBST(SYSTEM_GPGMEPP)

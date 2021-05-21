@@ -79,6 +79,8 @@ $(eval $(call gb_Library_add_exception_objects,xmlsecurity,\
     xmlsecurity/source/helper/xmlsignaturehelper \
     xmlsecurity/source/helper/xsecverify \
 ))
+
+$(eval $(call gb_Library_set_componentfile,xmlsecurity,xmlsecurity/util/xmlsecurity_dds,services))
 endif
 
 $(eval $(call gb_Library_use_externals,xmlsecurity,\

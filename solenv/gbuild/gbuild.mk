@@ -283,7 +283,7 @@ gb_TEST_ENV_VARS += SAL_DISABLE_SYNCHRONOUS_PRINTER_DETECTION=1
 ifeq (,$(SAL_USE_VCLPLUGIN))
 gb_TEST_ENV_VARS += SAL_USE_VCLPLUGIN=svp
 endif
-gb_TEST_ENV_VARS += UNO_HOME=file://$$I/program
+gb_TEST_ENV_VARS += STATIC_UNO_HOME=file://$$I/program
 
 # This is used to detect whether LibreOffice is being built (as opposed to building
 # 3rd-party code). Used for tag deprecation for API we want to

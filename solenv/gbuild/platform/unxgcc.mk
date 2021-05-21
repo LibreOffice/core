@@ -65,9 +65,12 @@ gb_LinkTarget_LDFLAGS += \
 	-Wl,--sysroot=$(SYSBASE)
 endif
 
+ifeq (,$(DISABLE_DYNLOADING))
 gb_LinkTarget_LDFLAGS += \
 	-Wl,-rpath-link,$(SYSBASE)/lib:$(SYSBASE)/usr/lib \
 	-Wl,-z,combreloc \
+
+endif
 
 ifeq ($(HAVE_LD_HASH_STYLE),TRUE)
 gb_LinkTarget_LDFLAGS += \
@@ -103,7 +106,8 @@ gb_LinkTarget__cmd_lockfile = $(if $(LOCKFILE),$(LOCKFILE),$(call gb_Executable_
 gb_LinkTarget__Lock := $(WORKDIR)/LinkTarget/link.lock
 gb_LinkTarget__WantLock = $(if $(and $(filter-out ANDROID MACOSX iOS WNT,$(OS)),$(filter TRUE,$(DISABLE_DYNLOADING)),$(filter CppunitTest Executable,$(TARGETTYPE))),$(true))
 
-gb_LinkTarget__NeedsCxxLinker = $(if $(CXXOBJECTS)$(GENCXXOBJECTS)$(EXTRAOBJECTLISTS)$(filter-out XTRUE,X$(ENABLE_RUNTIME_OPTIMIZATIONS)),$(true))
+# In theory would would need to track, if any of the linked objects is C++ code, so for the static build we assume yes :-(
+gb_LinkTarget__NeedsCxxLinker = $(if $(CXXOBJECTS)$(GENCXXOBJECTS)$(EXTRAOBJECTLISTS)$(filter-out XTRUE,X$(ENABLE_RUNTIME_OPTIMIZATIONS)$(DISABLE_DYNLOADING)),$(true))
 
 # note that `cat $(extraobjectlist)` is needed to build with older gcc versions, e.g. 4.1.2 on SLED10
 # we want to use @$(extraobjectlist) in the long run
@@ -133,7 +137,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		    -Wl$(COMMA)--start-group \
 		    $(patsubst lib%.a,-l%,$(patsubst lib%.so,-l%,$(patsubst %.$(gb_Library_UDK_MAJORVER),%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))))) \
 		    $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
-		    $(T_LIBS) \
+		    $(patsubst $(gb_LinkTarget__syslib),%,$(T_LIBS)) \
 		    $(if $(call gb_LinkTarget__NeedsCxxLinker),$(T_STDLIBS_CXX)) \
 		    -Wl$(COMMA)--end-group \
 		, \
@@ -290,12 +294,18 @@ endef
 
 gb_CppunitTest_CPPTESTPRECOMMAND := \
     $(call gb_Helper_extend_ld_path,$(WORKDIR)/UnpackedTarball/cppunit/src/cppunit/.libs)
-gb_CppunitTest_get_filename = libtest_$(1).so
+ifeq (,$(DISABLE_DYNLOADING))
+gb_CppunitTest_get_filename = libtest_$(1)$(gb_Library_PLAINEXT)
+else
+gb_CppunitTest_get_filename = test_$(1)$(gb_Executable_EXT)
+endif
 gb_CppunitTest_get_ilibfilename = $(gb_CppunitTest_get_filename)
 gb_CppunitTest_malloc_check := -ex 'set environment MALLOC_CHECK_=2; set environment MALLOC_PERTURB_=153'
 
 define gb_CppunitTest_CppunitTest_platform
+ifeq (,$(DISABLE_DYNLOADING))
 $(call gb_LinkTarget_get_target,$(2)) : RPATH := $(call gb_Library__get_rpath,$(call gb_LinkTarget__get_rpath_for_layer,NONE))
+endif
 
 endef
 

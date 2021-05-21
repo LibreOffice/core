@@ -19,12 +19,8 @@
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.xml.wrapper.XMLDocumentWrapper"
-      constructor="com_sun_star_xml_wrapper_XMLDocumentWrapper_get_implementation">
-    <service name="com.sun.star.xml.wrapper.XMLDocumentWrapper"/>
-  </implementation>
-  <implementation name="com.sun.star.xml.wrapper.XMLElementWrapper"
-      constructor="com_sun_star_xml_wrapper_XMLElementWrapper_get_implementation">
-    <service name="com.sun.star.xml.wrapper.XMLElementWrapper"/>
+  <implementation name="com.sun.star.security.DocumentDigitalSignatures"
+      constructor="com_sun_star_security_DocumentDigitalSignatures_get_implementation">
+    <service name="com.sun.star.security.DocumentDigitalSignatures"/>
   </implementation>
 </component>
