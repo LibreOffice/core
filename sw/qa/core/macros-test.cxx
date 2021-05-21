@@ -132,7 +132,7 @@ void SwMacrosTest::testVba()
 
 void SwMacrosTest::testBookmarkDeleteAndJoin()
 {
-    SwDoc *const pDoc = new SwDoc;
+    rtl::Reference<SwDoc> const pDoc(new SwDoc);
     pDoc->GetIDocumentUndoRedo().DoUndo(true); // bug is in SwUndoDelete
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
@@ -172,7 +172,7 @@ void SwMacrosTest::testBookmarkDeleteAndJoin()
 
 void SwMacrosTest::testBookmarkDeleteTdf90816()
 {
-    SwDoc *const pDoc = new SwDoc;
+    rtl::Reference<SwDoc> const pDoc(new SwDoc);
     pDoc->GetIDocumentUndoRedo().DoUndo(true); // bug is in SwUndoDelete
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
@@ -309,7 +309,7 @@ void SwMacrosTest::testControlShapeGrouping()
 
 void SwMacrosTest::testFdo55289()
 {
-    SwDoc *const pDoc = new SwDoc;
+    SwDoc* const pDoc = new SwDoc;
     SwDocShellRef pDocShell = new SwDocShell(*pDoc, SfxObjectCreateMode::EMBEDDED);
     // this needs to run with no layout to tickle the bugs in the special
     // cases in SwXShape re-anchoring
@@ -337,6 +337,7 @@ void SwMacrosTest::testFdo55289()
         uno::Reference<text::XTextDocument>(xModel, UNO_QUERY_THROW)->getText()->getEnd();
     uno::Reference<text::XTextContent> const xShapeContent(xShape, UNO_QUERY);
     xShapeContent->attach(xEnd);
+    pDocShell->DoClose();
 }
 
 void SwMacrosTest::testFdo68983()
