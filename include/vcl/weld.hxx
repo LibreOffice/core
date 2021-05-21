@@ -933,6 +933,7 @@ public:
         m_aQueryTooltipHdl = rLink;
     }
 
+    // see 'expanding on-demand node details' for bChildrenOnDemand of true
     virtual void insert(const TreeIter* pParent, int pos, const OUString* pStr, const OUString* pId,
                         const OUString* pIconName, VirtualDevice* pImageSurface,
                         bool bChildrenOnDemand, TreeIter* pRet)
@@ -1105,13 +1106,8 @@ public:
     //Don't select when frozen, select after thaw. Note selection doesn't survive a freeze.
     virtual void select(const TreeIter& rIter) = 0;
     virtual void unselect(const TreeIter& rIter) = 0;
-    virtual bool get_row_expanded(const TreeIter& rIter) const = 0;
-    virtual bool get_children_on_demand(const TreeIter& rIter) const = 0;
-    virtual void set_children_on_demand(const TreeIter& rIter, bool bChildrenOnDemand) = 0;
     //visually indent this row as if it was at get_iter_depth() + nIndentLevel
     virtual void set_extra_row_indent(const TreeIter& rIter, int nIndentLevel) = 0;
-    virtual void expand_row(const TreeIter& rIter) = 0;
-    virtual void collapse_row(const TreeIter& rIter) = 0;
     // col index -1 sets the first text column
     virtual void set_text(const TreeIter& rIter, const OUString& rStr, int col = -1) = 0;
     // col index -1 sets the first text column
@@ -1166,6 +1162,42 @@ public:
                                       const weld::TreeIter* pParent = nullptr,
                                       const std::vector<int>* pFixedWidths = nullptr)
         = 0;
+
+    /* expanding on-demand node details
+
+    When a node is added with children-on-demand (typically via 'insert' with
+    bChildrenOnDemand of true), then initially in reality the
+    children-on-demand node is given a 'placeholder' child entry to indicate
+    the load-on-demand state.
+
+    The 'placeholder' needs to be there for the expander indicator to be
+    drawn/shown even when there are no "real" entries yet. This child doesn't
+    exist for the purposes of any of the iterator methods, e.g. iter_has_child
+    on an on-demand node which hasn't been expanded yet is false. Likewise the
+    rest of the iterator methods skip over or otherwise ignore that node.
+
+    Normal usage is the user clicks on the expander, the expansion mechanism
+    removes the 'placeholder' entry (set_children_on_demand(false)) and calls
+    any installed expanding-callback (installable via connect_expanding) which
+    has the opportunity to populate the node with children.
+
+    If you decide to directly populate the children of an on-demand node
+    outside of the expanding-callback then you also need to explicitly remove
+    the 'placeholder' with set_children_on_demand(false) otherwise the treeview
+    is in an inconsistent state.  */
+
+    virtual bool get_row_expanded(const TreeIter& rIter) const = 0;
+    // expand row will first trigger the callback set via connect_expanding before expanding
+    virtual void expand_row(const TreeIter& rIter) = 0;
+    // collapse row will first trigger the callback set via connect_collapsing before collapsing
+    virtual void collapse_row(const TreeIter& rIter) = 0;
+    // set the empty node to appear as if it has children, true is equivalent
+    // to 'insert' with a bChildrenOnDemand of true. See notes above.
+    virtual void set_children_on_demand(const TreeIter& rIter, bool bChildrenOnDemand) = 0;
+    // return if the node is configured to be populated on-demand
+    virtual bool get_children_on_demand(const TreeIter& rIter) const = 0;
+    // set if the expanders are shown or not
+    virtual void set_show_expanders(bool bShow) = 0;
 
     void connect_expanding(const Link<const TreeIter&, bool>& rLink) { m_aExpandingHdl = rLink; }
     void connect_collapsing(const Link<const TreeIter&, bool>& rLink) { m_aCollapsingHdl = rLink; }
@@ -1250,8 +1282,6 @@ public:
     void save_value() { m_sSavedValue = get_selected_text(); }
     OUString const& get_saved_value() const { return m_sSavedValue; }
     bool get_value_changed_from_saved() const { return m_sSavedValue != get_selected_text(); }
-
-    virtual void set_show_expanders(bool bShow) = 0;
 
     // for custom rendering a cell
     void connect_custom_get_size(const Link<get_size_args, Size>& rLink) { m_aGetSizeHdl = rLink; }
