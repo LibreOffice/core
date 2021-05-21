@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "b12dfb89_de6d7654",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 5367,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-05-21T15:51:02Z",
+      "side": 1,
+      "message": "The maximum value is not fixed for a parallelogram in OOXML, but depends on width and height. Here maximum is 100000 * width / (min(width, height)). I have identified a lot of such pattern. You can find them in /svx/source/customshapes/EnhancedCustomShape2d.cxx. The methods there are for calculating the adjustment value from the handle position in UI, so not directly usable here. But the identified pattern might help you to find the correct conversion here.",
+      "range": {
+        "startLine": 5367,
+        "startChar": 51,
+        "endLine": 5367,
+        "endChar": 55
+      },
+      "revId": "0b84881d185b3fa53dbc6128575317c7f2b0589f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0dc86ed9_0d57c70b",
         "filename": "oox/source/export/drawingml.cxx",
         "patchSetId": 10
