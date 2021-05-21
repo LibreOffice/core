@@ -29,6 +29,12 @@ class Tdf57841(UITestCase):
         self.assertEqual('true', get_state_as_dict(xDialog.getChild("semicolon"))['Selected'])
         self.assertEqual('1', get_state_as_dict(xDialog.getChild("fromrow"))['Text'])
 
+        # Set text delimiter in case it's changed by another test
+        xTextDelimiter = xDialog.getChild("textdelimiter")
+        xTextDelimiter.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+        xTextDelimiter.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+        xTextDelimiter.executeAction("TYPE", mkPropertyValues({"TEXT": "\""}))
+
         xOK = xDialog.getChild('ok')
         self.ui_test.close_dialog_through_button(xOK)
 
