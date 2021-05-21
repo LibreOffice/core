@@ -10083,8 +10083,6 @@ public:
     }
 };
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-
 class GtkInstanceSpinner : public GtkInstanceWidget, public virtual weld::Spinner
 {
 private:
@@ -10108,6 +10106,7 @@ public:
     }
 };
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 class GtkInstanceImage : public GtkInstanceWidget, public virtual weld::Image
 {
 private:
@@ -19010,16 +19009,11 @@ public:
 
     virtual std::unique_ptr<weld::Spinner> weld_spinner(const OString &id) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkSpinner* pSpinner = GTK_SPINNER(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pSpinner)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pSpinner));
         return std::make_unique<GtkInstanceSpinner>(pSpinner, this, false);
-#else
-        (void)id;
-        return nullptr;
-#endif
     }
 
     virtual std::unique_ptr<weld::Image> weld_image(const OString &id) override
