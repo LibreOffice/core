@@ -27,6 +27,8 @@
 #include <deque>
 #include <unordered_map>
 
+#define ACTION_TYPE "action_type"
+
 class ToolBox;
 class ComboBox;
 class VclMultiLineEdit;
@@ -304,13 +306,17 @@ public:
     virtual void show() override
     {
         BaseInstanceClass::show();
-        sendFullUpdate();
+        std::unique_ptr<ActionDataMap> pMap = std::make_unique<ActionDataMap>();
+        (*pMap)[ACTION_TYPE] = "show";
+        sendAction(std::move(pMap));
     }
 
     virtual void hide() override
     {
         BaseInstanceClass::hide();
-        sendFullUpdate();
+        std::unique_ptr<ActionDataMap> pMap = std::make_unique<ActionDataMap>();
+        (*pMap)[ACTION_TYPE] = "hide";
+        sendAction(std::move(pMap));
     }
 
     using BaseInstanceClass::set_sensitive;
@@ -431,6 +437,7 @@ public:
     virtual void remove(int pos) override;
     virtual void set_entry_text(const OUString& rText) override;
     virtual void set_active(int pos) override;
+    virtual bool changed_by_direct_pick() const override;
 };
 
 class JSNotebook : public JSWidget<SalInstanceNotebook, ::TabControl>
