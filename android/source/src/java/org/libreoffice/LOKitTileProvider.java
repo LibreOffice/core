@@ -160,14 +160,6 @@ class LOKitTileProvider implements TileProvider {
                 mContext.getDocumentPartViewListAdapter().notifyDataSetChanged();
             }
         });
-        mContext.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mContext.pendingInsertGraphic) {
-                    mContext.getFormattingController().popCompressImageGradeSelection();
-                }
-            }
-        });
     }
 
     public void addPart(){
