@@ -718,6 +718,10 @@ public:
     SCSIZE      GetPatternCount() const;
     SCSIZE      GetPatternCount( SCROW nRow1, SCROW nRow2 ) const;
     bool        ReservePatternCount( SCSIZE nReserve );
+
+    void AttachNewFormulaCells(const sc::CellStoreType::position_type& aPos, size_t nLength,
+                               std::vector<SCROW>& rNewSharedRows);
+
 private:
 
     sc::CellStoreType::iterator GetPositionToInsert( SCROW nRow, std::vector<SCROW>& rNewSharedRows,
@@ -734,9 +738,6 @@ private:
         const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell,
         const std::vector<SCROW>& rNewSharedRows,
         bool bJoin = true, sc::StartListeningType eListenType = sc::SingleCellListening );
-
-    void AttachNewFormulaCells( const sc::CellStoreType::position_type& aPos, size_t nLength,
-                                std::vector<SCROW>& rNewSharedRows );
 
     void BroadcastNewCell( SCROW nRow );
     bool UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow, sc::CellStoreType::iterator& itr );
