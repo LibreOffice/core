@@ -168,6 +168,7 @@ public:
     void testAutoFilterTimeValue();
     void testTdf76441();
     void testTdf142186();
+    void testTdf126342();
     void testAdvancedFilter();
     void testTdf98642();
     void testMergedCells();
@@ -292,6 +293,7 @@ public:
     CPPUNIT_TEST(testAutoFilterTimeValue);
     CPPUNIT_TEST(testTdf76441);
     CPPUNIT_TEST(testTdf142186);
+    CPPUNIT_TEST(testTdf126342);
     CPPUNIT_TEST(testAdvancedFilter);
     CPPUNIT_TEST(testTdf98642);
     CPPUNIT_TEST(testMergedCells);
@@ -3632,6 +3634,37 @@ void Test::testTdf142186()
         // - Actual  : 1234.5
         CPPUNIT_ASSERT_EQUAL(OUString("12.3"), m_pDoc->GetString(ScAddress(0,1,0)));
     }
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testTdf126342()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    OUString aCode = "YYYY-MM-DD";
+    sal_Int32 nCheckPos;
+    SvNumFormatType nType;
+    sal_uInt32 nFormat;
+    SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
+    pFormatter->PutEntry( aCode, nCheckPos, nType, nFormat );
+
+    ScPatternAttr aNewAttrs(m_pDoc->GetPool());
+    SfxItemSet& rSet = aNewAttrs.GetItemSet();
+    rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
+    m_pDoc->ApplyPattern(0, 0, 0, aNewAttrs);
+
+    m_pDoc->SetString(ScAddress(0,0,0), "11/7/19");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("2019-11-07"), m_pDoc->GetString(ScAddress(0,0,0)));
+
+    // Overwrite the existing date with the exact same input
+    m_pDoc->SetString(ScAddress(0,0,0), "11/7/19");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 2019-11-07
+    // - Actual  : 2011-07-19
+    CPPUNIT_ASSERT_EQUAL(OUString("2019-11-07"), m_pDoc->GetString(ScAddress(0,0,0)));
 
     m_pDoc->DeleteTab(0);
 }
