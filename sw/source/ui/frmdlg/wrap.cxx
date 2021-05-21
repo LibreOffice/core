@@ -72,11 +72,17 @@ SwWrapTabPage::SwWrapTabPage(weld::Container* pPage, weld::DialogController* pCo
     , m_bHtmlMode(false)
     , m_bDrawMode(false)
     , m_bContourImage(false)
+    , m_xNoWrapImg(m_xBuilder->weld_image("noneimg"))
     , m_xNoWrapRB(m_xBuilder->weld_radio_button("none"))
+    , m_xWrapLeftImg(m_xBuilder->weld_image("beforeimg"))
     , m_xWrapLeftRB(m_xBuilder->weld_radio_button("before"))
+    , m_xWrapRightImg(m_xBuilder->weld_image("afterimg"))
     , m_xWrapRightRB(m_xBuilder->weld_radio_button("after"))
+    , m_xWrapParallelImg(m_xBuilder->weld_image("parallelimg"))
     , m_xWrapParallelRB(m_xBuilder->weld_radio_button("parallel"))
+    , m_xWrapThroughImg(m_xBuilder->weld_image("throughimg"))
     , m_xWrapThroughRB(m_xBuilder->weld_radio_button("through"))
+    , m_xIdealWrapImg(m_xBuilder->weld_image("optimalimg"))
     , m_xIdealWrapRB(m_xBuilder->weld_radio_button("optimal"))
     , m_xLeftMarginED(m_xBuilder->weld_metric_spin_button("left", FieldUnit::CM))
     , m_xRightMarginED(m_xBuilder->weld_metric_spin_button("right", FieldUnit::CM))
@@ -604,23 +610,23 @@ IMPL_LINK_NOARG(SwWrapTabPage, ContourHdl, weld::ToggleButton&, void)
 
 void SwWrapTabPage::SetImages()
 {
-    m_xWrapThroughRB->set_from_icon_name(RID_BMP_WRAP_THROUGH);
+    m_xWrapThroughImg->set_from_icon_name(RID_BMP_WRAP_THROUGH);
     bool bWrapOutline =  !m_xWrapOutlineCB->get_active();
     if (bWrapOutline)
     {
-        m_xNoWrapRB->set_from_icon_name(RID_BMP_WRAP_NONE);
-        m_xWrapLeftRB->set_from_icon_name(RID_BMP_WRAP_LEFT);
-        m_xWrapRightRB->set_from_icon_name(RID_BMP_WRAP_RIGHT);
-        m_xWrapParallelRB->set_from_icon_name(RID_BMP_WRAP_PARALLEL);
-        m_xIdealWrapRB->set_from_icon_name(RID_BMP_WRAP_IDEAL);
+        m_xNoWrapImg->set_from_icon_name(RID_BMP_WRAP_NONE);
+        m_xWrapLeftImg->set_from_icon_name(RID_BMP_WRAP_LEFT);
+        m_xWrapRightImg->set_from_icon_name(RID_BMP_WRAP_RIGHT);
+        m_xWrapParallelImg->set_from_icon_name(RID_BMP_WRAP_PARALLEL);
+        m_xIdealWrapImg->set_from_icon_name(RID_BMP_WRAP_IDEAL);
     }
     else
     {
-        m_xNoWrapRB->set_from_icon_name(RID_BMP_WRAP_CONTOUR_NONE);
-        m_xWrapLeftRB->set_from_icon_name(RID_BMP_WRAP_CONTOUR_LEFT);
-        m_xWrapRightRB->set_from_icon_name(RID_BMP_WRAP_CONTOUR_RIGHT);
-        m_xWrapParallelRB->set_from_icon_name(RID_BMP_WRAP_CONTOUR_PARALLEL);
-        m_xIdealWrapRB->set_from_icon_name(RID_BMP_WRAP_CONTOUR_IDEAL);
+        m_xNoWrapImg->set_from_icon_name(RID_BMP_WRAP_CONTOUR_NONE);
+        m_xWrapLeftImg->set_from_icon_name(RID_BMP_WRAP_CONTOUR_LEFT);
+        m_xWrapRightImg->set_from_icon_name(RID_BMP_WRAP_CONTOUR_RIGHT);
+        m_xWrapParallelImg->set_from_icon_name(RID_BMP_WRAP_CONTOUR_PARALLEL);
+        m_xIdealWrapImg->set_from_icon_name(RID_BMP_WRAP_CONTOUR_IDEAL);
     }
 }
 

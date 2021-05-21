@@ -48,11 +48,17 @@ class SwWrapTabPage: public SfxTabPage
     bool m_bContourImage;
 
     // WRAPPING
+    std::unique_ptr<weld::Image> m_xNoWrapImg;
     std::unique_ptr<weld::RadioButton> m_xNoWrapRB;
+    std::unique_ptr<weld::Image> m_xWrapLeftImg;
     std::unique_ptr<weld::RadioButton> m_xWrapLeftRB;
+    std::unique_ptr<weld::Image> m_xWrapRightImg;
     std::unique_ptr<weld::RadioButton> m_xWrapRightRB;
+    std::unique_ptr<weld::Image> m_xWrapParallelImg;
     std::unique_ptr<weld::RadioButton> m_xWrapParallelRB;
+    std::unique_ptr<weld::Image> m_xWrapThroughImg;
     std::unique_ptr<weld::RadioButton> m_xWrapThroughRB;
+    std::unique_ptr<weld::Image> m_xIdealWrapImg;
     std::unique_ptr<weld::RadioButton> m_xIdealWrapRB;
 
     // MARGIN
