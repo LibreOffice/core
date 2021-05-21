@@ -202,7 +202,8 @@ void SAL_CALL SfxClipboardChangeListener::disposing( const lang::EventObject& /*
     // root for many deadlocks, especially in conjunction with the "Windows"
     // based single thread apartment clipboard code!
     AsyncExecuteInfo* pInfo = new AsyncExecuteInfo( ASYNCEXECUTE_CMD_DISPOSING, this );
-    Application::PostUserEvent( LINK( nullptr, SfxClipboardChangeListener, AsyncExecuteHdl_Impl ), pInfo );
+    if (!Application::PostUserEvent( LINK( nullptr, SfxClipboardChangeListener, AsyncExecuteHdl_Impl ), pInfo ))
+        delete pInfo;
 }
 
 void SAL_CALL SfxClipboardChangeListener::changedContents( const datatransfer::clipboard::ClipboardEvent& )
@@ -211,7 +212,8 @@ void SAL_CALL SfxClipboardChangeListener::changedContents( const datatransfer::c
     // root for many deadlocks, especially in conjunction with the "Windows"
     // based single thread apartment clipboard code!
     AsyncExecuteInfo* pInfo = new AsyncExecuteInfo( ASYNCEXECUTE_CMD_CHANGEDCONTENTS, this );
-    Application::PostUserEvent( LINK( nullptr, SfxClipboardChangeListener, AsyncExecuteHdl_Impl ), pInfo );
+    if (!Application::PostUserEvent( LINK( nullptr, SfxClipboardChangeListener, AsyncExecuteHdl_Impl ), pInfo ))
+        delete pInfo;
 }
 
 sal_uInt32 SfxViewShell_Impl::m_nLastViewShellId = 0;
