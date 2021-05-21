@@ -9834,7 +9834,7 @@ public:
     }
 };
 
-class GtkInstanceCheckButton : public GtkInstanceButton, public virtual weld::CheckButton
+class GtkInstanceCheckButton : public GtkInstanceWidget, public virtual weld::CheckButton
 {
 private:
     GtkCheckButton* m_pCheckButton;
@@ -9849,7 +9849,7 @@ private:
 
 public:
     GtkInstanceCheckButton(GtkCheckButton* pButton, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : GtkInstanceButton(GTK_BUTTON(pButton), pBuilder, bTakeOwnership)
+        : GtkInstanceWidget(GTK_WIDGET(pButton), pBuilder, bTakeOwnership)
         , m_pCheckButton(pButton)
         , m_nSignalId(g_signal_connect(m_pCheckButton, "toggled", G_CALLBACK(signalToggled), this))
     {
@@ -9923,12 +9923,12 @@ public:
     virtual void disable_notify_events() override
     {
         g_signal_handler_block(m_pCheckButton, m_nSignalId);
-        GtkInstanceButton::disable_notify_events();
+        GtkInstanceWidget::disable_notify_events();
     }
 
     virtual void enable_notify_events() override
     {
-        GtkInstanceButton::enable_notify_events();
+        GtkInstanceWidget::enable_notify_events();
         g_signal_handler_unblock(m_pCheckButton, m_nSignalId);
     }
 
