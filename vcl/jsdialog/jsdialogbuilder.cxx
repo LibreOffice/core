@@ -27,8 +27,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <utility>
 
-#define ACTION_TYPE "action_type"
-
 namespace
 {
 void response_help(vcl::Window* pWindow)
@@ -968,6 +966,8 @@ void JSComboBox::set_active(int pos)
     SalInstanceComboBoxWithEdit::set_active(pos);
     sendUpdate();
 }
+
+bool JSComboBox::changed_by_direct_pick() const { return true; }
 
 JSNotebook::JSNotebook(JSDialogSender* pSender, ::TabControl* pControl,
                        SalInstanceBuilder* pBuilder, bool bTakeOwnership)
