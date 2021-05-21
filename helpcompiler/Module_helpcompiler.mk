@@ -10,14 +10,14 @@
 $(eval $(call gb_Module_Module,helpcompiler))
 
 $(eval $(call gb_Module_add_targets,helpcompiler,\
-    Library_helplinker \
+    $(call gb_Helper_optionals_or,HELPTOOLS XMLHELP,Library_helplinker) \
 ))
 
 $(eval $(call gb_Module_add_targets_for_build,helpcompiler,\
-    $(call gb_Helper_optional,HELPTOOLS, \
+    $(if $(DISABLE_DYNLOADING),,$(call gb_Helper_optional,HELPTOOLS, \
         Executable_HelpIndexer \
         Executable_HelpLinker \
-    ) \
+    )) \
 ))
 
 # vim:set noet sw=4 ts=4:

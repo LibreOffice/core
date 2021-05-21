@@ -35,7 +35,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	canvas \
 	chart2 \
 	cli_ure \
-	$(call gb_Helper_optional,DESKTOP,codemaker) \
+    codemaker \
 	comphelper \
 	configmgr \
 	connectivity \
@@ -119,6 +119,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	soltools \
 	sot \
 	starmath \
+    $(if $(ENABLE_CUSTOMTARGET_COMPONENTS),static) \
 	stoc \
 	store \
 	svl \
@@ -160,6 +161,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	xmlsecurity \
 ))
 
+ifeq (,$(DISABLE_DYNLOADING))
 # Especially when building everything with symbols, the linking of the largest
 # libraries takes enormous amounts of RAM.	To prevent annoying OOM situations
 # etc., try to prevent linking these in parallel by adding artificial build
@@ -193,5 +195,6 @@ $(eval $(call repositorymodule_serialize,\
 		svx svxcore xo sfx fwk svt vcl) \
 ))
 endif
+endif # !$(DISABLE_DYNLOADING)
 
 # vim: set noet sw=4 ts=4:

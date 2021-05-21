@@ -22,18 +22,22 @@
   <implementation name="com.sun.star.xml.crypto.NSSInitializer"
     constructor="com_sun_star_xml_crypto_NSSInitializer_get_implementation">
     <service name="com.sun.star.xml.crypto.NSSInitializer"/>
+    <optional/>
   </implementation>
   <implementation name="com.sun.star.xml.crypto.SEInitializer"
     constructor="com_sun_star_xml_crypto_SEInitializer_get_implementation">
     <service name="com.sun.star.xml.crypto.SEInitializer"/>
+    <optional/>
   </implementation>
   <implementation name="com.sun.star.xml.security.SEInitializer_Gpg"
     constructor="com_sun_star_xml_security_SEInitializer_Gpg_get_implementation">
     <service name="com.sun.star.xml.crypto.GPGSEInitializer"/>
+    <optional/>
   </implementation>
   <implementation name="com.sun.star.xml.crypto.SecurityEnvironment"
     constructor="com_sun_star_xml_crypto_SecurityEnvironment_get_implementation">
     <service name="com.sun.star.xml.crypto.SecurityEnvironment"/>
+    <optional/>
   </implementation>
   <implementation name="com.sun.star.xml.wrapper.XMLDocumentWrapper"
     constructor="com_sun_star_xml_wrapper_XMLDocumentWrapper_get_implementation">
@@ -46,9 +50,11 @@
   <implementation name="com.sun.star.xml.crypto.XMLSecurityContext"
     constructor="com_sun_star_xml_crypto_XMLSecurityContext_get_implementation">
     <service name="com.sun.star.xml.crypto.XMLSecurityContext"/>
+    <optional/>
   </implementation>
   <implementation name="com.sun.star.xml.crypto.XMLSignature"
     constructor="com_sun_star_xml_crypto_XMLSignature_get_implementation">
     <service name="com.sun.star.xml.crypto.XMLSignature"/>
+    <optional/>
   </implementation>
 </component>

@@ -48,11 +48,13 @@ $(eval $(call gb_Module_add_screenshot_targets,svx,\
 ))
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+ifeq (,$(DISABLE_DYNLOADING))
 $(eval $(call gb_Module_add_targets,svx,\
     Executable_gengal \
     $(if $(filter-out MACOSX WNT,$(OS)), \
 		Package_gengal) \
 ))
+endif
 else # !DESKTOP
 ifeq ($(WITH_GALLERY_BUILD),TRUE)
 $(eval $(call gb_Module_add_targets_for_build,svx,\
