@@ -128,6 +128,9 @@ $(if $(3),$(call gb_Output_error,gb_Library_set_soversion_script: too many argum
 $(call gb_Library__set_soversion_script_platform,$(1),$(2))
 endef
 
+gb_Library__get_component_var = $(call gb_Library__get_workdir_linktargetname,$(1))<>COMPONENTFILE
+gb_Library__get_component = $($(call gb_Library__get_component_var,$(1)))
+
 # The dependency from workdir component target to outdir library should ensure
 # that gb_CppunitTest_use_component can transitively depend on the library.
 # But the component target also must be delivered; use the target
@@ -145,7 +148,13 @@ $(call gb_ComponentTarget_get_target,$(2)) :| \
 	$(call gb_Library_get_target,$(gb_Library__get_name))
 $(call gb_Library_get_clean_target,$(gb_Library__get_name)) : \
 	$(call gb_ComponentTarget_get_clean_target,$(2))
+$(eval $(call gb_Library__get_component_var,$(1)) += $(2))
 
+endef
+
+# call gb_Library_set_componentfiles,library,componentfiles,rdb
+define gb_Library_set_componentfiles
+$(foreach comp,$(2),$(call gb_Library_set_componentfile,$(1),$(comp),$(3)))
 endef
 
 gb_Library__get_name = $(if $(filter $(1),$(gb_MERGEDLIBS)),merged,$(1))

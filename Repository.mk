@@ -300,14 +300,13 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,kde, \
 	$(if $(ENABLE_KF5),kf5be1) \
 ))
 
-ifneq (,$(USING_X11))
+ifneq ($(OS),HAIKU)
 $(eval $(call gb_Helper_register_plugins_for_install,OOOLIBS,kde, \
     $(if $(ENABLE_KF5),vclplug_kf5) \
     $(if $(ENABLE_QT5),vclplug_qt5) \
     $(if $(ENABLE_QT6),vclplug_qt6) \
     $(if $(ENABLE_GTK3_KDE5),vclplug_gtk3_kde5) \
 ))
-endif
 
 ifneq ($(ENABLE_GTK3_KDE5),)
 $(eval $(call gb_Helper_register_executables_for_install,OOO,kde, \
@@ -315,7 +314,8 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,kde, \
 ))
 endif
 
-ifeq ($(OS),HAIKU)
+else # HAIKU
+
 $(eval $(call gb_Helper_register_plugins_for_install,OOOLIBS,haiku, \
     $(if $(ENABLE_QT5),vclplug_qt5) \
     $(if $(ENABLE_QT6),vclplug_qt6) \
@@ -484,14 +484,14 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 
 $(eval $(call gb_Helper_register_plugins_for_install,OOOLIBS,ooo, \
     acc \
+    $(if $(ENABLE_CUSTOMTARGET_COMPONENTS),components) \
     cui \
     $(if $(USING_X11),desktop_detector) \
     icg \
     sdui \
-    $(if $(USING_X11),vclplug_gen) \
+    $(if $(ENABLE_GEN),vclplug_gen) \
     $(if $(filter $(OS),WNT),vclplug_win) \
     $(if $(filter $(OS),MACOSX),vclplug_osx) \
-    $(if $(USING_X11),,$(if $(ENABLE_QT5),vclplug_qt5)) \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,postgresqlsdbc, \
@@ -1061,7 +1061,7 @@ $(eval $(call gb_Helper_register_packages_for_install,brand,\
 	desktop_branding \
 	$(if $(CUSTOM_BRAND_DIR),desktop_branding_custom) \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),desktop_scripts_install) \
-	$(if $(and $(filter-out MACOSX HAIKU WNT,$(OS)),$(filter DESKTOP,$(BUILD_TYPE))),\
+	$(if $(and $(filter-out EMSCRIPTEN HAIKU MACOSX WNT,$(OS)),$(filter DESKTOP,$(BUILD_TYPE))),\
 		$(if $(DISABLE_GUI),, \
 			desktop_soffice_sh \
 		) \

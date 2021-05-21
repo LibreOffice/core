@@ -9,7 +9,12 @@
 
 $(eval $(call gb_Library_Library,xsec_xmlsec))
 
-$(eval $(call gb_Library_set_componentfile,xsec_xmlsec,xmlsecurity/util/xsec_xmlsec,services))
+$(eval $(call gb_Library_set_componentfiles,xsec_xmlsec, \
+    $(if $(ENABLE_GPGMEPP),xmlsecurity/util/xsec_xmlsec_gpg) \
+    $(if $(or $(ENABLE_NSS),$(filter WNT,$(OS))),xmlsecurity/util/xsec_xmlsec_nss_mscrypt) \
+    $(if $(ENABLE_NSS),xmlsecurity/util/xsec_xmlsec_nss) \
+    xmlsecurity/util/xsec_xmlsec \
+,services))
 
 $(eval $(call gb_Library_set_include,xsec_xmlsec,\
 	$$(INCLUDE) \
@@ -126,12 +131,17 @@ else # !$(OS),WNT
 
 ifeq ($(SYSTEM_XMLSEC),)
 $(eval $(call gb_Library_add_libs,xsec_xmlsec,\
-       $(call gb_UnpackedTarball_get_dir,xmlsec)/src/nss/.libs/libxmlsec1-nss.a \
        $(call gb_UnpackedTarball_get_dir,xmlsec)/src/.libs/libxmlsec1.a \
 ))
 endif
 
 ifeq ($(ENABLE_NSS),TRUE)
+
+ifeq ($(SYSTEM_XMLSEC),)
+$(eval $(call gb_Library_add_libs,xsec_xmlsec,\
+       $(call gb_UnpackedTarball_get_dir,xmlsec)/src/nss/.libs/libxmlsec1-nss.a \
+))
+endif
 
 $(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
 	xmlsecurity/source/xmlsec/nss/ciphercontext \

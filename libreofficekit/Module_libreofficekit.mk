@@ -28,7 +28,7 @@ $(eval $(call gb_Module_add_targets,libreofficekit,\
 endif # ($(ENABLE_GTK3),)
 
 $(eval $(call gb_Module_add_targets,libreofficekit,\
-    Executable_tilebench \
+    $(if $(DISABLE_DYNLOADING),,Executable_tilebench) \
     Package_selectionhandles \
     UIConfig_libreofficekit \
 ))
