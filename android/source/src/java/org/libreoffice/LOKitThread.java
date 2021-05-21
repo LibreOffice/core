@@ -111,7 +111,7 @@ class LOKitThread extends Thread {
     /**
      * Handle the geometry change + draw.
      */
-    private void redraw() {
+    private void redraw(boolean resetZoomAndPosition) {
         if (mLayerClient == null || mTileProvider == null) {
             // called too early...
             return;
@@ -121,7 +121,9 @@ class LOKitThread extends Thread {
         mViewportMetrics = mLayerClient.getViewportMetrics();
         mLayerClient.setViewportMetrics(mViewportMetrics);
 
-        zoomAndRepositionTheDocument();
+        if (resetZoomAndPosition) {
+            zoomAndRepositionTheDocument();
+        }
 
         mLayerClient.forceRedraw();
         mLayerClient.forceRender();
@@ -151,9 +153,9 @@ class LOKitThread extends Thread {
     /**
      * Invalidate everything + handle the geometry change
      */
-    private void refresh() {
+    private void refresh(boolean resetZoomAndPosition) {
         mLayerClient.clearAndResetlayers();
-        redraw();
+        redraw(resetZoomAndPosition);
         updatePartPageRectangles();
         if (mTileProvider != null && mTileProvider.isSpreadsheet()) {
             updateCalcHeaders();
@@ -176,7 +178,7 @@ class LOKitThread extends Thread {
 
     private void updatePageSize(int pageWidth, int pageHeight){
         mTileProvider.setDocumentSize(pageWidth, pageHeight);
-        redraw();
+        redraw(true);
     }
 
     private void updateZoomConstraints() {
@@ -195,7 +197,7 @@ class LOKitThread extends Thread {
         mTileProvider.changePart(partIndex);
         mViewportMetrics = mLayerClient.getViewportMetrics();
         // mLayerClient.setViewportMetrics(mViewportMetrics.scaleTo(0.9f, new PointF()));
-        refresh();
+        refresh(true);
         LOKitShell.hideProgressSpinner(mContext);
     }
 
@@ -217,7 +219,7 @@ class LOKitThread extends Thread {
                 public void run() {
                     // synchronize to avoid deletion while loading
                     synchronized (LOKitThread.this) {
-                        refresh();
+                        refresh(true);
                     }
                 }
             });
@@ -241,7 +243,7 @@ class LOKitThread extends Thread {
         if (mTileProvider.isReady()) {
             LOKitShell.showProgressSpinner(mContext);
             updateZoomConstraints();
-            refresh();
+            refresh(true);
             LOKitShell.hideProgressSpinner(mContext);
 
             mTileProvider.saveDocumentAs(filePath, true);
@@ -293,7 +295,7 @@ class LOKitThread extends Thread {
                 closeDocument();
                 break;
             case LOEvent.SIZE_CHANGED:
-                redraw();
+                redraw(true);
                 break;
             case LOEvent.CHANGE_PART:
                 changePart(event.mPartIndex);
@@ -347,7 +349,7 @@ class LOKitThread extends Thread {
                     mTileProvider.postUnoCommand(event.mString, event.mValue, event.mNotify);
                 break;
             case LOEvent.REFRESH:
-                refresh();
+                refresh(false);
                 break;
             case LOEvent.PAGE_SIZE_CHANGED:
                 updatePageSize(event.mPageWidth, event.mPageHeight);
