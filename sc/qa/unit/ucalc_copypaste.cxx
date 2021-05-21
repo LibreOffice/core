@@ -114,6 +114,7 @@ public:
     void testCopyPasteFormulas();
     void testCopyPasteFormulasExternalDoc();
     void testCopyPasteReferencesExternalDoc(); // tdf#106456
+    void testTdf68976();
     void testTdf71058();
 
     CPPUNIT_TEST_SUITE(TestCopyPaste);
@@ -189,6 +190,7 @@ public:
     CPPUNIT_TEST(testCopyPasteFormulasExternalDoc);
     CPPUNIT_TEST(testCopyPasteReferencesExternalDoc);
 
+    CPPUNIT_TEST(testTdf68976);
     CPPUNIT_TEST(testTdf71058);
 
     CPPUNIT_TEST_SUITE_END();
@@ -6818,6 +6820,48 @@ void TestCopyPaste::testCopyPasteReferencesExternalDoc()
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM('file:///source.fake'#$Sheet1.A#REF!:A3)"), aFormula);
 
     xExtDocSh->DoClose();
+}
+
+void TestCopyPaste::testTdf68976()
+{
+    const SCTAB nTab = 0;
+    m_pDoc->InsertTab(nTab, "Test");
+
+    m_pDoc->SetValue(0, 0, nTab, 1.0); // A1
+    m_pDoc->SetString(0, 1, nTab, "=$A$1"); // A2
+    m_pDoc->SetValue(0, 2, nTab, 1000.0); // A3
+
+    // Cut A3 to the clip document.
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    ScRange aSrcRange(0, 2, nTab, 0, 2, nTab);
+    cutToClip(*m_xDocShell, aSrcRange, &aClipDoc, false); // A3
+
+    ScRange aDestRange(1, 3, nTab, 1, 3, nTab); // B4
+    ScMarkData aDestMark(m_pDoc->GetSheetLimits());
+
+    // Transpose
+    ScDocument* pOrigClipDoc = &aClipDoc;
+    ScDocumentUniquePtr pTransClip(new ScDocument(SCDOCMODE_CLIP));
+    aClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::ALL, false, true);
+    aDestMark.SetMarkArea(aDestRange);
+    // Paste
+    m_pDoc->CopyFromClip(aDestRange, aDestMark, InsertDeleteFlags::ALL, nullptr, pTransClip.get(),
+                         true, false, true, false);
+    m_pDoc->UpdateTranspose(aDestRange.aStart, pOrigClipDoc, aDestMark, nullptr);
+    pTransClip.reset();
+
+    // Check results
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(0, 0, nTab)); // A1
+    // Without the fix in place, this would have failed with
+    // - Expected: =$A$1
+    // - Actual  : =$B$4
+    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0, 1, nTab), "$A$1", "Wrong formula");
+    // Without the fix in place, this would have failed with
+    // - Expected: 1
+    // - Actual  : 1000
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(0, 1, nTab)); // A2
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(0, 2, nTab)); // A3
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(1, 3, nTab)); // B4
 }
 
 void TestCopyPaste::testTdf71058()
