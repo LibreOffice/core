@@ -9880,6 +9880,18 @@ public:
 #endif
     }
 
+    virtual void disable_notify_events() override
+    {
+        g_signal_handler_block(m_pCheckButton, m_nSignalId);
+        GtkInstanceButton::disable_notify_events();
+    }
+
+    virtual void enable_notify_events() override
+    {
+        GtkInstanceButton::enable_notify_events();
+        g_signal_handler_unblock(m_pCheckButton, m_nSignalId);
+    }
+
     virtual ~GtkInstanceCheckButton() override
     {
         g_signal_handler_disconnect(m_pCheckButton, m_nSignalId);
