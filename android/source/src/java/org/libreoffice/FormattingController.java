@@ -421,15 +421,14 @@ class FormattingController implements View.OnClickListener {
 
     void handleActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
-            mContext.pendingInsertGraphic = true;
+            compressAndInsertImage();
         } else if (requestCode == SELECT_PHOTO && resultCode == Activity.RESULT_OK) {
             getFileFromURI(data.getData());
-            mContext.pendingInsertGraphic = true;
+            compressAndInsertImage();
         }
     }
 
-    // Called by LOKitTileProvider when activity is resumed from photo/gallery/camera/cloud apps
-    void popCompressImageGradeSelection() {
+    void compressAndInsertImage() {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         String[] options = {mContext.getResources().getString(R.string.compress_photo_smallest_size),
                 mContext.getResources().getString(R.string.compress_photo_medium_size),
@@ -493,7 +492,6 @@ class FormattingController implements View.OnClickListener {
         LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:InsertGraphic", rootJson.toString()));
         LOKitShell.sendEvent(new LOEvent(LOEvent.REFRESH));
         mContext.setDocumentChanged(true);
-        mContext.pendingInsertGraphic = false;
     }
 
     private void compressImage(int grade) {

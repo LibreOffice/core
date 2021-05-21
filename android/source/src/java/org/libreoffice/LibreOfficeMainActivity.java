@@ -101,7 +101,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     private String mPassword;
     private boolean mPasswordProtected;
     private boolean mbSkipNextRefresh;
-    public boolean pendingInsertGraphic; // boolean indicating a pending insert graphic action, used in LOKitTileProvider.postLoad()
 
     public GeckoLayerClient getLayerClient() {
         return mLayerClient;
