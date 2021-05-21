@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "39e93c1b_d3729eb8",
+        "filename": "include/sfx2/templatedlg.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-05-21T11:33:40Z",
+      "side": 1,
+      "message": "This should be removed rather than commented out",
+      "range": {
+        "startLine": 64,
+        "startChar": 4,
+        "endLine": 64,
+        "endChar": 6
+      },
+      "revId": "878f77dd1db4abd1ff69e56447c5aeedb2cdd12e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
