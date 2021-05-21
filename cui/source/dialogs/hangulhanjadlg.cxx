@@ -194,10 +194,14 @@ namespace svx
     class RubyRadioButton
     {
     public:
-        RubyRadioButton(std::unique_ptr<weld::RadioButton> xControl);
+        RubyRadioButton(std::unique_ptr<weld::RadioButton> xControl, std::unique_ptr<weld::Image> xImage);
         void init(const OUString& rPrimaryText, const OUString& rSecondaryText, const PseudoRubyText::RubyPosition& rPosition);
 
-        void set_sensitive(bool sensitive) { m_xControl->set_sensitive(sensitive); }
+        void set_sensitive(bool sensitive)
+        {
+            m_xControl->set_sensitive(sensitive);
+            m_xImage->set_sensitive(sensitive);
+        }
         void set_active(bool active) { m_xControl->set_active(active); }
         bool get_active() const { return m_xControl->get_active(); }
 
@@ -209,12 +213,14 @@ namespace svx
 
         ScopedVclPtr<VirtualDevice> m_xVirDev;
         std::unique_ptr<weld::RadioButton> m_xControl;
+        std::unique_ptr<weld::Image> m_xImage;
         PseudoRubyText m_aRubyText;
     };
 
-    RubyRadioButton::RubyRadioButton(std::unique_ptr<weld::RadioButton> xControl)
+    RubyRadioButton::RubyRadioButton(std::unique_ptr<weld::RadioButton> xControl, std::unique_ptr<weld::Image> xImage)
         : m_xVirDev(xControl->create_virtual_device())
         , m_xControl(std::move(xControl))
+        , m_xImage(std::move(xImage))
     {
         // expand the point size of the desired font to the equivalent pixel size
         weld::SetPointFont(*m_xVirDev, m_xControl->get_font());
@@ -228,7 +234,7 @@ namespace svx
 
         Paint(*m_xVirDev);
 
-        m_xControl->set_image(m_xVirDev.get());
+        m_xImage->set_image(m_xVirDev.get());
     }
 
     void RubyRadioButton::Paint(vcl::RenderContext& rRenderContext)
@@ -431,10 +437,14 @@ namespace svx
         , m_xHanjaBracketed(m_xBuilder->weld_radio_button("hanjabracket"))
         , m_xWordInput(m_xBuilder->weld_entry("wordinput"))
         , m_xOriginalWord(m_xBuilder->weld_label("originalword"))
-        , m_xHanjaAbove(new RubyRadioButton(m_xBuilder->weld_radio_button("hanja_above")))
-        , m_xHanjaBelow(new RubyRadioButton(m_xBuilder->weld_radio_button("hanja_below")))
-        , m_xHangulAbove(new RubyRadioButton(m_xBuilder->weld_radio_button("hangul_above")))
-        , m_xHangulBelow(new RubyRadioButton(m_xBuilder->weld_radio_button("hangul_below")))
+        , m_xHanjaAbove(new RubyRadioButton(m_xBuilder->weld_radio_button("hanja_above"),
+                                            m_xBuilder->weld_image("hanja_above_img")))
+        , m_xHanjaBelow(new RubyRadioButton(m_xBuilder->weld_radio_button("hanja_below"),
+                                            m_xBuilder->weld_image("hanja_below_img")))
+        , m_xHangulAbove(new RubyRadioButton(m_xBuilder->weld_radio_button("hangul_above"),
+                                             m_xBuilder->weld_image("hangul_above_img")))
+        , m_xHangulBelow(new RubyRadioButton(m_xBuilder->weld_radio_button("hangul_below"),
+                                             m_xBuilder->weld_image("hangul_below_img")))
         , m_xHangulOnly(m_xBuilder->weld_check_button("hangulonly"))
         , m_xHanjaOnly(m_xBuilder->weld_check_button("hanjaonly"))
         , m_xReplaceByChar(m_xBuilder->weld_check_button("replacebychar"))
