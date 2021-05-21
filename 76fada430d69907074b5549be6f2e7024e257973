@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "34d7cb94_26857ad5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-21T07:47:14Z",
+      "side": 1,
+      "message": "It would be better to split the change to two, where this one would be separate. It would allow to see better what the impact of each change is.",
+      "revId": "76fada430d69907074b5549be6f2e7024e257973",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
