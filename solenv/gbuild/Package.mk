@@ -80,7 +80,7 @@ $(call gb_Package_get_preparation_target,%) :
 $(call gb_Package_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),PKG,2)
 	$(call gb_Trace_StartRange,$*,PKG)
-	$(if $(PACKAGE_DEFINED),,$(call gb_Output_error,Something depends on package $* which does not exist.))
+	$(if $(PACKAGE_DEFINED),,$(call gb_Output_error,$(RDEPENDS) depend(s) on package $* which does not exist.))
 	rm -f $@ && \
 	mv $(call gb_var2file,$@.tmp,100,$(sort $(FILES))) $@
 	$(call gb_Trace_EndRange,$*,PKG)

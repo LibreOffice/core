@@ -1121,7 +1121,7 @@ emscripten)
     enable_scripting=no
     enable_xmlhelp=no
     with_system_zlib=no
-    with_theme="breeze"
+    with_theme="colibre"
     _os=Emscripten
     ;;
 
@@ -5234,6 +5234,9 @@ if test "$using_x11" = yes; then
         AC_DEFINE(USING_X11)
     else
         disable_x11_tests
+        if test "$DISABLE_DYNLOADING" = TRUE; then
+            test_qt5=yes
+        fi
     fi
 else
     if test "$USING_X11" = TRUE; then
@@ -14644,5 +14647,8 @@ if test -s "$WARNINGS_FILE"; then
     echo "HOST config ($WARNINGS_FILE)"
     cat "$WARNINGS_FILE"
 fi
+
+# Remove unneeded emconfigure artifacts
+rm -f a.out a.wasm a.out.js a.out.wasm
 
 dnl vim:set shiftwidth=4 softtabstop=4 expandtab:
