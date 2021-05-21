@@ -287,7 +287,9 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx,
                     png_read_row(pPng, pScanline, nullptr);
                 }
             }
+#ifndef ENABLE_WASM_STRIP_PREMULTIPLY
             const vcl::bitmap::lookup_table& premultiply = vcl::bitmap::get_premultiply_table();
+#endif
             if (eFormat == ScanlineFormat::N32BitTcAbgr || eFormat == ScanlineFormat::N32BitTcArgb)
             { // alpha first and premultiply
                 for (png_uint_32 y = 0; y < height; y++)
@@ -296,9 +298,15 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx,
                     for (size_t i = 0; i < aRowSizeBytes; i += 4)
                     {
                         const sal_uInt8 alpha = pScanline[i + 3];
+#ifdef ENABLE_WASM_STRIP_PREMULTIPLY
+                        pScanline[i + 3] = vcl::bitmap::premultiply(alpha, pScanline[i + 2]);
+                        pScanline[i + 2] = vcl::bitmap::premultiply(alpha, pScanline[i + 1]);
+                        pScanline[i + 1] = vcl::bitmap::premultiply(alpha, pScanline[i]);
+#else
                         pScanline[i + 3] = premultiply[alpha][pScanline[i + 2]];
                         pScanline[i + 2] = premultiply[alpha][pScanline[i + 1]];
                         pScanline[i + 1] = premultiply[alpha][pScanline[i]];
+#endif
                         pScanline[i] = alpha;
                     }
                 }
@@ -311,9 +319,15 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx,
                     for (size_t i = 0; i < aRowSizeBytes; i += 4)
                     {
                         const sal_uInt8 alpha = pScanline[i + 3];
+#ifdef ENABLE_WASM_STRIP_PREMULTIPLY
+                        pScanline[i] = vcl::bitmap::premultiply(alpha, pScanline[i]);
+                        pScanline[i + 1] = vcl::bitmap::premultiply(alpha, pScanline[i + 1]);
+                        pScanline[i + 2] = vcl::bitmap::premultiply(alpha, pScanline[i + 2]);
+#else
                         pScanline[i] = premultiply[alpha][pScanline[i]];
                         pScanline[i + 1] = premultiply[alpha][pScanline[i + 1]];
                         pScanline[i + 2] = premultiply[alpha][pScanline[i + 2]];
+#endif
                     }
                 }
             }

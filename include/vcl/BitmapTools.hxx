@@ -26,10 +26,12 @@ namespace com::sun::star::geometry { struct IntegerRectangle2D; }
 
 namespace vcl::bitmap {
 
+#ifndef ENABLE_WASM_STRIP_PREMULTIPLY
 typedef std::array<std::array<sal_uInt8, 256>, 256> lookup_table;
 
 VCL_DLLPUBLIC lookup_table const & get_premultiply_table();
 VCL_DLLPUBLIC lookup_table const & get_unpremultiply_table();
+#endif
 
 sal_uInt8 unpremultiply(sal_uInt8 c, sal_uInt8 a);
 sal_uInt8 premultiply(sal_uInt8 c, sal_uInt8 a);
