@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8f858bf5_664c3335",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1867,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-21T09:47:04Z",
+      "side": 1,
+      "message": "Oh, so I overlooked that this call was not only needed for unit tests, but also for functional change itself? Then it was indeed not necessary to over-engineer this by adding a public wrapper, and instead it would be correct to make the original method itself public.",
+      "range": {
+        "startLine": 1867,
+        "startChar": 33,
+        "endLine": 1867,
+        "endChar": 77
+      },
+      "revId": "a6f3d04583f9a5aadcad4d7a7dd7ee859df637a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
