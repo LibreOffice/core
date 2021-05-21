@@ -936,7 +936,102 @@ GradientStyle convertGradientStyle(drawinglayer::attribute::GradientStyle eGradi
             mpOutputDevice->DrawGradient(aRectangle, aGradient);
         }
 
+<<<<<<< HEAD   (50d58a sw: fix not needed invalidation of custom field on each keyp)
     } // end of namespace processor2d
 } // end of namespace drawinglayer
+=======
+void VclPixelProcessor2D::processShadowPrimitive2D(const primitive2d::ShadowPrimitive2D& rCandidate)
+{
+    if (rCandidate.getShadowBlur() == 0)
+    {
+        process(rCandidate);
+        return;
+    }
+
+    basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
+    aRange.transform(maCurrentTransformation);
+    basegfx::B2DVector aBlurRadiusVector(rCandidate.getShadowBlur(), 0);
+    aBlurRadiusVector *= maCurrentTransformation;
+    const double fBlurRadius = aBlurRadiusVector.getLength();
+
+    impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
+    if (aBufferDevice.isVisible())
+    {
+        OutputDevice* pLastOutputDevice = mpOutputDevice;
+        mpOutputDevice = &aBufferDevice.getContent();
+
+        process(rCandidate);
+
+        const tools::Rectangle aRect(static_cast<tools::Long>(std::floor(aRange.getMinX())),
+                                     static_cast<tools::Long>(std::floor(aRange.getMinY())),
+                                     static_cast<tools::Long>(std::ceil(aRange.getMaxX())),
+                                     static_cast<tools::Long>(std::ceil(aRange.getMaxY())));
+
+        BitmapEx bitmapEx = mpOutputDevice->GetBitmapEx(aRect.TopLeft(), aRect.GetSize());
+
+        AlphaMask mask = ProcessAndBlurAlphaMask(bitmapEx.GetAlpha(), 0, fBlurRadius, 0);
+
+        const basegfx::BColor aShadowColor(
+            maBColorModifierStack.getModifiedColor(rCandidate.getShadowColor()));
+
+        Bitmap bitmap = bitmapEx.GetBitmap();
+        bitmap.Erase(Color(aShadowColor));
+        BitmapEx result(bitmap, mask);
+
+        mpOutputDevice = pLastOutputDevice;
+        mpOutputDevice->DrawBitmapEx(aRect.TopLeft(), result);
+    }
+    else
+        SAL_WARN("drawinglayer", "Temporary buffered virtual device is not visible");
+}
+
+void VclPixelProcessor2D::processFillGradientPrimitive2D(
+    const primitive2d::FillGradientPrimitive2D& rPrimitive)
+{
+    const attribute::FillGradientAttribute& rFillGradient = rPrimitive.getFillGradient();
+
+    // VCL should be able to handle all styles, but for tdf#133477 the VCL result
+    // is different from processing the gradient manually by drawinglayer
+    // (and the Writer unittest for it fails). Keep using the drawinglayer code
+    // until somebody founds out what's wrong and fixes it.
+    if (rFillGradient.getStyle() != drawinglayer::attribute::GradientStyle::Linear
+        && rFillGradient.getStyle() != drawinglayer::attribute::GradientStyle::Axial
+        && rFillGradient.getStyle() != drawinglayer::attribute::GradientStyle::Radial)
+    {
+        process(rPrimitive);
+        return;
+    }
+
+    GradientStyle eGradientStyle = convertGradientStyle(rFillGradient.getStyle());
+
+    Gradient aGradient(eGradientStyle, Color(rFillGradient.getStartColor()),
+                       Color(rFillGradient.getEndColor()));
+
+    aGradient.SetAngle(Degree10(static_cast<int>(rFillGradient.getAngle() / F_PI1800)));
+    aGradient.SetBorder(rFillGradient.getBorder() * 100);
+    aGradient.SetOfsX(rFillGradient.getOffsetX() * 100.0);
+    aGradient.SetOfsY(rFillGradient.getOffsetY() * 100.0);
+    aGradient.SetSteps(rFillGradient.getSteps());
+
+    basegfx::B2DRange aOutputRange(rPrimitive.getOutputRange());
+    aOutputRange.transform(maCurrentTransformation);
+    basegfx::B2DRange aFullRange(rPrimitive.getDefinitionRange());
+    aFullRange.transform(maCurrentTransformation);
+
+    const tools::Rectangle aOutputRectangle(
+        std::floor(aOutputRange.getMinX()), std::floor(aOutputRange.getMinY()),
+        std::ceil(aOutputRange.getMaxX()), std::ceil(aOutputRange.getMaxY()));
+    const tools::Rectangle aFullRectangle(
+        std::floor(aFullRange.getMinX()), std::floor(aFullRange.getMinY()),
+        std::ceil(aFullRange.getMaxX()), std::ceil(aFullRange.getMaxY()));
+
+    mpOutputDevice->Push(PushFlags::CLIPREGION);
+    mpOutputDevice->IntersectClipRegion(aOutputRectangle);
+    mpOutputDevice->DrawGradient(aFullRectangle, aGradient);
+    mpOutputDevice->Pop();
+}
+
+} // end of namespace
+>>>>>>> CHANGE (a18f3e properly draw only parts of FillGradientPrimitive2D (tdf#139)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
