@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "01c176d9_33f1080f",
+        "filename": "sw/source/filter/basflt/fltini.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1002555
+      },
+      "writtenOn": "2021-05-21T08:30:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b629081f_59862e0e",
+      "range": {
+        "startLine": 570,
+        "startChar": 100,
+        "endLine": 570,
+        "endChar": 101
+      },
+      "revId": "20dea00e99cc1213ce6a8cb7df11eefb8957e691",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c8978fbe_437d062e",
         "filename": "sw/source/filter/basflt/fltini.cxx",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2020-11-11T13:26:51Z",
       "side": 1,
       "message": "This seems copy-pasted :-)",
+      "range": {
+        "startLine": 615,
+        "startChar": 10,
+        "endLine": 615,
+        "endChar": 44
+      },
+      "revId": "20dea00e99cc1213ce6a8cb7df11eefb8957e691",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "878245e2_d623d5ba",
+        "filename": "sw/source/filter/basflt/fltini.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1002555
+      },
+      "writtenOn": "2021-05-21T08:30:44Z",
+      "side": 1,
+      "message": "Yes, it is. I\u0027m not sure if some unification for two booleans is required.",
+      "parentUuid": "c8978fbe_437d062e",
       "range": {
         "startLine": 615,
         "startChar": 10,
@@ -68,6 +116,30 @@
       "revId": "20dea00e99cc1213ce6a8cb7df11eefb8957e691",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47475aee_8d0bc41f",
+        "filename": "sw/source/filter/basflt/fltini.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1002555
+      },
+      "writtenOn": "2021-05-21T08:30:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d25d6ac3_929f7dba",
+      "range": {
+        "startLine": 616,
+        "startChar": 7,
+        "endLine": 616,
+        "endChar": 8
+      },
+      "revId": "20dea00e99cc1213ce6a8cb7df11eefb8957e691",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
