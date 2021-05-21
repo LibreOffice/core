@@ -30,7 +30,7 @@ def read_icons(fname):
     full_path = os.path.join(args.base_path, fname)
     if not os.path.exists(full_path):
         if not args.quiet:
-            print("Skipping non-existent {}\n".format(full_path), file=sys.stderr)
+            print("Skipping non-existent {}".format(full_path), file=sys.stderr)
         return images
     with open(full_path) as fp:
         for line in fp:

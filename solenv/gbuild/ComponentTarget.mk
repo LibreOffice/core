@@ -64,6 +64,7 @@ $(call gb_ComponentTarget_get_target,%).optionals : \
 	    $(gb_ComponentTarget_XSLT_DUMP_OPTIONALS) $(COMPONENTSOURCE) > $@ 2>&1
 
 # %.filtered : list of all optional implementations we don't build
+.PRECIOUS: $(call gb_ComponentTarget_get_target,%).filtered
 $(call gb_ComponentTarget_get_target,%).filtered : $(call gb_ComponentTarget_get_target,%).optionals
 	cat $< $(COMPONENTIMPL) | sed -e '/^#\|^\s*$$/d' | sort | uniq -u > $@
 

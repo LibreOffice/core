@@ -32,7 +32,7 @@
 #include "nlsupport.hxx"
 
 // these share a lot, so use one define
-#if defined(LINUX) || defined(__sun) || \
+#if defined(LINUX) || defined(EMSCRIPTEN) || defined(__sun) || \
     defined(FREEBSD) || defined(OPENBSD) || defined(DRAGONFLY) || defined(NETBSD)
 #define LO_COMMON_NLS_ARCHS 1
 #else
@@ -284,7 +284,7 @@ static const Pair nl_language_list[] = {
 /* XXX MS-874 is an extension to tis620, so this is not
  * really equivalent */
 
-#elif defined(LINUX)
+#elif defined(LINUX) || defined(EMSCRIPTEN)
 
 #if !defined(CODESET)
 #define CODESET _NL_CTYPE_CODESET_NAME
