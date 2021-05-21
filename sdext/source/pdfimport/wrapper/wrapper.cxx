@@ -256,7 +256,10 @@ OString lcl_unescapeLineFeeds(std::string_view i_rStr)
 
 std::string_view LineParser::readNextToken()
 {
-    OSL_PRECOND(m_nCharIndex!=std::string_view::npos,"insufficient input");
+    if (m_nCharIndex == std::string_view::npos) {
+        SAL_WARN("sdext.pdfimport", "insufficient input");
+        return {};
+    }
     return o3tl::getToken(m_aLine,' ',m_nCharIndex);
 }
 
