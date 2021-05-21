@@ -9981,8 +9981,6 @@ public:
 
 namespace {
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-
 class GtkInstanceScale : public GtkInstanceWidget, public virtual weld::Scale
 {
 private:
@@ -10054,6 +10052,8 @@ public:
         g_signal_handler_disconnect(m_pScale, m_nValueChangedSignalId);
     }
 };
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
 
 class GtkInstanceProgressBar : public GtkInstanceWidget, public virtual weld::ProgressBar
 {
@@ -18992,16 +18992,11 @@ public:
 
     virtual std::unique_ptr<weld::Scale> weld_scale(const OString &id) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkScale* pScale = GTK_SCALE(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pScale)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pScale));
         return std::make_unique<GtkInstanceScale>(pScale, this, false);
-#else
-        (void)id;
-        return nullptr;
-#endif
     }
 
     virtual std::unique_ptr<weld::ProgressBar> weld_progress_bar(const OString &id) override
