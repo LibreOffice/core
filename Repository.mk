@@ -475,14 +475,14 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 
 $(eval $(call gb_Helper_register_plugins_for_install,OOOLIBS,ooo, \
     acc \
+    $(if $(ENABLE_CUSTOMTARGET_COMPONENTS),components) \
     cui \
     $(if $(USING_X11),desktop_detector) \
     icg \
     sdui \
-    $(if $(USING_X11),vclplug_gen) \
+    $(if $(ENABLE_GEN),vclplug_gen) \
     $(if $(filter $(OS),WNT),vclplug_win) \
     $(if $(filter $(OS),MACOSX),vclplug_osx) \
-    $(if $(USING_X11),,$(if $(ENABLE_QT5),vclplug_qt5)) \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,postgresqlsdbc, \
