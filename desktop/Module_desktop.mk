@@ -60,7 +60,7 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Package_soffice_sh \
 ))
 endif
-endif
+endif # DESKTOP
 
 ifeq ($(OS),WNT)
 
