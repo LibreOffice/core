@@ -17636,18 +17636,27 @@ public:
     }
 };
 
+}
+
+#endif
+
+namespace {
+
 class GtkInstanceExpander : public GtkInstanceWidget, public virtual weld::Expander
 {
 private:
     GtkExpander* m_pExpander;
     gulong m_nSignalId;
+#if !GTK_CHECK_VERSION(4, 0, 0)
     gulong m_nButtonPressEventSignalId;
+#endif
 
     static void signalExpanded(GtkExpander* pExpander, GParamSpec*, gpointer widget)
     {
         GtkInstanceExpander* pThis = static_cast<GtkInstanceExpander*>(widget);
         SolarMutexGuard aGuard;
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
         if (gtk_expander_get_resize_toplevel(pExpander))
         {
             GtkWidget *pToplevel = widget_get_root(GTK_WIDGET(pExpander));
@@ -17672,10 +17681,14 @@ private:
                 gtk_window_resize(GTK_WINDOW(pToplevel), nToplevelWidth, nToplevelHeight);
             }
         }
+#else
+        (void)pExpander;
+#endif
 
         pThis->signal_expanded();
     }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     static gboolean signalButton(GtkWidget*, GdkEventButton*, gpointer)
     {
         // don't let button press get to parent window, for the case of the
@@ -17683,13 +17696,16 @@ private:
         // doesn't work
         return true;
     }
+#endif
 
 public:
     GtkInstanceExpander(GtkExpander* pExpander, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceWidget(GTK_WIDGET(pExpander), pBuilder, bTakeOwnership)
         , m_pExpander(pExpander)
         , m_nSignalId(g_signal_connect(m_pExpander, "notify::expanded", G_CALLBACK(signalExpanded), this))
+#if !GTK_CHECK_VERSION(4, 0, 0)
         , m_nButtonPressEventSignalId(g_signal_connect_after(m_pExpander, "button-press-event", G_CALLBACK(signalButton), this))
+#endif
     {
     }
 
@@ -17715,14 +17731,14 @@ public:
 
     virtual ~GtkInstanceExpander() override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         g_signal_handler_disconnect(m_pExpander, m_nButtonPressEventSignalId);
+#endif
         g_signal_handler_disconnect(m_pExpander, m_nSignalId);
     }
 };
 
 }
-
-#endif
 
 namespace {
 
@@ -19195,16 +19211,11 @@ public:
 
     virtual std::unique_ptr<weld::Expander> weld_expander(const OString &id) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkExpander* pExpander = GTK_EXPANDER(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pExpander)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pExpander));
         return std::make_unique<GtkInstanceExpander>(pExpander, this, false);
-#else
-        (void)id;
-        return nullptr;
-#endif
     }
 
     virtual std::unique_ptr<weld::DrawingArea> weld_drawing_area(const OString &id, const a11yref& rA11y,
