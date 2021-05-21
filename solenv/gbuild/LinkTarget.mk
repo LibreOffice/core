@@ -763,6 +763,11 @@ $(WORKDIR)/Clean/LinkTarget/% :
 		$(foreach object,$(GENCXXCLROBJECTS),$(call gb_GenCxxClrObject_get_dwo_target,$(object))) \
 		$(call gb_LinkTarget_get_target,$(LINKTARGET)) \
 		$(call gb_LinkTarget_get_dep_target,$(LINKTARGET)) \
+		$(if $(gb_PARTIAL_BUILD),, \
+			$(call gb_LinkTarget_get_dep_libraries_target,$(LINKTARGET)) \
+			$(call gb_LinkTarget_get_dep_externals_target,$(LINKTARGET)) \
+			$(call gb_LinkTarget_get_dep_statics_target,$(LINKTARGET)) \
+			) \
 		$(call gb_LinkTarget_get_headers_target,$(LINKTARGET)) \
 		$(call gb_LinkTarget_get_objects_list,$(LINKTARGET)) \
 		$(call gb_LinkTarget_get_pch_timestamp,$(LINKTARGETMAKEFILENAME)) \
@@ -856,6 +861,13 @@ endef
 # call gb_LinkTarget__command_impl,linktargettarget,linktargetname
 define gb_LinkTarget__command_impl
 	$(if $(gb_FULLDEPS),
+		$(if $(ENABLE_CUSTOMTARGET_COMPONENTS),$(if $(gb_PARTIAL_BUILD),,
+			$(call gb_LinkTarget__command_dep_libraries,$(call gb_LinkTarget_get_dep_libraries_target,$(2)).tmp,$(2))
+			mv $(call gb_LinkTarget_get_dep_libraries_target,$(2)).tmp $(call gb_LinkTarget_get_dep_libraries_target,$(2))
+			$(call gb_LinkTarget__command_dep_externals,$(call gb_LinkTarget_get_dep_externals_target,$(2)).tmp,$(2))
+			mv $(call gb_LinkTarget_get_dep_externals_target,$(2)).tmp $(call gb_LinkTarget_get_dep_externals_target,$(2))
+			$(call gb_LinkTarget__command_dep_statics,$(call gb_LinkTarget_get_dep_statics_target,$(2)).tmp,$(2))
+			mv $(call gb_LinkTarget_get_dep_statics_target,$(2)).tmp $(call gb_LinkTarget_get_dep_statics_target,$(2))))
 		$(if $(findstring concat-deps,$(2)),,
 			$(call gb_LinkTarget__command_dep,$(call gb_LinkTarget_get_dep_target,$(2)).tmp,$(2))
 			mv $(call gb_LinkTarget_get_dep_target,$(2)).tmp $(call gb_LinkTarget_get_dep_target,$(2))))
@@ -872,6 +884,35 @@ endef
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,%) : $(call gb_Executable_get_runtime_dependencies,concat-deps)
 	$(call gb_LinkTarget__command_dep,$@,$*)
+
+$(dir $(call gb_LinkTarget_get_dep_target,%))/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
+ifeq ($(ENABLE_CUSTOMTARGET_COMPONENTS),TRUE)
+ifeq (,$(gb_PARTIAL_BUILD))
+
+define gb_LinkTarget__static_dep_x_template
+
+define gb_LinkTarget__command_dep_$(1)
+$$(call gb_Output_announce,LNK:$$(2).d.$(1),$$(true),DEP,1)
+mkdir -p $$(dir $$(1)) && \
+TEMPFILE=$$(call gb_var2file,$$(shell $$(gb_MKTEMP)),200,\
+	$$(call gb_LinkTarget__get_all_$(1),$$(2))) && \
+	$$(call gb_Helper_replace_if_different_and_touch,$$$${TEMPFILE},$$(1))
+
+endef
+
+$$(call gb_LinkTarget_get_dep_$(1)_target,%) : ;
+	$$(call gb_LinkTarget__command_dep_$(1),$$@,$$*)
+
+endef # gb_LinkTarget__static_dep_x_template
+
+$(eval $(call gb_LinkTarget__static_dep_x_template,libraries))
+$(eval $(call gb_LinkTarget__static_dep_x_template,externals))
+$(eval $(call gb_LinkTarget__static_dep_x_template,statics))
+
+endif # !gb_PARTIAL_BUILD
+endif # ENABLE_CUSTOMTARGET_COMPONENTS
 endif # gb_FULLDEPS
 
 # Ok, this is some dark voodoo: When declaring a linktarget with
@@ -1139,7 +1180,9 @@ $(if $(call gb_LinkTarget__is_merged,$(1)),\
 ifeq ($(ENABLE_CUSTOMTARGET_COMPONENTS),TRUE)
 $(if $(gb_DEBUG_STATIC),$$(info $$(call gb_LinkTarget__get_all_libraries_var,$(1)) += $(filter-out $(call gb_LinkTarget__get_all_libraries,$(1)),$(patsubst %,$(gb_LinkTarget__syslib),$(2)))))
 $$(eval $$(call gb_LinkTarget__get_all_libraries_var,$(1)) += $(filter-out $(call gb_LinkTarget__get_all_libraries,$(1)),$(patsubst %,$(gb_LinkTarget__syslib),$(2))))
+ifeq (,$(gb_PARTIAL_BUILD))
 $(call gb_LinkTarget_get_target,$(1)) : LINKED_LIBS += $(filter-out $(call gb_LinkTarget__get_all_libraries,$(1)),$(patsubst %,$(gb_LinkTarget__syslib),$(2)))
+endif
 endif
 
 endef
@@ -1862,8 +1905,10 @@ endef
 
 # call gb_LinkTarget_set_ilibtarget,linktarget,ilibfilename
 define gb_LinkTarget_set_ilibtarget
+ifeq (,$(DISABLE_DYNLOADING))
 $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : ILIBTARGET := $(2)
+endif
 
 endef
 
