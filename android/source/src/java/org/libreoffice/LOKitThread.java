@@ -295,7 +295,7 @@ class LOKitThread extends Thread {
                 closeDocument();
                 break;
             case LOEvent.SIZE_CHANGED:
-                redraw(true);
+                redraw(false);
                 break;
             case LOEvent.CHANGE_PART:
                 changePart(event.mPartIndex);

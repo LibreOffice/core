@@ -302,7 +302,7 @@ public class LayerView extends FrameLayout {
     private void onSizeChanged(int width, int height) {
         mGLController.surfaceChanged(width, height);
 
-        mLayerClient.setViewportSize(new FloatSize(width, height));
+        mLayerClient.setViewportSize(new FloatSize(width, height), false);
 
         if (mListener != null) {
             mListener.surfaceChanged(width, height);
@@ -367,7 +367,7 @@ public class LayerView extends FrameLayout {
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         if (changed) {
-            mLayerClient.setViewportSize(new FloatSize(right - left, bottom - top));
+            mLayerClient.setViewportSize(new FloatSize(right - left, bottom - top), true);
         }
     }
 

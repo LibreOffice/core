@@ -80,7 +80,7 @@ public class GeckoLayerClient implements PanZoomTarget {
 
         mView.setLayerRenderer(mLayerRenderer);
 
-        sendResizeEventIfNecessary();
+        sendResizeEventIfNecessary(false);
         mView.requestRender();
     }
 
@@ -124,21 +124,23 @@ public class GeckoLayerClient implements PanZoomTarget {
      * to the layer client. That way, the layer client won't be tempted to call this, which might
      * result in an infinite loop.
      */
-    void setViewportSize(FloatSize size) {
+    void setViewportSize(FloatSize size, boolean forceResizeEvent) {
         mViewportMetrics = mViewportMetrics.setViewportSize(size.width, size.height);
-        sendResizeEventIfNecessary();
+        sendResizeEventIfNecessary(forceResizeEvent);
     }
 
     PanZoomController getPanZoomController() {
         return mPanZoomController;
     }
 
-    /* Informs Gecko that the screen size has changed. */
-    private void sendResizeEventIfNecessary() {
+    /* Informs Gecko that the screen size has changed.
+     * @param force: If true, a resize event will always be sent, otherwise
+     *               it is only sent if size has changed. */
+    private void sendResizeEventIfNecessary(boolean force) {
         DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
         IntSize newScreenSize = new IntSize(metrics.widthPixels, metrics.heightPixels);
 
-        if (mScreenSize.equals(newScreenSize)) {
+        if (!force && mScreenSize.equals(newScreenSize)) {
             return;
         }
 
@@ -233,7 +235,7 @@ public class GeckoLayerClient implements PanZoomTarget {
     }
 
     private void geometryChanged() {
-        sendResizeEventIfNecessary();
+        sendResizeEventIfNecessary(false);
         if (getRedrawHint()) {
             adjustViewport(null);
         }
