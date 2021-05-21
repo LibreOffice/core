@@ -33,7 +33,7 @@ $(eval $(call gb_Module_add_l10n_targets,desktop,\
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,desktop,\
     Executable_soffice_bin \
-    Executable_unopkg_bin \
+    $(if $(DISABLE_DYNLOADING),,Executable_unopkg_bin) \
     $(if $(ENABLE_BREAKPAD),Executable_minidump_upload) \
     Library_migrationoo2 \
     Library_migrationoo3 \
@@ -43,6 +43,7 @@ $(eval $(call gb_Module_add_targets,desktop,\
 
 ifneq ($(OS),MACOSX)
 ifneq ($(OS),WNT)
+ifeq (,$(DISABLE_DYNLOADING))
 $(eval $(call gb_Module_add_targets,desktop,\
     Pagein_calc \
     Pagein_common \
@@ -52,7 +53,7 @@ $(eval $(call gb_Module_add_targets,desktop,\
     CustomTarget_soffice \
 ))
 
-ifeq ($(USING_X11), TRUE)
+ifeq ($(USING_X11),TRUE)
 $(eval $(call gb_Module_add_targets,desktop,\
     Package_sbase_sh \
     Package_scalc_sh \
@@ -63,9 +64,15 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Package_soffice_sh \
 ))
 endif
+else # $(DISABLE_DYNLOADING)
+$(eval $(call gb_Module_add_targets,desktop, \
+    CustomTarget_soffice \
+    Package_soffice_sh \
+))
 endif
 endif
 endif
+endif # DESKTOP
 
 ifeq ($(OS),WNT)
 
@@ -98,18 +105,10 @@ $(eval $(call gb_Module_add_targets,desktop,\
     WinResTarget_swriter \
 ))
 
-else ifeq ($(OS),MACOSX)
-
-else ifeq ($(OS),ANDROID)
-
-else ifeq ($(OS),iOS)
-
-else ifeq ($(OS),HAIKU)
-
-else
+else ifeq (,$(filter MACOSX ANDROID iOS HAIKU,$(OS)))
 
 $(eval $(call gb_Module_add_targets,desktop,\
-    Executable_oosplash \
+    $(if $(DISABLE_DYNLOADING),,Executable_oosplash) \
 ))
 
 endif

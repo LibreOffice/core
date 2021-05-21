@@ -295,13 +295,13 @@ $(eval $(call gb_Rdb_add_components,services,\
 	desktop/source/migration/services/migrationoo3 \
 	desktop/source/offacc/offacc \
 	$(if $(DISABLE_GUI),,desktop/source/splash/spl) \
-	extensions/source/abpilot/abp \
+	$(if $(DISABLE_DYNLOADING),,extensions/source/abpilot/abp) \
 	$(if $(ENABLE_LDAP),extensions/source/config/ldap/ldapbe2) \
 	$(if $(filter WNT,$(OS)),\
 		extensions/source/config/WinUserInfo/WinUserInfoBe \
 	) \
 	extensions/source/logging/log \
-	extensions/source/scanner/scn \
+	$(if $(DISABLE_DYNLOADING),,extensions/source/scanner/scn) \
 	extensions/source/update/feed/updatefeed \
 	$(if $(filter-out WNT,$(OS)),\
 		shell/source/cmdmail/cmdmail \

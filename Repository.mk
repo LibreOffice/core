@@ -300,14 +300,13 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,kde, \
 	$(if $(ENABLE_KF5),kf5be1) \
 ))
 
-ifneq (,$(USING_X11))
+ifneq ($(OS),HAIKU)
 $(eval $(call gb_Helper_register_plugins_for_install,OOOLIBS,kde, \
     $(if $(ENABLE_KF5),vclplug_kf5) \
     $(if $(ENABLE_QT5),vclplug_qt5) \
     $(if $(ENABLE_QT6),vclplug_qt6) \
     $(if $(ENABLE_GTK3_KDE5),vclplug_gtk3_kde5) \
 ))
-endif
 
 ifneq ($(ENABLE_GTK3_KDE5),)
 $(eval $(call gb_Helper_register_executables_for_install,OOO,kde, \
@@ -315,7 +314,8 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,kde, \
 ))
 endif
 
-ifeq ($(OS),HAIKU)
+else # HAIKU
+
 $(eval $(call gb_Helper_register_plugins_for_install,OOOLIBS,haiku, \
     $(if $(ENABLE_QT5),vclplug_qt5) \
     $(if $(ENABLE_QT6),vclplug_qt6) \
@@ -485,6 +485,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 
 $(eval $(call gb_Helper_register_plugins_for_install,OOOLIBS,ooo, \
     acc \
+    $(if $(DISABLE_DYNLOADING),components) \
     cui \
     gie \
     icg \
@@ -492,7 +493,6 @@ $(eval $(call gb_Helper_register_plugins_for_install,OOOLIBS,ooo, \
     $(if $(USING_X11),vclplug_gen) \
     $(if $(filter $(OS),WNT),vclplug_win) \
     $(if $(filter $(OS),MACOSX),vclplug_osx) \
-    $(if $(USING_X11),,$(if $(ENABLE_QT5),vclplug_qt5)) \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,postgresqlsdbc, \
@@ -563,6 +563,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 	$(if $(filter MSC,$(COM)),cli_cppuhelper) \
 	$(if $(filter $(OS),ANDROID),lo-bootstrap) \
 	$(if $(filter $(OS),MACOSX),OOoSpotlightImporter) \
+    cppunitmain \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,ure, \

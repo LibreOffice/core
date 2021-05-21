@@ -95,7 +95,49 @@
 #include <svx/galleryitem.hxx>
 #include <svx/sdangitm.hxx>
 
+#ifdef DISABLE_DYNLOADING
+/* Avoid clash with the ones from svx/source/form/typemap.cxx */
+#define aSfxBoolItem_Impl sd_source_core_typemap_aSfxBoolItem_Impl
+#define aSfxInt32Item_Impl sd_source_core_typemap_aSfxInt32Item_Impl
+#define aSfxStringItem_Impl sd_source_core_typemap_aSfxStringItem_Impl
+#define aSfxUInt16Item_Impl sd_source_core_typemap_aSfxUInt16Item_Impl
+#define aSfxUInt32Item_Impl sd_source_core_typemap_aSfxUInt32Item_Impl
+#define aSfxVoidItem_Impl sd_source_core_typemap_aSfxVoidItem_Impl
+#define aSvxClipboardFormatItem_Impl sd_source_core_typemap_aSvxClipboardFormatItem_Impl
+#define aSvxColorItem_Impl sd_source_core_typemap_aSvxColorItem_Impl
+#define aSvxContourItem_Impl sd_source_core_typemap_aSvxContourItem_Impl
+#define aSvxCrossedOutItem_Impl sd_source_core_typemap_aSvxCrossedOutItem_Impl
+#define aSvxFontHeightItem_Impl sd_source_core_typemap_aSvxFontHeightItem_Impl
+#define aSvxFontItem_Impl sd_source_core_typemap_aSvxFontItem_Impl
+#define aSvxLanguageItem_Impl sd_source_core_typemap_aSvxLanguageItem_Impl
+#define aSvxPostureItem_Impl sd_source_core_typemap_aSvxPostureItem_Impl
+#define aSvxShadowedItem_Impl sd_source_core_typemap_aSvxShadowedItem_Impl
+#define aSvxUnderlineItem_Impl sd_source_core_typemap_aSvxUnderlineItem_Impl
+#define aSvxOverlineItem_Impl sd_source_core_typemap_aSvxOverlineItem_Impl
+#define aSvxWeightItem_Impl sd_source_core_typemap_aSvxWeightItem_Impl
+#endif
+
 #define SFX_TYPEMAP
 #include <sdslots.hxx>
+
+#ifdef DISABLE_DYNLOADING
+#undef aSfxBoolItem_Impl
+#undef aSfxInt32Item_Impl
+#undef aSfxStringItem_Impl
+#undef aSfxUInt16Item_Impl
+#undef aSfxUInt32Item_Impl
+#undef aSfxVoidItem_Impl
+#undef aSvxClipboardFormatItem_Impl
+#undef aSvxColorItem_Impl
+#undef aSvxContourItem_Impl
+#undef aSvxCrossedOutItem_Impl
+#undef aSvxFontHeightItem_Impl
+#undef aSvxFontItem_Impl
+#undef aSvxLanguageItem_Impl
+#undef aSvxPostureItem_Impl
+#undef aSvxShadowedItem_Impl
+#undef aSvxTextLineItem_Impl
+#undef aSvxWeightItem_Impl
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

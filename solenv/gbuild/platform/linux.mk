@@ -18,7 +18,11 @@ gb_LinkTarget_LDFLAGS += $(gb__LinkTarget_LDFLAGS_zdefs)
 include $(GBUILDDIR)/platform/unxgcc.mk
 
 ifneq ($(ATOMIC_LIB),)
-gb_STDLIBS_CXX := $(ATOMIC_LIB)
+gb_STDLIBS_CXX += $(ATOMIC_LIB)
+endif
+
+ifeq ($(DISABLE_DYNLOADING),TRUE)
+gb_STDLIBS_CXX += -lstdc++
 endif
 
 # vim: set noet sw=4 ts=4:

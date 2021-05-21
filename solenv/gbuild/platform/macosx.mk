@@ -348,7 +348,7 @@ gb_UnpackedTarget_TARFILE_LOCATION := $(TARFILE_LOCATION)
 
 # UnoApiHeadersTarget class
 
-ifneq ($(filter TRUE,$(DISABLE_DYNLOADING)),)
+ifeq ($(DISABLE_DYNLOADING),TRUE)
 gb_UnoApiHeadersTarget_select_variant = $(if $(filter udkapi,$(1)),comprehensive,$(2))
 else
 gb_UnoApiHeadersTarget_select_variant = $(2)

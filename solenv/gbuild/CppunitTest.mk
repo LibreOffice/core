@@ -70,8 +70,13 @@ endif
 
 # defined by platform
 #  gb_CppunitTest_get_filename
+ifeq (,$(DISABLE_DYNLOADING))
 gb_CppunitTest_RUNTIMEDEPS := $(call gb_Executable_get_runtime_dependencies,cppunittester)
 gb_CppunitTest_CPPTESTCOMMAND := $(call gb_Executable_get_target_for_build,cppunittester)
+else
+gb_CppunitTest_RUNTIMEDEPS :=
+gb_CppunitTest_CPPTESTCOMMAND :=
+endif
 
 # i18npool dlopens localedata_* libraries.
 gb_CppunitTest_RUNTIMEDEPS += \
@@ -198,6 +203,11 @@ $(call gb_CppunitTest_get_target,$(1)) : HEADLESS := --headless
 $(call gb_CppunitTest_get_target,$(1)) : EXTRA_ENV_VARS :=
 $$(eval $$(call gb_Module_register_target,$(call gb_CppunitTest_get_target,$(1)),$(call gb_CppunitTest_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),CppunitTest)
+ifeq ($(DISABLE_DYNLOADING),TRUE)
+$$(eval $$(call gb_CppunitTest_use_libraries,$(1),cppunitmain))
+$$(eval $$(call gb_CppunitTest_add_defs,$(1),-D__EMSCRIPTEN__))
+endif
+$(if $(filter $(1),$(gb_CppunitTest_KNOWN)),,gb_CppunitTest_KNOWN += $(1))
 
 endef
 

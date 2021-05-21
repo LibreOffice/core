@@ -9,15 +9,15 @@
 
 $(eval $(call gb_Module_Module,registry))
 
+gb_registry_can_build_exe = $(if $(or $(DISABLE_DYNLOADING),$(ENABLE_MACOSX_SANDBOX)),,$(true))
+
 $(eval $(call gb_Module_add_targets,registry,\
 	Library_reg \
-	$(if $(filter-out $(OS),iOS), \
-		$(if $(ENABLE_MACOSX_SANDBOX),, \
+    $(if $(call gb_registry_can_build_exe), \
 			Executable_regmerge \
 			Executable_regview \
-		) \
 		StaticLibrary_registry_helper \
-	) \
+    ) \
 ))
 
 # vim:set noet sw=4 ts=4:
