@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0dc86ed9_0d57c70b",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 5373,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-05-21T10:56:16Z",
+      "side": 1,
+      "message": "That will not work in a simple way. Vertical mirror introduces a 180deg rotation of the text.",
+      "range": {
+        "startLine": 5373,
+        "startChar": 53,
+        "endLine": 5373,
+        "endChar": 62
+      },
+      "revId": "0b84881d185b3fa53dbc6128575317c7f2b0589f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
