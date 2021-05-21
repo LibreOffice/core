@@ -208,16 +208,16 @@ IMPL_LINK_NOARG(SwLineNumberingDlg, OKHdl, weld::Button&, void)
     aInf.SetPos(static_cast<LineNumberPosition>(m_xPosLB->get_active()));
 
     // offset
-    aInf.SetPosFromLeft(static_cast<sal_uInt16>(m_xOffsetMF->denormalize(m_xOffsetMF->get_value(FieldUnit::TWIP))));
+    aInf.SetPosFromLeft(o3tl::narrowing<sal_uInt16>(m_xOffsetMF->denormalize(m_xOffsetMF->get_value(FieldUnit::TWIP))));
 
     // numbering offset
-    aInf.SetCountBy(static_cast<sal_uInt16>(m_xNumIntervalNF->get_value()));
+    aInf.SetCountBy(o3tl::narrowing<sal_uInt16>(m_xNumIntervalNF->get_value()));
 
     // divider
     aInf.SetDivider(m_xDivisorED->get_text());
 
     // divider offset
-    aInf.SetDividerCountBy(static_cast<sal_uInt16>(m_xDivIntervalNF->get_value()));
+    aInf.SetDividerCountBy(o3tl::narrowing<sal_uInt16>(m_xDivIntervalNF->get_value()));
 
     // count
     aInf.SetCountBlankLines(m_xCountEmptyLinesCB->get_active());

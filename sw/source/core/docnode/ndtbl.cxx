@@ -362,7 +362,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
     if( GetIDocumentUndoRedo().DoesUndo() )
     {
         GetIDocumentUndoRedo().AppendUndo(
-            std::make_unique<SwUndoInsTable>( rPos, nCols, nRows, static_cast<sal_uInt16>(eAdjust),
+            std::make_unique<SwUndoInsTable>( rPos, nCols, nRows, o3tl::narrowing<sal_uInt16>(eAdjust),
                                       rInsTableOpts, pTAFormat, pColArr,
                                       aTableName));
     }
@@ -651,7 +651,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
     {
         GetIDocumentUndoRedo().StartUndo( SwUndoId::TEXTTOTABLE, nullptr );
         pUndo = new SwUndoTextToTable( aOriginal, rInsTableOpts, cCh,
-                    static_cast<sal_uInt16>(eAdjust), pTAFormat );
+                    o3tl::narrowing<sal_uInt16>(eAdjust), pTAFormat );
         GetIDocumentUndoRedo().AppendUndo( std::unique_ptr<SwUndo>(pUndo) );
 
         // Do not add splitting the TextNode to the Undo history
@@ -1041,13 +1041,13 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
                     {
                         // sw_redlinehide: no idea if this makes any sense...
                         TextFrameIndex const nPos(aFInfo.GetFrame()->MapModelToView(pTextNd, nChPos));
-                        aPosArr.push_back( static_cast<sal_uInt16>(
+                        aPosArr.push_back( o3tl::narrowing<sal_uInt16>(
                             aFInfo.GetCharPos(nPos+TextFrameIndex(1), false)) );
                     }
                 }
 
                 aPosArr.push_back(
-                                static_cast<sal_uInt16>(aFInfo.GetFrame()->IsVertical() ?
+                                o3tl::narrowing<sal_uInt16>(aFInfo.GetFrame()->IsVertical() ?
                                 aFInfo.GetFrame()->getFramePrintArea().Bottom() :
                                 aFInfo.GetFrame()->getFramePrintArea().Right()) );
 
@@ -2921,7 +2921,7 @@ void SwCollectTableLineBoxes::AddBox( const SwTableBox& rBox )
     m_aPositionArr.push_back(m_nWidth);
     SwTableBox* p = const_cast<SwTableBox*>(&rBox);
     m_Boxes.push_back(p);
-    m_nWidth = m_nWidth + static_cast<sal_uInt16>(rBox.GetFrameFormat()->GetFrameSize().GetWidth());
+    m_nWidth = m_nWidth + o3tl::narrowing<sal_uInt16>(rBox.GetFrameFormat()->GetFrameSize().GetWidth());
 }
 
 const SwTableBox* SwCollectTableLineBoxes::GetBoxOfPos( const SwTableBox& rBox )
@@ -2944,7 +2944,7 @@ const SwTableBox* SwCollectTableLineBoxes::GetBoxOfPos( const SwTableBox& rBox )
         if( n >= m_aPositionArr.size() )
             --n;
 
-        m_nWidth = m_nWidth + static_cast<sal_uInt16>(rBox.GetFrameFormat()->GetFrameSize().GetWidth());
+        m_nWidth = m_nWidth + o3tl::narrowing<sal_uInt16>(rBox.GetFrameFormat()->GetFrameSize().GetWidth());
         pRet = m_Boxes[ n ];
     }
     return pRet;

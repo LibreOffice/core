@@ -1348,7 +1348,7 @@ namespace //local functions originally from docfmt.cxx
                 if (nLevel >= MAXLEVEL)
                     nLevel = MAXLEVEL - 1;
 
-                SwNumFormat aNumFormat = pNumRule->Get(static_cast<sal_uInt16>(nLevel));
+                SwNumFormat aNumFormat = pNumRule->Get(o3tl::narrowing<sal_uInt16>(nLevel));
                 SwCharFormat * pCharFormat =
                     rDoc.FindCharFormatByName(aNumFormat.GetCharFormatName());
 

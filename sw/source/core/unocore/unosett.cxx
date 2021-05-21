@@ -1251,7 +1251,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
     SolarMutexGuard aGuard;
     OSL_ENSURE( 0 <= nIndex && nIndex < MAXLEVEL, "index out of range" );
 
-    const SwNumFormat& rFormat = rNumRule.Get( static_cast<sal_uInt16>(nIndex) );
+    const SwNumFormat& rFormat = rNumRule.Get( o3tl::narrowing<sal_uInt16>(nIndex) );
 
     SwCharFormat* pCharFormat = rFormat.GetCharFormat();
     OUString CharStyleName;
@@ -1479,7 +1479,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
     SolarMutexGuard aGuard;
     OSL_ENSURE( 0 <= nIndex && nIndex < MAXLEVEL, "index out of range" );
 
-    SwNumFormat aFormat(rNumRule.Get( static_cast<sal_uInt16>(nIndex) ));
+    SwNumFormat aFormat(rNumRule.Get( o3tl::narrowing<sal_uInt16>(nIndex) ));
 
     OUString sHeadingStyleName;
     OUString sParagraphStyleName;
@@ -1525,7 +1525,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
         }
     }
 
-    rNumRule.Set(static_cast<sal_uInt16>(nIndex), aFormat);
+    rNumRule.Set(o3tl::narrowing<sal_uInt16>(nIndex), aFormat);
 }
 
 void SwXNumberingRules::SetPropertiesToNumFormat(

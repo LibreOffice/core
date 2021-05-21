@@ -216,7 +216,7 @@ SwCaptionDialog::SwCaptionDialog(weld::Window *pParent, SwView &rV)
         SwFieldType* pFieldType = pMgr->GetFieldType(SwFieldIds::Unknown, --i);
         if (pFieldType->GetName() == m_xCategoryBox->get_active_text())
         {
-            nSelFormat = static_cast<sal_uInt16>(static_cast<SwSetExpFieldType*>(pFieldType)->GetSeqFormat());
+            nSelFormat = o3tl::narrowing<sal_uInt16>(static_cast<SwSetExpFieldType*>(pFieldType)->GetSeqFormat());
             break;
         }
     }

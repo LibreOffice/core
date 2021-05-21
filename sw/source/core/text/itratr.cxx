@@ -1432,7 +1432,7 @@ sal_uInt16 SwTextFrame::GetScalingOfSelectedText(
         SwTextIter aLine(this, &aInf);
         aLine.CharToLine( nStart );
         pOut->SetMapMode( aOldMap );
-        return static_cast<sal_uInt16>( nWidth ?
+        return o3tl::narrowing<sal_uInt16>( nWidth ?
             ( ( 100 * aLine.GetCurr()->Height() ) / nWidth ) : 0 );
     }
     // no frame or no paragraph, we take the height of the character
@@ -1442,7 +1442,7 @@ sal_uInt16 SwTextFrame::GetScalingOfSelectedText(
     pOut->SetMapMode( aOldMap );
 
     SwDrawTextInfo aDrawInf(pSh, *pOut, GetText(), sal_Int32(nStart), 1);
-    return static_cast<sal_uInt16>( nWidth ? ((100 * aIter.GetFnt()->GetTextSize_( aDrawInf ).Height()) / nWidth ) : 0 );
+    return o3tl::narrowing<sal_uInt16>( nWidth ? ((100 * aIter.GetFnt()->GetTextSize_( aDrawInf ).Height()) / nWidth ) : 0 );
 }
 
 SwTwips SwTextNode::GetWidthOfLeadingTabs() const

@@ -26,6 +26,7 @@
 
 #include <xmloff/xmluconv.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/safeint.hxx>
 
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
@@ -114,7 +115,7 @@ bool sw_frmitems_parseXMLBorder( std::u16string_view rValue,
         else if( !rHasWidth &&
              rUnitConverter.convertMeasureToCore(nTemp, aToken, 0, USHRT_MAX))
         {
-            rWidth = static_cast<sal_uInt16>(nTemp);
+            rWidth = o3tl::narrowing<sal_uInt16>(nTemp);
             rHasWidth = true;
         }
         else

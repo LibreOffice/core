@@ -332,7 +332,7 @@ bool SwDrawModeGrf::PutValue( const uno::Any& rVal,
     sal_Int32 eVal = SWUnoHelper::GetEnumAsInt32( rVal );
     if(eVal >= 0 && eVal <= sal_uInt16(GraphicDrawMode::Watermark))
     {
-        SetEnumValue(static_cast<sal_uInt16>(eVal));
+        SetEnumValue(o3tl::narrowing<sal_uInt16>(eVal));
         return true;
     }
     return false;

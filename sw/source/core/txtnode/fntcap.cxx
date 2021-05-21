@@ -482,7 +482,7 @@ void SwSubFont::DrawStretchCapital( SwDrawTextInfo &rInf )
         rInf.SetLen(TextFrameIndex(rInf.GetText().getLength()));
 
     const Point aOldPos = rInf.GetPos();
-    const sal_uInt16 nCapWidth = static_cast<sal_uInt16>( GetCapitalSize( rInf ).Width() );
+    const sal_uInt16 nCapWidth = o3tl::narrowing<sal_uInt16>( GetCapitalSize( rInf ).Width() );
     rInf.SetPos(aOldPos);
 
     rInf.SetDrawSpace( GetUnderline() != LINESTYLE_NONE ||

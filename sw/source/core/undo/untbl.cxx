@@ -929,7 +929,7 @@ sal_uInt16 SaveTable::AddFormat( SwFrameFormat* pFormat, bool bIsLine )
         m_aSets.push_back(pSet);
         m_aFrameFormats.insert(m_aFrameFormats.begin() + nRet, pFormat);
     }
-    return static_cast<sal_uInt16>(nRet);
+    return o3tl::narrowing<sal_uInt16>(nRet);
 }
 
 void SaveTable::RestoreAttr( SwTable& rTable, bool bMdfyBox )

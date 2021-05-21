@@ -889,7 +889,7 @@ tools::Long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     if (bNested)
         return 0;
 
-    sal_uInt16 n = (aF.nId <= eMax) ? aF.nId : static_cast<sal_uInt16>(eMax);
+    sal_uInt16 n = (aF.nId <= eMax) ? aF.nId : o3tl::narrowing<sal_uInt16>(eMax);
     sal_uInt16 nI = n / 32;                     // # of sal_uInt32
     sal_uInt32 nMask = 1 << ( n % 32 );          // Mask for bits
 
@@ -2675,7 +2675,7 @@ void SwWW8ImplReader::Read_SubF_Ruby( WW8ReadFieldParams& rReadParam)
                 if( sTemp.startsWithIgnoreAsciiCase( "jc" ) )
                 {
                     sTemp = sTemp.copy(2);
-                    nJustificationCode = static_cast<sal_uInt16>(sTemp.toInt32());
+                    nJustificationCode = o3tl::narrowing<sal_uInt16>(sTemp.toInt32());
                 }
                 else if( sTemp.startsWithIgnoreAsciiCase( "hps" ) )
                 {
@@ -2887,12 +2887,12 @@ static void lcl_toxMatchTSwitch(SwWW8ImplReader const & rReader, SwTOXBase& rBas
     else while( -1 != nIndex )
     {
         sal_Int32 nOldIndex=nIndex;
-        sal_uInt16 nLevel = static_cast<sal_uInt16>(
+        sal_uInt16 nLevel = o3tl::narrowing<sal_uInt16>(
             sParams.getToken(0, ';', nIndex).toInt32());
         if( -1 == nIndex )
         {
             nIndex = nOldIndex;
-            nLevel = static_cast<sal_uInt16>(
+            nLevel = o3tl::narrowing<sal_uInt16>(
                 sParams.getToken(0, ',', nIndex).toInt32());
         }
 
@@ -3023,7 +3023,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                         // if NO OUString just ignore the \c
                         if( !sParams.isEmpty() )
                         {
-                            nIndexCols = static_cast<sal_uInt16>(sParams.toInt32());
+                            nIndexCols = o3tl::narrowing<sal_uInt16>(sParams.toInt32());
                         }
                     }
                     break;
@@ -3616,7 +3616,7 @@ static void lcl_ImportTox(SwDoc &rDoc, SwPaM const &rPaM, const OUString &rStr, 
                 // if NO String just ignore the \l
                 if( !sParams.isEmpty() && sParams[0]>'0' && sParams[0]<='9' )
                 {
-                    nLevel = static_cast<sal_uInt16>(sParams.toInt32());
+                    nLevel = o3tl::narrowing<sal_uInt16>(sParams.toInt32());
                 }
             }
             break;

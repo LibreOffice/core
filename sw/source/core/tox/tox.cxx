@@ -860,7 +860,7 @@ lcl_BuildToken(const OUString & sPattern, sal_Int32 & nCurPatternPos)
     eRet.sCharStyleName = sToken.getToken( 0, ',', nIdx );
     OUString sTmp( sToken.getToken( 0, ',', nIdx ));
     if( !sTmp.isEmpty() )
-        eRet.nPoolId = static_cast<sal_uInt16>(sTmp.toInt32());
+        eRet.nPoolId = o3tl::narrowing<sal_uInt16>(sTmp.toInt32());
 
     switch( eTokenType )
     {
@@ -870,10 +870,10 @@ lcl_BuildToken(const OUString & sPattern, sal_Int32 & nCurPatternPos)
     case TOKEN_ENTRY_NO:
         sTmp = sToken.getToken( 0, ',', nIdx ); // token 2
         if( !sTmp.isEmpty() )
-            eRet.nChapterFormat = static_cast<sal_uInt16>(sTmp.toInt32());
+            eRet.nChapterFormat = o3tl::narrowing<sal_uInt16>(sTmp.toInt32());
         sTmp = sToken.getToken( 0, ',', nIdx ); // token 3
         if( !sTmp.isEmpty() )
-            eRet.nOutlineLevel = static_cast<sal_uInt16>(sTmp.toInt32()); //the maximum outline level to examine
+            eRet.nOutlineLevel = o3tl::narrowing<sal_uInt16>(sTmp.toInt32()); //the maximum outline level to examine
         break;
 
     case TOKEN_TEXT:
@@ -911,7 +911,7 @@ lcl_BuildToken(const OUString & sPattern, sal_Int32 & nCurPatternPos)
         break;
 
     case TOKEN_AUTHORITY:
-        eRet.nAuthorityField = static_cast<sal_uInt16>(sAuthFieldEnum.toInt32());
+        eRet.nAuthorityField = o3tl::narrowing<sal_uInt16>(sAuthFieldEnum.toInt32());
         break;
     default: break;
     }

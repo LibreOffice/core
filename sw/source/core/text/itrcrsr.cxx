@@ -142,7 +142,7 @@ namespace {
                 nListLevel = MAXLEVEL - 1;
 
             const SwNumFormat& rNumFormat =
-                    rTextNode.GetNumRule()->Get( static_cast<sal_uInt16>(nListLevel) );
+                    rTextNode.GetNumRule()->Get( o3tl::narrowing<sal_uInt16>(nListLevel) );
             if ( rNumFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
             {
                 bRet = true;
@@ -1625,7 +1625,7 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
                     nTmpY = pPor->Height() - nTmpY;
                 if( nTmpY < 0 )
                     nTmpY = 0;
-                nX = static_cast<sal_uInt16>(nTmpY);
+                nX = o3tl::narrowing<sal_uInt16>(nTmpY);
             }
 
             if( static_cast<SwMultiPortion*>(pPor)->HasBrackets() )

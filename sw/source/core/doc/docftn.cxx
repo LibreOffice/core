@@ -106,7 +106,7 @@ SwPageDesc* SwEndNoteInfo::GetPageDesc(SwDoc& rDoc) const
 {
     if(!m_pPageDesc)
     {
-        m_pPageDesc = rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool( static_cast<sal_uInt16>(
+        m_pPageDesc = rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool( o3tl::narrowing<sal_uInt16>(
             m_bEndNote ? RES_POOLPAGE_ENDNOTE : RES_POOLPAGE_FOOTNOTE ) );
         m_aDepends.StartListening(m_pPageDesc);
     }
@@ -139,7 +139,7 @@ void SwEndNoteInfo::SetFootnoteTextColl(SwTextFormatColl& rFormat)
 
 SwCharFormat* SwEndNoteInfo::GetCharFormat(SwDoc& rDoc) const
 {
-    auto pCharFormatFromDoc = rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( static_cast<sal_uInt16>(
+    auto pCharFormatFromDoc = rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( o3tl::narrowing<sal_uInt16>(
         m_bEndNote ? RES_POOLCHR_ENDNOTE : RES_POOLCHR_FOOTNOTE ) );
     if (m_pCharFormat != pCharFormatFromDoc)
     {
@@ -172,7 +172,7 @@ namespace
 void SwEndNoteInfo::SetCharFormat(SwCharFormat* pFormat)
 {
     lcl_ResetPoolIdForDocAndSync(
-            static_cast<sal_uInt16>(m_bEndNote
+            o3tl::narrowing<sal_uInt16>(m_bEndNote
                     ? RES_POOLCHR_ENDNOTE
                     : RES_POOLCHR_FOOTNOTE),
             pFormat,
@@ -181,7 +181,7 @@ void SwEndNoteInfo::SetCharFormat(SwCharFormat* pFormat)
 
 SwCharFormat* SwEndNoteInfo::GetAnchorCharFormat(SwDoc& rDoc) const
 {
-    auto pAnchorFormatFromDoc = rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( static_cast<sal_uInt16>(
+    auto pAnchorFormatFromDoc = rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( o3tl::narrowing<sal_uInt16>(
         m_bEndNote ? RES_POOLCHR_ENDNOTE_ANCHOR : RES_POOLCHR_FOOTNOTE_ANCHOR ) );
     if(m_pAnchorFormat != pAnchorFormatFromDoc)
     {
@@ -195,7 +195,7 @@ SwCharFormat* SwEndNoteInfo::GetAnchorCharFormat(SwDoc& rDoc) const
 void SwEndNoteInfo::SetAnchorCharFormat(SwCharFormat* pFormat)
 {
     lcl_ResetPoolIdForDocAndSync(
-            static_cast<sal_uInt16>(m_bEndNote
+            o3tl::narrowing<sal_uInt16>(m_bEndNote
                     ? RES_POOLCHR_ENDNOTE_ANCHOR
                     : RES_POOLCHR_FOOTNOTE_ANCHOR),
             pFormat,

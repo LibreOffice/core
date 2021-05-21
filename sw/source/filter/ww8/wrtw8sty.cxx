@@ -1379,7 +1379,7 @@ void WW8AttributeOutput::SectionLineNumbering( sal_uLong nRestartNo, const SwLin
     if ( nRestartNo )
     {
         SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::SLnnMin::val );
-        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, static_cast<sal_uInt16>(nRestartNo) - 1 );
+        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, o3tl::narrowing<sal_uInt16>(nRestartNo) - 1 );
     }
 }
 

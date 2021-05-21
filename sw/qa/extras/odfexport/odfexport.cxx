@@ -2951,7 +2951,7 @@ DECLARE_ODFEXPORT_TEST(testArabicZeroNumbering, "arabic-zero-numbering.odt")
     // - Expected: 64
     // - Actual  : 4
     // i.e. numbering type was ARABIC, not ARABIC_ZERO.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(style::NumberingType::ARABIC_ZERO),
+    CPPUNIT_ASSERT_EQUAL(o3tl::narrowing<sal_uInt16>(style::NumberingType::ARABIC_ZERO),
                          aMap["NumberingType"].get<sal_uInt16>());
 }
 
@@ -2965,7 +2965,7 @@ DECLARE_ODFEXPORT_TEST(testArabicZero3Numbering, "arabic-zero3-numbering.odt")
     // - Expected: 65
     // - Actual  : 4
     // i.e. numbering type was ARABIC, not ARABIC_ZERO3.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(style::NumberingType::ARABIC_ZERO3),
+    CPPUNIT_ASSERT_EQUAL(o3tl::narrowing<sal_uInt16>(style::NumberingType::ARABIC_ZERO3),
                          aMap["NumberingType"].get<sal_uInt16>());
 }
 
@@ -2979,7 +2979,7 @@ DECLARE_ODFEXPORT_TEST(testArabicZero4Numbering, "arabic-zero4-numbering.odt")
     // - Expected: 66
     // - Actual  : 4
     // i.e. numbering type was ARABIC, not ARABIC_ZERO4.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(style::NumberingType::ARABIC_ZERO4),
+    CPPUNIT_ASSERT_EQUAL(o3tl::narrowing<sal_uInt16>(style::NumberingType::ARABIC_ZERO4),
                          aMap["NumberingType"].get<sal_uInt16>());
 }
 
@@ -2993,7 +2993,7 @@ DECLARE_ODFEXPORT_TEST(testArabicZero5Numbering, "arabic-zero5-numbering.odt")
     // - Expected: 67
     // - Actual  : 4
     // i.e. numbering type was ARABIC, not ARABIC_ZERO5.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(style::NumberingType::ARABIC_ZERO5),
+    CPPUNIT_ASSERT_EQUAL(o3tl::narrowing<sal_uInt16>(style::NumberingType::ARABIC_ZERO5),
                          aMap["NumberingType"].get<sal_uInt16>());
 }
 
@@ -3007,7 +3007,7 @@ DECLARE_ODFEXPORT_TEST(testRovasNumbering, "rovas-numbering.odt")
     // - Expected: 68
     // - Actual  : 4
     // i.e. numbering type was ARABIC, not SZEKELY_ROVAS.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(style::NumberingType::SZEKELY_ROVAS),
+    CPPUNIT_ASSERT_EQUAL(o3tl::narrowing<sal_uInt16>(style::NumberingType::SZEKELY_ROVAS),
                          aMap["NumberingType"].get<sal_uInt16>());
 }
 

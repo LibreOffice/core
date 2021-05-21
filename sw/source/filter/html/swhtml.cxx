@@ -3605,7 +3605,7 @@ void SwHTMLParser::NewBasefontAttr()
         switch( rOption.GetToken() )
         {
         case HtmlOptionId::SIZE:
-            nSize = static_cast<sal_uInt16>(rOption.GetNumber());
+            nSize = o3tl::narrowing<sal_uInt16>(rOption.GetNumber());
             break;
         case HtmlOptionId::ID:
             aId = rOption.GetString();
@@ -3721,7 +3721,7 @@ void SwHTMLParser::NewFontAttr( HtmlTokenId nToken )
                 else if( nSSize > 7 )
                     nSSize = 7;
 
-                nSize = static_cast<sal_uInt16>(nSSize);
+                nSize = o3tl::narrowing<sal_uInt16>(nSSize);
                 nFontHeight = m_aFontHeights[nSize-1];
             }
             break;
@@ -4974,12 +4974,12 @@ void SwHTMLParser::InsertSpacer()
             {
                 SvxULSpaceItem aULSpace( static_cast<const SvxULSpaceItem&>(pTextNode
                     ->SwContentNode::GetAttr( RES_UL_SPACE )) );
-                aULSpace.SetLower( aULSpace.GetLower() + static_cast<sal_uInt16>(nSize) );
+                aULSpace.SetLower( aULSpace.GetLower() + o3tl::narrowing<sal_uInt16>(nSize) );
                 pTextNode->SetAttr( aULSpace );
             }
             else
             {
-                NewAttr(m_xAttrTab, &m_xAttrTab->pULSpace, SvxULSpaceItem(0, static_cast<sal_uInt16>(nSize), RES_UL_SPACE));
+                NewAttr(m_xAttrTab, &m_xAttrTab->pULSpace, SvxULSpaceItem(0, o3tl::narrowing<sal_uInt16>(nSize), RES_UL_SPACE));
                 EndAttr( m_xAttrTab->pULSpace, false );
 
                 AppendTextNode();    // Don't change spacing!
@@ -5031,7 +5031,7 @@ sal_uInt16 SwHTMLParser::ToTwips( sal_uInt16 nPixel )
     {
         SwTwips nTwips = Application::GetDefaultDevice()->PixelToLogic(
                     Size( nPixel, nPixel ), MapMode( MapUnit::MapTwip ) ).Width();
-        return static_cast<sal_uInt16>(std::min(nTwips, SwTwips(SAL_MAX_UINT16)));
+        return o3tl::narrowing<sal_uInt16>(std::min(nTwips, SwTwips(SAL_MAX_UINT16)));
     }
     else
         return nPixel;
@@ -5255,11 +5255,11 @@ void SwHTMLParser::InsertHorzRule()
             aId = rOption.GetString();
             break;
         case HtmlOptionId::SIZE:
-            nSize = static_cast<sal_uInt16>(rOption.GetNumber());
+            nSize = o3tl::narrowing<sal_uInt16>(rOption.GetNumber());
             break;
         case HtmlOptionId::WIDTH:
             bPercentWidth = (rOption.GetString().indexOf('%') != -1);
-            nWidth = static_cast<sal_uInt16>(rOption.GetNumber());
+            nWidth = o3tl::narrowing<sal_uInt16>(rOption.GetNumber());
             if( bPercentWidth && nWidth>=100 )
             {
                 // the default case are 100% lines (no attributes necessary)
@@ -5343,8 +5343,8 @@ void SwHTMLParser::InsertHorzRule()
         {
             // fake length and alignment of line above paragraph indents
             tools::Long nBrowseWidth = GetCurrentBrowseWidth();
-            nWidth = bPercentWidth ? static_cast<sal_uInt16>((nWidth*nBrowseWidth) / 100)
-                               : ToTwips( static_cast<sal_uInt16>(nBrowseWidth) );
+            nWidth = bPercentWidth ? o3tl::narrowing<sal_uInt16>((nWidth*nBrowseWidth) / 100)
+                               : ToTwips( o3tl::narrowing<sal_uInt16>(nBrowseWidth) );
             if( nWidth < MINLAY )
                 nWidth = MINLAY;
 
@@ -5357,16 +5357,16 @@ void SwHTMLParser::InsertHorzRule()
                 switch( eAdjust )
                 {
                 case SvxAdjust::Right:
-                    aLRItem.SetTextLeft( static_cast<sal_uInt16>(nDist) );
+                    aLRItem.SetTextLeft( o3tl::narrowing<sal_uInt16>(nDist) );
                     break;
                 case SvxAdjust::Left:
-                    aLRItem.SetRight( static_cast<sal_uInt16>(nDist) );
+                    aLRItem.SetRight( o3tl::narrowing<sal_uInt16>(nDist) );
                     break;
                 case SvxAdjust::Center:
                 default:
                     nDist /= 2;
-                    aLRItem.SetTextLeft( static_cast<sal_uInt16>(nDist) );
-                    aLRItem.SetRight( static_cast<sal_uInt16>(nDist) );
+                    aLRItem.SetTextLeft( o3tl::narrowing<sal_uInt16>(nDist) );
+                    aLRItem.SetRight( o3tl::narrowing<sal_uInt16>(nDist) );
                     break;
                 }
 

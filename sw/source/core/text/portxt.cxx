@@ -221,7 +221,7 @@ void SwTextPortion::BreakCut( SwTextFormatInfo &rInf, const SwTextGuess &rGuess 
     // The word/char is larger than the line
     // Special case 1: The word is larger than the line
     // We truncate ...
-    const sal_uInt16 nLineWidth = static_cast<sal_uInt16>(rInf.Width() - rInf.X());
+    const sal_uInt16 nLineWidth = o3tl::narrowing<sal_uInt16>(rInf.Width() - rInf.X());
     TextFrameIndex nLen = rGuess.CutPos() - rInf.GetIdx();
     if (nLen > TextFrameIndex(0))
     {

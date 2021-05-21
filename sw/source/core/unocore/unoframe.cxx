@@ -1409,7 +1409,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
         }
         else if(IsDescriptor())
         {
-            m_pProps->SetProperty(static_cast<sal_uInt16>(RES_FRAMEDIR), 0, _rValue);
+            m_pProps->SetProperty(o3tl::narrowing<sal_uInt16>(RES_FRAMEDIR), 0, _rValue);
         }
         return;
     }
@@ -1476,16 +1476,16 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                         pNoText->SetContour(nullptr);
                     else if(aValue >>= aParam)
                     {
-                        tools::PolyPolygon aPoly(static_cast<sal_uInt16>(aParam.getLength()));
+                        tools::PolyPolygon aPoly(o3tl::narrowing<sal_uInt16>(aParam.getLength()));
                         for(const ::drawing::PointSequence& rPointSeq : std::as_const(aParam))
                         {
                             sal_Int32 nPoints = rPointSeq.getLength();
                             const ::awt::Point* pPoints = rPointSeq.getConstArray();
-                            tools::Polygon aSet( static_cast<sal_uInt16>(nPoints) );
+                            tools::Polygon aSet( o3tl::narrowing<sal_uInt16>(nPoints) );
                             for(sal_Int32 j = 0; j < nPoints; j++)
                             {
                                 Point aPoint(pPoints[j].X, pPoints[j].Y);
-                                aSet.SetPoint(aPoint, static_cast<sal_uInt16>(j));
+                                aSet.SetPoint(aPoint, o3tl::narrowing<sal_uInt16>(j));
                             }
                             // Close polygon if it isn't closed already.
                             aSet.Optimize( PolyOptimizeFlags::CLOSE );

@@ -1488,7 +1488,7 @@ void SwTiledRenderingTest::testTrackChanges()
     // Reject the change by id, while the cursor does not cover the tracked change.
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
-        {"RejectTrackedChange", uno::makeAny(static_cast<sal_uInt16>(pRedline->GetId()))}
+        {"RejectTrackedChange", uno::makeAny(o3tl::narrowing<sal_uInt16>(pRedline->GetId()))}
     }));
     comphelper::dispatchCommand(".uno:RejectTrackedChange", aPropertyValues);
     Scheduler::ProcessEventsToIdle();

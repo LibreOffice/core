@@ -246,7 +246,7 @@ bool SwDoc::OutlineUpDown(const SwPaM& rPam, short nOffset,
             n++;
 
             SwTextFormatColl *aTmpColl =
-                getIDocumentStylePoolAccess().GetTextCollFromPool(static_cast<sal_uInt16>(RES_POOLCOLL_HEADLINE1 + n));
+                getIDocumentStylePoolAccess().GetTextCollFromPool(o3tl::narrowing<sal_uInt16>(RES_POOLCOLL_HEADLINE1 + n));
 
             if( aTmpColl->IsAssignedToListLevelOfOutlineStyle() &&
                 aTmpColl->GetAssignedOutlineStyleLevel() == n )
@@ -275,7 +275,7 @@ bool SwDoc::OutlineUpDown(const SwPaM& rPam, short nOffset,
             n--;
 
             SwTextFormatColl *aTmpColl =
-                getIDocumentStylePoolAccess().GetTextCollFromPool(static_cast<sal_uInt16>(RES_POOLCOLL_HEADLINE1 + n));
+                getIDocumentStylePoolAccess().GetTextCollFromPool(o3tl::narrowing<sal_uInt16>(RES_POOLCOLL_HEADLINE1 + n));
 
             if( aTmpColl->IsAssignedToListLevelOfOutlineStyle() &&
                 aTmpColl->GetAssignedOutlineStyleLevel() == n )
@@ -2556,7 +2556,7 @@ OUString SwDoc::GetUniqueNumRuleName( const OUString* pChkStr, bool bAutoNum ) c
             if( sNm.startsWith( aName ) )
             {
                 // Determine Number and set the Flag
-                nNum = static_cast<sal_uInt16>(sNm.copy( nNmLen ).toInt32());
+                nNum = o3tl::narrowing<sal_uInt16>(sNm.copy( nNmLen ).toInt32());
                 if( nNum-- && nNum < mpNumRuleTable->size() )
                     pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
             }

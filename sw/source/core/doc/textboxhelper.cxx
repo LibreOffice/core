@@ -575,7 +575,7 @@ void SwTextBoxHelper::getProperty(SwFrameFormat const* pShape, sal_uInt16 nWID, 
             break;
         default:
             SAL_WARN("sw.core", "SwTextBoxHelper::getProperty: unhandled member-id: "
-                                    << static_cast<sal_uInt16>(nMemberID));
+                                    << o3tl::narrowing<sal_uInt16>(nMemberID));
             break;
     }
 }
@@ -633,7 +633,7 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
                     break;
                 default:
                     SAL_WARN("sw.core", "SwTextBoxHelper::syncProperty: unhandled member-id: "
-                                            << static_cast<sal_uInt16>(nMemberID)
+                                            << o3tl::narrowing<sal_uInt16>(nMemberID)
                                             << " (which-id: " << nWID << ")");
                     break;
             }
@@ -650,7 +650,7 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
                     break;
                 default:
                     SAL_WARN("sw.core", "SwTextBoxHelper::syncProperty: unhandled member-id: "
-                                            << static_cast<sal_uInt16>(nMemberID)
+                                            << o3tl::narrowing<sal_uInt16>(nMemberID)
                                             << " (which-id: " << nWID << ")");
                     break;
             }
@@ -674,7 +674,7 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
                     break;
                 default:
                     SAL_WARN("sw.core", "SwTextBoxHelper::syncProperty: unhandled member-id: "
-                                            << static_cast<sal_uInt16>(nMemberID)
+                                            << o3tl::narrowing<sal_uInt16>(nMemberID)
                                             << " (which-id: " << nWID << ")");
                     break;
             }
@@ -714,7 +714,7 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
                 break;
                 default:
                     SAL_WARN("sw.core", "SwTextBoxHelper::syncProperty: unhandled member-id: "
-                                            << static_cast<sal_uInt16>(nMemberID)
+                                            << o3tl::narrowing<sal_uInt16>(nMemberID)
                                             << " (which-id: " << nWID << ")");
                     break;
             }
@@ -743,7 +743,7 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
                     break;
                 default:
                     SAL_WARN("sw.core", "SwTextBoxHelper::syncProperty: unhandled member-id: "
-                                            << static_cast<sal_uInt16>(nMemberID)
+                                            << o3tl::narrowing<sal_uInt16>(nMemberID)
                                             << " (which-id: " << nWID << ")");
                     break;
             }
@@ -768,7 +768,7 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
                     break;
                 default:
                     SAL_WARN("sw.core", "SwTextBoxHelper::syncProperty: unhandled member-id: "
-                                            << static_cast<sal_uInt16>(nMemberID)
+                                            << o3tl::narrowing<sal_uInt16>(nMemberID)
                                             << " (which-id: " << nWID << ")");
                     break;
             }
@@ -787,15 +787,15 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
                     break;
                 default:
                     SAL_WARN("sw.core", "SwTextBoxHelper::syncProperty: unhandled member-id: "
-                                            << static_cast<sal_uInt16>(nMemberID)
+                                            << o3tl::narrowing<sal_uInt16>(nMemberID)
                                             << " (which-id: " << nWID << ")");
                     break;
             }
             break;
         default:
             SAL_WARN("sw.core", "SwTextBoxHelper::syncProperty: unhandled which-id: "
-                                    << nWID << " (member-id: " << static_cast<sal_uInt16>(nMemberID)
-                                    << ")");
+                                    << nWID << " (member-id: "
+                                    << o3tl::narrowing<sal_uInt16>(nMemberID) << ")");
             break;
     }
 

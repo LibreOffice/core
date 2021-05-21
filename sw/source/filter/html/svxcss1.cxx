@@ -1013,7 +1013,7 @@ static void ParseCSS1_font_size( const CSS1Expression *pExpr,
         break;
     case CSS1_PERCENTAGE:
         // only for drop caps!
-        nPropHeight = static_cast<sal_uInt16>(pExpr->GetNumber());
+        nPropHeight = o3tl::narrowing<sal_uInt16>(pExpr->GetNumber());
         break;
     case CSS1_IDENT:
         {
@@ -1139,7 +1139,7 @@ static void ParseCSS1_font_weight( const CSS1Expression *pExpr,
         break;
     case CSS1_NUMBER:
         {
-            sal_uInt16 nWeight = static_cast<sal_uInt16>(pExpr->GetNumber());
+            sal_uInt16 nWeight = o3tl::narrowing<sal_uInt16>(pExpr->GetNumber());
             SvxWeightItem aWeight( nWeight>400 ? WEIGHT_BOLD : WEIGHT_NORMAL,
                                    aItemIds.nWeight );
             rItemSet.Put( aWeight );
@@ -1448,7 +1448,7 @@ static void ParseCSS1_background( const CSS1Expression *pExpr,
             {
                 // the percentage is converted to an enum
 
-                sal_uInt16 nPerc = static_cast<sal_uInt16>(pExpr->GetNumber());
+                sal_uInt16 nPerc = o3tl::narrowing<sal_uInt16>(pExpr->GetNumber());
                 if( !bHori )
                 {
                     ePos = nPerc < 25 ? GPOS_LT
@@ -1594,7 +1594,7 @@ static void ParseCSS1_line_height( const CSS1Expression *pExpr,
     switch( pExpr->GetType() )
     {
     case CSS1_LENGTH:
-        nHeight = static_cast<sal_uInt16>(pExpr->GetULength());
+        nHeight = o3tl::narrowing<sal_uInt16>(pExpr->GetULength());
         break;
     case CSS1_PIXLENGTH:
         {
@@ -1604,18 +1604,18 @@ static void ParseCSS1_line_height( const CSS1Expression *pExpr,
                 tools::Long nPHeight = static_cast<tools::Long>(fHeight);
                 tools::Long nPWidth = 0;
                 SvxCSS1Parser::PixelToTwip(nPWidth, nPHeight);
-                nHeight = static_cast<sal_uInt16>(nPHeight);
+                nHeight = o3tl::narrowing<sal_uInt16>(nPHeight);
             }
         }
         break;
     case CSS1_PERCENTAGE:
         {
-            nPropHeight = static_cast<sal_uInt16>(pExpr->GetNumber());
+            nPropHeight = o3tl::narrowing<sal_uInt16>(pExpr->GetNumber());
         }
         break;
     case CSS1_NUMBER:
         {
-            nPropHeight = static_cast<sal_uInt16>(pExpr->GetNumber() * 100);
+            nPropHeight = o3tl::narrowing<sal_uInt16>(pExpr->GetNumber() * 100);
         }
         break;
     default:
@@ -1711,7 +1711,7 @@ static void ParseCSS1_font( const CSS1Expression *pExpr,
         }
         else
         {
-            eWeight = static_cast<sal_uInt16>(pExpr->GetNumber()) > 400 ? WEIGHT_BOLD
+            eWeight = o3tl::narrowing<sal_uInt16>(pExpr->GetNumber()) > 400 ? WEIGHT_BOLD
                                                        : WEIGHT_NORMAL;
         }
 
@@ -2045,13 +2045,13 @@ static void ParseCSS1_margin_left( const CSS1Expression *pExpr,
                                                &pItem ) )
     {
         SvxLRSpaceItem aLRItem( *static_cast<const SvxLRSpaceItem*>(pItem) );
-        aLRItem.SetTextLeft( static_cast<sal_uInt16>(nLeft) );
+        aLRItem.SetTextLeft( o3tl::narrowing<sal_uInt16>(nLeft) );
         rItemSet.Put( aLRItem );
     }
     else
     {
         SvxLRSpaceItem aLRItem( aItemIds.nLRSpace );
-        aLRItem.SetTextLeft( static_cast<sal_uInt16>(nLeft) );
+        aLRItem.SetTextLeft( o3tl::narrowing<sal_uInt16>(nLeft) );
         rItemSet.Put( aLRItem );
     }
     rPropInfo.m_bLeftMargin = true;
@@ -2104,13 +2104,13 @@ static void ParseCSS1_margin_right( const CSS1Expression *pExpr,
                                                &pItem ) )
     {
         SvxLRSpaceItem aLRItem( *static_cast<const SvxLRSpaceItem*>(pItem) );
-        aLRItem.SetRight( static_cast<sal_uInt16>(nRight) );
+        aLRItem.SetRight( o3tl::narrowing<sal_uInt16>(nRight) );
         rItemSet.Put( aLRItem );
     }
     else
     {
         SvxLRSpaceItem aLRItem( aItemIds.nLRSpace );
-        aLRItem.SetRight( static_cast<sal_uInt16>(nRight) );
+        aLRItem.SetRight( o3tl::narrowing<sal_uInt16>(nRight) );
         rItemSet.Put( aLRItem );
     }
     rPropInfo.m_bRightMargin = true;
@@ -2132,7 +2132,7 @@ static void ParseCSS1_margin_top( const CSS1Expression *pExpr,
             tools::Long nTmp = pExpr->GetSLength();
             if( nTmp < 0 )
                 nTmp = 0;
-            nUpper = static_cast<sal_uInt16>(nTmp);
+            nUpper = o3tl::narrowing<sal_uInt16>(nTmp);
             bSet = true;
         }
         break;
@@ -2146,7 +2146,7 @@ static void ParseCSS1_margin_top( const CSS1Expression *pExpr,
                 if( nPHeight < 0 )
                     nPHeight = 0;
                 SvxCSS1Parser::PixelToTwip( nPWidth, nPHeight );
-                nUpper = static_cast<sal_uInt16>(nPHeight);
+                nUpper = o3tl::narrowing<sal_uInt16>(nPHeight);
                 bSet = true;
             }
         }
@@ -2194,7 +2194,7 @@ static void ParseCSS1_margin_bottom( const CSS1Expression *pExpr,
             tools::Long nTmp = pExpr->GetSLength();
             if( nTmp < 0 )
                 nTmp = 0;
-            nLower = static_cast<sal_uInt16>(nTmp);
+            nLower = o3tl::narrowing<sal_uInt16>(nTmp);
             bSet = true;
         }
         break;
@@ -2208,7 +2208,7 @@ static void ParseCSS1_margin_bottom( const CSS1Expression *pExpr,
                 if( nPHeight < 0 )
                     nPHeight = 0;
                 SvxCSS1Parser::PixelToTwip( nPWidth, nPHeight );
-                nLower = static_cast<sal_uInt16>(nPHeight);
+                nLower = o3tl::narrowing<sal_uInt16>(nPHeight);
                 bSet = true;
             }
         }
@@ -2339,18 +2339,18 @@ static void ParseCSS1_margin( const CSS1Expression *pExpr,
         {
             SvxLRSpaceItem aLRItem( *static_cast<const SvxLRSpaceItem*>(pItem) );
             if( bSetMargins[3] )
-                aLRItem.SetLeft( static_cast<sal_uInt16>(nMargins[3]) );
+                aLRItem.SetLeft( o3tl::narrowing<sal_uInt16>(nMargins[3]) );
             if( bSetMargins[1] )
-                aLRItem.SetRight( static_cast<sal_uInt16>(nMargins[1]) );
+                aLRItem.SetRight( o3tl::narrowing<sal_uInt16>(nMargins[1]) );
             rItemSet.Put( aLRItem );
         }
         else
         {
             SvxLRSpaceItem aLRItem( aItemIds.nLRSpace );
             if( bSetMargins[3] )
-                aLRItem.SetLeft( static_cast<sal_uInt16>(nMargins[3]) );
+                aLRItem.SetLeft( o3tl::narrowing<sal_uInt16>(nMargins[3]) );
             if( bSetMargins[1] )
-                aLRItem.SetRight( static_cast<sal_uInt16>(nMargins[1]) );
+                aLRItem.SetRight( o3tl::narrowing<sal_uInt16>(nMargins[1]) );
             rItemSet.Put( aLRItem );
         }
     }
@@ -2369,18 +2369,18 @@ static void ParseCSS1_margin( const CSS1Expression *pExpr,
     {
         SvxULSpaceItem aULItem( *static_cast<const SvxULSpaceItem*>(pItem) );
         if( bSetMargins[0] )
-            aULItem.SetUpper( static_cast<sal_uInt16>(nMargins[0]) );
+            aULItem.SetUpper( o3tl::narrowing<sal_uInt16>(nMargins[0]) );
         if( bSetMargins[2] )
-            aULItem.SetLower( static_cast<sal_uInt16>(nMargins[2]) );
+            aULItem.SetLower( o3tl::narrowing<sal_uInt16>(nMargins[2]) );
         rItemSet.Put( aULItem );
     }
     else
     {
         SvxULSpaceItem aULItem( aItemIds.nULSpace );
         if( bSetMargins[0] )
-            aULItem.SetUpper( static_cast<sal_uInt16>(nMargins[0]) );
+            aULItem.SetUpper( o3tl::narrowing<sal_uInt16>(nMargins[0]) );
         if( bSetMargins[2] )
-            aULItem.SetLower( static_cast<sal_uInt16>(nMargins[2]) );
+            aULItem.SetLower( o3tl::narrowing<sal_uInt16>(nMargins[2]) );
         rItemSet.Put( aULItem );
     }
 
@@ -2406,7 +2406,7 @@ static bool ParseCSS1_padding_xxx( const CSS1Expression *pExpr,
                 nTmp = 0;
             else if( nTmp > SvxCSS1PropertyInfo::UNSET_BORDER_DISTANCE-1 )
                 nTmp = SvxCSS1PropertyInfo::UNSET_BORDER_DISTANCE-1;
-            nDist = static_cast<sal_uInt16>(nTmp);
+            nDist = o3tl::narrowing<sal_uInt16>(nTmp);
             bSet = true;
         }
         break;
@@ -2422,7 +2422,7 @@ static bool ParseCSS1_padding_xxx( const CSS1Expression *pExpr,
                 SvxCSS1Parser::PixelToTwip( nPWidth, nPHeight );
                 if( nPWidth > SvxCSS1PropertyInfo::UNSET_BORDER_DISTANCE-1 )
                     nPWidth = SvxCSS1PropertyInfo::UNSET_BORDER_DISTANCE-1;
-                nDist = static_cast<sal_uInt16>(nPWidth);
+                nDist = o3tl::narrowing<sal_uInt16>(nPWidth);
                 bSet = true;
             }
         }
@@ -2549,7 +2549,7 @@ static void ParseCSS1_border_xxx( const CSS1Expression *pExpr,
             break;
 
         case CSS1_LENGTH:
-            nWidth = static_cast<sal_uInt16>(pExpr->GetULength());
+            nWidth = o3tl::narrowing<sal_uInt16>(pExpr->GetULength());
             break;
 
         case CSS1_PIXLENGTH:
@@ -2564,7 +2564,7 @@ static void ParseCSS1_border_xxx( const CSS1Expression *pExpr,
                     tools::Long nPWidth = bHori ? 0 : fWidth;
                     tools::Long nPHeight = bHori ? fWidth : 0;
                     SvxCSS1Parser::PixelToTwip( nPWidth, nPHeight );
-                    nWidth = static_cast<sal_uInt16>(bHori ? nPHeight : nPWidth);
+                    nWidth = o3tl::narrowing<sal_uInt16>(bHori ? nPHeight : nPWidth);
                 }
                 else
                     nWidth = 1;
@@ -2625,7 +2625,7 @@ static void ParseCSS1_border_xxx_width( const CSS1Expression *pExpr,
         break;
 
     case CSS1_LENGTH:
-        nWidth = static_cast<sal_uInt16>(pExpr->GetULength());
+        nWidth = o3tl::narrowing<sal_uInt16>(pExpr->GetULength());
         break;
 
     case CSS1_PIXLENGTH:
@@ -2641,7 +2641,7 @@ static void ParseCSS1_border_xxx_width( const CSS1Expression *pExpr,
                 tools::Long nPWidth = bHori ? 0 : nWidthL;
                 tools::Long nPHeight = bHori ? nWidthL : 0;
                 SvxCSS1Parser::PixelToTwip( nPWidth, nPHeight );
-                nWidth = static_cast<sal_uInt16>(bHori ? nPHeight : nPWidth);
+                nWidth = o3tl::narrowing<sal_uInt16>(bHori ? nPHeight : nPWidth);
             }
         }
         break;

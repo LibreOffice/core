@@ -231,7 +231,7 @@ SwCharFormat* SwTextRuby::GetCharFormat()
         const SwDoc& rDoc = GetTextNode().GetDoc();
         const OUString& rStr = rFormat.GetCharFormatName();
         const sal_uInt16 nId = rStr.isEmpty()
-                             ? static_cast<sal_uInt16>(RES_POOLCHR_RUBYTEXT)
+                             ? o3tl::narrowing<sal_uInt16>(RES_POOLCHR_RUBYTEXT)
                              : rFormat.GetCharFormatId();
 
         // JP 10.02.2000, Bug 72806: don't modify the doc for getting the

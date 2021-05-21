@@ -975,7 +975,7 @@ void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
     const OUString& rName   = rHlnkItem.GetName();
     const OUString& rURL    = rHlnkItem.GetURL();
     const OUString& rTarget = rHlnkItem.GetTargetFrame();
-    sal_uInt16 nType =  static_cast<sal_uInt16>(rHlnkItem.GetInsertMode());
+    sal_uInt16 nType =  o3tl::narrowing<sal_uInt16>(rHlnkItem.GetInsertMode());
     nType &= ~HLINK_HTMLMODE;
     const SvxMacroTableDtor* pMacroTable = rHlnkItem.GetMacroTable();
 

@@ -604,7 +604,7 @@ sal_uInt16 SwModule::GetLinkUpdMode() const
 {
     if(!m_pUsrPref)
         GetUsrPref(false);
-    return static_cast<sal_uInt16>(m_pUsrPref->GetUpdateLinkMode());
+    return o3tl::narrowing<sal_uInt16>(m_pUsrPref->GetUpdateLinkMode());
 }
 
 SwFieldUpdateFlags SwModule::GetFieldUpdateFlags() const

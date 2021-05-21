@@ -1675,7 +1675,7 @@ void SwDoc::MoveLeftMargin(const SwPaM& rPam, bool bRight, bool bModulus,
                     const int nListLevel = pTNd->GetActualListLevel();
                     if ( nListLevel >= 0 )
                     {
-                        const SwNumFormat& rFormat = pRule->Get(static_cast<sal_uInt16>(nListLevel));
+                        const SwNumFormat& rFormat = pRule->Get(o3tl::narrowing<sal_uInt16>(nListLevel));
                         if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
                         {
                             aLS.SetTextLeft( rFormat.GetIndentAt() );

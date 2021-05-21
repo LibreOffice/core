@@ -1349,7 +1349,7 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
         {
             sPage = m_xPageCollLB->get_active_text();
         }
-        sal_uInt16 nPgNum = static_cast<sal_uInt16>(m_xPageNoNF->get_value());
+        sal_uInt16 nPgNum = o3tl::narrowing<sal_uInt16>(m_xPageNoNF->get_value());
         bool const usePageNo(bState && m_xPageNoCB->get_active());
         std::optional<sal_uInt16> const oPageNum(
                 usePageNo ? nPgNum : std::optional<sal_Int16>());

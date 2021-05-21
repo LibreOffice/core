@@ -325,7 +325,7 @@ void SwColExample::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOr
 SwColumnOnlyExample::SwColumnOnlyExample()
     : m_aFrameSize(SvxPaperInfo::GetPaperSize(PAPER_A4)) // DIN A4
 {
-    ::FitToActualSize(m_aCols, static_cast<sal_uInt16>(m_aFrameSize.Width()));
+    ::FitToActualSize(m_aCols, o3tl::narrowing<sal_uInt16>(m_aFrameSize.Width()));
 }
 
 void SwColumnOnlyExample::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
@@ -440,15 +440,15 @@ void  SwColumnOnlyExample::SetColumns(const SwFormatCol& rCol)
         tools::Long nWish = pCol->GetWishWidth();
         nWish *= nFrameWidth;
         nWish /= nWishSum;
-        pCol->SetWishWidth(static_cast<sal_uInt16>(nWish));
+        pCol->SetWishWidth(o3tl::narrowing<sal_uInt16>(nWish));
         tools::Long nLeft = pCol->GetLeft();
         nLeft *= nFrameWidth;
         nLeft /= nWishSum;
-        pCol->SetLeft(static_cast<sal_uInt16>(nLeft));
+        pCol->SetLeft(o3tl::narrowing<sal_uInt16>(nLeft));
         tools::Long nRight = pCol->GetRight();
         nRight *= nFrameWidth;
         nRight /= nWishSum;
-        pCol->SetRight(static_cast<sal_uInt16>(nRight));
+        pCol->SetRight(o3tl::narrowing<sal_uInt16>(nRight));
     }
     // #97495# make sure that the automatic column width's are always equal
     if(!(nColCount && m_aCols.IsOrtho()))

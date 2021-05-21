@@ -3412,10 +3412,10 @@ void SwLayoutFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBord
         }
     }
 
-    const sal_uInt16 nLeft = static_cast<sal_uInt16>(pAttrs->CalcLeft(this));
+    const sal_uInt16 nLeft = o3tl::narrowing<sal_uInt16>(pAttrs->CalcLeft(this));
     const sal_uInt16 nUpper = bHideWhitespace ? 0 : pAttrs->CalcTop();
 
-    const sal_uInt16 nRight = static_cast<sal_uInt16>(pAttrs->CalcRight(this));
+    const sal_uInt16 nRight = o3tl::narrowing<sal_uInt16>(pAttrs->CalcRight(this));
     const sal_uInt16 nLower = bHideWhitespace ? 0 : pAttrs->CalcBottom();
 
     const bool bVert = IsVertical() && !IsPageFrame();

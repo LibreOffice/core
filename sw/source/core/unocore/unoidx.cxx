@@ -2557,7 +2557,7 @@ SwXDocumentIndex::StyleAccess_Impl::replaceByIndex(
                 SwGetPoolIdFromName::TxtColl);
         sSetStyles.append(aString);
     }
-    rTOXBase.SetStyleNames(sSetStyles.makeStringAndClear(), static_cast<sal_uInt16>(nIndex));
+    rTOXBase.SetStyleNames(sSetStyles.makeStringAndClear(), o3tl::narrowing<sal_uInt16>(nIndex));
 }
 
 sal_Int32 SAL_CALL
@@ -2579,7 +2579,7 @@ SwXDocumentIndex::StyleAccess_Impl::getByIndex(sal_Int32 nIndex)
     SwTOXBase & rTOXBase( m_xParent->m_pImpl->GetTOXSectionOrThrow() );
 
     const OUString& rStyles =
-        rTOXBase.GetStyleNames(static_cast<sal_uInt16>(nIndex));
+        rTOXBase.GetStyleNames(o3tl::narrowing<sal_uInt16>(nIndex));
     const sal_Int32 nStyles = comphelper::string::getTokenCount(rStyles, TOX_STYLE_DELIMITER);
     uno::Sequence<OUString> aStyles(nStyles);
     OUString* pStyles = aStyles.getArray();
@@ -2842,7 +2842,7 @@ SwXDocumentIndex::TokenAccess_Impl::replaceByIndex(
         sPattern.append(aToken.GetString());
     }
     SwForm aForm(rTOXBase.GetTOXForm());
-    aForm.SetPattern(static_cast<sal_uInt16>(nIndex), sPattern.makeStringAndClear());
+    aForm.SetPattern(o3tl::narrowing<sal_uInt16>(nIndex), sPattern.makeStringAndClear());
     rTOXBase.SetTOXForm(aForm);
 }
 
@@ -2869,7 +2869,7 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
 
     // #i21237#
     SwFormTokens aPattern = rTOXBase.GetTOXForm().
-        GetPattern(static_cast<sal_uInt16>(nIndex));
+        GetPattern(o3tl::narrowing<sal_uInt16>(nIndex));
 
     sal_Int32 nTokenCount = 0;
     uno::Sequence< beans::PropertyValues > aRetSeq;

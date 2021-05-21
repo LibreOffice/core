@@ -515,11 +515,11 @@ void InputEdit::UpdateRange(std::u16string_view rBoxes,
     m_xWidget->get_selection_bounds(nSelStartPos, nSelEndPos);
 
     Selection aSelection(nSelStartPos, nSelEndPos);
-    sal_uInt16 nSel = static_cast<sal_uInt16>(aSelection.Len());
+    sal_uInt16 nSel = o3tl::narrowing<sal_uInt16>(aSelection.Len());
     // OS: The following expression ensures that in the overwrite mode,
     // the selected closing parenthesis will be not deleted.
     if( nSel && ( nSel > 1 ||
-                  m_xWidget->get_text()[ static_cast<sal_uInt16>(aSelection.Min()) ] != cClose ))
+                  m_xWidget->get_text()[ o3tl::narrowing<sal_uInt16>(aSelection.Min()) ] != cClose ))
         m_xWidget->cut_clipboard();
     else
         aSelection.Max() = aSelection.Min();
@@ -538,7 +538,7 @@ void InputEdit::UpdateRange(std::u16string_view rBoxes,
     {
         bool bFound = false;
         sal_Unicode cCh;
-        sal_uInt16 nPos, nEndPos = 0, nStartPos = static_cast<sal_uInt16>(aSelection.Min());
+        sal_uInt16 nPos, nEndPos = 0, nStartPos = o3tl::narrowing<sal_uInt16>(aSelection.Min());
         if( nStartPos-- )
         {
             do {
@@ -565,7 +565,7 @@ void InputEdit::UpdateRange(std::u16string_view rBoxes,
             }
             // Only if the current position lies in the range or right behind.
             if( bFound && ( nStartPos >= o3tl::make_unsigned(aSelection.Max()) ||
-                             static_cast<sal_uInt16>(aSelection.Max()) > nEndPos + 1 ))
+                             o3tl::narrowing<sal_uInt16>(aSelection.Max()) > nEndPos + 1 ))
                 bFound = false;
         }
         if( bFound )
@@ -577,7 +577,7 @@ void InputEdit::UpdateRange(std::u16string_view rBoxes,
         else
         {
             OUString aTmp = OUStringChar(cOpen) + aBoxes + OUStringChar(cClose);
-            nPos = static_cast<sal_uInt16>(aSelection.Min());
+            nPos = o3tl::narrowing<sal_uInt16>(aSelection.Min());
             aActText = aActText.replaceAt( nPos, 0, aTmp );
             nPos = nPos + aTmp.getLength();
         }

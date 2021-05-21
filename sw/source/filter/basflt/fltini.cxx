@@ -354,9 +354,9 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
                 if( nMaxFrame < MINLAY )
                     nMaxFrame = MINLAY;
 
-                if( nWidth > static_cast<sal_uInt16>(nMaxFrame) )
+                if( nWidth > o3tl::narrowing<sal_uInt16>(nMaxFrame) )
                     nWidth = nMaxFrame;
-                else if( nWidth > static_cast<sal_uInt16>(nMinFrame) )
+                else if( nWidth > o3tl::narrowing<sal_uInt16>(nMinFrame) )
                     nWidth = nMinFrame;
             }
         }

@@ -462,7 +462,7 @@ static void WriteDop( WW8Export& rWrt )
     // write default TabStop
     const SvxTabStopItem& rTabStop =
         DefaultItemGet<SvxTabStopItem>(rWrt.m_rDoc, RES_PARATR_TABSTOP);
-    rDop.dxaTab = static_cast<sal_uInt16>(rTabStop[0].GetTabPos());
+    rDop.dxaTab = o3tl::narrowing<sal_uInt16>(rTabStop[0].GetTabPos());
 
     // Zoom factor and type
     SwViewShell *pViewShell(rWrt.m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell());
@@ -1029,7 +1029,7 @@ void WW8_WrPlcPn::AppendFkpEntry(WW8_FC nEndFc,short nVarLen,const sal_uInt8* pS
 
 void WW8_WrPlcPn::WriteFkps()
 {
-    nFkpStartPage = static_cast<sal_uInt16>( SwWW8Writer::FillUntil( rWrt.Strm() ) >> 9 );
+    nFkpStartPage = o3tl::narrowing<sal_uInt16>( SwWW8Writer::FillUntil( rWrt.Strm() ) >> 9 );
 
     for(const std::unique_ptr<WW8_WrFkp> & rp : m_Fkps)
     {
@@ -1116,10 +1116,10 @@ sal_uInt8 WW8_WrFkp::SearchSameSprm( sal_uInt16 nVarLen, const sal_uInt8* pSprms
         sal_uInt8 nStart = pOfs[i * nItemSize];
         if( nStart )
         {                               // has Sprms
-            const sal_uInt8* p = pFkp + ( static_cast<sal_uInt16>(nStart) << 1 );
+            const sal_uInt8* p = pFkp + ( o3tl::narrowing<sal_uInt16>(nStart) << 1 );
             if( ( CHP == ePlc
                     ? (*p++ == nVarLen)
-                    : ((static_cast<sal_uInt16>(*p++) << 1 ) == (( nVarLen+1) & 0xfffe)) )
+                    : ((o3tl::narrowing<sal_uInt16>(*p++) << 1 ) == (( nVarLen+1) & 0xfffe)) )
                 && !memcmp( p, pSprms, nVarLen ) )
                     return nStart;                      // found it
         }
@@ -1139,7 +1139,7 @@ sal_uInt8 *WW8_WrFkp::CopyLastSprms(sal_uInt8 &rLen)
 
     sal_uInt8 nStart = *(pStart + (nIMax-1) * nItemSize);
 
-    const sal_uInt8* p = pFkp + ( static_cast<sal_uInt16>(nStart) << 1 );
+    const sal_uInt8* p = pFkp + ( o3tl::narrowing<sal_uInt16>(nStart) << 1 );
 
     if (!*p)
         p++;
@@ -1273,7 +1273,7 @@ void WW8_WrFkp::MergeToNew( short& rVarLen, sal_uInt8 *& rpNewSprms )
         return;
 
 // has Sprms
-    sal_uInt8* p = pFkp + ( static_cast<sal_uInt16>(nStart) << 1 );
+    sal_uInt8* p = pFkp + ( o3tl::narrowing<sal_uInt16>(nStart) << 1 );
 
     // old and new equal? Then copy only one into the new sprms
     if( nOldVarLen == rVarLen && !memcmp( p+1, rpNewSprms, nOldVarLen ))
@@ -2193,7 +2193,7 @@ void WW8AttributeOutput::TableHeight( ww8::WW8TableNodeInfoInner::Pointer_t pTab
     if ( nHeight )
     {
         m_rWW8Export.InsUInt16( NS_sprm::TDyaRowHeight::val );
-        m_rWW8Export.InsUInt16( static_cast<sal_uInt16>(nHeight) );
+        m_rWW8Export.InsUInt16( o3tl::narrowing<sal_uInt16>(nHeight) );
     }
 
 }
@@ -2379,7 +2379,7 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
     ww8::GridColsPtr pGridCols = GetGridCols( pTableTextNodeInfoInner );
     for ( const auto nCol : *pGridCols )
      {
-         m_rWW8Export.InsUInt16( static_cast<sal_uInt16>(nCol) + nTableOffset );
+         m_rWW8Export.InsUInt16( o3tl::narrowing<sal_uInt16>(nCol) + nTableOffset );
      }
 
      /* TCs */
@@ -2420,7 +2420,7 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
     {
         m_rWW8Export.InsUInt16( NS_sprm::TTableWidth::val );
         m_rWW8Export.pO->push_back( sal_uInt8/*ftsPercent*/ (2) );
-        m_rWW8Export.InsUInt16( static_cast<sal_uInt16>(nWidthPercent) * 50 );
+        m_rWW8Export.InsUInt16( o3tl::narrowing<sal_uInt16>(nWidthPercent) * 50 );
     }
 }
 

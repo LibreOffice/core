@@ -1098,7 +1098,7 @@ bool SwFormatCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             const text::TextColumn* pArray = aSetColumns.getConstArray();
             m_aColumns.clear();
             //max count is 64k here - this is something the array can't do
-            sal_uInt16 nCount = std::min( static_cast<sal_uInt16>(aSetColumns.getLength()),
+            sal_uInt16 nCount = std::min( o3tl::narrowing<sal_uInt16>(aSetColumns.getLength()),
                                      sal_uInt16(0x3fff) );
             sal_uInt16 nWidthSum = 0;
             // #101224# one column is no column
@@ -2269,7 +2269,7 @@ bool SwTextGridItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nTmp = 0;
             bRet = (rVal >>= nTmp);
             if( bRet && (nTmp >= 0) )
-                SetLines( static_cast<sal_uInt16>(nTmp) );
+                SetLines( o3tl::narrowing<sal_uInt16>(nTmp) );
             else
                 bRet = false;
         }
@@ -2301,15 +2301,15 @@ bool SwTextGridItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 if( (nMemberId & ~CONVERT_TWIPS) == MID_GRID_BASEHEIGHT )
                 {
                     nTmp = std::max<sal_Int32>(nTmp, MIN_TEXTGRID_SIZE);
-                    SetBaseHeight( static_cast<sal_uInt16>(nTmp) );
+                    SetBaseHeight( o3tl::narrowing<sal_uInt16>(nTmp) );
                 }
                 else if( (nMemberId & ~CONVERT_TWIPS) == MID_GRID_BASEWIDTH )
                 {
                     nTmp = std::max<sal_Int32>(nTmp, MIN_TEXTGRID_SIZE);
-                    SetBaseWidth( static_cast<sal_uInt16>(nTmp) );
+                    SetBaseWidth( o3tl::narrowing<sal_uInt16>(nTmp) );
                 }
                 else
-                    SetRubyHeight( static_cast<sal_uInt16>(nTmp) );
+                    SetRubyHeight( o3tl::narrowing<sal_uInt16>(nTmp) );
             }
             else
                 bRet = false;

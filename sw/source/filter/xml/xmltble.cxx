@@ -298,7 +298,7 @@ static OUString lcl_xmltble_appendBoxPrefix(std::u16string_view rNamePrefix,
     if( bTop )
     {
         OUString sTmp;
-        sw_GetTableBoxColStr( static_cast<sal_uInt16>(nCol), sTmp );
+        sw_GetTableBoxColStr( o3tl::narrowing<sal_uInt16>(nCol), sTmp );
         return OUString::Concat(rNamePrefix) + "." + sTmp + OUString::number(nRow + 1);
     }
     return OUString::Concat(rNamePrefix)

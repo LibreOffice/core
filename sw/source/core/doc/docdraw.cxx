@@ -199,7 +199,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
 
         std::unique_ptr<SwUndoDrawGroup> pUndo;
         if (GetIDocumentUndoRedo().DoesUndo())
-            pUndo.reset(new SwUndoDrawGroup( static_cast<sal_uInt16>(rMrkList.GetMarkCount()), *this));
+            pUndo.reset(new SwUndoDrawGroup( o3tl::narrowing<sal_uInt16>(rMrkList.GetMarkCount()), *this));
 
         // #i53320#
         bool bGroupMembersNotPositioned( false );
@@ -335,7 +335,7 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
                         pFormatsAndObjs[i].emplace_back( pFormat, pSubObj );
 
                         if( bUndo )
-                            pUndo->AddObj( static_cast<sal_uInt16>(i2), pFormat );
+                            pUndo->AddObj( o3tl::narrowing<sal_uInt16>(i2), pFormat );
                     }
                 }
             }
@@ -419,7 +419,7 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
             {
                 std::unique_ptr<SwUndoDrawDelete> pUndo;
                 if (GetIDocumentUndoRedo().DoesUndo())
-                    pUndo.reset(new SwUndoDrawDelete( static_cast<sal_uInt16>(rMrkList.GetMarkCount()), *this ));
+                    pUndo.reset(new SwUndoDrawDelete( o3tl::narrowing<sal_uInt16>(rMrkList.GetMarkCount()), *this ));
 
                 // Destroy ContactObjects, save formats.
                 for( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )

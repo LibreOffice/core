@@ -606,7 +606,7 @@ bool SwView::SearchAll()
             m_pWrtShell->StartOfSection();
     }
     s_bExtra = false;
-    sal_uInt16 nFound = static_cast<sal_uInt16>(FUNC_Search( aOpts ));
+    sal_uInt16 nFound = o3tl::narrowing<sal_uInt16>(FUNC_Search( aOpts ));
     s_bFound = 0 != nFound;
 
     m_pWrtShell->EndAllAction();

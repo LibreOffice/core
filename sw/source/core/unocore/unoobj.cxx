@@ -310,7 +310,7 @@ lcl_SetNodeNumStart(SwPaM & rCursor, uno::Any const& rValue)
 {
     sal_Int16 nTmp = 1;
     rValue >>= nTmp;
-    sal_uInt16 nStt = (nTmp < 0 ? USHRT_MAX : static_cast<sal_uInt16>(nTmp));
+    sal_uInt16 nStt = (nTmp < 0 ? USHRT_MAX : o3tl::narrowing<sal_uInt16>(nTmp));
     SwDoc& rDoc = rCursor.GetDoc();
     UnoActionContext aAction(&rDoc);
 
@@ -2787,7 +2787,7 @@ bool SwUnoCursorHelper::ConvertSortProperties(
                             LanguageTag::convertToLanguageType( pFields[i].CollatorLocale );
                         aKeys[i]->sSortType = pFields[i].CollatorAlgorithm;
                         aKeys[i]->nColumnId =
-                            static_cast<sal_uInt16>(pFields[i].Field);
+                            o3tl::narrowing<sal_uInt16>(pFields[i].Field);
                         aKeys[i]->bIsNumeric = (pFields[i].FieldType ==
                                 table::TableSortFieldType_NUMERIC);
                         aKeys[i]->eSortOrder = (pFields[i].IsAscending)

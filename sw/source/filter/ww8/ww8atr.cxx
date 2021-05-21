@@ -816,7 +816,7 @@ void MSWordExportBase::OutputFormat( const SwFormat& rFormat, bool bPapFormat, b
             {
                 //if outline numbered
                 // if Write StyleDefinition then write the OutlineRule
-                const SwNumFormat& rNFormat = m_rDoc.GetOutlineNumRule()->Get( static_cast<sal_uInt16>( nLvl ) );
+                const SwNumFormat& rNFormat = m_rDoc.GetOutlineNumRule()->Get( o3tl::narrowing<sal_uInt16>( nLvl ) );
                 if ( m_bStyDef )
                     AttrOutput().OutlineNumbering(static_cast<sal_uInt8>(nLvl));
 
@@ -1479,7 +1479,7 @@ void WW8AttributeOutput::CharFontSize( const SvxFontHeightItem& rHeight )
     {
         m_rWW8Export.InsUInt16( nId );
 
-        m_rWW8Export.InsUInt16( static_cast<sal_uInt16>(( rHeight.GetHeight() + 5 ) / 10 ) );
+        m_rWW8Export.InsUInt16( o3tl::narrowing<sal_uInt16>(( rHeight.GetHeight() + 5 ) / 10 ) );
     }
 }
 
@@ -3741,7 +3741,7 @@ void WW8AttributeOutput::FormatFrameSize( const SwFormatFrameSize& rSize )
         {
             //"sprmPDxaWidth"
             m_rWW8Export.InsUInt16( NS_sprm::PDxaWidth::val );
-            m_rWW8Export.InsUInt16( static_cast<sal_uInt16>(rSize.GetWidth()) );
+            m_rWW8Export.InsUInt16( o3tl::narrowing<sal_uInt16>(rSize.GetWidth()) );
         }
 
         if ( rSize.GetHeight() )
@@ -3753,8 +3753,8 @@ void WW8AttributeOutput::FormatFrameSize( const SwFormatFrameSize& rSize )
             switch ( rSize.GetHeightSizeType() )
             {
                 case SwFrameSize::Variable: break;
-                case SwFrameSize::Fixed: nH = static_cast<sal_uInt16>(rSize.GetHeight()) & 0x7fff; break;
-                default:           nH = static_cast<sal_uInt16>(rSize.GetHeight()) | 0x8000; break;
+                case SwFrameSize::Fixed: nH = o3tl::narrowing<sal_uInt16>(rSize.GetHeight()) & 0x7fff; break;
+                default:           nH = o3tl::narrowing<sal_uInt16>(rSize.GetHeight()) | 0x8000; break;
             }
             m_rWW8Export.InsUInt16( nH );
         }
@@ -4080,7 +4080,7 @@ void WW8AttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLR )
         // sprmPDxaFromText10
         m_rWW8Export.InsUInt16( NS_sprm::LN_PDxaFromText10 );
         // use average, since WW only knows one value
-        m_rWW8Export.InsUInt16( static_cast<sal_uInt16>( ( rLR.GetLeft() + rLR.GetRight() ) / 2 ) );
+        m_rWW8Export.InsUInt16( o3tl::narrowing<sal_uInt16>( ( rLR.GetLeft() + rLR.GetRight() ) / 2 ) );
     }
     else if ( m_rWW8Export.m_bOutPageDescs )                // PageDescs
     {
@@ -4116,11 +4116,11 @@ void WW8AttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLR )
     {                                          // normal paragraphs
         // sprmPDxaLeft
         m_rWW8Export.InsUInt16( 0x845E );        //asian version ?
-        m_rWW8Export.InsUInt16( static_cast<sal_uInt16>(rLR.GetTextLeft()) );
+        m_rWW8Export.InsUInt16( o3tl::narrowing<sal_uInt16>(rLR.GetTextLeft()) );
 
         // sprmPDxaRight
         m_rWW8Export.InsUInt16( 0x845D );        //asian version ?
-        m_rWW8Export.InsUInt16( static_cast<sal_uInt16>(rLR.GetRight()) );
+        m_rWW8Export.InsUInt16( o3tl::narrowing<sal_uInt16>(rLR.GetRight()) );
 
         // sprmPDxaLeft1
         m_rWW8Export.InsUInt16( 0x8460 );        //asian version ?
@@ -4149,7 +4149,7 @@ void WW8AttributeOutput::FormatULSpace( const SvxULSpaceItem& rUL )
         // sprmPDyaFromText
         m_rWW8Export.InsUInt16( NS_sprm::PDyaFromText::val );
         // use average, since WW only knows one value
-        m_rWW8Export.InsUInt16( static_cast<sal_uInt16>( ( rUL.GetUpper() + rUL.GetLower() ) / 2 ) );
+        m_rWW8Export.InsUInt16( o3tl::narrowing<sal_uInt16>( ( rUL.GetUpper() + rUL.GetLower() ) / 2 ) );
     }
     else if ( m_rWW8Export.m_bOutPageDescs )            // Page-UL
     {
@@ -4694,7 +4694,7 @@ void WW8AttributeOutput::FormatColumns_Impl( sal_uInt16 nCols, const SwFormatCol
         m_rWW8Export.pO->push_back( static_cast<sal_uInt8>(n) );
         m_rWW8Export.InsUInt16( rCol.
                                 CalcPrtColWidth( n,
-                                                 static_cast<sal_uInt16>(nPageSize) ) );
+                                                 o3tl::narrowing<sal_uInt16>(nPageSize) ) );
 
         if ( n + 1 != nCols )
         {
@@ -4761,11 +4761,11 @@ void AttributeOutputBase::FormatColumns( const SwFormatCol& rCol )
     {
         bEven = true;
         sal_uInt16 n;
-        sal_uInt16 nColWidth = rCol.CalcPrtColWidth( 0, static_cast<sal_uInt16>(nPageSize) );
+        sal_uInt16 nColWidth = rCol.CalcPrtColWidth( 0, o3tl::narrowing<sal_uInt16>(nPageSize) );
         for ( n = 1; n < nCols; n++ )
         {
             short nDiff = nColWidth -
-                rCol.CalcPrtColWidth( n, static_cast<sal_uInt16>(nPageSize) );
+                rCol.CalcPrtColWidth( n, o3tl::narrowing<sal_uInt16>(nPageSize) );
 
             if ( nDiff > 10 || nDiff < -10 )      // Tolerance: 10 tw
             {

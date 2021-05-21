@@ -564,10 +564,10 @@ void SwFEShell::GetTabCols_(SwTabCols &rToFill, const SwFrame *pBox) const
             }
 
             if ( !bDel &&
-                 m_pColumnCache->pLastCols->GetLeftMin () == static_cast<sal_uInt16>(nLeftMin) &&
-                 m_pColumnCache->pLastCols->GetLeft    () == static_cast<sal_uInt16>(aRectFnSet.GetLeft(pTab->getFramePrintArea())) &&
-                 m_pColumnCache->pLastCols->GetRight   () == static_cast<sal_uInt16>(aRectFnSet.GetRight(pTab->getFramePrintArea()))&&
-                 m_pColumnCache->pLastCols->GetRightMax() == static_cast<sal_uInt16>(nRightMax) - m_pColumnCache->pLastCols->GetLeftMin() )
+                 m_pColumnCache->pLastCols->GetLeftMin () == o3tl::narrowing<sal_uInt16>(nLeftMin) &&
+                 m_pColumnCache->pLastCols->GetLeft    () == o3tl::narrowing<sal_uInt16>(aRectFnSet.GetLeft(pTab->getFramePrintArea())) &&
+                 m_pColumnCache->pLastCols->GetRight   () == o3tl::narrowing<sal_uInt16>(aRectFnSet.GetRight(pTab->getFramePrintArea()))&&
+                 m_pColumnCache->pLastCols->GetRightMax() == o3tl::narrowing<sal_uInt16>(nRightMax) - m_pColumnCache->pLastCols->GetLeftMin() )
             {
                 if (m_pColumnCache->pLastCellFrame != pBox)
                 {

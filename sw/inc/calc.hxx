@@ -27,6 +27,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/solar.h>
 #include <tools/long.hxx>
+#include <o3tl/safeint.hxx>
 #include "swdllapi.h"
 
 class CharClass;
@@ -167,7 +168,7 @@ public:
         ii %= nTableSize;
 
         if( pPos )
-            *pPos = static_cast<sal_uInt16>(ii);
+            *pPos = o3tl::narrowing<sal_uInt16>(ii);
 
         for( T* pEntry = m_aData[ii].get(); pEntry; pEntry = static_cast<T*>(pEntry->pNext.get()) )
         {

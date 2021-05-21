@@ -1927,7 +1927,7 @@ void SwHTMLWriter::OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat
                         nYPos -= aULItem.GetUpper();
                         if( nYPos < 0 )
                         {
-                            aULItem.SetUpper( static_cast<sal_uInt16>(aULItem.GetUpper() + nYPos) );
+                            aULItem.SetUpper( o3tl::narrowing<sal_uInt16>(aULItem.GetUpper() + nYPos) );
                             nYPos = 0;
                         }
                     }
@@ -1943,7 +1943,7 @@ void SwHTMLWriter::OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat
                         nXPos -= aLRItem.GetLeft();
                         if( nXPos < 0 )
                         {
-                            aLRItem.SetLeft( static_cast<sal_uInt16>(aLRItem.GetLeft() + nXPos) );
+                            aLRItem.SetLeft( o3tl::narrowing<sal_uInt16>(aLRItem.GetLeft() + nXPos) );
                             nXPos = 0;
                         }
                     }

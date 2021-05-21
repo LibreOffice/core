@@ -579,7 +579,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
             aDir = rOption.GetString();
             break;
         case HtmlOptionId::COLS:
-            nCols = static_cast<sal_uInt16>(rOption.GetNumber());
+            nCols = o3tl::narrowing<sal_uInt16>(rOption.GetNumber());
             break;
         case HtmlOptionId::WIDTH:
             nWidth = rOption.GetNumber();
@@ -588,7 +588,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
                 nWidth = 100;
             break;
         case HtmlOptionId::GUTTER:
-            nGutter = static_cast<sal_uInt16>(rOption.GetNumber());
+            nGutter = o3tl::narrowing<sal_uInt16>(rOption.GetNumber());
             break;
         default: break;
         }
@@ -707,7 +707,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
 
         if( nGutter && Application::GetDefaultDevice() )
         {
-            nGutter = static_cast<sal_uInt16>(Application::GetDefaultDevice()
+            nGutter = o3tl::narrowing<sal_uInt16>(Application::GetDefaultDevice()
                              ->PixelToLogic( Size(nGutter, 0),
                                              MapMode(MapUnit::MapTwip) ).Width());
         }

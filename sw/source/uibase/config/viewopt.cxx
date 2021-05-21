@@ -326,7 +326,7 @@ void SwViewOption::Init(const OutputDevice* pWin)
 {
     if( !s_nPixelTwips && pWin )
     {
-        s_nPixelTwips = static_cast<sal_uInt16>(pWin->PixelToLogic( Size(1,1) ).Height());
+        s_nPixelTwips = o3tl::narrowing<sal_uInt16>(pWin->PixelToLogic( Size(1,1) ).Height());
     }
 }
 

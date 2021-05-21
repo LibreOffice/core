@@ -384,7 +384,7 @@ void SwLayoutViewConfig::Load()
                 case 12: m_rParent.SetMetric(static_cast<FieldUnit>(nInt32Val), true); break;// "Other/MeasureUnit",
                 case 13: m_rParent.SetDefTabInMm100(nInt32Val, true); break;// "Other/TabStop",
                 case 14: m_rParent.SetVRulerRight(bSet); break;// "Window/IsVerticalRulerRight",
-                case 15: m_rParent.SetViewLayoutColumns( static_cast<sal_uInt16>(nInt32Val) ); break;// "ViewLayout/Columns",
+                case 15: m_rParent.SetViewLayoutColumns( o3tl::narrowing<sal_uInt16>(nInt32Val) ); break;// "ViewLayout/Columns",
                 case 16: m_rParent.SetViewLayoutBookMode(bSet); break;// "ViewLayout/BookMode",
                 case 17: m_rParent.SetDefaultPageMode(bSet,true); break;// "Other/IsSquaredPageMode",
                 case 18: m_rParent.SetApplyCharUnit(bSet, true); break;// "Other/ApplyUserChar"

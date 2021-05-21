@@ -594,7 +594,7 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer*, pIdle, void )
     sal_uInt16 nCount  = 0;
     // at first the region around the cursor is processed
     TextSelection aSel = m_pTextView->GetSelection();
-    sal_uInt16 nCur = static_cast<sal_uInt16>(aSel.GetStart().GetPara());
+    sal_uInt16 nCur = o3tl::narrowing<sal_uInt16>(aSel.GetStart().GetPara());
     if(nCur > 40)
         nCur -= 40;
     else
@@ -745,7 +745,7 @@ void SwSrcEditWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         case SfxHintId::TextParaContentChanged:
             if ( !m_bHighlighting )
             {
-                m_aSyntaxLineTable.insert( static_cast<sal_uInt16>(pTextHint->GetValue()) );
+                m_aSyntaxLineTable.insert( o3tl::narrowing<sal_uInt16>(pTextHint->GetValue()) );
                 m_aSyntaxIdle.Start();
             }
             break;

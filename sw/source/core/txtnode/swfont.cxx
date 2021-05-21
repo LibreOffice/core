@@ -1081,7 +1081,7 @@ Size SwSubFont::GetTextSize_( SwDrawTextInfo& rInf )
             const sal_uInt16 nAscent = pLastFont->GetFontAscent( rInf.GetShell(),
                                                              rInf.GetOut() );
             aTextSize.setHeight(
-                static_cast<tools::Long>(CalcEscHeight( static_cast<sal_uInt16>(aTextSize.Height()), nAscent)) );
+                static_cast<tools::Long>(CalcEscHeight( o3tl::narrowing<sal_uInt16>(aTextSize.Height()), nAscent)) );
         }
     }
 

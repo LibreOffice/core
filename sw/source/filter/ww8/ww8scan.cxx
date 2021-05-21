@@ -2448,7 +2448,7 @@ void WW8PLCF::GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN)
 
         for (sal_Int32 i = 0; i < ncpN; ++i)         // construct PNs
         {
-            ShortToSVBT16(static_cast<sal_uInt16>(nPN + i), p);
+            ShortToSVBT16(o3tl::narrowing<sal_uInt16>(nPN + i), p);
             p += nStru;
         }
     }
@@ -4236,7 +4236,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
                     nLen = SAL_MAX_UINT16;
                 else if (nLen < 2 )
                     nLen = 2;
-                nLen2 = static_cast<sal_uInt16>(nLen);
+                nLen2 = o3tl::narrowing<sal_uInt16>(nLen);
             }
             sal_uLong nRead = 0;
             for( nLen2 -= 2; nRead < nLen2;  )
@@ -4327,7 +4327,7 @@ void WW8PLCFx_Book::SetIdx2(sal_uInt32 nI)
     if( nIMax )
     {
         pBook[1]->SetIdx( nI & 0x7fffffff );
-        nIsEnd = static_cast<sal_uInt16>( ( nI >> 31 ) & 1 );  // 0 or 1
+        nIsEnd = o3tl::narrowing<sal_uInt16>( ( nI >> 31 ) & 1 );  // 0 or 1
     }
 }
 
@@ -6554,10 +6554,10 @@ void WW8Fib::Write(SvStream& rStrm)
     if( !bVer8 )
     {
         pData += 1*sizeof( sal_Int16);
-        Set_UInt16( pData, static_cast<sal_uInt16>(m_pnChpFirst) );
-        Set_UInt16( pData, static_cast<sal_uInt16>(m_pnPapFirst) );
-        Set_UInt16( pData, static_cast<sal_uInt16>(m_cpnBteChp) );
-        Set_UInt16( pData, static_cast<sal_uInt16>(m_cpnBtePap) );
+        Set_UInt16( pData, o3tl::narrowing<sal_uInt16>(m_pnChpFirst) );
+        Set_UInt16( pData, o3tl::narrowing<sal_uInt16>(m_pnPapFirst) );
+        Set_UInt16( pData, o3tl::narrowing<sal_uInt16>(m_cpnBteChp) );
+        Set_UInt16( pData, o3tl::narrowing<sal_uInt16>(m_cpnBtePap) );
     }
 
     Set_UInt32( pData, m_fcPlcfdoaMom ); // only at Ver67, in Ver8 unused

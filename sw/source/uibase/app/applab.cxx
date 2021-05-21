@@ -224,8 +224,8 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
         // Borders
         SvxLRSpaceItem aLRMargin( RES_LR_SPACE );
         SvxULSpaceItem aULMargin( RES_UL_SPACE );
-        aLRMargin.SetLeft (static_cast<sal_uInt16>(rItem.m_lLeft) );
-        aULMargin.SetUpper(static_cast<sal_uInt16>(rItem.m_lUpper));
+        aLRMargin.SetLeft (o3tl::narrowing<sal_uInt16>(rItem.m_lLeft) );
+        aULMargin.SetUpper(o3tl::narrowing<sal_uInt16>(rItem.m_lUpper));
         aLRMargin.SetRight( 0 );
         aULMargin.SetLower( 0 );
         rFormat.SetFormatAttr(aLRMargin);

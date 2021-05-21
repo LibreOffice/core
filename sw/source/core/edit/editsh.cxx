@@ -812,7 +812,7 @@ void SwEditShell::SetNumberingRestart()
                                     nListLevel = MAXLEVEL - 1;
 
                                 bIsNodeNum = pTextNd->GetNum()->GetNumber() ==
-                                    pNumRule->Get( static_cast<sal_uInt16>(nListLevel) ).GetStart();
+                                    pNumRule->Get( o3tl::narrowing<sal_uInt16>(nListLevel) ).GetStart();
                             }
                             if (bIsNodeNum)
                             {

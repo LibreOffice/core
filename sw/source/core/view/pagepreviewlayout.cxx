@@ -362,9 +362,9 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
         // determine column and row of proposed start position.
         // Note: paint starts at point (0,0)
         const sal_uInt16 nColOfProposed =
-                static_cast<sal_uInt16>(rProposedStartPos.X() / mnColWidth) + 1;
+                o3tl::narrowing<sal_uInt16>(rProposedStartPos.X() / mnColWidth) + 1;
         const sal_uInt16 nRowOfProposed =
-                static_cast<sal_uInt16>(rProposedStartPos.Y() / mnRowHeight) + 1;
+                o3tl::narrowing<sal_uInt16>(rProposedStartPos.Y() / mnRowHeight) + 1;
         // determine start page == page at proposed start position
         // leaving left-top-corner blank is
         // controlled by <mbBookPreview>.

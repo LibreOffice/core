@@ -287,7 +287,7 @@ void SwGlossaryList::Update()
                 OUString sName( aTitle.copy( 0, aTitle.getLength() - sExt.getLength() ));
 
                 aFoundGroupNames.push_back(sName);
-                sName += OUStringChar(GLOS_DELIM) + OUString::number( static_cast<sal_uInt16>(nPath) );
+                sName += OUStringChar(GLOS_DELIM) + OUString::number( o3tl::narrowing<sal_uInt16>(nPath) );
                 AutoTextGroup* pFound = FindGroup( sName );
                 if( !pFound )
                 {

@@ -137,12 +137,12 @@ void SwColMgr::SetActualWidth(sal_uInt16 nW)
 SwColMgr::SwColMgr(const SfxItemSet& rSet)
     : aFormatCol(rSet.Get(RES_COL))
 {
-    nWidth = static_cast<sal_uInt16>(rSet.Get(RES_FRM_SIZE).GetWidth());
+    nWidth = o3tl::narrowing<sal_uInt16>(rSet.Get(RES_FRM_SIZE).GetWidth());
     if (nWidth < MINLAY)
         nWidth = USHRT_MAX;
     const SvxLRSpaceItem& rLR = rSet.Get(RES_LR_SPACE);
-    nWidth = nWidth - static_cast<sal_uInt16>(rLR.GetLeft());
-    nWidth = nWidth - static_cast<sal_uInt16>(rLR.GetRight());
+    nWidth = nWidth - o3tl::narrowing<sal_uInt16>(rLR.GetLeft());
+    nWidth = nWidth - o3tl::narrowing<sal_uInt16>(rLR.GetRight());
     ::FitToActualSize(aFormatCol, nWidth);
 }
 

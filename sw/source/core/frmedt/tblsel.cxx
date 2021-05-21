@@ -2364,7 +2364,7 @@ void FndBox_::MakeFrames( SwTable &rTable )
                     i >= 0 && !pSibling; --i )
             {
                 SwTableLine *pLine = m_pLineBehind ? m_pLineBehind :
-                                                    rTable.GetTabLines()[static_cast<sal_uInt16>(i)];
+                                                    rTable.GetTabLines()[o3tl::narrowing<sal_uInt16>(i)];
                 SwIterator<SwRowFrame,SwFormat> aIter( *pLine->GetFrameFormat() );
                 pSibling = aIter.First();
                 while ( pSibling && (

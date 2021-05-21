@@ -265,7 +265,7 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc,
                         aCharStyleName = SwResId(STR_POOLCHR_INET_NORMAL);
                         mLinkProcessor->StartNewLink(rText.getLength(), aCharStyleName);
                     }
-                    rBase.FillText( *pTOXNd, aIdx, static_cast<sal_uInt16>(eField), pLayout );
+                    rBase.FillText( *pTOXNd, aIdx, o3tl::narrowing<sal_uInt16>(eField), pLayout );
                     if (eField == ToxAuthorityField::AUTH_FIELD_URL)
                     {
                         // Get the absolute URL, the text may be a relative one.

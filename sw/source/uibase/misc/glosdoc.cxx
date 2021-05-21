@@ -175,7 +175,7 @@ std::unique_ptr<SwTextBlocks> SwGlossaries::GetGroupDoc(const OUString &rName,
 bool SwGlossaries::NewGroupDoc(OUString& rGroupName, const OUString& rTitle)
 {
     const OUString sNewPath(rGroupName.getToken(1, GLOS_DELIM));
-    sal_uInt16 nNewPath = static_cast<sal_uInt16>(sNewPath.toInt32());
+    sal_uInt16 nNewPath = o3tl::narrowing<sal_uInt16>(sNewPath.toInt32());
     if (static_cast<size_t>(nNewPath) >= m_PathArr.size())
         return false;
     const OUString sNewFilePath(m_PathArr[nNewPath]);
@@ -195,7 +195,7 @@ bool SwGlossaries::NewGroupDoc(OUString& rGroupName, const OUString& rTitle)
 bool    SwGlossaries::RenameGroupDoc(
     const OUString& rOldGroup, OUString& rNewGroup, const OUString& rNewTitle )
 {
-    sal_uInt16 nOldPath = static_cast<sal_uInt16>(rOldGroup.getToken(1, GLOS_DELIM).toInt32());
+    sal_uInt16 nOldPath = o3tl::narrowing<sal_uInt16>(rOldGroup.getToken(1, GLOS_DELIM).toInt32());
     if (static_cast<size_t>(nOldPath) >= m_PathArr.size())
         return false;
 
@@ -208,7 +208,7 @@ bool    SwGlossaries::RenameGroupDoc(
         return false;
     }
 
-    sal_uInt16 nNewPath = static_cast<sal_uInt16>(rNewGroup.getToken(1, GLOS_DELIM).toInt32());
+    sal_uInt16 nNewPath = o3tl::narrowing<sal_uInt16>(rNewGroup.getToken(1, GLOS_DELIM).toInt32());
     if (static_cast<size_t>(nNewPath) >= m_PathArr.size())
         return false;
 
@@ -246,7 +246,7 @@ bool    SwGlossaries::RenameGroupDoc(
 // Deletes a text block group
 bool SwGlossaries::DelGroupDoc(const OUString &rName)
 {
-    sal_uInt16 nPath = static_cast<sal_uInt16>(rName.getToken(1, GLOS_DELIM).toInt32());
+    sal_uInt16 nPath = o3tl::narrowing<sal_uInt16>(rName.getToken(1, GLOS_DELIM).toInt32());
     if (static_cast<size_t>(nPath) >= m_PathArr.size())
         return false;
     const OUString sBaseName(rName.getToken(0, GLOS_DELIM));
@@ -269,7 +269,7 @@ SwGlossaries::~SwGlossaries()
 // read a block document
 std::unique_ptr<SwTextBlocks> SwGlossaries::GetGlosDoc( const OUString &rName, bool bCreate ) const
 {
-    sal_uInt16 nPath = static_cast<sal_uInt16>(rName.getToken(1, GLOS_DELIM).toInt32());
+    sal_uInt16 nPath = o3tl::narrowing<sal_uInt16>(rName.getToken(1, GLOS_DELIM).toInt32());
     std::unique_ptr<SwTextBlocks> pTmp;
     if (static_cast<size_t>(nPath) < m_PathArr.size())
     {

@@ -2197,7 +2197,7 @@ void SwFramePage::Init(const SfxItemSet& rSet)
 
     // columns
     SwFormatCol aCol( rSet.Get(RES_COL) );
-    ::FitToActualSize( aCol, static_cast<sal_uInt16>(rSize.GetWidth()) );
+    ::FitToActualSize( aCol, o3tl::narrowing<sal_uInt16>(rSize.GetWidth()) );
 
     RndStdIds eAnchorId = GetAnchor();
 

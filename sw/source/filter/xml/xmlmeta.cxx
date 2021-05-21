@@ -122,7 +122,7 @@ void SwXMLImport::SetStatistics(
                 if (rStat.Value >>= val) {
                     if (pStat->target16 != nullptr) {
                         aDocStat.*(pStat->target16)
-                            = static_cast<sal_uInt16> (val);
+                            = o3tl::narrowing<sal_uInt16> (val);
                     } else {
                         aDocStat.*(pStat->target32)
                             = static_cast<sal_uInt32> (val);

@@ -135,7 +135,7 @@ SwFrameFormat *DocumentLayoutManager::MakeLayoutFormat( RndStdIds eRequest, cons
                 m_rDoc.GetNodes().MakeTextSection
                 ( aTmpIdx,
                   bHeader ? SwHeaderStartNode : SwFooterStartNode,
-                  m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(static_cast<sal_uInt16>( bHeader
+                  m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(o3tl::narrowing<sal_uInt16>( bHeader
                                      ? ( eRequest == RndStdIds::HEADERL
                                          ? RES_POOLCOLL_HEADERL
                                          : eRequest == RndStdIds::HEADERR

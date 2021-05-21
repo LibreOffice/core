@@ -342,7 +342,7 @@ SwUndoNumRuleStart::SwUndoNumRuleStart( const SwPosition& rPos, sal_uInt16 nStt 
     {
         if ( pTextNd->HasAttrListRestartValue() )
         {
-            m_nOldStart = static_cast<sal_uInt16>(pTextNd->GetAttrListRestartValue());
+            m_nOldStart = o3tl::narrowing<sal_uInt16>(pTextNd->GetAttrListRestartValue());
         }
         else
         {

@@ -225,7 +225,7 @@ namespace
         }
         if( bNoSelection && mnStartCol < USHRT_MAX )
         {
-            sal_uInt16 nIdx = std::min(mnStartCol, static_cast<sal_uInt16>(maLines[0].size()));
+            sal_uInt16 nIdx = std::min(mnStartCol, o3tl::narrowing<sal_uInt16>(maLines[0].size()));
             mnStartCol = std::accumulate(maLines[0].begin(), maLines[0].begin() + nIdx, sal_uInt16(0),
                 [](sal_uInt16 sum, const BoxSpanInfo& rInfo) { return sum + rInfo.mnColSpan; });
         }
@@ -298,7 +298,7 @@ namespace
             aInfo.mbSelected = true;
             if( mnStartCol == USHRT_MAX )
             {
-                mnStartCol = static_cast<sal_uInt16>(maLines[nLine].size());
+                mnStartCol = o3tl::narrowing<sal_uInt16>(maLines[nLine].size());
                 if( pSelBoxes->size() < 2 )
                 {
                     pSelBoxes = nullptr;
@@ -352,7 +352,7 @@ namespace
         const sal_uInt16 nLineCount = rLines.size();
         if( nLineCount < mnAddLine )
             mnAddLine = nLineCount;
-        sal_uInt16 nLine = static_cast<sal_uInt16>(maLines.size());
+        sal_uInt16 nLine = o3tl::narrowing<sal_uInt16>(maLines.size());
         maLines.resize( nLine + mnAddLine );
         while( mnAddLine )
         {
@@ -591,7 +591,7 @@ static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
             : RES_POOLCOLL_TABLE_HDLN == nPoolId ) )
     {
         SwTextFormatColl* pColl = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(
-            static_cast<sal_uInt16>(
+            o3tl::narrowing<sal_uInt16>(
                                 RES_POOLCOLL_TABLE == nPoolId
                                     ? RES_POOLCOLL_TABLE_HDLN
                                     : RES_POOLCOLL_TABLE ) );

@@ -678,8 +678,8 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
             for(int i=0;i<4;++i)
                 rParaSprms.push_back(*pBegin++);
             short nDxaLeft = SVBT16ToUInt16(aSprm.pSprm);
-            aLVL.nDxaLeft = (0 < nDxaLeft) ? static_cast<sal_uInt16>(nDxaLeft)
-                            : static_cast<sal_uInt16>(-nDxaLeft);
+            aLVL.nDxaLeft = (0 < nDxaLeft) ? o3tl::narrowing<sal_uInt16>(nDxaLeft)
+                            : o3tl::narrowing<sal_uInt16>(-nDxaLeft);
         }
 
         // "sprmPDxaLeft1" pap.dxaLeft1;dxa;word;
@@ -749,8 +749,8 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
                 if (bDoAdjust)
                 {
                     aLVL.nDxaLeft = (0 < nTabPos)
-                                    ? static_cast<sal_uInt16>(nTabPos)
-                                    : static_cast<sal_uInt16>(-nTabPos);
+                                    ? o3tl::narrowing<sal_uInt16>(nTabPos)
+                                    : o3tl::narrowing<sal_uInt16>(-nTabPos);
 
                     aLVL.nDxaLeft1 = nDesired - aLVL.nDxaLeft;
                 }
@@ -866,7 +866,7 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
 
     // 6. Configure NumFormat
     if( bSetStartNo && 0 <= aLVL.nStartAt)
-        rNumFormat.SetStart(static_cast<sal_uInt16>(aLVL.nStartAt));
+        rNumFormat.SetStart(o3tl::narrowing<sal_uInt16>(aLVL.nStartAt));
     rNumFormat.SetNumberingType( nType );
     rNumFormat.SetNumAdjust( eAdj );
 
@@ -1978,7 +1978,7 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
         }
         else // nData in (0..0x7FFF]
         {
-            m_nLFOPosition = static_cast<sal_uInt16>(nData)-1; // m_nLFOPosition in [0..0x7FFF)
+            m_nLFOPosition = o3tl::narrowing<sal_uInt16>(nData)-1; // m_nLFOPosition in [0..0x7FFF)
             /*
             If we are a ww8+ style with ww7- style lists then there is a
             bizarre broken word bug where when the list is removed from a para

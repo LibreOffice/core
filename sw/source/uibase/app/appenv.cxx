@@ -334,8 +334,8 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         tools::Long lLeft  = rItem.m_nShiftRight,
              lUpper = rItem.m_nShiftDown;
 
-        sal_uInt16 nPageW = static_cast<sal_uInt16>(std::max(rItem.m_nWidth, rItem.m_nHeight)),
-               nPageH = static_cast<sal_uInt16>(std::min(rItem.m_nWidth, rItem.m_nHeight));
+        sal_uInt16 nPageW = o3tl::narrowing<sal_uInt16>(std::max(rItem.m_nWidth, rItem.m_nHeight)),
+               nPageH = o3tl::narrowing<sal_uInt16>(std::min(rItem.m_nWidth, rItem.m_nHeight));
 
         switch (rItem.m_eAlign)
         {
@@ -352,8 +352,8 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         }
         SvxLRSpaceItem aLRMargin( RES_LR_SPACE );
         SvxULSpaceItem aULMargin( RES_UL_SPACE );
-        aLRMargin.SetLeft (static_cast<sal_uInt16>(lLeft) );
-        aULMargin.SetUpper(static_cast<sal_uInt16>(lUpper));
+        aLRMargin.SetLeft (o3tl::narrowing<sal_uInt16>(lLeft) );
+        aULMargin.SetUpper(o3tl::narrowing<sal_uInt16>(lUpper));
         aLRMargin.SetRight(0);
         aULMargin.SetLower(0);
         rFormat.SetFormatAttr(aLRMargin);

@@ -669,7 +669,7 @@ void SwDropCapsPage::ModifyEntry(weld::Entry& rEdit)
     else if (&rEdit == m_xLinesField.get())
         m_aPict.SetLines(static_cast<sal_uInt8>(m_xLinesField->get_value()));
     else
-        m_aPict.SetDistance(static_cast<sal_uInt16>(m_xDistanceField->denormalize(m_xDistanceField->get_value(FieldUnit::TWIP))));
+        m_aPict.SetDistance(o3tl::narrowing<sal_uInt16>(m_xDistanceField->denormalize(m_xDistanceField->get_value(FieldUnit::TWIP))));
 
     bModified = true;
 }
@@ -708,7 +708,7 @@ void SwDropCapsPage::FillSet( SfxItemSet &rSet )
         // quantity, lines, gap
         aFormat.GetChars()     = static_cast<sal_uInt8>(m_xDropCapsField->get_value());
         aFormat.GetLines()     = static_cast<sal_uInt8>(m_xLinesField->get_value());
-        aFormat.GetDistance()  = static_cast<sal_uInt16>(m_xDistanceField->denormalize(m_xDistanceField->get_value(FieldUnit::TWIP)));
+        aFormat.GetDistance()  = o3tl::narrowing<sal_uInt16>(m_xDistanceField->denormalize(m_xDistanceField->get_value(FieldUnit::TWIP)));
         aFormat.GetWholeWord() = m_xWholeWordCB->get_active();
 
         // template

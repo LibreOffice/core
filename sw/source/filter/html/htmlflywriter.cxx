@@ -615,7 +615,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
         aTwipSpc.setHeight(
             ( static_cast<const SvxULSpaceItem*>(pItem)->GetUpper() +
                 static_cast<const SvxULSpaceItem*>(pItem)->GetLower() ) / 2 );
-        m_nDfltTopMargin = m_nDfltBottomMargin = static_cast<sal_uInt16>(aTwipSpc.Height());
+        m_nDfltTopMargin = m_nDfltBottomMargin = o3tl::narrowing<sal_uInt16>(aTwipSpc.Height());
     }
 
     if( (nFrameOpts & HtmlFrmOpts::Space) &&
@@ -880,7 +880,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
         aTwipSpc.setHeight(
             ( static_cast<const SvxULSpaceItem*>(pItem)->GetUpper() +
                 static_cast<const SvxULSpaceItem*>(pItem)->GetLower() ) / 2 );
-        m_nDfltTopMargin = m_nDfltBottomMargin = static_cast<sal_uInt16>(aTwipSpc.Height());
+        m_nDfltTopMargin = m_nDfltBottomMargin = o3tl::narrowing<sal_uInt16>(aTwipSpc.Height());
     }
 
     if( (nFrameOptions & HtmlFrmOpts::Space) &&
@@ -1344,7 +1344,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
                 aPixelBorder.setHeight( 0 );
 
             nBorderWidth =
-                static_cast<sal_uInt16>(aPixelBorder.Width() + aPixelBorder.Height());
+                o3tl::narrowing<sal_uInt16>(aPixelBorder.Width() + aPixelBorder.Height());
         }
 
         if( pColBorderLine )
@@ -1596,7 +1596,7 @@ static Writer & OutHTML_FrameFormatAsMulticol( Writer& rWrt,
     {
         if( nGutter && Application::GetDefaultDevice() )
         {
-            nGutter = static_cast<sal_uInt16>(Application::GetDefaultDevice()
+            nGutter = o3tl::narrowing<sal_uInt16>(Application::GetDefaultDevice()
                             ->LogicToPixel( Size(nGutter,0),
                                             MapMode(MapUnit::MapTwip) ).Width());
         }

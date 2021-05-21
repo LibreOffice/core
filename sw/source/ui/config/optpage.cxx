@@ -1050,16 +1050,16 @@ bool SwTableOptionsTabPage::FillItemSet( SfxItemSet* )
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
 
     if (m_xRowMoveMF->get_value_changed_from_saved())
-        pModOpt->SetTableHMove( static_cast<sal_uInt16>(m_xRowMoveMF->denormalize( m_xRowMoveMF->get_value(FieldUnit::TWIP))));
+        pModOpt->SetTableHMove( o3tl::narrowing<sal_uInt16>(m_xRowMoveMF->denormalize( m_xRowMoveMF->get_value(FieldUnit::TWIP))));
 
     if (m_xColMoveMF->get_value_changed_from_saved())
-        pModOpt->SetTableVMove( static_cast<sal_uInt16>(m_xColMoveMF->denormalize( m_xColMoveMF->get_value(FieldUnit::TWIP))));
+        pModOpt->SetTableVMove( o3tl::narrowing<sal_uInt16>(m_xColMoveMF->denormalize( m_xColMoveMF->get_value(FieldUnit::TWIP))));
 
     if (m_xRowInsertMF->get_value_changed_from_saved())
-        pModOpt->SetTableHInsert(static_cast<sal_uInt16>(m_xRowInsertMF->denormalize( m_xRowInsertMF->get_value(FieldUnit::TWIP))));
+        pModOpt->SetTableHInsert(o3tl::narrowing<sal_uInt16>(m_xRowInsertMF->denormalize( m_xRowInsertMF->get_value(FieldUnit::TWIP))));
 
     if (m_xColInsertMF->get_value_changed_from_saved())
-        pModOpt->SetTableVInsert(static_cast<sal_uInt16>(m_xColInsertMF->denormalize( m_xColInsertMF->get_value(FieldUnit::TWIP))));
+        pModOpt->SetTableVInsert(o3tl::narrowing<sal_uInt16>(m_xColInsertMF->denormalize( m_xColInsertMF->get_value(FieldUnit::TWIP))));
 
     TableChgMode eMode;
     if (m_xFixRB->get_active())

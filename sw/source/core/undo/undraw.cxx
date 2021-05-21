@@ -298,7 +298,7 @@ void SwUndoDrawGroup::SetGroupFormat( SwDrawFrameFormat* pFormat )
 SwUndoDrawUnGroup::SwUndoDrawUnGroup( SdrObjGroup* pObj, const SwDoc& rDoc )
     : SwUndo( SwUndoId::DRAWUNGROUP, &rDoc ), m_bDeleteFormat( false )
 {
-    m_nSize = static_cast<sal_uInt16>(pObj->GetSubList()->GetObjCount()) + 1;
+    m_nSize = o3tl::narrowing<sal_uInt16>(pObj->GetSubList()->GetObjCount()) + 1;
     m_pObjArray.reset( new SwUndoGroupObjImpl[ m_nSize ] );
 
     SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));

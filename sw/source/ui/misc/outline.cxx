@@ -92,7 +92,7 @@ void SwNumNamesDlg::SetUserNames(const OUString *pList[])
                 nSelect++;
         }
     }
-    m_xFormBox->select(std::min(nSelect, static_cast<sal_uInt16>(m_xFormBox->n_children() - 1)));
+    m_xFormBox->select(std::min(nSelect, o3tl::narrowing<sal_uInt16>(m_xFormBox->n_children() - 1)));
     SelectHdl(*m_xFormBox);
 }
 
@@ -666,7 +666,7 @@ IMPL_LINK( SwOutlineSettingsTabPage, StartModified, weld::SpinButton&, rEdit, vo
         if(nActLevel & nMask)
         {
             SwNumFormat aNumFormat(pNumRule->Get(i));
-            aNumFormat.SetStart(static_cast<sal_uInt16>(rEdit.get_value()));
+            aNumFormat.SetStart(o3tl::narrowing<sal_uInt16>(rEdit.get_value()));
             pNumRule->Set(i, aNumFormat);
         }
         nMask <<= 1;
@@ -767,7 +767,7 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
     int nTmp = 0;
     if(nOutlinePos != SwOutlineNodes::npos)
     {
-        nTmp = static_cast<sal_uInt16>(pSh->getIDocumentOutlineNodesAccess()->getOutlineLevel(nOutlinePos));
+        nTmp = o3tl::narrowing<sal_uInt16>(pSh->getIDocumentOutlineNodesAccess()->getOutlineLevel(nOutlinePos));
     }
     m_xLevelLB->select(nTmp-1);
 

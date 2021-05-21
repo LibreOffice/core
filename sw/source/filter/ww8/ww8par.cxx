@@ -1000,8 +1000,8 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
 
         if ( nTextId )
         {
-            pImpRec->aTextId.nTxBxS = static_cast<sal_uInt16>( nTextId >> 16 );
-            pImpRec->aTextId.nSequence = static_cast<sal_uInt16>(nTextId);
+            pImpRec->aTextId.nTxBxS = o3tl::narrowing<sal_uInt16>( nTextId >> 16 );
+            pImpRec->aTextId.nSequence = o3tl::narrowing<sal_uInt16>(nTextId);
         }
 
         pImpRec->nDxWrapDistLeft = o3tl::convert(GetPropertyValue(DFF_Prop_dxWrapDistLeft, 114935),
@@ -4207,9 +4207,9 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
             if ((nCrCount++ & 0x40) == 0 && nType == MAN_MAINTEXT && l <= nTextLen)
             {
                 if (nTextLen < WW8_CP_MAX/100)
-                    m_nProgress = static_cast<sal_uInt16>(l * 100 / nTextLen);
+                    m_nProgress = o3tl::narrowing<sal_uInt16>(l * 100 / nTextLen);
                 else
-                    m_nProgress = static_cast<sal_uInt16>(l / nTextLen * 100);
+                    m_nProgress = o3tl::narrowing<sal_uInt16>(l / nTextLen * 100);
                 m_xProgress->Update(m_nProgress); // Update
             }
         }
@@ -6558,8 +6558,8 @@ bool SwMSDffManager::GetOLEStorageName(sal_uInt32 nOLEId, OUString& rStorageName
             // Note: Ask MM about assertions in method <rReader.GetTxbxTextSttEndCp(..)>.
             WW8_CP nStartCp, nEndCp;
             if ( rReader.m_bDrawCpOValid && rReader.GetTxbxTextSttEndCp(nStartCp, nEndCp,
-                            static_cast<sal_uInt16>((nOLEId >> 16) & 0xFFFF),
-                            static_cast<sal_uInt16>(nOLEId & 0xFFFF)) )
+                            o3tl::narrowing<sal_uInt16>((nOLEId >> 16) & 0xFFFF),
+                            o3tl::narrowing<sal_uInt16>(nOLEId & 0xFFFF)) )
             {
                 WW8PLCFxSaveAll aSave;
                 rReader.m_xPlcxMan->SaveAllPLCFx( aSave );

@@ -588,7 +588,7 @@ void SwTextFormatColl::SetAttrOutlineLevel( int nLevel)
 {
     OSL_ENSURE( 0 <= nLevel && nLevel <= MAXLEVEL ,"SwTextFormatColl: Level Out Of Range" );
     SetFormatAttr( SfxUInt16Item( RES_PARATR_OUTLINELEVEL,
-                            static_cast<sal_uInt16>(nLevel) ) );
+                            o3tl::narrowing<sal_uInt16>(nLevel) ) );
 }
 
 int SwTextFormatColl::GetAttrOutlineLevel() const

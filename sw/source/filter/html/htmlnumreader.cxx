@@ -165,7 +165,7 @@ void SwHTMLParser::NewNumberBulletList( HtmlTokenId nToken )
             break;
         case HtmlOptionId::START:
             {
-                sal_uInt16 nStart = static_cast<sal_uInt16>(rOption.GetNumber());
+                sal_uInt16 nStart = o3tl::narrowing<sal_uInt16>(rOption.GetNumber());
                 if( bNewNumFormat )
                 {
                     aNumFormat.SetStart( nStart );
@@ -198,10 +198,10 @@ void SwHTMLParser::NewNumberBulletList( HtmlTokenId nToken )
             }
             break;
         case HtmlOptionId::WIDTH:
-            nWidth = static_cast<sal_uInt16>(rOption.GetNumber());
+            nWidth = o3tl::narrowing<sal_uInt16>(rOption.GetNumber());
             break;
         case HtmlOptionId::HEIGHT:
-            nHeight = static_cast<sal_uInt16>(rOption.GetNumber());
+            nHeight = o3tl::narrowing<sal_uInt16>(rOption.GetNumber());
             break;
         case HtmlOptionId::ALIGN:
             eVertOri = rOption.GetEnum( aHTMLImgVAlignTable, eVertOri );
@@ -441,7 +441,7 @@ void SwHTMLParser::NewNumberBulletListItem( HtmlTokenId nToken )
         switch( rOption.GetToken() )
         {
             case HtmlOptionId::VALUE:
-                nStart = static_cast<sal_uInt16>(rOption.GetNumber());
+                nStart = o3tl::narrowing<sal_uInt16>(rOption.GetNumber());
                 break;
             case HtmlOptionId::ID:
                 aId = rOption.GetString();
