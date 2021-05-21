@@ -183,10 +183,6 @@ public class LayerView extends FrameLayout {
     public GeckoLayerClient getLayerClient() { return mLayerClient; }
     public PanZoomController getPanZoomController() { return mPanZoomController; }
 
-    public void setViewportSize(IntSize size) {
-        mLayerClient.setViewportSize(new FloatSize(size));
-    }
-
     public ImmutableViewportMetrics getViewportMetrics() {
         return mLayerClient.getViewportMetrics();
     }
@@ -371,7 +367,7 @@ public class LayerView extends FrameLayout {
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         if (changed) {
-            setViewportSize(new IntSize(right - left, bottom - top));
+            mLayerClient.setViewportSize(new FloatSize(right - left, bottom - top));
         }
     }
 
