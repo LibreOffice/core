@@ -13,15 +13,15 @@ $(call gb_CustomTarget_get_target,desktop/soffice) : \
 	$(call gb_CustomTarget_get_workdir,desktop/soffice)/soffice.sh
 
 $(call gb_CustomTarget_get_workdir,desktop/soffice)/soffice.sh : \
-		$(SRCDIR)/desktop/scripts/soffice.sh \
+    $(SRCDIR)/desktop/scripts/soffice.sh \
+    $(BUILDDIR)/config_host.mk \
 		| $(call gb_CustomTarget_get_workdir,desktop/soffice)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),SED,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),SED)
-ifneq ($(JITC_PROCESSOR_TYPE),)
-	sed -e "s/^#@JITC_PROCESSOR_TYPE_EXPORT@/export JITC_PROCESSOR_TYPE=$(JITC_PROCESSOR_TYPE)/" $< > $@
-else
-	cp $< $@
-endif
+	sed -e "s/@SET_STATIC_UNO_HOME@/${DISABLE_DYNLOADING}/" \
+	    $(if $(JITC_PROCESSOR_TYPE), \
+		-e "s/^#@JITC_PROCESSOR_TYPE_EXPORT@/export JITC_PROCESSOR_TYPE=$(JITC_PROCESSOR_TYPE)/") $< > $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),SED)
+	chmod 755 $@
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:
