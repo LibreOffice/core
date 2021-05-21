@@ -15,6 +15,7 @@ Settings about which desktops have support enabled.
 /**
  * Set the enabled platform plugins
  */
+#define ENABLE_GEN 0
 #define ENABLE_GTK3 0
 #define ENABLE_GTK3_KDE5 0
 #define ENABLE_HEADLESS 0
