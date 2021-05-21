@@ -30,16 +30,11 @@
 
 FieldUnit GetModuleFieldUnit( const SfxItemSet& rSet )
 {
-    FieldUnit eUnit = FieldUnit::INCH;
-    const SfxPoolItem* pItem = nullptr;
-    if ( SfxItemState::SET == rSet.GetItemState( SID_ATTR_METRIC, false, &pItem ) )
-        eUnit = static_cast<FieldUnit>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
-    else
-    {
-        return SfxModule::GetCurrentFieldUnit();
-    }
+    if (const SfxPoolItem* pItem = nullptr;
+        SfxItemState::SET == rSet.GetItemState(SID_ATTR_METRIC, false, &pItem))
+        return static_cast<FieldUnit>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
 
-    return eUnit;
+    return SfxModule::GetCurrentFieldUnit();
 }
 
 bool GetApplyCharUnit( const SfxItemSet& rSet )
