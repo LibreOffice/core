@@ -986,7 +986,7 @@ bool SwTextFrame::CalcPreps()
     return bRet;
 }
 
-// We rewire the footnotes and the character bound objects
+// Move the as-character objects - footnotes must be moved by RemoveFootnote!
 void SwTextFrame::ChangeOffset( SwTextFrame* pFrame, TextFrameIndex nNew )
 {
     if( pFrame->GetOffset() < nNew )
@@ -1081,6 +1081,7 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
         // need to create a Follow.
         // We also need to do this if the whole mass of text remains in the Master,
         // because a hard line break could necessitate another line (without text mass)!
+        TextFrameIndex const nOld(nEnd);
         nEnd = rLine.GetEnd();
         if( GetFollow() )
         {
@@ -1105,6 +1106,13 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
                 // because the follow would have no content, we may still need it
                 // for the paragraph mark.
                 nNew |= 1;
+            }
+            // move footnotes if the follow is kept - if RemoveFootnote() is
+            // called in next format iteration, it will be with the *new*
+            // offset so no effect!
+            if (nNew && nOld < nEnd)
+            {
+                RemoveFootnote(nOld, nEnd - nOld);
             }
             ChangeOffset( GetFollow(), nEnd );
             GetFollow()->ManipOfst( nEnd );
