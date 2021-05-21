@@ -424,7 +424,7 @@ void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const OUS
     ++m_nEndStructureElement;
 
 #if OSL_DEBUG_LEVEL > 1
-    aStructStack.push_back( static_cast<sal_uInt16>(eType) );
+    aStructStack.push_back( o3tl::narrowing<sal_uInt16>(eType) );
 #endif
 
     // Store the id of the current structure element if
@@ -1117,7 +1117,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                     int nRealLevel = pTextNd->GetAttrOutlineLevel()-1;
                     nRealLevel = std::min(nRealLevel, 5);
 
-                    nPDFType =  static_cast<sal_uInt16>(vcl::PDFWriter::H1 + nRealLevel);
+                    nPDFType =  o3tl::narrowing<sal_uInt16>(vcl::PDFWriter::H1 + nRealLevel);
                     switch(nRealLevel)
                     {
                         case 0 :

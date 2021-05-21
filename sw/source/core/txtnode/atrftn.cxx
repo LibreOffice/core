@@ -234,8 +234,8 @@ OUString SwFormatFootnote::GetViewNumStr(const SwDoc& rDoc,
             const SwFormatFootnoteEndAtTextEnd& rFootnoteEnd = static_cast<const SwFormatFootnoteEndAtTextEnd&>(
                 pSectNd->GetSection().GetFormat()->GetFormatAttr(
                                 IsEndNote() ?
-                                static_cast<sal_uInt16>(RES_END_AT_TXTEND) :
-                                static_cast<sal_uInt16>(RES_FTN_AT_TXTEND) ) );
+                                o3tl::narrowing<sal_uInt16>(RES_END_AT_TXTEND) :
+                                o3tl::narrowing<sal_uInt16>(RES_FTN_AT_TXTEND) ) );
 
             if( FTNEND_ATTXTEND_OWNNUMANDFMT == rFootnoteEnd.GetValue() )
             {

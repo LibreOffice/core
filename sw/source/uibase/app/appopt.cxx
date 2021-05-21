@@ -175,10 +175,10 @@ std::unique_ptr<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )
         {
             const SvxTabStopItem& rDefTabs =
                     pAppView->GetWrtShell().GetDefault(RES_PARATR_TABSTOP);
-            pRet->Put( SfxUInt16Item( SID_ATTR_DEFTABSTOP, static_cast<sal_uInt16>(::GetTabDist(rDefTabs))));
+            pRet->Put( SfxUInt16Item( SID_ATTR_DEFTABSTOP, o3tl::narrowing<sal_uInt16>(::GetTabDist(rDefTabs))));
         }
         else
-            pRet->Put(SfxUInt16Item( SID_ATTR_DEFTABSTOP, static_cast<sal_uInt16>(convertMm100ToTwip(pPref->GetDefTabInMm100()))));
+            pRet->Put(SfxUInt16Item( SID_ATTR_DEFTABSTOP, o3tl::narrowing<sal_uInt16>(convertMm100ToTwip(pPref->GetDefTabInMm100()))));
     }
 
     // Options for GridTabPage
@@ -189,8 +189,8 @@ std::unique_ptr<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )
     aGridItem.SetGridVisible( aViewOpt.IsGridVisible());
 
     const Size& rSnapSize = aViewOpt.GetSnapSize();
-    aGridItem.SetFieldDrawX( static_cast<sal_uInt16>(rSnapSize.Width() ));
-    aGridItem.SetFieldDrawY( static_cast<sal_uInt16>(rSnapSize.Height()));
+    aGridItem.SetFieldDrawX( o3tl::narrowing<sal_uInt16>(rSnapSize.Width() ));
+    aGridItem.SetFieldDrawY( o3tl::narrowing<sal_uInt16>(rSnapSize.Height()));
 
     aGridItem.SetFieldDivisionX( aViewOpt.GetDivisionX());
     aGridItem.SetFieldDivisionY( aViewOpt.GetDivisionY());

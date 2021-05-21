@@ -717,7 +717,7 @@ static void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm )
             SwTableBoxes& rTableBoxes = pBox->GetUpper()->GetTabBoxes();
             if( nPos && rTableBoxes[ nPos - 1 ]->getRowSpan() != 1 )
                 nLeftDiff = 0;
-            if( nPos + 1 < static_cast<sal_uInt16>(rTableBoxes.size()) &&
+            if( nPos + 1 < o3tl::narrowing<sal_uInt16>(rTableBoxes.size()) &&
                 rTableBoxes[ nPos + 1 ]->getRowSpan() != 1 )
                 nRightDiff = 0;
         }
@@ -1177,7 +1177,7 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
         nOldPos = lcl_MulDiv64<tools::Long>(nOldPos, rParm.nOldWish, nOldWidth);
         if( nOldPos != nNewPos && nNewPos > 0 && nOldPos > 0 )
         {
-            ColChange aChg( static_cast<sal_uInt16>(nOldPos), static_cast<sal_uInt16>(nNewPos) );
+            ColChange aChg( o3tl::narrowing<sal_uInt16>(nOldPos), o3tl::narrowing<sal_uInt16>(nNewPos) );
             aOldNew.push_back( aChg );
         }
     }
@@ -1218,7 +1218,7 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
             }
             aRowSpanPos.clear();
         }
-        if( nCurr+1 < static_cast<sal_uInt16>(rLines.size()) )
+        if( nCurr+1 < o3tl::narrowing<sal_uInt16>(rLines.size()) )
         {
             ChangeList aCopy;
             sal_uInt16 nPos = 0;
@@ -1236,7 +1236,7 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
                 lcl_CalcNewWidths( aRowSpanPos, aCopy, rLines[++j],
                     rParm.nOldWish, nOldWidth, false );
                 lcl_AdjustWidthsInLine( rLines[j], aCopy, rParm, 0 );
-                bGoOn = !aRowSpanPos.empty() && j+1 < static_cast<sal_uInt16>(rLines.size());
+                bGoOn = !aRowSpanPos.empty() && j+1 < o3tl::narrowing<sal_uInt16>(rLines.size());
             }
         }
         ::lcl_AdjustWidthsInLine( rLines[nCurr], aOldNew, rParm, COLFUZZY );
@@ -1305,7 +1305,7 @@ sal_uInt16 SwTable::GetBoxNum( OUString& rStr, bool bFirstPart,
             nRet = 0;
             if ( !bPerformValidCheck || lcl_IsValidRowName( rStr ) )
             {
-                nRet = static_cast<sal_uInt16>(rStr.toInt32());
+                nRet = o3tl::narrowing<sal_uInt16>(rStr.toInt32());
             }
             rStr.clear();
         }
@@ -1315,7 +1315,7 @@ sal_uInt16 SwTable::GetBoxNum( OUString& rStr, bool bFirstPart,
             const OUString aText( rStr.copy( 0, nPos ) );
             if ( !bPerformValidCheck || lcl_IsValidRowName( aText ) )
             {
-                nRet = static_cast<sal_uInt16>(aText.toInt32());
+                nRet = o3tl::narrowing<sal_uInt16>(aText.toInt32());
             }
             rStr = rStr.copy( nPos+1 );
         }

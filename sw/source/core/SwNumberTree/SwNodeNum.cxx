@@ -273,7 +273,7 @@ SwNumberTree::tSwNumTreeNumber SwNodeNum::GetStartValue() const
 
             if (nLevel >= 0 && nLevel < MAXLEVEL)
             {
-                const SwNumFormat * pFormat = pRule->GetNumFormat( static_cast<sal_uInt16>(nLevel));
+                const SwNumFormat * pFormat = pRule->GetNumFormat( o3tl::narrowing<sal_uInt16>(nLevel));
 
                 if (pFormat)
                     aResult = pFormat->GetStart();

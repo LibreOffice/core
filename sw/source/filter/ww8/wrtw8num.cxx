@@ -140,7 +140,7 @@ sal_uInt16 MSWordExportBase::GetNumberingId( const SwNumRule& rNumRule )
         }
     }
     SwNumRule* p = const_cast<SwNumRule*>(&rNumRule);
-    sal_uInt16 nRet = static_cast<sal_uInt16>(m_pUsedNumTable->GetPos(p));
+    sal_uInt16 nRet = o3tl::narrowing<sal_uInt16>(m_pUsedNumTable->GetPos(p));
 
     return nRet;
 }

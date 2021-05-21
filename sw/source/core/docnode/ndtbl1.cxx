@@ -1303,7 +1303,7 @@ sal_uInt16 SwDoc::GetBoxAlign( const SwCursor& rCursor )
             const SwFormatVertOrient &rOri =
                             aBoxes[i]->GetFrameFormat()->GetVertOrient();
             if( USHRT_MAX == nAlign )
-                nAlign = static_cast<sal_uInt16>(rOri.GetVertOrient());
+                nAlign = o3tl::narrowing<sal_uInt16>(rOri.GetVertOrient());
             else if( rOri.GetVertOrient() != nAlign )
             {
                 nAlign = USHRT_MAX;
@@ -1339,7 +1339,7 @@ static sal_uInt16 lcl_CalcCellFit( const SwLayoutFrame *pCell )
     // To compensate for the accuracy of calculation later on in SwTable::SetTabCols
     // we keep adding up a little.
     nRet += COLFUZZY;
-    return static_cast<sal_uInt16>(std::max( SwTwips(MINLAY), nRet ));
+    return o3tl::narrowing<sal_uInt16>(std::max( SwTwips(MINLAY), nRet ));
 }
 
 /* The Line is within the Selection but not outlined by the TabCols.

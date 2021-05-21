@@ -28,7 +28,7 @@
 
 IMPL_LINK_NOARG(SwTableWidthDlg, LoseFocusHdl, weld::SpinButton&, void)
 {
-    sal_uInt16 nId = static_cast<sal_uInt16>(m_xColNF->get_value()) - 1;
+    sal_uInt16 nId = o3tl::narrowing<sal_uInt16>(m_xColNF->get_value()) - 1;
     const SwTwips lWidth = m_rFnc.GetColWidth(nId);
     m_xWidthMF->set_max(m_xWidthMF->normalize(m_rFnc.GetMaxColWidth(nId)), FieldUnit::TWIP);
     m_xWidthMF->set_value(m_xWidthMF->normalize(lWidth), FieldUnit::TWIP);
@@ -60,8 +60,8 @@ SwTableWidthDlg::SwTableWidthDlg(weld::Window *pParent, SwTableFUNC &rTableFnc)
 void SwTableWidthDlg::Apply()
 {
     m_rFnc.InitTabCols();
-    m_rFnc.SetColWidth(static_cast<sal_uInt16>(m_xColNF->get_value() - 1),
-                       static_cast<sal_uInt16>(m_xWidthMF->denormalize(m_xWidthMF->get_value(FieldUnit::TWIP))));
+    m_rFnc.SetColWidth(o3tl::narrowing<sal_uInt16>(m_xColNF->get_value() - 1),
+                       o3tl::narrowing<sal_uInt16>(m_xWidthMF->denormalize(m_xWidthMF->get_value(FieldUnit::TWIP))));
 }
 
 short SwTableWidthDlg::run()

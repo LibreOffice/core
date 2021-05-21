@@ -553,7 +553,7 @@ void SwColumnPage::Reset(const SfxItemSet *rSet)
 
     m_xColMgr.reset(new SwColMgr(*rSet));
     m_nCols = m_xColMgr->GetCount() ;
-    m_xCLNrEdt->set_max(std::max(static_cast<sal_uInt16>(m_xCLNrEdt->get_max()), m_nCols));
+    m_xCLNrEdt->set_max(std::max(o3tl::narrowing<sal_uInt16>(m_xCLNrEdt->get_max()), m_nCols));
 
     if(m_bFrame)
     {
@@ -563,7 +563,7 @@ void SwColumnPage::Reset(const SfxItemSet *rSet)
         {
             const SwFormatFrameSize& rSize = rSet->Get(RES_FRM_SIZE);
             const SvxBoxItem& rBox = rSet->Get(RES_BOX);
-            m_xColMgr->SetActualWidth(static_cast<sal_uInt16>(rSize.GetSize().Width()) - rBox.GetSmallestDistance());
+            m_xColMgr->SetActualWidth(o3tl::narrowing<sal_uInt16>(rSize.GetSize().Width()) - rBox.GetSmallestDistance());
         }
     }
     if (m_xBalanceColsCB->get_visible())
@@ -911,7 +911,7 @@ IMPL_LINK_NOARG(SwColumnPage, ColModify, weld::SpinButton&, void)
 
 void SwColumnPage::ColModify(bool bForceColReset)
 {
-    m_nCols = static_cast<sal_uInt16>(m_xCLNrEdt->get_value());
+    m_nCols = o3tl::narrowing<sal_uInt16>(m_xCLNrEdt->get_value());
     //#107890# the handler is also called from LoseFocus()
     //then no change has been made and thus no action should be taken
     // #i17816# changing the displayed types within the ValueSet
@@ -923,7 +923,7 @@ void SwColumnPage::ColModify(bool bForceColReset)
     if (!bForceColReset)
         m_aDefaultVS.SetNoSelection();
     tools::Long nDist = static_cast< tools::Long >(m_xDistEd1->DenormalizePercent(m_xDistEd1->get_value(FieldUnit::TWIP)));
-    m_xColMgr->SetCount(m_nCols, static_cast<sal_uInt16>(nDist));
+    m_xColMgr->SetCount(m_nCols, o3tl::narrowing<sal_uInt16>(nDist));
     for(sal_uInt16 i = 0; i < m_nCols; i++)
         m_nColDist[i] = nDist;
     m_nFirstVis = 0;
@@ -955,7 +955,7 @@ IMPL_LINK(SwColumnPage, GapModify, weld::MetricSpinButton&, rMetricField, void)
             nActValue = nMaxGap;
             m_xDistEd1->set_value(m_xDistEd1->NormalizePercent(nMaxGap), FieldUnit::TWIP);
         }
-        m_xColMgr->SetGutterWidth(static_cast<sal_uInt16>(nActValue));
+        m_xColMgr->SetGutterWidth(o3tl::narrowing<sal_uInt16>(nActValue));
         for(sal_uInt16 i = 0; i < m_nCols; i++)
             m_nColDist[i] = nActValue;
 
@@ -1018,7 +1018,7 @@ IMPL_LINK(SwColumnPage, EdModify, weld::MetricSpinButton&, rEdit, void)
 IMPL_LINK(SwColumnPage, AutoWidthHdl, weld::Toggleable&, rBox, void)
 {
     tools::Long nDist = static_cast< tools::Long >(m_xDistEd1->DenormalizePercent(m_xDistEd1->get_value(FieldUnit::TWIP)));
-    m_xColMgr->SetCount(m_nCols, static_cast<sal_uInt16>(nDist));
+    m_xColMgr->SetCount(m_nCols, o3tl::narrowing<sal_uInt16>(nDist));
     for(sal_uInt16 i = 0; i < m_nCols; i++)
         m_nColDist[i] = nDist;
     if (rBox.get_active())

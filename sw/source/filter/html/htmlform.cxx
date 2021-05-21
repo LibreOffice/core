@@ -1448,7 +1448,7 @@ void SwHTMLParser::InsertInput()
             nMaxLen = static_cast<sal_Int16>(rOption.GetNumber());
             break;
         case HtmlOptionId::SIZE:
-            nSize = static_cast<sal_uInt16>(rOption.GetNumber());
+            nSize = o3tl::narrowing<sal_uInt16>(rOption.GetNumber());
             break;
         case HtmlOptionId::SRC:
             sImgSrc = rOption.GetString();
@@ -1907,10 +1907,10 @@ void SwHTMLParser::NewTextArea()
             bDisabled = true;
             break;
         case HtmlOptionId::ROWS:
-            nRows = static_cast<sal_uInt16>(rOption.GetNumber());
+            nRows = o3tl::narrowing<sal_uInt16>(rOption.GetNumber());
             break;
         case HtmlOptionId::COLS:
-            nCols = static_cast<sal_uInt16>(rOption.GetNumber());
+            nCols = o3tl::narrowing<sal_uInt16>(rOption.GetNumber());
             break;
         case HtmlOptionId::WRAP:
             nWrap = rOption.GetEnum( aHTMLTextAreaWrapTable, nWrap );
@@ -2188,7 +2188,7 @@ void SwHTMLParser::NewSelect()
             bDisabled = true;
             break;
         case HtmlOptionId::SIZE:
-            m_nSelectEntryCnt = static_cast<sal_uInt16>(rOption.GetNumber());
+            m_nSelectEntryCnt = o3tl::narrowing<sal_uInt16>(rOption.GetNumber());
             break;
 
         case HtmlOptionId::TABINDEX:

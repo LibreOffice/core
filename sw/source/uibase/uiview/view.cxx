@@ -1215,7 +1215,7 @@ void SwView::ReadUserData( const OUString &rUserData, bool bBrowse )
     sal_Int32 nOff = 0;
     SvxZoomType eZoom;
     if( !m_pWrtShell->GetViewOptions()->getBrowseMode() )
-        eZoom = static_cast<SvxZoomType>(static_cast<sal_uInt16>(rUserData.getToken(nOff, ';', nPos ).toInt32()));
+        eZoom = static_cast<SvxZoomType>(o3tl::narrowing<sal_uInt16>(rUserData.getToken(nOff, ';', nPos ).toInt32()));
     else
     {
         eZoom = SvxZoomType::PERCENT;

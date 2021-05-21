@@ -49,7 +49,7 @@ void SwBreakDlg::rememberResult()
             oPgNum.reset();
             if (m_xPageNumBox->get_active())
             {
-                oPgNum = static_cast<sal_uInt16>(m_xPageNumEdit->get_value());
+                oPgNum = o3tl::narrowing<sal_uInt16>(m_xPageNumEdit->get_value());
             }
         }
     }

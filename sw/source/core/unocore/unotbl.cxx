@@ -204,7 +204,7 @@ static void lcl_SetSpecialProperty(SwFrameFormat* pFormat,
                 sal_Int32 nRepeat = 0;
                 aValue >>= nRepeat;
                 if( nRepeat >= 0 && nRepeat < SAL_MAX_UINT16 )
-                    pFormat->GetDoc()->SetRowsToRepeat( *pTable, static_cast<sal_uInt16>(nRepeat) );
+                    pFormat->GetDoc()->SetRowsToRepeat( *pTable, o3tl::narrowing<sal_uInt16>(nRepeat) );
             }
         }
         break;
@@ -2031,8 +2031,8 @@ void SwXTextTable::initialize(sal_Int32 nR, sal_Int32 nC)
 {
     if (!m_pImpl->IsDescriptor() || nR <= 0 || nC <= 0 || nR >= SAL_MAX_UINT16 || nC >= SAL_MAX_UINT16)
         throw uno::RuntimeException();
-    m_pImpl->m_nRows = static_cast<sal_uInt16>(nR);
-    m_pImpl->m_nColumns = static_cast<sal_uInt16>(nC);
+    m_pImpl->m_nRows = o3tl::narrowing<sal_uInt16>(nR);
+    m_pImpl->m_nColumns = o3tl::narrowing<sal_uInt16>(nC);
 }
 
 uno::Reference<table::XTableRows> SAL_CALL SwXTextTable::getRows()
@@ -2636,7 +2636,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                     aBoxInfo.SetLine(aVertLine.isEmpty() ? nullptr : &aVertLine, SvxBoxInfoItemLine::VERT);
                     aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::VERT, aBorder.IsVerticalLineValid);
 
-                    aBox.SetAllDistances(static_cast<sal_uInt16>(convertMm100ToTwip(aBorder.Distance)));
+                    aBox.SetAllDistances(o3tl::narrowing<sal_uInt16>(convertMm100ToTwip(aBorder.Distance)));
                     aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::DISTANCE, aBorder.IsDistanceValid);
 
                     aSet.Put(aBox);
@@ -3973,7 +3973,7 @@ void SwXTableRows::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
         // remove actions - TODO: why?
         UnoActionRemoveContext aRemoveContext(&pUnoCursor->GetDoc());
     }
-    pFrameFormat->GetDoc()->InsertRow(*pUnoCursor, static_cast<sal_uInt16>(nCount), bAppend);
+    pFrameFormat->GetDoc()->InsertRow(*pUnoCursor, o3tl::narrowing<sal_uInt16>(nCount), bAppend);
 }
 
 void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
@@ -4129,7 +4129,7 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
         UnoActionRemoveContext aRemoveContext(&pUnoCursor->GetDoc());
     }
 
-    pFrameFormat->GetDoc()->InsertCol(*pUnoCursor, static_cast<sal_uInt16>(nCount), bAppend);
+    pFrameFormat->GetDoc()->InsertCol(*pUnoCursor, o3tl::narrowing<sal_uInt16>(nCount), bAppend);
 }
 
 ///@see SwXTableRows::removeByIndex (TODO: seems to be copy and paste programming here)

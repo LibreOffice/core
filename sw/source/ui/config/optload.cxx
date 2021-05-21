@@ -198,7 +198,7 @@ bool SwLoadOptPage::FillItemSet( SfxItemSet* rSet )
     if (m_xTabMF->get_visible() && m_xTabMF->get_value_changed_from_saved())
     {
         rSet->Put(SfxUInt16Item(SID_ATTR_DEFTABSTOP,
-                    static_cast<sal_uInt16>(m_xTabMF->denormalize(m_xTabMF->get_value(FieldUnit::TWIP)))));
+                    o3tl::narrowing<sal_uInt16>(m_xTabMF->denormalize(m_xTabMF->get_value(FieldUnit::TWIP)))));
         bRet = true;
     }
 
@@ -477,7 +477,7 @@ SwCaptionOptPage::SwCaptionOptPage(weld::Container* pPage, weld::DialogControlle
             if (!pFieldType->GetName().isEmpty()
                 && pFieldType->GetName() == m_xCategoryBox->get_active_text())
             {
-                nSelFormat = static_cast<sal_uInt16>(static_cast<SwSetExpFieldType*>(pFieldType)->GetSeqFormat());
+                nSelFormat = o3tl::narrowing<sal_uInt16>(static_cast<SwSetExpFieldType*>(pFieldType)->GetSeqFormat());
                 break;
             }
         }

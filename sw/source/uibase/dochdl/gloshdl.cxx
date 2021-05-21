@@ -112,12 +112,12 @@ void SwGlossaryHdl::SetCurGroup(const OUString &rGrp, bool bApi, bool bAlwaysCre
             {
                 if (sCurEntryPath == rPathArr[nPath])
                 {
-                    nCurrentPath = static_cast<sal_uInt16>(nPath);
+                    nCurrentPath = o3tl::narrowing<sal_uInt16>(nPath);
                     break;
                 }
             }
             const OUString sPath = sGroup.getToken(1, GLOS_DELIM);
-            sal_uInt16 nComparePath = static_cast<sal_uInt16>(sPath.toInt32());
+            sal_uInt16 nComparePath = o3tl::narrowing<sal_uInt16>(sPath.toInt32());
             if(nCurrentPath == nComparePath &&
                 sGroup.getToken(0, GLOS_DELIM) == sCurBase)
                 bPathEqual = true;

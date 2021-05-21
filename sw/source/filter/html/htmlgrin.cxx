@@ -402,7 +402,7 @@ void SwHTMLParser::InsertImage()
                 sAltNm = rOption.GetString();
                 break;
             case HtmlOptionId::BORDER:
-                nBorder = static_cast<sal_uInt16>(rOption.GetNumber());
+                nBorder = o3tl::narrowing<sal_uInt16>(rOption.GetNumber());
                 break;
             case HtmlOptionId::ISMAP:
                 bIsMap = true;

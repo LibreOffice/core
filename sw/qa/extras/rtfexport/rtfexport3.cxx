@@ -187,7 +187,7 @@ DECLARE_ODFEXPORT_TEST(testArabicZeroNumbering, "arabic-zero-numbering.rtf")
     // - Expected: 64
     // - Actual  : 4
     // i.e. numbering type was ARABIC, not ARABIC_ZERO.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(style::NumberingType::ARABIC_ZERO),
+    CPPUNIT_ASSERT_EQUAL(o3tl::narrowing<sal_uInt16>(style::NumberingType::ARABIC_ZERO),
                          aMap["NumberingType"].get<sal_uInt16>());
 }
 

@@ -98,7 +98,7 @@ void SwTbxAutoTextCtrl::CreatePopupWindow()
             const sal_uInt16 nBlockCount = pGlossaryList->GetBlockCount(i -1);
             if(nBlockCount)
             {
-                sal_uInt16 nIndex = static_cast<sal_uInt16>(100*i);
+                sal_uInt16 nIndex = o3tl::narrowing<sal_uInt16>(100*i);
                 // but insert without extension
                 pPopup->InsertItem( i, sTitle);
                 VclPtrInstance<PopupMenu> pSub;
@@ -410,7 +410,7 @@ void SwZoomBox_Impl::Select()
         {
             bNonNumeric = false;
 
-            sal_uInt16 nZoom = static_cast<sal_uInt16>(sEntry.toInt32());
+            sal_uInt16 nZoom = o3tl::narrowing<sal_uInt16>(sEntry.toInt32());
             if(nZoom < MINZOOM)
                 nZoom = MINZOOM;
             if(nZoom > MAXZOOM)
@@ -564,7 +564,7 @@ IMPL_LINK_NOARG(SwJumpToSpecificBox_Impl, SelectHdl, weld::Entry&, bool)
 {
     OUString sEntry(m_xWidget->get_text());
     SfxUInt16Item aPageNum(nSlotId);
-    aPageNum.SetValue(static_cast<sal_uInt16>(sEntry.toInt32()));
+    aPageNum.SetValue(o3tl::narrowing<sal_uInt16>(sEntry.toInt32()));
     SfxObjectShell* pCurrentShell = SfxObjectShell::Current();
     pCurrentShell->GetDispatcher()->ExecuteList(nSlotId, SfxCallMode::ASYNCHRON,
             { &aPageNum });

@@ -923,7 +923,7 @@ bool HasNumberingWhichNeedsLayoutUpdate(const SwTextNode& rTextNode)
     }
 
     const SwNumFormat* pFormat
-        = pNumRule->GetNumFormat(static_cast<sal_uInt16>(rTextNode.GetAttrListLevel()));
+        = pNumRule->GetNumFormat(o3tl::narrowing<sal_uInt16>(rTextNode.GetAttrListLevel()));
     if (!pFormat)
     {
         return false;
@@ -3077,7 +3077,7 @@ namespace
 
 sal_uInt16 lcl_BoundListLevel(const int nActualLevel)
 {
-    return static_cast<sal_uInt16>( std::clamp( nActualLevel, 0, MAXLEVEL-1 ) );
+    return o3tl::narrowing<sal_uInt16>( std::clamp( nActualLevel, 0, MAXLEVEL-1 ) );
 }
 
 }
@@ -4030,7 +4030,7 @@ void SwTextNode::SetAttrOutlineLevel(int nLevel)
     if ( 0 <= nLevel && nLevel <= MAXLEVEL )
     {
         SetAttr( SfxUInt16Item( RES_PARATR_OUTLINELEVEL,
-                                static_cast<sal_uInt16>(nLevel) ) );
+                                o3tl::narrowing<sal_uInt16>(nLevel) ) );
     }
 }
 
@@ -4204,7 +4204,7 @@ SwNumberTree::tSwNumTreeNumber SwTextNode::GetActualListStartValue() const
         if ( pRule )
         {
             const SwNumFormat* pFormat =
-                    pRule->GetNumFormat( static_cast<sal_uInt16>(GetAttrListLevel()) );
+                    pRule->GetNumFormat( o3tl::narrowing<sal_uInt16>(GetAttrListLevel()) );
             if ( pFormat )
             {
                 nListRestartValue = pFormat->GetStart();
@@ -4483,7 +4483,7 @@ bool SwTextNode::GetListTabStopPosition( tools::Long& nListTabStopPosition ) con
     const SwNumRule* pNumRule = GetNum() ? GetNum()->GetNumRule() : nullptr;
     if ( pNumRule && HasVisibleNumberingOrBullet() && GetActualListLevel() >= 0 )
     {
-        const SwNumFormat& rFormat = pNumRule->Get( static_cast<sal_uInt16>(GetActualListLevel()) );
+        const SwNumFormat& rFormat = pNumRule->Get( o3tl::narrowing<sal_uInt16>(GetActualListLevel()) );
         if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT &&
              rFormat.GetLabelFollowedBy() == SvxNumberFormat::LISTTAB )
         {
@@ -4515,7 +4515,7 @@ OUString SwTextNode::GetLabelFollowedBy() const
     const SwNumRule* pNumRule = GetNum() ? GetNum()->GetNumRule() : nullptr;
     if ( pNumRule && HasVisibleNumberingOrBullet() && GetActualListLevel() >= 0 )
     {
-        const SwNumFormat& rFormat = pNumRule->Get( static_cast<sal_uInt16>(GetActualListLevel()) );
+        const SwNumFormat& rFormat = pNumRule->Get( o3tl::narrowing<sal_uInt16>(GetActualListLevel()) );
         if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
         {
             switch ( rFormat.GetLabelFollowedBy() )

@@ -1181,7 +1181,7 @@ TextFrameIndex SwTextFormatter::FormatQuoVadis(TextFrameIndex const nOffset)
                     if( nDiff < 0 )
                     {
                         nLastLeft = pQuo->GetAscent();
-                        nQuoWidth = static_cast<sal_uInt16>(-nDiff + nLastLeft);
+                        nQuoWidth = o3tl::narrowing<sal_uInt16>(-nDiff + nLastLeft);
                     }
                     else
                     {

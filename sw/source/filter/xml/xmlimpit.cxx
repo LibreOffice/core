@@ -123,7 +123,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
                     if( 0 == (pEntry->nMemberId&MID_SW_FLAG_SPECIAL_ITEM_IMPORT) )
                     {
                         bPut = PutXMLValue( *pNewItem, sValue,
-                                            static_cast<sal_uInt16>( pEntry->nMemberId & MID_SW_FLAG_MASK ),
+                                            o3tl::narrowing<sal_uInt16>( pEntry->nMemberId & MID_SW_FLAG_MASK ),
                                             rUnitConverter );
 
                     }
@@ -339,10 +339,10 @@ bool SvXMLImportItemMapper::PutXMLValue(
                         switch( nMemberId )
                         {
                             case MID_L_MARGIN:
-                                rLRSpace.SetTextLeft( nAbs, static_cast<sal_uInt16>(nProp) );
+                                rLRSpace.SetTextLeft( nAbs, o3tl::narrowing<sal_uInt16>(nProp) );
                                 break;
                             case MID_R_MARGIN:
-                                rLRSpace.SetRight( nAbs, static_cast<sal_uInt16>(nProp) );
+                                rLRSpace.SetRight( nAbs, o3tl::narrowing<sal_uInt16>(nProp) );
                                 break;
                         }
                     }
@@ -360,7 +360,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                         bOk = rUnitConverter.convertMeasureToCore(nAbs, rValue,
                                                              -0x7fff, 0x7fff );
 
-                    rLRSpace.SetTextFirstLineOffset( static_cast<short>(nAbs), static_cast<sal_uInt16>(nProp) );
+                    rLRSpace.SetTextFirstLineOffset( static_cast<short>(nAbs), o3tl::narrowing<sal_uInt16>(nProp) );
                 }
                 break;
 
@@ -394,10 +394,10 @@ bool SvXMLImportItemMapper::PutXMLValue(
             switch( nMemberId )
             {
                 case MID_UP_MARGIN:
-                    rULSpace.SetUpper( static_cast<sal_uInt16>(nAbs), static_cast<sal_uInt16>(nProp) );
+                    rULSpace.SetUpper( o3tl::narrowing<sal_uInt16>(nAbs), o3tl::narrowing<sal_uInt16>(nProp) );
                     break;
                 case MID_LO_MARGIN:
-                    rULSpace.SetLower( static_cast<sal_uInt16>(nAbs), static_cast<sal_uInt16>(nProp) );
+                    rULSpace.SetLower( o3tl::narrowing<sal_uInt16>(nAbs), o3tl::narrowing<sal_uInt16>(nProp) );
                     break;
                 default:
                     OSL_FAIL("unknown MemberId");
@@ -507,16 +507,16 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
                     if( nMemberId == LEFT_BORDER_PADDING ||
                         nMemberId == ALL_BORDER_PADDING )
-                        rBox.SetDistance( static_cast<sal_uInt16>(nTemp), SvxBoxItemLine::LEFT );
+                        rBox.SetDistance( o3tl::narrowing<sal_uInt16>(nTemp), SvxBoxItemLine::LEFT );
                     if( nMemberId == RIGHT_BORDER_PADDING ||
                         nMemberId == ALL_BORDER_PADDING )
-                        rBox.SetDistance( static_cast<sal_uInt16>(nTemp), SvxBoxItemLine::RIGHT );
+                        rBox.SetDistance( o3tl::narrowing<sal_uInt16>(nTemp), SvxBoxItemLine::RIGHT );
                     if( nMemberId == TOP_BORDER_PADDING ||
                         nMemberId == ALL_BORDER_PADDING )
-                        rBox.SetDistance( static_cast<sal_uInt16>(nTemp), SvxBoxItemLine::TOP );
+                        rBox.SetDistance( o3tl::narrowing<sal_uInt16>(nTemp), SvxBoxItemLine::TOP );
                     if( nMemberId == BOTTOM_BORDER_PADDING ||
                         nMemberId == ALL_BORDER_PADDING )
-                        rBox.SetDistance( static_cast<sal_uInt16>(nTemp), SvxBoxItemLine::BOTTOM);
+                        rBox.SetDistance( o3tl::narrowing<sal_uInt16>(nTemp), SvxBoxItemLine::BOTTOM);
                     break;
 
                 case ALL_BORDER:
@@ -831,7 +831,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                 // "auto" as "0" for tables - now that we support a real offset
                 //  0, this fake "0" MUST NOT be imported as offset 0!
                 if( bOk && nVal > 0 )
-                    rPageDesc.SetNumOffset( static_cast<sal_uInt16>(nVal) );
+                    rPageDesc.SetNumOffset( o3tl::narrowing<sal_uInt16>(nVal) );
             }
         }
         break;
@@ -944,7 +944,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                         else if( nValue > SAL_MAX_UINT16 )
                             nValue = SAL_MAX_UINT16;
 
-                        rFrameSize.SetWidth( static_cast<sal_uInt16>(nValue) );
+                        rFrameSize.SetWidth( o3tl::narrowing<sal_uInt16>(nValue) );
                         rFrameSize.SetHeightSizeType( SwFrameSize::Variable );
                         bOk = true;
                     }
@@ -960,9 +960,9 @@ bool SvXMLImportItemMapper::PutXMLValue(
                 if( bOk )
                 {
                     if( bSetWidth )
-                        rFrameSize.SetWidth( static_cast<sal_uInt16>(nValue) );
+                        rFrameSize.SetWidth( o3tl::narrowing<sal_uInt16>(nValue) );
                     if( bSetHeight )
-                        rFrameSize.SetHeight( static_cast<sal_uInt16>(nValue) );
+                        rFrameSize.SetHeight( o3tl::narrowing<sal_uInt16>(nValue) );
                     if( bSetSizeType )
                         rFrameSize.SetHeightSizeType( eSizeType );
                 }

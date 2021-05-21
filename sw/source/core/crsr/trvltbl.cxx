@@ -61,7 +61,7 @@ bool SwCursorShell::GoNextCell( bool bAppendLine )
                     pTableNd = IsCursorInTable();
                 assert (pTableNd);
                 pTableBox = & pTableBox->FindEndOfRowSpan( pTableNd->GetTable(),
-                                                           static_cast<sal_uInt16>(pTableBox->getRowSpan() + pCursor->GetCursorRowSpanOffset() ) );
+                                                           o3tl::narrowing<sal_uInt16>(pTableBox->getRowSpan() + pCursor->GetCursorRowSpanOffset() ) );
                 pTableBoxStartNode = pTableBox->GetSttNd();
             }
         }

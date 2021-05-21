@@ -472,7 +472,7 @@ bool SwGetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         break;
     case FIELD_PROP_USHORT1:
          rAny >>= nTmp;
-         m_nSubType = static_cast<sal_uInt16>(nTmp);
+         m_nSubType = o3tl::narrowing<sal_uInt16>(nTmp);
         break;
     case FIELD_PROP_PAR1:
     {
@@ -484,7 +484,7 @@ bool SwGetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     case FIELD_PROP_SUBTYPE:
         nTmp = lcl_APIToSubType(rAny);
         if( nTmp >=0 )
-            SetSubType( static_cast<sal_uInt16>((GetSubType() & 0xff00) | nTmp));
+            SetSubType( o3tl::narrowing<sal_uInt16>((GetSubType() & 0xff00) | nTmp));
         break;
     case FIELD_PROP_BOOL2:
         if(*o3tl::doAccess<bool>(rAny))
@@ -697,7 +697,7 @@ void SwSetExpFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         {
             sal_Int32 nSet = lcl_APIToSubType(rAny);
             if(nSet >=0)
-                SetType(static_cast<sal_uInt16>(nSet));
+                SetType(o3tl::narrowing<sal_uInt16>(nSet));
         }
         break;
     case FIELD_PROP_PAR2:
@@ -1109,7 +1109,7 @@ bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     case FIELD_PROP_SUBTYPE:
         nTmp32 = lcl_APIToSubType(rAny);
         if(nTmp32 >= 0)
-            SetSubType(static_cast<sal_uInt16>((GetSubType() & 0xff00) | nTmp32));
+            SetSubType(o3tl::narrowing<sal_uInt16>((GetSubType() & 0xff00) | nTmp32));
         break;
     case FIELD_PROP_PAR3:
         rAny >>= maPText;

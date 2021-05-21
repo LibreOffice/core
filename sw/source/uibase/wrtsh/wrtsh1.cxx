@@ -1111,7 +1111,7 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
                     OSL_ENSURE( pColl->IsAssignedToListLevelOfOutlineStyle(),
                             "<SwWrtShell::NumOrBulletOn(..)> - paragraph style with outline rule, but no outline level" );
                     if ( pColl->IsAssignedToListLevelOfOutlineStyle() &&
-                         pCollRule->Get( static_cast<sal_uInt16>(nActivateOutlineLvl) ).GetNumberingType()
+                         pCollRule->Get( o3tl::narrowing<sal_uInt16>(nActivateOutlineLvl) ).GetNumberingType()
                             == SVX_NUM_NUMBER_NONE )
                     {
                         // activate outline numbering
@@ -1138,7 +1138,7 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
                 // Check, if corresponding list level of the outline numbering
                 // has already a numbering format set.
                 nActivateOutlineLvl = pColl->GetAssignedOutlineStyleLevel();
-                if ( pCollRule->Get( static_cast<sal_uInt16>(nActivateOutlineLvl) ).GetNumberingType()
+                if ( pCollRule->Get( o3tl::narrowing<sal_uInt16>(nActivateOutlineLvl) ).GetNumberingType()
                                 == SVX_NUM_NUMBER_NONE )
                 {
                     // activate outline numbering, because from the precondition
@@ -1159,7 +1159,7 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
                 OSL_ENSURE( pColl->IsAssignedToListLevelOfOutlineStyle(),
                         "<SwWrtShell::NumOrBulletOn(..)> - paragraph style with outline rule, but no outline level" );
                 if ( pColl->IsAssignedToListLevelOfOutlineStyle() &&
-                     pCollRule->Get( static_cast<sal_uInt16>(nActivateOutlineLvl) ).GetNumberingType()
+                     pCollRule->Get( o3tl::narrowing<sal_uInt16>(nActivateOutlineLvl) ).GetNumberingType()
                         == SVX_NUM_NUMBER_NONE )
                 {
                     // activate outline numbering
@@ -1224,7 +1224,7 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
                 if (nLevel >= MAXLEVEL)
                     nLevel = MAXLEVEL - 1;
 
-                SwNumFormat aFormat(aNumRule.Get(static_cast<sal_uInt16>(nLevel)));
+                SwNumFormat aFormat(aNumRule.Get(o3tl::narrowing<sal_uInt16>(nLevel)));
 
                 if (bNum)
                     aFormat.SetNumberingType(SVX_NUM_ARABIC);
@@ -1242,7 +1242,7 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
                     aFormat.SetPrefix(OUString());
                     aFormat.SetSuffix(OUString());
                 }
-                aNumRule.Set(static_cast<sal_uInt16>(nLevel), aFormat);
+                aNumRule.Set(o3tl::narrowing<sal_uInt16>(nLevel), aFormat);
             }
         }
 
@@ -1396,7 +1396,7 @@ void SwWrtShell::NumOrBulletOff()
             if (nLevel >= MAXLEVEL)
                 nLevel = MAXLEVEL - 1;
 
-            SwNumFormat aFormat(aNumRule.Get(static_cast<sal_uInt16>(nLevel)));
+            SwNumFormat aFormat(aNumRule.Get(o3tl::narrowing<sal_uInt16>(nLevel)));
 
             aFormat.SetNumberingType(SVX_NUM_NUMBER_NONE);
             aNumRule.Set(nLevel, aFormat);

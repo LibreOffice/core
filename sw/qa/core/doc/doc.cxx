@@ -66,8 +66,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTextboxTextRotateAngle)
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "textbox-textrotateangle.odt");
     SwFrameFormats& rFrameFormats = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rFrameFormats.size());
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(RES_DRAWFRMFMT), rFrameFormats[0]->Which());
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(RES_FLYFRMFMT), rFrameFormats[1]->Which());
+    CPPUNIT_ASSERT_EQUAL(o3tl::narrowing<sal_uInt16>(RES_DRAWFRMFMT), rFrameFormats[0]->Which());
+    CPPUNIT_ASSERT_EQUAL(o3tl::narrowing<sal_uInt16>(RES_FLYFRMFMT), rFrameFormats[1]->Which());
     SvxFrameDirection eActual = rFrameFormats[1]->GetAttrSet().GetItem(RES_FRAMEDIR)->GetValue();
 
     // Without the accompanying fix in place, this test would have failed with:

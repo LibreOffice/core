@@ -503,7 +503,7 @@ sal_uInt16 PostItField_::GetPageNo(
         sal_uInt16 nPgNo = pFrame->GetPhyPageNum();
         if( rRangeEnum.hasValue( nPgNo, &rPossiblePages ))
         {
-            rLineNo = static_cast<sal_uInt16>(pFrame->GetLineCount( nPos ) +
+            rLineNo = o3tl::narrowing<sal_uInt16>(pFrame->GetLineCount( nPos ) +
                       pFrame->GetAllLines() - pFrame->GetThisLines());
             rVirtPgNo = pFrame->GetVirtPageNum();
             return nPgNo;
@@ -1271,7 +1271,7 @@ void SwDoc::Summary(SwDoc& rExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bImp
             {
                 SwTextFormatColl* pMyColl = pNd->GetTextColl();
 
-                const sal_uInt16 nHeadLine = static_cast<sal_uInt16>(
+                const sal_uInt16 nHeadLine = o3tl::narrowing<sal_uInt16>(
                             !pMyColl->IsAssignedToListLevelOfOutlineStyle()
                             ? RES_POOLCOLL_HEADLINE2
                             : RES_POOLCOLL_HEADLINE1 );

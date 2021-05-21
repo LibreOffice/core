@@ -769,7 +769,7 @@ OUString SwFieldMgr::GetFormatStr(SwFieldTypesEnum nTypeId, sal_uInt32 nFormatId
 // determine FormatId from Pseudo-ID
 sal_uInt16 SwFieldMgr::GetFormatId(SwFieldTypesEnum nTypeId, sal_uInt32 nFormatId) const
 {
-    sal_uInt16 nId = static_cast<sal_uInt16>(nFormatId);
+    sal_uInt16 nId = o3tl::narrowing<sal_uInt16>(nFormatId);
     switch( nTypeId )
     {
         case SwFieldTypesEnum::DocumentInfo:
@@ -983,7 +983,7 @@ bool SwFieldMgr::InsertField(
 
     case SwFieldTypesEnum::Chapter:
         {
-            sal_uInt16 nByte = static_cast<sal_uInt16>(rData.m_sPar2.toInt32());
+            sal_uInt16 nByte = o3tl::narrowing<sal_uInt16>(rData.m_sPar2.toInt32());
             SwChapterFieldType* pTyp =
                 static_cast<SwChapterFieldType*>( pCurShell->GetFieldType(0, SwFieldIds::Chapter) );
             pField.reset(new SwChapterField(pTyp, nFormatId));
@@ -1078,7 +1078,7 @@ bool SwFieldMgr::InsertField(
         {
             SwGetRefFieldType* pTyp =
                 static_cast<SwGetRefFieldType*>( pCurShell->GetFieldType(0, SwFieldIds::GetRef) );
-            sal_uInt16 nSeqNo = static_cast<sal_uInt16>(rData.m_sPar2.toInt32());
+            sal_uInt16 nSeqNo = o3tl::narrowing<sal_uInt16>(rData.m_sPar2.toInt32());
             OUString sReferenceLanguage;
             // handle language-variant formats
             if (nFormatId >= SAL_N_ELEMENTS(FMT_REF_ARY))
@@ -1564,7 +1564,7 @@ void SwFieldMgr::UpdateCurField(sal_uInt32 nFormat,
 
         case SwFieldTypesEnum::Chapter:
         {
-            sal_uInt16 nByte = static_cast<sal_uInt16>(rPar2.toInt32());
+            sal_uInt16 nByte = o3tl::narrowing<sal_uInt16>(rPar2.toInt32());
             nByte = std::max(sal_uInt16(1), nByte);
             nByte = std::min(nByte, sal_uInt16(MAXLEVEL));
             nByte -= 1;
@@ -1618,10 +1618,10 @@ void SwFieldMgr::UpdateCurField(sal_uInt32 nFormat,
         case SwFieldTypesEnum::GetRef:
             {
                 bSetPar2 = false;
-                static_cast<SwGetRefField*>(pTmpField.get())->SetSubType( static_cast<sal_uInt16>(rPar2.toInt32()) );
+                static_cast<SwGetRefField*>(pTmpField.get())->SetSubType( o3tl::narrowing<sal_uInt16>(rPar2.toInt32()) );
                 const sal_Int32 nPos = rPar2.indexOf( '|' );
                 if( nPos>=0 )
-                    static_cast<SwGetRefField*>(pTmpField.get())->SetSeqNo( static_cast<sal_uInt16>(rPar2.copy( nPos + 1 ).toInt32()));
+                    static_cast<SwGetRefField*>(pTmpField.get())->SetSeqNo( o3tl::narrowing<sal_uInt16>(rPar2.copy( nPos + 1 ).toInt32()));
             }
             break;
         case SwFieldTypesEnum::Dropdown:

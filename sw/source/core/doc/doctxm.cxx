@@ -1520,7 +1520,7 @@ void SwTOXBaseSection::UpdateContent( SwTOXElement eMyType,
                 std::unique_ptr<SwTOXPara> pNew( MakeSwTOXSortTabBase<SwTOXPara>(
                         pLayout, *pCNd, eMyType,
                             ( USHRT_MAX != nSetLevel )
-                            ? static_cast<sal_uInt16>(nSetLevel)
+                            ? o3tl::narrowing<sal_uInt16>(nSetLevel)
                             : FORM_ALPHA_DELIMITER ) );
                 InsertSorted( std::move(pNew) );
             }
@@ -1570,7 +1570,7 @@ void SwTOXBaseSection::UpdateTable(const SwTextNode* pOwnChapterNode,
                             if( pOutlNd->GetTextColl()->IsAssignedToListLevelOfOutlineStyle())
                             {
                                 const int nTmp = pOutlNd->GetTextColl()->GetAttrOutlineLevel();
-                                pNew->SetLevel(static_cast<sal_uInt16>(nTmp));
+                                pNew->SetLevel(o3tl::narrowing<sal_uInt16>(nTmp));
                             }
                         }
                     }

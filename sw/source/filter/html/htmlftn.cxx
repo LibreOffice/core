@@ -95,7 +95,7 @@ static sal_Int32 lcl_html_getEndNoteInfo( SwEndNoteInfo& rInfo,
             break;
 
         case 1:
-            rInfo.m_nFootnoteOffset = aPart.isEmpty() ? 0 : static_cast<sal_uInt16>(aPart.toInt32());
+            rInfo.m_nFootnoteOffset = aPart.isEmpty() ? 0 : o3tl::narrowing<sal_uInt16>(aPart.toInt32());
             break;
 
         case 2:

@@ -4373,15 +4373,15 @@ void SwWW8ImplReader::Read_LineSpace( sal_uInt16, const sal_uInt8* pData, short 
         tools::Long n = nSpace * 10 / 24;  // WW: 240 = 100%, SW: 100 = 100%
 
         // here n is in [0..13653]
-        aLSpc.SetPropLineSpace( static_cast<sal_uInt16>(n) );
+        aLSpc.SetPropLineSpace( o3tl::narrowing<sal_uInt16>(n) );
         const SvxFontHeightItem* pH = static_cast<const SvxFontHeightItem*>(
             GetFormatAttr( RES_CHRATR_FONTSIZE ));
-        nSpaceTw = static_cast<sal_uInt16>( n * pH->GetHeight() / 100 );
+        nSpaceTw = o3tl::narrowing<sal_uInt16>( n * pH->GetHeight() / 100 );
     }
     else                            // Fixed / Minimum
     {
         // for negative space, the distance is "exact", otherwise "at least"
-        nSpaceTw = static_cast<sal_uInt16>(nSpace);
+        nSpaceTw = o3tl::narrowing<sal_uInt16>(nSpace);
         aLSpc.SetLineHeight( nSpaceTw );
         aLSpc.SetLineSpaceRule( eLnSpc);
     }
@@ -5047,16 +5047,16 @@ void SwWW8ImplReader::Read_Border(sal_uInt16 , const sal_uInt8*, short nLen)
                 GetBorderDistance( aBrcs, aInnerDist );
 
                 if (nBorder & (1 << WW8_LEFT))
-                    aBox->SetDistance( static_cast<sal_uInt16>(aInnerDist.Left()), SvxBoxItemLine::LEFT );
+                    aBox->SetDistance( o3tl::narrowing<sal_uInt16>(aInnerDist.Left()), SvxBoxItemLine::LEFT );
 
                 if (nBorder & (1 << WW8_TOP))
-                    aBox->SetDistance( static_cast<sal_uInt16>(aInnerDist.Top()), SvxBoxItemLine::TOP );
+                    aBox->SetDistance( o3tl::narrowing<sal_uInt16>(aInnerDist.Top()), SvxBoxItemLine::TOP );
 
                 if (nBorder & (1 << WW8_RIGHT))
-                    aBox->SetDistance( static_cast<sal_uInt16>(aInnerDist.Right()), SvxBoxItemLine::RIGHT );
+                    aBox->SetDistance( o3tl::narrowing<sal_uInt16>(aInnerDist.Right()), SvxBoxItemLine::RIGHT );
 
                 if (nBorder & (1 << WW8_BOT))
-                    aBox->SetDistance( static_cast<sal_uInt16>(aInnerDist.Bottom()), SvxBoxItemLine::BOTTOM );
+                    aBox->SetDistance( o3tl::narrowing<sal_uInt16>(aInnerDist.Bottom()), SvxBoxItemLine::BOTTOM );
 
                 NewAttr( *aBox );
 

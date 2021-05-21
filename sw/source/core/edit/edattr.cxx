@@ -93,7 +93,7 @@ bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
                         nListLevel = MAXLEVEL - 1;
 
                     const OUString & aCharFormatName =
-                        pNumRule->Get(static_cast<sal_uInt16>(nListLevel)).GetCharFormatName();
+                        pNumRule->Get(o3tl::narrowing<sal_uInt16>(nListLevel)).GetCharFormatName();
                     SwCharFormat * pCharFormat =
                         GetDoc()->FindCharFormatByName(aCharFormatName);
 
@@ -504,7 +504,7 @@ bool SwEditShell::IsMoveLeftMargin( bool bRight, bool bModulus ) const
     bool bRet = true;
 
     const SvxTabStopItem& rTabItem = GetDoc()->GetDefault( RES_PARATR_TABSTOP );
-    sal_uInt16 nDefDist = static_cast<sal_uInt16>(rTabItem.Count() ? rTabItem[0].GetTabPos() : 1134);
+    sal_uInt16 nDefDist = o3tl::narrowing<sal_uInt16>(rTabItem.Count() ? rTabItem[0].GetTabPos() : 1134);
     if( !nDefDist )
         return false;
 
@@ -533,7 +533,7 @@ bool SwEditShell::IsMoveLeftMargin( bool bRight, bool bModulus ) const
                     SwFrame* pFrame = pCNd->getLayoutFrame( GetLayout() );
                     if ( pFrame )
                     {
-                        const sal_uInt16 nFrameWidth = static_cast<sal_uInt16>( pFrame->IsVertical() ?
+                        const sal_uInt16 nFrameWidth = o3tl::narrowing<sal_uInt16>( pFrame->IsVertical() ?
                                                  pFrame->getFrameArea().Height() :
                                                  pFrame->getFrameArea().Width() );
                         bRet = nFrameWidth > ( nNext + MM50 );
@@ -614,7 +614,7 @@ static bool lcl_IsNoEndTextAttrAtPos(SwRootFrame const& rLayout,
                 if (nListLevel >= MAXLEVEL)
                     nListLevel = MAXLEVEL - 1;
 
-                const SwNumFormat &rNumFormat = pNumRule->Get( static_cast<sal_uInt16>(nListLevel) );
+                const SwNumFormat &rNumFormat = pNumRule->Get( o3tl::narrowing<sal_uInt16>(nListLevel) );
                 if( SVX_NUM_BITMAP != rNumFormat.GetNumberingType() )
                 {
                     if ( SVX_NUM_CHAR_SPECIAL == rNumFormat.GetNumberingType() )

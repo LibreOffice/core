@@ -155,7 +155,7 @@ void SwView::SetZoom_( const Size &rEditSize, SvxZoomType eZoomType,
     }
 
     nFac = std::max( tools::Long( MINZOOM ), nFac );
-    const sal_uInt16 nZoomFac = static_cast<sal_uInt16>(nFac);
+    const sal_uInt16 nZoomFac = o3tl::narrowing<sal_uInt16>(nFac);
 
     SwViewOption aOpt( *pOpt );
     if ( !GetViewFrame()->GetFrame().IsInPlace() )

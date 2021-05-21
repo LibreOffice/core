@@ -929,7 +929,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
     // Hash table for all string replacements is filled on-the-fly.
     // Try to fabricate an uneven number.
     const SwFieldTypes::size_type nHashSize {(( mpFieldTypes->size() / 7 ) + 1 ) * 7};
-    const sal_uInt16 nStrFormatCnt = static_cast<sal_uInt16>(nHashSize);
+    const sal_uInt16 nStrFormatCnt = o3tl::narrowing<sal_uInt16>(nHashSize);
     OSL_ENSURE( nStrFormatCnt == nHashSize, "Downcasting to sal_uInt16 lost information!" );
     SwHashTable<HashStr> aHashStrTable(nStrFormatCnt);
 

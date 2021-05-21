@@ -46,7 +46,7 @@ size_t SwEditShell::GetFieldTypeCount(SwFieldIds nResId ) const
 
     if(nResId == SwFieldIds::Unknown)
     {
-        return static_cast<sal_uInt16>(pFieldTypes->size());
+        return o3tl::narrowing<sal_uInt16>(pFieldTypes->size());
     }
 
     // all types with the same ResId

@@ -972,7 +972,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 // RepeatHeaderLines
                 if(SfxItemState::SET == pArgs->GetItemState( FN_PARAM_4, true, &pItem))
                    aInsTableOpts.mnRowsToRepeat =
-                            static_cast<sal_uInt16>(static_cast< const SfxInt16Item* >(pItem)->GetValue());
+                            o3tl::narrowing<sal_uInt16>(static_cast< const SfxInt16Item* >(pItem)->GetValue());
                 //WithBorder
                 if(SfxItemState::SET == pArgs->GetItemState( FN_PARAM_5, true, &pItem) &&
                     static_cast< const SfxBoolItem* >(pItem)->GetValue())

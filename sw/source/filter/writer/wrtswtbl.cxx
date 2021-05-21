@@ -336,14 +336,14 @@ sal_uInt16 SwWriteTable::GetAbsWidth( sal_uInt16 nCol, sal_uInt16 nColSpan ) con
     nWidth -= GetLeftSpace( nCol ) + GetRightSpace( nCol, nColSpan );
 
     OSL_ENSURE( nWidth > 0, "Column Width <= 0. OK?" );
-    return nWidth > 0 ? static_cast<sal_uInt16>(nWidth) : 0;
+    return nWidth > 0 ? o3tl::narrowing<sal_uInt16>(nWidth) : 0;
 }
 
 sal_uInt16 SwWriteTable::GetRelWidth( sal_uInt16 nCol, sal_uInt16 nColSpan ) const
 {
     tools::Long nWidth = GetRawWidth( nCol, nColSpan );
 
-    return static_cast<sal_uInt16>(static_cast<tools::Long>(Fraction( nWidth*256 + GetBaseWidth()/2,
+    return o3tl::narrowing<sal_uInt16>(static_cast<tools::Long>(Fraction( nWidth*256 + GetBaseWidth()/2,
                                    GetBaseWidth() )));
 }
 
@@ -353,7 +353,7 @@ sal_uInt16 SwWriteTable::GetPercentWidth( sal_uInt16 nCol, sal_uInt16 nColSpan )
 
     // Looks funny, but is nothing more than
     // [(100 * nWidth) + .5] without rounding errors
-    return static_cast<sal_uInt16>(static_cast<tools::Long>(Fraction( nWidth*100 + GetBaseWidth()/2,
+    return o3tl::narrowing<sal_uInt16>(static_cast<tools::Long>(Fraction( nWidth*100 + GetBaseWidth()/2,
                                    GetBaseWidth() )));
 }
 
@@ -659,7 +659,7 @@ void SwWriteTable::FillTableRowsCols( tools::Long nStartRPos, sal_uInt16 nStartR
                 // The new table model may have true row span attributes
                 const sal_Int32 nAttrRowSpan = pBox->getRowSpan();
                 if ( 1 < nAttrRowSpan )
-                    nRowSpan = static_cast<sal_uInt16>(nAttrRowSpan);
+                    nRowSpan = o3tl::narrowing<sal_uInt16>(nAttrRowSpan);
                 else if ( nAttrRowSpan < 1 )
                     nRowSpan = 0;
 

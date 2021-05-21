@@ -659,7 +659,7 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
 
     if (nLevel < MAXLEVEL)
     {
-        const SwNumFormat& rMyNFormat = Get( static_cast<sal_uInt16>(nLevel) );
+        const SwNumFormat& rMyNFormat = Get( o3tl::narrowing<sal_uInt16>(nLevel) );
 
         {
             css::lang::Locale aLocale( LanguageTag::convertToLocale(nLang));
@@ -789,7 +789,7 @@ OUString SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
                 if (nListLevel >= MAXLEVEL)
                     nListLevel = MAXLEVEL - 1;
 
-                SwNumFormat aFormat( Get( static_cast<sal_uInt16>(nListLevel) ) );
+                SwNumFormat aFormat( Get( o3tl::narrowing<sal_uInt16>(nListLevel) ) );
                 bMakeNumStringForPhantom = aFormat.IsEnumeration() &&
                                            SVX_NUM_NUMBER_NONE != aFormat.GetNumberingType();
 
@@ -834,7 +834,7 @@ OUString SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
 
             if ( bInclSuperiorNumLabels && pWorkingNodeNum->GetLevelInListTree() > 0 )
             {
-                sal_uInt8 n = Get( static_cast<sal_uInt16>(pWorkingNodeNum->GetLevelInListTree()) ).GetIncludeUpperLevels();
+                sal_uInt8 n = Get( o3tl::narrowing<sal_uInt16>(pWorkingNodeNum->GetLevelInListTree()) ).GetIncludeUpperLevels();
                 pWorkingNodeNum = dynamic_cast<SwNodeNum*>(pWorkingNodeNum->GetParent());
                 // skip parents, whose list label is already contained in the actual list label.
                 while ( pWorkingNodeNum && n > 1 )

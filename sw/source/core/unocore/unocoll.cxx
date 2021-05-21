@@ -1860,7 +1860,7 @@ uno::Any SwXReferenceMarks::getByIndex(sal_Int32 nIndex)
     if(0 <= nIndex && nIndex < SAL_MAX_UINT16)
     {
         SwFormatRefMark *const pMark = const_cast<SwFormatRefMark*>(
-                GetDoc()->GetRefMark(static_cast<sal_uInt16>(nIndex)));
+                GetDoc()->GetRefMark(o3tl::narrowing<sal_uInt16>(nIndex)));
         if(pMark)
         {
             xRef = SwXReferenceMark::CreateXReferenceMark(*GetDoc(), pMark);

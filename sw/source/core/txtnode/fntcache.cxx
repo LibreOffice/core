@@ -412,7 +412,7 @@ sal_uInt16 SwFntObj::GetFontAscent( const SwViewShell *pSh, const OutputDevice& 
             const vcl::Font aOldFnt( rRefDev.GetFont() );
             const_cast<OutputDevice&>(rRefDev).SetFont( *m_pPrtFont );
             const FontMetric aOutMet( rRefDev.GetFontMetric() );
-            m_nPrtAscent = static_cast<sal_uInt16>(aOutMet.GetAscent());
+            m_nPrtAscent = o3tl::narrowing<sal_uInt16>(aOutMet.GetAscent());
             const_cast<OutputDevice&>(rRefDev).SetFont( aOldFnt );
         }
 
@@ -448,12 +448,12 @@ sal_uInt16 SwFntObj::GetFontHeight( const SwViewShell* pSh, const OutputDevice& 
             CreatePrtFont( rOut );
             const vcl::Font aOldFnt( rRefDev.GetFont() );
             const_cast<OutputDevice&>(rRefDev).SetFont( *m_pPrtFont );
-            m_nPrtHeight = static_cast<sal_uInt16>(rRefDev.GetTextHeight());
+            m_nPrtHeight = o3tl::narrowing<sal_uInt16>(rRefDev.GetTextHeight());
 
 #if OSL_DEBUG_LEVEL > 0
             // Check if vcl did not change the meaning of GetTextHeight
             const FontMetric aOutMet( rRefDev.GetFontMetric() );
-            tools::Long nTmpPrtHeight = static_cast<sal_uInt16>(aOutMet.GetAscent()) + aOutMet.GetDescent();
+            tools::Long nTmpPrtHeight = o3tl::narrowing<sal_uInt16>(aOutMet.GetAscent()) + aOutMet.GetDescent();
             // #i106098#: do not compare with == here due to rounding error
             OSL_ENSURE( std::abs(nTmpPrtHeight - m_nPrtHeight) < 3,
                     "GetTextHeight != Ascent + Descent" );
@@ -485,7 +485,7 @@ sal_uInt16 SwFntObj::GetFontLeading( const SwViewShell *pSh, const OutputDevice&
             const_cast<OutputDevice&>(rOut).SetFont( aOldFnt );
             m_bSymbol = RTL_TEXTENCODING_SYMBOL == aMet.GetCharSet();
             GuessLeading( *pSh, aMet );
-            m_nExtLeading = static_cast<sal_uInt16>(aMet.GetExternalLeading());
+            m_nExtLeading = o3tl::narrowing<sal_uInt16>(aMet.GetExternalLeading());
             /* HACK: FIXME There is something wrong with Writer's bullet rendering, causing lines
                with bullets to be higher than they should be. I think this is because
                Writer uses font's external leading incorrect, as the vertical distance
@@ -569,7 +569,7 @@ void SwFntObj::CreateScrFont( const SwViewShell& rSh, const OutputDevice& rOut )
             GuessLeading( rSh, aMet );
 
         if ( USHRT_MAX == m_nExtLeading )
-            m_nExtLeading = static_cast<sal_uInt16>(aMet.GetExternalLeading());
+            m_nExtLeading = o3tl::narrowing<sal_uInt16>(aMet.GetExternalLeading());
 
         // reset the original reference device font
         pPrt->SetFont( aOldPrtFnt );
@@ -587,9 +587,9 @@ void SwFntObj::CreateScrFont( const SwViewShell& rSh, const OutputDevice& rOut )
         m_pScrFont = m_pPrtFont;
     }
 
-    m_nScrAscent = static_cast<sal_uInt16>(pOut->GetFontMetric().GetAscent());
+    m_nScrAscent = o3tl::narrowing<sal_uInt16>(pOut->GetFontMetric().GetAscent());
     if ( USHRT_MAX == m_nScrHeight )
-        m_nScrHeight = static_cast<sal_uInt16>(pOut->GetTextHeight());
+        m_nScrHeight = o3tl::narrowing<sal_uInt16>(pOut->GetTextHeight());
 
     // reset original output device font
     pOut->SetFont( aOldOutFont );
@@ -653,7 +653,7 @@ void SwFntObj::GuessLeading( const SwViewShell&
                 {
                     OSL_ENSURE( m_nPrtAscent < USHRT_MAX, "GuessLeading: PrtAscent-Fault" );
                     if ( m_nPrtAscent < USHRT_MAX )
-                        m_nPrtAscent = m_nPrtAscent + static_cast<sal_uInt16>(( 2 * nDiff ) / 5);
+                        m_nPrtAscent = m_nPrtAscent + o3tl::narrowing<sal_uInt16>(( 2 * nDiff ) / 5);
                 }
             }
         }
@@ -1175,7 +1175,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         lcl_IsMonoSpaceFont( *(rInf.GetpOut()) ) )
                     {
                         pSI->Compress( pKernArray.get(), rInf.GetIdx(), rInf.GetLen(),
-                            rInf.GetKanaComp(), static_cast<sal_uInt16>(m_aFont.GetFontSize().Height()), lcl_IsFullstopCentered( rInf.GetOut() ) , &aTextOriginPos );
+                            rInf.GetKanaComp(), o3tl::narrowing<sal_uInt16>(m_aFont.GetFontSize().Height()), lcl_IsFullstopCentered( rInf.GetOut() ) , &aTextOriginPos );
                         bSpecialJust = true;
                     }
                     ///Asian Justification
@@ -1342,7 +1342,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 {
                     pSI->Compress( pKernArray.get(), rInf.GetIdx(), rInf.GetLen(),
                                    rInf.GetKanaComp(),
-                                   static_cast<sal_uInt16>(m_aFont.GetFontSize().Height()), lcl_IsFullstopCentered( rInf.GetOut() ), &aTextOriginPos );
+                                   o3tl::narrowing<sal_uInt16>(m_aFont.GetFontSize().Height()), lcl_IsFullstopCentered( rInf.GetOut() ), &aTextOriginPos );
                     bSpecialJust = true;
                 }
 
@@ -1551,10 +1551,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 Point aTmpPos( aTextOriginPos );
                 pSI->Compress( pScrArray.get(), rInf.GetIdx(), rInf.GetLen(),
                                rInf.GetKanaComp(),
-                               static_cast<sal_uInt16>(m_aFont.GetFontSize().Height()), lcl_IsFullstopCentered( rInf.GetOut() ), &aTmpPos );
+                               o3tl::narrowing<sal_uInt16>(m_aFont.GetFontSize().Height()), lcl_IsFullstopCentered( rInf.GetOut() ), &aTmpPos );
                 pSI->Compress( pKernArray.get(), rInf.GetIdx(), rInf.GetLen(),
                                rInf.GetKanaComp(),
-                               static_cast<sal_uInt16>(m_aFont.GetFontSize().Height()), lcl_IsFullstopCentered( rInf.GetOut() ), &aTextOriginPos );
+                               o3tl::narrowing<sal_uInt16>(m_aFont.GetFontSize().Height()), lcl_IsFullstopCentered( rInf.GetOut() ), &aTextOriginPos );
             }
 
             // Asian Justification
@@ -2029,7 +2029,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         if( bCompress )
             rInf.SetKanaDiff( rInf.GetScriptInfo()->Compress( pKernArray.get(),
                 rInf.GetIdx(), nLn, rInf.GetKanaComp(),
-                static_cast<sal_uInt16>(m_aFont.GetFontSize().Height()) ,lcl_IsFullstopCentered( rInf.GetOut() ) ) );
+                o3tl::narrowing<sal_uInt16>(m_aFont.GetFontSize().Height()) ,lcl_IsFullstopCentered( rInf.GetOut() ) ) );
         else
             rInf.SetKanaDiff( 0 );
 
@@ -2091,7 +2091,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
                                 sal_Int32(rInf.GetIdx()), sal_Int32(nLn));
             rInf.SetKanaDiff( rInf.GetScriptInfo()->Compress( pKernArray.get(),
                 rInf.GetIdx(), nLn, rInf.GetKanaComp(),
-                static_cast<sal_uInt16>(m_aFont.GetFontSize().Height()) ,lcl_IsFullstopCentered( rInf.GetOut() ) ) );
+                o3tl::narrowing<sal_uInt16>(m_aFont.GetFontSize().Height()) ,lcl_IsFullstopCentered( rInf.GetOut() ) ) );
             aTextSize.setWidth( pKernArray[sal_Int32(nLn) - 1] );
         }
         else
@@ -2151,7 +2151,7 @@ TextFrameIndex SwFntObj::GetModelPositionForViewPoint(SwDrawTextInfo &rInf)
         {
             pSI->Compress( pKernArray.get(), rInf.GetIdx(), rInf.GetLen(),
                            rInf.GetKanaComp(),
-                           static_cast<sal_uInt16>(m_aFont.GetFontSize().Height()),
+                           o3tl::narrowing<sal_uInt16>(m_aFont.GetFontSize().Height()),
                            lcl_IsFullstopCentered( rInf.GetOut() ) );
         }
 
@@ -2590,7 +2590,7 @@ TextFrameIndex SwFont::GetTextBreak(SwDrawTextInfo const & rInf, tools::Long nTe
         rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray.get(),
                                     sal_Int32(rInf.GetIdx()), sal_Int32(nLn));
         if( rInf.GetScriptInfo()->Compress( pKernArray.get(), rInf.GetIdx(), nLn,
-                            rInf.GetKanaComp(), static_cast<sal_uInt16>(GetHeight( m_nActual )),
+                            rInf.GetKanaComp(), o3tl::narrowing<sal_uInt16>(GetHeight( m_nActual )),
                             lcl_IsFullstopCentered( rInf.GetOut() ) ) )
         {
             tools::Long nKernAdd = nKern;

@@ -151,7 +151,7 @@ void SwFieldVarPage::Reset(const SfxItemSet* )
         if(!IsRefresh() && sUserData.getToken(0, ';', nIdx).equalsIgnoreAsciiCase(USER_DATA_VERSION_1))
         {
             OUString sVal = sUserData.getToken(0, ';', nIdx);
-            sal_uInt16 nVal = static_cast<sal_uInt16>(sVal.toInt32());
+            sal_uInt16 nVal = o3tl::narrowing<sal_uInt16>(sVal.toInt32());
             if (USHRT_MAX != nVal)
             {
                 for (sal_Int32 i = 0, nEntryCount = m_xTypeLB->n_children(); i < nEntryCount; i++)

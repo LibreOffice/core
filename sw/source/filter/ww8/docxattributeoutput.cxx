@@ -9445,7 +9445,7 @@ void DocxAttributeOutput::FormatColumns_Impl( sal_uInt16 nCols, const SwFormatCo
         for ( sal_uInt16 n = 0; n < nCols; ++n )
         {
             rtl::Reference<FastAttributeList> pColAttrList = FastSerializerHelper::createAttrList();
-            sal_uInt16 nWidth = rCol.CalcPrtColWidth( n, static_cast<sal_uInt16>(nPageSize) );
+            sal_uInt16 nWidth = rCol.CalcPrtColWidth( n, o3tl::narrowing<sal_uInt16>(nPageSize) );
             pColAttrList->add( FSNS( XML_w, XML_w ),
                     OString::number( nWidth ).getStr( ) );
 

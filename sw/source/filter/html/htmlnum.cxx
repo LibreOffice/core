@@ -27,7 +27,7 @@ void SwHTMLNumRuleInfo::Set(const SwTextNode& rTextNd)
     if (pTextNdNumRule && pTextNdNumRule != rTextNd.GetDoc().GetOutlineNumRule())
     {
         pNumRule = const_cast<SwNumRule*>(pTextNdNumRule);
-        nDeep = static_cast<sal_uInt16>(pNumRule ? rTextNd.GetActualListLevel() + 1 : 0);
+        nDeep = o3tl::narrowing<sal_uInt16>(pNumRule ? rTextNd.GetActualListLevel() + 1 : 0);
         bNumbered = rTextNd.IsCountedInList();
         // #i57919# - correction of refactoring done by cws swnumtree:
         // <bRestart> has to be set to <true>, if numbering is restarted at this

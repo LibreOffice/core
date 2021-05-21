@@ -125,7 +125,7 @@ static void lcl_ConvertToCols(const SvxColumnItem& rColItem,
     {
         OSL_ENSURE(rColItem[i+1].nStart >= rColItem[i].nEnd,"overlapping columns" );
         const tools::Long nStart = std::max(rColItem[i+1].nStart, rColItem[i].nEnd);
-        const sal_uInt16 nRight = static_cast<sal_uInt16>((nStart - rColItem[i].nEnd) / 2);
+        const sal_uInt16 nRight = o3tl::narrowing<sal_uInt16>((nStart - rColItem[i].nEnd) / 2);
 
         const tools::Long nWidth = rColItem[i].nEnd - rColItem[i].nStart + nLeft + nRight;
 
@@ -141,7 +141,7 @@ static void lcl_ConvertToCols(const SvxColumnItem& rColItem,
 
     // The difference between the total sum of the desired width and the so far
     // calculated columns and margins should result in the width of the last column.
-    rArr[rColItem.Count()-1].SetWishWidth( rCols.GetWishWidth() - static_cast<sal_uInt16>(nSumAll) );
+    rArr[rColItem.Count()-1].SetWishWidth( rCols.GetWishWidth() - o3tl::narrowing<sal_uInt16>(nSumAll) );
 
     rCols.SetOrtho(false, 0, 0 );
 }
@@ -204,23 +204,23 @@ static void ResizeFrameCols(SwFormatCol& rCol,
             SwColumn* pCol = &i;
             tools::Long nVal = pCol->GetWishWidth();
             lcl_Scale(nVal, nScale);
-            pCol->SetWishWidth(static_cast<sal_uInt16>(nVal));
+            pCol->SetWishWidth(o3tl::narrowing<sal_uInt16>(nVal));
             nVal = pCol->GetLeft();
             lcl_Scale(nVal, nScale);
-            pCol->SetLeft(static_cast<sal_uInt16>(nVal));
+            pCol->SetLeft(o3tl::narrowing<sal_uInt16>(nVal));
             nVal = pCol->GetRight();
             lcl_Scale(nVal, nScale);
-            pCol->SetRight(static_cast<sal_uInt16>(nVal));
+            pCol->SetRight(o3tl::narrowing<sal_uInt16>(nVal));
         }
         lcl_Scale(nNewWishWidth, nScale);
         lcl_Scale(nWishDiff, nScale);
     }
-    rCol.SetWishWidth( static_cast<sal_uInt16>(nNewWishWidth) );
+    rCol.SetWishWidth( o3tl::narrowing<sal_uInt16>(nNewWishWidth) );
 
     if( nLeftDelta >= 2 || nLeftDelta <= -2)
-        rArr.front().SetWishWidth(rArr.front().GetWishWidth() + static_cast<sal_uInt16>(nWishDiff));
+        rArr.front().SetWishWidth(rArr.front().GetWishWidth() + o3tl::narrowing<sal_uInt16>(nWishDiff));
     else
-        rArr.back().SetWishWidth(rArr.back().GetWishWidth() + static_cast<sal_uInt16>(nWishDiff));
+        rArr.back().SetWishWidth(rArr.back().GetWishWidth() + o3tl::narrowing<sal_uInt16>(nWishDiff));
     // Reset auto width
     rCol.SetOrtho(false, 0, 0 );
 }
@@ -510,9 +510,9 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                     const bool bHead = bool(nFrameType & FrameTypeFlags::HEADER);
                     SvxULSpaceItem aUL( rDesc.GetMaster().GetULSpace() );
                     if ( bHead )
-                        aUL.SetUpper( static_cast<sal_uInt16>(aLongULSpace.GetUpper()) );
+                        aUL.SetUpper( o3tl::narrowing<sal_uInt16>(aLongULSpace.GetUpper()) );
                     else
-                        aUL.SetLower( static_cast<sal_uInt16>(aLongULSpace.GetLower()) );
+                        aUL.SetLower( o3tl::narrowing<sal_uInt16>(aLongULSpace.GetLower()) );
                     aDesc.GetMaster().SetFormatAttr( aUL );
 
                     if( (bHead && pHeaderFormat) || (!bHead && pFooterFormat) )
@@ -531,8 +531,8 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 else
                 {
                     SvxULSpaceItem aUL(RES_UL_SPACE);
-                    aUL.SetUpper(static_cast<sal_uInt16>(aLongULSpace.GetUpper()));
-                    aUL.SetLower(static_cast<sal_uInt16>(aLongULSpace.GetLower()));
+                    aUL.SetUpper(o3tl::narrowing<sal_uInt16>(aLongULSpace.GetUpper()));
+                    aUL.SetLower(o3tl::narrowing<sal_uInt16>(aLongULSpace.GetLower()));
                     aDesc.GetMaster().SetFormatAttr(aUL);
                 }
 
@@ -550,8 +550,8 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
             SwPageDesc aDesc( rDesc );
             {
                 SvxULSpaceItem aUL(RES_UL_SPACE);
-                aUL.SetUpper(static_cast<sal_uInt16>(aLongULSpace.GetUpper()));
-                aUL.SetLower(static_cast<sal_uInt16>(aLongULSpace.GetLower()));
+                aUL.SetUpper(o3tl::narrowing<sal_uInt16>(aLongULSpace.GetUpper()));
+                aUL.SetLower(o3tl::narrowing<sal_uInt16>(aLongULSpace.GetLower()));
                 aDesc.GetMaster().SetFormatAttr(aUL);
             }
             rSh.ChgPageDesc( nDescId, aDesc );
@@ -1956,8 +1956,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                             aRect.Pos() += aTmpRect.Pos();
 
                             // make relative to page position:
-                            aColItem.SetLeft (static_cast<sal_uInt16>( aRect.Left() - rPageRect.Left() ));
-                            aColItem.SetRight(static_cast<sal_uInt16>( rPageRect.Right() - aRect.Right()));
+                            aColItem.SetLeft (o3tl::narrowing<sal_uInt16>( aRect.Left() - rPageRect.Left() ));
+                            aColItem.SetRight(o3tl::narrowing<sal_uInt16>( rPageRect.Right() - aRect.Right()));
                         }
                         aColItem.SetOrtho(aColItem.CalcOrtho());
 
@@ -2028,12 +2028,12 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     {
                         if (bVerticalWriting)
                         {
-                            aColItem.SetLeft(static_cast<sal_uInt16>(rPagePrtRect.Top()));
+                            aColItem.SetLeft(o3tl::narrowing<sal_uInt16>(rPagePrtRect.Top()));
                             aColItem.SetRight(sal_uInt16(nPageHeight - rPagePrtRect.Bottom()));
                         }
                         else
                         {
-                            aColItem.SetLeft(static_cast<sal_uInt16>(rPagePrtRect.Left()));
+                            aColItem.SetLeft(o3tl::narrowing<sal_uInt16>(rPagePrtRect.Left()));
                             aColItem.SetRight(sal_uInt16(nPageWidth - rPagePrtRect.Right()));
                         }
                     }
@@ -2203,9 +2203,9 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                                                     : CurRectType::Page, pPt ));
 
                     // The width of the frame or within the page margins.
-                    const sal_uInt16 nTotalWidth = static_cast<sal_uInt16>(aRect.Width());
+                    const sal_uInt16 nTotalWidth = o3tl::narrowing<sal_uInt16>(aRect.Width());
                     // The entire frame width - The difference is twice the distance to the edge.
-                    const sal_uInt16 nOuterWidth = static_cast<sal_uInt16>(aAbsRect.Width());
+                    const sal_uInt16 nOuterWidth = o3tl::narrowing<sal_uInt16>(aAbsRect.Width());
                     int nWidth = 0,
                         nEnd = 0;
                     aRectangle.SetLeft( 0 );
@@ -2325,7 +2325,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         aRect.Pos() += rSh.GetAnyCurRect( CurRectType::FlyEmbedded,
                                                                 pPt ).Pos();
 
-                    const sal_uInt16 nTotalWidth = static_cast<sal_uInt16>(aRect.Width());
+                    const sal_uInt16 nTotalWidth = o3tl::narrowing<sal_uInt16>(aRect.Width());
                     // Initialize nStart and nEnd for nNum == 0
                     int nWidth = 0,
                         nStart = 0,
@@ -2341,7 +2341,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     {
                         const SwColumn* pCol = &rCols[i];
                         nStart = pCol->GetLeft() + nWidth;
-                        nWidth += pCols->CalcColWidth( static_cast<sal_uInt16>(i), nTotalWidth );
+                        nWidth += pCols->CalcColWidth( o3tl::narrowing<sal_uInt16>(i), nTotalWidth );
                         nEnd = nWidth - pCol->GetRight();
                     }
                     if( bFrame || bColSct )

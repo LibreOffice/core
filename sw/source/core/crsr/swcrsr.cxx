@@ -1891,7 +1891,7 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
                 {
                     pTableBox = & pTableBox->FindEndOfRowSpan(
                         pOldTabSttNode->GetTable(),
-                        static_cast<sal_uInt16>(pTableBox->getRowSpan() + m_nRowSpanOffset));
+                        o3tl::narrowing<sal_uInt16>(pTableBox->getRowSpan() + m_nRowSpanOffset));
                     SwNodeIndex& rPtIdx = GetPoint()->nNode;
                     SwNodeIndex aNewIdx( *pTableBox->GetSttNd() );
                     rPtIdx = aNewIdx;
@@ -2212,7 +2212,7 @@ bool SwCursor::GoPrevNextCell( bool bNext, sal_uInt16 nCnt )
             if ( pTableBox && pTableBox->getRowSpan() > 1 )
             {
                 pTableBox = & pTableBox->FindEndOfRowSpan( pTableNd->GetTable(),
-                    static_cast<sal_uInt16>(pTableBox->getRowSpan() + m_nRowSpanOffset));
+                    o3tl::narrowing<sal_uInt16>(pTableBox->getRowSpan() + m_nRowSpanOffset));
                 SwNodeIndex aNewIdx( *pTableBox->GetSttNd() );
                 rPtIdx = aNewIdx;
                 pTableBoxStartNode = rPtIdx.GetNode().FindTableBoxStartNode();

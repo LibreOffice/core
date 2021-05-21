@@ -1434,7 +1434,7 @@ IMPL_LINK( SwPagePreview, EndScrollHdl, ScrollBar *, p, void )
         if ( GetViewShell()->PagePreviewLayout()->DoesPreviewLayoutRowsFitIntoWindow() )
         {
             // Scroll how many pages ??
-            const sal_uInt16 nThmbPos = static_cast<sal_uInt16>(pScrollbar->GetThumbPos());
+            const sal_uInt16 nThmbPos = o3tl::narrowing<sal_uInt16>(pScrollbar->GetThumbPos());
             // adjust to new preview functionality
             if( nThmbPos != m_pViewWin->SelectedPage() )
             {

@@ -945,7 +945,7 @@ void HTMLTable::InitCtor(const HTMLTableOptions& rOptions)
     // nBorder tells the width of the border as it's used in the width calculation of NetScape
     // If pOption->nBorder == USHRT_MAX, there wasn't a BORDER option given
     // Nonetheless, a 1 pixel wide border will be used for width calculation
-    m_nBorder = static_cast<sal_uInt16>(nPWidth);
+    m_nBorder = o3tl::narrowing<sal_uInt16>(nPWidth);
     if( nBorderOpt==USHRT_MAX )
         nPWidth = 0;
 
@@ -1004,8 +1004,8 @@ void HTMLTable::InitCtor(const HTMLTableOptions& rOptions)
     nPWidth = rOptions.nHSpace;
     nPHeight = rOptions.nVSpace;
     SvxCSS1Parser::PixelToTwip( nPWidth, nPHeight );
-    m_nHSpace = static_cast<sal_uInt16>(nPWidth);
-    m_nVSpace = static_cast<sal_uInt16>(nPHeight);
+    m_nHSpace = o3tl::narrowing<sal_uInt16>(nPWidth);
+    m_nVSpace = o3tl::narrowing<sal_uInt16>(nPHeight);
 
     m_bColSpec = false;
 
@@ -2022,14 +2022,14 @@ void HTMLTable::InsertCell( std::shared_ptr<HTMLTableCnts> const& rCnts,
     // Only set width on the first cell!
     if( nCellWidth )
     {
-        sal_uInt16 nTmp = bRelWidth ? nCellWidth : static_cast<sal_uInt16>(aTwipSz.Width());
+        sal_uInt16 nTmp = bRelWidth ? nCellWidth : o3tl::narrowing<sal_uInt16>(aTwipSz.Width());
         GetCell( m_nCurrentRow, m_nCurrentColumn ).SetWidth( nTmp, bRelWidth );
     }
 
     // Remember height
     if( nCellHeight && 1==nRowSpan )
     {
-        m_aRows[m_nCurrentRow].SetHeight(static_cast<sal_uInt16>(aTwipSz.Height()));
+        m_aRows[m_nCurrentRow].SetHeight(o3tl::narrowing<sal_uInt16>(aTwipSz.Height()));
     }
 
     // Set the column counter behind the new cells
@@ -2156,7 +2156,7 @@ void HTMLTable::InsertCol( sal_uInt16 nSpan, sal_uInt16 nColWidth, bool bRelWidt
     for( i=m_nCurrentColumn; i<nColsReq; i++ )
     {
         HTMLTableColumn& rCol = m_aColumns[i];
-        sal_uInt16 nTmp = bRelWidth ? nColWidth : static_cast<sal_uInt16>(aTwipSz.Width());
+        sal_uInt16 nTmp = bRelWidth ? nColWidth : o3tl::narrowing<sal_uInt16>(aTwipSz.Width());
         rCol.SetWidth( nTmp, bRelWidth );
         rCol.SetAdjust( eAdjust );
         rCol.SetVertOri( eVertOrient );
@@ -2481,7 +2481,7 @@ void HTMLTable::RegisterDrawObject( SdrObject *pObj, sal_uInt8 nPercentWidth )
         m_pDrawObjectPercentWidths.reset(new std::vector<sal_uInt16>);
     m_pDrawObjectPercentWidths->push_back( m_nCurrentRow );
     m_pDrawObjectPercentWidths->push_back( m_nCurrentColumn );
-    m_pDrawObjectPercentWidths->push_back( static_cast<sal_uInt16>(nPercentWidth) );
+    m_pDrawObjectPercentWidths->push_back( o3tl::narrowing<sal_uInt16>(nPercentWidth) );
 }
 
 void HTMLTable::MakeParentContents()
@@ -2891,7 +2891,7 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable const *pCurTabl
                 m_aId = rOption.GetString();
                 break;
             case HtmlOptionId::COLSPAN:
-                m_nColSpan = static_cast<sal_uInt16>(rOption.GetNumber());
+                m_nColSpan = o3tl::narrowing<sal_uInt16>(rOption.GetNumber());
                 if (m_nColSpan > 256)
                 {
                     SAL_INFO("sw.html", "ignoring huge COLSPAN " << m_nColSpan);
@@ -2899,7 +2899,7 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable const *pCurTabl
                 }
                 break;
             case HtmlOptionId::ROWSPAN:
-                m_nRowSpan = static_cast<sal_uInt16>(rOption.GetNumber());
+                m_nRowSpan = o3tl::narrowing<sal_uInt16>(rOption.GetNumber());
                 if (m_nRowSpan > 8192 || (m_nRowSpan > 256 && utl::ConfigManager::IsFuzzing()))
                 {
                     SAL_INFO("sw.html", "ignoring huge ROWSPAN " << m_nRowSpan);
@@ -2913,13 +2913,13 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable const *pCurTabl
                 m_eVertOri = rOption.GetEnum( aHTMLTableVAlignTable, m_eVertOri );
                 break;
             case HtmlOptionId::WIDTH:
-                m_nWidth = static_cast<sal_uInt16>(rOption.GetNumber());   // Just for Netscape
+                m_nWidth = o3tl::narrowing<sal_uInt16>(rOption.GetNumber());   // Just for Netscape
                 m_bPercentWidth = (rOption.GetString().indexOf('%') != -1);
                 if( m_bPercentWidth && m_nWidth>100 )
                     m_nWidth = 100;
                 break;
             case HtmlOptionId::HEIGHT:
-                m_nHeight = static_cast<sal_uInt16>(rOption.GetNumber());  // Just for Netscape
+                m_nHeight = o3tl::narrowing<sal_uInt16>(rOption.GetNumber());  // Just for Netscape
                 if( rOption.GetString().indexOf('%') != -1)
                     m_nHeight = 0;    // don't consider % attributes
                 break;
@@ -4308,7 +4308,7 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
                     InsertBookmark( rOption.GetString() );
                     break;
                 case HtmlOptionId::SPAN:
-                    pSaveStruct->nColGrpSpan = static_cast<sal_uInt16>(rOption.GetNumber());
+                    pSaveStruct->nColGrpSpan = o3tl::narrowing<sal_uInt16>(rOption.GetNumber());
                     if (pSaveStruct->nColGrpSpan > 256)
                     {
                         SAL_INFO("sw.html", "ignoring huge SPAN " << pSaveStruct->nColGrpSpan);
@@ -4316,7 +4316,7 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
                     }
                     break;
                 case HtmlOptionId::WIDTH:
-                    pSaveStruct->nColGrpWidth = static_cast<sal_uInt16>(rOption.GetNumber());
+                    pSaveStruct->nColGrpWidth = o3tl::narrowing<sal_uInt16>(rOption.GetNumber());
                     pSaveStruct->bRelColGrpWidth =
                         (rOption.GetString().indexOf('*') != -1);
                     break;
@@ -4395,7 +4395,7 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
                         InsertBookmark( rOption.GetString() );
                         break;
                     case HtmlOptionId::SPAN:
-                        nColSpan = static_cast<sal_uInt16>(rOption.GetNumber());
+                        nColSpan = o3tl::narrowing<sal_uInt16>(rOption.GetNumber());
                         if (nColSpan > 256)
                         {
                             SAL_INFO("sw.html", "ignoring huge SPAN " << nColSpan);
@@ -4403,7 +4403,7 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
                         }
                         break;
                     case HtmlOptionId::WIDTH:
-                        nColWidth = static_cast<sal_uInt16>(rOption.GetNumber());
+                        nColWidth = o3tl::narrowing<sal_uInt16>(rOption.GetNumber());
                         bRelColWidth =
                             (rOption.GetString().indexOf('*') != -1);
                         break;
@@ -4754,24 +4754,24 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
             aId = rOption.GetString();
             break;
         case HtmlOptionId::COLS:
-            nCols = static_cast<sal_uInt16>(rOption.GetNumber());
+            nCols = o3tl::narrowing<sal_uInt16>(rOption.GetNumber());
             break;
         case HtmlOptionId::WIDTH:
-            nWidth = static_cast<sal_uInt16>(rOption.GetNumber());
+            nWidth = o3tl::narrowing<sal_uInt16>(rOption.GetNumber());
             bPercentWidth = (rOption.GetString().indexOf('%') != -1);
             if( bPercentWidth && nWidth>100 )
                 nWidth = 100;
             break;
         case HtmlOptionId::HEIGHT:
-            nHeight = static_cast<sal_uInt16>(rOption.GetNumber());
+            nHeight = o3tl::narrowing<sal_uInt16>(rOption.GetNumber());
             if( rOption.GetString().indexOf('%') != -1 )
                 nHeight = 0;    // don't use % attributes
             break;
         case HtmlOptionId::CELLPADDING:
-            nCellPadding = static_cast<sal_uInt16>(rOption.GetNumber());
+            nCellPadding = o3tl::narrowing<sal_uInt16>(rOption.GetNumber());
             break;
         case HtmlOptionId::CELLSPACING:
-            nCellSpacing = static_cast<sal_uInt16>(rOption.GetNumber());
+            nCellSpacing = o3tl::narrowing<sal_uInt16>(rOption.GetNumber());
             break;
         case HtmlOptionId::ALIGN:
             {
@@ -4790,7 +4790,7 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
                 !rOption.GetString().equalsIgnoreAsciiCase(
                         OOO_STRING_SVTOOLS_HTML_O_border))
             {
-                nBorder = static_cast<sal_uInt16>(rOption.GetNumber());
+                nBorder = o3tl::narrowing<sal_uInt16>(rOption.GetNumber());
             }
             else
                 nBorder = 1;
@@ -4838,10 +4838,10 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
             aDir = rOption.GetString();
             break;
         case HtmlOptionId::HSPACE:
-            nHSpace = static_cast<sal_uInt16>(rOption.GetNumber());
+            nHSpace = o3tl::narrowing<sal_uInt16>(rOption.GetNumber());
             break;
         case HtmlOptionId::VSPACE:
-            nVSpace = static_cast<sal_uInt16>(rOption.GetNumber());
+            nVSpace = o3tl::narrowing<sal_uInt16>(rOption.GetNumber());
             break;
         default: break;
         }
@@ -5170,7 +5170,7 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
             }
 
             // Process SwTable
-            sal_uInt16 nBrowseWidth = static_cast<sal_uInt16>(GetCurrentBrowseWidth());
+            sal_uInt16 nBrowseWidth = o3tl::narrowing<sal_uInt16>(GetCurrentBrowseWidth());
             xSaveStruct->MakeTable(nBrowseWidth, *m_pPam->GetPoint(), m_xDoc.get());
         }
 

@@ -197,7 +197,7 @@ IMPL_LINK( SwEnvFormatPage, ModifyHdl, weld::MetricSpinButton&, rEdit, void )
         Paper ePaper = SvxPaperInfo::GetSvxPaper(
             Size(nRotatedWidth, nRotatedHeight), MapUnit::MapTwip);
         for (size_t i = 0; i < m_aIDs.size(); ++i)
-            if (m_aIDs[i] == static_cast<sal_uInt16>(ePaper))
+            if (m_aIDs[i] == o3tl::narrowing<sal_uInt16>(ePaper))
                 m_xSizeFormatBox->set_active(i);
 
         // remember user size
@@ -266,7 +266,7 @@ void SwEnvFormatPage::Edit(const OString& rIdent, bool bSender)
         const SvxTabStopItem& rDefTabs =
             pSh->GetView().GetCurShell()->GetPool().GetDefaultItem(RES_PARATR_TABSTOP);
 
-        const sal_uInt16 nDefDist = static_cast<sal_uInt16>(::GetTabDist( rDefTabs ));
+        const sal_uInt16 nDefDist = o3tl::narrowing<sal_uInt16>(::GetTabDist( rDefTabs ));
         SfxUInt16Item aDefDistItem( SID_ATTR_TABSTOP_DEFAULTS, nDefDist );
         aTmpSet.Put( aDefDistItem );
 
@@ -463,7 +463,7 @@ void SwEnvFormatPage::Reset(const SfxItemSet* rSet)
         Size( std::min(rItem.m_nWidth, rItem.m_nHeight),
         std::max(rItem.m_nWidth, rItem.m_nHeight)), MapUnit::MapTwip);
     for (size_t i = 0; i < m_aIDs.size(); ++i)
-        if (m_aIDs[i] == static_cast<sal_uInt16>(ePaper))
+        if (m_aIDs[i] == o3tl::narrowing<sal_uInt16>(ePaper))
             m_xSizeFormatBox->set_active(i);
 
     // Metric fields

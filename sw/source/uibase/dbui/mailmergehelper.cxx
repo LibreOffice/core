@@ -360,7 +360,7 @@ void SwAddressPreview::UpdateScrollBar()
 {
     if (pImpl->nColumns)
     {
-        sal_uInt16 nResultingRows = static_cast<sal_uInt16>(pImpl->aAddresses.size() + pImpl->nColumns - 1) / pImpl->nColumns;
+        sal_uInt16 nResultingRows = o3tl::narrowing<sal_uInt16>(pImpl->aAddresses.size() + pImpl->nColumns - 1) / pImpl->nColumns;
         ++nResultingRows;
         auto nValue = m_xVScrollBar->vadjustment_get_value();
         if (nValue > nResultingRows)
@@ -397,7 +397,7 @@ void SwAddressPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Re
     aPartSize.AdjustHeight( -2 );
 
     sal_uInt16 nAddress = nStartRow * pImpl->nColumns;
-    const sal_uInt16 nNumAddresses = static_cast<sal_uInt16>(pImpl->aAddresses.size());
+    const sal_uInt16 nNumAddresses = o3tl::narrowing<sal_uInt16>(pImpl->aAddresses.size());
     for (sal_uInt16 nRow = 0; nRow < pImpl->nRows ; ++nRow)
     {
         for (sal_uInt16 nCol = 0; nCol < pImpl->nColumns; ++nCol)
@@ -435,9 +435,9 @@ bool SwAddressPreview::MouseButtonDown( const MouseEvent& rMEvt )
         sal_uInt32 nSelect = nRow * pImpl->nColumns + nCol;
 
         if( nSelect < pImpl->aAddresses.size() &&
-                pImpl->nSelectedAddress != static_cast<sal_uInt16>(nSelect))
+                pImpl->nSelectedAddress != o3tl::narrowing<sal_uInt16>(nSelect))
         {
-            pImpl->nSelectedAddress = static_cast<sal_uInt16>(nSelect);
+            pImpl->nSelectedAddress = o3tl::narrowing<sal_uInt16>(nSelect);
             m_aSelectHdl.Call(nullptr);
         }
         Invalidate();
@@ -479,9 +479,9 @@ bool SwAddressPreview::KeyInput( const KeyEvent& rKEvt )
         }
         sal_uInt32 nSelect = nSelectedRow * pImpl->nColumns + nSelectedColumn;
         if( nSelect < pImpl->aAddresses.size() &&
-                pImpl->nSelectedAddress != static_cast<sal_uInt16>(nSelect))
+                pImpl->nSelectedAddress != o3tl::narrowing<sal_uInt16>(nSelect))
         {
-            pImpl->nSelectedAddress = static_cast<sal_uInt16>(nSelect);
+            pImpl->nSelectedAddress = o3tl::narrowing<sal_uInt16>(nSelect);
             m_aSelectHdl.Call(nullptr);
             Invalidate();
         }

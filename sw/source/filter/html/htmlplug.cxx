@@ -252,7 +252,7 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
             Application::GetDefaultDevice()->PixelToLogic( aTwipSpc,
                                                 MapMode(MapUnit::MapTwip) );
         nLeftSpace = nRightSpace = aTwipSpc.Width();
-        nUpperSpace = nLowerSpace = static_cast<sal_uInt16>(aTwipSpc.Height());
+        nUpperSpace = nLowerSpace = o3tl::narrowing<sal_uInt16>(aTwipSpc.Height());
     }
 
     // set left/right margin

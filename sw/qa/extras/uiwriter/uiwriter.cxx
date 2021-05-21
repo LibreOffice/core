@@ -2404,7 +2404,7 @@ void SwUiWriterTest::testDeleteTableRedlines()
     IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
     SwExtraRedlineTable& rExtras = rIDRA.GetExtraRedlineTable();
     rExtras.DeleteAllTableRedlines(*pDoc, rTable, false, RedlineType::Any);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(0), rExtras.GetSize());
+    CPPUNIT_ASSERT_EQUAL(o3tl::narrowing<sal_uInt16>(0), rExtras.GetSize());
 }
 
 void SwUiWriterTest::testXFlatParagraph()
@@ -5966,7 +5966,7 @@ void SwUiWriterTest::testRedlineParam()
     pWrtShell->StartOfSection();
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
-        {"NextTrackedChange", uno::makeAny(static_cast<sal_uInt16>(rTable[0]->GetId()))}
+        {"NextTrackedChange", uno::makeAny(o3tl::narrowing<sal_uInt16>(rTable[0]->GetId()))}
     }));
     dispatchCommand(mxComponent, ".uno:NextTrackedChange", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
@@ -5979,7 +5979,7 @@ void SwUiWriterTest::testRedlineParam()
     pWrtShell->StartOfSection();
     aPropertyValues = comphelper::InitPropertySequence(
     {
-        {"NextTrackedChange", uno::makeAny(static_cast<sal_uInt16>(rTable[1]->GetId()))}
+        {"NextTrackedChange", uno::makeAny(o3tl::narrowing<sal_uInt16>(rTable[1]->GetId()))}
     });
     dispatchCommand(mxComponent, ".uno:NextTrackedChange", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
@@ -5990,7 +5990,7 @@ void SwUiWriterTest::testRedlineParam()
     pWrtShell->StartOfSection();
     aPropertyValues = comphelper::InitPropertySequence(
     {
-        {"RejectTrackedChange", uno::makeAny(static_cast<sal_uInt16>(rTable[1]->GetId()))}
+        {"RejectTrackedChange", uno::makeAny(o3tl::narrowing<sal_uInt16>(rTable[1]->GetId()))}
     });
     dispatchCommand(mxComponent, ".uno:RejectTrackedChange", aPropertyValues);
     Scheduler::ProcessEventsToIdle();

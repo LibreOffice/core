@@ -1744,13 +1744,13 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject const * pSdrObj,
 
     // set distances from box's border to text contained within the box
     if( 0 < rInnerDist.Left() )
-        aBox.SetDistance( static_cast<sal_uInt16>(rInnerDist.Left()), SvxBoxItemLine::LEFT );
+        aBox.SetDistance( o3tl::narrowing<sal_uInt16>(rInnerDist.Left()), SvxBoxItemLine::LEFT );
     if( 0 < rInnerDist.Top() )
-        aBox.SetDistance( static_cast<sal_uInt16>(rInnerDist.Top()), SvxBoxItemLine::TOP );
+        aBox.SetDistance( o3tl::narrowing<sal_uInt16>(rInnerDist.Top()), SvxBoxItemLine::TOP );
     if( 0 < rInnerDist.Right() )
-        aBox.SetDistance( static_cast<sal_uInt16>(rInnerDist.Right()), SvxBoxItemLine::RIGHT );
+        aBox.SetDistance( o3tl::narrowing<sal_uInt16>(rInnerDist.Right()), SvxBoxItemLine::RIGHT );
     if( 0 < rInnerDist.Bottom() )
-        aBox.SetDistance( static_cast<sal_uInt16>(rInnerDist.Bottom()), SvxBoxItemLine::BOTTOM );
+        aBox.SetDistance( o3tl::narrowing<sal_uInt16>(rInnerDist.Bottom()), SvxBoxItemLine::BOTTOM );
 
     bool bFixSize = !(WW8ITEMVALUE(rOldSet, SDRATTR_TEXT_AUTOGROWHEIGHT,
         SdrOnOffItem));

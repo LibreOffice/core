@@ -900,7 +900,7 @@ sal_uInt16 SwEditShell::GetNodeNumStart( SwPaM* pPaM ) const
     // return USHRT_MAX, if no list restart value is found.
     if ( pTextNd && pTextNd->HasAttrListRestartValue() )
     {
-        return static_cast<sal_uInt16>(pTextNd->GetAttrListRestartValue());
+        return o3tl::narrowing<sal_uInt16>(pTextNd->GetAttrListRestartValue());
     }
     return USHRT_MAX;
 }

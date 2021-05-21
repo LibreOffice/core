@@ -2324,7 +2324,7 @@ void SwXMLTableContext::MakeTable_( SwTableBox *pBox )
             for( colIter = m_aColumnWidths.begin(); colIter < m_aColumnWidths.end() - 1; ++colIter)
             {
                 sal_Int32 nW = static_cast<sal_Int32>( colIter->width * n);
-                colIter->width = static_cast<sal_uInt16>(nW);
+                colIter->width = o3tl::narrowing<sal_uInt16>(nW);
                 nRelWidth += nW;
             }
             m_aColumnWidths.back().width = (m_nWidth-nRelWidth);

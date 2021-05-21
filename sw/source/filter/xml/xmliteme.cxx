@@ -116,7 +116,7 @@ void SwXMLTableItemMapper_Impl::handleSpecialItem(
                     static_cast<const SwFormatHoriOrient *>(pItem)->GetHoriOrient();
                 bool bExport = false;
                 sal_uInt16 nMemberId =
-                    static_cast<sal_uInt16>( rEntry.nMemberId & MID_SW_FLAG_MASK );
+                    o3tl::narrowing<sal_uInt16>( rEntry.nMemberId & MID_SW_FLAG_MASK );
                 switch( nMemberId )
                 {
                 case MID_L_MARGIN:
@@ -141,7 +141,7 @@ void SwXMLTableItemMapper_Impl::handleSpecialItem(
     case RES_FRM_SIZE:
         {
             sal_uInt16 nMemberId =
-                static_cast<sal_uInt16>( rEntry.nMemberId & MID_SW_FLAG_MASK );
+                o3tl::narrowing<sal_uInt16>( rEntry.nMemberId & MID_SW_FLAG_MASK );
             switch( nMemberId )
             {
             case MID_FRMSIZE_WIDTH:

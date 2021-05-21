@@ -1135,8 +1135,8 @@ DECLARE_RTFEXPORT_TEST(testCustomDocProps, "custom-doc-props.rtf")
     // Test roundtrip of date in general, and year/month/day in particular.
     util::DateTime aDate = getProperty<util::DateTime>(xUserDefinedProperties, "d");
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(2016), aDate.Year);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(1), aDate.Month);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(30), aDate.Day);
+    CPPUNIT_ASSERT_EQUAL(o3tl::narrowing<sal_uInt16>(1), aDate.Month);
+    CPPUNIT_ASSERT_EQUAL(o3tl::narrowing<sal_uInt16>(30), aDate.Day);
 
     // Test real number.
     CPPUNIT_ASSERT_EQUAL(3.14, getProperty<double>(xUserDefinedProperties, "pi"));

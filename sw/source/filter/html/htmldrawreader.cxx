@@ -94,8 +94,8 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         aTwipSpc =
             Application::GetDefaultDevice()->PixelToLogic( aTwipSpc,
                                                 MapMode(MapUnit::MapTwip) );
-        nLeftSpace = nRightSpace = static_cast<sal_uInt16>(aTwipSpc.Width());
-        nUpperSpace = nLowerSpace = static_cast<sal_uInt16>(aTwipSpc.Height());
+        nLeftSpace = nRightSpace = o3tl::narrowing<sal_uInt16>(aTwipSpc.Width());
+        nUpperSpace = nLowerSpace = o3tl::narrowing<sal_uInt16>(aTwipSpc.Height());
     }
 
     // set left/right border
@@ -307,7 +307,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
                 break;
 
             case HtmlOptionId::SCROLLDELAY:
-                nDelay = static_cast<sal_uInt16>(rOption.GetNumber());
+                nDelay = o3tl::narrowing<sal_uInt16>(rOption.GetNumber());
                 break;
 
             case HtmlOptionId::WIDTH:

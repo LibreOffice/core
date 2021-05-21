@@ -523,7 +523,7 @@ bool SwCursorShell::UpDown( bool bUp, sal_uInt16 nCnt )
             if( !bTableMode )
                 eUpdateMode = static_cast<CursorFlag>(eUpdateMode
                             | SwCursorShell::UPDOWN | SwCursorShell::CHKRANGE);
-            UpdateCursor( static_cast<sal_uInt16>(eUpdateMode) );
+            UpdateCursor( o3tl::narrowing<sal_uInt16>(eUpdateMode) );
         }
     }
     return bRet;
@@ -2435,7 +2435,7 @@ void SwCursorShell::ShellGetFocus()
     m_bHasFocus = true;
     if( !m_bBasicHideCursor && VisArea().Width() )
     {
-        UpdateCursor( static_cast<sal_uInt16>( SwCursorShell::CHKRANGE ) );
+        UpdateCursor( o3tl::narrowing<sal_uInt16>( SwCursorShell::CHKRANGE ) );
         ShowCursors( m_bSVCursorVis );
     }
 }

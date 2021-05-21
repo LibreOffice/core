@@ -321,8 +321,8 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet *rSet)
     bool bBottomMod = m_xBottomMarginED->get_value_changed_from_saved();
 
     SvxULSpaceItem aUL( RES_UL_SPACE );
-    aUL.SetUpper(static_cast<sal_uInt16>(m_xTopMarginED->denormalize(m_xTopMarginED->get_value(FieldUnit::TWIP))));
-    aUL.SetLower(static_cast<sal_uInt16>(m_xBottomMarginED->denormalize(m_xBottomMarginED->get_value(FieldUnit::TWIP))));
+    aUL.SetUpper(o3tl::narrowing<sal_uInt16>(m_xTopMarginED->denormalize(m_xTopMarginED->get_value(FieldUnit::TWIP))));
+    aUL.SetLower(o3tl::narrowing<sal_uInt16>(m_xBottomMarginED->denormalize(m_xBottomMarginED->get_value(FieldUnit::TWIP))));
 
     if ( bTopMod || bBottomMod )
     {
@@ -338,8 +338,8 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet *rSet)
     bool bRightMod = m_xRightMarginED->get_value_changed_from_saved();
 
     SvxLRSpaceItem aLR( RES_LR_SPACE );
-    aLR.SetLeft(static_cast<sal_uInt16>(m_xLeftMarginED->denormalize(m_xLeftMarginED->get_value(FieldUnit::TWIP))));
-    aLR.SetRight(static_cast<sal_uInt16>(m_xRightMarginED->denormalize(m_xRightMarginED->get_value(FieldUnit::TWIP))));
+    aLR.SetLeft(o3tl::narrowing<sal_uInt16>(m_xLeftMarginED->denormalize(m_xLeftMarginED->get_value(FieldUnit::TWIP))));
+    aLR.SetRight(o3tl::narrowing<sal_uInt16>(m_xRightMarginED->denormalize(m_xRightMarginED->get_value(FieldUnit::TWIP))));
 
     if ( bLeftMod || bRightMod )
     {

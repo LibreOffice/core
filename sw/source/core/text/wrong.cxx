@@ -203,7 +203,7 @@ sal_uInt16 SwWrongList::GetWrongPos( sal_Int32 nValue ) const
                     return (rST.mnPos <= nValue && nValue < rST.mnPos + rST.mnLen)
                         || (rST.mnPos > nValue);
                 });
-            return static_cast<sal_uInt16>(std::distance(maList.begin(), aIter));
+            return o3tl::narrowing<sal_uInt16>(std::distance(maList.begin(), aIter));
         }
 
         --nMax;
@@ -559,7 +559,7 @@ void SwWrongList::Remove(sal_uInt16 nIdx, sal_uInt16 nLen )
     i1 += nIdx;
 
     std::vector<SwWrongArea>::iterator i2 = i1;
-    if ( nIdx + nLen >= static_cast<sal_uInt16>(maList.size()) )
+    if ( nIdx + nLen >= o3tl::narrowing<sal_uInt16>(maList.size()) )
         i2 = maList.end(); // robust
     else
         i2 += nLen;
@@ -602,10 +602,10 @@ void SwWrongList::RemoveEntry( sal_Int32 nBegin, sal_Int32 nEnd ) {
                 return (rST.mnPos != nBegin) || ((rST.mnPos + rST.mnLen) != nEnd);
             });
     }
-    auto nDel = static_cast<sal_uInt16>(std::distance(aDelIter, aIter));
+    auto nDel = o3tl::narrowing<sal_uInt16>(std::distance(aDelIter, aIter));
     if( nDel )
     {
-        auto nDelPos = static_cast<sal_uInt16>(std::distance(maList.cbegin(), aDelIter));
+        auto nDelPos = o3tl::narrowing<sal_uInt16>(std::distance(maList.cbegin(), aDelIter));
         Remove( nDelPos, nDel );
     }
 }

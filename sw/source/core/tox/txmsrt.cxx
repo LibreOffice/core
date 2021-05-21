@@ -136,7 +136,7 @@ SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwContentNode* pNd,
                                     const SwTOXInternational* pInter,
                                     const lang::Locale* pLocale )
     : pTOXNd( nullptr ), pTextMark( pMark ), pTOXIntl( pInter ),
-    nPos( 0 ), nCntPos( 0 ), nType( static_cast<sal_uInt16>(nTyp) )
+    nPos( 0 ), nCntPos( 0 ), nType( o3tl::narrowing<sal_uInt16>(nTyp) )
     , m_bValidText( false )
 {
     if ( pLocale )
@@ -668,7 +668,7 @@ sal_uInt16 SwTOXPara::GetLevel() const
     {
         const int nTmp = static_cast<const SwTextNode*>(pNd)->GetAttrOutlineLevel();
         if(nTmp != 0 )
-            nRet = static_cast<sal_uInt16>(nTmp);
+            nRet = o3tl::narrowing<sal_uInt16>(nTmp);
     }
     return nRet;
 }

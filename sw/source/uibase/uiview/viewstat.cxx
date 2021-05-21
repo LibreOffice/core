@@ -305,7 +305,7 @@ void SwView::GetState(SfxItemSet &rSet)
             {
                 const SvxTabStopItem& rDefTabs = m_pWrtShell->GetDefault(RES_PARATR_TABSTOP);
                 rSet.Put( SfxUInt16Item( nWhich,
-                                                static_cast<sal_uInt16>(::GetTabDist(rDefTabs))));
+                                                o3tl::narrowing<sal_uInt16>(::GetTabDist(rDefTabs))));
             }
             break;
             case SID_ATTR_LANGUAGE:

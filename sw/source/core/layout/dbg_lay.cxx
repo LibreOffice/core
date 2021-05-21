@@ -409,7 +409,7 @@ void SwImplProtocol::CheckLine( OString& rLine )
                         }
                         break;
                 case 5:
-                    m_nMaxLines = static_cast<sal_uInt16>(nVal);
+                    m_nMaxLines = o3tl::narrowing<sal_uInt16>(nVal);
                     break;
                 case 6:
                     m_aVars.push_back(nVal);

@@ -1753,8 +1753,8 @@ SwPageDesc* DocumentStylePoolManager::GetPageDescFromPool( sal_uInt16 nId, bool 
     }
     SvxULSpaceItem aUL( RES_UL_SPACE );
     {
-        aUL.SetUpper( static_cast<sal_uInt16>(aLR.GetLeft()) );
-        aUL.SetLower( static_cast<sal_uInt16>(aLR.GetLeft()) );
+        aUL.SetUpper( o3tl::narrowing<sal_uInt16>(aLR.GetLeft()) );
+        aUL.SetLower( o3tl::narrowing<sal_uInt16>(aLR.GetLeft()) );
     }
 
     SwAttrSet aSet( m_rDoc.GetAttrPool(), aPgFrameFormatSetRange );
@@ -1824,8 +1824,8 @@ SwPageDesc* DocumentStylePoolManager::GetPageDescFromPool( sal_uInt16 nId, bool 
         {
             lcl_PutStdPageSizeIntoItemSet( m_rDoc, aSet );
             aLR.SetRight(o3tl::convert(1, o3tl::Length::cm, o3tl::Length::twip));
-            aUL.SetUpper( static_cast<sal_uInt16>(aLR.GetRight()) );
-            aUL.SetLower( static_cast<sal_uInt16>(aLR.GetRight()) );
+            aUL.SetUpper( o3tl::narrowing<sal_uInt16>(aLR.GetRight()) );
+            aUL.SetLower( o3tl::narrowing<sal_uInt16>(aLR.GetRight()) );
             aSet.Put( aLR );
             aSet.Put( aUL );
 

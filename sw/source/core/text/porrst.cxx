@@ -243,7 +243,7 @@ SwArrowPortion::SwArrowPortion( const SwLinePortion &rPortion ) :
 SwArrowPortion::SwArrowPortion( const SwTextPaintInfo &rInf )
     : m_bLeft( false )
 {
-    Height( static_cast<sal_uInt16>(rInf.GetTextFrame()->getFramePrintArea().Height()) );
+    Height( o3tl::narrowing<sal_uInt16>(rInf.GetTextFrame()->getFramePrintArea().Height()) );
     m_aPos.setX( rInf.GetTextFrame()->getFrameArea().Left() +
                rInf.GetTextFrame()->getFramePrintArea().Right() );
     m_aPos.setY( rInf.GetTextFrame()->getFrameArea().Top() +
@@ -493,7 +493,7 @@ bool SwTextFrame::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
                                     nTmp /= 100;
                                     if( !nTmp )
                                         ++nTmp;
-                                    rRegDiff = static_cast<sal_uInt16>(nTmp);
+                                    rRegDiff = o3tl::narrowing<sal_uInt16>(nTmp);
                                     nNetHeight = rRegDiff;
                                     break;
                                 }

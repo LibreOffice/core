@@ -154,7 +154,7 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
                 const SvxTabStopItem& rTab =
                     m_pFrame->GetAttrSet()->GetPool()->GetDefaultItem( RES_PARATR_TABSTOP );
                 if( rTab.Count() )
-                    nDefTabDist = static_cast<sal_uInt16>(rTab[0].GetTabPos());
+                    nDefTabDist = o3tl::narrowing<sal_uInt16>(rTab[0].GetTabPos());
                 else
                     nDefTabDist = SVX_TAB_DEFDIST;
                 m_aLineInf.SetDefTabStop( nDefTabDist );
@@ -323,7 +323,7 @@ bool SwTabPortion::PreFormat( SwTextFormatInfo &rInf )
     OSL_ENSURE( rInf.X() <= GetTabPos(), "SwTabPortion::PreFormat: rush hour" );
 
     // Here we settle down ...
-    SetFix( static_cast<sal_uInt16>(rInf.X()) );
+    SetFix( o3tl::narrowing<sal_uInt16>(rInf.X()) );
 
     IDocumentSettingAccess const& rIDSA(rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess());
     const bool bTabCompat = rIDSA.get(DocumentSettingId::TAB_COMPAT);
@@ -387,7 +387,7 @@ bool SwTabPortion::PreFormat( SwTextFormatInfo &rInf )
                     break;
                 }
 
-                PrtWidth( static_cast<sal_uInt16>(GetTabPos() - rInf.X()) );
+                PrtWidth( o3tl::narrowing<sal_uInt16>(GetTabPos() - rInf.X()) );
                 bFull = rInf.Width() <= rInf.X() + PrtWidth();
 
                 // In tabulator compatibility mode, we reset the bFull flag
@@ -417,7 +417,7 @@ bool SwTabPortion::PreFormat( SwTextFormatInfo &rInf )
             // line if there is a fly reducing the line width:
             !rInf.GetFly() )
         {
-            PrtWidth( static_cast<sal_uInt16>(rInf.Width() - rInf.X()) );
+            PrtWidth( o3tl::narrowing<sal_uInt16>(rInf.Width() - rInf.X()) );
             SetFixWidth( PrtWidth() );
         }
         else

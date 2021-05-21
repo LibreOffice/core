@@ -139,7 +139,7 @@ void SwMailMergeAddressBlockPage::Activate()
                 m_pWizard->GetConfigItem().GetAddressBlocks();
     for(const auto& rAddress : aBlocks)
         m_xSettings->AddAddress(rAddress);
-    m_xSettings->SelectAddress(static_cast<sal_uInt16>(rConfigItem.GetCurrentAddressBlockIndex()));
+    m_xSettings->SelectAddress(o3tl::narrowing<sal_uInt16>(rConfigItem.GetCurrentAddressBlockIndex()));
     m_xAddressCB->set_active(rConfigItem.IsAddressBlock());
     AddressBlockHdl_Impl(*m_xAddressCB);
     m_xSettings->SetLayout(1, 2);
@@ -430,7 +430,7 @@ IMPL_LINK(SwSelectAddressBlockDialog, NewCustomizeHdl_Impl, weld::Button&, rButt
         m_aAddressBlocks.realloc(m_aAddressBlocks.getLength() + 1);
         const sal_Int32 nSelect = m_aAddressBlocks.getLength() - 1;
         m_aAddressBlocks[nSelect] = sNew;
-        m_xPreview->SelectAddress(static_cast<sal_uInt16>(nSelect));
+        m_xPreview->SelectAddress(o3tl::narrowing<sal_uInt16>(nSelect));
     }
     m_xDeletePB->set_sensitive(m_aAddressBlocks.getLength() > 1);
 }

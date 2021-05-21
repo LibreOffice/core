@@ -664,7 +664,7 @@ IMPL_LINK_NOARG(SwInsertDBColAutoPilot, TableFormatHdl, weld::Button&, void)
             {
                 const SwColumn* pCol = &rCols[i];
                 nStart1 = pCol->GetLeft() + nWidth1;
-                nWidth1 += static_cast<tools::Long>(rCol.CalcColWidth( i, static_cast<sal_uInt16>(nWidth) ));
+                nWidth1 += static_cast<tools::Long>(rCol.CalcColWidth( i, o3tl::narrowing<sal_uInt16>(nWidth) ));
                 nEnd1 = nWidth1 - pCol->GetRight();
             }
             if(nStart1 || nEnd1 != nWidth)

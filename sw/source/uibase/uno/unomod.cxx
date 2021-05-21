@@ -645,7 +645,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
             sal_Int16 nZoom = 0;
             if(!(rValue >>= nZoom) || nZoom > MAXZOOM || nZoom < MINZOOM)
                 throw lang::IllegalArgumentException();
-            mpViewOption->SetZoom(static_cast<sal_uInt16>(nZoom));
+            mpViewOption->SetZoom(o3tl::narrowing<sal_uInt16>(nZoom));
             mbApplyZoom = true;
         }
         break;

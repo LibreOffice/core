@@ -149,7 +149,7 @@ void SwFieldDBPage::Reset(const SfxItemSet*)
         sal_Int32 nIdx{ 0 };
         if (sUserData.getToken(0, ';', nIdx).equalsIgnoreAsciiCase(USER_DATA_VERSION_1))
         {
-            const sal_uInt16 nVal = static_cast<sal_uInt16>(sUserData.getToken(0, ';', nIdx).toInt32());
+            const sal_uInt16 nVal = o3tl::narrowing<sal_uInt16>(sUserData.getToken(0, ';', nIdx).toInt32());
             if (nVal != USHRT_MAX)
             {
                 for (sal_Int32 i = 0, nEntryCount = m_xTypeLB->n_children(); i < nEntryCount; ++i)

@@ -2553,7 +2553,7 @@ void WW8TabDesc::UseSwTable()
     OSL_ENSURE( m_pTableNd, "Where is my table node" );
 
     // #i69519# - Restrict rows to repeat to a decent value
-    if ( m_nRowsToRepeat == static_cast<sal_uInt16>(m_nRows) )
+    if ( m_nRowsToRepeat == o3tl::narrowing<sal_uInt16>(m_nRows) )
         m_nRowsToRepeat = 1;
 
     m_pTableNd->GetTable().SetRowsToRepeat( m_nRowsToRepeat );
@@ -2588,9 +2588,9 @@ void WW8TabDesc::MergeCells()
 
                     // start a new merge group if appropriate
 
-                    OSL_ENSURE(nRow < static_cast<sal_uInt16>(m_pTabLines->size()),
+                    OSL_ENSURE(nRow < o3tl::narrowing<sal_uInt16>(m_pTabLines->size()),
                         "Too few lines, table ended early");
-                    if (nRow >= static_cast<sal_uInt16>(m_pTabLines->size()))
+                    if (nRow >= o3tl::narrowing<sal_uInt16>(m_pTabLines->size()))
                         return;
                     m_pTabLine = (*m_pTabLines)[ nRow ];
                     m_pTabBoxes = &m_pTabLine->GetTabBoxes();
@@ -2711,7 +2711,7 @@ void WW8TabDesc::ParkPaM()
 {
     SwTableBox *pTabBox2 = nullptr;
     short nRow = m_nCurrentRow + 1;
-    if (nRow < static_cast<sal_uInt16>(m_pTabLines->size()))
+    if (nRow < o3tl::narrowing<sal_uInt16>(m_pTabLines->size()))
     {
         if (SwTableLine *pLine = (*m_pTabLines)[nRow])
         {
@@ -3159,7 +3159,7 @@ void WW8TabDesc::AdjustNewBand()
         InsertCells( m_pActBand->nSwCols - m_nDefaultSwCols );
 
     SetPamInCell( 0, false);
-    OSL_ENSURE( m_pTabBoxes && m_pTabBoxes->size() == static_cast<sal_uInt16>(m_pActBand->nSwCols),
+    OSL_ENSURE( m_pTabBoxes && m_pTabBoxes->size() == o3tl::narrowing<sal_uInt16>(m_pActBand->nSwCols),
         "Wrong column count in table" );
 
     if( m_bClaimLineFormat )

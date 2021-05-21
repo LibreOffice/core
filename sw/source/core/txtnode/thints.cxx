@@ -1863,7 +1863,7 @@ void SwTextNode::TryCharSetExpandToNum(const SfxItemSet& aCharSet)
     if (!(nLevel != -1 && pCurrNum))
         return;
 
-    const SwNumFormat* pCurrNumFormat = pCurrNum->GetNumFormat(static_cast<sal_uInt16>(nLevel));
+    const SwNumFormat* pCurrNumFormat = pCurrNum->GetNumFormat(o3tl::narrowing<sal_uInt16>(nLevel));
     if (!pCurrNumFormat)
         return;
 
@@ -2101,7 +2101,7 @@ static void lcl_MergeListLevelIndentAsLRSpaceItem( const SwTextNode& rTextNode,
     const SwNumRule* pRule = rTextNode.GetNumRule();
     if ( pRule && rTextNode.GetActualListLevel() >= 0 )
     {
-        const SwNumFormat& rFormat = pRule->Get(static_cast<sal_uInt16>(rTextNode.GetActualListLevel()));
+        const SwNumFormat& rFormat = pRule->Get(o3tl::narrowing<sal_uInt16>(rTextNode.GetActualListLevel()));
         if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
         {
             SvxLRSpaceItem aLR( RES_LR_SPACE );
@@ -2303,7 +2303,7 @@ bool SwTextNode::GetParaAttr(SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
                     if( rItemPair.mpItem && !IsInvalidItem(rItemPair.mpItem) )
                     {
                         const sal_uInt16 nWh =
-                            static_cast<sal_uInt16>(n + RES_CHRATR_BEGIN);
+                            o3tl::narrowing<sal_uInt16>(n + RES_CHRATR_BEGIN);
 
                         if (nEnd <= rItemPair.mnEndPos) // behind or exactly end
                         {

@@ -589,7 +589,7 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const ww8::Frame &rFly,
         if ( !bIsSubstitutedSize )
         {
             const double fVal = nWidth * 1000.0 / (aGrTwipSz.Width() + nXSizeAdd );
-            Set_UInt16( pArr, static_cast<sal_uInt16>(::rtl::math::round(fVal)) );
+            Set_UInt16( pArr, o3tl::narrowing<sal_uInt16>(::rtl::math::round(fVal)) );
         }
         else
         {
@@ -606,7 +606,7 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const ww8::Frame &rFly,
         if ( !bIsSubstitutedSize )
         {
             const double fVal = nHeight * 1000.0 / (aGrTwipSz.Height() + nYSizeAdd);
-            Set_UInt16( pArr, static_cast<sal_uInt16>(::rtl::math::round(fVal)) );
+            Set_UInt16( pArr, o3tl::narrowing<sal_uInt16>(::rtl::math::round(fVal)) );
         }
         else
         {
@@ -720,7 +720,7 @@ void SwWW8WrGrf::WritePICBulletFHeader(SvStream& rStrm, const Graphic &rGrf,
     if( aGrTwipSz.Width() + nXSizeAdd )             // set mx
     {
         double fVal = nWidth * 1000.0 / (aGrTwipSz.Width() + nXSizeAdd);
-        Set_UInt16( pArr, static_cast<sal_uInt16>(::rtl::math::round(fVal)) );
+        Set_UInt16( pArr, o3tl::narrowing<sal_uInt16>(::rtl::math::round(fVal)) );
     }
     else
         pArr += 2;
@@ -728,7 +728,7 @@ void SwWW8WrGrf::WritePICBulletFHeader(SvStream& rStrm, const Graphic &rGrf,
     if( aGrTwipSz.Height() + nYSizeAdd )            // set my
     {
         double fVal = nHeight * 1000.0 / (aGrTwipSz.Height() + nYSizeAdd);
-        Set_UInt16( pArr, static_cast<sal_uInt16>(::rtl::math::round(fVal)) );
+        Set_UInt16( pArr, o3tl::narrowing<sal_uInt16>(::rtl::math::round(fVal)) );
     }
     else
         pArr += 2;

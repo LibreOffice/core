@@ -311,7 +311,7 @@ SwFlyFrameFormat* SwDoc::MakeFlySection( RndStdIds eAnchorType,
         if( !pFrameFormat )
             pFrameFormat = getIDocumentStylePoolAccess().GetFrameFormatFromPool( RES_POOLFRM_FRAME );
 
-        sal_uInt16 nCollId = static_cast<sal_uInt16>(
+        sal_uInt16 nCollId = o3tl::narrowing<sal_uInt16>(
             GetDocumentSettingManager().get(DocumentSettingId::HTML_MODE) ? RES_POOLCOLL_TEXT : RES_POOLCOLL_FRAME );
 
         /* If there is no adjust item in the paragraph style for the content node of the new fly section

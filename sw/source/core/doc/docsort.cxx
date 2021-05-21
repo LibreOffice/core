@@ -555,7 +555,7 @@ bool SwDoc::SortTable(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     std::multiset<SwSortBoxElement> aSortList;
 
     // When sorting, do not include the first row if the HeaderLine is repeated
-    for( sal_uInt16 i = static_cast<sal_uInt16>(nStart); i < nCount; ++i)
+    for( sal_uInt16 i = o3tl::narrowing<sal_uInt16>(nStart); i < nCount; ++i)
     {
         aSortList.insert(SwSortBoxElement(i));
     }

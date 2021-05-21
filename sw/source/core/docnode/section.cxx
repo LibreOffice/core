@@ -947,7 +947,7 @@ void SwSectionFormat::UpdateParent()
 
     if(bIsHidden == pSection->IsHiddenFlag())
     {
-        SwMsgPoolItem aMsgItem(static_cast<sal_uInt16>(bIsHidden
+        SwMsgPoolItem aMsgItem(o3tl::narrowing<sal_uInt16>(bIsHidden
                 ? RES_SECTION_HIDDEN
                 : RES_SECTION_NOT_HIDDEN));
         CallSwClientNotify(sw::LegacyModifyHint(&aMsgItem, &aMsgItem));

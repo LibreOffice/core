@@ -639,7 +639,7 @@ bool SwAutoFormat::DoTable()
 
         case '+':
         case '|':
-            aPosArr.push_back( static_cast<sal_uInt16>(aInfo.GetCharPos(n)) );
+            aPosArr.push_back( o3tl::narrowing<sal_uInt16>(aInfo.GetCharPos(n)) );
             break;
 
         default:
@@ -665,7 +665,7 @@ bool SwAutoFormat::DoTable()
             {
                 eHori = text::HoriOrientation::NONE;
                 // then - as last - we need to add the current frame width into the array
-                aPosArr.push_back( static_cast<sal_uInt16>(m_pCurTextFrame->getFrameArea().Width()) );
+                aPosArr.push_back( o3tl::narrowing<sal_uInt16>(m_pCurTextFrame->getFrameArea().Width()) );
             }
             else
                 eHori = text::HoriOrientation::LEFT;
@@ -908,7 +908,7 @@ CHECK_ROMAN_1:
                         if( nMod5 == ((3 * nVal) + n10 ) ||
                             nMod5 == ((4 * nVal) + n10 ) ||
                             nLast == n10 )
-                            nStart = static_cast<sal_uInt16>(nStart + (n10 * 8));
+                            nStart = o3tl::narrowing<sal_uInt16>(nStart + (n10 * 8));
                         else if( nMod5 == 0 ||
                                  nMod5 == (1 * nVal) ||
                                  nMod5 == (2 * nVal) )
@@ -927,7 +927,7 @@ CHECK_ROMAN_5:
                             int nMod = nStart % nVal;
                             int n10 = nVal / 5;
                             if( n10 == nMod )
-                                nStart = static_cast<sal_uInt16>(nStart + (3 * n10));
+                                nStart = o3tl::narrowing<sal_uInt16>(nStart + (3 * n10));
                             else if( 0 == nMod )
                                 nStart = nStart + nVal;
                             else
@@ -1590,7 +1590,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
         else
         {
             bChgBullet = true;
-            SetColl( static_cast<sal_uInt16>(RES_POOLCOLL_BULLET_LEVEL1 + ( std::min( nLvl, cnNumBullColls ) * 4 )) );
+            SetColl( o3tl::narrowing<sal_uInt16>(RES_POOLCOLL_BULLET_LEVEL1 + ( std::min( nLvl, cnNumBullColls ) * 4 )) );
         }
     }
     else
@@ -1627,7 +1627,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                 {
                     SwNumFormat aFormat( aRule.Get( nLvl ) );
                     aFormat.SetPrefix( aPrefix.getToken( 0, u'\x0001', nPrefixIdx ));
-                    aFormat.SetStart( static_cast<sal_uInt16>(aPrefix.getToken( 0, u'\x0001', nPrefixIdx ).toInt32()));
+                    aFormat.SetStart( o3tl::narrowing<sal_uInt16>(aPrefix.getToken( 0, u'\x0001', nPrefixIdx ).toInt32()));
                     aFormat.SetSuffix( aPostfix.getToken( 0, u'\x0001' ));
                     aFormat.SetIncludeUpperLevels( 0 );
 
@@ -1652,7 +1652,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
 
                         if( !n )
                             aFormat.SetPrefix( aPrefix.getToken( 0, u'\x0001', nPrefixIdx )); // token 0, read only on first loop
-                        aFormat.SetStart( static_cast<sal_uInt16>(aPrefix.getToken( 0, u'\x0001', nPrefixIdx ).toInt32() ));
+                        aFormat.SetStart( o3tl::narrowing<sal_uInt16>(aPrefix.getToken( 0, u'\x0001', nPrefixIdx ).toInt32() ));
                         aFormat.SetSuffix( aPostfix.getToken( 0, u'\x0001', nPostfixIdx ));
                         aFormat.SetIncludeUpperLevels( MAXLEVEL );
                         if( n < aNumTypes.getLength() )
@@ -1687,7 +1687,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
             }
         }
         else if( !m_aFlags.bAFormatByInput )
-            SetColl( static_cast<sal_uInt16>(RES_POOLCOLL_NUM_LEVEL1 + ( std::min( nLvl, cnNumBullColls ) * 4 ) ));
+            SetColl( o3tl::narrowing<sal_uInt16>(RES_POOLCOLL_NUM_LEVEL1 + ( std::min( nLvl, cnNumBullColls ) * 4 ) ));
         else
             bChgEnum = false;
     }
@@ -1811,7 +1811,7 @@ void SwAutoFormat::BuildNegIndent( SwTwips nSpaces )
             || (!nTextPos && IsBlanksInString(*m_pCurTextFrame))
             || IsSentenceAtEnd(*m_pCurTextFrame);
 
-    SetColl( static_cast<sal_uInt16>( nTextPos
+    SetColl( o3tl::narrowing<sal_uInt16>( nTextPos
                 ? RES_POOLCOLL_CONFRONTATION
                 : RES_POOLCOLL_TEXT_NEGIDENT ) );
 
@@ -1889,7 +1889,7 @@ void SwAutoFormat::BuildHeadLine( sal_uInt16 nLvl )
         m_pDoc->GetDocumentRedlineManager().SetAutoFormatRedlineComment( &sText );
     }
 
-    SetColl( static_cast<sal_uInt16>(RES_POOLCOLL_HEADLINE1 + nLvl ), true );
+    SetColl( o3tl::narrowing<sal_uInt16>(RES_POOLCOLL_HEADLINE1 + nLvl ), true );
     if( m_aFlags.bAFormatByInput )
     {
         SwTextFormatColl& rNxtColl = m_pCurTextFrame->GetTextNodeForParaProps()->GetTextColl()->GetNextTextFormatColl();

@@ -488,7 +488,7 @@ SwTwips SwTextAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
                 else
                     nCompress = 10000 - nCompress;
 
-                ( pCurrent->GetKanaComp() )[ nKanaIdx ] = static_cast<sal_uInt16>(nCompress);
+                ( pCurrent->GetKanaComp() )[ nKanaIdx ] = o3tl::narrowing<sal_uInt16>(nCompress);
                 nKanaDiffSum = 0;
             }
 
@@ -524,7 +524,7 @@ SwTwips SwTextAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
         }
         else if( pPos->InGlueGrp() && pPos->InFixMargGrp() )
         {
-            pPos->Width( static_cast<sal_uInt16>(pPos->Width() - nDecompress) );
+            pPos->Width( o3tl::narrowing<sal_uInt16>(pPos->Width() - nDecompress) );
 
             if ( pPos->InTabGrp() )
                 // set fix width to width
