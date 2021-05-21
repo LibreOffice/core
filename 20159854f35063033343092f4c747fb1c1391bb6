@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c91b1b2c_07002811",
+        "filename": "sc/inc/arraysumfunctor.hxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-05-21T10:32:55Z",
+      "side": 1,
+      "message": "These #defines are set only in files compiled with the relevant flags. That means that here in the generic code these conditions will always be false. Just remove them, there\u0027s nothing in this code that requires compile-time support for AVX etc.",
+      "revId": "20159854f35063033343092f4c747fb1c1391bb6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b87fa49_3a6c1125",
+        "filename": "sc/inc/arraysumfunctor.hxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-05-21T10:32:55Z",
+      "side": 1,
+      "message": "CPPUNIT_ASSERT_EQUAL( 42.0, executeAVX( i, SAL_N_ELEMENTS(summands), pCurrent).get());\n\nAnd this whole test functions belongs in the unittest .cxx file, I don\u0027t see a reason why a test should be here in the header.",
+      "revId": "20159854f35063033343092f4c747fb1c1391bb6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14736967_e648b5be",
+        "filename": "sc/qa/unit/functions_statistical.cxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-05-21T10:32:55Z",
+      "side": 1,
+      "message": "As commented in the test function, that test function should be here, as its own function (I\u0027m not sure if CPPUNIT_* macros even work in constructors). Just add the function next to testStatisticalFormulasFODS().",
+      "revId": "20159854f35063033343092f4c747fb1c1391bb6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
