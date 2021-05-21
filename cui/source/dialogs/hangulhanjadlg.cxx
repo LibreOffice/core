@@ -261,7 +261,7 @@ namespace svx
 
         Size minimumSize;
         minimumSize.setHeight( aPrimarySize.Height() + aSecondarySize.Height() + 5 );
-        minimumSize.setWidth( aPrimarySize.Width() + aSecondarySize.Width() + 5 );
+        minimumSize.setWidth(std::max(aPrimarySize.Width(), aSecondarySize.Width()) + 5 );
         return minimumSize;
     }
 
