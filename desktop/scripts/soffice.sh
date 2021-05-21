@@ -176,6 +176,11 @@ else
     unset LC_ALL
 fi
 
+SET_STATIC_UNO_HOME=@SET_STATIC_UNO_HOME@
+if [ -z "$STATIC_UNO_HOME" -a "$SET_STATIC_UNO_HOME" = TRUE ]; then
+    export STATIC_UNO_HOME="file://${sd_prog}"
+fi
+
 # run soffice.bin directly when you want to get the backtrace
 if [ -n "$GDBTRACECHECK" ] ; then
     exec $GDBTRACECHECK "$sd_prog/soffice.bin" "$@"
