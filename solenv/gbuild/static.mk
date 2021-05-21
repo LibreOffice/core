@@ -201,7 +201,47 @@ $(foreach exec,$(gb_Executable_KNOWN), \
 $(foreach workdir_linktargetname,$(gb_LinkTarget__ALL_TOUCHED), \
     $(eval $(call gb_LinkTarget__remove_touch,$(workdir_linktargetname))))
 
-endif # !gb_PARTIAL_BUILD
+else # gb_PARTIAL_BUILD
+
+# call gb_LinkTarget__expand_executable_template,class
+define gb_LinkTarget__expand_executable_template
+
+gb_$(1)__get_dep_libraries_target = $$(call gb_LinkTarget_get_dep_libraries_target,$$(call gb_$(1)__get_workdir_linktargetname,$$(1)))
+gb_$(1)__get_dep_externals_target = $$(call gb_LinkTarget_get_dep_externals_target,$$(call gb_$(1)__get_workdir_linktargetname,$$(1)))
+gb_$(1)__get_dep_statics_target = $$(call gb_LinkTarget_get_dep_statics_target,$$(call gb_$(1)__get_workdir_linktargetname,$$(1)))
+
+# call gb_$(1)__has_any_dependencies,item
+define gb_$(1)__has_any_dependencies
+$$(if $$(strip $$(filter-out GBUILD_TOUCHED,
+    $$(call gb_$(1)__get_all_libraries,$$(1))
+    $$(call gb_$(1)__get_all_externals,$$(1))
+    $$(call gb_$(1)__get_all_statics,$$(1)))),$$(1))
+
+endef
+
+# call gb_$(1)__expand_deps,item
+define gb_$(1)__expand_deps
+$$(if $$(call gb_$(1)__has_any_dependencies,$$(1)),
+    $$(if $$(shell cat $$(call gb_$(1)__get_dep_libraries_target,$$(1)) 2>/dev/null),
+        $$(eval $$(call gb_$(1)_use_libraries,$$(1),$$(shell cat $$(call gb_$(1)__get_dep_libraries_target,$$(1))))))
+    $$(if $$(shell cat $$(call gb_$(1)__get_dep_externals_target,$$(1)) 2>/dev/null),
+        $$(eval $$(call gb_$(1)_use_externals,$$(1),$$(shell cat $$(call gb_$(1)__get_dep_externals_target,$$(1))))))
+    $$(if $$(shell cat $$(call gb_$(1)__get_dep_statics_target,$$(1)) 2>/dev/null), \
+        $$(eval $$(call gb_$(1)_use_static_libraries,$$(1),$$(shell cat $$(call gb_$(1)__get_dep_statics_target,$$(1))))))
+)
+
+endef
+
+endef # gb_LinkTarget__expand_executable_template
+
+ifneq (,$(gb_DEBUG_STATIC))
+$(info $(call gb_LinkTarget__expand_executable_template,Executable))
+endif
+$(eval $(call gb_LinkTarget__expand_executable_template,Executable))
+
+$(foreach exec,$(gb_Executable_KNOWN),$(eval $(call gb_Executable__expand_deps,$(exec))))
+
+endif # gb_PARTIAL_BUILD
 endif # gb_FULLDEPS
 
 # vim: set noet sw=4 ts=4:
