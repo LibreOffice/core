@@ -150,7 +150,10 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
 
     m_pStdFontConfig.reset(new SwStdFontConfig);
 
-    StartListening( *SfxGetpApp() );
+    {
+        SolarMutexGuard g;
+        StartListening( *SfxGetpApp() );
+    }
 
     if (!utl::ConfigManager::IsFuzzing())
     {

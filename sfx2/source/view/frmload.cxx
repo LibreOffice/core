@@ -611,8 +611,6 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
 {
     ENSURE_OR_THROW( _rTargetFrame.is(), "illegal NULL frame" );
 
-    SolarMutexGuard aGuard;
-
     SAL_INFO( "sfx.view", "SfxFrameLoader::load" );
 
     ::comphelper::NamedValueCollection aDescriptor( rArgs );
@@ -728,6 +726,8 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
             impl_removeLoaderArguments( aDescriptor );
             xModel->attachResource( xModel->getURL(), aDescriptor.getPropertyValues() );
         }
+
+        SolarMutexGuard aGuard;
 
         // get the SfxObjectShell (still needed at the moment)
         // SfxObjectShellRef is used here ( instead of ...Lock ) since the model is closed below if necessary

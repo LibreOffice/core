@@ -37,8 +37,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Writer_SwTextDocument_get_implementation(
     css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const& args)
 {
-    SolarMutexGuard aGuard;
     SwGlobals::ensure();
+    SolarMutexGuard aGuard;
     css::uno::Reference<css::uno::XInterface> xInterface = sfx2::createSfxModelInstance(args,
         [](SfxModelFlags _nCreationFlags)
         {
