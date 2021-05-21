@@ -144,9 +144,6 @@ void Deck::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     auto childrenNode = rJsonWriter.startArray("children");
     for (auto &it : maPanels)
     {
-        if (it->IsLurking())
-            continue;
-
         // collapse the panel itself out
         auto xContent = it->GetContents();
         if (!xContent)
@@ -157,6 +154,7 @@ void Deck::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
         rJsonWriter.put("type", "panel");
         rJsonWriter.put("text", it->GetTitle());
         rJsonWriter.put("enabled", true);
+        rJsonWriter.put("hidden", it->IsLurking());
 
         {
             auto children2Node = rJsonWriter.startArray("children");
