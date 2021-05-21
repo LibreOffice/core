@@ -2059,16 +2059,19 @@ GdkDragAction VclToGdk(sal_Int8 dragOperation)
 }
 #endif
 
-GtkWindow* get_focus_window()
+GtkWindow* get_active_window()
 {
     GtkWindow* pFocus = nullptr;
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     GList* pList = gtk_window_list_toplevels();
 
     for (GList* pEntry = pList; pEntry; pEntry = pEntry->next)
     {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        if (gtk_window_is_active(GTK_WINDOW(pEntry->data)))
+#else
         if (gtk_window_has_toplevel_focus(GTK_WINDOW(pEntry->data)))
+#endif
         {
             pFocus = GTK_WINDOW(pEntry->data);
             break;
@@ -2076,7 +2079,6 @@ GtkWindow* get_focus_window()
     }
 
     g_list_free(pList);
-#endif
 
     return pFocus;
 }
@@ -2087,7 +2089,7 @@ void LocalizeDecimalSeparator(GdkEventKey* pEvent)
     // #i1820# use locale specific decimal separator
     if (pEvent->keyval == GDK_KEY_KP_Decimal && Application::GetSettings().GetMiscSettings().GetEnableLocalizedDecimalSep())
     {
-        GtkWindow* pFocusWin = get_focus_window();
+        GtkWindow* pFocusWin = get_active_window();
         GtkWidget* pFocus = pFocusWin ? gtk_window_get_focus(pFocusWin) : nullptr;
         // tdf#138932 except if the target is a GtkEntry used for passwords
         if (!pFocus || !GTK_IS_ENTRY(pFocus) || gtk_entry_get_visibility(GTK_ENTRY(pFocus)))
@@ -2837,7 +2839,7 @@ public:
     // to a widget is considered a child of that widget
     virtual bool has_child_focus() const override
     {
-        GtkWindow* pFocusWin = get_focus_window();
+        GtkWindow* pFocusWin = get_active_window();
         if (!pFocusWin)
             return false;
         GtkWidget* pFocus = gtk_window_get_focus(pFocusWin);
