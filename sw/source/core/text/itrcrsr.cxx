@@ -1051,7 +1051,7 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
                     nPorHeight = nPorAscent;
                     pOrig->Height( nPorHeight +
                         static_cast<SwDropPortion*>(pPor)->GetDropDescent() );
-                    if( static_cast<SwTwips>(nTmpHeight) < pOrig->Height() )
+                    if( o3tl::narrowing<SwTwips>(nTmpHeight) < pOrig->Height() )
                     {
                         nTmpAscent = nPorAscent;
                         nTmpHeight = sal_uInt16( pOrig->Height() );

@@ -356,7 +356,7 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
         SwTextPainter  aLine( const_cast<SwTextFrame*>(this), &aInf );
         bool bNoDummy = !aLine.GetNext(); // Only one empty line!
 
-        while( aLine.Y() + static_cast<SwTwips>(aLine.GetLineHeight()) <= rRect.Top() )
+        while( aLine.Y() + o3tl::narrowing<SwTwips>(aLine.GetLineHeight()) <= rRect.Top() )
         {
             if( !aLine.GetCurr()->IsDummy() &&
                 ( rLineInf.IsCountBlankLines() ||

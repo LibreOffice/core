@@ -299,7 +299,7 @@ sal_uInt32 SwTextCursor::AdjustBaseLine( const SwLineLayout& rLine,
 
 void SwTextIter::TwipsToLine( const SwTwips y)
 {
-    while( m_nY + static_cast<SwTwips>(GetLineHeight()) <= y && Next() )
+    while( m_nY + o3tl::narrowing<SwTwips>(GetLineHeight()) <= y && Next() )
         ;
     while( m_nY > y && Prev() )
         ;
