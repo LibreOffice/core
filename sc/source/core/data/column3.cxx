@@ -1852,6 +1852,12 @@ public:
                         aPos = rDestCells.position(aPos.first, nNextRow);
                         sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
                     }
+
+                    // Start listening on cells to get them updated by changes of referenced cells
+                    std::vector<SCROW> aNewSharedRows;
+                    aPos = rDestCells.position(itDestPos, nDestRow);
+                    size_t nFormulaCells = std::distance(itData, itDataEnd);
+                    mrDestColumn.AttachNewFormulaCells(aPos, nFormulaCells, aNewSharedRows);
                 }
                 break;
                 case sc::element_type_empty:
