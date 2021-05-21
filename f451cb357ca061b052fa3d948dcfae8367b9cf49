@@ -1,0 +1,303 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d5c191d2_8cc0bf48",
+        "filename": "sw/inc/textboxhelper.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-05-21T18:01:02Z",
+      "side": 1,
+      "message": "// Returns true on success. Synchronize z-order of the text frame of the given textbox\n// by setting it one level higher than the z-order of the shape of the textbox.\nDoTextBoxZOrderCorrection(pShape);",
+      "range": {
+        "startLine": 113,
+        "startChar": 42,
+        "endLine": 113,
+        "endChar": 48
+      },
+      "revId": "f451cb357ca061b052fa3d948dcfae8367b9cf49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2bc7d751_cd63e3f6",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport16.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-05-21T18:01:02Z",
+      "side": 1,
+      "message": "z-order values",
+      "range": {
+        "startLine": 334,
+        "startChar": 19,
+        "endLine": 334,
+        "endChar": 26
+      },
+      "revId": "f451cb357ca061b052fa3d948dcfae8367b9cf49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92a81d1d_31aceec0",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport16.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-05-21T18:01:02Z",
+      "side": 1,
+      "message": "z-order values",
+      "range": {
+        "startLine": 350,
+        "startChar": 17,
+        "endLine": 350,
+        "endChar": 24
+      },
+      "revId": "f451cb357ca061b052fa3d948dcfae8367b9cf49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7cbdb874_c197d022",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport16.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-05-21T18:01:02Z",
+      "side": 1,
+      "message": "the z-order was wrong.",
+      "range": {
+        "startLine": 357,
+        "startChar": 42,
+        "endLine": 357,
+        "endChar": 74
+      },
+      "revId": "f451cb357ca061b052fa3d948dcfae8367b9cf49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4beb7aa7_a8e67044",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport16.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-05-21T18:01:02Z",
+      "side": 1,
+      "message": "List duplicates only in the Bugzilla, as duplicates of the oldest bug report to avoid bad (redundant) bug management!\n\nIf these are different problems (e.g. synchronizing z-order after anchor changes), we can add extra regression test for them, fixing two or more problems in this commit.",
+      "range": {
+        "startLine": 358,
+        "startChar": 4,
+        "endLine": 358,
+        "endChar": 56
+      },
+      "revId": "f451cb357ca061b052fa3d948dcfae8367b9cf49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8de09a23_677a382a",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1281,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-05-21T18:01:02Z",
+      "side": 1,
+      "message": "Replace them with SAL_WARN macros.",
+      "range": {
+        "startLine": 1277,
+        "startChar": 1,
+        "endLine": 1281,
+        "endChar": 37
+      },
+      "revId": "f451cb357ca061b052fa3d948dcfae8367b9cf49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a1f6cdb_24c7fb93",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1290,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-05-21T18:01:02Z",
+      "side": 1,
+      "message": "SAL_WARN macros are compiled conditionally (see include/sal/log.hxx), so this unconditional string management results redundant code path and unused log strings in a logless build.",
+      "range": {
+        "startLine": 1289,
+        "startChar": 0,
+        "endLine": 1290,
+        "endChar": 15
+      },
+      "revId": "f451cb357ca061b052fa3d948dcfae8367b9cf49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05a762ca_6de44d96",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1298,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-05-21T18:01:02Z",
+      "side": 1,
+      "message": "model",
+      "range": {
+        "startLine": 1298,
+        "startChar": 32,
+        "endLine": 1298,
+        "endChar": 38
+      },
+      "revId": "f451cb357ca061b052fa3d948dcfae8367b9cf49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15973308_b455ed74",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1303,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-05-21T18:01:02Z",
+      "side": 1,
+      "message": "seems",
+      "range": {
+        "startLine": 1303,
+        "startChar": 71,
+        "endLine": 1303,
+        "endChar": 76
+      },
+      "revId": "f451cb357ca061b052fa3d948dcfae8367b9cf49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f7860db_2249960d",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1330,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-05-21T18:01:02Z",
+      "side": 1,
+      "message": "Replace them with SAL_WARN macros.",
+      "range": {
+        "startLine": 1324,
+        "startChar": 15,
+        "endLine": 1330,
+        "endChar": 30
+      },
+      "revId": "f451cb357ca061b052fa3d948dcfae8367b9cf49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "111117d3_cb3491e3",
+        "filename": "sw/source/core/frmedt/feshview.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1060,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-05-21T18:01:02Z",
+      "side": 1,
+      "message": "Does",
+      "range": {
+        "startLine": 1060,
+        "startChar": 7,
+        "endLine": 1060,
+        "endChar": 10
+      },
+      "revId": "f451cb357ca061b052fa3d948dcfae8367b9cf49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9bfac41e_da0663c3",
+        "filename": "sw/source/core/frmedt/feshview.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1101,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-05-21T18:01:02Z",
+      "side": 1,
+      "message": "z-order",
+      "range": {
+        "startLine": 1101,
+        "startChar": 39,
+        "endLine": 1101,
+        "endChar": 45
+      },
+      "revId": "f451cb357ca061b052fa3d948dcfae8367b9cf49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2080678_38651683",
+        "filename": "sw/source/core/frmedt/feshview.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1104,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-05-21T18:01:02Z",
+      "side": 1,
+      "message": "on",
+      "range": {
+        "startLine": 1104,
+        "startChar": 32,
+        "endLine": 1104,
+        "endChar": 34
+      },
+      "revId": "f451cb357ca061b052fa3d948dcfae8367b9cf49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
