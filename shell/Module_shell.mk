@@ -10,8 +10,8 @@
 $(eval $(call gb_Module_Module,shell))
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
-$(eval $(call gb_Module_add_targets,shell,\
-	Executable_lngconvex \
+$(eval $(call gb_Module_add_targets_for_build,shell,\
+	$(if $(filter WNT,$(OS)),Executable_lngconvex) \
 ))
 endif
 

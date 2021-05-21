@@ -183,7 +183,9 @@ SalInstance* autodetect_plugin()
 #if ENABLE_GTK3
         "gtk3",
 #endif
+#if ENABLE_GEN
         "gen",
+#endif
         nullptr
     };
 
@@ -192,7 +194,9 @@ SalInstance* autodetect_plugin()
 #if ENABLE_GTK3
         "gtk3",
 #endif
+#if ENABLE_GEN
         "gen",
+#endif
         nullptr
     };
 
@@ -295,7 +299,9 @@ SalInstance *CreateSalInstance()
 #if ENABLE_KF5
         "kf5",
 #endif
+#if ENABLE_GEN
         "gen",
+#endif
 #endif
         nullptr
      };

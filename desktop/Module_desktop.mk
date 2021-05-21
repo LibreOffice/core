@@ -33,7 +33,7 @@ $(eval $(call gb_Module_add_l10n_targets,desktop,\
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,desktop,\
     Executable_soffice_bin \
-    Executable_unopkg_bin \
+    $(if $(DISABLE_DYNLOADING),,Executable_unopkg_bin) \
     $(if $(ENABLE_BREAKPAD),Executable_minidump_upload) \
     Library_migrationoo2 \
     Library_migrationoo3 \
@@ -41,8 +41,8 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Package_scripts \
 ))
 
-ifneq ($(OS),MACOSX)
-ifneq ($(OS),WNT)
+ifeq (,$(filter EMSCRIPTEN HAIKU MACOSX WNT,$(OS)))
+ifeq (,$(DISABLE_DYNLOADING))
 $(eval $(call gb_Module_add_targets,desktop,\
     Pagein_calc \
     Pagein_common \
@@ -63,9 +63,14 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Package_soffice_sh \
 ))
 endif
+else # $(DISABLE_DYNLOADING)
+$(eval $(call gb_Module_add_targets,desktop, \
+    CustomTarget_soffice \
+    Package_soffice_sh \
+))
 endif
-endif
-endif
+endif # !(EMSCRIPTEN HAIKU MACOSX WNT)
+endif # DESKTOP
 
 ifeq ($(OS),WNT)
 
@@ -98,7 +103,7 @@ $(eval $(call gb_Module_add_targets,desktop,\
     WinResTarget_swriter \
 ))
 
-else ifeq (,$(filter MACOSX ANDROID iOS HAIKU,$(OS)))
+else ifeq (,$(filter MACOSX ANDROID iOS HAIKU EMSCRIPTEN,$(OS)))
 
 $(eval $(call gb_Module_add_targets,desktop,\
     Executable_oosplash \

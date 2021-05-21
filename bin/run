@@ -64,6 +64,7 @@ else
 
     export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}"${dir}"/instdir/program
     SEARCH_PATH="${LD_LIBRARY_PATH}"
+    test "${STATIC_UNO_HOME+set}" = set || export STATIC_UNO_HOME="file://${dir}/instdir/program"
 
 fi
 
