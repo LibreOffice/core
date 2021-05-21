@@ -1113,13 +1113,13 @@ emscripten)
     using_freetype_fontconfig=yes
     using_x11=no
     test_openldap=no
+    test_qt5=yes
+    test_system_freetype=no
     enable_compiler_plugins=no
-    test_libcmis=no
-    test_webdav=no
-    enable_database_connectivity=no
-    enable_lpsolve=no
+    enable_customtarget_components=yes
+    enable_qt5=yes
     enable_scripting=no
-    enable_xmlhelp=no
+    enable_wasm_strip=yes
     with_system_zlib=no
     with_theme="colibre"
     _os=Emscripten
@@ -1159,6 +1159,7 @@ test "${test_system_freetype+set}" != set -a "${test_system_fontconfig+set}" = s
 # Don't sort!
 test "$test_kf5" = yes -a "$test_qt5" = no && test_kf5=no
 test "$test_kf5" = yes && test_qt5=yes
+test "$test_gtk3" != yes && enable_gtk3=no
 test "$test_gtk3" != yes -o "$test_kf5" != yes && test_gtk3_kde5=no
 test "$using_freetype_fontconfig" = no && using_headless_plugin=no
 test "$using_freetype_fontconfig" = yes && test_cairo=yes
@@ -1981,7 +1982,7 @@ libo_FUZZ_ARG_ENABLE(librelogo,
 AC_ARG_ENABLE(wasm-strip,
     AS_HELP_STRING([--enable-wasm-strip],
         [Strip the static build like for WASM/emscripten platform.]),
-,enable_wasm_strip=yes)
+,)
 
 AC_ARG_ENABLE(xmlhelp,
     AS_HELP_STRING([--disable-xmlhelp],
@@ -2950,6 +2951,57 @@ if test $_os != iOS -a $_os != Android -a "$enable_fuzzers" != "yes"; then
     fi
 fi
 
+# explicitly doesn't include enable_gtk3=no and enable_qt5=yes, so it should
+# also work with the default gtk3 plugin.
+if test "$enable_wasm_strip" = "yes"; then
+    enable_avmedia=no
+    enable_cmis=no
+    enable_coinmp=no
+    enable_cups=no
+    test "$_os" = Emscripten && enable_curl=no
+    enable_database_connectivity=no
+    enable_dbus=no
+    enable_dconf=no
+    test "${enable_dynamic_loading+set}" = set -o "$_os" != Emscripten || enable_dynamic_loading=no
+    enable_extension_integration=no
+    enable_extensions=no
+    enable_extension_update=no
+    enable_gio=no
+    enable_gpgmepp=no
+    enable_ldap=no
+    enable_lotuswordpro=no
+    enable_lpsolve=no
+    enable_nss=no
+    enable_odk=no
+    enable_online_update=no
+    enable_opencl=no
+    enable_pdfimport=no
+    enable_randr=no
+    enable_report_builder=no
+    enable_scripting=no
+    enable_sdremote_bluetooth=no
+    enable_skia=no
+    enable_xmlhelp=no
+    enable_zxing=no
+    test_libepubgen=no
+    test_libcdr=no
+    test_libcmis=no
+    test_libetonyek=no
+    test_libfreehand=no
+    test_libmspub=no
+    test_libpagemaker=no
+    test_libqxp=no
+    test_libvisio=no
+    test_libzmf=no
+    test_webdav=no
+    with_galleries=no
+    with_webdav=no
+    with_x=no
+
+    test "${with_fonts+set}" = set || with_fonts=yes
+    test "${with_locales+set}" = set || with_locales=en
+fi
+
 # Whether to build "avmedia" functionality or not.
 
 if test "$enable_avmedia" = yes; then
@@ -3779,7 +3831,6 @@ if test "$build_cpu" != "$host_cpu" -o "$DISABLE_DYNLOADING" = TRUE; then
     fi
 fi
 
-ENABLE_WASM_STRIP=''
 if test "$cross_compiling" = "yes"; then
     export CROSS_COMPILING=TRUE
     if test "$enable_dynamic_loading" != yes -a "$enable_wasm_strip" = yes; then
@@ -5507,6 +5558,9 @@ if test "$cross_compiling" = "yes"; then
     test "$enable_wasm_strip" = "yes" && sub_conf_opts="$sub_conf_opts --enable-wasm-strip"
     test "${with_system_lockfile+set}" = set && sub_conf_opts="$sub_conf_opts --with-system-lockfile=${with_system_lockfile}"
     test "${enable_fuzzers}" = yes && sub_conf_opts="$sub_conf_opts --without-system-libxml"
+    if test "$_os" = "Emscripten"; then
+        sub_conf_opts="$sub_conf_opts --without-system-libxml --without-system-fontconfig --without-system-freetype --without-system-zlib"
+    fi
 
     # Don't bother having configure look for stuff not needed for the build platform anyway
     # WARNING: any option with an argument containing spaces must be handled separately (see --with-theme)
