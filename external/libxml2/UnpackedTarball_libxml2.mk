@@ -21,7 +21,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,libxml2,\
 	$(if $(gb_Module_CURRENTMODULE_SYMBOLS_ENABLED), \
 		external/libxml2/libxml2-icu-sym.patch.0, \
 		external/libxml2/libxml2-icu.patch.0) \
-	external/libxml2/ubsan.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:
