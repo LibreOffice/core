@@ -9789,6 +9789,12 @@ public:
     }
 };
 
+}
+
+#endif
+
+namespace {
+
 class GtkInstanceLinkButton : public GtkInstanceWidget, public virtual weld::LinkButton
 {
 private:
@@ -9850,8 +9856,6 @@ public:
 };
 
 }
-
-#endif
 
 namespace {
 
@@ -18948,16 +18952,11 @@ public:
 
     virtual std::unique_ptr<weld::LinkButton> weld_link_button(const OString &id) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkLinkButton* pButton = GTK_LINK_BUTTON(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pButton)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pButton));
         return std::make_unique<GtkInstanceLinkButton>(pButton, this, false);
-#else
-        (void)id;
-        return nullptr;
-#endif
     }
 
     virtual std::unique_ptr<weld::ToggleButton> weld_toggle_button(const OString &id) override
