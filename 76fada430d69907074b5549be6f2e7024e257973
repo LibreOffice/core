@@ -16,6 +16,24 @@
       "revId": "76fada430d69907074b5549be6f2e7024e257973",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82c4391a_539bf450",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000961
+      },
+      "writtenOn": "2021-05-21T10:30:15Z",
+      "side": 1,
+      "message": "Thanks for input, I\u0027ve split the patch and submitted https://gerrit.libreoffice.org/c/core/+/115901\n\nThis new patch needs to be merged first.\nAfter merging the new patch, I\u0027ll rebase and update this patch.\n\nNote: Currently, there are no existing tests covering cut paste transpose. In current master, adjusting references for cut paste transposed is completely dysfunctional.",
+      "parentUuid": "34d7cb94_26857ad5",
+      "revId": "76fada430d69907074b5549be6f2e7024e257973",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
