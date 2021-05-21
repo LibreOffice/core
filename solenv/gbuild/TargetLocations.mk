@@ -126,6 +126,12 @@ gb_LinkTarget_get_objects_list = \
  $(WORKDIR)/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1)).objectlist
 gb_LinkTarget_get_dep_target = \
  $(WORKDIR)/Dep/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1)).d
+gb_LinkTarget_get_dep_libraries_target = \
+ $(WORKDIR)/Dep/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1)).d.libraries
+gb_LinkTarget_get_dep_externals_target = \
+ $(WORKDIR)/Dep/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1)).d.externals
+gb_LinkTarget_get_dep_statics_target = \
+ $(WORKDIR)/Dep/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1)).d.statics
 gb_LinkTarget_get_clean_target = \
  $(WORKDIR)/Clean/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1))
 gb_LinkTarget_get_target = $(lastword $(subst <>,  ,$(1)))
@@ -427,6 +433,7 @@ define gb_Library_get_linktarget
 $(call gb_Library__get_workdir_linktargetname,$(1))<>$(call gb_Library_get_target,$(1))
 endef
 gb_Library_get_linktarget_target = $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,$(1)))
+gb_Library_get_dep_libraries_target = $(call gb_LinkTarget_get_dep_libraries_target,$(call gb_Library_get_linktarget,$(1)))
 
 define gb_StaticLibrary__get_workdir_linktargetname
 StaticLibrary/$(call gb_StaticLibrary_get_filename,$(1))
