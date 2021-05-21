@@ -66,3 +66,10 @@ leak:Firebird::
 # these appears to be some kind of ref-counting cycle
 leak:SbiRuntime::
 leak:SbModule::
+
+# LibXML leaks a couple of objects
+leak:libxml2.so
+
+# LibCoin leaks a little
+leak:coinComputeIntVariables
+leak:CoinMessages::operator=(CoinMessages const&)
