@@ -942,6 +942,9 @@ class SFScriptForge:
                 kwargs = {'loc': variables}
                 kwargs['loc'].setdefault('XSCRIPTCONTEXT', uno)
                 console(**kwargs)
+                # An interprocess call is necessary to allow a redirection of STDOUT and STDERR by APSO
+                #   Choice is a minimalist call to a Basic routine: no arguments, a few lines of code
+                SFScriptForge.SF_Basic.GetGuiType()
             else:
                 # The APSO extension could not be located in your LibreOffice installation
                 cls._RaiseFatal('SF_Exception.PythonShell', 'variables=None', 'PYTHONSHELLERROR')
