@@ -342,6 +342,7 @@ void SwDBTreeList::Select(std::u16string_view rDBName, std::u16string_view rTabl
             }
             if (!m_xTreeView->iter_has_child(*xParent))
             {
+                m_xTreeView->set_children_on_demand(*xParent, false); // tdf#142294 drop placeholder on-demand node
                 RequestingChildrenHdl(*xParent);
                 // If successful, it will be expanded in a call to scroll_to_row for its children
             }
@@ -363,6 +364,7 @@ void SwDBTreeList::Select(std::u16string_view rDBName, std::u16string_view rTabl
                     {
                         if (!m_xTreeView->iter_has_child(*xParent))
                         {
+                            m_xTreeView->set_children_on_demand(*xParent, false); // tdf#142294 drop placeholder on-demand node
                             RequestingChildrenHdl(*xParent);
                             m_xTreeView->expand_row(*xParent);
                         }
