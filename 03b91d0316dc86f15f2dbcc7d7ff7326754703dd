@@ -70,6 +70,30 @@
       "revId": "03b91d0316dc86f15f2dbcc7d7ff7326754703dd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e728f94_c7bf429c",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2508,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-05-21T12:33:04Z",
+      "side": 1,
+      "message": "Yeah, unfortunately the code paths here sometimes result in us allocating an extra OUStringBuffer, and I couldn\u0027t remove that easily",
+      "parentUuid": "c2e21521_3505d6bc",
+      "range": {
+        "startLine": 2508,
+        "startChar": 26,
+        "endLine": 2508,
+        "endChar": 34
+      },
+      "revId": "03b91d0316dc86f15f2dbcc7d7ff7326754703dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
