@@ -177,6 +177,7 @@ gb_Library_UDK_MAJORVER := 3
 gb_Library_SYSPRE := lib
 gb_Library_UNOVERPRE := $(gb_Library_SYSPRE)uno_
 gb_Library_PLAINEXT := .dylib
+gb_Library_PLAINEXT_FOR_BUILD := .dylib
 gb_Library_DLLEXT := .dylib
 gb_Library_RTEXT := gcc3$(gb_Library_PLAINEXT)
 

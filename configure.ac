@@ -5210,6 +5210,20 @@ AC_SUBST(PLATFORMID)
 AC_SUBST(WINDOWS_X64)
 AC_DEFINE_UNQUOTED(WORKDIR,"$WORKDIR")
 
+if test "$OS" = WNT -a "$COM" = MSC; then
+    case "$CPUNAME" in
+    INTEL) CPPU_ENV=msci ;;
+    X86_64) CPPU_ENV=mscx ;;
+    AARCH64) CPPU_ENV=msca ;;
+    *)
+        AC_MSG_ERROR([Unknown \$CPUNAME '$CPUNAME' for $OS / $COM"])
+        ;;
+    esac
+else
+    CPPU_ENV=gcc3
+fi
+AC_SUBST(CPPU_ENV)
+
 dnl ===================================================================
 dnl Test which package format to use
 dnl ===================================================================
@@ -5410,6 +5424,7 @@ if test "$cross_compiling" = "yes"; then
     # all these will get a _FOR_BUILD postfix
     DIRECT_FOR_BUILD_SETTINGS="
         CC
+        CPPU_ENV
         CXX
         ILIB
         JAVA_HOME
@@ -5495,6 +5510,7 @@ if test "$cross_compiling" = "yes"; then
 else
     OS_FOR_BUILD="$OS"
     CC_FOR_BUILD="$CC"
+    CPPU_ENV_FOR_BUILD="$CPPU_ENV"
     CXX_FOR_BUILD="$CXX"
     INSTDIR_FOR_BUILD="$INSTDIR"
     INSTROOT_FOR_BUILD="$INSTROOT"
@@ -5516,6 +5532,7 @@ AC_SUBST(SDKDIRNAME_FOR_BUILD)
 AC_SUBST(WORKDIR_FOR_BUILD)
 AC_SUBST(CC_FOR_BUILD)
 AC_SUBST(CXX_FOR_BUILD)
+AC_SUBST(CPPU_ENV_FOR_BUILD)
 
 dnl ===================================================================
 dnl Check for syslog header

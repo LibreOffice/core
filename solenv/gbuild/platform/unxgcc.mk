@@ -188,6 +188,7 @@ gb_Library_UNOVERPRE := $(gb_Library_SYSPRE)uno_
 ifeq ($(DISABLE_DYNLOADING),TRUE)
 
 gb_Library_PLAINEXT := .a
+gb_Library_PLAINEXT_FOR_BUILD := .so
 gb_Library_DLLEXT := .a
 
 else
@@ -195,6 +196,7 @@ else
 gb_Library_TARGETTYPEFLAGS := -shared -Wl,-z,noexecstack
 gb_Library_UDK_MAJORVER := 3
 gb_Library_PLAINEXT := .so
+gb_Library_PLAINEXT_FOR_BUILD := .so
 gb_Library_DLLEXT := .so
 
 endif

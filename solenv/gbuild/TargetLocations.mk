@@ -342,6 +342,10 @@ define gb_Library_get_filename
 $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Library_FILENAMES)))
 endef
 
+define gb_Library_get_filename_for_build
+$(patsubst $(1):%,%,$(filter $(1):%,$(gb_Library_FILENAMES_FOR_BUILD)))
+endef
+
 define gb_Executable_get_filename
 $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Executable_FILENAMES)))
 endef
@@ -393,6 +397,13 @@ endef
 define gb_Library_get_target
 $(call gb_Library_get_instdir,$(1))/$(call gb_Library_get_runtime_filename,$(1))
 endef
+ifneq ($(CROSS_COMPILING),)
+define gb_Library_get_target_for_build
+$(call gb_Library_get_instdir_for_build,$(1))/$(call gb_Library_get_runtime_filename_for_build,$(1))
+endef
+else
+gb_Library_get_target_for_build = $(gb_Library_get_target)
+endif # CROSS_COMPILING
 # this returns a tuple of both the linktargetname, and the target file
 define gb_Library_get_linktarget
 $(call gb_Library__get_workdir_linktargetname,$(1))<>$(call gb_Library_get_target,$(1))
@@ -438,6 +449,7 @@ gb_Library_WORKDIR_FOR_BUILD = $(WORKDIR_FOR_BUILD)/LinkTarget/Library
 gb_Executable_BINDIR = $(WORKDIR)/LinkTarget/Executable
 gb_Executable_BINDIR_FOR_BUILD = $(WORKDIR_FOR_BUILD)/LinkTarget/Executable
 gb_Library_DLLDIR = $(WORKDIR)/LinkTarget/Library
+gb_Library_DLLDIR_FOR_BUILD = $(WORKDIR_FOR_BUILD)/LinkTarget/Library
 gb_CppunitTest_DLLDIR = $(WORKDIR)/LinkTarget/CppunitTest
 
 # static variables declared here because they are used globally
