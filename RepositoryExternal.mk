@@ -3092,19 +3092,20 @@ $(call gb_LinkTarget_add_libs,$(1),\
 	$(call gb_UnpackedTarball_get_dir,postgresql)/$(gb_MSBUILD_CONFIG)/libpq/libpq.lib \
 )
 
-else # WNT
+else # !WNT
 
 $(call gb_LinkTarget_add_libs,$(1),\
 	$(call gb_UnpackedTarball_get_dir,postgresql)/src/interfaces/libpq/libpq$(gb_StaticLibrary_PLAINEXT) \
 	$(call gb_UnpackedTarball_get_dir,postgresql)/src/common/libpgcommon$(gb_StaticLibrary_PLAINEXT) \
 	$(call gb_UnpackedTarball_get_dir,postgresql)/src/port/libpgport$(gb_StaticLibrary_PLAINEXT) \
+    $(if $(WITH_GSSAPI),$(GSSAPI_LIBS)) \
 )
 
-endif # WNT
+endif # !WNT
 
-endef
+endef # gb_LinkTarget__use_postgresql
 
-endif # SYSTEM_POSTGRESQL
+endif # !SYSTEM_POSTGRESQL
 
 ifeq ($(ENABLE_KF5),TRUE)
 
