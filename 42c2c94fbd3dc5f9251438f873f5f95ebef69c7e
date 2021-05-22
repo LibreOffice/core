@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8e4c1740_14ddcdd4",
+        "filename": "basctl/source/basicide/baside2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-22T19:49:43Z",
+      "side": 1,
+      "message": "So if there is no non-ascii characters in the first 4K of the file, it will be treated as using system encoding. Personally I would use something like 1M.",
+      "range": {
+        "startLine": 441,
+        "startChar": 36,
+        "endLine": 441,
+        "endChar": 40
+      },
+      "revId": "42c2c94fbd3dc5f9251438f873f5f95ebef69c7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
