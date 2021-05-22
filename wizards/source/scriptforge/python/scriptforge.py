@@ -624,6 +624,11 @@ class SFScriptForge:
         MB_OK, MB_OKCANCEL, MB_RETRYCANCEL, MB_YESNO, MB_YESNOCANCEL = 0, 1, 5, 4, 3
         IDABORT, IDCANCEL, IDIGNORE, IDNO, IDOK, IDRETRY, IDYES = 3, 2, 5, 7, 1, 4, 6
 
+        @classmethod
+        def CDate(cls, datevalue):
+            cdate = cls.SIMPLEEXEC(cls.module + '.PyCDate', datevalue)
+            return cls.CDateFromUnoDateTime(cdate)
+
         @staticmethod
         def CDateFromUnoDateTime(unodate):
             """
