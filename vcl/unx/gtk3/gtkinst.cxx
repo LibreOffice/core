@@ -6081,7 +6081,6 @@ public:
 };
 
 }
-#if !GTK_CHECK_VERSION(4, 0, 0)
 
 static GType immobilized_viewport_get_type();
 
@@ -6191,7 +6190,7 @@ immobilized_viewport_get_property(GObject* object,
     }
 }
 
-static void immobilized_viewport_class_init(GtkViewportClass *klass)
+static void immobilized_viewport_class_init(GtkWidgetClass* klass)
 {
     GObjectClass* o_class = G_OBJECT_CLASS(klass);
 
@@ -6235,6 +6234,8 @@ GType immobilized_viewport_get_type()
 
     return type;
 }
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
 
 #define CUSTOM_TYPE_CELL_RENDERER_SURFACE             (custom_cell_renderer_surface_get_type())
 #define CUSTOM_CELL_RENDERER_SURFACE(obj)             (G_TYPE_CHECK_INSTANCE_CAST((obj),  CUSTOM_TYPE_CELL_RENDERER_SURFACE, CustomCellRendererSurface))
@@ -6452,6 +6453,7 @@ static GtkCellRenderer* custom_cell_renderer_surface_new()
 {
     return GTK_CELL_RENDERER(g_object_new(CUSTOM_TYPE_CELL_RENDERER_SURFACE, nullptr));
 }
+#endif
 
 static VclPolicyType GtkToVcl(GtkPolicyType eType)
 {
@@ -6489,8 +6491,6 @@ static GtkPolicyType VclToGtk(VclPolicyType eType)
     }
     return eRet;
 }
-
-#endif
 
 static GtkMessageType VclToGtk(VclMessageType eType)
 {
@@ -6566,6 +6566,8 @@ static GtkSelectionMode VclToGtk(SelectionMode eType)
     return eRet;
 }
 
+#endif
+
 namespace {
 
 class GtkInstanceScrolledWindow final : public GtkInstanceContainer, public virtual weld::ScrolledWindow
@@ -6615,24 +6617,43 @@ public:
     void set_user_managed_scrolling()
     {
         disable_notify_events();
-#if !GTK_CHECK_VERSION(4, 0, 0)
         //remove the original viewport and replace it with our bodged one which
         //doesn't do any scrolling and expects its child to figure it out somehow
         assert(!m_pOrigViewport);
+#if GTK_CHECK_VERSION(4, 0, 0)
+        GtkWidget *pViewport = gtk_scrolled_window_get_child(m_pScrolledWindow);
+#else
         GtkWidget *pViewport = gtk_bin_get_child(GTK_BIN(m_pScrolledWindow));
+#endif
         assert(GTK_IS_VIEWPORT(pViewport));
+#if GTK_CHECK_VERSION(4, 0, 0)
+        GtkWidget *pChild= gtk_viewport_get_child(GTK_VIEWPORT(pViewport));
+#else
         GtkWidget *pChild = gtk_bin_get_child(GTK_BIN(pViewport));
+#endif
         g_object_ref(pChild);
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_widget_unparent(pChild);
+#else
         gtk_container_remove(GTK_CONTAINER(pViewport), pChild);
+#endif
         g_object_ref(pViewport);
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_widget_unparent(pViewport);
+#else
         gtk_container_remove(GTK_CONTAINER(m_pScrolledWindow), pViewport);
+#endif
         GtkWidget* pNewViewport = GTK_WIDGET(g_object_new(immobilized_viewport_get_type(), nullptr));
         gtk_widget_show(pNewViewport);
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_scrolled_window_set_child(m_pScrolledWindow, pNewViewport);
+        gtk_viewport_set_child(GTK_VIEWPORT(pNewViewport), pChild);
+#else
         gtk_container_add(GTK_CONTAINER(m_pScrolledWindow), pNewViewport);
         gtk_container_add(GTK_CONTAINER(pNewViewport), pChild);
+#endif
         g_object_unref(pChild);
         m_pOrigViewport = pViewport;
-#endif
         enable_notify_events();
     }
 
@@ -6882,7 +6903,6 @@ public:
         if (!m_pOrigViewport)
             return;
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkInstanceContainer::disable_notify_events();
 
         // force in new adjustment to drop the built-in handlers on value-changed
@@ -6896,26 +6916,57 @@ public:
         GtkAdjustment *pHAdjustment = gtk_adjustment_new(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
         gtk_scrolled_window_set_hadjustment(m_pScrolledWindow, pHAdjustment);
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+        GtkWidget *pViewport = gtk_scrolled_window_get_child(m_pScrolledWindow);
+#else
         GtkWidget *pViewport = gtk_bin_get_child(GTK_BIN(m_pScrolledWindow));
+#endif
         assert(CRIPPLED_IS_VIEWPORT(pViewport));
+#if GTK_CHECK_VERSION(4, 0, 0)
+        GtkWidget *pChild= gtk_viewport_get_child(GTK_VIEWPORT(pViewport));
+#else
         GtkWidget *pChild = gtk_bin_get_child(GTK_BIN(pViewport));
+#endif
         g_object_ref(pChild);
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_widget_unparent(pChild);
+#else
         gtk_container_remove(GTK_CONTAINER(pViewport), pChild);
+#endif
         g_object_ref(pViewport);
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_widget_unparent(pViewport);
+#else
         gtk_container_remove(GTK_CONTAINER(m_pScrolledWindow), pViewport);
+#endif
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_scrolled_window_set_child(m_pScrolledWindow, m_pOrigViewport);
+#else
         gtk_container_add(GTK_CONTAINER(m_pScrolledWindow), m_pOrigViewport);
+#endif
         // coverity[freed_arg : FALSE] - this does not free m_pOrigViewport, it is reffed by m_pScrolledWindow
         g_object_unref(m_pOrigViewport);
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_viewport_set_child(GTK_VIEWPORT(m_pOrigViewport), pChild);
+#else
         gtk_container_add(GTK_CONTAINER(m_pOrigViewport), pChild);
+#endif
         g_object_unref(pChild);
+#if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_widget_destroy(pViewport);
+#endif
         g_object_unref(pViewport);
         m_pOrigViewport = nullptr;
         GtkInstanceContainer::enable_notify_events();
-#endif
     }
 };
+
+}
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
+
+namespace {
 
 class GtkInstanceNotebook : public GtkInstanceWidget, public virtual weld::Notebook
 {
@@ -18950,17 +19001,11 @@ public:
 
     virtual std::unique_ptr<weld::ScrolledWindow> weld_scrolled_window(const OString &id, bool bUserManagedScrolling = false) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkScrolledWindow* pScrolledWindow = GTK_SCROLLED_WINDOW(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pScrolledWindow)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pScrolledWindow));
         return std::make_unique<GtkInstanceScrolledWindow>(pScrolledWindow, this, false, bUserManagedScrolling);
-#else
-        (void)id;
-        (void)bUserManagedScrolling;
-        return nullptr;
-#endif
     }
 
     virtual std::unique_ptr<weld::Notebook> weld_notebook(const OString &id) override
