@@ -310,6 +310,7 @@ gb_Library_get_rpath :=
 
 gb_Library_SYSPRE := i
 gb_Library_PLAINEXT := .lib
+gb_Library_PLAINEXT_FOR_BUILD := .lib
 
 gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOO) \
