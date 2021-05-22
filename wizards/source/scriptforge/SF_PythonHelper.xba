@@ -58,6 +58,39 @@ End Property	&apos;	ScriptForge.SF_PythonHelper.ServiceName
 REM ============================================================== PUBLIC METHODS
 
 REM -----------------------------------------------------------------------------
+Public Function PyCDate(ByVal DateArg As Variant) As Variant
+&apos;&apos;&apos;	Convenient function to replicate CDate() in Python scripts
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		DateArg: a date as a string or as a double
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		The converted date as a UNO DateTime structure
+&apos;&apos;&apos;		If the input argument could not be recognized as a date, return the argument unchanged
+&apos;&apos;&apos;	Example: (Python code)
+&apos;&apos;&apos;		a = bas.CDate(&apos;2021-02-18&apos;)
+
+Dim vDate As Variant				&apos;	Return value
+Const cstThisSub = &quot;Basic.CDate&quot;
+Const cstSubArgs = &quot;datearg&quot;
+
+	On Local Error GoTo Catch
+	vDate = Null
+
+Check:
+	SF_Utils._EnterFunction(cstThisSub, cstSubArgs)
+
+Try:
+	vDate = CDate(DateArg)
+
+Finally:
+	If VarType(vDate) = V_DATE Then PyCDate = CDateToUnoDateTime(vDate) Else PyCDate = DateArg
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	On Local Error GoTo 0
+	GoTo Finally
+End Function	&apos;	ScriptForge.SF_PythonHelper.PyCDate
+
+REM -----------------------------------------------------------------------------
 Public Function PyConvertFromUrl(ByVal FileName As Variant) As String
 &apos;&apos;&apos;	Convenient function to replicate ConvertFromUrl() in Python scripts
 &apos;&apos;&apos;	Args:
@@ -295,7 +328,7 @@ Public Function PyDateValue(ByVal DateArg As Variant) As Variant
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		DateArg: a date as a string
 &apos;&apos;&apos;	Returns:
-&apos;&apos;&apos;		The converted date as a string in iso format
+&apos;&apos;&apos;		The converted date as a UNO DateTime structure
 &apos;&apos;&apos;	Example: (Python code)
 &apos;&apos;&apos;		a = bas.DateValue(&apos;2021-02-18&apos;)
 
