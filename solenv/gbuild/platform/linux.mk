@@ -20,7 +20,7 @@ include $(GBUILDDIR)/platform/unxgcc.mk
 gb_STDLIBS :=
 
 ifeq ($(DISABLE_DYNLOADING),TRUE)
-gb_STDLIBS += -ldl -lm
+gb_STDLIBS += -ldl -lm -pthread -lpthread
 endif
 
 gb_STDLIBS_CXX :=
