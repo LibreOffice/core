@@ -1438,7 +1438,6 @@ namespace emfio
         if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LineStyle::Dash ) )
         {
             tools::Polygon aRoundRectPoly( rRect, rSize.Width(), rSize.Height() );
-            aRoundRectPoly.Optimize( PolyOptimizeFlags::EDGES );
             mpGDIMetaFile->AddAction( new MetaPolyLineAction( ImplMap( aRoundRectPoly ), maLineStyle.aLineInfo ) );
         }
     }
