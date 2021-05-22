@@ -60,7 +60,8 @@ class Test : public test::BootstrapFixture, public XmlTestTools, public unotest:
     void TestEllipseXformIntersectClipRect();
     void TestDrawPolyLine16WithClip();
     void TestFillRegion();
-    void TestPalette();
+    void TestPaletteWMF();
+    void TestRoundrectWMF();
     void TestPolylinetoCloseStroke();
     void TestPolyLineWidth();
     void TestRoundRect();
@@ -90,7 +91,8 @@ public:
     CPPUNIT_TEST(TestEllipseXformIntersectClipRect);
     CPPUNIT_TEST(TestDrawPolyLine16WithClip);
     CPPUNIT_TEST(TestFillRegion);
-    CPPUNIT_TEST(TestPalette);
+    CPPUNIT_TEST(TestPaletteWMF);
+    CPPUNIT_TEST(TestRoundrectWMF);
     CPPUNIT_TEST(TestPolylinetoCloseStroke);
     CPPUNIT_TEST(TestPolyLineWidth);
     CPPUNIT_TEST(TestRoundRect);
@@ -502,8 +504,7 @@ void Test::TestPolylinetoCloseStroke()
                 "color", "#000000");
 }
 
-
-void Test::TestPalette()
+void Test::TestPaletteWMF()
 {
     // WMF import with records: CREATEPALETTE, SELECTOBJECT, CREATEPENINDIRECT, CREATEBRUSHINDIRECT, ELLIPSE.
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/wmf/data/TestPalette.wmf");
@@ -537,6 +538,26 @@ void Test::TestPalette()
                 "color", "#ff0000");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonstroke[2]/line",
                 "width", "132");
+}
+
+void Test::TestRoundrectWMF()
+{
+    // WMF records: ROUNDRECT, SETBKCOLOR, CREATEBRUSHINDIRECT
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/wmf/data/TestRoundRect.wmf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor",
+                "color", "#ffffff");
+
+    assertXPathContent(pDocument, "/primitive2D/metafile/transform/polygonstroke/polygon",
+                       "2865,661 2865,653 2865,645 2865,637 2865,621 2865,613 2865,605 2857,597 2857,589 2857,582 2857,566 2857,558 2849,550 2849,542 2849,534 2841,526 2841,518 2841,510 2833,502 2833,494 2825,486 2825,478 2817,470 2817,462 2809,454 2809,446 2801,438 2801,430 2793,422 2793,422 2785,414 2777,406 2777,398 2769,390 2761,390 2761,382 2753,374 2745,374 2737,366 2737,366 2729,358 2721,350 2714,350 2714,343 2706,343 2698,343 2690,335 2682,335 2682,335 2674,327 2666,327 2658,327 2650,327 2642,319 2634,319 2634,319 2626,319 2618,319 2610,319 573,319 565,319 557,319 549,319 549,319 541,319 533,327 525,327 517,327 509,327 501,335 501,335 493,335 485,343 477,343 469,343 469,350 462,350 454,358 446,366 446,366 438,374 430,374 422,382 422,390 414,390 406,398 406,406 398,414 390,422 390,422 382,430 382,438 374,446 374,454 366,462 366,470 358,478 358,486 350,494 350,502 342,510 342,518 342,526 334,534 334,542 334,550 326,558 326,566 326,582 326,589 326,597 318,605 318,613 318,621 318,637 318,645 318,653 318,661 318,1673 318,1681 318,1689 318,1697 318,1713 318,1721 318,1729 326,1737 326,1745 326,1752 326,1768 326,1776 334,1784 334,1792 334,1800 342,1808 342,1816 342,1824 350,1832 350,1840 358,1848 358,1856 366,1864 366,1872 374,1880 374,1888 382,1896 382,1904 390,1912 390,1912 398,1920 406,1928 406,1936 414,1944 422,1944 422,1952 430,1960 438,1960 446,1968 446,1968 454,1976 462,1984 469,1984 469,1991 477,1991 485,1991 493,1999 501,1999 501,1999 509,2007 517,2007 525,2007 533,2007 541,2015 549,2015 549,2015 557,2015 565,2015 573,2015 2610,2015 2618,2015 2626,2015 2634,2015 2634,2015 2642,2015 2650,2007 2658,2007 2666,2007 2674,2007 2682,1999 2682,1999 2690,1999 2698,1991 2706,1991 2714,1991 2714,1984 2721,1984 2729,1976 2737,1968 2737,1968 2745,1960 2753,1960 2761,1952 2761,1944 2769,1944 2777,1936 2777,1928 2785,1920 2793,1912 2793,1912 2801,1904 2801,1896 2809,1888 2809,1880 2817,1872 2817,1864 2825,1856 2825,1848 2833,1840 2833,1832 2841,1824 2841,1816 2841,1808 2849,1800 2849,1792 2849,1784 2857,1776 2857,1768 2857,1752 2857,1745 2857,1737 2865,1729 2865,1721 2865,1713 2865,1697 2865,1689 2865,1681 2865,1673");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polygonstroke/line",
+                "color", "#000000");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polygonstroke/line",
+                "width", "143");
 }
 
 void Test::TestPolyLineWidth()
