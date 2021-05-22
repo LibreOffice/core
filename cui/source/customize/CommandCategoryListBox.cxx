@@ -44,6 +44,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/SetFlagContextHelper.hxx>
 #include <comphelper/string.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nutil/searchopt.hxx>
 #include <sal/log.hxx>
@@ -222,6 +223,7 @@ void CommandCategoryListBox::FillFunctionsList(
     // Setup search filter parameters
     m_searchOptions.searchString = filterTerm;
     utl::TextSearch textSearch(m_searchOptions);
+    const bool bInExperimentalMode = officecfg::Office::Common::Misc::ExperimentalMode::get();
 
     for (const auto& rInfo : xCommands)
     {
@@ -234,11 +236,17 @@ void CommandCategoryListBox::FillFunctionsList(
             = vcl::CommandInfoProvider::GetTooltipForCommand(rInfo.Command, aProperties, m_xFrame);
         OUString sPopupLabel = (vcl::CommandInfoProvider::GetPopupLabelForCommand(aProperties))
                                    .replaceFirst("~", "");
+        bool bIsExperimental
+            = vcl::CommandInfoProvider::IsExperimental(rInfo.Command, m_sModuleLongName);
+
+        // Hide experimental commands when not in experimental mode
+        bool bHideExperimental = bIsExperimental && !bInExperimentalMode;
 
         // Apply the search filter
-        if (!filterTerm.isEmpty() && !textSearch.searchForward(sUIName)
-            && !textSearch.searchForward(sLabel) && !textSearch.searchForward(sTooltipLabel)
-            && !textSearch.searchForward(sPopupLabel))
+        if (bHideExperimental
+            || (!filterTerm.isEmpty() && !textSearch.searchForward(sUIName)
+                && !textSearch.searchForward(sLabel) && !textSearch.searchForward(sTooltipLabel)
+                && !textSearch.searchForward(sPopupLabel)))
         {
             continue;
         }
