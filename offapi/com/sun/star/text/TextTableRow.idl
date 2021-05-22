@@ -111,7 +111,7 @@ published service TextTableRow
         @since LibreOffice 7.2
      */
 
-        [optional, property, maybevoid] boolean IsNotTracked;
+        [optional, property] boolean IsNotTracked;
 
 };
 
