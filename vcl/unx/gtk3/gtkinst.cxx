@@ -1248,13 +1248,13 @@ Reference< XInterface > GtkInstance::CreateClipboard(const Sequence< Any >& argu
     }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    GdkAtom nSelection = (sel == "CLIPBOARD") ? GDK_SELECTION_CLIPBOARD : GDK_SELECTION_PRIMARY;
+    unsigned int nSelection = (sel == "CLIPBOARD") ? 0 : 1;
 
-    auto it = m_aClipboards.find(nSelection);
-    if (it != m_aClipboards.end())
-        return it->second;
+    if (m_aClipboards[nSelection].is())
+        return m_aClipboards[nSelection];
 
-    Reference<XInterface> xClipboard(static_cast<cppu::OWeakObject *>(new VclGtkClipboard(nSelection)));
+    GdkAtom nAtom = nSelection == 0 ? GDK_SELECTION_CLIPBOARD : GDK_SELECTION_PRIMARY;
+    Reference<XInterface> xClipboard(static_cast<cppu::OWeakObject *>(new VclGtkClipboard(nAtom)));
     m_aClipboards[nSelection] = xClipboard;
     return xClipboard;
 #else

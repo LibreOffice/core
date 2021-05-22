@@ -263,7 +263,7 @@ public:
 private:
     GtkSalTimer *m_pTimer;
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    std::unordered_map< GdkAtom, css::uno::Reference<css::uno::XInterface> > m_aClipboards;
+    css::uno::Reference<css::uno::XInterface> m_aClipboards[2];
 #endif
     bool                        IsTimerExpired();
     bool                        bNeedsInit;
