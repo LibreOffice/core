@@ -23,6 +23,7 @@
 #include <undobj.hxx>
 #include <swundo.hxx>
 #include <numrule.hxx>
+#include <memory>
 
 class SwDoc;
 class SwTextFormatColl;
@@ -36,7 +37,7 @@ protected:
     OUString m_sDerivedFrom;
     SwDoc& m_rDoc;
     mutable OUString m_sNewName;
-    SfxItemSet * m_pNewSet;
+    std::unique_ptr<SfxItemSet> m_pNewSet;
     sal_uInt16 m_nId;     // FormatId related
     bool m_bAuto;
 
