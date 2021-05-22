@@ -14621,14 +14621,10 @@ public:
 
 std::unique_ptr<weld::Label> GtkInstanceFrame::weld_label_widget() const
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
     GtkWidget* pLabel = gtk_frame_get_label_widget(m_pFrame);
     if (!pLabel || !GTK_IS_LABEL(pLabel))
         return nullptr;
     return std::make_unique<GtkInstanceLabel>(GTK_LABEL(pLabel), m_pBuilder, false);
-#else
-    return nullptr;
-#endif
 }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
@@ -18987,16 +18983,11 @@ public:
 
     virtual std::unique_ptr<weld::Frame> weld_frame(const OString &id) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkFrame* pFrame = GTK_FRAME(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pFrame)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pFrame));
         return std::make_unique<GtkInstanceFrame>(pFrame, this, false);
-#else
-        (void)id;
-        return nullptr;
-#endif
     }
 
     virtual std::unique_ptr<weld::ScrolledWindow> weld_scrolled_window(const OString &id, bool bUserManagedScrolling = false) override
