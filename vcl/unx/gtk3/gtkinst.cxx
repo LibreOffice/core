@@ -643,15 +643,26 @@ sal_Bool SAL_CALL GtkTransferable::isDataFlavorSupported(const css::datatransfer
 
 namespace {
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
+GdkClipboard* clipboard_get(SelectionType eSelection)
+{
+#if GTK_CHECK_VERSION(4, 0, 0)
+    if (eSelection == SELECTION_CLIPBOARD)
+        return gdk_display_get_clipboard(gdk_display_get_default());
+    return gdk_display_get_primary_clipboard(gdk_display_get_default());
+#else
+    return gtk_clipboard_get(eSelection == SELECTION_CLIPBOARD ? GDK_SELECTION_CLIPBOARD : GDK_SELECTION_PRIMARY);
+#endif
+}
+
 class GtkClipboardTransferable : public GtkTransferable
 {
 private:
-    GdkAtom m_nSelection;
+    SelectionType m_eSelection;
+
 public:
 
-    explicit GtkClipboardTransferable(GdkAtom nSelection)
-        : m_nSelection(nSelection)
+    explicit GtkClipboardTransferable(SelectionType eSelection)
+        : m_eSelection(eSelection)
     {
     }
 
@@ -662,18 +673,23 @@ public:
     virtual css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override
     {
         css::uno::Any aRet;
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        GdkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
+        GdkClipboard* clipboard = clipboard_get(m_eSelection);
         if (rFlavor.MimeType == "text/plain;charset=utf-16")
         {
+#if !GTK_CHECK_VERSION(4, 0, 0)
             OUString aStr;
             gchar *pText = gtk_clipboard_wait_for_text(clipboard);
             if (pText)
                 aStr = OUString(pText, strlen(pText), RTL_TEXTENCODING_UTF8);
             g_free(pText);
             aRet <<= aStr.replaceAll("\r\n", "\n");
+#else
+            (void)clipboard;
+            //TODO gdk_clipboard_read_text_async
+#endif
             return aRet;
         }
+#if !GTK_CHECK_VERSION(4, 0, 0)
 
         auto it = m_aMimeTypeToAtom.find(rFlavor.MimeType);
         if (it == m_aMimeTypeToAtom.end())
@@ -691,8 +707,8 @@ public:
         Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(rawdata), length);
         gtk_selection_data_free(data);
         aRet <<= aSeq;
-        return aRet;
 #endif
+        return aRet;
     }
 
     std::vector<css::datatransfer::DataFlavor> getTransferDataFlavorsAsVector()
@@ -701,7 +717,7 @@ public:
         std::vector<css::datatransfer::DataFlavor> aVector;
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-        GdkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
+        GdkClipboard* clipboard = clipboard_get(m_eSelection);
 
         GdkAtom *targets;
         gint n_targets;
@@ -715,7 +731,6 @@ public:
         return aVector;
     }
 };
-#endif
 
 class VclGtkClipboard :
         public cppu::WeakComponentImplHelper<
@@ -723,13 +738,9 @@ class VclGtkClipboard :
         datatransfer::clipboard::XFlushableClipboard,
         XServiceInfo>
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    GdkAtom                                                  m_nSelection;
-#endif
+    SelectionType                                            m_eSelection;
     osl::Mutex                                               m_aMutex;
-#if !GTK_CHECK_VERSION(4, 0, 0)
     gulong                                                   m_nOwnerChangedSignalId;
-#endif
     ImplSVEvent*                                             m_pSetClipboardEvent;
     Reference<css::datatransfer::XTransferable>              m_aContents;
     Reference<css::datatransfer::clipboard::XClipboardOwner> m_aOwner;
@@ -742,11 +753,7 @@ class VclGtkClipboard :
     DECL_LINK(AsyncSetGtkClipboard, void*, void);
 public:
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    explicit VclGtkClipboard(GdkAtom nSelection);
-#else
-    explicit VclGtkClipboard();
-#endif
+    explicit VclGtkClipboard(SelectionType eSelection);
     virtual ~VclGtkClipboard() override;
 
     /*
@@ -791,8 +798,8 @@ public:
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
     void ClipboardGet(GtkSelectionData *selection_data, guint info);
-    void OwnerPossiblyChanged(GtkClipboard *clipboard);
 #endif
+    void OwnerPossiblyChanged(GdkClipboard *clipboard);
     void ClipboardClear();
     void SetGtkClipboard();
     void SyncGtkClipboard();
@@ -818,14 +825,12 @@ sal_Bool VclGtkClipboard::supportsService( const OUString& ServiceName )
 
 Reference< css::datatransfer::XTransferable > VclGtkClipboard::getContents()
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
     if (!m_aContents.is())
     {
         //tdf#93887 This is the system clipboard/selection. We fetch it when we are not
         //the owner of the clipboard and have not already fetched it.
-        m_aContents = new GtkClipboardTransferable(m_nSelection);
+        m_aContents = new GtkClipboardTransferable(m_eSelection);
     }
-#endif
     return m_aContents;
 }
 
@@ -859,9 +864,7 @@ namespace
         return sPID;
     }
 }
-#endif
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
 namespace
 {
     void ClipboardGetFunc(GdkClipboard* /*clipboard*/, GtkSelectionData *selection_data,
@@ -877,8 +880,12 @@ namespace
         VclGtkClipboard* pThis = static_cast<VclGtkClipboard*>(user_data_or_owner);
         pThis->ClipboardClear();
     }
+}
+#endif
 
-    void handle_owner_change(GtkClipboard *clipboard, GdkEvent* /*event*/, gpointer user_data)
+namespace
+{
+    void handle_owner_change(GdkClipboard *clipboard, GdkEvent* /*event*/, gpointer user_data)
     {
         VclGtkClipboard* pThis = static_cast<VclGtkClipboard*>(user_data);
         pThis->OwnerPossiblyChanged(clipboard);
@@ -902,6 +909,7 @@ void VclGtkClipboard::OwnerPossiblyChanged(GdkClipboard* clipboard)
     //avoid possible recursion
     g_signal_handler_disconnect(clipboard, m_nOwnerChangedSignalId);
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     OString sTunnel = "application/x-libreoffice-internal-id-" + getPID();
     GdkAtom *targets;
     gint n_targets;
@@ -919,9 +927,15 @@ void VclGtkClipboard::OwnerPossiblyChanged(GdkClipboard* clipboard)
 
         g_free(targets);
     }
+#endif
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+    m_nOwnerChangedSignalId = g_signal_connect(clipboard, "notify::formats",
+                                               G_CALLBACK(handle_owner_change), this);
+#else
     m_nOwnerChangedSignalId = g_signal_connect(clipboard, "owner-change",
                                                G_CALLBACK(handle_owner_change), this);
+#endif
 
     if (!bSelf)
     {
@@ -931,7 +945,6 @@ void VclGtkClipboard::OwnerPossiblyChanged(GdkClipboard* clipboard)
                     Reference<css::datatransfer::clipboard::XClipboardOwner>());
     }
 }
-#endif
 
 void VclGtkClipboard::ClipboardClear()
 {
@@ -1025,21 +1038,18 @@ void VclToGtkHelper::setSelectionData(const Reference<css::datatransfer::XTransf
 }
 #endif
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-VclGtkClipboard::VclGtkClipboard(GdkAtom nSelection)
-#else
-VclGtkClipboard::VclGtkClipboard()
-#endif
+VclGtkClipboard::VclGtkClipboard(SelectionType eSelection)
     : cppu::WeakComponentImplHelper<datatransfer::clipboard::XSystemClipboard,
                                     datatransfer::clipboard::XFlushableClipboard, XServiceInfo>
         (m_aMutex)
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    , m_nSelection(nSelection)
-#endif
+    , m_eSelection(eSelection)
     , m_pSetClipboardEvent(nullptr)
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    GdkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
+    GdkClipboard* clipboard = clipboard_get(m_eSelection);
+#if GTK_CHECK_VERSION(4, 0, 0)
+    m_nOwnerChangedSignalId = g_signal_connect(clipboard, "notify::formats",
+                                               G_CALLBACK(handle_owner_change), this);
+#else
     m_nOwnerChangedSignalId = g_signal_connect(clipboard, "owner-change",
                                                G_CALLBACK(handle_owner_change), this);
 #endif
@@ -1050,10 +1060,10 @@ void VclGtkClipboard::flushClipboard()
 #if !GTK_CHECK_VERSION(4, 0, 0)
     SolarMutexGuard aGuard;
 
-    if (GDK_SELECTION_CLIPBOARD != m_nSelection)
+    if (m_eSelection != SELECTION_CLIPBOARD)
         return;
 
-    GdkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
+    GdkClipboard* clipboard = clipboard_get(m_eSelection);
     gtk_clipboard_store(clipboard);
 #endif
 }
@@ -1061,7 +1071,7 @@ void VclGtkClipboard::flushClipboard()
 VclGtkClipboard::~VclGtkClipboard()
 {
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    GdkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
+    GdkClipboard* clipboard = clipboard_get(m_eSelection);
     g_signal_handler_disconnect(clipboard, m_nOwnerChangedSignalId);
     if (!m_aGtkTargets.empty())
     {
@@ -1135,7 +1145,7 @@ void VclGtkClipboard::SyncGtkClipboard()
 void VclGtkClipboard::SetGtkClipboard()
 {
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    GdkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
+    GdkClipboard* clipboard = clipboard_get(m_eSelection);
     gtk_clipboard_set_with_data(clipboard, m_aGtkTargets.data(), m_aGtkTargets.size(),
                                 ClipboardGetFunc, ClipboardClearFunc, this);
     gtk_clipboard_set_can_store(clipboard, m_aGtkTargets.data(), m_aGtkTargets.size());
@@ -1162,7 +1172,7 @@ void VclGtkClipboard::setContents(
     datatransfer::clipboard::ClipboardEvent aEv;
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    GdkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
+    GdkClipboard* clipboard = clipboard_get(m_eSelection);
     if (!m_aGtkTargets.empty())
     {
         gtk_clipboard_clear(clipboard);
@@ -1203,11 +1213,7 @@ void VclGtkClipboard::setContents(
 
 OUString VclGtkClipboard::getName()
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    return (m_nSelection == GDK_SELECTION_CLIPBOARD) ? OUString("CLIPBOARD") : OUString("PRIMARY");
-#else
-    return "CLIPBOARD";
-#endif
+    return (m_eSelection == SELECTION_CLIPBOARD) ? OUString("CLIPBOARD") : OUString("PRIMARY");
 }
 
 sal_Int8 VclGtkClipboard::getRenderingCapabilities()
@@ -1247,19 +1253,14 @@ Reference< XInterface > GtkInstance::CreateClipboard(const Sequence< Any >& argu
             css::uno::Reference<css::uno::XInterface>(), -1);
     }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    unsigned int nSelection = (sel == "CLIPBOARD") ? 0 : 1;
+    SelectionType eSelection = (sel == "CLIPBOARD") ? SELECTION_CLIPBOARD : SELECTION_PRIMARY;
 
-    if (m_aClipboards[nSelection].is())
-        return m_aClipboards[nSelection];
+    if (m_aClipboards[eSelection].is())
+        return m_aClipboards[eSelection];
 
-    GdkAtom nAtom = nSelection == 0 ? GDK_SELECTION_CLIPBOARD : GDK_SELECTION_PRIMARY;
-    Reference<XInterface> xClipboard(static_cast<cppu::OWeakObject *>(new VclGtkClipboard(nAtom)));
-    m_aClipboards[nSelection] = xClipboard;
+    Reference<XInterface> xClipboard(static_cast<cppu::OWeakObject *>(new VclGtkClipboard(eSelection)));
+    m_aClipboards[eSelection] = xClipboard;
     return xClipboard;
-#else
-    return nullptr;
-#endif
 }
 
 GtkInstDropTarget::GtkInstDropTarget()
