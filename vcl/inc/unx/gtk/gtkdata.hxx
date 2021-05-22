@@ -116,6 +116,10 @@ typedef double gtk_coord;
 typedef int gtk_coord;
 #endif
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
+typedef GtkClipboard GdkClipboard;
+#endif
+
 class GtkSalTimer final : public SalTimer
 {
     struct SalGtkTimeoutSource *m_pTimeout;
