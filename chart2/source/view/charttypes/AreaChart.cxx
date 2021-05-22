@@ -664,8 +664,7 @@ void AreaChart::createShapes()
                 {
                     std::map< sal_Int32, double >& rLogicYSumMap = aLogicYSumMapByX[nIndex];
                     sal_Int32 nAttachedAxisIndex = pSeries->getAttachedAxisIndex();
-                    if( rLogicYSumMap.find(nAttachedAxisIndex)==rLogicYSumMap.end() )
-                        rLogicYSumMap[nAttachedAxisIndex]=0.0;
+                    rLogicYSumMap.insert({nAttachedAxisIndex, 0.0});
 
                     m_pPosHelper = &getPlottingPositionHelper(nAttachedAxisIndex);
 

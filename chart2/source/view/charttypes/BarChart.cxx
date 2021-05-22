@@ -518,8 +518,7 @@ void BarChart::createShapes()
             for( auto& rXSlot : rZSlot )
             {
                 sal_Int32 nAttachedAxisIndex = rXSlot.getAttachedAxisIndexForFirstSeries();
-                if( aLogicYSumMap.find(nAttachedAxisIndex)==aLogicYSumMap.end() )
-                    aLogicYSumMap[nAttachedAxisIndex]=0.0;
+                aLogicYSumMap.insert({nAttachedAxisIndex, 0.0});
 
                 const sal_Int32 nSlotPoints = rXSlot.getPointCount();
                 if( nPointIndex >= nSlotPoints )

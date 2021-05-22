@@ -369,8 +369,7 @@ void NetChart::createShapes()
                         pSeries->doSortByXValues();
 
                     sal_Int32 nAttachedAxisIndex = pSeries->getAttachedAxisIndex();
-                    if( aLogicYSumMap.find(nAttachedAxisIndex)==aLogicYSumMap.end() )
-                        aLogicYSumMap[nAttachedAxisIndex]=0.0;
+                    aLogicYSumMap.insert({nAttachedAxisIndex, 0.0});
 
                     m_pPosHelper = &getPlottingPositionHelper(nAttachedAxisIndex);
 
