@@ -27,7 +27,7 @@ namespace emfio
     class EmfReader : public MtfTools
     {
     private:
-        sal_Int32   mnRecordCount;
+        sal_uInt32   mnRecordCount;
 
         bool        mbRecordPath : 1;
         bool        mbEMFPlus : 1;
