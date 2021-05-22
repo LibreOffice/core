@@ -31,7 +31,7 @@
 SwUndoFormatCreate::SwUndoFormatCreate
 (SwUndoId nUndoId, SwFormat * _pNew, SwFormat const * _pDerivedFrom, SwDoc& rDoc)
     : SwUndo(nUndoId, &rDoc), m_pNew(_pNew),
-      m_rDoc(rDoc), m_pNewSet(nullptr), m_nId(0), m_bAuto(false)
+      m_rDoc(rDoc), m_nId(0), m_bAuto(false)
 {
     if (_pDerivedFrom)
         m_sDerivedFrom = _pDerivedFrom->GetName();
@@ -54,7 +54,7 @@ void SwUndoFormatCreate::UndoImpl(::sw::UndoRedoContext &)
 
     if (m_pNew)
     {
-        m_pNewSet = new SfxItemSet(m_pNew->GetAttrSet());
+        m_pNewSet.reset(new SfxItemSet(m_pNew->GetAttrSet()));
         m_nId = m_pNew->GetPoolFormatId() & COLL_GET_RANGE_BITS;
         m_bAuto = m_pNew->IsAuto();
 
