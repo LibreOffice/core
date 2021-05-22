@@ -663,7 +663,7 @@ public:
     {
         css::uno::Any aRet;
 #if !GTK_CHECK_VERSION(4, 0, 0)
-        GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
+        GdkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
         if (rFlavor.MimeType == "text/plain;charset=utf-16")
         {
             OUString aStr;
@@ -701,7 +701,7 @@ public:
         std::vector<css::datatransfer::DataFlavor> aVector;
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-        GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
+        GdkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
 
         GdkAtom *targets;
         gint n_targets;
@@ -864,7 +864,7 @@ namespace
 #if !GTK_CHECK_VERSION(4, 0, 0)
 namespace
 {
-    void ClipboardGetFunc(GtkClipboard* /*clipboard*/, GtkSelectionData *selection_data,
+    void ClipboardGetFunc(GdkClipboard* /*clipboard*/, GtkSelectionData *selection_data,
                           guint info,
                           gpointer user_data_or_owner)
     {
@@ -872,7 +872,7 @@ namespace
         pThis->ClipboardGet(selection_data, info);
     }
 
-    void ClipboardClearFunc(GtkClipboard* /*clipboard*/, gpointer user_data_or_owner)
+    void ClipboardClearFunc(GdkClipboard* /*clipboard*/, gpointer user_data_or_owner)
     {
         VclGtkClipboard* pThis = static_cast<VclGtkClipboard*>(user_data_or_owner);
         pThis->ClipboardClear();
@@ -885,7 +885,7 @@ namespace
     }
 }
 
-void VclGtkClipboard::OwnerPossiblyChanged(GtkClipboard* clipboard)
+void VclGtkClipboard::OwnerPossiblyChanged(GdkClipboard* clipboard)
 {
     SyncGtkClipboard(); // tdf#138183 do any pending SetGtkClipboard calls
     if (!m_aContents.is())
@@ -1039,7 +1039,7 @@ VclGtkClipboard::VclGtkClipboard()
     , m_pSetClipboardEvent(nullptr)
 {
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
+    GdkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
     m_nOwnerChangedSignalId = g_signal_connect(clipboard, "owner-change",
                                                G_CALLBACK(handle_owner_change), this);
 #endif
@@ -1053,7 +1053,7 @@ void VclGtkClipboard::flushClipboard()
     if (GDK_SELECTION_CLIPBOARD != m_nSelection)
         return;
 
-    GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
+    GdkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
     gtk_clipboard_store(clipboard);
 #endif
 }
@@ -1061,7 +1061,7 @@ void VclGtkClipboard::flushClipboard()
 VclGtkClipboard::~VclGtkClipboard()
 {
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
+    GdkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
     g_signal_handler_disconnect(clipboard, m_nOwnerChangedSignalId);
     if (!m_aGtkTargets.empty())
     {
@@ -1135,7 +1135,7 @@ void VclGtkClipboard::SyncGtkClipboard()
 void VclGtkClipboard::SetGtkClipboard()
 {
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
+    GdkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
     gtk_clipboard_set_with_data(clipboard, m_aGtkTargets.data(), m_aGtkTargets.size(),
                                 ClipboardGetFunc, ClipboardClearFunc, this);
     gtk_clipboard_set_can_store(clipboard, m_aGtkTargets.data(), m_aGtkTargets.size());
@@ -1162,7 +1162,7 @@ void VclGtkClipboard::setContents(
     datatransfer::clipboard::ClipboardEvent aEv;
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
+    GdkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
     if (!m_aGtkTargets.empty())
     {
         gtk_clipboard_clear(clipboard);
@@ -14627,9 +14627,16 @@ std::unique_ptr<weld::Label> GtkInstanceFrame::weld_label_widget() const
     return std::make_unique<GtkInstanceLabel>(GTK_LABEL(pLabel), m_pBuilder, false);
 }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-
 namespace {
+
+GdkClipboard* widget_get_clipboard(GtkWidget* pWidget)
+{
+#if GTK_CHECK_VERSION(4, 0, 0)
+    return gtk_widget_get_clipboard(pWidget);
+#else
+    return gtk_widget_get_clipboard(pWidget, GDK_SELECTION_CLIPBOARD);
+#endif
+}
 
 class GtkInstanceTextView : public GtkInstanceWidget, public virtual weld::TextView
 {
@@ -14645,6 +14652,7 @@ private:
     gulong m_nHasSelectionSignalId; // we don't disable/enable this one, it's to implement
                                     // auto-scroll to cursor on losing selection
     gulong m_nVAdjustChangedSignalId;
+#if !GTK_CHECK_VERSION(4, 0, 0)
     gulong m_nButtonPressEvent; // we don't disable/enable this one, it's to block mouse
                                 // click down from getting to (potential) toplevel
                                 // GtkSalFrame parent, which grabs focus away
@@ -14654,6 +14662,7 @@ private:
         // e.g. on clicking on the help TextView in OTableDesignHelpBar the currently displayed text shouldn't disappear
         return true;
     }
+#endif
 
     static void signalChanged(GtkTextBuffer*, gpointer widget)
     {
@@ -14733,7 +14742,9 @@ public:
         , m_nCursorPosSignalId(g_signal_connect(m_pTextBuffer, "notify::cursor-position", G_CALLBACK(signalCursorPosition), this))
         , m_nHasSelectionSignalId(g_signal_connect(m_pTextBuffer, "notify::has-selection", G_CALLBACK(signalHasSelection), this))
         , m_nVAdjustChangedSignalId(g_signal_connect(m_pVAdjustment, "value-changed", G_CALLBACK(signalVAdjustValueChanged), this))
+#if !GTK_CHECK_VERSION(4, 0, 0)
         , m_nButtonPressEvent(g_signal_connect_after(m_pTextView, "button-press-event", G_CALLBACK(signalButtonPressEvent), this))
+#endif
     {
     }
 
@@ -14875,22 +14886,19 @@ public:
 
     virtual void cut_clipboard() override
     {
-        GtkClipboard *pClipboard = gtk_widget_get_clipboard(GTK_WIDGET(m_pTextView),
-                                                            GDK_SELECTION_CLIPBOARD);
+        GdkClipboard *pClipboard = widget_get_clipboard(GTK_WIDGET(m_pTextView));
         gtk_text_buffer_cut_clipboard(m_pTextBuffer, pClipboard, get_editable());
     }
 
     virtual void copy_clipboard() override
     {
-        GtkClipboard *pClipboard = gtk_widget_get_clipboard(GTK_WIDGET(m_pTextView),
-                                                            GDK_SELECTION_CLIPBOARD);
+        GdkClipboard *pClipboard = widget_get_clipboard(GTK_WIDGET(m_pTextView));
         gtk_text_buffer_copy_clipboard(m_pTextBuffer, pClipboard);
     }
 
     virtual void paste_clipboard() override
     {
-        GtkClipboard *pClipboard = gtk_widget_get_clipboard(GTK_WIDGET(m_pTextView),
-                                                            GDK_SELECTION_CLIPBOARD);
+        GdkClipboard *pClipboard = widget_get_clipboard(GTK_WIDGET(m_pTextView));
         gtk_text_buffer_paste_clipboard(m_pTextBuffer, pClipboard, nullptr, get_editable());
     }
 
@@ -14957,7 +14965,9 @@ public:
 
     virtual ~GtkInstanceTextView() override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         g_signal_handler_disconnect(m_pTextView, m_nButtonPressEvent);
+#endif
         g_signal_handler_disconnect(m_pVAdjustment, m_nVAdjustChangedSignalId);
         g_signal_handler_disconnect(m_pTextBuffer, m_nInsertTextSignalId);
         g_signal_handler_disconnect(m_pTextBuffer, m_nChangedSignalId);
@@ -14965,6 +14975,12 @@ public:
         g_signal_handler_disconnect(m_pTextBuffer, m_nHasSelectionSignalId);
     }
 };
+
+}
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
+
+namespace {
 
 // IMHandler
 class IMHandler;
@@ -19274,16 +19290,11 @@ public:
 
     virtual std::unique_ptr<weld::TextView> weld_text_view(const OString &id) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkTextView* pTextView = GTK_TEXT_VIEW(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pTextView)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pTextView));
         return std::make_unique<GtkInstanceTextView>(pTextView, this, false);
-#else
-        (void)id;
-        return nullptr;
-#endif
     }
 
     virtual std::unique_ptr<weld::Expander> weld_expander(const OString &id) override
@@ -19435,6 +19446,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
     if (rUIFile != "cui/ui/hyphenate.ui" &&
         rUIFile != "cui/ui/percentdialog.ui" &&
         rUIFile != "sfx/ui/querysavedialog.ui" &&
+        rUIFile != "sfx/ui/licensedialog.ui" &&
         rUIFile != "svt/ui/javadisableddialog.ui" &&
         rUIFile != "modules/smath/ui/alignmentdialog.ui" &&
         rUIFile != "modules/smath/ui/fontsizedialog.ui" &&
