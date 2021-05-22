@@ -22,19 +22,11 @@
 #include "scdlgfact.hxx"
 #include <sal/types.h>
 
-namespace scui
-{
-static ScAbstractDialogFactory_Impl* GetFactory()
-{
-    static ScAbstractDialogFactory_Impl* pFactory = new ScAbstractDialogFactory_Impl;
-    return pFactory;
-}
-}
-
 extern "C" {
 SAL_DLLPUBLIC_EXPORT ScAbstractDialogFactory* ScCreateDialogFactory()
 {
-    return ::scui::GetFactory();
+    static ScAbstractDialogFactory_Impl aFactory;
+    return &aFactory;
 }
 }
 
