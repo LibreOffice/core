@@ -6083,9 +6083,9 @@ public:
 }
 #if !GTK_CHECK_VERSION(4, 0, 0)
 
-static GType crippled_viewport_get_type();
+static GType immobilized_viewport_get_type();
 
-#define CRIPPLED_TYPE_VIEWPORT            (crippled_viewport_get_type ())
+#define CRIPPLED_TYPE_VIEWPORT            (immobilized_viewport_get_type ())
 #define CRIPPLED_VIEWPORT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), CRIPPLED_TYPE_VIEWPORT, CrippledViewport))
 #ifndef NDEBUG
 #   define CRIPPLED_IS_VIEWPORT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), CRIPPLED_TYPE_VIEWPORT))
@@ -6139,7 +6139,7 @@ static void viewport_set_adjustment(CrippledViewport *viewport,
 }
 
 static void
-crippled_viewport_set_property(GObject* object,
+immobilized_viewport_set_property(GObject* object,
                                guint prop_id,
                                const GValue* value,
                                GParamSpec* /*pspec*/)
@@ -6164,7 +6164,7 @@ crippled_viewport_set_property(GObject* object,
 }
 
 static void
-crippled_viewport_get_property(GObject* object,
+immobilized_viewport_get_property(GObject* object,
                                guint prop_id,
                                GValue* value,
                                GParamSpec* /*pspec*/)
@@ -6191,13 +6191,13 @@ crippled_viewport_get_property(GObject* object,
     }
 }
 
-static void crippled_viewport_class_init(GtkViewportClass *klass)
+static void immobilized_viewport_class_init(GtkViewportClass *klass)
 {
     GObjectClass* o_class = G_OBJECT_CLASS(klass);
 
     /* GObject signals */
-    o_class->set_property = crippled_viewport_set_property;
-    o_class->get_property = crippled_viewport_get_property;
+    o_class->set_property = immobilized_viewport_set_property;
+    o_class->get_property = immobilized_viewport_get_property;
 
     /* Properties */
     g_object_class_override_property(o_class, PROP_HADJUSTMENT,    "hadjustment");
@@ -6206,7 +6206,7 @@ static void crippled_viewport_class_init(GtkViewportClass *klass)
     g_object_class_override_property(o_class, PROP_VSCROLL_POLICY, "vscroll-policy");
 }
 
-GType crippled_viewport_get_type()
+GType immobilized_viewport_get_type()
 {
     static GType type = 0;
 
@@ -6217,7 +6217,7 @@ GType crippled_viewport_get_type()
             sizeof (GtkViewportClass),
             nullptr,  /* base init */
             nullptr,  /* base finalize */
-            reinterpret_cast<GClassInitFunc>(crippled_viewport_class_init), /* class init */
+            reinterpret_cast<GClassInitFunc>(immobilized_viewport_class_init), /* class init */
             nullptr, /* class finalize */
             nullptr,                   /* class data */
             sizeof (CrippledViewport), /* instance size */
@@ -6623,7 +6623,7 @@ public:
         gtk_container_remove(GTK_CONTAINER(pViewport), pChild);
         g_object_ref(pViewport);
         gtk_container_remove(GTK_CONTAINER(m_pScrolledWindow), pViewport);
-        GtkWidget* pNewViewport = GTK_WIDGET(g_object_new(crippled_viewport_get_type(), nullptr));
+        GtkWidget* pNewViewport = GTK_WIDGET(g_object_new(immobilized_viewport_get_type(), nullptr));
         gtk_widget_show(pNewViewport);
         gtk_container_add(GTK_CONTAINER(m_pScrolledWindow), pNewViewport);
         gtk_container_add(GTK_CONTAINER(pNewViewport), pChild);
