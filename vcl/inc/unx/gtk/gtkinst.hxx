@@ -200,6 +200,8 @@ public:
     css::uno::Reference<css::datatransfer::XTransferable> const & GetTransferrable() const { return m_xTrans; }
 };
 
+enum SelectionType { SELECTION_CLIPBOARD = 0, SELECTION_PRIMARY = 1 };
+
 class GtkSalTimer;
 class GtkInstance final : public SvpSalInstance
 {
@@ -262,9 +264,7 @@ public:
 
 private:
     GtkSalTimer *m_pTimer;
-#if !GTK_CHECK_VERSION(4, 0, 0)
     css::uno::Reference<css::uno::XInterface> m_aClipboards[2];
-#endif
     bool                        IsTimerExpired();
     bool                        bNeedsInit;
     cairo_font_options_t*       m_pLastCairoFontOptions;
