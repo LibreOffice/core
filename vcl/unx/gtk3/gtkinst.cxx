@@ -18969,16 +18969,11 @@ public:
 
     virtual std::unique_ptr<weld::Paned> weld_paned(const OString &id) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkPaned* pPaned = GTK_PANED(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pPaned)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pPaned));
         return std::make_unique<GtkInstancePaned>(pPaned, this, false);
-#else
-        (void)id;
-        return nullptr;
-#endif
     }
 
     virtual std::unique_ptr<weld::Frame> weld_frame(const OString &id) override
