@@ -292,7 +292,10 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs, const SalLayoutGlyphsIm
     if (rArgs.mnEndCharPos - rArgs.mnMinCharPos <= 0)
         return true;
 
-    if (pGlyphs)
+    // Pre-computed glyph items for fallback layouts have been simplified.
+    // Simplified layout does not contain missing glyphs, and prevent
+    // further fallback.
+    if (pGlyphs && !(SalLayoutFlags::ForFallback & rArgs.mnFlags))
     {
         // Work with pre-computed glyph items.
         m_GlyphItems = *pGlyphs;
