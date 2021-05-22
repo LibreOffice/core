@@ -478,6 +478,7 @@ void DesktopLOKTest::testGetStyles()
             CPPUNIT_FAIL("Unknown style family: " + rPair.first);
         }
     }
+    free(pJSON);
 }
 
 void DesktopLOKTest::testGetFonts()
@@ -1031,7 +1032,9 @@ void DesktopLOKTest::testSheetOperations()
     std::vector<OString> aExpected = { "FirstSheet", "Renamed", "Sheet3", "Sheet4", "Sheet5", "LastSheet" };
     for (int i = 0; i < 6; ++i)
     {
-        CPPUNIT_ASSERT_EQUAL(aExpected[i], OString(pDocument->pClass->getPartName(pDocument, i)));
+        char* pPartName = pDocument->pClass->getPartName(pDocument, i);
+        CPPUNIT_ASSERT_EQUAL(aExpected[i], OString(pPartName));
+        free(pPartName);
     }
 }
 
