@@ -40,8 +40,6 @@ endif
 gb_Executable_FILENAMES := $(patsubst soffice_exe:soffice_exe%,soffice_exe:soffice.exe,$(gb_Executable_FILENAMES))
 gb_Executable_FILENAMES := $(patsubst soffice_com:soffice_com%,soffice_com:soffice.com,$(gb_Executable_FILENAMES))
 
-gb_Executable_FILENAMES_FOR_BUILD := $(subst $(gb_Executable_EXT),$(gb_Executable_EXT_for_build),$(gb_Executable_FILENAMES))
-
 # fixes for .jnilibs on macOS that are not also needed as .dylibs:
 ifeq ($(OS),MACOSX)
 gb_Library_FILENAMES := \
@@ -99,5 +97,8 @@ gb_Library_FILENAMES := $(filter-out $(foreach lib,$(gb_Library_LIBLIBFILENAMES)
 gb_Library_FILENAMES += $(foreach lib,$(gb_Library_LIBLIBFILENAMES),$(lib):lib$(lib).dll)
 
 endif # ifeq ($(OS),WNT)
+
+gb_Executable_FILENAMES_FOR_BUILD := $(subst $(gb_Executable_EXT),$(gb_Executable_EXT_for_build),$(gb_Executable_FILENAMES))
+gb_Library_FILENAMES_FOR_BUILD := $(subst $(gb_Library_PLAINEXT),$(gb_Library_PLAINEXT_FOR_BUILD),$(gb_Library_FILENAMES))
 
 # vim: set noet sw=4 ts=4:

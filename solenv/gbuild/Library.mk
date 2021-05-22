@@ -35,6 +35,13 @@ gb_Library_LAYER_DIRS := \
 	OXT:$(WORKDIR)/LinkTarget/ExtensionLibrary \
 	NONE:$(gb_Library_DLLDIR) \
 
+gb_Library_LAYER_DIRS_FOR_BUILD := \
+	URELIB:$(INSTROOT_FOR_BUILD)/$(LIBO_URE_LIB_FOLDER_FOR_BUILD) \
+	OOO:$(INSTROOT_FOR_BUILD)/$(LIBO_LIB_FOLDER_FOR_BUILD) \
+	SHLXTHDL:$(INSTROOT_FOR_BUILD)/$(LIBO_LIB_FOLDER_FOR_BUILD)/shlxthdl \
+	OXT:$(WORKDIR_FOR_BUILD)/LinkTarget/ExtensionLibrary \
+	NONE:$(gb_Library_DLLDIR_FOR_BUILD) \
+
 # EVIL: gb_StaticLibrary and gb_Library need the same deliver rule because they are indistinguishable on windows
 .PHONY : $(WORKDIR)/Clean/Library/%
 $(WORKDIR)/Clean/Library/% :
@@ -43,7 +50,9 @@ $(WORKDIR)/Clean/Library/% :
 			$(AUXTARGETS))
 
 gb_Library__get_dir_for_layer = $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Library_LAYER_DIRS)))
+gb_Library__get_dir_for_layer_for_build = $(patsubst $(1):%,%,$(filter $(1):%,$(call gb_Library_LAYER_DIRS_FOR_BUILD)))
 gb_Library_get_instdir = $(call gb_Library__get_dir_for_layer,$(call gb_Library_get_layer,$(1)))
+gb_Library_get_instdir_for_build = $(call gb_Library__get_dir_for_layer_for_build,$(call gb_Library_get_layer,$(1)))
 
 gb_Library_get_ilib_target = $(if $(filter $(1),$(gb_Library_RTVERLIBS) $(gb_Library_UNOVERLIBS)),$(call gb_Library_get_sdk_link_dir)/$(call gb_Library_get_ilibfilename,$(1)),$(gb_Library_DLLDIR)/$(call gb_Library_get_ilibfilename,$(1)))
 
@@ -161,6 +170,7 @@ gb_Library__COMPONENTPREFIXES := \
 
 
 gb_Library_get_runtime_filename = $(call gb_Library_get_filename,$(1))
+gb_Library_get_runtime_filename_for_build = $(call gb_Library_get_filename_for_build,$(1))
 
 # forward the call to the gb_LinkTarget implementation
 # (note: because the function name is in $(1), the other args are shifted by 1)

@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Library_Library,$(gb_CPPU_ENV)_uno))
+$(eval $(call gb_Library_Library,$(CPPU_ENV)_uno))
 
 ifeq ($(CPUNAME),ARM)
 
@@ -28,7 +28,7 @@ bridges_SELECTED_BRIDGE := gcc3_linux_aarch64
 bridge_asm_objects := vtableslotcall
 bridge_exception_objects := abi cpp2uno uno2cpp
 
-$(eval $(call gb_Library_add_exception_objects,$(gb_CPPU_ENV)_uno, \
+$(eval $(call gb_Library_add_exception_objects,$(CPPU_ENV)_uno, \
     bridges/source/cpp_uno/$(bridges_SELECTED_BRIDGE)/callvirtualfunction, \
     $(if $(HAVE_GCC_STACK_CLASH_PROTECTION),-fno-stack-clash-protection) \
 	$(if $(COM_IS_CLANG),-fasynchronous-unwind-tables) \
@@ -185,25 +185,25 @@ endif
 
 endif
 
-$(eval $(call gb_Library_use_internal_comprehensive_api,$(gb_CPPU_ENV)_uno,\
+$(eval $(call gb_Library_use_internal_comprehensive_api,$(CPPU_ENV)_uno,\
 	udkapi \
 ))
 
 ifeq ($(OS),MACOSX)
 ifeq ($(CPUNAME),AARCH64)
-$(eval $(call gb_Library_use_internal_comprehensive_api,$(gb_CPPU_ENV)_uno,\
+$(eval $(call gb_Library_use_internal_comprehensive_api,$(CPPU_ENV)_uno,\
 	offapi \
 ))
 endif
 endif
 
-$(eval $(call gb_Library_set_include,$(gb_CPPU_ENV)_uno,\
+$(eval $(call gb_Library_set_include,$(CPPU_ENV)_uno,\
 	-I$(SRCDIR)/bridges/inc \
 	$$(INCLUDE) \
 ))
 
 ifeq ($(HAVE_POSIX_FALLOCATE),YES)
-$(eval $(call gb_Library_add_defs,$(gb_CPPU_ENV)_uno,\
+$(eval $(call gb_Library_add_defs,$(CPPU_ENV)_uno,\
 	-DHAVE_POSIX_FALLOCATE \
 ))
 endif
@@ -235,40 +235,40 @@ bridges_NON_CALL_EXCEPTIONS_FLAGS := -fnon-call-exceptions
 endif
 endif
 
-$(eval $(call gb_Library_use_libraries,$(gb_CPPU_ENV)_uno,\
+$(eval $(call gb_Library_use_libraries,$(CPPU_ENV)_uno,\
 	cppu \
 	sal \
 ))
 
 $(foreach obj,$(bridge_exception_objects),\
-	$(eval $(call gb_Library_add_exception_objects,$(gb_CPPU_ENV)_uno,\
+	$(eval $(call gb_Library_add_exception_objects,$(CPPU_ENV)_uno,\
 	bridges/source/cpp_uno/$(bridges_SELECTED_BRIDGE)/$(obj))) \
 )
 $(foreach obj,$(bridge_noncallexception_objects),\
-	$(eval $(call gb_Library_add_exception_objects,$(gb_CPPU_ENV)_uno,\
+	$(eval $(call gb_Library_add_exception_objects,$(CPPU_ENV)_uno,\
 	bridges/source/cpp_uno/$(bridges_SELECTED_BRIDGE)/$(obj) \
 	, $(bridges_NON_CALL_EXCEPTIONS_FLAGS) )) \
 )
 $(foreach obj,$(bridge_noopt_objects),\
-		$(eval $(call gb_Library_add_exception_objects,$(gb_CPPU_ENV)_uno,\
+		$(eval $(call gb_Library_add_exception_objects,$(CPPU_ENV)_uno,\
 				bridges/source/cpp_uno/$(bridges_SELECTED_BRIDGE)/$(obj) \
 				, $(gb_COMPILERNOOPTFLAGS))) \
  )
 $(foreach obj,$(bridge_noncallexception_noopt_objects),\
-		$(eval $(call gb_Library_add_exception_objects,$(gb_CPPU_ENV)_uno,\
+		$(eval $(call gb_Library_add_exception_objects,$(CPPU_ENV)_uno,\
 				bridges/source/cpp_uno/$(bridges_SELECTED_BRIDGE)/$(obj) \
 				, $(gb_COMPILERNOOPTFLAGS) $(bridges_NON_CALL_EXCEPTIONS_FLAGS) )) \
  )
 $(foreach obj,$(bridge_cxx_objects),\
-		$(eval $(call gb_Library_add_cxxobjects,$(gb_CPPU_ENV)_uno,\
+		$(eval $(call gb_Library_add_cxxobjects,$(CPPU_ENV)_uno,\
 				bridges/source/cpp_uno/$(bridges_SELECTED_BRIDGE)/$(obj))) \
  )
 $(foreach obj,$(bridge_asm_objects),\
-		$(eval $(call gb_Library_add_asmobjects,$(gb_CPPU_ENV)_uno,\
+		$(eval $(call gb_Library_add_asmobjects,$(CPPU_ENV)_uno,\
 				bridges/source/cpp_uno/$(bridges_SELECTED_BRIDGE)/$(obj))) \
  )
 
-$(eval $(call gb_Library_add_exception_objects,$(gb_CPPU_ENV)_uno,\
+$(eval $(call gb_Library_add_exception_objects,$(CPPU_ENV)_uno,\
 			bridges/source/cpp_uno/shared/bridge \
 			bridges/source/cpp_uno/shared/component \
 			bridges/source/cpp_uno/shared/types \
@@ -278,13 +278,13 @@ $(eval $(call gb_Library_add_exception_objects,$(gb_CPPU_ENV)_uno,\
 	))
 
 ifeq ($(COM),MSC)
-$(eval $(call gb_Library_add_exception_objects,$(gb_CPPU_ENV)_uno,\
+$(eval $(call gb_Library_add_exception_objects,$(CPPU_ENV)_uno,\
     bridges/source/cpp_uno/msvc_shared/cpp2uno \
     bridges/source/cpp_uno/msvc_shared/except \
 ))
 endif
 
-$(eval $(call gb_Library_add_cxxobjects,$(gb_CPPU_ENV)_uno,\
+$(eval $(call gb_Library_add_cxxobjects,$(CPPU_ENV)_uno,\
 			bridges/source/cpp_uno/shared/cppinterfaceproxy \
 			, $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
 	))

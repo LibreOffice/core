@@ -17,7 +17,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-gb_CPPU_ENV := mscx
 gb_CPUDEFS := -D_AMD64_=1
 
 include $(GBUILDDIR)/platform/com_MSC_defs.mk

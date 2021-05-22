@@ -3857,19 +3857,17 @@ endif # SYSTEM_JFREEREPORT
 
 # Executables
 
-# FIXME: the library target should be for build too
 define gb_Executable__register_bestreversemap
 $(call gb_Executable_add_runtime_dependencies,bestreversemap,\
-	$(if $(filter $(OS),ANDROID),,$(if $(filter TRUE,$(DISABLE_DYNLOADING)),,$(call gb_Library_get_target,sal_textenc))) \
+	$(if $(filter $(OS),ANDROID),,$(if $(filter TRUE,$(DISABLE_DYNLOADING)),,$(call gb_Library_get_target_for_build,sal_textenc))) \
 )
 endef
 
 # TODO depending on the whole URE might be overkill, but I do not have a
 # Windows machine to debug it...
-# FIXME: the library target should be for build too
 define gb_Executable__register_climaker
 $(call gb_Executable_add_runtime_dependencies,climaker,\
-	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
+	$(call gb_Library_get_target_for_build,$(CPPU_ENV_FOR_BUILD)_uno) \
 	$(INSTROOT_FOR_BUILD)/$(LIBO_URE_MISC_FOLDER)/services.rdb \
 	$(call gb_UnoApi_get_target,udkapi) \
 	$(INSTROOT_FOR_BUILD)/$(LIBO_URE_ETC_FOLDER)/$(call gb_Helper_get_rcfile,uno)
@@ -3883,12 +3881,11 @@ $(call gb_Executable_add_runtime_dependencies,cppumaker,\
 endef
 
 # This is used to determine what we need for 'build' platform.
-# FIXME: the library target should be for build too
 define gb_Executable__register_gengal
 $(call gb_Executable_add_runtime_dependencies,gengal,\
-	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
-	$(if $(filter MACOSX,$(OS)),$(call gb_Library_get_target,vclplug_osx)) \
-	$(if $(filter WNT,$(OS)),$(call gb_Library_get_target,vclplug_win)) \
+	$(call gb_Library_get_target_for_build,$(CPPU_ENV_FOR_BUILD)_uno) \
+	$(if $(filter MACOSX,$(OS_FOR_BUILD)),$(call gb_Library_get_target_for_build,vclplug_osx)) \
+	$(if $(filter WNT,$(OS_FOR_BUILD)),$(call gb_Library_get_target_for_build,vclplug_win)) \
 	$(if $(filter host,$(gb_Side)),$(call gb_Package_get_target,postprocess_images)) \
 	$(call gb_Package_get_target_for_build,postprocess_registry) \
 	$(INSTROOT_FOR_BUILD)/$(LIBO_URE_ETC_FOLDER)/$(call gb_Helper_get_rcfile,uno) \
@@ -3929,10 +3926,9 @@ endef
 # FIXME ure/services.rdb needs cleanup
 # The dependencies on ure/services.rdb and udkapi.rdb are implicitly required
 # due to the settings for URE_SERVICES and URE_TYPES in cppuhelper/source/unorc:
-# FIXME: the library target should be for build too
 define gb_Executable__register_saxparser
 $(call gb_Executable_add_runtime_dependencies,saxparser,\
-	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
+	$(call gb_Library_get_target_for_build,$(CPPU_ENV_FOR_BUILD)_uno) \
 	$(call gb_Package_get_target_for_build,instsetoo_native_setup_ure) \
 	$(call gb_Rdb_get_target_for_build,saxparser) \
 	$(INSTROOT_FOR_BUILD)/$(LIBO_URE_MISC_FOLDER_FOR_BUILD)/services.rdb \
@@ -3943,10 +3939,9 @@ endef
 # NOTE: the dependencies on ure/services.rdb and udkapi.rdb are implicitly
 # required due to the settings for URE_SERVICES and URE_TYPES in
 # cppuhelper/source/unorc
-# FIXME: the library target should be for build too
 define gb_Executable__register_uno
 $(call gb_Executable_add_runtime_dependencies,uno,\
-	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
+	$(call gb_Library_get_target_for_build,$(CPPU_ENV_FOR_BUILD)_uno) \
 	$(INSTROOT_FOR_BUILD)/$(LIBO_URE_MISC_FOLDER)/services.rdb \
 	$(call gb_UnoApi_get_target,udkapi) \
 )
