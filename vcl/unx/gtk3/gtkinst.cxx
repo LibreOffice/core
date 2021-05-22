@@ -10146,44 +10146,62 @@ public:
             g_object_unref(pixbuf);
     }
 };
+#endif
 
 class GtkInstanceCalendar : public GtkInstanceWidget, public virtual weld::Calendar
 {
 private:
     GtkCalendar* m_pCalendar;
+#if GTK_CHECK_VERSION(4, 0, 0)
+    GtkEventController* m_pKeyController;
+#endif
     gulong m_nDaySelectedSignalId;
     gulong m_nDaySelectedDoubleClickSignalId;
     gulong m_nKeyPressEventSignalId;
+#if !GTK_CHECK_VERSION(4, 0, 0)
     gulong m_nButtonPressEventSignalId;
+#endif
 
     static void signalDaySelected(GtkCalendar*, gpointer widget)
     {
         GtkInstanceCalendar* pThis = static_cast<GtkInstanceCalendar*>(widget);
+        SolarMutexGuard aGuard;
         pThis->signal_selected();
     }
 
     static void signalDaySelectedDoubleClick(GtkCalendar*, gpointer widget)
     {
         GtkInstanceCalendar* pThis = static_cast<GtkInstanceCalendar*>(widget);
+        SolarMutexGuard aGuard;
         pThis->signal_activated();
     }
 
-    bool signal_key_press(GdkEventKey* pEvent)
+    bool signal_key_press(guint nKeyVal)
     {
-        if (pEvent->keyval == GDK_KEY_Return || pEvent->keyval == GDK_KEY_KP_Enter)
+        if (nKeyVal == GDK_KEY_Return || nKeyVal == GDK_KEY_KP_Enter)
         {
+            SolarMutexGuard aGuard;
             signal_activated();
             return true;
         }
         return false;
     }
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+    static gboolean signalKeyPress(GtkEventControllerKey*, guint nKeyVal, guint /*nKeyCode*/, GdkModifierType, gpointer widget)
+    {
+        GtkInstanceCalendar* pThis = static_cast<GtkInstanceCalendar*>(widget);
+        return pThis->signal_key_press(nKeyVal);
+    }
+#else
     static gboolean signalKeyPress(GtkWidget*, GdkEventKey* pEvent, gpointer widget)
     {
         GtkInstanceCalendar* pThis = static_cast<GtkInstanceCalendar*>(widget);
-        return pThis->signal_key_press(pEvent);
+        return pThis->signal_key_press(pEvent->keyval);
     }
+#endif
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     static gboolean signalButton(GtkWidget*, GdkEventButton*, gpointer)
     {
         // don't let button press get to parent window, for the case of the
@@ -10193,16 +10211,27 @@ private:
         // window isn't that of the floating parent GtkWindow
         return true;
     }
+#endif
 
 public:
     GtkInstanceCalendar(GtkCalendar* pCalendar, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceWidget(GTK_WIDGET(pCalendar), pBuilder, bTakeOwnership)
         , m_pCalendar(pCalendar)
+#if GTK_CHECK_VERSION(4, 0, 0)
+        , m_pKeyController(gtk_event_controller_key_new())
+#endif
         , m_nDaySelectedSignalId(g_signal_connect(pCalendar, "day-selected", G_CALLBACK(signalDaySelected), this))
         , m_nDaySelectedDoubleClickSignalId(g_signal_connect(pCalendar, "day-selected-double-click", G_CALLBACK(signalDaySelectedDoubleClick), this))
+#if GTK_CHECK_VERSION(4, 0, 0)
+        , m_nKeyPressEventSignalId(g_signal_connect(m_pKeyController, "key-pressed", G_CALLBACK(signalKeyPress), this))
+#else
         , m_nKeyPressEventSignalId(g_signal_connect(pCalendar, "key-press-event", G_CALLBACK(signalKeyPress), this))
         , m_nButtonPressEventSignalId(g_signal_connect_after(pCalendar, "button-press-event", G_CALLBACK(signalButton), this))
+#endif
     {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_widget_add_controller(GTK_WIDGET(m_pCalendar), m_pKeyController);
+#endif
     }
 
     virtual void set_date(const Date& rDate) override
@@ -10211,16 +10240,31 @@ public:
             return;
 
         disable_notify_events();
+#if GTK_CHECK_VERSION(4, 0, 0)
+        GDateTime* pDateTime = g_date_time_new_local(rDate.GetYear(), rDate.GetMonth(), rDate.GetDay(), 0, 0, 0);
+        gtk_calendar_select_day(m_pCalendar, pDateTime);
+        g_date_time_unref(pDateTime);
+#else
         gtk_calendar_select_month(m_pCalendar, rDate.GetMonth() - 1, rDate.GetYear());
         gtk_calendar_select_day(m_pCalendar, rDate.GetDay());
+#endif
         enable_notify_events();
     }
 
     virtual Date get_date() const override
     {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        GDateTime* pDateTime = gtk_calendar_get_date(m_pCalendar);
+        Date aDate(g_date_time_get_day_of_month(pDateTime),
+                   g_date_time_get_month(pDateTime),
+                   g_date_time_get_year(pDateTime));
+        g_date_time_unref(pDateTime);
+        return aDate;
+#else
         guint year, month, day;
         gtk_calendar_get_date(m_pCalendar, &year, &month, &day);
         return Date(day, month + 1, year);
+#endif
     }
 
     virtual void disable_notify_events() override
@@ -10239,14 +10283,16 @@ public:
 
     virtual ~GtkInstanceCalendar() override
     {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        g_signal_handler_disconnect(m_pKeyController, m_nKeyPressEventSignalId);
+#else
         g_signal_handler_disconnect(m_pCalendar, m_nButtonPressEventSignalId);
         g_signal_handler_disconnect(m_pCalendar, m_nKeyPressEventSignalId);
+#endif
         g_signal_handler_disconnect(m_pCalendar, m_nDaySelectedDoubleClickSignalId);
         g_signal_handler_disconnect(m_pCalendar, m_nDaySelectedSignalId);
     }
 };
-
-#endif
 
 }
 
@@ -19050,16 +19096,11 @@ public:
 
     virtual std::unique_ptr<weld::Calendar> weld_calendar(const OString &id) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkCalendar* pCalendar = GTK_CALENDAR(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pCalendar)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pCalendar));
         return std::make_unique<GtkInstanceCalendar>(pCalendar, this, false);
-#else
-        (void)id;
-        return nullptr;
-#endif
     }
 
     virtual std::unique_ptr<weld::Entry> weld_entry(const OString &id) override
