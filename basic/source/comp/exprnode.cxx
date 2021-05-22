@@ -274,16 +274,16 @@ void SbiExprNode::FoldConstantsBinaryNode(SbiParser* pParser)
                 nVal = ( eRes != 0 ) ? SbxTRUE : SbxFALSE;
                 break;
             case LT:
-                nVal = ( eRes < 0 ) ? SbxTRUE : SbxFALSE;
-                break;
-            case GT:
                 nVal = ( eRes > 0 ) ? SbxTRUE : SbxFALSE;
                 break;
+            case GT:
+                nVal = ( eRes < 0 ) ? SbxTRUE : SbxFALSE;
+                break;
             case LE:
-                nVal = ( eRes <= 0 ) ? SbxTRUE : SbxFALSE;
+                nVal = ( eRes >= 0 ) ? SbxTRUE : SbxFALSE;
                 break;
             case GE:
-                nVal = ( eRes >= 0 ) ? SbxTRUE : SbxFALSE;
+                nVal = ( eRes <= 0 ) ? SbxTRUE : SbxFALSE;
                 break;
             default:
                 pParser->Error( ERRCODE_BASIC_CONVERSION );
