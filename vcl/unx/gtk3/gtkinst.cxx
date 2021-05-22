@@ -6212,9 +6212,12 @@ GType immobilized_viewport_get_type()
 
     if (!type)
     {
+        GTypeQuery query;
+        g_type_query(gtk_viewport_get_type(), &query);
+
         static const GTypeInfo tinfo =
         {
-            sizeof (GtkViewportClass),
+            static_cast<guint16>(query.class_size),
             nullptr,  /* base init */
             nullptr,  /* base finalize */
             reinterpret_cast<GClassInitFunc>(immobilized_viewport_class_init), /* class init */
