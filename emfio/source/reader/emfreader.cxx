@@ -1355,8 +1355,14 @@ namespace emfio
                     case EMR_ARCTO :
                     case EMR_CHORD :
                     {
+<<<<<<< HEAD   (8d7b49 tdf#139915 DOCX import: fix anchored obj position with to-ch)
                         sal_uInt32 nStartX, nStartY, nEndX, nEndY;
                         mpInputStream->ReadInt32( nX32 ).ReadInt32( nY32 ).ReadInt32( nx32 ).ReadInt32( ny32 ).ReadUInt32( nStartX ).ReadUInt32( nStartY ).ReadUInt32( nEndX ).ReadUInt32( nEndY );
+=======
+                        sal_Int32 nStartX, nStartY, nEndX, nEndY;
+                        mpInputStream->ReadInt32( nX32 ).ReadInt32( nY32 ).ReadInt32( nx32 ).ReadInt32( ny32 ).ReadInt32( nStartX ).ReadInt32( nStartY ).ReadInt32( nEndX ).ReadInt32( nEndY );
+                        SAL_INFO( "emfio", "\t\t Bounds: " << nX32 << ":" << nY32 << ", " << nx32 << ":" << ny32 << ", Start: " << nStartX << ":" << nStartY << ", End: " << nEndX << ":" << nEndY );
+>>>>>>> CHANGE (4f4c5b tdf#55007 EMF Allow negatives values for Start Point and End)
                         tools::Polygon aPoly( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ), PolyStyle::Arc );
                         aPoly.Optimize( PolyOptimizeFlags::EDGES );
                         if ( nRecType == EMR_CHORD )
@@ -1368,6 +1374,7 @@ namespace emfio
 
                     case EMR_PIE :
                     {
+<<<<<<< HEAD   (8d7b49 tdf#139915 DOCX import: fix anchored obj position with to-ch)
                         sal_uInt32 nStartX, nStartY, nEndX, nEndY;
                         mpInputStream->ReadInt32( nX32 ).ReadInt32( nY32 ).ReadInt32( nx32 ).ReadInt32( ny32 ).ReadUInt32( nStartX ).ReadUInt32( nStartY ).ReadUInt32( nEndX ).ReadUInt32( nEndY );
                         tools::Polygon aPoly;
@@ -1384,6 +1391,11 @@ namespace emfio
                         else
                             aPoly = tools::Polygon( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ), PolyStyle::Pie );
                         aPoly.Optimize( PolyOptimizeFlags::EDGES );
+=======
+                        sal_Int32 nStartX, nStartY, nEndX, nEndY;
+                        mpInputStream->ReadInt32( nX32 ).ReadInt32( nY32 ).ReadInt32( nx32 ).ReadInt32( ny32 ).ReadInt32( nStartX ).ReadInt32( nStartY ).ReadInt32( nEndX ).ReadInt32( nEndY );
+                        tools::Polygon aPoly( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ), PolyStyle::Pie );
+>>>>>>> CHANGE (4f4c5b tdf#55007 EMF Allow negatives values for Start Point and End)
                         DrawPolygon( aPoly, mbRecordPath );
                     }
                     break;
@@ -2149,15 +2161,8 @@ namespace emfio
             mnEndPos = nActualFileSize;
         }
 
-        mpInputStream->ReadInt32(mnRecordCount);
+        mpInputStream->ReadUInt32(mnRecordCount);
         SAL_INFO("emfio", "\tRecords: " << mnRecordCount);
-
-        if (mnRecordCount <= 0)
-        {
-            SAL_WARN("emfio", "EMF\t\tEMF Header object shows record counter as <= 0! This shouldn't "
-                                "be possible... indicator of possible file corruption?");
-            return false;
-        }
 
         // the number of "handles", or graphics objects used in the metafile
 
