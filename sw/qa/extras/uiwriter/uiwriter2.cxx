@@ -3394,6 +3394,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineTableRowDeletion)
     assertXPath(pXmlDoc, "//page[1]//body/tab");
 
     // delete table row with enabled change tracking
+    // (IsNotTracked property of the row will be false)
     dispatchCommand(mxComponent, ".uno:DeleteRows", {});
 
     // This was deleted without change tracking
@@ -3402,7 +3403,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineTableRowDeletion)
     assertXPath(pXmlDoc, "//page[1]//body/tab");
 
     // accept the deletion of the content of the first cell
-
     SwEditShell* const pEditShell(pDoc->GetEditShell());
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), pEditShell->GetRedlineCount());
     pEditShell->AcceptRedline(0);
@@ -3419,6 +3419,45 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineTableRowDeletion)
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab", 0);
+
+    // Undo, and repeat the previous test, but only with deletion of the text content of the cells
+    // (IsNotTracked property will be removed by Undo)
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    // table exists again
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+
+    // delete table row with enabled change tracking
+    dispatchCommand(mxComponent, ".uno:SelectRow", {});
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+
+    // Table row still exists
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+
+    // accept the deletion of the content of the first cell
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), pEditShell->GetRedlineCount());
+    pEditShell->AcceptRedline(0);
+
+    // table row was still not deleted
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+
+    // accept last redline
+    pEditShell->AcceptRedline(0);
+
+    // table row (and the 1-row table) still exists
+    // (IsNotTracked property wasn't set for table row deletion)
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
 
     // Undo, and delete the row without change tracking
 
