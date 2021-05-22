@@ -99,6 +99,7 @@ void ScRangeTest::setUp()
 
 void ScRangeTest::tearDown()
 {
+    m_xDocShRef->DoClose();
     m_xDocShRef.clear();
     BootstrapFixture::tearDown();
 }
