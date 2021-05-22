@@ -89,6 +89,11 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxsids.hrc>
 
+#include <com/sun/star/sheet/XCellRangeAddressable.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <com/sun/star/sheet/XUsedAreaCursor.hpp>
+
 #include <iostream>
 #include <memory>
 #include <vector>
@@ -231,6 +236,7 @@ public:
     void testEditTextIterator();
 
     void testImportStream();
+    void testEmptyStringSeparator();
     void testDeleteContents();
     void testTransliterateText();
 
@@ -326,6 +332,7 @@ public:
     CPPUNIT_TEST(testCellTextWidth);
     CPPUNIT_TEST(testEditTextIterator);
     CPPUNIT_TEST(testImportStream);
+    CPPUNIT_TEST(testEmptyStringSeparator);
     CPPUNIT_TEST(testDeleteContents);
     CPPUNIT_TEST(testTransliterateText);
     CPPUNIT_TEST(testFormulaToValue);
@@ -5405,6 +5412,58 @@ void Test::testImportStream()
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,1,0))); // formula
 
     pUndoMgr->Clear();
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testEmptyStringSeparator()
+{
+    // A "CSV" containing only a single space per line. When using no string separator,
+    // it should import correctly as a single column of text cells with spaces. Without
+    // the fix in place, the resulting set of used cells would either be empty (if each
+    // line buffer happens to terminate by two zero characters), or the cells would
+    // contain random garbage.
+    OUStringBuffer aManySpacesCSV(4096 * 2);
+    for (int i = 0; i < 4096; ++i)
+        aManySpacesCSV.append(" \n");
+
+    m_pDoc->InsertTab(0, "Test");
+
+    // CSV import options.
+    ScAsciiOptions aOpt;
+    aOpt.SetFieldSeps(",");
+    aOpt.SetTextSep(0); // 0 means "no separator"
+
+    // Import values to A1:A4096.
+    ScImportExport aObj(*m_pDoc, ScAddress(0, 0, 0));
+    aObj.SetImportBroadcast(true);
+    aObj.SetExtOptions(aOpt);
+    aObj.ImportString(aManySpacesCSV.makeStringAndClear(), SotClipboardFormatId::STRING);
+
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xDocShell->GetModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIA(xDoc->getSheets(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheet> xSheet(xIA->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSheetCellCursor> xSheetCellCursor(xSheet->createCursor(),
+                                                             uno::UNO_SET_THROW);
+    uno::Reference<sheet::XCellRangeAddressable> xCellRangeAddressable(xSheetCellCursor,
+                                                                       uno::UNO_QUERY_THROW);
+
+    uno::Reference<sheet::XUsedAreaCursor> xUsedAreaCursor(xSheetCellCursor, uno::UNO_QUERY_THROW);
+    xUsedAreaCursor->gotoEndOfUsedArea(false);
+    xUsedAreaCursor->gotoStartOfUsedArea(true);
+    table::CellRangeAddress cellRangeAddress = xCellRangeAddressable->getRangeAddress();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), cellRangeAddress.StartColumn);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), cellRangeAddress.EndColumn);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), cellRangeAddress.StartRow);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4095), cellRangeAddress.EndRow);
+
+    for (sal_Int32 r = 0; r <= cellRangeAddress.EndRow; ++r)
+    {
+        const auto xCell = xSheet->getCellByPosition(0, r);
+        CPPUNIT_ASSERT_EQUAL(table::CellContentType_TEXT, xCell->getType());
+        CPPUNIT_ASSERT_EQUAL(OUString(" "), xCell->getFormula());
+    }
 
     m_pDoc->DeleteTab(0);
 }
