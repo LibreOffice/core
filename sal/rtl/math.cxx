@@ -1131,8 +1131,6 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
                                enum rtl_math_RoundingMode eMode)
     SAL_THROW_EXTERN_C()
 {
-    OSL_ASSERT(nDecPlaces >= -20 && nDecPlaces <= 20);
-
     if (!std::isfinite(fValue))
         return fValue;
 
@@ -1141,6 +1139,8 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
 
     if ( nDecPlaces == 0 && eMode == rtl_math_RoundingMode_Corrected )
         return std::round( fValue );
+
+    const double fOrigValue = fValue;
 
     // sign adjustment
     bool bSign = std::signbit( fValue );
@@ -1153,42 +1153,50 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
     if (nDecPlaces >= 0
             && (fValue >= (static_cast<sal_Int64>(1) << 52)
                 || isRepresentableInteger(fValue)))
-        return bSign ? -fValue : fValue;
+        return fOrigValue;
 
     double fFac = 0;
     if (nDecPlaces != 0)
     {
-        if (nDecPlaces > 1 && fValue > 4294967296.0)
+        if (nDecPlaces > 0)
         {
-            // 4294967296 is 2^32 with room for at least 20 decimals, checking
-            // smaller values is not necessary. Lower the limit if more than 20
-            // decimals were to be allowed.
-
             // Determine how many decimals are representable in the precision.
             // Anything greater 2^52 and 0.0 was already ruled out above.
             // Theoretically 0.5, 0.25, 0.125, 0.0625, 0.03125, ...
             const sal_math_Double* pd = reinterpret_cast<const sal_math_Double*>(&fValue);
             const sal_Int32 nDec = 52 - (pd->parts.exponent - 1023);
+
+            if (nDec <= 0)
+            {
+                assert(!"Shouldn't this had been caught already as large number?");
+                return fOrigValue;
+            }
+
             if (nDec < nDecPlaces)
                 nDecPlaces = nDec;
         }
-
-        /* TODO: this was without the inverse factor and determining max
-         * possible decimals, it could now be adjusted to be more lenient. */
-        // max 20 decimals, we don't have unlimited precision
-        // #38810# and no overflow on fValue*=fFac
-        if (nDecPlaces < -20 || 20 < nDecPlaces || fValue > (DBL_MAX / 1e20))
-            return bSign ? -fValue : fValue;
 
         // Avoid 1e-5 (1.0000000000000001e-05) and such inaccurate fractional
         // factors that later when dividing back spoil things. For negative
         // decimals divide first with the inverse, then multiply the rounded
         // value back.
         fFac = getN10Exp(abs(nDecPlaces));
+
+        if (fFac == 0.0 || (nDecPlaces < 0 && !std::isfinite(fFac)))
+            // Underflow, rounding to that many integer positions would be 0.
+            return 0.0;
+
+        if (!std::isfinite(fFac))
+            // Overflow with very small values and high number of decimals.
+            return fOrigValue;
+
         if (nDecPlaces < 0)
             fValue /= fFac;
         else
             fValue *= fFac;
+
+        if (!std::isfinite(fValue))
+            return fOrigValue;
     }
 
     // Round only if not already in distance precision gaps of integers, where
@@ -1275,6 +1283,9 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
         else
             fValue /= fFac;
     }
+
+    if (!std::isfinite(fValue))
+        return fOrigValue;
 
     return bSign ? -fValue : fValue;
 }
