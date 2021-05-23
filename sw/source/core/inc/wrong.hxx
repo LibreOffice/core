@@ -28,7 +28,7 @@
 #include <com/sun/star/uno/Any.hxx>
 
 #include <vector>
-
+#include <memory>
 #include <optional>
 
 #include <tools/color.hxx>
@@ -305,7 +305,7 @@ public:
 
     // Divide the list into two part, the wrong words until nSplitPos will be
     // removed and transferred to a new SwWrongList.
-    SwWrongList* SplitList( sal_Int32 nSplitPos );
+    std::unique_ptr<SwWrongList> SplitList( sal_Int32 nSplitPos );
     // Join the next SwWrongList, nInsertPos is my own text length, where
     // the other wrong list has to be inserted.
     void JoinList( SwWrongList* pNext, sal_Int32 nInsertPos );

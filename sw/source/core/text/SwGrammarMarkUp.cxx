@@ -54,9 +54,9 @@ void SwGrammarMarkUp::MoveGrammar( sal_Int32 nPos, sal_Int32 nDiff )
     }
 }
 
-SwGrammarMarkUp* SwGrammarMarkUp::SplitGrammarList( sal_Int32 nSplitPos )
+std::unique_ptr<SwGrammarMarkUp> SwGrammarMarkUp::SplitGrammarList( sal_Int32 nSplitPos )
 {
-    SwGrammarMarkUp* pNew = static_cast<SwGrammarMarkUp*>(SplitList( nSplitPos ));
+    std::unique_ptr<SwGrammarMarkUp> pNew( static_cast<SwGrammarMarkUp*>(SplitList( nSplitPos ).release()) );
     if( maSentence.empty() )
         return pNew;
     auto pIter = std::find_if(maSentence.begin(), maSentence.end(),
@@ -64,7 +64,7 @@ SwGrammarMarkUp* SwGrammarMarkUp::SplitGrammarList( sal_Int32 nSplitPos )
     if( pIter != maSentence.begin() )
     {
         if( !pNew ) {
-            pNew = new SwGrammarMarkUp();
+            pNew.reset(new SwGrammarMarkUp());
             pNew->SetInvalid( 0, COMPLETE_STRING );
         }
         pNew->maSentence.insert( pNew->maSentence.begin(), maSentence.begin(), pIter );

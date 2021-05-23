@@ -570,18 +570,15 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
     }
     else
     {
-        SwWrongList *pList = GetWrong();
-        SetWrong( nullptr, false );
+        std::unique_ptr<SwWrongList> pList = ReleaseWrong();
         SetWrongDirty(WrongState::TODO);
 
-        SwGrammarMarkUp *pList3 = GetGrammarCheck();
-        SetGrammarCheck( nullptr, false );
+        std::unique_ptr<SwGrammarMarkUp> pList3 = ReleaseGrammarCheck();
         SetGrammarCheckDirty( true );
 
         SetWordCountDirty( true );
 
-        SwWrongList *pList2 = GetSmartTags();
-        SetSmartTags( nullptr, false );
+        std::unique_ptr<SwWrongList> pList2 = ReleaseSmartTags();
         SetSmartTagDirty( true );
 
         SwIndex aIdx( this );
@@ -607,19 +604,19 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
         if( pList )
         {
             pNode->SetWrong( pList->SplitList( nSplitPos ) );
-            SetWrong( pList, false );
+            SetWrong( std::move(pList) );
         }
 
         if( pList3 )
         {
             pNode->SetGrammarCheck( pList3->SplitGrammarList( nSplitPos ) );
-            SetGrammarCheck( pList3, false );
+            SetGrammarCheck( std::move(pList3) );
         }
 
         if( pList2 )
         {
             pNode->SetSmartTags( pList2->SplitList( nSplitPos ) );
-            SetSmartTags( pList2, false );
+            SetSmartTags( std::move(pList2) );
         }
 
         if (pContentIndexRestore)
@@ -956,57 +953,51 @@ SwContentNode *SwTextNode::JoinNext()
         // METADATA: merge
         JoinMetadatable(*pTextNode, !Len(), !pTextNode->Len());
 
-        SwWrongList *pList = GetWrong();
+        std::unique_ptr<SwWrongList> pList = ReleaseWrong();
         if( pList )
         {
             pList->JoinList( pTextNode->GetWrong(), nOldLen );
             SetWrongDirty(WrongState::TODO);
-            SetWrong( nullptr, false );
         }
         else
         {
-            pList = pTextNode->GetWrong();
+            pList = pTextNode->ReleaseWrong();
             if( pList )
             {
                 pList->Move( 0, nOldLen );
                 SetWrongDirty(WrongState::TODO);
-                pTextNode->SetWrong( nullptr, false );
             }
         }
 
-        SwGrammarMarkUp *pList3 = GetGrammarCheck();
+        std::unique_ptr<SwGrammarMarkUp> pList3 = ReleaseGrammarCheck();
         if( pList3 )
         {
             pList3->JoinGrammarList( pTextNode->GetGrammarCheck(), nOldLen );
             SetGrammarCheckDirty( true );
-            SetGrammarCheck( nullptr, false );
         }
         else
         {
-            pList3 = pTextNode->GetGrammarCheck();
+            pList3 = pTextNode->ReleaseGrammarCheck();
             if( pList3 )
             {
                 pList3->MoveGrammar( 0, nOldLen );
                 SetGrammarCheckDirty( true );
-                pTextNode->SetGrammarCheck( nullptr, false );
             }
         }
 
-        SwWrongList *pList2 = GetSmartTags();
+        std::unique_ptr<SwWrongList> pList2 = ReleaseSmartTags();
         if( pList2 )
         {
             pList2->JoinList( pTextNode->GetSmartTags(), nOldLen );
             SetSmartTagDirty( true );
-            SetSmartTags( nullptr, false );
         }
         else
         {
-            pList2 = pTextNode->GetSmartTags();
+            pList2 = pTextNode->ReleaseSmartTags();
             if( pList2 )
             {
                 pList2->Move( 0, nOldLen );
                 SetSmartTagDirty( true );
-                pTextNode->SetSmartTags( nullptr, false );
             }
         }
 
@@ -1026,9 +1017,9 @@ SwContentNode *SwTextNode::JoinNext()
         bool bOldHasNumberingWhichNeedsLayoutUpdate = HasNumberingWhichNeedsLayoutUpdate(*pTextNode);
 
         rNds.Delete(aIdx);
-        SetWrong( pList, false );
-        SetGrammarCheck( pList3, false );
-        SetSmartTags( pList2, false );
+        SetWrong( std::move(pList) );
+        SetGrammarCheck( std::move(pList3) );
+        SetSmartTags( std::move(pList2) );
 
         if (bOldHasNumberingWhichNeedsLayoutUpdate || HasNumberingWhichNeedsLayoutUpdate(*this))
         {
@@ -1060,60 +1051,54 @@ void SwTextNode::JoinPrev()
         SwTextNode *pTextNode = aIdx.GetNode().GetTextNode();
         const sal_Int32 nLen = pTextNode->Len();
 
-        SwWrongList *pList = pTextNode->GetWrong();
+        std::unique_ptr<SwWrongList> pList = pTextNode->ReleaseWrong();
         if( pList )
         {
             pList->JoinList( GetWrong(), Len() );
             SetWrongDirty(WrongState::TODO);
-            pTextNode->SetWrong( nullptr, false );
-            SetWrong( nullptr );
+            ClearWrong();
         }
         else
         {
-            pList = GetWrong();
+            pList = ReleaseWrong();
             if( pList )
             {
                 pList->Move( 0, nLen );
                 SetWrongDirty(WrongState::TODO);
-                SetWrong( nullptr, false );
             }
         }
 
-        SwGrammarMarkUp *pList3 = pTextNode->GetGrammarCheck();
+        std::unique_ptr<SwGrammarMarkUp> pList3 = pTextNode->ReleaseGrammarCheck();
         if( pList3 )
         {
             pList3->JoinGrammarList( GetGrammarCheck(), Len() );
             SetGrammarCheckDirty( true );
-            pTextNode->SetGrammarCheck( nullptr, false );
-            SetGrammarCheck( nullptr );
+            ClearGrammarCheck();
         }
         else
         {
-            pList3 = GetGrammarCheck();
+            pList3 = ReleaseGrammarCheck();
             if( pList3 )
             {
                 pList3->MoveGrammar( 0, nLen );
                 SetGrammarCheckDirty( true );
-                SetGrammarCheck( nullptr, false );
             }
         }
 
-        SwWrongList *pList2 = pTextNode->GetSmartTags();
+        std::unique_ptr<SwWrongList> pList2 = pTextNode->ReleaseSmartTags();
         if( pList2 )
         {
             pList2->JoinList( GetSmartTags(), Len() );
             SetSmartTagDirty( true );
-            pTextNode->SetSmartTags( nullptr, false );
-            SetSmartTags( nullptr );
+            ClearSmartTags();
         }
         else
         {
-            pList2 = GetSmartTags();
+            pList2 = ReleaseSmartTags();
             if( pList2 )
             {
                 pList2->Move( 0, nLen );
                 SetSmartTagDirty( true );
-                SetSmartTags( nullptr, false );
             }
         }
 
@@ -1136,9 +1121,9 @@ void SwTextNode::JoinPrev()
             sw::MoveDeletedPrevFrames(*pTextNode, *this);
         }
         rNds.Delete(aIdx);
-        SetWrong( pList, false );
-        SetGrammarCheck( pList3, false );
-        SetSmartTags( pList2, false );
+        SetWrong( std::move(pList) );
+        SetGrammarCheck( std::move(pList3) );
+        SetSmartTags( std::move(pList2) );
         InvalidateNumRule();
         sw::CheckResetRedlineMergeFlag(*this,
                 eOldMergeFlag == SwNode::Merge::NonFirst

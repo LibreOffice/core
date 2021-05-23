@@ -1831,12 +1831,12 @@ static void lcl_SetWrong( SwTextFrame& rFrame, SwTextNode const& rNode,
         const sal_Int32 nEnd = nPos + (nCnt > 0 ? nCnt : 1 );
         if ( !pTextNode->GetWrong() && !pTextNode->IsWrongDirty() )
         {
-            pTextNode->SetWrong( new SwWrongList( WRONGLIST_SPELL ) );
+            pTextNode->SetWrong( std::make_unique<SwWrongList>( WRONGLIST_SPELL ) );
             pTextNode->GetWrong()->SetInvalid( nPos, nEnd );
         }
         if ( !pTextNode->GetSmartTags() && !pTextNode->IsSmartTagDirty() )
         {
-            pTextNode->SetSmartTags( new SwWrongList( WRONGLIST_SMARTTAG ) );
+            pTextNode->SetSmartTags( std::make_unique<SwWrongList>( WRONGLIST_SMARTTAG ) );
             pTextNode->GetSmartTags()->SetInvalid( nPos, nEnd );
         }
         pTextNode->SetWrongDirty(SwTextNode::WrongState::TODO);

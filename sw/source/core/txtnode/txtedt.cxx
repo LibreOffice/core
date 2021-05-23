@@ -99,9 +99,9 @@ namespace
 
 struct SwParaIdleData_Impl
 {
-    SwWrongList* pWrong;                // for spell checking
-    SwGrammarMarkUp* pGrammarCheck;     // for grammar checking /  proof reading
-    SwWrongList* pSmartTags;
+    std::unique_ptr<SwWrongList> pWrong;                // for spell checking
+    std::unique_ptr<SwGrammarMarkUp> pGrammarCheck;     // for grammar checking /  proof reading
+    std::unique_ptr<SwWrongList> pSmartTags;
     sal_uLong nNumberOfWords;
     sal_uLong nNumberOfAsianWords;
     sal_uLong nNumberOfChars;
@@ -113,9 +113,6 @@ struct SwParaIdleData_Impl
     bool bAutoComplDirty;               ///< auto complete list dirty
 
     SwParaIdleData_Impl() :
-        pWrong              ( nullptr ),
-        pGrammarCheck       ( nullptr ),
-        pSmartTags          ( nullptr ),
         nNumberOfWords      ( 0 ),
         nNumberOfAsianWords ( 0 ),
         nNumberOfChars      ( 0 ),
@@ -1343,7 +1340,7 @@ SwRect SwTextFrame::AutoSpell_(SwTextNode & rNode, sal_Int32 nActPos)
                     {
                         if( !pNode->GetWrong() )
                         {
-                            pNode->SetWrong( new SwWrongList( WRONGLIST_SPELL ) );
+                            pNode->SetWrong( std::make_unique<SwWrongList>( WRONGLIST_SPELL ) );
                             pNode->GetWrong()->SetInvalid( 0, nEnd );
                         }
                         SwWrongList::FreshState const eState(pNode->GetWrong()->Fresh(
@@ -1403,7 +1400,7 @@ SwRect SwTextFrame::AutoSpell_(SwTextNode & rNode, sal_Int32 nActPos)
                     : SwTextNode::WrongState::TODO)
                 : SwTextNode::WrongState::DONE);
         if( !pNode->GetWrong()->Count() && ! pNode->IsWrongDirty() )
-            pNode->SetWrong( nullptr );
+            pNode->ClearWrong();
     }
     else
         pNode->SetWrongDirty(SwTextNode::WrongState::DONE);
@@ -1524,7 +1521,7 @@ SwRect SwTextFrame::SmartTagScan(SwTextNode & rNode)
         pNode->SetSmartTagDirty( COMPLETE_STRING != pSmartTagList->GetBeginInv() );
 
         if( !pSmartTagList->Count() && !pNode->IsSmartTagDirty() )
-            pNode->SetSmartTags( nullptr );
+            pNode->ClearSmartTags();
 
         // Calculate repaint area:
         if ( nBegin < nEnd && ( 0 != nNumberOfRemovedEntries ||
@@ -2166,52 +2163,62 @@ void SwTextNode::InitSwParaStatistics( bool bNew )
     }
     else if ( m_pParaIdleData_Impl )
     {
-        delete m_pParaIdleData_Impl->pWrong;
-        delete m_pParaIdleData_Impl->pGrammarCheck;
-        delete m_pParaIdleData_Impl->pSmartTags;
+        m_pParaIdleData_Impl->pWrong.reset();
+        m_pParaIdleData_Impl->pGrammarCheck.reset();
+        m_pParaIdleData_Impl->pSmartTags.reset();
         delete m_pParaIdleData_Impl;
         m_pParaIdleData_Impl = nullptr;
     }
 }
 
-void SwTextNode::SetWrong( SwWrongList* pNew, bool bDelete )
+void SwTextNode::SetWrong( std::unique_ptr<SwWrongList> pNew )
 {
     if ( m_pParaIdleData_Impl )
-    {
-        if ( bDelete )
-        {
-            delete m_pParaIdleData_Impl->pWrong;
-        }
-        m_pParaIdleData_Impl->pWrong = pNew;
-    }
+        m_pParaIdleData_Impl->pWrong = std::move(pNew);
+}
+
+void SwTextNode::ClearWrong()
+{
+    if ( m_pParaIdleData_Impl )
+        m_pParaIdleData_Impl->pWrong.reset();
+}
+
+std::unique_ptr<SwWrongList> SwTextNode::ReleaseWrong()
+{
+    return m_pParaIdleData_Impl ? std::move(m_pParaIdleData_Impl->pWrong) : nullptr;
 }
 
 SwWrongList* SwTextNode::GetWrong()
 {
-    return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->pWrong : nullptr;
+    return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->pWrong.get() : nullptr;
 }
 
 // #i71360#
 const SwWrongList* SwTextNode::GetWrong() const
 {
-    return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->pWrong : nullptr;
+    return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->pWrong.get() : nullptr;
 }
 
-void SwTextNode::SetGrammarCheck( SwGrammarMarkUp* pNew, bool bDelete )
+void SwTextNode::SetGrammarCheck( std::unique_ptr<SwGrammarMarkUp> pNew )
 {
     if ( m_pParaIdleData_Impl )
-    {
-        if ( bDelete )
-        {
-            delete m_pParaIdleData_Impl->pGrammarCheck;
-        }
-        m_pParaIdleData_Impl->pGrammarCheck = pNew;
-    }
+        m_pParaIdleData_Impl->pGrammarCheck = std::move(pNew);
+}
+
+void SwTextNode::ClearGrammarCheck()
+{
+    if ( m_pParaIdleData_Impl )
+        m_pParaIdleData_Impl->pGrammarCheck.reset();
+}
+
+std::unique_ptr<SwGrammarMarkUp> SwTextNode::ReleaseGrammarCheck()
+{
+    return m_pParaIdleData_Impl ? std::move(m_pParaIdleData_Impl->pGrammarCheck) : nullptr;
 }
 
 SwGrammarMarkUp* SwTextNode::GetGrammarCheck()
 {
-    return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->pGrammarCheck : nullptr;
+    return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->pGrammarCheck.get() : nullptr;
 }
 
 SwWrongList const* SwTextNode::GetGrammarCheck() const
@@ -2219,24 +2226,29 @@ SwWrongList const* SwTextNode::GetGrammarCheck() const
     return static_cast<SwWrongList const*>(const_cast<SwTextNode*>(this)->GetGrammarCheck());
 }
 
-void SwTextNode::SetSmartTags( SwWrongList* pNew, bool bDelete )
+void SwTextNode::SetSmartTags( std::unique_ptr<SwWrongList> pNew )
 {
-    OSL_ENSURE( !pNew || SwSmartTagMgr::Get().IsSmartTagsEnabled(),
+    OSL_ENSURE( SwSmartTagMgr::Get().IsSmartTagsEnabled(),
             "Weird - we have a smart tag list without any recognizers?" );
 
     if ( m_pParaIdleData_Impl )
-    {
-        if ( bDelete )
-        {
-            delete m_pParaIdleData_Impl->pSmartTags;
-        }
-        m_pParaIdleData_Impl->pSmartTags = pNew;
-    }
+        m_pParaIdleData_Impl->pSmartTags = std::move(pNew);
+}
+
+void SwTextNode::ClearSmartTags()
+{
+    if ( m_pParaIdleData_Impl )
+        m_pParaIdleData_Impl->pSmartTags.reset();
+}
+
+std::unique_ptr<SwWrongList> SwTextNode::ReleaseSmartTags()
+{
+    return m_pParaIdleData_Impl ? std::move(m_pParaIdleData_Impl->pSmartTags) : nullptr;
 }
 
 SwWrongList* SwTextNode::GetSmartTags()
 {
-    return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->pSmartTags : nullptr;
+    return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->pSmartTags.get() : nullptr;
 }
 
 SwWrongList const* SwTextNode::GetSmartTags() const

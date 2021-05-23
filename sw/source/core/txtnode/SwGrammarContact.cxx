@@ -80,7 +80,7 @@ IMPL_LINK( SwGrammarContact, TimerRepaint, Timer *, pTimer, void )
         pTimer->Stop();
         if( m_pTextNode )
         {   //Replace the old wrong list by the proxy list and repaint all frames
-            m_pTextNode->SetGrammarCheck( m_pProxyList.release() );
+            m_pTextNode->SetGrammarCheck( std::move(m_pProxyList) );
             SwTextFrame::repaintTextFrames( *m_pTextNode );
         }
     }
@@ -99,7 +99,7 @@ void SwGrammarContact::updateCursorPosition( const SwPosition& rNewPos )
     {
         if( m_pProxyList )
         {   // replace old list by the proxy list and repaint
-            m_pTextNode->SetGrammarCheck( m_pProxyList.release() );
+            m_pTextNode->SetGrammarCheck( std::move(m_pProxyList) );
             SwTextFrame::repaintTextFrames( *m_pTextNode );
         }
         EndListeningAll();
@@ -146,7 +146,7 @@ SwGrammarMarkUp* SwGrammarContact::getGrammarCheck( SwTextNode& rTextNode, bool 
         {
             pRet = new SwGrammarMarkUp();
             pRet->SetInvalid( 0, COMPLETE_STRING );
-            rTextNode.SetGrammarCheck( pRet );
+            rTextNode.SetGrammarCheck( std::unique_ptr<SwGrammarMarkUp>(pRet) );
             rTextNode.SetGrammarCheckDirty( true );
         }
     }
@@ -167,7 +167,7 @@ void SwGrammarContact::finishGrammarCheck( SwTextNode& rTextNode )
         }
         else if( m_pTextNode->GetGrammarCheck() )
         {   // all grammar problems seems to be gone, no delay needed
-            m_pTextNode->SetGrammarCheck( nullptr );
+            m_pTextNode->ClearGrammarCheck();
             SwTextFrame::repaintTextFrames( *m_pTextNode );
         }
     }
