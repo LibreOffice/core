@@ -18,6 +18,16 @@ def load_file(testCase, url):
     finally:
         testCase.ui_test.close_doc()
 
+# Calls UITest.close_doc at exit
+@contextmanager
+def create_doc_in_start_center(testCase, app):
+    testCase.ui_test.create_doc_in_start_center(app)
+    component = testCase.ui_test.get_component()
+    try:
+        yield component
+    finally:
+        testCase.ui_test.close_doc()
+
 # Calls UITest.close_dialog_through_button at exit
 @contextmanager
 def execute_dialog_through_action(testCase, ui_object, action, parameters = None, event_name = "DialogExecute", close_button = "ok"):
@@ -30,8 +40,8 @@ def execute_dialog_through_action(testCase, ui_object, action, parameters = None
 
 # Calls UITest.close_dialog_through_button at exit
 @contextmanager
-def execute_dialog_through_command(testCase, unoCommand, close_button = "ok"):
-    testCase.ui_test.execute_dialog_through_command(unoCommand)
+def execute_dialog_through_command(testCase, command, printNames=False, close_button = "ok"):
+    testCase.ui_test.execute_dialog_through_command(command, printNames)
     xDialog = testCase.xUITest.getTopFocusWindow()
     try:
         yield xDialog
