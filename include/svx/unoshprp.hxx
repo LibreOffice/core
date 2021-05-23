@@ -290,6 +290,10 @@
 #define EDGERADIUS_PROPERTIES \
     { u"" UNO_NAME_EDGERADIUS,        SDRATTR_CORNER_RADIUS   , ::cppu::UnoType<sal_Int32>::get()  ,            0,     0, PropertyMoreFlags::METRIC_ITEM},
 
+#define TEXTCOLUMNS_PROPERTIES \
+    { u"TextColumnsNumber", SDRATTR_TEXTCOLUMNS_NUMBER, ::cppu::UnoType<sal_Int32>::get(), 0, 0 }, \
+    { u"TextColumnsSpacing", SDRATTR_TEXTCOLUMNS_SPACING, ::cppu::UnoType<sal_Int32>::get(), 0, 0, PropertyMoreFlags::METRIC_ITEM }, \
+
 #define TEXT_PROPERTIES_DEFAULTS\
     { u"" UNO_NAME_TEXT_WRITINGMODE,      SDRATTR_TEXTDIRECTION,          ::cppu::UnoType<css::text::WritingMode>::get(),      0,      0},\
     { u"" UNO_NAME_TEXT_ANIAMOUNT,        SDRATTR_TEXT_ANIAMOUNT,         ::cppu::UnoType<sal_Int16>::get(),        0,      0}, \
