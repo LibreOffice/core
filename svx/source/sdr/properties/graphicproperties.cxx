@@ -67,7 +67,7 @@ namespace sdr::properties
                 // range from SdrGrafObj
                 SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST,
 
-                SDRATTR_GLOW_FIRST, SDRATTR_SOFTEDGE_LAST,
+                SDRATTR_GLOW_FIRST, SDRATTR_TEXTCOLUMNS_LAST,
 
                 // range from SdrTextObj
                 EE_ITEMS_START, EE_ITEMS_END>{});
