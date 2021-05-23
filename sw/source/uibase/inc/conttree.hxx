@@ -126,6 +126,8 @@ class SwContentTree final : public SfxListener
 
     bool m_bIgnoreViewChange = false;
 
+    bool IsEditingActive() const { return m_bEditing; }
+
     /**
      * Before any data will be deleted, the last active entry has to be found.
      * After this the UserData will be deleted
@@ -179,6 +181,10 @@ class SwContentTree final : public SfxListener
     DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
     DECL_LINK(DragBeginHdl, bool&, bool);
     DECL_LINK(TimerUpdate, Timer *, void);
+
+    DECL_LINK(EditingEntryHdl, const weld::TreeIter&, bool);
+    typedef std::pair<const weld::TreeIter&, OUString> IterString;
+    DECL_LINK(EditedEntryHdl, const IterString&, bool);
 
 public:
     SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNavigationPI* pDialog);
