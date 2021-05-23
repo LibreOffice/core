@@ -14401,11 +14401,9 @@ public:
 
 }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-
 namespace {
 
-class GtkInstanceFormattedSpinButton : public GtkInstanceEntry, public virtual weld::FormattedSpinButton
+class GtkInstanceFormattedSpinButton : public GtkInstanceEditable, public virtual weld::FormattedSpinButton
 {
 private:
     GtkSpinButton* m_pButton;
@@ -14469,7 +14467,7 @@ private:
 
 public:
     GtkInstanceFormattedSpinButton(GtkSpinButton* pButton, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : GtkInstanceEntry(GTK_ENTRY(pButton), pBuilder, bTakeOwnership)
+        : GtkInstanceEditable(GTK_WIDGET(pButton), pBuilder, bTakeOwnership)
         , m_pButton(pButton)
         , m_pFormatter(nullptr)
         , m_nValueChangedSignalId(g_signal_connect(pButton, "value-changed", G_CALLBACK(signalValueChanged), this))
@@ -14483,7 +14481,7 @@ public:
 
     virtual void set_text(const OUString& rText) override
     {
-        GtkInstanceEntry::set_text(rText);
+        GtkInstanceEditable::set_text(rText);
         Formatter& rFormatter = GetFormatter();
         m_bEmptyField = rFormatter.IsEmptyFieldEnabled() && rText.isEmpty();
         if (m_bEmptyField)
@@ -14494,7 +14492,7 @@ public:
     {
         if (!m_pFormatter) // once a formatter is set, it takes over "changed"
         {
-            GtkInstanceEntry::connect_changed(rLink);
+            GtkInstanceEditable::connect_changed(rLink);
             return;
         }
         m_pFormatter->connect_changed(rLink);
@@ -14504,7 +14502,7 @@ public:
     {
         if (!m_pFormatter) // once a formatter is set, it takes over "focus-out"
         {
-            GtkInstanceEntry::connect_focus_out(rLink);
+            GtkInstanceEditable::connect_focus_out(rLink);
             return;
         }
         m_pFormatter->connect_focus_out(rLink);
@@ -14585,12 +14583,12 @@ public:
     virtual void disable_notify_events() override
     {
         g_signal_handler_block(m_pButton, m_nValueChangedSignalId);
-        GtkInstanceEntry::disable_notify_events();
+        GtkInstanceEditable::disable_notify_events();
     }
 
     virtual void enable_notify_events() override
     {
-        GtkInstanceEntry::enable_notify_events();
+        GtkInstanceEditable::enable_notify_events();
         g_signal_handler_unblock(m_pButton, m_nValueChangedSignalId);
     }
 
@@ -14606,7 +14604,6 @@ public:
 };
 
 }
-#endif
 
 namespace {
 
@@ -19270,16 +19267,11 @@ public:
 
     virtual std::unique_ptr<weld::FormattedSpinButton> weld_formatted_spin_button(const OString &id) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkSpinButton* pSpinButton = GTK_SPIN_BUTTON(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pSpinButton)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pSpinButton));
         return std::make_unique<GtkInstanceFormattedSpinButton>(pSpinButton, this, false);
-#else
-        (void)id;
-        return nullptr;
-#endif
     }
 
     virtual std::unique_ptr<weld::ComboBox> weld_combo_box(const OString &id) override
