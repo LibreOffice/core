@@ -88,6 +88,7 @@
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/processfactory.hxx>
+#include <officecfg/Office/Common.hxx>
 
 namespace uno = com::sun::star::uno;
 namespace frame = com::sun::star::frame;
@@ -1620,10 +1621,17 @@ IMPL_LINK_NOARG(SvxConfigPage, SelectFunctionHdl, weld::TreeView&, void)
             SfxGroupInfo_Impl *pData = reinterpret_cast<SfxGroupInfo_Impl*>(m_xFunctions->get_selected_id().toInt64());
             if (pData)
             {
+                bool bIsExperimental
+                    = vcl::CommandInfoProvider::IsExperimental(pData->sCommand, m_aModuleId);
+
+                OUString aExperimental = "\n" + CuiResId(RID_SVXSTR_COMMANDEXPERIMENTAL);
                 OUString aLabel = CuiResId(RID_SVXSTR_COMMANDLABEL) + ": " + pData->sLabel + "\n";
                 OUString aName = CuiResId(RID_SVXSTR_COMMANDNAME) + ": " + pData->sCommand + "\n";
                 OUString aTip = CuiResId(RID_SVXSTR_COMMANDTIP) + ": " + pData->sTooltip;
-                m_xDescriptionField->set_text(aLabel + aName + aTip);
+                if (bIsExperimental)
+                    m_xDescriptionField->set_text(aLabel + aName + aTip + aExperimental);
+                else
+                    m_xDescriptionField->set_text(aLabel + aName + aTip);
             }
         }
     }
