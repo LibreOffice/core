@@ -643,6 +643,9 @@ protected:
     // bullet access to the EditEngine.
     const SvxNumberFormat*  GetNumberFormat( sal_Int32 nPara ) const;
 
+    void SetTextColumnsNumber(sal_Int32 nColumns);
+    void SetTextColumnsSpacing(sal_Int32 nSpacing);
+
 public:
 
                     Outliner( SfxItemPool* pPool, OutlinerMode nOutlinerMode );
