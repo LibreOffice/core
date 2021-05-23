@@ -2636,6 +2636,20 @@ void ImpEditEngine::SetRotation(TextRotation nRotation)
     }
 }
 
+void ImpEditEngine::SetTextColumns(sal_Int16 nColumns, sal_Int32 nSpacing)
+{
+    if (mnColumns != nColumns || mnColumnSpacing != nSpacing)
+    {
+        mnColumns = nColumns;
+        mnColumnSpacing = nSpacing;
+        if (IsFormatted())
+        {
+            FormatFullDoc();
+            UpdateViews(GetActiveView());
+        }
+    }
+}
+
 void ImpEditEngine::SetFixedCellHeight( bool bUseFixedCellHeight )
 {
     if ( IsFixedCellHeight() != bUseFixedCellHeight )

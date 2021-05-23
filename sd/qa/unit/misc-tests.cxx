@@ -59,6 +59,8 @@
 #include <tools/gen.hxx>
 #include <svx/view3d.hxx>
 #include <svx/scene3d.hxx>
+#include <svx/sdmetitm.hxx>
+#include <svx/unoapi.hxx>
 
 using namespace ::com::sun::star;
 
@@ -81,6 +83,7 @@ public:
     void testTdf67248();
     void testTdf119956();
     void testTdf120527();
+    void testTextColumns();
     void testTdf98839_ShearVFlipH();
     void testTdf130988();
     void testTdf131033();
@@ -103,6 +106,7 @@ public:
     CPPUNIT_TEST(testTdf67248);
     CPPUNIT_TEST(testTdf119956);
     CPPUNIT_TEST(testTdf120527);
+    CPPUNIT_TEST(testTextColumns);
     CPPUNIT_TEST(testTdf98839_ShearVFlipH);
     CPPUNIT_TEST(testTdf130988);
     CPPUNIT_TEST(testTdf131033);
@@ -488,6 +492,51 @@ void SdMiscTest::testTdf120527()
     uno::Reference<graphic::XGraphic> xGraphic;
     xShapeProperySet->getPropertyValue("Graphic") >>= xGraphic;
     CPPUNIT_ASSERT(xGraphic.is());
+
+    xDocShRef->DoClose();
+}
+
+// Testing document model part of editengine-columns
+void SdMiscTest::testTextColumns()
+{
+    ::sd::DrawDocShellRef xDocShRef
+        = new ::sd::DrawDocShell(SfxObjectCreateMode::EMBEDDED, false, DocumentType::Impress);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier = getDoc(xDocShRef);
+    uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
+    // Insert a new page.
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->insertNewByIndex(0),
+                                                 uno::UNO_SET_THROW);
+    uno::Reference<drawing::XShapes> xShapes(xDrawPage, uno::UNO_QUERY_THROW);
+    uno::Reference<lang::XMultiServiceFactory> const xDoc(xDocShRef->GetDoc()->getUnoModel(),
+                                                          uno::UNO_QUERY);
+
+    {
+        // Create a text shape
+        uno::Reference<drawing::XShape> xShape(
+            xDoc->createInstance("com.sun.star.drawing.TextShape"), uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_QUERY_THROW);
+
+        // Add the shape to the page.
+        xShapes->add(xShape);
+
+        // Set up columns
+        auto pTextObj = dynamic_cast<SdrTextObj*>(GetSdrObjectFromXShape(xShape));
+        CPPUNIT_ASSERT(pTextObj);
+        pTextObj->SetMergedItem(SfxInt16Item(SDRATTR_TEXTCOLUMNS_NUMBER, 2));
+        pTextObj->SetMergedItem(SdrMetricItem(SDRATTR_TEXTCOLUMNS_SPACING, 1000));
+    }
+
+    {
+        // Retrieve the shape and check columns
+        uno::Reference<container::XIndexAccess> xIndexAccess(xDrawPage, uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XShape> xShape(xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW);
+
+        auto pTextObj = dynamic_cast<SdrTextObj*>(GetSdrObjectFromXShape(xShape));
+        CPPUNIT_ASSERT(pTextObj);
+
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(2), pTextObj->GetTextColumnsNumber());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), pTextObj->GetTextColumnsSpacing());
+    }
 
     xDocShRef->DoClose();
 }

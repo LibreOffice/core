@@ -335,6 +335,9 @@ SdrItemPool::SdrItemPool(
 
     rPoolDefaults[SDRATTR_SOFTEDGE_RADIUS - SDRATTR_START] = new SdrMetricItem(SDRATTR_SOFTEDGE_RADIUS, 0);
 
+    rPoolDefaults[SDRATTR_TEXTCOLUMNS_NUMBER - SDRATTR_START] = new SfxInt16Item(SDRATTR_TEXTCOLUMNS_NUMBER, 1);
+    rPoolDefaults[SDRATTR_TEXTCOLUMNS_SPACING - SDRATTR_START] = new SdrMetricItem(SDRATTR_TEXTCOLUMNS_SPACING, 0);
+
     // set own ItemInfos
     mpLocalItemInfos[SDRATTR_SHADOW-SDRATTR_START]._nSID=SID_ATTR_FILL_SHADOW;
     mpLocalItemInfos[SDRATTR_SHADOWCOLOR-SDRATTR_START]._nSID=SID_ATTR_SHADOW_COLOR;
@@ -355,6 +358,9 @@ SdrItemPool::SdrItemPool(
     mpLocalItemInfos[SDRATTR_GLOW_TRANSPARENCY - SDRATTR_START]._nSID = SID_ATTR_GLOW_TRANSPARENCY;
 
     mpLocalItemInfos[SDRATTR_SOFTEDGE_RADIUS - SDRATTR_START]._nSID = SID_ATTR_SOFTEDGE_RADIUS;
+
+    mpLocalItemInfos[SDRATTR_TEXTCOLUMNS_NUMBER - SDRATTR_START]._nSID = 0 /*TODO*/;
+    mpLocalItemInfos[SDRATTR_TEXTCOLUMNS_SPACING - SDRATTR_START]._nSID = 0 /*TODO*/;
 
     // it's my own creation level, set Defaults and ItemInfos
     SetDefaults(mpLocalPoolDefaults);
@@ -622,6 +628,9 @@ OUString SdrItemPool::GetItemName(sal_uInt16 nWhich)
         case EE_FEATURE_LINEBR  : pResId = SIP_EE_FEATURE_LINEBR;break;
         case EE_FEATURE_NOTCONV : pResId = SIP_EE_FEATURE_NOTCONV;break;
         case EE_FEATURE_FIELD   : pResId = SIP_EE_FEATURE_FIELD;break;
+
+        case SDRATTR_TEXTCOLUMNS_NUMBER: pResId = SIP_SA_TEXTCOLUMNS_NUMBER; break;
+        case SDRATTR_TEXTCOLUMNS_SPACING: pResId = SIP_SA_TEXTCOLUMNS_SPACING; break;
     } // switch
 
     return SvxResId(pResId);
