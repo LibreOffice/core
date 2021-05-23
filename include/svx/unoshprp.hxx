@@ -316,6 +316,8 @@
     { u"" UNO_NAME_TEXT_VERTADJUST,       SDRATTR_TEXT_VERTADJUST,        cppu::UnoType<css::drawing::TextVerticalAdjust>::get(),    0,      0},\
     { u"" UNO_NAME_TEXT_WORDWRAP,         SDRATTR_TEXT_WORDWRAP,          cppu::UnoType<bool>::get(),        0,      0}, \
     { u"" UNO_NAME_TEXT_CHAINNEXTNAME,    SDRATTR_TEXT_CHAINNEXTNAME,     ::cppu::UnoType<OUString>::get(),        0,      0}, \
+    { u"TextColumnsNumber",               SDRATTR_TEXTCOLUMNS_NUMBER,     cppu::UnoType<sal_Int32>::get(), 0, 0 }, \
+    { u"TextColumnsSpacing",              SDRATTR_TEXTCOLUMNS_SPACING,    cppu::UnoType<sal_Int32>::get(), 0, 0, PropertyMoreFlags::METRIC_ITEM }, \
     SVX_UNOEDIT_CHAR_PROPERTIES, \
     SVX_UNOEDIT_PARA_PROPERTIES,
 
