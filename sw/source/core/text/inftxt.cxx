@@ -1125,7 +1125,7 @@ void SwTextPaintInfo::DrawCheckBox(const SwFieldFormCheckboxPortion &rPor, bool 
     m_pOut->Pop();
 }
 
-void SwTextPaintInfo::DrawBackground( const SwLinePortion &rPor ) const
+void SwTextPaintInfo::DrawBackground( const SwLinePortion &rPor, const Color *pColor ) const
 {
     OSL_ENSURE( OnWin(), "SwTextPaintInfo::DrawBackground: printer pollution ?" );
 
@@ -1145,7 +1145,11 @@ void SwTextPaintInfo::DrawBackground( const SwLinePortion &rPor ) const
     }
     else
     {
-        pOut->SetFillColor( SwViewOption::GetFieldShadingsColor() );
+        if ( pColor )
+            pOut->SetFillColor( *pColor );
+        else
+            pOut->SetFillColor( SwViewOption::GetFieldShadingsColor() );
+
         pOut->SetLineColor();
     }
 
@@ -1313,7 +1317,7 @@ void SwTextPaintInfo::DrawBorder( const SwLinePortion &rPor ) const
 }
 
 void SwTextPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
-                                   PortionType nWhich ) const
+                                   PortionType nWhich, const Color *pColor ) const
 {
     if( !OnWin() || IsMulti() )
         return;
@@ -1366,7 +1370,7 @@ void SwTextPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
         }
     }
     if ( bDraw )
-        DrawBackground( rPor );
+        DrawBackground( rPor, pColor );
 }
 
 static void lcl_InitHyphValues( PropertyValues &rVals,

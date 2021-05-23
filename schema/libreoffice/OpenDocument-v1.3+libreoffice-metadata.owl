@@ -75,4 +75,27 @@
 	<range rdf:resource="http://www.w3.org/2001/XMLSchema-datatypes#string"/>
 	<label xml:lang="en">has suffix</label>
 </owl:DatatypeProperty>
+
+<owl:Class rdf:about="urn:oasis:names:tc:opendocument:xmlns:text:1.0meta">
+	<label xml:lang="en">OpenDocument Annotated text range Element</label>
+	<subClassOf rdf:resource="http://docs.oasis-open.org/ns/office/1.2/meta/odf#Element"/>
+</owl:Class>
+
+<owl:Class rdf:about="urn:oasis:names:tc:opendocument:xmlns:text:1.0nestedtextcontent">
+  <owl:equivalentClass>
+    <owl:Class>
+      <owl:unionOf rdf:parseType="Collection">
+        <owl:Class rdf:about="urn:oasis:names:tc:opendocument:xmlns:text:1.0meta">
+        <owl:Class rdf:about="urn:oasis:names:tc:opendocument:xmlns:text:1.0meta-field">
+      </owl:unionOf>
+    </owl:Class>
+  </owl:equivalentClass>
+</owl:Class>
+
+<owl:DatatypeProperty rdf:about="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0odf#shading">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+	<domain rdf:resource="urn:oasis:names:tc:opendocument:xmlns:text:1.0nestedtextcontent"/>
+	<range rdf:resource="http://www.w3.org/2001/XMLSchema-datatypes#string"/>
+	<label xml:lang="en">has shading color</label>
+</owl:DatatypeProperty>
 </rdf:RDF>

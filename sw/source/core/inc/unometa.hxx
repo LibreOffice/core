@@ -263,7 +263,7 @@ public:
 void getPrefixAndSuffix(
         const css::uno::Reference< css::frame::XModel>& xModel,
         const css::uno::Reference< css::rdf::XMetadatable>& xMetaField,
-        OUString *const o_pPrefix, OUString *const o_pSuffix);
+        OUString *const o_pPrefix, OUString *const o_pSuffix, OUString *const o_pShadowColor);
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_UNOMETA_HXX
 

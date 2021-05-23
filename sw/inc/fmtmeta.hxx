@@ -189,7 +189,7 @@ private:
 public:
     /// get prefix/suffix from the RDF repository. @throws RuntimeException
     void GetPrefixAndSuffix(
-        OUString *const o_pPrefix, OUString *const o_pSuffix);
+        OUString *const o_pPrefix, OUString *const o_pSuffix, OUString *const o_pShadingColor);
 };
 
     /// knows all meta-fields in the document.
