@@ -550,8 +550,11 @@ namespace
     };
 }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+std::vector<css::datatransfer::DataFlavor> GtkTransferable::getTransferDataFlavorsAsVector(const char * const *targets, gint n_targets)
+#else
 std::vector<css::datatransfer::DataFlavor> GtkTransferable::getTransferDataFlavorsAsVector(GdkAtom *targets, gint n_targets)
+#endif
 {
     std::vector<css::datatransfer::DataFlavor> aVector;
 
@@ -559,14 +562,20 @@ std::vector<css::datatransfer::DataFlavor> GtkTransferable::getTransferDataFlavo
 
     for (gint i = 0; i < n_targets; ++i)
     {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        const gchar* pName = targets[i];
+#else
         gchar* pName = gdk_atom_name(targets[i]);
+#endif
         const char* pFinalName = pName;
         css::datatransfer::DataFlavor aFlavor;
 
         // omit text/plain;charset=unicode since it is not well defined
         if (rtl_str_compare(pName, "text/plain;charset=unicode") == 0)
         {
+#if !GTK_CHECK_VERSION(4, 0, 0)
             g_free(pName);
+#endif
             continue;
         }
 
@@ -584,7 +593,9 @@ std::vector<css::datatransfer::DataFlavor> GtkTransferable::getTransferDataFlavo
         // them out for now before they confuse this code's clients:
         if (rtl_str_indexOfChar(pFinalName, '/') == -1)
         {
+#if !GTK_CHECK_VERSION(4, 0, 0)
             g_free(pName);
+#endif
             continue;
         }
 
@@ -610,7 +621,9 @@ std::vector<css::datatransfer::DataFlavor> GtkTransferable::getTransferDataFlavo
             }
         }
         aVector.push_back(aFlavor);
+#if !GTK_CHECK_VERSION(4, 0, 0)
         g_free(pName);
+#endif
     }
 
     //If we have text, but no UTF-16 format which is basically the only
@@ -626,7 +639,6 @@ std::vector<css::datatransfer::DataFlavor> GtkTransferable::getTransferDataFlavo
 
     return aVector;
 }
-#endif
 
 css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL GtkTransferable::getTransferDataFlavors()
 {
@@ -741,9 +753,14 @@ public:
     {
         std::vector<css::datatransfer::DataFlavor> aVector;
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
         GdkClipboard* clipboard = clipboard_get(m_eSelection);
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+        GdkContentFormats* pFormats = gdk_clipboard_get_formats(clipboard);
+        gsize n_targets;
+        const char * const *targets = gdk_content_formats_get_mime_types(pFormats, &n_targets);
+        aVector = GtkTransferable::getTransferDataFlavorsAsVector(targets, n_targets);
+#else
         GdkAtom *targets;
         gint n_targets;
         if (gtk_clipboard_wait_for_targets(clipboard, &targets, &n_targets))
@@ -1095,9 +1112,9 @@ void VclGtkClipboard::flushClipboard()
 
 VclGtkClipboard::~VclGtkClipboard()
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
     GdkClipboard* clipboard = clipboard_get(m_eSelection);
     g_signal_handler_disconnect(clipboard, m_nOwnerChangedSignalId);
+#if !GTK_CHECK_VERSION(4, 0, 0)
     if (!m_aGtkTargets.empty())
     {
         gtk_clipboard_clear(clipboard);
