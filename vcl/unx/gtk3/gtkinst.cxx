@@ -603,9 +603,7 @@ std::vector<css::datatransfer::DataFlavor> GtkTransferable::getTransferDataFlavo
                                     strlen(pFinalName),
                                     RTL_TEXTENCODING_UTF8);
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
         m_aMimeTypeToGtkType[aFlavor.MimeType] = targets[i];
-#endif
 
         aFlavor.DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
@@ -674,6 +672,12 @@ struct text_paste_result
     bool bDone = false;
 };
 
+struct read_paste_result
+{
+    Sequence<sal_Int8> aSeq;
+    bool bDone = false;
+};
+
 void text_async_completed(GObject* source, GAsyncResult* res, gpointer data)
 {
     GdkClipboard* clipboard = GDK_CLIPBOARD(source);
@@ -687,6 +691,38 @@ void text_async_completed(GObject* source, GAsyncResult* res, gpointer data)
 
     g_main_context_wakeup(nullptr);
 }
+
+void read_async_completed(GObject* source, GAsyncResult* res, gpointer data)
+{
+    GdkClipboard* clipboard = GDK_CLIPBOARD(source);
+    read_paste_result* pRes = static_cast<read_paste_result*>(data);
+
+    if (GInputStream* pResult = gdk_clipboard_read_finish(clipboard, res, nullptr, nullptr))
+    {
+        const int nBlockSize = 8192;
+        std::vector<sal_Int8> aVector(nBlockSize);
+        gsize total = 0;
+
+        while (true)
+        {
+            gsize bytes_read;
+            if (!g_input_stream_read_all(pResult, aVector.data() + total, nBlockSize, &bytes_read, nullptr, nullptr))
+                break;
+            total += bytes_read;
+            if (bytes_read < nBlockSize)
+                break;
+            aVector.resize(aVector.size() + nBlockSize);
+        }
+
+        pRes->aSeq = Sequence<sal_Int8>(aVector.data(), total);
+        g_object_unref(pResult);
+    }
+
+    pRes->bDone = true;
+
+    g_main_context_wakeup(nullptr);
+}
+
 #endif
 
 class GtkClipboardTransferable : public GtkTransferable
@@ -726,12 +762,25 @@ public:
 #endif
             return aRet;
         }
-#if !GTK_CHECK_VERSION(4, 0, 0)
 
         auto it = m_aMimeTypeToGtkType.find(rFlavor.MimeType);
         if (it == m_aMimeTypeToGtkType.end())
             return css::uno::Any();
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+        SalInstance* pInstance = GetSalData()->m_pInstance;
+        read_paste_result aRes;
+        const char *mime_types[] = { it->second.getStr(), nullptr };
+        gdk_clipboard_read_async(clipboard,
+                                 mime_types,
+                                 G_PRIORITY_DEFAULT,
+                                 nullptr,
+                                 read_async_completed,
+                                 &aRes);
+        while (!aRes.bDone)
+            pInstance->DoYield(true, false);
+        aRet <<= aRes.aSeq;
+#else
         GtkSelectionData* data = gtk_clipboard_wait_for_contents(clipboard,
                                                                  it->second);
         if (!data)
