@@ -401,6 +401,8 @@
 #define SIP_SA_TEXT_ANIDELAY                                NC_("SIP_SA_TEXT_ANIDELAY", "Speed of ticker")
 #define SIP_SA_TEXT_ANIAMOUNT                               NC_("SIP_SA_TEXT_ANIAMOUNT", "Ticker step size")
 #define SIP_SA_TEXT_CONTOURFRAME                            NC_("SIP_SA_TEXT_CONTOURFRAME", "Outline text flow")
+#define SIP_SA_TEXTCOLUMNS_NUMBER                           NC_("SIP_SA_TEXTCOLUMNS_NUMBER", "Columns number")
+#define SIP_SA_TEXTCOLUMNS_SPACING                          NC_("SIP_SA_TEXTCOLUMNS_SPACING", "Columns spacing")
 #define SIP_SA_XMLATTRIBUTES                                NC_("SIP_SA_XMLATTRIBUTES", "User-defined attributes")
 #define SIP_SA_TEXT_USEFIXEDCELLHEIGHT                      NC_("SIP_SA_TEXT_USEFIXEDCELLHEIGHT", "Use font-independent line spacing")
 #define SIP_SA_WORDWRAP                                     NC_("SIP_SA_WORDWRAP", "Word wrap text in shape")

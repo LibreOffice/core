@@ -128,7 +128,8 @@ namespace sdr::properties
                 // ranges from SdrAttrObj
                 svl::Items<SDRATTR_START, SDRATTR_SHADOW_LAST,
                 SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
-                SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION>{});
+                SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
+                SDRATTR_TEXTCOLUMNS_FIRST, SDRATTR_TEXTCOLUMNS_LAST>{});
         }
 
         AttributeProperties::AttributeProperties(SdrObject& rObj)

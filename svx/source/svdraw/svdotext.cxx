@@ -1726,6 +1726,16 @@ SdrTextAniDirection SdrTextObj::GetTextAniDirection() const
     return GetObjectItemSet().Get(SDRATTR_TEXT_ANIDIRECTION).GetValue();
 }
 
+sal_Int16 SdrTextObj::GetTextColumnsNumber() const
+{
+    return GetObjectItemSet().Get(SDRATTR_TEXTCOLUMNS_NUMBER).GetValue();
+}
+
+sal_Int32 SdrTextObj::GetTextColumnsSpacing() const
+{
+    return GetObjectItemSet().Get(SDRATTR_TEXTCOLUMNS_SPACING).GetValue();
+}
+
 // Get necessary data for text scroll animation. ATM base it on a Text-Metafile and a
 // painting rectangle. Rotation is excluded from the returned values.
 GDIMetaFile* SdrTextObj::GetTextScrollMetaFileAndRectangle(
