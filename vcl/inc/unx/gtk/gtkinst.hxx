@@ -73,7 +73,7 @@ class GtkTransferable : public cppu::WeakImplHelper<css::datatransfer::XTransfer
 {
 protected:
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    std::map<OUString, GdkAtom> m_aMimeTypeToAtom;
+    std::map<OUString, GdkAtom> m_aMimeTypeToGtkType;
 #endif
 
 #if GTK_CHECK_VERSION(4, 0, 0)
