@@ -2489,18 +2489,33 @@ bool SvNumberformat::GetOutputString(double fNumber,
                 {
                     OutString = "0";
                 }
-                else if (fNumber < EXP_LOWER_BOUND && fNumber > -EXP_LOWER_BOUND)
-                {
-                    OutString = ::rtl::math::doubleToUString( fNumber,
-                                rtl_math_StringFormat_E2,
-                                15,
-                                GetFormatter().GetNumDecimalSep()[0], true);
-                }
                 else if (fNumber < 1.0 && fNumber > -1.0)
                 {
-                    OutString = ::rtl::math::doubleToUString( fNumber,
-                                rtl_math_StringFormat_Automatic,
-                                15,
+                    // Decide whether to display as 0.000000123... or 1.23...e-07
+                    bool bFix = (fNumber < -EXP_LOWER_BOUND || EXP_LOWER_BOUND < fNumber);
+                    if (!bFix)
+                    {
+                        // Arbitrary, not too many 0s visually, start E2 at 1E-10.
+                        constexpr sal_Int32 kMaxExp = 9;
+                        const sal_Int32 nExp = static_cast<sal_Int32>(ceil( -log10( fabs( fNumber))));
+                        if (nExp <= kMaxExp && rtl::math::approxEqual(
+                                    rtl::math::round( fNumber, 16), rtl::math::round( fNumber, nExp + 16)))
+                        {
+                            // Not too many significant digits or accuracy
+                            // artefacts, otherwise leave everything to E2
+                            // format.
+                            bFix = true;
+                        }
+                    }
+                    if (bFix)
+                        OutString = ::rtl::math::doubleToUString( fNumber,
+                                rtl_math_StringFormat_F,
+                                rtl_math_DecimalPlaces_Max,
+                                GetFormatter().GetNumDecimalSep()[0], true);
+                    else
+                        OutString = ::rtl::math::doubleToUString( fNumber,
+                                rtl_math_StringFormat_E2,
+                                rtl_math_DecimalPlaces_Max,
                                 GetFormatter().GetNumDecimalSep()[0], true);
                 }
                 else
