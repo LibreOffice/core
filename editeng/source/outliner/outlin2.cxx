@@ -532,6 +532,16 @@ bool Outliner::IsTopToBottom() const
     return pEditEngine->IsTopToBottom();
 }
 
+void Outliner::SetTextColumnsNumber(sal_Int32 nColumns)
+{
+    pEditEngine->SetTextColumnsNumber(nColumns);
+}
+
+void Outliner::SetTextColumnsSpacing(sal_Int32 nSpacing)
+{
+    pEditEngine->SetTextColumnsSpacing(nSpacing);
+}
+
 void Outliner::SetFixedCellHeight( bool bUseFixedCellHeight )
 {
     pEditEngine->SetFixedCellHeight( bUseFixedCellHeight );

@@ -54,6 +54,7 @@ namespace sdr::properties
                 svl::Items<SDRATTR_START, SDRATTR_SHADOW_LAST,
                 SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
                 SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
+                SDRATTR_TEXTCOLUMNS_FIRST, SDRATTR_TEXTCOLUMNS_LAST,
 
                 // range from SdrTextObj
                 EE_ITEMS_START, EE_ITEMS_END>{});
@@ -199,6 +200,15 @@ namespace sdr::properties
 
             // call parent
             AttributeProperties::ItemChange( nWhich, pNewItem );
+
+            if (nWhich == SDRATTR_TEXTCOLUMNS_NUMBER)
+            {
+                rObj.SetTextColumnsNumber(GetItem(SDRATTR_TEXTCOLUMNS_NUMBER).GetValue());
+            }
+            else if (nWhich == SDRATTR_TEXTCOLUMNS_SPACING)
+            {
+                rObj.SetTextColumnsSpacing(GetItem(SDRATTR_TEXTCOLUMNS_SPACING).GetValue());
+            }
 
             // #i25616#
             if(!(XATTR_LINEWIDTH == nWhich && rObj.DoesSupportTextIndentingOnLineWidthChange()))

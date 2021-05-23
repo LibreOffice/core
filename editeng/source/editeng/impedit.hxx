@@ -563,8 +563,8 @@ private:
     sal_Int32 mnOverflowingLine = -1;
     bool mbNeedsChainingHandling = false;
 
-    sal_Int32 mnColumns = 3;
-    sal_Int32 mnColumnSpacing = 400;
+    sal_Int32 mnColumns = 1;
+    sal_Int32 mnColumnSpacing = 0;
 
     // If it is detected at one point that the StatusHdl has to be called, but
     // this should not happen immediately (critical section):
@@ -813,6 +813,9 @@ public:
     bool                    GetDirectVertical() const               { return GetEditDoc().GetDirectVertical(); }
     void                    SetRotation( TextRotation nRotation);
     TextRotation            GetRotation() const                     { return GetEditDoc().GetRotation(); }
+
+    void SetTextColumnsNumber(sal_Int32 nColumns);
+    void SetTextColumnsSpacing(sal_Int32 nSpacing);
 
     bool IsPageOverflow( ) const;
 
