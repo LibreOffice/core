@@ -399,8 +399,8 @@ public:
     void DrawLineBreak( const SwLinePortion &rPor ) const;
     void DrawRedArrow( const SwLinePortion &rPor ) const;
     void DrawPostIts( bool bScript ) const;
-    void DrawBackground( const SwLinePortion &rPor ) const;
-    void DrawViewOpt( const SwLinePortion &rPor, PortionType nWhich ) const;
+    void DrawBackground( const SwLinePortion &rPor, const Color *pColor=nullptr ) const;
+    void DrawViewOpt( const SwLinePortion &rPor, PortionType nWhich, const Color *pColor=nullptr ) const;
     void DrawBackBrush( const SwLinePortion &rPor ) const;
 
     /**

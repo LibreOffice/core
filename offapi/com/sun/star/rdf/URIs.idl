@@ -314,6 +314,14 @@ constants URIs
 
     /// urn:oasis:names:tc:opendocument:xmlns:text:1.0meta-field
 //    const short TEXT_META_FIELD = 3000;
+
+    /** custom shading color of an annotated text range or metadata field
+        (replacement of the default field shading color)
+
+        @since LibreOffice 7.2
+     */
+    /// urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0odf#shading
+    const short LO_EXT_SHADING      = 2106;
 };
 
 

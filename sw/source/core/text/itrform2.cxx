@@ -54,8 +54,15 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IMark.hxx>
 #include <IDocumentMarkAccess.hxx>
-
-#include <vector>
+#include <comphelper/processfactory.hxx>
+#include <docsh.hxx>
+#include <unocrsrhelper.hxx>
+#include <com/sun/star/rdf/Statement.hpp>
+#include <com/sun/star/rdf/URI.hpp>
+#include <com/sun/star/rdf/URIs.hpp>
+#include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
+#include <com/sun/star/rdf/XLiteral.hpp>
+#include <com/sun/star/text/XTextContent.hpp>
 
 using namespace ::com::sun::star;
 
@@ -842,9 +849,11 @@ namespace {
 
 class SwMetaPortion : public SwTextPortion
 {
+    Color m_aShadowColor;
 public:
     SwMetaPortion() { SetWhichPor( PortionType::Meta ); }
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    void SetShadowColor(const Color& rCol ) { m_aShadowColor = rCol; }
 };
 
 }
@@ -853,7 +862,12 @@ void SwMetaPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if ( Width() )
     {
-        rInf.DrawViewOpt( *this, PortionType::Meta );
+        rInf.DrawViewOpt( *this, PortionType::Meta,
+                // custom shading (RDF metadata)
+                COL_BLACK == m_aShadowColor
+                    ? nullptr
+                    : &m_aShadowColor );
+
         SwTextPortion::Paint( rInf );
     }
 }
@@ -919,7 +933,50 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
             pPor = new SwRefPortion;
         else if (GetFnt()->IsMeta())
         {
-            pPor = new SwMetaPortion;
+            auto pMetaPor = new SwMetaPortion;
+
+            // set custom LO_EXT_SHADING color, if it exists
+            SwTextFrame const*const pFrame(rInf.GetTextFrame());
+            SwPosition aPosition(pFrame->MapViewToModelPos(rInf.GetIdx()));
+            SwPaM aPam(aPosition);
+            uno::Reference<text::XTextContent> const xRet(
+                SwUnoCursorHelper::GetNestedTextContent(
+                    *aPam.GetNode().GetTextNode(), aPosition.nContent.GetIndex(), false) );
+            if (xRet.is())
+            {
+                const SwDoc & rDoc = rInf.GetTextFrame()->GetDoc();
+                static uno::Reference< uno::XComponentContext > xContext(
+                    ::comphelper::getProcessComponentContext());
+
+                static uno::Reference< rdf::XURI > xODF_SHADING(
+                    rdf::URI::createKnown(xContext, rdf::URIs::LO_EXT_SHADING), uno::UNO_SET_THROW);
+
+                uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(
+                    rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
+
+                const css::uno::Reference<css::rdf::XResource> xSubject(xRet, uno::UNO_QUERY);
+                const uno::Reference<rdf::XRepository>& xRepository =
+                    xDocumentMetadataAccess->getRDFRepository();
+                const uno::Reference<container::XEnumeration> xEnum(
+                    xRepository->getStatements(xSubject, xODF_SHADING, nullptr), uno::UNO_SET_THROW);
+
+                while (xEnum->hasMoreElements())
+                {
+                    rdf::Statement stmt;
+                    if (!(xEnum->nextElement() >>= stmt)) {
+                        throw uno::RuntimeException();
+                    }
+                    const uno::Reference<rdf::XLiteral> xObject(stmt.Object, uno::UNO_QUERY);
+                    if (!xObject.is()) continue;
+                    if (xEnum->hasMoreElements()) {
+                        SAL_INFO("sw.uno", "ignoring other odf:shading statements");
+                    }
+                    Color rColor = Color::STRtoRGB(xObject->getValue());
+                    pMetaPor->SetShadowColor(rColor);
+                    break;
+                }
+            }
+            pPor = pMetaPor;
         }
         else
         {

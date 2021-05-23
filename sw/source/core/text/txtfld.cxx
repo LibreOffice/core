@@ -304,7 +304,8 @@ static SwFieldPortion * lcl_NewMetaPortion(SwTextAttr & rHint, const bool bPrefi
     OSL_ENSURE(pField, "lcl_NewMetaPortion: no meta field?");
     if (pField)
     {
-        pField->GetPrefixAndSuffix(bPrefix ? &fix : nullptr, bPrefix ? nullptr : &fix);
+        OUString color;
+        pField->GetPrefixAndSuffix(bPrefix ? &fix : nullptr, bPrefix ? nullptr : &fix, &color);
     }
     return new SwFieldPortion( fix );
 }

@@ -1422,7 +1422,7 @@ SwXMetaField::removeVetoableChangeListener(
 }
 
 static uno::Reference<rdf::XURI> const&
-lcl_getURI(const bool bPrefix)
+lcl_getURI(const sal_Int16 eKnown)
 {
     static uno::Reference< uno::XComponentContext > xContext(
         ::comphelper::getProcessComponentContext());
@@ -1432,7 +1432,18 @@ lcl_getURI(const bool bPrefix)
     static uno::Reference< rdf::XURI > xOdfSuffix(
         rdf::URI::createKnown(xContext, rdf::URIs::ODF_SUFFIX),
         uno::UNO_SET_THROW);
-    return bPrefix ? xOdfPrefix : xOdfSuffix;
+    static uno::Reference< rdf::XURI > xOdfShading(
+        rdf::URI::createKnown(xContext, rdf::URIs::LO_EXT_SHADING),
+        uno::UNO_SET_THROW);
+    switch (eKnown)
+    {
+        case rdf::URIs::ODF_PREFIX:
+            return xOdfPrefix;
+        case rdf::URIs::ODF_SUFFIX:
+            return xOdfSuffix;
+        default:
+            return xOdfShading;
+    }
 }
 
 static OUString
@@ -1464,7 +1475,7 @@ void
 getPrefixAndSuffix(
         const uno::Reference<frame::XModel>& xModel,
         const uno::Reference<rdf::XMetadatable>& xMetaField,
-        OUString *const o_pPrefix, OUString *const o_pSuffix)
+        OUString *const o_pPrefix, OUString *const o_pSuffix, OUString *const o_pShadingColor)
 {
     try {
         const uno::Reference<rdf::XRepositorySupplier> xRS(
@@ -1475,11 +1486,15 @@ getPrefixAndSuffix(
                 xMetaField, uno::UNO_QUERY_THROW);
         if (o_pPrefix)
         {
-            *o_pPrefix = lcl_getPrefixOrSuffix(xRepo, xMeta, lcl_getURI(true));
+            *o_pPrefix = lcl_getPrefixOrSuffix(xRepo, xMeta, lcl_getURI(rdf::URIs::ODF_PREFIX));
         }
         if (o_pSuffix)
         {
-            *o_pSuffix = lcl_getPrefixOrSuffix(xRepo, xMeta, lcl_getURI(false));
+            *o_pSuffix = lcl_getPrefixOrSuffix(xRepo, xMeta, lcl_getURI(rdf::URIs::ODF_SUFFIX));
+        }
+        if (o_pShadingColor)
+        {
+            *o_pShadingColor = lcl_getPrefixOrSuffix(xRepo, xMeta, lcl_getURI(rdf::URIs::LO_EXT_SHADING));
         }
     } catch (uno::RuntimeException &) {
         throw;
@@ -1506,7 +1521,7 @@ SwXMetaField::getPresentation(sal_Bool bShowCommand)
         const OUString content( getString() );
         OUString prefix;
         OUString suffix;
-        getPrefixAndSuffix(GetModel(), this, &prefix, &suffix);
+        getPrefixAndSuffix(GetModel(), this, &prefix, &suffix, nullptr);
         return prefix + content + suffix;
     }
 }

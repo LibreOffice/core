@@ -730,7 +730,7 @@ MetaField::MetaField(SwFormatMeta * const i_pFormat,
 }
 
 void MetaField::GetPrefixAndSuffix(
-        OUString *const o_pPrefix, OUString *const o_pSuffix)
+        OUString *const o_pPrefix, OUString *const o_pSuffix, OUString *const o_pShadowsColor)
 {
     try
     {
@@ -743,7 +743,7 @@ void MetaField::GetPrefixAndSuffix(
             SwDocShell const * const pShell(pTextNode->GetDoc().GetDocShell());
             const uno::Reference<frame::XModel> xModel(
                 pShell ? pShell->GetModel() : nullptr,  uno::UNO_SET_THROW);
-            getPrefixAndSuffix(xModel, xMetaField, o_pPrefix, o_pSuffix);
+            getPrefixAndSuffix(xModel, xMetaField, o_pPrefix, o_pSuffix, o_pShadowsColor);
         }
     }
     catch (const uno::Exception&)
