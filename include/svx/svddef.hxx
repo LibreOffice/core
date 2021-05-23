@@ -138,6 +138,7 @@ class SdrVertShearAllItem;
 class SdrVertShearOneItem;
 class SdrYesNoItem;
 class SfxBoolItem;
+class SfxInt16Item;
 class SfxUInt16Item;
 class SfxUInt32Item;
 class SfxStringItem;
@@ -426,7 +427,12 @@ constexpr sal_uInt16                  SDRATTR_SOFTEDGE_FIRST(SDRATTR_GLOW_LAST +
 constexpr TypedWhichId<SdrMetricItem> SDRATTR_SOFTEDGE_RADIUS(SDRATTR_SOFTEDGE_FIRST + 0);
 constexpr sal_uInt16                  SDRATTR_SOFTEDGE_LAST(SDRATTR_SOFTEDGE_RADIUS);
 
-constexpr sal_uInt16 SDRATTR_END (SDRATTR_SOFTEDGE_LAST);      /* 1357 */ /* 1333 V4+++*/ /* 1243 V4+++*/  /*1213*/ /*1085*/ /*1040*/ /*Pool V2: 1123,V1: 1065 */
+constexpr sal_uInt16 SDRATTR_TEXTCOLUMNS_FIRST(SDRATTR_SOFTEDGE_LAST + 1);
+constexpr TypedWhichId<SfxInt16Item> SDRATTR_TEXTCOLUMNS_NUMBER(SDRATTR_TEXTCOLUMNS_FIRST + 0);
+constexpr TypedWhichId<SdrMetricItem> SDRATTR_TEXTCOLUMNS_SPACING(SDRATTR_TEXTCOLUMNS_FIRST + 1);
+constexpr sal_uInt16 SDRATTR_TEXTCOLUMNS_LAST(SDRATTR_TEXTCOLUMNS_SPACING);
+
+constexpr sal_uInt16 SDRATTR_END (SDRATTR_TEXTCOLUMNS_LAST);      /* 1357 */ /* 1333 V4+++*/ /* 1243 V4+++*/  /*1213*/ /*1085*/ /*1040*/ /*Pool V2: 1123,V1: 1065 */
 
 #endif // INCLUDED_SVX_SVDDEF_HXX
 
