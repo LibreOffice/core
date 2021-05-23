@@ -212,11 +212,6 @@ IMPL_LINK_NOARG(SwView, FormControlActivated, LinkParamNone*, void)
     }
 }
 
-IMPL_LINK_NOARG(SwView, ExchangeDatabaseHandler, weld::Button&, void)
-{
-    GetDispatcher().Execute(FN_CHANGE_DBFIELD);
-}
-
 namespace
 {
 uno::Reference<frame::XLayoutManager> getLayoutManager(const SfxViewFrame& rViewFrame)
@@ -1641,23 +1636,6 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
     else
     {
-        if (auto pSfxEventHint = dynamic_cast<const SfxEventHint*>(&rHint))
-        {
-            switch( pSfxEventHint->GetEventId() )
-            {
-                case SfxEventHintId::CreateDoc:
-                case SfxEventHintId::OpenDoc:
-                {
-                    OUString sDataSourceName = GetDataSourceName();
-                    if ( !sDataSourceName.isEmpty() && !IsDataSourceAvailable(sDataSourceName))
-                        AppendDataSourceInfobar();
-                }
-                break;
-                default:
-                    break;
-            }
-        }
-
         SfxHintId nId = rHint.GetId();
 
         switch ( nId )
@@ -1919,19 +1897,6 @@ bool SwView::IsDataSourceAvailable(const OUString sDataSourceName)
     Reference< XDatabaseContext> xDatabaseContext = DatabaseContext::create(xContext);
 
     return xDatabaseContext->hasByName(sDataSourceName);
-}
-
-void SwView::AppendDataSourceInfobar()
-{
-    auto pInfoBar = GetViewFrame()->AppendInfoBar("datasource", "",
-                                  SwResId(STR_DATASOURCE_NOT_AVAILABLE),
-                                  InfobarType::WARNING);
-    if (!pInfoBar)
-        return;
-
-    weld::Button& rBtn = pInfoBar->addButton();
-    rBtn.set_label(SwResId(STR_EXCHANGE_DATABASE));
-    rBtn.connect_clicked(LINK(this, SwView, ExchangeDatabaseHandler));
 }
 
 namespace sw {
