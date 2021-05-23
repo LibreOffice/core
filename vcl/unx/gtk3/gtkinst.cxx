@@ -654,6 +654,29 @@ GdkClipboard* clipboard_get(SelectionType eSelection)
 #endif
 }
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+
+struct text_paste_result
+{
+    OUString sText;
+    bool bDone = false;
+};
+
+void text_async_completed(GObject* source, GAsyncResult* res, gpointer data)
+{
+    GdkClipboard* clipboard = GDK_CLIPBOARD(source);
+    text_paste_result* pRes = static_cast<text_paste_result*>(data);
+
+    gchar* pText = gdk_clipboard_read_text_finish(clipboard, res, nullptr);
+    pRes->sText = OUString(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
+    g_free(pText);
+
+    pRes->bDone = true;
+
+    g_main_context_wakeup(nullptr);
+}
+#endif
+
 class GtkClipboardTransferable : public GtkTransferable
 {
 private:
@@ -677,15 +700,17 @@ public:
         if (rFlavor.MimeType == "text/plain;charset=utf-16")
         {
 #if !GTK_CHECK_VERSION(4, 0, 0)
-            OUString aStr;
             gchar *pText = gtk_clipboard_wait_for_text(clipboard);
-            if (pText)
-                aStr = OUString(pText, strlen(pText), RTL_TEXTENCODING_UTF8);
+            OUString aStr(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
             g_free(pText);
             aRet <<= aStr.replaceAll("\r\n", "\n");
 #else
-            (void)clipboard;
-            //TODO gdk_clipboard_read_text_async
+            SalInstance* pInstance = GetSalData()->m_pInstance;
+            text_paste_result aRes;
+            gdk_clipboard_read_text_async(clipboard, nullptr, text_async_completed, &aRes);
+            while (!aRes.bDone)
+                pInstance->DoYield(true, false);
+            aRet <<= aRes.sText.replaceAll("\r\n", "\n");
 #endif
             return aRet;
         }
