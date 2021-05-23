@@ -94,6 +94,8 @@ const char s_nsPkg      [] =
     "http://docs.oasis-open.org/ns/office/1.2/meta/pkg#";
 const char s_nsODF      [] =
     "http://docs.oasis-open.org/ns/office/1.2/meta/odf#";
+const char s_nsLO_EXT   [] =
+    "urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0odf#";
 
 void CURI::initFromConstant(const sal_Int16 i_Constant)
 {
@@ -695,6 +697,11 @@ void CURI::initFromConstant(const sal_Int16 i_Constant)
         case css::rdf::URIs::ODF_STYLESFILE:
             ns = s_nsODF;
             ln = "StylesFile";
+            break;
+
+        case css::rdf::URIs::LO_EXT_SHADING:
+            ns = s_nsLO_EXT;
+            ln = "shading";
             break;
 
         default:
