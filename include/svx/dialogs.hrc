@@ -45,6 +45,7 @@
 #define RID_SVXPAGE_TRANSPARENCE            (RID_SVX_START +  54)
 #define RID_SVXPAGE_TEXTATTR                (RID_SVX_START + 153)
 #define RID_SVXPAGE_TEXTANIMATION           (RID_SVX_START + 184)
+#define RID_SVXPAGE_TEXTCOLUMNS             (RID_SVX_START + 154)
 #define RID_SVXPAGE_MEASURE                 (RID_SVX_START + 161)
 #define RID_SVXPAGE_CONNECTION              (RID_SVX_START + 191)
 #define RID_SVXPAGE_LINE_DEF                (RID_SVX_START +  52)
