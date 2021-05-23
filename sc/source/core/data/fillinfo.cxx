@@ -680,7 +680,7 @@ void ScDocument::FillInfo(
                 if( bAnyCondition && pInfo->mxColorScale)
                 {
                     pRowInfo[nArrRow].bEmptyBack = false;
-                    pInfo->pBackground = new SvxBrushItem(*pInfo->mxColorScale, ATTR_BACKGROUND);
+                    pInfo->pBackground = &pPool->Put(SvxBrushItem(*pInfo->mxColorScale, ATTR_BACKGROUND));
                 }
             }
         }
