@@ -555,8 +555,6 @@ public:
     // form control has been activated
     DECL_LINK( FormControlActivated, LinkParamNone*, void );
 
-    DECL_LINK( ExchangeDatabaseHandler, weld::Button&, void);
-
     // edit links
     void            EditLinkDlg();
     void            AutoCaption(const sal_uInt16 nType, const SvGlobalName *pOleId = nullptr);
@@ -628,7 +626,6 @@ public:
 
     OUString GetDataSourceName() const;
     static bool IsDataSourceAvailable(const OUString sDataSourceName);
-    void AppendDataSourceInfobar();
 
     void ExecFormatPaintbrush(SfxRequest const &);
     void StateFormatPaintbrush(SfxItemSet &);
