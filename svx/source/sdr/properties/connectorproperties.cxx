@@ -39,6 +39,7 @@ namespace sdr::properties
                     SDRATTR_START, SDRATTR_SHADOW_LAST,
                     SDRATTR_MISC_FIRST, SDRATTR_EDGE_LAST,
                     SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
+                    SDRATTR_TEXTCOLUMNS_FIRST, SDRATTR_TEXTCOLUMNS_LAST,
                     // Range from SdrTextObj:
                     EE_ITEMS_START, EE_ITEMS_END>{});
         }

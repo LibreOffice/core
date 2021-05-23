@@ -57,6 +57,7 @@ void SdrOutliner::SetTextObj( const SdrTextObj* pObj )
         SetMinAutoPaperSize( Size() );
         SetMaxAutoPaperSize( aMaxSize );
         SetPaperSize( aMaxSize );
+        SetTextColumns(pObj->GetTextColumnsNumber(), pObj->GetTextColumnsSpacing());
         ClearPolygon();
     }
 
