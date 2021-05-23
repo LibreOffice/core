@@ -50,7 +50,7 @@ public:
     /* SwWrongList::Move() + handling of maSentence */
     void MoveGrammar(sal_Int32 nPos, sal_Int32 nDiff);
     /* SwWrongList::SplitList() + handling of maSentence */
-    SwGrammarMarkUp* SplitGrammarList(sal_Int32 nSplitPos);
+    std::unique_ptr<SwGrammarMarkUp> SplitGrammarList(sal_Int32 nSplitPos);
     /* SwWrongList::JoinList() + handling of maSentence */
     void JoinGrammarList(SwGrammarMarkUp* pNext, sal_Int32 nInsertPos);
     /* SwWrongList::ClearList() + handling of maSentence */

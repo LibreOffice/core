@@ -187,14 +187,20 @@ public:
     void SetGrammarCheckDirty( bool bNew ) const;
     void SetSmartTagDirty( bool bNew ) const;
     void SetAutoCompleteWordDirty( bool bNew ) const;
-    void SetWrong( SwWrongList* pNew, bool bDelete = true );
+    void SetWrong( std::unique_ptr<SwWrongList> pNew );
+    void ClearWrong();
+    std::unique_ptr<SwWrongList> ReleaseWrong();
     SwWrongList* GetWrong();
     const SwWrongList* GetWrong() const;
-    void SetGrammarCheck( SwGrammarMarkUp* pNew, bool bDelete = true );
+    void SetGrammarCheck( std::unique_ptr<SwGrammarMarkUp> pNew );
+    void ClearGrammarCheck();
+    std::unique_ptr<SwGrammarMarkUp> ReleaseGrammarCheck();
     SwGrammarMarkUp* GetGrammarCheck();
     // return SwWrongList because *function pointer* return values aren't covariant
     SwWrongList const* GetGrammarCheck() const;
-    void SetSmartTags( SwWrongList* pNew, bool bDelete = true );
+    void SetSmartTags( std::unique_ptr<SwWrongList> pNew );
+    void ClearSmartTags();
+    std::unique_ptr<SwWrongList> ReleaseSmartTags();
     SwWrongList* GetSmartTags();
     SwWrongList const* GetSmartTags() const;
     void TryCharSetExpandToNum(const SfxItemSet& pCharSet);

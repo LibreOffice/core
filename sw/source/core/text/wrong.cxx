@@ -442,9 +442,9 @@ bool SwWrongList::InvalidateWrong( )
     return false;
 }
 
-SwWrongList* SwWrongList::SplitList( sal_Int32 nSplitPos )
+std::unique_ptr<SwWrongList> SwWrongList::SplitList( sal_Int32 nSplitPos )
 {
-    SwWrongList *pRet = nullptr;
+    std::unique_ptr<SwWrongList> pRet;
     sal_uInt16 nLst = 0;
     while( nLst < Count() && Pos( nLst ) < nSplitPos )
         ++nLst;
@@ -462,9 +462,9 @@ SwWrongList* SwWrongList::SplitList( sal_Int32 nSplitPos )
     if( nLst )
     {
         if( WRONGLIST_GRAMMAR == GetWrongListType() )
-            pRet = new SwGrammarMarkUp();
+            pRet.reset(new SwGrammarMarkUp());
         else
-            pRet = new SwWrongList( GetWrongListType() );
+            pRet.reset(new SwWrongList( GetWrongListType() ));
         pRet->Insert(0, maList.begin(), ( nLst >= maList.size() ? maList.end() : maList.begin() + nLst ) );
         pRet->SetInvalid( GetBeginInv(), GetEndInv() );
         pRet->Invalidate_( nSplitPos ? nSplitPos - 1 : nSplitPos, nSplitPos );

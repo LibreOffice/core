@@ -164,7 +164,7 @@ void SAL_CALL SwXTextMarkup::commitStringMarkup(
         if ( !pWList )
         {
             pWList = new SwWrongList( WRONGLIST_SPELL );
-            m_pImpl->m_pTextNode->SetWrong( pWList );
+            m_pImpl->m_pTextNode->SetWrong( std::unique_ptr<SwWrongList>(pWList) );
         }
     }
     else if ( nType == text::TextMarkupType::PROOFREADING || nType == text::TextMarkupType::SENTENCE )
@@ -180,7 +180,7 @@ void SAL_CALL SwXTextMarkup::commitStringMarkup(
             pWList = m_pImpl->m_pTextNode->GetGrammarCheck();
             if ( !pWList )
             {
-                m_pImpl->m_pTextNode->SetGrammarCheck( new SwGrammarMarkUp() );
+                m_pImpl->m_pTextNode->SetGrammarCheck( std::make_unique<SwGrammarMarkUp>() );
                 pWList = m_pImpl->m_pTextNode->GetGrammarCheck();
             }
         }
@@ -194,7 +194,7 @@ void SAL_CALL SwXTextMarkup::commitStringMarkup(
         if ( !pWList )
         {
             pWList = new SwWrongList( WRONGLIST_SMARTTAG );
-            m_pImpl->m_pTextNode->SetSmartTags( pWList );
+            m_pImpl->m_pTextNode->SetSmartTags( std::unique_ptr<SwWrongList>(pWList) );
         }
     }
     else
@@ -434,7 +434,7 @@ void SAL_CALL SwXTextMarkup::commitMultiTextMarkup(
         pWList = m_pImpl->m_pTextNode->GetGrammarCheck();
         if ( !pWList )
         {
-            m_pImpl->m_pTextNode->SetGrammarCheck( new SwGrammarMarkUp() );
+            m_pImpl->m_pTextNode->SetGrammarCheck( std::make_unique<SwGrammarMarkUp>() );
             pWList = m_pImpl->m_pTextNode->GetGrammarCheck();
             pWList->SetInvalid( 0, COMPLETE_STRING );
         }

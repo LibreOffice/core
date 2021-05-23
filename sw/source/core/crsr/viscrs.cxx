@@ -248,8 +248,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
                     sal_Int32 nBegin = aPos.nContent.GetIndex();
                     sal_Int32 nLen = 1;
 
-                    SwWrongList *pWrong = nullptr;
-                    pWrong = pNode->GetWrong();
+                    SwWrongList *pWrong = pNode->GetWrong();
                     if (!pWrong)
                         pWrong = pNode->GetGrammarCheck();
                     if (pWrong)

@@ -2460,17 +2460,17 @@ void SAL_CALL SwXTextCursor::invalidateMarkings(::sal_Int32 nType)
     if ( text::TextMarkupType::SPELLCHECK == nType )
     {
         txtNode->SetWrongDirty(SwTextNode::WrongState::TODO);
-        txtNode->SetWrong(nullptr);
+        txtNode->ClearWrong();
     }
     else if( text::TextMarkupType::PROOFREADING == nType )
     {
         txtNode->SetGrammarCheckDirty(true);
-        txtNode->SetGrammarCheck(nullptr);
+        txtNode->ClearGrammarCheck();
     }
     else if ( text::TextMarkupType::SMARTTAG == nType )
     {
         txtNode->SetSmartTagDirty(true);
-        txtNode->SetSmartTags(nullptr);
+        txtNode->ClearSmartTags();
     }
     else return;
 

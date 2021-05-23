@@ -1144,10 +1144,7 @@ static bool lcl_CheckSmartTagsAgain( const SwNodePtr& rpNd, void*  )
     if( pTextNode )
     {
         pTextNode->SetSmartTagDirty( true );
-        if( pTextNode->GetSmartTags() )
-        {
-            pTextNode->SetSmartTags( nullptr );
-        }
+        pTextNode->ClearSmartTags();
     }
     return true;
 }
