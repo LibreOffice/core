@@ -966,9 +966,7 @@ void ScInterpreter::RoundNumber( rtl_math_RoundingMode eMode )
     {
         sal_Int16 nDec = GetInt16();
         double fX = GetDouble();
-        if ( nGlobalError != FormulaError::NONE || nDec < -20 || nDec > 20 )
-            PushIllegalArgument();
-        else
+        if (nGlobalError == FormulaError::NONE)
         {
             if ( ( eMode == rtl_math_RoundingMode_Down ||
                    eMode == rtl_math_RoundingMode_Up ) &&
