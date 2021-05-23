@@ -242,6 +242,8 @@ public:
     void            SetRotation(TextRotation nRotation);
     TextRotation    GetRotation() const;
 
+    void SetTextColumns(sal_Int16 nColumns, sal_Int32 nSpacing);
+
     void            SetFixedCellHeight( bool bUseFixedCellHeight );
 
     void                        SetDefaultHorizontalTextDirection( EEHorizontalTextDirection eHTextDir );
