@@ -452,6 +452,16 @@ bool EditEngine::GetDirectVertical() const
     return pImpEditEngine->GetDirectVertical();
 }
 
+void EditEngine::SetTextColumnsNumber(sal_Int32 nColumns)
+{
+    pImpEditEngine->SetTextColumnsNumber(nColumns);
+}
+
+void EditEngine::SetTextColumnsSpacing(sal_Int32 nSpacing)
+{
+    pImpEditEngine->SetTextColumnsSpacing(nSpacing);
+}
+
 void EditEngine::SetFixedCellHeight( bool bUseFixedCellHeight )
 {
     pImpEditEngine->SetFixedCellHeight( bUseFixedCellHeight );

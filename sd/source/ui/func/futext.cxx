@@ -1089,6 +1089,10 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag)
                     else if (nSlotId == SID_ATTR_CHAR_VERTICAL || nSlotId == SID_TEXT_FITTOSIZE_VERTICAL)
                         pOutl->SetVertical( true );
 
+                    pOutl->SetTextColumnsNumber(pTextObj->GetTextColumnsNumber());
+                    pOutl->SetTextColumnsSpacing(pTextObj->GetTextColumnsSpacing());
+
+
                     if( pTextObj->getTextCount() > 1 )
                     {
                         Point aPix(rMEvt.GetPosPixel());

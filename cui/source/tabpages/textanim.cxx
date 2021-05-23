@@ -19,6 +19,7 @@
 
 #include <textanim.hxx>
 #include <textattr.hxx>
+#include <TextColumnsPage.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/svdmark.hxx>
 #include <svx/svdview.hxx>
@@ -47,6 +48,7 @@ SvxTextTabDialog::SvxTextTabDialog(weld::Window* pParent, const SfxItemSet* pAtt
 {
     AddTabPage("RID_SVXPAGE_TEXTATTR", SvxTextAttrPage::Create, nullptr);
     AddTabPage("RID_SVXPAGE_TEXTANIMATION", SvxTextAnimationPage::Create, nullptr);
+    AddTabPage("RID_SVXPAGE_TEXTCOLUMNS", SvxTextColumnsPage::Create, nullptr);
 }
 
 /*************************************************************************
