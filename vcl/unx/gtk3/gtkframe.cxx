@@ -4260,8 +4260,8 @@ public:
         if (aFlavor.MimeType == "text/plain;charset=utf-16")
             aFlavor.MimeType = "text/plain;charset=utf-8";
 
-        auto it = m_aMimeTypeToAtom.find(aFlavor.MimeType);
-        if (it == m_aMimeTypeToAtom.end())
+        auto it = m_aMimeTypeToGtkType.find(aFlavor.MimeType);
+        if (it == m_aMimeTypeToGtkType.end())
             return css::uno::Any();
 
         /* like gtk_clipboard_wait_for_contents run a sub loop

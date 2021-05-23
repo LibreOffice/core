@@ -604,7 +604,7 @@ std::vector<css::datatransfer::DataFlavor> GtkTransferable::getTransferDataFlavo
                                     RTL_TEXTENCODING_UTF8);
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-        m_aMimeTypeToAtom[aFlavor.MimeType] = targets[i];
+        m_aMimeTypeToGtkType[aFlavor.MimeType] = targets[i];
 #endif
 
         aFlavor.DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
@@ -728,8 +728,8 @@ public:
         }
 #if !GTK_CHECK_VERSION(4, 0, 0)
 
-        auto it = m_aMimeTypeToAtom.find(rFlavor.MimeType);
-        if (it == m_aMimeTypeToAtom.end())
+        auto it = m_aMimeTypeToGtkType.find(rFlavor.MimeType);
+        if (it == m_aMimeTypeToGtkType.end())
             return css::uno::Any();
 
         GtkSelectionData* data = gtk_clipboard_wait_for_contents(clipboard,
