@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "50051b07_8a9568b3",
+        "filename": "sc/inc/arraysumfunctor.hxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-05-23T15:06:35Z",
+      "side": 1,
+      "message": "I\u0027ve tried to move it to the unittest .cxx file.\nBut it just keeps giving me linking errors.\nI\u0027ve located it\u0027s make file.\nhttps://opengrok.libreoffice.org/xref/core/sc/CppunitTest_sc_statistical_functions_test.mk?r\u003dba331893\nHowever I can\u0027t figure out wich flags I\u0027ve ot to use to link this.\n\nmake -j 8 -rs -f /home/uv/Downloads/libreoffice/Makefile.gbuild CppunitTest_sc_statistical_functions_test\n[DEP] LNK:CppunitTest/libtest_sc_statistical_functions_test.so\n[LNK] CppunitTest/libtest_sc_statistical_functions_test.so\n/usr/bin/ld: /home/uv/Downloads/libreoffice/workdir/CxxObject/sc/qa/unit/functions_statistical.o: in function `StatisticalFunctionsTest::testAdvancedSums()\u0027:\nfunctions_statistical.cxx:(.text+0x3ba): undefined reference to `sc::op::executeSSE2(unsigned long\u0026, unsigned long, double const*)\u0027\n/usr/bin/ld: functions_statistical.cxx:(.text+0x996): undefined reference to `sc::op::executeAVX512F(unsigned long\u0026, unsigned long, double const*)\u0027\n/usr/bin/ld: functions_statistical.cxx:(.text+0xaca): undefined reference to `sc::op::executeAVX(unsigned long\u0026, unsigned long, double const*)\u0027\ncollect2: error: ld returned 1 exit status\nmake[1]: *** [/home/uv/Downloads/libreoffice/solenv/gbuild/LinkTarget.mk:667: /home/uv/Downloads/libreoffice/workdir/LinkTarget/CppunitTest/libtest_sc_statistical_functions_test.so] Error 1\nmake: *** [Makefile:169: CppunitTest_sc_statistical_functions_test] Error 2",
+      "parentUuid": "2b87fa49_3a6c1125",
+      "revId": "20159854f35063033343092f4c747fb1c1391bb6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "14736967_e648b5be",
         "filename": "sc/qa/unit/functions_statistical.cxx",
         "patchSetId": 21
