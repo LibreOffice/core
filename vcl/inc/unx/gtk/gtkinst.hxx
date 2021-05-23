@@ -71,10 +71,14 @@ private:
 
 class GtkTransferable : public cppu::WeakImplHelper<css::datatransfer::XTransferable>
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
 protected:
+#if !GTK_CHECK_VERSION(4, 0, 0)
     std::map<OUString, GdkAtom> m_aMimeTypeToAtom;
+#endif
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+    std::vector<css::datatransfer::DataFlavor> getTransferDataFlavorsAsVector(const char * const *targets, gint n_targets);
+#else
     std::vector<css::datatransfer::DataFlavor> getTransferDataFlavorsAsVector(GdkAtom *targets, gint n_targets);
 #endif
 
