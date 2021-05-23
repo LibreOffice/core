@@ -658,6 +658,9 @@ public:
     bool            IsVertical() const;
     bool            IsTopToBottom() const;
 
+    void SetTextColumnsNumber(sal_Int32 nColumns);
+    void SetTextColumnsSpacing(sal_Int32 nSpacing);
+
     void            SetFixedCellHeight( bool bUseFixedCellHeight );
 
     void                        SetDefaultHorizontalTextDirection( EEHorizontalTextDirection eHTextDir );

@@ -242,6 +242,9 @@ public:
     void            SetRotation(TextRotation nRotation);
     TextRotation    GetRotation() const;
 
+    void SetTextColumnsNumber(sal_Int32 nColumns);
+    void SetTextColumnsSpacing(sal_Int32 nSpacing);
+
     void            SetFixedCellHeight( bool bUseFixedCellHeight );
 
     void                        SetDefaultHorizontalTextDirection( EEHorizontalTextDirection eHTextDir );

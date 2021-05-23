@@ -2635,6 +2635,32 @@ void ImpEditEngine::SetRotation(TextRotation nRotation)
     }
 }
 
+void ImpEditEngine::SetTextColumnsNumber(sal_Int32 nColumns)
+{
+    if (mnColumns != nColumns)
+    {
+        mnColumns = nColumns;
+        if (IsFormatted())
+        {
+            FormatFullDoc();
+            UpdateViews(GetActiveView());
+        }
+    }
+}
+
+void ImpEditEngine::SetTextColumnsSpacing(sal_Int32 nSpacing)
+{
+    if (mnColumnSpacing != nSpacing)
+    {
+        mnColumnSpacing = nSpacing;
+        if (IsFormatted())
+        {
+            FormatFullDoc();
+            UpdateViews(GetActiveView());
+        }
+    }
+}
+
 void ImpEditEngine::SetFixedCellHeight( bool bUseFixedCellHeight )
 {
     if ( IsFixedCellHeight() != bUseFixedCellHeight )
