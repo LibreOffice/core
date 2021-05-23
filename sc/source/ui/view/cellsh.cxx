@@ -223,7 +223,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             case SID_PASTE_ONLY_TEXT:
             case SID_PASTE_ONLY_FORMULA:
             case SID_PASTE_TEXTIMPORT_DIALOG:
-                bDisable = GetViewData()->SelectionForbidsCellFill();
+                bDisable = GetViewData()->SelectionForbidsPaste();
                 break;
 
             case FID_INS_ROW:
@@ -543,12 +543,11 @@ bool checkDestRanges(ScViewData& rViewData)
             return false;
     }
 
-    if (rViewData.SelectionForbidsCellFill())
-        return false;
-
     // Multiple destination ranges.
 
-    ScDocument& rDoc = rViewData.GetDocument();
+    // Same as ScViewData::SelectionForbidsPaste() in
+    // sc/source/ui/view/viewdata.cxx but different return details.
+
     vcl::Window* pWin = rViewData.GetActiveWin();
     if (!pWin)
         return false;
@@ -566,12 +565,15 @@ bool checkDestRanges(ScViewData& rViewData)
     SCROW nRowSize = aSrcRange.aEnd.Row() - aSrcRange.aStart.Row() + 1;
     SCCOL nColSize = aSrcRange.aEnd.Col() - aSrcRange.aStart.Col() + 1;
 
+    if (rViewData.SelectionForbidsPaste( nColSize, nRowSize))
+        return false;
+
     ScMarkData aMark = rViewData.GetMarkData();
     ScRangeList aRanges;
     aMark.MarkToSimple();
     aMark.FillRangeListWithMarks(&aRanges, false);
 
-    return ScClipUtil::CheckDestRanges(rDoc, nColSize, nRowSize, aMark, aRanges);
+    return ScClipUtil::CheckDestRanges(rViewData.GetDocument(), nColSize, nRowSize, aMark, aRanges);
 }
 
 }
