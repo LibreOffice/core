@@ -349,6 +349,7 @@ void SdrTextObj::ImpSetTextEditParams() const
     pEdtOutl->SetMinAutoPaperSize(aPaperMin);
     pEdtOutl->SetMaxAutoPaperSize(aPaperMax);
     pEdtOutl->SetPaperSize(Size());
+    pEdtOutl->SetTextColumns(GetTextColumnsNumber(), GetTextColumnsSpacing());
     if (bContourFrame) {
         tools::Rectangle aAnchorRect;
         TakeTextAnchorRect(aAnchorRect);
