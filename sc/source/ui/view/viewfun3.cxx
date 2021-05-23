@@ -884,7 +884,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         return false;
     }
 
-    if (GetViewData().SelectionForbidsCellFill())
+    if (GetViewData().SelectionForbidsPaste(pClipDoc))
         return false;
 
     //  undo: save all or no content
