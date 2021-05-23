@@ -56,6 +56,8 @@
 #include <markdata.hxx>
 #include <ViewSettingsSequenceDefines.hxx>
 #include <gridwin.hxx>
+#include <transobj.hxx>
+#include <clipparam.hxx>
 #include <comphelper/flagguard.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
@@ -1254,6 +1256,56 @@ bool ScViewData::IsMultiMarked() const
     ScRange aDummy;
     ScMarkType eType = GetSimpleArea(aDummy);
     return (eType & SC_MARK_SIMPLE) != SC_MARK_SIMPLE;
+}
+
+bool ScViewData::SelectionForbidsPaste( ScDocument* pClipDoc )
+{
+    if (!pClipDoc)
+    {
+        // Same as checkDestRanges() in sc/source/ui/view/cellsh.cxx but
+        // different return details.
+
+        vcl::Window* pWin = GetActiveWin();
+        if (!pWin)
+            // No window doesn't mean paste would be forbidden.
+            return false;
+
+        const ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard(ScTabViewShell::GetClipData(pWin));
+        if (!pOwnClip)
+            // Foreign content does not get repeatedly replicated.
+            return false;
+
+        pClipDoc = pOwnClip->GetDocument();
+        if (!pClipDoc)
+            // No clipdoc doesn't mean paste would be forbidden.
+            return false;
+    }
+
+    const ScRange aSrcRange = pClipDoc->GetClipParam().getWholeRange();
+    const SCROW nRowSize = aSrcRange.aEnd.Row() - aSrcRange.aStart.Row() + 1;
+    const SCCOL nColSize = aSrcRange.aEnd.Col() - aSrcRange.aStart.Col() + 1;
+
+    return SelectionForbidsPaste( nColSize, nRowSize);
+}
+
+bool ScViewData::SelectionForbidsPaste( SCCOL nSrcCols, SCROW nSrcRows )
+{
+    ScRange aSelRange( ScAddress::UNINITIALIZED );
+    ScMarkType eMarkType = GetSimpleArea( aSelRange);
+
+    if (eMarkType == SC_MARK_MULTI)
+        // Not because of DOOM.
+        return false;
+
+    if (aSelRange.aEnd.Row() - aSelRange.aStart.Row() + 1 == nSrcRows)
+        // This also covers entire col(s) copied to be pasted on entire cols.
+        return false;
+
+    if (aSelRange.aEnd.Col() - aSelRange.aStart.Col() + 1 == nSrcCols)
+        // This also covers entire row(s) copied to be pasted on entire rows.
+        return false;
+
+    return SelectionFillDOOM( aSelRange);
 }
 
 bool ScViewData::SelectionForbidsCellFill()

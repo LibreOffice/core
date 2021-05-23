@@ -479,7 +479,15 @@ public:
 
     bool            IsMultiMarked() const;
 
-                    /** Disallow cell fill (Paste,Fill,...) on Ctrl+A all
+                    /** Disallow Paste on Ctrl+A all selected or another high
+                        amount of selected cells that is not the same size in
+                        one direction as the clipboard source.
+                        To prevent DOOM.
+                     */
+    bool            SelectionForbidsPaste( ScDocument* pClipDoc = nullptr );
+    bool            SelectionForbidsPaste( SCCOL nSrcCols, SCROW nSrcRows );
+
+                    /** Disallow cell fill (Fill,Enter,...) on Ctrl+A all
                         selected or another high amount of selected cells.
                         We'd go DOOM.
                      */
