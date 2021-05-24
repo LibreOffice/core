@@ -4136,7 +4136,7 @@
       <text:p>#DIV/0!</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce13" table:formula="of:=ISERROR([.A9])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
-      <text:p>WAHR</text:p>
+      <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A9])" office:value-type="string" office:string-value="=RSQ(L12:L15;M12:M15)" calcext:value-type="string">
       <text:p>=RSQ(L12:L15;M12:M15)</text:p>
