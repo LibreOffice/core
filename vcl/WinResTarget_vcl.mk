@@ -92,6 +92,7 @@ $(eval $(call gb_WinResTarget_add_dependencies,vcl/salsrc,\
     vcl/win/src/chart.cur \
     vcl/win/src/dline.cur \
     vcl/win/src/movebw.cur \
+    vcl/win/src/fatcross.cur \
 ))
 
 # vim: set noet sw=4 ts=4:
