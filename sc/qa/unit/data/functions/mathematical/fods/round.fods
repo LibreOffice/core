@@ -2157,6 +2157,23 @@
      <table:table-cell table:style-name="ce32" table:number-columns-repeated="4"/>
      <table:table-cell/>
     </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=ROUND(6E-027;30)" office:value-type="float" office:value="6E-027" calcext:value-type="float">
+      <text:p>6E-27</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="6E-27" calcext:value-type="float">
+      <text:p>6E-27</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce44" table:formula="of:=[.A19]=[.B19]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce21" table:formula="of:=FORMULA([.A19])" office:value-type="string" office:string-value="=ROUND(6E-027,30)" calcext:value-type="string">
+      <text:p>=ROUND(6E-027;30)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell table:style-name="ce32" table:number-columns-repeated="4"/>
+     <table:table-cell/>
+    </table:table-row>
     <table:table-row table:style-name="ro2" table:number-rows-repeated="2">
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce14"/>
