@@ -151,12 +151,12 @@ void TestTraceEvent::test()
     CPPUNIT_ASSERT(aEvents[1].startsWith("{\"name\":\"async2.5\",\"ph\":\"b\",\"id\":1,"));
     CPPUNIT_ASSERT(aEvents[2].startsWith("{\"name\":\"block2\",\"ph\":\"X\","));
     CPPUNIT_ASSERT(aEvents[3].startsWith(
-        "{\"name\":\"async3\",\"ph\":\"b\",\"id\":2,\"args\":{\"foo\",\"bar\",\"tem\",\"42\"},"));
+        "{\"name\":\"async3\",\"ph\":\"b\",\"id\":2,\"args\":{\"foo\":\"bar\",\"tem\":\"42\"},"));
     CPPUNIT_ASSERT(aEvents[4].startsWith("{\"name\":\"async4in3\",\"ph\":\"b\",\"id\":2,"));
     CPPUNIT_ASSERT(aEvents[5].startsWith("{\"name\":\"block3\",\"ph\":\"X\","));
     CPPUNIT_ASSERT(aEvents[6].startsWith("{\"name\":\"async2.5\",\"ph\":\"e\",\"id\":1,"));
     CPPUNIT_ASSERT(aEvents[7].startsWith(
-        "{\"name:\"instant2\",\"ph\":\"i\",\"args\":{\"foo2\",\"bar2\",\"tem2\",\"42\"},"));
+        "{\"name:\"instant2\",\"ph\":\"i\",\"args\":{\"foo2\":\"bar2\",\"tem2\":\"42\"},"));
     CPPUNIT_ASSERT(aEvents[8].startsWith("{\"name\":\"async5in4\",\"ph\":\"b\",\"id\":2,"));
     CPPUNIT_ASSERT(aEvents[9].startsWith("{\"name\":\"async6in5\",\"ph\":\"b\",\"id\":2,"));
     CPPUNIT_ASSERT(aEvents[10].startsWith("{\"name\":\"async6in5\",\"ph\":\"e\",\"id\":2,"));
@@ -166,7 +166,7 @@ void TestTraceEvent::test()
     CPPUNIT_ASSERT(aEvents[14].startsWith("{\"name\":\"async4in3\",\"ph\":\"e\",\"id\":2,"));
     CPPUNIT_ASSERT(aEvents[15].startsWith("{\"name\":\"async7in3\",\"ph\":\"e\",\"id\":2,"));
     CPPUNIT_ASSERT(aEvents[16].startsWith(
-        "{\"name\":\"async3\",\"ph\":\"e\",\"id\":2,\"args\":{\"foo\",\"bar\",\"tem\",\"42\"},"));
+        "{\"name\":\"async3\",\"ph\":\"e\",\"id\":2,\"args\":{\"foo\":\"bar\",\"tem\":\"42\"},"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestTraceEvent);
