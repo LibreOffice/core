@@ -78,6 +78,7 @@ private:
     std::unique_ptr<sal_uInt16[]>         m_pRanges;
     OString             m_sAppPageId;
     bool                m_bStandardPushed;
+    std::unique_ptr<SfxAllItemSet>       m_xItemSet;
 
     DECL_DLLPRIVATE_LINK(ActivatePageHdl, const OString&, void);
     DECL_DLLPRIVATE_LINK(DeactivatePageHdl, const OString&, bool);
