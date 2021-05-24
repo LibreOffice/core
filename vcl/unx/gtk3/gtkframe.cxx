@@ -519,11 +519,7 @@ static void hud_activated( gboolean hud_active, gpointer user_data )
 static void attach_menu_model(GtkSalFrame* pSalFrame)
 {
     GtkWidget* pWidget = pSalFrame->getWindow();
-#if !GTK_CHECK_VERSION(4,0,0)
-    GdkSurface* gdkWindow = gtk_widget_get_window(pWidget);
-#else
-    GdkSurface* gdkWindow = gtk_native_get_surface(gtk_widget_get_native(pWidget));
-#endif
+    GdkSurface* gdkWindow = widget_get_surface(pWidget);
 
     if ( gdkWindow != nullptr && g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-menubar" ) == nullptr )
     {
@@ -1460,7 +1456,7 @@ void GtkSalFrame::SetIcon(const char* appicon)
                                              dlsym(nullptr, "gdk_wayland_window_set_application_id"));
         if (set_application_id)
         {
-            GdkWindow* gdkWindow = gtk_widget_get_window(m_pWindow);
+            GdkSurface* gdkWindow = widget_get_surface(m_pWindow);
             set_application_id(gdkWindow, appicon);
         }
 #endif
@@ -1721,12 +1717,12 @@ void GtkSalFrame::AllocateFrame()
         cairo_surface_destroy(m_pSurface);
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    m_pSurface = gdk_window_create_similar_surface(gtk_widget_get_window(m_pWindow),
+    m_pSurface = gdk_window_create_similar_surface(widget_get_surface(m_pWindow),
                                                    CAIRO_CONTENT_COLOR_ALPHA,
                                                    aFrameSize.getX(),
                                                    aFrameSize.getY());
 #else
-    m_pSurface = gdk_surface_create_similar_surface(gtk_native_get_surface(gtk_widget_get_native(m_pWindow)),
+    m_pSurface = gdk_surface_create_similar_surface(widget_get_surface(m_pWindow),
                                                     CAIRO_CONTENT_COLOR_ALPHA,
                                                     aFrameSize.getX(),
                                                     aFrameSize.getY());
@@ -2026,7 +2022,7 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, tools::Rect
             gtk_window_set_screen( GTK_WINDOW( m_pWindow ), pScreen );
 
         gint nOldMonitor = gdk_screen_get_monitor_at_window(
-                                pScreen, gtk_widget_get_window( m_pWindow ) );
+                                pScreen, widget_get_surface( m_pWindow ) );
         if (bSameMonitor)
             nMonitor = nOldMonitor;
 
@@ -2083,7 +2079,7 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, tools::Rect
 
     gtk_window_move(GTK_WINDOW(m_pWindow), nX, nY);
 
-    gdk_window_set_fullscreen_mode( gtk_widget_get_window(m_pWindow), m_bSpanMonitorsWhenFullscreen
+    gdk_window_set_fullscreen_mode( widget_get_surface(m_pWindow), m_bSpanMonitorsWhenFullscreen
         ? GDK_FULLSCREEN_ON_ALL_MONITORS : GDK_FULLSCREEN_ON_CURRENT_MONITOR );
 
     GtkWidget* pMenuBarContainerWidget = m_pSalMenu ? m_pSalMenu->GetMenuBarContainerWidget() : nullptr;
@@ -2253,7 +2249,7 @@ void GtkSalFrame::ToTop( SalFrameToTop nFlags )
             gtk_window_present_with_time(GTK_WINDOW(m_pWindow), nTimestamp);
 #if !GTK_CHECK_VERSION(4, 0, 0)
         else
-            gdk_window_focus(gtk_widget_get_window(m_pWindow), nTimestamp);
+            gdk_window_focus(widget_get_surface(m_pWindow), nTimestamp);
 #endif
         GrabFocus();
     }
@@ -2301,7 +2297,7 @@ void GtkSalFrame::grabPointer( bool bGrab, bool bKeyboardAlso, bool bOwnerEvents
     if (bGrab)
     {
         GdkSeatCapabilities eCapability = bKeyboardAlso ? GDK_SEAT_CAPABILITY_ALL : GDK_SEAT_CAPABILITY_ALL_POINTING;
-        gdk_seat_grab(pSeat, gtk_widget_get_window(getMouseEventWidget()), eCapability,
+        gdk_seat_grab(pSeat, widget_get_surface(getMouseEventWidget()), eCapability,
                       bOwnerEvents, nullptr, nullptr, nullptr, nullptr);
     }
     else
@@ -2343,7 +2339,7 @@ void GtkSalFrame::SetPointerPos( tools::Long nX, tools::Long nY )
     // #i38648# ask for the next motion hint
     gint x, y;
     GdkModifierType mask;
-    gdk_window_get_pointer( gtk_widget_get_window(pFrame->m_pWindow) , &x, &y, &mask );
+    gdk_window_get_pointer( widget_get_surface(pFrame->m_pWindow) , &x, &y, &mask );
 #else
     (void)nX;
     (void)nY;
@@ -2601,7 +2597,7 @@ void GtkSalFrame::ResetClipRegion()
 {
 #if !GTK_CHECK_VERSION(4, 0, 0)
     if( m_pWindow )
-        gdk_window_shape_combine_region( gtk_widget_get_window( m_pWindow ), nullptr, 0, 0 );
+        gdk_window_shape_combine_region( widget_get_surface( m_pWindow ), nullptr, 0, 0 );
 #endif
 }
 
@@ -2629,7 +2625,7 @@ void GtkSalFrame::EndSetClipRegion()
 {
 #if !GTK_CHECK_VERSION(4, 0, 0)
     if( m_pWindow && m_pRegion )
-        gdk_window_shape_combine_region( gtk_widget_get_window(m_pWindow), m_pRegion, 0, 0 );
+        gdk_window_shape_combine_region( widget_get_surface(m_pWindow), m_pRegion, 0, 0 );
 #endif
 }
 
@@ -2904,7 +2900,7 @@ gboolean GtkSalFrame::signalButton(GtkWidget*, GdkEventButton* pEvent, gpointer 
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
     GtkWidget* pEventWidget = pThis->getMouseEventWidget();
-    bool bDifferentEventWindow = pEvent->window != gtk_widget_get_window(pEventWidget);
+    bool bDifferentEventWindow = pEvent->window != widget_get_surface(pEventWidget);
 
     if (pEvent->type == GDK_BUTTON_PRESS)
     {
@@ -3252,7 +3248,7 @@ gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
     GtkWidget* pEventWidget = pThis->getMouseEventWidget();
-    bool bDifferentEventWindow = pEvent->window != gtk_widget_get_window(pEventWidget);
+    bool bDifferentEventWindow = pEvent->window != widget_get_surface(pEventWidget);
 
     //If a menu, e.g. font name dropdown, is open, then under wayland moving the
     //mouse in the top left corner of the toplevel window in a
@@ -3294,7 +3290,7 @@ gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer
         // ask for the next hint
         gint x, y;
         GdkModifierType mask;
-        gdk_window_get_pointer( gtk_widget_get_window(GTK_WIDGET(pThis->m_pWindow)), &x, &y, &mask );
+        gdk_window_get_pointer( widget_get_surface(GTK_WIDGET(pThis->m_pWindow)), &x, &y, &mask );
     }
 
     return true;
@@ -3495,13 +3491,13 @@ void GtkSalFrame::signalRealize(GtkWidget*, gpointer frame)
     }
 
     tools::Rectangle aFloatRect = FloatingWindow::ImplConvertToAbsPos(pVclParent, pThis->m_aFloatRect);
-    if (gdk_window_get_window_type(gtk_widget_get_window(pThis->m_pParent->m_pWindow)) != GDK_WINDOW_TOPLEVEL)
+    if (gdk_window_get_window_type(widget_get_surface(pThis->m_pParent->m_pWindow)) != GDK_WINDOW_TOPLEVEL)
         aFloatRect.Move(-pThis->m_pParent->maGeometry.nX, -pThis->m_pParent->maGeometry.nY);
 
     GdkRectangle rect {static_cast<int>(aFloatRect.Left()), static_cast<int>(aFloatRect.Top()),
                        static_cast<int>(aFloatRect.GetWidth()), static_cast<int>(aFloatRect.GetHeight())};
 
-    GdkWindow* gdkWindow = gtk_widget_get_window(pThis->m_pWindow);
+    GdkSurface* gdkWindow = widget_get_surface(pThis->m_pWindow);
     window_move_to_rect(gdkWindow, &rect, rect_anchor, menu_anchor, static_cast<GdkAnchorHints>(GDK_ANCHOR_FLIP | GDK_ANCHOR_SLIDE), 0, 0);
 #endif
 }
@@ -3529,7 +3525,7 @@ gboolean GtkSalFrame::signalConfigure(GtkWidget*, GdkEventConfigure* pEvent, gpo
 
     // update decoration hints
     GdkRectangle aRect;
-    gdk_window_get_frame_extents( gtk_widget_get_window(GTK_WIDGET(pThis->m_pWindow)), &aRect );
+    gdk_window_get_frame_extents( widget_get_surface(GTK_WIDGET(pThis->m_pWindow)), &aRect );
     pThis->maGeometry.nTopDecoration    = y - aRect.y;
     pThis->maGeometry.nBottomDecoration = aRect.y + aRect.height - y - pEvent->height;
     pThis->maGeometry.nLeftDecoration   = x - aRect.x;
@@ -4360,7 +4356,7 @@ gboolean GtkInstDropTarget::signalDragDrop(GtkWidget* pWidget, GdkDragContext* c
     // possible equivalent in gtk.
     // So (tdf#109227) set ACTION_DEFAULT if no modifier key is held down
     GdkModifierType mask;
-    gdk_window_get_pointer(gtk_widget_get_window(pWidget), nullptr, nullptr, &mask);
+    gdk_window_get_pointer(widget_get_surface(pWidget), nullptr, nullptr, &mask);
     if (!(mask & (GDK_CONTROL_MASK | GDK_SHIFT_MASK)))
         aEvent.DropAction |= css::datatransfer::dnd::DNDConstants::ACTION_DEFAULT;
     aEvent.SourceActions = GdkToVcl(gdk_drag_context_get_actions(context));
@@ -4453,7 +4449,7 @@ gboolean GtkInstDropTarget::signalDragMotion(GtkWidget *pWidget, GdkDragContext 
     //to overrule this choice. i.e. typically here we default to ACTION_MOVE
     sal_Int8 nSourceActions = GdkToVcl(gdk_drag_context_get_actions(context));
     GdkModifierType mask;
-    gdk_window_get_pointer(gtk_widget_get_window(pWidget), nullptr, nullptr, &mask);
+    gdk_window_get_pointer(widget_get_surface(pWidget), nullptr, nullptr, &mask);
 
     // tdf#124411 default to move if drag originates within LO itself, default
     // to copy if it comes from outside, this is similar to srcAndDestEqual
@@ -4605,7 +4601,7 @@ void GtkSalFrame::IMHandler::createIMContext()
     gtk_im_context_set_client_widget(m_pIMContext, m_pFrame->getMouseEventWidget());
     gtk_event_controller_key_set_im_context(m_pFrame->m_pKeyController, m_pIMContext);
 #else
-    gtk_im_context_set_client_window(m_pIMContext, gtk_widget_get_window(m_pFrame->getMouseEventWidget()));
+    gtk_im_context_set_client_window(m_pIMContext, widget_get_surface(m_pFrame->getMouseEventWidget()));
 #endif
     gtk_im_context_focus_in( m_pIMContext );
     GetGenericUnixSalData()->ErrorTrapPop();
@@ -5230,12 +5226,7 @@ Size GtkSalDisplay::GetScreenSize( int nDisplayScreen )
 
 sal_uIntPtr GtkSalFrame::GetNativeWindowHandle(GtkWidget *pWidget)
 {
-#if !GTK_CHECK_VERSION(4,0,0)
-    GdkSurface* pSurface = gtk_widget_get_window(pWidget);
-#else
-    GdkSurface* pSurface = gtk_native_get_surface(gtk_widget_get_native(pWidget));
-#endif
-
+    GdkSurface* pSurface = widget_get_surface(pWidget);
     GdkDisplay *pDisplay = getGdkDisplay();
 
 #if defined(GDK_WINDOWING_X11)
@@ -5334,7 +5325,7 @@ void GtkSalFrame::startDrag(gint nButton, gint nDragOriginX, gint nDragOriginY,
     GdkEvent aFakeEvent;
     memset(&aFakeEvent, 0, sizeof(GdkEvent));
     aFakeEvent.type = GDK_BUTTON_PRESS;
-    aFakeEvent.button.window = gtk_widget_get_window(getMouseEventWidget());
+    aFakeEvent.button.window = widget_get_surface(getMouseEventWidget());
     aFakeEvent.button.time = GDK_CURRENT_TIME;
     GdkDeviceManager* pDeviceManager = gdk_display_get_device_manager(getGdkDisplay());
     aFakeEvent.button.device = gdk_device_manager_get_client_pointer(pDeviceManager);
@@ -5466,7 +5457,7 @@ GdkEvent* GtkSalFrame::makeFakeKeyPress(GtkWidget* pWidget)
 {
 #if !GTK_CHECK_VERSION(4, 0, 0)
     GdkEvent *event = gdk_event_new(GDK_KEY_PRESS);
-    event->key.window = GDK_WINDOW(g_object_ref(gtk_widget_get_window(pWidget)));
+    event->key.window = GDK_WINDOW(g_object_ref(widget_get_surface(pWidget)));
 
     GdkSeat *seat = gdk_display_get_default_seat(gtk_widget_get_display(pWidget));
     gdk_event_set_device(event, gdk_seat_get_keyboard(seat));

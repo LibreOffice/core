@@ -503,7 +503,7 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
             rect_anchor = GDK_GRAVITY_NORTH_EAST;
         }
 
-        GdkWindow* gdkWindow = gtk_widget_get_window(mpFrame->getMouseEventWidget());
+        GdkSurface* gdkWindow = widget_get_surface(mpFrame->getMouseEventWidget());
         gtk_menu_popup_at_rect(GTK_MENU(pWidget), gdkWindow, &rect, rect_anchor, menu_anchor, nullptr);
     }
     else
@@ -1133,11 +1133,7 @@ void GtkSalMenu::SetFrame(const SalFrame* pFrame)
 
     // Clean menu model and action group if needed.
     GtkWidget* pWidget = mpFrame->getWindow();
-#if !GTK_CHECK_VERSION(4,0,0)
-    GdkSurface* gdkWindow = gtk_widget_get_window( pWidget );
-#else
-    GdkSurface* gdkWindow = gtk_native_get_surface(gtk_widget_get_native(pWidget));
-#endif
+    GdkSurface* gdkWindow = widget_get_surface(pWidget);
 
     GLOMenu* pMenuModel = G_LO_MENU( g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-menubar" ) );
     GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP( g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-action-group" ) );

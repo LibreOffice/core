@@ -115,6 +115,15 @@ inline void style_context_get_color(GtkStyleContext *pStyle, GdkRGBA *pColor)
 #endif
 }
 
+inline GdkSurface* widget_get_surface(GtkWidget* pWidget)
+{
+#if GTK_CHECK_VERSION(4,0,0)
+    return gtk_native_get_surface(gtk_widget_get_native(pWidget));
+#else
+    return gtk_widget_get_window(pWidget);
+#endif
+}
+
 inline void widget_set_cursor(GtkWidget *pWidget, GdkCursor *pCursor)
 {
 #if GTK_CHECK_VERSION(4, 0, 0)

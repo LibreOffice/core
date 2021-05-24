@@ -1742,7 +1742,7 @@ private:
         glGenFramebuffersEXT(1, &m_nAreaFrameBuffer);
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-        GdkWindow *pWindow = gtk_widget_get_window(pParent);
+        GdkSurface* pWindow = widget_get_surface(pParent);
         m_pContext = gdk_window_create_gl_context(pWindow, nullptr);
         if (!m_pContext)
             return false;
@@ -4675,7 +4675,7 @@ namespace
     {
 #if !GTK_CHECK_VERSION(4, 0, 0)
         GdkScreen* pScreen = gtk_widget_get_screen(pWindow);
-        gint nMonitor = gdk_screen_get_monitor_at_window(pScreen, gtk_widget_get_window(pWindow));
+        gint nMonitor = gdk_screen_get_monitor_at_window(pScreen, widget_get_surface(pWindow));
         GdkRectangle aRect;
         gdk_screen_get_monitor_workarea(pScreen, nMonitor, &aRect);
         return tools::Rectangle(aRect.x, aRect.y, aRect.x + aRect.width, aRect.y + aRect.height);
@@ -8322,7 +8322,7 @@ void do_grab(GtkWidget* pWidget)
 #if !GTK_CHECK_VERSION(4, 0, 0)
     GdkDisplay *pDisplay = gtk_widget_get_display(pWidget);
     GdkSeat* pSeat = gdk_display_get_default_seat(pDisplay);
-    gdk_seat_grab(pSeat, gtk_widget_get_window(pWidget),
+    gdk_seat_grab(pSeat, widget_get_surface(pWidget),
                   GDK_SEAT_CAPABILITY_ALL, true, nullptr, nullptr, nullptr, nullptr);
 #else
     (void)pWidget;
@@ -8347,7 +8347,7 @@ GtkPositionType show_menu_older_gtk(GtkWidget* pMenuButton, GtkWindow* pMenu)
     GtkWidget* pToplevel = widget_get_root(pMenuButton);
     gtk_coord x, y, absx, absy;
     gtk_widget_translate_coordinates(pMenuButton, pToplevel, 0, 0, &x, &y);
-    GdkWindow *pWindow = gtk_widget_get_window(pToplevel);
+    GdkSurface* pWindow = widget_get_surface(pToplevel);
     gdk_window_get_position(pWindow, &absx, &absy);
 
     x += absx;
@@ -8459,7 +8459,7 @@ bool show_menu_newer_gtk(GtkWidget* pComboBox, GtkWindow* pMenu)
     GdkGravity rect_anchor = !bSwapForRTL ? GDK_GRAVITY_SOUTH_WEST : GDK_GRAVITY_SOUTH_EAST;
     GdkGravity menu_anchor = !bSwapForRTL ? GDK_GRAVITY_NORTH_WEST : GDK_GRAVITY_NORTH_EAST;
     GdkRectangle rect {x, y, nComboWidth, nComboHeight };
-    GdkWindow* toplevel = gtk_widget_get_window(GTK_WIDGET(pMenu));
+    GdkSurface* toplevel = widget_get_surface(GTK_WIDGET(pMenu));
 
     window_move_to_rect(toplevel, &rect, rect_anchor, menu_anchor,
                         static_cast<GdkAnchorHints>(GDK_ANCHOR_FLIP_Y | GDK_ANCHOR_RESIZE_Y |
@@ -8609,7 +8609,7 @@ private:
         gdouble x = pEvent->x_root;
         gdouble y = pEvent->y_root;
         gint xoffset, yoffset;
-        gdk_window_get_root_origin(gtk_widget_get_window(pWidget), &xoffset, &yoffset);
+        gdk_window_get_root_origin(widget_get_surface(pWidget), &xoffset, &yoffset);
 
         GtkAllocation alloc;
         gtk_widget_get_allocation(pWidget, &alloc);
@@ -9216,7 +9216,7 @@ public:
             if (!pTriggerEvent)
                 pTriggerEvent = pKeyEvent;
 
-            gtk_menu_popup_at_rect(m_pMenu, gtk_widget_get_window(pWidget), &aRect, GDK_GRAVITY_SOUTH_WEST, GDK_GRAVITY_NORTH_WEST, pTriggerEvent);
+            gtk_menu_popup_at_rect(m_pMenu, widget_get_surface(pWidget), &aRect, GDK_GRAVITY_SOUTH_WEST, GDK_GRAVITY_NORTH_WEST, pTriggerEvent);
 
             gdk_event_free(pKeyEvent);
         }
@@ -15320,11 +15320,7 @@ public:
         GdkSeat* pSeat = gdk_display_get_default_seat(pDisplay);
         GdkDevice* pPointer = gdk_seat_get_pointer(pSeat);
         double x(-1), y(-1);
-#if !GTK_CHECK_VERSION(4,0,0)
-        GdkSurface* pWin = gtk_widget_get_window(m_pWidget);
-#else
-        GdkSurface* pWin = gtk_native_get_surface(gtk_widget_get_native(m_pWidget));
-#endif
+        GdkSurface* pWin = widget_get_surface(m_pWidget);
         surface_get_device_position(pWin, pPointer, x, y, nullptr);
         return Point(x, y);
     }
@@ -15523,7 +15519,7 @@ public:
 #if GTK_CHECK_VERSION(4, 0, 0)
         gtk_im_context_set_client_widget(m_pIMContext, pWidget);
 #else
-        GdkWindow* pWin = gtk_widget_get_window(pWidget);
+        GdkWindow* pWin = widget_get_surface(pWidget);
         gtk_im_context_set_client_window(m_pIMContext, pWin);
 #endif
         if (gtk_widget_has_focus(m_pArea->getWidget()))
@@ -16501,7 +16497,7 @@ private:
         gdouble x = pEvent->x_root;
         gdouble y = pEvent->y_root;
         gint xoffset, yoffset;
-        gdk_window_get_root_origin(gtk_widget_get_window(pWidget), &xoffset, &yoffset);
+        gdk_window_get_root_origin(widget_get_surface(pWidget), &xoffset, &yoffset);
 
         GtkAllocation alloc;
         gtk_widget_get_allocation(pWidget, &alloc);
