@@ -585,6 +585,8 @@ public:
     //which triggers the gsignals.
     bool                        CallCallbackExc(SalEvent nEvent, const void* pEvent) const;
 
+    // call gtk_widget_queue_draw on the drawing widget
+    void                        queue_draw();
 
     static void                 KeyCodeToGdkKey(const vcl::KeyCode& rKeyCode,
         guint* pGdkKeyCode, GdkModifierType *pGdkModifiers);
