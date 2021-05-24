@@ -3799,12 +3799,28 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
     ScAddress aOldPos = aPos;
     bool bPosChanged = false; // Whether this cell has been moved
 
-    ScRange aDestRange( rDest, ScAddress(
-                static_cast<SCCOL>(rDest.Col() + rSource.aEnd.Row() - rSource.aStart.Row()),
+    const ScRange aTransposedSourceRange(
+        rSource.aStart,
+        ScAddress(
+            static_cast<SCCOL>(rSource.aStart.Col() + rSource.aEnd.Row() - rSource.aStart.Row()),
+            static_cast<SCROW>(rSource.aStart.Row() + rSource.aEnd.Col() - rSource.aStart.Col()),
+            rDest.Tab()));
+    // Dest range is transposed
+    const ScRange aDestRange(
+        rDest,
+        ScAddress(static_cast<SCCOL>(rDest.Col() + rSource.aEnd.Row() - rSource.aStart.Row()),
                 static_cast<SCROW>(rDest.Row() + rSource.aEnd.Col() - rSource.aStart.Col()),
-                rDest.Tab() + rSource.aEnd.Tab() - rSource.aStart.Tab() ) );
-    if ( aDestRange.In( aOldPos ) )
+                  rDest.Tab()));
+    const ScRange aNonTransposedDestRange(
+        rDest,
+        ScAddress(static_cast<SCCOL>(rDest.Col() + rSource.aEnd.Col() - rSource.aStart.Col()),
+                  static_cast<SCROW>(rDest.Row() + rSource.aEnd.Row() - rSource.aStart.Row()),
+                  rDest.Tab()));
+
+    // cell within range
+    if (aDestRange.In(aOldPos))
     {
+        // References of these cells were not changed by ScTokenArray::AdjustReferenceOnMove()
         // Count back Positions
         SCCOL nRelPosX = aOldPos.Col();
         SCROW nRelPosY = aOldPos.Row();
@@ -3818,6 +3834,7 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
     if (pUndoDoc)
         pOld = pCode->Clone();
     bool bRefChanged = false;
+    bool bUpdateUndo = false;
 
     formula::FormulaTokenArrayPlainIterator aIter(*pCode);
     formula::FormulaToken* t;
@@ -3833,20 +3850,65 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
         {
             SingleDoubleRefModifier aMod(*t);
             ScComplexRefData& rRef = aMod.Ref();
+            ScRange aAbsOld = rRef.toAbs(rDocument, aOldPos);
             ScRange aAbs = rRef.toAbs(rDocument, aOldPos);
             bool bMod = (ScRefUpdate::UpdateTranspose(rDocument, rSource, rDest, aAbs) != UR_NOTHING || bPosChanged);
             if (bMod)
             {
                 rRef.SetRange(rDocument.GetSheetLimits(), aAbs, aPos); // based on the new anchor position.
                 bRefChanged = true;
+
+                // 3 cases can be distinguished.
+                //
+                // Example:
+                //
+                //   SSss
+                //   SSss
+                //   tt
+                //   tt
+                //
+                // S or s: source range
+                // S: source range that is also part of the transposed range (in undo doc)
+                // s: source range that is not part of the transposed range (not in undo doc)
+                // t: transposed range that is not part of the source range (in undo doc)
+                //
+                // Case 1 ("s"):
+                // Cells referencing "s" cells need to be added to undo document since these were
+                // not yet added. The normal undo document creation works on the transposed cells.
+                //
+                // Case 2 ("t"):
+                // References that were pointing to transposed source range that is not part of
+                // the source range are unrelated and the 3D-Flag must not be set.
+                //
+                // Case 3 ("S"):
+                // Nothing to do here for this case.
+
+                // Case 2 ("t")
+                const bool bUnrelatedRef
+                    = aDestRange.In(aAbsOld) && !aNonTransposedDestRange.In(aAbsOld);
+
+                // Absolute sheet reference => set 3D flag.
+                // More than one sheet referenced => has to have both 3D flags.
+                // If end part has 3D flag => start part must have it too.
+                // The same behavior as in ScTokenArray::AdjustReferenceOnMove() is used for 3D-Flags.
+                rRef.Ref2.SetFlag3D(aAbs.aStart.Tab() != aAbs.aEnd.Tab() || !rRef.Ref2.IsTabRel());
+                rRef.Ref1.SetFlag3D(
+                    (rSource.aStart.Tab() != rDest.Tab() && !bPosChanged && !bUnrelatedRef)
+                    || !rRef.Ref1.IsTabRel() || rRef.Ref2.IsFlag3D());
+
+                // The undo document must be updated with cells that point to the source range
+                // that is not part of the transposed range, see Case 1 ("s").
+                bUpdateUndo = rSource.In(aAbsOld) && !aTransposedSourceRange.In(aAbsOld);
             }
         }
     }
 
     if (bRefChanged)
     {
-        if (pUndoDoc)
+        if (pUndoDoc && bUpdateUndo)
         {
+            // Similar to setOldCodeToUndo(), but it cannot be used due to the check
+            // pUndoDoc->GetCellType(aPos) == CELLTYPE_FORMULA
             ScFormulaCell* pFCell = new ScFormulaCell(
                     *pUndoDoc, aPos, pOld ? *pOld : ScTokenArray(*pUndoDoc), eTempGrammar, cMatrixFlag);
 

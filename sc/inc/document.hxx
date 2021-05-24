@@ -1706,7 +1706,10 @@ public:
     void               UpdateReference( sc::RefUpdateContext& rCxt,  ScDocument*
                                         pUndoDoc = nullptr, bool bIncludeDraw = true,
                                         bool bUpdateNoteCaptionPos = true );
-
+    /**
+     * @param pClipDoc original clipboard doc, i.e. non-transposed
+     *                 This clip doc is used to check references pointing to cut cells.
+     */
     SC_DLLPUBLIC void  UpdateTranspose( const ScAddress& rDestPos, ScDocument* pClipDoc,
                                         const ScMarkData& rMark, ScDocument* pUndoDoc );
 
