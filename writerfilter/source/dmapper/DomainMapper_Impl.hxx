@@ -1032,6 +1032,7 @@ public:
     css::uno::Reference<css::container::XIndexAccess> GetCurrentNumberingRules(sal_Int32* pListLevel);
 
     sal_Int16 GetListLevel(const StyleSheetEntryPtr& pEntry, const PropertyMapPtr& pParaContext = nullptr);
+    void ValidateListLevel(const OUString& sStyleIdentifierD);
 
     /**
      Used for attributes/sprms which cannot be evaluated immediately (e.g. they depend
