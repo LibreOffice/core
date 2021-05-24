@@ -342,7 +342,8 @@ namespace oglcanvas
     uno::Any SpriteDeviceHelper::getDeviceHandle() const
     {
         const SystemChildWindow* pChildWindow = mxContext->getChildWindow();
-        return uno::Any( reinterpret_cast< sal_Int64 >(pChildWindow) );
+        const OutputDevice* pDevice = pChildWindow ? pChildWindow->GetOutDev() : nullptr;
+        return uno::Any(reinterpret_cast<sal_Int64>(pDevice));
     }
 
     uno::Any SpriteDeviceHelper::getSurfaceHandle() const
