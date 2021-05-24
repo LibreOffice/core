@@ -175,8 +175,10 @@ class GtkSalFrame final : public SalFrame
 #if !GTK_CHECK_VERSION(4, 0, 0)
     GtkEventBox*                    m_pEventBox;
     GtkFixed*                       m_pFixedContainer;
+    GtkFixed*                       m_pDrawingArea;
 #else
-    GtkDrawingArea*                 m_pFixedContainer;
+    GtkOverlay*                     m_pFixedContainer;
+    GtkDrawingArea*                 m_pDrawingArea;
     GtkEventControllerKey*          m_pKeyController;
 #endif
 #if !GTK_CHECK_VERSION(4, 0, 0)
