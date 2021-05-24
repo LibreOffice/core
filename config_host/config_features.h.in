@@ -145,4 +145,11 @@
  */
 #define HAVE_FEATURE_COMMUNITY_FLAVOR 0
 
+/* XMLHELP - whether we include the XML help mechanisms
+ *
+ * Can be turned off with --without-xmlhelp
+ */
+
+#define HAVE_FEATURE_XMLHELP 0
+
 #endif

@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include <config_feature_desktop.h>
+#include <config_features.h>
 
 #include <strings.hrc>
 #include <dp_backend.h>
@@ -31,7 +31,7 @@
 #include <unotools/pathoptions.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#if HAVE_FEATURE_DESKTOP
+#if HAVE_FEATURE_XMLHELP
 #include <helpcompiler/compilehelp.hxx>
 #include <helpcompiler/HelpIndexer.hxx>
 #endif
@@ -378,7 +378,7 @@ void BackendImpl::implProcessHelp(
             data.dataUrl = xPackage->getURL();
             if (!package->extensionContainsCompiledHelp())
             {
-#if HAVE_FEATURE_DESKTOP
+#if HAVE_FEATURE_XMLHELP
                 const OUString sHelpFolder = createFolder(xCmdEnv);
                 data.dataUrl = sHelpFolder;
 

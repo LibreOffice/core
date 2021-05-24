@@ -87,10 +87,8 @@ $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 		xmloff \
 		xmlscript \
 	) \
-	$(call gb_Helper_optional_for_host,DESKTOP, \
-		helpcompiler \
-		xmlhelp \
-	) \
+    $(call gb_Helper_optionals_or,HELPTOOLS XMLHELP,helpcompiler) \
+    $(call gb_Helper_optional,XMLHELP,xmlhelp) \
 	$(call gb_Helper_optional,QADEVOOO,qadevOOo) \
 ))
 

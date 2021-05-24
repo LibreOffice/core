@@ -301,8 +301,21 @@ $(1) : $(2) | $(dir $(1)).dir
 $(call gb_Deliver_add_deliverable,$(1),$(2),$(1))
 endef
 
+# call gb_Helper_optional,build_type,if-true,if-false
 define gb_Helper_optional
-$(if $(filter $(1),$(BUILD_TYPE)),$(2))
+$(if $(filter $(1),$(BUILD_TYPE)),$(2),$(3))
+endef
+
+# call gb_Helper_optionals_or,build_types,if-true,if-false
+define gb_Helper_optionals_or
+$(call gb_Helper_optional,$(1),$(2),$(3))
+endef
+
+gb_Helper_optionals_and_token = $(subst $(gb_SPACE),_,gb $(sort $(1)))
+
+# call gb_Helper_optionals_and,build_types,if-true,if-false
+define gb_Helper_optionals_and
+$(if $(filter $(call gb_Helper_optionals_and_token,$(1)),$(call gb_Helper_optionals_and_token,$(filter $(1),$(BUILD_TYPE)))),$(2),$(3))
 endef
 
 ifeq ($(WITH_LOCALES),)

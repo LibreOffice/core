@@ -25,7 +25,7 @@ File gid_File_Share_Registry_Draw_Xcd
     Name = "draw.xcd";
 End
 
-#if defined WITH_HELP
+#if defined WITH_HELPPACKS
 File gid_File_Help_Sdraw_Zip
     Dir = FILELIST_DIR;
     FILELIST_TXT_FILE_BODY_HELPPACK;
