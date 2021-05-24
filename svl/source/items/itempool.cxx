@@ -143,8 +143,8 @@ SfxBroadcaster& SfxItemPool::BC()
  *  @see SfxItemPool::SetDefaults(std::vector<SfxPoolItem*>*).
  *
  *  @see SfxItemPool::SetDefaults(std::vector<SfxPoolItem*>*)
- *  @see SfxItemPool::ReleaseDefaults(std::vector<SfxPoolItem*>*,sal_uInt16,sal_Bool)
- *  @see SfxItemPool::ReldaseDefaults(sal_Bool)
+ *  @see SfxItemPool::ReleaseDefaults(std::vector<SfxPoolItem*>*,bool)
+ *  @see SfxItemPool::ReleaseDefaults(bool)
  */
 SfxItemPool::SfxItemPool
 (
