@@ -495,6 +495,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                     SwKernPortion* pKrn =
                         new SwKernPortion( *rInf.GetLast(), nLstHeight,
                                            pLast->InFieldGrp() && pPor->InFieldGrp() );
+                    delete rInf.GetLast()->GetNextPortion();
                     rInf.GetLast()->SetNextPortion( nullptr );
                     InsertPortion( rInf, pKrn );
                 }
