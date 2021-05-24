@@ -4766,7 +4766,9 @@ public:
 
     virtual void resize_to_request() override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_window_set_default_size(m_pWindow, 1, 1);
+#else
         gtk_window_resize(m_pWindow, 1, 1);
 #endif
     }
@@ -5144,11 +5146,42 @@ typedef std::set<GtkWidget*> winset;
 
 namespace
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    void hideUnless(GtkContainer *pTop, const winset& rVisibleWidgets,
+#if GTK_CHECK_VERSION(4, 0, 0)
+    void collectVisibleChildren(GtkWidget* pTop, winset& rVisibleWidgets)
+    {
+        for (GtkWidget* pChild = gtk_widget_get_first_child(pTop);
+             pChild; pChild = gtk_widget_get_next_sibling(pChild))
+        {
+            if (!gtk_widget_get_visible(pChild))
+                continue;
+            rVisibleWidgets.insert(pChild);
+            collectVisibleChildren(pChild, rVisibleWidgets);
+        }
+    }
+#endif
+
+    void hideUnless(GtkWidget* pTop, const winset& rVisibleWidgets,
         std::vector<GtkWidget*> &rWasVisibleWidgets)
     {
-        GList* pChildren = gtk_container_get_children(pTop);
+#if GTK_CHECK_VERSION(4, 0, 0)
+        for (GtkWidget* pChild = gtk_widget_get_first_child(pTop);
+             pChild; pChild = gtk_widget_get_next_sibling(pChild))
+        {
+            if (!gtk_widget_get_visible(pChild))
+                continue;
+            if (rVisibleWidgets.find(pChild) == rVisibleWidgets.end())
+            {
+                g_object_ref(pChild);
+                rWasVisibleWidgets.emplace_back(pChild);
+                gtk_widget_hide(pChild);
+            }
+            else
+            {
+                hideUnless(pChild, rVisibleWidgets, rWasVisibleWidgets);
+            }
+        }
+#else
+        GList* pChildren = gtk_container_get_children(GTK_CONTAINER(pTop));
         for (GList* pEntry = g_list_first(pChildren); pEntry; pEntry = g_list_next(pEntry))
         {
             GtkWidget* pChild = static_cast<GtkWidget*>(pEntry->data);
@@ -5162,12 +5195,12 @@ namespace
             }
             else if (GTK_IS_CONTAINER(pChild))
             {
-                hideUnless(GTK_CONTAINER(pChild), rVisibleWidgets, rWasVisibleWidgets);
+                hideUnless(pChild, rVisibleWidgets, rWasVisibleWidgets);
             }
         }
         g_list_free(pChildren);
-    }
 #endif
+    }
 
 class GtkInstanceButton;
 
@@ -5526,24 +5559,35 @@ public:
         {
             aVisibleWidgets.insert(pCandidate);
         }
-        //same again with pRefBtn, except stop if there's a
-        //shared parent in the existing widgets
-        for (GtkWidget *pCandidate = pRefBtn;
-            pCandidate && pCandidate != pContentArea && gtk_widget_get_visible(pCandidate);
-            pCandidate = gtk_widget_get_parent(pCandidate))
+#if GTK_CHECK_VERSION(4, 0, 0)
+        collectVisibleChildren(pRefEdit, aVisibleWidgets);
+#endif
+        if (pRefBtn)
         {
-            if (aVisibleWidgets.insert(pCandidate).second)
-                break;
+#if GTK_CHECK_VERSION(4, 0, 0)
+            collectVisibleChildren(pRefBtn, aVisibleWidgets);
+#endif
+            //same again with pRefBtn, except stop if there's a
+            //shared parent in the existing widgets
+            for (GtkWidget *pCandidate = pRefBtn;
+                pCandidate && pCandidate != pContentArea && gtk_widget_get_visible(pCandidate);
+                pCandidate = gtk_widget_get_parent(pCandidate))
+            {
+                if (aVisibleWidgets.insert(pCandidate).second)
+                    break;
+            }
         }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
         //hide everything except the aVisibleWidgets
-        hideUnless(GTK_CONTAINER(pContentArea), aVisibleWidgets, m_aHiddenWidgets);
-
+        hideUnless(pContentArea, aVisibleWidgets, m_aHiddenWidgets);
         gtk_widget_set_size_request(pRefEdit, m_nOldEditWidth, -1);
+#if !GTK_CHECK_VERSION(4, 0, 0)
         m_nOldBorderWidth = gtk_container_get_border_width(GTK_CONTAINER(m_pDialog));
         gtk_container_set_border_width(GTK_CONTAINER(m_pDialog), 0);
         if (GtkWidget* pActionArea = gtk_dialog_get_action_area(GTK_DIALOG(m_pDialog)))
+            gtk_widget_hide(pActionArea);
+#else
+        if (GtkWidget* pActionArea = gtk_dialog_get_header_bar(GTK_DIALOG(m_pDialog)))
             gtk_widget_hide(pActionArea);
 #endif
 
@@ -5581,6 +5625,9 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_container_set_border_width(GTK_CONTAINER(m_pDialog), m_nOldBorderWidth);
         if (GtkWidget* pActionArea = gtk_dialog_get_action_area(GTK_DIALOG(m_pDialog)))
+            gtk_widget_show(pActionArea);
+#else
+        if (GtkWidget* pActionArea = gtk_dialog_get_header_bar(GTK_DIALOG(m_pDialog)))
             gtk_widget_show(pActionArea);
 #endif
         resize_to_request();
@@ -19666,6 +19713,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "svx/ui/fontworkgallerydialog.ui" &&
         rUIFile != "modules/scalc/ui/deletecells.ui" &&
         rUIFile != "modules/scalc/ui/deletecontents.ui" &&
+        rUIFile != "modules/scalc/ui/goalseekdlg.ui" &&
         rUIFile != "modules/scalc/ui/inputstringdialog.ui" &&
         rUIFile != "modules/scalc/ui/insertcells.ui" &&
         rUIFile != "modules/scalc/ui/optimalcolwidthdialog.ui" &&
