@@ -20,7 +20,9 @@ $(eval $(call gb_ExternalPackage_add_file,lcms2,$(LIBO_LIB_FOLDER)/liblcms2-2.dl
 else ifeq ($(COM),MSC)
 $(eval $(call gb_ExternalPackage_add_file,lcms2,$(LIBO_LIB_FOLDER)/lcms2.dll,bin/lcms2.dll))
 endif # $(COM)
-else  # $(OS) != WNT/MACOSX
+else ifeq ($(OS),FREEBSD)
+$(eval $(call gb_ExternalPackage_add_file,lcms2,$(LIBO_LIB_FOLDER)/liblcms2.so.2,src/.libs/liblcms2.so.2))
+else  # $(OS) != WNT/MACOSX/FREEBSD
 $(eval $(call gb_ExternalPackage_add_file,lcms2,$(LIBO_LIB_FOLDER)/liblcms2.so.2,src/.libs/liblcms2.so.2.0.10))
 endif # $(OS)
 endif # $(DISABLE_DYNLOADING)
