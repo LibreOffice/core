@@ -200,7 +200,7 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
 
             sal_uInt16 nWhich = pAttr->m_pItem->Which();
             if( !nOldEndCnt && RES_PARATR_BEGIN <= nWhich &&
-                pAttr->GetSttParaIdx() < pOldEndPara->GetIndex() )
+                pAttr->GetStartParagraphIdx() < pOldEndPara->GetIndex() )
             {
                 // The attribute needs to be closed one content position beforehand
                 if( !bMoveBack )
@@ -217,9 +217,9 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
             }
 
             if( (RES_PARATR_BEGIN <= nWhich && bMoveBack) ||
-                pAttr->GetSttParaIdx() < pOldEndPara->GetIndex() ||
-                (pAttr->GetSttPara() == *pOldEndPara &&
-                 pAttr->GetSttCnt() != nOldEndCnt) )
+                pAttr->GetStartParagraphIdx() < pOldEndPara->GetIndex() ||
+                (pAttr->GetStartParagraph() == *pOldEndPara &&
+                 pAttr->GetStartContent() != nOldEndCnt) )
             {
                 // The attribute needs to be set. Because we still need the original, since
                 // pointers to the attribute still exists in the contexts, we need to clone it.

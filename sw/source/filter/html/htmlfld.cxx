@@ -621,8 +621,8 @@ void SwHTMLParser::InsertComment( const OUString& rComment, const char *pTag )
         for( auto i = m_aSetAttrTab.size(); i > 0; )
         {
             HTMLAttr *pAttr = m_aSetAttrTab[--i];
-            if( pAttr->GetSttParaIdx() != nNodeIdx ||
-                pAttr->GetSttCnt() != nIdx )
+            if( pAttr->GetStartParagraphIdx() != nNodeIdx ||
+                pAttr->GetStartContent() != nIdx )
                 break;
 
             if( RES_TXTATR_FIELD == pAttr->m_pItem->Which() &&

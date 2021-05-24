@@ -2196,8 +2196,8 @@ void SwHTMLParser::GetMarginsFromContextWithNumberBullet( sal_uInt16& nLeft,
 void SwHTMLParser::GetULSpaceFromContext( sal_uInt16& nUpper,
                                           sal_uInt16& nLower ) const
 {
-    sal_uInt16 nDfltColl = 0;
-    OUString aDfltClass;
+    sal_uInt16 nDefaultColl = 0;
+    OUString aDefaultClass;
 
     HTMLAttrContexts::size_type nPos = m_aContexts.size();
     while( nPos > m_nContextStAttrMin )
@@ -2208,19 +2208,19 @@ void SwHTMLParser::GetULSpaceFromContext( sal_uInt16& nUpper,
             pCntxt->GetULSpace( nUpper, nLower );
             return;
         }
-        else if( !nDfltColl )
+        else if (!nDefaultColl)
         {
-            nDfltColl = pCntxt->GetDfltTextFormatColl();
-            if( nDfltColl )
-                aDfltClass = pCntxt->GetClass();
+            nDefaultColl = pCntxt->GetDefaultTextFormatColl();
+            if (nDefaultColl)
+                aDefaultClass = pCntxt->GetClass();
         }
     }
 
-    if( !nDfltColl )
-        nDfltColl = RES_POOLCOLL_TEXT;
+    if (!nDefaultColl)
+        nDefaultColl = RES_POOLCOLL_TEXT;
 
     const SwTextFormatColl *pColl =
-        m_pCSS1Parser->GetTextFormatColl( nDfltColl, aDfltClass );
+        m_pCSS1Parser->GetTextFormatColl(nDefaultColl, aDefaultClass);
     const SvxULSpaceItem& rULSpace = pColl->GetULSpace();
     nUpper = rULSpace.GetUpper();
     nLower = rULSpace.GetLower();
