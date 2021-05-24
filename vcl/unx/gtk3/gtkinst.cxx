@@ -18235,6 +18235,23 @@ Reference<css::xml::dom::XNode> CreateProperty(const css::uno::Reference<css::xm
     return xProperty;
 }
 
+bool ToplevelIsMessageDialog(const Reference<css::xml::dom::XNode>& xNode)
+{
+    for (css::uno::Reference<css::xml::dom::XNode> xObjectCandidate = xNode->getParentNode();
+         xObjectCandidate.is();
+         xObjectCandidate = xObjectCandidate->getParentNode())
+    {
+        if (xObjectCandidate->getNodeName() == "object")
+        {
+            css::uno::Reference<css::xml::dom::XNamedNodeMap> xObjectMap = xObjectCandidate->getAttributes();
+            css::uno::Reference<css::xml::dom::XNode> xClass = xObjectMap->getNamedItem("class");
+            if (xClass->getNodeValue() == "GtkMessageDialog")
+                return true;
+        }
+    }
+    return false;
+}
+
 void SetPropertyOnTopLevel(const Reference<css::xml::dom::XNode>& xNode, const Reference<css::xml::dom::XNode>& xProperty)
 {
     for (css::uno::Reference<css::xml::dom::XNode> xObjectCandidate = xNode->getParentNode();
@@ -18582,8 +18599,10 @@ bool ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
             OUString sClass(xClass->getNodeValue());
             if (sClass == "GtkButtonBox")
             {
-                css::uno::Reference<css::xml::dom::XNode> xId = xMap->getNamedItem("id");
-                if (xId->getNodeValue().startsWith("dialog-action_area"))
+                auto xInternalChildCandidate = xChild->getParentNode();
+                css::uno::Reference<css::xml::dom::XNamedNodeMap> xInternalChildCandidateMap = xInternalChildCandidate->getAttributes();
+                css::uno::Reference<css::xml::dom::XNode> xId = xInternalChildCandidateMap->getNamedItem("internal-child");
+                if (xId && xId->getNodeValue() == "action_area" && !ToplevelIsMessageDialog(xChild))
                 {
                     xClass->setNodeValue("GtkHeaderBar");
                     auto xDoc = xChild->getOwnerDocument();
@@ -18650,7 +18669,7 @@ bool ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
                         xContentAreaCandidate = xContentAreaCandidate->getParentNode();
                     }
                 }
-                else // if (!xId->getNodeValue().startsWith("messagedialog-action_area"))
+                else // GtkMessageDialog
                     xClass->setNodeValue("GtkBox");
             }
             else if (sClass == "GtkRadioButton")
