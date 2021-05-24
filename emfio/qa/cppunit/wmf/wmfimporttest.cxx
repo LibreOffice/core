@@ -206,7 +206,7 @@ void WmfTest::testWorldTransformFontSize()
 
     CPPUNIT_ASSERT(pDoc);
 
-    assertXPath(pDoc, "/metafile/font", 8);
+    assertXPath(pDoc, "/metafile/font", 9);
 
     assertXPath(pDoc, "/metafile/font[1]", "color", "#595959");
     assertXPath(pDoc, "/metafile/font[1]", "width", "0");
@@ -214,13 +214,19 @@ void WmfTest::testWorldTransformFontSize()
     assertXPath(pDoc, "/metafile/font[1]", "orientation", "0");
     assertXPath(pDoc, "/metafile/font[1]", "weight", "bold");
 
-    // World transform should not affect font size. Rotating text for 90 degrees
-    // should not exchange font width and height.
     assertXPath(pDoc, "/metafile/font[3]", "color", "#000000");
     assertXPath(pDoc, "/metafile/font[3]", "width", "0");
-    assertXPath(pDoc, "/metafile/font[3]", "height", "530");
-    assertXPath(pDoc, "/metafile/font[3]", "orientation", "900");
-    assertXPath(pDoc, "/metafile/font[3]", "weight", "normal");
+    assertXPath(pDoc, "/metafile/font[3]", "height", "389");
+    assertXPath(pDoc, "/metafile/font[3]", "orientation", "0");
+    assertXPath(pDoc, "/metafile/font[3]", "weight", "bold");
+
+    // World transform should not affect font size. Rotating text for 90 degrees
+    // should not exchange font width and height.
+    assertXPath(pDoc, "/metafile/font[4]", "color", "#000000");
+    assertXPath(pDoc, "/metafile/font[4]", "width", "0");
+    assertXPath(pDoc, "/metafile/font[4]", "height", "530");
+    assertXPath(pDoc, "/metafile/font[4]", "orientation", "900");
+    assertXPath(pDoc, "/metafile/font[4]", "weight", "normal");
 }
 
 void WmfTest::testTdf93750()
