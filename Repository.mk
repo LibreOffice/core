@@ -18,8 +18,8 @@
 #
 
 $(eval $(call gb_Helper_register_executables,NONE, \
-	HelpIndexer \
-	HelpLinker \
+    $(call gb_Helper_optional,HELPTOOLS,HelpIndexer) \
+    $(call gb_Helper_optional,HELPTOOLS,HelpLinker) \
 	bestreversemap \
 	canvasdemo \
 	cfgex \
@@ -622,7 +622,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	$(if $(WITH_WEBDAV),ucpdav1) \
 	ucpfile1 \
 	ucpftp1 \
-	ucpchelp1 \
+    $(call gb_Helper_optional,XMLHELP,ucpchelp1) \
 	ucphier1 \
 	ucppkg1 \
 	unopkgapp \
@@ -914,7 +914,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	$(if $(filter $(OS),MACOSX),vcl_osxres) \
 	xmloff_dtd \
 	xmlscript_dtd \
-	xmlhelp_helpxsl \
+    $(call gb_Helper_optional,XMLHELP,xmlhelp_helpxsl) \
 	$(if $(ENABLE_JAVA),\
 		scripting_java \
 		scripting_java_jars \
