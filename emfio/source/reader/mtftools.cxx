@@ -1390,6 +1390,15 @@ namespace emfio
         maActPos = aDest;
     }
 
+    void MtfTools::DrawRectWithBGColor(const tools::Rectangle& rRect, bool bEdge)
+    {
+        WinMtfFillStyle aFillStyleBackup = maFillStyle;
+
+        maFillStyle = maBkColor;
+        DrawRect(rRect, bEdge);
+        maFillStyle = aFillStyleBackup;
+    }
+
     void MtfTools::DrawRect( const tools::Rectangle& rRect, bool bEdge )
     {
         UpdateClipRegion();
