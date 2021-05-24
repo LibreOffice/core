@@ -897,7 +897,8 @@ void SfxTabDialogController::AddTabPage(const OString &rName, const OUString& rR
 SfxItemSet* SfxTabDialogController::CreateInputItemSet(const OString&)
 {
     SAL_WARN( "sfx.dialog", "CreateInputItemSet not implemented" );
-    return new SfxAllItemSet(SfxGetpApp()->GetPool());
+    m_xItemSet = std::make_unique<SfxAllItemSet>(SfxGetpApp()->GetPool());
+    return m_xItemSet.get();
 }
 
 void SfxTabDialogController::CreatePages()
