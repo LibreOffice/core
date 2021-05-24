@@ -844,9 +844,9 @@ IMAGE_SETEVENT:
         }
 
         if ((RndStdIds::FLY_AS_CHAR == pFlyFormat->GetAnchor().GetAnchorId()) &&
-            m_xAttrTab->pINetFormat->GetSttPara() ==
+            m_xAttrTab->pINetFormat->GetStartParagraph() ==
                         m_pPam->GetPoint()->nNode &&
-            m_xAttrTab->pINetFormat->GetSttCnt() ==
+            m_xAttrTab->pINetFormat->GetStartContent() ==
                         m_pPam->GetPoint()->nContent.GetIndex() - 1 )
         {
             // the attribute was insert right before as-character anchored
@@ -1369,7 +1369,7 @@ bool SwHTMLParser::HasCurrentParaBookmarks( bool bIgnoreStack ) const
             HTMLAttr* pAttr = m_aSetAttrTab[ --i ];
             if( RES_FLTR_BOOKMARK == pAttr->m_pItem->Which() )
             {
-                if( pAttr->GetSttParaIdx() == nNodeIdx )
+                if( pAttr->GetStartParagraphIdx() == nNodeIdx )
                     bHasMarks = true;
                 break;
             }

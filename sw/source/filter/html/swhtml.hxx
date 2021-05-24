@@ -78,51 +78,49 @@ typedef std::deque<HTMLAttr *> HTMLAttrs;
 // beginning of the table will set first in EndAllAttrs.
 struct HTMLAttrTable
 {
-    HTMLAttr
-                *pKeep,         // frame attributes
-                *pBox,
-                *pBrush,
-                *pBreak,
-                *pPageDesc,
+    HTMLAttr* pKeep; // frame attributes
+    HTMLAttr* pBox;
+    HTMLAttr* pBrush;
+    HTMLAttr* pBreak;
+    HTMLAttr* pPageDesc;
 
-                *pLRSpace,      // paragraph attributes
-                *pULSpace,
-                *pLineSpacing,
-                *pAdjust,
-                *pDropCap,
-                *pSplit,
-                *pWidows,
-                *pOrphans,
-                *pDirection,
+    HTMLAttr* pLRSpace; // paragraph attributes
+    HTMLAttr* pULSpace;
+    HTMLAttr* pLineSpacing;
+    HTMLAttr* pAdjust;
+    HTMLAttr* pDropCap;
+    HTMLAttr* pSplit;
+    HTMLAttr* pWidows;
+    HTMLAttr* pOrphans;
+    HTMLAttr* pDirection;
 
-                *pCharFormats,     // text attributes
-                *pINetFormat,
+    HTMLAttr* pCharFormats; // text attributes
+    HTMLAttr* pINetFormat;
 
-                *pBold,         // character attributes
-                *pBoldCJK,
-                *pBoldCTL,
-                *pItalic,
-                *pItalicCJK,
-                *pItalicCTL,
-                *pStrike,
-                *pUnderline,
-                *pBlink,
-                *pFont,
-                *pFontCJK,
-                *pFontCTL,
-                *pFontHeight,
-                *pFontHeightCJK,
-                *pFontHeightCTL,
-                *pFontColor,
-                *pEscapement,
-                *pCaseMap,
-                *pKerning,      // (only for SPACER)
-                *pCharBrush,    // character background
-                *pLanguage,
-                *pLanguageCJK,
-                *pLanguageCTL,
-                *pCharBox
-                ;
+    HTMLAttr* pBold; // character attributes
+    HTMLAttr* pBoldCJK;
+    HTMLAttr* pBoldCTL;
+    HTMLAttr* pItalic;
+    HTMLAttr* pItalicCJK;
+    HTMLAttr* pItalicCTL;
+    HTMLAttr* pStrike;
+    HTMLAttr* pUnderline;
+    HTMLAttr* pBlink;
+    HTMLAttr* pFont;
+    HTMLAttr* pFontCJK;
+    HTMLAttr* pFontCTL;
+    HTMLAttr* pFontHeight;
+    HTMLAttr* pFontHeightCJK;
+    HTMLAttr* pFontHeightCTL;
+    HTMLAttr* pFontColor;
+    HTMLAttr* pEscapement;
+    HTMLAttr* pCaseMap;
+    HTMLAttr* pKerning; // (only for SPACER)
+    HTMLAttr* pCharBrush; // character background
+    HTMLAttr* pLanguage;
+    HTMLAttr* pLanguageCJK;
+    HTMLAttr* pLanguageCTL;
+    HTMLAttr* pCharBox;
 };
 
 class HTMLAttr
@@ -130,8 +128,10 @@ class HTMLAttr
     friend class SwHTMLParser;
     friend class CellSaveStruct;
 
-    SwNodeIndex m_nStartPara, m_nEndPara;
-    sal_Int32 m_nStartContent, m_nEndContent;
+    SwNodeIndex m_nStartPara;
+    SwNodeIndex m_nEndPara;
+    sal_Int32 m_nStartContent;
+    sal_Int32 m_nEndContent;
     bool m_bInsAtStart : 1;
     bool m_bLikePara : 1; // set attribute above the whole paragraph
     bool m_bValid : 1;    // is the attribute valid?
@@ -157,14 +157,14 @@ public:
                 HTMLAttr **pHd, const std::shared_ptr<HTMLAttrTable>& rAttrTab );
     inline void SetStart( const SwPosition& rPos );
 
-    sal_uInt32 GetSttParaIdx() const { return m_nStartPara.GetIndex(); }
-    sal_uInt32 GetEndParaIdx() const { return m_nEndPara.GetIndex(); }
+    sal_uInt32 GetStartParagraphIdx() const { return m_nStartPara.GetIndex(); }
+    sal_uInt32 GetEndParagraphIdx() const { return m_nEndPara.GetIndex(); }
 
-    const SwNodeIndex& GetSttPara() const { return m_nStartPara; }
-    const SwNodeIndex& GetEndPara() const { return m_nEndPara; }
+    const SwNodeIndex& GetStartParagraph() const { return m_nStartPara; }
+    const SwNodeIndex& GetEndParagraph() const { return m_nEndPara; }
 
-    sal_Int32 GetSttCnt() const { return m_nStartContent; }
-    sal_Int32 GetEndCnt() const { return m_nEndContent; }
+    sal_Int32 GetStartContent() const { return m_nStartContent; }
+    sal_Int32 GetEndContent() const { return m_nEndContent; }
 
     bool IsLikePara() const { return m_bLikePara; }
     void SetLikePara() { m_bLikePara = true; }
@@ -211,9 +211,9 @@ class HTMLAttrContext
     std::unique_ptr<HTMLAttrContext_SaveDoc> m_pSaveDocContext;
     std::unique_ptr<SfxItemSet> m_pFrameItemSet;
 
-    HtmlTokenId m_nToken;         // the token of the context
+    HtmlTokenId m_nToken;  // the token of the context
 
-    sal_uInt16  m_nTextFormatColl;    // a style created in the context or zero
+    sal_uInt16  m_nTextFormatColl; // a style created in the context or zero
 
     sal_uInt16  m_nLeftMargin;        // a changed left border
     sal_uInt16  m_nRightMargin;       // a changed right border
@@ -248,7 +248,7 @@ public:
     HtmlTokenId GetToken() const { return m_nToken; }
 
     sal_uInt16 GetTextFormatColl() const { return m_bDefaultTextFormatColl ? 0 : m_nTextFormatColl; }
-    sal_uInt16 GetDfltTextFormatColl() const { return m_bDefaultTextFormatColl ? m_nTextFormatColl : 0; }
+    sal_uInt16 GetDefaultTextFormatColl() const { return m_bDefaultTextFormatColl ? m_nTextFormatColl : 0; }
 
     const OUString& GetClass() const { return m_aClass; }
 
