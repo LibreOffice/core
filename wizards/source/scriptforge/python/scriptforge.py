@@ -739,12 +739,12 @@ class SFScriptForge:
             return cls.SIMPLEEXEC(cls.module + '.PyGetGuiType')
 
         @classmethod
-        def GetSystemTicks(cls):
-            return cls.SIMPLEEXEC(cls.module + '.PyGetSystemTicks')
-
-        @classmethod
         def GetPathSeparator(cls):
             return os.sep
+
+        @classmethod
+        def GetSystemTicks(cls):
+            return cls.SIMPLEEXEC(cls.module + '.PyGetSystemTicks')
 
         class GlobalScope(object, metaclass = _Singleton):
             @classmethod  # Mandatory because the GlobalScope class is normally not instantiated
