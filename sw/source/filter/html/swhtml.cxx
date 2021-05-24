@@ -2217,14 +2217,14 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
             while( pAttr )
             {
                 HTMLAttr *pNext = pAttr->GetNext();
-                if( pAttr->GetSttParaIdx() < rEndIdx.GetIndex() ||
+                if( pAttr->GetStartParagraphIdx() < rEndIdx.GetIndex() ||
                     (!bWholePara &&
-                     pAttr->GetSttPara() == rEndIdx &&
-                     pAttr->GetSttCnt() != nEndCnt) )
+                     pAttr->GetStartParagraph() == rEndIdx &&
+                     pAttr->GetStartContent() != nEndCnt) )
                 {
                     bWholePara =
-                        pAttr->GetSttPara() == rEndIdx &&
-                        pAttr->GetSttCnt() == 0;
+                        pAttr->GetStartParagraph() == rEndIdx &&
+                        pAttr->GetStartContent() == 0;
 
                     sal_Int32 nStt = pAttr->m_nStartContent;
                     bool bScript = false;
@@ -2236,14 +2236,14 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
                     if( bScript )
                     {
                         const SwTextNode *pTextNd =
-                            pAttr->GetSttPara().GetNode().GetTextNode();
+                            pAttr->GetStartParagraph().GetNode().GetTextNode();
                         OSL_ENSURE( pTextNd, "No text node" );
                         if( pTextNd )
                         {
                             const OUString& rText = pTextNd->GetText();
                             sal_uInt16 nScriptText =
                                 g_pBreakIt->GetBreakIter()->getScriptType(
-                                            rText, pAttr->GetSttCnt() );
+                                            rText, pAttr->GetStartContent() );
                             sal_Int32 nScriptEnd = g_pBreakIt->GetBreakIter()
                                     ->endOfScript( rText, nStt, nScriptText );
                             while (nScriptEnd < nEndCnt && nScriptEnd != -1)
@@ -2723,7 +2723,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
         pAttr = m_aSetAttrTab[ --n ];
         sal_uInt16 nWhich = pAttr->m_pItem->Which();
 
-        sal_uLong nEndParaIdx = pAttr->GetEndParaIdx();
+        sal_uLong nEndParaIdx = pAttr->GetEndParagraphIdx();
         bool bSetAttr;
         if( bChkEnd )
         {
@@ -2737,11 +2737,11 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                          (RES_LR_SPACE != nWhich || !GetNumInfo().GetNumRule()) ) ||
                        ( !pAttr->IsLikePara() &&
                          nEndParaIdx == rEndIdx.GetIndex() &&
-                         pAttr->GetEndCnt() < nEndCnt &&
+                         pAttr->GetEndContent() < nEndCnt &&
                          (isCHRATR(nWhich) || isTXTATR_WITHEND(nWhich)) ) ||
                        ( bBeforeTable &&
                          nEndParaIdx == rEndIdx.GetIndex() &&
-                         !pAttr->GetEndCnt() );
+                         !pAttr->GetEndContent() );
         }
         else
         {
@@ -2783,7 +2783,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                 {
                     // because of the awful deleting of nodes an index can also
                     // point to an end node :-(
-                    if ( (pAttr->GetSttPara() == pAttr->GetEndPara()) &&
+                    if ( (pAttr->GetStartParagraph() == pAttr->GetEndParagraph()) &&
                          !isTXTATR_NOEND(nWhich) )
                     {
                         // when the end index also points to the node, we don't
@@ -2812,7 +2812,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                 aAttrPam.GetPoint()->nContent.Assign( pCNd, pAttr->m_nStartContent );
 
                 aAttrPam.SetMark();
-                if ( (pAttr->GetSttPara() != pAttr->GetEndPara()) &&
+                if ( (pAttr->GetStartParagraph() != pAttr->GetEndParagraph()) &&
                          !isTXTATR_NOEND(nWhich) )
                 {
                     pCNd = pAttr->m_nEndPara.GetNode().GetContentNode();
@@ -3096,7 +3096,7 @@ bool SwHTMLParser::EndAttr( HTMLAttr* pAttr, bool bChkEmpty )
     bool bMoveBack = false;
     sal_uInt16 nWhich = pAttr->m_pItem->Which();
     if( !nEndCnt && RES_PARATR_BEGIN <= nWhich &&
-        *pEndIdx != pAttr->GetSttPara() )
+        *pEndIdx != pAttr->GetStartParagraph() )
     {
         // Then move back one position in the content!
         bMoveBack = m_pPam->Move( fnMoveBackward );
@@ -3112,12 +3112,12 @@ bool SwHTMLParser::EndAttr( HTMLAttr* pAttr, bool bChkEmpty )
     // does it have a non-empty range?
     if( !bChkEmpty || (RES_PARATR_BEGIN <= nWhich && bMoveBack) ||
         RES_PAGEDESC == nWhich || RES_BREAK == nWhich ||
-        *pEndIdx != pAttr->GetSttPara() ||
-        nEndCnt != pAttr->GetSttCnt() )
+        *pEndIdx != pAttr->GetStartParagraph() ||
+        nEndCnt != pAttr->GetStartContent() )
     {
         bInsert = true;
         // We do some optimization for script dependent attributes here.
-        if( *pEndIdx == pAttr->GetSttPara() )
+        if( *pEndIdx == pAttr->GetStartParagraph() )
         {
             lcl_swhtml_getItemInfo( *pAttr, bScript, nScriptItem );
         }
@@ -3128,16 +3128,16 @@ bool SwHTMLParser::EndAttr( HTMLAttr* pAttr, bool bChkEmpty )
     }
 
     const SwTextNode *pTextNd = (bInsert && bScript) ?
-        pAttr->GetSttPara().GetNode().GetTextNode() :
+        pAttr->GetStartParagraph().GetNode().GetTextNode() :
         nullptr;
 
     if (pTextNd)
     {
         const OUString& rText = pTextNd->GetText();
         sal_uInt16 nScriptText = g_pBreakIt->GetBreakIter()->getScriptType(
-                        rText, pAttr->GetSttCnt() );
+                        rText, pAttr->GetStartContent() );
         sal_Int32 nScriptEnd = g_pBreakIt->GetBreakIter()
-                    ->endOfScript( rText, pAttr->GetSttCnt(), nScriptText );
+                    ->endOfScript( rText, pAttr->GetStartContent(), nScriptText );
         while (nScriptEnd < nEndCnt && nScriptEnd != -1)
         {
             if( nScriptItem == nScriptText )
@@ -3355,9 +3355,9 @@ void SwHTMLParser::SplitAttrTab( std::shared_ptr<HTMLAttrTable> const & rNewAttr
             HTMLAttr *pPrev = pAttr->GetPrev();
 
             if( bSetAttr &&
-                ( pAttr->GetSttParaIdx() < nEndIdx.GetIndex() ||
-                  (pAttr->GetSttPara() == nEndIdx &&
-                   pAttr->GetSttCnt() != nEndCnt) ) )
+                ( pAttr->GetStartParagraphIdx() < nEndIdx.GetIndex() ||
+                  (pAttr->GetStartParagraph() == nEndIdx &&
+                   pAttr->GetStartContent() != nEndCnt) ) )
             {
                 // The attribute must be set before the list. We need the
                 // original and therefore we clone it, because pointer to the
@@ -4673,7 +4673,7 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
         else
         {
             // Maybe a default style exists?
-            nColl = pCntxt->GetDfltTextFormatColl();
+            nColl = pCntxt->GetDefaultTextFormatColl();
             if( nColl )
                 nDfltColl = nColl;
         }
