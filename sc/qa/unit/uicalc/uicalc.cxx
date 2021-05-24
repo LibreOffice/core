@@ -1566,6 +1566,36 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf123202)
     CPPUNIT_ASSERT(pDoc->RowHidden(2, 0));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf134675)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    insertStringToCell(*pModelObj, "A1", "A");
+
+    // Select column A
+    goToCell("A:A");
+
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Select column B to Z
+    goToCell("B:Z");
+
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+
+    for (size_t i = 1; i < 24; ++i)
+    {
+        // Without the fix in place, this test would have failed here with
+        // - Expected: A
+        // - Actual  :
+        CPPUNIT_ASSERT_EQUAL(OUString("A"), pDoc->GetString(ScAddress(i, 0, 0)));
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf116215)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
