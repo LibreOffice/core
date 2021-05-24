@@ -168,6 +168,7 @@ public:
     void testAutoFilterTimeValue();
     void testTdf76441();
     void testTdf142186();
+    void testTdf137063();
     void testTdf126342();
     void testAdvancedFilter();
     void testTdf98642();
@@ -295,6 +296,7 @@ public:
     CPPUNIT_TEST(testAutoFilterTimeValue);
     CPPUNIT_TEST(testTdf76441);
     CPPUNIT_TEST(testTdf142186);
+    CPPUNIT_TEST(testTdf137063);
     CPPUNIT_TEST(testTdf126342);
     CPPUNIT_TEST(testAdvancedFilter);
     CPPUNIT_TEST(testTdf98642);
@@ -3638,6 +3640,22 @@ void Test::testTdf142186()
         // - Actual  : 1234.5
         CPPUNIT_ASSERT_EQUAL(OUString("12.3"), m_pDoc->GetString(ScAddress(0,1,0)));
     }
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testTdf137063()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    m_pDoc->SetValue(0,0,0, 0.000000006);
+    m_pDoc->SetValue(0,1,0, 0.0000000006);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 0.000000006
+    // - Actual  : 6E-09
+    CPPUNIT_ASSERT_EQUAL(OUString("0.000000006"), m_pDoc->GetString(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("6E-10"), m_pDoc->GetString(ScAddress(0,1,0)));
 
     m_pDoc->DeleteTab(0);
 }
