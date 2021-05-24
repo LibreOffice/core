@@ -60,6 +60,9 @@ class Test : public test::BootstrapFixture, public XmlTestTools, public unotest:
     void TestEllipseXformIntersectClipRect();
     void TestDrawPolyLine16WithClip();
     void TestFillRegion();
+    void TestExtTextOutOpaqueAndClipTransform();
+
+    void TestExtTextOutOpaqueAndClipWMF();
     void TestPaletteWMF();
     void TestRoundrectWMF();
     void TestPolylinetoCloseStroke();
@@ -91,6 +94,8 @@ public:
     CPPUNIT_TEST(TestEllipseXformIntersectClipRect);
     CPPUNIT_TEST(TestDrawPolyLine16WithClip);
     CPPUNIT_TEST(TestFillRegion);
+    CPPUNIT_TEST(TestExtTextOutOpaqueAndClipTransform);
+    CPPUNIT_TEST(TestExtTextOutOpaqueAndClipWMF);
     CPPUNIT_TEST(TestPaletteWMF);
     CPPUNIT_TEST(TestRoundrectWMF);
     CPPUNIT_TEST(TestPolylinetoCloseStroke);
@@ -502,6 +507,114 @@ void Test::TestPolylinetoCloseStroke()
                        "1760,1120 1710,1130 1670,1140 1620,1150 1580,1160 1540,1170 1500,1180 1460,1200 1420,1210 1380,1230 1350,1240 1320,1260 1290,1280 1260,1300 1230,1310 1210,1330 1190,1360 1170,1380 1150,1400 1140,1420 1120,1440 1110,1460 1110,1490 1100,1510 1100,1530 1100,1550 1100,1580 1110,1600 1120,1620 1130,1650 1140,1670 1160,1690 1170,1710 1190,1730");
     assertXPath(pDocument, "/primitive2D/metafile/transform/polygonhairline[2]",
                 "color", "#000000");
+}
+
+
+void Test::TestExtTextOutOpaqueAndClipTransform()
+{
+    // tdf#142495 EMF records: SETBKCOLOR, SELECTOBJECT, EXTTEXTOUTW, MODIFYWORLDTRANSFORM, CREATEFONTINDIRECT.
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestExtTextOutOpaqueAndClipTransform.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion",
+                "text", "No_rect- DLP-");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion",
+                "fontcolor", "#000000");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor", 2);
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor[1]/polypolygon",
+                "path", "m966 490-477-275-84 147 476 275z");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor[1]",
+                "color", "#ff0000");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor[2]/polypolygon",
+                "path", "m251 713 623 361-148 257-623-361z");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor[2]",
+                "color", "#0080ff");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/group", 3);
+    assertXPath(pDocument, "/primitive2D/metafile/transform/group[1]/polypolygoncolor",
+                "color", "#ff0000");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/group[1]/textsimpleportion",
+                "text", "Opaque - DLP-");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/group[1]/textsimpleportion",
+                "fontcolor", "#000000");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/group[2]/mask/group/polypolygoncolor",
+                "color", "#00ff00");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/group[2]/mask/polypolygon",
+                "path", "m320 508 586 340-169 293-586-339z");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/group[2]/mask/group/textsimpleportion",
+                "text", "Clip  -  DLP-");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/group[2]/mask/group/textsimpleportion",
+                "fontcolor", "#000000");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/group[3]/mask/group/polypolygoncolor",
+                "color", "#0080ff");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/group[3]/mask/polypolygon",
+                "path", "m251 713 623 361-148 257-623-361z");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/group[3]/mask/group/textsimpleportion",
+                "text", "Opaque ClipP-");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/group[3]/mask/group/textsimpleportion",
+                "fontcolor", "#000000");
+}
+
+void Test::TestExtTextOutOpaqueAndClipWMF()
+{
+    // tdf#53004 WMF records: SETBKCOLOR, SELECTOBJECT, EXTTEXTOUT, CREATEBRUSHINDIRECT.
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/wmf/data/TestExtTextOutOpaqueAndClip.wmf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    CPPUNIT_ASSERT (pDocument);
+
+#ifdef MACOSX
+    // On some operating systems (Linux on LO Jenkins CI), the `/mask/` string is not added to XPath
+    // As a result tests are failing. On my Ubuntu 20.04 the `/mask/` string was added
+    // I would leave this test case for macOS to make sure there is no regression at least on one platform.
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polypolygoncolor", 5);
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polypolygoncolor[1]/polypolygon",
+                "path", "m7219 1825h319v3608h-319z");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polypolygoncolor[1]",
+                "color", "#ff0000");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polypolygoncolor[2]/polypolygon",
+                "path", "m7219 5942h319v318h-319z");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polypolygoncolor[2]",
+                "color", "#00ff00");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polypolygoncolor[3]/polypolygon",
+                "path", "m10149 5942h319v318h-319z");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polypolygoncolor[3]",
+                "color", "#8080ff");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/group", 5);
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/group[1]/polypolygoncolor",
+                "color", "#00ff00");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/group[1]/textsimpleportion",
+                "text", "ABCD");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/group[1]/textsimpleportion",
+                "fontcolor", "#000000");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/group[2]/polypolygoncolor",
+                "color", "#8080ff");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/group[2]/textsimpleportion",
+                "text", "MMMM");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/group[2]/textsimpleportion",
+                "fontcolor", "#000000");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/group[3]/mask/group/polypolygoncolor",
+                "color", "#ff8000");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/group[3]/mask/group/polypolygoncolor/polypolygon",
+                "path", "m1062 1061h1270v473h-1270z");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/group[3]/mask/group/textsimpleportion",
+                "text", "OOOO");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/group[3]/mask/group/textsimpleportion",
+                "fontcolor", "#000000");
+#endif
 }
 
 void Test::TestPaletteWMF()

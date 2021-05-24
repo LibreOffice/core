@@ -1795,14 +1795,18 @@ namespace emfio
                         [[fallthrough]];
                     case EMR_EXTTEXTOUTW :
                     {
-                        sal_Int32   nLeft, nTop, nRight, nBottom, ptlReferenceX, ptlReferenceY, nGfxMode, nXScale, nYScale;
-                        sal_uInt32  nOffString, nOptions, offDx;
-                        sal_Int32   nLen;
+                        sal_Int32   nLeft, nTop, nRight, nBottom;
+                        sal_uInt32  nGfxMode;
+                        float       nXScale, nYScale;
+                        sal_Int32   ptlReferenceX, ptlReferenceY;
+                        sal_uInt32  nLen, nOffString, nOptions, offDx;
+                        sal_Int32   nLeftRect, nTopRect, nRightRect, nBottomRect;
 
                         nCurPos = mpInputStream->Tell() - 8;
 
-                        mpInputStream->ReadInt32( nLeft ).ReadInt32( nTop ).ReadInt32( nRight ).ReadInt32( nBottom ).ReadInt32( nGfxMode ).ReadInt32( nXScale ).ReadInt32( nYScale )
-                           .ReadInt32( ptlReferenceX ).ReadInt32( ptlReferenceY ).ReadInt32( nLen ).ReadUInt32( nOffString ).ReadUInt32( nOptions );
+                        mpInputStream->ReadInt32( nLeft ).ReadInt32( nTop ).ReadInt32( nRight ).ReadInt32( nBottom )
+                           .ReadUInt32( nGfxMode ).ReadFloat( nXScale ).ReadFloat( nYScale )
+                           .ReadInt32( ptlReferenceX ).ReadInt32( ptlReferenceY ).ReadUInt32( nLen ).ReadUInt32( nOffString ).ReadUInt32( nOptions );
 
                         SAL_INFO("emfio", "\t\tBounds: " << nLeft << ", " << nTop << ", " << nRight << ", " << nBottom);
                         SAL_INFO("emfio", "\t\tiGraphicsMode: 0x" << std::hex << nGfxMode << std::dec);
@@ -1810,7 +1814,13 @@ namespace emfio
                         SAL_INFO("emfio", "\t\teyScale: " << nYScale);
                         SAL_INFO("emfio", "\t\tReference: (" << ptlReferenceX << ", " << ptlReferenceY << ")");
 
-                        mpInputStream->SeekRel( 0x10 );
+                        mpInputStream->ReadInt32( nLeftRect ).ReadInt32( nTopRect ).ReadInt32( nRightRect ).ReadInt32( nBottomRect );
+                        const tools::Rectangle aRect( nLeftRect, nTopRect, nRightRect, nBottomRect );
+                        BkMode mnBkModeBackup = mnBkMode;
+                        if ( nOptions & ETO_NO_RECT ) // Don't draw the background rectangle
+                            mnBkMode = BkMode::Transparent;
+                        if ( nOptions & ETO_OPAQUE )
+                            DrawRectWithBGColor( aRect );
                         mpInputStream->ReadUInt32( offDx );
 
                         ComplexTextLayoutFlags nTextLayoutMode = ComplexTextLayoutFlags::Default;
@@ -1820,15 +1830,14 @@ namespace emfio
                         SAL_WARN_IF( ( nOptions & ( ETO_PDY | ETO_GLYPH_INDEX ) ) != 0, "emfio", "SJ: ETO_PDY || ETO_GLYPH_INDEX in EMF" );
 
                         Point aPos( ptlReferenceX, ptlReferenceY );
-                        bool bLenSane = nLen > 0 && nLen < static_cast<sal_Int32>( SAL_MAX_UINT32 / sizeof(sal_Int32) );
                         bool bOffStringSane = nOffString <= mnEndPos - nCurPos;
-                        if (bLenSane && bOffStringSane)
+                        if ( bOffStringSane )
                         {
                             mpInputStream->Seek( nCurPos + nOffString );
                             OUString aText;
                             if ( bFlag )
                             {
-                                if ( nLen <= static_cast<sal_Int32>( mnEndPos - mpInputStream->Tell() ) )
+                                if ( nLen <= ( mnEndPos - mpInputStream->Tell() ) )
                                 {
                                     std::unique_ptr<char[]> pBuf(new char[ nLen ]);
                                     mpInputStream->ReadBytes(pBuf.get(), nLen);
@@ -1862,7 +1871,7 @@ namespace emfio
                                 for (sal_Int32 i = 0; i < aText.getLength(); ++i)
                                 {
                                     sal_Int32 nDxCount = 1;
-                                    if (aText.getLength() != nLen)
+                                    if (aText.getLength() != static_cast<sal_Int32>( nLen ) )
                                     {
                                         sal_Unicode cUniChar = aText[i];
                                         OString aTmp(&cUniChar, 1, GetCharSet());
@@ -1894,7 +1903,15 @@ namespace emfio
                                     }
                                 }
                             }
+                            if ( nOptions & ETO_CLIPPED )
+                            {
+                                Push(); // Save the current clip. It will be restored after text drawing
+                                IntersectClipRect( aRect );
+                            }
                             DrawText(aPos, aText, pDXAry.get(), pDYAry.get(), mbRecordPath, nGfxMode);
+                            if ( nOptions & ETO_CLIPPED )
+                                Pop();
+                            mnBkMode = mnBkModeBackup;
                         }
                     }
                     break;
