@@ -243,8 +243,10 @@ void SwDrawView::AddCustomHdl()
     }
 
     // add anchor handle:
-    maHdlList.AddHdl( std::make_unique<SwSdrHdl>( aPos, ( pAnch->IsVertical() && !pAnch->IsVertLR() ) ||
-                                     pAnch->IsRightToLeft() ) );
+    std::unique_ptr<SdrHdl> hdl = std::make_unique<SwSdrHdl>( aPos, ( pAnch->IsVertical() && !pAnch->IsVertLR() ) ||
+                                     pAnch->IsRightToLeft() );
+    hdl->SetObjHdlNum(maHdlList.GetHdlCount());
+    maHdlList.AddHdl(std::move(hdl));
 }
 
 SdrObject* SwDrawView::GetMaxToTopObj( SdrObject* pObj ) const
