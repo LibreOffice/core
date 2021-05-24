@@ -126,9 +126,9 @@ ScOutlineCollection::const_iterator ScOutlineCollection::end() const
     return m_Entries.end();
 }
 
-void ScOutlineCollection::erase(const iterator& pos)
+ScOutlineCollection::iterator ScOutlineCollection::erase(const iterator& pos)
 {
-    m_Entries.erase(pos);
+    return m_Entries.erase(pos);
 }
 
 bool ScOutlineCollection::empty() const
@@ -262,11 +262,7 @@ bool ScOutlineArray::Insert(
                         return false;
                     }
                     aCollections[nMoveLevel+1].insert(*pEntry);
-                    size_t nPos = std::distance(rColl.begin(), it);
-                    rColl.erase(it);
-                    it = rColl.begin();
-                    std::advance(it, nPos);
-                    itEnd = rColl.end();
+                    it = rColl.erase(it);
                     if (nMoveLevel == nDepth - 1)
                         bNeedSize = true;
                 }
@@ -345,12 +341,7 @@ void ScOutlineArray::PromoteSub(SCCOLROW nStartPos, SCCOLROW nEndPos, size_t nSt
             {
                 aCollections[nLevel-1].insert(*pEntry);
 
-                // Re-calc iterator positions after the tree gets invalidated
-                size_t nPos = std::distance(rColl.begin(), it);
-                rColl.erase(it);
-                it = rColl.begin();
-                std::advance(it, nPos);
-                itEnd = rColl.end();
+                it = rColl.erase(it);
             }
             else
                 ++it;
@@ -368,12 +359,7 @@ void ScOutlineArray::PromoteSub(SCCOLROW nStartPos, SCCOLROW nEndPos, size_t nSt
             {
                 aCollections[nLevel-1].insert(*pEntry);
 
-                // Re-calc iterator positions after the tree gets invalidated
-                size_t nPos = std::distance(rColl.begin(), it);
-                rColl.erase(it);
-                it = rColl.begin();
-                std::advance(it, nPos);
-                itEnd = rColl.end();
+                it = rColl.erase(it);
             }
             else
                 ++it;
