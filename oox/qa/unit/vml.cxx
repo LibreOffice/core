@@ -16,6 +16,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -56,6 +57,28 @@ void OoxVmlTest::load(std::u16string_view rFileName)
 {
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + rFileName;
     mxComponent = loadFromDesktop(aURL);
+}
+
+CPPUNIT_TEST_FIXTURE(OoxVmlTest, tdf137314_vml_rotation_unit_fd)
+{
+    // Load a document with a 30deg rotated arc on a drawing canvas. Rotation is given
+    // as 1966080fd. Error was, that the vml angle unit "fd" was not converted to Degree100.
+    load(u"tdf137314_vml_rotation_unit_fd.docx");
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    drawing::PolyPolygonBezierCoords aPolyPolygonBezierCoords;
+    xShapeProps->getPropertyValue("PolyPolygonBezier") >>= aPolyPolygonBezierCoords;
+    drawing::PointSequence aPolygon = aPolyPolygonBezierCoords.Coordinates[1];
+    // Without fix in place, the vector was -1441|1490.
+    // [1] and [2] are Bezier-curve control points.
+    sal_Int32 nDiffX = aPolygon[3].X - aPolygon[0].X;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1490), nDiffX);
+    sal_Int32 nDiffY = aPolygon[3].Y - aPolygon[0].Y;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1441), nDiffY);
 }
 
 CPPUNIT_TEST_FIXTURE(OoxVmlTest, testSpt202ShapeType)
