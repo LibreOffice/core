@@ -1716,17 +1716,10 @@ void GtkSalFrame::AllocateFrame()
     if (m_pSurface)
         cairo_surface_destroy(m_pSurface);
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    m_pSurface = gdk_window_create_similar_surface(widget_get_surface(m_pWindow),
-                                                   CAIRO_CONTENT_COLOR_ALPHA,
-                                                   aFrameSize.getX(),
-                                                   aFrameSize.getY());
-#else
-    m_pSurface = gdk_surface_create_similar_surface(widget_get_surface(m_pWindow),
-                                                    CAIRO_CONTENT_COLOR_ALPHA,
-                                                    aFrameSize.getX(),
-                                                    aFrameSize.getY());
-#endif
+    m_pSurface = surface_create_similar_surface(widget_get_surface(m_pWindow),
+                                                CAIRO_CONTENT_COLOR_ALPHA,
+                                                aFrameSize.getX(),
+                                                aFrameSize.getY());
     m_aFrameSize = aFrameSize;
 
     cairo_surface_set_user_data(m_pSurface, SvpSalGraphics::getDamageKey(), &m_aDamageHandler, nullptr);

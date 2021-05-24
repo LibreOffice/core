@@ -133,6 +133,18 @@ inline void widget_set_cursor(GtkWidget *pWidget, GdkCursor *pCursor)
 #endif
 }
 
+inline cairo_surface_t * surface_create_similar_surface(GdkSurface *pSurface,
+                                                        cairo_content_t eContent,
+                                                        int nWidth,
+                                                        int nHeight)
+{
+#if GTK_CHECK_VERSION(4, 0, 0)
+    return gdk_surface_create_similar_surface(pSurface, eContent, nWidth, nHeight);
+#else
+    return gdk_window_create_similar_surface(pSurface, eContent, nWidth, nHeight);
+#endif
+}
+
 #if GTK_CHECK_VERSION(4, 0, 0)
 typedef double gtk_coord;
 #else
