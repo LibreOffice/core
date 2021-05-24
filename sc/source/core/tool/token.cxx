@@ -3312,6 +3312,18 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
             {
                 case svSingleRef:
                     {
+                        const bool bTransposed = rCxt.mpSrcDoc != nullptr
+                                                 && rCxt.mpSrcDoc->GetClipParam().isTransposed();
+
+                        // Cut paste transposed case:
+                        // Cells within range referencing cells within range will be handled
+                        // in UpdateTranspose(). Stop processing these cells.
+                        // Rationale: References within range are a special case and may
+                        // lead to #REF! errors here. These #REF! cannot by fixed later in
+                        // UpdateTranspose().
+                        if (bTransposed && aOldRange.In(rOldPos))
+                            break;
+
                         ScSingleRefData& rRef = *p->GetSingleRef();
                         ScAddress aAbs = rRef.toAbs(*mxSheetLimits, rOldPos);
                         if (aOldRange.In(aAbs))
@@ -3333,6 +3345,18 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
                     break;
                 case svDoubleRef:
                     {
+                        const bool bTransposed = rCxt.mpSrcDoc != nullptr
+                                                 && rCxt.mpSrcDoc->GetClipParam().isTransposed();
+
+                        // Cut paste transposed case:
+                        // Cells within range referencing cells within range will be handled
+                        // in UpdateTranspose(). Stop processing these cells.
+                        // Rationale: References within range are a special case and may
+                        // lead to #REF! errors here. These #REF! cannot by fixed later in
+                        // UpdateTranspose().
+                        if (bTransposed && aOldRange.In(rOldPos))
+                            break;
+
                         ScComplexRefData& rRef = *p->GetDoubleRef();
                         ScRange aAbs = rRef.toAbs(*mxSheetLimits, rOldPos);
                         if (aOldRange.In(aAbs))

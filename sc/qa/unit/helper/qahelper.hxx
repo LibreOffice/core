@@ -258,7 +258,14 @@ SCQAHELPER_DLLPUBLIC ScRange insertRangeData(ScDocument* pDoc, const ScAddress& 
                                    const std::vector<std::vector<const char*>>& rData);
 SCQAHELPER_DLLPUBLIC bool insertRangeNames(ScDocument* pDoc, ScRangeName* pNames, const RangeNameDef* p,
                                    const RangeNameDef* pEnd);
-SCQAHELPER_DLLPUBLIC void printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption);
+SCQAHELPER_DLLPUBLIC OUString getRangeByName(ScDocument* pDoc, const OUString& aRangeName);
+SCQAHELPER_DLLPUBLIC OUString getFormula(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab);
+SCQAHELPER_DLLPUBLIC void printFormula(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
+                                       const char* pCaption = nullptr);
+SCQAHELPER_DLLPUBLIC void printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption,
+                                     const bool printFormula = false);
+SCQAHELPER_DLLPUBLIC void printRange(ScDocument* pDoc, const ScRange& rRange,
+                                     const OString& rCaption, const bool printFormula = false);
 SCQAHELPER_DLLPUBLIC void clearRange(ScDocument* pDoc, const ScRange& rRange);
 SCQAHELPER_DLLPUBLIC void clearSheet(ScDocument* pDoc, SCTAB nTab);
 
