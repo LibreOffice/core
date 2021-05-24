@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ -->
+
+<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="SchXMLExport.Compact"
+      constructor="com_sun_star_comp_Chart_XMLExporter_get_implementation">
+    <service name="com.sun.star.comp.Chart.XMLExporter"/>
+  </implementation>
+  <implementation name="SchXMLExport.Content"
+    constructor="com_sun_star_comp_Chart_XMLContentExporter_get_implementation">
+    <service name="com.sun.star.comp.Chart.XMLContentExporter"/>
+  </implementation>
+  <implementation name="SchXMLExport.Oasis.Compact"
+      constructor="com_sun_star_comp_Chart_XMLOasisExporter_get_implementation">
+    <service name="com.sun.star.comp.Chart.XMLOasisExporter"/>
+  </implementation>
+  <implementation name="SchXMLExport.Oasis.Content"
+      constructor="com_sun_star_comp_Chart_XMLOasisContentExporter_get_implementation">
+    <service name="com.sun.star.comp.Chart.XMLOasisContentExporter"/>
+  </implementation>
+  <implementation name="SchXMLExport.Oasis.Meta"
+      constructor="com_sun_star_comp_Chart_XMLOasisMetaExporter_get_implementation">
+    <service name="com.sun.star.comp.Chart.XMLOasisMetaExporter"/>
+  </implementation>
+  <implementation name="SchXMLExport.Oasis.Styles"
+      constructor="com_sun_star_comp_Chart_XMLOasisStylesExporter_get_implementation">
+    <service name="com.sun.star.comp.Chart.XMLOasisStylesExporter"/>
+  </implementation>
+  <implementation name="SchXMLExport.Styles"
+      constructor="com_sun_star_comp_Chart_XMLStylesExporter_get_implementation">
+    <service name="com.sun.star.comp.Chart.XMLStylesExporter"/>
+  </implementation>
+  <implementation name="SchXMLImport"
+      constructor="com_sun_star_comp_Chart_XMLOasisImporter_get_implementation">
+    <service name="com.sun.star.comp.Chart.XMLOasisImporter"/>
+  </implementation>
+  <implementation name="SchXMLImport.Content"
+      constructor="com_sun_star_comp_Chart_XMLOasisContentImporter_get_implementation">
+    <service name="com.sun.star.comp.Chart.XMLOasisContentImporter"/>
+  </implementation>
+  <implementation name="SchXMLImport.Meta"
+      constructor="com_sun_star_comp_Chart_XMLOasisMetaImporter_get_implementation">
+    <service name="com.sun.star.comp.Chart.XMLOasisMetaImporter"/>
+  </implementation>
+  <implementation name="SchXMLImport.Styles"
+      constructor="com_sun_star_comp_Chart_XMLOasisStylesImporter_get_implementation">
+    <service name="com.sun.star.comp.Chart.XMLOasisStylesImporter"/>
+  </implementation>
+</component>

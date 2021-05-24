@@ -19,24 +19,18 @@
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="XMLMetaExportComponent"
-      constructor="XMLMetaExportComponent_get_implementation">
-    <service name="com.sun.star.document.XMLOasisMetaExporter"/>
+  <implementation name="com.sun.star.comp.Writer.XMLAutotextEventsExporter"
+      constructor="com_sun_star_comp_Writer_XMLAutotextEventsExporter_get_implementation">
+    <service name="com.sun.star.comp.Writer.XMLAutotextEventsExporter"/>
   </implementation>
-  <implementation name="XMLMetaExportOOo"
-    constructor="XMLMetaExportOOo_get_implementation">
-    <service name="com.sun.star.document.XMLMetaExporter"/>
+  <implementation
+      name="com.sun.star.comp.Writer.XMLOasisAutotextEventsExporter"
+      constructor="com_sun_star_comp_Writer_XMLOasisAutotextEventsExporter_get_implementation">
+    <service name="com.sun.star.comp.Writer.XMLOasisAutotextEventsExporter"/>
   </implementation>
-  <implementation name="XMLMetaImportComponent"
-      constructor="XMLMetaImportComponent_get_implementation">
-    <service name="com.sun.star.document.XMLOasisMetaImporter"/>
-  </implementation>
-  <implementation name="XMLVersionListPersistence"
-      constructor="XMLVersionListPersistence_get_implementation">
-    <service name="com.sun.star.document.DocumentRevisionListPersistence"/>
-  </implementation>
-  <implementation name="xmloff::AnimationsImport"
-      constructor="com_sun_star_comp_Xmloff_AnimationsImport">
-    <service name="com.sun.star.comp.Xmloff.AnimationsImport"/>
+  <implementation
+      name="com.sun.star.comp.Writer.XMLOasisAutotextEventsImporter"
+      constructor="com_sun_star_comp_Writer_XMLOasisAutotextEventsImporter_get_implementation">
+    <service name="com.sun.star.comp.Writer.XMLOasisAutotextEventsImporter"/>
   </implementation>
 </component>

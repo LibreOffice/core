@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ -->
+
+<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="XMLImpressClipboardExport"
+    constructor="com_sun_star_comp_Impress_XMLClipboardExporter_get_implementation">
+    <service name="com.sun.star.comp.Impress.XMLClipboardExporter"/>
+  </implementation>
+  <implementation name="XMLImpressContentExportOasis"
+    constructor="com_sun_star_comp_Impress_XMLOasisContentExporter_get_implementation">
+    <service name="com.sun.star.comp.Impress.XMLOasisContentExporter"/>
+  </implementation>
+  <implementation name="XMLImpressContentImportOasis"
+    constructor="com_sun_star_comp_Impress_XMLOasisContentImporter_get_implementation">
+    <service name="com.sun.star.comp.Impress.XMLOasisContentImporter"/>
+  </implementation>
+  <implementation name="XMLImpressExportOOO"
+    constructor="com_sun_star_comp_Impress_XMLExporter_get_implementation">
+    <service name="com.sun.star.comp.Impress.XMLExporter"/>
+  </implementation>
+  <implementation name="XMLImpressExportOasis"
+    constructor="com_sun_star_comp_Impress_XMLOasisExporter_get_implementation">
+    <service name="com.sun.star.comp.Impress.XMLOasisExporter"/>
+  </implementation>
+  <implementation name="XMLImpressImportOasis"
+    constructor="com_sun_star_comp_Impress_XMLOasisImporter_get_implementation">
+    <service name="com.sun.star.comp.Impress.XMLOasisImporter"/>
+  </implementation>
+  <implementation name="XMLImpressMetaExportOasis"
+    constructor="com_sun_star_comp_Impress_XMLOasisMetaExporter_get_implementation">
+    <service name="com.sun.star.comp.Impress.XMLOasisMetaExporter"/>
+  </implementation>
+  <implementation name="XMLImpressMetaImportOasis"
+    constructor="com_sun_star_comp_Impress_XMLOasisMetaImporter_get_implementation">
+    <service name="com.sun.star.comp.Impress.XMLOasisMetaImporter"/>
+  </implementation>
+  <implementation name="XMLImpressSettingsExportOasis"
+    constructor="com_sun_star_comp_Impress_XMLOasisSettingsExporter_get_implementation">
+    <service name="com.sun.star.comp.Impress.XMLOasisSettingsExporter"/>
+  </implementation>
+  <implementation name="XMLImpressSettingsImportOasis"
+    constructor="com_sun_star_comp_Impress_XMLOasisSettingsImporter_get_implementation">
+    <service name="com.sun.star.comp.Impress.XMLOasisSettingsImporter"/>
+  </implementation>
+  <implementation name="XMLImpressStylesExportOasis"
+    constructor="com_sun_star_comp_Impress_XMLOasisStylesExporter_get_implementation">
+    <service name="com.sun.star.comp.Impress.XMLOasisStylesExporter"/>
+  </implementation>
+  <implementation name="XMLImpressStylesImportOasis"
+    constructor="com_sun_star_comp_Impress_XMLOasisStylesImporter_get_implementation">
+    <service name="com.sun.star.comp.Impress.XMLOasisStylesImporter"/>
+  </implementation>
+</component>

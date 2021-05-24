@@ -19,7 +19,15 @@
 
 $(eval $(call gb_Library_Library,xo))
 
-$(eval $(call gb_Library_set_componentfile,xo,xmloff/util/xo))
+$(eval $(call gb_Library_set_componentfiles,xo, \
+    xmloff/util/xo \
+    xmloff/util/xo.chart \
+    $(if $(ENABLE_WASM_STRIP_BASIC_CALC_DRAW_MATH_IMPRESS),, \
+        xmloff/util/xo.draw \
+        xmloff/util/xo.impress \
+        xmloff/util/xo.writer \
+    ) \
+))
 
 $(eval $(call gb_Library_set_precompiled_header,xo,xmloff/inc/pch/precompiled_xo))
 

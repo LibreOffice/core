@@ -18,10 +18,6 @@
  -->
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.Draw.GraphicExporter"
-      constructor="com_sun_star_comp_Draw_GraphicExporter_get_implementation">
-    <service name="com.sun.star.drawing.GraphicExportFilter"/>
-  </implementation>
   <implementation name="com.sun.star.comp.svx.ExtrusionDepthController"
       constructor="com_sun_star_comp_svx_ExtrusionDepthController_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
