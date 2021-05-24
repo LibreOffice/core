@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4719702c_fe423ec0",
+        "filename": "sw/qa/uitest/writer_tests7/tdf63438.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-05-24T07:07:06Z",
+      "side": 1,
+      "message": "do not use time.sleep.\nOTOH, you are not checking the expected behaviour after changing the char background",
+      "revId": "baf1e2eb300a611d80a7a5dff0714c0691becf9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
