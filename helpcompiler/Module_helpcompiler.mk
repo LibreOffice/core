@@ -10,8 +10,10 @@
 $(eval $(call gb_Module_Module,helpcompiler))
 
 $(eval $(call gb_Module_add_targets,helpcompiler,\
-    Executable_HelpIndexer \
-    Executable_HelpLinker \
+    $(call gb_Helper_optional,HELPTOOLS, \
+        Executable_HelpIndexer \
+        Executable_HelpLinker \
+    ) \
     Library_helplinker \
 ))
 
