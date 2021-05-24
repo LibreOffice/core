@@ -766,7 +766,7 @@ void GtkSalFrame::moveWindow( tools::Long nX, tools::Long nY )
 
 void GtkSalFrame::widget_set_size_request(tools::Long nWidth, tools::Long nHeight)
 {
-    gtk_widget_set_size_request(GTK_WIDGET(m_pFixedContainer), nWidth, nHeight );
+    gtk_widget_set_size_request(GTK_WIDGET(m_pDrawingArea), nWidth, nHeight );
 }
 
 void GtkSalFrame::window_resize(tools::Long nWidth, tools::Long nHeight)
@@ -916,7 +916,8 @@ void GtkSalFrame::InitCommon()
     m_pFixedContainer = GTK_FIXED(g_object_new( ooo_fixed_get_type(), nullptr ));
     m_pDrawingArea = m_pFixedContainer;
 #else
-    m_pFixedContainer = GTK_OVERLAY(gtk_overlay_new());
+    m_pOverlay = GTK_OVERLAY(gtk_overlay_new());
+    m_pFixedContainer = GTK_FIXED(gtk_fixed_new());
     m_pDrawingArea = GTK_DRAWING_AREA(gtk_drawing_area_new());
 #endif
     gtk_widget_set_can_focus(GTK_WIDGET(m_pDrawingArea), true);
@@ -924,10 +925,12 @@ void GtkSalFrame::InitCommon()
 #if !GTK_CHECK_VERSION(4,0,0)
     gtk_container_add( GTK_CONTAINER(m_pEventBox), GTK_WIDGET(m_pFixedContainer) );
 #else
-    gtk_widget_set_vexpand(GTK_WIDGET(m_pFixedContainer), true);
-    gtk_widget_set_hexpand(GTK_WIDGET(m_pFixedContainer), true);
-    gtk_grid_attach(m_pTopLevelGrid, GTK_WIDGET(m_pFixedContainer), 0, 0, 1, 1);
-    gtk_overlay_set_child(m_pFixedContainer, GTK_WIDGET(m_pDrawingArea));
+    gtk_widget_set_vexpand(GTK_WIDGET(m_pOverlay), true);
+    gtk_widget_set_hexpand(GTK_WIDGET(m_pOverlay), true);
+    gtk_grid_attach(m_pTopLevelGrid, GTK_WIDGET(m_pOverlay), 0, 0, 1, 1);
+    gtk_overlay_set_child(m_pOverlay, GTK_WIDGET(m_pDrawingArea));
+    gtk_overlay_add_overlay(m_pOverlay, GTK_WIDGET(m_pFixedContainer));
+    gtk_widget_set_can_target(GTK_WIDGET(m_pFixedContainer), false);
 #endif
 
     GtkWidget *pEventWidget = getMouseEventWidget();
