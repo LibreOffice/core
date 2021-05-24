@@ -11656,7 +11656,7 @@ if test -z "$PATCH"; then
 fi
 
 dnl On Solaris or macOS, check if --with-gnu-patch was used
-if test "$_os" = "SunOS" -o "$_os" = "Darwin"; then
+if test "$_os" = "SunOS" -o "$_os" = "Darwin" -o "$_os" = "FreeBSD"; then
     if test -z "$with_gnu_patch"; then
         GNUPATCH=$PATCH
     else
