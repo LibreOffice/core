@@ -666,8 +666,9 @@ namespace emfio
                 Point aPosition = ReadYX();
                 sal_uInt16 nLen = 0, nOptions = 0;
                 mpInputStream->ReadUInt16( nLen ).ReadUInt16( nOptions );
-
-                if (nOptions & ETO_CLIPPED)
+                SAL_INFO( "emfio", "\t\t\t Pos: " << aPosition.getX() << ":" << aPosition.getY() << " String Length: " << nLen << " Options: " << nOptions );
+                tools::Rectangle aRect;
+                if ( ( nOptions & ETO_CLIPPED ) || ( nOptions & ETO_OPAQUE ) )
                 {
                     nNonStringLen += 2 * sizeof(sal_uInt16);
 
@@ -676,10 +677,12 @@ namespace emfio
                         SAL_WARN("emfio", "W_META_TEXTOUT too short");
                         break;
                     }
-
-                    ReadPoint();
-                    ReadPoint();
-                    SAL_WARN("emfio", "clipping unsupported");
+                    const Point aTopLeft = ReadPoint();
+                    const Point aBottomRight = ReadPoint();
+                    aRect = tools::Rectangle( aTopLeft, aBottomRight );
+                    if ( nOptions & ETO_OPAQUE )
+                        DrawRectWithBGColor( aRect );
+                    SAL_INFO( "emfio", "\t\t\t Rectangle : " << aTopLeft.getX() << ":" << aTopLeft.getY() << ", " << aBottomRight.getX() << ":" << aBottomRight.getY() );
                 }
 
                 ComplexTextLayoutFlags nTextLayoutMode = ComplexTextLayoutFlags::Default;
@@ -709,6 +712,12 @@ namespace emfio
                                                                                        // dxAry will not fit
                     if ( nNewTextLen )
                     {
+                        if ( nOptions & ETO_CLIPPED )
+                        {
+                            Push(); // Save the current clip. It will be restored after text drawing
+                            IntersectClipRect( aRect );
+                        }
+                        SAL_INFO( "emfio", "\t\t\t Text : " << aText );
                         std::unique_ptr<tools::Long[]> pDXAry, pDYAry;
                         auto nDxArySize =  nMaxStreamPos - mpInputStream->Tell();
                         auto nDxAryEntries = nDxArySize >> 1;
@@ -768,6 +777,8 @@ namespace emfio
                             DrawText( aPosition, aText, pDXAry.get(), pDYAry.get() );
                         else
                             DrawText( aPosition, aText );
+                        if ( nOptions & ETO_CLIPPED )
+                            Pop();
                     }
                 }
             }
