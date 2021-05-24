@@ -145,6 +145,15 @@ inline cairo_surface_t * surface_create_similar_surface(GdkSurface *pSurface,
 #endif
 }
 
+inline void im_context_set_client_widget(GtkIMContext *pIMContext, GtkWidget *pWidget)
+{
+#if GTK_CHECK_VERSION(4, 0, 0)
+    gtk_im_context_set_client_widget(pIMContext, pWidget);
+#else
+    gtk_im_context_set_client_window(pIMContext, pWidget ? gtk_widget_get_window(pWidget) : nullptr);
+#endif
+}
+
 #if GTK_CHECK_VERSION(4, 0, 0)
 typedef double gtk_coord;
 #else
