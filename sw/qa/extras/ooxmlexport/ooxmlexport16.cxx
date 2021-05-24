@@ -164,9 +164,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf141966_chapterNumberTortureTest, "tdf141966_chap
     xPara.set(getParagraph(3, "First numbered line"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("1st.i.a.1.I"), getProperty<OUString>(xPara, "ListLabelString"));
 
+    xPara.set(getParagraph(5, "Outline with listLvl 5"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
+
     xPara.set(getParagraph(7, "inheritOnly: inherit outlineLvl and listLvl."), uno::UNO_QUERY);
-    // 2nd.iii in MS Word 2003.  2nd.ii in MS Word 2010/2016 where para5 is not numbered. Why not?
-    CPPUNIT_ASSERT_EQUAL(OUString("2nd.iii"), getProperty<OUString>(xPara, "ListLabelString"));
+    // 2nd.iii in MS Word 2003.  2nd.ii in MS Word 2010/2016 where para5 is not numbered.
+    CPPUNIT_ASSERT_EQUAL(OUString("2nd.ii"), getProperty<OUString>(xPara, "ListLabelString"));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), getProperty<sal_Int16>(xPara, "NumberingLevel")); // Level 2
 
     xPara.set(getParagraph(9, "outline with Body listLvl(9)."), uno::UNO_QUERY);
@@ -179,7 +182,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf141966_chapterNumberTortureTest, "tdf141966_chap
     CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
 
     xPara.set(getParagraph(12, "direct numId, inherit listLvl."), uno::UNO_QUERY);
-    //CPPUNIT_ASSERT_EQUAL(OUString("2nd.ii.a.1.I"), getProperty<OUString>(xPara, "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(OUString("2nd.ii.a.1.I"), getProperty<OUString>(xPara, "ListLabelString"));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(4), getProperty<sal_Int16>(xPara, "NumberingLevel")); // Level 5
 
     xPara.set(getParagraph(13, "Style numId0 cancels inherited numbering."), uno::UNO_QUERY);

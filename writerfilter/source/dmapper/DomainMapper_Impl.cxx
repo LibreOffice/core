@@ -1486,6 +1486,44 @@ sal_Int16 DomainMapper_Impl::GetListLevel(const StyleSheetEntryPtr& pEntry,
     return GetListLevel(pParent);
 }
 
+void DomainMapper_Impl::ValidateListLevel(const OUString& sStyleIdentifierD)
+{
+    StyleSheetEntryPtr pMyStyle = GetStyleSheetTable()->FindStyleSheetByISTD(sStyleIdentifierD);
+    if (!pMyStyle)
+        return;
+
+    sal_Int8 nListLevel = GetListLevel(pMyStyle);
+    if (nListLevel < 0 || nListLevel >= WW_OUTLINE_MAX)
+        return;
+
+    bool bDummy = false;
+    sal_Int16 nListId = lcl_getListId(pMyStyle, GetStyleSheetTable(), bDummy);
+    if (nListId < 1)
+        return;
+
+    auto const pList(GetListTable()->GetList(nListId));
+    if (!pList)
+        return;
+
+    auto pLevel = pList->GetLevel(nListLevel);
+    if (!pLevel && pList->GetAbstractDefinition())
+        pLevel = pList->GetAbstractDefinition()->GetLevel(nListLevel);
+    if (!pLevel)
+        return;
+
+    if (!pLevel->GetParaStyle())
+    {
+        // First come, first served, and it hasn't been claimed yet, so claim it now.
+        pLevel->SetParaStyle(pMyStyle);
+    }
+    else if (pLevel->GetParaStyle() != pMyStyle)
+    {
+        // This level is already used by another style, so prevent numbering via this style
+        // by setting to body level (9).
+        pMyStyle->pProperties->SetListLevel(WW_OUTLINE_MAX);
+    }
+}
+
 void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, const bool bRemove, const bool bNoNumbering )
 {
     if (m_bDiscardHeaderFooter)
