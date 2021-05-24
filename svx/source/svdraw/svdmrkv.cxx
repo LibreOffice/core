@@ -1002,6 +1002,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, SfxView
             {
                 boost::property_tree::ptree responseJSON;
                 boost::property_tree::ptree others;
+                boost::property_tree::ptree anchor;
                 boost::property_tree::ptree rectangle;
                 boost::property_tree::ptree poly;
                 boost::property_tree::ptree custom;
@@ -1036,6 +1037,14 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, SfxView
                     {
                         selectedNode = &custom;
                     }
+                    else if (kind == static_cast<sal_Int32>(SdrHdlKind::Anchor) || kind == static_cast<sal_Int32>(SdrHdlKind::Anchor_TR))
+                    {
+                        if (getSdrModelFromSdrView().IsWriter())
+                            selectedNode = &anchor;
+                        else
+                            // put it to others as we dont render them except in writer
+                            selectedNode = &others;
+                    }
                     else
                     {
                         selectedNode = &others;
@@ -1054,6 +1063,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, SfxView
                 nodes.add_child("rectangle", rectangle);
                 nodes.add_child("poly", poly);
                 nodes.add_child("custom", custom);
+                nodes.add_child("anchor", anchor);
                 nodes.add_child("others", others);
                 responseJSON.add_child("kinds", nodes);
                 std::stringstream aStream;
@@ -1415,11 +1425,6 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
         }
     }
 
-    // moved it here to access all the handles for callback.
-    if (bTiledRendering && pViewShell)
-    {
-        SetMarkHandlesForLOKit(aRect, pOtherShell);
-    }
     // rotation point/axis of reflection
     if(!bLimitedRotation)
     {
@@ -1431,6 +1436,12 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
 
     // add custom handles (used by other apps, e.g. AnchorPos)
     AddCustomHdl();
+
+    // moved it here to access all the handles for callback.
+    if (bTiledRendering && pViewShell)
+    {
+        SetMarkHandlesForLOKit(aRect, pOtherShell);
+    }
 
     // try to restore focus handle index from remembered values
     if(bSaveOldFocus)
