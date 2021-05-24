@@ -2199,7 +2199,7 @@ static ::Color style_context_get_background_color(GtkStyleContext* pStyle)
     sal_uInt8 b = unpremultiply_table[a][data[SVP_CAIRO_BLUE]];
     sal_uInt8 g = unpremultiply_table[a][data[SVP_CAIRO_GREEN]];
     sal_uInt8 r = unpremultiply_table[a][data[SVP_CAIRO_RED]];
-    Color aColor(ColorAlpha, a, r, g, b);
+    Color aColor(r, g, b);
     cairo_surface_destroy(target);
 
     return aColor;
