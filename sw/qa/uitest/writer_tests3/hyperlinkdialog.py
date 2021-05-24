@@ -87,12 +87,12 @@ class HyperlinkDialog(UITestCase):
         # opened in the user's default browser):
         if os.getenv('ENABLE_HTMLHELP') == 'TRUE':
             return
-        # Skip this test for --with-help, as that would fail with a
+        # Skip this test for --enable-xmlhelp, as that would fail with a
         # "uno.com.sun.star.uno.RuntimeException: Could not find child with id: cancel" thrown from
         # the below execute_blocking_action call, as it would open the "LibreOffice Help" window
         # instead of the apparently expected "LibreOffice Help Not Installed" dialog that has a
         # "Cancel" button:
-        if re.compile(r'-DWITH_HELP\b').search(os.getenv('SCPDEFS')):
+        if re.compile(r'XMLHELP\b').search(os.getenv('BUILD_TYPE')):
             return
 
         self.ui_test.create_doc_in_start_center("writer")
