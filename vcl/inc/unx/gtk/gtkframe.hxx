@@ -49,6 +49,8 @@
 
 #include <headless/svpgdi.hxx>
 
+#include "gtkdata.hxx"
+
 class GtkSalGraphics;
 class GtkSalDisplay;
 
@@ -56,11 +58,6 @@ typedef sal_uIntPtr GdkNativeWindow;
 class GtkInstDropTarget;
 class GtkInstDragSource;
 class GtkDnDTransferable;
-
-#if !GTK_CHECK_VERSION(4,0,0)
-typedef GdkWindow GdkSurface;
-typedef GdkWindowState GdkToplevelState;
-#endif
 
 class GtkSalMenu;
 

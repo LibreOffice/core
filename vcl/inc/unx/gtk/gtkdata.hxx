@@ -46,6 +46,11 @@ namespace com::sun::star::accessibility { class XAccessibleEventListener; }
 class GtkSalDisplay;
 class DocumentFocusListener;
 
+#if !GTK_CHECK_VERSION(4,0,0)
+typedef GdkWindow GdkSurface;
+typedef GdkWindowState GdkToplevelState;
+#endif
+
 inline void main_loop_run(GMainLoop* pLoop)
 {
 #if !GTK_CHECK_VERSION(4, 0, 0)
@@ -110,11 +115,40 @@ inline void style_context_get_color(GtkStyleContext *pStyle, GdkRGBA *pColor)
 #endif
 }
 
+inline void widget_set_cursor(GtkWidget *pWidget, GdkCursor *pCursor)
+{
+#if GTK_CHECK_VERSION(4, 0, 0)
+    gtk_widget_set_cursor(pWidget, pCursor);
+#else
+    gdk_window_set_cursor(gtk_widget_get_window(pWidget), pCursor);
+#endif
+}
+
 #if GTK_CHECK_VERSION(4, 0, 0)
 typedef double gtk_coord;
 #else
 typedef int gtk_coord;
 #endif
+
+inline bool surface_get_device_position(GdkSurface* pSurface,
+                                        GdkDevice* pDevice,
+                                        double& x,
+                                        double& y,
+                                        GdkModifierType* pMask)
+{
+#if GTK_CHECK_VERSION(4, 0, 0)
+    return gdk_surface_get_device_position(pSurface, pDevice,
+                                           &x, &y,
+                                           pMask);
+#else
+    int nX(x), nY(y);
+    return gdk_window_get_device_position(pSurface, pDevice,
+                                           &nX, &nY,
+                                           pMask);
+    x = nX;
+    y = nY;
+#endif
+}
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
 typedef GtkClipboard GdkClipboard;

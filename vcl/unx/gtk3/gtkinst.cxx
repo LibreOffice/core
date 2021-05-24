@@ -2200,7 +2200,7 @@ void set_cursor(GtkWidget* pWidget, const char *pName)
         gtk_widget_realize(pWidget);
     GdkDisplay *pDisplay = gtk_widget_get_display(pWidget);
     GdkCursor *pCursor = pName ? gdk_cursor_new_from_name(pDisplay, pName) : nullptr;
-    gdk_window_set_cursor(gtk_widget_get_window(pWidget), pCursor);
+    widget_set_cursor(pWidget, pCursor);
     gdk_display_flush(pDisplay);
     if (pCursor)
         g_object_unref(pCursor);
@@ -2402,7 +2402,9 @@ private:
     gulong m_nFocusOutSignalId;
     gulong m_nKeyPressSignalId;
     gulong m_nKeyReleaseSignalId;
+protected:
     gulong m_nSizeAllocateSignalId;
+private:
     gulong m_nButtonPressSignalId;
     gulong m_nMotionSignalId;
     gulong m_nLeaveSignalId;
@@ -3378,7 +3380,7 @@ public:
 
     virtual void connect_size_allocate(const Link<const Size&, void>& rLink) override
     {
-        m_nSizeAllocateSignalId = g_signal_connect(m_pWidget, "size_allocate", G_CALLBACK(signalSizeAllocate), this);
+        m_nSizeAllocateSignalId = g_signal_connect(m_pWidget, "size-allocate", G_CALLBACK(signalSizeAllocate), this);
         weld::Widget::connect_size_allocate(rLink);
     }
 
@@ -7068,7 +7070,7 @@ private:
     GtkNotebook* m_pOverFlowNotebook;
     gulong m_nSwitchPageSignalId;
     gulong m_nOverFlowSwitchPageSignalId;
-    gulong m_nSizeAllocateSignalId;
+    gulong m_nNotebookSizeAllocateSignalId;
     gulong m_nFocusSignalId;
     gulong m_nChangeCurrentPageId;
     guint m_nLaunchSplitTimeoutId;
@@ -7522,9 +7524,9 @@ public:
         gtk_widget_add_events(GTK_WIDGET(pNotebook), GDK_SCROLL_MASK);
 #endif
         if (get_n_pages() > 6)
-            m_nSizeAllocateSignalId = g_signal_connect_after(pNotebook, "size-allocate", G_CALLBACK(signalSizeAllocate), this);
+            m_nNotebookSizeAllocateSignalId = g_signal_connect_after(pNotebook, "size-allocate", G_CALLBACK(signalSizeAllocate), this);
         else
-            m_nSizeAllocateSignalId = 0;
+            m_nNotebookSizeAllocateSignalId = 0;
         gtk_notebook_set_show_border(m_pOverFlowNotebook, false);
 
         // tdf#122623 it's nigh impossible to have a GtkNotebook without an active (checked) tab, so try and theme
@@ -7792,8 +7794,8 @@ public:
     {
         if (m_nLaunchSplitTimeoutId)
             g_source_remove(m_nLaunchSplitTimeoutId);
-        if (m_nSizeAllocateSignalId)
-            g_signal_handler_disconnect(m_pNotebook, m_nSizeAllocateSignalId);
+        if (m_nNotebookSizeAllocateSignalId)
+            g_signal_handler_disconnect(m_pNotebook, m_nNotebookSizeAllocateSignalId);
         g_signal_handler_disconnect(m_pNotebook, m_nSwitchPageSignalId);
         g_signal_handler_disconnect(m_pNotebook, m_nFocusSignalId);
         g_signal_handler_disconnect(m_pNotebook, m_nChangeCurrentPageId);
@@ -15067,41 +15069,68 @@ public:
 
 }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-
 namespace {
 
 // IMHandler
 class IMHandler;
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 AtkObject* (*default_drawing_area_get_accessible)(GtkWidget *widget);
+#endif
 
 class GtkInstanceDrawingArea : public GtkInstanceWidget, public virtual weld::DrawingArea
 {
 private:
     GtkDrawingArea* m_pDrawingArea;
     a11yref m_xAccessible;
+#if !GTK_CHECK_VERSION(4, 0, 0)
     AtkObject *m_pAccessible;
+#endif
     ScopedVclPtrInstance<VirtualDevice> m_xDevice;
     std::unique_ptr<IMHandler> m_xIMHandler;
     cairo_surface_t* m_pSurface;
+#if !GTK_CHECK_VERSION(4, 0, 0)
     gulong m_nDrawSignalId;
+#endif
     gulong m_nQueryTooltip;
+#if !GTK_CHECK_VERSION(4, 0, 0)
     gulong m_nPopupMenu;
     gulong m_nScrollEvent;
+#endif
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+    static void signalDraw(GtkDrawingArea*, cairo_t *cr, int /*width*/, int /*height*/, gpointer widget)
+#else
     static gboolean signalDraw(GtkWidget*, cairo_t* cr, gpointer widget)
+#endif
     {
         GtkInstanceDrawingArea* pThis = static_cast<GtkInstanceDrawingArea*>(widget);
         SolarMutexGuard aGuard;
         pThis->signal_draw(cr);
+#if !GTK_CHECK_VERSION(4, 0, 0)
         return false;
+#endif
     }
     void signal_draw(cairo_t* cr)
     {
-        GdkRectangle rect;
-        if (!m_pSurface || !gdk_cairo_get_clip_rectangle(cr, &rect))
+        if (!m_pSurface)
             return;
+
+        GdkRectangle rect;
+#if GTK_CHECK_VERSION(4, 0, 0)
+        double clip_x1, clip_x2, clip_y1, clip_y2;
+        cairo_clip_extents(cr, &clip_x1, &clip_y1, &clip_x2, &clip_y2);
+        rect.x = clip_x1;
+        rect.y = clip_y1;
+        rect.width = clip_x2 - clip_x1;
+        rect.height = clip_y2 - clip_y1;
+        if (rect.width <= 0 || rect.height <= 0)
+            return;
+#else
+        if (!gdk_cairo_get_clip_rectangle(cr, &rect))
+            return;
+#endif
+
         tools::Rectangle aRect(Point(rect.x, rect.y), Size(rect.width, rect.height));
         aRect = m_xDevice->PixelToLogic(aRect);
         m_xDevice->Erase(aRect);
@@ -15158,6 +15187,7 @@ private:
     {
         return signal_command(rCEvt);
     }
+#if !GTK_CHECK_VERSION(4, 0, 0)
     bool signal_scroll(const GdkEventScroll* pEvent)
     {
         SalWheelMouseEvent aEvt(GtkSalFrame::GetWheelEvent(*pEvent));
@@ -15190,20 +15220,39 @@ private:
         GtkInstanceDrawingArea* pThis = static_cast<GtkInstanceDrawingArea*>(widget);
         return pThis->signal_scroll(pEvent);
     }
+#endif
+
+#if GTK_CHECK_VERSION(4, 0, 0)
+    static void signalResize(GtkDrawingArea*, int nWidth, int nHeight, gpointer widget)
+    {
+        GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        SolarMutexGuard aGuard;
+        pThis->signal_size_allocate(nWidth, nHeight);
+    }
+#endif
+
     DECL_LINK(SettingsChangedHdl, VclSimpleEvent&, void);
 public:
     GtkInstanceDrawingArea(GtkDrawingArea* pDrawingArea, GtkInstanceBuilder* pBuilder, const a11yref& rA11y, bool bTakeOwnership)
         : GtkInstanceWidget(GTK_WIDGET(pDrawingArea), pBuilder, bTakeOwnership)
         , m_pDrawingArea(pDrawingArea)
         , m_xAccessible(rA11y)
+#if !GTK_CHECK_VERSION(4, 0, 0)
         , m_pAccessible(nullptr)
+#endif
         , m_xDevice(DeviceFormat::DEFAULT)
         , m_pSurface(nullptr)
-        , m_nDrawSignalId(g_signal_connect(m_pDrawingArea, "draw", G_CALLBACK(signalDraw), this))
         , m_nQueryTooltip(g_signal_connect(m_pDrawingArea, "query-tooltip", G_CALLBACK(signalQueryTooltip), this))
+#if !GTK_CHECK_VERSION(4, 0, 0)
         , m_nPopupMenu(g_signal_connect(m_pDrawingArea, "popup-menu", G_CALLBACK(signalPopupMenu), this))
         , m_nScrollEvent(g_signal_connect(m_pDrawingArea, "scroll-event", G_CALLBACK(signalScroll), this))
+#endif
     {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_drawing_area_set_draw_func(m_pDrawingArea, signalDraw, this, nullptr);
+#else
+        m_nDrawSignalId = g_signal_connect(m_pDrawingArea, "draw", G_CALLBACK(signalDraw), this);
+#endif
         gtk_widget_set_has_tooltip(m_pWidget, true);
         g_object_set_data(G_OBJECT(m_pDrawingArea), "g-lo-GtkInstanceDrawingArea", this);
         m_xDevice->EnableRTL(get_direction());
@@ -15211,6 +15260,7 @@ public:
         Application::AddEventListener(LINK(this, GtkInstanceDrawingArea, SettingsChangedHdl));
     }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     AtkObject* GetAtkObject(AtkObject* pDefaultAccessible)
     {
         if (!m_pAccessible && m_xAccessible.is())
@@ -15222,18 +15272,31 @@ public:
         }
         return m_pAccessible;
     }
+#endif
+
+#if GTK_CHECK_VERSION(4, 0, 0)
+    virtual void connect_size_allocate(const Link<const Size&, void>& rLink) override
+    {
+        m_nSizeAllocateSignalId = g_signal_connect(m_pWidget, "resize", G_CALLBACK(signalResize), this);
+        weld::Widget::connect_size_allocate(rLink);
+    }
+#endif
 
     virtual void connect_mouse_press(const Link<const MouseEvent&, bool>& rLink) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         if (!(gtk_widget_get_events(m_pWidget) & GDK_BUTTON_PRESS_MASK))
             gtk_widget_add_events(m_pWidget, GDK_BUTTON_PRESS_MASK);
+#endif
         GtkInstanceWidget::connect_mouse_press(rLink);
     }
 
     virtual void connect_mouse_release(const Link<const MouseEvent&, bool>& rLink) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         if (!(gtk_widget_get_events(m_pWidget) & GDK_BUTTON_RELEASE_MASK))
             gtk_widget_add_events(m_pWidget, GDK_BUTTON_RELEASE_MASK);
+#endif
         GtkInstanceWidget::connect_mouse_release(rLink);
     }
 
@@ -15248,7 +15311,7 @@ public:
         GdkCursor *pCursor = GtkSalFrame::getDisplay()->getCursor(ePointerStyle);
         if (!gtk_widget_get_realized(GTK_WIDGET(m_pDrawingArea)))
             gtk_widget_realize(GTK_WIDGET(m_pDrawingArea));
-        gdk_window_set_cursor(gtk_widget_get_window(GTK_WIDGET(m_pDrawingArea)), pCursor);
+        widget_set_cursor(GTK_WIDGET(m_pDrawingArea), pCursor);
     }
 
     virtual Point get_pointer_position() const override
@@ -15256,9 +15319,13 @@ public:
         GdkDisplay *pDisplay = gtk_widget_get_display(m_pWidget);
         GdkSeat* pSeat = gdk_display_get_default_seat(pDisplay);
         GdkDevice* pPointer = gdk_seat_get_pointer(pSeat);
-        gint x(-1), y(-1);
-        GdkWindow* pWin = gtk_widget_get_window(m_pWidget);
-        gdk_window_get_device_position(pWin, pPointer, &x, &y, nullptr);
+        double x(-1), y(-1);
+#if !GTK_CHECK_VERSION(4,0,0)
+        GdkSurface* pWin = gtk_widget_get_window(m_pWidget);
+#else
+        GdkSurface* pWin = gtk_native_get_surface(gtk_widget_get_native(m_pWidget));
+#endif
+        surface_get_device_position(pWin, pPointer, x, y, nullptr);
         return Point(x, y);
     }
 
@@ -15283,9 +15350,14 @@ public:
 
     virtual void queue_draw_area(int x, int y, int width, int height) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         tools::Rectangle aRect(Point(x, y), Size(width, height));
         aRect = m_xDevice->LogicToPixel(aRect);
         gtk_widget_queue_draw_area(GTK_WIDGET(m_pDrawingArea), aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight());
+#else
+        (void)x; (void)y; (void)width; (void)height;
+        queue_draw();
+#endif
     }
 
     virtual a11yref get_accessible_parent() override
@@ -15308,33 +15380,49 @@ public:
 
     virtual Point get_accessible_location_on_screen() override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         AtkObject* pAtkObject = default_drawing_area_get_accessible(m_pWidget);
+#endif
         gint x(0), y(0);
+#if !GTK_CHECK_VERSION(4, 0, 0)
         if (pAtkObject && ATK_IS_COMPONENT(pAtkObject))
             atk_component_get_extents(ATK_COMPONENT(pAtkObject), &x, &y, nullptr, nullptr, ATK_XY_SCREEN);
+#endif
         return Point(x, y);
     }
 
     virtual void set_accessible_name(const OUString& rName) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         AtkObject* pAtkObject = default_drawing_area_get_accessible(m_pWidget);
         if (!pAtkObject)
             return;
         atk_object_set_name(pAtkObject, OUStringToOString(rName, RTL_TEXTENCODING_UTF8).getStr());
+#else
+        (void)rName;
+#endif
     }
 
     virtual OUString get_accessible_name() const override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         AtkObject* pAtkObject = default_drawing_area_get_accessible(m_pWidget);
         const char* pStr = pAtkObject ? atk_object_get_name(pAtkObject) : nullptr;
         return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+#else
+        return OUString();
+#endif
     }
 
     virtual OUString get_accessible_description() const override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         AtkObject* pAtkObject = default_drawing_area_get_accessible(m_pWidget);
         const char* pStr = pAtkObject ? atk_object_get_description(pAtkObject) : nullptr;
         return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+#else
+        return OUString();
+#endif
     }
 
     virtual void enable_drag_source(rtl::Reference<TransferDataContainer>& rHelper, sal_uInt8 eDNDConstants) override
@@ -15355,15 +15443,25 @@ public:
         Application::RemoveEventListener(LINK(this, GtkInstanceDrawingArea, SettingsChangedHdl));
 
         g_object_steal_data(G_OBJECT(m_pDrawingArea), "g-lo-GtkInstanceDrawingArea");
+#if !GTK_CHECK_VERSION(4, 0, 0)
         if (m_pAccessible)
             g_object_unref(m_pAccessible);
+#endif
         css::uno::Reference<css::lang::XComponent> xComp(m_xAccessible, css::uno::UNO_QUERY);
         if (xComp.is())
             xComp->dispose();
+#if !GTK_CHECK_VERSION(4, 0, 0)
         g_signal_handler_disconnect(m_pDrawingArea, m_nScrollEvent);
+#endif
+#if !GTK_CHECK_VERSION(4, 0, 0)
         g_signal_handler_disconnect(m_pDrawingArea, m_nPopupMenu);
+#endif
         g_signal_handler_disconnect(m_pDrawingArea, m_nQueryTooltip);
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_drawing_area_set_draw_func(m_pDrawingArea, nullptr, nullptr, nullptr);
+#else
         g_signal_handler_disconnect(m_pDrawingArea, m_nDrawSignalId);
+#endif
     }
 
     virtual OutputDevice& get_ref_device() override
@@ -15422,8 +15520,12 @@ public:
         GtkWidget* pWidget = m_pArea->getWidget();
         if (!gtk_widget_get_realized(pWidget))
             gtk_widget_realize(pWidget);
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_im_context_set_client_widget(m_pIMContext, pWidget);
+#else
         GdkWindow* pWin = gtk_widget_get_window(pWidget);
         gtk_im_context_set_client_window(m_pIMContext, pWin);
+#endif
         if (gtk_widget_has_focus(m_pArea->getWidget()))
             gtk_im_context_focus_in(m_pIMContext);
     }
@@ -15461,7 +15563,11 @@ public:
             gtk_im_context_focus_out(m_pIMContext);
 
         // first give IC a chance to deinitialize
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_im_context_set_client_widget(m_pIMContext, nullptr);
+#else
         gtk_im_context_set_client_window(m_pIMContext, nullptr);
+#endif
         // destroy old IC
         g_object_unref(m_pIMContext);
     }
@@ -15620,6 +15726,8 @@ void GtkInstanceDrawingArea::im_context_set_cursor_location(const tools::Rectang
 }
 
 }
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
 
 namespace {
 
@@ -18219,15 +18327,17 @@ bool ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
                 auto xDoc = xChild->getOwnerDocument();
                 auto xDefaultWidget = CreateProperty(xDoc, "default-widget", xId->getNodeValue());
                 SetPropertyOnTopLevel(xChild, xDefaultWidget);
+                xRemoveList.push_back(xChild);
             }
 
-            if (sName == "has-focus")
+            if (sName == "has-focus" || sName == "is-focus")
             {
                 css::uno::Reference<css::xml::dom::XNamedNodeMap> xParentMap = xChild->getParentNode()->getAttributes();
                 css::uno::Reference<css::xml::dom::XNode> xId = xParentMap->getNamedItem("id");
                 auto xDoc = xChild->getOwnerDocument();
                 auto xDefaultWidget = CreateProperty(xDoc, "focus-widget", xId->getNodeValue());
                 SetPropertyOnTopLevel(xChild, xDefaultWidget);
+                xRemoveList.push_back(xChild);
             }
 
             if (sName == "can-focus")
@@ -18254,6 +18364,19 @@ bool ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
                 if (GetParentObjectType(xChild) == "GtkFrame")
                     xRemoveList.push_back(xChild);
             }
+
+            if (sName == "relief")
+            {
+                if (GetParentObjectType(xChild) == "GtkLinkButton")
+                {
+                    assert(xChild->getFirstChild()->getNodeValue() == "none");
+                    auto xDoc = xChild->getOwnerDocument();
+                    auto xHasFrame = CreateProperty(xDoc, "has-frame", "False");
+                    xChild->getParentNode()->insertBefore(xHasFrame, xChild);
+                    xRemoveList.push_back(xChild);
+                }
+            }
+
 
             if (sName == "image")
             {
@@ -18306,10 +18429,9 @@ bool ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
             }
 
             if (sName == "type-hint" || sName == "skip-taskbar-hint" ||
-                sName == "can-default" || sName == "has-default" ||
-                sName == "border-width" || sName == "layout-style" ||
-                sName == "has-focus" || sName == "no-show-all" ||
-                sName == "ignore-hidden")
+                sName == "can-default" || sName == "border-width" ||
+                sName == "layout-style" || sName == "no-show-all" ||
+                sName == "ignore-hidden" || sName == "window-position")
             {
                 xRemoveList.push_back(xChild);
             }
@@ -19393,17 +19515,11 @@ public:
     virtual std::unique_ptr<weld::DrawingArea> weld_drawing_area(const OString &id, const a11yref& rA11y,
             FactoryFunction /*pUITestFactoryFunction*/, void* /*pUserData*/) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkDrawingArea* pDrawingArea = GTK_DRAWING_AREA(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pDrawingArea)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pDrawingArea));
         return std::make_unique<GtkInstanceDrawingArea>(pDrawingArea, this, rA11y, false);
-#else
-        (void)id;
-        (void)rA11y;
-        return nullptr;
-#endif
     }
 
     virtual std::unique_ptr<weld::Menu> weld_menu(const OString &id) override
@@ -19530,6 +19646,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
     if (rUIFile != "cui/ui/hyphenate.ui" &&
         rUIFile != "cui/ui/percentdialog.ui" &&
         rUIFile != "sfx/ui/querysavedialog.ui" &&
+        rUIFile != "cui/ui/tipofthedaydialog.ui" &&
         rUIFile != "sfx/ui/licensedialog.ui" &&
         rUIFile != "svt/ui/javadisableddialog.ui" &&
         rUIFile != "modules/smath/ui/alignmentdialog.ui" &&
