@@ -981,6 +981,7 @@ ios*) # iOS
     enable_coinmp=no
     enable_lpsolve=no
     enable_extension_integration=no
+    enable_xmlhelp=no
     with_ppds=no
     if test "$enable_ios_simulator" = "yes"; then
         host=x86_64-apple-darwin
@@ -1080,6 +1081,7 @@ linux-android*)
     enable_lpsolve=no
     enable_odk=no
     enable_python=no
+    enable_xmlhelp=no
     _os=Android
 
     AC_DEFINE(HAVE_FT_FACE_GETCHARVARIANTINDEX)
@@ -1108,6 +1110,7 @@ emscripten)
     test_webdav=no
     enable_database_connectivity=no
     enable_lpsolve=no
+    enable_xmlhelp=no
     with_system_zlib=no
     with_theme="breeze"
     _os=Emscripten
@@ -1940,6 +1943,11 @@ AC_ARG_ENABLE(wasm-strip,
     AS_HELP_STRING([--enable-wasm-strip],
         [Strip the static build like for WASM/emscripten platform.]),
 ,enable_wasm_strip=yes)
+
+AC_ARG_ENABLE(xmlhelp,
+    AS_HELP_STRING([--disable-xmlhelp],
+        [Disable XML help support]),
+,enable_xmlhelp=yes)
 
 
 dnl ===================================================================
@@ -2977,6 +2985,9 @@ fi
 if test "$enable_extensions" = yes; then
     BUILD_TYPE="$BUILD_TYPE EXTENSIONS"
     AC_DEFINE(HAVE_FEATURE_EXTENSIONS)
+else
+    enable_extension_integration=no
+    enable_extension_update=no
 fi
 
 if test -z "$enable_scripting"; then
@@ -5296,6 +5307,97 @@ fi
 AC_SUBST(PKGFORMAT)
 
 dnl ===================================================================
+dnl handle help related options
+dnl
+dnl If you change help related options, please update README.help
+dnl ===================================================================
+
+ENABLE_HTMLHELP=
+HELP_OMINDEX_PAGE=
+HELP_ONLINE=
+WITH_HELPPACKS=
+
+AC_MSG_CHECKING([which help to build])
+if test -n "$with_help" -a "$with_help" != "no"; then
+    GIT_NEEDED_SUBMODULES="helpcontent2 $GIT_NEEDED_SUBMODULES"
+    BUILD_TYPE="$BUILD_TYPE HELP"
+    case "$with_help" in
+    "html")
+        ENABLE_HTMLHELP=TRUE
+        WITH_HELPPACKS=TRUE
+        SCPDEFS="$SCPDEFS -DWITH_HELPPACKS"
+        AC_MSG_RESULT([HTML (local)])
+        ;;
+    "online")
+        ENABLE_HTMLHELP=TRUE
+        HELP_ONLINE=TRUE
+        AC_MSG_RESULT([HTML (online)])
+        ;;
+    yes)
+        WITH_HELPPACKS=TRUE
+        SCPDEFS="$SCPDEFS -DWITH_HELPPACKS"
+        AC_MSG_RESULT([XML (local)])
+        ;;
+    *)
+        AC_MSG_ERROR([Unknown --with-help=$with_help])
+        ;;
+    esac
+else
+    AC_MSG_RESULT([no])
+fi
+
+if test "$with_help" = yes -o "$enable_extension_integration" != no; then
+    BUILD_TYPE="$BUILD_TYPE HELPTOOLS"
+fi
+
+AC_MSG_CHECKING([whether to enable xapian-omega support for online help])
+if test -n "$with_omindex" -a "$with_omindex" != "no"; then
+    if test "$HELP_ONLINE" != TRUE; then
+        AC_MSG_ERROR([Can't build xapian-omega index without --help=online])
+    fi
+    case "$with_omindex" in
+    "server")
+        HELP_OMINDEX_PAGE=TRUE
+        AC_MSG_RESULT([SERVER])
+        ;;
+    "noxap")
+        AC_MSG_RESULT([NOXAP])
+        ;;
+    *)
+        AC_MSG_ERROR([Unknown --with-omindex=$with_omindex])
+        ;;
+    esac
+else
+    AC_MSG_RESULT([no])
+fi
+
+AC_MSG_CHECKING([whether to include the XML-help support])
+if test "$enable_xmlhelp" = yes; then
+    BUILD_TYPE="$BUILD_TYPE XMLHELP"
+    AC_DEFINE(HAVE_FEATURE_XMLHELP)
+    AC_MSG_RESULT([yes])
+else
+    if test "$with_help" = yes; then
+        add_warning "Building the XML help, but LO with disabled xmlhelp support. Generated help can't be accesssed from this LO build!"
+    fi
+    AC_MSG_RESULT([no])
+fi
+
+dnl Test whether to integrate helppacks into the product's installer
+AC_MSG_CHECKING([for helppack integration])
+if test -z "$WITH_HELPPACKS" -o "$with_helppack_integration" = no; then
+    AC_MSG_RESULT([no integration])
+else
+    SCPDEFS="$SCPDEFS -DWITH_HELPPACK_INTEGRATION"
+    AC_MSG_RESULT([integration])
+fi
+
+AC_SUBST([ENABLE_HTMLHELP])
+AC_SUBST([HELP_OMINDEX_PAGE])
+AC_SUBST([HELP_ONLINE])
+# WITH_HELPPACKS is used only in configure
+
+dnl ===================================================================
 dnl Set up a different compiler to produce tools to run on the build
 dnl machine when doing cross-compilation
 dnl ===================================================================
@@ -5381,6 +5483,7 @@ if test "$cross_compiling" = "yes"; then
         --build="$build_alias" \
         --disable-cairo-canvas \
         --disable-cups \
+        --disable-extensions \
         --disable-firebird-sdbc \
         --disable-gpgmepp \
         --disable-gstreamer-1-0 \
@@ -5711,65 +5814,6 @@ else
     DO_FETCH_TARBALLS=
 fi
 AC_SUBST(DO_FETCH_TARBALLS)
-
-AC_MSG_CHECKING([whether to build help])
-if test -n "$with_help" -a "$with_help" != "no" -a $_os != iOS -a $_os != Android; then
-    BUILD_TYPE="$BUILD_TYPE HELP"
-    GIT_NEEDED_SUBMODULES="helpcontent2 $GIT_NEEDED_SUBMODULES"
-    case "$with_help" in
-    "html")
-        ENABLE_HTMLHELP=TRUE
-        SCPDEFS="$SCPDEFS -DWITH_HELP"
-        AC_MSG_RESULT([HTML])
-        ;;
-    "online")
-        ENABLE_HTMLHELP=TRUE
-        HELP_ONLINE=TRUE
-        AC_MSG_RESULT([HTML])
-        ;;
-    yes)
-        SCPDEFS="$SCPDEFS -DWITH_HELP"
-        AC_MSG_RESULT([yes])
-        ;;
-    *)
-        AC_MSG_ERROR([Unknown --with-help=$with_help])
-        ;;
-    esac
-else
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST([ENABLE_HTMLHELP])
-AC_SUBST([HELP_ONLINE])
-
-AC_MSG_CHECKING([whether to enable xapian-omega support for help])
-if test -n "$with_omindex" -a "$with_omindex" != "no" -a $_os != iOS -a $_os != Android; then
-    BUILD_TYPE="$BUILD_TYPE HELP"
-    GIT_NEEDED_SUBMODULES="helpcontent2 $GIT_NEEDED_SUBMODULES"
-    case "$with_omindex" in
-    "server")
-        ENABLE_HTMLHELP=TRUE
-        HELP_ONLINE=TRUE
-        HELP_OMINDEX_PAGE=TRUE
-        AC_MSG_RESULT([SERVER])
-        ;;
-    "noxap")
-        ENABLE_HTMLHELP=TRUE
-        HELP_ONLINE=TRUE
-        HELP_OMINDEX_PAGE=FALSE
-        AC_MSG_RESULT([NOXAP])
-        ;;
-    *)
-        AC_MSG_ERROR([Unknown --with-omindex=$with_omindex])
-        ;;
-    esac
-else
-    HELP_OMINDEX_PAGE=FALSE
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST([ENABLE_HTMLHELP])
-AC_SUBST([HELP_OMINDEX_PAGE])
-AC_SUBST([HELP_ONLINE])
-
 
 dnl Test whether to include MySpell dictionaries
 dnl ===================================================================
@@ -9184,6 +9228,7 @@ dnl ===================================================================
 dnl we should rather be using
 dnl libo_CHECK_SYSTEM_MODULE([clucence],[CLUCENE],[liblucence-core]) here
 dnl but the contribs-lib check seems tricky
+if test "$enable_xmlhelp" = yes -o "$enable_extension_integration" = yes; then
 AC_MSG_CHECKING([which clucene to use])
 if test "$with_system_clucene" = "yes"; then
     AC_MSG_RESULT([external])
@@ -9210,6 +9255,7 @@ else
     AC_MSG_RESULT([internal])
     SYSTEM_CLUCENE=
     BUILD_TYPE="$BUILD_TYPE CLUCENE"
+fi
 fi
 AC_SUBST(SYSTEM_CLUCENE)
 AC_SUBST(CLUCENE_CFLAGS)
@@ -12873,17 +12919,6 @@ for theme in $with_theme; do
     *) ;;
     esac
 done
-
-dnl ===================================================================
-dnl Test whether to integrate helppacks into the product's installer
-dnl ===================================================================
-AC_MSG_CHECKING([for helppack integration])
-if test "$with_helppack_integration" = "no"; then
-    AC_MSG_RESULT([no integration])
-else
-    SCPDEFS="$SCPDEFS -DWITH_HELPPACK_INTEGRATION"
-    AC_MSG_RESULT([integration])
-fi
 
 ###############################################################################
 # Extensions checking

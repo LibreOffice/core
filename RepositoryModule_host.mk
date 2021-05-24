@@ -60,7 +60,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	formula \
 	$(call gb_Helper_optional,DESKTOP,fpicker) \
 	framework \
-	$(call gb_Helper_optional,DESKTOP,helpcompiler) \
+    $(call gb_Helper_optionals_or,HELPTOOLS XMLHELP,helpcompiler) \
 	$(call gb_Helper_optional,HELP,helpcontent2) \
 	hwpfilter \
 	i18nlangtag \
@@ -153,7 +153,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	writerfilter \
 	writerperfect \
 	xmerge \
-	$(call gb_Helper_optional,DESKTOP,xmlhelp) \
+    $(call gb_Helper_optional,XMLHELP,xmlhelp) \
 	xmloff \
 	xmlreader \
 	xmlscript \

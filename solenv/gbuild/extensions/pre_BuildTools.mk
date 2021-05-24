@@ -33,11 +33,11 @@ gb_BUILD_TOOLS_executables = \
 		unoidl-check \
 		unoidl-write \
 		xrmex \
-		$(call gb_Helper_optional_for_host,DESKTOP, \
-			HelpIndexer \
-			HelpLinker \
-			lngconvex \
-		) \
+    $(call gb_Helper_optional_for_host,HELPTOOLS, \
+        HelpIndexer \
+        HelpLinker \
+    ) \
+    $(if $(filter WNT,$(OS)),$(call gb_Helper_optional_for_host,DESKTOP,lngconvex)) \
 
 gb_BUILD_TOOLS_executables_extern = \
     python \
