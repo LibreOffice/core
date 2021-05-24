@@ -924,6 +924,12 @@ void StyleSheetTable::ApplyNumberingStyleNameToParaStyles()
                     const OUString sNumberingStyleName = m_pImpl->m_rDMapper.GetListStyleName( pStyleSheetProperties->GetListId() );
                     if ( !sNumberingStyleName.isEmpty() || !pStyleSheetProperties->GetListId() )
                         xPropertySet->setPropertyValue( getPropertyName(PROP_NUMBERING_STYLE_NAME), uno::makeAny(sNumberingStyleName) );
+
+                    // Word 2010+ (not Word 2003, and Word 2007 is completely broken)
+                    // does something rather strange. It does not allow two paragraph styles
+                    // to share the same listLevel on a numbering rule.
+                    // Consider this style to just be body level if already used previously.
+                    m_pImpl->m_rDMapper.ValidateListLevel(pEntry->sStyleIdentifierD);
                 }
             }
         }

@@ -71,6 +71,8 @@ public:
     // Get all properties, merged with the all of the parent's properties
     PropertyMapPtr GetMergedInheritedProperties(const StyleSheetTablePtr& pStyleSheetTable);
 
+    sal_Int8 GetListLevel(const StyleSheetTablePtr& pStyleSheetTable, bool bNoNegative);
+
     StyleSheetEntry();
     virtual ~StyleSheetEntry() override;
 };
