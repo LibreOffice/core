@@ -19664,6 +19664,14 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "sfx/ui/licensedialog.ui" &&
         rUIFile != "svt/ui/javadisableddialog.ui" &&
         rUIFile != "svx/ui/fontworkgallerydialog.ui" &&
+        rUIFile != "modules/scalc/ui/deletecells.ui" &&
+        rUIFile != "modules/scalc/ui/deletecontents.ui" &&
+        rUIFile != "modules/scalc/ui/inputstringdialog.ui" &&
+        rUIFile != "modules/scalc/ui/insertcells.ui" &&
+        rUIFile != "modules/scalc/ui/optimalcolwidthdialog.ui" &&
+        rUIFile != "modules/scalc/ui/optimalrowheightdialog.ui" &&
+        rUIFile != "modules/scalc/ui/colwidthdialog.ui" &&
+        rUIFile != "modules/scalc/ui/rowheightdialog.ui" &&
         rUIFile != "modules/smath/ui/alignmentdialog.ui" &&
         rUIFile != "modules/smath/ui/fontsizedialog.ui" &&
         rUIFile != "modules/smath/ui/savedefaultsdialog.ui" &&
