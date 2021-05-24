@@ -207,11 +207,13 @@ namespace emfio
 #define MAC_CHARSET             77
 #define BALTIC_CHARSET          186
 
+#define ETO_OPAQUE              0x0002
 #define ETO_CLIPPED             0x0004
 /*WINVER >= 0x0400*/
 #define ETO_GLYPH_INDEX         0x0010
 #define ETO_RTLREADING          0x0080
 /*_WIN32_WINNT >= 0x0500*/
+#define ETO_NO_RECT             0x0100
 #define ETO_PDY                 0x2000
 
 #define DEFAULT_PITCH           0x00
@@ -642,6 +644,7 @@ namespace emfio
         void                LineTo(const Point& rPoint, bool bRecordPath = false);
         void                DrawPixel(const Point& rSource, const Color& rColor);
         void                DrawRect(const tools::Rectangle& rRect, bool bEdge = true);
+        void                DrawRectWithBGColor(const tools::Rectangle& rRect);
         void                DrawRoundRect(const tools::Rectangle& rRect, const Size& rSize);
         void                DrawEllipse(const tools::Rectangle& rRect);
         void                DrawArc(
