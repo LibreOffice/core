@@ -19664,6 +19664,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/smath/ui/fontsizedialog.ui" &&
         rUIFile != "modules/smath/ui/savedefaultsdialog.ui" &&
         rUIFile != "modules/swriter/ui/gotopagedialog.ui" &&
+        rUIFile != "modules/swriter/ui/insertfootnote.ui" &&
         rUIFile != "modules/swriter/ui/wordcount.ui")
     {
         SAL_WARN( "vcl.gtk", rUIFile);
