@@ -529,13 +529,55 @@ void ScRefUpdate::DoTranspose( SCCOL& rCol, SCROW& rRow, SCTAB& rTab,
             static_cast<SCCOLROW>(nRelX));
 }
 
-ScRefUpdateRes ScRefUpdate::UpdateTranspose(
-    const ScDocument& rDoc, const ScRange& rSource, const ScAddress& rDest, ScRange& rRef )
+ScRefUpdateRes ScRefUpdate::UpdateTranspose(const ScDocument& rDoc, const ScRange& rSource,
+                                            const ScAddress& rDest, ScRange& rRef)
 {
+    // Dest range is transposed
+    const ScRange aDestRange(
+        rDest,
+        ScAddress(static_cast<SCCOL>(rDest.Col() + rSource.aEnd.Row() - rSource.aStart.Row()),
+                  static_cast<SCROW>(rDest.Row() + rSource.aEnd.Col() - rSource.aStart.Col()),
+                  rDest.Tab()));
+    const ScRange aNonTransposedDestRange(
+        rDest,
+        ScAddress(static_cast<SCCOL>(rDest.Col() + rSource.aEnd.Col() - rSource.aStart.Col()),
+                  static_cast<SCROW>(rDest.Row() + rSource.aEnd.Row() - rSource.aStart.Row()),
+                  rDest.Tab()));
+
+    // 3 cases can be distinguished and must be handled.
+    //
+    // Example:
+    //
+    //   SSss
+    //   SSss
+    //   tt
+    //   tt
+    //
+    // S or s: source range
+    // S: source range that is also part of the transposed range
+    // s: source range that is not part of the transposed range
+    // t: transposed range that is not part of the source range
+    //
+    // Case 1 ("s"):
+    // References that still point to the original source need to be transposed and adjusted to
+    // destination range.
+    // These references were not yet handled by the ScTokenArray::AdjustReferenceOnMove() or are
+    // in a named range.
+    // These are "s" cells in the above example.
+    //
+    // Case 2 ("t"):
+    // References that were pointing to transposed source range that is not part of the source range
+    // were moved by the ScTokenArray::AdjustReferenceOnMove(). However, these references are
+    // unrelated and were changed wrongly. The move has to be undone.
+    //
+    // Case 3 ("S"):
+    // References that point to source range that is also part of the transposed source range
+    // were moved by the ScTokenArray::AdjustReferenceOnMove(), but not transposed yet.
+    // These references have to be transposed.
+
     ScRefUpdateRes eRet = UR_NOTHING;
-    if (rRef.aStart.Col() >= rSource.aStart.Col() && rRef.aEnd.Col() <= rSource.aEnd.Col() &&
-        rRef.aStart.Row() >= rSource.aStart.Row() && rRef.aEnd.Row() <= rSource.aEnd.Row() &&
-        rRef.aStart.Tab() >= rSource.aStart.Tab() && rRef.aEnd.Tab() <= rSource.aEnd.Tab())
+    // Case 1 ("s")
+    if (rSource.In(rRef))
     {
         // Source range contains the reference range.
         SCCOL nCol1 = rRef.aStart.Col(), nCol2 = rRef.aEnd.Col();
@@ -547,6 +589,31 @@ ScRefUpdateRes ScRefUpdate::UpdateTranspose(
         rRef.aEnd = ScAddress(nCol2, nRow2, nTab2);
         eRet = UR_UPDATED;
     }
+    // Case 2 ("t")
+    else if (aDestRange.In(rRef) && !aNonTransposedDestRange.In(rRef))
+    {
+        const SCCOL nDx = rDest.Col() - rSource.aStart.Col();
+        const SCROW nDy = rDest.Row() - rSource.aStart.Row();
+        const SCTAB nDz = rDest.Tab() - rSource.aStart.Tab();
+
+        rRef.aStart
+            = ScAddress(rRef.aStart.Col() - nDx, rRef.aStart.Row() - nDy, rRef.aStart.Tab() - nDz);
+        rRef.aEnd = ScAddress(rRef.aEnd.Col() - nDx, rRef.aEnd.Row() - nDy, rRef.aEnd.Tab() - nDz);
+        eRet = UR_UPDATED;
+    }
+    // Case 3 ("S")
+    else if (aDestRange.In(rRef))
+    {
+        SCCOL nCol1 = rRef.aStart.Col(), nCol2 = rRef.aEnd.Col();
+        SCROW nRow1 = rRef.aStart.Row(), nRow2 = rRef.aEnd.Row();
+        SCTAB nTab1 = rRef.aStart.Tab(), nTab2 = rRef.aEnd.Tab();
+        DoTranspose(nCol1, nRow1, nTab1, rDoc, aDestRange, rDest);
+        DoTranspose(nCol2, nRow2, nTab2, rDoc, aDestRange, rDest);
+        rRef.aStart = ScAddress(nCol1, nRow1, nTab1);
+        rRef.aEnd = ScAddress(nCol2, nRow2, nTab2);
+        eRet = UR_UPDATED;
+    }
+
     return eRet;
 }
 
