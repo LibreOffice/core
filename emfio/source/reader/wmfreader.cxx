@@ -666,8 +666,9 @@ namespace emfio
                 Point aPosition = ReadYX();
                 sal_uInt16 nLen = 0, nOptions = 0;
                 mpInputStream->ReadUInt16( nLen ).ReadUInt16( nOptions );
+                SAL_INFO( "emfio", "\t\t\t Pos: " << aPosition.getX() << ":" << aPosition.getY() << " String Length: " << nLen << " Options: " << nOptions );
 
-                if (nOptions & ETO_CLIPPED)
+                if ( ( nOptions & ETO_CLIPPED ) || ( nOptions & ETO_OPAQUE ) )
                 {
                     nNonStringLen += 2 * sizeof(sal_uInt16);
 
@@ -676,10 +677,14 @@ namespace emfio
                         SAL_WARN("emfio", "W_META_TEXTOUT too short");
                         break;
                     }
+                    const Point aTopLeft = ReadPoint();
+                    const Point aBottomRight = ReadPoint();
 
-                    ReadPoint();
-                    ReadPoint();
-                    SAL_WARN("emfio", "clipping unsupported");
+                    if ( nOptions & ETO_CLIPPED )
+                        SAL_WARN("emfio", "clipping unsupported");
+                    if ( nOptions & ETO_OPAQUE )
+                        DrawRectWithBGColor( tools::Rectangle( aTopLeft, aBottomRight ), false );
+                    SAL_INFO( "emfio", "\t\t\t Rectangle : " << aTopLeft.getX() << ":" << aTopLeft.getY() << ", " << aBottomRight.getX() << ":" << aBottomRight.getY() );
                 }
 
                 ComplexTextLayoutFlags nTextLayoutMode = ComplexTextLayoutFlags::Default;
@@ -709,6 +714,7 @@ namespace emfio
                                                                                        // dxAry will not fit
                     if ( nNewTextLen )
                     {
+                        SAL_INFO( "emfio", "\t\t\t Text : " << aText );
                         std::unique_ptr<tools::Long[]> pDXAry, pDYAry;
                         auto nDxArySize =  nMaxStreamPos - mpInputStream->Tell();
                         auto nDxAryEntries = nDxArySize >> 1;
