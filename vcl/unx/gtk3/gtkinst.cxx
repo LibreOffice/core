@@ -6218,15 +6218,15 @@ public:
 
 static GType immobilized_viewport_get_type();
 
-#define CRIPPLED_TYPE_VIEWPORT            (immobilized_viewport_get_type ())
-#define CRIPPLED_VIEWPORT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), CRIPPLED_TYPE_VIEWPORT, CrippledViewport))
+#define IMMOBILIZED_TYPE_VIEWPORT            (immobilized_viewport_get_type ())
+#define IMMOBILIZED_VIEWPORT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), IMMOBILIZED_TYPE_VIEWPORT, ImmobilizedViewport))
 #ifndef NDEBUG
-#   define CRIPPLED_IS_VIEWPORT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), CRIPPLED_TYPE_VIEWPORT))
+#   define IMMOBILIZED_IS_VIEWPORT(obj)      (G_TYPE_CHECK_INSTANCE_TYPE ((obj), IMMOBILIZED_TYPE_VIEWPORT))
 #endif
 
 namespace {
 
-struct CrippledViewport
+struct ImmobilizedViewport
 {
 #if !GTK_CHECK_VERSION(4, 0, 0)
     GtkViewport viewport;
@@ -6248,7 +6248,7 @@ enum
     PROP_SHADOW_TYPE
 };
 
-static void viewport_set_adjustment(CrippledViewport *viewport,
+static void viewport_set_adjustment(ImmobilizedViewport *viewport,
                                     GtkOrientation  orientation,
                                     GtkAdjustment  *adjustment)
 {
@@ -6277,7 +6277,7 @@ immobilized_viewport_set_property(GObject* object,
                                const GValue* value,
                                GParamSpec* /*pspec*/)
 {
-    CrippledViewport *viewport = CRIPPLED_VIEWPORT(object);
+    ImmobilizedViewport *viewport = IMMOBILIZED_VIEWPORT(object);
 
     switch (prop_id)
     {
@@ -6302,7 +6302,7 @@ immobilized_viewport_get_property(GObject* object,
                                GValue* value,
                                GParamSpec* /*pspec*/)
 {
-    CrippledViewport *viewport = CRIPPLED_VIEWPORT(object);
+    ImmobilizedViewport *viewport = IMMOBILIZED_VIEWPORT(object);
 
     switch (prop_id)
     {
@@ -6356,13 +6356,13 @@ GType immobilized_viewport_get_type()
             reinterpret_cast<GClassInitFunc>(immobilized_viewport_class_init), /* class init */
             nullptr, /* class finalize */
             nullptr,                   /* class data */
-            sizeof (CrippledViewport), /* instance size */
+            sizeof (ImmobilizedViewport), /* instance size */
             0,                         /* nb preallocs */
             nullptr,  /* instance init */
             nullptr                    /* value table */
         };
 
-        type = g_type_register_static( GTK_TYPE_VIEWPORT, "CrippledViewport",
+        type = g_type_register_static( GTK_TYPE_VIEWPORT, "ImmobilizedViewport",
                                        &tinfo, GTypeFlags(0));
     }
 
@@ -7055,7 +7055,7 @@ public:
 #else
         GtkWidget *pViewport = gtk_bin_get_child(GTK_BIN(m_pScrolledWindow));
 #endif
-        assert(CRIPPLED_IS_VIEWPORT(pViewport));
+        assert(IMMOBILIZED_IS_VIEWPORT(pViewport));
 #if GTK_CHECK_VERSION(4, 0, 0)
         GtkWidget *pChild= gtk_viewport_get_child(GTK_VIEWPORT(pViewport));
 #else
@@ -19720,6 +19720,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/scalc/ui/optimalrowheightdialog.ui" &&
         rUIFile != "modules/scalc/ui/colwidthdialog.ui" &&
         rUIFile != "modules/scalc/ui/rowheightdialog.ui" &&
+        rUIFile != "modules/scalc/ui/solverdlg.ui" &&
         rUIFile != "modules/smath/ui/alignmentdialog.ui" &&
         rUIFile != "modules/smath/ui/fontsizedialog.ui" &&
         rUIFile != "modules/smath/ui/savedefaultsdialog.ui" &&
