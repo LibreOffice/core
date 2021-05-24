@@ -174,7 +174,7 @@ void VclTextTest::testSimpleText()
     device->SetFont(font);
     device->DrawText(Point(90, 10), text);
     exportDevice("simple-text-36-270deg.png", device);
-    // Width and heigth here should be swapped, again allowing for some imprecisions.
+    // Width and height here should be swapped, again allowing for some imprecisions.
     tools::Long height36Rotated = getCharacterLeftSideHeight(device, Point(0, 20));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(width36, height36Rotated, 2);
     tools::Long width36Rotated = getCharacterTopWidth(device, Point(70, 0));
