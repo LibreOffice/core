@@ -1083,10 +1083,9 @@ namespace
         {
             if (SdrObject* pShape = GetSdrObjectFromXShape(rxShape))
             {
-                // -1 is required because the direction of MSO rotation is the opposite of ours
-                // 100 is required because in this part of the code the angle is in a hundredth of
-                // degrees.
-                Degree100 nAngle( static_cast<sal_Int32>(-1 * 100.0 * rTypeModel.maRotation.toDouble()) );
+                // The needed factor -1 for opposite direction and factor 100 for Degree100 is
+                // contained in method decodeRotation().
+                Degree100 nAngle(ConversionHelper::decodeRotation(rTypeModel.maRotation));
                 pShape->NbcRotate(pShape->GetSnapRect().Center(), nAngle);
             }
         }
