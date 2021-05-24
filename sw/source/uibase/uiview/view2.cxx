@@ -1402,7 +1402,12 @@ void SwView::Execute(SfxRequest &rReq)
                 const sal_uLong handleNum = handleNumItem->GetValue();
                 const sal_uLong newPosX = newPosXTwips->GetValue();
                 const sal_uLong newPosY = newPosYTwips->GetValue();
-                pSdrView->MoveShapeHandle(handleNum, Point(newPosX, newPosY), OrdNum ? OrdNum->GetValue() : -1);
+                const Point mPoint(newPosX, newPosY);
+                const SdrHdl* handle = pSdrView->GetHdlList().GetHdl(handleNum);
+                if (handle->GetKind() == SdrHdlKind::Anchor || handle->GetKind() == SdrHdlKind::Anchor_TR)
+                    m_pWrtShell->FindAnchorPos(mPoint, /*bMoveIt=*/true);
+                else
+                    pSdrView->MoveShapeHandle(handleNum, mPoint, OrdNum ? OrdNum->GetValue() : -1);
             }
             break;
         }
