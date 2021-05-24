@@ -18345,6 +18345,15 @@ bool ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
             {
                 if (GetParentObjectType(xChild) == "GtkFrame")
                     xRemoveList.push_back(xChild);
+                else if (GetParentObjectType(xChild) == "GtkScrolledWindow")
+                {
+                    bool bHasFrame = xChild->getFirstChild()->getNodeValue() != "none";
+                    auto xDoc = xChild->getOwnerDocument();
+                    auto xHasFrame = CreateProperty(xDoc, "has-frame",
+                                                    bHasFrame ? OUString("True") : OUString("False"));
+                    xChild->getParentNode()->insertBefore(xHasFrame, xChild);
+                    xRemoveList.push_back(xChild);
+                }
             }
 
             if (sName == "relief")
@@ -19627,6 +19636,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
 #if GTK_CHECK_VERSION(4, 0, 0)
     if (rUIFile != "cui/ui/hyphenate.ui" &&
         rUIFile != "cui/ui/percentdialog.ui" &&
+        rUIFile != "cui/ui/signatureline.ui" &&
         rUIFile != "sfx/ui/querysavedialog.ui" &&
         rUIFile != "cui/ui/tipofthedaydialog.ui" &&
         rUIFile != "sfx/ui/licensedialog.ui" &&
