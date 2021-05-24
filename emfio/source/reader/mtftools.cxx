@@ -1051,14 +1051,8 @@ namespace emfio
         {
             return; // empty rectangles cause trouble
         }
-        Point aPoints[] { Point(rRect.Left(), rRect.Top()),
-                          Point(rRect.Right(), rRect.Top()),
-                          Point(rRect.Right(), rRect.Bottom()),
-                          Point(rRect.Left(), rRect.Bottom()) };
-        tools::Polygon aPoly(4, aPoints);
-        aPoly = ImplMap( aPoly );
-        aPoly.Optimize( PolyOptimizeFlags::CLOSE );
-        tools::PolyPolygon aPolyPolyRect( aPoly );
+        tools::Polygon aPoly( rRect );
+        const tools::PolyPolygon aPolyPolyRect( ImplMap( aPoly ) );
         maClipPath.intersectClip( aPolyPolyRect.getB2DPolyPolygon() );
     }
 
@@ -1067,15 +1061,8 @@ namespace emfio
         if (utl::ConfigManager::IsFuzzing())
             return;
         mbClipNeedsUpdate=true;
-
-        Point aPoints[] { Point(rRect.Left(), rRect.Top()),
-                          Point(rRect.Right(), rRect.Top()),
-                          Point(rRect.Right(), rRect.Bottom()),
-                          Point(rRect.Left(), rRect.Bottom()) };
-        tools::Polygon aPoly(4, aPoints);
-        aPoly = ImplMap( aPoly );
-        aPoly.Optimize( PolyOptimizeFlags::CLOSE );
-        tools::PolyPolygon aPolyPolyRect( aPoly );
+        tools::Polygon aPoly( rRect );
+        const tools::PolyPolygon aPolyPolyRect( ImplMap( aPoly ) );
         maClipPath.excludeClip( aPolyPolyRect.getB2DPolyPolygon() );
     }
 
@@ -1388,6 +1375,20 @@ namespace emfio
             mpGDIMetaFile->AddAction( new MetaLineAction( maActPos, aDest, maLineStyle.aLineInfo ) );
         }
         maActPos = aDest;
+    }
+
+    void MtfTools::DrawRectWithBGColor(const tools::Rectangle& rRect)
+    {
+        WinMtfFillStyle aFillStyleBackup = maFillStyle;
+        bool            aTransparentBackup = maLineStyle.bTransparent;
+
+        const tools::Polygon aPoly( rRect );
+        maLineStyle.bTransparent = true;
+        maFillStyle = maBkColor;
+        ImplSetNonPersistentLineColorTransparenz();
+        DrawPolygon(aPoly, false);
+        maFillStyle = aFillStyleBackup;
+        maLineStyle.bTransparent = aTransparentBackup;
     }
 
     void MtfTools::DrawRect( const tools::Rectangle& rRect, bool bEdge )
