@@ -1725,10 +1725,7 @@ private:
 #else
         gtk_grid_attach(GTK_GRID(pParent), m_pGLArea, 0, 0, 1, 1);
         gtk_widget_show(pParent);
-        gtk_widget_realize(m_pGLArea);
-        // TODO does realize do the gdk_window_create_gl_context + gdk_gl_context_realize
-        // and so gtk_gl_area_make_current then does gdk_gl_context_make_current on its
-        // own ?
+        gtk_widget_show(m_pGLArea);
 #endif
 
         gtk_gl_area_make_current(GTK_GL_AREA(m_pGLArea));
@@ -1741,9 +1738,8 @@ private:
         gtk_gl_area_attach_buffers(GTK_GL_AREA(m_pGLArea));
         glGenFramebuffersEXT(1, &m_nAreaFrameBuffer);
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
         GdkSurface* pWindow = widget_get_surface(pParent);
-        m_pContext = gdk_window_create_gl_context(pWindow, nullptr);
+        m_pContext = surface_create_gl_context(pWindow);
         if (!m_pContext)
             return false;
 
@@ -1751,7 +1747,6 @@ private:
             return false;
 
         gdk_gl_context_make_current(m_pContext);
-#endif
         glGenFramebuffersEXT(1, &m_nFrameBuffer);
         glGenRenderbuffersEXT(1, &m_nRenderBuffer);
         glGenRenderbuffersEXT(1, &m_nDepthBuffer);
