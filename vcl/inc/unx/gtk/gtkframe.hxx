@@ -177,7 +177,8 @@ class GtkSalFrame final : public SalFrame
     GtkFixed*                       m_pFixedContainer;
     GtkFixed*                       m_pDrawingArea;
 #else
-    GtkOverlay*                     m_pFixedContainer;
+    GtkOverlay*                     m_pOverlay;
+    GtkFixed*                       m_pFixedContainer;
     GtkDrawingArea*                 m_pDrawingArea;
     GtkEventControllerKey*          m_pKeyController;
 #endif
