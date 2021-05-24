@@ -15516,12 +15516,7 @@ public:
         GtkWidget* pWidget = m_pArea->getWidget();
         if (!gtk_widget_get_realized(pWidget))
             gtk_widget_realize(pWidget);
-#if GTK_CHECK_VERSION(4, 0, 0)
-        gtk_im_context_set_client_widget(m_pIMContext, pWidget);
-#else
-        GdkWindow* pWin = widget_get_surface(pWidget);
-        gtk_im_context_set_client_window(m_pIMContext, pWin);
-#endif
+        im_context_set_client_widget(m_pIMContext, pWidget);
         if (gtk_widget_has_focus(m_pArea->getWidget()))
             gtk_im_context_focus_in(m_pIMContext);
     }
@@ -15559,11 +15554,7 @@ public:
             gtk_im_context_focus_out(m_pIMContext);
 
         // first give IC a chance to deinitialize
-#if GTK_CHECK_VERSION(4, 0, 0)
-        gtk_im_context_set_client_widget(m_pIMContext, nullptr);
-#else
-        gtk_im_context_set_client_window(m_pIMContext, nullptr);
-#endif
+        im_context_set_client_widget(m_pIMContext, nullptr);
         // destroy old IC
         g_object_unref(m_pIMContext);
     }

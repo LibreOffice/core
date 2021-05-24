@@ -4590,11 +4590,9 @@ void GtkSalFrame::IMHandler::createIMContext()
                       G_CALLBACK (signalIMPreeditEnd), this );
 
     GetGenericUnixSalData()->ErrorTrapPush();
+    im_context_set_client_widget(m_pIMContext, m_pFrame->getMouseEventWidget());
 #if GTK_CHECK_VERSION(4, 0, 0)
-    gtk_im_context_set_client_widget(m_pIMContext, m_pFrame->getMouseEventWidget());
     gtk_event_controller_key_set_im_context(m_pFrame->m_pKeyController, m_pIMContext);
-#else
-    gtk_im_context_set_client_window(m_pIMContext, widget_get_surface(m_pFrame->getMouseEventWidget()));
 #endif
     gtk_im_context_focus_in( m_pIMContext );
     GetGenericUnixSalData()->ErrorTrapPop();
@@ -4609,11 +4607,9 @@ void GtkSalFrame::IMHandler::deleteIMContext()
         // first give IC a chance to deinitialize
         GetGenericUnixSalData()->ErrorTrapPush();
 #if GTK_CHECK_VERSION(4, 0, 0)
-        gtk_im_context_set_client_widget(m_pIMContext, nullptr);
         gtk_event_controller_key_set_im_context(m_pFrame->m_pKeyController, nullptr);
-#else
-        gtk_im_context_set_client_window(m_pIMContext, nullptr);
 #endif
+        im_context_set_client_widget(m_pIMContext, nullptr);
         GetGenericUnixSalData()->ErrorTrapPop();
         // destroy old IC
         g_object_unref( m_pIMContext );
