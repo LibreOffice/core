@@ -224,6 +224,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 		wizards/com/sun/star/wizards/report/report \
 		wizards/com/sun/star/wizards/table/table \
 	) \
+    $(call gb_Helper_optional,XMLHELP,xmlhelp/util/ucpchelp1) \
 ))
 
 $(eval $(call gb_Rdb_add_components,services,\
@@ -298,7 +299,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	extensions/source/logging/log \
 	extensions/source/scanner/scn \
 	extensions/source/update/feed/updatefeed \
-	xmlhelp/util/ucpchelp1 \
 	$(if $(filter-out WNT,$(OS)),\
 		shell/source/cmdmail/cmdmail \
 	) \
