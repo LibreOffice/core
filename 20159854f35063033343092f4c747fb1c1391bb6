@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "54192fed_fbc8de37",
+        "filename": "sc/inc/arraysumfunctor.hxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-05-24T09:14:20Z",
+      "side": 1,
+      "message": "You probably need to mark the functions called from unittests as SC_DLLPUBLIC, see my comment at https://gerrit.libreoffice.org/c/core/+/115675/18/sc/source/core/inc/arraysumfunctor.hxx#103 .",
+      "parentUuid": "50051b07_8a9568b3",
+      "revId": "20159854f35063033343092f4c747fb1c1391bb6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "14736967_e648b5be",
         "filename": "sc/qa/unit/functions_statistical.cxx",
         "patchSetId": 21
