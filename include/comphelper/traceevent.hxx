@@ -69,7 +69,7 @@ protected:
                 sResult.append(',');
             sResult.append('"');
             sResult.append(i.first);
-            sResult.append("\",\"");
+            sResult.append("\":\"");
             sResult.append(i.second);
             sResult.append('"');
             first = false;
