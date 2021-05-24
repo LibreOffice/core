@@ -26,7 +26,9 @@ OPENSSL_PLATFORM := \
         $(if $(filter GNU/kFreeBSD,$(shell uname)),\
           debian-kfreebsd-amd64\
         ,\
-          $(if $(filter TRUE, $(ENABLE_DBGUTIL)), debug-linux-generic64, linux-generic64) no-asm\
+          $(if $(filter FreeBSD,$(shell uname)), BSD-x86_64,\
+            $(if $(filter TRUE, $(ENABLE_DBGUTIL)), debug-linux-generic64, linux-generic64) no-asm\
+          )\
         )\
       ,\
         $(if $(filter TRUE, $(ENABLE_DBGUTIL)), debug-linux-generic32, linux-generic32)\
