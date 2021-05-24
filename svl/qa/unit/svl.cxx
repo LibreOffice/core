@@ -1337,6 +1337,11 @@ void Test::testUserDefinedNumberFormats()
         sExpected = "-12.00 ;";
         checkPreviewString(aFormatter, sCode, -12.0, eLang, sExpected);
     }
+    {  // tdf#100755
+        sCode = "000\" \"000/000";
+        sExpected = "003 016/113";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+    }
     {  // tdf#129878
         sCode =     "[HH]";
         sExpected = "#FMT";
