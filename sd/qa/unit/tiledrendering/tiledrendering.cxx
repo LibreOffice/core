@@ -132,6 +132,7 @@ public:
     void testSpellOnlineRenderParameter();
     void testSlideDuplicateUndo();
     void testMoveShapeHandle();
+    void testDeleteTable();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
     CPPUNIT_TEST(testCreateDestroy);
@@ -188,6 +189,7 @@ public:
     CPPUNIT_TEST(testSpellOnlineRenderParameter);
     CPPUNIT_TEST(testSlideDuplicateUndo);
     CPPUNIT_TEST(testMoveShapeHandle);
+    CPPUNIT_TEST(testDeleteTable);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -736,6 +738,30 @@ void SdTiledRenderingTest::testInsertTable()
 
     CPPUNIT_ASSERT(aPos.X() != 0);
     CPPUNIT_ASSERT(aPos.Y() != 0);
+}
+
+void SdTiledRenderingTest::testDeleteTable()
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+    {
+        { "Rows", uno::makeAny(sal_Int32(3)) },
+        { "Columns", uno::makeAny(sal_Int32(5)) }
+    }));
+
+    comphelper::dispatchCommand(".uno:InsertTable", aArgs);
+    Scheduler::ProcessEventsToIdle();
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pSdrView = pViewShell->GetView();
+    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
+    CPPUNIT_ASSERT(rMarkList.GetMarkCount());
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | awt::Key::A);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_MOD1 | awt::Key::A);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DELETE);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DELETE);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!rMarkList.GetMarkCount());
 }
 
 void SdTiledRenderingTest::testPartHash()
