@@ -372,7 +372,7 @@ bool GtkSalFrame::doKeyCallback( guint state,
             if (keyval == GDK_KEY_0)
             {
                 SAL_INFO("vcl.gtk3", "force widget_queue_draw.");
-                gtk_widget_queue_draw(GTK_WIDGET(m_pFixedContainer));
+                gtk_widget_queue_draw(GTK_WIDGET(m_pDrawingArea));
                 return false;
             }
             else if (keyval == GDK_KEY_1)
@@ -871,7 +871,7 @@ GtkWidget *GtkSalFrame::getMouseEventWidget() const
 #if !GTK_CHECK_VERSION(4,0,0)
     return GTK_WIDGET(m_pEventBox);
 #else
-    return GTK_WIDGET(m_pFixedContainer);
+    return GTK_WIDGET(m_pDrawingArea);
 #endif
 }
 
@@ -914,23 +914,26 @@ void GtkSalFrame::InitCommon()
     // fixed is needed since we have to position plugin windows
 #if !GTK_CHECK_VERSION(4,0,0)
     m_pFixedContainer = GTK_FIXED(g_object_new( ooo_fixed_get_type(), nullptr ));
+    m_pDrawingArea = m_pFixedContainer;
 #else
-    m_pFixedContainer = GTK_DRAWING_AREA(gtk_drawing_area_new());
+    m_pFixedContainer = GTK_OVERLAY(gtk_overlay_new());
+    m_pDrawingArea = GTK_DRAWING_AREA(gtk_drawing_area_new());
 #endif
-    gtk_widget_set_can_focus(GTK_WIDGET(m_pFixedContainer), true);
-    gtk_widget_set_size_request(GTK_WIDGET(m_pFixedContainer), 1, 1);
+    gtk_widget_set_can_focus(GTK_WIDGET(m_pDrawingArea), true);
+    gtk_widget_set_size_request(GTK_WIDGET(m_pDrawingArea), 1, 1);
 #if !GTK_CHECK_VERSION(4,0,0)
     gtk_container_add( GTK_CONTAINER(m_pEventBox), GTK_WIDGET(m_pFixedContainer) );
 #else
     gtk_widget_set_vexpand(GTK_WIDGET(m_pFixedContainer), true);
     gtk_widget_set_hexpand(GTK_WIDGET(m_pFixedContainer), true);
     gtk_grid_attach(m_pTopLevelGrid, GTK_WIDGET(m_pFixedContainer), 0, 0, 1, 1);
+    gtk_overlay_set_child(m_pFixedContainer, GTK_WIDGET(m_pDrawingArea));
 #endif
 
     GtkWidget *pEventWidget = getMouseEventWidget();
 #if !GTK_CHECK_VERSION(4,0,0)
-    gtk_widget_set_app_paintable(GTK_WIDGET(m_pFixedContainer), true);
-    gtk_widget_set_redraw_on_allocate(GTK_WIDGET(m_pFixedContainer), false);
+    gtk_widget_set_app_paintable(GTK_WIDGET(m_pDrawingArea), true);
+    gtk_widget_set_redraw_on_allocate(GTK_WIDGET(m_pDrawingArea), false);
 #endif
 
 #if !GTK_CHECK_VERSION(4,0,0)
@@ -984,14 +987,14 @@ void GtkSalFrame::InitCommon()
 #endif
 
 #if !GTK_CHECK_VERSION(4,0,0)
-    g_signal_connect( G_OBJECT(m_pFixedContainer), "draw", G_CALLBACK(signalDraw), this );
-    g_signal_connect( G_OBJECT(m_pFixedContainer), "size-allocate", G_CALLBACK(sizeAllocated), this );
+    g_signal_connect( G_OBJECT(m_pDrawingArea), "draw", G_CALLBACK(signalDraw), this );
+    g_signal_connect( G_OBJECT(m_pDrawingArea), "size-allocate", G_CALLBACK(sizeAllocated), this );
 #else
-    gtk_drawing_area_set_draw_func(m_pFixedContainer, signalDraw, this, nullptr);
-    g_signal_connect( G_OBJECT(m_pFixedContainer), "resize", G_CALLBACK(sizeAllocated), this );
+    gtk_drawing_area_set_draw_func(m_pDrawingArea, signalDraw, this, nullptr);
+    g_signal_connect( G_OBJECT(m_pDrawingArea), "resize", G_CALLBACK(sizeAllocated), this );
 #endif
 
-    g_signal_connect( G_OBJECT(m_pFixedContainer), "realize", G_CALLBACK(signalRealize), this );
+    g_signal_connect( G_OBJECT(m_pDrawingArea), "realize", G_CALLBACK(signalRealize), this );
 
 #if !GTK_CHECK_VERSION(4,0,0)
     GtkGesture *pSwipe = gtk_gesture_swipe_new(pEventWidget);
@@ -1164,7 +1167,7 @@ void GtkSalFrame::DisallowCycleFocusOut()
     // set container without can-focus and focus will tab between
     // the native embedded widgets using the default gtk handling for
     // that
-    gtk_widget_set_can_focus(GTK_WIDGET(m_pFixedContainer), false);
+    gtk_widget_set_can_focus(GTK_WIDGET(m_pDrawingArea), false);
 }
 
 bool GtkSalFrame::IsCycleFocusOutDisallowed() const
@@ -1185,7 +1188,7 @@ void GtkSalFrame::AllowCycleFocusOut()
     // set container without can-focus and focus will tab between
     // the native embedded widgets using the default gtk handling for
     // that
-    gtk_widget_set_can_focus(GTK_WIDGET(m_pFixedContainer), true);
+    gtk_widget_set_can_focus(GTK_WIDGET(m_pDrawingArea), true);
 }
 
 
@@ -2845,9 +2848,9 @@ void GtkSalFrame::GrabFocus()
     if (GTK_IS_EVENT_BOX(m_pWindow))
         pGrabWidget = GTK_WIDGET(m_pWindow);
     else
-        pGrabWidget = GTK_WIDGET(m_pFixedContainer);
+        pGrabWidget = GTK_WIDGET(m_pDrawingArea);
 #else
-    pGrabWidget = GTK_WIDGET(m_pFixedContainer);
+    pGrabWidget = GTK_WIDGET(m_pDrawingArea);
 #endif
     // m_nSetFocusSignalId is 0 for the DisallowCycleFocusOut case where
     // we don't allow focus to enter the toplevel, but expect it to
@@ -3362,11 +3365,11 @@ void GtkSalFrame::damaged(sal_Int32 nExtentsX, sal_Int32 nExtentsY,
         return;
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    gtk_widget_queue_draw_area(GTK_WIDGET(m_pFixedContainer),
+    gtk_widget_queue_draw_area(GTK_WIDGET(m_pDrawingArea),
                                nExtentsX, nExtentsY,
                                nExtentsWidth, nExtentsHeight);
 #else
-    gtk_widget_queue_draw(GTK_WIDGET(m_pFixedContainer));
+    gtk_widget_queue_draw(GTK_WIDGET(m_pDrawingArea));
     (void)nExtentsX;
     (void)nExtentsY;
 #endif
@@ -3538,7 +3541,7 @@ gboolean GtkSalFrame::signalConfigure(GtkWidget*, GdkEventConfigure* pEvent, gpo
 
 void GtkSalFrame::queue_draw()
 {
-    gtk_widget_queue_draw(GTK_WIDGET(m_pFixedContainer));
+    gtk_widget_queue_draw(GTK_WIDGET(m_pDrawingArea));
 }
 
 void GtkSalFrame::TriggerPaintEvent()
@@ -3578,7 +3581,7 @@ void GtkSalFrame::DrawingAreaFocusInOut(SalEvent nEventType)
         if (GTK_IS_WINDOW(m_pWindow))
         {
             GtkWidget* pFocusWindow = gtk_window_get_focus(GTK_WINDOW(m_pWindow));
-            bFocusInAnotherGtkWidget = pFocusWindow && pFocusWindow != GTK_WIDGET(m_pFixedContainer);
+            bFocusInAnotherGtkWidget = pFocusWindow && pFocusWindow != GTK_WIDGET(m_pDrawingArea);
         }
         if (!bFocusInAnotherGtkWidget)
             m_pIMHandler->focusChanged(nEventType == SalEvent::GetFocus);
@@ -3611,7 +3614,7 @@ gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer f
         if (GTK_IS_WINDOW(pThis->m_pWindow))
         {
             GtkWidget* pFocusWindow = gtk_window_get_focus(GTK_WINDOW(pThis->m_pWindow));
-            bFocusInAnotherGtkWidget = pFocusWindow && pFocusWindow != GTK_WIDGET(pThis->m_pFixedContainer);
+            bFocusInAnotherGtkWidget = pFocusWindow && pFocusWindow != GTK_WIDGET(pThis->m_pDrawingArea);
         }
         if (!bFocusInAnotherGtkWidget)
             pThis->m_pIMHandler->focusChanged( pEvent->in != 0 );
@@ -3632,7 +3635,7 @@ gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer f
         if (GTK_IS_EVENT_BOX(pThis->m_pWindow))
             pGrabWidget = GTK_WIDGET(pThis->m_pWindow);
         else
-            pGrabWidget = GTK_WIDGET(pThis->m_pFixedContainer);
+            pGrabWidget = GTK_WIDGET(pThis->m_pDrawingArea);
         bool bHasFocus = gtk_widget_has_focus(pGrabWidget);
         pThis->CallCallbackExc(bHasFocus ? SalEvent::GetFocus : SalEvent::LoseFocus, nullptr);
     }
@@ -3663,7 +3666,7 @@ void GtkSalFrame::signalSetFocus(GtkWindow*, GtkWidget* pWidget, gpointer frame)
     if (GTK_IS_EVENT_BOX(pThis->m_pWindow))
         pGrabWidget = GTK_WIDGET(pThis->m_pWindow);
     else
-        pGrabWidget = GTK_WIDGET(pThis->m_pFixedContainer);
+        pGrabWidget = GTK_WIDGET(pThis->m_pDrawingArea);
 
     GtkWidget* pTopLevel = widget_get_root(pGrabWidget);
     // see commentary in GtkSalObjectWidgetClip::Show
@@ -3676,7 +3679,7 @@ void GtkSalFrame::signalSetFocus(GtkWindow*, GtkWidget* pWidget, gpointer frame)
     // do not propagate focus get/lose if floats are open
     pThis->CallCallbackExc(bLoseFocus ? SalEvent::LoseFocus : SalEvent::GetFocus, nullptr);
 
-    gtk_widget_set_can_focus(GTK_WIDGET(pThis->m_pFixedContainer), !bLoseFocus);
+    gtk_widget_set_can_focus(GTK_WIDGET(pThis->m_pDrawingArea), !bLoseFocus);
 }
 #endif
 
@@ -3745,7 +3748,7 @@ gboolean GtkSalFrame::signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointe
     if (GTK_IS_WINDOW(pThis->m_pWindow))
     {
         GtkWidget* pFocusWindow = gtk_window_get_focus(GTK_WINDOW(pThis->m_pWindow));
-        bFocusInAnotherGtkWidget = pFocusWindow && pFocusWindow != GTK_WIDGET(pThis->m_pFixedContainer);
+        bFocusInAnotherGtkWidget = pFocusWindow && pFocusWindow != GTK_WIDGET(pThis->m_pDrawingArea);
         if (bFocusInAnotherGtkWidget)
         {
             if (!gtk_widget_get_realized(pFocusWindow))
@@ -4546,6 +4549,7 @@ void GtkSalFrame::signalDestroy( GtkWidget* pObj, gpointer frame )
     if (pThis->m_pSurface)
         cairo_surface_set_user_data(pThis->m_pSurface, SvpSalGraphics::getDamageKey(), nullptr, nullptr);
     pThis->m_pFixedContainer = nullptr;
+    pThis->m_pDrawingArea = nullptr;
 #if !GTK_CHECK_VERSION(4, 0, 0)
     pThis->m_pEventBox = nullptr;
 #endif
