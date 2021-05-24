@@ -3536,6 +3536,11 @@ gboolean GtkSalFrame::signalConfigure(GtkWidget*, GdkEventConfigure* pEvent, gpo
 }
 #endif
 
+void GtkSalFrame::queue_draw()
+{
+    gtk_widget_queue_draw(GTK_WIDGET(m_pFixedContainer));
+}
+
 void GtkSalFrame::TriggerPaintEvent()
 {
     //Under gtk2 we can basically paint directly into the XWindow and on
@@ -3553,7 +3558,7 @@ void GtkSalFrame::TriggerPaintEvent()
     SAL_INFO("vcl.gtk3", "force painting" << 0 << "," << 0 << " " << maGeometry.nWidth << "x" << maGeometry.nHeight);
     SalPaintEvent aPaintEvt(0, 0, maGeometry.nWidth, maGeometry.nHeight, true);
     CallCallbackExc(SalEvent::Paint, &aPaintEvt);
-    gtk_widget_queue_draw(GTK_WIDGET(m_pFixedContainer));
+    queue_draw();
 }
 
 void GtkSalFrame::DrawingAreaFocusInOut(SalEvent nEventType)

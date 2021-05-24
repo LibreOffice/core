@@ -2783,8 +2783,7 @@ cairo::SurfaceSharedPtr GtkSalGraphics::CreateSurface(const OutputDevice& /*rRef
 void GtkSalGraphics::WidgetQueueDraw() const
 {
     //request gtk to sync the entire contents
-    GtkWidget *pWidget = GTK_WIDGET(mpFrame->getFixedContainer());
-    gtk_widget_queue_draw(pWidget);
+    mpFrame->queue_draw();
 }
 
 namespace {
