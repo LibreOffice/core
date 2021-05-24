@@ -9,8 +9,8 @@
 
 # Tools we need to build for cross-compiling
 ifeq ($(gb_Side),build)
-gb_BUILD_TOOLS = \
-	$(foreach executable, \
+
+gb_BUILD_TOOLS_executables = \
 		bestreversemap \
 		cfgex \
 		climaker \
@@ -38,10 +38,13 @@ gb_BUILD_TOOLS = \
 			HelpLinker \
 			lngconvex \
 		) \
-	,$(call gb_Executable_get_runtime_dependencies,$(executable))) \
-	$(foreach executable, \
+
+gb_BUILD_TOOLS_executables_extern = \
 		xsltproc \
-	,$(call gb_ExternalExecutable_get_dependencies,$(executable))) \
+
+gb_BUILD_TOOLS = \
+    $(foreach executable,$(gb_BUILD_TOOLS_executables),$(call gb_Executable_get_runtime_dependencies,$(executable))) \
+    $(foreach executable,$(gb_BUILD_TOOLS_executables_extern),$(call gb_ExternalExecutable_get_dependencies,$(executable))) \
 	$(INSTROOT)/$(LIBO_URE_ETC_FOLDER)/$(call gb_Helper_get_rcfile,uno) \
 
 endif
