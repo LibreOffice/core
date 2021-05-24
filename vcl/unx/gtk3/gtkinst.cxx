@@ -3913,7 +3913,6 @@ namespace
         return load_icon_from_stream(*xMemStm);
     }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     GdkPixbuf* getPixbuf(const VirtualDevice& rDevice)
     {
         Size aSize(rDevice.GetOutputSizePixel());
@@ -3971,7 +3970,6 @@ namespace
 #endif
         return pixbuf;
     }
-#endif
 
     GtkWidget* image_new_from_virtual_device(const VirtualDevice& rImageSurface)
     {
@@ -10853,8 +10851,6 @@ public:
 
 }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-
 namespace
 {
 
@@ -10871,6 +10867,7 @@ namespace
         }
     };
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     gboolean foreach_find(GtkTreeModel* model, GtkTreePath* path, GtkTreeIter* iter, gpointer data)
     {
         Search* search = static_cast<Search*>(data);
@@ -10935,10 +10932,12 @@ namespace
             }
         }
     }
+#endif
 }
 
 namespace
 {
+#if !GTK_CHECK_VERSION(4, 0, 0)
     gint default_sort_func(GtkTreeModel* pModel, GtkTreeIter* a, GtkTreeIter* b, gpointer data)
     {
         comphelper::string::NaturalStringSorter* pSorter = static_cast<comphelper::string::NaturalStringSorter*>(data);
@@ -10978,30 +10977,33 @@ namespace
 
         return -1;
     }
+#endif
 
-struct GtkInstanceTreeIter : public weld::TreeIter
-{
-    GtkInstanceTreeIter(const GtkInstanceTreeIter* pOrig)
+    struct GtkInstanceTreeIter : public weld::TreeIter
     {
-        if (pOrig)
-            iter = pOrig->iter;
-        else
-            memset(&iter, 0, sizeof(iter));
-    }
-    GtkInstanceTreeIter(const GtkTreeIter& rOrig)
-    {
-        memcpy(&iter, &rOrig, sizeof(iter));
-    }
-    virtual bool equal(const TreeIter& rOther) const override
-    {
-        return memcmp(&iter,  &static_cast<const GtkInstanceTreeIter&>(rOther).iter, sizeof(GtkTreeIter)) == 0;
-    }
-    GtkTreeIter iter;
-};
+        GtkInstanceTreeIter(const GtkInstanceTreeIter* pOrig)
+        {
+            if (pOrig)
+                iter = pOrig->iter;
+            else
+                memset(&iter, 0, sizeof(iter));
+        }
+        GtkInstanceTreeIter(const GtkTreeIter& rOrig)
+        {
+            memcpy(&iter, &rOrig, sizeof(iter));
+        }
+        virtual bool equal(const TreeIter& rOther) const override
+        {
+            return memcmp(&iter,  &static_cast<const GtkInstanceTreeIter&>(rOther).iter, sizeof(GtkTreeIter)) == 0;
+        }
+        GtkTreeIter iter;
+    };
 
-class GtkInstanceTreeView;
+    class GtkInstanceTreeView;
 
 }
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
 
 static GtkInstanceTreeView* g_DragSource;
 
@@ -13777,6 +13779,8 @@ IMPL_LINK_NOARG(GtkInstanceTreeView, async_stop_cell_editing, void*, void)
     end_editing();
 }
 
+#endif
+
 namespace {
 
 class GtkInstanceIconView : public GtkInstanceWidget, public virtual weld::IconView
@@ -13789,7 +13793,9 @@ private:
     gint m_nIdCol;
     gulong m_nSelectionChangedSignalId;
     gulong m_nItemActivatedSignalId;
+#if !GTK_CHECK_VERSION(4, 0, 0)
     gulong m_nPopupMenu;
+#endif
     ImplSVEvent* m_pSelectionChangeEvent;
 
     DECL_LINK(async_signal_selection_changed, void*, void);
@@ -13908,7 +13914,9 @@ public:
         , m_nSelectionChangedSignalId(g_signal_connect(pIconView, "selection-changed",
                                       G_CALLBACK(signalSelectionChanged), this))
         , m_nItemActivatedSignalId(g_signal_connect(pIconView, "item-activated", G_CALLBACK(signalItemActivated), this))
+#if !GTK_CHECK_VERSION(4, 0, 0)
         , m_nPopupMenu(g_signal_connect(pIconView, "popup-menu", G_CALLBACK(signalPopupMenu), this))
+#endif
         , m_pSelectionChangeEvent(nullptr)
     {
         m_nIdCol = m_nTextCol + 1;
@@ -14186,7 +14194,9 @@ public:
 
         g_signal_handler_disconnect(m_pIconView, m_nItemActivatedSignalId);
         g_signal_handler_disconnect(m_pIconView, m_nSelectionChangedSignalId);
+#if !GTK_CHECK_VERSION(4, 0, 0)
         g_signal_handler_disconnect(m_pIconView, m_nPopupMenu);
+#endif
     }
 };
 
@@ -14197,8 +14207,6 @@ IMPL_LINK_NOARG(GtkInstanceIconView, async_signal_selection_changed, void*, void
     m_pSelectionChangeEvent = nullptr;
     signal_selection_changed();
 }
-
-#endif
 
 namespace {
 
@@ -19465,16 +19473,11 @@ public:
 
     virtual std::unique_ptr<weld::IconView> weld_icon_view(const OString &id) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkIconView* pIconView = GTK_ICON_VIEW(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pIconView)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pIconView));
         return std::make_unique<GtkInstanceIconView>(pIconView, this, false);
-#else
-        (void)id;
-        return nullptr;
-#endif
     }
 
     virtual std::unique_ptr<weld::EntryTreeView> weld_entry_tree_view(const OString& containerid, const OString& entryid, const OString& treeviewid) override
@@ -19656,10 +19659,11 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
     if (rUIFile != "cui/ui/hyphenate.ui" &&
         rUIFile != "cui/ui/percentdialog.ui" &&
         rUIFile != "cui/ui/signatureline.ui" &&
-        rUIFile != "sfx/ui/querysavedialog.ui" &&
         rUIFile != "cui/ui/tipofthedaydialog.ui" &&
+        rUIFile != "sfx/ui/querysavedialog.ui" &&
         rUIFile != "sfx/ui/licensedialog.ui" &&
         rUIFile != "svt/ui/javadisableddialog.ui" &&
+        rUIFile != "svx/ui/fontworkgallerydialog.ui" &&
         rUIFile != "modules/smath/ui/alignmentdialog.ui" &&
         rUIFile != "modules/smath/ui/fontsizedialog.ui" &&
         rUIFile != "modules/smath/ui/savedefaultsdialog.ui" &&
