@@ -18,7 +18,7 @@
 
 #include "macros.inc"
 
-#if defined WITH_HELP
+#if defined WITH_HELPPACKS
 File gid_File_Help_Swriter_Zip
     Dir = FILELIST_DIR;
     FILELIST_TXT_FILE_BODY_HELPPACK;

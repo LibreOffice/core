@@ -9,13 +9,9 @@
 
 $(eval $(call gb_Module_Module,clucene))
 
-# do we need the Android check below? Shouldn't it be already covered by
-# gb_Helper_optional in Module_external.mk?
-ifneq ($(OS),ANDROID)
 $(eval $(call gb_Module_add_targets,clucene,\
     Library_clucene \
 	UnpackedTarball_clucene \
 ))
-endif
 
 # vim: set noet sw=4 ts=4:

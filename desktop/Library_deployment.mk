@@ -70,7 +70,7 @@ $(eval $(call gb_Library_add_exception_objects,deployment,\
     desktop/source/deployment/registry/sfwk/dp_sfwk \
 ))
 
-ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+ifneq (,$(filter XMLHELP,$(BUILD_TYPE)))
 
 $(eval $(call gb_Library_use_libraries,deployment,\
     helplinker \

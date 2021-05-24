@@ -67,7 +67,7 @@ using namespace ::com::sun::star;
 
 static SfxApplication* g_pSfxApplication = nullptr;
 
-#if HAVE_FEATURE_DESKTOP
+#if HAVE_FEATURE_XMLHELP
 static SfxHelp*        pSfxHelp = nullptr;
 #endif
 
@@ -127,7 +127,7 @@ SfxApplication* SfxApplication::GetOrCreate()
         ::framework::SetStatusBarControllerCreator( SfxStatusBarControllerFactory );
         ::framework::SetDockingWindowCreator( SfxDockingWindowFactory );
         ::framework::SetIsDockingWindowVisible( IsDockingWindowVisible );
-#if HAVE_FEATURE_DESKTOP
+#if HAVE_FEATURE_XMLHELP
         Application::SetHelp( pSfxHelp );
         if (!utl::ConfigManager::IsFuzzing() && SvtHelpOptions().IsHelpTips())
             Help::EnableQuickHelp();
@@ -167,7 +167,7 @@ SfxApplication::SfxApplication()
     (void)bOk;
 #endif
 
-#if HAVE_FEATURE_DESKTOP
+#if HAVE_FEATURE_XMLHELP
     pSfxHelp = new SfxHelp;
 #endif
 
@@ -187,7 +187,7 @@ SfxApplication::~SfxApplication()
     for (auto &module : pImpl->aModules)    // Clear modules
         module.reset();
 
-#if HAVE_FEATURE_DESKTOP
+#if HAVE_FEATURE_XMLHELP
     delete pSfxHelp;
     Application::SetHelp();
 #endif
