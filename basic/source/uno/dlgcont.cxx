@@ -248,6 +248,9 @@ void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< e
                             }
                         }
                     }
+                    Reference< XComponent > xDialogModelComp(xDialogModel, UNO_QUERY);
+                    if (xDialogModelComp)
+                        xDialogModelComp->dispose();
                 }
             }
         }
@@ -327,6 +330,11 @@ Any SfxDialogLibraryContainer::importLibraryElement
     // to avoid creating the DialogModel here!
     Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel, mxContext, mxOwnerDocument );
     aRetAny <<= xISP;
+
+    Reference< XComponent > xDialogModelComp(xDialogModel, UNO_QUERY);
+    if (xDialogModelComp)
+        xDialogModelComp->dispose();
+
     return aRetAny;
 }
 
