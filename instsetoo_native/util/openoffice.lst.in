@@ -51,8 +51,6 @@ LibreOffice
             BUNDLEIDENTIFIER @MACOSX_BUNDLE_IDENTIFIER@
             BRANDPACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             USERDIRPRODUCTVERSION 4
-            ABOUTBOXPRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
-            ABOUTBOXPRODUCTVERSIONSUFFIX @LIBO_VERSION_SUFFIX_SUFFIX@
             BASEPRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             PCPFILENAME libreoffice.pcp
             UPDATEURL https://update.libreoffice.org/check.php
@@ -66,9 +64,6 @@ LibreOffice
             SPELLCHECKERFILE spellchecker_selection.txt
             CHANGETARGETDIR 1
             PATCHCODEFILE ooo_patchcodes.txt
-            STARTCENTER_ADDFEATURE_URL https://extensions.libreoffice.org/
-            STARTCENTER_INFO_URL https://www.libreoffice.org/
-            STARTCENTER_TEMPLREP_URL https://templates.libreoffice.org/
         }
         active          1
         compression     5
@@ -95,8 +90,6 @@ LibreOfficeDev
             BUNDLEIDENTIFIER @MACOSX_BUNDLE_IDENTIFIER@
             BRANDPACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             USERDIRPRODUCTVERSION 4
-            ABOUTBOXPRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
-            ABOUTBOXPRODUCTVERSIONSUFFIX @LIBO_VERSION_SUFFIX_SUFFIX@
             BASEPRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             DEVELOPMENTPRODUCT 1
             BASISPACKAGEPREFIX lodevbasis
@@ -116,9 +109,6 @@ LibreOfficeDev
             PATCHCODEFILE ooodev_patchcodes.txt
             CODEFILENAME codes_ooodev.txt
             LOCALUSERDIR $ORIGIN/..
-            STARTCENTER_ADDFEATURE_URL https://extensions.libreoffice.org/
-            STARTCENTER_INFO_URL https://www.libreoffice.org/
-            STARTCENTER_TEMPLREP_URL https://templates.libreoffice.org/
         }
         active          1
         compression     5
@@ -156,9 +146,6 @@ LibreOffice_SDK
             NOSHORTDIRECTORYNAMES 1
             CHANGETARGETDIR 1
             DONTUSESTARTMENUFOLDER 1
-            STARTCENTER_ADDFEATURE_URL https://extensions.libreoffice.org/
-            STARTCENTER_INFO_URL https://www.libreoffice.org/
-            STARTCENTER_TEMPLREP_URL https://templates.libreoffice.org/
         }
         active 1
         compression 5
@@ -200,9 +187,6 @@ LibreOfficeDev_SDK
             NOSHORTDIRECTORYNAMES 1
             CHANGETARGETDIR 1
             DONTUSESTARTMENUFOLDER 1
-            STARTCENTER_ADDFEATURE_URL https://extensions.libreoffice.org/
-            STARTCENTER_INFO_URL https://www.libreoffice.org/
-            STARTCENTER_TEMPLREP_URL https://templates.libreoffice.org/
         }
         active 1
         compression 5

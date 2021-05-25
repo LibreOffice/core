@@ -19,8 +19,16 @@
 
 Some documentation for the variables specified in file openoffice.lst.
 
-FIXME: quite a few of these variables are duplicated in
-postprocess/CustomTarget_registry.mk, this needs to be consolidated
+It contains values used by the creation of installation packages themselves,
+and as part of that contain subsitutions for variables used in scp2 (those will
+be handled by the perl installer code)
+
+NOTE: For instdir, the corresponding files are created by
+instsetoo_native/CustomTarget_setup.mk instead.
+
+It used to contain variables that were replaced in the xcu configuration files,
+but those are handled by postprocess/CustomTarget_registry.mk (and there's no
+difference for those between an installation set and the instdir method)
 
 VARIABLE NAME                   USAGE
 -------------------------------------------------------------------------------
@@ -30,10 +38,6 @@ UREPACKAGEPREFIX                name prefix for the URE installation packages
                                 for Linux platforms
 SOLSUREPACKAGEPREFIX            name prefix for the URE installation packages
                                 for Solaris platforms
-
-STARTCENTER_ADDFEATURE_URL      URL in start center to link to extension website
-STARTCENTER_INFO_URL            URL in start center to link to product homepage
-STARTCENTER_TEMPLREP_URL        URL in start center to link to templates website
 
 UPDATEURL                       URL for the application update functionality
 
