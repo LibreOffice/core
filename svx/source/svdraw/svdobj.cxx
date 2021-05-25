@@ -579,9 +579,14 @@ SdrItemPool& SdrObject::GetGlobalDrawObjectItemPool()
         mpGlobalItemPool->SetSecondaryPool(pGlobalOutlPool.get());
         mpGlobalItemPool->SetDefaultMetric(SdrEngineDefaults::GetMapUnit());
         mpGlobalItemPool->FreezeIdRanges();
-        uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(comphelper::getProcessComponentContext());
-        uno::Reference< frame::XTerminateListener > xListener( new TerminateListener );
-        xDesktop->addTerminateListener( xListener );
+        if (utl::ConfigManager::IsFuzzing())
+            mpGlobalItemPool->acquire();
+        else
+        {
+            uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(comphelper::getProcessComponentContext());
+            uno::Reference< frame::XTerminateListener > xListener( new TerminateListener );
+            xDesktop->addTerminateListener( xListener );
+        }
     }
 
     return *mpGlobalItemPool;
