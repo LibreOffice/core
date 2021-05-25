@@ -19704,6 +19704,8 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
 {
 #if GTK_CHECK_VERSION(4, 0, 0)
     if (rUIFile != "cui/ui/hyphenate.ui" &&
+        rUIFile != "cui/ui/objectnamedialog.ui" &&
+        rUIFile != "cui/ui/objecttitledescdialog.ui" &&
         rUIFile != "cui/ui/percentdialog.ui" &&
         rUIFile != "cui/ui/signatureline.ui" &&
         rUIFile != "cui/ui/tipofthedaydialog.ui" &&
