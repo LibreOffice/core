@@ -11539,7 +11539,6 @@ svx/source/dialog/connctrl.cxx
 svx/source/dialog/contimp.hxx
 svx/source/dialog/contwnd.cxx
 svx/source/dialog/contwnd.hxx
-svx/source/dialog/crashreportdlg.cxx
 svx/source/dialog/crashreportui.cxx
 svx/source/dialog/ctredlin.cxx
 svx/source/dialog/databaseregistrationui.cxx
