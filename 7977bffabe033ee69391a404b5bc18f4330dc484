@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "edda156b_d393eecb",
+        "filename": "cui/source/customize/cfg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1626,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-05-25T13:28:11Z",
+      "side": 1,
+      "message": "Would have added a less obtrusive icon at the end rather than some long text at the beginning. Thinking about this, I wonder what users do who customize the UI in exp. mode and switch later back to normal. Would be surprising to loose many controls suddenly.",
+      "range": {
+        "startLine": 1626,
+        "startChar": 50,
+        "endLine": 1626,
+        "endChar": 63
+      },
+      "revId": "7977bffabe033ee69391a404b5bc18f4330dc484",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
