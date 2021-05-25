@@ -1081,7 +1081,7 @@ VclPtr<AbstractThesaurusDialog> AbstractDialogFactory_Impl::CreateThesaurusDialo
     return VclPtr<AbstractThesaurusDialog_Impl>::Create(std::make_shared<SvxThesaurusDialog>(pParent, xThesaurus, rWord, nLanguage));
 }
 
-#ifndef ENABLE_WASM_STRIP_EXTRA
+#ifndef ENABLE_WASM_STRIP_HUNSPELL
 VclPtr<AbstractHyphenWordDialog> AbstractDialogFactory_Impl::CreateHyphenWordDialog(weld::Widget* pParent,
                                                 const OUString &rWord, LanguageType nLang,
                                                 css::uno::Reference< css::linguistic2::XHyphenator >  &xHyphen,

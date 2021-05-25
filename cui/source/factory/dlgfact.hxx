@@ -798,7 +798,7 @@ public:
                                                 css::uno::Reference<css::linguistic2::XThesaurus> xThesaurus,
                                                 const OUString &rWord, LanguageType nLanguage) override;
 
-#ifndef ENABLE_WASM_STRIP_EXTRA
+#ifndef ENABLE_WASM_STRIP_HUNSPELL
     virtual VclPtr<AbstractHyphenWordDialog> CreateHyphenWordDialog(weld::Widget*,
                                                 const OUString &rWord, LanguageType nLang,
                                                 css::uno::Reference< css::linguistic2::XHyphenator >  &xHyphen,

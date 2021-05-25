@@ -99,7 +99,7 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
 ))
 endif
 
-ifneq ($(ENABLE_WASM_STRIP_EXTRA),TRUE)
+ifneq ($(ENABLE_WASM_STRIP_HUNSPELL),TRUE)
 $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/dialogs/hyphen \
 ))

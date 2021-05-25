@@ -577,7 +577,7 @@ $(call gb_ExternalProject_use_external_project,$(1),hunspell)
 
 endef
 
-endif # ENABLE_WASM_STRIP_EXTRA
+endif # ENABLE_WASM_STRIP_HUNSPELL
 endif # SYSTEM_HUNSPELL
 
 

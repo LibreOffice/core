@@ -30,6 +30,10 @@ ifneq ($(ENABLE_WASM_STRIP_EPUB),TRUE)
 $(eval $(call gb_Library_set_componentfile,wpftwriter,writerperfect/source/writer/wpftwriter.extended))
 endif
 
+ifneq ($(ENABLE_WASM_STRIP_SWEXPORTS),TRUE)
+$(eval $(call gb_Library_set_componentfile,wpftwriter,writerperfect/source/writer/wpftwriter.extended2))
+endif
+
 $(eval $(call gb_Library_use_sdk_api,wpftwriter))
 
 $(eval $(call gb_Library_use_common_precompiled_header,wpftwriter))
@@ -89,14 +93,19 @@ $(eval $(call gb_Library_add_exception_objects,wpftwriter,\
 ))
 endif
 
+ifneq ($(ENABLE_WASM_STRIP_SWEXPORTS),TRUE)
 $(eval $(call gb_Library_add_exception_objects,wpftwriter,\
 	writerperfect/source/writer/AbiWordImportFilter \
 	writerperfect/source/writer/EBookImportFilter \
 	writerperfect/source/writer/MSWorksImportFilter \
 	writerperfect/source/writer/MWAWImportFilter \
 	writerperfect/source/writer/PagesImportFilter \
-	writerperfect/source/writer/StarOfficeWriterImportFilter \
 	writerperfect/source/writer/WordPerfectImportFilter \
+))
+endif
+
+$(eval $(call gb_Library_add_exception_objects,wpftwriter,\
+	writerperfect/source/writer/StarOfficeWriterImportFilter \
 	writerperfect/source/writer/exp/XMLBase64ImportContext \
 	writerperfect/source/writer/exp/XMLFootnoteImportContext \
 	writerperfect/source/writer/exp/XMLSectionContext \
