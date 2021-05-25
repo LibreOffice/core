@@ -3224,17 +3224,17 @@ static void lcl_CorrectRectangle(tools::Rectangle & rRect,
                                             rInGrid.Bottom(), true) );
 }
 
-tools::Rectangle SwAccessibleMap::CoreToPixel( const tools::Rectangle& rRect ) const
+tools::Rectangle SwAccessibleMap::CoreToPixel( const SwRect& rRect ) const
 {
     tools::Rectangle aRect;
     if (const OutputDevice* pWin = GetShell()->GetWin()->GetOutDev())
     {
         MapMode aMapMode;
         GetMapMode( rRect.TopLeft(), aMapMode );
-        aRect = pWin->LogicToPixel( rRect, aMapMode );
+        aRect = pWin->LogicToPixel( rRect.SVRect(), aMapMode );
 
         tools::Rectangle aTmpRect = pWin->PixelToLogic( aRect, aMapMode );
-        lcl_CorrectRectangle(aRect, rRect, aTmpRect);
+        lcl_CorrectRectangle(aRect, rRect.SVRect(), aTmpRect);
     }
 
     return aRect;

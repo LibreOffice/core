@@ -830,7 +830,7 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleContext::getAccessibleAtPoint
     if( !GetFrame()->IsRootFrame() )
     {
         SwRect aLogBounds( GetBounds( *(GetMap()), GetFrame() ) ); // twip rel to doc root
-        Point aPixPos( GetMap()->CoreToPixel( aLogBounds.SVRect() ).TopLeft() );
+        Point aPixPos( GetMap()->CoreToPixel( aLogBounds ).TopLeft() );
         aPixPoint.setX(aPixPoint.getX() + aPixPos.getX());
         aPixPoint.setY(aPixPoint.getY() + aPixPos.getY());
     }
@@ -905,11 +905,11 @@ awt::Rectangle SwAccessibleContext::getBoundsImpl(bool bRelative)
     }
     if( !aLogBounds.IsEmpty() )
     {
-        aPixBounds = GetMap()->CoreToPixel( aLogBounds.SVRect() );
+        aPixBounds = GetMap()->CoreToPixel( aLogBounds );
         if( !pParent->IsRootFrame() && bRelative)
         {
             SwRect aParentLogBounds( GetBounds( *(GetMap()), pParent ) ); // twip rel to doc root
-            Point aParentPixPos( GetMap()->CoreToPixel( aParentLogBounds.SVRect() ).TopLeft() );
+            Point aParentPixPos( GetMap()->CoreToPixel( aParentLogBounds ).TopLeft() );
             aPixBounds.Move( -aParentPixPos.getX(), -aParentPixPos.getY() );
         }
     }

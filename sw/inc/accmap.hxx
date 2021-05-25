@@ -275,7 +275,7 @@ public:
     // additional Core/Pixel conversions for internal use; also works
     // for preview
     Point PixelToCore (const Point& rPoint) const;
-    tools::Rectangle CoreToPixel (const tools::Rectangle& rRect) const;
+    tools::Rectangle CoreToPixel (const SwRect& rRect) const;
 
     // is there a known accessibility impl cached for the frame
     bool Contains(const SwFrame *pFrame) const;
