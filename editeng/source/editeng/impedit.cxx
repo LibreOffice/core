@@ -1300,11 +1300,15 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
 
                 MapUnit eDevUnit = rOutDev.GetMapMode().GetMapUnit();
                 tools::Rectangle aCursorRectPureLogical(aEditCursor.TopLeft(), GetCursor()->GetSize());
-                // Get rectangle in window-coordinates from editeng(doc) coordinates.
-                aCursorRectPureLogical = mpLOKSpecialPositioning->GetWindowPos(aCursorRectPureLogical, eDevUnit);
+                // Get rectangle in window-coordinates from editeng(doc) coordinates in hmm.
+                aCursorRectPureLogical = GetWindowPos(aCursorRectPureLogical);
+                Point aRefPointLogical = GetOutputArea().TopLeft();
+                // Get the relative coordinates w.r.t refpoint in display hmm.
+                aCursorRectPureLogical.Move(-aRefPointLogical.X(), -aRefPointLogical.Y());
+                // Convert to twips.
+                aCursorRectPureLogical = OutputDevice::LogicToLogic(aCursorRectPureLogical, MapMode(eDevUnit), MapMode(MapUnit::MapTwip));
+                // "refpoint" in print twips.
                 const Point aRefPoint = mpLOKSpecialPositioning->GetRefPoint();
-                // Get the relative coordinates w.r.t rRefPoint.
-                aCursorRectPureLogical.Move(-aRefPoint.X(), -aRefPoint.Y());
                 aMessageParams.put("relrect", aCursorRectPureLogical.toString());
                 aMessageParams.put("refpoint", aRefPoint.toString());
             }
