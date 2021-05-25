@@ -38,6 +38,12 @@ $(eval $(call gb_CppunitTest_use_externals,desktop_lib, \
     boost_headers \
     cairo \
 ))
+ifeq ($(TLS),NSS)
+$(eval $(call gb_CppunitTest_use_externals,desktop_lib,\
+       plc4 \
+       nss3 \
+))
+endif
 
 $(eval $(call gb_CppunitTest_set_include,desktop_lib,\
     -I$(SRCDIR)/desktop/inc \
