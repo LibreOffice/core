@@ -9,6 +9,7 @@
 
 #include <sal/config.h>
 #include <test/unoapi_test.hxx>
+#include <com/sun/star/util/XCloseable.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -37,7 +38,8 @@ void DBAccessTest::test()
     OUString aFileName;
     createFileURL(u"testdb.odb", aFileName);
     uno::Reference<lang::XComponent> xComponent = loadFromDesktop(aFileName);
-    xComponent->dispose();
+    uno::Reference<util::XCloseable> xDocCloseable(xComponent, UNO_QUERY_THROW);
+    xDocCloseable->close(false);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DBAccessTest);
