@@ -23,23 +23,28 @@
 #include <osl/diagnose.h>
 #include <osl/thread.hxx>
 
-#include <cppuhelper/servicefactory.hxx>
-
+#include <com/sun/star/io/IOException.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <com/sun/star/registry/XImplementationRegistration.hpp>
-
+#include <com/sun/star/connection/AlreadyAcceptingException.hpp>
+#include <com/sun/star/connection/ConnectionSetupException.hpp>
 #include <com/sun/star/connection/XConnector.hpp>
 #include <com/sun/star/connection/XAcceptor.hpp>
+
+#include <cppuhelper/bootstrap.hxx>
 
 using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::connection;
 
+
+namespace {
 
 class MyThread :
     public Thread
@@ -95,7 +100,6 @@ void MyThread::run()
 
     if( m_rConnection.is() )
     {
-        Sequence < sal_Int8 > seq(12);
         try
         {
             doWrite( m_rConnection );
@@ -115,70 +119,58 @@ void testConnection( const OUString &sConnectionDescription  ,
                      const Reference < XAcceptor > &rAcceptor,
                      const Reference < XConnector > &rConnector )
 {
+    MyThread thread( rAcceptor , sConnectionDescription );
+    thread.create();
+
+    bool bGotit = false;
+    Reference < XConnection > r;
+
+    while( ! bGotit )
     {
-        MyThread thread( rAcceptor , sConnectionDescription );
-        thread.create();
-
-        sal_Bool bGotit = sal_False;
-        Reference < XConnection > r;
-
-        while( ! bGotit )
-        {
-            try
-            {
-                // Why is this wait necessary ????
-                osl::Thread::wait(std::chrono::seconds(1));
-                r = rConnector->connect( sConnectionDescription );
-                OSL_ASSERT( r.is() );
-                doWrite( r );
-                doRead( r );
-                bGotit = sal_True;
-            }
-            catch( ... )
-            {
-                printf( "Couldn't connect, retrying ...\n" );
-
-            }
-        }
-
-        r->close();
-
         try
         {
-            Sequence < sal_Int8 > seq(10);
-            r->write( seq );
-            OSL_FAIL( "expected exception not thrown" );
+            // Why is this wait necessary ????
+            osl::Thread::wait(std::chrono::seconds(1));
+            r = rConnector->connect( sConnectionDescription );
+            OSL_ASSERT( r.is() );
+            doWrite( r );
+            doRead( r );
+            bGotit = true;
         }
-        catch ( IOException & )
+        catch( ... )
         {
-            // everything is ok
-        }
-        catch ( ... )
-        {
-            OSL_FAIL( "wrong exception was thrown" );
-        }
+            printf( "Couldn't connect, retrying ...\n" );
 
-        thread.join();
+        }
     }
+
+    r->close();
+
+    try
+    {
+        Sequence < sal_Int8 > seq(10);
+        r->write( seq );
+        OSL_FAIL( "expected exception not thrown" );
+    }
+    catch ( IOException & )
+    {
+        // everything is ok
+    }
+    catch ( ... )
+    {
+        OSL_FAIL( "wrong exception was thrown" );
+    }
+
+    thread.join();
+}
+
 }
 
 
-int SAL_CALL main( int argc, char * argv[] )
+int main()
 {
     Reference< XMultiServiceFactory > xMgr(
-        createRegistryServiceFactory( OUString( "applicat.rdb") ) );
-
-    Reference< XImplementationRegistration > xImplReg(
-        xMgr->createInstance("com.sun.star.registry.ImplementationRegistration"), UNO_QUERY );
-    OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
-
-    OUString aLibName = "connector.uno" SAL_DLLEXTENSION;
-    xImplReg->registerImplementation(
-        OUString("com.sun.star.loader.SharedLibrary"), aLibName, Reference< XSimpleRegistry >() );
-
-    aLibName = "acceptor.uno" SAL_DLLEXTENSION;
-    xImplReg->registerImplementation(
-        OUString("com.sun.star.loader.SharedLibrary"), aLibName, Reference< XSimpleRegistry >() );
+        defaultBootstrap_InitialComponentContext()->getServiceManager(), UNO_QUERY );
 
     Reference < XAcceptor >  rAcceptor(
         xMgr->createInstance( "com.sun.star.connection.Acceptor" ) , UNO_QUERY );
@@ -192,12 +184,12 @@ int SAL_CALL main( int argc, char * argv[] )
 
     printf( "Testing sockets" );
     fflush( stdout );
-    testConnection( OUString("socket,host=localhost,port=2001"), rAcceptor , rConnector );
+    testConnection( "socket,host=localhost,port=2001", rAcceptor , rConnector );
     printf( " Done\n" );
 
     printf( "Testing pipe" );
     fflush( stdout );
-    testConnection( OUString("pipe,name=bla") , rAcceptorPipe , rConnector );
+    testConnection( "pipe,name=bla" , rAcceptorPipe , rConnector );
     printf( " Done\n" );
 
     // check, if erroneous strings make any problem
@@ -234,13 +226,13 @@ int SAL_CALL main( int argc, char * argv[] )
     }
 
 
-    MyThread thread( rAcceptor , OUString("socket,host=localhost,port=2001") );
+    MyThread thread( rAcceptor , "socket,host=localhost,port=2001" );
     thread.create();
 
-    osl::Thread::wait(std::chrono::nanoseconds(1));
+    osl::Thread::wait(std::chrono::seconds(1));
     try
     {
-        rAcceptor->accept( OUString("socket,host=localhost,port=2001") );
+        rAcceptor->accept( "socket,host=localhost,port=2001" );
         OSL_FAIL( "already existing exception expected" );
     }
     catch( AlreadyAcceptingException & )

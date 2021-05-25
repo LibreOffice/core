@@ -17,4 +17,10 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,io,\
     CppunitTest_io_textinputstream \
 ))
 
+ifneq (,$(filter Executable_io-testconnection,$(MAKECMDGOALS)))
+$(eval $(call gb_Module_add_targets,io, \
+    Executable_io-testconnection \
+))
+endif
+
 # vim:set noet sw=4 ts=4:
