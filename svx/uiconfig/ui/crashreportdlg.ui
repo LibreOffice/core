@@ -75,7 +75,7 @@ Thank you for your help in improving %PRODUCTNAME.</property>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="position">4</property>
+            <property name="position">5</property>
           </packing>
         </child>
         <child>
@@ -137,6 +137,20 @@ You can help us to fix this issue by sending an anonymous crash report to the %P
             <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLinkButton" id="btnPrivacyPolicy">
+            <property name="label" translatable="yes" context="crashreportdlg|privacy">Privacy Policy</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="relief">none</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">4</property>
           </packing>
         </child>
       </object>

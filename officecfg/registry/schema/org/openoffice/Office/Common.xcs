@@ -2146,6 +2146,11 @@
           <desc>Specifies the URL used for Install Java message box.</desc>
         </info>
       </prop>
+      <prop oor:name="PrivacyPolicyURL" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Specifies the URL for a privacy policy.</desc>
+        </info>
+      </prop>
     </group>
     <group oor:name="History">
       <!-- OldLocation: soffice.ini -->
