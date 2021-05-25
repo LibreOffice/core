@@ -579,7 +579,7 @@ void ViewSettings::finalizeImport()
         aPropMap.setProperty( PROP_GridColor, rxActiveSheetView->getGridColor( getBaseFilter() ));
         aPropMap.setProperty( PROP_ShowPageBreakPreview, rxActiveSheetView->isPageBreakPreview());
         aPropMap.setProperty( PROP_ShowFormulas, rxActiveSheetView->mbShowFormulas);
-        aPropMap.setProperty( PROP_ShowGrid, rxActiveSheetView->mbShowGrid);
+        aPropMap.setProperty( PROP_ShowGrid, true);
         aPropMap.setProperty( PROP_HasColumnRowHeaders, rxActiveSheetView->mbShowHeadings);
         aPropMap.setProperty( PROP_ShowZeroValues, rxActiveSheetView->mbShowZeros);
         aPropMap.setProperty( PROP_IsOutlineSymbolsSet, rxActiveSheetView->mbShowOutline);
