@@ -1421,6 +1421,11 @@ bool ScDocShell::ExecuteChangeProtectionDialog( bool bJustQueryIfProtected )
 
 void ScDocShell::DoRecalc( bool bApi )
 {
+    if (m_aDocument.IsInDocShellRecalc())
+    {
+        SAL_WARN("sc","ScDocShell::DoRecalc tries re-entering while in Recalc; probably Forms->BASIC->Dispatcher.");
+        return;
+    }
     ScDocShellRecalcGuard aGuard(m_aDocument);
     bool bDone = false;
     ScTabViewShell* pSh = GetBestViewShell();
@@ -1467,6 +1472,11 @@ void ScDocShell::DoRecalc( bool bApi )
 
 void ScDocShell::DoHardRecalc()
 {
+    if (m_aDocument.IsInDocShellRecalc())
+    {
+        SAL_WARN("sc","ScDocShell::DoHardRecalc tries re-entering while in Recalc; probably Forms->BASIC->Dispatcher.");
+        return;
+    }
     auto start = std::chrono::steady_clock::now();
     ScDocShellRecalcGuard aGuard(m_aDocument);
     weld::WaitObject aWaitObj( GetActiveDialogParent() );
