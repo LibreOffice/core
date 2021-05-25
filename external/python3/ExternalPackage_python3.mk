@@ -106,7 +106,7 @@ $(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-cor
 	LO_lib/_sha3.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/_sha512.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/_socket.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/spwd.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	$(if $(filter FREEBSD,$(OS)),,  LO_lib/spwd.$(python3_EXTENSION_MODULE_SUFFIX).so) \
 	$(if $(ENABLE_OPENSSL), \
 		LO_lib/_ssl.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	) \
@@ -137,6 +137,11 @@ endif
 endif
 
 # that one is generated...
+ifeq ($(HOST_PLATFORM),x86_64-unknown-freebsd12.2)
+$(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib,\
+	LO_lib/_sysconfigdata__freebsd12_.py \
+))
+else
 # note: python configure overrides config.guess with something that doesn't
 # put -pc in its linux platform triplets, so filter that...
 ifneq ($(OS),WNT)
@@ -148,6 +153,7 @@ else
 $(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib,\
 	LO_lib/_sysconfigdata_$(if $(ENABLE_DBGUTIL),d)_$(python3_MACHDEP)_$(subst i686,i386,$(subst -pc,,$(HOST_PLATFORM))).py \
 ))
+endif
 endif
 endif
 
