@@ -246,7 +246,7 @@ void SwView::SetVisArea( const tools::Rectangle &rRect, bool bUpdateScrollbar )
 
     if ( m_pWrtShell )
     {
-        m_pWrtShell->VisPortChgd( m_aVisArea );
+        m_pWrtShell->VisPortChgd( SwRect(m_aVisArea) );
         if ( aOldSz != m_pWrtShell->VisArea().SSize() &&
              ( std::abs(aOldSz.Width() - m_pWrtShell->VisArea().Width()) > 2 ||
                 std::abs(aOldSz.Height() - m_pWrtShell->VisArea().Height()) > 2 ) )

@@ -140,7 +140,7 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
     // left difference is only considered, if requested.
     if( !IsObjFly() )
     {
-        SwRect aSnapRect = GetObject().GetSnapRect();
+        SwRect aSnapRect(GetObject().GetSnapRect());
         if ( rAnchorFrame.IsVertical() )
         {
             rAnchorFrame.SwitchVerticalToHorizontal( aSnapRect );
@@ -237,7 +237,7 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
 
             // move drawing object to set its correct relative position.
             {
-                SwRect aSnapRect = GetObject().GetSnapRect();
+                SwRect aSnapRect(GetObject().GetSnapRect());
                 if ( rAnchorFrame.IsVertical() )
                     rAnchorFrame.SwitchVerticalToHorizontal( aSnapRect );
 

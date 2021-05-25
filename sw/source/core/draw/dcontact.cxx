@@ -1237,7 +1237,7 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                 SwFrameFormat::tLayoutDir eLayoutDir =
                                 pAnchoredDrawObj->GetFrameFormat().GetLayoutDir();
                 // use geometry of drawing object
-                SwRect aObjRect( rObj.GetSnapRect() );
+                tools::Rectangle aObjRect( rObj.GetSnapRect() );
                 // If drawing object is a member of a group, the adjustment
                 // of the positioning and the alignment attributes has to
                 // be done for the top group object.
@@ -1311,9 +1311,9 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                     // #i34748# - use new method
                     // <SwAnchoredDrawObject::SetLastObjRect(..)>.
                     const_cast<SwAnchoredDrawObject*>(pAnchoredDrawObj)
-                                    ->SetLastObjRect( aObjRect.SVRect() );
+                                    ->SetLastObjRect( aObjRect );
                 }
-                else if ( aObjRect.SSize() != aOldObjRect.GetSize() )
+                else if ( aObjRect.GetSize() != aOldObjRect.GetSize() )
                 {
                     InvalidateObjs_();
                     // #i35007# - notify anchor frame
@@ -1990,7 +1990,7 @@ void SwDrawContact::ChkPage()
     SwPageFrame* pPg = ( maAnchoredDrawObj.GetAnchorFrame() &&
                        maAnchoredDrawObj.GetAnchorFrame()->IsPageFrame() )
                      ? GetPageFrame()
-                     : FindPage( GetMaster()->GetCurrentBoundRect() );
+                     : FindPage( SwRect(GetMaster()->GetCurrentBoundRect()) );
     if ( GetPageFrame() == pPg )
         return;
 

@@ -1276,7 +1276,7 @@ SwRect SwFEShell::GetFlyRect() const
 SwRect SwFEShell::GetObjRect() const
 {
     if( Imp()->HasDrawView() )
-        return Imp()->GetDrawView()->GetAllMarkedRect();
+        return SwRect(Imp()->GetDrawView()->GetAllMarkedRect());
     else
     {
         SwRect aRect;
@@ -1618,7 +1618,7 @@ const SwFrameFormat* SwFEShell::GetFormatFromObj( const Point& rPt, SwRect** pRe
             else if ( pObj->GetUserCall() ) //not for group objects
                 pRet = static_cast<SwDrawContact*>(pObj->GetUserCall())->GetFormat();
             if(pRet && pRectToFill)
-                **pRectToFill = pObj->GetCurrentBoundRect();
+                **pRectToFill = SwRect(pObj->GetCurrentBoundRect());
         }
         pDView->SetHitTolerancePixel( nOld );
     }

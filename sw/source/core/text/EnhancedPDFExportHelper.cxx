@@ -1808,7 +1808,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                 // Turn media shapes into Screen annotations.
                 if (SdrObject* pObject = pFrameFormat->FindRealSdrObject())
                 {
-                    SwRect aSnapRect = pObject->GetSnapRect();
+                    SwRect aSnapRect(pObject->GetSnapRect());
                     std::vector<sal_Int32> aScreenPageNums = CalcOutputPageNums(aSnapRect);
                     if (aScreenPageNums.empty())
                         continue;

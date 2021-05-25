@@ -45,7 +45,7 @@ public:
     inline SwRect( tools::Long X, tools::Long Y, tools::Long Width, tools::Long Height );
 
     //SV-SS e.g. SwRect( pWin->GetClipRect() );
-    SwRect( const tools::Rectangle &rRect );
+    explicit SwRect( const tools::Rectangle &rRect );
 
     //Set-Methods
     inline void Chg( const Point& rNP, const Size &rNS );

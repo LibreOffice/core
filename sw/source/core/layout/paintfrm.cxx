@@ -1200,7 +1200,7 @@ void SwAlignRect( SwRect &rRect, const SwViewShell *pSh, const vcl::RenderContex
         bZeroHeight = true;
     }
 
-    rRect = pOut->PixelToLogic( aAlignedPxRect.SVRect() );
+    rRect = SwRect(pOut->PixelToLogic( aAlignedPxRect.SVRect() ));
 
     // Consider zero width/height and adjust calculated aligned twip rectangle.
     // Reset width/height to zero; previous negative width/height haven't to be considered.
@@ -3914,7 +3914,7 @@ bool SwFlyFrame::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
                     //right now. Afterwards they must not be printed if the
                     //page over which they float position wise gets printed.
                     const SwPageFrame *pPage = pAnch->FindPageFrame();
-                    if ( !pPage->getFrameArea().IsOver( pObj->GetCurrentBoundRect() ) )
+                    if ( !pPage->getFrameArea().IsOver( SwRect(pObj->GetCurrentBoundRect()) ) )
                         pAnch = nullptr;
                 }
             }
@@ -5801,7 +5801,7 @@ bool SwPageFrame::IsLeftShadowNeeded() const
     const SwPostItMgr *pMgr = _pViewShell->GetPostItMgr();
     SwRect aAlignedPageRect( _rPageRect );
     ::SwAlignRect( aAlignedPageRect, _pViewShell, pRenderContext );
-    SwRect aPagePxRect = pRenderContext->LogicToPixel( aAlignedPageRect.SVRect() );
+    SwRect aPagePxRect(pRenderContext->LogicToPixel( aAlignedPageRect.SVRect() ));
 
     tools::Long lShadowAdjustment = snShadowPxWidth - 1; // TODO: extract this
 
@@ -5917,7 +5917,7 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
 
     SwRect aAlignedPageRect( _rPageRect );
     ::SwAlignRect( aAlignedPageRect, _pViewShell, _pViewShell->GetOut() );
-    SwRect aPagePxRect = _pViewShell->GetOut()->LogicToPixel( aAlignedPageRect.SVRect() );
+    SwRect aPagePxRect(_pViewShell->GetOut()->LogicToPixel( aAlignedPageRect.SVRect() ));
 
     if (aShadowColor != SwViewOption::GetShadowColor())
     {
@@ -6168,7 +6168,7 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
 {
     SwRect aAlignedPageRect( _rPageRect );
     ::SwAlignRect( aAlignedPageRect, _pViewShell, pRenderContext );
-    SwRect aPagePxRect = pRenderContext->LogicToPixel( aAlignedPageRect.SVRect() );
+    SwRect aPagePxRect(pRenderContext->LogicToPixel( aAlignedPageRect.SVRect() ));
     aPagePxRect.AddBottom( snShadowPxWidth + 1 );
     aPagePxRect.AddTop( - snShadowPxWidth - 1 );
 
@@ -6181,7 +6181,7 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
     if(bLeftShadow) aPagePxRect.Left( aTmpRect.Left() - snShadowPxWidth - 1);
     if(bRightShadow) aPagePxRect.Right( aTmpRect.Right() + snShadowPxWidth + 1);
 
-    _orBorderAndShadowBoundRect = pRenderContext->PixelToLogic( aPagePxRect.SVRect() );
+    _orBorderAndShadowBoundRect = SwRect(pRenderContext->PixelToLogic( aPagePxRect.SVRect() ));
 }
 
 SwRect SwPageFrame::GetBoundRect(OutputDevice const * pOutputDevice) const

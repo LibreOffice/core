@@ -401,7 +401,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
                     if ( bPaint )
                     {
                         if (GetWin()->SupportsDoubleBuffering())
-                            InvalidateWindows(aRect.SVRect());
+                            InvalidateWindows(aRect);
                         else
                         {
                             // #i75172# begin DrawingLayer paint
@@ -417,7 +417,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
                             if (!comphelper::LibreOfficeKit::isActive())
                                 pCurrentLayout->PaintSwFrame( *mpOut, aRect );
                             else
-                                pCurrentLayout->GetCurrShell()->InvalidateWindows(aRect.SVRect());
+                                pCurrentLayout->GetCurrShell()->InvalidateWindows(aRect);
 
                             // #i75172# end DrawingLayer paint
                             DLPostPaint2(true);
@@ -1859,7 +1859,7 @@ void SwViewShell::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
 
             for(const auto& rRectangle : aRectangles)
             {
-                Imp()->AddPaintRect(rRectangle);
+                Imp()->AddPaintRect(SwRect(rRectangle));
             }
 
             //RegionHandle hHdl( aRegion.BeginEnumRects() );
@@ -1938,7 +1938,7 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
     VisPortChgd(SwRect(aOutRect));
 
     // Invoke SwLayAction if layout is not yet ready.
-    CheckInvalidForPaint(aOutRect);
+    CheckInvalidForPaint(SwRect(aOutRect));
 
     // draw - works in logic coordinates
     Paint(rDevice, aOutRect);

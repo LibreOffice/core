@@ -1112,7 +1112,7 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef, const Fraction& xFact, const
         // need to save aOutRect to FrameArea, will be restored to aOutRect in
         // SwVirtFlyDrawObj::NbcMove currently for TransformableSwFrames
         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*GetFlyFrame());
-        aFrm.setSwRect(m_aOutRect);
+        aFrm.setSwRect(SwRect(m_aOutRect));
     }
 
     // keep old hack - not clear what happens here

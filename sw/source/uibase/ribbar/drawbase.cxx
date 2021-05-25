@@ -528,7 +528,7 @@ Point  SwDrawBase::GetDefaultCenterPos() const
     SwRect aVisArea(m_pSh->VisArea());
     if (comphelper::LibreOfficeKit::isActive())
     {
-        aVisArea = m_pSh->getLOKVisibleArea();
+        aVisArea = SwRect(m_pSh->getLOKVisibleArea());
         aVisArea.Intersection(SwRect(Point(), aDocSz));
     }
 

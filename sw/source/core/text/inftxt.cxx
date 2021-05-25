@@ -1089,8 +1089,7 @@ void SwTextPaintInfo::DrawPostIts( bool bScript ) const
     if ( GetTextFrame()->IsVertical() )
         GetTextFrame()->SwitchHorizontalToVertical( aTmpRect );
 
-    const tools::Rectangle aRect( aTmpRect.SVRect() );
-    SwViewOption::PaintPostIts( const_cast<OutputDevice*>(GetOut()), aRect, bScript );
+    SwViewOption::PaintPostIts( const_cast<OutputDevice*>(GetOut()), aTmpRect, bScript );
 
 }
 

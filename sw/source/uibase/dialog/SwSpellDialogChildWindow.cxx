@@ -778,7 +778,7 @@ bool SwSpellDialogChildWindow::FindNextDrawTextError_Impl(SwWrtShell& rSh)
                     if(pCurrentTextObj)
                         pDrView->SdrEndTextEdit( true );
                     // and the found one should be activated
-                    rSh.MakeVisible(pTextObj->GetLogicRect());
+                    rSh.MakeVisible(SwRect(pTextObj->GetLogicRect()));
                     Point aTmp( 0,0 );
                     rSh.SelectObj( aTmp, 0, pTextObj );
                     SdrPageView* pPV = pDrView->GetSdrPageView();

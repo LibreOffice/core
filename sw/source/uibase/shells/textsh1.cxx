@@ -1430,7 +1430,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if (pDlg->Execute() == RET_OK)
             {
                 pFieldBM->Invalidate();
-                rWrtSh.InvalidateWindows( rWrtSh.GetView().GetVisArea() );
+                rWrtSh.InvalidateWindows( SwRect(rWrtSh.GetView().GetVisArea()) );
                 rWrtSh.UpdateCursor(); // cursor position might be invalid
             }
         }
@@ -1442,7 +1442,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if (pDlg->Execute() == RET_OK)
             {
                 rDateField.Invalidate();
-                rWrtSh.InvalidateWindows( rWrtSh.GetView().GetVisArea() );
+                rWrtSh.InvalidateWindows( SwRect(rWrtSh.GetView().GetVisArea()) );
                 rWrtSh.UpdateCursor(); // cursor position might be invalid
             }
         }
