@@ -1134,10 +1134,10 @@ css::uno::Sequence< css::style::TabStop > SwAccessibleParagraph::GetCurrentTabSt
 
         SwRect aTmpRect(0, 0, tabs[0].Position, 0);
 
-        tools::Rectangle aScreenRect( GetMap()->CoreToPixel( aTmpRect.SVRect() ));
+        tools::Rectangle aScreenRect( GetMap()->CoreToPixel( aTmpRect ));
         SwRect aFrameLogBounds( GetBounds( *(GetMap()) ) ); // twip rel to doc root
 
-        Point aFramePixPos( GetMap()->CoreToPixel( aFrameLogBounds.SVRect() ).TopLeft() );
+        Point aFramePixPos( GetMap()->CoreToPixel( aFrameLogBounds ).TopLeft() );
         aScreenRect.Move( -aFramePixPos.X(), -aFramePixPos.Y() );
 
         tabs[0].Position = aScreenRect.GetWidth();
@@ -2081,10 +2081,10 @@ awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
         throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
     }
 
-    tools::Rectangle aScreenRect( GetMap()->CoreToPixel( aCoreRect.SVRect() ));
+    tools::Rectangle aScreenRect( GetMap()->CoreToPixel( aCoreRect ));
     SwRect aFrameLogBounds( GetBounds( *(GetMap()) ) ); // twip rel to doc root
 
-    Point aFramePixPos( GetMap()->CoreToPixel( aFrameLogBounds.SVRect() ).TopLeft() );
+    Point aFramePixPos( GetMap()->CoreToPixel( aFrameLogBounds ).TopLeft() );
     aScreenRect.Move( -aFramePixPos.getX(), -aFramePixPos.getY() );
 
     // convert into AWT Rectangle
@@ -2116,7 +2116,7 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
     }
     Point aPoint( rPoint.X, rPoint.Y );
     SwRect aLogBounds( GetBounds( *(GetMap()), GetFrame() ) ); // twip rel to doc root
-    Point aPixPos( GetMap()->CoreToPixel( aLogBounds.SVRect() ).TopLeft() );
+    Point aPixPos( GetMap()->CoreToPixel( aLogBounds ).TopLeft() );
     aPoint.setX(aPoint.getX() + aPixPos.getX());
     aPoint.setY(aPoint.getY() + aPixPos.getY());
     Point aCorePoint( GetMap()->PixelToCore( aPoint ) );
@@ -2515,7 +2515,7 @@ sal_Bool SwAccessibleParagraph::scrollSubstringTo( sal_Int32 nStartIndex,
 
     /* Offset the values relative to the view shell frame */
     SwRect aFrameLogBounds( GetBounds( *(GetMap()) ) ); // twip rel to doc root
-    Point aFramePixPos( GetMap()->CoreToPixel( aFrameLogBounds.SVRect() ).TopLeft() );
+    Point aFramePixPos( GetMap()->CoreToPixel( aFrameLogBounds ).TopLeft() );
     sP += aFramePixPos;
     eP += aFramePixPos;
 
@@ -3309,10 +3309,10 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getNumberOfLineWithCaret()
                     throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
                 }
 
-                tools::Rectangle aScreenRect( GetMap()->CoreToPixel( aCursorCoreRect.SVRect() ));
+                tools::Rectangle aScreenRect( GetMap()->CoreToPixel( aCursorCoreRect ));
 
                 SwRect aFrameLogBounds( GetBounds( *(GetMap()) ) ); // twip rel to doc root
-                Point aFramePixPos( GetMap()->CoreToPixel( aFrameLogBounds.SVRect() ).TopLeft() );
+                Point aFramePixPos( GetMap()->CoreToPixel( aFrameLogBounds ).TopLeft() );
                 aScreenRect.Move( -aFramePixPos.getX(), -aFramePixPos.getY() );
 
                 // convert into AWT Rectangle
