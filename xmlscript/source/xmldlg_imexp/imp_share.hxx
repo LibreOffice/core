@@ -192,8 +192,9 @@ class ElementBase
     : public ::cppu::WeakImplHelper< css::xml::input::XElement >
 {
 protected:
-    rtl::Reference<DialogImport> const m_xImport;
-    rtl::Reference<ElementBase> const m_xParent;
+    // We deliberately store these as raw pointers, otherwise we get reference cycles between DialogImport and the elements
+    DialogImport* m_pImport;
+    ElementBase* m_pParent;
 private:
     const sal_Int32 _nUid;
     const OUString _aLocalName;
@@ -957,7 +958,7 @@ public:
         ElementBase * pParent, DialogImport * pImport )
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {
-            m_xContainer.set( m_xImport->_xDialogModelFactory->createInstance( "com.sun.star.awt.UnoMultiPageModel" ), css::uno::UNO_QUERY );
+            m_xContainer.set( m_pImport->_xDialogModelFactory->createInstance( "com.sun.star.awt.UnoMultiPageModel" ), css::uno::UNO_QUERY );
         }
 private:
     css::uno::Reference< css::container::XNameContainer > m_xContainer;
@@ -1000,7 +1001,7 @@ public:
         ElementBase * pParent, DialogImport * pImport )
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {
-            m_xContainer.set( m_xImport->_xDialogModelFactory->createInstance( "com.sun.star.awt.UnoPageModel" ), css::uno::UNO_QUERY );
+            m_xContainer.set( m_pImport->_xDialogModelFactory->createInstance( "com.sun.star.awt.UnoPageModel" ), css::uno::UNO_QUERY );
         }
 private:
     css::uno::Reference< css::container::XNameContainer > m_xContainer;

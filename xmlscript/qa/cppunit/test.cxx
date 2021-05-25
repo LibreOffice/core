@@ -95,6 +95,10 @@ Reference<container::XNameContainer> XmlScriptTest::importFile(std::u16string_vi
     ::xmlscript::importDialogModel(::xmlscript::createInputStream(bytes), xDialogModel,
                                    mxComponentContext, nullptr);
 
+    Reference<lang::XComponent> xDialogModelComp(xDialogModel, UNO_QUERY);
+    if (xDialogModelComp)
+        xDialogModelComp->dispose();
+
     return xDialogModel;
 }
 
@@ -179,6 +183,10 @@ void XmlScriptTest::testBasicElements()
     assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:scrollbar[1]", "id", "scrollbar1");
     assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:formattedfield[1]", "id", "ffield0");
     assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:formattedfield[2]", "id", "ffield1");
+
+    Reference<lang::XComponent> xDialogModelComp(xModel, UNO_QUERY);
+    if (xDialogModelComp)
+        xDialogModelComp->dispose();
 }
 
 void XmlScriptTest::testEmptyPopupItems()
