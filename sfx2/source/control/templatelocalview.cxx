@@ -613,7 +613,41 @@ bool TemplateLocalView::renameItem(ThumbnailViewItem* pItem, const OUString& sNe
         nDocId = pDocItem->mnDocId;
     }
 
-    return mpDocTemplates->SetName( sNewTitle, nRegionId, nDocId );
+    bool bRes = mpDocTemplates->SetName( sNewTitle, nRegionId, nDocId );
+    if(bRes)
+    {
+        for (auto & pRegion : maRegions)
+        {
+            if (pRegion->mnId == nRegionId + 1 )
+            {
+                for(auto & aTemplate : pRegion->maTemplates)
+                {
+                    if(aTemplate.nId == nDocId + 1)
+                    {
+                        aTemplate.aName = sNewTitle;
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+        OUString sRegionName;
+        for (auto & aTemplate : maAllTemplates)
+        {
+            if (aTemplate.nRegionId == nRegionId && aTemplate.nDocId == nDocId)
+            {
+                aTemplate.aName = sNewTitle;
+                sRegionName = aTemplate.aRegionName;
+                break;
+            }
+        }
+
+        OUString sHelpText = SfxResId(STR_TEMPLATE_TOOLTIP);
+        sHelpText = (sHelpText.replaceFirst("$1", sNewTitle)).replaceFirst("$2", sRegionName);
+        pItem->setHelpText(sHelpText);
+        pItem->maTitle = sNewTitle;
+    }
+    return bRes;
 }
 
 void TemplateLocalView::insertItems(const std::vector<TemplateItemProperties> &rTemplates, bool isRegionSelected, bool bShowCategoryInTooltip)
