@@ -660,9 +660,12 @@ void ImpEditView::ImplDrawHighlightRect( OutputDevice* _pTarget, const Point& rD
         {
             MapUnit eDevUnit = _pTarget->GetMapMode().GetMapUnit();
             tools::Rectangle aSelRect(rDocPosTopLeft, rDocPosBottomRight);
-            aSelRect = mpLOKSpecialPositioning->GetWindowPos(aSelRect, eDevUnit);
-            const Point aRefPoint = mpLOKSpecialPositioning->GetRefPoint();
-            aSelRect.Move(-aRefPoint.X(), -aRefPoint.Y());
+            aSelRect = GetWindowPos(aSelRect);
+            Point aRefPointLogical = GetOutputArea().TopLeft();
+            // Get the relative coordinates w.r.t refpoint in display units.
+            aSelRect.Move(-aRefPointLogical.X(), -aRefPointLogical.Y());
+            // Convert from display unit to twips.
+            aSelRect = OutputDevice::LogicToLogic(aSelRect, MapMode(eDevUnit), MapMode(MapUnit::MapTwip));
 
             tools::Polygon aTmpPoly(4);
             aTmpPoly[0] = aSelRect.TopLeft();
