@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "66dbfc35_45afb997",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 5367,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-05-25T09:11:24Z",
+      "side": 1,
+      "message": "\u003e Well, what i saw in the OOXML standard there were only that information, what \"these values are input parameters for equations, and they do not have unit\" but i did not find any reference for the range for these.",
+      "parentUuid": "8431d386_1795686a",
+      "range": {
+        "startLine": 5367,
+        "startChar": 51,
+        "endLine": 5367,
+        "endChar": 55
+      },
+      "revId": "0b84881d185b3fa53dbc6128575317c7f2b0589f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0dc86ed9_0d57c70b",
         "filename": "oox/source/export/drawingml.cxx",
         "patchSetId": 10
