@@ -264,6 +264,14 @@ static sal_Int32 osl_psz_getServicePort (
 static void osl_psz_getLastSocketErrorDescription (
     oslSocket Socket, char* pBuffer, sal_uInt32 BufferSize);
 
+namespace {
+
+int convertToMs(TimeValue const * value) {
+    return value->Seconds * 1000 + value->Nanosec / 1000000; //TODO: overflow
+}
+
+}
+
 static oslSocket createSocketImpl()
 {
     oslSocket pSocket;
@@ -1328,10 +1336,7 @@ oslSocketResult SAL_CALL osl_connectSocketTo(oslSocket pSocket,
                                     oslSocketAddr pAddr,
                                     const TimeValue* pTimeout)
 {
-    fd_set   WriteSet;
-    fd_set   ExcptSet;
     int      ReadyHandles;
-    struct timeval  tv;
 
     SAL_WARN_IF( !pSocket, "sal.osl", "undefined socket" );
 
@@ -1387,30 +1392,16 @@ oslSocketResult SAL_CALL osl_connectSocketTo(oslSocket pSocket,
         return osl_Socket_Error;
     }
 
-    /* prepare select set for socket  */
-    FD_ZERO(&WriteSet);
-    FD_ZERO(&ExcptSet);
-    FD_SET(pSocket->m_Socket, &WriteSet);
-    FD_SET(pSocket->m_Socket, &ExcptSet);
+    /* prepare poll set for socket  */
+    pollfd Set = {pSocket->m_Socket, POLLPRI | POLLOUT, 0};
 
-    /* prepare timeout */
-    if (pTimeout)
-    {
-        /* divide milliseconds into seconds and microseconds */
-        tv.tv_sec=  pTimeout->Seconds;
-        tv.tv_usec= pTimeout->Nanosec / 1000;
-    }
-
-    /* select */
-    ReadyHandles= select(pSocket->m_Socket+1,
-                         nullptr,
-                         PTR_FD_SET(WriteSet),
-                         PTR_FD_SET(ExcptSet),
-                         pTimeout ? &tv : nullptr);
+    /* poll */
+    ReadyHandles= poll(&Set, 1,
+                         pTimeout ? convertToMs(pTimeout) : -1);
 
     if (ReadyHandles > 0)  /* connected */
     {
-        if ( FD_ISSET(pSocket->m_Socket, &WriteSet ) )
+        if ( (Set.revents & POLLOUT) != 0 )
         {
             int nErrorCode = 0;
             socklen_t nErrorSize = sizeof( nErrorCode );
@@ -1789,9 +1780,7 @@ static bool socket_poll (
     timeout = -1;
     if (pTimeout)
     {
-        /* Convert to [ms] */
-        timeout  = pTimeout->Seconds * 1000;
-        timeout += pTimeout->Nanosec / (1000 * 1000);
+        timeout  = convertToMs(pTimeout);
     }
 
     result = poll (&fds, 1, timeout);
