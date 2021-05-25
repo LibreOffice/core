@@ -419,6 +419,14 @@ bool ValueSet::KeyInput( const KeyEvent& rKeyEvent )
         case KEY_RETURN:
             if (GetStyle() & WB_NO_DIRECTSELECT)
             {
+                // tdf#142479 on return select the entry the cursor is in
+                // before calling Select
+                if (nCurPos != VALUESET_ITEM_NONEITEM)
+                {
+                    const sal_uInt16 nItemId = GetItemId(nCurPos);
+                    if (nItemId != mnSelItemId)
+                        SelectItem(nItemId);
+                }
                 Select();
                 break;
             }
