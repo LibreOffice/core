@@ -3,3 +3,4 @@
 --disable-symbols
 --disable-dependency-tracking
 --enable-odk
+--disable-online-update

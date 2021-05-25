@@ -37,9 +37,11 @@
 #include <com/sun/star/configuration/ReadWriteAccess.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <officecfg/Office/Common.hxx>
 #include <osl/file.hxx>
 #include <osl/security.hxx>
 #include <tools/diagnose_ex.h>
+#include <unotools/configmgr.hxx>
 
 using namespace ::css;
 
@@ -58,6 +60,7 @@ SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage(weld::Container* pPage, weld::Dia
     , m_xLastChecked(m_xBuilder->weld_label("lastchecked"))
     , m_xExtrasCheckBox(m_xBuilder->weld_check_button("extrabits"))
     , m_xUserAgentLabel(m_xBuilder->weld_label("useragent"))
+    , m_xPrivacyPolicyButton(m_xBuilder->weld_link_button("btnPrivacyPolicy"))
 {
     m_aNeverChecked = m_xNeverChecked->get_label();
 
@@ -65,6 +68,11 @@ SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage(weld::Container* pPage, weld::Dia
     m_xExtrasCheckBox->connect_toggled( LINK( this, SvxOnlineUpdateTabPage, ExtrasCheckHdl_Impl ) );
     m_xCheckNowButton->connect_clicked( LINK( this, SvxOnlineUpdateTabPage, CheckNowHdl_Impl ) );
     m_xChangePathButton->connect_clicked( LINK( this, SvxOnlineUpdateTabPage, FileDialogHdl_Impl ) );
+    m_xPrivacyPolicyButton->set_uri(
+        officecfg::Office::Common::Menus::PrivacyPolicyURL::get()
+        + "?type=updatecheck&LOvers=" + utl::ConfigManager::getProductVersion()
+        + "&LOlocale=" + LanguageTag(utl::ConfigManager::getUILocale()).getBcp47());
+
 
     uno::Reference < uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 

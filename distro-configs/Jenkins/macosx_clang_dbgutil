@@ -3,3 +3,4 @@
 --disable-dependency-tracking
 --enable-optimized
 --enable-odk
+--disable-online-update

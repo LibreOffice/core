@@ -27,6 +27,7 @@ private:
     std::unique_ptr<weld::TextView> mxEditPostUpload;
     std::unique_ptr<weld::TextView> mxFtBugReport;
     std::unique_ptr<weld::CheckButton> mxCBSafeMode;
+    std::unique_ptr<weld::LinkButton> mxPrivacyPolicyButton;
 
     OUString maSuccessMsg;
 

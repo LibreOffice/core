@@ -47,6 +47,7 @@ private:
     std::unique_ptr<weld::Label> m_xLastChecked;
     std::unique_ptr<weld::CheckButton> m_xExtrasCheckBox;
     std::unique_ptr<weld::Label> m_xUserAgentLabel;
+    std::unique_ptr<weld::LinkButton> m_xPrivacyPolicyButton;
 
     DECL_LINK(FileDialogHdl_Impl, weld::Button&, void);
     DECL_LINK(CheckNowHdl_Impl, weld::Button&, void);

@@ -12,6 +12,9 @@
 #include <desktop/crashreport.hxx>
 #include <sfx2/safemode.hxx>
 #include <comphelper/processfactory.hxx>
+#include <i18nlangtag/languagetag.hxx>
+#include <unotools/configmgr.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -25,6 +28,7 @@ CrashReportDialog::CrashReportDialog(weld::Window* pParent)
     , mxEditPostUpload(m_xBuilder->weld_text_view("ed_post"))
     , mxFtBugReport(m_xBuilder->weld_text_view("ed_bugreport"))
     , mxCBSafeMode(m_xBuilder->weld_check_button("check_safemode"))
+    , mxPrivacyPolicyButton(m_xBuilder->weld_link_button("btnPrivacyPolicy"))
 {
     maSuccessMsg = mxEditPostUpload->get_text();
 
@@ -36,6 +40,11 @@ CrashReportDialog::CrashReportDialog(weld::Window* pParent)
     mxBtnSend->connect_clicked(LINK(this, CrashReportDialog, BtnHdl));
     mxBtnCancel->connect_clicked(LINK(this, CrashReportDialog, BtnHdl));
     mxBtnClose->connect_clicked(LINK(this, CrashReportDialog, BtnHdl));
+
+    mxPrivacyPolicyButton->set_uri(
+        officecfg::Office::Common::Menus::PrivacyPolicyURL::get()
+        + "?type=crashreport&LOvers=" + utl::ConfigManager::getProductVersion()
+        + "&LOlocale=" + LanguageTag(utl::ConfigManager::getUILocale()).getBcp47());
 }
 
 CrashReportDialog::~CrashReportDialog() {}
