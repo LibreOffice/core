@@ -1468,9 +1468,33 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
     WritePresetShape("rect");
     Reference< XPropertySet > xProps(xShape, UNO_QUERY);
     if (xProps.is())
+    {
         WriteBlipFill(xProps, "Graphic");
-    mpFS->endElementNS(XML_p, XML_spPr);
+        // Do not forget to export the visible properties.
+        WriteFill( xProps );
+        WriteOutline( xProps );
+        WriteShapeEffects( xProps );
 
+        bool bHas3DEffectinShape = false;
+        uno::Sequence<beans::PropertyValue> grabBag;
+        if (xProps->getPropertySetInfo()->hasPropertyByName("InteropGrabBag"))
+            xProps->getPropertyValue("InteropGrabBag") >>= grabBag;
+
+        for (auto const& it : std::as_const(grabBag))
+            if (it.Name == "3DEffectProperties")
+                bHas3DEffectinShape = true;
+
+        if( bHas3DEffectinShape)
+            WriteShape3DEffects( xProps );
+    }
+    mpFS->endElementNS(XML_p, XML_spPr);
+    if (xProps.is() && 0)
+    {
+        // Dont forget to export the styles too.
+        mpFS->startElementNS(XML_p, XML_style);
+        WriteShapeStyle(xProps);
+        mpFS->endElementNS(XML_p, XML_style);
+    }
     WriteTextBox(xShape, XML_p);
 
     mpFS->endElementNS(XML_p, XML_sp);
