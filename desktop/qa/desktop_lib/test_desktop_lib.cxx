@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_oox.h>
 #include <memory>
 #include <string_view>
 
@@ -59,6 +60,10 @@
 
 #include <cppunit/TestAssert.h>
 
+#if USE_TLS_NSS
+#include <nss.h>
+#endif
+
 using namespace com::sun::star;
 using namespace desktop;
 
@@ -95,6 +100,7 @@ public:
     m_nTrackChanges(0)
     {
     }
+    ~DesktopLOKTest();
 
     void readFileIntoByteVector(
         std::u16string_view sFilename, std::vector<sal_uInt8> & rByteVector);
@@ -289,6 +295,13 @@ public:
 
     std::unique_ptr<LibLODocument_Impl> m_pDocument;
 };
+
+DesktopLOKTest::~DesktopLOKTest()
+{
+#if USE_TLS_NSS
+    NSS_Shutdown();
+#endif
+}
 
 static Control* GetFocusControl(vcl::Window const * pParent)
 {

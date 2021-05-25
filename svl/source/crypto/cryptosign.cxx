@@ -1926,6 +1926,8 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
                                  /*pwfn_arg=*/nullptr,
                                  /*decrypt_key_cb=*/nullptr,
                                  /*decrypt_key_cb_arg=*/nullptr);
+    comphelper::ScopeGuard aMessageGuard(
+        [&pCMSMessage]() { NSS_CMSMessage_Destroy(pCMSMessage); } );
     if (!NSS_CMSMessage_IsSigned(pCMSMessage))
     {
         SAL_WARN("svl.crypto", "ValidateSignature: message is not signed");
