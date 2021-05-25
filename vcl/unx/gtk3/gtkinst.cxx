@@ -3971,13 +3971,13 @@ namespace
         return pixbuf;
     }
 
-    GtkWidget* image_new_from_virtual_device(const VirtualDevice& rImageSurface)
+#if GTK_CHECK_VERSION(4, 0, 0)
+    GdkTexture* texture_new_from_virtual_device(const VirtualDevice& rImageSurface)
     {
-        GtkWidget* pImage = nullptr;
         cairo_surface_t* surface = get_underlying_cairo_surface(rImageSurface);
 
         Size aSize(rImageSurface.GetOutputSizePixel());
-#if GTK_CHECK_VERSION(4, 0, 0)
+
         double x_scale(1.0), y_scale(1.0);
         cairo_surface_get_device_scale(surface, &x_scale, &y_scale);
         cairo_surface_t* target = cairo_surface_create_similar_image(surface,
@@ -3985,17 +3985,12 @@ namespace
                                                                      aSize.Width() * x_scale,
                                                                      aSize.Height() * y_scale);
         cairo_surface_set_device_scale(target, x_scale, y_scale);
-#else
-        cairo_surface_t* target = cairo_surface_create_similar(surface,
-                                                               cairo_surface_get_content(surface),
-                                                               aSize.Width(),
-                                                               aSize.Height());
-#endif
+
         cairo_t* cr = cairo_create(target);
         cairo_set_source_surface(cr, surface, 0, 0);
         cairo_paint(cr);
         cairo_destroy(cr);
-#if GTK_CHECK_VERSION(4, 0, 0)
+
         GBytes* bytes = g_bytes_new_with_free_func(cairo_image_surface_get_data(target),
                                                    cairo_image_surface_get_height(target) *
                                                    cairo_image_surface_get_stride(target),
@@ -4010,12 +4005,45 @@ namespace
 
         g_bytes_unref (bytes);
 
-        pImage = gtk_image_new_from_paintable(GDK_PAINTABLE(texture));
+        cairo_surface_destroy(target);
+
+        return texture;
+    }
+
+    GtkWidget* image_new_from_virtual_device(const VirtualDevice& rImageSurface)
+    {
+        GdkTexture* texture = texture_new_from_virtual_device(rImageSurface);
+        return gtk_image_new_from_paintable(GDK_PAINTABLE(texture));
+    }
 #else
+    GtkWidget* image_new_from_virtual_device(const VirtualDevice& rImageSurface)
+    {
+        GtkWidget* pImage = nullptr;
+        cairo_surface_t* surface = get_underlying_cairo_surface(rImageSurface);
+
+        Size aSize(rImageSurface.GetOutputSizePixel());
+        cairo_surface_t* target = cairo_surface_create_similar(surface,
+                                                               cairo_surface_get_content(surface),
+                                                               aSize.Width(),
+                                                               aSize.Height());
+        cairo_t* cr = cairo_create(target);
+        cairo_set_source_surface(cr, surface, 0, 0);
+        cairo_paint(cr);
+        cairo_destroy(cr);
+
         pImage = gtk_image_new_from_surface(target);
-#endif
         cairo_surface_destroy(target);
         return pImage;
+    }
+#endif
+
+    void image_set_from_virtual_device(GtkImage* pImage, const VirtualDevice* pDevice)
+    {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_image_set_from_paintable(pImage, pDevice ? GDK_PAINTABLE(texture_new_from_virtual_device(*pDevice)) : nullptr);
+#else
+        gtk_image_set_from_surface(pImage, pDevice ? get_underlying_cairo_surface(*pDevice) : nullptr);
+#endif
     }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
@@ -8781,10 +8809,7 @@ public:
     virtual void set_image(VirtualDevice* pDevice) override
     {
         ensure_image_widget();
-        if (pDevice)
-            gtk_image_set_from_surface(m_pImage, get_underlying_cairo_surface(*pDevice));
-        else
-            gtk_image_set_from_surface(m_pImage, nullptr);
+        image_set_from_virtual_device(m_pImage, pDevice);
     }
 
     virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override
@@ -8797,7 +8822,7 @@ public:
             g_object_unref(pixbuf);
         }
         else
-            gtk_image_set_from_surface(m_pImage, nullptr);
+            image_set_from_virtual_device(m_pImage, nullptr);
     }
 
     virtual void insert_item(int pos, const OUString& rId, const OUString& rStr,
@@ -10332,7 +10357,6 @@ public:
     }
 };
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
 class GtkInstanceImage : public GtkInstanceWidget, public virtual weld::Image
 {
 private:
@@ -10356,10 +10380,7 @@ public:
 
     virtual void set_image(VirtualDevice* pDevice) override
     {
-        if (pDevice)
-            gtk_image_set_from_surface(m_pImage, get_underlying_cairo_surface(*pDevice));
-        else
-            gtk_image_set_from_surface(m_pImage, nullptr);
+        image_set_from_virtual_device(m_pImage, pDevice);
     }
 
     virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override
@@ -10370,7 +10391,6 @@ public:
             g_object_unref(pixbuf);
     }
 };
-#endif
 
 class GtkInstanceCalendar : public GtkInstanceWidget, public virtual weld::Calendar
 {
@@ -19444,16 +19464,11 @@ public:
 
     virtual std::unique_ptr<weld::Image> weld_image(const OString &id) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkImage* pImage = GTK_IMAGE(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pImage)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pImage));
         return std::make_unique<GtkInstanceImage>(pImage, this, false);
-#else
-        (void)id;
-        return nullptr;
-#endif
     }
 
     virtual std::unique_ptr<weld::Calendar> weld_calendar(const OString &id) override
