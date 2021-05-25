@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8431d386_1795686a",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 5367,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-05-25T07:29:19Z",
+      "side": 1,
+      "message": "Well, what i saw in the OOXML standard there were only that information, what \"these values are input parameters for equations, and they do not have unit\" but i did not find any reference for the range for these. I did not saw the equations so in the case of the triangle i checked carefully how this parameter affects the shape with modifying the xml. Then i find the maximum and minimum values for it. (by setting the floater on the UI to the end positions). In the case of the parallelogram i just checked the range only. So thank you for the help, and the information where i can find it. That cxx if i know well serves import functionality, but it is good for revealing these values for conversion.\nNext patch soon with the fix for the mentioned problems.",
+      "parentUuid": "b12dfb89_de6d7654",
+      "range": {
+        "startLine": 5367,
+        "startChar": 51,
+        "endLine": 5367,
+        "endChar": 55
+      },
+      "revId": "0b84881d185b3fa53dbc6128575317c7f2b0589f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0dc86ed9_0d57c70b",
         "filename": "oox/source/export/drawingml.cxx",
         "patchSetId": 10
@@ -36,6 +60,30 @@
       "writtenOn": "2021-05-21T10:56:16Z",
       "side": 1,
       "message": "That will not work in a simple way. Vertical mirror introduces a 180deg rotation of the text.",
+      "range": {
+        "startLine": 5373,
+        "startChar": 53,
+        "endLine": 5373,
+        "endChar": 62
+      },
+      "revId": "0b84881d185b3fa53dbc6128575317c7f2b0589f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0cfeb92d_5a816d1d",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 5373,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-05-25T07:29:19Z",
+      "side": 1,
+      "message": "Unfortunately that is true. What is your opinion, should i keep the custom geometry for this case?",
+      "parentUuid": "0dc86ed9_0d57c70b",
       "range": {
         "startLine": 5373,
         "startChar": 53,
