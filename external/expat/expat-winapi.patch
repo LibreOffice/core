@@ -11,3 +11,17 @@
  #  endif
  #endif /* not defined XML_STATIC */
  
+--- misc/expat-2.1.0/lib/xmlparse.c	2021-05-23 16:56:25.000000000 +0100
++++ misc/build/expat-2.1.0/lib/xmlparse.c	2021-05-25 12:42:11.997173600 +0100
+@@ -92,6 +92,11 @@
+ 
+ #include <expat_config.h>
+ 
++#ifdef _WIN32
++#  undef HAVE_GETRANDOM
++#  undef HAVE_SYSCALL_GETRANDOM
++#endif
++
+ #include "ascii.h"
+ #include "expat.h"
+ #include "siphash.h"
