@@ -14,6 +14,7 @@
 #include <iodetect.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
+#include <wrtsh.hxx>
 
 class TxtImportTest : public SwModelTestBase
 {
@@ -148,6 +149,27 @@ DECLARE_TXTIMPORT_TEST(testTdf60145_utf16bewithbom, "UTF16BEWITHBOM.txt")
     uno::Reference<text::XTextRange> xPara(getParagraph(1));
 
     CPPUNIT_ASSERT_EQUAL(OUString(u"漢a'"), xPara->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf115088)
+{
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Insert("1");
+    pWrtShell->SplitNode();
+    pWrtShell->Insert("1");
+
+    pWrtShell->SelAll();
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+    pWrtShell->Insert("test");
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+    dispatchCommand(mxComponent, ".uno:PasteUnformatted", {});
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    OUString aActual = xTextDocument->getText()->getString().copy(0, 2);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1\n
+    // - Actual  : 1t
+    CPPUNIT_ASSERT_EQUAL(OUString("1\n"), aActual.replaceAll("\r", "\n"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
