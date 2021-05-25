@@ -9,7 +9,6 @@
 
 #include "crashreportdlg.hxx"
 
-
 #include <desktop/crashreport.hxx>
 #include <sfx2/safemode.hxx>
 #include <comphelper/processfactory.hxx>
@@ -18,8 +17,7 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
 CrashReportDialog::CrashReportDialog(weld::Window* pParent)
-    : GenericDialogController(pParent, "svx/ui/crashreportdlg.ui",
-                            "CrashReportDialog")
+    : GenericDialogController(pParent, "svx/ui/crashreportdlg.ui", "CrashReportDialog")
     , mxBtnSend(m_xBuilder->weld_button("btn_send"))
     , mxBtnCancel(m_xBuilder->weld_button("btn_cancel"))
     , mxBtnClose(m_xBuilder->weld_button("btn_close"))
@@ -40,9 +38,7 @@ CrashReportDialog::CrashReportDialog(weld::Window* pParent)
     mxBtnClose->connect_clicked(LINK(this, CrashReportDialog, BtnHdl));
 }
 
-CrashReportDialog::~CrashReportDialog()
-{
-}
+CrashReportDialog::~CrashReportDialog() {}
 
 short CrashReportDialog::run()
 {
@@ -52,8 +48,8 @@ short CrashReportDialog::run()
     if (mxCBSafeMode->get_active())
     {
         sfx2::SafeMode::putFlag();
-        css::task::OfficeRestartManager::get(comphelper::getProcessComponentContext())->requestRestart(
-            css::uno::Reference< css::task::XInteractionHandler >());
+        css::task::OfficeRestartManager::get(comphelper::getProcessComponentContext())
+            ->requestRestart(css::uno::Reference<css::task::XInteractionHandler>());
     }
     return nRet;
 }
@@ -69,7 +65,8 @@ IMPL_LINK(CrashReportDialog, BtnHdl, weld::Button&, rBtn, void)
 
         if (bSuccess)
         {
-            OUString aProcessedMessage = maSuccessMsg.replaceAll("%CRASHID", aCrashID.replaceAll("Crash-ID=",""));
+            OUString aProcessedMessage
+                = maSuccessMsg.replaceAll("%CRASHID", aCrashID.replaceAll("Crash-ID=", ""));
 
             // vclbuilder seems to replace _ with ~ even in text
             mxEditPostUpload->set_text(aProcessedMessage.replaceAll("~", "_"));
