@@ -366,6 +366,9 @@
     <prop oor:name="VolunteerURL" oor:type="xs:string">
       <value>https://hub.libreoffice.org/volunteersupport/</value>
     </prop>
+    <prop oor:name="PrivacyPolicyURL" oor:type="xs:string">
+      <value>${PRIVACY_POLICY_URL}</value>
+    </prop>
   </node>
   <node oor:name="Forms">
     <node oor:name="ControlLayout">
