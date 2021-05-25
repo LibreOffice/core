@@ -12,20 +12,26 @@ AC_ARG_WITH(system-$1,
         [Use $1 from operating system instead of building and bundling it.]),,
     [with_system_$1="$with_system_libs"])
 AC_MSG_CHECKING([which $1 to use])
-if test "$with_system_$1" = "yes"; then
-    AC_MSG_RESULT([external])
-    SYSTEM_$2=TRUE
-    PKG_CHECK_MODULES([$2], [$3])
-    $2_CFLAGS=$(printf '%s' "${$2_CFLAGS}" | sed -e "s/-I/${ISYSTEM?}/g")
-    FilterLibs "${$2_LIBS}"
-    $2_LIBS="$filteredlibs"
+if test "$test_$1" != "no"; then
+    ENABLE_$2=TRUE
+    if test "$with_system_$1" = "yes"; then
+        AC_MSG_RESULT([external])
+        SYSTEM_$2=TRUE
+        PKG_CHECK_MODULES([$2], [$3])
+        $2_CFLAGS=$(printf '%s' "${$2_CFLAGS}" | sed -e "s/-I/${ISYSTEM?}/g")
+        FilterLibs "${$2_LIBS}"
+        $2_LIBS="$filteredlibs"
+    else
+        AC_MSG_RESULT([internal])
+        SYSTEM_$2=
+        $2_CFLAGS=$4
+        $2_LIBS=$5
+        BUILD_TYPE="$BUILD_TYPE $2"
+    fi
 else
-    AC_MSG_RESULT([internal])
-    SYSTEM_$2=
-    $2_CFLAGS=$4
-    $2_LIBS=$5
-    BUILD_TYPE="$BUILD_TYPE $2"
+    AC_MSG_RESULT([ignored])
 fi
+AC_SUBST([ENABLE_$2])
 AC_SUBST([SYSTEM_$2])
 AC_SUBST([$2_CFLAGS])
 AC_SUBST([$2_LIBS])
