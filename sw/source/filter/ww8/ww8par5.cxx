@@ -1332,7 +1332,7 @@ SwFltStackEntry *SwWW8FltRefStack::RefToVar(const SwField* pField,
         if (aResult != aFieldVarNames.end())
         {
             SwGetExpField aField( static_cast<SwGetExpFieldType*>(
-                rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::GetExp)), sName, nsSwGetSetExpType::GSE_STRING, 0);
+                m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::GetExp)), sName, nsSwGetSetExpType::GSE_STRING, 0);
             SwFormatField aTmp(aField);
             rEntry.pAttr.reset( aTmp.Clone() );
             pRet = &rEntry;
