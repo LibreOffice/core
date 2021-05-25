@@ -105,7 +105,7 @@ $(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-cor
 	LO_lib/_sha3.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
 	LO_lib/_sha512.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
 	LO_lib/_socket.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/spwd.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	$(if $(filter FREEBSD,$(OS)),, LO_lib/spwd.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so) \
 	$(if $(DISABLE_OPENSSL),, \
 		LO_lib/_ssl.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
 	) \
@@ -134,12 +134,18 @@ endif
 endif
 
 # that one is generated...
+ifeq ($(HOST_PLATFORM),x86_64-unknown-freebsd12.2)
+$(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib,\
+	LO_lib/_sysconfigdata__freebsd12_.py \
+))
+else
 # note: python configure overrides config.guess with something that doesn't
 # put -pc in its linux platform triplets, so filter that...
 ifneq ($(OS),WNT)
 $(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib,\
 	LO_lib/_sysconfigdata__$(python3_MACHDEP)_$(subst i686,i386,$(subst -pc,,$(HOST_PLATFORM))).py \
 ))
+endif
 endif
 
 # packages not shipped:
