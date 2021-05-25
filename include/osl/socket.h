@@ -611,22 +611,30 @@ SAL_DLLPUBLIC oslSocketError SAL_CALL osl_getLastSocketError(
                             oslSocket Socket);
 
 /** Type for the representation of socket sets.
+
+    @deprecated
 */
 typedef struct oslSocketSetImpl * oslSocketSet;
 
 /** Creates a set of sockets to be used with osl_demultiplexSocketEvents().
 
     @return A oslSocketSet or 0 if creation failed.
+
+    @deprecated
 */
 SAL_DLLPUBLIC oslSocketSet SAL_CALL osl_createSocketSet(void);
 
 /** Destroys an oslSocketSet.
+
+    @deprecated
 */
 SAL_DLLPUBLIC void SAL_CALL osl_destroySocketSet(oslSocketSet Set);
 
 /** Clears the set from all previously added sockets.
 
     @param Set the set to be cleared.
+
+    @deprecated
 */
 SAL_DLLPUBLIC void SAL_CALL osl_clearSocketSet(oslSocketSet Set);
 
@@ -635,6 +643,8 @@ SAL_DLLPUBLIC void SAL_CALL osl_clearSocketSet(oslSocketSet Set);
 
     @param Set the set were the socket is added.
     @param Socket the socket to be added.
+
+    @deprecated
 */
 SAL_DLLPUBLIC void SAL_CALL osl_addToSocketSet(oslSocketSet Set, oslSocket Socket);
 
@@ -642,6 +652,8 @@ SAL_DLLPUBLIC void SAL_CALL osl_addToSocketSet(oslSocketSet Set, oslSocket Socke
 
     @param Set the set were the socket is removed from.
     @param Socket the socket to be removed.
+
+    @deprecated
 */
 SAL_DLLPUBLIC void SAL_CALL osl_removeFromSocketSet(oslSocketSet Set, oslSocket Socket);
 
@@ -651,6 +663,8 @@ SAL_DLLPUBLIC void SAL_CALL osl_removeFromSocketSet(oslSocketSet Set, oslSocket 
     @param Socket check if this socket is in the set.
 
     @retval sal_True if socket is in the set.
+
+    @deprecated
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isInSocketSet(oslSocketSet Set, oslSocket Socket);
 
@@ -667,6 +681,8 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isInSocketSet(oslSocketSet Set, oslSocket So
 
     @return -1 on errors, otherwise the number of sockets with pending events. In case of timeout, the
         number might be 0.
+
+    @deprecated
 */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_demultiplexSocketEvents(
                             oslSocketSet IncomingSet,
