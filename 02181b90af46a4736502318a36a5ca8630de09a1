@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "90fa85e0_533207da",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-25T05:33:55Z",
+      "side": 1,
+      "message": "A nitpick: whenever you perform a survey, you are most likely to hear from those who have problems, than from those who are OK with the status quo. Thus in fact, surveys often are severely biased, with the vocal minority creating the most feedback. Hence the wide use of telemetry in many products, that is actually more useful - but we don\u0027t have that great tool :-(",
+      "revId": "02181b90af46a4736502318a36a5ca8630de09a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
