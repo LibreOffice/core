@@ -114,6 +114,8 @@ ScRange ScClipParam::getWholeRange() const
 void ScClipParam::transpose(const ScDocument& rSrcDoc, bool bIncludeFiltered,
                             bool bIsMultiRangeRowFilteredTranspose)
 {
+    mbTransposed = true;
+
     switch (meDirection)
     {
         case Column:
@@ -183,5 +185,7 @@ void ScClipParam::transpose(const ScDocument& rSrcDoc, bool bIncludeFiltered,
     }
     maRanges = aNewRanges;
 }
+
+bool ScClipParam::isTransposed() { return mbTransposed; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2692,7 +2692,7 @@ void ScDocument::CopyBlockFromClip(
                     && rClipTabs[(nClipTab + nFollow + 1) % static_cast<SCTAB>(rClipTabs.size())] )
                 ++nFollow;
 
-            sc::RefUpdateContext aRefCxt(*this);
+            sc::RefUpdateContext aRefCxt(*this, rCxt.getClipDoc());
             aRefCxt.maRange = ScRange(nCol1, nRow1, i, nCol2, nRow2, i+nFollow);
             aRefCxt.mnColDelta = nDx;
             aRefCxt.mnRowDelta = nDy;
