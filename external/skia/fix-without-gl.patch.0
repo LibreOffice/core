@@ -32,19 +32,18 @@ diff --git a/src/gpu/gl/GrGLContext.h b/src/gpu/gl/GrGLContext.h
 index 66bfe29331..034cd21838 100644
 --- ./src/gpu/gl/GrGLContext.h
 +++ ./src/gpu/gl/GrGLContext.h
-@@ -45,10 +45,11 @@ public:
-     GrGLDriverVersion driverVersion() const { return fDriverVersion; }
+@@ -45,9 +45,11 @@ public:
      const GrGLCaps* caps() const { return fGLCaps.get(); }
      GrGLCaps* caps() { return fGLCaps.get(); }
+ 
 +#ifdef SK_GL
      bool hasExtension(const char* ext) const {
          return fInterface->hasExtension(ext);
      }
--
 +#endif
+ 
      const GrGLExtensions& extensions() const { return fInterface->fExtensions; }
  
- protected:
 diff --git a/src/gpu/gl/GrGLGpu.h b/src/gpu/gl/GrGLGpu.h
 index 8e550c36e6..27fb5efe9b 100644
 --- ./src/gpu/gl/GrGLGpu.h

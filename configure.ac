@@ -9397,6 +9397,7 @@ if test "$using_freetype_fontconfig" = yes -a "$test_system_freetype" != no; the
     # FreeType's docs/VERSION.DLL provides a table mapping between the three
     #
     # 9.9.3 is 2.2.0
+    # When the minimal version is at least 2.8.1, remove Skia's check down below.
     PKG_CHECK_MODULES(FREETYPE, freetype2 >= 9.9.3)
     FREETYPE_CFLAGS=$(printf '%s' "$FREETYPE_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     FilterLibs "${FREETYPE_LIBS}"
@@ -11974,38 +11975,52 @@ AC_SUBST(POPPLER_CFLAGS)
 AC_SUBST(POPPLER_LIBS)
 
 # Skia?
-AC_MSG_CHECKING([whether to build Skia])
 ENABLE_SKIA=
 if test "$enable_skia" != "no" -a "$build_skia" = "yes" -a -z "$DISABLE_GUI"; then
-    if test "$enable_skia" = "debug"; then
-        AC_MSG_RESULT([yes (debug)])
-        ENABLE_SKIA_DEBUG=TRUE
-    else
-        AC_MSG_RESULT([yes])
-        ENABLE_SKIA_DEBUG=
+    # Skia now requires at least freetype2 >= 2.8.1, which is less that what LO requires as system freetype.
+    if test "$SYSTEM_FREETYPE" = TRUE; then
+        PKG_CHECK_EXISTS(freetype2 >= 21.0.15, # 21.0.15 = 2.8.1
+            [skia_freetype_ok=yes],
+            [skia_freetype_ok=no])
+    else # internal is ok
+        skia_freetype_ok=yes
     fi
-    ENABLE_SKIA=TRUE
-    AC_DEFINE(HAVE_FEATURE_SKIA)
-    BUILD_TYPE="$BUILD_TYPE SKIA"
+    AC_MSG_CHECKING([whether to build Skia])
+    if test "$skia_freetype_ok" = "yes"; then
+        if test "$enable_skia" = "debug"; then
+            AC_MSG_RESULT([yes (debug)])
+            ENABLE_SKIA_DEBUG=TRUE
+        else
+            AC_MSG_RESULT([yes])
+            ENABLE_SKIA_DEBUG=
+        fi
+        ENABLE_SKIA=TRUE
+        AC_DEFINE(HAVE_FEATURE_SKIA)
+        BUILD_TYPE="$BUILD_TYPE SKIA"
 
-    if test "$OS" = "MACOSX"; then
-        AC_DEFINE(SK_SUPPORT_GPU,1)
-        AC_DEFINE(SK_METAL,1)
-        SKIA_GPU=METAL
-        AC_SUBST(SKIA_GPU)
+        if test "$OS" = "MACOSX"; then
+            AC_DEFINE(SK_SUPPORT_GPU,1)
+            AC_DEFINE(SK_METAL,1)
+            SKIA_GPU=METAL
+            AC_SUBST(SKIA_GPU)
+        else
+            AC_DEFINE(SK_SUPPORT_GPU,1)
+            AC_DEFINE(SK_VULKAN,1)
+            SKIA_GPU=VULKAN
+            AC_SUBST(SKIA_GPU)
+        fi
+
+        if test -n "$MAC_OS_X_VERSION_MIN_REQUIRED" -a "$MAC_OS_X_VERSION_MIN_REQUIRED" -lt "101200"; then
+            SKIA_DISABLE_VMA_USE_STL_SHARED_MUTEX=1
+            AC_SUBST(SKIA_DISABLE_VMA_USE_STL_SHARED_MUTEX)
+        fi
     else
-        AC_DEFINE(SK_SUPPORT_GPU,1)
-        AC_DEFINE(SK_VULKAN,1)
-        SKIA_GPU=VULKAN
-        AC_SUBST(SKIA_GPU)
-    fi
-
-    if test -n "$MAC_OS_X_VERSION_MIN_REQUIRED" -a "$MAC_OS_X_VERSION_MIN_REQUIRED" -lt "101200"; then
-        SKIA_DISABLE_VMA_USE_STL_SHARED_MUTEX=1
-        AC_SUBST(SKIA_DISABLE_VMA_USE_STL_SHARED_MUTEX)
+        AC_MSG_RESULT([no (freetype too old)])
+        add_warning "freetype version is too old for Skia library, at least 2.8.1 required, Skia support disabled"
     fi
 
 else
+    AC_MSG_CHECKING([whether to build Skia])
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_SKIA)

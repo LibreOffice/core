@@ -50,6 +50,8 @@ are the same.
 #define SK_ASSUME_GL 1
 #define SK_ASSUME_GL_ES 0
 
+#define SK_ENABLE_SKSL 1
+
 // See https://codereview.chromium.org/2089583002 . This makes raster drawing
 // faster in some cases, it was made conditional because of some tests failing,
 // but if I'm reading the review correctly the code is in fact fine and just
