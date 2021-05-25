@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fd6a43a3_b8781f4d",
+        "filename": "oox/source/ppt/customshowlistcontext.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-05-25T10:06:38Z",
+      "side": 1,
+      "message": "To simplify, it\u0027s possible to use mrCustomShowList.back() instead of this and onEndElement()",
+      "range": {
+        "startLine": 36,
+        "startChar": 4,
+        "endLine": 36,
+        "endChar": 27
+      },
+      "revId": "34cc828b00d261873a54ec1a8ec9c08156485ab1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "615fe543_6c368799",
+        "filename": "oox/source/ppt/customshowlistcontext.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-05-25T10:06:38Z",
+      "side": 1,
+      "message": "CustomShow aCustomShow;\n    aCustomShow.maCustomShowName \u003d rxAttribs-\u003egetOptionalValue( XML_name );\n    aCustomShow.mnId \u003d rxAttribs-\u003egetOptionalValue( XML_id );\n    mrCustomShowList.push_back(aCustomShow);",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 61
+      },
+      "revId": "34cc828b00d261873a54ec1a8ec9c08156485ab1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52e022a2_6f6ae100",
+        "filename": "oox/source/ppt/presentationfragmenthandler.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-05-25T10:06:38Z",
+      "side": 1,
+      "message": "copy() gives an error, if sSlide is longer than aCustomSlide, so it\u0027s better to avoid that, moreover, it\u0027s worth to match the string according to the logic of the operation:\n\n                sal_Int32 nPageNumber \u003d 0;\n                if ( aCustomSlide.match( sSlide ) )\n                    nPageNumber \u003d aCustomSlide.copy( sSlide.getLength() ).toInt32();",
+      "range": {
+        "startLine": 191,
+        "startChar": 0,
+        "endLine": 191,
+        "endChar": 88
+      },
+      "revId": "34cc828b00d261873a54ec1a8ec9c08156485ab1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
