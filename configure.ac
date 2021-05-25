@@ -815,6 +815,7 @@ test_cairo=no
 test_gdb_index=no
 test_split_debug=no
 test_openldap=yes
+test_webdav=yes
 
 # Default values, as such probably valid just for Linux, set
 # differently below just for Mac OSX, but at least better than
@@ -968,6 +969,7 @@ ios*) # iOS
     test_fontconfig=no
     test_dbus=no
     test_openldap=no
+    test_webdav=no
     if test -n "$LODE_HOME" ; then
         mac_sanitize_path
         AC_MSG_NOTICE([sanitized the PATH to $PATH])
@@ -1088,6 +1090,7 @@ linux-android*)
     test_gtk3_kde5=no
     test_openldap=no
     test_randr=no
+    test_webdav=no
     test_xrender=no
     _os=Android
 
@@ -1124,6 +1127,7 @@ emscripten)
     test_freetype=no
     test_gtk=no
     test_randr=no
+    test_webdav=no
     test_xrender=no
     enable_postgresql_sdbc=no
     enable_firebird_sdbc=no
@@ -1646,11 +1650,6 @@ libo_FUZZ_ARG_ENABLE(gstreamer-1-0,
     AS_HELP_STRING([--disable-gstreamer-1-0],
         [Disable building with the gstreamer 1.0 avmedia backend.]),
 ,test "${enable_gstreamer_1_0+set}" = set || enable_gstreamer_1_0=yes)
-
-libo_FUZZ_ARG_ENABLE(neon,
-    AS_HELP_STRING([--disable-neon],
-        [Disable neon and the compilation of webdav binding.]),
-,)
 
 libo_FUZZ_ARG_ENABLE([eot],
     [AS_HELP_STRING([--enable-eot],
@@ -2339,9 +2338,7 @@ AC_ARG_WITH(webdav,
     AS_HELP_STRING([--with-webdav],
         [Specify which library to use for webdav implementation.
          Possible values: "neon", "serf", "no". The default value is "neon".
-         Example: --with-webdav="serf"]),
-    WITH_WEBDAV=$withval,
-    WITH_WEBDAV="neon")
+         Example: --with-webdav="serf"]))
 
 AC_ARG_WITH(linker-hash-style,
     AS_HELP_STRING([--with-linker-hash-style],
@@ -10721,14 +10718,17 @@ AC_SUBST(XRANDR_CFLAGS)
 AC_SUBST(XRANDR_LIBS)
 AC_SUBST(ENABLE_RANDR)
 
-if test "$enable_neon" = "no" -o "$enable_mpl_subset" = "yes"; then
-    if test -z "$WITH_WEBDAV"; then
-        WITH_WEBDAV="serf"
+if test "$test_webdav" = yes; then
+    if test -z "$with_webdav"; then
+        WITH_WEBDAV=neon
+        if test "$enable_mpl_subset" = yes; then
+            WITH_WEBDAV=serf
+        fi
+    else
+        WITH_WEBDAV="$with_webdav"
     fi
 fi
-if test $_os = iOS -o $_os = Android; then
-    WITH_WEBDAV="no"
-fi
+
 AC_MSG_CHECKING([for webdav library])
 case "$WITH_WEBDAV" in
 serf)
