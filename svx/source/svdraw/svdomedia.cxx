@@ -260,6 +260,7 @@ void SdrMediaObj::SetInputStream(uno::Reference<io::XInputStream> const& xStream
         return;
     }
 
+#if HAVE_FEATURE_AVMEDIA
     OUString tempFileURL;
     const bool bSuccess(
         ::avmedia::CreateMediaTempFile(
@@ -270,12 +271,14 @@ void SdrMediaObj::SetInputStream(uno::Reference<io::XInputStream> const& xStream
     if (bSuccess)
     {
         m_xImpl->m_pTempFile = std::make_shared<::avmedia::MediaTempFile>(tempFileURL);
-#if HAVE_FEATURE_AVMEDIA
         m_xImpl->m_MediaProperties.setURL(
             m_xImpl->m_LastFailedPkgURL, tempFileURL, "");
-#endif
     }
     m_xImpl->m_LastFailedPkgURL.clear(); // once only
+#else
+    (void)xStream;
+    return;
+#endif
 }
 
 /// copy a stream from XStorage to temp file
