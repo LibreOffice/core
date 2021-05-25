@@ -981,6 +981,8 @@ ios*) # iOS
     enable_extension_integration=no
     enable_report_builder=no
     with_ppds=no
+    with_webdav=no
+
     if test "$enable_ios_simulator" = "yes"; then
         host=x86_64-apple-darwin
     fi
@@ -1085,6 +1087,7 @@ linux-android*)
     test_gtk3_kde5=no
     test_randr=no
     test_xrender=no
+    with_webdav=no
     _os=Android
 
     AC_DEFINE(HAVE_FT_FACE_GETCHARVARIANTINDEX)
@@ -1647,11 +1650,6 @@ libo_FUZZ_ARG_ENABLE(gstreamer-1-0,
     AS_HELP_STRING([--disable-gstreamer-1-0],
         [Disable building with the gstreamer 1.0 avmedia backend.]),
 ,test "${enable_gstreamer_1_0+set}" = set || enable_gstreamer_1_0=yes)
-
-libo_FUZZ_ARG_ENABLE(neon,
-    AS_HELP_STRING([--disable-neon],
-        [Disable neon and the compilation of webdav binding.]),
-,)
 
 libo_FUZZ_ARG_ENABLE([eot],
     [AS_HELP_STRING([--enable-eot],
@@ -2340,9 +2338,7 @@ AC_ARG_WITH(webdav,
     AS_HELP_STRING([--with-webdav],
         [Specify which library to use for webdav implementation.
          Possible values: "neon", "serf", "no". The default value is "neon".
-         Example: --with-webdav="serf"]),
-    WITH_WEBDAV=$withval,
-    WITH_WEBDAV="neon")
+         Example: --with-webdav="serf"]))
 
 AC_ARG_WITH(linker-hash-style,
     AS_HELP_STRING([--with-linker-hash-style],
@@ -10732,14 +10728,14 @@ AC_SUBST(XRANDR_CFLAGS)
 AC_SUBST(XRANDR_LIBS)
 AC_SUBST(ENABLE_RANDR)
 
-if test "$enable_neon" = "no" -o "$enable_mpl_subset" = "yes"; then
-    if test -z "$WITH_WEBDAV"; then
-        WITH_WEBDAV="serf"
+if test -z "$with_webdav"; then
+    with_webdav="neon"
+    if test "$enable_mpl_subset" = yes; then
+        with_webdav="serf"
     fi
 fi
-if test $_os = iOS -o $_os = Android; then
-    WITH_WEBDAV="no"
-fi
+WITH_WEBDAV="$with_webdav"
+
 AC_MSG_CHECKING([for webdav library])
 case "$WITH_WEBDAV" in
 serf)
