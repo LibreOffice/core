@@ -532,7 +532,7 @@ void SwAccessibleContext::ThrowIfDisposed()
 SwAccessibleContext::SwAccessibleContext(std::shared_ptr<SwAccessibleMap> const& pMap,
                                           sal_Int16 const nRole,
                                           const SwFrame *pF )
-    : SwAccessibleFrame( pMap->GetVisArea().SVRect(), pF,
+    : SwAccessibleFrame( pMap->GetVisArea(), pF,
                          pMap->GetShell()->IsPreview() )
     , m_pMap(pMap.get())
     , m_wMap(pMap)

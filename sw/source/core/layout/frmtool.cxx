@@ -3406,7 +3406,7 @@ void Notify_Background( const SdrObject* pObj,
                 // instead of <GetCurrentBoundRect()>, because a recalculation
                 // of the bounding rectangle isn't intended here.
                 if (!isValidTableBeforeAnchor
-                    && (pTab->getFrameArea().IsOver(pObj->GetLastBoundRect()) ||
+                    && (pTab->getFrameArea().IsOver(SwRect(pObj->GetLastBoundRect())) ||
                         pTab->getFrameArea().IsOver(rRect)))
                 {
                     if ( !pFlyFrame || !pFlyFrame->IsLowerOf( pTab ) )
@@ -3418,7 +3418,7 @@ void Notify_Background( const SdrObject* pObj,
             // instead of <GetCurrentBoundRect()>, because a recalculation
             // of the bounding rectangle isn't intended here.
             if (!isValidTableBeforeAnchor && pCell->IsCellFrame() &&
-                 ( pCell->getFrameArea().IsOver( pObj->GetLastBoundRect() ) ||
+                 ( pCell->getFrameArea().IsOver( SwRect(pObj->GetLastBoundRect()) ) ||
                    pCell->getFrameArea().IsOver( rRect ) ) )
             {
                 const SwFormatVertOrient &rOri = pCell->GetFormat()->GetVertOrient();

@@ -161,7 +161,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
                 {
                     Size            aDocSize( m_pWrtShell->GetDocSize() );
                     const SwRect&   rVisArea = comphelper::LibreOfficeKit::isActive() ?
-                                                m_pWrtShell->getLOKVisibleArea() : m_pWrtShell->VisArea();
+                                                SwRect(m_pWrtShell->getLOKVisibleArea()) : m_pWrtShell->VisArea();
                     Point           aPos( rVisArea.Center() );
                     tools::Rectangle aObjRect( pObj->GetLogicRect() );
 

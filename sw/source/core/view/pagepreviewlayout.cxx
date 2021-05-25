@@ -1027,7 +1027,7 @@ bool SwPagePreviewLayout::Paint(vcl::RenderContext& rRenderContext, const tools:
 
     // paint preview background
     {
-        SwRegionRects aPreviewBackgrdRegion(rOutRect);
+        SwRegionRects aPreviewBackgrdRegion((SwRect(rOutRect)));
         // calculate preview background rectangles
         for ( auto & rpPreviewPage : maPreviewPages )
         {
@@ -1086,14 +1086,14 @@ bool SwPagePreviewLayout::Paint(vcl::RenderContext& rRenderContext, const tools:
                 pOutputDev->SetFont( aOldFont );
                 // paint shadow and border for empty page
                 // use new method to paint page border and shadow
-                SwPageFrame::PaintBorderAndShadow( aPageRect, &mrParentViewShell, true, false, true );
+                SwPageFrame::PaintBorderAndShadow( SwRect(aPageRect), &mrParentViewShell, true, false, true );
             }
             else
             {
                 const bool bIsLeftShadowed = pPage->IsLeftShadowNeeded();
                 const bool bIsRightShadowed = pPage->IsRightShadowNeeded();
 
-                mrParentViewShell.maVisArea = aPageRect;
+                mrParentViewShell.maVisArea = SwRect(aPageRect);
                 aPxPaintRect.Intersection( aPxOutRect );
                 tools::Rectangle aPaintRect = pOutputDev->PixelToLogic( aPxPaintRect );
                 mrParentViewShell.Paint(rRenderContext, aPaintRect);
@@ -1106,7 +1106,7 @@ bool SwPagePreviewLayout::Paint(vcl::RenderContext& rRenderContext, const tools:
                         bIsLeftShadowed, bIsRightShadowed, true );
                     const vcl::Region aDLRegion(aPageBorderRect.SVRect());
                     mrParentViewShell.DLPrePaint2(aDLRegion);
-                    SwPageFrame::PaintBorderAndShadow( aPageRect, &mrParentViewShell, true, false, true );
+                    SwPageFrame::PaintBorderAndShadow( SwRect(aPageRect), &mrParentViewShell, true, false, true );
                     mrParentViewShell.DLPostPaint2(true);
                 }
                 // <--

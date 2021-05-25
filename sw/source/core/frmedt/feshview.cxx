@@ -1761,7 +1761,7 @@ bool SwFEShell::GotoObj( bool bNext, GotoObjFlags eType )
     {
         SelectObj( Point(), 0, const_cast<SdrObject*>(pBest) );
         if( !ActionPend() )
-            MakeVisible( pBest->GetCurrentBoundRect() );
+            MakeVisible( SwRect(pBest->GetCurrentBoundRect()) );
     }
     CallChgLnk();
     return true;
@@ -2678,7 +2678,7 @@ void SwFEShell::MakeSelVisible()
          Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() )
     {
         GetCurrFrame(); // just to trigger formatting in case the selected object is not formatted.
-        MakeVisible( Imp()->GetDrawView()->GetAllMarkedRect() );
+        MakeVisible( SwRect(Imp()->GetDrawView()->GetAllMarkedRect()) );
     }
     else
         SwCursorShell::MakeSelVisible();

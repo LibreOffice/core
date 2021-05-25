@@ -4781,7 +4781,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                         ICheckboxFieldmark& rCheckboxFm = dynamic_cast<ICheckboxFieldmark&>(*fieldBM);
                                         rCheckboxFm.SetChecked(!rCheckboxFm.IsChecked());
                                         rCheckboxFm.Invalidate();
-                                        rSh.InvalidateWindows( m_rView.GetVisArea() );
+                                        rSh.InvalidateWindows( SwRect(m_rView.GetVisArea()) );
                                     }
                                 }
                             }

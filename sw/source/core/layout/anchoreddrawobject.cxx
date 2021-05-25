@@ -619,7 +619,7 @@ SwRect SwAnchoredDrawObject::GetObjRect() const
 {
     // use geometry of drawing object
     //return GetDrawObj()->GetCurrentBoundRect();
-    return GetDrawObj()->GetSnapRect();
+    return SwRect(GetDrawObj()->GetSnapRect());
 }
 
 namespace
@@ -745,7 +745,7 @@ SwRect SwAnchoredDrawObject::GetObjBoundRect() const
             pDoc->getIDocumentState().SetEnableSetModified(bEnableSetModified);
         }
     }
-    return GetDrawObj()->GetCurrentBoundRect();
+    return SwRect(GetDrawObj()->GetCurrentBoundRect());
 }
 
 // --> #i68520#

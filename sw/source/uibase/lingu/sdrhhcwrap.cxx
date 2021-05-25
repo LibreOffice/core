@@ -142,7 +142,7 @@ bool SdrHHCWrapper::ConvertNextDocument()
                     pOutlView->SetOutputArea( tools::Rectangle( Point(), Size(1,1)));
                     SetPaperSize( pTextObj->GetLogicRect().GetSize() );
                     SetUpdateMode(true);
-                    pView->GetWrtShell().MakeVisible(pTextObj->GetLogicRect());
+                    pView->GetWrtShell().MakeVisible(SwRect(pTextObj->GetLogicRect()));
 
                     pSdrView->SdrBeginTextEdit(pTextObj, pPV, &pView->GetEditWin(), false, this, pOutlView.get(), true, true);
                 }

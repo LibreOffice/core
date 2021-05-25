@@ -135,7 +135,7 @@ static void lcl_AdjustPositioningAttr( SwDrawFrameFormat* _pFrameFormat,
 
         }
         // use geometry of drawing object
-        const SwRect aObjRect = _rSdrObj.GetSnapRect();
+        const tools::Rectangle aObjRect = _rSdrObj.GetSnapRect();
 
         if ( bVert )
         {
@@ -172,9 +172,9 @@ static void lcl_AdjustPositioningAttr( SwDrawFrameFormat* _pFrameFormat,
         const SwAnchoredObject* pAnchoredObj = pContact->GetAnchoredObj( &_rSdrObj );
         if ( auto pAnchoredDrawObj = dynamic_cast<const SwAnchoredDrawObject*>( pAnchoredObj) )
         {
-            const SwRect aObjRect = _rSdrObj.GetSnapRect();
+            const tools::Rectangle aObjRect = _rSdrObj.GetSnapRect();
             const_cast<SwAnchoredDrawObject*>(pAnchoredDrawObj)
-                                        ->SetLastObjRect( aObjRect.SVRect() );
+                                        ->SetLastObjRect( aObjRect );
         }
     }
 }
