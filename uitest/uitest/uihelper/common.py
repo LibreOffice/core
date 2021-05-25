@@ -21,6 +21,9 @@ def select_pos(ui_object, pos):
 def select_text(ui_object, from_pos, to):
     ui_object.executeAction("SELECT", mkPropertyValues({"FROM": from_pos, "TO": to}))
 
+def select_by_text(ui_object, text):
+     ui_object.executeAction("SELECT", mkPropertyValues({"TEXT": text}))
+
 def get_url_for_data_file(file_name):
     return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
 

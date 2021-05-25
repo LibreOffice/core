@@ -6,7 +6,7 @@
 #
 
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict
+from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, select_by_text
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.calc.document import get_row
 from uitest.uihelper.calc import enter_text_to_cell
@@ -434,4 +434,42 @@ class AutofilterTest(UITestCase):
         self.assertTrue(is_row_hidden(doc, 7))
         self.assertFalse(is_row_hidden(doc, 8))
 
+        self.ui_test.close_doc()
+
+    def test_tdf142402(self):
+        doc = self.ui_test.load_file(get_url_for_data_file("tdf140968.xlsx"))
+
+        xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
+
+        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+        xFloatWindow = self.xUITest.getFloatWindow()
+        #Choose Standard Filter... button
+        xMenu = xFloatWindow.getChild("menu")
+
+        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
+
+        xDialog = self.xUITest.getTopFocusWindow()
+        xval1 = xDialog.getChild("val1")
+
+        select_by_text(xval1, "0.365")
+
+        xOKBtn = xDialog.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOKBtn)
+
+        self.assertFalse(is_row_hidden(doc, 0))
+        self.assertFalse(is_row_hidden(doc, 1))
+        self.assertTrue(is_row_hidden(doc, 2))
+        self.assertTrue(is_row_hidden(doc, 3))
+        self.assertTrue(is_row_hidden(doc, 4))
+        self.assertTrue(is_row_hidden(doc, 5))
+        self.assertTrue(is_row_hidden(doc, 6))
+
+        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

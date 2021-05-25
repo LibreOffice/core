@@ -1601,7 +1601,7 @@ void ScDocument::GetFilterEntriesArea(
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
     {
-        maTabs[nTab]->GetFilterEntries( nCol, nStartRow, nEndRow, rFilterEntries );
+        maTabs[nTab]->GetFilterEntries( nCol, nStartRow, nEndRow, rFilterEntries, true );
         sortAndRemoveDuplicates( rFilterEntries.maStrData, bCaseSens);
     }
 }
