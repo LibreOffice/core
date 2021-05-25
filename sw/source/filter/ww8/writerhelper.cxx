@@ -714,7 +714,7 @@ namespace sw
             {
                 const SwFltRedline *pTest = static_cast<const SwFltRedline *>
                     (pEntry->pAttr.get());
-                return (pEntry->bOpen && (pTest->eType == meType));
+                return (pEntry->bOpen && (pTest->m_eType == meType));
             }
         };
 
@@ -810,8 +810,8 @@ namespace sw
                 const SwFltRedline *pFltRedline = static_cast<const SwFltRedline*>
                     (pEntry->pAttr.get());
 
-                SwRedlineData aData(pFltRedline->eType, pFltRedline->nAutorNo,
-                        pFltRedline->aStamp, OUString(), nullptr);
+                SwRedlineData aData(pFltRedline->m_eType, pFltRedline->m_nAutorNo,
+                        pFltRedline->m_aStamp, OUString(), nullptr);
 
                 SwRangeRedline *const pNewRedline(new SwRangeRedline(aData, aRegion));
                 // the point node may be deleted in AppendRedline, so park
@@ -835,10 +835,10 @@ namespace sw
 
             //Return the earlier time, if two have the same time, prioritize
             //inserts over deletes
-            if (pOne->aStamp == pTwo->aStamp)
-                return (pOne->eType == RedlineType::Insert && pTwo->eType != RedlineType::Insert);
+            if (pOne->m_aStamp == pTwo->m_aStamp)
+                return (pOne->m_eType == RedlineType::Insert && pTwo->m_eType != RedlineType::Insert);
             else
-                return (pOne->aStamp < pTwo->aStamp);
+                return (pOne->m_aStamp < pTwo->m_aStamp);
         }
 
         RedlineStack::~RedlineStack()

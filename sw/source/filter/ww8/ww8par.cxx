@@ -1298,7 +1298,7 @@ const SwNumFormat* SwWW8FltControlStack::GetNumFormatFromStack(const SwPosition 
         if (rTextNode.IsCountedInList())
         {
             OUString sName(static_cast<const SfxStringItem*>(pItem)->GetValue());
-            const SwNumRule *pRule = rDoc.FindNumRulePtr(sName);
+            const SwNumRule *pRule = m_rDoc.FindNumRulePtr(sName);
             if (pRule)
                 pRet = GetNumFormatFromSwNumRuleLevel(*pRule, rTextNode.GetActualListLevel());
         }
@@ -1382,14 +1382,14 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                     paragraph indent to be relative to the new paragraph indent
                 */
                 SwPaM aRegion(rTmpPos);
-                if (rEntry.MakeRegion(rDoc, aRegion, SwFltStackEntry::RegionMode::NoCheck))
+                if (rEntry.MakeRegion(m_rDoc, aRegion, SwFltStackEntry::RegionMode::NoCheck))
                 {
                     SvxLRSpaceItem aNewLR( *static_cast<SvxLRSpaceItem*>(rEntry.pAttr.get()) );
                     sal_uLong nStart = aRegion.Start()->nNode.GetIndex();
                     sal_uLong nEnd   = aRegion.End()->nNode.GetIndex();
                     for(; nStart <= nEnd; ++nStart)
                     {
-                        SwNode* pNode = rDoc.GetNodes()[ nStart ];
+                        SwNode* pNode = m_rDoc.GetNodes()[ nStart ];
                         if (!pNode || !pNode->IsTextNode())
                             continue;
 
@@ -1448,7 +1448,7 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
         case RES_TXTATR_INETFMT:
             {
                 SwPaM aRegion(rTmpPos);
-                if (rEntry.MakeRegion(rDoc, aRegion, SwFltStackEntry::RegionMode::NoCheck))
+                if (rEntry.MakeRegion(m_rDoc, aRegion, SwFltStackEntry::RegionMode::NoCheck))
                 {
                     SwFrameFormat *pFrame;
                     // If we have just one single inline graphic then
@@ -1466,7 +1466,7 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                     }
                     else
                     {
-                        rDoc.getIDocumentContentOperations().InsertPoolItem(aRegion, *rEntry.pAttr);
+                        m_rDoc.getIDocumentContentOperations().InsertPoolItem(aRegion, *rEntry.pAttr);
                     }
                 }
             }
@@ -1485,7 +1485,7 @@ const SfxPoolItem* SwWW8FltControlStack::GetFormatAttr(const SwPosition& rPos,
     {
         SwContentNode const*const pNd = rPos.nNode.GetNode().GetContentNode();
         if (!pNd)
-            pItem = &rDoc.GetAttrPool().GetDefaultItem(nWhich);
+            pItem = &m_rDoc.GetAttrPool().GetDefaultItem(nWhich);
         else
         {
             /*
@@ -1510,7 +1510,7 @@ const SfxPoolItem* SwWW8FltControlStack::GetFormatAttr(const SwPosition& rPos,
             if (pNd->IsTextNode())
             {
                 const sal_Int32 nPos = rPos.nContent.GetIndex();
-                m_xScratchSet.reset(new SfxItemSet(rDoc.GetAttrPool(), {{nWhich, nWhich}}));
+                m_xScratchSet.reset(new SfxItemSet(m_rDoc.GetAttrPool(), {{nWhich, nWhich}}));
                 if (pNd->GetTextNode()->GetParaAttr(*m_xScratchSet, nPos, nPos))
                     pItem = m_xScratchSet->GetItem(nWhich);
             }
@@ -1563,7 +1563,7 @@ bool SwWW8FltRefStack::IsFootnoteEdnBkmField(
         && ((REF_FOOTNOTE == (nSubType = pField->GetSubType())) || (REF_ENDNOTE  == nSubType))
         && !static_cast<const SwGetRefField*>(pField)->GetSetRefName().isEmpty())
     {
-        const IDocumentMarkAccess* const pMarkAccess = rDoc.getIDocumentMarkAccess();
+        const IDocumentMarkAccess* const pMarkAccess = m_rDoc.getIDocumentMarkAccess();
         IDocumentMarkAccess::const_iterator_t ppBkmk =
             pMarkAccess->findMark( static_cast<const SwGetRefField*>(pField)->GetSetRefName() );
         if(ppBkmk != pMarkAccess->getAllMarksEnd())
@@ -1601,7 +1601,7 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 sal_uInt16 nBkmNo;
                 if( IsFootnoteEdnBkmField(rFormatField, nBkmNo) )
                 {
-                    ::sw::mark::IMark const * const pMark = rDoc.getIDocumentMarkAccess()->getAllMarksBegin()[nBkmNo];
+                    ::sw::mark::IMark const * const pMark = m_rDoc.getIDocumentMarkAccess()->getAllMarksBegin()[nBkmNo];
 
                     const SwPosition& rBkMrkPos = pMark->GetMarkPos();
 
@@ -1623,7 +1623,7 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 }
             }
 
-            rDoc.getIDocumentContentOperations().InsertPoolItem(aPaM, *rEntry.pAttr);
+            m_rDoc.getIDocumentContentOperations().InsertPoolItem(aPaM, *rEntry.pAttr);
             MoveAttrs(*aPaM.GetPoint());
         }
         break;

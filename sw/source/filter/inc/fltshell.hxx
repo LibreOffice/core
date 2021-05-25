@@ -127,14 +127,14 @@ private:
     typedef std::vector<std::unique_ptr<SwFltStackEntry>> Entries;
     Entries m_Entries;
 
-    sal_uLong nFieldFlags;
+    sal_uLong m_nFieldFlags;
 
-    bool bHasSdOD;
-    bool bSdODChecked;
+    bool m_bHasSdOD;
+    bool m_bSdODChecked;
 
 protected:
-    SwDoc& rDoc;
-    bool bIsEndStack;
+    SwDoc& m_rDoc;
+    bool m_bIsEndStack;
 
     virtual void SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry& rEntry);
     virtual sal_Int32 GetCurrAttrCP() const {return -1;}
@@ -162,7 +162,7 @@ public:
     SwFltControlStack(SwDoc& rDo, sal_uLong nFieldFl);
     virtual ~SwFltControlStack();
 
-    bool IsFlagSet(Flags no) const  { return ::SwFltGetFlag(nFieldFlags, no);}
+    bool IsFlagSet(Flags no) const  { return ::SwFltGetFlag(m_nFieldFlags, no);}
 
     void NewAttr(const SwPosition& rPos, const SfxPoolItem & rAttr );
 
@@ -186,8 +186,8 @@ class SwFltAnchorListener;
 
 class SW_DLLPUBLIC SwFltAnchor: public SfxPoolItem
 {
-    SwFrameFormat* pFrameFormat;
-    std::unique_ptr<SwFltAnchorListener> pListener;
+    SwFrameFormat* m_pFrameFormat;
+    std::unique_ptr<SwFltAnchorListener> m_pListener;
 
 public:
     SwFltAnchor(SwFrameFormat* pFlyFormat);
@@ -198,8 +198,8 @@ public:
     virtual bool operator==(const SfxPoolItem&) const override;
     virtual SwFltAnchor* Clone(SfxItemPool* = nullptr) const override;
     void SetFrameFormat(SwFrameFormat* _pFrameFormat);
-    const SwFrameFormat* GetFrameFormat() const { return pFrameFormat; }
-          SwFrameFormat* GetFrameFormat() { return pFrameFormat; }
+    const SwFrameFormat* GetFrameFormat() const { return m_pFrameFormat; }
+          SwFrameFormat* GetFrameFormat() { return m_pFrameFormat; }
 };
 
 class SwFltAnchorListener : public SvtListener
@@ -213,16 +213,16 @@ class SwFltAnchorListener : public SvtListener
 class SW_DLLPUBLIC SwFltRedline : public SfxPoolItem
 {
 public:
-    DateTime        aStamp;
-    RedlineType     eType;
-    std::size_t     nAutorNo;
+    DateTime        m_aStamp;
+    RedlineType     m_eType;
+    std::size_t     m_nAutorNo;
 
     SwFltRedline(RedlineType   eType_,
                  std::size_t     nAutorNo_,
                  const DateTime& rStamp_)
-        : SfxPoolItem(RES_FLTR_REDLINE), aStamp(rStamp_),
-        eType(eType_),
-        nAutorNo(nAutorNo_)
+        : SfxPoolItem(RES_FLTR_REDLINE), m_aStamp(rStamp_),
+        m_eType(eType_),
+        m_nAutorNo(nAutorNo_)
     {
     }
 
@@ -303,7 +303,7 @@ public:
     SwFltEndStack(SwDoc& rDo, sal_uLong nFieldFl)
         :SwFltControlStack(rDo, nFieldFl)
     {
-        bIsEndStack = true;
+        m_bIsEndStack = true;
     }
 };
 

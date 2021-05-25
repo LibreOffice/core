@@ -109,7 +109,7 @@ SwHtmlOptType SwApplet_Impl::GetOptionType( const OUString& rName, bool bApplet 
     return nType;
 }
 SwApplet_Impl::SwApplet_Impl( SfxItemPool& rPool ) :
-        aItemSet( rPool, svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1>{} )
+        m_aItemSet( rPool, svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1>{} )
 {
 }
 
@@ -121,14 +121,14 @@ void SwApplet_Impl::CreateApplet( const OUString& rCode, const OUString& rName,
     OUString aName;
 
     // create Applet; it will be in running state
-    xApplet = aCnt.CreateEmbeddedObject( SvGlobalName( SO3_APPLET_CLASSID ).GetByteSequence(), aName );
-    ::svt::EmbeddedObjectRef::TryRunningState( xApplet );
+    m_xApplet = aCnt.CreateEmbeddedObject( SvGlobalName( SO3_APPLET_CLASSID ).GetByteSequence(), aName );
+    ::svt::EmbeddedObjectRef::TryRunningState( m_xApplet );
 
     INetURLObject aUrlBase(rDocumentBaseURL);
     aUrlBase.removeSegment();
 
     OUString sDocBase = aUrlBase.GetMainURL(INetURLObject::DecodeMechanism::NONE);
-    uno::Reference < beans::XPropertySet > xSet( xApplet->getComponent(), uno::UNO_QUERY );
+    uno::Reference < beans::XPropertySet > xSet( m_xApplet->getComponent(), uno::UNO_QUERY );
     if ( xSet.is() )
     {
         xSet->setPropertyValue("AppletCode", uno::makeAny( rCode ) );
@@ -147,10 +147,10 @@ bool SwApplet_Impl::CreateApplet( const OUString& rBaseURL )
     OUString aCode, aName, aCodeBase;
     bool bMayScript = false;
 
-    size_t nArgCount = aCommandList.size();
+    size_t nArgCount = m_aCommandList.size();
     for( size_t i = 0; i < nArgCount; i++ )
     {
-        const SvCommand& rArg = aCommandList[i];
+        const SvCommand& rArg = m_aCommandList[i];
         const OUString& rName = rArg.GetCommand();
         if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_code ) )
             aCode = rArg.GetArgument();
@@ -174,11 +174,11 @@ SwApplet_Impl::~SwApplet_Impl()
 }
 void SwApplet_Impl::FinishApplet()
 {
-    uno::Reference < beans::XPropertySet > xSet( xApplet->getComponent(), uno::UNO_QUERY );
+    uno::Reference < beans::XPropertySet > xSet( m_xApplet->getComponent(), uno::UNO_QUERY );
     if ( xSet.is() )
     {
         uno::Sequence < beans::PropertyValue > aProps;
-        aCommandList.FillSequence( aProps );
+        m_aCommandList.FillSequence( aProps );
         xSet->setPropertyValue("AppletCommands", uno::makeAny( aProps ) );
     }
 }
@@ -186,7 +186,7 @@ void SwApplet_Impl::FinishApplet()
 #if HAVE_FEATURE_JAVA
 void SwApplet_Impl::AppendParam( const OUString& rName, const OUString& rValue )
 {
-    aCommandList.Append( rName, rValue );
+    m_aCommandList.Append( rName, rValue );
 }
 #endif
 

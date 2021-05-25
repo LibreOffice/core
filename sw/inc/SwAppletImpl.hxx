@@ -38,15 +38,15 @@ enum class SwHtmlOptType {
 
 class SwApplet_Impl
 {
-    css::uno::Reference < css::embed::XEmbeddedObject > xApplet;
-    SvCommandList     aCommandList;
-    SfxItemSet        aItemSet;
-    OUString   sAlt;
+    css::uno::Reference < css::embed::XEmbeddedObject > m_xApplet;
+    SvCommandList     m_aCommandList;
+    SfxItemSet        m_aItemSet;
+    OUString   m_sAlt;
 
 public:
     static SwHtmlOptType GetOptionType( const OUString& rName, bool bApplet );
     SwApplet_Impl( SfxItemPool& rPool );
-    SwApplet_Impl( SfxItemSet const & rSet ): aItemSet ( rSet) {}
+    SwApplet_Impl( SfxItemSet const & rSet ): m_aItemSet ( rSet) {}
     ~SwApplet_Impl();
     void CreateApplet( const OUString& rCode, const OUString& rName,
                        bool bMayScript, const OUString& rCodeBase,
@@ -56,10 +56,10 @@ public:
     void AppendParam( const OUString& rName, const OUString& rValue );
 #endif
     void FinishApplet();
-    const css::uno::Reference < css::embed::XEmbeddedObject >& GetApplet() const { return xApplet; }
-    SfxItemSet& GetItemSet() { return aItemSet; }
-    const OUString& GetAltText() const { return sAlt; }
-    void SetAltText( const OUString& rAlt ) {sAlt = rAlt;}
+    const css::uno::Reference < css::embed::XEmbeddedObject >& GetApplet() const { return m_xApplet; }
+    SfxItemSet& GetItemSet() { return m_aItemSet; }
+    const OUString& GetAltText() const { return m_sAlt; }
+    void SetAltText( const OUString& rAlt ) {m_sAlt = rAlt;}
 };
 #endif
 
