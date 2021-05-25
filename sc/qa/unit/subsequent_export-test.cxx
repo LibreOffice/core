@@ -43,6 +43,7 @@
 #include <dpcache.hxx>
 #include <dpobject.hxx>
 #include <clipparam.hxx>
+#include <viewopti.hxx>
 
 #include <svx/svdpage.hxx>
 #include <svx/svdograf.hxx>
@@ -295,6 +296,7 @@ public:
     void testTdf84874();
     void testTdf136721_paper_size();
     void testTdf139258_rotated_image();
+    void testTdf126541_SheetVisibilityImportXlsx();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -486,10 +488,13 @@ public:
     CPPUNIT_TEST(testTdf84874);
     CPPUNIT_TEST(testTdf136721_paper_size);
     CPPUNIT_TEST(testTdf139258_rotated_image);
+    CPPUNIT_TEST(testTdf126541_SheetVisibilityImportXlsx);
 
     CPPUNIT_TEST_SUITE_END();
 
 private:
+
+    ScDocShellRef loadDocAndSetupModelViewController(std::u16string_view rFileName, sal_Int32 nFormat, bool bReadWrite);
     void testExcelCellBorders( sal_uLong nFormatType );
 
     uno::Reference<uno::XInterface> m_xCalcComponent;
@@ -6125,6 +6130,47 @@ void ScExportTest::testTdf139258_rotated_image()
     assertXPathContent(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:from/xdr:row", "12");
     assertXPathContent(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:to/xdr:col", "6");
     assertXPathContent(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:to/xdr:row", "25");
+}
+
+ScDocShellRef ScExportTest::loadDocAndSetupModelViewController(std::u16string_view rFileName, sal_Int32 nFormat, bool bReadWrite)
+{
+    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(::comphelper::getProcessComponentContext());
+    CPPUNIT_ASSERT(xDesktop.is());
+
+    // create a frame
+    Reference< frame::XFrame > xTargetFrame = xDesktop->findFrame("_blank", 0);
+    CPPUNIT_ASSERT(xTargetFrame.is());
+
+    // 1. Open the document
+    ScDocShellRef xDocSh = loadDoc(rFileName, nFormat, bReadWrite);
+    CPPUNIT_ASSERT_MESSAGE(OString("Failed to load " + OUStringToOString(rFileName, RTL_TEXTENCODING_UTF8)).getStr(), xDocSh.is());
+
+    uno::Reference< frame::XModel2 > xModel2 = xDocSh->GetModel();
+    CPPUNIT_ASSERT(xModel2.is());
+
+    Reference< frame::XController2 > xController = xModel2->createDefaultViewController(xTargetFrame);
+    CPPUNIT_ASSERT(xController.is());
+
+    // introduce model/view/controller to each other
+    xController->attachModel(xModel2);
+    xModel2->connectController(xController);
+    xTargetFrame->setComponent(xController->getComponentWindow(), xController);
+    xController->attachFrame(xTargetFrame);
+    xModel2->setCurrentController(xController);
+
+    return xDocSh;
+}
+
+void ScExportTest::testTdf126541_SheetVisibilityImportXlsx()
+{
+    // Import an ods file with 'Hide' global grid visibility setting.
+    ScDocShellRef xShell = loadDocAndSetupModelViewController(u"tdf126541_GridOffGlobally.", FORMAT_ODS, true);
+    CPPUNIT_ASSERT(!xShell->GetDocument().GetViewOptions().GetOption(VOPT_GRID));
+
+    // Importing xlsx file should set the global grid visibility setting to 'Show'
+    // Sheet based grid line visibility setting should not overwrite the global setting.
+    xShell = loadDocAndSetupModelViewController(u"tdf126541_GridOff.", FORMAT_XLSX, true);
+    CPPUNIT_ASSERT(xShell->GetDocument().GetViewOptions().GetOption(VOPT_GRID));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
