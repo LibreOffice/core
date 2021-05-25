@@ -126,6 +126,8 @@ public:
 
     sal_uInt16 getCurRegionId () const { return mnCurRegionId;}
 
+    void setCurRegionId (sal_uInt16 nCurRegionId) { mnCurRegionId = nCurRegionId;}
+
     void setOpenRegionHdl(const Link<void*,void> &rLink);
 
     void setCreateContextMenuHdl(const Link<ThumbnailViewItem*,void> &rLink);
