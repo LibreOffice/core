@@ -30,8 +30,13 @@ $(eval $(call gb_Library_set_componentfile,vclcanvas,canvas/source/vcl/vclcanvas
 
 $(eval $(call gb_Library_use_externals,vclcanvas,\
 	boost_headers \
-	epoxy \
 ))
+
+ifeq ($(DISABLE_GUI),)
+$(eval $(call gb_Library_use_externals,vclcanvas,\
+     epoxy \
+ ))
+endif
 
 $(eval $(call gb_Library_use_sdk_api,vclcanvas))
 
