@@ -533,9 +533,9 @@ ScRefUpdateRes ScRefUpdate::UpdateTranspose(
     const ScDocument& rDoc, const ScRange& rSource, const ScAddress& rDest, ScRange& rRef )
 {
     ScRefUpdateRes eRet = UR_NOTHING;
-    if (rRef.aStart.Col() >= rSource.aStart.Col() && rRef.aEnd.Col() <= rSource.aEnd.Col() &&
-        rRef.aStart.Row() >= rSource.aStart.Row() && rRef.aEnd.Row() <= rSource.aEnd.Row() &&
-        rRef.aStart.Tab() >= rSource.aStart.Tab() && rRef.aEnd.Tab() <= rSource.aEnd.Tab())
+    // Only references in source range must be updated, i.e. no references in destination area.
+    // Otherwise existing references pointing to destination area will be wrongly transposed.
+    if (rSource.In(rRef))
     {
         // Source range contains the reference range.
         SCCOL nCol1 = rRef.aStart.Col(), nCol2 = rRef.aEnd.Col();

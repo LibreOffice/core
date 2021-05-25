@@ -52,6 +52,8 @@ private:
 struct RefUpdateContext
 {
     ScDocument& mrDoc;
+    /** A source document, i.e. the original clipdoc. */
+    ScDocument* mpSrcDoc;
 
     /**
      * update mode - insert/delete, copy, or move. The reorder mode (which
@@ -80,7 +82,7 @@ struct RefUpdateContext
 
     ColumnBlockPositionSet* mpBlockPos; // not owning
 
-    RefUpdateContext(ScDocument& rDoc);
+    RefUpdateContext(ScDocument& rDoc, ScDocument* pSrcDoc = nullptr);
 
     bool isInserted() const;
     bool isDeleted() const;
