@@ -117,7 +117,7 @@ public:
     void testAutoInputStringBlock();
     void testAutoInputExactMatch();
     void testMoveShapeHandle();
-
+    void testEditCursorBounds();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnHeaders);
@@ -169,6 +169,7 @@ public:
     CPPUNIT_TEST(testAutoInputStringBlock);
     CPPUNIT_TEST(testAutoInputExactMatch);
     CPPUNIT_TEST(testMoveShapeHandle);
+    CPPUNIT_TEST(testEditCursorBounds);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -426,6 +427,58 @@ void ScTiledRenderingTest::testEmptyColumnSelection()
     CPPUNIT_ASSERT_EQUAL(OString(), apitest::helper::transferable::getTextSelection(pModelObj->getSelection(), "text/plain;charset=utf-8"));
 }
 
+struct EditCursorMessage final {
+    tools::Rectangle m_aRelRect;
+    Point m_aRefPoint;
+
+    void clear()
+    {
+        m_aRelRect.SetEmpty();
+        m_aRefPoint = Point(-1, -1);
+    }
+
+    bool empty()
+    {
+        return m_aRelRect.IsEmpty() &&
+            m_aRefPoint.X() == -1 &&
+            m_aRefPoint.Y() == -1;
+    }
+
+    void parseMessage(const char* pMessage)
+    {
+        clear();
+        if (!pMessage || !comphelper::LibreOfficeKit::isCompatFlagSet(
+            comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs) ||
+            !comphelper::LibreOfficeKit::isViewIdForVisCursorInvalidation())
+            return;
+
+        std::stringstream aStream(pMessage);
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+        std::string aVal = aTree.get_child("refpoint").get_value<std::string>();
+
+        uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(aVal.c_str()));
+        CPPUNIT_ASSERT_EQUAL(2, aSeq.getLength());
+        m_aRefPoint.setX(aSeq[0].toInt32());
+        m_aRefPoint.setY(aSeq[1].toInt32());
+
+        aVal = aTree.get_child("relrect").get_value<std::string>();
+        aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(aVal.c_str()));
+        CPPUNIT_ASSERT_EQUAL(4, aSeq.getLength());
+        m_aRelRect.setX(aSeq[0].toInt32());
+        m_aRelRect.setY(aSeq[1].toInt32());
+        m_aRelRect.setWidth(aSeq[2].toInt32());
+        m_aRelRect.setHeight(aSeq[3].toInt32());
+    }
+
+    tools::Rectangle getBounds()
+    {
+        tools::Rectangle aBounds = m_aRelRect;
+        aBounds.Move(m_aRefPoint.X(), m_aRefPoint.Y());
+        return aBounds;
+    }
+};
+
 /// A view callback tracks callbacks invoked on one specific view.
 class ViewCallback final
 {
@@ -440,10 +493,12 @@ public:
     bool m_bFullInvalidateTiles;
     bool m_bInvalidateTiles;
     std::vector<tools::Rectangle> m_aInvalidations;
+    tools::Rectangle m_aCellCursorBounds;
     std::vector<int> m_aInvalidationsParts;
     bool m_bViewLock;
     OString m_sCellFormula;
     boost::property_tree::ptree m_aCommentCallbackResult;
+    EditCursorMessage m_aInvalidateCursorResult;
     OString m_sInvalidateHeader;
     OString m_sInvalidateSheetGeometry;
     OString m_ShapeSelection;
@@ -486,6 +541,14 @@ public:
         case LOK_CALLBACK_CELL_CURSOR:
         {
             m_bOwnCursorInvalidated = true;
+            uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(pPayload));
+            m_aCellCursorBounds = tools::Rectangle();
+            if (aSeq.getLength() == 6) {
+                m_aCellCursorBounds.setX(aSeq[0].toInt32());
+                m_aCellCursorBounds.setY(aSeq[1].toInt32());
+                m_aCellCursorBounds.setWidth(aSeq[2].toInt32());
+                m_aCellCursorBounds.setHeight(aSeq[3].toInt32());
+            }
         }
         break;
         case LOK_CALLBACK_CELL_VIEW_CURSOR:
@@ -561,6 +624,11 @@ public:
         case LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY:
         {
             m_sInvalidateSheetGeometry = pPayload;
+        }
+        break;
+        case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+        {
+            m_aInvalidateCursorResult.parseMessage(pPayload);
         }
         }
     }
@@ -2584,6 +2652,51 @@ void ScTiledRenderingTest::testAutoInputExactMatch()
     lcl_typeCharsInCell("T", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "T" in A8
     // Should autocomplete to "Time" which is the only match.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("7: A8 should autocomplete", OUString("Time"), pDoc->GetString(aA8));
+}
+
+void ScTiledRenderingTest::testEditCursorBounds()
+{
+    comphelper::LibreOfficeKit::setActive();
+    comphelper::LibreOfficeKit::setCompatFlag(
+        comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+
+    ViewCallback aView;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView);
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+    comphelper::LibreOfficeKit::setViewIdForVisCursorInvalidation(true);
+
+    // ~170% zoom.
+    pModelObj->setClientZoom(256, 256, 2222, 2222);
+    pModelObj->setClientVisibleArea(tools::Rectangle(7725, 379832, 16240, 6449));
+    Scheduler::ProcessEventsToIdle();
+
+    constexpr SCCOL nCol = 5;
+    constexpr SCROW nRow = 2048;
+    pDoc->SetValue(ScAddress(nCol, nRow, 0), 123);
+
+    aView.m_bOwnCursorInvalidated = false;
+    // Obtain the cell bounds via cursor.
+    pView->SetCursor(nCol, nRow);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(aView.m_bOwnCursorInvalidated);
+    CPPUNIT_ASSERT(!aView.m_aCellCursorBounds.IsEmpty());
+    tools::Rectangle aCellBounds(aView.m_aCellCursorBounds);
+
+    aView.m_aInvalidateCursorResult.clear();
+    // Enter edit mode in the same cell.
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::F2);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::F2);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(!aView.m_aInvalidateCursorResult.empty());
+    CPPUNIT_ASSERT_MESSAGE("Edit cursor must be in cell bounds!",
+        aCellBounds.IsInside(aView.m_aInvalidateCursorResult.getBounds()));
+
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
 
 }
