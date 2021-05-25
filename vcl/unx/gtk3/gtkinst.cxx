@@ -6217,26 +6217,24 @@ public:
 }
 
 static GType immobilized_viewport_get_type();
+static gpointer immobilized_viewport_parent_class;
 
-#define IMMOBILIZED_TYPE_VIEWPORT            (immobilized_viewport_get_type ())
-#define IMMOBILIZED_VIEWPORT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), IMMOBILIZED_TYPE_VIEWPORT, ImmobilizedViewport))
 #ifndef NDEBUG
-#   define IMMOBILIZED_IS_VIEWPORT(obj)      (G_TYPE_CHECK_INSTANCE_TYPE ((obj), IMMOBILIZED_TYPE_VIEWPORT))
+#   define IMMOBILIZED_TYPE_VIEWPORT         (immobilized_viewport_get_type())
+#   define IMMOBILIZED_IS_VIEWPORT(obj)      (G_TYPE_CHECK_INSTANCE_TYPE((obj), IMMOBILIZED_TYPE_VIEWPORT))
 #endif
 
 namespace {
 
-struct ImmobilizedViewport
+struct ImmobilizedViewportPrivate
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    GtkViewport viewport;
-#endif
-
     GtkAdjustment  *hadjustment;
     GtkAdjustment  *vadjustment;
 };
 
 }
+
+#define IMMOBILIZED_VIEWPORT_PRIVATE_DATA "ImmobilizedViewportPrivateData"
 
 enum
 {
@@ -6248,24 +6246,28 @@ enum
     PROP_SHADOW_TYPE
 };
 
-static void viewport_set_adjustment(ImmobilizedViewport *viewport,
+static void viewport_set_adjustment(GtkViewport *viewport,
                                     GtkOrientation  orientation,
                                     GtkAdjustment  *adjustment)
 {
+    ImmobilizedViewportPrivate* priv =
+        static_cast<ImmobilizedViewportPrivate*>(g_object_get_data(G_OBJECT(viewport),
+                                                                   IMMOBILIZED_VIEWPORT_PRIVATE_DATA));
+
     if (!adjustment)
         adjustment = gtk_adjustment_new(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
     if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-        if (viewport->hadjustment)
-            g_object_unref(viewport->hadjustment);
-        viewport->hadjustment = adjustment;
+        if (priv->hadjustment)
+            g_object_unref(priv->hadjustment);
+        priv->hadjustment = adjustment;
     }
     else
     {
-        if (viewport->vadjustment)
-            g_object_unref(viewport->vadjustment);
-        viewport->vadjustment = adjustment;
+        if (priv->vadjustment)
+            g_object_unref(priv->vadjustment);
+        priv->vadjustment = adjustment;
     }
 
     g_object_ref_sink(adjustment);
@@ -6273,11 +6275,11 @@ static void viewport_set_adjustment(ImmobilizedViewport *viewport,
 
 static void
 immobilized_viewport_set_property(GObject* object,
-                               guint prop_id,
-                               const GValue* value,
-                               GParamSpec* /*pspec*/)
+                                  guint prop_id,
+                                  const GValue* value,
+                                  GParamSpec* /*pspec*/)
 {
-    ImmobilizedViewport *viewport = IMMOBILIZED_VIEWPORT(object);
+    GtkViewport *viewport = GTK_VIEWPORT(object);
 
     switch (prop_id)
     {
@@ -6298,19 +6300,21 @@ immobilized_viewport_set_property(GObject* object,
 
 static void
 immobilized_viewport_get_property(GObject* object,
-                               guint prop_id,
-                               GValue* value,
-                               GParamSpec* /*pspec*/)
+                                  guint prop_id,
+                                  GValue* value,
+                                  GParamSpec* /*pspec*/)
 {
-    ImmobilizedViewport *viewport = IMMOBILIZED_VIEWPORT(object);
+    ImmobilizedViewportPrivate* priv =
+        static_cast<ImmobilizedViewportPrivate*>(g_object_get_data(object,
+                                                                   IMMOBILIZED_VIEWPORT_PRIVATE_DATA));
 
     switch (prop_id)
     {
         case PROP_HADJUSTMENT:
-            g_value_set_object(value, viewport->hadjustment);
+            g_value_set_object(value, priv->hadjustment);
             break;
         case PROP_VADJUSTMENT:
-            g_value_set_object(value, viewport->vadjustment);
+            g_value_set_object(value, priv->vadjustment);
             break;
         case PROP_HSCROLL_POLICY:
             g_value_set_enum(value, GTK_SCROLL_MINIMUM);
@@ -6324,11 +6328,43 @@ immobilized_viewport_get_property(GObject* object,
     }
 }
 
+static ImmobilizedViewportPrivate*
+immobilized_viewport_new_private_data()
+{
+    ImmobilizedViewportPrivate* priv = g_slice_new0(ImmobilizedViewportPrivate);
+    priv->hadjustment = nullptr;
+    priv->vadjustment = nullptr;
+    return priv;
+}
+
+static void
+immobilized_viewport_instance_init(GTypeInstance *instance, gpointer /*klass*/)
+{
+    GObject* object = G_OBJECT(instance);
+    g_object_set_data(object, IMMOBILIZED_VIEWPORT_PRIVATE_DATA,
+                      immobilized_viewport_new_private_data());
+}
+
+static void
+immobilized_viewport_finalize(GObject* object)
+{
+    void* priv = g_object_get_data(object, IMMOBILIZED_VIEWPORT_PRIVATE_DATA);
+    if (priv)
+    {
+        g_slice_free(ImmobilizedViewportPrivate, priv);
+        g_object_set_data(object, IMMOBILIZED_VIEWPORT_PRIVATE_DATA, nullptr);
+    }
+    G_OBJECT_CLASS(immobilized_viewport_parent_class)->finalize(object);
+}
+
 static void immobilized_viewport_class_init(GtkWidgetClass* klass)
 {
+    immobilized_viewport_parent_class = g_type_class_peek_parent(klass);
+
     GObjectClass* o_class = G_OBJECT_CLASS(klass);
 
     /* GObject signals */
+    o_class->finalize = immobilized_viewport_finalize;
     o_class->set_property = immobilized_viewport_set_property;
     o_class->get_property = immobilized_viewport_get_property;
 
@@ -6354,16 +6390,16 @@ GType immobilized_viewport_get_type()
             nullptr,  /* base init */
             nullptr,  /* base finalize */
             reinterpret_cast<GClassInitFunc>(immobilized_viewport_class_init), /* class init */
-            nullptr, /* class finalize */
-            nullptr,                   /* class data */
-            sizeof (ImmobilizedViewport), /* instance size */
-            0,                         /* nb preallocs */
-            nullptr,  /* instance init */
-            nullptr                    /* value table */
+            nullptr,  /* class finalize */
+            nullptr,  /* class data */
+            static_cast<guint16>(query.instance_size), /* instance size */
+            0,        /* nb preallocs */
+            immobilized_viewport_instance_init,  /* instance init */
+            nullptr   /* value table */
         };
 
-        type = g_type_register_static( GTK_TYPE_VIEWPORT, "ImmobilizedViewport",
-                                       &tinfo, GTypeFlags(0));
+        type = g_type_register_static(GTK_TYPE_VIEWPORT, "ImmobilizedViewport",
+                                      &tinfo, GTypeFlags(0));
     }
 
     return type;
