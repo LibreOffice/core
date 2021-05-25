@@ -3799,12 +3799,16 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
     ScAddress aOldPos = aPos;
     bool bPosChanged = false; // Whether this cell has been moved
 
+    // Dest range is transposed
     ScRange aDestRange( rDest, ScAddress(
                 static_cast<SCCOL>(rDest.Col() + rSource.aEnd.Row() - rSource.aStart.Row()),
                 static_cast<SCROW>(rDest.Row() + rSource.aEnd.Col() - rSource.aStart.Col()),
                 rDest.Tab() + rSource.aEnd.Tab() - rSource.aStart.Tab() ) );
+
+    // cell within range
     if ( aDestRange.In( aOldPos ) )
     {
+        // References of these cells were not changed by ScTokenArray::AdjustReferenceOnMove()
         // Count back Positions
         SCCOL nRelPosX = aOldPos.Col();
         SCROW nRelPosY = aOldPos.Row();
@@ -3839,6 +3843,15 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
             {
                 rRef.SetRange(rDocument.GetSheetLimits(), aAbs, aPos); // based on the new anchor position.
                 bRefChanged = true;
+
+                // Absolute sheet reference => set 3D flag.
+                // More than one sheet referenced => has to have both 3D flags.
+                // If end part has 3D flag => start part must have it too.
+                // The same behavior as in ScTokenArray::AdjustReferenceOnMove() is used for 3D-Flags.
+                rRef.Ref2.SetFlag3D(aAbs.aStart.Tab() != aAbs.aEnd.Tab() || !rRef.Ref2.IsTabRel());
+                rRef.Ref1.SetFlag3D(
+                    (rSource.aStart.Tab() != rDest.Tab() && !bPosChanged)
+                    || !rRef.Ref1.IsTabRel() || rRef.Ref2.IsFlag3D());
             }
         }
     }
@@ -3847,6 +3860,8 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
     {
         if (pUndoDoc)
         {
+            // Similar to setOldCodeToUndo(), but it cannot be used due to the check
+            // pUndoDoc->GetCellType(aPos) == CELLTYPE_FORMULA
             ScFormulaCell* pFCell = new ScFormulaCell(
                     *pUndoDoc, aPos, pOld ? *pOld : ScTokenArray(*pUndoDoc), eTempGrammar, cMatrixFlag);
 

@@ -64,8 +64,8 @@ bool UpdatedRangeNames::isEmpty(SCTAB nTab) const
 }
 
 
-RefUpdateContext::RefUpdateContext(ScDocument& rDoc) :
-    mrDoc(rDoc), meMode(URM_INSDEL), mnColDelta(0), mnRowDelta(0), mnTabDelta(0), mpBlockPos( nullptr ) {}
+RefUpdateContext::RefUpdateContext(ScDocument& rDoc, ScDocument* pSrcDoc) :
+    mrDoc(rDoc), mpSrcDoc(pSrcDoc), meMode(URM_INSDEL), mnColDelta(0), mnRowDelta(0), mnTabDelta(0), mpBlockPos( nullptr ) {}
 
 bool RefUpdateContext::isInserted() const
 {
