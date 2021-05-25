@@ -76,6 +76,8 @@ CPPUNIT_TEST_FIXTURE(EventContainerTest, testInsertOrder)
     CPPUNIT_ASSERT_EQUAL(OUString("a"), aEventNames[1]);
     CPPUNIT_ASSERT_EQUAL(OUString("1"), aEventNames[2]);
     CPPUNIT_ASSERT_EQUAL(OUString("A"), aEventNames[3]);
+
+    css::uno::Reference<css::lang::XComponent>(xControlModel, css::uno::UNO_QUERY_THROW)->dispose();
 }
 }
 

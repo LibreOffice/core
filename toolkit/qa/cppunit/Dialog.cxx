@@ -66,6 +66,7 @@ CPPUNIT_TEST_FIXTURE(DialogTest, testDialogSizeable)
 
     xDialog->endExecute();
     css::uno::Reference<css::lang::XComponent>(xDialog, css::uno::UNO_QUERY_THROW)->dispose();
+    css::uno::Reference<css::lang::XComponent>(xControlModel, css::uno::UNO_QUERY_THROW)->dispose();
 }
 }
 
