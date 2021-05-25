@@ -37,6 +37,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	genindex_data \
 	helpex \
 	idxdict \
+	io-testconnection \
 	langsupport \
 	$(if $(filter iOS,$(OS)),LibreOffice) \
 	lngconvex \
