@@ -78,7 +78,6 @@ protected:
     DECL_LINK(ExportTemplateHdl, void*, void);
 
     void SearchUpdate();
-    void FilterSearch();
 
     DECL_LINK(SearchUpdateHdl, weld::Entry&, void);
     DECL_LINK(GetFocusHdl, weld::Widget&, void);
