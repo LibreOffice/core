@@ -115,6 +115,7 @@ public:
     void testNarrationMimeType();
     void testTdf140865Wordart3D();
     void testTdf124457();
+    void testPlaceholderFillAndOutlineExport();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest1);
 
@@ -172,6 +173,7 @@ public:
     CPPUNIT_TEST(testNarrationMimeType);
     CPPUNIT_TEST(testTdf140865Wordart3D);
     CPPUNIT_TEST(testTdf124457);
+    CPPUNIT_TEST(testPlaceholderFillAndOutlineExport);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -439,6 +441,57 @@ void SdOOXMLExportTest1::testLostPlaceholders()
     // Expected: true
     // Actual: false
 
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest1::testPlaceholderFillAndOutlineExport()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/LostPlaceholderFill.odp"), ODP);
+
+    uno::Any aFillStyle;
+    uno::Any aFillColor;
+    uno::Any aLineStyle;
+    uno::Any aLineColor;
+
+    for (int i = 1; i <= 2; i++)
+    {
+        CPPUNIT_ASSERT(xDocShRef.is());
+
+        auto pDoc = xDocShRef->GetDoc();
+        CPPUNIT_ASSERT(pDoc);
+        auto pPage = pDoc->GetPage(1);
+        CPPUNIT_ASSERT(pPage);
+        auto pObj = pPage->GetObj(1);
+        CPPUNIT_ASSERT(pObj);
+
+        uno::Reference<drawing::XShape> xShp(pObj->getUnoShape(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xShp);
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong ShapeType!", OUString(u"com.sun.star.presentation.OutlinerShape"), xShp->getShapeType());
+        uno::Reference<beans::XPropertySet> xShpProps(xShp, uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("It must be a placeholder!", true, xShpProps->getPropertyValue("IsPresentationObject").get<bool>());
+
+        if (i == 1)
+        {
+            aFillStyle = xShpProps->getPropertyValue("FillStyle");
+            aFillColor = xShpProps->getPropertyValue("FillColor");
+
+            aLineStyle = xShpProps->getPropertyValue("LineStyle");
+            aLineColor = xShpProps->getPropertyValue("LineColor");
+
+            xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+            continue;
+        }
+        else
+        {
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("The Placeholder fillstyle has not been exported!", aFillStyle, xShpProps->getPropertyValue("FillStyle"));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("The Placeholder fillcolor has not been exported!", aFillColor, xShpProps->getPropertyValue("FillColor"));
+
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("The Placeholder linestyle has not been exported!", aLineStyle, xShpProps->getPropertyValue("LineStyle"));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("The Placeholder linecolor has not been exported!", aLineColor, xShpProps->getPropertyValue("LineColor"));
+            break;
+        }
+    }
     xDocShRef->DoClose();
 }
 
