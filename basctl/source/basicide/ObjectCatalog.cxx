@@ -54,8 +54,7 @@ ObjectCatalog::~ObjectCatalog() { disposeOnce(); }
 
 void ObjectCatalog::dispose()
 {
-    if (!IsDisposed())
-        GetParent()->GetSystemWindow()->GetTaskPaneList()->RemoveWindow(this);
+    GetParent()->GetSystemWindow()->GetTaskPaneList()->RemoveWindow(this);
     m_xTitle.reset();
     m_xTree.reset();
     DockingWindow::dispose();
