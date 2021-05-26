@@ -18583,6 +18583,15 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
                 }
             }
 
+            if (sName == "xalign")
+            {
+                if (GetParentObjectType(xChild) == "GtkLinkButton")
+                {
+                    // TODO expand into a GtkLabel child with alignment on that instead
+                    assert(xChild->getFirstChild()->getNodeValue() == "0");
+                    xRemoveList.push_back(xChild);
+                }
+            }
 
             if (sName == "image")
             {
