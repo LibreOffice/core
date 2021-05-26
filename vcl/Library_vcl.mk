@@ -48,13 +48,8 @@ $(eval $(call gb_Library_add_defs,vcl,\
     -DCUI_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,cui))\" \
     -DDESKTOP_DETECTOR_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,desktop_detector))\" \
     -DTK_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,tk))\" \
+    $(if $(SYSTEM_GLM),-DGLM_ENABLE_EXPERIMENTAL) \
 ))
-
-ifeq ($(SYSTEM_GLM),TRUE)
-$(eval $(call gb_Library_add_defs,vcl,\
-        -DGLM_ENABLE_EXPERIMENTAL \
-))
-endif
 
 $(eval $(call gb_Library_use_sdk_api,vcl))
 
@@ -62,38 +57,25 @@ $(eval $(call gb_Library_use_custom_headers,vcl,\
     officecfg/registry \
 ))
 
-$(eval $(call gb_Library_use_externals,vcl,\
-    libjpeg \
-    libeot \
-    libpng \
-    $(if $(filter PDFIUM,$(BUILD_TYPE)),pdfium) \
-))
-
 $(eval $(call gb_Library_use_libraries,vcl,\
-    $(call gb_Helper_optional,BREAKPAD, \
-        crashreport) \
-    svl \
-    tl \
-    utl \
-    sot \
-    ucbhelper \
     basegfx \
     comphelper \
+    cppu \
     cppuhelper \
+    $(call gb_Helper_optional,BREAKPAD,crashreport) \
     i18nlangtag \
     i18nutil \
+    $(if $(ENABLE_JAVA),jvmaccess) \
     $(if $(filter OPENCL,$(BUILD_TYPE)),opencl) \
-    cppu \
     sal \
     salhelper \
+    sot \
+    svl \
+    tl \
+    ucbhelper \
+    utl \
     xmlreader \
 ))
-
-ifeq ($(ENABLE_JAVA),TRUE)
-$(eval $(call gb_Library_use_libraries,vcl,\
-    jvmaccess \
-))
-endif
 
 $(eval $(call gb_Library_use_externals,vcl,\
     boost_headers \
@@ -104,17 +86,15 @@ $(eval $(call gb_Library_use_externals,vcl,\
     icu_headers \
     icuuc \
     lcms2 \
+    libeot \
+    libjpeg \
+    libpng \
     mdds_headers \
-    $(if $(filter SKIA,$(BUILD_TYPE)),skia) \
+    $(if $(filter PDFIUM,$(BUILD_TYPE)),pdfium) \
 ))
 
-ifeq ($(DISABLE_GUI),)
-$(eval $(call gb_Library_use_externals,vcl,\
-     epoxy \
- ))
-endif
-
 $(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/skia/SkiaHelper \
     vcl/source/animate/Animation \
     vcl/source/animate/AnimationBitmap \
     vcl/source/cnttype/mcnttfactory \
@@ -202,7 +182,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/control/longcurr \
     vcl/source/control/imp_listbox \
     vcl/source/control/listbox \
-	vcl/source/control/managedmenubutton \
+    vcl/source/control/managedmenubutton \
     vcl/source/control/menubtn \
     vcl/source/control/NotebookbarPopup \
     vcl/source/control/PriorityHBox \
@@ -500,6 +480,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/fontsubset/ttcr \
     vcl/source/fontsubset/xlat \
     vcl/source/pdf/PDFiumTools \
+    vcl/source/pdf/$(if $(filter PDFIUM,$(BUILD_TYPE)),,Dummy)PDFiumLibrary \
     vcl/source/uitest/logger \
     vcl/source/uitest/uiobject \
     vcl/source/uitest/uitest \
@@ -522,20 +503,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/jsdialog/executor \
 ))
 
-ifneq ($(filter PDFIUM,$(BUILD_TYPE)),)
-
-$(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/source/pdf/PDFiumLibrary \
-))
-
-else
-
-$(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/source/pdf/DummyPDFiumLibrary \
-))
-
-endif
-
 $(eval $(call gb_Library_add_cobjects,vcl,\
     vcl/source/filter/jpeg/transupp \
 ))
@@ -546,7 +513,8 @@ vcl_headless_code= \
         vcl/headless/svpbmp \
         vcl/headless/svpgdi \
         vcl/headless/svpdata \
-        vcl/headless/CustomWidgetDraw) \
+        vcl/headless/CustomWidgetDraw \
+    ) \
     vcl/headless/svpdummies \
     vcl/headless/svpinst \
     vcl/headless/svpvd \
@@ -578,6 +546,11 @@ vcl_headless_freetype_code=\
     vcl/unx/generic/print/prtsetup \
     vcl/unx/generic/print/text_gfx \
 
+vcl_headless_freetype_libs = \
+    cairo \
+    fontconfig \
+    freetype \
+
 ifeq ($(USING_X11),TRUE)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/app/salplug \
@@ -585,10 +558,10 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/unx/generic/printer/ppdparser \
     vcl/unx/generic/window/screensaverinhibitor \
     vcl/unx/generic/printer/cpdmgr \
-    $(if $(filter TRUE,$(ENABLE_CUPS)),\
+    $(if $(ENABLE_CUPS),\
         vcl/unx/generic/printer/cupsmgr \
         vcl/unx/generic/printer/printerinfomanager \
-        , \
+    , \
         vcl/null/printerinfomanager \
     ) \
     $(vcl_headless_code) \
@@ -596,16 +569,28 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 ))
 
 $(eval $(call gb_Library_use_externals,vcl,\
-    cairo \
-    cups \
+    $(if $(ENABLE_CUPS),cups) \
     dbus \
-    fontconfig \
-    freetype \
     valgrind \
+    $(vcl_headless_freetype_libs) \
+))
+
+$(eval $(call gb_Library_add_libs,vcl,\
+    -lX11 \
+    -lXext \
+))
+
+ifneq (,$(filter LINUX %BSD SOLARIS,$(OS)))
+$(eval $(call gb_Library_use_static_libraries,vcl,\
+    glxtest \
+))
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/source/opengl/x11/X11DeviceInfo \
 ))
 endif
+endif # USING_X11
 
-ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
+ifneq (,$(filter LINUX %BSD SOLARIS,$(OS)))
 $(eval $(call gb_Library_add_libs,vcl,\
     -lm $(DLOPEN_LIBS) \
 ))
@@ -617,45 +602,32 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/unx/generic/printer/ppdparser \
     vcl/null/printerinfomanager \
     vcl/headless/headlessinst \
-    vcl/skia/SkiaHelper \
     $(vcl_headless_code) \
     $(vcl_headless_freetype_code) \
 ))
 
 $(eval $(call gb_Library_use_externals,vcl,\
-    cairo \
-    freetype \
-    fontconfig \
+    $(vcl_headless_freetype_libs) \
 ))
 
-else # ! DISABLE_GUI
+else # !DISABLE_GUI
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/opengl/DeviceInfo \
     vcl/source/opengl/OpenGLContext \
     vcl/source/opengl/OpenGLHelper \
-    vcl/skia/SkiaHelper \
     $(if $(filter SKIA,$(BUILD_TYPE)), \
         vcl/skia/salbmp \
         vcl/skia/zone \
         vcl/skia/gdiimpl \
-        ) \
- ))
-
-ifeq ($(OS),WNT)
-$(eval $(call gb_Library_use_package,vcl,vcl_opengl_denylist))
-endif
-
-ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
-$(eval $(call gb_Library_add_libs,vcl,\
-    -lX11 \
-    -lXext \
+    ) \
 ))
-$(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/source/opengl/x11/X11DeviceInfo \
+
+$(eval $(call gb_Library_use_externals,vcl,\
+    epoxy \
+    $(if $(filter SKIA,$(BUILD_TYPE)),skia) \
 ))
-endif
-endif # ! DISABLE_GUI
+endif # !DISABLE_GUI
 
 
 ifeq ($(OS),HAIKU)
@@ -676,10 +648,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl, \
 ))
 
 $(eval $(call gb_Library_use_externals,vcl,\
-    cairo \
-    fontconfig \
-    freetype \
     expat \
+    $(vcl_headless_freetype_libs) \
 ))
 endif
 
@@ -700,10 +670,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 ))
 
 $(eval $(call gb_Library_use_externals,vcl,\
-    cairo \
-    fontconfig \
-    freetype \
     expat \
+    $(vcl_headless_freetype_libs) \
 ))
 endif
 
@@ -764,18 +732,10 @@ $(eval $(call gb_Library_add_nativeres,vcl,vcl/salsrc))
 
 # HACK: dependency on icon themes so running unit tests don't
 # prevent delivering these by having open file handles on WNT
-ifeq ($(gb_Side),host)
-$(eval $(call gb_Library_use_package,vcl,postprocess_images))
-endif
-endif # $(OS) == WNT
-
-
-ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
-ifeq ($(USING_X11),TRUE)
-$(eval $(call gb_Library_use_static_libraries,vcl,\
-	glxtest \
+$(eval $(call gb_Library_use_packages,vcl, \
+    vcl_opengl_denylist \
+    $(if $(filter host,$(gb_Side)),postprocess_images) \
 ))
-endif
-endif
+endif # WNT
 
 # vim: set noet sw=4 ts=4:
