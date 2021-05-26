@@ -150,8 +150,10 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
                     if (separatorPos > 0)
                     {
                         // x;y
-                        OString clickPosX = OUStringToOString(rData["data"].copy(0, separatorPos),  RTL_TEXTENCODING_ASCII_US);
-                        OString  clickPosY = OUStringToOString(rData["data"].copy(separatorPos + 1),  RTL_TEXTENCODING_ASCII_US);
+                        OString clickPosX = OUStringToOString(rData["data"].copy(0, separatorPos),
+                                                              RTL_TEXTENCODING_ASCII_US);
+                        OString clickPosY = OUStringToOString(rData["data"].copy(separatorPos + 1),
+                                                              RTL_TEXTENCODING_ASCII_US);
                         if (!clickPosX.isEmpty() && !clickPosY.isEmpty())
                         {
                             double posX = std::atof(clickPosX.getStr());
@@ -173,7 +175,7 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
             auto pSpinField = dynamic_cast<weld::SpinButton*>(pWidget);
             if (pSpinField)
             {
-                if (sAction == "change")
+                if (sAction == "change" || sAction == "value")
                 {
                     OString sValue = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
                     int nValue = std::atoi(sValue.getStr());
