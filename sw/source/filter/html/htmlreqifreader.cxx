@@ -498,41 +498,26 @@ bool WrapOleInRtf(SvStream& rOle2, SvStream& rRtf, SwOLENode& rOLENode,
 
 bool WrapGraphicInRtf(const Graphic& rGraphic, const Size& rLogicSize, SvStream& rRtf)
 {
+    // Start object.
+    rRtf.WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_OBJECT);
+    rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_OBJEMB);
+
+    rRtf.WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_RESULT);
     rRtf.WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_PICT);
 
-    GfxLink aLink = rGraphic.GetGfxLink();
-    const sal_uInt8* pGraphicAry = aLink.GetData();
-    sal_uInt64 nSize = aLink.GetDataSize();
-    OString aBlipType;
-    bool bIsWMF = false;
-    switch (aLink.GetType())
+    // Prepare presendation data.
+    const sal_uInt8* pPresentationData = nullptr;
+    sal_uInt64 nPresentationData = 0;
+    SvMemoryStream aGraphicStream;
+    uno::Sequence<beans::PropertyValue> aFilterData
+        = { comphelper::makePropertyValue("EmbedEMF", false) };
+    FilterConfigItem aConfigItem(&aFilterData);
+    if (ConvertGraphicToWMF(rGraphic, aGraphicStream, &aConfigItem))
     {
-        case GfxLinkType::NativeBmp:
-            aBlipType = OOO_STRING_SVTOOLS_RTF_WBITMAP;
-            break;
-        case GfxLinkType::NativeJpg:
-            aBlipType = OOO_STRING_SVTOOLS_RTF_JPEGBLIP;
-            break;
-        case GfxLinkType::NativePng:
-            aBlipType = OOO_STRING_SVTOOLS_RTF_PNGBLIP;
-            break;
-        case GfxLinkType::NativeWmf:
-            if (aLink.IsEMF())
-                aBlipType = OOO_STRING_SVTOOLS_RTF_EMFBLIP;
-            else
-            {
-                aBlipType = OOO_STRING_SVTOOLS_RTF_WMETAFILE;
-                bIsWMF = true;
-            }
-            break;
-        default:
-            break;
+        pPresentationData = static_cast<const sal_uInt8*>(aGraphicStream.GetData());
+        nPresentationData = aGraphicStream.TellEnd();
+        msfilter::rtfutil::StripMetafileHeader(pPresentationData, nPresentationData);
     }
-
-    if (aBlipType.isEmpty())
-        return false;
-
-    rRtf.WriteOString(aBlipType);
 
     Size aMapped(rGraphic.GetPrefSize());
     rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PICW);
@@ -544,18 +529,22 @@ bool WrapGraphicInRtf(const Graphic& rGraphic, const Size& rLogicSize, SvStream&
     rRtf.WriteOString(OString::number(rLogicSize.Width()));
     rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PICHGOAL);
     rRtf.WriteOString(OString::number(rLogicSize.Height()));
+    rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_WMETAFILE "8");
+    rRtf.WriteOString(SAL_NEWLINE_STRING);
 
-    if (bIsWMF)
+    if (pPresentationData)
     {
-        rRtf.WriteOString(OString::number(8));
-        msfilter::rtfutil::StripMetafileHeader(pGraphicAry, nSize);
+        msfilter::rtfutil::WriteHex(pPresentationData, nPresentationData, &rRtf);
+        rRtf.WriteOString(SAL_NEWLINE_STRING);
     }
-    rRtf.WriteOString(SAL_NEWLINE_STRING);
-
-    msfilter::rtfutil::WriteHex(pGraphicAry, nSize, &rRtf);
-    rRtf.WriteOString(SAL_NEWLINE_STRING);
 
     // End pict.
+    rRtf.WriteCharPtr("}");
+
+    // End result.
+    rRtf.WriteCharPtr("}");
+
+    // End object.
     rRtf.WriteCharPtr("}");
     return true;
 }
