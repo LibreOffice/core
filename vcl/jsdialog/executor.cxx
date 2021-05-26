@@ -179,7 +179,7 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
                 {
                     OString sValue = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
                     int nValue = std::atoi(sValue.getStr());
-                    pSpinField->set_value(nValue);
+                    pSpinField->set_value(pSpinField->normalize(nValue));
                     LOKTrigger::trigger_value_changed(*pSpinField);
                     return true;
                 }
