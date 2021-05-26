@@ -12961,7 +12961,7 @@ AC_SUBST(UPDATE_CONFIG)
 PRIVACY_POLICY_URL="$with_privacy_policy_url"
 if test "$ENABLE_ONLINE_UPDATE" = TRUE -o "$ENABLE_BREAKPAD" = "TRUE"; then
     if test "x$with_privacy_policy_url" = "xundefined"; then
-        AC_MSG_FAILURE([online update or breakpad/crashreporting are enabled, but no privacy url was provided])
+        AC_MSG_FAILURE([online update or breakpad/crashreporting are enabled, but no --with-privacy-policy-url=... was provided])
     fi
 fi
 AC_SUBST(PRIVACY_POLICY_URL)
