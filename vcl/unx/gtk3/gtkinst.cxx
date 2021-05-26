@@ -2207,12 +2207,22 @@ void set_cursor(GtkWidget* pWidget, const char *pName)
 
 OString get_buildable_id(GtkBuildable* pWidget)
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    const gchar* pStr = gtk_buildable_get_name(pWidget);
+#if GTK_CHECK_VERSION(4, 0, 0)
+    const gchar* pStr = gtk_buildable_get_buildable_id(pWidget);
 #else
-    const gchar* pStr = gtk_buildable_get_buildable_id(GTK_BUILDABLE(pWidget));
+    const gchar* pStr = gtk_buildable_get_name(pWidget);
 #endif
     return OString(pStr, pStr ? strlen(pStr) : 0);
+}
+
+void set_buildable_id(GtkBuildable* pWidget, const OString& rId)
+{
+#if GTK_CHECK_VERSION(4, 0, 0)
+    GtkBuildableIface *iface = GTK_BUILDABLE_GET_IFACE(pWidget);
+    (*iface->set_id)(pWidget, rId.getStr());
+#else
+    gtk_buildable_set_name(pWidget, rId.getStr());
+#endif
 }
 
 class GtkInstanceWidget : public virtual weld::Widget
@@ -3301,11 +3311,7 @@ public:
 
     virtual void set_buildable_name(const OString& rId) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        gtk_buildable_set_name(GTK_BUILDABLE(m_pWidget), rId.getStr());
-#else
-        (void)rId;
-#endif
+        ::set_buildable_id(GTK_BUILDABLE(m_pWidget), rId);
     }
 
     virtual void set_help_id(const OString& rHelpId) override
@@ -4154,7 +4160,7 @@ public:
         if (eCheckRadioFalse == TRISTATE_FALSE)
             gtk_check_menu_item_set_draw_as_radio(GTK_CHECK_MENU_ITEM(pItem), true);
 
-        gtk_buildable_set_name(GTK_BUILDABLE(pItem), OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr());
+        ::set_buildable_id(GTK_BUILDABLE(pItem), OUStringToOString(rId, RTL_TEXTENCODING_UTF8));
         gtk_menu_shell_append(GTK_MENU_SHELL(m_pMenu), pItem);
         gtk_widget_show(pItem);
         add_to_map(GTK_MENU_ITEM(pItem));
@@ -4165,7 +4171,7 @@ public:
     void insert_separator(int pos, std::u16string_view rId)
     {
         GtkWidget* pItem = gtk_separator_menu_item_new();
-        gtk_buildable_set_name(GTK_BUILDABLE(pItem), OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr());
+        ::set_buildable_id(GTK_BUILDABLE(pItem), OUStringToOString(rId, RTL_TEXTENCODING_UTF8));
         gtk_menu_shell_append(GTK_MENU_SHELL(m_pMenu), pItem);
         gtk_widget_show(pItem);
         add_to_map(GTK_MENU_ITEM(pItem));
@@ -5968,12 +5974,12 @@ public:
         m_pBack = GTK_BUTTON(gtk_button_new_with_mnemonic(MapToGtkAccelerator(GetStandardText(StandardButtonType::Back)).getStr()));
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_widget_set_can_default(GTK_WIDGET(m_pBack), true);
-        gtk_buildable_set_name(GTK_BUILDABLE(m_pBack), "previous");
+        ::set_buildable_id(GTK_BUILDABLE(m_pBack), "previous");
         gtk_box_pack_end(GTK_BOX(m_pButtonBox), GTK_WIDGET(m_pBack), false, false, 0);
 
         m_pNext = GTK_BUTTON(gtk_button_new_with_mnemonic(MapToGtkAccelerator(GetStandardText(StandardButtonType::Next)).getStr()));
         gtk_widget_set_can_default(GTK_WIDGET(m_pNext), true);
-        gtk_buildable_set_name(GTK_BUILDABLE(m_pNext), "next");
+        ::set_buildable_id(GTK_BUILDABLE(m_pNext), "next");
         gtk_box_pack_end(GTK_BOX(m_pButtonBox), GTK_WIDGET(m_pNext), false, false, 0);
 
         m_pCancel = GTK_BUTTON(gtk_button_new_with_mnemonic(MapToGtkAccelerator(GetStandardText(StandardButtonType::Cancel)).getStr()));
@@ -5982,7 +5988,7 @@ public:
 
         m_pFinish = GTK_BUTTON(gtk_button_new_with_mnemonic(MapToGtkAccelerator(GetStandardText(StandardButtonType::Finish)).getStr()));
         gtk_widget_set_can_default(GTK_WIDGET(m_pFinish), true);
-        gtk_buildable_set_name(GTK_BUILDABLE(m_pFinish), "finish");
+        ::set_buildable_id(GTK_BUILDABLE(m_pFinish), "finish");
         gtk_box_pack_end(GTK_BOX(m_pButtonBox), GTK_WIDGET(m_pFinish), false, false, 0);
 
         m_pHelp = GTK_BUTTON(gtk_button_new_with_mnemonic(MapToGtkAccelerator(GetStandardText(StandardButtonType::Help)).getStr()));
@@ -6119,11 +6125,7 @@ public:
         disable_notify_events();
 
         GtkWidget *pChild = gtk_grid_new();
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        gtk_buildable_set_name(GTK_BUILDABLE(pChild), rIdent.getStr());
-#else
-        (void)rIdent;
-#endif
+        ::set_buildable_id(GTK_BUILDABLE(pChild), rIdent);
         gtk_assistant_append_page(m_pAssistant, pChild);
         gtk_assistant_set_page_type(m_pAssistant, pChild, GTK_ASSISTANT_PAGE_CUSTOM);
         gtk_widget_show(pChild);
@@ -7327,9 +7329,7 @@ private:
         disable_notify_events();
 
         GtkWidget *pTabWidget = gtk_fixed_new();
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        gtk_buildable_set_name(GTK_BUILDABLE(pTabWidget), "useless");
-#endif
+        ::set_buildable_id(GTK_BUILDABLE(pTabWidget), "useless");
 
         GtkWidget *pChild = gtk_grid_new();
         gtk_notebook_append_page(pNotebook, pChild, pTabWidget);
@@ -7344,11 +7344,7 @@ private:
         disable_notify_events();
 
         GtkWidget *pTabWidget = gtk_label_new_with_mnemonic(MapToGtkAccelerator(rLabel).getStr());
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        gtk_buildable_set_name(GTK_BUILDABLE(pTabWidget), rIdent.getStr());
-#else
-        (void)rIdent;
-#endif
+        ::set_buildable_id(GTK_BUILDABLE(pTabWidget), rIdent);
         gtk_notebook_insert_page(pNotebook, pChild, pTabWidget, nPos);
         gtk_widget_show(pChild);
         gtk_widget_show(pTabWidget);
@@ -9427,7 +9423,7 @@ public:
         if (eCheckRadioFalse == TRISTATE_FALSE)
             gtk_check_menu_item_set_draw_as_radio(GTK_CHECK_MENU_ITEM(pItem), true);
 
-        gtk_buildable_set_name(GTK_BUILDABLE(pItem), OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr());
+        ::set_buildable_id(GTK_BUILDABLE(pItem), OUStringToOString(rId, RTL_TEXTENCODING_UTF8));
         gtk_menu_shell_append(GTK_MENU_SHELL(m_pMenu), pItem);
         gtk_widget_show(pItem);
         GtkMenuItem* pMenuItem = GTK_MENU_ITEM(pItem);
@@ -9811,7 +9807,7 @@ public:
     {
         OString sId = OUStringToOString(rId, RTL_TEXTENCODING_UTF8);
         GtkToolItem* pItem = gtk_tool_button_new(nullptr, sId.getStr());
-        gtk_buildable_set_name(GTK_BUILDABLE(pItem), sId.getStr());
+        ::set_buildable_id(GTK_BUILDABLE(pItem), sId);
         gtk_toolbar_insert(m_pToolbar, pItem, pos);
         gtk_widget_show(GTK_WIDGET(pItem));
         add_to_map(pItem, nullptr);
@@ -9821,7 +9817,7 @@ public:
     {
         OString sId = OUStringToOString(rId, RTL_TEXTENCODING_UTF8);
         GtkToolItem* pItem = gtk_separator_tool_item_new();
-        gtk_buildable_set_name(GTK_BUILDABLE(pItem), sId.getStr());
+        ::set_buildable_id(GTK_BUILDABLE(pItem), sId);
         gtk_toolbar_insert(m_pToolbar, pItem, pos);
         gtk_widget_show(GTK_WIDGET(pItem));
     }
@@ -9853,7 +9849,7 @@ public:
         m_aMap.erase(m_aMap.find(sOldIdent));
 
         GtkToolItem* pItem = gtk_toolbar_get_nth_item(m_pToolbar, nIndex);
-        gtk_buildable_set_name(GTK_BUILDABLE(pItem), rIdent.getStr());
+        ::set_buildable_id(GTK_BUILDABLE(pItem), rIdent);
 
         // to keep the ids unique, if the new id is already in use by an item,
         // change the id of that item to the now unused old ident of this item
@@ -9861,7 +9857,7 @@ public:
         if (aFind != m_aMap.end())
         {
             GtkToolItem* pDupIdItem = aFind->second;
-            gtk_buildable_set_name(GTK_BUILDABLE(pDupIdItem), sOldIdent.getStr());
+            ::set_buildable_id(GTK_BUILDABLE(pDupIdItem), sOldIdent);
             m_aMap[sOldIdent] = pDupIdItem;
         }
 
