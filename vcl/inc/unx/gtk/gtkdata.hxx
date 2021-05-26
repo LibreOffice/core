@@ -73,10 +73,11 @@ inline void css_provider_load_from_data(GtkCssProvider *css_provider,
 #endif
 }
 
-inline GtkWidget* widget_get_root(GtkWidget* pWidget)
+inline GtkWidget* widget_get_toplevel(GtkWidget* pWidget)
 {
 #if GTK_CHECK_VERSION(4, 0, 0)
-    return pWidget ? GTK_WIDGET(gtk_widget_get_root(pWidget)) : nullptr;
+    GtkRoot* pRoot = gtk_widget_get_root(pWidget);
+    return pRoot ? GTK_WIDGET(pRoot) : pWidget;
 #else
     return gtk_widget_get_toplevel(pWidget);
 #endif

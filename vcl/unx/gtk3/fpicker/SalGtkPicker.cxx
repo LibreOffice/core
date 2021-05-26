@@ -101,7 +101,7 @@ GtkWindow* RunDialog::GetTransientFor()
     GtkSalFrame *pFrame = dynamic_cast<GtkSalFrame*>(pWindow->ImplGetFrame());
     if (!pFrame)
         return nullptr;
-    return GTK_WINDOW(widget_get_root(pFrame->getWindow()));
+    return GTK_WINDOW(widget_get_toplevel(pFrame->getWindow()));
 }
 
 RunDialog::RunDialog(GtkWidget *pDialog, const uno::Reference<awt::XExtendedToolkit>& rToolkit,
