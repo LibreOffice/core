@@ -2548,8 +2548,9 @@ DECLARE_ODFEXPORT_EXPORTONLY_TEST(testTableStyles3, "table_styles_3.odt")
 
 }
 
-DECLARE_ODFIMPORT_TEST(testTableStyles4, "table_styles_4.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTableStyles4)
 {
+    load(mpTestDocumentPath, "table_styles_4.odt");
     // Test if loaded styles overwrite existing styles
     uno::Reference<style::XStyleFamiliesSupplier> XFamiliesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xFamilies(XFamiliesSupplier->getStyleFamilies());
