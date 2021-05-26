@@ -130,17 +130,17 @@ void SwInsTableDlg::InitAutoTableFormat()
 
     m_xLbFormat->connect_changed(LINK(this, SwInsTableDlg, SelFormatHdl));
 
-    pTableTable = new SwTableAutoFormatTable;
-    pTableTable->Load();
+    m_xTableTable.reset(new SwTableAutoFormatTable);
+    m_xTableTable->Load();
 
     // Add "- none -" style autoformat table.
     m_xLbFormat->append_text(SwViewShell::GetShellRes()->aStrNone); // Insert to listbox
 
     // Add other styles of autoformat tables.
-    for (sal_uInt8 i = 0, nCount = static_cast<sal_uInt8>(pTableTable->size());
+    for (sal_uInt8 i = 0, nCount = static_cast<sal_uInt8>(m_xTableTable->size());
             i < nCount; i++)
     {
-        SwTableAutoFormat const& rFormat = (*pTableTable)[ i ];
+        SwTableAutoFormat const& rFormat = (*m_xTableTable)[ i ];
         m_xLbFormat->append_text(rFormat.GetName());
         if (pTAutoFormat && rFormat.GetName() == pTAutoFormat->GetName())
             lbIndex = i;
@@ -148,7 +148,7 @@ void SwInsTableDlg::InitAutoTableFormat()
 
     // Change this min variable if you add autotable manually.
     minTableIndexInLb = 1;
-    maxTableIndexInLb = minTableIndexInLb + static_cast<sal_uInt8>(pTableTable->size());
+    maxTableIndexInLb = minTableIndexInLb + static_cast<sal_uInt8>(m_xTableTable->size());
     lbIndex = 0;
     m_xLbFormat->select( lbIndex );
     tbIndex = lbIndexToTableIndex(lbIndex);
@@ -187,7 +187,7 @@ IMPL_LINK_NOARG(SwInsTableDlg, SelFormatHdl, weld::TreeView&, void)
     // To understand this index mapping, look InitAutoTableFormat function to
     // see how listbox item is implemented.
     if( tbIndex < 255 )
-        m_aWndPreview.NotifyChange( (*pTableTable)[tbIndex] );
+        m_aWndPreview.NotifyChange( (*m_xTableTable)[tbIndex] );
     else
     {
         SwTableAutoFormat aTmp( SwViewShell::GetShellRes()->aStrNone );
@@ -200,14 +200,14 @@ IMPL_LINK_NOARG(SwInsTableDlg, SelFormatHdl, weld::TreeView&, void)
 IMPL_LINK_NOARG(SwInsTableDlg, OKHdl, weld::Button&, void)
 {
     if( tbIndex < 255 )
-        pShell->SetTableStyle((*pTableTable)[tbIndex]);
+        pShell->SetTableStyle((*m_xTableTable)[tbIndex]);
 
     if( tbIndex < 255 )
     {
         if( pTAutoFormat )
-            *pTAutoFormat = (*pTableTable)[ tbIndex ];
+            *pTAutoFormat = (*m_xTableTable)[ tbIndex ];
         else
-            pTAutoFormat = new SwTableAutoFormat( (*pTableTable)[ tbIndex ] );
+            pTAutoFormat = new SwTableAutoFormat( (*m_xTableTable)[ tbIndex ] );
     }
     else
     {
