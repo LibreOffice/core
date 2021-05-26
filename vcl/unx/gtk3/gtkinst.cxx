@@ -2256,7 +2256,7 @@ protected:
 
     void signal_focus_in()
     {
-        GtkWidget* pTopLevel = widget_get_root(m_pWidget);
+        GtkWidget* pTopLevel = widget_get_toplevel(m_pWidget);
         // see commentary in GtkSalObjectWidgetClip::Show
         if (pTopLevel && g_object_get_data(G_OBJECT(pTopLevel), "g-lo-BlockFocusChange"))
             return;
@@ -2306,7 +2306,7 @@ protected:
 
     void signal_focus_out()
     {
-        GtkWidget* pTopLevel = widget_get_root(m_pWidget);
+        GtkWidget* pTopLevel = widget_get_toplevel(m_pWidget);
         // see commentary in GtkSalObjectWidgetClip::Show
         if (pTopLevel && g_object_get_data(G_OBJECT(pTopLevel), "g-lo-BlockFocusChange"))
             return;
@@ -2940,7 +2940,7 @@ public:
 
     virtual bool is_active() const override
     {
-        GtkWindow* pTopLevel = GTK_WINDOW(widget_get_root(m_pWidget));
+        GtkWindow* pTopLevel = GTK_WINDOW(widget_get_toplevel(m_pWidget));
         return pTopLevel && gtk_window_is_active(pTopLevel) && has_focus();
     }
 
@@ -3334,7 +3334,7 @@ public:
 
     GtkWindow* getWindow()
     {
-        return GTK_WINDOW(widget_get_root(m_pWidget));
+        return GTK_WINDOW(widget_get_toplevel(m_pWidget));
     }
 
 #if GTK_CHECK_VERSION(4, 0, 0)
@@ -4667,7 +4667,7 @@ namespace
 #if !GTK_CHECK_VERSION(4, 0, 0)
     void do_collect_screenshot_data(GtkWidget* pItem, gpointer data)
     {
-        GtkWidget* pTopLevel = widget_get_root(pItem);
+        GtkWidget* pTopLevel = widget_get_toplevel(pItem);
 
         gtk_coord x, y;
         gtk_widget_translate_coordinates(pItem, pTopLevel, 0, 0, &x, &y);
@@ -8423,7 +8423,7 @@ void do_ungrab(GtkWidget* pWidget)
 GtkPositionType show_menu_older_gtk(GtkWidget* pMenuButton, GtkWindow* pMenu)
 {
     //place the toplevel just below its launcher button
-    GtkWidget* pToplevel = widget_get_root(pMenuButton);
+    GtkWidget* pToplevel = widget_get_toplevel(pMenuButton);
     gtk_coord x, y, absx, absy;
     gtk_widget_translate_coordinates(pMenuButton, pToplevel, 0, 0, &x, &y);
     GdkSurface* pWindow = widget_get_surface(pToplevel);
@@ -8522,7 +8522,7 @@ bool show_menu_newer_gtk(GtkWidget* pComboBox, GtkWindow* pMenu)
 #endif
 
     //place the toplevel just below its launcher button
-    GtkWidget* pToplevel = widget_get_root(pComboBox);
+    GtkWidget* pToplevel = widget_get_toplevel(pComboBox);
     gtk_coord x, y;
     gtk_widget_translate_coordinates(pComboBox, pToplevel, 0, 0, &x, &y);
 
@@ -8563,7 +8563,7 @@ GtkPositionType show_menu(GtkWidget* pMenuButton, GtkWindow* pMenu)
     // the same top level parent. The problem is that since gtk 3.24 tooltips are also
     // implemented as popups, which means that we cannot show any popup if there is a
     // visible tooltip.
-    GtkWidget* pParent = widget_get_root(pMenuButton);
+    GtkWidget* pParent = widget_get_toplevel(pMenuButton);
     GtkSalFrame* pFrame = pParent ? GtkSalFrame::getFromWindow(pParent) : nullptr;
     if (pFrame)
     {
@@ -8632,7 +8632,7 @@ private:
             gtk_widget_set_size_request(GTK_WIDGET(m_pMenuHack), -1, -1);
 
             // undo show_menu tooltip blocking
-            GtkWidget* pParent = widget_get_root(GTK_WIDGET(m_pMenuButton));
+            GtkWidget* pParent = widget_get_toplevel(GTK_WIDGET(m_pMenuButton));
             GtkSalFrame* pFrame = pParent ? GtkSalFrame::getFromWindow(pParent) : nullptr;
             if (pFrame)
                 pFrame->UnblockTooltip();
@@ -9974,7 +9974,7 @@ public:
         if (gtk_widget_has_focus(m_pWidget))
             return true;
 
-        GtkWidget* pTopLevel = widget_get_root(m_pWidget);
+        GtkWidget* pTopLevel = widget_get_toplevel(m_pWidget);
         if (!GTK_IS_WINDOW(pTopLevel))
             return false;
         GtkWidget* pFocus = gtk_window_get_focus(GTK_WINDOW(pTopLevel));
@@ -16122,7 +16122,7 @@ private:
                 tree_view_set_cursor(m_nPrePopupCursorPos);
 
             // undo show_menu tooltip blocking
-            GtkWidget* pParent = widget_get_root(m_pToggleButton);
+            GtkWidget* pParent = widget_get_toplevel(m_pToggleButton);
             GtkSalFrame* pFrame = pParent ? GtkSalFrame::getFromWindow(pParent) : nullptr;
             if (pFrame)
                 pFrame->UnblockTooltip();
@@ -16318,7 +16318,7 @@ private:
     bool combobox_activate()
     {
         GtkWidget *pComboBox = GTK_WIDGET(m_pToggleButton);
-        GtkWidget *pToplevel = widget_get_root(pComboBox);
+        GtkWidget *pToplevel = widget_get_toplevel(pComboBox);
         GtkWindow *pWindow = GTK_WINDOW(pToplevel);
         if (!pWindow)
             return false;
@@ -18107,7 +18107,7 @@ private:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         if (gtk_expander_get_resize_toplevel(pExpander))
         {
-            GtkWidget *pToplevel = widget_get_root(GTK_WIDGET(pExpander));
+            GtkWidget *pToplevel = widget_get_toplevel(GTK_WIDGET(pExpander));
 
             // https://gitlab.gnome.org/GNOME/gtk/issues/70
             // I imagine at some point a release with a fix will be available in which
@@ -19148,7 +19148,7 @@ private:
     {
         assert(!m_bAllowCycleFocusOut); // we only expect this to be called when this holds
 
-        GtkWidget* pTopLevel = widget_get_root(m_pParentWidget);
+        GtkWidget* pTopLevel = widget_get_toplevel(m_pParentWidget);
         assert(pTopLevel);
         GtkSalFrame* pFrame = GtkSalFrame::getFromWindow(pTopLevel);
         assert(pFrame);
@@ -19169,7 +19169,7 @@ private:
     {
         assert(!m_bAllowCycleFocusOut); // we only expect this to be called when this holds
 
-        GtkWidget* pTopLevel = widget_get_root(m_pParentWidget);
+        GtkWidget* pTopLevel = widget_get_toplevel(m_pParentWidget);
         assert(pTopLevel);
         GtkSalFrame* pFrame = GtkSalFrame::getFromWindow(pTopLevel);
         assert(pFrame);
@@ -19297,7 +19297,7 @@ public:
     //gtk impl emulate this by doing this implicitly at weld time
     void auto_add_parentless_widgets_to_container(GtkWidget* pWidget)
     {
-        if (widget_get_root(pWidget) == pWidget && !GTK_IS_POPOVER(pWidget) && !GTK_IS_WINDOW(pWidget))
+        if (widget_get_toplevel(pWidget) == pWidget && !GTK_IS_POPOVER(pWidget) && !GTK_IS_WINDOW(pWidget))
         {
 #if GTK_CHECK_VERSION(4, 0, 0)
             gtk_widget_set_parent(pWidget, m_pParentWidget);
@@ -19312,7 +19312,7 @@ public:
         GtkMessageDialog* pMessageDialog = GTK_MESSAGE_DIALOG(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pMessageDialog)
             return nullptr;
-        gtk_window_set_transient_for(GTK_WINDOW(pMessageDialog), GTK_WINDOW(widget_get_root(m_pParentWidget)));
+        gtk_window_set_transient_for(GTK_WINDOW(pMessageDialog), GTK_WINDOW(widget_get_toplevel(m_pParentWidget)));
         return std::make_unique<GtkInstanceMessageDialog>(pMessageDialog, this, true);
     }
 
@@ -19322,7 +19322,7 @@ public:
         if (!pAssistant)
             return nullptr;
         if (m_pParentWidget)
-            gtk_window_set_transient_for(GTK_WINDOW(pAssistant), GTK_WINDOW(widget_get_root(m_pParentWidget)));
+            gtk_window_set_transient_for(GTK_WINDOW(pAssistant), GTK_WINDOW(widget_get_toplevel(m_pParentWidget)));
         return std::make_unique<GtkInstanceAssistant>(pAssistant, this, true);
     }
 
@@ -19332,7 +19332,7 @@ public:
         if (!pDialog)
             return nullptr;
         if (m_pParentWidget)
-            gtk_window_set_transient_for(pDialog, GTK_WINDOW(widget_get_root(m_pParentWidget)));
+            gtk_window_set_transient_for(pDialog, GTK_WINDOW(widget_get_toplevel(m_pParentWidget)));
         return std::make_unique<GtkInstanceDialog>(pDialog, this, true);
     }
 
@@ -19371,7 +19371,7 @@ public:
         }
 
         if (m_pParentWidget)
-            gtk_window_set_transient_for(pDialog, GTK_WINDOW(widget_get_root(m_pParentWidget)));
+            gtk_window_set_transient_for(pDialog, GTK_WINDOW(widget_get_toplevel(m_pParentWidget)));
         return std::make_unique<GtkInstanceDialog>(pDialog, this, true);
 #else
         return nullptr;
@@ -19986,7 +19986,7 @@ weld::Window* GtkInstance::GetFrameWeld(const css::uno::Reference<css::awt::XWin
 weld::Window* GtkSalFrame::GetFrameWeld() const
 {
     if (!m_xFrameWeld)
-        m_xFrameWeld.reset(new GtkInstanceWindow(GTK_WINDOW(widget_get_root(getWindow())), nullptr, false));
+        m_xFrameWeld.reset(new GtkInstanceWindow(GTK_WINDOW(widget_get_toplevel(getWindow())), nullptr, false));
     return m_xFrameWeld.get();
 }
 
