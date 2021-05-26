@@ -152,10 +152,8 @@ void OBoolOperator::Exec(OCodeStack& rCodeStack)
     rCodeStack.pop();
 
     rCodeStack.push(new OOperandResultBOOL(operate(pLeft, pRight)));
-    if( typeid(OOperandResult) == typeid(*pLeft))
-        delete pLeft;
-    if( typeid(OOperandResult) == typeid(*pRight))
-        delete pRight;
+    delete pLeft;
+    delete pRight;
 }
 
 bool OOp_NOT::operate(const OOperand* pLeft, const OOperand* ) const
@@ -170,8 +168,7 @@ void OOp_NOT::Exec(OCodeStack& rCodeStack)
 
     rCodeStack.push(new OOperandResultBOOL(operate(pOperand, nullptr)));
 
-    if( typeid(OOperandResult) == typeid(*pOperand))
-        delete pOperand;
+    delete pOperand;
 }
 
 bool OOp_AND::operate(const OOperand* pLeft, const OOperand* pRight) const
@@ -192,8 +189,7 @@ void OOp_ISNULL::Exec(OCodeStack& rCodeStack)
     rCodeStack.pop();
 
     rCodeStack.push(new OOperandResultBOOL(operate(pOperand, nullptr)));
-    if( typeid(OOperandResult) == typeid(*pOperand))
-        delete pOperand;
+    delete pOperand;
 }
 
 
@@ -304,10 +300,8 @@ void ONumOperator::Exec(OCodeStack& rCodeStack)
     rCodeStack.pop();
 
     rCodeStack.push(new OOperandResultNUM(operate(pLeft->getValue(), pRight->getValue())));
-    if( typeid(OOperandResult) == typeid(*pLeft))
-        delete pLeft;
-    if( typeid(OOperandResult) == typeid(*pRight))
-        delete pRight;
+    delete pLeft;
+    delete pRight;
 }
 
 double OOp_ADD::operate(const double& fLeft,const double& fRight) const
@@ -370,10 +364,8 @@ void OBinaryOperator::Exec(OCodeStack& rCodeStack)
         rCodeStack.pop();
 
     rCodeStack.push(new OOperandResult(operate(pLeft->getValue(),pRight->getValue())));
-    if(typeid(OOperandResult) == typeid(*pRight))
-        delete pRight;
-    if(typeid(OOperandResult) == typeid(*pLeft))
-        delete pLeft;
+    delete pRight;
+    delete pLeft;
 }
 
 void OUnaryOperator::Exec(OCodeStack& rCodeStack)
@@ -383,8 +375,7 @@ void OUnaryOperator::Exec(OCodeStack& rCodeStack)
     rCodeStack.pop();
 
     rCodeStack.push(new OOperandResult(operate(pOperand->getValue())));
-    if (typeid(OOperandResult) == typeid(*pOperand))
-        delete pOperand;
+    delete pOperand;
 }
 
 
