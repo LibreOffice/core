@@ -61,17 +61,37 @@ public:
 };
 
 // XXX: to be moved in a separate header.
-class EDITENG_DLLPUBLIC SvxBackgroundColorItem final : public SvxColorItem
+class EDITENG_DLLPUBLIC SvxBackgroundColorItem final : public SfxPoolItem
 {
-    public:
-        static SfxPoolItem* CreateDefault();
+private:
+    Color mColor;
 
-        SvxBackgroundColorItem(const sal_uInt16 nId);
-        SvxBackgroundColorItem(const Color& rCol, const sal_uInt16 nId);
+public:
+    static SfxPoolItem* CreateDefault();
 
-        virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
-        virtual bool QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;
-        virtual bool PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) override;
+    SvxBackgroundColorItem(const sal_uInt16 nId);
+    SvxBackgroundColorItem(const Color& rCol, const sal_uInt16 nId);
+    virtual ~SvxBackgroundColorItem() override;
+
+    virtual bool operator==(const SfxPoolItem& rPoolItem) const override;
+    virtual bool QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;
+    virtual bool PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) override;
+
+    virtual bool GetPresentation(SfxItemPresentation ePres,
+                                 MapUnit eCoreMetric, MapUnit ePresMetric,
+                                 OUString &rText, const IntlWrapper& rIntlWrapper) const override;
+
+    virtual SvxBackgroundColorItem* Clone(SfxItemPool* pPool = nullptr) const override;
+    SvxBackgroundColorItem(SvxBackgroundColorItem const &) = default; // SfxPoolItem copy function dichotomy
+
+    const Color& GetValue() const
+    {
+        return mColor;
+    }
+
+    void SetValue(const Color& rNewColor);
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 #endif
