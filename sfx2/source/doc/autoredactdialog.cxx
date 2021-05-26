@@ -644,12 +644,13 @@ bool SfxAutoRedactDialog::hasTargets() const
     return true;
 }
 
-bool SfxAutoRedactDialog::getTargets(std::vector<std::pair<RedactionTarget*, OUString>>& r_aTargets)
+bool SfxAutoRedactDialog::getTargets(std::vector<std::pair<RedactionTarget, OUString>>& r_aTargets)
 {
     if (m_aTableTargets.empty())
         return true;
 
-    r_aTargets = m_aTableTargets;
+    for (auto const& rPair : m_aTableTargets)
+        r_aTargets.push_back({ *rPair.first, rPair.second });
     m_bTargetsCopied = true;
     return true;
 }
