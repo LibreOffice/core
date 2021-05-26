@@ -61,11 +61,11 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::view;
 
-#define DEFAULT_LEFT_DISTANCE (MM50*5)  // 2,5 cm
-#define DEFAULT_TOP_DISTANCE  (MM50*11) // 5,5 cm
-#define GREETING_TOP_DISTANCE (MM50*25) //12,5 cm
-#define DEFAULT_ADDRESS_WIDTH  (MM50*15)// 7,5 cm
-#define DEFAULT_ADDRESS_HEIGHT (MM50*7) // 3,5cm
+#define DEFAULT_LEFT_DISTANCE (o3tl::convert(25, o3tl::Length::mm, o3tl::Length::twip)) // 2,5 cm
+#define DEFAULT_TOP_DISTANCE (o3tl::convert(55, o3tl::Length::mm, o3tl::Length::twip)) // 5,5 cm
+#define GREETING_TOP_DISTANCE (o3tl::convert(125, o3tl::Length::mm, o3tl::Length::twip)) //12,5 cm
+#define DEFAULT_ADDRESS_WIDTH (o3tl::convert(75, o3tl::Length::mm, o3tl::Length::twip)) // 7,5 cm
+#define DEFAULT_ADDRESS_HEIGHT (o3tl::convert(35, o3tl::Length::mm, o3tl::Length::twip)) // 3,5cm
 
 SwMailMergeLayoutPage::SwMailMergeLayoutPage(weld::Container* pPage, SwMailMergeWizard* pWizard)
     : vcl::OWizardPage(pPage, pWizard, "modules/swriter/ui/mmlayoutpage.ui", "MMLayoutPage")

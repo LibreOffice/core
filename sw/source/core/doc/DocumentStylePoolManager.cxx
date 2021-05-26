@@ -1664,7 +1664,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
             // Set the default width to 3.5 cm, use the minimum value for the height
             aSet.Put( SwFormatFrameSize( SwFrameSize::Minimum,
                     o3tl::convert(35, o3tl::Length::mm, o3tl::Length::twip),
-                    MM50 ));
+                    o3tl::convert(5, o3tl::Length::mm, o3tl::Length::twip)));
         }
         break;
     case RES_POOLFRM_WATERSIGN:

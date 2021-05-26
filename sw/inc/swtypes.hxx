@@ -25,6 +25,7 @@
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include "swdllapi.h"
 #include <o3tl/typed_flags_set.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <i18nlangtag/lang.h>
 #include <vcl/outdev.hxx>
 
@@ -52,34 +53,28 @@ typedef tools::Long SwTwips;
 #define INVALID_TWIPS   LONG_MAX
 #define TWIPS_MAX       (LONG_MAX - 1)
 
-// Converts Millimeters to Twips (1 mm == 56.905479 twips).
-template <typename T = SwTwips>
-constexpr T MmToTwips(const double mm) { return static_cast<T>(mm / 0.017573); }
-
-#define MM50   283  // 1/2 cm in TWIPS.
-
 const sal_Int32 COMPLETE_STRING = SAL_MAX_INT32;
 
-const SwTwips cMinHdFtHeight = 56;
+constexpr SwTwips cMinHdFtHeight = o3tl::convert(1, o3tl::Length::mm, o3tl::Length::twip);
 
-#define MINFLY 23   // Minimal size for FlyFrames.
-#define MINLAY 23   // Minimal size for other Frames.
+constexpr SwTwips MINFLY = o3tl::convert(40, o3tl::Length::mm100, o3tl::Length::twip); // Minimal size for FlyFrames.
+constexpr SwTwips MINLAY = o3tl::convert(40, o3tl::Length::mm100, o3tl::Length::twip); // Minimal size for other Frames.
 
 // Default column distance of two text columns corresponds to 0.3 cm.
-#define DEF_GUTTER_WIDTH (MM50 / 5 * 3)
+constexpr SwTwips DEF_GUTTER_WIDTH = o3tl::convert(3, o3tl::Length::mm, o3tl::Length::twip);
 
 // Minimal distance (distance to text) for border attribute
 // in order not to crock up aligned lines.
-// 28 Twips == 0,4mm
-#define MIN_BORDER_DIST 28
+// 28 Twips == 0,5mm
+constexpr SwTwips MIN_BORDER_DIST = o3tl::convert(50, o3tl::Length::mm100, o3tl::Length::twip);
 
 // Minimal document border: 20mm.
-const SwTwips lMinBorder = 1134;
+constexpr SwTwips lMinBorder = o3tl::convert(20, o3tl::Length::mm, o3tl::Length::twip);
 
 // Margin left and above document.
 // Half of it is gap between the pages.
 //TODO: Replace with SwViewOption::defDocumentBorder
-#define DOCUMENTBORDER  284
+constexpr SwTwips DOCUMENTBORDER = o3tl::convert(5, o3tl::Length::mm, o3tl::Length::twip);
 
 // For inserting of captions (what and where to insert).
 // It's here because it is not big enough to justify its own hxx
@@ -100,11 +95,11 @@ const sal_uInt8 NO_NUMLEVEL  = 0x20;    // "or" with the levels.
 //  (For more levels the values have to be multiplied with the levels+1;
 //  levels 0 ..4!)
 
-const short lBulletIndent = 1440/4;
+constexpr short lBulletIndent = o3tl::convert(25, o3tl::Length::in100, o3tl::Length::twip);
 const short lBulletFirstLineOffset = -lBulletIndent;
-const sal_uInt16 lNumberIndent = 1440/4;
+constexpr sal_uInt16 lNumberIndent = o3tl::convert(25, o3tl::Length::in100, o3tl::Length::twip);
 const short lNumberFirstLineOffset = -lNumberIndent;
-const short lOutlineMinTextDistance = 216; // 0.15 inch = 0.38 cm
+const short lOutlineMinTextDistance = o3tl::convert(15, o3tl::Length::in100, o3tl::Length::twip); // 0.15 inch = 0.38 cm
 
 // Count of SystemField-types of SwDoc.
 #define INIT_FLDTYPES   33

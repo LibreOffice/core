@@ -134,7 +134,7 @@
 
 #include <memory>
 
-#define OLESIZE 11905 - 2 * lMinBorder, 6 * MM50
+#define OLESIZE o3tl::convert(210 - 2 * 20, o3tl::Length::mm, o3tl::Length::twip), o3tl::convert(30, o3tl::Length::mm, o3tl::Length::twip)
 
 constexpr sal_uInt32 SWTRANSFER_OBJECTTYPE_DRAWMODEL = 0x00000001;
 constexpr sal_uInt32 SWTRANSFER_OBJECTTYPE_HTML      = 0x00000002;

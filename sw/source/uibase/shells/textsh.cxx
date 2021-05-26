@@ -399,9 +399,10 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             Size aWinSize = rEdtWin.GetSizePixel();
             Point aStartPos(aWinSize.Width()/2, aWinSize.Height() / 2);
             aStartPos = rEdtWin.PixelToLogic(aStartPos);
-            aStartPos.AdjustX( -(8 * MM50) );
-            aStartPos.AdjustY( -(4 * MM50) );
-            Size aSize(16 * MM50, 8 * MM50);
+            aStartPos.AdjustX(-o3tl::convert(40, o3tl::Length::mm, o3tl::Length::twip));
+            aStartPos.AdjustY(-o3tl::convert(20, o3tl::Length::mm, o3tl::Length::twip));
+            Size aSize(o3tl::convert(80, o3tl::Length::mm, o3tl::Length::twip),
+                       o3tl::convert(40, o3tl::Length::mm, o3tl::Length::twip));
             GetShell().LockPaint();
             GetShell().StartAllAction();
             SwFlyFrameAttrMgr aMgr( true, GetShellPtr(), Frmmgr_Type::TEXT, nullptr );

@@ -39,7 +39,8 @@ SwTextGridPage::SwTextGridPage(weld::Container* pPage, weld::DialogController* p
     : SfxTabPage(pPage, pController, "modules/swriter/ui/textgridpage.ui", "TextGridPage", &rSet)
     , m_nRubyUserValue(0)
     , m_bRubyUserValue(false)
-    , m_aPageSize(MM50, MM50)
+    , m_aPageSize(o3tl::convert(5, o3tl::Length::mm, o3tl::Length::twip),
+                  o3tl::convert(5, o3tl::Length::mm, o3tl::Length::twip))
     , m_bVertical(false)
     , m_bSquaredMode(false)
     , m_bHRulerChanged(false)

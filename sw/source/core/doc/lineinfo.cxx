@@ -25,6 +25,7 @@
 #include <charfmt.hxx>
 #include <poolfmt.hxx>
 #include <rootfrm.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <osl/diagnose.h>
 
 void SwDoc::SetLineNumberInfo( const SwLineNumberInfo &rNew )
@@ -52,7 +53,7 @@ const SwLineNumberInfo& SwDoc::GetLineNumberInfo() const
 }
 
 SwLineNumberInfo::SwLineNumberInfo() :
-    m_nPosFromLeft( MM50 ),
+    m_nPosFromLeft( o3tl::convert(5, o3tl::Length::mm, o3tl::Length::twip) ),
     m_nCountBy( 5 ),
     m_nDividerCountBy( 3 ),
     m_ePos( LINENUMBER_POS_LEFT ),

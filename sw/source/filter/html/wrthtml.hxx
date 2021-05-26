@@ -66,7 +66,7 @@ namespace utl { class TempFile; }
 
 extern SwAttrFnTab aHTMLAttrFnTab;
 
-#define HTML_PARSPACE (MM50)
+#define HTML_PARSPACE (o3tl::convert(5, o3tl::Length::mm, o3tl::Length::twip))
 
 // flags for the output of any kind of frames
 // BORDER only possible if OutHTML_Image
