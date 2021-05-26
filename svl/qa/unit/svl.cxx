@@ -1360,6 +1360,11 @@ void Test::testUserDefinedNumberFormats()
         sCode =     "HH:MM:SS";
         checkPreviewString(aFormatter, sCode, 0.365972222222222, eLang, sExpected);
     }
+    {  // tdf#100122
+        sCode =     "?/?";
+        sExpected = "-1/2";
+        checkPreviewString(aFormatter, sCode, -0.5, eLang, sExpected);
+    }
     {  // tdf#52510
         sCode =     "_($* #,##0.00_);_($* (#,##0.00);";
         sExpected = "";
