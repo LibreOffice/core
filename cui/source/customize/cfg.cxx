@@ -1018,6 +1018,12 @@ IMPL_LINK_NOARG(SvxConfigPage, SelectElementHdl, weld::ComboBox&, void)
 
 SvxConfigPage::~SvxConfigPage()
 {
+    int cnt = m_xSaveInListBox->get_count();
+    for(int i=0; i < cnt; ++i)
+    {
+        SaveInData *pData = reinterpret_cast<SaveInData*>(m_xSaveInListBox->get_id(i).toInt64());
+        delete pData;
+    }
 }
 
 void SvxConfigPage::Reset( const SfxItemSet* )
