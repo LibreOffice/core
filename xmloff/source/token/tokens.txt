@@ -1823,6 +1823,11 @@ text-autospace
 text-background-color
 text-blinking
 text-box
+<<<<<<< HEAD   (9290bf Uncomment formerly commented uitest asserts)
+=======
+text-changes-only
+text-color
+>>>>>>> CHANGE (48898a tdf#60382 sw xmloff: import/export tracked table/row deletio)
 text-combine
 text-combine-end-char
 text-combine-start-char

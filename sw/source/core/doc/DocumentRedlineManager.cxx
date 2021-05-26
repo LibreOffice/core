@@ -433,10 +433,10 @@ namespace
         if ( const SwTableBox* pBox = pPos->nNode.GetNode().GetTableBox() )
         {
             const SwTableLine* pLine = pBox->GetUpper();
-            const SvxPrintItem *pIsNoTrackedProp =
+            const SvxPrintItem *pHasTextChangesOnlyProp =
                     pLine->GetFrameFormat()->GetAttrSet().GetItem<SvxPrintItem>(RES_PRINT);
-            // table row property "IsNotTracked" is set and its value is false
-            if ( pIsNoTrackedProp && !pIsNoTrackedProp->GetValue() )
+            // table row property "HasTextChangesOnly" is set and its value is false
+            if ( pHasTextChangesOnlyProp && !pHasTextChangesOnlyProp->GetValue() )
             {
                 bool bEmptyLine = true;
                 const SwTableBoxes & rBoxes = pLine->GetTabBoxes();

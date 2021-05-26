@@ -1916,6 +1916,11 @@ namespace xmloff::token {
         TOKEN( "text-background-color",           XML_TEXT_BACKGROUND_COLOR ),
         TOKEN( "text-blinking",                   XML_TEXT_BLINKING ),
         TOKEN( "text-box",                        XML_TEXT_BOX ),
+<<<<<<< HEAD   (9290bf Uncomment formerly commented uitest asserts)
+=======
+        TOKEN( "text-changes-only",               XML_TEXT_CHANGES_ONLY ),
+        TOKEN( "text-color",                      XML_TEXT_COLOR ),
+>>>>>>> CHANGE (48898a tdf#60382 sw xmloff: import/export tracked table/row deletio)
         TOKEN( "text-combine",                    XML_TEXT_COMBINE ),
         TOKEN( "text-combine-end-char",           XML_TEXT_COMBINE_END_CHAR ),
         TOKEN( "text-combine-start-char",         XML_TEXT_COMBINE_START_CHAR ),

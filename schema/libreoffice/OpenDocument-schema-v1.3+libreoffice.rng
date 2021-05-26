@@ -2483,4 +2483,28 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
+<<<<<<< HEAD   (9290bf Uncomment formerly commented uitest asserts)
+=======
+  <!-- https://issues.oasis-open.org/browse/OFFICE-4107 -->
+  <rng:define name="table-filter-condition-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:data-type">
+        <rng:choice>
+          <rng:value>background-color</rng:value>
+          <rng:value>text-color</rng:value>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="style-table-row-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:text-changes-only">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+>>>>>>> CHANGE (48898a tdf#60382 sw xmloff: import/export tracked table/row deletio)
 </rng:grammar>
