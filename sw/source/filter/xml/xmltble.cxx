@@ -32,6 +32,7 @@
 #include <xmloff/numehelp.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/boxitem.hxx>
+#include <editeng/prntitem.hxx>
 #include <editeng/xmlcnitm.hxx>
 #include <fmtrowsplt.hxx>
 #include <editeng/frmdiritem.hxx>
@@ -197,6 +198,7 @@ bool SwXMLTableFrameFormatsSort_Impl::AddRow( SwFrameFormat& rFrameFormat,
     const SwFormatFrameSize *pFrameSize = nullptr;
     const SwFormatRowSplit* pRowSplit = nullptr;
     const SvxBrushItem *pBrush = nullptr;
+    const SvxPrintItem *pHasTextChangesOnly = nullptr;
 
     const SfxItemSet& rItemSet = rFrameFormat.GetAttrSet();
     const SfxPoolItem *pItem;
@@ -209,8 +211,11 @@ bool SwXMLTableFrameFormatsSort_Impl::AddRow( SwFrameFormat& rFrameFormat,
     if( SfxItemState::SET == rItemSet.GetItemState( RES_BACKGROUND, false, &pItem ) )
         pBrush = static_cast<const SvxBrushItem *>(pItem);
 
+    if( SfxItemState::SET == rItemSet.GetItemState( RES_PRINT, false, &pItem ) )
+        pHasTextChangesOnly = static_cast<const SvxPrintItem *>(pItem);
+
     // empty styles have not to be exported
-    if( !pFrameSize && !pBrush && !pRowSplit )
+    if( !pFrameSize && !pBrush && !pRowSplit && !pHasTextChangesOnly )
         return false;
 
     // order is: -/brush, size/-, size/brush
@@ -221,6 +226,7 @@ bool SwXMLTableFrameFormatsSort_Impl::AddRow( SwFrameFormat& rFrameFormat,
         const SwFormatFrameSize *pTestFrameSize = nullptr;
         const SwFormatRowSplit* pTestRowSplit = nullptr;
         const SvxBrushItem *pTestBrush = nullptr;
+        const SvxPrintItem *pTestHasTextChangesOnly = nullptr;
         const SwFrameFormat *pTestFormat = *i;
         const SfxItemSet& rTestSet = pTestFormat->GetAttrSet();
         if( SfxItemState::SET == rTestSet.GetItemState( RES_FRM_SIZE, false,
@@ -265,6 +271,20 @@ bool SwXMLTableFrameFormatsSort_Impl::AddRow( SwFrameFormat& rFrameFormat,
                 continue;
         }
 
+        if( SfxItemState::SET == rTestSet.GetItemState( RES_PRINT, false,
+                                                  &pItem ) )
+        {
+            if( !pHasTextChangesOnly )
+                break;
+
+            pTestHasTextChangesOnly = static_cast<const SvxPrintItem *>(pItem);
+        }
+        else
+        {
+            if( pHasTextChangesOnly )
+                continue;
+        }
+
         if( pFrameSize &&
             ( pFrameSize->GetHeightSizeType() != pTestFrameSize->GetHeightSizeType() ||
               pFrameSize->GetHeight() != pTestFrameSize->GetHeight() ) )
@@ -274,6 +294,9 @@ bool SwXMLTableFrameFormatsSort_Impl::AddRow( SwFrameFormat& rFrameFormat,
             continue;
 
         if( pRowSplit && (!pRowSplit->GetValue() != !pTestRowSplit->GetValue()) )
+            continue;
+
+        if( pHasTextChangesOnly && (!pHasTextChangesOnly->GetValue() != !pTestHasTextChangesOnly->GetValue()) )
             continue;
 
         // found!
