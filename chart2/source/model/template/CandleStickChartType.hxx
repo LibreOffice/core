@@ -23,7 +23,8 @@
 namespace chart
 {
 
-class CandleStickChartType final : public ChartType
+// see tdf#142467 before restoring 'final'
+class CandleStickChartType /* final */ : public ChartType
 {
 public:
     explicit CandleStickChartType();
