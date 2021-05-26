@@ -1113,7 +1113,13 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog(weld::Window* pParent, const SfxIte
     // Property Pages
     AddTabPage("general", SfxDocumentPage::Create, nullptr);
     AddTabPage("description", SfxDocumentDescPage::Create, nullptr);
-    AddTabPage("customprops", SfxCustomPropertiesPage::Create, nullptr);
+    if (Application::GetToolkitName() == "gtk4")
+    {
+        SAL_WARN( "sfx.dialog", "temp bootstrapping gtk4 disabled page for menubutton");
+        RemoveTabPage("customprops");
+    }
+    else
+        AddTabPage("customprops", SfxCustomPropertiesPage::Create, nullptr);
     if (rInfoItem.isCmisDocument())
         AddTabPage("cmisprops", SfxCmisPropertiesPage::Create, nullptr);
     else
