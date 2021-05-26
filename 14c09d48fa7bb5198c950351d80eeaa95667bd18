@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3804e067_b8ec9b59",
+        "filename": "basctl/source/basicide/baside2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-26T08:30:54Z",
+      "side": 1,
+      "message": "In the previous version, you used 1M buffer on stack; here you allocate 3 bytes :-) I\u0027d suggest to use\n\n        sal_uInt8 pBuf[3];",
+      "revId": "14c09d48fa7bb5198c950351d80eeaa95667bd18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
