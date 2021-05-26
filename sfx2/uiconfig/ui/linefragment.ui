@@ -56,7 +56,6 @@
         <property name="receives_default">True</property>
         <property name="tooltip_text" translatable="yes" context="linefragment|STR_SFX_REMOVE_PROPERTY">Remove Property</property>
         <property name="image">image1</property>
-        <property name="always_show_image">True</property>
       </object>
       <packing>
         <property name="left_attach">3</property>
