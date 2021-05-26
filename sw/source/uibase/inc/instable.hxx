@@ -30,13 +30,14 @@
 #include <view.hxx>
 #include <tblafmt.hxx>
 #include <itabenum.hxx>
+#include <memory>
 
 class SwInsTableDlg : public SfxDialogController
 {
     TextFilter m_aTextFilter;
 
     SwWrtShell* pShell;
-    SwTableAutoFormatTable* pTableTable;
+    std::unique_ptr<SwTableAutoFormatTable> m_xTableTable;
     SwTableAutoFormat* pTAutoFormat;
 
     sal_uInt8 lbIndex;
