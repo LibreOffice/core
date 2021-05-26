@@ -1899,15 +1899,16 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
 
     SeekAndChg( rInf );
     std::unique_ptr<SwFontSave> xFontSave;
+    std::unique_ptr<SwFont> xTmpFont;
     if( rMulti.IsDouble() )
     {
-        SwFont* pTmpFnt = new SwFont( *rInf.GetFont() );
+        xTmpFont.reset(new SwFont( *rInf.GetFont() ));
         if( rMulti.IsDouble() )
         {
             SetPropFont( 50 );
-            pTmpFnt->SetProportion( GetPropFont() );
+            xTmpFont->SetProportion( GetPropFont() );
         }
-        xFontSave.reset(new SwFontSave(rInf, pTmpFnt, this));
+        xFontSave.reset(new SwFontSave(rInf, xTmpFont.get(), this));
     }
 
     SwLayoutModeModifier aLayoutModeModifier( *GetInfo().GetOut() );
