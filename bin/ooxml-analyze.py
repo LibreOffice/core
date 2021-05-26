@@ -35,12 +35,18 @@ def main(argv):
         extracted_files_dir = os.path.join(outputdir, 'extractedfiles')
         extract_files(inputdir, extracted_files_dir)
 
-        count_elements(extracted_files_dir, result_list)
+        # create seperate result files for each ooxml document as <document name>.result in output directory
+        for ext_dir in get_list_of_subdir(extracted_files_dir):
+            i = ext_dir.rfind('/')
+            sub_result_name = ext_dir[i+1:] + ".result"
+            sub_result_list = []
+            count_elements(ext_dir, sub_result_list)
+            sub_result_path = os.path.join(outputdir, sub_result_name)
+            with open(sub_result_path, "w") as log_file:
+                pprint.pprint(sub_result_list, log_file)
     else:
         # use user defined directory path for extracted ooxml files.
         count_elements(extracted_files_dir_by_user, result_list)
-
-    pprint.pprint(result_list)
 
 # unzip all ooxml files into the given path
 def extract_files(inputdir, extracted_files_dir):
@@ -49,9 +55,6 @@ def extract_files(inputdir, extracted_files_dir):
     if(os.path.exists(extracted_files_dir)):
         shutil.rmtree(extracted_files_dir)
 
-    # holds directory names for each ooxml document in extracted files dir.
-    counter = 1
-
     # unzip files into the extracted files directory
     for filename in os.listdir(inputdir):
         if (filename.endswith(".pptx") or       \
@@ -59,12 +62,10 @@ def extract_files(inputdir, extracted_files_dir):
             filename.endswith(".xlsx")) and not \
             filename.startswith("~"):
             filepath = os.path.join(inputdir, filename)
-            extracted_file_path = os.path.join(extracted_files_dir, str(counter))
+            extracted_file_path = os.path.join(extracted_files_dir, filename)
 
             with ZipFile(filepath) as zipObj:
                 zipObj.extractall(extracted_file_path)
-
-            counter +=1
         else:
             continue
 
@@ -157,6 +158,18 @@ def get_list_of_files(directory_name):
             all_files.append(full_path)
 
     return all_files
+
+def get_list_of_subdir(directory_name):
+
+    list_of_file = os.listdir(directory_name)
+    subdirs = list()
+
+    for filename in list_of_file:
+        full_path = os.path.join(directory_name, filename)
+        if os.path.isdir(full_path):
+            subdirs.append(full_path)
+
+    return subdirs
 
 if __name__ == "__main__":
     main(sys.argv[1:])
