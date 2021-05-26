@@ -61,12 +61,14 @@ public:
     bool WriteObjectData(SvStream& rOLE);
     tools::Long GetObjw() const { return m_nObjw; }
     tools::Long GetObjh() const { return m_nObjh; }
+    int getWmetafile() const { return m_nWmetafile; }
 
 private:
     bool m_bInObjData = false;
     OStringBuffer m_aHex;
     tools::Long m_nObjw = 0;
     tools::Long m_nObjh = 0;
+    int m_nWmetafile = 0;
 };
 
 TestReqIfRtfReader::TestReqIfRtfReader(SvStream& rStream)
@@ -93,6 +95,9 @@ void TestReqIfRtfReader::NextToken(int nToken)
             break;
         case RTF_OBJH:
             m_nObjh = nTokenValue;
+            break;
+        case RTF_WMETAFILE:
+            m_nWmetafile = nTokenValue;
             break;
     }
 }
@@ -1446,6 +1451,32 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testBlockQuoteNoMargin)
     assertXPathContent(pXmlDoc,
                        "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:blockquote/reqif-xhtml:p",
                        "string");
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifImageToOle)
+{
+    // Given a document with an image:
+    loadURL("private:factory/swriter", nullptr);
+    OUString aImageURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "ole2.png";
+    uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("FileName", aImageURL),
+    };
+    dispatchCommand(mxComponent, ".uno:InsertGraphic", aArgs);
+
+    // When exporting to XHTML:
+    ExportToReqif();
+
+    // Then make sure we export that PNG as WMF in ReqIF mode:
+    OUString aRtfUrl = GetOlePath();
+    SvMemoryStream aRtf;
+    HtmlExportTest::wrapRtfFragment(aRtfUrl, aRtf);
+    tools::SvRef<TestReqIfRtfReader> xReader(new TestReqIfRtfReader(aRtf));
+    CPPUNIT_ASSERT(xReader->CallParser() != SvParserState::Error);
+    // Without the accompanying fix in place, this test would have failed:
+    // - Expected: 8
+    // - Actual  : 0
+    // i.e. the image was exported as PNG, not as WMF (with a version).
+    CPPUNIT_ASSERT_EQUAL(8, xReader->getWmetafile());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
