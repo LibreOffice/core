@@ -121,9 +121,12 @@ void ProfileZone::addRecording()
 
 void ProfileZone::stopConsole()
 {
-    sal_uInt32 nEndTime = osl_getGlobalTimer();
+    TimeValue systemTime;
+    osl_getSystemTime(&systemTime);
+    long long nEndTime
+        = static_cast<long long>(systemTime.Seconds) * 1000000 + systemTime.Nanosec / 1000;
     std::cerr << "comphelper::ProfileZone: " << m_sName << " finished in "
-              << nEndTime - m_nCreateTime << " ms" << std::endl;
+              << (nEndTime - m_nCreateTime) / 1000 << " ms" << std::endl;
 }
 
 } // namespace comphelper
