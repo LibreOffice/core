@@ -40,6 +40,7 @@ gb_BUILD_TOOLS_executables = \
 		) \
 
 gb_BUILD_TOOLS_executables_extern = \
+    python \
 		xsltproc \
 
 gb_BUILD_TOOLS = \
