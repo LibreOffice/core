@@ -60,6 +60,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools, public unotest:
     void TestEllipseXformIntersectClipRect();
     void TestDrawPolyLine16WithClip();
     void TestFillRegion();
+    void TestExtTextOutOpaqueAndClipWMF();
     void TestPaletteWMF();
     void TestRoundrectWMF();
     void TestPolylinetoCloseStroke();
@@ -91,6 +92,7 @@ public:
     CPPUNIT_TEST(TestEllipseXformIntersectClipRect);
     CPPUNIT_TEST(TestDrawPolyLine16WithClip);
     CPPUNIT_TEST(TestFillRegion);
+    CPPUNIT_TEST(TestExtTextOutOpaqueAndClipWMF);
     CPPUNIT_TEST(TestPaletteWMF);
     CPPUNIT_TEST(TestRoundrectWMF);
     CPPUNIT_TEST(TestPolylinetoCloseStroke);
@@ -502,6 +504,49 @@ void Test::TestPolylinetoCloseStroke()
                        "1760,1120 1710,1130 1670,1140 1620,1150 1580,1160 1540,1170 1500,1180 1460,1200 1420,1210 1380,1230 1350,1240 1320,1260 1290,1280 1260,1300 1230,1310 1210,1330 1190,1360 1170,1380 1150,1400 1140,1420 1120,1440 1110,1460 1110,1490 1100,1510 1100,1530 1100,1550 1100,1580 1110,1600 1120,1620 1130,1650 1140,1670 1160,1690 1170,1710 1190,1730");
     assertXPath(pDocument, "/primitive2D/metafile/transform/polygonhairline[2]",
                 "color", "#000000");
+}
+
+void Test::TestExtTextOutOpaqueAndClipWMF()
+{
+    if (!IsDefaultDPI())
+        return;
+    // tdf#53004 WMF records: SETBKCOLOR, SELECTOBJECT, EXTTEXTOUT, CREATEBRUSHINDIRECT.
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/wmf/data/TestExtTextOutOpaqueAndClip.wmf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor", 5);
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor[1]/polypolygon",
+                "path", "m7219 1825h339v3628h-339z");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor[1]",
+                "color", "#ff0000");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor[2]/polypolygon",
+                "path", "m7219 5942h339v339h-339z");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor[2]",
+                "color", "#00ff00");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor[3]/polypolygon",
+                "path", "m10149 5942h339v339h-339z");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor[3]",
+                "color", "#8080ff");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/group", 5);
+    assertXPath(pDocument, "/primitive2D/metafile/transform/group[1]/polypolygoncolor",
+                "color", "#00ff00");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/group[1]/textsimpleportion",
+                "text", "ABCD");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/group[1]/textsimpleportion",
+                "fontcolor", "#000000");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/group[2]/polypolygoncolor",
+                "color", "#8080ff");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/group[2]/textsimpleportion",
+                "text", "MMMM");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/group[2]/textsimpleportion",
+                "fontcolor", "#000000");
 }
 
 void Test::TestPaletteWMF()
