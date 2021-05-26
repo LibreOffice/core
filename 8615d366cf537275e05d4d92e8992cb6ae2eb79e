@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5b561f5b_d5cbcd26",
+        "filename": "sc/inc/clipparam.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000961
+      },
+      "writtenOn": "2021-05-26T20:00:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7218340_2352e921",
+      "revId": "8615d366cf537275e05d4d92e8992cb6ae2eb79e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f418f51a_e7c28340",
         "filename": "sc/inc/refupdatecontext.hxx",
         "patchSetId": 9
@@ -54,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "8ca46fc3_5ad67e35",
+        "filename": "sc/inc/refupdatecontext.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000961
+      },
+      "writtenOn": "2021-05-26T20:00:13Z",
+      "side": 1,
+      "message": "Yeah, it is only the clipboard document and during the call it remains valid.\nHowever, I\u0027ve simplified the solution and just store mbTransposed in RefUpdateContext. This is what we actually need. The code gets in total shorter, more readable and the bTransposed is evaluated \"outside the loop\". And no worries about pointers.",
+      "parentUuid": "4d2c22fa_68618755",
+      "revId": "8615d366cf537275e05d4d92e8992cb6ae2eb79e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "682222dd_b7720c15",
         "filename": "sc/inc/refupdatecontext.hxx",
         "patchSetId": 9
@@ -74,6 +110,30 @@
       "revId": "8615d366cf537275e05d4d92e8992cb6ae2eb79e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e1b8028_219f9bfa",
+        "filename": "sc/inc/refupdatecontext.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000961
+      },
+      "writtenOn": "2021-05-26T20:00:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "682222dd_b7720c15",
+      "range": {
+        "startLine": 85,
+        "startChar": 51,
+        "endLine": 85,
+        "endChar": 58
+      },
+      "revId": "8615d366cf537275e05d4d92e8992cb6ae2eb79e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -100,6 +160,30 @@
     },
     {
       "key": {
+        "uuid": "0aac9f42_7b0f5708",
+        "filename": "sc/source/core/tool/token.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 3319,
+      "author": {
+        "id": 1000961
+      },
+      "writtenOn": "2021-05-26T20:00:13Z",
+      "side": 1,
+      "message": "mbTransposed is now evaluated in RefUpdateContext and here just accessed.",
+      "parentUuid": "8f0a25fa_aeff8dd2",
+      "range": {
+        "startLine": 3318,
+        "startChar": 0,
+        "endLine": 3319,
+        "endChar": 1
+      },
+      "revId": "8615d366cf537275e05d4d92e8992cb6ae2eb79e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5b70beba_fbbf1bd1",
         "filename": "sc/source/core/tool/token.cxx",
         "patchSetId": 9
@@ -120,6 +204,30 @@
       "revId": "8615d366cf537275e05d4d92e8992cb6ae2eb79e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a519b956_a49d492e",
+        "filename": "sc/source/core/tool/token.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 3352,
+      "author": {
+        "id": 1000961
+      },
+      "writtenOn": "2021-05-26T20:00:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b70beba_fbbf1bd1",
+      "range": {
+        "startLine": 3351,
+        "startChar": 0,
+        "endLine": 3352,
+        "endChar": 1
+      },
+      "revId": "8615d366cf537275e05d4d92e8992cb6ae2eb79e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -146,6 +254,30 @@
     },
     {
       "key": {
+        "uuid": "278d903e_6852b6d6",
+        "filename": "sc/source/core/tool/token.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 4013,
+      "author": {
+        "id": 1000961
+      },
+      "writtenOn": "2021-05-26T20:00:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f32a8f91_8ec8ee4c",
+      "range": {
+        "startLine": 4012,
+        "startChar": 0,
+        "endLine": 4013,
+        "endChar": 1
+      },
+      "revId": "8615d366cf537275e05d4d92e8992cb6ae2eb79e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8b76c06d_7fcc1b02",
         "filename": "sc/source/core/tool/token.cxx",
         "patchSetId": 9
@@ -166,6 +298,30 @@
       "revId": "8615d366cf537275e05d4d92e8992cb6ae2eb79e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a322b373_be5b522f",
+        "filename": "sc/source/core/tool/token.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 4041,
+      "author": {
+        "id": 1000961
+      },
+      "writtenOn": "2021-05-26T20:00:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b76c06d_7fcc1b02",
+      "range": {
+        "startLine": 4040,
+        "startChar": 0,
+        "endLine": 4041,
+        "endChar": 1
+      },
+      "revId": "8615d366cf537275e05d4d92e8992cb6ae2eb79e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
