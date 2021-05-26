@@ -46,6 +46,7 @@
 #include <editeng/keepitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <editeng/prntitem.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
@@ -866,6 +867,17 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                 aOut.append( pFormatKeep->GetValue()
                              ? GetXMLToken( XML_ALWAYS )
                              : GetXMLToken( XML_AUTO ) );
+                bOk = true;
+            }
+        }
+        break;
+
+        case RES_PRINT:
+        {
+            const SvxPrintItem* pHasTextChangesOnly = dynamic_cast<const SvxPrintItem*>( &rItem );
+            if (pHasTextChangesOnly && !pHasTextChangesOnly->GetValue())
+            {
+                aOut.append( "false" );
                 bOk = true;
             }
         }
