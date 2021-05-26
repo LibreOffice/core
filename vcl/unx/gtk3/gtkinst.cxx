@@ -19422,14 +19422,13 @@ public:
     {
 #if !GTK_CHECK_VERSION(4, 0, 0)
         GtkContainer* pContainer = GTK_CONTAINER(gtk_builder_get_object(m_pBuilder, id.getStr()));
+#else
+        GtkWidget* pContainer = GTK_WIDGET(gtk_builder_get_object(m_pBuilder, id.getStr()));
+#endif
         if (!pContainer)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pContainer));
         return std::make_unique<GtkInstanceContainer>(pContainer, this, false);
-#else
-        (void)id;
-        return nullptr;
-#endif
     }
 
     virtual std::unique_ptr<weld::Box> weld_box(const OString &id) override
