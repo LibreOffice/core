@@ -42,7 +42,6 @@
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <comphelper/SetFlagContextHelper.hxx>
 #include <comphelper/string.hxx>
-#include <unicode/ucsdet.h>
 #include <svl/srchdefs.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/docfile.hxx>
@@ -188,6 +187,17 @@ void lcl_ConvertTabsToSpaces( OUString& rLine )
         ++nPos;
     }
     rLine = aResult.makeStringAndClear();
+}
+
+void DetectUTF8BOMCharset(SvStream& pStream)
+{
+    sal_uInt8 pBuf[3];
+    sal_Int32 nRead = pStream.ReadBytes(pBuf, 3);
+    unsigned char const BOM[3] = { 0xEF, 0xBB, 0xBF };
+    if (nRead == 3 && memcmp(pBuf, BOM, 3) == 0)
+        pStream.SetStreamCharSet(RTL_TEXTENCODING_UTF8);
+    else
+        pStream.Seek(0);
 }
 
 } // namespace
@@ -438,23 +448,7 @@ void ModulWindow::LoadBasic()
         GetEditorWindow().CreateProgress( IDEResId(RID_STR_GENERATESOURCE), nLines*4 );
         GetEditEngine()->SetUpdateMode( false );
         // tdf#139196 - import macros using either default or utf-8 text encoding
-        constexpr size_t buffsize = 1024 * 1024;
-        sal_Int8 bytes[buffsize] = { 0 };
-        sal_Int32 nRead = pStream->ReadBytes(bytes, buffsize);
-        UErrorCode uerr = U_ZERO_ERROR;
-        UCharsetDetector* ucd = ucsdet_open(&uerr);
-        ucsdet_setText(ucd, reinterpret_cast<const char*>(bytes), nRead, &uerr);
-        if (const UCharsetMatch* match = ucsdet_detect(ucd, &uerr))
-        {
-            const char* pEncodingName = ucsdet_getName(match, &uerr);
-
-            if (U_SUCCESS(uerr) && !strcmp("UTF-8", pEncodingName))
-            {
-                pStream->SetStreamCharSet(RTL_TEXTENCODING_UTF8);
-            }
-        }
-        ucsdet_close(ucd);
-        pStream->Seek(0);
+        DetectUTF8BOMCharset(*pStream);
         GetEditView()->Read( *pStream );
         GetEditEngine()->SetUpdateMode( true );
         GetEditorWindow().PaintImmediately();

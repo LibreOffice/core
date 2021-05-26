@@ -29,12 +29,7 @@ $(eval $(call gb_Library_set_include,basctl,\
 	-I$(WORKDIR)/SdiTarget/basctl/sdi \
 ))
 
-$(eval $(call gb_Library_use_externals,basctl,\
-	boost_headers \
-	icui18n \
-	icuuc \
-	icu_headers \
-))
+$(eval $(call gb_Library_use_external,basctl,boost_headers))
 
 $(eval $(call gb_Library_use_custom_headers,basctl,\
 	officecfg/registry \
