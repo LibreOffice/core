@@ -18440,6 +18440,25 @@ OUString GetParentObjectType(const Reference<css::xml::dom::XNode>& xNode)
     return xClass->getNodeValue();
 }
 
+// currently runs the risk of duplicate margin-* properties if there was already such as well
+// as the border
+void AddBorderAsMargins(const Reference<css::xml::dom::XNode>& xNode, const OUString& rBorderWidth)
+{
+    auto xDoc = xNode->getOwnerDocument();
+
+    auto xMarginEnd = CreateProperty(xDoc, "margin-end", rBorderWidth);
+
+    auto xFirstChild = xNode->getFirstChild();
+    if (xFirstChild.is())
+        xNode->insertBefore(xMarginEnd, xFirstChild);
+    else
+        xNode->appendChild(xMarginEnd);
+
+    xNode->insertBefore(CreateProperty(xDoc, "margin-top", rBorderWidth), xMarginEnd);
+    xNode->insertBefore(CreateProperty(xDoc, "margin-bottom", rBorderWidth), xMarginEnd);
+    xNode->insertBefore(CreateProperty(xDoc, "margin-start", rBorderWidth), xMarginEnd);
+}
+
 struct ConvertResult
 {
     bool m_bChildCanFocus;
@@ -18642,7 +18661,7 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
                     xRemoveList.push_back(xChild); // Yikes!, what's the replacement for this going to be
             }
 
-            if (bContentArea || !sBorderWidth.isEmpty())
+            if (bContentArea)
             {
                 for (css::uno::Reference<css::xml::dom::XNode> xObjectCandidate = xChild->getFirstChild();
                      xObjectCandidate.is();
@@ -18652,35 +18671,22 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
                     {
                         auto xDoc = xChild->getOwnerDocument();
 
-                        if (bContentArea)
-                        {
-                            auto xVExpand = CreateProperty(xDoc, "vexpand", "True");
-
-                            auto xFirstChild = xObjectCandidate->getFirstChild();
-                            if (xFirstChild.is())
-                                xObjectCandidate->insertBefore(xVExpand, xFirstChild);
-                            else
-                                xObjectCandidate->appendChild(xVExpand);
-                        }
+                        auto xVExpand = CreateProperty(xDoc, "vexpand", "True");
+                        auto xFirstChild = xObjectCandidate->getFirstChild();
+                        if (xFirstChild.is())
+                            xObjectCandidate->insertBefore(xVExpand, xFirstChild);
+                        else
+                            xObjectCandidate->appendChild(xVExpand);
 
                         if (!sBorderWidth.isEmpty())
                         {
-                            auto xMarginEnd = CreateProperty(xDoc, "margin-end", sBorderWidth);
-
-                            auto xFirstChild = xObjectCandidate->getFirstChild();
-                            if (xFirstChild.is())
-                                xObjectCandidate->insertBefore(xMarginEnd, xFirstChild);
-                            else
-                                xObjectCandidate->appendChild(xMarginEnd);
-
-                            xObjectCandidate->insertBefore(CreateProperty(xDoc, "margin-top", sBorderWidth), xMarginEnd);
-                            xObjectCandidate->insertBefore(CreateProperty(xDoc, "margin-bottom", sBorderWidth), xMarginEnd);
-                            xObjectCandidate->insertBefore(CreateProperty(xDoc, "margin-start", sBorderWidth), xMarginEnd);
+                            AddBorderAsMargins(xObjectCandidate, sBorderWidth);
+                            sBorderWidth.clear();
                         }
+
                         break;
                     }
                 }
-                sBorderWidth.clear();
             }
         }
         else if (xChild->getNodeName() == "packing")
@@ -18896,6 +18902,10 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
 
         xChild = xNextChild;
     }
+
+    if (!sBorderWidth.isEmpty())
+        AddBorderAsMargins(xNode, sBorderWidth);
+
     for (auto& xRemove : xRemoveList)
         xNode->removeChild(xRemove);
 
