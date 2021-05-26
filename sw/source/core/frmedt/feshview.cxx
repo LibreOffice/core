@@ -1070,7 +1070,7 @@ void SwFEShell::SelectionToTop( bool bTop )
                 if (auto pDrwModel
                     = pFormat->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel())
                     // Not really understood why everything is on page 0...
-                    // but it is easier to handle sdrobjects, thats true
+                    // but it is easier to handle sdrobjects, that's true
                     if (auto pPage = pDrwModel->GetPage(0))
                     {
                         // nShift: it means how many layers the pObj have to be shifted up,
@@ -1089,7 +1089,7 @@ void SwFEShell::SelectionToTop( bool bTop )
                         // If there is a higher object (not null)...
                         if (pNextObj)
                         {
-                            // One level shift is neccessary
+                            // One level shift is necessary
                             nShift++;
                             // If this object is a textbox, two level increasing needed
                             // (one for the shape and one for the frame)

@@ -505,7 +505,7 @@ bool WrapGraphicInRtf(const Graphic& rGraphic, const Size& rLogicSize, SvStream&
     rRtf.WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_RESULT);
     rRtf.WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_PICT);
 
-    // Prepare presendation data.
+    // Prepare presentation data.
     const sal_uInt8* pPresentationData = nullptr;
     sal_uInt64 nPresentationData = 0;
     SvMemoryStream aGraphicStream;
