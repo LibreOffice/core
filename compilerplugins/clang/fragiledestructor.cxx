@@ -51,6 +51,8 @@ public:
              return false;
         if (loplugin::isSamePathname(fn, SRCDIR "/sw/source/core/layout/ssfrm.cxx")) // ~SwFrame calling IsDeleteForbidden
              return false;
+        if (loplugin::isSamePathname(fn, SRCDIR "/chart2/source/model/template/CandleStickChartType.cxx")) // to ignore tdf#142467 workaround
+             return false;
 
         return true;
     }
