@@ -20,7 +20,7 @@
 Some documentation for the variables specified in file openoffice.lst.
 
 It contains values used by the creation of installation packages themselves,
-and as part of that contain subsitutions for variables used in scp2 (those will
+and as part of that contain substitutions for variables used in scp2 (those will
 be handled by the perl installer code)
 
 NOTE: For instdir, the corresponding files are created by

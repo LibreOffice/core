@@ -2647,7 +2647,7 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
                                   m_bIsNewDoc ? uno::Reference<text::XTextCursor>()
                                               : xText->createTextCursorByRange(xText->getStart())));
             m_bDiscardHeaderFooter = false; // set only on success!
-            // Restore the original state of the shared prop after we stored the neccessary values.
+            // Restore the original state of the shared prop after we stored the necessary values.
             xPageStyle->setPropertyValue(getPropertyName(ePropShared), uno::makeAny(bIsShared));
         }
 
