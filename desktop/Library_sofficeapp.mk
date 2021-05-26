@@ -16,12 +16,6 @@ $(eval $(call gb_Library_set_include,sofficeapp,\
     -I$(SRCDIR)/desktop/source/deployment/inc \
 ))
 
-$(eval $(call gb_Library_add_libs,sofficeapp,\
-    $(if $(filter LINUX %BSD SOLARIS, $(OS)), \
-        $(DLOPEN_LIBS) \
-    ) \
-))
-
 $(eval $(call gb_Library_use_externals,sofficeapp, \
 	$(if $(ENABLE_BREAKPAD),breakpad) \
 	$(if $(filter OPENCL,$(BUILD_TYPE)),clew) \
@@ -79,8 +73,9 @@ $(eval $(call gb_Library_use_libraries,sofficeapp,\
     tl \
     ucbhelper \
     utl \
-    vcl \
 ))
+
+$(eval $(call gb_Executable_use_glxtest,sofficeapp,-lm))
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_static_libraries,sofficeapp,\
@@ -131,25 +126,6 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
     desktop/source/app/userinstall \
     desktop/source/migration/migration \
 ))
-
-ifeq ($(DISABLE_GUI),TRUE)
-$(eval $(call gb_Library_add_libs,sofficeapp,\
-	-lm $(DLOPEN_LIBS) \
-))
-else
-ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
-ifeq ($(USING_X11),TRUE)
-$(eval $(call gb_Library_use_static_libraries,sofficeapp,\
-    glxtest \
-))
-endif
-
-$(eval $(call gb_Library_add_libs,sofficeapp,\
-	-lm $(DLOPEN_LIBS) \
-    -lX11 \
-))
-endif
-endif
 
 # LibreOfficeKit bits
 ifneq ($(filter $(OS),ANDROID iOS MACOSX WNT),)
