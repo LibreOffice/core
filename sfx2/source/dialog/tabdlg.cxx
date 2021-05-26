@@ -530,7 +530,7 @@ IMPL_LINK(SfxTabDialogController, ActivatePageHdl, const OString&, rPage, void)
     Data_Impl* pDataObject = Find(m_pImpl->aData, rPage);
     if (!pDataObject)
     {
-        SAL_WARN("sfx.dialog", "Tab Page ID not known, this is pretty serious and needs investigation");
+        SAL_WARN("sfx.dialog", "Tab Page ID '" << rPage << "' not known, this is pretty serious and needs investigation");
         return;
     }
 
