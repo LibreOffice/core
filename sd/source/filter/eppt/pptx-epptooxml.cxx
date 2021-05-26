@@ -47,6 +47,9 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/presentation/XCustomPresentationSupplier.hpp>
+#include <com/sun/star/container/XIndexContainer.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 
 #include <oox/export/utils.hxx>
 
@@ -436,6 +439,8 @@ bool PowerPointExport::exportDocument()
                                      XML_cx, OString::number(PPTtoEMU(maNotesPageSize.Width)),
                                      XML_cy, OString::number(PPTtoEMU(maNotesPageSize.Height)));
 
+    WriteCustomSlideShow();
+
     WriteAuthors();
 
     WriteVBA();
@@ -449,6 +454,7 @@ bool PowerPointExport::exportDocument()
 
     maShapeMap.clear();
     maAuthors.clear();
+    maRelId.clear();
 
     return true;
 }
@@ -456,6 +462,64 @@ bool PowerPointExport::exportDocument()
 ::oox::ole::VbaProject* PowerPointExport::implCreateVbaProject() const
 {
     return new ::oox::ole::VbaProject(getComponentContext(), getModel(), u"Impress");
+}
+
+void PowerPointExport::WriteCustomSlideShow()
+{
+    Reference<XCustomPresentationSupplier> aXCPSup(mXModel, css::uno::UNO_QUERY);
+    if (aXCPSup.is() && aXCPSup->getCustomPresentations()->hasElements())
+    {
+        mPresentationFS->startElementNS(XML_p, XML_custShowLst);
+
+        Reference<XDrawPagesSupplier> xDPS(getModel(), uno::UNO_QUERY_THROW);
+        Reference<XDrawPages> xDrawPages(xDPS->getDrawPages(), uno::UNO_SET_THROW);
+        Reference<XNameContainer> aXNameCont(aXCPSup->getCustomPresentations());
+        const Sequence<OUString> aNameSeq(aXNameCont->getElementNames());
+
+        OUString sRelId;
+        sal_uInt32 nCustomShowIndex = 0;
+        sal_Int32 nSlideCount = xDrawPages->getCount();
+
+        for (OUString const& customShowName : aNameSeq)
+        {
+            mPresentationFS->startElementNS(XML_p, XML_custShow, XML_name, customShowName, XML_id,
+                                            OUString::number(nCustomShowIndex++));
+
+            mAny = aXNameCont->getByName(customShowName);
+            Reference<XIndexContainer> aXIContainer;
+            if (mAny >>= aXIContainer)
+            {
+                mPresentationFS->startElementNS(XML_p, XML_sldLst);
+
+                sal_Int32 nCustomShowSlideCount = aXIContainer->getCount();
+                for (sal_Int32 i = 0; i < nCustomShowSlideCount; ++i)
+                {
+                    Reference<XDrawPage> aXCustomShowDrawPage;
+                    aXIContainer->getByIndex(i) >>= aXCustomShowDrawPage;
+                    Reference<XNamed> aXName(aXCustomShowDrawPage, UNO_QUERY_THROW);
+                    OUString sCustomShowSlideName = aXName->getName();
+
+                    for (sal_Int32 j = 0; j < nSlideCount; ++j)
+                    {
+                        Reference<XDrawPage> xDrawPage;
+                        xDrawPages->getByIndex(j) >>= xDrawPage;
+                        Reference<XNamed> xNamed(xDrawPage, UNO_QUERY_THROW);
+                        OUString sSlideName = xNamed->getName();
+
+                        if (sCustomShowSlideName == sSlideName)
+                        {
+                            sRelId = maRelId[j];
+                            break;
+                        }
+                    }
+                    mPresentationFS->singleElementNS(XML_p, XML_sld, FSNS(XML_r, XML_id), sRelId);
+                }
+                mPresentationFS->endElementNS(XML_p, XML_sldLst);
+            }
+            mPresentationFS->endElementNS(XML_p, XML_custShow);
+        }
+        mPresentationFS->endElementNS(XML_p, XML_custShowLst);
+    }
 }
 
 void PowerPointExport::ImplWriteBackground(const FSHelperPtr& pFS, const Reference< XPropertySet >& rXPropSet)
@@ -1087,6 +1151,8 @@ void PowerPointExport::ImplWriteSlide(sal_uInt32 nPageNum, sal_uInt32 nMasterNum
     mPresentationFS->singleElementNS(XML_p, XML_sldId,
                                      XML_id, OString::number(GetNewSlideId()),
                                      FSNS(XML_r, XML_id), sRelId);
+
+    maRelId.push_back(sRelId);
 
     if (nPageNum == mnPages - 1)
         mPresentationFS->endElementNS(XML_p, XML_sldIdLst);
