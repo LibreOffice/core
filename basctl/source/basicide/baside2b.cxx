@@ -1679,8 +1679,7 @@ void WatchWindow::dispose()
     m_xRemoveWatchButton.reset();
     m_xTitleArea.reset();
     m_xTreeListBox.reset();
-    if (!IsDisposed())
-        GetSystemWindow()->GetTaskPaneList()->RemoveWindow( this );
+    GetSystemWindow()->GetTaskPaneList()->RemoveWindow( this );
     DockingWindow::dispose();
 }
 
@@ -1836,8 +1835,7 @@ StackWindow::~StackWindow()
 
 void StackWindow::dispose()
 {
-    if (!IsDisposed())
-        GetSystemWindow()->GetTaskPaneList()->RemoveWindow( this );
+    GetSystemWindow()->GetTaskPaneList()->RemoveWindow( this );
     m_xTitle.reset();
     m_xTreeListBox.reset();
     DockingWindow::dispose();
