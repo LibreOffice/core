@@ -27,6 +27,10 @@
         DYLD_LIBRARY_PATH=`pwd`/instdir/LibreOfficeDev.app/Contents/Frameworks instdir/LibreOfficeDev.app/Contents/MacOS/fftester <foo> png
   */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <sal/main.h>
 #include <tools/extendapplicationenvironment.hxx>
 
@@ -60,6 +64,7 @@
 #include <filter/XpmReader.hxx>
 #include <osl/file.hxx>
 #include <osl/module.hxx>
+#include <rtl/bootstrap.hxx>
 #include <tools/stream.hxx>
 #include <vcl/gdimtf.hxx>
 
@@ -71,11 +76,22 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace cppu;
 
-#ifndef DISABLE_DYNLOADING
-extern "C" { static void thisModule() {} }
-#endif
-
 typedef bool (*FFilterCall)(SvStream &rStream);
+
+#ifndef DISABLE_DYNLOADING
+namespace {
+
+FFilterCall load(std::u16string_view library, char const * function) {
+    OUString path = OUString::Concat("$LO_LIB_DIR/") + library;
+    rtl::Bootstrap::expandMacros(path); //TODO: check for failure
+    osl::Module aLibrary(path, SAL_LOADMODULE_LAZY);
+    auto const fn = reinterpret_cast<FFilterCall>(aLibrary.getFunctionSymbol(function));
+    aLibrary.release();
+    return fn;
+}
+
+}
+#endif
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
@@ -241,11 +257,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             static FFilterCall pfnImport(nullptr);
             if (!pfnImport)
             {
-                osl::Module aLibrary;
-                aLibrary.loadRelative(&thisModule, "libmswordlo.so", SAL_LOADMODULE_LAZY);
-                pfnImport = reinterpret_cast<FFilterCall>(
-                    aLibrary.getFunctionSymbol("TestImportWW8"));
-                aLibrary.release();
+                pfnImport = load(u"libmswordlo.so", "TestImportWW8");
             }
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));
@@ -255,11 +267,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             static FFilterCall pfnImport(nullptr);
             if (!pfnImport)
             {
-                osl::Module aLibrary;
-                aLibrary.loadRelative(&thisModule, "libmswordlo.so", SAL_LOADMODULE_LAZY);
-                pfnImport = reinterpret_cast<FFilterCall>(
-                    aLibrary.getFunctionSymbol("TestImportWW6"));
-                aLibrary.release();
+                pfnImport = load(u"libmswordlo.so", "TestImportWW6");
             }
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));
@@ -269,11 +277,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             static FFilterCall pfnImport(nullptr);
             if (!pfnImport)
             {
-                osl::Module aLibrary;
-                aLibrary.loadRelative(&thisModule, "libmswordlo.so", SAL_LOADMODULE_LAZY);
-                pfnImport = reinterpret_cast<FFilterCall>(
-                    aLibrary.getFunctionSymbol("TestImportWW2"));
-                aLibrary.release();
+                pfnImport = load(u"libmswordlo.so", "TestImportWW2");
             }
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));
@@ -283,11 +287,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             static FFilterCall pfnImport(nullptr);
             if (!pfnImport)
             {
-                osl::Module aLibrary;
-                aLibrary.loadRelative(&thisModule, "libmswordlo.so", SAL_LOADMODULE_LAZY);
-                pfnImport = reinterpret_cast<FFilterCall>(
-                    aLibrary.getFunctionSymbol("TestImportRTF"));
-                aLibrary.release();
+                pfnImport = load(u"libmswordlo.so", "TestImportRTF");
             }
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));
@@ -297,11 +297,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             static FFilterCall pfnImport(nullptr);
             if (!pfnImport)
             {
-                osl::Module aLibrary;
-                aLibrary.loadRelative(&thisModule, "libswlo.so", SAL_LOADMODULE_LAZY);
-                pfnImport = reinterpret_cast<FFilterCall>(
-                    aLibrary.getFunctionSymbol("TestImportHTML"));
-                aLibrary.release();
+                pfnImport = load(u"libswlo.so", "TestImportHTML");
             }
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));
@@ -311,11 +307,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             static FFilterCall pfnImport(nullptr);
             if (!pfnImport)
             {
-                osl::Module aLibrary;
-                aLibrary.loadRelative(&thisModule, "libswlo.so", SAL_LOADMODULE_LAZY);
-                pfnImport = reinterpret_cast<FFilterCall>(
-                    aLibrary.getFunctionSymbol("TestImportFODT"));
-                aLibrary.release();
+                pfnImport = load(u"libswlo.so", "TestImportFODT");
             }
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));
@@ -325,11 +317,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             static FFilterCall pfnImport(nullptr);
             if (!pfnImport)
             {
-                osl::Module aLibrary;
-                aLibrary.loadRelative(&thisModule, "libswlo.so", SAL_LOADMODULE_LAZY);
-                pfnImport = reinterpret_cast<FFilterCall>(
-                    aLibrary.getFunctionSymbol("TestImportDOCX"));
-                aLibrary.release();
+                pfnImport = load(u"libswlo.so", "TestImportDOCX");
             }
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));
@@ -339,11 +327,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             static FFilterCall pfnImport(nullptr);
             if (!pfnImport)
             {
-                osl::Module aLibrary;
-                aLibrary.loadRelative(&thisModule, "libsclo.so", SAL_LOADMODULE_LAZY);
-                pfnImport = reinterpret_cast<FFilterCall>(
-                    aLibrary.getFunctionSymbol("TestImportFODS"));
-                aLibrary.release();
+                pfnImport = load(u"libsclo.so", "TestImportFODS");
             }
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));
@@ -353,11 +337,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             static FFilterCall pfnImport(nullptr);
             if (!pfnImport)
             {
-                osl::Module aLibrary;
-                aLibrary.loadRelative(&thisModule, "libsclo.so", SAL_LOADMODULE_LAZY);
-                pfnImport = reinterpret_cast<FFilterCall>(
-                    aLibrary.getFunctionSymbol("TestImportXLSX"));
-                aLibrary.release();
+                pfnImport = load(u"libsclo.so", "TestImportXLSX");
             }
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));
@@ -367,11 +347,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             static FFilterCall pfnImport(nullptr);
             if (!pfnImport)
             {
-                osl::Module aLibrary;
-                aLibrary.loadRelative(&thisModule, "libsdlo.so", SAL_LOADMODULE_LAZY);
-                pfnImport = reinterpret_cast<FFilterCall>(
-                    aLibrary.getFunctionSymbol("TestImportFODP"));
-                aLibrary.release();
+                pfnImport = load(u"libsdlo.so", "TestImportFODP");
             }
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));
@@ -381,11 +357,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             static FFilterCall pfnImport(nullptr);
             if (!pfnImport)
             {
-                osl::Module aLibrary;
-                aLibrary.loadRelative(&thisModule, "libsdlo.so", SAL_LOADMODULE_LAZY);
-                pfnImport = reinterpret_cast<FFilterCall>(
-                    aLibrary.getFunctionSymbol("TestImportPPTX"));
-                aLibrary.release();
+                pfnImport = load(u"libsdlo.so", "TestImportPPTX");
             }
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));
@@ -395,11 +367,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             static FFilterCall pfnImport(nullptr);
             if (!pfnImport)
             {
-                osl::Module aLibrary;
-                aLibrary.loadRelative(&thisModule, "libscfiltlo.so", SAL_LOADMODULE_LAZY);
-                pfnImport = reinterpret_cast<FFilterCall>(
-                    aLibrary.getFunctionSymbol("TestImportXLS"));
-                aLibrary.release();
+                pfnImport = load(u"libscfiltlo.so", "TestImportXLS");
             }
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));
@@ -409,11 +377,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             static FFilterCall pfnImport(nullptr);
             if (!pfnImport)
             {
-                osl::Module aLibrary;
-                aLibrary.loadRelative(&thisModule, "libscfiltlo.so", SAL_LOADMODULE_LAZY);
-                pfnImport = reinterpret_cast<FFilterCall>(
-                    aLibrary.getFunctionSymbol("TestImportWKS"));
-                aLibrary.release();
+                pfnImport = load(u"libscfiltlo.so", "TestImportWKS");
             }
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));
@@ -423,11 +387,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             static FFilterCall pfnImport(nullptr);
             if (!pfnImport)
             {
-                osl::Module aLibrary;
-                aLibrary.loadRelative(&thisModule, "libhwplo.so", SAL_LOADMODULE_LAZY);
-                pfnImport = reinterpret_cast<FFilterCall>(
-                    aLibrary.getFunctionSymbol("TestImportHWP"));
-                aLibrary.release();
+                pfnImport = load(u"libhwplo.so", "TestImportHWP");
             }
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));
@@ -437,11 +397,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             static FFilterCall pfnImport(nullptr);
             if (!pfnImport)
             {
-                osl::Module aLibrary;
-                aLibrary.loadRelative(&thisModule, "libt602filterlo.so", SAL_LOADMODULE_LAZY);
-                pfnImport = reinterpret_cast<FFilterCall>(
-                    aLibrary.getFunctionSymbol("TestImport602"));
-                aLibrary.release();
+                pfnImport = load(u"libt602filterlo.so", "TestImport602");
             }
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));
@@ -451,11 +407,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             static FFilterCall pfnImport(nullptr);
             if (!pfnImport)
             {
-                osl::Module aLibrary;
-                aLibrary.loadRelative(&thisModule, "liblwpftlo.so", SAL_LOADMODULE_LAZY);
-                pfnImport = reinterpret_cast<FFilterCall>(
-                    aLibrary.getFunctionSymbol("TestImportLWP"));
-                aLibrary.release();
+                pfnImport = load(u"liblwpftlo.so", "TestImportLWP");
             }
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));
@@ -465,11 +417,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             static FFilterCall pfnImport(nullptr);
             if (!pfnImport)
             {
-                osl::Module aLibrary;
-                aLibrary.loadRelative(&thisModule, "libsdfiltlo.so", SAL_LOADMODULE_LAZY);
-                pfnImport = reinterpret_cast<FFilterCall>(
-                    aLibrary.getFunctionSymbol("TestImportPPT"));
-                aLibrary.release();
+                pfnImport = load(u"libsdfiltlo.so", "TestImportPPT");
             }
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));
@@ -479,11 +427,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             static FFilterCall pfnImport(nullptr);
             if (!pfnImport)
             {
-                osl::Module aLibrary;
-                aLibrary.loadRelative(&thisModule, "libsdlo.so", SAL_LOADMODULE_LAZY);
-                pfnImport = reinterpret_cast<FFilterCall>(
-                    aLibrary.getFunctionSymbol("TestImportCGM"));
-                aLibrary.release();
+                pfnImport = load(u"libsdlo.so", "TestImportCGM");
             }
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));
@@ -493,11 +437,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             static FFilterCall pfnImport(nullptr);
             if (!pfnImport)
             {
-                osl::Module aLibrary;
-                aLibrary.loadRelative(&thisModule, "libscfiltlo.so", SAL_LOADMODULE_LAZY);
-                pfnImport = reinterpret_cast<FFilterCall>(
-                    aLibrary.getFunctionSymbol("TestImportQPW"));
-                aLibrary.release();
+                pfnImport = load(u"libscfiltlo.so", "TestImportQPW");
             }
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));
@@ -507,11 +447,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             static FFilterCall pfnImport(nullptr);
             if (!pfnImport)
             {
-                osl::Module aLibrary;
-                aLibrary.loadRelative(&thisModule, "libscfiltlo.so", SAL_LOADMODULE_LAZY);
-                pfnImport = reinterpret_cast<FFilterCall>(
-                    aLibrary.getFunctionSymbol("TestImportDIF"));
-                aLibrary.release();
+                pfnImport = load(u"libscfiltlo.so", "TestImportDIF");
             }
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));
@@ -521,11 +457,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             static FFilterCall pfnImport(nullptr);
             if (!pfnImport)
             {
-                osl::Module aLibrary;
-                aLibrary.loadRelative(&thisModule, "libscfiltlo.so", SAL_LOADMODULE_LAZY);
-                pfnImport = reinterpret_cast<FFilterCall>(
-                    aLibrary.getFunctionSymbol("TestImportCalcRTF"));
-                aLibrary.release();
+                pfnImport = load(u"libscfiltlo.so", "TestImportCalcRTF");
             }
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));
@@ -535,11 +467,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             static FFilterCall pfnImport(nullptr);
             if (!pfnImport)
             {
-                osl::Module aLibrary;
-                aLibrary.loadRelative(&thisModule, "libsclo.so", SAL_LOADMODULE_LAZY);
-                pfnImport = reinterpret_cast<FFilterCall>(
-                    aLibrary.getFunctionSymbol("TestImportSLK"));
-                aLibrary.release();
+                pfnImport = load(u"libsclo.so", "TestImportSLK");
             }
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));
@@ -549,11 +477,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             static FFilterCall pfnImport(nullptr);
             if (!pfnImport)
             {
-                osl::Module aLibrary;
-                aLibrary.loadRelative(&thisModule, "libsotlo.so", SAL_LOADMODULE_LAZY);
-                pfnImport = reinterpret_cast<FFilterCall>(
-                    aLibrary.getFunctionSymbol("TestImportOLE2"));
-                aLibrary.release();
+                pfnImport = load(u"libsotlo.so", "TestImportOLE2");
             }
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));
@@ -563,11 +487,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             static FFilterCall pfnImport(nullptr);
             if (!pfnImport)
             {
-                osl::Module aLibrary;
-                aLibrary.loadRelative(&thisModule, "libsmlo.so", SAL_LOADMODULE_LAZY);
-                pfnImport = reinterpret_cast<FFilterCall>(
-                    aLibrary.getFunctionSymbol("TestImportMML"));
-                aLibrary.release();
+                pfnImport = load(u"libsmlo.so", "TestImportMML");
             }
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));
@@ -577,11 +497,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             static FFilterCall pfnImport(nullptr);
             if (!pfnImport)
             {
-                osl::Module aLibrary;
-                aLibrary.loadRelative(&thisModule, "libsmlo.so", SAL_LOADMODULE_LAZY);
-                pfnImport = reinterpret_cast<FFilterCall>(
-                    aLibrary.getFunctionSymbol("TestImportMathType"));
-                aLibrary.release();
+                pfnImport = load(u"libsmlo.so", "TestImportMathType");
             }
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));
