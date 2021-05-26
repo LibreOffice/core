@@ -25,8 +25,10 @@
 using namespace objectpositioning;
 
 SwEnvironmentOfAnchoredObject::SwEnvironmentOfAnchoredObject(
-                                                const bool   _bFollowTextFlow )
-    : mbFollowTextFlow( _bFollowTextFlow )
+                                                const bool   _bFollowTextFlow,
+                                                bool   _bTextBoxShapeFollowsTextFlow)
+    : mbFollowTextFlow( _bFollowTextFlow ),
+      mbTextBoxShapeFollowsTextFlow( _bTextBoxShapeFollowsTextFlow)
 {}
 
 SwEnvironmentOfAnchoredObject::~SwEnvironmentOfAnchoredObject()
@@ -38,7 +40,7 @@ const SwLayoutFrame& SwEnvironmentOfAnchoredObject::GetHoriEnvironmentLayoutFram
 {
     const SwFrame* pHoriEnvironmentLayFrame = &_rHoriOrientFrame;
 
-    if ( !mbFollowTextFlow )
+    if ( !mbFollowTextFlow && !mbTextBoxShapeFollowsTextFlow )
     {
         // No exception any more for page alignment.
         // the page frame determines the horizontal layout environment.

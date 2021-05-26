@@ -41,6 +41,7 @@
 #include <fmtwrapinfluenceonobjpos.hxx>
 #include <sortedobjs.hxx>
 #include <textboxhelper.hxx>
+#include <fmtfollowtextflow.hxx>
 
 using namespace objectpositioning;
 using namespace ::com::sun::star;
@@ -164,8 +165,12 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
     const bool bNoSurround = rSurround.GetSurround() == css::text::WrapTextMode_NONE;
     const bool bWrapThrough = rSurround.GetSurround() == css::text::WrapTextMode_THROUGH;
 
+    bool bIsTextBoxFollowsTextFLow = false;
+    if (auto pTextBox = SwTextBoxHelper::getOtherTextBoxFormat(&rFrameFormat, RES_FLYFRMFMT))
+        bIsTextBoxFollowsTextFLow = pTextBox->GetFollowTextFlow().GetValue();
+
     // new class <SwEnvironmentOfAnchoredObject>
-    SwEnvironmentOfAnchoredObject aEnvOfObj( DoesObjFollowsTextFlow() );
+    SwEnvironmentOfAnchoredObject aEnvOfObj( DoesObjFollowsTextFlow(), bIsTextBoxFollowsTextFLow );
 
     // #i18732# - grow only, if object has to follow the text flow
     const bool bGrow = DoesObjFollowsTextFlow() &&

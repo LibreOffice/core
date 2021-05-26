@@ -29,6 +29,7 @@ class SwEnvironmentOfAnchoredObject
 {
 private:
     const bool mbFollowTextFlow;
+    bool mbTextBoxShapeFollowsTextFlow;
 
 public:
     /** constructor
@@ -37,7 +38,8 @@ public:
         input parameter - indicates, if the anchored object, for which
         this environment is instantiated, follow the text flow or not
     */
-    SwEnvironmentOfAnchoredObject(const bool _bFollowTextFlow);
+    SwEnvironmentOfAnchoredObject(const bool _bFollowTextFlow,
+                                  bool _bTextBoxShapeFollowsTextFlow = false);
 
     /** destructor
     */
