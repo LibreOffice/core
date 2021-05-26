@@ -13,6 +13,7 @@
       <object class="GtkFrame" id="fontEmbeddingFrame">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
+        <property name="hexpand">True</property>
         <property name="label-xalign">0</property>
         <property name="shadow-type">none</property>
         <child>
@@ -79,6 +80,7 @@
       <object class="GtkFrame" id="scriptframe">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
+        <property name="hexpand">True</property>
         <property name="label-xalign">0</property>
         <property name="shadow-type">none</property>
         <child>
