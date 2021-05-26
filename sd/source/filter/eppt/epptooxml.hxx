@@ -110,6 +110,8 @@ private:
     // Write docProps/core.xml and docprops/custom.xml and docprops/app.xml
     void writeDocumentProperties();
 
+    void WriteCustomSlideShow();
+
     void AddLayoutIdAndRelation( const ::sax_fastparser::FSHelperPtr& pFS, sal_Int32 nLayoutFileId );
 
     virtual OUString SAL_CALL getImplementationName() override;
@@ -133,6 +135,8 @@ private:
     sal_uInt32 mnAnimationNodeIdMax;
 
     sal_uInt32 mnDiagramId;
+
+    std::vector<OUString> maRelId;
 
     bool mbCreateNotes;
 
