@@ -3314,6 +3314,15 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
                     {
                         ScSingleRefData& rRef = *p->GetSingleRef();
                         ScAddress aAbs = rRef.toAbs(*mxSheetLimits, rOldPos);
+
+                        // Do not update the reference in transposed case (cut paste transposed).
+                        // The reference will be updated in UpdateTranspose().
+                        // Additionally, do not update the references from cells within the moved
+                        // range as they lead to #REF! errors here. These #REF! cannot by fixed
+                        // later in UpdateTranspose().
+                        if (rCxt.mbTransposed && (aOldRange.In(rOldPos) || aOldRange.In(aAbs)))
+                            break;
+
                         if (aOldRange.In(aAbs))
                         {
                             ScAddress aErrorPos( ScAddress::UNINITIALIZED );
@@ -3335,6 +3344,15 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
                     {
                         ScComplexRefData& rRef = *p->GetDoubleRef();
                         ScRange aAbs = rRef.toAbs(*mxSheetLimits, rOldPos);
+
+                        // Do not update the reference in transposed case (cut paste transposed).
+                        // The reference will be updated in UpdateTranspose().
+                        // Additionally, do not update the references from cells within the moved
+                        // range as they lead to #REF! errors here. These #REF! cannot by fixed
+                        // later in UpdateTranspose().
+                        if (rCxt.mbTransposed && (aOldRange.In(rOldPos) || aOldRange.In(aAbs)))
+                            break;
+
                         if (aOldRange.In(aAbs))
                         {
                             ScRange aErrorRange( ScAddress::UNINITIALIZED );
@@ -3984,6 +4002,12 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInMovedName( const sc::RefUpdat
                             continue;
 
                         ScAddress aAbs = rRef.toAbs(rCxt.mrDoc, rPos);
+
+                        // Do not update the reference in transposed case (cut paste transposed).
+                        // The reference will be updated in UpdateTranspose().
+                        if (rCxt.mbTransposed && aOldRange.In(aAbs))
+                            break;
+
                         if (aOldRange.In(aAbs))
                         {
                             ScAddress aErrorPos( ScAddress::UNINITIALIZED );
@@ -4003,6 +4027,12 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInMovedName( const sc::RefUpdat
                             continue;
 
                         ScRange aAbs = rRef.toAbs(rCxt.mrDoc, rPos);
+
+                        // Do not update the reference in transposed case (cut paste transposed).
+                        // The reference will be updated in UpdateTranspose().
+                        if (rCxt.mbTransposed && aOldRange.In(aAbs))
+                            break;
+
                         if (aOldRange.In(aAbs))
                         {
                             ScRange aErrorRange( ScAddress::UNINITIALIZED );

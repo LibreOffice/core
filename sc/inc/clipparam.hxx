@@ -36,6 +36,8 @@ struct SC_DLLPUBLIC ScClipParam
     bool                mbCutMode;
     sal_uInt32          mnSourceDocID;
     ScRangeListVector   maProtectedChartRangesVector;
+    /** Was this clip transposed? */
+    bool mbTransposed = false;
 
     ScClipParam();
     ScClipParam(const ScRange& rRange, bool bCutMode);
@@ -69,6 +71,11 @@ struct SC_DLLPUBLIC ScClipParam
 
     sal_uInt32 getSourceDocID() const { return mnSourceDocID; }
     void setSourceDocID( sal_uInt32 nVal ) { mnSourceDocID = nVal; }
+
+    /**
+     * Was this clip transposed?
+     */
+    bool isTransposed() const { return mbTransposed; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

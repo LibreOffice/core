@@ -9,6 +9,7 @@
 
 #include <refupdatecontext.hxx>
 #include <algorithm>
+#include <clipparam.hxx>
 #include <mtvelements.hxx>
 
 namespace sc {
@@ -63,9 +64,17 @@ bool UpdatedRangeNames::isEmpty(SCTAB nTab) const
     return it == maUpdatedNames.end();
 }
 
-
-RefUpdateContext::RefUpdateContext(ScDocument& rDoc) :
-    mrDoc(rDoc), meMode(URM_INSDEL), mnColDelta(0), mnRowDelta(0), mnTabDelta(0), mpBlockPos( nullptr ) {}
+RefUpdateContext::RefUpdateContext(ScDocument& rDoc, ScDocument* pClipdoc)
+    : mrDoc(rDoc)
+    , meMode(URM_INSDEL)
+    , mbTransposed(pClipdoc != nullptr && pClipdoc->GetClipParam().isTransposed())
+    , mnColDelta(0)
+    , mnRowDelta(0)
+    , mnTabDelta(0)
+    , mpBlockPos(nullptr)
+{
+    assert((pClipdoc == nullptr || pClipdoc->IsClipboard()) && "only nullptr or clipdoc allowed");
+}
 
 bool RefUpdateContext::isInserted() const
 {
