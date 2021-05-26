@@ -1360,6 +1360,11 @@ void Test::testUserDefinedNumberFormats()
         sCode =     "HH:MM:SS";
         checkPreviewString(aFormatter, sCode, 0.365972222222222, eLang, sExpected);
     }
+    {  // tdf#52510
+        sCode =     "_($* #,##0.00_);_($* (#,##0.00);";
+        sExpected = "";
+        checkPreviewString(aFormatter, sCode, 0.0, eLang, sExpected);
+    }
     {  // tdf#95339: detect SSMM as second minute
         sCode =     "SS:MM:HH DD/MM/YY"; // Month not detected by Excel, but we do not follow that.
         sExpected = "53:23:03 02/01/00";
