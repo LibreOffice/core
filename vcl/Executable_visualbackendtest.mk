@@ -30,27 +30,12 @@ $(eval $(call gb_Executable_use_libraries,visualbackendtest,\
     tl \
     sal \
 	salhelper \
-    vcl \
 ))
+
+$(eval $(call gb_Executable_use_vclmain,visualbackendtest,-lm))
 
 $(eval $(call gb_Executable_add_exception_objects,visualbackendtest,\
     vcl/backendtest/VisualBackendTest \
 ))
-
-$(eval $(call gb_Executable_use_static_libraries,visualbackendtest,\
-    vclmain \
-))
-
-ifneq (, $(filter LINUX %BSD, $(OS)))
-$(eval $(call gb_Executable_add_libs,visualbackendtest,\
-	-lm \
-	$(DLOPEN_LIBS) \
-    -lX11 \
-))
-
-$(eval $(call gb_Executable_use_static_libraries,visualbackendtest,\
-	glxtest \
-))
-endif
 
 # vim: set noet sw=4 ts=4:

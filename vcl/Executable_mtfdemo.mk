@@ -26,29 +26,15 @@ $(eval $(call gb_Executable_use_libraries,mtfdemo,\
 	basegfx \
     tl \
     sal \
-    vcl \
     cppu \
     cppuhelper \
     comphelper \
 ))
 
+$(eval $(call gb_Executable_use_vclmain,mtfdemo))
+
 $(eval $(call gb_Executable_add_exception_objects,mtfdemo,\
     vcl/workben/mtfdemo \
 ))
-
-$(eval $(call gb_Executable_use_static_libraries,mtfdemo,\
-    vclmain \
-))
-
-ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
-$(eval $(call gb_Executable_add_libs,mtfdemo,\
-	-lm $(DLOPEN_LIBS) \
-    -lX11 \
-))
-
-$(eval $(call gb_Executable_use_static_libraries,mtfdemo,\
-	glxtest \
-))
-endif
 
 # vim: set noet sw=4 ts=4:

@@ -43,26 +43,12 @@ $(eval $(call gb_Executable_use_libraries,vcldemo,\
     tl \
     sal \
 	salhelper \
-    vcl \
 ))
+
+$(eval $(call gb_Executable_use_vclmain,vcldemo))
 
 $(eval $(call gb_Executable_add_exception_objects,vcldemo,\
     vcl/workben/vcldemo \
 ))
-
-$(eval $(call gb_Executable_use_static_libraries,vcldemo,\
-    vclmain \
-))
-
-ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
-$(eval $(call gb_Executable_add_libs,vcldemo,\
-	-lm $(DLOPEN_LIBS) \
-    -lX11 \
-))
-
-$(eval $(call gb_Executable_use_static_libraries,vcldemo,\
-	glxtest \
-))
-endif
 
 # vim: set noet sw=4 ts=4:
