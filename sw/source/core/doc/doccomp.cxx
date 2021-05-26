@@ -56,11 +56,12 @@ using std::vector;
 
 namespace {
 
-class SwCompareLine
+class SwCompareLine final
 {
-    const SwNode& m_rNode;
+    const SwNode* m_pNode;
 public:
-    explicit SwCompareLine( const SwNode& rNd ) : m_rNode( rNd ) {}
+    explicit SwCompareLine( const SwNode& rNd ) : m_pNode( &rNd ) {}
+    SwCompareLine() : m_pNode( nullptr ) {}
 
     sal_uLong GetHashValue() const;
     bool Compare( const SwCompareLine& rLine ) const;
@@ -73,7 +74,7 @@ public:
     bool ChangesInLine( const SwCompareLine& rLine,
                             std::unique_ptr<SwPaM>& rpInsRing, std::unique_ptr<SwPaM>& rpDelRing ) const;
 
-    const SwNode& GetNode() const { return m_rNode; }
+    const SwNode& GetNode() const { return *m_pNode; }
 
     const SwNode& GetEndNode() const;
 
@@ -95,7 +96,7 @@ private:
     static sal_uLong PrevIdx( const SwNode* pNd );
     static sal_uLong NextIdx( const SwNode* pNd );
 
-    vector< SwCompareLine* > m_aLines;
+    vector<SwCompareLine> m_aLines;
     bool m_bRecordDiff;
 
     // Truncate beginning and end and add all others to the LinesArray
@@ -142,10 +143,10 @@ public:
         }
 
     size_t GetLineCount() const     { return m_aLines.size(); }
-    const SwCompareLine* GetLine( size_t nLine ) const
+    const SwCompareLine& GetLine( size_t nLine ) const
             { return m_aLines[ nLine ]; }
-    void InsertLine( SwCompareLine* pLine )
-        { m_aLines.push_back( pLine ); }
+    void InsertLine( SwCompareLine aLine )
+        { m_aLines.push_back( aLine ); }
 
     void SetRedlinesToDoc( bool bUseDocInfo );
 };
@@ -185,10 +186,10 @@ class Hash
     struct HashData
     {
         sal_uLong nNext, nHash;
-        const SwCompareLine* pLine;
+        SwCompareLine aLine;
 
         HashData()
-            : nNext( 0 ), nHash( 0 ), pLine(nullptr) {}
+            : nNext( 0 ), nHash( 0 ) {}
     };
 
     std::unique_ptr<sal_uLong[]> m_pHashArr;
@@ -528,7 +529,6 @@ Hash::Hash( sal_uLong nSize )
     m_pDataArr.reset( new HashData[ nSize ] );
     m_pDataArr[0].nNext = 0;
     m_pDataArr[0].nHash = 0;
-    m_pDataArr[0].pLine = nullptr;
     m_nPrime = primes[0];
 
     for( i = 0; primes[i] < nSize / 3;  i++)
@@ -549,9 +549,8 @@ void Hash::CalcHashValue( CompareData& rData )
 
     for( size_t n = 0; n < rData.GetLineCount(); ++n )
     {
-        const SwCompareLine* pLine = rData.GetLine( n );
-        OSL_ENSURE( pLine, "where is the line?" );
-        sal_uLong nH = pLine->GetHashValue();
+        const SwCompareLine aLine = rData.GetLine( n );
+        sal_uLong nH = aLine.GetHashValue();
 
         sal_uLong* pFound = &m_pHashArr[ nH % m_nPrime ];
         size_t i;
@@ -561,12 +560,12 @@ void Hash::CalcHashValue( CompareData& rData )
                 i = m_nCount++;
                 m_pDataArr[i].nNext = *pFound;
                 m_pDataArr[i].nHash = nH;
-                m_pDataArr[i].pLine = pLine;
+                m_pDataArr[i].aLine = aLine;
                 *pFound = i;
                 break;
             }
             else if( m_pDataArr[i].nHash == nH &&
-                    m_pDataArr[i].pLine->Compare( *pLine ))
+                    m_pDataArr[i].aLine.Compare( aLine ))
                 break;
 
         rData.SetIndex( n, i );
@@ -1012,16 +1011,16 @@ void Compare::ShiftBoundaries( CompareData& rData1, CompareData& rData2 )
 sal_uLong SwCompareLine::GetHashValue() const
 {
     sal_uLong nRet = 0;
-    switch( m_rNode.GetNodeType() )
+    switch( m_pNode->GetNodeType() )
     {
     case SwNodeType::Text:
-        nRet = GetTextNodeHashValue( *m_rNode.GetTextNode(), nRet );
+        nRet = GetTextNodeHashValue( *m_pNode->GetTextNode(), nRet );
         break;
 
     case SwNodeType::Table:
         {
-            const SwNode* pEndNd = m_rNode.EndOfSectionNode();
-            SwNodeIndex aIdx( m_rNode );
+            const SwNode* pEndNd = m_pNode->EndOfSectionNode();
+            SwNodeIndex aIdx( *m_pNode );
             while( &aIdx.GetNode() != pEndNd )
             {
                 if( aIdx.GetNode().IsTextNode() )
@@ -1050,19 +1049,19 @@ sal_uLong SwCompareLine::GetHashValue() const
 
 const SwNode& SwCompareLine::GetEndNode() const
 {
-    const SwNode* pNd = &m_rNode;
-    switch( m_rNode.GetNodeType() )
+    const SwNode* pNd = m_pNode;
+    switch( m_pNode->GetNodeType() )
     {
     case SwNodeType::Table:
-        pNd = m_rNode.EndOfSectionNode();
+        pNd = m_pNode->EndOfSectionNode();
         break;
 
     case SwNodeType::Section:
         {
-            const SwSectionNode& rSNd = static_cast<const SwSectionNode&>(m_rNode);
+            const SwSectionNode& rSNd = static_cast<const SwSectionNode&>(*m_pNode);
             const SwSection& rSect = rSNd.GetSection();
             if( SectionType::Content != rSect.GetType() || rSect.IsProtect() )
-                pNd = m_rNode.EndOfSectionNode();
+                pNd = m_pNode->EndOfSectionNode();
         }
         break;
     default: break;
@@ -1072,7 +1071,7 @@ const SwNode& SwCompareLine::GetEndNode() const
 
 bool SwCompareLine::Compare( const SwCompareLine& rLine ) const
 {
-    return CompareNode( m_rNode, rLine.m_rNode );
+    return CompareNode( *m_pNode, *rLine.m_pNode );
 }
 
 namespace
@@ -1196,15 +1195,15 @@ bool SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
 OUString SwCompareLine::GetText() const
 {
     OUString sRet;
-    switch( m_rNode.GetNodeType() )
+    switch( m_pNode->GetNodeType() )
     {
     case SwNodeType::Text:
-        sRet = m_rNode.GetTextNode()->GetExpandText(nullptr);
+        sRet = m_pNode->GetTextNode()->GetExpandText(nullptr);
         break;
 
     case SwNodeType::Table:
         {
-            sRet = "Tabelle: " + SimpleTableToText(m_rNode);
+            sRet = "Tabelle: " + SimpleTableToText(*m_pNode);
         }
         break;
 
@@ -1212,7 +1211,7 @@ OUString SwCompareLine::GetText() const
         {
             sRet = "Section - Node:";
 
-            const SwSectionNode& rSNd = static_cast<const SwSectionNode&>(m_rNode);
+            const SwSectionNode& rSNd = static_cast<const SwSectionNode&>(*m_pNode);
             const SwSection& rSect = rSNd.GetSection();
             switch( rSect.GetType() )
             {
@@ -1278,10 +1277,10 @@ bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
     bool bRet = false;
 
     // Only compare textnodes
-    if( SwNodeType::Text == m_rNode.GetNodeType() &&
+    if( SwNodeType::Text == m_pNode->GetNodeType() &&
         SwNodeType::Text == rLine.GetNode().GetNodeType() )
     {
-        SwTextNode& rDstNd = *const_cast<SwTextNode*>(m_rNode.GetTextNode());
+        SwTextNode& rDstNd = *const_cast<SwTextNode*>(m_pNode->GetTextNode());
         const SwTextNode& rSrcNd = *rLine.GetNode().GetTextNode();
         SwDoc& rDstDoc = rDstNd.GetDoc();
 
@@ -1486,22 +1485,22 @@ void CompareData::CheckRanges( CompareData& rData )
     while( nSrcSttIdx <= nSrcEndIdx )
     {
         const SwNode* pNd = rSrcNds[ nSrcSttIdx ];
-        rData.InsertLine( new SwCompareLine( *pNd ) );
+        rData.InsertLine( SwCompareLine( *pNd ) );
         nSrcSttIdx = NextIdx( pNd );
     }
 
     while( nDstSttIdx <= nDstEndIdx )
     {
         const SwNode* pNd = rDstNds[ nDstSttIdx ];
-        InsertLine( new SwCompareLine( *pNd ) );
+        InsertLine( SwCompareLine( *pNd ) );
         nDstSttIdx = NextIdx( pNd );
     }
 }
 
 void CompareData::ShowInsert( sal_uLong nStt, sal_uLong nEnd )
 {
-    SwPaM* pTmp = new SwPaM( GetLine( nStt )->GetNode(), 0,
-                             GetLine( nEnd-1 )->GetEndNode(), 0,
+    SwPaM* pTmp = new SwPaM( GetLine( nStt ).GetNode(), 0,
+                             GetLine( nEnd-1 ).GetEndNode(), 0,
                              m_pInsertRing.get() );
     if( !m_pInsertRing )
         m_pInsertRing.reset( pTmp );
@@ -1516,29 +1515,29 @@ void CompareData::ShowDelete(
     sal_uLong nInsPos )
 {
     SwNodeRange aRg(
-        rData.GetLine( nStt )->GetNode(), 0,
-        rData.GetLine( nEnd-1 )->GetEndNode(), 1 );
+        rData.GetLine( nStt ).GetNode(), 0,
+        rData.GetLine( nEnd-1 ).GetEndNode(), 1 );
 
     sal_uInt16 nOffset = 0;
-    const SwCompareLine* pLine = nullptr;
+    std::optional<SwCompareLine> xLine;
     if( nInsPos >= 1 )
     {
         if( GetLineCount() == nInsPos )
         {
-            pLine = GetLine( nInsPos-1 );
+            xLine = GetLine( nInsPos-1 );
             nOffset = 1;
         }
         else
-            pLine = GetLine( nInsPos );
+            xLine = GetLine( nInsPos );
     }
 
     const SwNode* pLineNd;
-    if( pLine )
+    if( xLine )
     {
         if( nOffset )
-            pLineNd = &pLine->GetEndNode();
+            pLineNd = &xLine->GetEndNode();
         else
-            pLineNd = &pLine->GetNode();
+            pLineNd = &xLine->GetNode();
     }
     else
     {
@@ -1599,12 +1598,12 @@ void CompareData::CheckForChangesInLine( const CompareData& rData,
 
         if( i )
         {
-            const SwCompareLine* pDstLn = GetLine( nThisStt + nDstFrom - 1 );
-            const SwCompareLine* pSrcLn = rData.GetLine( nStt + nSrcFrom - 1 );
+            const SwCompareLine aDstLn = GetLine( nThisStt + nDstFrom - 1 );
+            const SwCompareLine aSrcLn = rData.GetLine( nStt + nSrcFrom - 1 );
 
             // Show differences in detail for lines that
             // were matched as only slightly different
-            if( !pDstLn->ChangesInLine( *pSrcLn, m_pInsertRing, m_pDelRing ) )
+            if( !aDstLn.ChangesInLine( aSrcLn, m_pInsertRing, m_pDelRing ) )
             {
                 ShowInsert( nThisStt + nDstFrom - 1, nThisStt + nDstFrom );
                 ShowDelete( rData, nStt + nSrcFrom - 1, nStt + nSrcFrom,
@@ -2169,8 +2168,8 @@ bool LineArrayComparator::Compare( int nIdx1, int nIdx2 ) const
         return false;
     }
 
-    const SwTextNode *pTextNd1 = m_rData1.GetLine( m_nFirst1 + nIdx1 )->GetNode().GetTextNode();
-    const SwTextNode *pTextNd2 = m_rData2.GetLine( m_nFirst2 + nIdx2 )->GetNode().GetTextNode();
+    const SwTextNode *pTextNd1 = m_rData1.GetLine( m_nFirst1 + nIdx1 ).GetNode().GetTextNode();
+    const SwTextNode *pTextNd2 = m_rData2.GetLine( m_nFirst2 + nIdx2 ).GetNode().GetTextNode();
 
     if( !pTextNd1 || !pTextNd2
         || ( CmpOptions.bUseRsid && !pTextNd1->CompareParRsid( *pTextNd2 ) ) )
