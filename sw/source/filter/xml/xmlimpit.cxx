@@ -857,6 +857,23 @@ bool SvXMLImportItemMapper::PutXMLValue(
         }
         break;
 
+        case RES_PRINT:
+        {
+            SfxBoolItem& rHasTextChangesOnly = dynamic_cast<SfxBoolItem&>(rItem);
+
+            if( IsXMLToken( rValue, XML_TRUE ) )
+            {
+                rHasTextChangesOnly.SetValue( true );
+                bOk = true;
+            }
+            else if( IsXMLToken( rValue, XML_FALSE ) )
+            {
+                rHasTextChangesOnly.SetValue( false );
+                bOk = true;
+            }
+        }
+        break;
+
         case RES_HORI_ORIENT:
         {
             SwFormatHoriOrient& rHoriOrient = dynamic_cast<SwFormatHoriOrient&>(rItem);

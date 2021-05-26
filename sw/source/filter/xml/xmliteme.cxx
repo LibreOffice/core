@@ -33,6 +33,8 @@
 #include <frmfmt.hxx>
 #include "xmlexp.hxx"
 #include <editeng/memberids.h>
+#include <editeng/prntitem.hxx>
+#include <xmloff/xmlnamespace.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -105,6 +107,33 @@ void SwXMLTableItemMapper_Impl::handleSpecialItem(
 {
     switch( rEntry.nWhichId )
     {
+
+    case RES_PRINT:
+        {
+            const SfxPoolItem *pItem;
+            if( pSet &&
+                SfxItemState::SET == pSet->GetItemState( RES_PRINT, true,
+                                                    &pItem ) )
+            {
+                bool bHasTextChangesOnly =
+                    static_cast<const SvxPrintItem *>(pItem)->GetValue();
+                if ( !bHasTextChangesOnly )
+                {
+                    OUString sValue;
+                    sal_uInt16 nMemberId =
+                        static_cast<sal_uInt16>( rEntry.nMemberId & MID_SW_FLAG_MASK );
+
+                    if( SvXMLExportItemMapper::QueryXMLValue(
+                        rItem, sValue, nMemberId, rUnitConverter ) )
+                    {
+                        AddAttribute( rEntry.nNameSpace, rEntry.eLocalName,
+                                      sValue, rNamespaceMap, rAttrList );
+                    }
+               }
+           }
+        }
+        break;
+
     case RES_LR_SPACE:
         {
             const SfxPoolItem *pItem;

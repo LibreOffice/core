@@ -1910,6 +1910,7 @@ namespace xmloff::token {
         XML_TEXT_BACKGROUND_COLOR,
         XML_TEXT_BLINKING,
         XML_TEXT_BOX,
+        XML_TEXT_CHANGES_ONLY,
         XML_TEXT_COMBINE,
         XML_TEXT_COMBINE_END_CHAR,
         XML_TEXT_COMBINE_START_CHAR,
