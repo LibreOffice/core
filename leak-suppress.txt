@@ -73,3 +73,6 @@ leak:libxml2.so
 # LibCoin leaks a little
 leak:coinComputeIntVariables
 leak:CoinMessages::operator=(CoinMessages const&)
+
+# ignore the in-process Java VM
+leak:libjvm
