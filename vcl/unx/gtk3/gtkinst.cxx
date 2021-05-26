@@ -18530,7 +18530,21 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
             {
                 bChildCanFocus = toBool(xChild->getFirstChild()->getNodeValue());
                 if (!bChildCanFocus)
-                    xCantFocus = xChild;
+                {
+                    OUString sParentClass = GetParentObjectType(xChild);
+                    if (sParentClass == "GtkBox" || sParentClass == "GtkGrid")
+                    {
+                        // e.g. for the case of notebooks without children yet, just remove the can't focus property
+                        // from Boxes and Grids
+                        xRemoveList.push_back(xChild);
+                    }
+                    else
+                    {
+                        // otherwise mark the property as needing removal if there turns out to be a child
+                        // with can-focus of true, in which case remove this parent conflicting property
+                        xCantFocus = xChild;
+                    }
+                }
             }
 
             if (sName == "visible")
