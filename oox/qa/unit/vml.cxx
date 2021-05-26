@@ -76,9 +76,9 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, tdf137314_vml_rotation_unit_fd)
     // Without fix in place, the vector was -1441|1490.
     // [1] and [2] are Bezier-curve control points.
     sal_Int32 nDiffX = aPolygon[3].X - aPolygon[0].X;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1490), nDiffX);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(1490), nDiffX, 1);
     sal_Int32 nDiffY = aPolygon[3].Y - aPolygon[0].Y;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1441), nDiffY);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(1441), nDiffY, 1);
 }
 
 CPPUNIT_TEST_FIXTURE(OoxVmlTest, testSpt202ShapeType)
