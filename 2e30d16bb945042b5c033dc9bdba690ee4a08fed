@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8ec0cc5c_9f1f121f",
+        "filename": "sc/source/ui/drawfunc/mediash.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-26T13:57:44Z",
+      "side": 1,
+      "message": "So these 21 characters and two lines are required to save 10 characters (two occurrences of svx::) in each of the three files? ;-)",
+      "revId": "2e30d16bb945042b5c033dc9bdba690ee4a08fed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
