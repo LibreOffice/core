@@ -85,7 +85,6 @@ SvxLineTabPage::SvxLineTabPage(weld::Container* pPage, weld::DialogController* p
     , m_pSymbolList(nullptr)
     , m_bNewSize(false)
     , m_nSymbolType(SVX_SYMBOLTYPE_UNKNOWN) // unknown respectively unchanged
-    , m_pSymbolAttr(nullptr)
     , m_bLastWidthModified(false)
     , m_aSymbolLastSize(Size(0,0))
     , m_bSymbols(false)
@@ -840,9 +839,9 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
                     // directly clone to target SdrModel
                     pObj = pObj->CloneSdrObject(*pModel);
 
-                    if(m_pSymbolAttr)
+                    if(m_xSymbolAttr)
                     {
-                        pObj->SetMergedItemSet(*m_pSymbolAttr);
+                        pObj->SetMergedItemSet(*m_xSymbolAttr);
                     }
                     else
                     {
@@ -1480,9 +1479,9 @@ IMPL_LINK_NOARG(SvxLineTabPage, MenuCreateHdl_Impl, weld::Toggleable&, void)
 
             m_aGrfNames.emplace_back("");
             pPage->NbcInsertObject(pObj);
-            if(m_pSymbolAttr)
+            if(m_xSymbolAttr)
             {
-                pObj->SetMergedItemSet(*m_pSymbolAttr);
+                pObj->SetMergedItemSet(*m_xSymbolAttr);
             }
             else
             {
@@ -1692,7 +1691,7 @@ void SvxLineTabPage::PageCreated(const SfxAllItemSet& aSet)
         ShowSymbolControls(true);
         m_pSymbolList = static_cast<SdrObjList*>(pSdrObjListItem->GetValue());
         if (pSymbolAttrItem)
-            m_pSymbolAttr = new SfxItemSet(pSymbolAttrItem->GetItemSet());
+            m_xSymbolAttr.reset(new SfxItemSet(pSymbolAttrItem->GetItemSet()));
         if(pGraphicItem)
             m_aAutoSymbolGraphic = pGraphicItem->GetGraphic();
     }

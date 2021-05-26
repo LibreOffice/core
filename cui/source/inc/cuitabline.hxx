@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <memory>
 #include <vector>
 #include <editeng/brushitem.hxx>
 #include <sfx2/tabdlg.hxx>
@@ -97,7 +98,7 @@ private:
     Graphic             m_aAutoSymbolGraphic;
     tools::Long                m_nSymbolType;
     /// attributes for the shown symbols; only necessary if not equal to line properties
-    SfxItemSet*         m_pSymbolAttr;
+    std::unique_ptr<SfxItemSet> m_xSymbolAttr;
 
     std::vector<OUString>      m_aGrfNames;
     std::vector< std::unique_ptr<SvxBmpItemInfo> >
