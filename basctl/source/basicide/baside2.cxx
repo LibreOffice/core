@@ -190,6 +190,27 @@ void lcl_ConvertTabsToSpaces( OUString& rLine )
     rLine = aResult.makeStringAndClear();
 }
 
+void lcl_DetectUTF8Charset(SvStream& pStream)
+{
+    const size_t buffsize = pStream.remainingSize();
+    std::unique_ptr<sal_uInt8[]> pBuf;
+    pBuf.reset(new sal_uInt8[static_cast<std::size_t>(buffsize)]);
+    sal_Int32 nRead = pStream.ReadBytes(pBuf.get(), buffsize);
+    UErrorCode uerr = U_ZERO_ERROR;
+    UCharsetDetector* ucd = ucsdet_open(&uerr);
+    ucsdet_setText(ucd, reinterpret_cast<const char*>(pBuf.get()), nRead, &uerr);
+    if (const UCharsetMatch* match = ucsdet_detect(ucd, &uerr))
+    {
+        const char* pEncodingName = ucsdet_getName(match, &uerr);
+        if (U_SUCCESS(uerr) && !strcmp("UTF-8", pEncodingName))
+        {
+            pStream.SetStreamCharSet(RTL_TEXTENCODING_UTF8);
+        }
+    }
+    ucsdet_close(ucd);
+    pStream.Seek(0);
+}
+
 } // namespace
 
 ModulWindow::ModulWindow (ModulWindowLayout* pParent, ScriptDocument const& rDocument,
@@ -438,23 +459,7 @@ void ModulWindow::LoadBasic()
         GetEditorWindow().CreateProgress( IDEResId(RID_STR_GENERATESOURCE), nLines*4 );
         GetEditEngine()->SetUpdateMode( false );
         // tdf#139196 - import macros using either default or utf-8 text encoding
-        constexpr size_t buffsize = 1024 * 1024;
-        sal_Int8 bytes[buffsize] = { 0 };
-        sal_Int32 nRead = pStream->ReadBytes(bytes, buffsize);
-        UErrorCode uerr = U_ZERO_ERROR;
-        UCharsetDetector* ucd = ucsdet_open(&uerr);
-        ucsdet_setText(ucd, reinterpret_cast<const char*>(bytes), nRead, &uerr);
-        if (const UCharsetMatch* match = ucsdet_detect(ucd, &uerr))
-        {
-            const char* pEncodingName = ucsdet_getName(match, &uerr);
-
-            if (U_SUCCESS(uerr) && !strcmp("UTF-8", pEncodingName))
-            {
-                pStream->SetStreamCharSet(RTL_TEXTENCODING_UTF8);
-            }
-        }
-        ucsdet_close(ucd);
-        pStream->Seek(0);
+        lcl_DetectUTF8Charset(*pStream);
         GetEditView()->Read( *pStream );
         GetEditEngine()->SetUpdateMode( true );
         GetEditorWindow().PaintImmediately();
