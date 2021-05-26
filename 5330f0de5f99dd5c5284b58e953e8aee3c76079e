@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4fb953ad_0fddc5f2",
+        "filename": "basctl/source/basicide/baside2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-26T10:29:20Z",
+      "side": 1,
+      "message": "No need in separate declaration (and default-initialization) of the unique_ptr, and immediately resetting it. I\u0027d just do\n\n    auto pBuf \u003d std::make_unique\u003csal_uInt8[]\u003e(buffsize);",
+      "revId": "5330f0de5f99dd5c5284b58e953e8aee3c76079e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
