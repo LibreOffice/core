@@ -1,0 +1,170 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b782e5e0_17e80f81",
+        "filename": "setup_native/scripts/admin.pl",
+        "patchSetId": 1
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-05-26T14:41:15Z",
+      "side": 1,
+      "message": "you keep the create_directory helper that sets custom permissions, so all the leftover cruft to set the directory permission can go as well.\n\nAlso instead of using the create_directory helper with custom permissions, one could just use make_path with the mode directly, however here the permissions are the same, and the create_directory function is not meant to accept multiple arguments, \n\nAlso with the (superfluous) check whether the directory exists, and make_path returning the number of created directories, it is basically a if(1) statement.",
+      "range": {
+        "startLine": 369,
+        "startChar": 0,
+        "endLine": 381,
+        "endChar": 9
+      },
+      "revId": "9e317bf6a03bd9e57a9fbc8d062b7294e4c9574b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1b18236_316d1f75",
+        "filename": "setup_native/scripts/admin.pl",
+        "patchSetId": 1
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-05-26T14:41:15Z",
+      "side": 1,
+      "message": "seems to be a bug in original code, should have been -d most likely, and in that case the check is superfluous.\n\nAlso it\u0027s not necessary to manually walk the directory tree, since make_path can create the whole path with all intermediate directories.",
+      "revId": "9e317bf6a03bd9e57a9fbc8d062b7294e4c9574b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b73e5968_c49e431c",
+        "filename": "solenv/bin/modules/installer/systemactions.pm",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-05-26T14:41:15Z",
+      "side": 1,
+      "message": "see other comments",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 0
+      },
+      "revId": "9e317bf6a03bd9e57a9fbc8d062b7294e4c9574b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05c45f26_74d0a555",
+        "filename": "solenv/bin/modules/installer/systemactions.pm",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-05-26T14:41:15Z",
+      "side": 1,
+      "message": "see other comments, manually walking the hierarchy is not necessary, make_path is equivalent to mkdir -p and create parent directories.",
+      "revId": "9e317bf6a03bd9e57a9fbc8d062b7294e4c9574b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4cedaa28_ea2efa7e",
+        "filename": "solenv/bin/modules/installer/systemactions.pm",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-05-26T14:41:15Z",
+      "side": 1,
+      "message": "see earlier, attempting second time not necessary if the whole path is created at once.",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 114,
+        "endChar": 0
+      },
+      "revId": "9e317bf6a03bd9e57a9fbc8d062b7294e4c9574b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dcc669ea_6af22d9c",
+        "filename": "solenv/bin/modules/installer/systemactions.pm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1041,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-05-26T14:41:15Z",
+      "side": 1,
+      "message": "again the unnecessary check whether the directory exists, and an additional superfluous chmod - just simplify and trust that make_path works correctly when it is told to apply permissions or rather don\u0027t expect a separate chmod to do anything different :-)",
+      "range": {
+        "startLine": 1030,
+        "startChar": 0,
+        "endLine": 1041,
+        "endChar": 0
+      },
+      "revId": "9e317bf6a03bd9e57a9fbc8d062b7294e4c9574b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "738adb6e_62f7c859",
+        "filename": "solenv/bin/modules/par2script/systemactions.pm",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-05-26T14:41:15Z",
+      "side": 1,
+      "message": "same deal here. and esp. on unix/linux you\u0027d expect perl\u0027s chmod to work exactly like system chmod command…",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 13
+      },
+      "revId": "9e317bf6a03bd9e57a9fbc8d062b7294e4c9574b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfdf9d0b_8630a417",
+        "filename": "solenv/bin/modules/pre2par/systemactions.pm",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-05-26T14:41:15Z",
+      "side": 1,
+      "message": "dito...",
+      "revId": "9e317bf6a03bd9e57a9fbc8d062b7294e4c9574b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
