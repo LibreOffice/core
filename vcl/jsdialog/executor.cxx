@@ -174,7 +174,7 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
             auto pSpinField = dynamic_cast<weld::SpinButton*>(pWidget);
             if (pSpinField)
             {
-                if (sAction == "change")
+                if (sAction == "change" || sAction == "value")
                 {
                     OString sValue = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
                     int nValue = std::atoi(sValue.getStr());
