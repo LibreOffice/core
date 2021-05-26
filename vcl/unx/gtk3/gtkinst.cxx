@@ -10542,6 +10542,28 @@ public:
 
 namespace
 {
+#if GTK_CHECK_VERSION(4, 0, 0)
+    // speculative, "error" seems to be a thing but "warning" probably isn't
+    void set_widget_css_message_type(GtkWidget* pWidget, weld::EntryMessageType eType)
+    {
+        switch (eType)
+        {
+            case weld::EntryMessageType::Normal:
+                gtk_widget_remove_css_class(pWidget, "error");
+                gtk_widget_remove_css_class(pWidget, "warning");
+                break;
+            case weld::EntryMessageType::Warning:
+                gtk_widget_remove_css_class(pWidget, "error");
+                gtk_widget_add_css_class(pWidget, "warning");
+                break;
+            case weld::EntryMessageType::Error:
+                gtk_widget_remove_css_class(pWidget, "warning");
+                gtk_widget_add_css_class(pWidget, "error");
+                break;
+        }
+    }
+#endif
+
     void set_entry_message_type(GtkEntry* pEntry, weld::EntryMessageType eType)
     {
         switch (eType)
@@ -10800,6 +10822,13 @@ public:
 
     virtual void set_message_type(weld::EntryMessageType eType) override
     {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        if (!GTK_IS_ENTRY(m_pDelegate))
+        {
+            ::set_widget_css_message_type(m_pDelegate, eType);
+            return;
+        }
+#endif
         ::set_entry_message_type(GTK_ENTRY(m_pDelegate), eType);
     }
 
