@@ -16,10 +16,6 @@ $(eval $(call gb_Executable_use_api,ui-previewer,\
     udkapi \
 ))
 
-$(eval $(call gb_Executable_use_static_libraries,ui-previewer,\
-    vclmain \
-))
-
 $(eval $(call gb_Executable_use_libraries,ui-previewer,\
 	comphelper \
 	cppu \
@@ -27,8 +23,9 @@ $(eval $(call gb_Executable_use_libraries,ui-previewer,\
 	sal \
     tl \
     ucbhelper \
-    vcl \
 ))
+
+$(eval $(call gb_Executable_use_vclmain,ui-previewer))
 
 $(eval $(call gb_Executable_add_exception_objects,ui-previewer,\
     vcl/source/uipreviewer/previewer \
@@ -37,17 +34,6 @@ $(eval $(call gb_Executable_add_exception_objects,ui-previewer,\
 $(eval $(call gb_Executable_add_defs,ui-previewer,\
     -DVCL_INTERNALS \
 ))
-
-ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
-$(eval $(call gb_Executable_add_libs,ui-previewer,\
-	-lm $(DLOPEN_LIBS) \
-    -lX11 \
-))
-
-$(eval $(call gb_Executable_use_static_libraries,ui-previewer,\
-	glxtest \
-))
-endif
 
 $(eval $(call gb_Executable_add_default_nativeres,ui-previewer))
 
