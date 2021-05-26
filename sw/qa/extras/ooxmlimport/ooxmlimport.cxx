@@ -770,7 +770,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf105127, "tdf105127.docx")
     // ForceMetricTo100th_mm -> the old results were in twips due to the
     // object residing in Writer. The UNO API by definition is in 100thmm,
     // thus I will correct the value here.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5719), aPolyPolygon.Coordinates[0][0].Y); // was: 3257
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5718), aPolyPolygon.Coordinates[0][0].Y); // was: 3257
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTdf105143, "tdf105143.docx")
@@ -778,7 +778,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf105143, "tdf105143.docx")
     OUString aTop = parseDump("/root/page/body/txt/anchored/SwAnchoredDrawObject/bounds", "top");
     // This was 6272, i.e. the shape was moved up (incorrect position) to be
     // inside the page rectangle.
-    CPPUNIT_ASSERT_EQUAL(OUString("6731"), aTop);
+    CPPUNIT_ASSERT_EQUAL(OUString("6730"), aTop);
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTdf105975, "105975.docx")

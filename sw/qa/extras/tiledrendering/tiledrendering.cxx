@@ -588,7 +588,7 @@ void SwTiledRenderingTest::testInsertShape()
     IDocumentDrawModelAccess &rDrawModelAccess = pWrtShell->GetDoc()->getIDocumentDrawModelAccess();
     SdrPage* pPage = rDrawModelAccess.GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(0);
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(3302, 302, 6698, 3698), pObject->GetSnapRect());
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(3299, 299, 6698, 3698), pObject->GetSnapRect());
 
     // check that it is in the foreground layer
     CPPUNIT_ASSERT_EQUAL(rDrawModelAccess.GetHeavenId().get(), pObject->GetLayer().get());
@@ -1735,7 +1735,7 @@ void SwTiledRenderingTest::testCommentInsert()
     // - Expected: 1418, 1418, 0, 0
     // - Actual  : 1418, 1418, 1024, 1024
     // i.e. the anchor position was a non-empty rectangle.
-    CPPUNIT_ASSERT_EQUAL(OString("1418, 1418, 0, 0"), aAnchorPos);
+    CPPUNIT_ASSERT_EQUAL(OString("1417, 1417, 0, 0"), aAnchorPos);
     comphelper::LibreOfficeKit::setTiledAnnotations(true);
 }
 
@@ -2722,7 +2722,7 @@ void SwTiledRenderingTest::testDropDownFormFieldButton()
         CPPUNIT_ASSERT_EQUAL(OString("drop-down"), sType);
 
         OString sTextArea = aTree.get_child("textArea").get_value<std::string>().c_str();
-        CPPUNIT_ASSERT_EQUAL(OString("1538, 1418, 1026, 275"), sTextArea);
+        CPPUNIT_ASSERT_EQUAL(OString("1537, 1417, 1026, 275"), sTextArea);
 
         boost::property_tree::ptree aItems = aTree.get_child("params").get_child("items");
         CPPUNIT_ASSERT_EQUAL(size_t(6), aItems.size());

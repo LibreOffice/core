@@ -1909,10 +1909,10 @@ bool SwFEShell::ImpEndCreate()
             // The crsr should not be too far away
             bCharBound = true;
             tools::Rectangle aRect( aTmp.SVRect() );
-            aRect.AdjustLeft( -(MM50*2) );
-            aRect.AdjustTop( -(MM50*2) );
-            aRect.AdjustRight(MM50*2 );
-            aRect.AdjustBottom(MM50*2 );
+            aRect.AdjustLeft(-o3tl::convert(10, o3tl::Length::mm, o3tl::Length::twip));
+            aRect.AdjustTop(-o3tl::convert(10, o3tl::Length::mm, o3tl::Length::twip));
+            aRect.AdjustRight(o3tl::convert(10, o3tl::Length::mm, o3tl::Length::twip));
+            aRect.AdjustBottom(o3tl::convert(10, o3tl::Length::mm, o3tl::Length::twip));
 
             if( !aRect.IsOver( rBound ) && !::GetHtmlMode( GetDoc()->GetDocShell() ))
                 bCharBound = false;

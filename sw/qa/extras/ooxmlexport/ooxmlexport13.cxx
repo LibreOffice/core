@@ -922,7 +922,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf125324, "tdf125324.docx")
 {
     discardDumpedLayout();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "/root/page/body/txt[2]/anchored/fly/tab/infos/bounds", "top", "4193");
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/anchored/fly/tab/infos/bounds", "top", "4192");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf78657, "tdf78657_picture_hyperlink.docx")

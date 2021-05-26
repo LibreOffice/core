@@ -36,6 +36,7 @@
 #include <calbck.hxx>
 #include <viewopt.hxx>
 #include <ndtxt.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 
@@ -645,7 +646,7 @@ bool SwRootFrame::IsBetweenPages(const Point& rPt) const
             // If we are really close to the bottom or top of a page.
             const auto toEdge = std::min(std::abs(pPage->getFrameArea().Top() - rPt.Y()),
                                          std::abs(pPage->getFrameArea().Bottom() - rPt.Y()));
-            return toEdge <= MmToTwips(2.0);
+            return toEdge <= o3tl::convert(2, o3tl::Length::mm, o3tl::Length::twip);
         }
     }
 

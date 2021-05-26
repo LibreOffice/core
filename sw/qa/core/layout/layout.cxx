@@ -57,7 +57,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTdf128195)
     sal_Int32 nTxtHeight = parseDump("//header/txt[2]/infos/bounds", "height").toInt32();
     sal_Int32 nTxtBottom = parseDump("//header/txt[2]/infos/bounds", "bottom").toInt32();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2269), nTxtHeight);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3529), nTxtBottom);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3528), nTxtBottom);
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testBorderCollapseCompat)
@@ -163,7 +163,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testAnchorPositionBasedOnParagraph)
     load(DATA_DIRECTORY, "tdf134783_testAnchorPositionBasedOnParagraph.fodt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT(pXmlDoc);
-    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[1]/bounds", "top", "1671");
+    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[1]/bounds", "top", "1670");
     assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[1]/bounds", "bottom", "1732");
     assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[2]/bounds", "top", "1947");
     assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[2]/bounds", "bottom", "2008");
@@ -181,7 +181,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxStaysInsideShape)
     // Without the fix in place, this test would have failed with
     // - Expected: 1932
     // - Actual  : 7476
-    assertXPath(pXmlDoc, "//anchored/fly/infos/bounds", "top", "1932");
+    assertXPath(pXmlDoc, "//anchored/fly/infos/bounds", "top", "1931");
     assertXPath(pXmlDoc, "//anchored/fly/infos/bounds", "bottom", "7184");
 }
 
@@ -407,10 +407,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMarginPageBorder)
     MetafileXmlDump dumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 2565
+    // - Expected: 2564
     // - Actual  : 1425
-    // Where 2565 is close to the left edge of the text area (2553).
-    assertXPath(pXmlDoc, "//polyline[@style='solid']/point[1]", "x", "2565");
+    // Where 2564 is close to the left edge of the text area (2553).
+    assertXPath(pXmlDoc, "//polyline[@style='solid']/point[1]", "x", "2564");
 #endif
 }
 

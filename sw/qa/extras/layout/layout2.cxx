@@ -404,9 +404,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf131707)
     createDoc("tdf131707_flyWrap.doc");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
-    assertXPath(pXmlDoc, "//body/tab/row[3]/cell[2]/txt/infos/bounds", "top", "2185");
+    assertXPath(pXmlDoc, "//body/tab/row[3]/cell[2]/txt/infos/bounds", "top", "2184");
     // the image should be inside of the cell boundary - so the same top or higher
-    assertXPath(pXmlDoc, "//body/tab/row[3]/cell[2]/txt/anchored/fly/infos/bounds", "top", "2185");
+    assertXPath(pXmlDoc, "//body/tab/row[3]/cell[2]/txt/anchored/fly/infos/bounds", "top", "2184");
 }
 
 #if HAVE_MORE_FONTS
@@ -1791,7 +1791,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf122607_regression)
     // somehow these 2 rows overlapped in the PDF unless CalcLayout() runs
     assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[1]/infos/bounds", "mbFixSize",
                 "false");
-    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[1]/infos/bounds", "top", "2977");
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[1]/infos/bounds", "top", "2976");
     assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[1]/infos/bounds", "height", "241");
     assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[2]/infos/bounds", "mbFixSize",
                 "true");
@@ -1822,7 +1822,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testBtlrCell)
     // Without the accompanying fix in place, this test would have failed with 'Expected: 1915;
     // Actual  : 1756', i.e. the AAA1 text was too close to the left cell border due to an ascent vs
     // descent mismatch when calculating the baseline offset of the text portion.
-    assertXPath(pXmlDoc, "//textarray[1]", "x", "1915");
+    assertXPath(pXmlDoc, "//textarray[1]", "x", "1914");
     assertXPath(pXmlDoc, "//textarray[1]", "y", "2707");
 
     // Without the accompanying fix in place, this test would have failed with 'Expected: 1979;
@@ -2227,7 +2227,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138039)
     assertXPath(pXmlDoc, "/root/page[2]/body/tab", 0);
     assertXPath(pXmlDoc, "/root/page[2]/body/txt", 1);
     assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/anchored/fly", 1);
-    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/anchored/fly[1]/infos/bounds", "top", "17915");
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/anchored/fly[1]/infos/bounds", "top", "17914");
     assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/anchored/fly[1]/infos/bounds", "height",
                 "15819");
     // paragraph on third page
@@ -2252,7 +2252,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134298)
     assertXPath(pXmlDoc, "/root/page[2]/body/tab", 0);
     assertXPath(pXmlDoc, "/root/page[2]/body/txt", 1);
     assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/anchored/fly", 1);
-    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/anchored/fly[1]/infos/bounds", "top", "17897");
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/anchored/fly[1]/infos/bounds", "top", "17896");
     assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/anchored/fly[1]/infos/bounds", "height",
                 "15819");
 }

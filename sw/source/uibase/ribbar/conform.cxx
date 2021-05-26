@@ -91,10 +91,10 @@ void ConstFormControl::CreateDefaultObject()
 {
     Point aStartPos(GetDefaultCenterPos());
     Point aEndPos(aStartPos);
-    aStartPos.AdjustX( -(2 * MM50) );
-    aStartPos.AdjustY( -(MM50) );
-    aEndPos.AdjustX(2 * MM50 );
-    aEndPos.AdjustY(MM50 );
+    aStartPos.AdjustX(-o3tl::convert(10, o3tl::Length::mm, o3tl::Length::twip));
+    aStartPos.AdjustY(-o3tl::convert(5, o3tl::Length::mm, o3tl::Length::twip));
+    aEndPos.AdjustX(o3tl::convert(10, o3tl::Length::mm, o3tl::Length::twip));
+    aEndPos.AdjustY(o3tl::convert(5, o3tl::Length::mm, o3tl::Length::twip));
 
     if(!m_pSh->HasDrawView())
         m_pSh->MakeDrawView();

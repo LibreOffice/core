@@ -543,7 +543,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf81567, "tdf81567.odt")
     CPPUNIT_ASSERT_EQUAL(3520, nFrameHeight);
 
     int nFrameTop = parseDump("/root/page/body/txt/anchored/fly/infos/bounds", "top").toInt32();
-    CPPUNIT_ASSERT_EQUAL(1518, nFrameTop);
+    CPPUNIT_ASSERT_EQUAL(1517, nFrameTop);
 
     int nImageWidth = parseDump("/root/page/body/txt/anchored/fly/txt/anchored/fly/infos/bounds", "width").toInt32();
     CPPUNIT_ASSERT_EQUAL(2370, nImageWidth);

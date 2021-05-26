@@ -513,10 +513,10 @@ void SwDrawBase::CreateDefaultObject()
 {
     Point aStartPos = GetDefaultCenterPos();
     Point aEndPos(aStartPos);
-    aStartPos.AdjustX( -(6 * MM50) );
-    aStartPos.AdjustY( -(6 * MM50) );
-    aEndPos.AdjustX(6 * MM50 );
-    aEndPos.AdjustY(6 * MM50 );
+    aStartPos.AdjustX(-o3tl::convert(30, o3tl::Length::mm, o3tl::Length::twip));
+    aStartPos.AdjustY(-o3tl::convert(30, o3tl::Length::mm, o3tl::Length::twip));
+    aEndPos.AdjustX(o3tl::convert(30, o3tl::Length::mm, o3tl::Length::twip));
+    aEndPos.AdjustY(o3tl::convert(30, o3tl::Length::mm, o3tl::Length::twip));
     tools::Rectangle aRect(aStartPos, aEndPos);
     m_pSh->CreateDefaultShape(m_pWin->GetSdrDrawMode(), aRect, m_nSlotId);
 }

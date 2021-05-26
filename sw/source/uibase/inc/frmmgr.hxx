@@ -22,6 +22,7 @@
 #include <swtypes.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/shaditem.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <tools/gen.hxx>
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
@@ -35,8 +36,8 @@ struct  SwPosition;
 class   SwFormatCol;
 class SvGlobalName;
 
-const SwTwips   DFLT_WIDTH      = MM50 * 4;
-const SwTwips   DFLT_HEIGHT     = MM50;
+constexpr SwTwips DFLT_WIDTH = o3tl::convert(20, o3tl::Length::mm, o3tl::Length::twip);
+constexpr SwTwips DFLT_HEIGHT = o3tl::convert(5, o3tl::Length::mm, o3tl::Length::twip);
 
 enum class Frmmgr_Type
 {

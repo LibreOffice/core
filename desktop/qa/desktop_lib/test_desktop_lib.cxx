@@ -2725,7 +2725,7 @@ void DesktopLOKTest::testTextSelectionHandles()
     char* pText = pDocument->pClass->getTextSelection(pDocument, "text/plain;charset=utf-8", nullptr);
     CPPUNIT_ASSERT_EQUAL(aText, OString(pText));
     free(pText);
-    CPPUNIT_ASSERT_EQUAL(OString("1418, 1418, 0, 275"), m_aTextSelectionStart);
+    CPPUNIT_ASSERT_EQUAL(OString("1417, 1417, 0, 275"), m_aTextSelectionStart);
     CPPUNIT_ASSERT_EQUAL(OString("1898, 1418, 0, 275"), m_aTextSelectionEnd);
 
     // deselect & check
