@@ -201,6 +201,18 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(const std::shared_ptr<weld::Window>& rPar
 
 SwRedlineAcceptDlg::~SwRedlineAcceptDlg()
 {
+    weld::TreeView& rTreeView = m_pTable->GetWidget();
+    rTreeView.all_foreach(
+        [&rTreeView](weld::TreeIter& rEntry)
+        {
+            if (!rTreeView.get_iter_depth(rEntry))
+            {
+                RedlinData *pData = reinterpret_cast<RedlinData*>(rTreeView.get_id(rEntry).toInt64());
+                delete pData;
+            }
+            return false;
+        }
+    );
 }
 
 void SwRedlineAcceptDlg::Init(SwRedlineTable::size_type nStart)
