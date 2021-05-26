@@ -5616,15 +5616,10 @@ fi
 dnl ===================================================================
 dnl check for cups support
 dnl ===================================================================
-ENABLE_CUPS=""
-
-if test "$enable_cups" = "no"; then
-    test_cups=no
-fi
 
 AC_MSG_CHECKING([whether to enable CUPS support])
-if test "$test_cups" = "yes"; then
-    ENABLE_CUPS="TRUE"
+if test "$test_cups" = yes -a "$enable_cups" != no; then
+    ENABLE_CUPS=TRUE
     AC_MSG_RESULT([yes])
 
     AC_MSG_CHECKING([whether cups support is present])
@@ -5633,7 +5628,6 @@ if test "$test_cups" = "yes"; then
     if test "$ac_cv_lib_cups_cupsPrintFiles" != "yes" -o "$ac_cv_header_cups_cups_h" != "yes"; then
         AC_MSG_ERROR([Could not find CUPS. Install libcups2-dev or cups-devel.])
     fi
-
 else
     AC_MSG_RESULT([no])
 fi
