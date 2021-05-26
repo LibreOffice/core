@@ -18,9 +18,8 @@
  */
 
 #include <memory>
-#include "printerinfomanager.hxx"
-
-#include "unx/gendata.hxx"
+#include <printerinfomanager.hxx>
+#include <unx/gendata.hxx>
 
 // needed since we declare a std::unique_ptr<SystemQueueInfo>
 namespace psp
