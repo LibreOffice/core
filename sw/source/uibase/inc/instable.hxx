@@ -38,7 +38,7 @@ class SwInsTableDlg : public SfxDialogController
 
     SwWrtShell* pShell;
     std::unique_ptr<SwTableAutoFormatTable> m_xTableTable;
-    SwTableAutoFormat* pTAutoFormat;
+    std::unique_ptr<SwTableAutoFormat> m_xTAutoFormat;
 
     sal_uInt8 lbIndex;
     sal_uInt8 tbIndex;
