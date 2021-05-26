@@ -177,9 +177,13 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
             {
                 if (sAction == "change" || sAction == "value")
                 {
+                    if (rData["data"] == "undefined")
+                        return true;
+
                     OString sValue = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
-                    int nValue = std::atoi(sValue.getStr());
-                    pSpinField->set_value(pSpinField->normalize(nValue));
+                    double nValue = std::atof(sValue.getStr());
+                    pSpinField->set_value(nValue
+                                          * weld::SpinButton::Power10(pSpinField->get_digits()));
                     LOKTrigger::trigger_value_changed(*pSpinField);
                     return true;
                 }
