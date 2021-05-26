@@ -42,6 +42,10 @@ def main(argv):
             sub_result_list = []
             count_elements(ext_dir, sub_result_list)
             sub_result_path = os.path.join(outputdir, sub_result_name)
+
+            # sort the result sub list according to tag names
+            sub_result_list = sorted(sub_result_list, key=lambda x: list(x[0].keys())[0], reverse=False)
+
             with open(sub_result_path, "w") as log_file:
                 pprint.pprint(sub_result_list, log_file)
     else:
@@ -89,6 +93,23 @@ def replace_namespace_with_alias(filename, element):
             element = element.replace("{" + element_ns + "}", "")
     return element
 
+def is_file_in_accepted_files(filename):
+    if(filename.endswith("[Content_Types].xml") or \
+       filename.endswith("docProps/custom.xml") or \
+       filename.endswith("docProps/app.xml") or    \
+       filename.endswith("presentation.xml") or \
+       filename.endswith("viewProps.xml") or \
+       filename.endswith("tableStyles.xml") or \
+       filename.endswith("presProps.xml") or \
+       "ppt/slideLayouts" in filename or \
+       "ppt/slideMasters" in filename or \
+       "ppt/theme" in filename or \
+       filename.endswith("docProps/core.xml") or not \
+       filename.endswith(".xml")):
+       return False
+
+    return True
+
 # counts tags, attribute names and values of xmls
 def count_elements(extracted_files_dir, result_list):
 
@@ -101,40 +122,43 @@ def count_elements(extracted_files_dir, result_list):
 
     # parse xmls and count elements
     for xmlfile in list_of_files:
-        if(xmlfile.endswith(".xml")):
-            tree = ET.parse(xmlfile)
-            root = tree.getroot()
+        if not is_file_in_accepted_files(xmlfile):
+            continue
 
-            # start to count
-            for child in root.iter():
-                tag = replace_namespace_with_alias(xmlfile, child.tag)
-                tag_idx = get_index_of_tag(tag, result_list)
+        print(xmlfile)
+        tree = ET.parse(xmlfile)
+        root = tree.getroot()
 
-                # count tags
-                if (tag_idx == -1):
-                    tmp_list = [{tag: 1},{},{},{}]
-                    result_list.append(tmp_list)
+        # start to count
+        for child in root.iter():
+            tag = replace_namespace_with_alias(xmlfile, child.tag)
+            tag_idx = get_index_of_tag(tag, result_list)
+
+            # count tags
+            if (tag_idx == -1):
+                tmp_list = [{tag: 1},{},{},{}]
+                result_list.append(tmp_list)
+            else:
+                result_list[tag_idx][0][tag] += 1
+
+            # count attribute names and values of current tag
+            for attr_name, attr_value in child.attrib.items():
+                attr_name = replace_namespace_with_alias(xmlfile, attr_name)
+                if not attr_name in result_list[tag_idx][1].keys():
+                    result_list[tag_idx][1][attr_name] = 1
                 else:
-                    result_list[tag_idx][0][tag] += 1
+                    result_list[tag_idx][1][attr_name] +=1
 
-                # count attribute names and values of current tag
-                for attr_name, attr_value in child.attrib.items():
-                    attr_name = replace_namespace_with_alias(xmlfile, attr_name)
-                    if not attr_name in result_list[tag_idx][1].keys():
-                        result_list[tag_idx][1][attr_name] = 1
-                    else:
-                        result_list[tag_idx][1][attr_name] +=1
+                if not attr_value in result_list[tag_idx][2].keys():
+                    result_list[tag_idx][2][attr_value] = 1
+                else:
+                    result_list[tag_idx][2][attr_value] +=1
 
-                    if not attr_value in result_list[tag_idx][2].keys():
-                        result_list[tag_idx][2][attr_value] = 1
-                    else:
-                        result_list[tag_idx][2][attr_value] +=1
-
-                if not (str(child.text) == "None"):
-                    if not child.text in result_list[tag_idx][3].keys():
-                        result_list[tag_idx][3][child.text] = 1
-                    else:
-                        result_list[tag_idx][3][child.text] += 1
+            if not (str(child.text) == "None"):
+                if not child.text in result_list[tag_idx][3].keys():
+                    result_list[tag_idx][3][child.text] = 1
+                else:
+                    result_list[tag_idx][3][child.text] += 1
 
 # gets the position of "tag" element in result list. If element is not exist,
 # return -1 that points the last index of the list.
