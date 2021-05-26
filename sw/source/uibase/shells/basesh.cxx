@@ -1705,8 +1705,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
 
                     if (comphelper::LibreOfficeKit::isActive())
                     {
-                        if (nWhich == FN_TOOL_ANCHOR_PAGE || nWhich == FN_TOOL_ANCHOR_PARAGRAPH
-                            || nWhich == FN_TOOL_ANCHOR_FRAME)
+                        if (nWhich == FN_TOOL_ANCHOR_PAGE || nWhich == FN_TOOL_ANCHOR_FRAME)
                         {
                             rSet.DisableItem(nWhich);
                         }
