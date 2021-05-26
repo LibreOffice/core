@@ -68,6 +68,9 @@ struct RefUpdateContext
      */
     ScRange maRange;
 
+    /** Are the data transposed? */
+    bool mbTransposed;
+
     /** Amount and direction of movement in the column direction. */
     SCCOL mnColDelta;
     /** Amount and direction of movement in the row direction. */
@@ -80,7 +83,7 @@ struct RefUpdateContext
 
     ColumnBlockPositionSet* mpBlockPos; // not owning
 
-    RefUpdateContext(ScDocument& rDoc);
+    RefUpdateContext(ScDocument& rDoc, ScDocument* pClipdoc = nullptr);
 
     bool isInserted() const;
     bool isDeleted() const;

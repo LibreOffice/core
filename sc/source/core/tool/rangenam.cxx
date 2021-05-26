@@ -283,6 +283,7 @@ void ScRangeData::UpdateTranspose( const ScRange& rSource, const ScAddress& rDes
         {
             SingleDoubleRefModifier aMod( *t );
             ScComplexRefData& rRef = aMod.Ref();
+            // Update only absolute references
             if (!rRef.Ref1.IsColRel() && !rRef.Ref1.IsRowRel() &&
                     (!rRef.Ref1.IsFlag3D() || !rRef.Ref1.IsTabRel()) &&
                 ( t->GetType() == svSingleRef ||
@@ -290,6 +291,7 @@ void ScRangeData::UpdateTranspose( const ScRange& rSource, const ScAddress& rDes
                     (!rRef.Ref2.IsFlag3D() || !rRef.Ref2.IsTabRel()))))
             {
                 ScRange aAbs = rRef.toAbs(rDoc, aPos);
+                // Check if the absolute reference of this range is pointing to the transposed source
                 if (ScRefUpdate::UpdateTranspose(rDoc, rSource, rDest, aAbs) != UR_NOTHING)
                 {
                     rRef.SetRange(rDoc.GetSheetLimits(), aAbs, aPos);

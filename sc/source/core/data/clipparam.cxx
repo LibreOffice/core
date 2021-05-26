@@ -114,6 +114,8 @@ ScRange ScClipParam::getWholeRange() const
 void ScClipParam::transpose(const ScDocument& rSrcDoc, bool bIncludeFiltered,
                             bool bIsMultiRangeRowFilteredTranspose)
 {
+    mbTransposed = true;
+
     switch (meDirection)
     {
         case Column:

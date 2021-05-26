@@ -1027,7 +1027,38 @@ bool insertRangeNames(
     return true;
 }
 
-void printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption)
+OUString getRangeByName(ScDocument* pDoc, const OUString& aRangeName)
+{
+    ScRangeData* pName = pDoc->GetRangeName()->findByUpperName(aRangeName.toAsciiUpperCase());
+    CPPUNIT_ASSERT(pName);
+    OUString aSymbol;
+    pName->GetSymbol(aSymbol, pDoc->GetGrammar());
+
+    return aSymbol;
+}
+
+OUString getFormula(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab)
+{
+    OUString aFormula;
+    pDoc->GetFormula(nCol, nRow, nTab, aFormula);
+    return aFormula;
+}
+
+#if CALC_DEBUG_OUTPUT != 0
+void printFormula(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, const char* pCaption)
+{
+    if (pCaption != nullptr)
+        cout << pCaption << ", ";
+    cout << nCol << "/" << nRow << ": " << getFormula(pDoc, nCol, nRow, nTab);
+    cout << endl;
+}
+#else
+// Avoid unused parameter warning
+void printFormula(ScDocument*, SCCOL, SCROW, SCTAB, const char*) {}
+#endif
+
+void printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption,
+                const bool printFormula)
 {
     SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();
     SCCOL nCol1 = rRange.aStart.Col(), nCol2 = rRange.aEnd.Col();
@@ -1038,11 +1069,18 @@ void printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption)
         {
             ScAddress aPos(nCol, nRow, rRange.aStart.Tab());
             ScRefCellValue aCell(*pDoc, aPos);
-            OUString aVal = ScCellFormat::GetOutputString(*pDoc, aPos, aCell);
-            printer.set(nRow-nRow1, nCol-nCol1, aVal);
+            OUString aVal = printFormula ? getFormula(pDoc, nCol, nRow, rRange.aStart.Tab())
+                                         : ScCellFormat::GetOutputString(*pDoc, aPos, aCell);
+            printer.set(nRow - nRow1, nCol - nCol1, aVal);
         }
     }
     printer.print(pCaption);
+}
+
+void printRange(ScDocument* pDoc, const ScRange& rRange, const OString& rCaption,
+                const bool printFormula)
+{
+    printRange(pDoc, rRange, rCaption.getStr(), printFormula);
 }
 
 void clearRange(ScDocument* pDoc, const ScRange& rRange)
