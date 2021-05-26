@@ -7168,7 +7168,9 @@ private:
     gulong m_nSwitchPageSignalId;
     gulong m_nOverFlowSwitchPageSignalId;
     gulong m_nNotebookSizeAllocateSignalId;
+#if !GTK_CHECK_VERSION(4, 0, 0)
     gulong m_nFocusSignalId;
+#endif
     gulong m_nChangeCurrentPageId;
     guint m_nLaunchSplitTimeoutId;
     bool m_bOverFlowBoxActive;
@@ -7572,6 +7574,7 @@ private:
         return false;
     }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     static gboolean signalFocus(GtkNotebook* notebook, GtkDirectionType direction, gpointer widget)
     {
         // if the notebook widget itself has focus
@@ -7582,6 +7585,7 @@ private:
         }
         return false;
     }
+#endif
 
     // ctrl + page_up/ page_down
     bool signal_change_current_page(gint arg1)
@@ -7608,7 +7612,9 @@ public:
         , m_pOverFlowNotebook(GTK_NOTEBOOK(gtk_notebook_new()))
         , m_nSwitchPageSignalId(g_signal_connect(pNotebook, "switch-page", G_CALLBACK(signalSwitchPage), this))
         , m_nOverFlowSwitchPageSignalId(g_signal_connect(m_pOverFlowNotebook, "switch-page", G_CALLBACK(signalOverFlowSwitchPage), this))
+#if !GTK_CHECK_VERSION(4, 0, 0)
         , m_nFocusSignalId(g_signal_connect(pNotebook, "focus", G_CALLBACK(signalFocus), this))
+#endif
         , m_nChangeCurrentPageId(g_signal_connect(pNotebook, "change-current-page", G_CALLBACK(signalChangeCurrentPage), this))
         , m_nLaunchSplitTimeoutId(0)
         , m_bOverFlowBoxActive(false)
@@ -7827,7 +7833,9 @@ public:
     virtual void disable_notify_events() override
     {
         g_signal_handler_block(m_pNotebook, m_nSwitchPageSignalId);
+#if !GTK_CHECK_VERSION(4, 0, 0)
         g_signal_handler_block(m_pNotebook, m_nFocusSignalId);
+#endif
         g_signal_handler_block(m_pNotebook, m_nChangeCurrentPageId);
         g_signal_handler_block(m_pOverFlowNotebook, m_nOverFlowSwitchPageSignalId);
 #if !GTK_CHECK_VERSION(4, 0, 0)
@@ -7846,7 +7854,9 @@ public:
 #endif
         g_signal_handler_unblock(m_pOverFlowNotebook, m_nOverFlowSwitchPageSignalId);
         g_signal_handler_unblock(m_pNotebook, m_nSwitchPageSignalId);
+#if !GTK_CHECK_VERSION(4, 0, 0)
         g_signal_handler_unblock(m_pNotebook, m_nFocusSignalId);
+#endif
         g_signal_handler_unblock(m_pNotebook, m_nChangeCurrentPageId);
     }
 
@@ -7894,7 +7904,9 @@ public:
         if (m_nNotebookSizeAllocateSignalId)
             g_signal_handler_disconnect(m_pNotebook, m_nNotebookSizeAllocateSignalId);
         g_signal_handler_disconnect(m_pNotebook, m_nSwitchPageSignalId);
+#if !GTK_CHECK_VERSION(4, 0, 0)
         g_signal_handler_disconnect(m_pNotebook, m_nFocusSignalId);
+#endif
         g_signal_handler_disconnect(m_pNotebook, m_nChangeCurrentPageId);
         g_signal_handler_disconnect(m_pOverFlowNotebook, m_nOverFlowSwitchPageSignalId);
 #if !GTK_CHECK_VERSION(4, 0, 0)
