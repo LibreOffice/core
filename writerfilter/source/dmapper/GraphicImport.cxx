@@ -836,16 +836,19 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         // Avoid setting AnchorType for TextBoxes till SwTextBoxHelper::syncProperty() doesn't handle transition.
                         bool bTextBox = false;
                         xShapeProps->getPropertyValue("TextBox") >>= bTextBox;
-                        if (m_pImpl->nVertRelation == text::RelOrientation::TEXT_LINE && !bTextBox)
+                        if (m_pImpl->nVertRelation == text::RelOrientation::TEXT_LINE)
                             eAnchorType = text::TextContentAnchorType_AT_CHARACTER;
 
                         xShapeProps->setPropertyValue("AnchorType", uno::makeAny(eAnchorType));
 
-                        if (m_pImpl->nVertRelation == text::RelOrientation::TEXT_LINE && bTextBox)
+                        if (m_pImpl->nVertRelation == text::RelOrientation::TEXT_LINE)
                         {
-                            // TEXT_LINE to specific to to-char anchoring, we have to-para, so reset
-                            // to default.
-                            m_pImpl->nVertRelation = text::RelOrientation::FRAME;
+                            // Word's "line" is "below the bottom of the line", our TEXT_LINE is
+                            // "towards top, from the bottom of the line", so invert the vertical
+                            // position.
+                            awt::Point aPoint = xShape->getPosition();
+                            aPoint.Y *= -1;
+                            xShape->setPosition(aPoint);
                         }
 
                         //only the position orientation is handled in applyPosition()

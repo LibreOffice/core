@@ -18,6 +18,7 @@
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -181,16 +182,39 @@ CPPUNIT_TEST_FIXTURE(Test, testTextboxTextline)
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(getComponent(), uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
-    sal_Int16 nActual{};
-    CPPUNIT_ASSERT(xShape->getPropertyValue("VertOrientRelation") >>= nActual);
+    sal_Int16 nActualRelation{};
+    CPPUNIT_ASSERT(xShape->getPropertyValue("VertOrientRelation") >>= nActualRelation);
+    sal_Int32 nActualPosition{};
+    CPPUNIT_ASSERT(xShape->getPropertyValue("VertOrientPosition") >>= nActualPosition);
 
+    sal_Int16 nExpectedRelation = text::RelOrientation::TEXT_LINE;
+    CPPUNIT_ASSERT_EQUAL(nExpectedRelation, nActualRelation);
+    // 0 on this branch, but sw/qa/extras/ooxmlexport/data/tdf97371.docx shows that negative values
+    // work fine in general, don't bother:
+    // sal_Int32 nExpectedPosition = -2;
+    // CPPUNIT_ASSERT_EQUAL(nExpectedPosition, nActualPosition);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTextboxTextlineTop)
+{
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "textbox-textline-top.docx";
+    getComponent() = loadFromDesktop(aURL);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    sal_Int16 nActualRelation{};
+    CPPUNIT_ASSERT(xShape->getPropertyValue("VertOrientRelation") >>= nActualRelation);
+    sal_Int16 nExpectedRelation = text::RelOrientation::TEXT_LINE;
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 0 (text::RelOrientation::FRAME)
-    // - Actual  : 9 (text::RelOrientation::TEXT_LINE)
-    // i.e. the relation had a value which doesn't make sense for to-para anchoring (only for
-    // to-char anchoring).
-    sal_Int16 nExpected = text::RelOrientation::FRAME;
-    CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
+    // - Expected: 9 (TEXT_LINE)
+    // - Actual  : 0 (FRAME)
+    // i.e. the anchor point for the positioning was wrong, resulting in overlapping textboxes.
+    CPPUNIT_ASSERT_EQUAL(nExpectedRelation, nActualRelation);
+
+    sal_Int16 nActualOrient{};
+    CPPUNIT_ASSERT(xShape->getPropertyValue("VertOrient") >>= nActualOrient);
+    sal_Int16 nExpectedOrient = text::VertOrientation::BOTTOM;
+    CPPUNIT_ASSERT_EQUAL(nExpectedOrient, nActualOrient);
 }
 }
 
