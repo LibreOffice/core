@@ -59,8 +59,8 @@ case "$1" in
         echo
         echo " --- for submitters:"
         echo "             submit [BRANCH]         submit your change for review"
-        echo "             submit-private [BRANCH] submit your change as private"
-        echo "             submit-wip [BRANCH]     submit your change as work-in-progress"
+        echo "             submit [BRANCH]%private submit your change as private"
+        echo "             submit [BRANCH]%wip     submit your change as work-in-progress"
         echo "             nextchange [BRANCH]     reset branch to the remote to start with the next change"
         echo "             testfeature [BRANCH] [CHANGEID]"
         echo "                                     trigger a test of a feature branch on gerrit"
@@ -158,16 +158,6 @@ case "$1" in
     ;;
     submit)
         submit "$2"
-    ;;
-    submit-private)
-        submit "$2" '%private'
-    ;;
-    submit-wip)
-        submit "$2" '%wip'
-    ;;
-    submit-draft)
-        echo "Please use submit-private instead of submit-draft."
-        exit 1
     ;;
     nextchange)
         if test -n "$(git status -s -uno)"
