@@ -18467,16 +18467,29 @@ OUString GetParentObjectType(const Reference<css::xml::dom::XNode>& xNode)
     return xClass->getNodeValue();
 }
 
-bool ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
+struct ConvertResult
+{
+    bool m_bChildCanFocus;
+    bool m_bChildIsDefaultInvisible;
+
+    ConvertResult(bool bChildCanFocus, bool bChildIsDefaultInvisible)
+        : m_bChildCanFocus(bChildCanFocus)
+        , m_bChildIsDefaultInvisible(bChildIsDefaultInvisible)
+    {
+    }
+};
+
+ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
 {
     css::uno::Reference<css::xml::dom::XNodeList> xNodeList = xNode->getChildNodes();
     if (!xNodeList.is())
-        return false;
+        return ConvertResult(false, false);
 
     std::vector<css::uno::Reference<css::xml::dom::XNode>> xRemoveList;
 
     OUString sBorderWidth;
     bool bChildCanFocus = false;
+    bool bChildIsDefaultInvisible = true;
     css::uno::Reference<css::xml::dom::XNode> xCantFocus;
 
     css::uno::Reference<css::xml::dom::XNode> xChild = xNode->getFirstChild();
@@ -18527,6 +18540,9 @@ bool ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
                 if (!bChildCanFocus)
                     xCantFocus = xChild;
             }
+
+            if (sName == "visible")
+                bChildIsDefaultInvisible = false;
 
             if (sName == "activates-default")
             {
@@ -18766,28 +18782,63 @@ bool ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
 
         if (xChild->hasChildNodes())
         {
-            bChildCanFocus |= ConvertTree(xChild);
+            auto aChildRes = Convert3To4(xChild);
+            bChildCanFocus |= aChildRes.m_bChildCanFocus;
             if (bChildCanFocus && xCantFocus.is())
             {
                 xNode->removeChild(xCantFocus);
                 xCantFocus.clear();
             }
+            if (xChild->getNodeName() == "object")
+                bChildIsDefaultInvisible = aChildRes.m_bChildIsDefaultInvisible;
         }
 
         if (xChild->getNodeName() == "object")
         {
+            auto xDoc = xChild->getOwnerDocument();
+
             css::uno::Reference<css::xml::dom::XNamedNodeMap> xMap = xChild->getAttributes();
             css::uno::Reference<css::xml::dom::XNode> xClass = xMap->getNamedItem("class");
             OUString sClass(xClass->getNodeValue());
+
+            auto xInternalChildCandidate = xChild->getParentNode();
+            css::uno::Reference<css::xml::dom::XNamedNodeMap> xInternalChildCandidateMap = xInternalChildCandidate->getAttributes();
+            css::uno::Reference<css::xml::dom::XNode> xId = xInternalChildCandidateMap->getNamedItem("internal-child");
+
+            // turn default gtk3 invisibility for widget objects into explicit invisible, but ignore internal-children
+            if (bChildIsDefaultInvisible && !xId)
+            {
+                if (sClass == "GtkBox" || sClass == "GtkButton" ||
+                    sClass == "GtkCalendar" || sClass == "GtkCheckButton" ||
+                    sClass == "GtkRadioButton" || sClass == "GtkComboBox" ||
+                    sClass == "GtkComboBoxText" || sClass == "GtkDrawingArea" ||
+                    sClass == "GtkEntry" || sClass == "GtkExpander" ||
+                    sClass == "GtkFrame" || sClass == "GtkGrid" ||
+                    sClass == "GtkImage" || sClass == "GtkLabel" ||
+                    sClass == "GtkMenuButton" || sClass == "GtkNotebook" ||
+                    sClass == "GtkOverlay" || sClass == "GtkPaned" ||
+                    sClass == "GtkProgressBar" || sClass == "GtkScrolledWindow" ||
+                    sClass == "GtkSeparator" || sClass == "GtkSpinButton" ||
+                    sClass == "GtkSpinner" || sClass == "GtkTextView" ||
+                    sClass == "GtkTreeView" || sClass == "GtkViewport" ||
+                    sClass == "GtkLinkButton" || sClass == "GtkToggleButton" ||
+                    sClass == "GtkButtonBox")
+
+                {
+                    auto xVisible = CreateProperty(xDoc, "visible", "False");
+                    auto xFirstChild = xChild->getFirstChild();
+                    if (xFirstChild.is())
+                        xChild->insertBefore(xVisible, xFirstChild);
+                    else
+                        xChild->appendChild(xVisible);
+                }
+            }
+
             if (sClass == "GtkButtonBox")
             {
-                auto xInternalChildCandidate = xChild->getParentNode();
-                css::uno::Reference<css::xml::dom::XNamedNodeMap> xInternalChildCandidateMap = xInternalChildCandidate->getAttributes();
-                css::uno::Reference<css::xml::dom::XNode> xId = xInternalChildCandidateMap->getNamedItem("internal-child");
                 if (xId && xId->getNodeValue() == "action_area" && !ToplevelIsMessageDialog(xChild))
                 {
                     xClass->setNodeValue("GtkHeaderBar");
-                    auto xDoc = xChild->getOwnerDocument();
                     auto xSpacingNode = CreateProperty(xDoc, "show-title-buttons", "False");
                     auto xFirstChild = xChild->getFirstChild();
                     if (xFirstChild.is())
@@ -18866,7 +18917,7 @@ bool ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
     for (auto& xRemove : xRemoveList)
         xNode->removeChild(xRemove);
 
-    return bChildCanFocus;
+    return ConvertResult(bChildCanFocus, bChildIsDefaultInvisible);
 }
 #endif
 
@@ -18881,7 +18932,7 @@ void load_ui_file(GtkBuilder* pBuilder, const OUString& rUri)
     css::uno::Reference<css::xml::dom::XDocument> xDocument = xBuilder->parseURI(rUri);
 
     // convert it from gtk3 to gtk4
-    ConvertTree(xDocument);
+    Convert3To4(xDocument);
 
     css::uno::Reference<css::beans::XPropertySet> xTempFile(io::TempFile::create(xContext), css::uno::UNO_QUERY);
     css::uno::Reference<css::io::XStream> xTempStream(xTempFile, css::uno::UNO_QUERY_THROW);
