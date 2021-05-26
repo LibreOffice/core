@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "857e3c9c_779f1fe2",
+        "filename": "basctl/source/basicide/baside2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-26T10:26:49Z",
+      "side": 1,
+      "message": "Possibly we still need to check if there\u0027s BOM, and seek after the BOM, to avoid the extra character? I suppose it may add more and more characters on repeated import-export cycles without that",
+      "revId": "1379cf0dae9341e581495bce4b45b0e21e02697f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
