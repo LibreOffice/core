@@ -2205,6 +2205,16 @@ void set_cursor(GtkWidget* pWidget, const char *pName)
 #endif
 }
 
+OString get_buildable_id(GtkBuildable* pWidget)
+{
+#if !GTK_CHECK_VERSION(4, 0, 0)
+    const gchar* pStr = gtk_buildable_get_name(pWidget);
+#else
+    const gchar* pStr = gtk_buildable_get_buildable_id(GTK_BUILDABLE(pWidget));
+#endif
+    return OString(pStr, pStr ? strlen(pStr) : 0);
+}
+
 class GtkInstanceWidget : public virtual weld::Widget
 {
 protected:
@@ -3286,12 +3296,7 @@ public:
 
     virtual OString get_buildable_name() const override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(m_pWidget));
-#else
-        const gchar* pStr = gtk_buildable_get_buildable_id(GTK_BUILDABLE(m_pWidget));
-#endif
-        return OString(pStr, pStr ? strlen(pStr) : 0);
+        return ::get_buildable_id(GTK_BUILDABLE(m_pWidget));
     }
 
     virtual void set_buildable_name(const OString& rId) override
@@ -4085,24 +4090,14 @@ public:
 
     void add_to_map(GtkMenuItem* pMenuItem)
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pMenuItem));
-#else
-        const gchar* pStr = gtk_buildable_get_buildable_id(GTK_BUILDABLE(pMenuItem));
-#endif
-        OString id(pStr, pStr ? strlen(pStr) : 0);
+        OString id = ::get_buildable_id(GTK_BUILDABLE(pMenuItem));
         m_aMap[id] = pMenuItem;
         g_signal_connect(pMenuItem, "activate", G_CALLBACK(signalActivate), this);
     }
 
     void remove_from_map(GtkMenuItem* pMenuItem)
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pMenuItem));
-#else
-        const gchar* pStr = gtk_buildable_get_buildable_id(GTK_BUILDABLE(pMenuItem));
-#endif
-        OString id(pStr, pStr ? strlen(pStr) : 0);
+        OString id = ::get_buildable_id(GTK_BUILDABLE(pMenuItem));
         auto iter = m_aMap.find(id);
         g_signal_handlers_disconnect_by_data(pMenuItem, this);
         m_aMap.erase(iter);
@@ -5844,18 +5839,14 @@ private:
     std::vector<std::unique_ptr<GtkInstanceContainer>> m_aPages;
     std::map<OString, bool> m_aNotClickable;
 
-    int find_page(const OString& rIdent) const
+    int find_page(std::string_view ident) const
     {
         int nPages = gtk_assistant_get_n_pages(m_pAssistant);
         for (int i = 0; i < nPages; ++i)
         {
             GtkWidget* pPage = gtk_assistant_get_nth_page(m_pAssistant, i);
-#if !GTK_CHECK_VERSION(4, 0, 0)
-            const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pPage));
-#else
-            const gchar* pStr = gtk_buildable_get_buildable_id(GTK_BUILDABLE(pPage));
-#endif
-            if (g_strcmp0(pStr, rIdent.getStr()) == 0)
+            OString sBuildableName = ::get_buildable_id(GTK_BUILDABLE(pPage));
+            if (sBuildableName == ident)
                 return i;
         }
         return -1;
@@ -5873,12 +5864,8 @@ private:
 
     static void find_sidebar(GtkWidget *pWidget, gpointer user_data)
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pWidget));
-#else
-        const gchar* pStr = gtk_buildable_get_buildable_id(GTK_BUILDABLE(pWidget));
-#endif
-        if (g_strcmp0(pStr, "sidebar") == 0)
+        OString sBuildableName = ::get_buildable_id(GTK_BUILDABLE(pWidget));
+        if (sBuildableName == "sidebar")
         {
             GtkWidget **ppSidebar = static_cast<GtkWidget**>(user_data);
             *ppSidebar = pWidget;
@@ -6047,12 +6034,7 @@ public:
     virtual OString get_page_ident(int nPage) const override
     {
         const GtkWidget* pWidget = gtk_assistant_get_nth_page(m_pAssistant, nPage);
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pWidget));
-#else
-        const gchar* pStr = gtk_buildable_get_buildable_id(GTK_BUILDABLE(pWidget));
-#endif
-        return OString(pStr, pStr ? strlen(pStr) : 0);
+        return ::get_buildable_id(GTK_BUILDABLE(pWidget));
     }
 
     virtual OString get_current_page_ident() const override
@@ -7290,35 +7272,26 @@ private:
     static OString get_page_ident(GtkNotebook *pNotebook, guint nPage)
     {
         const GtkWidget* pTabWidget = gtk_notebook_get_tab_label(pNotebook, gtk_notebook_get_nth_page(pNotebook, nPage));
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pTabWidget));
-#else
-        const gchar* pStr = gtk_buildable_get_buildable_id(GTK_BUILDABLE(pTabWidget));
-#endif
-        return OString(pStr, pStr ? strlen(pStr) : 0);
+        return ::get_buildable_id(GTK_BUILDABLE(pTabWidget));
     }
 
-    static gint get_page_number(GtkNotebook *pNotebook, const OString& rIdent)
+    static gint get_page_number(GtkNotebook *pNotebook, std::string_view ident)
     {
         gint nPages = gtk_notebook_get_n_pages(pNotebook);
         for (gint i = 0; i < nPages; ++i)
         {
             const GtkWidget* pTabWidget = gtk_notebook_get_tab_label(pNotebook, gtk_notebook_get_nth_page(pNotebook, i));
-#if !GTK_CHECK_VERSION(4, 0, 0)
-            const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pTabWidget));
-#else
-            const gchar* pStr = gtk_buildable_get_buildable_id(GTK_BUILDABLE(pTabWidget));
-#endif
-            if (pStr && strcmp(pStr, rIdent.getStr()) == 0)
+            OString sBuildableName = ::get_buildable_id(GTK_BUILDABLE(pTabWidget));
+            if (sBuildableName == ident)
                 return i;
         }
         return -1;
     }
 
-    int remove_page(GtkNotebook *pNotebook, const OString& rIdent)
+    int remove_page(GtkNotebook *pNotebook, std::string_view ident)
     {
         disable_notify_events();
-        int nPageNumber = get_page_number(pNotebook, rIdent);
+        int nPageNumber = get_page_number(pNotebook, ident);
         gtk_notebook_remove_page(pNotebook, nPageNumber);
         enable_notify_events();
         return nPageNumber;
@@ -8889,8 +8862,7 @@ public:
 
     virtual void signal_activate(GtkMenuItem* pItem) override
     {
-        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pItem));
-        signal_selected(OString(pStr, pStr ? strlen(pStr) : 0));
+        signal_selected(::get_buildable_id(GTK_BUILDABLE(pItem)));
     }
 
     virtual void set_popover(weld::Widget* pPopover) override
@@ -9214,8 +9186,7 @@ public:
 
     virtual void signal_activate(GtkMenuItem* pItem) override
     {
-        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pItem));
-        signal_selected(OString(pStr, pStr ? strlen(pStr) : 0));
+        signal_selected(::get_buildable_id(GTK_BUILDABLE(pItem)));
     }
 
     virtual void set_popover(weld::Widget* /*pPopover*/) override
@@ -9234,8 +9205,7 @@ protected:
 private:
     virtual void signal_activate(GtkMenuItem* pItem) override
     {
-        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pItem));
-        m_sActivated = OString(pStr, pStr ? strlen(pStr) : 0);
+        m_sActivated = ::get_buildable_id(GTK_BUILDABLE(pItem));
         weld::Menu::signal_activate(m_sActivated);
     }
 
@@ -9473,8 +9443,7 @@ public:
     {
         GList* pChildren = gtk_container_get_children(GTK_CONTAINER(m_pMenu));
         gpointer pMenuItem = g_list_nth_data(pChildren, pos);
-        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pMenuItem));
-        OString id(pStr, pStr ? strlen(pStr) : 0);
+        OString id = ::get_buildable_id(GTK_BUILDABLE(pMenuItem));
         g_list_free(pChildren);
         return id;
     }
@@ -9617,8 +9586,7 @@ private:
 
     void add_to_map(GtkToolItem* pToolItem, GtkMenuButton* pMenuButton)
     {
-        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pToolItem));
-        OString id(pStr, pStr ? strlen(pStr) : 0);
+        OString id = ::get_buildable_id(GTK_BUILDABLE(pToolItem));
         m_aMap[id] = pToolItem;
         if (pMenuButton)
         {
@@ -9670,8 +9638,7 @@ private:
 
     void signal_item_clicked(GtkToolButton* pItem)
     {
-        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pItem));
-        signal_clicked(OString(pStr, pStr ? strlen(pStr) : 0));
+        signal_clicked(::get_buildable_id(GTK_BUILDABLE(pItem)));
     }
 
     static void signalItemToggled(GtkToggleButton* pItem, gpointer widget)
@@ -9877,8 +9844,7 @@ public:
     virtual OString get_item_ident(int nIndex) const override
     {
         GtkToolItem* pItem = gtk_toolbar_get_nth_item(m_pToolbar, nIndex);
-        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pItem));
-        return OString(pStr, pStr ? strlen(pStr) : 0);
+        return ::get_buildable_id(GTK_BUILDABLE(pItem));
     }
 
     virtual void set_item_ident(int nIndex, const OString& rIdent) override
@@ -19075,15 +19041,9 @@ private:
 #endif
 
         //set helpids
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pWidget));
-#else
-        const gchar* pStr = gtk_buildable_get_buildable_id(GTK_BUILDABLE(pWidget));
-#endif
-        size_t nLen = pStr ? strlen(pStr) : 0;
-        if (nLen)
+        OString sBuildableName = ::get_buildable_id(GTK_BUILDABLE(pWidget));
+        if (!sBuildableName.isEmpty())
         {
-            OString sBuildableName(pStr, nLen);
             OString sHelpId = m_aUtf8HelpRoot + sBuildableName;
             set_help_id(pWidget, sHelpId);
             //hook up for extended help
