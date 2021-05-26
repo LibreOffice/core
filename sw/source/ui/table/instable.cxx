@@ -43,9 +43,9 @@ void SwInsTableDlg::GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rC
         rInsTableOpts.mnRowsToRepeat = 0;
     if (!m_xDontSplitCB->get_active())
         nInsMode |= SwInsertTableFlags::SplitLayout;
-    if( pTAutoFormat )
+    if( m_xTAutoFormat )
     {
-        prTAFormat.reset(new SwTableAutoFormat( *pTAutoFormat ));
+        prTAFormat.reset(new SwTableAutoFormat( *m_xTAutoFormat ));
         rAutoName = prTAFormat->GetName();
     }
 
@@ -62,7 +62,6 @@ SwInsTableDlg::SwInsTableDlg(SwView& rView)
     : SfxDialogController(rView.GetFrameWeld(), "modules/swriter/ui/inserttable.ui", "InsertTableDialog")
     , m_aTextFilter(" .<>")
     , pShell(&rView.GetWrtShell())
-    , pTAutoFormat(nullptr)
     , nEnteredValRepeatHeaderNF(-1)
     , m_xNameEdit(m_xBuilder->weld_entry("nameedit"))
     , m_xWarning(m_xBuilder->weld_label("lbwarning"))
@@ -142,7 +141,7 @@ void SwInsTableDlg::InitAutoTableFormat()
     {
         SwTableAutoFormat const& rFormat = (*m_xTableTable)[ i ];
         m_xLbFormat->append_text(rFormat.GetName());
-        if (pTAutoFormat && rFormat.GetName() == pTAutoFormat->GetName())
+        if (m_xTAutoFormat && rFormat.GetName() == m_xTAutoFormat->GetName())
             lbIndex = i;
     }
 
@@ -204,16 +203,15 @@ IMPL_LINK_NOARG(SwInsTableDlg, OKHdl, weld::Button&, void)
 
     if( tbIndex < 255 )
     {
-        if( pTAutoFormat )
-            *pTAutoFormat = (*m_xTableTable)[ tbIndex ];
+        if( m_xTAutoFormat )
+            *m_xTAutoFormat = (*m_xTableTable)[ tbIndex ];
         else
-            pTAutoFormat = new SwTableAutoFormat( (*m_xTableTable)[ tbIndex ] );
+            m_xTAutoFormat.reset(new SwTableAutoFormat( (*m_xTableTable)[ tbIndex ] ));
     }
     else
     {
-        delete pTAutoFormat;
-        pTAutoFormat = new SwTableAutoFormat( SwViewShell::GetShellRes()->aStrNone );
-        lcl_SetProperties( pTAutoFormat, false );
+        m_xTAutoFormat.reset(new SwTableAutoFormat( SwViewShell::GetShellRes()->aStrNone ));
+        lcl_SetProperties( m_xTAutoFormat.get(), false );
     }
 
     m_xDialog->response(RET_OK);
