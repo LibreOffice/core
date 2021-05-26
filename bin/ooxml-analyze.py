@@ -33,8 +33,8 @@ def main(argv):
     if(extracted_files_dir_by_user == ''):
         # use default directory path for extracted ooxml files.
         extracted_files_dir = os.path.join(outputdir, 'extractedfiles')
-
         extract_files(inputdir, extracted_files_dir)
+
         count_elements(extracted_files_dir, result_list)
     else:
         # use user defined directory path for extracted ooxml files.
@@ -58,16 +58,35 @@ def extract_files(inputdir, extracted_files_dir):
             filename.endswith(".docx") or       \
             filename.endswith(".xlsx")) and not \
             filename.startswith("~"):
-
             filepath = os.path.join(inputdir, filename)
             extracted_file_path = os.path.join(extracted_files_dir, str(counter))
 
             with ZipFile(filepath) as zipObj:
                 zipObj.extractall(extracted_file_path)
 
-            counter += 1
+            counter +=1
         else:
             continue
+
+# get key of value in dictionary
+def get_key(val, dict):
+    for key, value in dict.items():
+         if val == value:
+             return str(key)
+    return ''
+
+# replace curlybrace namespaces with the shorten ones
+def replace_namespace_with_alias(filename, element):
+    namespaces = dict([node for _, node in ET.iterparse(filename, events=['start-ns'])])
+    i = element.find('}')
+    if i>=0:
+        element_ns = element[1:i]
+        element_ns_alias = get_key(element_ns, namespaces)
+        if element_ns_alias !='':
+            element = element.replace("{" + element_ns + "}", element_ns_alias + ":")
+        else:
+            element = element.replace("{" + element_ns + "}", "")
+    return element
 
 # counts tags, attribute names and values of xmls
 def count_elements(extracted_files_dir, result_list):
@@ -87,7 +106,7 @@ def count_elements(extracted_files_dir, result_list):
 
             # start to count
             for child in root.iter():
-                tag = str(child.tag)
+                tag = replace_namespace_with_alias(xmlfile, child.tag)
                 tag_idx = get_index_of_tag(tag, result_list)
 
                 # count tags
@@ -99,6 +118,7 @@ def count_elements(extracted_files_dir, result_list):
 
                 # count attribute names and values of current tag
                 for attr_name, attr_value in child.attrib.items():
+                    attr_name = replace_namespace_with_alias(xmlfile, attr_name)
                     if not attr_name in result_list[tag_idx][1].keys():
                         result_list[tag_idx][1][attr_name] = 1
                     else:
