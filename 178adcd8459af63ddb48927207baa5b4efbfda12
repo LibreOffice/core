@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "847b6000_c0e573c0",
+        "filename": "basctl/source/basicide/baside2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-05-26T06:51:47Z",
+      "side": 1,
+      "message": "If `bytes` starts with a UTF-8 BOM, but ends in a truncated UTF-8 sequence (truncated by `bufsize`), will it nevertheless get reliably detected as UTF-8 here?  (Otherwise, it might make more sense to just check for a leading UTF-8 BOM, and not try the ucsdet_detect heuristics on the file\u0027s `bufzsize`-sized prefix.)",
+      "revId": "178adcd8459af63ddb48927207baa5b4efbfda12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
