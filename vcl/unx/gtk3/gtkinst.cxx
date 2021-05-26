@@ -7157,8 +7157,6 @@ public:
 
 }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-
 namespace {
 
 class GtkInstanceNotebook : public GtkInstanceWidget, public virtual weld::Notebook
@@ -7902,24 +7900,29 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_widget_destroy(GTK_WIDGET(m_pOverFlowNotebook));
 #else
-        g_clear_pointer(&m_pOverFlowNotebook, gtk_widget_unparent);
+        GtkWidget* pOverFlowWidget = GTK_WIDGET(m_pOverFlowNotebook);
+        g_clear_pointer(&pOverFlowWidget, gtk_widget_unparent);
 #endif
         if (m_pOverFlowBox)
         {
+#if !GTK_CHECK_VERSION(4, 0, 0)
             // put it back to how we found it initially
             GtkWidget* pParent = gtk_widget_get_parent(GTK_WIDGET(m_pOverFlowBox));
             g_object_ref(m_pNotebook);
-#if !GTK_CHECK_VERSION(4, 0, 0)
             gtk_container_remove(GTK_CONTAINER(m_pOverFlowBox), GTK_WIDGET(m_pNotebook));
             gtk_container_add(GTK_CONTAINER(pParent), GTK_WIDGET(m_pNotebook));
-#endif
             g_object_unref(m_pNotebook);
+#endif
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
             gtk_widget_destroy(GTK_WIDGET(m_pOverFlowBox));
+#else
+            GtkWidget* pOverFlowBox = GTK_WIDGET(m_pOverFlowBox);
+            g_clear_pointer(&pOverFlowBox, gtk_widget_unparent);
+#endif
         }
     }
 };
-#endif
 
 void update_attr_list(PangoAttrList* pAttrList, const vcl::Font& rFont)
 {
@@ -8002,11 +8005,7 @@ void set_font(GtkLabel* pLabel, const vcl::Font& rFont)
     pango_attr_list_unref(pAttrList);
 }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-
 }
-
-#endif
 
 namespace {
 
@@ -19474,16 +19473,11 @@ public:
 
     virtual std::unique_ptr<weld::Notebook> weld_notebook(const OString &id) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkNotebook* pNotebook = GTK_NOTEBOOK(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pNotebook)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pNotebook));
         return std::make_unique<GtkInstanceNotebook>(pNotebook, this, false);
-#else
-        (void)id;
-        return nullptr;
-#endif
     }
 
     virtual std::unique_ptr<weld::Button> weld_button(const OString &id) override
@@ -19885,8 +19879,16 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/percentdialog.ui" &&
         rUIFile != "cui/ui/signatureline.ui" &&
         rUIFile != "cui/ui/tipofthedaydialog.ui" &&
+        rUIFile != "sfx/ui/custominfopage.ui" &&
+        rUIFile != "svt/ui/datewindow.ui" &&
+        rUIFile != "sfx/ui/descriptioninfopage.ui" &&
+        rUIFile != "sfx/ui/documentfontspage.ui" &&
+        rUIFile != "sfx/ui/documentinfopage.ui" &&
+        rUIFile != "sfx/ui/documentpropertiesdialog.ui" &&
         rUIFile != "sfx/ui/querysavedialog.ui" &&
         rUIFile != "sfx/ui/licensedialog.ui" &&
+        rUIFile != "sfx/ui/linefragment.ui" &&
+        rUIFile != "sfx/ui/securityinfopage.ui" &&
         rUIFile != "svt/ui/javadisableddialog.ui" &&
         rUIFile != "svx/ui/fontworkgallerydialog.ui" &&
         rUIFile != "modules/scalc/ui/deletecells.ui" &&
@@ -19905,6 +19907,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/swriter/ui/gotopagedialog.ui" &&
         rUIFile != "modules/swriter/ui/insertfootnote.ui" &&
         rUIFile != "modules/swriter/ui/inserttable.ui" &&
+        rUIFile != "modules/swriter/ui/statisticsinfopage.ui" &&
         rUIFile != "modules/swriter/ui/wordcount.ui")
     {
         SAL_WARN( "vcl.gtk", rUIFile);
