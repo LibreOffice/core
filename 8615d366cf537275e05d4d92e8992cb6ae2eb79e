@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f418f51a_e7c28340",
+        "filename": "sc/inc/refupdatecontext.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-26T08:04:43Z",
+      "side": 1,
+      "message": "Is storing a raw pointer to a source doc safe here? Would it not try to use after free if one cuts then closes the document than pastes?",
+      "revId": "8615d366cf537275e05d4d92e8992cb6ae2eb79e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
