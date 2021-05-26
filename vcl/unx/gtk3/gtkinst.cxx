@@ -19297,12 +19297,14 @@ public:
     //gtk impl emulate this by doing this implicitly at weld time
     void auto_add_parentless_widgets_to_container(GtkWidget* pWidget)
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         if (widget_get_root(pWidget) == pWidget && !GTK_IS_POPOVER(pWidget) && !GTK_IS_WINDOW(pWidget))
-            gtk_container_add(GTK_CONTAINER(m_pParentWidget), pWidget);
+        {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            gtk_widget_set_parent(pWidget, m_pParentWidget);
 #else
-        (void)pWidget;
+            gtk_container_add(GTK_CONTAINER(m_pParentWidget), pWidget);
 #endif
+        }
     }
 
     virtual std::unique_ptr<weld::MessageDialog> weld_message_dialog(const OString &id) override
