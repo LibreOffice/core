@@ -76,7 +76,7 @@ public:
     addPagesToDraw(const uno::Reference<XComponent>& xComponent, sal_Int32 nPages,
                    const std::vector<GDIMetaFile>& aMetaFiles,
                    const std::vector<::Size>& aPageSizes, const PageMargins& aPageMargins,
-                   const std::vector<std::pair<RedactionTarget*, OUString>>& r_aTableTargets,
+                   const std::vector<std::pair<RedactionTarget, OUString>>& r_aTableTargets,
                    bool bIsAutoRedact);
     /*
      * Makes the Redaction toolbar visible to the user.
@@ -102,7 +102,7 @@ public:
      * Used to find the text portions to be redacted. Returns a list of rectangles to cover those
      * areas to be redacted. Probably the most crucial part of the auto-redaction process.
      * */
-    static void searchInMetaFile(const RedactionTarget* pRedactionTarget, const GDIMetaFile& rMtf,
+    static void searchInMetaFile(const RedactionTarget& rRedactionTarget, const GDIMetaFile& rMtf,
                                  std::vector<tools::Rectangle>& aRedactionRectangles,
                                  const uno::Reference<XComponent>& xComponent);
 
@@ -117,14 +117,14 @@ public:
      * Search for the given term through the gdimetafile, which has the whole content of a draw page,
      * and draw redaction rectangles to the appropriate positions with suitable sizes.
      * */
-    static void autoRedactPage(const RedactionTarget* pRedactionTarget,
+    static void autoRedactPage(const RedactionTarget& rRedactionTarget,
                                const GDIMetaFile& rGDIMetaFile,
                                const uno::Reference<drawing::XDrawPage>& xPage,
                                const uno::Reference<XComponent>& xComponent);
 
     /// Fill the search options based on the given redaction target
     static void fillSearchOptions(i18nutil::SearchOptions2& rSearchOpt,
-                                  const RedactionTarget* pTarget);
+                                  const RedactionTarget& rTarget);
 
 private:
     static constexpr std::u16string_view m_aPredefinedTargets[6] = {

@@ -216,7 +216,7 @@ void SfxRedactionHelper::addPagesToDraw(
     const uno::Reference<XComponent>& xComponent, sal_Int32 nPages,
     const std::vector<GDIMetaFile>& aMetaFiles, const std::vector<::Size>& aPageSizes,
     const PageMargins& aPageMargins,
-    const std::vector<std::pair<RedactionTarget*, OUString>>& r_aTableTargets, bool bIsAutoRedact)
+    const std::vector<std::pair<RedactionTarget, OUString>>& r_aTableTargets, bool bIsAutoRedact)
 {
     // Access the draw pages
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xComponent, uno::UNO_QUERY);
@@ -413,14 +413,14 @@ SfxRedactionHelper::getPageMarginsForCalc(const css::uno::Reference<css::frame::
     return aPageMargins;
 }
 
-void SfxRedactionHelper::searchInMetaFile(const RedactionTarget* pRedactionTarget,
+void SfxRedactionHelper::searchInMetaFile(const RedactionTarget& rRedactionTarget,
                                           const GDIMetaFile& rMtf,
                                           std::vector<::tools::Rectangle>& aRedactionRectangles,
                                           const uno::Reference<XComponent>& xComponent)
 {
     // Initialize search
     i18nutil::SearchOptions2 aSearchOptions;
-    fillSearchOptions(aSearchOptions, pRedactionTarget);
+    fillSearchOptions(aSearchOptions, rRedactionTarget);
 
     utl::TextSearch textSearch(aSearchOptions);
     static tools::Long aLastFontHeight = 0;
@@ -508,17 +508,17 @@ void SfxRedactionHelper::addRedactionRectToPage(
     }
 }
 
-void SfxRedactionHelper::autoRedactPage(const RedactionTarget* pRedactionTarget,
+void SfxRedactionHelper::autoRedactPage(const RedactionTarget& rRedactionTarget,
                                         const GDIMetaFile& rGDIMetaFile,
                                         const uno::Reference<drawing::XDrawPage>& xPage,
                                         const uno::Reference<XComponent>& xComponent)
 {
-    if (pRedactionTarget == nullptr || pRedactionTarget->sContent.isEmpty())
+    if (rRedactionTarget.sContent.isEmpty())
         return;
 
     // Search for the redaction strings, and get the rectangle coordinates
     std::vector<::tools::Rectangle> aRedactionRectangles;
-    searchInMetaFile(pRedactionTarget, rGDIMetaFile, aRedactionRectangles, xComponent);
+    searchInMetaFile(rRedactionTarget, rGDIMetaFile, aRedactionRectangles, xComponent);
 
     // Add the redaction rectangles to the page
     addRedactionRectToPage(xComponent, xPage, aRedactionRectangles);
@@ -530,17 +530,10 @@ const LanguageTag& GetAppLanguageTag() { return Application::GetSettings().GetLa
 }
 
 void SfxRedactionHelper::fillSearchOptions(i18nutil::SearchOptions2& rSearchOpt,
-                                           const RedactionTarget* pTarget)
+                                           const RedactionTarget& rTarget)
 {
-    if (!pTarget)
-    {
-        SAL_WARN("sfx.doc",
-                 "pTarget (pointer to Redactiontarget) is null. This should never happen.");
-        return;
-    }
-
-    if (pTarget->sType == RedactionTargetType::REDACTION_TARGET_REGEX
-        || pTarget->sType == RedactionTargetType::REDACTION_TARGET_PREDEFINED)
+    if (rTarget.sType == RedactionTargetType::REDACTION_TARGET_REGEX
+        || rTarget.sType == RedactionTargetType::REDACTION_TARGET_PREDEFINED)
     {
         rSearchOpt.algorithmType = util::SearchAlgorithms_REGEXP;
         rSearchOpt.AlgorithmType2 = util::SearchAlgorithms2::REGEXP;
@@ -552,20 +545,20 @@ void SfxRedactionHelper::fillSearchOptions(i18nutil::SearchOptions2& rSearchOpt,
     }
 
     rSearchOpt.Locale = GetAppLanguageTag().getLocale();
-    if (pTarget->sType == RedactionTargetType::REDACTION_TARGET_PREDEFINED)
+    if (rTarget.sType == RedactionTargetType::REDACTION_TARGET_PREDEFINED)
     {
-        auto nPredefIndex = pTarget->sContent.getToken(0, ';').toUInt32();
+        auto nPredefIndex = rTarget.sContent.getToken(0, ';').toUInt32();
         rSearchOpt.searchString = m_aPredefinedTargets[nPredefIndex];
     }
     else
-        rSearchOpt.searchString = pTarget->sContent;
+        rSearchOpt.searchString = rTarget.sContent;
 
     rSearchOpt.replaceString.clear();
 
-    if (!pTarget->bCaseSensitive && pTarget->sType != RedactionTargetType::REDACTION_TARGET_REGEX
-        && pTarget->sType != RedactionTargetType::REDACTION_TARGET_PREDEFINED)
+    if (!rTarget.bCaseSensitive && rTarget.sType != RedactionTargetType::REDACTION_TARGET_REGEX
+        && rTarget.sType != RedactionTargetType::REDACTION_TARGET_PREDEFINED)
         rSearchOpt.transliterateFlags |= TransliterationFlags::IGNORE_CASE;
-    if (pTarget->bWholeWords)
+    if (rTarget.bWholeWords)
         rSearchOpt.searchFlag |= util::SearchFlags::NORM_WORD_ONLY;
 }
 

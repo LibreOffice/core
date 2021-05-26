@@ -132,7 +132,7 @@ public:
      *  Does a shallow copy.
      *  Returns true if successful.
      */
-    bool getTargets(std::vector<std::pair<RedactionTarget*, OUString>>& r_aTargets);
+    bool getTargets(std::vector<std::pair<RedactionTarget, OUString>>& r_aTargets);
 };
 
 class SfxAddTargetDialog final : public weld::GenericDialogController

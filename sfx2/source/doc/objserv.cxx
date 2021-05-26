@@ -538,7 +538,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
     bool bIsPDFExport = false;
     bool bIsAutoRedact = false;
-    std::vector<std::pair<RedactionTarget*, OUString>> aRedactionTargets;
+    std::vector<std::pair<RedactionTarget, OUString>> aRedactionTargets;
     switch(nId)
     {
         case SID_VERSION:
