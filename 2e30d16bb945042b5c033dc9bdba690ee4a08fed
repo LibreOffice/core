@@ -16,6 +16,24 @@
       "revId": "2e30d16bb945042b5c033dc9bdba690ee4a08fed",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "626628da_8652fde2",
+        "filename": "sc/source/ui/drawfunc/mediash.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-05-26T22:32:01Z",
+      "side": 1,
+      "message": "Feel free to make it an easy hack ;-)",
+      "parentUuid": "8ec0cc5c_9f1f121f",
+      "revId": "2e30d16bb945042b5c033dc9bdba690ee4a08fed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
