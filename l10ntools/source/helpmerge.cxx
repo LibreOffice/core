@@ -148,13 +148,13 @@ bool HelpParser::Merge( const OString &rDestinationFile,
 
     //TODO: explicit BOM handling?
 
-    std::unique_ptr<XMLFile> xmlfile(new XMLFile( OString('0') ));
-    if (!aParser.Execute( sHelpFile, xmlfile.get()))
+    XMLFile xmlfile( OString('0') );
+    if (!aParser.Execute( sHelpFile, &xmlfile))
     {
         SAL_WARN("l10ntools", "could not parse " << sHelpFile);
         return false;
     }
-    MergeSingleFile( xmlfile.get() , pMergeDataFile , rLanguage , rDestinationFile );
+    MergeSingleFile( &xmlfile , pMergeDataFile , rLanguage , rDestinationFile );
     return true;
 }
 

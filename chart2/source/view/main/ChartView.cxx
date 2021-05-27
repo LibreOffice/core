@@ -2269,19 +2269,19 @@ void lcl_createButtons(const uno::Reference<drawing::XShapes>& xPageShapes,
         const css::uno::Sequence<chart2::data::PivotTableFieldEntry> aPivotFieldEntries = xPivotTableDataProvider->getPageFields();
         for (css::chart2::data::PivotTableFieldEntry const & rPageFieldEntry : aPivotFieldEntries)
         {
-            std::unique_ptr<VButton> pButton(new VButton);
-            pButton->init(xPageShapes, xShapeFactory);
+            VButton aButton;
+            aButton.init(xPageShapes, xShapeFactory);
             awt::Point aNewPosition(rRemainingSpace.X + x + 100, rRemainingSpace.Y + 100);
             sal_Int32 nDimensionIndex = rPageFieldEntry.DimensionIndex;
             OUString aFieldOutputDescription = xPivotTableDataProvider->getFieldOutputDescription(nDimensionIndex);
-            pButton->setLabel(rPageFieldEntry.Name + " | " + aFieldOutputDescription);
-            pButton->setCID("FieldButton.Page." + OUString::number(nDimensionIndex));
-            pButton->setPosition(aNewPosition);
-            pButton->setSize(aSize);
+            aButton.setLabel(rPageFieldEntry.Name + " | " + aFieldOutputDescription);
+            aButton.setCID("FieldButton.Page." + OUString::number(nDimensionIndex));
+            aButton.setPosition(aNewPosition);
+            aButton.setSize(aSize);
             if (rPageFieldEntry.HasHiddenMembers)
-                pButton->setArrowColor(Color(0x0000FF));
+                aButton.setArrowColor(Color(0x0000FF));
 
-            pButton->createShapes(xModelPage);
+            aButton.createShapes(xModelPage);
             x += aSize.Width + 100;
         }
         rRemainingSpace.Y += (aSize.Height + 100 + 100);
@@ -2297,23 +2297,22 @@ void lcl_createButtons(const uno::Reference<drawing::XShapes>& xPageShapes,
     const css::uno::Sequence<chart2::data::PivotTableFieldEntry> aPivotFieldEntries = xPivotTableDataProvider->getRowFields();
     for (css::chart2::data::PivotTableFieldEntry const & rRowFieldEntry : aPivotFieldEntries)
     {
-
-        std::unique_ptr<VButton> pButton(new VButton);
-        pButton->init(xPageShapes, xShapeFactory);
+        VButton aButton;
+        aButton.init(xPageShapes, xShapeFactory);
         awt::Point aNewPosition(rRemainingSpace.X + x + 100,
                                 rRemainingSpace.Y + rRemainingSpace.Height - aSize.Height - 100);
-        pButton->setLabel(rRowFieldEntry.Name);
-        pButton->setCID("FieldButton.Row." + OUString::number(rRowFieldEntry.DimensionIndex));
-        pButton->setPosition(aNewPosition);
-        pButton->setSize(aSize);
+        aButton.setLabel(rRowFieldEntry.Name);
+        aButton.setCID("FieldButton.Row." + OUString::number(rRowFieldEntry.DimensionIndex));
+        aButton.setPosition(aNewPosition);
+        aButton.setSize(aSize);
         if ( rRowFieldEntry.Name == "Data" )
         {
-            pButton->setBGColor( Color(0x00F6F6F6) );
-            pButton->showArrow( false );
+            aButton.setBGColor( Color(0x00F6F6F6) );
+            aButton.showArrow( false );
         }
         else if (rRowFieldEntry.HasHiddenMembers)
-            pButton->setArrowColor(Color(0x0000FF));
-        pButton->createShapes(xModelPage);
+            aButton.setArrowColor(Color(0x0000FF));
+        aButton.createShapes(xModelPage);
         x += aSize.Width + 100;
     }
     rRemainingSpace.Height -= (aSize.Height + 100 + 100);

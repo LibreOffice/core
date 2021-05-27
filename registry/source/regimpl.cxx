@@ -855,11 +855,11 @@ RegError ORegistry::loadKey(RegKeyHandle hKey, const OUString& regFileName,
 {
     ORegKey* pKey = static_cast< ORegKey* >(hKey);
 
-    std::unique_ptr< ORegistry > pReg (new ORegistry());
-    RegError _ret = pReg->initRegistry(regFileName, RegAccessMode::READONLY);
+    ORegistry aReg;
+    RegError _ret = aReg.initRegistry(regFileName, RegAccessMode::READONLY);
     if (_ret != RegError::NO_ERROR)
         return _ret;
-    ORegKey* pRootKey = pReg->getRootKey();
+    ORegKey* pRootKey = aReg.getRootKey();
 
     REG_GUARD(m_mutex);
 
@@ -889,7 +889,7 @@ RegError ORegistry::loadKey(RegKeyHandle hKey, const OUString& regFileName,
     }
 
     rStoreDir = OStoreDirectory();
-    (void) pReg->releaseKey(pRootKey);
+    (void) aReg.releaseKey(pRootKey);
     return _ret;
 }
 

@@ -120,11 +120,11 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         else
         {
             HelpParser aParser( aArgs.m_sInputFile );
-            std::unique_ptr<XMLFile> xmlfile(new XMLFile( OString('0') ));
+            XMLFile xmlfile( OString('0') );
             hasNoError =
                 HelpParser::CreatePO(
                     aArgs.m_sOutputFile, aArgs.m_sInputFile,
-                    xmlfile.get(), "help" );
+                    &xmlfile, "help" );
         }
     }
     catch (std::exception& e)
