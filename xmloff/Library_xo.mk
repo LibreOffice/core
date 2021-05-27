@@ -154,6 +154,8 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/draw/ximpshap \
     xmloff/source/draw/ximpshow \
     xmloff/source/draw/ximpstyl \
+    xmloff/source/draw/XMLTextColumnsPropHdl \
+    xmloff/source/draw/XMLTextColumnsContext \
     xmloff/source/forms/controlelement \
     xmloff/source/forms/controlpropertyhdl \
     xmloff/source/forms/controlpropertymap \
