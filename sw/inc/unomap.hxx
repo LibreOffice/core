@@ -58,7 +58,6 @@ struct SfxItemPropertyMapEntry;
 #define PROPERTY_MAP_AUTO_TEXT_GROUP        31
 #define PROPERTY_MAP_TEXTPORTION_EXTENSIONS 34
 #define PROPERTY_MAP_FOOTNOTE               35
-#define PROPERTY_MAP_TEXT_COLUMS            36
 #define PROPERTY_MAP_PARAGRAPH              37
 #define PROPERTY_MAP_EMBEDDED_OBJECT        38
 #define PROPERTY_MAP_REDLINE                39
@@ -304,16 +303,6 @@ struct SfxItemPropertyMapEntry;
 #define WID_IS_ABS_MARGINS              3
 #define WID_IS_OUTLINE                  4
 #define WID_DEFAULT_LIST_ID             5
-
-// TextColumns
-#define WID_TXTCOL_LINE_WIDTH           0
-#define WID_TXTCOL_LINE_COLOR           1
-#define WID_TXTCOL_LINE_REL_HGT         2
-#define WID_TXTCOL_LINE_ALIGN           3
-#define WID_TXTCOL_LINE_IS_ON           4
-#define WID_TXTCOL_IS_AUTOMATIC         5
-#define WID_TXTCOL_AUTO_DISTANCE        6
-#define WID_TXTCOL_LINE_STYLE           7
 
 // This define would need the include of <svx/unoshprp.hxx>, but this ends
 // in a mess; there *are* double used symbols which are used in a #define in
