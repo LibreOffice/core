@@ -8588,7 +8588,13 @@ GtkPositionType show_menu(GtkWidget* pMenuButton, GtkWindow* pMenu)
     return ePosUsed;
 }
 
+#endif
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
 class GtkInstanceMenuButton : public GtkInstanceToggleButton, public MenuHelper, public virtual weld::MenuButton
+#else
+class GtkInstanceMenuButton : public GtkInstanceToggleButton, public virtual weld::MenuButton
+#endif
 {
 protected:
     GtkMenuButton* m_pMenuButton;
@@ -8612,6 +8618,7 @@ private:
 
     void toggle_menu()
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         if (!m_pMenuHack)
             return;
         if (!get_active())
@@ -8653,8 +8660,10 @@ private:
             // tdf#132540 keep the placeholder popover on this same side as the replacement menu
             gtk_popover_set_position(gtk_menu_button_get_popover(m_pMenuButton), ePosUsed);
         }
+#endif
     }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     static void signalGrabBroken(GtkWidget*, GdkEventGrabBroken *pEvent, gpointer widget)
     {
         GtkInstanceMenuButton* pThis = static_cast<GtkInstanceMenuButton*>(widget);
@@ -8724,33 +8733,65 @@ private:
         }
         return false;
     }
+#endif
 
     void ensure_image_widget()
     {
         if (!m_pImage)
         {
             m_pImage = GTK_IMAGE(gtk_image_new());
+#if !GTK_CHECK_VERSION(4, 0, 0)
             gtk_box_pack_start(m_pBox, GTK_WIDGET(m_pImage), false, false, 0);
             gtk_box_reorder_child(m_pBox, GTK_WIDGET(m_pImage), 0);
+#else
+            gtk_box_prepend(m_pBox, GTK_WIDGET(m_pImage));
+#endif
             gtk_widget_show(GTK_WIDGET(m_pImage));
         }
     }
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+    static GtkWidget* find_image_widget(GtkWidget* pContainer)
+    {
+        GtkWidget* pImage = nullptr;
+        for (GtkWidget* pChild = gtk_widget_get_first_child(pContainer);
+             pChild; pChild = gtk_widget_get_next_sibling(pChild))
+        {
+            if (GTK_IS_IMAGE(pChild))
+            {
+                pImage = pChild;
+                break;
+            }
+            else
+            {
+                pImage = find_image_widget(pChild);
+                if (pImage)
+                    break;
+            }
+        }
+        return pImage;
+    }
+#endif
+
     static void find_image(GtkWidget *pWidget, gpointer user_data)
     {
+        GtkImage **ppImage = static_cast<GtkImage**>(user_data);
         if (GTK_IS_IMAGE(pWidget))
-        {
-            GtkImage **ppImage = static_cast<GtkImage**>(user_data);
             *ppImage = GTK_IMAGE(pWidget);
-        }
-        else if (GTK_IS_CONTAINER(pWidget))
+#if GTK_CHECK_VERSION(4, 0, 0)
+        *ppImage = GTK_IMAGE(find_image_widget(pWidget));
+#else
+        if (GTK_IS_CONTAINER(pWidget))
             gtk_container_forall(GTK_CONTAINER(pWidget), find_image, user_data);
+#endif
     }
 
 public:
     GtkInstanceMenuButton(GtkMenuButton* pMenuButton, GtkWidget* pMenuAlign, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceToggleButton(GTK_TOGGLE_BUTTON(pMenuButton), pBuilder, bTakeOwnership)
+#if !GTK_CHECK_VERSION(4, 0, 0)
         , MenuHelper(gtk_menu_button_get_popup(pMenuButton), false)
+#endif
         , m_pMenuButton(pMenuButton)
         , m_pImage(nullptr)
         , m_pMenuHack(nullptr)
@@ -8758,7 +8799,11 @@ public:
         , m_pPopover(nullptr)
         , m_nSignalId(0)
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         m_pLabel = gtk_bin_get_child(GTK_BIN(m_pMenuButton));
+#else
+        m_pLabel = find_label_widget(GTK_WIDGET(m_pMenuButton));
+#endif
         find_image(GTK_WIDGET(m_pMenuButton), &m_pImage);
         m_pBox = formatMenuButton(m_pLabel);
     }
@@ -8803,69 +8848,98 @@ public:
     virtual void insert_item(int pos, const OUString& rId, const OUString& rStr,
                         const OUString* pIconName, VirtualDevice* pImageSurface, TriState eCheckRadioFalse) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         MenuHelper::insert_item(pos, rId, rStr, pIconName, pImageSurface, eCheckRadioFalse);
+#endif
     }
 
     virtual void insert_separator(int pos, const OUString& rId) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         MenuHelper::insert_separator(pos, rId);
+#endif
     }
 
     virtual void remove_item(const OString& rId) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         MenuHelper::remove_item(rId);
+#endif
     }
 
     virtual void clear() override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         clear_items();
+#endif
     }
 
     virtual void set_item_active(const OString& rIdent, bool bActive) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         MenuHelper::set_item_active(rIdent, bActive);
+#endif
     }
 
     virtual void set_item_sensitive(const OString& rIdent, bool bSensitive) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         MenuHelper::set_item_sensitive(rIdent, bSensitive);
+#endif
     }
 
     virtual void set_item_label(const OString& rIdent, const OUString& rLabel) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         MenuHelper::set_item_label(rIdent, rLabel);
+#endif
     }
 
     virtual OUString get_item_label(const OString& rIdent) const override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         return MenuHelper::get_item_label(rIdent);
+#else
+        return OUString();
+#endif
     }
 
     virtual void set_item_visible(const OString& rIdent, bool bVisible) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         MenuHelper::set_item_visible(rIdent, bVisible);
+#endif
     }
 
     virtual void set_item_help_id(const OString& rIdent, const OString& rHelpId) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         MenuHelper::set_item_help_id(rIdent, rHelpId);
+#endif
     }
 
     virtual OString get_item_help_id(const OString& rIdent) const override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         return MenuHelper::get_item_help_id(rIdent);
+#else
+        return OString();
+#endif
     }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     virtual void signal_activate(GtkMenuItem* pItem) override
     {
         signal_selected(::get_buildable_id(GTK_BUILDABLE(pItem)));
     }
+#endif
 
     virtual void set_popover(weld::Widget* pPopover) override
     {
         GtkInstanceWidget* pPopoverWidget = dynamic_cast<GtkInstanceWidget*>(pPopover);
         m_pPopover = pPopoverWidget ? pPopoverWidget->getWidget() : nullptr;
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 #if defined(GDK_WINDOWING_X11)
         if (!m_pMenuHack)
         {
@@ -8885,7 +8959,9 @@ public:
             }
         }
 #endif
+#endif
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
         if (m_pMenuHack)
         {
             GtkWidget* pPlaceHolder = gtk_popover_new(GTK_WIDGET(m_pMenuButton));
@@ -8902,10 +8978,17 @@ public:
             gtk_menu_button_set_popover(m_pMenuButton, pPlaceHolder);
         }
         else
+#endif
         {
             gtk_menu_button_set_popover(m_pMenuButton, m_pPopover);
             if (m_pPopover)
+            {
+#if !GTK_CHECK_VERSION(4, 0, 0)
                 gtk_widget_show_all(m_pPopover);
+#else
+                gtk_popover_popup(GTK_POPOVER(m_pPopover));
+#endif
+            }
         }
     }
 
@@ -8917,35 +9000,59 @@ public:
         // on the right at the same time as an image is shown on the left
         g_object_ref(pLabel);
         GtkWidget* pContainer = gtk_widget_get_parent(pLabel);
+#if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_container_remove(GTK_CONTAINER(pContainer), pLabel);
+#else
+        gtk_widget_unparent(pLabel);
+#endif
 
         gint nImageSpacing(2);
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkStyleContext *pContext = gtk_widget_get_style_context(pContainer);
         gtk_style_context_get_style(pContext, "image-spacing", &nImageSpacing, nullptr);
+#endif
         GtkBox* pBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, nImageSpacing));
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_box_pack_start(pBox, pLabel, true, true, 0);
+#else
+        gtk_box_prepend(pBox, pLabel);
+#endif
         g_object_unref(pLabel);
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
         if (gtk_toggle_button_get_mode(GTK_TOGGLE_BUTTON(pContainer)))
             gtk_box_pack_end(pBox, gtk_image_new_from_icon_name("pan-down-symbolic", GTK_ICON_SIZE_BUTTON), false, false, 0);
+#endif
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_container_add(GTK_CONTAINER(pContainer), GTK_WIDGET(pBox));
+#else
+        gtk_widget_set_parent(pContainer, GTK_WIDGET(pBox));
+#endif
+#if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_widget_show_all(GTK_WIDGET(pBox));
+#else
+        gtk_widget_show(GTK_WIDGET(pBox));
+#endif
 
         return pBox;
     }
 
     virtual ~GtkInstanceMenuButton() override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         if (m_pMenuHack)
         {
             g_signal_handler_disconnect(m_pMenuButton, m_nSignalId);
             gtk_menu_button_set_popover(m_pMenuButton, nullptr);
             gtk_widget_destroy(GTK_WIDGET(m_pMenuHack));
         }
+#endif
     }
 };
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
 
 class GtkInstanceMenuToggleButton : public GtkInstanceToggleButton, public MenuHelper
                                   , public virtual weld::MenuToggleButton
@@ -19490,16 +19597,11 @@ public:
 
     virtual std::unique_ptr<weld::MenuButton> weld_menu_button(const OString &id) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkMenuButton* pButton = GTK_MENU_BUTTON(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pButton)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pButton));
         return std::make_unique<GtkInstanceMenuButton>(pButton, nullptr, this, false);
-#else
-        (void)id;
-        return nullptr;
-#endif
     }
 
     virtual std::unique_ptr<weld::MenuToggleButton> weld_menu_toggle_button(const OString &id) override
