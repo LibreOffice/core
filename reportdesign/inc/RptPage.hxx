@@ -57,7 +57,7 @@ public:
     virtual rtl::Reference<SdrPage> CloneSdrPage(SdrModel& rTargetModel) const override;
 
     virtual void NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE) override;
-    virtual SdrObject* RemoveObject(size_t nObjNum) override;
+    virtual rtl::Reference<SdrObject> RemoveObject(size_t nObjNum) override;
 
     /** returns the index inside the object list which belongs to the report component.
         @param  _xObject    the report component

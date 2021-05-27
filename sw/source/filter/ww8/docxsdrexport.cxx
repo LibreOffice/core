@@ -303,7 +303,7 @@ tools::Polygon lcl_CreateContourPolygon(SdrObject* pSdrObj)
             // polygon acts on the untransformed shape in Word. We do here similar as in
             // GetLineGeometry(), but without transformations.
             EnhancedCustomShape2d aCustomShape2d(*static_cast<SdrObjCustomShape*>(pSdrObj));
-            SdrObjectUniquePtr pLineGeometryObj = aCustomShape2d.CreateLineGeometry();
+            rtl::Reference<SdrObject> pLineGeometryObj = aCustomShape2d.CreateLineGeometry();
             if (!pLineGeometryObj)
                 break;
 
@@ -317,7 +317,8 @@ tools::Polygon lcl_CreateContourPolygon(SdrObject* pSdrObj)
                     aPP = pPathObj->GetPathPoly();
                 else
                 {
-                    SdrObjectUniquePtr pNewObj = pLineGeometryObj->ConvertToPolyObj(false, false);
+                    rtl::Reference<SdrObject> pNewObj
+                        = pLineGeometryObj->ConvertToPolyObj(false, false);
                     SdrPathObj* pPath = dynamic_cast<SdrPathObj*>(pNewObj.get());
                     if (pPath)
                         aPP = pPath->GetPathPoly();
@@ -363,12 +364,12 @@ tools::Polygon lcl_CreateContourPolygon(SdrObject* pSdrObj)
             // case OBJ_PLIN: disabled for unknown reason; related bug 75254.
             {
                 // Includes removing any control points
-                SdrObjectUniquePtr pNewObj = pSdrObj->ConvertToPolyObj(false, false);
+                rtl::Reference<SdrObject> pNewObj = pSdrObj->ConvertToPolyObj(false, false);
                 SdrPathObj* pConverted = dynamic_cast<SdrPathObj*>(pNewObj.get());
                 if (!pConverted)
                     break;
                 aPolyPolygon = pConverted->GetPathPoly();
-                pNewObj.reset();
+                pNewObj.clear();
 
                 // Word adds a line from last to first point. That will cut of indentations from being
                 // filled. To prevent this, the wrap polygon is lead along the path back to the first

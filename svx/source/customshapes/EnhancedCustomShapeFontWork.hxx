@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_SOURCE_CUSTOMSHAPES_ENHANCEDCUSTOMSHAPEFONTWORK_HXX
 
 #include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <rtl/ref.hxx>
 
 class SdrObject;
 class SdrObjCustomShape;
@@ -32,7 +33,7 @@ class EnhancedCustomShapeFontWork
     public:
 
         static css::uno::Reference < css::i18n::XBreakIterator > const & GetBreakIterator();
-        static SdrObject* CreateFontWork(
+        static rtl::Reference<SdrObject> CreateFontWork(
             const SdrObject* pShape2d,
             const SdrObjCustomShape& rSdrObjCustomShape);
 };
