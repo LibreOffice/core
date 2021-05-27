@@ -203,9 +203,9 @@ static bool ImpVerticalSwitch( const SdrObjCustomShape& rCustoShape )
 
 // #i37011# create a clone with all attributes changed to shadow attributes
 // and translation executed, too.
-static SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemSet& rOriginalSet)
+static rtl::Reference<SdrObject> ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemSet& rOriginalSet)
 {
-    SdrObject* pRetval = nullptr;
+    rtl::Reference<SdrObject> pRetval;
     const bool bShadow(rOriginalSet.Get(SDRATTR_SHADOW).GetValue());
 
     if(bShadow)
@@ -436,7 +436,7 @@ const SdrObject* SdrObjCustomShape::GetSdrObjectShadowFromCustomShape() const
         }
     }
 
-    return mpLastShadowGeometry;
+    return mpLastShadowGeometry.get();
 }
 
 bool SdrObjCustomShape::IsTextPath() const
@@ -789,7 +789,6 @@ SdrObjCustomShape::SdrObjCustomShape(SdrModel& rSdrModel)
 :   SdrTextObj(rSdrModel)
     , fObjectRotation(0.0)
     , mbAdjustingTextFrameWidthAndHeight(false)
-    , mpLastShadowGeometry(nullptr)
 {
     m_bClosedObj = true; // custom shapes may be filled
     mbTextFrame = true;
@@ -799,7 +798,6 @@ SdrObjCustomShape::SdrObjCustomShape(SdrModel& rSdrModel, SdrObjCustomShape cons
 :   SdrTextObj(rSdrModel, rSource)
     , fObjectRotation(0.0)
     , mbAdjustingTextFrameWidthAndHeight(false)
-    , mpLastShadowGeometry(nullptr)
 {
     m_bClosedObj = true; // custom shapes may be filled
     mbTextFrame = true;
@@ -2776,7 +2774,7 @@ void SdrObjCustomShape::NbcSetOutlinerParaObject(std::optional<OutlinerParaObjec
     InvalidateRenderGeometry();
 }
 
-SdrObjCustomShape* SdrObjCustomShape::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> SdrObjCustomShape::CloneSdrObject(SdrModel& rTargetModel) const
 {
     return new SdrObjCustomShape(rTargetModel, *this);
 }
@@ -2808,10 +2806,10 @@ basegfx::B2DPolyPolygon SdrObjCustomShape::TakeContour() const
     return basegfx::B2DPolyPolygon();
 }
 
-SdrObjectUniquePtr SdrObjCustomShape::DoConvertToPolyObj(bool bBezier, bool bAddText) const
+rtl::Reference<SdrObject> SdrObjCustomShape::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     // #i37011#
-    SdrObjectUniquePtr pRetval;
+    rtl::Reference<SdrObject> pRetval;
     SdrObject* pRenderedCustomShape = nullptr;
 
     if ( !mXRenderedCustomShape.is() )
@@ -2828,10 +2826,10 @@ SdrObjectUniquePtr SdrObjCustomShape::DoConvertToPolyObj(bool bBezier, bool bAdd
     if ( pRenderedCustomShape )
     {
         // Clone to same SdrModel
-        SdrObject* pCandidate(pRenderedCustomShape->CloneSdrObject(pRenderedCustomShape->getSdrModelFromSdrObject()));
+        rtl::Reference<SdrObject> pCandidate(pRenderedCustomShape->CloneSdrObject(pRenderedCustomShape->getSdrModelFromSdrObject()));
         DBG_ASSERT(pCandidate, "SdrObjCustomShape::DoConvertToPolyObj: Could not clone SdrObject (!)");
         pRetval = pCandidate->DoConvertToPolyObj(bBezier, bAddText);
-        SdrObject::Free( pCandidate );
+        pCandidate.clear();
 
         if(pRetval)
         {
@@ -3209,7 +3207,6 @@ bool SdrObjCustomShape::doConstructOrthogonal(std::u16string_view rName)
 void SdrObjCustomShape::InvalidateRenderGeometry()
 {
     mXRenderedCustomShape = nullptr;
-    SdrObject::Free( mpLastShadowGeometry );
     mpLastShadowGeometry = nullptr;
 }
 

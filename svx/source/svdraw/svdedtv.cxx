@@ -192,9 +192,6 @@ void SdrEditView::ImpDelLayerDelObjs(SdrObjList* pOL, SdrLayerID nDelID)
                 if( bUndo )
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj, true));
                 pOL->RemoveObject(nObjNum);
-
-                if( !bUndo )
-                    SdrObject::Free( pObj );
             }
             else
             {
@@ -208,8 +205,6 @@ void SdrEditView::ImpDelLayerDelObjs(SdrObjList* pOL, SdrLayerID nDelID)
                 if( bUndo )
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj, true));
                 pOL->RemoveObject(nObjNum);
-                if( !bUndo )
-                    SdrObject::Free( pObj );
             }
         }
     }
@@ -261,8 +256,6 @@ void SdrEditView::DeleteLayer(const OUString& rName)
                         if( bUndo )
                             AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj, true));
                         pPage->RemoveObject(nObjNum);
-                        if( !bUndo )
-                            SdrObject::Free(pObj);
                     }
                     else
                     {
@@ -276,8 +269,6 @@ void SdrEditView::DeleteLayer(const OUString& rName)
                         if( bUndo )
                             AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj, true));
                         pPage->RemoveObject(nObjNum);
-                        if( !bUndo )
-                            SdrObject::Free(pObj);
                     }
                 }
             }
@@ -792,14 +783,11 @@ std::vector<SdrObject*> SdrEditView::DeleteMarkedList(SdrMarkList const& rMark)
     return ret;
 }
 
-static void lcl_LazyDelete(std::vector<SdrObject*> & rLazyDelete)
+static void lcl_LazyDelete(std::vector<rtl::Reference<SdrObject>> & rLazyDelete)
 {
     // now delete removed scene objects
     while (!rLazyDelete.empty())
-    {
-        SdrObject::Free( rLazyDelete.back() );
         rLazyDelete.pop_back();
-    }
 }
 
 void SdrEditView::DeleteMarkedObj()
@@ -814,7 +802,7 @@ void SdrEditView::DeleteMarkedObj()
     BrkAction();
     BegUndo(SvxResId(STR_EditDelete),GetDescriptionOfMarkedObjects(),SdrRepeatFunc::Delete);
 
-    std::vector<SdrObject*> lazyDeleteObjects;
+    std::vector<rtl::Reference<SdrObject>> lazyDeleteObjects;
     // remove as long as something is selected. This allows to schedule objects for
     // removal for a next run as needed
     while(GetMarkedObjectCount())
@@ -941,16 +929,16 @@ void SdrEditView::CopyMarkedObj()
     for (size_t nm=0; nm<nMarkCount; ++nm) {
         SdrMark* pM=aSourceObjectsForCopy.GetMark(nm);
         SdrObject* pSource(pM->GetMarkedSdrObj());
-        SdrObject* pO(pSource->CloneSdrObject(pSource->getSdrModelFromSdrObject()));
+        rtl::Reference<SdrObject> pO(pSource->CloneSdrObject(pSource->getSdrModelFromSdrObject()));
         if (pO!=nullptr) {
-            pM->GetPageView()->GetObjList()->InsertObjectThenMakeNameUnique(pO, aNameSet);
+            pM->GetPageView()->GetObjList()->InsertObjectThenMakeNameUnique(pO.get(), aNameSet);
 
             if( bUndo )
                 AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoCopyObject(*pO));
 
             SdrMark aME(*pM);
-            aME.SetMarkedSdrObj(pO);
-            aCloneList.AddPair(pM->GetMarkedSdrObj(), pO);
+            aME.SetMarkedSdrObj(pO.get());
+            aCloneList.AddPair(pM->GetMarkedSdrObj(), pO.get());
 
             if (pM->GetUser()==0)
             {
@@ -995,7 +983,6 @@ bool SdrEditView::InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, SdrInser
         SdrLayerID nLayer=rPV.GetPage()->GetLayerAdmin().GetLayerID(maActualLayer);
         if (nLayer==SDRLAYER_NOTFOUND) nLayer=SdrLayerID(0);
         if (rPV.GetLockedLayers().IsSet(nLayer) || !rPV.GetVisibleLayers().IsSet(nLayer)) {
-            SdrObject::Free( pObj ); // Layer locked or invisible
             return false;
         }
         pObj->NbcSetLayer(nLayer);
@@ -1063,9 +1050,6 @@ void SdrEditView::ReplaceObjectAtView(SdrObject* pOldObj, SdrPageView& rPV, SdrO
         MarkObj( pOldObj, &rPV, true /*unmark!*/ );
 
     pOL->ReplaceObject(pNewObj,pOldObj->GetOrdNum());
-
-    if( !bUndo )
-        SdrObject::Free( pOldObj );
 
     if (bMark) MarkObj(pNewObj,&rPV);
 }
