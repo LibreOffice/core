@@ -45,7 +45,7 @@ DlgEdFactory::~DlgEdFactory() COVERITY_NOEXCEPT_FALSE
 }
 
 
-IMPL_LINK( DlgEdFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject* )
+IMPL_LINK( DlgEdFactory, MakeObject, SdrObjCreatorParams, aParams, rtl::Reference<SdrObject> )
 {
     static const uno::Reference<lang::XMultiServiceFactory> xDialogSFact = [] {
         uno::Reference<lang::XMultiServiceFactory> xFact;
@@ -59,7 +59,7 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject* )
         return xFact;
     }();
 
-    SdrObject* pNewObj = nullptr;
+    rtl::Reference<SdrObject> pNewObj;
     if( (aParams.nInventor == SdrInventor::BasicDialog) &&
         (aParams.nObjIdentifier >= SdrObjKind::BasicDialogPushButton) &&
         (aParams.nObjIdentifier <= SdrObjKind::BasicDialogFormHorizontalScroll)    )
@@ -74,26 +74,26 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject* )
                  break;
             case SdrObjKind::BasicDialogFormRadio:
                  pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.form.component.RadioButton", xDialogSFact );
-                 static_cast< DlgEdObj* >( pNewObj )->MakeDataAware( mxModel );
+                 static_cast< DlgEdObj* >( pNewObj.get() )->MakeDataAware( mxModel );
                  break;
             case SdrObjKind::BasicDialogCheckbox:
                  pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.UnoControlCheckBoxModel", xDialogSFact );
                  break;
             case SdrObjKind::BasicDialogFormCheck:
                  pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.form.component.CheckBox", xDialogSFact );
-                 static_cast< DlgEdObj* >( pNewObj )->MakeDataAware( mxModel );
+                 static_cast< DlgEdObj* >( pNewObj.get() )->MakeDataAware( mxModel );
                  break;
             case SdrObjKind::BasicDialogListbox:
                  pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.UnoControlListBoxModel", xDialogSFact );
                  break;
             case SdrObjKind::BasicDialogFormList:
                  pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.form.component.ListBox", xDialogSFact );
-                 static_cast< DlgEdObj* >( pNewObj )->MakeDataAware( mxModel );
+                 static_cast< DlgEdObj* >( pNewObj.get() )->MakeDataAware( mxModel );
                  break;
             case SdrObjKind::BasicDialogFormCombo:
             case SdrObjKind::BasicDialogCombobox:
             {
-                 DlgEdObj* pNew = nullptr;
+                 rtl::Reference<DlgEdObj> pNew;
                  if ( aParams.nObjIdentifier == SdrObjKind::BasicDialogCombobox )
                      pNew = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.UnoControlComboBoxModel", xDialogSFact );
                  else
@@ -135,12 +135,12 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject* )
                  break;
             case SdrObjKind::BasicDialogFormHorizontalScroll:
                  pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.form.component.ScrollBar", xDialogSFact );
-                 static_cast< DlgEdObj* >( pNewObj )->MakeDataAware( mxModel );
+                 static_cast< DlgEdObj* >( pNewObj.get() )->MakeDataAware( mxModel );
                  break;
             case SdrObjKind::BasicDialogFormVerticalScroll:
             case SdrObjKind::BasicDialogVerticalScrollbar:
             {
-                 DlgEdObj* pNew = nullptr;
+                 rtl::Reference<DlgEdObj> pNew;
                  if ( aParams.nObjIdentifier == SdrObjKind::BasicDialogVerticalScrollbar )
                      pNew = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.UnoControlScrollBarModel", xDialogSFact );
                  else
@@ -167,7 +167,7 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject* )
                  break;
             case SdrObjKind::BasicDialogVerticalFixedLine:
             {
-                 DlgEdObj* pNew = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.UnoControlFixedLineModel", xDialogSFact );
+                 rtl::Reference<DlgEdObj> pNew = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.UnoControlFixedLineModel", xDialogSFact );
                  pNewObj = pNew;
                  // set vertical orientation
                  try
@@ -208,7 +208,7 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject* )
                  break;
             case SdrObjKind::BasicDialogFormSpin:
                  pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.form.component.SpinButton", xDialogSFact );
-                 static_cast< DlgEdObj* >( pNewObj )->MakeDataAware( mxModel );
+                 static_cast< DlgEdObj* >( pNewObj.get() )->MakeDataAware( mxModel );
                  break;
             case SdrObjKind::BasicDialogTreeControl:
                  pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.tree.TreeControlModel", xDialogSFact );

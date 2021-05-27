@@ -118,30 +118,30 @@ SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, bool bMoveWithinDoc,
     }
 
     // TTTT Clone directly to target SdrModel
-    SdrObject *pObj(rObj.CloneSdrObject(*getIDocumentDrawModelAccess().GetDrawModel()));
+    rtl::Reference<SdrObject> pObj(rObj.CloneSdrObject(*getIDocumentDrawModelAccess().GetDrawModel()));
 
     if( bMoveWithinDoc && SdrInventor::FmForm == pObj->GetObjInventor() )
     {
         // We need to preserve the Name for Controls
-        uno::Reference< awt::XControlModel >  xModel = static_cast<SdrUnoObj*>(pObj)->GetUnoControlModel();
+        uno::Reference< awt::XControlModel >  xModel = static_cast<SdrUnoObj*>(pObj.get())->GetUnoControlModel();
         uno::Any aVal;
         uno::Reference< beans::XPropertySet >  xSet(xModel, uno::UNO_QUERY);
         static const OUStringLiteral sName(u"Name");
         if( xSet.is() )
             aVal = xSet->getPropertyValue( sName );
         if( bInsInPage )
-            pPg->InsertObjectThenMakeNameUnique( pObj );
+            pPg->InsertObjectThenMakeNameUnique( pObj.get() );
         if( xSet.is() )
             xSet->setPropertyValue( sName, aVal );
     }
     else if( bInsInPage )
-        pPg->InsertObjectThenMakeNameUnique( pObj );
+        pPg->InsertObjectThenMakeNameUnique( pObj.get() );
 
     // For drawing objects: set layer of cloned object to invisible layer
     SdrLayerID nLayerIdForClone = rObj.GetLayer();
-    if ( dynamic_cast<const SwFlyDrawObj*>( pObj) ==  nullptr &&
-         dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr &&
-         !isType<SdrObject>(pObj) )
+    if ( dynamic_cast<const SwFlyDrawObj*>( pObj.get() ) ==  nullptr &&
+         dynamic_cast<const SwVirtFlyDrawObj*>( pObj.get() ) ==  nullptr &&
+         !isType<SdrObject>(pObj.get()) )
     {
         if ( getIDocumentDrawModelAccess().IsVisibleLayerId( nLayerIdForClone ) )
         {
@@ -150,7 +150,7 @@ SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, bool bMoveWithinDoc,
     }
     pObj->SetLayer( nLayerIdForClone );
 
-    return pObj;
+    return pObj.get();
 }
 
 SwFlyFrameFormat* SwDoc::MakeFlySection_( const SwPosition& rAnchPos,
