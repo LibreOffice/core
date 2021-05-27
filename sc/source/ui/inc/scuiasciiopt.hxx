@@ -54,7 +54,6 @@ class ScImportAsciiDlg : public weld::GenericDialogController
     ScImportAsciiCall const     meCall;             /// How the dialog is called (see asciiopt.hxx)
     bool                        mbDetectSpaceSep;   /// Whether to detect a possible space separator.
 
-    std::unique_ptr<weld::Label> mxFtCharSet;
     std::unique_ptr<SvxTextEncodingBox> mxLbCharSet;
     std::unique_ptr<weld::Label> mxFtCustomLang;
     std::unique_ptr<SvxLanguageBox> mxLbCustomLang;
@@ -62,8 +61,7 @@ class ScImportAsciiDlg : public weld::GenericDialogController
     std::unique_ptr<weld::Label> mxFtRow;
     std::unique_ptr<weld::SpinButton> mxNfRow;
 
-    std::unique_ptr<weld::RadioButton> mxRbFixed;
-    std::unique_ptr<weld::RadioButton> mxRbSeparated;
+    std::unique_ptr<weld::CheckButton> mxRbSeparated;
 
     std::unique_ptr<weld::CheckButton> mxCkbTab;
     std::unique_ptr<weld::CheckButton> mxCkbSemicolon;
