@@ -1009,7 +1009,7 @@ void FuPoor::ReceiveRequest(SfxRequest& /*rReq*/)
 {
 }
 
-SdrObjectUniquePtr FuPoor::CreateDefaultObject(const sal_uInt16, const ::tools::Rectangle& )
+rtl::Reference<SdrObject> FuPoor::CreateDefaultObject(const sal_uInt16, const ::tools::Rectangle& )
 {
     // empty base implementation
     return nullptr;

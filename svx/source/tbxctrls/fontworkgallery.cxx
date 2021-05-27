@@ -58,7 +58,6 @@ FontWorkGalleryDialog::FontWorkGalleryDialog(weld::Window* pParent, SdrView& rSd
     , mnThemeId(0xffff)
     , mrSdrView(rSdrView)
     , mbInsertIntoPage(true)
-    , mppSdrObject(nullptr)
     , mpDestModel(nullptr)
     , maCtlFavorites(m_xBuilder->weld_icon_view("ctlFavoriteswin"))
     , mxOKButton(m_xBuilder->weld_button("ok"))
@@ -179,7 +178,7 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
         return;
 
     // Clone directly to target SdrModel (may be different due to user/caller (!))
-    SdrObject* pNewObject(
+    rtl::Reference<SdrObject> pNewObject(
         pPage->GetObj(0)->CloneSdrObject(
             bUseSpecialCalcMode ? *mpDestModel : mrSdrView.getSdrModelFromSdrView()));
 
@@ -245,12 +244,7 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
 
         if (nullptr != pPV)
         {
-            mrSdrView.InsertObjectAtView( pNewObject, *pPV );
-        }
-        else
-        {
-            // tdf#116993 no target -> delete clone
-            SdrObject::Free(pNewObject);
+            mrSdrView.InsertObjectAtView( pNewObject.get(), *pPV );
         }
     }
 }

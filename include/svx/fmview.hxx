@@ -71,15 +71,15 @@ public:
         @deprecated
             This method is deprecated. Use the version with an ODataAccessDescriptor instead.
     */
-    SdrObjectUniquePtr CreateFieldControl(const OUString& rFieldDesc) const;
+    rtl::Reference<SdrObject> CreateFieldControl(const OUString& rFieldDesc) const;
 
     /** create a control pair (label/bound control) for the database field description given.
     */
-    SdrObjectUniquePtr CreateFieldControl( const svx::ODataAccessDescriptor& _rColumnDescriptor );
+    rtl::Reference<SdrObject> CreateFieldControl( const svx::ODataAccessDescriptor& _rColumnDescriptor );
 
     /** create a control pair (label/bound control) for the xforms description given.
     */
-    SdrObjectUniquePtr CreateXFormsControl( const svx::OXFormsDescriptor &_rDesc );
+    rtl::Reference<SdrObject> CreateXFormsControl( const svx::OXFormsDescriptor &_rDesc );
 
     virtual void MarkListHasChanged() override;
     virtual void AddWindowToPaintView(OutputDevice* pNewWin, vcl::Window* pWindow) override;
@@ -99,8 +99,8 @@ public:
         // demand clear, hand over a SdrMldel&
         SdrModel& _rModel,
 
-        std::unique_ptr<SdrUnoObj, SdrObjectFreeOp>& _rpLabel,
-        std::unique_ptr<SdrUnoObj, SdrObjectFreeOp>& _rpControl
+        rtl::Reference<SdrUnoObj>& _rpLabel,
+        rtl::Reference<SdrUnoObj>& _rpControl
     );
 
     virtual SdrPageView* ShowSdrPage(SdrPage* pPage) override;
