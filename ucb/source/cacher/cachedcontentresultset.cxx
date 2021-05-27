@@ -446,8 +446,8 @@ CCRS_PropertySetInfo::CCRS_PropertySetInfo(
     if( nFetchDirection != -1 )
         nDeleted++;
 
-    std::unique_ptr<Sequence< Property > > pOrigProps(new Sequence<Property> ( *m_pProperties ));
-    sal_Int32 nOrigProps = pOrigProps->getLength();
+    Sequence< Property > aOrigProps( *m_pProperties );
+    sal_Int32 nOrigProps = aOrigProps.getLength();
 
     m_pProperties->realloc( nOrigProps + 2 - nDeleted );//note that nDeleted is <= 2
     for( sal_Int32 n = 0, m = 0; n < nOrigProps; n++, m++ )
@@ -455,7 +455,7 @@ CCRS_PropertySetInfo::CCRS_PropertySetInfo(
         if( n == nFetchSize || n == nFetchDirection )
             m--;
         else
-            (*m_pProperties)[ m ] = (*pOrigProps)[ n ];
+            (*m_pProperties)[ m ] = aOrigProps[ n ];
     }
     {
         Property& rMyProp = (*m_pProperties)[ nOrigProps - nDeleted ];
@@ -464,7 +464,7 @@ CCRS_PropertySetInfo::CCRS_PropertySetInfo(
         rMyProp.Attributes = PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT;
 
         if( nFetchSize != -1 )
-            m_nFetchSizePropertyHandle = (*pOrigProps)[nFetchSize].Handle;
+            m_nFetchSizePropertyHandle = aOrigProps[nFetchSize].Handle;
         else
             m_nFetchSizePropertyHandle = impl_getRemainedHandle();
 
