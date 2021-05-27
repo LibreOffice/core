@@ -2337,7 +2337,7 @@ void SwContentFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
     auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
     if(!pLegacy)
         return;
-    sal_uInt8 nInvFlags = 0;
+    SwContentFrameInvFlags eInvFlags = SwContentFrameInvFlags::NONE;
     if(pLegacy->m_pNew && RES_ATTRSET_CHG == pLegacy->m_pNew->Which() && pLegacy->m_pOld)
     {
         auto& rOldSetChg = *static_cast<const SwAttrSetChg*>(pLegacy->m_pOld);
@@ -2350,7 +2350,7 @@ void SwContentFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         SwAttrSetChg aNewSet(rNewSetChg);
         do
         {
-            UpdateAttr_(pOItem, pNItem, nInvFlags, &aOldSet, &aNewSet);
+            UpdateAttr_(pOItem, pNItem, eInvFlags, &aOldSet, &aNewSet);
             pNItem = aNIter.NextItem();
             pOItem = aOIter.NextItem();
         } while(pNItem);
@@ -2358,20 +2358,20 @@ void SwContentFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             SwFrame::SwClientNotify(rMod, sw::LegacyModifyHint(&aOldSet, &aNewSet));
     }
     else
-        UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, nInvFlags);
+        UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, eInvFlags);
 
-    if(nInvFlags == 0)
+    if(eInvFlags == SwContentFrameInvFlags::NONE)
         return;
 
     SwPageFrame* pPage = FindPageFrame();
     InvalidatePage(pPage);
-    if(nInvFlags & 0x01)
+    if(eInvFlags & SwContentFrameInvFlags::SetCompletePaint)
         SetCompletePaint();
-    if(nInvFlags & 0x02)
+    if(eInvFlags & SwContentFrameInvFlags::InvalidatePos)
         InvalidatePos_();
-    if(nInvFlags & 0x04 )
+    if(eInvFlags & SwContentFrameInvFlags::InvalidateSize)
         InvalidateSize_();
-    if(nInvFlags & 0x88)
+    if(eInvFlags & (SwContentFrameInvFlags::InvalidateSectPrt | SwContentFrameInvFlags::SetNextCompletePaint))
     {
         if(IsInSct() && !GetPrev())
         {
@@ -2385,16 +2385,16 @@ void SwContentFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         InvalidatePrt_();
     }
     SwFrame* pNextFrame = GetIndNext();
-    if(pNextFrame && nInvFlags & 0x10)
+    if(pNextFrame && eInvFlags & SwContentFrameInvFlags::InvalidateNextPrt)
     {
         pNextFrame->InvalidatePrt_();
         pNextFrame->InvalidatePage(pPage);
     }
-    if(pNextFrame && nInvFlags & 0x80)
+    if(pNextFrame && eInvFlags & SwContentFrameInvFlags::SetNextCompletePaint)
     {
         pNextFrame->SetCompletePaint();
     }
-    if(nInvFlags & 0x20)
+    if(eInvFlags & SwContentFrameInvFlags::InvalidatePrevPrt)
     {
         SwFrame* pPrevFrame = GetPrev();
         if(pPrevFrame)
@@ -2403,12 +2403,12 @@ void SwContentFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             pPrevFrame->InvalidatePage(pPage);
         }
     }
-    if(nInvFlags & 0x40)
+    if(eInvFlags & SwContentFrameInvFlags::InvalidateNextPos)
         InvalidateNextPos();
 }
 
 void SwContentFrame::UpdateAttr_( const SfxPoolItem* pOld, const SfxPoolItem* pNew,
-                              sal_uInt8 &rInvFlags,
+                              SwContentFrameInvFlags &rInvFlags,
                             SwAttrSetChg *pOldSet, SwAttrSetChg *pNewSet )
 {
     bool bClear = true;
@@ -2416,13 +2416,13 @@ void SwContentFrame::UpdateAttr_( const SfxPoolItem* pOld, const SfxPoolItem* pN
     switch ( nWhich )
     {
         case RES_FMT_CHG:
-            rInvFlags = 0xFF;
+            rInvFlags = static_cast<SwContentFrameInvFlags>(0xFF);
             [[fallthrough]];
 
         case RES_PAGEDESC:                      //attribute changes (on/off)
             if ( IsInDocBody() && !IsInTab() )
             {
-                rInvFlags |= 0x02;
+                rInvFlags |= static_cast<SwContentFrameInvFlags>(0x02);
                 SwPageFrame *pPage = FindPageFrame();
                 if ( !GetPrev() )
                     CheckPageDescs( pPage );
@@ -2466,7 +2466,7 @@ void SwContentFrame::UpdateAttr_( const SfxPoolItem* pOld, const SfxPoolItem* pN
                     GetIndNext()->InvalidateObjs();
                 }
                 Prepare( PrepareHint::ULSpaceChanged );   //TextFrame has to correct line spacing.
-                rInvFlags |= 0x80;
+                rInvFlags |= static_cast<SwContentFrameInvFlags>(0x80);
                 [[fallthrough]];
             }
         case RES_LR_SPACE:
@@ -2476,17 +2476,17 @@ void SwContentFrame::UpdateAttr_( const SfxPoolItem* pOld, const SfxPoolItem* pN
                 Prepare( PrepareHint::FixSizeChanged );
                 SwModify aMod;
                 SwFrame::SwClientNotify(aMod, sw::LegacyModifyHint(pOld, pNew));
-                rInvFlags |= 0x30;
+                rInvFlags |= static_cast<SwContentFrameInvFlags>(0x30);
                 break;
             }
         case RES_BREAK:
             {
-                rInvFlags |= 0x42;
+                rInvFlags |= static_cast<SwContentFrameInvFlags>(0x42);
                 const IDocumentSettingAccess& rIDSA = GetUpper()->GetFormat()->getIDocumentSettingAccess();
                 if( rIDSA.get(DocumentSettingId::PARA_SPACE_MAX) ||
                     rIDSA.get(DocumentSettingId::PARA_SPACE_MAX_AT_PAGES) )
                 {
-                    rInvFlags |= 0x1;
+                    rInvFlags |= static_cast<SwContentFrameInvFlags>(0x1);
                     SwFrame* pNxt = FindNext();
                     if( pNxt )
                     {
@@ -2511,7 +2511,7 @@ void SwContentFrame::UpdateAttr_( const SfxPoolItem* pOld, const SfxPoolItem* pN
         // OD 2004-02-26 #i25029#
         case RES_PARATR_CONNECT_BORDER:
         {
-            rInvFlags |= 0x01;
+            rInvFlags |= static_cast<SwContentFrameInvFlags>(0x01);
             if ( IsTextFrame() )
             {
                 InvalidateNextPrtArea();
@@ -2534,11 +2534,11 @@ void SwContentFrame::UpdateAttr_( const SfxPoolItem* pOld, const SfxPoolItem* pN
         case RES_CHRATR_ESCAPEMENT:
         case RES_CHRATR_CONTOUR:
         case RES_PARATR_NUMRULE:
-            rInvFlags |= 0x01;
+            rInvFlags |= static_cast<SwContentFrameInvFlags>(0x01);
             break;
 
         case RES_FRM_SIZE:
-            rInvFlags |= 0x01;
+            rInvFlags |= static_cast<SwContentFrameInvFlags>(0x01);
             [[fallthrough]];
 
         default:
