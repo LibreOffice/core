@@ -109,11 +109,11 @@ void IMapWindow::ReplaceImageMap( const ImageMap& rImageMap )
 
     for ( sal_uInt16 i(nCount); i > 0; i-- )
     {
-        SdrObject* pNewObj = CreateObj( rImageMap.GetIMapObject( i - 1 ) );
+        rtl::Reference<SdrObject> pNewObj = CreateObj( rImageMap.GetIMapObject( i - 1 ) );
 
         if (pNewObj && pPage)
         {
-            pPage->InsertObject( pNewObj );
+            pPage->InsertObject( pNewObj.get() );
         }
     }
 }
@@ -170,10 +170,10 @@ void IMapWindow::SetTargetList( const TargetList& rTargetList )
     pModel->SetChanged( false );
 }
 
-SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
+rtl::Reference<SdrObject> IMapWindow::CreateObj( const IMapObject* pIMapObj )
 {
     tools::Rectangle   aClipRect( Point(), GetGraphicSize() );
-    SdrObject*  pSdrObj = nullptr;
+    rtl::Reference<SdrObject> pSdrObj;
     IMapObjectPtr pCloneIMapObj;
 
     switch( pIMapObj->GetType() )
@@ -310,12 +310,10 @@ void IMapWindow::SdrObjCreated( const SdrObject& rObj )
         case SdrObjKind::CircleOrEllipse:
         {
             SdrCircObj* pCircObj = const_cast<SdrCircObj*>( static_cast<const SdrCircObj*>(&rObj) );
-            SdrPathObj* pPathObj = static_cast<SdrPathObj*>( pCircObj->ConvertToPolyObj( false, false ).release() );
+            rtl::Reference<SdrPathObj> pPathObj = static_cast<SdrPathObj*>( pCircObj->ConvertToPolyObj( false, false ).get() );
             tools::Polygon aPoly(pPathObj->GetPathPoly().getB2DPolygon(0));
 
-            // always use SdrObject::Free(...) for SdrObjects (!)
-            SdrObject* pTemp(pPathObj);
-            SdrObject::Free(pTemp);
+            pPathObj.clear();
 
             auto pObj = std::make_shared<IMapPolygonObject>( aPoly, "", "", "", "", "", true, false );
             pObj->SetExtraEllipse( aPoly.GetBoundRect() );
@@ -380,16 +378,13 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
         case SdrObjKind::CircleOrEllipse:
         {
             const SdrCircObj& rCircObj = static_cast<const SdrCircObj&>(rObj);
-            SdrPathObj* pPathObj = static_cast<SdrPathObj*>( rCircObj.ConvertToPolyObj( false, false ).release() );
+            rtl::Reference<SdrPathObj> pPathObj = static_cast<SdrPathObj*>( rCircObj.ConvertToPolyObj( false, false ).get() );
             tools::Polygon aPoly(pPathObj->GetPathPoly().getB2DPolygon(0));
 
             auto pObj = std::make_shared<IMapPolygonObject>( aPoly, aURL, aAltText, aDesc, aTarget, "", bActive, false );
             pObj->SetExtraEllipse( aPoly.GetBoundRect() );
 
-            // was only created by us temporarily
-            // always use SdrObject::Free(...) for SdrObjects (!)
-            SdrObject* pTemp(pPathObj);
-            SdrObject::Free(pTemp);
+            pPathObj.clear();
 
             pUserData->ReplaceObject( pObj );
         }
