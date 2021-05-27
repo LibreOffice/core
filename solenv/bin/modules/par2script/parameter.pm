@@ -22,7 +22,6 @@ package par2script::parameter;
 use Cwd;
 use par2script::files;
 use par2script::globals;
-use par2script::systemactions;
 
 ############################################
 # Parameter Operations

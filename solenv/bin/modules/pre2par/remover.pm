@@ -31,28 +31,4 @@ sub remove_leading_and_ending_whitespaces
     $$stringref =~ s/\s*$//g;
 }
 
-sub remove_leading_and_ending_quotationmarks
-{
-    my ( $stringref ) = @_;
-
-    $$stringref =~ s/^\s*\"//g;
-    $$stringref =~ s/\"\s*$//g;
-}
-
-sub remove_leading_and_ending_slashes
-{
-    my ( $stringref ) = @_;
-
-    $$stringref =~ s/^\s*\///g;
-    $$stringref =~ s/\/\s*$//g;
-}
-
-sub remove_leading_and_ending_backslashes
-{
-    my ( $stringref ) = @_;
-
-    $$stringref =~ s/^\s*\\//g;
-    $$stringref =~ s/\\\s*$//g;
-}
-
 1;

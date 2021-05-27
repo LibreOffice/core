@@ -24,16 +24,6 @@ use pre2par::exiter;
 # File Operations
 ############################################
 
-sub check_file
-{
-    my ($arg) = @_;
-
-    if(!( -f $arg ))
-    {
-        pre2par::exiter::exit_program("ERROR: Cannot find file $arg", "check_file");
-    }
-}
-
 sub read_file
 {
     my ($localfile) = @_;
