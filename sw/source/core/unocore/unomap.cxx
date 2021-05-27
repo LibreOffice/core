@@ -681,23 +681,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 m_aMapEntriesArr[nPropertyId] = GetFootnotePropertyMap();
             }
             break;
-            case PROPERTY_MAP_TEXT_COLUMS :
-            {
-                static SfxItemPropertyMapEntry const aTextColumns_Impl[] =
-                {
-                    {u"" UNO_NAME_IS_AUTOMATIC, WID_TXTCOL_IS_AUTOMATIC, cppu::UnoType<bool>::get(),PropertyAttribute::READONLY, 0},
-                    {u"" UNO_NAME_AUTOMATIC_DISTANCE, WID_TXTCOL_AUTO_DISTANCE, cppu::UnoType<sal_Int32>::get(),PROPERTY_NONE, 0},
-                    {u"" UNO_NAME_SEPARATOR_LINE_WIDTH, WID_TXTCOL_LINE_WIDTH, cppu::UnoType<sal_Int32>::get(),PROPERTY_NONE, 0},
-                    {u"" UNO_NAME_SEPARATOR_LINE_COLOR, WID_TXTCOL_LINE_COLOR, cppu::UnoType<sal_Int32>::get(),PROPERTY_NONE,    0},
-                    {u"" UNO_NAME_SEPARATOR_LINE_RELATIVE_HEIGHT, WID_TXTCOL_LINE_REL_HGT, cppu::UnoType<sal_Int32>::get(),PROPERTY_NONE,    0},
-                    {u"" UNO_NAME_SEPARATOR_LINE_VERTIVAL_ALIGNMENT, WID_TXTCOL_LINE_ALIGN, cppu::UnoType<css::style::VerticalAlignment>::get(),PROPERTY_NONE,   0},
-                    {u"" UNO_NAME_SEPARATOR_LINE_IS_ON, WID_TXTCOL_LINE_IS_ON, cppu::UnoType<bool>::get(),PROPERTY_NONE,  0},
-                    {u"" UNO_NAME_SEPARATOR_LINE_STYLE, WID_TXTCOL_LINE_STYLE, cppu::UnoType<sal_Int8>::get(),PROPERTY_NONE, 0},
-                    { u"", 0, css::uno::Type(), 0, 0 }
-                };
-                m_aMapEntriesArr[nPropertyId] = aTextColumns_Impl;
-            }
-            break;
             case PROPERTY_MAP_REDLINE :
             {
                 m_aMapEntriesArr[nPropertyId] = GetRedlinePropertyMap();

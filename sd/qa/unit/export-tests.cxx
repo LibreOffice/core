@@ -39,8 +39,10 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/text/XTextColumns.hpp>
 
 #include <svx/svdotable.hxx>
+#include <svx/unoapi.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
 
 using namespace css;
@@ -89,6 +91,7 @@ public:
     void testTdf128550();
     void testTdf140714();
     void testMasterPageBackgroundFullSize();
+    void testColumnsODG();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
 
@@ -132,6 +135,7 @@ public:
     CPPUNIT_TEST(testTdf128550);
     CPPUNIT_TEST(testTdf140714);
     CPPUNIT_TEST(testMasterPageBackgroundFullSize);
+    CPPUNIT_TEST(testColumnsODG);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1567,6 +1571,71 @@ void SdExportTest::testMasterPageBackgroundFullSize()
         "/office:document-styles/office:automatic-styles/style:style[@style:family='drawing-page' and @style:name = "
         "/office:document-styles/office:master-styles/style:master-page[@style:name='Default_20_1']/attribute::draw:style-name"
         "]/style:drawing-page-properties", "background-size", "full");
+
+    tempFile.EnableKillingFile();
+}
+
+void SdExportTest::testColumnsODG()
+{
+    auto xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/odg/two_columns.odg"), ODG);
+
+    {
+        uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier = getDoc(xDocShRef);
+        uno::Reference<drawing::XDrawPages> xPages = xDrawPagesSupplier->getDrawPages();
+        uno::Reference<drawing::XDrawPage> xPage(xPages->getByIndex(0), uno::UNO_QUERY_THROW);
+        uno::Reference<container::XIndexAccess> xIndexAccess(xPage, uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XShape> xShape(xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xProps(xShape, uno::UNO_QUERY_THROW);
+        uno::Reference<text::XTextColumns> xCols(xProps->getPropertyValue("TextColumns"),
+                                                 uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCols->getColumnCount());
+        uno::Reference<beans::XPropertySet> xColProps(xCols, uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(700)),
+                             xColProps->getPropertyValue("AutomaticDistance"));
+
+        auto pTextObj = dynamic_cast<SdrTextObj*>(GetSdrObjectFromXShape(xShape));
+        CPPUNIT_ASSERT(pTextObj);
+
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(2), pTextObj->GetTextColumnsNumber());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(700), pTextObj->GetTextColumnsSpacing());
+    }
+
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), ODG, &tempFile);
+
+    {
+        uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier = getDoc(xDocShRef);
+        uno::Reference<drawing::XDrawPages> xPages = xDrawPagesSupplier->getDrawPages();
+        uno::Reference<drawing::XDrawPage> xPage(xPages->getByIndex(0), uno::UNO_QUERY_THROW);
+        uno::Reference<container::XIndexAccess> xIndexAccess(xPage, uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XShape> xShape(xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xProps(xShape, uno::UNO_QUERY_THROW);
+        uno::Reference<text::XTextColumns> xCols(xProps->getPropertyValue("TextColumns"),
+                                                 uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCols->getColumnCount());
+        uno::Reference<beans::XPropertySet> xColProps(xCols, uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(700)),
+                             xColProps->getPropertyValue("AutomaticDistance"));
+
+        auto pTextObj = dynamic_cast<SdrTextObj*>(GetSdrObjectFromXShape(xShape));
+        CPPUNIT_ASSERT(pTextObj);
+
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(2), pTextObj->GetTextColumnsNumber());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(700), pTextObj->GetTextColumnsSpacing());
+    }
+
+    xDocShRef->DoClose();
+
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "content.xml");
+    assertXPath(pXmlDoc,
+                "/office:document-content/office:automatic-styles/style:style/"
+                "style:graphic-properties/style:columns",
+                "column-count", "2");
+    assertXPath(pXmlDoc,
+                "/office:document-content/office:automatic-styles/style:style/"
+                "style:graphic-properties/style:columns",
+                "column-gap", "0.7cm");
 
     tempFile.EnableKillingFile();
 }
