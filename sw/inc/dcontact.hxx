@@ -175,9 +175,7 @@ public:
 class SW_DLLPUBLIC SwFlyDrawContact final : public SwContact
 {
 private:
-    typedef std::unique_ptr< SwFlyDrawObj, SdrObjectFreeOp > SwFlyDrawObjPtr;
-
-    SwFlyDrawObjPtr mpMasterObj;
+    rtl::Reference<SwFlyDrawObj> mpMasterObj;
     void SwClientNotify(const SwModify&, const SfxHint& rHint) override;
     sal_uInt32 GetOrdNumForNewRef(const SwFlyFrame* pFly, SwFrame const& rAnchorFrame);
 
@@ -241,7 +239,7 @@ class SwDrawVirtObj final : public SdrVirtObj
         /// access to offset
         virtual Point GetOffset() const override;
 
-        virtual SwDrawVirtObj* CloneSdrObject(SdrModel& rTargetModel) const override;
+        virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
         /// connection to writer layout
         const SwAnchoredObject& GetAnchoredObj() const { return maAnchoredDrawObj; }
@@ -302,8 +300,6 @@ bool CheckControlLayer( const SdrObject *pObj );
 /** ContactObject for connection of formats as representatives of draw objects
  in SwClient and the objects themselves in Drawing (SDrObjUserCall). */
 
-typedef std::unique_ptr< SwDrawVirtObj, SdrObjectFreeOp > SwDrawVirtObjPtr;
-
 class SAL_DLLPUBLIC_RTTI SwDrawContact final : public SwContact
 {
     private:
@@ -312,7 +308,7 @@ class SAL_DLLPUBLIC_RTTI SwDrawContact final : public SwContact
         SwAnchoredDrawObject maAnchoredDrawObj;
 
         /** container for 'virtual' drawing object supporting drawing objects in headers/footers. */
-        std::vector< SwDrawVirtObjPtr > maDrawVirtObjs;
+        std::vector< rtl::Reference<SwDrawVirtObj> > maDrawVirtObjs;
 
         /** boolean indicating set 'master' drawing
          object has been cleared. */
