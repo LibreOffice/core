@@ -1434,7 +1434,10 @@ void ScAcceptChgDlg::RemoveEntries(sal_uLong nStartAction,sal_uLong nEndAction)
         {
             nAction = pEntryData->nActionNo;
             if (nStartAction <= nAction && nAction <= nEndAction)
+            {
                 aIdsToRemove.push_back(sId);
+                delete pEntryData;
+            }
         }
     }
     while (rTreeView.iter_next(*xEntry));
@@ -1478,6 +1481,7 @@ void ScAcceptChgDlg::UpdateEntries(const ScChangeTrack* pChgTrack, sal_uLong nSt
         if (bRemove)
         {
             rTreeView.remove(*xEntry);
+            delete pEntryData;
 
             if (!bLastEntry)
                 bLastEntry = rTreeView.get_iter_first(*xLastEntry);
