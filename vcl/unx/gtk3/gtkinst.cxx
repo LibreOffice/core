@@ -3981,48 +3981,115 @@ namespace
 #endif
         return pixbuf;
     }
+}
 
 #if GTK_CHECK_VERSION(4, 0, 0)
-    GdkTexture* texture_new_from_virtual_device(const VirtualDevice& rImageSurface)
+
+G_BEGIN_DECLS
+
+G_DECLARE_FINAL_TYPE(SurfacePaintable, surface_paintable, SURFACE, PAINTABLE, GObject)
+
+struct _SurfacePaintable
+{
+    GObject parent_instance;
+    int width;
+    int height;
+    cairo_surface_t* surface;
+};
+
+struct _SurfacePaintableClass
+{
+    GObjectClass parent_class;
+};
+
+static void surface_paintable_snapshot(GdkPaintable *paintable, GdkSnapshot *snapshot,
+                                       double width, double height)
+{
+    graphene_rect_t rect = GRAPHENE_RECT_INIT(0.0f, 0.0f,
+                                              static_cast<float>(width),
+                                              static_cast<float>(height));
+    SurfacePaintable *self = SURFACE_PAINTABLE(paintable);
+    cairo_t* cr = gtk_snapshot_append_cairo(GTK_SNAPSHOT(snapshot), &rect);
+    cairo_set_source_surface(cr, self->surface, 0, 0);
+    cairo_paint(cr);
+    cairo_destroy(cr);
+}
+
+static int surface_paintable_get_intrinsic_width(GdkPaintable *paintable)
+{
+    SurfacePaintable *self = SURFACE_PAINTABLE(paintable);
+    return self->width;
+}
+
+static int surface_paintable_get_intrinsic_height(GdkPaintable *paintable)
+{
+    SurfacePaintable *self = SURFACE_PAINTABLE(paintable);
+    return self->height;
+}
+
+static void surface_paintable_init_interface(GdkPaintableInterface *iface)
+{
+    iface->snapshot = surface_paintable_snapshot;
+    iface->get_intrinsic_width = surface_paintable_get_intrinsic_width;
+    iface->get_intrinsic_height = surface_paintable_get_intrinsic_height;
+}
+
+G_DEFINE_TYPE_WITH_CODE(SurfacePaintable, surface_paintable, G_TYPE_OBJECT,
+                        G_IMPLEMENT_INTERFACE(GDK_TYPE_PAINTABLE,
+                                              surface_paintable_init_interface));
+
+static void surface_paintable_init(SurfacePaintable *self)
+{
+    self->width = 0;
+    self->height = 0;
+    self->surface = nullptr;
+}
+
+static void surface_paintable_dispose(GObject *object)
+{
+    SurfacePaintable* self = SURFACE_PAINTABLE(object);
+    cairo_surface_destroy(self->surface);
+    G_OBJECT_CLASS(surface_paintable_parent_class)->dispose(object);
+}
+
+static void surface_paintable_class_init(SurfacePaintableClass *klass)
+{
+    GObjectClass *object_class = G_OBJECT_CLASS(klass);
+    object_class->dispose = surface_paintable_dispose;
+}
+
+G_END_DECLS
+
+#endif
+
+namespace
+{
+#if GTK_CHECK_VERSION(4, 0, 0)
+    SurfacePaintable* paintable_new_from_virtual_device(const VirtualDevice& rImageSurface)
     {
         cairo_surface_t* surface = get_underlying_cairo_surface(rImageSurface);
 
         Size aSize(rImageSurface.GetOutputSizePixel());
-
-        // seems unfortunately to lose the potentially hidpi image here
-        cairo_surface_t* target = cairo_surface_create_similar_image(surface,
-                                                                     CAIRO_FORMAT_ARGB32,
-                                                                     aSize.Width(),
-                                                                     aSize.Height());
-
+        cairo_surface_t* target = cairo_surface_create_similar(surface,
+                                                               cairo_surface_get_content(surface),
+                                                               aSize.Width(),
+                                                               aSize.Height());
         cairo_t* cr = cairo_create(target);
         cairo_set_source_surface(cr, surface, 0, 0);
         cairo_paint(cr);
         cairo_destroy(cr);
 
-        GBytes* bytes = g_bytes_new_with_free_func(cairo_image_surface_get_data(target),
-                                                   cairo_image_surface_get_height(target) *
-                                                   cairo_image_surface_get_stride(target),
-                                                   reinterpret_cast<GDestroyNotify>(cairo_surface_destroy),
-                                                   cairo_surface_reference(target));
-
-        GdkTexture* texture = gdk_memory_texture_new(cairo_image_surface_get_width(target),
-                                                     cairo_image_surface_get_height(target),
-                                                     GDK_MEMORY_DEFAULT,
-                                                     bytes,
-                                                     cairo_image_surface_get_stride(target));
-
-        g_bytes_unref (bytes);
-
-        cairo_surface_destroy(target);
-
-        return texture;
+        SurfacePaintable* pPaintable = SURFACE_PAINTABLE(g_object_new(surface_paintable_get_type(), nullptr));
+        pPaintable->surface = target;
+        pPaintable->width = aSize.Width();
+        pPaintable->height = aSize.Height();
+        return pPaintable;
     }
 
     GtkWidget* image_new_from_virtual_device(const VirtualDevice& rImageSurface)
     {
-        GdkTexture* texture = texture_new_from_virtual_device(rImageSurface);
-        return gtk_image_new_from_paintable(GDK_PAINTABLE(texture));
+        SurfacePaintable* paintable = paintable_new_from_virtual_device(rImageSurface);
+        return gtk_image_new_from_paintable(GDK_PAINTABLE(paintable));
     }
 #else
     GtkWidget* image_new_from_virtual_device(const VirtualDevice& rImageSurface)
@@ -4049,7 +4116,7 @@ namespace
     void image_set_from_virtual_device(GtkImage* pImage, const VirtualDevice* pDevice)
     {
 #if GTK_CHECK_VERSION(4, 0, 0)
-        gtk_image_set_from_paintable(pImage, pDevice ? GDK_PAINTABLE(texture_new_from_virtual_device(*pDevice)) : nullptr);
+        gtk_image_set_from_paintable(pImage, pDevice ? GDK_PAINTABLE(paintable_new_from_virtual_device(*pDevice)) : nullptr);
 #else
         gtk_image_set_from_surface(pImage, pDevice ? get_underlying_cairo_surface(*pDevice) : nullptr);
 #endif
@@ -10493,7 +10560,7 @@ public:
         if (!pDevice)
             gtk_picture_set_paintable(m_pPicture, nullptr);
         else
-            gtk_picture_set_paintable(m_pPicture, GDK_PAINTABLE(texture_new_from_virtual_device(*pDevice)));
+            gtk_picture_set_paintable(m_pPicture, GDK_PAINTABLE(paintable_new_from_virtual_device(*pDevice)));
     }
 
     virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rPicture) override
