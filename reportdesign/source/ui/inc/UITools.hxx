@@ -139,7 +139,7 @@ namespace rptui
     */
     SdrObject* isOver(const tools::Rectangle& _rRect,SdrPage const & _rPage,SdrView const & _rView,bool _bAllObjects = false,SdrObject const * _pIgnore = nullptr, sal_Int16 _nIgnoreType=0);
 
-    SdrObject* isOver(const tools::Rectangle& _rRect,SdrPage const & _rPage,SdrView const & _rView,bool _bAllObjects, std::unique_ptr<SdrUnoObj, SdrObjectFreeOp> _pIgnoreList[], int _nIgnoreListLength);
+    SdrObject* isOver(const tools::Rectangle& _rRect,SdrPage const & _rPage,SdrView const & _rView,bool _bAllObjects, rtl::Reference<SdrUnoObj> _pIgnoreList[], int _nIgnoreListLength);
 
     /** checks whether the given OUnoObject object rectangle overlapps another object in that view.
     *

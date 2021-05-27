@@ -3210,8 +3210,8 @@ void Test::testGraphicsInGroup()
     {
         //Add a square
         tools::Rectangle aOrigRect(2,2,100,100);
-        SdrRectObj *pObj = new SdrRectObj(*pDrawLayer, aOrigRect);
-        pPage->InsertObject(pObj);
+        rtl::Reference<SdrRectObj> pObj = new SdrRectObj(*pDrawLayer, aOrigRect);
+        pPage->InsertObject(pObj.get());
         const tools::Rectangle &rNewRect = pObj->GetLogicRect();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("must have equal position and size",
                                const_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
@@ -3249,8 +3249,8 @@ void Test::testGraphicsInGroup()
     {
         // Add a circle.
         tools::Rectangle aOrigRect(10,10,210,210); // 200 x 200
-        SdrCircObj* pObj = new SdrCircObj(*pDrawLayer, SdrCircKind::Full, aOrigRect);
-        pPage->InsertObject(pObj);
+        rtl::Reference<SdrCircObj> pObj = new SdrCircObj(*pDrawLayer, SdrCircKind::Full, aOrigRect);
+        pPage->InsertObject(pObj.get());
         const tools::Rectangle& rNewRect = pObj->GetLogicRect();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Position and size of the circle shouldn't change when inserted into the page.",
                                const_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
@@ -3281,9 +3281,9 @@ void Test::testGraphicsInGroup()
         tools::Rectangle aOrigRect(10,200,110,300); // 100 x 100
         aTempPoly.append(basegfx::B2DPoint(aStartPos.X(), aStartPos.Y()));
         aTempPoly.append(basegfx::B2DPoint(aEndPos.X(), aEndPos.Y()));
-        SdrPathObj* pObj = new SdrPathObj(*pDrawLayer, SdrObjKind::Line, basegfx::B2DPolyPolygon(aTempPoly));
+        rtl::Reference<SdrPathObj> pObj = new SdrPathObj(*pDrawLayer, SdrObjKind::Line, basegfx::B2DPolyPolygon(aTempPoly));
         pObj->NbcSetLogicRect(aOrigRect);
-        pPage->InsertObject(pObj);
+        pPage->InsertObject(pObj.get());
         const tools::Rectangle& rNewRect = pObj->GetLogicRect();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Size differ.",
                                const_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
@@ -3324,13 +3324,13 @@ void Test::testGraphicsOnSheetMove()
 
     // Insert an object.
     tools::Rectangle aObjRect(2,2,100,100);
-    SdrObject* pObj = new SdrRectObj(*pDrawLayer, aObjRect);
-    pPage->InsertObject(pObj);
+    rtl::Reference<SdrObject> pObj = new SdrRectObj(*pDrawLayer, aObjRect);
+    pPage->InsertObject(pObj.get());
     ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0, false);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be one object on the 1st sheet.", static_cast<size_t>(1), pPage->GetObjCount());
 
-    const ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj);
+    const ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj.get());
     CPPUNIT_ASSERT_MESSAGE("Object meta-data doesn't exist.", pData);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong sheet ID in cell anchor data!", SCTAB(0), pData->maStart.Tab());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong sheet ID in cell anchor data!", SCTAB(0), pData->maEnd.Tab());
@@ -3386,7 +3386,7 @@ void Test::testGraphicsOnSheetMove()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Copied sheet should have one object.", size_t(1), pPage->GetObjCount());
     pObj = pPage->GetObj(0);
     CPPUNIT_ASSERT_MESSAGE("Failed to get drawing object.", pObj);
-    pData = ScDrawLayer::GetObjData(pObj);
+    pData = ScDrawLayer::GetObjData(pObj.get());
     CPPUNIT_ASSERT_MESSAGE("Failed to get drawing object meta-data.", pData);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong sheet ID in cell anchor data!", SCTAB(2), pData->maStart.Tab());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong sheet ID in cell anchor data!", SCTAB(2), pData->maEnd.Tab());
@@ -5471,8 +5471,8 @@ void Test::testAnchoredRotatedShape()
         tools::Rectangle aRect( 4000, 5000, 10000, 7000 );
 
         tools::Rectangle aRotRect( 6000, 3000, 8000, 9000 );
-        SdrRectObj *pObj = new SdrRectObj(*pDrawLayer, aRect);
-        pPage->InsertObject(pObj);
+        rtl::Reference<SdrRectObj> pObj = new SdrRectObj(*pDrawLayer, aRect);
+        pPage->InsertObject(pObj.get());
         Point aRef1(pObj->GetSnapRect().Center());
         Degree100 nAngle = 9000_deg100; //90 deg.
         double nSin = 1.0; // sin(90 deg)
@@ -5488,7 +5488,7 @@ void Test::testAnchoredRotatedShape()
         CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRotRect.Top(), aSnap.Top(), TOLERANCE ) );
 
         ScDrawObjData aAnchor;
-        ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj );
+        ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj.get() );
         CPPUNIT_ASSERT_MESSAGE("Failed to get drawing object meta-data.", pData);
 
         aAnchor.maStart = pData->maStart;
@@ -6435,19 +6435,19 @@ void Test::testUndoDataAnchor()
 
     // Insert an object.
     tools::Rectangle aObjRect(2,1000,100,1100);
-    SdrObject* pObj = new SdrRectObj(*pDrawLayer, aObjRect);
-    pPage->InsertObject(pObj);
+    rtl::Reference<SdrObject> pObj = new SdrRectObj(*pDrawLayer, aObjRect);
+    pPage->InsertObject(pObj.get());
     ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0, false);
 
     // Get anchor data
-    ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj);
+    ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj.get());
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
 
     ScAddress aOldStart = pData->maStart;
     ScAddress aOldEnd   = pData->maEnd;
 
     // Get non rotated anchor data
-    ScDrawObjData* pNData = ScDrawLayer::GetNonRotatedObjData( pObj );
+    ScDrawObjData* pNData = ScDrawLayer::GetNonRotatedObjData( pObj.get() );
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve non rotated user data for this object.", pNData);
 
     ScAddress aNOldStart = pNData->maStart;
@@ -6462,14 +6462,14 @@ void Test::testUndoDataAnchor()
     aMark.SelectOneTable(0);
     rFunc.InsertCells(ScRange( 0, aOldStart.Row() - 1, 0, m_pDoc->MaxCol(), aOldStart.Row(), 0 ), &aMark, INS_INSROWS_BEFORE, true, true);
 
-    pData = ScDrawLayer::GetObjData(pObj);
+    pData = ScDrawLayer::GetObjData(pObj.get());
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
 
     ScAddress aNewStart = pData->maStart;
     ScAddress aNewEnd   = pData->maEnd;
 
     // Get non rotated anchor data
-    pNData = ScDrawLayer::GetNonRotatedObjData( pObj );
+    pNData = ScDrawLayer::GetNonRotatedObjData( pObj.get() );
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve non rotated user data for this object.", pNData);
 
     ScAddress aNNewStart = pNData->maStart;
@@ -6490,11 +6490,11 @@ void Test::testUndoDataAnchor()
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Failed to check state SCA_CELL.", SCA_CELL, oldType);
 
     // Get anchor data
-    pData = ScDrawLayer::GetObjData(pObj);
+    pData = ScDrawLayer::GetObjData(pObj.get());
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
 
     // Get non rotated anchor data
-    pNData = ScDrawLayer::GetNonRotatedObjData( pObj );
+    pNData = ScDrawLayer::GetNonRotatedObjData( pObj.get() );
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve non rotated user data for this object.", pNData);
 
     // Check if data has moved to new rows
@@ -6507,11 +6507,11 @@ void Test::testUndoDataAnchor()
     pUndoMgr->Redo();
 
     // Get anchor data
-    pData = ScDrawLayer::GetObjData(pObj);
+    pData = ScDrawLayer::GetObjData(pObj.get());
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
 
     // Get non rotated anchor data
-    pNData = ScDrawLayer::GetNonRotatedObjData( pObj );
+    pNData = ScDrawLayer::GetNonRotatedObjData( pObj.get() );
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve non rotated user data for this object.", pNData);
 
     // Check if data has moved to new rows
