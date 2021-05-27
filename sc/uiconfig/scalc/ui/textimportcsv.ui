@@ -113,20 +113,6 @@
                     <property name="margin-start">12</property>
                     <property name="margin-top">6</property>
                     <child>
-                      <object class="GtkLabel" id="textcharset">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="textimportcsv|textcharset">Ch_aracter set:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">charset</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkLabel" id="textlanguage">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -138,6 +124,7 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">1</property>
+                        <property name="width">2</property>
                       </packing>
                     </child>
                     <child>
@@ -165,8 +152,9 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
+                        <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
+                        <property name="width">2</property>
                       </packing>
                     </child>
                     <child>
@@ -209,7 +197,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="textimportcsv|label1">Import</property>
+                    <property name="label" translatable="yes" context="textimportcsv|label1">Character encoding</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -245,29 +233,8 @@
                         <property name="hexpand">True</property>
                         <property name="homogeneous">True</property>
                         <child>
-                          <object class="GtkRadioButton" id="tofixedwidth">
-                            <property name="label" translatable="yes" context="textimportcsv|tofixedwidth">_Fixed width</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="use_underline">True</property>
-                            <property name="draw_indicator">True</property>
-                            <property name="group">toseparatedby</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="tofixedwidth-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="textimportcsv|extended_tip|tofixedwidth">Separates fixed-width data (equal number of characters) into columns.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkRadioButton" id="toseparatedby">
-                            <property name="label" translatable="yes" context="textimportcsv|toseparatedby">_Separated by</property>
+                          <object class="GtkCheckButton" id="toseparatedby">
+                            <property name="label" translatable="yes" context="textimportcsv|toseparatedby">_Use separators</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
