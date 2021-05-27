@@ -98,6 +98,7 @@
 #include <o3tl/enumrange.hxx>
 #include <o3tl/safeint.hxx>
 #include <memory>
+#include <optional>
 #include <filter/msfilter/escherex.hxx>
 #include "sprmids.hxx"
 
@@ -608,7 +609,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
     bool bDoingSymbol = false;
     sal_Unicode cReplaceSymbol = m_cSymbol;
 
-    std::unique_ptr<SfxItemSet> pS(new SfxItemSet(m_pDrawEditEngine->GetEmptyItemSet()));
+    std::optional<SfxItemSet> pS(m_pDrawEditEngine->GetEmptyItemSet());
     WW8PLCFManResult aRes;
 
     std::deque<Chunk> aChunks;
@@ -738,7 +739,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
             {
                 m_pDrawEditEngine->QuickSetAttribs( *pS,
                     GetESelection(*m_pDrawEditEngine, nTextStart - nStartCp, nEnd - nStartCp ) );
-                pS.reset( new SfxItemSet(m_pDrawEditEngine->GetEmptyItemSet()) );
+                pS.emplace(m_pDrawEditEngine->GetEmptyItemSet());
             }
         }
         nStart = nNext;

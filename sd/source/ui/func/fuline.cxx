@@ -62,12 +62,12 @@ void FuLine::DoExecute( SfxRequest& rReq )
     if( rMarkList.GetMarkCount() == 1 )
         pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
-    std::unique_ptr<SfxItemSet> pNewAttr(new SfxItemSet( mpDoc->GetPool() ));
-    mpView->GetAttributes( *pNewAttr );
+    SfxItemSet aNewAttr( mpDoc->GetPool() );
+    mpView->GetAttributes( aNewAttr );
 
     bool bHasMarked = mpView->AreObjectsMarked();
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    VclPtr<SfxAbstractTabDialog> pDlg( pFact->CreateSvxLineTabDialog(mpViewShell->GetFrameWeld(), pNewAttr.get(), mpDoc, pObj, bHasMarked) );
+    VclPtr<SfxAbstractTabDialog> pDlg( pFact->CreateSvxLineTabDialog(mpViewShell->GetFrameWeld(), &aNewAttr, mpDoc, pObj, bHasMarked) );
 
     pDlg->StartExecuteAsync([pDlg, this](sal_Int32 nResult){
         if (nResult == RET_OK)

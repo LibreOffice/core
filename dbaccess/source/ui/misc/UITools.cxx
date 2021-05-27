@@ -792,7 +792,7 @@ bool callColumnFormatDialog(weld::Widget* _pParent,
     pPool->SetDefaultMetric( MapUnit::MapTwip );    // ripped, don't understand why
     pPool->FreezeIdRanges();                        // the same
 
-    std::unique_ptr<SfxItemSet> pFormatDescriptor(new SfxItemSet(*pPool, aAttrMap));
+    std::optional<SfxItemSet> pFormatDescriptor(SfxItemSet(*pPool, aAttrMap));
     // fill it
     pFormatDescriptor->Put(SvxHorJustifyItem(_eJustify, SBA_ATTR_ALIGN_HOR_JUSTIFY));
     bool bText = false;
@@ -818,7 +818,7 @@ bool callColumnFormatDialog(weld::Widget* _pParent,
     }
 
     {   // want the dialog to be destroyed before our set
-        SbaSbAttrDlg aDlg(_pParent, pFormatDescriptor.get(), _pFormatter, _bHasFormat);
+        SbaSbAttrDlg aDlg(_pParent, &*pFormatDescriptor, _pFormatter, _bHasFormat);
         if (RET_OK == aDlg.run())
         {
             // ItemSet->UNO

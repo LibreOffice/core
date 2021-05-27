@@ -83,7 +83,7 @@ bool ScConversionEngineBase::FindNextConversionCell()
     const ScPatternAttr* pPattern = nullptr;
     const ScPatternAttr* pLastPattern = nullptr;
 
-    std::unique_ptr<SfxItemSet> pEditDefaults(new SfxItemSet(GetEmptyItemSet()));
+    SfxItemSet aEditDefaults(GetEmptyItemSet());
 
     if( IsModified() )
     {
@@ -183,8 +183,8 @@ bool ScConversionEngineBase::FindNextConversionCell()
                 pPattern = mrDoc.GetPattern( nNewCol, nNewRow, mnStartTab );
                 if( pPattern && (pPattern != pLastPattern) )
                 {
-                    pPattern->FillEditItemSet( pEditDefaults.get() );
-                    SetDefaults( *pEditDefaults );
+                    pPattern->FillEditItemSet( &aEditDefaults );
+                    SetDefaults( aEditDefaults );
                     pLastPattern = pPattern;
                 }
 

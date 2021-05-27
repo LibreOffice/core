@@ -466,9 +466,9 @@ void ClassificationDialog::readIn(std::vector<ClassificationResult> const & rInp
                 FontWeight eWeight = (rClassificationResult.msName == "BOLD") ? WEIGHT_BOLD : WEIGHT_NORMAL;
 
                 ClassificationEditEngine& rEdEngine = m_xEditWindow->getEditEngine();
-                std::unique_ptr<SfxItemSet> pSet(new SfxItemSet(rEdEngine.GetParaAttribs(nParagraph)));
-                pSet->Put(SvxWeightItem(eWeight, EE_CHAR_WEIGHT));
-                rEdEngine.SetParaAttribs(nParagraph, *pSet);
+                SfxItemSet aSet(rEdEngine.GetParaAttribs(nParagraph));
+                aSet.Put(SvxWeightItem(eWeight, EE_CHAR_WEIGHT));
+                rEdEngine.SetParaAttribs(nParagraph, aSet);
             }
             break;
 

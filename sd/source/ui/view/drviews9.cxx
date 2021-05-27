@@ -204,9 +204,9 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
     CheckLineTo (rReq);
 
     SfxBindings&    rBindings = GetViewFrame()->GetBindings();
-    std::unique_ptr<SfxItemSet> pAttr(new SfxItemSet ( GetDoc()->GetPool() ));
+    SfxItemSet aAttr( GetDoc()->GetPool() );
 
-    GetView()->GetAttributes( *pAttr );
+    GetView()->GetAttributes( aAttr );
     const SfxItemSet* pArgs = rReq.GetArgs();
 
     switch (rReq.GetSlot ())
@@ -218,10 +218,10 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                 const SfxUInt32Item* pFillStyle = rReq.GetArg<SfxUInt32Item>(ID_VAL_STYLE);
                 if (CHECK_RANGE (drawing::FillStyle_NONE, static_cast<drawing::FillStyle>(pFillStyle->GetValue ()), drawing::FillStyle_BITMAP))
                 {
-                    pAttr->ClearItem (XATTR_FILLSTYLE);
+                    aAttr.ClearItem (XATTR_FILLSTYLE);
                     XFillStyleItem aStyleItem(static_cast<drawing::FillStyle>(pFillStyle->GetValue ()));
                     aStyleItem.SetWhich(XATTR_FILLSTYLE);
-                    pAttr->Put (aStyleItem);
+                    aAttr.Put (aStyleItem);
                     rBindings.Invalidate (SID_ATTR_FILL_STYLE);
                     rBindings.Invalidate (SID_ATTR_PAGE_FILLSTYLE);
                 }
@@ -242,10 +242,10 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                 const SfxUInt32Item* pLineStyle = rReq.GetArg<SfxUInt32Item>(ID_VAL_STYLE);
                 if (CHECK_RANGE (sal_Int32(drawing::LineStyle_NONE), static_cast<sal_Int32>(pLineStyle->GetValue()), sal_Int32(drawing::LineStyle_DASH)))
                 {
-                    pAttr->ClearItem (XATTR_LINESTYLE);
+                    aAttr.ClearItem (XATTR_LINESTYLE);
                     XLineStyleItem aStyleItem(static_cast<drawing::LineStyle>(pLineStyle->GetValue()));
                     aStyleItem.SetWhich(XATTR_LINESTYLE);
-                    pAttr->Put(aStyleItem);
+                    aAttr.Put(aStyleItem);
                     rBindings.Invalidate (SID_ATTR_LINE_STYLE);
                 }
 #if HAVE_FEATURE_SCRIPTING
@@ -263,10 +263,10 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
             if (pArgs && pArgs->Count () == 1)
             {
                 const SfxUInt32Item* pLineWidth = rReq.GetArg<SfxUInt32Item>(ID_VAL_WIDTH);
-                pAttr->ClearItem (XATTR_LINEWIDTH);
+                aAttr.ClearItem (XATTR_LINEWIDTH);
                 XLineWidthItem aWidthItem(pLineWidth->GetValue());
                 aWidthItem.SetWhich(XATTR_LINEWIDTH);
-                pAttr->Put(aWidthItem);
+                aAttr.Put(aWidthItem);
                 rBindings.Invalidate (SID_ATTR_LINE_WIDTH);
                 break;
             }
@@ -282,13 +282,13 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                 const SfxUInt32Item* pGreen = rReq.GetArg<SfxUInt32Item>(ID_VAL_GREEN);
                 const SfxUInt32Item* pBlue = rReq.GetArg<SfxUInt32Item>(ID_VAL_BLUE);
 
-                pAttr->ClearItem (XATTR_FILLCOLOR);
-                pAttr->ClearItem (XATTR_FILLSTYLE);
+                aAttr.ClearItem (XATTR_FILLCOLOR);
+                aAttr.ClearItem (XATTR_FILLSTYLE);
                 XFillColorItem aColorItem(-1, Color (static_cast<sal_uInt8>(pRed->GetValue ()),
                                                        static_cast<sal_uInt8>(pGreen->GetValue ()),
                                                        static_cast<sal_uInt8>(pBlue->GetValue ())));
                 aColorItem.SetWhich(XATTR_FILLCOLOR);
-                pAttr->Put(aColorItem);
+                aAttr.Put(aColorItem);
                 rBindings.Invalidate (SID_ATTR_FILL_COLOR);
                 rBindings.Invalidate (SID_ATTR_PAGE_COLOR);
                 rBindings.Invalidate (SID_ATTR_FILL_STYLE);
@@ -307,12 +307,12 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                 const SfxUInt32Item* pGreen = rReq.GetArg<SfxUInt32Item>(ID_VAL_GREEN);
                 const SfxUInt32Item* pBlue = rReq.GetArg<SfxUInt32Item>(ID_VAL_BLUE);
 
-                pAttr->ClearItem (XATTR_LINECOLOR);
+                aAttr.ClearItem (XATTR_LINECOLOR);
                 XLineColorItem aColorItem(-1, Color(static_cast<sal_uInt8>(pRed->GetValue()),
                                                     static_cast<sal_uInt8>(pGreen->GetValue()),
                                                     static_cast<sal_uInt8>(pBlue->GetValue())));
                 aColorItem.SetWhich(XATTR_LINECOLOR);
-                pAttr->Put(aColorItem);
+                aAttr.Put(aColorItem);
                 rBindings.Invalidate (SID_ATTR_LINE_COLOR);
                 break;
             }
@@ -337,8 +337,8 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                                       static_cast<sal_uInt8>(pBlue->GetValue ()));
                 ::tools::Long i;
 
-                pAttr->ClearItem (XATTR_FILLGRADIENT);
-                pAttr->ClearItem (XATTR_FILLSTYLE);
+                aAttr.ClearItem (XATTR_FILLGRADIENT);
+                aAttr.ClearItem (XATTR_FILLSTYLE);
 
                 for ( i = 0; i < nCounts; i ++)
                 {
@@ -353,10 +353,10 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                         XFillStyleItem aStyleItem(drawing::FillStyle_GRADIENT);
                         aStyleItem.SetWhich(XATTR_FILLSTYLE);
-                        pAttr->Put(aStyleItem);
+                        aAttr.Put(aStyleItem);
                         XFillGradientItem aGradientItem(pName->GetValue (), aGradient);
                         aGradientItem.SetWhich(XATTR_FILLGRADIENT);
-                        pAttr->Put(aGradientItem);
+                        aAttr.Put(aGradientItem);
                         break;
                     }
                 }
@@ -375,10 +375,10 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                     XFillStyleItem aStyleItem(drawing::FillStyle_GRADIENT);
                     aStyleItem.SetWhich(XATTR_FILLSTYLE);
-                    pAttr->Put(aStyleItem);
+                    aAttr.Put(aStyleItem);
                     XFillGradientItem aGradientItem(pName->GetValue(), aGradient);
                     aGradientItem.SetWhich(XATTR_FILLGRADIENT);
-                    pAttr->Put(aGradientItem);
+                    aAttr.Put(aGradientItem);
                 }
 
                 rBindings.Invalidate (SID_ATTR_FILL_STYLE);
@@ -407,8 +407,8 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                                    static_cast<sal_uInt8>(pBlue->GetValue ()));
                 ::tools::Long i;
 
-                pAttr->ClearItem (XATTR_FILLHATCH);
-                pAttr->ClearItem (XATTR_FILLSTYLE);
+                aAttr.ClearItem (XATTR_FILLHATCH);
+                aAttr.ClearItem (XATTR_FILLSTYLE);
 
                 for ( i = 0; i < nCounts; i ++)
                 {
@@ -422,10 +422,10 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                         XFillStyleItem aStyleItem(drawing::FillStyle_HATCH);
                         aStyleItem.SetWhich(XATTR_FILLSTYLE);
-                        pAttr->Put(aStyleItem);
+                        aAttr.Put(aStyleItem);
                         XFillHatchItem aHatchItem(pName->GetValue(), aHatch);
                         aHatchItem.SetWhich(XATTR_FILLHATCH);
-                        pAttr->Put(aHatchItem);
+                        aAttr.Put(aHatchItem);
                         break;
                     }
                 }
@@ -438,10 +438,10 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                     XFillStyleItem aStyleItem(drawing::FillStyle_HATCH);
                     aStyleItem.SetWhich(XATTR_FILLSTYLE);
-                    pAttr->Put(aStyleItem);
+                    aAttr.Put(aStyleItem);
                     XFillHatchItem aHatchItem(pName->GetValue (), aHatch);
                     aHatchItem.SetWhich(XATTR_FILLHATCH);
-                    pAttr->Put(aHatchItem);
+                    aAttr.Put(aHatchItem);
                 }
 
                 rBindings.Invalidate (SID_ATTR_FILL_HATCH);
@@ -472,8 +472,8 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     XDash aNewDash (static_cast<css::drawing::DashStyle>(pStyle->GetValue ()), static_cast<short>(pDots->GetValue ()), pDotLen->GetValue (),
                                     static_cast<short>(pDashes->GetValue ()), pDashLen->GetValue (), pDistance->GetValue ());
 
-                    pAttr->ClearItem (XATTR_LINEDASH);
-                    pAttr->ClearItem (XATTR_LINESTYLE);
+                    aAttr.ClearItem (XATTR_LINEDASH);
+                    aAttr.ClearItem (XATTR_LINESTYLE);
 
                     XDashListRef pDashList = GetDoc()->GetDashList();
                     ::tools::Long       nCounts    = pDashList->Count ();
@@ -491,10 +491,10 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                     XLineDashItem aDashItem(pName->GetValue(), aNewDash);
                     aDashItem.SetWhich(XATTR_LINEDASH);
-                    pAttr->Put(aDashItem);
+                    aAttr.Put(aDashItem);
                     XLineStyleItem aStyleItem(drawing::LineStyle_DASH);
                     aStyleItem.SetWhich(XATTR_LINESTYLE);
-                    pAttr->Put(aStyleItem);
+                    aAttr.Put(aStyleItem);
                     rBindings.Invalidate (SID_ATTR_LINE_DASH);
                     rBindings.Invalidate (SID_ATTR_FILL_STYLE);
                 }
@@ -529,8 +529,8 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     CHECK_RANGE (0, static_cast<sal_Int32>(pStart->GetValue ()), 100) &&
                     CHECK_RANGE (0, static_cast<sal_Int32>(pEnd->GetValue ()), 100))
                 {
-                    pAttr->ClearItem (XATTR_FILLGRADIENT);
-                    pAttr->ClearItem (XATTR_FILLSTYLE);
+                    aAttr.ClearItem (XATTR_FILLGRADIENT);
+                    aAttr.ClearItem (XATTR_FILLSTYLE);
 
                     XGradientListRef pGradientList = GetDoc()->GetGradientList ();
                     ::tools::Long           nCounts        = pGradientList->Count ();
@@ -554,10 +554,10 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                             XFillStyleItem aStyleItem(drawing::FillStyle_GRADIENT);
                             aStyleItem.SetWhich(XATTR_FILLSTYLE);
-                            pAttr->Put(aStyleItem);
+                            aAttr.Put(aStyleItem);
                             XFillGradientItem aGradientItem(pName->GetValue (), aGradient);
                             aGradientItem.SetWhich(XATTR_FILLGRADIENT);
-                            pAttr->Put(aGradientItem);
+                            aAttr.Put(aGradientItem);
                             break;
                         }
                     }
@@ -573,10 +573,10 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                         pGradientList->Insert(std::make_unique<XGradientEntry>(aGradient, pName->GetValue()));
                         XFillStyleItem aStyleItem(drawing::FillStyle_GRADIENT);
                         aStyleItem.SetWhich(XATTR_FILLSTYLE);
-                        pAttr->Put(aStyleItem);
+                        aAttr.Put(aStyleItem);
                         XFillGradientItem aGradientItem(pName->GetValue (), aGradient);
                         aGradientItem.SetWhich(XATTR_FILLGRADIENT);
-                        pAttr->Put(aGradientItem);
+                        aAttr.Put(aGradientItem);
                     }
 
                     rBindings.Invalidate (SID_ATTR_FILL_GRADIENT);
@@ -606,8 +606,8 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                 if (CHECK_RANGE (sal_Int32(css::drawing::HatchStyle_SINGLE), static_cast<sal_Int32>(pStyle->GetValue()), sal_Int32(css::drawing::HatchStyle_TRIPLE)) &&
                     CHECK_RANGE (0, static_cast<sal_Int32>(pAngle->GetValue ()), 360))
                 {
-                    pAttr->ClearItem (XATTR_FILLHATCH);
-                    pAttr->ClearItem (XATTR_FILLSTYLE);
+                    aAttr.ClearItem (XATTR_FILLHATCH);
+                    aAttr.ClearItem (XATTR_FILLSTYLE);
 
                     XHatchListRef pHatchList = GetDoc()->GetHatchList ();
                     ::tools::Long       nCounts     = pHatchList->Count ();
@@ -627,10 +627,10 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                             XFillStyleItem aStyleItem(drawing::FillStyle_HATCH);
                             aStyleItem.SetWhich(XATTR_FILLSTYLE);
-                            pAttr->Put(aStyleItem);
+                            aAttr.Put(aStyleItem);
                             XFillHatchItem aHatchItem(pName->GetValue (), aHatch);
                             aHatchItem.SetWhich(XATTR_FILLHATCH);
-                            pAttr->Put(aHatchItem);
+                            aAttr.Put(aHatchItem);
                             break;
                         }
                     }
@@ -643,10 +643,10 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                         pHatchList->Insert(std::make_unique<XHatchEntry>(aHatch, pName->GetValue()));
                         XFillStyleItem aStyleItem(drawing::FillStyle_HATCH);
                         aStyleItem.SetWhich(XATTR_FILLSTYLE);
-                        pAttr->Put(aStyleItem);
+                        aAttr.Put(aStyleItem);
                         XFillHatchItem aHatchItem(pName->GetValue (), aHatch);
                         aHatchItem.SetWhich(XATTR_FILLHATCH);
-                        pAttr->Put(aHatchItem);
+                        aAttr.Put(aHatchItem);
                     }
 
                     rBindings.Invalidate (SID_ATTR_FILL_HATCH);
@@ -676,14 +676,14 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                     if (pEntry->GetName () == pName->GetValue ())
                     {
-                        pAttr->ClearItem (XATTR_FILLGRADIENT);
-                        pAttr->ClearItem (XATTR_FILLSTYLE);
+                        aAttr.ClearItem (XATTR_FILLGRADIENT);
+                        aAttr.ClearItem (XATTR_FILLSTYLE);
                         XFillStyleItem aStyleItem(drawing::FillStyle_GRADIENT);
                         aStyleItem.SetWhich(XATTR_FILLSTYLE);
-                        pAttr->Put(aStyleItem);
+                        aAttr.Put(aStyleItem);
                         XFillGradientItem aGradientItem(pName->GetValue (), pEntry->GetGradient ());
                         aGradientItem.SetWhich(XATTR_FILLGRADIENT);
-                        pAttr->Put(aGradientItem);
+                        aAttr.Put(aGradientItem);
                         rBindings.Invalidate (SID_ATTR_FILL_GRADIENT);
                         rBindings.Invalidate (SID_ATTR_PAGE_GRADIENT);
                         rBindings.Invalidate (SID_ATTR_FILL_STYLE);
@@ -713,14 +713,14 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                     if (pEntry->GetName () == pName->GetValue ())
                     {
-                        pAttr->ClearItem (XATTR_FILLHATCH);
-                        pAttr->ClearItem (XATTR_FILLSTYLE);
+                        aAttr.ClearItem (XATTR_FILLHATCH);
+                        aAttr.ClearItem (XATTR_FILLSTYLE);
                         XFillStyleItem aStyleItem(drawing::FillStyle_HATCH);
                         aStyleItem.SetWhich(XATTR_FILLSTYLE);
-                        pAttr->Put(aStyleItem);
+                        aAttr.Put(aStyleItem);
                         XFillHatchItem aHatchItem(pName->GetValue (), pEntry->GetHatch ());
                         aHatchItem.SetWhich(XATTR_FILLHATCH);
-                        pAttr->Put(aHatchItem);
+                        aAttr.Put(aHatchItem);
 
                         rBindings.Invalidate (SID_ATTR_FILL_HATCH);
                         rBindings.Invalidate (SID_ATTR_PAGE_HATCH);
@@ -774,7 +774,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
             ;
     }
 
-    mpDrawView->SetAttributes (*const_cast<const SfxItemSet *>(pAttr.get()));
+    mpDrawView->SetAttributes (const_cast<const SfxItemSet &>(aAttr));
     rReq.Ignore ();
 }
 

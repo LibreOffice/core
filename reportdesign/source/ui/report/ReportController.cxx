@@ -2418,18 +2418,18 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
 
     try
     {
-        ::std::unique_ptr<SfxItemSet> pDescriptor(new SfxItemSet(*pPool, pRanges));
+        SfxItemSet aDescriptor(*pPool, pRanges);
         // fill it
         if ( _xSection.is() )
-            pDescriptor->Put(SvxBrushItem(::Color(ColorTransparency, _xSection->getBackColor()),RPTUI_ID_BRUSH));
+            aDescriptor.Put(SvxBrushItem(::Color(ColorTransparency, _xSection->getBackColor()),RPTUI_ID_BRUSH));
         else
         {
-            pDescriptor->Put(SvxSizeItem(RPTUI_ID_SIZE,VCLSize(getStyleProperty<awt::Size>(m_xReportDefinition,PROPERTY_PAPERSIZE))));
-            pDescriptor->Put(SvxLRSpaceItem(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_LEFTMARGIN)
+            aDescriptor.Put(SvxSizeItem(RPTUI_ID_SIZE,VCLSize(getStyleProperty<awt::Size>(m_xReportDefinition,PROPERTY_PAPERSIZE))));
+            aDescriptor.Put(SvxLRSpaceItem(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_LEFTMARGIN)
                                             ,getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_RIGHTMARGIN),0,0,RPTUI_ID_LRSPACE));
-            pDescriptor->Put(SvxULSpaceItem(static_cast<sal_uInt16>(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_TOPMARGIN))
+            aDescriptor.Put(SvxULSpaceItem(static_cast<sal_uInt16>(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_TOPMARGIN))
                                             ,static_cast<sal_uInt16>(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_BOTTOMMARGIN)),RPTUI_ID_ULSPACE));
-            pDescriptor->Put(SfxUInt16Item(SID_ATTR_METRIC,static_cast<sal_uInt16>(eUserMetric)));
+            aDescriptor.Put(SfxUInt16Item(SID_ATTR_METRIC,static_cast<sal_uInt16>(eUserMetric)));
 
             uno::Reference< style::XStyle> xPageStyle(getUsedStyle(m_xReportDefinition));
             if ( xPageStyle.is() )
@@ -2440,14 +2440,14 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
                 aPageItem.PutValue(xProp->getPropertyValue(PROPERTY_PAGESTYLELAYOUT),MID_PAGE_LAYOUT);
                 aPageItem.SetLandscape(getStyleProperty<bool>(m_xReportDefinition,PROPERTY_ISLANDSCAPE));
                 aPageItem.SetNumType(static_cast<SvxNumType>(getStyleProperty<sal_Int16>(m_xReportDefinition,PROPERTY_NUMBERINGTYPE)));
-                pDescriptor->Put(aPageItem);
-                pDescriptor->Put(SvxBrushItem(::Color(ColorTransparency, getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_BACKCOLOR)),RPTUI_ID_BRUSH));
+                aDescriptor.Put(aPageItem);
+                aDescriptor.Put(SvxBrushItem(::Color(ColorTransparency, getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_BACKCOLOR)),RPTUI_ID_BRUSH));
             }
         }
 
         {   // want the dialog to be destroyed before our set
             ORptPageDialog aDlg(
-                getFrameWeld(), pDescriptor.get(),_xSection.is()
+                getFrameWeld(), &aDescriptor,_xSection.is()
                            ? OUString("BackgroundDialog")
                            : OUString("PageDialog"));
             if (aDlg.run() == RET_OK)
@@ -4223,13 +4223,13 @@ void OReportController::openZoomDialog()
     pPool->FreezeIdRanges();                        // the same
     try
     {
-        ::std::unique_ptr<SfxItemSet> pDescriptor(new SfxItemSet(*pPool, pRanges));
+        SfxItemSet aDescriptor(*pPool, pRanges);
         // fill it
         SvxZoomItem aZoomItem( m_eZoomType, m_nZoomValue, SID_ATTR_ZOOM );
         aZoomItem.SetValueSet(SvxZoomEnableFlags::N100|SvxZoomEnableFlags::WHOLEPAGE|SvxZoomEnableFlags::PAGEWIDTH);
-        pDescriptor->Put(aZoomItem);
+        aDescriptor.Put(aZoomItem);
 
-        ScopedVclPtr<AbstractSvxZoomDialog> pDlg(pFact->CreateSvxZoomDialog(nullptr, *pDescriptor));
+        ScopedVclPtr<AbstractSvxZoomDialog> pDlg(pFact->CreateSvxZoomDialog(nullptr, aDescriptor));
         pDlg->SetLimits( 20, 400 );
         bool bCancel = ( RET_CANCEL == pDlg->Execute() );
 
