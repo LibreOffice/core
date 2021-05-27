@@ -18779,6 +18779,11 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
             // TODO <relation type="labelled-by" target="pagenumcb"/> -> <relation name="labelled-by">pagenumcb</relation>
             xRemoveList.push_back(xChild);
         }
+        else if (xChild->getNodeName() == "accelerator")
+        {
+            // TODO is anything like this supported anymore in .ui files
+            xRemoveList.push_back(xChild);
+        }
 
         auto xNextChild = xChild->getNextSibling();
 
@@ -19867,7 +19872,8 @@ void GtkInstanceWidget::help_hierarchy_foreach(const std::function<bool(const OS
 weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile)
 {
 #if GTK_CHECK_VERSION(4, 0, 0)
-    if (rUIFile != "cui/ui/hyphenate.ui" &&
+    if (rUIFile != "cui/ui/aboutdialog.ui" &&
+        rUIFile != "cui/ui/hyphenate.ui" &&
         rUIFile != "cui/ui/objectnamedialog.ui" &&
         rUIFile != "cui/ui/objecttitledescdialog.ui" &&
         rUIFile != "cui/ui/percentdialog.ui" &&
@@ -19882,6 +19888,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "sfx/ui/querysavedialog.ui" &&
         rUIFile != "sfx/ui/licensedialog.ui" &&
         rUIFile != "sfx/ui/linefragment.ui" &&
+        rUIFile != "sfx/ui/loadtemplatedialog.ui" &&
         rUIFile != "sfx/ui/securityinfopage.ui" &&
         rUIFile != "svt/ui/javadisableddialog.ui" &&
         rUIFile != "svx/ui/fontworkgallerydialog.ui" &&
@@ -19899,8 +19906,11 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/smath/ui/fontsizedialog.ui" &&
         rUIFile != "modules/smath/ui/savedefaultsdialog.ui" &&
         rUIFile != "modules/swriter/ui/gotopagedialog.ui" &&
+        rUIFile != "modules/swriter/ui/exchangedatabases.ui" &&
+        rUIFile != "modules/swriter/ui/insertbookmark.ui" &&
         rUIFile != "modules/swriter/ui/insertfootnote.ui" &&
         rUIFile != "modules/swriter/ui/inserttable.ui" &&
+        rUIFile != "modules/swriter/ui/renameobjectdialog.ui" &&
         rUIFile != "modules/swriter/ui/statisticsinfopage.ui" &&
         rUIFile != "modules/swriter/ui/wordcount.ui")
     {
