@@ -44,7 +44,6 @@
 // class SvxBrushItem : public SfxPoolItem
 // class SvxBulletItem : public SfxPoolItem
 // class SvxColorItem : public SfxPoolItem
-//    class SvxBackgroundColorItem : public SvxColorItem
 // class SvxFontHeightItem : public SfxPoolItem
 // class SvxFieldItem : public SfxPoolItem
 // class SvxFontListItem : public SfxPoolItem

@@ -706,10 +706,6 @@ include/editeng/boxitem.hxx:114
     _Bool SvxBoxItem::HasBorder(_Bool) const
     _Bool bTreatPaddingAsBorder
     1
-include/editeng/colritem.hxx:69
-    void SvxBackgroundColorItem::SvxBackgroundColorItem(const unsigned short)
-    const unsigned short nId
-    0
 include/editeng/editeng.hxx:548
     void EditEngine::dumpAsXmlEditDoc(struct _xmlTextWriter *) const
     struct _xmlTextWriter * pWriter
