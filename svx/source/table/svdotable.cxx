@@ -864,12 +864,16 @@ std::unique_ptr<sdr::contact::ViewContact> SdrTableObj::CreateObjectSpecificView
 SdrTableObj::SdrTableObj(SdrModel& rSdrModel)
 :   SdrTextObj(rSdrModel)
 {
+    osl_atomic_increment(&m_refCount); // other I get deleted during construction
     init( 1, 1 );
+    osl_atomic_decrement(&m_refCount);
 }
 
 SdrTableObj::SdrTableObj(SdrModel& rSdrModel, SdrTableObj const & rSource)
 :   SdrTextObj(rSdrModel, rSource)
 {
+    osl_atomic_increment(&m_refCount);
+
     init( 1, 1 );
 
     TableModelNotifyGuard aGuard( mpImpl.is() ? mpImpl->mxTable.get() : nullptr );
@@ -887,6 +891,8 @@ SdrTableObj::SdrTableObj(SdrModel& rSdrModel, SdrTableObj const & rSource)
     // use SdrTableObjImpl::operator= now to
     // copy model data and other stuff (see there)
     *mpImpl = *rSource.mpImpl;
+
+    osl_atomic_decrement(&m_refCount);
 }
 
 SdrTableObj::SdrTableObj(
@@ -897,6 +903,8 @@ SdrTableObj::SdrTableObj(
 :   SdrTextObj(rSdrModel, rNewRect)
     ,maLogicRect(rNewRect)
 {
+    osl_atomic_increment(&m_refCount);
+
     if( nColumns <= 0 )
         nColumns = 1;
 
@@ -904,6 +912,8 @@ SdrTableObj::SdrTableObj(
         nRows = 1;
 
     init( nColumns, nRows );
+
+    osl_atomic_decrement(&m_refCount);
 }
 
 
@@ -1786,7 +1796,7 @@ OUString SdrTableObj::TakeObjNamePlural() const
 }
 
 
-SdrTableObj* SdrTableObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> SdrTableObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
     return new SdrTableObj(rTargetModel, *this);
 }

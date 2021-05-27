@@ -117,14 +117,14 @@ SdrObjKind E3dLatheObj::GetObjIdentifier() const
     return SdrObjKind::E3D_Lathe;
 }
 
-E3dLatheObj* E3dLatheObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> E3dLatheObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
     return new E3dLatheObj(rTargetModel, *this);
 }
 
 // Convert the object to group object consisting of n polygons
 
-SdrObjectUniquePtr E3dLatheObj::DoConvertToPolyObj(bool /*bBezier*/, bool /*bAddText*/) const
+rtl::Reference<SdrObject> E3dLatheObj::DoConvertToPolyObj(bool /*bBezier*/, bool /*bAddText*/) const
 {
     return nullptr;
 }
@@ -181,12 +181,12 @@ bool E3dLatheObj::IsBreakObjPossible()
     return true;
 }
 
-std::unique_ptr<SdrAttrObj,SdrObjectFreeOp> E3dLatheObj::GetBreakObj()
+rtl::Reference<SdrAttrObj> E3dLatheObj::GetBreakObj()
 {
     // create PathObj
     basegfx::B3DPolyPolygon aLathePoly3D(basegfx::utils::createB3DPolyPolygonFromB2DPolyPolygon(maPolyPoly2D));
     basegfx::B2DPolyPolygon aTransPoly(TransformToScreenCoor(aLathePoly3D));
-    std::unique_ptr<SdrPathObj,SdrObjectFreeOp> pPathObj(new SdrPathObj(getSdrModelFromSdrObject(), SdrObjKind::PolyLine, std::move(aTransPoly)));
+    rtl::Reference<SdrPathObj> pPathObj(new SdrPathObj(getSdrModelFromSdrObject(), SdrObjKind::PolyLine, std::move(aTransPoly)));
 
     // Set Attribute
     SfxItemSet aSet(GetObjectItemSet());
@@ -196,7 +196,7 @@ std::unique_ptr<SdrAttrObj,SdrObjectFreeOp> E3dLatheObj::GetBreakObj()
 
     pPathObj->SetMergedItemSet(aSet);
 
-    return std::unique_ptr<SdrAttrObj,SdrObjectFreeOp>(pPathObj.release());
+    return pPathObj;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

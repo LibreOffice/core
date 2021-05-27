@@ -4945,7 +4945,7 @@ void SwHTMLParser::DeleteSection(SwStartNode* pSttNd)
 {
     //if section to be deleted contains a pending m_pMarquee, it will be deleted
     //so clear m_pMarquee pointer if that's the case
-    SwFrameFormat* pObjectFormat = m_pMarquee ? ::FindFrameFormat(m_pMarquee) : nullptr;
+    SwFrameFormat* pObjectFormat = m_pMarquee ? ::FindFrameFormat(m_pMarquee.get()) : nullptr;
     FrameDeleteWatch aWatch(pObjectFormat);
 
     //similarly for footnotes

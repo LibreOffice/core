@@ -81,16 +81,16 @@ void FuMorph::DoExecute( SfxRequest& )
     // create clones
     SdrObject*  pObj1 = rMarkList.GetMark(0)->GetMarkedSdrObj();
     SdrObject*  pObj2 = rMarkList.GetMark(1)->GetMarkedSdrObj();
-    SdrObject*  pCloneObj1(pObj1->CloneSdrObject(pObj1->getSdrModelFromSdrObject()));
-    SdrObject*  pCloneObj2(pObj2->CloneSdrObject(pObj2->getSdrModelFromSdrObject()));
+    rtl::Reference<SdrObject> pCloneObj1(pObj1->CloneSdrObject(pObj1->getSdrModelFromSdrObject()));
+    rtl::Reference<SdrObject> pCloneObj2(pObj2->CloneSdrObject(pObj2->getSdrModelFromSdrObject()));
 
     // delete text at clone, otherwise we do not get a correct PathObj
     pCloneObj1->SetOutlinerParaObject(std::nullopt);
     pCloneObj2->SetOutlinerParaObject(std::nullopt);
 
     // create path objects
-    SdrObjectUniquePtr pPolyObj1 = pCloneObj1->ConvertToPolyObj(false, false);
-    SdrObjectUniquePtr pPolyObj2 = pCloneObj2->ConvertToPolyObj(false, false);
+    rtl::Reference<SdrObject> pPolyObj1 = pCloneObj1->ConvertToPolyObj(false, false);
+    rtl::Reference<SdrObject> pPolyObj2 = pCloneObj2->ConvertToPolyObj(false, false);
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
     ScopedVclPtr<AbstractMorphDlg> pDlg( pFact->CreateMorphDlg(mpWindow ? mpWindow->GetFrameWeld() : nullptr, pObj1, pObj2) );
     if(pPolyObj1 && pPolyObj2 && (pDlg->Execute() == RET_OK))
@@ -170,8 +170,6 @@ void FuMorph::DoExecute( SfxRequest& )
             mpView->EndUndo();
         }
     }
-    SdrObject::Free( pCloneObj1 );
-    SdrObject::Free( pCloneObj2 );
 }
 
 static ::basegfx::B2DPolygon ImpGetExpandedPolygon(
@@ -376,7 +374,7 @@ void FuMorph::ImpInsertPolygons(
         return;
 
     SfxItemSet      aSet( aSet1 );
-    std::unique_ptr<SdrObjGroup, SdrObjectFreeOp> xObjGroup(new SdrObjGroup(mpView->getSdrModelFromSdrView()));
+    rtl::Reference<SdrObjGroup> xObjGroup(new SdrObjGroup(mpView->getSdrModelFromSdrView()));
     SdrObjList*     pObjList = xObjGroup->GetSubList();
     const size_t    nCount = rPolyPolyList3D.size();
     const double    fStep = 1. / ( nCount + 1 );
@@ -389,7 +387,7 @@ void FuMorph::ImpInsertPolygons(
     for ( size_t i = 0; i < nCount; i++, fFactor += fStep )
     {
         const ::basegfx::B2DPolyPolygon& rPolyPoly3D = rPolyPolyList3D[ i ];
-        SdrPathObj* pNewObj = new SdrPathObj(
+        rtl::Reference<SdrPathObj> pNewObj = new SdrPathObj(
             mpView->getSdrModelFromSdrView(),
             SdrObjKind::Polygon,
             rPolyPoly3D);
@@ -418,19 +416,19 @@ void FuMorph::ImpInsertPolygons(
 
         pNewObj->SetMergedItemSetAndBroadcast(aSet);
 
-        pObjList->InsertObject( pNewObj );
+        pObjList->InsertObject( pNewObj.get() );
     }
 
     if ( nCount )
     {
         pObjList->InsertObject(
-            pObj1->CloneSdrObject(pObj1->getSdrModelFromSdrObject()),
+            pObj1->CloneSdrObject(pObj1->getSdrModelFromSdrObject()).get(),
             0 );
         pObjList->InsertObject(
-            pObj2->CloneSdrObject(pObj2->getSdrModelFromSdrObject()) );
+            pObj2->CloneSdrObject(pObj2->getSdrModelFromSdrObject()).get() );
 
         mpView->DeleteMarked();
-        mpView->InsertObjectAtView(xObjGroup.release(), *pPageView, SdrInsertFlags:: SETDEFLAYER);
+        mpView->InsertObjectAtView(xObjGroup.get(), *pPageView, SdrInsertFlags:: SETDEFLAYER);
     }
 }
 
