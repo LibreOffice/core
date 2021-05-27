@@ -247,6 +247,13 @@ void SvxUnoDrawPool::_getPropertyStates( const comphelper::PropertyMapEntry** pp
                     }
                 }
                 break;
+            case OWN_ATTR_TEXTCOLUMNS:
+                if (IsStaticDefaultItem(&pPool->GetDefaultItem(sal_uInt16(SDRATTR_TEXTCOLUMNS_NUMBER)))
+                    && IsStaticDefaultItem(&pPool->GetDefaultItem(sal_uInt16(SDRATTR_TEXTCOLUMNS_SPACING))))
+                    *pStates = beans::PropertyState_DEFAULT_VALUE;
+                else
+                    *pStates = beans::PropertyState_DIRECT_VALUE;
+                break;
             default:
                 //#i18732# - correction:
                 // use method <IsStaticDefaultItem(..)> instead of using probably

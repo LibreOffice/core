@@ -35,6 +35,7 @@
 #include <o3tl/safeint.hxx>
 #include <svtools/unoimap.hxx>
 #include <svtools/unoevent.hxx>
+#include <svx/SvxXTextColumns.hxx>
 #include <unotbl.hxx>
 #include <unostyle.hxx>
 #include <unofield.hxx>
@@ -795,7 +796,7 @@ SwXServiceProvider::MakeInstance(SwServiceType nObjectType, SwDoc & rDoc)
             xRet = static_cast<cppu::OWeakObject*>(new SwXNumberingRules(rDoc));
         break;
         case SwServiceType::TextColumns:
-            xRet = static_cast<cppu::OWeakObject*>(new SwXTextColumns);
+            xRet = SvxXTextColumns_createInstance();
         break;
         case SwServiceType::Defaults:
             xRet = static_cast<cppu::OWeakObject*>(new SwXTextDefaults(&rDoc));
