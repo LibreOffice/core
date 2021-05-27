@@ -532,7 +532,7 @@ bool Outliner::IsTopToBottom() const
     return pEditEngine->IsTopToBottom();
 }
 
-void Outliner::SetTextColumns(sal_Int32 nColumns, sal_Int32 nSpacing)
+void Outliner::SetTextColumns(sal_Int16 nColumns, sal_Int32 nSpacing)
 {
     pEditEngine->SetTextColumns(nColumns, nSpacing);
 }

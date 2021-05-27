@@ -2629,7 +2629,7 @@ void ImpEditEngine::SetRotation(TextRotation nRotation)
     }
 }
 
-void ImpEditEngine::SetTextColumns(sal_Int32 nColumns, sal_Int32 nSpacing)
+void ImpEditEngine::SetTextColumns(sal_Int16 nColumns, sal_Int32 nSpacing)
 {
     if (mnColumns != nColumns || mnColumnSpacing != nSpacing)
     {

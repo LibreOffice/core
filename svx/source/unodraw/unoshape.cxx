@@ -87,6 +87,8 @@
 #include <svx/svdoutl.hxx>
 #include <svx/svdopath.hxx>
 
+#include "SvxXTextColumns.hxx"
+
 #include <memory>
 #include <optional>
 #include <vector>
@@ -3896,6 +3898,25 @@ bool SvxShapeText::setPropertyValueImpl( const OUString& rName, const SfxItemPro
         }
         return true;
     }
+    else if (pProperty->nWID == OWN_ATTR_TEXTCOLUMNS)
+    {
+        if (auto pTextObj = dynamic_cast<SdrTextObj*>(GetSdrObject()))
+        {
+            css::uno::Reference<css::text::XTextColumns> xTextColumns;
+            if (rValue >>= xTextColumns)
+            {
+                pTextObj->SetTextColumnsNumber(xTextColumns->getColumnCount());
+                if (css::uno::Reference<css::beans::XPropertySet> xPropSet{ xTextColumns,
+                                                                            css::uno::UNO_QUERY })
+                {
+                    auto aVal = xPropSet->getPropertyValue("AutomaticDistance");
+                    if (sal_Int32 nSpacing; aVal >>= nSpacing)
+                        pTextObj->SetTextColumnsSpacing(nSpacing);
+                }
+            }
+        }
+        return true;
+    }
     return SvxShape::setPropertyValueImpl( rName, pProperty, rValue );
 }
 
@@ -3908,6 +3929,17 @@ bool SvxShapeText::getPropertyValueImpl( const OUString& rName, const SfxItemPro
             rValue <<= css::text::WritingMode_TB_RL;
         else
             rValue <<= css::text::WritingMode_LR_TB;
+        return true;
+    }
+    else if (pProperty->nWID == OWN_ATTR_TEXTCOLUMNS)
+    {
+        css::uno::Reference<css::uno::XInterface> xTextColumns;
+        if (auto pTextObj = dynamic_cast<const SdrTextObj*>(GetSdrObject()))
+        {
+            xTextColumns = SvxXTextColumns_createInstance(pTextObj->GetTextColumnsNumber(),
+                                                          pTextObj->GetTextColumnsSpacing());
+        }
+        rValue <<= xTextColumns;
         return true;
     }
 

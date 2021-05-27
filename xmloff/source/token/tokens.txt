@@ -1829,6 +1829,8 @@ text-blinking
 text-box
 text-changes-only
 text-color
+text-columns-number
+text-columns-spacing
 text-combine
 text-combine-end-char
 text-combine-start-char

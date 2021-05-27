@@ -452,7 +452,7 @@ bool EditEngine::GetDirectVertical() const
     return pImpEditEngine->GetDirectVertical();
 }
 
-void EditEngine::SetTextColumns(sal_Int32 nColumns, sal_Int32 nSpacing)
+void EditEngine::SetTextColumns(sal_Int16 nColumns, sal_Int32 nSpacing)
 {
     pImpEditEngine->SetTextColumns(nColumns, nSpacing);
 }

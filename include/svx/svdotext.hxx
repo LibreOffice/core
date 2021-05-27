@@ -439,8 +439,10 @@ public:
     SdrTextAniKind GetTextAniKind() const;
     SdrTextAniDirection GetTextAniDirection() const;
 
-    sal_Int32 GetTextColumnsNumber() const;
+    sal_Int16 GetTextColumnsNumber() const;
+    void SetTextColumnsNumber(sal_Int16 nColumns);
     sal_Int32 GetTextColumnsSpacing() const;
+    void SetTextColumnsSpacing(sal_Int32 nSpacing);
 
     // react on model/page change
     virtual void handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage) override;

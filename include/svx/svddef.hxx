@@ -138,7 +138,7 @@ class SdrVertShearAllItem;
 class SdrVertShearOneItem;
 class SdrYesNoItem;
 class SfxBoolItem;
-class SfxInt32Item;
+class SfxInt16Item;
 class SfxUInt16Item;
 class SfxUInt32Item;
 class SfxStringItem;
@@ -428,7 +428,7 @@ constexpr TypedWhichId<SdrMetricItem> SDRATTR_SOFTEDGE_RADIUS(SDRATTR_SOFTEDGE_F
 constexpr sal_uInt16                  SDRATTR_SOFTEDGE_LAST(SDRATTR_SOFTEDGE_RADIUS);
 
 constexpr sal_uInt16 SDRATTR_TEXTCOLUMNS_FIRST(SDRATTR_SOFTEDGE_LAST + 1);
-constexpr TypedWhichId<SfxInt32Item> SDRATTR_TEXTCOLUMNS_NUMBER(SDRATTR_TEXTCOLUMNS_FIRST + 0);
+constexpr TypedWhichId<SfxInt16Item> SDRATTR_TEXTCOLUMNS_NUMBER(SDRATTR_TEXTCOLUMNS_FIRST + 0);
 constexpr TypedWhichId<SdrMetricItem> SDRATTR_TEXTCOLUMNS_SPACING(SDRATTR_TEXTCOLUMNS_FIRST + 1);
 constexpr sal_uInt16 SDRATTR_TEXTCOLUMNS_LAST(SDRATTR_TEXTCOLUMNS_SPACING);
 

@@ -1186,6 +1186,19 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
             return PropertyState_AMBIGUOUS_VALUE;
         }
     }
+    else if (pEntry->nWID == OWN_ATTR_TEXTCOLUMNS)
+    {
+        const SfxItemSet& rSet = GetItemSet();
+
+        const auto eState1 = rSet.GetItemState(SDRATTR_TEXTCOLUMNS_NUMBER, false);
+        const auto eState2 = rSet.GetItemState(SDRATTR_TEXTCOLUMNS_SPACING, false);
+        if (eState1 == SfxItemState::SET || eState2 == SfxItemState::SET)
+            return PropertyState_DIRECT_VALUE;
+        else if (eState1 == SfxItemState::DEFAULT && eState2 == SfxItemState::DEFAULT)
+            return PropertyState_DEFAULT_VALUE;
+        else
+            return PropertyState_AMBIGUOUS_VALUE;
+    }
     else
     {
         SfxItemSet &rStyleSet = GetItemSet();
