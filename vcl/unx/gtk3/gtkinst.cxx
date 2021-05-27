@@ -20147,7 +20147,9 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/scalc/ui/optimalrowheightdialog.ui" &&
         rUIFile != "modules/scalc/ui/colwidthdialog.ui" &&
         rUIFile != "modules/scalc/ui/rowheightdialog.ui" &&
+        rUIFile != "modules/scalc/ui/selectrange.ui" &&
         rUIFile != "modules/scalc/ui/solverdlg.ui" &&
+        rUIFile != "modules/scalc/ui/xmlsourcedialog.ui" &&
         rUIFile != "modules/smath/ui/alignmentdialog.ui" &&
         rUIFile != "modules/smath/ui/fontsizedialog.ui" &&
         rUIFile != "modules/smath/ui/savedefaultsdialog.ui" &&
