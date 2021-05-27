@@ -2416,13 +2416,20 @@ void SwContentFrame::UpdateAttr_( const SfxPoolItem* pOld, const SfxPoolItem* pN
     switch ( nWhich )
     {
         case RES_FMT_CHG:
-            rInvFlags = static_cast<SwContentFrameInvFlags>(0xFF);
+            rInvFlags = SwContentFrameInvFlags::SetCompletePaint
+                        | SwContentFrameInvFlags::InvalidatePos
+                        | SwContentFrameInvFlags::InvalidateSize
+                        | SwContentFrameInvFlags::InvalidateSectPrt
+                        | SwContentFrameInvFlags::InvalidateNextPrt
+                        | SwContentFrameInvFlags::InvalidatePrevPrt
+                        | SwContentFrameInvFlags::InvalidateNextPos
+                        | SwContentFrameInvFlags::SetNextCompletePaint;
             [[fallthrough]];
 
         case RES_PAGEDESC:                      //attribute changes (on/off)
             if ( IsInDocBody() && !IsInTab() )
             {
-                rInvFlags |= static_cast<SwContentFrameInvFlags>(0x02);
+                rInvFlags |= SwContentFrameInvFlags::InvalidatePos;
                 SwPageFrame *pPage = FindPageFrame();
                 if ( !GetPrev() )
                     CheckPageDescs( pPage );
@@ -2466,7 +2473,7 @@ void SwContentFrame::UpdateAttr_( const SfxPoolItem* pOld, const SfxPoolItem* pN
                     GetIndNext()->InvalidateObjs();
                 }
                 Prepare( PrepareHint::ULSpaceChanged );   //TextFrame has to correct line spacing.
-                rInvFlags |= static_cast<SwContentFrameInvFlags>(0x80);
+                rInvFlags |= SwContentFrameInvFlags::SetNextCompletePaint;
                 [[fallthrough]];
             }
         case RES_LR_SPACE:
@@ -2476,17 +2483,17 @@ void SwContentFrame::UpdateAttr_( const SfxPoolItem* pOld, const SfxPoolItem* pN
                 Prepare( PrepareHint::FixSizeChanged );
                 SwModify aMod;
                 SwFrame::SwClientNotify(aMod, sw::LegacyModifyHint(pOld, pNew));
-                rInvFlags |= static_cast<SwContentFrameInvFlags>(0x30);
+                rInvFlags |= SwContentFrameInvFlags::InvalidateNextPrt | SwContentFrameInvFlags::InvalidatePrevPrt;
                 break;
             }
         case RES_BREAK:
             {
-                rInvFlags |= static_cast<SwContentFrameInvFlags>(0x42);
+                rInvFlags |= SwContentFrameInvFlags::InvalidatePos | SwContentFrameInvFlags::InvalidateNextPos;
                 const IDocumentSettingAccess& rIDSA = GetUpper()->GetFormat()->getIDocumentSettingAccess();
                 if( rIDSA.get(DocumentSettingId::PARA_SPACE_MAX) ||
                     rIDSA.get(DocumentSettingId::PARA_SPACE_MAX_AT_PAGES) )
                 {
-                    rInvFlags |= static_cast<SwContentFrameInvFlags>(0x1);
+                    rInvFlags |= SwContentFrameInvFlags::SetCompletePaint;
                     SwFrame* pNxt = FindNext();
                     if( pNxt )
                     {
@@ -2511,7 +2518,7 @@ void SwContentFrame::UpdateAttr_( const SfxPoolItem* pOld, const SfxPoolItem* pN
         // OD 2004-02-26 #i25029#
         case RES_PARATR_CONNECT_BORDER:
         {
-            rInvFlags |= static_cast<SwContentFrameInvFlags>(0x01);
+            rInvFlags |= SwContentFrameInvFlags::SetCompletePaint;
             if ( IsTextFrame() )
             {
                 InvalidateNextPrtArea();
@@ -2534,11 +2541,11 @@ void SwContentFrame::UpdateAttr_( const SfxPoolItem* pOld, const SfxPoolItem* pN
         case RES_CHRATR_ESCAPEMENT:
         case RES_CHRATR_CONTOUR:
         case RES_PARATR_NUMRULE:
-            rInvFlags |= static_cast<SwContentFrameInvFlags>(0x01);
+            rInvFlags |= SwContentFrameInvFlags::SetCompletePaint;
             break;
 
         case RES_FRM_SIZE:
-            rInvFlags |= static_cast<SwContentFrameInvFlags>(0x01);
+            rInvFlags |= SwContentFrameInvFlags::SetCompletePaint;
             [[fallthrough]];
 
         default:
