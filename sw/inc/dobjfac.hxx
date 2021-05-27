@@ -25,7 +25,7 @@
 class SwObjectFactory
 {
 public:
-    DECL_STATIC_LINK(SwObjectFactory, MakeObject, SdrObjCreatorParams, SdrObject*);
+    DECL_STATIC_LINK(SwObjectFactory, MakeObject, SdrObjCreatorParams, rtl::Reference<SdrObject>);
 };
 
 extern SwObjectFactory aSwObjectFactory;

@@ -43,7 +43,7 @@ public:
     void SetAttributes( SdrObject* pObj );
     const OUString& GetShapeType() const;
 
-    virtual SdrObjectUniquePtr CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rectangle& rRectangle) override;
+    virtual rtl::Reference<SdrObject> CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rectangle& rRectangle) override;
 
     // #i33136#
     virtual bool doConstructOrthogonal() const override;

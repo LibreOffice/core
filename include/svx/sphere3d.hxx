@@ -68,9 +68,9 @@ public:
         { return GetObjectItemSet().Get(SDRATTR_3DOBJ_VERT_SEGS).GetValue(); }
 
     virtual SdrObjKind GetObjIdentifier() const override;
-    virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
+    virtual rtl::Reference<SdrObject> DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
-    virtual E3dSphereObj* CloneSdrObject(SdrModel& rTargetModel) const override;
+    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
     const basegfx::B3DPoint& Center() const { return aCenter; }
     const basegfx::B3DVector& Size() const { return aSize; }

@@ -114,12 +114,12 @@ void DrawViewShell::ScannerEvent()
 
                     if( bInsertNewObject )
                     {
-                        auto pGrafObj = new SdrGrafObj(
+                        rtl::Reference<SdrGrafObj> pGrafObj = new SdrGrafObj(
                             GetView()->getSdrModelFromSdrView(),
                             Graphic(aScanBmp),
                             aRect);
                         SdrPageView* pPV = GetView()->GetSdrPageView();
-                        GetView()->InsertObjectAtView( pGrafObj, *pPV, SdrInsertFlags::SETDEFLAYER );
+                        GetView()->InsertObjectAtView( pGrafObj.get(), *pPV, SdrInsertFlags::SETDEFLAYER );
                     }
                 }
             }

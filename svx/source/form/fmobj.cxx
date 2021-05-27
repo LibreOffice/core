@@ -360,7 +360,7 @@ SdrObjKind FmFormObj::GetObjIdentifier() const
     return OBJ_UNO;
 }
 
-FmFormObj* FmFormObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> FmFormObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
     return new FmFormObj(rTargetModel, *this);
 }

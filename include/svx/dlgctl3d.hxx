@@ -41,8 +41,8 @@ protected:
     std::unique_ptr<FmFormModel> mpModel;
     rtl::Reference<FmFormPage> mxFmPage;
     std::unique_ptr<E3dView> mp3DView;
-    E3dScene*               mpScene;
-    E3dObject*              mp3DObj;
+    rtl::Reference<E3dScene>  mpScene;
+    rtl::Reference<E3dObject>  mp3DObj;
     SvxPreviewObjectType    mnObjectType;
 
     void Construct();
@@ -72,9 +72,9 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC Svx3DLightControl final : public Svx3DPrevie
     sal_uInt32                  maSelectedLight;
 
     // extra objects for light control
-    E3dObject*                  mpExpansionObject;
-    E3dObject*                  mpLampBottomObject;
-    E3dObject*                  mpLampShaftObject;
+    rtl::Reference<E3dObject>   mpExpansionObject;
+    rtl::Reference<E3dObject>   mpLampBottomObject;
+    rtl::Reference<E3dObject>   mpLampShaftObject;
     std::vector< E3dObject* >   maLightObjects;
 
     // 3d rotations of object

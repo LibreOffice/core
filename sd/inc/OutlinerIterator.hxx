@@ -223,7 +223,7 @@ private:
             This specifies at which object the iterator points initially.
     */
     static Iterator CreateSelectionIterator (
-        const ::std::vector<::tools::WeakReference<SdrObject>>& rObjectList,
+        const ::std::vector<::unotools::WeakReference<SdrObject>>& rObjectList,
         SdDrawDocument* pDocument,
         const std::shared_ptr<ViewShell>& rpViewShell,
         bool bDirectionIsForward,
@@ -296,7 +296,7 @@ public:
     bool operator== (const IteratorPosition& aPosition) const;
 
     /// Pointer to the actual <type>SdrObject</type> object.
-    ::tools::WeakReference<SdrObject> mxObject;
+    ::unotools::WeakReference<SdrObject> mxObject;
 
     /// Number of the actual SdrText from the current <type>SdrObject</type>
     sal_Int32 mnText;
