@@ -1067,7 +1067,7 @@ bool SpellDialog::GetNextSentence_Impl(std::unique_ptr<UndoChangeGroupGuard>* pG
                 }
 
                 if (elem.bIsField)
-                    m_xSentenceED->SetAttrib(SvxBackgroundColorItem(COL_LIGHTGRAY, EE_CHAR_BKGCOLOR), nStartPosition, nEndPosition);
+                    m_xSentenceED->SetAttrib(SvxColorItem(COL_LIGHTGRAY, EE_CHAR_BKGCOLOR), nStartPosition, nEndPosition);
                 m_xSentenceED->SetAttrib(SvxLanguageItem(elem.eLanguage, EE_CHAR_LANGUAGE), nStartPosition, nEndPosition);
                 nStartPosition = nEndPosition;
             }

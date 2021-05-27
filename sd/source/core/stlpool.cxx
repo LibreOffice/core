@@ -239,7 +239,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(std::u16string_view rLayoutName, 
                 rSet.Put( SvxEmphasisMarkItem(FontEmphasisMark::NONE, EE_CHAR_EMPHASISMARK ) );
                 rSet.Put( SvxCharReliefItem(FontRelief::NONE, EE_CHAR_RELIEF) );
                 rSet.Put( SvxColorItem( COL_AUTO, EE_CHAR_COLOR) );
-                rSet.Put( SvxBackgroundColorItem( COL_AUTO, EE_CHAR_BKGCOLOR )  );
+                rSet.Put( SvxColorItem( COL_AUTO, EE_CHAR_BKGCOLOR )  );
                 rSet.Put( XLineStyleItem(css::drawing::LineStyle_NONE) );
                 rSet.Put( XFillStyleItem(drawing::FillStyle_NONE) );
                 rSet.Put( SdrTextFitToSizeTypeItem(drawing::TextFitToSizeType_AUTOFIT) );
@@ -354,7 +354,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(std::u16string_view rLayoutName, 
         rTitleSet.Put( SvxEmphasisMarkItem(FontEmphasisMark::NONE, EE_CHAR_EMPHASISMARK ) );
         rTitleSet.Put( SvxCharReliefItem(FontRelief::NONE, EE_CHAR_RELIEF ) );
         rTitleSet.Put(SvxColorItem( COL_AUTO, EE_CHAR_COLOR ));
-        rTitleSet.Put(SvxBackgroundColorItem( COL_AUTO, EE_CHAR_BKGCOLOR ));
+        rTitleSet.Put(SvxColorItem( COL_AUTO, EE_CHAR_BKGCOLOR ));
         rTitleSet.Put(SvxAdjustItem(SvxAdjust::Center, EE_PARA_JUST ));
         rTitleSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
         // #i16874# enable kerning by default but only for new documents
@@ -400,7 +400,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(std::u16string_view rLayoutName, 
         rSubtitleSet.Put( SvxEmphasisMarkItem(FontEmphasisMark::NONE, EE_CHAR_EMPHASISMARK ) );
         rSubtitleSet.Put( SvxCharReliefItem(FontRelief::NONE, EE_CHAR_RELIEF ) );
         rSubtitleSet.Put(SvxColorItem( COL_AUTO, EE_CHAR_COLOR ));
-        rSubtitleSet.Put(SvxBackgroundColorItem( COL_AUTO, EE_CHAR_BKGCOLOR ));
+        rSubtitleSet.Put(SvxColorItem( COL_AUTO, EE_CHAR_BKGCOLOR ));
         rSubtitleSet.Put(SvxAdjustItem(SvxAdjust::Center, EE_PARA_JUST ));
         rSubtitleSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
         // #i16874# enable kerning by default but only for new documents
@@ -449,7 +449,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(std::u16string_view rLayoutName, 
         rNotesSet.Put( SvxEmphasisMarkItem(FontEmphasisMark::NONE, EE_CHAR_EMPHASISMARK ) );
         rNotesSet.Put( SvxCharReliefItem(FontRelief::NONE, EE_CHAR_RELIEF) );
         rNotesSet.Put( SvxColorItem( COL_AUTO, EE_CHAR_COLOR ) );
-        rNotesSet.Put( SvxBackgroundColorItem( COL_AUTO, EE_CHAR_BKGCOLOR ) );
+        rNotesSet.Put( SvxColorItem( COL_AUTO, EE_CHAR_BKGCOLOR ) );
         rNotesSet.Put( SvxLRSpaceItem( 0, 0, 600, -600, EE_PARA_LRSPACE  ) );
         // #i16874# enable kerning by default but only for new documents
         rNotesSet.Put( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
