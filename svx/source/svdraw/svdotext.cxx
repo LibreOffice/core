@@ -1726,14 +1726,34 @@ SdrTextAniDirection SdrTextObj::GetTextAniDirection() const
     return GetObjectItemSet().Get(SDRATTR_TEXT_ANIDIRECTION).GetValue();
 }
 
+bool SdrTextObj::HasTextColumnsNumber() const
+{
+    return GetObjectItemSet().HasItem(SDRATTR_TEXTCOLUMNS_NUMBER);
+}
+
 sal_Int16 SdrTextObj::GetTextColumnsNumber() const
 {
     return GetObjectItemSet().Get(SDRATTR_TEXTCOLUMNS_NUMBER).GetValue();
 }
 
+void SdrTextObj::SetTextColumnsNumber(sal_Int16 nColumns)
+{
+    SetObjectItem(SfxInt16Item(SDRATTR_TEXTCOLUMNS_NUMBER, nColumns));
+}
+
+bool SdrTextObj::HasTextColumnsSpacing() const
+{
+    return GetObjectItemSet().HasItem(SDRATTR_TEXTCOLUMNS_SPACING);
+}
+
 sal_Int32 SdrTextObj::GetTextColumnsSpacing() const
 {
     return GetObjectItemSet().Get(SDRATTR_TEXTCOLUMNS_SPACING).GetValue();
+}
+
+void SdrTextObj::SetTextColumnsSpacing(sal_Int32 nSpacing)
+{
+    SetObjectItem(SdrMetricItem(SDRATTR_TEXTCOLUMNS_SPACING, nSpacing));
 }
 
 // Get necessary data for text scroll animation. ATM base it on a Text-Metafile and a

@@ -60,6 +60,7 @@
 #include <com/sun/star/drawing/TextureProjectionMode.hpp>
 #include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
+#include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/CameraGeometry.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
@@ -193,7 +194,9 @@
 #define OWN_ATTR_SIGNATURELINE_IS_SIGNED        (OWN_ATTR_VALUE_START+103)
 #define OWN_ATTR_QRCODE                         (OWN_ATTR_VALUE_START+104)
 #define OWN_ATTR_TEXTFITTOSIZESCALE             (OWN_ATTR_VALUE_START+105)
-// ATTENTION: maximum is OWN_ATTR_VALUE_START+105 svx, see include/svl/solar.hrc
+#define OWN_ATTR_TEXTCOLUMNS                    (OWN_ATTR_VALUE_START+106)
+// ATTENTION: current maximum is OWN_ATTR_VALUE_START+106 svx; wnen adding values, update
+// OWN_ATTR_VALUE_END in include/svl/solar.hrc accordingly
 
 // #FontWork#
 #define FONTWORK_PROPERTIES \
@@ -316,6 +319,7 @@
     { u"" UNO_NAME_TEXT_VERTADJUST,       SDRATTR_TEXT_VERTADJUST,        cppu::UnoType<css::drawing::TextVerticalAdjust>::get(),    0,      0},\
     { u"" UNO_NAME_TEXT_WORDWRAP,         SDRATTR_TEXT_WORDWRAP,          cppu::UnoType<bool>::get(),        0,      0}, \
     { u"" UNO_NAME_TEXT_CHAINNEXTNAME,    SDRATTR_TEXT_CHAINNEXTNAME,     ::cppu::UnoType<OUString>::get(),        0,      0}, \
+    { u"TextColumns",                     OWN_ATTR_TEXTCOLUMNS,           cppu::UnoType<css::text::XTextColumns>::get(), 0, 0 }, \
     SVX_UNOEDIT_CHAR_PROPERTIES, \
     SVX_UNOEDIT_PARA_PROPERTIES,
 
