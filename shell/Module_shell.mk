@@ -104,6 +104,7 @@ $(eval $(call gb_Module_add_targets,shell,\
 ))
 endif
 
+ifeq (,$(filter EMSCRIPTEN,$(OS)))
 ifeq ($(filter DESKTOP,$(BUILD_TYPE)),DESKTOP)
 
 $(eval $(call gb_Module_add_targets,shell,\
@@ -111,17 +112,16 @@ $(eval $(call gb_Module_add_targets,shell,\
 ))
 
 ifneq ($(OS),WNT)
-
 $(eval $(call gb_Module_add_targets,shell,\
 	StaticLibrary_xmlparser \
 	Executable_uri_encode \
 	Library_cmdmail \
 	$(if $(ENABLE_MACOSX_SANDBOX),,Package_senddoc) \
 ))
-
 endif
 
-endif
+endif # DESKTOP
+endif # !EMSCRIPTEN
 
 $(eval $(call gb_Module_add_l10n_targets,shell,\
     AllLangMoTarget_shell \

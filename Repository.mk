@@ -82,6 +82,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     mtfdemo \
     visualbackendtest \
 	$(if $(and $(ENABLE_GTK3), $(filter LINUX %BSD SOLARIS,$(OS))), gtktiledviewer) \
+    $(if $(filter EMSCRIPTEN,$(OS)),wasm-qt5-mandelbrot) \
 ))
 
 $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \

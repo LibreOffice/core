@@ -5,31 +5,27 @@ $ emrun --serve_after_close instdir/program/ui-previewer.html
 
 The ui-previewer "binary" will "crash" with memory alignment problems.
 
-You can run the WASM mandelbrot Qt example, if you copy its HTML
-and the qtloader.js from the Qt's example folder after build with:
+You can run the WASM mandelbrot Qt example:
 
-$ emrun --serve_after_close workdir/LinkTarget/Executable/mandelbrot.html
+$ emrun --serve_after_close workdir/LinkTarget/Executable/qt_mandelbrot.html
 
 REMINDER: always start new tabs in the browser, reload might fail / cache!
 
 
 = Setup for the LO WASM build (with Qt) =
 
-We're using Qt 5.15 with the officially supported emscripten v1.39.8.
-But there are several potential problems with threads and exceptions, so this will likely
-change later to a newer emscripten.
+We're using Qt 5.15 with current upstream emscripten, currently 2.0.23.
 
-Qt WASM is not yet used with LO, just if you're wondering!
+++ See below under Docker build for another build option ++
 
- ++ See below under Docker build for another build option ++
 
 == Setup emscripten ==
 
 https://emscripten.org/docs/getting_started/index.html
 
 git clone https://github.com/emscripten-core/emsdk.git
-./emsdk install 1.39.8
-./emsdk activate --embedded 1.39.8
+./emsdk install 2.0.23
+./emsdk activate --embedded 2.0.23
 
 Example bashrc scriptlet:
 
@@ -49,10 +45,21 @@ git clone https://github.com/qt/qt5.git
 cd qt5
 git checkout v5.15.2
 ./init-repository
-./configure -xplatform wasm-emscripten -feature-thread -compile-examples -prefix $PWD/qtbase
-make -j<CORES> module-qtbase module-qtdeclarative
 
-Building with examples will break with some of them, but at that point Qt already works.
+./configure -xplatform wasm-emscripten -feature-thread -prefix $PWD/qtbase
+
+Optionally you can add the configure flag "-compile-examples". But then you also have to
+patch at least mkspecs/wasm-emscripten/qmake.conf with EXIT_RUNTIME=0, otherwise they will
+fail to run. In addition, building with examples will break with some of them, but at that
+point Qt already works and also most examples.
+
+Linking takes quite a long time, because emscripten-finalize rewrites the whole WASM files
+with some options. This way the LO WASM needs at least 64GB RAM. For faster link times add
+"-s WASM_BIGINT=1", change to ASSERTIONS=1 nd use -g3 to prevent rewriting the WASM file
+and generating source maps (see emscripten.py, finalize_wasm, and avoid modify_wasm = True).
+This is just needed for Qt examples, as LO already uses the correct flags!
+
+make -j<CORES> module-qtbase module-qtdeclarative
 
 At some point Qt configure failed for me with:
 "Checking for target architecture... Project ERROR: target architecture detection binary not found."
@@ -74,10 +81,6 @@ autogen.sh is patched to use emconfigure. That basically sets various environmen
 especially EMMAKEN_JUST_CONFIGURE, which will create the correct output file names, checked by
 configure (a.out).
 
-There's a distro config for WASM (work in progress), that gets your
-defaults right (and currently disables a ton of 3rd party stuff which
-is not essential).
-
 Recommended configure setup is thusly:
 
 # grab defaults
@@ -88,7 +91,27 @@ QT5DIR=/dir/of/git_qt5/qtbase
 
 # if you want to use ccache on both sides of the build
 --with-build-platform-configure-options=--enable-ccache
---enable-ccache
+
+# Include all build components, not just the manual list
+#--enable-services-rdb-from-build
+
+-----------
+
+FWIW: it's also possible to build an almost static Linux LibreOffice by just using
+--disable-dynloading. System externals are still linked dynamically, but everything
+else is static. Then there is --enable-wasm-strip for a smaller feature set.
+
+
+== Debugging setup ==
+
+Since a few months you can use DWARF information embedded by LLVM into the WASM to
+debug WASM in Chrome. You need to enable an experimental feature and install an
+additional extension. The whole setup is described in:
+
+https://developer.chrome.com/blog/wasm-debugging-2020/
+
+This way you don't need source maps (much faster linking!) and can resolve local WASM
+variables to C++ names!
 
 
 == Using Docker to cross-build with emscripten ==

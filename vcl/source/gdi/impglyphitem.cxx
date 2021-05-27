@@ -19,10 +19,6 @@
 
 #include <impglyphitem.hxx>
 
-#if (defined UNX && !defined MACOSX && !defined IOS)
-#include <unx/freetype_glyphcache.hxx>
-#endif
-
 SalLayoutGlyphs::SalLayoutGlyphs() {}
 
 SalLayoutGlyphs::~SalLayoutGlyphs() {}

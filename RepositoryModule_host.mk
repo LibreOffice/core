@@ -184,6 +184,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	uui \
 	vbahelper \
 	vcl \
+    $(if $(filter EMSCRIPTEN,$(OS)),wasm-qt) \
 	wizards \
 	writerfilter \
 	writerperfect \

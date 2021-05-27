@@ -27,7 +27,11 @@
 #include <fcntl.h>
 #include <pthread.h>
 #include <sys/time.h>
+#ifdef EMSCRIPTEN
+#include <poll.h>
+#else
 #include <sys/poll.h>
+#endif
 
 #include <sal/types.h>
 #include <sal/log.hxx>

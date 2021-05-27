@@ -8,13 +8,9 @@
 
 $(eval $(call gb_Module_Module,wasm-qt))
 
-ifeq ($(OS),EMSCRIPTEN)
-
 $(eval $(call gb_Module_add_targets,wasm-qt,\
     CustomTarget_wasm-qt5-mandelbrot_moc \
     Executable_wasm-qt5-mandelbrot \
 ))
-
-endif
 
 # vim: set noet sw=4 ts=4:
