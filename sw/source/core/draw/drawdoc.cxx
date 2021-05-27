@@ -27,6 +27,7 @@
 #include <dpage.hxx>
 #include <docsh.hxx>
 #include <hintids.hxx>
+#include <dcontact.hxx>
 #include <DocumentSettingManager.hxx>
 
 using namespace com::sun::star;
@@ -83,6 +84,27 @@ SwDrawModel::SwDrawModel(SwDoc& rDoc)
 SwDrawModel::~SwDrawModel()
 {
     Broadcast(SdrHint(SdrHintKind::ModelCleared));
+
+    // We have a nasty situation, where SwDrawVirtObj has a SwAnchoredObject field,
+    // which points back to the SwDrawVirtObj via the rtl::Reference<SdrObject> mpDrawObj field.
+    // Which creates a reference loop.
+    // But other code also uses SwAnchoredObject, and does
+    // so in a way which expects the mpDrawObj to keep things alive.
+    // So we cannot change that.
+    // So to prevent leaks on shutdown, we have to remove all of the SwDrawVirtObj objects.
+    sal_uInt16 nPageCount=GetPageCount();
+    for (sal_uInt16 i=0; i < nPageCount; ++i)
+    {
+        SdrPage* pPage = GetPage(i);
+        const size_t nObjCount = pPage->GetObjCount();
+        for (size_t j=0; j < nObjCount; ++j)
+        {
+            SdrObject* pSdrObj = pPage->GetObj(j);
+            SwDrawContact* pContact = dynamic_cast<SwDrawContact*>(pSdrObj->GetUserCall());
+            if (pContact)
+                pContact->RemoveAllVirtObjs();
+        }
+    }
 
     ClearModel(true);
 }

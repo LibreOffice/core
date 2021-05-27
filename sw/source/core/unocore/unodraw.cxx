@@ -298,11 +298,11 @@ uno::Reference<drawing::XShape> SwFmDrawPage::GetShape(SdrObject* pObj)
     SwFmDrawPage* pPage = dynamic_cast<SwFmDrawPage*>(pFormat);
     if(!pPage || pPage->m_vShapes.empty())
         return uno::Reference<drawing::XShape>(pObj->getUnoShape(), uno::UNO_QUERY);
-    for(auto pShape : pPage->m_vShapes)
+    for(const auto & pShape : pPage->m_vShapes)
     {
         SvxShape* pSvxShape = pShape->GetSvxShape();
         if (pSvxShape && pSvxShape->GetSdrObject() == pObj)
-            return uno::Reference<drawing::XShape>(static_cast<::cppu::OWeakObject*>(pShape), uno::UNO_QUERY);
+            return pShape;
     }
     return nullptr;
 }
@@ -373,7 +373,7 @@ uno::Reference< drawing::XShape > SwFmDrawPage::CreateShape( SdrObject *pObj ) c
                 pShape = new SwXShape(xCreate, nullptr);
             xRet = pShape;
         }
-        const_cast<std::vector<SwXShape*>*>(&m_vShapes)->push_back(pShape.get());
+        const_cast<std::vector<rtl::Reference<SwXShape>>*>(&m_vShapes)->push_back(pShape);
         pShape->m_pPage = this;
     }
     return xRet;
@@ -961,7 +961,6 @@ SwXShape::~SwXShape()
     EndListeningAll();
     if(m_pPage)
        const_cast<SwFmDrawPage*>(m_pPage)->RemoveShape(this);
-    m_pPage = nullptr;
 }
 
 uno::Any SwXShape::queryInterface( const uno::Type& aType )
@@ -2182,8 +2181,11 @@ void SwXShape::dispose()
             xComp->dispose();
     }
     if(m_pPage)
-        const_cast<SwFmDrawPage*>(m_pPage)->RemoveShape(this);
-    m_pPage = nullptr;
+    {
+        auto pPage = const_cast<SwFmDrawPage*>(m_pPage);
+        m_pPage = nullptr;
+        pPage->RemoveShape(this);
+    }
 }
 
 void SwXShape::addEventListener(

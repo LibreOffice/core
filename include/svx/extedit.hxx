@@ -13,6 +13,7 @@
 #include <svx/svxdllapi.h>
 #include <svl/lstner.hxx>
 #include <rtl/ustring.hxx>
+#include <rtl/ref.hxx>
 #include <memory>
 
 class Graphic;
@@ -41,6 +42,7 @@ public:
 
 class FmFormView;
 class SdrObject;
+class SdrGrafObj;
 
 class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SdrExternalToolEdit final
 :   public ExternalToolEdit
@@ -48,7 +50,7 @@ class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SdrExternalToolEdit final
 {
 private:
     FmFormView* m_pView;
-    SdrObject*  m_pObj;
+    rtl::Reference<SdrGrafObj>  m_pObj;
 
     SAL_DLLPRIVATE virtual void Update(Graphic&) override;
     SAL_DLLPRIVATE virtual void Notify(SfxBroadcaster&, const SfxHint&) override;
@@ -56,7 +58,7 @@ private:
 public:
     SdrExternalToolEdit(
         FmFormView* pView,
-        SdrObject* pObj);
+        SdrGrafObj* pObj);
 };
 
 #endif

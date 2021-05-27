@@ -196,9 +196,11 @@ OUString SdrUndoGroup::GetSdrRepeatComment() const
 
 SdrUndoObj::SdrUndoObj(SdrObject& rNewObj)
 :   SdrUndoAction(rNewObj.getSdrModelFromSdrObject())
-    ,pObj(&rNewObj)
+    ,mxObj(&rNewObj)
 {
 }
+
+SdrUndoObj::~SdrUndoObj() {}
 
 OUString SdrUndoObj::GetDescriptionStringForObject( const SdrObject& _rForObject, TranslateId pStrCacheID, bool bRepeat )
 {
@@ -216,18 +218,18 @@ OUString SdrUndoObj::GetDescriptionStringForObject( const SdrObject& _rForObject
 
 OUString SdrUndoObj::ImpGetDescriptionStr(TranslateId pStrCacheID, bool bRepeat) const
 {
-    if ( pObj )
-        return GetDescriptionStringForObject( *pObj, pStrCacheID, bRepeat );
+    if ( mxObj )
+        return GetDescriptionStringForObject( *mxObj, pStrCacheID, bRepeat );
     return OUString();
 }
 
 // common call method for possible change of the page when UNDO/REDO is triggered
 void SdrUndoObj::ImpShowPageOfThisObject()
 {
-    if(pObj && pObj->IsInserted() && pObj->getSdrPageFromSdrObject())
+    if(mxObj && mxObj->IsInserted() && mxObj->getSdrPageFromSdrObject())
     {
-        SdrHint aHint(SdrHintKind::SwitchToPage, *pObj, pObj->getSdrPageFromSdrObject());
-        pObj->getSdrModelFromSdrObject().Broadcast(aHint);
+        SdrHint aHint(SdrHintKind::SwitchToPage, *mxObj, mxObj->getSdrPageFromSdrObject());
+        mxObj->getSdrModelFromSdrObject().Broadcast(aHint);
     }
 }
 
@@ -255,12 +257,12 @@ SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, bool bStyleSheet1, bool bSave
 
     SdrObjList* pOL = rNewObj.GetSubList();
     bool bIsGroup(pOL!=nullptr && pOL->GetObjCount());
-    bool bIs3DScene(bIsGroup && dynamic_cast< E3dScene* >(pObj) !=  nullptr);
+    bool bIs3DScene(bIsGroup && dynamic_cast< E3dScene* >(mxObj.get()) !=  nullptr);
 
     if(bIsGroup)
     {
         // it's a group object!
-        pUndoGroup.reset(new SdrUndoGroup(pObj->getSdrModelFromSdrObject()));
+        pUndoGroup.reset(new SdrUndoGroup(mxObj->getSdrModelFromSdrObject()));
         const size_t nObjCount(pOL->GetObjCount());
 
         for(size_t nObjNum = 0; nObjNum < nObjCount; ++nObjNum)
@@ -273,14 +275,14 @@ SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, bool bStyleSheet1, bool bSave
     if(bIsGroup && !bIs3DScene)
         return;
 
-    moUndoSet.emplace( pObj->GetMergedItemSet() );
+    moUndoSet.emplace( mxObj->GetMergedItemSet() );
 
     if(bStyleSheet)
-        mxUndoStyleSheet = pObj->GetStyleSheet();
+        mxUndoStyleSheet = mxObj->GetStyleSheet();
 
     if(bSaveText)
     {
-        auto p = pObj->GetOutlinerParaObject();
+        auto p = mxObj->GetOutlinerParaObject();
         if(p)
             pTextUndo = *p;
     }
@@ -297,8 +299,8 @@ SdrUndoAttrObj::~SdrUndoAttrObj()
 
 void SdrUndoAttrObj::Undo()
 {
-    E3DModifySceneSnapRectUpdater aUpdater(pObj);
-    bool bIs3DScene(dynamic_cast< E3dScene* >(pObj) !=  nullptr);
+    E3DModifySceneSnapRectUpdater aUpdater(mxObj.get());
+    bool bIs3DScene(dynamic_cast< E3dScene* >(mxObj.get()) !=  nullptr);
 
     // Trigger PageChangeCall
     ImpShowPageOfThisObject();
@@ -309,15 +311,15 @@ void SdrUndoAttrObj::Undo()
         {
             bHaveToTakeRedoSet = false;
 
-            moRedoSet.emplace( pObj->GetMergedItemSet() );
+            moRedoSet.emplace( mxObj->GetMergedItemSet() );
 
             if(bStyleSheet)
-                mxRedoStyleSheet = pObj->GetStyleSheet();
+                mxRedoStyleSheet = mxObj->GetStyleSheet();
 
             if(pTextUndo)
             {
                 // #i8508#
-                auto p = pObj->GetOutlinerParaObject();
+                auto p = mxObj->GetOutlinerParaObject();
                 if(p)
                     pTextRedo = *p;
             }
@@ -325,13 +327,13 @@ void SdrUndoAttrObj::Undo()
 
         if(bStyleSheet)
         {
-            mxRedoStyleSheet = pObj->GetStyleSheet();
+            mxRedoStyleSheet = mxObj->GetStyleSheet();
             SfxStyleSheet* pSheet = dynamic_cast< SfxStyleSheet* >(mxUndoStyleSheet.get());
 
-            if(pSheet && pObj->getSdrModelFromSdrObject().GetStyleSheetPool())
+            if(pSheet && mxObj->getSdrModelFromSdrObject().GetStyleSheetPool())
             {
-                ensureStyleSheetInStyleSheetPool(*pObj->getSdrModelFromSdrObject().GetStyleSheetPool(), *pSheet);
-                pObj->SetStyleSheet(pSheet, true);
+                ensureStyleSheetInStyleSheetPool(*mxObj->getSdrModelFromSdrObject().GetStyleSheetPool(), *pSheet);
+                mxObj->SetStyleSheet(pSheet, true);
             }
             else
             {
@@ -339,7 +341,7 @@ void SdrUndoAttrObj::Undo()
             }
         }
 
-        sdr::properties::ItemChangeBroadcaster aItemChange(*pObj);
+        sdr::properties::ItemChangeBroadcaster aItemChange(*mxObj);
 
         // Since ClearItem sets back everything to normal
         // it also sets fit-to-size text to non-fit-to-size text and
@@ -347,13 +349,13 @@ void SdrUndoAttrObj::Undo()
         // losing the geometry size info for the object when it is
         // laid out again from AdjustTextFrameWidthAndHeight(). This makes
         // rescuing the size of the object necessary.
-        const tools::Rectangle aSnapRect = pObj->GetSnapRect();
+        const tools::Rectangle aSnapRect = mxObj->GetSnapRect();
         // SdrObjCustomShape::NbcSetSnapRect needs logic instead of snap rect
-        const tools::Rectangle aLogicRect = pObj->GetLogicRect();
+        const tools::Rectangle aLogicRect = mxObj->GetLogicRect();
 
         if(moUndoSet)
         {
-            if(dynamic_cast<const SdrCaptionObj*>( pObj) !=  nullptr)
+            if(dynamic_cast<const SdrCaptionObj*>( mxObj.get() ) !=  nullptr)
             {
                 // do a more smooth item deletion here, else the text
                 // rect will be reformatted, especially when information regarding
@@ -367,7 +369,7 @@ void SdrUndoAttrObj::Undo()
                 {
                     if(SfxItemState::SET != aIter.GetItemState(false))
                     {
-                        pObj->ClearMergedItem(nWhich);
+                        mxObj->ClearMergedItem(nWhich);
                     }
 
                     nWhich = aIter.NextWhich();
@@ -375,26 +377,26 @@ void SdrUndoAttrObj::Undo()
             }
             else
             {
-                pObj->ClearMergedItem();
+                mxObj->ClearMergedItem();
             }
 
-            pObj->SetMergedItemSet(*moUndoSet);
+            mxObj->SetMergedItemSet(*moUndoSet);
         }
 
         // Restore previous size here when it was changed.
-        if(aSnapRect != pObj->GetSnapRect())
+        if(aSnapRect != mxObj->GetSnapRect())
         {
-            if(dynamic_cast<const SdrObjCustomShape*>(pObj))
-                pObj->NbcSetSnapRect(aLogicRect);
+            if(dynamic_cast<const SdrObjCustomShape*>(mxObj.get()))
+                mxObj->NbcSetSnapRect(aLogicRect);
             else
-                pObj->NbcSetSnapRect(aSnapRect);
+                mxObj->NbcSetSnapRect(aSnapRect);
         }
 
-        pObj->GetProperties().BroadcastItemChange(aItemChange);
+        mxObj->GetProperties().BroadcastItemChange(aItemChange);
 
         if(pTextUndo)
         {
-            pObj->SetOutlinerParaObject(*pTextUndo);
+            mxObj->SetOutlinerParaObject(*pTextUndo);
         }
     }
 
@@ -406,20 +408,20 @@ void SdrUndoAttrObj::Undo()
 
 void SdrUndoAttrObj::Redo()
 {
-    E3DModifySceneSnapRectUpdater aUpdater(pObj);
-    bool bIs3DScene(dynamic_cast< E3dScene* >(pObj) !=  nullptr);
+    E3DModifySceneSnapRectUpdater aUpdater(mxObj.get());
+    bool bIs3DScene(dynamic_cast< E3dScene* >(mxObj.get()) !=  nullptr);
 
     if(!pUndoGroup || bIs3DScene)
     {
         if(bStyleSheet)
         {
-            mxUndoStyleSheet = pObj->GetStyleSheet();
+            mxUndoStyleSheet = mxObj->GetStyleSheet();
             SfxStyleSheet* pSheet = dynamic_cast< SfxStyleSheet* >(mxRedoStyleSheet.get());
 
-            if(pSheet && pObj->getSdrModelFromSdrObject().GetStyleSheetPool())
+            if(pSheet && mxObj->getSdrModelFromSdrObject().GetStyleSheetPool())
             {
-                ensureStyleSheetInStyleSheetPool(*pObj->getSdrModelFromSdrObject().GetStyleSheetPool(), *pSheet);
-                pObj->SetStyleSheet(pSheet, true);
+                ensureStyleSheetInStyleSheetPool(*mxObj->getSdrModelFromSdrObject().GetStyleSheetPool(), *pSheet);
+                mxObj->SetStyleSheet(pSheet, true);
             }
             else
             {
@@ -427,14 +429,14 @@ void SdrUndoAttrObj::Redo()
             }
         }
 
-        sdr::properties::ItemChangeBroadcaster aItemChange(*pObj);
+        sdr::properties::ItemChangeBroadcaster aItemChange(*mxObj);
 
-        const tools::Rectangle aSnapRect = pObj->GetSnapRect();
-        const tools::Rectangle aLogicRect = pObj->GetLogicRect();
+        const tools::Rectangle aSnapRect = mxObj->GetSnapRect();
+        const tools::Rectangle aLogicRect = mxObj->GetLogicRect();
 
         if(moRedoSet)
         {
-            if(dynamic_cast<const SdrCaptionObj*>( pObj) !=  nullptr)
+            if(dynamic_cast<const SdrCaptionObj*>( mxObj.get() ) !=  nullptr)
             {
                 // do a more smooth item deletion here, else the text
                 // rect will be reformatted, especially when information regarding
@@ -448,7 +450,7 @@ void SdrUndoAttrObj::Redo()
                 {
                     if(SfxItemState::SET != aIter.GetItemState(false))
                     {
-                        pObj->ClearMergedItem(nWhich);
+                        mxObj->ClearMergedItem(nWhich);
                     }
 
                     nWhich = aIter.NextWhich();
@@ -456,27 +458,27 @@ void SdrUndoAttrObj::Redo()
             }
             else
             {
-                pObj->ClearMergedItem();
+                mxObj->ClearMergedItem();
             }
 
-            pObj->SetMergedItemSet(*moRedoSet);
+            mxObj->SetMergedItemSet(*moRedoSet);
         }
 
         // Restore previous size here when it was changed.
-        if(aSnapRect != pObj->GetSnapRect())
+        if(aSnapRect != mxObj->GetSnapRect())
         {
-            if(dynamic_cast<const SdrObjCustomShape*>(pObj))
-                pObj->NbcSetSnapRect(aLogicRect);
+            if(dynamic_cast<const SdrObjCustomShape*>(mxObj.get()))
+                mxObj->NbcSetSnapRect(aLogicRect);
             else
-                pObj->NbcSetSnapRect(aSnapRect);
+                mxObj->NbcSetSnapRect(aSnapRect);
         }
 
-        pObj->GetProperties().BroadcastItemChange(aItemChange);
+        mxObj->GetProperties().BroadcastItemChange(aItemChange);
 
         // #i8508#
         if(pTextRedo)
         {
-            pObj->SetOutlinerParaObject(*pTextRedo);
+            mxObj->SetOutlinerParaObject(*pTextRedo);
         }
     }
 
@@ -521,12 +523,12 @@ void SdrUndoMoveObj::Undo()
     // Trigger PageChangeCall
     ImpShowPageOfThisObject();
 
-    pObj->Move(Size(-aDistance.Width(),-aDistance.Height()));
+    mxObj->Move(Size(-aDistance.Width(),-aDistance.Height()));
 }
 
 void SdrUndoMoveObj::Redo()
 {
-    pObj->Move(Size(aDistance.Width(),aDistance.Height()));
+    mxObj->Move(Size(aDistance.Width(),aDistance.Height()));
 
     // Trigger PageChangeCall
     ImpShowPageOfThisObject();
@@ -563,7 +565,7 @@ SdrUndoGeoObj::SdrUndoGeoObj(SdrObject& rNewObj)
         // this is a group object!
         // If this were 3D scene, we'd only add an Undo for the scene itself
         // (which we do elsewhere).
-        pUndoGroup.reset(new SdrUndoGroup(pObj->getSdrModelFromSdrObject()));
+        pUndoGroup.reset(new SdrUndoGroup(mxObj->getSdrModelFromSdrObject()));
         const size_t nObjCount = pOL->GetObjCount();
         for (size_t nObjNum = 0; nObjNum<nObjCount; ++nObjNum) {
             pUndoGroup->AddAction(std::make_unique<SdrUndoGeoObj>(*pOL->GetObj(nObjNum)));
@@ -571,7 +573,7 @@ SdrUndoGeoObj::SdrUndoGeoObj(SdrObject& rNewObj)
     }
     else
     {
-        pUndoGeo = pObj->GetGeoData();
+        pUndoGeo = mxObj->GetGeoData();
     }
 }
 
@@ -592,16 +594,16 @@ void SdrUndoGeoObj::Undo()
         pUndoGroup->Undo();
 
         // only repaint, no objectchange
-        pObj->ActionChanged();
+        mxObj->ActionChanged();
     }
     else
     {
-        pRedoGeo = pObj->GetGeoData();
+        pRedoGeo = mxObj->GetGeoData();
 
-        auto pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pObj);
+        auto pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(mxObj.get());
         if (pTableObj && mbSkipChangeLayout)
             pTableObj->SetSkipChangeLayout(true);
-        pObj->SetGeoData(*pUndoGeo);
+        mxObj->SetGeoData(*pUndoGeo);
         if (pTableObj && mbSkipChangeLayout)
             pTableObj->SetSkipChangeLayout(false);
     }
@@ -614,12 +616,12 @@ void SdrUndoGeoObj::Redo()
         pUndoGroup->Redo();
 
         // only repaint, no objectchange
-        pObj->ActionChanged();
+        mxObj->ActionChanged();
     }
     else
     {
-        pUndoGeo = pObj->GetGeoData();
-        pObj->SetGeoData(*pRedoGeo);
+        pUndoGeo = mxObj->GetGeoData();
+        mxObj->SetGeoData(*pRedoGeo);
     }
 
     // Trigger PageChangeCall
@@ -646,15 +648,15 @@ SdrUndoDiagramModelData::~SdrUndoDiagramModelData()
 
 void SdrUndoDiagramModelData::implUndoRedo(bool bUndo)
 {
-    if(nullptr == pObj)
+    if(!mxObj)
         return;
 
-    if(!pObj->isDiagram())
+    if(!mxObj->isDiagram())
         return;
 
-    pObj->getDiagramHelper()->applyDiagramDataState(
+    mxObj->getDiagramHelper()->applyDiagramDataState(
         bUndo ? m_aStartState : m_aEndState);
-    pObj->getDiagramHelper()->reLayout(*static_cast<SdrObjGroup*>(pObj));
+    mxObj->getDiagramHelper()->reLayout(*static_cast<SdrObjGroup*>(mxObj.get()));
 }
 
 void SdrUndoDiagramModelData::Undo()
@@ -674,46 +676,29 @@ OUString SdrUndoDiagramModelData::GetComment() const
 
 SdrUndoObjList::SdrUndoObjList(SdrObject& rNewObj, bool bOrdNumDirect)
     : SdrUndoObj(rNewObj)
-    , bOwner(false)
 {
-    pObjList=pObj->getParentSdrObjListFromSdrObject();
+    pObjList=mxObj->getParentSdrObjListFromSdrObject();
     if (bOrdNumDirect)
     {
-        nOrdNum=pObj->GetOrdNumDirect();
+        nOrdNum=mxObj->GetOrdNumDirect();
     }
     else
     {
-        nOrdNum=pObj->GetOrdNum();
+        nOrdNum=mxObj->GetOrdNum();
     }
 }
 
 SdrUndoObjList::~SdrUndoObjList()
 {
-    SolarMutexGuard aGuard;
-
-    if (pObj!=nullptr && IsOwner())
-    {
-        // Attribute have to go back to the regular Pool
-        SetOwner(false);
-
-        // now delete
-        SdrObject::Free( pObj );
-    }
 }
-
-void SdrUndoObjList::SetOwner(bool bNew)
-{
-    bOwner = bNew;
-}
-
 
 void SdrUndoRemoveObj::Undo()
 {
     // Trigger PageChangeCall
     ImpShowPageOfThisObject();
 
-    DBG_ASSERT(!pObj->IsInserted(),"UndoRemoveObj: pObj has already been inserted.");
-    if (pObj->IsInserted())
+    DBG_ASSERT(!mxObj->IsInserted(),"UndoRemoveObj: mxObj has already been inserted.");
+    if (mxObj->IsInserted())
         return;
 
     // #i11426#
@@ -727,23 +712,23 @@ void SdrUndoRemoveObj::Undo()
     }
 
     E3DModifySceneSnapRectUpdater aUpdater(pObjList->getSdrObjectFromSdrObjList());
-    pObjList->InsertObject(pObj,nOrdNum);
+    pObjList->InsertObject(mxObj.get(), nOrdNum);
 
     // #i11426#
     if(aOwnerAnchorPos.X() || aOwnerAnchorPos.Y())
     {
-        pObj->NbcSetAnchorPos(aOwnerAnchorPos);
+        mxObj->NbcSetAnchorPos(aOwnerAnchorPos);
     }
 }
 
 void SdrUndoRemoveObj::Redo()
 {
-    DBG_ASSERT(pObj->IsInserted(),"RedoRemoveObj: pObj is not inserted.");
-    if (pObj->IsInserted())
+    DBG_ASSERT(mxObj->IsInserted(),"RedoRemoveObj: mxObj is not inserted.");
+    if (mxObj->IsInserted())
     {
-        ImplUnmarkObject( pObj );
-        E3DModifySceneSnapRectUpdater aUpdater(pObj);
-        pObjList->RemoveObject(pObj->GetOrdNum());
+        ImplUnmarkObject( mxObj.get() );
+        E3DModifySceneSnapRectUpdater aUpdater(mxObj.get());
+        pObjList->RemoveObject(mxObj->GetOrdNum());
     }
 
     // Trigger PageChangeCall
@@ -760,20 +745,20 @@ void SdrUndoInsertObj::Undo()
     // Trigger PageChangeCall
     ImpShowPageOfThisObject();
 
-    DBG_ASSERT(pObj->IsInserted(),"UndoInsertObj: pObj is not inserted.");
-    if (pObj->IsInserted())
+    DBG_ASSERT(mxObj->IsInserted(),"UndoInsertObj: mxObj is not inserted.");
+    if (mxObj->IsInserted())
     {
-        ImplUnmarkObject( pObj );
+        ImplUnmarkObject( mxObj.get() );
 
-        SdrObject* pChkObj= pObjList->RemoveObject(pObj->GetOrdNum());
-        DBG_ASSERT(pChkObj==pObj,"UndoInsertObj: RemoveObjNum!=pObj");
+        rtl::Reference<SdrObject> pChkObj= pObjList->RemoveObject(mxObj->GetOrdNum());
+        DBG_ASSERT(pChkObj.get()==mxObj.get(),"UndoInsertObj: RemoveObjNum!=mxObj");
     }
 }
 
 void SdrUndoInsertObj::Redo()
 {
-    DBG_ASSERT(!pObj->IsInserted(),"RedoInsertObj: pObj is already inserted");
-    if (!pObj->IsInserted())
+    DBG_ASSERT(!mxObj->IsInserted(),"RedoInsertObj: mxObj is already inserted");
+    if (!mxObj->IsInserted())
     {
         // Restore anchor position of an object,
         // which becomes a member of a group, because its cleared in method
@@ -782,15 +767,15 @@ void SdrUndoInsertObj::Redo()
 
         if (dynamic_cast<const SdrObjGroup*>(pObjList->getSdrObjectFromSdrObjList()) != nullptr)
         {
-            aAnchorPos = pObj->GetAnchorPos();
+            aAnchorPos = mxObj->GetAnchorPos();
         }
 
-        pObjList->InsertObject(pObj,nOrdNum);
+        pObjList->InsertObject(mxObj.get(), nOrdNum);
 
         // Arcs lose position when grouped (#i45952#)
         if ( aAnchorPos.X() || aAnchorPos.Y() )
         {
-            pObj->NbcSetAnchorPos( aAnchorPos );
+            mxObj->NbcSetAnchorPos( aAnchorPos );
         }
     }
 
@@ -801,21 +786,16 @@ void SdrUndoInsertObj::Redo()
 SdrUndoDelObj::SdrUndoDelObj(SdrObject& rNewObj, bool bOrdNumDirect)
 :   SdrUndoRemoveObj(rNewObj,bOrdNumDirect)
 {
-    SetOwner(true);
 }
 
 void SdrUndoDelObj::Undo()
 {
     SdrUndoRemoveObj::Undo();
-    DBG_ASSERT(IsOwner(),"UndoDeleteObj: pObj does not belong to UndoAction");
-    SetOwner(false);
 }
 
 void SdrUndoDelObj::Redo()
 {
     SdrUndoRemoveObj::Redo();
-    DBG_ASSERT(!IsOwner(),"RedoDeleteObj: pObj already belongs to UndoAction");
-    SetOwner(true);
 }
 
 OUString SdrUndoDelObj::GetComment() const
@@ -842,15 +822,11 @@ OUString SdrUndoDelObj::GetSdrRepeatComment() const
 void SdrUndoNewObj::Undo()
 {
     SdrUndoInsertObj::Undo();
-    DBG_ASSERT(!IsOwner(),"RedoNewObj: pObj already belongs to UndoAction");
-    SetOwner(true);
 }
 
 void SdrUndoNewObj::Redo()
 {
     SdrUndoInsertObj::Redo();
-    DBG_ASSERT(IsOwner(),"RedoNewObj: pObj does not belong to UndoAction");
-    SetOwner(false);
 }
 
 OUString SdrUndoNewObj::GetComment( const SdrObject& _rForObject )
@@ -865,32 +841,13 @@ OUString SdrUndoNewObj::GetComment() const
 
 SdrUndoReplaceObj::SdrUndoReplaceObj(SdrObject& rOldObj1, SdrObject& rNewObj1)
     : SdrUndoObj(rOldObj1)
-    , bOldOwner(false)
-    , bNewOwner(false)
-    , pNewObj(&rNewObj1)
+    , mxNewObj(&rNewObj1)
 {
-    SetOldOwner(true);
-    pObjList=pObj->getParentSdrObjListFromSdrObject();
+    pObjList=mxObj->getParentSdrObjListFromSdrObject();
 }
 
 SdrUndoReplaceObj::~SdrUndoReplaceObj()
 {
-    if (pObj!=nullptr && IsOldOwner())
-    {
-        // Attribute have to go back into the Pool
-        SetOldOwner(false);
-
-        // now delete
-        SdrObject::Free( pObj );
-    }
-    if (pNewObj!=nullptr && IsNewOwner())
-    {
-        // Attribute have to go back into the Pool
-        SetNewOwner(false);
-
-        // now delete
-        SdrObject::Free( pNewObj );
-    }
 }
 
 void SdrUndoReplaceObj::Undo()
@@ -898,52 +855,20 @@ void SdrUndoReplaceObj::Undo()
     // Trigger PageChangeCall
     ImpShowPageOfThisObject();
 
-    if (IsOldOwner() && !IsNewOwner())
-    {
-        DBG_ASSERT(!pObj->IsInserted(),"SdrUndoReplaceObj::Undo(): Old object is already inserted!");
-        DBG_ASSERT(pNewObj->IsInserted(),"SdrUndoReplaceObj::Undo(): New object is not inserted!");
-        SetOldOwner(false);
-        SetNewOwner(true);
+    DBG_ASSERT(!mxObj->IsInserted(),"SdrUndoReplaceObj::Undo(): Old object is already inserted!");
+    DBG_ASSERT(mxNewObj->IsInserted(),"SdrUndoReplaceObj::Undo(): New object is not inserted!");
 
-        ImplUnmarkObject( pNewObj );
-        pObjList->ReplaceObject(pObj,pNewObj->GetOrdNum());
-    }
-    else
-    {
-        OSL_FAIL("SdrUndoReplaceObj::Undo(): Wrong IsMine flags. Did you call Undo twice?");
-    }
+    ImplUnmarkObject( mxNewObj.get() );
+    pObjList->ReplaceObject(mxObj.get(), mxNewObj->GetOrdNum());
 }
 
 void SdrUndoReplaceObj::Redo()
 {
-    if (!IsOldOwner() && IsNewOwner())
-    {
-        DBG_ASSERT(!pNewObj->IsInserted(),"SdrUndoReplaceObj::Redo(): New object is already inserted!!");
-        DBG_ASSERT(pObj->IsInserted(),"SdrUndoReplaceObj::Redo(): Old object is not inserted!!");
-        SetOldOwner(true);
-        SetNewOwner(false);
-
-        ImplUnmarkObject( pObj );
-        pObjList->ReplaceObject(pNewObj,pObj->GetOrdNum());
-
-    }
-    else
-    {
-        OSL_FAIL("SdrUndoReplaceObj::Redo(): Wrong IsMine flags. Did you call Redo twice?");
-    }
+    ImplUnmarkObject( mxObj.get() );
+    pObjList->ReplaceObject(mxNewObj.get(), mxObj->GetOrdNum());
 
     // Trigger PageChangeCall
     ImpShowPageOfThisObject();
-}
-
-void SdrUndoReplaceObj::SetNewOwner(bool bNew)
-{
-    bNewOwner = bNew;
-}
-
-void SdrUndoReplaceObj::SetOldOwner(bool bNew)
-{
-    bOldOwner = bNew;
 }
 
 
@@ -965,12 +890,12 @@ SdrUndoObjectLayerChange::SdrUndoObjectLayerChange(SdrObject& rObj, SdrLayerID a
 void SdrUndoObjectLayerChange::Undo()
 {
     ImpShowPageOfThisObject();
-    pObj->SetLayer(maOldLayer);
+    mxObj->SetLayer(maOldLayer);
 }
 
 void SdrUndoObjectLayerChange::Redo()
 {
-    pObj->SetLayer(maNewLayer);
+    mxObj->SetLayer(maNewLayer);
     ImpShowPageOfThisObject();
 }
 
@@ -987,10 +912,10 @@ void SdrUndoObjOrdNum::Undo()
     // Trigger PageChangeCall
     ImpShowPageOfThisObject();
 
-    SdrObjList* pOL=pObj->getParentSdrObjListFromSdrObject();
+    SdrObjList* pOL=mxObj->getParentSdrObjListFromSdrObject();
     if (pOL==nullptr)
     {
-        OSL_FAIL("UndoObjOrdNum: pObj does not have an ObjList.");
+        OSL_FAIL("UndoObjOrdNum: mxObj does not have an ObjList.");
         return;
     }
     pOL->SetObjectOrdNum(nNewOrdNum,nOldOrdNum);
@@ -998,10 +923,10 @@ void SdrUndoObjOrdNum::Undo()
 
 void SdrUndoObjOrdNum::Redo()
 {
-    SdrObjList* pOL=pObj->getParentSdrObjListFromSdrObject();
+    SdrObjList* pOL=mxObj->getParentSdrObjListFromSdrObject();
     if (pOL==nullptr)
     {
-        OSL_FAIL("RedoObjOrdNum: pObj does not have an ObjList.");
+        OSL_FAIL("RedoObjOrdNum: mxObj does not have an ObjList.");
         return;
     }
     pOL->SetObjectOrdNum(nOldOrdNum,nNewOrdNum);
@@ -1088,7 +1013,7 @@ void SdrUndoObjSetText::AfterSetText()
 {
     if (!bNewTextAvailable)
     {
-        SdrText* pText = static_cast< SdrTextObj*>( pObj )->getText(mnText);
+        SdrText* pText = static_cast< SdrTextObj*>( mxObj.get() )->getText(mnText);
         if( pText && pText->GetOutlinerParaObject() )
             pNewText = *pText->GetOutlinerParaObject();
         bNewTextAvailable=true;
@@ -1098,7 +1023,7 @@ void SdrUndoObjSetText::AfterSetText()
 void SdrUndoObjSetText::Undo()
 {
     // only works with SdrTextObj
-    SdrTextObj* pTarget = dynamic_cast< SdrTextObj* >(pObj);
+    SdrTextObj* pTarget = dynamic_cast< SdrTextObj* >(mxObj.get());
 
     if(!pTarget)
     {
@@ -1140,7 +1065,7 @@ void SdrUndoObjSetText::Undo()
 void SdrUndoObjSetText::Redo()
 {
     // only works with SdrTextObj
-    SdrTextObj* pTarget = dynamic_cast< SdrTextObj* >(pObj);
+    SdrTextObj* pTarget = dynamic_cast< SdrTextObj* >(mxObj.get());
 
     if(!pTarget)
     {
@@ -1242,13 +1167,13 @@ void SdrUndoObjStrAttr::Undo()
     switch ( meObjStrAttr )
     {
     case ObjStrAttrType::Name:
-        pObj->SetName( msOldStr );
+        mxObj->SetName( msOldStr );
         break;
     case ObjStrAttrType::Title:
-        pObj->SetTitle( msOldStr );
+        mxObj->SetTitle( msOldStr );
         break;
     case ObjStrAttrType::Description:
-        pObj->SetDescription( msOldStr );
+        mxObj->SetDescription( msOldStr );
         break;
     }
 }
@@ -1258,13 +1183,13 @@ void SdrUndoObjStrAttr::Redo()
     switch ( meObjStrAttr )
     {
     case ObjStrAttrType::Name:
-        pObj->SetName( msNewStr );
+        mxObj->SetName( msNewStr );
         break;
     case ObjStrAttrType::Title:
-        pObj->SetTitle( msNewStr );
+        mxObj->SetTitle( msNewStr );
         break;
     case ObjStrAttrType::Description:
-        pObj->SetDescription( msNewStr );
+        mxObj->SetDescription( msNewStr );
         break;
     }
 

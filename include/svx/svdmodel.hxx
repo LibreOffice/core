@@ -146,7 +146,6 @@ struct SdrModelImpl;
 
 class SVXCORE_DLLPUBLIC SdrModel : public SfxBroadcaster, public tools::WeakBase
 {
-private:
 #ifdef DBG_UTIL
     // SdrObjectLifetimeWatchDog:
     // Use maAllIncarnatedObjects to keep track of all SdrObjects incarnated using this SdrModel
@@ -165,9 +164,9 @@ private:
     // be expensive. Nonetheless, only use with debug code. It may be seductive to use this in
     // product code, too, especially if it will indeed trigger - but its intention is clearly
     // to find/identify MemoryLeaks caused by SdrObjects
-    friend void impAddIncarnatedSdrObjectToSdrModel(const SdrObject& rSdrObject, SdrModel& rSdrModel);
-    friend void impRemoveIncarnatedSdrObjectToSdrModel(const SdrObject& rSdrObject, SdrModel& rSdrModel);
-    std::unordered_set< const SdrObject* >  maAllIncarnatedObjects;
+    friend void impAddIncarnatedSdrObjectToSdrModel(SdrObject& rSdrObject, SdrModel& rSdrModel);
+    friend void impRemoveIncarnatedSdrObjectToSdrModel(SdrObject& rSdrObject, SdrModel& rSdrModel);
+    std::unordered_set< SdrObject* >  maAllIncarnatedObjects;
 #endif
 protected:
     std::vector<rtl::Reference<SdrPage>> maMasterPages;

@@ -30,11 +30,6 @@
 #include <cppuhelper/weak.hxx>
 #include <rtl/ref.hxx>
 
-namespace cppu
-{
-class OWeakObject;
-}
-
 namespace unotools
 {
 /** The WeakReference<> holds a weak reference to an object.
@@ -64,7 +59,7 @@ public:
         @param rRef another hard ref
     */
     WeakReference(const rtl::Reference<interface_type>& rRef)
-        : WeakReferenceHelper(rRef)
+        : WeakReferenceHelper(css::uno::Reference<css::uno::XWeak>(rRef))
     {
     }
 

@@ -288,8 +288,11 @@ SdrModel& SdrObject::getSdrModelFromSdrObject() const
 
 void SdrObject::setParentOfSdrObject(SdrObjList* pNewObjList)
 {
-    if(getParentSdrObjListFromSdrObject() == pNewObjList)
+    assert(!pNewObjList || mpParentOfSdrObject != pNewObjList);
+    if(mpParentOfSdrObject == pNewObjList)
         return;
+    // we need to be removed from the old parent before we are attached to the new parent
+    assert(bool(mpParentOfSdrObject) != bool(pNewObjList) && "may only transition empty->full or full->empty");
 
     // remember current page
     SdrPage* pOldPage(getSdrPageFromSdrObject());
@@ -325,15 +328,15 @@ void SdrObject::SetBoundRectDirty()
 
 #ifdef DBG_UTIL
 // SdrObjectLifetimeWatchDog:
-void impAddIncarnatedSdrObjectToSdrModel(const SdrObject& rSdrObject, SdrModel& rSdrModel)
+void impAddIncarnatedSdrObjectToSdrModel(SdrObject& rSdrObject, SdrModel& rSdrModel)
 {
     rSdrModel.maAllIncarnatedObjects.insert(&rSdrObject);
 }
-void impRemoveIncarnatedSdrObjectToSdrModel(const SdrObject& rSdrObject, SdrModel& rSdrModel)
+void impRemoveIncarnatedSdrObjectToSdrModel(SdrObject& rSdrObject, SdrModel& rSdrModel)
 {
     if(!rSdrModel.maAllIncarnatedObjects.erase(&rSdrObject))
     {
-        SAL_WARN("svx","SdrObject::~SdrObject: Destructed incarnation of SdrObject not member of this SdrModel (!)");
+        assert(false && "SdrObject::~SdrObject: Destructed incarnation of SdrObject not member of this SdrModel (!)");
     }
 }
 #endif
@@ -408,10 +411,6 @@ SdrObject::SdrObject(SdrModel& rSdrModel, SdrObject const & rSource)
     m_bIs3DObj=false;
     m_bMarkProt=false;
     m_bIsUnoObj=false;
-#ifdef DBG_UTIL
-    // SdrObjectLifetimeWatchDog:
-    impAddIncarnatedSdrObjectToSdrModel(*this, getSdrModelFromSdrObject());
-#endif
 
     mpProperties.reset();
     mpViewContact.reset();
@@ -444,10 +443,15 @@ SdrObject::SdrObject(SdrModel& rSdrModel, SdrObject const & rSource)
     m_pGrabBagItem.reset();
     if (rSource.m_pGrabBagItem!=nullptr)
         m_pGrabBagItem.reset(rSource.m_pGrabBagItem->Clone());
+#ifdef DBG_UTIL
+    // SdrObjectLifetimeWatchDog:
+    impAddIncarnatedSdrObjectToSdrModel(*this, getSdrModelFromSdrObject());
+#endif
 }
 
 SdrObject::~SdrObject()
 {
+    assert(m_refCount == -1);
     // Tell all the registered ObjectUsers that the page is in destruction.
     // And clear the vector. This means that user do not need to call RemoveObjectUser()
     // when they get called from ObjectInDestruction().
@@ -466,50 +470,32 @@ SdrObject::~SdrObject()
     m_pGrabBagItem.reset();
     mpProperties.reset();
     mpViewContact.reset();
-
 #ifdef DBG_UTIL
     // SdrObjectLifetimeWatchDog:
     impRemoveIncarnatedSdrObjectToSdrModel(*this, getSdrModelFromSdrObject());
 #endif
 }
 
-void SdrObject::Free( SdrObject*& _rpObject )
+void SdrObject::acquire() noexcept
 {
-    SdrObject* pObject = _rpObject; _rpObject = nullptr;
+#ifdef DBG_UTIL
+    assert(m_refCount != -1);
+#endif
+    osl_atomic_increment( &m_refCount );
+}
 
-    if(nullptr == pObject)
+void SdrObject::release() noexcept
+{
+    oslInterlockedCount x = osl_atomic_decrement( &m_refCount );
+    if ( x == 0 )
     {
-        // nothing to do
-        return;
+        disposeWeakConnectionPoint();
+#ifdef DBG_UTIL
+        // make sure it doesn't accidentally come back to life, see assert in acquire()
+        osl_atomic_decrement( &m_refCount );
+#endif
+        delete this;
     }
-
-    SvxShape* pShape(pObject->getSvxShape());
-
-    if(pShape)
-    {
-        if(pShape->HasSdrObjectOwnership())
-        {
-            // only the SvxShape is allowed to delete me, and will reset
-            // the ownership before doing so
-            return;
-        }
-        else
-        {
-            // not only delete pObject, but also need to dispose uno shape
-            try
-            {
-                pShape->InvalidateSdrObject();
-                uno::Reference< lang::XComponent > xShapeComp( pObject->getWeakUnoShape().get(), uno::UNO_QUERY_THROW );
-                xShapeComp->dispose();
-            }
-            catch( const uno::Exception& )
-            {
-                DBG_UNHANDLED_EXCEPTION("svx");
-            }
-        }
-    }
-
-    delete pObject;
 }
 
 void SdrObject::SetBoundAndSnapRectsDirty(bool bNotMyself, bool bRecursive)
@@ -545,10 +531,8 @@ void SdrObject::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
     {
         SvxShape* const pShape(getSvxShape());
 
-        if (pShape && !pShape->HasSdrObjectOwnership())
-        {
+        if (pShape)
             setUnoShape(nullptr);
-        }
     }
 }
 
@@ -1072,7 +1056,7 @@ bool SdrObject::HasLimitedRotation() const
     return false;
 }
 
-SdrObject* SdrObject::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> SdrObject::CloneSdrObject(SdrModel& rTargetModel) const
 {
     return new SdrObject(rTargetModel, *this);
 }
@@ -1136,7 +1120,7 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
 
     // create cloned object without text, but with drawing::LineStyle_SOLID,
     // COL_BLACK as line color and drawing::FillStyle_NONE
-    SdrObject* pClone(CloneSdrObject(getSdrModelFromSdrObject()));
+    rtl::Reference<SdrObject> pClone(CloneSdrObject(getSdrModelFromSdrObject()));
 
     if(pClone)
     {
@@ -1211,9 +1195,6 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
                 }
             }
         }
-
-        // Always use SdrObject::Free to delete SdrObjects (!)
-        SdrObject::Free(pClone);
     }
 
     return aRetval;
@@ -1334,10 +1315,10 @@ bool SdrObject::supportsFullDrag() const
     return true;
 }
 
-SdrObjectUniquePtr SdrObject::getFullDragClone() const
+rtl::Reference<SdrObject> SdrObject::getFullDragClone() const
 {
     // default uses simple clone
-    return SdrObjectUniquePtr(CloneSdrObject(getSdrModelFromSdrObject()));
+    return CloneSdrObject(getSdrModelFromSdrObject());
 }
 
 bool SdrObject::beginSpecialDrag(SdrDragStat& rDrag) const
@@ -2439,9 +2420,9 @@ static void extractLineContourFromPrimitive2DSequence(
 }
 
 
-SdrObject* SdrObject::ImpConvertToContourObj(bool bForceLineDash)
+rtl::Reference<SdrObject> SdrObject::ImpConvertToContourObj(bool bForceLineDash)
 {
-    SdrObject* pRetval(nullptr);
+    rtl::Reference<SdrObject> pRetval;
 
     if(LineGeometryUsageIsNecessary())
     {
@@ -2475,8 +2456,8 @@ SdrObject* SdrObject::ImpConvertToContourObj(bool bForceLineDash)
         {
             SfxItemSet aSet(GetMergedItemSet());
             drawing::FillStyle eOldFillStyle = aSet.Get(XATTR_FILLSTYLE).GetValue();
-            SdrPathObj* aLinePolygonPart = nullptr;
-            SdrPathObj* aLineHairlinePart = nullptr;
+            rtl::Reference<SdrPathObj> aLinePolygonPart;
+            rtl::Reference<SdrPathObj> aLineHairlinePart;
             bool bBuildGroup(false);
 
             if(aMergedLineFillPolyPolygon.count())
@@ -2541,7 +2522,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(bool bForceLineDash)
             // do we need a group?
             if(bBuildGroup || bAddOriginalGeometry)
             {
-                SdrObject* pGroup = new SdrObjGroup(getSdrModelFromSdrObject());
+                rtl::Reference<SdrObject> pGroup = new SdrObjGroup(getSdrModelFromSdrObject());
 
                 if(bAddOriginalGeometry)
                 {
@@ -2551,20 +2532,20 @@ SdrObject* SdrObject::ImpConvertToContourObj(bool bForceLineDash)
                     aSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
                     aSet.Put(XLineWidthItem(0));
 
-                    SdrObject* pClone(CloneSdrObject(getSdrModelFromSdrObject()));
+                    rtl::Reference<SdrObject> pClone(CloneSdrObject(getSdrModelFromSdrObject()));
                     pClone->SetMergedItemSet(aSet);
 
-                    pGroup->GetSubList()->NbcInsertObject(pClone);
+                    pGroup->GetSubList()->NbcInsertObject(pClone.get());
                 }
 
                 if(aLinePolygonPart)
                 {
-                    pGroup->GetSubList()->NbcInsertObject(aLinePolygonPart);
+                    pGroup->GetSubList()->NbcInsertObject(aLinePolygonPart.get());
                 }
 
                 if(aLineHairlinePart)
                 {
-                    pGroup->GetSubList()->NbcInsertObject(aLineHairlinePart);
+                    pGroup->GetSubList()->NbcInsertObject(aLineHairlinePart.get());
                 }
 
                 pRetval = pGroup;
@@ -2583,11 +2564,10 @@ SdrObject* SdrObject::ImpConvertToContourObj(bool bForceLineDash)
         }
     }
 
-    if(nullptr == pRetval)
+    if(!pRetval)
     {
         // due to current method usage, create and return a clone when nothing has changed
-        SdrObject* pClone(CloneSdrObject(getSdrModelFromSdrObject()));
-        pRetval = pClone;
+        pRetval = CloneSdrObject(getSdrModelFromSdrObject());
     }
 
     return pRetval;
@@ -2613,24 +2593,25 @@ void SdrObject::SetNotVisibleAsMaster(bool bFlg)
 
 
 // convert this path object to contour object, even when it is a group
-SdrObject* SdrObject::ConvertToContourObj(SdrObject* pRet, bool bForceLineDash) const
+rtl::Reference<SdrObject> SdrObject::ConvertToContourObj(SdrObject* pRet1, bool bForceLineDash) const
 {
-    if(dynamic_cast<const SdrObjGroup*>( pRet) !=  nullptr)
+    rtl::Reference<SdrObject> pRet = pRet1;
+    if(dynamic_cast<const SdrObjGroup*>( pRet.get()) !=  nullptr)
     {
         SdrObjList* pObjList2 = pRet->GetSubList();
-        SdrObject* pGroup = new SdrObjGroup(getSdrModelFromSdrObject());
+        rtl::Reference<SdrObject> pGroup = new SdrObjGroup(getSdrModelFromSdrObject());
 
         for(size_t a=0; a<pObjList2->GetObjCount(); ++a)
         {
             SdrObject* pIterObj = pObjList2->GetObj(a);
-            pGroup->GetSubList()->NbcInsertObject(ConvertToContourObj(pIterObj, bForceLineDash));
+            pGroup->GetSubList()->NbcInsertObject(ConvertToContourObj(pIterObj, bForceLineDash).get());
         }
 
         pRet = pGroup;
     }
     else
     {
-        if (SdrPathObj *pPathObj = dynamic_cast<SdrPathObj*>(pRet))
+        if (SdrPathObj *pPathObj = dynamic_cast<SdrPathObj*>(pRet.get()))
         {
             // bezier geometry got created, even for straight edges since the given
             // object is a result of DoConvertToPolyObj. For conversion to contour
@@ -2651,14 +2632,13 @@ SdrObject* SdrObject::ConvertToContourObj(SdrObject* pRet, bool bForceLineDash) 
 }
 
 
-SdrObjectUniquePtr SdrObject::ConvertToPolyObj(bool bBezier, bool bLineToArea) const
+rtl::Reference<SdrObject> SdrObject::ConvertToPolyObj(bool bBezier, bool bLineToArea) const
 {
-    SdrObjectUniquePtr pRet = DoConvertToPolyObj(bBezier, true);
+    rtl::Reference<SdrObject> pRet = DoConvertToPolyObj(bBezier, true);
 
     if(pRet && bLineToArea)
     {
-        SdrObject* pNewRet = ConvertToContourObj(pRet.get());
-        pRet.reset(pNewRet);
+        pRet = ConvertToContourObj(pRet.get());
     }
 
     // #i73441# preserve LayerID
@@ -2671,7 +2651,7 @@ SdrObjectUniquePtr SdrObject::ConvertToPolyObj(bool bBezier, bool bLineToArea) c
 }
 
 
-SdrObjectUniquePtr SdrObject::DoConvertToPolyObj(bool /*bBezier*/, bool /*bAddText*/) const
+rtl::Reference<SdrObject> SdrObject::DoConvertToPolyObj(bool /*bBezier*/, bool /*bAddText*/) const
 {
     return nullptr;
 }
@@ -2872,10 +2852,8 @@ void SdrObject::setUnoShape( const uno::Reference< drawing::XShape >& _rxUnoShap
         return;
     }
 
-    bool bTransferOwnership( false );
     if ( xOldUnoShape.is() )
     {
-        bTransferOwnership = mpSvxShape->HasSdrObjectOwnership();
         // Remove yourself from the current UNO shape. Its destructor
         // will reset our UNO shape otherwise.
         mpSvxShape->InvalidateSdrObject();
@@ -2883,14 +2861,6 @@ void SdrObject::setUnoShape( const uno::Reference< drawing::XShape >& _rxUnoShap
 
     maWeakUnoShape = _rxUnoShape;
     mpSvxShape = comphelper::getFromUnoTunnel<SvxShape>( _rxUnoShape );
-
-    // I think this may never happen... But I am not sure enough .-)
-    if ( bTransferOwnership )
-    {
-        if (mpSvxShape)
-            mpSvxShape->TakeSdrObjectOwnership();
-        SAL_WARN( "svx.uno", "a UNO shape took over an SdrObject previously owned by another UNO shape!");
-    }
 }
 
 /** only for internal use! */
@@ -2901,12 +2871,8 @@ SvxShape* SdrObject::getSvxShape()
         // guarded by the SolarMutex
 
     uno::Reference< uno::XInterface > xShape( maWeakUnoShape );
-#if OSL_DEBUG_LEVEL > 0
-    OSL_ENSURE( !( !xShape.is() && mpSvxShape ),
-        "SdrObject::getSvxShape: still having IMPL-Pointer to dead object!" );
-#endif
     //#113608#, make sure mpSvxShape is always synchronized with maWeakUnoShape
-    if ( mpSvxShape && !xShape.is() )
+    if ( mpSvxShape && !xShape )
         mpSvxShape = nullptr;
 
     return mpSvxShape;
@@ -2915,11 +2881,9 @@ SvxShape* SdrObject::getSvxShape()
 css::uno::Reference< css::drawing::XShape > SdrObject::getUnoShape()
 {
     // try weak reference first
-    uno::Reference< css::drawing::XShape > xShape( getWeakUnoShape() );
-    if( xShape )
+    uno::Reference< css::drawing::XShape > xShape = maWeakUnoShape;
+    if (xShape)
         return xShape;
-
-    OSL_ENSURE( mpSvxShape == nullptr, "SdrObject::getUnoShape: XShape already dead, but still an IMPL pointer!" );
 
     // try to access SdrPage from this SdrObject. This will only exist if the SdrObject is
     // inserted in a SdrObjList (page/group/3dScene)
@@ -2985,6 +2949,7 @@ css::uno::Reference< css::drawing::XShape > SdrObject::getUnoShape()
             {
                 // create one
                 xShape = pDrawPage->CreateShape( this );
+                assert(xShape);
                 setUnoShape( xShape );
             }
         }
@@ -3247,11 +3212,11 @@ void SdrObject::moveOutRectangle(sal_Int32 nXDelta, sal_Int32 nYDelta)
     m_aOutRect.Move(nXDelta, nYDelta);
 }
 
-SdrObject* SdrObjFactory::CreateObjectFromFactory(SdrModel& rSdrModel, SdrInventor nInventor, SdrObjKind nObjIdentifier)
+rtl::Reference<SdrObject> SdrObjFactory::CreateObjectFromFactory(SdrModel& rSdrModel, SdrInventor nInventor, SdrObjKind nObjIdentifier)
 {
     SdrObjCreatorParams aParams { nInventor, nObjIdentifier, rSdrModel };
     for (const auto & i : ImpGetUserMakeObjHdl()) {
-        SdrObject* pObj = i.Call(aParams);
+        rtl::Reference<SdrObject> pObj = i.Call(aParams);
         if (pObj) {
             return pObj;
         }
@@ -3259,13 +3224,13 @@ SdrObject* SdrObjFactory::CreateObjectFromFactory(SdrModel& rSdrModel, SdrInvent
     return nullptr;
 }
 
-SdrObject* SdrObjFactory::MakeNewObject(
+rtl::Reference<SdrObject> SdrObjFactory::MakeNewObject(
     SdrModel& rSdrModel,
     SdrInventor nInventor,
     SdrObjKind nIdentifier,
     const tools::Rectangle* pSnapRect)
 {
-    SdrObject* pObj(nullptr);
+    rtl::Reference<SdrObject> pObj;
     bool bSetSnapRect(nullptr != pSnapRect);
 
     if (nInventor == SdrInventor::Default)
@@ -3397,9 +3362,9 @@ SdrObject* SdrObjFactory::MakeNewObject(
     return pObj;
 }
 
-void SdrObjFactory::InsertMakeObjectHdl(Link<SdrObjCreatorParams, SdrObject*> const & rLink)
+void SdrObjFactory::InsertMakeObjectHdl(Link<SdrObjCreatorParams, rtl::Reference<SdrObject>> const & rLink)
 {
-    std::vector<Link<SdrObjCreatorParams, SdrObject*>>& rLL=ImpGetUserMakeObjHdl();
+    std::vector<Link<SdrObjCreatorParams, rtl::Reference<SdrObject>>>& rLL=ImpGetUserMakeObjHdl();
     auto it = std::find(rLL.begin(), rLL.end(), rLink);
     if (it != rLL.end()) {
         OSL_FAIL("SdrObjFactory::InsertMakeObjectHdl(): Link already in place.");
@@ -3408,9 +3373,9 @@ void SdrObjFactory::InsertMakeObjectHdl(Link<SdrObjCreatorParams, SdrObject*> co
     }
 }
 
-void SdrObjFactory::RemoveMakeObjectHdl(Link<SdrObjCreatorParams, SdrObject*> const & rLink)
+void SdrObjFactory::RemoveMakeObjectHdl(Link<SdrObjCreatorParams, rtl::Reference<SdrObject>> const & rLink)
 {
-    std::vector<Link<SdrObjCreatorParams, SdrObject*>>& rLL=ImpGetUserMakeObjHdl();
+    std::vector<Link<SdrObjCreatorParams, rtl::Reference<SdrObject>>>& rLL=ImpGetUserMakeObjHdl();
     auto it = std::find(rLL.begin(), rLL.end(), rLink);
     if (it != rLL.end())
         rLL.erase(it);
