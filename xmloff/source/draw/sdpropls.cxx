@@ -145,6 +145,9 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "TextWordWrap",                   XML_NAMESPACE_FO,   XML_WRAP_OPTION,            XML_TYPE_WRAP_OPTION, 0 ),
     GMAP( "TextChainNextName",              XML_NAMESPACE_DRAW,   XML_CHAIN_NEXT_NAME,      XML_TYPE_STRING, 0 ),
 
+    GMAPV( "TextColumnsNumber",              XML_NAMESPACE_LO_EXT, XML_TEXTCOLUMNS_NUMBER,   XML_TYPE_NUMBER, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED ),
+    GMAPV( "TextColumnsSpacing",             XML_NAMESPACE_LO_EXT, XML_TEXTCOLUMNS_SPACING,  XML_TYPE_MEASURE, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED ),
+
     // shadow attributes
     GMAP( "Shadow",                         XML_NAMESPACE_DRAW, XML_SHADOW,                 XML_SD_TYPE_VISIBLE_HIDDEN, 0 ),
     GMAP( "ShadowXDistance",                    XML_NAMESPACE_DRAW, XML_SHADOW_OFFSET_X,        XML_TYPE_MEASURE, 0 ),

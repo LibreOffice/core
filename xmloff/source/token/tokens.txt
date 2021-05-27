@@ -1828,6 +1828,8 @@ text-background-color
 text-blinking
 text-box
 text-color
+text-columns-number
+text-columns-spacing
 text-combine
 text-combine-end-char
 text-combine-start-char
