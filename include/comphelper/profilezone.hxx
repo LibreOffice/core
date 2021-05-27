@@ -30,13 +30,8 @@ class COMPHELPER_DLLPUBLIC ProfileZone : public NamedEvent
 
     void addRecording();
 
- public:
-
-    // Note that the char pointer is stored as such in the ProfileZone object and used in the
-    // destructor, so be sure to pass a pointer that stays valid for the duration of the object's
-    // lifetime.
-    ProfileZone(const char* sName, const std::map<OUString, OUString> &args = std::map<OUString, OUString>())
-        : NamedEvent(sName, args)
+    ProfileZone(const char* sName, const OUString &sArgs)
+        : NamedEvent(sName, sArgs)
         , m_nNesting(-1)
     {
         if (s_bRecording)
@@ -49,6 +44,21 @@ class COMPHELPER_DLLPUBLIC ProfileZone : public NamedEvent
         }
         else
             m_nCreateTime = 0;
+    }
+
+ public:
+
+    // Note that the char pointer is stored as such in the ProfileZone object and used in the
+    // destructor, so be sure to pass a pointer that stays valid for the duration of the object's
+    // lifetime.
+    ProfileZone(const char* sName, const std::map<OUString, OUString> &aArgs)
+        : ProfileZone(sName, createArgsString(aArgs))
+    {
+    }
+
+    ProfileZone(const char* sName)
+        : ProfileZone(sName, OUString())
+    {
     }
 
     ~ProfileZone()
