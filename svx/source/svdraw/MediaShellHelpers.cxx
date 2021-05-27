@@ -41,12 +41,12 @@ void GetState(SdrMarkView* pSdrView, SfxItemSet& rSet)
         if (SID_AVMEDIA_TOOLBOX != nWhich)
             continue;
 
-        std::unique_ptr<SdrMarkList> pMarkList(new SdrMarkList(pSdrView->GetMarkedObjectList()));
+        const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
         bool bDisable = true;
 
-        if (1 == pMarkList->GetMarkCount())
+        if (1 == rMarkList.GetMarkCount())
         {
-            SdrObject* pObj = pMarkList->GetMark(0)->GetMarkedSdrObj();
+            SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
             if (dynamic_cast<SdrMediaObj*>(pObj))
             {
@@ -81,12 +81,12 @@ const ::avmedia::MediaItem* Execute(SdrMarkView* pSdrView, SfxRequest const& rRe
     if (!pItem)
         return nullptr;
 
-    std::unique_ptr<SdrMarkList> pMarkList(new SdrMarkList(pSdrView->GetMarkedObjectList()));
+    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
 
-    if (1 != pMarkList->GetMarkCount())
+    if (1 != rMarkList.GetMarkCount())
         return nullptr;
 
-    SdrObject* pObj = pMarkList->GetMark(0)->GetMarkedSdrObj();
+    SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
     if (!dynamic_cast<SdrMediaObj*>(pObj))
         return nullptr;
