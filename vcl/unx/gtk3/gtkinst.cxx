@@ -18003,8 +18003,6 @@ void custom_cell_renderer_surface_render(GtkCellRenderer* cell,
 }
 #endif
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-
 namespace {
 
 class GtkInstanceEntryTreeView : public GtkInstanceContainer, public virtual weld::EntryTreeView
@@ -18012,12 +18010,15 @@ class GtkInstanceEntryTreeView : public GtkInstanceContainer, public virtual wel
 private:
     GtkInstanceEntry* m_pEntry;
     GtkInstanceTreeView* m_pTreeView;
+#if !GTK_CHECK_VERSION(4, 0, 0)
     gulong m_nKeyPressSignalId;
+#endif
     gulong m_nEntryInsertTextSignalId;
     guint m_nAutoCompleteIdleId;
     bool m_bAutoCompleteCaseSensitive;
     bool m_bTreeChange;
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     bool signal_key_press(GdkEventKey* pEvent)
     {
         if (GtkSalFrame::GetMouseModCode(pEvent->state)) // only with no modifiers held
@@ -18057,6 +18058,7 @@ private:
         GtkInstanceEntryTreeView* pThis = static_cast<GtkInstanceEntryTreeView*>(widget);
         return pThis->signal_key_press(pEvent);
     }
+#endif
 
     static gboolean idleAutoComplete(gpointer widget)
     {
@@ -18139,8 +18141,13 @@ private:
 
 
 public:
+#if GTK_CHECK_VERSION(4, 0, 0)
+    GtkInstanceEntryTreeView(GtkWidget* pContainer, GtkInstanceBuilder* pBuilder, bool bTakeOwnership,
+                             std::unique_ptr<weld::Entry> xEntry, std::unique_ptr<weld::TreeView> xTreeView)
+#else
     GtkInstanceEntryTreeView(GtkContainer* pContainer, GtkInstanceBuilder* pBuilder, bool bTakeOwnership,
                              std::unique_ptr<weld::Entry> xEntry, std::unique_ptr<weld::TreeView> xTreeView)
+#endif
         : EntryTreeView(std::move(xEntry), std::move(xTreeView))
         , GtkInstanceContainer(pContainer, pBuilder, bTakeOwnership)
         , m_pEntry(dynamic_cast<GtkInstanceEntry*>(m_xEntry.get()))
@@ -18151,7 +18158,9 @@ public:
     {
         assert(m_pEntry);
         GtkWidget* pWidget = m_pEntry->getWidget();
+#if !GTK_CHECK_VERSION(4, 0, 0)
         m_nKeyPressSignalId = g_signal_connect(pWidget, "key-press-event", G_CALLBACK(signalKeyPress), this);
+#endif
         m_nEntryInsertTextSignalId = g_signal_connect(pWidget, "insert-text", G_CALLBACK(signalEntryInsertText), this);
     }
 
@@ -18225,7 +18234,9 @@ public:
     {
         GtkWidget* pWidget = m_pEntry->getWidget();
         g_signal_handler_block(pWidget, m_nEntryInsertTextSignalId);
+#if !GTK_CHECK_VERSION(4, 0, 0)
         g_signal_handler_block(pWidget, m_nKeyPressSignalId);
+#endif
         m_pTreeView->disable_notify_events();
         GtkInstanceContainer::disable_notify_events();
     }
@@ -18233,7 +18244,9 @@ public:
     virtual void enable_notify_events() override
     {
         GtkWidget* pWidget = m_pEntry->getWidget();
+#if !GTK_CHECK_VERSION(4, 0, 0)
         g_signal_handler_unblock(pWidget, m_nKeyPressSignalId);
+#endif
         g_signal_handler_unblock(pWidget, m_nEntryInsertTextSignalId);
         m_pTreeView->enable_notify_events();
         GtkInstanceContainer::disable_notify_events();
@@ -18292,14 +18305,14 @@ public:
         if (m_nAutoCompleteIdleId)
             g_source_remove(m_nAutoCompleteIdleId);
         GtkWidget* pWidget = m_pEntry->getWidget();
+#if !GTK_CHECK_VERSION(4, 0, 0)
         g_signal_handler_disconnect(pWidget, m_nKeyPressSignalId);
+#endif
         g_signal_handler_disconnect(pWidget, m_nEntryInsertTextSignalId);
     }
 };
 
 }
-
-#endif
 
 namespace {
 
@@ -19932,20 +19945,17 @@ public:
 
     virtual std::unique_ptr<weld::EntryTreeView> weld_entry_tree_view(const OString& containerid, const OString& entryid, const OString& treeviewid) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+        GtkWidget* pContainer = GTK_WIDGET(gtk_builder_get_object(m_pBuilder, containerid.getStr()));
+#else
         GtkContainer* pContainer = GTK_CONTAINER(gtk_builder_get_object(m_pBuilder, containerid.getStr()));
+#endif
         if (!pContainer)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pContainer));
         return std::make_unique<GtkInstanceEntryTreeView>(pContainer, this, false,
                                                           weld_entry(entryid),
                                                           weld_tree_view(treeviewid));
-#else
-        (void)containerid;
-        (void)entryid;
-        (void)treeviewid;
-        return nullptr;
-#endif
     }
 
     virtual std::unique_ptr<weld::Label> weld_label(const OString &id) override
@@ -20108,6 +20118,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
 #if GTK_CHECK_VERSION(4, 0, 0)
     if (rUIFile != "cui/ui/aboutdialog.ui" &&
         rUIFile != "cui/ui/hyphenate.ui" &&
+        rUIFile != "cui/ui/insertfloatingframe.ui" &&
         rUIFile != "cui/ui/objectnamedialog.ui" &&
         rUIFile != "cui/ui/objecttitledescdialog.ui" &&
         rUIFile != "cui/ui/percentdialog.ui" &&
@@ -20126,6 +20137,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "sfx/ui/securityinfopage.ui" &&
         rUIFile != "svt/ui/javadisableddialog.ui" &&
         rUIFile != "svx/ui/fontworkgallerydialog.ui" &&
+        rUIFile != "modules/scalc/ui/definedatabaserangedialog.ui" &&
         rUIFile != "modules/scalc/ui/deletecells.ui" &&
         rUIFile != "modules/scalc/ui/deletecontents.ui" &&
         rUIFile != "modules/scalc/ui/goalseekdlg.ui" &&
