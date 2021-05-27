@@ -179,7 +179,7 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
 
     tools::Rectangle aRect ( aInsertPos, aLogicSize );
 
-    SdrGrafObj* pObj = new SdrGrafObj(
+    rtl::Reference<SdrGrafObj> pObj = new SdrGrafObj(
         pView->getSdrModelFromSdrView(), // TTTT pView should be reference
         rGraphic1,
         aRect);
@@ -198,7 +198,7 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
 
     //  don't select if from (dispatch) API, to allow subsequent cell operations
     SdrInsertFlags nInsOptions = (bApi && !comphelper::LibreOfficeKit::isActive()) ? SdrInsertFlags::DONTMARK : SdrInsertFlags::NONE;
-    bool bSuccess = pView->InsertObjectAtView( pObj, *pPV, nInsOptions );
+    bool bSuccess = pView->InsertObjectAtView( pObj.get(), *pPV, nInsOptions );
 
     // SetGraphicLink has to be used after inserting the object,
     // otherwise an empty graphic is swapped in and the contact stuff crashes.
@@ -247,12 +247,12 @@ static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
         if (!bRet) { return; }
     }
 
-    SdrMediaObj* pObj = new SdrMediaObj(
+    rtl::Reference<SdrMediaObj> pObj = new SdrMediaObj(
         *rData.GetDocument().GetDrawLayer(),
         tools::Rectangle(aInsertPos, aSize));
 
     pObj->setURL( realURL, ""/*TODO?*/ );
-    pView->InsertObjectAtView( pObj, *pPV, bApi ? SdrInsertFlags::DONTMARK : SdrInsertFlags::NONE );
+    pView->InsertObjectAtView( pObj.get(), *pPV, bApi ? SdrInsertFlags::DONTMARK : SdrInsertFlags::NONE );
 }
 #endif
 

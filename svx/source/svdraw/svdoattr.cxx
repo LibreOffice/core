@@ -58,7 +58,7 @@ const tools::Rectangle& SdrAttrObj::GetSnapRect() const
 }
 
 // syntactical sugar for ItemSet accesses
-void SdrAttrObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
+void SdrAttrObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     bool bDataChg(SfxHintId::DataChanged == rHint.GetId());
 
@@ -73,6 +73,8 @@ void SdrAttrObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
         BroadcastObjectChange();
         SendUserCall(SdrUserCallType::ChangeAttr, aBoundRect);
     }
+
+    SdrObject::Notify(rBC, rHint);
 }
 
 sal_Int32 SdrAttrObj::ImpGetLineWdt() const
