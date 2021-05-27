@@ -58,6 +58,7 @@
 #include <XMLClipPropertyHandler.hxx>
 #include <XMLIsPercentagePropertyHandler.hxx>
 #include <XMLPercentOrMeasurePropertyHandler.hxx>
+#include <XMLTextColumnsPropertyHandler.hxx>
 #include <animations.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmlsdtypes.hxx>
@@ -144,6 +145,8 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "NumberingRules",                 XML_NAMESPACE_TEXT, XML_LIST_STYLE_NAME,        XML_TYPE_STRING, CTF_SD_NUMBERINGRULES_NAME ),
     GMAP( "TextWordWrap",                   XML_NAMESPACE_FO,   XML_WRAP_OPTION,            XML_TYPE_WRAP_OPTION, 0 ),
     GMAP( "TextChainNextName",              XML_NAMESPACE_DRAW,   XML_CHAIN_NEXT_NAME,      XML_TYPE_STRING, 0 ),
+
+    GMAP( "TextColumns",                    XML_NAMESPACE_STYLE, XML_COLUMNS, XML_TYPE_TEXT_COLUMNS|MID_FLAG_ELEMENT_ITEM, CTF_TEXTCOLUMNS ),
 
     // shadow attributes
     GMAP( "Shadow",                         XML_NAMESPACE_DRAW, XML_SHADOW,                 XML_SD_TYPE_VISIBLE_HIDDEN, 0 ),
@@ -1284,6 +1287,9 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 break;
             case XML_SD_TYPE_CELL_ROTATION_ANGLE:
                 pHdl = new XMLSdRotationAngleTypeHdl;
+                break;
+            case XML_TYPE_TEXT_COLUMNS:
+                pHdl = new XMLTextColumnsPropertyHandler;
                 break;
         }
 
