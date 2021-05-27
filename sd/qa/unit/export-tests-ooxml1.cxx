@@ -207,7 +207,7 @@ public:
 namespace {
 
 template< typename ItemValue, typename ItemType >
-void checkFontAttributes( const SdrTextObj* pObj, ItemValue nVal)
+void checkFontAttributes( const SdrTextObj* pObj, ItemValue nVal, sal_uInt32 nId)
 {
     CPPUNIT_ASSERT_MESSAGE( "no object", pObj != nullptr);
     const EditTextObject& aEdit = pObj->GetOutlinerParaObject()->GetTextObject();
@@ -216,7 +216,7 @@ void checkFontAttributes( const SdrTextObj* pObj, ItemValue nVal)
     for( std::vector<EECharAttrib>::reverse_iterator it = rLst.rbegin(); it!=rLst.rend(); ++it)
     {
         const ItemType* pAttrib = dynamic_cast<const ItemType *>((*it).pAttr);
-        if (pAttrib)
+        if (pAttrib && pAttrib->Which() == nId)
         {
             CPPUNIT_ASSERT_EQUAL( nVal, static_cast<ItemValue>(pAttrib->GetValue()));
         }
@@ -289,7 +289,7 @@ void SdOOXMLExportTest1::testBnc887230()
     // Without the fix in place, this test would have failed with
     //- Expected: 255
     //- Actual  : 13421823
-    checkFontAttributes<Color, SvxColorItem>( pObj, Color(0x0000ff) );
+    checkFontAttributes<Color, SvxColorItem>( pObj, Color(0x0000ff), EE_CHAR_COLOR );
 
     xDocShRef->DoClose();
 }
@@ -306,15 +306,15 @@ void SdOOXMLExportTest1::testBnc870233_1()
     // First shape has red, bold font
     {
         const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>( pPage->GetObj( 0 ) );
-        checkFontAttributes<Color, SvxColorItem>( pObj, Color(0xff0000) );
-        checkFontAttributes<FontWeight, SvxWeightItem>( pObj, WEIGHT_BOLD );
+        checkFontAttributes<Color, SvxColorItem>( pObj, Color(0xff0000), EE_CHAR_COLOR );
+        checkFontAttributes<FontWeight, SvxWeightItem>( pObj, WEIGHT_BOLD, EE_CHAR_WEIGHT );
     }
 
     // Second shape has blue, italic font
     {
         const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>( pPage->GetObj( 1 ) );
-        checkFontAttributes<Color, SvxColorItem>( pObj, Color(0x0000ff) );
-        checkFontAttributes<FontItalic, SvxPostureItem>( pObj, ITALIC_NORMAL );
+        checkFontAttributes<Color, SvxColorItem>( pObj, Color(0x0000ff), EE_CHAR_COLOR);
+        checkFontAttributes<FontItalic, SvxPostureItem>( pObj, ITALIC_NORMAL, EE_CHAR_ITALIC);
     }
 
     xDocShRef->DoClose();
@@ -334,7 +334,7 @@ void SdOOXMLExportTest1::testBnc870233_2()
         const SdrObjGroup *pObjGroup = dynamic_cast<SdrObjGroup *>(pPage->GetObj(0));
         CPPUNIT_ASSERT(pObjGroup);
         const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>(pObjGroup->GetSubList()->GetObj(0));
-        checkFontAttributes<Color, SvxColorItem>(pObj, Color(0x0000ff));
+        checkFontAttributes<Color, SvxColorItem>(pObj, Color(0x0000ff), EE_CHAR_COLOR);
     }
 
     // Second smart art has "dk2" font color (style)
@@ -342,7 +342,7 @@ void SdOOXMLExportTest1::testBnc870233_2()
         const SdrObjGroup *pObjGroup = dynamic_cast<SdrObjGroup *>(pPage->GetObj(1));
         CPPUNIT_ASSERT(pObjGroup);
         const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>(pObjGroup->GetSubList()->GetObj(0));
-        checkFontAttributes<Color, SvxColorItem>( pObj, Color(0x1F497D) );
+        checkFontAttributes<Color, SvxColorItem>( pObj, Color(0x1F497D), EE_CHAR_COLOR );
     }
 
     // Third smart art has white font color (style)
@@ -350,7 +350,7 @@ void SdOOXMLExportTest1::testBnc870233_2()
         const SdrObjGroup *pObjGroup = dynamic_cast<SdrObjGroup *>(pPage->GetObj(2));
         CPPUNIT_ASSERT(pObjGroup);
         const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>(pObjGroup->GetSubList()->GetObj(0));
-        checkFontAttributes<Color, SvxColorItem>(pObj, Color(0xffffff));
+        checkFontAttributes<Color, SvxColorItem>(pObj, Color(0xffffff), EE_CHAR_COLOR);
     }
 
     xDocShRef->DoClose();
