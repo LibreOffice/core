@@ -151,7 +151,9 @@ void ImplAnimView::drawToPos( sal_uLong nPos )
     }
 
     ScopedVclPtrInstance<VirtualDevice> aVDev;
-    std::unique_ptr<vcl::Region> xOldClip(!maClip.IsNull() ? new vcl::Region( pRenderContext->GetClipRegion() ) : nullptr);
+    std::optional<vcl::Region> xOldClip;
+    if (!maClip.IsNull())
+        xOldClip = pRenderContext->GetClipRegion();
 
     aVDev->SetOutputSizePixel( maSzPix, false );
     nPos = std::min( nPos, static_cast<sal_uLong>(mpParent->Count()) - 1 );
@@ -270,7 +272,9 @@ void ImplAnimView::draw( sal_uLong nPos, VirtualDevice* pVDev )
 
         if( !pVDev )
         {
-            std::unique_ptr<vcl::Region> xOldClip(!maClip.IsNull() ? new vcl::Region( pRenderContext->GetClipRegion() ) : nullptr);
+            std::optional<vcl::Region> xOldClip;
+            if (!maClip.IsNull())
+                xOldClip = pRenderContext->GetClipRegion();
 
             if (xOldClip)
                 pRenderContext->SetClipRegion( maClip );

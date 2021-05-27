@@ -332,11 +332,11 @@ Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, co
 
                     if( maAny >>= aSeq )
                     {
-                        std::unique_ptr<SvMemoryStream> pSrcStm(new SvMemoryStream( aSeq.getArray(), aSeq.getLength(), StreamMode::WRITE | StreamMode::TRUNC ));
                         GDIMetaFile     aMtf;
-
-                        ReadGDIMetaFile( *pSrcStm, aMtf );
-                        pSrcStm.reset();
+                        {
+                            SvMemoryStream aSrcStm( aSeq.getArray(), aSeq.getLength(), StreamMode::WRITE | StreamMode::TRUNC );
+                            ReadGDIMetaFile( aSrcStm, aMtf );
+                        }
 
                         Graphic         aGraphic( aMtf );
                         SvMemoryStream  aDstStm( 65535, 65535 );
@@ -362,11 +362,11 @@ Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, co
 
                     if( maAny >>= aSeq )
                     {
-                        std::unique_ptr<SvMemoryStream> pSrcStm(new SvMemoryStream( aSeq.getArray(), aSeq.getLength(), StreamMode::WRITE | StreamMode::TRUNC ));
                         GDIMetaFile     aMtf;
-
-                        ReadGDIMetaFile( *pSrcStm, aMtf );
-                        pSrcStm.reset();
+                        {
+                            SvMemoryStream aSrcStm( aSeq.getArray(), aSeq.getLength(), StreamMode::WRITE | StreamMode::TRUNC );
+                            ReadGDIMetaFile( aSrcStm, aMtf );
+                        }
 
                         SvMemoryStream  aDstStm( 65535, 65535 );
 
