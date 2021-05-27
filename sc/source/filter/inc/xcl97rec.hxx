@@ -168,7 +168,7 @@ class XclObjComment : public XclObj
 {
     ScAddress                   maScPos;
 
-    // no need to use std::unique_ptr< SdrCaptionObj, SdrObjectFreeOp >
+    // no need to use std::unique_ptr< SdrCaptionObj >
     SdrCaptionObj*              mpCaption;
 
     bool                        mbVisible;

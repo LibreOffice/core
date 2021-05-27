@@ -487,7 +487,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                 for(size_t a = 0; a < pMarkList->GetMarkCount(); ++a)
                                 {
                                     SdrMark* pM = pMarkList->GetMark(a);
-                                    SdrObject* pObj(pM->GetMarkedSdrObj()->CloneSdrObject(pPage->getSdrModelFromSdrPage()));
+                                    rtl::Reference<SdrObject> pObj(pM->GetMarkedSdrObj()->CloneSdrObject(pPage->getSdrModelFromSdrPage()));
 
                                     if(pObj)
                                     {
@@ -499,9 +499,9 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                                         SdrObject* pMarkParent = pM->GetMarkedSdrObj()->getParentSdrObjectFromSdrObject();
                                         if (bCopy || (pMarkParent && pMarkParent->IsGroupObject()))
-                                            pPage->InsertObjectThenMakeNameUnique(pObj, aNameSet);
+                                            pPage->InsertObjectThenMakeNameUnique(pObj.get(), aNameSet);
                                         else
-                                            pPage->InsertObject(pObj);
+                                            pPage->InsertObject(pObj.get());
 
                                         if( IsUndoEnabled() )
                                         {
@@ -512,10 +512,10 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                                         ImpRememberOrigAndClone aRem;
                                         aRem.pOrig = pM->GetMarkedSdrObj();
-                                        aRem.pClone = pObj;
+                                        aRem.pClone = pObj.get();
                                         aConnectorContainer.push_back(aRem);
 
-                                        if(dynamic_cast< SdrEdgeObj *>( pObj ) !=  nullptr)
+                                        if(dynamic_cast< SdrEdgeObj *>( pObj.get() ) !=  nullptr)
                                             nConnectorCount++;
                                     }
                                 }
@@ -744,7 +744,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                         {
                             // replace object
                             SdrPage* pWorkPage = GetSdrPageView()->GetPage();
-                            SdrObject* pNewObj(pObj->CloneSdrObject(pWorkPage->getSdrModelFromSdrPage()));
+                            rtl::Reference<SdrObject> pNewObj(pObj->CloneSdrObject(pWorkPage->getSdrModelFromSdrPage()));
                             ::tools::Rectangle   aPickObjRect( pPickObj2->GetCurrentBoundRect() );
                             Size        aPickObjSize( aPickObjRect.GetSize() );
                             Point       aVec( aPickObjRect.TopLeft() );
@@ -763,7 +763,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                             if( bUndo )
                                 BegUndo(SdResId(STR_UNDO_DRAGDROP));
                             pNewObj->NbcSetLayer( pPickObj->GetLayer() );
-                            pWorkPage->InsertObject( pNewObj );
+                            pWorkPage->InsertObject( pNewObj.get() );
                             if( bUndo )
                             {
                                 AddUndo( mrDoc.GetSdrUndoFactory().CreateUndoNewObject( *pNewObj ) );
@@ -774,10 +774,6 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                             if( bUndo )
                             {
                                 EndUndo();
-                            }
-                            else
-                            {
-                                SdrObject::Free(pPickObj2 );
                             }
                             bChanged = true;
                             mnAction = DND_ACTION_COPY;
@@ -870,7 +866,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
         if( aDataHelper.GetString( SotClipboardFormatId::SBA_FIELDDATAEXCHANGE, aOUString ) )
         {
-            SdrObjectUniquePtr pObj = CreateFieldControl( aOUString );
+            rtl::Reference<SdrObject> pObj = CreateFieldControl( aOUString );
 
             if( pObj )
             {
@@ -882,7 +878,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                 aRect.SetPos( maDropPos );
                 pObj->SetLogicRect( aRect );
-                InsertObjectAtView( pObj.release(), *GetSdrPageView(), SdrInsertFlags::SETDEFLAYER );
+                InsertObjectAtView( pObj.get(), *GetSdrPageView(), SdrInsertFlags::SETDEFLAYER );
                 bReturn = true;
             }
         }
@@ -1016,7 +1012,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     maDropPos.AdjustY( -(std::min( aSize.Height(), aMaxSize.Height() ) >> 1) );
 
                     ::tools::Rectangle       aRect( maDropPos, aSize );
-                    SdrOle2Obj*     pObj = new SdrOle2Obj(
+                    rtl::Reference<SdrOle2Obj> pObj = new SdrOle2Obj(
                         getSdrModelFromSdrView(),
                         aObjRef,
                         aName,
@@ -1034,7 +1030,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     }
 
                     // bInserted of false means that pObj has been deleted
-                    bool bInserted = InsertObjectAtView( pObj, *pPV, nOptions );
+                    bool bInserted = InsertObjectAtView( pObj.get(), *pPV, nOptions );
 
                     if (bInserted && pImageMap)
                         pObj->AppendUserData( std::unique_ptr<SdrObjUserData>(new SvxIMapInfo( *pImageMap )) );
@@ -1191,7 +1187,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     maDropPos.AdjustY( -(std::min( aSize.Height(), aMaxSize.Height() ) >> 1) );
 
                     ::tools::Rectangle       aRect( maDropPos, aSize );
-                    SdrOle2Obj*     pObj = new SdrOle2Obj(
+                    rtl::Reference<SdrOle2Obj> pObj = new SdrOle2Obj(
                         getSdrModelFromSdrView(),
                         aObjRef,
                         aName,
@@ -1208,7 +1204,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                             nOptions |= SdrInsertFlags::DONTMARK;
                     }
 
-                    bReturn = InsertObjectAtView( pObj, *pPV, nOptions );
+                    bReturn = InsertObjectAtView( pObj.get(), *pPV, nOptions );
 
                     if (bReturn)
                     {

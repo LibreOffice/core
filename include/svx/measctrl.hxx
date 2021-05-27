@@ -35,7 +35,7 @@ class SVX_DLLPUBLIC SvxXMeasurePreview final : public weld::CustomWidgetControll
 private:
     MapMode m_aMapMode;
     std::unique_ptr<SdrModel> pModel;
-    std::unique_ptr<SdrMeasureObj, SdrObjectFreeOp> pMeasureObj;
+    rtl::Reference<SdrMeasureObj> pMeasureObj;
 
     void ResizeImpl(const Size& rSize);
 
