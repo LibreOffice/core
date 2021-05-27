@@ -2666,23 +2666,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf101873)
     CPPUNIT_ASSERT_EQUAL(OUString("something"), pShellCursor->GetText());
 }
 
-CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTableWidth)
-{
-    load(DATA_DIRECTORY, "frame_size_export.docx");
-
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("Office Open XML Text");
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-
-    // after exporting: table width was overwritten in the doc model
-    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
-                                                    uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(100),
-                         getProperty<sal_Int16>(xTables->getByIndex(0), "RelativeWidth"));
-}
-
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTextFormFieldInsertion)
 {
     SwDoc* pDoc = createDoc();
