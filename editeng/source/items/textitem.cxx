@@ -93,7 +93,6 @@ SfxPoolItem* SvxAutoKernItem::CreateDefault() {return new SvxAutoKernItem(false,
 SfxPoolItem* SvxWordLineModeItem::CreateDefault() {return new SvxWordLineModeItem(false, 0);}
 SfxPoolItem* SvxContourItem::CreateDefault() {return new SvxContourItem(false, 0);}
 SfxPoolItem* SvxColorItem::CreateDefault() {return new SvxColorItem(0);}
-SfxPoolItem* SvxBackgroundColorItem::CreateDefault() {return new SvxBackgroundColorItem(0);}
 SfxPoolItem* SvxKerningItem::CreateDefault() {return new SvxKerningItem(0, 0);}
 SfxPoolItem* SvxCaseMapItem::CreateDefault() {return new SvxCaseMapItem(SvxCaseMap::NotMapped, 0);}
 SfxPoolItem* SvxEscapementItem::CreateDefault() {return new SvxEscapementItem(0);}
@@ -1310,117 +1309,6 @@ bool SvxContourItem::GetPresentation
     return true;
 }
 
-// class SvxBackgroundColorItem -----------------------------------------
-
-SvxBackgroundColorItem::SvxBackgroundColorItem( const sal_uInt16 nId ) :
-    SfxPoolItem( nId ),
-    mColor( COL_WHITE )
-{
-}
-
-SvxBackgroundColorItem::SvxBackgroundColorItem( const Color& rCol, const sal_uInt16 nId ) :
-    SfxPoolItem( nId ),
-    mColor( rCol )
-{
-}
-
-SvxBackgroundColorItem::~SvxBackgroundColorItem()
-{
-}
-
-bool SvxBackgroundColorItem::operator==( const SfxPoolItem& rAttr ) const
-{
-    assert(SfxPoolItem::operator==(rAttr));
-
-    return  mColor == static_cast<const SvxBackgroundColorItem&>( rAttr ).mColor;
-}
-
-bool SvxBackgroundColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
-{
-    nMemberId &= ~CONVERT_TWIPS;
-    Color aColor = SvxBackgroundColorItem::GetValue();
-
-    switch( nMemberId )
-    {
-        case MID_GRAPHIC_TRANSPARENT:
-        {
-            rVal <<= aColor.GetAlpha() == 0;
-            break;
-        }
-        default:
-        {
-            rVal <<= aColor;
-            break;
-        }
-    }
-    return true;
-}
-
-bool SvxBackgroundColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
-{
-    nMemberId &= ~CONVERT_TWIPS;
-    Color nColor;
-    Color aColor = SvxBackgroundColorItem::GetValue();
-
-    switch( nMemberId )
-    {
-        case MID_GRAPHIC_TRANSPARENT:
-        {
-            aColor.SetAlpha( Any2Bool( rVal ) ? 0 : 255 );
-            SvxBackgroundColorItem::SetValue( aColor );
-            break;
-        }
-        default:
-        {
-            if(!(rVal >>= nColor))
-                return false;
-            SvxBackgroundColorItem::SetValue( nColor );
-            break;
-        }
-    }
-    return true;
-}
-
-SvxBackgroundColorItem* SvxBackgroundColorItem::Clone( SfxItemPool * ) const
-{
-    return new SvxBackgroundColorItem(*this);
-}
-
-
-bool SvxBackgroundColorItem::GetPresentation
-(
-    SfxItemPresentation /*ePres*/,
-    MapUnit             /*eCoreUnit*/,
-    MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper& /*rIntl*/
-)   const
-{
-    rText = ::GetColorString( mColor );
-    return true;
-}
-
-void SvxBackgroundColorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
-{
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SvxBackgroundColorItem"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-
-    std::stringstream ss;
-    ss << mColor;
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(ss.str().c_str()));
-
-    OUString aStr;
-    IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
-    GetPresentation( SfxItemPresentation::Complete, MapUnit::Map100thMM, MapUnit::Map100thMM, aStr, aIntlWrapper);
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(OUStringToOString(aStr, RTL_TEXTENCODING_UTF8).getStr()));
-    (void)xmlTextWriterEndElement(pWriter);
-}
-
-void SvxBackgroundColorItem::SetValue( const Color& rNewCol )
-{
-    mColor = rNewCol;
-}
-
-
 // class SvxColorItem ----------------------------------------------------
 SvxColorItem::SvxColorItem( const sal_uInt16 nId ) :
     SfxPoolItem( nId ),
@@ -1456,6 +1344,11 @@ bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= static_cast<sal_Int16>(basegfx::fround(fTransparency));
             break;
         }
+        case MID_GRAPHIC_TRANSPARENT:
+        {
+            rVal <<= mColor.GetAlpha() == 0;
+            break;
+        }
         default:
         {
             rVal <<= mColor;
@@ -1480,6 +1373,11 @@ bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 mColor.SetAlpha(255 - static_cast<sal_uInt8>(basegfx::fround(fTransparency)));
             }
             return bRet;
+        }
+        case MID_GRAPHIC_TRANSPARENT:
+        {
+            mColor.SetAlpha( Any2Bool( rVal ) ? 0 : 255 );
+            return true;
         }
         default:
         {

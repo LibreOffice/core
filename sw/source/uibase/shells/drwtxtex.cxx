@@ -112,7 +112,7 @@ namespace
 
             case SID_ATTR_CHAR_BACK_COLOR:
             {
-                SvxBackgroundColorItem pBackgroundItem(aColor, EE_CHAR_BKGCOLOR);
+                SvxColorItem pBackgroundItem(aColor, EE_CHAR_BKGCOLOR);
                 pArgs->Put(pBackgroundItem);
                 break;
             }
