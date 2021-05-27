@@ -24,7 +24,7 @@
 SwObjectFactory aSwObjectFactory;
 
 IMPL_STATIC_LINK(
-    SwObjectFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject* )
+    SwObjectFactory, MakeObject, SdrObjCreatorParams, aParams, rtl::Reference<SdrObject> )
 {
     if ( aParams.nInventor == SdrInventor::Swg )
     {

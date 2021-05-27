@@ -51,7 +51,7 @@ public:
      */
     void SetAttributes(SfxItemSet& rAttr, SdrObject* pObj);
 
-    virtual SdrObjectUniquePtr CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rectangle& rRectangle) override;
+    virtual rtl::Reference<SdrObject> CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rectangle& rRectangle) override;
 
 private:
     FuConstructBezierPolygon (

@@ -128,11 +128,11 @@ void FuConstructUnoControl::Deactivate()
     mpWindow->SetPointer( aOldPointer );
 }
 
-SdrObjectUniquePtr FuConstructUnoControl::CreateDefaultObject(const sal_uInt16, const ::tools::Rectangle& rRectangle)
+rtl::Reference<SdrObject> FuConstructUnoControl::CreateDefaultObject(const sal_uInt16, const ::tools::Rectangle& rRectangle)
 {
     // case SID_FM_CREATE_CONTROL:
 
-    SdrObjectUniquePtr pObj(SdrObjFactory::MakeNewObject(
+    rtl::Reference<SdrObject> pObj(SdrObjFactory::MakeNewObject(
         mpView->getSdrModelFromSdrView(),
         mpView->GetCurrentObjInventor(),
         mpView->GetCurrentObjIdentifier()));

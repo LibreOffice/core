@@ -3765,9 +3765,9 @@ static void lcl_ApplyCropping( const DffPropSet& rPropSet, SfxItemSet* pSet, Gra
     }
 }
 
-SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, const DffObjData& rObjData )
+rtl::Reference<SdrObject> SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, const DffObjData& rObjData )
 {
-    SdrObject*  pRet = nullptr;
+    rtl::Reference<SdrObject> pRet;
     OUString    aLinkFileName;
     tools::Rectangle   aVisArea;
 
@@ -3964,7 +3964,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
         {
             pRet = new SdrGrafObj(*pSdrModel);
             if( bGrfRead )
-                static_cast<SdrGrafObj*>(pRet)->SetGraphic( aGraf );
+                static_cast<SdrGrafObj*>(pRet.get())->SetGraphic( aGraf );
 
             if( bLinkGrf && !bGrfRead )     // sj: #i55484# if the graphic was embedded ( bGrfRead == true ) then
             {                               // we do not need to set a link. TODO: not to lose the information where the graphic is linked from
@@ -4003,7 +4003,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
     }
     pRet->SetLogicRect( rObjData.aBoundRect );
 
-    if (SdrGrafObj* pGrafObj = dynamic_cast<SdrGrafObj*>(pRet))
+    if (SdrGrafObj* pGrafObj = dynamic_cast<SdrGrafObj*>(pRet.get()))
     {
         if( aLinkFileName.getLength() )
         {
@@ -4023,10 +4023,10 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
 }
 
 // PptSlidePersistEntry& rPersistEntry, SdPage* pPage
-SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, SvxMSDffClientData& rClientData,
+rtl::Reference<SdrObject> SvxMSDffManager::ImportObj( SvStream& rSt, SvxMSDffClientData& rClientData,
     tools::Rectangle& rClientRect, const tools::Rectangle& rGlobalChildRect, int nCalledByGroup, sal_Int32* pShapeId )
 {
-    SdrObject* pRet = nullptr;
+    rtl::Reference<SdrObject> pRet;
     DffRecordHeader aObjHd;
     bool bOk = ReadDffRecordHeader(rSt, aObjHd);
     if (bOk && aObjHd.nRecType == DFF_msofbtSpgrContainer)
@@ -4041,11 +4041,11 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, SvxMSDffClientData& rClien
     return pRet;
 }
 
-SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& rSt, SvxMSDffClientData& rClientData,
+rtl::Reference<SdrObject> SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& rSt, SvxMSDffClientData& rClientData,
                                             tools::Rectangle& rClientRect, const tools::Rectangle& rGlobalChildRect,
                                                 int nCalledByGroup, sal_Int32* pShapeId )
 {
-    SdrObject* pRet = nullptr;
+    rtl::Reference<SdrObject> pRet;
 
     if( pShapeId )
         *pShapeId = 0;
@@ -4105,18 +4105,18 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                     if (!aRecHd2.SeekToBegOfRecord(rSt))
                         return pRet;
                     sal_Int32 nShapeId;
-                    SdrObject* pTmp = ImportGroup( aRecHd2, rSt, rClientData, aGroupClientAnchor, aGroupChildAnchor, nCalledByGroup + 1, &nShapeId );
+                    rtl::Reference<SdrObject> pTmp = ImportGroup( aRecHd2, rSt, rClientData, aGroupClientAnchor, aGroupChildAnchor, nCalledByGroup + 1, &nShapeId );
                     if (pTmp)
                     {
-                        SdrObjGroup* pGroup = dynamic_cast<SdrObjGroup*>(pRet);
+                        SdrObjGroup* pGroup = dynamic_cast<SdrObjGroup*>(pRet.get());
                         if (pGroup && pGroup->GetSubList())
                         {
-                            pGroup->GetSubList()->NbcInsertObject(pTmp);
+                            pGroup->GetSubList()->NbcInsertObject(pTmp.get());
                             if (nShapeId)
-                                insertShapeId(nShapeId, pTmp);
+                                insertShapeId(nShapeId, pTmp.get());
                         }
                         else
-                            FreeObj(rClientData, pTmp);
+                            FreeObj(rClientData, pTmp.get());
                     }
                 }
                 else if ( aRecHd2.nRecType == DFF_msofbtSpContainer )
@@ -4124,18 +4124,18 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                     if (!aRecHd2.SeekToBegOfRecord(rSt))
                         return pRet;
                     sal_Int32 nShapeId;
-                    SdrObject* pTmp = ImportShape( aRecHd2, rSt, rClientData, aClientRect, aGlobalChildRect, nCalledByGroup + 1, &nShapeId );
+                    rtl::Reference<SdrObject> pTmp = ImportShape( aRecHd2, rSt, rClientData, aClientRect, aGlobalChildRect, nCalledByGroup + 1, &nShapeId );
                     if (pTmp)
                     {
-                        SdrObjGroup* pGroup = dynamic_cast<SdrObjGroup*>(pRet);
+                        SdrObjGroup* pGroup = dynamic_cast<SdrObjGroup*>(pRet.get());
                         if (pGroup && pGroup->GetSubList())
                         {
-                            pGroup->GetSubList()->NbcInsertObject(pTmp);
+                            pGroup->GetSubList()->NbcInsertObject(pTmp.get());
                             if (nShapeId)
-                                insertShapeId(nShapeId, pTmp);
+                                insertShapeId(nShapeId, pTmp.get());
                         }
                         else
-                            FreeObj(rClientData, pTmp);
+                            FreeObj(rClientData, pTmp.get());
                     }
                 }
                 if (!aRecHd2.SeekToEndOfRecord(rSt))
@@ -4161,17 +4161,17 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
     if (o3tl::make_unsigned(nCalledByGroup) < maPendingGroupData.size())
     {
         // finalization for this group is pending, do it now
-        pRet = FinalizeObj(maPendingGroupData.back().first, pRet);
+        pRet = FinalizeObj(maPendingGroupData.back().first, pRet.get());
         maPendingGroupData.pop_back();
     }
     return pRet;
 }
 
-SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& rSt, SvxMSDffClientData& rClientData,
+rtl::Reference<SdrObject> SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& rSt, SvxMSDffClientData& rClientData,
                                             tools::Rectangle& rClientRect, const tools::Rectangle& rGlobalChildRect,
                                             int nCalledByGroup, sal_Int32* pShapeId )
 {
-    SdrObject* pRet = nullptr;
+    rtl::Reference<SdrObject> pRet;
 
     if( pShapeId )
         *pShapeId = 0;
@@ -4387,12 +4387,12 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         // this should be replaced through "CharacterRotation"
                         // by 90 degrees, therefore a new Item has to be
                         // supported by svx core, api and xml file format
-                        static_cast<SdrObjCustomShape*>(pRet)->SetVerticalWriting( ( ngtextFStrikethrough & 0x2000 ) != 0 );
+                        static_cast<SdrObjCustomShape*>(pRet.get())->SetVerticalWriting( ( ngtextFStrikethrough & 0x2000 ) != 0 );
 
                         if ( SeekToContent( DFF_Prop_gtextUNICODE, rSt ) )
                         {
                             aObjectText = MSDFFReadZString( rSt, GetPropertyValue( DFF_Prop_gtextUNICODE, 0 ), true );
-                            ReadObjText( aObjectText, pRet );
+                            ReadObjText( aObjectText, pRet.get() );
                         }
 
                         auto eGeoTextAlign = GetPropertyValue(DFF_Prop_gtextAlign, mso_alignTextCenter);
@@ -4466,10 +4466,10 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                     // so we have to calculate the a text direction from string:
                     if ( bIsFontwork )
                     {
-                        OutlinerParaObject* pParaObj = static_cast<SdrObjCustomShape*>(pRet)->GetOutlinerParaObject();
+                        OutlinerParaObject* pParaObj = static_cast<SdrObjCustomShape*>(pRet.get())->GetOutlinerParaObject();
                         if ( pParaObj )
                         {
-                            SdrOutliner& rOutliner = static_cast<SdrObjCustomShape*>(pRet)->ImpGetDrawOutliner();
+                            SdrOutliner& rOutliner = static_cast<SdrObjCustomShape*>(pRet.get())->ImpGetDrawOutliner();
                             rOutliner.SetStyleSheetPool(static_cast< SfxStyleSheetPool* >(pRet->getSdrModelFromSdrObject().GetStyleSheetPool()));
                             bool bOldUpdateMode = rOutliner.SetUpdateLayout( false );
                             rOutliner.SetText( *pParaObj );
@@ -4495,7 +4495,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                 {
                                     std::optional<OutlinerParaObject> pNewText = rOutliner.CreateParaObject();
                                     rOutliner.Init( OutlinerMode::TextObject );
-                                    static_cast<SdrObjCustomShape*>(pRet)->NbcSetOutlinerParaObject( std::move(pNewText) );
+                                    static_cast<SdrObjCustomShape*>(pRet.get())->NbcSetOutlinerParaObject( std::move(pNewText) );
                                 }
                             }
                             rOutliner.Clear();
@@ -4512,7 +4512,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         static const OUStringLiteral sAdjustmentValues( u"AdjustmentValues" );
                         static const OUStringLiteral sViewBox( u"ViewBox" );
                         static const OUStringLiteral sPath( u"Path" );
-                        SdrCustomShapeGeometryItem aGeometryItem( static_cast<SdrObjCustomShape*>(pRet)->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
+                        SdrCustomShapeGeometryItem aGeometryItem( static_cast<SdrObjCustomShape*>(pRet.get())->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
                         PropertyValue aPropVal;
 
                         // The default arc goes form -90deg to 0deg. Replace general defaults used
@@ -4704,18 +4704,18 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         aGeometryItem.ClearPropertyValue( "Equations" );
                         aGeometryItem.ClearPropertyValue( sPath );
 
-                        static_cast<SdrObjCustomShape*>(pRet)->SetMergedItem( aGeometryItem );
-                        static_cast<SdrObjCustomShape*>(pRet)->MergeDefaultAttributes();
+                        static_cast<SdrObjCustomShape*>(pRet.get())->SetMergedItem( aGeometryItem );
+                        static_cast<SdrObjCustomShape*>(pRet.get())->MergeDefaultAttributes();
 
                         // now setting a new name, so the above correction is only done once when importing from ms
-                        SdrCustomShapeGeometryItem aGeoName( static_cast<SdrObjCustomShape*>(pRet)->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
+                        SdrCustomShapeGeometryItem aGeoName( static_cast<SdrObjCustomShape*>(pRet.get())->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
                         aPropVal.Name = "Type";
                         aPropVal.Value <<= OUString( "mso-spt100" );
                         aGeoName.SetPropertyValue( aPropVal );
-                        static_cast<SdrObjCustomShape*>(pRet)->SetMergedItem( aGeoName );
+                        static_cast<SdrObjCustomShape*>(pRet.get())->SetMergedItem( aGeoName );
                     }
                     else
-                        static_cast<SdrObjCustomShape*>(pRet)->MergeDefaultAttributes();
+                        static_cast<SdrObjCustomShape*>(pRet.get())->MergeDefaultAttributes();
 
                     pRet->SetSnapRect( aObjData.aBoundRect );
                     EnhancedCustomShape2d aCustomShape2d(static_cast<SdrObjCustomShape&>(*pRet));
@@ -4741,8 +4741,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             Point aRight( aLeft.X() + 1000, aLeft.Y() );
                             pRet->NbcMirror( aLeft, aRight );
                         }
-                        basegfx::B2DPolyPolygon aPoly( static_cast<SdrObjCustomShape*>(pRet)->GetLineGeometry( true ) );
-                        SdrObject::Free( pRet );
+                        basegfx::B2DPolyPolygon aPoly( static_cast<SdrObjCustomShape*>(pRet.get())->GetLineGeometry( true ) );
 
                         pRet = new SdrEdgeObj(*pSdrModel);
                         ApplyAttributes( rSt, aSet, aObjData );
@@ -4752,8 +4751,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         // connectors
                         auto eConnectorStyle = GetPropertyValue(DFF_Prop_cxstyle, mso_cxstyleStraight);
 
-                        static_cast<SdrEdgeObj*>(pRet)->ConnectToNode(true, nullptr);
-                        static_cast<SdrEdgeObj*>(pRet)->ConnectToNode(false, nullptr);
+                        static_cast<SdrEdgeObj*>(pRet.get())->ConnectToNode(true, nullptr);
+                        static_cast<SdrEdgeObj*>(pRet.get())->ConnectToNode(false, nullptr);
 
                         Point aPoint1( aObjData.aBoundRect.TopLeft() );
                         Point aPoint2( aObjData.aBoundRect.BottomRight() );
@@ -4818,13 +4817,13 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         aSet.Put( SdrEdgeNode2HorzDistItem( n2HorzDist ) );
                         aSet.Put( SdrEdgeNode2VertDistItem( n2VertDist ) );
 
-                        static_cast<SdrEdgeObj*>(pRet)->SetEdgeTrackPath( aPoly );
+                        static_cast<SdrEdgeObj*>(pRet.get())->SetEdgeTrackPath( aPoly );
                         pRet->SetMergedItemSet( aSet );
                     }
                     if ( aObjData.eShapeType == mso_sptLine )
                     {
                         pRet->SetMergedItemSet(aSet);
-                        static_cast<SdrObjCustomShape*>(pRet)->MergeDefaultAttributes();
+                        static_cast<SdrObjCustomShape*>(pRet.get())->MergeDefaultAttributes();
                     }
                 }
             }
@@ -4862,7 +4861,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
     }
 
     pRet =
-        ProcessObj( rSt, aObjData, rClientData, aTextRect, pRet);
+        ProcessObj( rSt, aObjData, rClientData, aTextRect, pRet.get());
 
     if ( pRet )
     {
@@ -4898,7 +4897,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
     }
     else
     {
-        pRet = FinalizeObj(aObjData, pRet);
+        pRet = FinalizeObj(aObjData, pRet.get());
     }
     return pRet;
 }
@@ -5062,7 +5061,7 @@ void SvxMSDffImportData::insert(std::unique_ptr<SvxMSDffImportRec> pImpRec)
     if (bSuccess)
     {
         SvxMSDffImportRec* pRec = aRet.first->get();
-        m_ObjToRecMap[pRec->pObj] = pRec;
+        m_ObjToRecMap[pRec->pObj.get()] = pRec;
     }
 }
 
@@ -5091,16 +5090,16 @@ void SvxMSDffManager::NotifyFreeObj(SvxMSDffClientData& rData, SdrObject* pObj)
 void SvxMSDffManager::FreeObj(SvxMSDffClientData& rData, SdrObject* pObj)
 {
     NotifyFreeObj(rData, pObj);
-    SdrObject::Free(pObj);
 }
 
-SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
+rtl::Reference<SdrObject> SvxMSDffManager::ProcessObj(SvStream& rSt,
                                        DffObjData& rObjData,
                                        SvxMSDffClientData& rData,
                                        tools::Rectangle& rTextRect,
-                                       SdrObject* pObj
+                                       SdrObject* pObj1
                                        )
 {
+    rtl::Reference<SdrObject> pObj = pObj1;
     if( !rTextRect.IsEmpty() )
     {
         SvxMSDffImportData& rImportData = static_cast<SvxMSDffImportData&>(rData);
@@ -5177,8 +5176,8 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
         }
 
         //  text frame, also Title or Outline
-        SdrObject*  pOrgObj  = pObj;
-        SdrRectObj* pTextObj = nullptr;
+        rtl::Reference<SdrObject> pOrgObj  = pObj;
+        rtl::Reference<SdrRectObj> pTextObj;
         sal_uInt32 nTextId = GetPropertyValue( DFF_Prop_lTxid, 0 );
         if( nTextId )
         {
@@ -5207,8 +5206,8 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
 
             if (bTextFrame)
             {
-                SdrObject::Free( pObj );
-                pObj = pOrgObj = nullptr;
+                pObj = nullptr;
+                pOrgObj = nullptr;
             }
 
             // Distance of Textbox to its surrounding Customshape
@@ -5445,20 +5444,20 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
 
             if( !pObj )
             {
-                pObj = pTextObj;
+                pObj = pTextObj.get();
             }
             else
             {
-                if( pTextObj != pObj )
+                if( pTextObj.get() != pObj.get() )
                 {
-                    SdrObject* pGroup = new SdrObjGroup(*pSdrModel);
-                    pGroup->GetSubList()->NbcInsertObject( pObj );
-                    pGroup->GetSubList()->NbcInsertObject( pTextObj );
+                    rtl::Reference<SdrObject> pGroup = new SdrObjGroup(*pSdrModel);
+                    pGroup->GetSubList()->NbcInsertObject( pObj.get() );
+                    pGroup->GetSubList()->NbcInsertObject( pTextObj.get() );
                     if (pOrgObj == pObj)
                         pOrgObj = pGroup;
                     else
                         pOrgObj = pObj;
-                    pObj = pGroup;
+                    pObj = pGroup.get();
                 }
             }
         }
@@ -5573,7 +5572,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             // amend the import record list
             if( pOrgObj )
             {
-                pImpRec->pObj = pOrgObj;
+                pImpRec->pObj = pOrgObj.get();
                 rImportData.insert(std::unique_ptr<SvxMSDffImportRec>(pImpRec));
                 bDeleteImpRec = false;
                 if (pImpRec == pTextImpRec)
@@ -5584,7 +5583,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             {
                 // Modify ShapeId (must be unique)
                 pImpRec->nShapeId |= 0x8000000;
-                pTextImpRec->pObj = pTextObj;
+                pTextImpRec->pObj = pTextObj.get();
                 rImportData.insert(std::unique_ptr<SvxMSDffImportRec>(pTextImpRec));
                 bDeleteTextImpRec = false;
                 if (pTextImpRec == pImpRec)
@@ -5600,7 +5599,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
               )
                 StoreShapeOrder( pImpRec->nShapeId,
                                 ( static_cast<sal_uLong>(pImpRec->aTextId.nTxBxS) << 16 )
-                                    + pImpRec->aTextId.nSequence, pObj );
+                                    + pImpRec->aTextId.nSequence, pObj.get() );
         }
 
         if (bDeleteImpRec)
@@ -6304,7 +6303,7 @@ bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
     Access to a shape at runtime (via the Shape-Id)
     ----------------------------
 ******************************************************************************/
-bool SvxMSDffManager::GetShape(sal_uLong nId, SdrObject*&         rpShape,
+bool SvxMSDffManager::GetShape(sal_uLong nId, rtl::Reference<SdrObject>& rpShape,
                                           SvxMSDffImportData& rData)
 {
     auto const pTmpRec = std::make_shared<SvxMSDffShapeInfo>(0, nId);
@@ -6333,7 +6332,7 @@ bool SvxMSDffManager::GetShape(sal_uLong nId, SdrObject*&         rpShape,
         rStCtrl.Seek( nOldPosCtrl );
         if( &rStCtrl != pStData && pStData )
             pStData->Seek( nOldPosData );
-        return ( nullptr != rpShape );
+        return bool(rpShape);
     }
     return false;
 }
@@ -6666,13 +6665,13 @@ bool SvxMSDffManager::ShapeHasText( sal_uLong /* nShapeId */, sal_uLong /* nFile
 }
 
 // #i32596# - add new parameter <_nCalledByGroup>
-SdrObject* SvxMSDffManager::ImportOLE( sal_uInt32 nOLEId,
+rtl::Reference<SdrObject> SvxMSDffManager::ImportOLE( sal_uInt32 nOLEId,
                                        const Graphic& rGrf,
                                        const tools::Rectangle& rBoundRect,
                                        const tools::Rectangle& rVisArea,
                                        const int /* _nCalledByGroup */ ) const
 {
-    SdrObject* pRet = nullptr;
+    rtl::Reference<SdrObject> pRet;
     OUString sStorageName;
     tools::SvRef<SotStorage> xSrcStg;
     ErrCode nError = ERRCODE_NONE;
@@ -7185,7 +7184,7 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
 }
 
 // TODO/MBA: code review and testing!
-SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
+rtl::Reference<SdrOle2Obj> SvxMSDffManager::CreateSdrOLEFromStorage(
     SdrModel& rSdrModel,
     const OUString& rStorageName,
     tools::SvRef<SotStorage> const & rSrcStorage,
@@ -7200,7 +7199,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
     OUString const& rBaseURL)
 {
     sal_Int64 nAspect = nRecommendedAspect;
-    SdrOle2Obj* pRet = nullptr;
+    rtl::Reference<SdrOle2Obj> pRet;
     if( rSrcStorage.is() && xDestStorage.is() && rStorageName.getLength() )
     {
         comphelper::EmbeddedObjectContainer aCnt( xDestStorage );
@@ -7407,8 +7406,7 @@ bool SvxMSDffManager::SetPropValue( const uno::Any& rAny, const uno::Reference< 
 }
 
 SvxMSDffImportRec::SvxMSDffImportRec()
-    : pObj( nullptr ),
-      nClientAnchorLen(  0 ),
+    : nClientAnchorLen(  0 ),
       nClientDataLen(    0 ),
       nXAlign( 0 ), // position n cm from left
       nYAlign( 0 ), // position n cm below

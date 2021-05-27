@@ -28,6 +28,8 @@
 #include <svx/svdotable.hxx>
 #include <svx/svdview.hxx>
 #include <optional>
+#include <unotools/weakref.hxx>
+#include <memory>
 
 struct ImplSVEvent;
 class SdrView;
@@ -98,7 +100,7 @@ public:
     SVX_DLLPRIVATE virtual bool GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const override;
     SVX_DLLPRIVATE virtual bool SetAttributes(const SfxItemSet& rSet, bool bReplaceAll) override;
 
-    SVX_DLLPRIVATE virtual SdrObject* GetMarkedSdrObjClone( SdrModel& rTargetModel ) override;
+    SVX_DLLPRIVATE virtual rtl::Reference<SdrObject> GetMarkedSdrObjClone( SdrModel& rTargetModel ) override;
     SVX_DLLPRIVATE virtual bool PasteObjModel( const SdrModel& rModel ) override;
 
     SVX_DLLPRIVATE virtual bool hasSelectedCells() const override { return mbCellSelectionMode || mrView.IsTextEdit(); }
@@ -124,7 +126,7 @@ public:
     bool isColumnSelected( sal_Int32 nColumn );
     bool isRowHeader();
     bool isColumnHeader();
-    sdr::table::SdrTableObj* GetTableObj() { return mxTableObj.get(); }
+    sdr::table::SdrTableObj* GetTableObj() { return mxTableObj.get().get(); }
 private:
     SvxTableController(SvxTableController const &) = delete;
     SvxTableController& operator =(SvxTableController const &) = delete;
@@ -184,7 +186,7 @@ private:
     bool mbLeftButtonDown;
     std::optional<sdr::overlay::OverlayObjectList>  mpSelectionOverlay;
     SdrView& mrView;
-    tools::WeakReference<SdrTableObj> mxTableObj;
+    unotools::WeakReference<SdrTableObj> mxTableObj;
     css::uno::Reference< css::util::XModifyListener > mxModifyListener;
     ImplSVEvent * mnUpdateEvent;
 };

@@ -150,7 +150,7 @@ void SAL_CALL TablePivotCharts::addNewByName(OUString const & rName,
         xReceiver->setArguments(aArgs);
     }
 
-    SdrOle2Obj* pObject = new SdrOle2Obj(
+    rtl::Reference<SdrOle2Obj> pObject = new SdrOle2Obj(
             *pModel,
             svt::EmbeddedObjectRef(xObject, embed::Aspects::MSOLE_CONTENT),
             aName,
@@ -159,7 +159,7 @@ void SAL_CALL TablePivotCharts::addNewByName(OUString const & rName,
     if (xObject.is())
         xObject->setVisualAreaSize(nAspect, aAwtSize);
 
-    pPage->InsertObject(pObject);
+    pPage->InsertObject(pObject.get());
     pModel->AddUndo(std::make_unique<SdrUndoInsertObj>(*pObject));
 }
 

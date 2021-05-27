@@ -44,7 +44,7 @@ public:
     // #i3694#
     // This GetOffset() method is not needed anymore, it even leads to errors.
     // virtual Point GetOffset() const;
-    virtual SdrObject* ReplaceObject( SdrObject* pNewObj, size_t nObjNum ) override;
+    virtual rtl::Reference<SdrObject> ReplaceObject( SdrObject* pNewObj, size_t nObjNum ) override;
 
     virtual const SdrPageGridFrameList* GetGridFrameList(const SdrPageView* pPV,
                                     const tools::Rectangle *pRect) const override;

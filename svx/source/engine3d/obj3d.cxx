@@ -96,7 +96,7 @@ bool E3dObject::IsBreakObjPossible()
     return false;
 }
 
-std::unique_ptr<SdrAttrObj,SdrObjectFreeOp> E3dObject::GetBreakObj()
+rtl::Reference<SdrAttrObj> E3dObject::GetBreakObj()
 {
     return nullptr;
 }
@@ -398,7 +398,7 @@ OUString E3dObject::TakeObjNamePlural() const
     return SvxResId(STR_ObjNamePluralObj3d);
 }
 
-E3dObject* E3dObject::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> E3dObject::CloneSdrObject(SdrModel& rTargetModel) const
 {
     return new E3dObject(rTargetModel, *this);
 }
@@ -591,7 +591,7 @@ void E3dCompoundObject::RecalcSnapRect()
         sal_Int32(ceil(aSnapRange.getMaxX())), sal_Int32(ceil(aSnapRange.getMaxY())));
 }
 
-E3dCompoundObject* E3dCompoundObject::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> E3dCompoundObject::CloneSdrObject(SdrModel& rTargetModel) const
 {
     return new E3dCompoundObject(rTargetModel, *this);
 }
