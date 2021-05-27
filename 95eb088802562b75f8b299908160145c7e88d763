@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c12c5010_ada14bff",
+        "filename": "offapi/com/sun/star/document/ReloadEditableRequest.idl",
+        "patchSetId": 44
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-05-27T11:30:33Z",
+      "side": 1,
+      "message": "\u003chttps://gerrit.libreoffice.org/c/core/+/111641/1/offapi/com/sun/star/document/ReloadEditableRequest.idl#1\u003e has not been addressed here (and elsewhere in this change)",
+      "revId": "95eb088802562b75f8b299908160145c7e88d763",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2decf126_6c9a843c",
+        "filename": "uui/source/reloadeditable.cxx",
+        "patchSetId": 44
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-05-27T11:30:33Z",
+      "side": 1,
+      "message": "\u003chttps://gerrit.libreoffice.org/c/core/+/111641/1/uui/source/reloadeditable.cxx#18\u003e has not been addressed here (and elsewhere in this change)",
+      "revId": "95eb088802562b75f8b299908160145c7e88d763",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a344c5c9_58640f01",
+        "filename": "uui/source/reloadeditable.hxx",
+        "patchSetId": 44
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-05-27T11:30:33Z",
+      "side": 1,
+      "message": "\u003chttps://gerrit.libreoffice.org/c/core/+/111641/1/uui/source/reloadeditable.hxx#18\u003e has not been addressed here (and elsewhere in this change)",
+      "revId": "95eb088802562b75f8b299908160145c7e88d763",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
