@@ -510,18 +510,16 @@ PrinterGfx::DrawPS1GrayImage (const PrinterBmp& rBitmap, const tools::Rectangle&
     WritePS (mpPageBody, pGrayImage.makeStringAndClear());
 
     // image body
-    std::unique_ptr<HexEncoder> xEncoder(new HexEncoder (mpPageBody));
+    HexEncoder aEncoder(mpPageBody);
 
     for (tools::Long nRow = rArea.Top(); nRow <= rArea.Bottom(); nRow++)
     {
         for (tools::Long nColumn = rArea.Left(); nColumn <= rArea.Right(); nColumn++)
         {
             unsigned char nByte = rBitmap.GetPixelGray (nRow, nColumn);
-            xEncoder->EncodeByte (nByte);
+            aEncoder.EncodeByte (nByte);
         }
     }
-
-    xEncoder.reset();
 
     WritePS (mpPageBody, "\n");
 }
@@ -587,16 +585,15 @@ PrinterGfx::writePS2Colorspace(const PrinterBmp& rBitmap, psp::ImageType nType)
             psp::appendStr ("\npsp_lzwstring\n", pImage);
             WritePS (mpPageBody, pImage.makeStringAndClear());
 
-            std::unique_ptr<ByteEncoder> xEncoder(new LZWEncoder(mpPageBody));
+            LZWEncoder aEncoder(mpPageBody);
             for (sal_uInt32 i = 0; i < nSize; i++)
             {
                 PrinterColor aColor = rBitmap.GetPaletteColor(i);
 
-                xEncoder->EncodeByte (aColor.GetRed());
-                xEncoder->EncodeByte (aColor.GetGreen());
-                xEncoder->EncodeByte (aColor.GetBlue());
+                aEncoder.EncodeByte (aColor.GetRed());
+                aEncoder.EncodeByte (aColor.GetGreen());
+                aEncoder.EncodeByte (aColor.GetBlue());
             }
-            xEncoder.reset();
 
             WritePS (mpPageBody, "pop ] setcolorspace\n");
         }
@@ -611,14 +608,14 @@ PrinterGfx::DrawPS2GrayImage (const PrinterBmp& rBitmap, const tools::Rectangle&
     writePS2Colorspace(rBitmap, psp::ImageType::GrayScaleImage);
     writePS2ImageHeader(rArea, psp::ImageType::GrayScaleImage);
 
-    std::unique_ptr<ByteEncoder> xEncoder(new LZWEncoder(mpPageBody));
+    LZWEncoder aEncoder(mpPageBody);
 
     for (tools::Long nRow = rArea.Top(); nRow <= rArea.Bottom(); nRow++)
     {
         for (tools::Long nColumn = rArea.Left(); nColumn <= rArea.Right(); nColumn++)
         {
             unsigned char nByte = rBitmap.GetPixelGray (nRow, nColumn);
-            xEncoder->EncodeByte (nByte);
+            aEncoder.EncodeByte (nByte);
         }
     }
 }
@@ -629,7 +626,7 @@ PrinterGfx::DrawPS2MonoImage (const PrinterBmp& rBitmap, const tools::Rectangle&
     writePS2Colorspace(rBitmap, psp::ImageType::MonochromeImage);
     writePS2ImageHeader(rArea, psp::ImageType::MonochromeImage);
 
-    std::unique_ptr<ByteEncoder> xEncoder(new LZWEncoder(mpPageBody));
+    LZWEncoder aEncoder(mpPageBody);
 
     for (tools::Long nRow = rArea.Top(); nRow <= rArea.Bottom(); nRow++)
     {
@@ -643,14 +640,14 @@ PrinterGfx::DrawPS2MonoImage (const PrinterBmp& rBitmap, const tools::Rectangle&
 
             if (++nBitPos == 8)
             {
-                xEncoder->EncodeByte (nByte);
+                aEncoder.EncodeByte (nByte);
                 nBitPos = 0;
                 nByte   = 0;
             }
         }
         // keep the row byte aligned
         if (nBitPos != 0)
-            xEncoder->EncodeByte (nByte);
+            aEncoder.EncodeByte (nByte);
     }
 }
 
@@ -660,14 +657,14 @@ PrinterGfx::DrawPS2PaletteImage (const PrinterBmp& rBitmap, const tools::Rectang
     writePS2Colorspace(rBitmap, psp::ImageType::PaletteImage);
     writePS2ImageHeader(rArea, psp::ImageType::PaletteImage);
 
-    std::unique_ptr<ByteEncoder> xEncoder(new LZWEncoder(mpPageBody));
+    LZWEncoder aEncoder(mpPageBody);
 
     for (tools::Long nRow = rArea.Top(); nRow <= rArea.Bottom(); nRow++)
     {
         for (tools::Long nColumn = rArea.Left(); nColumn <= rArea.Right(); nColumn++)
         {
             unsigned char nByte = rBitmap.GetPixelIdx (nRow, nColumn);
-            xEncoder->EncodeByte (nByte);
+            aEncoder.EncodeByte (nByte);
         }
     }
 }
@@ -678,16 +675,16 @@ PrinterGfx::DrawPS2TrueColorImage (const PrinterBmp& rBitmap, const tools::Recta
     writePS2Colorspace(rBitmap, psp::ImageType::TrueColorImage);
     writePS2ImageHeader(rArea, psp::ImageType::TrueColorImage);
 
-    std::unique_ptr<ByteEncoder> xEncoder(new LZWEncoder(mpPageBody));
+    LZWEncoder aEncoder(mpPageBody);
 
     for (tools::Long nRow = rArea.Top(); nRow <= rArea.Bottom(); nRow++)
     {
         for (tools::Long nColumn = rArea.Left(); nColumn <= rArea.Right(); nColumn++)
         {
             PrinterColor aColor = rBitmap.GetPixelRGB (nRow, nColumn);
-            xEncoder->EncodeByte (aColor.GetRed());
-            xEncoder->EncodeByte (aColor.GetGreen());
-            xEncoder->EncodeByte (aColor.GetBlue());
+            aEncoder.EncodeByte (aColor.GetRed());
+            aEncoder.EncodeByte (aColor.GetGreen());
+            aEncoder.EncodeByte (aColor.GetBlue());
         }
     }
 }
