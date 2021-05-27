@@ -367,8 +367,8 @@ void SvXMLAutoStylePoolP_Impl::AddFamily(
     }
 
 #if OSL_DEBUG_LEVEL > 0
-    std::unique_ptr<XMLAutoStyleFamily> pTemp(new XMLAutoStyleFamily(nFamily));
-    auto const iter = m_FamilySet.find(pTemp);
+    XMLAutoStyleFamily aTemp(nFamily);
+    auto const iter = m_FamilySet.find(aTemp);
     if (iter != m_FamilySet.end())
     {
         // FIXME: do we really intend to replace the previous nFamily
@@ -388,8 +388,8 @@ void SvXMLAutoStylePoolP_Impl::SetFamilyPropSetMapper(
         XmlStyleFamily nFamily,
         const rtl::Reference < SvXMLExportPropertyMapper > & rMapper )
 {
-    std::unique_ptr<XMLAutoStyleFamily> pTemp(new XMLAutoStyleFamily(nFamily));
-    auto const iter = m_FamilySet.find(pTemp);
+    XMLAutoStyleFamily aTemp(nFamily);
+    auto const iter = m_FamilySet.find(aTemp);
     if (iter != m_FamilySet.end())
         (*iter)->mxMapper = rMapper;
 }
@@ -397,8 +397,8 @@ void SvXMLAutoStylePoolP_Impl::SetFamilyPropSetMapper(
 // Adds a name to list
 void SvXMLAutoStylePoolP_Impl::RegisterName( XmlStyleFamily nFamily, const OUString& rName )
 {
-    std::unique_ptr<XMLAutoStyleFamily> pTemp(new XMLAutoStyleFamily(nFamily));
-    auto const iter = m_FamilySet.find(pTemp);
+    XMLAutoStyleFamily aTemp(nFamily);
+    auto const iter = m_FamilySet.find(aTemp);
     assert(iter != m_FamilySet.end()); // family must be known
     // SAL_DEBUG("SvXMLAutoStylePoolP_Impl::RegisterName: " << nFamily << ", '" << rName << "'");
     (*iter)->maNameSet.insert(rName);
@@ -407,8 +407,8 @@ void SvXMLAutoStylePoolP_Impl::RegisterName( XmlStyleFamily nFamily, const OUStr
 // Adds a name to list
 void SvXMLAutoStylePoolP_Impl::RegisterDefinedName( XmlStyleFamily nFamily, const OUString& rName )
 {
-    std::unique_ptr<XMLAutoStyleFamily> pTemp(new XMLAutoStyleFamily(nFamily));
-    auto const iter = m_FamilySet.find(pTemp);
+    XMLAutoStyleFamily aTemp(nFamily);
+    auto const iter = m_FamilySet.find(aTemp);
     assert(iter != m_FamilySet.end()); // family must be known
     (*iter)->maReservedNameSet.insert(rName);
 }
@@ -455,8 +455,8 @@ bool SvXMLAutoStylePoolP_Impl::Add(
     OUString& rName, XmlStyleFamily nFamily, const OUString& rParentName,
     const ::std::vector< XMLPropertyState >& rProperties, bool bDontSeek )
 {
-    std::unique_ptr<XMLAutoStyleFamily> pTemp(new XMLAutoStyleFamily(nFamily));
-    auto const iter = m_FamilySet.find(pTemp);
+    XMLAutoStyleFamily aTemp(nFamily);
+    auto const iter = m_FamilySet.find(aTemp);
     assert(iter != m_FamilySet.end()); // family must be known
 
     XMLAutoStyleFamily &rFamily = **iter;
@@ -481,8 +481,8 @@ bool SvXMLAutoStylePoolP_Impl::AddNamed(
 {
     // get family and parent the same way as in Add()
 
-    std::unique_ptr<XMLAutoStyleFamily> pTemp(new XMLAutoStyleFamily(nFamily));
-    auto const iter = m_FamilySet.find(pTemp);
+    XMLAutoStyleFamily aTemp(nFamily);
+    auto const iter = m_FamilySet.find(aTemp);
     assert(iter != m_FamilySet.end());  // family must be known
 
     XMLAutoStyleFamily &rFamily = **iter;
@@ -511,13 +511,13 @@ OUString SvXMLAutoStylePoolP_Impl::Find( XmlStyleFamily nFamily,
 {
     OUString sName;
 
-    std::unique_ptr<XMLAutoStyleFamily> pTemp(new XMLAutoStyleFamily(nFamily));
-    auto const iter = m_FamilySet.find(pTemp);
+    XMLAutoStyleFamily aTemp(nFamily);
+    auto const iter = m_FamilySet.find(aTemp);
     assert(iter != m_FamilySet.end()); // family must be known
 
     XMLAutoStyleFamily const& rFamily = **iter;
-    std::unique_ptr<XMLAutoStylePoolParent> pTmp(new XMLAutoStylePoolParent(rParent));
-    auto const it2 = rFamily.m_ParentSet.find(pTmp);
+    XMLAutoStylePoolParent aTmp(rParent);
+    auto const it2 = rFamily.m_ParentSet.find(aTmp);
     if (it2 != rFamily.m_ParentSet.end())
     {
         sName = (*it2)->Find(rFamily, rProperties);
@@ -579,8 +579,8 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
         const SvXMLAutoStylePoolP *pAntiImpl) const
 {
     // Get list of parents for current family (nFamily)
-    std::unique_ptr<XMLAutoStyleFamily> pTemp(new XMLAutoStyleFamily(nFamily));
-    auto const iter = m_FamilySet.find(pTemp);
+    XMLAutoStyleFamily aTemp(nFamily);
+    auto const iter = m_FamilySet.find(aTemp);
     assert(iter != m_FamilySet.end()); // family must be known
 
     const XMLAutoStyleFamily &rFamily = **iter;

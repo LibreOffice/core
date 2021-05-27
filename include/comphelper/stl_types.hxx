@@ -74,6 +74,20 @@ template<class T> struct UniquePtrValueLess
             assert(rhs.get());
             return (*lhs) < (*rhs);
         }
+        // The following are so we can search in std::set without allocating a temporary entry on the heap
+        typedef bool is_transparent;
+        bool operator()(T const& lhs,
+                        std::unique_ptr<T> const& rhs) const
+        {
+            assert(rhs.get());
+            return lhs < (*rhs);
+        }
+        bool operator()(std::unique_ptr<T> const& lhs,
+                        T const& rhs) const
+        {
+            assert(lhs.get());
+            return (*lhs) < rhs;
+        }
 };
 
 /// by-value implementation of std::foo<std::unique_ptr<T>>::operator==
