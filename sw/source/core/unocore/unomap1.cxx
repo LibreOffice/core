@@ -1275,12 +1275,6 @@ const SfxItemPropertySet*  SwUnoPropertyMapProvider::GetPropertySet( sal_uInt16 
                 m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FOOTNOTE;
             }
             break;
-            case PROPERTY_MAP_TEXT_COLUMS            :
-            {
-                static SfxItemPropertySet aPROPERTY_MAP_TEXT_COLUMS(pEntries);
-                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_COLUMS;
-            }
-            break;
             case PROPERTY_MAP_PARAGRAPH              :
             {
                 static SfxItemPropertySet aPROPERTY_MAP_PARAGRAPH(pEntries);

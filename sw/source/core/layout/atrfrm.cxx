@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <com/sun/star/text/ColumnSeparatorStyle.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
@@ -78,6 +81,7 @@
 #include <unomid.h>
 #include <strings.hrc>
 #include <svx/svdundo.hxx>
+#include <svx/SvxXTextColumns.hxx>
 #include <sortedobjs.hxx>
 #include <HandleAnchorNodeChg.hxx>
 #include <calbck.hxx>
@@ -85,6 +89,7 @@
 #include <drawdoc.hxx>
 #include <hints.hxx>
 #include <frameformats.hxx>
+#include <unoprnms.hxx>
 
 #include <ndtxt.hxx>
 
@@ -1097,7 +1102,81 @@ bool SwFormatCol::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     }
     else
     {
-        uno::Reference< text::XTextColumns >  xCols = new SwXTextColumns(*this);
+        uno::Reference<text::XTextColumns> xCols(SvxXTextColumns_createInstance(),
+                                                 css::uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xProps(xCols, css::uno::UNO_QUERY_THROW);
+
+        if (GetNumCols() > 0)
+        {
+            xCols->setColumnCount(GetNumCols());
+            const sal_uInt16 nItemGutterWidth = GetGutterWidth();
+            sal_Int32 nAutoDistance = IsOrtho() ? USHRT_MAX == nItemGutterWidth
+                                                      ? DEF_GUTTER_WIDTH
+                                                      : static_cast<sal_Int32>(nItemGutterWidth)
+                                                : 0;
+            nAutoDistance = convertTwipToMm100(nAutoDistance);
+            xProps->setPropertyValue(UNO_NAME_AUTOMATIC_DISTANCE, uno::Any(nAutoDistance));
+
+            if (!IsOrtho())
+            {
+                auto aTextColumns = xCols->getColumns();
+                text::TextColumn* pColumns = aTextColumns.getArray();
+                const SwColumns& rCols = GetColumns();
+                for (sal_Int32 i = 0; i < aTextColumns.getLength(); ++i)
+                {
+                    const SwColumn* pCol = &rCols[i];
+
+                    pColumns[i].Width = pCol->GetWishWidth();
+                    pColumns[i].LeftMargin = convertTwipToMm100(pCol->GetLeft());
+                    pColumns[i].RightMargin = convertTwipToMm100(pCol->GetRight());
+                }
+                xCols->setColumns(aTextColumns); // sets "IsAutomatic" property to false
+            }
+        }
+        uno::Any aVal;
+        aVal <<= static_cast<sal_Int32>(GetLineWidth());
+        xProps->setPropertyValue(UNO_NAME_SEPARATOR_LINE_WIDTH, aVal);
+        aVal <<= GetLineColor();
+        xProps->setPropertyValue(UNO_NAME_SEPARATOR_LINE_COLOR, aVal);
+        aVal <<= static_cast<sal_Int32>(GetLineHeight());
+        xProps->setPropertyValue(UNO_NAME_SEPARATOR_LINE_RELATIVE_HEIGHT, aVal);
+        aVal <<= GetLineAdj() != COLADJ_NONE;
+        xProps->setPropertyValue(UNO_NAME_SEPARATOR_LINE_IS_ON, aVal);
+        sal_Int16 nStyle;
+        switch (GetLineStyle())
+        {
+            case SvxBorderLineStyle::SOLID:
+                nStyle = css::text::ColumnSeparatorStyle::SOLID;
+                break;
+            case SvxBorderLineStyle::DOTTED:
+                nStyle = css::text::ColumnSeparatorStyle::DOTTED;
+                break;
+            case SvxBorderLineStyle::DASHED:
+                nStyle = css::text::ColumnSeparatorStyle::DASHED;
+                break;
+            case SvxBorderLineStyle::NONE:
+            default:
+                nStyle = css::text::ColumnSeparatorStyle::NONE;
+                break;
+        }
+        aVal <<= nStyle;
+        xProps->setPropertyValue(UNO_NAME_SEPARATOR_LINE_STYLE, aVal);
+        style::VerticalAlignment eAlignment;
+        switch (GetLineAdj())
+        {
+            case COLADJ_TOP:
+                eAlignment = style::VerticalAlignment_TOP;
+                break;
+            case COLADJ_BOTTOM:
+                eAlignment = style::VerticalAlignment_BOTTOM;
+                break;
+            case COLADJ_CENTER:
+            case COLADJ_NONE:
+            default:
+                eAlignment = style::VerticalAlignment_MIDDLE;
+        }
+        aVal <<= eAlignment;
+        xProps->setPropertyValue(UNO_NAME_SEPARATOR_LINE_VERTIVAL_ALIGNMENT, aVal);
         rVal <<= xCols;
     }
     return true;
@@ -1141,24 +1220,33 @@ bool SwFormatCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             m_nWidth = nWidthSum;
             m_bOrtho = false;
 
-            auto pSwColums = comphelper::getUnoTunnelImplementation<SwXTextColumns>(xCols);
-            if(pSwColums)
+            if (uno::Reference<beans::XPropertySet> xProps{ xCols, css::uno::UNO_QUERY })
             {
-                m_bOrtho = pSwColums->IsAutomaticWidth();
-                m_nLineWidth = pSwColums->GetSepLineWidth();
-                m_aLineColor = pSwColums->GetSepLineColor();
-                m_nLineHeight = pSwColums->GetSepLineHeightRelative();
-                switch ( pSwColums->GetSepLineStyle() )
+                xProps->getPropertyValue(UNO_NAME_IS_AUTOMATIC) >>= m_bOrtho;
+                xProps->getPropertyValue(UNO_NAME_SEPARATOR_LINE_WIDTH) >>= m_nLineWidth;
+                xProps->getPropertyValue(UNO_NAME_SEPARATOR_LINE_COLOR) >>= m_aLineColor;
+                if (sal_Int32 nHeight;
+                    xProps->getPropertyValue(UNO_NAME_SEPARATOR_LINE_RELATIVE_HEIGHT) >>= nHeight)
+                    m_nLineHeight = nHeight;
+                switch (xProps->getPropertyValue(UNO_NAME_SEPARATOR_LINE_STYLE).get<sal_Int16>())
                 {
                     default:
-                    case 0: m_eLineStyle = SvxBorderLineStyle::NONE; break;
-                    case 1: m_eLineStyle = SvxBorderLineStyle::SOLID; break;
-                    case 2: m_eLineStyle = SvxBorderLineStyle::DOTTED; break;
-                    case 3: m_eLineStyle = SvxBorderLineStyle::DASHED; break;
+                    case css::text::ColumnSeparatorStyle::NONE:
+                        m_eLineStyle = SvxBorderLineStyle::NONE;
+                        break;
+                    case css::text::ColumnSeparatorStyle::SOLID:
+                        m_eLineStyle = SvxBorderLineStyle::SOLID;
+                        break;
+                    case css::text::ColumnSeparatorStyle::DOTTED:
+                        m_eLineStyle = SvxBorderLineStyle::DOTTED;
+                        break;
+                    case css::text::ColumnSeparatorStyle::DASHED:
+                        m_eLineStyle = SvxBorderLineStyle::DASHED;
+                        break;
                 }
-                if(!pSwColums->GetSepLineIsOn())
+                if (!xProps->getPropertyValue(UNO_NAME_SEPARATOR_LINE_IS_ON).get<bool>())
                     m_eAdj = COLADJ_NONE;
-                else switch(pSwColums->GetSepLineVertAlign())
+                else switch (xProps->getPropertyValue(UNO_NAME_SEPARATOR_LINE_VERTIVAL_ALIGNMENT).get<style::VerticalAlignment>())
                 {
                     case style::VerticalAlignment_TOP: m_eAdj = COLADJ_TOP;  break;
                     case style::VerticalAlignment_MIDDLE: m_eAdj = COLADJ_CENTER; break;
