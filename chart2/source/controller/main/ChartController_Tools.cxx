@@ -418,7 +418,9 @@ void ChartController::impl_PasteShapes( SdrModel* pModel )
         {
             SdrObject* pObj(aIter.Next());
             // Clone to new SdrModel
-            SdrObject* pNewObj(pObj ? pObj->CloneSdrObject(pDrawModelWrapper->getSdrModel()) : nullptr);
+            rtl::Reference<SdrObject> pNewObj;
+            if (pObj)
+                pNewObj = pObj->CloneSdrObject(pDrawModelWrapper->getSdrModel());
 
             if ( pNewObj )
             {
@@ -429,7 +431,7 @@ void ChartController::impl_PasteShapes( SdrModel* pModel )
                     xShape->setPosition( awt::Point( 0, 0 ) );
                 }
 
-                pDestPage->InsertObject( pNewObj );
+                pDestPage->InsertObject( pNewObj.get() );
                 m_pDrawViewWrapper->AddUndo( std::make_unique<SdrUndoInsertObj>( *pNewObj ) );
                 xSelShape = xShape;
             }

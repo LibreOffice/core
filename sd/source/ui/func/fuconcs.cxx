@@ -138,9 +138,9 @@ bool FuConstructCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
                 aClickPos = mpView->GetSnapPos(aClickPos, pPV);
 
             ::tools::Rectangle aNewObjectRectangle(aClickPos, Size(nDefaultObjectSize, nDefaultObjectSize));
-            SdrObjectUniquePtr pObjDefault = CreateDefaultObject(nSlotId, aNewObjectRectangle);
+            rtl::Reference<SdrObject> pObjDefault = CreateDefaultObject(nSlotId, aNewObjectRectangle);
 
-            bReturn = mpView->InsertObjectAtView(pObjDefault.release(), *pPV);
+            bReturn = mpView->InsertObjectAtView(pObjDefault.get(), *pPV);
         }
     }
     bReturn = FuConstruct::MouseButtonUp (rMEvt) || bReturn;
@@ -229,9 +229,9 @@ const OUString& FuConstructCustomShape::GetShapeType() const
     return aCustomShape;
 }
 
-SdrObjectUniquePtr FuConstructCustomShape::CreateDefaultObject(const sal_uInt16, const ::tools::Rectangle& rRectangle)
+rtl::Reference<SdrObject> FuConstructCustomShape::CreateDefaultObject(const sal_uInt16, const ::tools::Rectangle& rRectangle)
 {
-    SdrObjectUniquePtr pObj(SdrObjFactory::MakeNewObject(
+    rtl::Reference<SdrObject> pObj(SdrObjFactory::MakeNewObject(
         mpView->getSdrModelFromSdrView(),
         mpView->GetCurrentObjInventor(),
         mpView->GetCurrentObjIdentifier()));

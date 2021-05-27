@@ -401,7 +401,7 @@ void FuConstructBezierPolygon::SetEditMode(sal_uInt16 nMode)
     rBindings.Invalidate(SID_BEZIER_INSERT);
 }
 
-SdrObjectUniquePtr FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rectangle& rRectangle)
+rtl::Reference<SdrObject> FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rectangle& rRectangle)
 {
     // case SID_DRAW_POLYGON:
     // case SID_DRAW_POLYGON_NOFILL:
@@ -412,7 +412,7 @@ SdrObjectUniquePtr FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt1
     // case SID_DRAW_BEZIER_FILL:          // BASIC
     // case SID_DRAW_BEZIER_NOFILL:        // BASIC
 
-    SdrObjectUniquePtr pObj(SdrObjFactory::MakeNewObject(
+    rtl::Reference<SdrObject> pObj(SdrObjFactory::MakeNewObject(
         mpView->getSdrModelFromSdrView(),
         mpView->GetCurrentObjInventor(),
         mpView->GetCurrentObjIdentifier()));
