@@ -21,6 +21,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_shapetest, \
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_shapetest, \
     cppu \
+    cppuhelper \
     sal \
     sc \
     sfx \
