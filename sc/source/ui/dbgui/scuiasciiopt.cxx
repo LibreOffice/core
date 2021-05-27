@@ -288,14 +288,12 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, const OUString& aDatNa
     , mcTextSep(ScAsciiOptions::cDefaultTextSep)
     , meCall(eCall)
     , mbDetectSpaceSep(eCall != SC_TEXTTOCOLUMNS)
-    , mxFtCharSet(m_xBuilder->weld_label("textcharset"))
     , mxLbCharSet(new SvxTextEncodingBox(m_xBuilder->weld_combo_box("charset")))
     , mxFtCustomLang(m_xBuilder->weld_label("textlanguage"))
     , mxLbCustomLang(new SvxLanguageBox(m_xBuilder->weld_combo_box("language")))
     , mxFtRow(m_xBuilder->weld_label("textfromrow"))
     , mxNfRow(m_xBuilder->weld_spin_button("fromrow"))
-    , mxRbFixed(m_xBuilder->weld_radio_button("tofixedwidth"))
-    , mxRbSeparated(m_xBuilder->weld_radio_button("toseparatedby"))
+    , mxRbSeparated(m_xBuilder->weld_check_button("toseparatedby"))
     , mxCkbTab(m_xBuilder->weld_check_button("tab"))
     , mxCkbSemicolon(m_xBuilder->weld_check_button("semicolon"))
     , mxCkbComma(m_xBuilder->weld_check_button("comma"))
@@ -363,7 +361,7 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, const OUString& aDatNa
     if (bSkipEmptyCells)
         mxCkbSkipEmptyCells->set_active(true);
     if (bFixedWidth && !bIsTSV)
-        mxRbFixed->set_active(true);
+        mxRbSeparated->set_active(false);
     if (nFromRow != 1)
         mxNfRow->set_value(nFromRow);
 
@@ -488,10 +486,9 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, const OUString& aDatNa
     mxTableBox->SetColTypeHdl( LINK( this, ScImportAsciiDlg, ColTypeHdl ) );
 
     mxRbSeparated->connect_clicked( LINK( this, ScImportAsciiDlg, RbSepFixHdl ) );
-    mxRbFixed->connect_clicked( LINK( this, ScImportAsciiDlg, RbSepFixHdl ) );
 
     SetupSeparatorCtrls();
-    RbSepFixHdl(*mxRbFixed);
+    RbSepFixHdl( *mxRbSeparated );
 
     UpdateVertical();
 
@@ -499,7 +496,6 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, const OUString& aDatNa
 
     if (meCall == SC_TEXTTOCOLUMNS)
     {
-        mxFtCharSet->set_sensitive(false);
         mxLbCharSet->set_sensitive(false);
         mxFtCustomLang->set_sensitive(false);
         mxLbCustomLang->set_active_id(LANGUAGE_SYSTEM);
@@ -539,7 +535,7 @@ bool ScImportAsciiDlg::GetLine( sal_uLong nLine, OUString &rText, sal_Unicode& r
         return false;
 
     bool bRet = true;
-    bool bFixed = mxRbFixed->get_active();
+    bool bFixed = !mxRbSeparated->get_active();
 
     if (!mpRowPosArray)
         mpRowPosArray.reset( new sal_uLong[ASCIIDLG_MAXROWS + 2] );
@@ -602,7 +598,7 @@ void ScImportAsciiDlg::GetOptions( ScAsciiOptions& rOpt )
     rOpt.SetCharSet( meCharSet );
     rOpt.SetCharSetSystem( mbCharSetSystem );
     rOpt.SetLanguage(mxLbCustomLang->get_active_id());
-    rOpt.SetFixedLen( mxRbFixed->get_active() );
+    rOpt.SetFixedLen( !mxRbSeparated->get_active() );
     rOpt.SetStartRow( mxNfRow->get_value() );
     mxTableBox->FillColumnData( rOpt );
     if( mxRbSeparated->get_active() )
@@ -622,7 +618,7 @@ void ScImportAsciiDlg::SaveParameters()
 {
     lcl_SaveSeparators( maFieldSeparators, mxCbTextSep->get_active_text(), mxCkbAsOnce->get_active(),
                      mxCkbQuotedAsText->get_active(), mxCkbDetectNumber->get_active(),
-                     mxRbFixed->get_active(),
+                     !mxRbSeparated->get_active(),
                      mxNfRow->get_value(),
                      mxLbCharSet->get_active(),
                      static_cast<sal_uInt16>(mxLbCustomLang->get_active_id()),
@@ -698,10 +694,10 @@ void ScImportAsciiDlg::UpdateVertical()
 
 IMPL_LINK(ScImportAsciiDlg, RbSepFixHdl, weld::Button&, rButton, void)
 {
-    if (&rButton == mxRbFixed.get() || &rButton == mxRbSeparated.get())
+    if (&rButton == mxRbSeparated.get())
     {
         weld::WaitObject aWaitObj(m_xDialog.get());
-        if( mxRbFixed->get_active() )
+        if( !mxRbSeparated->get_active() )
             mxTableBox->SetFixedWidthMode();
         else
             mxTableBox->SetSeparatorsMode();
@@ -727,7 +723,7 @@ IMPL_LINK( ScImportAsciiDlg, SeparatorEditHdl, weld::Entry&, rEdit, void )
 void ScImportAsciiDlg::SeparatorHdl(const weld::Widget* pCtrl)
 {
     OSL_ENSURE( pCtrl, "ScImportAsciiDlg::SeparatorHdl - missing sender" );
-    OSL_ENSURE( !mxRbFixed->get_active(), "ScImportAsciiDlg::SeparatorHdl - not allowed in fixed width" );
+    OSL_ENSURE( mxRbSeparated->get_active(), "ScImportAsciiDlg::SeparatorHdl - not allowed in fixed width" );
 
     /*  #i41550# First update state of the controls. The GetSeparators()
         function needs final state of the check boxes. */
@@ -780,7 +776,7 @@ IMPL_LINK_NOARG(ScImportAsciiDlg, UpdateTextHdl, ScCsvTableBox&, void)
     // when the dialog wasn't already presented to the user.
     // As a side effect this has the benefit that the check is only done on the
     // first set of visible lines.
-    sal_Unicode cDetectSep = (mbDetectSpaceSep && !mxRbFixed->get_active() && !mxCkbSpace->get_active() ? 0 : 0xffff);
+    sal_Unicode cDetectSep = (mbDetectSpaceSep && mxRbSeparated->get_active() && !mxCkbSpace->get_active() ? 0 : 0xffff);
 
     sal_Int32 nBaseLine = mxTableBox->GetGrid().GetFirstVisLine();
     sal_Int32 nRead = mxTableBox->GetGrid().GetVisLineCount();
