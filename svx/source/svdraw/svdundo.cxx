@@ -652,9 +652,6 @@ SdrUndoObjList::~SdrUndoObjList()
     {
         // Attribute have to go back to the regular Pool
         SetOwner(false);
-
-        // now delete
-        SdrObject::Free( pObj );
     }
 }
 
@@ -722,8 +719,8 @@ void SdrUndoInsertObj::Undo()
     {
         ImplUnmarkObject( pObj );
 
-        SdrObject* pChkObj= pObjList->RemoveObject(pObj->GetOrdNum());
-        DBG_ASSERT(pChkObj==pObj,"UndoInsertObj: RemoveObjNum!=pObj");
+        rtl::Reference<SdrObject> pChkObj= pObjList->RemoveObject(pObj->GetOrdNum());
+        DBG_ASSERT(pChkObj.get()==pObj,"UndoInsertObj: RemoveObjNum!=pObj");
     }
 }
 
@@ -836,17 +833,11 @@ SdrUndoReplaceObj::~SdrUndoReplaceObj()
     {
         // Attribute have to go back into the Pool
         SetOldOwner(false);
-
-        // now delete
-        SdrObject::Free( pObj );
     }
     if (pNewObj!=nullptr && IsNewOwner())
     {
         // Attribute have to go back into the Pool
         SetNewOwner(false);
-
-        // now delete
-        SdrObject::Free( pNewObj );
     }
 }
 

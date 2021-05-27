@@ -101,9 +101,9 @@ public:
 
     virtual SdrObjKind GetObjIdentifier() const override;
 
-    virtual E3dLatheObj* CloneSdrObject(SdrModel& rTargetModel) const override;
+    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
-    virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
+    virtual rtl::Reference<SdrObject> DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
     // TakeObjName...() is for the display in the UI, for example "3 frames selected".
     virtual OUString TakeObjNameSingul() const override;
@@ -115,7 +115,7 @@ public:
 
     // break up
     virtual bool IsBreakObjPossible() override;
-    virtual std::unique_ptr<SdrAttrObj,SdrObjectFreeOp> GetBreakObj() override;
+    virtual rtl::Reference<SdrAttrObj> GetBreakObj() override;
 };
 
 #endif // INCLUDED_SVX_LATHE3D_HXX

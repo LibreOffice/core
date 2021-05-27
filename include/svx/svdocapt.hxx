@@ -85,7 +85,7 @@ public:
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual SdrObjKind GetObjIdentifier() const override;
-    virtual SdrCaptionObj* CloneSdrObject(SdrModel& rTargetModel) const override;
+    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
     // for calc: special shadow only for text box
     void SetSpecialTextBoxShadow() { mbSpecialTextBoxShadow = true; }
@@ -135,7 +135,7 @@ private:
     virtual void RestoreGeoData(const SdrObjGeoData& rGeo) override;
 
 public:
-    virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
+    virtual rtl::Reference<SdrObject> DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
     const Point& GetTailPos() const;
     void SetTailPos(const Point& rPos);

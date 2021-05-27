@@ -112,7 +112,7 @@ void SwView::ExecDraw(const SfxRequest& rReq)
             if( pDescriptorItem )
             {
                 svx::ODataAccessDescriptor aDescriptor( pDescriptorItem->GetValue() );
-                SdrObjectUniquePtr pObj = pFormView->CreateFieldControl( aDescriptor );
+                rtl::Reference<SdrObject> pObj = pFormView->CreateFieldControl( aDescriptor );
 
                 if ( pObj )
                 {
@@ -134,7 +134,7 @@ void SwView::ExecDraw(const SfxRequest& rReq)
 
                     // TODO: unmark all other
                     m_pWrtShell->EnterStdMode();
-                    m_pWrtShell->SwFEShell::InsertDrawObj( *(pObj.release()), aStartPos );
+                    m_pWrtShell->SwFEShell::InsertDrawObj( *pObj, aStartPos );
                 }
             }
         }

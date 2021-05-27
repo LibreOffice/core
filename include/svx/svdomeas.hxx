@@ -77,9 +77,6 @@ private:
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const override;
     virtual void RestoreGeoData(const SdrObjGeoData& rGeo) override;
 
-    // protected destructor
-    virtual ~SdrMeasureObj() override;
-
 public:
     SdrMeasureObj(SdrModel& rSdrModel);
     // Copy constructor
@@ -88,11 +85,12 @@ public:
         SdrModel& rSdrModel,
         const Point& rPt1,
         const Point& rPt2);
+    virtual ~SdrMeasureObj() override;
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual SdrObjKind GetObjIdentifier() const override;
     virtual void TakeUnrotatedSnapRect(tools::Rectangle& rRect) const override;
-    virtual SdrMeasureObj* CloneSdrObject(SdrModel& rTargetModel) const override;
+    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
@@ -131,7 +129,7 @@ public:
     virtual Point GetPoint(sal_uInt32 i) const override;
     virtual void NbcSetPoint(const Point& rPnt, sal_uInt32 i) override;
 
-    virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
+    virtual rtl::Reference<SdrObject> DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
     virtual bool BegTextEdit(SdrOutliner& rOutl) override;
     virtual const Size& GetTextSize() const override;

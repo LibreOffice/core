@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SVX_SOURCE_CUSTOMSHAPES_ENHANCEDCUSTOMSHAPE3D_HXX
 #define INCLUDED_SVX_SOURCE_CUSTOMSHAPES_ENHANCEDCUSTOMSHAPE3D_HXX
 
+#include <rtl/ref.hxx>
+
 class SdrObject;
 class SdrObjCustomShape;
 
@@ -27,7 +29,7 @@ class EnhancedCustomShape3d final
 {
 
 public:
-    static SdrObject* Create3DObject(
+    static rtl::Reference<SdrObject> Create3DObject(
         const SdrObject* pShape2d,
         const SdrObjCustomShape& rSdrObjCustomShape);
 };
