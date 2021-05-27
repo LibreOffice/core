@@ -808,7 +808,7 @@ void Calendar::ImplUpdateSelection( IntDateSet* pOld )
 
 void Calendar::ImplMouseSelect( const Date& rDate, sal_uInt16 nHitTest )
 {
-    std::unique_ptr<IntDateSet> pOldSel(new IntDateSet( *mpSelectTable ));
+    IntDateSet aOldSel( *mpSelectTable );
     Date    aOldDate = maCurDate;
     Date    aTempDate = rDate;
 
@@ -824,13 +824,13 @@ void Calendar::ImplMouseSelect( const Date& rDate, sal_uInt16 nHitTest )
         ImplCalendarSelectDate( mpSelectTable.get(), maCurDate, true );
     }
 
-    bool bNewSel = *pOldSel != *mpSelectTable;
+    bool bNewSel = aOldSel != *mpSelectTable;
     if ( (maCurDate != aOldDate) || bNewSel )
     {
         HideFocus();
         if ( bNewSel )
-            ImplUpdateSelection( pOldSel.get() );
-        if ( !bNewSel || pOldSel->find( aOldDate.GetDate() ) == pOldSel->end() )
+            ImplUpdateSelection( &aOldSel );
+        if ( !bNewSel || aOldSel.find( aOldDate.GetDate() ) == aOldSel.end() )
             ImplUpdateDate( aOldDate );
         // assure focus rectangle is displayed again
         if ( HasFocus() || !bNewSel
@@ -961,13 +961,13 @@ void Calendar::ImplEndTracking( bool bCancel )
 
         if ( !bSpinDown )
         {
-            std::unique_ptr<IntDateSet> pOldSel(new IntDateSet( *mpSelectTable ));
+            IntDateSet aOldSel( *mpSelectTable );
             Date    aOldDate = maCurDate;
             maCurDate       = maOldCurDate;
             *mpSelectTable  = *mpOldSelectTable;
             HideFocus();
-            ImplUpdateSelection( pOldSel.get() );
-            if ( pOldSel->find( aOldDate.GetDate() ) == pOldSel->end() )
+            ImplUpdateSelection( &aOldSel );
+            if ( aOldSel.find( aOldDate.GetDate() ) == aOldSel.end() )
                 ImplUpdateDate( aOldDate );
             //  assure focus rectangle is displayed again
             if ( HasFocus() || mpSelectTable->find( maCurDate.GetDate() ) == mpSelectTable->end() )
