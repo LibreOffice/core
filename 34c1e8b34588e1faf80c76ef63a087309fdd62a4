@@ -16,6 +16,24 @@
       "revId": "34c1e8b34588e1faf80c76ef63a087309fdd62a4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9c7d4ed_0641f3c7",
+        "filename": "emfio/qa/cppunit/emf/EmfImportTest.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 520,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2021-05-27T07:59:03Z",
+      "side": 1,
+      "message": "Nope, the only checked platform would be macOS in this case.\nAs this platform do not change (as it is for Linux), it will always be run successfully.\n\nmacOS will also secure us in case of some major regression in EMF import.",
+      "parentUuid": "9a52935c_a433f6fc",
+      "revId": "34c1e8b34588e1faf80c76ef63a087309fdd62a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
