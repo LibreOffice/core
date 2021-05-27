@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a52935c_a433f6fc",
+        "filename": "emfio/qa/cppunit/emf/EmfImportTest.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 520,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-05-27T07:23:31Z",
+      "side": 1,
+      "message": "Hi Bartosz,\nIf we submit this patch to master, it will fail for everyone using Ubuntu 20.04 like you, isn\u0027t it ?",
+      "revId": "34c1e8b34588e1faf80c76ef63a087309fdd62a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
