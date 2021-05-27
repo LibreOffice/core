@@ -18,6 +18,7 @@
 #include <editeng/editobj.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/colritem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <svx/svdotext.hxx>
 #include <svx/svdograf.hxx>
@@ -272,7 +273,7 @@ void SdExportTest::testBackgroundImage()
 namespace {
 
 template< typename ItemValue, typename ItemType >
-void checkFontAttributes( const SdrTextObj* pObj, ItemValue nVal)
+void checkFontAttributes( const SdrTextObj* pObj, ItemValue nVal, sal_uInt32 nId)
 {
     CPPUNIT_ASSERT_MESSAGE( "no object", pObj != nullptr);
     const EditTextObject& aEdit = pObj->GetOutlinerParaObject()->GetTextObject();
@@ -281,7 +282,7 @@ void checkFontAttributes( const SdrTextObj* pObj, ItemValue nVal)
     for( std::vector<EECharAttrib>::reverse_iterator it = rLst.rbegin(); it!=rLst.rend(); ++it)
     {
         const ItemType* pAttrib = dynamic_cast<const ItemType *>((*it).pAttr);
-        if (pAttrib)
+        if (pAttrib && pAttrib->Which() == nId)
         {
             CPPUNIT_ASSERT_EQUAL( nVal, static_cast<ItemValue>(pAttrib->GetValue()));
         }
@@ -298,10 +299,10 @@ void SdExportTest::testTransparentBackground()
     const SdrPage *pPage = GetPage( 1, xDocShRef );
 
     const SdrTextObj *pObj1 = dynamic_cast<SdrTextObj *>( pPage->GetObj( 0 ) );
-    checkFontAttributes<Color, SvxBackgroundColorItem>( pObj1, COL_TRANSPARENT );
+    checkFontAttributes<Color, SvxColorItem>( pObj1, COL_TRANSPARENT, EE_CHAR_BKGCOLOR);
 
     const SdrTextObj *pObj2 = dynamic_cast<SdrTextObj *>( pPage->GetObj( 1 ) );
-    checkFontAttributes<Color, SvxBackgroundColorItem>( pObj2, COL_YELLOW);
+    checkFontAttributes<Color, SvxColorItem>( pObj2, COL_YELLOW, EE_CHAR_BKGCOLOR);
 
     xDocShRef->DoClose();
 }
