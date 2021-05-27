@@ -141,12 +141,12 @@ ImplPolygon::ImplPolygon( const tools::Rectangle& rRect, sal_uInt32 nHorzRound, 
             const Point     aTR( aRect.Right() - nHorzRound, aRect.Top() + nVertRound );
             const Point     aBR( aRect.Right() - nHorzRound, aRect.Bottom() - nVertRound );
             const Point     aBL( aRect.Left() + nHorzRound, aRect.Bottom() - nVertRound );
-            std::unique_ptr<tools::Polygon> pEllipsePoly( new tools::Polygon( Point(), nHorzRound, nVertRound ) );
-            sal_uInt16 i, nEnd, nSize4 = pEllipsePoly->GetSize() >> 2;
+            tools::Polygon aEllipsePoly( Point(), nHorzRound, nVertRound );
+            sal_uInt16 i, nEnd, nSize4 = aEllipsePoly.GetSize() >> 2;
 
-            ImplInitSize(pEllipsePoly->GetSize() + 1);
+            ImplInitSize(aEllipsePoly.GetSize() + 1);
 
-            const Point* pSrcAry = pEllipsePoly->GetConstPointAry();
+            const Point* pSrcAry = aEllipsePoly.GetConstPointAry();
             Point* pDstAry = mxPointAry.get();
 
             for( i = 0, nEnd = nSize4; i < nEnd; i++ )
