@@ -63,6 +63,7 @@ public:
                 {}
 
     sal_Int32&  GetLen()                        { return nLen; }
+    sal_Int32  GetLen() const                   { return nLen; }
     tools::Long&           GetWidth()                  { return nWidth; }
     sal_uInt8&      GetKind()                   { return nKind; }
     void            SetRightToLeft(bool b)      { bRightToLeft = b; }
@@ -72,7 +73,7 @@ public:
 class TETextPortionList
 {
 private:
-    std::vector<std::unique_ptr<TETextPortion>> maPortions;
+    std::vector<TETextPortion> maPortions;
 
 public:
     static constexpr auto npos = std::numeric_limits<std::size_t>::max();
@@ -80,17 +81,17 @@ public:
     TETextPortionList();
     ~TETextPortionList();
 
-    TETextPortion* operator[]( std::size_t nPos );
-    std::vector<std::unique_ptr<TETextPortion>>::iterator begin();
-    std::vector<std::unique_ptr<TETextPortion>>::const_iterator begin() const;
-    std::vector<std::unique_ptr<TETextPortion>>::iterator end();
-    std::vector<std::unique_ptr<TETextPortion>>::const_iterator end() const;
+    TETextPortion& operator[]( std::size_t nPos );
+    std::vector<TETextPortion>::iterator begin();
+    std::vector<TETextPortion>::const_iterator begin() const;
+    std::vector<TETextPortion>::iterator end();
+    std::vector<TETextPortion>::const_iterator end() const;
     bool empty() const;
     std::size_t size() const;
-    std::vector<std::unique_ptr<TETextPortion>>::iterator erase( const std::vector<std::unique_ptr<TETextPortion>>::iterator& aIter );
-    std::vector<std::unique_ptr<TETextPortion>>::iterator insert( const std::vector<std::unique_ptr<TETextPortion>>::iterator& aIter,
-                                                  std::unique_ptr<TETextPortion> pTP );
-    void push_back( std::unique_ptr<TETextPortion> pTP );
+    std::vector<TETextPortion>::iterator erase( const std::vector<TETextPortion>::iterator& aIter );
+    std::vector<TETextPortion>::iterator insert( const std::vector<TETextPortion>::iterator& aIter,
+                                                  const TETextPortion& rTP );
+    void push_back( const TETextPortion & aTP );
 
     void    Reset();
     std::size_t FindPortion( sal_Int32 nCharPos, sal_Int32& rPortionStart, bool bPreferStartingPortion = false );
