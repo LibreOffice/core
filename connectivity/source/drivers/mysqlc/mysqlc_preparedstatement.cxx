@@ -95,7 +95,7 @@ Sequence<Type> SAL_CALL OPreparedStatement::getTypes()
 Reference<XResultSetMetaData> SAL_CALL OPreparedStatement::getMetaData()
 {
     MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedStatement::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
 
     if (!m_xMetaData.is())
     {
@@ -109,7 +109,7 @@ Reference<XResultSetMetaData> SAL_CALL OPreparedStatement::getMetaData()
 void SAL_CALL OPreparedStatement::close()
 {
     MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedStatement::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
 
     if (mysql_stmt_close(m_pStmt))
     {
@@ -124,7 +124,7 @@ void SAL_CALL OPreparedStatement::close()
 sal_Bool SAL_CALL OPreparedStatement::execute()
 {
     MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedStatement::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
 
     if (!m_binds.empty() && mysql_stmt_bind_param(m_pStmt, m_binds.data()))
     {
@@ -149,7 +149,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute()
 sal_Int32 SAL_CALL OPreparedStatement::executeUpdate()
 {
     MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedStatement::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
 
     if (!m_binds.empty() && mysql_stmt_bind_param(m_pStmt, m_binds.data()))
     {
@@ -176,7 +176,7 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate()
 void SAL_CALL OPreparedStatement::setString(sal_Int32 parameter, const OUString& x)
 {
     MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedStatement::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
     OString stringie(OUStringToOString(x, m_xConnection->getConnectionEncoding()));
@@ -191,7 +191,7 @@ void SAL_CALL OPreparedStatement::setString(sal_Int32 parameter, const OUString&
 Reference<XConnection> SAL_CALL OPreparedStatement::getConnection()
 {
     MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedStatement::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
 
     return m_xConnection;
 }
@@ -199,7 +199,7 @@ Reference<XConnection> SAL_CALL OPreparedStatement::getConnection()
 Reference<XResultSet> SAL_CALL OPreparedStatement::executeQuery()
 {
     MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedStatement::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
 
     if (!m_binds.empty() && mysql_stmt_bind_param(m_pStmt, m_binds.data()))
     {
@@ -226,7 +226,7 @@ Reference<XResultSet> SAL_CALL OPreparedStatement::executeQuery()
 void SAL_CALL OPreparedStatement::setBoolean(sal_Int32 parameter, sal_Bool x)
 {
     MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedStatement::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
     const sal_Int32 nIndex = parameter - 1;
@@ -238,7 +238,7 @@ void SAL_CALL OPreparedStatement::setBoolean(sal_Int32 parameter, sal_Bool x)
 void SAL_CALL OPreparedStatement::setByte(sal_Int32 parameter, sal_Int8 x)
 {
     MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedStatement::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
     const sal_Int32 nIndex = parameter - 1;
@@ -250,7 +250,7 @@ void SAL_CALL OPreparedStatement::setByte(sal_Int32 parameter, sal_Int8 x)
 void SAL_CALL OPreparedStatement::setDate(sal_Int32 parameter, const Date& aData)
 {
     MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedStatement::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
     MYSQL_TIME my_time = {};
@@ -268,7 +268,7 @@ void SAL_CALL OPreparedStatement::setDate(sal_Int32 parameter, const Date& aData
 void SAL_CALL OPreparedStatement::setTime(sal_Int32 parameter, const Time& aVal)
 {
     MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedStatement::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
     MYSQL_TIME my_time = {};
@@ -286,7 +286,7 @@ void SAL_CALL OPreparedStatement::setTime(sal_Int32 parameter, const Time& aVal)
 void SAL_CALL OPreparedStatement::setTimestamp(sal_Int32 parameter, const DateTime& aVal)
 {
     MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedStatement::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
     MYSQL_TIME my_time = {};
@@ -307,7 +307,7 @@ void SAL_CALL OPreparedStatement::setTimestamp(sal_Int32 parameter, const DateTi
 void SAL_CALL OPreparedStatement::setDouble(sal_Int32 parameter, double x)
 {
     MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedStatement::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
     const sal_Int32 nIndex = parameter - 1;
@@ -319,7 +319,7 @@ void SAL_CALL OPreparedStatement::setDouble(sal_Int32 parameter, double x)
 void SAL_CALL OPreparedStatement::setFloat(sal_Int32 parameter, float x)
 {
     MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedStatement::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
     const sal_Int32 nIndex = parameter - 1;
@@ -331,7 +331,7 @@ void SAL_CALL OPreparedStatement::setFloat(sal_Int32 parameter, float x)
 void SAL_CALL OPreparedStatement::setInt(sal_Int32 parameter, sal_Int32 x)
 {
     MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedStatement::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
     const sal_Int32 nIndex = parameter - 1;
@@ -343,7 +343,7 @@ void SAL_CALL OPreparedStatement::setInt(sal_Int32 parameter, sal_Int32 x)
 void SAL_CALL OPreparedStatement::setLong(sal_Int32 parameter, sal_Int64 aVal)
 {
     MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedStatement::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
     const sal_Int32 nIndex = parameter - 1;
@@ -355,7 +355,7 @@ void SAL_CALL OPreparedStatement::setLong(sal_Int32 parameter, sal_Int64 aVal)
 void SAL_CALL OPreparedStatement::setNull(sal_Int32 parameter, sal_Int32 /*sqlType*/)
 {
     MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedStatement::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
     const sal_Int32 nIndex = parameter - 1;
@@ -367,7 +367,7 @@ void SAL_CALL OPreparedStatement::setNull(sal_Int32 parameter, sal_Int32 /*sqlTy
 void SAL_CALL OPreparedStatement::setClob(sal_Int32 parameter, const Reference<XClob>& /* x */)
 {
     MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedStatement::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setClob", *this);
@@ -376,7 +376,7 @@ void SAL_CALL OPreparedStatement::setClob(sal_Int32 parameter, const Reference<X
 void SAL_CALL OPreparedStatement::setBlob(sal_Int32 parameter, const Reference<XBlob>& /* x */)
 {
     MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedStatement::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setBlob", *this);
@@ -385,7 +385,7 @@ void SAL_CALL OPreparedStatement::setBlob(sal_Int32 parameter, const Reference<X
 void SAL_CALL OPreparedStatement::setArray(sal_Int32 parameter, const Reference<XArray>& /* x */)
 {
     MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedStatement::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setArray", *this);
@@ -394,7 +394,7 @@ void SAL_CALL OPreparedStatement::setArray(sal_Int32 parameter, const Reference<
 void SAL_CALL OPreparedStatement::setRef(sal_Int32 parameter, const Reference<XRef>& /* x */)
 {
     MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedStatement::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setRef", *this);
@@ -403,7 +403,7 @@ void SAL_CALL OPreparedStatement::setRef(sal_Int32 parameter, const Reference<XR
 void SAL_CALL OPreparedStatement::setObjectWithInfo(sal_Int32 parameterIndex, const Any& value,
                                                     sal_Int32 targetSqlType, sal_Int32 /* scale */)
 {
-    checkDisposed(OPreparedStatement::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
     MutexGuard aGuard(m_aMutex);
     checkParameterIndex(parameterIndex);
 
@@ -457,7 +457,7 @@ void SAL_CALL OPreparedStatement::setObjectNull(sal_Int32 parameter, sal_Int32 /
                                                 const OUString& /* typeName */)
 {
     MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedStatement::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setObjectNull",
@@ -467,7 +467,7 @@ void SAL_CALL OPreparedStatement::setObjectNull(sal_Int32 parameter, sal_Int32 /
 void SAL_CALL OPreparedStatement::setObject(sal_Int32 parameter, const Any& /* x */)
 {
     MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedStatement::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setObject", *this);
@@ -476,7 +476,7 @@ void SAL_CALL OPreparedStatement::setObject(sal_Int32 parameter, const Any& /* x
 void SAL_CALL OPreparedStatement::setShort(sal_Int32 parameter, sal_Int16 x)
 {
     MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedStatement::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
     const sal_Int32 nIndex = parameter - 1;
@@ -488,7 +488,7 @@ void SAL_CALL OPreparedStatement::setShort(sal_Int32 parameter, sal_Int16 x)
 void SAL_CALL OPreparedStatement::setBytes(sal_Int32 parameter, const Sequence<sal_Int8>& x)
 {
     MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedStatement::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
     const sal_Int32 nIndex = parameter - 1;
@@ -502,7 +502,7 @@ void SAL_CALL OPreparedStatement::setCharacterStream(sal_Int32 parameter,
                                                      sal_Int32 /* length */)
 {
     MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedStatement::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
     mysqlc_sdbc_driver::throwFeatureNotImplementedException(
@@ -514,7 +514,7 @@ void SAL_CALL OPreparedStatement::setBinaryStream(sal_Int32 parameter,
                                                   sal_Int32 /* length */)
 {
     MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedStatement::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setBinaryStream",
@@ -524,7 +524,7 @@ void SAL_CALL OPreparedStatement::setBinaryStream(sal_Int32 parameter,
 void SAL_CALL OPreparedStatement::clearParameters()
 {
     MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedStatement::rBHelper.bDisposed);
+    checkDisposed(rBHelper.bDisposed);
 
     for (size_t i = 0; i < m_binds.size(); ++i)
     {
