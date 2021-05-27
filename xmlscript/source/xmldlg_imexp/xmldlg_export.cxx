@@ -1272,72 +1272,72 @@ OUString StyleBag::getStyleId( Style const & rStyle )
     }
 
     // lookup existing style
-    for (auto const & pStyle : _styles)
+    for (auto & rExistingStyle : _styles)
     {
         short demanded_defaults = ~rStyle._set & rStyle._all;
         // test, if defaults are not set
-        if ((~pStyle->_set & demanded_defaults) == demanded_defaults &&
-            (rStyle._set & (pStyle->_all & ~pStyle->_set)) == 0)
+        if ((~rExistingStyle._set & demanded_defaults) == demanded_defaults &&
+            (rStyle._set & (rExistingStyle._all & ~rExistingStyle._set)) == 0)
         {
-            short bset = rStyle._set & pStyle->_set;
+            short bset = rStyle._set & rExistingStyle._set;
             if ((bset & 0x1) &&
-                rStyle._backgroundColor != pStyle->_backgroundColor)
+                rStyle._backgroundColor != rExistingStyle._backgroundColor)
                 continue;
             if ((bset & 0x2) &&
-                rStyle._textColor != pStyle->_textColor)
+                rStyle._textColor != rExistingStyle._textColor)
                 continue;
             if ((bset & 0x20) &&
-                rStyle._textLineColor != pStyle->_textLineColor)
+                rStyle._textLineColor != rExistingStyle._textLineColor)
                 continue;
             if ((bset & 0x10) &&
-                rStyle._fillColor != pStyle->_fillColor)
+                rStyle._fillColor != rExistingStyle._fillColor)
                 continue;
             if ((bset & 0x4) &&
-                (rStyle._border != pStyle->_border ||
+                (rStyle._border != rExistingStyle._border ||
                  (rStyle._border == BORDER_SIMPLE_COLOR &&
-                  rStyle._borderColor != pStyle->_borderColor)))
+                  rStyle._borderColor != rExistingStyle._borderColor)))
                 continue;
             if ((bset & 0x8) &&
-                !equalFont( rStyle, *pStyle ))
+                !equalFont( rStyle, rExistingStyle ))
                 continue;
             if ((bset & 0x40) &&
-                rStyle._visualEffect != pStyle->_visualEffect)
+                rStyle._visualEffect != rExistingStyle._visualEffect)
                 continue;
 
             // merge in
-            short bnset = rStyle._set & ~pStyle->_set;
+            short bnset = rStyle._set & ~rExistingStyle._set;
             if (bnset & 0x1)
-                pStyle->_backgroundColor = rStyle._backgroundColor;
+                rExistingStyle._backgroundColor = rStyle._backgroundColor;
             if (bnset & 0x2)
-                pStyle->_textColor = rStyle._textColor;
+                rExistingStyle._textColor = rStyle._textColor;
             if (bnset & 0x20)
-                pStyle->_textLineColor = rStyle._textLineColor;
+                rExistingStyle._textLineColor = rStyle._textLineColor;
             if (bnset & 0x10)
-                pStyle->_fillColor = rStyle._fillColor;
+                rExistingStyle._fillColor = rStyle._fillColor;
             if (bnset & 0x4) {
-                pStyle->_border = rStyle._border;
-                pStyle->_borderColor = rStyle._borderColor;
+                rExistingStyle._border = rStyle._border;
+                rExistingStyle._borderColor = rStyle._borderColor;
             }
             if (bnset & 0x8) {
-                pStyle->_descr = rStyle._descr;
-                pStyle->_fontRelief = rStyle._fontRelief;
-                pStyle->_fontEmphasisMark = rStyle._fontEmphasisMark;
+                rExistingStyle._descr = rStyle._descr;
+                rExistingStyle._fontRelief = rStyle._fontRelief;
+                rExistingStyle._fontEmphasisMark = rStyle._fontEmphasisMark;
             }
             if (bnset & 0x40)
-                pStyle->_visualEffect = rStyle._visualEffect;
+                rExistingStyle._visualEffect = rStyle._visualEffect;
 
-            pStyle->_all |= rStyle._all;
-            pStyle->_set |= rStyle._set;
+            rExistingStyle._all |= rStyle._all;
+            rExistingStyle._set |= rStyle._set;
 
-            return pStyle->_id;
+            return rExistingStyle._id;
         }
     }
 
     // no appr style found, append new
-    std::unique_ptr<Style> pStyle(new Style( rStyle ));
-    pStyle->_id = OUString::number( _styles.size() );
-    _styles.push_back( std::move(pStyle) );
-    return _styles.back()->_id;
+    Style aNewStyle( rStyle );
+    aNewStyle._id = OUString::number( _styles.size() );
+    _styles.push_back( aNewStyle );
+    return _styles.back()._id;
 }
 
 StyleBag::~StyleBag()
@@ -1353,9 +1353,9 @@ void StyleBag::dump( Reference< xml::sax::XExtendedDocumentHandler > const & xOu
     xOut->ignorableWhitespace( OUString() );
     xOut->startElement( aStylesName, Reference< xml::sax::XAttributeList >() );
     // export styles
-    for (auto const & _style : _styles)
+    for (auto & _style : _styles)
     {
-        Reference< xml::sax::XAttributeList > xAttr( _style->createElement() );
+        Reference< xml::sax::XAttributeList > xAttr( _style.createElement() );
         static_cast< ElementDescriptor * >( xAttr.get() )->dump( xOut );
     }
     xOut->ignorableWhitespace( OUString() );
