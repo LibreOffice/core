@@ -357,7 +357,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     if( !m_pMarquee )
         return;
 
-    pPg->InsertObject( m_pMarquee );
+    pPg->InsertObject( m_pMarquee.get() );
 
     if( !aId.isEmpty() )
         InsertBookmark( aId );
@@ -511,7 +511,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     m_pMarquee->SetLogicRect( tools::Rectangle( 0, 0, aTwipSz.Width(), aTwipSz.Height() ) );
 
     // and insert the object into the document
-    InsertDrawObject( m_pMarquee, aSpace, eVertOri, eHoriOri, aStyleItemSet,
+    InsertDrawObject( m_pMarquee.get(), aSpace, eVertOri, eHoriOri, aStyleItemSet,
                       aPropInfo );
 
     // Register the drawing object at the table. Is a little bit complicated,
@@ -520,7 +520,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     // The global pTable also can't be used, because the marquee can also be
     // in a sub-table.
     if( pCurTable && bPercentWidth)
-        RegisterDrawObjectToTable( pCurTable, m_pMarquee, static_cast<sal_uInt8>(nWidth) );
+        RegisterDrawObjectToTable( pCurTable, m_pMarquee.get(), static_cast<sal_uInt8>(nWidth) );
 }
 
 void SwHTMLParser::EndMarquee()
@@ -538,13 +538,13 @@ void SwHTMLParser::EndMarquee()
     }
 
     // insert the collected text
-    static_cast<SdrTextObj*>(m_pMarquee)->SetText( m_aContents );
+    static_cast<SdrTextObj*>(m_pMarquee.get())->SetText( m_aContents );
     m_pMarquee->SetMergedItemSetAndBroadcast( m_pMarquee->GetMergedItemSet() );
 
     if( m_bFixMarqueeWidth )
     {
         // adjust the size to the text
-        static_cast<SdrTextObj*>(m_pMarquee)->FitFrameToTextSize();
+        static_cast<SdrTextObj*>(m_pMarquee.get())->FitFrameToTextSize();
     }
 
     m_aContents.clear();
