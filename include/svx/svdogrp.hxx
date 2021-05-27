@@ -43,13 +43,11 @@ private:
     friend class svx::diagram::IDiagramHelper;
     std::shared_ptr< svx::diagram::IDiagramHelper > mp_DiagramHelper;
 
-    // protected destructor - due to final, make private
-    virtual ~SdrObjGroup() override;
-
 public:
     SdrObjGroup(SdrModel& rSdrModel);
     // Copy constructor
     SdrObjGroup(SdrModel& rSdrModel, SdrObjGroup const& rSource);
+    virtual ~SdrObjGroup() override;
 
     // derived from SdrObjList
     virtual SdrPage* getSdrPageFromSdrObjList() const override;
@@ -73,7 +71,7 @@ public:
     virtual const tools::Rectangle& GetCurrentBoundRect() const override;
     virtual const tools::Rectangle& GetSnapRect() const override;
 
-    virtual SdrObjGroup* CloneSdrObject(SdrModel& rTargetModel) const override;
+    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
@@ -113,7 +111,8 @@ public:
 
     virtual void NbcReformatText() override;
 
-    virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
+    virtual rtl::Reference<SdrObject> DoConvertToPolyObj(bool bBezier,
+                                                         bool bAddText) const override;
 
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
     virtual void AddToHdlList(SdrHdlList& rHdlList) const override;

@@ -42,7 +42,7 @@ void SvxXMeasurePreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
 
     pModel.reset(new SdrModel(nullptr, nullptr, true));
-    pMeasureObj.reset(new SdrMeasureObj(*pModel, Point(), Point()));
+    pMeasureObj = new SdrMeasureObj(*pModel, Point(), Point());
 
     ResizeImpl(aSize);
     Invalidate();

@@ -34,7 +34,7 @@ protected:
 
     // Creating a SdrObject based on a Description. Can be used by derived classes to
     // support own css::drawing::Shapes (for example Controls)
-    virtual SdrObject *CreateSdrObject_( const css::uno::Reference< css::drawing::XShape > & xShape ) override;
+    virtual rtl::Reference<SdrObject> CreateSdrObject_( const css::uno::Reference< css::drawing::XShape > & xShape ) override;
 
     // The following method is called when a SvxShape object should be created.
     // Derived classes can create a derivation or an object aggregating SvxShape.
