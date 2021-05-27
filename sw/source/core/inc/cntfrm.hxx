@@ -33,6 +33,23 @@ class SwTextFrame;
 // implemented in cntfrm.cxx, used in cntfrm.cxx and crsrsh.cxx
 extern bool GetFrameInPage( const SwContentFrame*, SwWhichPage, SwPosPage, SwPaM* );
 
+enum class SwContentFrameInvFlags : sal_uInt8
+{
+    NONE = 0x00,
+    SetCompletePaint = 0x01,
+    InvalidatePos = 0x02,
+    InvalidateSize = 0x04,
+    InvalidateSectPrt = 0x08,
+    InvalidateNextPrt = 0x10,
+    InvalidatePrevPrt = 0x20,
+    InvalidateNextPos = 0x40,
+    SetNextCompletePaint = 0x80,
+};
+
+namespace o3tl {
+    template<> struct typed_flags<SwContentFrameInvFlags> : is_typed_flags<SwContentFrameInvFlags, 0xff> {};
+}
+
 class SAL_DLLPUBLIC_RTTI SwContentFrame: public SwFrame, public SwFlowFrame
 {
     friend void MakeNxt( SwFrame *pFrame, SwFrame *pNxt );    // calls MakePrtArea
@@ -46,7 +63,7 @@ class SAL_DLLPUBLIC_RTTI SwContentFrame: public SwFrame, public SwFlowFrame
 
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
 
-    void UpdateAttr_( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
+    void UpdateAttr_( const SfxPoolItem*, const SfxPoolItem*, SwContentFrameInvFlags &,
                       SwAttrSetChg *pa = nullptr, SwAttrSetChg *pb = nullptr );
 
     virtual bool ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool& ) override;
