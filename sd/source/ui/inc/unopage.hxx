@@ -104,7 +104,7 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     // this is called whenever a SdrObject must be created for an empty api shape wrapper
-    virtual SdrObject *CreateSdrObject_( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
+    virtual rtl::Reference<SdrObject> CreateSdrObject_( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
 
     // SvxFmDrawPage
     virtual css::uno::Reference<css::drawing::XShape>  CreateShape(SdrObject *pObj) const override;

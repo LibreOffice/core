@@ -212,6 +212,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
     bool                                                       m_bSuicide               ;
     bool                                                       m_bExternalTitle         ;
     bool                                                       m_bModifiedSinceLastSave ;
+    bool                                                       m_bDisposing             ;
     Reference< view::XPrintable>                               m_xPrintable             ;
     Reference< ui::XUIConfigurationManager2 >                  m_xUIConfigurationManager;
     ::rtl::Reference< ::sfx2::DocumentStorageModifyListener >  m_pStorageModifyListen   ;
@@ -233,6 +234,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
             ,   m_bSuicide              ( false     )
             ,   m_bExternalTitle        ( false     )
             ,   m_bModifiedSinceLastSave( false     )
+            ,   m_bDisposing            ( false     )
     {
         // increase global instance counter.
         ++g_nInstanceCounter;
@@ -723,6 +725,10 @@ void SAL_CALL SfxBaseModel::dispose()
 
         return;
     }
+
+    if  ( m_pData->m_bDisposing )
+        return;
+    m_pData->m_bDisposing = true;
 
     if ( m_pData->m_pStorageModifyListen.is() )
     {

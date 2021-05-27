@@ -49,7 +49,7 @@ private:
 
     tools::Rectangle       m_aRect;
     std::unique_ptr<SdrModel>           m_pModel;
-    ScCaptionPtr    m_xObject;
+    rtl::Reference<SdrCaptionObj> m_xObject;
     bool            m_bVisible;
     DECL_LINK( TimeHdl, Timer*, void );
 

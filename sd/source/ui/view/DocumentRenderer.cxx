@@ -1508,9 +1508,7 @@ private:
         // delete all previous shapes from handout page
         while( pHandout->GetObjCount() )
         {
-            SdrObject* pObj = pHandout->NbcRemoveObject(0);
-            if( pObj )
-                SdrObject::Free( pObj  );
+            pHandout->NbcRemoveObject(0);
         }
 
         const bool bDrawLines (eLayout == AUTOLAYOUT_HANDOUT3);
@@ -1544,14 +1542,14 @@ private:
                     aPathPoly.append( aPoly );
                 }
 
-                SdrPathObj* pPathObj = new SdrPathObj(
+                rtl::Reference<SdrPathObj> pPathObj = new SdrPathObj(
                     rModel,
                     SdrObjKind::PathLine,
                     aPathPoly);
                 pPathObj->SetMergedItem(XLineStyleItem(drawing::LineStyle_SOLID));
                 pPathObj->SetMergedItem(XLineColorItem(OUString(), COL_BLACK));
 
-                pHandout->NbcInsertObject( pPathObj );
+                pHandout->NbcInsertObject( pPathObj.get() );
             }
         }
     }

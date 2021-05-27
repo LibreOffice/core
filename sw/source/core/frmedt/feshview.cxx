@@ -2089,8 +2089,7 @@ bool SwFEShell::ImpEndCreate()
             pPg = pNewPage.get();
         }
         pPg->RecalcObjOrdNums();
-        SdrObject* pRemovedObject = pPg->RemoveObject( rSdrObj.GetOrdNumDirect() );
-        SdrObject::Free( pRemovedObject );
+        pPg->RemoveObject( rSdrObj.GetOrdNumDirect() );
         GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(true);
 
         SwFlyFrame* pFlyFrame;
@@ -3030,7 +3029,7 @@ void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rect
 {
     SdrView* pDrawView = GetDrawView();
     SdrModel* pDrawModel = pDrawView->GetModel();
-    SdrObject* pObj = SdrObjFactory::MakeNewObject(
+    rtl::Reference<SdrObject> pObj = SdrObjFactory::MakeNewObject(
         *pDrawModel,
         SdrInventor::Default,
         eSdrObjectKind);
@@ -3059,14 +3058,14 @@ void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rect
         Point aStart = aRect.TopLeft();
         Point aEnd = aRect.BottomRight();
 
-        if(dynamic_cast<const SdrCircObj*>( pObj) !=  nullptr)
+        if(dynamic_cast<const SdrCircObj*>( pObj.get()) !=  nullptr)
         {
             SfxItemSet aAttr(pDrawModel->GetItemPool());
             aAttr.Put(makeSdrCircStartAngleItem(9000_deg100));
             aAttr.Put(makeSdrCircEndAngleItem(0_deg100));
             pObj->SetMergedItemSet(aAttr);
         }
-        else if(auto pPathObj = dynamic_cast<SdrPathObj*>( pObj))
+        else if(auto pPathObj = dynamic_cast<SdrPathObj*>( pObj.get()))
         {
             basegfx::B2DPolyPolygon aPoly;
 
@@ -3164,7 +3163,7 @@ void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rect
 
             pPathObj->SetPathPoly(aPoly);
         }
-        else if(auto pMeasureObj = dynamic_cast<SdrMeasureObj*>( pObj))
+        else if(auto pMeasureObj = dynamic_cast<SdrMeasureObj*>( pObj.get()))
         {
             sal_Int32 nYMiddle((aRect.Top() + aRect.Bottom()) / 2);
             pMeasureObj->SetPoint(Point(aStart.X(), nYMiddle), 0);
@@ -3174,7 +3173,7 @@ void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rect
             SetLineEnds(aAttr, *pObj, nSlotId);
             pObj->SetMergedItemSet(aAttr);
         }
-        else if(auto pCaptionObj = dynamic_cast<SdrCaptionObj*>( pObj))
+        else if(auto pCaptionObj = dynamic_cast<SdrCaptionObj*>( pObj.get()))
         {
             bool bVerticalText = ( SID_DRAW_TEXT_VERTICAL == nSlotId ||
                                             SID_DRAW_CAPTION_VERTICAL == nSlotId );
@@ -3191,7 +3190,7 @@ void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rect
             pCaptionObj->SetTailPos(
                 aRect.TopLeft() - Point(aRect.GetWidth() / 2, aRect.GetHeight() / 2));
         }
-        else if(auto pText = dynamic_cast<SdrTextObj*>( pObj))
+        else if(auto pText = dynamic_cast<SdrTextObj*>( pObj.get()))
         {
             pText->SetLogicRect(aRect);
 
@@ -3223,12 +3222,12 @@ void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rect
             }
         }
         SdrPageView* pPageView = pDrawView->GetSdrPageView();
-        SdrCreateView::SetupObjLayer(pPageView, pDrawView->GetActiveLayer(), pObj);
+        SdrCreateView::SetupObjLayer(pPageView, pDrawView->GetActiveLayer(), pObj.get());
         // switch undo off or this combined with ImpEndCreate will cause two undos
         // see comment made in SwFEShell::EndCreate (we create our own undo-object!)
         const bool bUndo(GetDoc()->GetIDocumentUndoRedo().DoesUndo());
         GetDoc()->GetIDocumentUndoRedo().DoUndo(false);
-        pDrawView->InsertObjectAtView(pObj, *pPageView);
+        pDrawView->InsertObjectAtView(pObj.get(), *pPageView);
         GetDoc()->GetIDocumentUndoRedo().DoUndo(bUndo);
     }
     ImpEndCreate();

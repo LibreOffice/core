@@ -13,16 +13,8 @@
 #include <rtl/ref.hxx>
 #include <boost/intrusive_ptr.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
-
-namespace cppu
-{
-class OWeakObject
-{
-public:
-    void acquire();
-    void release();
-};
-}
+#include <cppuhelper/weak.hxx>
+#include <unotools/weakref.hxx>
 
 struct UnoObject : public cppu::OWeakObject
 {
@@ -115,6 +107,11 @@ void foo7()
     UnoSubObject* p3 = static_cast<UnoSubObject*>(getConstRef().get());
     (void)p3;
     p3 = static_cast<UnoSubObject*>(getConstRef().get());
+
+    // no warning expected, although, arguably, we should be assigning to a rtl::Reference temporary
+    unotools::WeakReference<UnoObject> weak1;
+    auto pTextObj = dynamic_cast<UnoSubObject*>(weak1.get().get());
+    (void)pTextObj;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

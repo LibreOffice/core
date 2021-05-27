@@ -218,7 +218,7 @@ public:
 
     virtual void RecalcSnapRect() override;
     virtual void TakeUnrotatedSnapRect(tools::Rectangle& rRect) const override;
-    virtual SdrEdgeObj* CloneSdrObject(SdrModel& rTargetModel) const override;
+    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
 
@@ -236,7 +236,7 @@ public:
     virtual OUString getSpecialDragComment(const SdrDragStat& rDrag) const override;
 
     // FullDrag support
-    virtual SdrObjectUniquePtr getFullDragClone() const override;
+    virtual rtl::Reference<SdrObject> getFullDragClone() const override;
 
     virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;
     virtual void NbcMove(const Size& aSize) override;
@@ -257,7 +257,7 @@ public:
     virtual void BrkCreate(SdrDragStat& rStat) override;
     virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const override;
     virtual PointerStyle GetCreatePointer() const override;
-    virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
+    virtual rtl::Reference<SdrObject> DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
     virtual sal_uInt32 GetSnapPointCount() const override;
     virtual Point GetSnapPoint(sal_uInt32 i) const override;

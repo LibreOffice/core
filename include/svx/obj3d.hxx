@@ -125,7 +125,7 @@ public:
     // TakeObjName...() is for the display in the UI, for example "3 frames selected".
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
-    virtual E3dObject* CloneSdrObject(SdrModel& rTargetModel) const override;
+    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
     virtual std::unique_ptr<SdrObjGeoData> NewGeoData() const override;
     virtual void          SaveGeoData(SdrObjGeoData& rGeo) const override;
@@ -137,7 +137,7 @@ public:
 
     // break up
     virtual bool IsBreakObjPossible();
-    virtual std::unique_ptr<SdrAttrObj,SdrObjectFreeOp> GetBreakObj();
+    virtual rtl::Reference<SdrAttrObj> GetBreakObj();
 };
 
 /*************************************************************************
@@ -180,7 +180,7 @@ public:
     virtual SdrObjKind GetObjIdentifier() const override;
     virtual void RecalcSnapRect() override;
 
-    virtual E3dCompoundObject* CloneSdrObject(SdrModel& rTargetModel) const override;
+    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 };
 
 #endif // INCLUDED_SVX_OBJ3D_HXX

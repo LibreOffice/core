@@ -161,11 +161,11 @@ bool FmFormPage::RequestHelp( vcl::Window* pWindow, SdrView const * pView,
 }
 
 
-SdrObject* FmFormPage::RemoveObject(size_t nObjNum)
+rtl::Reference<SdrObject> FmFormPage::RemoveObject(size_t nObjNum)
 {
-    SdrObject* pObj = SdrPage::RemoveObject(nObjNum);
+    rtl::Reference<SdrObject> pObj = SdrPage::RemoveObject(nObjNum);
     if (pObj)
-        static_cast< FmFormModel& >(getSdrModelFromSdrPage()).GetUndoEnv().Removed(pObj);
+        static_cast< FmFormModel& >(getSdrModelFromSdrPage()).GetUndoEnv().Removed(pObj.get());
     return pObj;
 }
 
