@@ -30,10 +30,8 @@ bool WrapOleInRtf(SvStream& rOle2, SvStream& rRtf, SwOLENode& rOLENode,
 
 /**
  * Wraps an image in an RTF fragment.
- *
- * @param rLogicSize the size used in the document model (not pixel size)
  */
-bool WrapGraphicInRtf(const Graphic& rGraphic, const Size& rLogicSize, SvStream& rRtf);
+bool WrapGraphicInRtf(const Graphic& rGraphic, const SwFrameFormat& rFormat, SvStream& rRtf);
 }
 
 #endif // INCLUDED_SW_SOURCE_FILTER_HTML_HTMLREQIFREADER_HXX
