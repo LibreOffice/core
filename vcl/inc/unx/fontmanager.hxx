@@ -136,7 +136,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     };
 
     fontID                                      m_nNextFontID;
-    std::unordered_map< fontID, std::unique_ptr<PrintFont> >    m_aFonts;
+    std::unordered_map< fontID, PrintFont >     m_aFonts;
     // for speeding up findFontFileID
     std::unordered_map< OString, std::set< fontID > >
                                                 m_aFontFileToFontID;
@@ -146,12 +146,12 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     std::unordered_map< int, OString >          m_aAtomToDir;
     int                                         m_nNextDirAtom;
 
-    OString getFontFile(const PrintFont* pFont) const;
+    OString getFontFile(const PrintFont& rFont) const;
 
-    std::vector<std::unique_ptr<PrintFont>> analyzeFontFile(int nDirID, const OString& rFileName, const char *pFormat=nullptr) const;
+    std::vector<PrintFont> analyzeFontFile(int nDirID, const OString& rFileName, const char *pFormat=nullptr) const;
     static OUString convertSfntName( void* pNameRecord ); // actually a NameRecord* format font subsetting code
     static void analyzeSfntFamilyName( void const * pTTFont, std::vector< OUString >& rnames ); // actually a TrueTypeFont* from font subsetting code
-    bool analyzeSfntFile(PrintFont* pFont) const;
+    bool analyzeSfntFile(PrintFont& rFont) const;
     // finds the font id for the nFaceIndex face in this font file
     // There may be multiple font ids for font collections
     fontID findFontFileID(int nDirID, const OString& rFile, int nFaceIndex, int nVariationIndex) const;
@@ -161,13 +161,18 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
 
     static FontFamily matchFamilyName( std::u16string_view rFamily );
 
-    PrintFont* getFont( fontID nID ) const
+    const PrintFont* getFont( fontID nID ) const
     {
         auto it = m_aFonts.find( nID );
-        return it == m_aFonts.end() ? nullptr : it->second.get();
+        return it == m_aFonts.end() ? nullptr : &it->second;
     }
-    static void fillPrintFontInfo(PrintFont* pFont, FastPrintFontInfo& rInfo);
-    void fillPrintFontInfo( PrintFont* pFont, PrintFontInfo& rInfo ) const;
+    PrintFont* getFont( fontID nID )
+    {
+        auto it = m_aFonts.find( nID );
+        return it == m_aFonts.end() ? nullptr : &it->second;
+    }
+    static void fillPrintFontInfo(const PrintFont& rFont, FastPrintFontInfo& rInfo);
+    void fillPrintFontInfo( PrintFont& rFont, PrintFontInfo& rInfo ) const;
 
     OString getDirectory( int nAtom ) const;
     int getDirectoryAtom( const OString& rDirectory );
@@ -217,26 +222,26 @@ public:
     // routines to get font info in small pieces
 
     // get a specific fonts PSName name
-    OUString getPSName( fontID nFontID ) const;
+    OUString getPSName( fontID nFontID );
 
     // get a specific fonts italic type
     FontItalic getFontItalic( fontID nFontID ) const
     {
-        PrintFont* pFont = getFont( nFontID );
+        const PrintFont* pFont = getFont( nFontID );
         return pFont ? pFont->m_eItalic : ITALIC_DONTKNOW;
     }
 
     // get a specific fonts weight type
     FontWeight getFontWeight( fontID nFontID ) const
     {
-        PrintFont* pFont = getFont( nFontID );
+        const PrintFont* pFont = getFont( nFontID );
         return pFont ? pFont->m_eWeight : WEIGHT_DONTKNOW;
     }
 
     // get a specific fonts system dependent filename
     OString getFontFileSysPath( fontID nFontID ) const
     {
-        return getFontFile( getFont( nFontID ) );
+        return getFontFile( *getFont( nFontID ) );
     }
 
     // get the ttc face number
@@ -246,10 +251,10 @@ public:
     int getFontFaceVariation( fontID nFontID ) const;
 
     // get a specific fonts ascend
-    int getFontAscend( fontID nFontID ) const;
+    int getFontAscend( fontID nFontID );
 
     // get a specific fonts descent
-    int getFontDescend( fontID nFontID ) const;
+    int getFontDescend( fontID nFontID );
 
     // get a fonts glyph bounding box
     void getFontBoundingBox( fontID nFont, int& xMin, int& yMin, int& xMax, int& yMax );
