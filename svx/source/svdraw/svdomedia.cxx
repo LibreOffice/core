@@ -141,7 +141,7 @@ OUString SdrMediaObj::TakeObjNamePlural() const
     return SvxResId(STR_ObjNamePluralMEDIA);
 }
 
-SdrMediaObj* SdrMediaObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> SdrMediaObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
     return new SdrMediaObj(rTargetModel, *this);
 }

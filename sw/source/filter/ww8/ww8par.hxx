@@ -754,7 +754,7 @@ private:
     virtual bool ShapeHasText( sal_uLong nShapeId, sal_uLong nFilePos ) const override;
     // #i32596# - new parameter <_nCalledByGroup>, which
     // indicates, if the OLE object is imported inside a group object
-    virtual SdrObject* ImportOLE( sal_uInt32 nOLEId,
+    virtual rtl::Reference<SdrObject> ImportOLE( sal_uInt32 nOLEId,
                                   const Graphic& rGrf,
                                   const tools::Rectangle& rBoundRect,
                                   const tools::Rectangle& rVisArea,
@@ -770,7 +770,7 @@ public:
     void DisableFallbackStream();
     void EnableFallbackStream();
 protected:
-    virtual SdrObject* ProcessObj( SvStream& rSt, DffObjData& rObjData, SvxMSDffClientData& rData, tools::Rectangle& rTextRect, SdrObject* pObj ) override;
+    virtual rtl::Reference<SdrObject> ProcessObj( SvStream& rSt, DffObjData& rObjData, SvxMSDffClientData& rData, tools::Rectangle& rTextRect, SdrObject* pObj ) override;
 };
 
 class wwSection
@@ -1559,7 +1559,7 @@ private:
     SwFrameFormat* ImportGraf1(WW8_PIC const & rPic, SvStream* pSt, sal_uLong nFilePos);
     SwFrameFormat* ImportGraf(SdrTextObj const * pTextObj = nullptr, SwFrameFormat const * pFlyFormat = nullptr);
 
-    SdrObject* ImportOleBase( Graphic& rGraph, const Graphic* pGrf=nullptr,
+    rtl::Reference<SdrObject> ImportOleBase( Graphic& rGraph, const Graphic* pGrf=nullptr,
         const SfxItemSet* pFlySet=nullptr, const tools::Rectangle& aVisArea = tools::Rectangle() );
 
     SwFrameFormat* ImportOle( const Graphic* = nullptr, const SfxItemSet* pFlySet = nullptr,
@@ -1613,11 +1613,11 @@ private:
 
     bool ReadGrafStart(void* pData, short nDataSiz, WW8_DPHEAD const * pHd,
         SfxAllItemSet &rSet);
-    SdrObject *ReadLine(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
-    SdrObject *ReadRect(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
-    SdrObject *ReadEllipse(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
-    SdrObject *ReadArc(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
-    SdrObject *ReadPolyLine(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
+    rtl::Reference<SdrObject> ReadLine(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
+    rtl::Reference<SdrObject> ReadRect(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
+    rtl::Reference<SdrObject> ReadEllipse(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
+    rtl::Reference<SdrObject> ReadArc(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
+    rtl::Reference<SdrObject> ReadPolyLine(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
     void InsertTxbxStyAttrs( SfxItemSet& rS, sal_uInt16 nColl );
     void InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp, ManTypes eType, bool bONLYnPicLocFc=false);
 
@@ -1634,20 +1634,20 @@ private:
     bool TxbxChainContainsRealText( sal_uInt16 nTxBxS,
                                     tools::Long&  rStartCp,
                                     tools::Long&  rEndCp );
-    SdrObject *ReadTextBox(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
-    SdrObject *ReadCaptionBox(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
-    SdrObject *ReadGroup(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
-    SdrObject *ReadGrafPrimitive(short& rLeft, SfxAllItemSet &rSet);
+    rtl::Reference<SdrObject> ReadTextBox(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
+    rtl::Reference<SdrObject> ReadCaptionBox(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
+    rtl::Reference<SdrObject> ReadGroup(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
+    rtl::Reference<SdrObject> ReadGrafPrimitive(short& rLeft, SfxAllItemSet &rSet);
     void ReadGrafLayer1(WW8PLCFspecial& rPF, tools::Long nGrafAnchorCp);
     SdrObject* CreateContactObject(SwFrameFormat* pFlyFormat);
     RndStdIds ProcessEscherAlign(SvxMSDffImportRec& rRecord, WW8_FSPA& rFSPA, SfxItemSet& rFlySet);
     bool MiserableRTLGraphicsHack(SwTwips &rLeft, SwTwips nWidth,
         sal_Int16 eHoriOri, sal_Int16 eHoriRel);
     SwFrameFormat* Read_GrafLayer( tools::Long nGrafAnchorCp );
-    SwFlyFrameFormat* ImportReplaceableDrawables(SdrObject*& rpObject, SdrObject*& rpOurNewObject,
+    SwFlyFrameFormat* ImportReplaceableDrawables(rtl::Reference<SdrObject>& rpObject, rtl::Reference<SdrObject>& rpOurNewObject,
                                                  SvxMSDffImportRec& rRecord, WW8_FSPA& rF,
                                                  SfxItemSet& rFlySet);
-    SwFlyFrameFormat* ConvertDrawTextToFly(SdrObject*& rpObject, SdrObject*& rpOurNewObject,
+    SwFlyFrameFormat* ConvertDrawTextToFly(rtl::Reference<SdrObject>& rpObject, rtl::Reference<SdrObject>& rpOurNewObject,
                                            const SvxMSDffImportRec& rRecord, RndStdIds eAnchor,
                                            const WW8_FSPA& rF, SfxItemSet& rFlySet);
     SwFrameFormat* MungeTextIntoDrawBox(SvxMSDffImportRec& rRecord, tools::Long nGrafAnchorCp,

@@ -45,7 +45,7 @@ class SW_DLLPUBLIC SwAnchoredObject
 {
     private:
         // drawing object representing the anchored object in the drawing layer
-        SdrObject* mpDrawObj;
+        rtl::Reference<SdrObject> mpDrawObj;
         /// Frame the object is anchored at.
         /// For at-char/at-para anchor, this is always the master SwTextFrame.
         SwFrame* mpAnchorFrame;
@@ -197,8 +197,8 @@ class SW_DLLPUBLIC SwAnchoredObject
 
         // accessors to member <mpDrawObj>
         void SetDrawObj( SdrObject& _rDrawObj );
-        const SdrObject* GetDrawObj() const { return mpDrawObj; }
-        SdrObject* DrawObj() { return mpDrawObj; }
+        const SdrObject* GetDrawObj() const { return mpDrawObj.get(); }
+        SdrObject* DrawObj() { return mpDrawObj.get(); }
 
         // accessors to member <mpAnchorFrame>
         const SwFrame* GetAnchorFrame() const { return mpAnchorFrame; }

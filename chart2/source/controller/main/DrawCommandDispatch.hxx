@@ -20,6 +20,7 @@
 
 #include <svx/svdobjkind.hxx>
 #include "FeatureCommandDispatchBase.hxx"
+#include <rtl/ref.hxx>
 
 class SfxItemSet;
 class SdrObject;
@@ -60,7 +61,7 @@ protected:
 
 private:
     void setInsertObj(SdrObjKind eObj);
-    SdrObject* createDefaultObject( const sal_uInt16 nID );
+    rtl::Reference<SdrObject> createDefaultObject( const sal_uInt16 nID );
 
     bool parseCommandURL( const OUString& rCommandURL, sal_uInt16* pnFeatureId, OUString* pBaseCommand, OUString* pCustomShapeType );
 
