@@ -127,10 +127,11 @@ public:
 class SVXCORE_DLLPUBLIC SdrUndoObj : public SdrUndoAction
 {
 protected:
-    SdrObject* pObj;
+    rtl::Reference<SdrObject> mxObj;
 
 protected:
     SdrUndoObj(SdrObject& rNewObj);
+    virtual ~SdrUndoObj() override;
 
     OUString ImpGetDescriptionStr(TranslateId pStrCacheID, bool bRepeat = false) const;
 
@@ -255,9 +256,6 @@ class SVXCORE_DLLPUBLIC SdrUndoObjList : public SdrUndoObj {
     class ObjListListener;
     friend class ObjListListener;
 
-private:
-    bool bOwner;
-
 protected:
     SdrObjList* pObjList;
     sal_uInt32 nOrdNum;
@@ -265,9 +263,6 @@ protected:
 protected:
     SdrUndoObjList(SdrObject& rNewObj, bool bOrdNumDirect);
     virtual ~SdrUndoObjList() override;
-
-    bool IsOwner() const { return bOwner; }
-    void SetOwner(bool bNew);
 };
 
 /**
@@ -351,11 +346,8 @@ public:
 
 class SVXCORE_DLLPUBLIC SdrUndoReplaceObj : public SdrUndoObj
 {
-    bool bOldOwner;
-    bool bNewOwner;
-
     SdrObjList* pObjList;
-    SdrObject* pNewObj;
+    rtl::Reference<SdrObject> mxNewObj;
 
 public:
     SdrUndoReplaceObj(SdrObject& rOldObj1, SdrObject& rNewObj1);
@@ -363,12 +355,6 @@ public:
 
     virtual void Undo() override;
     virtual void Redo() override;
-
-    bool IsNewOwner() const { return bNewOwner; }
-    void SetNewOwner(bool bNew);
-
-    bool IsOldOwner() const { return bOldOwner; }
-    void SetOldOwner(bool bNew);
 };
 
 /**
