@@ -156,7 +156,7 @@ void ExternalToolEdit::Edit(GraphicObject const*const pGraphicObject)
 
 SdrExternalToolEdit::SdrExternalToolEdit(
     FmFormView* pView,
-    SdrObject* pObj)
+    SdrGrafObj* pObj)
 :   m_pView(pView)
     ,m_pObj(pObj)
 {
@@ -171,7 +171,7 @@ void SdrExternalToolEdit::Notify(SfxBroadcaster & rBC, SfxHint const& rHint)
         return;
     SdrHint const*const pSdrHint(static_cast<SdrHint const*>(&rHint));
     if (SdrHintKind::ModelCleared == pSdrHint->GetKind()
-            || (pSdrHint->GetObject() == m_pObj
+            || (pSdrHint->GetObject() == m_pObj.get()
                 && SdrHintKind::ObjectRemoved == pSdrHint->GetKind()))
     {
         m_pView = nullptr;
@@ -188,7 +188,7 @@ void SdrExternalToolEdit::Update(Graphic & rGraphic)
     if (!pPageView)
         return;
 
-    SdrGrafObj *const pNewObj(static_cast<SdrGrafObj*>(m_pObj->CloneSdrObject(m_pObj->getSdrModelFromSdrObject())));
+    rtl::Reference<SdrGrafObj> pNewObj = SdrObject::Clone(*m_pObj, m_pObj->getSdrModelFromSdrObject());
     assert(pNewObj);
     OUString const description =
         m_pView->GetDescriptionOfMarkedObjects() + " External Edit";
@@ -196,9 +196,9 @@ void SdrExternalToolEdit::Update(Graphic & rGraphic)
     pNewObj->SetGraphicObject(rGraphic);
     // set to new object before ReplaceObjectAtView() so that Notify() will
     // not delete the running timer and crash
-    SdrObject *const pOldObj = m_pObj;
+    rtl::Reference<SdrObject> pOldObj = m_pObj;
     m_pObj = pNewObj;
-    m_pView->ReplaceObjectAtView(pOldObj, *pPageView, pNewObj);
+    m_pView->ReplaceObjectAtView(pOldObj.get(), *pPageView, pNewObj.get());
     m_pView->EndUndo();
 }
 

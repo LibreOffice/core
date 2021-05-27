@@ -1310,8 +1310,7 @@ void lcl_removeEmptyGroupShapes( const SdrObject& rParent )
         if (pChildObjList->GetObjCount() == 0)
         {
             //remove empty group shape
-            SdrObject* pRemoved = pObjList->NbcRemoveObject(nIdx);
-            SdrObject::Free( pRemoved );
+            pObjList->NbcRemoveObject(nIdx);
         }
         else
             lcl_removeEmptyGroupShapes(*pChildSdrObject);

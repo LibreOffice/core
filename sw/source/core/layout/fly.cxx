@@ -41,6 +41,7 @@
 #include <ndole.hxx>
 #include <swtable.hxx>
 #include <svx/svdoashp.hxx>
+#include <svx/svdpage.hxx>
 #include <layouter.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
@@ -439,13 +440,12 @@ void SwFlyFrame::FinitDrawObj()
         }
     }
 
+    auto pVirtDrawObj = GetVirtDrawObj();
     // Else calls delete of the ContactObj
-    GetVirtDrawObj()->SetUserCall(nullptr);
+    pVirtDrawObj->SetUserCall(nullptr);
 
-    // Deregisters itself at the Master
-    // always use SdrObject::Free(...) for SdrObjects (!)
-    SdrObject* pTemp(GetVirtDrawObj());
-    SdrObject::Free(pTemp);
+    if ( pVirtDrawObj->getSdrPageFromSdrObject() )
+        pVirtDrawObj->getSdrPageFromSdrObject()->RemoveObject( pVirtDrawObj->GetOrdNum() );
 }
 
 void SwFlyFrame::ChainFrames( SwFlyFrame *pMaster, SwFlyFrame *pFollow )

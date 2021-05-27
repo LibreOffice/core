@@ -139,7 +139,7 @@ Graphic ViewElementListProvider::GetSymbolGraphic( sal_Int32 nStandardSymbol, co
         nStandardSymbol*=-1;
     if( o3tl::make_unsigned(nStandardSymbol) >= pSymbolList->GetObjCount() )
         nStandardSymbol %= pSymbolList->GetObjCount();
-    SdrObject* pObj = pSymbolList->GetObj(nStandardSymbol);
+    rtl::Reference<SdrObject> pObj = pSymbolList->GetObj(nStandardSymbol);
 
     ScopedVclPtrInstance< VirtualDevice > pVDev;
     pVDev->SetMapMode(MapMode(MapUnit::Map100thMM));
@@ -158,8 +158,8 @@ Graphic ViewElementListProvider::GetSymbolGraphic( sal_Int32 nStandardSymbol, co
     // directly clone to target SdrModel
     pObj = pObj->CloneSdrObject(*pModel);
 
-    pPage->NbcInsertObject(pObj);
-    aView.MarkObj(pObj,pPageView);
+    pPage->NbcInsertObject(pObj.get());
+    aView.MarkObj(pObj.get(),pPageView);
     if( pSymbolShapeProperties )
         pObj->SetMergedItemSet(*pSymbolShapeProperties);
 
@@ -172,7 +172,6 @@ Graphic ViewElementListProvider::GetSymbolGraphic( sal_Int32 nStandardSymbol, co
 
     aView.UnmarkAll();
     pObj=pPage->RemoveObject(0);
-    SdrObject::Free( pObj );
 
     return aGraph;
 }
