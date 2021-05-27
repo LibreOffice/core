@@ -471,7 +471,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
         {
             MakeDrawLayer();
             ScDrawView* pScDrawView = GetScDrawView();
-            SdrObjectUniquePtr pObj = pScDrawView->CreateFieldControl( svx::OColumnTransferable::extractColumnDescriptor( aDataHelper ) );
+            rtl::Reference<SdrObject> pObj = pScDrawView->CreateFieldControl( svx::OColumnTransferable::extractColumnDescriptor( aDataHelper ) );
             if (pObj)
             {
                 Point aInsPos = aPos;
@@ -501,7 +501,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                     }
                 }
 
-                pScDrawView->InsertObjectSafe(pObj.release(), *pScDrawView->GetSdrPageView());
+                pScDrawView->InsertObjectSafe(pObj.get(), *pScDrawView->GetSdrPageView());
 
                 GetViewData().GetViewShell()->SetDrawShell( true );
                 bRet = true;

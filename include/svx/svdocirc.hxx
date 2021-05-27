@@ -100,7 +100,7 @@ public:
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
 
-    virtual SdrCircObj* CloneSdrObject(SdrModel& rTargetModel) const override;
+    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
     virtual void RecalcSnapRect() override;
     virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;
@@ -129,7 +129,7 @@ public:
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2) override;
     virtual void NbcShear (const Point& rRef, Degree100 nAngle, double tn, bool bVShear) override;
-    virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
+    virtual rtl::Reference<SdrObject> DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
 private:
     virtual std::unique_ptr<SdrObjGeoData> NewGeoData() const override;

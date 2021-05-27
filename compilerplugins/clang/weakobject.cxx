@@ -1,3 +1,4 @@
+
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
@@ -143,6 +144,7 @@ public:
             || tc.Class("SwXTextDocument").GlobalNamespace() // ambiguous, ~4 parents
             || tc.Class("SdStyleSheet").GlobalNamespace() // same extra magic as WeakComponentImplHelperBase
             || tc.Class("SdXImpressDocument").GlobalNamespace() // same extra magic as WeakComponentImplHelperBase
+            || tc.Class("SdrObject").GlobalNamespace() // debugging logic
            )
         {
             return true;

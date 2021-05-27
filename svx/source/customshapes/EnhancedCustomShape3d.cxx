@@ -245,11 +245,11 @@ bool EnhancedCustomShape3d::Transformation2D::IsParallel() const
     return eProjectionMode == css::drawing::ProjectionMode_PARALLEL;
 }
 
-SdrObject* EnhancedCustomShape3d::Create3DObject(
+rtl::Reference<SdrObject> EnhancedCustomShape3d::Create3DObject(
     const SdrObject* pShape2d,
     const SdrObjCustomShape& rSdrObjCustomShape)
 {
-    SdrObject* pRet(nullptr);
+    rtl::Reference<SdrObject> pRet;
     const SdrCustomShapeGeometryItem& rGeometryItem(rSdrObjCustomShape.GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY));
     double fMap(1.0), *pMap = nullptr;
     Fraction aFraction( rSdrObjCustomShape.getSdrModelFromSdrObject().GetScaleFraction() );
@@ -318,7 +318,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
         a3DDefaultAttr.SetDefaultLatheCharacterMode( true );
         a3DDefaultAttr.SetDefaultExtrudeCharacterMode( true );
 
-        E3dScene* pScene = new E3dScene(rSdrObjCustomShape.getSdrModelFromSdrObject());
+        rtl::Reference<E3dScene> pScene = new E3dScene(rSdrObjCustomShape.getSdrModelFromSdrObject());
 
         bool bSceneHasObjects ( false );
         bool bUseTwoFillStyles( false );
@@ -408,8 +408,8 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
 
                 if(bNeedToConvertToContour)
                 {
-                    SdrObject* pNewObj = pNext->ConvertToContourObj(const_cast< SdrObject* >(pNext));
-                    SdrPathObj* pNewPathObj = dynamic_cast< SdrPathObj* >(pNewObj);
+                    rtl::Reference<SdrObject> pNewObj = pNext->ConvertToContourObj(const_cast< SdrObject* >(pNext));
+                    SdrPathObj* pNewPathObj = dynamic_cast< SdrPathObj* >(pNewObj.get());
 
                     if(pNewPathObj)
                     {
@@ -443,8 +443,6 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
                             aLocalSet.Put(XLineStyleItem(drawing::LineStyle_SOLID));
                         }
                     }
-
-                    SdrObject::Free(pNewObj);
                 }
                 else
                 {
@@ -453,7 +451,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
             }
             else
             {
-                SdrObjectUniquePtr pNewObj = pNext->ConvertToPolyObj( false, false );
+                rtl::Reference<SdrObject> pNewObj = pNext->ConvertToPolyObj( false, false );
                 SdrPathObj* pPath = dynamic_cast<SdrPathObj*>( pNewObj.get() );
                 if ( pPath )
                     aPolyPoly = pPath->GetPathPoly();
@@ -471,7 +469,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
                 aBoundRect2d.Union( aBoundRect );
 
                 // #i122777# depth 0 is okay for planes when using double-sided
-                E3dCompoundObject* p3DObj = new E3dExtrudeObj(
+                rtl::Reference<E3dCompoundObject> p3DObj = new E3dExtrudeObj(
                     rSdrObjCustomShape.getSdrModelFromSdrObject(),
                     a3DDefaultAttr,
                     aPolyPoly,
@@ -481,7 +479,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
                 p3DObj->SetMergedItemSet( aLocalSet );
 
                 if ( bIsPlaceholderObject )
-                    aPlaceholderObjectList.push_back( p3DObj );
+                    aPlaceholderObjectList.push_back( p3DObj.get() );
                 else if ( bUseTwoFillStyles )
                 {
                     BitmapEx aFillBmp;
@@ -525,7 +523,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
                             p3DObj->SetMergedItem(XFillBitmapItem(OUString(), Graphic(aFillBmp)));
                         }
                     }
-                    pScene->InsertObject( p3DObj );
+                    pScene->InsertObject( p3DObj.get() );
                     p3DObj = new E3dExtrudeObj(
                         rSdrObjCustomShape.getSdrModelFromSdrObject(),
                         a3DDefaultAttr,
@@ -538,7 +536,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
                     p3DObj->SetMergedItem( XFillStyleItem( drawing::FillStyle_SOLID ) );
                     p3DObj->SetMergedItem( Svx3DCloseFrontItem( false ) );
                     p3DObj->SetMergedItem( Svx3DCloseBackItem( false ) );
-                    pScene->InsertObject( p3DObj );
+                    pScene->InsertObject( p3DObj.get() );
 
                     // #i122777# depth 0 is okay for planes when using double-sided
                     p3DObj = new E3dExtrudeObj(
@@ -567,7 +565,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
                     p3DObj->SetMergedItem( Svx3DCloseFrontItem( false ) );
                     p3DObj->SetMergedItem( Svx3DCloseBackItem( false ) );
                 }
-                pScene->InsertObject( p3DObj );
+                pScene->InsertObject( p3DObj.get() );
                 bSceneHasObjects = true;
             }
         }
@@ -735,16 +733,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
             for (E3dCompoundObject* pTemp : aPlaceholderObjectList)
             {
                 pScene->RemoveObject( pTemp->GetOrdNum() );
-                // always use SdrObject::Free(...) for SdrObjects (!)
-                SdrObject* pTemp2(pTemp);
-                SdrObject::Free(pTemp2);
             }
-        }
-        else
-        {
-            // always use SdrObject::Free(...) for SdrObjects (!)
-            SdrObject* pTemp(pScene);
-            SdrObject::Free(pTemp);
         }
     }
     return pRet;

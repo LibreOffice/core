@@ -22,14 +22,14 @@
 
 #include <editeng/outliner.hxx>
 #include <svx/svxdllapi.h>
-#include <tools/weakbase.h>
+#include <unotools/weakref.hxx>
 
 class SdrTextObj;
 class SdrPage;
 
 class SVXCORE_DLLPUBLIC SdrOutliner : public Outliner
 {
-    tools::WeakReference<SdrTextObj> mpTextObj;
+    ::unotools::WeakReference<SdrTextObj> mpTextObj;
     const SdrPage* mpVisualizedPage;
 
 public:

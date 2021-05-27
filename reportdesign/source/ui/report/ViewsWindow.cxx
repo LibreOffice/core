@@ -969,18 +969,18 @@ void OViewsWindow::BegDragObj_createInvisibleObjectAtPosition(const tools::Recta
 
         if ( &rView != &_rSection )
         {
-            SdrObject *pNewObj = new SdrUnoObj(
+            rtl::Reference<SdrObject> pNewObj = new SdrUnoObj(
                 rView.getSdrModelFromSdrView(),
                 "com.sun.star.form.component.FixedText");
 
             pNewObj->SetLogicRect(_aRect);
             pNewObj->Move(Size(0, aNewPos.Y()));
             bool bChanged = rView.GetModel()->IsChanged();
-            rReportSection.getPage()->InsertObject(pNewObj);
+            rReportSection.getPage()->InsertObject(pNewObj.get());
             rView.GetModel()->SetChanged(bChanged);
-            m_aBegDragTempList.push_back(pNewObj);
+            m_aBegDragTempList.push_back(pNewObj.get());
 
-            rView.MarkObj( pNewObj, rView.GetSdrPageView() );
+            rView.MarkObj( pNewObj.get(), rView.GetSdrPageView() );
         }
         const tools::Long nSectionHeight = rReportSection.PixelToLogic(rReportSection.GetOutputSizePixel()).Height();
         aNewPos.AdjustY( -nSectionHeight );

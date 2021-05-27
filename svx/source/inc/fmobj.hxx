@@ -80,7 +80,7 @@ public:
     SAL_DLLPRIVATE virtual SdrObjKind GetObjIdentifier() const override;
     SAL_DLLPRIVATE virtual void NbcReformatText() override;
 
-    SAL_DLLPRIVATE virtual FmFormObj* CloneSdrObject(SdrModel& rTargetModel) const override;
+    SAL_DLLPRIVATE virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
     SAL_DLLPRIVATE static css::uno::Reference< css::uno::XInterface> ensureModelEnv(
                   const css::uno::Reference< css::uno::XInterface>& _rSourceContainer,

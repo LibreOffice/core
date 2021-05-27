@@ -241,7 +241,7 @@ namespace sdr::contact
                 // needed and can be deleted.
 
                 // create temp RectObj as TextObj and set needed attributes
-                SdrRectObj* pRectObj(new SdrRectObj(GetGrafObject().getSdrModelFromSdrObject(), OBJ_TEXT));
+                rtl::Reference<SdrRectObj> pRectObj(new SdrRectObj(GetGrafObject().getSdrModelFromSdrObject(), OBJ_TEXT));
                 pRectObj->NbcSetText(aDraftText);
                 pRectObj->SetMergedItem(SvxColorItem(COL_LIGHTRED, EE_CHAR_COLOR));
 
@@ -272,10 +272,6 @@ namespace sdr::contact
                     const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
                     xBlockTextPrimitive->get2DDecomposition(xRetval, aViewInformation2D);
                 }
-
-                // always use SdrObject::Free(...) for SdrObjects (!)
-                SdrObject* pTemp(pRectObj);
-                SdrObject::Free(pTemp);
             }
 
             return xRetval;

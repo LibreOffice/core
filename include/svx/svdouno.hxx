@@ -59,10 +59,6 @@ private:
     SVX_DLLPRIVATE void CreateUnoControlModel(const OUString& rModelName,
         const css::uno::Reference< css::lang::XMultiServiceFactory >& rxSFac );
 
-protected:
-    // protected destructor
-    virtual ~SdrUnoObj() override;
-
 public:
     explicit SdrUnoObj(
         SdrModel& rSdrModel,
@@ -73,11 +69,12 @@ public:
         SdrModel& rSdrModel,
         const OUString& rModelName,
         const css::uno::Reference< css::lang::XMultiServiceFactory >& rxSFac);
+    virtual ~SdrUnoObj() override;
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual SdrObjKind GetObjIdentifier() const override;
 
-    virtual SdrUnoObj* CloneSdrObject(SdrModel& rTargetModel) const override;
+    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
     virtual void NbcSetLayer(SdrLayerID nLayer) override;
 

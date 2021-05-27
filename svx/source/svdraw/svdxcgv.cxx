@@ -139,7 +139,7 @@ bool SdrExchangeView::Paste(const OUString& rStr, const Point& rPos, SdrObjList*
     if (pPage!=nullptr) {
         aTextRect.SetSize(pPage->GetSize());
     }
-    SdrRectObj* pObj = new SdrRectObj(
+    rtl::Reference<SdrRectObj> pObj = new SdrRectObj(
         getSdrModelFromSdrView(),
         OBJ_TEXT,
         aTextRect);
@@ -160,7 +160,7 @@ bool SdrExchangeView::Paste(const OUString& rStr, const Point& rPos, SdrObjList*
     Size aSiz(pObj->GetLogicRect().GetSize());
     MapUnit eMap=mpModel->GetScaleUnit();
     Fraction aMap=mpModel->GetScaleFraction();
-    ImpPasteObject(pObj,*pLst,aPos,aSiz,MapMode(eMap,Point(0,0),aMap,aMap),nOptions);
+    ImpPasteObject(pObj.get(),*pLst,aPos,aSiz,MapMode(eMap,Point(0,0),aMap,aMap),nOptions);
     return true;
 }
 
@@ -179,7 +179,7 @@ bool SdrExchangeView::Paste(SvStream& rInput, EETextFormat eFormat, const Point&
     if (pPage!=nullptr) {
         aTextRect.SetSize(pPage->GetSize());
     }
-    SdrRectObj* pObj = new SdrRectObj(
+    rtl::Reference<SdrRectObj> pObj = new SdrRectObj(
         getSdrModelFromSdrView(),
         OBJ_TEXT,
         aTextRect);
@@ -200,7 +200,7 @@ bool SdrExchangeView::Paste(SvStream& rInput, EETextFormat eFormat, const Point&
     Size aSiz(pObj->GetLogicRect().GetSize());
     MapUnit eMap=mpModel->GetScaleUnit();
     Fraction aMap=mpModel->GetScaleFraction();
-    ImpPasteObject(pObj,*pLst,aPos,aSiz,MapMode(eMap,Point(0,0),aMap,aMap),nOptions);
+    ImpPasteObject(pObj.get(),*pLst,aPos,aSiz,MapMode(eMap,Point(0,0),aMap,aMap),nOptions);
 
     // b4967543
     if(pObj->GetOutlinerParaObject())
@@ -298,7 +298,7 @@ bool SdrExchangeView::Paste(
         {
             const SdrObject* pSrcOb=pSrcPg->GetObj(nOb);
 
-            SdrObject* pNewObj(pSrcOb->CloneSdrObject(*mpModel));
+            rtl::Reference<SdrObject> pNewObj(pSrcOb->CloneSdrObject(*mpModel));
 
             if (pNewObj!=nullptr)
             {
@@ -320,7 +320,7 @@ bool SdrExchangeView::Paste(
                     const SdrLayerAdmin& rAd = pPg->GetLayerAdmin();
                     SdrLayerID nLayer(0);
 
-                    if(dynamic_cast<const FmFormObj*>( pNewObj) !=  nullptr)
+                    if(dynamic_cast<const FmFormObj*>( pNewObj.get()) !=  nullptr)
                     {
                         // for FormControls, force to form layer
                         nLayer = rAd.GetLayerID(rAd.GetControlLayerName());
@@ -338,7 +338,7 @@ bool SdrExchangeView::Paste(
                     pNewObj->SetLayer(nLayer);
                 }
 
-                pDstLst->InsertObjectThenMakeNameUnique(pNewObj, aNameSet);
+                pDstLst->InsertObjectThenMakeNameUnique(pNewObj.get(), aNameSet);
 
                 if( bUndo )
                     AddUndo(getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoNewObject(*pNewObj));
@@ -346,11 +346,11 @@ bool SdrExchangeView::Paste(
                 if (bMark) {
                     // Don't already set Markhandles!
                     // That is instead being done by ModelHasChanged in MarkView.
-                    MarkObj(pNewObj,pMarkPV,false,true);
+                    MarkObj(pNewObj.get(),pMarkPV,false,true);
                 }
 
                 // #i13033#
-                aCloneList.AddPair(pSrcOb, pNewObj);
+                aCloneList.AddPair(pSrcOb, pNewObj.get());
             }
             else
             {
@@ -712,7 +712,7 @@ std::unique_ptr<SdrModel> SdrExchangeView::CreateMarkedObjModel() const
 
     for(SdrObject* pObj : aSdrObjects)
     {
-        SdrObject* pNewObj(nullptr);
+        rtl::Reference<SdrObject> pNewObj;
 
         if(nullptr != dynamic_cast< const SdrPageObj* >(pObj))
         {
@@ -733,7 +733,7 @@ std::unique_ptr<SdrModel> SdrExchangeView::CreateMarkedObjModel() const
             }
         }
 
-        if(nullptr == pNewObj)
+        if(!pNewObj)
         {
             // not cloned yet
             if(pObj->GetObjIdentifier() == OBJ_OLE2 && nullptr == mpModel->GetPersist())
@@ -750,10 +750,10 @@ std::unique_ptr<SdrModel> SdrExchangeView::CreateMarkedObjModel() const
 
         if(pNewObj)
         {
-            pNewPage->InsertObject(pNewObj, SAL_MAX_SIZE);
+            pNewPage->InsertObject(pNewObj.get(), SAL_MAX_SIZE);
 
             // #i13033#
-            aCloneList.AddPair(pObj, pNewObj);
+            aCloneList.AddPair(pObj, pNewObj.get());
         }
     }
 

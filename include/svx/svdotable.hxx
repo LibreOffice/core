@@ -205,7 +205,7 @@ public:
     virtual bool AdjustTextFrameWidthAndHeight() override;
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
-    virtual SdrTableObj* CloneSdrObject(SdrModel& rTargetModel) const override;
+    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
     virtual void RecalcSnapRect() override;
     virtual const tools::Rectangle& GetSnapRect() const override;
     virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;

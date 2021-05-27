@@ -31,6 +31,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <svx/svdobj.hxx>
+#include <unotools/weakref.hxx>
 #include <memory>
 #include <vector>
 
@@ -64,7 +65,7 @@ private:
     SdrObjList(const SdrObjList& rSrcList) = delete;
     SdrObjList &operator=(const SdrObjList& rSrcList) = delete;
 
-    ::std::vector<SdrObject*>   maList;
+    ::std::vector<rtl::Reference<SdrObject>>   maList;
 
     tools::Rectangle    maSdrObjListOutRect;
     tools::Rectangle    maSdrObjListSnapRect;
@@ -114,13 +115,13 @@ public:
     void InsertObjectThenMakeNameUnique(SdrObject* pObj, std::unordered_set<rtl::OUString>& rNameSet, size_t nPos=SAL_MAX_SIZE);
 
     /// remove from list without delete
-    virtual SdrObject* NbcRemoveObject(size_t nObjNum);
-    virtual SdrObject* RemoveObject(size_t nObjNum);
+    virtual rtl::Reference<SdrObject> NbcRemoveObject(size_t nObjNum);
+    virtual rtl::Reference<SdrObject> RemoveObject(size_t nObjNum);
 
     /// Replace existing object by different one.
     /// Same as Remove(old)+Insert(new) but faster because the order numbers
     /// do not have to be set dirty.
-    virtual SdrObject* ReplaceObject(SdrObject* pNewObj, size_t nObjNum);
+    virtual rtl::Reference<SdrObject> ReplaceObject(SdrObject* pNewObj, size_t nObjNum);
 
     /// Modify ZOrder of an SdrObject
     virtual SdrObject* SetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum);
@@ -228,7 +229,7 @@ public:
 private:
     /// This list, if it exists, defines the navigation order. If it does
     /// not exist then maList defines the navigation order.
-    std::unique_ptr<std::vector<tools::WeakReference<SdrObject>>> mxNavigationOrder;
+    std::unique_ptr<std::vector<unotools::WeakReference<SdrObject>>> mxNavigationOrder;
 
     /// This flag is <TRUE/> when the mpNavigation list has been changed but
     /// the indices of the referenced SdrObjects still have their old values.

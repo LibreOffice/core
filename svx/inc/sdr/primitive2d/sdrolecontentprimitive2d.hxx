@@ -22,7 +22,7 @@
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <tools/weakbase.h>
+#include <unotools/weakref.hxx>
 
 
 // predefinitions
@@ -35,7 +35,7 @@ namespace drawinglayer::primitive2d
         class SdrOleContentPrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
-            tools::WeakReference<SdrOle2Obj>            mpSdrOle2Obj;
+            unotools::WeakReference<SdrOle2Obj>         mpSdrOle2Obj;
             basegfx::B2DHomMatrix                       maObjectTransform;
 
             // #i104867# The GraphicVersion number to identify in operator== if

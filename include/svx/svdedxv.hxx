@@ -26,6 +26,7 @@
 #include <svx/svdglev.hxx>
 #include <svx/selectioncontroller.hxx>
 #include <editeng/editview.hxx>
+#include <unotools/weakref.hxx>
 #include <memory>
 
 class SdrOutliner;
@@ -80,7 +81,7 @@ class SVXCORE_DLLPUBLIC SdrObjEditView : public SdrGlueEditView, public EditView
 
 protected:
     // TextEdit
-    tools::WeakReference<SdrTextObj>
+    unotools::WeakReference<SdrTextObj>
                                 mxTextEditObj;         // current object in TextEdit
     SdrPageView*                pTextEditPV;
     std::unique_ptr<SdrOutliner> pTextEditOutliner;     // outliner for the TextEdit
@@ -223,7 +224,7 @@ public:
     bool IsTextEditInSelectionMode() const;
 
     // If sb needs the object out of the TextEdit:
-    SdrTextObj* GetTextEditObject() const { return mxTextEditObj.get(); }
+    SdrTextObj* GetTextEditObject() const { return mxTextEditObj.get().get(); }
 
     // info about TextEditPageView. Default is 0L.
     SdrPageView* GetTextEditPageView() const;

@@ -44,7 +44,7 @@ OReportDrawPage::OReportDrawPage(SdrPage* _pPage
 {
 }
 
-SdrObject* OReportDrawPage::CreateSdrObject_(const uno::Reference< drawing::XShape > & xDescr)
+rtl::Reference<SdrObject> OReportDrawPage::CreateSdrObject_(const uno::Reference< drawing::XShape > & xDescr)
 {
     uno::Reference< report::XReportComponent> xReportComponent(xDescr,uno::UNO_QUERY);
     if ( xReportComponent.is() )

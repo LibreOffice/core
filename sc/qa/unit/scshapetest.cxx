@@ -495,9 +495,9 @@ void ScShapeTest::testTdf139583_Rotate180deg()
     const tools::Rectangle aRect(Point(3000, 4000), Size(5000, 2000));
     ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
     CPPUNIT_ASSERT_MESSAGE("No ScDrawLayer", pDrawLayer);
-    SdrRectObj* pObj = new SdrRectObj(*pDrawLayer, aRect);
+    rtl::Reference<SdrRectObj> pObj = new SdrRectObj(*pDrawLayer, aRect);
     CPPUNIT_ASSERT_MESSAGE("Could not create rectangle", pObj);
-    pPage->InsertObject(pObj);
+    pPage->InsertObject(pObj.get());
 
     // Anchor "to cell (resize with cell)" and then rotate it by 180deg around center
     // The order is important here.
@@ -733,13 +733,13 @@ void ScShapeTest::testTdf137576_LogicRectInNewMeasureline()
     Point aEndPoint(13000, 8000);
     ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
     CPPUNIT_ASSERT_MESSAGE("No ScDrawLayer", pDrawLayer);
-    SdrMeasureObj* pObj = new SdrMeasureObj(*pDrawLayer, aStartPoint, aEndPoint);
+    rtl::Reference<SdrMeasureObj> pObj = new SdrMeasureObj(*pDrawLayer, aStartPoint, aEndPoint);
     CPPUNIT_ASSERT_MESSAGE("Could not create measure line", pObj);
-    pPage->InsertObject(pObj);
+    pPage->InsertObject(pObj.get());
 
     // Anchor "to cell (resize with cell)" and examine NonRotatedAnchor
     ScDrawLayer::SetCellAnchoredFromPosition(*pObj, rDoc, 0 /*SCTAB*/, true /*bResizeWithCell*/);
-    ScDrawObjData* pNData = ScDrawLayer::GetNonRotatedObjData(pObj);
+    ScDrawObjData* pNData = ScDrawLayer::GetNonRotatedObjData(pObj.get());
     CPPUNIT_ASSERT_MESSAGE("Failed to get NonRotatedAnchor", pNData);
     // Without the fix all four values would be zero.
     CPPUNIT_ASSERT_EQUAL(SCCOL(1), pNData->maStart.Col());

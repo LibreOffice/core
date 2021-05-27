@@ -78,12 +78,10 @@ protected:
     void SetDefaultAttributes();
     void ImpCleanup3DDepthMapper();
 
-    // protected destructor
-    virtual ~E3dScene() override;
-
 public:
     E3dScene(SdrModel& rSdrModel);
     E3dScene(SdrModel& rSdrModel, E3dScene const &);
+    virtual ~E3dScene() override;
 
     virtual void StructureChanged() override;
 
@@ -128,7 +126,7 @@ public:
     const Camera3D& GetCamera() const { return aCamera; }
     void removeAllNonSelectedObjects();
 
-    virtual E3dScene* CloneSdrObject(SdrModel& rTargetModel) const override;
+    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
     virtual std::unique_ptr<SdrObjGeoData> NewGeoData() const override;
     virtual void          SaveGeoData(SdrObjGeoData& rGeo) const override;
@@ -171,8 +169,8 @@ public:
     // derived from SdrObjList
     virtual void NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE) override;
     virtual void InsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE) override;
-    virtual SdrObject* NbcRemoveObject(size_t nObjNum) override;
-    virtual SdrObject* RemoveObject(size_t nObjNum) override;
+    virtual rtl::Reference<SdrObject> NbcRemoveObject(size_t nObjNum) override;
+    virtual rtl::Reference<SdrObject> RemoveObject(size_t nObjNum) override;
 
     // needed for group functionality
     virtual void SetRectsDirty(bool bNotMyself = false, bool bRecursive = true) override;

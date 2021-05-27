@@ -152,7 +152,7 @@ void SdrPageObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bCanConvToPolyLineToArea=false;
 }
 
-SdrPageObj* SdrPageObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> SdrPageObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
     return new SdrPageObj(rTargetModel, *this);
 }

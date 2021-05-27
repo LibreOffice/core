@@ -322,11 +322,6 @@ void SdrPolyEditView::DeleteMarkedPoints()
                 if( bUndo )
                     AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pPath ) );
                 pM->GetPageView()->GetObjList()->RemoveObject(pPath->GetOrdNum());
-                if( !bUndo )
-                {
-                    SdrObject* pObj = pPath;
-                    SdrObject::Free(pObj);
-                }
             }
         }
     }
@@ -367,14 +362,14 @@ void SdrPolyEditView::RipUpAtMarkedPoints()
         for(SdrUShortCont::const_reverse_iterator it = rPts.rbegin(); it != rPts.rend(); ++it)
         {
             sal_uInt32 nNewPt0Idx(0);
-            SdrObject* pNewObj = pObj->RipPoint(*it, nNewPt0Idx);
+            rtl::Reference<SdrPathObj> pNewObj = pObj->RipPoint(*it, nNewPt0Idx);
 
             if(pNewObj)
             {
-                pM->GetPageView()->GetObjList()->InsertObject(pNewObj, pObj->GetOrdNum() + 1);
+                pM->GetPageView()->GetObjList()->InsertObject(pNewObj.get(), pObj->GetOrdNum() + 1);
                 if( bUndo )
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pNewObj));
-                MarkObj(pNewObj, pM->GetPageView(), false, true);
+                MarkObj(pNewObj.get(), pM->GetPageView(), false, true);
             }
 
             if(nNewPt0Idx)

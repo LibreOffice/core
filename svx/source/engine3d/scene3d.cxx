@@ -438,13 +438,12 @@ void E3dScene::removeAllNonSelectedObjects()
             {
                 NbcRemoveObject(pObj->GetOrdNum());
                 a--;
-                SdrObject::Free(pObj);
             }
         }
     }
 }
 
-E3dScene* E3dScene::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> E3dScene::CloneSdrObject(SdrModel& rTargetModel) const
 {
     return new E3dScene(rTargetModel, *this);
 }
@@ -781,10 +780,10 @@ void E3dScene::InsertObject(SdrObject* pObj, size_t nPos)
     }
 }
 
-SdrObject* E3dScene::NbcRemoveObject(size_t nObjNum)
+rtl::Reference<SdrObject> E3dScene::NbcRemoveObject(size_t nObjNum)
 {
     // call parent
-    SdrObject* pRetval = SdrObjList::NbcRemoveObject(nObjNum);
+    rtl::Reference<SdrObject> pRetval = SdrObjList::NbcRemoveObject(nObjNum);
 
     InvalidateBoundVolume();
     StructureChanged();
@@ -792,10 +791,10 @@ SdrObject* E3dScene::NbcRemoveObject(size_t nObjNum)
     return pRetval;
 }
 
-SdrObject* E3dScene::RemoveObject(size_t nObjNum)
+rtl::Reference<SdrObject> E3dScene::RemoveObject(size_t nObjNum)
 {
     // call parent
-    SdrObject* pRetval(SdrObjList::RemoveObject(nObjNum));
+    rtl::Reference<SdrObject> pRetval(SdrObjList::RemoveObject(nObjNum));
 
     InvalidateBoundVolume();
     StructureChanged();

@@ -617,7 +617,7 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
     EEControlBits nCntrl = nOldCntrl & ~EEControlBits::ONLINESPELLING;
     rOutl.SetControlWord(nCntrl);
 
-    SdrObject* pTempBackgroundShape = nullptr;
+    rtl::Reference<SdrObject> pTempBackgroundShape;
     std::vector< SdrObject* > aShapes;
     bool bRet = true;
 
@@ -636,7 +636,7 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
                 pTempBackgroundShape->SetMergedItemSet(pCorrectProperties->GetItemSet());
                 pTempBackgroundShape->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
                 pTempBackgroundShape->NbcSetStyleSheet(pCorrectProperties->GetStyleSheet(), true);
-                aShapes.push_back(pTempBackgroundShape);
+                aShapes.push_back(pTempBackgroundShape.get());
             }
         }
         else
@@ -968,10 +968,7 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
         }
     }
 
-    if(pTempBackgroundShape)
-    {
-        SdrObject::Free(pTempBackgroundShape);
-    }
+    pTempBackgroundShape.clear();
 
     rOutl.SetCalcFieldValueHdl( maOldCalcFieldValueHdl );
 

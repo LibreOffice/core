@@ -504,6 +504,8 @@ bool RefCounting::VisitCXXDeleteExpr(const CXXDeleteExpr * cxxDeleteExpr)
         compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(cxxDeleteExpr)));
     if (loplugin::isSamePathname(aFileName, SRCDIR "/cppuhelper/source/weak.cxx"))
         return true;
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/include/svx/svdobj.hxx"))
+        return true;
 
     if (!cxxDeleteExpr->getArgument())
         return true;
@@ -743,6 +745,15 @@ bool RefCounting::isCastingReference(const Expr* expr)
     {
         if (auto callMethod = callExpr->getDirectCallee())
             if (callMethod->getReturnType()->isReferenceType())
+                return false;
+    }
+    // Ignore
+    //     WeakReference x;
+    //     if (x.get.get())
+    // and similar stuff
+    if (auto memberCall2 = dyn_cast<CXXMemberCallExpr>(obj))
+    {
+        if (loplugin::TypeCheck(memberCall2->getImplicitObjectArgument()->getType()).Class("WeakReference"))
                 return false;
     }
     return true;

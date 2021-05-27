@@ -78,7 +78,7 @@ public:
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual SdrObjKind GetObjIdentifier() const override;
     virtual void TakeUnrotatedSnapRect(tools::Rectangle& rRect) const override;
-    virtual SdrPathObj* CloneSdrObject(SdrModel& rTargetModel) const override;
+    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
@@ -127,7 +127,7 @@ public:
     sal_uInt32 NbcInsPoint(const Point& rPos, bool bNewObj);
 
     // rip at given point
-    SdrObject* RipPoint(sal_uInt32 nHdlNum, sal_uInt32& rNewPt0Index);
+    rtl::Reference<SdrPathObj> RipPoint(sal_uInt32 nHdlNum, sal_uInt32& rNewPt0Index);
 
 private:
     virtual std::unique_ptr<SdrObjGeoData> NewGeoData() const override;
@@ -135,7 +135,7 @@ private:
     virtual void RestoreGeoData(const SdrObjGeoData& rGeo) override;
 
 public:
-    virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
+    virtual rtl::Reference<SdrObject> DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
     // Bezier-polygon getter/setter
     const basegfx::B2DPolyPolygon& GetPathPoly() const { return maPathPolygon; }

@@ -268,7 +268,7 @@ private:
         selection.  This copy is necessary because during the search
         process the mark list is modified.
     */
-    ::std::vector<tools::WeakReference<SdrObject>> maMarkListCopy;
+    ::std::vector<unotools::WeakReference<SdrObject>> maMarkListCopy;
 
     /** Current object that may be a text object.  The object pointer to
         corresponds to <member>mnObjIndex</member>.  While iterating over the

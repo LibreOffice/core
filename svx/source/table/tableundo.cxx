@@ -40,17 +40,17 @@ CellUndo::CellUndo( SdrObject* pObjRef, const CellRef& xCell )
     ,mxCell( xCell )
     ,mbUndo( true )
 {
-    if( mxCell.is() && mxObjRef.is() )
+    if( mxCell.is() && pObjRef )
     {
         getDataFromCell( maUndoData );
-        mxObjRef->AddObjectUser( *this );
+        pObjRef->AddObjectUser( *this );
     }
 }
 
 CellUndo::~CellUndo()
 {
-    if( mxObjRef.is() )
-        mxObjRef->RemoveObjectUser( *this );
+    if( auto pObj = mxObjRef.get() )
+        pObj->RemoveObjectUser( *this );
     dispose();
 }
 
@@ -102,7 +102,7 @@ bool CellUndo::Merge( SfxUndoAction *pNextAction )
 void CellUndo::setDataToCell( const Data& rData )
 {
     if( rData.mpProperties )
-        mxCell->mpProperties.reset(Cell::CloneProperties( rData.mpProperties, *mxObjRef, *mxCell ));
+        mxCell->mpProperties.reset(Cell::CloneProperties( rData.mpProperties, *mxObjRef.get(), *mxCell ));
     else
         mxCell->mpProperties.reset();
 
@@ -118,22 +118,22 @@ void CellUndo::setDataToCell( const Data& rData )
     mxCell->mnRowSpan = rData.mnRowSpan;
     mxCell->mnColSpan = rData.mnColSpan;
 
-    if(mxObjRef.is())
+    if(auto pObj = mxObjRef.get())
     {
         // #i120201# ActionChanged is not enough, we need to trigger TableLayouter::UpdateBorderLayout()
         // and this is done best using ReformatText() for table objects
-        mxObjRef->ActionChanged();
-        mxObjRef->NbcReformatText();
+        pObj->ActionChanged();
+        pObj->NbcReformatText();
     }
 }
 
 void CellUndo::getDataFromCell( Data& rData )
 {
-    if( !(mxObjRef.is() && mxCell.is()) )
+    if( !(mxObjRef.get().is() && mxCell.is()) )
         return;
 
     if( mxCell->mpProperties )
-        rData.mpProperties = mxCell->CloneProperties( *mxObjRef, *mxCell);
+        rData.mpProperties = mxCell->CloneProperties( *mxObjRef.get(), *mxCell);
 
     if( mxCell->GetOutlinerParaObject() )
         rData.mpOutlinerParaObject = new OutlinerParaObject(*mxCell->GetOutlinerParaObject());
@@ -495,7 +495,7 @@ void TableStyleUndo::Redo()
 
 void TableStyleUndo::setData( const Data& rData )
 {
-    SdrTableObj* pTableObj = mxObjRef.get();
+    rtl::Reference<SdrTableObj> pTableObj = mxObjRef.get();
     if( pTableObj )
     {
         pTableObj->setTableStyle( rData.mxTableStyle );
@@ -505,7 +505,7 @@ void TableStyleUndo::setData( const Data& rData )
 
 void TableStyleUndo::getData( Data& rData )
 {
-    SdrTableObj* pTableObj = mxObjRef.get();
+    rtl::Reference<SdrTableObj> pTableObj = mxObjRef.get();
     if( pTableObj )
     {
         rData.maSettings = pTableObj->getTableStyleSettings();

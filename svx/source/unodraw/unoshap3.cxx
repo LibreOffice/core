@@ -112,19 +112,19 @@ void SAL_CALL Svx3DSceneObject::add( const Reference< drawing::XShape >& xShape 
     SolarMutexGuard aGuard;
 
     SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
+    assert(pShape && "adding a non-SvxShape to a scene?");
 
     if(!HasSdrObject() || !mxPage.is() || pShape == nullptr || nullptr != pShape->GetSdrObject() )
         throw uno::RuntimeException();
 
-    SdrObject* pSdrShape = mxPage->CreateSdrObject_( xShape );
-    if( dynamic_cast<const E3dObject* >(pSdrShape) !=  nullptr )
+    rtl::Reference<SdrObject> pSdrShape = mxPage->CreateSdrObject_( xShape );
+    if( dynamic_cast<const E3dObject* >(pSdrShape.get()) !=  nullptr )
     {
-        GetSdrObject()->GetSubList()->NbcInsertObject( pSdrShape );
-        pShape->Create(pSdrShape, mxPage.get());
+        GetSdrObject()->GetSubList()->NbcInsertObject( pSdrShape.get() );
+        pShape->Create(pSdrShape.get(), mxPage.get());
     }
     else
     {
-        SdrObject::Free( pSdrShape );
         throw uno::RuntimeException();
     }
 
@@ -155,8 +155,7 @@ void SAL_CALL Svx3DSceneObject::remove( const Reference< drawing::XShape >& xSha
 
     if( nObjNum < nObjCount )
     {
-        SdrObject* pObject = rList.NbcRemoveObject( nObjNum );
-        SdrObject::Free( pObject );
+        rList.NbcRemoveObject( nObjNum );
     }
     else
     {

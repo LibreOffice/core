@@ -119,13 +119,13 @@ void GraphicObjectBar::ExecuteFilter( SfxRequest const & rReq )
 
                     if( pPageView )
                     {
-                        SdrGrafObj* pFilteredObj = static_cast<SdrGrafObj*>( pObj->CloneSdrObject(pObj->getSdrModelFromSdrObject()) );
+                        rtl::Reference<SdrGrafObj> pFilteredObj = SdrObject::Clone(static_cast<SdrGrafObj&>(*pObj), pObj->getSdrModelFromSdrObject());
                         OUString aStr = mpView->GetDescriptionOfMarkedObjects() +
                             " " + SdResId(STR_UNDO_GRAFFILTER);
                         mpView->BegUndo( aStr );
                         pFilteredObj->SetGraphicObject( aFilterObj );
                         ::sd::View* const pView = mpView;
-                        pView->ReplaceObjectAtView( pObj, *pPageView, pFilteredObj );
+                        pView->ReplaceObjectAtView( pObj, *pPageView, pFilteredObj.get() );
                         pView->EndUndo();
                         return;
                     }

@@ -288,15 +288,15 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
 
             // create a SdrModel-GraphicObject to insert to page
             SdrPage* pTargetSdrPage(pSvxDrawPage->GetSdrPage());
-            std::unique_ptr< SdrGrafObj, SdrObjectFreeOp > aNewSdrGrafObj;
+            rtl::Reference< SdrGrafObj > aNewSdrGrafObj;
 
             // tdf#118232 only add an SdrGrafObj when we have Geometry
             if(!bContainsNoGeometry)
             {
-                aNewSdrGrafObj.reset(
+                aNewSdrGrafObj =
                     new SdrGrafObj(
                         pTargetSdrPage->getSdrModelFromSdrPage(),
-                        aGraphic));
+                        aGraphic);
             }
 
             // Evtl. adapt the GraphicPrefSize to target-MapMode of target-Model
@@ -352,7 +352,7 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
                         aGraphicSize));
 
                 // insert to page (owner change of SdrGrafObj)
-                pTargetSdrPage->InsertObject(aNewSdrGrafObj.release());
+                pTargetSdrPage->InsertObject(aNewSdrGrafObj.get());
             }
 
             // done - set positive result now

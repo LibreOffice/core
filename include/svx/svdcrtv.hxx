@@ -37,7 +37,7 @@ class SVXCORE_DLLPUBLIC SdrCreateView : public SdrDragView
     friend class                SdrPageView;
 
 protected:
-    SdrObject*                  pCurrentCreate;   // The currently being created object
+    rtl::Reference<SdrObject>   pCurrentCreate;   // The currently being created object
     SdrPageView*                pCreatePV;    // Here, the creation is started
     std::unique_ptr<ImplConnectMarkerOverlay> mpCoMaOverlay;
 
@@ -113,7 +113,7 @@ public:
     void BckCreateObj();  // go back one polygon point
     void BrkCreateObj();
     bool IsCreateObj() const { return pCurrentCreate!=nullptr; }
-    SdrObject* GetCreateObj() const { return pCurrentCreate; }
+    SdrObject* GetCreateObj() const { return pCurrentCreate.get(); }
 
     /// Setup layer (eg. foreground / background) of the given object.
     static void SetupObjLayer(const SdrPageView* pPageView, const OUString& aActiveLayer, SdrObject* pObj);

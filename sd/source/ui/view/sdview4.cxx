@@ -78,7 +78,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
     mnAction = rAction;
 
     // Is there an object at the position rPos?
-    SdrGrafObj*     pNewGrafObj = nullptr;
+    rtl::Reference<SdrGrafObj> pNewGrafObj;
     SdrPageView*    pPV = GetSdrPageView();
     SdrObject*      pPickObj = pObj;
     const bool bOnMaster = pPV && pPV->GetPage() && pPV->GetPage()->IsMasterPage();
@@ -111,7 +111,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         if( bIsGraphic )
         {
             // We fill the object with the Bitmap
-            pNewGrafObj = static_cast<SdrGrafObj*>( pPickObj->CloneSdrObject(pPickObj->getSdrModelFromSdrObject()) );
+            pNewGrafObj = SdrObject::Clone(static_cast<SdrGrafObj&>(*pPickObj), pPickObj->getSdrModelFromSdrObject());
             pNewGrafObj->SetGraphic(rGraphic);
         }
         else
@@ -134,14 +134,14 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         if (pPage && pPage->IsPresObj(pPickObj))
         {
             // Insert new PresObj into the list
-            pPage->InsertPresObj( pNewGrafObj, PresObjKind::Graphic );
+            pPage->InsertPresObj( pNewGrafObj.get(), PresObjKind::Graphic );
             pNewGrafObj->SetUserCall(pPickObj->GetUserCall());
         }
 
         if (pImageMap)
             pNewGrafObj->AppendUserData(std::unique_ptr<SdrObjUserData>(new SvxIMapInfo(*pImageMap)));
 
-        ReplaceObjectAtView(pPickObj, *pPV, pNewGrafObj); // maybe ReplaceObjectAtView
+        ReplaceObjectAtView(pPickObj, *pPV, pNewGrafObj.get()); // maybe ReplaceObjectAtView
 
         if( IsUndoEnabled() )
             EndUndo();
@@ -244,7 +244,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
                 BegUndo(SdResId(STR_UNDO_DRAGDROP));
             pNewGrafObj->NbcSetLayer(pPickObj->GetLayer());
             SdrPage* pP = pPV->GetPage();
-            pP->InsertObject(pNewGrafObj);
+            pP->InsertObject(pNewGrafObj.get());
             if( bUndo )
             {
                 AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoNewObject(*pNewGrafObj));
@@ -256,15 +256,11 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
             {
                 EndUndo();
             }
-            else
-            {
-                SdrObject::Free(pPickObj);
-            }
             mnAction = DND_ACTION_COPY;
         }
         else
         {
-            bool bSuccess = InsertObjectAtView(pNewGrafObj, *pPV, nOptions);
+            bool bSuccess = InsertObjectAtView(pNewGrafObj.get(), *pPV, nOptions);
             if (!bSuccess)
                 pNewGrafObj = nullptr;
             else if (pImageMap)
@@ -274,7 +270,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
 
     rAction = mnAction;
 
-    return pNewGrafObj;
+    return pNewGrafObj.get();
 }
 
 void View::InsertMediaURL( const OUString& rMediaURL, sal_Int8& rAction,
@@ -307,7 +303,7 @@ SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, const OUString& rM
     SdrEndTextEdit();
     mnAction = rAction;
 
-    SdrMediaObj*    pNewMediaObj = nullptr;
+    rtl::Reference<SdrMediaObj> pNewMediaObj;
     SdrPageView*    pPV = GetSdrPageView();
     SdrObject*      pPickObj = GetEmptyPresentationObject( PresObjKind::Media );
 
@@ -319,11 +315,11 @@ SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, const OUString& rM
 
     if( mnAction == DND_ACTION_LINK && pPV && dynamic_cast< SdrMediaObj *>( pPickObj ) )
     {
-        pNewMediaObj = static_cast< SdrMediaObj* >( pPickObj->CloneSdrObject(pPickObj->getSdrModelFromSdrObject()) );
+        pNewMediaObj = SdrObject::Clone(static_cast<SdrMediaObj&>(*pPickObj), pPickObj->getSdrModelFromSdrObject());
         pNewMediaObj->setURL( rMediaURL, ""/*TODO?*/, rMimeType );
 
         BegUndo(SdResId(STR_UNDO_DRAGDROP));
-        ReplaceObjectAtView(pPickObj, *pPV, pNewMediaObj);
+        ReplaceObjectAtView(pPickObj, *pPV, pNewMediaObj.get());
         EndUndo();
     }
     else if( pPV )
@@ -347,15 +343,15 @@ SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, const OUString& rM
             bIsPres = pPage && pPage->IsPresObj(pPickObj);
             if( bIsPres )
             {
-                pPage->InsertPresObj( pNewMediaObj, PresObjKind::Media );
+                pPage->InsertPresObj( pNewMediaObj.get(), PresObjKind::Media );
             }
         }
 
         if( pPickObj )
-            ReplaceObjectAtView(pPickObj, *pPV, pNewMediaObj);
+            ReplaceObjectAtView(pPickObj, *pPV, pNewMediaObj.get());
         else
         {
-            if (!InsertObjectAtView(pNewMediaObj, *pPV, SdrInsertFlags::SETDEFLAYER))
+            if (!InsertObjectAtView(pNewMediaObj.get(), *pPV, SdrInsertFlags::SETDEFLAYER))
                 pNewMediaObj = nullptr;
         }
 
@@ -380,7 +376,7 @@ SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, const OUString& rM
 
     rAction = mnAction;
 
-    return pNewMediaObj;
+    return pNewMediaObj.get();
 }
 
 /**
@@ -545,7 +541,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl, Timer *, void)
 
                             aRect = ::tools::Rectangle( maDropPos, aSize );
 
-                            SdrOle2Obj* pOleObj = new SdrOle2Obj(
+                            rtl::Reference<SdrOle2Obj> pOleObj = new SdrOle2Obj(
                                 getSdrModelFromSdrView(),
                                 svt::EmbeddedObjectRef(xObj, nAspect),
                                 aName,
@@ -561,7 +557,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl, Timer *, void)
                                     nOptions |= SdrInsertFlags::DONTMARK;
                             }
 
-                            if (InsertObjectAtView( pOleObj, *GetSdrPageView(), nOptions ))
+                            if (InsertObjectAtView( pOleObj.get(), *GetSdrPageView(), nOptions ))
                                 pOleObj->SetLogicRect( aRect );
                             aSz.Width = aRect.GetWidth();
                             aSz.Height = aRect.GetHeight();

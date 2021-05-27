@@ -103,9 +103,9 @@ namespace
     }
 }
 
-IMPL_STATIC_LINK(FmFormObjFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject*)
+IMPL_STATIC_LINK(FmFormObjFactory, MakeObject, SdrObjCreatorParams, aParams, rtl::Reference<SdrObject>)
 {
-    SdrObject* pNewObj = nullptr;
+    rtl::Reference<SdrObject> pNewObj;
 
     if (aParams.nInventor == SdrInventor::FmForm)
     {
@@ -221,7 +221,7 @@ IMPL_STATIC_LINK(FmFormObjFactory, MakeObject, SdrObjCreatorParams, aParams, Sdr
         for (const auto& rInitProp : aInitialProperties)
         {
             lcl_initProperty(
-                static_cast< FmFormObj* >( pNewObj ),
+                static_cast< FmFormObj* >( pNewObj.get() ),
                 rInitProp.first,
                 rInitProp.second
             );

@@ -143,11 +143,11 @@ class SVXCORE_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
         SAL_DLLPRIVATE void CreateSubPath(
             sal_Int32& rSrcPt,
             sal_Int32& rSegmentInd,
-            std::vector< std::pair< SdrPathObjUniquePtr, double> >& rObjectList,
+            std::vector< std::pair< rtl::Reference<SdrPathObj>, double> >& rObjectList,
             bool bLineGeometryNeededOnly,
             bool bSortFilledObjectsToBack,
             sal_Int32 nIndex);
-        SAL_DLLPRIVATE SdrObjectUniquePtr CreatePathObj( bool bLineGeometryNeededOnly );
+        SAL_DLLPRIVATE rtl::Reference<SdrObject> CreatePathObj( bool bLineGeometryNeededOnly );
         SAL_DLLPRIVATE void     ApplyShapeAttributes( const SdrCustomShapeGeometryItem& rItem );
 
         SAL_DLLPRIVATE void     SetPathSize( sal_Int32 nIndex = 0 );
@@ -187,8 +187,8 @@ class SVXCORE_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
         SAL_DLLPRIVATE bool     IsFlipHorz() const { return bFlipH; };
         SAL_DLLPRIVATE Degree100 GetRotateAngle() const { return nRotateAngle; };
 
-        SdrObjectUniquePtr      CreateLineGeometry();
-        SdrObjectUniquePtr      CreateObject( bool bLineGeometryNeededOnly );
+        rtl::Reference<SdrObject>      CreateLineGeometry();
+        rtl::Reference<SdrObject>      CreateObject( bool bLineGeometryNeededOnly );
         void                    ApplyGluePoints( SdrObject* pObj );
         tools::Rectangle        GetTextRect() const;
         const tools::Rectangle& GetLogicRect() const { return aLogicRect; }

@@ -814,8 +814,8 @@ bool SVGFilter::implExportWriterTextGraphic( const Reference< view::XSelectionSu
         if(pSvxDrawPage == nullptr || pSvxDrawPage->GetSdrPage() == nullptr)
             return false;
 
-        SdrGrafObj* pGraphicObj = new SdrGrafObj(pSvxDrawPage->GetSdrPage()->getSdrModelFromSdrPage(), aGraphic, tools::Rectangle( aPos, aSize ));
-        uno::Reference< drawing::XShape > xShape = GetXShapeForSdrObject(pGraphicObj);
+        rtl::Reference<SdrGrafObj> pGraphicObj = new SdrGrafObj(pSvxDrawPage->GetSdrPage()->getSdrModelFromSdrPage(), aGraphic, tools::Rectangle( aPos, aSize ));
+        uno::Reference< drawing::XShape > xShape = GetXShapeForSdrObject(pGraphicObj.get());
         uno::Reference< XPropertySet > xShapePropSet(xShape, uno::UNO_QUERY);
         xShapePropSet->setPropertyValue("Graphic", uno::Any(xGraphic));
 
