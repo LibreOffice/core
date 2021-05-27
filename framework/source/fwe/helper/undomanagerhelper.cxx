@@ -36,6 +36,7 @@
 #include <svl/undo.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <osl/conditn.hxx>
+#include <vcl/svapp.hxx>
 
 #include <functional>
 #include <mutex>
@@ -687,6 +688,7 @@ namespace framework
 
         {
             ::comphelper::FlagGuard aNotificationGuard( m_bAPIActionRunning );
+            SolarMutexGuard aGuard2;
             rUndoManager.Clear();
         }
 

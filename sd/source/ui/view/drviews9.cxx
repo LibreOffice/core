@@ -124,7 +124,7 @@ void DrawViewShell::ExecGallery(SfxRequest const & rReq)
         aPnt += Point(pPage->GetLeftBorder(), pPage->GetUpperBorder());
         ::tools::Rectangle aRect (aPnt, aSize);
 
-        SdrGrafObj* pGrafObj = nullptr;
+        rtl::Reference<SdrGrafObj> pGrafObj;
 
         bool bInsertNewObject = true;
 
@@ -147,7 +147,7 @@ void DrawViewShell::ExecGallery(SfxRequest const & rReq)
                         // the empty graphic object gets a new graphic
                         bInsertNewObject = false;
 
-                        SdrGrafObj* pNewGrafObj(pGrafObj->CloneSdrObject(pGrafObj->getSdrModelFromSdrObject()));
+                        rtl::Reference<SdrGrafObj> pNewGrafObj(SdrObject::Clone(*pGrafObj, pGrafObj->getSdrModelFromSdrObject()));
                         pNewGrafObj->SetEmptyPresObj(false);
                         pNewGrafObj->SetOutlinerParaObject(std::nullopt);
                         pNewGrafObj->SetGraphic(aGraphic);
@@ -156,7 +156,7 @@ void DrawViewShell::ExecGallery(SfxRequest const & rReq)
                             " " + SdResId(STR_UNDO_REPLACE);
                         mpDrawView->BegUndo(aStr);
                         SdrPageView* pPV = mpDrawView->GetSdrPageView();
-                        mpDrawView->ReplaceObjectAtView(pGrafObj, *pPV, pNewGrafObj);
+                        mpDrawView->ReplaceObjectAtView(pGrafObj.get(), *pPV, pNewGrafObj.get());
                         mpDrawView->EndUndo();
                     }
                 }
@@ -170,7 +170,7 @@ void DrawViewShell::ExecGallery(SfxRequest const & rReq)
                 aGraphic,
                 aRect);
             SdrPageView* pPV = mpDrawView->GetSdrPageView();
-            mpDrawView->InsertObjectAtView(pGrafObj, *pPV, SdrInsertFlags::SETDEFLAYER);
+            mpDrawView->InsertObjectAtView(pGrafObj.get(), *pPV, SdrInsertFlags::SETDEFLAYER);
         }
     }
     // insert sound

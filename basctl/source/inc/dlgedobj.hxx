@@ -50,7 +50,7 @@ class DlgEdObj: public SdrUnoObj
 
 private:
     bool            bIsListening;
-    DlgEdForm*      pDlgEdForm;
+    rtl::Reference<DlgEdForm> pDlgEdForm;
     css::uno::Reference< css::beans::XPropertyChangeListener> m_xPropertyChangeListener;
     css::uno::Reference< css::container::XContainerListener>  m_xContainerListener;
 
@@ -94,15 +94,15 @@ protected:
 
 public:
     void SetDlgEdForm( DlgEdForm* pForm ) { pDlgEdForm = pForm; }
-    DlgEdForm* GetDlgEdForm() const { return pDlgEdForm; }
+    DlgEdForm* GetDlgEdForm() const { return pDlgEdForm.get(); }
 
     virtual SdrInventor GetObjInventor() const override;
     virtual SdrObjKind GetObjIdentifier() const override;
 
-    virtual DlgEdObj* CloneSdrObject(SdrModel& rTargetModel) const override;                                          // not working yet
+    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;                                          // not working yet
 
     // FullDrag support
-    virtual SdrObjectUniquePtr getFullDragClone() const override;
+    virtual rtl::Reference<SdrObject> getFullDragClone() const override;
 
     bool supportsService( OUString const & serviceName ) const;
     OUString GetDefaultName() const;
