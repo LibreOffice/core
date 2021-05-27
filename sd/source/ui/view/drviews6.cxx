@@ -268,8 +268,7 @@ void DrawViewShell::ExecBmpMask( SfxRequest const & rReq )
 
             if ( pObj && !mpDrawView->IsTextEdit() )
             {
-                typedef std::unique_ptr< SdrGrafObj, SdrObjectFreeOp > SdrGrafObjPtr;
-                SdrGrafObjPtr xNewObj(pObj->CloneSdrObject(pObj->getSdrModelFromSdrObject()));
+                rtl::Reference<SdrGrafObj> xNewObj(SdrObject::Clone(*pObj, pObj->getSdrModelFromSdrObject()));
                 bool bCont = true;
 
                 if (xNewObj->IsLinkedGraphic())
@@ -303,7 +302,7 @@ void DrawViewShell::ExecBmpMask( SfxRequest const & rReq )
                             " " + SdResId(STR_EYEDROPPER);
 
                         mpDrawView->BegUndo( aStr );
-                        mpDrawView->ReplaceObjectAtView(pObj, *pPV, xNewObj.release());
+                        mpDrawView->ReplaceObjectAtView(pObj, *pPV, xNewObj.get());
                         mpDrawView->EndUndo();
                     }
                 }

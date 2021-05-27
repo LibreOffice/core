@@ -280,7 +280,7 @@ OUString SdrUnoObj::TakeObjNamePlural() const
     return SvxResId(STR_ObjNamePluralUno);
 }
 
-SdrUnoObj* SdrUnoObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> SdrUnoObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
     return new SdrUnoObj(rTargetModel, *this);
 }
