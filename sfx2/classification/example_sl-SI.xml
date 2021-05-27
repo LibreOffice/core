@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<baf:BusinessAuthorization xmlns:baf="urn:tscp:names:baf:1.1">
+<baf:BusinessAuthorization xmlns:baf="urn:tscp:names:baf:1.1" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0">
     <baf:PolicyAuthorityName>Avtoriteta primera politike TSCP</baf:PolicyAuthorityName>
     <baf:PolicyName>Primer politike TSCP</baf:PolicyName>
     <baf:AdministrativeData>
