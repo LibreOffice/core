@@ -813,11 +813,11 @@ static void FitTextOutlinesToShapeOutlines( const tools::PolyPolygon& aOutlines2
     }
 }
 
-static SdrObject* CreateSdrObjectFromParagraphOutlines(
+static rtl::Reference<SdrObject> CreateSdrObjectFromParagraphOutlines(
     const FWData& rFWData,
     const SdrObjCustomShape& rSdrObjCustomShape)
 {
-    SdrObject* pRet = nullptr;
+    rtl::Reference<SdrObject> pRet;
     basegfx::B2DPolyPolygon aPolyPoly;
     if ( !rFWData.vTextAreas.empty() )
     {
@@ -861,11 +861,11 @@ Reference < i18n::XBreakIterator > const & EnhancedCustomShapeFontWork::GetBreak
     return mxBreakIterator;
 }
 
-SdrObject* EnhancedCustomShapeFontWork::CreateFontWork(
+rtl::Reference<SdrObject> EnhancedCustomShapeFontWork::CreateFontWork(
     const SdrObject* pShape2d,
     const SdrObjCustomShape& rSdrObjCustomShape)
 {
-    SdrObject* pRet = nullptr;
+    rtl::Reference<SdrObject> pRet;
 
     tools::PolyPolygon aOutlines2d( GetOutlinesFromShape2d( pShape2d ) );
     sal_uInt16 nOutlinesCount2d = aOutlines2d.Count();

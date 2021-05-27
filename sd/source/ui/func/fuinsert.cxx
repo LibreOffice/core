@@ -357,7 +357,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                 aRect = ::tools::Rectangle(aPos, aSize);
             }
 
-            SdrOle2Obj* pOleObj = new SdrOle2Obj(
+            rtl::Reference<SdrOle2Obj> pOleObj = new SdrOle2Obj(
                 mpView->getSdrModelFromSdrView(),
                 svt::EmbeddedObjectRef( xObj, nAspect ),
                 aObjName,
@@ -370,7 +370,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                 SdPage* pPage = static_cast< SdPage* >(pPickObj->getSdrPageFromSdrObject());
                 if(pPage && pPage->IsPresObj(pPickObj))
                 {
-                    pPage->InsertPresObj( pOleObj, ePresObjKind );
+                    pPage->InsertPresObj( pOleObj.get(), ePresObjKind );
                     pOleObj->SetUserCall(pPickObj->GetUserCall());
                 }
 
@@ -385,9 +385,9 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
 
             bool bRet = true;
             if( pPickObj )
-                mpView->ReplaceObjectAtView(pPickObj, *pPV, pOleObj );
+                mpView->ReplaceObjectAtView(pPickObj, *pPV, pOleObj.get() );
             else
-                bRet = mpView->InsertObjectAtView(pOleObj, *pPV, SdrInsertFlags::SETDEFLAYER);
+                bRet = mpView->InsertObjectAtView(pOleObj.get(), *pPV, SdrInsertFlags::SETDEFLAYER);
 
             if (bRet && !comphelper::LibreOfficeKit::isActive())
             {
@@ -412,7 +412,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                 aVisualSize.Width = aTmp.Width();
                 aVisualSize.Height = aTmp.Height();
                 xObj->setVisualAreaSize( nAspect, aVisualSize );
-                mpViewShell->ActivateObject(pOleObj, embed::EmbedVerbs::MS_OLEVERB_SHOW);
+                mpViewShell->ActivateObject(pOleObj.get(), embed::EmbedVerbs::MS_OLEVERB_SHOW);
 
                 if (nSlotId == SID_INSERT_DIAGRAM)
                 {
@@ -587,13 +587,13 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                     Point aPnt ((aPageSize.Width()  - aSize.Width())  / 2,
                         (aPageSize.Height() - aSize.Height()) / 2);
                     ::tools::Rectangle aRect (aPnt, aSize);
-                    SdrOle2Obj* pObj = new SdrOle2Obj(
+                    rtl::Reference<SdrOle2Obj> pObj = new SdrOle2Obj(
                         mpView->getSdrModelFromSdrView(),
                         aObjRef,
                         aName,
                         aRect);
 
-                    if( mpView->InsertObjectAtView(pObj, *pPV, SdrInsertFlags::SETDEFLAYER) )
+                    if( mpView->InsertObjectAtView(pObj.get(), *pPV, SdrInsertFlags::SETDEFLAYER) )
                     {
                         //  Math objects change their object size during InsertObject.
                         //  New size must be set in SdrObject, or a wrong scale will be set at
@@ -628,7 +628,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                                 xObj->setVisualAreaSize( nAspect, aSz );
                             }
 
-                            mpViewShell->ActivateObject(pObj, embed::EmbedVerbs::MS_OLEVERB_SHOW);
+                            mpViewShell->ActivateObject(pObj.get(), embed::EmbedVerbs::MS_OLEVERB_SHOW);
                         }
 
                         Size aVisSizePixel = mpWindow->GetOutputSizePixel();

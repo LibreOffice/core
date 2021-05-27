@@ -33,6 +33,7 @@
 #include <svx/xlineit0.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/dlgutil.hxx>
+#include <svx/obj3d.hxx>
 #include <svx/sdshitm.hxx>
 #include <svx/svx3ditems.hxx>
 

@@ -490,7 +490,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                     if(pPageView)
                     {
                         svx::ODataAccessDescriptor aDescriptor(pDescriptorItem->GetValue());
-                        SdrObjectUniquePtr pNewDBField = pDrView->CreateFieldControl(aDescriptor);
+                        rtl::Reference<SdrObject> pNewDBField = pDrView->CreateFieldControl(aDescriptor);
 
                         if(pNewDBField)
                         {
@@ -522,7 +522,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                                 }
                             }
 
-                            pView->InsertObjectAtView(pNewDBField.release(), *pPageView);
+                            pView->InsertObjectAtView(pNewDBField.get(), *pPageView);
                         }
                     }
                 }

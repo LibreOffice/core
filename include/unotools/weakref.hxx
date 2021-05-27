@@ -30,11 +30,6 @@
 #include <cppuhelper/weak.hxx>
 #include <rtl/ref.hxx>
 
-namespace cppu
-{
-class OWeakObject;
-}
-
 namespace unotools
 {
 /** The WeakReference<> holds a weak reference to an object.

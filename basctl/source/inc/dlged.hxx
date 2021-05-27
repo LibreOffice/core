@@ -113,7 +113,7 @@ private:
     std::unique_ptr<DlgEdModel> pDlgEdModel; // never nullptr
     DlgEdPage*          pDlgEdPage;  // never nullptr
     std::unique_ptr<DlgEdView> pDlgEdView; // never nullptr
-    DlgEdForm*          pDlgEdForm; // never nullptr
+    rtl::Reference<DlgEdForm>  pDlgEdForm; // never nullptr
     css::uno::Reference< css::container::XNameContainer >     m_xUnoControlDialogModel;
     css::uno::Reference< css::awt::XControlContainer >        m_xControlContainer;
     css::uno::Sequence< css::datatransfer::DataFlavor >       m_ClipboardDataFlavors;

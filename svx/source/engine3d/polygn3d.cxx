@@ -217,12 +217,13 @@ void E3dPolygonObj::SetPolyTexture2D(const basegfx::B2DPolyPolygon& rNewPolyText
 
 // Convert the object into a group object consisting of 6 polygons
 
-SdrObjectUniquePtr E3dPolygonObj::DoConvertToPolyObj(bool /*bBezier*/, bool /*bAddText*/) const
+rtl::Reference<SdrObject> E3dPolygonObj::DoConvertToPolyObj(bool /*bBezier*/,
+                                                            bool /*bAddText*/) const
 {
     return nullptr;
 }
 
-E3dPolygonObj* E3dPolygonObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> E3dPolygonObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
     return new E3dPolygonObj(rTargetModel, *this);
 }
