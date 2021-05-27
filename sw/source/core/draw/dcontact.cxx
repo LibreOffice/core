@@ -93,7 +93,7 @@ namespace
         :   m_pAnchorFrame(FindFrame(pAnchorFrame))
         {}
 
-        bool operator()(const SwDrawVirtObjPtr& rpDrawVirtObj)
+        bool operator()(const rtl::Reference<SwDrawVirtObj>& rpDrawVirtObj)
         {
             return FindFrame(rpDrawVirtObj->GetAnchorFrame()) == m_pAnchorFrame;
         }
@@ -532,7 +532,7 @@ SwVirtFlyDrawObj* SwFlyDrawContact::CreateNewRef(SwFlyFrame* pFly,
 
     IDocumentDrawModelAccess& rIDDMA = pFormat->getIDocumentDrawModelAccess();
     SwFlyDrawContact* pContact = pFormat->GetOrCreateContact();
-    SwVirtFlyDrawObj* pDrawObj(
+    rtl::Reference<SwVirtFlyDrawObj> pDrawObj(
         new SwVirtFlyDrawObj(
             pContact->GetMaster()->getSdrModelFromSdrObject(),
             *pContact->GetMaster(),
@@ -547,16 +547,16 @@ SwVirtFlyDrawObj* SwFlyDrawContact::CreateNewRef(SwFlyFrame* pFly,
     if(nullptr != pPg)
     {
         const size_t nOrdNum = pContact->GetMaster()->GetOrdNum();
-        pPg->ReplaceObject(pDrawObj, nOrdNum);
+        pPg->ReplaceObject(pDrawObj.get(), nOrdNum);
     }
     // #i27030# - insert new <SwVirtFlyDrawObj> instance
     // into drawing page with correct order number
     else
-        rIDDMA.GetDrawModel()->GetPage(0)->InsertObject(pDrawObj, pContact->GetOrdNumForNewRef(pFly, rAnchorFrame));
+        rIDDMA.GetDrawModel()->GetPage(0)->InsertObject(pDrawObj.get(), pContact->GetOrdNumForNewRef(pFly, rAnchorFrame));
     // #i38889# - assure, that new <SwVirtFlyDrawObj> instance
     // is in a visible layer.
-    pContact->MoveObjToVisibleLayer(pDrawObj);
-    return pDrawObj;
+    pContact->MoveObjToVisibleLayer(pDrawObj.get());
+    return pDrawObj.get();
 }
 
 // #i26791#
@@ -744,12 +744,6 @@ SwDrawContact::~SwDrawContact()
 
     // remove and destroy 'virtual' drawing objects.
     RemoveAllVirtObjs();
-
-    if ( !mbMasterObjCleared )
-    {
-        SdrObject* pObject = const_cast< SdrObject* >( maAnchoredDrawObj.GetDrawObj() );
-        SdrObject::Free( pObject );
-    }
 }
 
 void SwDrawContact::GetTextObjectsFromFormat(std::list<SdrTextObj*>& o_rTextObjects, SwDoc& rDoc)
@@ -833,11 +827,10 @@ SwFrame* SwDrawContact::GetAnchorFrame(SdrObject const *const pDrawObj)
 SwDrawVirtObj* SwDrawContact::AddVirtObj(SwFrame const& rAnchorFrame)
 {
     maDrawVirtObjs.push_back(
-        SwDrawVirtObjPtr(
             new SwDrawVirtObj(
                 GetMaster()->getSdrModelFromSdrObject(),
                 *GetMaster(),
-                *this)));
+                *this));
     maDrawVirtObjs.back()->AddToDrawingPage(rAnchorFrame);
     return maDrawVirtObjs.back().get();
 }
@@ -1755,7 +1748,7 @@ void SwDrawContact::DisconnectObjFromLayout( SdrObject* _pDrawObj )
     else
     {
         const auto ppVirtDrawObj(std::find_if(maDrawVirtObjs.begin(), maDrawVirtObjs.end(),
-                [] (const SwDrawVirtObjPtr& pObj) { return pObj->IsConnected(); }));
+                [] (const rtl::Reference<SwDrawVirtObj>& pObj) { return pObj->IsConnected(); }));
 
         if(ppVirtDrawObj != maDrawVirtObjs.end())
         {
@@ -2280,7 +2273,7 @@ SwDrawVirtObj::~SwDrawVirtObj()
 {
 }
 
-SwDrawVirtObj* SwDrawVirtObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> SwDrawVirtObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
     return new SwDrawVirtObj(rTargetModel, *this);
 }
@@ -2434,7 +2427,7 @@ void SwDrawVirtObj::RecalcBoundRect()
 
 basegfx::B2DPolyPolygon SwDrawVirtObj::TakeXorPoly() const
 {
-    basegfx::B2DPolyPolygon aRetval(rRefObj.TakeXorPoly());
+    basegfx::B2DPolyPolygon aRetval(mxRefObj->TakeXorPoly());
     aRetval.transform(basegfx::utils::createTranslateB2DHomMatrix(GetOffset().X(), GetOffset().Y()));
 
     return aRetval;
@@ -2442,7 +2435,7 @@ basegfx::B2DPolyPolygon SwDrawVirtObj::TakeXorPoly() const
 
 basegfx::B2DPolyPolygon SwDrawVirtObj::TakeContour() const
 {
-    basegfx::B2DPolyPolygon aRetval(rRefObj.TakeContour());
+    basegfx::B2DPolyPolygon aRetval(mxRefObj->TakeContour());
     aRetval.transform(basegfx::utils::createTranslateB2DHomMatrix(GetOffset().X(), GetOffset().Y()));
 
     return aRetval;
@@ -2451,7 +2444,7 @@ basegfx::B2DPolyPolygon SwDrawVirtObj::TakeContour() const
 void SwDrawVirtObj::AddToHdlList(SdrHdlList& rHdlList) const
 {
     SdrHdlList tmpList(nullptr);
-    rRefObj.AddToHdlList(tmpList);
+    mxRefObj->AddToHdlList(tmpList);
 
     size_t cnt = tmpList.GetHdlCount();
     for(size_t i=0; i < cnt; ++i)
@@ -2470,25 +2463,25 @@ void SwDrawVirtObj::NbcMove(const Size& rSiz)
 
 void SwDrawVirtObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
-    rRefObj.NbcResize(rRef - GetOffset(), xFact, yFact);
+    mxRefObj->NbcResize(rRef - GetOffset(), xFact, yFact);
     SetBoundAndSnapRectsDirty();
 }
 
 void SwDrawVirtObj::NbcRotate(const Point& rRef, Degree100 nAngle, double sn, double cs)
 {
-    rRefObj.NbcRotate(rRef - GetOffset(), nAngle, sn, cs);
+    mxRefObj->NbcRotate(rRef - GetOffset(), nAngle, sn, cs);
     SetBoundAndSnapRectsDirty();
 }
 
 void SwDrawVirtObj::NbcMirror(const Point& rRef1, const Point& rRef2)
 {
-    rRefObj.NbcMirror(rRef1 - GetOffset(), rRef2 - GetOffset());
+    mxRefObj->NbcMirror(rRef1 - GetOffset(), rRef2 - GetOffset());
     SetBoundAndSnapRectsDirty();
 }
 
 void SwDrawVirtObj::NbcShear(const Point& rRef, Degree100 nAngle, double tn, bool bVShear)
 {
-    rRefObj.NbcShear(rRef - GetOffset(), nAngle, tn, bVShear);
+    mxRefObj->NbcShear(rRef - GetOffset(), nAngle, tn, bVShear);
     SetBoundAndSnapRectsDirty();
 }
 
@@ -2502,7 +2495,7 @@ void SwDrawVirtObj::Resize(const Point& rRef, const Fraction& xFact, const Fract
     if(xFact.GetNumerator() != xFact.GetDenominator() || yFact.GetNumerator() != yFact.GetDenominator())
     {
         tools::Rectangle aBoundRect0; if(m_pUserCall) aBoundRect0 = GetLastBoundRect();
-        rRefObj.Resize(rRef - GetOffset(), xFact, yFact, bUnsetRelative);
+        mxRefObj->Resize(rRef - GetOffset(), xFact, yFact, bUnsetRelative);
         SetBoundAndSnapRectsDirty();
         SendUserCall(SdrUserCallType::Resize, aBoundRect0);
     }
@@ -2513,7 +2506,7 @@ void SwDrawVirtObj::Rotate(const Point& rRef, Degree100 nAngle, double sn, doubl
     if(nAngle)
     {
         tools::Rectangle aBoundRect0; if(m_pUserCall) aBoundRect0 = GetLastBoundRect();
-        rRefObj.Rotate(rRef - GetOffset(), nAngle, sn, cs);
+        mxRefObj->Rotate(rRef - GetOffset(), nAngle, sn, cs);
         SetBoundAndSnapRectsDirty();
         SendUserCall(SdrUserCallType::Resize, aBoundRect0);
     }
@@ -2522,7 +2515,7 @@ void SwDrawVirtObj::Rotate(const Point& rRef, Degree100 nAngle, double sn, doubl
 void SwDrawVirtObj::Mirror(const Point& rRef1, const Point& rRef2)
 {
     tools::Rectangle aBoundRect0; if(m_pUserCall) aBoundRect0 = GetLastBoundRect();
-    rRefObj.Mirror(rRef1 - GetOffset(), rRef2 - GetOffset());
+    mxRefObj->Mirror(rRef1 - GetOffset(), rRef2 - GetOffset());
     SetBoundAndSnapRectsDirty();
     SendUserCall(SdrUserCallType::Resize, aBoundRect0);
 }
@@ -2532,7 +2525,7 @@ void SwDrawVirtObj::Shear(const Point& rRef, Degree100 nAngle, double tn, bool b
     if(nAngle)
     {
         tools::Rectangle aBoundRect0; if(m_pUserCall) aBoundRect0 = GetLastBoundRect();
-        rRefObj.Shear(rRef - GetOffset(), nAngle, tn, bVShear);
+        mxRefObj->Shear(rRef - GetOffset(), nAngle, tn, bVShear);
         SetBoundAndSnapRectsDirty();
         SendUserCall(SdrUserCallType::Resize, aBoundRect0);
     }
@@ -2540,13 +2533,13 @@ void SwDrawVirtObj::Shear(const Point& rRef, Degree100 nAngle, double tn, bool b
 
 void SwDrawVirtObj::RecalcSnapRect()
 {
-    aSnapRect = rRefObj.GetSnapRect();
+    aSnapRect = mxRefObj->GetSnapRect();
     aSnapRect += GetOffset();
 }
 
 const tools::Rectangle& SwDrawVirtObj::GetSnapRect() const
 {
-    const_cast<SwDrawVirtObj*>(this)->aSnapRect = rRefObj.GetSnapRect();
+    const_cast<SwDrawVirtObj*>(this)->aSnapRect = mxRefObj->GetSnapRect();
     const_cast<SwDrawVirtObj*>(this)->aSnapRect += GetOffset();
 
     return aSnapRect;
@@ -2557,7 +2550,7 @@ void SwDrawVirtObj::SetSnapRect(const tools::Rectangle& rRect)
     tools::Rectangle aBoundRect0; if(m_pUserCall) aBoundRect0 = GetLastBoundRect();
     tools::Rectangle aR(rRect);
     aR -= GetOffset();
-    rRefObj.SetSnapRect(aR);
+    mxRefObj->SetSnapRect(aR);
     SetBoundAndSnapRectsDirty();
     SendUserCall(SdrUserCallType::Resize, aBoundRect0);
 }
@@ -2567,12 +2560,12 @@ void SwDrawVirtObj::NbcSetSnapRect(const tools::Rectangle& rRect)
     tools::Rectangle aR(rRect);
     aR -= GetOffset();
     SetBoundAndSnapRectsDirty();
-    rRefObj.NbcSetSnapRect(aR);
+    mxRefObj->NbcSetSnapRect(aR);
 }
 
 const tools::Rectangle& SwDrawVirtObj::GetLogicRect() const
 {
-    const_cast<SwDrawVirtObj*>(this)->aSnapRect = rRefObj.GetLogicRect();
+    const_cast<SwDrawVirtObj*>(this)->aSnapRect = mxRefObj->GetLogicRect();
     const_cast<SwDrawVirtObj*>(this)->aSnapRect += GetOffset();
 
     return aSnapRect;
@@ -2583,7 +2576,7 @@ void SwDrawVirtObj::SetLogicRect(const tools::Rectangle& rRect)
     tools::Rectangle aBoundRect0; if(m_pUserCall) aBoundRect0 = GetLastBoundRect();
     tools::Rectangle aR(rRect);
     aR -= GetOffset();
-    rRefObj.SetLogicRect(aR);
+    mxRefObj->SetLogicRect(aR);
     SetBoundAndSnapRectsDirty();
     SendUserCall(SdrUserCallType::Resize, aBoundRect0);
 }
@@ -2592,13 +2585,13 @@ void SwDrawVirtObj::NbcSetLogicRect(const tools::Rectangle& rRect)
 {
     tools::Rectangle aR(rRect);
     aR -= GetOffset();
-    rRefObj.NbcSetLogicRect(aR);
+    mxRefObj->NbcSetLogicRect(aR);
     SetBoundAndSnapRectsDirty();
 }
 
 Point SwDrawVirtObj::GetSnapPoint(sal_uInt32 i) const
 {
-    Point aP(rRefObj.GetSnapPoint(i));
+    Point aP(mxRefObj->GetSnapPoint(i));
     aP += GetOffset();
 
     return aP;
@@ -2606,20 +2599,20 @@ Point SwDrawVirtObj::GetSnapPoint(sal_uInt32 i) const
 
 Point SwDrawVirtObj::GetPoint(sal_uInt32 i) const
 {
-    return rRefObj.GetPoint(i) + GetOffset();
+    return mxRefObj->GetPoint(i) + GetOffset();
 }
 
 void SwDrawVirtObj::NbcSetPoint(const Point& rPnt, sal_uInt32 i)
 {
     Point aP(rPnt);
     aP -= GetOffset();
-    rRefObj.SetPoint(aP, i);
+    mxRefObj->SetPoint(aP, i);
     SetBoundAndSnapRectsDirty();
 }
 
 bool SwDrawVirtObj::HasTextEdit() const
 {
-    return rRefObj.HasTextEdit();
+    return mxRefObj->HasTextEdit();
 }
 
 // override 'layer' methods for 'virtual' drawing object to assure

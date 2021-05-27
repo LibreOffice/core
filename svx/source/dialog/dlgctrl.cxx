@@ -1119,10 +1119,7 @@ void SvxXLinePreview::Resize()
 }
 
 SvxXLinePreview::SvxXLinePreview()
-    : mpLineObjA(nullptr)
-    , mpLineObjB(nullptr)
-    , mpLineObjC(nullptr)
-    , mpGraphic(nullptr)
+    : mpGraphic(nullptr)
     , mbWithSymbol(false)
 {
 }
@@ -1141,12 +1138,9 @@ void SvxXLinePreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
 SvxXLinePreview::~SvxXLinePreview()
 {
-    SdrObject *pFoo = mpLineObjA;
-    SdrObject::Free( pFoo );
-    pFoo = mpLineObjB;
-    SdrObject::Free( pFoo );
-    pFoo = mpLineObjC;
-    SdrObject::Free( pFoo );
+    mpLineObjA->RemoveFromAssociatedSvxShape();
+    mpLineObjB->RemoveFromAssociatedSvxShape();
+    mpLineObjC->RemoveFromAssociatedSvxShape();
 }
 
 void SvxXLinePreview::SetSymbol(Graphic* p,const Size& s)
@@ -1184,9 +1178,9 @@ void SvxXLinePreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
 
     // paint objects to buffer device
     sdr::contact::SdrObjectVector aObjectVector;
-    aObjectVector.push_back(mpLineObjA);
-    aObjectVector.push_back(mpLineObjB);
-    aObjectVector.push_back(mpLineObjC);
+    aObjectVector.push_back(mpLineObjA.get());
+    aObjectVector.push_back(mpLineObjB.get());
+    aObjectVector.push_back(mpLineObjC.get());
 
     sdr::contact::ObjectContactOfObjListPainter aPainter(getBufferDevice(), std::move(aObjectVector), nullptr);
     sdr::contact::DisplayInfo aDisplayInfo;
@@ -1207,8 +1201,6 @@ void SvxXLinePreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
 }
 
 SvxXShadowPreview::SvxXShadowPreview()
-    : mpRectangleObject(nullptr)
-    , mpRectangleShadow(nullptr)
 {
 }
 
@@ -1237,8 +1229,8 @@ void SvxXShadowPreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
 SvxXShadowPreview::~SvxXShadowPreview()
 {
-    SdrObject::Free(mpRectangleObject);
-    SdrObject::Free(mpRectangleShadow);
+    mpRectangleObject->RemoveFromAssociatedSvxShape();
+    mpRectangleShadow->RemoveFromAssociatedSvxShape();
 }
 
 void SvxXShadowPreview::SetRectangleAttributes(const SfxItemSet& rItemSet)
@@ -1277,8 +1269,8 @@ void SvxXShadowPreview::Paint(vcl::RenderContext& rRenderContext, const tools::R
 
     sdr::contact::SdrObjectVector aObjectVector;
 
-    aObjectVector.push_back(mpRectangleShadow);
-    aObjectVector.push_back(mpRectangleObject);
+    aObjectVector.push_back(mpRectangleShadow.get());
+    aObjectVector.push_back(mpRectangleObject.get());
 
     sdr::contact::ObjectContactOfObjListPainter aPainter(getBufferDevice(), std::move(aObjectVector), nullptr);
     sdr::contact::DisplayInfo aDisplayInfo;
@@ -1381,7 +1373,6 @@ void SvxPreviewBase::StyleUpdated()
 }
 
 SvxXRectPreview::SvxXRectPreview()
-    : mpRectangleObject(nullptr)
 {
 }
 
@@ -1402,19 +1393,20 @@ void SvxXRectPreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
 void SvxXRectPreview::Resize()
 {
-    SdrObject *pOrigObject = mpRectangleObject;
+    rtl::Reference<SdrObject> pOrigObject = mpRectangleObject;
     if (pOrigObject)
     {
         mpRectangleObject = new SdrRectObj(getModel(), GetPreviewSize());
         SetAttributes(pOrigObject->GetMergedItemSet());
-        SdrObject::Free(pOrigObject);
+        pOrigObject->RemoveFromAssociatedSvxShape();
+        pOrigObject.clear();
     }
     SvxPreviewBase::Resize();
 }
 
 SvxXRectPreview::~SvxXRectPreview()
 {
-    SdrObject::Free(mpRectangleObject);
+    mpRectangleObject->RemoveFromAssociatedSvxShape();
 }
 
 void SvxXRectPreview::SetAttributes(const SfxItemSet& rItemSet)
@@ -1431,7 +1423,7 @@ void SvxXRectPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
 
     sdr::contact::SdrObjectVector aObjectVector;
 
-    aObjectVector.push_back(mpRectangleObject);
+    aObjectVector.push_back(mpRectangleObject.get());
 
     sdr::contact::ObjectContactOfObjListPainter aPainter(getBufferDevice(), std::move(aObjectVector), nullptr);
     sdr::contact::DisplayInfo aDisplayInfo;
