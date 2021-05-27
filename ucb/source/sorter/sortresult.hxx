@@ -69,7 +69,7 @@ public:
 
 class EventList
 {
-    std::deque < std::unique_ptr<css::ucb::ListAction> > maData;
+    std::deque <css::ucb::ListAction > maData;
 
 public:
                      EventList(){}
@@ -77,9 +77,9 @@ public:
     sal_uInt32      Count() { return static_cast<sal_uInt32>(maData.size()); }
 
     void            AddEvent( sal_IntPtr nType, sal_Int32 nPos );
-    void            Insert( std::unique_ptr<css::ucb::ListAction> pAction ) { maData.push_back( std::move(pAction) ); }
+    void            Insert( const css::ucb::ListAction& rAction ) { maData.push_back( rAction ); }
     void            Clear();
-    css::ucb::ListAction*     GetAction( sal_Int32 nIndex ) { return maData[ nIndex ].get(); }
+    css::ucb::ListAction&  GetAction( sal_Int32 nIndex ) { return maData[ nIndex ]; }
 };
 
 
