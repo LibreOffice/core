@@ -40,14 +40,6 @@ sub remove_leading_and_ending_quotationmarks
     $$stringref =~ s/\"\s*$//;
 }
 
-sub remove_leading_and_ending_slashes
-{
-    my ( $stringref ) = @_;
-
-    $$stringref =~ s/^\s*\///g;
-    $$stringref =~ s/\/\s*$//g;
-}
-
 sub remove_ending_pathseparator
 {
     my ( $stringref ) = @_;

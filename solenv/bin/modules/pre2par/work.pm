@@ -271,45 +271,6 @@ sub formatter
     }
 }
 
-###################################################
-# Returning the language file name
-###################################################
-
-sub getlangfilename
-{
-    return $pre2par::globals::langfilename;
-}
-
-############################################
-# Checking if a file exists
-############################################
-
-sub fileexists
-{
-    my ($langfilename) = @_;
-
-    my $fileexists = 0;
-
-    if( -f $langfilename ) { $fileexists = 1; }
-
-    return $fileexists;
-}
-
-############################################
-# Checking the existence of ulf file
-############################################
-
-sub check_existence_of_langfiles
-{
-    my ($langfilename) = @_;
-
-    my $do_localize = 0;
-
-    if ( fileexists($langfilename) ) { $do_localize = 1; }
-
-    return $do_localize;
-}
-
 ############################################
 # Checking that the pre file has content
 ############################################

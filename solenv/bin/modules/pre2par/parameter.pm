@@ -20,7 +20,6 @@
 package pre2par::parameter;
 
 use Cwd;
-use pre2par::files;
 use pre2par::globals;
 use pre2par::systemactions;
 
@@ -89,6 +88,15 @@ sub control_parameter
         exit(-1);
     }
 
+    if (!(-f $pre2par::globals::prefilename))
+    {
+        print "\n************************************************\n";
+        print "Error: Input file does not exist!";
+        print "\n************************************************\n";
+        usage();
+        exit(-1);
+    }
+
     if ($pre2par::globals::parfilename eq "")
     {
         print "\n************************************************\n";
@@ -115,10 +123,6 @@ sub control_parameter
         usage();
         exit(-1);
     }
-
-    # The input file has to exist
-
-    pre2par::files::check_file($pre2par::globals::prefilename);
 }
 
 #####################################

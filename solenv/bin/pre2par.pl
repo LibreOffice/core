@@ -43,11 +43,9 @@ my $parfile = pre2par::work::convert($prefile);
 
 pre2par::work::formatter($parfile);
 
-my $langfilename = pre2par::work::getlangfilename();
+my $langfilename = $pre2par::globals::langfilename;
 
-my $dolocalization = pre2par::work::check_existence_of_langfiles($langfilename);
-
-if ( $dolocalization )
+if ( -f $langfilename )
 {
     my $langfile = pre2par::files::read_file($langfilename);
     pre2par::language::localize($parfile, $langfile);
