@@ -180,7 +180,7 @@ static OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
         case EE_CHAR_BKGCOLOR:
         {
             aDebStr.append("FillColor= ");
-            Color aColor( static_cast<const SvxBackgroundColorItem&>(rItem).GetValue() );
+            Color aColor( static_cast<const SvxColorItem&>(rItem).GetValue() );
             aDebStr.append(static_cast<sal_Int32>(aColor.GetRed()));
             aDebStr.append(", ");
             aDebStr.append(static_cast<sal_Int32>(aColor.GetGreen()));

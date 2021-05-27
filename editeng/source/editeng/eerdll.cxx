@@ -140,7 +140,7 @@ DefItems::DefItems()
     rDefItems[48] = new SvxOverlineItem( LINESTYLE_NONE, EE_CHAR_OVERLINE );
     rDefItems[49] = new SvxCaseMapItem( SvxCaseMap::NotMapped, EE_CHAR_CASEMAP );
     rDefItems[50] = new SfxGrabBagItem( EE_CHAR_GRABBAG );
-    rDefItems[51] = new SvxBackgroundColorItem( COL_AUTO, EE_CHAR_BKGCOLOR );
+    rDefItems[51] = new SvxColorItem( COL_AUTO, EE_CHAR_BKGCOLOR );
     // Features
     rDefItems[52] = new SfxVoidItem( EE_FEATURE_TAB );
     rDefItems[53] = new SfxVoidItem( EE_FEATURE_LINEBR );

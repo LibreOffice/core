@@ -28,7 +28,6 @@ class SfxGrabBagItem;
 class SfxInt16Item;
 class SvxAdjustItem;
 class SvxAutoKernItem;
-class SvxBackgroundColorItem;
 class SvxCaseMapItem;
 class SvxCharReliefItem;
 class SvxCharScaleWidthItem;
@@ -127,7 +126,7 @@ constexpr TypedWhichId<SvXMLAttrContainerItem> EE_CHAR_XMLATTRIBS     (EE_CHAR_S
 constexpr TypedWhichId<SvxOverlineItem>        EE_CHAR_OVERLINE       (EE_CHAR_START+29);
 constexpr TypedWhichId<SvxCaseMapItem>         EE_CHAR_CASEMAP        (EE_CHAR_START+30);
 constexpr TypedWhichId<SfxGrabBagItem>         EE_CHAR_GRABBAG        (EE_CHAR_START+31);
-constexpr TypedWhichId<SvxBackgroundColorItem> EE_CHAR_BKGCOLOR       (EE_CHAR_START+32);
+constexpr TypedWhichId<SvxColorItem>           EE_CHAR_BKGCOLOR       (EE_CHAR_START+32);
 
 constexpr sal_uInt16                           EE_CHAR_END            (EE_CHAR_START + 32);
 

@@ -219,7 +219,7 @@ void EditCharAttribColor::SetFont( SvxFont& rFont, OutputDevice* )
 
 
 EditCharAttribBackgroundColor::EditCharAttribBackgroundColor(
-                                const SvxBackgroundColorItem& rAttr,
+                                const SvxColorItem& rAttr,
                                   sal_Int32 _nStart,
                                   sal_Int32 _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
@@ -229,7 +229,7 @@ EditCharAttribBackgroundColor::EditCharAttribBackgroundColor(
 
 void EditCharAttribBackgroundColor::SetFont( SvxFont& rFont, OutputDevice* )
 {
-    Color aColor = static_cast<const SvxBackgroundColorItem*>(GetItem())->GetValue();
+    Color aColor = static_cast<const SvxColorItem*>(GetItem())->GetValue();
     rFont.SetTransparent(false);
     rFont.SetFillColor(aColor);
 }

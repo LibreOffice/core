@@ -85,7 +85,7 @@ void FuChar::DoExecute( SfxRequest& rReq )
 
         if ( pBrushItem )
         {
-            SvxBackgroundColorItem aBackColorItem( pBrushItem->GetColor(), EE_CHAR_BKGCOLOR );
+            SvxColorItem aBackColorItem( pBrushItem->GetColor(), EE_CHAR_BKGCOLOR );
             aOtherSet.ClearItem( SID_ATTR_BRUSH_CHAR );
             aOtherSet.Put( aBackColorItem );
         }

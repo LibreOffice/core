@@ -385,12 +385,12 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         if (eFamily == SfxStyleFamily::Pseudo)
                         {
                             SfxItemSet aTempSet(*pOutSet);
-                            /* Extract SvxBrushItem out of set and insert SvxBackgroundColorItem */
+                            /* Extract SvxBrushItem out of set and insert SvxColorItem */
                             const SvxBrushItem* pBrushItem = aTempSet.GetItem<SvxBrushItem>( SID_ATTR_BRUSH_CHAR );
 
                             if ( pBrushItem )
                             {
-                                SvxBackgroundColorItem aBackColorItem(pBrushItem->GetColor(), EE_CHAR_BKGCOLOR);
+                                SvxColorItem aBackColorItem(pBrushItem->GetColor(), EE_CHAR_BKGCOLOR);
                                 aTempSet.ClearItem( EE_CHAR_BKGCOLOR );
                                 aTempSet.Put( aBackColorItem );
                             }
