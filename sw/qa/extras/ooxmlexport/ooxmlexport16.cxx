@@ -118,11 +118,8 @@ DECLARE_OOXMLEXPORT_TEST(testGutterLeft, "gutter-left.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270), nGutterMargin);
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testGutterTop)
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testGutterTop, "gutter-top.docx")
 {
-    load(mpTestDocumentPath, "gutter-top.docx");
-    save("Office Open XML Text", maTempFile);
-    mbExported = true;
     xmlDocUniquePtr pXmlSettings = parseExport("word/settings.xml");
     CPPUNIT_ASSERT(pXmlSettings);
     // Without the accompanying fix in place, this test would have failed with:

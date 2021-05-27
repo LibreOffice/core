@@ -137,11 +137,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf109063, "tdf109063.docx")
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 }
 
-DECLARE_SW_ROUNDTRIP_TEST(testTdf108269, "tdf108269.docm", nullptr, DocmTest)
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf108269, "tdf108269.docm")
 {
-    if (!mbExported)
-        return;
-
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
     // This failed: VBA streams were not roundtripped via the doc-level
     // grab-bag.

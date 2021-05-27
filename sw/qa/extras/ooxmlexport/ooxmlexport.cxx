@@ -243,26 +243,23 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testShapeInFloattable, "shape-in-floattable.
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl", 1);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testEmptyAnnotationMark, "empty-annotation-mark.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testEmptyAnnotationMark, "empty-annotation-mark.docx")
 {
-    if (mbExported)
-    {
-        // Delete the word that is commented, and save again.
-        uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 3);
-        CPPUNIT_ASSERT_EQUAL(OUString("with"), xRun->getString());
-        xRun->setString("");
-        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-        xStorable->store();
+    // Delete the word that is commented, and save again.
+    uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 3);
+    CPPUNIT_ASSERT_EQUAL(OUString("with"), xRun->getString());
+    xRun->setString("");
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    xStorable->store();
 
-        // Then inspect the OOXML markup of the modified document model.
-        xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-        // There were two commentReference nodes.
-        assertXPath(pXmlDoc, "//w:commentReference", "id", "0");
-        // Empty comment range was not ignored on export, this was 1.
-        assertXPath(pXmlDoc, "//w:commentRangeStart", 0);
-        // Ditto.
-        assertXPath(pXmlDoc, "//w:commentRangeEnd", 0);
-    }
+    // Then inspect the OOXML markup of the modified document model.
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // There were two commentReference nodes.
+    assertXPath(pXmlDoc, "//w:commentReference", "id", "0");
+    // Empty comment range was not ignored on export, this was 1.
+    assertXPath(pXmlDoc, "//w:commentRangeStart", 0);
+    // Ditto.
+    assertXPath(pXmlDoc, "//w:commentRangeEnd", 0);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testDropdownInCell, "dropdown-in-cell.docx")

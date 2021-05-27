@@ -526,13 +526,11 @@ DECLARE_OOXMLEXPORT_TEST(tdf124600b, "tdf124600b.docx")
     CPPUNIT_ASSERT(!bAllowOverlap2);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testDateControl, "empty-date-control.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDateControl, "empty-date-control.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Check that we exported the empty date control correctly
     // Date form field is converted to date content control.
-    if (!mbExported)
-        return ;
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
