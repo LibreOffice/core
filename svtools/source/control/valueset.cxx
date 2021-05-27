@@ -504,7 +504,9 @@ bool ValueSet::MouseButtonUp( const MouseEvent& rMouseEvent )
 {
     if (rMouseEvent.IsLeft() && !rMouseEvent.IsMod2())
     {
-        Select();
+        // tdf#142150 MouseUp seen without previous MouseDown
+        if (mnSelItemId)
+            Select();
         return true;
     }
 
