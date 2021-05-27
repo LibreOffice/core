@@ -406,6 +406,17 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testCommentDone, "CommentDone.docx")
     assertXPath(pXmlCommExt, "/w15:commentsEx/w15:commentEx", "done", "1");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTableWidth, "frame_size_export.docx")
+{
+    // after exporting: table width was overwritten in the doc model
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(100),
+                         getProperty<sal_Int16>(xTables->getByIndex(0), "RelativeWidth"));
+}
+
+
 DECLARE_OOXMLEXPORT_TEST(testCommentDoneModel, "CommentDone.docx")
 {
     css::uno::Reference<css::text::XTextFieldsSupplier> xTextFieldsSupplier(
