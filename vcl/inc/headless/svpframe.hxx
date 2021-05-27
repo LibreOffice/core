@@ -116,6 +116,8 @@ public:
     virtual void                SetScreenNumber( unsigned int ) override {}
     virtual void                SetApplicationID(const OUString &) override {}
 
+private:
+    basegfx::B2IVector GetSurfaceFrameSize() const;
 };
 
 #endif // INCLUDED_VCL_INC_HEADLESS_SVPFRAME_HXX
