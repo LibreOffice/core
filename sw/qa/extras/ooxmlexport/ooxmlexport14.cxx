@@ -718,19 +718,8 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121658, "tdf121658.docx")
     assertXPath(pXmlSettings, "/w:settings/w:doNotHyphenateCaps");
 }
 
-CPPUNIT_TEST_FIXTURE(SwModelTestBase, testTableStyleConfNested)
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTableStyleConfNested, "table-style-conf-nested.docx")
 {
-    // Create the doc model.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "table-style-conf-nested.docx";
-    loadURL(aURL, nullptr);
-
-    // Export to docx.
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("Office Open XML Text");
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-    validate(maTempFile.GetFileName(), test::OOXML);
-    mbExported = true;
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDoc);
     // Without the accompanying fix in place, this test would have failed, as the custom table cell
@@ -750,11 +739,7 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testTdf133771)
     // Without the fix in place, this test would have failed with
     // "An uncaught exception of type com.sun.star.io.IOException"
     // exporting to docx
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("Office Open XML Text");
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-    validate(maTempFile.GetFileName(), test::OOXML);
+    save("Office Open XML Text", maTempFile);
     mbExported = true;
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -772,10 +757,7 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testZeroLineSpacing)
     xParagraph->setPropertyValue("ParaLineSpacing", uno::makeAny(aSpacing));
 
     // Export to docx.
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("Office Open XML Text");
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    save("Office Open XML Text", maTempFile);
     mbExported = true;
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -803,10 +785,7 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testSemiTransparentText)
     xTextRange->setString("x");
 
     // Export to docx.
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("Office Open XML Text");
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    save("Office Open XML Text", maTempFile);
     mbExported = true;
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -839,11 +818,7 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testUserField)
     xText->insertTextContent(xText->createTextCursor(), xField, /*bAbsorb=*/false);
 
     // Export to docx.
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("Office Open XML Text");
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-    validate(maTempFile.GetFileName(), test::OOXML);
+    save("Office Open XML Text", maTempFile);
     mbExported = true;
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -897,10 +872,7 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testHighlightEdit_numbering)
     properties->setPropertyValue("ListAutoFormat", uno::makeAny(aListAutoFormat));
 
     // Export to docx.
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("Office Open XML Text");
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    save("Office Open XML Text", maTempFile);
     mbExported = true;
 
     // Paragraph 2 should have only one w:highlight written per w:rPr. Without the fix, there were two.
