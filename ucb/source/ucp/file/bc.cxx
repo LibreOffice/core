@@ -1187,13 +1187,13 @@ BaseContent::cPCL()
 
     if( seqNames.hasElements() )
     {
-        std::unique_ptr<ListenerMap> listener(new ListenerMap);
+        ListenerMap listener;
         for( const auto& rName : seqNames )
         {
             cppu::OInterfaceContainerHelper* pContainer = m_pPropertyListener->getContainer(rName);
             if (!pContainer)
                 continue;
-            (*listener)[rName] = pContainer->getElements();
+            listener[rName] = pContainer->getElements();
         }
 
         p.reset( new PropertyChangeNotifier( this, std::move(listener) ) );

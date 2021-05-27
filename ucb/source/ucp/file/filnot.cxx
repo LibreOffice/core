@@ -192,9 +192,9 @@ PropertySetInfoChangeNotifier::notifyPropertyRemoved( const OUString & aProperty
 
 PropertyChangeNotifier::PropertyChangeNotifier(
     const css::uno::Reference< XContent >& xCreatorContent,
-    std::unique_ptr<ListenerMap> pListeners )
+    ListenerMap&& pListeners )
     : m_xCreatorContent( xCreatorContent ),
-      m_pListeners( std::move(pListeners) )
+      m_aListeners( std::move(pListeners) )
 {
 }
 
@@ -214,7 +214,7 @@ void PropertyChangeNotifier::notifyPropertyChanged(
 
     // notify listeners for all Events
 
-    uno::Sequence< uno::Reference< uno::XInterface > > seqList = (*m_pListeners)[ OUString() ];
+    uno::Sequence< uno::Reference< uno::XInterface > > seqList = m_aListeners[ OUString() ];
     for( const auto& rListener : std::as_const(seqList) )
     {
         uno::Reference< beans::XPropertiesChangeListener > aListener( rListener,uno::UNO_QUERY );
@@ -228,7 +228,7 @@ void PropertyChangeNotifier::notifyPropertyChanged(
     for( const auto& rChange : std::as_const(Changes) )
     {
         seq[0] = rChange;
-        seqList = (*m_pListeners)[ rChange.PropertyName ];
+        seqList = m_aListeners[ rChange.PropertyName ];
 
         for( const auto& rListener : std::as_const(seqList) )
         {

@@ -83,11 +83,11 @@ namespace fileaccess {
     {
     private:
         css::uno::Reference< css::ucb::XContent > m_xCreatorContent;
-        std::unique_ptr<ListenerMap> m_pListeners;
+        ListenerMap m_aListeners;
     public:
         PropertyChangeNotifier(
             const css::uno::Reference< css::ucb::XContent >& xCreatorContent,
-            std::unique_ptr<ListenerMap> pListeners );
+            ListenerMap&& pListeners );
 
         ~PropertyChangeNotifier();
 
