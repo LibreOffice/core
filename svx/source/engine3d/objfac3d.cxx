@@ -44,7 +44,7 @@ E3dObjFactory::~E3dObjFactory()
 
 // Generate chart internal objects
 
-IMPL_STATIC_LINK( E3dObjFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject* )
+IMPL_STATIC_LINK( E3dObjFactory, MakeObject, SdrObjCreatorParams, aParams, rtl::Reference<SdrObject> )
 {
     if ( aParams.nInventor == SdrInventor::E3d )
     {

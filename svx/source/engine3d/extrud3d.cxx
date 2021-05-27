@@ -111,7 +111,7 @@ SdrObjKind E3dExtrudeObj::GetObjIdentifier() const
     return SdrObjKind::E3D_Extrusion;
 }
 
-E3dExtrudeObj* E3dExtrudeObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> E3dExtrudeObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
     return new E3dExtrudeObj(rTargetModel, *this);
 }
@@ -153,7 +153,7 @@ bool E3dExtrudeObj::IsBreakObjPossible()
     return true;
 }
 
-std::unique_ptr<SdrAttrObj,SdrObjectFreeOp> E3dExtrudeObj::GetBreakObj()
+rtl::Reference<SdrAttrObj> E3dExtrudeObj::GetBreakObj()
 {
     basegfx::B3DPolyPolygon aFrontSide;
     basegfx::B3DPolyPolygon aBackSide;
@@ -204,13 +204,13 @@ std::unique_ptr<SdrAttrObj,SdrObjectFreeOp> E3dExtrudeObj::GetBreakObj()
     {
     // create PathObj
         basegfx::B2DPolyPolygon aPoly = TransformToScreenCoor(aBackSide);
-        std::unique_ptr<SdrPathObj,SdrObjectFreeOp> pPathObj(new SdrPathObj(getSdrModelFromSdrObject(), SdrObjKind::PolyLine, aPoly));
+        rtl::Reference<SdrPathObj> pPathObj(new SdrPathObj(getSdrModelFromSdrObject(), SdrObjKind::PolyLine, aPoly));
 
         SfxItemSet aSet(GetObjectItemSet());
         aSet.Put(XLineStyleItem(css::drawing::LineStyle_SOLID));
         pPathObj->SetMergedItemSet(aSet);
 
-        return std::unique_ptr<SdrAttrObj,SdrObjectFreeOp>(pPathObj.release());
+        return pPathObj;
     }
 
     return nullptr;

@@ -1115,8 +1115,8 @@ rtl::Reference<SvxShapePolyPolygon>
         return nullptr;
 
     //create shape
-    SdrPathObj* pPath = new SdrPathObj(xTarget->GetSdrObject()->getSdrModelFromSdrObject(), SdrObjKind::Polygon);
-    xTarget->GetSdrObject()->GetSubList()->InsertObject(pPath);
+    rtl::Reference<SdrPathObj> pPath = new SdrPathObj(xTarget->GetSdrObject()->getSdrModelFromSdrObject(), SdrObjKind::Polygon);
+    xTarget->GetSdrObject()->GetSubList()->InsertObject(pPath.get());
 
     //set properties
     try

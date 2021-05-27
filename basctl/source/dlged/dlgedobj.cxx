@@ -70,7 +70,6 @@ DlgEditor& DlgEdObj::GetDialogEditor ()
 DlgEdObj::DlgEdObj(SdrModel& rSdrModel)
 :   SdrUnoObj(rSdrModel, OUString())
     ,bIsListening(false)
-    ,pDlgEdForm( nullptr )
 {
 }
 
@@ -118,7 +117,6 @@ DlgEdObj::DlgEdObj(
     const css::uno::Reference< css::lang::XMultiServiceFactory >& rxSFac)
 :   SdrUnoObj(rSdrModel, rModelName, rxSFac)
     ,bIsListening(false)
-    ,pDlgEdForm( nullptr )
 {
 }
 
@@ -906,16 +904,16 @@ SdrObjKind DlgEdObj::GetObjIdentifier() const
     }
 }
 
-DlgEdObj* DlgEdObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> DlgEdObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
     return new DlgEdObj(rTargetModel, *this);
 }
 
-SdrObjectUniquePtr DlgEdObj::getFullDragClone() const
+rtl::Reference<SdrObject> DlgEdObj::getFullDragClone() const
 {
     // no need to really add the clone for dragging, it's a temporary
     // object
-    return SdrObjectUniquePtr(new SdrUnoObj(getSdrModelFromSdrObject(), *this));
+    return rtl::Reference<SdrObject>(new SdrUnoObj(getSdrModelFromSdrObject(), *this));
 }
 
 void DlgEdObj::NbcMove( const Size& rSize )
@@ -961,7 +959,7 @@ bool DlgEdObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     // implementation. For historical reasons, the SdrPage (which is the DlgEdPage) was
     // already set. For now, get it from the SdrDragStat and use it to access and set
     // the local pDlgEdForm
-    if(nullptr == pDlgEdForm && nullptr != rStat.GetPageView())
+    if(!pDlgEdForm && nullptr != rStat.GetPageView())
     {
         const DlgEdPage* pDlgEdPage(dynamic_cast<const DlgEdPage*>(rStat.GetPageView()->GetPage()));
 

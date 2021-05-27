@@ -33,7 +33,7 @@ public:
     DlgEdFactory();
     ~DlgEdFactory() COVERITY_NOEXCEPT_FALSE;
 
-    DECL_STATIC_LINK(DlgEdFactory, MakeObject, SdrObjCreatorParams, SdrObject*);
+    DECL_STATIC_LINK(DlgEdFactory, MakeObject, SdrObjCreatorParams, rtl::Reference<SdrObject>);
 };
 }
 #endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_DLGEDFAC_HXX
