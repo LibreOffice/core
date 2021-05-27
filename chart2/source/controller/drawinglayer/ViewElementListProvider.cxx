@@ -155,26 +155,26 @@ Graphic ViewElementListProvider::GetSymbolGraphic( sal_Int32 nStandardSymbol, co
     rtl::Reference<SdrPage> pPage = new SdrPage( *pModel, false );
     pPage->SetSize(Size(1000,1000));
     pModel->InsertPage( pPage.get(), 0 );
-    std::unique_ptr<SdrView> pView(new SdrView(*pModel, pVDev));
-    pView->hideMarkHandles();
-    SdrPageView* pPageView = pView->ShowSdrPage(pPage.get());
+    SdrView aView(*pModel, pVDev);
+    aView.hideMarkHandles();
+    SdrPageView* pPageView = aView.ShowSdrPage(pPage.get());
 
     // directly clone to target SdrModel
     pObj = pObj->CloneSdrObject(*pModel);
 
     pPage->NbcInsertObject(pObj);
-    pView->MarkObj(pObj,pPageView);
+    aView.MarkObj(pObj,pPageView);
     if( pSymbolShapeProperties )
         pObj->SetMergedItemSet(*pSymbolShapeProperties);
 
-    GDIMetaFile aMeta(pView->GetMarkedObjMetaFile());
+    GDIMetaFile aMeta(aView.GetMarkedObjMetaFile());
 
     Graphic aGraph(aMeta);
     Size aSize = pObj->GetSnapRect().GetSize();
     aGraph.SetPrefSize(aSize);
     aGraph.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
 
-    pView->UnmarkAll();
+    aView.UnmarkAll();
     pObj=pPage->RemoveObject(0);
     SdrObject::Free( pObj );
 

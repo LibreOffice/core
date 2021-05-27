@@ -850,10 +850,10 @@ namespace
                 sal_uInt8 aBuffer[BACKUP_FILE_HELPER_BLOCK_SIZE];
                 sal_uInt64 nBytesTransfer(0);
                 sal_uInt64 nSize(getPackFileSize());
-                std::unique_ptr< z_stream > zstream(new z_stream);
-                memset(zstream.get(), 0, sizeof(*zstream));
+                z_stream zstream;
+                memset(&zstream, 0, sizeof(zstream));
 
-                if (Z_OK == deflateInit(zstream.get(), Z_BEST_COMPRESSION))
+                if (Z_OK == deflateInit(&zstream, Z_BEST_COMPRESSION))
                 {
                     // set offset in source file - when this is zero, a new file is to be added
                     if (osl::File::E_None == maFile->setPos(osl_Pos_Absolut, sal_Int64(getOffset())))
@@ -869,16 +869,16 @@ namespace
                                 break;
                             }
 
-                            zstream->avail_in = nToTransfer;
-                            zstream->next_in = reinterpret_cast<unsigned char*>(aArray);
+                            zstream.avail_in = nToTransfer;
+                            zstream.next_in = reinterpret_cast<unsigned char*>(aArray);
 
                             do {
-                                zstream->avail_out = BACKUP_FILE_HELPER_BLOCK_SIZE;
-                                zstream->next_out = reinterpret_cast<unsigned char*>(aBuffer);
+                                zstream.avail_out = BACKUP_FILE_HELPER_BLOCK_SIZE;
+                                zstream.next_out = reinterpret_cast<unsigned char*>(aBuffer);
 #if !defined Z_PREFIX
-                                const sal_Int64 nRetval(deflate(zstream.get(), nSize == nToTransfer ? Z_FINISH : Z_NO_FLUSH));
+                                const sal_Int64 nRetval(deflate(&zstream, nSize == nToTransfer ? Z_FINISH : Z_NO_FLUSH));
 #else
-                                const sal_Int64 nRetval(z_deflate(zstream.get(), nSize == nToTransfer ? Z_FINISH : Z_NO_FLUSH));
+                                const sal_Int64 nRetval(z_deflate(&zstream, nSize == nToTransfer ? Z_FINISH : Z_NO_FLUSH));
 #endif
                                 if (Z_STREAM_ERROR == nRetval)
                                 {
@@ -886,14 +886,14 @@ namespace
                                 }
                                 else
                                 {
-                                    const sal_uInt64 nAvailable(BACKUP_FILE_HELPER_BLOCK_SIZE - zstream->avail_out);
+                                    const sal_uInt64 nAvailable(BACKUP_FILE_HELPER_BLOCK_SIZE - zstream.avail_out);
 
                                     if (osl_File_E_None != osl_writeFile(rTargetHandle, static_cast<const void*>(aBuffer), nAvailable, &nBytesTransfer) || nBytesTransfer != nAvailable)
                                     {
                                         bOkay = false;
                                     }
                                 }
-                            } while (bOkay && 0 == zstream->avail_out);
+                            } while (bOkay && 0 == zstream.avail_out);
 
                             if (!bOkay)
                             {
@@ -904,9 +904,9 @@ namespace
                         }
 
 #if !defined Z_PREFIX
-                        deflateEnd(zstream.get());
+                        deflateEnd(&zstream);
 #else
-                        z_deflateEnd(zstream.get());
+                        z_deflateEnd(&zstream);
 #endif
                     }
                 }
@@ -914,9 +914,9 @@ namespace
                 maFile->close();
 
                 // get compressed size and add to entry
-                if (mnFullFileSize == mnPackFileSize && mnFullFileSize == zstream->total_in)
+                if (mnFullFileSize == mnPackFileSize && mnFullFileSize == zstream.total_in)
                 {
-                    mnPackFileSize = zstream->total_out;
+                    mnPackFileSize = zstream.total_out;
                 }
 
                 return (0 == nSize);
@@ -933,10 +933,10 @@ namespace
                 sal_uInt8 aBuffer[BACKUP_FILE_HELPER_BLOCK_SIZE];
                 sal_uInt64 nBytesTransfer(0);
                 sal_uInt64 nSize(getPackFileSize());
-                std::unique_ptr< z_stream > zstream(new z_stream);
-                memset(zstream.get(), 0, sizeof(*zstream));
+                z_stream zstream;
+                memset(&zstream, 0, sizeof(zstream));
 
-                if (Z_OK == inflateInit(zstream.get()))
+                if (Z_OK == inflateInit(&zstream))
                 {
                     // set offset in source file - when this is zero, a new file is to be added
                     if (osl::File::E_None == maFile->setPos(osl_Pos_Absolut, sal_Int64(getOffset())))
@@ -952,16 +952,16 @@ namespace
                                 break;
                             }
 
-                            zstream->avail_in = nToTransfer;
-                            zstream->next_in = reinterpret_cast<unsigned char*>(aArray);
+                            zstream.avail_in = nToTransfer;
+                            zstream.next_in = reinterpret_cast<unsigned char*>(aArray);
 
                             do {
-                                zstream->avail_out = BACKUP_FILE_HELPER_BLOCK_SIZE;
-                                zstream->next_out = reinterpret_cast<unsigned char*>(aBuffer);
+                                zstream.avail_out = BACKUP_FILE_HELPER_BLOCK_SIZE;
+                                zstream.next_out = reinterpret_cast<unsigned char*>(aBuffer);
 #if !defined Z_PREFIX
-                                const sal_Int64 nRetval(inflate(zstream.get(), Z_NO_FLUSH));
+                                const sal_Int64 nRetval(inflate(&zstream, Z_NO_FLUSH));
 #else
-                                const sal_Int64 nRetval(z_inflate(zstream.get(), Z_NO_FLUSH));
+                                const sal_Int64 nRetval(z_inflate(&zstream, Z_NO_FLUSH));
 #endif
                                 if (Z_STREAM_ERROR == nRetval)
                                 {
@@ -969,14 +969,14 @@ namespace
                                 }
                                 else
                                 {
-                                    const sal_uInt64 nAvailable(BACKUP_FILE_HELPER_BLOCK_SIZE - zstream->avail_out);
+                                    const sal_uInt64 nAvailable(BACKUP_FILE_HELPER_BLOCK_SIZE - zstream.avail_out);
 
                                     if (osl_File_E_None != osl_writeFile(rTargetHandle, static_cast<const void*>(aBuffer), nAvailable, &nBytesTransfer) || nBytesTransfer != nAvailable)
                                     {
                                         bOkay = false;
                                     }
                                 }
-                            } while (bOkay && 0 == zstream->avail_out);
+                            } while (bOkay && 0 == zstream.avail_out);
 
                             if (!bOkay)
                             {
@@ -987,9 +987,9 @@ namespace
                         }
 
 #if !defined Z_PREFIX
-                        deflateEnd(zstream.get());
+                        deflateEnd(&zstream);
 #else
-                        z_deflateEnd(zstream.get());
+                        z_deflateEnd(&zstream);
 #endif
                     }
                 }

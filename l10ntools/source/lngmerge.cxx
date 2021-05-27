@@ -168,9 +168,9 @@ void LngParser::Merge(
         OString sID( sGroup );
         std::size_t nLastLangPos = 0;
 
-        std::unique_ptr<ResData> pResData( new ResData( sID, sSource ) );
-        pResData->sResTyp = "LngText";
-        MergeEntrys *pEntrys = aMergeDataFile.GetMergeEntrys( pResData.get() );
+        ResData aResData( sID, sSource );
+        aResData.sResTyp = "LngText";
+        MergeEntrys *pEntrys = aMergeDataFile.GetMergeEntrys( &aResData );
         // read languages
         bGroup = false;
 

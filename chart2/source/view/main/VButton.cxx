@@ -95,10 +95,10 @@ void VButton::createShapes(const uno::Reference<beans::XPropertySet>& xTextProp)
 {
     ShapeFactory* pShapeFactory = ShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
 
-    std::unique_ptr<tNameSequence> pPropNames(new tNameSequence);
-    std::unique_ptr<tAnySequence> pPropValues(new tAnySequence);
+    tNameSequence aPropNames;
+    tAnySequence aPropValues;
 
-    PropertyMapper::getTextLabelMultiPropertyLists(xTextProp, *pPropNames, *pPropValues);
+    PropertyMapper::getTextLabelMultiPropertyLists(xTextProp, aPropNames, aPropValues);
 
     m_xShape.set(pShapeFactory->createGroup2D(m_xTarget, m_sCID), uno::UNO_QUERY);
     m_xShape->setPosition(m_aPosition);
@@ -124,10 +124,10 @@ void VButton::createShapes(const uno::Reference<beans::XPropertySet>& xTextProp)
 
     aTextValueMap["Name"] <<= m_sCID; //CID OUString
 
-    PropertyMapper::getMultiPropertyListsFromValueMap(*pPropNames, *pPropValues, aTextValueMap);
+    PropertyMapper::getMultiPropertyListsFromValueMap(aPropNames, aPropValues, aTextValueMap);
 
     uno::Reference<drawing::XShape> xEntry
-        = pShapeFactory->createText(xContainer, m_sLabel, *pPropNames, *pPropValues, uno::Any());
+        = pShapeFactory->createText(xContainer, m_sLabel, aPropNames, aPropValues, uno::Any());
 
     if (xEntry.is())
     {

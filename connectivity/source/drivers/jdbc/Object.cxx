@@ -170,22 +170,22 @@ namespace
 
         if ( _pEnvironment->IsInstanceOf( jThrow, java_sql_SQLException_BASE::st_getMyClass() ) )
         {
-            std::unique_ptr< java_sql_SQLException_BASE > pException( new java_sql_SQLException_BASE( _pEnvironment, jThrow ) );
-            _out_rException = SQLException( pException->getMessage(), _rxContext,
-                pException->getSQLState(), pException->getErrorCode(), Any() );
+            java_sql_SQLException_BASE aException( _pEnvironment, jThrow );
+            _out_rException = SQLException( aException.getMessage(), _rxContext,
+                aException.getSQLState(), aException.getErrorCode(), Any() );
             return true;
         }
         else if ( _pEnvironment->IsInstanceOf( jThrow, java_lang_Throwable::st_getMyClass() ) )
         {
-            std::unique_ptr< java_lang_Throwable > pThrow( new java_lang_Throwable( _pEnvironment, jThrow ) );
+            java_lang_Throwable aThrow( _pEnvironment, jThrow );
 #if OSL_DEBUG_LEVEL > 0
-            pThrow->printStackTrace();
+            aThrow.printStackTrace();
 #endif
-            OUString sMessage = pThrow->getMessage();
+            OUString sMessage = aThrow.getMessage();
             if ( sMessage.isEmpty() )
-                sMessage = pThrow->getLocalizedMessage();
+                sMessage = aThrow.getLocalizedMessage();
             if(  sMessage.isEmpty() )
-                sMessage = pThrow->toString();
+                sMessage = aThrow.toString();
             _out_rException = SQLException( sMessage, _rxContext, OUString(), -1, Any() );
             return true;
         }
