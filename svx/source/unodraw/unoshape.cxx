@@ -86,6 +86,7 @@
 #include <svx/sdtfsitm.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdopath.hxx>
+#include <svx/SvxXTextColumns.hxx>
 
 #include <memory>
 #include <optional>
@@ -2495,6 +2496,27 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
             return false;
         }
     }
+
+    case OWN_ATTR_TEXTCOLUMNS:
+    {
+        if (auto pTextObj = dynamic_cast<SdrTextObj*>(GetSdrObject()))
+        {
+            css::uno::Reference<css::text::XTextColumns> xTextColumns;
+            if (rValue >>= xTextColumns)
+            {
+                pTextObj->SetTextColumnsNumber(xTextColumns->getColumnCount());
+                if (css::uno::Reference<css::beans::XPropertySet> xPropSet{ xTextColumns,
+                                                                            css::uno::UNO_QUERY })
+                {
+                    auto aVal = xPropSet->getPropertyValue("AutomaticDistance");
+                    if (sal_Int32 nSpacing; aVal >>= nSpacing)
+                        pTextObj->SetTextColumnsSpacing(nSpacing);
+                }
+            }
+        }
+        return true;
+    }
+
     default:
     {
         return false;
@@ -2895,6 +2917,22 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
         {
             rValue = GetBitmap( true );
         }
+        break;
+    }
+
+    case OWN_ATTR_TEXTCOLUMNS:
+    {
+        css::uno::Reference<css::uno::XInterface> xIf;
+        if (auto pTextObj = dynamic_cast<const SdrTextObj*>(GetSdrObject()))
+        {
+            xIf = SvxXTextColumns_createInstance();
+            css::uno::Reference<css::text::XTextColumns> xColumns(xIf, css::uno::UNO_QUERY_THROW);
+            xColumns->setColumnCount(pTextObj->GetTextColumnsNumber());
+            css::uno::Reference<css::beans::XPropertySet> xPropSet(xIf, css::uno::UNO_QUERY_THROW);
+            xPropSet->setPropertyValue("AutomaticDistance",
+                                       css::uno::Any(pTextObj->GetTextColumnsSpacing()));
+        }
+        rValue <<= xIf;
         break;
     }
 
