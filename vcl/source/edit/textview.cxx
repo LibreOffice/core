@@ -1472,10 +1472,10 @@ void TextView::ImpShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bSpec
 
             sal_Int32 nTextPortionStart = 0;
             std::size_t nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, true );
-            TETextPortion* pTextPortion = pParaPortion->GetTextPortions()[ nTextPortion ];
-            if ( pTextPortion->GetKind() == PORTIONKIND_TAB )
+            TETextPortion& rTextPortion = pParaPortion->GetTextPortions()[ nTextPortion ];
+            if ( rTextPortion.GetKind() == PORTIONKIND_TAB )
             {
-                aEditCursor.AdjustRight(pTextPortion->GetWidth() );
+                aEditCursor.AdjustRight(rTextPortion.GetWidth() );
             }
             else
             {
