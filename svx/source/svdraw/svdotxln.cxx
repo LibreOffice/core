@@ -266,8 +266,10 @@ void SdrTextObj::ImpRegisterLink()
 void SdrTextObj::ImpDeregisterLink()
 {
     ImpSdrObjTextLinkUserData* pData=GetLinkUserData();
+    if (!pData)
+        return;
     sfx2::LinkManager* pLinkManager(getSdrModelFromSdrObject().GetLinkManager());
-    if (pLinkManager!=nullptr && pData!=nullptr && pData->mpLink!=nullptr) { // don't register twice
+    if (pLinkManager!=nullptr && pData->mpLink!=nullptr) { // don't register twice
         // when doing Remove, *pLink is deleted implicitly
         pLinkManager->Remove( pData->mpLink.get() );
         pData->mpLink=nullptr;

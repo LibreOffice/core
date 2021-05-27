@@ -56,7 +56,7 @@ private:
     SVX_DLLPRIVATE void GetObjRef_Impl();
 
     // #i118485# helper added
-    SVX_DLLPRIVATE SdrObjectUniquePtr createSdrGrafObjReplacement(bool bAddText) const;
+    SVX_DLLPRIVATE rtl::Reference<SdrObject> createSdrGrafObjReplacement(bool bAddText) const;
     SVX_DLLPRIVATE void ImpSetVisAreaSize();
 
     SVX_DLLPRIVATE void Init();
@@ -133,14 +133,14 @@ public:
     void SetClosedObj( bool bIsClosed );
 
     // FullDrag support
-    virtual SdrObjectUniquePtr getFullDragClone() const override;
+    virtual rtl::Reference<SdrObject> getFullDragClone() const override;
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual SdrObjKind GetObjIdentifier() const override;
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
 
-    virtual SdrOle2Obj* CloneSdrObject(SdrModel& rTargetModel) const override;
+    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
     virtual void NbcMove(const Size& rSize) override;
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
@@ -181,7 +181,7 @@ public:
     void SetWindow(const css::uno::Reference < css::awt::XWindow >& _xWindow);
 
     // #i118485# missing converter added
-    virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
+    virtual rtl::Reference<SdrObject> DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 };
 
 class SVXCORE_DLLPUBLIC SdrEmbedObjectLink final : public sfx2::SvBaseLink

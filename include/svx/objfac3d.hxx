@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_OBJFAC3D_HXX
 #define INCLUDED_SVX_OBJFAC3D_HXX
 
+#include <rtl/ref.hxx>
 #include <svx/svxdllapi.h>
 #include <tools/link.hxx>
 
@@ -37,7 +38,8 @@ class SVXCORE_DLLPUBLIC E3dObjFactory
 public:
     E3dObjFactory();
 
-    DECL_DLLPRIVATE_STATIC_LINK(E3dObjFactory, MakeObject, SdrObjCreatorParams, SdrObject*);
+    DECL_DLLPRIVATE_STATIC_LINK(E3dObjFactory, MakeObject, SdrObjCreatorParams,
+                                rtl::Reference<SdrObject>);
 };
 
 #endif // INCLUDED_SVX_OBJFAC3D_HXX
