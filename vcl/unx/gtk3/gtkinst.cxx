@@ -3989,13 +3989,11 @@ namespace
 
         Size aSize(rImageSurface.GetOutputSizePixel());
 
-        double x_scale(1.0), y_scale(1.0);
-        cairo_surface_get_device_scale(surface, &x_scale, &y_scale);
+        // seems unfortunately to lose the potentially hidpi image here
         cairo_surface_t* target = cairo_surface_create_similar_image(surface,
                                                                      CAIRO_FORMAT_ARGB32,
-                                                                     aSize.Width() * x_scale,
-                                                                     aSize.Height() * y_scale);
-        cairo_surface_set_device_scale(target, x_scale, y_scale);
+                                                                     aSize.Width(),
+                                                                     aSize.Height());
 
         cairo_t* cr = cairo_create(target);
         cairo_set_source_surface(cr, surface, 0, 0);
@@ -10466,6 +10464,47 @@ public:
             g_object_unref(pixbuf);
     }
 };
+
+#if GTK_CHECK_VERSION(4, 0, 0)
+class GtkInstancePicture: public GtkInstanceWidget, public virtual weld::Image
+{
+private:
+    GtkPicture* m_pPicture;
+
+public:
+    GtkInstancePicture(GtkPicture* pPicture, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : GtkInstanceWidget(GTK_WIDGET(pPicture), pBuilder, bTakeOwnership)
+        , m_pPicture(pPicture)
+    {
+        gtk_picture_set_can_shrink(m_pPicture, true);
+    }
+
+    virtual void set_from_icon_name(const OUString& rIconName) override
+    {
+        GdkPixbuf* pixbuf = load_icon_by_name(rIconName);
+        if (!pixbuf)
+            return;
+        gtk_picture_set_pixbuf(m_pPicture, pixbuf);
+        g_object_unref(pixbuf);
+    }
+
+    virtual void set_image(VirtualDevice* pDevice) override
+    {
+        if (!pDevice)
+            gtk_picture_set_paintable(m_pPicture, nullptr);
+        else
+            gtk_picture_set_paintable(m_pPicture, GDK_PAINTABLE(texture_new_from_virtual_device(*pDevice)));
+    }
+
+    virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rPicture) override
+    {
+        GdkPixbuf* pixbuf = getPixbuf(rPicture);
+        gtk_picture_set_pixbuf(m_pPicture, pixbuf);
+        if (pixbuf)
+            g_object_unref(pixbuf);
+    }
+};
+#endif
 
 class GtkInstanceCalendar : public GtkInstanceWidget, public virtual weld::Calendar
 {
@@ -18570,10 +18609,14 @@ struct ConvertResult
 {
     bool m_bChildCanFocus;
     bool m_bChildIsDefaultInvisible;
+    bool m_bHasIconName;
 
-    ConvertResult(bool bChildCanFocus, bool bChildIsDefaultInvisible)
+    ConvertResult(bool bChildCanFocus,
+                  bool bChildIsDefaultInvisible,
+                  bool bHasIconName)
         : m_bChildCanFocus(bChildCanFocus)
         , m_bChildIsDefaultInvisible(bChildIsDefaultInvisible)
+        , m_bHasIconName(bHasIconName)
     {
     }
 };
@@ -18582,13 +18625,14 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
 {
     css::uno::Reference<css::xml::dom::XNodeList> xNodeList = xNode->getChildNodes();
     if (!xNodeList.is())
-        return ConvertResult(false, false);
+        return ConvertResult(false, false, false);
 
     std::vector<css::uno::Reference<css::xml::dom::XNode>> xRemoveList;
 
     OUString sBorderWidth;
     bool bChildCanFocus = false;
     bool bChildIsDefaultInvisible = true;
+    bool bHasIconName = false;
     css::uno::Reference<css::xml::dom::XNode> xCantFocus;
 
     css::uno::Reference<css::xml::dom::XNode> xChild = xNode->getFirstChild();
@@ -18656,6 +18700,9 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
 
             if (sName == "visible")
                 bChildIsDefaultInvisible = false;
+
+            if (sName == "icon-name")
+                bHasIconName = true;
 
             if (sName == "activates-default")
             {
@@ -18894,6 +18941,7 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
 
         auto xNextChild = xChild->getNextSibling();
 
+        bool bChildHasIconName = false;
         if (xChild->hasChildNodes())
         {
             auto aChildRes = Convert3To4(xChild);
@@ -18904,7 +18952,10 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
                 xCantFocus.clear();
             }
             if (xChild->getNodeName() == "object")
+            {
                 bChildIsDefaultInvisible = aChildRes.m_bChildIsDefaultInvisible;
+                bChildHasIconName = aChildRes.m_bHasIconName;
+            }
         }
 
         if (xChild->getNodeName() == "object")
@@ -19023,7 +19074,10 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
             {
                 xClass->setNodeValue("GtkCheckButton");
             }
-
+            else if (sClass == "GtkImage" && !bChildHasIconName)
+            {
+                xClass->setNodeValue("GtkPicture");
+            }
         }
 
         xChild = xNextChild;
@@ -19035,7 +19089,7 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
     for (auto& xRemove : xRemoveList)
         xNode->removeChild(xRemove);
 
-    return ConvertResult(bChildCanFocus, bChildIsDefaultInvisible);
+    return ConvertResult(bChildCanFocus, bChildIsDefaultInvisible, bHasIconName);
 }
 #endif
 
@@ -19689,11 +19743,22 @@ public:
 
     virtual std::unique_ptr<weld::Image> weld_image(const OString &id) override
     {
-        GtkImage* pImage = GTK_IMAGE(gtk_builder_get_object(m_pBuilder, id.getStr()));
-        if (!pImage)
+        GtkWidget* pWidget = GTK_WIDGET(gtk_builder_get_object(m_pBuilder, id.getStr()));
+        if (!pWidget)
             return nullptr;
-        auto_add_parentless_widgets_to_container(GTK_WIDGET(pImage));
-        return std::make_unique<GtkInstanceImage>(pImage, this, false);
+        if (GTK_IS_IMAGE(pWidget))
+        {
+            auto_add_parentless_widgets_to_container(pWidget);
+            return std::make_unique<GtkInstanceImage>(GTK_IMAGE(pWidget), this, false);
+        }
+#if GTK_CHECK_VERSION(4, 0, 0)
+        if (GTK_IS_PICTURE(pWidget))
+        {
+            auto_add_parentless_widgets_to_container(pWidget);
+            return std::make_unique<GtkInstancePicture>(GTK_PICTURE(pWidget), this, false);
+        }
+#endif
+        return nullptr;
     }
 
     virtual std::unique_ptr<weld::Calendar> weld_calendar(const OString &id) override
