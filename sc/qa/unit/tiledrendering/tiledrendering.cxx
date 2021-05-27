@@ -118,6 +118,7 @@ public:
     void testAutoInputExactMatch();
     void testMoveShapeHandle();
     void testEditCursorBounds();
+    void testTextSelectionBounds();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnHeaders);
@@ -170,6 +171,7 @@ public:
     CPPUNIT_TEST(testAutoInputExactMatch);
     CPPUNIT_TEST(testMoveShapeHandle);
     CPPUNIT_TEST(testEditCursorBounds);
+    CPPUNIT_TEST(testTextSelectionBounds);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -479,6 +481,78 @@ struct EditCursorMessage final {
     }
 };
 
+struct TextSelectionMessage
+{
+    std::vector<tools::Rectangle> m_aRelRects;
+    Point m_aRefPoint;
+
+    void clear() {
+        m_aRefPoint.setX(0);
+        m_aRefPoint.setY(0);
+        m_aRelRects.clear();
+    }
+
+    bool empty() {
+        return m_aRelRects.empty();
+    }
+
+    void parseMessage(const char* pMessage)
+    {
+        clear();
+        if (!pMessage)
+            return;
+
+        std::string aStr(pMessage);
+        if (aStr.find(",") == std::string::npos)
+            return;
+
+        size_t nRefDelimStart = aStr.find("::");
+        std::string aRectListString = (nRefDelimStart == std::string::npos) ? aStr : aStr.substr(0, nRefDelimStart);
+        std::string aRefPointString = (nRefDelimStart == std::string::npos) ?
+            std::string("0, 0") :
+            aStr.substr(nRefDelimStart + 2, aStr.length() - 2 - nRefDelimStart);
+        uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(aRefPointString.c_str()));
+        CPPUNIT_ASSERT_EQUAL(2, aSeq.getLength());
+        m_aRefPoint.setX(aSeq[0].toInt32());
+        m_aRefPoint.setY(aSeq[1].toInt32());
+
+        size_t nStart = 0;
+        size_t nEnd = aRectListString.find(";");
+        if (nEnd == std::string::npos)
+            nEnd = aRectListString.length();
+        do
+        {
+            std::string aRectString = aRectListString.substr(nStart, nEnd - nStart);
+            {
+                aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(aRectString.c_str()));
+                CPPUNIT_ASSERT_EQUAL(4, aSeq.getLength());
+                tools::Rectangle aRect;
+                aRect.setX(aSeq[0].toInt32());
+                aRect.setY(aSeq[1].toInt32());
+                aRect.setWidth(aSeq[2].toInt32());
+                aRect.setHeight(aSeq[3].toInt32());
+
+                m_aRelRects.push_back(aRect);
+            }
+
+            nStart = nEnd + 1;
+            nEnd = aRectListString.find(";", nStart);
+        }
+        while(nEnd != std::string::npos);
+    }
+
+    tools::Rectangle getBounds(size_t nIndex)
+    {
+        if (nIndex >= m_aRelRects.size())
+            return tools::Rectangle();
+
+        tools::Rectangle aBounds = m_aRelRects[nIndex];
+        aBounds.Move(m_aRefPoint.X(), m_aRefPoint.Y());
+        return aBounds;
+    }
+
+};
+
 /// A view callback tracks callbacks invoked on one specific view.
 class ViewCallback final
 {
@@ -499,6 +573,7 @@ public:
     OString m_sCellFormula;
     boost::property_tree::ptree m_aCommentCallbackResult;
     EditCursorMessage m_aInvalidateCursorResult;
+    TextSelectionMessage m_aTextSelectionResult;
     OString m_sInvalidateHeader;
     OString m_sInvalidateSheetGeometry;
     OString m_ShapeSelection;
@@ -629,6 +704,11 @@ public:
         case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
         {
             m_aInvalidateCursorResult.parseMessage(pPayload);
+        }
+        break;
+        case LOK_CALLBACK_TEXT_SELECTION:
+        {
+            m_aTextSelectionResult.parseMessage(pPayload);
         }
         }
     }
@@ -2695,6 +2775,56 @@ void ScTiledRenderingTest::testEditCursorBounds()
     CPPUNIT_ASSERT(!aView.m_aInvalidateCursorResult.empty());
     CPPUNIT_ASSERT_MESSAGE("Edit cursor must be in cell bounds!",
         aCellBounds.IsInside(aView.m_aInvalidateCursorResult.getBounds()));
+
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
+}
+
+void ScTiledRenderingTest::testTextSelectionBounds()
+{
+    comphelper::LibreOfficeKit::setActive();
+    comphelper::LibreOfficeKit::setCompatFlag(
+        comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+
+    ViewCallback aView;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView);
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+    comphelper::LibreOfficeKit::setViewIdForVisCursorInvalidation(true);
+
+    // ~170% zoom.
+    pModelObj->setClientZoom(256, 256, 2222, 2222);
+    pModelObj->setClientVisibleArea(tools::Rectangle(7725, 379832, 16240, 6449));
+    Scheduler::ProcessEventsToIdle();
+
+    constexpr SCCOL nCol = 5;
+    constexpr SCROW nRow = 2048;
+    pDoc->SetValue(ScAddress(nCol, nRow, 0), 123);
+
+    aView.m_bOwnCursorInvalidated = false;
+    // Obtain the cell bounds via cursor.
+    pView->SetCursor(nCol, nRow);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(aView.m_bOwnCursorInvalidated);
+    CPPUNIT_ASSERT(!aView.m_aCellCursorBounds.IsEmpty());
+    tools::Rectangle aCellBounds(aView.m_aCellCursorBounds);
+
+    aView.m_aTextSelectionResult.clear();
+    // Enter edit mode in the same cell and select all text.
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::F2);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::F2);
+    Scheduler::ProcessEventsToIdle();
+
+    // CTRL + A
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | awt::Key::A);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_MOD1 | awt::Key::A);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(!aView.m_aTextSelectionResult.empty());
+    CPPUNIT_ASSERT_MESSAGE("Text selections must be in cell bounds!",
+        !aCellBounds.Intersection(aView.m_aTextSelectionResult.getBounds(0)).IsEmpty());
 
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
