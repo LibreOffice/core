@@ -450,7 +450,7 @@ static void lcl_ConvertSdrOle2ObjsToSdrGrafObjs(SwDoc& _rDoc)
             pOle2Obj->Disconnect();
 
             // create new graphic shape with the ole graphic and shape size
-            SdrGrafObj* pGraphicObj = new SdrGrafObj(
+            rtl::Reference<SdrGrafObj> pGraphicObj = new SdrGrafObj(
                 pOle2Obj->getSdrModelFromSdrObject(),
                 aGraphic,
                 pOle2Obj->GetCurrentBoundRect());
@@ -459,8 +459,7 @@ static void lcl_ConvertSdrOle2ObjsToSdrGrafObjs(SwDoc& _rDoc)
             pGraphicObj->SetLayer( pOle2Obj->GetLayer() );
 
             // replace ole2 shape with the new graphic object and delete the ol2 shape
-            SdrObject* pReplaced = pObjList->ReplaceObject( pGraphicObj, pOle2Obj->GetOrdNum() );
-            SdrObject::Free( pReplaced );
+            pObjList->ReplaceObject( pGraphicObj.get(), pOle2Obj->GetOrdNum() );
         }
     }
 }

@@ -524,12 +524,12 @@ public:
             if (!pMasterPage)
                 continue;
 
-            SdrRectObj* pObject = new SdrRectObj(
+            rtl::Reference<SdrRectObj> pObject = new SdrRectObj(
                 *m_rDrawViewShell.GetDoc(), // TTTT should be reference
                 SdrObjKind::Text);
             pObject->SetMergedItem(makeSdrTextAutoGrowWidthItem(true));
             pObject->SetOutlinerParaObject(pOutliner->CreateParaObject());
-            pMasterPage->InsertObject(pObject);
+            pMasterPage->InsertObject(pObject.get());
 
             // Calculate position
             ::tools::Rectangle aRectangle(Point(), pMasterPage->GetSize());
@@ -1202,7 +1202,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 }
 
                 // create new object
-                SdrGrafObj* pGraphicObj = new SdrGrafObj(
+                rtl::Reference<SdrGrafObj> pGraphicObj = new SdrGrafObj(
                     *GetDoc(),
                     aGraphic);
 
@@ -1237,7 +1237,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 pGraphicObj->SetLayer(pReplacementCandidate->GetLayer());
 
                 // now replace lowest object with new one
-                mpDrawView->ReplaceObjectAtView(pReplacementCandidate, *pPageView, pGraphicObj);
+                mpDrawView->ReplaceObjectAtView(pReplacementCandidate, *pPageView, pGraphicObj.get());
 
                 // switch off undo
                 mpDrawView->EndUndo();
@@ -1456,7 +1456,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         GraphicObject aGraphicObject( pGraphicObj->GetGraphicObject() );
                         m_ExternalEdits.push_back(
                             std::make_unique<SdrExternalToolEdit>(
-                                mpDrawView.get(), pObj));
+                                mpDrawView.get(), pGraphicObj));
                         m_ExternalEdits.back()->Edit( &aGraphicObject );
                     }
             }
@@ -1478,11 +1478,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         CompressGraphicsDialog dialog(GetFrameWeld(), pGraphicObj, GetViewFrame()->GetBindings() );
                         if (dialog.run() == RET_OK)
                         {
-                            SdrGrafObj* pNewObject = dialog.GetCompressedSdrGrafObj();
+                            rtl::Reference<SdrGrafObj> pNewObject = dialog.GetCompressedSdrGrafObj();
                             SdrPageView* pPageView = mpDrawView->GetSdrPageView();
                             OUString aUndoString = mpDrawView->GetDescriptionOfMarkedObjects() + " Compress";
                             mpDrawView->BegUndo( aUndoString );
-                            mpDrawView->ReplaceObjectAtView( pObj, *pPageView, pNewObject );
+                            mpDrawView->ReplaceObjectAtView( pObj, *pPageView, pNewObject.get() );
                             mpDrawView->EndUndo();
                         }
                     }
@@ -2533,7 +2533,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 pOutl->QuickInsertField( *pFieldItem, ESelection() );
                 std::optional<OutlinerParaObject> pOutlParaObject = pOutl->CreateParaObject();
 
-                SdrRectObj* pRectObj = new SdrRectObj(
+                rtl::Reference<SdrRectObj> pRectObj = new SdrRectObj(
                     *GetDoc(),
                     SdrObjKind::Text);
                 pRectObj->SetMergedItem(makeSdrTextAutoGrowWidthItem(true));
@@ -2554,7 +2554,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 ::tools::Rectangle aLogicRect(aPos, aSize);
                 pRectObj->SetLogicRect(aLogicRect);
                 pRectObj->SetOutlinerParaObject( std::move(pOutlParaObject) );
-                mpDrawView->InsertObjectAtView(pRectObj, *mpDrawView->GetSdrPageView());
+                mpDrawView->InsertObjectAtView(pRectObj.get(), *mpDrawView->GetSdrPageView());
                 pOutl->Init( nOutlMode );
             }
 
