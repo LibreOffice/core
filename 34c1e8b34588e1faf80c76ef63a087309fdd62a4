@@ -52,6 +52,24 @@
       "revId": "34c1e8b34588e1faf80c76ef63a087309fdd62a4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d5b33bae_8703268a",
+        "filename": "emfio/qa/cppunit/emf/EmfImportTest.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 520,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2021-05-27T09:44:49Z",
+      "side": 1,
+      "message": "Without `/mask/` and with `if (!IsDefaultDPI())` it is failing on my Ubuntu 20.04",
+      "parentUuid": "88fd947b_d8545ad8",
+      "revId": "34c1e8b34588e1faf80c76ef63a087309fdd62a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
