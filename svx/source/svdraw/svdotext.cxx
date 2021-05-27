@@ -602,10 +602,9 @@ void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, tools::Rectangle 
         if(bShadowOn)
         {
             // force shadow off
-            SdrObject* pCopy(CloneSdrObject(getSdrModelFromSdrObject()));
+            rtl::Reference<SdrTextObj> pCopy = SdrObject::Clone(*this, getSdrModelFromSdrObject());
             pCopy->SetMergedItem(makeSdrShadowItem(false));
             *pContourPolyPolygon = pCopy->TakeContour();
-            SdrObject::Free( pCopy );
         }
         else
         {
@@ -1068,7 +1067,7 @@ OUString SdrTextObj::TakeObjNamePlural() const
     return sName;
 }
 
-SdrTextObj* SdrTextObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> SdrTextObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
     return new SdrTextObj(rTargetModel, *this);
 }
@@ -2047,9 +2046,9 @@ bool SdrTextObj::GetPreventChainable() const
     return mbIsUnchainableClone || (GetNextLinkInChain() && GetNextLinkInChain()->IsInEditMode());
 }
 
-SdrObjectUniquePtr SdrTextObj::getFullDragClone() const
+rtl::Reference<SdrObject> SdrTextObj::getFullDragClone() const
 {
-    SdrObjectUniquePtr pClone = SdrAttrObj::getFullDragClone();
+    rtl::Reference<SdrObject> pClone = SdrAttrObj::getFullDragClone();
     SdrTextObj *pTextObjClone = dynamic_cast<SdrTextObj *>(pClone.get());
     if (pTextObjClone != nullptr) {
         // Avoid transferring of text for chainable object during dragging

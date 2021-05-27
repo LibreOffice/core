@@ -39,7 +39,7 @@ public:
     MotionPathTag( CustomAnimationPane& rPane, ::sd::View& rView, const CustomAnimationEffectPtr& pEffect );
     virtual ~MotionPathTag() override;
 
-    SdrPathObj* getPathObj() const { return mpPathObj; }
+    SdrPathObj* getPathObj() const { return mpPathObj.get(); }
 
     /// @return true if the SmartTag handled the event.
     virtual bool MouseButtonDown( const MouseEvent&, SmartHdl& ) override;
@@ -102,7 +102,7 @@ private:
     CustomAnimationEffectPtr mpEffect;
     ::basegfx::B2DPolyPolygon mxPolyPoly;
     css::uno::Reference< css::drawing::XShape > mxOrigin;
-    SdrPathObj* mpPathObj;
+    rtl::Reference<SdrPathObj> mpPathObj;
     css::awt::Point maOriginPos;
     std::unique_ptr<SdrMark> mpMark;
     OUString msLastPath;
