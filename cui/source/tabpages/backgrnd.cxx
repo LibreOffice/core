@@ -153,8 +153,8 @@ bool SvxBkgTabPage::FillItemSet( SfxItemSet* rCoreSet )
             {
                 if ( SID_ATTR_CHAR_BACK_COLOR == nSlot )
                 {
-                    maSet.Put( SvxBackgroundColorItem( COL_TRANSPARENT, nWhich ) );
-                    rCoreSet->Put( SvxBackgroundColorItem( COL_TRANSPARENT, nWhich ) );
+                    maSet.Put( SvxColorItem( COL_TRANSPARENT, nWhich ) );
+                    rCoreSet->Put( SvxColorItem( COL_TRANSPARENT, nWhich ) );
                 }
                 else
                 {
@@ -169,8 +169,8 @@ bool SvxBkgTabPage::FillItemSet( SfxItemSet* rCoreSet )
             XFillColorItem aColorItem( maSet.Get( XATTR_FILLCOLOR ) );
             if ( SID_ATTR_CHAR_BACK_COLOR == nSlot )
             {
-                maSet.Put( SvxBackgroundColorItem( aColorItem.GetColorValue(), nWhich ) );
-                rCoreSet->Put( SvxBackgroundColorItem( aColorItem.GetColorValue(), nWhich ) );
+                maSet.Put( SvxColorItem( aColorItem.GetColorValue(), nWhich ) );
+                rCoreSet->Put( SvxColorItem( aColorItem.GetColorValue(), nWhich ) );
             }
             else
             {
@@ -263,7 +263,7 @@ void SvxBkgTabPage::PageCreated(const SfxAllItemSet& aSet)
     if ( bCharBackColor )
     {
         sal_uInt16 nWhich(maSet.GetPool()->GetWhich(SID_ATTR_CHAR_BACK_COLOR));
-        Color aBackColor(static_cast<const SvxBackgroundColorItem&>(maSet.Get(nWhich)).GetValue());
+        Color aBackColor(static_cast<const SvxColorItem&>(maSet.Get(nWhich)).GetValue());
         SvxBrushItem aBrushItem(SvxBrushItem(aBackColor, SID_ATTR_BRUSH_CHAR));
         setSvxBrushItemAsFillAttributesToTargetSet(aBrushItem, maSet);
     }

@@ -352,7 +352,7 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sa
         break;
         case EE_CHAR_BKGCOLOR:
         {
-            pNew = new EditCharAttribBackgroundColor( static_cast<const SvxBackgroundColorItem&>(rNew), nS, nE );
+            pNew = new EditCharAttribBackgroundColor( static_cast<const SvxColorItem&>(rNew), nS, nE );
         }
         break;
         default:
