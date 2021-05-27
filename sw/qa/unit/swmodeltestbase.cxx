@@ -623,10 +623,13 @@ void SwModelTestBase::save(const OUString& aFilterName, utl::TempFile& rTempFile
     if (!maFilterOptions.isEmpty())
         aMediaDescriptor["FilterOptions"] <<= maFilterOptions;
     xStorable->storeToURL(rTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-    // TODO: for now, validate only ODF here
     if (aFilterName == "writer8" || aFilterName == "OpenDocument Text Flat XML")
     {
         validate(rTempFile.GetFileName(), test::ODF);
+    }
+    else if (aFilterName == "Office Open XML Text")
+    {
+        validate(rTempFile.GetFileName(), test::OOXML);
     }
 }
 
