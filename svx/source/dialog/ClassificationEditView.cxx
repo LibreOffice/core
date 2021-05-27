@@ -61,16 +61,16 @@ void ClassificationEditView::InvertSelectionWeight()
     {
         FontWeight eFontWeight = WEIGHT_BOLD;
 
-        std::unique_ptr<SfxItemSet> pSet(new SfxItemSet(m_xEditEngine->GetParaAttribs(nParagraph)));
-        if (const SfxPoolItem* pItem = pSet->GetItem(EE_CHAR_WEIGHT, false))
+        SfxItemSet aSet(m_xEditEngine->GetParaAttribs(nParagraph));
+        if (const SfxPoolItem* pItem = aSet.GetItem(EE_CHAR_WEIGHT, false))
         {
             const SvxWeightItem* pWeightItem = dynamic_cast<const SvxWeightItem*>(pItem);
             if (pWeightItem && pWeightItem->GetWeight() == WEIGHT_BOLD)
                 eFontWeight = WEIGHT_NORMAL;
         }
         SvxWeightItem aWeight(eFontWeight, EE_CHAR_WEIGHT);
-        pSet->Put(aWeight);
-        m_xEditEngine->SetParaAttribs(nParagraph, *pSet);
+        aSet.Put(aWeight);
+        m_xEditEngine->SetParaAttribs(nParagraph, aSet);
     }
 
     m_xEditView->Invalidate();

@@ -1393,7 +1393,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
     const ScPatternAttr*    pAttrs      = pTabViewShell->GetSelectionPattern();
     const SfxItemSet*       pSet        = rReq.GetArgs();
     sal_uInt16                  nSlot       = rReq.GetSlot();
-    std::unique_ptr<SfxAllItemSet> pNewSet;
+    std::optional<SfxAllItemSet> pNewSet;
 
     pTabViewShell->HideListBox();                   // Autofilter-DropDown-Listbox
 
@@ -1405,7 +1405,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
         ||(nSlot == SID_ULINE_VAL_DOUBLE)
         ||(nSlot == SID_ULINE_VAL_DOTTED) )
     {
-        pNewSet.reset(new SfxAllItemSet( GetPool() ));
+        pNewSet.emplace( GetPool() );
 
         switch ( nSlot )
         {
@@ -1897,16 +1897,12 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                 {
                     ::editeng::SvxBorderLine*          pDefLine = pTabViewShell->GetDefaultFrameLine();
                     const ScPatternAttr*    pOldAttrs = pTabViewShell->GetSelectionPattern();
-                    std::unique_ptr<SfxItemSet> pOldSet(
-                                                new SfxItemSet(
-                                                        *rDoc.GetPool(),
-                                                        svl::Items<ATTR_PATTERN_START,
-                                                        ATTR_PATTERN_END>{} ));
-                    std::unique_ptr<SfxItemSet> pNewSet(
-                                                new SfxItemSet(
-                                                        *rDoc.GetPool(),
-                                                        svl::Items<ATTR_PATTERN_START,
-                                                        ATTR_PATTERN_END>{} ));
+                    SfxItemSet aOldSet( *rDoc.GetPool(),
+                                        svl::Items<ATTR_PATTERN_START,
+                                                    ATTR_PATTERN_END>{} );
+                    SfxItemSet aNewSet( *rDoc.GetPool(),
+                                        svl::Items<ATTR_PATTERN_START,
+                                                    ATTR_PATTERN_END>{} );
                     const SfxPoolItem&      rBorderAttr =
                                                 pOldAttrs->GetItemSet().
                                                     Get( ATTR_BORDER );
@@ -1931,7 +1927,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                             aBoxItem.SetLine( pDefLine, SvxBoxItemLine::LEFT );
                         if ( aBoxItem.GetRight() && aBoxItem.GetRight()->GetOutWidth() == 0 )
                             aBoxItem.SetLine( pDefLine, SvxBoxItemLine::RIGHT );
-                        pNewSet->Put( aBoxItem );
+                        aNewSet.Put( aBoxItem );
                         rReq.AppendItem( aBoxItem );
                     }
 
@@ -1943,7 +1939,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                             aBoxInfoItem.SetLine( pDefLine, SvxBoxInfoItemLine::HORI );
                         if ( aBoxInfoItem.GetVert() && aBoxInfoItem.GetVert()->GetOutWidth() == 0 )
                             aBoxInfoItem.SetLine( pDefLine, SvxBoxInfoItemLine::VERT );
-                        pNewSet->Put( aBoxInfoItem );
+                        aNewSet.Put( aBoxInfoItem );
                         rReq.AppendItem( aBoxInfoItem );
                     }
                     else
@@ -1951,11 +1947,11 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                         SvxBoxInfoItem aBoxInfoItem( ATTR_BORDER_INNER );
                         aBoxInfoItem.SetLine( nullptr, SvxBoxInfoItemLine::HORI );
                         aBoxInfoItem.SetLine( nullptr, SvxBoxInfoItemLine::VERT );
-                        pNewSet->Put( aBoxInfoItem );
+                        aNewSet.Put( aBoxInfoItem );
                     }
 
-                    pOldSet->Put( rBorderAttr );
-                    pTabViewShell->ApplyAttributes( pNewSet.get(), pOldSet.get() );
+                    aOldSet.Put( rBorderAttr );
+                    pTabViewShell->ApplyAttributes( &aNewSet, &aOldSet );
                 }
                 break;
 
@@ -1963,8 +1959,8 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
             case SID_ATTR_BORDER_DIAG_BLTR:
                 {
                     const ScPatternAttr* pOldAttrs = pTabViewShell->GetSelectionPattern();
-                    std::unique_ptr<SfxItemSet> pOldSet(new SfxItemSet(pOldAttrs->GetItemSet()));
-                    std::unique_ptr<SfxItemSet> pNewSet(new SfxItemSet(pOldAttrs->GetItemSet()));
+                    SfxItemSet aOldSet(pOldAttrs->GetItemSet());
+                    SfxItemSet aNewSet(pOldAttrs->GetItemSet());
                     const SfxPoolItem* pItem = nullptr;
 
                     if(SID_ATTR_BORDER_DIAG_TLBR == nSlot)
@@ -1973,9 +1969,9 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                         {
                             SvxLineItem aItem(ATTR_BORDER_TLBR);
                             aItem.SetLine(pNewAttrs->Get(ATTR_BORDER_TLBR).GetLine());
-                            pNewSet->Put(aItem);
+                            aNewSet.Put(aItem);
                             rReq.AppendItem(aItem);
-                            pTabViewShell->ApplyAttributes(pNewSet.get(), pOldSet.get());
+                            pTabViewShell->ApplyAttributes(&aNewSet, &aOldSet);
                         }
                     }
                     else // if( nSlot == SID_ATTR_BORDER_DIAG_BLTR )
@@ -1984,9 +1980,9 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                         {
                             SvxLineItem aItem(ATTR_BORDER_BLTR);
                             aItem.SetLine(pNewAttrs->Get(ATTR_BORDER_BLTR).GetLine());
-                            pNewSet->Put(aItem);
+                            aNewSet.Put(aItem);
                             rReq.AppendItem(aItem);
-                            pTabViewShell->ApplyAttributes(pNewSet.get(), pOldSet.get());
+                            pTabViewShell->ApplyAttributes(&aNewSet, &aOldSet);
                         }
                     }
 

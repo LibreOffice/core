@@ -733,11 +733,11 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
     bool bSuccess = false;
     try
     {
-        ::std::unique_ptr<SfxItemSet> pDescriptor( new SfxItemSet( *pPool, pRanges ) );
-        lcl_CharPropertiesToItems( _rxReportControlFormat, *pDescriptor );
+        SfxItemSet aDescriptor( *pPool, pRanges );
+        lcl_CharPropertiesToItems( _rxReportControlFormat, aDescriptor );
 
         {   // want the dialog to be destroyed before our set
-            ORptPageDialog aDlg(Application::GetFrameWeld(_rxParentWindow), pDescriptor.get(), "CharDialog");
+            ORptPageDialog aDlg(Application::GetFrameWeld(_rxParentWindow), &aDescriptor, "CharDialog");
             uno::Reference< report::XShape > xShape( _rxReportControlFormat, uno::UNO_QUERY );
             if ( xShape.is() )
                 aDlg.RemoveTabPage("background");
@@ -776,12 +776,12 @@ bool openAreaDialog( const uno::Reference<report::XShape >& _xShape,const uno::R
     try
     {
         SfxItemPool& rItemPool = pModel->GetItemPool();
-        ::std::unique_ptr<SfxItemSet> pDescriptor( new SfxItemSet( rItemPool, {{rItemPool.GetFirstWhich(),rItemPool.GetLastWhich()}} ) );
-        lcl_fillShapeToItems(_xShape,*pDescriptor);
+        SfxItemSet aDescriptor( rItemPool, {{rItemPool.GetFirstWhich(),rItemPool.GetLastWhich()}} );
+        lcl_fillShapeToItems(_xShape, aDescriptor);
 
         {   // want the dialog to be destroyed before our set
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            ScopedVclPtr<AbstractSvxAreaTabDialog> pDialog(pFact->CreateSvxAreaTabDialog(pParent, pDescriptor.get(), pModel.get(), true));
+            ScopedVclPtr<AbstractSvxAreaTabDialog> pDialog(pFact->CreateSvxAreaTabDialog(pParent, &aDescriptor, pModel.get(), true));
             if ( RET_OK == pDialog->Execute() )
             {
                 bSuccess = true;

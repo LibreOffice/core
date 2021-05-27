@@ -1617,7 +1617,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
             [](const beans::PropertyValue& rProp) { return rProp.Name != "CheckIn"; });
     }
 
-    std::unique_ptr<SfxAllItemSet> pParams(new SfxAllItemSet( SfxGetpApp()->GetPool() ));
+    std::optional<SfxAllItemSet> pParams(SfxGetpApp()->GetPool() );
     TransformParameters( nSlotId, aArgs, *pParams );
 
     SfxGetpApp()->NotifyEvent( SfxEventHint( SfxEventHintId::SaveDoc, GlobalEventConfig::GetEventName(GlobalEventId::SAVEDOC), m_pData->m_pObjectShell.get() ) );
@@ -1639,7 +1639,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
         }
         else
         {
-            bRet = m_pData->m_pObjectShell->Save_Impl( pParams.get() );
+            bRet = m_pData->m_pObjectShell->Save_Impl( &*pParams );
         }
     }
     else
@@ -1648,9 +1648,9 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
         m_pData->m_pObjectShell->GetMedium( )->SetInCheckIn( nSlotId == SID_CHECKIN );
         if (bOnMainThread)
             bRet = vcl::solarthread::syncExecute(
-                [this, &pParams] { return m_pData->m_pObjectShell->Save_Impl(pParams.get()); });
+                [this, &pParams] { return m_pData->m_pObjectShell->Save_Impl(&*pParams); });
         else
-            bRet = m_pData->m_pObjectShell->Save_Impl(pParams.get());
+            bRet = m_pData->m_pObjectShell->Save_Impl(&*pParams);
         m_pData->m_pObjectShell->GetMedium( )->SetInCheckIn( nSlotId != SID_CHECKIN );
     }
 
@@ -3056,7 +3056,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
     SfxGetpApp()->NotifyEvent( SfxEventHint( bSaveTo ? SfxEventHintId::SaveToDoc : SfxEventHintId::SaveAsDoc, GlobalEventConfig::GetEventName( bSaveTo ? GlobalEventId::SAVETODOC : GlobalEventId::SAVEASDOC ),
                                             m_pData->m_pObjectShell.get() ) );
 
-    std::unique_ptr<SfxAllItemSet> pItemSet(new SfxAllItemSet(SfxGetpApp()->GetPool()));
+    std::optional<SfxAllItemSet> pItemSet(SfxGetpApp()->GetPool());
     pItemSet->Put(SfxStringItem(SID_FILE_NAME, sURL));
     if ( bSaveTo )
         pItemSet->Put(SfxBoolItem(SID_SAVETO, true));

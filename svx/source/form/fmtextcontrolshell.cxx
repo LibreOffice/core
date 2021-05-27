@@ -623,10 +623,10 @@ namespace svx
 
         rtl::Reference<SfxItemPool> pPool(EditEngine::CreatePool());
         pPool->FreezeIdRanges();
-        std::unique_ptr< SfxItemSet > xPureItems( new SfxItemSet( *pPool ) );
+        std::optional< SfxItemSet > xPureItems(( SfxItemSet( *pPool ) ));
 
         // put the current states of the items into the set
-        std::unique_ptr<SfxAllItemSet> xCurrentItems( new SfxAllItemSet( *xPureItems ) );
+        std::optional<SfxAllItemSet> xCurrentItems(( SfxAllItemSet( *xPureItems ) ));
         transferFeatureStatesToItemSet( m_aControlFeatures, *xCurrentItems, false );
 
         // additional items, which we are not responsible for at the SfxShell level,

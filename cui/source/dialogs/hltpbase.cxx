@@ -341,14 +341,14 @@ IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, weld::Button&, voi
         aItem.SetMacroTable( *pMacroTbl );
 
     // create empty itemset for macro-dlg
-    std::unique_ptr<SfxItemSet> pItemSet( new SfxItemSet(SfxGetpApp()->GetPool(),
-                                          svl::Items<SID_ATTR_MACROITEM,
-                                          SID_ATTR_MACROITEM>{} ) );
-    pItemSet->Put ( aItem );
+    SfxItemSet aItemSet( SfxGetpApp()->GetPool(),
+                         svl::Items<SID_ATTR_MACROITEM,
+                                    SID_ATTR_MACROITEM>{} );
+    aItemSet.Put ( aItem );
 
     DisableClose( true );
 
-    SfxMacroAssignDlg aDlg(mpDialog->getDialog(), mxDocumentFrame, *pItemSet);
+    SfxMacroAssignDlg aDlg(mpDialog->getDialog(), mxDocumentFrame, aItemSet);
 
     // add events
     SfxMacroTabPage *pMacroPage = aDlg.GetTabPage();

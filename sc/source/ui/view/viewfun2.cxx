@@ -3332,14 +3332,12 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
     // none of the lines don't care?
     if( (eItemState != SfxItemState::DONTCARE) && (eTLBRState != SfxItemState::DONTCARE) && (eBLTRState != SfxItemState::DONTCARE) )
     {
-        std::unique_ptr<SfxItemSet> pOldSet(new SfxItemSet(
-                                        *rDoc.GetPool(),
-                                        svl::Items<ATTR_PATTERN_START,
-                                        ATTR_PATTERN_END>{} ));
-        std::unique_ptr<SfxItemSet> pNewSet(new SfxItemSet(
-                                        *rDoc.GetPool(),
-                                        svl::Items<ATTR_PATTERN_START,
-                                        ATTR_PATTERN_END>{} ));
+        SfxItemSet aOldSet( *rDoc.GetPool(),
+                            svl::Items<ATTR_PATTERN_START,
+                                        ATTR_PATTERN_END>{} );
+        SfxItemSet aNewSet(*rDoc.GetPool(),
+                            svl::Items<ATTR_PATTERN_START,
+                                        ATTR_PATTERN_END>{} );
 
         SvxBorderLine           aLine;
 
@@ -3359,9 +3357,9 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
             aBoxInfoItem.SetLine( aBoxItem.GetLeft(), SvxBoxInfoItemLine::VERT );
             aBoxInfoItem.ResetFlags(); // set Lines to Valid
 
-            pOldSet->Put( *pBorderAttr );
-            pNewSet->Put( aBoxItem );
-            pNewSet->Put( aBoxInfoItem );
+            aOldSet.Put( *pBorderAttr );
+            aNewSet.Put( aBoxItem );
+            aNewSet.Put( aBoxInfoItem );
         }
 
         if( pTLBRItem && static_cast<const SvxLineItem*>(pTLBRItem)->GetLine() )
@@ -3369,8 +3367,8 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
             SvxLineItem aTLBRItem( *static_cast<const SvxLineItem*>(pTLBRItem) );
             UpdateLineAttrs( aLine, aTLBRItem.GetLine(), pLine, bColorOnly );
             aTLBRItem.SetLine( &aLine );
-            pOldSet->Put( *pTLBRItem );
-            pNewSet->Put( aTLBRItem );
+            aOldSet.Put( *pTLBRItem );
+            aNewSet.Put( aTLBRItem );
         }
 
         if( pBLTRItem && static_cast<const SvxLineItem*>(pBLTRItem)->GetLine() )
@@ -3378,11 +3376,11 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
             SvxLineItem aBLTRItem( *static_cast<const SvxLineItem*>(pBLTRItem) );
             UpdateLineAttrs( aLine, aBLTRItem.GetLine(), pLine, bColorOnly );
             aBLTRItem.SetLine( &aLine );
-            pOldSet->Put( *pBLTRItem );
-            pNewSet->Put( aBLTRItem );
+            aOldSet.Put( *pBLTRItem );
+            aNewSet.Put( aBLTRItem );
         }
 
-        ApplyAttributes( pNewSet.get(), pOldSet.get() );
+        ApplyAttributes( &aNewSet, &aOldSet );
     }
     else // if ( eItemState == SfxItemState::DONTCARE )
     {

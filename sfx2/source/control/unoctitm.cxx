@@ -730,12 +730,12 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
                     }
 
                     eMapUnit = GetCoreMetric( pShell->GetPool(), GetId() );
-                    std::unique_ptr<SfxAllItemSet> xSet(new SfxAllItemSet(pShell->GetPool()));
+                    std::optional<SfxAllItemSet> xSet(pShell->GetPool());
                     TransformParameters(GetId(), lNewArgs, *xSet, pSlot);
                     if (xSet->Count())
                     {
                         // execute with arguments - call directly
-                        pItem = pDispatcher->Execute(GetId(), nCall, xSet.get(), &aInternalSet, nModifier);
+                        pItem = pDispatcher->Execute(GetId(), nCall, &*xSet, &aInternalSet, nModifier);
                         if ( pItem != nullptr )
                         {
                             if (const SfxBoolItem* pBoolItem = dynamic_cast<const SfxBoolItem*>(pItem))
