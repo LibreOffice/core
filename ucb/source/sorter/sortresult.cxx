@@ -1619,12 +1619,12 @@ void SortedResultSet::ResortModified( EventList* pList )
 
                     m_O2S[pData->mnCurPos] = nNewPos;
 
-                    std::unique_ptr<ListAction> pAction(new ListAction);
-                    pAction->Position = nCurPos;
-                    pAction->Count = 1;
-                    pAction->ListActionType = ListActionType::MOVED;
-                    pAction->ActionInfo <<= nNewPos-nCurPos;
-                    pList->Insert( std::move(pAction) );
+                    ListAction aAction;
+                    aAction.Position = nCurPos;
+                    aAction.Count = 1;
+                    aAction.ListActionType = ListActionType::MOVED;
+                    aAction.ActionInfo <<= nNewPos-nCurPos;
+                    pList->Insert( aAction );
                 }
                 pList->AddEvent( ListActionType::PROPERTIES_CHANGED, nNewPos );
             }

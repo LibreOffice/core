@@ -306,13 +306,13 @@ void SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
                         aWelcome.Old = mxTwo.get();
                         aWelcome.New = mxOne.get();
 
-                        std::unique_ptr<ListAction> pWelcomeAction(new ListAction);
-                        pWelcomeAction->ActionInfo <<= aWelcome;
-                        pWelcomeAction->Position = 0;
-                        pWelcomeAction->Count = 0;
-                        pWelcomeAction->ListActionType = ListActionType::WELCOME;
+                        ListAction aWelcomeAction;
+                        aWelcomeAction.ActionInfo <<= aWelcome;
+                        aWelcomeAction.Position = 0;
+                        aWelcomeAction.Count = 0;
+                        aWelcomeAction.ListActionType = ListActionType::WELCOME;
 
-                        maActions.Insert( std::move(pWelcomeAction) );
+                        maActions.Insert( aWelcomeAction );
                     }
                     else
                     {
@@ -388,7 +388,7 @@ void SortedDynamicResultSet::SendNotify()
 
         for ( sal_Int32 i=0; i<nCount; i++ )
         {
-            pActionList[ i ] = *(maActions.GetAction( i ));
+            pActionList[ i ] = maActions.GetAction( i );
         }
 
         ListEvent aNewEvent;
@@ -461,12 +461,12 @@ void EventList::Clear()
 
 void EventList::AddEvent( sal_IntPtr nType, sal_Int32 nPos )
 {
-    std::unique_ptr<ListAction> pAction(new ListAction);
-    pAction->Position = nPos;
-    pAction->Count = 1;
-    pAction->ListActionType = nType;
+    ListAction aAction;
+    aAction.Position = nPos;
+    aAction.Count = 1;
+    aAction.ListActionType = nType;
 
-    Insert( std::move(pAction) );
+    Insert( aAction );
 }
 
 // SortedDynamicResultSetListener
