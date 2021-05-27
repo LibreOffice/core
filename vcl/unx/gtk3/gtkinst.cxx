@@ -3911,7 +3911,7 @@ namespace
         if (!sStock.isEmpty())
             return load_icon_by_name(sStock);
 
-        std::unique_ptr<SvMemoryStream> xMemStm(new SvMemoryStream);
+        SvMemoryStream aMemStm;
 
         css::uno::Sequence<css::beans::PropertyValue> aFilterData(1);
         aFilterData[0].Name = "Compression";
@@ -3919,9 +3919,9 @@ namespace
         aFilterData[0].Value <<= sal_Int32(1);
 
         vcl::PNGWriter aWriter(aImage.GetBitmapEx(), &aFilterData);
-        aWriter.Write(*xMemStm);
+        aWriter.Write(aMemStm);
 
-        return load_icon_from_stream(*xMemStm);
+        return load_icon_from_stream(aMemStm);
     }
 
     GdkPixbuf* getPixbuf(const VirtualDevice& rDevice)
