@@ -2567,8 +2567,7 @@ void SdTiledRenderingTest::testRegenerateDiagram()
     // as the group shape is a diagram. Do the same as before done by triggering UI
     // events directly in the model
     // Remove and free top-left entry (Box showing "A")
-    SdrObject* pTopLeftRemoved = pActualPage->GetObj(0)->GetSubList()->RemoveObject(1);
-    SdrObject::Free(pTopLeftRemoved);
+    pActualPage->GetObj(0)->GetSubList()->RemoveObject(1);
 
     // select diagram
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);

@@ -60,12 +60,12 @@ void ScTabViewShell::InsertURLButton( const OUString& rName, const OUString& rUR
     ScDrawView* pDrView = pView->GetScDrawView();
     SdrModel*   pModel  = pDrView->GetModel();
 
-    SdrObject* pObj = SdrObjFactory::MakeNewObject(
+    rtl::Reference<SdrObject> pObj = SdrObjFactory::MakeNewObject(
         *pModel,
         SdrInventor::FmForm,
         SdrObjKind::FormButton);
 
-    SdrUnoObj* pUnoCtrl = dynamic_cast<SdrUnoObj*>( pObj );
+    SdrUnoObj* pUnoCtrl = dynamic_cast<SdrUnoObj*>( pObj.get() );
     OSL_ENSURE( pUnoCtrl, "no SdrUnoObj");
     if( !pUnoCtrl )
         return;
@@ -114,7 +114,7 @@ void ScTabViewShell::InsertURLButton( const OUString& rName, const OUString& rUR
     // that seems not to be needed with UnoControls
 
     // do not mark when Ole
-    pDrView->InsertObjectSafe( pObj, *pDrView->GetSdrPageView() );
+    pDrView->InsertObjectSafe( pObj.get(), *pDrView->GetSdrPageView() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

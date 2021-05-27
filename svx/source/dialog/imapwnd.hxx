@@ -104,7 +104,7 @@ class IMapWindow final : public GraphCtrl
 
     void                ReplaceImageMap( const ImageMap& rNewImageMap );
 
-    SdrObject*          CreateObj( const IMapObject* pIMapObj );
+    rtl::Reference<SdrObject> CreateObj( const IMapObject* pIMapObj );
     static IMapObject*  GetIMapObj( const SdrObject* pSdrObj );
     SdrObject*          GetHitSdrObj( const Point& rPosPixel ) const;
 

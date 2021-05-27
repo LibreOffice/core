@@ -34,7 +34,7 @@
 
 void E3dView::ConvertMarkedToPolyObj()
 {
-    SdrObject* pNewObj = nullptr;
+    rtl::Reference<SdrObject> pNewObj;
 
     if (GetMarkedObjectCount() == 1)
     {
@@ -45,11 +45,11 @@ void E3dView::ConvertMarkedToPolyObj()
             auto pScene = dynamic_cast< const E3dScene* >(pObj);
             if (pScene)
             {
-                pNewObj = pScene->ConvertToPolyObj(false/*bBezier*/, false/*bLineToArea*/).release();
+                pNewObj = pScene->ConvertToPolyObj(false/*bBezier*/, false/*bLineToArea*/);
                 if (pNewObj)
                 {
                     BegUndo(SvxResId(RID_SVX_3D_UNDO_EXTRUDE));
-                    ReplaceObjectAtView(pObj, *GetSdrPageView(), pNewObj);
+                    ReplaceObjectAtView(pObj, *GetSdrPageView(), pNewObj.get());
                     EndUndo();
                 }
             }
