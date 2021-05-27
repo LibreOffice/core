@@ -48,6 +48,7 @@
 #include <svx/unomodel.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/SvxXTextColumns.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/xmlgrhlp.hxx>
 
@@ -181,6 +182,10 @@ css::uno::Reference<css::uno::XInterface> create(
         rtl::Reference<SvXMLGraphicHelper> pGraphicHelper = SvXMLGraphicHelper::Create( SvXMLGraphicHelperMode::Read );
         uno::Reference< uno::XInterface> xRet( static_cast< ::cppu::OWeakObject* >( pGraphicHelper.get() ) );
         return xRet;
+    }
+    else if (rServiceSpecifier == "com.sun.star.text.TextColumns")
+    {
+        return SvxXTextColumns_createInstance();
     }
 
     uno::Reference< uno::XInterface > xRet( SvxUnoDrawMSFactory::createTextField( rServiceSpecifier ) );
