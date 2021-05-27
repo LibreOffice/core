@@ -496,11 +496,72 @@ bool WrapOleInRtf(SvStream& rOle2, SvStream& rRtf, SwOLENode& rOLENode,
     return true;
 }
 
-bool WrapGraphicInRtf(const Graphic& rGraphic, const Size& rLogicSize, SvStream& rRtf)
+bool WrapGraphicInRtf(const Graphic& rGraphic, const SwFrameFormat& rFormat, SvStream& rRtf)
 {
     // Start object.
     rRtf.WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_OBJECT);
     rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_OBJEMB);
+
+    // Object size: as used in the document model (not pixel size)
+    Size aSize = rFormat.GetFrameSize().GetSize();
+    sal_uInt32 nWidth = aSize.getWidth();
+    sal_uInt32 nHeight = aSize.getHeight();
+    rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_OBJW);
+    rRtf.WriteOString(OString::number(nWidth));
+    rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_OBJH);
+    rRtf.WriteOString(OString::number(nHeight));
+    rRtf.WriteOString(SAL_NEWLINE_STRING);
+
+    // Start objclass.
+    rRtf.WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_OBJCLASS " ");
+    OString aClassName("PBrush");
+    rRtf.WriteOString(aClassName);
+    // End objclass.
+    rRtf.WriteCharPtr("}");
+    rRtf.WriteOString(SAL_NEWLINE_STRING);
+
+    // Start objdata.
+    rRtf.WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_OBJDATA " ");
+
+    SvMemoryStream aOle1;
+    // Write ObjectHeader, see [MS-OLEDS] 2.2.4.
+    // OLEVersion.
+    aOle1.WriteUInt32(0x00000501);
+
+    // FormatID is EmbeddedObject.
+    aOle1.WriteUInt32(0x00000002);
+
+    // ClassName
+    aOle1.WriteUInt32(aClassName.getLength() + 1);
+    aOle1.WriteOString(aClassName);
+    // Null terminated pascal string.
+    aOle1.WriteChar(0);
+
+    // TopicName.
+    aOle1.WriteUInt32(0);
+
+    // ItemName.
+    aOle1.WriteUInt32(0);
+
+    // NativeDataSize
+    SvMemoryStream aNativeData;
+    if (GraphicConverter::Export(aNativeData, rGraphic, ConvertDataFormat::BMP) != ERRCODE_NONE)
+    {
+        SAL_WARN("sw.html", "WrapGraphicInRtf: bmp conversion failed");
+    }
+    aOle1.WriteUInt32(aNativeData.TellEnd());
+
+    // Write the actual native data.
+    aNativeData.Seek(0);
+    aOle1.WriteStream(aNativeData);
+
+    // TODO Write Presentation.
+
+    // End objdata.
+    msfilter::rtfutil::WriteHex(static_cast<const sal_uInt8*>(aOle1.GetData()), aOle1.GetSize(),
+                                &rRtf);
+    rRtf.WriteCharPtr("}");
+    rRtf.WriteOString(SAL_NEWLINE_STRING);
 
     rRtf.WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_RESULT);
     rRtf.WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_PICT);
@@ -526,9 +587,9 @@ bool WrapGraphicInRtf(const Graphic& rGraphic, const Size& rLogicSize, SvStream&
     rRtf.WriteOString(OString::number(aMapped.Height()));
 
     rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PICWGOAL);
-    rRtf.WriteOString(OString::number(rLogicSize.Width()));
+    rRtf.WriteOString(OString::number(nWidth));
     rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PICHGOAL);
-    rRtf.WriteOString(OString::number(rLogicSize.Height()));
+    rRtf.WriteOString(OString::number(nHeight));
     rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_WMETAFILE "8");
     rRtf.WriteOString(SAL_NEWLINE_STRING);
 

@@ -1878,7 +1878,7 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
         aFileName = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 
         SvFileStream aOutStream(aFileName, StreamMode::WRITE);
-        if (!SwReqIfReader::WrapGraphicInRtf(aGraphic, pGrfNd->GetTwipSize(), aOutStream))
+        if (!SwReqIfReader::WrapGraphicInRtf(aGraphic, rFrameFormat, aOutStream))
             SAL_WARN("sw.html", "SwReqIfReader::WrapGraphicInRtf() failed");
 
         // Refer to this data.

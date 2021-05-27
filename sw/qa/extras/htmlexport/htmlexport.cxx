@@ -149,6 +149,7 @@ OLE1Reader::OLE1Reader(SvStream& rStream)
 {
     // Skip ObjectHeader, see [MS-OLEDS] 2.2.4.
     rStream.Seek(0);
+    CPPUNIT_ASSERT(rStream.remainingSize());
     sal_uInt32 nData;
     rStream.ReadUInt32(nData); // OLEVersion
     rStream.ReadUInt32(nData); // FormatID
@@ -161,6 +162,11 @@ OLE1Reader::OLE1Reader(SvStream& rStream)
 
     rStream.ReadUInt32(m_nNativeDataSize);
     rStream.SeekRel(m_nNativeDataSize);
+
+    if (!rStream.remainingSize())
+    {
+        return;
+    }
 
     rStream.ReadUInt32(nData); // OLEVersion for presentation data
     CPPUNIT_ASSERT(rStream.good());
@@ -1477,6 +1483,13 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifImageToOle)
     // - Actual  : 0
     // i.e. the image was exported as PNG, not as WMF (with a version).
     CPPUNIT_ASSERT_EQUAL(8, xReader->getWmetafile());
+
+    // Make sure that the native data byte array is not empty.
+    SvMemoryStream aOle1;
+    CPPUNIT_ASSERT(xReader->WriteObjectData(aOle1));
+    // Without the accompanying fix in place, this test would have failed, as aOle1 was empty.
+    OLE1Reader aOle1Reader(aOle1);
+    CPPUNIT_ASSERT(aOle1Reader.m_nNativeDataSize);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
