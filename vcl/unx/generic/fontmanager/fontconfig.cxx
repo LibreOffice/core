@@ -636,7 +636,7 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int>& o
             // not described by fontconfig (e.g. alias names, PSName)
             if (eFormatRes != FcResultMatch)
                 format = nullptr;
-            std::vector<std::unique_ptr<PrintFont>> aFonts = analyzeFontFile( nDirID, aBase, reinterpret_cast<char*>(format) );
+            std::vector<PrintFont> aFonts = analyzeFontFile( nDirID, aBase, reinterpret_cast<char*>(format) );
             if(aFonts.empty())
             {
                 SAL_INFO(
@@ -651,10 +651,10 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int>& o
                 continue;
             }
 
-            std::unique_ptr<PrintFont> xUpdate;
+            std::optional<PrintFont> xUpdate;
 
             if (aFonts.size() == 1) // one font
-                xUpdate = std::move(aFonts.front());
+                xUpdate = aFonts.front();
             else // more than one font
             {
                 // a collection entry, get the correct index
@@ -663,9 +663,9 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int>& o
                     int nCollectionEntry = GetCollectionIndex(nEntryId);
                     for (auto & font : aFonts)
                     {
-                        if( font->m_nCollectionEntry == nCollectionEntry )
+                        if( font.m_nCollectionEntry == nCollectionEntry )
                         {
-                            xUpdate = std::move(font);
+                            xUpdate = font;
                             break;
                         }
                     }
@@ -710,7 +710,7 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int>& o
 
                 // sort into known fonts
                 fontID aFont = m_nNextFontID++;
-                m_aFonts[ aFont ] = std::move(xUpdate);
+                m_aFonts.emplace( aFont, *xUpdate );
                 m_aFontFileToFontID[ aBase ].insert( aFont );
                 nFonts++;
                 SAL_INFO("vcl.fonts.detail", "inserted font " << family << " as fontID " << aFont);
