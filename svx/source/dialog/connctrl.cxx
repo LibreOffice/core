@@ -34,8 +34,7 @@
 #include <memory>
 
 SvxXConnectionPreview::SvxXConnectionPreview()
-    : pEdgeObj(nullptr)
-    , pView(nullptr)
+    : pView(nullptr)
 {
     SetMapMode(MapMode(MapUnit::Map100thMM));
 }
@@ -154,7 +153,7 @@ void SvxXConnectionPreview::Construct()
                 }
 
                 const SdrEdgeObj* pTmpEdgeObj = static_cast<const SdrEdgeObj*>(pObj);
-                pEdgeObj = pTmpEdgeObj->CloneSdrObject(mxSdrPage->getSdrModelFromSdrPage());
+                pEdgeObj = SdrObject::Clone(*pTmpEdgeObj, mxSdrPage->getSdrModelFromSdrPage());
 
                 SdrObjConnection& rConn1 = pEdgeObj->GetConnection( true );
                 SdrObjConnection& rConn2 = pEdgeObj->GetConnection( false );
@@ -167,19 +166,19 @@ void SvxXConnectionPreview::Construct()
 
                 if( pTmpObj1 )
                 {
-                    SdrObject* pObj1 = pTmpObj1->CloneSdrObject(mxSdrPage->getSdrModelFromSdrPage());
-                    mxSdrPage->InsertObject( pObj1 );
-                    pEdgeObj->ConnectToNode( true, pObj1 );
+                    rtl::Reference<SdrObject> pObj1 = pTmpObj1->CloneSdrObject(mxSdrPage->getSdrModelFromSdrPage());
+                    mxSdrPage->InsertObject( pObj1.get() );
+                    pEdgeObj->ConnectToNode( true, pObj1.get() );
                 }
 
                 if( pTmpObj2 )
                 {
-                    SdrObject* pObj2 = pTmpObj2->CloneSdrObject(mxSdrPage->getSdrModelFromSdrPage());
-                    mxSdrPage->InsertObject( pObj2 );
-                    pEdgeObj->ConnectToNode( false, pObj2 );
+                    rtl::Reference<SdrObject> pObj2 = pTmpObj2->CloneSdrObject(mxSdrPage->getSdrModelFromSdrPage());
+                    mxSdrPage->InsertObject( pObj2.get() );
+                    pEdgeObj->ConnectToNode( false, pObj2.get() );
                 }
 
-                mxSdrPage->InsertObject( pEdgeObj );
+                mxSdrPage->InsertObject( pEdgeObj.get() );
             }
         }
     }

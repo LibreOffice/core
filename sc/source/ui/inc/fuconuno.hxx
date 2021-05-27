@@ -44,7 +44,7 @@ public:
     SC_DLLPUBLIC virtual void Deactivate() override;
 
     // Create default drawing objects via keyboard
-    virtual SdrObjectUniquePtr CreateDefaultObject(const sal_uInt16 nID, const tools::Rectangle& rRectangle) override;
+    virtual rtl::Reference<SdrObject> CreateDefaultObject(const sal_uInt16 nID, const tools::Rectangle& rRectangle) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

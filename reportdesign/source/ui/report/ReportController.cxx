@@ -3104,7 +3104,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
     if ( aPos.X < nLeftMargin )
         aPos.X = nLeftMargin;
 
-    SdrObject* pNewControl = nullptr;
+    rtl::Reference<SdrObject> pNewControl;
     uno::Reference< report::XReportComponent> xShapeProp;
     if ( _nObjectId == SdrObjKind::CustomShape )
     {
@@ -3116,7 +3116,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
         OUString sCustomShapeType = getDesignView()->GetInsertObjString();
         if ( sCustomShapeType.isEmpty() )
             sCustomShapeType = "diamond";
-        OReportSection::createDefault(sCustomShapeType,pNewControl);
+        OReportSection::createDefault(sCustomShapeType,pNewControl.get());
         pNewControl->SetLogicRect(tools::Rectangle(3000,500,6000,3500)); // switch height and width
     }
     else if ( _nObjectId == SdrObjKind::OLE2 || SdrObjKind::ReportDesignSubReport == _nObjectId  )
@@ -3128,7 +3128,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
 
         pNewControl->SetLogicRect(tools::Rectangle(3000,500,8000,5500)); // switch height and width
         xShapeProp.set(pNewControl->getUnoShape(),uno::UNO_QUERY_THROW);
-        OOle2Obj* pObj = dynamic_cast<OOle2Obj*>(pNewControl);
+        OOle2Obj* pObj = dynamic_cast<OOle2Obj*>(pNewControl.get());
         if ( pObj && !pObj->IsEmpty() )
         {
             pObj->initializeChart(getModel());
@@ -3136,8 +3136,8 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
     }
     else
     {
-        std::unique_ptr<SdrUnoObj, SdrObjectFreeOp> pLabel;
-        std::unique_ptr<SdrUnoObj, SdrObjectFreeOp> pControl;
+        rtl::Reference<SdrUnoObj> pLabel;
+        rtl::Reference<SdrUnoObj> pControl;
 
         FmFormView::createControlLabelPair(
             getDesignView()->GetOutDev(),
@@ -3157,10 +3157,10 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
             pLabel,
             pControl);
 
-        pLabel.reset();
+        pLabel.clear();
 
-        pNewControl = pControl.release();
-        OUnoObject* pObj = dynamic_cast<OUnoObject*>(pNewControl);
+        pNewControl = pControl;
+        OUnoObject* pObj = dynamic_cast<OUnoObject*>(pNewControl.get());
         assert(pObj);
         if(pObj)
         {
@@ -3223,7 +3223,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
         aPos.X = nPaperWidth - nShapeWidth;
     xShapeProp->setPosition(aPos);
 
-    correctOverlapping(pNewControl,pSectionWindow->getReportSection());
+    correctOverlapping(pNewControl.get(),pSectionWindow->getReportSection());
 }
 
 void OReportController::createDateTime(const Sequence< PropertyValue >& _aArgs)
@@ -3438,7 +3438,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                 continue;
 
             Reference< XNumberFormats >  xNumberFormats(xSupplier->getNumberFormats());
-            std::unique_ptr<SdrUnoObj, SdrObjectFreeOp> pControl[2];
+            rtl::Reference<SdrUnoObj> pControl[2];
             const sal_Int32 nRightMargin = getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_RIGHTMARGIN);
             const sal_Int32 nPaperWidth = getStyleProperty<awt::Size>(m_xReportDefinition,PROPERTY_PAPERSIZE).Width - nRightMargin;
             OSectionView* pSectionViews[2];
@@ -3473,7 +3473,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                 {
                     OUString sDefaultName;
                     size_t i = 0;
-                    OUnoObject* pObjs[2];
+                    rtl::Reference<OUnoObject> pObjs[2];
                     for(i = 0; i < SAL_N_ELEMENTS(pControl); ++i)
                     {
                         pObjs[i] = dynamic_cast<OUnoObject*>(pControl[i].get());
@@ -3548,7 +3548,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                         }
                         xShapePropLabel->setPosition(aPosLabel);
                     }
-                    OUnoObject* pObj = dynamic_cast<OUnoObject*>(pControl[0].get());
+                    rtl::Reference<OUnoObject> pObj = dynamic_cast<OUnoObject*>(pControl[0].get());
                     assert(pObj);
                     uno::Reference< report::XFixedText> xShapeProp(pObj->getUnoShape(),uno::UNO_QUERY_THROW);
                     xShapeProp->setName(xShapeProp->getName() + sDefaultName );
@@ -3599,9 +3599,6 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                         }
                     }
                 }
-                // not sure where the ownership of these passes too...
-                pControl[0].release();
-                pControl[1].release();
             }
         }
     }

@@ -94,7 +94,7 @@ public:
     void    StopDragTimer();
 
     // Create default drawing objects via keyboard
-    virtual SdrObjectUniquePtr CreateDefaultObject(const sal_uInt16 nID, const tools::Rectangle& rRectangle);
+    virtual rtl::Reference<SdrObject> CreateDefaultObject(const sal_uInt16 nID, const tools::Rectangle& rRectangle);
 
 protected:
     static void ImpForceQuadratic(tools::Rectangle& rRect);

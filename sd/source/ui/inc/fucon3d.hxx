@@ -42,7 +42,7 @@ public:
 
     virtual void Activate() override;
 
-    virtual SdrObjectUniquePtr CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rectangle& rRectangle) override;
+    virtual rtl::Reference<SdrObject> CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rectangle& rRectangle) override;
 
 private:
     FuConstruct3dObject (
@@ -53,7 +53,7 @@ private:
         SfxRequest& rReq);
 
     void ImpPrepareBasic3DShape(E3dCompoundObject const * p3DObj, E3dScene *pScene);
-    E3dCompoundObject* ImpCreateBasic3DShape();
+    rtl::Reference<E3dCompoundObject> ImpCreateBasic3DShape();
 };
 
 } // end of namespace sd

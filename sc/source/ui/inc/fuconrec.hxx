@@ -38,7 +38,7 @@ public:
     static void SetLineEnds(SfxItemSet& rAttr, const SdrObject& rObj, sal_uInt16 nSlotId);
 
     // Create default drawing objects via keyboard
-    virtual SdrObjectUniquePtr CreateDefaultObject(const sal_uInt16 nID, const tools::Rectangle& rRectangle) override;
+    virtual rtl::Reference<SdrObject> CreateDefaultObject(const sal_uInt16 nID, const tools::Rectangle& rRectangle) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
