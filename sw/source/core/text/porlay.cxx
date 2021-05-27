@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+ignore/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -410,7 +410,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                 AddPrtWidth( pPos->Width() );
 
                 // #i3952#
-                if ( bIgnoreBlanksAndTabsForLineHeightCalculation )
+                if (bIgnoreBlanksAndTabsForLineHeightCalculation && !rInf.GetLineStart())
                 {
                     if ( pPos->InTabGrp() || pPos->IsHolePortion() ||
                             ( pPos->IsTextPortion() &&

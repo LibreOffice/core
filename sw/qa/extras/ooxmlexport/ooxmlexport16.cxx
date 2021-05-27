@@ -212,6 +212,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf141173_missingFrames, "tdf141173_missingFrames.r
     CPPUNIT_ASSERT_EQUAL(13, getShapes());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf142404_tabSpacing, "tdf142404_tabSpacing.docx")
+{
+    // The tabstops should be laid out as triple-spaced when the paragraph takes multiple lines.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("too big for one page", 2, getPages());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf139580, "tdf139580.odt")
 {
     // Without the fix in place, this test would have crashed at export time
