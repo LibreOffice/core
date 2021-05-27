@@ -136,11 +136,8 @@ DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(style::ParagraphAdjust_CENTER), nValue); // Paragraph properties are imported
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFdo69548, "fdo69548.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo69548, "fdo69548.docx")
 {
-    if (!mbExported)
-        return;
-
     // The problem was that the last space in target URL was removed
     CPPUNIT_ASSERT_EQUAL(OUString("#this_is_a_bookmark"), getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
 }

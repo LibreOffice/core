@@ -73,11 +73,8 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDmlShapeRelsize, "dml-shape-relsize.docx
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp14:sizeRelH", "relativeFrom", "margin");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testDmlPictureInTextframe, "dml-picture-in-textframe.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDmlPictureInTextframe, "dml-picture-in-textframe.docx")
 {
-    if (!mbExported)
-        return;
-
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
     CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName("word/media/image1.gif")));
     // This was also true, image was written twice.

@@ -194,11 +194,8 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTrackChangesParagraphProperties, "testTr
     assertXPathChildren(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pPrChange", 0);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testMsoSpt180, "mso-spt180.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testMsoSpt180, "mso-spt180.docx")
 {
-    if (!mbExported)
-        return;
-
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     const uno::Sequence<beans::PropertyValue> aProps = getProperty< uno::Sequence<beans::PropertyValue> >(xGroup->getByIndex(0), "CustomShapeGeometry");
     OUString aType;
@@ -1012,25 +1009,19 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testEmbeddedExcelChart, "EmbeddedExcelChart.
         "Excel.Chart.8");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf83227, "tdf83227.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf83227, "tdf83227.docx")
 {
     // Bug document contains a rotated image, which is handled as a draw shape (not as a Writer image) on export.
-    if (!mbExported)
-        return;
-
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
     CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName("word/media/image1.png")));
     // This was also true, image was written twice.
     CPPUNIT_ASSERT_EQUAL(false, bool(xNameAccess->hasByName("word/media/image2.png")));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf103001, "tdf103001.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf103001, "tdf103001.docx")
 {
     // The same image is featured in the header and in the body text, make sure
     // the header relation is still written, even when caching is enabled.
-    if (!mbExported)
-        return;
-
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
     // This failed: header reused the RelId of the body text, even if RelIds
     // are local to their stream.
