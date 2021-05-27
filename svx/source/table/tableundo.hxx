@@ -78,7 +78,7 @@ private:
     void setDataToCell( const Data& rData );
     void getDataFromCell( Data& rData );
 
-    tools::WeakReference<SdrObject> mxObjRef;
+    unotools::WeakReference<SdrObject> mxObjRef;
     CellRef mxCell;
     Data maUndoData;
     Data maRedoData;
@@ -235,7 +235,7 @@ public:
     virtual void            Redo() override;
 
 private:
-    tools::WeakReference<SdrTableObj> mxObjRef;
+    unotools::WeakReference<SdrTableObj> mxObjRef;
 
     struct Data
     {

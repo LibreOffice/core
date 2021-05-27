@@ -397,7 +397,7 @@ class SwHTMLParser : public SfxHTMLParser, public SvtListener
     std::vector<HTMLTable*> m_aTables;
     std::shared_ptr<HTMLTable> m_xTable; // current "outermost" table
     SwHTMLForm_Impl* m_pFormImpl;   // current form
-    SdrObject       *m_pMarquee;    // current marquee
+    rtl::Reference<SdrObject> m_pMarquee;    // current marquee
     std::unique_ptr<SwField> m_xField; // current field
     ImageMap        *m_pImageMap;   // current image map
     std::unique_ptr<ImageMaps> m_pImageMaps;  ///< all Image-Maps that have been read
