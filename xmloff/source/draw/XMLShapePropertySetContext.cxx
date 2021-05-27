@@ -18,6 +18,7 @@
  */
 
 #include <XMLShapePropertySetContext.hxx>
+#include <XMLTextColumnsContext.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnumi.hxx>
 #include <xmltabi.hxx>
@@ -78,6 +79,8 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLShapePropertySetCon
         return new SvxXMLTabStopImportContext( GetImport(), nElement,
                                                    rProp,
                                                    rProperties );
+    case CTF_TEXTCOLUMNS:
+        return new XMLTextColumnsContext(GetImport(), nElement, xAttrList, rProp, rProperties);
     }
 
     return SvXMLPropertySetContext::createFastChildContext( nElement,

@@ -656,6 +656,9 @@ bool XMLTextColumnsPropertyHandler::equals(
     Reference < XTextColumns > xColumns2;
     r2 >>= xColumns2;
 
+    if (!xColumns1 || !xColumns2)
+        return (!xColumns1 && !xColumns2);
+
     if( xColumns1->getColumnCount() != xColumns2->getColumnCount() ||
           xColumns1->getReferenceValue() != xColumns2->getReferenceValue() )
         return false;
