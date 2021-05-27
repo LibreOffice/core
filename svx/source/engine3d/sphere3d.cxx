@@ -95,12 +95,12 @@ SdrObjKind E3dSphereObj::GetObjIdentifier() const
 
 // Convert the object into a group object consisting of n polygons
 
-SdrObjectUniquePtr E3dSphereObj::DoConvertToPolyObj(bool /*bBezier*/, bool /*bAddText*/) const
+rtl::Reference<SdrObject> E3dSphereObj::DoConvertToPolyObj(bool /*bBezier*/, bool /*bAddText*/) const
 {
     return nullptr;
 }
 
-E3dSphereObj* E3dSphereObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> E3dSphereObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
     return new E3dSphereObj(rTargetModel, *this);
 }

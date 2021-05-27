@@ -91,12 +91,12 @@ SdrObjKind E3dCubeObj::GetObjIdentifier() const
 
 // Convert the object into a group object consisting of 6 polygons
 
-SdrObjectUniquePtr E3dCubeObj::DoConvertToPolyObj(bool /*bBezier*/, bool /*bAddText*/) const
+rtl::Reference<SdrObject> E3dCubeObj::DoConvertToPolyObj(bool /*bBezier*/, bool /*bAddText*/) const
 {
     return nullptr;
 }
 
-E3dCubeObj* E3dCubeObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> E3dCubeObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
     return new E3dCubeObj(rTargetModel, *this);
 }

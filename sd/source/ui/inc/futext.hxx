@@ -20,7 +20,7 @@
 #pragma once
 
 #include "fuconstr.hxx"
-#include <tools/weakbase.h>
+#include <unotools/weakref.hxx>
 
 class SdrTextObj;
 class FontList;
@@ -52,9 +52,9 @@ public:
 
     void    SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag);
     void    DeleteDefaultText();
-    SdrTextObj* GetTextObj() { return mxTextObj.get(); }
+    SdrTextObj* GetTextObj() { return mxTextObj.get().get(); }
 
-    virtual SdrObjectUniquePtr CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rectangle& rRectangle) override;
+    virtual rtl::Reference<SdrObject> CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rectangle& rRectangle) override;
 
     /** is called when the current function should be aborted. <p>
         This is used when a function gets a KEY_ESCAPE but can also
@@ -79,7 +79,7 @@ protected:
 private:
     virtual void disposing() override;
 
-    ::tools::WeakReference<SdrTextObj>
+    ::unotools::WeakReference<SdrTextObj>
                         mxTextObj;
     bool                bFirstObjCreated;
     bool                bJustEndedEdit;
