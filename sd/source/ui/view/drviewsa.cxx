@@ -23,6 +23,7 @@
 #include <comphelper/processfactory.hxx>
 #include <editeng/sizeitem.hxx>
 #include <svx/svdlayer.hxx>
+#include <svx/svdograf.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <svx/svdpagv.hxx>
 #include <svl/ptitem.hxx>

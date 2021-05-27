@@ -92,7 +92,7 @@ public:
     CompressGraphicsDialog( weld::Window* pParent, Graphic const & rGraphic, Size rViewSize100mm, tools::Rectangle const & rCropRectangle, SfxBindings& rBindings );
     virtual ~CompressGraphicsDialog() override;
 
-    SdrGrafObj* GetCompressedSdrGrafObj();
+    rtl::Reference<SdrGrafObj> GetCompressedSdrGrafObj();
     Graphic GetCompressedGraphic();
 
     tools::Rectangle GetScaledCropRectangle() const;

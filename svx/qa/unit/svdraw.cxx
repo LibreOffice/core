@@ -319,9 +319,6 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObject)
     assertXPath(pXmlDoc, aBasePath + "/stroke", "fulldotdashlen", "0");
 
     pPage->RemoveObject(0);
-
-    SdrObject* pObject(pRectangle);
-    SdrObject::Free(pObject);
 }
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testAutoHeightMultiColShape)

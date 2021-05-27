@@ -103,7 +103,7 @@ bool SwTextShell::InsertMediaDlg( SfxRequest const & rReq )
                 if (!bRet) { return bRet; }
             }
 
-            SdrMediaObj* pObj = new SdrMediaObj(
+            rtl::Reference<SdrMediaObj> pObj = new SdrMediaObj(
                 *rSh.GetDoc()->getIDocumentDrawModelAccess().GetDrawModel(),
                 tools::Rectangle(aPos, aSize));
 

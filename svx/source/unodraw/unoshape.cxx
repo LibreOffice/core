@@ -112,7 +112,6 @@ struct SvxShapeImpl
     std::optional<SfxItemSet> mxItemSet;
     sal_uInt32      mnObjId;
     SvxShapeMaster* mpMaster;
-    bool            mbHasSdrObjectOwnership;
     bool            mbDisposing;
 
     /** CL, OD 2005-07-19 #i52126# - this is initially 0 and set when
@@ -120,7 +119,7 @@ struct SvxShapeImpl
      *  SdrObject so a multiple call to SvxShape::Create() with same SdrObject
      *  is prohibited.
      */
-    ::tools::WeakReference< SdrObject > mpCreatedObj;
+    unotools::WeakReference<SdrObject> mpCreatedObj;
 
     // for xComponent
     ::comphelper::OInterfaceContainerHelper2   maDisposeListeners;
@@ -130,7 +129,6 @@ struct SvxShapeImpl
         :mrAntiImpl( _rAntiImpl )
         ,mnObjId( 0 )
         ,mpMaster( nullptr )
-        ,mbHasSdrObjectOwnership( false )
         ,mbDisposing( false )
         ,maDisposeListeners( _rMutex )
         ,maPropertyNotifier( _rAntiImpl, _rMutex )
@@ -232,20 +230,7 @@ SvxShape::~SvxShape() noexcept
         GetSdrObject()->setUnoShape(nullptr);
     }
 
-    if( HasSdrObjectOwnership() && HasSdrObject() )
-    {
-        mpImpl->mbHasSdrObjectOwnership = false;
-        SdrObject* pObject = GetSdrObject();
-        SdrObject::Free( pObject );
-    }
-
     EndListeningAll(); // call explicitly within SolarMutexGuard
-}
-
-
-void SvxShape::TakeSdrObjectOwnership()
-{
-    mpImpl->mbHasSdrObjectOwnership = true;
 }
 
 
@@ -256,21 +241,8 @@ void SvxShape::InvalidateSdrObject()
         EndListening(GetSdrObject()->getSdrModelFromSdrObject());
     }
 
-    if (HasSdrObjectOwnership())
-        return;
-
-    mpSdrObjectWeakReference.reset(nullptr);
+    mpSdrObjectWeakReference.clear();
 };
-
-bool SvxShape::HasSdrObjectOwnership() const
-{
-    if ( !mpImpl->mbHasSdrObjectOwnership )
-        return false;
-
-    OSL_ENSURE( HasSdrObject(), "SvxShape::HasSdrObjectOwnership: have the ownership of an object which I don't know!" );
-    return HasSdrObject();
-}
-
 
 void SvxShape::setShapeKind( sal_uInt32 nKind )
 {
@@ -387,8 +359,8 @@ void SvxShape::Create( SdrObject* pNewObj, SvxDrawPage* /*pNewPage*/ )
     if ( !pNewObj )
         return;
 
-    SdrObject* pCreatedObj = mpImpl->mpCreatedObj.get();
-    OSL_ENSURE( ( pCreatedObj == nullptr ) || ( pCreatedObj == pNewObj ),
+    rtl::Reference<SdrObject> pCreatedObj = mpImpl->mpCreatedObj.get();
+    assert( ( !pCreatedObj || ( pCreatedObj == pNewObj ) ) &&
         "SvxShape::Create: the same shape used for two different objects?! Strange ..." );
 
     // Correct condition (#i52126#)
@@ -403,7 +375,7 @@ void SvxShape::Create( SdrObject* pNewObj, SvxDrawPage* /*pNewPage*/ )
         EndListening( GetSdrObject()->getSdrModelFromSdrObject() );
     }
 
-    mpSdrObjectWeakReference.reset( pNewObj );
+    mpSdrObjectWeakReference = pNewObj;
 
     if( HasSdrObject() )
     {
@@ -997,7 +969,7 @@ void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) noexcept
     if( !xSelf.is() )
     {
         EndListening(pSdrObject->getSdrModelFromSdrObject());
-        mpSdrObjectWeakReference.reset(nullptr);
+        mpSdrObjectWeakReference.clear();
         return;
     }
 
@@ -1022,23 +994,12 @@ void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) noexcept
     if( !bClearMe )
         return;
 
-    if(!HasSdrObjectOwnership())
+    if(nullptr != pSdrObject)
     {
-        if(nullptr != pSdrObject)
-        {
-            EndListening(pSdrObject->getSdrModelFromSdrObject());
-            pSdrObject->setUnoShape(nullptr);
-        }
-
-        mpSdrObjectWeakReference.reset(nullptr);
-
-        // SdrModel *is* going down, try to Free SdrObject even
-        // when !HasSdrObjectOwnership
-        if(nullptr != pSdrObject && !pSdrObject->IsInserted())
-        {
-            SdrObject::Free(pSdrObject);
-        }
+        EndListening(pSdrObject->getSdrModelFromSdrObject());
+        pSdrObject->setUnoShape(nullptr);
     }
+    mpSdrObjectWeakReference.clear();
 
     if(!mpImpl->mbDisposing)
     {
@@ -1282,14 +1243,9 @@ void SAL_CALL SvxShape::dispose()
     SdrObject* pObject = GetSdrObject();
 
     EndListening( pObject->getSdrModelFromSdrObject() );
-    bool bFreeSdrObject = false;
 
     if ( pObject->IsInserted() && pObject->getSdrPageFromSdrObject() )
     {
-        OSL_ENSURE( HasSdrObjectOwnership(), "SvxShape::dispose: is the below code correct?" );
-            // normally, we are allowed to free the SdrObject only if we have its ownership.
-            // Why isn't this checked here?
-
         SdrPage* pPage = pObject->getSdrPageFromSdrObject();
         // delete the SdrObject from the page
         const size_t nCount = pPage->GetObjCount();
@@ -1298,21 +1254,12 @@ void SAL_CALL SvxShape::dispose()
             if ( pPage->GetObj( nNum ) == pObject )
             {
                 OSL_VERIFY( pPage->RemoveObject( nNum ) == pObject );
-                bFreeSdrObject = true;
                 break;
             }
         }
     }
 
     pObject->setUnoShape(nullptr);
-
-    if ( bFreeSdrObject )
-    {
-        // in case we have the ownership of the SdrObject, a Free
-        // would do nothing. So ensure the ownership is reset.
-        mpImpl->mbHasSdrObjectOwnership = false;
-        SdrObject::Free( pObject );
-    }
 }
 
 

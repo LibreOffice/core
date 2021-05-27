@@ -28,6 +28,7 @@
 #include <svtools/colrdlg.hxx>
 #include <svx/svx3ditems.hxx>
 #include <svx/svddef.hxx>
+#include <svx/obj3d.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
 

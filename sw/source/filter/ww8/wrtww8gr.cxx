@@ -129,7 +129,7 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet, tools::SvRef<SotStora
         sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
         if ( pOLENd )
             nAspect = pOLENd->GetAspect();
-        SdrOle2Obj *pRet = SvxMSDffManager::CreateSdrOLEFromStorage(
+        rtl::Reference<SdrOle2Obj> pRet = SvxMSDffManager::CreateSdrOLEFromStorage(
             *m_rDoc.getIDocumentDrawModelAccess().GetOrCreateDrawModel(),
             rStorageName,
             xObjStg,
@@ -182,10 +182,6 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet, tools::SvRef<SotStora
                     }
                 }
             }
-
-            // always use SdrObject::Free(...) for SdrObjects (!)
-            SdrObject* pTemp(pRet);
-            SdrObject::Free(pTemp);
         }
     }
     else

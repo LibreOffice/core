@@ -53,9 +53,10 @@ public:
     const basegfx::B2DPolyPolygon& GetPolyTexture2D() const { return aPolyTexture2D; }
 
     virtual SdrObjKind GetObjIdentifier() const override;
-    virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
+    virtual rtl::Reference<SdrObject> DoConvertToPolyObj(bool bBezier,
+                                                         bool bAddText) const override;
 
-    virtual E3dPolygonObj* CloneSdrObject(SdrModel& rTargetModel) const override;
+    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
     // LineOnly?
     bool GetLineOnly() const { return bLineOnly; }

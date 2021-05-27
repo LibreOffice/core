@@ -136,7 +136,7 @@ protected:
     virtual void addCustomHandles( SdrHdlList& rHandlerList ) override;
 
 private:
-    ::tools::WeakReference<SdrObject>    mxPlaceholderObj;
+    ::unotools::WeakReference<SdrObject>    mxPlaceholderObj;
 };
 
 class ImageButtonHdl : public SmartHdl
@@ -318,14 +318,14 @@ bool ChangePlaceholderTag::MouseButtonDown( const MouseEvent& /*rMEvt*/, SmartHd
     {
         sal_uInt16 nSID = gButtonSlots[nHighlightId];
 
-        if( mxPlaceholderObj )
+        if( auto pPlaceholder = mxPlaceholderObj.get() )
         {
             // mark placeholder if it is not currently marked (or if also others are marked)
-            if( !mrView.IsObjMarked( mxPlaceholderObj.get() ) || (mrView.GetMarkedObjectList().GetMarkCount() != 1) )
+            if( !mrView.IsObjMarked( pPlaceholder.get() ) || (mrView.GetMarkedObjectList().GetMarkCount() != 1) )
             {
                 SdrPageView* pPV = mrView.GetSdrPageView();
                 mrView.UnmarkAllObj(pPV );
-                mrView.MarkObj(mxPlaceholderObj.get(), pPV);
+                mrView.MarkObj(pPlaceholder.get(), pPV);
             }
         }
 
@@ -356,9 +356,8 @@ bool ChangePlaceholderTag::KeyInput( const KeyEvent& rKEvt )
 BitmapEx ChangePlaceholderTag::createOverlayImage( int nHighlight )
 {
     BitmapEx aRet;
-    if( mxPlaceholderObj.is() )
+    if( auto pPlaceholder = mxPlaceholderObj.get() )
     {
-        SdrObject* pPlaceholder = mxPlaceholderObj.get();
         SmartTagReference xThis( this );
         const ::tools::Rectangle& rSnapRect = pPlaceholder->GetSnapRect();
 
@@ -390,10 +389,10 @@ BitmapEx ChangePlaceholderTag::createOverlayImage( int nHighlight )
 
 void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
 {
-    if( !mxPlaceholderObj.is() )
+    rtl::Reference<SdrObject> pPlaceholder = mxPlaceholderObj.get();
+    if( !pPlaceholder )
         return;
 
-    SdrObject* pPlaceholder = mxPlaceholderObj.get();
     SmartTagReference xThis( this );
     const ::tools::Rectangle& rSnapRect = pPlaceholder->GetSnapRect();
     const Point aPoint;

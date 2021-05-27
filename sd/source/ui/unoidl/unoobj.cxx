@@ -491,10 +491,6 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const c
                             if(!pGroup->GetSubList()->GetObjCount())
                             {
                                 pPage->NbcRemoveObject(pGroup->GetOrdNum());
-
-                                // always use SdrObject::Free(...) for SdrObjects (!)
-                                SdrObject* pTemp(pGroup);
-                                SdrObject::Free(pTemp);
                             }
                         }
                     }

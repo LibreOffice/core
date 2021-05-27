@@ -85,7 +85,7 @@ class SVXCORE_DLLPUBLIC SvxDrawPage : protected cppu::BaseMutex,
     // Creating a SdrObject using it's Description.
     // Can be used by derived classes to support their owen Shapes (e.g. Controls).
     /// @throws css::uno::RuntimeException
-    virtual SdrObject *CreateSdrObject_( const css::uno::Reference< css::drawing::XShape >& xShape );
+    virtual rtl::Reference<SdrObject> CreateSdrObject_( const css::uno::Reference< css::drawing::XShape >& xShape );
 
     /// @throws css::uno::RuntimeException
     static rtl::Reference<SvxShape> CreateShapeByTypeAndInventor( sal_uInt16 nType, SdrInventor nInventor, SdrObject *pObj, SvxDrawPage *pPage = nullptr, OUString const & referer = OUString() );
