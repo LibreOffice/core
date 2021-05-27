@@ -277,8 +277,8 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObject)
     pModel->InsertPage(pPage.get(), 0);
 
     tools::Rectangle aSize(Point(), Size(100, 100));
-    auto* pRectangle = new SdrRectObj(*pModel, aSize);
-    pPage->NbcInsertObject(pRectangle);
+    rtl::Reference<SdrRectObj> pRectangle = new SdrRectObj(*pModel, aSize);
+    pPage->NbcInsertObject(pRectangle.get());
     pRectangle->SetMergedItem(XLineStyleItem(drawing::LineStyle_SOLID));
     pRectangle->SetMergedItem(XLineStartWidthItem(200));
 
@@ -342,9 +342,6 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObject)
     assertXPath(pXmlDoc, aBasePath + "/stroke", 0);
 
     pPage->RemoveObject(0);
-
-    SdrObject* pObject(pRectangle);
-    SdrObject::Free(pObject);
 }
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testAutoHeightMultiColShape)

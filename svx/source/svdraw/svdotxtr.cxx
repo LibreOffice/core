@@ -283,9 +283,9 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
 }
 
 
-SdrObjectUniquePtr SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
+rtl::Reference<SdrObject> SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
 {
-    SdrObjectUniquePtr pRetval;
+    rtl::Reference<SdrObject> pRetval;
 
     if(!ImpCanConvTextToCurve())
     {
@@ -307,7 +307,7 @@ SdrObjectUniquePtr SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly
     if(nResultCount)
     {
         // prepare own target
-        SdrObjGroup* pGroup = new SdrObjGroup(getSdrModelFromSdrObject());
+        rtl::Reference<SdrObjGroup> pGroup = new SdrObjGroup(getSdrModelFromSdrObject());
         SdrObjList* pObjectList = pGroup->GetSubList();
 
         // process results
@@ -336,7 +336,7 @@ SdrObjectUniquePtr SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly
 
                 // create ItemSet with object attributes
                 SfxItemSet aAttributeSet(GetObjectItemSet());
-                SdrPathObj* pPathObj = nullptr;
+                rtl::Reference<SdrPathObj> pPathObj;
 
                 // always clear objectshadow; this is included in the extraction
                 aAttributeSet.Put(makeSdrShadowItem(false));
@@ -376,28 +376,21 @@ SdrObjectUniquePtr SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly
 
                 // apply prepared ItemSet and add to target
                 pPathObj->SetMergedItemSet(aAttributeSet);
-                pObjectList->InsertObject(pPathObj);
+                pObjectList->InsertObject(pPathObj.get());
             }
         }
 
         // postprocess; if no result and/or only one object, simplify
         if(!pObjectList->GetObjCount())
         {
-            // always use SdrObject::Free(...) for SdrObjects (!)
-            SdrObject* pTemp(pGroup);
-            SdrObject::Free(pTemp);
         }
         else if(1 == pObjectList->GetObjCount())
         {
-            pRetval.reset(pObjectList->RemoveObject(0));
-
-            // always use SdrObject::Free(...) for SdrObjects (!)
-            SdrObject* pTemp(pGroup);
-            SdrObject::Free(pTemp);
+            pRetval = pObjectList->RemoveObject(0);
         }
         else
         {
-            pRetval.reset(pGroup);
+            pRetval = pGroup;
         }
     }
 
@@ -405,7 +398,7 @@ SdrObjectUniquePtr SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly
 }
 
 
-SdrObjectUniquePtr SdrTextObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
+rtl::Reference<SdrObject> SdrTextObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     if(bAddText)
     {
@@ -420,7 +413,7 @@ bool SdrTextObj::ImpCanConvTextToCurve() const
     return !IsOutlText();
 }
 
-SdrPathObjUniquePtr SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPolygon, bool bClosed, bool bBezier) const
+rtl::Reference<SdrPathObj> SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPolygon, bool bClosed, bool bBezier) const
 {
     SdrObjKind ePathKind = bClosed ? SdrObjKind::PathFill : SdrObjKind::PathLine;
     basegfx::B2DPolyPolygon aB2DPolyPolygon(rPolyPolygon);
@@ -432,7 +425,7 @@ SdrPathObjUniquePtr SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon&
         ePathKind = bClosed ? SdrObjKind::Polygon : SdrObjKind::PolyLine;
     }
 
-    SdrPathObjUniquePtr pPathObj(new SdrPathObj(
+    rtl::Reference<SdrPathObj> pPathObj(new SdrPathObj(
         getSdrModelFromSdrObject(),
         ePathKind,
         std::move(aB2DPolyPolygon)));
@@ -454,14 +447,14 @@ SdrPathObjUniquePtr SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon&
     return pPathObj;
 }
 
-SdrObjectUniquePtr SdrTextObj::ImpConvertAddText(SdrObjectUniquePtr pObj, bool bBezier) const
+rtl::Reference<SdrObject> SdrTextObj::ImpConvertAddText(rtl::Reference<SdrObject> pObj, bool bBezier) const
 {
     if(!ImpCanConvTextToCurve())
     {
         return pObj;
     }
 
-    SdrObjectUniquePtr pText = ImpConvertContainedTextToSdrPathObjs(!bBezier);
+    rtl::Reference<SdrObject> pText = ImpConvertContainedTextToSdrPathObjs(!bBezier);
 
     if(!pText)
     {
@@ -477,17 +470,17 @@ SdrObjectUniquePtr SdrTextObj::ImpConvertAddText(SdrObjectUniquePtr pObj, bool b
     {
         // is already group object, add partial shape in front
         SdrObjList* pOL=pText->GetSubList();
-        pOL->InsertObject(pObj.release(),0);
+        pOL->InsertObject(pObj.get(),0);
 
         return pText;
     }
     else
     {
         // not yet a group, create one and add partial and new shapes
-        std::unique_ptr<SdrObjGroup, SdrObjectFreeOp> pGrp(new SdrObjGroup(getSdrModelFromSdrObject()));
+        rtl::Reference<SdrObjGroup> pGrp(new SdrObjGroup(getSdrModelFromSdrObject()));
         SdrObjList* pOL=pGrp->GetSubList();
-        pOL->InsertObject(pObj.release());
-        pOL->InsertObject(pText.release());
+        pOL->InsertObject(pObj.get());
+        pOL->InsertObject(pText.get());
 
         return pGrp;
     }

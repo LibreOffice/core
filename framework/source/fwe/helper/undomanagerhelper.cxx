@@ -687,6 +687,7 @@ namespace framework
 
         {
             ::comphelper::FlagGuard aNotificationGuard( m_bAPIActionRunning );
+            SolarMutexGuard aGuard2;
             rUndoManager.Clear();
         }
 
