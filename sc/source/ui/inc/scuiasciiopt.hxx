@@ -62,8 +62,7 @@ class ScImportAsciiDlg : public weld::GenericDialogController
     std::unique_ptr<weld::Label> mxFtRow;
     std::unique_ptr<weld::SpinButton> mxNfRow;
 
-    std::unique_ptr<weld::RadioButton> mxRbFixed;
-    std::unique_ptr<weld::RadioButton> mxRbSeparated;
+    std::unique_ptr<weld::CheckButton> mxRbSeparated;
 
     std::unique_ptr<weld::CheckButton> mxCkbTab;
     std::unique_ptr<weld::CheckButton> mxCkbSemicolon;
