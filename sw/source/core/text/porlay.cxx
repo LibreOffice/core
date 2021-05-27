@@ -410,7 +410,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                 AddPrtWidth( pPos->Width() );
 
                 // #i3952#
-                if ( bIgnoreBlanksAndTabsForLineHeightCalculation )
+                if ( bIgnoreBlanksAndTabsForLineHeightCalculation && !rInf.GetLineStart() )
                 {
                     if ( pPos->InTabGrp() || pPos->IsHolePortion() ||
                             ( pPos->IsTextPortion() &&
