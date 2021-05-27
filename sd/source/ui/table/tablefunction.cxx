@@ -141,13 +141,13 @@ static void InsertTableImpl(const DrawViewShell* pShell,
         aRect = ::tools::Rectangle(aPos, aSize);
     }
 
-    sdr::table::SdrTableObj* pObj = new sdr::table::SdrTableObj(
+    rtl::Reference<sdr::table::SdrTableObj> pObj = new sdr::table::SdrTableObj(
         *pShell->GetDoc(), // TTTT should be reference
         aRect,
         nColumns,
         nRows);
     pObj->NbcSetStyleSheet( pShell->GetDoc()->GetDefaultStyleSheet(), true );
-    apply_table_style( pObj, pShell->GetDoc(), sTableStyle );
+    apply_table_style( pObj.get(), pShell->GetDoc(), sTableStyle );
     SdrPageView* pPV = pView->GetSdrPageView();
 
     // #i123359# if an object is to be replaced/manipulated it may be that it is in text edit mode,
@@ -166,15 +166,15 @@ static void InsertTableImpl(const DrawViewShell* pShell,
         if(pPage && pPage->IsPresObj(pPickObj))
         {
             pObj->SetUserCall( pPickObj->GetUserCall() );
-            pPage->InsertPresObj( pObj, PresObjKind::Table );
+            pPage->InsertPresObj( pObj.get(), PresObjKind::Table );
         }
     }
 
     pShell->GetParentWindow()->GrabFocus();
     if( pPickObj )
-        pView->ReplaceObjectAtView(pPickObj, *pPV, pObj );
+        pView->ReplaceObjectAtView(pPickObj, *pPV, pObj.get() );
     else
-        pView->InsertObjectAtView(pObj, *pPV, SdrInsertFlags::SETDEFLAYER);
+        pView->InsertObjectAtView(pObj.get(), *pPV, SdrInsertFlags::SETDEFLAYER);
 }
 
 void DrawViewShell::FuTable(SfxRequest& rReq)
@@ -274,15 +274,15 @@ void CreateTableFromRTF( SvStream& rStream, SdDrawDocument* pModel )
 
     Size aSize( 200, 200 );
     ::tools::Rectangle aRect (Point(), aSize);
-    sdr::table::SdrTableObj* pObj = new sdr::table::SdrTableObj(
+    rtl::Reference<sdr::table::SdrTableObj> pObj = new sdr::table::SdrTableObj(
         *pModel,
         aRect,
         1,
         1);
     pObj->NbcSetStyleSheet( pModel->GetDefaultStyleSheet(), true );
-    apply_table_style( pObj, pModel, OUString() );
+    apply_table_style( pObj.get(), pModel, OUString() );
 
-    pPage->NbcInsertObject( pObj );
+    pPage->NbcInsertObject( pObj.get() );
 
     sdr::table::ImportAsRTF( rStream, *pObj );
 }

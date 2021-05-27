@@ -351,7 +351,7 @@ std::unique_ptr<SdrOutliner> SdrMakeOutliner(OutlinerMode nOutlinerMode, SdrMode
     return pOutl;
 }
 
-std::vector<Link<SdrObjCreatorParams, SdrObject*>>& ImpGetUserMakeObjHdl()
+std::vector<Link<SdrObjCreatorParams, rtl::Reference<SdrObject>>>& ImpGetUserMakeObjHdl()
 {
     SdrGlobalData& rGlobalData=GetSdrGlobalData();
     return rGlobalData.aUserMakeObjHdl;

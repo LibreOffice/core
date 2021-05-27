@@ -333,9 +333,9 @@ public:
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxXLinePreview final : public SvxPreviewBase
 {
 private:
-    SdrPathObj*                                     mpLineObjA;
-    SdrPathObj*                                     mpLineObjB;
-    SdrPathObj*                                     mpLineObjC;
+    rtl::Reference<SdrPathObj>                      mpLineObjA;
+    rtl::Reference<SdrPathObj>                      mpLineObjB;
+    rtl::Reference<SdrPathObj>                      mpLineObjC;
 
     Graphic*                                        mpGraphic;
     bool                                            mbWithSymbol;
@@ -359,7 +359,7 @@ public:
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxXRectPreview final : public SvxPreviewBase
 {
 private:
-    SdrObject* mpRectangleObject;
+    rtl::Reference<SdrObject> mpRectangleObject;
 
 public:
     SvxXRectPreview();
@@ -383,8 +383,8 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxXShadowPreview final : public SvxPreviewB
 private:
     Point maShadowOffset;
 
-    SdrObject* mpRectangleObject;
-    SdrObject* mpRectangleShadow;
+    rtl::Reference<SdrObject> mpRectangleObject;
+    rtl::Reference<SdrObject> mpRectangleShadow;
 
 public:
     SvxXShadowPreview();

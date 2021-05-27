@@ -432,8 +432,7 @@ SwVirtFlyDrawObj::SwVirtFlyDrawObj(
 
 SwVirtFlyDrawObj::~SwVirtFlyDrawObj()
 {
-    if ( getSdrPageFromSdrObject() )    //Withdraw SdrPage the responsibility.
-        getSdrPageFromSdrObject()->RemoveObject( GetOrdNum() );
+    assert (!getSdrPageFromSdrObject() && "should have already been removed");
 }
 
 const SwFrameFormat *SwVirtFlyDrawObj::GetFormat() const
@@ -1191,10 +1190,10 @@ Degree100 SwVirtFlyDrawObj::GetRotateAngle() const
     }
 }
 
-SdrObjectUniquePtr SwVirtFlyDrawObj::getFullDragClone() const
+rtl::Reference<SdrObject> SwVirtFlyDrawObj::getFullDragClone() const
 {
     // call parent
-    SdrObjectUniquePtr pRetval = SdrVirtObj::getFullDragClone();
+    rtl::Reference<SdrObject> pRetval = SdrVirtObj::getFullDragClone();
 
     if(pRetval && GetFlyFrame() && ContainsSwGrfNode())
     {

@@ -252,15 +252,15 @@ void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyC
                     if ( pObject )
                     {
                         // Clone to target SdrModel
-                        SdrObject* pNewObj(pObject->CloneSdrObject(*m_pModel));
-                        m_pPage->InsertObject(pNewObj, SAL_MAX_SIZE);
+                        rtl::Reference<SdrObject> pNewObj(pObject->CloneSdrObject(*m_pModel));
+                        m_pPage->InsertObject(pNewObj.get(), SAL_MAX_SIZE);
                         tools::Rectangle aRet(VCLPoint(rCopy->getPosition()),VCLSize(rCopy->getSize()));
                         aRet.setHeight(aRet.getOpenHeight() + 1);
                         aRet.setWidth(aRet.getOpenWidth() + 1);
                         bool bOverlapping = true;
                         while ( bOverlapping )
                         {
-                            bOverlapping = isOver(aRet,*m_pPage,*m_pView,true,pNewObj) != nullptr;
+                            bOverlapping = isOver(aRet,*m_pPage,*m_pView,true,pNewObj.get()) != nullptr;
                             if ( bOverlapping )
                             {
                                 aRet.Move(0,aRet.getOpenHeight()+1);
@@ -268,7 +268,7 @@ void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyC
                             }
                         }
                         m_pView->AddUndo( m_pView->GetModel()->GetSdrUndoFactory().CreateUndoNewObject( *pNewObj ) );
-                        m_pView->MarkObj( pNewObj, m_pView->GetSdrPageView() );
+                        m_pView->MarkObj( pNewObj.get(), m_pView->GetSdrPageView() );
                         if ( m_xSection.is() && (o3tl::make_unsigned(aRet.getOpenHeight() + aRet.Top()) > m_xSection->getHeight()) )
                             m_xSection->setHeight(aRet.getOpenHeight() + aRet.Top());
                     }
@@ -340,7 +340,7 @@ void OReportSection::Copy(uno::Sequence< beans::NamedValue >& _rAllreadyCopiedOb
         {
             try
             {
-                SdrObject* pNewObj(pSdrObject->CloneSdrObject(pSdrObject->getSdrModelFromSdrObject()));
+                rtl::Reference<SdrObject> pNewObj(pSdrObject->CloneSdrObject(pSdrObject->getSdrModelFromSdrObject()));
                 aCopies.emplace_back(pNewObj->getUnoShape(),uno::UNO_QUERY);
                 if ( _bEraseAnddNoClone )
                 {
