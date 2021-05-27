@@ -395,10 +395,10 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
         }
         else
         {
-            // EE_CHAR_BKGCOLOR is SvxBackgroundColorItem, but char background tabpage
+            // EE_CHAR_BKGCOLOR is SvxColorItem, but char background tabpage
             // can only work with SvxBrushItems
             // extract Color out of SvxBackColorItem
-            Color aBackColor = static_cast<const SvxBackgroundColorItem&>(rSet->Get(nWhich)).GetValue();
+            Color aBackColor = static_cast<const SvxColorItem&>(rSet->Get(nWhich)).GetValue();
             // make new SvxBrushItem with this Color
             aBgdAttr = std::make_shared<SvxBrushItem>(aBackColor, SID_ATTR_BRUSH_CHAR);
         }
@@ -469,10 +469,10 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
             nWhich = GetWhich(SID_ATTR_CHAR_BACK_COLOR);
             if ( rSet->GetItemState( nWhich, false ) >= SfxItemState::DEFAULT )
             {
-                // EE_CHAR_BKGCOLOR is SvxBackgroundColorItem, but char background tabpage
+                // EE_CHAR_BKGCOLOR is SvxColorItem, but char background tabpage
                 // can only work with SvxBrushItems
                 // extract Color out of SvxBackColorItem
-                Color aBackColor = static_cast<const SvxBackgroundColorItem&>(rSet->Get(nWhich)).GetValue();
+                Color aBackColor = static_cast<const SvxColorItem&>(rSet->Get(nWhich)).GetValue();
                 // make new SvxBrushItem with this Color
                 pHighlighting = std::make_unique<SvxBrushItem>(aBackColor, SID_ATTR_BRUSH_CHAR);
             }
@@ -642,14 +642,14 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
     {
         SfxItemState eOldItemState = rCoreSet->GetItemState(nSlot, false);
         const SfxItemSet& rOldSet = GetItemSet();
-        const SvxBackgroundColorItem& rOldItem = static_cast<const SvxBackgroundColorItem&>(*pOld);
+        const SvxColorItem& rOldItem = static_cast<const SvxColorItem&>(*pOld);
 
         // Brush-treatment:
         if ( rOldItem.GetValue() != aBgdColor ||
              (SfxItemState::DEFAULT >= eOldItemState && m_bColorSelected))
         {
             bModified = true;
-            rCoreSet->Put(SvxBackgroundColorItem(aBgdColor, nWhich));
+            rCoreSet->Put(SvxColorItem(aBgdColor, nWhich));
         }
         else if ( SfxItemState::DEFAULT == rOldSet.GetItemState( nWhich, false ) )
             rCoreSet->ClearItem( nWhich );
@@ -1450,8 +1450,8 @@ bool SvxBkgTabPage::FillItemSet( SfxItemSet* rCoreSet )
             {
                 if ( SID_ATTR_CHAR_BACK_COLOR == nSlot )
                 {
-                    maSet.Put( SvxBackgroundColorItem( COL_TRANSPARENT, nWhich ) );
-                    rCoreSet->Put( SvxBackgroundColorItem( COL_TRANSPARENT, nWhich ) );
+                    maSet.Put( SvxColorItem( COL_TRANSPARENT, nWhich ) );
+                    rCoreSet->Put( SvxColorItem( COL_TRANSPARENT, nWhich ) );
                 }
                 else
                 {
@@ -1466,8 +1466,8 @@ bool SvxBkgTabPage::FillItemSet( SfxItemSet* rCoreSet )
             XFillColorItem aColorItem( maSet.Get( XATTR_FILLCOLOR ) );
             if ( SID_ATTR_CHAR_BACK_COLOR == nSlot )
             {
-                maSet.Put( SvxBackgroundColorItem( aColorItem.GetColorValue(), nWhich ) );
-                rCoreSet->Put( SvxBackgroundColorItem( aColorItem.GetColorValue(), nWhich ) );
+                maSet.Put( SvxColorItem( aColorItem.GetColorValue(), nWhich ) );
+                rCoreSet->Put( SvxColorItem( aColorItem.GetColorValue(), nWhich ) );
             }
             else
             {
@@ -1560,7 +1560,7 @@ void SvxBkgTabPage::PageCreated(const SfxAllItemSet& aSet)
     if ( bCharBackColor )
     {
         sal_uInt16 nWhich(maSet.GetPool()->GetWhich(SID_ATTR_CHAR_BACK_COLOR));
-        Color aBackColor(static_cast<const SvxBackgroundColorItem&>(maSet.Get(nWhich)).GetValue());
+        Color aBackColor(static_cast<const SvxColorItem&>(maSet.Get(nWhich)).GetValue());
         SvxBrushItem aBrushItem(SvxBrushItem(aBackColor, SID_ATTR_BRUSH_CHAR));
         setSvxBrushItemAsFillAttributesToTargetSet(aBrushItem, maSet);
     }

@@ -3753,7 +3753,7 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
     case SID_ATTR_CHAR_BACK_COLOR:
         if( rReq.GetArgs() )
         {
-            const SvxBackgroundColorItem* pItem = rReq.GetArg<SvxBackgroundColorItem>(SID_ATTR_CHAR_BACK_COLOR);
+            const SvxColorItem* pItem = rReq.GetArg<SvxColorItem>(SID_ATTR_CHAR_BACK_COLOR);
             if (pItem)
             {
                 aNewAttr.Put(*pItem);

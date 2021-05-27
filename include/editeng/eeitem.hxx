@@ -28,7 +28,6 @@ class SfxGrabBagItem;
 class SfxInt16Item;
 class SvxAdjustItem;
 class SvxAutoKernItem;
-class SvxBackgroundColorItem;
 class SvxCaseMapItem;
 class SvxCharReliefItem;
 class SvxCharScaleWidthItem;
@@ -124,7 +123,7 @@ class SvxNumBulletItem;
 #define EE_CHAR_OVERLINE            TypedWhichId<SvxOverlineItem>(EE_CHAR_START+29)
 #define EE_CHAR_CASEMAP             TypedWhichId<SvxCaseMapItem>(EE_CHAR_START+30)
 #define EE_CHAR_GRABBAG             TypedWhichId<SfxGrabBagItem>(EE_CHAR_START+31)
-#define EE_CHAR_BKGCOLOR            TypedWhichId<SvxBackgroundColorItem>(EE_CHAR_START+32)
+#define EE_CHAR_BKGCOLOR            TypedWhichId<SvxColorItem>(EE_CHAR_START+32)
 
 #define EE_CHAR_END                 (EE_CHAR_START+32)
 

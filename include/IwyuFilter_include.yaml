@@ -883,7 +883,6 @@ blacklist:
     - class SfxInt16Item
     - class SvxAdjustItem
     - class SvxAutoKernItem
-    - class SvxBackgroundColorItem
     - class SvxCaseMapItem
     - class SvxCharReliefItem
     - class SvxCharScaleWidthItem
