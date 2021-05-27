@@ -186,24 +186,26 @@ void SAL_CALL SvxDrawPage::add( const uno::Reference< drawing::XShape >& xShape 
     SvxShape* pShape = comphelper::getFromUnoTunnel<SvxShape>( xShape );
 
     if( nullptr == pShape )
+    {
+        assert(false && "adding a non-SvxShape to a page?");
         return;
+    }
 
-    SdrObject *pObj = pShape->GetSdrObject();
+    rtl::Reference<SdrObject> pObj = pShape->GetSdrObject();
     bool bNeededToClone(false);
 
-    if(nullptr != pObj && &pObj->getSdrModelFromSdrObject() != &mpPage->getSdrModelFromSdrPage())
+    if(pObj && &pObj->getSdrModelFromSdrObject() != &mpPage->getSdrModelFromSdrPage())
     {
         // TTTT UNO API tries to add an existing SvxShape to this SvxDrawPage,
         // but these use different SdrModels. It was possible before to completely
         // 'change' a SdrObject to another SdrModel (including dangerous MigrateItemPool
         // stuff), but is no longer. We need to Clone the SdrObject to the target model
-        // and ::Create a new SvxShape (set SdrObject there, take obver values, ...)
-        SdrObject* pClonedSdrShape(pObj->CloneSdrObject(mpPage->getSdrModelFromSdrPage()));
+        // and ::Create a new SvxShape (set SdrObject there, take over values, ...)
+        rtl::Reference<SdrObject> pClonedSdrShape(pObj->CloneSdrObject(mpPage->getSdrModelFromSdrPage()));
         pObj->setUnoShape(nullptr);
-        pClonedSdrShape->setUnoShape(xShape);
+        pClonedSdrShape->setUnoShape(pShape);
         // pShape->InvalidateSdrObject();
         // pShape->Create(pClonedSdrShape, this);
-        SdrObject::Free(pObj);
         pObj = pClonedSdrShape;
         bNeededToClone = true;
     }
@@ -215,28 +217,28 @@ void SAL_CALL SvxDrawPage::add( const uno::Reference< drawing::XShape >& xShape 
     }
     else if ( !pObj->IsInserted() )
     {
-        mpPage->InsertObject( pObj );
+        mpPage->InsertObject( pObj.get() );
 
         if(bNeededToClone)
         {
             // TTTT Unfortunately in SdrObject::SetPage (see there) the
             // xShape/UnoShape at the newly cloned SDrObject is *removed* again,
             // so re-set it here, the caller *may need it* (e.g. Writer)
-            uno::Reference< uno::XInterface > xShapeCheck(pObj->getWeakUnoShape());
+            uno::Reference< drawing::XShape > xShapeCheck(pObj->getWeakUnoShape());
 
             if( !xShapeCheck.is() )
             {
-                pObj->setUnoShape(xShape);
+                pObj->setUnoShape(pShape);
             }
         }
     }
 
-    pShape->Create( pObj, this );
-    OSL_ENSURE( pShape->GetSdrObject() == pObj, "SvxDrawPage::add: shape does not know about its newly created SdrObject!" );
+    pShape->Create( pObj.get(), this );
+    OSL_ENSURE( pShape->GetSdrObject() == pObj.get(), "SvxDrawPage::add: shape does not know about its newly created SdrObject!" );
 
     if ( !pObj->IsInserted() )
     {
-        mpPage->InsertObject( pObj );
+        mpPage->InsertObject( pObj.get() );
     }
 
     mpModel->SetChanged();
@@ -257,7 +259,10 @@ void SAL_CALL SvxDrawPage::addBottom( const uno::Reference< drawing::XShape >& x
     SvxShape* pShape = comphelper::getFromUnoTunnel<SvxShape>( xShape );
 
     if( nullptr == pShape )
+    {
+        assert(false && "adding a non-SvxShape to a page?");
         return;
+    }
 
     SdrObject *pObj = pShape->GetSdrObject();
 
@@ -310,9 +315,6 @@ void SAL_CALL SvxDrawPage::remove( const Reference< drawing::XShape >& xShape )
             }
 
             OSL_VERIFY( mpPage->RemoveObject( nNum ) == pObj );
-
-            if (!bUndoEnabled)
-                SdrObject::Free(pObj);
 
             if (bUndoEnabled)
                 mpModel->EndUndo();
@@ -492,7 +494,7 @@ void SAL_CALL SvxDrawPage::ungroup( const Reference< drawing::XShapeGroup >& aGr
         mpModel->SetChanged();
 }
 
-SdrObject* SvxDrawPage::CreateSdrObject_(const Reference< drawing::XShape > & xShape)
+rtl::Reference<SdrObject> SvxDrawPage::CreateSdrObject_(const Reference< drawing::XShape > & xShape)
 {
     SdrObjKind nType = SdrObjKind::NONE;
     SdrInventor nInventor;
@@ -507,7 +509,7 @@ SdrObject* SvxDrawPage::CreateSdrObject_(const Reference< drawing::XShape > & xS
     awt::Point aPos = xShape->getPosition();
     tools::Rectangle aRect( Point( aPos.X, aPos.Y ), Size( aSize.Width, aSize.Height ) );
 
-    SdrObject* pNewObj = SdrObjFactory::MakeNewObject(
+    rtl::Reference<SdrObject> pNewObj = SdrObjFactory::MakeNewObject(
         *mpModel,
         nInventor,
         nType,
@@ -518,7 +520,7 @@ SdrObject* SvxDrawPage::CreateSdrObject_(const Reference< drawing::XShape > & xS
 
     if( nType == SdrObjKind::E3D_Scene )
     {
-        auto pScene = static_cast<E3dScene* >(pNewObj);
+        auto pScene = static_cast<E3dScene* >(pNewObj.get());
         // initialise scene
 
         double fW = static_cast<double>(aSize.Width);
@@ -537,7 +539,7 @@ SdrObject* SvxDrawPage::CreateSdrObject_(const Reference< drawing::XShape > & xS
     }
     else if(nType == SdrObjKind::E3D_Extrusion)
     {
-        auto pObj = static_cast<E3dExtrudeObj* >(pNewObj);
+        auto pObj = static_cast<E3dExtrudeObj* >(pNewObj.get());
         basegfx::B2DPolygon aNewPolygon;
         aNewPolygon.append(basegfx::B2DPoint(0.0, 0.0));
         aNewPolygon.append(basegfx::B2DPoint(0.0, 1.0));
@@ -550,7 +552,7 @@ SdrObject* SvxDrawPage::CreateSdrObject_(const Reference< drawing::XShape > & xS
     }
     else if(nType == SdrObjKind::E3D_Lathe)
     {
-        auto pLatheObj = static_cast<E3dLatheObj* >(pNewObj);
+        auto pLatheObj = static_cast<E3dLatheObj* >(pNewObj.get());
         basegfx::B2DPolygon aNewPolygon;
         aNewPolygon.append(basegfx::B2DPoint(0.0, 0.0));
         aNewPolygon.append(basegfx::B2DPoint(0.0, 1.0));
@@ -832,19 +834,19 @@ Reference< drawing::XShape >  SvxDrawPage::CreateShape( SdrObject *pObj ) const
 
 SdrObject *SvxDrawPage::CreateSdrObject( const Reference< drawing::XShape > & xShape, bool bBeginning ) noexcept
 {
-    SdrObject* pObj = CreateSdrObject_( xShape );
+    rtl::Reference<SdrObject> pObj = CreateSdrObject_( xShape );
     if( pObj)
     {
         if ( !pObj->IsInserted() && !pObj->IsDoNotInsertIntoPageAutomatically() )
         {
             if(bBeginning)
-                mpPage->InsertObject( pObj, 0 );
+                mpPage->InsertObject( pObj.get(), 0 );
             else
-                mpPage->InsertObject( pObj );
+                mpPage->InsertObject( pObj.get() );
         }
     }
 
-    return pObj;
+    return pObj.get();
 }
 
 // css::lang::XServiceInfo
@@ -893,6 +895,7 @@ SdrPage* GetSdrPageFromXDrawPage( const uno::Reference< drawing::XDrawPage >& xD
         {
             return pDrawPage->GetSdrPage();
         }
+        assert(false && "non-SvxDrawPage?");
     }
 
     return nullptr;

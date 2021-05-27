@@ -353,7 +353,7 @@ MotionPathTag::MotionPathTag( CustomAnimationPane& rPane, ::sd::View& rView, con
 
     mpPathObj->SetMergedItem(XLineTransparenceItem(50));
 
-    mpMark.reset(new SdrMark( mpPathObj, mrView.GetSdrPageView() ));
+    mpMark.reset(new SdrMark( mpPathObj.get(), mrView.GetSdrPageView() ));
 
     mpPathObj->AddListener( *this );
 
@@ -887,10 +887,10 @@ void MotionPathTag::addCustomHandles( SdrHdlList& rHandlerList )
     }
 
     SmartTagReference xThis( this );
-    std::unique_ptr<SdPathHdl> pHdl(new SdPathHdl( xThis, mpPathObj ));
+    std::unique_ptr<SdPathHdl> pHdl(new SdPathHdl( xThis, mpPathObj.get() ));
     pHdl->SetObjHdlNum( SMART_TAG_HDL_NUM );
     pHdl->SetPageView( mrView.GetSdrPageView() );
-    pHdl->SetObj(mpPathObj);
+    pHdl->SetObj(mpPathObj.get());
     rHandlerList.AddHdl( std::move(pHdl) );
 
     if( !isSelected() )
@@ -908,7 +908,7 @@ void MotionPathTag::addCustomHandles( SdrHdlList& rHandlerList )
         {
             SdrHdl* pTempHdl = aTemp.GetHdl( nHandle );
 
-            SmartHdl* pSmartHdl = new SmartHdl( xThis, mpPathObj, pTempHdl->GetPos(), pTempHdl->GetKind() );
+            SmartHdl* pSmartHdl = new SmartHdl( xThis, mpPathObj.get(), pTempHdl->GetPos(), pTempHdl->GetKind() );
             pSmartHdl->SetObjHdlNum( static_cast<sal_uInt32>(nHandle) );
             pSmartHdl->SetPolyNum( pTempHdl->GetPolyNum() );
             pSmartHdl->SetPointNum( pTempHdl->GetPointNum() );
@@ -929,7 +929,7 @@ void MotionPathTag::addCustomHandles( SdrHdlList& rHandlerList )
                 for (sal_uInt32 nPlusNum=0; nPlusNum<nPlusHdlCnt; nPlusNum++)
                 {
                     SdrHdl* pPlusHdl = plusList.GetHdl(nPlusNum);
-                    pPlusHdl->SetObj(mpPathObj);
+                    pPlusHdl->SetObj(mpPathObj.get());
                     pPlusHdl->SetPageView(mrView.GetSdrPageView());
                     pPlusHdl->SetPlusHdl(true);
                 }
@@ -949,23 +949,23 @@ void MotionPathTag::addCustomHandles( SdrHdlList& rHandlerList )
             bool bHgt0=aRect.Top()==aRect.Bottom();
             if (bWdt0 && bHgt0)
             {
-                rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.TopLeft(),SdrHdlKind::UpperLeft));
+                rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj.get(), aRect.TopLeft(),SdrHdlKind::UpperLeft));
             }
             else if (bWdt0 || bHgt0)
             {
-                rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.TopLeft()    ,SdrHdlKind::UpperLeft));
-                rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.BottomRight(),SdrHdlKind::LowerRight));
+                rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj.get(), aRect.TopLeft()    ,SdrHdlKind::UpperLeft));
+                rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj.get(), aRect.BottomRight(),SdrHdlKind::LowerRight));
             }
             else // !bWdt0 && !bHgt0
             {
-                rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.TopLeft()     ,SdrHdlKind::UpperLeft));
-                rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.TopCenter()   ,SdrHdlKind::Upper));
-                rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.TopRight()    ,SdrHdlKind::UpperRight));
-                rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.LeftCenter()  ,SdrHdlKind::Left ));
-                rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.RightCenter() ,SdrHdlKind::Right));
-                rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.BottomLeft()  ,SdrHdlKind::LowerLeft));
-                rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.BottomCenter(),SdrHdlKind::Lower));
-                rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj, aRect.BottomRight() ,SdrHdlKind::LowerRight));
+                rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj.get(), aRect.TopLeft()     ,SdrHdlKind::UpperLeft));
+                rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj.get(), aRect.TopCenter()   ,SdrHdlKind::Upper));
+                rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj.get(), aRect.TopRight()    ,SdrHdlKind::UpperRight));
+                rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj.get(), aRect.LeftCenter()  ,SdrHdlKind::Left ));
+                rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj.get(), aRect.RightCenter() ,SdrHdlKind::Right));
+                rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj.get(), aRect.BottomLeft()  ,SdrHdlKind::LowerLeft));
+                rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj.get(), aRect.BottomCenter(),SdrHdlKind::Lower));
+                rHandlerList.AddHdl(std::make_unique<SmartHdl>( xThis, mpPathObj.get(), aRect.BottomRight() ,SdrHdlKind::LowerRight));
             }
 
             while( nCount < rHandlerList.GetHdlCount() )
@@ -986,12 +986,8 @@ void MotionPathTag::disposing()
 
     if( mpPathObj )
     {
-        SdrObject* pTemp(mpPathObj);
         mpPathObj = nullptr;
         mrView.updateHandles();
-
-        // always use SdrObject::Free(...) for SdrObjects (!)
-        SdrObject::Free(pTemp);
     }
 
     mpMark.reset();

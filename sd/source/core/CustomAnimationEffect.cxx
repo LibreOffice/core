@@ -1566,9 +1566,9 @@ bool CustomAnimationEffect::getStopAudio() const
     return mnCommand == EffectCommands::STOPAUDIO;
 }
 
-SdrPathObj* CustomAnimationEffect::createSdrPathObjFromPath(SdrModel& rTargetModel)
+rtl::Reference<SdrPathObj> CustomAnimationEffect::createSdrPathObjFromPath(SdrModel& rTargetModel)
 {
-    SdrPathObj * pPathObj = new SdrPathObj(rTargetModel, SdrObjKind::PathLine);
+    rtl::Reference<SdrPathObj> pPathObj = new SdrPathObj(rTargetModel, SdrObjKind::PathLine);
     updateSdrPathObjFromPath( *pPathObj );
     return pPathObj;
 }

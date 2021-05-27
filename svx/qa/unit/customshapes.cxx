@@ -745,8 +745,8 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf121845_two_commands_U)
     SdrObjCustomShape& rSdrObjCustomShape(
         static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
     EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape);
-    SdrPathObjUniquePtr pPathObj(
-        static_cast<SdrPathObj*>(aCustomShape2d.CreateLineGeometry().release()));
+    rtl::Reference<SdrPathObj> pPathObj(
+        static_cast<SdrPathObj*>(aCustomShape2d.CreateLineGeometry().get()));
     CPPUNIT_ASSERT_MESSAGE("Could not convert to SdrPathObj", pPathObj);
     const basegfx::B2DPolyPolygon aPolyPolygon(pPathObj->GetPathPoly());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("count polygons", static_cast<sal_uInt32>(2),
@@ -1129,8 +1129,8 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf103474_commandT_CaseZeroHeight)
     SdrObjCustomShape& rSdrObjCustomShape(
         static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
     EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape);
-    SdrPathObjUniquePtr pPathObj(
-        static_cast<SdrPathObj*>(aCustomShape2d.CreateLineGeometry().release()));
+    rtl::Reference<SdrPathObj> pPathObj(
+        static_cast<SdrPathObj*>(aCustomShape2d.CreateLineGeometry().get()));
     CPPUNIT_ASSERT_MESSAGE("Could not convert to SdrPathObj", pPathObj);
     const basegfx::B2DPolyPolygon aPolyPolygon(pPathObj->GetPathPoly());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("count polygons", static_cast<sal_uInt32>(1),
@@ -1159,8 +1159,8 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf103474_commandG_CaseZeroHeight)
     SdrObjCustomShape& rSdrObjCustomShape(
         static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
     EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape);
-    SdrPathObjUniquePtr pPathObj(
-        static_cast<SdrPathObj*>(aCustomShape2d.CreateLineGeometry().release()));
+    rtl::Reference<SdrPathObj> pPathObj(
+        static_cast<SdrPathObj*>(aCustomShape2d.CreateLineGeometry().get()));
     CPPUNIT_ASSERT_MESSAGE("Could not convert to SdrPathObj", pPathObj);
     const basegfx::B2DPolyPolygon aPolyPolygon(pPathObj->GetPathPoly());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("count polygons", static_cast<sal_uInt32>(1),
@@ -1189,8 +1189,8 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf122323_largeSwingAngle)
     SdrObjCustomShape& rSdrObjCustomShape(
         static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
     EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape);
-    SdrPathObjUniquePtr pPathObj(
-        static_cast<SdrPathObj*>(aCustomShape2d.CreateLineGeometry().release()));
+    rtl::Reference<SdrPathObj> pPathObj(
+        static_cast<SdrPathObj*>(aCustomShape2d.CreateLineGeometry().get()));
     CPPUNIT_ASSERT_MESSAGE("Could not convert to SdrPathObj", pPathObj);
     const basegfx::B2DPolyPolygon aPolyPolygon(pPathObj->GetPathPoly());
     const basegfx::B2DPolygon aPolygon(aPolyPolygon.getB2DPolygon(0));
@@ -1393,8 +1393,8 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf148707_two_commands_B_V)
         SdrObjCustomShape& rSdrObjCustomShape(
             static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
         EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape);
-        SdrPathObjUniquePtr pPathObj(
-            static_cast<SdrPathObj*>(aCustomShape2d.CreateLineGeometry().release()));
+        rtl::Reference<SdrPathObj> pPathObj(
+            static_cast<SdrPathObj*>(aCustomShape2d.CreateLineGeometry().get()));
         CPPUNIT_ASSERT_MESSAGE("Could not convert to SdrPathObj", pPathObj);
         const basegfx::B2DPolyPolygon aPolyPolygon(pPathObj->GetPathPoly());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("count polygons", sal_uInt32(2), aPolyPolygon.count());

@@ -107,7 +107,7 @@ ScUndoObjData::~ScUndoObjData()
 
 void ScUndoObjData::Undo()
 {
-    ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj );
+    ScDrawObjData* pData = ScDrawLayer::GetObjData( mxObj.get() );
     OSL_ENSURE(pData,"ScUndoObjData: Data missing");
     if (pData)
     {
@@ -116,7 +116,7 @@ void ScUndoObjData::Undo()
     }
 
     // Undo also an untransformed anchor
-    pData = ScDrawLayer::GetNonRotatedObjData( pObj );
+    pData = ScDrawLayer::GetNonRotatedObjData( mxObj.get() );
     if (pData)
     {
         pData->maStart = aOldStt;
@@ -126,7 +126,7 @@ void ScUndoObjData::Undo()
 
 void ScUndoObjData::Redo()
 {
-    ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj );
+    ScDrawObjData* pData = ScDrawLayer::GetObjData( mxObj.get() );
     OSL_ENSURE(pData,"ScUndoObjData: Data missing");
     if (pData)
     {
@@ -135,7 +135,7 @@ void ScUndoObjData::Redo()
     }
 
     // Redo also an untransformed anchor
-    pData = ScDrawLayer::GetNonRotatedObjData( pObj );
+    pData = ScDrawLayer::GetNonRotatedObjData( mxObj.get() );
     if (pData)
     {
         pData->maStart = aNewStt;
@@ -159,30 +159,30 @@ ScUndoAnchorData::~ScUndoAnchorData()
 void ScUndoAnchorData::Undo()
 {
     // Trigger Object Change
-    if (pObj->IsInserted() && pObj->getSdrPageFromSdrObject())
+    if (mxObj->IsInserted() && mxObj->getSdrPageFromSdrObject())
     {
-        SdrHint aHint(SdrHintKind::ObjectChange, *pObj);
-        pObj->getSdrModelFromSdrObject().Broadcast(aHint);
+        SdrHint aHint(SdrHintKind::ObjectChange, *mxObj);
+        mxObj->getSdrModelFromSdrObject().Broadcast(aHint);
     }
 
     if (mbWasCellAnchored)
-        ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *mpDoc, mnTab, mbWasResizeWithCell);
+        ScDrawLayer::SetCellAnchoredFromPosition(*mxObj, *mpDoc, mnTab, mbWasResizeWithCell);
     else
-        ScDrawLayer::SetPageAnchored( *pObj );
+        ScDrawLayer::SetPageAnchored( *mxObj );
 }
 
 void ScUndoAnchorData::Redo()
 {
     if (mbWasCellAnchored)
-        ScDrawLayer::SetPageAnchored( *pObj );
+        ScDrawLayer::SetPageAnchored( *mxObj );
     else
-        ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *mpDoc, mnTab, mbWasResizeWithCell);
+        ScDrawLayer::SetCellAnchoredFromPosition(*mxObj, *mpDoc, mnTab, mbWasResizeWithCell);
 
     // Trigger Object Change
-    if (pObj->IsInserted() && pObj->getSdrPageFromSdrObject())
+    if (mxObj->IsInserted() && mxObj->getSdrPageFromSdrObject())
     {
-        SdrHint aHint(SdrHintKind::ObjectChange, *pObj);
-        pObj->getSdrModelFromSdrObject().Broadcast(aHint);
+        SdrHint aHint(SdrHintKind::ObjectChange, *mxObj);
+        mxObj->getSdrModelFromSdrObject().Broadcast(aHint);
     }
 }
 
@@ -449,10 +449,10 @@ void ScDrawLayer::ScCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos )
             }
 
             // Clone to target SdrModel
-            SdrObject* pNewObject(pOldObject->CloneSdrObject(*this));
+            rtl::Reference<SdrObject> pNewObject(pOldObject->CloneSdrObject(*this));
             pNewObject->NbcMove(Size(0,0));
-            pNewPage->InsertObject( pNewObject );
-            ScDrawObjData* pNewData = GetObjData(pNewObject);
+            pNewPage->InsertObject( pNewObject.get() );
+            ScDrawObjData* pNewData = GetObjData(pNewObject.get());
             if (pNewData)
             {
                 pNewData->maStart.SetTab(nNewTab);
@@ -1735,12 +1735,12 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const tools::Rec
             if (pDestPage)
             {
                 // Clone to target SdrModel
-                SdrObject* pNewObject(pOldObject->CloneSdrObject(*pDestModel));
+                rtl::Reference<SdrObject> pNewObject(pOldObject->CloneSdrObject(*pDestModel));
 
                 uno::Reference< chart2::XChartDocument > xOldChart( ScChartHelper::GetChartFromSdrObject( pOldObject ) );
                 if(!xOldChart.is())//#i110034# do not move charts as they lose all their data references otherwise
                     pNewObject->NbcMove(Size(0,0));
-                pDestPage->InsertObject( pNewObject );
+                pDestPage->InsertObject( pNewObject.get() );
 
                 //  no undo needed in clipboard document
                 //  charts are not updated
@@ -1905,16 +1905,16 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
             && !IsNoteCaption(pOldObject))
         {
             // Clone to target SdrModel
-            SdrObject* pNewObject(pOldObject->CloneSdrObject(*this));
+            rtl::Reference<SdrObject> pNewObject(pOldObject->CloneSdrObject(*this));
 
             if ( bMirrorObj )
-                MirrorRTL( pNewObject );        // first mirror, then move
+                MirrorRTL( pNewObject.get() );        // first mirror, then move
 
             pNewObject->NbcMove( aMove );
             if ( bResize )
                 pNewObject->NbcResize( aRefPos, aHorFract, aVerFract );
 
-            pDestPage->InsertObject( pNewObject );
+            pDestPage->InsertObject( pNewObject.get() );
             if (bRecording)
                 AddCalcUndo( std::make_unique<SdrUndoInsertObj>( *pNewObject ) );
 
@@ -1922,7 +1922,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
 
             if ( pNewObject->GetObjIdentifier() == SdrObjKind::OLE2 )
             {
-                uno::Reference< embed::XEmbeddedObject > xIPObj = static_cast<SdrOle2Obj*>(pNewObject)->GetObjRef();
+                uno::Reference< embed::XEmbeddedObject > xIPObj = static_cast<SdrOle2Obj*>(pNewObject.get())->GetObjRef();
                 uno::Reference< embed::XClassifiedObject > xClassified = xIPObj;
                 SvGlobalName aObjectClassName;
                 if ( xClassified.is() )
@@ -1937,10 +1937,10 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
 
                 if ( xIPObj.is() && SotExchange::IsChart( aObjectClassName ) )
                 {
-                    uno::Reference< chart2::XChartDocument > xNewChart( ScChartHelper::GetChartFromSdrObject( pNewObject ) );
+                    uno::Reference< chart2::XChartDocument > xNewChart( ScChartHelper::GetChartFromSdrObject( pNewObject.get() ) );
                     if( xNewChart.is() && !xNewChart->hasInternalDataProvider() )
                     {
-                        OUString aChartName = static_cast<SdrOle2Obj*>(pNewObject)->GetPersistName();
+                        OUString aChartName = static_cast<SdrOle2Obj*>(pNewObject.get())->GetPersistName();
                         ::std::vector< ScRangeList > aRangesVector;
                         pDoc->GetChartRanges( aChartName, aRangesVector, *pDoc );
                         if( !aRangesVector.empty() )
