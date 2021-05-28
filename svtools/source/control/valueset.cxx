@@ -138,17 +138,15 @@ void ValueSet::ImplDeleteItems()
 
     for ( size_t i = 0; i < n; ++i )
     {
-        ValueSetItem* pItem = mItemList[i].get();
-        if ( pItem->mbVisible && ImplHasAccessibleListeners() )
+        ValueSetItem& rItem = mItemList[i];
+        if ( rItem.mbVisible && ImplHasAccessibleListeners() )
         {
             Any aOldAny;
             Any aNewAny;
 
-            aOldAny <<= pItem->GetAccessible( false/*bIsTransientChildrenDisabled*/ );
+            aOldAny <<= rItem.GetAccessible( false/*bIsTransientChildrenDisabled*/ );
             ImplFireAccessibleEvent(AccessibleEventId::CHILD, aOldAny, aNewAny);
         }
-
-        mItemList[i].reset();
     }
 
     mItemList.clear();
@@ -206,12 +204,12 @@ ValueSetItem* ValueSet::ImplGetItem( size_t nPos )
     if (nPos == VALUESET_ITEM_NONEITEM)
         return mpNoneItem.get();
     else
-        return (nPos < mItemList.size()) ? mItemList[nPos].get() : nullptr;
+        return (nPos < mItemList.size()) ? &mItemList[nPos] : nullptr;
 }
 
 ValueSetItem* ValueSet::ImplGetFirstItem()
 {
-    return !mItemList.empty() ? mItemList[0].get() : nullptr;
+    return !mItemList.empty() ? mItemList.data() : nullptr;
 }
 
 sal_uInt16 ValueSet::ImplGetVisibleItemCount() const
@@ -221,7 +219,7 @@ sal_uInt16 ValueSet::ImplGetVisibleItemCount() const
 
     for ( size_t n = 0; n < nItemCount; ++n )
     {
-        if ( mItemList[n]->mbVisible )
+        if ( mItemList[n].mbVisible )
             ++nRet;
     }
 
@@ -614,7 +612,7 @@ size_t ValueSet::GetItemCount() const
 size_t ValueSet::GetItemPos( sal_uInt16 nItemId ) const
 {
     for ( size_t i = 0, n = mItemList.size(); i < n; ++i ) {
-        if ( mItemList[i]->mnId == nItemId ) {
+        if ( mItemList[i].mnId == nItemId ) {
             return i;
         }
     }
@@ -623,7 +621,7 @@ size_t ValueSet::GetItemPos( sal_uInt16 nItemId ) const
 
 sal_uInt16 ValueSet::GetItemId( size_t nPos ) const
 {
-    return ( nPos < mItemList.size() ) ? mItemList[nPos]->mnId : 0 ;
+    return ( nPos < mItemList.size() ) ? mItemList[nPos].mnId : 0 ;
 }
 
 sal_uInt16 ValueSet::GetItemId( const Point& rPos ) const
@@ -639,7 +637,7 @@ tools::Rectangle ValueSet::GetItemRect( sal_uInt16 nItemId ) const
 {
     const size_t nPos = GetItemPos( nItemId );
 
-    if ( nPos!=VALUESET_ITEM_NOTFOUND && mItemList[nPos]->mbVisible )
+    if ( nPos!=VALUESET_ITEM_NOTFOUND && mItemList[nPos].mbVisible )
         return ImplGetItemRect( nPos );
 
     return tools::Rectangle();
@@ -812,7 +810,7 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
         if( nPos != VALUESET_ITEM_NOTFOUND )
         {
             ValueItemAcc* pItemAcc = ValueItemAcc::getImplementation(
-                mItemList[nPos]->GetAccessible( false/*bIsTransientChildrenDisabled*/ ) );
+                mItemList[nPos].GetAccessible( false/*bIsTransientChildrenDisabled*/ ) );
 
             if( pItemAcc )
             {
@@ -829,7 +827,7 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
 
     ValueSetItem* pItem;
     if( nPos != VALUESET_ITEM_NOTFOUND )
-        pItem = mItemList[nPos].get();
+        pItem = &mItemList[nPos];
     else
         pItem = mpNoneItem.get();
 
@@ -1027,7 +1025,7 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
 
         for (size_t i = 0; i < nItemCount; i++)
         {
-            mItemList[i]->mbVisible = false;
+            mItemList[i].mbVisible = false;
         }
 
         if (mxScrolledWindow && mxScrolledWindow->get_vpolicy() != VclPolicyType::NEVER)
@@ -1105,7 +1103,7 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
             maNoneItemRect.SetRight( maNoneItemRect.Left() + aWinSize.Width() - x - 1 );
             maNoneItemRect.SetBottom( y + nNoneHeight - 1 );
 
-            ImplFormatItem(rRenderContext, mpNoneItem.get(), maNoneItemRect);
+            ImplFormatItem(rRenderContext, *mpNoneItem, maNoneItemRect);
 
             y += nNoneHeight + nNoneSpace;
         }
@@ -1130,21 +1128,21 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
         }
         for (size_t i = 0; i < nItemCount; i++)
         {
-            ValueSetItem* pItem = mItemList[i].get();
+            ValueSetItem& rItem = mItemList[i];
 
             if (i >= nFirstItem && i < nLastItem)
             {
-                if (!pItem->mbVisible && ImplHasAccessibleListeners())
+                if (!rItem.mbVisible && ImplHasAccessibleListeners())
                 {
                     Any aOldAny;
                     Any aNewAny;
 
-                    aNewAny <<= pItem->GetAccessible(false/*bIsTransientChildrenDisabled*/);
+                    aNewAny <<= rItem.GetAccessible(false/*bIsTransientChildrenDisabled*/);
                     ImplFireAccessibleEvent(AccessibleEventId::CHILD, aOldAny, aNewAny);
                 }
 
-                pItem->mbVisible = true;
-                ImplFormatItem(rRenderContext, pItem, tools::Rectangle(Point(x, y), Size(mnItemWidth, mnItemHeight)));
+                rItem.mbVisible = true;
+                ImplFormatItem(rRenderContext, rItem, tools::Rectangle(Point(x, y), Size(mnItemWidth, mnItemHeight)));
 
                 if (!((i + 1) % mnCols))
                 {
@@ -1156,16 +1154,16 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
             }
             else
             {
-                if (pItem->mbVisible && ImplHasAccessibleListeners())
+                if (rItem.mbVisible && ImplHasAccessibleListeners())
                 {
                     Any aOldAny;
                     Any aNewAny;
 
-                    aOldAny <<= pItem->GetAccessible(false/*bIsTransientChildrenDisabled*/);
+                    aOldAny <<= rItem.GetAccessible(false/*bIsTransientChildrenDisabled*/);
                     ImplFireAccessibleEvent(AccessibleEventId::CHILD, aOldAny, aNewAny);
                 }
 
-                pItem->mbVisible = false;
+                rItem.mbVisible = false;
             }
         }
 
@@ -1219,7 +1217,7 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nIt
     if (nItemId)
     {
         const size_t nPos = GetItemPos( nItemId );
-        pItem = mItemList[ nPos ].get();
+        pItem = &mItemList[ nPos ];
         aRect = ImplGetItemRect( nPos );
     }
     else if (mpNoneItem)
@@ -1332,7 +1330,7 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nIt
     ImplDrawItemText(rRenderContext, pItem->maText);
 }
 
-void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSetItem* pItem, tools::Rectangle aRect)
+void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSetItem& rItem, tools::Rectangle aRect)
 {
     WinBits nStyle = GetStyle();
     if (nStyle & WB_ITEMBORDER)
@@ -1358,15 +1356,15 @@ void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSe
         }
     }
 
-    if (pItem == mpNoneItem.get())
-        pItem->maText = GetText();
+    if (&rItem == mpNoneItem.get())
+        rItem.maText = GetText();
 
     if ((aRect.GetHeight() <= 0) || (aRect.GetWidth() <= 0))
         return;
 
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
-    if (pItem == mpNoneItem.get())
+    if (&rItem == mpNoneItem.get())
     {
         maVirDev->SetFont(rRenderContext.GetFont());
         maVirDev->SetTextColor((nStyle & WB_MENUSTYLEVALUESET) ? rStyleSettings.GetMenuTextColor() : rStyleSettings.GetWindowTextColor());
@@ -1374,19 +1372,19 @@ void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSe
         maVirDev->SetFillColor((nStyle & WB_MENUSTYLEVALUESET) ? rStyleSettings.GetMenuColor() : rStyleSettings.GetWindowColor());
         maVirDev->DrawRect(aRect);
         Point aTxtPos(aRect.Left() + 2, aRect.Top());
-        tools::Long nTxtWidth = rRenderContext.GetTextWidth(pItem->maText);
+        tools::Long nTxtWidth = rRenderContext.GetTextWidth(rItem.maText);
         if ((aTxtPos.X() + nTxtWidth) > aRect.Right())
         {
             maVirDev->SetClipRegion(vcl::Region(aRect));
-            maVirDev->DrawText(aTxtPos, pItem->maText);
+            maVirDev->DrawText(aTxtPos, rItem.maText);
             maVirDev->SetClipRegion();
         }
         else
-            maVirDev->DrawText(aTxtPos, pItem->maText);
+            maVirDev->DrawText(aTxtPos, rItem.maText);
     }
-    else if (pItem->meType == VALUESETITEM_COLOR)
+    else if (rItem.meType == VALUESETITEM_COLOR)
     {
-        maVirDev->SetFillColor(pItem->maColor);
+        maVirDev->SetFillColor(rItem.maColor);
         maVirDev->DrawRect(aRect);
     }
     else
@@ -1401,19 +1399,19 @@ void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSe
             maVirDev->SetFillColor(rStyleSettings.GetFaceColor());
         maVirDev->DrawRect(aRect);
 
-        if (pItem->meType == VALUESETITEM_USERDRAW)
+        if (rItem.meType == VALUESETITEM_USERDRAW)
         {
-            UserDrawEvent aUDEvt(maVirDev.get(), aRect, pItem->mnId);
+            UserDrawEvent aUDEvt(maVirDev.get(), aRect, rItem.mnId);
             UserDraw(aUDEvt);
         }
         else
         {
-            Size aImageSize = pItem->maImage.GetSizePixel();
+            Size aImageSize = rItem.maImage.GetSizePixel();
             Size  aRectSize = aRect.GetSize();
             Point aPos(aRect.Left(), aRect.Top());
             aPos.AdjustX((aRectSize.Width() - aImageSize.Width()) / 2 );
 
-            if (pItem->meType != VALUESETITEM_IMAGE_AND_TEXT)
+            if (rItem.meType != VALUESETITEM_IMAGE_AND_TEXT)
                 aPos.AdjustY((aRectSize.Height() - aImageSize.Height()) / 2 );
 
             DrawImageFlags  nImageStyle  = DrawImageFlags::NONE;
@@ -1424,19 +1422,19 @@ void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSe
                 aImageSize.Height() > aRectSize.Height())
             {
                 maVirDev->SetClipRegion(vcl::Region(aRect));
-                maVirDev->DrawImage(aPos, pItem->maImage, nImageStyle);
+                maVirDev->DrawImage(aPos, rItem.maImage, nImageStyle);
                 maVirDev->SetClipRegion();
             }
             else
-                maVirDev->DrawImage(aPos, pItem->maImage, nImageStyle);
+                maVirDev->DrawImage(aPos, rItem.maImage, nImageStyle);
 
-            if (pItem->meType == VALUESETITEM_IMAGE_AND_TEXT)
+            if (rItem.meType == VALUESETITEM_IMAGE_AND_TEXT)
             {
                 maVirDev->SetFont(rRenderContext.GetFont());
                 maVirDev->SetTextColor((nStyle & WB_MENUSTYLEVALUESET) ? rStyleSettings.GetMenuTextColor() : rStyleSettings.GetWindowTextColor());
                 maVirDev->SetTextFillColor();
 
-                tools::Long nTxtWidth = maVirDev->GetTextWidth(pItem->maText);
+                tools::Long nTxtWidth = maVirDev->GetTextWidth(rItem.maText);
 
                 if (nTxtWidth > aRect.GetWidth())
                     maVirDev->SetClipRegion(vcl::Region(aRect));
@@ -1444,7 +1442,7 @@ void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSe
                 maVirDev->DrawText(Point(aRect.Left() +
                                          (aRect.GetWidth() - nTxtWidth) / 2,
                                          aRect.Bottom() - maVirDev->GetTextHeight()),
-                                   pItem->maText);
+                                   rItem.maText);
 
                 if (nTxtWidth > aRect.GetWidth())
                     maVirDev->SetClipRegion();
@@ -1522,9 +1520,9 @@ void ValueSet::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
     if ( nPos == VALUESET_ITEM_NOTFOUND )
         return;
 
-    ValueSetItem* pItem = mItemList[nPos].get();
-    pItem->meType  = VALUESETITEM_IMAGE;
-    pItem->maImage = rImage;
+    ValueSetItem& rItem = mItemList[nPos];
+    rItem.meType  = VALUESETITEM_IMAGE;
+    rItem.maImage = rImage;
 
     if ( !mbFormat && IsReallyVisible() && IsUpdateMode() )
     {
@@ -1542,9 +1540,9 @@ void ValueSet::SetItemColor( sal_uInt16 nItemId, const Color& rColor )
     if ( nPos == VALUESET_ITEM_NOTFOUND )
         return;
 
-    ValueSetItem* pItem = mItemList[nPos].get();
-    pItem->meType  = VALUESETITEM_COLOR;
-    pItem->maColor = rColor;
+    ValueSetItem& rItem = mItemList[nPos];
+    rItem.meType  = VALUESETITEM_COLOR;
+    rItem.maColor = rColor;
 
     if ( !mbFormat && IsReallyVisible() && IsUpdateMode() )
     {
@@ -1560,7 +1558,7 @@ Color ValueSet::GetItemColor( sal_uInt16 nItemId ) const
     size_t nPos = GetItemPos( nItemId );
 
     if ( nPos != VALUESET_ITEM_NOTFOUND )
-        return mItemList[nPos]->maColor;
+        return mItemList[nPos].maColor;
     else
         return Color();
 }
@@ -1638,54 +1636,54 @@ Size ValueSet::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesireCol
 
 void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage )
 {
-    std::unique_ptr<ValueSetItem> pItem(new ValueSetItem( *this ));
-    pItem->mnId     = nItemId;
-    pItem->meType   = VALUESETITEM_IMAGE;
-    pItem->maImage  = rImage;
-    ImplInsertItem( std::move(pItem), VALUESET_APPEND );
+    ValueSetItem aItem(*this);
+    aItem.mnId     = nItemId;
+    aItem.meType   = VALUESETITEM_IMAGE;
+    aItem.maImage  = rImage;
+    ImplInsertItem( aItem, VALUESET_APPEND );
 }
 
 void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage,
                            const OUString& rText, size_t nPos,
                            bool bShowLegend )
 {
-    std::unique_ptr<ValueSetItem> pItem(new ValueSetItem( *this ));
-    pItem->mnId     = nItemId;
-    pItem->meType   = bShowLegend ? VALUESETITEM_IMAGE_AND_TEXT : VALUESETITEM_IMAGE;
-    pItem->maImage  = rImage;
-    pItem->maText   = rText;
-    ImplInsertItem( std::move(pItem), nPos );
+    ValueSetItem aItem( *this );
+    aItem.mnId     = nItemId;
+    aItem.meType   = bShowLegend ? VALUESETITEM_IMAGE_AND_TEXT : VALUESETITEM_IMAGE;
+    aItem.maImage  = rImage;
+    aItem.maText   = rText;
+    ImplInsertItem( aItem, nPos );
 }
 
 void ValueSet::InsertItem( sal_uInt16 nItemId, size_t nPos )
 {
-    std::unique_ptr<ValueSetItem> pItem(new ValueSetItem( *this ));
-    pItem->mnId     = nItemId;
-    pItem->meType   = VALUESETITEM_USERDRAW;
-    ImplInsertItem( std::move(pItem), nPos );
+    ValueSetItem aItem(*this );
+    aItem.mnId     = nItemId;
+    aItem.meType   = VALUESETITEM_USERDRAW;
+    ImplInsertItem( aItem, nPos );
 }
 
 void ValueSet::InsertItem( sal_uInt16 nItemId, const Color& rColor,
                            const OUString& rText )
 {
-    std::unique_ptr<ValueSetItem> pItem(new ValueSetItem( *this ));
-    pItem->mnId     = nItemId;
-    pItem->meType   = VALUESETITEM_COLOR;
-    pItem->maColor  = rColor;
-    pItem->maText   = rText;
-    ImplInsertItem( std::move(pItem), VALUESET_APPEND );
+    ValueSetItem aItem( *this );
+    aItem.mnId     = nItemId;
+    aItem.meType   = VALUESETITEM_COLOR;
+    aItem.maColor  = rColor;
+    aItem.maText   = rText;
+    ImplInsertItem( aItem, VALUESET_APPEND );
 }
 
-void ValueSet::ImplInsertItem( std::unique_ptr<ValueSetItem> pItem, const size_t nPos )
+void ValueSet::ImplInsertItem( const ValueSetItem& rItem, const size_t nPos )
 {
-    DBG_ASSERT( pItem->mnId, "ValueSet::InsertItem(): ItemId == 0" );
-    DBG_ASSERT( GetItemPos( pItem->mnId ) == VALUESET_ITEM_NOTFOUND,
+    DBG_ASSERT( rItem.mnId, "ValueSet::InsertItem(): ItemId == 0" );
+    DBG_ASSERT( GetItemPos( rItem.mnId ) == VALUESET_ITEM_NOTFOUND,
                 "ValueSet::InsertItem(): ItemId already exists" );
 
     if ( nPos < mItemList.size() ) {
-        mItemList.insert( mItemList.begin() + nPos, std::move(pItem) );
+        mItemList.insert( mItemList.begin() + nPos, rItem );
     } else {
-        mItemList.push_back( std::move(pItem) );
+        mItemList.push_back( rItem );
     }
 
     QueueReformat();
@@ -1761,7 +1759,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const OUString& rText, size_t nPo
     pItem->mnId     = nItemId;
     pItem->meType   = VALUESETITEM_USERDRAW;
     pItem->maText   = rText;
-    ImplInsertItem( std::move(pItem), nPos );
+    ImplInsertItem( *pItem, nPos );
 }
 
 void ValueSet::SetItemHeight( tools::Long nNewItemHeight )
@@ -1791,7 +1789,7 @@ OUString ValueSet::GetItemText(sal_uInt16 nItemId) const
     const size_t nPos = GetItemPos(nItemId);
 
     if ( nPos != VALUESET_ITEM_NOTFOUND )
-        return mItemList[nPos]->maText;
+        return mItemList[nPos].maText;
 
     return OUString();
 }
@@ -1817,10 +1815,10 @@ void ValueSet::SetItemData( sal_uInt16 nItemId, void* pData )
     if ( nPos == VALUESET_ITEM_NOTFOUND )
         return;
 
-    ValueSetItem* pItem = mItemList[nPos].get();
-    pItem->mpData = pData;
+    ValueSetItem& rItem = mItemList[nPos];
+    rItem.mpData = pData;
 
-    if ( pItem->meType == VALUESETITEM_USERDRAW )
+    if ( rItem.meType == VALUESETITEM_USERDRAW )
     {
         if ( !mbFormat && IsReallyVisible() && IsUpdateMode() )
         {
@@ -1837,7 +1835,7 @@ void* ValueSet::GetItemData( sal_uInt16 nItemId ) const
     size_t nPos = GetItemPos( nItemId );
 
     if ( nPos != VALUESET_ITEM_NOTFOUND )
-        return mItemList[nPos]->mpData;
+        return mItemList[nPos].mpData;
     else
         return nullptr;
 }
@@ -1849,17 +1847,15 @@ void ValueSet::SetItemText(sal_uInt16 nItemId, const OUString& rText)
     if ( nPos == VALUESET_ITEM_NOTFOUND )
         return;
 
-    ValueSetItem* pItem = mItemList[nPos].get();
+    ValueSetItem& rItem = mItemList[nPos];
 
     // Remember old and new name for accessibility event.
     Any aOldName;
     Any aNewName;
-    OUString sString (pItem->maText);
-    aOldName <<= sString;
-    sString = rText;
-    aNewName <<= sString;
+    aOldName <<= rItem.maText;
+    aNewName <<= rText;
 
-    pItem->maText = rText;
+    rItem.maText = rText;
 
     if (!mbFormat && IsReallyVisible() && IsUpdateMode())
     {
@@ -1874,7 +1870,7 @@ void ValueSet::SetItemText(sal_uInt16 nItemId, const OUString& rText)
 
     if (ImplHasAccessibleListeners())
     {
-        Reference<XAccessible> xAccessible(pItem->GetAccessible( false/*bIsTransientChildrenDisabled*/));
+        Reference<XAccessible> xAccessible(rItem.GetAccessible( false/*bIsTransientChildrenDisabled*/));
         ValueItemAcc* pValueItemAcc = static_cast<ValueItemAcc*>(xAccessible.get());
         pValueItemAcc->FireAccessibleEvent(AccessibleEventId::NAME_CHANGED, aOldName, aNewName);
     }
@@ -1884,25 +1880,25 @@ Size ValueSet::GetLargestItemSize()
 {
     Size aLargestItem;
 
-    for (const std::unique_ptr<ValueSetItem>& pItem : mItemList)
+    for (const ValueSetItem& rItem : mItemList)
     {
-        if (!pItem->mbVisible)
+        if (!rItem.mbVisible)
             continue;
 
-        if (pItem->meType != VALUESETITEM_IMAGE &&
-            pItem->meType != VALUESETITEM_IMAGE_AND_TEXT)
+        if (rItem.meType != VALUESETITEM_IMAGE &&
+            rItem.meType != VALUESETITEM_IMAGE_AND_TEXT)
         {
             // handle determining an optimal size for this case
             continue;
         }
 
-        Size aSize = pItem->maImage.GetSizePixel();
-        if (pItem->meType == VALUESETITEM_IMAGE_AND_TEXT)
+        Size aSize = rItem.maImage.GetSizePixel();
+        if (rItem.meType == VALUESETITEM_IMAGE_AND_TEXT)
         {
             aSize.AdjustHeight(3 * NAME_LINE_HEIGHT +
                 maVirDev->GetTextHeight() );
             aSize.setWidth( std::max(aSize.Width(),
-                                     maVirDev->GetTextWidth(pItem->maText) + NAME_OFFSET) );
+                                     maVirDev->GetTextWidth(rItem.maText) + NAME_OFFSET) );
         }
 
         aLargestItem.setWidth( std::max(aLargestItem.Width(), aSize.Width()) );
@@ -1926,7 +1922,7 @@ Image ValueSet::GetItemImage(sal_uInt16 nItemId) const
     size_t nPos = GetItemPos( nItemId );
 
     if ( nPos != VALUESET_ITEM_NOTFOUND )
-        return mItemList[nPos]->maImage;
+        return mItemList[nPos].maImage;
     else
         return Image();
 }
