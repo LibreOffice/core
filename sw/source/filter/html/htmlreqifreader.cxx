@@ -555,17 +555,6 @@ bool WrapGraphicInRtf(const Graphic& rGraphic, const SwFrameFormat& rFormat, SvS
     aNativeData.Seek(0);
     aOle1.WriteStream(aNativeData);
 
-    // TODO Write Presentation.
-
-    // End objdata.
-    msfilter::rtfutil::WriteHex(static_cast<const sal_uInt8*>(aOle1.GetData()), aOle1.GetSize(),
-                                &rRtf);
-    rRtf.WriteCharPtr("}");
-    rRtf.WriteOString(SAL_NEWLINE_STRING);
-
-    rRtf.WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_RESULT);
-    rRtf.WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_PICT);
-
     // Prepare presentation data.
     const sal_uInt8* pPresentationData = nullptr;
     sal_uInt64 nPresentationData = 0;
@@ -579,6 +568,43 @@ bool WrapGraphicInRtf(const Graphic& rGraphic, const SwFrameFormat& rFormat, SvS
         nPresentationData = aGraphicStream.TellEnd();
         msfilter::rtfutil::StripMetafileHeader(pPresentationData, nPresentationData);
     }
+
+    // Write Presentation.
+    // OLEVersion.
+    aOle1.WriteUInt32(0x00000501);
+    // FormatID: constant means the ClassName field is present.
+    aOle1.WriteUInt32(0x00000005);
+    // ClassName: null terminated pascal string.
+    OString aPresentationClassName("METAFILEPICT");
+    aOle1.WriteUInt32(aPresentationClassName.getLength() + 1);
+    aOle1.WriteOString(aPresentationClassName);
+    aOle1.WriteChar(0);
+    const sal_uInt8* pBytes = nullptr;
+    sal_uInt64 nBytes = 0;
+    // Take presentation data for OLE1 from RTF.
+    pBytes = pPresentationData;
+    nBytes = nPresentationData;
+    // Width.
+    aOle1.WriteUInt32(nWidth);
+    // Height.
+    aOle1.WriteUInt32(nHeight * -1);
+    // PresentationDataSize: size of (reserved fields + pBytes).
+    aOle1.WriteUInt32(8 + nBytes);
+    // Reserved1-4.
+    aOle1.WriteUInt16(0x0008);
+    aOle1.WriteUInt16(0x31b1);
+    aOle1.WriteUInt16(0x1dd9);
+    aOle1.WriteUInt16(0x0000);
+    aOle1.WriteBytes(pBytes, nBytes);
+
+    // End objdata.
+    msfilter::rtfutil::WriteHex(static_cast<const sal_uInt8*>(aOle1.GetData()), aOle1.GetSize(),
+                                &rRtf);
+    rRtf.WriteCharPtr("}");
+    rRtf.WriteOString(SAL_NEWLINE_STRING);
+
+    rRtf.WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_RESULT);
+    rRtf.WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_PICT);
 
     Size aMapped(rGraphic.GetPrefSize());
     rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PICW);
