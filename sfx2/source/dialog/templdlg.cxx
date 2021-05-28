@@ -341,6 +341,16 @@ void SfxCommonTemplateDialog_Impl::PrepareMenu(const Point& rPos)
         pTreeView->select(*xIter);
         FmtSelectHdl(*pTreeView);
     }
+
+    weld::TreeView* pTreeView1 = mxTreeBox1->get_visible() ? mxTreeBox1.get() : mxFmtLb.get();
+    std::unique_ptr<weld::TreeIter> xIter1(pTreeView1->make_iterator());
+    if (pTreeView1->get_dest_row_at_pos(rPos, xIter.get(), false) && !pTreeView1->is_selected(*xIter1))
+    {
+        pTreeView1->unselect_all();
+        pTreeView1->set_cursor(*xIter1);
+        pTreeView1->select(*xIter1);
+        FmtSelectHdl(*pTreeView1);
+    }
 }
 
 void SfxCommonTemplateDialog_Impl::ShowMenu(const CommandEvent& rCEvt)
@@ -350,6 +360,10 @@ void SfxCommonTemplateDialog_Impl::ShowMenu(const CommandEvent& rCEvt)
     weld::TreeView* pTreeView = mxTreeBox->get_visible() ? mxTreeBox.get() : mxFmtLb.get();
     OString sCommand(mxMenu->popup_at_rect(pTreeView, tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1))));
     MenuSelect(sCommand);
+
+    weld::TreeView* pTreeView1 = mxTreeBox1->get_visible() ? mxTreeBox1.get() : mxFmtLb.get();
+    OString sCommand1(mxMenu->popup_at_rect(pTreeView1, tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1))));
+    MenuSelect(sCommand1);
 }
 
 IMPL_LINK(SfxCommonTemplateDialog_Impl, PopupTreeMenuHdl, const CommandEvent&, rCEvt, bool)
@@ -533,6 +547,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl(SfxBindings* pB, weld
     , m_pDeletionWatcher(nullptr)
     , mxFmtLb(pBuilder->weld_tree_view("flatview"))
     , mxTreeBox(pBuilder->weld_tree_view("treeview"))
+    , mxTreeBox1(pBuilder->weld_tree_view("treeview1"))
     , mxPreviewCheckbox(pBuilder->weld_check_button("showpreview"))
     , mxFilterLb(pBuilder->weld_combo_box("filter"))
 
@@ -745,21 +760,35 @@ void SfxCommonTemplateDialog_Impl::Initialize()
     mxTreeBox->connect_popup_menu(LINK(this, SfxCommonTemplateDialog_Impl, PopupTreeMenuHdl));
     mxTreeBox->connect_key_press(LINK(this, SfxCommonTemplateDialog_Impl, KeyInputHdl));
     mxTreeBox->connect_drag_begin(LINK(this, SfxCommonTemplateDialog_Impl, DragBeginHdl));
+
+    mxTreeBox1->connect_changed(LINK(this, SfxCommonTemplateDialog_Impl, FmtSelectHdl));
+    mxTreeBox1->connect_row_activated(LINK( this, SfxCommonTemplateDialog_Impl, TreeListApplyHdl));
+    mxTreeBox1->connect_mouse_press(LINK(this, SfxCommonTemplateDialog_Impl, MousePressHdl));
+    mxTreeBox1->connect_query_tooltip(LINK(this, SfxCommonTemplateDialog_Impl, QueryTooltipHdl));
+    mxTreeBox1->connect_popup_menu(LINK(this, SfxCommonTemplateDialog_Impl, PopupTreeMenuHdl));
+    mxTreeBox1->connect_key_press(LINK(this, SfxCommonTemplateDialog_Impl, KeyInputHdl));
+    mxTreeBox1->connect_drag_begin(LINK(this, SfxCommonTemplateDialog_Impl, DragBeginHdl));
+
     mxPreviewCheckbox->connect_toggled(LINK(this, SfxCommonTemplateDialog_Impl, PreviewHdl));
     m_xTreeView1DropTargetHelper.reset(new TreeViewDropTarget(*this, *mxFmtLb));
     m_xTreeView2DropTargetHelper.reset(new TreeViewDropTarget(*this, *mxTreeBox));
+    m_xTreeView2DropTargetHelper.reset(new TreeViewDropTarget(*this, *mxTreeBox1));
 
     int nTreeHeight = mxFmtLb->get_height_rows(8);
     mxFmtLb->set_size_request(-1, nTreeHeight);
     mxTreeBox->set_size_request(-1, nTreeHeight);
+    mxTreeBox1->set_size_request(-1, nTreeHeight);
 
     mxFmtLb->connect_custom_get_size(LINK(this, SfxCommonTemplateDialog_Impl, CustomGetSizeHdl));
     mxFmtLb->connect_custom_render(LINK(this, SfxCommonTemplateDialog_Impl, CustomRenderHdl));
     mxTreeBox->connect_custom_get_size(LINK(this, SfxCommonTemplateDialog_Impl, CustomGetSizeHdl));
     mxTreeBox->connect_custom_render(LINK(this, SfxCommonTemplateDialog_Impl, CustomRenderHdl));
+    mxTreeBox1->connect_custom_get_size(LINK(this, SfxCommonTemplateDialog_Impl, CustomGetSizeHdl));
+    mxTreeBox1->connect_custom_render(LINK(this, SfxCommonTemplateDialog_Impl, CustomRenderHdl));
     bool bCustomPreview = officecfg::Office::Common::StylesAndFormatting::Preview::get();
     mxFmtLb->set_column_custom_renderer(0, bCustomPreview);
     mxTreeBox->set_column_custom_renderer(0, bCustomPreview);
+    mxTreeBox1->set_column_custom_renderer(0, bCustomPreview);
 
     mxFmtLb->set_visible(!bHierarchical);
     mxTreeBox->set_visible(bHierarchical);
@@ -982,6 +1011,7 @@ OUString SfxCommonTemplateDialog_Impl::getDefaultStyleName( const SfxStyleFamily
 void SfxCommonTemplateDialog_Impl::FillTreeBox()
 {
     assert(mxTreeBox && "FillTreeBox() without treebox");
+    assert(mxTreeBox1 && "FillTreeBox() without treebox");
     if (!pStyleSheetPool || nActFamily == 0xffff)
         return;
 
@@ -990,7 +1020,11 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
         return;
     const SfxStyleFamily eFam = pItem->GetFamily();
     StyleTreeArr_Impl aArr;
+    StyleTreeArr_Impl aArr1;
     SfxStyleSheetBase* pStyle = pStyleSheetPool->First(eFam, SfxStyleSearchBits::AllVisible);
+    const SfxStyleFamilyItem &rItem1 = pStyleFamilies->at( 1 );
+    const OUString aTemplName1(rItem1.GetText());
+    SfxStyleSheetBase* pStyle1 = pStyleSheetPool->First(SfxStyleFamily::Char, SfxStyleSearchBits::Auto);
 
     bAllowReParentDrop = pStyle && pStyle->HasParentSupport() && bTreeDrag;
 
@@ -1000,18 +1034,38 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
         aArr.emplace_back(pNew);
         pStyle = pStyleSheetPool->Next();
     }
+    while(pStyle1)
+        {
+        StyleTree_Impl* pNew = new StyleTree_Impl(pStyle1->GetName(), pStyle1->GetParent());
+        aArr1.emplace_back(pNew);
+        pStyle1 = pStyleSheetPool->Next();
+    }
+
     OUString aUIName = getDefaultStyleName(eFam);
+    OUString aUIName1 = getDefaultStyleName(SfxStyleFamily::Char);
     MakeTree_Impl(aArr, aUIName);
+    MakeTree_Impl(aArr1, aUIName1);
     std::vector<OUString> aEntries;
+    std::vector<OUString> aEntries1;
     MakeExpanded_Impl(*mxTreeBox, aEntries);
+    MakeExpanded_Impl(*mxTreeBox1, aEntries1);
     mxTreeBox->freeze();
     mxTreeBox->clear();
+    mxTreeBox1->freeze();
+    mxTreeBox1->clear();
     const sal_uInt16 nCount = aArr.size();
 
     for (sal_uInt16 i = 0; i < nCount; ++i)
     {
         FillBox_Impl(*mxTreeBox, aArr[i].get(), aEntries, eFam, nullptr);
+        mxTreeBox1->set_visible(false);
+        if (eFam == SfxStyleFamily::Para)
+        {
+            mxTreeBox1->set_visible(true);
+            FillBox_Impl(*mxTreeBox1, aArr1[i].get(), aEntries1, SfxStyleFamily::Char, nullptr);
+        }
         aArr[i].reset();
+        aArr1[i].reset();
     }
 
     EnableItem("watercan", false);
@@ -1019,6 +1073,7 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
     SfxTemplateItem* pState = pFamilyState[nActFamily - 1].get();
 
     mxTreeBox->thaw();
+    mxTreeBox1->thaw();
 
     std::unique_ptr<weld::TreeIter> xEntry = mxTreeBox->make_iterator();
     bool bEntry = mxTreeBox->get_iter_first(*xEntry);
@@ -1031,6 +1086,11 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
             mxTreeBox->expand_row(*xEntry);
         bEntry = mxTreeBox->iter_next(*xEntry);
     }
+
+    std::unique_ptr<weld::TreeIter> xEntry1 = mxTreeBox1->make_iterator();
+    bool bEntry1 = mxTreeBox1->get_iter_first(*xEntry1);
+    if (bEntry1 && nCount)
+        mxTreeBox1->expand_row(*xEntry1);
 
     OUString aStyle;
     if(pState)  // Select current entry
