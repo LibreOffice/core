@@ -5366,7 +5366,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
     m_xSBase.reset();
     m_xWDop.reset();
     m_xFonts.reset();
-    m_pAtnNames.reset();
+    m_xAtnNames.reset();
     m_xSprmParser.reset();
     m_xProgress.reset();
 
@@ -6090,10 +6090,10 @@ void SwWW8ImplReader::SetOutlineStyles()
 
 const OUString* SwWW8ImplReader::GetAnnotationAuthor(sal_uInt16 nIdx)
 {
-    if (!m_pAtnNames && m_xWwFib->m_lcbGrpStAtnOwners)
+    if (!m_xAtnNames && m_xWwFib->m_lcbGrpStAtnOwners)
     {
         // Determine authors: can be found in the TableStream
-        m_pAtnNames.reset(new std::vector<OUString>);
+        m_xAtnNames.emplace();
         SvStream& rStrm = *m_pTableStream;
 
         tools::Long nOldPos = rStrm.Tell();
@@ -6104,23 +6104,23 @@ const OUString* SwWW8ImplReader::GetAnnotationAuthor(sal_uInt16 nIdx)
         {
             if( m_bVer67 )
             {
-                m_pAtnNames->push_back(read_uInt8_PascalString(rStrm,
+                m_xAtnNames->push_back(read_uInt8_PascalString(rStrm,
                     RTL_TEXTENCODING_MS_1252));
-                nRead += m_pAtnNames->rbegin()->getLength() + 1; // Length + sal_uInt8 count
+                nRead += m_xAtnNames->rbegin()->getLength() + 1; // Length + sal_uInt8 count
             }
             else
             {
-                m_pAtnNames->push_back(read_uInt16_PascalString(rStrm));
+                m_xAtnNames->push_back(read_uInt16_PascalString(rStrm));
                 // Unicode: double the length + sal_uInt16 count
-                nRead += (m_pAtnNames->rbegin()->getLength() + 1)*2;
+                nRead += (m_xAtnNames->rbegin()->getLength() + 1)*2;
             }
         }
         rStrm.Seek( nOldPos );
     }
 
     const OUString *pRet = nullptr;
-    if (m_pAtnNames && nIdx < m_pAtnNames->size())
-        pRet = &((*m_pAtnNames)[nIdx]);
+    if (m_xAtnNames && nIdx < m_xAtnNames->size())
+        pRet = &((*m_xAtnNames)[nIdx]);
     return pRet;
 }
 

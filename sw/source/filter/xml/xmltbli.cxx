@@ -1286,7 +1286,7 @@ SwXMLTableContext::~SwXMLTableContext()
 {
     if (m_bOwnsBox1)
         delete m_pBox1;
-    m_pColumnDefaultCellStyleNames.reset();
+    m_xColumnDefaultCellStyleNames.reset();
     m_pSharedBoxFormats.reset();
     m_pRows.reset();
 
@@ -1354,21 +1354,21 @@ void SwXMLTableContext::InsertColumn( sal_Int32 nWidth2, bool bRelWidth2,
         nWidth2 = MAX_WIDTH;
     m_aColumnWidths.emplace_back(nWidth2, bRelWidth2 );
     if( !((pDfltCellStyleName && !pDfltCellStyleName->isEmpty()) ||
-        m_pColumnDefaultCellStyleNames) )
+        m_xColumnDefaultCellStyleNames) )
         return;
 
-    if( !m_pColumnDefaultCellStyleNames )
+    if( !m_xColumnDefaultCellStyleNames )
     {
-        m_pColumnDefaultCellStyleNames.reset(new std::vector<OUString>);
+        m_xColumnDefaultCellStyleNames.emplace();
         sal_uLong nCount = m_aColumnWidths.size() - 1;
         while( nCount-- )
-            m_pColumnDefaultCellStyleNames->push_back(OUString());
+            m_xColumnDefaultCellStyleNames->push_back(OUString());
     }
 
     if(pDfltCellStyleName)
-        m_pColumnDefaultCellStyleNames->push_back(*pDfltCellStyleName);
+        m_xColumnDefaultCellStyleNames->push_back(*pDfltCellStyleName);
     else
-        m_pColumnDefaultCellStyleNames->push_back(OUString());
+        m_xColumnDefaultCellStyleNames->push_back(OUString());
 }
 
 sal_Int32 SwXMLTableContext::GetColumnWidth( sal_uInt32 nCol,
@@ -1387,8 +1387,8 @@ sal_Int32 SwXMLTableContext::GetColumnWidth( sal_uInt32 nCol,
 
 OUString SwXMLTableContext::GetColumnDefaultCellStyleName( sal_uInt32 nCol ) const
 {
-    if( m_pColumnDefaultCellStyleNames && nCol < m_pColumnDefaultCellStyleNames->size())
-        return (*m_pColumnDefaultCellStyleNames)[static_cast<size_t>(nCol)];
+    if( m_xColumnDefaultCellStyleNames && nCol < m_xColumnDefaultCellStyleNames->size())
+        return (*m_xColumnDefaultCellStyleNames)[static_cast<size_t>(nCol)];
 
     return OUString();
 }
@@ -1476,7 +1476,7 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
     if( sStyleName.isEmpty() )
     {
         sStyleName = (*m_pRows)[m_nCurRow]->GetDefaultCellStyleName();
-        if( sStyleName.isEmpty() && m_pColumnDefaultCellStyleNames )
+        if( sStyleName.isEmpty() && m_xColumnDefaultCellStyleNames )
         {
             sStyleName = GetColumnDefaultCellStyleName( m_nCurCol );
             if( sStyleName.isEmpty() )
