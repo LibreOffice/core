@@ -18,6 +18,21 @@
 
 #include <svl/svldllapi.h>
 
+// Is this length truly the maximum possible, or just a number that
+// seemed large enough when the author tested this (with some type of
+// certificates)? I suspect the latter.
+
+// Used to be 0x4000 = 16384, but a sample signed PDF (produced by
+// some other software) provided by the customer has a signature
+// content that is 30000 bytes. The SampleSignedPDFDocument.pdf from
+// Adobe has one that is 21942 bytes. So let's be careful. Pity this
+// can't be dynamic, at least not without restructuring the code. Also
+// note that the checks in the code for this being too small
+// apparently are broken, if this overflows you end up with an invalid
+// PDF. Need to fix that.
+
+#define MAX_SIGNATURE_CONTENT_LENGTH 50000
+
 namespace com::sun::star::security { class XCertificate; }
 class SvStream;
 struct SignatureInformation;

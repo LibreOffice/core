@@ -127,11 +127,6 @@
 #define HAVE_FEATURE_PDFIMPORT 0
 
 /*
- * Whether NSS is available
- */
-#define HAVE_FEATURE_NSS 0
-
-/*
  * Whether poppler is available
  */
 #define HAVE_FEATURE_POPPLER 0

@@ -34,8 +34,6 @@ using namespace com::sun::star;
 
 namespace vcl::filter
 {
-const int MAX_SIGNATURE_CONTENT_LENGTH = 50000;
-
 XRefEntry::XRefEntry() = default;
 
 PDFDocument::PDFDocument() = default;
