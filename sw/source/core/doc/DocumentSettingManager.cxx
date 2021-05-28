@@ -85,7 +85,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbCollapseEmptyCellPara(true),
     mbTabAtLeftIndentForParagraphsInList(false), //#i89181#
     mbSmallCapsPercentage66(false),
-    mbTabOverflow(true),
+    mbTabOverflow(false),
     mbUnbreakableNumberings(false),
     mbClippedPictures(false),
     mbBackgroundParaOverDrawings(false),
