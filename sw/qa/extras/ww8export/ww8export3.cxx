@@ -157,6 +157,12 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testChicagoNumberingFootnote)
     CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
 }
 
+DECLARE_WW8EXPORT_TEST(tesTdf138302_restartNumbering, "tdf138302_restartNumbering.odt")
+{
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(8), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("1."), getProperty<OUString>(xPara, "ListLabelString"));
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf122429_header, "tdf122429_header.doc")
 {
     uno::Reference<container::XNameAccess> pageStyles = getStyles("PageStyles");
