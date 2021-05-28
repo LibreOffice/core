@@ -37,7 +37,7 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
         explicit SidebarWinAccessibleContext( sw::annotation::SwAnnotationWin& rSidebarWin,
                                               SwViewShell& rViewShell,
                                               const SwFrame* pAnchorFrame )
-            : VCLXAccessibleComponent( rSidebarWin.GetWindowPeer() )
+            : VCLXAccessibleComponent( dynamic_cast<VCLXWindow*>(rSidebarWin.CreateAccessible().get()) )
             , mrViewShell( rViewShell )
             , mpAnchorFrame( pAnchorFrame )
             , maMutex()
