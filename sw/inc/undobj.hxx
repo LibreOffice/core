@@ -243,7 +243,7 @@ class SwUndoInsLayFormat;
 
 namespace sw {
 
-std::unique_ptr<std::vector<SwFrameFormat*>>
+std::optional<std::vector<SwFrameFormat*>>
 GetFlysAnchoredAt(SwDoc & rDoc, sal_uLong nSttNode);
 
 }
@@ -252,7 +252,7 @@ GetFlysAnchoredAt(SwDoc & rDoc, sal_uLong nSttNode);
 class SwUndoInserts : public SwUndo, public SwUndRng, private SwUndoSaveContent
 {
     SwTextFormatColl *m_pTextFormatColl, *m_pLastNodeColl;
-    std::unique_ptr<std::vector<SwFrameFormat*>> m_pFrameFormats;
+    std::optional<std::vector<SwFrameFormat*>> m_pFrameFormats;
     std::vector< std::shared_ptr<SwUndoInsLayFormat> > m_FlyUndos;
     std::unique_ptr<SwRedlineData> m_pRedlineData;
     int m_nDeleteTextNodes;
@@ -277,7 +277,7 @@ public:
 
     static bool IsCreateUndoForNewFly(SwFormatAnchor const& rAnchor,
         sal_uLong const nStartNode, sal_uLong const nEndNode);
-    std::vector<SwFrameFormat*> * GetFlysAnchoredAt() { return m_pFrameFormats.get(); }
+    std::vector<SwFrameFormat*> * GetFlysAnchoredAt() { return m_pFrameFormats ? &*m_pFrameFormats : nullptr; }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };

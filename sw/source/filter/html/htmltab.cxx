@@ -386,8 +386,8 @@ class HTMLTable
     OUString m_aClass;
     OUString m_aDir;
 
-    std::unique_ptr<SdrObjects> m_pResizeDrawObjects;// SDR objects
-    std::unique_ptr<std::vector<sal_uInt16>> m_pDrawObjectPercentWidths;   // column of draw object and its rel. width
+    std::optional<SdrObjects> m_xResizeDrawObjects;// SDR objects
+    std::optional<std::vector<sal_uInt16>> m_xDrawObjectPercentWidths;   // column of draw object and its rel. width
 
     std::vector<HTMLTableRow> m_aRows;         ///< table rows
     std::vector<HTMLTableColumn> m_aColumns;   ///< table columns
@@ -1074,8 +1074,8 @@ HTMLTable::~HTMLTable()
 {
     m_pParser->DeregisterHTMLTable(this);
 
-    m_pResizeDrawObjects.reset();
-    m_pDrawObjectPercentWidths.reset();
+    m_xResizeDrawObjects.reset();
+    m_xDrawObjectPercentWidths.reset();
 
     m_pContext.reset();
 
@@ -2433,16 +2433,16 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
 
     const_cast<SwTable *>(m_pSwTable)->SetHTMLTableLayout(m_xLayoutInfo);
 
-    if( !m_pResizeDrawObjects )
+    if( !m_xResizeDrawObjects )
         return;
 
-    sal_uInt16 nCount = m_pResizeDrawObjects->size();
+    sal_uInt16 nCount = m_xResizeDrawObjects->size();
     for( sal_uInt16 i=0; i<nCount; i++ )
     {
-        SdrObject *pObj = (*m_pResizeDrawObjects)[i];
-        sal_uInt16 nRow = (*m_pDrawObjectPercentWidths)[3*i];
-        sal_uInt16 nCol = (*m_pDrawObjectPercentWidths)[3*i+1];
-        sal_uInt8 nPercentWidth = static_cast<sal_uInt8>((*m_pDrawObjectPercentWidths)[3*i+2]);
+        SdrObject *pObj = (*m_xResizeDrawObjects)[i];
+        sal_uInt16 nRow = (*m_xDrawObjectPercentWidths)[3*i];
+        sal_uInt16 nCol = (*m_xDrawObjectPercentWidths)[3*i+1];
+        sal_uInt8 nPercentWidth = static_cast<sal_uInt8>((*m_xDrawObjectPercentWidths)[3*i+2]);
 
         SwHTMLTableLayoutCell *pLayoutCell =
             m_xLayoutInfo->GetCell( nRow, nCol );
@@ -2473,15 +2473,15 @@ void HTMLTable::SetTable( const SwStartNode *pStNd, std::unique_ptr<HTMLTableCon
 
 void HTMLTable::RegisterDrawObject( SdrObject *pObj, sal_uInt8 nPercentWidth )
 {
-    if( !m_pResizeDrawObjects )
-        m_pResizeDrawObjects.reset(new SdrObjects);
-    m_pResizeDrawObjects->push_back( pObj );
+    if( !m_xResizeDrawObjects )
+        m_xResizeDrawObjects.emplace();
+    m_xResizeDrawObjects->push_back( pObj );
 
-    if( !m_pDrawObjectPercentWidths )
-        m_pDrawObjectPercentWidths.reset(new std::vector<sal_uInt16>);
-    m_pDrawObjectPercentWidths->push_back( m_nCurrentRow );
-    m_pDrawObjectPercentWidths->push_back( m_nCurrentColumn );
-    m_pDrawObjectPercentWidths->push_back( o3tl::narrowing<sal_uInt16>(nPercentWidth) );
+    if( !m_xDrawObjectPercentWidths )
+        m_xDrawObjectPercentWidths.emplace();
+    m_xDrawObjectPercentWidths->push_back( m_nCurrentRow );
+    m_xDrawObjectPercentWidths->push_back( m_nCurrentColumn );
+    m_xDrawObjectPercentWidths->push_back( o3tl::narrowing<sal_uInt16>(nPercentWidth) );
 }
 
 void HTMLTable::MakeParentContents()
@@ -3358,7 +3358,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                                                m_nContextStAttrMin ) );
 
             // end all open attributes and open them again behind the table
-            std::unique_ptr<std::deque<std::unique_ptr<HTMLAttr>>> pPostIts;
+            std::optional<std::deque<std::unique_ptr<HTMLAttr>>> pPostIts;
             if( !bForceFrame && (bTopTable || pCurTable->HasParentSection()) )
             {
                 SplitAttrTab(pTCntxt->xAttrTab, bTopTable);
@@ -3370,16 +3370,16 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 if( (bTopTable && !bAppended) ||
                     (!bTopTable && !bParentLFStripped &&
                      !m_pPam->GetPoint()->nContent.GetIndex()) )
-                    pPostIts.reset(new std::deque<std::unique_ptr<HTMLAttr>>);
-                SetAttr( bTopTable, bTopTable, pPostIts.get() );
+                    pPostIts.emplace();
+                SetAttr( bTopTable, bTopTable, &*pPostIts );
             }
             else
             {
                 SaveAttrTab(pTCntxt->xAttrTab);
                 if( bTopTable && !bAppended )
                 {
-                    pPostIts.reset(new std::deque<std::unique_ptr<HTMLAttr>>);
-                    SetAttr( true, true, pPostIts.get() );
+                    pPostIts.emplace();
+                    SetAttr( true, true, &*pPostIts );
                 }
             }
             m_bNoParSpace = false;
@@ -5234,15 +5234,15 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
 
 bool HTMLTable::PendingDrawObjectsInPaM(SwPaM& rPam) const
 {
-    if (!m_pResizeDrawObjects)
+    if (!m_xResizeDrawObjects)
         return false;
 
     bool bRet = false;
 
-    sal_uInt16 nCount = m_pResizeDrawObjects->size();
+    sal_uInt16 nCount = m_xResizeDrawObjects->size();
     for (sal_uInt16 i = 0; i < nCount && !bRet; ++i)
     {
-        SdrObject *pObj = (*m_pResizeDrawObjects)[i];
+        SdrObject *pObj = (*m_xResizeDrawObjects)[i];
         SwFrameFormat* pObjectFormat = ::FindFrameFormat(pObj);
         if (!pObjectFormat)
             continue;
