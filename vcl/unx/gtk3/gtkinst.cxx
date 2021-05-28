@@ -20511,6 +20511,9 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
             if (sName == "icon-name")
                 bHasIconName = true;
 
+            if (sName == "events")
+                xRemoveList.push_back(xChild);
+
             if (sName == "activates-default")
             {
                 if (GetParentObjectType(xChild) == "GtkSpinButton")
@@ -21878,6 +21881,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/scalc/ui/solverdlg.ui" &&
         rUIFile != "modules/scalc/ui/xmlsourcedialog.ui" &&
         rUIFile != "modules/smath/ui/alignmentdialog.ui" &&
+        rUIFile != "modules/smath/ui/catalogdialog.ui" &&
         rUIFile != "modules/smath/ui/fontsizedialog.ui" &&
         rUIFile != "modules/smath/ui/savedefaultsdialog.ui" &&
         rUIFile != "modules/swriter/ui/gotopagedialog.ui" &&
