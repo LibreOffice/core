@@ -400,7 +400,7 @@ namespace {
 
 vcl::Window* findChild(vcl::Window* pParent, const OUString& rID, bool bRequireVisible = false)
 {
-    if (!pParent || pParent->IsDisposed())
+    if (!pParent || pParent->isDisposed())
         return nullptr;
 
     if (pParent->get_id() == rID)
