@@ -255,7 +255,7 @@ void SvxFontSizeBox_Base::UpdateFont(const css::awt::FontDescriptor& rCurrentFon
 {
     // filling up the sizes list
     auto nOldVal = m_xWidget->get_value(); // memorize old value
-    std::unique_ptr<FontList> xFontList(new FontList(Application::GetDefaultDevice()));
+    FontList aFontList(Application::GetDefaultDevice());
 
     if (!rCurrentFont.Name.isEmpty())
     {
@@ -263,11 +263,11 @@ void SvxFontSizeBox_Base::UpdateFont(const css::awt::FontDescriptor& rCurrentFon
         aFontMetric.SetFamilyName(rCurrentFont.Name);
         aFontMetric.SetStyleName(rCurrentFont.StyleName);
         aFontMetric.SetFontHeight(rCurrentFont.Height);
-        m_xWidget->Fill(&aFontMetric, xFontList.get());
+        m_xWidget->Fill(&aFontMetric, &aFontList);
     }
     else
     {
-        m_xWidget->Fill(nullptr, xFontList.get());
+        m_xWidget->Fill(nullptr, &aFontList);
     }
     m_xWidget->set_value(nOldVal); // restore old value
     m_aCurText = m_xWidget->get_active_text(); // memorize to reset at ESC

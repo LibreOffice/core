@@ -154,13 +154,13 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
     if (nItemId == 0)
         return;
 
-    std::unique_ptr<FmFormModel> pModel(new FmFormModel());
-    pModel->GetItemPool().FreezeIdRanges();
+    FmFormModel aModel;
+    aModel.GetItemPool().FreezeIdRanges();
 
-    if( !GalleryExplorer::GetSdrObj( mnThemeId, nItemId-1, pModel.get() ) )
+    if( !GalleryExplorer::GetSdrObj( mnThemeId, nItemId-1, &aModel ) )
         return;
 
-    SdrPage* pPage = pModel->GetPage(0);
+    SdrPage* pPage = aModel.GetPage(0);
     if( !(pPage && pPage->GetObjCount()) )
         return;
 
