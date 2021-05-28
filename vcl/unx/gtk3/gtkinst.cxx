@@ -16653,8 +16653,7 @@ private:
     // GtkEntry and activate the default dialog/assistant button
     bool combobox_activate()
     {
-#if 0
-        GtkWidget *pComboBox = GTK_WIDGET(m_pToggleButton);
+        GtkWidget *pComboBox = GTK_WIDGET(m_pComboBox);
         GtkWidget *pToplevel = widget_get_toplevel(pComboBox);
         GtkWindow *pWindow = GTK_WINDOW(pToplevel);
         if (!pWindow)
@@ -16663,12 +16662,9 @@ private:
             return false;
         bool bDone = false;
         GtkWidget *pDefaultWidget = gtk_window_get_default_widget(pWindow);
-        if (pDefaultWidget && pDefaultWidget != m_pToggleButton && gtk_widget_get_sensitive(pDefaultWidget))
+        if (pDefaultWidget && pDefaultWidget != pComboBox && gtk_widget_get_sensitive(pDefaultWidget))
             bDone = gtk_widget_activate(pDefaultWidget);
         return bDone;
-#else
-        return false;
-#endif
     }
 
 #if 0
