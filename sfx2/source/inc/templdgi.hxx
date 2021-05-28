@@ -99,6 +99,7 @@ protected:
 
     std::unique_ptr<weld::TreeView> mxFmtLb;
     std::unique_ptr<weld::TreeView> mxTreeBox;
+    std::unique_ptr<weld::TreeView> mxTreeBox1;
     std::unique_ptr<weld::CheckButton> mxPreviewCheckbox;
     std::unique_ptr<weld::ComboBox> mxFilterLb;
     std::unique_ptr<TreeViewDropTarget> m_xTreeView1DropTargetHelper;
