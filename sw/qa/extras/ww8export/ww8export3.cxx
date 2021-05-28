@@ -157,6 +157,40 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testChicagoNumberingFootnote)
     CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
 }
 
+<<<<<<< HEAD   (1bafb0 Avoid empty std::map constructor)
+=======
+DECLARE_WW8EXPORT_TEST(testHyperLinkURLSaving, "tdf120003.doc")
+{
+    OUString URL = getProperty<OUString>(getShape(1), "HyperLinkURL");
+    // Without the fix in place, this test would have failed with
+    // - Expected: https://www.libreoffice.org/
+    // - Actual  : tps://www.libreoffice.org/
+    CPPUNIT_ASSERT_EQUAL(OUString("https://www.libreoffice.org/"), URL);
+}
+
+DECLARE_WW8EXPORT_TEST(testdf79553_lineNumbers, "tdf79553_lineNumbers.doc")
+{
+    bool bValue = false;
+    sal_Int32 nValue = -1;
+
+    uno::Reference< text::XTextDocument > xtextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference< text::XLineNumberingProperties > xLineProperties( xtextDocument, uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xPropertySet = xLineProperties->getLineNumberingProperties();
+
+    xPropertySet->getPropertyValue("IsOn") >>= bValue;
+    CPPUNIT_ASSERT_EQUAL(true, bValue);
+
+    xPropertySet->getPropertyValue("Distance") >>= nValue;
+    CPPUNIT_ASSERT_MESSAGE("automatic distance", nValue > 0);
+}
+
+DECLARE_WW8EXPORT_TEST(tesTdf138302_restartNumbering, "tdf138302_restartNumbering.odt")
+{
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(8), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("1."), getProperty<OUString>(xPara, "ListLabelString"));
+}
+
+>>>>>>> CHANGE (f49e59 tdf#138302 partial revert tdf#108496: DOCX: redesign of over)
 DECLARE_WW8EXPORT_TEST(testTdf122429_header, "tdf122429_header.doc")
 {
     uno::Reference<container::XNameAccess> pageStyles = getStyles("PageStyles");
