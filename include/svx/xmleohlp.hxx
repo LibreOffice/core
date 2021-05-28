@@ -31,6 +31,7 @@
 #include <tools/stream.hxx>
 #include <map>
 #include <memory>
+#include <optional>
 
 enum class SvXMLEmbeddedObjectHelperMode
 {
@@ -57,8 +58,8 @@ class SVXCORE_DLLPUBLIC SvXMLEmbeddedObjectHelper final :
     css::uno::Reference < css::embed::XStorage > mxTempStorage;  // package
                                                 // objects
     SvXMLEmbeddedObjectHelperMode       meCreateMode;
-    std::unique_ptr<std::map< OUString, rtl::Reference<OutputStorageWrapper_Impl> >>
-                                                 mpStreamMap;
+    std::optional<std::map< OUString, rtl::Reference<OutputStorageWrapper_Impl> >>
+                                                 mxStreamMap;
 
     SVX_DLLPRIVATE bool                 ImplGetStorageNames(
                                        const OUString& rURLStr,

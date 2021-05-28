@@ -38,6 +38,7 @@
 #include <vector>
 #include <algorithm>
 #include <memory>
+#include <optional>
 #include <string_view>
 
 using namespace ::com::sun::star;
@@ -151,7 +152,7 @@ class LocationBrowseNode :
     public ::cppu::WeakImplHelper< browse::XBrowseNode >
 {
 private:
-    std::unique_ptr<std::unordered_map< OUString, Reference< browse::XBrowseNode > >> m_hBNA;
+    std::optional<std::unordered_map< OUString, Reference< browse::XBrowseNode > >> m_hBNA;
     std::vector< OUString > m_vStr;
     OUString m_sNodeName;
     Reference< browse::XBrowseNode > m_origNode;
@@ -175,7 +176,7 @@ public:
     virtual Sequence< Reference< browse::XBrowseNode > > SAL_CALL
     getChildNodes() override
     {
-        if ( m_hBNA == nullptr )
+        if ( !m_hBNA )
         {
             loadChildNodes();
         }
@@ -206,7 +207,7 @@ private:
 
     void loadChildNodes()
     {
-        m_hBNA.reset( new std::unordered_map< OUString, Reference< browse::XBrowseNode > > );
+        m_hBNA.emplace();
 
         const Sequence< Reference< browse::XBrowseNode > > langNodes =
             m_origNode->getChildNodes();

@@ -32,6 +32,7 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <svx/svdobj.hxx>
 #include <memory>
+#include <optional>
 #include <vector>
 
 
@@ -228,7 +229,7 @@ public:
 private:
     /// This list, if it exists, defines the navigation order. If it does
     /// not exist then maList defines the navigation order.
-    std::unique_ptr<std::vector<tools::WeakReference<SdrObject>>> mxNavigationOrder;
+    std::optional<std::vector<tools::WeakReference<SdrObject>>> mxNavigationOrder;
 
     /// This flag is <TRUE/> when the mpNavigation list has been changed but
     /// the indices of the referenced SdrObjects still have their old values.
