@@ -1181,7 +1181,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         }
         break;
 
-        case SID_ZOOM_IN:  // BASIC
+        case SID_ZOOM_OUT:  // BASIC
         {
             mbZoomOnPage = false;
             SetZoom( std::max<::tools::Long>( GetActiveWindow()->GetZoom() / 2, GetActiveWindow()->GetMinZoom() ) );
@@ -1195,7 +1195,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         }
         break;
 
-        case SID_ZOOM_OUT:
+        case SID_ZOOM_IN:
         {
             mbZoomOnPage = false;
             SetZoom( std::min<::tools::Long>( GetActiveWindow()->GetZoom() * 2, GetActiveWindow()->GetMaxZoom() ) );
@@ -1203,6 +1203,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                                               GetActiveWindow()->GetOutputSizePixel()) );
             mpZoomList->InsertZoomRect(aVisAreaWin);
             Invalidate( SID_ZOOM_IN );
+            Invalidate(SID_ZOOM_OUT);
             Invalidate( SID_ZOOM_PANNING );
             rReq.Done ();
         }

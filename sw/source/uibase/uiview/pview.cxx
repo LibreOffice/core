@@ -102,18 +102,18 @@ static sal_uInt16 lcl_GetNextZoomStep(sal_uInt16 nCurrentZoom, bool bZoomIn)
     const int nZoomArrSize = static_cast<int>(SAL_N_ELEMENTS(aZoomArr));
     if (bZoomIn)
     {
-        for(int i = nZoomArrSize - 1; i >= 0; --i)
-        {
-            if(nCurrentZoom > aZoomArr[i] || !i)
-                return aZoomArr[i];
-        }
-    }
-    else
-    {
         for(sal_uInt16 i : aZoomArr)
         {
             if(nCurrentZoom < i)
                 return i;
+        }
+    }
+    else
+    {
+        for(int i = nZoomArrSize - 1; i >= 0; --i)
+        {
+            if(nCurrentZoom > aZoomArr[i] || !i)
+                return aZoomArr[i];
         }
     }
     return bZoomIn ? MAX_PREVIEW_ZOOM : MIN_PREVIEW_ZOOM;
@@ -1006,8 +1006,8 @@ void  SwPagePreview::GetState( SfxItemSet& rSet )
         case SID_ZOOM_OUT:
         {
             const SwViewOption* pVOpt = GetViewShell()->GetViewOptions();
-            if((SID_ZOOM_OUT == nWhich && pVOpt->GetZoom() >= MAX_PREVIEW_ZOOM)||
-              (SID_ZOOM_IN == nWhich && pVOpt->GetZoom() <= MIN_PREVIEW_ZOOM))
+            if((SID_ZOOM_IN == nWhich && pVOpt->GetZoom() >= MAX_PREVIEW_ZOOM) ||
+                    (SID_ZOOM_OUT == nWhich && pVOpt->GetZoom() <= MIN_PREVIEW_ZOOM))
             {
                 rSet.DisableItem(nWhich);
             }
