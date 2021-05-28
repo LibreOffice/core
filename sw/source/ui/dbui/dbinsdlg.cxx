@@ -1596,20 +1596,20 @@ void SwInsertDBColAutoPilot::Load()
         pDataSourceProps[2] >>= nCommandType;
         if(sSource == aDBData.sDataSource && sCommand == aDBData.sCommand)
         {
-            std::unique_ptr<DB_ColumnConfigData> pNewData(new DB_ColumnConfigData);
+            DB_ColumnConfigData aNewData;
 
-            pDataSourceProps[3] >>= pNewData->sEdit;
-            pDataSourceProps[4] >>= pNewData->sTableList;
-            pDataSourceProps[5] >>= pNewData->sTmplNm;
-            pDataSourceProps[6] >>= pNewData->sTAutoFormatNm;
+            pDataSourceProps[3] >>= aNewData.sEdit;
+            pDataSourceProps[4] >>= aNewData.sTableList;
+            pDataSourceProps[5] >>= aNewData.sTmplNm;
+            pDataSourceProps[6] >>= aNewData.sTAutoFormatNm;
             if(pDataSourceProps[7].hasValue())
-                pNewData->bIsTable = *o3tl::doAccess<bool>(pDataSourceProps[7]);
+                aNewData.bIsTable = *o3tl::doAccess<bool>(pDataSourceProps[7]);
             if(pDataSourceProps[8].hasValue())
-                 pNewData->bIsField = *o3tl::doAccess<bool>(pDataSourceProps[8]);
+                 aNewData.bIsField = *o3tl::doAccess<bool>(pDataSourceProps[8]);
             if(pDataSourceProps[9].hasValue())
-                 pNewData->bIsHeadlineOn = *o3tl::doAccess<bool>(pDataSourceProps[9]);
+                 aNewData.bIsHeadlineOn = *o3tl::doAccess<bool>(pDataSourceProps[9]);
             if(pDataSourceProps[10].hasValue())
-                 pNewData->bIsEmptyHeadln = *o3tl::doAccess<bool>(pDataSourceProps[10]);
+                 aNewData.bIsEmptyHeadln = *o3tl::doAccess<bool>(pDataSourceProps[10]);
 
             const OUString sSubNodeName(nodeName + "/ColumnSet/");
             const Sequence <OUString> aSubNames = GetNodeNames(sSubNodeName);
@@ -1659,9 +1659,9 @@ void SwInsertDBColAutoPilot::Load()
                 pInsDBColumn->nUsrNumFormat = rNFormatr.GetEntryKey( pInsDBColumn->sUsrNumFormat,
                                                         pInsDBColumn->eUsrNumFormatLng );
 
-                pNewData->aDBColumns.insert(std::move(pInsDBColumn));
+                aNewData.aDBColumns.insert(std::move(pInsDBColumn));
             }
-            OUString sTmp( pNewData->sTableList );
+            OUString sTmp( aNewData.sTableList );
             if( !sTmp.isEmpty() )
             {
                 sal_Int32 n = 0;
@@ -1683,16 +1683,16 @@ void SwInsertDBColAutoPilot::Load()
                 m_xIbDbcolOneFrom->set_sensitive(true);
                 m_xIbDbcolAllFrom->set_sensitive(true);
             }
-            m_xEdDbText->set_text( pNewData->sEdit );
+            m_xEdDbText->set_text( aNewData.sEdit );
 
-            sTmp = pNewData->sTmplNm;
+            sTmp = aNewData.sTmplNm;
             if( !sTmp.isEmpty() )
                 m_xLbDbParaColl->set_active_text(sTmp);
             else
                 m_xLbDbParaColl->set_active(0);
 
             m_xTAutoFormat.reset();
-            sTmp = pNewData->sTAutoFormatNm;
+            sTmp = aNewData.sTAutoFormatNm;
             if( !sTmp.isEmpty() )
             {
                 // then load the AutoFormat file and look for Autoformat first
@@ -1706,13 +1706,13 @@ void SwInsertDBColAutoPilot::Load()
                     }
             }
 
-            m_xRbAsTable->set_active( pNewData->bIsTable );
-            m_xRbAsField->set_active( pNewData->bIsField );
-            m_xRbAsText->set_active( !pNewData->bIsTable && !pNewData->bIsField );
+            m_xRbAsTable->set_active( aNewData.bIsTable );
+            m_xRbAsField->set_active( aNewData.bIsField );
+            m_xRbAsText->set_active( !aNewData.bIsTable && !aNewData.bIsField );
 
-            m_xCbTableHeadon->set_active( pNewData->bIsHeadlineOn );
-            m_xRbHeadlColnms->set_active( !pNewData->bIsEmptyHeadln );
-            m_xRbHeadlEmpty->set_active( pNewData->bIsEmptyHeadln );
+            m_xCbTableHeadon->set_active( aNewData.bIsHeadlineOn );
+            m_xRbHeadlColnms->set_active( !aNewData.bIsEmptyHeadln );
+            m_xRbHeadlEmpty->set_active( aNewData.bIsEmptyHeadln );
             HeaderHdl(*m_xCbTableHeadon);
 
             // now copy the user defined Numberformat strings to the
@@ -1720,9 +1720,9 @@ void SwInsertDBColAutoPilot::Load()
             for( size_t n = 0; n < aDBColumns.size() ; ++n )
             {
                 SwInsDBColumn& rSet = *aDBColumns[ n ];
-                for( size_t m = 0; m < pNewData->aDBColumns.size() ; ++m )
+                for( size_t m = 0; m < aNewData.aDBColumns.size() ; ++m )
                 {
-                    SwInsDBColumn& rGet = *pNewData->aDBColumns[ m ];
+                    SwInsDBColumn& rGet = *aNewData.aDBColumns[ m ];
                     if(rGet.sColumn == rSet.sColumn)
                     {
                         if( rGet.bHasFormat && !rGet.bIsDBFormat )

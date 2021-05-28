@@ -2697,12 +2697,12 @@ void SwFrameURLPage::Reset( const SfxItemSet *rSet )
     const SfxPoolItem* pItem;
     if ( SfxItemState::SET == rSet->GetItemState( SID_DOCFRAME, true, &pItem))
     {
-        std::unique_ptr<TargetList> pList(new TargetList);
-        SfxFrame::GetDefaultTargetList(*pList);
-        size_t nCount = pList->size();
+        TargetList aList;
+        SfxFrame::GetDefaultTargetList(aList);
+        size_t nCount = aList.size();
         for (size_t i = 0; i < nCount; ++i)
         {
-            m_xFrameCB->append_text(pList->at(i));
+            m_xFrameCB->append_text(aList.at(i));
         }
     }
 
