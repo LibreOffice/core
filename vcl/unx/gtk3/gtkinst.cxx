@@ -1890,17 +1890,24 @@ class GtkInstanceBuilder;
         return OString(pStr, pStr ? strlen(pStr) : 0);
     }
 
+    KeyEvent CreateKeyEvent(guint keyval, guint16 hardware_keycode, guint state, guint8 group)
+    {
+        sal_uInt16 nKeyCode = GtkSalFrame::GetKeyCode(keyval);
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        if (nKeyCode == 0)
+        {
+            guint updated_keyval = GtkSalFrame::GetKeyValFor(gdk_keymap_get_default(), hardware_keycode, group);
+            nKeyCode = GtkSalFrame::GetKeyCode(updated_keyval);
+        }
+#endif
+        nKeyCode |= GtkSalFrame::GetKeyModCode(state);
+        return KeyEvent(gdk_keyval_to_unicode(keyval), nKeyCode, 0);
+    }
+
 #if !GTK_CHECK_VERSION(4, 0, 0)
     KeyEvent GtkToVcl(const GdkEventKey& rEvent)
     {
-        sal_uInt16 nKeyCode = GtkSalFrame::GetKeyCode(rEvent.keyval);
-        if (nKeyCode == 0)
-        {
-            guint updated_keyval = GtkSalFrame::GetKeyValFor(gdk_keymap_get_default(), rEvent.hardware_keycode, rEvent.group);
-            nKeyCode = GtkSalFrame::GetKeyCode(updated_keyval);
-        }
-        nKeyCode |= GtkSalFrame::GetKeyModCode(rEvent.state);
-        return KeyEvent(gdk_keyval_to_unicode(rEvent.keyval), nKeyCode, 0);
+        return CreateKeyEvent(rEvent.keyval, rEvent.hardware_keycode, rEvent.state, rEvent.group);
     }
 #endif
 }
@@ -16236,10 +16243,10 @@ private:
     GtkTreeModel* m_pTreeModel;
     GtkCellRenderer* m_pButtonTextRenderer;
     GtkCellRenderer* m_pMenuTextRenderer;
-//    GtkWidget* m_pToggleButton;
     GtkWidget* m_pEntry;
     GtkEditable* m_pEditable;
     GtkCellView* m_pCellView;
+    GtkEventController* m_pKeyController;
 //    std::unique_ptr<CustomRenderMenuButtonHelper> m_xCustomMenuButtonHelper;
     std::unique_ptr<vcl::Font> m_xFont;
     std::unique_ptr<comphelper::string::NaturalStringSorter> m_xSorter;
@@ -16261,7 +16268,7 @@ private:
     gulong m_nRowActivatedSignalId;
     gulong m_nChangedSignalId;
     gulong m_nPopupShownSignalId;
-//    gulong m_nKeyPressEventSignalId;
+    gulong m_nKeyPressEventSignalId;
     gulong m_nEntryInsertTextSignalId;
     gulong m_nEntryActivateSignalId;
 //    gulong m_nEntryFocusInSignalId;
@@ -16642,19 +16649,17 @@ private:
         return bRet;
     }
 
-#if 0
     // https://gitlab.gnome.org/GNOME/gtk/issues/310
     //
     // in the absence of a built-in solution
     // a) support typeahead for the case where there is no entry widget, typing ahead
     // into the button itself will select via the vcl selection engine, a matching
     // entry
-    static gboolean signalKeyPress(GtkWidget*, GdkEventKey* pEvent, gpointer widget)
+    static gboolean signalKeyPress(GtkEventControllerKey*, guint keyval, guint keycode, GdkModifierType state, gpointer widget)
     {
         GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
-        return pThis->signal_key_press(pEvent);
+        return pThis->signal_key_press(CreateKeyEvent(keyval, keycode, state, 0));
     }
-#endif
 
     // tdf#131076 we want return in a ComboBox to act like return in a
     // GtkEntry and activate the default dialog/assistant button
@@ -16685,12 +16690,11 @@ private:
         LocalizeDecimalSeparator(pEvent);
         return pThis->signal_entry_key_press(pEvent);
     }
+#endif
 
-    bool signal_entry_key_press(const GdkEventKey* pEvent)
+    bool signal_entry_key_press(const KeyEvent& rKEvt)
     {
-        KeyEvent aKEvt(GtkToVcl(*pEvent));
-
-        vcl::KeyCode aKeyCode = aKEvt.GetKeyCode();
+        vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
 
         bool bDone = false;
 
@@ -16712,7 +16716,7 @@ private:
                 }
                 else if (nKeyMod == KEY_MOD2 && !m_bPopupActive)
                 {
-                    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_pToggleButton), true);
+                    gtk_combo_box_popup(m_pComboBox);
                     bDone = true;
                 }
                 break;
@@ -16770,8 +16774,9 @@ private:
         return bDone;
     }
 
-    bool signal_key_press(const GdkEventKey* pEvent)
+    bool signal_key_press(const KeyEvent& rKEvt)
     {
+#if 0
         if (m_bHoverSelection)
         {
             // once a key is pressed, turn off hover selection until mouse is
@@ -16780,10 +16785,9 @@ private:
             gtk_tree_view_set_hover_selection(m_pTreeView, false);
             m_bHoverSelection = false;
         }
+#endif
 
-        KeyEvent aKEvt(GtkToVcl(*pEvent));
-
-        vcl::KeyCode aKeyCode = aKEvt.GetKeyCode();
+        vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
 
         bool bDone = false;
 
@@ -16807,12 +16811,12 @@ private:
                     bDone = combobox_activate();
                 else if (nCode == KEY_UP && nKeyMod == KEY_MOD2 && m_bPopupActive)
                 {
-                    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_pToggleButton), false);
+                    gtk_combo_box_popdown(m_pComboBox);
                     bDone = true;
                 }
                 else if (nCode == KEY_DOWN && nKeyMod == KEY_MOD2 && !m_bPopupActive)
                 {
-                    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_pToggleButton), true);
+                    gtk_combo_box_popup(m_pComboBox);
                     bDone = true;
                 }
                 break;
@@ -16822,7 +16826,7 @@ private:
                 m_aQuickSelectionEngine.Reset();
                 if (m_bPopupActive)
                 {
-                    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_pToggleButton), false);
+                    gtk_combo_box_popdown(m_pComboBox);
                     bDone = true;
                 }
                 break;
@@ -16832,16 +16836,15 @@ private:
                 if (nCode == KEY_SPACE && !aKeyCode.GetModifier() && !m_bPopupActive)
                     bDone = false;
                 else
-                    bDone = m_aQuickSelectionEngine.HandleKeyEvent(aKEvt);
+                    bDone = m_aQuickSelectionEngine.HandleKeyEvent(rKEvt);
                 break;
         }
 
         if (!bDone && !m_pEntry)
-            bDone = signal_entry_key_press(pEvent);
+            bDone = signal_entry_key_press(rKEvt);
 
         return bDone;
     }
-#endif
 
     vcl::StringEntryIdentifier typeahead_getEntry(int nPos, OUString& out_entryText) const
     {
@@ -17312,7 +17315,8 @@ public:
 //            m_nEntryFocusInSignalId = g_signal_connect(m_pEntry, "focus-in-event", G_CALLBACK(signalEntryFocusIn), this);
 //            m_nEntryFocusOutSignalId = g_signal_connect(m_pEntry, "focus-out-event", G_CALLBACK(signalEntryFocusOut), this);
 //            m_nEntryKeyPressEventSignalId = g_signal_connect(m_pEntry, "key-press-event", G_CALLBACK(signalEntryKeyPress), this);
-//            m_nKeyPressEventSignalId = 0;
+            m_nKeyPressEventSignalId = 0;
+            m_pKeyController = nullptr;
         }
         else
         {
@@ -17321,7 +17325,9 @@ public:
 //            m_nEntryFocusInSignalId = 0;
 //            m_nEntryFocusOutSignalId = 0;
 //            m_nEntryKeyPressEventSignalId = 0;
-//            m_nKeyPressEventSignalId = g_signal_connect(m_pToggleButton, "key-press-event", G_CALLBACK(signalKeyPress), this);
+            m_pKeyController = GTK_EVENT_CONTROLLER(gtk_event_controller_key_new());
+            m_nKeyPressEventSignalId = g_signal_connect(m_pKeyController, "key-pressed", G_CALLBACK(signalKeyPress), this);
+            gtk_widget_add_controller(GTK_WIDGET(m_pComboBox), m_pKeyController);
         }
 
         if (nActive != -1)
@@ -17649,10 +17655,9 @@ public:
 //            g_signal_handler_block(m_pEntry, m_nEntryFocusOutSignalId);
 //            g_signal_handler_block(m_pEntry, m_nEntryKeyPressEventSignalId);
         }
-#if 0
         else
-            g_signal_handler_block(m_pToggleButton, m_nKeyPressEventSignalId);
-#endif
+            g_signal_handler_block(m_pKeyController, m_nKeyPressEventSignalId);
+
 //        if (m_nToggleFocusInSignalId)
 //            g_signal_handler_block(m_pToggleButton, m_nToggleFocusInSignalId);
 //        if (m_nToggleFocusOutSignalId)
@@ -17681,10 +17686,8 @@ public:
 //            g_signal_handler_unblock(m_pEntry, m_nEntryKeyPressEventSignalId);
             g_signal_handler_unblock(m_pEditable, m_nEntryInsertTextSignalId);
         }
-#if 0
         else
-            g_signal_handler_unblock(m_pToggleButton, m_nKeyPressEventSignalId);
-#endif
+            g_signal_handler_unblock(m_pKeyController, m_nKeyPressEventSignalId);
     }
 
     virtual void freeze() override
@@ -17918,10 +17921,8 @@ public:
 //            g_signal_handler_disconnect(m_pEntry, m_nEntryFocusOutSignalId);
 //            g_signal_handler_disconnect(m_pEntry, m_nEntryKeyPressEventSignalId);
         }
-#if 0
         else
-            g_signal_handler_disconnect(m_pToggleButton, m_nKeyPressEventSignalId);
-#endif
+            g_signal_handler_disconnect(m_pKeyController, m_nKeyPressEventSignalId);
 //        if (m_nToggleFocusInSignalId)
 //            g_signal_handler_disconnect(m_pToggleButton, m_nToggleFocusInSignalId);
 //        if (m_nToggleFocusOutSignalId)
