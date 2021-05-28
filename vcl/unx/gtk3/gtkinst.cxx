@@ -22028,6 +22028,11 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
 {
 #if GTK_CHECK_VERSION(4, 0, 0)
     if (rUIFile != "cui/ui/aboutdialog.ui" &&
+        rUIFile != "cui/ui/acorexceptpage.ui" &&
+        rUIFile != "cui/ui/acoroptionspage.ui" &&
+        rUIFile != "cui/ui/acorreplacepage.ui" &&
+        rUIFile != "cui/ui/applylocalizedpage.ui" &&
+        rUIFile != "cui/ui/autocorrectdialog.ui" &&
         rUIFile != "cui/ui/hyphenate.ui" &&
         rUIFile != "cui/ui/insertfloatingframe.ui" &&
         rUIFile != "cui/ui/objectnamedialog.ui" &&
@@ -22036,7 +22041,6 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/signatureline.ui" &&
         rUIFile != "cui/ui/tipofthedaydialog.ui" &&
         rUIFile != "sfx/ui/custominfopage.ui" &&
-        rUIFile != "svt/ui/datewindow.ui" &&
         rUIFile != "sfx/ui/descriptioninfopage.ui" &&
         rUIFile != "sfx/ui/documentfontspage.ui" &&
         rUIFile != "sfx/ui/documentinfopage.ui" &&
@@ -22045,7 +22049,9 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "sfx/ui/licensedialog.ui" &&
         rUIFile != "sfx/ui/linefragment.ui" &&
         rUIFile != "sfx/ui/loadtemplatedialog.ui" &&
+        rUIFile != "sfx/ui/password.ui" &&
         rUIFile != "sfx/ui/securityinfopage.ui" &&
+        rUIFile != "svt/ui/datewindow.ui" &&
         rUIFile != "svt/ui/javadisableddialog.ui" &&
         rUIFile != "svx/ui/fontworkgallerydialog.ui" &&
         rUIFile != "modules/scalc/ui/colwidthdialog.ui" &&
