@@ -119,7 +119,24 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
         {
             rProp.Value >>= sSuffix;
         }
-        else if( rProp.Name == "BulletChar" )
+        else if (rProp.Name == "ListFormat")
+        {
+            OUString sListFormat;
+            rProp.Value >>= sListFormat;
+
+            // Since we have no support for entire format string it should be converted
+            // to prefix and suffix. Of course, it is not so flexible as format string,
+            // but it is the only option
+            sal_Int32 nFirstReplacement = sListFormat.indexOf('%');
+            sal_Int32 nLastReplacement = sListFormat.lastIndexOf('%') + 1;
+            if (nFirstReplacement > 0)
+                // Everything before first '%' will be prefix
+                sPrefix = sListFormat.copy(0, nFirstReplacement);
+            if (nLastReplacement >= 0 && nLastReplacement  < sListFormat.getLength() -1 )
+                // Everything beyond last '%' (+1 for follow up id) is a suffix
+                sSuffix = sListFormat.copy(nLastReplacement + 1);
+        }
+        else if (rProp.Name == "BulletChar")
         {
             OUString sValue;
             rProp.Value >>= sValue;
