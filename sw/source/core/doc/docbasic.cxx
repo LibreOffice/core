@@ -213,7 +213,7 @@ sal_uInt16 SwDoc::CallEvent( SvMacroItemId nEvent, const SwCallMouseEvent& rCall
             }
             else if( EXTENDED_STYPE == rMacro.GetScriptType() )
             {
-                std::unique_ptr<Sequence<Any> > pUnoArgs(new Sequence<Any>());
+                Sequence<Any> aUnoArgs;
 
                 Any aRet;
                 Sequence< sal_Int16 > aOutArgsIndex;
@@ -222,7 +222,7 @@ sal_uInt16 SwDoc::CallEvent( SvMacroItemId nEvent, const SwCallMouseEvent& rCall
                 SAL_INFO("sw", "SwDoc::CallEvent URL is " << rMacro.GetMacName() );
 
                 nRet += ERRCODE_NONE == mpDocShell->CallXScript(
-                    rMacro.GetMacName(), *pUnoArgs,aRet, aOutArgsIndex, aOutArgs) ? 1 : 0;
+                    rMacro.GetMacName(), aUnoArgs, aRet, aOutArgsIndex, aOutArgs) ? 1 : 0;
             }
             // JavaScript calls are ignored
         }
