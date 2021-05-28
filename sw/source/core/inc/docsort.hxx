@@ -63,7 +63,7 @@ struct SwSortElement
     static const FlatFndBox*    pBox;
     static CollatorWrapper*     pSortCollator;
     static css::lang::Locale*   pLocale;
-    static OUString*            pLastAlgorithm;
+    static std::optional<OUString> xLastAlgorithm;
     static LocaleDataWrapper*   pLclData;
 
     static void Init( SwDoc*, const SwSortOptions& rOpt, FlatFndBox const * = nullptr );

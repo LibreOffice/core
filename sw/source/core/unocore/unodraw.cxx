@@ -666,7 +666,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     else
         pObj->SetLayer(m_pDoc->getIDocumentDrawModelAccess().GetInvisibleControlsId());
 
-    std::unique_ptr<SwPaM> pPam(new SwPaM(m_pDoc->GetNodes().GetEndOfContent()));
+    std::optional<SwPaM> pPam(m_pDoc->GetNodes().GetEndOfContent());
     std::unique_ptr<SwUnoInternalPaM> pInternalPam;
     uno::Reference< text::XTextRange >  xRg;
     if( pDesc && (xRg = pDesc->GetTextRange()).is() )
@@ -706,7 +706,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     aSet.Put(aAnchor);
     SwPaM* pTemp = pInternalPam.get();
     if ( !pTemp )
-        pTemp = pPam.get();
+        pTemp = &*pPam;
     UnoActionContext aAction(m_pDoc);
     m_pDoc->getIDocumentContentOperations().InsertDrawObj( *pTemp, *pObj, aSet );
 

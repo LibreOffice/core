@@ -57,7 +57,7 @@ SwDoc*              SwSortElement::pDoc = nullptr;
 const FlatFndBox*   SwSortElement::pBox = nullptr;
 CollatorWrapper*    SwSortElement::pSortCollator = nullptr;
 lang::Locale*       SwSortElement::pLocale = nullptr;
-OUString*           SwSortElement::pLastAlgorithm = nullptr;
+std::optional<OUString> SwSortElement::xLastAlgorithm;
 LocaleDataWrapper*  SwSortElement::pLclData = nullptr;
 
 // List of all sorted elements
@@ -87,8 +87,7 @@ void SwSortElement::Finit()
     pOptions = nullptr;
     delete pLocale;
     pLocale = nullptr;
-    delete pLastAlgorithm;
-    pLastAlgorithm = nullptr;
+    xLastAlgorithm.reset();
     delete pSortCollator;
     pSortCollator = nullptr;
     delete pLclData;
@@ -142,13 +141,10 @@ int SwSortElement::keycompare(const SwSortElement& rCmp, sal_uInt16 nKey) const
     }
     else
     {
-        if( !pLastAlgorithm || *pLastAlgorithm != rSrtKey.sSortType )
+        if( !xLastAlgorithm || *xLastAlgorithm != rSrtKey.sSortType )
         {
-            if( pLastAlgorithm )
-                *pLastAlgorithm = rSrtKey.sSortType;
-            else
-                pLastAlgorithm = new OUString( rSrtKey.sSortType );
-            pSortCollator->loadCollatorAlgorithm( *pLastAlgorithm,
+            xLastAlgorithm = rSrtKey.sSortType;
+            pSortCollator->loadCollatorAlgorithm( *xLastAlgorithm,
                     *pLocale,
                     pOptions->bIgnoreCase ? SW_COLLATOR_IGNORES : 0 );
         }
