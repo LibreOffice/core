@@ -19,6 +19,7 @@
 #pragma once
 
 #include <memory>
+#include <optional>
 #include <com/sun/star/beans/PropertyValues.hpp>
 
 #include <map>
@@ -187,7 +188,7 @@ public:
     // GetMultiAttr returns the text attribute of the multiportion,
     // if rPos is inside any multi-line part.
     // rPos will set to the end of the multi-line part.
-    std::unique_ptr<SwMultiCreator> GetMultiCreator(TextFrameIndex &rPos, SwMultiPortion const* pM) const;
+    std::optional<SwMultiCreator> GetMultiCreator(TextFrameIndex &rPos, SwMultiPortion const* pM) const;
 
     bool OnWin() const { return m_bOnWin; }
     void SetOnWin( const bool bNew ) { m_bOnWin = bNew; }
