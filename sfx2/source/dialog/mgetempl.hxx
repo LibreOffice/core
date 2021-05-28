@@ -38,7 +38,7 @@ namespace weld { class Widget; }
 class SfxManageStyleSheetPage final : public SfxTabPage
 {
     SfxStyleSheetBase *pStyle;
-    std::unique_ptr<SfxStyleFamilies> pFamilies;
+    std::optional<SfxStyleFamilies> mxFamilies;
     const SfxStyleFamilyItem *pItem;
     OUString aBuf;
     bool bModified;

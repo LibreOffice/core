@@ -25,6 +25,7 @@ class SfxTemplateControllerItem;
 
 #include <array>
 #include <memory>
+#include <optional>
 
 #include <vcl/transfer.hxx>
 #include <vcl/weld.hxx>
@@ -90,7 +91,7 @@ protected:
     SfxModule* pModule;
     std::unique_ptr<Idle> pIdle;
 
-    std::unique_ptr<SfxStyleFamilies> pStyleFamilies;
+    std::optional<SfxStyleFamilies> mxStyleFamilies;
     std::array<std::unique_ptr<SfxTemplateItem>, MAX_FAMILIES> pFamilyState;
     SfxStyleSheetBasePool* pStyleSheetPool;
     SfxObjectShell* pCurObjShell;

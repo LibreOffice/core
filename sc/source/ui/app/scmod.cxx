@@ -2217,21 +2217,21 @@ bool ScModule::HasThesaurusLanguage( LanguageType nLang )
     return bHasLang;
 }
 
-std::unique_ptr<SfxStyleFamilies> ScModule::CreateStyleFamilies()
+std::optional<SfxStyleFamilies> ScModule::CreateStyleFamilies()
 {
-    std::unique_ptr<SfxStyleFamilies> pStyleFamilies(new SfxStyleFamilies);
+    SfxStyleFamilies aStyleFamilies;
 
-    pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Para,
+    aStyleFamilies.emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Para,
                                                     ScResId(STR_STYLE_FAMILY_CELL),
                                                     BMP_STYLES_FAMILY_CELL,
                                                     RID_CELLSTYLEFAMILY, SC_MOD()->GetResLocale()));
 
-    pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Page,
+    aStyleFamilies.emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Page,
                                                     ScResId(STR_STYLE_FAMILY_PAGE),
                                                     BMP_STYLES_FAMILY_PAGE,
                                                     RID_PAGESTYLEFAMILY, SC_MOD()->GetResLocale()));
 
-    return pStyleFamilies;
+    return aStyleFamilies;
 }
 
 void ScModule::RegisterAutomationApplicationEventsCaller(css::uno::Reference< ooo::vba::XSinkCaller > const& xCaller)

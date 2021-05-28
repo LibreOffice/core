@@ -341,41 +341,41 @@ void    SwModule::RemoveAttrPool()
     m_pAttrPool.clear();
 }
 
-std::unique_ptr<SfxStyleFamilies> SwModule::CreateStyleFamilies()
+std::optional<SfxStyleFamilies> SwModule::CreateStyleFamilies()
 {
-    std::unique_ptr<SfxStyleFamilies> pStyleFamilies(new SfxStyleFamilies);
+    SfxStyleFamilies aStyleFamilies;
 
-    pStyleFamilies->emplace_back(SfxStyleFamily::Para,
+    aStyleFamilies.emplace_back(SfxStyleFamily::Para,
                                  SwResId(STR_PARAGRAPHSTYLEFAMILY),
                                  BMP_STYLES_FAMILY_PARA,
                                  RID_PARAGRAPHSTYLEFAMILY, GetResLocale());
 
-    pStyleFamilies->emplace_back(SfxStyleFamily::Char,
+    aStyleFamilies.emplace_back(SfxStyleFamily::Char,
                                  SwResId(STR_CHARACTERSTYLEFAMILY),
                                  BMP_STYLES_FAMILY_CHAR,
                                  RID_CHARACTERSTYLEFAMILY, GetResLocale());
 
-    pStyleFamilies->emplace_back(SfxStyleFamily::Frame,
+    aStyleFamilies.emplace_back(SfxStyleFamily::Frame,
                                  SwResId(STR_FRAMESTYLEFAMILY),
                                  BMP_STYLES_FAMILY_FRAME,
                                  RID_FRAMESTYLEFAMILY, GetResLocale());
 
-    pStyleFamilies->emplace_back(SfxStyleFamily::Page,
+    aStyleFamilies.emplace_back(SfxStyleFamily::Page,
                                  SwResId(STR_PAGESTYLEFAMILY),
                                  BMP_STYLES_FAMILY_PAGE,
                                  RID_PAGESTYLEFAMILY, GetResLocale());
 
-    pStyleFamilies->emplace_back(SfxStyleFamily::Pseudo,
+    aStyleFamilies.emplace_back(SfxStyleFamily::Pseudo,
                                  SwResId(STR_LISTSTYLEFAMILY),
                                  BMP_STYLES_FAMILY_LIST,
                                  RID_LISTSTYLEFAMILY, GetResLocale());
 
-    pStyleFamilies->emplace_back(SfxStyleFamily::Table,
+    aStyleFamilies.emplace_back(SfxStyleFamily::Table,
                                  SwResId(STR_TABLESTYLEFAMILY),
                                  BMP_STYLES_FAMILY_TABLE,
                                  RID_TABLESTYLEFAMILY, GetResLocale());
 
-    return pStyleFamilies;
+    return aStyleFamilies;
 }
 
 void SwModule::RegisterAutomationApplicationEventsCaller(css::uno::Reference< ooo::vba::XSinkCaller > const& xCaller)
