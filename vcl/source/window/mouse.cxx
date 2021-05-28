@@ -252,7 +252,7 @@ void Window::ImplGrabFocus( GetFocusFlags nFlags )
 
     bool bAsyncFocusWaiting = false;
     vcl::Window *pFrame = pSVData->maFrameData.mpFirstFrame;
-    while( pFrame  )
+    while( pFrame && pFrame->mpWindowImpl && pFrame->mpWindowImpl->mpFrameData )
     {
         if( pFrame != mpWindowImpl->mpFrameWindow.get() && pFrame->mpWindowImpl->mpFrameData->mnFocusId )
         {
@@ -275,6 +275,8 @@ void Window::ImplGrabFocus( GetFocusFlags nFlags )
             bMustNotGrabFocus = true;
             break;
         }
+        if (!pParent->mpWindowImpl)
+            break;
         pParent = pParent->mpWindowImpl->mpParent;
     }
 
@@ -332,13 +334,16 @@ void Window::ImplGrabFocus( GetFocusFlags nFlags )
     else
     {
         vcl::Window* pNewOverlapWindow = ImplGetFirstOverlapWindow();
-        vcl::Window* pNewRealWindow = pNewOverlapWindow->ImplGetWindow();
-        pNewOverlapWindow->mpWindowImpl->mbActive = true;
-        pNewOverlapWindow->Activate();
-        if ( pNewRealWindow != pNewOverlapWindow )
+        if ( pNewOverlapWindow && pNewOverlapWindow->mpWindowImpl )
         {
-            pNewRealWindow->mpWindowImpl->mbActive = true;
-            pNewRealWindow->Activate();
+            vcl::Window* pNewRealWindow = pNewOverlapWindow->ImplGetWindow();
+            pNewOverlapWindow->mpWindowImpl->mbActive = true;
+            pNewOverlapWindow->Activate();
+            if ( pNewRealWindow != pNewOverlapWindow  && pNewRealWindow && pNewRealWindow->mpWindowImpl )
+            {
+                pNewRealWindow->mpWindowImpl->mbActive = true;
+                pNewRealWindow->Activate();
+            }
         }
     }
 
