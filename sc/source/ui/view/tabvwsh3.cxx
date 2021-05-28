@@ -713,7 +713,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     const Fraction& rOldY = GetViewData().GetZoomY();
                     tools::Long nOld = tools::Long(rOldY * 100);
                     tools::Long nNew;
-                    if (SID_ZOOM_OUT == nSlot)
+                    if (SID_ZOOM_IN == nSlot)
                         nNew = std::max(tools::Long(MINZOOM), basegfx::zoomtools::zoomOut(nOld));
                     else
                         nNew = std::min(tools::Long(MAXZOOM), basegfx::zoomtools::zoomIn(nOld));
