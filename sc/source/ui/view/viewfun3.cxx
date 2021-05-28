@@ -1578,9 +1578,11 @@ bool ScViewFunc::PasteMultiRangesFromClip(InsertDeleteFlags nFlags, ScDocument* 
     if (rDoc.IsUndoEnabled())
         rDoc.BeginDrawUndo();
 
-    InsertDeleteFlags nNoObjFlags = nFlags & ~InsertDeleteFlags::OBJECTS;
+    InsertDeleteFlags nCopyFlags = nFlags & ~InsertDeleteFlags::OBJECTS;
     // in case of transpose, links were added in TransposeClip()
-    rDoc.CopyMultiRangeFromClip(rCurPos, aMark, nNoObjFlags, pClipDoc, true, bAsLink && !bTranspose,
+    if (bAsLink && bTranspose)
+        nCopyFlags |= InsertDeleteFlags::FORMULA;
+    rDoc.CopyMultiRangeFromClip(rCurPos, aMark, nCopyFlags, pClipDoc, true, bAsLink && !bTranspose,
                                 bIncludeFiltered, bSkipEmpty);
 
     if (pMixDoc)

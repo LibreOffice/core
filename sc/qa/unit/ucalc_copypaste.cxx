@@ -1059,7 +1059,7 @@ void TestCopyPaste::testCopyPasteSpecialAsLinkFilteredTranspose()
 }
 
 // tdf#141683
-// InsertDeleteFlags::CONTENTS
+// InsertDeleteFlags::VALUE
 void TestCopyPaste::testCopyPasteSpecialMultiRangeRowAsLinkTranspose()
 {
     const SCTAB srcSheet = 0;
@@ -1090,14 +1090,14 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeRowAsLinkTranspose()
 
     // transpose
     ScDocumentUniquePtr pTransClip(new ScDocument(SCDOCMODE_CLIP));
-    aClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::CONTENTS, true, false);
+    aClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::VALUE, true, false);
 
     ScRange aDestRange(1, 1, destSheet, 2, 4, destSheet); // Paste to B2:C5 on Sheet2.
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SetMarkArea(aDestRange);
-    m_pDoc->CopyMultiRangeFromClip(ScAddress(1, 1, destSheet), aMark, InsertDeleteFlags::CONTENTS,
-                                   pTransClip.get(), true, false /* false fixes tdf#141683 */,
-                                   false, false);
+    m_pDoc->CopyMultiRangeFromClip(
+        ScAddress(1, 1, destSheet), aMark, InsertDeleteFlags::VALUE | InsertDeleteFlags::FORMULA,
+        pTransClip.get(), true, false /* false fixes tdf#141683 */, false, false);
     pTransClip.reset();
 
     OUString aString;
@@ -1149,7 +1149,7 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeRowAsLinkTranspose()
 }
 
 // tdf#141683
-// InsertDeleteFlags::CONTENTS
+// InsertDeleteFlags::VALUE
 void TestCopyPaste::testCopyPasteSpecialMultiRangeRowAsLinkFilteredTranspose()
 {
     const SCTAB srcSheet = 0;
@@ -1217,7 +1217,7 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeRowAsLinkFilteredTranspose()
     printRange(m_pDoc, aClipParam.getWholeRange(), "Src range");
     // transpose
     ScDocumentUniquePtr pTransClip(new ScDocument(SCDOCMODE_CLIP));
-    aClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::CONTENTS, true, false);
+    aClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::VALUE, true, false);
 
     printRange(&aClipDoc, ScRange(0, 0, 0, 4, 5, 0), "Base doc (&aClipDoc)");
     printRange(pTransClip.get(), ScRange(0, 0, 0, 3, 3, 0),
@@ -1225,9 +1225,9 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeRowAsLinkFilteredTranspose()
     ScRange aDestRange(1, 1, destSheet, 3, 4, destSheet); // Paste to B2:D5 on Sheet2.
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SetMarkArea(aDestRange);
-    m_pDoc->CopyMultiRangeFromClip(ScAddress(1, 1, destSheet), aMark, InsertDeleteFlags::CONTENTS,
-                                   pTransClip.get(), true, false /* false fixes tdf#141683 */,
-                                   false, false);
+    m_pDoc->CopyMultiRangeFromClip(
+        ScAddress(1, 1, destSheet), aMark, InsertDeleteFlags::VALUE | InsertDeleteFlags::FORMULA,
+        pTransClip.get(), true, false /* false fixes tdf#141683 */, false, false);
     pTransClip.reset();
     printRange(m_pDoc, aDestRange, "Transposed dest sheet");
 
@@ -1301,7 +1301,7 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeRowAsLinkFilteredTranspose()
 }
 
 // tdf#141683
-// InsertDeleteFlags::CONTENTS
+// InsertDeleteFlags::VALUE
 void TestCopyPaste::testCopyPasteSpecialMultiRangeColAsLinkTranspose()
 {
     const SCTAB srcSheet = 0;
@@ -1332,14 +1332,14 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeColAsLinkTranspose()
 
     // transpose
     ScDocumentUniquePtr pTransClip(new ScDocument(SCDOCMODE_CLIP));
-    aClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::CONTENTS, true, false);
+    aClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::VALUE, true, false);
 
     ScRange aDestRange(1, 1, destSheet, 4, 2, destSheet); // Paste to B2:E3 on Sheet2.
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SetMarkArea(aDestRange);
-    m_pDoc->CopyMultiRangeFromClip(ScAddress(1, 1, destSheet), aMark, InsertDeleteFlags::CONTENTS,
-                                   pTransClip.get(), true, false /* false fixes tdf#141683 */,
-                                   false, false);
+    m_pDoc->CopyMultiRangeFromClip(
+        ScAddress(1, 1, destSheet), aMark, InsertDeleteFlags::VALUE | InsertDeleteFlags::FORMULA,
+        pTransClip.get(), true, false /* false fixes tdf#141683 */, false, false);
     pTransClip.reset();
 
     OUString aString;
@@ -1391,7 +1391,7 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeColAsLinkTranspose()
 }
 
 // tdf#141683
-// InsertDeleteFlags::CONTENTS
+// InsertDeleteFlags::VALUE
 void TestCopyPaste::testCopyPasteSpecialMultiRangeColAsLinkFilteredTranspose()
 {
     const SCTAB srcSheet = 0;
@@ -1446,14 +1446,14 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeColAsLinkFilteredTranspose()
 
     // transpose
     ScDocumentUniquePtr pTransClip(new ScDocument(SCDOCMODE_CLIP));
-    aClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::CONTENTS, true, false);
+    aClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::VALUE, true, false);
 
     ScRange aDestRange(1, 1, destSheet, 4, 2, destSheet); // Paste to B2:E3 on Sheet2.
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SetMarkArea(aDestRange);
-    m_pDoc->CopyMultiRangeFromClip(ScAddress(1, 1, destSheet), aMark, InsertDeleteFlags::CONTENTS,
-                                   pTransClip.get(), true, false /* false fixes tdf#141683 */,
-                                   false, false);
+    m_pDoc->CopyMultiRangeFromClip(
+        ScAddress(1, 1, destSheet), aMark, InsertDeleteFlags::VALUE | InsertDeleteFlags::FORMULA,
+        pTransClip.get(), true, false /* false fixes tdf#141683 */, false, false);
     pTransClip.reset();
 
     OUString aString;
