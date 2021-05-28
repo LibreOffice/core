@@ -50,6 +50,12 @@
 		"C_Cpp.clang_format_path": "/opt/lo/bin/clang-format",
 		"editor.rulers": [
 			100
+		],
+		"gitlens.autolinks": [
+			{
+				"prefix": "tdf#",
+				"url": "https://bugs.documentfoundation.org/show_bug.cgi?id=<num>"
+			}
 		]
 	},
 	"tasks": {
