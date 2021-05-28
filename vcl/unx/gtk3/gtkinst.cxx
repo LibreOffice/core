@@ -1905,7 +1905,6 @@ class GtkInstanceBuilder;
 #endif
 }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
 static MouseEventModifiers ImplGetMouseButtonMode(sal_uInt16 nButton, sal_uInt16 nCode)
 {
     MouseEventModifiers nMode = MouseEventModifiers::NONE;
@@ -1922,6 +1921,7 @@ static MouseEventModifiers ImplGetMouseButtonMode(sal_uInt16 nButton, sal_uInt16
     return nMode;
 }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 static MouseEventModifiers ImplGetMouseMoveMode(sal_uInt16 nCode)
 {
     MouseEventModifiers nMode = MouseEventModifiers::NONE;
@@ -2324,9 +2324,26 @@ protected:
     {
         if (!m_nButtonPressSignalId)
         {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            GtkEventController* pClickController = get_click_controller();
+            m_nButtonPressSignalId = g_signal_connect(pClickController, "pressed", G_CALLBACK(signalButtonPress), this);
+#else
             ensureMouseEventWidget();
-#if !GTK_CHECK_VERSION(4, 0, 0)
-            m_nButtonPressSignalId = g_signal_connect(m_pMouseEventBox, "button-press-event", G_CALLBACK(signalButton), this);
+            m_nButtonPressSignalId = g_signal_connect(m_pMouseEventBox, "button-press-event", G_CALLBACK(signalButtonPress), this);
+#endif
+        }
+    }
+
+    void ensureButtonReleaseSignal()
+    {
+        if (!m_nButtonReleaseSignalId)
+        {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            GtkEventController* pClickController = get_click_controller();
+            m_nButtonReleaseSignalId = g_signal_connect(pClickController, "released", G_CALLBACK(signalButtonRelease), this);
+#else
+            ensureMouseEventWidget();
+            m_nButtonReleaseSignalId = g_signal_connect(m_pMouseEventBox, "button-release-event", G_CALLBACK(signalButtonRelease), this);
 #endif
         }
     }
@@ -2400,10 +2417,12 @@ private:
 #endif
     int m_nWaitCount;
     int m_nFreezeCount;
-#if !GTK_CHECK_VERSION(4, 0, 0)
     sal_uInt16 m_nLastMouseButton;
+#if !GTK_CHECK_VERSION(4, 0, 0)
     sal_uInt16 m_nLastMouseClicks;
+#endif
     int m_nPressedButton;
+#if !GTK_CHECK_VERSION(4, 0, 0)
     int m_nPressStartX;
     int m_nPressStartY;
 #endif
@@ -2437,6 +2456,7 @@ private:
 
 #if GTK_CHECK_VERSION(4, 0, 0)
     GtkEventController* m_pFocusController;
+    GtkEventController* m_pClickController;
 #endif
 
     rtl::Reference<GtkInstDropTarget> m_xDropTarget;
@@ -2463,8 +2483,69 @@ private:
         return false;
     }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    static gboolean signalButton(GtkWidget*, GdkEventButton* pEvent, gpointer widget)
+#if GTK_CHECK_VERSION(4, 0, 0)
+    static void signalButtonPress(GtkGestureClick* pGesture, int /*n_press*/, gdouble x, gdouble y, gpointer widget)
+    {
+        GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        SolarMutexGuard aGuard;
+        pThis->signal_button(pGesture, SalEvent::MouseButtonDown, x, y);
+    }
+
+    static void signalButtonRelease(GtkGestureClick* pGesture, int /*n_press*/, gdouble x, gdouble y, gpointer widget)
+    {
+        GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        SolarMutexGuard aGuard;
+        pThis->signal_button(pGesture, SalEvent::MouseButtonUp, x, y);
+    }
+
+    void signal_button(GtkGestureClick* pGesture, SalEvent nEventType, gdouble x, gdouble y)
+    {
+        m_nPressedButton = -1;
+
+        Point aPos(x, y);
+        if (SwapForRTL())
+            aPos.setX(gtk_widget_get_allocated_width(m_pWidget) - 1 - aPos.X());
+
+        GdkModifierType eType = gtk_event_controller_get_current_event_state(GTK_EVENT_CONTROLLER(pGesture));
+        int nButton = gtk_gesture_single_get_current_button(GTK_GESTURE_SINGLE(pGesture));
+
+        switch (nButton)
+        {
+            case 1:
+                m_nLastMouseButton = MOUSE_LEFT;
+                break;
+            case 2:
+                m_nLastMouseButton = MOUSE_MIDDLE;
+                break;
+            case 3:
+                m_nLastMouseButton = MOUSE_RIGHT;
+                break;
+            default:
+                return;
+        }
+
+        sal_uInt32 nModCode = GtkSalFrame::GetMouseModCode(eType);
+        // strip out which buttons are involved from the nModCode and replace with m_nLastMouseButton
+        sal_uInt16 nCode = m_nLastMouseButton | (nModCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2));
+        MouseEvent aMEvt(aPos, 1, ImplGetMouseButtonMode(m_nLastMouseButton, nModCode), nCode, nCode);
+
+        if (nEventType == SalEvent::MouseButtonDown && m_aMousePressHdl.Call(aMEvt))
+            gtk_gesture_set_state(GTK_GESTURE(pGesture), GTK_EVENT_SEQUENCE_CLAIMED);
+
+        if (nEventType == SalEvent::MouseButtonUp && m_aMouseReleaseHdl.Call(aMEvt))
+            gtk_gesture_set_state(GTK_GESTURE(pGesture), GTK_EVENT_SEQUENCE_CLAIMED);
+    }
+
+#else
+
+    static gboolean signalButtonPress(GtkWidget*, GdkEventButton* pEvent, gpointer widget)
+    {
+        GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        SolarMutexGuard aGuard;
+        return pThis->signal_button(pEvent);
+    }
+
+    static gboolean signalButtonRelease(GtkWidget*, GdkEventButton* pEvent, gpointer widget)
     {
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
         SolarMutexGuard aGuard;
@@ -2811,10 +2892,12 @@ public:
 #endif
         , m_nWaitCount(0)
         , m_nFreezeCount(0)
-#if !GTK_CHECK_VERSION(4, 0, 0)
         , m_nLastMouseButton(0)
+#if !GTK_CHECK_VERSION(4, 0, 0)
         , m_nLastMouseClicks(0)
+#endif
         , m_nPressedButton(-1)
+#if !GTK_CHECK_VERSION(4, 0, 0)
         , m_nPressStartX(-1)
         , m_nPressStartY(-1)
 #endif
@@ -2845,6 +2928,7 @@ public:
         , m_nDragGetSignalId(0)
 #if GTK_CHECK_VERSION(4, 0, 0)
         , m_pFocusController(nullptr)
+        , m_pClickController(nullptr)
 #endif
     {
         if (!bTakeOwnership)
@@ -2893,11 +2977,7 @@ public:
 
     virtual void connect_mouse_release(const Link<const MouseEvent&, bool>& rLink) override
     {
-        ensureMouseEventWidget();
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        if (!m_nButtonReleaseSignalId)
-            m_nButtonReleaseSignalId = g_signal_connect(m_pMouseEventBox, "button-release-event", G_CALLBACK(signalButton), this);
-#endif
+        ensureButtonReleaseSignal();
         weld::Widget::connect_mouse_release(rLink);
     }
 
@@ -3348,6 +3428,22 @@ public:
         }
         return m_pFocusController;
     }
+
+#if GTK_CHECK_VERSION(4, 0, 0)
+    GtkEventController* get_click_controller()
+    {
+        if (!m_pClickController)
+        {
+            GtkGesture *pClick = gtk_gesture_click_new();
+            gtk_gesture_single_set_button(GTK_GESTURE_SINGLE(pClick), 0);
+            m_pClickController = GTK_EVENT_CONTROLLER(pClick);
+            gtk_widget_add_controller(m_pWidget, m_pClickController);
+        }
+        return m_pClickController;
+    }
+#endif
+
+
 #endif
 
     virtual void connect_focus_in(const Link<Widget&, void>& rLink) override
@@ -3570,15 +3666,28 @@ public:
         if (m_nKeyReleaseSignalId)
             g_signal_handler_disconnect(m_pWidget, m_nKeyReleaseSignalId);
         if (m_nButtonPressSignalId)
+        {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            g_signal_handler_disconnect(get_click_controller(), m_nButtonPressSignalId);
+#else
             g_signal_handler_disconnect(m_pMouseEventBox, m_nButtonPressSignalId);
+#endif
+        }
         if (m_nMotionSignalId)
             g_signal_handler_disconnect(m_pMouseEventBox, m_nMotionSignalId);
         if (m_nLeaveSignalId)
             g_signal_handler_disconnect(m_pMouseEventBox, m_nLeaveSignalId);
         if (m_nEnterSignalId)
             g_signal_handler_disconnect(m_pMouseEventBox, m_nEnterSignalId);
+
         if (m_nButtonReleaseSignalId)
+        {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            g_signal_handler_disconnect(get_click_controller(), m_nButtonReleaseSignalId);
+#else
             g_signal_handler_disconnect(m_pMouseEventBox, m_nButtonReleaseSignalId);
+#endif
+        }
 
         if (m_nFocusInSignalId)
         {
