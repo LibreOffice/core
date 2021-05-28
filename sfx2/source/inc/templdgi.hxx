@@ -100,8 +100,11 @@ protected:
 
     std::unique_ptr<weld::TreeView> mxFmtLb;
     std::unique_ptr<weld::TreeView> mxTreeBox;
+    std::unique_ptr<weld::TreeView> mxCharTreeBox;
     std::unique_ptr<weld::CheckButton> mxPreviewCheckbox;
+    std::unique_ptr<weld::CheckButton> mxCharPreviewCheckbox;
     std::unique_ptr<weld::ComboBox> mxFilterLb;
+    std::unique_ptr<weld::ComboBox> mxCharFilterLb;
     std::unique_ptr<TreeViewDropTarget> m_xTreeView1DropTargetHelper;
     std::unique_ptr<TreeViewDropTarget> m_xTreeView2DropTargetHelper;
 
@@ -126,6 +129,8 @@ protected:
     bool bAllowReParentDrop:1;
     bool bHierarchical :1;
     bool m_bWantHierarchical :1;
+    bool m_bWantCharHierarchical :1;
+    bool m_bCharHierarchical :1;
     bool bBindingUpdate :1;
 
     DECL_LINK(FilterSelectHdl, weld::ComboBox&, void );
@@ -147,7 +152,7 @@ protected:
 
     virtual void EnableItem(const OString& /*rMesId*/, bool /*bCheck*/ = true)
     {}
-    virtual void CheckItem(const OString& /*rMesId*/, bool /*bCheck*/ = true)
+    virtual void CheckItem(const OString& /*rMesId*/, weld::CheckButton&, bool /*bCheck*/ = true)
     {}
     virtual bool IsCheckedItem(const OString& /*rMesId*/ )
     {
@@ -170,7 +175,7 @@ protected:
                       sal_uInt16 nFamily, SfxStyleSearchBits nMask = SfxStyleSearchBits::Auto,
                       sal_uInt16* pIdx = nullptr, const sal_uInt16* pModifier = nullptr );
 
-    void UpdateStyles_Impl(StyleFlags nFlags);
+    void UpdateStyles_Impl(StyleFlags nFlags, weld::ComboBox&);
     const SfxStyleFamilyItem* GetFamilyItem_Impl() const;
     bool IsInitialized() const
     {
@@ -178,14 +183,14 @@ protected:
     }
     void EnableDelete();
     void Initialize();
-    void EnableHierarchical(bool);
+    void EnableHierarchical(bool, weld::ComboBox&);
 
-    void FilterSelect( sal_uInt16 nFilterIdx, bool bForce );
+    void FilterSelect( sal_uInt16 nFilterIdx, bool bForce, weld::ComboBox& );
     void SetFamilyState( sal_uInt16 nSlotId, const SfxTemplateItem* );
     void SetWaterCanState( const SfxBoolItem* pItem );
     bool IsSafeForWaterCan() const;
 
-    void SelectStyle(const OUString& rStyle, bool bIsCallback);
+    void SelectStyle(const OUString& rStyle, bool bIsCallback, weld::TreeView& treeview);
     void UpdateStyleDependents();
     bool HasSelectedStyle() const;
     void GetSelectedStyle() const;
@@ -279,7 +284,7 @@ private:
 protected:
     virtual void EnableEdit( bool ) override;
     virtual void EnableItem(const OString& rMesId, bool bCheck = true) override;
-    virtual void CheckItem(const OString& rMesId, bool bCheck = true) override;
+    virtual void CheckItem(const OString& rMesId, weld::CheckButton&, bool bCheck = true) override;
     virtual bool IsCheckedItem(const OString& rMesId) override;
     virtual void InsertFamilyItem(sal_uInt16 nId, const SfxStyleFamilyItem& rItem) override;
     virtual void EnableFamilyItem(sal_uInt16 nId, bool bEnabled) override;
