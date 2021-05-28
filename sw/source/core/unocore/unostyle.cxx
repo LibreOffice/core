@@ -1899,10 +1899,10 @@ void SwXStyle::SetPropertyValue<FN_UNO_CATEGORY>(const SfxItemPropertyMapEntry&,
 {
     if(!o_rStyleBase.getNewBase()->IsUserDefined() || !rValue.has<paragraphstyle_t>())
         throw lang::IllegalArgumentException();
-    static std::unique_ptr<std::map<paragraphstyle_t, SfxStyleSearchBits>> pUnoToCore;
+    static std::optional<std::map<paragraphstyle_t, SfxStyleSearchBits>> pUnoToCore;
     if(!pUnoToCore)
     {
-        pUnoToCore.reset(new std::map<paragraphstyle_t, SfxStyleSearchBits>);
+        pUnoToCore.emplace();
         auto pEntries = lcl_GetParagraphStyleCategoryEntries();
         std::transform(pEntries->begin(), pEntries->end(), std::inserter(*pUnoToCore, pUnoToCore->end()),
             [] (const ParagraphStyleCategoryEntry& rEntry) { return std::pair<paragraphstyle_t, SfxStyleSearchBits>(rEntry.m_eCategory, rEntry.m_nSwStyleBits); });
@@ -2003,10 +2003,10 @@ void SwXStyle::SetStyleProperty(const SfxItemPropertyMapEntry& rEntry, const Sfx
 {
     using propertytype_t = decltype(rEntry.nWID);
     using coresetter_t = std::function<void(SwXStyle&, const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, const uno::Any&, SwStyleBase_Impl&)>;
-    static std::unique_ptr<std::map<propertytype_t, coresetter_t>> pUnoToCore;
+    static std::optional<std::map<propertytype_t, coresetter_t>> pUnoToCore;
     if(!pUnoToCore)
     {
-        pUnoToCore.reset(new std::map<propertytype_t, coresetter_t> {
+        pUnoToCore = std::map<propertytype_t, coresetter_t> {
             // these explicit std::mem_fn() calls shouldn't be needed, but apparently MSVC is currently too stupid for C++11 again
             { FN_UNO_HIDDEN,                 std::mem_fn(&SwXStyle::SetPropertyValue<FN_UNO_HIDDEN>)                 },
             { FN_UNO_STYLE_INTEROP_GRAB_BAG, std::mem_fn(&SwXStyle::SetPropertyValue<FN_UNO_STYLE_INTEROP_GRAB_BAG>) },
@@ -2029,7 +2029,7 @@ void SwXStyle::SetStyleProperty(const SfxItemPropertyMapEntry& rEntry, const Sfx
             { RES_TXTATR_CJK_RUBY,           std::mem_fn(&SwXStyle::SetPropertyValue<sal_uInt16(RES_TXTATR_CJK_RUBY)>)           },
             { RES_PARATR_DROP,               std::mem_fn(&SwXStyle::SetPropertyValue<sal_uInt16(RES_PARATR_DROP)>)               },
             { RES_PARATR_NUMRULE,            std::mem_fn(&SwXStyle::SetPropertyValue<sal_uInt16(RES_PARATR_NUMRULE)>)            }
-        });
+        };
     }
     const auto pUnoToCoreIt(pUnoToCore->find(rEntry.nWID));
     if(pUnoToCoreIt != pUnoToCore->end())
@@ -2262,10 +2262,10 @@ template<>
 uno::Any SwXStyle::GetStyleProperty<FN_UNO_CATEGORY>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
 {
     PrepareStyleBase(rBase);
-    static std::unique_ptr<std::map<collectionbits_t, paragraphstyle_t>> pUnoToCore;
+    static std::optional<std::map<collectionbits_t, paragraphstyle_t>> pUnoToCore;
     if(!pUnoToCore)
     {
-        pUnoToCore.reset(new std::map<collectionbits_t, paragraphstyle_t>);
+        pUnoToCore.emplace();
         auto pEntries = lcl_GetParagraphStyleCategoryEntries();
         std::transform(pEntries->begin(), pEntries->end(), std::inserter(*pUnoToCore, pUnoToCore->end()),
             [] (const ParagraphStyleCategoryEntry& rEntry) { return std::pair<collectionbits_t, paragraphstyle_t>(rEntry.m_nCollectionBits, rEntry.m_eCategory); });
@@ -2343,10 +2343,10 @@ uno::Any SwXStyle::GetStyleProperty_Impl(const SfxItemPropertyMapEntry& rEntry, 
 {
     using propertytype_t = decltype(rEntry.nWID);
     using coresetter_t = std::function<uno::Any(SwXStyle&, const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, SwStyleBase_Impl&)>;
-    static std::unique_ptr<std::map<propertytype_t, coresetter_t>> pUnoToCore;
+    static std::optional<std::map<propertytype_t, coresetter_t>> pUnoToCore;
     if(!pUnoToCore)
     {
-        pUnoToCore.reset(new std::map<propertytype_t, coresetter_t> {
+        pUnoToCore = std::map<propertytype_t, coresetter_t> {
             // these explicit std::mem_fn() calls shouldn't be needed, but apparently MSVC is currently too stupid for C++11 again
             { FN_UNO_IS_PHYSICAL,            std::mem_fn(&SwXStyle::GetStyleProperty<FN_UNO_IS_PHYSICAL>)            },
             { FN_UNO_HIDDEN,                 std::mem_fn(&SwXStyle::GetStyleProperty<FN_UNO_HIDDEN>)                 },
@@ -2363,7 +2363,7 @@ uno::Any SwXStyle::GetStyleProperty_Impl(const SfxItemPropertyMapEntry& rEntry, 
             { SID_SWREGISTER_COLLECTION,     std::mem_fn(&SwXStyle::GetStyleProperty<SID_SWREGISTER_COLLECTION>)     },
             { RES_BACKGROUND,                std::mem_fn(&SwXStyle::GetStyleProperty<sal_uInt16(RES_BACKGROUND)>)                },
             { OWN_ATTR_FILLBMP_MODE,         std::mem_fn(&SwXStyle::GetStyleProperty<OWN_ATTR_FILLBMP_MODE>)         }
-        });
+        };
     }
     const auto pUnoToCoreIt(pUnoToCore->find(rEntry.nWID));
     if(pUnoToCoreIt != pUnoToCore->end())
