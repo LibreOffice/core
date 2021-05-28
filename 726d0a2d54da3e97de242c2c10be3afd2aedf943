@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "99424d18_a92eb657",
+        "filename": "xmloff/source/style/xmlnume.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-05-28T11:40:19Z",
+      "side": 1,
+      "message": "Is this accurate for listlevel 10? (Is that represented as %9 or %10? I assume %10 but can\u0027t tell from a quick code read).\nOf course, that might be a moot point since ListFormat is only defined by MS Formats right? And they only support 9 levels... But in a different commit you considered a future event when MS decided to support more than 15 levels.",
+      "range": {
+        "startLine": 139,
+        "startChar": 60,
+        "endLine": 139,
+        "endChar": 63
+      },
+      "revId": "726d0a2d54da3e97de242c2c10be3afd2aedf943",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
