@@ -20410,14 +20410,14 @@ void AddBorderAsMargins(const Reference<css::xml::dom::XNode>& xNode, const OUSt
 struct ConvertResult
 {
     bool m_bChildCanFocus;
-    bool m_bChildIsDefaultInvisible;
+    bool m_bHasVisible;
     bool m_bHasIconName;
 
     ConvertResult(bool bChildCanFocus,
-                  bool bChildIsDefaultInvisible,
+                  bool bHasVisible,
                   bool bHasIconName)
         : m_bChildCanFocus(bChildCanFocus)
-        , m_bChildIsDefaultInvisible(bChildIsDefaultInvisible)
+        , m_bHasVisible(bHasVisible)
         , m_bHasIconName(bHasIconName)
     {
     }
@@ -20433,7 +20433,7 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
 
     OUString sBorderWidth;
     bool bChildCanFocus = false;
-    bool bChildIsDefaultInvisible = true;
+    bool bHasVisible = false;
     bool bHasIconName = false;
     css::uno::Reference<css::xml::dom::XNode> xCantFocus;
 
@@ -20491,6 +20491,11 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
                         // from Boxes and Grids
                         xRemoveList.push_back(xChild);
                     }
+                    else if (sParentClass == "GtkComboBoxText")
+                    {
+                        // this was always a bit finicky in gtk3, fix it up to default to can-focus
+                        xRemoveList.push_back(xChild);
+                    }
                     else
                     {
                         // otherwise mark the property as needing removal if there turns out to be a child
@@ -20501,7 +20506,7 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
             }
 
             if (sName == "visible")
-                bChildIsDefaultInvisible = false;
+                bHasVisible = true;
 
             if (sName == "icon-name")
                 bHasIconName = true;
@@ -20744,6 +20749,7 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
         auto xNextChild = xChild->getNextSibling();
 
         bool bChildHasIconName = false;
+        bool bChildHasVisible = false;
         if (xChild->hasChildNodes())
         {
             auto aChildRes = Convert3To4(xChild);
@@ -20755,7 +20761,7 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
             }
             if (xChild->getNodeName() == "object")
             {
-                bChildIsDefaultInvisible = aChildRes.m_bChildIsDefaultInvisible;
+                bChildHasVisible = aChildRes.m_bHasVisible;
                 bChildHasIconName = aChildRes.m_bHasIconName;
             }
         }
@@ -20773,7 +20779,7 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
             css::uno::Reference<css::xml::dom::XNode> xId = xInternalChildCandidateMap->getNamedItem("internal-child");
 
             // turn default gtk3 invisibility for widget objects into explicit invisible, but ignore internal-children
-            if (bChildIsDefaultInvisible && !xId)
+            if (!bChildHasVisible && !xId)
             {
                 if (sClass == "GtkBox" || sClass == "GtkButton" ||
                     sClass == "GtkCalendar" || sClass == "GtkCheckButton" ||
@@ -20891,7 +20897,7 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
     for (auto& xRemove : xRemoveList)
         xNode->removeChild(xRemove);
 
-    return ConvertResult(bChildCanFocus, bChildIsDefaultInvisible, bHasIconName);
+    return ConvertResult(bChildCanFocus, bHasVisible, bHasIconName);
 }
 #endif
 
