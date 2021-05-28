@@ -420,20 +420,20 @@ VclPtr<VirtualDevice> GraphicExporter::CreatePageVDev( SdrPage* pPage, tools::Lo
 
     if(bSuccess)
     {
-        std::unique_ptr<SdrView> pView(new SdrView(*mpDoc, pVDev));
+        SdrView aView(*mpDoc, pVDev);
 
-        pView->SetPageVisible( false );
-        pView->SetBordVisible( false );
-        pView->SetGridVisible( false );
-        pView->SetHlplVisible( false );
-        pView->SetGlueVisible( false );
-        pView->ShowSdrPage(pPage);
+        aView.SetPageVisible( false );
+        aView.SetBordVisible( false );
+        aView.SetGridVisible( false );
+        aView.SetHlplVisible( false );
+        aView.SetGlueVisible( false );
+        aView.ShowSdrPage(pPage);
 
         vcl::Region aRegion (tools::Rectangle( aPoint, aPageSize ) );
 
         ImplExportCheckVisisbilityRedirector aRedirector( mpCurrentPage );
 
-        pView->CompleteRedraw(pVDev, aRegion, &aRedirector);
+        aView.CompleteRedraw(pVDev, aRegion, &aRedirector);
     }
     else
     {

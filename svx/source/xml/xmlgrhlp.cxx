@@ -319,19 +319,19 @@ Graphic SvXMLGraphicOutputStream::GetGraphic()
 
                 if( sFirstBytes[0] == 0x1f && sFirstBytes[1] == 0x8b )
                 {
-                    std::unique_ptr<SvMemoryStream> pDest(new SvMemoryStream);
+                    SvMemoryStream aDest;
                     ZCodec aZCodec( 0x8000, 0x8000 );
                     aZCodec.BeginCompression(ZCODEC_DEFAULT_COMPRESSION, /*gzLib*/true);
                     mpOStm->Seek( 0 );
-                    aZCodec.Decompress( *mpOStm, *pDest );
+                    aZCodec.Decompress( *mpOStm, aDest );
 
                     if (aZCodec.EndCompression())
                     {
-                        sal_uInt64 nStreamLen_ = pDest->TellEnd();
+                        sal_uInt64 nStreamLen_ = aDest.TellEnd();
                         if (nStreamLen_ > 0)
                         {
-                            pDest->Seek(0);
-                            GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, "", *pDest ,nFormat,&nDeterminedFormat );
+                            aDest.Seek(0);
+                            GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, "", aDest ,nFormat,&nDeterminedFormat );
                         }
                     }
                 }
