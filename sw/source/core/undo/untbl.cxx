@@ -1491,7 +1491,7 @@ void SwUndoTableNdsChg::SaveNewBoxes( const SwTableNode& rTableNd,
     const SwTableSortBoxes& rTableBoxes = rTable.GetTabSortBoxes();
 
     OSL_ENSURE( ! IsDelBox(), "wrong Action" );
-    m_pNewSttNds.reset( new std::set<BoxMove> );
+    m_xNewSttNds.emplace();
 
     size_t i = 0;
     for (size_t  n = 0; n < rOld.size(); ++i)
@@ -1500,12 +1500,12 @@ void SwUndoTableNdsChg::SaveNewBoxes( const SwTableNode& rTableNd,
             ++n;
         else
             // new box: insert sorted
-            m_pNewSttNds->insert( BoxMove(rTableBoxes[ i ]->GetSttIdx()) );
+            m_xNewSttNds->insert( BoxMove(rTableBoxes[ i ]->GetSttIdx()) );
     }
 
     for( ; i < rTableBoxes.size(); ++i )
         // new box: insert sorted
-        m_pNewSttNds->insert( BoxMove(rTableBoxes[ i ]->GetSttIdx()) );
+        m_xNewSttNds->insert( BoxMove(rTableBoxes[ i ]->GetSttIdx()) );
 }
 
 static SwTableLine* lcl_FindTableLine( const SwTable& rTable,
@@ -1543,7 +1543,7 @@ void SwUndoTableNdsChg::SaveNewBoxes( const SwTableNode& rTableNd,
     const SwTableSortBoxes& rTableBoxes = rTable.GetTabSortBoxes();
 
     OSL_ENSURE( ! IsDelBox(), "wrong Action" );
-    m_pNewSttNds.reset( new std::set<BoxMove> );
+    m_xNewSttNds.emplace();
 
     OSL_ENSURE( rTable.IsNewModel() || rOld.size() + m_nCount * rBoxes.size() == rTableBoxes.size(),
         "unexpected boxes" );
@@ -1610,7 +1610,7 @@ void SwUndoTableNdsChg::SaveNewBoxes( const SwTableNode& rTableNd,
                 ( nNodes != ( pSourceBox->GetSttNd()->EndOfSectionIndex() -
                               pSourceBox->GetSttIdx() ) )
                 && ( nNodes - 1 > nLineDiff );
-            m_pNewSttNds->insert( BoxMove(pBox->GetSttIdx(), bNodesMoved) );
+            m_xNewSttNds->insert( BoxMove(pBox->GetSttIdx(), bNodesMoved) );
         }
     }
 }
@@ -1669,11 +1669,11 @@ void SwUndoTableNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
         }
         m_pDelSects->clear();
     }
-    else if( !m_pNewSttNds->empty() )
+    else if( !m_xNewSttNds->empty() )
     {
         // Then the nodes have be moved and not deleted!
         // But for that we need a temp array.
-        std::vector<BoxMove> aTmp( m_pNewSttNds->begin(), m_pNewSttNds->end() );
+        std::vector<BoxMove> aTmp( m_xNewSttNds->begin(), m_xNewSttNds->end() );
 
         // backwards
         for (size_t n = aTmp.size(); n > 0 ; )
@@ -1722,7 +1722,7 @@ void SwUndoTableNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
     {
         // Remove nodes from nodes array (backwards!)
         std::set<BoxMove>::reverse_iterator it;
-        for( it = m_pNewSttNds->rbegin(); it != m_pNewSttNds->rend(); ++it )
+        for( it = m_xNewSttNds->rbegin(); it != m_xNewSttNds->rend(); ++it )
         {
             sal_uLong nIdx = (*it).index;
             SwTableBox* pBox = pTableNd->GetTable().GetTableBox( nIdx );

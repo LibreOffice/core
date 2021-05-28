@@ -2183,7 +2183,7 @@ bool SwTextNode::GetParaAttr(SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
         else                            // a query range is defined
         {
             // #i75299#
-            std::unique_ptr< std::vector< SwPoolItemEndPair > > pAttrArr;
+            std::optional< std::vector< SwPoolItemEndPair > > pAttrArr;
 
             const size_t coArrSz = RES_TXTATR_WITHEND_END - RES_CHRATR_BEGIN;
 
@@ -2243,8 +2243,7 @@ bool SwTextNode::GetParaAttr(SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
 
                         if (!pAttrArr)
                         {
-                            pAttrArr.reset(
-                                new std::vector< SwPoolItemEndPair >(coArrSz));
+                            pAttrArr = std::vector< SwPoolItemEndPair >(coArrSz);
                         }
 
                         std::vector< SwPoolItemEndPair >::iterator pPrev = pAttrArr->begin();

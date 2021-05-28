@@ -20,6 +20,7 @@
 #define INCLUDED_SW_INC_SHELLRES_HXX
 
 #include <memory>
+#include <optional>
 #include <vector>
 #include "swdllapi.h"
 #include <rtl/ustring.hxx>
@@ -78,7 +79,7 @@ struct SW_DLLPUBLIC ShellResource
 
 private:
     void GetAutoFormatNameLst_() const;
-    mutable std::unique_ptr<std::vector<OUString>> pAutoFormatNameLst;
+    mutable std::optional<std::vector<OUString>> mxAutoFormatNameLst;
     OUString        sPageDescFirstName;
     OUString        sPageDescFollowName;
     OUString        sPageDescName;
@@ -86,9 +87,9 @@ private:
 
 inline const std::vector<OUString>& ShellResource::GetAutoFormatNameLst() const
 {
-    if( !pAutoFormatNameLst )
+    if( !mxAutoFormatNameLst )
         GetAutoFormatNameLst_();
-    return *pAutoFormatNameLst;
+    return *mxAutoFormatNameLst;
 }
 
 #endif // INCLUDED_SW_INC_SHELLRES_HXX
