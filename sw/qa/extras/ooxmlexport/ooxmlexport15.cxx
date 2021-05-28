@@ -789,6 +789,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf138345_charStyleHighlight, "tdf138345_charStyleH
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_TRANSPARENT), getProperty<sal_Int32>(xRun,"CharBackColor"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf125268, "tdf125268.odt")
+{
+    const uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1), 1, "Hello"), uno::UNO_QUERY);
+    // Without the fix in place, this test would have failed with
+    // - Expected: -1
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_TRANSPARENT), getProperty<sal_Int32>(xRun,"CharHighlight"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_BLACK), getProperty<sal_Int32>(xRun,"CharBackColor"));
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf138345_numberingHighlight, "tdf138345_numberingHighlight.docx")
 {
     // Before the fix, the highlight was completely lost.
