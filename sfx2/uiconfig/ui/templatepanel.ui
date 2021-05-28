@@ -1,24 +1,32 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<?xml version="1.0" encoding="UTF_8"?>
+<!__ Generated with glade 3.38.2 __>
 <interface domain="sfx">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkTreeStore" id="liststore1">
     <columns>
-      <!-- column-name text -->
+      <!__ column_name text __>
       <column type="gchararray"/>
-      <!-- column-name id -->
+      <!__ column_name id __>
       <column type="gchararray"/>
     </columns>
   </object>
   <object class="GtkTreeStore" id="liststore2">
     <columns>
-      <!-- column-name text -->
+      <!__ column_name text __>
       <column type="gchararray"/>
-      <!-- column-name id -->
+      <!__ column_name id __>
       <column type="gchararray"/>
     </columns>
   </object>
-  <!-- n-columns=1 n-rows=1 -->
+  <object class="GtkTreeStore" id="liststore3">
+    <columns>
+      <!__ column_name text __>
+      <column type="gchararray"/>
+      <!__ column_name id __>
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <!__ n_columns=1 n_rows=1 __>
   <object class="GtkGrid" id="TemplatePanel">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -213,8 +221,8 @@
                 <property name="headers_visible">False</property>
                 <property name="search_column">0</property>
                 <property name="show_expanders">False</property>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
+                <child internal_child="selection">
+                  <object class="GtkTreeSelection" id="Macro Library List_selection2"/>
                 </child>
                 <child>
                   <object class="GtkTreeViewColumn" id="treeviewcolumn1">
@@ -226,9 +234,9 @@
                     </child>
                   </object>
                 </child>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="flatview-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes" context="templatepanel|STR_STYLE_ELEMTLIST">Style List</property>
+                <child internal_child="accessible">
+                  <object class="AtkObject" id="flatview_atkobject">
+                    <property name="AtkObject::accessible_name" translatable="yes" context="templatepanel|STR_STYLE_ELEMTLIST">Style List</property>
                   </object>
                 </child>
               </object>
@@ -259,8 +267,8 @@
                 <property name="reorderable">True</property>
                 <property name="search_column">0</property>
                 <property name="enable_tree_lines">True</property>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection" id="Macro Library List-selection1"/>
+                <child internal_child="selection">
+                  <object class="GtkTreeSelection" id="Macro Library List_selection1"/>
                 </child>
                 <child>
                   <object class="GtkTreeViewColumn" id="treeviewcolumn2">
@@ -272,9 +280,9 @@
                     </child>
                   </object>
                 </child>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="treeview-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes" context="templatepanel|STR_STYLE_ELEMTLIST">Style List</property>
+                <child internal_child="accessible">
+                  <object class="AtkObject" id="treeview_atkobject">
+                    <property name="AtkObject::accessible_name" translatable="yes" context="templatepanel|STR_STYLE_ELEMTLIST">Style List</property>
                   </object>
                 </child>
               </object>
@@ -284,6 +292,42 @@
             <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkTreeView" id="treeview1">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="no_show_all">True</property>
+            <property name="has_tooltip">True</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <property name="model">liststore3</property>
+            <property name="headers_visible">False</property>
+            <property name="reorderable">True</property>
+            <property name="search_column">0</property>
+            <property name="enable_tree_lines">True</property>
+            <child>
+              <object class="GtkTreeViewColumn" id="treeviewcolumn3">
+                <child>
+                  <object class="GtkCellRendererText" id="cellrenderertext3"/>
+                  <attributes>
+                    <attribute name="text">0</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+            <child internal_child="accessible">
+              <object class="AtkObject" id="treeview1_atkobject">
+                <property name="AtkObject::accessible_name" translatable="yes" context="templatepanel|STR_STYLE_ELEMTLIST">Style List</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">3</property>
           </packing>
         </child>
         <child>
@@ -298,7 +342,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">3</property>
+            <property name="position">4</property>
           </packing>
         </child>
         <child>
@@ -309,7 +353,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">4</property>
+            <property name="position">5</property>
           </packing>
         </child>
       </object>
