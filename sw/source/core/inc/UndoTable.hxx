@@ -175,7 +175,7 @@ class SwUndoTableNdsChg : public SwUndo
         BoxMove(sal_uLong idx, bool moved=false) : index(idx), hasMoved(moved) {};
         bool operator<(const BoxMove& other) const { return index < other.index; };
     };
-    std::unique_ptr< std::set<BoxMove> > m_pNewSttNds;
+    std::optional< std::set<BoxMove> > m_xNewSttNds;
     std::unique_ptr<SwUndoSaveSections> m_pDelSects;
     tools::Long m_nMin, m_nMax;        // for redo of delete column
     sal_uLong m_nSttNode;
