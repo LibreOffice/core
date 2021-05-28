@@ -4670,7 +4670,7 @@ SfxBoolItem ViewDataSourceBrowser SID_VIEW_DATA_SOURCE_BROWSER
     GroupId = SfxGroupId::View;
 ]
 
-SfxVoidItem ZoomMinus SID_ZOOM_IN
+SfxVoidItem ZoomPlus SID_ZOOM_IN
 ()
 [
     AutoUpdate = FALSE,
@@ -4706,7 +4706,7 @@ SfxVoidItem ZoomNext SID_ZOOM_NEXT
 ]
 
 
-SfxVoidItem ZoomPlus SID_ZOOM_OUT
+SfxVoidItem ZoomMinus SID_ZOOM_OUT
 ()
 [
     AutoUpdate = TRUE,

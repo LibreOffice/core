@@ -736,9 +736,9 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
         SfxItemState::DEFAULT == rSet.GetItemState( SID_ZOOM_OUT ) )
     {
         if( GetActiveWindow()->GetZoom() <= GetActiveWindow()->GetMinZoom() || GetDocSh()->IsUIActive() )
-            rSet.DisableItem( SID_ZOOM_IN );
-        if( GetActiveWindow()->GetZoom() >= GetActiveWindow()->GetMaxZoom() || GetDocSh()->IsUIActive() )
             rSet.DisableItem( SID_ZOOM_OUT );
+        if( GetActiveWindow()->GetZoom() >= GetActiveWindow()->GetMaxZoom() || GetDocSh()->IsUIActive() )
+            rSet.DisableItem( SID_ZOOM_IN );
     }
 
     ::Outliner& rOutl = pOlView->GetOutliner();
