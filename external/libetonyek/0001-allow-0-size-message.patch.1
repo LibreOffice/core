@@ -1,0 +1,30 @@
+From 54762245feee35ce6885f7443da8f8443fccd5b5 Mon Sep 17 00:00:00 2001
+From: David Tardon <dtardon@redhat.com>
+Date: Wed, 26 May 2021 20:39:41 +0200
+Subject: [PATCH] allow 0-size message
+
+It likely means the input is broken, but there is no need to reject it.
+Let's just produce a dummy, empty message.
+
+Change-Id: I03a1e9827f21f6a0ce69d7e16dfcf2e9a0f2d44f
+---
+ src/lib/IWAMessage.cpp | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/lib/IWAMessage.cpp b/src/lib/IWAMessage.cpp
+index c01b1b6..9456444 100644
+--- a/src/lib/IWAMessage.cpp
++++ b/src/lib/IWAMessage.cpp
+@@ -42,7 +42,8 @@ IWAMessage::IWAMessage(const RVNGInputStreamPtr_t &input, unsigned long length)
+   : m_input(input)
+   , m_fields()
+ {
+-  assert(length > 0);
++  if (length == 0)
++    return;
+ 
+   parse(length);
+ }
+-- 
+2.31.1
+
