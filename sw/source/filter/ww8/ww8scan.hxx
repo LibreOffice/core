@@ -878,7 +878,7 @@ enum ManTypes // enums for PLCFMan-ctor
 struct WW8PLCFxDesc
 {
     WW8PLCFx* pPLCFx;
-    std::unique_ptr<std::stack<sal_uInt16>> xIdStack;    // memory for Attr-Id for Attr-end(s)
+    std::optional<std::stack<sal_uInt16>> xIdStack;    // memory for Attr-Id for Attr-end(s)
     const sal_uInt8* pMemPos;// where are the Sprm(s)
     tools::Long nOrigSprmsLen;
 

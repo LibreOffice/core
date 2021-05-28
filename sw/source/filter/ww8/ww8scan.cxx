@@ -5074,7 +5074,7 @@ WW8PLCFMan::WW8PLCFMan(const WW8ScannerBase* pBase, ManTypes nType, tools::Long 
         if( p->pPLCFx->IsSprm() )
         {
             // Careful: nEndPos must be
-            p->xIdStack.reset(new std::stack<sal_uInt16>);
+            p->xIdStack.emplace();
             if ((p == m_pChp) || (p == m_pPap))
             {
                 WW8_CP nTemp = p->nEndPos+p->nCpOfs;
