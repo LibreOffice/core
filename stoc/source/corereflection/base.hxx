@@ -231,8 +231,8 @@ class CompoundIdlClassImpl
 {
     css::uno::Reference< css::reflection::XIdlClass >
                                              _xSuperClass;
-    std::unique_ptr< css::uno::Sequence< css::uno::Reference< css::reflection::XIdlField > > >
-                                            _pFields;
+    std::optional< css::uno::Sequence< css::uno::Reference< css::reflection::XIdlField > > >
+                                            m_xFields;
     OUString2Field                          _aName2Field;
 
 public:
@@ -294,7 +294,7 @@ public:
 class EnumIdlClassImpl
     : public IdlClassImpl
 {
-    std::unique_ptr< css::uno::Sequence< css::uno::Reference< css::reflection::XIdlField > > > _pFields;
+    std::optional< css::uno::Sequence< css::uno::Reference< css::reflection::XIdlField > > > m_xFields;
     OUString2Field                       _aName2Field;
 
 public:

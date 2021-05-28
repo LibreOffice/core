@@ -302,7 +302,7 @@ Sequence< Reference< XIdlClass > > CompoundIdlClassImpl::getSuperclasses()
 
 Reference< XIdlField > CompoundIdlClassImpl::getField( const OUString & rName )
 {
-    if (! _pFields)
+    if (! m_xFields)
         getFields(); // init fields
 
     const OUString2Field::const_iterator iFind( _aName2Field.find( rName ) );
@@ -315,16 +315,15 @@ Reference< XIdlField > CompoundIdlClassImpl::getField( const OUString & rName )
 Sequence< Reference< XIdlField > > CompoundIdlClassImpl::getFields()
 {
     ::osl::MutexGuard aGuard( getMutexAccess() );
-    if (! _pFields)
+    if (! m_xFields)
     {
         sal_Int32 nAll = 0;
         typelib_CompoundTypeDescription * pCompTypeDescr = getTypeDescr();
         for ( ; pCompTypeDescr; pCompTypeDescr = pCompTypeDescr->pBaseTypeDescription )
             nAll += pCompTypeDescr->nMembers;
 
-        Sequence< Reference< XIdlField > > * pFields =
-            new Sequence< Reference< XIdlField > >( nAll );
-        Reference< XIdlField > * pSeq = pFields->getArray();
+        Sequence< Reference< XIdlField > > aFields( nAll );
+        Reference< XIdlField > * pSeq = aFields.getArray();
 
         for ( pCompTypeDescr = getTypeDescr(); pCompTypeDescr;
               pCompTypeDescr = pCompTypeDescr->pBaseTypeDescription )
@@ -348,9 +347,9 @@ Sequence< Reference< XIdlField > > CompoundIdlClassImpl::getFields()
             }
         }
 
-        _pFields.reset( pFields );
+        m_xFields = std::move( aFields );
     }
-    return *_pFields;
+    return *m_xFields;
 }
 
 }
