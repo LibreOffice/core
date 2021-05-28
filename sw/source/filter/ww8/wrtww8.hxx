@@ -657,6 +657,7 @@ public:
     /// List is set to restart at a particular value so for export make a
     /// completely new list based on this one and export that instead,
     /// which duplicates words behaviour in this respect.
+    sal_uInt16 DuplicateNumRule(const SwNumRule* pRule, sal_uInt8 nLevel, sal_uInt16 nVal);
     SwNumRule * DuplicateNumRuleImpl(const SwNumRule *pRule);
 
     /// check if a new abstractNum is needed for this list
