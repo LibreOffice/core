@@ -288,7 +288,7 @@ public:
     SwHTMLFormatInfos m_CharFormatInfos;
     SwHTMLFormatInfos m_TextCollInfos;
     std::vector<SwFormatINetFormat*> m_aINetFormats; // the "open" INet attributes
-    std::unique_ptr<std::vector<SwTextFootnote*>> m_pFootEndNotes;
+    std::optional<std::vector<SwTextFootnote*>> m_xFootEndNotes;
 
     OUString m_aCSS1Selector;           // style selector
     OUString m_aNonConvertableCharacters;

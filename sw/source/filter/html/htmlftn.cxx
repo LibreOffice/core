@@ -253,7 +253,7 @@ Writer& OutHTML_SwFormatFootnote( Writer& rWrt, const SfxPoolItem& rHt )
     size_t nPos;
     if( rFormatFootnote.IsEndNote() )
     {
-        nPos = rHTMLWrt.m_pFootEndNotes ? rHTMLWrt.m_pFootEndNotes->size() : 0;
+        nPos = rHTMLWrt.m_xFootEndNotes ? rHTMLWrt.m_xFootEndNotes->size() : 0;
         OSL_ENSURE( nPos == static_cast<size_t>(rHTMLWrt.m_nFootNote + rHTMLWrt.m_nEndNote),
                 "OutHTML_SwFormatFootnote: wrong position" );
         sClass = OOO_STRING_SVTOOLS_HTML_sdendnote_anc;
@@ -266,9 +266,9 @@ Writer& OutHTML_SwFormatFootnote( Writer& rWrt, const SfxPoolItem& rHt )
         sFootnoteName = OOO_STRING_SVTOOLS_HTML_sdfootnote + OUString::number( static_cast<sal_Int32>(++rHTMLWrt.m_nFootNote));
     }
 
-    if( !rHTMLWrt.m_pFootEndNotes )
-        rHTMLWrt.m_pFootEndNotes.reset(new std::vector<SwTextFootnote*>);
-    rHTMLWrt.m_pFootEndNotes->insert( rHTMLWrt.m_pFootEndNotes->begin() + nPos, pTextFootnote );
+    if( !rHTMLWrt.m_xFootEndNotes )
+        rHTMLWrt.m_xFootEndNotes.emplace();
+    rHTMLWrt.m_xFootEndNotes->insert( rHTMLWrt.m_xFootEndNotes->begin() + nPos, pTextFootnote );
 
     OStringBuffer sOut;
     OString aTag = rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_anchor;
@@ -299,9 +299,9 @@ Writer& OutHTML_SwFormatFootnote( Writer& rWrt, const SfxPoolItem& rHt )
 
 void SwHTMLWriter::OutFootEndNotes()
 {
-    OSL_ENSURE( m_pFootEndNotes,
+    OSL_ENSURE( m_xFootEndNotes,
             "SwHTMLWriter::OutFootEndNotes(): unnecessary call" );
-    if( !m_pFootEndNotes )
+    if( !m_xFootEndNotes )
         return;
 
 #if OSL_DEBUG_LEVEL > 0
@@ -310,7 +310,7 @@ void SwHTMLWriter::OutFootEndNotes()
     m_nFootNote = 0;
     m_nEndNote = 0;
 
-    for( auto *pTextFootnote : *m_pFootEndNotes )
+    for( auto *pTextFootnote : *m_xFootEndNotes )
     {
         m_pFormatFootnote = &pTextFootnote->GetFootnote();
 
@@ -373,7 +373,7 @@ void SwHTMLWriter::OutFootEndNotes()
             "SwHTMLWriter::OutFootEndNotes: Number of endnotes does not match" );
 #endif
 
-    m_pFootEndNotes.reset();
+    m_xFootEndNotes.reset();
     m_nFootNote = m_nEndNote = 0;
 }
 

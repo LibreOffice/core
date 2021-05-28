@@ -65,7 +65,7 @@ struct Writer_Impl
 {
     SvStream * m_pStream;
 
-    std::unique_ptr< std::map<OUString, OUString> > pFileNameMap;
+    std::optional< std::map<OUString, OUString> > xFileNameMap;
     std::vector<const SvxFontItem*> aFontRemoveLst;
     SwBookmarkNodeTable aBkmkNodePos;
 
@@ -312,11 +312,11 @@ bool Writer::CopyLocalFileToINet( OUString& rFileNm )
             INetProtocol::VndSunStarWebdav >= aTargetUrl.GetProtocol() ) )
         return bRet;
 
-    if (m_pImpl->pFileNameMap)
+    if (m_pImpl->xFileNameMap)
     {
         // has the file been moved?
-        std::map<OUString, OUString>::iterator it = m_pImpl->pFileNameMap->find( rFileNm );
-        if ( it != m_pImpl->pFileNameMap->end() )
+        std::map<OUString, OUString>::iterator it = m_pImpl->xFileNameMap->find( rFileNm );
+        if ( it != m_pImpl->xFileNameMap->end() )
         {
             rFileNm = it->second;
             return true;
@@ -324,7 +324,7 @@ bool Writer::CopyLocalFileToINet( OUString& rFileNm )
     }
     else
     {
-        m_pImpl->pFileNameMap.reset( new std::map<OUString, OUString> );
+        m_pImpl->xFileNameMap.emplace();
     }
 
     OUString aSrc  = rFileNm;
@@ -342,7 +342,7 @@ bool Writer::CopyLocalFileToINet( OUString& rFileNm )
 
     if( bRet )
     {
-        m_pImpl->pFileNameMap->insert( std::make_pair( aSrc, aDest ) );
+        m_pImpl->xFileNameMap->insert( std::make_pair( aSrc, aDest ) );
         rFileNm = aDest;
     }
 

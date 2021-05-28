@@ -36,10 +36,10 @@
 
 namespace sw {
 
-std::unique_ptr<std::vector<SwFrameFormat*>>
+std::optional<std::vector<SwFrameFormat*>>
 GetFlysAnchoredAt(SwDoc & rDoc, sal_uLong const nSttNode)
 {
-    std::unique_ptr<std::vector<SwFrameFormat*>> pFrameFormats;
+    std::optional<std::vector<SwFrameFormat*>> pFrameFormats;
     const size_t nArrLen = rDoc.GetSpzFrameFormats()->size();
     for (size_t n = 0; n < nArrLen; ++n)
     {
@@ -52,7 +52,7 @@ GetFlysAnchoredAt(SwDoc & rDoc, sal_uLong const nSttNode)
                  || (pAnchor->GetAnchorId() == RndStdIds::FLY_AT_CHAR)))
         {
             if (!pFrameFormats)
-                pFrameFormats.reset( new std::vector<SwFrameFormat*> );
+                pFrameFormats.emplace();
             pFrameFormats->push_back( pFormat );
         }
     }

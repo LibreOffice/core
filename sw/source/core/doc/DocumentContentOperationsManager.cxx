@@ -4732,7 +4732,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
     std::shared_ptr<SwUnoCursor> const pCopyPam(rDoc.CreateUnoCursor(rPos));
 
     SwTableNumFormatMerge aTNFM( m_rDoc, rDoc );
-    std::unique_ptr<std::vector<SwFrameFormat*>> pFlys;
+    std::optional<std::vector<SwFrameFormat*>> pFlys;
     std::vector<SwFrameFormat*> const* pFlysAtInsPos;
 
     if (rDoc.GetIDocumentUndoRedo().DoesUndo())
@@ -4743,7 +4743,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
     else
     {
         pFlys = sw::GetFlysAnchoredAt(rDoc, rPos.nNode.GetIndex());
-        pFlysAtInsPos = pFlys.get();
+        pFlysAtInsPos = pFlys ? &*pFlys : nullptr;
     }
 
     RedlineFlags eOld = rDoc.getIDocumentRedlineAccess().GetRedlineFlags();

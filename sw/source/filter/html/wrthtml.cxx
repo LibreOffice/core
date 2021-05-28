@@ -344,7 +344,7 @@ ErrCode SwHTMLWriter::WriteStream()
                          m_pDoc->GetDocShell());
 
     m_xDfltColor.reset();
-    m_pFootEndNotes = nullptr;
+    m_xFootEndNotes.reset();
     m_pFormatFootnote = nullptr;
     m_bOutTable = m_bOutHeader = m_bOutFooter = m_bOutFlyFrame = false;
     mxFormComps.clear();
@@ -475,7 +475,7 @@ ErrCode SwHTMLWriter::WriteStream()
     if( mxFormComps.is() )
         OutForm( false, mxFormComps );
 
-    if( m_pFootEndNotes )
+    if( m_xFootEndNotes )
         OutFootEndNotes();
 
     if( !m_bWriteClipboardDoc && m_pDoc->GetDocShell() &&
@@ -523,7 +523,7 @@ ErrCode SwHTMLWriter::WriteStream()
 
     mxFormComps.clear();
 
-    OSL_ENSURE( !m_pFootEndNotes,
+    OSL_ENSURE( !m_xFootEndNotes,
             "SwHTMLWriter::Write: Footnotes not deleted by OutFootEndNotes" );
 
     m_pCurrPageDesc = nullptr;
