@@ -797,21 +797,21 @@ std::unique_ptr<SfxTabPage> SdModule::CreateTabPage( sal_uInt16 nId, weld::Conta
     return xRet;
 }
 
-std::unique_ptr<SfxStyleFamilies> SdModule::CreateStyleFamilies()
+std::optional<SfxStyleFamilies> SdModule::CreateStyleFamilies()
 {
-    std::unique_ptr<SfxStyleFamilies> pStyleFamilies(new SfxStyleFamilies);
+    SfxStyleFamilies aStyleFamilies;
 
-    pStyleFamilies->emplace_back(SfxStyleFamily::Para,
+    aStyleFamilies.emplace_back(SfxStyleFamily::Para,
                                  SdResId(STR_GRAPHICS_STYLE_FAMILY),
                                  BMP_STYLES_FAMILY_GRAPHICS,
                                  RID_GRAPHICSTYLEFAMILY, SD_MOD()->GetResLocale());
 
-    pStyleFamilies->emplace_back(SfxStyleFamily::Pseudo,
+    aStyleFamilies.emplace_back(SfxStyleFamily::Pseudo,
                                  SdResId(STR_PRESENTATIONS_STYLE_FAMILY),
                                  BMP_STYLES_FAMILY_PRESENTATIONS,
                                  RID_PRESENTATIONSTYLEFAMILY, SD_MOD()->GetResLocale());
 
-    return pStyleFamilies;
+    return aStyleFamilies;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

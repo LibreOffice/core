@@ -20,6 +20,7 @@
 #define INCLUDED_SFX2_MODULE_HXX
 
 #include <memory>
+#include <optional>
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sfx2/shell.hxx>
@@ -81,7 +82,7 @@ public:
                                                const SfxItemSet& rSet );
     virtual void                Invalidate(sal_uInt16 nId = 0) override;
 
-    virtual std::unique_ptr<SfxStyleFamilies> CreateStyleFamilies() { return nullptr; }
+    virtual std::optional<SfxStyleFamilies> CreateStyleFamilies() { return {}; }
 
     static SfxModule*           GetActiveModule( SfxViewFrame* pFrame=nullptr );
     static FieldUnit            GetCurrentFieldUnit();

@@ -566,7 +566,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl(SfxBindings* pB, weld
 
 sal_uInt16 SfxCommonTemplateDialog_Impl::StyleNrToInfoOffset(sal_uInt16 nId)
 {
-    const SfxStyleFamilyItem& rItem = pStyleFamilies->at( nId );
+    const SfxStyleFamilyItem& rItem = mxStyleFamilies->at( nId );
     return SfxTemplate::SfxFamilyIdToNId(rItem.GetFamily())-1;
 }
 
@@ -587,9 +587,9 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
     pCurObjShell = pViewFrame->GetObjectShell();
     pModule = pCurObjShell ? pCurObjShell->GetModule() : nullptr;
     if (pModule)
-        pStyleFamilies = pModule->CreateStyleFamilies();
-    if (!pStyleFamilies)
-        pStyleFamilies.reset(new SfxStyleFamilies);
+        mxStyleFamilies = pModule->CreateStyleFamilies();
+    if (!mxStyleFamilies)
+        mxStyleFamilies.emplace();
 
     nActFilter = 0xffff;
     if (pCurObjShell)
@@ -601,7 +601,7 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
 
     // Paste in the toolbox
     // reverse order, since always inserted at the head
-    size_t nCount = pStyleFamilies->size();
+    size_t nCount = mxStyleFamilies->size();
 
     pBindings->ENTERREGISTRATIONS();
 
@@ -609,7 +609,7 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
     for (i = 0; i < nCount; ++i)
     {
         sal_uInt16 nSlot = 0;
-        switch (pStyleFamilies->at(i).GetFamily())
+        switch (mxStyleFamilies->at(i).GetFamily())
         {
             case SfxStyleFamily::Char:
                 nSlot = SID_STYLE_FAMILY1; break;
@@ -666,7 +666,7 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
 
     for( ; nCount--; )
     {
-        const SfxStyleFamilyItem &rItem = pStyleFamilies->at( nCount );
+        const SfxStyleFamilyItem &rItem = mxStyleFamilies->at( nCount );
         sal_uInt16 nId = SfxTemplate::SfxFamilyIdToNId( rItem.GetFamily() );
         InsertFamilyItem(nId, rItem);
     }
@@ -683,7 +683,7 @@ void SfxCommonTemplateDialog_Impl::ClearResource()
 
 void SfxCommonTemplateDialog_Impl::impl_clear()
 {
-    pStyleFamilies.reset();
+    mxStyleFamilies.reset();
     for (auto & i : pFamilyState)
         i.reset();
     for (auto & i : pBoundItems)
@@ -789,10 +789,10 @@ SfxCommonTemplateDialog_Impl::~SfxCommonTemplateDialog_Impl()
 // Helper function: Access to the current family item
 const SfxStyleFamilyItem *SfxCommonTemplateDialog_Impl::GetFamilyItem_Impl() const
 {
-    const size_t nCount = pStyleFamilies->size();
+    const size_t nCount = mxStyleFamilies->size();
     for(size_t i = 0; i < nCount; ++i)
     {
-        const SfxStyleFamilyItem &rItem = pStyleFamilies->at( i );
+        const SfxStyleFamilyItem &rItem = mxStyleFamilies->at( i );
         sal_uInt16 nId = SfxTemplate::SfxFamilyIdToNId(rItem.GetFamily());
         if(nId == nActFamily)
             return &rItem;
@@ -1054,7 +1054,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(StyleFlags nFlags)
     if (!pItem)
     {
         // Is the case for the template catalog
-        const size_t nFamilyCount = pStyleFamilies->size();
+        const size_t nFamilyCount = mxStyleFamilies->size();
         size_t n;
         for( n = 0; n < nFamilyCount; n++ )
             if( pFamilyState[ StyleNrToInfoOffset(n) ] ) break;
@@ -1207,7 +1207,7 @@ void SfxCommonTemplateDialog_Impl::SetWaterCanState(const SfxBoolItem *pItem)
 
 // Ignore while in watercan mode statusupdates
 
-    size_t nCount = pStyleFamilies->size();
+    size_t nCount = mxStyleFamilies->size();
     pBindings->EnterRegistrations();
     for(size_t n = 0; n < nCount; n++)
     {
@@ -1288,7 +1288,7 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
     if(nActFamily == 0xffff || nullptr == (pItem = pFamilyState[nActFamily-1].get() ) )
     {
          CheckItem(OString::number(nActFamily), false);
-         const size_t nFamilyCount = pStyleFamilies->size();
+         const size_t nFamilyCount = mxStyleFamilies->size();
          size_t n;
          for( n = 0; n < nFamilyCount; n++ )
              if( pFamilyState[ StyleNrToInfoOffset(n) ] ) break;
