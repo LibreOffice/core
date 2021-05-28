@@ -181,9 +181,9 @@ SwGlossaryList* GetGlossaryList()
 
 void ShellResource::GetAutoFormatNameLst_() const
 {
-    assert(!pAutoFormatNameLst);
-    pAutoFormatNameLst.reset( new std::vector<OUString> );
-    pAutoFormatNameLst->reserve(STR_AUTOFMTREDL_END);
+    assert(!mxAutoFormatNameLst);
+    mxAutoFormatNameLst.emplace();
+    mxAutoFormatNameLst->reserve(STR_AUTOFMTREDL_END);
 
     assert(SAL_N_ELEMENTS(RID_SHELLRES_AUTOFMTSTRS) == STR_AUTOFMTREDL_END);
     for (sal_uInt16 n = 0; n < STR_AUTOFMTREDL_END; ++n)
@@ -196,7 +196,7 @@ void ShellResource::GetAutoFormatNameLst_() const
             p = p.replaceFirst("%1", rLclD.getDoubleQuotationMarkStart());
             p = p.replaceFirst("%2", rLclD.getDoubleQuotationMarkEnd());
         }
-        pAutoFormatNameLst->push_back(p);
+        mxAutoFormatNameLst->push_back(p);
     }
 }
 
