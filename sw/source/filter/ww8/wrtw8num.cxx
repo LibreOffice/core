@@ -61,6 +61,17 @@ SwNumRule* MSWordExportBase::DuplicateNumRuleImpl(const SwNumRule *pRule)
     return pMyNumRule;
 }
 
+sal_uInt16 MSWordExportBase::DuplicateNumRule(const SwNumRule* pRule, sal_uInt8 nLevel, sal_uInt16 nVal)
+{
+    SwNumRule* const pMyNumRule = DuplicateNumRuleImpl(pRule);
+
+    SwNumFormat aNumFormat(pMyNumRule->Get(nLevel));
+    aNumFormat.SetStart(nVal);
+    pMyNumRule->Set(nLevel, aNumFormat);
+
+    return GetNumberingId(*pMyNumRule);
+}
+
 // multiple SwList can be based on the same SwNumRule; ensure one w:abstractNum
 // per SwList
 sal_uInt16 MSWordExportBase::DuplicateAbsNum(OUString const& rListId,
