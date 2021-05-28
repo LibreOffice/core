@@ -3057,7 +3057,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
         vcl::Window *pWin = pFocusWin->GetParent();
         while (pWin)
         {
-            if(pWin->ImplGetWindowImpl()->mbToolBox)
+            if(pWin->ImplGetWindowImpl() && pWin->ImplGetWindowImpl()->mbToolBox)
             {
                 bFocusWindowIsAToolBoxChild = true;
                 break;
@@ -3066,7 +3066,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
         }
     }
 
-    if( bFocusWindowIsAToolBoxChild || (pFocusWin && pFocusWin->ImplGetWindowImpl()->mbToolBox && pFocusWin != this) )
+    if( bFocusWindowIsAToolBoxChild || (pFocusWin && pFocusWin->ImplGetWindowImpl() && pFocusWin->ImplGetWindowImpl()->mbToolBox && pFocusWin != this) )
         bDrawHotSpot = false;
 
     if ( mbDragging )
