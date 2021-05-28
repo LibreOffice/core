@@ -2484,21 +2484,21 @@ private:
     }
 
 #if GTK_CHECK_VERSION(4, 0, 0)
-    static void signalButtonPress(GtkGestureClick* pGesture, int /*n_press*/, gdouble x, gdouble y, gpointer widget)
+    static void signalButtonPress(GtkGestureClick* pGesture, int n_press, gdouble x, gdouble y, gpointer widget)
     {
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
         SolarMutexGuard aGuard;
-        pThis->signal_button(pGesture, SalEvent::MouseButtonDown, x, y);
+        pThis->signal_button(pGesture, SalEvent::MouseButtonDown, n_press, x, y);
     }
 
-    static void signalButtonRelease(GtkGestureClick* pGesture, int /*n_press*/, gdouble x, gdouble y, gpointer widget)
+    static void signalButtonRelease(GtkGestureClick* pGesture, int n_press, gdouble x, gdouble y, gpointer widget)
     {
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
         SolarMutexGuard aGuard;
-        pThis->signal_button(pGesture, SalEvent::MouseButtonUp, x, y);
+        pThis->signal_button(pGesture, SalEvent::MouseButtonUp, n_press, x, y);
     }
 
-    void signal_button(GtkGestureClick* pGesture, SalEvent nEventType, gdouble x, gdouble y)
+    void signal_button(GtkGestureClick* pGesture, SalEvent nEventType, int n_press, gdouble x, gdouble y)
     {
         m_nPressedButton = -1;
 
@@ -2527,7 +2527,7 @@ private:
         sal_uInt32 nModCode = GtkSalFrame::GetMouseModCode(eType);
         // strip out which buttons are involved from the nModCode and replace with m_nLastMouseButton
         sal_uInt16 nCode = m_nLastMouseButton | (nModCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2));
-        MouseEvent aMEvt(aPos, 1, ImplGetMouseButtonMode(m_nLastMouseButton, nModCode), nCode, nCode);
+        MouseEvent aMEvt(aPos, n_press, ImplGetMouseButtonMode(m_nLastMouseButton, nModCode), nCode, nCode);
 
         if (nEventType == SalEvent::MouseButtonDown && m_aMousePressHdl.Call(aMEvt))
             gtk_gesture_set_state(GTK_GESTURE(pGesture), GTK_EVENT_SEQUENCE_CLAIMED);
