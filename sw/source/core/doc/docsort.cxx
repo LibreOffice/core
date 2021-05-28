@@ -121,8 +121,8 @@ int SwSortElement::keycompare(const SwSortElement& rCmp, sal_uInt16 nKey) const
     // The actual comparison
     const SwSortElement *pOrig, *pCmp;
 
-    const SwSortKey* pSrtKey = pOptions->aKeys[ nKey ].get();
-    if( pSrtKey->eSortOrder == SwSortOrder::Ascending )
+    const SwSortKey& rSrtKey = pOptions->aKeys[ nKey ];
+    if( rSrtKey.eSortOrder == SwSortOrder::Ascending )
     {
         pOrig = this;
         pCmp = &rCmp;
@@ -133,7 +133,7 @@ int SwSortElement::keycompare(const SwSortElement& rCmp, sal_uInt16 nKey) const
         pCmp = this;
     }
 
-    if( pSrtKey->bIsNumeric )
+    if( rSrtKey.bIsNumeric )
     {
         double n1 = pOrig->GetValue( nKey );
         double n2 = pCmp->GetValue( nKey );
@@ -142,12 +142,12 @@ int SwSortElement::keycompare(const SwSortElement& rCmp, sal_uInt16 nKey) const
     }
     else
     {
-        if( !pLastAlgorithm || *pLastAlgorithm != pSrtKey->sSortType )
+        if( !pLastAlgorithm || *pLastAlgorithm != rSrtKey.sSortType )
         {
             if( pLastAlgorithm )
-                *pLastAlgorithm = pSrtKey->sSortType;
+                *pLastAlgorithm = rSrtKey.sSortType;
             else
-                pLastAlgorithm = new OUString( pSrtKey->sSortType );
+                pLastAlgorithm = new OUString( rSrtKey.sSortType );
             pSortCollator->loadCollatorAlgorithm( *pLastAlgorithm,
                     *pLocale,
                     pOptions->bIgnoreCase ? SW_COLLATOR_IGNORES : 0 );
@@ -196,7 +196,7 @@ OUString SwSortTextElement::GetKey(sal_uInt16 nId) const
     const OUString& rStr = pTextNd->GetText();
 
     sal_Unicode nDeli = pOptions->cDeli;
-    sal_uInt16 nDCount = pOptions->aKeys[nId]->nColumnId, i = 1;
+    sal_uInt16 nDCount = pOptions->aKeys[nId].nColumnId, i = 1;
     sal_Int32 nStart = 0;
 
     // Find the delimiter
@@ -228,7 +228,7 @@ SwSortBoxElement::SwSortBoxElement( sal_uInt16 nRC )
 OUString SwSortBoxElement::GetKey(sal_uInt16 nKey) const
 {
     const FndBox_* pFndBox;
-    sal_uInt16 nCol = pOptions->aKeys[nKey]->nColumnId-1;
+    sal_uInt16 nCol = pOptions->aKeys[nKey].nColumnId-1;
 
     if( SwSortDirection::Rows == pOptions->eDirection )
         pFndBox = pBox->GetBox(nCol, nRow);         // Sort rows
@@ -260,7 +260,7 @@ OUString SwSortBoxElement::GetKey(sal_uInt16 nKey) const
 double SwSortBoxElement::GetValue( sal_uInt16 nKey ) const
 {
     const FndBox_* pFndBox;
-    sal_uInt16 nCol = pOptions->aKeys[nKey]->nColumnId-1;
+    sal_uInt16 nCol = pOptions->aKeys[nKey].nColumnId-1;
 
     if( SwSortDirection::Rows == pOptions->eDirection )
         pFndBox = pBox->GetBox(nCol, nRow);         // Sort rows

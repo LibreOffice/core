@@ -45,16 +45,13 @@ SwSortOptions::SwSortOptions()
 }
 
 SwSortOptions::SwSortOptions(const SwSortOptions& rOpt) :
+    aKeys( rOpt.aKeys ),
     eDirection( rOpt.eDirection ),
     cDeli( rOpt.cDeli ),
     nLanguage( rOpt.nLanguage ),
     bTable( rOpt.bTable ),
     bIgnoreCase( rOpt.bIgnoreCase )
 {
-    for(auto const & pKey : rOpt.aKeys)
-    {
-        aKeys.push_back( std::make_unique<SwSortKey>(*pKey) );
-    }
 }
 
 SwSortOptions::~SwSortOptions()
