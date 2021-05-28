@@ -3934,6 +3934,19 @@ namespace
         gtk_button_set_label(pButton, MapToGtkAccelerator(rText).getStr());
     }
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+    OUString get_label(GtkCheckButton* pButton)
+    {
+        const gchar* pStr = gtk_check_button_get_label(pButton);
+        return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+    }
+
+    void set_label(GtkCheckButton* pButton, const OUString& rText)
+    {
+        gtk_check_button_set_label(pButton, MapToGtkAccelerator(rText).getStr());
+    }
+#endif
+
     OUString get_title(GtkWindow* pWindow)
     {
         const gchar* pStr = gtk_window_get_title(pWindow);
@@ -21077,6 +21090,9 @@ private:
     GtkWidget* m_pParentWidget;
     gulong m_nNotifySignalId;
     std::vector<GtkButton*> m_aMnemonicButtons;
+#if GTK_CHECK_VERSION(4, 0, 0)
+    std::vector<GtkCheckButton*> m_aMnemonicCheckButtons;
+#endif
     std::vector<GtkLabel*> m_aMnemonicLabels;
 
     VclPtr<SystemChildWindow> m_xInterimGlue;
@@ -21169,6 +21185,20 @@ private:
             if (gtk_button_get_use_underline(pButton))
                 m_aMnemonicButtons.push_back(pButton);
         }
+#if GTK_CHECK_VERSION(4, 0, 0)
+        else if (GTK_IS_CHECK_BUTTON(pWidget))
+        {
+            GtkCheckButton* pButton = GTK_CHECK_BUTTON(pWidget);
+            if (m_pStringReplace != nullptr)
+            {
+                OUString aLabel(get_label(pButton));
+                if (!aLabel.isEmpty())
+                    set_label(pButton, (*m_pStringReplace)(aLabel));
+            }
+            if (gtk_check_button_get_use_underline(pButton))
+                m_aMnemonicCheckButtons.push_back(pButton);
+        }
+#endif
         else if (GTK_IS_LABEL(pWidget))
         {
             GtkLabel* pLabel = GTK_LABEL(pWidget);
@@ -21340,6 +21370,10 @@ public:
         MnemonicGenerator aMnemonicGenerator('_');
         for (const auto a : m_aMnemonicButtons)
             aMnemonicGenerator.RegisterMnemonic(get_label(a));
+#if GTK_CHECK_VERSION(4, 0, 0)
+        for (const auto a : m_aMnemonicCheckButtons)
+            aMnemonicGenerator.RegisterMnemonic(get_label(a));
+#endif
         for (const auto a : m_aMnemonicLabels)
             aMnemonicGenerator.RegisterMnemonic(get_label(a));
 
@@ -21351,6 +21385,16 @@ public:
                 continue;
             set_label(a, aNewLabel);
         }
+#if GTK_CHECK_VERSION(4, 0, 0)
+        for (const auto a : m_aMnemonicCheckButtons)
+        {
+            OUString aLabel(get_label(a));
+            OUString aNewLabel = aMnemonicGenerator.CreateMnemonic(aLabel);
+            if (aLabel == aNewLabel)
+                continue;
+            set_label(a, aNewLabel);
+        }
+#endif
         for (const auto a : m_aMnemonicLabels)
         {
             OUString aLabel(get_label(a));
@@ -21361,6 +21405,9 @@ public:
         }
 
         m_aMnemonicLabels.clear();
+#if GTK_CHECK_VERSION(4, 0, 0)
+        m_aMnemonicCheckButtons.clear();
+#endif
         m_aMnemonicButtons.clear();
     }
 
@@ -21979,6 +22026,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/scalc/ui/colwidthdialog.ui" &&
         rUIFile != "modules/scalc/ui/rowheightdialog.ui" &&
         rUIFile != "modules/scalc/ui/selectrange.ui" &&
+        rUIFile != "modules/scalc/ui/selectsource.ui" &&
         rUIFile != "modules/scalc/ui/solverdlg.ui" &&
         rUIFile != "modules/scalc/ui/xmlsourcedialog.ui" &&
         rUIFile != "modules/smath/ui/alignmentdialog.ui" &&
