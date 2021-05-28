@@ -483,13 +483,13 @@ struct TabBar_Impl
     ScopedVclPtr<ImplTabSizer>  mpSizer;
     ScopedVclPtr<TabButtons>    mxButtonBox;
     ScopedVclPtr<TabBarEdit>    mxEdit;
-    std::vector<std::unique_ptr<ImplTabBarItem>> mpItemList;
+    std::vector<ImplTabBarItem> maItemList;
 
     vcl::AccessibleFactoryAccess  maAccessibleFactory;
 
     sal_uInt16 getItemSize() const
     {
-        return static_cast<sal_uInt16>(mpItemList.size());
+        return static_cast<sal_uInt16>(maItemList.size());
     }
 };
 
@@ -550,10 +550,10 @@ void TabBar::ImplInit( WinBits nWinStyle )
 
 ImplTabBarItem* TabBar::seek( size_t i )
 {
-    if ( i < mpImpl->mpItemList.size() )
+    if ( i < mpImpl->maItemList.size() )
     {
         maCurrentItemList = i;
-        return mpImpl->mpItemList[maCurrentItemList].get();
+        return &mpImpl->maItemList[maCurrentItemList];
     }
     return nullptr;
 }
@@ -562,16 +562,16 @@ ImplTabBarItem* TabBar::prev()
 {
     if ( maCurrentItemList > 0 )
     {
-        return mpImpl->mpItemList[--maCurrentItemList].get();
+        return &mpImpl->maItemList[--maCurrentItemList];
     }
     return nullptr;
 }
 
 ImplTabBarItem* TabBar::next()
 {
-    if ( maCurrentItemList + 1 < mpImpl->mpItemList.size() )
+    if ( maCurrentItemList + 1 < mpImpl->maItemList.size() )
     {
-        return mpImpl->mpItemList[++maCurrentItemList].get();
+        return &mpImpl->maItemList[++maCurrentItemList];
     }
     return nullptr;
 }
@@ -645,29 +645,29 @@ bool TabBar::ImplCalcWidth()
     }
 
     bool bChanged = false;
-    for (auto& pItem : mpImpl->mpItemList)
+    for (auto& rItem : mpImpl->maItemList)
     {
-        tools::Long nNewWidth = GetTextWidth(pItem->GetRenderText());
+        tools::Long nNewWidth = GetTextWidth(rItem.GetRenderText());
         if (mnCurMaxWidth && (nNewWidth > mnCurMaxWidth))
         {
-            pItem->mbShort = true;
+            rItem.mbShort = true;
             nNewWidth = mnCurMaxWidth;
         }
         else
         {
-            pItem->mbShort = false;
+            rItem.mbShort = false;
         }
 
         // Padding is dependent on font height - bigger font = bigger padding
         tools::Long nFontWidth = aFont.GetFontHeight();
-        if (pItem->mbProtect)
+        if (rItem.mbProtect)
             nNewWidth += 24;
         nNewWidth += nFontWidth * 2;
 
-        if (pItem->mnWidth != nNewWidth)
+        if (rItem.mnWidth != nNewWidth)
         {
-            pItem->mnWidth = nNewWidth;
-            if (!pItem->maRect.IsEmpty())
+            rItem.mnWidth = nNewWidth;
+            if (!rItem.maRect.IsEmpty())
                 bChanged = true;
         }
     }
@@ -685,33 +685,33 @@ void TabBar::ImplFormat()
 
     sal_uInt16 nItemIndex = 0;
     tools::Long x = mnOffX;
-    for (auto & pItem : mpImpl->mpItemList)
+    for (auto & rItem : mpImpl->maItemList)
     {
         // At all non-visible tabs an empty rectangle is set
         if ((nItemIndex + 1 < mnFirstPos) || (x > mnLastOffX))
-            pItem->maRect.SetEmpty();
+            rItem.maRect.SetEmpty();
         else
         {
             // Slightly before the tab before the first visible page
             // should also be visible
             if (nItemIndex + 1 == mnFirstPos)
             {
-                pItem->maRect.SetLeft(x - pItem->mnWidth);
+                rItem.maRect.SetLeft(x - rItem.mnWidth);
             }
             else
             {
-                pItem->maRect.SetLeft(x);
-                x += pItem->mnWidth;
+                rItem.maRect.SetLeft(x);
+                x += rItem.mnWidth;
             }
-            pItem->maRect.SetRight(x);
-            pItem->maRect.SetBottom(maWinSize.Height() - 1);
+            rItem.maRect.SetRight(x);
+            rItem.maRect.SetBottom(maWinSize.Height() - 1);
 
             if (mbMirrored)
             {
-                tools::Long nNewLeft  = mnOffX + mnLastOffX - pItem->maRect.Right();
-                tools::Long nNewRight = mnOffX + mnLastOffX - pItem->maRect.Left();
-                pItem->maRect.SetRight(nNewRight);
-                pItem->maRect.SetLeft(nNewLeft);
+                tools::Long nNewLeft  = mnOffX + mnLastOffX - rItem.maRect.Right();
+                tools::Long nNewRight = mnOffX + mnLastOffX - rItem.maRect.Left();
+                rItem.maRect.SetRight(nNewRight);
+                rItem.maRect.SetLeft(nNewLeft);
             }
         }
 
@@ -732,14 +732,14 @@ sal_uInt16 TabBar::ImplGetLastFirstPos()
 
     sal_uInt16  nLastFirstPos = nCount - 1;
     tools::Long nWinWidth = mnLastOffX - mnOffX - ADDNEWPAGE_AREAWIDTH;
-    tools::Long nWidth = mpImpl->mpItemList[nLastFirstPos]->mnWidth;
+    tools::Long nWidth = mpImpl->maItemList[nLastFirstPos].mnWidth;
 
     while (nLastFirstPos && (nWidth < nWinWidth))
     {
         nLastFirstPos--;
-        nWidth += mpImpl->mpItemList[nLastFirstPos]->mnWidth;
+        nWidth += mpImpl->maItemList[nLastFirstPos].mnWidth;
     }
-    if ((nLastFirstPos != static_cast<sal_uInt16>(mpImpl->mpItemList.size() - 1)) && (nWidth > nWinWidth))
+    if ((nLastFirstPos != static_cast<sal_uInt16>(mpImpl->maItemList.size() - 1)) && (nWidth > nWinWidth))
         nLastFirstPos++;
     return nLastFirstPos;
 }
@@ -842,12 +842,12 @@ void TabBar::ImplShowPage( sal_uInt16 nPos )
     // calculate width
     tools::Long nWidth = GetOutputSizePixel().Width();
 
-    auto& pItem = mpImpl->mpItemList[nPos];
+    auto& rItem = mpImpl->maItemList[nPos];
     if (nPos < mnFirstPos)
-        SetFirstPageId( pItem->mnId );
-    else if (pItem->maRect.Right() > nWidth)
+        SetFirstPageId( rItem.mnId );
+    else if (rItem.maRect.Right() > nWidth)
     {
-        while (pItem->maRect.Right() > nWidth)
+        while (rItem.maRect.Right() > nWidth)
         {
             sal_uInt16 nNewPos = mnFirstPos + 1;
             SetFirstPageId(GetPageId(nNewPos));
@@ -975,14 +975,14 @@ void TabBar::MouseButtonDown(const MouseEvent& rMEvt)
                     n = 0;
                     while (n < nCurPos)
                     {
-                        auto& pItem = mpImpl->mpItemList[n];
+                        auto& rItem = mpImpl->maItemList[n];
                         bSelect = n >= nPos;
 
-                        if (pItem->mbSelect != bSelect)
+                        if (rItem.mbSelect != bSelect)
                         {
-                            pItem->mbSelect = bSelect;
-                            if (!pItem->maRect.IsEmpty())
-                                Invalidate(pItem->maRect);
+                            rItem.mbSelect = bSelect;
+                            if (!rItem.maRect.IsEmpty())
+                                Invalidate(rItem.maRect);
                         }
 
                         n++;
@@ -998,15 +998,15 @@ void TabBar::MouseButtonDown(const MouseEvent& rMEvt)
                     n = nCurPos;
                     while (n < nCount)
                     {
-                        auto& pItem = mpImpl->mpItemList[n];
+                        auto& rItem = mpImpl->maItemList[n];
 
                         bSelect = n <= nPos;
 
-                        if (pItem->mbSelect != bSelect)
+                        if (rItem.mbSelect != bSelect)
                         {
-                            pItem->mbSelect = bSelect;
-                            if (!pItem->maRect.IsEmpty())
-                                Invalidate(pItem->maRect);
+                            rItem.mbSelect = bSelect;
+                            if (!rItem.maRect.IsEmpty())
+                                Invalidate(rItem.maRect);
                         }
 
                         n++;
@@ -1051,9 +1051,9 @@ void TabBar::MouseButtonDown(const MouseEvent& rMEvt)
             if (nSelId != mnCurPageId)
             {
                 sal_uInt16 nPos = GetPagePos(nSelId);
-                auto& pItem = mpImpl->mpItemList[nPos];
+                auto& rItem = mpImpl->maItemList[nPos];
 
-                if (!pItem->mbSelect)
+                if (!rItem.mbSelect)
                 {
                     // make not valid
                     bool bUpdate = false;
@@ -1061,13 +1061,13 @@ void TabBar::MouseButtonDown(const MouseEvent& rMEvt)
                         bUpdate = true;
 
                     // deselect all selected items
-                    for (auto& xItem : mpImpl->mpItemList)
+                    for (auto& xItem : mpImpl->maItemList)
                     {
-                        if (xItem->mbSelect || (xItem->mnId == mnCurPageId))
+                        if (xItem.mbSelect || (xItem.mnId == mnCurPageId))
                         {
-                            xItem->mbSelect = false;
+                            xItem.mbSelect = false;
                             if (bUpdate)
-                                Invalidate(xItem->maRect);
+                                Invalidate(xItem.maRect);
                         }
                     }
                 }
@@ -1340,8 +1340,8 @@ void TabBar::RequestHelp(const HelpEvent& rHEvt)
         if (rHEvt.GetMode() & (HelpEventMode::QUICK | HelpEventMode::BALLOON))
         {
             sal_uInt16 nPos = GetPagePos(nItemId);
-            auto& pItem = mpImpl->mpItemList[nPos];
-            if (pItem->mbShort || (pItem->maRect.Right() - 5 > mnLastOffX))
+            auto& rItem = mpImpl->maItemList[nPos];
+            if (rItem.mbShort || (rItem.maRect.Right() - 5 > mnLastOffX))
             {
                 tools::Rectangle aItemRect = GetPageRect(nItemId);
                 Point aPt = OutputToScreenPixel(aItemRect.TopLeft());
@@ -1350,7 +1350,7 @@ void TabBar::RequestHelp(const HelpEvent& rHEvt)
                 aPt = OutputToScreenPixel(aItemRect.BottomRight());
                 aItemRect.SetRight( aPt.X() );
                 aItemRect.SetBottom( aPt.Y() );
-                OUString aStr = mpImpl->mpItemList[nPos]->maText;
+                OUString aStr = mpImpl->maItemList[nPos].maText;
                 if (!aStr.isEmpty())
                 {
                     if (rHEvt.GetMode() & HelpEventMode::BALLOON)
@@ -1372,7 +1372,7 @@ void TabBar::StateChanged(StateChangedType nType)
 
     if (nType == StateChangedType::InitShow)
     {
-        if ( (mbSizeFormat || mbFormat) && !mpImpl->mpItemList.empty() )
+        if ( (mbSizeFormat || mbFormat) && !mpImpl->maItemList.empty() )
             ImplFormat();
     }
     else if (nType == StateChangedType::Zoom ||
@@ -1481,8 +1481,8 @@ void TabBar::ImplPrePaint()
     if (!mnCurPageId || (mnFirstPos != 0) || mbDropPos)
         return;
 
-    auto& pItem = mpImpl->mpItemList[GetPagePos(mnCurPageId)];
-    if (pItem->maRect.IsEmpty())
+    auto& rItem = mpImpl->maItemList[GetPagePos(mnCurPageId)];
+    if (rItem.maRect.IsEmpty())
     {
         // set mbDropPos (or misuse) to prevent Invalidate()
         mbDropPos = true;
@@ -1557,16 +1557,16 @@ void TabBar::InsertPage(sal_uInt16 nPageId, const OUString& rText,
     assert ((nBits <= TPB_DISPLAY_NAME_ALLFLAGS) && "TabBar::InsertPage(): Invalid flag set in nBits");
 
     // create PageItem and insert in the item list
-    std::unique_ptr<ImplTabBarItem> pItem(new ImplTabBarItem( nPageId, rText, nBits ));
-    if (nPos < mpImpl->mpItemList.size())
+    ImplTabBarItem aItem( nPageId, rText, nBits );
+    if (nPos < mpImpl->maItemList.size())
     {
-        auto it = mpImpl->mpItemList.begin();
+        auto it = mpImpl->maItemList.begin();
         it += nPos;
-        mpImpl->mpItemList.insert(it, std::move(pItem));
+        mpImpl->maItemList.insert(it, aItem);
     }
     else
     {
-        mpImpl->mpItemList.push_back(std::move(pItem));
+        mpImpl->maItemList.push_back(aItem);
     }
     mbSizeFormat = true;
 
@@ -1586,7 +1586,7 @@ Color TabBar::GetTabBgColor(sal_uInt16 nPageId) const
     sal_uInt16 nPos = GetPagePos(nPageId);
 
     if (nPos != PAGE_NOT_FOUND)
-        return mpImpl->mpItemList[nPos]->maTabBgColor;
+        return mpImpl->maItemList[nPos].maTabBgColor;
     else
         return COL_AUTO;
 }
@@ -1597,19 +1597,19 @@ void TabBar::SetTabBgColor(sal_uInt16 nPageId, const Color& aTabBgColor)
     if (nPos == PAGE_NOT_FOUND)
         return;
 
-    auto& pItem = mpImpl->mpItemList[nPos];
+    auto& rItem = mpImpl->maItemList[nPos];
     if (aTabBgColor != COL_AUTO)
     {
-        pItem->maTabBgColor = aTabBgColor;
+        rItem.maTabBgColor = aTabBgColor;
         if (aTabBgColor.GetLuminance() <= 128) //Do not use aTabBgColor.IsDark(), because that threshold is way too low...
-            pItem->maTabTextColor = COL_WHITE;
+            rItem.maTabTextColor = COL_WHITE;
         else
-            pItem->maTabTextColor = COL_BLACK;
+            rItem.maTabTextColor = COL_BLACK;
     }
     else
     {
-        pItem->maTabBgColor = COL_AUTO;
-        pItem->maTabTextColor = COL_AUTO;
+        rItem.maTabBgColor = COL_AUTO;
+        rItem.maTabTextColor = COL_AUTO;
     }
 }
 
@@ -1629,9 +1629,9 @@ void TabBar::RemovePage(sal_uInt16 nPageId)
         mnFirstPos--;
 
     // delete item data
-    auto it = mpImpl->mpItemList.begin();
+    auto it = mpImpl->maItemList.begin();
     it += nPos;
-    mpImpl->mpItemList.erase(it);
+    mpImpl->maItemList.erase(it);
 
     // redraw bar
     if (IsReallyVisible() && IsUpdateMode())
@@ -1656,19 +1656,18 @@ void TabBar::MovePage(sal_uInt16 nPageId, sal_uInt16 nNewPos)
         return;
 
     // move tabbar item in the list
-    auto it = mpImpl->mpItemList.begin();
+    auto it = mpImpl->maItemList.begin();
     it += nPos;
-    std::unique_ptr<ImplTabBarItem> pItem = std::move(*it);
-    mpImpl->mpItemList.erase(it);
-    if (nNewPos < mpImpl->mpItemList.size())
+    ImplTabBarItem aItem = std::move(*it);
+    if (nNewPos < mpImpl->maItemList.size())
     {
-        it = mpImpl->mpItemList.begin();
+        it = mpImpl->maItemList.begin();
         it += nNewPos;
-        mpImpl->mpItemList.insert(it, std::move(pItem));
+        mpImpl->maItemList.insert(it, aItem);
     }
     else
     {
-        mpImpl->mpItemList.push_back(std::move(pItem));
+        mpImpl->maItemList.push_back(aItem);
     }
 
     // redraw bar
@@ -1681,7 +1680,7 @@ void TabBar::MovePage(sal_uInt16 nPageId, sal_uInt16 nNewPos)
 void TabBar::Clear()
 {
     // delete all items
-    mpImpl->mpItemList.clear();
+    mpImpl->maItemList.clear();
 
     // remove items from the list
     mbSizeFormat = true;
@@ -1710,15 +1709,15 @@ void TabBar::SetPageBits(sal_uInt16 nPageId, TabBarPageBits nBits)
     if (nPos == PAGE_NOT_FOUND)
         return;
 
-    auto& pItem = mpImpl->mpItemList[nPos];
+    auto& rItem = mpImpl->maItemList[nPos];
 
-    if (pItem->mnBits != nBits)
+    if (rItem.mnBits != nBits)
     {
-        pItem->mnBits = nBits;
+        rItem.mnBits = nBits;
 
         // redraw bar
         if (IsReallyVisible() && IsUpdateMode())
-            Invalidate(pItem->maRect);
+            Invalidate(rItem.maRect);
     }
 }
 
@@ -1727,7 +1726,7 @@ TabBarPageBits TabBar::GetPageBits(sal_uInt16 nPageId) const
     sal_uInt16 nPos = GetPagePos(nPageId);
 
     if (nPos != PAGE_NOT_FOUND)
-        return mpImpl->mpItemList[nPos]->mnBits;
+        return mpImpl->maItemList[nPos].mnBits;
     else
         return TabBarPageBits::NONE;
 }
@@ -1739,14 +1738,14 @@ sal_uInt16 TabBar::GetPageCount() const
 
 sal_uInt16 TabBar::GetPageId(sal_uInt16 nPos) const
 {
-    return nPos < mpImpl->mpItemList.size() ? mpImpl->mpItemList[nPos]->mnId : 0;
+    return nPos < mpImpl->maItemList.size() ? mpImpl->maItemList[nPos].mnId : 0;
 }
 
 sal_uInt16 TabBar::GetPagePos(sal_uInt16 nPageId) const
 {
-    for (size_t i = 0; i < mpImpl->mpItemList.size(); ++i)
+    for (size_t i = 0; i < mpImpl->maItemList.size(); ++i)
     {
-        if (mpImpl->mpItemList[i]->mnId == nPageId)
+        if (mpImpl->maItemList[i].mnId == nPageId)
         {
             return static_cast<sal_uInt16>(i);
         }
@@ -1756,10 +1755,10 @@ sal_uInt16 TabBar::GetPagePos(sal_uInt16 nPageId) const
 
 sal_uInt16 TabBar::GetPageId(const Point& rPos) const
 {
-    for (const auto& pItem : mpImpl->mpItemList)
+    for (const auto& rItem : mpImpl->maItemList)
     {
-        if (pItem->maRect.IsInside(rPos))
-            return pItem->mnId;
+        if (rItem.maRect.IsInside(rPos))
+            return rItem.mnId;
     }
 
     return 0;
@@ -1770,7 +1769,7 @@ tools::Rectangle TabBar::GetPageRect(sal_uInt16 nPageId) const
     sal_uInt16 nPos = GetPagePos(nPageId);
 
     if (nPos != PAGE_NOT_FOUND)
-        return mpImpl->mpItemList[nPos]->maRect;
+        return mpImpl->maItemList[nPos].maRect;
     else
         return tools::Rectangle();
 }
@@ -1792,22 +1791,22 @@ void TabBar::SetCurPageId(sal_uInt16 nPageId)
     if (IsReallyVisible() && IsUpdateMode())
         bUpdate = true;
 
-    auto& pItem = mpImpl->mpItemList[nPos];
+    auto& rItem = mpImpl->maItemList[nPos];
     ImplTabBarItem* pOldItem;
 
     if (mnCurPageId)
-        pOldItem = mpImpl->mpItemList[GetPagePos(mnCurPageId)].get();
+        pOldItem = &mpImpl->maItemList[GetPagePos(mnCurPageId)];
     else
         pOldItem = nullptr;
 
     // deselect previous page if page was not selected, if this is the
     // only selected page
-    if (!pItem->mbSelect && pOldItem)
+    if (!rItem.mbSelect && pOldItem)
     {
         sal_uInt16 nSelPageCount = GetSelectPageCount();
         if (nSelPageCount == 1)
             pOldItem->mbSelect = false;
-        pItem->mbSelect = true;
+        rItem.mbSelect = true;
     }
 
     mnCurPageId = nPageId;
@@ -1825,11 +1824,11 @@ void TabBar::SetCurPageId(sal_uInt16 nPageId)
             if (nWidth > ADDNEWPAGE_AREAWIDTH)
                 nWidth -= ADDNEWPAGE_AREAWIDTH;
 
-            if (pItem->maRect.IsEmpty())
+            if (rItem.maRect.IsEmpty())
                 ImplFormat();
 
-            while ((mbMirrored ? (pItem->maRect.Left() < mnOffX) : (pItem->maRect.Right() > nWidth)) ||
-                    pItem->maRect.IsEmpty())
+            while ((mbMirrored ? (rItem.maRect.Left() < mnOffX) : (rItem.maRect.Right() > nWidth)) ||
+                    rItem.maRect.IsEmpty())
             {
                 sal_uInt16 nNewPos = mnFirstPos + 1;
                 // assure at least the actual tabpages are visible as first tabpage
@@ -1851,7 +1850,7 @@ void TabBar::SetCurPageId(sal_uInt16 nPageId)
     // redraw bar
     if (bUpdate)
     {
-        Invalidate(pItem->maRect);
+        Invalidate(rItem.maRect);
         if (pOldItem)
             Invalidate(pOldItem->maRect);
     }
@@ -1872,19 +1871,19 @@ void TabBar::MakeVisible(sal_uInt16 nPageId)
         SetFirstPageId(nPageId);
     else
     {
-        auto& pItem = mpImpl->mpItemList[nPos];
+        auto& rItem = mpImpl->maItemList[nPos];
 
         // calculate visible area
         tools::Long nWidth = mnLastOffX;
 
-        if (mbFormat || pItem->maRect.IsEmpty())
+        if (mbFormat || rItem.maRect.IsEmpty())
         {
             mbFormat = true;
             ImplFormat();
         }
 
-        while ((pItem->maRect.Right() > nWidth) ||
-                pItem->maRect.IsEmpty())
+        while ((rItem.maRect.Right() > nWidth) ||
+                rItem.maRect.IsEmpty())
         {
             sal_uInt16 nNewPos = mnFirstPos+1;
             // assure at least the actual tabpages are visible as first tabpage
@@ -1942,24 +1941,24 @@ void TabBar::SelectPage(sal_uInt16 nPageId, bool bSelect)
     if (nPos == PAGE_NOT_FOUND)
         return;
 
-    auto& pItem = mpImpl->mpItemList[nPos];
+    auto& rItem = mpImpl->maItemList[nPos];
 
-    if (pItem->mbSelect != bSelect)
+    if (rItem.mbSelect != bSelect)
     {
-        pItem->mbSelect = bSelect;
+        rItem.mbSelect = bSelect;
 
         // redraw bar
         if (IsReallyVisible() && IsUpdateMode())
-            Invalidate(pItem->maRect);
+            Invalidate(rItem.maRect);
     }
 }
 
 sal_uInt16 TabBar::GetSelectPageCount() const
 {
     sal_uInt16 nSelected = 0;
-    for (const auto& pItem : mpImpl->mpItemList)
+    for (const auto& rItem : mpImpl->maItemList)
     {
-        if (pItem->mbSelect)
+        if (rItem.mbSelect)
             nSelected++;
     }
 
@@ -1970,7 +1969,7 @@ bool TabBar::IsPageSelected(sal_uInt16 nPageId) const
 {
     sal_uInt16 nPos = GetPagePos(nPageId);
     if (nPos != PAGE_NOT_FOUND)
-        return mpImpl->mpItemList[nPos]->mbSelect;
+        return mpImpl->maItemList[nPos].mbSelect;
     else
         return false;
 }
@@ -1980,9 +1979,9 @@ void TabBar::SetProtectionSymbol(sal_uInt16 nPageId, bool bProtection)
     sal_uInt16 nPos = GetPagePos(nPageId);
     if (nPos != PAGE_NOT_FOUND)
     {
-        if (mpImpl->mpItemList[nPos]->mbProtect != bProtection)
+        if (mpImpl->maItemList[nPos].mbProtect != bProtection)
         {
-            mpImpl->mpItemList[nPos]->mbProtect = bProtection;
+            mpImpl->maItemList[nPos].mbProtect = bProtection;
             mbSizeFormat = true;    // render text width changes, thus bar width
 
             // redraw bar
@@ -2152,7 +2151,7 @@ void TabBar::SetPageText(sal_uInt16 nPageId, const OUString& rText)
     sal_uInt16 nPos = GetPagePos(nPageId);
     if (nPos != PAGE_NOT_FOUND)
     {
-        mpImpl->mpItemList[nPos]->maText = rText;
+        mpImpl->maItemList[nPos].maText = rText;
         mbSizeFormat = true;
 
         // redraw bar
@@ -2167,7 +2166,7 @@ OUString TabBar::GetPageText(sal_uInt16 nPageId) const
 {
     sal_uInt16 nPos = GetPagePos(nPageId);
     if (nPos != PAGE_NOT_FOUND)
-        return mpImpl->mpItemList[nPos]->maText;
+        return mpImpl->maItemList[nPos].maText;
     return OUString();
 }
 
@@ -2175,7 +2174,7 @@ OUString TabBar::GetAuxiliaryText(sal_uInt16 nPageId) const
 {
     sal_uInt16 nPos = GetPagePos(nPageId);
     if (nPos != PAGE_NOT_FOUND)
-        return mpImpl->mpItemList[nPos]->maAuxiliaryText;
+        return mpImpl->maItemList[nPos].maAuxiliaryText;
     return OUString();
 }
 
@@ -2184,7 +2183,7 @@ void TabBar::SetAuxiliaryText(sal_uInt16 nPageId, const OUString& rText )
     sal_uInt16 nPos = GetPagePos(nPageId);
     if (nPos != PAGE_NOT_FOUND)
     {
-        mpImpl->mpItemList[nPos]->maAuxiliaryText = rText;
+        mpImpl->maItemList[nPos].maAuxiliaryText = rText;
         // no redraw bar, no CallEventListener, internal use in LayerTabBar
     }
 }
@@ -2194,15 +2193,15 @@ OUString TabBar::GetHelpText(sal_uInt16 nPageId) const
     sal_uInt16 nPos = GetPagePos(nPageId);
     if (nPos != PAGE_NOT_FOUND)
     {
-        auto& pItem = mpImpl->mpItemList[nPos];
-        if (pItem->maHelpText.isEmpty() && !pItem->maHelpId.isEmpty())
+        auto& rItem = mpImpl->maItemList[nPos];
+        if (rItem.maHelpText.isEmpty() && !rItem.maHelpId.isEmpty())
         {
             Help* pHelp = Application::GetHelp();
             if (pHelp)
-                pItem->maHelpText = pHelp->GetHelpText(OStringToOUString(pItem->maHelpId, RTL_TEXTENCODING_UTF8), this);
+                rItem.maHelpText = pHelp->GetHelpText(OStringToOUString(rItem.maHelpId, RTL_TEXTENCODING_UTF8), this);
         }
 
-        return pItem->maHelpText;
+        return rItem.maHelpText;
     }
     return OUString();
 }
@@ -2258,8 +2257,8 @@ sal_uInt16 TabBar::ShowDropPos(const Point& rPos)
 
     if (rPos.X() > mnLastOffX-TABBAR_DRAG_SCROLLOFF)
     {
-        auto& pItem = mpImpl->mpItemList[mpImpl->mpItemList.size() - 1];
-        if (!pItem->maRect.IsEmpty() && (rPos.X() > pItem->maRect.Right()))
+        auto& rItem = mpImpl->maItemList[mpImpl->maItemList.size() - 1];
+        if (!rItem.maRect.IsEmpty() && (rPos.X() > rItem.maRect.Right()))
             nNewDropPos = mpImpl->getItemSize();
         else
         {
@@ -2327,17 +2326,17 @@ sal_uInt16 TabBar::ShowDropPos(const Point& rPos)
         GetOutDev()->SetLineColor(aBlackColor);
         GetOutDev()->SetFillColor(aBlackColor);
 
-        auto& pItem = mpImpl->mpItemList[mnDropPos];
-        nX = pItem->maRect.Left();
+        auto& rItem = mpImpl->maItemList[mnDropPos];
+        nX = rItem.maRect.Left();
         if ( mnDropPos == nCurPos )
             nX--;
         else
             nX++;
 
-        if (!pItem->IsDefaultTabBgColor() && !pItem->mbSelect)
+        if (!rItem.IsDefaultTabBgColor() && !rItem.mbSelect)
         {
-            GetOutDev()->SetLineColor(pItem->maTabTextColor);
-            GetOutDev()->SetFillColor(pItem->maTabTextColor);
+            GetOutDev()->SetLineColor(rItem.maTabTextColor);
+            GetOutDev()->SetFillColor(rItem.maTabTextColor);
         }
 
         tools::Polygon aPoly(3);
@@ -2351,14 +2350,14 @@ sal_uInt16 TabBar::ShowDropPos(const Point& rPos)
         GetOutDev()->SetLineColor(aBlackColor);
         GetOutDev()->SetFillColor(aBlackColor);
 
-        auto& pItem = mpImpl->mpItemList[mnDropPos - 1];
-        nX = pItem->maRect.Right();
+        auto& rItem = mpImpl->maItemList[mnDropPos - 1];
+        nX = rItem.maRect.Right();
         if (mnDropPos == nCurPos)
             nX++;
-        if (!pItem->IsDefaultTabBgColor() && !pItem->mbSelect)
+        if (!rItem.IsDefaultTabBgColor() && !rItem.mbSelect)
         {
-            GetOutDev()->SetLineColor(pItem->maTabTextColor);
-            GetOutDev()->SetFillColor(pItem->maTabTextColor);
+            GetOutDev()->SetLineColor(rItem.maTabTextColor);
+            GetOutDev()->SetFillColor(rItem.maTabTextColor);
         }
         tools::Polygon aPoly(3);
         aPoly.SetPoint(Point(nX, nY), 0);
@@ -2382,8 +2381,8 @@ void TabBar::HideDropPos()
 
     if (mnDropPos < nItemCount)
     {
-        auto& pItem = mpImpl->mpItemList[mnDropPos];
-        nX = pItem->maRect.Left();
+        auto& rItem = mpImpl->maItemList[mnDropPos];
+        nX = rItem.maRect.Left();
         // immediately call Paint, as it is not possible during drag and drop
         tools::Rectangle aRect( nX-1, nY1, nX+3, nY2 );
         vcl::Region aRegion( aRect );
@@ -2393,8 +2392,8 @@ void TabBar::HideDropPos()
     }
     if (mnDropPos > 0 && mnDropPos < nItemCount + 1)
     {
-        auto& pItem = mpImpl->mpItemList[mnDropPos - 1];
-        nX = pItem->maRect.Right();
+        auto& rItem = mpImpl->maItemList[mnDropPos - 1];
+        nX = rItem.maRect.Right();
         // immediately call Paint, as it is not possible during drag and drop
         tools::Rectangle aRect(nX - 2, nY1, nX + 1, nY2);
         vcl::Region aRegion(aRect);
@@ -2460,12 +2459,12 @@ Size TabBar::CalcWindowSizePixel() const
 {
     tools::Long nWidth = 0;
 
-    if (!mpImpl->mpItemList.empty())
+    if (!mpImpl->maItemList.empty())
     {
         const_cast<TabBar*>(this)->ImplCalcWidth();
-        for (const auto& pItem : mpImpl->mpItemList)
+        for (const auto& rItem : mpImpl->maItemList)
         {
-            nWidth += pItem->mnWidth;
+            nWidth += rItem.mnWidth;
         }
     }
 
