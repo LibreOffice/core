@@ -9,7 +9,7 @@
 
 #include <svl/cryptosign.hxx>
 #include <svl/sigstruct.hxx>
-#include <config_features.h>
+#include <config_crypto.h>
 
 #include <rtl/character.hxx>
 #include <rtl/strbuf.hxx>
@@ -26,7 +26,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
-#if HAVE_FEATURE_NSS && !defined(_WIN32)
+#if USE_CRYPTO_NSS
 // NSS headers for PDF signing
 #include <cert.h>
 #include <hasht.h>
@@ -37,9 +37,13 @@
 
 // We use curl for RFC3161 time stamp requests
 #include <curl/curl.h>
+
+#include <com/sun/star/xml/crypto/DigestID.hpp>
+#include <com/sun/star/xml/crypto/NSSInitializer.hpp>
+#include <mutex>
 #endif
 
-#ifdef _WIN32
+#if USE_CRYPTO_MSCAPI
 // WinCrypt headers for PDF signing
 // Note: this uses Windows 7 APIs and requires the relevant data types
 #include <prewin.h>
@@ -48,33 +52,11 @@
 #include <comphelper/windowserrorstring.hxx>
 #endif
 
-#if HAVE_FEATURE_NSS
-
-#include <com/sun/star/xml/crypto/DigestID.hpp>
-#include <com/sun/star/xml/crypto/NSSInitializer.hpp>
-#include <mutex>
-
-// Is this length truly the maximum possible, or just a number that
-// seemed large enough when the author tested this (with some type of
-// certificates)? I suspect the latter.
-
-// Used to be 0x4000 = 16384, but a sample signed PDF (produced by
-// some other software) provided by the customer has a signature
-// content that is 30000 bytes. The SampleSignedPDFDocument.pdf from
-// Adobe has one that is 21942 bytes. So let's be careful. Pity this
-// can't be dynamic, at least not without restructuring the code. Also
-// note that the checks in the code for this being too small
-// apparently are broken, if this overflows you end up with an invalid
-// PDF. Need to fix that.
-
-#define MAX_SIGNATURE_CONTENT_LENGTH 50000
-#endif
-
 using namespace com::sun::star;
 
 namespace {
 
-#if HAVE_FEATURE_NSS
+#if USE_CRYPTO_ANY
 void appendHex( sal_Int8 nInt, OStringBuffer& rBuffer )
 {
     static const char pHexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7',
@@ -82,10 +64,9 @@ void appendHex( sal_Int8 nInt, OStringBuffer& rBuffer )
     rBuffer.append( pHexDigits[ (nInt >> 4) & 15 ] );
     rBuffer.append( pHexDigits[ nInt & 15 ] );
 }
-#endif // HAVE_FEATURE_NSS
+#endif
 
-#if HAVE_FEATURE_NSS && !defined(_WIN32)
-
+#if USE_CRYPTO_NSS
 char *PDFSigningPKCS7PasswordCallback(PK11SlotInfo * /*slot*/, PRBool /*retry*/, void *arg)
 {
     return PL_strdup(static_cast<char *>(arg));
@@ -701,13 +682,7 @@ NSSCMSMessage *CreateCMSMessage(const PRTime* time,
     return result;
 }
 
-#endif // HAVE_FEATURE_NSS && !_WIN32
-
-} // Anonymous namespace
-
-#ifdef _WIN32
-namespace
-{
+#elif USE_CRYPTO_MSCAPI // ends USE_CRYPTO_NSS
 
 /// Counts how many bytes are needed to encode a given length.
 size_t GetDERLengthOfLength(size_t nLength)
@@ -876,8 +851,9 @@ bool CreateSigningCertificateAttribute(void const * pDerEncoded, int nDerEncoded
 
     return true;
 }
+#endif // USE_CRYPTO_MSCAPI
+
 } // anonymous namespace
-#endif //_WIN32
 
 namespace svl::crypto {
 
@@ -929,11 +905,12 @@ std::vector<unsigned char> DecodeHexString(const OString& rHex)
     return aRet;
 }
 
-
-#if defined(SVL_CRYPTO_NSS) || defined(_WIN32)
-
 bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
 {
+#if !USE_CRYPTO_ANY
+    (void)rCMSHexBuffer;
+    return false;
+#else
     // Create the PKCS#7 object.
     css::uno::Sequence<sal_Int8> aDerEncoded = m_xCertificate->getEncoded();
     if (!aDerEncoded.hasElements())
@@ -942,8 +919,7 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
         return false;
     }
 
-#ifndef _WIN32
-
+#if USE_CRYPTO_NSS
     CERTCertificate *cert = CERT_DecodeCertFromPackage(reinterpret_cast<char *>(aDerEncoded.getArray()), aDerEncoded.getLength());
 
     if (!cert)
@@ -1334,7 +1310,8 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
 
     return true;
 
-#else // _WIN32
+#elif USE_CRYPTO_MSCAPI // ends USE_CRYPTO_NSS
+
     PCCERT_CONTEXT pCertContext = CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, reinterpret_cast<const BYTE*>(aDerEncoded.getArray()), aDerEncoded.getLength());
     if (pCertContext == nullptr)
     {
@@ -1633,19 +1610,13 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
         appendHex(pSig[i], rCMSHexBuffer);
 
     return true;
-#endif
+#endif // USE_CRYPTO_MSCAPI
+#endif // USE_CRYPTO_ANY
 }
-#else
-bool Signing::Sign(OStringBuffer&)
-{
-    return false;
-}
-#endif //!SVL_CRYPTO_NSS && !_WIN32
-
 
 namespace
 {
-#ifdef SVL_CRYPTO_NSS
+#if USE_CRYPTO_NSS
 /// Similar to NSS_CMSAttributeArray_FindAttrByOidTag(), but works directly with a SECOidData.
 NSSCMSAttribute* CMSAttributeArray_FindAttrByOidData(NSSCMSAttribute** attrs, SECOidData const * oid, PRBool only)
 {
@@ -1796,7 +1767,9 @@ bad_data:
     }
     return rv;
 }
-#elif defined _WIN32
+
+#elif USE_CRYPTO_MSCAPI // ends USE_CRYPTO_NSS
+
 /// Verifies a non-detached signature using CryptoAPI.
 bool VerifyNonDetachedSignature(const std::vector<unsigned char>& aData, const std::vector<BYTE>& rExpectedHash)
 {
@@ -1885,13 +1858,9 @@ OUString GetSubjectName(PCCERT_CONTEXT pCertContext)
 
     return subjectName;
 }
+#endif // USE_CRYPTO_MSCAPI
 
-#endif
-}
-
-#ifdef SVL_CRYPTO_NSS
-namespace
-{
+#if USE_CRYPTO_NSS
     void ensureNssInit()
     {
         // e.g. tdf#122599 ensure NSS library is initialized for NSS_CMSMessage_CreateFromDER
@@ -1902,15 +1871,15 @@ namespace
         xNSSInitializer->getDigestContext(css::xml::crypto::DigestID::SHA256,
                                           uno::Sequence<beans::NamedValue>());
     }
-}
 #endif
+} // anonymous namespace
 
 bool Signing::Verify(const std::vector<unsigned char>& aData,
                      const bool bNonDetached,
                      const std::vector<unsigned char>& aSignature,
                      SignatureInformation& rInformation)
 {
-#ifdef SVL_CRYPTO_NSS
+#if USE_CRYPTO_NSS
     // ensure NSS_Init() is called before using NSS_CMSMessage_CreateFromDER
     static std::once_flag aInitOnce;
     std::call_once(aInitOnce, ensureNssInit);
@@ -2113,7 +2082,8 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
 
     return true;
 
-#elif defined _WIN32
+#elif USE_CRYPTO_MSCAPI // ends USE_CRYPTO_NSS
+
     // Open a message for decoding.
     HCRYPTMSG hMsg = CryptMsgOpenToDecode(PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
                                           CMSG_DETACHED_FLAG,
@@ -2344,8 +2314,7 @@ bool Signing::Verify(SvStream& rStream,
                      const std::vector<unsigned char>& aSignature,
                      SignatureInformation& rInformation)
 {
-#if defined(SVL_CRYPTO_NSS) || defined(_WIN32)
-
+#if USE_CRYPTO_ANY
     std::vector<unsigned char> buffer;
 
     // Copy the byte ranges into a single buffer.
