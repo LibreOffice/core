@@ -22081,12 +22081,16 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/smath/ui/catalogdialog.ui" &&
         rUIFile != "modules/smath/ui/fontsizedialog.ui" &&
         rUIFile != "modules/smath/ui/savedefaultsdialog.ui" &&
-        rUIFile != "modules/swriter/ui/gotopagedialog.ui" &&
+        rUIFile != "modules/swriter/ui/endnotepage.ui" &&
+        rUIFile != "modules/swriter/ui/footnotepage.ui" &&
         rUIFile != "modules/swriter/ui/exchangedatabases.ui" &&
+        rUIFile != "modules/swriter/ui/footendnotedialog.ui" &&
+        rUIFile != "modules/swriter/ui/gotopagedialog.ui" &&
         rUIFile != "modules/swriter/ui/insertbookmark.ui" &&
         rUIFile != "modules/swriter/ui/insertbreak.ui" &&
         rUIFile != "modules/swriter/ui/insertfootnote.ui" &&
         rUIFile != "modules/swriter/ui/inserttable.ui" &&
+        rUIFile != "modules/swriter/ui/linenumbering.ui" &&
         rUIFile != "modules/swriter/ui/renameobjectdialog.ui" &&
         rUIFile != "modules/swriter/ui/statisticsinfopage.ui" &&
         rUIFile != "modules/swriter/ui/titlepage.ui" &&
