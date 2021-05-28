@@ -758,6 +758,7 @@ void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& x
         uno::Reference<lang::XMultiServiceFactory> xTextFactory(xDoc, uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xDocumentSettings(xTextFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY_THROW);
         xDocumentSettings->setPropertyValue("MsWordCompMinLineHeightByFly", uno::makeAny(true));
+        xDocumentSettings->setPropertyValue("TabOverMargin", uno::makeAny(true));
     }
 
     // Show changes value

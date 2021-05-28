@@ -324,7 +324,6 @@ void WriterFilter::setTargetDocument(const uno::Reference<lang::XComponent>& xDo
     xSettings->setPropertyValue("FloattableNomargins", uno::makeAny(true));
     xSettings->setPropertyValue("ClippedPictures", uno::makeAny(true));
     xSettings->setPropertyValue("BackgroundParaOverDrawings", uno::makeAny(true));
-    xSettings->setPropertyValue("TabOverMargin", uno::makeAny(true));
     xSettings->setPropertyValue("TreatSingleColumnBreakAsPageBreak", uno::makeAny(true));
     xSettings->setPropertyValue("PropLineSpacingShrinksFirstLine", uno::makeAny(true));
     xSettings->setPropertyValue("DoNotCaptureDrawObjsOnPage", uno::makeAny(true));
