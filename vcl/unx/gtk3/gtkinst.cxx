@@ -20952,9 +20952,10 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
 
                             xContentAreaCandidate->getParentNode()->insertBefore(xActionArea, xContentAreaCandidate);
 
-                            for (css::uno::Reference<css::xml::dom::XNode> xTitleChild = xChild->getFirstChild();
-                                 xTitleChild.is(); xTitleChild = xTitleChild->getNextSibling())
+                            css::uno::Reference<css::xml::dom::XNode> xTitleChild = xChild->getFirstChild();
+                            while(xTitleChild.is())
                             {
+                                auto xNextTitleChild = xTitleChild->getNextSibling();
                                 if (xTitleChild->getNodeName() == "child")
                                 {
                                     css::uno::Reference<css::xml::dom::XElement> xChildElem(xTitleChild, css::uno::UNO_QUERY_THROW);
@@ -20981,6 +20982,16 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
                                         xChildElem->setAttributeNode(xTypeEnd);
                                     }
                                 }
+                                else if (xTitleChild->getNodeName() == "property")
+                                {
+                                    // remove any <property name="homogeneous"> tag
+                                    css::uno::Reference<css::xml::dom::XNamedNodeMap> xTitleChildMap = xTitleChild->getAttributes();
+                                    css::uno::Reference<css::xml::dom::XNode> xPropName = xTitleChildMap->getNamedItem("name");
+                                    OUString sPropName(xPropName->getNodeValue().replace('_', '-'));
+                                    if (sPropName == "homogeneous")
+                                        xChild->removeChild(xTitleChild);
+                                }
+                                xTitleChild = xNextTitleChild;
                             }
 
                             break;
@@ -22011,6 +22022,8 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "sfx/ui/securityinfopage.ui" &&
         rUIFile != "svt/ui/javadisableddialog.ui" &&
         rUIFile != "svx/ui/fontworkgallerydialog.ui" &&
+        rUIFile != "modules/scalc/ui/dataform.ui" &&
+        rUIFile != "modules/scalc/ui/dataformfragment.ui" &&
         rUIFile != "modules/scalc/ui/definedatabaserangedialog.ui" &&
         rUIFile != "modules/scalc/ui/deletecells.ui" &&
         rUIFile != "modules/scalc/ui/deletecontents.ui" &&
