@@ -87,11 +87,11 @@ PageColumnControl::~PageColumnControl()
 
 void PageColumnControl::ExecuteColumnChange( const sal_uInt16 nColumnType )
 {
-    std::unique_ptr<SfxInt16Item> mpPageColumnTypeItem( new SfxInt16Item(SID_ATTR_PAGE_COLUMN) );
-    mpPageColumnTypeItem->SetValue( nColumnType );
+    SfxInt16Item aPageColumnTypeItem(SID_ATTR_PAGE_COLUMN);
+    aPageColumnTypeItem.SetValue( nColumnType );
     if ( SfxViewFrame::Current() )
         SfxViewFrame::Current()->GetBindings().GetDispatcher()->ExecuteList(SID_ATTR_PAGE_COLUMN,
-            SfxCallMode::RECORD, { mpPageColumnTypeItem.get() });
+            SfxCallMode::RECORD, { &aPageColumnTypeItem });
 }
 
 IMPL_LINK( PageColumnControl, ColumnButtonClickHdl_Impl, weld::Button&, rButton, void )

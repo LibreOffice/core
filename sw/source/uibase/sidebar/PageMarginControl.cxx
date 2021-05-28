@@ -425,12 +425,11 @@ void PageMarginControl::ExecuteMarginLRChange(
 {
     if ( SfxViewFrame::Current() )
     {
-        std::unique_ptr<SvxLongLRSpaceItem> pPageLRMarginItem( new SvxLongLRSpaceItem( 0, 0, SID_ATTR_PAGE_LRSPACE ) );
-        pPageLRMarginItem->SetLeft( nPageLeftMargin );
-        pPageLRMarginItem->SetRight( nPageRightMargin );
+        SvxLongLRSpaceItem aPageLRMarginItem( 0, 0, SID_ATTR_PAGE_LRSPACE );
+        aPageLRMarginItem.SetLeft( nPageLeftMargin );
+        aPageLRMarginItem.SetRight( nPageRightMargin );
         SfxViewFrame::Current()->GetBindings().GetDispatcher()->ExecuteList( SID_ATTR_PAGE_LRSPACE,
-                SfxCallMode::RECORD, { pPageLRMarginItem.get() } );
-        pPageLRMarginItem.reset();
+                SfxCallMode::RECORD, { &aPageLRMarginItem } );
     }
 }
 
@@ -440,12 +439,11 @@ void PageMarginControl::ExecuteMarginULChange(
 {
     if ( SfxViewFrame::Current() )
     {
-        std::unique_ptr<SvxLongULSpaceItem> pPageULMarginItem( new SvxLongULSpaceItem( 0, 0, SID_ATTR_PAGE_ULSPACE ) );
-        pPageULMarginItem->SetUpper( nPageTopMargin );
-        pPageULMarginItem->SetLower( nPageBottomMargin );
+        SvxLongULSpaceItem aPageULMarginItem( 0, 0, SID_ATTR_PAGE_ULSPACE );
+        aPageULMarginItem.SetUpper( nPageTopMargin );
+        aPageULMarginItem.SetLower( nPageBottomMargin );
         SfxViewFrame::Current()->GetBindings().GetDispatcher()->ExecuteList( SID_ATTR_PAGE_ULSPACE,
-                SfxCallMode::RECORD, { pPageULMarginItem.get() } );
-        pPageULMarginItem.reset();
+                SfxCallMode::RECORD, { &aPageULMarginItem } );
     }
 }
 
@@ -453,11 +451,10 @@ void PageMarginControl::ExecutePageLayoutChange( const bool bMirrored )
 {
     if ( SfxViewFrame::Current() )
     {
-        std::unique_ptr<SvxPageItem> pPageItem( new SvxPageItem( SID_ATTR_PAGE ) );
-        pPageItem->SetPageUsage( bMirrored ? SvxPageUsage::Mirror : SvxPageUsage::All );
+        SvxPageItem aPageItem( SID_ATTR_PAGE );
+        aPageItem.SetPageUsage( bMirrored ? SvxPageUsage::Mirror : SvxPageUsage::All );
         SfxViewFrame::Current()->GetBindings().GetDispatcher()->ExecuteList( SID_ATTR_PAGE,
-                SfxCallMode::RECORD, { pPageItem.get() } );
-        pPageItem.reset();
+                SfxCallMode::RECORD, { &aPageItem } );
     }
 }
 

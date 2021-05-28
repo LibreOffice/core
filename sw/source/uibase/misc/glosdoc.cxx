@@ -237,8 +237,8 @@ bool    SwGlossaries::RenameGroupDoc(
         m_GlosArr.push_back(rNewGroup);
     }
 
-    std::unique_ptr<SwTextBlocks> pNewBlock(new SwTextBlocks( sNewFileURL ));
-    pNewBlock->SetName(rNewTitle);
+    SwTextBlocks aNewBlock( sNewFileURL );
+    aNewBlock.SetName(rNewTitle);
 
     return true;
 }

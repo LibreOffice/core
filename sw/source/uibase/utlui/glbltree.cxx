@@ -184,7 +184,7 @@ sal_Int8 SwGlobalTreeDropTarget::ExecuteDrop( const ExecuteDropEvent& rEvt )
         if( aData.HasFormat( SotClipboardFormatId::FILE_LIST ))
         {
             nRet = rEvt.mnAction;
-            std::unique_ptr<SwGlblDocContents> pTempContents(new SwGlblDocContents);
+            SwGlblDocContents aTempContents;
             int nAbsContPos = xDropEntry ?
                                 rWidget.get_iter_index_in_parent(*xDropEntry):
                                     - 1;
@@ -201,14 +201,14 @@ sal_Int8 SwGlobalTreeDropTarget::ExecuteDrop( const ExecuteDropEvent& rEvt )
                 // to not work on an old content.
                 if(n)
                 {
-                    m_rTreeView.GetActiveWrtShell()->GetGlobalDocContent(*pTempContents);
+                    m_rTreeView.GetActiveWrtShell()->GetGlobalDocContent(aTempContents);
                     // If the file was successfully inserted,
                     // then the next content must also be fetched.
-                    if(nEntryCount < pTempContents->size())
+                    if(nEntryCount < aTempContents.size())
                     {
                         nEntryCount++;
                         nAbsContPos++;
-                        pCnt = (*pTempContents)[ nAbsContPos ].get();
+                        pCnt = aTempContents[ nAbsContPos ].get();
                     }
                 }
             }
@@ -867,20 +867,20 @@ bool SwGlobalTree::Update(bool bHard)
         else
         {
             bool bCopy = false;
-            std::unique_ptr<SwGlblDocContents> pTempContents(new SwGlblDocContents);
-            m_pActiveShell->GetGlobalDocContent(*pTempContents);
+            SwGlblDocContents aTempContents;
+            m_pActiveShell->GetGlobalDocContent(aTempContents);
             size_t nChildren = m_xTreeView->n_children();
-            if (pTempContents->size() != m_pSwGlblDocContents->size() ||
-                    pTempContents->size() != nChildren)
+            if (aTempContents.size() != m_pSwGlblDocContents->size() ||
+                    aTempContents.size() != nChildren)
             {
                 bRet = true;
                 bCopy = true;
             }
             else
             {
-                for(size_t i = 0; i < pTempContents->size() && !bCopy; i++)
+                for(size_t i = 0; i < aTempContents.size() && !bCopy; i++)
                 {
-                    SwGlblDocContent* pLeft = (*pTempContents)[i].get();
+                    SwGlblDocContent* pLeft = aTempContents[i].get();
                     SwGlblDocContent* pRight = (*m_pSwGlblDocContents)[i].get();
                     GlobalDocContentType eType = pLeft->GetType();
                     OUString sTemp = m_xTreeView->get_text(i);
@@ -902,7 +902,7 @@ bool SwGlobalTree::Update(bool bHard)
             }
             if (bCopy || bHard)
             {
-                *m_pSwGlblDocContents = std::move( *pTempContents );
+                *m_pSwGlblDocContents = std::move( aTempContents );
                 bRet = true;
             }
         }

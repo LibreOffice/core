@@ -159,14 +159,14 @@ static void lcl_UpdateIMapDlg( SwWrtShell& rSh )
     GraphicType nGrfType = aGrf.GetType();
     void* pEditObj = GraphicType::NONE != nGrfType && GraphicType::Default != nGrfType
                         ? rSh.GetIMapInventor() : nullptr;
-    std::unique_ptr<TargetList> pList(new TargetList);
-    SfxFrame::GetDefaultTargetList(*pList);
+    TargetList aList;
+    SfxFrame::GetDefaultTargetList(aList);
 
     SfxItemSet aSet( rSh.GetAttrPool(), svl::Items<RES_URL, RES_URL>{} );
     rSh.GetFlyFrameAttr( aSet );
     const SwFormatURL &rURL = aSet.Get( RES_URL );
     SvxIMapDlgChildWindow::UpdateIMapDlg(
-            aGrf, rURL.GetMap(), pList.get(), pEditObj );
+            aGrf, rURL.GetMap(), &aList, pEditObj );
 }
 
 static bool lcl_UpdateContourDlg( SwWrtShell &rSh, SelectionType nSel )

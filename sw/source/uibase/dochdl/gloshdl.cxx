@@ -670,18 +670,18 @@ bool SwGlossaryHdl::ImportGlossaries( const OUString& rName )
     if( !rName.isEmpty() )
     {
         std::shared_ptr<const SfxFilter> pFilter;
-        std::unique_ptr<SfxMedium> pMed(new SfxMedium( rName, StreamMode::READ, nullptr, nullptr ));
+        SfxMedium aMed( rName, StreamMode::READ, nullptr, nullptr );
         SfxFilterMatcher aMatcher( "swriter" );
-        pMed->UseInteractionHandler( true );
-        if (!aMatcher.GuessFilter(*pMed, pFilter, SfxFilterFlags::NONE))
+        aMed.UseInteractionHandler( true );
+        if (!aMatcher.GuessFilter(aMed, pFilter, SfxFilterFlags::NONE))
         {
             SwTextBlocks *pGlossary = nullptr;
-            pMed->SetFilter( pFilter );
+            aMed.SetFilter( pFilter );
             Reader* pR = SwReaderWriter::GetReader( pFilter->GetUserData() );
             if( pR && nullptr != ( pGlossary = pCurGrp ? pCurGrp.get()
                                     : rStatGlossaries.GetGroupDoc(aCurGrp).release()) )
             {
-                SwReader aReader( *pMed, rName );
+                SwReader aReader( aMed, rName );
                 if( aReader.HasGlossaries( *pR ) )
                 {
                     const SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
