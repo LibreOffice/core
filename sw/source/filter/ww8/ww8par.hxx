@@ -1263,7 +1263,7 @@ private:
 
     std::unique_ptr<SwMSDffManager> m_xMSDffManager;
 
-    std::unique_ptr<std::vector<OUString>> m_pAtnNames;
+    std::optional<std::vector<OUString>> m_xAtnNames;
 
     std::unique_ptr<WW8SmartTagData> m_pSmartTagData;
 
