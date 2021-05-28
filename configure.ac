@@ -804,6 +804,7 @@ dnl Sequential to keep the logic very simple
 dnl These values may be checked and reset later.
 dnl ===================================================================
 #defaults unless the os test overrides this:
+build_crypto=yes
 test_cmis=yes
 test_curl=yes
 test_randr=yes
@@ -962,6 +963,7 @@ darwin*|macos*) # macOS
 ;;
 
 ios*) # iOS
+    build_crypto=no
     test_cmis=no
     test_randr=no
     test_xrender=no
@@ -1071,6 +1073,7 @@ dragonfly*)
     ;;
 
 linux-android*)
+    build_crypto=no
     build_gstreamer_1_0=no
     enable_lotuswordpro=no
     enable_mpl_subset=yes
@@ -10290,7 +10293,6 @@ if test "$enable_fuzzers" != "yes" -a "$enable_nss" = "yes"; then
     libo_CHECK_SYSTEM_MODULE([nss],[NSS],[nss >= 3.9.3 nspr >= 4.8])
     AC_DEFINE(HAVE_FEATURE_NSS)
     ENABLE_NSS=TRUE
-    AC_DEFINE(ENABLE_NSS)
 elif test $_os != iOS ; then
     with_tls=openssl
 fi
@@ -10862,6 +10864,20 @@ else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST([ENABLE_CIPHER_OPENSSL_BACKEND])
+
+dnl ===================================================================
+dnl Select the crypto backends used by LO
+dnl ===================================================================
+
+if test "$build_crypto" = yes; then
+    if test "$OS" = WNT; then
+        BUILD_TARGET="$BUILD_TARGET CRYPTO_MSCAPI"
+        AC_DEFINE([USE_CRYPTO_MSCAPI])
+    elif test "$ENABLE_NSS" = TRUE; then
+        BUILD_TARGET="$BUILD_TARGET CRYPTO_NSS"
+        AC_DEFINE([USE_CRYPTO_NSS])
+    fi
+fi
 
 dnl ===================================================================
 dnl Check for building gnutls
@@ -14253,6 +14269,7 @@ AC_CONFIG_FILES([config_host.mk
 AC_CONFIG_HEADERS([config_host/config_buildid.h])
 AC_CONFIG_HEADERS([config_host/config_box2d.h])
 AC_CONFIG_HEADERS([config_host/config_clang.h])
+AC_CONFIG_HEADERS([config_host/config_crypto.h])
 AC_CONFIG_HEADERS([config_host/config_dconf.h])
 AC_CONFIG_HEADERS([config_host/config_eot.h])
 AC_CONFIG_HEADERS([config_host/config_extensions.h])

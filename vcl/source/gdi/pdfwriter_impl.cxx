@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
+#include <config_crypto.h>
 
 #include <sal/types.h>
 
@@ -81,14 +81,6 @@
 
 #include "pdfwriter_impl.hxx"
 
-#ifdef _WIN32
-// WinCrypt headers for PDF signing
-// Note: this uses Windows 7 APIs and requires the relevant data types
-#include <prewin.h>
-#include <wincrypt.h>
-#include <postwin.h>
-#endif
-
 #include <config_eot.h>
 
 #if ENABLE_EOT
@@ -98,23 +90,6 @@
 using namespace::com::sun::star;
 
 static bool g_bDebugDisableCompression = getenv("VCL_DEBUG_DISABLE_PDFCOMPRESSION");
-
-#if HAVE_FEATURE_NSS
-// Is this length truly the maximum possible, or just a number that
-// seemed large enough when the author tested this (with some type of
-// certificates)? I suspect the latter.
-
-// Used to be 0x4000 = 16384, but a sample signed PDF (produced by
-// some other software) provided by the customer has a signature
-// content that is 30000 bytes. The SampleSignedPDFDocument.pdf from
-// Adobe has one that is 21942 bytes. So let's be careful. Pity this
-// can't be dynamic, at least not without restructuring the code. Also
-// note that the checks in the code for this being too small
-// apparently are broken, if this overflows you end up with an invalid
-// PDF. Need to fix that.
-
-#define MAX_SIGNATURE_CONTENT_LENGTH 50000
-#endif
 
 namespace
 {
