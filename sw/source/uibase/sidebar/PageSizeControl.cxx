@@ -203,16 +203,16 @@ void PageSizeControl::ExecuteSizeChange( const Paper ePaper )
     SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE, pItem );
     bLandscape = static_cast<const SvxPageItem*>(pItem)->IsLandscape();
 
-    std::unique_ptr<SvxSizeItem> pPageSizeItem( new SvxSizeItem(SID_ATTR_PAGE_SIZE) );
+    SvxSizeItem aPageSizeItem(SID_ATTR_PAGE_SIZE);
     Size aPageSize = SvxPaperInfo::GetPaperSize( ePaper, eUnit );
     if ( bLandscape )
     {
         Swap( aPageSize );
     }
-    pPageSizeItem->SetSize( aPageSize );
+    aPageSizeItem.SetSize( aPageSize );
 
     SfxViewFrame::Current()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE,
-        SfxCallMode::RECORD, { pPageSizeItem.get() });
+        SfxCallMode::RECORD, { &aPageSizeItem });
 }
 
 

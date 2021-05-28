@@ -360,7 +360,7 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
 
 void SwView::ExecViewOptions(SfxRequest &rReq)
 {
-    std::unique_ptr<SwViewOption> pOpt(new SwViewOption( *GetWrtShell().GetViewOptions() ));
+    std::optional<SwViewOption> pOpt( *GetWrtShell().GetViewOptions() );
     bool bModified = GetWrtShell().IsModified();
 
     int eState = STATE_TOGGLE;
