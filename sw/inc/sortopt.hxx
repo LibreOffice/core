@@ -47,7 +47,7 @@ struct SW_DLLPUBLIC SwSortOptions
 
     SwSortOptions& operator=( SwSortOptions const & ) = delete; // MSVC2015 workaround
 
-    std::vector<std::unique_ptr<SwSortKey>> aKeys;
+    std::vector<SwSortKey>  aKeys;
     SwSortDirection         eDirection;
     sal_Unicode             cDeli;
     LanguageType            nLanguage;

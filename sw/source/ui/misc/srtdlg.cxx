@@ -259,8 +259,8 @@ void SwSortDlg::Apply()
             sEntry = m_xTypDLB1->get_active_id();
 
         aOptions.aKeys.push_back(
-            std::make_unique<SwSortKey>( nCol1, sEntry,
-                                    bAsc1 ? SwSortOrder::Ascending : SwSortOrder::Descending ));
+            SwSortKey( nCol1, sEntry,
+                       bAsc1 ? SwSortOrder::Ascending : SwSortOrder::Descending ));
     }
 
     if( bCheck2 )
@@ -272,8 +272,8 @@ void SwSortDlg::Apply()
             sEntry = m_xTypDLB2->get_active_id();
 
         aOptions.aKeys.push_back(
-            std::make_unique<SwSortKey>( nCol2, sEntry,
-                                    bAsc2 ? SwSortOrder::Ascending : SwSortOrder::Descending ));
+            SwSortKey( nCol2, sEntry,
+                        bAsc2 ? SwSortOrder::Ascending : SwSortOrder::Descending ));
     }
 
     if( bCheck3 )
@@ -285,8 +285,8 @@ void SwSortDlg::Apply()
             sEntry = m_xTypDLB3->get_active_id();
 
         aOptions.aKeys.push_back(
-            std::make_unique<SwSortKey>( nCol3, sEntry,
-                                    bAsc3 ? SwSortOrder::Ascending : SwSortOrder::Descending ));
+            SwSortKey( nCol3, sEntry,
+                       bAsc3 ? SwSortOrder::Ascending : SwSortOrder::Descending ));
     }
 
     aOptions.eDirection =  bCol ? SwSortDirection::Columns : SwSortDirection::Rows;
