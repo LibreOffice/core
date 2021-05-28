@@ -217,13 +217,12 @@ void ScStyleSheetPool::CreateStandardStyles()
     const OUString  aHelpFile;//which text???
     SfxItemSet*     pSet            = nullptr;
     SfxItemSet*     pHFSet          = nullptr;
-    SvxSetItem*     pHFSetItem      = nullptr;
     std::unique_ptr<ScEditEngineDefaulter> pEdEngine(new ScEditEngineDefaulter( EditEngine::CreatePool().get(), true ));
     pEdEngine->SetUpdateMode( false );
     std::unique_ptr<EditTextObject> pEmptyTxtObj = pEdEngine->CreateTextObject();
     std::unique_ptr<EditTextObject> pTxtObj;
-    std::unique_ptr<ScPageHFItem> pHeaderItem(new ScPageHFItem( ATTR_PAGE_HEADERRIGHT ));
-    std::unique_ptr<ScPageHFItem> pFooterItem(new ScPageHFItem( ATTR_PAGE_FOOTERRIGHT ));
+    ScPageHFItem aHeaderItem( ATTR_PAGE_HEADERRIGHT );
+    ScPageHFItem aFooterItem( ATTR_PAGE_FOOTERRIGHT );
     ScStyleSheet*   pSheet          = nullptr;
     ::editeng::SvxBorderLine    aBorderLine     ( &aColBlack, DEF_LINE_WIDTH_2 );
     SvxBoxItem      aBoxItem        ( ATTR_BORDER );
@@ -276,12 +275,11 @@ void ScStyleSheetPool::CreateStandardStyles()
     pSheet->SetHelpId( aHelpFile, HID_SC_SHEET_PAGE_STD );
 
     // distance to header/footer for the sheet
-    pHFSetItem = new SvxSetItem( pSet->Get( ATTR_PAGE_HEADERSET ) );
-    pHFSetItem->SetWhich(ATTR_PAGE_HEADERSET);
-    pSet->Put( *pHFSetItem );
-    pHFSetItem->SetWhich(ATTR_PAGE_FOOTERSET);
-    pSet->Put( *pHFSetItem );
-    delete pHFSetItem;
+    SvxSetItem aHFSetItem = pSet->Get( ATTR_PAGE_HEADERSET );
+    aHFSetItem.SetWhich(ATTR_PAGE_HEADERSET);
+    pSet->Put( aHFSetItem );
+    aHFSetItem.SetWhich(ATTR_PAGE_FOOTERSET);
+    pSet->Put( aHFSetItem );
 
     // Header:
     // [empty][\sheet\][empty]
@@ -289,10 +287,10 @@ void ScStyleSheetPool::CreateStandardStyles()
     pEdEngine->SetTextCurrentDefaults(EMPTY_OUSTRING);
     pEdEngine->QuickInsertField( SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD), ESelection() );
     pTxtObj = pEdEngine->CreateTextObject();
-    pHeaderItem->SetLeftArea  ( *pEmptyTxtObj );
-    pHeaderItem->SetCenterArea( *pTxtObj );
-    pHeaderItem->SetRightArea ( *pEmptyTxtObj );
-    pSet->Put( *pHeaderItem );
+    aHeaderItem.SetLeftArea  ( *pEmptyTxtObj );
+    aHeaderItem.SetCenterArea( *pTxtObj );
+    aHeaderItem.SetRightArea ( *pEmptyTxtObj );
+    pSet->Put( aHeaderItem );
 
     // Footer:
     // [empty][Page \STR_PAGE\][empty]
@@ -302,10 +300,10 @@ void ScStyleSheetPool::CreateStandardStyles()
     nStrLen = aStr.getLength();
     pEdEngine->QuickInsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(0,nStrLen,0,nStrLen) );
     pTxtObj = pEdEngine->CreateTextObject();
-    pFooterItem->SetLeftArea  ( *pEmptyTxtObj );
-    pFooterItem->SetCenterArea( *pTxtObj );
-    pFooterItem->SetRightArea ( *pEmptyTxtObj );
-    pSet->Put( *pFooterItem );
+    aFooterItem.SetLeftArea  ( *pEmptyTxtObj );
+    aFooterItem.SetCenterArea( *pTxtObj );
+    aFooterItem.SetRightArea ( *pEmptyTxtObj );
+    pSet->Put( aFooterItem );
 
     // 2. Report
 
@@ -329,17 +327,16 @@ void ScStyleSheetPool::CreateStandardStyles()
     aBoxInfoItem.SetTable( false );
     aBoxInfoItem.SetDist ( true );
 
-    pHFSetItem = new SvxSetItem( pSet->Get( ATTR_PAGE_HEADERSET ) );
-    pHFSet = &(pHFSetItem->GetItemSet());
+    SvxSetItem aHFSetItem2 = pSet->Get( ATTR_PAGE_HEADERSET );
+    pHFSet = &(aHFSetItem2.GetItemSet());
 
     pHFSet->Put( SvxBrushItem( COL_LIGHTGRAY, ATTR_BACKGROUND ) );
     pHFSet->Put( aBoxItem );
     pHFSet->Put( aBoxInfoItem );
-    pHFSetItem->SetWhich(ATTR_PAGE_HEADERSET);
-    pSet->Put( *pHFSetItem );
-    pHFSetItem->SetWhich(ATTR_PAGE_FOOTERSET);
-    pSet->Put( *pHFSetItem );
-    delete pHFSetItem;
+    aHFSetItem2.SetWhich(ATTR_PAGE_HEADERSET);
+    pSet->Put( aHFSetItem2 );
+    aHFSetItem2.SetWhich(ATTR_PAGE_FOOTERSET);
+    pSet->Put( aHFSetItem2 );
 
     // Footer:
     // [\TABLE\ (\DATA\)][empty][\DATE\, \TIME\]
@@ -349,16 +346,16 @@ void ScStyleSheetPool::CreateStandardStyles()
     pEdEngine->QuickInsertField( SvxFieldItem(SvxFileField(), EE_FEATURE_FIELD), ESelection(0,2,0,2) );
     pEdEngine->QuickInsertField( SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD), ESelection() );
     pTxtObj = pEdEngine->CreateTextObject();
-    pHeaderItem->SetLeftArea( *pTxtObj );
-    pHeaderItem->SetCenterArea( *pEmptyTxtObj );
+    aHeaderItem.SetLeftArea( *pTxtObj );
+    aHeaderItem.SetCenterArea( *pEmptyTxtObj );
     aStr = ", ";
     pEdEngine->SetTextCurrentDefaults( aStr );
     pEdEngine->QuickInsertField( SvxFieldItem(SvxTimeField(), EE_FEATURE_FIELD), ESelection(0,2,0,2) );
     pEdEngine->QuickInsertField( SvxFieldItem(SvxDateField(Date( Date::SYSTEM ),SvxDateType::Var), EE_FEATURE_FIELD),
                                     ESelection() );
     pTxtObj = pEdEngine->CreateTextObject();
-    pHeaderItem->SetRightArea( *pTxtObj );
-    pSet->Put( *pHeaderItem );
+    aHeaderItem.SetRightArea( *pTxtObj );
+    pSet->Put( aHeaderItem );
 
     // Footer:
     // [empty][Page: \PAGE\ / \PAGE\][empty]
@@ -371,10 +368,10 @@ void ScStyleSheetPool::CreateStandardStyles()
     pEdEngine->QuickInsertField( SvxFieldItem(SvxPagesField(), EE_FEATURE_FIELD), ESelection(0,nStrLen2,0,nStrLen2) );
     pEdEngine->QuickInsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(0,nStrLen,0,nStrLen) );
     pTxtObj = pEdEngine->CreateTextObject();
-    pFooterItem->SetLeftArea  ( *pEmptyTxtObj );
-    pFooterItem->SetCenterArea( *pTxtObj );
-    pFooterItem->SetRightArea ( *pEmptyTxtObj );
-    pSet->Put( *pFooterItem );
+    aFooterItem.SetLeftArea  ( *pEmptyTxtObj );
+    aFooterItem.SetCenterArea( *pTxtObj );
+    aFooterItem.SetRightArea ( *pEmptyTxtObj );
+    pSet->Put( aFooterItem );
 
     bHasStandardStyles = true;
 }

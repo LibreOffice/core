@@ -1125,12 +1125,11 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                 //search for the view that created the call
                                 if(pViewShell->GetObjectShell() == this && pViewShell->GetDispatcher())
                                 {
-                                    std::unique_ptr<SfxFrameItem> pFrameItem(new SfxFrameItem( SID_DOCFRAME,
-                                                        pViewShell->GetViewFrame() ));
+                                    SfxFrameItem aFrameItem( SID_DOCFRAME, pViewShell->GetViewFrame() );
                                     SfxDispatcher* pDispatch = pViewShell->GetDispatcher();
                                     pDispatch->ExecuteList(SID_OPENDOC,
                                         SfxCallMode::ASYNCHRON,
-                                        { &aName, &aReferer, pFrameItem.get() });
+                                        { &aName, &aReferer, &aFrameItem });
                                     break;
                                 }
                                 pViewShell = SfxViewShell::GetNext(*pViewShell);

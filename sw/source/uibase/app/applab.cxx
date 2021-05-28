@@ -264,7 +264,8 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
         pSh->ChgPageDesc( 0, aDesc );
 
         // Insert frame
-        std::unique_ptr<SwFieldMgr> pFieldMgr(new SwFieldMgr);
+        std::optional<SwFieldMgr> pFieldMgr;
+        pFieldMgr.emplace();
         pFieldMgr->SetEvalExpFields(false);
 
         // Prepare border template

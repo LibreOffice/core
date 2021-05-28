@@ -177,14 +177,14 @@ SwCharURLPage::SwCharURLPage(weld::Container* pPage, weld::DialogController* pCo
     m_xNotVisitedLB->set_active_id(OUString::number(RES_POOLCHR_INET_NORMAL));
     m_xNotVisitedLB->save_value();
 
-    std::unique_ptr<TargetList> pList( new TargetList );
-    SfxFrame::GetDefaultTargetList(*pList);
+    TargetList aList;
+    SfxFrame::GetDefaultTargetList(aList);
 
     m_xTargetFrameLB->freeze();
-    size_t nCount = pList->size();
+    size_t nCount = aList.size();
     for (size_t i = 0; i < nCount; ++i)
     {
-        m_xTargetFrameLB->append_text(pList->at(i));
+        m_xTargetFrameLB->append_text(aList.at(i));
     }
     m_xTargetFrameLB->thaw();
 }
