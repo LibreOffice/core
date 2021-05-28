@@ -30,6 +30,7 @@
 #include <type_traits>
 #include <vector>
 #include <memory>
+#include <optional>
 
 class SwModify;
 class SwFormat;
@@ -76,7 +77,6 @@ namespace sw
     struct ModifyChangedHint final: SfxHint
     {
         ModifyChangedHint(const SwModify* pNew) : m_pNew(pNew) {};
-        virtual ~ModifyChangedHint() override;
         const SwModify* m_pNew;
     };
     // Observer pattern using svl implementation
@@ -151,7 +151,7 @@ public:
 
     // in case an SwModify object is destroyed that itself is registered in another SwModify,
     // its SwClient objects can decide to get registered to the latter instead by calling this method
-    std::unique_ptr<sw::ModifyChangedHint> CheckRegistration( const SfxPoolItem* pOldValue );
+    std::optional<sw::ModifyChangedHint> CheckRegistration( const SfxPoolItem* pOldValue );
     // SwFormat wants to die different than the rest: It wants to reparent every client to its parent
     // and then send a SwFormatChg hint.
     void CheckRegistrationFormat(SwFormat& rOld);
