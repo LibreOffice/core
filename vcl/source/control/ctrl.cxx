@@ -308,14 +308,14 @@ bool Control::ImplCallEventListenersAndHandler( VclEventId nEvent, std::function
 
     Control::CallEventListeners( nEvent );
 
-    if ( !xThis->IsDisposed() )
+    if ( !xThis->isDisposed() )
     {
         if (callHandler)
         {
             callHandler();
         }
 
-        if ( !xThis->IsDisposed() )
+        if ( !xThis->isDisposed() )
             return false;
     }
     return true;

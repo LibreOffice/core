@@ -276,7 +276,7 @@ IMPL_LINK_NOARG(ListBox, ImplPopupModeEndHdl, FloatingWindow*, void)
 
             VclPtr<vcl::Window> xWindow = this;
             Select();
-            if ( xWindow->IsDisposed() )
+            if ( xWindow->isDisposed() )
                 return;
 
             mpImplLB->SetTravelSelect( bTravelSelect );
