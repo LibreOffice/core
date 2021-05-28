@@ -759,14 +759,14 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
     {
         sal_uInt8 nBoxArrLen = pTAFormat ? 16 : 4;
         std::unique_ptr< DfltBoxAttrList_t > aBoxFormatArr1;
-        std::unique_ptr< std::vector<SwTableBoxFormat*> > aBoxFormatArr2;
+        std::optional< std::vector<SwTableBoxFormat*> > aBoxFormatArr2;
         if( bUseBoxFormat )
         {
             aBoxFormatArr1.reset(new DfltBoxAttrList_t( nBoxArrLen, nullptr ));
         }
         else
         {
-            aBoxFormatArr2.reset(new std::vector<SwTableBoxFormat*>( nBoxArrLen, nullptr ));
+            aBoxFormatArr2 = std::vector<SwTableBoxFormat*>( nBoxArrLen, nullptr );
         }
 
         SfxItemSet aCharSet( GetAttrPool(), svl::Items<RES_CHRATR_BEGIN, RES_PARATR_LIST_END-1>{} );
