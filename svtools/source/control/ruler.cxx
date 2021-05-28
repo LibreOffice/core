@@ -1931,27 +1931,27 @@ void Ruler::MouseButtonDown( const MouseEvent& rMEvt )
     }
     else
     {
-        std::unique_ptr<RulerSelection> pHitTest(new RulerSelection);
-        bool bHitTestResult = ImplDoHitTest(aMousePos, pHitTest.get());
+        RulerSelection aHitTest;
+        bool bHitTestResult = ImplDoHitTest(aMousePos, &aHitTest);
 
         if ( nMouseClicks == 1 )
         {
             if ( bHitTestResult )
             {
-                ImplStartDrag( pHitTest.get(), nMouseModifier );
+                ImplStartDrag( &aHitTest, nMouseModifier );
             }
             else
             {
                 // calculate position inside of ruler area
-                if ( pHitTest->eType == RulerType::DontKnow )
+                if ( aHitTest.eType == RulerType::DontKnow )
                 {
-                    mnDragPos = pHitTest->nPos;
+                    mnDragPos = aHitTest.nPos;
                     Click();
                     mnDragPos = 0;
 
                     // call HitTest again as a click, for example, could set a new tab
-                    if ( ImplDoHitTest(aMousePos, pHitTest.get()) )
-                        ImplStartDrag(pHitTest.get(), nMouseModifier);
+                    if ( ImplDoHitTest(aMousePos, &aHitTest) )
+                        ImplStartDrag(&aHitTest, nMouseModifier);
                 }
             }
         }
@@ -1959,10 +1959,10 @@ void Ruler::MouseButtonDown( const MouseEvent& rMEvt )
         {
             if (bHitTestResult)
             {
-                mnDragPos    = pHitTest->nPos;
-                mnDragAryPos = pHitTest->nAryPos;
+                mnDragPos    = aHitTest.nPos;
+                mnDragAryPos = aHitTest.nAryPos;
             }
-            meDragType = pHitTest->eType;
+            meDragType = aHitTest.eType;
 
             DoubleClick();
 
