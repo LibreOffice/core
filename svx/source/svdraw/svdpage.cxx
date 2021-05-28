@@ -836,7 +836,7 @@ void SdrObjList::UnGroupObj( size_t nObjNum )
 #endif
 }
 
-bool SdrObjList::HasObjectNavigationOrder() const { return mxNavigationOrder != nullptr; }
+bool SdrObjList::HasObjectNavigationOrder() const { return bool(mxNavigationOrder); }
 
 void SdrObjList::SetObjectNavigationPosition (
     SdrObject& rObject,
@@ -845,12 +845,11 @@ void SdrObjList::SetObjectNavigationPosition (
     // When the navigation order container has not yet been created then
     // create one now.  It is initialized with the z-order taken from
     // maList.
-    if (mxNavigationOrder == nullptr)
+    if (!mxNavigationOrder)
     {
-        mxNavigationOrder.reset(new std::vector<tools::WeakReference<SdrObject>>(maList.begin(),
-            maList.end()));
+        mxNavigationOrder.emplace(maList.begin(), maList.end());
     }
-    OSL_ASSERT(mxNavigationOrder != nullptr);
+    OSL_ASSERT(bool(mxNavigationOrder));
     OSL_ASSERT( mxNavigationOrder->size() == maList.size());
 
     tools::WeakReference<SdrObject> aReference (&rObject);
@@ -927,7 +926,7 @@ bool SdrObjList::RecalcNavigationPositions()
 {
     if (mbIsNavigationOrderDirty)
     {
-        if (mxNavigationOrder != nullptr)
+        if (mxNavigationOrder)
         {
             mbIsNavigationOrderDirty = false;
 
@@ -940,7 +939,7 @@ bool SdrObjList::RecalcNavigationPositions()
         }
     }
 
-    return mxNavigationOrder != nullptr;
+    return bool(mxNavigationOrder);
 }
 
 
@@ -952,8 +951,8 @@ void SdrObjList::SetNavigationOrder (const uno::Reference<container::XIndexAcces
         if (static_cast<sal_uInt32>(nCount) != maList.size())
             return;
 
-        if (mxNavigationOrder == nullptr)
-            mxNavigationOrder.reset(new std::vector<tools::WeakReference<SdrObject>>(nCount));
+        if (!mxNavigationOrder)
+            mxNavigationOrder = std::vector<tools::WeakReference<SdrObject>>(nCount);
 
         for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
         {

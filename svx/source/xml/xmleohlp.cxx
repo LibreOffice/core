@@ -430,10 +430,10 @@ OUString SvXMLEmbeddedObjectHelper::ImplInsertEmbeddedObjectURL(
         OutputStorageWrapper_Impl *pOut = nullptr;
         std::map< OUString, rtl::Reference<OutputStorageWrapper_Impl> >::iterator aIter;
 
-        if( mpStreamMap )
+        if( mxStreamMap )
         {
-            aIter = mpStreamMap->find( rURLStr );
-            if( aIter != mpStreamMap->end() && aIter->second.is() )
+            aIter = mxStreamMap->find( rURLStr );
+            if( aIter != mxStreamMap->end() && aIter->second.is() )
                 pOut = aIter->second.get();
         }
 
@@ -450,7 +450,7 @@ OUString SvXMLEmbeddedObjectHelper::ImplInsertEmbeddedObjectURL(
 
         if( pOut )
         {
-            mpStreamMap->erase( aIter );
+            mxStreamMap->erase( aIter );
         }
     }
     else
@@ -576,18 +576,18 @@ Any SAL_CALL SvXMLEmbeddedObjectHelper::getByName(
     if( SvXMLEmbeddedObjectHelperMode::Read == meCreateMode )
     {
         Reference < XOutputStream > xStrm;
-        if( mpStreamMap )
+        if( mxStreamMap )
         {
-            auto aIter = mpStreamMap->find( rURLStr );
-            if( aIter != mpStreamMap->end() && aIter->second.is() )
+            auto aIter = mxStreamMap->find( rURLStr );
+            if( aIter != mxStreamMap->end() && aIter->second.is() )
                 xStrm = aIter->second.get();
         }
         if( !xStrm.is() )
         {
             rtl::Reference<OutputStorageWrapper_Impl> xOut = new OutputStorageWrapper_Impl;
-            if( !mpStreamMap )
-                mpStreamMap.reset( new std::map< OUString, rtl::Reference<OutputStorageWrapper_Impl> > );
-            (*mpStreamMap)[rURLStr] = xOut;
+            if( !mxStreamMap )
+                mxStreamMap.emplace();
+            (*mxStreamMap)[rURLStr] = xOut;
             xStrm = xOut.get();
         }
 
