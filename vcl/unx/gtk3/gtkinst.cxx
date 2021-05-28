@@ -16993,15 +16993,7 @@ private:
     {
         disable_notify_events();
 
-        tree_view_set_cursor(pos);
-
-        if (m_pEditable)
-        {
-            if (pos != -1)
-                gtk_editable_set_text(m_pEditable, OUStringToOString(get_text_including_mru(pos), RTL_TEXTENCODING_UTF8).getStr());
-            else
-                gtk_editable_set_text(m_pEditable, "");
-        }
+        gtk_combo_box_set_active(m_pComboBox, pos);
 
         m_bChangedByMenu = false;
         enable_notify_events();
