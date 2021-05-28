@@ -440,7 +440,7 @@ void XMLStyleExport::exportStyleFamily(
        // If next styles are supported and used styles should be exported only,
     // the next style may be unused but has to be exported, too. In this case
     // the names of all exported styles are remembered.
-    std::unique_ptr<std::set<OUString> > pExportedStyles;
+    std::optional<std::set<OUString> > xExportedStyles;
     bool bFirstStyle = true;
 
     const uno::Sequence< OUString> aSeq = xStyleCont->getElementNames();
@@ -478,14 +478,14 @@ void XMLStyleExport::exportStyleFamily(
                     xPropSet->getPropertySetInfo();
 
                 if (xPropSetInfo->hasPropertyByName( gsFollowStyle ))
-                    pExportedStyles.reset(new std::set<OUString>);
+                    xExportedStyles.emplace();
                 bFirstStyle = false;
             }
 
-            if (pExportedStyles && bExported)
+            if (xExportedStyles && bExported)
             {
                 // If next styles are supported, remember this style's name.
-                pExportedStyles->insert( xStyle->getName() );
+                xExportedStyles->insert( xStyle->getName() );
             }
         }
 
@@ -495,7 +495,7 @@ void XMLStyleExport::exportStyleFamily(
             pAutoStylePool->RegisterName( nFamily, xStyle->getName() );
     }
 
-    if( !pExportedStyles )
+    if( !xExportedStyles )
         return;
 
     // if next styles are supported, export all next styles that are
@@ -532,13 +532,13 @@ void XMLStyleExport::exportStyleFamily(
         // if the next style hasn't been exported by now, export it now
         // and remember its name.
         if (xStyle->getName() != sNextName &&
-            0 == pExportedStyles->count( sTmp ))
+            0 == xExportedStyles->count( sTmp ))
         {
             xStyleCont->getByName( sNextName ) >>= xStyle;
             assert(xStyle.is());
 
             if (exportStyle(xStyle, rXMLFamily, rPropMapper, xStyleCont, pPrefix))
-                pExportedStyles->insert( sTmp );
+                xExportedStyles->insert( sTmp );
         }
     }
 }

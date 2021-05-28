@@ -93,8 +93,8 @@ using namespace ::com::sun::star::ucb;
 
 struct XMLTextImportHelper::Impl
 {
-    std::unique_ptr< std::vector<OUString> > m_xPrevFrmNames;
-    std::unique_ptr< std::vector<OUString> > m_xNextFrmNames;
+    std::optional< std::vector<OUString> > m_xPrevFrmNames;
+    std::optional< std::vector<OUString> > m_xNextFrmNames;
     std::unique_ptr<XMLTextListsHelper> m_xTextListsHelper;
 
     rtl::Reference<SvXMLStylesContext> m_xAutoStyles;
@@ -172,7 +172,7 @@ struct XMLTextImportHelper::Impl
 
     OUString m_sCellParaStyleDefault;
 
-    std::unique_ptr<std::map<OUString, OUString>> m_pCrossRefHeadingBookmarkMap;
+    std::optional<std::map<OUString, OUString>> m_xCrossRefHeadingBookmarkMap;
 
     Impl(       uno::Reference<frame::XModel> const& rModel,
                 SvXMLImport & rImport,
@@ -2183,8 +2183,8 @@ void XMLTextImportHelper::ConnectFrameChains(
         {
             if (!m_xImpl->m_xPrevFrmNames)
             {
-                m_xImpl->m_xPrevFrmNames.reset( new std::vector<OUString> );
-                m_xImpl->m_xNextFrmNames.reset( new std::vector<OUString> );
+                m_xImpl->m_xPrevFrmNames.emplace();
+                m_xImpl->m_xNextFrmNames.emplace();
             }
             m_xImpl->m_xPrevFrmNames->push_back(rFrmName);
             m_xImpl->m_xNextFrmNames->push_back(sNextFrmName);
@@ -2372,11 +2372,11 @@ OUString const& XMLTextImportHelper::GetCellParaStyleDefault() const
 
 void XMLTextImportHelper::AddCrossRefHeadingMapping(OUString const& rFrom, OUString const& rTo)
 {
-    if (!m_xImpl->m_pCrossRefHeadingBookmarkMap)
+    if (!m_xImpl->m_xCrossRefHeadingBookmarkMap)
     {
-        m_xImpl->m_pCrossRefHeadingBookmarkMap.reset(new std::map<OUString, OUString>);
+        m_xImpl->m_xCrossRefHeadingBookmarkMap.emplace();
     }
-    m_xImpl->m_pCrossRefHeadingBookmarkMap->insert(std::make_pair(rFrom, rTo));
+    m_xImpl->m_xCrossRefHeadingBookmarkMap->insert(std::make_pair(rFrom, rTo));
 }
 
 // tdf#94804: hack to map cross reference fields that reference duplicate marks
@@ -2384,7 +2384,7 @@ void XMLTextImportHelper::AddCrossRefHeadingMapping(OUString const& rFrom, OUStr
 // be round-tripped by different versions preserving duplicates => always map
 void XMLTextImportHelper::MapCrossRefHeadingFieldsHorribly()
 {
-    if (!m_xImpl->m_pCrossRefHeadingBookmarkMap)
+    if (!m_xImpl->m_xCrossRefHeadingBookmarkMap)
     {
         return;
     }
@@ -2417,8 +2417,8 @@ void XMLTextImportHelper::MapCrossRefHeadingFieldsHorribly()
         }
         OUString name;
         xField->getPropertyValue("SourceName") >>= name;
-        auto const iter(m_xImpl->m_pCrossRefHeadingBookmarkMap->find(name));
-        if (iter == m_xImpl->m_pCrossRefHeadingBookmarkMap->end())
+        auto const iter(m_xImpl->m_xCrossRefHeadingBookmarkMap->find(name));
+        if (iter == m_xImpl->m_xCrossRefHeadingBookmarkMap->end())
         {
             continue;
         }
