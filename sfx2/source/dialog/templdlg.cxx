@@ -341,6 +341,16 @@ void SfxCommonTemplateDialog_Impl::PrepareMenu(const Point& rPos)
         pTreeView->select(*xIter);
         FmtSelectHdl(*pTreeView);
     }
+
+    weld::TreeView* pCharTreeView = mxCharTreeBox->get_visible() ? mxCharTreeBox.get() : mxFmtLb.get();
+    std::unique_ptr<weld::TreeIter> pCharIter(pCharTreeView->make_iterator());
+    if (pCharTreeView->get_dest_row_at_pos(rPos, xIter.get(), false) && !pCharTreeView->is_selected(*pCharIter))
+    {
+        pCharTreeView->unselect_all();
+        pCharTreeView->set_cursor(*pCharIter);
+        pCharTreeView->select(*pCharIter);
+        FmtSelectHdl(*pCharTreeView);
+    }
 }
 
 void SfxCommonTemplateDialog_Impl::ShowMenu(const CommandEvent& rCEvt)
@@ -350,6 +360,10 @@ void SfxCommonTemplateDialog_Impl::ShowMenu(const CommandEvent& rCEvt)
     weld::TreeView* pTreeView = mxTreeBox->get_visible() ? mxTreeBox.get() : mxFmtLb.get();
     OString sCommand(mxMenu->popup_at_rect(pTreeView, tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1))));
     MenuSelect(sCommand);
+
+    weld::TreeView* pCharTreeView = mxCharTreeBox->get_visible() ? mxCharTreeBox.get() : mxFmtLb.get();
+    OString sCharCommand(mxMenu->popup_at_rect(pCharTreeView, tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1))));
+    MenuSelect(sCharCommand);
 }
 
 IMPL_LINK(SfxCommonTemplateDialog_Impl, PopupTreeMenuHdl, const CommandEvent&, rCEvt, bool)
@@ -533,8 +547,11 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl(SfxBindings* pB, weld
     , m_pDeletionWatcher(nullptr)
     , mxFmtLb(pBuilder->weld_tree_view("flatview"))
     , mxTreeBox(pBuilder->weld_tree_view("treeview"))
+    , mxCharTreeBox(pBuilder->weld_tree_view("charTreeview"))
     , mxPreviewCheckbox(pBuilder->weld_check_button("showpreview"))
+    , mxCharPreviewCheckbox(pBuilder->weld_check_button("charShowpreview"))
     , mxFilterLb(pBuilder->weld_combo_box("filter"))
+    , mxCharFilterLb(pBuilder->weld_combo_box("charFilter"))
 
     , nActFamily(0xffff)
     , nActFilter(0)
@@ -556,12 +573,18 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl(SfxBindings* pB, weld
     , bTreeDrag(true)
     , bAllowReParentDrop(false)
     , bHierarchical(false)
+    , bCharHierarchical(false)
     , m_bWantHierarchical(false)
+    , m_bWantCharHierarchical(false)
     , bBindingUpdate(true)
 {
     mxFmtLb->set_help_id(HID_TEMPLATE_FMT);
     mxFilterLb->set_help_id(HID_TEMPLATE_FILTER);
+    mxCharFilterLb->set_help_id(HID_CHAR_TEMPLATE_FILTER);
     mxPreviewCheckbox->set_active(officecfg::Office::Common::StylesAndFormatting::Preview::get());
+    mxPreviewCheckbox->set_help_id(HID_PREVIEW_CHECKBOX);
+    mxCharPreviewCheckbox->set_active(officecfg::Office::Common::StylesAndFormatting::Preview::get());
+    mxCharPreviewCheckbox->set_help_id(HID_CHAR_PREVIEW_CHECKBOX);
 }
 
 sal_uInt16 SfxCommonTemplateDialog_Impl::StyleNrToInfoOffset(sal_uInt16 nId)
@@ -731,6 +754,7 @@ void SfxCommonTemplateDialog_Impl::Initialize()
     pBindings->Update( SID_STYLE_FAMILY );
 
     mxFilterLb->connect_changed(LINK(this, SfxCommonTemplateDialog_Impl, FilterSelectHdl));
+    mxCharFilterLb->connect_changed(LINK(this, SfxCommonTemplateDialog_Impl, FilterSelectHdl));
     mxFmtLb->connect_row_activated(LINK( this, SfxCommonTemplateDialog_Impl, TreeListApplyHdl));
     mxFmtLb->connect_mouse_press(LINK(this, SfxCommonTemplateDialog_Impl, MousePressHdl));
     mxFmtLb->connect_query_tooltip(LINK(this, SfxCommonTemplateDialog_Impl, QueryTooltipHdl));
@@ -745,24 +769,40 @@ void SfxCommonTemplateDialog_Impl::Initialize()
     mxTreeBox->connect_popup_menu(LINK(this, SfxCommonTemplateDialog_Impl, PopupTreeMenuHdl));
     mxTreeBox->connect_key_press(LINK(this, SfxCommonTemplateDialog_Impl, KeyInputHdl));
     mxTreeBox->connect_drag_begin(LINK(this, SfxCommonTemplateDialog_Impl, DragBeginHdl));
+
+    mxCharTreeBox->connect_changed(LINK(this, SfxCommonTemplateDialog_Impl, FmtSelectHdl));
+    mxCharTreeBox->connect_row_activated(LINK( this, SfxCommonTemplateDialog_Impl, TreeListApplyHdl));
+    mxCharTreeBox->connect_mouse_press(LINK(this, SfxCommonTemplateDialog_Impl, MousePressHdl));
+    mxCharTreeBox->connect_query_tooltip(LINK(this, SfxCommonTemplateDialog_Impl, QueryTooltipHdl));
+    mxCharTreeBox->connect_popup_menu(LINK(this, SfxCommonTemplateDialog_Impl, PopupTreeMenuHdl));
+    mxCharTreeBox->connect_key_press(LINK(this, SfxCommonTemplateDialog_Impl, KeyInputHdl));
+    mxCharTreeBox->connect_drag_begin(LINK(this, SfxCommonTemplateDialog_Impl, DragBeginHdl));
+
     mxPreviewCheckbox->connect_toggled(LINK(this, SfxCommonTemplateDialog_Impl, PreviewHdl));
     m_xTreeView1DropTargetHelper.reset(new TreeViewDropTarget(*this, *mxFmtLb));
     m_xTreeView2DropTargetHelper.reset(new TreeViewDropTarget(*this, *mxTreeBox));
+    mxCharPreviewCheckbox->connect_toggled(LINK(this, SfxCommonTemplateDialog_Impl, PreviewHdl));
+    m_xTreeView2DropTargetHelper.reset(new TreeViewDropTarget(*this, *mxCharTreeBox));
 
     int nTreeHeight = mxFmtLb->get_height_rows(8);
     mxFmtLb->set_size_request(-1, nTreeHeight);
     mxTreeBox->set_size_request(-1, nTreeHeight);
+    mxCharTreeBox->set_size_request(-1, nTreeHeight);
 
     mxFmtLb->connect_custom_get_size(LINK(this, SfxCommonTemplateDialog_Impl, CustomGetSizeHdl));
     mxFmtLb->connect_custom_render(LINK(this, SfxCommonTemplateDialog_Impl, CustomRenderHdl));
     mxTreeBox->connect_custom_get_size(LINK(this, SfxCommonTemplateDialog_Impl, CustomGetSizeHdl));
     mxTreeBox->connect_custom_render(LINK(this, SfxCommonTemplateDialog_Impl, CustomRenderHdl));
+    mxCharTreeBox->connect_custom_get_size(LINK(this, SfxCommonTemplateDialog_Impl, CustomGetSizeHdl));
+    mxCharTreeBox->connect_custom_render(LINK(this, SfxCommonTemplateDialog_Impl, CustomRenderHdl));
     bool bCustomPreview = officecfg::Office::Common::StylesAndFormatting::Preview::get();
     mxFmtLb->set_column_custom_renderer(0, bCustomPreview);
     mxTreeBox->set_column_custom_renderer(0, bCustomPreview);
+    mxCharTreeBox->set_column_custom_renderer(0, bCustomPreview);
 
     mxFmtLb->set_visible(!bHierarchical);
     mxTreeBox->set_visible(bHierarchical);
+    mxCharTreeBox->set_visible(bCharHierarchical);
 
     Update_Impl();
 }
@@ -783,7 +823,9 @@ SfxCommonTemplateDialog_Impl::~SfxCommonTemplateDialog_Impl()
         m_pDeletionWatcher->signal();
     mxFmtLb.reset();
     mxPreviewCheckbox.reset();
+    mxCharPreviewCheckbox.reset();
     mxFilterLb.reset();
+    mxCharFilterLb.reset();
 }
 
 // Helper function: Access to the current family item
@@ -846,6 +888,25 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const OUString &rStr, bool bIsCal
 
     if (!bIsCallback)
     {
+        if (mxCharTreeBox->get_visible())
+        {
+            std::unique_ptr<weld::TreeIter> pEntry = mxCharTreeBox->make_iterator();
+            bool bEntry = mxCharTreeBox->get_iter_first(*pEntry);
+            while (bEntry)
+            {
+                if (mxCharTreeBox->get_text(*pEntry) == rStr)
+                {
+                    mxCharTreeBox->scroll_to_row(*pEntry);
+                    mxCharTreeBox->select(*pEntry);
+                    break;
+                }
+
+                bEntry = mxCharTreeBox->iter_next(*pEntry);
+            }
+        }
+        else
+            mxCharTreeBox->unselect_all();
+
         if (mxTreeBox->get_visible())
         {
             if (!rStr.isEmpty())
@@ -982,6 +1043,7 @@ OUString SfxCommonTemplateDialog_Impl::getDefaultStyleName( const SfxStyleFamily
 void SfxCommonTemplateDialog_Impl::FillTreeBox()
 {
     assert(mxTreeBox && "FillTreeBox() without treebox");
+    assert(mxCharTreeBox && "FillTreeBox() without treebox");
     if (!pStyleSheetPool || nActFamily == 0xffff)
         return;
 
@@ -1000,25 +1062,55 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
         aArr.emplace_back(pNew);
         pStyle = pStyleSheetPool->Next();
     }
+
+    StyleTreeArr_Impl aCharArr;
+    SfxStyleSheetBase* pCharStyle = pStyleSheetPool->First(SfxStyleFamily::Char, SfxStyleSearchBits::AllVisible);
+
+    while (pCharStyle)
+    {
+        StyleTree_Impl* pNew = new StyleTree_Impl(pCharStyle->GetName(), pCharStyle->GetParent());
+        aCharArr.emplace_back(pNew);
+        pCharStyle = pStyleSheetPool->Next();
+    }
+
     OUString aUIName = getDefaultStyleName(eFam);
+    OUString aCharUIName = getDefaultStyleName(SfxStyleFamily::Char);
     MakeTree_Impl(aArr, aUIName);
+    MakeTree_Impl(aCharArr, aCharUIName);
     std::vector<OUString> aEntries;
+    std::vector<OUString> aCharEntries;
     MakeExpanded_Impl(*mxTreeBox, aEntries);
+    MakeExpanded_Impl(*mxCharTreeBox, aCharEntries);
     mxTreeBox->freeze();
     mxTreeBox->clear();
+    mxCharTreeBox->freeze();
+    mxCharTreeBox->clear();
     const sal_uInt16 nCount = aArr.size();
+    const sal_uInt16 nCharCount = aCharArr.size();
 
     for (sal_uInt16 i = 0; i < nCount; ++i)
     {
         FillBox_Impl(*mxTreeBox, aArr[i].get(), aEntries, eFam, nullptr);
+        mxCharTreeBox->set_visible(false);
         aArr[i].reset();
+    }
+    if (eFam == SfxStyleFamily::Para)
+    {
+        for (sal_uInt16 i = 0; i < nCharCount; ++i)
+        {
+            mxCharTreeBox->set_visible(true);
+            FillBox_Impl(*mxCharTreeBox, aCharArr[i].get(), aCharEntries, SfxStyleFamily::Char, nullptr);
+            aCharArr[i].reset();
+        }
     }
 
     EnableItem("watercan", false);
 
     SfxTemplateItem* pState = pFamilyState[nActFamily - 1].get();
+    SfxTemplateItem* pCharState = pFamilyState[0].get();
 
     mxTreeBox->thaw();
+    mxCharTreeBox->thaw();
 
     std::unique_ptr<weld::TreeIter> xEntry = mxTreeBox->make_iterator();
     bool bEntry = mxTreeBox->get_iter_first(*xEntry);
@@ -1032,10 +1124,26 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
         bEntry = mxTreeBox->iter_next(*xEntry);
     }
 
+    std::unique_ptr<weld::TreeIter> xCharEntry = mxCharTreeBox->make_iterator();
+    bool bCharEntry = mxCharTreeBox->get_iter_first(*xCharEntry);
+    if (bCharEntry && nCharCount)
+        mxCharTreeBox->expand_row(*xCharEntry);
+
+    while (bCharEntry)
+    {
+        if (IsExpanded_Impl(aCharEntries, mxCharTreeBox->get_text(*xCharEntry)))
+            mxCharTreeBox->expand_row(*xCharEntry);
+        bCharEntry = mxCharTreeBox->iter_next(*xCharEntry);
+    }
+
     OUString aStyle;
     if(pState)  // Select current entry
         aStyle = pState->GetStyleName();
     SelectStyle(aStyle, false);
+    OUString aCharStyle;
+    if(pCharState)
+        aCharStyle =  pCharState->GetStyleName();
+    SelectStyle(aCharStyle, false);
     EnableDelete();
 }
 
@@ -1047,7 +1155,7 @@ bool SfxCommonTemplateDialog_Impl::HasSelectedStyle() const
 
 // internal: Refresh the display
 // nFlags: what we should update.
-void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(StyleFlags nFlags)
+void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(StyleFlags nFlags, weld::ComboBox& rBox )
 {
     OSL_ENSURE(nFlags != StyleFlags::NONE, "nothing to do");
     const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
@@ -1062,7 +1170,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(StyleFlags nFlags)
             // It happens sometimes, God knows why
             return;
         nAppFilter = pFamilyState[StyleNrToInfoOffset(n)]->GetValue();
-        FamilySelect(  StyleNrToInfoOffset(n)+1 );
+        FamilySelect(  StyleNrToInfoOffset(n)+1);
         pItem = GetFamilyItem_Impl();
     }
 
@@ -1077,55 +1185,162 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(StyleFlags nFlags)
         return;
 
     pItem = GetFamilyItem_Impl();
-    if(nFlags & StyleFlags::UpdateFamily)   // Update view type list (Hierarchical, All, etc.
-    {
-        CheckItem(OString::number(nActFamily));    // check Button in Toolbox
-
-        mxFilterLb->freeze();
-        mxFilterLb->clear();
-
-        //insert hierarchical at the beginning
-        mxFilterLb->append(OUString::number(static_cast<int>(SfxStyleSearchBits::All)), SfxResId(STR_STYLE_FILTER_HIERARCHICAL));
-        const SfxStyleFilter& rFilter = pItem->GetFilterList();
-        for (const SfxFilterTuple& i : rFilter)
-            mxFilterLb->append(OUString::number(static_cast<int>(i.nFlags)), i.aName);
-        mxFilterLb->thaw();
-
-        if (nActFilter < mxFilterLb->get_count() - 1)
-            mxFilterLb->set_active(nActFilter + 1);
-        else
+    if (rBox.get_help_id() == HID_TEMPLATE_FILTER) {
+        if (nFlags & StyleFlags::UpdateFamily && rBox.get_help_id() == HID_TEMPLATE_FILTER)   // Update view type list (Hierarchical, All, etc.
         {
-            nActFilter = 0;
-            mxFilterLb->set_active(1);
-            nFilter = (nActFilter < rFilter.size()) ? rFilter[nActFilter].nFlags : SfxStyleSearchBits::Auto;
+            CheckItem(OString::number(nActFamily), *mxPreviewCheckbox);    // check Button in Toolbox
+
+            mxFilterLb->freeze();
+            mxFilterLb->clear();
+
+            //insert hierarchical at the beginning
+            mxFilterLb->append(OUString::number(static_cast<int>(SfxStyleSearchBits::All)), SfxResId(STR_STYLE_FILTER_HIERARCHICAL));
+            const SfxStyleFilter& rFilter = pItem->GetFilterList();
+            for (const SfxFilterTuple& i : rFilter)
+                mxFilterLb->append(OUString::number(static_cast<int>(i.nFlags)), i.aName);
+            mxFilterLb->thaw();
+
+            if (nActFilter < mxFilterLb->get_count() - 1)
+                mxFilterLb->set_active(nActFilter + 1);
+            else
+            {
+                nActFilter = 0;
+                mxFilterLb->set_active(1);
+                nFilter = (nActFilter < rFilter.size()) ? rFilter[nActFilter].nFlags : SfxStyleSearchBits::Auto;
+            }
+
+            // if the tree view again, select family hierarchy
+            if (mxTreeBox->get_visible() || m_bWantHierarchical)
+            {
+                mxFilterLb->set_active_text(SfxResId(STR_STYLE_FILTER_HIERARCHICAL));
+                EnableHierarchical(true, *mxFilterLb);
+            }
+        }
+        else if (!(nFlags & StyleFlags::UpdateFamily))
+        {
+            if (nActFilter < mxFilterLb->get_count() - 1)
+                mxFilterLb->set_active(nActFilter + 1);
+            else
+            {
+                nActFilter = 0;
+                mxFilterLb->set_active(1);
+            }
         }
 
-        // if the tree view again, select family hierarchy
-        if (mxTreeBox->get_visible() || m_bWantHierarchical)
-        {
-            mxFilterLb->set_active_text(SfxResId(STR_STYLE_FILTER_HIERARCHICAL));
-            EnableHierarchical(true);
-        }
-    }
-    else
-    {
-        if (nActFilter < mxFilterLb->get_count() - 1)
-            mxFilterLb->set_active(nActFilter + 1);
-        else
-        {
-            nActFilter = 0;
-            mxFilterLb->set_active(1);
-        }
-    }
-
-    if(!(nFlags & StyleFlags::UpdateFamilyList))
+        if(!(nFlags & StyleFlags::UpdateFamilyList))
         return;
 
-    EnableItem("watercan", false);
+        EnableItem("watercan", false);
 
-    SfxStyleSheetBase *pStyle = pStyleSheetPool->First(eFam, nFilter);
+        SfxStyleSheetBase* pStyle = pStyleSheetPool->First(eFam, nFilter);
 
-    std::unique_ptr<weld::TreeIter> xEntry = mxFmtLb->make_iterator();
+        std::unique_ptr<weld::TreeIter> xEntry = mxFmtLb->make_iterator();
+        bool bEntry = mxFmtLb->get_iter_first(*xEntry);
+        std::vector<OUString> aStrings;
+
+        comphelper::string::NaturalStringSorter aSorter(
+            ::comphelper::getProcessComponentContext(),
+            Application::GetSettings().GetLanguageTag().getLocale());
+
+        while (pStyle)
+        {
+            aStrings.push_back(pStyle->GetName());
+            pStyle = pStyleSheetPool->Next();
+        }
+        OUString aUIName = getDefaultStyleName(eFam);
+
+        // Paradoxically, with a list and non-Latin style names,
+        // sorting twice is faster than sorting once.
+        // The first sort has a cheap comparator, and gets the list into mostly-sorted order.
+        // Then the second sort needs to call its (much more expensive) comparator less often.
+        std::sort(aStrings.begin(), aStrings.end());
+        std::sort(aStrings.begin(), aStrings.end(),
+                  [&aSorter, &aUIName](const OUString& rLHS, const OUString& rRHS) {
+                      if (rRHS == aUIName)
+                          return false;
+                      if (rLHS == aUIName)
+                          return true; // default always first
+                      return aSorter.compare(rLHS, rRHS) < 0;
+                  });
+
+        size_t nCount = aStrings.size();
+        size_t nPos = 0;
+        while (nPos < nCount && bEntry && aStrings[nPos] == mxFmtLb->get_text(*xEntry))
+        {
+            ++nPos;
+            bEntry = mxFmtLb->iter_next(*xEntry);
+        }
+
+        if (nPos < nCount || bEntry)
+        {
+            // Fills the display box
+            mxFmtLb->freeze();
+            mxFmtLb->clear();
+
+            for (nPos = 0; nPos < nCount; ++nPos)
+                mxFmtLb->append(aStrings[nPos], aStrings[nPos]);
+
+            mxFmtLb->thaw();
+        }
+        // Selects the current style if any
+        SfxTemplateItem* pState = pFamilyState[nActFamily - 1].get();
+        OUString aStyle;
+        if (pState)
+            aStyle = pState->GetStyleName();
+        SelectStyle(aStyle, false);
+        EnableDelete();
+    }
+    if (eFam == SfxStyleFamily::Para)
+    {
+        if (nFlags & StyleFlags::UpdateFamily && rBox.get_help_id() == HID_CHAR_TEMPLATE_FILTER) {
+
+            if(mxCharPreviewCheckbox->get_active())
+            CheckItem(OString::number(2), *mxCharPreviewCheckbox);    // check Button in Toolbox
+
+            mxCharFilterLb->freeze();
+            mxCharFilterLb->clear();
+
+            //insert hierarchical at the beginning
+            mxCharFilterLb->append(OUString::number(static_cast<int>(SfxStyleSearchBits::All)), SfxResId(STR_STYLE_FILTER_HIERARCHICAL));
+            const SfxStyleFamilyItem& rCharItem = mxStyleFamilies->at(1);
+            const SfxStyleFilter& rFilter = rCharItem.GetFilterList();
+            for (const SfxFilterTuple& i : rFilter)
+                mxCharFilterLb->append(OUString::number(static_cast<int>(i.nFlags)), i.aName);
+            mxCharFilterLb->thaw();
+
+            if (nActFilter < mxCharFilterLb->get_count() - 1)
+                mxCharFilterLb->set_active(nActFilter + 1);
+            else
+            {
+                nActFilter = 0;
+                mxCharFilterLb->set_active(1);
+                nFilter = (nActFilter < rFilter.size()) ? rFilter[nActFilter].nFlags : SfxStyleSearchBits::Auto;
+            }
+
+            // if the tree view again, select family hierarchy
+            if (mxCharTreeBox->get_visible() || m_bWantHierarchical)
+            {
+                mxCharFilterLb->set_active_text(SfxResId(STR_STYLE_FILTER_HIERARCHICAL));
+                EnableHierarchical(true, *mxCharFilterLb);
+            }
+
+
+        }
+        else if (!(nFlags & StyleFlags::UpdateFamily) && rBox.get_help_id() == HID_CHAR_TEMPLATE_FILTER ) {
+            if (nActFilter < mxCharFilterLb->get_count() - 1)
+                mxCharFilterLb->set_active(nActFilter + 1);
+            else
+            {
+                nActFilter = 0;
+                mxCharFilterLb->set_active(1);
+            }
+        }
+
+        EnableItem("watercan", false);
+
+    SfxStyleSheetBase *pStyle = pStyleSheetPool->First(SfxStyleFamily::Char, nFilter);
+
+    std::unique_ptr<weld::TreeIter> xEntry = mxCharTreeBox->make_iterator();
     bool bEntry = mxFmtLb->get_iter_first(*xEntry);
     std::vector<OUString> aStrings;
 
@@ -1138,7 +1353,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(StyleFlags nFlags)
         aStrings.push_back(pStyle->GetName());
         pStyle = pStyleSheetPool->Next();
     }
-    OUString aUIName = getDefaultStyleName(eFam);
+    OUString aUIName = getDefaultStyleName(SfxStyleFamily::Char);
 
     // Paradoxically, with a list and non-Latin style names,
     // sorting twice is faster than sorting once.
@@ -1157,30 +1372,39 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(StyleFlags nFlags)
     size_t nCount = aStrings.size();
     size_t nPos = 0;
     while (nPos < nCount && bEntry &&
-           aStrings[nPos] == mxFmtLb->get_text(*xEntry))
+           aStrings[nPos] == mxCharTreeBox->get_text(*xEntry))
     {
         ++nPos;
-        bEntry = mxFmtLb->iter_next(*xEntry);
+        bEntry = mxCharTreeBox->iter_next(*xEntry);
     }
 
     if (nPos < nCount || bEntry)
     {
         // Fills the display box
-        mxFmtLb->freeze();
-        mxFmtLb->clear();
+        mxCharTreeBox->freeze();
+        mxCharTreeBox->clear();
 
         for (nPos = 0; nPos < nCount; ++nPos)
-            mxFmtLb->append(aStrings[nPos], aStrings[nPos]);
+            mxCharTreeBox->append(aStrings[nPos], aStrings[nPos]);
 
-        mxFmtLb->thaw();
+        mxCharTreeBox->thaw();
     }
     // Selects the current style if any
-    SfxTemplateItem *pState = pFamilyState[nActFamily-1].get();
+    SfxTemplateItem *pState = pFamilyState[0].get();
     OUString aStyle;
     if(pState)
         aStyle = pState->GetStyleName();
     SelectStyle(aStyle, false);
     EnableDelete();
+    }
+    else
+    {
+     mxCharTreeBox->set_visible(false);
+     mxCharPreviewCheckbox->set_visible(false);
+     mxCharFilterLb->set_visible(false);
+    }
+
+
 }
 
 // Updated display: Watering the house
@@ -1194,7 +1418,9 @@ void SfxCommonTemplateDialog_Impl::SetWaterCanState(const SfxBoolItem *pItem)
 
     if(pItem && !bWaterDisabled)
     {
-        CheckItem("watercan", pItem->GetValue());
+        CheckItem("watercan", *mxPreviewCheckbox,pItem->GetValue());
+        EnableItem("watercan");
+        CheckItem("watercan", *mxCharPreviewCheckbox,pItem->GetValue());
         EnableItem("watercan");
     }
     else
@@ -1287,7 +1513,7 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
     // current region not within the allowed region or default
     if(nActFamily == 0xffff || nullptr == (pItem = pFamilyState[nActFamily-1].get() ) )
     {
-         CheckItem(OString::number(nActFamily), false);
+         CheckItem(OString::number(nActFamily),*mxPreviewCheckbox ,false);
          const size_t nFamilyCount = mxStyleFamilies->size();
          size_t n;
          for( n = 0; n < nFamilyCount; n++ )
@@ -1295,13 +1521,13 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
 
          std::unique_ptr<SfxTemplateItem> & pNewItem = pFamilyState[StyleNrToInfoOffset(n)];
          nAppFilter = pNewItem->GetValue();
-         FamilySelect( StyleNrToInfoOffset(n) + 1 );
+         FamilySelect( StyleNrToInfoOffset(n) + 1);
          pItem = pNewItem.get();
     }
     else if( bDocChanged )
     {
          // other DocShell -> all new
-         CheckItem(OString::number(nActFamily));
+         CheckItem(OString::number(nActFamily),*mxPreviewCheckbox);
          nActFilter = static_cast< sal_uInt16 >( LoadFactoryStyleFilter( pDocShell ) );
          if ( 0xffff == nActFilter )
             nActFilter = pDocShell->GetAutoStyleFilterIndex();
@@ -1309,7 +1535,7 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
          nAppFilter = pItem->GetValue();
          if (!mxTreeBox->get_visible())
          {
-             UpdateStyles_Impl(StyleFlags::UpdateFamilyList);
+             UpdateStyles_Impl(StyleFlags::UpdateFamilyList ,*mxFilterLb);
          }
          else
              FillTreeBox();
@@ -1317,16 +1543,16 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
     else
     {
          // other filters for automatic
-         CheckItem(OString::number(nActFamily));
+         CheckItem(OString::number(nActFamily),*mxPreviewCheckbox);
          const SfxStyleFamilyItem *pStyleItem =  GetFamilyItem_Impl();
          if ( pStyleItem && SfxStyleSearchBits::Auto == pStyleItem->GetFilterList()[nActFilter].nFlags
             && nAppFilter != pItem->GetValue())
          {
              nAppFilter = pItem->GetValue();
              if (!mxTreeBox->get_visible())
-                 UpdateStyles_Impl(StyleFlags::UpdateFamilyList);
+                 UpdateStyles_Impl(StyleFlags::UpdateFamilyList, *mxFilterLb);
              else
-                 FillTreeBox();
+                FillTreeBox();
          }
          else
              nAppFilter = pItem->GetValue();
@@ -1343,7 +1569,7 @@ IMPL_LINK_NOARG( SfxCommonTemplateDialog_Impl, TimeOut, Timer *, void )
     {
         bDontUpdate=true;
         if (!mxTreeBox->get_visible())
-            UpdateStyles_Impl(StyleFlags::UpdateFamilyList);
+            UpdateStyles_Impl(StyleFlags::UpdateFamilyList, *mxFilterLb);
         else
         {
             FillTreeBox();
@@ -1455,7 +1681,7 @@ void SfxCommonTemplateDialog_Impl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint
 // editing, if the current document has been assigned a different filter.
 void SfxCommonTemplateDialog_Impl::FilterSelect(
                 sal_uInt16 nEntry,  // Idx of the new Filters
-                bool bForce )   // Force update, even if the new filter is
+                bool bForce, weld::ComboBox& rBox )   // Force update, even if the new filter is
                                 // equal to the current
 {
     if( nEntry == nActFilter && !bForce )
@@ -1473,7 +1699,7 @@ void SfxCommonTemplateDialog_Impl::FilterSelect(
             StartListening(*pStyleSheetPool);
     }
 
-    UpdateStyles_Impl(StyleFlags::UpdateFamilyList);
+    UpdateStyles_Impl(StyleFlags::UpdateFamilyList, rBox);
 }
 
 // Internal: Perform functions through the Dispatcher
@@ -1541,32 +1767,60 @@ bool SfxCommonTemplateDialog_Impl::Execute_Impl(
 }
 
 // Handler Listbox of Filter
-void SfxCommonTemplateDialog_Impl::EnableHierarchical(bool const bEnable)
+void SfxCommonTemplateDialog_Impl::EnableHierarchical(bool const bEnable, weld::ComboBox& rBox)
 {
-    if (bEnable)
+    if (rBox.get_help_id() == HID_TEMPLATE_FILTER)
     {
-        if (!bHierarchical)
+        if (bEnable)
         {
-            // Turn on treeView
-            bHierarchical=true;
-            m_bWantHierarchical = true;
-            SaveSelection(); // fdo#61429 store "hierarchical"
-            const OUString aSelectEntry( GetSelectedEntry());
-            mxFmtLb->hide();
-            FillTreeBox();
-            SelectStyle(aSelectEntry, false);
-            mxTreeBox->show();
+            if (!bHierarchical)
+            {
+                // Turn on treeView
+                bHierarchical = true;
+                m_bWantHierarchical = true;
+                SaveSelection(); // fdo#61429 store "hierarchical"
+                const OUString aSelectEntry(GetSelectedEntry());
+                mxFmtLb->hide();
+                FillTreeBox();
+                SelectStyle(aSelectEntry, false);
+                mxTreeBox->show();
+            }
+        }
+        else
+        {
+            mxTreeBox->hide();
+            mxFmtLb->show();
+            // If bHierarchical, then the family can have changed
+            // minus one since hierarchical is inserted at the start
+            m_bWantHierarchical = false; // before FilterSelect
+            FilterSelect(mxFilterLb->get_active() - 1, bHierarchical, rBox);
+            bHierarchical = false;
         }
     }
-    else
+    else if (rBox.get_help_id() == HID_CHAR_TEMPLATE_FILTER )
     {
-        mxTreeBox->hide();
-        mxFmtLb->show();
-        // If bHierarchical, then the family can have changed
-        // minus one since hierarchical is inserted at the start
-        m_bWantHierarchical = false; // before FilterSelect
-        FilterSelect(mxFilterLb->get_active() - 1, bHierarchical );
-        bHierarchical=false;
+        if (bEnable)
+        {
+            if (!bCharHierarchical)
+            {
+                // Turn on treeView
+                bCharHierarchical = true;
+                m_bWantHierarchical = true;
+                SaveSelection(); // fdo#61429 store "hierarchical"
+                const OUString aSelectEntry(GetSelectedEntry());
+                FillTreeBox();
+                SelectStyle(aSelectEntry, false);
+                mxCharTreeBox->show();
+            }
+        }
+        else
+        {
+            // If bCharHierarchical, then the family can have changed
+            // minus one since hierarchical is inserted at the start
+            m_bWantHierarchical = false; // before FilterSelect
+            FilterSelect(mxCharFilterLb->get_active() - 1, bCharHierarchical, rBox);
+            bCharHierarchical = false;
+        }
     }
 }
 
@@ -1574,11 +1828,11 @@ IMPL_LINK(SfxCommonTemplateDialog_Impl, FilterSelectHdl, weld::ComboBox&, rBox, 
 {
     if (SfxResId(STR_STYLE_FILTER_HIERARCHICAL) == rBox.get_active_text())
     {
-        EnableHierarchical(true);
+        EnableHierarchical(true, rBox);
     }
     else
     {
-        EnableHierarchical(false);
+        EnableHierarchical(false, rBox);
     }
 }
 
@@ -1586,16 +1840,18 @@ IMPL_LINK(SfxCommonTemplateDialog_Impl, FilterSelectHdl, weld::ComboBox&, rBox, 
 void SfxCommonTemplateDialog_Impl::FamilySelect(sal_uInt16 nEntry, bool bPreviewRefresh)
 {
     assert((0 < nEntry && nEntry <= MAX_FAMILIES) || 0xffff == nEntry);
-    if( nEntry != nActFamily || bPreviewRefresh )
+    if (nEntry != nActFamily || bPreviewRefresh)
     {
-        CheckItem(OString::number(nActFamily), false);
+        CheckItem(OString::number(nActFamily), *mxPreviewCheckbox, false);
+        if(nActFamily == 2)
+            CheckItem(OString::number(nActFamily), *mxCharPreviewCheckbox, false);
         nActFamily = nEntry;
         SfxDispatcher* pDispat = pBindings->GetDispatcher_Impl();
         SfxUInt16Item const aItem(SID_STYLE_FAMILY,
-                static_cast<sal_uInt16>(SfxTemplate::NIdToSfxFamilyId(nEntry)));
+            static_cast<sal_uInt16>(SfxTemplate::NIdToSfxFamilyId(nEntry)));
         pDispat->ExecuteList(SID_STYLE_FAMILY, SfxCallMode::SYNCHRON, { &aItem });
-        pBindings->Invalidate( SID_STYLE_FAMILY );
-        pBindings->Update( SID_STYLE_FAMILY );
+        pBindings->Invalidate(SID_STYLE_FAMILY);
+        pBindings->Update(SID_STYLE_FAMILY);
         UpdateFamily_Impl();
     }
 }
@@ -1622,7 +1878,7 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(const OString& rEntry)
             Execute_Impl(SID_STYLE_WATERCAN, "", "", 0);
             bCheck = false;
         }
-        CheckItem(rEntry, bCheck);
+        CheckItem(rEntry,*mxPreviewCheckbox ,bCheck);
         aBool.SetValue(bCheck);
         SetWaterCanState(&aBool);
     }
@@ -1826,7 +2082,7 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl()
         }
     }
     bDontUpdate = false; //if everything is deleted set bDontUpdate back to false
-    UpdateStyles_Impl(StyleFlags::UpdateFamilyList); //and force-update the list
+    UpdateStyles_Impl(StyleFlags::UpdateFamilyList, *mxFilterLb); //and force-update the list
 }
 
 void SfxCommonTemplateDialog_Impl::HideHdl()
@@ -1913,6 +2169,15 @@ IMPL_LINK(SfxCommonTemplateDialog_Impl, MousePressHdl, const MouseEvent&, rMEvt,
 // Double-click on a style sheet in the ListBox is applied.
 IMPL_LINK_NOARG(SfxCommonTemplateDialog_Impl, TreeListApplyHdl, weld::TreeView&, bool)
 {
+    if (IsInitialized() && nullptr != pFamilyState[0] && !GetSelectedEntry().isEmpty()
+        && mxCharTreeBox->get_visible())
+    {
+        OUString charStyle = mxCharTreeBox->get_selected_text();
+        Execute_Impl(SID_STYLE_APPLY, charStyle, OUString(),
+                     static_cast<sal_uInt16>(SfxStyleFamily::Char), SfxStyleSearchBits::Auto,
+                     nullptr, &m_nModifier);
+    }
+
     // only if that region is allowed
     if ( IsInitialized() && nullptr != pFamilyState[nActFamily-1] &&
          !GetSelectedEntry().isEmpty() )
@@ -1947,6 +2212,16 @@ IMPL_LINK_NOARG(SfxCommonTemplateDialog_Impl, PreviewHdl, weld::Toggleable&, voi
     mxTreeBox->clear();
     mxTreeBox->set_column_custom_renderer(0, bCustomPreview);
 
+    FamilySelect(nActFamily, true);
+
+    bool bCharCustomPreview = mxCharPreviewCheckbox->get_active();
+    officecfg::Office::Common::StylesAndFormatting::Preview::set(bCharCustomPreview, batch );
+    batch->commit();
+
+    mxFmtLb->clear();
+    mxFmtLb->set_column_custom_renderer(0, bCharCustomPreview);
+    mxCharTreeBox->clear();
+    mxCharTreeBox->set_column_custom_renderer(0, bCharCustomPreview);
     FamilySelect(nActFamily, true);
 }
 
@@ -2187,12 +2462,21 @@ void SfxTemplateDialog_Impl::EnableItem(const OString& rMesId, bool bCheck)
     m_xActionTbR->set_item_sensitive(rMesId, bCheck);
 }
 
-void SfxTemplateDialog_Impl::CheckItem(const OString &rMesId, bool bCheck)
+void SfxTemplateDialog_Impl::CheckItem(const OString &rMesId, weld::CheckButton& checkbutton, bool bCheck)
 {
     if (rMesId == "watercan")
     {
         bIsWater=bCheck;
         m_xActionTbR->set_item_active("watercan", bCheck);
+    }
+    else if (rMesId == "2" && checkbutton.get_help_id() == HID_CHAR_PREVIEW_CHECKBOX)
+    {
+
+        for (int i = 0; i < 27; i++) {
+            OUString a = mxCharTreeBox->get_id(i);
+            OString b = OUStringToOString(a, RTL_TEXTENCODING_ASCII_US);
+            m_xActionTbL->set_item_active(b, bCheck);
+        }
     }
     else
         m_xActionTbL->set_item_active(rMesId, bCheck);
@@ -2250,7 +2534,7 @@ void SfxCommonTemplateDialog_Impl::SetFamily(SfxStyleFamily const nFamily)
     if ( nId != nActFamily )
     {
         if ( nActFamily != 0xFFFF )
-            CheckItem(OString::number(nActFamily), false);
+            CheckItem(OString::number(nActFamily),*mxPreviewCheckbox ,false);
         nActFamily = nId;
         if ( nId != 0xFFFF )
             bUpdateFamily = true;
@@ -2283,12 +2567,21 @@ void SfxCommonTemplateDialog_Impl::UpdateFamily_Impl()
     if (pStyleSheetPool)
     {
         if (!mxTreeBox->get_visible())
-            UpdateStyles_Impl(StyleFlags::UpdateFamily | StyleFlags::UpdateFamilyList);
+            UpdateStyles_Impl(StyleFlags::UpdateFamily | StyleFlags::UpdateFamilyList, *mxFilterLb);
         else
         {
-            UpdateStyles_Impl(StyleFlags::UpdateFamily);
+            UpdateStyles_Impl(StyleFlags::UpdateFamily, *mxFilterLb);
             FillTreeBox();
         }
+
+        if (!mxCharTreeBox->get_visible())
+            UpdateStyles_Impl(StyleFlags::UpdateFamily | StyleFlags::UpdateFamilyList, *mxCharFilterLb);
+        else
+        {
+            UpdateStyles_Impl(StyleFlags::UpdateFamily, *mxCharFilterLb);
+            FillTreeBox();
+        }
+
     }
 
     InvalidateBindings();
