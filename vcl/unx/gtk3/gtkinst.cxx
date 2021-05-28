@@ -20673,6 +20673,32 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
                 }
             }
 
+            if (sName == "hscrollbar-policy")
+            {
+                if (GetParentObjectType(xChild) == "GtkScrolledWindow")
+                {
+                    if (xChild->getFirstChild()->getNodeValue() == "never")
+                    {
+                        auto xDoc = xChild->getOwnerDocument();
+                        auto xHasFrame = CreateProperty(xDoc, "propagate-natural-width", "True");
+                        xChild->getParentNode()->insertBefore(xHasFrame, xChild);
+                    }
+                }
+            }
+
+            if (sName == "vscrollbar-policy")
+            {
+                if (GetParentObjectType(xChild) == "GtkScrolledWindow")
+                {
+                    if (xChild->getFirstChild()->getNodeValue() == "never")
+                    {
+                        auto xDoc = xChild->getOwnerDocument();
+                        auto xHasFrame = CreateProperty(xDoc, "propagate-natural-height", "True");
+                        xChild->getParentNode()->insertBefore(xHasFrame, xChild);
+                    }
+                }
+            }
+
             if (sName == "image")
             {
                 if (GetParentObjectType(xChild) == "GtkButton")
@@ -22022,17 +22048,20 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "sfx/ui/securityinfopage.ui" &&
         rUIFile != "svt/ui/javadisableddialog.ui" &&
         rUIFile != "svx/ui/fontworkgallerydialog.ui" &&
+        rUIFile != "modules/scalc/ui/colwidthdialog.ui" &&
+        rUIFile != "modules/scalc/ui/consolidatedialog.ui" &&
         rUIFile != "modules/scalc/ui/dataform.ui" &&
         rUIFile != "modules/scalc/ui/dataformfragment.ui" &&
         rUIFile != "modules/scalc/ui/definedatabaserangedialog.ui" &&
         rUIFile != "modules/scalc/ui/deletecells.ui" &&
         rUIFile != "modules/scalc/ui/deletecontents.ui" &&
         rUIFile != "modules/scalc/ui/goalseekdlg.ui" &&
+        rUIFile != "modules/scalc/ui/groupdialog.ui" &&
         rUIFile != "modules/scalc/ui/inputstringdialog.ui" &&
         rUIFile != "modules/scalc/ui/insertcells.ui" &&
         rUIFile != "modules/scalc/ui/optimalcolwidthdialog.ui" &&
         rUIFile != "modules/scalc/ui/optimalrowheightdialog.ui" &&
-        rUIFile != "modules/scalc/ui/colwidthdialog.ui" &&
+        rUIFile != "modules/scalc/ui/protectsheetdlg.ui" &&
         rUIFile != "modules/scalc/ui/rowheightdialog.ui" &&
         rUIFile != "modules/scalc/ui/selectrange.ui" &&
         rUIFile != "modules/scalc/ui/selectsource.ui" &&
