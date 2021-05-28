@@ -10871,10 +10871,10 @@ dnl ===================================================================
 
 if test "$build_crypto" = yes; then
     if test "$OS" = WNT; then
-        BUILD_TARGET="$BUILD_TARGET CRYPTO_MSCAPI"
+        BUILD_TYPE="$BUILD_TYPE CRYPTO_MSCAPI"
         AC_DEFINE([USE_CRYPTO_MSCAPI])
     elif test "$ENABLE_NSS" = TRUE; then
-        BUILD_TARGET="$BUILD_TARGET CRYPTO_NSS"
+        BUILD_TYPE="$BUILD_TYPE CRYPTO_NSS"
         AC_DEFINE([USE_CRYPTO_NSS])
     fi
 fi
