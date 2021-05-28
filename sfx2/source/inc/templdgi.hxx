@@ -100,8 +100,11 @@ protected:
 
     std::unique_ptr<weld::TreeView> mxFmtLb;
     std::unique_ptr<weld::TreeView> mxTreeBox;
+    std::unique_ptr<weld::TreeView> mxCharTreeBox;
     std::unique_ptr<weld::CheckButton> mxPreviewCheckbox;
+    std::unique_ptr<weld::CheckButton> mxCharPreviewCheckbox;
     std::unique_ptr<weld::ComboBox> mxFilterLb;
+    std::unique_ptr<weld::ComboBox> mxCharFilterLb;
     std::unique_ptr<TreeViewDropTarget> m_xTreeView1DropTargetHelper;
     std::unique_ptr<TreeViewDropTarget> m_xTreeView2DropTargetHelper;
 
@@ -125,7 +128,9 @@ protected:
     bool bTreeDrag :1;
     bool bAllowReParentDrop:1;
     bool bHierarchical :1;
+    bool bCharHierarchical :1;
     bool m_bWantHierarchical :1;
+    bool m_bWantCharHierarchical :1;
     bool bBindingUpdate :1;
 
     DECL_LINK(FilterSelectHdl, weld::ComboBox&, void );
@@ -178,7 +183,7 @@ protected:
     }
     void EnableDelete();
     void Initialize();
-    void EnableHierarchical(bool);
+    void EnableHierarchical(bool, weld::ComboBox&);
 
     void FilterSelect( sal_uInt16 nFilterIdx, bool bForce );
     void SetFamilyState( sal_uInt16 nSlotId, const SfxTemplateItem* );
