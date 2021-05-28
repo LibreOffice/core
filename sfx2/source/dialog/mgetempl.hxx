@@ -22,6 +22,7 @@
 #include <sfx2/styfitem.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <memory>
+#include <optional>
 
 namespace weld { class Button; }
 namespace weld { class CheckButton; }
