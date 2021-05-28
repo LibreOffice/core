@@ -322,9 +322,9 @@ class IdlInterfaceMethodImpl
     : public IdlMemberImpl
     , public XIdlMethod
 {
-    std::unique_ptr<Sequence< Reference< XIdlClass > >> _pExceptionTypes;
-    std::unique_ptr<Sequence< Reference< XIdlClass > >> _pParamTypes;
-    std::unique_ptr<Sequence< ParamInfo >>              _pParamInfos;
+    std::optional<Sequence< Reference< XIdlClass > >>   m_xExceptionTypes;
+    std::optional<Sequence< Reference< XIdlClass > >>   m_xParamTypes;
+    std::optional<Sequence< ParamInfo >>                m_xParamInfos;
 
 public:
     typelib_InterfaceMethodTypeDescription * getMethodTypeDescr() const
@@ -424,15 +424,14 @@ Reference< XIdlClass > SAL_CALL IdlInterfaceMethodImpl::getReturnType()
 
 Sequence< Reference< XIdlClass > > IdlInterfaceMethodImpl::getExceptionTypes()
 {
-    if (! _pExceptionTypes)
+    if (! m_xExceptionTypes)
     {
         ::osl::MutexGuard aGuard( getMutexAccess() );
-        if (! _pExceptionTypes)
+        if (! m_xExceptionTypes)
         {
             sal_Int32 nExc = getMethodTypeDescr()->nExceptions;
-            std::unique_ptr<Sequence< Reference< XIdlClass > >> pTempExceptionTypes(
-                new Sequence< Reference< XIdlClass > >( nExc ));
-            Reference< XIdlClass > * pExceptionTypes = pTempExceptionTypes->getArray();
+            Sequence< Reference< XIdlClass > > aTempExceptionTypes( nExc );
+            Reference< XIdlClass > * pExceptionTypes = aTempExceptionTypes.getArray();
 
             typelib_TypeDescriptionReference ** ppExc =
                 getMethodTypeDescr()->ppExceptions;
@@ -441,23 +440,22 @@ Sequence< Reference< XIdlClass > > IdlInterfaceMethodImpl::getExceptionTypes()
             while (nExc--)
                 pExceptionTypes[nExc] = pRefl->forType( ppExc[nExc] );
 
-            _pExceptionTypes = std::move(pTempExceptionTypes);
+            m_xExceptionTypes = std::move(aTempExceptionTypes);
         }
     }
-    return *_pExceptionTypes;
+    return *m_xExceptionTypes;
 }
 
 Sequence< Reference< XIdlClass > > IdlInterfaceMethodImpl::getParameterTypes()
 {
-    if (! _pParamTypes)
+    if (! m_xParamTypes)
     {
         ::osl::MutexGuard aGuard( getMutexAccess() );
-        if (! _pParamTypes)
+        if (! m_xParamTypes)
         {
             sal_Int32 nParams = getMethodTypeDescr()->nParams;
-            std::unique_ptr<Sequence< Reference< XIdlClass > > > pTempParamTypes(
-                new Sequence< Reference< XIdlClass > >( nParams ));
-            Reference< XIdlClass > * pParamTypes = pTempParamTypes->getArray();
+            Sequence< Reference< XIdlClass > > aTempParamTypes( nParams );
+            Reference< XIdlClass > * pParamTypes = aTempParamTypes.getArray();
 
             typelib_MethodParameter * pTypelibParams =
                 getMethodTypeDescr()->pParams;
@@ -466,29 +464,29 @@ Sequence< Reference< XIdlClass > > IdlInterfaceMethodImpl::getParameterTypes()
             while (nParams--)
                 pParamTypes[nParams] = pRefl->forType( pTypelibParams[nParams].pTypeRef );
 
-            _pParamTypes = std::move(pTempParamTypes);
+            m_xParamTypes = std::move(aTempParamTypes);
         }
     }
-    return *_pParamTypes;
+    return *m_xParamTypes;
 }
 
 Sequence< ParamInfo > IdlInterfaceMethodImpl::getParameterInfos()
 {
-    if (! _pParamInfos)
+    if (! m_xParamInfos)
     {
         ::osl::MutexGuard aGuard( getMutexAccess() );
-        if (! _pParamInfos)
+        if (! m_xParamInfos)
         {
             sal_Int32 nParams = getMethodTypeDescr()->nParams;
-            std::unique_ptr<Sequence< ParamInfo > > pTempParamInfos( new Sequence< ParamInfo >( nParams ) );
-            ParamInfo * pParamInfos = pTempParamInfos->getArray();
+            Sequence< ParamInfo > aTempParamInfos( nParams );
+            ParamInfo * pParamInfos = aTempParamInfos.getArray();
 
             typelib_MethodParameter * pTypelibParams =
                 getMethodTypeDescr()->pParams;
 
-            if (_pParamTypes) // use param types
+            if (m_xParamTypes) // use param types
             {
-                const Reference< XIdlClass > * pParamTypes = _pParamTypes->getConstArray();
+                const Reference< XIdlClass > * pParamTypes = m_xParamTypes->getConstArray();
 
                 while (nParams--)
                 {
@@ -504,9 +502,8 @@ Sequence< ParamInfo > IdlInterfaceMethodImpl::getParameterInfos()
             }
             else // make also param types sequence if not already initialized
             {
-                std::unique_ptr<Sequence< Reference< XIdlClass > > > pTempParamTypes(
-                    new Sequence< Reference< XIdlClass > >( nParams ));
-                Reference< XIdlClass > * pParamTypes = pTempParamTypes->getArray();
+                Sequence< Reference< XIdlClass > > aTempParamTypes( nParams );
+                Reference< XIdlClass > * pParamTypes = aTempParamTypes.getArray();
 
                 IdlReflectionServiceImpl * pRefl = getReflection();
 
@@ -522,13 +519,13 @@ Sequence< ParamInfo > IdlInterfaceMethodImpl::getParameterInfos()
                     rInfo.aType = pParamTypes[nParams] = pRefl->forType( rParam.pTypeRef );
                 }
 
-                _pParamTypes = std::move(pTempParamTypes);
+                m_xParamTypes = std::move(aTempParamTypes);
             }
 
-            _pParamInfos = std::move(pTempParamInfos);
+            m_xParamInfos = std::move(aTempParamInfos);
         }
     }
-    return *_pParamInfos;
+    return *m_xParamInfos;
 }
 
 MethodMode SAL_CALL IdlInterfaceMethodImpl::getMode()

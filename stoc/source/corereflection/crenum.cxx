@@ -159,7 +159,7 @@ EnumIdlClassImpl::~EnumIdlClassImpl()
 
 Reference< XIdlField > EnumIdlClassImpl::getField( const OUString & rName )
 {
-    if (! _pFields)
+    if (! m_xFields)
         getFields(); // init members
 
     const OUString2Field::const_iterator iFind( _aName2Field.find( rName ) );
@@ -171,15 +171,14 @@ Reference< XIdlField > EnumIdlClassImpl::getField( const OUString & rName )
 
 Sequence< Reference< XIdlField > > EnumIdlClassImpl::getFields()
 {
-    if (! _pFields)
+    if (! m_xFields)
     {
         ::osl::MutexGuard aGuard( getMutexAccess() );
-        if (! _pFields)
+        if (! m_xFields)
         {
             sal_Int32 nFields = getTypeDescr()->nEnumValues;
-            Sequence< Reference< XIdlField > > * pFields =
-                new Sequence< Reference< XIdlField > >( nFields );
-            Reference< XIdlField > * pSeq = pFields->getArray();
+            Sequence< Reference< XIdlField > > aFields( nFields );
+            Reference< XIdlField > * pSeq = aFields.getArray();
 
             while (nFields--)
             {
@@ -188,10 +187,10 @@ Sequence< Reference< XIdlField > > EnumIdlClassImpl::getFields()
                     getReflection(), aName, IdlClassImpl::getTypeDescr(), getTypeDescr()->pEnumValues[nFields] );
             }
 
-            _pFields.reset( pFields );
+            m_xFields =  std::move( aFields );
         }
     }
-    return *_pFields;
+    return *m_xFields;
 }
 
 void EnumIdlClassImpl::createObject( Any & rObj )
