@@ -2575,7 +2575,6 @@ private:
         switch (pEvent->type)
         {
             case GDK_BUTTON_PRESS:
-#if !GTK_CHECK_VERSION(4, 0, 0)
                 if (GdkEvent* pPeekEvent = gdk_event_peek())
                 {
                     bool bSkip = pPeekEvent->type == GDK_2BUTTON_PRESS ||
@@ -2586,11 +2585,9 @@ private:
                         return false;
                     }
                 }
-#endif
                 nEventType = SalEvent::MouseButtonDown;
                 m_nLastMouseClicks = 1;
                 break;
-#if !GTK_CHECK_VERSION(4, 0, 0)
             case GDK_2BUTTON_PRESS:
                 m_nLastMouseClicks = 2;
                 nEventType = SalEvent::MouseButtonDown;
@@ -2599,7 +2596,6 @@ private:
                 m_nLastMouseClicks = 3;
                 nEventType = SalEvent::MouseButtonDown;
                 break;
-#endif
             case GDK_BUTTON_RELEASE:
                 nEventType = SalEvent::MouseButtonUp;
                 break;
