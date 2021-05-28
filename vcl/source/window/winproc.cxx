@@ -810,17 +810,20 @@ static vcl::Window* ImplGetKeyInputWindow( vcl::Window* pWindow )
     vcl::Window* pChild = pSVData->mpWinData->mpFirstFloat;
     while (pChild)
     {
-        if (pChild->ImplGetWindowImpl()->mbFloatWin)
+        if (pChild->ImplGetWindowImpl())
         {
-            if (static_cast<FloatingWindow *>(pChild)->GrabsFocus())
-                break;
-        }
-        else if (pChild->ImplGetWindowImpl()->mbDockWin)
-        {
-            vcl::Window* pParent = pChild->GetWindow(GetWindowType::RealParent);
-            if (pParent && pParent->ImplGetWindowImpl()->mbFloatWin &&
-                static_cast<FloatingWindow *>(pParent)->GrabsFocus())
-                break;
+            if (pChild->ImplGetWindowImpl()->mbFloatWin)
+            {
+                if (static_cast<FloatingWindow *>(pChild)->GrabsFocus())
+                    break;
+            }
+            else if (pChild->ImplGetWindowImpl()->mbDockWin)
+            {
+                vcl::Window* pParent = pChild->GetWindow(GetWindowType::RealParent);
+                if (pParent && pParent->ImplGetWindowImpl()->mbFloatWin &&
+                    static_cast<FloatingWindow *>(pParent)->GrabsFocus())
+                    break;
+            }
         }
         pChild = pChild->GetParent();
     }
@@ -828,7 +831,7 @@ static vcl::Window* ImplGetKeyInputWindow( vcl::Window* pWindow )
     if (!pChild)
         pChild = pWindow;
 
-    pChild = pChild->ImplGetWindowImpl()->mpFrameData->mpFocusWin;
+    pChild = pChild->ImplGetWindowImpl() && pChild->ImplGetWindowImpl()->mpFrameData ? pChild->ImplGetWindowImpl()->mpFrameData->mpFocusWin.get() : nullptr;
 
     // no child - then no input
     if ( !pChild )
@@ -1735,6 +1738,9 @@ static void ImplActivateFloatingWindows( vcl::Window const * pWindow, bool bActi
 
 IMPL_LINK_NOARG(vcl::Window, ImplAsyncFocusHdl, void*, void)
 {
+    if (!ImplGetWindowImpl() || !ImplGetWindowImpl()->mpFrameData)
+        return;
+
     ImplGetWindowImpl()->mpFrameData->mnFocusId = nullptr;
 
     // If the status has been preserved, because we got back the focus
@@ -1793,22 +1799,27 @@ IMPL_LINK_NOARG(vcl::Window, ImplAsyncFocusHdl, void*, void)
             {
                 // transfer the FocusWindow
                 vcl::Window* pOverlapWindow = pFocusWin->ImplGetFirstOverlapWindow();
-                pOverlapWindow->ImplGetWindowImpl()->mpLastFocusWindow = pFocusWin;
+                if ( pOverlapWindow && pOverlapWindow->ImplGetWindowImpl() )
+                    pOverlapWindow->ImplGetWindowImpl()->mpLastFocusWindow = pFocusWin;
                 pSVData->mpWinData->mpFocusWin = nullptr;
 
-                if ( pFocusWin->ImplGetWindowImpl()->mpCursor )
+                if ( pFocusWin->ImplGetWindowImpl() && pFocusWin->ImplGetWindowImpl()->mpCursor )
                     pFocusWin->ImplGetWindowImpl()->mpCursor->ImplHide();
 
                 // call the Deactivate
                 vcl::Window* pOldOverlapWindow = pFocusWin->ImplGetFirstOverlapWindow();
                 vcl::Window* pOldRealWindow = pOldOverlapWindow->ImplGetWindow();
 
-                pOldOverlapWindow->ImplGetWindowImpl()->mbActive = false;
-                pOldOverlapWindow->Deactivate();
-                if ( pOldRealWindow != pOldOverlapWindow )
+                if (pOldOverlapWindow && pOldOverlapWindow->ImplGetWindowImpl() &&
+                    pOldRealWindow && pOldRealWindow->ImplGetWindowImpl())
                 {
-                    pOldRealWindow->ImplGetWindowImpl()->mbActive = false;
-                    pOldRealWindow->Deactivate();
+                    pOldOverlapWindow->ImplGetWindowImpl()->mbActive = false;
+                    pOldOverlapWindow->Deactivate();
+                    if ( pOldRealWindow != pOldOverlapWindow )
+                    {
+                        pOldRealWindow->ImplGetWindowImpl()->mbActive = false;
+                        pOldRealWindow->Deactivate();
+                    }
                 }
 
                 // TrackingMode is ended in ImplHandleLoseFocus
