@@ -54,7 +54,6 @@ namespace sw
 }
 
 sw::LegacyModifyHint::~LegacyModifyHint() {}
-sw::ModifyChangedHint::~ModifyChangedHint() {}
 
 SwClient::SwClient(SwClient&& o) noexcept
     : m_pRegisteredIn(nullptr)
@@ -75,19 +74,19 @@ SwClient::~SwClient()
         m_pRegisteredIn->Remove( this );
 }
 
-std::unique_ptr<sw::ModifyChangedHint> SwClient::CheckRegistration( const SfxPoolItem* pOld )
+std::optional<sw::ModifyChangedHint> SwClient::CheckRegistration( const SfxPoolItem* pOld )
 {
     DBG_TESTSOLARMUTEX();
     // this method only handles notification about dying SwModify objects
     if( !pOld || pOld->Which() != RES_OBJECTDYING )
-        return nullptr;
+        return {};
 
     assert(dynamic_cast<const SwPtrMsgPoolItem*>(pOld));
     const SwPtrMsgPoolItem* pDead = static_cast<const SwPtrMsgPoolItem*>(pOld);
     if(pDead->pObject != m_pRegisteredIn)
     {
         // we should only care received death notes from objects we are following
-        return nullptr;
+        return {};
     }
     // I've got a notification from the object I know
     SwModify* pAbove = m_pRegisteredIn->GetRegisteredIn();
@@ -102,7 +101,7 @@ std::unique_ptr<sw::ModifyChangedHint> SwClient::CheckRegistration( const SfxPoo
         // destroy connection
         EndListeningAll();
     }
-    return std::unique_ptr<sw::ModifyChangedHint>(new sw::ModifyChangedHint(pAbove));
+    return sw::ModifyChangedHint(pAbove);
 }
 
 void SwClient::CheckRegistrationFormat(SwFormat& rOld)
