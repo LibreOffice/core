@@ -1717,7 +1717,9 @@ void SwTOXBaseSection::UpdatePageNum_( SwTextNode* pNd,
                                     const SwTOXInternational& rIntl )
 {
     // collect starts end ends of main entry character style
-    std::unique_ptr< std::vector<sal_uInt16> > xCharStyleIdx(pMainEntryNums ? new std::vector<sal_uInt16> : nullptr);
+    std::optional< std::vector<sal_uInt16> > xCharStyleIdx;
+    if (pMainEntryNums)
+        xCharStyleIdx.emplace();
 
     OUString sSrchStr
         = OUStringChar(C_NUM_REPL) + SwTOXMark::S_PAGE_DELI + OUStringChar(C_NUM_REPL);

@@ -7560,11 +7560,11 @@ Graphic SwDrawFrameFormat::MakeGraphic( ImageMap* )
     if ( pMod )
     {
         SdrObject *pObj = FindSdrObject();
-        std::unique_ptr<SdrView> pView( new SdrView( *pMod ) );
-        SdrPageView *pPgView = pView->ShowSdrPage(pView->GetModel()->GetPage(0));
-        pView->MarkObj( pObj, pPgView );
-        aRet = pView->GetMarkedObjBitmapEx();
-        pView->HideSdrPage();
+        SdrView aView( *pMod );
+        SdrPageView *pPgView = aView.ShowSdrPage(aView.GetModel()->GetPage(0));
+        aView.MarkObj( pObj, pPgView );
+        aRet = aView.GetMarkedObjBitmapEx();
+        aView.HideSdrPage();
     }
     return aRet;
 }
