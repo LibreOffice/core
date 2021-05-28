@@ -163,11 +163,6 @@ OLE1Reader::OLE1Reader(SvStream& rStream)
     rStream.ReadUInt32(m_nNativeDataSize);
     rStream.SeekRel(m_nNativeDataSize);
 
-    if (!rStream.remainingSize())
-    {
-        return;
-    }
-
     rStream.ReadUInt32(nData); // OLEVersion for presentation data
     CPPUNIT_ASSERT(rStream.good());
     rStream.ReadUInt32(nData); // FormatID
@@ -1490,6 +1485,11 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifImageToOle)
     // Without the accompanying fix in place, this test would have failed, as aOle1 was empty.
     OLE1Reader aOle1Reader(aOle1);
     CPPUNIT_ASSERT(aOle1Reader.m_nNativeDataSize);
+
+    // Make sure that the presentation data byte array is not empty.
+    // Without the accompanying fix in place, this test would have failed, as aOle1 only contained
+    // the native data.
+    CPPUNIT_ASSERT(aOle1Reader.m_nPresentationDataSize);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
