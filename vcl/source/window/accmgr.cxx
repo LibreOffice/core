@@ -30,34 +30,34 @@ ImplAccelManager::~ImplAccelManager()
 
 bool ImplAccelManager::InsertAccel( Accelerator* pAccel )
 {
-    if ( !mpAccelList ) {
-        mpAccelList.reset( new std::vector< Accelerator* > );
+    if ( !mxAccelList ) {
+        mxAccelList.emplace();
     } else {
-        for (Accelerator* i : *mpAccelList) {
+        for (Accelerator* i : *mxAccelList) {
             if ( i == pAccel ) {
                 return false;
             }
         }
     }
 
-    mpAccelList->insert( mpAccelList->begin(), pAccel );
+    mxAccelList->insert( mxAccelList->begin(), pAccel );
     return true;
 }
 
 void ImplAccelManager::RemoveAccel( Accelerator const * pAccel )
 {
     // do we have a list ?
-    if ( !mpAccelList )
+    if ( !mxAccelList )
         return;
 
     //e.g. #i90599#. Someone starts typing a sequence in a dialog, but doesn't
     //end it, and then closes the dialog, deleting the accelerators. So if
     //we're removing an accelerator that a sub-accelerator which is in the
     //sequence list, throw away the entire sequence
-    if ( mpSequenceList ) {
+    if ( mxSequenceList ) {
         for (sal_uInt16 i = 0; i < pAccel->GetItemCount(); ++i) {
             Accelerator* pSubAccel = pAccel->GetAccel( pAccel->GetItemId(i) );
-            for (Accelerator* j : *mpSequenceList) {
+            for (Accelerator* j : *mxSequenceList) {
                 if ( j == pSubAccel ) {
                     EndSequence();
                     i = pAccel->GetItemCount();
@@ -68,24 +68,24 @@ void ImplAccelManager::RemoveAccel( Accelerator const * pAccel )
     }
 
     // throw it away
-    auto it = std::find(mpAccelList->begin(), mpAccelList->end(), pAccel);
-    if (it != mpAccelList->end())
-        mpAccelList->erase( it );
+    auto it = std::find(mxAccelList->begin(), mxAccelList->end(), pAccel);
+    if (it != mxAccelList->end())
+        mxAccelList->erase( it );
 }
 
 void ImplAccelManager::EndSequence()
 {
     // are we in a list ?
-    if ( !mpSequenceList )
+    if ( !mxSequenceList )
         return;
 
-    for (Accelerator* pTempAccel : *mpSequenceList)
+    for (Accelerator* pTempAccel : *mxSequenceList)
     {
         pTempAccel->mpDel = nullptr;
     }
 
     // delete sequence-list
-    mpSequenceList.reset();
+    mxSequenceList.reset();
 }
 
 bool ImplAccelManager::IsAccelKey( const vcl::KeyCode& rKeyCode )
@@ -93,15 +93,15 @@ bool ImplAccelManager::IsAccelKey( const vcl::KeyCode& rKeyCode )
     Accelerator* pAccel;
 
     // do we have accelerators ??
-    if ( !mpAccelList )
+    if ( !mxAccelList )
         return false;
-    if ( mpAccelList->empty() )
+    if ( mxAccelList->empty() )
         return false;
 
     // are we in a sequence ?
-    if ( mpSequenceList )
+    if ( mxSequenceList )
     {
-        pAccel = mpSequenceList->empty() ? nullptr : (*mpSequenceList)[ 0 ];
+        pAccel = mxSequenceList->empty() ? nullptr : (*mxSequenceList)[ 0 ];
 
         // not found ?
         if ( !pAccel )
@@ -121,7 +121,7 @@ bool ImplAccelManager::IsAccelKey( const vcl::KeyCode& rKeyCode )
             if ( pNextAccel )
             {
 
-                mpSequenceList->insert( mpSequenceList->begin(), pNextAccel );
+                mxSequenceList->insert( mxSequenceList->begin(), pNextAccel );
 
                 // call Activate-Handler of the new one
                 pNextAccel->Activate();
@@ -169,7 +169,7 @@ bool ImplAccelManager::IsAccelKey( const vcl::KeyCode& rKeyCode )
     }
 
     // step through the list of accelerators
-    for (Accelerator* i : *mpAccelList)
+    for (Accelerator* i : *mxAccelList)
     {
         pAccel = i;
 
@@ -184,9 +184,9 @@ bool ImplAccelManager::IsAccelKey( const vcl::KeyCode& rKeyCode )
             {
 
                 // create sequence list
-                mpSequenceList.reset( new std::vector< Accelerator* > );
-                mpSequenceList->insert( mpSequenceList->begin(), pAccel     );
-                mpSequenceList->insert( mpSequenceList->begin(), pNextAccel );
+                mxSequenceList.emplace();
+                mxSequenceList->insert( mxSequenceList->begin(), pAccel     );
+                mxSequenceList->insert( mxSequenceList->begin(), pNextAccel );
 
                 // call activate-Handler of the new one
                 pNextAccel->Activate();

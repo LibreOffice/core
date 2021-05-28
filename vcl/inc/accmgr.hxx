@@ -21,7 +21,7 @@
 #define INCLUDED_VCL_INC_ACCMGR_HXX
 
 #include <vector>
-#include <memory>
+#include <optional>
 
 #include <vcl/keycod.hxx>
 
@@ -30,8 +30,8 @@ class Accelerator;
 class ImplAccelManager
 {
 private:
-    std::unique_ptr<std::vector< Accelerator* >> mpAccelList;
-    std::unique_ptr<std::vector< Accelerator* >> mpSequenceList;
+    std::optional<std::vector< Accelerator* >> mxAccelList;
+    std::optional<std::vector< Accelerator* >> mxSequenceList;
 
 public:
                         ImplAccelManager()

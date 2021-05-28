@@ -245,7 +245,7 @@ namespace psp
     {
     public:
         std::vector< std::unique_ptr<PPDParser> > aAllParsers;
-        std::unique_ptr<std::unordered_map< OUString, OUString >> pAllPPDFiles;
+        std::optional<std::unordered_map< OUString, OUString >> xAllPPDFiles;
     };
 }
 
@@ -417,7 +417,7 @@ void PPDParser::scanPPDDir( const OUString& rDir )
                         {
                             if( aFileName.endsWithIgnoreAsciiCaseAsciiL( rSuffix.pSuffix, rSuffix.nSuffixLen ) )
                             {
-                                (*rPPDCache.pAllPPDFiles)[ aFileName.copy( 0, aFileName.getLength() - rSuffix.nSuffixLen ) ] = aPPDFile.PathToFileName();
+                                (*rPPDCache.xAllPPDFiles)[ aFileName.copy( 0, aFileName.getLength() - rSuffix.nSuffixLen ) ] = aPPDFile.PathToFileName();
                                 break;
                             }
                         }
@@ -435,10 +435,10 @@ void PPDParser::scanPPDDir( const OUString& rDir )
 
 void PPDParser::initPPDFiles(PPDCache &rPPDCache)
 {
-    if( rPPDCache.pAllPPDFiles )
+    if( rPPDCache.xAllPPDFiles )
         return;
 
-    rPPDCache.pAllPPDFiles.reset(new std::unordered_map< OUString, OUString >);
+    rPPDCache.xAllPPDFiles.emplace();
 
     // check installation directories
     std::vector< OUString > aPathList;
@@ -448,7 +448,7 @@ void PPDParser::initPPDFiles(PPDCache &rPPDCache)
         INetURLObject aPPDDir( path, INetProtocol::File, INetURLObject::EncodeMechanism::All );
         scanPPDDir( aPPDDir.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
     }
-    if( rPPDCache.pAllPPDFiles->find( OUString( "SGENPRT" ) ) != rPPDCache.pAllPPDFiles->end() )
+    if( rPPDCache.xAllPPDFiles->find( OUString( "SGENPRT" ) ) != rPPDCache.xAllPPDFiles->end() )
         return;
 
     // last try: search in directory of executable (mainly for setup)
@@ -461,8 +461,8 @@ void PPDParser::initPPDFiles(PPDCache &rPPDCache)
                 << aDir.GetMainURL(INetURLObject::DecodeMechanism::NONE));
         scanPPDDir( aDir.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
         SAL_INFO("vcl.unx.print", "SGENPRT "
-                << (rPPDCache.pAllPPDFiles->find("SGENPRT") ==
-                    rPPDCache.pAllPPDFiles->end() ? "not found" : "found"));
+                << (rPPDCache.xAllPPDFiles->find("SGENPRT") ==
+                    rPPDCache.xAllPPDFiles->end() ? "not found" : "found"));
     }
 }
 
@@ -488,23 +488,23 @@ OUString PPDParser::getPPDFile( const OUString& rFile )
                 aBase = aBase.copy( nLastIndex+1 );
             do
             {
-                it = rPPDCache.pAllPPDFiles->find( aBase );
+                it = rPPDCache.xAllPPDFiles->find( aBase );
                 nLastIndex = aBase.lastIndexOf( '.' );
                 if( nLastIndex > 0 )
                     aBase = aBase.copy( 0, nLastIndex );
-            } while( it == rPPDCache.pAllPPDFiles->end() && nLastIndex > 0 );
+            } while( it == rPPDCache.xAllPPDFiles->end() && nLastIndex > 0 );
 
-            if( it == rPPDCache.pAllPPDFiles->end() && bRetry )
+            if( it == rPPDCache.xAllPPDFiles->end() && bRetry )
             {
                 // a new file ? rehash
-                rPPDCache.pAllPPDFiles.reset();
+                rPPDCache.xAllPPDFiles.reset();
                 bRetry = false;
                 // note this is optimized for office start where
                 // no new files occur and initPPDFiles is called only once
             }
-        } while( ! rPPDCache.pAllPPDFiles );
+        } while( ! rPPDCache.xAllPPDFiles );
 
-        if( it != rPPDCache.pAllPPDFiles->end() )
+        if( it != rPPDCache.xAllPPDFiles->end() )
             aStream.Open( it->second );
     }
 
