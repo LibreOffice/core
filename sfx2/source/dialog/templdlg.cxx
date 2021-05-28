@@ -341,6 +341,16 @@ void SfxCommonTemplateDialog_Impl::PrepareMenu(const Point& rPos)
         pTreeView->select(*xIter);
         FmtSelectHdl(*pTreeView);
     }
+
+    weld::TreeView* pTreeView1 = mxTreeBox1->get_visible() ? mxTreeBox1.get() : mxFmtLb.get();
+    std::unique_ptr<weld::TreeIter> xIter1(pTreeView1->make_iterator());
+    if (pTreeView1->get_dest_row_at_pos(rPos, xIter.get(), false) && !pTreeView1->is_selected(*xIter1))
+    {
+        pTreeView1->unselect_all();
+        pTreeView1->set_cursor(*xIter1);
+        pTreeView1->select(*xIter1);
+        FmtSelectHdl(*pTreeView1);
+    }
 }
 
 void SfxCommonTemplateDialog_Impl::ShowMenu(const CommandEvent& rCEvt)
@@ -350,6 +360,10 @@ void SfxCommonTemplateDialog_Impl::ShowMenu(const CommandEvent& rCEvt)
     weld::TreeView* pTreeView = mxTreeBox->get_visible() ? mxTreeBox.get() : mxFmtLb.get();
     OString sCommand(mxMenu->popup_at_rect(pTreeView, tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1))));
     MenuSelect(sCommand);
+
+    weld::TreeView* pTreeView1 = mxTreeBox1->get_visible() ? mxTreeBox1.get() : mxFmtLb.get();
+    OString sCommand1(mxMenu->popup_at_rect(pTreeView1, tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1))));
+    MenuSelect(sCommand1);
 }
 
 IMPL_LINK(SfxCommonTemplateDialog_Impl, PopupTreeMenuHdl, const CommandEvent&, rCEvt, bool)
@@ -533,6 +547,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl(SfxBindings* pB, weld
     , m_pDeletionWatcher(nullptr)
     , mxFmtLb(pBuilder->weld_tree_view("flatview"))
     , mxTreeBox(pBuilder->weld_tree_view("treeview"))
+    , mxTreeBox1(pBuilder->weld_tree_view("treeview1"))
     , mxPreviewCheckbox(pBuilder->weld_check_button("showpreview"))
     , mxFilterLb(pBuilder->weld_combo_box("filter"))
 
@@ -982,6 +997,7 @@ OUString SfxCommonTemplateDialog_Impl::getDefaultStyleName( const SfxStyleFamily
 void SfxCommonTemplateDialog_Impl::FillTreeBox()
 {
     assert(mxTreeBox && "FillTreeBox() without treebox");
+    assert(mxTreeBox1 && "FillTreeBox() without treebox");
     if (!pStyleSheetPool || nActFamily == 0xffff)
         return;
 
@@ -990,6 +1006,7 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
         return;
     const SfxStyleFamily eFam = pItem->GetFamily();
     StyleTreeArr_Impl aArr;
+    StyleTreeArr_Impl aArr1;
     SfxStyleSheetBase* pStyle = pStyleSheetPool->First(eFam, SfxStyleSearchBits::AllVisible);
 
     bAllowReParentDrop = pStyle && pStyle->HasParentSupport() && bTreeDrag;
@@ -1001,11 +1018,17 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
         pStyle = pStyleSheetPool->Next();
     }
     OUString aUIName = getDefaultStyleName(eFam);
+    OUString aUIName1 = getDefaultStyleName(SfxStyleFamily::Char);
     MakeTree_Impl(aArr, aUIName);
+    MakeTree_Impl(aArr1, aUIName1);
     std::vector<OUString> aEntries;
+    std::vector<OUString> aEntries1;
     MakeExpanded_Impl(*mxTreeBox, aEntries);
+    MakeExpanded_Impl(*mxTreeBox1, aEntries1);
     mxTreeBox->freeze();
     mxTreeBox->clear();
+    mxTreeBox1->freeze();
+    mxTreeBox1->clear();
     const sal_uInt16 nCount = aArr.size();
 
     for (sal_uInt16 i = 0; i < nCount; ++i)
@@ -1013,12 +1036,14 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
         FillBox_Impl(*mxTreeBox, aArr[i].get(), aEntries, eFam, nullptr);
         aArr[i].reset();
     }
+    FillBox_Impl(*mxTreeBox1, aArr1[0].get(), aEntries1, SfxStyleFamily::Char, nullptr);
 
     EnableItem("watercan", false);
 
     SfxTemplateItem* pState = pFamilyState[nActFamily - 1].get();
 
     mxTreeBox->thaw();
+    mxTreeBox1->thaw();
 
     std::unique_ptr<weld::TreeIter> xEntry = mxTreeBox->make_iterator();
     bool bEntry = mxTreeBox->get_iter_first(*xEntry);
@@ -1030,6 +1055,18 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
         if (IsExpanded_Impl(aEntries, mxTreeBox->get_text(*xEntry)))
             mxTreeBox->expand_row(*xEntry);
         bEntry = mxTreeBox->iter_next(*xEntry);
+    }
+
+    std::unique_ptr<weld::TreeIter> xEntry1 = mxTreeBox1->make_iterator();
+    bool bEntry1 = mxTreeBox1->get_iter_first(*xEntry1);
+    if (bEntry1 && nCount)
+        mxTreeBox1->expand_row(*xEntry1);
+
+    while (bEntry1)
+    {
+        if (IsExpanded_Impl(aEntries1, mxTreeBox1->get_text(*xEntry1)))
+            mxTreeBox1->expand_row(*xEntry1);
+        bEntry1 = mxTreeBox1->iter_next(*xEntry1);
     }
 
     OUString aStyle;
