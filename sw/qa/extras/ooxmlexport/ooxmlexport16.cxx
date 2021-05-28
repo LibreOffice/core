@@ -218,6 +218,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf142404_tabSpacing, "tdf142404_tabSpacing.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("too big for one page", 2, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf142404_tabOverMarginC15, "tdf142404_tabOverMarginC15.docx")
+{
+    // TabOverMargin no longer applies to compatibilityMode 15 DOCX files.
+    // One page long if tabOverMargin is true. Two pages long if tabOverflow is true.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("too big for one page", 3, getPages());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf139580, "tdf139580.odt")
 {
     // Without the fix in place, this test would have crashed at export time
