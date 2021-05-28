@@ -3649,6 +3649,13 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
                     }
                 }
             }
+            else if (pTextNd->IsListRestart())
+            {
+                sal_uInt16 nStartWith = static_cast<sal_uInt16>(pTextNd->GetActualListStartValue());
+                nNumId = GetExport().DuplicateNumRule(pRule, nLvl, nStartWith);
+                if (USHRT_MAX != nNumId)
+                    ++nNumId;
+            }
         }
         else
         {
