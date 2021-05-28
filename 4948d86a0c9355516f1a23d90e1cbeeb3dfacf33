@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a183f74_0a1163db",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-05-28T08:07:46Z",
+      "side": 1,
+      "message": "It was not possible to change the anchor type of a shape when it had a textbox associated with it, I mean.",
+      "revId": "4948d86a0c9355516f1a23d90e1cbeeb3dfacf33",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
