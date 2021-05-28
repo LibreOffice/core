@@ -1728,15 +1728,15 @@ bool SvNumberFormatter::GetPreviewString(const OUString& sFormatString,
     eLnge = ActLnge;
     sal_Int32 nCheckPos = -1;
     OUString sTmpString = sFormatString;
-    std::unique_ptr<SvNumberformat> p_Entry(new SvNumberformat(sTmpString,
-                                                 pFormatScanner.get(),
-                                                 pStringScanner.get(),
-                                                 nCheckPos,
-                                                 eLnge));
+    SvNumberformat aEntry(sTmpString,
+                          pFormatScanner.get(),
+                          pStringScanner.get(),
+                          nCheckPos,
+                          eLnge);
     if (nCheckPos == 0)                                 // String ok
     {
         sal_uInt32 CLOffset = ImpGenerateCL(eLnge);     // create new standard formats if necessary
-        sal_uInt32 nKey = ImpIsEntry(p_Entry->GetFormatstring(),CLOffset, eLnge);
+        sal_uInt32 nKey = ImpIsEntry(aEntry.GetFormatstring(),CLOffset, eLnge);
         if (nKey != NUMBERFORMAT_ENTRY_NOT_FOUND)       // already present
         {
             GetOutputString(fPreviewNumber, nKey, sOutString, ppColor, bUseStarFormat);
@@ -1745,12 +1745,12 @@ bool SvNumberFormatter::GetPreviewString(const OUString& sFormatString,
         {
             if ( bUseStarFormat )
             {
-                p_Entry->SetStarFormatSupport( true );
+                aEntry.SetStarFormatSupport( true );
             }
-            p_Entry->GetOutputString(fPreviewNumber, sOutString, ppColor);
+            aEntry.GetOutputString(fPreviewNumber, sOutString, ppColor);
             if ( bUseStarFormat )
             {
-                p_Entry->SetStarFormatSupport( false );
+                aEntry.SetStarFormatSupport( false );
             }
         }
         return true;
@@ -1790,15 +1790,15 @@ bool SvNumberFormatter::GetPreviewStringGuess( const OUString& sFormatString,
         return true;
     }
 
-    std::unique_ptr<SvNumberformat> pEntry;
+    std::optional<SvNumberformat> pEntry;
     sal_Int32 nCheckPos = -1;
     OUString sTmpString;
 
     if ( bEnglish )
     {
         sTmpString = sFormatString;
-        pEntry.reset(new SvNumberformat( sTmpString, pFormatScanner.get(),
-                                     pStringScanner.get(), nCheckPos, eLnge ));
+        pEntry.emplace( sTmpString, pFormatScanner.get(),
+                        pStringScanner.get(), nCheckPos, eLnge );
     }
     else
     {
@@ -1810,8 +1810,8 @@ bool SvNumberFormatter::GetPreviewStringGuess( const OUString& sFormatString,
         LanguageType eFormatLang = LANGUAGE_ENGLISH_US;
         pFormatScanner->SetConvertMode( LANGUAGE_ENGLISH_US, eLnge, false, false);
         sTmpString = sFormatString;
-        pEntry.reset(new SvNumberformat( sTmpString, pFormatScanner.get(),
-                                     pStringScanner.get(), nCheckPos, eFormatLang ));
+        pEntry.emplace( sTmpString, pFormatScanner.get(),
+                        pStringScanner.get(), nCheckPos, eFormatLang );
         pFormatScanner->SetConvertMode( false );
         ChangeIntl( eLnge );
 
@@ -1824,8 +1824,8 @@ bool SvNumberFormatter::GetPreviewStringGuess( const OUString& sFormatString,
                 // Force locale's keywords.
                 pFormatScanner->ChangeIntl( ImpSvNumberformatScan::KeywordLocalization::LocaleLegacy );
                 sTmpString = sFormatString;
-                pEntry.reset(new SvNumberformat( sTmpString, pFormatScanner.get(),
-                                             pStringScanner.get(), nCheckPos, eLnge ));
+                pEntry.emplace( sTmpString, pFormatScanner.get(),
+                                pStringScanner.get(), nCheckPos, eLnge );
             }
             else
             {
@@ -1835,19 +1835,19 @@ bool SvNumberFormatter::GetPreviewStringGuess( const OUString& sFormatString,
                 eFormatLang = eLnge;
                 pFormatScanner->SetConvertMode( eLnge, LANGUAGE_ENGLISH_US, false, false);
                 sTmpString = sFormatString;
-                std::unique_ptr<SvNumberformat> pEntry2(new SvNumberformat( sTmpString, pFormatScanner.get(),
-                                                              pStringScanner.get(), nCheckPos2, eFormatLang ));
+                SvNumberformat aEntry2( sTmpString, pFormatScanner.get(),
+                                        pStringScanner.get(), nCheckPos2, eFormatLang );
                 pFormatScanner->SetConvertMode( false );
                 ChangeIntl( eLnge );
                 if ( nCheckPos2 == 0 && !xTransliteration->isEqual( sFormatString,
-                                                                    pEntry2->GetFormatstring() ) )
+                                                                    aEntry2.GetFormatstring() ) )
                 {
                     // other Format
                     // Force locale's keywords.
                     pFormatScanner->ChangeIntl( ImpSvNumberformatScan::KeywordLocalization::LocaleLegacy );
                     sTmpString = sFormatString;
-                    pEntry.reset(new SvNumberformat( sTmpString, pFormatScanner.get(),
-                                                 pStringScanner.get(), nCheckPos, eLnge ));
+                    pEntry.emplace( sTmpString, pFormatScanner.get(),
+                                    pStringScanner.get(), nCheckPos, eLnge );
                 }
             }
         }
@@ -1881,16 +1881,16 @@ bool SvNumberFormatter::GetPreviewString( const OUString& sFormatString,
     eLnge = ActLnge;
     sal_Int32 nCheckPos = -1;
     OUString sTmpString = sFormatString;
-    std::unique_ptr<SvNumberformat> p_Entry(new SvNumberformat( sTmpString,
-                                                  pFormatScanner.get(),
-                                                  pStringScanner.get(),
-                                                  nCheckPos,
-                                                  eLnge));
+    SvNumberformat aEntry( sTmpString,
+                           pFormatScanner.get(),
+                           pStringScanner.get(),
+                           nCheckPos,
+                           eLnge);
     if (nCheckPos == 0)                          // String ok
     {
         // May have to create standard formats for this locale.
         sal_uInt32 CLOffset = ImpGenerateCL(eLnge);
-        sal_uInt32 nKey = ImpIsEntry( p_Entry->GetFormatstring(), CLOffset, eLnge);
+        sal_uInt32 nKey = ImpIsEntry( aEntry.GetFormatstring(), CLOffset, eLnge);
         if (nKey != NUMBERFORMAT_ENTRY_NOT_FOUND)       // already present
         {
             GetOutputString( sPreviewString, nKey, sOutString, ppColor);
@@ -1900,9 +1900,9 @@ bool SvNumberFormatter::GetPreviewString( const OUString& sFormatString,
             // If the format is valid but not a text format and does not
             // include a text subformat, an empty string would result. Same as
             // in SvNumberFormatter::GetOutputString()
-            if (p_Entry->IsTextFormat() || p_Entry->HasTextFormat())
+            if (aEntry.IsTextFormat() || aEntry.HasTextFormat())
             {
-                p_Entry->GetOutputString( sPreviewString, sOutString, ppColor);
+                aEntry.GetOutputString( sPreviewString, sOutString, ppColor);
             }
             else
             {
@@ -1935,15 +1935,15 @@ sal_uInt32 SvNumberFormatter::TestNewString(const OUString& sFormatString,
     sal_uInt32 nRes;
     sal_Int32 nCheckPos = -1;
     OUString sTmpString = sFormatString;
-    std::unique_ptr<SvNumberformat> pEntry(new SvNumberformat(sTmpString,
-                                                pFormatScanner.get(),
-                                                pStringScanner.get(),
-                                                nCheckPos,
-                                                eLnge));
+    SvNumberformat aEntry(sTmpString,
+                          pFormatScanner.get(),
+                          pStringScanner.get(),
+                          nCheckPos,
+                          eLnge);
     if (nCheckPos == 0)                                 // String ok
     {
         sal_uInt32 CLOffset = ImpGenerateCL(eLnge);     // create new standard formats if necessary
-        nRes = ImpIsEntry(pEntry->GetFormatstring(),CLOffset, eLnge);
+        nRes = ImpIsEntry(aEntry.GetFormatstring(),CLOffset, eLnge);
                                                         // already present?
     }
     else
@@ -2162,11 +2162,11 @@ sal_uInt32 SvNumberFormatter::GetFormatSpecialInfo( const OUString& rFormatStrin
     eLnge = ActLnge;
     OUString aTmpStr( rFormatString );
     sal_Int32 nCheckPos = 0;
-    std::unique_ptr<SvNumberformat> pFormat(new SvNumberformat( aTmpStr, pFormatScanner.get(),
-                                                  pStringScanner.get(), nCheckPos, eLnge ));
+    SvNumberformat aFormat( aTmpStr, pFormatScanner.get(),
+                            pStringScanner.get(), nCheckPos, eLnge );
     if ( nCheckPos == 0 )
     {
-        pFormat->GetFormatSpecialInfo( bThousand, IsRed, nPrecision, nLeadingCnt );
+        aFormat.GetFormatSpecialInfo( bThousand, IsRed, nPrecision, nLeadingCnt );
     }
     else
     {
@@ -4007,9 +4007,9 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     bInitializing = true;
 
     LanguageType eSysLang = SvtSysLocale().GetLanguageTag().getLanguageType();
-    std::unique_ptr<LocaleDataWrapper> pLocaleData(new LocaleDataWrapper(
+    std::optional<LocaleDataWrapper> pLocaleData(std::in_place,
         ::comphelper::getProcessComponentContext(),
-        SvtSysLocale().GetLanguageTag() ));
+        SvtSysLocale().GetLanguageTag() );
     // get user configured currency
     OUString aConfiguredCurrencyAbbrev;
     LanguageType eConfiguredCurrencyLanguage = LANGUAGE_SYSTEM;
@@ -4035,9 +4035,9 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     {
         LanguageType eLang = LanguageTag::convertToLanguageType( rLocale, false);
         rInstalledLocales.insert( eLang);
-        pLocaleData.reset(new LocaleDataWrapper(
+        pLocaleData.emplace(
             ::comphelper::getProcessComponentContext(),
-            LanguageTag(rLocale) ));
+            LanguageTag(rLocale) );
         Sequence< Currency2 > aCurrSeq = pLocaleData->getAllCurrencies();
         sal_Int32 nCurrencyCount = aCurrSeq.getLength();
         Currency2 const * const pCurrencies = aCurrSeq.getConstArray();
