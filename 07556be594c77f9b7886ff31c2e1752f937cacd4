@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3d919dc0_857b82e5",
+        "filename": "configure.ac",
+        "patchSetId": 4
+      },
+      "lineNbr": 10877,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-05-28T20:35:12Z",
+      "side": 1,
+      "message": "are we sure BUILD_TARGET is the right thing her or should it be BUILD_TYPE ?",
+      "revId": "07556be594c77f9b7886ff31c2e1752f937cacd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
