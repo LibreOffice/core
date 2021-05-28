@@ -1899,6 +1899,9 @@ class GtkInstanceBuilder;
             guint updated_keyval = GtkSalFrame::GetKeyValFor(gdk_keymap_get_default(), hardware_keycode, group);
             nKeyCode = GtkSalFrame::GetKeyCode(updated_keyval);
         }
+#else
+        (void)hardware_keycode;
+        (void)group;
 #endif
         nKeyCode |= GtkSalFrame::GetKeyModCode(state);
         return KeyEvent(gdk_keyval_to_unicode(keyval), nKeyCode, 0);
@@ -16239,7 +16242,7 @@ private:
 //    GtkOverlay* m_pOverlay;
 //    GtkTreeView* m_pTreeView;
 //    GtkMenuButton* m_pOverlayButton; // button that the StyleDropdown uses on an active row
-//    GtkWindow* m_pMenuWindow;
+    GtkWidget* m_pMenuWindow;
     GtkTreeModel* m_pTreeModel;
     GtkCellRenderer* m_pButtonTextRenderer;
     GtkCellRenderer* m_pMenuTextRenderer;
@@ -16260,7 +16263,7 @@ private:
     bool m_bAutoCompleteCaseSensitive;
     bool m_bChangedByMenu;
     bool m_bCustomRenderer;
-    bool m_bActivateCalled;
+    bool m_bUserSelectEntry;
     gint m_nTextCol;
     gint m_nIdCol;
 //    gulong m_nToggleFocusInSignalId;
@@ -16378,7 +16381,7 @@ private:
         }
     }
 
-    static void signalChanged(GtkEntry*, gpointer widget)
+    static void signalChanged(GtkComboBox*, gpointer widget)
     {
         GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
         SolarMutexGuard aGuard;
@@ -16387,6 +16390,8 @@ private:
 
     void fire_signal_changed()
     {
+        m_bUserSelectEntry = true;
+        m_bChangedByMenu = toggle_button_get_active();
         signal_changed();
         m_bChangedByMenu = false;
     }
@@ -16439,11 +16444,19 @@ private:
     }
 #endif
 
-#if 0
+    bool toggle_button_get_active()
+    {
+        GValue value = G_VALUE_INIT;
+        g_value_init(&value, G_TYPE_BOOLEAN);
+        g_object_get_property(G_OBJECT(m_pComboBox), "popup-shown", &value);
+        return g_value_get_boolean(&value);
+    }
+
     void toggle_menu()
     {
-        if (!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_pToggleButton)))
+        if (!toggle_button_get_active())
         {
+#if 0
             if (m_bHoverSelection)
             {
                 // turn hover selection back off until mouse is moved again
@@ -16451,63 +16464,38 @@ private:
                 gtk_tree_view_set_hover_selection(m_pTreeView, false);
                 m_bHoverSelection = false;
             }
+#endif
 
-            do_ungrab(GTK_WIDGET(m_pMenuWindow));
+            if (!m_bUserSelectEntry)
+                set_active_including_mru(m_nPrePopupCursorPos, true);
 
-            gtk_widget_hide(GTK_WIDGET(m_pMenuWindow));
-
-            // so gdk_window_move_to_rect will work again the next time
-            gtk_widget_unrealize(GTK_WIDGET(m_pMenuWindow));
-
-            gtk_widget_set_size_request(GTK_WIDGET(m_pMenuWindow), -1, -1);
-
-            if (!m_bActivateCalled)
-                tree_view_set_cursor(m_nPrePopupCursorPos);
-
+#if 0
             // undo show_menu tooltip blocking
             GtkWidget* pParent = widget_get_toplevel(m_pToggleButton);
             GtkSalFrame* pFrame = pParent ? GtkSalFrame::getFromWindow(pParent) : nullptr;
             if (pFrame)
                 pFrame->UnblockTooltip();
+#endif
         }
         else
         {
-            GtkWidget* pComboBox = GTK_WIDGET(getContainer());
-
-            gint nComboWidth = gtk_widget_get_allocated_width(pComboBox);
-            GtkRequisition size;
-            gtk_widget_get_preferred_size(GTK_WIDGET(m_pMenuWindow), nullptr, &size);
-
-            gint nPopupWidth = size.width;
-            gint nPopupHeight = get_popup_height(nPopupWidth);
-            nPopupWidth = std::max(nPopupWidth, nComboWidth);
-
-            gtk_widget_set_size_request(GTK_WIDGET(m_pMenuWindow), nPopupWidth, nPopupHeight);
-
             m_nPrePopupCursorPos = get_active();
 
-            m_bActivateCalled = false;
+            m_bUserSelectEntry = false;
 
             // if we are in mru mode always start with the cursor at the top of the menu
             if (m_nMaxMRUCount)
-                tree_view_set_cursor(0);
-
-            show_menu(pComboBox, m_pMenuWindow);
+                set_active_including_mru(0, true);
         }
     }
-#endif
 
     virtual void signal_popup_toggled() override
     {
         m_aQuickSelectionEngine.Reset();
 
-        // toggle_menu();
+        toggle_menu();
 
-        GValue value = G_VALUE_INIT;
-        g_value_init(&value, G_TYPE_BOOLEAN);
-        g_object_get_property(G_OBJECT(m_pComboBox), "popup-shown", &value);
-        bool bIsShown = g_value_get_boolean(&value);
-
+        bool bIsShown = toggle_button_get_active();
         if (m_bPopupActive != bIsShown)
         {
             m_bPopupActive = bIsShown;
@@ -16807,8 +16795,18 @@ private:
                 m_aQuickSelectionEngine.Reset();
                 sal_uInt16 nKeyMod = aKeyCode.GetModifier();
                 // tdf#131076 don't let bare return toggle menu popup active, but do allow deactivate
-                if (nCode == KEY_RETURN && !nKeyMod && !m_bPopupActive)
-                    bDone = combobox_activate();
+                if (nCode == KEY_RETURN && !nKeyMod)
+                {
+                    if (!m_bPopupActive)
+                        bDone = combobox_activate();
+                    else
+                    {
+                        // treat 'return' as if the active entry was clicked on
+                        signalChanged(m_pComboBox, this);
+                        gtk_combo_box_popdown(m_pComboBox);
+                        bDone = true;
+                    }
+                }
                 else if (nCode == KEY_UP && nKeyMod == KEY_MOD2 && m_bPopupActive)
                 {
                     gtk_combo_box_popdown(m_pComboBox);
@@ -16914,10 +16912,7 @@ private:
 
     void set_typeahead_selected_entry(int nSelect)
     {
-        if (m_bPopupActive)
-            tree_view_set_cursor(nSelect);
-        else
-            set_active_including_mru(nSelect, true);
+        set_active_including_mru(nSelect, true);
     }
 
     virtual vcl::StringEntryIdentifier CurrentEntry(OUString& out_entryText) const override
@@ -17031,7 +17026,7 @@ private:
 
     void handle_row_activated()
     {
-        m_bActivateCalled = true;
+        m_bUserSelectEntry = true;
         m_bChangedByMenu = true;
         disable_notify_events();
         int nActive = get_active();
@@ -17276,7 +17271,7 @@ public:
 //        , m_pOverlay(GTK_OVERLAY(gtk_builder_get_object(pComboBuilder, "overlay")))
 //        , m_pTreeView(GTK_TREE_VIEW(gtk_builder_get_object(pComboBuilder, "treeview")))
 //        , m_pOverlayButton(GTK_MENU_BUTTON(gtk_builder_get_object(pComboBuilder, "overlaybutton")))
-//        , m_pMenuWindow(GTK_WINDOW(gtk_builder_get_object(pComboBuilder, "popup")))
+        , m_pMenuWindow(nullptr)
         , m_pTreeModel(gtk_combo_box_get_model(pComboBox))
         , m_pButtonTextRenderer(nullptr)
 //        , m_pToggleButton(GTK_WIDGET(gtk_builder_get_object(pComboBuilder, "button")))
@@ -17291,7 +17286,7 @@ public:
         , m_bAutoCompleteCaseSensitive(false)
         , m_bChangedByMenu(false)
         , m_bCustomRenderer(false)
-        , m_bActivateCalled(false)
+        , m_bUserSelectEntry(false)
         , m_nTextCol(gtk_combo_box_get_entry_text_column(pComboBox))
         , m_nIdCol(gtk_combo_box_get_id_column(pComboBox))
 //        , m_nToggleFocusInSignalId(0)
@@ -17305,7 +17300,16 @@ public:
         , m_nMRUCount(0)
         , m_nMaxMRUCount(0)
     {
-        int nActive = gtk_combo_box_get_active(m_pComboBox);
+        for (GtkWidget* pChild = gtk_widget_get_first_child(GTK_WIDGET(m_pComboBox));
+             pChild; pChild = gtk_widget_get_next_sibling(pChild))
+        {
+            if (GTK_IS_POPOVER(pChild))
+            {
+                m_pMenuWindow = pChild;
+                break;
+            }
+        }
+        SAL_WARN_IF(!m_pMenuWindow, "vcl.gtk", "GtkInstanceComboBox: couldn't find popup menu");
 
         if (gtk_combo_box_get_has_entry(m_pComboBox))
         {
@@ -17330,15 +17334,18 @@ public:
             gtk_widget_add_controller(GTK_WIDGET(m_pComboBox), m_pKeyController);
         }
 
-        if (nActive != -1)
-            tree_view_set_cursor(nActive);
-
 //        g_signal_connect(m_pMenuWindow, "grab-broken-event", G_CALLBACK(signalGrabBroken), this);
 //        g_signal_connect(m_pMenuWindow, "button-press-event", G_CALLBACK(signalButtonPress), this);
 //        g_signal_connect(m_pMenuWindow, "motion-notify-event", G_CALLBACK(signalMotion), this);
+
         // support typeahead for the menu itself, typing into the menu will
         // select via the vcl selection engine, a matching entry.
-//        g_signal_connect(m_pMenuWindow, "key-press-event", G_CALLBACK(signalKeyPress), this);
+        if (m_pMenuWindow)
+        {
+            GtkEventController* pMenuKeyController = GTK_EVENT_CONTROLLER(gtk_event_controller_key_new());
+            g_signal_connect(pMenuKeyController, "key-pressed", G_CALLBACK(signalKeyPress), this);
+            gtk_widget_add_controller(m_pMenuWindow, pMenuKeyController);
+        }
 #if 0
         g_signal_connect(m_pOverlay, "get-child-position", G_CALLBACK(signalGetChildPosition), this);
         gtk_overlay_add_overlay(m_pOverlay, GTK_WIDGET(m_pOverlayButton));
