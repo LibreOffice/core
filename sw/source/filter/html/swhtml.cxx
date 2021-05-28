@@ -2710,7 +2710,7 @@ void SwHTMLFrameFormatListener::Notify(const SfxHint& rHint)
 void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                              std::deque<std::unique_ptr<HTMLAttr>> *pPostIts )
 {
-    std::unique_ptr<SwPaM> pAttrPam( new SwPaM( *m_pPam->GetPoint() ) );
+    SwPaM aAttrPam( *m_pPam->GetPoint() );
     const SwNodeIndex& rEndIdx = m_pPam->GetPoint()->nNode;
     const sal_Int32 nEndCnt = m_pPam->GetPoint()->nContent.GetIndex();
     HTMLAttr* pAttr;
@@ -2803,15 +2803,15 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                         continue;
                     }
                 }
-                pAttrPam->GetPoint()->nNode = pAttr->m_nStartPara;
+                aAttrPam.GetPoint()->nNode = pAttr->m_nStartPara;
 
                 // because of the deleting of BRs the start index can also
                 // point behind the end the text
                 if( pAttr->m_nStartContent > pCNd->Len() )
                     pAttr->m_nStartContent = pCNd->Len();
-                pAttrPam->GetPoint()->nContent.Assign( pCNd, pAttr->m_nStartContent );
+                aAttrPam.GetPoint()->nContent.Assign( pCNd, pAttr->m_nStartContent );
 
-                pAttrPam->SetMark();
+                aAttrPam.SetMark();
                 if ( (pAttr->GetSttPara() != pAttr->GetEndPara()) &&
                          !isTXTATR_NOEND(nWhich) )
                 {
@@ -2824,14 +2824,14 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                         else
                         {
                             OSL_ENSURE( false, "SetAttr: GoPrevious() failed!" );
-                            pAttrPam->DeleteMark();
+                            aAttrPam.DeleteMark();
                             delete pAttr;
                             pAttr = pPrev;
                             continue;
                         }
                     }
 
-                    pAttrPam->GetPoint()->nNode = pAttr->m_nEndPara;
+                    aAttrPam.GetPoint()->nNode = pAttr->m_nEndPara;
                 }
                 else if( pAttr->IsLikePara() )
                 {
@@ -2843,9 +2843,9 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                 if( pAttr->m_nEndContent > pCNd->Len() )
                     pAttr->m_nEndContent = pCNd->Len();
 
-                pAttrPam->GetPoint()->nContent.Assign( pCNd, pAttr->m_nEndContent );
+                aAttrPam.GetPoint()->nContent.Assign( pCNd, pAttr->m_nEndContent );
                 if( bBeforeTable &&
-                    pAttrPam->GetPoint()->nNode.GetIndex() ==
+                    aAttrPam.GetPoint()->nNode.GetIndex() ==
                         rEndIdx.GetIndex() )
                 {
                     // If we're before inserting a table and the attribute ends
@@ -2854,16 +2854,16 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                     if( nWhich != RES_BREAK && nWhich != RES_PAGEDESC &&
                          !isTXTATR_NOEND(nWhich) )
                     {
-                        if( pAttrPam->GetMark()->nNode.GetIndex() !=
+                        if( aAttrPam.GetMark()->nNode.GetIndex() !=
                             rEndIdx.GetIndex() )
                         {
-                            OSL_ENSURE( !pAttrPam->GetPoint()->nContent.GetIndex(),
+                            OSL_ENSURE( !aAttrPam.GetPoint()->nContent.GetIndex(),
                                     "Content-Position before table not 0???" );
-                            pAttrPam->Move( fnMoveBackward );
+                            aAttrPam.Move( fnMoveBackward );
                         }
                         else
                         {
-                            pAttrPam->DeleteMark();
+                            aAttrPam.DeleteMark();
                             delete pAttr;
                             pAttr = pPrev;
                             continue;
@@ -2879,11 +2879,11 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                         IDocumentMarkAccess* const pMarkAccess = m_xDoc->getIDocumentMarkAccess();
                         IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findMark( sName );
                         if( ppBkmk != pMarkAccess->getAllMarksEnd() &&
-                            (*ppBkmk)->GetMarkStart() == *pAttrPam->GetPoint() )
+                            (*ppBkmk)->GetMarkStart() == *aAttrPam.GetPoint() )
                             break; // do not generate duplicates on this position
-                        pAttrPam->DeleteMark();
+                        aAttrPam.DeleteMark();
                         const ::sw::mark::IMark* const pNewMark = pMarkAccess->makeMark(
-                            *pAttrPam,
+                            aAttrPam,
                             sName,
                             IDocumentMarkAccess::MarkType::BOOKMARK,
                             ::sw::mark::InsertMode::New);
@@ -2914,13 +2914,13 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                             aFields.emplace_back( pAttr);
                         }
                     }
-                    pAttrPam->DeleteMark();
+                    aAttrPam.DeleteMark();
                     pAttr = pPrev;
                     continue;
 
                 case RES_LR_SPACE:
-                    if( pAttrPam->GetPoint()->nNode.GetIndex() ==
-                        pAttrPam->GetMark()->nNode.GetIndex())
+                    if( aAttrPam.GetPoint()->nNode.GetIndex() ==
+                        aAttrPam.GetMark()->nNode.GetIndex())
                     {
                         // because of numbering set this attribute directly at node
                         pCNd->SetAttr( *pAttr->m_pItem );
@@ -2940,7 +2940,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                     SfxItemSet aNewSet(m_xDoc->GetAttrPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
 
                     setSvxBrushItemAsFillAttributesToTargetSet(rBrush, aNewSet);
-                    m_xDoc->getIDocumentContentOperations().InsertItemSet(*pAttrPam, aNewSet, SetAttrMode::DONTREPLACE);
+                    m_xDoc->getIDocumentContentOperations().InsertItemSet(aAttrPam, aNewSet, SetAttrMode::DONTREPLACE);
                     break;
                 }
                 default:
@@ -2954,9 +2954,9 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                         m_eJumpTo = JumpToMarks::NONE;
                     }
 
-                    m_xDoc->getIDocumentContentOperations().InsertPoolItem( *pAttrPam, *pAttr->m_pItem, SetAttrMode::DONTREPLACE );
+                    m_xDoc->getIDocumentContentOperations().InsertPoolItem( aAttrPam, *pAttr->m_pItem, SetAttrMode::DONTREPLACE );
                 }
-                pAttrPam->DeleteMark();
+                aAttrPam.DeleteMark();
 
                 delete pAttr;
                 pAttr = pPrev;
@@ -2997,12 +2997,12 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
         if( bMoveFly )
         {
             pFrameFormat->DelFrames();
-            *pAttrPam->GetPoint() = *pFlyPos;
-            pAttrPam->GetPoint()->nContent.Assign( pAttrPam->GetContentNode(),
+            *aAttrPam.GetPoint() = *pFlyPos;
+            aAttrPam.GetPoint()->nContent.Assign( aAttrPam.GetContentNode(),
                                                    m_aMoveFlyCnts[n] );
             SwFormatAnchor aAnchor( rAnchor );
             aAnchor.SetType( RndStdIds::FLY_AT_CHAR );
-            aAnchor.SetAnchor( pAttrPam->GetPoint() );
+            aAnchor.SetAnchor( aAttrPam.GetPoint() );
             pFrameFormat->SetFormatAttr( aAnchor );
 
             const SwFormatHoriOrient& rHoriOri = pFrameFormat->GetHoriOrient();
@@ -3028,20 +3028,20 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
     for (auto & field : aFields)
     {
         pCNd = field->m_nStartPara.GetNode().GetContentNode();
-        pAttrPam->GetPoint()->nNode = field->m_nStartPara;
-        pAttrPam->GetPoint()->nContent.Assign( pCNd, field->m_nStartContent );
+        aAttrPam.GetPoint()->nNode = field->m_nStartPara;
+        aAttrPam.GetPoint()->nContent.Assign( pCNd, field->m_nStartContent );
 
         if( bBeforeTable &&
-            pAttrPam->GetPoint()->nNode.GetIndex() == rEndIdx.GetIndex() )
+            aAttrPam.GetPoint()->nNode.GetIndex() == rEndIdx.GetIndex() )
         {
             OSL_ENSURE( !bBeforeTable, "Aha, the case does occur" );
-            OSL_ENSURE( !pAttrPam->GetPoint()->nContent.GetIndex(),
+            OSL_ENSURE( !aAttrPam.GetPoint()->nContent.GetIndex(),
                     "Content-Position before table not 0???" );
             // !!!
-            pAttrPam->Move( fnMoveBackward );
+            aAttrPam.Move( fnMoveBackward );
         }
 
-        m_xDoc->getIDocumentContentOperations().InsertPoolItem( *pAttrPam, *field->m_pItem );
+        m_xDoc->getIDocumentContentOperations().InsertPoolItem( aAttrPam, *field->m_pItem );
 
         field.reset();
     }
@@ -5613,8 +5613,8 @@ namespace
 bool TestImportHTML(SvStream &rStream)
 {
     FontCacheGuard aFontCacheGuard;
-    std::unique_ptr<Reader> xReader(new HTMLReader);
-    xReader->m_pStream = &rStream;
+    HTMLReader aReader;
+    aReader.m_pStream = &rStream;
 
     SwGlobals::ensure();
 
@@ -5628,7 +5628,7 @@ bool TestImportHTML(SvStream &rStream)
     bool bRet = false;
     try
     {
-        bRet = xReader->Read(*pD, OUString(), aPaM, OUString()) == ERRCODE_NONE;
+        bRet = aReader.Read(*pD, OUString(), aPaM, OUString()) == ERRCODE_NONE;
     }
     catch (const std::runtime_error&)
     {

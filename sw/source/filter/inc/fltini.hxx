@@ -33,7 +33,6 @@ class HTMLReader : public Reader
 {
     // we don't want to have the streams/storages open
     virtual bool SetStrmStgPtr() override;
-    virtual ErrCode Read(SwDoc&, const OUString& rBaseURL, SwPaM&, const OUString&) override;
     virtual OUString GetTemplateName(SwDoc& rDoc) const override;
 
     /// Parse FilterOptions passed to the importer.
@@ -43,6 +42,7 @@ class HTMLReader : public Reader
 
 public:
     HTMLReader();
+    virtual ErrCode Read(SwDoc&, const OUString& rBaseURL, SwPaM&, const OUString&) override;
 };
 
 class XMLReader : public Reader

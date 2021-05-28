@@ -1538,8 +1538,8 @@ SwXText::convertToTextFrame(
         throw  uno::RuntimeException();
     }
     uno::Reference< text::XTextContent > xRet;
-    std::unique_ptr<SwUnoInternalPaM> pTempStartPam(new SwUnoInternalPaM(*GetDoc()));
-    std::unique_ptr< SwUnoInternalPaM > pEndPam(new SwUnoInternalPaM(*GetDoc()));
+    std::optional<SwUnoInternalPaM> pTempStartPam(*GetDoc());
+    std::optional<SwUnoInternalPaM> pEndPam(*GetDoc());
     if (!::sw::XTextRangeToSwPaM(*pTempStartPam, xStart) ||
         !::sw::XTextRangeToSwPaM(*pEndPam, xEnd))
     {
