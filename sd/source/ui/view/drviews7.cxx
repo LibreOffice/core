@@ -988,11 +988,11 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     {
         if( GetActiveWindow()->GetZoom() <= GetActiveWindow()->GetMinZoom() || GetDocSh()->IsUIActive() )
         {
-            rSet.DisableItem( SID_ZOOM_IN );
+            rSet.DisableItem( SID_ZOOM_OUT );
             rSet.DisableItem( SID_ZOOM_PANNING );
         }
         if( GetActiveWindow()->GetZoom() >= GetActiveWindow()->GetMaxZoom() || GetDocSh()->IsUIActive() )
-            rSet.DisableItem( SID_ZOOM_OUT );
+            rSet.DisableItem( SID_ZOOM_IN );
     }
 
     if (!mpZoomList->IsNextPossible())

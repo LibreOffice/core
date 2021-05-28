@@ -74,8 +74,8 @@ void SwView::GetState(SfxItemSet &rSet)
             case SID_ZOOM_OUT:
             {
                 tools::Long nFact = m_pWrtShell->GetViewOptions()->GetZoom();
-                if ((SID_ZOOM_OUT == nWhich && nFact >= tools::Long(600)) ||
-                        (SID_ZOOM_IN == nWhich && nFact <= tools::Long(20)))
+                if ((SID_ZOOM_IN == nWhich && nFact >= tools::Long(600)) ||
+                        (SID_ZOOM_OUT == nWhich && nFact <= tools::Long(20)))
                 {
                     rSet.DisableItem(nWhich);
                 }
