@@ -22037,6 +22037,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/swriter/ui/inserttable.ui" &&
         rUIFile != "modules/swriter/ui/renameobjectdialog.ui" &&
         rUIFile != "modules/swriter/ui/statisticsinfopage.ui" &&
+        rUIFile != "modules/swriter/ui/titlepage.ui" &&
         rUIFile != "modules/swriter/ui/wordcount.ui")
     {
         SAL_WARN( "vcl.gtk", rUIFile);
