@@ -115,11 +115,15 @@ enum Paper : unsigned
     PAPER_SCREEN_16_9,
     PAPER_SCREEN_16_10,
     PAPER_16K_195x270,
-    PAPER_16K_197x273
+    PAPER_16K_197x273,
+    PAPER_WIDESCREEN, //PowerPoint Widescreen
+    PAPER_ONSCREENSHOW_4_3, //PowerPoint On-screen Show (4:3)
+    PAPER_ONSCREENSHOW_16_9, //PowerPoint On-screen Show (16:9)
+    PAPER_ONSCREENSHOW_16_10 //PowerPoint On-screen Show (16:10)
 };
 
 // defined for 'equal size' test with the implementation array
-#define NUM_PAPER_ENTRIES (PAPER_16K_197x273 - PAPER_A0 + 1)
+#define NUM_PAPER_ENTRIES (PAPER_ONSCREENSHOW_16_10 - PAPER_A0 + 1)
 
 class I18NUTIL_DLLPUBLIC PaperInfo
 {

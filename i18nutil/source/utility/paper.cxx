@@ -156,7 +156,11 @@ const PageDesc aDinTab[] =
     { MM2MM100( 157.5),  MM2MM100( 280 ),    nullptr,  nullptr }, //Screen 16:9
     { MM2MM100( 175 ),   MM2MM100( 280 ),    nullptr,  nullptr }, //Screen 16:10
     { MM2MM100( 195 ),   MM2MM100( 270 ),    nullptr,  nullptr }, // 16k
-    { MM2MM100( 197 ),   MM2MM100( 273 ),    nullptr,  nullptr }  // 16k
+    { MM2MM100( 197 ),   MM2MM100( 273 ),    nullptr,  nullptr }, // 16k
+    { IN2MM100( 7.5 ),   IN2MM100( 13.333 ), nullptr,  nullptr }, //PowerPoint Widescreen
+    { IN2MM100( 7.5 ),   IN2MM100( 10 ),     nullptr,  nullptr }, //PowerPoint On-screen Show (4:3)
+    { IN2MM100( 5.625 ), IN2MM100( 10 ),     nullptr,  nullptr }, //PowerPoint On-screen Show (16:9)
+    { IN2MM100( 6.25 ),  IN2MM100( 10 ),     nullptr,  nullptr }  //PowerPoint On-screen Show (16:10)
 
 };
 

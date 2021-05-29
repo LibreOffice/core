@@ -968,7 +968,7 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperSizeSelect_Impl, weld::ComboBox&, void)
 
     // Draw: if paper format the margin shall be 1 cm
     tools::Long nTmp = 0;
-    bool bScreen = (( PAPER_SCREEN_4_3 == ePaper )||( PAPER_SCREEN_16_9 == ePaper)||( PAPER_SCREEN_16_10 == ePaper));
+    bool bScreen = (( PAPER_SCREEN_4_3 == ePaper )||( PAPER_SCREEN_16_9 == ePaper)||( PAPER_SCREEN_16_10 == ePaper)||( PAPER_WIDESCREEN == ePaper)||( PAPER_ONSCREENSHOW_4_3 == ePaper)||( PAPER_ONSCREENSHOW_16_9 == ePaper)||( PAPER_ONSCREENSHOW_16_10 == ePaper));
 
     if ( !bScreen )
         // no margin if screen
@@ -1367,7 +1367,7 @@ DeactivateRC SvxPageDescPage::DeactivatePage( SfxItemSet* _pSet )
     // If not, stay on the TabPage.
     Paper ePaper = m_xPaperSizeBox->get_active_id();
 
-    if ( ePaper != PAPER_SCREEN_4_3 && ePaper != PAPER_SCREEN_16_9 && ePaper != PAPER_SCREEN_16_10 && IsMarginOutOfRange() )
+    if ( ePaper != PAPER_SCREEN_4_3 && ePaper != PAPER_SCREEN_16_9 && ePaper != PAPER_SCREEN_16_10 && ePaper != PAPER_WIDESCREEN && ePaper != PAPER_ONSCREENSHOW_4_3 && ePaper != PAPER_ONSCREENSHOW_16_9 && ePaper != PAPER_ONSCREENSHOW_16_10 && IsMarginOutOfRange() )
     {
         std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                        VclMessageType::Question, VclButtonsType::YesNo,
