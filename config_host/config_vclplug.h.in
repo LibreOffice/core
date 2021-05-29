@@ -7,6 +7,11 @@ Settings about which desktops have support enabled.
 #ifndef CONFIG_VCLPLUG_H
 #define CONFIG_VCLPLUG_H
 
+/**
+ * Set, if the platform uses X11 code.
+ */
+#define USING_X11 0
+
 #define ENABLE_GTK3 0
 #define ENABLE_GTK3_KDE5 0
 #define ENABLE_KF5 0

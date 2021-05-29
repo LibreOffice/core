@@ -665,6 +665,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/unx/generic/printer/ppdparser \
     vcl/null/printerinfomanager \
     vcl/android/androidinst \
+    vcl/source/app/salplug \
     $(vcl_headless_code) \
     $(vcl_headless_freetype_code) \
 ))
