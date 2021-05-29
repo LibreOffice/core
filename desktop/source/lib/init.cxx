@@ -1065,6 +1065,7 @@ static void doc_postKeyEvent(LibreOfficeKitDocument* pThis,
                              int nType,
                              int nCharCode,
                              int nKeyCode);
+static void doc_setFreemiumSession(bool isFreemium, const std::vector<std::string> &freemiumBlacklist);
 static void doc_postWindowExtTextInputEvent(LibreOfficeKitDocument* pThis,
                                             unsigned nWindowId,
                                             int nType,
@@ -1328,6 +1329,8 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->completeFunction = doc_completeFunction;
 
         m_pDocumentClass->sendFormFieldEvent = doc_sendFormFieldEvent;
+
+        m_pDocumentClass->setFreemiumSession = doc_setFreemiumSession;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -3545,6 +3548,11 @@ static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nChar
         SetLastExceptionMsg(exception.Message);
         SAL_INFO("lok", "Failed to postKeyEvent " << exception.Message);
     }
+}
+
+static void doc_setFreemiumSession(bool isFreemium, const std::vector<std::string> &freemiumBlacklist)
+{
+    comphelper::LibreOfficeKit::setFreemiumSession(isFreemium, freemiumBlacklist);
 }
 
 static void doc_postWindowExtTextInputEvent(LibreOfficeKitDocument* pThis, unsigned nWindowId, int nType, const char* pText)

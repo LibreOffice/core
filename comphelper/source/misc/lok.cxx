@@ -10,6 +10,7 @@
 #include <comphelper/lok.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <sal/log.hxx>
+#include <algorithm>
 
 #include <iostream>
 
@@ -33,6 +34,10 @@ static bool g_bViewIdForVisCursorInvalidation(false);
 static bool g_bLocalRendering(false);
 
 static Compat g_eCompatFlags(Compat::none);
+
+static bool _isFreemiumSession(false);
+
+static std::vector<std::string> _freemiumBlacklist{};
 
 namespace
 {
@@ -282,6 +287,32 @@ void statusIndicatorFinish()
 {
     if (pStatusIndicatorCallback)
         pStatusIndicatorCallback(pStatusIndicatorCallbackData, statusIndicatorCallbackType::Finish, 0);
+}
+
+void setFreemiumSession(bool isFreemium, const std::vector<std::string> &freemiumBlacklist)
+{
+    _isFreemiumSession = isFreemium;
+    _freemiumBlacklist = freemiumBlacklist;
+}
+
+bool isFreemiumSession()
+{
+    return _isFreemiumSession;
+}
+
+const std::vector<std::string>& getFreemiumBlackList()
+{
+    return _freemiumBlacklist;
+}
+
+bool isCommandFreemiumBlackListed(const OUString& command)
+{
+    // return std::find(_freemiumBlacklist.begin(), _freemiumBlacklist.end(), command) != _freemiumBlacklist.end();
+    OString sConverted;
+    command.convertToString(&sConverted, RTL_TEXTENCODING_UTF8, 0);
+
+    std::string commandString(sConverted.getStr(), sConverted.getLength());
+    return std::find(_freemiumBlacklist.begin(), _freemiumBlacklist.end(), commandString) != _freemiumBlacklist.end();
 }
 
 } // namespace

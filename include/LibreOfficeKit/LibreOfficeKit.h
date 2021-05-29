@@ -11,6 +11,8 @@
 #define INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKIT_H
 
 #include <stddef.h>
+#include <string>
+#include <vector>
 
 // the unstable API needs C99's bool
 // TODO remove the C99 types from the API before making stable
@@ -191,6 +193,9 @@ struct _LibreOfficeKitDocumentClass
     void (*registerCallback) (LibreOfficeKitDocument* pThis,
                               LibreOfficeKitCallback pCallback,
                               void* pData);
+
+    /// @see lok::Document::setFreemiumSession
+    void (*setFreemiumSession) (bool isFreemium, const std::vector<std::string> &freemiumBlacklist);
 
     /// @see lok::Document::postKeyEvent
     void (*postKeyEvent) (LibreOfficeKitDocument* pThis,
