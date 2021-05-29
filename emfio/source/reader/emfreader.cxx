@@ -1817,9 +1817,9 @@ namespace emfio
                         mpInputStream->ReadInt32( nLeftRect ).ReadInt32( nTopRect ).ReadInt32( nRightRect ).ReadInt32( nBottomRect );
                         const tools::Rectangle aRect( nLeftRect, nTopRect, nRightRect, nBottomRect );
                         BkMode mnBkModeBackup = mnBkMode;
-                        if ( nOptions & ETO_NO_RECT ) // Don't draw the background rectangle
+                        if ( nOptions & ETO_NO_RECT ) // Don't draw the background rectangle and text background
                             mnBkMode = BkMode::Transparent;
-                        if ( nOptions & ETO_OPAQUE )
+                        else if ( nOptions & ETO_OPAQUE )
                             DrawRectWithBGColor( aRect );
                         mpInputStream->ReadUInt32( offDx );
 
