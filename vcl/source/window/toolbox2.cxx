@@ -368,7 +368,7 @@ void ToolBox::Select()
     CallEventListeners( VclEventId::ToolboxSelect );
     maSelectHdl.Call( this );
 
-    if ( xWindow->IsDisposed() )
+    if ( xWindow->isDisposed() )
         return;
 
     // TODO: GetFloatingWindow in DockingWindow is currently inline, change it to check dockingwrapper
@@ -1620,14 +1620,14 @@ void ToolBox::ExecuteCustomMenu( const tools::Rectangle& rRect )
     sal_uInt16 uId = GetMenu()->Execute( pWin, tools::Rectangle( ImplGetPopupPosition( aMenuRect ), Size() ),
                             PopupMenuFlags::ExecuteDown | PopupMenuFlags::NoMouseUpClose );
 
-    if ( pWin->IsDisposed() )
+    if ( pWin->isDisposed() )
         return;
 
     if( GetMenu() )
         GetMenu()->RemoveEventListener( LINK( this, ToolBox, ImplCustomMenuListener ) );
     if( bBorderDel )
     {
-        if( pBorderWin->IsDisposed() )
+        if( pBorderWin->isDisposed() )
             return;
     }
 
