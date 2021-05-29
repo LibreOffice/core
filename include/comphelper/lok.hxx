@@ -12,6 +12,7 @@
 
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ustring.hxx>
+#include <vector>
 
 class LanguageTag;
 
@@ -107,6 +108,10 @@ COMPHELPER_DLLPUBLIC bool isAllowlistedLanguage(const OUString& lang);
 COMPHELPER_DLLPUBLIC void statusIndicatorStart();
 COMPHELPER_DLLPUBLIC void statusIndicatorSetValue(int percent);
 COMPHELPER_DLLPUBLIC void statusIndicatorFinish();
+
+COMPHELPER_DLLPUBLIC void setFreemiumBlackList(const char* freemiumBlacklist);
+COMPHELPER_DLLPUBLIC const std::vector<OUString>& getFreemiumBlackList();
+COMPHELPER_DLLPUBLIC bool isCommandFreemiumBlackListed(const OUString& command);
 }
 
 #endif // INCLUDED_COMPHELPER_LOK_HXX

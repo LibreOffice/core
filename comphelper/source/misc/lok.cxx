@@ -10,6 +10,7 @@
 #include <comphelper/lok.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <sal/log.hxx>
+#include <algorithm>
 
 #include <iostream>
 
@@ -33,6 +34,8 @@ static bool g_bViewIdForVisCursorInvalidation(false);
 static bool g_bLocalRendering(false);
 
 static Compat g_eCompatFlags(Compat::none);
+
+static std::vector<OUString> g_bFreemiumBlacklist;
 
 namespace
 {
@@ -282,6 +285,31 @@ void statusIndicatorFinish()
 {
     if (pStatusIndicatorCallback)
         pStatusIndicatorCallback(pStatusIndicatorCallbackData, statusIndicatorCallbackType::Finish, 0);
+}
+
+void setFreemiumBlackList(const char* freemiumBlacklist)
+{
+    if(!g_bFreemiumBlacklist.empty())
+        return;
+
+    OUString BlackListString(freemiumBlacklist, strlen(freemiumBlacklist), RTL_TEXTENCODING_UTF8);
+
+    OUString command = BlackListString.getToken(0, ' ');
+    for (size_t i = 1; !command.isEmpty(); i++)
+    {
+        g_bFreemiumBlacklist.emplace_back(command);
+        command = BlackListString.getToken(i, ' ');
+    }
+}
+
+const std::vector<OUString>& getFreemiumBlackList()
+{
+    return g_bFreemiumBlacklist;
+}
+
+bool isCommandFreemiumBlackListed(const OUString& command)
+{
+    return std::find(g_bFreemiumBlacklist.begin(), g_bFreemiumBlacklist.end(), command) != g_bFreemiumBlacklist.end();
 }
 
 } // namespace
