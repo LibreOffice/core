@@ -110,6 +110,8 @@ SvxGradientTabPage::SvxGradientTabPage(weld::Container* pPage, weld::DialogContr
     m_xMtrColorTo->connect_value_changed( aLink );
     m_xLbColorTo->SetSelectHdl( aLink3 );
 
+    m_xGradientLB->SetStyle(WB_FLATVALUESET | WB_NO_DIRECTSELECT | WB_TABSTOP);
+
     // #i76307# always paint the preview in LTR, because this is what the document does
     m_aCtlPreview.EnableRTL(false);
 }

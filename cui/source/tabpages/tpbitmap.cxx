@@ -127,6 +127,8 @@ SvxBitmapTabPage::SvxBitmapTabPage(weld::Container* pPage, weld::DialogControlle
     SetFieldUnit( *m_xBitmapWidth, meFieldUnit, true );
     SetFieldUnit( *m_xBitmapHeight, meFieldUnit, true );
 
+    m_xBitmapLB->SetStyle(WB_FLATVALUESET | WB_NO_DIRECTSELECT | WB_TABSTOP);
+
     SfxViewShell* pViewShell = SfxViewShell::Current();
     if( pViewShell )
         mpView = pViewShell->GetDrawView();

@@ -133,10 +133,12 @@ SvxColorTabPage::SvxColorTabPage(weld::Container* pPage, weld::DialogController*
     m_xCMYKpreset->set_sensitive(false);
 
     // ValueSet
-    m_xValSetColorList->SetStyle(m_xValSetColorList->GetStyle() | WB_ITEMBORDER);
+    m_xValSetColorList->SetStyle(m_xValSetColorList->GetStyle() |
+            WB_FLATVALUESET | WB_ITEMBORDER | WB_NO_DIRECTSELECT | WB_TABSTOP);
     m_xValSetColorList->Show();
 
-    m_xValSetRecentList->SetStyle(m_xValSetRecentList->GetStyle() | WB_ITEMBORDER);
+    m_xValSetRecentList->SetStyle(m_xValSetRecentList->GetStyle() |
+            WB_FLATVALUESET | WB_ITEMBORDER | WB_NO_DIRECTSELECT | WB_TABSTOP);
     m_xValSetRecentList->Show();
 
     maPaletteManager.ReloadRecentColorSet(*m_xValSetRecentList);
