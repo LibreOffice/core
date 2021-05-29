@@ -106,8 +106,12 @@ const char* RID_STR_PAPERNAMES[] =
     NC_("RID_STR_PAPERNAMES", "Screen 16:9"),
     NC_("RID_STR_PAPERNAMES", "Screen 16:10"),
     NC_("RID_STR_PAPERNAMES", "16k (195 x 270)"),
+    NC_("RID_STR_PAPERNAMES", "16k (197 x 273)"),
+    NC_("RID_STR_PAPERNAMES", "Widescreen"),
+    NC_("RID_STR_PAPERNAMES", "On-screen Show (4:3)"),
+    NC_("RID_STR_PAPERNAMES", "On-screen Show (16:9)"),
     // To translators: This is the last entry of the sequence of paper size names
-    NC_("RID_STR_PAPERNAMES", "16k (197 x 273)")
+    NC_("RID_STR_PAPERNAMES", "On-screen Show (16:10)")
 };
 
 #endif // INCLUDED_VCL_INC_PRINT_HRC
