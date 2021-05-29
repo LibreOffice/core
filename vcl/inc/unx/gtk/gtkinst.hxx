@@ -57,17 +57,23 @@ class GtkSalFrame;
 gint gtk_dialog_run(GtkDialog *dialog);
 #endif
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
 struct VclToGtkHelper
 {
     std::vector<css::datatransfer::DataFlavor> aInfoToFlavor;
+#if GTK_CHECK_VERSION(4, 0, 0)
+    std::vector<OString> FormatsToGtk(const css::uno::Sequence<css::datatransfer::DataFlavor> &rFormats);
+#else
     std::vector<GtkTargetEntry> FormatsToGtk(const css::uno::Sequence<css::datatransfer::DataFlavor> &rFormats);
+#endif
+#if !GTK_CHECK_VERSION(4, 0, 0)
     void setSelectionData(const css::uno::Reference<css::datatransfer::XTransferable> &rTrans,
                           GtkSelectionData *selection_data, guint info);
-private:
-    GtkTargetEntry makeGtkTargetEntry(const css::datatransfer::DataFlavor& rFlavor);
-};
 #endif
+private:
+#if !GTK_CHECK_VERSION(4, 0, 0)
+    GtkTargetEntry makeGtkTargetEntry(const css::datatransfer::DataFlavor& rFlavor);
+#endif
+};
 
 class GtkTransferable : public cppu::WeakImplHelper<css::datatransfer::XTransferable>
 {
