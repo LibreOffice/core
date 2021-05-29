@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8502a467_09edd705",
+        "filename": "sc/source/ui/view/tabvwsh3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-05-29T22:56:17Z",
+      "side": 1,
+      "message": "SID_ZOOM_IN calling zoomOut() is definitely wrong.",
+      "revId": "96a934de2da419b790b580e5998d3a9229ac25ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
