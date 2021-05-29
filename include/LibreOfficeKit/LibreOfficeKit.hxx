@@ -787,6 +787,11 @@ public:
         mpDoc->pClass->sendFormFieldEvent(mpDoc, pArguments);
     }
 
+    void setFreemiumSession(bool isFreemium, const char* freemiumBlacklist)
+    {
+        mpDoc->pClass->setFreemiumSession(isFreemium, freemiumBlacklist);
+    }
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

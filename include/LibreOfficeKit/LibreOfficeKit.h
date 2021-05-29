@@ -192,6 +192,9 @@ struct _LibreOfficeKitDocumentClass
                               LibreOfficeKitCallback pCallback,
                               void* pData);
 
+    /// @see lok::Document::setFreemiumSession
+    void (*setFreemiumSession) (bool isFreemium, const char* freemiumBlacklist);
+
     /// @see lok::Document::postKeyEvent
     void (*postKeyEvent) (LibreOfficeKitDocument* pThis,
                           int nType,
