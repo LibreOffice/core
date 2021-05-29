@@ -68,6 +68,7 @@
 #include <unotools/pathoptions.hxx>
 #include <osl/time.h>
 #include <sfx2/lokhelper.hxx>
+#include <basic/sberrors.hxx>
 
 #include <map>
 #include <memory>
@@ -615,6 +616,22 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
 {
     collectUsageInformation(aURL, aArgs);
     collectUIInformation(aURL, aArgs);
+
+    if (comphelper::LibreOfficeKit::isActive() &&
+        SfxViewShell::Current()->isFreemiumView() &&
+        comphelper::LibreOfficeKit::isCommandFreemiumBlackListed(aURL.Complete))
+    {
+        boost::property_tree::ptree aTree;
+        aTree.put("code", ErrCode(ERRCODE_BASIC_ACCESS_DENIED));
+        aTree.put("kind", "failure");
+        aTree.put("cmd", "freemiumstatus");
+        aTree.put("message", "Blocked Freemium feature");
+
+        std::stringstream aStream;
+        boost::property_tree::write_json(aStream, aTree);
+        SfxViewShell::Current()->libreOfficeKitViewCallback(LOK_CALLBACK_ERROR, aStream.str().c_str());
+        return;
+    }
 
     SolarMutexGuard aGuard;
     if (
