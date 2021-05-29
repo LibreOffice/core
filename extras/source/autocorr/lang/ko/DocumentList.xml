@@ -2489,8 +2489,8 @@
   <block-list:block block-list:abbreviated-name="예뿌" block-list:name="예뻐"/>
   <block-list:block block-list:abbreviated-name="예뿌게" block-list:name="예쁘게"/>
   <block-list:block block-list:abbreviated-name="오랫만" block-list:name="오랜만"/>
-  <block-list:block block-list:abbreviated-name="올께" block-list:name="올게"/>"/>
-  <block-list:block block-list:abbreviated-name="와싿" block-list:name="왔다"/>"/>
+  <block-list:block block-list:abbreviated-name="올께" block-list:name="올게"/>
+  <block-list:block block-list:abbreviated-name="와싿" block-list:name="왔다"/>
   <block-list:block block-list:abbreviated-name="와싿가싿" block-list:name="왔다갔다"/>
   <block-list:block block-list:abbreviated-name="왠만하면" block-list:name="웬만하면"/>
   <block-list:block block-list:abbreviated-name="외형율" block-list:name="외형률"/>
@@ -2527,24 +2527,40 @@
   <block-list:block block-list:abbreviated-name="퇴마루" block-list:name="툇마루"/>
   <block-list:block block-list:abbreviated-name="틈틈히" block-list:name="틈틈이"/>
   <block-list:block block-list:abbreviated-name="파괘한다" block-list:name="파괴한다"/>
-  <block-list:block block-list:abbreviated-name="피다" block-list:name="피우다"/>
   <block-list:block block-list:abbreviated-name="핑게" block-list:name="핑계"/>
+  <block-list:block block-list:abbreviated-name="하눙" block-list:name="하는"/>
   <block-list:block block-list:abbreviated-name="하마트면" block-list:name="하마터면"/>
   <block-list:block block-list:abbreviated-name="하세유" block-list:name="하세요"/>
+  <block-list:block block-list:abbreviated-name="하셧슴돠" block-list:name="하셨습니다"/>
+  <block-list:block block-list:abbreviated-name="하셧어" block-list:name="하셨어"/>
+  <block-list:block block-list:abbreviated-name="할랭" block-list:name="할래"/>
   <block-list:block block-list:abbreviated-name="할려고" block-list:name="하려고"/>
+  <block-list:block block-list:abbreviated-name="할뤠" block-list:name="할래"/>
+  <block-list:block block-list:abbreviated-name="할이버지" block-list:name="할아버지"/>
+  <block-list:block block-list:abbreviated-name="할쟉" block-list:name="할짝"/>
   <block-list:block block-list:abbreviated-name="함수값" block-list:name="함숫값"/>
   <block-list:block block-list:abbreviated-name="합격율" block-list:name="합격률"/>
+  <block-list:block block-list:abbreviated-name="항가항가" block-list:name="하악하악"/>
+  <block-list:block block-list:abbreviated-name="해꾸랴" block-list:name="했구랴"/>
   <block-list:block block-list:abbreviated-name="해도지" block-list:name="해돋이"/>
   <block-list:block block-list:abbreviated-name="해싿" block-list:name="했다"/>
   <block-list:block block-list:abbreviated-name="핼쓱하다" block-list:name="핼쑥하다"/>
+  <block-list:block block-list:abbreviated-name="햇다" block-list:name="했다"/>
+  <block-list:block block-list:abbreviated-name="햇쑴니" block-list:name="했습니"/>
   <block-list:block block-list:abbreviated-name="햇어" block-list:name="했어"/>
   <block-list:block block-list:abbreviated-name="했써" block-list:name="했어"/>
   <block-list:block block-list:abbreviated-name="헤택" block-list:name="혜택"/>
   <block-list:block block-list:abbreviated-name="헥갈리다" block-list:name="헷갈리다"/>
   <block-list:block block-list:abbreviated-name="헬쑥하다" block-list:name="핼쑥하다"/>
+  <block-list:block block-list:abbreviated-name="혼나규" block-list:name="혼나고"/>
   <block-list:block block-list:abbreviated-name="회수" block-list:name="횟수"/>
   <block-list:block block-list:abbreviated-name="흉헙다" block-list:name="흉업다"/>
   <block-list:block block-list:abbreviated-name="흐리멍텅" block-list:name="흐리멍덩"/>
   <block-list:block block-list:abbreviated-name="희안" block-list:name="희한"/>
+  <block-list:block block-list:abbreviated-name="히매셈" block-list:name="힘내세요"/>
+  <block-list:block block-list:abbreviated-name="힐고같아" block-list:name="힐것같아"/>
+  <block-list:block block-list:abbreviated-name="힘냉" block-list:name="힘내"/>
   <block-list:block block-list:abbreviated-name="힘들게싿" block-list:name="힘들겠다"/>
+  <block-list:block block-list:abbreviated-name="힘듬" block-list:name="힘듦"/>
+  <block-list:block block-list:abbreviated-name="힘쌔고" block-list:name="힘세고"/>
 </block-list:block-list>
