@@ -177,7 +177,7 @@
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="fldrefpage|label3">Insert _reference to</property>
+                    <property name="label" translatable="yes" context="fldrefpage|label3">_Refer using:</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <attributes>
@@ -308,7 +308,7 @@
                             </child>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="selecttip-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="fldrefpage|extended_tip|selecttip">Lists the available fields for the field type selected in the Type list. To insert a field, click the field, select a format in the "Insert reference to" list, and then click Insert.</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="fldrefpage|extended_tip|selecttip">Lists the available fields for the field type selected in the Type list. To insert a field, click the field, select a format in the "Refer using" list, and then click Insert.</property>
                               </object>
                             </child>
                           </object>

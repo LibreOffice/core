@@ -1027,11 +1027,11 @@
 /*--------------------------------------------------------------------
     Description: formats references
  --------------------------------------------------------------------*/
-#define FMT_REF_TEXT                            NC_("FMT_REF_TEXT", "Reference")
-#define FMT_REF_PAGE                            NC_("FMT_REF_PAGE", "Page")
+#define FMT_REF_TEXT                            NC_("FMT_REF_TEXT", "Referenced text")
+#define FMT_REF_PAGE                            NC_("FMT_REF_PAGE", "Page number (unstyled)")
 #define FMT_REF_CHAPTER                         NC_("FMT_REF_CHAPTER", "Chapter")
-#define FMT_REF_UPDOWN                          NC_("FMT_REF_UPDOWN", "Above/Below")
-#define FMT_REF_PAGE_PGDSC                      NC_("FMT_REF_PAGE_PGDSC", "As Page Style")
+#define FMT_REF_UPDOWN                          NC_("FMT_REF_UPDOWN", "“Above”/“Below”")
+#define FMT_REF_PAGE_PGDSC                      NC_("FMT_REF_PAGE_PGDSC", "Page number (styled)")
 #define FMT_REF_ONLYNUMBER                      NC_("FMT_REF_ONLYNUMBER", "Category and Number")
 #define FMT_REF_ONLYCAPTION                     NC_("FMT_REF_ONLYCAPTION", "Caption Text")
 #define FMT_REF_ONLYSEQNO                       NC_("FMT_REF_ONLYSEQNO", "Numbering")
