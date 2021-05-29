@@ -1381,12 +1381,15 @@ namespace emfio
     {
         WinMtfFillStyle aFillStyleBackup = maFillStyle;
         bool            aTransparentBackup = maLineStyle.bTransparent;
+        BkMode          mnBkModeBackup = mnBkMode;
 
         const tools::Polygon aPoly( rRect );
         maLineStyle.bTransparent = true;
         maFillStyle = maBkColor;
+        mnBkMode = BkMode::OPAQUE;
         ImplSetNonPersistentLineColorTransparenz();
         DrawPolygon(aPoly, false);
+        mnBkMode = mnBkModeBackup; // The rectangle is always drawed
         maFillStyle = aFillStyleBackup;
         maLineStyle.bTransparent = aTransparentBackup;
     }

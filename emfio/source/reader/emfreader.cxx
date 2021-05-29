@@ -1819,7 +1819,7 @@ namespace emfio
                         BkMode mnBkModeBackup = mnBkMode;
                         if ( nOptions & ETO_NO_RECT ) // Don't draw the background rectangle
                             mnBkMode = BkMode::Transparent;
-                        if ( nOptions & ETO_OPAQUE )
+                        else if ( nOptions & ETO_OPAQUE )
                             DrawRectWithBGColor( aRect );
                         mpInputStream->ReadUInt32( offDx );
 
