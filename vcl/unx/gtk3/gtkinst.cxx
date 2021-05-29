@@ -2180,23 +2180,22 @@ GtkWindow* get_active_window()
     return pFocus;
 }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-void LocalizeDecimalSeparator(GdkEventKey* pEvent)
+void LocalizeDecimalSeparator(guint& keyval)
 {
     // #i1820# use locale specific decimal separator
-    if (pEvent->keyval == GDK_KEY_KP_Decimal && Application::GetSettings().GetMiscSettings().GetEnableLocalizedDecimalSep())
+    if (keyval == GDK_KEY_KP_Decimal && Application::GetSettings().GetMiscSettings().GetEnableLocalizedDecimalSep())
     {
         GtkWindow* pFocusWin = get_active_window();
         GtkWidget* pFocus = pFocusWin ? gtk_window_get_focus(pFocusWin) : nullptr;
         // tdf#138932 except if the target is a GtkEntry used for passwords
+        // GTK4: TODO is it a GtkEntry or a child GtkText that has the focus in this situation?
         if (!pFocus || !GTK_IS_ENTRY(pFocus) || gtk_entry_get_visibility(GTK_ENTRY(pFocus)))
         {
             OUString aSep(Application::GetSettings().GetLocaleDataWrapper().getNumDecimalSep());
-            pEvent->keyval = aSep[0];
+            keyval = aSep[0];
         }
     }
 }
-#endif
 
 void set_cursor(GtkWidget* pWidget, const char *pName)
 {
@@ -2482,7 +2481,7 @@ private:
 #if !GTK_CHECK_VERSION(4, 0, 0)
     static gboolean signalKey(GtkWidget*, GdkEventKey* pEvent, gpointer widget)
     {
-        LocalizeDecimalSeparator(pEvent);
+        LocalizeDecimalSeparator(pEvent->keyval);
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
         return pThis->signal_key(pEvent);
     }
@@ -16672,9 +16671,7 @@ private:
     static gboolean signalEntryKeyPress(GtkEventControllerKey*, guint keyval, guint keycode, GdkModifierType state, gpointer widget)
     {
         GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
-#if 0
-        LocalizeDecimalSeparator(pEvent);
-#endif
+        LocalizeDecimalSeparator(keyval);
         return pThis->signal_entry_key_press(CreateKeyEvent(keyval, keycode, state, 0));
     }
 
@@ -18401,7 +18398,7 @@ private:
     static gboolean signalEntryKeyPress(GtkWidget*, GdkEventKey* pEvent, gpointer widget)
     {
         GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
-        LocalizeDecimalSeparator(pEvent);
+        LocalizeDecimalSeparator(pEvent->keyval);
         return pThis->signal_entry_key_press(pEvent);
     }
 
