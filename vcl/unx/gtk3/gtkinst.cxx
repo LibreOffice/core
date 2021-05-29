@@ -836,10 +836,12 @@ class VclGtkClipboard :
     Reference<css::datatransfer::XTransferable>              m_aContents;
     Reference<css::datatransfer::clipboard::XClipboardOwner> m_aOwner;
     std::vector< Reference<css::datatransfer::clipboard::XClipboardListener> > m_aListeners;
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+    std::vector<OString> m_aGtkTargets;
+#else
     std::vector<GtkTargetEntry> m_aGtkTargets;
-    VclToGtkHelper m_aConversionHelper;
 #endif
+    VclToGtkHelper m_aConversionHelper;
 
     DECL_LINK(AsyncSetGtkClipboard, void*, void);
 public:
@@ -937,7 +939,6 @@ void VclGtkClipboard::ClipboardGet(GtkSelectionData *selection_data, guint info)
 }
 #endif
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
 namespace
 {
     const OString& getPID()
@@ -956,6 +957,7 @@ namespace
     }
 }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 namespace
 {
     void ClipboardGetFunc(GdkClipboard* /*clipboard*/, GtkSelectionData *selection_data,
@@ -1047,8 +1049,8 @@ void VclGtkClipboard::ClipboardClear()
 #if !GTK_CHECK_VERSION(4, 0, 0)
     for (auto &a : m_aGtkTargets)
         g_free(a.target);
-    m_aGtkTargets.clear();
 #endif
+    m_aGtkTargets.clear();
 }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
@@ -1163,21 +1165,30 @@ VclGtkClipboard::~VclGtkClipboard()
 {
     GdkClipboard* clipboard = clipboard_get(m_eSelection);
     g_signal_handler_disconnect(clipboard, m_nOwnerChangedSignalId);
-#if !GTK_CHECK_VERSION(4, 0, 0)
     if (!m_aGtkTargets.empty())
     {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gdk_clipboard_set_content(clipboard, nullptr);
+#else
         gtk_clipboard_clear(clipboard);
+#endif
         ClipboardClear();
     }
     assert(!m_pSetClipboardEvent);
     assert(m_aGtkTargets.empty());
-#endif
 }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+std::vector<OString> VclToGtkHelper::FormatsToGtk(const css::uno::Sequence<css::datatransfer::DataFlavor> &rFormats)
+#else
 std::vector<GtkTargetEntry> VclToGtkHelper::FormatsToGtk(const css::uno::Sequence<css::datatransfer::DataFlavor> &rFormats)
+#endif
 {
+#if GTK_CHECK_VERSION(4, 0, 0)
+    std::vector<OString> aGtkTargets;
+#else
     std::vector<GtkTargetEntry> aGtkTargets;
+#endif
 
     bool bHaveText(false), bHaveUTF8(false);
     for (const css::datatransfer::DataFlavor& rFlavor : rFormats)
@@ -1192,28 +1203,42 @@ std::vector<GtkTargetEntry> VclToGtkHelper::FormatsToGtk(const css::uno::Sequenc
                 bHaveUTF8 = true;
             }
         }
+#if GTK_CHECK_VERSION(4, 0, 0)
+        aGtkTargets.push_back(OUStringToOString(rFlavor.MimeType, RTL_TEXTENCODING_UTF8));
+#else
         GtkTargetEntry aEntry(makeGtkTargetEntry(rFlavor));
         aGtkTargets.push_back(aEntry);
+#endif
     }
 
     if (bHaveText)
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         css::datatransfer::DataFlavor aFlavor;
         aFlavor.DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
+#endif
         if (!bHaveUTF8)
         {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            aGtkTargets.push_back("text/plain;charset=utf-8");
+#else
             aFlavor.MimeType = "text/plain;charset=utf-8";
             aGtkTargets.push_back(makeGtkTargetEntry(aFlavor));
+#endif
         }
+#if GTK_CHECK_VERSION(4, 0, 0)
+        aGtkTargets.push_back("UTF8_STRING");
+        aGtkTargets.push_back("STRING");
+#else
         aFlavor.MimeType = "UTF8_STRING";
         aGtkTargets.push_back(makeGtkTargetEntry(aFlavor));
         aFlavor.MimeType = "STRING";
         aGtkTargets.push_back(makeGtkTargetEntry(aFlavor));
+#endif
     }
 
     return aGtkTargets;
 }
-#endif
 
 IMPL_LINK_NOARG(VclGtkClipboard, AsyncSetGtkClipboard, void*, void)
 {
@@ -1235,8 +1260,14 @@ void VclGtkClipboard::SyncGtkClipboard()
 
 void VclGtkClipboard::SetGtkClipboard()
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
     GdkClipboard* clipboard = clipboard_get(m_eSelection);
+#if GTK_CHECK_VERSION(4, 0, 0)
+    GdkContentFormatsBuilder* pBuilder = gdk_content_formats_builder_new();
+    for (const auto& rFormat : m_aGtkTargets)
+        gdk_content_formats_builder_add_mime_type(pBuilder, rFormat.getStr());
+    GdkContentFormats* pFormats = gdk_content_formats_builder_free_to_formats(pBuilder);
+    //TODO pFormats needs a place to call home
+#else
     gtk_clipboard_set_with_data(clipboard, m_aGtkTargets.data(), m_aGtkTargets.size(),
                                 ClipboardGetFunc, ClipboardClearFunc, this);
     gtk_clipboard_set_can_store(clipboard, m_aGtkTargets.data(), m_aGtkTargets.size());
@@ -1262,33 +1293,42 @@ void VclGtkClipboard::setContents(
     std::vector< Reference< datatransfer::clipboard::XClipboardListener > > aListeners( m_aListeners );
     datatransfer::clipboard::ClipboardEvent aEv;
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     GdkClipboard* clipboard = clipboard_get(m_eSelection);
     if (!m_aGtkTargets.empty())
     {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gdk_clipboard_set_content(clipboard, nullptr);
+#else
         gtk_clipboard_clear(clipboard);
+#endif
         ClipboardClear();
     }
     assert(m_aGtkTargets.empty());
     if (m_aContents.is())
     {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        std::vector<OString> aGtkTargets(m_aConversionHelper.FormatsToGtk(aFormats));
+#else
         std::vector<GtkTargetEntry> aGtkTargets(m_aConversionHelper.FormatsToGtk(aFormats));
+#endif
         if (!aGtkTargets.empty())
         {
-            GtkTargetEntry aEntry;
             OString sTunnel = "application/x-libreoffice-internal-id-" + getPID();
+#if GTK_CHECK_VERSION(4, 0, 0)
+            aGtkTargets.push_back(sTunnel);
+#else
+            GtkTargetEntry aEntry;
             aEntry.target = g_strdup(sTunnel.getStr());
             aEntry.flags = 0;
             aEntry.info = 0;
             aGtkTargets.push_back(aEntry);
-
+#endif
             m_aGtkTargets = aGtkTargets;
 
             if (!m_pSetClipboardEvent)
                 m_pSetClipboardEvent = Application::PostUserEvent(LINK(this, VclGtkClipboard, AsyncSetGtkClipboard));
         }
     }
-#endif
 
     aEv.Contents = getContents();
 
