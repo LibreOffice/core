@@ -115,7 +115,7 @@ static tools::Rectangle ImplCursorInvert(vcl::RenderContext* pRenderContext, Imp
 
 static void ImplCursorInvert(vcl::Window* pWindow, ImplCursorData const * pData)
 {
-    if (!pWindow || pWindow->IsDisposed())
+    if (!pWindow || pWindow->isDisposed())
         return;
 
     vcl::PaintBufferGuardPtr pGuard;
