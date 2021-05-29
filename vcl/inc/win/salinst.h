@@ -74,6 +74,7 @@ public:
 
     virtual OUString            getOSVersion() override;
     virtual std::shared_ptr<vcl::BackendCapabilities> GetBackendCapabilities() override;
+    virtual void BeforeAbort(const OUString&, bool) override;
 
     static int WorkaroundExceptionHandlingInUSER32Lib(int nExcept, LPEXCEPTION_POINTERS pExceptionInfo);
 };

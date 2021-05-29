@@ -205,6 +205,8 @@ public:
     virtual const cairo_font_options_t* GetCairoFontOptions() { return nullptr; }
 
     virtual void* CreateGStreamerSink(const SystemChildWindow*) { return nullptr; }
+
+    virtual void BeforeAbort(const OUString& /* rErrorText */, bool /* bDumpCore */) {}
 };
 
 // called from SVMain
@@ -214,6 +216,10 @@ void DestroySalInstance( SalInstance* pInst );
 void SalAbort( const OUString& rErrorText, bool bDumpCore );
 
 const OUString& SalGetDesktopEnvironment();
+
+#ifdef DISABLE_DYNLOADING
+extern "C" SalInstance *create_SalInstance();
+#endif
 
 #endif // INCLUDED_VCL_INC_SALINST_HXX
 

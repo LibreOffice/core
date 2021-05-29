@@ -12,9 +12,14 @@
 
 #include <jni.h>
 #include <android/input.h>
+#include <android/log.h>
 #include <android/native_window.h>
 #include <headless/svpinst.hxx>
 #include <headless/svpframe.hxx>
+
+#define LOGTAG "LibreOffice/androidinst"
+#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, LOGTAG, __VA_ARGS__))
+#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, LOGTAG, __VA_ARGS__))
 
 class AndroidSalFrame;
 class AndroidSalInstance : public SvpSalInstance
