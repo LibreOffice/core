@@ -343,7 +343,7 @@ void Window::ImplGrabFocus( GetFocusFlags nFlags )
     }
 
     // call Get- and LoseFocus
-    if ( pOldFocusWindow && ! pOldFocusWindow->IsDisposed() )
+    if ( pOldFocusWindow && ! pOldFocusWindow->isDisposed() )
     {
         NotifyEvent aNEvt( MouseNotifyEvent::LOSEFOCUS, pOldFocusWindow );
         if ( !ImplCallPreNotify( aNEvt ) )
