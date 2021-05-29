@@ -931,4 +931,9 @@ std::shared_ptr<vcl::BackendCapabilities> WinSalInstance::GetBackendCapabilities
     return pBackendCapabilities;
 }
 
+void WinSalInstance::BeforeAbort(const OUString&, bool)
+{
+    ImplFreeSalGDI();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

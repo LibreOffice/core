@@ -43,11 +43,13 @@
 #include <cstdio>
 
 #ifdef ANDROID
-#error "Android has no plugin infrastructure!"
+#include <android/androidinst.hxx>
 #endif
 
 #if !(defined _WIN32 || defined MACOSX)
+#if USING_X11
 #define DESKTOPDETECT
+#endif
 #define HEADLESS_VCLPLUG
 #endif
 
@@ -57,10 +59,17 @@ typedef SalInstance*(*salFactoryProc)();
 
 namespace {
 
+#ifndef DISABLE_DYNLOADING
 oslModule pCloseModule = nullptr;
+#endif
 
 SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = false )
 {
+#ifdef DISABLE_DYNLOADING
+    (void)rModuleBase;
+    (void)bForce;
+    return create_SalInstance();
+#else // !DISABLE_DYNLOADING
 #ifdef HEADLESS_VCLPLUG
     if (rModuleBase == "svp")
         return svp_create_SalInstance();
@@ -122,18 +131,24 @@ SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = false )
 
     // coverity[leaked_storage] - this is on purpose
     return pInst;
+#endif // !DISABLE_DYNLOADING
 }
 
 #ifdef DESKTOPDETECT
+#ifndef DISABLE_DYNLOADING
 extern "C" typedef DesktopType Fn_get_desktop_environment();
+#endif
 
-DesktopType get_desktop_environment()
+DesktopType lcl_get_desktop_environment()
 {
+    DesktopType ret = DESKTOP_UNKNOWN;
+#ifdef DISABLE_DYNLOADING
+    ret = get_desktop_environment();
+#else
     OUString aModule(DESKTOP_DETECTOR_DLL_NAME);
     oslModule aMod = osl_loadModuleRelative(
         reinterpret_cast< oslGenericFunction >( &tryInstance ), aModule.pData,
         SAL_LOADMODULE_DEFAULT );
-    DesktopType ret = DESKTOP_UNKNOWN;
     if( aMod )
     {
         Fn_get_desktop_environment * pSym
@@ -143,11 +158,15 @@ DesktopType get_desktop_environment()
             ret = pSym();
     }
     osl_unloadModule( aMod );
+#endif
     return ret;
 }
 
 SalInstance* autodetect_plugin()
 {
+#ifdef DISABLE_DYNLOADING
+    return nullptr;
+#else // !DISABLE_DYNLOADING
     static const char* const pKDEFallbackList[] =
     {
 #if ENABLE_KF5
@@ -171,7 +190,8 @@ SalInstance* autodetect_plugin()
     };
 #endif
 
-    DesktopType desktop = get_desktop_environment();
+    SalInstance* pInst = nullptr;
+    DesktopType desktop = lcl_get_desktop_environment();
     const char * const * pList = pStandardFallbackList;
     int nListEntry = 0;
 
@@ -189,7 +209,6 @@ SalInstance* autodetect_plugin()
     else if (desktop == DESKTOP_PLASMA5 || desktop == DESKTOP_LXQT)
         pList = pKDEFallbackList;
 
-    SalInstance* pInst = nullptr;
     while( pList[nListEntry] && pInst == nullptr )
     {
         OUString aTry( OUString::createFromAscii( pList[nListEntry] ) );
@@ -199,8 +218,8 @@ SalInstance* autodetect_plugin()
             "plugin autodetection: " << pList[nListEntry]);
         nListEntry++;
     }
-
     return pInst;
+#endif // !DISABLE_DYNLOADING
 }
 #endif // DESKTOPDETECT
 
@@ -229,7 +248,6 @@ bool IsHeadlessModeRequested()
 SalInstance *CreateSalInstance()
 {
     SalInstance *pInst = nullptr;
-
     OUString aUsePlugin;
     rtl::Bootstrap::get("SAL_USE_VCLPLUGIN", aUsePlugin);
     SAL_INFO_IF(!aUsePlugin.isEmpty(), "vcl", "Requested VCL plugin: " << aUsePlugin);
@@ -245,6 +263,7 @@ SalInstance *CreateSalInstance()
         aUsePlugin.clear();
 #endif
     }
+
     if( !aUsePlugin.isEmpty() )
         pInst = tryInstance( aUsePlugin, true );
 
@@ -287,40 +306,45 @@ void DestroySalInstance( SalInstance *pInst )
     pInst->ReleaseYieldMutexAll();
 
     delete pInst;
+#ifndef DISABLE_DYNLOADING
     if( pCloseModule )
         osl_unloadModule( pCloseModule );
+#endif
 }
 
 void SalAbort( const OUString& rErrorText, bool bDumpCore )
 {
-#if defined _WIN32
-    //TODO: ImplFreeSalGDI();
-#endif
+    if (GetSalData()->m_pInstance)
+        GetSalData()->m_pInstance->BeforeAbort(rErrorText, bDumpCore);
 
+#if defined _WIN32
+    (void) bDumpCore;
     if( rErrorText.isEmpty() )
     {
-#if defined _WIN32
         // make sure crash reporter is triggered
         RaiseException( 0, EXCEPTION_NONCONTINUABLE, 0, nullptr );
         FatalAppExitW( 0, L"Application Error" );
-#else
-        std::fprintf( stderr, "Application Error\n" );
-#endif
     }
     else
     {
         CrashReporter::addKeyValue("AbortMessage", rErrorText, CrashReporter::Write);
-#if defined _WIN32
         // make sure crash reporter is triggered
         RaiseException( 0, EXCEPTION_NONCONTINUABLE, 0, nullptr );
         FatalAppExitW( 0, o3tl::toW(rErrorText.getStr()) );
-#else
-        std::fprintf( stderr, "%s\n", OUStringToOString(rErrorText, osl_getThreadTextEncoding()).getStr() );
-#endif
     }
-#if defined _WIN32
-    (void) bDumpCore;
 #else
+#if defined ANDROID
+    OUString aError(rErrorText.isEmpty() ? "Unspecified application error" : rErrorText);
+    LOGE("SalAbort: '%s'", OUStringToOString(aError, osl_getThreadTextEncoding()).getStr());
+#else
+    if( rErrorText.isEmpty() )
+        std::fprintf( stderr, "Unspecified Application Error\n" );
+    else
+    {
+        CrashReporter::addKeyValue("AbortMessage", rErrorText, CrashReporter::Write);
+        std::fprintf( stderr, "%s\n", OUStringToOString(rErrorText, osl_getThreadTextEncoding()).getStr() );
+    }
+#endif
     if( bDumpCore )
         abort();
     else
@@ -332,11 +356,13 @@ const OUString& SalGetDesktopEnvironment()
 {
 #ifdef _WIN32
     static OUString aDesktopEnvironment( "Windows" );
-
-#else
-#ifdef MACOSX
+#elif defined(MACOSX)
     static OUString aDesktopEnvironment( "MacOSX" );
-#else
+#elif defined(EMSCRIPTEN)
+    static OUString aDesktopEnvironment("WASM");
+#elif defined(ANDROID)
+    static OUString aDesktopEnvironment("android");
+#elif USING_X11
     // Order to match desktops.hxx' DesktopType
     static const char * const desktop_strings[] = {
         "none", "unknown", "GNOME", "UNITY",
@@ -345,9 +371,10 @@ const OUString& SalGetDesktopEnvironment()
     if( aDesktopEnvironment.isEmpty())
     {
         aDesktopEnvironment = OUString::createFromAscii(
-            desktop_strings[get_desktop_environment()]);
+            desktop_strings[lcl_get_desktop_environment()]);
     }
-#endif
+#else
+    static OUString aDesktopEnvironment("unknown");
 #endif
     return aDesktopEnvironment;
 }

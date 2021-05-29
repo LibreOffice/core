@@ -9,7 +9,6 @@
 
 #include <jni.h>
 
-#include <android/log.h>
 #include <android/looper.h>
 #include <android/bitmap.h>
 
@@ -23,10 +22,6 @@
 #include <vcl/weld.hxx>
 #include <memory>
 #include <unistd.h>
-
-#define LOGTAG "LibreOffice/androidinst"
-#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, LOGTAG, __VA_ARGS__))
-#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, LOGTAG, __VA_ARGS__))
 
 // Horrible hack
 static int viewWidth = 1, viewHeight = 1;
@@ -169,51 +164,13 @@ SalFrame *AndroidSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags
     return new AndroidSalFrame( this, pParent, nStyle );
 }
 
-void SalAbort( const OUString& rErrorText, bool bDumpCore )
-{
-    OUString aError( rErrorText );
-    if( aError.isEmpty() )
-        aError = "Unknown application error";
-    LOGI("%s", OUStringToOString(rErrorText, osl_getThreadTextEncoding()).getStr() );
-
-    LOGI("SalAbort: '%s'",
-         OUStringToOString(aError, RTL_TEXTENCODING_ASCII_US).getStr());
-    if( bDumpCore )
-        abort();
-    else
-        _exit(1);
-}
-
-const OUString& SalGetDesktopEnvironment()
-{
-    static OUString aEnv( "android" );
-    return aEnv;
-}
-
-SalData::SalData() :
-    m_pInstance( 0 ),
-    m_pPIManager(0 )
-{
-}
-
-SalData::~SalData()
-{
-}
-
 // This is our main entry point:
-SalInstance *CreateSalInstance()
+extern "C" SalInstance *create_SalInstance()
 {
     LOGI("Android: CreateSalInstance!");
     AndroidSalInstance* pInstance = new AndroidSalInstance( std::make_unique<SvpSalYieldMutex>() );
     new AndroidSalData( pInstance );
-    pInstance->AcquireYieldMutex();
     return pInstance;
-}
-
-void DestroySalInstance( SalInstance *pInst )
-{
-    pInst->ReleaseYieldMutexAll();
-    delete pInst;
 }
 
 int AndroidSalSystem::ShowNativeDialog( const OUString& rTitle,

@@ -5185,6 +5185,10 @@ if test "$enable_gui" = "no"; then
 fi
 AC_SUBST(DISABLE_GUI)
 
+if test "$USING_X11" = TRUE; then
+    AC_DEFINE(USING_X11)
+fi
+
 WORKDIR="${BUILDDIR}/workdir"
 INSTDIR="${BUILDDIR}/instdir"
 INSTROOTBASE=${INSTDIR}${INSTROOTBASESUFFIX}
