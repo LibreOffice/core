@@ -16250,6 +16250,8 @@ private:
     GtkEditable* m_pEditable;
     GtkCellView* m_pCellView;
     GtkEventController* m_pKeyController;
+    GtkEventController* m_pEntryKeyController;
+    GtkEventController* m_pMenuKeyController;
 //    std::unique_ptr<CustomRenderMenuButtonHelper> m_xCustomMenuButtonHelper;
     std::unique_ptr<vcl::Font> m_xFont;
     std::unique_ptr<comphelper::string::NaturalStringSorter> m_xSorter;
@@ -16276,7 +16278,7 @@ private:
     gulong m_nEntryActivateSignalId;
 //    gulong m_nEntryFocusInSignalId;
 //    gulong m_nEntryFocusOutSignalId;
-//    gulong m_nEntryKeyPressEventSignalId;
+    gulong m_nEntryKeyPressEventSignalId;
     guint m_nAutoCompleteIdleId;
     gint m_nNonCustomLineHeight;
     gint m_nPrePopupCursorPos;
@@ -16667,14 +16669,14 @@ private:
         return bDone;
     }
 
-#if 0
-    static gboolean signalEntryKeyPress(GtkWidget*, GdkEventKey* pEvent, gpointer widget)
+    static gboolean signalEntryKeyPress(GtkEventControllerKey*, guint keyval, guint keycode, GdkModifierType state, gpointer widget)
     {
         GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
+#if 0
         LocalizeDecimalSeparator(pEvent);
-        return pThis->signal_entry_key_press(pEvent);
-    }
 #endif
+        return pThis->signal_entry_key_press(CreateKeyEvent(keyval, keycode, state, 0));
+    }
 
     bool signal_entry_key_press(const KeyEvent& rKEvt)
     {
@@ -16834,8 +16836,19 @@ private:
                 break;
         }
 
-        if (!bDone && !m_pEntry)
-            bDone = signal_entry_key_press(rKEvt);
+        if (!bDone)
+        {
+            if (!m_pEntry)
+                bDone = signal_entry_key_press(rKEvt);
+            else
+            {
+                // with gtk4-4.2.1 the unconsumed keystrokes don't appear to get to
+                // the GtkEntry for up/down to move to the next entry without this extra help
+                // (which means this extra indirection is probably effectively
+                // the same as if calling signal_entry_key_press directly here)
+                bDone = gtk_event_controller_key_forward(GTK_EVENT_CONTROLLER_KEY(m_pMenuKeyController), m_pEntry);
+            }
+        }
 
         return bDone;
     }
@@ -17314,7 +17327,9 @@ public:
             m_nEntryActivateSignalId = g_signal_connect(m_pEntry, "activate", G_CALLBACK(signalEntryActivate), this);
 //            m_nEntryFocusInSignalId = g_signal_connect(m_pEntry, "focus-in-event", G_CALLBACK(signalEntryFocusIn), this);
 //            m_nEntryFocusOutSignalId = g_signal_connect(m_pEntry, "focus-out-event", G_CALLBACK(signalEntryFocusOut), this);
-//            m_nEntryKeyPressEventSignalId = g_signal_connect(m_pEntry, "key-press-event", G_CALLBACK(signalEntryKeyPress), this);
+            m_pEntryKeyController = GTK_EVENT_CONTROLLER(gtk_event_controller_key_new());
+            m_nEntryKeyPressEventSignalId = g_signal_connect(m_pEntryKeyController, "key-pressed", G_CALLBACK(signalEntryKeyPress), this);
+            gtk_widget_add_controller(m_pEntry, m_pEntryKeyController);
             m_nKeyPressEventSignalId = 0;
             m_pKeyController = nullptr;
         }
@@ -17324,7 +17339,8 @@ public:
             m_nEntryActivateSignalId = 0;
 //            m_nEntryFocusInSignalId = 0;
 //            m_nEntryFocusOutSignalId = 0;
-//            m_nEntryKeyPressEventSignalId = 0;
+            m_pEntryKeyController = nullptr;
+            m_nEntryKeyPressEventSignalId = 0;
             m_pKeyController = GTK_EVENT_CONTROLLER(gtk_event_controller_key_new());
             m_nKeyPressEventSignalId = g_signal_connect(m_pKeyController, "key-pressed", G_CALLBACK(signalKeyPress), this);
             gtk_widget_add_controller(GTK_WIDGET(m_pComboBox), m_pKeyController);
@@ -17338,10 +17354,12 @@ public:
         // select via the vcl selection engine, a matching entry.
         if (m_pMenuWindow)
         {
-            GtkEventController* pMenuKeyController = GTK_EVENT_CONTROLLER(gtk_event_controller_key_new());
-            g_signal_connect(pMenuKeyController, "key-pressed", G_CALLBACK(signalKeyPress), this);
-            gtk_widget_add_controller(m_pMenuWindow, pMenuKeyController);
+            m_pMenuKeyController = GTK_EVENT_CONTROLLER(gtk_event_controller_key_new());
+            g_signal_connect(m_pMenuKeyController, "key-pressed", G_CALLBACK(signalKeyPress), this);
+            gtk_widget_add_controller(m_pMenuWindow, m_pMenuKeyController);
         }
+        else
+            m_pMenuKeyController = nullptr;
 #if 0
         g_signal_connect(m_pOverlay, "get-child-position", G_CALLBACK(signalGetChildPosition), this);
         gtk_overlay_add_overlay(m_pOverlay, GTK_WIDGET(m_pOverlayButton));
@@ -17656,7 +17674,7 @@ public:
             g_signal_handler_block(m_pEntry, m_nEntryActivateSignalId);
 //            g_signal_handler_block(m_pEntry, m_nEntryFocusInSignalId);
 //            g_signal_handler_block(m_pEntry, m_nEntryFocusOutSignalId);
-//            g_signal_handler_block(m_pEntry, m_nEntryKeyPressEventSignalId);
+            g_signal_handler_block(m_pEntryKeyController, m_nEntryKeyPressEventSignalId);
         }
         else
             g_signal_handler_block(m_pKeyController, m_nKeyPressEventSignalId);
@@ -17686,7 +17704,7 @@ public:
             g_signal_handler_unblock(m_pEntry, m_nEntryActivateSignalId);
 //            g_signal_handler_unblock(m_pEntry, m_nEntryFocusInSignalId);
 //            g_signal_handler_unblock(m_pEntry, m_nEntryFocusOutSignalId);
-//            g_signal_handler_unblock(m_pEntry, m_nEntryKeyPressEventSignalId);
+            g_signal_handler_unblock(m_pEntryKeyController, m_nEntryKeyPressEventSignalId);
             g_signal_handler_unblock(m_pEditable, m_nEntryInsertTextSignalId);
         }
         else
@@ -17922,7 +17940,7 @@ public:
             g_signal_handler_disconnect(m_pEntry, m_nEntryActivateSignalId);
 //            g_signal_handler_disconnect(m_pEntry, m_nEntryFocusInSignalId);
 //            g_signal_handler_disconnect(m_pEntry, m_nEntryFocusOutSignalId);
-//            g_signal_handler_disconnect(m_pEntry, m_nEntryKeyPressEventSignalId);
+            g_signal_handler_disconnect(m_pEntryKeyController, m_nEntryKeyPressEventSignalId);
         }
         else
             g_signal_handler_disconnect(m_pKeyController, m_nKeyPressEventSignalId);
@@ -22077,11 +22095,16 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/scalc/ui/selectrange.ui" &&
         rUIFile != "modules/scalc/ui/selectsource.ui" &&
         rUIFile != "modules/scalc/ui/solverdlg.ui" &&
+        rUIFile != "modules/scalc/ui/sortcriteriapage.ui" &&
+        rUIFile != "modules/scalc/ui/sortdialog.ui" &&
+        rUIFile != "modules/scalc/ui/sortkey.ui" &&
+        rUIFile != "modules/scalc/ui/sortoptionspage.ui" &&
         rUIFile != "modules/scalc/ui/xmlsourcedialog.ui" &&
         rUIFile != "modules/smath/ui/alignmentdialog.ui" &&
         rUIFile != "modules/smath/ui/catalogdialog.ui" &&
         rUIFile != "modules/smath/ui/fontsizedialog.ui" &&
         rUIFile != "modules/smath/ui/savedefaultsdialog.ui" &&
+        rUIFile != "modules/swriter/ui/bibliographyentry.ui" &&
         rUIFile != "modules/swriter/ui/endnotepage.ui" &&
         rUIFile != "modules/swriter/ui/footnotepage.ui" &&
         rUIFile != "modules/swriter/ui/exchangedatabases.ui" &&
