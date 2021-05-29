@@ -751,16 +751,13 @@ DbGridControl::~DbGridControl()
 
 void DbGridControl::dispose()
 {
-    if (!isDisposed())
-    {
-        RemoveColumns();
+    RemoveColumns();
 
-        m_bWantDestruction = true;
-        osl::MutexGuard aGuard(m_aDestructionSafety);
-        if (m_pFieldListeners)
-            DisconnectFromFields();
-        m_pCursorDisposeListener.reset();
-    }
+    m_bWantDestruction = true;
+    osl::MutexGuard aGuard(m_aDestructionSafety);
+    if (m_pFieldListeners)
+        DisconnectFromFields();
+    m_pCursorDisposeListener.reset();
 
     if (m_nDeleteEvent)
         Application::RemoveUserEvent(m_nDeleteEvent);
