@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "35dcc8bf_2feaf60d",
+        "filename": "sc/source/ui/view/viewfunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2226,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-05-29T22:31:48Z",
+      "side": 1,
+      "message": "This should instead determine if the current block from nRow to nEndNo has any filtered rows or where they start and end, and show rows in blocks instead of doing an individual call for each row. RowFiltered() returns first and last row of a block in either case, filtered or not, so that can be used also for non-filtered blocks.",
+      "revId": "b12c9562da8fdce0f131a20939fb4fbd69926c91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
