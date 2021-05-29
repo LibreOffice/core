@@ -432,7 +432,7 @@ void MenuFloatingWindow::End()
     if (!bInExecute)
         return;
 
-    if (GetParent() && !GetParent()->IsDisposed())
+    if (GetParent() && !GetParent()->isDisposed())
         GetParent()->DecModalCount();
 
     // restore focus to previous window if we still have the focus
@@ -1194,7 +1194,7 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
     }
 
     // #105474# check if menu window was not destroyed
-    if ( !xWindow->IsDisposed() )
+    if ( !xWindow->isDisposed() )
     {
         bKeyInput = false;
     }
