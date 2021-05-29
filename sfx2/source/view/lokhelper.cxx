@@ -717,6 +717,11 @@ void SfxLokHelper::postKeyEventAsync(const VclPtr<vcl::Window> &xWindow,
     postEventAsync(pLOKEv);
 }
 
+void SfxLokHelper::setFreemiumView(bool isFreemium)
+{
+    SfxViewShell::Current()->setFreemiumView(isFreemium);
+}
+
 void SfxLokHelper::postExtTextEventAsync(const VclPtr<vcl::Window> &xWindow,
                                          int nType, const OUString &rText)
 {

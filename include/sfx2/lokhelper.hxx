@@ -60,6 +60,8 @@ public:
     /// Get viewIds of views of the current DocId.
     static bool getViewIds(int nDocId, int* pArray, size_t nSize);
 
+    static void setFreemiumView(bool isFreemium);
+
     /// Get the document id for a view
     static int getDocumentIdOfView(int nViewId);
     /// Get the default language that should be used for views
