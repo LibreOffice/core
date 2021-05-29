@@ -114,6 +114,9 @@ static tools::Rectangle ImplCursorInvert(vcl::RenderContext* pRenderContext, Imp
 
 static void ImplCursorInvert(vcl::Window* pWindow, ImplCursorData const * pData)
 {
+    if (!pWindow || pWindow->isDisposed())
+        return;
+
     std::unique_ptr<vcl::PaintBufferGuard> pGuard;
     const bool bDoubleBuffering = pWindow->SupportsDoubleBuffering();
     if (bDoubleBuffering)

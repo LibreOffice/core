@@ -104,7 +104,7 @@ bool Window::EventNotify( NotifyEvent& rNEvt )
 {
     bool bRet = false;
 
-    if (IsDisposed())
+    if (isDisposed())
         return false;
 
     // check for docking window
@@ -218,7 +218,7 @@ void Window::CallEventListeners( VclEventId nEvent, void* pData )
 
     Application::ImplCallEventListeners( aEvent );
 
-    if ( xWindow->IsDisposed() )
+    if ( xWindow->isDisposed() )
         return;
 
     // If maEventListeners is empty, the XVCLWindow has not yet been initialized.
@@ -236,7 +236,7 @@ void Window::CallEventListeners( VclEventId nEvent, void* pData )
         comphelper::ScopeGuard aGuard(
             [&rWindowImpl, &xWindow]()
             {
-                if (!xWindow->IsDisposed())
+                if (!xWindow->isDisposed())
                 {
                     rWindowImpl.mnEventListenersIteratingCount--;
                     if (rWindowImpl.mnEventListenersIteratingCount == 0)
@@ -246,7 +246,7 @@ void Window::CallEventListeners( VclEventId nEvent, void* pData )
         );
         for ( const Link<VclWindowEvent&,void>& rLink : aCopy )
         {
-            if (xWindow->IsDisposed()) break;
+            if (xWindow->isDisposed()) break;
             // check this hasn't been removed in some re-enterancy scenario fdo#47368
             if( rWindowImpl.maEventListenersDeleted.find(rLink) == rWindowImpl.maEventListenersDeleted.end() )
                 rLink.Call( aEvent );
@@ -256,7 +256,7 @@ void Window::CallEventListeners( VclEventId nEvent, void* pData )
     while ( xWindow )
     {
 
-        if ( xWindow->IsDisposed() )
+        if ( xWindow->isDisposed() )
             return;
 
         auto& rWindowImpl = *xWindow->mpWindowImpl;
@@ -269,7 +269,7 @@ void Window::CallEventListeners( VclEventId nEvent, void* pData )
             comphelper::ScopeGuard aGuard(
                 [&rWindowImpl, &xWindow]()
                 {
-                    if (!xWindow->IsDisposed())
+                    if (!xWindow->isDisposed())
                     {
                         rWindowImpl.mnChildEventListenersIteratingCount--;
                         if (rWindowImpl.mnChildEventListenersIteratingCount == 0)
@@ -279,7 +279,7 @@ void Window::CallEventListeners( VclEventId nEvent, void* pData )
             );
             for ( const Link<VclWindowEvent&,void>& rLink : aCopy )
             {
-                if (xWindow->IsDisposed())
+                if (xWindow->isDisposed())
                     return;
                 // Check this hasn't been removed in some re-enterancy scenario fdo#47368.
                 if( rWindowImpl.maChildEventListenersDeleted.find(rLink) == rWindowImpl.maChildEventListenersDeleted.end() )
@@ -287,7 +287,7 @@ void Window::CallEventListeners( VclEventId nEvent, void* pData )
             }
         }
 
-        if ( xWindow->IsDisposed() )
+        if ( xWindow->isDisposed() )
             return;
 
         xWindow = xWindow->GetParent();
@@ -472,7 +472,7 @@ void Window::ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt )
             CallEventListeners( VclEventId::WindowKeyUp, const_cast<KeyEvent *>(rNEvt.GetKeyEvent()) );
     }
 
-    if ( xWindow->IsDisposed() )
+    if ( xWindow->isDisposed() )
         return;
 
     // #106721# check if we're part of a compound control and notify
