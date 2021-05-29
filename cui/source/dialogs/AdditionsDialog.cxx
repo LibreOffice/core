@@ -52,6 +52,7 @@
 #include <com/sun/star/task/XInteractionApprove.hpp>
 
 #include <orcus/json_document_tree.hpp>
+#include <orcus/json_parser.hpp>
 #include <orcus/config.hpp>
 #include <orcus/pstring.hpp>
 
@@ -131,7 +132,15 @@ void parseResponse(const std::string& rResponse, std::vector<AdditionInfo>& aAdd
     if (rResponse.empty())
         return;
 
-    aJsonDoc.load(rResponse, aConfig);
+    try
+    {
+        aJsonDoc.load(rResponse, aConfig);
+    }
+    catch (const orcus::json::parse_error&)
+    {
+        TOOLS_WARN_EXCEPTION("cui.dialogs", "Invalid JSON file from the extensions API");
+        return;
+    }
 
     auto aDocumentRoot = aJsonDoc.get_document_root();
     if (aDocumentRoot.type() != orcus::json::node_t::object)
