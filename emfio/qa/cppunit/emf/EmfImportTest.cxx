@@ -519,12 +519,19 @@ void Test::TestExtTextOutOpaqueAndClipTransform()
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
     CPPUNIT_ASSERT (pDocument);
 
-    assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion",
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion", 2);
+    assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion[1]",
                 "text", "No_rect- DLP-");
-    assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion",
+    assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion[1]",
                 "fontcolor", "#000000");
 
-    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor", 2);
+    assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion[2]",
+                "text", "OpaqueTranspa");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion[2]",
+                "fontcolor", "#000000");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor", 3);
     assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor[1]/polypolygon",
                 "path", "m966 490-477-275-84 147 476 275z");
     assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor[1]",
@@ -534,6 +541,11 @@ void Test::TestExtTextOutOpaqueAndClipTransform()
                 "path", "m251 713 623 361-148 257-623-361z");
     assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor[2]",
                 "color", "#0080ff");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor[3]/polypolygon",
+                "path", "m972 1326-476-275-148 257 476 276z");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor[3]",
+                "color", "#800080");
 
     assertXPath(pDocument, "/primitive2D/metafile/transform/group", 3);
     assertXPath(pDocument, "/primitive2D/metafile/transform/group[1]/polypolygoncolor",
