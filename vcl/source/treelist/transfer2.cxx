@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
+#include <config_vclplug.h>
 
 #include <osl/mutex.hxx>
 #include <sot/exchange.hxx>
@@ -498,7 +498,7 @@ Reference<XClipboard> GetSystemPrimarySelection()
     try
     {
         Reference<XComponentContext> xContext(comphelper::getProcessComponentContext());
-#if HAVE_FEATURE_X11
+#if USING_X11
         // A hack, making the primary selection available as an instance
         // of the SystemClipboard service on X11:
         Sequence< Any > args(1);
