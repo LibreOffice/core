@@ -24,6 +24,7 @@
 #include <cstddef>
 #include <deque>
 #include <memory>
+#include <optional>
 #include <stack>
 #include <unordered_map>
 #include <vector>
