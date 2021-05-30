@@ -345,11 +345,8 @@ bool SwAutoFormat::HasObjects(const SwTextFrame & rFrame)
     SwNodeIndex node(*rFrame.GetTextNodeFirst());
     do
     {
-        if (node.GetNode().GetAnchoredFlys() != nullptr)
-        {
-            assert(!node.GetNode().GetAnchoredFlys()->empty());
+        if (!node.GetNode().GetAnchoredFlys().empty())
             return true;
-        }
         ++node;
     }
     while (sw::FrameContainsNode(rFrame, node.GetIndex()));

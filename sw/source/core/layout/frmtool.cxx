@@ -1160,12 +1160,8 @@ void RemoveHiddenObjsOfNode(SwTextNode const& rNode,
     std::vector<sw::Extent>::const_iterator const*const pEnd,
     SwTextNode const*const pFirstNode, SwTextNode const*const pLastNode)
 {
-    std::vector<SwFrameFormat*> const*const pFlys(rNode.GetAnchoredFlys());
-    if (!pFlys)
-    {
-        return;
-    }
-    for (SwFrameFormat * pFrameFormat : *pFlys)
+    std::vector<SwFrameFormat*> const & rFlys(rNode.GetAnchoredFlys());
+    for (SwFrameFormat * pFrameFormat : rFlys)
     {
         SwFormatAnchor const& rAnchor = pFrameFormat->GetAnchor();
         if (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR
@@ -1204,10 +1200,10 @@ void AppendObjsOfNode(SwFrameFormats const*const pTable, sal_uLong const nIndex,
 #endif
 
     SwNode const& rNode(*pDoc->GetNodes()[nIndex]);
-    std::vector<SwFrameFormat*> const*const pFlys(rNode.GetAnchoredFlys());
-    for (size_t it = 0; pFlys && it != pFlys->size(); )
+    std::vector<SwFrameFormat*> const & rFlys(rNode.GetAnchoredFlys());
+    for (size_t it = 0; it != rFlys.size(); )
     {
-        SwFrameFormat *const pFormat = (*pFlys)[it];
+        SwFrameFormat *const pFormat = rFlys[it];
         const SwFormatAnchor &rAnch = pFormat->GetAnchor();
         if ( rAnch.GetContentAnchor() &&
             IsShown(nIndex, rAnch, pIter, pEnd, pFirstNode, pLastNode))
