@@ -396,15 +396,15 @@ published       return IDL_PUBLISHED;
         }
 
 <COMMENT>[^*]+  {
-                docu += OString(yytext);
+                docu += yytext;
             } 
 
 <COMMENT>"*"[^*/]+  {
-                docu += OString(yytext);
+                docu += yytext;
             }
 
 <COMMENT>"**"   {
-                docu += OString(yytext);
+                docu += yytext;
             }
 
 <COMMENT>[*]+"/"  {
@@ -423,21 +423,21 @@ published       return IDL_PUBLISHED;
         }
 
 <DOCU>[^*\n]+   {
-                docu += OString(yytext);
+                docu += yytext;
             }
 
 <DOCU>"\n"[ \t]*"*"{1}  {
                 idlc()->setLineNumber( idlc()->getLineNumber()  + 1);
-                docu += OString("\n");
+                docu += "\n";
             }
 
 <DOCU>"\n"  {
                 idlc()->setLineNumber( idlc()->getLineNumber()  + 1);
-                docu += OString(yytext);
+                docu += yytext;
             }
 
 <DOCU>"*"[^*^/\n]*  {
-                docu += OString(yytext);
+                docu += yytext;
             }
 
 <DOCU>"\n"[ \t]*"*/"    {
