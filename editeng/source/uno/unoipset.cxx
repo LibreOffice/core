@@ -54,10 +54,10 @@ SvxItemPropertySet::~SvxItemPropertySet()
 
 uno::Any* SvxItemPropertySet::GetUsrAnyForID(SfxItemPropertyMapEntry const & entry) const
 {
-    for (auto const & pActual : aCombineList)
+    for (auto const & rActual : aCombineList)
     {
-        if( pActual->nWID == entry.nWID && pActual->memberId == entry.nMemberId )
-            return &pActual->aAny;
+        if( rActual.nWID == entry.nWID && rActual.memberId == entry.nMemberId )
+            return const_cast<uno::Any*>(&rActual.aAny);
     }
     return nullptr;
 }
@@ -66,11 +66,11 @@ uno::Any* SvxItemPropertySet::GetUsrAnyForID(SfxItemPropertyMapEntry const & ent
 void SvxItemPropertySet::AddUsrAnyForID(
     const uno::Any& rAny, SfxItemPropertyMapEntry const & entry)
 {
-    std::unique_ptr<SvxIDPropertyCombine> pNew(new SvxIDPropertyCombine);
-    pNew->nWID = entry.nWID;
-    pNew->memberId = entry.nMemberId;
-    pNew->aAny = rAny;
-    aCombineList.push_back( std::move(pNew) );
+    SvxIDPropertyCombine aNew;
+    aNew.nWID = entry.nWID;
+    aNew.memberId = entry.nMemberId;
+    aNew.aAny = rAny;
+    aCombineList.push_back( std::move(aNew) );
 }
 
 
