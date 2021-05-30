@@ -61,7 +61,7 @@ namespace drawinglayer::processor3d
             /*  remembered RasterPrimitive3D's which need to be painted back to front
                 for transparent 3D parts
              */
-            std::unique_ptr<std::vector< RasterPrimitive3D >> mpRasterPrimitive3Ds;
+            mutable std::vector< RasterPrimitive3D > maRasterPrimitive3Ds;
 
             sal_uInt32 mnStartLine;
             sal_uInt32 mnStopLine;

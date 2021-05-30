@@ -422,12 +422,8 @@ namespace drawinglayer::processor3d
             {
                 // transparent output; record for later sorting and painting from
                 // back to front
-                if(!mpRasterPrimitive3Ds)
-                {
-                    const_cast< ZBufferProcessor3D* >(this)->mpRasterPrimitive3Ds.reset( new std::vector< RasterPrimitive3D > );
-                }
 
-                mpRasterPrimitive3Ds->push_back(RasterPrimitive3D(
+                maRasterPrimitive3Ds.push_back(RasterPrimitive3D(
                     getGeoTexSvx(),
                     getTransparenceGeoTexSvx(),
                     rMaterial,
@@ -486,12 +482,7 @@ namespace drawinglayer::processor3d
             {
                 // transparent output; record for later sorting and painting from
                 // back to front
-                if(!mpRasterPrimitive3Ds)
-                {
-                    const_cast< ZBufferProcessor3D* >(this)->mpRasterPrimitive3Ds.reset( new std::vector< RasterPrimitive3D > );
-                }
-
-                mpRasterPrimitive3Ds->push_back(RasterPrimitive3D(
+                maRasterPrimitive3Ds.push_back(RasterPrimitive3D(
                     getGeoTexSvx(),
                     getTransparenceGeoTexSvx(),
                     rMaterial,
@@ -596,32 +587,31 @@ namespace drawinglayer::processor3d
         {
             mpZBufferRasterConverter3D.reset();
 
-            if(mpRasterPrimitive3Ds)
+            if(!maRasterPrimitive3Ds.empty())
             {
                 OSL_FAIL("ZBufferProcessor3D: destructed, but there are unrendered transparent geometries. Use ZBufferProcessor3D::finish() to render these (!)");
             }
-            mpRasterPrimitive3Ds.reset();
         }
 
         void ZBufferProcessor3D::finish()
         {
-            if(!mpRasterPrimitive3Ds)
+            if(maRasterPrimitive3Ds.empty())
                 return;
 
             // there are transparent rasterprimitives
-            const sal_uInt32 nSize(mpRasterPrimitive3Ds->size());
+            const sal_uInt32 nSize(maRasterPrimitive3Ds.size());
 
             if(nSize > 1)
             {
                 // sort them from back to front
-                std::sort(mpRasterPrimitive3Ds->begin(), mpRasterPrimitive3Ds->end());
+                std::sort(maRasterPrimitive3Ds.begin(), maRasterPrimitive3Ds.end());
             }
 
             for(sal_uInt32 a(0); a < nSize; a++)
             {
                 // paint each one by setting the remembered data and calling
                 // the render method
-                const RasterPrimitive3D& rCandidate = (*mpRasterPrimitive3Ds)[a];
+                const RasterPrimitive3D& rCandidate = maRasterPrimitive3Ds[a];
 
                 mpGeoTexSvx = rCandidate.getGeoTexSvx();
                 mpTransparenceGeoTexSvx = rCandidate.getTransparenceGeoTexSvx();
@@ -645,7 +635,7 @@ namespace drawinglayer::processor3d
 
             // delete them to signal the destructor that all is done and
             // to allow asserting there
-            mpRasterPrimitive3Ds.reset();
+            maRasterPrimitive3Ds.clear();
         }
 
 } // end of namespace
