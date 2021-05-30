@@ -3582,14 +3582,11 @@ void CheckAnchoredFlyConsistency(SwDoc const& rDoc)
     for (sal_uLong i = 0; i != count; ++i)
     {
         SwNode const*const pNode(rNodes[i]);
-        std::vector<SwFrameFormat*> const*const pFlys(pNode->GetAnchoredFlys());
-        if (pFlys)
+        std::vector<SwFrameFormat*> const & rFlys(pNode->GetAnchoredFlys());
+        for (const auto& rpFly : rFlys)
         {
-            for (const auto& rpFly : *pFlys)
-            {
-                SwFormatAnchor const& rAnchor((*rpFly).GetAnchor(false));
-                assert(&rAnchor.GetContentAnchor()->nNode.GetNode() == pNode);
-            }
+            SwFormatAnchor const& rAnchor((*rpFly).GetAnchor(false));
+            assert(&rAnchor.GetContentAnchor()->nNode.GetNode() == pNode);
         }
     }
     SwFrameFormats const*const pSpzFrameFormats(rDoc.GetSpzFrameFormats());
@@ -3609,8 +3606,8 @@ void CheckAnchoredFlyConsistency(SwDoc const& rDoc)
         else
         {
             SwNode & rNode(rAnchor.GetContentAnchor()->nNode.GetNode());
-            std::vector<SwFrameFormat*> const*const pFlys(rNode.GetAnchoredFlys());
-            assert(std::find(pFlys->begin(), pFlys->end(), *it) != pFlys->end());
+            std::vector<SwFrameFormat*> const& rFlys(rNode.GetAnchoredFlys());
+            assert(std::find(rFlys.begin(), rFlys.end(), *it) != rFlys.end());
             switch (rAnchor.GetAnchorId())
             {
                 case RndStdIds::FLY_AT_FLY:

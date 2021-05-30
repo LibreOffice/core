@@ -4240,14 +4240,11 @@ static void AddRemoveFlysForNode(
         if (pSkipped)
         {
             // if a fly has been added by AppendObjsOfNode, it must be skipped; if not, then it doesn't matter if it's skipped or not because it has no frames and because of that it would be skipped anyway
-            if (auto const pFlys = pNode->GetAnchoredFlys())
+            for (auto const pFly : pNode->GetAnchoredFlys())
             {
-                for (auto const pFly : *pFlys)
+                if (pFly->Which() != RES_DRAWFRMFMT)
                 {
-                    if (pFly->Which() != RES_DRAWFRMFMT)
-                    {
-                        pSkipped->insert(pFly->GetContent().GetContentIdx()->GetIndex());
-                    }
+                    pSkipped->insert(pFly->GetContent().GetContentIdx()->GetIndex());
                 }
             }
         }
@@ -4418,12 +4415,9 @@ static void UnHideRedlines(SwRootFrame & rLayout,
                                 {
                                     sw::RemoveFootnotesForNode(rLayout, *pNode->GetTextNode(), nullptr);
                                     // similarly, remove the anchored flys
-                                    if (auto const pFlys = pNode->GetAnchoredFlys())
+                                    for (SwFrameFormat * pFormat : pNode->GetAnchoredFlys())
                                     {
-                                        for (SwFrameFormat * pFormat : *pFlys)
-                                        {
-                                            pFormat->DelFrames(/*&rLayout*/);
-                                        }
+                                        pFormat->DelFrames(/*&rLayout*/);
                                     }
                                 }
                             }

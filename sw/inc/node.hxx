@@ -107,7 +107,7 @@ private:
     /// all SwFrameFormat that are anchored at the node
     /// invariant: SwFrameFormat is in the list iff
     /// SwFrameFormat::GetAnchor().GetContentAnchor() points to this node
-    std::optional<std::vector<SwFrameFormat*>> m_xAnchoredFlys;
+    std::vector<SwFrameFormat*> m_aAnchoredFlys;
 
 protected:
     SwStartNode* m_pStartOfSection;
@@ -294,7 +294,7 @@ public:
 
     sal_uInt8 HasPrevNextLayNode() const;
 
-    std::vector<SwFrameFormat *> const* GetAnchoredFlys() const { return m_xAnchoredFlys ? &*m_xAnchoredFlys : nullptr; }
+    std::vector<SwFrameFormat *> const & GetAnchoredFlys() const { return m_aAnchoredFlys; }
     void AddAnchoredFly(SwFrameFormat *);
     void RemoveAnchoredFly(SwFrameFormat *);
 
