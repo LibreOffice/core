@@ -19,16 +19,17 @@
 
 
 #include "pppoptimizertoken.hxx"
-#include <osl/mutex.hxx>
+
 #include <sal/macros.h>
 #include <unordered_map>
 #include <memory>
+#include <mutex>
 
 typedef std::unordered_map< const char*, PPPOptimizerTokenEnum, rtl::CStringHash, rtl::CStringEqual> TypeNameHashMap;
 static TypeNameHashMap* pHashMap = nullptr;
-static ::osl::Mutex& getHashMapMutex()
+static std::mutex& getHashMapMutex()
 {
-    static osl::Mutex s_aHashMapProtection;
+    static std::mutex s_aHashMapProtection;
     return s_aHashMapProtection;
 }
 
@@ -166,7 +167,7 @@ PPPOptimizerTokenEnum TKGet( const OUString& rToken )
 {
     if ( !pHashMap )
     {   // init hash map
-        ::osl::MutexGuard aGuard( getHashMapMutex() );
+        std::lock_guard aGuard( getHashMapMutex() );
         if ( !pHashMap )
         {
             TypeNameHashMap* pH = new TypeNameHashMap;

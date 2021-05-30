@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <cassert>
+#include <mutex>
 
 #include <pdfihelper.hxx>
 
@@ -44,7 +45,7 @@ class PDFPasswordRequest:
         task::XInteractionRequest, task::XInteractionPassword >
 {
 private:
-    mutable osl::Mutex            m_aMutex;
+    mutable std::mutex            m_aMutex;
     uno::Any                      m_aRequest;
     OUString                 m_aPassword;
     bool                          m_bSelected;
@@ -65,7 +66,7 @@ public:
     // XInteractionContinuation
     virtual void SAL_CALL select() override;
 
-    bool isSelected() const { osl::MutexGuard const guard( m_aMutex ); return m_bSelected; }
+    bool isSelected() const { std::scoped_lock const guard( m_aMutex ); return m_bSelected; }
 
 private:
     virtual ~PDFPasswordRequest() override {}
@@ -98,21 +99,21 @@ uno::Sequence< uno::Reference< task::XInteractionContinuation > > PDFPasswordReq
 
 void PDFPasswordRequest::setPassword( const OUString& rPwd )
 {
-    osl::MutexGuard const guard( m_aMutex );
+    std::scoped_lock const guard( m_aMutex );
 
     m_aPassword = rPwd;
 }
 
 OUString PDFPasswordRequest::getPassword()
 {
-    osl::MutexGuard const guard( m_aMutex );
+    std::scoped_lock const guard( m_aMutex );
 
     return m_aPassword;
 }
 
 void PDFPasswordRequest::select()
 {
-    osl::MutexGuard const guard( m_aMutex );
+    std::scoped_lock const guard( m_aMutex );
 
     m_bSelected = true;
 }
