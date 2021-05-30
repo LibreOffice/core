@@ -1447,10 +1447,10 @@ void SwTextNode::Update(
             }
         }
 #endif
-        std::vector<SwFrameFormat*> const*const pFlys(GetAnchoredFlys());
-        for (size_t i = 0; pFlys && i != pFlys->size(); ++i)
+        std::vector<SwFrameFormat*> const& rFlys(GetAnchoredFlys());
+        for (size_t i = 0; i != rFlys.size(); ++i)
         {
-            SwFrameFormat const*const pFormat = (*pFlys)[i];
+            SwFrameFormat const*const pFormat = rFlys[i];
             const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
             const SwPosition* pContentAnchor = rAnchor.GetContentAnchor();
             if (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR && pContentAnchor)
