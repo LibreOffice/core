@@ -234,11 +234,9 @@ SfxViewShell_Impl::~SfxViewShell_Impl()
 {
 }
 
-std::vector< SfxInPlaceClient* > *SfxViewShell_Impl::GetIPClients_Impl( bool bCreate ) const
+std::vector< SfxInPlaceClient* >& SfxViewShell_Impl::GetIPClients_Impl()
 {
-    if (!mpIPClients && bCreate)
-        mpIPClients.reset(new std::vector< SfxInPlaceClient* >);
-    return mpIPClients.get();
+    return maIPClients;
 }
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SfxViewShell,SfxShell)
@@ -358,16 +356,16 @@ static OUString impl_searchFormatTypeForApp(const css::uno::Reference< css::fram
 
 void SfxViewShell::NewIPClient_Impl( SfxInPlaceClient *pIPClient )
 {
-    pImpl->GetIPClients_Impl()->push_back(pIPClient);
+    pImpl->GetIPClients_Impl().push_back(pIPClient);
 }
 
 void SfxViewShell::IPClientGone_Impl( SfxInPlaceClient const *pIPClient )
 {
-    std::vector< SfxInPlaceClient* > *pClients = pImpl->GetIPClients_Impl();
+    std::vector< SfxInPlaceClient* >& pClients = pImpl->GetIPClients_Impl();
 
-    auto it = std::find(pClients->begin(), pClients->end(), pIPClient);
-    if (it != pClients->end())
-        pClients->erase( it );
+    auto it = std::find(pClients.begin(), pClients.end(), pIPClient);
+    if (it != pClients.end())
+        pClients.erase( it );
 }
 
 
@@ -787,13 +785,13 @@ SfxInPlaceClient* SfxViewShell::FindIPClient
     vcl::Window*             pObjParentWin
 )   const
 {
-    std::vector< SfxInPlaceClient* > *pClients = pImpl->GetIPClients_Impl(false);
-    if ( !pClients )
+    std::vector< SfxInPlaceClient* >& rClients = pImpl->GetIPClients_Impl();
+    if ( rClients.empty() )
         return nullptr;
 
     if( !pObjParentWin )
         pObjParentWin = GetWindow();
-    for (SfxInPlaceClient* pIPClient : *pClients)
+    for (SfxInPlaceClient* pIPClient : rClients)
     {
         if ( pIPClient->GetObject() == xObj && pIPClient->GetEditWin() == pObjParentWin )
             return pIPClient;
@@ -812,11 +810,11 @@ SfxInPlaceClient* SfxViewShell::GetIPClient() const
 SfxInPlaceClient* SfxViewShell::GetUIActiveIPClient_Impl() const
 {
     // this method is needed as long as SFX still manages the border space for ChildWindows (see SfxFrame::Resize)
-    std::vector< SfxInPlaceClient* > *pClients = pImpl->GetIPClients_Impl(false);
-    if ( !pClients )
+    std::vector< SfxInPlaceClient* >& rClients = pImpl->GetIPClients_Impl();
+    if ( rClients.empty() )
         return nullptr;
 
-    for (SfxInPlaceClient* pIPClient : *pClients)
+    for (SfxInPlaceClient* pIPClient : rClients)
     {
         if ( pIPClient->IsUIActive() )
             return pIPClient;
@@ -827,13 +825,13 @@ SfxInPlaceClient* SfxViewShell::GetUIActiveIPClient_Impl() const
 
 SfxInPlaceClient* SfxViewShell::GetUIActiveClient() const
 {
-    std::vector< SfxInPlaceClient* > *pClients = pImpl->GetIPClients_Impl(false);
-    if ( !pClients )
+    std::vector< SfxInPlaceClient* >& rClients = pImpl->GetIPClients_Impl();
+    if ( rClients.empty() )
         return nullptr;
 
     const bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
 
-    for (SfxInPlaceClient* pIPClient : *pClients)
+    for (SfxInPlaceClient* pIPClient : rClients)
     {
         if ( pIPClient->IsObjectUIActive() || ( bIsTiledRendering && pIPClient->IsObjectInPlaceActive() ) )
             return pIPClient;
@@ -1627,11 +1625,11 @@ void SfxViewShell::ShowCursor( bool /*bOn*/ )
 void SfxViewShell::ResetAllClients_Impl( SfxInPlaceClient const *pIP )
 {
 
-    std::vector< SfxInPlaceClient* > *pClients = pImpl->GetIPClients_Impl(false);
-    if ( !pClients )
+    std::vector< SfxInPlaceClient* >& rClients = pImpl->GetIPClients_Impl();
+    if ( rClients.empty() )
         return;
 
-    for (SfxInPlaceClient* pIPClient : *pClients)
+    for (SfxInPlaceClient* pIPClient : rClients)
     {
         if( pIPClient != pIP )
             pIPClient->ResetObject();
@@ -1641,13 +1639,13 @@ void SfxViewShell::ResetAllClients_Impl( SfxInPlaceClient const *pIP )
 
 void SfxViewShell::DisconnectAllClients()
 {
-    std::vector< SfxInPlaceClient* > *pClients = pImpl->GetIPClients_Impl(false);
-    if ( !pClients )
+    std::vector< SfxInPlaceClient* >& rClients = pImpl->GetIPClients_Impl();
+    if ( rClients.empty() )
         return;
 
-    for ( size_t n = 0; n < pClients->size(); )
+    for ( size_t n = 0; n < rClients.size(); )
         // clients will remove themselves from the list
-        delete pClients->at( n );
+        delete rClients.at( n );
 }
 
 
@@ -1658,11 +1656,11 @@ void SfxViewShell::QueryObjAreaPixel( tools::Rectangle& ) const
 
 void SfxViewShell::VisAreaChanged()
 {
-    std::vector< SfxInPlaceClient* > *pClients = pImpl->GetIPClients_Impl(false);
-    if ( !pClients )
+    std::vector< SfxInPlaceClient* >& rClients = pImpl->GetIPClients_Impl();
+    if ( rClients.empty() )
         return;
 
-    for (SfxInPlaceClient* pIPClient : *pClients)
+    for (SfxInPlaceClient* pIPClient : rClients)
     {
         if ( pIPClient->IsObjectInPlaceActive() )
             // client is active, notify client that the VisArea might have changed
