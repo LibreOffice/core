@@ -14,7 +14,6 @@ $(eval $(call gb_UnpackedTarball_set_tarball,libxml2,$(LIBXML_TARBALL),,libxml2)
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libxml2))
 
 $(eval $(call gb_UnpackedTarball_add_patches,libxml2,\
-	external/libxml2/libxml2-config.patch.1 \
 	external/libxml2/libxml2-global-symbols.patch \
 	external/libxml2/libxml2-vc10.patch \
 	$(if $(filter ANDROID,$(OS)),external/libxml2/libxml2-android.patch) \
@@ -22,5 +21,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libxml2,\
 		external/libxml2/libxml2-icu-sym.patch.0, \
 		external/libxml2/libxml2-icu.patch.0) \
 ))
+
+$(eval $(call gb_UnpackedTarball_add_file,libxml2,xml2-config.in,external/libxml2/xml2-config.in))
 
 # vim: set noet sw=4 ts=4:

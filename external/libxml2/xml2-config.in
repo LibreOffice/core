@@ -1,0 +1,28 @@
+#! /bin/sh
+
+while test $# -gt 0; do
+    case "$1" in
+    -*=*) optarg=`echo "$1" | sed 's/[-_a-zA-Z0-9]*=//'` ;;
+    *) optarg= ;;
+    esac
+
+    case "$1" in
+    --version)
+	echo @VERSION@
+	exit 0
+        ;;
+    --cflags)
+        cflags="$LIBXML_CFLAGS"
+        ;;
+    --libs)
+        libs="$LIBXML_LIBS"
+        ;;
+    esac
+    shift
+done
+
+if test -n "$cflags$libs"; then
+    echo $cflags $libs
+fi
+
+exit 0
