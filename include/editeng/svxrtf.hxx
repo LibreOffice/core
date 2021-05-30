@@ -74,7 +74,7 @@ public:
     std::unique_ptr<EditNodeIdx> MakeNodeIdx() const;
 };
 
-typedef std::map<short, std::unique_ptr<vcl::Font>> SvxRTFFontTbl;
+typedef std::map<short, vcl::Font> SvxRTFFontTbl;
 typedef std::map<sal_uInt16, std::unique_ptr<SvxRTFStyleType>> SvxRTFStyleTbl;
 
 // own helper classes for the RTF Parser
