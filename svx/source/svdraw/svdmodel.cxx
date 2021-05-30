@@ -119,8 +119,6 @@ SdrModel::SdrModel(
     m_pDefaultStyleSheet=nullptr;
     mpDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj = nullptr;
     m_pLinkManager=nullptr;
-    m_pUndoStack=nullptr;
-    m_pRedoStack=nullptr;
     m_nMaxUndoCount=16;
     m_pCurrentUndoGroup=nullptr;
     m_nUndoLevel=0;
@@ -278,27 +276,24 @@ void SdrModel::SetMaxUndoActionCount(sal_uInt32 nCount)
 {
     if (nCount<1) nCount=1;
     m_nMaxUndoCount=nCount;
-    if (m_pUndoStack) {
-        while (m_pUndoStack->size()>m_nMaxUndoCount) {
-            m_pUndoStack->pop_back();
-        }
-    }
+    while (m_aUndoStack.size()>m_nMaxUndoCount)
+        m_aUndoStack.pop_back();
 }
 
 void SdrModel::ClearUndoBuffer()
 {
-    m_pUndoStack.reset();
-    m_pRedoStack.reset();
+    m_aUndoStack.clear();
+    m_aRedoStack.clear();
 }
 
 bool SdrModel::HasUndoActions() const
 {
-    return m_pUndoStack && !m_pUndoStack->empty();
+    return !m_aUndoStack.empty();
 }
 
 bool SdrModel::HasRedoActions() const
 {
-    return m_pRedoStack && !m_pRedoStack->empty();
+    return !m_aRedoStack.empty();
 }
 
 void SdrModel::Undo()
@@ -311,15 +306,13 @@ void SdrModel::Undo()
     {
         if(HasUndoActions())
         {
-            SfxUndoAction* pDo = m_pUndoStack->front().get();
+            SfxUndoAction* pDo = m_aUndoStack.front().get();
             const bool bWasUndoEnabled = mbUndoEnabled;
             mbUndoEnabled = false;
             pDo->Undo();
-            if(!m_pRedoStack)
-                m_pRedoStack.reset(new std::deque<std::unique_ptr<SfxUndoAction>>);
-            std::unique_ptr<SfxUndoAction> p = std::move(m_pUndoStack->front());
-            m_pUndoStack->pop_front();
-            m_pRedoStack->emplace_front(std::move(p));
+            std::unique_ptr<SfxUndoAction> p = std::move(m_aUndoStack.front());
+            m_aUndoStack.pop_front();
+            m_aRedoStack.emplace_front(std::move(p));
             mbUndoEnabled = bWasUndoEnabled;
         }
     }
@@ -335,15 +328,13 @@ void SdrModel::Redo()
     {
         if(HasRedoActions())
         {
-            SfxUndoAction* pDo = m_pRedoStack->front().get();
+            SfxUndoAction* pDo = m_aRedoStack.front().get();
             const bool bWasUndoEnabled = mbUndoEnabled;
             mbUndoEnabled = false;
             pDo->Redo();
-            if(!m_pUndoStack)
-                m_pUndoStack.reset(new std::deque<std::unique_ptr<SfxUndoAction>>);
-            std::unique_ptr<SfxUndoAction> p = std::move(m_pRedoStack->front());
-            m_pRedoStack->pop_front();
-            m_pUndoStack->emplace_front(std::move(p));
+            std::unique_ptr<SfxUndoAction> p = std::move(m_aRedoStack.front());
+            m_aRedoStack.pop_front();
+            m_aUndoStack.emplace_front(std::move(p));
             mbUndoEnabled = bWasUndoEnabled;
         }
     }
@@ -359,7 +350,7 @@ void SdrModel::Repeat(SfxRepeatTarget& rView)
     {
         if(HasUndoActions())
         {
-            SfxUndoAction* pDo =  m_pUndoStack->front().get();
+            SfxUndoAction* pDo =  m_aUndoStack.front().get();
             if(pDo->CanRepeat(rView))
             {
                 pDo->Repeat(rView);
@@ -380,15 +371,12 @@ void SdrModel::ImpPostUndoAction(std::unique_ptr<SdrUndoAction> pUndo)
     }
     else
     {
-        if (!m_pUndoStack)
-            m_pUndoStack.reset(new std::deque<std::unique_ptr<SfxUndoAction>>);
-        m_pUndoStack->emplace_front(std::move(pUndo));
-        while (m_pUndoStack->size()>m_nMaxUndoCount)
+        m_aUndoStack.emplace_front(std::move(pUndo));
+        while (m_aUndoStack.size()>m_nMaxUndoCount)
         {
-            m_pUndoStack->pop_back();
+            m_aUndoStack.pop_back();
         }
-        if (m_pRedoStack!=nullptr)
-            m_pRedoStack->clear();
+        m_aRedoStack.clear();
     }
 }
 
