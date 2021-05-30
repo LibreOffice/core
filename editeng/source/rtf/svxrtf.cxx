@@ -442,13 +442,13 @@ void SvxRTFParser::ReadColorTable()
 void SvxRTFParser::ReadFontTable()
 {
     int _nOpenBrakets = 1;      // the first was already detected earlier!!
-    std::unique_ptr<vcl::Font> pFont(new vcl::Font);
+    vcl::Font aFont;
     short nFontNo(0), nInsFontNo (0);
     OUString sAltNm, sFntNm;
     bool bIsAltFntNm = false;
 
     rtl_TextEncoding nSystemChar = lcl_GetDefaultTextEncodingForRTF();
-    pFont->SetCharSet( nSystemChar );
+    aFont.SetCharSet( nSystemChar );
     SetEncoding( nSystemChar );
 
     while( _nOpenBrakets && IsParserWorking() )
@@ -487,33 +487,33 @@ void SvxRTFParser::ReadFontTable()
                 ++_nOpenBrakets;
                 break;
             case RTF_FROMAN:
-                pFont->SetFamily( FAMILY_ROMAN );
+                aFont.SetFamily( FAMILY_ROMAN );
                 break;
             case RTF_FSWISS:
-                pFont->SetFamily( FAMILY_SWISS );
+                aFont.SetFamily( FAMILY_SWISS );
                 break;
             case RTF_FMODERN:
-                pFont->SetFamily( FAMILY_MODERN );
+                aFont.SetFamily( FAMILY_MODERN );
                 break;
             case RTF_FSCRIPT:
-                pFont->SetFamily( FAMILY_SCRIPT );
+                aFont.SetFamily( FAMILY_SCRIPT );
                 break;
             case RTF_FDECOR:
-                pFont->SetFamily( FAMILY_DECORATIVE );
+                aFont.SetFamily( FAMILY_DECORATIVE );
                 break;
             // for technical/symbolic font of the rtl_TextEncoding is changed!
             case RTF_FTECH:
-                pFont->SetCharSet( RTL_TEXTENCODING_SYMBOL );
+                aFont.SetCharSet( RTL_TEXTENCODING_SYMBOL );
                 [[fallthrough]];
             case RTF_FNIL:
-                pFont->SetFamily( FAMILY_DONTKNOW );
+                aFont.SetFamily( FAMILY_DONTKNOW );
                 break;
             case RTF_FCHARSET:
                 if (-1 != nTokenValue)
                 {
                     rtl_TextEncoding nrtl_TextEncoding = rtl_getTextEncodingFromWindowsCharset(
                         static_cast<sal_uInt8>(nTokenValue));
-                    pFont->SetCharSet(nrtl_TextEncoding);
+                    aFont.SetCharSet(nrtl_TextEncoding);
                     //When we're in a font, the fontname is in the font
                     //charset, except for symbol fonts I believe
                     if (nrtl_TextEncoding == RTL_TEXTENCODING_SYMBOL)
@@ -525,10 +525,10 @@ void SvxRTFParser::ReadFontTable()
                 switch( nTokenValue )
                 {
                     case 1:
-                        pFont->SetPitch( PITCH_FIXED );
+                        aFont.SetPitch( PITCH_FIXED );
                         break;
                     case 2:
-                        pFont->SetPitch( PITCH_VARIABLE );
+                        aFont.SetPitch( PITCH_VARIABLE );
                         break;
                 }
                 break;
@@ -558,16 +558,14 @@ void SvxRTFParser::ReadFontTable()
             if (!sAltNm.isEmpty())
                 sFntNm += ";" + sAltNm;
 
-            pFont->SetFamilyName( sFntNm );
-            m_FontTable.insert(std::make_pair(nInsFontNo, std::move(pFont)));
-            pFont.reset(new vcl::Font);
-            pFont->SetCharSet( nSystemChar );
+            aFont.SetFamilyName( sFntNm );
+            m_FontTable.insert(std::make_pair(nInsFontNo, aFont));
+            aFont = vcl::Font();
+            aFont.SetCharSet( nSystemChar );
             sAltNm.clear();
             sFntNm.clear();
         }
     }
-    // the last one we have to delete manually
-    pFont.reset();
     SkipToken();        // the closing brace is evaluated "above"
 
     // set the default font in the Document
@@ -602,7 +600,7 @@ const vcl::Font& SvxRTFParser::GetFont( sal_uInt16 nId )
     SvxRTFFontTbl::const_iterator it = m_FontTable.find( nId );
     if (it != m_FontTable.end())
     {
-        return *it->second;
+        return it->second;
     }
     const SvxFontItem& rDfltFont = static_cast<const SvxFontItem&>(
                     pAttrPool->GetDefaultItem( aPlainMap.nFont ));
