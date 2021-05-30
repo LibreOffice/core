@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 
 #include <algorithm>
+#include <mutex>
 #include <utility>
 #include <vector>
 
@@ -34,7 +35,6 @@
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <osl/mutex.hxx>
 #include <o3tl/functional.hxx>
 #include <config_features.h>
 #include <vcl/skia/SkiaHelper.hxx>
@@ -58,7 +58,7 @@ class CanvasFactory
     typedef std::vector< CachePair >                    CacheVector;
 
 
-    mutable ::osl::Mutex              m_mutex;
+    mutable std::mutex                m_mutex;
     Reference<XComponentContext>      m_xContext;
     Reference<container::XNameAccess> m_xCanvasConfigNameAccess;
     AvailVector                       m_aAvailableImplementations;
@@ -288,7 +288,7 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
     OUString const & serviceName, Sequence<Any> const & args,
     Reference<XComponentContext> const & xContext ) const
 {
-    ::osl::MutexGuard guard(m_mutex);
+    std::lock_guard guard(m_mutex);
 
     // forcing last entry from impl list, if config flag set
     bool bForceLastEntry(false);
