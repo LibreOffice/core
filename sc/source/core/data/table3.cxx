@@ -3548,6 +3548,9 @@ bool ScTable::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCR
 
 void ScTable::GetFilterEntries( SCCOL nCol, SCROW nRow1, SCROW nRow2, ScFilterEntries& rFilterEntries )
 {
+    if (nCol >= aCol.size())
+        return;
+
     sc::ColumnBlockConstPosition aBlockPos;
     aCol[nCol].InitBlockPosition(aBlockPos);
     aCol[nCol].GetFilterEntries(aBlockPos, nRow1, nRow2, rFilterEntries, false);
@@ -3556,6 +3559,9 @@ void ScTable::GetFilterEntries( SCCOL nCol, SCROW nRow1, SCROW nRow2, ScFilterEn
 void ScTable::GetFilteredFilterEntries(
     SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScQueryParam& rParam, ScFilterEntries& rFilterEntries, bool bFiltering )
 {
+    if (nCol >= aCol.size())
+        return;
+
     sc::ColumnBlockConstPosition aBlockPos;
     aCol[nCol].InitBlockPosition(aBlockPos);
 
