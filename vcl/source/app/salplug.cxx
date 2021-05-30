@@ -46,12 +46,10 @@
 #include <android/androidinst.hxx>
 #endif
 
-#if !(defined _WIN32 || defined MACOSX)
 #if USING_X11
 #define DESKTOPDETECT
 #endif
-#define HEADLESS_VCLPLUG
-#endif
+#define HEADLESS_VCLPLUG ENABLE_HEADLESS
 
 extern "C" {
 typedef SalInstance*(*salFactoryProc)();
