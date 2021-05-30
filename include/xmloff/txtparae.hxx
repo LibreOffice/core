@@ -90,7 +90,7 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
 
     const ::std::unique_ptr< ::xmloff::BoundFrameSets > pBoundFrameSets;
     std::unique_ptr<XMLTextFieldExport>          pFieldExport;
-    std::unique_ptr<std::vector<OUString>>       pListElements;
+    std::vector<OUString>                        maListElements;
     XMLTextListAutoStylePool                     maListAutoPool;
     std::unique_ptr<XMLSectionExport>            pSectionExport;
     std::unique_ptr<XMLIndexMarkExport>          pIndexMarkExport;
