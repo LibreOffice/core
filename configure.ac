@@ -9570,7 +9570,7 @@ else
         LIBXML_LIBS="${WORKDIR}/UnpackedTarball/libxml2/win32/bin.msvc/libxml2.lib"
     else
         LIBXML_LIBS="-L${WORKDIR}/UnpackedTarball/libxml2/.libs -lxml2"
-        if test "$_os" = Android; then
+        if test "$DISABLE_DYNLOADING" = TRUE; then
             LIBXML_LIBS="$LIBXML_LIBS -lm"
         fi
     fi
