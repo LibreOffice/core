@@ -36,7 +36,6 @@
 #include <tools/stream.hxx>
 #include <tools/zcodec.hxx>
 #include <o3tl/safeint.hxx>
-#include <osl/mutex.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
@@ -48,6 +47,7 @@
 
 #include <com/sun/star/lang/Locale.hpp>
 
+#include <mutex>
 #include <unordered_map>
 
 #ifdef ENABLE_CUPS
@@ -531,8 +531,8 @@ OUString PPDParser::getPPDFile( const OUString& rFile )
 
 const PPDParser* PPDParser::getParser( const OUString& rFile )
 {
-    static ::osl::Mutex aMutex;
-    ::osl::Guard< ::osl::Mutex > aGuard( aMutex );
+    static std::mutex aMutex;
+    std::lock_guard aGuard( aMutex );
 
     OUString aFile = rFile;
     if( !rFile.startsWith( "CUPS:" ) && !rFile.startsWith( "CPD:" ) )
