@@ -23,6 +23,7 @@
 #include <sal/types.h>
 #include "IMark.hxx"
 #include <memory>
+#include <optional>
 
 class SwPaM;
 struct SwPosition;
@@ -60,7 +61,7 @@ class IDocumentMarkAccess
         class SW_DLLPUBLIC iterator
         {
             private:
-                std::unique_ptr<std::vector<::sw::mark::MarkBase*>::const_iterator> m_pIter;
+                std::optional<std::vector<::sw::mark::MarkBase*>::const_iterator> m_pIter;
 
             public:
                 // MarkManager implementation needs to get the real iterator
