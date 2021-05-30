@@ -60,18 +60,18 @@ IDocumentMarkAccess::iterator::get() const
 }
 
 IDocumentMarkAccess::iterator::iterator(std::vector<::sw::mark::MarkBase*>::const_iterator const& rIter)
-    : m_pIter(new std::vector<::sw::mark::MarkBase*>::const_iterator(rIter))
+    : m_pIter(rIter)
 {
 }
 
 IDocumentMarkAccess::iterator::iterator(iterator const& rOther)
-    : m_pIter(new std::vector<::sw::mark::MarkBase*>::const_iterator(*rOther.m_pIter))
+    : m_pIter(rOther.m_pIter)
 {
 }
 
 auto IDocumentMarkAccess::iterator::operator=(iterator const& rOther) -> iterator&
 {
-    m_pIter.reset(new std::vector<::sw::mark::MarkBase*>::const_iterator(*rOther.m_pIter));
+    m_pIter = rOther.m_pIter;
     return *this;
 }
 
@@ -120,7 +120,7 @@ bool IDocumentMarkAccess::iterator::operator!=(iterator const& rOther) const
 }
 
 IDocumentMarkAccess::iterator::iterator()
-    : m_pIter(new std::vector<::sw::mark::MarkBase*>::const_iterator())
+    : m_pIter(std::in_place)
 {
 }
 
