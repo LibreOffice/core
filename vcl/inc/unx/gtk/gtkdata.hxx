@@ -173,11 +173,12 @@ inline bool surface_get_device_position(GdkSurface* pSurface,
                                            pMask);
 #else
     int nX(x), nY(y);
-    return gdk_window_get_device_position(pSurface, pDevice,
-                                           &nX, &nY,
-                                           pMask);
+    bool bRet = gdk_window_get_device_position(pSurface, pDevice,
+                                               &nX, &nY,
+                                               pMask);
     x = nX;
     y = nY;
+    return bRet;
 #endif
 }
 
