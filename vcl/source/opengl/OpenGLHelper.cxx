@@ -8,6 +8,7 @@
  */
 
 #include <vcl/opengl/OpenGLHelper.hxx>
+#include <config_vclplug.h>
 
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
@@ -38,7 +39,7 @@
 #include <vcl/skia/SkiaHelper.hxx>
 #include <vcl/glxtestprocess.hxx>
 
-#if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID && !defined HAIKU
+#if USING_X11
 #include <opengl/x11/X11DeviceInfo.hxx>
 #elif defined (_WIN32)
 #include <opengl/win/WinDeviceInfo.hxx>
@@ -200,7 +201,7 @@ namespace
 
     OString getDeviceInfoString()
     {
-#if defined( SAL_UNX ) && !defined( MACOSX ) && !defined( IOS )&& !defined( ANDROID ) && !defined( HAIKU )
+#if USING_X11
         const X11OpenGLDeviceInfo aInfo;
         return aInfo.GetOS() +
             aInfo.GetOSRelease() +
@@ -762,7 +763,7 @@ bool OpenGLHelper::isDeviceDenylisted()
     {
         OpenGLZone aZone;
 
-#if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID && !defined HAIKU
+#if USING_X11
         X11OpenGLDeviceInfo aInfo;
         bDenylisted = aInfo.isDeviceBlocked();
         SAL_INFO("vcl.opengl", "denylisted: " << bDenylisted);

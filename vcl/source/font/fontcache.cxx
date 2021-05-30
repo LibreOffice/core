@@ -24,10 +24,6 @@
 #include <PhysicalFontFamily.hxx>
 #include <sal/log.hxx>
 
-#if !(defined(_WIN32) || defined(MACOSX) || defined(IOS))
-#include <unx/glyphcache.hxx>
-#endif
-
 size_t ImplFontCache::IFSD_Hash::operator()( const FontSelectPattern& rFSD ) const
 {
     return rFSD.hashCode();
