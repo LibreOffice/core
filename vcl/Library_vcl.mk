@@ -512,7 +512,7 @@ vcl_headless_code= \
     $(if $(filter-out iOS,$(OS)), \
         vcl/headless/svpbmp \
         vcl/headless/svpgdi \
-        vcl/headless/svpdata \
+        $(if $(ENABLE_HEADLESS),vcl/headless/svpdata) \
         vcl/headless/CustomWidgetDraw \
     ) \
     vcl/headless/svpdummies \
