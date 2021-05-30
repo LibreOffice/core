@@ -27,6 +27,7 @@
 #include <stack>
 #include <unordered_map>
 #include <vector>
+#include <optional>
 
 #include <osl/endian.h>
 #include <tools/solar.h>
