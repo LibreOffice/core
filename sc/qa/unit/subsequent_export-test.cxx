@@ -297,6 +297,7 @@ public:
     void testTdf136721_paper_size();
     void testTdf139258_rotated_image();
     void testTdf126541_SheetVisibilityImportXlsx();
+    void testTdf113646();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -489,7 +490,7 @@ public:
     CPPUNIT_TEST(testTdf136721_paper_size);
     CPPUNIT_TEST(testTdf139258_rotated_image);
     CPPUNIT_TEST(testTdf126541_SheetVisibilityImportXlsx);
-
+    CPPUNIT_TEST(testTdf113646);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -6171,6 +6172,20 @@ void ScExportTest::testTdf126541_SheetVisibilityImportXlsx()
     // Sheet based grid line visibility setting should not overwrite the global setting.
     xShell = loadDocAndSetupModelViewController(u"tdf126541_GridOff.", FORMAT_XLSX, true);
     CPPUNIT_ASSERT(xShell->GetDocument().GetViewOptions().GetOption(VOPT_GRID));
+}
+
+void ScExportTest::testTdf113646()
+{
+    ScDocShellRef xShell = loadDoc(u"tdf113646.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xShell.is());
+
+    auto pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+    xmlDocUniquePtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/styles.xml");
+    CPPUNIT_ASSERT(pSheet);
+
+    assertXPath(pSheet, "/x:styleSheet/x:dxfs/x:dxf/x:font/x:sz", "val", "36");
+
+    xShell->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
