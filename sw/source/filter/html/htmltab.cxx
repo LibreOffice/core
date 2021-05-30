@@ -3371,7 +3371,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                     (!bTopTable && !bParentLFStripped &&
                      !m_pPam->GetPoint()->nContent.GetIndex()) )
                     pPostIts.emplace();
-                SetAttr( bTopTable, bTopTable, &*pPostIts );
+                SetAttr( bTopTable, bTopTable, pPostIts ? &*pPostIts : nullptr );
             }
             else
             {
