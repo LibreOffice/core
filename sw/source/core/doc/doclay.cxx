@@ -1571,11 +1571,11 @@ bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
                 checkFormats.push_back( pFormat );
         }
 #endif
-        std::vector<SwFrameFormat*> const*const pFlys(pFlyNd->GetAnchoredFlys());
+        std::vector<SwFrameFormat*> const & rFlys(pFlyNd->GetAnchoredFlys());
         bool bFound(false);
-        for (size_t i = 0; pFlys && i < pFlys->size(); ++i)
+        for (size_t i = 0; i < rFlys.size(); ++i)
         {
-            const SwFrameFormat *const pFormat = (*pFlys)[i];
+            const SwFrameFormat *const pFormat = rFlys[i];
             const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx();
             if( pIdx && pFlyNd == &pIdx->GetNode() )
             {

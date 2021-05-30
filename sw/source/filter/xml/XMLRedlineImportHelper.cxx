@@ -628,7 +628,7 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
              && (pTempNode = pDoc->GetNodes()[pRedlineInfo->pContentIndex->GetIndex() + 1]->GetTextNode()) != nullptr
              && pTempNode->GetText().isEmpty()
              && !pTempNode->GetpSwpHints()
-             && !pTempNode->GetAnchoredFlys()))
+             && pTempNode->GetAnchoredFlys().empty()))
     {
         // ignore redline (e.g. file loaded in insert mode):
         // delete 'deleted' redlines and forget about the whole thing

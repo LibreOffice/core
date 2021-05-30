@@ -347,7 +347,7 @@ SwNode::SwNode( SwNodes& rNodes, sal_uLong nPos, const SwNodeType nNdType )
 
 SwNode::~SwNode()
 {
-    assert(!m_xAnchoredFlys || GetDoc().IsInDtor()); // must all be deleted
+    assert(m_aAnchoredFlys.empty() || GetDoc().IsInDtor()); // must all be deleted
     InvalidateInSwCache(RES_OBJECTDYING);
     assert(!IsInCache());
 }
@@ -2119,11 +2119,7 @@ void SwNode::AddAnchoredFly(SwFrameFormat *const pFlyFormat)
     assert(&pFlyFormat->GetAnchor(false).GetContentAnchor()->nNode.GetNode() == this);
     // check node type, cf. SwFormatAnchor::SetAnchor()
     assert(IsTextNode() || IsStartNode() || IsTableNode());
-    if (!m_xAnchoredFlys)
-    {
-        m_xAnchoredFlys.emplace();
-    }
-    m_xAnchoredFlys->push_back(pFlyFormat);
+    m_aAnchoredFlys.push_back(pFlyFormat);
 }
 
 void SwNode::RemoveAnchoredFly(SwFrameFormat *const pFlyFormat)
@@ -2132,14 +2128,9 @@ void SwNode::RemoveAnchoredFly(SwFrameFormat *const pFlyFormat)
     // cannot assert this in Remove because it is called when new anchor is already set
 //    assert(&pFlyFormat->GetAnchor(false).GetContentAnchor()->nNode.GetNode() == this);
     assert(IsTextNode() || IsStartNode() || IsTableNode());
-    assert(m_xAnchoredFlys);
-    auto it(std::find(m_xAnchoredFlys->begin(), m_xAnchoredFlys->end(), pFlyFormat));
-    assert(it != m_xAnchoredFlys->end());
-    m_xAnchoredFlys->erase(it);
-    if (m_xAnchoredFlys->empty())
-    {
-        m_xAnchoredFlys.reset();
-    }
+    auto it(std::find(m_aAnchoredFlys.begin(), m_aAnchoredFlys.end(), pFlyFormat));
+    assert(it != m_aAnchoredFlys.end());
+    m_aAnchoredFlys.erase(it);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
