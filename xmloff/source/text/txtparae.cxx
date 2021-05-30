@@ -870,14 +870,13 @@ void XMLTextParagraphExport::exportListChange(
         }
 
         if ( nListLevelsToBeClosed > 0 &&
-             pListElements &&
-             pListElements->size() >= sal::static_int_cast< sal_uInt32 >( 2 * nListLevelsToBeClosed ) )
+             maListElements.size() >= sal::static_int_cast< sal_uInt32 >( 2 * nListLevelsToBeClosed ) )
         {
             do {
                 for(size_t j = 0; j < 2; ++j)
                 {
-                    OUString aElem(pListElements->back());
-                    pListElements->pop_back();
+                    OUString aElem(maListElements.back());
+                    maListElements.pop_back();
                     GetExport().EndElement(aElem, true);
                 }
 
@@ -1046,9 +1045,7 @@ void XMLTextParagraphExport::exportListChange(
                 GetExport().IgnorableWhitespace();
                 GetExport().StartElement(aElem, false);
 
-                if(!pListElements)
-                    pListElements.reset( new std::vector<OUString> );
-                pListElements->push_back(aElem);
+                maListElements.push_back(aElem);
 
                 mpTextListsHelper->PushListOnStack( sListId,
                                                     sListStyleName );
@@ -1083,7 +1080,7 @@ void XMLTextParagraphExport::exportListChange(
                                             GetXMLToken(eLName) );
                 GetExport().IgnorableWhitespace();
                 GetExport().StartElement(aElem, false);
-                pListElements->push_back(aElem);
+                maListElements.push_back(aElem);
 
                 // export of <text:number> element for last opened <text:list-item>, if requested
                 if ( GetExport().exportTextNumberElement() &&
@@ -1111,25 +1108,25 @@ void XMLTextParagraphExport::exportListChange(
          rPrevInfo.BelongsToSameList( rNextInfo ) &&
          rPrevInfo.GetLevel() >= rNextInfo.GetLevel() )
     {
-        assert(pListElements && pListElements->size() >= 2 && "list elements missing");
-        bEndElement = pListElements && pListElements->size() >= 2;
+        assert(maListElements.size() >= 2 && "list elements missing");
+        bEndElement = maListElements.size() >= 2;
     }
 
     if (!bEndElement)
         return;
 
     // close previous list-item
-    GetExport().EndElement(pListElements->back(), true );
-    pListElements->pop_back();
+    GetExport().EndElement(maListElements.back(), true );
+    maListElements.pop_back();
 
     // Only for sub lists (#i103745#)
     if ( rNextInfo.IsRestart() && !rNextInfo.HasStartValue() &&
          rNextInfo.GetLevel() != 1 )
     {
         // start new sub list respectively list on same list level
-        GetExport().EndElement(pListElements->back(), true );
+        GetExport().EndElement(maListElements.back(), true );
         GetExport().IgnorableWhitespace();
-        GetExport().StartElement(pListElements->back(), false);
+        GetExport().StartElement(maListElements.back(), false);
     }
 
     // open new list-item
@@ -1166,7 +1163,7 @@ void XMLTextParagraphExport::exportListChange(
                             GetXMLToken(XML_LIST_ITEM) ) );
     GetExport().IgnorableWhitespace();
     GetExport().StartElement(aElem, false );
-    pListElements->push_back(aElem);
+    maListElements.push_back(aElem);
 
     // export of <text:number> element for <text:list-item>, if requested
     if ( GetExport().exportTextNumberElement() &&
@@ -1294,7 +1291,6 @@ XMLTextParagraphExport::~XMLTextParagraphExport()
     pIndexMarkExport.reset();
     pSectionExport.reset();
     pFieldExport.reset();
-    pListElements.reset();
 #ifdef DBG_UTIL
     txtparae_bContainsIllegalCharacters = false;
 #endif
