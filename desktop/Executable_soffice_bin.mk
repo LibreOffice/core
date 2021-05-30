@@ -14,6 +14,10 @@ $(eval $(call gb_Executable_set_include,soffice_bin,\
     -I$(SRCDIR)/desktop/source/inc \
 ))
 
+$(eval $(call gb_Executable_add_defs,soffice_bin,\
+    $(if $(DISABLE_DYNLOADING),$(if $(SYSTEM_LIBXML),,-DNOTEST_xmlCleanupParser)) \
+))
+
 $(eval $(call gb_Executable_use_libraries,soffice_bin,\
     sal \
     sofficeapp \
