@@ -187,8 +187,8 @@ protected:
     SfxStyleSheet*  m_pDefaultStyleSheet;
     SfxStyleSheet* mpDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj; // #i119287#
     sfx2::LinkManager* m_pLinkManager;   // LinkManager
-    std::unique_ptr<std::deque<std::unique_ptr<SfxUndoAction>>> m_pUndoStack;
-    std::unique_ptr<std::deque<std::unique_ptr<SfxUndoAction>>> m_pRedoStack;
+    std::deque<std::unique_ptr<SfxUndoAction>> m_aUndoStack;
+    std::deque<std::unique_ptr<SfxUndoAction>> m_aRedoStack;
     std::unique_ptr<SdrUndoGroup> m_pCurrentUndoGroup;  // For multi-level
     sal_uInt16          m_nUndoLevel;                   // undo nesting
     bool                m_bIsWriter:1;        // to clean up pMyPool from 303a
