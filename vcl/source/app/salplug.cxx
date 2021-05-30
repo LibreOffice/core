@@ -46,10 +46,10 @@
 #include <android/androidinst.hxx>
 #endif
 
-#if !(defined _WIN32 || defined MACOSX)
 #if USING_X11
 #define DESKTOPDETECT
 #endif
+#if ENABLE_HEADLESS
 #define HEADLESS_VCLPLUG
 #endif
 
