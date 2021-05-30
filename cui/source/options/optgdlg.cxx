@@ -18,7 +18,6 @@
  */
 
 #include <config_features.h>
-#include <config_vclplug.h>
 #include <svl/zforlist.hxx>
 #include <svl/currencytable.hxx>
 #include <svtools/langhelp.hxx>
@@ -155,7 +154,6 @@ OfaMiscTabPage::OfaMiscTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xPopUpNoHelpCB(m_xBuilder->weld_check_button("popupnohelp"))
     , m_xShowTipOfTheDay(m_xBuilder->weld_check_button("cbShowTipOfTheDay"))
     , m_xFileDlgFrame(m_xBuilder->weld_widget("filedlgframe"))
-    , m_xPrintDlgFrame(m_xBuilder->weld_widget("printdlgframe"))
     , m_xFileDlgROImage(m_xBuilder->weld_widget("lockimage"))
     , m_xFileDlgCB(m_xBuilder->weld_check_button("filedlg"))
     , m_xPrintDlgCB(m_xBuilder->weld_check_button("printdlg"))
@@ -184,15 +182,6 @@ OfaMiscTabPage::OfaMiscTabPage(weld::Container* pPage, weld::DialogController* p
         m_xFileDlgROImage->show();
         m_xFileDlgCB->set_sensitive(false);
     }
-
-#if !ENABLE_GTK3
-    m_xPrintDlgFrame->hide();
-#else
-    if (!officecfg::Office::Common::Misc::ExperimentalMode::get())
-    {
-        m_xPrintDlgFrame->hide();
-    }
-#endif
 
     m_xQuickLaunchCB->show();
 
@@ -244,15 +233,6 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
         std::shared_ptr< comphelper::ConfigurationChanges > xChanges(
                 comphelper::ConfigurationChanges::create());
         officecfg::Office::Common::Misc::UseSystemFileDialog::set( !m_xFileDlgCB->get_active(), xChanges );
-        xChanges->commit();
-        bModified = true;
-    }
-
-    if ( m_xPrintDlgCB->get_state_changed_from_saved() )
-    {
-        std::shared_ptr< comphelper::ConfigurationChanges > xChanges(
-                comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Misc::UseSystemPrintDialog::set( !m_xPrintDlgCB->get_active(), xChanges );
         xChanges->commit();
         bModified = true;
     }
@@ -316,8 +296,6 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     m_xShowTipOfTheDay->save_state();
     m_xFileDlgCB->set_active( !officecfg::Office::Common::Misc::UseSystemFileDialog::get() );
     m_xFileDlgCB->save_state();
-    m_xPrintDlgCB->set_active( !officecfg::Office::Common::Misc::UseSystemPrintDialog::get() );
-    m_xPrintDlgCB->save_state();
 
     m_xDocStatusCB->set_active(officecfg::Office::Common::Print::PrintingModifiesDocument::get());
     m_xDocStatusCB->save_state();
