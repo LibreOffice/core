@@ -7,13 +7,6 @@
 #ifndef CONFIG_FEATURES_H
 #define CONFIG_FEATURES_H
 
-/* X11
- *
- * Whether we are building code to run in an X11 environment.
- */
-
-#define HAVE_FEATURE_X11 0
-
 /* AVMEDIA - Whether to have functionality to display and manipulate
  * embedded AV media in documents
  */
@@ -119,7 +112,7 @@
 /*
  * Whether User Interface is available
  */
-#define HAVE_FEATURE_UI 1
+#define HAVE_FEATURE_UI 0
 
 /*
  * Whether PDF import is available

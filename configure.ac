@@ -800,25 +800,26 @@ if test "$enable_android_editing" = yes; then
 fi
 AC_SUBST([ENABLE_ANDROID_EDITING])
 
-dnl ===================================================================
-dnl The following is a list of supported systems.
-dnl Sequential to keep the logic very simple
-dnl These values may be checked and reset later.
-dnl ===================================================================
-#defaults unless the os test overrides this:
+# ===================================================================
+#
+# Start initial platform setup
+#
+# The using_* variables reflect platform support and should not be
+# changed after the "End initial platform setup" block.
+# This is also true for most test_* variables.
+# ===================================================================
 build_crypto=yes
 test_cmis=yes
 test_curl=yes
-test_randr=yes
-test_xrender=yes
-test_cups=yes
-test_dbus=yes
-test_fontconfig=yes
-test_cairo=no
 test_gdb_index=no
 test_split_debug=no
-test_openldap=yes
 test_webdav=yes
+
+# There is currently just iOS not using salplug, so this explicitly enables it.
+# must: using_freetype_fontconfig
+#  may: using_headless_plugin defaults to $using_freetype_fontconfig
+using_vclplug=yes
+# must: using_x11
 
 # Default values, as such probably valid just for Linux, set
 # differently below just for Mac OSX, but at least better than
@@ -843,8 +844,8 @@ host_cpu_for_clang="$host_cpu"
 case "$host_os" in
 
 solaris*)
-    build_gstreamer_1_0=yes
-    test_freetype=yes
+    using_freetype_fontconfig=yes
+    using_x11=yes
     build_skia=yes
     _os=SunOS
 
@@ -869,31 +870,24 @@ solaris*)
     ;;
 
 linux-gnu*|k*bsd*-gnu*)
-    build_gstreamer_1_0=yes
-    test_kf5=yes
-    test_gtk3_kde5=yes
+    using_freetype_fontconfig=yes
+    using_x11=yes
     build_skia=yes
     test_gdb_index=yes
     test_split_debug=yes
-    if test "$enable_fuzzers" != yes; then
-        test_freetype=yes
-        test_fontconfig=yes
-    else
-        test_freetype=no
-        test_fontconfig=no
-        BUILD_TYPE="$BUILD_TYPE FONTCONFIG FREETYPE"
+    if test "$enable_fuzzers" = yes; then
+        test_system_freetype=no
     fi
     _os=Linux
     ;;
 
 gnu)
-    test_randr=no
-    test_xrender=no
+    using_freetype_fontconfig=yes
+    using_x11=no
     _os=GNU
      ;;
 
 cygwin*|wsl*)
-
     # When building on Windows normally with MSVC under Cygwin,
     # configure thinks that the host platform (the platform the
     # built code will run on) is Cygwin, even if it obviously is
@@ -905,13 +899,8 @@ cygwin*|wsl*)
     # look at $host etc that much, it mostly uses its own $_os
     # variable, set here in this case statement.
 
-    test_cups=no
-    test_dbus=no
-    test_randr=no
-    test_xrender=no
-    test_freetype=no
-    test_fontconfig=no
-    test_openldap=no
+    using_freetype_fontconfig=no
+    using_x11=no
     build_skia=yes
     _os=WINNT
 
@@ -926,11 +915,8 @@ cygwin*|wsl*)
     ;;
 
 darwin*|macos*) # macOS
-    test_randr=no
-    test_xrender=no
-    test_freetype=no
-    test_fontconfig=no
-    test_dbus=no
+    using_freetype_fontconfig=no
+    using_x11=no
     if test -n "$LODE_HOME" ; then
         mac_sanitize_path
         AC_MSG_NOTICE([sanitized the PATH to $PATH])
@@ -965,14 +951,11 @@ darwin*|macos*) # macOS
 ;;
 
 ios*) # iOS
+    using_freetype_fontconfig=no
+    using_vclplug=no
+    using_x11=no
     build_crypto=no
     test_cmis=no
-    test_randr=no
-    test_xrender=no
-    test_freetype=no
-    test_fontconfig=no
-    test_dbus=no
-    test_openldap=no
     test_webdav=no
     if test -n "$LODE_HOME" ; then
         mac_sanitize_path
@@ -980,7 +963,6 @@ ios*) # iOS
     fi
     enable_gpgmepp=no
     _os=iOS
-    test_cups=no
     enable_mpl_subset=yes
     enable_lotuswordpro=no
     enable_coinmp=no
@@ -1013,10 +995,8 @@ ios*) # iOS
 ;;
 
 freebsd*)
-    build_gstreamer_1_0=yes
-    test_kf5=yes
-    test_gtk3_kde5=yes
-    test_freetype=yes
+    using_freetype_fontconfig=yes
+    using_x11=yes
     build_skia=yes
     AC_MSG_CHECKING([the FreeBSD operating system release])
     if test -n "$with_os_version"; then
@@ -1041,44 +1021,49 @@ freebsd*)
     ;;
 
 *netbsd*)
-    build_gstreamer_1_0=yes
-    test_kf5=yes
-    test_gtk3_kde5=yes
-    test_freetype=yes
+    using_freetype_fontconfig=yes
+    using_x11=yes
+    test_gtk3_kde5=no
     build_skia=yes
     PTHREAD_LIBS="-pthread -lpthread"
     _os=NetBSD
     ;;
 
 aix*)
+    using_freetype_fontconfig=yes
+    using_x11=yes
     test_randr=no
-    test_freetype=yes
+    test_gstreamer_1_0=no
     PTHREAD_LIBS=-pthread
     _os=AIX
     ;;
 
 openbsd*)
-    test_freetype=yes
+    using_freetype_fontconfig=yes
+    using_x11=yes
     PTHREAD_CFLAGS="-D_THREAD_SAFE"
     PTHREAD_LIBS="-pthread"
     _os=OpenBSD
     ;;
 
 dragonfly*)
-    build_gstreamer_1_0=yes
-    test_kf5=yes
-    test_gtk3_kde5=yes
-    test_freetype=yes
+    using_freetype_fontconfig=yes
+    using_x11=yes
     build_skia=yes
     PTHREAD_LIBS="-pthread"
     _os=DragonFly
     ;;
 
 linux-android*)
+    using_freetype_fontconfig=yes
+    using_headless_plugin=no
+    using_x11=no
     build_crypto=no
-    build_gstreamer_1_0=no
+    test_system_freetype=no
+    test_webdav=no
     enable_lotuswordpro=no
     enable_mpl_subset=yes
+    enable_cairo_canvas=no
     enable_coinmp=yes
     enable_lpsolve=no
     enable_mariadb_sdbc=no
@@ -1086,31 +1071,18 @@ linux-android*)
     enable_odk=no
     enable_postgresql_sdbc=no
     enable_python=no
-    test_cups=no
-    test_dbus=no
-    test_fontconfig=no
-    test_freetype=no
-    test_kf5=no
-    test_qt5=no
-    test_gtk3_kde5=no
-    test_openldap=no
-    test_randr=no
-    test_webdav=no
-    test_xrender=no
     _os=Android
 
     AC_DEFINE(HAVE_FT_FACE_GETCHARVARIANTINDEX)
-    BUILD_TYPE="$BUILD_TYPE CAIRO FONTCONFIG FREETYPE"
     ;;
 
 haiku*)
-    test_cups=no
-    test_dbus=no
-    test_randr=no
-    test_xrender=no
-    test_freetype=yes
+    using_freetype_fontconfig=yes
+    using_x11=no
+    test_gtk3_kde5=no
+    test_kf5=yes
+    test_openldap=yes
     enable_odk=no
-    enable_gstreamer_1_0=no
     enable_coinmp=no
     enable_pdfium=no
     enable_sdremote=no
@@ -1120,27 +1092,19 @@ haiku*)
     ;;
 
 emscripten)
-    build_gstreamer_1_0=no
-    enable_lpsolve=no
-    enable_report_builder=no
-    with_theme="breeze"
+    using_freetype_fontconfig=yes
+    using_x11=no
+    enable_compiler_plugins=no
     test_cmis=no
-    test_cups=no
-    test_curl=no
-    test_dbus=no
-    test_fontconfig=no
-    test_freetype=no
-    test_gtk=no
-    test_randr=no
     test_webdav=no
-    test_xrender=no
-    enable_postgresql_sdbc=no
     enable_firebird_sdbc=no
+    enable_lpsolve=no
     enable_mariadb_sdbc=no
+    enable_postgresql_sdbc=no
+    enable_report_builder=no
     with_system_zlib=no
+    with_theme="breeze"
     _os=Emscripten
-
-    BUILD_TYPE="$BUILD_TYPE FONTCONFIG FREETYPE"
     ;;
 
 *)
@@ -1149,6 +1113,73 @@ emscripten)
 esac
 
 AC_SUBST(HOST_PLATFORM)
+
+if test -z "$using_x11" -o -z "$using_freetype_fontconfig"; then
+    AC_MSG_ERROR([You must set \$using_freetype_fontconfig and \$using_x11 for your platform])
+fi
+
+# Set defaults, if not set by platform
+test "${test_cups+set}" = set || test_cups="$using_x11"
+test "${test_dbus+set}" = set || test_dbus="$using_x11"
+test "${test_gstreamer_1_0+set}" = set || test_gstreamer_1_0="$using_x11"
+test "${test_gtk3+set}" = set || test_gtk3="$using_x11"
+test "${test_gtk4+set}" = set || test_gtk4="$using_x11"
+test "${test_kf5+set}" = set || test_kf5="$using_x11"
+test "${test_openldap+set}" = set || test_openldap="$using_x11"
+# don't handle test_qt5, so it can disable test_kf5 later
+test "${test_randr+set}" = set || test_randr="$using_x11"
+test "${test_xrender+set}" = set || test_xrender="$using_x11"
+test "${using_headless_plugin+set}" = set || using_headless_plugin="$using_freetype_fontconfig"
+
+test "${test_gtk3_kde5+set}" != set -a "$test_kf5" = yes -a "$test_gtk3" = yes && test_gtk3_kde5="yes"
+test "${test_system_fontconfig+set}" != set -a "${test_system_freetype+set}" = set && test_system_fontconfig="$test_system_freetype"
+test "${test_system_freetype+set}" != set -a "${test_system_fontconfig+set}" = set && test_system_freetype="$test_system_fontconfig"
+
+# convenience / platform overriding "fixes"
+# Don't sort!
+test "$test_kf5" = yes -a "$test_qt5" = no && test_kf5=no
+test "$test_kf5" = yes && test_qt5=yes
+test "$test_gtk3" != yes -o "$test_kf5" != yes && test_gtk3_kde5=no
+test "$using_freetype_fontconfig" = no && using_headless_plugin=no
+test "$using_freetype_fontconfig" = yes && test_cairo=yes
+
+# Keep in sync with the above $using_x11 depending test default list
+disable_x11_tests()
+{
+    test_cups=no
+    test_dbus=no
+    test_gstreamer_1_0=no
+    test_gtk3_kde5=no
+    test_gtk3=no
+    test_gtk4=no
+    test_kf5=no
+    test_openldap=no
+    test_qt5=no
+    test_randr=no
+    test_xrender=no
+}
+
+test "$using_x11" = yes && USING_X11=TRUE
+
+if test "$using_freetype_fontconfig" = yes; then
+    if test "$using_headless_plugin" = yes; then
+        AC_DEFINE(ENABLE_HEADLESS)
+        ENABLE_HEADLESS=TRUE
+    fi
+fi
+
+AC_SUBST(ENABLE_HEADLESS)
+
+AC_MSG_NOTICE([VCL platform uses freetype+fontconfig: $using_freetype_fontconfig])
+AC_MSG_NOTICE([VCL platform uses headless plugin: $using_headless_plugin])
+AC_MSG_NOTICE([VCL platform uses vclplug: $using_vclplug])
+AC_MSG_NOTICE([VCL platform uses X11: $using_x11])
+
+# ===================================================================
+#
+# End initial platform setup
+#
+# ===================================================================
 
 if test "$_os" = "Android" ; then
     # Verify that the NDK and SDK options are proper
@@ -3674,7 +3705,6 @@ reg_get_value_64()
 case "$host_os" in
 cygwin*|wsl*)
     COM=MSC
-    USING_X11=
     OS=WNT
     RTL_OS=Windows
     if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
@@ -4715,14 +4745,12 @@ AC_SUBST(ENABLE_OPTIMIZED_DEBUG)
 
 #
 # determine CPUNAME, OS, ...
-# The USING_X11 flag tells whether the host os uses X by default. Can be overridden with the --without-x option.
 #
 case "$host_os" in
 
 aix*)
     COM=GCC
     CPUNAME=POWERPC
-    USING_X11=TRUE
     OS=AIX
     RTL_OS=AIX
     RTL_ARCH=PowerPC
@@ -4736,7 +4764,6 @@ cygwin*|wsl*)
 
 darwin*|macos*)
     COM=GCC
-    USING_X11=
     OS=MACOSX
     RTL_OS=MacOSX
     P_SEP=:
@@ -4767,7 +4794,6 @@ darwin*|macos*)
 
 ios*)
     COM=GCC
-    USING_X11=
     OS=iOS
     RTL_OS=iOS
     P_SEP=:
@@ -4789,7 +4815,6 @@ ios*)
 
 dragonfly*)
     COM=GCC
-    USING_X11=TRUE
     OS=DRAGONFLY
     RTL_OS=DragonFly
     P_SEP=:
@@ -4813,7 +4838,6 @@ dragonfly*)
 
 freebsd*)
     COM=GCC
-    USING_X11=TRUE
     RTL_OS=FreeBSD
     OS=FREEBSD
     P_SEP=:
@@ -4852,7 +4876,6 @@ freebsd*)
 
 haiku*)
     COM=GCC
-    USING_X11=
     GUIBASE=haiku
     RTL_OS=Haiku
     OS=HAIKU
@@ -4877,7 +4900,6 @@ haiku*)
 
 kfreebsd*)
     COM=GCC
-    USING_X11=TRUE
     OS=LINUX
     RTL_OS=kFreeBSD
     P_SEP=:
@@ -4902,7 +4924,6 @@ kfreebsd*)
 
 linux-gnu*)
     COM=GCC
-    USING_X11=TRUE
     OS=LINUX
     RTL_OS=Linux
     P_SEP=:
@@ -5025,7 +5046,6 @@ linux-gnu*)
 
 linux-android*)
     COM=GCC
-    USING_X11=
     OS=ANDROID
     RTL_OS=Android
     P_SEP=:
@@ -5060,7 +5080,6 @@ linux-android*)
 
 *netbsd*)
     COM=GCC
-    USING_X11=TRUE
     OS=NETBSD
     RTL_OS=NetBSD
     P_SEP=:
@@ -5094,7 +5113,6 @@ linux-android*)
 
 openbsd*)
     COM=GCC
-    USING_X11=TRUE
     OS=OPENBSD
     RTL_OS=OpenBSD
     P_SEP=:
@@ -5119,7 +5137,6 @@ openbsd*)
 
 solaris*)
     COM=GCC
-    USING_X11=TRUE
     OS=SOLARIS
     RTL_OS=Solaris
     P_SEP=:
@@ -5149,7 +5166,6 @@ solaris*)
 
 emscripten*)
     COM=GCC
-    USING_X11=
     OS=EMSCRIPTEN
     RTL_OS=Emscripten
     P_SEP=:
@@ -5177,18 +5193,26 @@ fi
 
 DISABLE_GUI=""
 if test "$enable_gui" = "no"; then
-    if test "$USING_X11" != TRUE; then
+    if test "$using_x11" != yes; then
         AC_MSG_ERROR([$host_os operating system is not suitable to build LibreOffice with --disable-gui.])
     fi
     USING_X11=
     DISABLE_GUI=TRUE
-    AC_DEFINE(HAVE_FEATURE_UI,0)
-    test_cairo=yes
+else
+    AC_DEFINE(HAVE_FEATURE_UI)
 fi
 AC_SUBST(DISABLE_GUI)
 
-if test "$USING_X11" = TRUE; then
-    AC_DEFINE(USING_X11)
+if test "$using_x11" = yes; then
+    if test "$USING_X11" = TRUE; then
+        AC_DEFINE(USING_X11)
+    else
+        disable_x11_tests
+    fi
+else
+    if test "$USING_X11" = TRUE; then
+        AC_MSG_ERROR([Platform doesn't support X11 (\$using_x11), but \$USING_X11 is set!])
+    fi
 fi
 
 WORKDIR="${BUILDDIR}/workdir"
@@ -5353,11 +5377,13 @@ if test "$cross_compiling" = "yes"; then
     # Don't bother having configure look for stuff not needed for the build platform anyway
     ./configure \
         --build="$build_alias" \
+        --disable-cairo-canvas \
         --disable-cups \
         --disable-firebird-sdbc \
         --disable-gpgmepp \
         --disable-gstreamer-1-0 \
         --disable-gtk3 \
+        --disable-gtk4 \
         --disable-mariadb-sdbc \
         --disable-nss \
         --disable-online-update \
@@ -5600,28 +5626,6 @@ if test $_os != "WINNT" -a $_os != "Darwin"; then
 fi
 AC_SUBST(ENABLE_OOENV)
 
-if test "$USING_X11" != TRUE; then
-    # be sure to do not mess with unneeded stuff
-    test_randr=no
-    test_xrender=no
-    test_cups=no
-    test_dbus=no
-    build_gstreamer_1_0=no
-    test_kf5=no
-    test_qt5=no
-    test_gtk3_kde5=no
-    enable_cairo_canvas=no
-fi
-
-if test "$OS" = "HAIKU"; then
-    enable_cairo_canvas=yes
-    test_kf5=yes
-fi
-
-if test "$test_kf5" = "yes"; then
-    test_qt5=yes
-fi
-
 if test "$test_kf5" = "yes" -a "$enable_kf5" = "yes"; then
     if test "$enable_qt5" = "no"; then
         AC_MSG_ERROR([KF5 support depends on QT5, so it conflicts with --disable-qt5])
@@ -5652,11 +5656,18 @@ fi
 AC_SUBST(ENABLE_CUPS)
 
 # fontconfig checks
-if test "$test_fontconfig" = "yes"; then
+if test "$using_freetype_fontconfig" = yes; then
+    AC_MSG_CHECKING([which fontconfig to use])
+fi
+if test "$using_freetype_fontconfig" = yes -a "$test_system_fontconfig" != no; then
+    AC_MSG_RESULT([external])
     PKG_CHECK_MODULES([FONTCONFIG], [fontconfig >= 2.4.1])
     SYSTEM_FONTCONFIG=TRUE
     FilterLibs "${FONTCONFIG_LIBS}"
     FONTCONFIG_LIBS="${filteredlibs}"
+elif test "$using_freetype_fontconfig" = yes; then
+    AC_MSG_RESULT([internal])
+    BUILD_TYPE="$BUILD_TYPE FONTCONFIG"
 fi
 AC_SUBST(FONTCONFIG_CFLAGS)
 AC_SUBST(FONTCONFIG_LIBS)
@@ -9301,8 +9312,11 @@ fi
 dnl ===================================================================
 dnl Check whether freetype is available
 dnl ===================================================================
-if test  "$test_freetype" = "yes"; then
-    AC_MSG_CHECKING([whether freetype is available])
+if test "$using_freetype_fontconfig" = yes; then
+    AC_MSG_CHECKING([which freetype to use])
+fi
+if test "$using_freetype_fontconfig" = yes -a "$test_system_freetype" != no; then
+    AC_MSG_RESULT([external])
     # FreeType has 3 different kinds of versions
     # * release, like 2.4.10
     # * libtool, like 13.0.7 (this what pkg-config returns)
@@ -9315,13 +9329,15 @@ if test  "$test_freetype" = "yes"; then
     FilterLibs "${FREETYPE_LIBS}"
     FREETYPE_LIBS="${filteredlibs}"
     SYSTEM_FREETYPE=TRUE
-else
+elif test "$using_freetype_fontconfig" = yes; then
+    AC_MSG_RESULT([internal])
     FREETYPE_CFLAGS="${ISYSTEM}${WORKDIR}/UnpackedTarball/freetype/include"
     if test "x$ac_config_site_64bit_host" = xYES; then
         FREETYPE_LIBS="-L${WORKDIR}/UnpackedTarball/freetype/instdir/lib64 -lfreetype"
     else
         FREETYPE_LIBS="-L${WORKDIR}/UnpackedTarball/freetype/instdir/lib -lfreetype"
     fi
+    BUILD_TYPE="$BUILD_TYPE FREETYPE"
 fi
 AC_SUBST(FREETYPE_CFLAGS)
 AC_SUBST(FREETYPE_LIBS)
@@ -10648,15 +10664,6 @@ else
     fi
 fi
 
-AC_MSG_CHECKING([whether to use X11])
-dnl ***************************************
-dnl testing for X libraries and includes...
-dnl ***************************************
-if test "$USING_X11" = TRUE; then
-    AC_DEFINE(HAVE_FEATURE_X11)
-fi
-AC_MSG_RESULT([$USING_X11])
-
 if test "$USING_X11" = TRUE; then
     AC_PATH_X
     AC_PATH_XTRA
@@ -11502,7 +11509,9 @@ if test "$_os" = "WINNT"; then
 elif test "$_os" = "Darwin"; then
     R="$R osx"
 elif test "$_os" = "iOS"; then
-    R="ios (builtin)"
+    R="ios"
+elif test "$_os" = Android; then
+    R="android"
 fi
 
 build_vcl_plugins="$R"
@@ -11519,11 +11528,10 @@ dnl ===================================================================
 
 GTK3_CFLAGS=""
 GTK3_LIBS=""
-if test "x$enable_gtk3" = "xyes" -o "x$enable_gtk3_kde5" = "xyes"; then
+if test "$test_gtk3" = yes -a "x$enable_gtk3" = "xyes" -o "x$enable_gtk3_kde5" = "xyes"; then
     if test "$with_system_cairo" = no; then
         add_warning 'Non-system cairo combined with gtk3 is assumed to cause trouble; proceed at your own risk.'
     fi
-    : ${with_system_cairo:=yes}
     PKG_CHECK_MODULES(GTK3, gtk+-3.0 >= 3.20 gtk+-unix-print-3.0 gmodule-no-export-2.0 glib-2.0 >= 2.38 cairo)
     GTK3_CFLAGS=$(printf '%s' "$GTK3_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     GTK3_CFLAGS="$GTK3_CFLAGS -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"
@@ -11542,11 +11550,10 @@ AC_SUBST(GTK3_CFLAGS)
 
 GTK4_CFLAGS=""
 GTK4_LIBS=""
-if test "x$enable_gtk4" = "xyes"; then
+if test "test_gtk4" = yes -a "x$enable_gtk4" = "xyes"; then
     if test "$with_system_cairo" = no; then
         add_warning 'Non-system cairo combined with gtk4 is assumed to cause trouble; proceed at your own risk.'
     fi
-    : ${with_system_cairo:=yes}
     PKG_CHECK_MODULES(GTK4, gtk4 gmodule-no-export-2.0 glib-2.0 >= 2.38 cairo atk)
     GTK4_CFLAGS=$(printf '%s' "$GTK4_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     GTK4_CFLAGS="$GTK4_CFLAGS -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"
@@ -11723,30 +11730,13 @@ if test "$enable_split_opt_features" = "yes"; then
 fi
 AC_SUBST(SPLIT_OPT_FEATURES)
 
-if test $_os = Darwin -o $_os = WINNT -o $_os = iOS; then
-    if test "$enable_cairo_canvas" = yes; then
-        AC_MSG_ERROR([The cairo canvas should not be used for this platform])
-    fi
-    enable_cairo_canvas=no
-elif test -z "$enable_cairo_canvas"; then
-    enable_cairo_canvas=yes
-fi
-
-ENABLE_CAIRO_CANVAS=""
-if test "$enable_cairo_canvas" = "yes"; then
-    test_cairo=yes
-    ENABLE_CAIRO_CANVAS="TRUE"
-    AC_DEFINE(ENABLE_CAIRO_CANVAS)
-fi
-AC_SUBST(ENABLE_CAIRO_CANVAS)
-
 dnl ===================================================================
 dnl Check whether the GStreamer libraries are available.
 dnl ===================================================================
 
 ENABLE_GSTREAMER_1_0=""
 
-if test "$build_gstreamer_1_0" = "yes"; then
+if test "$test_gstreamer_1_0" = yes; then
 
     AC_MSG_CHECKING([whether to enable the GStreamer 1.0 avmedia backend])
     if test "$enable_avmedia" = yes -a "$enable_gstreamer_1_0" != no; then
@@ -12729,7 +12719,7 @@ then
 the root of your Qt installation by exporting QT5DIR before running "configure".])
     fi
 
-    if test "$build_gstreamer_1_0" = "yes"; then
+    if test "$test_gstreamer_1_0" = yes; then
         PKG_CHECK_MODULES(QT5_GOBJECT,[gobject-2.0], [
                 QT5_HAVE_GOBJECT=1
                 AC_DEFINE(QT5_HAVE_GOBJECT)
@@ -13114,15 +13104,9 @@ dnl ===================================================================
 dnl Test whether to build cairo or rely on the system version
 dnl ===================================================================
 
-if test "$USING_X11" = TRUE; then
-    # Used in vcl/Library_vclplug_gen.mk
-    test_cairo=yes
-fi
-
 if test "$test_cairo" = "yes"; then
     AC_MSG_CHECKING([whether to use the system cairo])
 
-    : ${with_system_cairo:=$with_system_libs}
     if test "$with_system_cairo" = "yes"; then
         SYSTEM_CAIRO=TRUE
         AC_MSG_RESULT([yes])
@@ -13145,16 +13129,20 @@ if test "$test_cairo" = "yes"; then
             AC_LANG_POP([C])
         fi
     else
-        SYSTEM_CAIRO=
         AC_MSG_RESULT([no])
-
         BUILD_TYPE="$BUILD_TYPE CAIRO"
+    fi
+
+    if test "$enable_cairo_canvas" != no; then
+        AC_DEFINE(ENABLE_CAIRO_CANVAS)
+        ENABLE_CAIRO_CANVAS=TRUE
     fi
 fi
 
-AC_SUBST(SYSTEM_CAIRO)
 AC_SUBST(CAIRO_CFLAGS)
 AC_SUBST(CAIRO_LIBS)
+AC_SUBST(ENABLE_CAIRO_CANVAS)
+AC_SUBST(SYSTEM_CAIRO)
 
 dnl ===================================================================
 dnl Test whether to use avahi
