@@ -286,6 +286,7 @@ public:
     void testTdf84874();
     void testTdf136721_paper_size();
     void testTdf139258_rotated_image();
+    void testTdf113646();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -469,6 +470,7 @@ public:
     CPPUNIT_TEST(testTdf84874);
     CPPUNIT_TEST(testTdf136721_paper_size);
     CPPUNIT_TEST(testTdf139258_rotated_image);
+    CPPUNIT_TEST(testTdf113646);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5965,6 +5967,21 @@ void ScExportTest::testTdf139258_rotated_image()
     assertXPathContent(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:to/xdr:col", "6");
     assertXPathContent(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:to/xdr:row", "25");
 }
+
+void ScExportTest::testTdf113646()
+{
+    ScDocShellRef xShell = loadDoc(u"tdf113646", FORMAT_ODS);
+    CPPUNIT_ASSERT(xShell.is());
+
+    auto pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+    xmlDocUniquePtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/styles.xml");
+    CPPUNIT_ASSERT(pSheet)
+
+    assertXPath(pSheet, "/x:styleSheet/x:dxfs/x:dxf/x:font/x:sz", "val", "36");
+
+    xShell->DoClose();
+}
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
 
