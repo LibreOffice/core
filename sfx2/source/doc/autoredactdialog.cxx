@@ -366,7 +366,8 @@ boost::property_tree::ptree redactionTargetToJSON(const RedactionTarget* pTarget
     return aNode;
 }
 
-RedactionTarget* JSONtoRedactionTarget(const boost::property_tree::ptree::value_type& rValue)
+std::unique_ptr<RedactionTarget>
+JSONtoRedactionTarget(const boost::property_tree::ptree::value_type& rValue)
 {
     OUString sName = OUString::fromUtf8(rValue.second.get<std::string>("sName").c_str());
     RedactionTargetType eType
@@ -378,10 +379,8 @@ RedactionTarget* JSONtoRedactionTarget(const boost::property_tree::ptree::value_
         = OUString::fromUtf8(rValue.second.get<std::string>("bWholeWords").c_str()).toBoolean();
     sal_uInt32 nID = atoi(rValue.second.get<std::string>("nID").c_str());
 
-    RedactionTarget* pTarget
-        = new RedactionTarget({ sName, eType, sContent, bCaseSensitive, bWholeWords, nID });
-
-    return pTarget;
+    return std::unique_ptr<RedactionTarget>(
+        new RedactionTarget{ sName, eType, sContent, bCaseSensitive, bWholeWords, nID });
 }
 }
 
@@ -418,8 +417,7 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, LoadHdl, sfx2::FileDialogHelper*, void)
         for (const boost::property_tree::ptree::value_type& rValue :
              aTargetsJSON.get_child("RedactionTargets"))
         {
-            RedactionTarget* pTarget = JSONtoRedactionTarget(rValue);
-            addTarget(pTarget);
+            addTarget(JSONtoRedactionTarget(rValue));
         }
     }
     catch (css::uno::Exception& e)
@@ -454,7 +452,8 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, SaveHdl, sfx2::FileDialogHelper*, void)
         boost::property_tree::ptree aTargetsArray;
         for (const auto& targetPair : m_aTableTargets)
         {
-            aTargetsArray.push_back(std::make_pair("", redactionTargetToJSON(targetPair.first)));
+            aTargetsArray.push_back(
+                std::make_pair("", redactionTargetToJSON(targetPair.first.get())));
         }
 
         // Build the JSON tree
@@ -496,21 +495,21 @@ void SfxAutoRedactDialog::StartFileDialog(StartFileDialogType nType, const OUStr
     m_pFileDlg->StartExecuteModal(aDlgClosedLink);
 }
 
-void SfxAutoRedactDialog::addTarget(RedactionTarget* pTarget)
+void SfxAutoRedactDialog::addTarget(std::unique_ptr<RedactionTarget> pTarget)
 {
     // Only the visual/display part
-    m_xTargetsBox->InsertTarget(pTarget);
+    m_xTargetsBox->InsertTarget(pTarget.get());
 
     // Actually add to the targets vector
-    if (m_xTargetsBox->GetTargetByName(pTarget->sName))
-        m_aTableTargets.emplace_back(pTarget, pTarget->sName);
+    auto name = pTarget->sName;
+    if (m_xTargetsBox->GetTargetByName(name))
+        m_aTableTargets.emplace_back(std::move(pTarget), name);
     else
     {
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
             getDialog(), VclMessageType::Warning, VclButtonsType::Ok,
             SfxResId(STR_REDACTION_TARGET_ADD_ERROR)));
         xBox->run();
-        delete pTarget;
     }
 }
 
@@ -520,11 +519,6 @@ void SfxAutoRedactDialog::clearTargets()
     m_xTargetsBox->clear();
 
     // Clear the targets vector
-    auto delTarget
-        = [](const std::pair<RedactionTarget*, OUString>& targetPair) { delete targetPair.first; };
-
-    std::for_each(m_aTableTargets.begin(), m_aTableTargets.end(), delTarget);
-
     m_aTableTargets.clear();
 }
 
@@ -568,8 +562,7 @@ SfxAutoRedactDialog::SfxAutoRedactDialog(weld::Window* pParent)
             for (const boost::property_tree::ptree::value_type& rValue :
                  aTargetsJSON.get_child("RedactionTargets"))
             {
-                RedactionTarget* pTarget = JSONtoRedactionTarget(rValue);
-                addTarget(pTarget);
+                addTarget(JSONtoRedactionTarget(rValue));
             }
         }
         catch (css::uno::Exception& e)
@@ -606,7 +599,8 @@ SfxAutoRedactDialog::~SfxAutoRedactDialog()
         boost::property_tree::ptree aTargetsArray;
         for (const auto& targetPair : m_aTableTargets)
         {
-            aTargetsArray.push_back(std::make_pair("", redactionTargetToJSON(targetPair.first)));
+            aTargetsArray.push_back(
+                std::make_pair("", redactionTargetToJSON(targetPair.first.get())));
         }
 
         // Build the JSON tree
