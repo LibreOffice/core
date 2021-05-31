@@ -16533,6 +16533,7 @@ private:
     GtkEventController* m_pKeyController;
     GtkEventController* m_pEntryKeyController;
     GtkEventController* m_pMenuKeyController;
+    GtkEventController* m_pEntryFocusController;
 //    std::unique_ptr<CustomRenderMenuButtonHelper> m_xCustomMenuButtonHelper;
     std::unique_ptr<vcl::Font> m_xFont;
     std::unique_ptr<comphelper::string::NaturalStringSorter> m_xSorter;
@@ -16557,8 +16558,8 @@ private:
     gulong m_nKeyPressEventSignalId;
     gulong m_nEntryInsertTextSignalId;
     gulong m_nEntryActivateSignalId;
-//    gulong m_nEntryFocusInSignalId;
-//    gulong m_nEntryFocusOutSignalId;
+    gulong m_nEntryFocusInSignalId;
+    gulong m_nEntryFocusOutSignalId;
     gulong m_nEntryKeyPressEventSignalId;
     guint m_nAutoCompleteIdleId;
 //    gint m_nNonCustomLineHeight;
@@ -16794,24 +16795,40 @@ private:
         }
     }
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+    static void signalEntryFocusIn(GtkEventControllerFocus*, gpointer widget)
+    {
+        GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
+        pThis->signal_entry_focus_in();
+    }
+#else
     static gboolean signalEntryFocusIn(GtkWidget*, GdkEvent*, gpointer widget)
     {
         GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
         pThis->signal_entry_focus_in();
         return false;
     }
+#endif
 
     void signal_entry_focus_in()
     {
         signal_focus_in();
     }
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+    static void signalEntryFocusOut(GtkEventControllerFocus*, gpointer widget)
+    {
+        GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
+        pThis->signal_entry_focus_out();
+    }
+#else
     static gboolean signalEntryFocusOut(GtkWidget*, GdkEvent*, gpointer widget)
     {
         GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
         pThis->signal_entry_focus_out();
         return false;
     }
+#endif
 
     void signal_entry_focus_out()
     {
@@ -17604,8 +17621,10 @@ public:
             m_bAutoComplete = true;
             m_nEntryInsertTextSignalId = g_signal_connect(m_pEditable, "insert-text", G_CALLBACK(signalEntryInsertText), this);
             m_nEntryActivateSignalId = g_signal_connect(m_pEntry, "activate", G_CALLBACK(signalEntryActivate), this);
-//            m_nEntryFocusInSignalId = g_signal_connect(m_pEntry, "focus-in-event", G_CALLBACK(signalEntryFocusIn), this);
-//            m_nEntryFocusOutSignalId = g_signal_connect(m_pEntry, "focus-out-event", G_CALLBACK(signalEntryFocusOut), this);
+            m_pEntryFocusController = GTK_EVENT_CONTROLLER(gtk_event_controller_focus_new());
+            m_nEntryFocusInSignalId = g_signal_connect(m_pEntry, "enter", G_CALLBACK(signalEntryFocusIn), this);
+            m_nEntryFocusOutSignalId = g_signal_connect(m_pEntry, "leave", G_CALLBACK(signalEntryFocusOut), this);
+            gtk_widget_add_controller(m_pEntry, m_pEntryFocusController);
             m_pEntryKeyController = GTK_EVENT_CONTROLLER(gtk_event_controller_key_new());
             m_nEntryKeyPressEventSignalId = g_signal_connect(m_pEntryKeyController, "key-pressed", G_CALLBACK(signalEntryKeyPress), this);
             gtk_widget_add_controller(m_pEntry, m_pEntryKeyController);
@@ -17616,8 +17635,9 @@ public:
         {
             m_nEntryInsertTextSignalId = 0;
             m_nEntryActivateSignalId = 0;
-//            m_nEntryFocusInSignalId = 0;
-//            m_nEntryFocusOutSignalId = 0;
+            m_pEntryFocusController = nullptr;
+            m_nEntryFocusInSignalId = 0;
+            m_nEntryFocusOutSignalId = 0;
             m_pEntryKeyController = nullptr;
             m_nEntryKeyPressEventSignalId = 0;
             m_pKeyController = GTK_EVENT_CONTROLLER(gtk_event_controller_key_new());
@@ -17953,8 +17973,8 @@ public:
         {
             g_signal_handler_block(m_pEditable, m_nEntryInsertTextSignalId);
             g_signal_handler_block(m_pEntry, m_nEntryActivateSignalId);
-//            g_signal_handler_block(m_pEntry, m_nEntryFocusInSignalId);
-//            g_signal_handler_block(m_pEntry, m_nEntryFocusOutSignalId);
+            g_signal_handler_block(m_pEntryFocusController, m_nEntryFocusInSignalId);
+            g_signal_handler_block(m_pEntryFocusController, m_nEntryFocusOutSignalId);
             g_signal_handler_block(m_pEntryKeyController, m_nEntryKeyPressEventSignalId);
         }
         else
@@ -17983,8 +18003,8 @@ public:
         if (m_pEditable)
         {
             g_signal_handler_unblock(m_pEntry, m_nEntryActivateSignalId);
-//            g_signal_handler_unblock(m_pEntry, m_nEntryFocusInSignalId);
-//            g_signal_handler_unblock(m_pEntry, m_nEntryFocusOutSignalId);
+            g_signal_handler_unblock(m_pEntryFocusController, m_nEntryFocusInSignalId);
+            g_signal_handler_unblock(m_pEntryFocusController, m_nEntryFocusOutSignalId);
             g_signal_handler_unblock(m_pEntryKeyController, m_nEntryKeyPressEventSignalId);
             g_signal_handler_unblock(m_pEditable, m_nEntryInsertTextSignalId);
         }
@@ -18219,8 +18239,8 @@ public:
         {
             g_signal_handler_disconnect(m_pEditable, m_nEntryInsertTextSignalId);
             g_signal_handler_disconnect(m_pEntry, m_nEntryActivateSignalId);
-//            g_signal_handler_disconnect(m_pEntry, m_nEntryFocusInSignalId);
-//            g_signal_handler_disconnect(m_pEntry, m_nEntryFocusOutSignalId);
+            g_signal_handler_disconnect(m_pEntryFocusController, m_nEntryFocusInSignalId);
+            g_signal_handler_disconnect(m_pEntryFocusController, m_nEntryFocusOutSignalId);
             g_signal_handler_disconnect(m_pEntryKeyController, m_nEntryKeyPressEventSignalId);
         }
         else
