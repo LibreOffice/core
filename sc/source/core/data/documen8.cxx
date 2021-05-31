@@ -1251,9 +1251,9 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, Transliteratio
                     std::unique_ptr<SfxItemSet> pDefaults(new SfxItemSet( pEngine->GetEmptyItemSet() ));
                     if ( ScStyleSheet* pPreviewStyle = GetPreviewCellStyle( nCol, nRow, nTab ) )
                     {
-                        std::unique_ptr<ScPatternAttr> pPreviewPattern(new ScPatternAttr( *pPattern ));
-                        pPreviewPattern->SetStyleSheet(pPreviewStyle);
-                        pPreviewPattern->FillEditItemSet( pDefaults.get() );
+                        ScPatternAttr aPreviewPattern( *pPattern );
+                        aPreviewPattern.SetStyleSheet(pPreviewStyle);
+                        aPreviewPattern.FillEditItemSet( pDefaults.get() );
                     }
                     else
                     {
