@@ -477,6 +477,9 @@ public:
     void updateKitOtherCursors() const;
     void updateOtherKitSelections() const;
 
+    void notifyKitCellFollowJump() const;
+
+
     /// Same as MouseButtonDown(), but coordinates are in logic unit.
     virtual void LogicMouseButtonDown(const MouseEvent& rMouseEvent) override;
     /// Same as MouseButtonUp(), but coordinates are in logic unit.
@@ -489,6 +492,8 @@ public:
 
     void updateLOKValListButton(bool bVisible, const ScAddress& rPos) const;
     void updateLOKInputHelp(const OUString& title, const OUString& content) const;
+
+
 
 protected:
     void ImpCreateOverlayObjects();
