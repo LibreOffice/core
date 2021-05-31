@@ -10,6 +10,7 @@
 
 #include <svtools/HtmlWriter.hxx>
 #include <tools/stream.hxx>
+#include <sal/log.hxx>
 
 HtmlWriter::HtmlWriter(SvStream& rStream, std::string_view rNamespace) :
     mrStream(rStream),
@@ -80,6 +81,14 @@ void HtmlWriter::flushStack()
     }
 }
 
+bool HtmlWriter::end(const OString& aElement)
+{
+    bool bExpected = maElementStack.back() == aElement;
+    SAL_WARN_IF(!bExpected, "svtools", "HtmlWriter: end element mismatch - '" << aElement << "' expected '" << maElementStack.back() << "'");
+    end();
+    return bExpected;
+}
+
 void HtmlWriter::end()
 {
     if (mbElementOpen && !mbCharactersWritten)
@@ -108,16 +117,26 @@ void HtmlWriter::end()
     mbCharactersWritten = false;
 }
 
+void HtmlWriter::writeAttribute(SvStream& rStream, std::string_view aAttribute, sal_Int32 aValue)
+{
+    writeAttribute(rStream, aAttribute, OString::number(aValue));
+}
+
+void HtmlWriter::writeAttribute(SvStream& rStream, std::string_view aAttribute, std::string_view aValue)
+{
+    rStream.WriteOString(aAttribute);
+    rStream.WriteChar('=');
+    rStream.WriteChar('"');
+    rStream.WriteOString(aValue);
+    rStream.WriteChar('"');
+}
+
 void HtmlWriter::attribute(std::string_view aAttribute, std::string_view aValue)
 {
     if (mbElementOpen && !aAttribute.empty() && !aValue.empty())
     {
         mrStream.WriteChar(' ');
-        mrStream.WriteOString(aAttribute);
-        mrStream.WriteChar('=');
-        mrStream.WriteChar('"');
-        mrStream.WriteOString(aValue);
-        mrStream.WriteChar('"');
+        writeAttribute(mrStream, aAttribute, aValue);
     }
 }
 
