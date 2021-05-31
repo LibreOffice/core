@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "772e5a46_df4471f8",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 5158,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-05-31T11:17:37Z",
+      "side": 1,
+      "message": "next patchset will fix this",
+      "parentUuid": "bb760d24_33fd1d0b",
+      "range": {
+        "startLine": 5158,
+        "startChar": 23,
+        "endLine": 5158,
+        "endChar": 27
+      },
+      "revId": "0b84881d185b3fa53dbc6128575317c7f2b0589f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0da39f9f_8c332ceb",
         "filename": "oox/source/export/drawingml.cxx",
         "patchSetId": 10
@@ -36,6 +60,30 @@
       "writtenOn": "2021-05-28T10:55:03Z",
       "side": 1,
       "message": "is adjustable only",
+      "range": {
+        "startLine": 5304,
+        "startChar": 25,
+        "endLine": 5304,
+        "endChar": 39
+      },
+      "revId": "0b84881d185b3fa53dbc6128575317c7f2b0589f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9edf24d_5492aa39",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 5304,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-05-31T11:17:37Z",
+      "side": 1,
+      "message": "next patchset will fix this",
+      "parentUuid": "0da39f9f_8c332ceb",
       "range": {
         "startLine": 5304,
         "startChar": 25,
@@ -190,6 +238,30 @@
     },
     {
       "key": {
+        "uuid": "10539687_9242d0c6",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 5373,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-05-31T11:17:37Z",
+      "side": 1,
+      "message": "I the first part I will leave the trapezoid alone :)",
+      "parentUuid": "5fe17e0d_320303a6",
+      "range": {
+        "startLine": 5373,
+        "startChar": 53,
+        "endLine": 5373,
+        "endChar": 62
+      },
+      "revId": "0b84881d185b3fa53dbc6128575317c7f2b0589f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "98513293_397e0fe5",
         "filename": "oox/source/export/drawingml.cxx",
         "patchSetId": 10
@@ -201,6 +273,30 @@
       "writtenOn": "2021-05-28T10:55:03Z",
       "side": 1,
       "message": "XML",
+      "range": {
+        "startLine": 5424,
+        "startChar": 63,
+        "endLine": 5424,
+        "endChar": 66
+      },
+      "revId": "0b84881d185b3fa53dbc6128575317c7f2b0589f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43792bdd_e860826f",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 5424,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-05-31T11:17:37Z",
+      "side": 1,
+      "message": "next patchset will fix this.",
+      "parentUuid": "98513293_397e0fe5",
       "range": {
         "startLine": 5424,
         "startChar": 63,
