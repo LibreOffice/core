@@ -17620,8 +17620,8 @@ public:
             m_nEntryInsertTextSignalId = g_signal_connect(m_pEditable, "insert-text", G_CALLBACK(signalEntryInsertText), this);
             m_nEntryActivateSignalId = g_signal_connect(m_pEntry, "activate", G_CALLBACK(signalEntryActivate), this);
             m_pEntryFocusController = GTK_EVENT_CONTROLLER(gtk_event_controller_focus_new());
-            m_nEntryFocusInSignalId = g_signal_connect(m_pEntry, "enter", G_CALLBACK(signalEntryFocusIn), this);
-            m_nEntryFocusOutSignalId = g_signal_connect(m_pEntry, "leave", G_CALLBACK(signalEntryFocusOut), this);
+            m_nEntryFocusInSignalId = g_signal_connect(m_pEntryFocusController, "enter", G_CALLBACK(signalEntryFocusIn), this);
+            m_nEntryFocusOutSignalId = g_signal_connect(m_pEntryFocusController, "leave", G_CALLBACK(signalEntryFocusOut), this);
             gtk_widget_add_controller(m_pEntry, m_pEntryFocusController);
             m_pEntryKeyController = GTK_EVENT_CONTROLLER(gtk_event_controller_key_new());
             m_nEntryKeyPressEventSignalId = g_signal_connect(m_pEntryKeyController, "key-pressed", G_CALLBACK(signalEntryKeyPress), this);
