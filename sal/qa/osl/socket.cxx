@@ -19,18 +19,34 @@ namespace
 class SocketTest : public CppUnit::TestFixture
 {
     CPPUNIT_TEST_SUITE(SocketTest);
-    CPPUNIT_TEST(test_getDottedInetAddrOfSocketAddr);
+    CPPUNIT_TEST(test_createInetSocketAddr);
+    CPPUNIT_TEST(test_createInetBroadcastAddr);
     CPPUNIT_TEST_SUITE_END();
 
-    void test_getDottedInetAddrOfSocketAddr()
+    void test_createInetSocketAddr()
     {
         OUString const in("123.4.56.78");
-        auto const addr = osl_createInetSocketAddr(in.pData, 0);
+        auto const addr = osl_createInetSocketAddr(in.pData, 100);
         CPPUNIT_ASSERT(addr != nullptr);
+        CPPUNIT_ASSERT_EQUAL(osl_Socket_FamilyInet, osl_getFamilyOfSocketAddr(addr));
         OUString out;
         auto const res = osl_getDottedInetAddrOfSocketAddr(addr, &out.pData);
         CPPUNIT_ASSERT_EQUAL(osl_Socket_Ok, res);
         CPPUNIT_ASSERT_EQUAL(in, out);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(100), osl_getInetPortOfSocketAddr(addr));
+    }
+
+    void test_createInetBroadcastAddr()
+    {
+        OUString const in("123.4.56.78");
+        auto const addr = osl_createInetBroadcastAddr(in.pData, 100);
+        CPPUNIT_ASSERT(addr != nullptr);
+        CPPUNIT_ASSERT_EQUAL(osl_Socket_FamilyInet, osl_getFamilyOfSocketAddr(addr));
+        OUString out;
+        auto const res = osl_getDottedInetAddrOfSocketAddr(addr, &out.pData);
+        CPPUNIT_ASSERT_EQUAL(osl_Socket_Ok, res);
+        CPPUNIT_ASSERT_EQUAL(OUString("123.255.255.255"), out);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(100), osl_getInetPortOfSocketAddr(addr));
     }
 };
 

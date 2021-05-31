@@ -426,7 +426,10 @@ oslSocketAddr SAL_CALL osl_createInetBroadcastAddr (
             &pDottedAddr, strDottedAddr->buffer, strDottedAddr->length,
             RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS);
 
-        nAddr = inet_addr (pDottedAddr->buffer);
+        in_addr buf;
+        if (inet_pton (AF_INET, pDottedAddr->buffer, &buf) == 1) {
+            nAddr = buf.s_addr;
+        }
         rtl_string_release (pDottedAddr);
     }
 
@@ -494,11 +497,11 @@ oslSocketAddr osl_psz_createInetSocketAddr (
     sal_Int32       Port)
 {
     oslSocketAddr pAddr = nullptr;
-    sal_Int32 Addr = inet_addr(pszDottedAddr);
-    if(Addr != -1)
+    in_addr buf;
+    if(inet_pton(AF_INET, pszDottedAddr, &buf) == 1)
     {
         /* valid dotted addr */
-        pAddr = createSocketAddrWithFamily( osl_Socket_FamilyInet, htons(Port) , Addr );
+        pAddr = createSocketAddrWithFamily( osl_Socket_FamilyInet, htons(Port) , buf.s_addr );
     }
     return pAddr;
 }
