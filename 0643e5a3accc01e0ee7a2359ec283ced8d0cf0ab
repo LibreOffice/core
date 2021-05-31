@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "87198caf_9ce49296",
+        "filename": "sc/source/ui/miscdlgs/datatableview.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-05-31T16:56:57Z",
+      "side": 1,
+      "message": "Why do we even have such ugly hard coded value here?",
+      "range": {
+        "startLine": 93,
+        "startChar": 51,
+        "endLine": 93,
+        "endChar": 58
+      },
+      "revId": "0643e5a3accc01e0ee7a2359ec283ced8d0cf0ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
