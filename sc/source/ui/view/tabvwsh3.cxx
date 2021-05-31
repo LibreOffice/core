@@ -472,6 +472,8 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         // align to cursor even if the cursor position hasn't changed,
                         // because the cursor may be set outside the visible area.
                         AlignToCursor( nCol, nRow, SC_FOLLOW_JUMP );
+                        if ( nSlot == SID_JUMPTOMARK && comphelper::LibreOfficeKit::isActive() )
+                            rViewData.GetActiveWin()->notifyKitCellFollowJump();
                     }
 
                     rReq.SetReturnValue( SfxStringItem( SID_CURRENTCELL, aAddress ) );
