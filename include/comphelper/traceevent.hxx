@@ -82,11 +82,16 @@ protected:
     const int m_nPid;
     const OUString m_sArgs;
 
-    TraceEvent(std::map<OUString, OUString> args)
+    TraceEvent(const OUString& sArgs)
         : m_nPid(getPid())
-        , m_sArgs(createArgsString(args))
+        , m_sArgs(sArgs)
     {
     }
+
+    TraceEvent(std::map<OUString, OUString> aArgs)
+        : TraceEvent(createArgsString(aArgs))
+     {
+     }
 
 public:
     static void addInstantEvent(const char* sName, const std::map<OUString, OUString>& args
@@ -105,9 +110,14 @@ class COMPHELPER_DLLPUBLIC NamedEvent : public TraceEvent
 protected:
     const char* m_sName;
 
-    NamedEvent(const char* sName,
-               const std::map<OUString, OUString>& args = std::map<OUString, OUString>())
-        : TraceEvent(args)
+    NamedEvent(const char* sName, const OUString& sArgs)
+        : TraceEvent(sArgs)
+        , m_sName(sName ? sName : "(null)")
+    {
+    }
+
+    NamedEvent(const char* sName, const std::map<OUString, OUString>& aArgs)
+        : TraceEvent(aArgs)
         , m_sName(sName ? sName : "(null)")
     {
     }
