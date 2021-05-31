@@ -196,12 +196,16 @@ void SwHTMLWriter::SetupFilterOptions(SfxMedium& rMedium)
 
     comphelper::SequenceAsHashMap aStoreMap(rMedium.GetArgs());
     auto it = aStoreMap.find("RTFOLEMimeType");
-    if (it == aStoreMap.end())
+    if (it != aStoreMap.end())
     {
-        return;
+        it->second >>= m_aRTFOLEMimeType;
     }
 
-    it->second >>= m_aRTFOLEMimeType;
+    it = aStoreMap.find("ExportImagesAsOLE");
+    if (it != aStoreMap.end())
+    {
+        it->second >>= m_bExportImagesAsOLE;
+    }
 }
 
 void SwHTMLWriter::SetupFilterOptions(const OUString& rFilterOptions)
