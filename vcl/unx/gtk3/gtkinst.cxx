@@ -20908,6 +20908,23 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
                     xRemoveList.push_back(xChild);
             }
 
+            if (sName == "icon-size")
+            {
+                if (GetParentObjectType(xChild) == "GtkImage")
+                {
+                    if (xChild->getFirstChild()->getNodeValue() == "6")
+                    {
+                        auto xDoc = xChild->getOwnerDocument();
+                        // convert old GTK_ICON_SIZE_DIALOG to new GTK_ICON_SIZE_LARGE
+                        auto xIconSize = CreateProperty(xDoc, "icon-size", "2");
+                        xChild->getParentNode()->insertBefore(xIconSize, xChild);
+                        xRemoveList.push_back(xChild);
+                    }
+                    else
+                        SAL_WARN( "vcl.gtk", "what should we do with an icon-size of: " << xChild->getFirstChild()->getNodeValue());
+                }
+            }
+
             if (sName == "truncate-multiline")
             {
                 if (GetParentObjectType(xChild) == "GtkSpinButton")
