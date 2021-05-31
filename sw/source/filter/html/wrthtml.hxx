@@ -32,6 +32,7 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <rtl/ref.hxx>
 #include <svtools/htmlout.hxx>
+#include <svtools/HtmlWriter.hxx>
 #include <tools/fldunit.hxx>
 
 #include <shellio.hxx>
@@ -263,7 +264,7 @@ class SW_DLLPUBLIC SwHTMLWriter : public Writer
     FieldUnit m_eCSS1Unit;
 
     sal_uInt16 OutHeaderAttrs();
-    const SwPageDesc *MakeHeader( sal_uInt16& rHeaderAtrs );
+    const SwPageDesc* MakeHeader(HtmlWriter & rXmlWriter, sal_uInt16& rHeaderAtrs);
     void GetControls();
 
     void AddLinkTarget( const OUString& rURL );
@@ -396,6 +397,8 @@ public:
     OString maNamespace;
     /// If the ReqIF subset of XHTML should be written.
     bool mbReqIF = false;
+    /// Indexing output.
+    bool mbIndexingOutput : 1;
 
 #define sCSS2_P_CLASS_leaders "leaders"
     bool m_bCfgPrintLayout : 1;       // PrintLayout option for TOC dot leaders
