@@ -38,9 +38,14 @@ public:
 
     void start(const OString& aElement);
 
+    bool end(const OString& aElement);
     void end();
 
     void flushStack();
+
+    static void writeAttribute(SvStream& rStream, std::string_view aAttribute, sal_Int32 aValue);
+    static void writeAttribute(SvStream& rStream, std::string_view aAttribute,
+                               std::string_view aValue);
 
     void attribute(std::string_view aAttribute, const char* aValue);
     void attribute(std::string_view aAttribute, sal_Int32 aValue);
