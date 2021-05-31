@@ -92,7 +92,7 @@ enum class StartFileDialogType
 class SfxAutoRedactDialog final : public SfxDialogController
 {
     SfxObjectShellLock m_xDocShell;
-    std::vector<std::pair<RedactionTarget*, OUString>> m_aTableTargets;
+    std::vector<std::pair<std::unique_ptr<RedactionTarget>, OUString>> m_aTableTargets;
     std::unique_ptr<sfx2::FileDialogHelper> m_pFileDlg;
     bool m_bIsValidState;
     bool m_bTargetsCopied;
@@ -116,7 +116,7 @@ class SfxAutoRedactDialog final : public SfxDialogController
 
     void StartFileDialog(StartFileDialogType nType, const OUString& rTitle);
     /// Carry out proper addition both to the targets box, and to the tabletargets vector.
-    void addTarget(RedactionTarget* pTarget);
+    void addTarget(std::unique_ptr<RedactionTarget> pTarget);
     /// Clear all targets both visually and from the targets vector
     void clearTargets();
 
