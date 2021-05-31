@@ -611,7 +611,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 pTmpItem=GetNumBulletItem(aNewAttr, nNumItemId);
 
                 if (pTmpItem)
-                    pNumRule.reset(new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pTmpItem)->GetNumRule()));
+                    pNumRule.reset(new SvxNumRule(static_cast<const SvxNumBulletItem*>(pTmpItem)->GetNumRule()));
 
                 if ( pNumRule )
                 {

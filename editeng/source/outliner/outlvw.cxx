@@ -851,7 +851,7 @@ void OutlinerView::ToggleBullets()
                     const SfxItemSet aTmpSet(pOwner->pEditEngine->GetAttribs(aSelection));
                     const SfxPoolItem& rPoolItem = aTmpSet.GetPool()->GetDefaultItem( EE_PARA_NUMBULLET );
                     const SvxNumBulletItem* pNumBulletItem = dynamic_cast< const SvxNumBulletItem* >(&rPoolItem);
-                    pDefaultBulletNumRule =  pNumBulletItem ? pNumBulletItem->GetNumRule() : nullptr;
+                    pDefaultBulletNumRule =  pNumBulletItem ? &pNumBulletItem->GetNumRule() : nullptr;
                 }
             }
 
@@ -1034,17 +1034,17 @@ void OutlinerView::ApplyBulletsNumbering(
                         const SvxNumBulletItem* pNumBulletItem = dynamic_cast< const SvxNumBulletItem* >(pPoolItem);
                         if (pNumBulletItem)
                         {
-                            const sal_uInt16 nLevelCnt = std::min(pNumBulletItem->GetNumRule()->GetLevelCount(), aNewRule.GetLevelCount());
+                            const sal_uInt16 nLevelCnt = std::min(pNumBulletItem->GetNumRule().GetLevelCount(), aNewRule.GetLevelCount());
                             for ( sal_uInt16 nLevel = 0; nLevel < nLevelCnt; ++nLevel )
                             {
-                                const SvxNumberFormat* pOldFmt = pNumBulletItem->GetNumRule()->Get(nLevel);
+                                const SvxNumberFormat* pOldFmt = pNumBulletItem->GetNumRule().Get(nLevel);
                                 const SvxNumberFormat* pNewFmt = aNewRule.Get(nLevel);
                                 if (pOldFmt && pNewFmt && (pOldFmt->GetFirstLineOffset() != pNewFmt->GetFirstLineOffset() || pOldFmt->GetAbsLSpace() != pNewFmt->GetAbsLSpace()))
                                 {
-                                    std::unique_ptr<SvxNumberFormat> pNewFmtClone(new SvxNumberFormat(*pNewFmt));
-                                    pNewFmtClone->SetFirstLineOffset(pOldFmt->GetFirstLineOffset());
-                                    pNewFmtClone->SetAbsLSpace(pOldFmt->GetAbsLSpace());
-                                    aNewRule.SetLevel(nLevel, pNewFmtClone.get());
+                                    SvxNumberFormat aNewFmtClone(*pNewFmt);
+                                    aNewFmtClone.SetFirstLineOffset(pOldFmt->GetFirstLineOffset());
+                                    aNewFmtClone.SetAbsLSpace(pOldFmt->GetAbsLSpace());
+                                    aNewRule.SetLevel(nLevel, &aNewFmtClone);
                                 }
                             }
                         }

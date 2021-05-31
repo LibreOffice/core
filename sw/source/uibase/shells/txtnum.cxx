@@ -209,13 +209,13 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                 {
                     pRequest->AppendItem(*pItem);
                     pRequest->Done();
-                    SvxNumRule* pSetRule = static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule();
-                    pSetRule->UnLinkGraphics();
+                    SvxNumRule& rSetRule = const_cast<SvxNumRule&>(static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule());
+                    rSetRule.UnLinkGraphics();
                     SwNumRule aSetRule(pNumRuleAtCurrentSelection != nullptr
                                        ? pNumRuleAtCurrentSelection->GetName()
                                        : GetShell().GetUniqueNumRuleName(),
                         numfunc::GetDefaultPositionAndSpaceMode());
-                    aSetRule.SetSvxRule(*pSetRule, GetShell().GetDoc());
+                    aSetRule.SetSvxRule(rSetRule, GetShell().GetDoc());
                     aSetRule.SetAutoRule(true);
                     // No start of new list, if an existing list style is edited.
                     // Otherwise start a new list.
@@ -229,11 +229,11 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                 {
                     pRequest->AppendItem(*pItem);
                     pRequest->Done();
-                    SvxNumRule* pSetRule = static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule();
+                    const SvxNumRule& rSetRule = static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule();
                     SwNumRule aSetRule(
                         GetShell().GetUniqueNumRuleName(),
                         numfunc::GetDefaultPositionAndSpaceMode());
-                    aSetRule.SetSvxRule(*pSetRule, GetShell().GetDoc());
+                    aSetRule.SetSvxRule(rSetRule, GetShell().GetDoc());
                     aSetRule.SetAutoRule(true);
                     // start new list
                     GetShell().SetCurNumRule(aSetRule, true);

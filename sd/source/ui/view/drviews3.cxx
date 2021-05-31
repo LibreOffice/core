@@ -838,10 +838,9 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 const SvxLRSpaceItem& rOrigLRSpaceItem = aEditAttr.Get( EE_PARA_LRSPACE );
                 const SvxNumBulletItem& rNumBulletItem = aEditAttr.Get( EE_PARA_NUMBULLET );
                 if( nOutlineLevel != -1 &&
-                    rNumBulletItem.GetNumRule() &&
-                    rNumBulletItem.GetNumRule()->GetLevelCount() > nOutlineLevel )
+                    rNumBulletItem.GetNumRule().GetLevelCount() > nOutlineLevel )
                 {
-                    const SvxNumberFormat& rFormat = rNumBulletItem.GetNumRule()->GetLevel(nOutlineLevel);
+                    const SvxNumberFormat& rFormat = rNumBulletItem.GetNumRule().GetLevel(nOutlineLevel);
                     SvxNumberFormat aFormat(rFormat);
 
                     // left margin gets distributed onto LRSpace item
@@ -879,7 +878,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                     if( rFormat != aFormat )
                     {
                         // put all items
-                        rNumBulletItem.GetNumRule()->SetLevel(nOutlineLevel,aFormat);
+                        const_cast<SvxNumRule&>(rNumBulletItem.GetNumRule()).SetLevel(nOutlineLevel,aFormat);
                         aEditAttr.Put( rNumBulletItem );
                         aEditAttr.Put( aLRSpaceItem );
                         mpDrawView->SetAttributes( aEditAttr );
@@ -968,10 +967,9 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
                     const sal_Int16 nOutlineLevel = aEditAttr.Get( EE_PARA_OUTLLEVEL ).GetValue();
                     const SvxNumBulletItem& rNumBulletItem = aEditAttr.Get( EE_PARA_NUMBULLET );
                     if( nOutlineLevel != -1 &&
-                        rNumBulletItem.GetNumRule() &&
-                        rNumBulletItem.GetNumRule()->GetLevelCount() > nOutlineLevel )
+                        rNumBulletItem.GetNumRule().GetLevelCount() > nOutlineLevel )
                     {
-                        const SvxNumberFormat& rFormat = rNumBulletItem.GetNumRule()->GetLevel(nOutlineLevel);
+                        const SvxNumberFormat& rFormat = rNumBulletItem.GetNumRule().GetLevel(nOutlineLevel);
                         aLRSpaceItem.SetTextLeft(rFormat.GetAbsLSpace() + rLRSpaceItem.GetTextLeft());
                         aLRSpaceItem.SetTextFirstLineOffset(
                             rLRSpaceItem.GetTextFirstLineOffset() + rFormat.GetFirstLineOffset()
