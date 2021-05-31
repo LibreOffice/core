@@ -37,7 +37,7 @@ private:
     virtual void        InsertPara() override;
     virtual void        InsertText() override;
     virtual void        MovePos( bool bForward = true ) override;
-    virtual void        SetEndPrevPara( EditNodeIdx*& rpNodePos,
+    virtual void        SetEndPrevPara( std::optional<EditNodeIdx>& rpNodePos,
                                         sal_Int32& rCntPos ) override;
 
     virtual void        UnknownAttrToken( int nToken ) override;

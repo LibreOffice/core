@@ -206,7 +206,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                     break;
 
                 SvxRTFItemStackType* pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back().get();
-                if( !pCurrent || (pCurrent->pSttNd->GetIdx() == mxInsertPosition->GetNodeIdx() &&
+                if( !pCurrent || (pCurrent->mxStartNodeIdx->GetIdx() == mxInsertPosition->GetNodeIdx() &&
                     pCurrent->nSttCnt == mxInsertPosition->GetCntIdx() ))
                     break;
 
