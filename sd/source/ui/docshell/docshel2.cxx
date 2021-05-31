@@ -50,7 +50,7 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
       // THUMBNAIL: here we may can set the draft mode
     }
 
-    std::unique_ptr<ClientView> pView( new ClientView(this, pOut) );
+    std::optional<ClientView> pView( std::in_place, this, pOut );
 
     pView->SetHlplVisible(false);
     pView->SetGridVisible(false);
@@ -202,7 +202,7 @@ BitmapEx DrawDocShell::GetPagePreviewBitmap(SdPage* pPage)
     aMapMode.SetScaleY( aFrac );
     pVDev->SetMapMode( aMapMode );
 
-    std::unique_ptr<ClientView> pView(new ClientView( this, pVDev ));
+    std::optional<ClientView> pView( std::in_place, this, pVDev );
     FrameView*      pFrameView = GetFrameView();
     pView->ShowSdrPage( pPage );
 
