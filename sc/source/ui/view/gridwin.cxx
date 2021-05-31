@@ -4870,6 +4870,13 @@ void ScGridWindow::updateLOKValListButton( bool bVisible, const ScAddress& rPos 
     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_VALIDITY_LIST_BUTTON, ss.str().c_str());
 }
 
+void ScGridWindow::notifyKitCellFollowJump( ) const
+{
+    ScTabViewShell* pViewShell = mrViewData.GetViewShell();
+
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_SC_FOLLOW_JUMP, getCellCursor().getStr());
+}
+
 void ScGridWindow::UpdateListValPos( bool bVisible, const ScAddress& rPos )
 {
     bool bOldButton = bListValButton;
