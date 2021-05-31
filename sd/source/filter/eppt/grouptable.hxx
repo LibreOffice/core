@@ -49,15 +49,14 @@ class GroupTable
 
         sal_uInt32              mnIndex;
         sal_uInt32              mnGroupsClosed;
-        std::vector<std::unique_ptr<GroupEntry>>
-                                mvGroupEntry;
+        std::vector<GroupEntry> mvGroupEntry;
 
     public:
 
         sal_uInt32              GetCurrentGroupIndex() const { return mnIndex; };
         sal_Int32               GetCurrentGroupLevel() const { return mvGroupEntry.size() - 1; };
-        css::uno::Reference< css::container::XIndexAccess > &
-                                GetCurrentGroupAccess() const { return mvGroupEntry.back()->mXIndexAccess; };
+        const css::uno::Reference< css::container::XIndexAccess > &
+                                GetCurrentGroupAccess() const { return mvGroupEntry.back().mXIndexAccess; };
         sal_uInt32              GetGroupsClosed();
         void                    ResetGroupTable( sal_uInt32 nCount );
         void                    ClearGroupTable();
