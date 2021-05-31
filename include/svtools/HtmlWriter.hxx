@@ -39,9 +39,13 @@ public:
 
     void start(const OString& aElement);
 
+    bool end(const OString& aElement);
     void end();
 
     void flushStack();
+
+    static void writeAttribute(SvStream& rStream, const OString& aAttribute, sal_Int32 aValue);
+    static void writeAttribute(SvStream& rStream, const OString& aAttribute, const OString& aValue);
 
     void attribute(const OString& aAttribute, const char* aValue);
     void attribute(const OString& aAttribute, sal_Int32 aValue);

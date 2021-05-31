@@ -183,6 +183,23 @@ CPPUNIT_TEST_FIXTURE(Test, testCharacters)
     CPPUNIT_ASSERT_EQUAL(OString("<abc>hello</abc>"), aString);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testExactElementEnd)
+{
+    SvMemoryStream aStream;
+
+    HtmlWriter aHtml(aStream);
+    aHtml.prettyPrint(false);
+    aHtml.start("start");
+    aHtml.start("a");
+    CPPUNIT_ASSERT(aHtml.end("a"));
+    aHtml.start("b");
+    CPPUNIT_ASSERT(!aHtml.end("c"));
+    CPPUNIT_ASSERT(aHtml.end("start"));
+
+    OString aString = extractFromStream(aStream);
+    CPPUNIT_ASSERT_EQUAL(OString("<start><a/><b/></start>"), aString);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
