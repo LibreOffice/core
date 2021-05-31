@@ -37,10 +37,10 @@ bool GroupTable::EnterGroup( css::uno::Reference< css::container::XIndexAccess >
     bool bRet = false;
     if ( rXIndexAccessRef.is() )
     {
-        std::unique_ptr<GroupEntry> pNewGroup( new GroupEntry( rXIndexAccessRef ) );
-        if ( pNewGroup->mnCount )
+        GroupEntry aNewGroup( rXIndexAccessRef );
+        if ( aNewGroup.mnCount )
         {
-            mvGroupEntry.push_back( std::move(pNewGroup) );
+            mvGroupEntry.push_back( std::move(aNewGroup) );
             bRet = true;
         }
     }
@@ -62,16 +62,16 @@ void GroupTable::ClearGroupTable()
 void GroupTable::ResetGroupTable( sal_uInt32 nCount )
 {
     ClearGroupTable();
-    mvGroupEntry.push_back( std::unique_ptr<GroupEntry>(new GroupEntry( nCount )) );
+    mvGroupEntry.push_back( GroupEntry( nCount ) );
 }
 
 bool GroupTable::GetNextGroupEntry()
 {
     while ( !mvGroupEntry.empty() )
     {
-        mnIndex = mvGroupEntry.back()->mnCurrentPos++;
+        mnIndex = mvGroupEntry.back().mnCurrentPos++;
 
-        if ( mvGroupEntry.back()->mnCount > mnIndex )
+        if ( mvGroupEntry.back().mnCount > mnIndex )
             return true;
 
         mvGroupEntry.pop_back();
