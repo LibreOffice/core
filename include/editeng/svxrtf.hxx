@@ -63,12 +63,10 @@ private:
 
 public:
     EditPosition(EditEngine* pIEE, EditSelection* pSel);
+    EditPosition(const EditPosition &) = default;
 
     sal_Int32   GetNodeIdx() const;
     sal_Int32   GetCntIdx() const;
-
-    // clone
-    std::unique_ptr<EditPosition> Clone() const;
 
     // clone NodeIndex
     std::unique_ptr<EditNodeIdx> MakeNodeIdx() const;
@@ -170,7 +168,7 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
     RTFPardAttrMapIds aPardMap;
     std::vector<sal_uInt16> aWhichMap;
 
-    std::unique_ptr<EditPosition> pInsPos;
+    std::optional<EditPosition> mxInsertPosition;
     SfxItemPool* pAttrPool;
     std::optional<Color>  mxDefaultColor;
     std::unique_ptr<vcl::Font>   pDfltFont;

@@ -83,14 +83,14 @@ SvxRTFParser::~SvxRTFParser()
 
 void SvxRTFParser::SetInsPos( const EditPosition& rNew )
 {
-    pInsPos = rNew.Clone();
+    mxInsertPosition = rNew;
 }
 
 SvParserState SvxRTFParser::CallParser()
 {
-    DBG_ASSERT( pInsPos, "no insertion position");
+    DBG_ASSERT( mxInsertPosition, "no insertion position");
 
-    if( !pInsPos )
+    if( !mxInsertPosition )
         return SvParserState::Error;
 
     if( !maColorTable.empty() )
@@ -614,10 +614,10 @@ SvxRTFItemStackType* SvxRTFParser::GetAttrSet_()
     SvxRTFItemStackType* pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back().get();
     std::unique_ptr<SvxRTFItemStackType> pNew;
     if( pCurrent )
-        pNew.reset(new SvxRTFItemStackType( *pCurrent, *pInsPos, false/*bCopyAttr*/ ));
+        pNew.reset(new SvxRTFItemStackType( *pCurrent, *mxInsertPosition, false/*bCopyAttr*/ ));
     else
         pNew.reset(new SvxRTFItemStackType( *pAttrPool, aWhichMap.data(),
-                                        *pInsPos ));
+                                        *mxInsertPosition ));
     pNew->SetRTFDefaults( GetRTFDefaults() );
 
     aAttrStack.push_back( std::move(pNew) );
@@ -683,8 +683,8 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
         sal_Int32 nOldSttNdIdx = pOld->pSttNd->GetIdx();
         if (!pOld->m_pChildList &&
             ((!pOld->aAttrSet.Count() && !pOld->nStyleNo ) ||
-            (nOldSttNdIdx == pInsPos->GetNodeIdx() &&
-            pOld->nSttCnt == pInsPos->GetCntIdx() )))
+            (nOldSttNdIdx == mxInsertPosition->GetNodeIdx() &&
+            pOld->nSttCnt == mxInsertPosition->GetCntIdx() )))
             break;          // no attributes or Area
 
         // set only the attributes that are different from the parent
@@ -708,25 +708,25 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
         }
 
         // Set all attributes which have been defined from start until here
-        bool bCrsrBack = !pInsPos->GetCntIdx();
+        bool bCrsrBack = !mxInsertPosition->GetCntIdx();
         if( bCrsrBack )
         {
             // at the beginning of a paragraph? Move back one position
-            sal_Int32 nNd = pInsPos->GetNodeIdx();
+            sal_Int32 nNd = mxInsertPosition->GetNodeIdx();
             MovePos(false);
             // if can not move backward then later don't move forward !
-            bCrsrBack = nNd != pInsPos->GetNodeIdx();
+            bCrsrBack = nNd != mxInsertPosition->GetNodeIdx();
         }
 
-        if( pOld->pSttNd->GetIdx() < pInsPos->GetNodeIdx() ||
-            ( pOld->pSttNd->GetIdx() == pInsPos->GetNodeIdx() &&
-              pOld->nSttCnt <= pInsPos->GetCntIdx() ) )
+        if( pOld->pSttNd->GetIdx() < mxInsertPosition->GetNodeIdx() ||
+            ( pOld->pSttNd->GetIdx() == mxInsertPosition->GetNodeIdx() &&
+              pOld->nSttCnt <= mxInsertPosition->GetCntIdx() ) )
         {
             if( !bCrsrBack )
             {
                 // all pard attributes are only valid until the previous
                 // paragraph !!
-                if( nOldSttNdIdx == pInsPos->GetNodeIdx() )
+                if( nOldSttNdIdx == mxInsertPosition->GetNodeIdx() )
                 {
                 }
                 else
@@ -736,7 +736,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                     // - all paragraph attributes to get the area
                     //   up to the previous paragraph
                     std::unique_ptr<SvxRTFItemStackType> pNew(
-                        new SvxRTFItemStackType(*pOld, *pInsPos, true));
+                        new SvxRTFItemStackType(*pOld, *mxInsertPosition, true));
                     pNew->aAttrSet.SetParent( pOld->aAttrSet.GetParent() );
 
                     // Delete all paragraph attributes from pNew
@@ -783,8 +783,8 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                 }
             }
 
-            pOld->pEndNd = pInsPos->MakeNodeIdx().release();
-            pOld->nEndCnt = pInsPos->GetCntIdx();
+            pOld->pEndNd = mxInsertPosition->MakeNodeIdx().release();
+            pOld->nEndCnt = mxInsertPosition->GetCntIdx();
 
             /*
             #i21422#
@@ -812,7 +812,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
 
                     // Open a new Group.
                     std::unique_ptr<SvxRTFItemStackType> pNew(new SvxRTFItemStackType(
-                                            *pCurrent, *pInsPos, true ));
+                                            *pCurrent, *mxInsertPosition, true ));
                     pNew->SetRTFDefaults( GetRTFDefaults() );
 
                     // Set all until here valid Attributes
@@ -874,8 +874,8 @@ void SvxRTFParser::SetAttrSet( SvxRTFItemStackType &rSet )
 bool SvxRTFParser::IsAttrSttPos()
 {
     SvxRTFItemStackType* pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back().get();
-    return !pCurrent || (pCurrent->pSttNd->GetIdx() == pInsPos->GetNodeIdx() &&
-        pCurrent->nSttCnt == pInsPos->GetCntIdx());
+    return !pCurrent || (pCurrent->pSttNd->GetIdx() == mxInsertPosition->GetNodeIdx() &&
+        pCurrent->nSttCnt == mxInsertPosition->GetCntIdx());
 }
 
 
