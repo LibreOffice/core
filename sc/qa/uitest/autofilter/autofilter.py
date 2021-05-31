@@ -409,7 +409,14 @@ class AutofilterTest(UITestCase):
         xFloatWindow = self.xUITest.getFloatWindow()
         xCheckListMenu = xFloatWindow.getChild("check_list_menu")
         xList = xCheckListMenu.getChild("check_list_box")
-        xEntry = xList.getChild("2")
+
+        # tdf140745 show (empty) entry on top of the checkbox list
+        self.assertEqual(3, len(xList.getChildren()))
+        self.assertEqual("(empty)", get_state_as_dict(xList.getChild('0'))['Text'])
+        self.assertEqual("0", get_state_as_dict(xList.getChild('1'))['Text'])
+        self.assertEqual("1", get_state_as_dict(xList.getChild('2'))['Text'])
+
+        xEntry = xList.getChild("0")
         xEntry.executeAction("CLICK", tuple())
 
         xOkButton = xFloatWindow.getChild("ok")
@@ -424,9 +431,9 @@ class AutofilterTest(UITestCase):
         xCheckListMenu = xFloatWindow.getChild("check_list_menu")
         xList = xCheckListMenu.getChild("check_list_box")
         self.assertEqual(3, len(xList.getChildren()))
-        self.assertEqual('true', get_state_as_dict(xList.getChild('0'))['IsChecked'])
+        self.assertEqual('false', get_state_as_dict(xList.getChild('0'))['IsChecked'])
         self.assertEqual('true', get_state_as_dict(xList.getChild('1'))['IsChecked'])
-        self.assertEqual('false', get_state_as_dict(xList.getChild('2'))['IsChecked'])
+        self.assertEqual('true', get_state_as_dict(xList.getChild('2'))['IsChecked'])
         xCloseButton = xFloatWindow.getChild("cancel")
         xCloseButton.executeAction("CLICK", tuple())
 

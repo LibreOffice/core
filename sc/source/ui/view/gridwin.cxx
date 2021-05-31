@@ -683,22 +683,31 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
 
     // Populate the check box list.
     rControl.setMemberSize(aFilterEntries.size());
+    for (auto it = aFilterEntries.begin(); it != aFilterEntries.end(); ++it)
+    {
+        // tdf#140745 show (empty) entry on top of the checkbox list
+        if (it->GetString().isEmpty())
+        {
+            const OUString& aStringVal = it->GetString();
+            const double aDoubleVal = it->GetValue();
+            bool bSelected = true;
+            if (!aSelectedValue.empty() || !aSelectedString.empty())
+                bSelected = aSelectedString.count(aStringVal) > 0;
+            else if (bQueryByNonEmpty)
+                bSelected = false;
+            rControl.addMember(aStringVal, aDoubleVal, bSelected, false, it->IsDuplicated());
+            aFilterEntries.maStrData.erase(it);
+            break;
+        }
+    }
     for (const auto& rEntry : aFilterEntries)
     {
         const OUString& aStringVal = rEntry.GetString();
         const double aDoubleVal = rEntry.GetValue();
         bool bSelected = true;
         if (!aSelectedValue.empty() || !aSelectedString.empty())
-        {
-            if (aStringVal.isEmpty())
-                bSelected = aSelectedString.count(aStringVal) > 0;
-            else
-                bSelected
-                    = aSelectedValue.count(aDoubleVal) > 0 || aSelectedString.count(aStringVal) > 0;
-        }
-        else if (bQueryByNonEmpty)
-            bSelected = !aStringVal.isEmpty();
-
+            bSelected
+                = aSelectedValue.count(aDoubleVal) > 0 || aSelectedString.count(aStringVal) > 0;
         if ( rEntry.IsDate() )
             rControl.addDateMember( aStringVal, rEntry.GetValue(), bSelected );
         else

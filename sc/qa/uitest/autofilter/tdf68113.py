@@ -44,9 +44,9 @@ class tdf68113(UITestCase):
         xCheckListMenu = xFloatWindow.getChild("check_list_menu")
         xTreeList = xCheckListMenu.getChild("check_list_box")
         self.assertEqual(5, len(xTreeList.getChildren()))
-        self.assertEqual('false', get_state_as_dict(xTreeList.getChild('0'))['IsChecked'])
+        self.assertEqual('true', get_state_as_dict(xTreeList.getChild('0'))['IsChecked'])
         self.assertEqual('false', get_state_as_dict(xTreeList.getChild('2'))['IsChecked'])
-        self.assertEqual('true', get_state_as_dict(xTreeList.getChild('4'))['IsChecked'])
+        self.assertEqual('false', get_state_as_dict(xTreeList.getChild('4'))['IsChecked'])
         xCancelBtn = xFloatWindow.getChild("cancel")
         xCancelBtn.executeAction("CLICK", tuple())
 
@@ -66,9 +66,9 @@ class tdf68113(UITestCase):
         xCheckListMenu = xFloatWindow.getChild("check_list_menu")
         xTreeList = xCheckListMenu.getChild("check_list_box")
         self.assertEqual(5, len(xTreeList.getChildren()))
-        self.assertEqual('true', get_state_as_dict(xTreeList.getChild('0'))['IsChecked'])
+        self.assertEqual('false', get_state_as_dict(xTreeList.getChild('0'))['IsChecked'])
         self.assertEqual('true', get_state_as_dict(xTreeList.getChild('2'))['IsChecked'])
-        self.assertEqual('false', get_state_as_dict(xTreeList.getChild('4'))['IsChecked'])
+        self.assertEqual('true', get_state_as_dict(xTreeList.getChild('4'))['IsChecked'])
         xCancelBtn = xFloatWindow.getChild("cancel")
         xCancelBtn.executeAction("CLICK", tuple())
 
