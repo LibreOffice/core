@@ -55,6 +55,7 @@ public class InvalidationHandler implements Document.MessageCallback, Office.Mes
                     && messageID != Document.CALLBACK_DOCUMENT_PASSWORD
                     && messageID != Document.CALLBACK_HYPERLINK_CLICKED
                     && messageID != Document.CALLBACK_SEARCH_RESULT_SELECTION
+                    && messageID != Document.CALLBACK_SC_FOLLOW_JUMP
                     && messageID != Document.CALLBACK_TEXT_SELECTION
                     && messageID != Document.CALLBACK_TEXT_SELECTION_START
                     && messageID != Document.CALLBACK_TEXT_SELECTION_END)
@@ -113,6 +114,9 @@ public class InvalidationHandler implements Document.MessageCallback, Office.Mes
                 break;
             case Document.CALLBACK_CELL_CURSOR:
                 invalidateCellCursor(payload);
+                break;
+            case Document.CALLBACK_SC_FOLLOW_JUMP:
+                jumpToCell(payload);
                 break;
             case Document.CALLBACK_INVALIDATE_HEADER:
                 invalidateHeader();
@@ -210,6 +214,14 @@ public class InvalidationHandler implements Document.MessageCallback, Office.Mes
 
         if (cellCursorRect != null) {
             mDocumentOverlay.showCellSelection(cellCursorRect);
+            moveViewportToMakeSelectionVisible(cellCursorRect);
+        }
+    }
+
+    private void jumpToCell(String payload) {
+        RectF cellCursorRect = convertPayloadCellToRectangle(payload);
+
+        if (cellCursorRect != null) {
             moveViewportToMakeSelectionVisible(cellCursorRect);
         }
     }
@@ -368,6 +380,40 @@ public class InvalidationHandler implements Document.MessageCallback, Office.Mes
         if (coordinates.length != 4) {
             return null;
         }
+        return convertPayloadToRectangle(coordinates);
+    }
+
+    /**
+     * Parses the payload text with rectangle coordinates and converts to rectangle in pixel coordinates
+     *
+     * @param payload - invalidation message payload text
+     * @return rectangle in pixel coordinates
+     */
+    public RectF convertPayloadCellToRectangle(String payload) {
+        String payloadWithoutWhitespace = payload.replaceAll("\\s", ""); // remove all whitespace from the string
+
+        if (payloadWithoutWhitespace.isEmpty() || payloadWithoutWhitespace.equals("EMPTY")) {
+            return null;
+        }
+
+        String[] coordinates = payloadWithoutWhitespace.split(",");
+
+        if (coordinates.length != 6 ) {
+            return null;
+        }
+        return convertPayloadToRectangle(coordinates);
+    }
+
+    /**
+     * Converts rectangle coordinates to rectangle in pixel coordinates
+     *
+     * @param coordinates - the first four items defines the rectangle
+     * @return rectangle in pixel coordinates
+     */
+    public RectF convertPayloadToRectangle(String[] coordinates) {
+        if (coordinates.length < 4 ) {
+            return null;
+        }
 
         int x = Integer.decode(coordinates[0]);
         int y = Integer.decode(coordinates[1]);
@@ -377,10 +423,10 @@ public class InvalidationHandler implements Document.MessageCallback, Office.Mes
         float dpi = LOKitShell.getDpi(mContext);
 
         return new RectF(
-                LOKitTileProvider.twipToPixel(x, dpi),
-                LOKitTileProvider.twipToPixel(y, dpi),
-                LOKitTileProvider.twipToPixel(x + width, dpi),
-                LOKitTileProvider.twipToPixel(y + height, dpi)
+            LOKitTileProvider.twipToPixel(x, dpi),
+            LOKitTileProvider.twipToPixel(y, dpi),
+            LOKitTileProvider.twipToPixel(x + width, dpi),
+            LOKitTileProvider.twipToPixel(y + height, dpi)
         );
     }
 
