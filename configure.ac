@@ -202,12 +202,14 @@ AbsolutePath()
     fi
 }
 
-rm -f warn
+WARNINGS_FILE=config.warn
+WARNINGS_FILE_FOR_BUILD=config.Build.warn
+rm -f "$WARNINGS_FILE" "$WARNINGS_FILE_FOR_BUILD"
 have_WARNINGS="no"
 add_warning()
 {
     if test "$have_WARNINGS" = "no"; then
-        echo "*************************************" > warn
+        echo "*************************************" > "$WARNINGS_FILE"
         have_WARNINGS="yes"
         if which tput >/dev/null && test "`tput colors 2>/dev/null || echo 0`" -ge 8; then
             dnl <esc> as actual byte (U+1b), [ escaped using quadrigraph @<:@
@@ -216,7 +218,7 @@ add_warning()
             COLORWARN="* WARNING :"
         fi
     fi
-    echo "$COLORWARN $@" >> warn
+    echo "$COLORWARN $@" >> "$WARNINGS_FILE"
 }
 
 dnl Some Mac User have the bad habit of letting a lot of crap
@@ -5420,6 +5422,7 @@ if test "$cross_compiling" = "yes"; then
     mv config.log ../config.Build.log
     mkdir -p ../config_build
     mv config_host/*.h ../config_build
+    test -f "$WARNINGS_FILE" && mv "$WARNINGS_FILE" "../$WARNINGS_FILE_FOR_BUILD"
 
     # all these will get a _FOR_BUILD postfix
     DIRECT_FOR_BUILD_SETTINGS="
@@ -11419,8 +11422,8 @@ dnl We need touch with -h option support.
 dnl ===================================================================
 AC_PATH_PROG(TOUCH, touch)
 test -z "$TOUCH" && AC_MSG_ERROR([touch is required])
-touch warn
-if ! "$TOUCH" -h warn 2>/dev/null > /dev/null; then
+touch "$WARNINGS_FILE"
+if ! "$TOUCH" -h "$WARNINGS_FILE" 2>/dev/null > /dev/null; then
     AC_MSG_ERROR([touch version with -h option support is required to build, please install it and make sure it is the one found first in PATH],,)
 fi
 
@@ -14424,9 +14427,15 @@ $GNUMAKE check
 _EOF
 fi
 
-if test -f warn; then
-    cat warn
-    rm warn
+if test -f "$WARNINGS_FILE_FOR_BUILD"; then
+    echo "BUILD / cross-toolset config, repeated ($WARNINGS_FILE_FOR_BUILD)"
+    cat "$WARNINGS_FILE_FOR_BUILD"
+    echo
+fi
+
+if test -f "$WARNINGS_FILE"; then
+    echo "HOST config ($WARNINGS_FILE)"
+    cat "$WARNINGS_FILE"
 fi
 
 dnl vim:set shiftwidth=4 softtabstop=4 expandtab:

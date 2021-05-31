@@ -40,10 +40,12 @@
 /autogen.lastrun.bak
 /ChangeLog
 /config.Build.log
+/config.Build.warn
 /config.guess
 /config.log
 /config.status
 /config.parms
+/config.warn
 /config_host.mk
 /config_host.mk.last
 /config_host.mk.stamp
