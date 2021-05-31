@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "06e492c2_fedfdb45",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1026,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-05-31T10:03:37Z",
+      "side": 1,
+      "message": "Hii.. \n\nTill this point, Character Styles are detected but in the next line \"read access violation error\" is thrown. I guess it is because \"pStyleSheetPool\" in the next line contains only Paragraph Style contents.. If we add Character Style contents too in pStyleSheetPool, then I think Character Styles will get loaded too.",
+      "range": {
+        "startLine": 1026,
+        "startChar": 3,
+        "endLine": 1026,
+        "endChar": 49
+      },
+      "revId": "630c533fbc90936165b8a16677e92d5cbc8df528",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
