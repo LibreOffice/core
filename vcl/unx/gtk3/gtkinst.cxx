@@ -4358,13 +4358,13 @@ namespace
                                               16, GTK_ICON_LOOKUP_USE_BUILTIN, &error);
         }
         else
+#endif
         {
             const AllSettings& rSettings = Application::GetSettings();
             pixbuf = load_icon_by_name_theme_lang(rIconName,
                                        rSettings.GetStyleSettings().DetermineIconTheme(),
                                        rSettings.GetUILanguageTag().getBcp47());
         }
-#endif
         return pixbuf;
     }
 }
