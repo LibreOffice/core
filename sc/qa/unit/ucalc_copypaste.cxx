@@ -10036,7 +10036,7 @@ void TestCopyPaste::testCutTransposedFormulasSquare()
     m_pDoc->UpdateTranspose(aDestRange.aStart, pOrigClipDoc, aDestMark, nullptr);
     pTransClip.reset();
 
-    printRange(m_pDoc, aDestRange, "Forumlas after cut transposed");
+    printRange(m_pDoc, aDestRange, "Formulas after cut transposed");
     printFormula(m_pDoc, 2, 6, nTab);
 
     // Check results
