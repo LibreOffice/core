@@ -20044,10 +20044,8 @@ bool custom_cell_renderer_surface_get_preferred_size(GtkCellRenderer *cell,
         ensure_device(cellsurface, pWidget);
         if (GtkInstanceTreeView* pTreeView = dynamic_cast<GtkInstanceTreeView*>(pWidget))
             aSize = pTreeView->call_signal_custom_get_size(*cellsurface->device, sId);
-#if !GTK_CHECK_VERSION(4, 0, 0)
         else if (GtkInstanceComboBox* pComboBox = dynamic_cast<GtkInstanceComboBox*>(pWidget))
             aSize = pComboBox->call_signal_custom_get_size(*cellsurface->device);
-#endif
     }
 
     if (orientation == GTK_ORIENTATION_HORIZONTAL)
@@ -20116,10 +20114,8 @@ void custom_cell_renderer_surface_render(GtkCellRenderer* cell,
 
     if (GtkInstanceTreeView* pTreeView = dynamic_cast<GtkInstanceTreeView*>(pWidget))
         pTreeView->call_signal_custom_render(*cellsurface->device, tools::Rectangle(Point(0, 0), aSize), flags & GTK_CELL_RENDERER_SELECTED, sId);
-#if !GTK_CHECK_VERSION(4, 0, 0)
     else if (GtkInstanceComboBox* pComboBox = dynamic_cast<GtkInstanceComboBox*>(pWidget))
         pComboBox->call_signal_custom_render(*cellsurface->device, tools::Rectangle(Point(0, 0), aSize), flags & GTK_CELL_RENDERER_SELECTED, sId);
-#endif
     cairo_surface_mark_dirty(pSurface);
 
     cairo_set_source_surface(cr, pSurface, cell_area->x, cell_area->y);
