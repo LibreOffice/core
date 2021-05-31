@@ -166,7 +166,7 @@ endif
 # LinkTarget class
 
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS)
-gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
+gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) -bigobj
 gb_LinkTarget_CXXCLRFLAGS := $(gb_CXXCLRFLAGS)
 
 gb_LinkTarget_INCLUDE :=\
