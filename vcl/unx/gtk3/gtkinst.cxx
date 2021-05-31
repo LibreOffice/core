@@ -22378,6 +22378,11 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/percentdialog.ui" &&
         rUIFile != "cui/ui/signatureline.ui" &&
         rUIFile != "cui/ui/tipofthedaydialog.ui" &&
+        rUIFile != "filter/ui/testxmlfilter.ui" &&
+        rUIFile != "filter/ui/xmlfiltersettings.ui" &&
+        rUIFile != "filter/ui/xmlfiltertabpagegeneral.ui" &&
+        rUIFile != "filter/ui/xmlfiltertabpagetransformation.ui" &&
+        rUIFile != "filter/ui/xsltfilterdialog.ui" &&
         rUIFile != "sfx/ui/custominfopage.ui" &&
         rUIFile != "sfx/ui/descriptioninfopage.ui" &&
         rUIFile != "sfx/ui/documentfontspage.ui" &&
