@@ -160,10 +160,13 @@ public:
     css::uno::Reference< css::style::XStyle >
                         getStyleObject( const OUString& rStyleName, bool bPageStyle ) const;
 
+    // second is true if ownership belongs to the caller
+    typedef std::pair<ScRangeData*, bool> RangeDataRet;
+
     /** Creates and returns a defined name on-the-fly in the Calc document.
         The name will not be buffered in the global defined names buffer.
         @param orName  (in/out-parameter) Returns the resulting used name. */
-    ScRangeData* createNamedRangeObject(
+    RangeDataRet createNamedRangeObject(
                             OUString& orName,
                             const css::uno::Sequence< css::sheet::FormulaToken>& rTokens,
                             sal_Int32 nIndex,
@@ -172,7 +175,7 @@ public:
     /** Creates and returns a defined name on-the-fly in the sheet.
         The name will not be buffered in the global defined names buffer.
         @param orName  (in/out-parameter) Returns the resulting used name. */
-    ScRangeData* createLocalNamedRangeObject(
+    RangeDataRet createLocalNamedRangeObject(
                             OUString& orName,
                             const css::uno::Sequence< css::sheet::FormulaToken>& rTokens,
                             sal_Int32 nIndex,

@@ -122,7 +122,7 @@ public:
 private:
     typedef ::std::unique_ptr< StreamDataSequence >   StreamDataSeqPtr;
 
-    ScRangeData*        mpScRangeData;       /// ScRangeData of the defined name.
+    RangeDataRet        maScRangeData;      /// ScRangeData of the defined name.
     sal_Int32           mnTokenIndex;       /// Name index used in API token array.
     sal_Int16           mnCalcSheet;        /// Calc sheet index for sheet-local names.
     sal_Unicode         mcBuiltinId;        /// Identifier for built-in defined names.
