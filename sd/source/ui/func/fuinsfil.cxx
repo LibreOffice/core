@@ -422,10 +422,10 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
        - the draw outliner of the drawing engine has to draw something in
          between
        - the global outliner could be used in SdPage::CreatePresObj */
-    std::unique_ptr<SdrOutliner> pOutliner(new SdOutliner( mpDoc, OutlinerMode::TextObject ));
+    SdOutliner aOutliner( mpDoc, OutlinerMode::TextObject );
 
     // set reference device
-    pOutliner->SetRefDevice( SD_MOD()->GetVirtualRefDevice() );
+    aOutliner.SetRefDevice( SD_MOD()->GetVirtualRefDevice() );
 
     SdPage* pPage = static_cast<DrawViewShell*>(mpViewShell)->GetActualPage();
     aLayoutName = pPage->GetLayoutName();
@@ -433,15 +433,15 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
     if( nIndex != -1 )
         aLayoutName = aLayoutName.copy(0, nIndex);
 
-    pOutliner->SetPaperSize(pPage->GetSize());
+    aOutliner.SetPaperSize(pPage->GetSize());
 
     SvStream* pStream = pMedium->GetInStream();
     assert(pStream && "No InStream!");
     pStream->Seek( 0 );
 
-    ErrCode nErr = pOutliner->Read( *pStream, pMedium->GetBaseURL(), nFormat, mpDocSh->GetHeaderAttributes() );
+    ErrCode nErr = aOutliner.Read( *pStream, pMedium->GetBaseURL(), nFormat, mpDocSh->GetHeaderAttributes() );
 
-    if (nErr || pOutliner->GetEditEngine().GetText().isEmpty())
+    if (nErr || aOutliner.GetEditEngine().GetText().isEmpty())
     {
         std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(mpWindow->GetFrameWeld(),
                                                        VclMessageType::Warning, VclButtonsType::Ok, SdResId(STR_READ_DATA_ERROR)));
@@ -466,20 +466,20 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
             if( pObj &&
                 pObj->GetObjInventor()   == SdrInventor::Default &&
                 pObj->GetObjIdentifier() == OBJ_TITLETEXT &&
-                pOutliner->GetParagraphCount() > 1 )
+                aOutliner.GetParagraphCount() > 1 )
             {
                 // in title objects, only one paragraph is allowed
-                while ( pOutliner->GetParagraphCount() > 1 )
+                while ( aOutliner.GetParagraphCount() > 1 )
                 {
-                    Paragraph* pPara = pOutliner->GetParagraph( 0 );
-                    sal_uLong nLen = pOutliner->GetText( pPara ).getLength();
-                    pOutliner->QuickDelete( ESelection( 0, nLen, 1, 0 ) );
-                    pOutliner->QuickInsertLineBreak( ESelection( 0, nLen, 0, nLen ) );
+                    Paragraph* pPara = aOutliner.GetParagraph( 0 );
+                    sal_uLong nLen = aOutliner.GetText( pPara ).getLength();
+                    aOutliner.QuickDelete( ESelection( 0, nLen, 1, 0 ) );
+                    aOutliner.QuickInsertLineBreak( ESelection( 0, nLen, 0, nLen ) );
                 }
             }
         }
 
-        std::unique_ptr<OutlinerParaObject> pOPO = pOutliner->CreateParaObject();
+        std::unique_ptr<OutlinerParaObject> pOPO = aOutliner.CreateParaObject();
 
         if (pOutlinerView)
         {
@@ -499,7 +499,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
 
             /* can be bigger as the maximal allowed size:
                limit object size if necessary */
-            Size aSize(pOutliner->CalcTextSize());
+            Size aSize(aOutliner.CalcTextSize());
             Size aMaxSize = mpDoc->GetMaxObjSize();
             aSize.setHeight( std::min(aSize.Height(), aMaxSize.Height()) );
             aSize.setWidth( std::min(aSize.Width(), aMaxSize.Width()) );
@@ -573,20 +573,20 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
        - the draw outliner of the drawing engine has to draw something in
          between
        - the global outliner could be used in SdPage::CreatePresObj */
-    std::unique_ptr< ::Outliner> pOutliner(new ::Outliner( &mpDoc->GetItemPool(), OutlinerMode::OutlineObject ));
-    pOutliner->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(mpDoc->GetStyleSheetPool()));
+    ::Outliner aOutliner( &mpDoc->GetItemPool(), OutlinerMode::OutlineObject );
+    aOutliner.SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(mpDoc->GetStyleSheetPool()));
 
     // set reference device
-    pOutliner->SetRefDevice(SD_MOD()->GetVirtualRefDevice());
-    pOutliner->SetPaperSize(Size(0x7fffffff, 0x7fffffff));
+    aOutliner.SetRefDevice(SD_MOD()->GetVirtualRefDevice());
+    aOutliner.SetPaperSize(Size(0x7fffffff, 0x7fffffff));
 
     SvStream* pStream = pMedium->GetInStream();
     DBG_ASSERT( pStream, "No InStream!" );
     pStream->Seek( 0 );
 
-    ErrCode nErr = pOutliner->Read(*pStream, pMedium->GetBaseURL(), nFormat, mpDocSh->GetHeaderAttributes());
+    ErrCode nErr = aOutliner.Read(*pStream, pMedium->GetBaseURL(), nFormat, mpDocSh->GetHeaderAttributes());
 
-    if (nErr || pOutliner->GetEditEngine().GetText().isEmpty())
+    if (nErr || aOutliner.GetEditEngine().GetText().isEmpty())
     {
         std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(mpWindow->GetFrameWeld(),
                                                        VclMessageType::Warning, VclButtonsType::Ok, SdResId(STR_READ_DATA_ERROR)));
@@ -594,22 +594,22 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     }
     else
     {
-        sal_Int32 nParaCount = pOutliner->GetParagraphCount();
+        sal_Int32 nParaCount = aOutliner.GetParagraphCount();
 
         // for progress bar: number of level-0-paragraphs
         sal_uInt16 nNewPages = 0;
-        pPara = pOutliner->GetParagraph( 0 );
+        pPara = aOutliner.GetParagraph( 0 );
         while (pPara)
         {
-            sal_Int32 nPos = pOutliner->GetAbsPos( pPara );
+            sal_Int32 nPos = aOutliner.GetAbsPos( pPara );
             if( Outliner::HasParaFlag( pPara, ParaFlag::ISPAGE ) )
                 nNewPages++;
-            pPara = pOutliner->GetParagraph( ++nPos );
+            pPara = aOutliner.GetParagraph( ++nPos );
         }
 
         mpDocSh->SetWaitCursor( false );
 
-        std::unique_ptr<SfxProgress> pProgress(new SfxProgress( mpDocSh, SdResId(STR_CREATE_PAGES), nNewPages));
+        std::optional<SfxProgress> pProgress( std::in_place, mpDocSh, SdResId(STR_CREATE_PAGES), nNewPages);
         pProgress->SetState( 0, 100 );
 
         nNewPages = 0;
@@ -620,17 +620,17 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
 
         sal_Int32 nSourcePos = 0;
         SfxStyleSheet* pStyleSheet = pPage->GetStyleSheetForPresObj( PresObjKind::Outline );
-        Paragraph* pSourcePara = pOutliner->GetParagraph( 0 );
+        Paragraph* pSourcePara = aOutliner.GetParagraph( 0 );
         while (pSourcePara)
         {
-            sal_Int32 nPos = pOutliner->GetAbsPos( pSourcePara );
-            sal_Int16 nDepth = pOutliner->GetDepth( nPos );
+            sal_Int32 nPos = aOutliner.GetAbsPos( pSourcePara );
+            sal_Int16 nDepth = aOutliner.GetDepth( nPos );
 
             // only take the last paragraph if it is filled
             if (nSourcePos < nParaCount - 1 ||
-                !pOutliner->GetText(pSourcePara).isEmpty())
+                !aOutliner.GetText(pSourcePara).isEmpty())
             {
-                rDocliner.Insert( pOutliner->GetText(pSourcePara), nTargetPos, nDepth );
+                rDocliner.Insert( aOutliner.GetText(pSourcePara), nTargetPos, nDepth );
                 OUString aStyleSheetName( pStyleSheet->GetName() );
                 aStyleSheetName = aStyleSheetName.subView( 0, aStyleSheetName.getLength()-1 ) +
                     OUString::number( nDepth <= 0 ? 1 : nDepth+1 );
@@ -645,7 +645,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
                 pProgress->SetState( nNewPages );
             }
 
-            pSourcePara = pOutliner->GetParagraph( ++nPos );
+            pSourcePara = aOutliner.GetParagraph( ++nPos );
             nTargetPos++;
             nSourcePos++;
         }

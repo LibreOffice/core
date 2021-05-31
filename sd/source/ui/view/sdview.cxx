@@ -1267,7 +1267,7 @@ void View::ChangeMarkedObjectsBulletsNumbering(
     const bool bToggleOn = ShouldToggleOn( bToggle, bHandleBullets );
 
     std::unique_ptr<SdrOutliner> pOutliner(SdrMakeOutliner(OutlinerMode::TextObject, *pSdrModel));
-    std::unique_ptr<OutlinerView> pOutlinerView(new OutlinerView(pOutliner.get(), pWindow));
+    OutlinerView aOutlinerView(pOutliner.get(), pWindow);
 
     const size_t nMarkCount = GetMarkedObjectCount();
     for (size_t nIndex = 0; nIndex < nMarkCount; ++nIndex)
@@ -1308,11 +1308,11 @@ void View::ChangeMarkedObjectsBulletsNumbering(
                     }
                     if ( !bToggleOn )
                     {
-                        pOutlinerView->SwitchOffBulletsNumbering();
+                        aOutlinerView.SwitchOffBulletsNumbering();
                     }
                     else
                     {
-                        pOutlinerView->ApplyBulletsNumbering( bHandleBullets, pNumRule, bToggle );
+                        aOutlinerView.ApplyBulletsNumbering( bHandleBullets, pNumRule, bToggle );
                     }
                     sal_uInt32 nParaCount = pOutliner->GetParagraphCount();
                     pText->SetOutlinerParaObject(pOutliner->CreateParaObject(0, static_cast<sal_uInt16>(nParaCount)));
@@ -1339,11 +1339,11 @@ void View::ChangeMarkedObjectsBulletsNumbering(
             }
             if ( !bToggleOn )
             {
-                pOutlinerView->SwitchOffBulletsNumbering();
+                aOutlinerView.SwitchOffBulletsNumbering();
             }
             else
             {
-                pOutlinerView->ApplyBulletsNumbering( bHandleBullets, pNumRule, bToggle );
+                aOutlinerView.ApplyBulletsNumbering( bHandleBullets, pNumRule, bToggle );
             }
             sal_uInt32 nParaCount = pOutliner->GetParagraphCount();
             pTextObj->SetOutlinerParaObject(pOutliner->CreateParaObject(0, static_cast<sal_uInt16>(nParaCount)));

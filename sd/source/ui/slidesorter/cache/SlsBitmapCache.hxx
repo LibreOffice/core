@@ -145,7 +145,7 @@ public:
         Entries with the precious flag set are omitted.
         Entries with that have no preview bitmaps are omitted.
     */
-    ::std::unique_ptr<CacheIndex> GetCacheIndex() const;
+    CacheIndex GetCacheIndex() const;
 
     /** Compress the specified preview bitmap with the given bitmap
         compressor.  A reference to the compressor is stored for later
