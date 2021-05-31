@@ -457,6 +457,24 @@ namespace
         }
     }
 
+    // at rejection of a deletion in a table, remove the tracking of the table row
+    void lcl_RemoveTrackingOfTableRow( const SwPosition* pPos )
+    {
+        if ( const SwTableBox* pBox = pPos->nNode.GetNode().GetTableBox() )
+        {
+            const SwTableLine* pLine = pBox->GetUpper();
+            const SvxPrintItem *pHasTextChangesOnlyProp =
+                    pLine->GetFrameFormat()->GetAttrSet().GetItem<SvxPrintItem>(RES_PRINT);
+            // table row property "HasTextChangesOnly" is set and its value is false
+            if ( pHasTextChangesOnlyProp && !pHasTextChangesOnlyProp->GetValue() )
+            {
+                SvxPrintItem aUnsetTracking(RES_PRINT, true);
+                SwCursor aCursor( *pPos, nullptr );
+                pPos->GetDoc().SetRowNotTracked( aCursor, aUnsetTracking );
+            }
+        }
+    }
+
     bool lcl_AcceptRedline( SwRedlineTable& rArr, SwRedlineTable::size_type& rPos,
                             bool bCallDelete,
                             const SwPosition* pSttRng = nullptr,
@@ -738,6 +756,9 @@ namespace
 
                 if( pRedl->GetExtraData() )
                     pRedl->GetExtraData()->Reject( *pRedl );
+
+                // remove tracking of the table row, if needed
+                lcl_RemoveTrackingOfTableRow( updatePaM.End() );
 
                 switch( eCmp )
                 {

@@ -3578,6 +3578,85 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf128335)
     pView->GetViewFrame()->GetDispatcher()->Execute(SID_CUT, SfxCallMode::SYNCHRON);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineTableRowDeletionWithReject)
+{
+    // load a 1-row table, and delete the row with enabled change tracking:
+    // now the row is not deleted silently, but keeps the deleted cell contents,
+    // and only accepting all of them will result the deletion of the table row.
+    SwDoc* pDoc = createDoc("tdf118311.fodt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // turn on red-lining and show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // check table
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+
+    // delete table row with enabled change tracking
+    // (HasTextChangesOnly property of the row will be false)
+    dispatchCommand(mxComponent, ".uno:DeleteRows", {});
+
+    // Deleted text content with change tracking,
+    // but not table deletion
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+
+    // Save it and load it back.
+    reload("writer8", "tdf60382_tracked_table_deletion.odt");
+    pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    pDoc = pTextDoc->GetDocShell()->GetWrtShell()->GetDoc();
+
+    // reject the deletion of the content of the first cell
+    // HasTextChangesOnly property of the table row will be true
+    SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), pEditShell->GetRedlineCount());
+    pEditShell->RejectRedline(0);
+
+    // Select and delete the content of the first cell
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+
+    // table row was still not deleted
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+
+    // accept all redlines
+    while (pEditShell->GetRedlineCount())
+        pEditShell->AcceptRedline(0);
+
+    // This was table row deletion instead of remaining the empty row
+    // (HasTextChangesOnly was false)
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+
+    // restore HasTextChangesOnly = false
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    // accept all redlines
+    while (pEditShell->GetRedlineCount())
+        pEditShell->AcceptRedline(0);
+
+    // table row (and the 1-row table) was deleted finally
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab", 0);
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf128603)
 {
     // Load the bugdoc, which has 3 textboxes.
