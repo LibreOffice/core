@@ -1890,7 +1890,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
         pPDFExtOutDevData->SetCurrentPageNumber(nOutputPageNum);
     }
 
-    std::unique_ptr<::sd::ClientView> pView( new ::sd::ClientView( mpDocShell, pOut ) );
+    ::sd::ClientView aView( mpDocShell, pOut );
     ::tools::Rectangle aVisArea( Point(), mpDoc->GetSdPage( static_cast<sal_uInt16>(nPageNumber) - 1, ePageKind )->GetSize() );
     vcl::Region                       aRegion( aVisArea );
 
@@ -1900,11 +1900,11 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
     if  ( pOldSdView )
         pOldSdView->SdrEndTextEdit();
 
-    pView->SetHlplVisible( false );
-    pView->SetGridVisible( false );
-    pView->SetBordVisible( false );
-    pView->SetPageVisible( false );
-    pView->SetGlueVisible( false );
+    aView.SetHlplVisible( false );
+    aView.SetGridVisible( false );
+    aView.SetBordVisible( false );
+    aView.SetPageVisible( false );
+    aView.SetGlueVisible( false );
 
     pOut->SetMapMode(MapMode(MapUnit::Map100thMM));
     pOut->IntersectClipRegion( aVisArea );
@@ -1914,8 +1914,8 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
 
     if( xModel == mpDocShell->GetModel() )
     {
-        pView->ShowSdrPage( mpDoc->GetSdPage( static_cast<sal_uInt16>(nPageNumber) - 1, ePageKind ));
-        SdrPageView* pPV = pView->GetSdrPageView();
+        aView.ShowSdrPage( mpDoc->GetSdPage( static_cast<sal_uInt16>(nPageNumber) - 1, ePageKind ));
+        SdrPageView* pPV = aView.GetSdrPageView();
 
         if( pOldSdView )
         {
@@ -1949,7 +1949,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
             // hint value if screen display. Only then the AutoColor mechanisms shall be applied
             rOutl.SetBackgroundColor( pPage->GetPageBackgroundColor( pPV, bScreenDisplay ) );
         }
-        pView->SdrPaintView::CompleteRedraw( pOut, aRegion, &aImplRenderPaintProc );
+        aView.SdrPaintView::CompleteRedraw( pOut, aRegion, &aImplRenderPaintProc );
 
         if ( pPDFExtOutDevData && pPage )
         {
@@ -2176,14 +2176,14 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                             && aImplRenderPaintProc.IsPrintable( pObj ) )
                     {
                         if( !pPV )
-                            pPV = pView->ShowSdrPage( pObj->getSdrPageFromSdrObject() );
+                            pPV = aView.ShowSdrPage( pObj->getSdrPageFromSdrObject() );
 
                         if( pPV )
-                            pView->MarkObj( pObj, pPV );
+                            aView.MarkObj( pObj, pPV );
                     }
                 }
             }
-            pView->DrawMarkedObj(*pOut);
+            aView.DrawMarkedObj(*pOut);
         }
     }
 }
