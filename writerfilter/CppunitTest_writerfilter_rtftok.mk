@@ -18,6 +18,7 @@ $(eval $(call gb_CppunitTest_use_externals,writerfilter_rtftok,\
 $(eval $(call gb_CppunitTest_add_exception_objects,writerfilter_rtftok, \
     writerfilter/qa/cppunittests/rtftok/rtfsdrimport \
     writerfilter/qa/cppunittests/rtftok/rtfsprm \
+    writerfilter/qa/cppunittests/rtftok/rtftokenizer \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,writerfilter_rtftok, \
