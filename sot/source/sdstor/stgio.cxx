@@ -27,6 +27,7 @@
 #include <sal/log.hxx>
 
 #include <memory>
+#include <optional>
 
 ///////////////////////////// class StgIo
 
@@ -363,7 +364,7 @@ FatError StgIo::ValidateFATs()
 {
     if( m_bFile )
     {
-        std::unique_ptr<Validator> pV(new Validator( *this ));
+        std::optional<Validator> pV( *this );
         bool bRet1 = !pV->IsError(), bRet2 = true ;
         pV.reset();
 
@@ -376,7 +377,7 @@ FatError StgIo::ValidateFATs()
                       StreamMode::READ | StreamMode::SHARE_DENYNONE) &&
             aIo.Load() )
         {
-            pV.reset(new Validator( aIo ));
+            pV.emplace( aIo );
             bRet2 = !pV->IsError();
             pV.reset();
         }
