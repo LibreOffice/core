@@ -531,6 +531,8 @@ public:
 class BulletinBoardElement
     : public ControlElement
 {
+    // we are the owner of this, so have to keep a reference to it
+    rtl::Reference<DialogImport> mxDialogImport;
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
     SAL_CALL startChildElement(
