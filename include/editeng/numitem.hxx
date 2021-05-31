@@ -266,6 +266,7 @@ public:
                         eDefaultNumberFormatPositionAndSpaceMode
                                 = SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
     SvxNumRule(const SvxNumRule& rCopy);
+    SvxNumRule(SvxNumRule&&);
     SvxNumRule(SvStream &rStream);
     ~SvxNumRule();
 
@@ -273,6 +274,7 @@ public:
     bool                    operator!=( const SvxNumRule& rRule ) const {return !(*this == rRule);}
 
     SvxNumRule&             operator=( const SvxNumRule&  );
+    SvxNumRule&             operator=( SvxNumRule&&  );
 
     void                    Store(SvStream &rStream);
     void                    dumpAsXml(xmlTextWriterPtr pWriter) const;
@@ -301,7 +303,7 @@ public:
 
 class EDITENG_DLLPUBLIC SvxNumBulletItem final : public SfxPoolItem
 {
-    std::unique_ptr<SvxNumRule> pNumRule;
+    SvxNumRule maNumRule;
 public:
     explicit SvxNumBulletItem(SvxNumRule const & rRule);
     SvxNumBulletItem(SvxNumRule const & rRule, sal_uInt16 nWhich );
@@ -311,7 +313,8 @@ public:
     virtual SvxNumBulletItem* Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool             operator==( const SfxPoolItem& ) const override;
 
-    SvxNumRule*             GetNumRule() const {return pNumRule.get();}
+    const SvxNumRule&       GetNumRule() const { return maNumRule; }
+    SvxNumRule&             GetNumRule() { return maNumRule; }
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
@@ -345,7 +348,7 @@ inline SvxNodeNum& SvxNodeNum::operator=( const SvxNodeNum& rCpy )
     return *this;
 }
 
-std::unique_ptr<SvxNumRule> SvxConvertNumRule( const SvxNumRule* pRule, sal_uInt16 nLevel, SvxNumRuleType eType );
+SvxNumRule SvxConvertNumRule( const SvxNumRule& rRule, sal_uInt16 nLevel, SvxNumRuleType eType );
 
 #endif
 

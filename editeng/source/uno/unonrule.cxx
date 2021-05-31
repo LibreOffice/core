@@ -481,18 +481,9 @@ const SvxNumRule& SvxGetNumRule( Reference< XIndexReplace > const & xRule )
     return pRule->getNumRule();
 }
 
-css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule(const SvxNumRule* pRule)
+css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule(const SvxNumRule& rRule)
 {
-    DBG_ASSERT( pRule, "No default SvxNumRule!" );
-    if( pRule )
-    {
-        return new SvxUnoNumberingRules( *pRule );
-    }
-    else
-    {
-        SvxNumRule aDefaultRule( SvxNumRuleFlags::BULLET_REL_SIZE | SvxNumRuleFlags::BULLET_COLOR, SVX_MAX_NUM, false);
-        return new SvxUnoNumberingRules( aDefaultRule );
-    }
+    return new SvxUnoNumberingRules( rRule );
 }
 
 namespace {
@@ -554,7 +545,7 @@ Reference< XAnyCompare > SvxCreateNumRuleCompare() noexcept
 css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule()
 {
     SvxNumRule aTempRule( SvxNumRuleFlags::NONE, 10, false );
-    return SvxCreateNumRule( &aTempRule );
+    return SvxCreateNumRule( aTempRule );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

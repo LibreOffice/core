@@ -663,18 +663,18 @@ css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule(SdrModel* 
         const SvxNumBulletItem* pItem = pModel->GetItemPool().GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET);
         if( pItem )
         {
-            pDefaultRule = pItem->GetNumRule();
+            pDefaultRule = &pItem->GetNumRule();
         }
     }
 
     if( pDefaultRule )
     {
-        return SvxCreateNumRule( pDefaultRule );
+        return SvxCreateNumRule( *pDefaultRule );
     }
     else
     {
         SvxNumRule aTempRule( SvxNumRuleFlags::NONE, 10, false );
-        return SvxCreateNumRule( &aTempRule );
+        return SvxCreateNumRule( aTempRule );
     }
 }
 

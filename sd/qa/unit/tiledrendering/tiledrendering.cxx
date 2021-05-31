@@ -1534,7 +1534,7 @@ void SdTiledRenderingTest::testTdf103083()
                          pOutliner->GetStyleSheet(2)->GetName());
     const EditTextObject& aEdit = pTextObject->GetOutlinerParaObject()->GetTextObject();
     const SvxNumBulletItem* pNumFmt = aEdit.GetParaAttribs(2).GetItem(EE_PARA_NUMBULLET);
-    SvxNumberFormat aNumFmt(pNumFmt->GetNumRule()->GetLevel(2));
+    SvxNumberFormat aNumFmt(pNumFmt->GetNumRule().GetLevel(2));
 
     // cut contents of bullet item
     comphelper::dispatchCommand(".uno:Cut", uno::Sequence<beans::PropertyValue>());
@@ -1563,7 +1563,7 @@ void SdTiledRenderingTest::testTdf103083()
 
     const EditTextObject& aEdit2 = pTextObject->GetOutlinerParaObject()->GetTextObject();
     const SvxNumBulletItem* pNumFmt2 = aEdit2.GetParaAttribs(2).GetItem(EE_PARA_NUMBULLET);
-    SvxNumberFormat aNumFmt2(pNumFmt2->GetNumRule()->GetLevel(2));
+    SvxNumberFormat aNumFmt2(pNumFmt2->GetNumRule().GetLevel(2));
 
     bool bEqual(aNumFmt2 == aNumFmt);
     CPPUNIT_ASSERT_MESSAGE("Bullet properties changed after paste", bEqual);

@@ -278,7 +278,7 @@ const SfxItemSet* SdPresLayoutTemplateDlg::GetOutputItemSet() const
 
         const SvxNumBulletItem *pSvxNumBulletItem = nullptr;
         if (SfxItemState::SET == pOutSet->GetItemState(EE_PARA_NUMBULLET, false, reinterpret_cast<const SfxPoolItem**>(&pSvxNumBulletItem)))
-            SdBulletMapper::MapFontsInNumRule( *pSvxNumBulletItem->GetNumRule(), *pOutSet );
+            SdBulletMapper::MapFontsInNumRule( const_cast<SvxNumRule&>(pSvxNumBulletItem->GetNumRule()), *pOutSet );
         return pOutSet.get();
     }
     else

@@ -407,7 +407,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                             {
                                 if (aTempSet.GetItemState(EE_PARA_NUMBULLET) == SfxItemState::SET)
                                 {
-                                    SvxNumRule aRule(*aTempSet.GetItem<SvxNumBulletItem>(EE_PARA_NUMBULLET)->GetNumRule());
+                                    SvxNumRule aRule(aTempSet.GetItem<SvxNumBulletItem>(EE_PARA_NUMBULLET)->GetNumRule());
 
                                     OUString sStyleName(SdResId(STR_PSEUDOSHEET_OUTLINE) + " 1");
                                     SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( sStyleName, SfxStyleFamily::Pseudo);

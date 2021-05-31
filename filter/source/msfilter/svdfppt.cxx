@@ -6176,30 +6176,27 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  std::optional< sal_Int16 >& rS
                     aNumberFormat.SetIndentAt( 0 );
                 }
                 SvxNumBulletItem aNewNumBulletItem( *pNumBulletItem );
-                SvxNumRule* pRule = aNewNumBulletItem.GetNumRule();
-                if ( pRule )
+                SvxNumRule& rRule = aNewNumBulletItem.GetNumRule();
+                rRule.SetLevel( mxParaSet->mnDepth, aNumberFormat );
+                for (sal_uInt16 i = 0; i < rRule.GetLevelCount(); ++i)
                 {
-                    pRule->SetLevel( mxParaSet->mnDepth, aNumberFormat );
-                    for (sal_uInt16 i = 0; i < pRule->GetLevelCount(); ++i)
+                    if ( i != mxParaSet->mnDepth )
                     {
-                        if ( i != mxParaSet->mnDepth )
-                        {
-                            sal_uInt16 n = sanitizeForMaxPPTLevels(i);
+                        sal_uInt16 n = sanitizeForMaxPPTLevels(i);
 
-                            SvxNumberFormat aNumberFormat2( pRule->GetLevel( i ) );
-                            const PPTParaLevel& rParaLevel = mrStyleSheet.mpParaSheet[ nInstance ]->maParaLevel[ n ];
-                            const PPTCharLevel& rCharLevel = mrStyleSheet.mpCharSheet[ nInstance ]->maCharLevel[ n ];
-                            sal_uInt32 nColor;
-                            if ( rParaLevel.mnBuFlags & ( 1 << PPT_ParaAttr_BuHardColor ) )
-                                nColor = rParaLevel.mnBulletColor;
-                            else
-                                nColor = rCharLevel.mnFontColor;
-                            aNumberFormat2.SetBulletColor( rManager.MSO_TEXT_CLR_ToColor( nColor ) );
-                            pRule->SetLevel( i, aNumberFormat2 );
-                        }
+                        SvxNumberFormat aNumberFormat2( rRule.GetLevel( i ) );
+                        const PPTParaLevel& rParaLevel = mrStyleSheet.mpParaSheet[ nInstance ]->maParaLevel[ n ];
+                        const PPTCharLevel& rCharLevel = mrStyleSheet.mpCharSheet[ nInstance ]->maCharLevel[ n ];
+                        sal_uInt32 nColor;
+                        if ( rParaLevel.mnBuFlags & ( 1 << PPT_ParaAttr_BuHardColor ) )
+                            nColor = rParaLevel.mnBulletColor;
+                        else
+                            nColor = rCharLevel.mnFontColor;
+                        aNumberFormat2.SetBulletColor( rManager.MSO_TEXT_CLR_ToColor( nColor ) );
+                        rRule.SetLevel( i, aNumberFormat2 );
                     }
-                    rSet.Put( aNewNumBulletItem );
                 }
+                rSet.Put( aNewNumBulletItem );
             }
         }
     }

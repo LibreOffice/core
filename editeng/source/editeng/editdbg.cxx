@@ -83,7 +83,7 @@ static OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
                 aDebStr.append("Level");
                 aDebStr.append(static_cast<sal_Int32>(nLevel));
                 aDebStr.append('=');
-                const SvxNumberFormat* pFmt = static_cast<const SvxNumBulletItem&>(rItem).GetNumRule()->Get( nLevel );
+                const SvxNumberFormat* pFmt = static_cast<const SvxNumBulletItem&>(rItem).GetNumRule().Get( nLevel );
                 if ( pFmt )
                 {
                     aDebStr.append('(');

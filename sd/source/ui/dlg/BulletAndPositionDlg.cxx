@@ -229,7 +229,7 @@ SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const Sf
     }
     if (SfxItemState::SET == rSet.GetItemState(nNumItemId, false, &pItem))
     {
-        pSaveNum.reset(new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()));
+        pSaveNum.reset(new SvxNumRule(static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()));
     }
 
     bModified = (!pActNum->Get(0) || bPreset);
@@ -311,7 +311,7 @@ void SvxBulletAndPositionDlg::Reset(const SfxItemSet* rSet)
         }
     }
     DBG_ASSERT(eState == SfxItemState::SET, "no item found!");
-    pSaveNum.reset(new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()));
+    pSaveNum.reset(new SvxNumRule(static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()));
 
     // insert levels
     if (!m_xLevelLB->n_children())

@@ -169,7 +169,7 @@ void FuBulletAndPosition::SetCurrentBulletsNumbering(SfxRequest& rReq)
     std::unique_ptr<SvxNumRule> pNumRule;
     if ( pTmpItem )
     {
-        pNumRule.reset(new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pTmpItem)->GetNumRule()));
+        pNumRule.reset(new SvxNumRule(static_cast<const SvxNumBulletItem*>(pTmpItem)->GetNumRule()));
 
         // get numbering rule corresponding to <nIdx> and apply the needed number formats to <pNumRule>
         NBOTypeMgrBase* pNumRuleMgr =
@@ -323,15 +323,12 @@ const SfxPoolItem* FuBulletAndPosition::GetNumBulletItem(SfxItemSet& aNewAttr, s
             if(bTitle && aNewAttr.GetItemState(EE_PARA_NUMBULLET) == SfxItemState::SET )
             {
                 const SvxNumBulletItem* pBulletItem = aNewAttr.GetItem(EE_PARA_NUMBULLET);
-                SvxNumRule* pLclRule = pBulletItem->GetNumRule();
-                if(pLclRule)
-                {
-                    SvxNumRule aNewRule( *pLclRule );
-                    aNewRule.SetFeatureFlag( SvxNumRuleFlags::NO_NUMBERS );
+                const SvxNumRule& rLclRule = pBulletItem->GetNumRule();
+                SvxNumRule aNewRule( rLclRule );
+                aNewRule.SetFeatureFlag( SvxNumRuleFlags::NO_NUMBERS );
 
-                    SvxNumBulletItem aNewItem( aNewRule, EE_PARA_NUMBULLET );
-                    aNewAttr.Put(aNewItem);
-                }
+                SvxNumBulletItem aNewItem( aNewRule, EE_PARA_NUMBULLET );
+                aNewAttr.Put(aNewItem);
             }
 
             SfxItemState eItemState = aNewAttr.GetItemState(nNumItemId, false, &pTmpItem);
