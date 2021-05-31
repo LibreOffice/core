@@ -1092,7 +1092,10 @@ oslSocketResult SAL_CALL osl_getDottedInetAddrOfSocketAddr(oslSocketAddr Addr, r
         return osl_Socket_Error;
     }
 
-    rtl_uString_newFromAscii(ustrDottedInetAddr,inet_ntoa(pSystemInetAddr->sin_addr));
+    char buf[INET_ADDRSTRLEN];
+    auto const text = inet_ntop(AF_INET, &pSystemInetAddr->sin_addr, buf, INET_ADDRSTRLEN);
+    assert(text != nullptr);
+    rtl_uString_newFromAscii(ustrDottedInetAddr,text);
 
     return osl_Socket_Ok;
 
