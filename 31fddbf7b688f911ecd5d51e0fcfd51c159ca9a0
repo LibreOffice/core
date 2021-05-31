@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bfda4b60_0e495032",
+        "filename": "officecfg/registry/data/org/openoffice/Office/Accelerators.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 7943,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-05-31T10:19:48Z",
+      "side": 1,
+      "message": "this is the same comment, as before",
+      "range": {
+        "startLine": 7943,
+        "startChar": 76,
+        "endLine": 7943,
+        "endChar": 77
+      },
+      "revId": "31fddbf7b688f911ecd5d51e0fcfd51c159ca9a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
