@@ -13430,6 +13430,8 @@ if test "$ENABLE_JAVA" != "" -a "$with_junit" != "no" -a "$cross_compiling" != "
                 HAMCREST_JAR=/usr/share/lib/java/hamcrest.jar
             elif test -e /usr/share/java/hamcrest/core.jar; then
                 HAMCREST_JAR=/usr/share/java/hamcrest/core.jar
+            elif test -e /usr/share/java/hamcrest/hamcrest.jar; then
+                HAMCREST_JAR=/usr/share/java/hamcrest/hamcrest.jar
             else
                 HAMCREST_JAR=/usr/share/java/hamcrest.jar
             fi
