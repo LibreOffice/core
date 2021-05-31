@@ -69,7 +69,7 @@ public:
     sal_Int32   GetCntIdx() const;
 
     // clone NodeIndex
-    std::unique_ptr<EditNodeIdx> MakeNodeIdx() const;
+    EditNodeIdx MakeNodeIdx() const;
 };
 
 typedef std::map<short, vcl::Font> SvxRTFFontTbl;
@@ -238,7 +238,7 @@ protected:
 
     virtual void InsertText() = 0;
     virtual void MovePos( bool bForward = true ) = 0;
-    virtual void SetEndPrevPara( EditNodeIdx*& rpNodePos,
+    virtual void SetEndPrevPara( std::optional<EditNodeIdx>& rpNodePos,
                                  sal_Int32& rCntPos )=0;
     virtual void SetAttrInDoc( SvxRTFItemStackType &rSet );
     // for Tokens, which are not evaluated in ReadAttr
@@ -293,8 +293,8 @@ class SvxRTFItemStackType
     friend class SvxRTFParser;
 
     SfxItemSet   aAttrSet;
-    std::unique_ptr<EditNodeIdx> pSttNd;
-    EditNodeIdx  *pEndNd;
+    std::optional<EditNodeIdx>  mxStartNodeIdx;
+    std::optional<EditNodeIdx>  mxEndNodeIdx;
     sal_Int32    nSttCnt, nEndCnt;
     std::unique_ptr<SvxRTFItemStackList> m_pChildList;
     sal_uInt16   nStyleNo;
@@ -318,8 +318,8 @@ public:
     //bad, consider this deprecated.
     void SetStartPos( const EditPosition& rPos );
 
-    const EditNodeIdx& GetSttNode() const { return *pSttNd; }
-    const EditNodeIdx& GetEndNode() const { return *pEndNd; }
+    const EditNodeIdx& GetSttNode() const { return *mxStartNodeIdx; }
+    const EditNodeIdx& GetEndNode() const { return *mxEndNodeIdx; }
 
     sal_Int32 GetSttCnt() const { return nSttCnt; }
     sal_Int32 GetEndCnt() const { return nEndCnt; }

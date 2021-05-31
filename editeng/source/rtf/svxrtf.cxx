@@ -680,7 +680,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
     SvxRTFItemStackType *pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back().get();
 
     do {        // middle check loop
-        sal_Int32 nOldSttNdIdx = pOld->pSttNd->GetIdx();
+        sal_Int32 nOldSttNdIdx = pOld->mxStartNodeIdx->GetIdx();
         if (!pOld->m_pChildList &&
             ((!pOld->aAttrSet.Count() && !pOld->nStyleNo ) ||
             (nOldSttNdIdx == mxInsertPosition->GetNodeIdx() &&
@@ -718,8 +718,8 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
             bCrsrBack = nNd != mxInsertPosition->GetNodeIdx();
         }
 
-        if( pOld->pSttNd->GetIdx() < mxInsertPosition->GetNodeIdx() ||
-            ( pOld->pSttNd->GetIdx() == mxInsertPosition->GetNodeIdx() &&
+        if( pOld->mxStartNodeIdx->GetIdx() < mxInsertPosition->GetNodeIdx() ||
+            ( pOld->mxStartNodeIdx->GetIdx() == mxInsertPosition->GetNodeIdx() &&
               pOld->nSttCnt <= mxInsertPosition->GetCntIdx() ) )
         {
             if( !bCrsrBack )
@@ -756,7 +756,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                         pNew->nStyleNo = 0;
 
                         // Now span the real area of pNew from old
-                        SetEndPrevPara( pOld->pEndNd, pOld->nEndCnt );
+                        SetEndPrevPara( pOld->mxEndNodeIdx, pOld->nEndCnt );
                         pNew->nSttCnt = 0;
 
                         if( IsChkStyleAttr() )
@@ -783,7 +783,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                 }
             }
 
-            pOld->pEndNd = mxInsertPosition->MakeNodeIdx().release();
+            pOld->mxEndNodeIdx = mxInsertPosition->MakeNodeIdx();
             pOld->nEndCnt = mxInsertPosition->GetCntIdx();
 
             /*
@@ -874,7 +874,7 @@ void SvxRTFParser::SetAttrSet( SvxRTFItemStackType &rSet )
 bool SvxRTFParser::IsAttrSttPos()
 {
     SvxRTFItemStackType* pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back().get();
-    return !pCurrent || (pCurrent->pSttNd->GetIdx() == mxInsertPosition->GetNodeIdx() &&
+    return !pCurrent || (pCurrent->mxStartNodeIdx->GetIdx() == mxInsertPosition->GetNodeIdx() &&
         pCurrent->nSttCnt == mxInsertPosition->GetCntIdx());
 }
 
@@ -928,9 +928,9 @@ SvxRTFItemStackType::SvxRTFItemStackType(
     : aAttrSet( rPool, pWhichRange )
     , nStyleNo( 0 )
 {
-    pSttNd = rPos.MakeNodeIdx();
+    mxStartNodeIdx = rPos.MakeNodeIdx();
     nSttCnt = rPos.GetCntIdx();
-    pEndNd = pSttNd.get();
+    mxEndNodeIdx = mxStartNodeIdx;
     nEndCnt = nSttCnt;
 }
 
@@ -941,9 +941,9 @@ SvxRTFItemStackType::SvxRTFItemStackType(
     : aAttrSet( *rCpy.aAttrSet.GetPool(), rCpy.aAttrSet.GetRanges() )
     , nStyleNo( rCpy.nStyleNo )
 {
-    pSttNd = rPos.MakeNodeIdx();
+    mxStartNodeIdx = rPos.MakeNodeIdx();
     nSttCnt = rPos.GetCntIdx();
-    pEndNd = pSttNd.get();
+    mxEndNodeIdx = mxStartNodeIdx;
     nEndCnt = nSttCnt;
 
     aAttrSet.SetParent( &rCpy.aAttrSet );
@@ -991,8 +991,6 @@ void SvxRTFItemStackType::DropChildList()
 
 SvxRTFItemStackType::~SvxRTFItemStackType()
 {
-    if( pSttNd.get() != pEndNd )
-        delete pEndNd;
 }
 
 void SvxRTFItemStackType::Add(std::unique_ptr<SvxRTFItemStackType> pIns)
@@ -1004,10 +1002,8 @@ void SvxRTFItemStackType::Add(std::unique_ptr<SvxRTFItemStackType> pIns)
 
 void SvxRTFItemStackType::SetStartPos( const EditPosition& rPos )
 {
-    if (pSttNd.get() != pEndNd)
-        delete pEndNd;
-    pSttNd = rPos.MakeNodeIdx();
-    pEndNd = pSttNd.get();
+    mxStartNodeIdx = rPos.MakeNodeIdx();
+    mxEndNodeIdx = mxStartNodeIdx;
     nSttCnt = rPos.GetCntIdx();
 }
 
@@ -1019,11 +1015,11 @@ void SvxRTFItemStackType::Compress( const SvxRTFParser& rParser )
     SvxRTFItemStackType* pTmp = (*m_pChildList)[0].get();
 
     if( !pTmp->aAttrSet.Count() ||
-        pSttNd->GetIdx() != pTmp->pSttNd->GetIdx() ||
+        mxStartNodeIdx->GetIdx() != pTmp->mxStartNodeIdx->GetIdx() ||
         nSttCnt != pTmp->nSttCnt )
         return;
 
-    EditNodeIdx* pLastNd = pTmp->pEndNd;
+    EditNodeIdx aLastNd = *pTmp->mxEndNodeIdx;
     sal_Int32 nLastCnt = pTmp->nEndCnt;
 
     SfxItemSet aMrgSet( pTmp->aAttrSet );
@@ -1034,10 +1030,10 @@ void SvxRTFItemStackType::Compress( const SvxRTFParser& rParser )
             pTmp->Compress( rParser );
 
         if( !pTmp->nSttCnt
-            ? (pLastNd->GetIdx()+1 != pTmp->pSttNd->GetIdx() ||
-               !rParser.IsEndPara( pLastNd, nLastCnt ) )
+            ? (aLastNd.GetIdx()+1 != pTmp->mxStartNodeIdx->GetIdx() ||
+               !rParser.IsEndPara( &aLastNd, nLastCnt ) )
             : ( pTmp->nSttCnt != nLastCnt ||
-                pLastNd->GetIdx() != pTmp->pSttNd->GetIdx() ))
+                aLastNd.GetIdx() != pTmp->mxStartNodeIdx->GetIdx() ))
         {
             while (++n < m_pChildList->size())
             {
@@ -1067,11 +1063,11 @@ void SvxRTFItemStackType::Compress( const SvxRTFParser& rParser )
                 return;
         }
 
-        pLastNd = pTmp->pEndNd;
+        aLastNd = *pTmp->mxEndNodeIdx;
         nLastCnt = pTmp->nEndCnt;
     }
 
-    if( pEndNd->GetIdx() != pLastNd->GetIdx() || nEndCnt != nLastCnt )
+    if( mxEndNodeIdx->GetIdx() != aLastNd.GetIdx() || nEndCnt != nLastCnt )
         return;
 
     // It can be merged

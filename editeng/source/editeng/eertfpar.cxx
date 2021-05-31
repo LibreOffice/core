@@ -275,7 +275,7 @@ void EditRTFParser::MovePos( bool const bForward )
             aCurSel.Max(), i18n::CharacterIteratorMode::SKIPCHARACTER);
 }
 
-void EditRTFParser::SetEndPrevPara( EditNodeIdx*& rpNodePos,
+void EditRTFParser::SetEndPrevPara( std::optional<EditNodeIdx>& rpNodePos,
                                     sal_Int32& rCntPos )
 {
     // The Intention is to: determine the current insert position of the
@@ -289,7 +289,7 @@ void EditRTFParser::SetEndPrevPara( EditNodeIdx*& rpNodePos,
         nCurPara--;
     ContentNode* pPrevNode = mpEditEngine->GetEditDoc().GetObject( nCurPara );
     assert(pPrevNode && "pPrevNode = 0!");
-    rpNodePos = new EditNodeIdx(mpEditEngine, pPrevNode);
+    rpNodePos = EditNodeIdx(mpEditEngine, pPrevNode);
     rCntPos = pPrevNode->Len();
 }
 
@@ -612,9 +612,9 @@ sal_Int32 EditNodeIdx::GetIdx() const
 EditPosition::EditPosition(EditEngine* pEE, EditSelection* pSel) :
     mpEditEngine(pEE), mpCurSel(pSel) {}
 
-std::unique_ptr<EditNodeIdx> EditPosition::MakeNodeIdx() const
+EditNodeIdx EditPosition::MakeNodeIdx() const
 {
-    return std::make_unique<EditNodeIdx>(mpEditEngine, mpCurSel->Max().GetNode());
+    return EditNodeIdx(mpEditEngine, mpCurSel->Max().GetNode());
 }
 
 sal_Int32 EditPosition::GetNodeIdx() const
