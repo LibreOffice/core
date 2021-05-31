@@ -1253,20 +1253,26 @@ private:
 
     /**
      * Transpose clipboard patterns
+     * @param nCombinedStartRow start row of the combined range;
+     * used for transposed multi range selection with row direction;
+     * for other cases than multi range row selection this it equal to nRow1
      * @param nRowDestOffset adjustment of destination row position;
      * used for transposed multi range row selections, otherwise 0
      */
     void TransposeColPatterns(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol, SCROW nRow1,
-                              SCROW nRow2, bool bIncludeFiltered,
+                              SCROW nRow2, SCROW nCombinedStartRow, bool bIncludeFiltered,
                               const std::vector<SCROW>& rFilteredRows, SCROW nRowDestOffset);
 
     /**
      * Transpose clipboard notes
+     * @param nCombinedStartRow start row of the combined range;
+     * used for transposed multi range selection with row direction;
+     * for other cases than multi range row selection this it equal to nRow1
      * @param nRowDestOffset adjustment of destination row position;
      * used for transposed multi range row selections, otherwise 0
      */
     void TransposeColNotes(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol, SCROW nRow1, SCROW nRow2,
-                           bool bIncludeFiltered, SCROW nRowDestOffset);
+                           SCROW nCombinedStartRow, bool bIncludeFiltered, SCROW nRowDestOffset);
 
     ScColumn* FetchColumn( SCCOL nCol );
     const ScColumn* FetchColumn( SCCOL nCol ) const;

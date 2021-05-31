@@ -999,18 +999,18 @@ void ScTable::TransposeClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
         //  Attributes
         if (nFlags & InsertDeleteFlags::ATTRIB)
-            TransposeColPatterns(pTransClip, nCol1, nCol, nRow1, nRow2, bIncludeFiltered,
-                                 aFilteredRows, nRowDestOffset);
+            TransposeColPatterns(pTransClip, nCol1, nCol, nRow1, nRow2, nCombinedStartRow,
+                                 bIncludeFiltered, aFilteredRows, nRowDestOffset);
 
         // Cell Notes - fdo#68381 paste cell notes on Transpose
         if ((nFlags & InsertDeleteFlags::NOTE) && rDocument.HasColNotes(nCol, nTab))
-            TransposeColNotes(pTransClip, nCol1, nCol, nRow1, nRow2, bIncludeFiltered,
-                              nRowDestOffset);
+            TransposeColNotes(pTransClip, nCol1, nCol, nRow1, nRow2, nCombinedStartRow,
+                              bIncludeFiltered, nRowDestOffset);
     }
 }
 
 static void lcl_SetTransposedPatternInRows(ScTable* pTransClip, SCROW nAttrRow1, SCROW nAttrRow2,
-                                           SCCOL nCol1, SCROW nRow1, SCCOL nCol,
+                                           SCCOL nCol1, SCROW nRow1, SCROW nCombinedStartRow, SCCOL nCol,
                                            const ScPatternAttr& rPatternAttr, bool bIncludeFiltered,
                                            const std::vector<SCROW>& rFilteredRows,
                                            SCROW nRowDestOffset)
@@ -1034,13 +1034,13 @@ static void lcl_SetTransposedPatternInRows(ScTable* pTransClip, SCROW nAttrRow1,
         }
 
         pTransClip->SetPattern(
-            static_cast<SCCOL>(nRow - nRow1 - nFilteredRowAdjustment + nRowDestOffset),
-            static_cast<SCROW>(nCol - nCol1), rPatternAttr);
+            static_cast<SCCOL>(nCol1 + nRow - nRow1 - nFilteredRowAdjustment + nRowDestOffset),
+            static_cast<SCROW>(nCombinedStartRow + nCol - nCol1), rPatternAttr);
     }
 }
 
 void ScTable::TransposeColPatterns(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol, SCROW nRow1,
-                                   SCROW nRow2, bool bIncludeFiltered,
+                                   SCROW nRow2, SCROW nCombinedStartRow, bool bIncludeFiltered,
                                    const std::vector<SCROW>& rFilteredRows, SCROW nRowDestOffset)
 {
         SCROW nAttrRow1 = {}; // spurious -Werror=maybe-uninitialized
@@ -1059,8 +1059,8 @@ void ScTable::TransposeColPatterns(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol,
                     // Set pattern in cells from nAttrRow1 to nAttrRow2
                     // no borders or merge items involved - use pattern as-is
                     lcl_SetTransposedPatternInRows(pTransClip, nAttrRow1, nAttrRow2, nCol1, nRow1,
-                                                   nCol, *pPattern, bIncludeFiltered, rFilteredRows,
-                                                   nRowDestOffset);
+                                                   nCombinedStartRow, nCol, *pPattern,
+                                                   bIncludeFiltered, rFilteredRows, nRowDestOffset);
                 }
                 else
                 {
@@ -1103,15 +1103,16 @@ void ScTable::TransposeColPatterns(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol,
 
                     // Set pattern in cells from nAttrRow1 to nAttrRow2
                     lcl_SetTransposedPatternInRows(pTransClip, nAttrRow1, nAttrRow2, nCol1, nRow1,
-                                                   nCol, aNewPattern, bIncludeFiltered,
-                                                   rFilteredRows, nRowDestOffset);
+                                                   nCombinedStartRow, nCol, aNewPattern,
+                                                   bIncludeFiltered, rFilteredRows, nRowDestOffset);
                 }
             }
     }
 }
 
 void ScTable::TransposeColNotes(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol, SCROW nRow1,
-                                SCROW nRow2, bool bIncludeFiltered, SCROW nRowDestOffset)
+                                SCROW nRow2, SCROW nCombinedStartRow, bool bIncludeFiltered,
+                                SCROW nRowDestOffset)
 {
     sc::CellNoteStoreType::const_iterator itBlk = aCol[nCol].maCellNotes.begin(), itBlkEnd = aCol[nCol].maCellNotes.end();
 
@@ -1165,8 +1166,8 @@ void ScTable::TransposeColNotes(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol, SC
                     }
 
                     ScAddress aDestPos(
-                        static_cast<SCCOL>(curRow - nRow1 - nFilteredRows + nRowDestOffset),
-                        static_cast<SCROW>(nCol - nCol1), pTransClip->nTab);
+                        static_cast<SCCOL>(nCol1 + curRow - nRow1 - nFilteredRows + nRowDestOffset),
+                        static_cast<SCROW>(nCombinedStartRow + nCol - nCol1), pTransClip->nTab);
                     pTransClip->rDocument.ReleaseNote(aDestPos);
                     ScPostIt* pNote = *itData;
                     if (pNote)
@@ -1191,8 +1192,8 @@ void ScTable::TransposeColNotes(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol, SC
                     }
 
                     ScAddress aDestPos(
-                        static_cast<SCCOL>(curRow - nRow1 - nFilteredRows + nRowDestOffset),
-                        static_cast<SCROW>(nCol - nCol1), pTransClip->nTab);
+                        static_cast<SCCOL>(nCol1 + curRow - nRow1 - nFilteredRows + nRowDestOffset),
+                        static_cast<SCROW>(nCombinedStartRow + nCol - nCol1), pTransClip->nTab);
                     pTransClip->rDocument.ReleaseNote(aDestPos);
                     ScPostIt* pNote = *itData;
                     if (pNote)
@@ -1216,8 +1217,8 @@ void ScTable::TransposeColNotes(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol, SC
                 }
 
                 ScAddress aDestPos(
-                    static_cast<SCCOL>(curRow - nRow1 - nFilteredRows + nRowDestOffset),
-                    static_cast<SCROW>(nCol - nCol1), pTransClip->nTab);
+                    static_cast<SCCOL>(nCol1 + curRow - nRow1 - nFilteredRows + nRowDestOffset),
+                    static_cast<SCROW>(nCombinedStartRow + nCol - nCol1), pTransClip->nTab);
                 pTransClip->rDocument.ReleaseNote(aDestPos);
             }
         }
