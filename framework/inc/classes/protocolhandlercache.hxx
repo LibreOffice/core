@@ -20,6 +20,7 @@
 #pragma once
 
 #include <unordered_map>
+#include <optional>
 
 #include <com/sun/star/util/URL.hpp>
 
@@ -90,9 +91,9 @@ class HandlerCache final
     private:
 
         /// list of all registered handler registered by her uno implementation names
-        static std::unique_ptr<HandlerHash> s_pHandler;
+        static std::optional<HandlerHash> s_pHandler;
         /// maps URL pattern to handler names
-        static std::unique_ptr<PatternHash> s_pPattern;
+        static std::optional<PatternHash> s_pPattern;
         /// informs about config updates
         static HandlerCFGAccess* s_pConfig;
         /// ref count to construct/destruct internal member lists on demand by using singleton mechanism
@@ -107,7 +108,7 @@ class HandlerCache final
         bool search( const OUString& sURL, ProtocolHandler* pReturn ) const;
         bool search( const css::util::URL&  aURL, ProtocolHandler* pReturn ) const;
 
-        void takeOver(std::unique_ptr<HandlerHash> pHandler, std::unique_ptr<PatternHash> pPattern);
+        void takeOver(HandlerHash aHandler, PatternHash aPattern);
 };
 
 /**
