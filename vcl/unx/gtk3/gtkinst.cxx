@@ -966,6 +966,7 @@ void VclGtkClipboard::ClipboardGet(GtkSelectionData *selection_data, guint info)
 }
 #endif
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 namespace
 {
     const OString& getPID()
@@ -982,11 +983,7 @@ namespace
         }
         return sPID;
     }
-}
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-namespace
-{
     void ClipboardGetFunc(GdkClipboard* /*clipboard*/, GtkSelectionData *selection_data,
                           guint info,
                           gpointer user_data_or_owner)
@@ -1005,11 +1002,19 @@ namespace
 
 namespace
 {
+#if GTK_CHECK_VERSION(4, 0, 0)
+    void handle_owner_change(GdkClipboard *clipboard, gpointer user_data)
+    {
+        VclGtkClipboard* pThis = static_cast<VclGtkClipboard*>(user_data);
+        pThis->OwnerPossiblyChanged(clipboard);
+    }
+#else
     void handle_owner_change(GdkClipboard *clipboard, GdkEvent* /*event*/, gpointer user_data)
     {
         VclGtkClipboard* pThis = static_cast<VclGtkClipboard*>(user_data);
         pThis->OwnerPossiblyChanged(clipboard);
     }
+#endif
 }
 
 void VclGtkClipboard::OwnerPossiblyChanged(GdkClipboard* clipboard)
@@ -1032,7 +1037,6 @@ void VclGtkClipboard::OwnerPossiblyChanged(GdkClipboard* clipboard)
     //avoid possible recursion
     g_signal_handler_disconnect(clipboard, m_nOwnerChangedSignalId);
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     OString sTunnel = "application/x-libreoffice-internal-id-" + getPID();
     GdkAtom *targets;
     gint n_targets;
@@ -1050,15 +1054,9 @@ void VclGtkClipboard::OwnerPossiblyChanged(GdkClipboard* clipboard)
 
         g_free(targets);
     }
-#endif
 
-#if GTK_CHECK_VERSION(4, 0, 0)
-    m_nOwnerChangedSignalId = g_signal_connect(clipboard, "notify::formats",
-                                               G_CALLBACK(handle_owner_change), this);
-#else
     m_nOwnerChangedSignalId = g_signal_connect(clipboard, "owner-change",
                                                G_CALLBACK(handle_owner_change), this);
-#endif
 #endif
 
     if (!bSelf)
@@ -1292,7 +1290,7 @@ VclGtkClipboard::VclGtkClipboard(SelectionType eSelection)
 {
     GdkClipboard* clipboard = clipboard_get(m_eSelection);
 #if GTK_CHECK_VERSION(4, 0, 0)
-    m_nOwnerChangedSignalId = g_signal_connect(clipboard, "notify::formats",
+    m_nOwnerChangedSignalId = g_signal_connect(clipboard, "changed",
                                                G_CALLBACK(handle_owner_change), this);
 #else
     m_nOwnerChangedSignalId = g_signal_connect(clipboard, "owner-change",
@@ -1444,11 +1442,18 @@ static GdkContentFormats* clipboard_content_ref_formats(GdkContentProvider *prov
     return content->clipboard->ref_formats();
 }
 
+static void clipboard_content_detach_clipboard(GdkContentProvider *provider, GdkClipboard*)
+{
+    ClipboardContent *content = CLIPBOARD_CONTENT(provider);
+    return content->clipboard->ClipboardClear();
+}
+
 static void clipboard_content_class_init(ClipboardContentClass* klass)
 {
   GdkContentProviderClass *provider_class = GDK_CONTENT_PROVIDER_CLASS(klass);
 
   provider_class->ref_formats = clipboard_content_ref_formats;
+  provider_class->detach_clipboard = clipboard_content_detach_clipboard;
   provider_class->write_mime_type_async = clipboard_content_write_mime_type_async;
   provider_class->write_mime_type_finish = clipboard_content_write_mime_type_finish;
 }
@@ -1529,11 +1534,9 @@ void VclGtkClipboard::setContents(
 #endif
         if (!aGtkTargets.empty())
         {
-            OString sTunnel = "application/x-libreoffice-internal-id-" + getPID();
-#if GTK_CHECK_VERSION(4, 0, 0)
-            aGtkTargets.push_back(sTunnel);
-#else
+#if !GTK_CHECK_VERSION(4, 0, 0)
             GtkTargetEntry aEntry;
+            OString sTunnel = "application/x-libreoffice-internal-id-" + getPID();
             aEntry.target = g_strdup(sTunnel.getStr());
             aEntry.flags = 0;
             aEntry.info = 0;
