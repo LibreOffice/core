@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "914a2277_4771dc25",
+        "filename": "include/vcl/vclreferencebase.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-05-31T09:25:37Z",
+      "side": 1,
+      "message": "without this, I get\n/virdev.hxx:24:\nIn file included from /home/noel/libo/include/vcl/outdev.hxx:49:\n/home/noel/libo/include/vcl/vclreferencebase.hxx:30:20: error: no class named \u0027VclBuilder\u0027 in the global namespace\n    friend class ::VclBuilder; // needed by ::delete_by_window(vcl::Window *pWindow)\n                 ~~^",
+      "parentUuid": "c2171950_50325f20",
+      "range": {
+        "startLine": 25,
+        "startChar": 6,
+        "endLine": 25,
+        "endChar": 16
+      },
+      "revId": "d8ac295abc0fd1679d53b1de8b4d0a4560865542",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ebbfd820_6ae761d8",
         "filename": "include/vcl/vclreferencebase.hxx",
         "patchSetId": 7
@@ -36,6 +60,30 @@
       "writtenOn": "2021-05-29T05:52:39Z",
       "side": 1,
       "message": "May be restrict friendship to only the specific function?",
+      "range": {
+        "startLine": 32,
+        "startChar": 46,
+        "endLine": 32,
+        "endChar": 62
+      },
+      "revId": "d8ac295abc0fd1679d53b1de8b4d0a4560865542",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7f003a1_46cdf0d1",
+        "filename": "include/vcl/vclreferencebase.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-05-31T09:25:37Z",
+      "side": 1,
+      "message": "If I do that, I get\n:\nIn file included from /home/noel/libo/include/vcl/outdev.hxx:49:\n/home/noel/libo/include/vcl/vclreferencebase.hxx:32:14: error: incomplete type \u0027VclBuilder\u0027 named in nested name specifier\n    friend ::VclBuilder::delete_by_window(vcl::Window*); // needed by ::delete_by_window(vcl::Window *pWindow)\n           ~~^~~~~~~~~~~~",
+      "parentUuid": "ebbfd820_6ae761d8",
       "range": {
         "startLine": 32,
         "startChar": 46,
