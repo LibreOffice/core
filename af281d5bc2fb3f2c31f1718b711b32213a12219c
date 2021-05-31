@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1010c1ee_507f02fe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-05-31T13:45:34Z",
+      "side": 1,
+      "message": "(loplugin:stringviewparam doesn\u0027t report about functions that have conditional #if etc. in their definitions, that\u0027s why)",
+      "range": {
+        "startLine": 9,
+        "startChar": 4,
+        "endLine": 9,
+        "endChar": 57
+      },
+      "revId": "af281d5bc2fb3f2c31f1718b711b32213a12219c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
