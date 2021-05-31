@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b3c4d37b_94997b24",
+        "filename": "sfx2/source/commandpopup/CommandPopup.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-05-31T07:47:49Z",
+      "side": 1,
+      "message": "You call toUpper() inside toLower(), is that intentional?",
+      "revId": "a39947102bac8430b13b10b3f11c34b5ebf576b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
