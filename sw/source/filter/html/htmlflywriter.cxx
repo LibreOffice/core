@@ -1863,7 +1863,7 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
     if (xGraphic.is() && aMimeType.isEmpty())
         xGraphic->getPropertyValue("MimeType") >>= aMimeType;
 
-    if (rHTMLWrt.mbReqIF)
+    if (rHTMLWrt.mbReqIF && rHTMLWrt.m_bExportImagesAsOLE)
     {
         // Write the original image as an RTF fragment.
         OUString aFileName;
@@ -1893,7 +1893,7 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
     OutHTML_Image( rWrt, rFrameFormat, aGraphicURL, aGraphic, pGrfNd->GetTitle(),
                   pGrfNd->GetTwipSize(), nFrameFlags, "graphic", nullptr, aMimeType );
 
-    if (rHTMLWrt.mbReqIF)
+    if (rHTMLWrt.mbReqIF && rHTMLWrt.m_bExportImagesAsOLE)
         rWrt.Strm().WriteOString(OString("</" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object ">"));
 
     return rWrt;
