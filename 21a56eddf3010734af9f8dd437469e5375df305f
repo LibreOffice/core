@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0832ad6d_89da90e5",
+        "filename": "sw/inc/strings.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1032,
+      "author": {
+        "id": 1002975
+      },
+      "writtenOn": "2021-05-31T20:15:08Z",
+      "side": 1,
+      "message": "\"without style\" typically means something else, see:\nhttps://www.powerthesaurus.org/without_style/synonyms\n\nDo you believe \"unstyled\" is not clear enough?",
+      "parentUuid": "f9dd54d8_17c00b80",
+      "range": {
+        "startLine": 1032,
+        "startChar": 82,
+        "endLine": 1032,
+        "endChar": 90
+      },
+      "revId": "21a56eddf3010734af9f8dd437469e5375df305f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1341754d_50464db7",
         "filename": "sw/inc/strings.hrc",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "21a56eddf3010734af9f8dd437469e5375df305f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eeabde5d_81df5a34",
+        "filename": "sw/inc/strings.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1034,
+      "author": {
+        "id": 1002975
+      },
+      "writtenOn": "2021-05-31T20:15:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1341754d_50464db7",
+      "range": {
+        "startLine": 1034,
+        "startChar": 71,
+        "endLine": 1034,
+        "endChar": 72
+      },
+      "revId": "21a56eddf3010734af9f8dd437469e5375df305f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
