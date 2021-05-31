@@ -368,7 +368,7 @@ void BitmapCache::Recycle (const BitmapCache& rCache)
     }
 }
 
-::std::unique_ptr<BitmapCache::CacheIndex> BitmapCache::GetCacheIndex() const
+BitmapCache::CacheIndex BitmapCache::GetCacheIndex() const
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -392,11 +392,11 @@ void BitmapCache::Recycle (const BitmapCache& rCache)
     ::std::sort(aSortedContainer.begin(), aSortedContainer.end(), AccessTimeComparator());
 
     // Return a list with the keys of the sorted entries.
-    ::std::unique_ptr<CacheIndex> pIndex(new CacheIndex);
-    pIndex->reserve(aSortedContainer.size());
+    CacheIndex aIndex;
+    aIndex.reserve(aSortedContainer.size());
     for (const auto& rIndexEntry : aSortedContainer)
-        pIndex->push_back(rIndexEntry.first);
-    return pIndex;
+        aIndex.push_back(rIndexEntry.first);
+    return aIndex;
 }
 
 void BitmapCache::Compress (
