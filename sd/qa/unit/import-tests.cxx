@@ -1563,7 +1563,7 @@ void SdImportTest::testBulletSuffix()
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     const SvxNumBulletItem *pNumFmt = aEdit.GetParaAttribs(1).GetItem(EE_PARA_NUMBULLET);
     CPPUNIT_ASSERT(pNumFmt);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's suffix is wrong!", pNumFmt->GetNumRule()->GetLevel(0).GetSuffix(), OUString() );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's suffix is wrong!", pNumFmt->GetNumRule().GetLevel(0).GetSuffix(), OUString() );
     xDocShRef->DoClose();
 }
 
@@ -2255,7 +2255,7 @@ void SdImportTest::testTdf103477()
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     const SvxNumBulletItem *pNumFmt = aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET);
     CPPUNIT_ASSERT(pNumFmt);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's color is wrong!", Color(0x000000), pNumFmt->GetNumRule()->GetLevel(1).GetBulletColor());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's color is wrong!", Color(0x000000), pNumFmt->GetNumRule().GetLevel(1).GetBulletColor());
 
     xDocShRef->DoClose();
 }
@@ -2729,7 +2729,7 @@ void SdImportTest::testTdf108925()
 
     const SvxNumBulletItem *pNumFmt = aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET);
     CPPUNIT_ASSERT(pNumFmt);
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(25), pNumFmt->GetNumRule()->GetLevel(0).GetBulletRelSize());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(25), pNumFmt->GetNumRule().GetLevel(0).GetBulletRelSize());
 
     xDocShRef->DoClose();
 }
@@ -2807,7 +2807,7 @@ void SdImportTest::testTdf90626()
     {
         const SvxNumBulletItem *pNumFmt = aEdit.GetParaAttribs(i).GetItem(EE_PARA_NUMBULLET);
         CPPUNIT_ASSERT(pNumFmt);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(tools::Long(372), pNumFmt->GetNumRule()->GetLevel(0).GetGraphicSize().getHeight(), tools::Long(1));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(tools::Long(372), pNumFmt->GetNumRule().GetLevel(0).GetGraphicSize().getHeight(), tools::Long(1));
     }
 
     xDocShRef->DoClose();
@@ -2824,12 +2824,12 @@ void SdImportTest::testTdf138148()
     {
         const SvxNumBulletItem *pNumFmt = aEdit.GetParaAttribs(i).GetItem(EE_PARA_NUMBULLET);
         CPPUNIT_ASSERT(pNumFmt);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(tools::Long(444), pNumFmt->GetNumRule()->GetLevel(0).GetGraphicSize().getHeight(), tools::Long(1));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(tools::Long(444), pNumFmt->GetNumRule().GetLevel(0).GetGraphicSize().getHeight(), tools::Long(1));
 
         // Without the fix in place, this test would have failed with
         // - Expected: 148
         // - Actual  : 444
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(tools::Long(148), pNumFmt->GetNumRule()->GetLevel(0).GetGraphicSize().getWidth(), tools::Long(1));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(tools::Long(148), pNumFmt->GetNumRule().GetLevel(0).GetGraphicSize().getWidth(), tools::Long(1));
     }
 
     xDocShRef->DoClose();
@@ -2891,7 +2891,7 @@ void SdImportTest::testTdf114913()
     CPPUNIT_ASSERT_MESSAGE("No text object", pTxtObj != nullptr);
     const SvxNumBulletItem *pItem = pTxtObj->GetOutlinerParaObject()->GetTextObject().GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET);
     CPPUNIT_ASSERT(pItem);
-    CPPUNIT_ASSERT_EQUAL(tools::Long(692), pItem->GetNumRule()->GetLevel(0).GetGraphicSize().getHeight());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(692), pItem->GetNumRule().GetLevel(0).GetGraphicSize().getHeight());
 
     xDocShRef->DoClose();
 }
@@ -3069,9 +3069,9 @@ void SdImportTest::testTdf77747()
     CPPUNIT_ASSERT_MESSAGE("No text object", pTxtObj != nullptr);
     const SvxNumBulletItem *pNumFmt = pTxtObj->GetOutlinerParaObject()->GetTextObject().GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET);
     CPPUNIT_ASSERT(pNumFmt);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's suffix is wrong!", OUString("-"), pNumFmt->GetNumRule()->GetLevel(0).GetSuffix() );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's suffix is wrong!", OUString("-"), pNumFmt->GetNumRule().GetLevel(0).GetSuffix() );
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's numbering type is wrong!", SVX_NUM_NUMBER_HEBREW,
-            pNumFmt->GetNumRule()->GetLevel(0).GetNumberingType());
+            pNumFmt->GetNumRule().GetLevel(0).GetNumberingType());
 
     xDocShRef->DoClose();
 }
@@ -3381,7 +3381,7 @@ void SdImportTest::testTdf49856()
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     const SvxNumBulletItem *pNumFmt = aEdit.GetParaAttribs(2).GetItem(EE_PARA_NUMBULLET);
     CPPUNIT_ASSERT(pNumFmt);
-    const sal_UCS4 aBullet = pNumFmt->GetNumRule()->GetLevel(0).GetBulletChar();
+    const sal_UCS4 aBullet = pNumFmt->GetNumRule().GetLevel(0).GetBulletChar();
     CPPUNIT_ASSERT_EQUAL(OUString("More level 2"), aEdit.GetText(2));
     CPPUNIT_ASSERT_EQUAL(sal_UCS4(0x2022), aBullet);
 

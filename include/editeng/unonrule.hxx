@@ -32,7 +32,7 @@
 
 namespace com::sun::star::beans { struct PropertyValue; }
 
-EDITENG_DLLPUBLIC css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule(const SvxNumRule* pRule);
+EDITENG_DLLPUBLIC css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule(const SvxNumRule& rRule);
 css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule();
 /// @throws css::lang::IllegalArgumentException
 const SvxNumRule& SvxGetNumRule( css::uno::Reference< css::container::XIndexReplace > const & xRule );

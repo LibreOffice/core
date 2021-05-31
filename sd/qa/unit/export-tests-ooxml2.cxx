@@ -2831,7 +2831,7 @@ void SdOOXMLExportTest2::testTdf126234()
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     const SvxNumBulletItem *pNumFmt = aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET);
     CPPUNIT_ASSERT(pNumFmt);
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(400), pNumFmt->GetNumRule()->GetLevel(0).GetBulletRelSize());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(400), pNumFmt->GetNumRule().GetLevel(0).GetBulletRelSize());
 
     xDocShRef->DoClose();
 }

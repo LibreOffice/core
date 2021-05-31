@@ -463,7 +463,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
 
                         if (pItem )
                         {
-                            SvxNumRule aNewRule(*pItem->GetNumRule());
+                            SvxNumRule aNewRule(pItem->GetNumRule());
                             ESelection aSel = pOLV->GetSelection();
                             aSel.Adjust();
                             sal_Int32 nStartPara = aSel.nStartPara;

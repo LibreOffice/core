@@ -638,6 +638,21 @@ SvxNumRule::SvxNumRule(const SvxNumRule& rCopy)
     }
 }
 
+SvxNumRule::SvxNumRule(SvxNumRule&& rCopy)
+{
+    ++nRefCount;
+    nLevelCount          = rCopy.nLevelCount         ;
+    nFeatureFlags        = rCopy.nFeatureFlags       ;
+    bContinuousNumbering = rCopy.bContinuousNumbering;
+    eNumberingType       = rCopy.eNumberingType;
+    for(sal_uInt16 i = 0; i < SVX_MAX_NUM; i++)
+    {
+        if(rCopy.aFmts[i])
+            aFmts[i] = std::move(rCopy.aFmts[i]);
+        aFmtsSet[i] = rCopy.aFmtsSet[i];
+    }
+}
+
 SvxNumRule::SvxNumRule( SvStream &rStream )
     : nLevelCount(0)
 {
@@ -753,6 +768,24 @@ SvxNumRule& SvxNumRule::operator=( const SvxNumRule& rCopy )
                 aFmts[i].reset( new SvxNumberFormat(*rCopy.aFmts[i]) );
             else
                 aFmts[i].reset();
+            aFmtsSet[i] = rCopy.aFmtsSet[i];
+        }
+    }
+    return *this;
+}
+
+SvxNumRule& SvxNumRule::operator=( SvxNumRule&& rCopy )
+{
+    if (this != &rCopy)
+    {
+        nLevelCount          = rCopy.nLevelCount;
+        nFeatureFlags        = rCopy.nFeatureFlags;
+        bContinuousNumbering = rCopy.bContinuousNumbering;
+        eNumberingType       = rCopy.eNumberingType;
+        for(sal_uInt16 i = 0; i < SVX_MAX_NUM; i++)
+        {
+            if(rCopy.aFmts[i])
+                aFmts[i] = std::move(rCopy.aFmts[i]);
             aFmtsSet[i] = rCopy.aFmtsSet[i];
         }
     }
@@ -927,19 +960,19 @@ void SvxNumRule::UnLinkGraphics()
 
 SvxNumBulletItem::SvxNumBulletItem(SvxNumRule const & rRule) :
     SfxPoolItem(SID_ATTR_NUMBERING_RULE),
-    pNumRule(new SvxNumRule(rRule))
+    maNumRule(rRule)
 {
 }
 
 SvxNumBulletItem::SvxNumBulletItem(SvxNumRule const & rRule, sal_uInt16 _nWhich ) :
     SfxPoolItem(_nWhich),
-    pNumRule(new SvxNumRule(rRule))
+    maNumRule(rRule)
 {
 }
 
 SvxNumBulletItem::SvxNumBulletItem(const SvxNumBulletItem& rCopy) :
     SfxPoolItem(rCopy),
-    pNumRule(new SvxNumRule(*rCopy.pNumRule))
+    maNumRule(rCopy.maNumRule)
 {
 }
 
@@ -950,7 +983,7 @@ SvxNumBulletItem::~SvxNumBulletItem()
 bool SvxNumBulletItem::operator==( const SfxPoolItem& rCopy) const
 {
     return SfxPoolItem::operator==(rCopy) &&
-        *pNumRule == *static_cast<const SvxNumBulletItem&>(rCopy).pNumRule;
+        maNumRule == static_cast<const SvxNumBulletItem&>(rCopy).maNumRule;
 }
 
 SvxNumBulletItem* SvxNumBulletItem::Clone( SfxItemPool * ) const
@@ -960,7 +993,7 @@ SvxNumBulletItem* SvxNumBulletItem::Clone( SfxItemPool * ) const
 
 bool SvxNumBulletItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
-    rVal <<= SvxCreateNumRule( pNumRule.get() );
+    rVal <<= SvxCreateNumRule( maNumRule );
     return true;
 }
 
@@ -971,14 +1004,13 @@ bool SvxNumBulletItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberI
     {
         try
         {
-            std::unique_ptr<SvxNumRule> pNewRule(new SvxNumRule( SvxGetNumRule( xRule ) ));
-            if( pNewRule->GetLevelCount() != pNumRule->GetLevelCount() ||
-                pNewRule->GetNumRuleType() != pNumRule->GetNumRuleType() )
+            SvxNumRule aNewRule( SvxGetNumRule( xRule ) );
+            if( aNewRule.GetLevelCount() != maNumRule.GetLevelCount() ||
+                aNewRule.GetNumRuleType() != maNumRule.GetNumRuleType() )
             {
-                std::unique_ptr<SvxNumRule> pConverted = SvxConvertNumRule( pNewRule.get(), pNumRule->GetLevelCount(), pNumRule->GetNumRuleType() );
-                pNewRule = std::move(pConverted);
+                aNewRule = SvxConvertNumRule( aNewRule, maNumRule.GetLevelCount(), maNumRule.GetNumRuleType() );
             }
-            pNumRule = std::move( pNewRule );
+            maNumRule = std::move( aNewRule );
             return true;
         }
         catch(const lang::IllegalArgumentException&)
@@ -992,19 +1024,19 @@ void SvxNumBulletItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SvxNumBulletItem"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    pNumRule->dumpAsXml(pWriter);
+    maNumRule.dumpAsXml(pWriter);
     (void)xmlTextWriterEndElement(pWriter);
 }
 
-std::unique_ptr<SvxNumRule> SvxConvertNumRule( const SvxNumRule* pRule, sal_uInt16 nLevels, SvxNumRuleType eType )
+SvxNumRule SvxConvertNumRule( const SvxNumRule& rRule, sal_uInt16 nLevels, SvxNumRuleType eType )
 {
-    const sal_uInt16 nSrcLevels = pRule->GetLevelCount();
-    std::unique_ptr<SvxNumRule> pNewRule(new SvxNumRule( pRule->GetFeatureFlags(), nLevels, pRule->IsContinuousNumbering(), eType ));
+    const sal_uInt16 nSrcLevels = rRule.GetLevelCount();
+    SvxNumRule aNewRule(rRule.GetFeatureFlags(), nLevels, rRule.IsContinuousNumbering(), eType );
 
     for( sal_uInt16 nLevel = 0; (nLevel < nLevels) && (nLevel < nSrcLevels); nLevel++ )
-        pNewRule->SetLevel( nLevel, pRule->GetLevel( nLevel ) );
+        aNewRule.SetLevel( nLevel, rRule.GetLevel( nLevel ) );
 
-    return pNewRule;
+    return aNewRule;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

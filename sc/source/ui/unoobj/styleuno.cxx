@@ -1114,7 +1114,7 @@ void SAL_CALL ScStyleObj::setName( const OUString& aNewName )
 uno::Reference<container::XIndexReplace> ScStyleObj::CreateEmptyNumberingRules()
 {
     SvxNumRule aRule( SvxNumRuleFlags::NONE, 0, true );         // nothing supported
-    return SvxCreateNumRule( &aRule );
+    return SvxCreateNumRule( aRule );
 }
 
 // beans::XPropertyState

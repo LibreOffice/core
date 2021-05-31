@@ -407,7 +407,7 @@ void SdOOXMLExportTest1::testN828390_5()
         CPPUNIT_ASSERT( pTxtObj );
         const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
         const SvxNumBulletItem& rNumFmt = aEdit.GetParaAttribs(3).Get(EE_PARA_NUMBULLET);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's relative size is wrong!", sal_uInt16(75), rNumFmt.GetNumRule()->GetLevel(1).GetBulletRelSize() ); // != 25
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's relative size is wrong!", sal_uInt16(75), rNumFmt.GetNumRule().GetLevel(1).GetBulletRelSize() ); // != 25
     }
 
     xDocShRef->DoClose();
@@ -724,7 +724,7 @@ void SdOOXMLExportTest1::testBulletStartNumber()
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     const SvxNumBulletItem *pNumFmt = aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET);
     CPPUNIT_ASSERT(pNumFmt);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's start number is wrong!", sal_Int16(3), sal_Int16(pNumFmt->GetNumRule()->GetLevel(0).GetStart()) );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's start number is wrong!", sal_Int16(3), sal_Int16(pNumFmt->GetNumRule().GetLevel(0).GetStart()) );
     xDocShRef->DoClose();
 }
 
@@ -828,7 +828,7 @@ void SdOOXMLExportTest1::testBulletColor()
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     const SvxNumBulletItem *pNumFmt = aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET);
     CPPUNIT_ASSERT(pNumFmt);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's color is wrong!", Color(0xff0000),pNumFmt->GetNumRule()->GetLevel(0).GetBulletColor());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's color is wrong!", Color(0xff0000),pNumFmt->GetNumRule().GetLevel(0).GetBulletColor());
 
     xDocShRef->DoClose();
 }
@@ -874,8 +874,8 @@ void SdOOXMLExportTest1::testBulletMarginAndIndentation()
     const SvxNumBulletItem *pNumFmt = aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET);
     CPPUNIT_ASSERT(pNumFmt);
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's left margin is wrong!", sal_Int32(1000),pNumFmt->GetNumRule()->GetLevel(0).GetAbsLSpace() ); // left margin is 0.79 cm
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's indentation is wrong!", sal_Int32(-1000),pNumFmt->GetNumRule()->GetLevel(0). GetFirstLineOffset());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's left margin is wrong!", sal_Int32(1000),pNumFmt->GetNumRule().GetLevel(0).GetAbsLSpace() ); // left margin is 0.79 cm
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's indentation is wrong!", sal_Int32(-1000),pNumFmt->GetNumRule().GetLevel(0). GetFirstLineOffset());
 
     xDocShRef->DoClose();
 }

@@ -1389,8 +1389,8 @@ const SvxNumberFormat* Outliner::GetNumberFormat( sal_Int32 nPara ) const
     if( nDepth >= 0 )
     {
         const SvxNumBulletItem& rNumBullet = pEditEngine->GetParaAttrib( nPara, EE_PARA_NUMBULLET );
-        if ( rNumBullet.GetNumRule()->GetLevelCount() > nDepth )
-            pFmt = rNumBullet.GetNumRule()->Get( nDepth );
+        if ( rNumBullet.GetNumRule().GetLevelCount() > nDepth )
+            pFmt = rNumBullet.GetNumRule().Get( nDepth );
     }
 
     return pFmt;

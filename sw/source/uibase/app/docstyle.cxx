@@ -1640,10 +1640,10 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                 {
                 case SfxItemState::SET:
                 {
-                    SvxNumRule* pSetRule = static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule();
-                    pSetRule->UnLinkGraphics();
+                    SvxNumRule& rSetRule = const_cast<SvxNumRule&>(static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule());
+                    rSetRule.UnLinkGraphics();
                     SwNumRule aSetRule(*m_pNumRule);
-                    aSetRule.SetSvxRule(*pSetRule, &m_rDoc);
+                    aSetRule.SetSvxRule(rSetRule, &m_rDoc);
                     m_rDoc.ChgNumRuleFormats( aSetRule );
                 }
                 break;

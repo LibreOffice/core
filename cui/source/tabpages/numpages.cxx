@@ -239,7 +239,7 @@ void  SvxSingleNumPickTabPage::ActivatePage(const SfxItemSet& rSet)
     }
     if(SfxItemState::SET == rSet.GetItemState(nNumItemId, false, &pItem))
     {
-        pSaveNum.reset( new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
+        pSaveNum.reset( new SvxNumRule(static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
     }
     if(pActNum && *pSaveNum != *pActNum)
     {
@@ -283,7 +283,7 @@ void  SvxSingleNumPickTabPage::Reset( const SfxItemSet* rSet )
         }
     }
     DBG_ASSERT(eState == SfxItemState::SET, "no item found!");
-    pSaveNum.reset( new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
+    pSaveNum.reset( new SvxNumRule(static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
 
     if(!pActNum)
         pActNum.reset( new SvxNumRule(*pSaveNum) );
@@ -390,7 +390,7 @@ void  SvxBulletPickTabPage::ActivatePage(const SfxItemSet& rSet)
     }
     if(SfxItemState::SET == rSet.GetItemState(nNumItemId, false, &pItem))
     {
-        pSaveNum.reset( new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
+        pSaveNum.reset( new SvxNumRule(static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
     }
     if(pActNum && *pSaveNum != *pActNum)
     {
@@ -433,7 +433,7 @@ void  SvxBulletPickTabPage::Reset( const SfxItemSet* rSet )
 
     }
     DBG_ASSERT(eState == SfxItemState::SET, "no item found!");
-    pSaveNum.reset( new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
+    pSaveNum.reset( new SvxNumRule(static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
 
     if(!pActNum)
         pActNum.reset( new SvxNumRule(*pSaveNum) );
@@ -573,7 +573,7 @@ void  SvxNumPickTabPage::ActivatePage(const SfxItemSet& rSet)
     }
     if(SfxItemState::SET == rSet.GetItemState(nNumItemId, false, &pItem))
     {
-        pSaveNum.reset( new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
+        pSaveNum.reset( new SvxNumRule(static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
     }
     if(pActNum && *pSaveNum != *pActNum)
     {
@@ -616,7 +616,7 @@ void  SvxNumPickTabPage::Reset( const SfxItemSet* rSet )
 
     }
     DBG_ASSERT(eState == SfxItemState::SET, "no item found!");
-    pSaveNum.reset( new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
+    pSaveNum.reset( new SvxNumRule(static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
 
     if(!pActNum)
         pActNum.reset( new SvxNumRule(*pSaveNum) );
@@ -801,7 +801,7 @@ void  SvxBitmapPickTabPage::ActivatePage(const SfxItemSet& rSet)
     }
     if(SfxItemState::SET == rSet.GetItemState(nNumItemId, false, &pItem))
     {
-        pSaveNum.reset( new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
+        pSaveNum.reset( new SvxNumRule(static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
     }
     if(pActNum && *pSaveNum != *pActNum)
     {
@@ -861,7 +861,7 @@ void  SvxBitmapPickTabPage::Reset( const SfxItemSet* rSet )
 
     }
     DBG_ASSERT(eState == SfxItemState::SET, "no item found!");
-    pSaveNum.reset( new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
+    pSaveNum.reset( new SvxNumRule(static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
 
     if(!pActNum)
         pActNum.reset( new SvxNumRule(*pSaveNum) );
@@ -1148,7 +1148,7 @@ void    SvxNumOptionsTabPage::ActivatePage(const SfxItemSet& rSet)
     }
     if(SfxItemState::SET == rSet.GetItemState(nNumItemId, false, &pItem))
     {
-        pSaveNum.reset( new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
+        pSaveNum.reset( new SvxNumRule(static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
     }
 
     bModified = (!pActNum->Get( 0 ) || bPreset);
@@ -1211,7 +1211,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet* rSet )
 
     }
     DBG_ASSERT(eState == SfxItemState::SET, "no item found!");
-    pSaveNum.reset( new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
+    pSaveNum.reset( new SvxNumRule(static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
 
     // insert levels
     if (!m_xLevelLB->n_children())
@@ -2758,7 +2758,7 @@ void SvxNumPositionTabPage::ActivatePage(const SfxItemSet& rSet)
     }
     if(SfxItemState::SET == rSet.GetItemState(nNumItemId, false, &pItem))
     {
-        pSaveNum.reset( new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
+        pSaveNum.reset( new SvxNumRule(static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
     }
     bModified = (!pActNum->Get( 0 ) || bPreset);
     if(*pSaveNum != *pActNum ||
@@ -2831,7 +2831,7 @@ void SvxNumPositionTabPage::Reset( const SfxItemSet* rSet )
 
     }
     DBG_ASSERT(eState == SfxItemState::SET, "no item found!");
-    pSaveNum.reset( new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
+    pSaveNum.reset( new SvxNumRule(static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
 
     // insert levels
     if (!m_xLevelLB->count_selected_rows())
