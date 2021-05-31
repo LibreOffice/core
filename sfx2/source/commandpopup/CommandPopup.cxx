@@ -155,7 +155,7 @@ OUString MenuContentHandler::toLower(OUString const& rString)
 {
     const css::lang::Locale& rLocale = Application::GetSettings().GetUILanguageTag().getLocale();
 
-    return m_xCharacterClassification->toUpper(rString, 0, rString.getLength(), rLocale);
+    return m_xCharacterClassification->toLower(rString, 0, rString.getLength(), rLocale);
 }
 
 CommandListBox::CommandListBox(weld::Window* pParent, uno::Reference<frame::XFrame> const& xFrame)
