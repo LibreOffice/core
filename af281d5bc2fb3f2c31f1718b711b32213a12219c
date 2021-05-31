@@ -46,6 +46,30 @@
       "revId": "af281d5bc2fb3f2c31f1718b711b32213a12219c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2acf535d_fecd3aa8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-05-31T13:59:12Z",
+      "side": 1,
+      "message": "For a given function parameter, that plugin looks at all the uses that it can see (and it can\u0027t see any in disabled #if branches) and decides whether all those uses would still be ok if the parameter were of string_view type.  The plugin tries to be conservative, and e.g. assumes that there would be problematic uses in disabled #if branches.",
+      "parentUuid": "b8265a18_d2ffa0df",
+      "range": {
+        "startLine": 9,
+        "startChar": 4,
+        "endLine": 9,
+        "endChar": 57
+      },
+      "revId": "af281d5bc2fb3f2c31f1718b711b32213a12219c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
