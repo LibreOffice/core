@@ -42,6 +42,7 @@
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 
 #include <memory>
+#include <optional>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <sal/log.hxx>
@@ -2120,7 +2121,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                         {
                             // create a stream to write the manifest file - use a temp file
                             OUString aURL( aNewSubFolder.getURL() );
-                            std::unique_ptr< ::utl::TempFile> pTempFile(new ::utl::TempFile( &aURL ));
+                            std::optional< ::utl::TempFile> pTempFile(&aURL );
 
                             // get the stream from the temp file and create an output stream wrapper
                             SvStream* pStream = pTempFile->GetStream( StreamMode::STD_READWRITE );
