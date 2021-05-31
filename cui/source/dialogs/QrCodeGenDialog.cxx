@@ -98,11 +98,9 @@ OString ConvertToSVGFormat(const ZXing::BitMatrix& bitmatrix)
     sb.append("\"/>\n</svg>");
     return sb.toString();
 }
-#endif
 
 OString GenerateQRCode(const OUString& aQRText, tools::Long aQRECC, int aQRBorder)
 {
-#if ENABLE_ZXING
     // Associated ZXing error correction levels (0-8) to our constants arbitrarily.
     int bqrEcc = 1;
 
@@ -137,14 +135,10 @@ OString GenerateQRCode(const OUString& aQRText, tools::Long aQRECC, int aQRBorde
     writer.setEncoding(ZXing::CharacterSet::UTF8);
     ZXing::BitMatrix bitmatrix = writer.encode(ZXing::TextUtfEncoding::FromUtf8(QRText), 0, 0);
     return ConvertToSVGFormat(bitmatrix);
-#else
-    (void)aQRText;
-    (void)aQRECC;
-    (void)aQRBorder;
-    return OString();
+}
 #endif
-}
-}
+
+} // anonymous namespace
 
 QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<XModel> xModel,
                                  bool bEditExisting)
