@@ -8,6 +8,7 @@ def main(argv):
     inputdir = ''
     outputdir = ''
     extracted_files_dir_by_user = ''
+    extracted_files_dir = ''
 
     #read the arguments
     try:
@@ -34,23 +35,27 @@ def main(argv):
         # use default directory path for extracted ooxml files.
         extracted_files_dir = os.path.join(outputdir, 'extractedfiles')
         extract_files(inputdir, extracted_files_dir)
-
-        # create seperate result files for each ooxml document as <document name>.result in output directory
-        for ext_dir in get_list_of_subdir(extracted_files_dir):
-            i = ext_dir.rfind('/')
-            sub_result_name = ext_dir[i+1:] + ".result"
-            sub_result_list = []
-            count_elements(ext_dir, sub_result_list)
-            sub_result_path = os.path.join(outputdir, sub_result_name)
-
-            # sort the result sub list according to tag names
-            sub_result_list = sorted(sub_result_list, key=lambda x: list(x[0].keys())[0], reverse=False)
-
-            with open(sub_result_path, "w") as log_file:
-                pprint.pprint(sub_result_list, log_file)
     else:
         # use user defined directory path for extracted ooxml files.
-        count_elements(extracted_files_dir_by_user, result_list)
+        extracted_files_dir = extracted_files_dir_by_user
+
+    # create seperate result files for each ooxml document as <document name>.result in output directory
+    for ext_dir in get_list_of_subdir(extracted_files_dir):
+        i = ext_dir.rfind('/')
+        sub_result_name = ext_dir[i+1:] + ".result"
+        sub_result_list = []
+        count_elements(ext_dir, sub_result_list)
+        sub_result_path = os.path.join(outputdir, sub_result_name)
+
+        # sort the result sub list according to tag names
+        sub_result_list = sorted(sub_result_list, key=lambda x: list(x[0].keys())[0], reverse=False)
+
+        if os.path.exists(sub_result_path):
+            os.remove(sub_result_path)
+        for i in sub_result_list:
+            with open(sub_result_path, "a") as log_file:
+                print(i, file=log_file)
+                log_file.close()
 
 # unzip all ooxml files into the given path
 def extract_files(inputdir, extracted_files_dir):
@@ -154,7 +159,8 @@ def count_elements(extracted_files_dir, result_list):
                 else:
                     result_list[tag_idx][2][attr_value] +=1
 
-            if not (str(child.text) == "None"):
+            # count text contents except consisted of whitespaces.
+            if not (str(child.text) == "None" or str(child.text).strip()==""):
                 if not child.text in result_list[tag_idx][3].keys():
                     result_list[tag_idx][3][child.text] = 1
                 else:
