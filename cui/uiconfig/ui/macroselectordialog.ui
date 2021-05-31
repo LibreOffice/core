@@ -241,7 +241,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="macroselectordialog|macronameft">Macro Name</property>
-                        <property name="track_visited_links">False</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>

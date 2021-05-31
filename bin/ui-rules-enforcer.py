@@ -192,6 +192,21 @@ def remove_check_button_align(current):
         raise Exception(sys.argv[1] + ': non-default yalign', yalign.text)
       current.remove(yalign)
 
+def remove_track_visited_links(current):
+  track_visited_links = None
+  islabel = current.get('class') == "GtkLabel"
+  for child in current:
+    remove_track_visited_links(child)
+    if not islabel:
+        continue
+    if child.tag == "property":
+      attributes = child.attrib
+      if attributes.get("name") == "track_visited_links" or attributes.get("name") == "track-visited-links":
+        track_visited_links = child
+
+  if track_visited_links != None:
+    current.remove(track_visited_links)
+
 with open(sys.argv[1], encoding="utf-8") as f:
   header = f.readline()
   f.seek(0)
@@ -212,6 +227,7 @@ if not sys.argv[1].endswith('/multiline.ui'): # let this one alone not truncate 
 replace_button_use_stock(root)
 replace_image_stock(root)
 remove_check_button_align(root)
+remove_track_visited_links(root)
 
 with open(sys.argv[1], 'wb') as o:
   # without encoding='unicode' (and the matching encode("utf8")) we get &#XXXX replacements for non-ascii characters
