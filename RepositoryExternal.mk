@@ -3869,7 +3869,7 @@ define gb_Executable__register_climaker
 $(call gb_Executable_add_runtime_dependencies,climaker,\
 	$(call gb_Library_get_target_for_build,$(CPPU_ENV_FOR_BUILD)_uno) \
 	$(INSTROOT_FOR_BUILD)/$(LIBO_URE_MISC_FOLDER)/services.rdb \
-	$(call gb_UnoApi_get_target,udkapi) \
+	$(call gb_UnoApi_get_target_for_build,udkapi) \
 	$(INSTROOT_FOR_BUILD)/$(LIBO_URE_ETC_FOLDER)/$(call gb_Helper_get_rcfile,uno)
 )
 endef
@@ -3893,8 +3893,8 @@ $(call gb_Executable_add_runtime_dependencies,gengal,\
 	$(INSTROOT_FOR_BUILD)/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,louno) \
 	$(INSTROOT_FOR_BUILD)/$(LIBO_URE_MISC_FOLDER)/services.rdb \
 	$(INSTROOT_FOR_BUILD)/$(LIBO_ETC_FOLDER)/services/services.rdb \
-	$(call gb_UnoApi_get_target,offapi) \
-	$(call gb_UnoApi_get_target,udkapi) \
+	$(call gb_UnoApi_get_target_for_build,offapi) \
+	$(call gb_UnoApi_get_target_for_build,udkapi) \
 )
 endef
 
@@ -3932,7 +3932,7 @@ $(call gb_Executable_add_runtime_dependencies,saxparser,\
 	$(call gb_Package_get_target_for_build,instsetoo_native_setup_ure) \
 	$(call gb_Rdb_get_target_for_build,saxparser) \
 	$(INSTROOT_FOR_BUILD)/$(LIBO_URE_MISC_FOLDER_FOR_BUILD)/services.rdb \
-	$(call gb_UnoApi_get_target,udkapi) \
+	$(call gb_UnoApi_get_target_for_build,udkapi) \
 )
 endef
 
@@ -3943,7 +3943,7 @@ define gb_Executable__register_uno
 $(call gb_Executable_add_runtime_dependencies,uno,\
 	$(call gb_Library_get_target_for_build,$(CPPU_ENV_FOR_BUILD)_uno) \
 	$(INSTROOT_FOR_BUILD)/$(LIBO_URE_MISC_FOLDER)/services.rdb \
-	$(call gb_UnoApi_get_target,udkapi) \
+	$(call gb_UnoApi_get_target_for_build,udkapi) \
 )
 endef
 
