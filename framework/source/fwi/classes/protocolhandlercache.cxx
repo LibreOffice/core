@@ -68,8 +68,8 @@ PatternHash::const_iterator findPatternKey(PatternHash const * hash, const OUStr
                 That means it use two static member list to hold all necessary information
                 and a ref count mechanism to create/destroy it on demand.
  */
-std::unique_ptr<HandlerHash> HandlerCache::s_pHandler;
-std::unique_ptr<PatternHash> HandlerCache::s_pPattern;
+std::optional<HandlerHash> HandlerCache::s_pHandler;
+std::optional<PatternHash> HandlerCache::s_pPattern;
 sal_Int32    HandlerCache::m_nRefCount = 0;
 HandlerCFGAccess* HandlerCache::s_pConfig = nullptr;
 
@@ -86,8 +86,8 @@ HandlerCache::HandlerCache()
 
     if (m_nRefCount==0)
     {
-        s_pHandler.reset(new HandlerHash);
-        s_pPattern.reset(new PatternHash);
+        s_pHandler.emplace();
+        s_pPattern.emplace();
         s_pConfig = new HandlerCFGAccess(PACKAGENAME_PROTOCOLHANDLER);
         s_pConfig->read(*s_pHandler, *s_pPattern);
         s_pConfig->setCache(this);
@@ -129,7 +129,7 @@ bool HandlerCache::search( const OUString& sURL, ProtocolHandler* pReturn ) cons
 
     SolarMutexGuard aGuard;
 
-    PatternHash::const_iterator pItem = findPatternKey(s_pPattern.get(), sURL);
+    PatternHash::const_iterator pItem = findPatternKey(s_pPattern ? &*s_pPattern : nullptr, sURL);
     if (pItem != s_pPattern->end())
     {
         *pReturn = (*s_pHandler)[pItem->second];
@@ -150,12 +150,12 @@ bool HandlerCache::search( const css::util::URL& aURL, ProtocolHandler* pReturn 
     return search( aURL.Complete, pReturn );
 }
 
-void HandlerCache::takeOver(std::unique_ptr<HandlerHash> pHandler, std::unique_ptr<PatternHash> pPattern)
+void HandlerCache::takeOver(HandlerHash aHandler, PatternHash aPattern)
 {
     SolarMutexGuard aGuard;
 
-    s_pHandler = std::move(pHandler);
-    s_pPattern = std::move(pPattern);
+    s_pHandler = std::move(aHandler);
+    s_pPattern = std::move(aPattern);
 }
 
 /**
@@ -240,12 +240,12 @@ void HandlerCFGAccess::read( HandlerHash& rHandlerHash, PatternHash& rPatternHas
 
 void HandlerCFGAccess::Notify(const css::uno::Sequence< OUString >& /*lPropertyNames*/)
 {
-    std::unique_ptr<HandlerHash> pHandler(new HandlerHash);
-    std::unique_ptr<PatternHash> pPattern(new PatternHash);
+    HandlerHash aHandler;
+    PatternHash aPattern;
 
-    read(*pHandler, *pPattern);
+    read(aHandler, aPattern);
     if (m_pCache)
-        m_pCache->takeOver(std::move(pHandler), std::move(pPattern));
+        m_pCache->takeOver(std::move(aHandler), std::move(aPattern));
 }
 
 void HandlerCFGAccess::ImplCommit()
