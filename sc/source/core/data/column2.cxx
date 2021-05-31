@@ -391,9 +391,9 @@ tools::Long ScColumn::GetNeededSize(
         std::unique_ptr<SfxItemSet> pSet(new SfxItemSet( pEngine->GetEmptyItemSet() ));
         if ( ScStyleSheet* pPreviewStyle = rDocument.GetPreviewCellStyle( nCol, nRow, nTab ) )
         {
-            std::unique_ptr<ScPatternAttr> pPreviewPattern(new ScPatternAttr( *pPattern ));
-            pPreviewPattern->SetStyleSheet(pPreviewStyle);
-            pPreviewPattern->FillEditItemSet( pSet.get(), pCondSet );
+            ScPatternAttr aPreviewPattern( *pPattern );
+            aPreviewPattern.SetStyleSheet(pPreviewStyle);
+            aPreviewPattern.FillEditItemSet( pSet.get(), pCondSet );
         }
         else
         {

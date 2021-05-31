@@ -1529,12 +1529,11 @@ void ScAttrArray::RemoveAreaMerge(SCROW nStartRow, SCROW nEndRow)
             for (SCROW nThisRow = nThisStart; nThisRow <= nThisEnd; nThisRow++)
                 rDocument.ApplyAttr( nThisCol, nThisRow, nTab, *pAttr );
 
-            std::unique_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr( rDocument.GetPool() ));
-            SfxItemSet*     pSet = &pNewPattern->GetItemSet();
+            ScPatternAttr aNewPattern( rDocument.GetPool() );
+            SfxItemSet*     pSet = &aNewPattern.GetItemSet();
             pSet->Put( *pFlagAttr );
             rDocument.ApplyPatternAreaTab( nThisCol, nThisStart, nMergeEndCol, nMergeEndRow,
-                                                nTab, *pNewPattern );
-            pNewPattern.reset();
+                                                nTab, aNewPattern );
 
             Search( nThisEnd, nIndex );    // data changed
         }
@@ -1819,15 +1818,14 @@ void ScAttrArray::FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, ScFlatBo
 
             if (bReset)
             {
-                std::unique_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr(*mvData[nPos].pPattern));
+                ScPatternAttr aNewPattern(*mvData[nPos].pPattern);
                 rDocument.GetPool()->Remove(*mvData[nPos].pPattern);
-                pNewPattern->SetStyleSheet( static_cast<ScStyleSheet*>(
+                aNewPattern.SetStyleSheet( static_cast<ScStyleSheet*>(
                     rDocument.GetStyleSheetPool()->
                         Find( ScResId(STR_STYLENAME_STANDARD),
                               SfxStyleFamily::Para,
                               SfxStyleSearchBits::Auto | SfxStyleSearchBits::ScStandard ) ) );
-                mvData[nPos].pPattern = &rDocument.GetPool()->Put(*pNewPattern);
-                pNewPattern.reset();
+                mvData[nPos].pPattern = &rDocument.GetPool()->Put(aNewPattern);
 
                 if (Concat(nPos))
                 {
@@ -2427,20 +2425,20 @@ void ScAttrArray::CopyArea(
             }
             else if ( nStripFlags != ScMF::NONE )
             {
-                std::unique_ptr<ScPatternAttr> pTmpPattern(new ScPatternAttr( *pOldPattern ));
+                ScPatternAttr aTmpPattern( *pOldPattern );
                 ScMF nNewFlags = ScMF::NONE;
                 if ( nStripFlags != ScMF::All )
-                    nNewFlags = pTmpPattern->GetItem(ATTR_MERGE_FLAG).GetValue() & ~nStripFlags;
+                    nNewFlags = aTmpPattern.GetItem(ATTR_MERGE_FLAG).GetValue() & ~nStripFlags;
 
                 if ( nNewFlags != ScMF::NONE )
-                    pTmpPattern->GetItemSet().Put( ScMergeFlagAttr( nNewFlags ) );
+                    aTmpPattern.GetItemSet().Put( ScMergeFlagAttr( nNewFlags ) );
                 else
-                    pTmpPattern->GetItemSet().ClearItem( ATTR_MERGE_FLAG );
+                    aTmpPattern.GetItemSet().ClearItem( ATTR_MERGE_FLAG );
 
                 if (bSamePool)
-                    pNewPattern = &pDestDocPool->Put(*pTmpPattern);
+                    pNewPattern = &pDestDocPool->Put(aTmpPattern);
                 else
-                    pNewPattern = pTmpPattern->PutInPool( &rAttrArray.rDocument, &rDocument );
+                    pNewPattern = aTmpPattern.PutInPool( &rAttrArray.rDocument, &rDocument );
             }
             else
             {
