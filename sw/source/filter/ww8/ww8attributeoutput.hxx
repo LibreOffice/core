@@ -188,6 +188,10 @@ public:
     /// Definition of a numbering instance.
     virtual void NumberingDefinition( sal_uInt16 nId, const SwNumRule &rRule ) override;
 
+    virtual void OverrideNumberingDefinition(SwNumRule const&, sal_uInt16 nNum,
+                                             sal_uInt16 nAbstractNum,
+                                             const std::map<size_t, size_t>& rLevelOverrides) override;
+
     /// All the numbering level information.
     virtual void NumberingLevel( sal_uInt8 nLevel,
         sal_uInt16 nStart,

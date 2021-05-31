@@ -209,6 +209,14 @@ void WW8AttributeOutput::NumberingDefinition( sal_uInt16 nId, const SwNumRule &r
     m_rWW8Export.pTableStrm->WriteUChar( nFlags ).WriteUChar( 0/*nDummy*/ );
 }
 
+void WW8AttributeOutput::OverrideNumberingDefinition(
+    SwNumRule const& rRule, sal_uInt16 nNum, sal_uInt16 nAbstractNum,
+    const std::map<size_t, size_t>& rLevelOverrides)
+{
+    // Write the definition, LFO are written later
+    NumberingDefinition(nNum, rRule);
+}
+
 void MSWordExportBase::NumberingDefinitions()
 {
     if ( !m_pUsedNumTable )
@@ -412,6 +420,23 @@ void MSWordExportBase::AbstractNumberingDefinitions()
 
     for( n = 0; n < nCount; ++n )
     {
+        if (m_OverridingNums.find(n) != m_OverridingNums.end())
+        {
+            sal_uInt16 no = m_OverridingNums[n].first;
+            AttrOutput().StartAbstractNumbering(no + 1);
+
+            const SwNumRule& rRule = *(*m_pUsedNumTable)[no];
+            sal_uInt8 nLvl;
+            sal_uInt8 nLevels = static_cast<sal_uInt8>(
+                rRule.IsContinusNum() ? WW8ListManager::nMinLevel : WW8ListManager::nMaxLevel);
+            for (nLvl = 0; nLvl < nLevels; ++nLvl)
+            {
+                NumberingLevel(rRule, nLvl);
+            }
+
+            AttrOutput().EndAbstractNumbering();
+            continue;
+        }
         if (nullptr == (*m_pUsedNumTable)[ n ])
         {
             continue;
@@ -621,15 +646,55 @@ void WW8Export::OutOverrideListTab()
     sal_uInt16 n;
 
     pFib->m_fcPlfLfo = pTableStrm->Tell();
-    SwWW8Writer::WriteLong( *pTableStrm, nCount );
+    pTableStrm->WriteUInt32( nCount );
 
+    // LFO ([MS-DOC] 2.9.131)
     for( n = 0; n < nCount; ++n )
     {
-        SwWW8Writer::WriteLong( *pTableStrm, n + 1 );
-        SwWW8Writer::FillCount( *pTableStrm, 12 );
+        pTableStrm->WriteUInt32( n + 1);
+        pTableStrm->WriteUInt32(0); // unused1
+        pTableStrm->WriteUInt32(0); // unused2
+
+        // This list is override?
+        auto it = m_OverridingNums.find(n);
+        if (it != m_OverridingNums.end())
+        {
+            pTableStrm->WriteUChar(m_ListLevelOverrides[n].size()); // clfolvl
+        }
+        else
+            pTableStrm->WriteUChar(0); // clfolvl
+
+        pTableStrm->WriteUChar(0); // ibstFltAutoNum
+        pTableStrm->WriteUChar(0); // grfhic
+        pTableStrm->WriteUChar(0); // unused3
     }
-    for( n = 0; n < nCount; ++n )
-        SwWW8Writer::WriteLong( *pTableStrm, -1 );  // no overwrite
+
+    // LFOData ([MS-DOC] 2.9.132)
+    for (n = 0; n < nCount; ++n)
+    {
+        auto it = m_OverridingNums.find(n);
+        if (it == m_OverridingNums.end())
+        {
+            // No override, write cp = -1
+            pTableStrm->WriteUInt32(0xFFFFFFFF);
+        }
+        else
+        {
+            pTableStrm->WriteUInt32(0); // cp - TODO
+            // LFOLVL ([MS-DOC] 2.9.133)
+            for (int i = 0; i < m_ListLevelOverrides[n].size(); i++)
+            {
+                pTableStrm->WriteUInt32(m_ListLevelOverrides[n][i]);    // iStartAt
+
+                uint32_t nData = i + 1; // iLvl
+                nData |= 0x10;  // fStartAt - true;
+                                // fFormatting - false
+                                // higner bits are unused
+
+                pTableStrm->WriteUInt32(nData);
+            }
+        }
+    }
 
     // set len to FIB
     pFib->m_lcbPlfLfo = pTableStrm->Tell() - pFib->m_fcPlfLfo;
@@ -649,10 +714,10 @@ void WW8Export::OutListNamesTab()
 
     for( ; nNms < nCount; ++nNms )
     {
-        const SwNumRule& rRule = *(*m_pUsedNumTable)[ nNms ];
+        const SwNumRule* rRule = (*m_pUsedNumTable)[ nNms ];
         OUString sNm;
-        if( !rRule.IsAutoRule() )
-            sNm = rRule.GetName();
+        if ( rRule && !rRule->IsAutoRule())
+            sNm = rRule->GetName();
 
         SwWW8Writer::WriteShort( *pTableStrm, sNm.getLength() );
         if (!sNm.isEmpty())

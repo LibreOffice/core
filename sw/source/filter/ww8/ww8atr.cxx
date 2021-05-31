@@ -3654,7 +3654,7 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
 
             nLvl = static_cast< sal_uInt8 >(nLevel);
 
-            if (GetExport().GetExportFormat() == MSWordExportBase::DOCX) // FIXME
+//            if (GetExport().GetExportFormat() == MSWordExportBase::DOCX)
             {
                 // tdf#95848 find the abstract list definition
                 OUString const listId(pTextNd->GetListId());
@@ -3694,6 +3694,7 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
             }
             else if (pTextNd->IsListRestart())
             {
+                // For RTF and DOC in case of restarting of numbering we duplicate list but do not use overrides
                 sal_uInt16 nStartWith = static_cast<sal_uInt16>(pTextNd->GetActualListStartValue());
                 nNumId = GetExport().DuplicateNumRule(pRule, nLvl, nStartWith);
                 if (USHRT_MAX != nNumId)
