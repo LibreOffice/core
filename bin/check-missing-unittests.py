@@ -39,6 +39,7 @@ def main(ignoredBugs):
         },
         'calc': {
             'import': {},
+            'format': {},
             'others': {},
         },
         'impress': {
@@ -131,6 +132,9 @@ def main(ignoredBugs):
 
             elif 'sc/source/core/tool/interpr' in changedFiles:
                 results['calc']['import'][bugId] = infoList
+
+            elif 'svl/source/numbers/' in changedFiles:
+                results['calc']['format'][bugId] = infoList
 
             # Keep the following if statements at the end
 
