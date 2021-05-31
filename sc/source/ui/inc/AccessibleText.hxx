@@ -217,7 +217,7 @@ public:
 
     virtual void                UpdateData() override {  }
 private:
-    ScPreviewViewForwarder* mpViewForwarder;
+    std::unique_ptr<ScPreviewViewForwarder> mxViewForwarder;
     ScPreviewShell*         mpViewShell;
     std::unique_ptr<ScEditEngineDefaulter>  mpEditEngine;
     std::unique_ptr<SvxEditEngineForwarder> mpForwarder;
@@ -244,7 +244,7 @@ public:
 
     virtual void                UpdateData() override {  }
 private:
-    ScPreviewViewForwarder* mpViewForwarder;
+    std::unique_ptr<ScPreviewViewForwarder> mxViewForwarder;
     ScPreviewShell*         mpViewShell;
     std::unique_ptr<ScEditEngineDefaulter> mpEditEngine;
     std::unique_ptr<SvxEditEngineForwarder> mpForwarder;

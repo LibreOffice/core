@@ -1077,7 +1077,6 @@ ScDocShell* ScAccessiblePreviewHeaderCellTextData::GetDocShell(ScPreviewShell* p
 ScAccessibleHeaderTextData::ScAccessibleHeaderTextData(ScPreviewShell* pViewShell,
                             const EditTextObject* pEditObj, SvxAdjust eAdjust)
     :
-    mpViewForwarder(nullptr),
     mpViewShell(pViewShell),
     mpDocSh(nullptr),
     mpEditObj(pEditObj),
@@ -1113,8 +1112,8 @@ void ScAccessibleHeaderTextData::Notify( SfxBroadcaster&, const SfxHint& rHint )
     {
         mpViewShell = nullptr;// invalid now
         mpDocSh = nullptr;
-        if (mpViewForwarder)
-            mpViewForwarder->SetInvalid();
+        if (mxViewForwarder)
+            mxViewForwarder->SetInvalid();
     }
 }
 
@@ -1176,15 +1175,14 @@ SvxTextForwarder* ScAccessibleHeaderTextData::GetTextForwarder()
 
 SvxViewForwarder* ScAccessibleHeaderTextData::GetViewForwarder()
 {
-    if (!mpViewForwarder)
-        mpViewForwarder = new ScPreviewHeaderFooterViewForwarder(mpViewShell);
-    return mpViewForwarder;
+    if (!mxViewForwarder)
+        mxViewForwarder = std::make_unique<ScPreviewHeaderFooterViewForwarder>(mpViewShell);
+    return mxViewForwarder.get();
 }
 
 ScAccessibleNoteTextData::ScAccessibleNoteTextData(ScPreviewShell* pViewShell,
                             const OUString& sText, const ScAddress& aCellPos, bool bMarkNote)
     :
-    mpViewForwarder(nullptr),
     mpViewShell(pViewShell),
     mpDocSh(nullptr),
     msText(sText),
@@ -1221,8 +1219,8 @@ void ScAccessibleNoteTextData::Notify( SfxBroadcaster&, const SfxHint& rHint )
     {
         mpViewShell = nullptr;// invalid now
         mpDocSh = nullptr;
-        if (mpViewForwarder)
-            mpViewForwarder->SetInvalid();
+        if (mxViewForwarder)
+            mxViewForwarder->SetInvalid();
     }
 }
 
@@ -1279,9 +1277,9 @@ SvxTextForwarder* ScAccessibleNoteTextData::GetTextForwarder()
 
 SvxViewForwarder* ScAccessibleNoteTextData::GetViewForwarder()
 {
-    if (!mpViewForwarder)
-        mpViewForwarder = new ScPreviewNoteViewForwarder(mpViewShell);
-    return mpViewForwarder;
+    if (!mxViewForwarder)
+        mxViewForwarder = std::make_unique<ScPreviewNoteViewForwarder>(mpViewShell);
+    return mxViewForwarder.get();
 }
 
 // CSV import =================================================================
