@@ -772,6 +772,19 @@ typedef enum
      * The payload format is JSON: { "title": "title text", "content": "content text" }
      */
     LOK_CALLBACK_VALIDITY_INPUT_HELP = 51,
+
+    /**
+     * The position of the cell cursor jumped to.
+     *
+     * Payload format: "x, y, width, height, column, row", where the first
+     * 4 numbers are document coordinates, in twips, and the last 2 are table
+     * coordinates starting from 0.
+     * When the cursor is not shown the payload format is the "EMPTY" string.
+     *
+     * Rectangle format is the same as LOK_CALLBACK_INVALIDATE_TILES.
+     */
+    LOK_CALLBACK_SC_FOLLOW_JUMP = 52,
+
 }
 LibreOfficeKitCallbackType;
 
@@ -904,6 +917,8 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_FORM_FIELD_BUTTON";
     case LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY:
         return "LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY";
+    case LOK_CALLBACK_SC_FOLLOW_JUMP:
+        return "LOK_CALLBACK_SC_FOLLOW_JUMP";
     }
 
     assert(!"Unknown LibreOfficeKitCallbackType type.");
