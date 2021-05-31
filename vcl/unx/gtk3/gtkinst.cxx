@@ -889,7 +889,16 @@ public:
     virtual void SAL_CALL removeClipboardListener(
         const Reference< css::datatransfer::clipboard::XClipboardListener >& listener ) override;
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+    GdkContentFormats* ref_formats();
+    void write_mime_type_async(GdkContentProvider* provider,
+                               const char* mime_type,
+                               GOutputStream* stream,
+                               int io_priority,
+                               GCancellable* cancellable,
+                               GAsyncReadyCallback callback,
+                               gpointer user_data);
+#else
     void ClipboardGet(GtkSelectionData *selection_data, guint info);
 #endif
     void OwnerPossiblyChanged(GdkClipboard *clipboard);
@@ -927,7 +936,25 @@ Reference< css::datatransfer::XTransferable > VclGtkClipboard::getContents()
     return m_aContents;
 }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+void VclGtkClipboard::write_mime_type_async(GdkContentProvider* provider,
+                                            const char* mime_type,
+                                            GOutputStream* stream,
+                                            int io_priority,
+                                            GCancellable* cancellable,
+                                            GAsyncReadyCallback callback,
+                                            gpointer user_data)
+{
+    if (!m_aContents.is())
+        return;
+    // tdf#129809 take a reference in case m_aContents is replaced during this
+    // call
+    Reference<datatransfer::XTransferable> xCurrentContents(m_aContents);
+    m_aConversionHelper.setSelectionData(xCurrentContents, provider, mime_type,
+                                         stream, io_priority, cancellable,
+                                         callback, user_data);
+}
+#else
 void VclGtkClipboard::ClipboardGet(GtkSelectionData *selection_data, guint info)
 {
     if (!m_aContents.is())
@@ -991,6 +1018,9 @@ void VclGtkClipboard::OwnerPossiblyChanged(GdkClipboard* clipboard)
     if (!m_aContents.is())
         return;
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+    bool bSelf = gdk_clipboard_is_local(clipboard);
+#else
     //if gdk_display_supports_selection_notification is not supported, e.g. like
     //right now under wayland, then you only get owner-changed notifications at
     //opportune times when the selection might have changed. So here
@@ -1029,6 +1059,7 @@ void VclGtkClipboard::OwnerPossiblyChanged(GdkClipboard* clipboard)
     m_nOwnerChangedSignalId = g_signal_connect(clipboard, "owner-change",
                                                G_CALLBACK(handle_owner_change), this);
 #endif
+#endif
 
     if (!bSelf)
     {
@@ -1053,7 +1084,17 @@ void VclGtkClipboard::ClipboardClear()
     m_aGtkTargets.clear();
 }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+OString VclToGtkHelper::makeGtkTargetEntry(const css::datatransfer::DataFlavor& rFlavor)
+{
+    OString aEntry = OUStringToOString(rFlavor.MimeType, RTL_TEXTENCODING_UTF8);
+    auto it = std::find_if(aInfoToFlavor.begin(), aInfoToFlavor.end(),
+                           DataFlavorEq(rFlavor));
+    if (it == aInfoToFlavor.end())
+        aInfoToFlavor.push_back(rFlavor);
+    return aEntry;
+}
+#else
 GtkTargetEntry VclToGtkHelper::makeGtkTargetEntry(const css::datatransfer::DataFlavor& rFlavor)
 {
     GtkTargetEntry aEntry;
@@ -1071,7 +1112,118 @@ GtkTargetEntry VclToGtkHelper::makeGtkTargetEntry(const css::datatransfer::DataF
     }
     return aEntry;
 }
+#endif
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+
+namespace
+{
+    void write_mime_type_done(GObject* pStream, GAsyncResult* pResult, gpointer pTaskPtr)
+    {
+        GTask* pTask = static_cast<GTask*>(pTaskPtr);
+
+        GError* pError = nullptr;
+        if (!g_output_stream_write_all_finish(G_OUTPUT_STREAM(pStream),
+                                              pResult, nullptr, &pError))
+        {
+            g_task_return_error(pTask, pError);
+        }
+        else
+        {
+            g_task_return_boolean(pTask, true);
+        }
+
+        g_object_unref(pTask);
+    }
+
+    class MimeTypeEq
+    {
+    private:
+        const OUString& m_rMimeType;
+    public:
+        explicit MimeTypeEq(const OUString& rMimeType) : m_rMimeType(rMimeType) {}
+        bool operator() (const css::datatransfer::DataFlavor& rData) const
+        {
+            return rData.MimeType == m_rMimeType;
+        }
+    };
+}
+
+void VclToGtkHelper::setSelectionData(const Reference<css::datatransfer::XTransferable> &rTrans,
+                                      GdkContentProvider* provider,
+                                      const char* mime_type,
+                                      GOutputStream* stream,
+                                      int io_priority,
+                                      GCancellable* cancellable,
+                                      GAsyncReadyCallback callback,
+                                      gpointer user_data)
+{
+    GTask *task = g_task_new(provider, cancellable, callback, user_data);
+    g_task_set_priority(task, io_priority);
+
+    OUString sMimeType(mime_type, strlen(mime_type), RTL_TEXTENCODING_UTF8);
+
+    auto it = std::find_if(aInfoToFlavor.begin(), aInfoToFlavor.end(),
+                           MimeTypeEq(sMimeType));
+    if (it == aInfoToFlavor.end())
+    {
+        SAL_WARN( "vcl.gtk", "unknown mime-type request from clipboard");
+        g_task_return_new_error(task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
+            "unknown mime-type “%s” request from clipboard", mime_type);
+        g_object_unref(task);
+        return;
+    }
+
+    css::datatransfer::DataFlavor aFlavor(*it);
+    if (aFlavor.MimeType == "UTF8_STRING" || aFlavor.MimeType == "STRING")
+        aFlavor.MimeType = "text/plain;charset=utf-8";
+
+    Sequence<sal_Int8> aData;
+    Any aValue;
+
+    try
+    {
+        aValue = rTrans->getTransferData(aFlavor);
+    }
+    catch (...)
+    {
+    }
+
+    if (aValue.getValueTypeClass() == TypeClass_STRING)
+    {
+        OUString aString;
+        aValue >>= aString;
+        aData = Sequence< sal_Int8 >( reinterpret_cast<sal_Int8 const *>(aString.getStr()), aString.getLength() * sizeof( sal_Unicode ) );
+    }
+    else if (aValue.getValueType() == cppu::UnoType<Sequence< sal_Int8 >>::get())
+    {
+        aValue >>= aData;
+    }
+    else if (aFlavor.MimeType == "text/plain;charset=utf-8")
+    {
+        //didn't have utf-8, try utf-16 and convert
+        aFlavor.MimeType = "text/plain;charset=utf-16";
+        aFlavor.DataType = cppu::UnoType<OUString>::get();
+        try
+        {
+            aValue = rTrans->getTransferData(aFlavor);
+        }
+        catch (...)
+        {
+        }
+        OUString aString;
+        aValue >>= aString;
+        OString aUTF8String(OUStringToOString(aString, RTL_TEXTENCODING_UTF8));
+
+        g_output_stream_write_all_async(stream, aUTF8String.getStr(), aUTF8String.getLength(),
+                                        io_priority, cancellable, write_mime_type_done, task);
+        return;
+    }
+
+    g_output_stream_write_all_async(stream, aData.getArray(), aData.getLength(),
+                                    io_priority, cancellable, write_mime_type_done, task);
+}
+#else
 void VclToGtkHelper::setSelectionData(const Reference<css::datatransfer::XTransferable> &rTrans,
                                       GtkSelectionData *selection_data, guint info)
 {
@@ -1203,38 +1355,22 @@ std::vector<GtkTargetEntry> VclToGtkHelper::FormatsToGtk(const css::uno::Sequenc
                 bHaveUTF8 = true;
             }
         }
-#if GTK_CHECK_VERSION(4, 0, 0)
-        aGtkTargets.push_back(OUStringToOString(rFlavor.MimeType, RTL_TEXTENCODING_UTF8));
-#else
-        GtkTargetEntry aEntry(makeGtkTargetEntry(rFlavor));
-        aGtkTargets.push_back(aEntry);
-#endif
+        aGtkTargets.push_back(makeGtkTargetEntry(rFlavor));
     }
 
     if (bHaveText)
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         css::datatransfer::DataFlavor aFlavor;
         aFlavor.DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
-#endif
         if (!bHaveUTF8)
         {
-#if GTK_CHECK_VERSION(4, 0, 0)
-            aGtkTargets.push_back("text/plain;charset=utf-8");
-#else
             aFlavor.MimeType = "text/plain;charset=utf-8";
             aGtkTargets.push_back(makeGtkTargetEntry(aFlavor));
-#endif
         }
-#if GTK_CHECK_VERSION(4, 0, 0)
-        aGtkTargets.push_back("UTF8_STRING");
-        aGtkTargets.push_back("STRING");
-#else
         aFlavor.MimeType = "UTF8_STRING";
         aGtkTargets.push_back(makeGtkTargetEntry(aFlavor));
         aFlavor.MimeType = "STRING";
         aGtkTargets.push_back(makeGtkTargetEntry(aFlavor));
-#endif
     }
 
     return aGtkTargets;
@@ -1258,15 +1394,95 @@ void VclGtkClipboard::SyncGtkClipboard()
     }
 }
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+
+G_BEGIN_DECLS
+
+#define CLIPBOARD_CONTENT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), clipboard_content_get_type(), ClipboardContent))
+
+typedef struct _ClipboardContent ClipboardContent;
+typedef struct _ClipboardContentClass ClipboardContentClass;
+
+struct _ClipboardContent
+{
+    GdkContentProvider parent;
+    VclGtkClipboard* clipboard;
+};
+
+struct _ClipboardContentClass
+{
+    GdkContentProviderClass parent_class;
+};
+
+GType clipboard_content_get_type();
+
+G_DEFINE_TYPE(ClipboardContent, clipboard_content, GDK_TYPE_CONTENT_PROVIDER)
+
+static void clipboard_content_write_mime_type_async(GdkContentProvider* provider,
+                                                    const char* mime_type,
+                                                    GOutputStream* stream,
+                                                    int io_priority,
+                                                    GCancellable* cancellable,
+                                                    GAsyncReadyCallback callback,
+                                                    gpointer user_data)
+{
+    ClipboardContent *content = CLIPBOARD_CONTENT(provider);
+    content->clipboard->write_mime_type_async(provider, mime_type, stream, io_priority,
+                                              cancellable, callback, user_data);
+}
+
+static gboolean clipboard_content_write_mime_type_finish(GdkContentProvider*,
+                                                         GAsyncResult* result,
+                                                         GError** error)
+{
+    return g_task_propagate_boolean(G_TASK(result), error);
+}
+
+static GdkContentFormats* clipboard_content_ref_formats(GdkContentProvider *provider)
+{
+    ClipboardContent *content = CLIPBOARD_CONTENT(provider);
+    return content->clipboard->ref_formats();
+}
+
+static void clipboard_content_class_init(ClipboardContentClass* klass)
+{
+  GdkContentProviderClass *provider_class = GDK_CONTENT_PROVIDER_CLASS(klass);
+
+  provider_class->ref_formats = clipboard_content_ref_formats;
+  provider_class->write_mime_type_async = clipboard_content_write_mime_type_async;
+  provider_class->write_mime_type_finish = clipboard_content_write_mime_type_finish;
+}
+
+static void clipboard_content_init(ClipboardContent*)
+{
+}
+
+static GdkContentProvider* clipboard_content_new(VclGtkClipboard* pClipboard)
+{
+    ClipboardContent *content = CLIPBOARD_CONTENT(g_object_new(clipboard_content_get_type(), nullptr));
+    content->clipboard = pClipboard;
+    return GDK_CONTENT_PROVIDER(content);
+}
+
+G_END_DECLS
+
+#endif
+
+#if GTK_CHECK_VERSION(4, 0, 0)
+GdkContentFormats* VclGtkClipboard::ref_formats()
+{
+    GdkContentFormatsBuilder* pBuilder = gdk_content_formats_builder_new();
+    for (const auto& rFormat : m_aGtkTargets)
+        gdk_content_formats_builder_add_mime_type(pBuilder, rFormat.getStr());
+    return gdk_content_formats_builder_free_to_formats(pBuilder);
+}
+#endif
+
 void VclGtkClipboard::SetGtkClipboard()
 {
     GdkClipboard* clipboard = clipboard_get(m_eSelection);
 #if GTK_CHECK_VERSION(4, 0, 0)
-    GdkContentFormatsBuilder* pBuilder = gdk_content_formats_builder_new();
-    for (const auto& rFormat : m_aGtkTargets)
-        gdk_content_formats_builder_add_mime_type(pBuilder, rFormat.getStr());
-    GdkContentFormats* pFormats = gdk_content_formats_builder_free_to_formats(pBuilder);
-    //TODO pFormats needs a place to call home
+    gdk_clipboard_set_content(clipboard, clipboard_content_new(this));
 #else
     gtk_clipboard_set_with_data(clipboard, m_aGtkTargets.data(), m_aGtkTargets.size(),
                                 ClipboardGetFunc, ClipboardClearFunc, this);

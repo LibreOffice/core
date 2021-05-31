@@ -65,12 +65,23 @@ struct VclToGtkHelper
 #else
     std::vector<GtkTargetEntry> FormatsToGtk(const css::uno::Sequence<css::datatransfer::DataFlavor> &rFormats);
 #endif
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+    void setSelectionData(const css::uno::Reference<css::datatransfer::XTransferable> &rTrans,
+                          GdkContentProvider* provider,
+                          const char* mime_type,
+                          GOutputStream* stream,
+                          int io_priority,
+                          GCancellable* cancellable,
+                          GAsyncReadyCallback callback,
+                          gpointer user_data);
+#else
     void setSelectionData(const css::uno::Reference<css::datatransfer::XTransferable> &rTrans,
                           GtkSelectionData *selection_data, guint info);
 #endif
 private:
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+    OString makeGtkTargetEntry(const css::datatransfer::DataFlavor& rFlavor);
+#else
     GtkTargetEntry makeGtkTargetEntry(const css::datatransfer::DataFlavor& rFlavor);
 #endif
 };
