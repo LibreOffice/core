@@ -146,7 +146,7 @@ const OUString& DefinedNameBase::getUpcaseModelName() const
 
 DefinedName::DefinedName( const WorkbookHelper& rHelper ) :
     DefinedNameBase( rHelper ),
-    mpScRangeData(nullptr),
+    maScRangeData(nullptr, false),
     mnTokenIndex( -1 ),
     mnCalcSheet( 0 ),
     mcBuiltinId( BIFF_DEFNAME_UNKNOWN )
@@ -233,9 +233,9 @@ void DefinedName::createNameObject( sal_Int32 nIndex )
 
     // create the name and insert it into the document, maCalcName will be changed to the resulting name
     if (maModel.mnSheet >= 0)
-        mpScRangeData = createLocalNamedRangeObject( maCalcName, ApiTokenSequence(), nIndex, nNameFlags, maModel.mnSheet, maModel.mbHidden );
+        maScRangeData = createLocalNamedRangeObject( maCalcName, ApiTokenSequence(), nIndex, nNameFlags, maModel.mnSheet, maModel.mbHidden );
     else
-        mpScRangeData = createNamedRangeObject( maCalcName, ApiTokenSequence(), nIndex, nNameFlags, maModel.mbHidden );
+        maScRangeData = createNamedRangeObject( maCalcName, ApiTokenSequence(), nIndex, nNameFlags, maModel.mbHidden );
     mnTokenIndex = nIndex;
 }
 
@@ -259,17 +259,18 @@ std::unique_ptr<ScTokenArray> DefinedName::getScTokens(
 
 void DefinedName::convertFormula( const css::uno::Sequence<css::sheet::ExternalLinkInfo>& rExternalLinks )
 {
+    ScRangeData* pScRangeData = maScRangeData.first;
     // macro function or vba procedure
-    if(!mpScRangeData)
+    if (!pScRangeData)
         return;
 
     // convert and set formula of the defined name
     {
         std::unique_ptr<ScTokenArray> pTokenArray = getScTokens( rExternalLinks);
-        mpScRangeData->SetCode( *pTokenArray );
+        pScRangeData->SetCode( *pTokenArray );
     }
 
-    ScTokenArray* pTokenArray = mpScRangeData->GetCode();
+    ScTokenArray* pTokenArray = pScRangeData->GetCode();
     Sequence< FormulaToken > aFTokenSeq;
     ScTokenConversion::ConvertToTokenSequence( getScDocument(), aFTokenSeq, *pTokenArray );
     // set built-in names (print ranges, repeated titles, filter ranges)
@@ -327,7 +328,8 @@ void DefinedName::convertFormula( const css::uno::Sequence<css::sheet::ExternalL
 
 bool DefinedName::getAbsoluteRange( ScRange& orRange ) const
 {
-    ScTokenArray* pTokenArray = mpScRangeData->GetCode();
+    ScRangeData* pScRangeData = maScRangeData.first;
+    ScTokenArray* pTokenArray = pScRangeData->GetCode();
     Sequence< FormulaToken > aFTokenSeq;
     ScTokenConversion::ConvertToTokenSequence(getScDocument(), aFTokenSeq, *pTokenArray);
     return getFormulaParser().extractCellRange( orRange, aFTokenSeq );
@@ -336,11 +338,10 @@ bool DefinedName::getAbsoluteRange( ScRange& orRange ) const
 DefinedName::~DefinedName()
 {
     // this kind of field is owned by us - see lcl_addNewByNameAndTokens
-    if (mpScRangeData && maModel.mbHidden &&
-        (mcBuiltinId == BIFF_DEFNAME_CRITERIA || mcBuiltinId == BIFF_DEFNAME_FILTERDATABASE))
-        delete mpScRangeData;
+    bool bOwned = maScRangeData.second;
+    if (bOwned)
+        delete maScRangeData.first;
 }
-
 
 DefinedNamesBuffer::DefinedNamesBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
