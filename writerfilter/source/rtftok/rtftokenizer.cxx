@@ -144,11 +144,16 @@ RTFError RTFTokenizer::resolveParse()
                     else
                     {
                         SAL_INFO("writerfilter.rtf", __func__ << ": hex internal state");
-                        b = b << 4;
-                        sal_Int8 parsed = msfilter::rtfutil::AsHex(ch);
-                        if (parsed == -1)
-                            return RTFError::HEX_INVALID;
-                        b += parsed;
+                        // Assume that \'<number><junk> means \'0<number>.
+                        if (rtl::isAsciiDigit(static_cast<unsigned char>(ch))
+                            || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F'))
+                        {
+                            b = b << 4;
+                            sal_Int8 parsed = msfilter::rtfutil::AsHex(ch);
+                            if (parsed == -1)
+                                return RTFError::HEX_INVALID;
+                            b += parsed;
+                        }
                         count--;
                         if (!count)
                         {
