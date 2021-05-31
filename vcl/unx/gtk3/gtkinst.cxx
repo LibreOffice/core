@@ -22311,10 +22311,16 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/acorreplacepage.ui" &&
         rUIFile != "cui/ui/applylocalizedpage.ui" &&
         rUIFile != "cui/ui/autocorrectdialog.ui" &&
+        rUIFile != "cui/ui/hyperlinkdialog.ui" &&
+        rUIFile != "cui/ui/hyperlinkdocpage.ui" &&
+        rUIFile != "cui/ui/hyperlinkinternetpage.ui" &&
+        rUIFile != "cui/ui/hyperlinkmailpage.ui" &&
+        rUIFile != "cui/ui/hyperlinknewdocpage.ui" &&
         rUIFile != "cui/ui/hyphenate.ui" &&
         rUIFile != "cui/ui/insertfloatingframe.ui" &&
         rUIFile != "cui/ui/objectnamedialog.ui" &&
         rUIFile != "cui/ui/objecttitledescdialog.ui" &&
+        rUIFile != "cui/ui/pastespecial.ui" &&
         rUIFile != "cui/ui/percentdialog.ui" &&
         rUIFile != "cui/ui/signatureline.ui" &&
         rUIFile != "cui/ui/tipofthedaydialog.ui" &&

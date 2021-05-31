@@ -59,7 +59,6 @@
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes" context="hyperlinkdocpage|fileopen|tooltip_text">Open File</property>
                 <property name="image">image2</property>
-                <property name="always_show_image">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="fileopen-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkdocpage|extended_tip|fileopen">Opens the Open dialog, where you can select a file.</property>
@@ -165,7 +164,6 @@
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes" context="hyperlinkdocpage|browse|tooltip_text">Target in Document</property>
                 <property name="image">image1</property>
-                <property name="always_show_image">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="browse-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkdocpage|extended_tip|browse">Opens the Target in Document dialog.</property>
@@ -370,7 +368,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="tooltip_text" translatable="yes" context="hyperlinkdocpage|script|tooltip_text">Events</property>
-                    <property name="always_show_image">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="script-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkdocpage|extended_tip|script">Opens the Assign Macro dialog, in which you can give events such as "mouse over object" or "trigger hyperlink" their own program codes.</property>
