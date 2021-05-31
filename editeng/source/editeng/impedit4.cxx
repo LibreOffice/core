@@ -1456,10 +1456,10 @@ EESpellState ImpEditEngine::Spell(EditView* pEditView, weld::Widget* pDialogPare
     else if ( CreateEPaM( aEditDoc.GetStartPaM() ) == pSpellInfo->aSpellStart )
         bIsStart = true;
 
-    std::unique_ptr<EditSpellWrapper> pWrp(new EditSpellWrapper(pDialogParent,
-            bIsStart, pEditView ));
-    pWrp->SpellDocument();
-    pWrp.reset();
+    {
+        EditSpellWrapper aWrp(pDialogParent, bIsStart, pEditView );
+        aWrp.SpellDocument();
+    }
 
     if ( !bMultipleDoc )
     {
