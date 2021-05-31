@@ -206,8 +206,8 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                     break;
 
                 SvxRTFItemStackType* pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back().get();
-                if( !pCurrent || (pCurrent->pSttNd->GetIdx() == pInsPos->GetNodeIdx() &&
-                    pCurrent->nSttCnt == pInsPos->GetCntIdx() ))
+                if( !pCurrent || (pCurrent->pSttNd->GetIdx() == mxInsertPosition->GetNodeIdx() &&
+                    pCurrent->nSttCnt == mxInsertPosition->GetCntIdx() ))
                     break;
 
                 int nLastToken = GetStackPtr(-1)->nTokenId;
@@ -219,7 +219,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 {
                     // Open a new Group
                     std::unique_ptr<SvxRTFItemStackType> pNew(new SvxRTFItemStackType(
-                                                *pCurrent, *pInsPos, true ));
+                                                *pCurrent, *mxInsertPosition, true ));
                     pNew->SetRTFDefaults( GetRTFDefaults() );
 
                     // "Set" all valid attributes up until this point
@@ -232,7 +232,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 }
                 else
                     // continue to use this entry as a new one
-                    pCurrent->SetStartPos( *pInsPos );
+                    pCurrent->SetStartPos( *mxInsertPosition );
 
                 pSet = &pCurrent->aAttrSet;
             } while( false );
@@ -1704,7 +1704,7 @@ void SvxRTFParser::RTFPardPlain( bool const bPard, SfxItemSet** ppSet )
         if (pCurrent->aAttrSet.Count() || pCurrent->m_pChildList || pCurrent->nStyleNo)
         {
             // open a new group
-            std::unique_ptr<SvxRTFItemStackType> pNew(new SvxRTFItemStackType( *pCurrent, *pInsPos, true ));
+            std::unique_ptr<SvxRTFItemStackType> pNew(new SvxRTFItemStackType( *pCurrent, *mxInsertPosition, true ));
             pNew->SetRTFDefaults( GetRTFDefaults() );
 
             // Set all until here valid attributes
@@ -1717,7 +1717,7 @@ void SvxRTFParser::RTFPardPlain( bool const bPard, SfxItemSet** ppSet )
         else
         {
             // continue to use this entry as new
-            pCurrent->SetStartPos( *pInsPos );
+            pCurrent->SetStartPos( *mxInsertPosition );
             bNewStkEntry = false;
         }
     }
