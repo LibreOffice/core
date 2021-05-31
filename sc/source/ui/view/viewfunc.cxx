@@ -1220,7 +1220,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
         }
 
         aChangeRanges.push_back(aPos);
-        std::unique_ptr<ScPatternAttr> pOldPat(new ScPatternAttr(*rDoc.GetPattern( nCol, nRow, nTab )));
+        std::optional<ScPatternAttr> pOldPat(*rDoc.GetPattern( nCol, nRow, nTab ));
 
         rDoc.ApplyPattern( nCol, nRow, nTab, rAttr );
 
@@ -1229,7 +1229,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
         if (bRecord)
         {
             std::unique_ptr<ScUndoCursorAttr> pUndo(new ScUndoCursorAttr(
-                pDocSh, nCol, nRow, nTab, pOldPat.get(), pNewPat, &rAttr ));
+                pDocSh, nCol, nRow, nTab, &*pOldPat, pNewPat, &rAttr ));
             pUndo->SetEditData(std::move(pOldEditData), std::move(pNewEditData));
             pDocSh->GetUndoManager()->AddUndoAction(std::move(pUndo));
         }

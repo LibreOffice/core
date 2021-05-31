@@ -1031,8 +1031,8 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
 {
     const SfxItemSet* pSrcSet = &GetItemSet();
 
-    std::unique_ptr<ScPatternAttr> pDestPattern( new ScPatternAttr(pDestDoc->GetPool()) );
-    SfxItemSet* pDestSet = &pDestPattern->GetItemSet();
+    ScPatternAttr aDestPattern( pDestDoc->GetPool() );
+    SfxItemSet* pDestSet = &aDestPattern.GetItemSet();
 
     // Copy cell pattern style to other document:
 
@@ -1048,7 +1048,7 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
                                                             pDestDoc->GetStyleSheetPool(),
                                                             pDestDoc->GetFormatExchangeList() );
 
-        pDestPattern->SetStyleSheet( static_cast<ScStyleSheet*>(pStyleCpy) );
+        aDestPattern.SetStyleSheet( static_cast<ScStyleSheet*>(pStyleCpy) );
     }
 
     for ( sal_uInt16 nAttrId = ATTR_PATTERN_START; nAttrId <= ATTR_PATTERN_END; nAttrId++ )
@@ -1096,7 +1096,7 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
         }
     }
 
-    ScPatternAttr* pPatternAttr = const_cast<ScPatternAttr*>( &pDestDoc->GetPool()->Put(*pDestPattern) );
+    ScPatternAttr* pPatternAttr = const_cast<ScPatternAttr*>( &pDestDoc->GetPool()->Put(aDestPattern) );
     return pPatternAttr;
 }
 
