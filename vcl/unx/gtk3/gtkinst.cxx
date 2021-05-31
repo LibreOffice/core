@@ -5033,20 +5033,29 @@ bool sortButtons(const GtkWidget* pA, const GtkWidget* pB)
 
 void sort_native_button_order(GtkBox* pContainer)
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
     std::vector<GtkWidget*> aChildren;
+#if GTK_CHECK_VERSION(4, 0, 0)
+    for (GtkWidget* pChild = gtk_widget_get_first_child(GTK_WIDGET(pContainer));
+         pChild; pChild = gtk_widget_get_next_sibling(pChild))
+    {
+        aChildren.push_back(pChild);
+    }
+#else
     GList* pChildren = gtk_container_get_children(GTK_CONTAINER(pContainer));
     for (GList* pChild = g_list_first(pChildren); pChild; pChild = g_list_next(pChild))
         aChildren.push_back(static_cast<GtkWidget*>(pChild->data));
     g_list_free(pChildren);
+#endif
 
     //sort child order within parent so that we match the platform button order
     std::stable_sort(aChildren.begin(), aChildren.end(), sortButtons);
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+    for (size_t pos = 0; pos < aChildren.size(); ++pos)
+        gtk_box_reorder_child_after(pContainer, aChildren[pos], pos ? aChildren[pos - 1] : nullptr);
+#else
     for (size_t pos = 0; pos < aChildren.size(); ++pos)
         gtk_box_reorder_child(pContainer, aChildren[pos], pos);
-#else
-    (void)pContainer;
 #endif
 }
 
@@ -16516,11 +16525,11 @@ private:
 //    GtkMenuButton* m_pOverlayButton; // button that the StyleDropdown uses on an active row
     GtkWidget* m_pMenuWindow;
     GtkTreeModel* m_pTreeModel;
-    GtkCellRenderer* m_pButtonTextRenderer;
-    GtkCellRenderer* m_pMenuTextRenderer;
+//    GtkCellRenderer* m_pButtonTextRenderer;
+//    GtkCellRenderer* m_pMenuTextRenderer;
     GtkWidget* m_pEntry;
     GtkEditable* m_pEditable;
-    GtkCellView* m_pCellView;
+//    GtkCellView* m_pCellView;
     GtkEventController* m_pKeyController;
     GtkEventController* m_pEntryKeyController;
     GtkEventController* m_pMenuKeyController;
@@ -16530,8 +16539,8 @@ private:
     vcl::QuickSelectionEngine m_aQuickSelectionEngine;
     std::vector<std::unique_ptr<GtkTreeRowReference, GtkTreeRowReferenceDeleter>> m_aSeparatorRows;
     OUString m_sMenuButtonRow;
-    bool m_bHoverSelection;
-    bool m_bMouseInOverlayButton;
+//    bool m_bHoverSelection;
+//    bool m_bMouseInOverlayButton;
     bool m_bPopupActive;
     bool m_bAutoComplete;
     bool m_bAutoCompleteCaseSensitive;
@@ -16542,7 +16551,7 @@ private:
     gint m_nIdCol;
 //    gulong m_nToggleFocusInSignalId;
 //    gulong m_nToggleFocusOutSignalId;
-    gulong m_nRowActivatedSignalId;
+//    gulong m_nRowActivatedSignalId;
     gulong m_nChangedSignalId;
     gulong m_nPopupShownSignalId;
     gulong m_nKeyPressEventSignalId;
@@ -16552,7 +16561,7 @@ private:
 //    gulong m_nEntryFocusOutSignalId;
     gulong m_nEntryKeyPressEventSignalId;
     guint m_nAutoCompleteIdleId;
-    gint m_nNonCustomLineHeight;
+//    gint m_nNonCustomLineHeight;
     gint m_nPrePopupCursorPos;
     int m_nMRUCount;
     int m_nMaxMRUCount;
@@ -17552,14 +17561,14 @@ public:
 //        , m_pOverlayButton(GTK_MENU_BUTTON(gtk_builder_get_object(pComboBuilder, "overlaybutton")))
         , m_pMenuWindow(nullptr)
         , m_pTreeModel(gtk_combo_box_get_model(pComboBox))
-        , m_pButtonTextRenderer(nullptr)
+//        , m_pButtonTextRenderer(nullptr)
 //        , m_pToggleButton(GTK_WIDGET(gtk_builder_get_object(pComboBuilder, "button")))
         , m_pEntry(GTK_IS_ENTRY(gtk_combo_box_get_child(pComboBox)) ? gtk_combo_box_get_child(pComboBox) : nullptr)
         , m_pEditable(GTK_EDITABLE(m_pEntry))
-        , m_pCellView(nullptr)
+//        , m_pCellView(nullptr)
         , m_aQuickSelectionEngine(*this)
-        , m_bHoverSelection(false)
-        , m_bMouseInOverlayButton(false)
+//        , m_bHoverSelection(false)
+//        , m_bMouseInOverlayButton(false)
         , m_bPopupActive(false)
         , m_bAutoComplete(false)
         , m_bAutoCompleteCaseSensitive(false)
@@ -17574,7 +17583,7 @@ public:
         , m_nChangedSignalId(g_signal_connect(m_pComboBox, "changed", G_CALLBACK(signalChanged), this))
         , m_nPopupShownSignalId(g_signal_connect(m_pComboBox, "notify::popup-shown", G_CALLBACK(signalPopupToggled), this))
         , m_nAutoCompleteIdleId(0)
-        , m_nNonCustomLineHeight(-1)
+//        , m_nNonCustomLineHeight(-1)
         , m_nPrePopupCursorPos(-1)
         , m_nMRUCount(0)
         , m_nMaxMRUCount(0)
@@ -17669,6 +17678,7 @@ public:
 
     virtual void set_size_request(int nWidth, int nHeight) override
     {
+#if 0
         if (m_pButtonTextRenderer)
         {
             // tweak the cell render to get a narrower size to stick
@@ -17700,6 +17710,7 @@ public:
                 gtk_cell_renderer_set_fixed_size(m_pButtonTextRenderer, -1, -1);
             }
         }
+#endif
 
         gtk_widget_set_size_request(m_pWidget, nWidth, nHeight);
     }
