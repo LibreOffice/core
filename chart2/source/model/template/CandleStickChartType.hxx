@@ -23,7 +23,8 @@
 namespace chart
 {
 
-// see tdf#142467 before restoring 'final'
+// see <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100797> "[10/11/12 Regression] using
+// declaration causing virtual call with wrongly adjusted this pointer" before restoring 'final'
 class CandleStickChartType /* final */ : public ChartType
 {
 public:
