@@ -704,34 +704,55 @@ DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfOleImg, "reqif-ole-img.xhtml")
     CPPUNIT_ASSERT(aStream.indexOf("type=\"image/png\"") != -1);
 }
 
-DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfPngImg, "reqif-png-img.xhtml")
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIfPngImg)
 {
-    uno::Reference<container::XNamed> xShape(getShape(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xShape.is());
+    auto verify = [this](bool bExported) {
+        uno::Reference<container::XNamed> xShape(getShape(1), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xShape.is());
 
-    if (!mbExported)
-    {
-        // Imported PNG image is not an object.
-        CPPUNIT_ASSERT_EQUAL(OUString("Image1"), xShape->getName());
-        return;
-    }
+        if (!bExported)
+        {
+            // Imported PNG image is not an object.
+            CPPUNIT_ASSERT_EQUAL(OUString("Image1"), xShape->getName());
+            return;
+        }
 
-    // All images are exported as objects in ReqIF mode.
-    CPPUNIT_ASSERT_EQUAL(OUString("Object1"), xShape->getName());
+        // All images are exported as objects in ReqIF mode.
+        CPPUNIT_ASSERT_EQUAL(OUString("Object1"), xShape->getName());
 
-    // This was <img>, not <object>, which is not valid in the reqif-xhtml
-    // subset.
-    SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
-    CPPUNIT_ASSERT(pStream);
-    sal_uInt64 nLength = pStream->TellEnd();
-    OString aStream(read_uInt8s_ToOString(*pStream, nLength));
-    CPPUNIT_ASSERT(aStream.indexOf("<reqif-xhtml:object") != -1);
+        // This was <img>, not <object>, which is not valid in the reqif-xhtml
+        // subset.
+        SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
+        CPPUNIT_ASSERT(pStream);
+        sal_uInt64 nLength = pStream->TellEnd();
+        OString aStream(read_uInt8s_ToOString(*pStream, nLength));
+        CPPUNIT_ASSERT(aStream.indexOf("<reqif-xhtml:object") != -1);
 
-    // Make sure that both RTF and PNG versions are written.
-    CPPUNIT_ASSERT(aStream.indexOf("text/rtf") != -1);
-    // This failed when images with a query in their file:// URL failed to
-    // import.
-    CPPUNIT_ASSERT(aStream.indexOf("image/png") != -1);
+        // Make sure that both RTF and PNG versions are written.
+        CPPUNIT_ASSERT(aStream.indexOf("text/rtf") != -1);
+        // This failed when images with a query in their file:// URL failed to
+        // import.
+        CPPUNIT_ASSERT(aStream.indexOf("image/png") != -1);
+    };
+
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "reqif-png-img.xhtml";
+    uno::Sequence<beans::PropertyValue> aLoadProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+    };
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", aLoadProperties);
+    verify(/*bExported=*/false);
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+        comphelper::makePropertyValue("ExportImagesAsOLE", true),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    mxComponent->dispose();
+    mxComponent
+        = loadFromDesktop(maTempFile.GetURL(), "com.sun.star.text.TextDocument", aLoadProperties);
+    verify(/*bExported=*/true);
 }
 
 DECLARE_HTMLEXPORT_TEST(testReqIfJpgImg, "reqif-jpg-img.xhtml")
@@ -911,10 +932,19 @@ DECLARE_HTMLEXPORT_TEST(testTransparentImage, "transparent-image.odt")
     CPPUNIT_ASSERT_MESSAGE(aMessage.toUtf8().getStr(), aSource.endsWith(".gif"));
 }
 
-DECLARE_HTMLEXPORT_TEST(testTransparentImageReqIf, "transparent-image.odt")
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTransparentImageReqIf)
 {
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "transparent-image.odt";
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", {});
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+        comphelper::makePropertyValue("ExportImagesAsOLE", true),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
     SvMemoryStream aStream;
-    wrapFragment(maTempFile, aStream);
+    HtmlExportTest::wrapFragment(maTempFile, aStream);
     xmlDocUniquePtr pDoc = parseXmlStream(&aStream);
     CPPUNIT_ASSERT(pDoc);
 
@@ -1465,7 +1495,13 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifImageToOle)
     dispatchCommand(mxComponent, ".uno:InsertGraphic", aArgs);
 
     // When exporting to XHTML:
-    ExportToReqif();
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+        comphelper::makePropertyValue("ExportImagesAsOLE", true),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
 
     // Then make sure we export that PNG as WMF in ReqIF mode:
     OUString aRtfUrl = GetOlePath();
@@ -1490,6 +1526,36 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifImageToOle)
     // Without the accompanying fix in place, this test would have failed, as aOle1 only contained
     // the native data.
     CPPUNIT_ASSERT(aOle1Reader.m_nPresentationDataSize);
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedPNGDirectly)
+{
+    // Given a document with an image:
+    loadURL("private:factory/swriter", nullptr);
+    OUString aImageURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "ole2.png";
+    uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("FileName", aImageURL),
+    };
+    dispatchCommand(mxComponent, ".uno:InsertGraphic", aArgs);
+
+    // When exporting to XHTML:
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+
+    // Then make sure the PNG is embedded directly, without an RTF wrapper:
+    SvMemoryStream aStream;
+    HtmlExportTest::wrapFragment(maTempFile, aStream);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: image/png
+    // - Actual  : text/rtf
+    // i.e. even PNG was wrapped in an RTF.
+    assertXPath(pXmlDoc, "//reqif-xhtml:p/reqif-xhtml:object", "type", "image/png");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
