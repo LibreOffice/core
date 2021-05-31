@@ -278,7 +278,7 @@ void ScAcceptChgDlg::ClearView()
     nAcceptCount=0;
     nRejectCount=0;
     weld::TreeView& rTreeView = pTheView->GetWidget();
-    rTreeView.selected_foreach(
+    rTreeView.all_foreach(
         [&rTreeView](weld::TreeIter& rEntry)
         {
             ScRedlinData *pEntryData = reinterpret_cast<ScRedlinData*>(rTreeView.get_id(rEntry).toInt64());
