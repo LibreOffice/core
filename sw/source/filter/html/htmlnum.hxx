@@ -35,11 +35,11 @@ class SwNumRule;
 
 class SwHTMLNumRuleInfo
 {
-    sal_uInt16      aNumStarts[MAXLEVEL];
-    SwNumRule   *   pNumRule;       // current numbering
-    sal_uInt16      nDeep;          // current numbering depth (1, 2, 3, ...)
-    bool        bRestart : 1;   // Export: restart numbering
-    bool        bNumbered : 1;  // Export: paragraph is numbered
+    sal_uInt16      m_aNumStarts[MAXLEVEL];
+    SwNumRule   *   m_pNumRule;       // current numbering
+    sal_uInt16      m_nDeep;          // current numbering depth (1, 2, 3, ...)
+    bool        m_bRestart : 1;   // Export: restart numbering
+    bool        m_bNumbered : 1;  // Export: paragraph is numbered
 
 public:
 
@@ -47,17 +47,17 @@ public:
     void Set( const SwTextNode& rTextNd );
 
     SwHTMLNumRuleInfo() :
-        pNumRule( nullptr ), nDeep( 0 ),
-        bRestart( false ), bNumbered( false )
+        m_pNumRule( nullptr ), m_nDeep( 0 ),
+        m_bRestart( false ), m_bNumbered( false )
     {
-        memset( &aNumStarts, 0xff, sizeof( aNumStarts ) );
+        memset( &m_aNumStarts, 0xff, sizeof( m_aNumStarts ) );
     }
 
     SwHTMLNumRuleInfo( const SwHTMLNumRuleInfo& rInf ) :
-        pNumRule( rInf.pNumRule ), nDeep( rInf.nDeep ),
-        bRestart( rInf.bRestart ), bNumbered( rInf.bNumbered )
+        m_pNumRule( rInf.m_pNumRule ), m_nDeep( rInf.m_nDeep ),
+        m_bRestart( rInf.m_bRestart ), m_bNumbered( rInf.m_bNumbered )
     {
-        memcpy( &aNumStarts, &rInf.aNumStarts, sizeof( aNumStarts ) );
+        memcpy( &m_aNumStarts, &rInf.m_aNumStarts, sizeof( m_aNumStarts ) );
     }
 
     explicit SwHTMLNumRuleInfo( const SwTextNode& rTextNd ) { Set( rTextNd ); }
@@ -65,22 +65,22 @@ public:
 
     inline void Clear();
 
-    void SetNumRule( const SwNumRule *pRule ) { pNumRule = const_cast<SwNumRule *>(pRule); }
-    SwNumRule *GetNumRule() { return pNumRule; }
-    const SwNumRule *GetNumRule() const { return pNumRule; }
+    void SetNumRule( const SwNumRule *pRule ) { m_pNumRule = const_cast<SwNumRule *>(pRule); }
+    SwNumRule *GetNumRule() { return m_pNumRule; }
+    const SwNumRule *GetNumRule() const { return m_pNumRule; }
 
-    void SetDepth( sal_uInt16 nDepth ) { nDeep = nDepth; }
-    sal_uInt16 GetDepth() const { return nDeep; }
-    void IncDepth() { ++nDeep; }
-    void DecDepth() { if (nDeep!=0) --nDeep; }
+    void SetDepth( sal_uInt16 nDepth ) { m_nDeep = nDepth; }
+    sal_uInt16 GetDepth() const { return m_nDeep; }
+    void IncDepth() { ++m_nDeep; }
+    void DecDepth() { if (m_nDeep!=0) --m_nDeep; }
     inline sal_uInt8 GetLevel() const;
 
-    bool IsRestart() const { return bRestart; }
+    bool IsRestart() const { return m_bRestart; }
 
-    bool IsNumbered() const { return bNumbered; }
+    bool IsNumbered() const { return m_bNumbered; }
 
     inline void SetNodeStartValue( sal_uInt8 nLvl, sal_uInt16 nVal=USHRT_MAX );
-    sal_uInt16 GetNodeStartValue( sal_uInt8 nLvl ) const { return aNumStarts[nLvl]; }
+    sal_uInt16 GetNodeStartValue( sal_uInt8 nLvl ) const { return m_aNumStarts[nLvl]; }
 };
 
 inline SwHTMLNumRuleInfo& SwHTMLNumRuleInfo::operator=(
@@ -92,32 +92,32 @@ inline SwHTMLNumRuleInfo& SwHTMLNumRuleInfo::operator=(
 
 inline void SwHTMLNumRuleInfo::Set( const SwHTMLNumRuleInfo& rInf )
 {
-    pNumRule = rInf.pNumRule;
-    nDeep = rInf.nDeep;
-    bRestart = rInf.bRestart;
-    bNumbered = rInf.bNumbered;
-    memcpy( &aNumStarts, &rInf.aNumStarts, sizeof( aNumStarts ) );
+    m_pNumRule = rInf.m_pNumRule;
+    m_nDeep = rInf.m_nDeep;
+    m_bRestart = rInf.m_bRestart;
+    m_bNumbered = rInf.m_bNumbered;
+    memcpy( &m_aNumStarts, &rInf.m_aNumStarts, sizeof( m_aNumStarts ) );
 }
 
 inline void SwHTMLNumRuleInfo::Clear()
 {
-    pNumRule = nullptr;
-    nDeep = 0;
-    bRestart = bNumbered = false;
-    memset( &aNumStarts, 0xff, sizeof( aNumStarts ) );
+    m_pNumRule = nullptr;
+    m_nDeep = 0;
+    m_bRestart = m_bNumbered = false;
+    memset( &m_aNumStarts, 0xff, sizeof( m_aNumStarts ) );
 }
 
 inline sal_uInt8 SwHTMLNumRuleInfo::GetLevel() const
 {
     return
-        static_cast<sal_uInt8>( pNumRule!=nullptr && nDeep != 0
-            ? ( nDeep<=MAXLEVEL ? nDeep-1 : MAXLEVEL - 1 )
+        static_cast<sal_uInt8>( m_pNumRule!=nullptr && m_nDeep != 0
+            ? ( m_nDeep<=MAXLEVEL ? m_nDeep-1 : MAXLEVEL - 1 )
             : 0 );
 }
 
 inline void SwHTMLNumRuleInfo::SetNodeStartValue( sal_uInt8 nLvl, sal_uInt16 nVal )
 {
-    aNumStarts[nLvl] = nVal;
+    m_aNumStarts[nLvl] = nVal;
 }
 
 #endif

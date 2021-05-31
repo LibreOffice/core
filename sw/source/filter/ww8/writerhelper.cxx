@@ -713,8 +713,8 @@ namespace sw
             bool operator()(const std::unique_ptr<SwFltStackEntry> & pEntry) const
             {
                 const SwFltRedline *pTest = static_cast<const SwFltRedline *>
-                    (pEntry->pAttr.get());
-                return (pEntry->bOpen && (pTest->m_eType == meType));
+                    (pEntry->m_pAttr.get());
+                return (pEntry->m_bOpen && (pTest->m_eType == meType));
             }
         };
 
@@ -808,7 +808,7 @@ namespace sw
                 mrDoc.getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowInsert |
                                          RedlineFlags::ShowDelete);
                 const SwFltRedline *pFltRedline = static_cast<const SwFltRedline*>
-                    (pEntry->pAttr.get());
+                    (pEntry->m_pAttr.get());
 
                 SwRedlineData aData(pFltRedline->m_eType, pFltRedline->m_nAutorNo,
                         pFltRedline->m_aStamp, OUString(), nullptr);
@@ -829,9 +829,9 @@ namespace sw
             const std::unique_ptr<SwFltStackEntry> & pTwoE) const
         {
             const SwFltRedline *pOne= static_cast<const SwFltRedline*>
-                (pOneE->pAttr.get());
+                (pOneE->m_pAttr.get());
             const SwFltRedline *pTwo= static_cast<const SwFltRedline*>
-                (pTwoE->pAttr.get());
+                (pTwoE->m_pAttr.get());
 
             //Return the earlier time, if two have the same time, prioritize
             //inserts over deletes

@@ -679,7 +679,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
                         OUString sURL;
                         for (size_t nI = m_xCtrlStck->size(); nI > nCount; --nI)
                         {
-                            const SfxPoolItem *pItem = ((*m_xCtrlStck)[nI-1]).pAttr.get();
+                            const SfxPoolItem *pItem = ((*m_xCtrlStck)[nI-1]).m_pAttr.get();
                             sal_uInt16 nWhich = pItem->Which();
                             if (nWhich == RES_TXTATR_INETFMT)
                             {
@@ -715,7 +715,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
             {
                 for (size_t i = nCurrentCount; i < m_xCtrlStck->size(); ++i)
                 {
-                    const SfxPoolItem *pItem = ((*m_xCtrlStck)[i]).pAttr.get();
+                    const SfxPoolItem *pItem = ((*m_xCtrlStck)[i]).m_pAttr.get();
                     sal_uInt16 nWhich = pItem->Which();
                     if( nWhich < RES_FLTRATTR_BEGIN ||
                         nWhich >= RES_FLTRATTR_END )

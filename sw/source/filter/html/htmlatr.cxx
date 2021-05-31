@@ -1071,22 +1071,22 @@ enum HTMLOnOffState { HTML_NOT_SUPPORTED,   // unsupported Attribute
 
 class HTMLEndPosLst
 {
-    HTMLStartEndPositions aStartLst;  // list, sorted for start positions
-    HTMLStartEndPositions aEndLst;    // list, sorted for end positions
-    std::deque<sal_Int32> aScriptChgLst;    // positions where script changes
-                                    // 0 is not contained in this list,
-                                    // but the text length
+    HTMLStartEndPositions m_aStartLst; // list, sorted for start positions
+    HTMLStartEndPositions m_aEndLst; // list, sorted for end positions
+    std::deque<sal_Int32> m_aScriptChgLst; // positions where script changes
+        // 0 is not contained in this list,
+        // but the text length
     // the script that is valid up to the position
     // contained in aScriptChgList at the same index
-    std::vector<sal_uInt16> aScriptLst;
+    std::vector<sal_uInt16> m_aScriptLst;
 
-    SwDoc *pDoc;            // the current document
-    SwDoc* pTemplate;       // the HTML template (or 0)
-    std::optional<Color> xDfltColor;// the default foreground colors
-    std::set<OUString>& rScriptTextStyles;
+    SwDoc* m_pDoc; // the current document
+    SwDoc* m_pTemplate; // the HTML template (or 0)
+    std::optional<Color> m_xDefaultColor; // the default foreground colors
+    std::set<OUString>& m_rScriptTextStyles;
 
-    sal_uLong nHTMLMode;
-    bool bOutStyles : 1;    // are styles exported
+    sal_uLong m_nHTMLMode;
+    bool m_bOutStyles : 1; // are styles exported
 
     // Insert/remove a SttEndPos in/from the Start and End lists.
     // The end position is known.
@@ -1148,7 +1148,7 @@ public:
     void OutEndAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
                       HTMLOutContext *pContext );
 
-    bool IsHTMLMode( sal_uLong nMode ) const { return (nHTMLMode & nMode) != 0; }
+    bool IsHTMLMode(sal_uLong nMode) const { return (m_nHTMLMode & nMode) != 0; }
 };
 
 }
@@ -1160,26 +1160,25 @@ void HTMLEndPosLst::InsertItem_( HTMLStartEndPos *pPos, HTMLStartEndPositions::s
     sal_Int32 nStart = pPos->GetStart();
     HTMLStartEndPositions::size_type i {0};
 
-    while( i < aStartLst.size() && aStartLst[i]->GetStart() <= nStart )
+    while (i < m_aStartLst.size() && m_aStartLst[i]->GetStart() <= nStart)
         ++i;
-    aStartLst.insert( aStartLst.begin() + i, pPos );
+    m_aStartLst.insert(m_aStartLst.begin() + i, pPos);
 
     // the position in the End list was supplied
-    aEndLst.insert( aEndLst.begin() + nEndPos, pPos );
+    m_aEndLst.insert(m_aEndLst.begin() + nEndPos, pPos);
 }
 
 void HTMLEndPosLst::RemoveItem_( HTMLStartEndPositions::size_type nEndPos )
 {
-    HTMLStartEndPos *pPos = aEndLst[nEndPos];
+    HTMLStartEndPos* pPos = m_aEndLst[nEndPos];
 
     // now, we are looking for it in the Start list
-    HTMLStartEndPositions::iterator it =
-        std::find(aStartLst.begin(), aStartLst.end(), pPos );
-    OSL_ENSURE(it != aStartLst.end(), "Item not found in Start List!");
-    if( it != aStartLst.end() )
-        aStartLst.erase( it );
+    HTMLStartEndPositions::iterator it = std::find(m_aStartLst.begin(), m_aStartLst.end(), pPos);
+    OSL_ENSURE(it != m_aStartLst.end(), "Item not found in Start List!");
+    if (it != m_aStartLst.end())
+        m_aStartLst.erase(it);
 
-    aEndLst.erase( aEndLst.begin() + nEndPos );
+    m_aEndLst.erase(m_aEndLst.begin() + nEndPos);
 
     delete pPos;
 }
@@ -1335,7 +1334,7 @@ HTMLOnOffState HTMLEndPosLst::GetHTMLItemState( const SfxPoolItem& rItem )
 
 bool HTMLEndPosLst::ExistsOnTagItem( sal_uInt16 nWhich, sal_Int32 nPos )
 {
-    for( auto pTest : aStartLst )
+    for (auto pTest : m_aStartLst)
     {
         if( pTest->GetStart() > nPos )
         {
@@ -1369,7 +1368,7 @@ bool HTMLEndPosLst::ExistsOffTagItem( sal_uInt16 nWhich, sal_Int32 nStartPos,
         return false;
     }
 
-    for( auto pTest : aStartLst )
+    for (auto pTest : m_aStartLst)
     {
         if( pTest->GetStart() > nStartPos )
         {
@@ -1405,22 +1404,21 @@ void HTMLEndPosLst::FixSplittedItem( HTMLStartEndPos *pPos, sal_Int32 nNewEnd,
     pPos->SetEnd( nNewEnd );
 
     // remove the item from the End list
-    HTMLStartEndPositions::iterator it =
-        std::find(aEndLst.begin(), aEndLst.end(), pPos );
-    OSL_ENSURE(it != aEndLst.end(), "Item not found in End List!" );
-    if( it != aEndLst.end() )
-        aEndLst.erase( it );
+    HTMLStartEndPositions::iterator it = std::find(m_aEndLst.begin(), m_aEndLst.end(), pPos);
+    OSL_ENSURE(it != m_aEndLst.end(), "Item not found in End List!");
+    if (it != m_aEndLst.end())
+        m_aEndLst.erase(it);
 
     // from now on, it is closed as the last one at the corresponding position
     HTMLStartEndPositions::size_type nEndPos {0};
-    while( nEndPos < aEndLst.size() && aEndLst[nEndPos]->GetEnd() <= nNewEnd )
+    while (nEndPos < m_aEndLst.size() && m_aEndLst[nEndPos]->GetEnd() <= nNewEnd)
         ++nEndPos;
-    aEndLst.insert( aEndLst.begin() + nEndPos, pPos );
+    m_aEndLst.insert(m_aEndLst.begin() + nEndPos, pPos);
 
     // now, adjust the attributes that got started afterwards
-    for( HTMLStartEndPositions::size_type i = nStartPos+1; i<aStartLst.size(); ++i )
+    for (HTMLStartEndPositions::size_type i = nStartPos + 1; i < m_aStartLst.size(); ++i)
     {
-        HTMLStartEndPos *pTest = aStartLst[i];
+        HTMLStartEndPos* pTest = m_aStartLst[i];
         sal_Int32 nTestEnd = pTest->GetEnd();
         if( pTest->GetStart() >= nNewEnd )
         {
@@ -1437,14 +1435,14 @@ void HTMLEndPosLst::FixSplittedItem( HTMLStartEndPos *pPos, sal_Int32 nNewEnd,
             pTest->SetEnd( nNewEnd );
 
             // remove the attribute from the End list
-            it = std::find(aEndLst.begin(), aEndLst.end(), pTest );
-            OSL_ENSURE(it != aEndLst.end(), "Item not found in End List!" );
-            if( it != aEndLst.end() )
-                aEndLst.erase( it );
+            it = std::find(m_aEndLst.begin(), m_aEndLst.end(), pTest);
+            OSL_ENSURE(it != m_aEndLst.end(), "Item not found in End List!");
+            if (it != m_aEndLst.end())
+                m_aEndLst.erase(it);
 
             // it now ends as the first attribute in the respective position.
             // We already know this position in the End list.
-            aEndLst.insert( aEndLst.begin() + nEndPos, pTest );
+            m_aEndLst.insert(m_aEndLst.begin() + nEndPos, pTest);
 
             // insert the 'rest' of the attribute
             InsertItem( *pTest->GetItem(), nNewEnd, nTestEnd );
@@ -1456,9 +1454,9 @@ void HTMLEndPosLst::InsertItem( const SfxPoolItem& rItem, sal_Int32 nStart,
                                                           sal_Int32 nEnd )
 {
     HTMLStartEndPositions::size_type i;
-    for( i = 0; i < aEndLst.size(); i++ )
+    for (i = 0; i < m_aEndLst.size(); i++)
     {
-        HTMLStartEndPos *pTest = aEndLst[i];
+        HTMLStartEndPos* pTest = m_aEndLst[i];
         sal_Int32 nTestEnd = pTest->GetEnd();
         if( nTestEnd <= nStart )
         {
@@ -1495,9 +1493,9 @@ void HTMLEndPosLst::SplitItem( const SfxPoolItem& rItem, sal_Int32 nStart,
     // first, we must search for the old items by using the start list and
     // determine the new item range
 
-    for( HTMLStartEndPositions::size_type i=0; i<aStartLst.size(); ++i )
+    for (HTMLStartEndPositions::size_type i = 0; i < m_aStartLst.size(); ++i)
     {
-        HTMLStartEndPos *pTest = aStartLst[i];
+        HTMLStartEndPos* pTest = m_aStartLst[i];
         sal_Int32 nTestStart = pTest->GetStart();
         sal_Int32 nTestEnd = pTest->GetEnd();
 
@@ -1528,14 +1526,14 @@ void HTMLEndPosLst::SplitItem( const SfxPoolItem& rItem, sal_Int32 nStart,
                 {
                     // the Test item only starts after the new end of the
                     // attribute. Therefore, it can be completely erased.
-                    aStartLst.erase( aStartLst.begin() + i );
+                    m_aStartLst.erase(m_aStartLst.begin() + i);
                     i--;
 
-                    HTMLStartEndPositions::iterator it =
-                        std::find(aEndLst.begin(), aEndLst.end(), pTest );
-                    OSL_ENSURE(it != aEndLst.end(), "Item not found in End List!" );
-                    if( it != aEndLst.end() )
-                        aEndLst.erase( it );
+                    HTMLStartEndPositions::iterator it
+                        = std::find(m_aEndLst.begin(), m_aEndLst.end(), pTest);
+                    OSL_ENSURE(it != m_aEndLst.end(), "Item not found in End List!");
+                    if (it != m_aEndLst.end())
+                        m_aEndLst.erase(it);
                 }
 
                 // if necessary, insert the second part of the split
@@ -1564,25 +1562,23 @@ const SwHTMLFormatInfo *HTMLEndPosLst::GetFormatInfo( const SwFormat& rFormat,
     }
     else
     {
-        pFormatInfo = new SwHTMLFormatInfo( &rFormat, pDoc, pTemplate,
-                                      bOutStyles );
+        pFormatInfo = new SwHTMLFormatInfo(&rFormat, m_pDoc, m_pTemplate, m_bOutStyles);
         rFormatInfos.insert(std::unique_ptr<SwHTMLFormatInfo>(pFormatInfo));
-        if ( rScriptTextStyles.count( rFormat.GetName() ) )
+        if (m_rScriptTextStyles.count(rFormat.GetName()))
             pFormatInfo->bScriptDependent = true;
     }
 
     return pFormatInfo;
 }
 
-HTMLEndPosLst::HTMLEndPosLst(SwDoc* pD, SwDoc* pTempl, std::optional<Color> xDfltCol,
-                             bool bStyles, sal_uLong nMode, const OUString& rText,
-                             std::set<OUString>& rStyles)
-    : pDoc(pD)
-    , pTemplate(pTempl)
-    , xDfltColor(std::move(xDfltCol))
-    , rScriptTextStyles(rStyles)
-    , nHTMLMode(nMode)
-    , bOutStyles(bStyles)
+HTMLEndPosLst::HTMLEndPosLst(SwDoc* pD, SwDoc* pTempl, std::optional<Color> xDfltCol, bool bStyles,
+                             sal_uLong nMode, const OUString& rText, std::set<OUString>& rStyles)
+    : m_pDoc(pD)
+    , m_pTemplate(pTempl)
+    , m_xDefaultColor(std::move(xDfltCol))
+    , m_rScriptTextStyles(rStyles)
+    , m_nHTMLMode(nMode)
+    , m_bOutStyles(bStyles)
 {
     sal_Int32 nEndPos = rText.getLength();
     sal_Int32 nPos = 0;
@@ -1590,15 +1586,15 @@ HTMLEndPosLst::HTMLEndPosLst(SwDoc* pD, SwDoc* pTempl, std::optional<Color> xDfl
     {
         sal_uInt16 nScript = g_pBreakIt->GetBreakIter()->getScriptType( rText, nPos );
         nPos = g_pBreakIt->GetBreakIter()->endOfScript( rText, nPos, nScript );
-        aScriptChgLst.push_back( nPos );
-        aScriptLst.push_back( nScript );
+        m_aScriptChgLst.push_back(nPos);
+        m_aScriptLst.push_back(nScript);
     }
 }
 
 HTMLEndPosLst::~HTMLEndPosLst()
 {
-    OSL_ENSURE(aStartLst.empty(), "Start List not empty in destructor");
-    OSL_ENSURE(aEndLst.empty(), "End List not empty in destructor");
+    OSL_ENSURE(m_aStartLst.empty(), "Start List not empty in destructor");
+    OSL_ENSURE(m_aEndLst.empty(), "End List not empty in destructor");
 }
 
 void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
@@ -1625,8 +1621,7 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
         // together with the paragraph tag.
         if( ExistsOnTagItem( rItem.Which(), nStart ) )
             bSplit = true;
-        bSet = bOutStyles && !bParaAttrs &&
-               !ExistsOffTagItem( rItem.Which(), nStart, nEnd );
+        bSet = m_bOutStyles && !bParaAttrs && !ExistsOffTagItem(rItem.Which(), nStart, nEnd);
         break;
 
     case HTML_REAL_VALUE:
@@ -1639,11 +1634,9 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
         // the paragraph, it was already output with the paragraph tag.
         // The only exception is the character-background attribute. This
         // attribute must always be handled like a Hint.
-        bSet = bOutStyles &&
-               (!bParaAttrs
-              || rItem.Which()==RES_CHRATR_BACKGROUND
-              || rItem.Which()==RES_CHRATR_BOX
-              || rItem.Which()==RES_CHRATR_OVERLINE);
+        bSet = m_bOutStyles
+               && (!bParaAttrs || rItem.Which() == RES_CHRATR_BACKGROUND
+                   || rItem.Which() == RES_CHRATR_BOX || rItem.Which() == RES_CHRATR_OVERLINE);
         break;
 
     case HTML_CHRFMT_VALUE:
@@ -1686,8 +1679,7 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
             Color aColor( static_cast<const SvxColorItem&>(rItem).GetValue() );
             if( COL_AUTO == aColor )
                 aColor = COL_BLACK;
-            bSet = !bParaAttrs || !xDfltColor ||
-                   !xDfltColor->IsRGBEqual( aColor );
+            bSet = !bParaAttrs || !m_xDefaultColor || !m_xDefaultColor->IsRGBEqual(aColor);
         }
         break;
 
@@ -1697,7 +1689,7 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
                     "Not a drop cap, after all" );
             const SwFormatDrop& rDrop = static_cast<const SwFormatDrop&>(rItem);
             nEnd = nStart + rDrop.GetChars();
-            if( !bOutStyles )
+            if (!m_bOutStyles)
             {
                 // At least use the attributes of the character style
                 const SwCharFormat *pCharFormat = rDrop.GetCharFormat();
@@ -1771,10 +1763,14 @@ void HTMLEndPosLst::Insert( const SfxPoolItem& rItem,
         break;
     case RES_TXTATR_INETFMT:
         {
-            if( GetFormatInfo( *pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool(
-                     RES_POOLCHR_INET_NORMAL), rFormatInfos )->bScriptDependent ||
-                GetFormatInfo( *pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool(
-                     RES_POOLCHR_INET_VISIT), rFormatInfos )->bScriptDependent )
+            if (GetFormatInfo(*m_pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool(
+                                  RES_POOLCHR_INET_NORMAL),
+                              rFormatInfos)
+                    ->bScriptDependent
+                || GetFormatInfo(*m_pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool(
+                                     RES_POOLCHR_INET_VISIT),
+                                 rFormatInfos)
+                       ->bScriptDependent)
             {
                 bDependsOnScript = true;
                 bDependsOnAnyScript = true;
@@ -1786,9 +1782,9 @@ void HTMLEndPosLst::Insert( const SfxPoolItem& rItem,
     if( bDependsOnScript )
     {
         sal_Int32 nPos = nStart;
-        for( size_t i=0; i < aScriptChgLst.size(); i++ )
+        for (size_t i = 0; i < m_aScriptChgLst.size(); i++)
         {
-            sal_Int32 nChgPos = aScriptChgLst[i];
+            sal_Int32 nChgPos = m_aScriptChgLst[i];
             if( nPos >= nChgPos )
             {
                 // the hint starts behind or at the next script change,
@@ -1800,7 +1796,7 @@ void HTMLEndPosLst::Insert( const SfxPoolItem& rItem,
                 // the (rest of) the hint ends before or at the next script
                 // change, so we can insert it, but only if it belongs
                 // to the current script.
-                if( bDependsOnAnyScript || nScript == aScriptLst[i] )
+                if (bDependsOnAnyScript || nScript == m_aScriptLst[i])
                     InsertNoScript( rItem, nPos, nEnd, rFormatInfos,
                                     bParaAttrs );
                 break;
@@ -1809,7 +1805,7 @@ void HTMLEndPosLst::Insert( const SfxPoolItem& rItem,
             // the hint starts before the next script change and ends behind
             // it, so we can insert a hint up to the next script change and
             // continue with the rest of the hint.
-            if( bDependsOnAnyScript || nScript == aScriptLst[i] )
+            if (bDependsOnAnyScript || nScript == m_aScriptLst[i])
                 InsertNoScript( rItem, nPos, nChgPos, rFormatInfos, bParaAttrs );
             nPos = nChgPos;
         }
@@ -1855,27 +1851,27 @@ void HTMLEndPosLst::Insert( const SwDrawFrameFormat& rFormat, sal_Int32 nPos,
     SfxItemSet aItemSet( *rFormatItemSet.GetPool(), svl::Items<RES_CHRATR_BEGIN,
                                                  RES_CHRATR_END>{} );
     SwHTMLWriter::GetEEAttrsFromDrwObj( aItemSet, pTextObj );
-    bool bOutStylesOld = bOutStyles;
-    bOutStyles = false;
+    bool bOutStylesOld = m_bOutStyles;
+    m_bOutStyles = false;
     Insert( aItemSet, nPos, nPos+1, rFormatInfos, false );
-    bOutStyles = bOutStylesOld;
+    m_bOutStyles = bOutStylesOld;
 }
 
 sal_uInt16 HTMLEndPosLst::GetScriptAtPos( sal_Int32 nPos, sal_uInt16 nWeak )
 {
     sal_uInt16 nRet = CSS1_OUTMODE_ANY_SCRIPT;
 
-    size_t nScriptChgs = aScriptChgLst.size();
+    size_t nScriptChgs = m_aScriptChgLst.size();
     size_t i=0;
-    while( i < nScriptChgs && nPos >= aScriptChgLst[i] )
+    while (i < nScriptChgs && nPos >= m_aScriptChgLst[i])
         i++;
     OSL_ENSURE( i < nScriptChgs, "script list is too short" );
     if( i < nScriptChgs )
     {
-        if( i18n::ScriptType::WEAK == aScriptLst[i] )
+        if (i18n::ScriptType::WEAK == m_aScriptLst[i])
             nRet = nWeak;
         else
-            nRet = SwHTMLWriter::GetCSS1ScriptForScriptType( aScriptLst[i] );
+            nRet = SwHTMLWriter::GetCSS1ScriptForScriptType(m_aScriptLst[i]);
     }
 
     return nRet;
@@ -1889,27 +1885,27 @@ void HTMLEndPosLst::OutStartAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
     // Character border attribute must be the first which is written out
     // because of border merge.
     HTMLStartEndPositions::size_type nCharBoxIndex = 0;
-    while( nCharBoxIndex < aStartLst.size() &&
-           aStartLst[nCharBoxIndex]->GetItem()->Which() != RES_CHRATR_BOX )
+    while (nCharBoxIndex < m_aStartLst.size()
+           && m_aStartLst[nCharBoxIndex]->GetItem()->Which() != RES_CHRATR_BOX)
     {
         ++nCharBoxIndex;
     }
 
     // the attributes of the start list are sorted in ascending order
-    for( HTMLStartEndPositions::size_type i=0; i< aStartLst.size(); ++i )
+    for (HTMLStartEndPositions::size_type i = 0; i < m_aStartLst.size(); ++i)
     {
         HTMLStartEndPos *pPos = nullptr;
-        if( nCharBoxIndex < aStartLst.size() )
+        if (nCharBoxIndex < m_aStartLst.size())
         {
             if( i == 0 )
-                pPos = aStartLst[nCharBoxIndex];
+                pPos = m_aStartLst[nCharBoxIndex];
             else if( i == nCharBoxIndex )
-                pPos = aStartLst[0];
+                pPos = m_aStartLst[0];
             else
-                pPos = aStartLst[i];
+                pPos = m_aStartLst[i];
         }
         else
-            pPos = aStartLst[i];
+            pPos = m_aStartLst[i];
 
         sal_Int32 nStart = pPos->GetStart();
         if( nStart > nPos )
@@ -1947,9 +1943,9 @@ void HTMLEndPosLst::OutEndAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
 
     // the attributes in the End list are sorted in ascending order
     HTMLStartEndPositions::size_type i {0};
-    while( i < aEndLst.size() )
+    while (i < m_aEndLst.size())
     {
-        HTMLStartEndPos *pPos = aEndLst[i];
+        HTMLStartEndPos* pPos = m_aEndLst[i];
         sal_Int32 nEnd = pPos->GetEnd();
 
         if( SAL_MAX_INT32 == nPos || nEnd == nPos )
@@ -1963,12 +1959,12 @@ void HTMLEndPosLst::OutEndAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
             bool bSkipOut = false;
             if( pPos->GetItem()->Which() == RES_CHRATR_BOX )
             {
-                HTMLStartEndPositions::iterator it =
-                    std::find(aStartLst.begin(), aStartLst.end(), pPos );
-                OSL_ENSURE(it != aStartLst.end(), "Item not found in Start List!" );
-                if (it != aStartLst.end())
+                HTMLStartEndPositions::iterator it
+                    = std::find(m_aStartLst.begin(), m_aStartLst.end(), pPos);
+                OSL_ENSURE(it != m_aStartLst.end(), "Item not found in Start List!");
+                if (it != m_aStartLst.end())
                     ++it;
-                while(it != aStartLst.end() )
+                while (it != m_aStartLst.end())
                 {
                     HTMLStartEndPos *pEndPos = *it;
                     if( pEndPos->GetItem()->Which() == RES_CHRATR_BOX &&
