@@ -113,6 +113,7 @@ gb_CFLAGS := \
 	-W4 \
 	-wd4244 \
 	-wd4505 \
+	-bigobj \
 
 gb_CXXFLAGS_DISABLE_WARNINGS = -w
 
@@ -145,6 +146,7 @@ gb_CXXFLAGS := \
 	-wd4505 \
 	-wd4611 \
 	-wd4706 \
+	-bigobj \
 
 ifeq ($(CPUNAME),INTEL)
 
