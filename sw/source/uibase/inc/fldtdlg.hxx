@@ -22,7 +22,7 @@
 #include <sal/config.h>
 
 #include <string_view>
-
+#include <memory>
 #include <sfx2/tabdlg.hxx>
 
 class SfxBindings;
@@ -37,6 +37,7 @@ class SwFieldDlg : public SfxTabDialogController
     bool                m_bHtmlMode;
     bool                m_bDataBaseMode;
     bool                m_bClosing;
+    std::unique_ptr<SfxItemSet> mxInputItemSet;
 
     virtual SfxItemSet* CreateInputItemSet(const OString& rId) override;
     virtual void        PageCreated(const OString& rId, SfxTabPage& rPage) override;
