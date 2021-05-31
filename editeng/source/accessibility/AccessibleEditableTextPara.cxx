@@ -1528,7 +1528,7 @@ namespace accessibility
             if (rRes.Name == "NumberingLevel")
             {
                 const SvxNumBulletItem& rNumBullet = rCacheTF.GetParaAttribs(GetParagraphIndex()).Get(EE_PARA_NUMBULLET);
-                if(rNumBullet.GetNumRule()->GetLevelCount()==0)
+                if(rNumBullet.GetNumRule().GetLevelCount()==0)
                 {
                     rRes.Value <<= sal_Int16(-1);
                     rRes.Handle = -1;

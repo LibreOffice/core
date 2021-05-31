@@ -104,15 +104,12 @@ OutlineBulletDlg::OutlineBulletDlg(weld::Window* pParent, const SfxItemSet* pAtt
     if (m_bTitle && m_aInputSet.GetItemState(EE_PARA_NUMBULLET) == SfxItemState::SET )
     {
         const SvxNumBulletItem* pItem = m_aInputSet.GetItem<SvxNumBulletItem>(EE_PARA_NUMBULLET);
-        SvxNumRule* pRule = pItem->GetNumRule();
-        if(pRule)
-        {
-            SvxNumRule aNewRule( *pRule );
-            aNewRule.SetFeatureFlag( SvxNumRuleFlags::NO_NUMBERS );
+        const SvxNumRule& rRule = pItem->GetNumRule();
+        SvxNumRule aNewRule( rRule );
+        aNewRule.SetFeatureFlag( SvxNumRuleFlags::NO_NUMBERS );
 
-            SvxNumBulletItem aNewItem( aNewRule, EE_PARA_NUMBULLET );
-            m_aInputSet.Put(aNewItem);
-        }
+        SvxNumBulletItem aNewItem( aNewRule, EE_PARA_NUMBULLET );
+        m_aInputSet.Put(aNewItem);
     }
 
     SetInputSet(&m_aInputSet);
@@ -156,16 +153,15 @@ const SfxItemSet* OutlineBulletDlg::GetBulletOutputItemSet() const
     const SfxPoolItem *pItem = nullptr;
     if( SfxItemState::SET == m_xOutputSet->GetItemState(m_xOutputSet->GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE), false, &pItem ))
     {
-        SdBulletMapper::MapFontsInNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule(), *m_xOutputSet);
+        SdBulletMapper::MapFontsInNumRule(const_cast<SvxNumRule&>(static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()), *m_xOutputSet);
         // #i35937 - removed EE_PARA_BULLETSTATE setting
     }
 
     if (m_bTitle && m_xOutputSet->GetItemState(EE_PARA_NUMBULLET) == SfxItemState::SET)
     {
         const SvxNumBulletItem* pBulletItem = m_xOutputSet->GetItem<SvxNumBulletItem>(EE_PARA_NUMBULLET);
-        SvxNumRule* pRule = pBulletItem->GetNumRule();
-        if(pRule)
-            pRule->SetFeatureFlag( SvxNumRuleFlags::NO_NUMBERS, false );
+        SvxNumRule& rRule = const_cast<SvxNumRule&>(pBulletItem->GetNumRule());
+        rRule.SetFeatureFlag( SvxNumRuleFlags::NO_NUMBERS, false );
     }
 
     return m_xOutputSet.get();
