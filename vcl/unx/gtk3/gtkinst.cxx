@@ -22397,6 +22397,11 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "svt/ui/datewindow.ui" &&
         rUIFile != "svt/ui/javadisableddialog.ui" &&
         rUIFile != "svx/ui/fontworkgallerydialog.ui" &&
+        rUIFile != "modules/BasicIDE/ui/organizedialog.ui" &&
+        rUIFile != "modules/BasicIDE/ui/dialogpage.ui" &&
+        rUIFile != "modules/BasicIDE/ui/libpage.ui" &&
+        rUIFile != "modules/BasicIDE/ui/modulepage.ui" &&
+        rUIFile != "modules/BasicIDE/ui/newlibdialog.ui" &&
         rUIFile != "modules/scalc/ui/colwidthdialog.ui" &&
         rUIFile != "modules/scalc/ui/consolidatedialog.ui" &&
         rUIFile != "modules/scalc/ui/dataform.ui" &&
