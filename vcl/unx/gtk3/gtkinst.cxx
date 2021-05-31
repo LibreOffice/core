@@ -4973,7 +4973,6 @@ std::unique_ptr<weld::Container> GtkInstanceWidget::weld_parent() const
 }
 
 namespace {
-#if !GTK_CHECK_VERSION(4, 0, 0)
 
 struct ButtonOrder
 {
@@ -5069,14 +5068,30 @@ public:
 
     virtual void reorder_child(weld::Widget* pWidget, int nNewPosition) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkInstanceWidget* pGtkWidget = dynamic_cast<GtkInstanceWidget*>(pWidget);
         assert(pGtkWidget);
         GtkWidget* pChild = pGtkWidget->getWidget();
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_box_reorder_child(m_pBox, pChild, nNewPosition);
 #else
-        (void)pWidget;
-        (void)nNewPosition;
+        if (nNewPosition == 0)
+            gtk_box_reorder_child_after(m_pBox, pChild, nullptr);
+        else
+        {
+            int nNewSiblingPos = nNewPosition - 1;
+            int nChildPosition = 0;
+            for (GtkWidget* pNewSibling = gtk_widget_get_first_child(GTK_WIDGET(m_pBox));
+                 pNewSibling; pNewSibling = gtk_widget_get_next_sibling(pNewSibling))
+            {
+                if (nChildPosition == nNewSiblingPos)
+                {
+                    gtk_box_reorder_child_after(m_pBox, pChild, pNewSibling);
+                    break;
+                }
+                ++nChildPosition;
+            }
+        }
 #endif
     }
 
@@ -5086,7 +5101,6 @@ public:
     }
 };
 
-#endif
 }
 
 namespace
@@ -21879,16 +21893,11 @@ public:
 
     virtual std::unique_ptr<weld::Box> weld_box(const OString &id) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkBox* pBox = GTK_BOX(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pBox)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pBox));
         return std::make_unique<GtkInstanceBox>(pBox, this, false);
-#else
-        (void)id;
-        return nullptr;
-#endif
     }
 
     virtual std::unique_ptr<weld::Paned> weld_paned(const OString &id) override
