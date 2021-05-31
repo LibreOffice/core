@@ -26,21 +26,21 @@ void SwHTMLNumRuleInfo::Set(const SwTextNode& rTextNd)
     const SwNumRule* pTextNdNumRule(rTextNd.GetNumRule());
     if (pTextNdNumRule && pTextNdNumRule != rTextNd.GetDoc().GetOutlineNumRule())
     {
-        pNumRule = const_cast<SwNumRule*>(pTextNdNumRule);
-        nDeep = o3tl::narrowing<sal_uInt16>(pNumRule ? rTextNd.GetActualListLevel() + 1 : 0);
-        bNumbered = rTextNd.IsCountedInList();
+        m_pNumRule = const_cast<SwNumRule*>(pTextNdNumRule);
+        m_nDeep = o3tl::narrowing<sal_uInt16>(m_pNumRule ? rTextNd.GetActualListLevel() + 1 : 0);
+        m_bNumbered = rTextNd.IsCountedInList();
         // #i57919# - correction of refactoring done by cws swnumtree:
         // <bRestart> has to be set to <true>, if numbering is restarted at this
         // text node and the start value equals <USHRT_MAX>.
         // Start value <USHRT_MAX> indicates, that at this text node the numbering
         // is restarted with the value given at the corresponding level.
-        bRestart = rTextNd.IsListRestart() && !rTextNd.HasAttrListRestartValue();
+        m_bRestart = rTextNd.IsListRestart() && !rTextNd.HasAttrListRestartValue();
     }
     else
     {
-        pNumRule = nullptr;
-        nDeep = 0;
-        bNumbered = bRestart = false;
+        m_pNumRule = nullptr;
+        m_nDeep = 0;
+        m_bNumbered = m_bRestart = false;
     }
 }
 

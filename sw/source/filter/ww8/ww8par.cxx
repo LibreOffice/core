@@ -1203,7 +1203,7 @@ SwFltStackEntry* SwWW8FltControlStack::SetAttr(const SwPosition& rPos, sal_uInt1
         for (size_t i=0; i < nCnt; ++i)
         {
             SwFltStackEntry& rEntry = (*this)[i];
-            if (nAttrId == rEntry.pAttr->Which())
+            if (nAttrId == rEntry.m_pAttr->Which())
             {
                 DeleteAndDestroy(i--);
                 --nCnt;
@@ -1336,7 +1336,7 @@ bool SwWW8FltControlStack::CheckSdOD(sal_Int32 nStart,sal_Int32 nEnd)
 void SwWW8ReferencedFltEndStack::SetAttrInDoc( const SwPosition& rTmpPos,
                                                SwFltStackEntry& rEntry )
 {
-    switch( rEntry.pAttr->Which() )
+    switch( rEntry.m_pAttr->Which() )
     {
     case RES_FLTR_BOOKMARK:
         {
@@ -1344,7 +1344,7 @@ void SwWW8ReferencedFltEndStack::SetAttrInDoc( const SwPosition& rTmpPos,
             // and which is not referenced.
             bool bInsertBookmarkIntoDoc = true;
 
-            SwFltBookmark* pFltBookmark = dynamic_cast<SwFltBookmark*>(rEntry.pAttr.get());
+            SwFltBookmark* pFltBookmark = dynamic_cast<SwFltBookmark*>(rEntry.m_pAttr.get());
             if ( pFltBookmark != nullptr && pFltBookmark->IsTOCBookmark() )
             {
                 const OUString& rName = pFltBookmark->GetName();
@@ -1370,7 +1370,7 @@ void SwWW8ReferencedFltEndStack::SetAttrInDoc( const SwPosition& rTmpPos,
 void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
     SwFltStackEntry& rEntry)
 {
-    switch (rEntry.pAttr->Which())
+    switch (rEntry.m_pAttr->Which())
     {
         case RES_LR_SPACE:
             {
@@ -1384,7 +1384,7 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 SwPaM aRegion(rTmpPos);
                 if (rEntry.MakeRegion(m_rDoc, aRegion, SwFltStackEntry::RegionMode::NoCheck))
                 {
-                    SvxLRSpaceItem aNewLR( *static_cast<SvxLRSpaceItem*>(rEntry.pAttr.get()) );
+                    SvxLRSpaceItem aNewLR( *static_cast<SvxLRSpaceItem*>(rEntry.m_pAttr.get()) );
                     sal_uLong nStart = aRegion.Start()->nNode.GetIndex();
                     sal_uLong nEnd   = aRegion.End()->nNode.GetIndex();
                     for(; nStart <= nEnd; ++nStart)
@@ -1458,7 +1458,7 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                     if (nullptr != pFrame)
                     {
                         const SwFormatINetFormat *pAttr = static_cast<const SwFormatINetFormat *>(
-                            rEntry.pAttr.get());
+                            rEntry.m_pAttr.get());
                         SwFormatURL aURL;
                         aURL.SetURL(pAttr->GetValue(), false);
                         aURL.SetTargetFrameName(pAttr->GetTargetFrame());
@@ -1466,7 +1466,7 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                     }
                     else
                     {
-                        m_rDoc.getIDocumentContentOperations().InsertPoolItem(aRegion, *rEntry.pAttr);
+                        m_rDoc.getIDocumentContentOperations().InsertPoolItem(aRegion, *rEntry.m_pAttr);
                     }
                 }
             }
@@ -1531,9 +1531,9 @@ const SfxPoolItem* SwWW8FltControlStack::GetStackAttr(const SwPosition& rPos,
     while (nSize)
     {
         const SwFltStackEntry& rEntry = (*this)[ --nSize ];
-        if (rEntry.pAttr->Which() == nWhich)
+        if (rEntry.m_pAttr->Which() == nWhich)
         {
-            if ( (rEntry.bOpen) ||
+            if ( (rEntry.m_bOpen) ||
                  (
                   (rEntry.m_aMkPos.m_nNode <= aFltPos.m_nNode) &&
                   (rEntry.m_aPtPos.m_nNode >= aFltPos.m_nNode) &&
@@ -1546,7 +1546,7 @@ const SfxPoolItem* SwWW8FltControlStack::GetStackAttr(const SwPosition& rPos,
                  * means props that end at 3 are not included
                  */
             {
-                return rEntry.pAttr.get();
+                return rEntry.m_pAttr.get();
             }
         }
     }
@@ -1579,7 +1579,7 @@ bool SwWW8FltRefStack::IsFootnoteEdnBkmField(
 void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
     SwFltStackEntry& rEntry)
 {
-    switch (rEntry.pAttr->Which())
+    switch (rEntry.m_pAttr->Which())
     {
         /*
         Look up these in our lists of bookmarks that were changed to
@@ -1593,7 +1593,7 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
             SwNodeIndex aIdx(rEntry.m_aMkPos.m_nNode, 1);
             SwPaM aPaM(aIdx, rEntry.m_aMkPos.m_nContent);
 
-            SwFormatField& rFormatField   = *static_cast<SwFormatField*>(rEntry.pAttr.get());
+            SwFormatField& rFormatField   = *static_cast<SwFormatField*>(rEntry.m_pAttr.get());
             SwField* pField = rFormatField.GetField();
 
             if (!RefToVar(pField, rEntry))
@@ -1623,7 +1623,7 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 }
             }
 
-            m_rDoc.getIDocumentContentOperations().InsertPoolItem(aPaM, *rEntry.pAttr);
+            m_rDoc.getIDocumentContentOperations().InsertPoolItem(aPaM, *rEntry.m_pAttr);
             MoveAttrs(*aPaM.GetPoint());
         }
         break;

@@ -2258,16 +2258,16 @@ WW8DupProperties::WW8DupProperties(SwDoc &rDoc, SwWW8FltControlStack *pStack)
     for (size_t i=0; i < nCnt; ++i)
     {
         const SwFltStackEntry& rEntry = (*pCtrlStck)[ i ];
-        if (rEntry.bOpen)
+        if (rEntry.m_bOpen)
         {
-            if (isCHRATR(rEntry.pAttr->Which()))
+            if (isCHRATR(rEntry.m_pAttr->Which()))
             {
-                aChrSet.Put( *rEntry.pAttr );
+                aChrSet.Put( *rEntry.m_pAttr );
 
             }
-            else if (isPARATR(rEntry.pAttr->Which()))
+            else if (isPARATR(rEntry.m_pAttr->Which()))
             {
-                aParSet.Put( *rEntry.pAttr );
+                aParSet.Put( *rEntry.m_pAttr );
             }
         }
     }

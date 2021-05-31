@@ -87,16 +87,16 @@ public:
     SwFltPosition m_aMkPos;
     SwFltPosition m_aPtPos;
 
-    std::unique_ptr<SfxPoolItem> pAttr;// Format Attribute
+    std::unique_ptr<SfxPoolItem> m_pAttr;// Format Attribute
 
-    bool bOld;          // to mark Attributes *before* skipping field results
-    bool bOpen;     //Entry open, awaiting being closed
-    bool bConsumedByField;
+    bool m_bOld;          // to mark Attributes *before* skipping field results
+    bool m_bOpen;     //Entry open, awaiting being closed
+    bool m_bConsumedByField;
     bool m_isAnnotationOnEnd; ///< annotation already moved onto its end pos.
 
     sal_Int32 mnStartCP;
     sal_Int32 mnEndCP;
-    bool bIsParaEnd;
+    bool m_bIsParaEnd;
 
     SW_DLLPUBLIC SwFltStackEntry(const SwPosition & rStartPos, std::unique_ptr<SfxPoolItem> pHt );
     SW_DLLPUBLIC ~SwFltStackEntry();
@@ -112,8 +112,8 @@ public:
     void SetEndCP(sal_Int32 nCP) {mnEndCP = nCP;}
     sal_Int32 GetStartCP() const {return mnStartCP;}
     sal_Int32 GetEndCP() const {return mnEndCP;}
-    bool IsParaEnd() const { return bIsParaEnd;}
-    void SetIsParaEnd(bool bArg){ bIsParaEnd = bArg;}
+    bool IsParaEnd() const { return m_bIsParaEnd;}
+    void SetIsParaEnd(bool bArg){ m_bIsParaEnd = bArg;}
 };
 
 template<> struct o3tl::typed_flags<SwFltStackEntry::RegionMode>: o3tl::is_typed_flags<SwFltStackEntry::RegionMode, 0x03> {};
@@ -280,18 +280,18 @@ public:
 class SW_DLLPUBLIC SwFltTOX : public SfxPoolItem
 {
     std::shared_ptr<SwTOXBase> m_xTOXBase;
-    bool bHadBreakItem; // there was a break item BEFORE insertion of the TOX
-    bool bHadPageDescItem;
+    bool m_bHadBreakItem; // there was a break item BEFORE insertion of the TOX
+    bool m_bHadPageDescItem;
 public:
     SwFltTOX(std::shared_ptr<SwTOXBase> xBase);
     // "purely virtual methods" of SfxPoolItem
     virtual bool operator==(const SfxPoolItem&) const override;
     virtual SwFltTOX* Clone(SfxItemPool* = nullptr) const override;
     const SwTOXBase& GetBase() const { return *m_xTOXBase; }
-    void SetHadBreakItem(    bool bVal ) { bHadBreakItem    = bVal; }
-    void SetHadPageDescItem( bool bVal ) { bHadPageDescItem = bVal; }
-    bool HadBreakItem()    const { return bHadBreakItem; }
-    bool HadPageDescItem() const { return bHadPageDescItem; }
+    void SetHadBreakItem(    bool bVal ) { m_bHadBreakItem    = bVal; }
+    void SetHadPageDescItem( bool bVal ) { m_bHadPageDescItem = bVal; }
+    bool HadBreakItem()    const { return m_bHadBreakItem; }
+    bool HadPageDescItem() const { return m_bHadPageDescItem; }
 };
 
 // The WWEndStack behaves like the WWControlStack, except that the attributes
