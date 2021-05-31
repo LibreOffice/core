@@ -25,19 +25,23 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
+#include <com/sun/star/i18n/CharacterClassification.hpp>
 
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/svapp.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 using namespace css;
 
 MenuContentHandler::MenuContentHandler(uno::Reference<frame::XFrame> const& xFrame)
-    : m_xFrame(xFrame)
+    : m_xContext(comphelper::getProcessComponentContext())
+    , m_xFrame(xFrame)
+    , m_xCharacterClassification(i18n::CharacterClassification::create(m_xContext))
+    , m_xURLTransformer(util::URLTransformer::create(m_xContext))
     , m_sModuleLongName(vcl::CommandInfoProvider::GetModuleIdentifier(xFrame))
 {
-    auto xComponentContext = comphelper::getProcessComponentContext();
-
     uno::Reference<ui::XModuleUIConfigurationManagerSupplier> xModuleConfigSupplier;
-    xModuleConfigSupplier.set(ui::theModuleUIConfigurationManagerSupplier::get(xComponentContext));
+    xModuleConfigSupplier.set(ui::theModuleUIConfigurationManagerSupplier::get(m_xContext));
 
     uno::Reference<ui::XUIConfigurationManager> xConfigurationManager;
     xConfigurationManager = xModuleConfigSupplier->getUIConfigurationManager(m_sModuleLongName);
@@ -83,6 +87,7 @@ void MenuContentHandler::gatherMenuContent(
             aNewContent.m_aCommandURL, m_sModuleLongName);
         OUString aLabel = vcl::CommandInfoProvider::GetLabelForCommand(aCommandProperties);
         aNewContent.m_aMenuLabel = aLabel;
+        aNewContent.m_aSearchableMenuLabel = toLower(aLabel);
 
         if (!rMenuContent.m_aFullLabelWithPath.isEmpty())
             aNewContent.m_aFullLabelWithPath = rMenuContent.m_aFullLabelWithPath + " / ";
@@ -102,7 +107,7 @@ void MenuContentHandler::findInMenu(OUString const& rText,
                                     std::unique_ptr<weld::TreeView>& rpCommandTreeView,
                                     std::vector<CurrentEntry>& rCommandList)
 {
-    findInMenuRecursive(m_aMenuContent, rText, rpCommandTreeView, rCommandList);
+    findInMenuRecursive(m_aMenuContent, toLower(rText), rpCommandTreeView, rCommandList);
 }
 
 void MenuContentHandler::findInMenuRecursive(MenuContent const& rMenuContent, OUString const& rText,
@@ -111,15 +116,13 @@ void MenuContentHandler::findInMenuRecursive(MenuContent const& rMenuContent, OU
 {
     for (MenuContent const& aSubContent : rMenuContent.m_aSubMenuContent)
     {
-        if (aSubContent.m_aMenuLabel.toAsciiLowerCase().startsWith(rText))
+        if (aSubContent.m_aSearchableMenuLabel.startsWith(rText))
         {
             OUString sCommandURL = aSubContent.m_aCommandURL;
             util::URL aCommandURL;
             aCommandURL.Complete = sCommandURL;
-            uno::Reference<uno::XComponentContext> xContext
-                = comphelper::getProcessComponentContext();
-            uno::Reference<util::XURLTransformer> xParser = util::URLTransformer::create(xContext);
-            xParser->parseStrict(aCommandURL);
+
+            m_xURLTransformer->parseStrict(aCommandURL);
 
             auto* pViewFrame = SfxViewFrame::Current();
 
@@ -146,6 +149,13 @@ void MenuContentHandler::findInMenuRecursive(MenuContent const& rMenuContent, OU
         }
         findInMenuRecursive(aSubContent, rText, rpCommandTreeView, rCommandList);
     }
+}
+
+OUString MenuContentHandler::toLower(OUString const& rString)
+{
+    const css::lang::Locale& rLocale = Application::GetSettings().GetUILanguageTag().getLocale();
+
+    return m_xCharacterClassification->toUpper(rString, 0, rString.getLength(), rLocale);
 }
 
 CommandListBox::CommandListBox(weld::Window* pParent, uno::Reference<frame::XFrame> const& xFrame)
@@ -225,7 +235,7 @@ IMPL_LINK_NOARG(CommandListBox, ModifyHdl, weld::Entry&, void)
         return;
 
     mpCommandTreeView->freeze();
-    mpMenuContentHandler->findInMenu(sText.toAsciiLowerCase(), mpCommandTreeView, maCommandList);
+    mpMenuContentHandler->findInMenu(sText, mpCommandTreeView, maCommandList);
     mpCommandTreeView->thaw();
 
     if (mpCommandTreeView->n_children() > 0)

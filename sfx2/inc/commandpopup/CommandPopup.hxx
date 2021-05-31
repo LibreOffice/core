@@ -17,8 +17,11 @@
 #include <vcl/weld.hxx>
 #include <vcl/window.hxx>
 
-#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/i18n/XCharacterClassification.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
 
 struct CurrentEntry final
 {
@@ -36,6 +39,7 @@ struct MenuContent final
 {
     OUString m_aCommandURL;
     OUString m_aMenuLabel;
+    OUString m_aSearchableMenuLabel;
     OUString m_aFullLabelWithPath;
     OUString m_aTooltip;
     std::vector<MenuContent> m_aSubMenuContent;
@@ -44,9 +48,14 @@ struct MenuContent final
 class MenuContentHandler final
 {
 private:
+    css::uno::Reference<css::uno::XComponentContext> m_xContext;
     css::uno::Reference<css::frame::XFrame> m_xFrame;
+    css::uno::Reference<css::i18n::XCharacterClassification> m_xCharacterClassification;
+    css::uno::Reference<css::util::XURLTransformer> m_xURLTransformer;
+
     MenuContent m_aMenuContent;
     OUString m_sModuleLongName;
+    OUString toLower(OUString const& rString);
 
 public:
     MenuContentHandler(css::uno::Reference<css::frame::XFrame> const& xFrame);
