@@ -2950,7 +2950,7 @@ bool ImpEditEngine::UpdateFields()
             if (rAttr.Which() == EE_FEATURE_FIELD)
             {
                 EditCharAttribField& rField = static_cast<EditCharAttribField&>(rAttr);
-                std::unique_ptr<EditCharAttribField> pCurrent(new EditCharAttribField(rField));
+                EditCharAttribField aCurrent(rField);
                 rField.Reset();
 
                 if (!aStatus.MarkNonUrlFields() && !aStatus.MarkUrlFields())
@@ -2975,7 +2975,7 @@ bool ImpEditEngine::UpdateFields()
                         nPara, rField.GetStart(), rField.GetTextColor(), rField.GetFieldColor());
 
                 rField.SetFieldValue(aFldValue);
-                if (rField != *pCurrent)
+                if (rField != aCurrent)
                 {
                     bChanges = true;
                     bChangesInPara = true;
