@@ -1725,7 +1725,8 @@ BulletinBoardElement::BulletinBoardElement(
     OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes,
     ElementBase * pParent, DialogImport * pImport )
-    : ControlElement( rLocalName, xAttributes, pParent, pImport )
+    : ControlElement( rLocalName, xAttributes, pParent, pImport ),
+      mxDialogImport(pImport)
 {
     OUString aValue( _xAttributes->getValueByUidName( m_pImport->XMLNS_DIALOGS_UID, "left" ) );
     if (!aValue.isEmpty())
