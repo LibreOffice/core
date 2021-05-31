@@ -292,7 +292,7 @@ private:
     */
     static InstanceMap maInstanceMap;
     class ViewURLMap;
-    static std::unique_ptr<ViewURLMap> mpViewURLMap;
+    static ViewURLMap maViewURLMap;
 
     ViewShellBase& mrBase;
     css::uno::Reference<css::drawing::framework::XConfigurationController>

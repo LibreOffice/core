@@ -560,10 +560,10 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest const & rReq )
     if( !pTextApi )
         return;
 
-    std::unique_ptr< ::Outliner > pOutliner( new ::Outliner(GetAnnotationPool(),OutlinerMode::TextObject) );
+    ::Outliner aOutliner( GetAnnotationPool(),OutlinerMode::TextObject );
 
-    SdDrawDocument::SetCalcFieldValueHdl( pOutliner.get() );
-    pOutliner->SetUpdateMode( true );
+    SdDrawDocument::SetCalcFieldValueHdl( &aOutliner );
+    aOutliner.SetUpdateMode( true );
 
     OUString aStr(SdResId(STR_ANNOTATION_REPLY));
     OUString sAuthor( xAnnotation->getAuthor() );
@@ -580,24 +580,24 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest const & rReq )
     aStr += sQuote + "\"\n";
 
     for( sal_Int32 nIdx = 0; nIdx >= 0; )
-        pOutliner->Insert( aStr.getToken( 0, '\n', nIdx ), EE_PARA_APPEND, -1 );
+        aOutliner.Insert( aStr.getToken( 0, '\n', nIdx ), EE_PARA_APPEND, -1 );
 
-    if( pOutliner->GetParagraphCount() > 1 )
+    if( aOutliner.GetParagraphCount() > 1 )
     {
-        SfxItemSet aAnswerSet( pOutliner->GetEmptyItemSet() );
+        SfxItemSet aAnswerSet( aOutliner.GetEmptyItemSet() );
         aAnswerSet.Put(SvxPostureItem(ITALIC_NORMAL,EE_CHAR_ITALIC));
 
         ESelection aSel;
-        aSel.nEndPara = pOutliner->GetParagraphCount()-2;
-        aSel.nEndPos = pOutliner->GetText( pOutliner->GetParagraph( aSel.nEndPara ) ).getLength();
+        aSel.nEndPara = aOutliner.GetParagraphCount()-2;
+        aSel.nEndPos = aOutliner.GetText( aOutliner.GetParagraph( aSel.nEndPara ) ).getLength();
 
-        pOutliner->QuickSetAttribs( aAnswerSet, aSel );
+        aOutliner.QuickSetAttribs( aAnswerSet, aSel );
     }
 
     if (!sReplyText.isEmpty())
-        pOutliner->Insert(sReplyText);
+        aOutliner.Insert(sReplyText);
 
-    std::unique_ptr< OutlinerParaObject > pOPO( pOutliner->CreateParaObject() );
+    std::unique_ptr< OutlinerParaObject > pOPO( aOutliner.CreateParaObject() );
     pTextApi->SetText(*pOPO);
 
     OUString sReplyAuthor;

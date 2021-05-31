@@ -285,7 +285,7 @@ public:
 
 //----- FrameworkHelper -------------------------------------------------------
 
-std::unique_ptr<FrameworkHelper::ViewURLMap> FrameworkHelper::mpViewURLMap(new ViewURLMap());
+FrameworkHelper::ViewURLMap FrameworkHelper::maViewURLMap;
 
 FrameworkHelper::InstanceMap FrameworkHelper::maInstanceMap;
 
@@ -447,19 +447,19 @@ Reference<XResourceId> FrameworkHelper::RequestView (
 
 ViewShell::ShellType FrameworkHelper::GetViewId (const OUString& rsViewURL)
 {
-    if (mpViewURLMap->empty())
+    if (maViewURLMap.empty())
     {
-        (*mpViewURLMap)[msImpressViewURL] = ViewShell::ST_IMPRESS;
-        (*mpViewURLMap)[msDrawViewURL] = ViewShell::ST_DRAW;
-        (*mpViewURLMap)[msOutlineViewURL] = ViewShell::ST_OUTLINE;
-        (*mpViewURLMap)[msNotesViewURL] = ViewShell::ST_NOTES;
-        (*mpViewURLMap)[msHandoutViewURL] = ViewShell::ST_HANDOUT;
-        (*mpViewURLMap)[msSlideSorterURL] = ViewShell::ST_SLIDE_SORTER;
-        (*mpViewURLMap)[msPresentationViewURL] = ViewShell::ST_PRESENTATION;
-        (*mpViewURLMap)[msSidebarViewURL] = ViewShell::ST_SIDEBAR;
+        maViewURLMap[msImpressViewURL] = ViewShell::ST_IMPRESS;
+        maViewURLMap[msDrawViewURL] = ViewShell::ST_DRAW;
+        maViewURLMap[msOutlineViewURL] = ViewShell::ST_OUTLINE;
+        maViewURLMap[msNotesViewURL] = ViewShell::ST_NOTES;
+        maViewURLMap[msHandoutViewURL] = ViewShell::ST_HANDOUT;
+        maViewURLMap[msSlideSorterURL] = ViewShell::ST_SLIDE_SORTER;
+        maViewURLMap[msPresentationViewURL] = ViewShell::ST_PRESENTATION;
+        maViewURLMap[msSidebarViewURL] = ViewShell::ST_SIDEBAR;
     }
-    ViewURLMap::const_iterator iView (mpViewURLMap->find(rsViewURL));
-    if (iView != mpViewURLMap->end())
+    ViewURLMap::const_iterator iView (maViewURLMap.find(rsViewURL));
+    if (iView != maViewURLMap.end())
         return iView->second;
     else
         return ViewShell::ST_NONE;
