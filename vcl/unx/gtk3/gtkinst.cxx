@@ -17348,7 +17348,7 @@ private:
     void do_clear()
     {
         disable_notify_events();
-//        gtk_tree_view_set_row_separator_func(m_pTreeView, nullptr, nullptr, nullptr);
+        gtk_combo_box_set_row_separator_func(m_pComboBox, nullptr, nullptr, nullptr);
         m_aSeparatorRows.clear();
         gtk_list_store_clear(GTK_LIST_STORE(m_pTreeModel));
         m_nMRUCount = 0;
@@ -17485,10 +17485,8 @@ private:
     {
         disable_notify_events();
         GtkTreeIter iter;
-#if 0
-        if (!gtk_tree_view_get_row_separator_func(m_pTreeView))
-            gtk_tree_view_set_row_separator_func(m_pTreeView, separatorFunction, this, nullptr);
-#endif
+        if (!gtk_combo_box_get_row_separator_func(m_pComboBox))
+            gtk_combo_box_set_row_separator_func(m_pComboBox, separatorFunction, this, nullptr);
         insert_row(GTK_LIST_STORE(m_pTreeModel), iter, pos, &rId, u"", nullptr, nullptr);
         GtkTreePath* pPath = gtk_tree_path_new_from_indices(pos, -1);
         m_aSeparatorRows.emplace_back(gtk_tree_row_reference_new(m_pTreeModel, pPath));
