@@ -344,11 +344,28 @@ void ScHTMLExport::WriteHeader()
     rStrm.WriteCharPtr( "<" ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_style ).WriteCharPtr( " " ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_type ).WriteCharPtr( "=\"text/css\">" );
 
     OUT_LF();
-    rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_HTML_body ).WriteCharPtr( "," ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_division ).WriteCharPtr( "," ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_table ).WriteCharPtr( "," )
-       .WriteCharPtr( OOO_STRING_SVTOOLS_HTML_thead ).WriteCharPtr( "," ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_tbody ).WriteCharPtr( "," ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_tfoot ).WriteCharPtr( "," )
-       .WriteCharPtr( OOO_STRING_SVTOOLS_HTML_tablerow ).WriteCharPtr( "," ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_tableheader ).WriteCharPtr( "," )
-       .WriteCharPtr( OOO_STRING_SVTOOLS_HTML_tabledata ).WriteCharPtr( "," ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_parabreak )
-       .WriteCharPtr( " { " ).WriteCharPtr( "font-family:" );
+    rStrm.WriteCharPtr(OOO_STRING_SVTOOLS_HTML_body);
+    rStrm.WriteCharPtr(",");
+    rStrm.WriteCharPtr(OOO_STRING_SVTOOLS_HTML_division);
+    rStrm.WriteCharPtr(",");
+    rStrm.WriteCharPtr(OOO_STRING_SVTOOLS_HTML_table);
+    rStrm.WriteCharPtr(",");
+    rStrm.WriteCharPtr(OOO_STRING_SVTOOLS_HTML_thead);
+    rStrm.WriteCharPtr(",");
+    rStrm.WriteCharPtr(OOO_STRING_SVTOOLS_HTML_tbody);
+    rStrm.WriteCharPtr(",");
+    rStrm.WriteCharPtr(OOO_STRING_SVTOOLS_HTML_tfoot);
+    rStrm.WriteCharPtr(",");
+    rStrm.WriteCharPtr(OOO_STRING_SVTOOLS_HTML_tablerow);
+    rStrm.WriteCharPtr(",");
+    rStrm.WriteCharPtr(OOO_STRING_SVTOOLS_HTML_tableheader);
+    rStrm.WriteCharPtr(",");
+    rStrm.WriteCharPtr(OOO_STRING_SVTOOLS_HTML_tabledata);
+    rStrm.WriteCharPtr(",");
+    rStrm.WriteCharPtr(OOO_STRING_SVTOOLS_HTML_parabreak);
+    rStrm.WriteCharPtr(" { ");
+    rStrm.WriteCharPtr("font-family:");
+
     if (!aHTMLStyle.aFontFamilyName.isEmpty())
     {
         const OUString& rList = aHTMLStyle.aFontFamilyName;
@@ -362,43 +379,76 @@ void ScHTMLExport::WriteHeader()
             rStrm.WriteCharPtr( ", " );
         }
     }
-    rStrm.WriteCharPtr( "; " ).WriteCharPtr( "font-size:" )
-       .WriteCharPtr( GetFontSizeCss( static_cast<sal_uInt16>(aHTMLStyle.nFontHeight) ) ).WriteCharPtr( " }" );
+    rStrm.WriteCharPtr("; ");
+    rStrm.WriteCharPtr("font-size:");
+    rStrm.WriteCharPtr(GetFontSizeCss(static_cast<sal_uInt16>(aHTMLStyle.nFontHeight)));
+    rStrm.WriteCharPtr(" }");
 
     OUT_LF();
 
     // write the style for the comments to make them stand out from normal cell content
     // this is done through only showing the cell contents when the custom indicator is hovered
-    rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_HTML_anchor ).WriteCharPtr(".comment-indicator:hover")
-       .WriteCharPtr(" + ").WriteCharPtr( OOO_STRING_SVTOOLS_HTML_comment2 ).WriteCharPtr(" { ")
-       .WriteCharPtr(sBackground).WriteCharPtr("#ffd").WriteCharPtr("; ")
-       .WriteCharPtr("position:").WriteCharPtr("absolute").WriteCharPtr("; ")
-       .WriteCharPtr(sDisplay).WriteCharPtr("block").WriteCharPtr("; ")
-       .WriteCharPtr(sBorder).WriteCharPtr("1px solid black").WriteCharPtr("; ")
-       .WriteCharPtr("padding:").WriteCharPtr("0.5em").WriteCharPtr("; ")
-       .WriteCharPtr(" } ");
+    rStrm.WriteCharPtr(OOO_STRING_SVTOOLS_HTML_anchor);
+    rStrm.WriteCharPtr(".comment-indicator:hover");
+    rStrm.WriteCharPtr(" + ");
+    rStrm.WriteCharPtr(OOO_STRING_SVTOOLS_HTML_comment2);
+    rStrm.WriteCharPtr(" { ");
+    rStrm.WriteCharPtr(sBackground);
+    rStrm.WriteCharPtr("#ffd");
+    rStrm.WriteCharPtr("; ");
+    rStrm.WriteCharPtr("position:");
+    rStrm.WriteCharPtr("absolute");
+    rStrm.WriteCharPtr("; ");
+    rStrm.WriteCharPtr(sDisplay);
+    rStrm.WriteCharPtr("block");
+    rStrm.WriteCharPtr("; ");
+    rStrm.WriteCharPtr(sBorder);
+    rStrm.WriteCharPtr("1px solid black");
+    rStrm.WriteCharPtr("; ");
+    rStrm.WriteCharPtr("padding:");
+    rStrm.WriteCharPtr("0.5em");
+    rStrm.WriteCharPtr("; ");
+    rStrm.WriteCharPtr(" } ");
 
     OUT_LF();
 
-    rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_HTML_anchor ).WriteCharPtr(".comment-indicator")
-        .WriteCharPtr(" { ")
-        .WriteCharPtr(sBackground).WriteCharPtr("red").WriteCharPtr("; ")
-        .WriteCharPtr(sDisplay).WriteCharPtr("inline-block").WriteCharPtr("; ")
-        .WriteCharPtr(sBorder).WriteCharPtr("1px solid black").WriteCharPtr("; ")
-        .WriteCharPtr("width:").WriteCharPtr("0.5em").WriteCharPtr("; ")
-        .WriteCharPtr("height:").WriteCharPtr("0.5em").WriteCharPtr("; ")
-        .WriteCharPtr(" } ");
+    rStrm.WriteCharPtr(OOO_STRING_SVTOOLS_HTML_anchor);
+    rStrm.WriteCharPtr(".comment-indicator");
+    rStrm.WriteCharPtr(" { ");
+    rStrm.WriteCharPtr(sBackground);
+    rStrm.WriteCharPtr("red");
+    rStrm.WriteCharPtr("; ");
+    rStrm.WriteCharPtr(sDisplay);
+    rStrm.WriteCharPtr("inline-block");
+    rStrm.WriteCharPtr("; ");
+    rStrm.WriteCharPtr(sBorder);
+    rStrm.WriteCharPtr("1px solid black");
+    rStrm.WriteCharPtr("; ");
+    rStrm.WriteCharPtr("width:");
+    rStrm.WriteCharPtr("0.5em");
+    rStrm.WriteCharPtr("; ");
+    rStrm.WriteCharPtr("height:");
+    rStrm.WriteCharPtr("0.5em");
+    rStrm.WriteCharPtr("; ");
+    rStrm.WriteCharPtr(" } ");
 
     OUT_LF();
 
-    rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_HTML_comment2  ).WriteCharPtr(" { ")
-       .WriteCharPtr(sDisplay).WriteCharPtr("none").WriteCharPtr("; ")
-       .WriteCharPtr(" } ");
+    rStrm.WriteCharPtr(OOO_STRING_SVTOOLS_HTML_comment2);
+    rStrm.WriteCharPtr(" { ");
+    rStrm.WriteCharPtr(sDisplay);
+    rStrm.WriteCharPtr("none");
+    rStrm.WriteCharPtr("; ");
+    rStrm.WriteCharPtr(" } ");
 
 
-    IncIndent(-1); OUT_LF(); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_style );
+    IncIndent(-1);
+    OUT_LF();
+    TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_style );
 
-    IncIndent(-1); OUT_LF(); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_head );
+    IncIndent(-1);
+    OUT_LF();
+    TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_head );
 }
 
 void ScHTMLExport::WriteOverview()
