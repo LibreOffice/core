@@ -417,11 +417,13 @@ SwHTMLFormatInfo::~SwHTMLFormatInfo()
 }
 
 static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
-                    const SfxItemSet *pNodeItemSet,
+                    const SwTextNode* pTextNode,
                     SwHTMLTextCollOutputInfo& rInfo )
 {
     OSL_ENSURE( RES_CONDTXTFMTCOLL==rFormat.Which() || RES_TXTFMTCOLL==rFormat.Which(),
             "not a paragraph style" );
+
+    const SfxItemSet* pNodeItemSet = pTextNode->GetpSwAttrSet();
 
     SwHTMLWriter & rHWrt = static_cast<SwHTMLWriter&>(rWrt);
 
@@ -861,6 +863,15 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
         rHWrt.m_bOutOpts = true;
 
         OString sOut = "<" + rHWrt.GetNamespace() + aToken;
+
+        if (rHWrt.mbIndexingOutput)
+        {
+            rWrt.Strm().WriteOString(sOut);
+            rWrt.Strm().WriteChar(' ');
+            sal_uLong nNodeIndex = pTextNode->GetIndex();
+            HtmlWriter::writeAttribute(rWrt.Strm(), "nodeid", nNodeIndex);
+            sOut = "";
+        }
 
         if( eLang != LANGUAGE_DONTKNOW && eLang != rHWrt.m_eLang )
         {
@@ -2211,7 +2222,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
     const SwFormat& rFormat = pNd->GetAnyFormatColl();
     SwHTMLTextCollOutputInfo aFormatInfo;
     bool bOldLFPossible = rHTMLWrt.m_bLFPossible;
-    OutHTML_SwFormat( rWrt, rFormat, pNd->GetpSwAttrSet(), aFormatInfo );
+    OutHTML_SwFormat(rWrt, rFormat, pNd, aFormatInfo);
 
     // If we didn't open a new line before the paragraph tag, we do that now
     rHTMLWrt.m_bLFPossible = rHTMLWrt.m_nLastParaToken == HtmlTokenId::NONE;
