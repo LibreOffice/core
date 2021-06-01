@@ -811,15 +811,14 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                     bCrsrBack = false;
 
                     // Open a new Group.
-                    std::unique_ptr<SvxRTFItemStackType> pNew(new SvxRTFItemStackType(
-                                            *pCurrent, *mxInsertPosition, true ));
-                    pNew->SetRTFDefaults( GetRTFDefaults() );
+                    auto xNew(std::make_unique<SvxRTFItemStackType>(*pCurrent, *mxInsertPosition, true));
+                    xNew->SetRTFDefaults( GetRTFDefaults() );
 
                     // Set all until here valid Attributes
                     AttrGroupEnd();
                     pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back().get();  // can be changed after AttrGroupEnd!
-                    pNew->aAttrSet.SetParent( pCurrent ? &pCurrent->aAttrSet : nullptr );
-                    aAttrStack.push_back( std::move(pNew) );
+                    xNew->aAttrSet.SetParent( pCurrent ? &pCurrent->aAttrSet : nullptr );
+                    aAttrStack.push_back( std::move(xNew) );
                 }
             }
             else

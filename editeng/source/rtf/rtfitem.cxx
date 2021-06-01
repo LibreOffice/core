@@ -218,16 +218,15 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                     pCurrent->nStyleNo )
                 {
                     // Open a new Group
-                    std::unique_ptr<SvxRTFItemStackType> pNew(new SvxRTFItemStackType(
-                                                *pCurrent, *mxInsertPosition, true ));
-                    pNew->SetRTFDefaults( GetRTFDefaults() );
+                    auto xNew(std::make_unique<SvxRTFItemStackType>(*pCurrent, *mxInsertPosition, true));
+                    xNew->SetRTFDefaults( GetRTFDefaults() );
 
                     // "Set" all valid attributes up until this point
                     AttrGroupEnd();
                     pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back().get();  // can be changed after AttrGroupEnd!
-                    pNew->aAttrSet.SetParent( pCurrent ? &pCurrent->aAttrSet : nullptr );
+                    xNew->aAttrSet.SetParent( pCurrent ? &pCurrent->aAttrSet : nullptr );
 
-                    aAttrStack.push_back( std::move(pNew) );
+                    aAttrStack.push_back( std::move(xNew) );
                     pCurrent = aAttrStack.back().get();
                 }
                 else
@@ -1704,14 +1703,14 @@ void SvxRTFParser::RTFPardPlain( bool const bPard, SfxItemSet** ppSet )
         if (pCurrent->aAttrSet.Count() || pCurrent->m_pChildList || pCurrent->nStyleNo)
         {
             // open a new group
-            std::unique_ptr<SvxRTFItemStackType> pNew(new SvxRTFItemStackType( *pCurrent, *mxInsertPosition, true ));
-            pNew->SetRTFDefaults( GetRTFDefaults() );
+            auto xNew(std::make_unique<SvxRTFItemStackType>(*pCurrent, *mxInsertPosition, true));
+            xNew->SetRTFDefaults( GetRTFDefaults() );
 
             // Set all until here valid attributes
             AttrGroupEnd();
             pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back().get();  // can be changed after AttrGroupEnd!
-            pNew->aAttrSet.SetParent( pCurrent ? &pCurrent->aAttrSet : nullptr );
-            aAttrStack.push_back( std::move(pNew) );
+            xNew->aAttrSet.SetParent( pCurrent ? &pCurrent->aAttrSet : nullptr );
+            aAttrStack.push_back( std::move(xNew) );
             pCurrent = aAttrStack.back().get();
         }
         else
