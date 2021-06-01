@@ -834,8 +834,8 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             aContext.UseReferenceXObject = mbUseReferenceXObject;
 
             // all context data set, time to create the printing device
-            std::unique_ptr<vcl::PDFWriter> pPDFWriter(new vcl::PDFWriter( aContext, xEnc ));
-            OutputDevice*       pOut = pPDFWriter->GetReferenceDevice();
+            vcl::PDFWriter aPDFWriter( aContext, xEnc );
+            OutputDevice*  pOut = aPDFWriter.GetReferenceDevice();
 
             DBG_ASSERT( pOut, "PDFExport::Export: no reference device" );
             xDevice->SetOutputDevice(pOut);
@@ -845,7 +845,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 // export stream
                 // get mimetype
                 OUString aSrcMimetype = getMimetypeForDocument( mxContext, mxSrcDoc );
-                pPDFWriter->AddStream( aSrcMimetype,
+                aPDFWriter.AddStream( aSrcMimetype,
                                        new PDFExportStreamDoc( mxSrcDoc, aPreparedPermissionPassword )
                                        );
             }
@@ -853,19 +853,19 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             if ( pOut )
             {
                 DBG_ASSERT( pOut->GetExtOutDevData() == nullptr, "PDFExport: ExtOutDevData already set!!!" );
-                std::unique_ptr<vcl::PDFExtOutDevData> pPDFExtOutDevData(new vcl::PDFExtOutDevData( *pOut ));
-                pOut->SetExtOutDevData( pPDFExtOutDevData.get() );
-                pPDFExtOutDevData->SetIsExportNotes( mbExportNotes );
-                pPDFExtOutDevData->SetIsExportTaggedPDF( mbUseTaggedPDF );
-                pPDFExtOutDevData->SetIsExportTransitionEffects( mbUseTransitionEffects );
-                pPDFExtOutDevData->SetIsExportFormFields( mbExportFormFields );
-                pPDFExtOutDevData->SetIsExportBookmarks( mbExportBookmarks );
-                pPDFExtOutDevData->SetIsExportHiddenSlides( mbExportHiddenSlides );
-                pPDFExtOutDevData->SetIsSinglePageSheets( mbSinglePageSheets );
-                pPDFExtOutDevData->SetIsLosslessCompression( mbUseLosslessCompression );
-                pPDFExtOutDevData->SetCompressionQuality( mnQuality );
-                pPDFExtOutDevData->SetIsReduceImageResolution( mbReduceImageResolution );
-                pPDFExtOutDevData->SetIsExportNamedDestinations( mbExportBmkToDest );
+                vcl::PDFExtOutDevData aPDFExtOutDevData( *pOut );
+                pOut->SetExtOutDevData( &aPDFExtOutDevData );
+                aPDFExtOutDevData.SetIsExportNotes( mbExportNotes );
+                aPDFExtOutDevData.SetIsExportTaggedPDF( mbUseTaggedPDF );
+                aPDFExtOutDevData.SetIsExportTransitionEffects( mbUseTransitionEffects );
+                aPDFExtOutDevData.SetIsExportFormFields( mbExportFormFields );
+                aPDFExtOutDevData.SetIsExportBookmarks( mbExportBookmarks );
+                aPDFExtOutDevData.SetIsExportHiddenSlides( mbExportHiddenSlides );
+                aPDFExtOutDevData.SetIsSinglePageSheets( mbSinglePageSheets );
+                aPDFExtOutDevData.SetIsLosslessCompression( mbUseLosslessCompression );
+                aPDFExtOutDevData.SetCompressionQuality( mnQuality );
+                aPDFExtOutDevData.SetIsReduceImageResolution( mbReduceImageResolution );
+                aPDFExtOutDevData.SetIsExportNamedDestinations( mbExportBmkToDest );
 
                 Sequence< PropertyValue > aRenderOptions( 8 );
                 aRenderOptions[ 0 ].Name = "RenderDevice";
@@ -952,26 +952,26 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 bRet = nPageCount > 0;
 
                 if ( bRet && bExportPages )
-                    bRet = ExportSelection( *pPDFWriter, xRenderable, aSelection, aRangeEnum, aRenderOptions, nPageCount );
+                    bRet = ExportSelection( aPDFWriter, xRenderable, aSelection, aRangeEnum, aRenderOptions, nPageCount );
 
                 if ( bRet && bExportNotesPages )
                 {
                     rExportNotesValue <<= true;
-                    bRet = ExportSelection( *pPDFWriter, xRenderable, aSelection, aRangeEnum, aRenderOptions, nPageCount );
+                    bRet = ExportSelection( aPDFWriter, xRenderable, aSelection, aRangeEnum, aRenderOptions, nPageCount );
                 }
                 if ( mxStatusIndicator.is() )
                     mxStatusIndicator->end();
 
                 // if during the export the doc locale was set copy it to PDF writer
-                const css::lang::Locale& rLoc( pPDFExtOutDevData->GetDocumentLocale() );
+                const css::lang::Locale& rLoc( aPDFExtOutDevData.GetDocumentLocale() );
                 if( !rLoc.Language.isEmpty() )
-                    pPDFWriter->SetDocumentLocale( rLoc );
+                    aPDFWriter.SetDocumentLocale( rLoc );
 
                 if( bRet )
                 {
-                    pPDFExtOutDevData->PlayGlobalActions( *pPDFWriter );
-                    bRet = pPDFWriter->Emit();
-                    aErrors = pPDFWriter->GetErrors();
+                    aPDFExtOutDevData.PlayGlobalActions( aPDFWriter );
+                    bRet = aPDFWriter.Emit();
+                    aErrors = aPDFWriter.GetErrors();
                 }
                 pOut->SetExtOutDevData( nullptr );
                 if( bReChangeToNormalView )

@@ -288,7 +288,7 @@ namespace XSLT
         xsltSetGenericDebugFunc(stderr, NULL);
         xsltDebugDumpExtensions(NULL);
 #endif
-        std::unique_ptr<OleHandler> oh(new OleHandler(m_transformer->getComponentContext()));
+        std::optional<OleHandler> oh(std::in_place, m_transformer->getComponentContext());
         if (styleSheet)
         {
             xsltTransformContextPtr tcontext = xsltNewTransformContext(

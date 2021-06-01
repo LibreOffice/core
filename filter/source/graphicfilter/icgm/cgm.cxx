@@ -693,8 +693,8 @@ ImportCGM(SvStream& rIn, uno::Reference< frame::XModel > const & rXModel, css::u
     {
         try
         {
-            std::unique_ptr<CGM> pCGM(new CGM(rXModel));
-            if (pCGM->IsValid())
+            CGM aCGM(rXModel);
+            if (aCGM.IsValid())
             {
                 rIn.SetEndian(SvStreamEndian::BIG);
                 sal_uInt64 const nInSize = rIn.remainingSize();
@@ -706,7 +706,7 @@ ImportCGM(SvStream& rIn, uno::Reference< frame::XModel > const & rXModel, css::u
                 if ( bProgressBar )
                     aXStatInd->start( "CGM Import" , nInSize );
 
-                while (pCGM->IsValid() && (rIn.Tell() < nInSize) && !pCGM->IsFinished())
+                while (aCGM.IsValid() && (rIn.Tell() < nInSize) && !aCGM.IsFinished())
                 {
                     if ( bProgressBar )
                     {
@@ -718,12 +718,12 @@ ImportCGM(SvStream& rIn, uno::Reference< frame::XModel > const & rXModel, css::u
                         }
                     }
 
-                    if (!pCGM->Write(rIn))
+                    if (!aCGM.Write(rIn))
                         break;
                 }
-                if ( pCGM->IsValid() )
+                if ( aCGM.IsValid() )
                 {
-                    nStatus = pCGM->GetBackGroundColor() | 0xff000000;
+                    nStatus = aCGM.GetBackGroundColor() | 0xff000000;
                 }
                 if ( bProgressBar )
                     aXStatInd->end();

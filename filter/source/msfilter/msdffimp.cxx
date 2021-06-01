@@ -7065,16 +7065,16 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
     {
         //TODO/MBA: check if (and when) storage and stream will be destroyed!
         std::shared_ptr<const SfxFilter> pFilter;
-        std::unique_ptr<SvMemoryStream> xMemStream (new SvMemoryStream);
+        SvMemoryStream aMemStream;
         if ( pName )
         {
             // TODO/LATER: perhaps we need to retrieve VisArea and Metafile from the storage also
-            SvxMSDffManager::ExtractOwnStream(rSrcStg, *xMemStream);
+            SvxMSDffManager::ExtractOwnStream(rSrcStg, aMemStream);
         }
         else
         {
             SfxFilterMatcher aMatch( sStarName );
-            tools::SvRef<SotStorage> xStorage = new SotStorage( false, *xMemStream );
+            tools::SvRef<SotStorage> xStorage = new SotStorage( false, aMemStream );
             rSrcStg.CopyTo( xStorage.get() );
             xStorage->Commit();
             xStorage.clear();
@@ -7107,7 +7107,7 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
 
             uno::Sequence<beans::PropertyValue> aMedium(aFilterName.isEmpty() ? 3 : 4);
             aMedium[0].Name = "InputStream";
-            uno::Reference < io::XInputStream > xStream = new ::utl::OSeekableInputStreamWrapper( *xMemStream );
+            uno::Reference < io::XInputStream > xStream = new ::utl::OSeekableInputStreamWrapper( aMemStream );
             aMedium[0].Value <<= xStream;
             aMedium[1].Name = "URL";
             aMedium[1].Value <<= OUString( "private:stream" );

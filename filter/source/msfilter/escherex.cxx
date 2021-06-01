@@ -1345,8 +1345,8 @@ bool EscherPropertyContainer::CreateOLEGraphicProperties(const uno::Reference<dr
             if (pGraphic)
             {
                 Graphic aGraphic(*pGraphic);
-                std::unique_ptr<GraphicObject> xGraphicObject(new GraphicObject(aGraphic));
-                bRetValue = CreateGraphicProperties(rXShape, *xGraphicObject);
+                GraphicObject aGraphicObject(aGraphic);
+                bRetValue = CreateGraphicProperties(rXShape, aGraphicObject);
             }
         }
     }
@@ -1391,8 +1391,8 @@ bool EscherPropertyContainer::CreateMediaGraphicProperties(const uno::Reference<
         SdrObject* pSdrObject(GetSdrObjectFromXShape(rXShape));  // SJ: leaving unoapi, because currently there is
         if (auto pSdrMediaObj = dynamic_cast<const SdrMediaObj*>(pSdrObject)) // no access to the native graphic object
         {
-            std::unique_ptr<GraphicObject> xGraphicObject(new GraphicObject(pSdrMediaObj->getSnapshot()));
-            bRetValue = CreateGraphicProperties(rXShape, *xGraphicObject);
+            GraphicObject aGraphicObject(pSdrMediaObj->getSnapshot());
+            bRetValue = CreateGraphicProperties(rXShape, aGraphicObject);
         }
     }
     return bRetValue;
