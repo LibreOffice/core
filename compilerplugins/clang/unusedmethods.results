@@ -974,8 +974,6 @@ include/vcl/weld.hxx:179
     _Bool weld::Widget::get_hexpand() const
 include/vcl/weld.hxx:181
     _Bool weld::Widget::get_vexpand() const
-include/vcl/weld.hxx:183
-    void weld::Widget::set_secondary(_Bool)
 include/vcl/weld.hxx:190
     int weld::Widget::get_margin_top() const
 include/vcl/weld.hxx:191

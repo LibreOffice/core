@@ -358,8 +358,6 @@ void SalInstanceWidget::set_vexpand(bool bExpand) { m_xWidget->set_vexpand(bExpa
 
 bool SalInstanceWidget::get_vexpand() const { return m_xWidget->get_vexpand(); }
 
-void SalInstanceWidget::set_secondary(bool bSecondary) { m_xWidget->set_secondary(bSecondary); }
-
 void SalInstanceWidget::set_margin_top(int nMargin) { m_xWidget->set_margin_top(nMargin); }
 
 void SalInstanceWidget::set_margin_bottom(int nMargin) { m_xWidget->set_margin_bottom(nMargin); }
