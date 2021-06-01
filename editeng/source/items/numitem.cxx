@@ -638,7 +638,7 @@ SvxNumRule::SvxNumRule(const SvxNumRule& rCopy)
     }
 }
 
-SvxNumRule::SvxNumRule(SvxNumRule&& rCopy)
+SvxNumRule::SvxNumRule(SvxNumRule&& rCopy) noexcept
 {
     ++nRefCount;
     nLevelCount          = rCopy.nLevelCount         ;
@@ -774,7 +774,7 @@ SvxNumRule& SvxNumRule::operator=( const SvxNumRule& rCopy )
     return *this;
 }
 
-SvxNumRule& SvxNumRule::operator=( SvxNumRule&& rCopy )
+SvxNumRule& SvxNumRule::operator=( SvxNumRule&& rCopy ) noexcept
 {
     if (this != &rCopy)
     {
