@@ -131,7 +131,11 @@ public:
     css::uno::Reference<css::datatransfer::XTransferable>
         CreateSelectionDataObject (::sd::View*);
 
-    void                    UpdateSelectionClipboard( bool bForceDeselect );
+    // update clipboard to what is selected
+    void UpdateSelectionClipboard();
+
+    // release content of clipboard, if we own the content
+    void ClearSelectionClipboard();
 
     DrawDocShell* GetDocSh() const { return mpDocSh; }
     inline SdDrawDocument& GetDoc() const;
