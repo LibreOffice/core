@@ -2121,7 +2121,7 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
         DffRecordHeader*    pExEmbed = nullptr;
 
         pHd->SeekToBegOfRecord( rStCtrl );
-        std::unique_ptr<DffRecordManager> pExObjListManager(new DffRecordManager( rStCtrl ));
+        DffRecordManager aExObjListManager( rStCtrl );
         sal_uInt16 i, nRecType(PPT_PST_ExEmbed);
 
         for ( i = 0; i < 2; i++ )
@@ -2131,8 +2131,8 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                 case 0 : nRecType = PPT_PST_ExEmbed; break;
                 case 1 : nRecType = PPT_PST_ExControl; break;
             }
-            for ( pExEmbed = pExObjListManager->GetRecordHeader( nRecType );
-                    pExEmbed; pExEmbed = pExObjListManager->GetRecordHeader( nRecType, SEEK_FROM_CURRENT ) )
+            for ( pExEmbed = aExObjListManager.GetRecordHeader( nRecType );
+                    pExEmbed; pExEmbed = aExObjListManager.GetRecordHeader( nRecType, SEEK_FROM_CURRENT ) )
             {
                 pExEmbed->SeekToContent( rStCtrl );
 
