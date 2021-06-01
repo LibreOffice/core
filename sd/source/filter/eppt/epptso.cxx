@@ -88,7 +88,7 @@ sal_uInt16 PPTExBulletProvider::GetId(Graphic const & rGraphic, Size& rGraphicSi
     if (!rGraphic.IsNone())
     {
         Graphic         aMappedGraphic, aGraphic(rGraphic);
-        std::unique_ptr<GraphicObject> xGraphicObject(new GraphicObject(aGraphic));
+        GraphicObject   aGraphicObject(aGraphic);
         Size            aPrefSize( aGraphic.GetPrefSize() );
         BitmapEx        aBmpEx( aGraphic.GetBitmapEx() );
 
@@ -117,11 +117,11 @@ sal_uInt16 PPTExBulletProvider::GetId(Graphic const & rGraphic, Size& rGraphicSi
                                      static_cast<sal_Int32>(static_cast<double>(rGraphicSize.Height()) / fYScale + 0.5 ) );
 
                     aMappedGraphic = Graphic( aBmpEx );
-                    xGraphicObject.reset(new GraphicObject(aMappedGraphic));
+                    aGraphicObject = GraphicObject(aMappedGraphic);
                 }
             }
         }
-        sal_uInt32 nId = pGraphicProv->GetBlibID(aBuExPictureStream, *xGraphicObject);
+        sal_uInt32 nId = pGraphicProv->GetBlibID(aBuExPictureStream, aGraphicObject);
 
         if ( nId && ( nId < 0x10000 ) )
             nRetValue = static_cast<sal_uInt16>(nId) - 1;
@@ -3104,8 +3104,8 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape > const & rXSha
                 if ( y == nRowCount - 1 && nPosition != maRect.Bottom())
                     maRect.SetBottom( nPosition );
             }
-            std::unique_ptr<ContainerGuard> xSpgrContainer(new ContainerGuard(mpPptEscherEx.get(), ESCHER_SpgrContainer));
-            std::unique_ptr<ContainerGuard> xSpContainer(new ContainerGuard(mpPptEscherEx.get(), ESCHER_SpContainer));
+            std::optional<ContainerGuard> xSpgrContainer(std::in_place, mpPptEscherEx.get(), ESCHER_SpgrContainer);
+            std::optional<ContainerGuard> xSpContainer(std::in_place, mpPptEscherEx.get(), ESCHER_SpContainer);
             mpPptEscherEx->AddAtom( 16, ESCHER_Spgr, 1 );
             mpStrm    ->WriteInt32( maRect.Left() ) // Bounding box for the grouped shapes to which they are attached
                        .WriteInt32( maRect.Top() )
@@ -3161,7 +3161,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape > const & rXSha
                             aAny >>= mbFontIndependentLineSpacing;
 
                         EscherPropertyContainer aPropOptSp;
-                        std::unique_ptr<ContainerGuard> xCellContainer(new ContainerGuard(mpPptEscherEx.get(), ESCHER_SpContainer));
+                        std::optional<ContainerGuard> xCellContainer(std::in_place, mpPptEscherEx.get(), ESCHER_SpContainer);
                         ImplCreateShape( ESCHER_ShpInst_Rectangle,
                                          ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty | ShapeFlag::Child,
                                          aSolverContainer );
@@ -3179,12 +3179,12 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape > const & rXSha
                         // need write client data for extend bullet
                         if ( aExtBu.Tell() )
                         {
-                            std::unique_ptr<SvMemoryStream> pClientData(new SvMemoryStream( 0x200, 0x200 ));
-                            ImplProgTagContainer( pClientData.get(), &aExtBu );
+                            SvMemoryStream aClientData( 0x200, 0x200 );
+                            ImplProgTagContainer( &aClientData, &aExtBu );
                             mpStrm->WriteUInt32( ( ESCHER_ClientData << 16 ) | 0xf )
-                               .WriteUInt32( pClientData->Tell() );
+                               .WriteUInt32( aClientData.Tell() );
 
-                            mpStrm->WriteBytes(pClientData->GetData(), pClientData->Tell());
+                            mpStrm->WriteBytes(aClientData.GetData(), aClientData.Tell());
                         }
 
                         aPropOptSp.Commit( *mpStrm );

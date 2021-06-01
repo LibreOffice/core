@@ -810,15 +810,15 @@ OUString ScViewFunc::GetAutoSumFormula( const ScRangeList& rRangeList, bool bSub
 {
     ScViewData& rViewData = GetViewData();
     ScDocument& rDoc = rViewData.GetDocument();
-    std::unique_ptr<ScTokenArray> pArray(new ScTokenArray(rDoc));
+    ScTokenArray aArray(rDoc);
 
-    pArray->AddOpCode(bSubTotal ? ocSubTotal : eCode);
-    pArray->AddOpCode(ocOpen);
+    aArray.AddOpCode(bSubTotal ? ocSubTotal : eCode);
+    aArray.AddOpCode(ocOpen);
 
     if (bSubTotal)
     {
-        pArray->AddDouble( GetSubTotal( eCode ) );
-        pArray->AddOpCode(ocSep);
+        aArray.AddDouble( GetSubTotal( eCode ) );
+        aArray.AddOpCode(ocSep);
     }
 
     if(!rRangeList.empty())
@@ -829,16 +829,16 @@ OUString ScViewFunc::GetAutoSumFormula( const ScRangeList& rRangeList, bool bSub
         {
             const ScRange & r = aRangeList[i];
             if (i != 0)
-                pArray->AddOpCode(ocSep);
+                aArray.AddOpCode(ocSep);
             ScComplexRefData aRef;
             aRef.InitRangeRel(rDoc, r, rAddr);
-            pArray->AddDoubleReference(aRef);
+            aArray.AddDoubleReference(aRef);
         }
     }
 
-    pArray->AddOpCode(ocClose);
+    aArray.AddOpCode(ocClose);
 
-    ScCompiler aComp(rDoc, rAddr, *pArray, rDoc.GetGrammar());
+    ScCompiler aComp(rDoc, rAddr, aArray, rDoc.GetGrammar());
     OUStringBuffer aBuf;
     aComp.CreateStringFromTokenArray(aBuf);
     OUString aFormula = aBuf.makeStringAndClear();
@@ -927,11 +927,11 @@ void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pDat
         // MarkData was already MarkToSimple'ed in PasteFromClip
         ScRange aRange;
         rMark.GetMarkArea( aRange );
-        std::unique_ptr<ScPatternAttr> pPattern(new ScPatternAttr( rDoc.GetPool() ));
-        pPattern->GetItemSet().Put( *pItem );
+        ScPatternAttr aPattern( rDoc.GetPool() );
+        aPattern.GetItemSet().Put( *pItem );
         SvNumFormatType nNewType = rDoc.GetFormatTable()->GetType( pItem->GetValue() );
         rDoc.ApplyPatternIfNumberformatIncompatible( aRange, rMark,
-            *pPattern, nNewType );
+            aPattern, nNewType );
     }
 }
 

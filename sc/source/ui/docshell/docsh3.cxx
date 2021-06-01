@@ -1178,14 +1178,14 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
             // merge own changes into shared document
             sal_uLong nActStartShared = pSharedAction->GetActionNumber();
             sal_uLong nActEndShared = pSharedTrack->GetActionMax();
-            std::unique_ptr<ScDocument> pTmpDoc(new ScDocument);
+            std::optional<ScDocument> pTmpDoc(std::in_place);
             for ( sal_Int32 nIndex = 0; nIndex < m_aDocument.GetTableCount(); ++nIndex )
             {
                 OUString sTabName;
                 pTmpDoc->CreateValidTabName( sTabName );
                 pTmpDoc->InsertTab( SC_TAB_APPEND, sTabName );
             }
-            m_aDocument.GetChangeTrack()->Clone( pTmpDoc.get() );
+            m_aDocument.GetChangeTrack()->Clone( &*pTmpDoc );
             ScChangeActionMergeMap aOwnInverseMergeMap;
             pSharedDocShell->MergeDocument( *pTmpDoc, true, true, 0, &aOwnInverseMergeMap, true );
             pTmpDoc.reset();
@@ -1226,14 +1226,14 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
             pSharedTrack->Undo( nActStartOwn, nActEndOwn );
 
             // clone change track for merging into own document
-            pTmpDoc.reset(new ScDocument);
+            pTmpDoc.emplace();
             for ( sal_Int32 nIndex = 0; nIndex < m_aDocument.GetTableCount(); ++nIndex )
             {
                 OUString sTabName;
                 pTmpDoc->CreateValidTabName( sTabName );
                 pTmpDoc->InsertTab( SC_TAB_APPEND, sTabName );
             }
-            pThisTrack->Clone( pTmpDoc.get() );
+            pThisTrack->Clone( &*pTmpDoc );
 
             // undo own changes since last save in own document
             sal_uLong nStartShared = pThisAction->GetActionNumber();

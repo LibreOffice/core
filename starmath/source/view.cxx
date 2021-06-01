@@ -1731,13 +1731,13 @@ void SmViewShell::Execute(SfxRequest& rReq)
                     xStrm = aDataHelper.GetInputStream(nId, "");
                     if (xStrm.is())
                     {
-                        std::unique_ptr<SfxMedium> pClipboardMedium(new SfxMedium());
-                        pClipboardMedium->GetItemSet(); //generate initial itemset, not sure if necessary
+                        SfxMedium aClipboardMedium;
+                        aClipboardMedium.GetItemSet(); //generate initial itemset, not sure if necessary
                         std::shared_ptr<const SfxFilter> pMathFilter =
                             SfxFilter::GetFilterByName(MATHML_XML);
-                        pClipboardMedium->SetFilter(pMathFilter);
-                        pClipboardMedium->setStreamToLoadFrom(xStrm, true /*bIsReadOnly*/);
-                        InsertFrom(*pClipboardMedium);
+                        aClipboardMedium.SetFilter(pMathFilter);
+                        aClipboardMedium.setStreamToLoadFrom(xStrm, true /*bIsReadOnly*/);
+                        InsertFrom(aClipboardMedium);
                         GetDoc()->UpdateText();
                     }
                 }
@@ -1754,11 +1754,11 @@ void SmViewShell::Execute(SfxRequest& rReq)
                             if (!aString.startsWith("<?xml"))
                                 aString = "<?xml version=\"1.0\"?>\n" + aString;
 
-                            std::unique_ptr<SfxMedium> pClipboardMedium(new SfxMedium());
-                            pClipboardMedium->GetItemSet(); //generates initial itemset, not sure if necessary
+                            SfxMedium aClipboardMedium;
+                            aClipboardMedium.GetItemSet(); //generates initial itemset, not sure if necessary
                             std::shared_ptr<const SfxFilter> pMathFilter =
                                 SfxFilter::GetFilterByName(MATHML_XML);
-                            pClipboardMedium->SetFilter(pMathFilter);
+                            aClipboardMedium.SetFilter(pMathFilter);
 
                             std::unique_ptr<SvMemoryStream> pStrm;
                             // The text to be imported might asserts encoding like 'encoding="utf-8"' but FORMAT_STRING is UTF-16.
@@ -1785,8 +1785,8 @@ void SmViewShell::Execute(SfxRequest& rReq)
                                 pStrm.reset(new SvMemoryStream( const_cast<sal_Unicode *>(aString.getStr()), aString.getLength() * sizeof(sal_Unicode), StreamMode::READ));
                             }
                             uno::Reference<io::XInputStream> xStrm2( new ::utl::OInputStreamWrapper(*pStrm) );
-                            pClipboardMedium->setStreamToLoadFrom(xStrm2, true /*bIsReadOnly*/);
-                            InsertFrom(*pClipboardMedium);
+                            aClipboardMedium.setStreamToLoadFrom(xStrm2, true /*bIsReadOnly*/);
+                            InsertFrom(aClipboardMedium);
                             GetDoc()->UpdateText();
                         }
                     }

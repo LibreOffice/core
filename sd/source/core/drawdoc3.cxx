@@ -1027,7 +1027,7 @@ bool SdDrawDocument::InsertBookmarkAsObject(
     if (pBMView)
     {
         // Insert selected objects
-        std::unique_ptr<::sd::View> pView(new ::sd::View(*this, nullptr));
+        std::optional<::sd::View> pView(std::in_place, *this, nullptr);
         pView->EndListening(*this);
 
         // Look for the page into which the objects are supposed to be inserted

@@ -1737,7 +1737,7 @@ static OUString lcl_Calculate( const OUString& rFormula, ScDocument& rDoc, const
     if(rFormula.isEmpty())
         return OUString();
 
-    std::unique_ptr<ScSimpleFormulaCalculator> pCalc( new ScSimpleFormulaCalculator( rDoc, rPos, rFormula, false ) );
+    std::optional<ScSimpleFormulaCalculator> pCalc( std::in_place, rDoc, rPos, rFormula, false );
 
     // FIXME: HACK! In order to not get a #REF! for ColRowNames, if a name is actually inserted as a Range
     // into the whole Formula, but is interpreted as a single cell reference when displaying it on its own
@@ -1749,7 +1749,7 @@ static OUString lcl_Calculate( const OUString& rFormula, ScDocument& rDoc, const
         {   // ==1: Single one is as a Parameter always a Range
             // ==0: It might be one, if ...
             OUString aBraced = "(" + rFormula + ")";
-            pCalc.reset( new ScSimpleFormulaCalculator( rDoc, rPos, aBraced, false ) );
+            pCalc.emplace( rDoc, rPos, aBraced, false );
         }
         else
             bColRowName = false;
