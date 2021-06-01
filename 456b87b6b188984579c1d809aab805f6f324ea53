@@ -34,6 +34,24 @@
       "revId": "456b87b6b188984579c1d809aab805f6f324ea53",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5c764648_be33ccc1",
+        "filename": "solenv/clang-format/excludelist",
+        "patchSetId": 5
+      },
+      "lineNbr": 8904,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-01T14:51:11Z",
+      "side": 0,
+      "message": "\u003e This policy is new for me.\n\nLooks like we never spelled out that policy too explicitly (discussion at that time centred more around tooling to ensure clang-format\u0027ing of new files than around the rationale why not to reformat existing code).  The closest I come up with with an ad-hoc search now is my \u003chttps://lists.freedesktop.org/archives/libreoffice/2017-November/078785.html\u003e \"Re: minutes of ESC call ...\", which then became part of the deal of introducing clang-format:\n\n\u003e To maybe clarify that a bit:  I see no value at all in enforcing any \n\u003e formatting as an end in itself.  I only see it as a means to drop the \n\u003e future amount of reformatting commits to zero.  (What I mean with \n\u003e \"reformatting commits\" is both commits that do no changes other than \n\u003e reformatting source code, as well as commits that mix---related, or even \n\u003e unrelated---reformatting of source code with some \"real\" changes. \n\u003e Either form creates \"noise\" that makes it harder to inspect individual \n\u003e git commits and the git history.)",
+      "parentUuid": "6d7fae93_dff8397b",
+      "revId": "456b87b6b188984579c1d809aab805f6f324ea53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
