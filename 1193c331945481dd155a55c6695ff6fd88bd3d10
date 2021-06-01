@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e8e3e64c_725ac386",
+        "filename": "extensions/source/ole/oleobjw.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1432,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-01T21:07:59Z",
+      "side": 0,
+      "message": "Technically the change is functional: SysStringLen will differ from wcslen(excepinfo.bstrDescription), it allows embedded nulls in the string (not that this should matter here, but I know you usually are careful to such semantical changes).",
+      "range": {
+        "startLine": 1432,
+        "startChar": 30,
+        "endLine": 1432,
+        "endChar": 70
+      },
+      "revId": "1193c331945481dd155a55c6695ff6fd88bd3d10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

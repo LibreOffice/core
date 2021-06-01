@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0e3f98cd_84422ea0",
+        "filename": "basic/source/runtime/dllmgr-x64.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-01T21:07:59Z",
+      "side": 1,
+      "message": "Why use of string view here, when proc.name is OString, and has an overload for string literals?",
+      "range": {
+        "startLine": 500,
+        "startChar": 22,
+        "endLine": 500,
+        "endChar": 38
+      },
+      "revId": "eebd84b337506c8fff151493f9b51bd127dbc89f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
