@@ -939,9 +939,9 @@ SvxRTFItemStackType::SvxRTFItemStackType(
         const EditPosition& rPos,
         bool const bCopyAttr )
     : aAttrSet( *rCpy.aAttrSet.GetPool(), rCpy.aAttrSet.GetRanges() )
+    , mxStartNodeIdx( rPos.MakeNodeIdx() )
     , nStyleNo( rCpy.nStyleNo )
 {
-    mxStartNodeIdx = rPos.MakeNodeIdx();
     nSttCnt = rPos.GetCntIdx();
     mxEndNodeIdx = mxStartNodeIdx;
     nEndCnt = nSttCnt;
