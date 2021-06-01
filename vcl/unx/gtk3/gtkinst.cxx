@@ -5317,13 +5317,13 @@ public:
 
     virtual Size get_size() const override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         int current_width, current_height;
+#if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_window_get_size(m_pWindow, &current_width, &current_height);
-        return Size(current_width, current_height);
 #else
-        return Size(0, 0);
+        gtk_window_get_default_size(m_pWindow, &current_width, &current_height);
 #endif
+        return Size(current_width, current_height);
     }
 
     virtual Point get_position() const override
