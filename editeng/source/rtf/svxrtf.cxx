@@ -914,23 +914,22 @@ const SfxItemSet& SvxRTFParser::GetRTFDefaults()
 
 
 SvxRTFStyleType::SvxRTFStyleType( SfxItemPool& rPool, const sal_uInt16* pWhichRange )
-    : aAttrSet( rPool, pWhichRange )
+    : aAttrSet(rPool, pWhichRange)
+    , nBasedOn(0)
+    , nOutlineNo(sal_uInt8(-1))         // not set
 {
-    nOutlineNo = sal_uInt8(-1);         // not set
-    nBasedOn = 0;
 }
-
 
 SvxRTFItemStackType::SvxRTFItemStackType(
         SfxItemPool& rPool, const sal_uInt16* pWhichRange,
         const EditPosition& rPos )
     : aAttrSet( rPool, pWhichRange )
-    , nStyleNo( 0 )
+    , mxStartNodeIdx(rPos.MakeNodeIdx())
+    , mxEndNodeIdx(mxStartNodeIdx)
+    , nSttCnt(rPos.GetCntIdx())
+    , nEndCnt(nSttCnt)
+    , nStyleNo(0)
 {
-    mxStartNodeIdx = rPos.MakeNodeIdx();
-    nSttCnt = rPos.GetCntIdx();
-    mxEndNodeIdx = mxStartNodeIdx;
-    nEndCnt = nSttCnt;
 }
 
 SvxRTFItemStackType::SvxRTFItemStackType(
@@ -938,13 +937,12 @@ SvxRTFItemStackType::SvxRTFItemStackType(
         const EditPosition& rPos,
         bool const bCopyAttr )
     : aAttrSet( *rCpy.aAttrSet.GetPool(), rCpy.aAttrSet.GetRanges() )
-    , nStyleNo( rCpy.nStyleNo )
+    , mxStartNodeIdx(rPos.MakeNodeIdx())
+    , mxEndNodeIdx(mxStartNodeIdx)
+    , nSttCnt(rPos.GetCntIdx())
+    , nEndCnt(nSttCnt)
+    , nStyleNo(rCpy.nStyleNo)
 {
-    mxStartNodeIdx = rPos.MakeNodeIdx();
-    nSttCnt = rPos.GetCntIdx();
-    mxEndNodeIdx = mxStartNodeIdx;
-    nEndCnt = nSttCnt;
-
     aAttrSet.SetParent( &rCpy.aAttrSet );
     if( bCopyAttr )
         aAttrSet.Put( rCpy.aAttrSet );
@@ -1106,7 +1104,6 @@ void SvxRTFItemStackType::SetRTFDefaults( const SfxItemSet& rDefaults )
         } while(pItem);
     }
 }
-
 
 RTFPlainAttrMapIds::RTFPlainAttrMapIds( const SfxItemPool& rPool )
 {
