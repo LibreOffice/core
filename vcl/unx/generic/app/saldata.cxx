@@ -57,7 +57,7 @@
 
 X11SalData* GetX11SalData()
 {
-    SalData * p1 = ImplGetSVData()->mpSalData;
+    SalData * p1 = ImplGetSVData()->mpSalData.get();
     OSL_ASSERT(p1 != nullptr);
     X11SalData * p2 = dynamic_cast< X11SalData * >(p1);
     OSL_ASSERT(p2 != nullptr);

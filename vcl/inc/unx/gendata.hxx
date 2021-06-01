@@ -94,7 +94,7 @@ public:
 
 inline GenericUnixSalData* GetGenericUnixSalData()
 {
-    return static_cast<GenericUnixSalData*>(ImplGetSVData()->mpSalData);
+    return static_cast<GenericUnixSalData*>(ImplGetSVData()->mpSalData.get());
 }
 
 #endif

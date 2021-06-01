@@ -379,7 +379,7 @@ struct ImplSVData
 {
     ImplSVData();
     ~ImplSVData();
-    SalData*                mpSalData = nullptr;
+    std::unique_ptr<SalData> mpSalData;
     SalInstance*            mpDefInst = nullptr;            // Default SalInstance
     Application*            mpApp = nullptr;                // pApp
     VclPtr<WorkWindow>      mpDefaultWin;                   // Default-Window

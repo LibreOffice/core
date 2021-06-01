@@ -42,6 +42,7 @@
 #include <vcl/toolkit/dialog.hxx>
 #include <salinst.hxx>
 #include <salgdi.hxx>
+#include <saldatabasic.hxx>
 #include <svdata.hxx>
 #include <salsys.hxx>
 #include <windowdev.hxx>

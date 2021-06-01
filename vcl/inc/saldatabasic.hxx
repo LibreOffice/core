@@ -54,12 +54,13 @@ public:
 
 inline void SetSalData( SalData* pData )
 {
-    ImplGetSVData()->mpSalData = pData;
+    assert(!ImplGetSVData()->mpSalData && "cannot init this twice");
+    ImplGetSVData()->mpSalData.reset(pData);
 }
 
 inline SalData* GetSalData()
 {
-    return ImplGetSVData()->mpSalData;
+    return ImplGetSVData()->mpSalData.get();
 }
 
 #endif
