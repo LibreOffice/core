@@ -225,10 +225,10 @@ void SdOOXMLExportTest1::testTdf127237()
     CPPUNIT_ASSERT(pTableObj != nullptr);
     uno::Reference< table::XCellRange > xTable(pTableObj->getTable(), uno::UNO_QUERY_THROW);
 
-    sal_Int32 nFillColor = 0;
+    Color nFillColor = 0;
     uno::Reference< beans::XPropertySet > xCell(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nFillColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x0070C0), nFillColor);
+    CPPUNIT_ASSERT_EQUAL(Color(0x0070C0), nFillColor);
 
     xDocShRef->DoClose();
 }
@@ -565,10 +565,10 @@ void SdOOXMLExportTest1::testTableCellFillProperties()
     uno::Reference< beans::XPropertySet > xCell;
 
     // Test Solid fill color
-    sal_Int32 nColor;
+    Color nColor;
     xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(6750207), nColor);
+    CPPUNIT_ASSERT_EQUAL(Color(6750207), nColor);
 
     // Test Picture fill type for cell
     drawing::FillStyle aFillStyle( drawing::FillStyle_NONE );
@@ -990,8 +990,8 @@ void SdOOXMLExportTest1::testTdf94238()
     // Without the accompanying fix in place, this test would have failed with
     // 'Expected: 0, Actual  : 10592673', i.e. the start color of the gradient
     // was incorrect.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aGradient.StartColor);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x8B8B8B), aGradient.EndColor);
+    CPPUNIT_ASSERT_EQUAL(static_cast<Color>(0), aGradient.StartColor);
+    CPPUNIT_ASSERT_EQUAL(static_cast<Color>(0x8B8B8B), aGradient.EndColor);
 
     xDocShRef->DoClose();
 }
@@ -1276,8 +1276,8 @@ void SdOOXMLExportTest1::testTdf128345GradientAxial()
 
     awt::Gradient aTransparenceGradient;
     xShapePropSet->getPropertyValue("FillTransparenceGradient") >>= aTransparenceGradient;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x000000), aTransparenceGradient.StartColor);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), aTransparenceGradient.EndColor);
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, aTransparenceGradient.StartColor);
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, aTransparenceGradient.EndColor);
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_AXIAL, aTransparenceGradient.Style);
 
     xDocShRef->DoClose();

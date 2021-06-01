@@ -978,19 +978,19 @@ void SdImportTest::testPredefinedTableStyle()
 
     uno::Reference< table::XCellRange > xTable(pTableObj->getTable(), uno::UNO_QUERY_THROW);
     uno::Reference< beans::XPropertySet > xCell;
-    sal_Int32 nColor;
+    Color nColor;
 
     xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nColor);
+    CPPUNIT_ASSERT_EQUAL(Color(0), nColor);
 
     xCell.set(xTable->getCellByPosition(0, 1), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(13421772), nColor);
+    CPPUNIT_ASSERT_EQUAL(Color(13421772), nColor);
 
     xCell.set(xTable->getCellByPosition(0, 2), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(15198183), nColor);
+    CPPUNIT_ASSERT_EQUAL(Color(15198183), nColor);
 
     xDocShRef->DoClose();
 }
@@ -1007,35 +1007,35 @@ void SdImportTest::testBnc887225()
     CPPUNIT_ASSERT( pTableObj );
     uno::Reference< table::XCellRange > xTable(pTableObj->getTable(), uno::UNO_QUERY_THROW);
     uno::Reference< beans::XPropertySet > xCell;
-    sal_Int32 nColor;
+    Color nColor;
 
     xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(6003669), nColor);
+    CPPUNIT_ASSERT_EQUAL(Color(6003669), nColor);
 
     xCell.set(xTable->getCellByPosition(0, 1), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(6003669), nColor);
+    CPPUNIT_ASSERT_EQUAL(Color(6003669), nColor);
 
     xCell.set(xTable->getCellByPosition(1, 1), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(13754095), nColor);
+    CPPUNIT_ASSERT_EQUAL(Color(13754095), nColor);
 
     xCell.set(xTable->getCellByPosition(1, 2), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(15331319), nColor);
+    CPPUNIT_ASSERT_EQUAL(Color(15331319), nColor);
 
     xCell.set(xTable->getCellByPosition(1, 4), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(6003669), nColor);
+    CPPUNIT_ASSERT_EQUAL(Color(6003669), nColor);
 
     xCell.set(xTable->getCellByPosition(3, 2), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(6003669), nColor);
+    CPPUNIT_ASSERT_EQUAL(Color(6003669), nColor);
 
     xCell.set(xTable->getCellByPosition(3, 4), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(6003669), nColor);
+    CPPUNIT_ASSERT_EQUAL(Color(6003669), nColor);
 
     xDocShRef->DoClose();
 }
@@ -1295,11 +1295,11 @@ void SdImportTest::testBnc862510_6()
     // Get first run of the paragraph
     uno::Reference<text::XTextRange> xRun( getRunFromParagraph( 0, xParagraph ) );
     uno::Reference< beans::XPropertySet > xPropSet( xRun, uno::UNO_QUERY_THROW );
-    sal_Int32 nCharColor;
+    Color nCharColor;
     xPropSet->getPropertyValue( "CharColor" ) >>= nCharColor;
 
     // Color should be gray
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(0x8B8B8B), nCharColor );
+    CPPUNIT_ASSERT_EQUAL( Color(0x8B8B8B), nCharColor );
 
     xDocShRef->DoClose();
 }
@@ -1468,11 +1468,11 @@ void SdImportTest::testBnc910045()
     CPPUNIT_ASSERT( pTableObj );
     uno::Reference< table::XCellRange > xTable(pTableObj->getTable(), uno::UNO_QUERY_THROW);
     uno::Reference< beans::XPropertySet > xCell;
-    sal_Int32 nColor;
+    Color nColor;
 
     xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(5210557), nColor);
+    CPPUNIT_ASSERT_EQUAL(Color(5210557), nColor);
 
     xDocShRef->DoClose();
 }
@@ -1539,14 +1539,14 @@ void SdImportTest::testTdf127129()
     uno::Reference< text::XTextRange > xRun( getRunFromParagraph( 0, xParagraph ) );
     uno::Reference< beans::XPropertySet > xPropSet( xRun, uno::UNO_QUERY_THROW );
 
-    sal_Int32 nCharColor;
+    Color nCharColor;
     xPropSet->getPropertyValue( "CharColor" ) >>= nCharColor;
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(0x000000), nCharColor );
+    CPPUNIT_ASSERT_EQUAL( COL_BLACK, nCharColor );
 
     // Without the accompanying fix in place, the highlight would be -1
-    sal_Int32 nCharBackColor;
+    Color nCharBackColor;
     xPropSet->getPropertyValue( "CharBackColor" ) >>= nCharBackColor;
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(0xFF00), nCharBackColor );
+    CPPUNIT_ASSERT_EQUAL( Color(0xFF00), nCharBackColor );
 
     xDocShRef->DoClose();
 }
@@ -1760,9 +1760,9 @@ void SdImportTest::testTdf89927()
     uno::Reference< text::XTextRange > xRun( getRunFromParagraph( 0, xParagraph ) );
     uno::Reference< beans::XPropertySet > xPropSet( xRun, uno::UNO_QUERY_THROW );
 
-    sal_Int32 nCharColor;
+    Color nCharColor;
     xPropSet->getPropertyValue( "CharColor" ) >>= nCharColor;
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(0xFFFFFF), nCharColor );
+    CPPUNIT_ASSERT_EQUAL( COL_WHITE, nCharColor );
 
     xDocShRef->DoClose();
 }
@@ -1807,7 +1807,7 @@ void SdImportTest::testTdf99030()
         xDoc->getMasterPages()->getByIndex( 0 ), uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySet > xPropSet( xPage, uno::UNO_QUERY );
 
-    sal_Int32 nFillColor(0);
+    Color nFillColor(0);
     uno::Any aAny = xPropSet->getPropertyValue( "Background" );
     if (aAny.hasValue())
     {
@@ -1815,7 +1815,7 @@ void SdImportTest::testTdf99030()
         aAny >>= xBackgroundPropSet;
         xBackgroundPropSet->getPropertyValue( "FillColor" ) >>= nFillColor;
     }
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(0x676A55), nFillColor );
+    CPPUNIT_ASSERT_EQUAL( Color(0x676A55), nFillColor );
 
     xDocShRef->DoClose();
 }
@@ -1978,9 +1978,9 @@ void SdImportTest::testTdf103876()
     CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(nParaAdjust));
 
     // Check character color
-    sal_Int32 nCharColor;
+    Color nCharColor;
     xShape->getPropertyValue( "CharColor" ) >>= nCharColor;
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(0xFF0000), nCharColor );
+    CPPUNIT_ASSERT_EQUAL( Color(0xFF0000), nCharColor );
 
     xDocShRef->DoClose();
 }
@@ -3040,11 +3040,11 @@ void SdImportTest::testTdf120028b()
     uno::Reference<text::XTextRange> xParagraph(getParagraphFromShape(0, xCell));
     uno::Reference<text::XTextRange> xRun(getRunFromParagraph(0, xParagraph));
     uno::Reference<beans::XPropertySet> xPropSet(xRun, uno::UNO_QUERY);
-    sal_Int32 nCharColor = 0;
+    Color nCharColor = 0;
     xPropSet->getPropertyValue("CharColor") >>= nCharColor;
     // This was 0x1f497d, not white: text list style from placeholder shape
     // from slide layout was ignored.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xffffff), nCharColor);
+    CPPUNIT_ASSERT_EQUAL(static_cast<COL_WHITE>, nCharColor);
 
     xDocShRef->DoClose();
 }

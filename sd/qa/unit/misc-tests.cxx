@@ -129,10 +129,10 @@ virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
     }
 
 private:
-    sd::DrawDocShellRef Load(const OUString& rURL, sal_Int32 nFormat);
+    sd::DrawDocShellRef Load(const OUString& rURL, Color nFormat);
 };
 
-sd::DrawDocShellRef SdMiscTest::Load(const OUString& rURL, sal_Int32 nFormat)
+sd::DrawDocShellRef SdMiscTest::Load(const OUString& rURL, Color nFormat)
 {
     uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(::comphelper::getProcessComponentContext());
     CPPUNIT_ASSERT(xDesktop.is());
@@ -360,8 +360,8 @@ void SdMiscTest::testFillGradient()
     uno::Reference<beans::XPropertySet> xPropSet(xShape1, uno::UNO_QUERY_THROW);
     // Set FillStyle and FillGradient
     awt::Gradient aGradient;
-    aGradient.StartColor = sal_Int32(Color(255, 0, 0));
-    aGradient.EndColor = sal_Int32(Color(0, 255, 0));
+    aGradient.StartColor = Color(Color(255, 0, 0));
+    aGradient.EndColor = Color(Color(0, 255, 0));
     xPropSet->setPropertyValue("FillStyle", uno::makeAny(drawing::FillStyle_GRADIENT));
     xPropSet->setPropertyValue("FillGradient", uno::makeAny(aGradient));
     // Add the rectangle to the page.
@@ -375,8 +375,8 @@ void SdMiscTest::testFillGradient()
     CPPUNIT_ASSERT(xPropSet2->getPropertyValue("FillStyle") >>= eFillStyle);
     CPPUNIT_ASSERT_EQUAL(int(drawing::FillStyle_GRADIENT), static_cast<int>(eFillStyle));
     CPPUNIT_ASSERT(xPropSet2->getPropertyValue("FillGradient") >>= aGradient2);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(Color(255, 0, 0)),aGradient2.StartColor);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(Color(0, 255, 0)),aGradient2.EndColor);
+    CPPUNIT_ASSERT_EQUAL(Color(Color(255, 0, 0)),aGradient2.StartColor);
+    CPPUNIT_ASSERT_EQUAL(Color(Color(0, 255, 0)),aGradient2.EndColor);
 
     xDocShRef->DoClose();
 }

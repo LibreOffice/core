@@ -508,7 +508,7 @@ void SdExportTest::testBnc480256()
     sdr::table::SdrTableObj *pTableObj;
     uno::Reference< table::XCellRange > xTable;
     uno::Reference< beans::XPropertySet > xCell;
-    sal_Int32 nColor;
+    Color nColor;
     table::BorderLine2 aBorderLine;
 
     pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
@@ -517,13 +517,13 @@ void SdExportTest::testBnc480256()
 
     xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(10208238), nColor);
+    CPPUNIT_ASSERT_EQUAL(Color(10208238), nColor);
     xCell->getPropertyValue("LeftBorder") >>= aBorderLine;
     CPPUNIT_ASSERT_EQUAL(util::Color(5609427), aBorderLine.Color);
 
     xCell.set(xTable->getCellByPosition(0, 1), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(13032959), nColor);
+    CPPUNIT_ASSERT_EQUAL(Color(13032959), nColor);
     xCell->getPropertyValue("TopBorder") >>= aBorderLine;
     CPPUNIT_ASSERT_EQUAL(util::Color(5609427), aBorderLine.Color);
 
@@ -533,13 +533,13 @@ void SdExportTest::testBnc480256()
 
     xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(7056614), nColor);
+    CPPUNIT_ASSERT_EQUAL(Color(7056614), nColor);
     xCell->getPropertyValue("LeftBorder") >>= aBorderLine;
     CPPUNIT_ASSERT_EQUAL(util::Color(12505062), aBorderLine.Color);
 
     xCell.set(xTable->getCellByPosition(0, 1), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4626400), nColor);
+    CPPUNIT_ASSERT_EQUAL(Color(4626400), nColor);
 
     xCell.set(xTable->getCellByPosition(1, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("BottomBorder") >>= aBorderLine;
@@ -1251,9 +1251,9 @@ void SdExportTest::testGlow()
     sal_Int32 nGlowEffectRad = 0;
     CPPUNIT_ASSERT(xShape->getPropertyValue("GlowEffectRadius") >>= nGlowEffectRad);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(529), nGlowEffectRad); // 15 pt = 529.166... mm/100
-    sal_Int32 nGlowEffectColor = 0;
+    Color nGlowEffectColor = 0;
     CPPUNIT_ASSERT(xShape->getPropertyValue("GlowEffectColor") >>= nGlowEffectColor);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00FF4000), nGlowEffectColor); // "Brick"
+    CPPUNIT_ASSERT_EQUAL(Color(0x00FF4000), nGlowEffectColor); // "Brick"
     sal_Int16 nGlowEffectTransparency = 0;
     CPPUNIT_ASSERT(xShape->getPropertyValue("GlowEffectTransparency") >>= nGlowEffectTransparency);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(60), nGlowEffectTransparency); // 60%
