@@ -32,6 +32,7 @@
 {Relationship::OFFICEDOCUMENT, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument"},
 {Relationship::OLEOBJECT, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject"},
 {Relationship::PACKAGE, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package"},
+{Relationship::PRESPROPS, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/presProps"},
 {Relationship::SETTINGS, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings"},
 {Relationship::SHAREDSTRINGS, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings"},
 {Relationship::SLIDE, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slide"},
