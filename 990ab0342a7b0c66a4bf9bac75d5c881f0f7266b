@@ -22,6 +22,30 @@
       "revId": "990ab0342a7b0c66a4bf9bac75d5c881f0f7266b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65124206_d05a7940",
+        "filename": "sfx2/source/control/bindings.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1277,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-01T06:09:19Z",
+      "side": 1,
+      "message": "Addressed in https://gerrit.libreoffice.org/c/core/+/116455",
+      "parentUuid": "caebd91e_da5c7da7",
+      "range": {
+        "startLine": 1277,
+        "startChar": 4,
+        "endLine": 1277,
+        "endChar": 48
+      },
+      "revId": "990ab0342a7b0c66a4bf9bac75d5c881f0f7266b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
