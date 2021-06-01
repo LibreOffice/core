@@ -824,9 +824,9 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
         pPage->SetSize(Size(1000,1000));
         pModel->InsertPage( pPage.get(), 0 );
         {
-        std::unique_ptr<SdrView> pView(new SdrView( *pModel, pVDev ));
-        pView->hideMarkHandles();
-        pView->ShowSdrPage(pPage.get());
+        SdrView aView( *pModel, pVDev );
+        aView.hideMarkHandles();
+        aView.ShowSdrPage(pPage.get());
         size_t nSymTmp = static_cast<size_t>(nSymType);
         if(m_pSymbolList)
         {
@@ -861,8 +861,8 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
                     pInvisibleSquare->SetMergedItem(XFillTransparenceItem(100));
                     pInvisibleSquare->SetMergedItem(XLineTransparenceItem(100));
 
-                    pView->MarkAll();
-                    GDIMetaFile aMeta(pView->GetMarkedObjMetaFile());
+                    aView.MarkAll();
+                    GDIMetaFile aMeta(aView.GetMarkedObjMetaFile());
 
                     m_aSymbolGraphic=Graphic(aMeta);
                     m_aSymbolSize=pObj->GetSnapRect().GetSize();
@@ -872,7 +872,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
                     bEnable=true;
                     bIgnoreGraphic=true;
 
-                    pView->UnmarkAll();
+                    aView.UnmarkAll();
                     pInvisibleSquare=pPage->RemoveObject(1);
                     SdrObject::Free( pInvisibleSquare);
                     pObj=pPage->RemoveObject(0);
@@ -1454,9 +1454,9 @@ IMPL_LINK_NOARG(SvxLineTabPage, MenuCreateHdl_Impl, weld::Toggleable&, void)
     pModel->InsertPage( pPage.get(), 0 );
     {
         // 3D View
-        std::unique_ptr<SdrView> pView(new SdrView( *pModel, pVDev ));
-        pView->hideMarkHandles();
-        pView->ShowSdrPage(pPage.get());
+        SdrView aView( *pModel, pVDev );
+        aView.hideMarkHandles();
+        aView.ShowSdrPage(pPage.get());
 
         // Generate invisible square to give all symbols a
         // bitmap size, which is independent from specific glyph
@@ -1487,10 +1487,10 @@ IMPL_LINK_NOARG(SvxLineTabPage, MenuCreateHdl_Impl, weld::Toggleable&, void)
             {
                 pObj->SetMergedItemSet(m_rOutAttrs);
             }
-            pView->MarkAll();
-            BitmapEx aBitmapEx(pView->GetMarkedObjBitmapEx());
-            GDIMetaFile aMeta(pView->GetMarkedObjMetaFile());
-            pView->UnmarkAll();
+            aView.MarkAll();
+            BitmapEx aBitmapEx(aView.GetMarkedObjBitmapEx());
+            GDIMetaFile aMeta(aView.GetMarkedObjMetaFile());
+            aView.UnmarkAll();
             pObj=pPage->RemoveObject(1);
             SdrObject::Free(pObj);
 

@@ -143,15 +143,15 @@ void SvxHyperlinkTabPageBase::InitStdControls ()
         SfxFrame* pFrame = pViewFrame ? &pViewFrame->GetFrame() : nullptr;
         if ( pFrame )
         {
-            std::unique_ptr<TargetList> pList(new TargetList);
-            SfxFrame::GetDefaultTargetList(*pList);
-            if( !pList->empty() )
+            TargetList aList;
+            SfxFrame::GetDefaultTargetList(aList);
+            if( !aList.empty() )
             {
-                size_t nCount = pList->size();
+                size_t nCount = aList.size();
                 size_t i;
                 for ( i = 0; i < nCount; i++ )
                 {
-                    mxCbbFrame->append_text( pList->at( i ) );
+                    mxCbbFrame->append_text( aList.at( i ) );
                 }
             }
         }
