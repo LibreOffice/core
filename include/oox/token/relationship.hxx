@@ -52,6 +52,7 @@ enum class Relationship
     OFFICEDOCUMENT,
     OLEOBJECT,
     PACKAGE,
+    PRESPROPS,
     SETTINGS,
     SHAREDSTRINGS,
     SLIDE,
