@@ -406,7 +406,6 @@ namespace slideshow::internal
 
                     if( !rRangePix.isEmpty() )
                     {
-                        uno::Sequence< uno::Any >   aArgs( 3 );
                         awt::Rectangle              aAWTRect( rRangePix.getMinX(),
                                                               rRangePix.getMinY(),
                                                                 rRangePix.getMaxX() - rRangePix.getMinX(),
@@ -433,6 +432,7 @@ namespace slideshow::internal
 
                         if( mxPlayer.is() )
                         {
+                            uno::Sequence< uno::Any >   aArgs( 3 );
                             sal_IntPtr nParentWindowHandle(0);
                             const SystemEnvData* pEnvData = mpMediaWindow->GetSystemData();
                             // tdf#139609 gtk doesn't need the handle, and fetching it is undesirable
