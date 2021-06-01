@@ -46,6 +46,30 @@
       "revId": "0643e5a3accc01e0ee7a2359ec283ced8d0cf0ab",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5982b73c_db645897",
+        "filename": "sc/source/ui/miscdlgs/datatableview.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1002925
+      },
+      "writtenOn": "2021-06-01T20:37:22Z",
+      "side": 1,
+      "message": "First of all thank you very much for your feedback.\nIMHO if we consider the line 218 in file sc/source/ui/view/colrowba.cxx which controls the row header of home calc sheet , here also million entries( pTab \u003eGetViewData().GetDocument().MaxRow() that is 1048576) are loaded .\n\nIf we change this value from MaxRow to some lesser value \u0027v\u0027 we can observe in sheets that row numbers in row headers will *not* be visible after our specific entry \u0027v\u0027.\n\nSince I am new to codebase I considered *MaxRow+1* in my patch in ScHeaderControl by taking inspiration from existing implementations in files(ex. colrowba.cxx).\n\nPlease correct me if I am wrong since I don\u0027t want to push any dirty code to the codebase.\n\nThank You.",
+      "parentUuid": "9127cb87_8d78e575",
+      "range": {
+        "startLine": 93,
+        "startChar": 51,
+        "endLine": 93,
+        "endChar": 58
+      },
+      "revId": "0643e5a3accc01e0ee7a2359ec283ced8d0cf0ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
