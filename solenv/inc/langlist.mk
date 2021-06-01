@@ -115,7 +115,6 @@ sq \
 sr \
 ss \
 st \
-st-LS \
 sv \
 sw-TZ \
 szl \
