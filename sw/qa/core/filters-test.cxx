@@ -42,6 +42,7 @@ public:
         const OUString &rUserData, SfxFilterFlags nFilterFlags,
         SotClipboardFormatId nClipboardID, unsigned int nFilterVersion) override;
     virtual void setUp() override;
+    virtual void tearDown() override;
 
     // Ensure CVEs remain unbroken
     void testCVEs();
@@ -206,6 +207,12 @@ void SwFiltersTest::setUp()
     m_xWriterComponent =
         getMultiServiceFactory()->createInstance("com.sun.star.comp.Writer.TextDocument");
     CPPUNIT_ASSERT_MESSAGE("no writer component!", m_xWriterComponent.is());
+}
+
+void SwFiltersTest::tearDown()
+{
+    uno::Reference<lang::XComponent>(m_xWriterComponent, uno::UNO_QUERY_THROW)->dispose();
+    m_xWriterComponent.clear();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwFiltersTest);
