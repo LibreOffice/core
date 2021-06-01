@@ -184,8 +184,6 @@ public:
     virtual void set_vexpand(bool bExpand) = 0;
     virtual bool get_vexpand() const = 0;
 
-    virtual void set_secondary(bool bSecondary) = 0;
-
     virtual void set_margin_top(int nMargin) = 0;
     virtual void set_margin_bottom(int nMargin) = 0;
     virtual void set_margin_start(int nMargin) = 0;

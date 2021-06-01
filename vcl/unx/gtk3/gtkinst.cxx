@@ -3475,17 +3475,6 @@ public:
         return gtk_widget_get_vexpand(m_pWidget);
     }
 
-    virtual void set_secondary(bool bSecondary) override
-    {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
-        if (pParent && GTK_IS_BUTTON_BOX(pParent))
-            gtk_button_box_set_child_secondary(GTK_BUTTON_BOX(pParent), m_pWidget, bSecondary);
-#else
-        (void)bSecondary;
-#endif
-    }
-
     virtual void set_margin_top(int nMargin) override
     {
         gtk_widget_set_margin_top(m_pWidget, nMargin);

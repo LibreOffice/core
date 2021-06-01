@@ -275,8 +275,6 @@ public:
 
     virtual bool get_vexpand() const override;
 
-    virtual void set_secondary(bool bSecondary) override;
-
     virtual void set_margin_top(int nMargin) override;
 
     virtual void set_margin_bottom(int nMargin) override;
