@@ -249,7 +249,7 @@ void DrawViewShell::SelectionHasChanged()
     // Invalidate for every subshell
     GetViewShellBase().GetViewShellManager()->InvalidateAllSubShells(this);
 
-    mpDrawView->UpdateSelectionClipboard( false );
+    mpDrawView->UpdateSelectionClipboard();
 
     GetViewShellBase().GetDrawController().FireSelectionChangeListener();
 }

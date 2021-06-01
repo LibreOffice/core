@@ -211,17 +211,28 @@ css::uno::Reference< css::datatransfer::XTransferable > View::CreateSelectionDat
     return pTransferable;
 }
 
-void View::UpdateSelectionClipboard( bool bForceDeselect )
+void View::UpdateSelectionClipboard() // false case
 {
-    if( mpViewSh && mpViewSh->GetActiveWindow() )
+    if (!mpViewSh)
+        return;
+    if (!mpViewSh->GetActiveWindow())
+        return;
+    if (GetMarkedObjectList().GetMarkCount())
+        CreateSelectionDataObject( this );
+    else
+        ClearSelectionClipboard();
+}
+
+void View::ClearSelectionClipboard() // true case
+{
+    if (!mpViewSh)
+        return;
+    if (!mpViewSh->GetActiveWindow())
+        return;
+    if (SD_MOD()->pTransferSelection && SD_MOD()->pTransferSelection->GetView() == this)
     {
-        if( !bForceDeselect && GetMarkedObjectList().GetMarkCount() )
-            CreateSelectionDataObject( this );
-        else if( SD_MOD()->pTransferSelection && ( SD_MOD()->pTransferSelection->GetView() == this ) )
-        {
-            TransferableHelper::ClearPrimarySelection();
-            SD_MOD()->pTransferSelection = nullptr;
-        }
+        TransferableHelper::ClearPrimarySelection();
+        SD_MOD()->pTransferSelection = nullptr;
     }
 }
 

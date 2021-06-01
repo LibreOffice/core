@@ -135,7 +135,7 @@ View::~View()
     maSmartTags.Dispose();
 
     // release content of selection clipboard, if we own the content
-    UpdateSelectionClipboard( true );
+    ClearSelectionClipboard();
 
     maDropErrorIdle.Stop();
     maDropInsertFileIdle.Stop();
