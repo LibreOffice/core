@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75b38cd5_4fe8a014",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 1145,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-06-01T16:50:00Z",
+      "side": 1,
+      "message": "test \"$test_gtk3\" \u003d yes \u0026\u0026 enable_system_cairo\u003dyes\n\nI tried to keep the logic at one place.",
+      "revId": "ab37ab2e09615e596e98d5fae202075699944e6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
