@@ -4340,25 +4340,59 @@ namespace
         return pRet;
     }
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+    cairo_surface_t* render_paintable_to_surface(GdkPaintable *paintable, int nWidth, int nHeight)
+    {
+        cairo_surface_t* surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nWidth, nHeight);
+
+        GtkSnapshot* snapshot = gtk_snapshot_new();
+        gdk_paintable_snapshot(paintable, snapshot, nWidth, nHeight);
+        GskRenderNode* node = gtk_snapshot_free_to_node(snapshot);
+
+        cairo_t* cr = cairo_create(surface);
+        gsk_render_node_draw(node, cr);
+        cairo_destroy(cr);
+
+        gsk_render_node_unref(node);
+
+        return surface;
+    }
+#endif
+
     GdkPixbuf* getPixbuf(const OUString& rIconName)
     {
         if (rIconName.isEmpty())
             return nullptr;
 
         GdkPixbuf* pixbuf = nullptr;
-#if !GTK_CHECK_VERSION(4, 0, 0)
         if (rIconName.lastIndexOf('.') != rIconName.getLength() - 4)
         {
             assert((rIconName== "dialog-warning" || rIconName== "dialog-error" || rIconName== "dialog-information") &&
                    "unknown stock image");
 
-            GError *error = nullptr;
+#if GTK_CHECK_VERSION(4, 0, 0)
+            GtkIconTheme *icon_theme = gtk_icon_theme_get_for_display(gdk_display_get_default());
+            GtkIconPaintable *icon = gtk_icon_theme_lookup_icon(icon_theme,
+                                     OUStringToOString(rIconName, RTL_TEXTENCODING_UTF8).getStr(),
+                                     nullptr,
+                                     16,
+                                     1,
+                                     AllSettings::GetLayoutRTL() ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR,
+                                     static_cast<GtkIconLookupFlags>(0));
+            GdkPaintable* paintable = GDK_PAINTABLE(icon);
+            int nWidth = gdk_paintable_get_intrinsic_width(paintable);
+            int nHeight = gdk_paintable_get_intrinsic_height(paintable);
+            cairo_surface_t* surface = render_paintable_to_surface(paintable, nWidth, nHeight);
+            pixbuf = gdk_pixbuf_get_from_surface(surface, 0, 0, nWidth, nHeight);
+            cairo_surface_destroy(surface);
+#else
             GtkIconTheme *icon_theme = gtk_icon_theme_get_default();
+            GError *error = nullptr;
             pixbuf = gtk_icon_theme_load_icon(icon_theme, OUStringToOString(rIconName, RTL_TEXTENCODING_UTF8).getStr(),
                                               16, GTK_ICON_LOOKUP_USE_BUILTIN, &error);
+#endif
         }
         else
-#endif
         {
             const AllSettings& rSettings = Application::GetSettings();
             pixbuf = load_icon_by_name_theme_lang(rIconName,
