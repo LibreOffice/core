@@ -209,8 +209,10 @@ distclean : clean compilerplugins-clean
         $(BUILDDIR)/bin/odfvalidator.sh \
         $(BUILDDIR)/bin/officeotron.sh \
         $(BUILDDIR)/config.Build.log \
+        $(BUILDDIR)/config.Build.warn \
         $(BUILDDIR)/config.log \
         $(BUILDDIR)/config.status \
+        $(BUILDDIR)/config.warn \
         $(BUILDDIR)/config_build.mk \
         $(BUILDDIR)/config_build_lang.mk \
         $(BUILDDIR)/config_build \
