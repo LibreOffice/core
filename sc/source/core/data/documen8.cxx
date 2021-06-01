@@ -570,7 +570,7 @@ bool ScDocument::IdleCalcTextWidth()            // true = try next again
     aScope.setCol(pTab->ClampToAllocatedColumns(aScope.Col()));
     // Start at specified cell position (nCol, nRow, nTab).
     ScColumn* pCol  = &pTab->aCol[aScope.Col()];
-    std::unique_ptr<ScColumnTextWidthIterator> pColIter(new ScColumnTextWidthIterator(*this, *pCol, aScope.Row(), MaxRow()));
+    std::optional<ScColumnTextWidthIterator> pColIter(std::in_place, *this, *pCol, aScope.Row(), MaxRow());
 
     OutputDevice* pDev = nullptr;
     sal_uInt16 nRestart = 0;
@@ -667,7 +667,7 @@ bool ScDocument::IdleCalcTextWidth()            // true = try next again
                 if ( nZoom > 0 )
                 {
                     pCol  = &pTab->aCol[aScope.Col()];
-                    pColIter.reset(new ScColumnTextWidthIterator(*this, *pCol, aScope.Row(), MaxRow()));
+                    pColIter.emplace(*this, *pCol, aScope.Row(), MaxRow());
                 }
                 else
                 {

@@ -30,8 +30,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         args.push_back(std::string(argv[i]));
     try
     {
-        std::unique_ptr<HelpLinker> pHelpLinker(new HelpLinker());
-        pHelpLinker->main(args);
+        HelpLinker aHelpLinker;
+        aHelpLinker.main(args);
     }
     catch (const HelpProcessingException& e)
     {

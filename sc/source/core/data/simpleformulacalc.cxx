@@ -50,8 +50,8 @@ void ScSimpleFormulaCalculator::Calculate()
     if (mbMatrixFormula)
         aInt.AssertFormulaMatrix();
 
-    std::unique_ptr<sfx2::LinkManager> pNewLinkMgr( new sfx2::LinkManager(mrDoc.GetDocumentShell()) );
-    aInt.SetLinkManager( pNewLinkMgr.get() );
+    sfx2::LinkManager aNewLinkMgr( mrDoc.GetDocumentShell() );
+    aInt.SetLinkManager( &aNewLinkMgr );
 
     formula::StackVar aIntType = aInt.Interpret();
     if ( aIntType == formula::svMatrixCell )
