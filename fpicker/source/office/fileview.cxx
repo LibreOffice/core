@@ -1218,13 +1218,13 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     m_aCurrentAsyncActionHandler = Link<void*,void>();
 
     // minimum time to wait
-    std::unique_ptr< TimeValue > pTimeout( new TimeValue );
+    TimeValue aTimeout;
     sal_Int32 nMinTimeout = pAsyncDescriptor->nMinTimeout;
     OSL_ENSURE( nMinTimeout > 0, "SvtFileView_Impl::GetFolderContent_Impl: invalid minimum timeout!" );
     if ( nMinTimeout <= 0 )
         nMinTimeout = sal_Int32( 1000 );
-    pTimeout->Seconds = nMinTimeout / 1000;
-    pTimeout->Nanosec = ( nMinTimeout % 1000 ) * 1000000;
+    aTimeout.Seconds = nMinTimeout / 1000;
+    aTimeout.Nanosec = ( nMinTimeout % 1000 ) * 1000000;
 
     m_xContentEnumerator->enumerateFolderContent( _rFolder, this );
 
@@ -1240,7 +1240,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
         SolarMutexReleaser aSolarRelease;
 
         // now wait. Note that if we didn't get a pAsyncDescriptor, then this is an infinite wait.
-        eResult = m_aAsyncActionFinished.wait( pTimeout.get() );
+        eResult = m_aAsyncActionFinished.wait( &aTimeout );
     }
 
     ::osl::MutexGuard aGuard2( maMutex );

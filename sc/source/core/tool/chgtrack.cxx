@@ -1746,8 +1746,8 @@ void ScChangeActionContent::GetFormulaString(
     else
     {
         OSL_FAIL( "ScChangeActionContent::GetFormulaString: aPos != pCell->aPos" );
-        std::unique_ptr<ScFormulaCell> pNew(new ScFormulaCell( *pCell, pCell->GetDocument(), aPos ));
-        pNew->GetFormula( rStr );
+        ScFormulaCell aNew( *pCell, pCell->GetDocument(), aPos );
+        aNew.GetFormula( rStr );
     }
 }
 

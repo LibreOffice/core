@@ -217,9 +217,9 @@ void ScStyleSheetPool::CreateStandardStyles()
     const OUString  aHelpFile;//which text???
     SfxItemSet*     pSet            = nullptr;
     SfxItemSet*     pHFSet          = nullptr;
-    std::unique_ptr<ScEditEngineDefaulter> pEdEngine(new ScEditEngineDefaulter( EditEngine::CreatePool().get(), true ));
-    pEdEngine->SetUpdateMode( false );
-    std::unique_ptr<EditTextObject> pEmptyTxtObj = pEdEngine->CreateTextObject();
+    ScEditEngineDefaulter aEdEngine( EditEngine::CreatePool().get(), true );
+    aEdEngine.SetUpdateMode( false );
+    std::unique_ptr<EditTextObject> pEmptyTxtObj = aEdEngine.CreateTextObject();
     std::unique_ptr<EditTextObject> pTxtObj;
     ScPageHFItem aHeaderItem( ATTR_PAGE_HEADERRIGHT );
     ScPageHFItem aFooterItem( ATTR_PAGE_FOOTERRIGHT );
@@ -284,9 +284,9 @@ void ScStyleSheetPool::CreateStandardStyles()
     // Header:
     // [empty][\sheet\][empty]
 
-    pEdEngine->SetTextCurrentDefaults(EMPTY_OUSTRING);
-    pEdEngine->QuickInsertField( SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD), ESelection() );
-    pTxtObj = pEdEngine->CreateTextObject();
+    aEdEngine.SetTextCurrentDefaults(EMPTY_OUSTRING);
+    aEdEngine.QuickInsertField( SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD), ESelection() );
+    pTxtObj = aEdEngine.CreateTextObject();
     aHeaderItem.SetLeftArea  ( *pEmptyTxtObj );
     aHeaderItem.SetCenterArea( *pTxtObj );
     aHeaderItem.SetRightArea ( *pEmptyTxtObj );
@@ -296,10 +296,10 @@ void ScStyleSheetPool::CreateStandardStyles()
     // [empty][Page \STR_PAGE\][empty]
 
     aStr = SCSTR( STR_PAGE ) + " ";
-    pEdEngine->SetTextCurrentDefaults( aStr );
+    aEdEngine.SetTextCurrentDefaults( aStr );
     nStrLen = aStr.getLength();
-    pEdEngine->QuickInsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(0,nStrLen,0,nStrLen) );
-    pTxtObj = pEdEngine->CreateTextObject();
+    aEdEngine.QuickInsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(0,nStrLen,0,nStrLen) );
+    pTxtObj = aEdEngine.CreateTextObject();
     aFooterItem.SetLeftArea  ( *pEmptyTxtObj );
     aFooterItem.SetCenterArea( *pTxtObj );
     aFooterItem.SetRightArea ( *pEmptyTxtObj );
@@ -342,18 +342,18 @@ void ScStyleSheetPool::CreateStandardStyles()
     // [\TABLE\ (\DATA\)][empty][\DATE\, \TIME\]
 
     aStr = " ()";
-    pEdEngine->SetTextCurrentDefaults( aStr );
-    pEdEngine->QuickInsertField( SvxFieldItem(SvxFileField(), EE_FEATURE_FIELD), ESelection(0,2,0,2) );
-    pEdEngine->QuickInsertField( SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD), ESelection() );
-    pTxtObj = pEdEngine->CreateTextObject();
+    aEdEngine.SetTextCurrentDefaults( aStr );
+    aEdEngine.QuickInsertField( SvxFieldItem(SvxFileField(), EE_FEATURE_FIELD), ESelection(0,2,0,2) );
+    aEdEngine.QuickInsertField( SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD), ESelection() );
+    pTxtObj = aEdEngine.CreateTextObject();
     aHeaderItem.SetLeftArea( *pTxtObj );
     aHeaderItem.SetCenterArea( *pEmptyTxtObj );
     aStr = ", ";
-    pEdEngine->SetTextCurrentDefaults( aStr );
-    pEdEngine->QuickInsertField( SvxFieldItem(SvxTimeField(), EE_FEATURE_FIELD), ESelection(0,2,0,2) );
-    pEdEngine->QuickInsertField( SvxFieldItem(SvxDateField(Date( Date::SYSTEM ),SvxDateType::Var), EE_FEATURE_FIELD),
+    aEdEngine.SetTextCurrentDefaults( aStr );
+    aEdEngine.QuickInsertField( SvxFieldItem(SvxTimeField(), EE_FEATURE_FIELD), ESelection(0,2,0,2) );
+    aEdEngine.QuickInsertField( SvxFieldItem(SvxDateField(Date( Date::SYSTEM ),SvxDateType::Var), EE_FEATURE_FIELD),
                                     ESelection() );
-    pTxtObj = pEdEngine->CreateTextObject();
+    pTxtObj = aEdEngine.CreateTextObject();
     aHeaderItem.SetRightArea( *pTxtObj );
     pSet->Put( aHeaderItem );
 
@@ -364,10 +364,10 @@ void ScStyleSheetPool::CreateStandardStyles()
     nStrLen = aStr.getLength();
     aStr += " / ";
     sal_Int32 nStrLen2 = aStr.getLength();
-    pEdEngine->SetTextCurrentDefaults( aStr );
-    pEdEngine->QuickInsertField( SvxFieldItem(SvxPagesField(), EE_FEATURE_FIELD), ESelection(0,nStrLen2,0,nStrLen2) );
-    pEdEngine->QuickInsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(0,nStrLen,0,nStrLen) );
-    pTxtObj = pEdEngine->CreateTextObject();
+    aEdEngine.SetTextCurrentDefaults( aStr );
+    aEdEngine.QuickInsertField( SvxFieldItem(SvxPagesField(), EE_FEATURE_FIELD), ESelection(0,nStrLen2,0,nStrLen2) );
+    aEdEngine.QuickInsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(0,nStrLen,0,nStrLen) );
+    pTxtObj = aEdEngine.CreateTextObject();
     aFooterItem.SetLeftArea  ( *pEmptyTxtObj );
     aFooterItem.SetCenterArea( *pTxtObj );
     aFooterItem.SetRightArea ( *pEmptyTxtObj );

@@ -47,11 +47,11 @@ CSubmissionGet::CSubmissionGet(const OUString& aURL, const css::uno::Reference< 
 CSubmission::SubmissionResult CSubmissionGet::submit(const css::uno::Reference< css::task::XInteractionHandler >& aInteractionHandler)
 {
     // GET always uses application/x-www-formurlencoded
-    std::unique_ptr< CSerialization > apSerialization(new CSerializationURLEncoded());
-    apSerialization->setSource(m_aFragment);
-    apSerialization->serialize();
+    CSerializationURLEncoded aSerialization;
+    aSerialization.setSource(m_aFragment);
+    aSerialization.serialize();
 
-    css::uno::Reference< XInputStream > aInStream = apSerialization->getInputStream();
+    css::uno::Reference< XInputStream > aInStream = aSerialization.getInputStream();
 
     // create a commandEnvironment and use the default interaction handler
     rtl::Reference<CCommandEnvironmentHelper> pHelper = new CCommandEnvironmentHelper;
