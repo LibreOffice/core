@@ -3572,7 +3572,7 @@ void ScInterpreter::ScTableOp()
         PushIllegalParameter();
         return;
     }
-    std::unique_ptr<ScInterpreterTableOpParams> pTableOp(new ScInterpreterTableOpParams);
+    std::optional<ScInterpreterTableOpParams> pTableOp(std::in_place);
     if (nParamCount == 5)
     {
         PopSingleRef( pTableOp->aNew2 );
@@ -3583,7 +3583,7 @@ void ScInterpreter::ScTableOp()
     PopSingleRef( pTableOp->aFormulaPos );
 
     pTableOp->bValid = true;
-    mrDoc.m_TableOpList.push_back(pTableOp.get());
+    mrDoc.m_TableOpList.push_back(&*pTableOp);
     mrDoc.IncInterpreterTableOpLevel();
 
     bool bReuseLastParams = (mrDoc.aLastTableOpParams == *pTableOp);
@@ -3621,7 +3621,7 @@ void ScInterpreter::ScTableOp()
     }
 
     auto const itr =
-        ::std::find(mrDoc.m_TableOpList.begin(), mrDoc.m_TableOpList.end(), pTableOp.get());
+        ::std::find(mrDoc.m_TableOpList.begin(), mrDoc.m_TableOpList.end(), &*pTableOp);
     if (itr != mrDoc.m_TableOpList.end())
     {
         mrDoc.m_TableOpList.erase(itr);

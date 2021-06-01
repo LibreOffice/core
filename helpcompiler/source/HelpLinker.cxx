@@ -881,8 +881,8 @@ bool compileExtensionHelp
     xmlSetStructuredErrorFunc( nullptr, StructuredXMLErrorFunction );
     try
     {
-        std::unique_ptr<HelpLinker> pHelpLinker(new HelpLinker());
-        pHelpLinker->main( args, &aStdStrExtensionPath, &aStdStrDestination, &aOfficeHelpPath );
+        HelpLinker aHelpLinker;
+        aHelpLinker.main( args, &aStdStrExtensionPath, &aStdStrDestination, &aOfficeHelpPath );
     }
     catch( const HelpProcessingException& e )
     {

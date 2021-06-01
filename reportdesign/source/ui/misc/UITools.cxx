@@ -645,7 +645,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         { SID_ATTR_CHAR_CTL_POSTURE, true },
         { SID_ATTR_CHAR_CTL_WEIGHT, true }
     };
-    ::std::unique_ptr<FontList> pFontList(new FontList(Application::GetDefaultDevice()));
+    FontList aFontList(Application::GetDefaultDevice());
     XColorListRef pColorList( XColorList::CreateStdColorList() );
     const Graphic aNullGraphic;
     const ::Color aNullLineCol(COL_DEFAULT_SHAPE_STROKE); // #i121448# Use defined default color
@@ -691,7 +691,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         new SvxKerningItem(0,ITEMID_KERNING),
         new SvxCaseMapItem(SvxCaseMap::NotMapped,ITEMID_CASEMAP),
         new SvxEscapementItem(ITEMID_ESCAPEMENT),
-        new SvxFontListItem(pFontList.get(),ITEMID_FONTLIST),
+        new SvxFontListItem(&aFontList,ITEMID_FONTLIST),
         new SvxAutoKernItem(false,ITEMID_AUTOKERN),
         new SvxColorListItem(pColorList,ITEMID_COLOR_TABLE),
         new SvxBlinkItem(false,ITEMID_BLINK),
