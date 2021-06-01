@@ -20993,6 +20993,13 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
                     xRemoveList.push_back(xChild);
             }
 
+            if (sName == "homogeneous")
+            {
+                // e.g. the buttonbox in xml filter dialog
+                if (GetParentObjectType(xChild) == "GtkButtonBox")
+                    xRemoveList.push_back(xChild);
+            }
+
             if (sName == "shadow-type")
             {
                 if (GetParentObjectType(xChild) == "GtkFrame")
