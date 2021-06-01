@@ -2230,7 +2230,12 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
         rHTMLWrt.OutNewLine();
 
     // then, the bookmarks (including end tag)
-    rHTMLWrt.m_bOutOpts = false;
+
+    if (rHTMLWrt.mbIndexingOutput)
+        rHTMLWrt.m_bOutOpts = true;
+    else
+        rHTMLWrt.m_bOutOpts = false;
+
     rHTMLWrt.OutBookmarks();
 
     // now it's a good opportunity again for an LF - if it is still allowed
