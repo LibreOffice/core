@@ -11532,6 +11532,7 @@ if test "$test_gtk3" = yes -a "x$enable_gtk3" = "xyes" -o "x$enable_gtk3_kde5" =
     if test "$with_system_cairo" = no; then
         add_warning 'Non-system cairo combined with gtk3 is assumed to cause trouble; proceed at your own risk.'
     fi
+    : ${with_system_cairo:=yes}
     PKG_CHECK_MODULES(GTK3, gtk+-3.0 >= 3.20 gtk+-unix-print-3.0 gmodule-no-export-2.0 glib-2.0 >= 2.38 cairo)
     GTK3_CFLAGS=$(printf '%s' "$GTK3_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     GTK3_CFLAGS="$GTK3_CFLAGS -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"
@@ -11554,6 +11555,7 @@ if test "test_gtk4" = yes -a "x$enable_gtk4" = "xyes"; then
     if test "$with_system_cairo" = no; then
         add_warning 'Non-system cairo combined with gtk4 is assumed to cause trouble; proceed at your own risk.'
     fi
+    : ${with_system_cairo:=yes}
     PKG_CHECK_MODULES(GTK4, gtk4 gmodule-no-export-2.0 glib-2.0 >= 2.38 cairo atk)
     GTK4_CFLAGS=$(printf '%s' "$GTK4_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     GTK4_CFLAGS="$GTK4_CFLAGS -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"
@@ -13106,6 +13108,7 @@ dnl ===================================================================
 if test "$test_cairo" = "yes"; then
     AC_MSG_CHECKING([whether to use the system cairo])
 
+    : ${with_system_cairo:=$with_system_libs}
     if test "$with_system_cairo" = "yes"; then
         SYSTEM_CAIRO=TRUE
         AC_MSG_RESULT([yes])
