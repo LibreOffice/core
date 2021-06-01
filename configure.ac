@@ -800,6 +800,15 @@ if test "$enable_android_editing" = yes; then
 fi
 AC_SUBST([ENABLE_ANDROID_EDITING])
 
+disable_database_connectivity_dependencies()
+{
+    enable_evolution2=no
+    enable_firebird_sdbc=no
+    enable_mariadb_sdbc=no
+    enable_postgresql_sdbc=no
+    enable_report_builder=no
+}
+
 # ===================================================================
 #
 # Start initial platform setup
@@ -965,12 +974,10 @@ ios*) # iOS
     _os=iOS
     enable_mpl_subset=yes
     enable_lotuswordpro=no
+    disable_database_connectivity_dependencies
     enable_coinmp=no
     enable_lpsolve=no
-    enable_mariadb_sdbc=no
-    enable_postgresql_sdbc=no
     enable_extension_integration=no
-    enable_report_builder=no
     with_ppds=no
     if test "$enable_ios_simulator" = "yes"; then
         host=x86_64-apple-darwin
@@ -1061,15 +1068,13 @@ linux-android*)
     build_crypto=no
     test_system_freetype=no
     test_webdav=no
+    disable_database_connectivity_dependencies
     enable_lotuswordpro=no
     enable_mpl_subset=yes
     enable_cairo_canvas=no
     enable_coinmp=yes
     enable_lpsolve=no
-    enable_mariadb_sdbc=no
-    enable_report_builder=no
     enable_odk=no
-    enable_postgresql_sdbc=no
     enable_python=no
     _os=Android
 
@@ -1097,11 +1102,8 @@ emscripten)
     enable_compiler_plugins=no
     test_cmis=no
     test_webdav=no
-    enable_firebird_sdbc=no
+    enable_database_connectivity=no
     enable_lpsolve=no
-    enable_mariadb_sdbc=no
-    enable_postgresql_sdbc=no
-    enable_report_builder=no
     with_system_zlib=no
     with_theme="breeze"
     _os=Emscripten
@@ -2952,20 +2954,15 @@ else
 fi
 AC_SUBST(USE_AVMEDIA_DUMMY)
 
-# Decide whether to build database connectivity stuff (including
-# Base) or not. We probably don't want to on non-desktop OSes.
-if test -z "$enable_database_connectivity"; then
-    # --disable-database-connectivity is unfinished work in progress
-    # and the iOS test app doesn't link if we actually try to use it.
-    # if test $_os != iOS -a $_os != Android; then
-    if test $_os != iOS; then
-        enable_database_connectivity=yes
-    fi
-fi
-
-if test "$enable_database_connectivity" = yes; then
+# Decide whether to build database connectivity stuff (including Base) or not.
+if test "$enable_database_connectivity" != no; then
     BUILD_TYPE="$BUILD_TYPE DBCONNECTIVITY"
     AC_DEFINE(HAVE_FEATURE_DBCONNECTIVITY)
+else
+    if test "$_os" = iOS; then
+        AC_MSG_ERROR([Presumly can't disable DB connectivity on iOS.])
+    fi
+    disable_database_connectivity_dependencies
 fi
 
 if test -z "$enable_extensions"; then
@@ -3023,6 +3020,9 @@ WITH_GALLERY_BUILD=TRUE
 AC_MSG_CHECKING([how to build and package galleries])
 if test -n "${with_galleries}"; then
     if test "$with_galleries" = "build"; then
+        if test "$enable_database_connectivity" = no; then
+            AC_MSG_ERROR([DB connectivity is needed for gengal / svx])
+        fi
         AC_MSG_RESULT([build from source images internally])
     elif test "$with_galleries" = "no"; then
         WITH_GALLERY_BUILD=
@@ -5370,7 +5370,7 @@ if test "$cross_compiling" = "yes"; then
     fi
     test -n "$TARFILE_LOCATION" && sub_conf_opts="$sub_conf_opts --with-external-tar=$TARFILE_LOCATION"
     test "$with_system_icu_for_build" = "yes" -o "$with_system_icu_for_build" = "force" && sub_conf_opts="$sub_conf_opts --with-system-icu"
-    test "$with_galleries" = "no" -o -z "$WITH_GALLERY_BUILD" && sub_conf_opts="$sub_conf_opts --with-galleries=no"
+    test "$with_galleries" = "no" -o -z "$WITH_GALLERY_BUILD" && sub_conf_opts="$sub_conf_opts --with-galleries=no --disable-database-connectivity"
     test "$enable_wasm_strip" = "yes" && sub_conf_opts="$sub_conf_opts --enable-wasm-strip"
     sub_conf_opts="$sub_conf_opts $with_build_platform_configure_options"
 
@@ -12828,7 +12828,7 @@ dnl ===================================================================
 dnl Test whether to include Evolution 2 support
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable evolution 2 support])
-if test "$enable_evolution2" = "yes" -o "$enable_evolution2" = "TRUE"; then
+if test "$enable_evolution2" = yes; then
     AC_MSG_RESULT([yes])
     PKG_CHECK_MODULES(GOBJECT, gobject-2.0)
     GOBJECT_CFLAGS=$(printf '%s' "$GOBJECT_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
@@ -12836,7 +12836,6 @@ if test "$enable_evolution2" = "yes" -o "$enable_evolution2" = "TRUE"; then
     GOBJECT_LIBS="${filteredlibs}"
     ENABLE_EVOAB2="TRUE"
 else
-    ENABLE_EVOAB2=""
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_EVOAB2)
