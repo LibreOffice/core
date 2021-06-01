@@ -76,3 +76,7 @@ leak:CoinMessages::operator=(CoinMessages const&)
 
 # ignore the in-process Java VM
 leak:libjvm
+
+# TODO The code in Signing::Verify is clearly leaking this structure, but naively destroying it instead
+# that method results in heap-use-after-free errors
+leak:NSS_CMSMessage_CreateFromDER
