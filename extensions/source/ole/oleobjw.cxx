@@ -1427,9 +1427,8 @@ uno::Any SAL_CALL IUnknownWrapper::directInvoke( const OUString& aName, const un
                       "DISP_E_BADVARTYPE.", nullptr);
                 break;
             case DISP_E_EXCEPTION:
-                    message = "[automation bridge]: "
-                        + OUString(o3tl::toU(excepinfo.bstrDescription),
-                            ::SysStringLen(excepinfo.bstrDescription));
+                    message = OUString::Concat("[automation bridge]: ")
+                        + o3tl::toU(excepinfo.bstrDescription);
                     throw InvocationTargetException(message, Reference<XInterface>(), Any());
                     break;
             case DISP_E_MEMBERNOTFOUND:
@@ -2049,9 +2048,8 @@ Any  IUnknownWrapper::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
                   "DISP_E_BADVARTYPE.", nullptr);
             break;
         case DISP_E_EXCEPTION:
-                message = "[automation bridge]: "
-                    + OUString(o3tl::toU(excepinfo.bstrDescription),
-                                    ::SysStringLen(excepinfo.bstrDescription));
+                message = OUString::Concat("[automation bridge]: ")
+                    + o3tl::toU(excepinfo.bstrDescription);
 
                 throw InvocationTargetException(message, Reference<XInterface>(), Any());
             break;

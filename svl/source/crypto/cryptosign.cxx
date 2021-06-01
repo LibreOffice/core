@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <svl/cryptosign.hxx>
 #include <svl/sigstruct.hxx>
 #include <config_crypto.h>
@@ -2131,9 +2135,9 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
         return false;
     }
     auto pDigestID = reinterpret_cast<CRYPT_ALGORITHM_IDENTIFIER*>(pDigestBytes.get());
-    if (OString(szOID_NIST_sha256) == pDigestID->pszObjId)
+    if (std::string_view(szOID_NIST_sha256) == pDigestID->pszObjId)
         rInformation.nDigestID = xml::crypto::DigestID::SHA256;
-    else if (OString(szOID_RSA_SHA1RSA) == pDigestID->pszObjId || OString(szOID_OIWSEC_sha1) == pDigestID->pszObjId)
+    else if (std::string_view(szOID_RSA_SHA1RSA) == pDigestID->pszObjId || std::string_view(szOID_OIWSEC_sha1) == pDigestID->pszObjId)
         rInformation.nDigestID = xml::crypto::DigestID::SHA1;
     else
         // Don't error out here, we can still verify the message digest correctly, just the digest ID won't be set.
@@ -2239,7 +2243,7 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
              * { iso(1) member-body(2) us(840) rsadsi(113549) pkcs(1) pkcs9(9)
              *   smime(16) id-aa(2) 47 }
              */
-            if (OString("1.2.840.113549.1.9.16.2.47") == rAttr.pszObjId)
+            if (std::string_view("1.2.840.113549.1.9.16.2.47") == rAttr.pszObjId)
             {
                 rInformation.bHasSigningCertificate = true;
                 break;
@@ -2262,7 +2266,7 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
         {
             CRYPT_ATTRIBUTE& rAttr = pSignedAttributes->rgAttr[nAttr];
             // Timestamp blob
-            if (OString("1.2.840.113549.1.9.16.2.14") == rAttr.pszObjId)
+            if (std::string_view("1.2.840.113549.1.9.16.2.14") == rAttr.pszObjId)
             {
                 PCRYPT_TIMESTAMP_CONTEXT pTsContext;
                 if (!CryptVerifyTimeStampSignature(rAttr.rgValue->pbData, rAttr.rgValue->cbData, nullptr, 0, nullptr, &pTsContext, nullptr, nullptr))
