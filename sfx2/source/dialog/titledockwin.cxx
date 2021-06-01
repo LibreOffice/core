@@ -39,7 +39,6 @@ namespace sfx2
         ,m_aToolbox( VclPtr<ToolBox>::Create(this) )
         ,m_aContentWindow( VclPtr<vcl::Window>::Create(this, WB_DIALOGCONTROL) )
         ,m_aBorder( 3, 1, 3, 3 )
-        ,m_bLayoutPending( false )
         ,m_nTitleBarHeight(0)
     {
         SetBackground( Wallpaper() );
@@ -83,20 +82,12 @@ namespace sfx2
     void TitledDockingWindow::Resize()
     {
         SfxDockingWindow::Resize();
-        impl_scheduleLayout();
-    }
-
-
-    void TitledDockingWindow::impl_scheduleLayout()
-    {
-        m_bLayoutPending = true;
+        impl_layout();
     }
 
 
     void TitledDockingWindow::impl_layout()
     {
-        m_bLayoutPending = false;
-
         m_aToolbox->ShowItem( ToolBoxItemId(1), !IsFloatingMode() );
 
         const Size aToolBoxSize( m_aToolbox->CalcWindowSizePixel() );
@@ -142,9 +133,6 @@ namespace sfx2
     void TitledDockingWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& i_rArea)
     {
         const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-
-        if (m_bLayoutPending)
-            impl_layout();
 
         SfxDockingWindow::Paint(rRenderContext, i_rArea);
 
@@ -240,7 +228,7 @@ namespace sfx2
         switch ( i_nType )
         {
             case StateChangedType::InitShow:
-                impl_scheduleLayout();
+                impl_layout();
                 break;
             default:;
         }
@@ -260,7 +248,7 @@ namespace sfx2
             case DataChangedEventType::FONTS:
             case DataChangedEventType::FONTSUBSTITUTION:
             {
-                impl_scheduleLayout();
+                impl_layout();
                 Invalidate();
             }
             break;

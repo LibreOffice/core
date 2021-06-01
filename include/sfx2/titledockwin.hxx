@@ -73,7 +73,6 @@ namespace sfx2
         DECL_LINK( OnToolboxItemSelected, ToolBox*, void );
 
         void    impl_layout();
-        void    impl_scheduleLayout();
 
     private:
         OUString            m_sTitle;
@@ -85,11 +84,6 @@ namespace sfx2
             such line is painted.
         */
         SvBorder            m_aBorder;
-
-        /** Remember that a layout is pending, i.e. Resize() has been called
-            since the last Paint().
-        */
-        bool                m_bLayoutPending;
 
         /** Height of the title bar.  Calculated in impl_layout().
         */
