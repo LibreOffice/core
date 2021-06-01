@@ -230,6 +230,7 @@ void SwHTMLWriter::SetupFilterOptions(const OUString& rFilterOptions)
         mbSkipHeaderFooter = true;
         mbSkipImages = true;
         mbXHTML = true;
+        m_bOutOpts = true;
     }
 
     const uno::Sequence<OUString> aOptionSeq = comphelper::string::convertCommaSeparated(rFilterOptions);

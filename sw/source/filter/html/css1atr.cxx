@@ -3584,6 +3584,8 @@ void SwHTMLWriter::OutCSS1_SfxItemSet( const SfxItemSet& rItemSet,
                                        bool bDeep )
 {
     // print ItemSet, including all attributes
+    if (mbIndexingOutput)
+        return;
     Out_SfxItemSet( aCSS1AttrFnTab, *this, rItemSet, bDeep );
 
     // some Attributes require special treatment
@@ -3645,6 +3647,8 @@ void SwHTMLWriter::OutCSS1_SfxItemSet( const SfxItemSet& rItemSet,
 Writer& OutCSS1_HintSpanTag( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
+    if (rHTMLWrt.mbIndexingOutput)
+        return rWrt;
 
     SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_SPAN_TAG |
                                    CSS1_OUTMODE_ENCODE|CSS1_OUTMODE_HINT, nullptr );
@@ -3660,6 +3664,8 @@ Writer& OutCSS1_HintSpanTag( Writer& rWrt, const SfxPoolItem& rHt )
 Writer& OutCSS1_HintStyleOpt( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
+    if (rHTMLWrt.mbIndexingOutput)
+        return rWrt;
 
     SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_STYLE_OPT_ON |
                                    CSS1_OUTMODE_ENCODE|
