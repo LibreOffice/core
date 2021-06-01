@@ -8,6 +8,7 @@
  */
 
 #include <sal/config.h>
+#include <config_oox.h>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -26,6 +27,10 @@
 #include <osl/file.hxx>
 #include <comphelper/processfactory.hxx>
 
+#if USE_TLS_NSS
+#include <nss.h>
+#endif
+
 using namespace css::lang;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -37,6 +42,7 @@ class ScPDFExportTest : public test::BootstrapFixture, public unotest::MacrosTes
 
 public:
     ScPDFExportTest() {}
+    ~ScPDFExportTest();
 
     virtual void setUp() override final;
     virtual void tearDown() override final;
@@ -68,6 +74,13 @@ public:
 };
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sc/qa/extras/testdocuments/";
+
+ScPDFExportTest::~ScPDFExportTest()
+{
+#if USE_TLS_NSS
+    NSS_Shutdown();
+#endif
+}
 
 void ScPDFExportTest::setUp()
 {
