@@ -18,6 +18,12 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_pdf_export, \
 $(eval $(call gb_CppunitTest_use_externals,sc_pdf_export, \
     boost_headers \
 ))
+ifeq ($(TLS),NSS)
+$(eval $(call gb_CppunitTest_use_externals,sc_pdf_export,\
+       plc4 \
+       nss3 \
+))
+endif
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_pdf_export, \
     comphelper \
