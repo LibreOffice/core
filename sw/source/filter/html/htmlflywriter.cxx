@@ -137,7 +137,7 @@ static Writer& OutHTML_FrameFormatAsDivOrSpan( Writer& rWrt,
 static Writer& OutHTML_FrameFormatAsImage( Writer& rWrt, const SwFrameFormat& rFormat );
 
 static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rFormat,
-                                      bool bInCntnr );
+                                      bool bInCntnr, bool bPNGFallback );
 
 static Writer& OutHTML_FrameFormatAsMarquee( Writer& rWrt, const SwFrameFormat& rFrameFormat,
                                         const SdrObject& rSdrObj    );
@@ -467,7 +467,7 @@ void SwHTMLWriter::OutFrameFormat( AllHtmlFlags nMode, const SwFrameFormat& rFra
         OutHTML_FrameFormatTableNode( *this, rFrameFormat );
         break;
     case HtmlOut::GraphicNode:      // OK
-        OutHTML_FrameFormatGrfNode( *this, rFrameFormat, !aContainerStr.isEmpty() );
+        OutHTML_FrameFormatGrfNode( *this, rFrameFormat, !aContainerStr.isEmpty(), /*bPNGFallback=*/true );
         break;
     case HtmlOut::OleNode:      // OK
         OutHTML_FrameFormatOLENode( *this, rFrameFormat, !aContainerStr.isEmpty() );
@@ -1192,7 +1192,7 @@ OUString lclWriteOutImap(SwHTMLWriter& rHTMLWrt, const SfxItemSet& rItemSet, con
 
 }
 
-Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
+Writer& OutHTML_ImageStart( HtmlWriter& rHtml, Writer& rWrt, const SwFrameFormat &rFrameFormat,
                        const OUString& rGraphicURL,
                        Graphic const & rGraphic, const OUString& rAlternateText,
                        const Size &rRealSize, HtmlFrmOpts nFrameOpts,
@@ -1228,8 +1228,6 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
     if( rHTMLWrt.m_bLFPossible )
         rHTMLWrt.OutNewLine( true );
 
-    HtmlWriter aHtml(rWrt.Strm(), rHTMLWrt.maNamespace);
-
     // <a name=...></a>...<img ...>
     if( pMarkType && !rFrameFormat.GetName().isEmpty() )
     {
@@ -1260,22 +1258,22 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
 
         if( !aMapURL.isEmpty() || !aName.isEmpty() || !aTarget.isEmpty() || bEvents )
         {
-            aHtml.start(OOO_STRING_SVTOOLS_HTML_anchor);
+            rHtml.start(OOO_STRING_SVTOOLS_HTML_anchor);
 
             // Output "href" element if a link or macro exists
             if( !aMapURL.isEmpty() || bEvents )
             {
-                aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_href, OUStringToOString(rHTMLWrt.convertHyperlinkHRefValue(aMapURL), RTL_TEXTENCODING_UTF8));
+                rHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_href, OUStringToOString(rHTMLWrt.convertHyperlinkHRefValue(aMapURL), RTL_TEXTENCODING_UTF8));
             }
 
             if( !aName.isEmpty() )
             {
-                aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_name, OUStringToOString(aName, RTL_TEXTENCODING_UTF8));
+                rHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_name, OUStringToOString(aName, RTL_TEXTENCODING_UTF8));
             }
 
             if( !aTarget.isEmpty() )
             {
-                aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_target, OUStringToOString(aTarget, RTL_TEXTENCODING_UTF8));
+                rHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_target, OUStringToOString(aTarget, RTL_TEXTENCODING_UTF8));
             }
 
             if( pMacItem )
@@ -1283,7 +1281,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
                 const SvxMacroTableDtor& rMacTable = pMacItem->GetMacroTable();
                 if (!rMacTable.empty())
                 {
-                    HtmlWriterHelper::applyEvents(aHtml, rMacTable, aAnchorEventTable, rHTMLWrt.m_bCfgStarBasic);
+                    HtmlWriterHelper::applyEvents(rHtml, rMacTable, aAnchorEventTable, rHTMLWrt.m_bCfgStarBasic);
                 }
             }
         }
@@ -1349,8 +1347,8 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
 
         if( pColBorderLine )
         {
-            aHtml.start(OOO_STRING_SVTOOLS_HTML_font);
-            HtmlWriterHelper::applyColor(aHtml, OOO_STRING_SVTOOLS_HTML_O_color, pColBorderLine->GetColor());
+            rHtml.start(OOO_STRING_SVTOOLS_HTML_font);
+            HtmlWriterHelper::applyColor(rHtml, OOO_STRING_SVTOOLS_HTML_O_color, pColBorderLine->GetColor());
         }
     }
 
@@ -1358,7 +1356,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
     if (bReplacement)
         // Write replacement graphic of OLE object as <object>.
         aTag = OOO_STRING_SVTOOLS_HTML_object;
-    aHtml.start(aTag);
+    rHtml.start(aTag);
 
     OStringBuffer sBuffer;
     if(rHTMLWrt.mbEmbedImages)
@@ -1369,7 +1367,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
             sBuffer.append(OOO_STRING_SVTOOLS_HTML_O_data);
             sBuffer.append(":");
             sBuffer.append(OUStringToOString(aGraphicInBase64, RTL_TEXTENCODING_UTF8));
-            aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_src, sBuffer.makeStringAndClear().getStr());
+            rHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_src, sBuffer.makeStringAndClear().getStr());
         }
         else
             rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD;
@@ -1380,14 +1378,14 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
         OString aAttribute(OOO_STRING_SVTOOLS_HTML_O_src);
         if (bReplacement)
             aAttribute = OOO_STRING_SVTOOLS_HTML_O_data;
-        aHtml.attribute(aAttribute, sBuffer.makeStringAndClear().getStr());
+        rHtml.attribute(aAttribute, sBuffer.makeStringAndClear().getStr());
     }
 
     if (bReplacement)
     {
         // Handle XHTML type attribute for OLE replacement images.
         if (!rMimeType.isEmpty())
-            aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_type, rMimeType.toUtf8());
+            rHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_type, rMimeType.toUtf8());
     }
 
     // Events
@@ -1396,28 +1394,28 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
         const SvxMacroTableDtor& rMacTable = static_cast<const SvxMacroItem *>(pItem)->GetMacroTable();
         if (!rMacTable.empty())
         {
-            HtmlWriterHelper::applyEvents(aHtml, rMacTable, aImageEventTable, rHTMLWrt.m_bCfgStarBasic);
+            HtmlWriterHelper::applyEvents(rHtml, rMacTable, aImageEventTable, rHTMLWrt.m_bCfgStarBasic);
         }
     }
 
     // alt, align, width, height, hspace, vspace
-    rHTMLWrt.writeFrameFormatOptions(aHtml, rFrameFormat, rAlternateText, nFrameOpts);
+    rHTMLWrt.writeFrameFormatOptions(rHtml, rFrameFormat, rAlternateText, nFrameOpts);
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) )
         rHTMLWrt.OutCSS1_FrameFormatOptions( rFrameFormat, nFrameOpts );
 
     if ((nFrameOpts & HtmlFrmOpts::Border) && !bReplacement)
     {
-        aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_border, nBorderWidth);
+        rHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_border, nBorderWidth);
     }
 
     if( pURLItem && pURLItem->IsServerMap() )
     {
-        aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_ismap);
+        rHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_ismap);
     }
 
     if( !aIMapName.isEmpty() )
     {
-        aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_usemap, OUString("#" + aIMapName));
+        rHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_usemap, OUString("#" + aIMapName));
     }
 
     if (bReplacement)
@@ -1426,12 +1424,18 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
         // "alt" attribute.
         if (rAlternateText.isEmpty())
             // Empty alternate text is not valid.
-            aHtml.characters(" ");
+            rHtml.characters(" ");
         else
-            aHtml.characters(rAlternateText.toUtf8());
+            rHtml.characters(rAlternateText.toUtf8());
     }
 
-    aHtml.flushStack();
+    return rHTMLWrt;
+}
+
+Writer& OutHTML_ImageEnd( HtmlWriter& rHtml, Writer& rWrt )
+{
+    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
+    rHtml.flushStack();
 
     if( !rHTMLWrt.m_aINetFormats.empty() )
     {
@@ -1763,17 +1767,20 @@ static Writer & OutHTML_FrameFormatAsImage( Writer& rWrt, const SwFrameFormat& r
             URIHelper::GetMaybeFileHdl() );
 
     }
-    OutHTML_Image( rWrt, rFrameFormat, GraphicURL, aGraphic, rFrameFormat.GetName(), aSz,
+    HtmlWriter aHtml(rWrt.Strm(), rHTMLWrt.maNamespace);
+    OutHTML_ImageStart( aHtml, rWrt, rFrameFormat, GraphicURL, aGraphic, rFrameFormat.GetName(), aSz,
                     HtmlFrmOpts::GenImgMask, "frame",
                     aIMap.GetIMapObjectCount() ? &aIMap : nullptr );
+    OutHTML_ImageEnd(aHtml, rWrt);
 
     return rWrt;
 }
 
 static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rFrameFormat,
-                                      bool bInCntnr )
+                                      bool bInCntnr, bool bPNGFallback )
 {
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
+    bool bWritePNGFallback = !rHTMLWrt.m_bExportImagesAsOLE && bPNGFallback;
 
     if (rHTMLWrt.mbSkipImages)
         return rWrt;
@@ -1824,10 +1831,12 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
 
             OUString aFilterName("");
 
-            if (rHTMLWrt.mbReqIF)
+            if (rHTMLWrt.mbReqIF && !bWritePNGFallback)
             {
                 // Writing image without fallback PNG in ReqIF mode: force PNG
                 // output.
+                // But don't force it when writing the original format and we'll write PNG inside
+                // that.
                 aFilterName = "PNG";
                 nFlags &= ~XOutFlags::UseNativeIfPossible;
                 nFlags &= ~XOutFlags::UseGifIfSensible;
@@ -1890,8 +1899,19 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
         rHTMLWrt.OutNewLine();
     }
 
-    OutHTML_Image( rWrt, rFrameFormat, aGraphicURL, aGraphic, pGrfNd->GetTitle(),
+    HtmlWriter aHtml(rWrt.Strm(), rHTMLWrt.maNamespace);
+    OutHTML_ImageStart( aHtml, rWrt, rFrameFormat, aGraphicURL, aGraphic, pGrfNd->GetTitle(),
                   pGrfNd->GetTwipSize(), nFrameFlags, "graphic", nullptr, aMimeType );
+
+    GfxLink aLink = aGraphic.GetGfxLink();
+    if (bWritePNGFallback && aLink.GetType() != GfxLinkType::NativePng)
+    {
+        // Not OLE mode, outer format is not PNG: write inner PNG.
+        OutHTML_FrameFormatGrfNode( rWrt, rFrameFormat,
+                                      bInCntnr, /*bPNGFallback=*/false );
+    }
+
+    OutHTML_ImageEnd(aHtml, rWrt);
 
     if (rHTMLWrt.mbReqIF && rHTMLWrt.m_bExportImagesAsOLE)
         rWrt.Strm().WriteOString(OString("</" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object ">"));

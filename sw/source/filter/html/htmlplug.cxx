@@ -79,6 +79,7 @@
 #include <o3tl/safeint.hxx>
 #include <osl/file.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <svtools/HtmlWriter.hxx>
 
 using namespace com::sun::star;
 
@@ -1655,9 +1656,11 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
         : HtmlFrmOpts::GenImgMask;
     if (bObjectOpened)
         nFlags |= HtmlFrmOpts::Replacement;
-    OutHTML_Image( rWrt, rFrameFormat, aGraphicURL, aGraphic,
+    HtmlWriter aHtml(rWrt.Strm(), rHTMLWrt.maNamespace);
+    OutHTML_ImageStart( aHtml, rWrt, rFrameFormat, aGraphicURL, aGraphic,
             pOLENd->GetTitle(), pOLENd->GetTwipSize(),
             nFlags, "ole", nullptr, aMimeType );
+    OutHTML_ImageEnd(aHtml, rWrt);
 
     if (bObjectOpened)
         // Close native data.
