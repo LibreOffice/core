@@ -7307,13 +7307,13 @@ public:
 #endif
         g_object_ref(pChild);
 #if GTK_CHECK_VERSION(4, 0, 0)
-        gtk_widget_unparent(pChild);
+        gtk_viewport_set_child(GTK_VIEWPORT(pViewport), nullptr);
 #else
         gtk_container_remove(GTK_CONTAINER(pViewport), pChild);
 #endif
         g_object_ref(pViewport);
 #if GTK_CHECK_VERSION(4, 0, 0)
-        gtk_widget_unparent(pViewport);
+        gtk_scrolled_window_set_child(m_pScrolledWindow, nullptr);
 #else
         gtk_container_remove(GTK_CONTAINER(m_pScrolledWindow), pViewport);
 #endif
@@ -7603,13 +7603,13 @@ public:
 #endif
         g_object_ref(pChild);
 #if GTK_CHECK_VERSION(4, 0, 0)
-        gtk_widget_unparent(pChild);
+        gtk_viewport_set_child(GTK_VIEWPORT(pViewport), nullptr);
 #else
         gtk_container_remove(GTK_CONTAINER(pViewport), pChild);
 #endif
         g_object_ref(pViewport);
 #if GTK_CHECK_VERSION(4, 0, 0)
-        gtk_widget_unparent(pViewport);
+        gtk_scrolled_window_set_child(m_pScrolledWindow, nullptr);
 #else
         gtk_container_remove(GTK_CONTAINER(m_pScrolledWindow), pViewport);
 #endif
@@ -22406,6 +22406,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/objecttitledescdialog.ui" &&
         rUIFile != "cui/ui/pastespecial.ui" &&
         rUIFile != "cui/ui/percentdialog.ui" &&
+        rUIFile != "cui/ui/scriptorganizer.ui" &&
         rUIFile != "cui/ui/signatureline.ui" &&
         rUIFile != "cui/ui/tipofthedaydialog.ui" &&
         rUIFile != "filter/ui/testxmlfilter.ui" &&
@@ -22424,14 +22425,16 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "sfx/ui/loadtemplatedialog.ui" &&
         rUIFile != "sfx/ui/password.ui" &&
         rUIFile != "sfx/ui/securityinfopage.ui" &&
+        rUIFile != "svt/ui/addresstemplatedialog.ui" &&
         rUIFile != "svt/ui/datewindow.ui" &&
         rUIFile != "svt/ui/javadisableddialog.ui" &&
         rUIFile != "svx/ui/fontworkgallerydialog.ui" &&
-        rUIFile != "modules/BasicIDE/ui/organizedialog.ui" &&
+        rUIFile != "modules/BasicIDE/ui/basicmacrodialog.ui" &&
         rUIFile != "modules/BasicIDE/ui/dialogpage.ui" &&
         rUIFile != "modules/BasicIDE/ui/libpage.ui" &&
         rUIFile != "modules/BasicIDE/ui/modulepage.ui" &&
         rUIFile != "modules/BasicIDE/ui/newlibdialog.ui" &&
+        rUIFile != "modules/BasicIDE/ui/organizedialog.ui" &&
         rUIFile != "modules/scalc/ui/colwidthdialog.ui" &&
         rUIFile != "modules/scalc/ui/consolidatedialog.ui" &&
         rUIFile != "modules/scalc/ui/dataform.ui" &&
