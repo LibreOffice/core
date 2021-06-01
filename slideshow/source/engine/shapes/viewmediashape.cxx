@@ -393,7 +393,8 @@ namespace slideshow::internal
 
                 rVCLDeviceParams[ 1 ] >>= aVal;
 
-                vcl::Window* pWindow = reinterpret_cast< vcl::Window* >( aVal );
+                OutputDevice* pDevice = reinterpret_cast<OutputDevice*>(aVal);
+                vcl::Window* pWindow = pDevice ? pDevice->GetOwnerWindow() : nullptr;
 
                 if( pWindow )
                 {
