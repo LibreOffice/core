@@ -9821,6 +9821,7 @@ sd/source/ui/inc/DrawViewShell.hxx
 sd/source/ui/inc/FrameView.hxx
 sd/source/ui/inc/GraphicObjectBar.hxx
 sd/source/ui/inc/LayerTabBar.hxx
+sd/source/ui/inc/MediaObjectBar.hxx
 sd/source/ui/inc/NavigatorChildWindow.hxx
 sd/source/ui/inc/OutlineView.hxx
 sd/source/ui/inc/OutlineViewShell.hxx
