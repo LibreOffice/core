@@ -766,6 +766,7 @@ namespace o3tl
 #define LANGUAGE_USER_CABECAR               LanguageType(0x06AA)
 #define LANGUAGE_USER_BRIBRI                LanguageType(0x06AB)
 #define LANGUAGE_USER_ENGLISH_DENMARK       LanguageType(0xB009)  /* makeLangID( 0x2C, getPrimaryLanguage( LANGUAGE_ENGLISH_UK)) */
+#define LANGUAGE_USER_SESOTHO_LESOTHO       LanguageType(0x8030)  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_SESOTHO)) */
 
 
 /* XXX Add new user defined LCIDs ^^^ there.
