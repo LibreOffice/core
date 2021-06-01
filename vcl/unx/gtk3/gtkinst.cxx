@@ -339,14 +339,14 @@ thread_local std::stack<sal_uInt32> GtkYieldMutex::yieldCounts;
 void GtkYieldMutex::ThreadsEnter()
 {
     acquire();
-    if (!yieldCounts.empty()) {
-        auto n = yieldCounts.top();
-        yieldCounts.pop();
-        assert(n > 0);
-        n--;
-        if (n > 0)
-            acquire(n);
-    }
+    if (yieldCounts.empty())
+        return;
+    auto n = yieldCounts.top();
+    yieldCounts.pop();
+    assert(n > 0);
+    n--;
+    if (n > 0)
+        acquire(n);
 }
 
 void GtkYieldMutex::ThreadsLeave()
