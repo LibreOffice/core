@@ -454,7 +454,7 @@ void XclObj::WriteBody( XclExpStream& rStrm )
 
     // create a substream to be able to create subrecords
     SvMemoryStream aMemStrm;
-    std::unique_ptr< XclExpStream > pXclStrm( new XclExpStream( aMemStrm, rStrm.GetRoot() ) );
+    std::optional< XclExpStream > pXclStrm( std::in_place, aMemStrm, rStrm.GetRoot() );
 
     // write the ftCmo subrecord
     pXclStrm->StartRecord( EXC_ID_OBJCMO, 18 );

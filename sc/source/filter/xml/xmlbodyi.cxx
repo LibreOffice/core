@@ -257,17 +257,17 @@ void SAL_CALL ScXMLBodyContext::endFastElement(sal_Int32 nElement)
     if (!bProtected)
         return;
 
-    std::unique_ptr<ScDocProtection> pProtection(new ScDocProtection);
-    pProtection->setProtected(true);
+    ScDocProtection aProtection;
+    aProtection.setProtected(true);
 
     uno::Sequence<sal_Int8> aPass;
     if (!sPassword.isEmpty())
     {
         ::comphelper::Base64::decode(aPass, sPassword);
-        pProtection->setPasswordHash(aPass, meHash1, meHash2);
+        aProtection.setPasswordHash(aPass, meHash1, meHash2);
     }
 
-    pDoc->SetDocProtection(pProtection.get());
+    pDoc->SetDocProtection(&aProtection);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

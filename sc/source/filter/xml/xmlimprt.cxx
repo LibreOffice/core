@@ -636,29 +636,29 @@ void ScXMLImport::SetChangeTrackingViewSettings(const css::uno::Sequence<css::be
 
     ScXMLImport::MutexGuard aGuard(*this);
     sal_Int16 nTemp16(0);
-    std::unique_ptr<ScChangeViewSettings> pViewSettings(new ScChangeViewSettings());
+    ScChangeViewSettings aViewSettings;
     for (const auto& rChangeProp : rChangeProps)
     {
         OUString sName(rChangeProp.Name);
         if (sName == "ShowChanges")
-            pViewSettings->SetShowChanges(::cppu::any2bool(rChangeProp.Value));
+            aViewSettings.SetShowChanges(::cppu::any2bool(rChangeProp.Value));
         else if (sName == "ShowAcceptedChanges")
-            pViewSettings->SetShowAccepted(::cppu::any2bool(rChangeProp.Value));
+            aViewSettings.SetShowAccepted(::cppu::any2bool(rChangeProp.Value));
         else if (sName == "ShowRejectedChanges")
-            pViewSettings->SetShowRejected(::cppu::any2bool(rChangeProp.Value));
+            aViewSettings.SetShowRejected(::cppu::any2bool(rChangeProp.Value));
         else if (sName == "ShowChangesByDatetime")
-            pViewSettings->SetHasDate(::cppu::any2bool(rChangeProp.Value));
+            aViewSettings.SetHasDate(::cppu::any2bool(rChangeProp.Value));
         else if (sName == "ShowChangesByDatetimeMode")
         {
             if (rChangeProp.Value >>= nTemp16)
-                pViewSettings->SetTheDateMode(static_cast<SvxRedlinDateMode>(nTemp16));
+                aViewSettings.SetTheDateMode(static_cast<SvxRedlinDateMode>(nTemp16));
         }
         else if (sName == "ShowChangesByDatetimeFirstDatetime")
         {
             util::DateTime aDateTime;
             if (rChangeProp.Value >>= aDateTime)
             {
-                pViewSettings->SetTheFirstDateTime(::DateTime(aDateTime));
+                aViewSettings.SetTheFirstDateTime(::DateTime(aDateTime));
             }
         }
         else if (sName == "ShowChangesByDatetimeSecondDatetime")
@@ -666,31 +666,31 @@ void ScXMLImport::SetChangeTrackingViewSettings(const css::uno::Sequence<css::be
             util::DateTime aDateTime;
             if (rChangeProp.Value >>= aDateTime)
             {
-                pViewSettings->SetTheLastDateTime(::DateTime(aDateTime));
+                aViewSettings.SetTheLastDateTime(::DateTime(aDateTime));
             }
         }
         else if (sName == "ShowChangesByAuthor")
-            pViewSettings->SetHasAuthor(::cppu::any2bool(rChangeProp.Value));
+            aViewSettings.SetHasAuthor(::cppu::any2bool(rChangeProp.Value));
         else if (sName == "ShowChangesByAuthorName")
         {
             OUString sOUName;
             if (rChangeProp.Value >>= sOUName)
             {
-                pViewSettings->SetTheAuthorToShow(sOUName);
+                aViewSettings.SetTheAuthorToShow(sOUName);
             }
         }
         else if (sName == "ShowChangesByComment")
-            pViewSettings->SetHasComment(::cppu::any2bool(rChangeProp.Value));
+            aViewSettings.SetHasComment(::cppu::any2bool(rChangeProp.Value));
         else if (sName == "ShowChangesByCommentText")
         {
             OUString sOUComment;
             if (rChangeProp.Value >>= sOUComment)
             {
-                pViewSettings->SetTheComment(sOUComment);
+                aViewSettings.SetTheComment(sOUComment);
             }
         }
         else if (sName == "ShowChangesByRanges")
-            pViewSettings->SetHasRange(::cppu::any2bool(rChangeProp.Value));
+            aViewSettings.SetHasRange(::cppu::any2bool(rChangeProp.Value));
         else if (sName == "ShowChangesByRangesList")
         {
             OUString sRanges;
@@ -699,11 +699,11 @@ void ScXMLImport::SetChangeTrackingViewSettings(const css::uno::Sequence<css::be
                 ScRangeList aRangeList;
                 ScRangeStringConverter::GetRangeListFromString(
                     aRangeList, sRanges, *pDoc, FormulaGrammar::CONV_OOO);
-                pViewSettings->SetTheRangeList(aRangeList);
+                aViewSettings.SetTheRangeList(aRangeList);
             }
         }
     }
-    pDoc->SetChangeViewSettings(*pViewSettings);
+    pDoc->SetChangeViewSettings(aViewSettings);
 }
 
 void ScXMLImport::SetViewSettings(const uno::Sequence<beans::PropertyValue>& aViewProps)
