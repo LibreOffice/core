@@ -63,7 +63,6 @@ private:
 
 public:
     EditPosition(EditEngine* pIEE, EditSelection* pSel);
-    EditPosition(const EditPosition &) = default;
 
     sal_Int32   GetNodeIdx() const;
     sal_Int32   GetCntIdx() const;
