@@ -697,7 +697,7 @@ void SdOOXMLExportTest1::testTableCellFillProperties()
     Color nColor;
     xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(Color(0x66ffff), nColor);
+    CPPUNIT_ASSERT_EQUAL(Color(6750207), nColor);
 
     // Test Picture fill type for cell
     drawing::FillStyle aFillStyle( drawing::FillStyle_NONE );
@@ -1119,8 +1119,9 @@ void SdOOXMLExportTest1::testTdf94238()
     // Without the accompanying fix in place, this test would have failed with
     // 'Expected: 0, Actual  : 10592673', i.e. the start color of the gradient
     // was incorrect.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x0), aGradient.StartColor);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x8B8B8B), aGradient.EndColor);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<Color>(0), aGradient.StartColor);
+    CPPUNIT_ASSERT_EQUAL(static_cast<Color>(0x8B8B8B), aGradient.EndColor);
 
     xDocShRef->DoClose();
 }

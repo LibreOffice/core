@@ -1000,7 +1000,7 @@ void SdActiveXControlsTest::testToggleButtonProperties()
     CPPUNIT_ASSERT_EQUAL(Color(0xECE9D8), nColor);
 
     xPropertySet->getPropertyValue("TextColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(COL_BLACK, nColor);
+    CPPUNIT_ASSERT_EQUAL(Color(0x000000), nColor);
 
     bool bToggle;
     xPropertySet->getPropertyValue("Toggle") >>= bToggle;
