@@ -100,8 +100,8 @@ public:
     static NSStatusItem* getStatusItem();
 };
 
-inline void SetSalData( SalData* pData ) { ImplGetSVData()->mpSalData = pData; }
-inline SalData *GetSalData() { return ImplGetSVData()->mpSalData; }
+inline void SetSalData( SalData* pData ) { ImplGetSVData()->mpSalData.reset(pData); }
+inline SalData *GetSalData() { return ImplGetSVData()->mpSalData.get(); }
 
 bool ImplSalYieldMutexTryToAcquire();
 void ImplSalYieldMutexRelease();

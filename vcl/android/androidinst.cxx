@@ -44,7 +44,7 @@ AndroidSalInstance *AndroidSalInstance::getInstance()
 {
     if (!ImplGetSVData())
         return NULL;
-    AndroidSalData *pData = static_cast<AndroidSalData *>(ImplGetSVData()->mpSalData);
+    AndroidSalData *pData = static_cast<AndroidSalData *>(ImplGetSVData()->mpSalData.get());
     if (!pData)
         return NULL;
     return static_cast<AndroidSalInstance *>(pData->m_pInstance);
