@@ -34,6 +34,7 @@ class SocketTest : public CppUnit::TestFixture
         CPPUNIT_ASSERT_EQUAL(osl_Socket_Ok, res);
         CPPUNIT_ASSERT_EQUAL(in, out);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(100), osl_getInetPortOfSocketAddr(addr));
+        osl_destroySocketAddr(addr);
     }
 
     void test_createInetBroadcastAddr()
@@ -47,6 +48,7 @@ class SocketTest : public CppUnit::TestFixture
         CPPUNIT_ASSERT_EQUAL(osl_Socket_Ok, res);
         CPPUNIT_ASSERT_EQUAL(OUString("123.255.255.255"), out);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(100), osl_getInetPortOfSocketAddr(addr));
+        osl_destroySocketAddr(addr);
     }
 };
 
