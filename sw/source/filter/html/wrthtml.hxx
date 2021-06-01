@@ -666,13 +666,14 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt, const SwDrawFrameFormat&
 Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrameFormat& rFrameFormat,
                               bool bHeader );
 
-Writer& OutHTML_Image( Writer&, const SwFrameFormat& rFormat,
+Writer& OutHTML_ImageStart( HtmlWriter& rHtml, Writer&, const SwFrameFormat& rFormat,
                        const OUString& rGraphicURL,
                        Graphic const & rGraphic, const OUString& rAlternateText,
                        const Size& rRealSize, HtmlFrmOpts nFrameOpts,
                        const char *pMarkType,
                        const ImageMap *pGenImgMap,
                        const OUString& rMimeType = OUString() );
+Writer& OutHTML_ImageEnd( HtmlWriter& rHtml, Writer& );
 
 Writer& OutHTML_BulletImage( Writer& rWrt, const char *pTag,
                              const SvxBrushItem* pBrush,
