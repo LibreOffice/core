@@ -1790,14 +1790,17 @@ namespace emfio
                     }
                     break;
 
+                    case EMR_POLYTEXTOUTA :
                     case EMR_EXTTEXTOUTA :
                         bFlag = true;
                         [[fallthrough]];
+                    case EMR_POLYTEXTOUTW :
                     case EMR_EXTTEXTOUTW :
                     {
                         sal_Int32   nLeft, nTop, nRight, nBottom;
                         sal_uInt32  nGfxMode;
                         float       nXScale, nYScale;
+                        sal_uInt32  ncStrings( 1 );
                         sal_Int32   ptlReferenceX, ptlReferenceY;
                         sal_uInt32  nLen, nOffString, nOptions, offDx;
                         sal_Int32   nLeftRect, nTopRect, nRightRect, nBottomRect;
@@ -1805,112 +1808,118 @@ namespace emfio
                         nCurPos = mpInputStream->Tell() - 8;
 
                         mpInputStream->ReadInt32( nLeft ).ReadInt32( nTop ).ReadInt32( nRight ).ReadInt32( nBottom )
-                           .ReadUInt32( nGfxMode ).ReadFloat( nXScale ).ReadFloat( nYScale )
-                           .ReadInt32( ptlReferenceX ).ReadInt32( ptlReferenceY ).ReadUInt32( nLen ).ReadUInt32( nOffString ).ReadUInt32( nOptions );
-
+                           .ReadUInt32( nGfxMode ).ReadFloat( nXScale ).ReadFloat( nYScale );
                         SAL_INFO("emfio", "\t\tBounds: " << nLeft << ", " << nTop << ", " << nRight << ", " << nBottom);
                         SAL_INFO("emfio", "\t\tiGraphicsMode: 0x" << std::hex << nGfxMode << std::dec);
-                        SAL_INFO("emfio", "\t\texScale: " << nXScale);
-                        SAL_INFO("emfio", "\t\teyScale: " << nYScale);
-                        SAL_INFO("emfio", "\t\tReference: (" << ptlReferenceX << ", " << ptlReferenceY << ")");
-
-                        mpInputStream->ReadInt32( nLeftRect ).ReadInt32( nTopRect ).ReadInt32( nRightRect ).ReadInt32( nBottomRect );
-                        const tools::Rectangle aRect( nLeftRect, nTopRect, nRightRect, nBottomRect );
-                        BkMode mnBkModeBackup = mnBkMode;
-                        if ( nOptions & ETO_NO_RECT ) // Don't draw the background rectangle and text background
-                            mnBkMode = BkMode::Transparent;
-                        else if ( nOptions & ETO_OPAQUE )
-                            DrawRectWithBGColor( aRect );
-                        mpInputStream->ReadUInt32( offDx );
-
-                        ComplexTextLayoutFlags nTextLayoutMode = ComplexTextLayoutFlags::Default;
-                        if ( nOptions & ETO_RTLREADING )
-                            nTextLayoutMode = ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::TextOriginLeft;
-                        SetTextLayoutMode( nTextLayoutMode );
-                        SAL_WARN_IF( ( nOptions & ( ETO_PDY | ETO_GLYPH_INDEX ) ) != 0, "emfio", "SJ: ETO_PDY || ETO_GLYPH_INDEX in EMF" );
-
-                        Point aPos( ptlReferenceX, ptlReferenceY );
-                        bool bOffStringSane = nOffString <= mnEndPos - nCurPos;
-                        if ( bOffStringSane )
+                        SAL_INFO("emfio", "\t\t Scale: " << nXScale << " x " << nYScale);
+                        if ( ( nRecType == EMR_POLYTEXTOUTA ) || ( nRecType == EMR_POLYTEXTOUTW ) )
                         {
-                            mpInputStream->Seek( nCurPos + nOffString );
-                            OUString aText;
-                            if ( bFlag )
+                            mpInputStream->ReadUInt32( ncStrings );
+                            SAL_INFO("emfio", "\t\t Number of Text objects: " << ncStrings);
+                        }
+                        for ( sal_uInt32 nStringNo = 0; nStringNo < ncStrings; nStringNo++ )
+                        {
+                            mpInputStream->ReadInt32( ptlReferenceX ).ReadInt32( ptlReferenceY ).ReadUInt32( nLen ).ReadUInt32( nOffString ).ReadUInt32( nOptions );
+                            SAL_INFO("emfio", "\t\tReference: (" << ptlReferenceX << ", " << ptlReferenceY << ")");
+
+                            mpInputStream->ReadInt32( nLeftRect ).ReadInt32( nTopRect ).ReadInt32( nRightRect ).ReadInt32( nBottomRect );
+                            const tools::Rectangle aRect( nLeftRect, nTopRect, nRightRect, nBottomRect );
+                            const BkMode mnBkModeBackup = mnBkMode;
+                            if ( nOptions & ETO_NO_RECT ) // Don't draw the background rectangle and text background
+                                mnBkMode = BkMode::Transparent;
+                            else if ( nOptions & ETO_OPAQUE )
+                                DrawRectWithBGColor( aRect );
+                            mpInputStream->ReadUInt32( offDx );
+
+                            ComplexTextLayoutFlags nTextLayoutMode = ComplexTextLayoutFlags::Default;
+                            if ( nOptions & ETO_RTLREADING )
+                                nTextLayoutMode = ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::TextOriginLeft;
+                            SetTextLayoutMode( nTextLayoutMode );
+                            SAL_WARN_IF( ( nOptions & ( ETO_PDY | ETO_GLYPH_INDEX ) ) != 0, "emfio", "SJ: ETO_PDY || ETO_GLYPH_INDEX in EMF" );
+
+                            Point aPos( ptlReferenceX, ptlReferenceY );
+                            bool bOffStringSane = nOffString <= mnEndPos - nCurPos;
+                            if ( bOffStringSane )
                             {
-                                if ( nLen <= ( mnEndPos - mpInputStream->Tell() ) )
+                                mpInputStream->Seek( nCurPos + nOffString );
+                                OUString aText;
+                                if ( bFlag )
                                 {
-                                    std::unique_ptr<char[]> pBuf(new char[ nLen ]);
-                                    mpInputStream->ReadBytes(pBuf.get(), nLen);
-                                    aText = OUString(pBuf.get(), nLen, GetCharSet());
-                                }
-                            }
-                            else
-                            {
-                                if ( ( nLen * sizeof(sal_Unicode) ) <= ( mnEndPos - mpInputStream->Tell() ) )
-                                {
-                                    aText = read_uInt16s_ToOUString(*mpInputStream, nLen);
-                                }
-                            }
-
-                            SAL_INFO("emfio", "\t\tText: " << aText);
-                            SAL_INFO("emfio", "\t\tDxBuffer:");
-
-                            std::unique_ptr<tools::Long[]> pDXAry, pDYAry;
-
-                            sal_Int32 nDxSize;
-                            bool bOverflow = o3tl::checked_multiply<sal_Int32>(nLen, (nOptions & ETO_PDY) ? 8 : 4, nDxSize);
-                            if (!bOverflow && offDx && ((nCurPos + offDx + nDxSize) <= nNextPos ) && nNextPos <= mnEndPos)
-                            {
-                                mpInputStream->Seek( nCurPos + offDx );
-                                pDXAry.reset( new tools::Long[aText.getLength()] );
-                                if (nOptions & ETO_PDY)
-                                {
-                                    pDYAry.reset( new tools::Long[aText.getLength()] );
-                                }
-
-                                for (sal_Int32 i = 0; i < aText.getLength(); ++i)
-                                {
-                                    sal_Int32 nDxCount = 1;
-                                    if (aText.getLength() != static_cast<sal_Int32>( nLen ) )
+                                    if ( nLen <= ( mnEndPos - mpInputStream->Tell() ) )
                                     {
-                                        sal_Unicode cUniChar = aText[i];
-                                        OString aTmp(&cUniChar, 1, GetCharSet());
-                                        if (aTmp.getLength() > 1)
-                                        {
-                                            nDxCount = aTmp.getLength();
-                                        }
+                                        std::unique_ptr<char[]> pBuf(new char[ nLen ]);
+                                        mpInputStream->ReadBytes(pBuf.get(), nLen);
+                                        aText = OUString(pBuf.get(), nLen, GetCharSet());
                                     }
-
-                                    sal_Int32 nDx = 0, nDy = 0;
-                                    while (nDxCount--)
+                                }
+                                else
+                                {
+                                    if ( ( nLen * sizeof(sal_Unicode) ) <= ( mnEndPos - mpInputStream->Tell() ) )
                                     {
-                                        sal_Int32 nDxTmp = 0;
-                                        mpInputStream->ReadInt32(nDxTmp);
-                                        nDx += nDxTmp;
-                                        if (nOptions & ETO_PDY)
-                                        {
-                                            sal_Int32 nDyTmp = 0;
-                                            mpInputStream->ReadInt32(nDyTmp);
-                                            nDy += nDyTmp;
-                                        }
+                                        aText = read_uInt16s_ToOUString(*mpInputStream, nLen);
                                     }
+                                }
 
-                                    SAL_INFO("emfio", "\t\t\tSpacing " << i << ": " << nDx);
-                                    pDXAry[i] = nDx;
+                                SAL_INFO("emfio", "\t\tText: " << aText);
+                                SAL_INFO("emfio", "\t\tDxBuffer:");
+
+                                std::unique_ptr<tools::Long[]> pDXAry, pDYAry;
+
+                                sal_Int32 nDxSize;
+                                bool bOverflow = o3tl::checked_multiply<sal_Int32>(nLen, (nOptions & ETO_PDY) ? 8 : 4, nDxSize);
+                                if (!bOverflow && offDx && ((nCurPos + offDx + nDxSize) <= nNextPos ) && nNextPos <= mnEndPos)
+                                {
+                                    mpInputStream->Seek( nCurPos + offDx );
+                                    pDXAry.reset( new tools::Long[aText.getLength()] );
                                     if (nOptions & ETO_PDY)
                                     {
-                                        pDYAry[i] = nDy;
+                                        pDYAry.reset( new tools::Long[aText.getLength()] );
+                                    }
+
+                                    for (sal_Int32 i = 0; i < aText.getLength(); ++i)
+                                    {
+                                        sal_Int32 nDxCount = 1;
+                                        if ( static_cast<sal_uInt32>( aText.getLength() ) !=  nLen )
+                                        {
+                                            sal_Unicode cUniChar = aText[i];
+                                            OString aTmp(&cUniChar, 1, GetCharSet());
+                                            if (aTmp.getLength() > 1)
+                                            {
+                                                nDxCount = aTmp.getLength();
+                                            }
+                                        }
+
+                                        sal_Int32 nDx = 0, nDy = 0;
+                                        while (nDxCount--)
+                                        {
+                                            sal_Int32 nDxTmp = 0;
+                                            mpInputStream->ReadInt32(nDxTmp);
+                                            nDx += nDxTmp;
+                                            if (nOptions & ETO_PDY)
+                                            {
+                                                sal_Int32 nDyTmp = 0;
+                                                mpInputStream->ReadInt32(nDyTmp);
+                                                nDy += nDyTmp;
+                                            }
+                                        }
+
+                                        SAL_INFO("emfio", "\t\t\tSpacing " << i << ": " << nDx);
+                                        pDXAry[i] = nDx;
+                                        if (nOptions & ETO_PDY)
+                                        {
+                                            pDYAry[i] = nDy;
+                                        }
                                     }
                                 }
+                                if ( nOptions & ETO_CLIPPED )
+                                {
+                                    Push(); // Save the current clip. It will be restored after text drawing
+                                    IntersectClipRect( aRect );
+                                }
+                                DrawText(aPos, aText, pDXAry.get(), pDYAry.get(), mbRecordPath, nGfxMode);
+                                if ( nOptions & ETO_CLIPPED )
+                                    Pop();
                             }
-                            if ( nOptions & ETO_CLIPPED )
-                            {
-                                Push(); // Save the current clip. It will be restored after text drawing
-                                IntersectClipRect( aRect );
-                            }
-                            DrawText(aPos, aText, pDXAry.get(), pDYAry.get(), mbRecordPath, nGfxMode);
-                            if ( nOptions & ETO_CLIPPED )
-                                Pop();
                             mnBkMode = mnBkModeBackup;
                         }
                     }
@@ -2050,8 +2059,6 @@ namespace emfio
                     case EMR_ANGLEARC :
                     case EMR_SETCOLORADJUSTMENT :
                     case EMR_POLYDRAW16 :
-                    case EMR_POLYTEXTOUTA :
-                    case EMR_POLYTEXTOUTW :
                     case EMR_CREATECOLORSPACE :
                     case EMR_SETCOLORSPACE :
                     case EMR_DELETECOLORSPACE :
