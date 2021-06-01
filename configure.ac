@@ -11551,7 +11551,7 @@ AC_SUBST(GTK3_CFLAGS)
 
 GTK4_CFLAGS=""
 GTK4_LIBS=""
-if test "test_gtk4" = yes -a "x$enable_gtk4" = "xyes"; then
+if test "$test_gtk4" = yes -a "x$enable_gtk4" = "xyes"; then
     if test "$with_system_cairo" = no; then
         add_warning 'Non-system cairo combined with gtk4 is assumed to cause trouble; proceed at your own risk.'
     fi
