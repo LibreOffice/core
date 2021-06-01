@@ -16,6 +16,24 @@
       "revId": "456b87b6b188984579c1d809aab805f6f324ea53",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d7fae93_dff8397b",
+        "filename": "solenv/clang-format/excludelist",
+        "patchSetId": 5
+      },
+      "lineNbr": 8904,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-06-01T12:45:38Z",
+      "side": 0,
+      "message": "This policy is new for me. We had a bunch of clang-format changes, which just changed minimal formatting. And after moving all of the code, I found running clang-format on the source was acceptable.",
+      "parentUuid": "b036bb22_344d8a9e",
+      "revId": "456b87b6b188984579c1d809aab805f6f324ea53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
