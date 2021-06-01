@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "caebd91e_da5c7da7",
+        "filename": "sfx2/source/control/bindings.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1277,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-01T05:59:57Z",
+      "side": 1,
+      "message": "This seems to conflict with the \"//GetSlotServer can modify pImp-\u003epCaches\" below. (But taking size before loop starts, as prior to the change, seems not correct, too)",
+      "range": {
+        "startLine": 1277,
+        "startChar": 4,
+        "endLine": 1277,
+        "endChar": 48
+      },
+      "revId": "990ab0342a7b0c66a4bf9bac75d5c881f0f7266b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
