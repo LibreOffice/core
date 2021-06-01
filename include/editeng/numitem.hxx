@@ -266,7 +266,7 @@ public:
                         eDefaultNumberFormatPositionAndSpaceMode
                                 = SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
     SvxNumRule(const SvxNumRule& rCopy);
-    SvxNumRule(SvxNumRule&&);
+    SvxNumRule(SvxNumRule&&) noexcept;
     SvxNumRule(SvStream &rStream);
     ~SvxNumRule();
 
@@ -274,7 +274,7 @@ public:
     bool                    operator!=( const SvxNumRule& rRule ) const {return !(*this == rRule);}
 
     SvxNumRule&             operator=( const SvxNumRule&  );
-    SvxNumRule&             operator=( SvxNumRule&&  );
+    SvxNumRule&             operator=( SvxNumRule&&  ) noexcept;
 
     void                    Store(SvStream &rStream);
     void                    dumpAsXml(xmlTextWriterPtr pWriter) const;
