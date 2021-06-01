@@ -52,6 +52,24 @@
       "revId": "456b87b6b188984579c1d809aab805f6f324ea53",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "eca1b9c3_abc4119a",
+        "filename": "solenv/clang-format/excludelist",
+        "patchSetId": 5
+      },
+      "lineNbr": 8904,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-06-01T15:16:43Z",
+      "side": 0,
+      "message": "Guess I should have expressed myself a bit more verbose. I\u0027m aware we don\u0027t want to reformat the code in generally. Looking at the diff, I can now see, that the removal of the large chunks of code + the minimal reformat, made the diff harder to follow. Originally I just did the patch, did the c-f of the final source, found the diff acceptable small and squashed the patches, instead of keeping them separate.\n\nI still find it a sensible goal to have a common formatting for most of the code. I would even prefer, if the infrastructure could enforce the formatting on all new code, but that seems hard to implement. And it would annoy people even more then the compiler plugins for non-clang-based development, as it would make submitting \"Gerrit passing\" patches even harder (I doubt there is a sensible way to clang-format a patch only).",
+      "parentUuid": "5c764648_be33ccc1",
+      "revId": "456b87b6b188984579c1d809aab805f6f324ea53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
