@@ -1108,8 +1108,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     // corner
     const double fStartInX(bVerticalWriting && bTopToBottom ? aAdjustTranslate.getX() + aOutlinerScale.getX() : aAdjustTranslate.getX());
     const double fStartInY(bVerticalWriting && !bTopToBottom ? aAdjustTranslate.getY() + aOutlinerScale.getY() : aAdjustTranslate.getY());
-    const basegfx::B2DTuple aAdjOffset(fStartInX, fStartInY);
-    basegfx::B2DHomMatrix aNewTransformA(basegfx::utils::createTranslateB2DHomMatrix(aAdjOffset.getX(), aAdjOffset.getY()));
+    basegfx::B2DHomMatrix aNewTransformA(basegfx::utils::createTranslateB2DHomMatrix(fStartInX, fStartInY));
 
     // Apply the camera rotation. It have to be applied after adjustment of
     // the text (top, bottom, center, left, right).
