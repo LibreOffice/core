@@ -343,6 +343,17 @@ void GtkYieldMutex::ThreadsEnter()
         return;
     auto n = yieldCounts.top();
     yieldCounts.pop();
+
+    const bool bUndoingLeaveWithoutEnter = n == 0;
+    // if the ThreadsLeave bLeaveWithoutEnter of true condition occurred to
+    // create this entry then return early undoing the initial acquire of the
+    // function
+    if G_UNLIKELY(bUndoingLeaveWithoutEnter)
+    {
+        release();
+        return;
+    }
+
     assert(n > 0);
     n--;
     if (n > 0)
@@ -351,8 +362,11 @@ void GtkYieldMutex::ThreadsEnter()
 
 void GtkYieldMutex::ThreadsLeave()
 {
-    assert(m_nCount != 0);
+    const bool bLeaveWithoutEnter = m_nCount == 0;
+    SAL_WARN_IF(bLeaveWithoutEnter, "vcl.gtk", "gdk_threads_leave without matching gdk_threads_enter");
     yieldCounts.push(m_nCount);
+    if G_UNLIKELY(bLeaveWithoutEnter) // this ideally shouldn't happen, but can due to the gtk3 file dialog
+        return;
     release(true);
 }
 
