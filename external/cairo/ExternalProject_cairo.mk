@@ -26,18 +26,6 @@ $(eval $(call gb_ExternalProject_register_targets,cairo,\
 	build \
 ))
 
-ifeq ($(OS),WNT)
-
-$(call gb_ExternalProject_get_state_target,cairo,build) :
-	$(call gb_Trace_StartRange,cairo,EXTERNAL)
-	$(call gb_ExternalProject_run,build,\
-	$(MAKE) -f Makefile.win32 CFG=release ZLIB3RDLIB=zlib.lib \
-	)
-	$(call gb_Trace_EndRange,cairo,EXTERNAL)
-
-
-else
-
 # Including -rtlib=compiler-rt in pixman_LIBS is a BAD HACK:  At least when compiling with Clang
 # -fsanitize=undefined on Linux x86-64, the generated code references __muloti4, which is an
 # extension provided by libclang_rt.builtins-x86_64.a runtime, but not by GCC's libgcc_s.so.1 (which
@@ -97,7 +85,5 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 	&& cd src && $(MAKE) \
 	)
 	$(call gb_Trace_EndRange,cairo,EXTERNAL)
-
-endif
 
 # vim: set noet sw=4 ts=4:

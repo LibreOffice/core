@@ -1291,7 +1291,7 @@ else # !SYSTEM_CAIRO
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	cairo \
-	$(if $(filter $(OS),WNT),,pixman) \
+    pixman \
 ))
 
 define gb_LinkTarget__use_cairo
@@ -1306,9 +1306,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 $(call gb_LinkTarget_add_libs,$(1),\
 	-L$(call gb_UnpackedTarball_get_dir,cairo)/src/.libs -lcairo \
-	$(if $(filter-out MACOSX WNT,$(OS)), \
 		-L$(call gb_UnpackedTarball_get_dir,pixman)/pixman/.libs -lpixman-1 \
-	) \
 )
 
 endef

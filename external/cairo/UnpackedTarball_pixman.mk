@@ -17,8 +17,4 @@ $(eval $(call gb_UnpackedTarball_add_patches,pixman,\
 	external/cairo/pixman/pixman-ubsan.patch \
 ))
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_UnpackedTarball_add_file,pixman,pixman,external/cairo/pixman/Makefile.win32.common))
-endif
-
 # vim: set noet sw=4 ts=4:
