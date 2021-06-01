@@ -117,6 +117,30 @@
       "revId": "21a56eddf3010734af9f8dd437469e5375df305f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0e5b2fb0_a0e5960a",
+        "filename": "sw/inc/strings.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1034,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-06-01T14:08:11Z",
+      "side": 1,
+      "message": "Sure l10n people understand the curliness? But yes, it looks a bit cleaner. Goode idea.",
+      "parentUuid": "b9cfad79_04c7b83a",
+      "range": {
+        "startLine": 1034,
+        "startChar": 71,
+        "endLine": 1034,
+        "endChar": 72
+      },
+      "revId": "21a56eddf3010734af9f8dd437469e5375df305f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
