@@ -48,14 +48,16 @@ public:
     }
 };
 
-DECLARE_OOXMLIMPORT_TEST(testTdf108545_embeddedDocxIcon, "tdf108545_embeddedDocxIcon.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf108545_embeddedDocxIcon)
 {
+    load(mpTestDocumentPath, "tdf108545_embeddedDocxIcon.docx");
     uno::Reference<document::XEmbeddedObjectSupplier2> xSupplier(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(embed::Aspects::MSOLE_ICON, xSupplier->getAspect());
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf121203, "tdf121203.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf121203)
 {
+    load(mpTestDocumentPath, "tdf121203.docx");
     // We imported the date field
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -90,15 +92,17 @@ DECLARE_OOXMLIMPORT_TEST(testTdf121203, "tdf121203.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("17-Oct-2018 09:00"), sCurrentDate);
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf109053, "tdf109053.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf109053)
 {
+    load(mpTestDocumentPath, "tdf109053.docx");
     // Table was imported into a text frame which led to a one page document
     // Originally the table takes two pages, so Writer should import it accordingly.
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf121664, "tdf121664.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf121664)
 {
+    load(mpTestDocumentPath, "tdf121664.docx");
     uno::Reference<text::XLineNumberingProperties> xLineNumbering(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xLineNumbering.is());
     // Without the accompanying fix in place, numbering did not restart on the
@@ -107,8 +111,9 @@ DECLARE_OOXMLIMPORT_TEST(testTdf121664, "tdf121664.docx")
         getProperty<bool>(xLineNumbering->getLineNumberingProperties(), "RestartAtEachPage"));
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf108849, "tdf108849.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf108849)
 {
+    load(mpTestDocumentPath, "tdf108849.docx");
     // sectPr element that is child element of body must be the last child. However, Word accepts it
     // in wrong places, and we should do the same (bug-to-bug compatibility) without creating extra sections.
     CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
@@ -116,15 +121,17 @@ DECLARE_OOXMLIMPORT_TEST(testTdf108849, "tdf108849.docx")
                                  getPages());
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf97038, "tdf97038.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf97038)
 {
+    load(mpTestDocumentPath, "tdf97038.docx");
     // Without the accompanying fix in place, this test would have failed, as the importer lost the
     // fLayoutInCell shape property for wrap-though shapes.
     CPPUNIT_ASSERT(getProperty<bool>(getShapeByName(u"Kep2"), "IsFollowingTextFlow"));
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf114212, "tdf114212.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf114212)
 {
+    load(mpTestDocumentPath, "tdf114212.docx");
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1427
     // - Actual  : 387
@@ -132,8 +139,9 @@ DECLARE_OOXMLIMPORT_TEST(testTdf114212, "tdf114212.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("1427"), aTop);
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf109524, "tdf109524.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf109524)
 {
+    load(mpTestDocumentPath, "tdf109524.docx");
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
                                                     uno::UNO_QUERY);
@@ -146,8 +154,9 @@ DECLARE_OOXMLIMPORT_TEST(testTdf109524, "tdf109524.docx")
                          getProperty<sal_Int16>(xTables->getByIndex(0), "RelativeWidth"));
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf120547, "tdf120547.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf120547)
 {
+    load(mpTestDocumentPath, "tdf120547.docx");
     uno::Reference<drawing::XShape> xGroupShape = getShape(1);
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xGroup->getCount());
@@ -196,8 +205,9 @@ DECLARE_OOXMLIMPORT_TEST(testTdf120547, "tdf120547.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8073), aSizeShape3.Height);
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf118693, "tdf118693.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf118693)
 {
+    load(mpTestDocumentPath, "tdf118693.docx");
     uno::Reference<drawing::XShape> xGroupShape = getShape(1);
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xGroup->getCount());
@@ -234,8 +244,9 @@ DECLARE_OOXMLIMPORT_TEST(testTdf118693, "tdf118693.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4981), aSizeShape2.Height);
 }
 
-DECLARE_OOXMLIMPORT_TEST(testGroupShapeFontName, "groupshape-fontname.docx")
+CPPUNIT_TEST_FIXTURE(Test, testGroupShapeFontName)
 {
+    load(mpTestDocumentPath, "groupshape-fontname.docx");
     // Font names inside a group shape were not imported
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     uno::Reference<text::XText> xText
@@ -252,8 +263,9 @@ DECLARE_OOXMLIMPORT_TEST(testGroupShapeFontName, "groupshape-fontname.docx")
         getProperty<OUString>(getRun(getParagraphOfText(1, xText), 1), "CharFontNameAsian"));
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf124600, "tdf124600.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf124600)
 {
+    load(mpTestDocumentPath, "tdf124600.docx");
     uno::Reference<drawing::XShape> xShape = getShape(1);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 0
@@ -274,16 +286,18 @@ DECLARE_OOXMLIMPORT_TEST(testTdf124600, "tdf124600.docx")
     CPPUNIT_ASSERT_EQUAL(aBodyTextLeft, aShapeTextLeft);
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf120548, "tdf120548.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf120548)
 {
+    load(mpTestDocumentPath, "tdf120548.docx");
     // Without the accompanying fix in place, this test would have failed with 'Expected: 00ff0000;
     // Actual: ffffffff', i.e. the numbering portion was black, not red.
     CPPUNIT_ASSERT_EQUAL(OUString("00ff0000"),
                          parseDump("//Special[@nType='PortionType::Number']/SwFont", "color"));
 }
 
-DECLARE_OOXMLIMPORT_TEST(test120551, "tdf120551.docx")
+CPPUNIT_TEST_FIXTURE(Test, test120551)
 {
+    load(mpTestDocumentPath, "tdf120551.docx");
     auto nHoriOrientPosition = getProperty<sal_Int32>(getShape(1), "HoriOrientPosition");
     // Without the accompanying fix in place, this test would have failed with
     // 'Expected: 430, Actual  : -2542'.
@@ -292,8 +306,9 @@ DECLARE_OOXMLIMPORT_TEST(test120551, "tdf120551.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(392), nHoriOrientPosition);
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf111550, "tdf111550.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf111550)
 {
+    load(mpTestDocumentPath, "tdf111550.docx");
     // The test document has following ill-formed structure:
     //
     //    <w:tbl>
@@ -358,8 +373,9 @@ DECLARE_OOXMLIMPORT_TEST(testTdf111550, "tdf111550.docx")
     getCell(innerTable, "A1", "[outer:A2]\n[inner:A1]");
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf117843, "tdf117843.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf117843)
 {
+    load(mpTestDocumentPath, "tdf117843.docx");
     uno::Reference<container::XNameAccess> xPageStyles = getStyles("PageStyles");
     uno::Reference<style::XStyle> xPageStyle(xPageStyles->getByName("Standard"), uno::UNO_QUERY);
     uno::Reference<text::XText> xHeaderText
@@ -371,8 +387,9 @@ DECLARE_OOXMLIMPORT_TEST(testTdf117843, "tdf117843.docx")
 }
 
 // related tdf#124754
-DECLARE_OOXMLIMPORT_TEST(testTdf43017, "tdf43017.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf43017)
 {
+    load(mpTestDocumentPath, "tdf43017.docx");
     uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
     uno::Reference<text::XTextRange> xText = getRun(xParagraph, 2, "kick the bucket");
 
@@ -394,8 +411,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127778)
 }
 
 // related tdf#43017
-DECLARE_OOXMLIMPORT_TEST(testTdf124754, "tdf124754.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf124754)
 {
+    load(mpTestDocumentPath, "tdf124754.docx");
     uno::Reference<text::XText> textbox(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(1, getParagraphs(textbox));
 
@@ -407,8 +425,9 @@ DECLARE_OOXMLIMPORT_TEST(testTdf124754, "tdf124754.docx")
                                  getProperty<sal_Int32>(xText, "CharColor"));
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTextCopy, "text-copy.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTextCopy)
 {
+    load(mpTestDocumentPath, "text-copy.docx");
     // The document has a header on the second page that is copied as part of the import process.
     // The header has a single paragraph: make sure shapes anchored to it are not lost.
     // Note that the single paragraph itself has no text portions.
@@ -436,8 +455,9 @@ DECLARE_OOXMLIMPORT_TEST(testTextCopy, "text-copy.docx")
     CPPUNIT_ASSERT(xHeaderShapes->hasMoreElements());
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf112443, "tdf112443.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf112443)
 {
+    load(mpTestDocumentPath, "tdf112443.docx");
     // the position of the flying text frame should be off page
     // 30624 below its anchor
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
@@ -456,10 +476,15 @@ DECLARE_OOXMLIMPORT_TEST(testTdf112443, "tdf112443.docx")
 // DOCX: Textbox wrap differs in MSO and LO
 // Both should layout text regardless of existing text box
 // and as result only one page should be generated.
-DECLARE_OOXMLIMPORT_TEST(testTdf113182, "tdf113182.docx") { CPPUNIT_ASSERT_EQUAL(1, getPages()); }
-
-DECLARE_OOXMLIMPORT_TEST(testBtlrFrameVml, "btlr-frame-vml.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf113182)
 {
+    load(mpTestDocumentPath, "tdf113182.docx");
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testBtlrFrameVml)
+{
+    load(mpTestDocumentPath, "btlr-frame-vml.docx");
     uno::Reference<beans::XPropertySet> xTextFrame(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xTextFrame.is());
 
@@ -469,8 +494,9 @@ DECLARE_OOXMLIMPORT_TEST(testBtlrFrameVml, "btlr-frame-vml.docx")
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::BT_LR, nActual);
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf124398, "tdf124398.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf124398)
 {
+    load(mpTestDocumentPath, "tdf124398.docx");
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xGroup.is());
     // Without the accompanying fix in place, this test would have failed with 'Expected: 2; Actual:
@@ -481,8 +507,9 @@ DECLARE_OOXMLIMPORT_TEST(testTdf124398, "tdf124398.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.OLE2Shape"), xShape->getShapeType());
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf104167, "tdf104167.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf104167)
 {
+    load(mpTestDocumentPath, "tdf104167.docx");
     // Make sure that heading 1 paragraphs start on a new page.
     uno::Any xStyle = getStyles("ParagraphStyles")->getByName("Heading 1");
     // Without the accompanying fix in place, this test would have failed with:
@@ -493,8 +520,9 @@ DECLARE_OOXMLIMPORT_TEST(testTdf104167, "tdf104167.docx")
                          getProperty<style::BreakType>(xStyle, "BreakType"));
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf113946, "tdf113946.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf113946)
 {
+    load(mpTestDocumentPath, "tdf113946.docx");
     OUString aTop = parseDump("/root/page/body/txt/anchored/SwAnchoredDrawObject/bounds", "top");
     // tdf#106792 Checked loading of tdf113946.docx. Before the change, the expected
     // value of this test was "1696". Opening the file shows a single short line anchored
@@ -504,8 +532,9 @@ DECLARE_OOXMLIMPORT_TEST(testTdf113946, "tdf113946.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("1695"), aTop);
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf121804, "tdf121804.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf121804)
 {
+    load(mpTestDocumentPath, "tdf121804.docx");
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xShape(xGroup->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xFirstPara = getParagraphOfText(1, xShape->getText());
@@ -522,14 +551,16 @@ DECLARE_OOXMLIMPORT_TEST(testTdf121804, "tdf121804.docx")
                          getProperty<sal_Int32>(xThirdRun, "CharEscapement"));
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf114217, "tdf114217.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf114217)
 {
+    load(mpTestDocumentPath, "tdf114217.docx");
     // This was 1, multi-page table was imported as a floating one.
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf119200, "tdf119200.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf119200)
 {
+    load(mpTestDocumentPath, "tdf119200.docx");
     auto xPara = getParagraph(1);
     // Check that we import MathType functional symbols as symbols, not functions with missing args
     CPPUNIT_ASSERT_EQUAL(OUString(u" size 12{ func \u2208 } {}"), getFormula(getRun(xPara, 1)));
@@ -541,8 +572,9 @@ DECLARE_OOXMLIMPORT_TEST(testTdf119200, "tdf119200.docx")
     CPPUNIT_ASSERT_EQUAL(OUString(u" size 12{ func \u2287 } {}"), getFormula(getRun(xPara, 7)));
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf115094, "tdf115094.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf115094)
 {
+    load(mpTestDocumentPath, "tdf115094.docx");
     // anchor of graphic has to be the text in the text frame
     // xray ThisComponent.DrawPage(1).Anchor.Text
     uno::Reference<text::XTextContent> xShape(getShape(2), uno::UNO_QUERY);
@@ -558,16 +590,18 @@ DECLARE_OOXMLIMPORT_TEST(testTdf115094, "tdf115094.docx")
     CPPUNIT_ASSERT_EQUAL(xText1.get(), xText2.get());
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf115094v2, "tdf115094v2.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf115094v2)
 {
+    load(mpTestDocumentPath, "tdf115094v2.docx");
     // layoutInCell="1" combined with <wp:wrapNone/>
 
     CPPUNIT_ASSERT(getProperty<bool>(getShapeByName(u"Grafik 18"), "IsFollowingTextFlow"));
     CPPUNIT_ASSERT(getProperty<bool>(getShapeByName(u"Grafik 19"), "IsFollowingTextFlow"));
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf122224, "tdf122224.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf122224)
 {
+    load(mpTestDocumentPath, "tdf122224.docx");
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
                                                     uno::UNO_QUERY);
@@ -577,8 +611,9 @@ DECLARE_OOXMLIMPORT_TEST(testTdf122224, "tdf122224.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("2000"), xCell->getString());
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf121440, "tdf121440.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf121440)
 {
+    load(mpTestDocumentPath, "tdf121440.docx");
     // Insert some text in front of footnote
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -593,8 +628,9 @@ DECLARE_OOXMLIMPORT_TEST(testTdf121440, "tdf121440.docx")
         getProperty<sal_Int32>(getRun(getParagraph(1), 1), "CharEscapement"));
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf124670, "tdf124670.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf124670)
 {
+    load(mpTestDocumentPath, "tdf124670.docx");
     CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
     // We need to take xml:space attribute into account, even in w:document element
     uno::Reference<text::XTextRange> paragraph = getParagraph(1);
@@ -603,15 +639,17 @@ DECLARE_OOXMLIMPORT_TEST(testTdf124670, "tdf124670.docx")
         paragraph->getString());
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf126114, "tdf126114.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf126114)
 {
+    load(mpTestDocumentPath, "tdf126114.docx");
     // The problem was that after the drop-down form field, also the placeholder string
     // was imported as text. Beside the duplication of the field, it also caused a crash.
     CPPUNIT_ASSERT_EQUAL(7, getLength());
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf127825, "tdf127825.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf127825)
 {
+    load(mpTestDocumentPath, "tdf127825.docx");
     // The document has a shape with Japanese-style text in it. The shape has relative size and also
     // has automatic height.
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
@@ -634,8 +672,9 @@ DECLARE_OOXMLIMPORT_TEST(testTdf127825, "tdf127825.docx")
     CPPUNIT_ASSERT(rDrawObjs[0]->GetObjRect().IsOver(pBody->getFrameArea()));
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf103345, "numbering-circle.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf103345)
 {
+    load(mpTestDocumentPath, "numbering-circle.docx");
     uno::Reference<beans::XPropertySet> xPropertySet(
         getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xLevels(
@@ -653,8 +692,9 @@ DECLARE_OOXMLIMPORT_TEST(testTdf103345, "numbering-circle.docx")
     }
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf125038, "tdf125038.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf125038)
 {
+    load(mpTestDocumentPath, "tdf125038.docx");
     OUString aActual = getParagraph(1)->getString();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: phone:...
@@ -663,8 +703,9 @@ DECLARE_OOXMLIMPORT_TEST(testTdf125038, "tdf125038.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("phone: \t1234567890"), aActual);
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf125038b, "tdf125038b.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf125038b)
 {
+    load(mpTestDocumentPath, "tdf125038b.docx");
     // Load a document with an IF field, where the IF field command contains a paragraph break.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParagraphAccess(xTextDocument->getText(),
@@ -687,8 +728,9 @@ DECLARE_OOXMLIMPORT_TEST(testTdf125038b, "tdf125038b.docx")
     CPPUNIT_ASSERT(!xParagraphs->hasMoreElements());
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf125038c, "tdf125038c.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf125038c)
 {
+    load(mpTestDocumentPath, "tdf125038c.docx");
     OUString aActual = getParagraph(1)->getString();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: email: test@test.test
@@ -697,18 +739,21 @@ DECLARE_OOXMLIMPORT_TEST(testTdf125038c, "tdf125038c.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("email: test@test.test"), aActual);
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf130214, "tdf130214.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf130214)
 {
+    load(mpTestDocumentPath, "tdf130214.docx");
     // Currently this file imports with errors because of tdf#126435; it must not segfault on load
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf129659, "tdf129659.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf129659)
 {
+    load(mpTestDocumentPath, "tdf129659.docx");
     // don't crash on footnote with page break
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf129912, "tdf129912.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf129912)
 {
+    load(mpTestDocumentPath, "tdf129912.docx");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();

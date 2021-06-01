@@ -77,7 +77,6 @@
     CPPUNIT_TEST_SUITE_REGISTRATION(TestName); \
     void TestName::verify()
 
-#define DECLARE_OOXMLIMPORT_TEST(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, nullptr, Test)
 #define DECLARE_OOXMLEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, nullptr, Test)
 #define DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(TestName, filename) DECLARE_SW_EXPORTONLY_TEST(TestName, filename, nullptr, Test)
 #define DECLARE_RTFEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, nullptr, Test)
