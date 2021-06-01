@@ -151,6 +151,8 @@ private:
 
     void WriteAuthors();
 
+    void WritePresentationProps();
+
     /// If this is PPTM, output the VBA stream.
     void WriteVBA();
 };

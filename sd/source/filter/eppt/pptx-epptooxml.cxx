@@ -50,6 +50,7 @@
 #include <com/sun/star/presentation/XCustomPresentationSupplier.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/presentation/XPresentationSupplier.hpp>
 
 #include <oox/export/utils.hxx>
 
@@ -71,6 +72,10 @@
                       FSNS(XML_xmlns, XML_p15), OUStringToOString(this->getNamespaceURL(OOX_NS(p15)), RTL_TEXTENCODING_UTF8).getStr(), \
                       FSNS(XML_xmlns, XML_mc),  OUStringToOString(this->getNamespaceURL(OOX_NS(mce)), RTL_TEXTENCODING_UTF8).getStr()
 
+// presentationPr namespace
+#define PPRNMSS       FSNS(XML_xmlns, XML_a),   OUStringToOString(this->getNamespaceURL(OOX_NS(dml)), RTL_TEXTENCODING_UTF8).getStr(), \
+                      FSNS(XML_xmlns, XML_r),   OUStringToOString(this->getNamespaceURL(OOX_NS(officeRel)), RTL_TEXTENCODING_UTF8).getStr(), \
+                      FSNS(XML_xmlns, XML_p),   OUStringToOString(this->getNamespaceURL(OOX_NS(ppt)), RTL_TEXTENCODING_UTF8).getStr()
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::animations;
@@ -440,6 +445,8 @@ bool PowerPointExport::exportDocument()
                                      XML_cy, OString::number(PPTtoEMU(maNotesPageSize.Height)));
 
     WriteCustomSlideShow();
+
+    WritePresentationProps();
 
     WriteAuthors();
 
@@ -1050,6 +1057,31 @@ sal_Int32 PowerPointExport::GetAuthorIdAndLastIndex(const OUString& sAuthor, sal
     nLastIndex = ++maAuthors[ sAuthor ].nLastIndex;
 
     return maAuthors[ sAuthor ].nId;
+}
+
+void PowerPointExport::WritePresentationProps()
+{
+    Reference<XPresentationSupplier> xPresentationSupplier(mXModel, uno::UNO_QUERY);
+    if (xPresentationSupplier.is())
+    {
+        Reference<beans::XPropertySet> xPresentationProps(xPresentationSupplier->getPresentation(),
+                                                          uno::UNO_QUERY);
+        bool bEndlessVal = xPresentationProps->getPropertyValue("IsEndless").get<bool>();
+
+        FSHelperPtr pFS = openFragmentStreamWithSerializer(
+            "ppt/presProps.xml",
+            "application/vnd.openxmlformats-officedocument.presentationml.presProps+xml");
+
+        addRelation(mPresentationFS->getOutputStream(),
+                    oox::getRelationship(Relationship::PRESPROPS), u"presProps.xml");
+
+        pFS->startElementNS(XML_p, XML_presentationPr, PPRNMSS);
+
+        pFS->singleElementNS(XML_p, XML_showPr, XML_loop, sax_fastparser::UseIf("1", bEndlessVal),
+                             XML_showNarration, sax_fastparser::UseIf("1", bEndlessVal));
+
+        pFS->endElementNS(XML_p, XML_presentationPr);
+    }
 }
 
 bool PowerPointExport::WriteComments(sal_uInt32 nPageNum)
