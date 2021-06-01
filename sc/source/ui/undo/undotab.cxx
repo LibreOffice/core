@@ -495,8 +495,8 @@ void ScUndoMoveTab::DoChange( bool bUndo ) const
     if (bUndo)                                      // UnDo
     {
         size_t i = mpNewTabs->size();
-        std::unique_ptr<ScProgress> pProgress(new ScProgress(pDocShell , ScResId(STR_UNDO_MOVE_TAB),
-                                                               i * rDoc.GetCodeCount(), true));
+        ScProgress aProgress(pDocShell, ScResId(STR_UNDO_MOVE_TAB),
+                                        i * rDoc.GetCodeCount(), true);
         for (; i > 0; --i)
         {
             SCTAB nDestTab = (*mpNewTabs)[i-1];
@@ -504,7 +504,7 @@ void ScUndoMoveTab::DoChange( bool bUndo ) const
             if (nDestTab > MAXTAB)                          // appended ?
                 nDestTab = rDoc.GetTableCount() - 1;
 
-            rDoc.MoveTab( nDestTab, nOldTab, pProgress.get() );
+            rDoc.MoveTab( nDestTab, nOldTab, &aProgress );
             pViewShell->GetViewData().MoveTab( nDestTab, nOldTab );
             pViewShell->SetTabNo( nOldTab, true );
             if (mpOldNames)
@@ -517,8 +517,8 @@ void ScUndoMoveTab::DoChange( bool bUndo ) const
     else
     {
         size_t n = mpNewTabs->size();
-        std::unique_ptr<ScProgress> pProgress(new ScProgress(pDocShell , ScResId(STR_UNDO_MOVE_TAB),
-                                                               n * rDoc.GetCodeCount(), true));
+        ScProgress aProgress(pDocShell, ScResId(STR_UNDO_MOVE_TAB),
+                                            n * rDoc.GetCodeCount(), true);
         for (size_t i = 0; i < n; ++i)
         {
             SCTAB nDestTab = (*mpNewTabs)[i];
@@ -527,7 +527,7 @@ void ScUndoMoveTab::DoChange( bool bUndo ) const
             if (nDestTab > MAXTAB)                          // appended ?
                 nDestTab = rDoc.GetTableCount() - 1;
 
-            rDoc.MoveTab( nOldTab, nNewTab, pProgress.get() );
+            rDoc.MoveTab( nOldTab, nNewTab, &aProgress );
             pViewShell->GetViewData().MoveTab( nOldTab, nNewTab );
             pViewShell->SetTabNo( nDestTab, true );
             if (mpNewNames)

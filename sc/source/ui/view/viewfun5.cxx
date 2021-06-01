@@ -585,17 +585,17 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
         uno::Reference <io::XInputStream> xStm = aDataHelper.GetInputStream(nFormatId, OUString());
         if (xStm.is())
         {
-            std::unique_ptr<ScDocument> pInsDoc(new ScDocument( SCDOCMODE_CLIP ));
+            ScDocument aInsDoc( SCDOCMODE_CLIP );
             SCTAB nSrcTab = 0;      // Biff5 in clipboard: always sheet 0
-            pInsDoc->ResetClip( &rDoc, nSrcTab );
+            aInsDoc.ResetClip( &rDoc, nSrcTab );
 
             SfxMedium aMed;
             aMed.GetItemSet()->Put( SfxUnoAnyItem( SID_INPUTSTREAM, uno::makeAny( xStm ) ) );
-            ErrCode eErr = ScFormatFilter::Get().ScImportExcel( aMed, pInsDoc.get(), EIF_AUTO );
+            ErrCode eErr = ScFormatFilter::Get().ScImportExcel( aMed, &aInsDoc, EIF_AUTO );
             if ( eErr == ERRCODE_NONE )
             {
                 ScRange aSource;
-                const ScExtDocOptions* pExtOpt = pInsDoc->GetExtDocOptions();
+                const ScExtDocOptions* pExtOpt = aInsDoc.GetExtDocOptions();
                 const ScExtTabSettings* pTabSett = pExtOpt ? pExtOpt->GetTabSettings( nSrcTab ) : nullptr;
                 if( pTabSett && pTabSett->maUsedArea.IsValid() )
                 {
@@ -611,8 +611,8 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                     OSL_FAIL("no dimension");   //! possible?
                     SCCOL nFirstCol, nLastCol;
                     SCROW nFirstRow, nLastRow;
-                    if ( pInsDoc->GetDataStart( nSrcTab, nFirstCol, nFirstRow ) )
-                        pInsDoc->GetCellArea( nSrcTab, nLastCol, nLastRow );
+                    if ( aInsDoc.GetDataStart( nSrcTab, nFirstCol, nFirstRow ) )
+                        aInsDoc.GetCellArea( nSrcTab, nLastCol, nLastRow );
                     else
                     {
                         nFirstCol = nLastCol = 0;
@@ -629,8 +629,8 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                     Unmark();
                 }
 
-                pInsDoc->SetClipArea( aSource );
-                PasteFromClip( InsertDeleteFlags::ALL, pInsDoc.get(),
+                aInsDoc.SetClipArea( aSource );
+                PasteFromClip( InsertDeleteFlags::ALL, &aInsDoc,
                                 ScPasteFunc::NONE, false, false, false, INS_NONE, InsertDeleteFlags::NONE,
                                 bAllowDialogs );
                 bRet = true;

@@ -196,16 +196,16 @@ void ScMyTables::DeleteTable()
     uno::Sequence<sal_Int8> aHash;
     ::comphelper::Base64::decode(aHash, maProtectionData.maPassword);
 
-    std::unique_ptr<ScTableProtection> pProtect(new ScTableProtection);
-    pProtect->setProtected(maProtectionData.mbProtected);
-    pProtect->setPasswordHash(aHash, maProtectionData.meHash1, maProtectionData.meHash2);
-    pProtect->setOption(ScTableProtection::SELECT_LOCKED_CELLS,   maProtectionData.mbSelectProtectedCells);
-    pProtect->setOption(ScTableProtection::SELECT_UNLOCKED_CELLS, maProtectionData.mbSelectUnprotectedCells);
-    pProtect->setOption(ScTableProtection::INSERT_COLUMNS, maProtectionData.mbInsertColumns);
-    pProtect->setOption(ScTableProtection::INSERT_ROWS,    maProtectionData.mbInsertRows);
-    pProtect->setOption(ScTableProtection::DELETE_COLUMNS, maProtectionData.mbDeleteColumns);
-    pProtect->setOption(ScTableProtection::DELETE_ROWS,    maProtectionData.mbDeleteRows);
-    rImport.GetDocument()->SetTabProtection(maCurrentCellPos.Tab(), pProtect.get());
+    ScTableProtection aProtect;
+    aProtect.setProtected(maProtectionData.mbProtected);
+    aProtect.setPasswordHash(aHash, maProtectionData.meHash1, maProtectionData.meHash2);
+    aProtect.setOption(ScTableProtection::SELECT_LOCKED_CELLS,   maProtectionData.mbSelectProtectedCells);
+    aProtect.setOption(ScTableProtection::SELECT_UNLOCKED_CELLS, maProtectionData.mbSelectUnprotectedCells);
+    aProtect.setOption(ScTableProtection::INSERT_COLUMNS, maProtectionData.mbInsertColumns);
+    aProtect.setOption(ScTableProtection::INSERT_ROWS,    maProtectionData.mbInsertRows);
+    aProtect.setOption(ScTableProtection::DELETE_COLUMNS, maProtectionData.mbDeleteColumns);
+    aProtect.setOption(ScTableProtection::DELETE_ROWS,    maProtectionData.mbDeleteRows);
+    rImport.GetDocument()->SetTabProtection(maCurrentCellPos.Tab(), &aProtect);
 }
 
 void ScMyTables::AddColStyle(const sal_Int32 nRepeat, const OUString& rCellStyleName)

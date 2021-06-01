@@ -1423,9 +1423,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool ExportPPT( const std::vector< css::bean
                     SvMemoryStream* pVBA,
                     sal_uInt32 nCnvrtFlags )
 {
-    std::unique_ptr<PPTWriter> pPPTWriter(new PPTWriter( rSvStorage, rXModel, rXStatInd, pVBA, nCnvrtFlags ));
-    pPPTWriter->exportPPT(rMediaData);
-    bool bStatus = pPPTWriter->IsValid();
+    PPTWriter aPPTWriter( rSvStorage, rXModel, rXStatInd, pVBA, nCnvrtFlags );
+    aPPTWriter.exportPPT(rMediaData);
+    bool bStatus = aPPTWriter.IsValid();
     return bStatus;
 }
 

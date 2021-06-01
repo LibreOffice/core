@@ -987,9 +987,9 @@ bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, bool bCopy, bool bRec
             return true;    // nothing to do, but valid
         }
 
-        std::unique_ptr<ScProgress> pProgress(new ScProgress(this, ScResId(STR_UNDO_MOVE_TAB),
-                                                m_aDocument.GetCodeCount(), true));
-        bool bDone = m_aDocument.MoveTab( nSrcTab, nDestTab, pProgress.get() );
+        std::optional<ScProgress> pProgress(std::in_place, this, ScResId(STR_UNDO_MOVE_TAB),
+                                                m_aDocument.GetCodeCount(), true);
+        bool bDone = m_aDocument.MoveTab( nSrcTab, nDestTab, &*pProgress );
         pProgress.reset();
         if (!bDone)
         {
