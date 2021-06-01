@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cb1f0f5d_e31a2764",
+        "filename": "sw/inc/swrect.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-06-01T12:51:43Z",
+      "side": 1,
+      "message": "typo \"lhs\"",
+      "range": {
+        "startLine": 55,
+        "startChar": 38,
+        "endLine": 55,
+        "endChar": 41
+      },
+      "revId": "285eb56448db2b105920a7bc33e39d38b9a645d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d43673f_82284be5",
+        "filename": "sw/inc/swrect.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-06-01T12:51:43Z",
+      "side": 1,
+      "message": "pls dont use comma operator to init 1 variable",
+      "range": {
+        "startLine": 64,
+        "startChar": 39,
+        "endLine": 64,
+        "endChar": 62
+      },
+      "revId": "285eb56448db2b105920a7bc33e39d38b9a645d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
