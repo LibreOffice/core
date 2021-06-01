@@ -27,6 +27,7 @@
 #include <algorithm>
 #include <cstddef>
 #include <map>
+#include <string_view>
 #include <vector>
 
 #include <basic/sbx.hxx>
@@ -496,7 +497,7 @@ ErrCode call(
     // require similar treatment, too:
     bool special =
         dll.equalsIgnoreAsciiCase("KERNEL32.DLL") &&
-        (proc.name == OString("GetLogicalDriveStringsA"));
+        (proc.name == std::string_view("GetLogicalDriveStringsA"));
     for (sal_uInt32 i = 1; i < (arguments == nullptr ? 0 : arguments->Count()); ++i)
     {
         ErrCode e = marshal(true, arguments->Get(i), special && i == 2, stack, stack.size(),

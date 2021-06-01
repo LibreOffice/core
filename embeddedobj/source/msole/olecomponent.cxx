@@ -418,7 +418,7 @@ static OUString WinAccToVcl_Impl( const sal_Unicode* pStr )
             }
             else
             {
-                aResult += OUString( pStr, 1 );
+                aResult += OUStringChar( *pStr );
                 pStr++;
             }
         }
