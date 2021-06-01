@@ -94,7 +94,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLoadComponentFromURL)
 
     // Create a default window, so by the time the thread would post a user event, it doesn't need
     // the solar mutex to process a SendMessageW() call on Windows.
-    VclPtrInstance<WorkWindow> xWindow(nullptr, WB_APP | WB_STDWORK);
+    ScopedVclPtrInstance<WorkWindow> xWindow(nullptr, WB_APP | WB_STDWORK);
     // Variable is not used, it holds the default window.
     (void)xWindow;
 
