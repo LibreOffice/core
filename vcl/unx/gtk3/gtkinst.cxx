@@ -5359,10 +5359,10 @@ public:
 
     virtual bool has_toplevel_focus() const override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        return gtk_window_has_toplevel_focus(m_pWindow);
+#if GTK_CHECK_VERSION(4, 0, 0)
+        return gtk_window_is_active(m_pWindow);
 #else
-        return false;
+        return gtk_window_has_toplevel_focus(m_pWindow);
 #endif
     }
 
