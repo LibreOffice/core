@@ -1272,9 +1272,6 @@ endif # ANDROID
 
 endif # SYSTEM_REDLAND
 
-
-ifneq ($(USING_X11)$(ENABLE_CAIRO_CANVAS)$(DISABLE_GUI),) # or
-
 ifneq ($(SYSTEM_CAIRO),)
 
 define gb_LinkTarget__use_cairo
@@ -1311,27 +1308,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 
 endef
 
-endif # SYSTEM_CAIRO
-
-else ifeq ($(OS),ANDROID)
-
-define gb_LinkTarget__use_cairo
-$(call gb_LinkTarget_use_package,$(1),cairo)
-$(call gb_LinkTarget_use_package,$(1),pixman)
-$(call gb_LinkTarget_use_external,$(1),freetype_headers)
-$(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,cairo) \
-	-I$(call gb_UnpackedTarball_get_dir,cairo)/src \
-	$$(INCLUDE) \
-)
-$(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,cairo)/src/.libs -lcairo \
-	-L$(call gb_UnpackedTarball_get_dir,pixman)/pixman/.libs -lpixman-1 \
-)
-
-endef
-
-endif # CAIRO
+endif # !SYSTEM_CAIRO
 
 ifneq ($(SYSTEM_FREETYPE),)
 
@@ -1381,6 +1358,8 @@ $(call gb_LinkTarget_add_libs,$(1),$(FONTCONFIG_LIBS))
 
 endef
 
+gb_ExternalProject__use_fontconfig :=
+
 else
 
 define gb_LinkTarget__use_fontconfig
@@ -1393,6 +1372,11 @@ $(call gb_LinkTarget_set_include,$(1),\
 $(call gb_LinkTarget_add_libs,$(1),\
     -L$(call gb_UnpackedTarball_get_dir,fontconfig)/src/.libs -lfontconfig \
 )
+
+endef
+
+define gb_ExternalProject__use_fontconfig
+$(call gb_ExternalProject_use_external_project,$(1),fontconfig)
 
 endef
 

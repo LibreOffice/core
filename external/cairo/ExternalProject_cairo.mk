@@ -12,15 +12,11 @@ $(eval $(call gb_ExternalProject_ExternalProject,cairo))
 $(eval $(call gb_ExternalProject_use_external_project,cairo,pixman))
 
 $(eval $(call gb_ExternalProject_use_externals,cairo,\
+    fontconfig \
 	freetype \
 	libpng \
 	zlib \
 ))
-
-ifeq ($(OS),ANDROID)
-$(eval $(call gb_ExternalProject_use_unpacked,cairo,fontconfig))
-$(eval $(call gb_ExternalProject_use_unpacked,cairo,libpng))
-endif
 
 $(eval $(call gb_ExternalProject_register_targets,cairo,\
 	build \
@@ -72,7 +68,7 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 		$(if $(SYSTEM_FREETYPE),,FREETYPE_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,freetype)/include") \
 		$(if $(SYSTEM_FONTCONFIG),,FONTCONFIG_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,fontconfig)") \
 		$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
-		$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,$(if $(filter ANDROID,$(OS)),--disable-shared,--disable-static)) \
+		$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
 		$(if $(filter EMSCRIPTEN ANDROID iOS,$(OS)),--disable-xlib --disable-xcb,$(if $(filter TRUE,$(DISABLE_GUI)),--disable-xlib --disable-xcb,--enable-xlib --enable-xcb)) \
 		$(if $(filter iOS,$(OS)),--enable-quartz --enable-quartz-font) \
 		--disable-valgrind \
