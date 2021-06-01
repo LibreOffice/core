@@ -27,6 +27,7 @@
 
 #include "OleHandler.hxx"
 #include <memory>
+#include <optional>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -119,7 +120,7 @@ namespace XSLT
         }
 
         // Decompress the bytes
-        std::unique_ptr< ::ZipUtils::Inflater> decompresser(new ::ZipUtils::Inflater(false));
+        std::optional< ::ZipUtils::Inflater> decompresser(std::in_place, false);
         decompresser->setInput(content);
         Sequence<sal_Int8> result(oleLength);
         decompresser->doInflateSegment(result, 0, oleLength);
@@ -187,7 +188,7 @@ namespace XSLT
 
         // Compress the bytes
         Sequence<sal_Int8> output(oledata.getLength());
-        std::unique_ptr< ::ZipUtils::Deflater> compresser(new ::ZipUtils::Deflater(sal_Int32(3), false));
+        std::optional< ::ZipUtils::Deflater> compresser(std::in_place, sal_Int32(3), false);
         compresser->setInputSegment(oledata);
         compresser->finish();
         int compressedDataLength = compresser->doDeflateSegment(output, oledata.getLength());
