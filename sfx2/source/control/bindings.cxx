@@ -1079,10 +1079,10 @@ void SfxBindings::UpdateSlotServer_Impl()
             pImpl->bContextChanged = true;
     }
 
-    for (std::unique_ptr<SfxStateCache>& pCache : pImpl->pCaches)
+    for (size_t i = 0; i < pImpl->pCaches.size(); ++i)
     {
         //GetSlotServer can modify pImpl->pCaches
-        pCache->GetSlotServer(*pDispatcher, pImpl->xProv);
+        pImpl->pCaches[i]->GetSlotServer(*pDispatcher, pImpl->xProv);
     }
     pImpl->bMsgDirty = pImpl->bAllMsgDirty = false;
 
