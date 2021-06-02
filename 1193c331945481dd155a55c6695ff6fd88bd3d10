@@ -142,6 +142,30 @@
       "revId": "1193c331945481dd155a55c6695ff6fd88bd3d10",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f6ff0b7_a799c9c8",
+        "filename": "extensions/source/ole/oleobjw.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1432,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-02T08:18:48Z",
+      "side": 0,
+      "message": "So it would make sense to change this to a std::u16string_view explicitly constructed from pointer and length.  Will do.",
+      "parentUuid": "4a57c763_887b90e5",
+      "range": {
+        "startLine": 1432,
+        "startChar": 30,
+        "endLine": 1432,
+        "endChar": 70
+      },
+      "revId": "1193c331945481dd155a55c6695ff6fd88bd3d10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
