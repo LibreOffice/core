@@ -387,6 +387,7 @@ SalData::SalData() :
 
 SalData::~SalData() COVERITY_NOEXCEPT_FALSE
 {
+    assert(false);
 #if (defined UNX && !defined MACOSX)
     psp::PrinterInfoManager::release();
 #endif

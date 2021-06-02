@@ -70,6 +70,7 @@ SalData::SalData()
 
 SalData::~SalData()
 {
+    assert(false);
     CGColorSpaceRelease( mxRGBSpace );
     CGColorSpaceRelease( mxGraySpace );
     for( NSCursor* pCurs : maCursors )

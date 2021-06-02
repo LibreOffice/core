@@ -298,6 +298,7 @@ SalData::SalData()
 
 SalData::~SalData()
 {
+    assert(false);
     deInitNWF();
     SetSalData( nullptr );
 
