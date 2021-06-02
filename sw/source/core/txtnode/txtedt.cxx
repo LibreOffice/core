@@ -2228,7 +2228,7 @@ SwWrongList const* SwTextNode::GetGrammarCheck() const
 
 void SwTextNode::SetSmartTags( std::unique_ptr<SwWrongList> pNew )
 {
-    OSL_ENSURE( SwSmartTagMgr::Get().IsSmartTagsEnabled(),
+    OSL_ENSURE( !pNew || SwSmartTagMgr::Get().IsSmartTagsEnabled(),
             "Weird - we have a smart tag list without any recognizers?" );
 
     if ( m_pParaIdleData_Impl )
