@@ -118,6 +118,30 @@
       "revId": "1193c331945481dd155a55c6695ff6fd88bd3d10",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a57c763_887b90e5",
+        "filename": "extensions/source/ole/oleobjw.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1432,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-02T08:12:00Z",
+      "side": 0,
+      "message": "\u003e at a well-known negative offset of p, say\n\nexactly :-)",
+      "parentUuid": "d2d04605_1274a507",
+      "range": {
+        "startLine": 1432,
+        "startChar": 30,
+        "endLine": 1432,
+        "endChar": 70
+      },
+      "revId": "1193c331945481dd155a55c6695ff6fd88bd3d10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
