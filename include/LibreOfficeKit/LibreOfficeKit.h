@@ -458,6 +458,12 @@ struct _LibreOfficeKitDocumentClass
     void (*sendFormFieldEvent) (LibreOfficeKitDocument* pThis,
                                 const char* pArguments);
 
+    /// @see lok::Document::setFreemiumDenyList
+    void (*setFreemiumDenyList) (const char* freemiumDenyList);
+
+    /// @see lok::Document::setFreemiumView
+    void (*setFreemiumView) (bool isFreemium, int nViewId);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

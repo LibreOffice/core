@@ -164,6 +164,7 @@ friend class SfxPrinterController;
     LanguageTag                 maLOKLanguageTag;
     LanguageTag                 maLOKLocale;
     LOKDeviceFormFactor         maLOKDeviceFormFactor;
+    bool                        mbLOKIsFreemiumView;
 
     /// Used to set the DocId at construction time. See SetCurrentDocId.
     static ViewShellDocId       mnCurrentDocId;
@@ -384,6 +385,10 @@ public:
     bool isLOKMobilePhone() const { return maLOKDeviceFormFactor == LOKDeviceFormFactor::MOBILE; }
 
     virtual tools::Rectangle getLOKVisibleArea() const { return tools::Rectangle(); }
+
+    // Fremium view settings
+    void setFreemiumView(bool isFreemium) { mbLOKIsFreemiumView = isFreemium; }
+    bool isFreemiumView() { return mbLOKIsFreemiumView; }
 };
 
 
