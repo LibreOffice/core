@@ -182,6 +182,23 @@ void SfxLokHelper::setView(int nId)
 
 }
 
+SfxViewShell* SfxLokHelper::getViewOfId(int nId)
+{
+    SfxApplication* pApp = SfxApplication::Get();
+    if (pApp == nullptr)
+        return nullptr;
+
+    const ViewShellId nViewShellId(nId);
+    SfxViewShellArr_Impl& rViewArr = pApp->GetViewShells_Impl();
+    for (SfxViewShell* pViewShell : rViewArr)
+    {
+        if (pViewShell->GetViewShellId() == nViewShellId)
+            return pViewShell;
+    }
+
+    return nullptr;
+}
+
 int SfxLokHelper::getView(const SfxViewShell* pViewShell)
 {
     if (!pViewShell)
@@ -721,6 +738,14 @@ void SfxLokHelper::postKeyEventAsync(const VclPtr<vcl::Window> &xWindow,
     pLOKEv->maKeyEvent = KeyEvent(nCharCode, nKeyCode, nRepeat);
     pLOKEv->mpWindow = xWindow;
     postEventAsync(pLOKEv);
+}
+
+void SfxLokHelper::setFreemiumView(int nViewId, bool isFreemium)
+{
+    SfxViewShell* pViewShell = SfxLokHelper::getViewOfId(nViewId);
+
+    if(pViewShell)
+        pViewShell->setFreemiumView(isFreemium);
 }
 
 void SfxLokHelper::postExtTextEventAsync(const VclPtr<vcl::Window> &xWindow,
