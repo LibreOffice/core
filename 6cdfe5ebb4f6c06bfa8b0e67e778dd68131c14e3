@@ -22,6 +22,30 @@
       "revId": "6cdfe5ebb4f6c06bfa8b0e67e778dd68131c14e3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e531552c_539db5ff",
+        "filename": "solenv/gbuild/Module.mk",
+        "patchSetId": 8
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-06-02T15:05:19Z",
+      "side": 1,
+      "message": "I have a hunch, that it had originally something to do with the way I started implementing headless mode for either Windows or MacOSX. I remember I tested different stuff to enable that mode; guess it\u0027s an oversight. I also can\u0027t find any usage.",
+      "parentUuid": "b0424a3c_984df100",
+      "range": {
+        "startLine": 220,
+        "startChar": 1,
+        "endLine": 220,
+        "endChar": 17
+      },
+      "revId": "6cdfe5ebb4f6c06bfa8b0e67e778dd68131c14e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
