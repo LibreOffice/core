@@ -5019,11 +5019,12 @@ struct ButtonOrder
 
 int getButtonPriority(const OString &rType)
 {
-    static const size_t N_TYPES = 7;
+    static const size_t N_TYPES = 8;
     static const ButtonOrder aDiscardCancelSave[N_TYPES] =
     {
         { "/discard", 0 },
         { "/cancel", 1 },
+        { "/close", 1 },
         { "/no", 2 },
         { "/open", 3 },
         { "/save", 3 },
@@ -5039,7 +5040,8 @@ int getButtonPriority(const OString &rType)
         { "/ok", 0 },
         { "/discard", 1 },
         { "/no", 1 },
-        { "/cancel", 2 }
+        { "/cancel", 2 },
+        { "/close", 2 }
     };
 
     const ButtonOrder* pOrder = &aDiscardCancelSave[0];
@@ -21402,18 +21404,6 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
                                         }
                                     }
 
-                                    css::uno::Reference<css::xml::dom::XElement> xChildElem(xTitleChild, css::uno::UNO_QUERY_THROW);
-                                    if (!xChildElem->hasAttribute("type"))
-                                    {
-                                        // turn parent tag of <child> into <child type="end">
-                                        css::uno::Reference<css::xml::dom::XAttr> xTypeEnd = xDoc->createAttribute("type");
-                                        if (sNodeId == "cancel")
-                                            xTypeEnd->setValue("start");
-                                        else
-                                            xTypeEnd->setValue("end");
-                                        xChildElem->setAttributeNode(xTypeEnd);
-                                    }
-
                                     aChildren.push_back(std::make_pair(xTitleChild, sNodeId));
                                 }
                                 else if (xTitleChild->getNodeName() == "property")
@@ -21432,13 +21422,34 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
                             //sort child order within parent so that we match the platform button order
                             std::stable_sort(aChildren.begin(), aChildren.end(), sortButtonNodes);
 
-                            for (const auto& foo : aChildren)
-                                xChild->removeChild(foo.first);
+                            int nNonHelpButtonCount = 0;
+
+                            for (const auto& rTitleChild : aChildren)
+                            {
+                                xChild->removeChild(rTitleChild.first);
+                                if (rTitleChild.second != "help")
+                                    ++nNonHelpButtonCount;
+                            }
 
                             std::reverse(aChildren.begin(), aChildren.end());
 
-                            for (const auto& foo : aChildren)
-                                xChild->appendChild(foo.first);
+                            for (const auto& rTitleChild : aChildren)
+                            {
+                                xChild->appendChild(rTitleChild.first);
+
+                                css::uno::Reference<css::xml::dom::XElement> xChildElem(rTitleChild.first, css::uno::UNO_QUERY_THROW);
+                                if (!xChildElem->hasAttribute("type"))
+                                {
+                                    // turn parent tag of <child> into <child type="end"> except for cancel/close which we'll
+                                    // put at start unless there is nothing at end
+                                    css::uno::Reference<css::xml::dom::XAttr> xTypeEnd = xDoc->createAttribute("type");
+                                    if (nNonHelpButtonCount >= 2 && (rTitleChild.second == "cancel" || rTitleChild.second == "close"))
+                                        xTypeEnd->setValue("start");
+                                    else
+                                        xTypeEnd->setValue("end");
+                                    xChildElem->setAttributeNode(xTypeEnd);
+                                }
+                            }
 
                             break;
                         }
@@ -22496,6 +22507,8 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "svt/ui/javadisableddialog.ui" &&
         rUIFile != "svx/ui/accessibilitycheckdialog.ui" &&
         rUIFile != "svx/ui/accessibilitycheckentry.ui" &&
+        rUIFile != "svx/ui/asianphoneticguidedialog.ui" &&
+        rUIFile != "svx/ui/docrecoverysavedialog.ui" &&
         rUIFile != "svx/ui/findreplacedialog.ui" &&
         rUIFile != "svx/ui/fontworkgallerydialog.ui" &&
         rUIFile != "modules/BasicIDE/ui/basicmacrodialog.ui" &&
