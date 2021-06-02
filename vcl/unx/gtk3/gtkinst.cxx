@@ -20985,6 +20985,20 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
                     xRemoveList.push_back(xChild);
             }
 
+            // remove 'Help' button label and replace with a help icon instead
+            if (sName == "label" && GetParentObjectType(xChild) == "GtkButton")
+            {
+                css::uno::Reference<css::xml::dom::XNamedNodeMap> xParentMap = xChild->getParentNode()->getAttributes();
+                css::uno::Reference<css::xml::dom::XNode> xId = xParentMap->getNamedItem("id");
+                if (xId && xId->getNodeValue() == "help")
+                {
+                    auto xDoc = xChild->getOwnerDocument();
+                    auto xIconName = CreateProperty(xDoc, "icon-name", "help-browser-symbolic");
+                    xChild->getParentNode()->insertBefore(xIconName, xChild);
+                    xRemoveList.push_back(xChild);
+                }
+            }
+
             if (sName == "icon-size")
             {
                 if (GetParentObjectType(xChild) == "GtkImage")
