@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c281c9eb_ec7c6a6a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-02T11:49:54Z",
+      "side": 1,
+      "message": "this is not an incompatible API change, so no need for that tag",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 12
+      },
+      "revId": "d26c6d2896701bc3ef0e8b4aab29aca5f925d839",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89434b51_5638b358",
+        "filename": "include/osl/thread.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-02T11:49:54Z",
+      "side": 1,
+      "message": "please add a @since tag",
+      "revId": "d26c6d2896701bc3ef0e8b4aab29aca5f925d839",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4e27357_8b0475cf",
+        "filename": "include/osl/thread.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-02T11:49:54Z",
+      "side": 1,
+      "message": "this should be `char const *`",
+      "range": {
+        "startLine": 215,
+        "startChar": 14,
+        "endLine": 215,
+        "endChar": 20
+      },
+      "revId": "d26c6d2896701bc3ef0e8b4aab29aca5f925d839",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
