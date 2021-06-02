@@ -139,12 +139,15 @@
                 <property name="can-focus">False</property>
                 <property name="margin-end">6</property>
                 <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkBox" id="box13">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkDrawingArea" id="preview">
@@ -153,6 +156,8 @@
                         <property name="events">GDK_STRUCTURE_MASK | GDK_SCROLL_MASK</property>
                         <property name="tooltip-text" translatable="yes" context="printdialog|printpreview">Print preview</property>
                         <property name="margin-end">6</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="preview-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|preview">The preview shows how each sheet of paper will look. You can browse through all sheets of paper with the buttons below the preview.</property>
