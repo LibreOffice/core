@@ -1335,11 +1335,18 @@ namespace emfio
                     {
                         mpInputStream->ReadInt32( nX32 ).ReadInt32( nY32 ).ReadInt32( nx32 ).ReadInt32( ny32 );
                         SAL_INFO("emfio", "\t\t Rectangle, left: " << nX32 << ", top: " << nY32 << ", right: " << nx32 << ", bottom: " << ny32);
-                        tools::Long dw = (nx32 - nX32) / 2;
-                        tools::Long dh = (ny32 - nY32) / 2;
-                        Point aCenter( nX32 + dw, nY32 + dh );
-                        tools::Polygon aPoly( aCenter, dw, dh );
-                        DrawPolygon( aPoly, mbRecordPath );
+
+                        sal_Int32 w(0), h(0);
+                        if (o3tl::checked_sub(nx32, nX32, w) || o3tl::checked_sub(ny32, nY32, h))
+                            SAL_WARN("emfio", "broken ellipse");
+                        else
+                        {
+                            tools::Long dw = w / 2;
+                            tools::Long dh = h / 2;
+                            Point aCenter( nX32 + dw, nY32 + dh );
+                            tools::Polygon aPoly( aCenter, dw, dh );
+                            DrawPolygon( aPoly, mbRecordPath );
+                        }
                     }
                     break;
 
