@@ -10,6 +10,7 @@
 #include <comphelper/lok.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <sal/log.hxx>
+#include <algorithm>
 
 #include <iostream>
 
@@ -33,6 +34,8 @@ static bool g_bViewIdForVisCursorInvalidation(false);
 static bool g_bLocalRendering(false);
 
 static Compat g_eCompatFlags(Compat::none);
+
+static std::vector<OUString> g_vFreemiumDenyList;
 
 namespace
 {
@@ -280,6 +283,31 @@ void statusIndicatorFinish()
 {
     if (pStatusIndicatorCallback)
         pStatusIndicatorCallback(pStatusIndicatorCallbackData, statusIndicatorCallbackType::Finish, 0, nullptr);
+}
+
+void setFreemiumDenyList(const char* freemiumDenyList)
+{
+    if(!g_vFreemiumDenyList.empty())
+        return;
+
+    OUString DenyListString(freemiumDenyList, strlen(freemiumDenyList), RTL_TEXTENCODING_UTF8);
+
+    OUString command = DenyListString.getToken(0, ' ');
+    for (size_t i = 1; !command.isEmpty(); i++)
+    {
+        g_vFreemiumDenyList.emplace_back(command);
+        command = DenyListString.getToken(i, ' ');
+    }
+}
+
+const std::vector<OUString>& getFreemiumDenyList()
+{
+    return g_vFreemiumDenyList;
+}
+
+bool isCommandFreemiumDenied(const OUString& command)
+{
+    return std::find(g_vFreemiumDenyList.begin(), g_vFreemiumDenyList.end(), command) != g_vFreemiumDenyList.end();
 }
 
 } // namespace

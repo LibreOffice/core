@@ -55,13 +55,16 @@ public:
     static void destroyView(int nId);
     /// Set a view shell as current one.
     static void setView(int nId);
+    /// Get view shell with id
+    static SfxViewShell* getViewOfId(int nId);
     /// Get the currently active view.
     static int getView(const SfxViewShell* pViewShell = nullptr);
     /// Get the number of views of the current DocId.
     static std::size_t getViewsCount(int nDocId);
     /// Get viewIds of views of the current DocId.
     static bool getViewIds(int nDocId, int* pArray, size_t nSize);
-
+    /// Set View Freemium
+    static void setFreemiumView(int nViewId, bool isFreemium);
     /// Get the document id for a view
     static int getDocumentIdOfView(int nViewId);
     /// Get the default language that should be used for views
