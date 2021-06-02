@@ -5226,7 +5226,8 @@ bool WW8PLCFMan::IsSprmLegalForCategory(sal_uInt16 nSprmId, short nIdx) const
         auto nSGC = ((nSprmId & 0x1C00) >> 10);
         bRet = nSGC == 4;
     }
-    SAL_WARN_IF(!bRet, "sw.ww8", "sprm, id " << nSprmId << " wrong category for section properties");
+    if (!bRet)
+        SAL_INFO("sw.ww8", "sprm, id " << nSprmId << " wrong category for section properties");
     return bRet;
 }
 
