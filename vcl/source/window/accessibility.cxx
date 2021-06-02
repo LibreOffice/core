@@ -445,7 +445,7 @@ void Window::SetAccessibleDescription( const OUString& rDescription )
     if ( ! mpWindowImpl->mpAccessibleInfos )
         mpWindowImpl->mpAccessibleInfos.reset( new ImplAccessibleInfos );
 
-    SAL_WARN_IF( mpWindowImpl->mpAccessibleInfos->pAccessibleDescription, "vcl", "AccessibleDescription already set!" );
+    SAL_WARN_IF( mpWindowImpl->mpAccessibleInfos->pAccessibleDescription != rDescription, "vcl", "AccessibleDescription already set!" );
     mpWindowImpl->mpAccessibleInfos->pAccessibleDescription = rDescription;
 }
 
