@@ -22,6 +22,30 @@
       "revId": "b141c0eaacac4c8a81e486bc8ec71705e82c743a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ccfb63d7_f87c82f4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-06-02T07:05:32Z",
+      "side": 1,
+      "message": "No - we really overwrite the one provided by libxml2.",
+      "parentUuid": "62f58614_b7eb7237",
+      "range": {
+        "startLine": 22,
+        "startChar": 45,
+        "endLine": 22,
+        "endChar": 55
+      },
+      "revId": "b141c0eaacac4c8a81e486bc8ec71705e82c743a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
