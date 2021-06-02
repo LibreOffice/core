@@ -5062,6 +5062,17 @@ int getButtonPriority(const OString &rType)
     return -1;
 }
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+typedef std::pair<css::uno::Reference<css::xml::dom::XNode>, OUString> named_node;
+
+bool sortButtonNodes(const named_node& rA, const named_node& rB)
+{
+    //order within groups according to platform rules
+    return getButtonPriority("/" + rA.second.toUtf8()) <
+           getButtonPriority("/" + rB.second.toUtf8());
+}
+#endif
+
 bool sortButtons(const GtkWidget* pA, const GtkWidget* pB)
 {
     //order within groups according to platform rules
@@ -21356,35 +21367,42 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
 
                             xContentAreaCandidate->getParentNode()->insertBefore(xActionArea, xContentAreaCandidate);
 
+                            std::vector<named_node> aChildren;
+
                             css::uno::Reference<css::xml::dom::XNode> xTitleChild = xChild->getFirstChild();
-                            while(xTitleChild.is())
+                            while (xTitleChild.is())
                             {
                                 auto xNextTitleChild = xTitleChild->getNextSibling();
                                 if (xTitleChild->getNodeName() == "child")
                                 {
+                                    OUString sNodeId;
+
+                                    for (css::uno::Reference<css::xml::dom::XNode> xObjectCandidate = xTitleChild->getFirstChild();
+                                         xObjectCandidate.is();
+                                         xObjectCandidate = xObjectCandidate->getNextSibling())
+                                    {
+                                        if (xObjectCandidate->getNodeName() == "object")
+                                        {
+                                            css::uno::Reference<css::xml::dom::XNamedNodeMap> xObjectMap = xObjectCandidate->getAttributes();
+                                            css::uno::Reference<css::xml::dom::XNode> xObjectId = xObjectMap->getNamedItem("id");
+                                            sNodeId = xObjectId->getNodeValue();
+                                            break;
+                                        }
+                                    }
+
                                     css::uno::Reference<css::xml::dom::XElement> xChildElem(xTitleChild, css::uno::UNO_QUERY_THROW);
                                     if (!xChildElem->hasAttribute("type"))
                                     {
                                         // turn parent tag of <child> into <child type="end">
                                         css::uno::Reference<css::xml::dom::XAttr> xTypeEnd = xDoc->createAttribute("type");
-                                        xTypeEnd->setValue("end");
-
-                                        for (css::uno::Reference<css::xml::dom::XNode> xObjectCandidate = xTitleChild->getFirstChild();
-                                             xObjectCandidate.is();
-                                             xObjectCandidate = xObjectCandidate->getNextSibling())
-                                        {
-                                            if (xObjectCandidate->getNodeName() == "object")
-                                            {
-                                                css::uno::Reference<css::xml::dom::XNamedNodeMap> xObjectMap = xObjectCandidate->getAttributes();
-                                                css::uno::Reference<css::xml::dom::XNode> xObjectId = xObjectMap->getNamedItem("id");
-                                                if (xObjectId->getNodeValue() == "cancel")
-                                                    xTypeEnd->setValue("start");
-                                                break;
-                                            }
-                                        }
-
+                                        if (sNodeId == "cancel")
+                                            xTypeEnd->setValue("start");
+                                        else
+                                            xTypeEnd->setValue("end");
                                         xChildElem->setAttributeNode(xTypeEnd);
                                     }
+
+                                    aChildren.push_back(std::make_pair(xTitleChild, sNodeId));
                                 }
                                 else if (xTitleChild->getNodeName() == "property")
                                 {
@@ -21395,8 +21413,20 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
                                     if (sPropName == "homogeneous")
                                         xChild->removeChild(xTitleChild);
                                 }
+
                                 xTitleChild = xNextTitleChild;
                             }
+
+                            //sort child order within parent so that we match the platform button order
+                            std::stable_sort(aChildren.begin(), aChildren.end(), sortButtonNodes);
+
+                            for (const auto& foo : aChildren)
+                                xChild->removeChild(foo.first);
+
+                            std::reverse(aChildren.begin(), aChildren.end());
+
+                            for (const auto& foo : aChildren)
+                                xChild->appendChild(foo.first);
 
                             break;
                         }
