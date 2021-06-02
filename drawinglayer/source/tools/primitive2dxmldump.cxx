@@ -84,6 +84,47 @@ void writePolyPolygon(::tools::XmlWriter& rWriter, const basegfx::B2DPolyPolygon
     rWriter.endElement();
 }
 
+void writeLineAttribute(::tools::XmlWriter& rWriter, const drawinglayer::attribute::LineAttribute& rLineAttribute)
+{
+    rWriter.startElement("line");
+    rWriter.attribute("color", convertColorToString(rLineAttribute.getColor()));
+    rWriter.attribute("width", rLineAttribute.getWidth());
+    switch( rLineAttribute.getLineJoin() )
+    {
+        case basegfx::B2DLineJoin::NONE:
+            rWriter.attribute("linejoin", "NONE");
+        break;
+        case basegfx::B2DLineJoin::Bevel:
+            rWriter.attribute("linejoin", "Bevel");
+        break;
+        case basegfx::B2DLineJoin::Miter:
+            rWriter.attribute("linejoin", "Miter");
+        break;
+        case basegfx::B2DLineJoin::Round:
+            rWriter.attribute("linejoin", "Round");
+        break;
+        default:
+            rWriter.attribute("linejoin", "Unknown");
+        break;
+    }
+    switch( rLineAttribute.getLineCap() )
+    {
+        case css::drawing::LineCap::LineCap_BUTT:
+            rWriter.attribute("linecap", "BUTT");
+        break;
+        case css::drawing::LineCap::LineCap_ROUND:
+            rWriter.attribute("linecap", "ROUND");
+        break;
+        case css::drawing::LineCap::LineCap_SQUARE:
+            rWriter.attribute("linecap", "SQUARE");
+        break;
+        default:
+            rWriter.attribute("linecap", "Unknown");
+        break;
+    }
+    rWriter.endElement();
+}
+
 } // end anonymous namespace
 
 Primitive2dXmlDump::Primitive2dXmlDump() :
@@ -235,12 +276,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 rWriter.content(basegfx::utils::exportToSvgPoints(rPolygonStrokePrimitive2D.getB2DPolygon()));
                 rWriter.endElement();
 
-                rWriter.startElement("line");
-                const drawinglayer::attribute::LineAttribute& aLineAttribute = rPolygonStrokePrimitive2D.getLineAttribute();
-                rWriter.attribute("color", convertColorToString(aLineAttribute.getColor()));
-                rWriter.attribute("width", aLineAttribute.getWidth());
-
-                rWriter.endElement();
+                writeLineAttribute(rWriter, rPolygonStrokePrimitive2D.getLineAttribute());
 
                 rWriter.startElement("stroke");
                 const drawinglayer::attribute::StrokeAttribute& aStrokeAttribute = rPolygonStrokePrimitive2D.getStrokeAttribute();
@@ -256,13 +292,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 const PolyPolygonStrokePrimitive2D& rPolyPolygonStrokePrimitive2D = dynamic_cast<const PolyPolygonStrokePrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("polypolygonstroke");
 
-                rWriter.startElement("line");
-                const drawinglayer::attribute::LineAttribute& aLineAttribute = rPolyPolygonStrokePrimitive2D.getLineAttribute();
-                rWriter.attribute("color", convertColorToString(aLineAttribute.getColor()));
-                rWriter.attribute("width", aLineAttribute.getWidth());
-                //rWriter.attribute("linejoin", aLineAttribute.getLineJoin());
-                //rWriter.attribute("linecap", aLineAttribute.getLineCap());
-                rWriter.endElement();
+                writeLineAttribute(rWriter, rPolyPolygonStrokePrimitive2D.getLineAttribute());
 
                 //getStrokeAttribute()
 
