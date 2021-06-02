@@ -52,6 +52,7 @@
 
 #if defined LINUX && ! defined __FreeBSD_kernel__
 #include <sys/syscall.h>
+constexpr int LINUX_THREAD_NAME_MAXLEN = 15;
 #endif
 
 /****************************************************************************
@@ -562,7 +563,6 @@ void SAL_CALL osl_setThreadName(char const * name)
 {
     assert( name );
 #if defined LINUX && ! defined __FreeBSD_kernel__
-    const int LINUX_THREAD_NAME_MAXLEN = 15;
     if ( strlen( name ) > LINUX_THREAD_NAME_MAXLEN )
         SAL_INFO( "sal.osl", "osl_setThreadName truncated thread name to "
                   << LINUX_THREAD_NAME_MAXLEN << " chars from name '"
@@ -579,6 +579,31 @@ void SAL_CALL osl_setThreadName(char const * name)
     pthread_setname_np( name );
 #else
     (void) name;
+#endif
+}
+
+char * SAL_CALL osl_getThreadName()
+{
+#if defined LINUX && ! defined __FreeBSD_kernel__
+    static thread_local char name[LINUX_THREAD_NAME_MAXLEN + 1];
+    int err = pthread_getname_np( pthread_self(), name, sizeof(name) );
+    if ( 0 != err )
+    {
+        SAL_WARN("sal.osl", "pthread_getname_np failed with errno " << err);
+        return nullptr;
+    }
+    return name;
+#elif defined MACOSX || defined IOS
+    static thread_local char name[100];
+    int err = pthread_getname_np( pthread_self(), name, sizeof(name) );
+    if ( 0 != err )
+    {
+        SAL_WARN("sal.osl", "pthread_getname_np failed with errno " << err);
+        return nullptr;
+    }
+    return name;
+#else
+    return nullptr;
 #endif
 }
 

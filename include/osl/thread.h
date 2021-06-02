@@ -195,9 +195,24 @@ SAL_DLLPUBLIC void SAL_CALL osl_yieldThread(void);
     debugger is attached can be observed within the debugger.
 
     @param name  the name of the thread; must not be null; on Linux, only the
-    first 16 characters are used
+    first 15 chars are used.
 */
 SAL_DLLPUBLIC void SAL_CALL osl_setThreadName(char const * name);
+
+/** Retrieves the name set for the current thread, if any
+
+    On platforms where this works, it works even if the thread name
+    has not been set with osl_setThreadName() but using platform APIs
+    directly.
+
+    On Linux thread names are limited to 15 chars, but on other
+    platforms they might be longer.
+
+    The returned pointer is to a static thread-local buffer.
+
+    @return the thread name, or nullptr
+*/
+SAL_DLLPUBLIC char * osl_getThreadName(void);
 
 /* Callback when data stored in a thread key is no longer needed */
 

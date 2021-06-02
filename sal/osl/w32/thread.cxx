@@ -383,6 +383,12 @@ void SAL_CALL osl_setThreadName(char const * name) {
 #endif
 }
 
+// TODO: Implement
+char * SAL_CALL osl_getThreadName()
+{
+    return nullptr;
+}
+
 namespace {
 
 typedef struct TLS_
