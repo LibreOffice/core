@@ -8769,11 +8769,7 @@ weld::Button* GtkInstanceDialog::weld_widget_for_response(int nVclResponse)
     GtkButton* pButton = get_widget_for_response(VclToGtk(nVclResponse));
     if (!pButton)
         return nullptr;
-#if !GTK_CHECK_VERSION(4, 0, 0)
     return new GtkInstanceButton(pButton, m_pBuilder, false);
-#else
-    return nullptr;
-#endif
 }
 
 void GtkInstanceDialog::response(int nResponse)
@@ -8782,12 +8778,10 @@ void GtkInstanceDialog::response(int nResponse)
     //unblock this response now when activated through code
     if (GtkButton* pWidget = get_widget_for_response(nGtkResponse))
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         void* pData = g_object_get_data(G_OBJECT(pWidget), "g-lo-GtkInstanceButton");
         GtkInstanceButton* pButton = static_cast<GtkInstanceButton*>(pData);
         if (pButton)
             pButton->clear_click_handler();
-#endif
     }
     if (GTK_IS_DIALOG(m_pDialog))
         gtk_dialog_response(GTK_DIALOG(m_pDialog), nGtkResponse);
@@ -8812,9 +8806,7 @@ void GtkInstanceDialog::close(bool bCloseSignal)
             g_signal_stop_emission_by_name(m_pDialog, "close");
         // make esc (bCloseSignal == true) or window-delete (bCloseSignal == false)
         // act as if cancel button was pressed
-#if !GTK_CHECK_VERSION(4, 0, 0)
         pClickHandler->clicked();
-#endif
         return;
     }
     response(RET_CANCEL);
@@ -8827,12 +8819,10 @@ GtkInstanceButton* GtkInstanceDialog::has_click_handler(int nResponse)
     nResponse = VclToGtk(GtkToVcl(nResponse));
     if (GtkButton* pWidget = get_widget_for_response(nResponse))
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         void* pData = g_object_get_data(G_OBJECT(pWidget), "g-lo-GtkInstanceButton");
         pButton = static_cast<GtkInstanceButton*>(pData);
         if (pButton && !pButton->has_click_handler())
             pButton = nullptr;
-#endif
     }
     return pButton;
 }
