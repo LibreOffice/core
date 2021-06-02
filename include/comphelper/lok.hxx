@@ -12,6 +12,7 @@
 
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ustring.hxx>
+#include <vector>
 
 class LanguageTag;
 
@@ -108,6 +109,9 @@ COMPHELPER_DLLPUBLIC void statusIndicatorStart();
 COMPHELPER_DLLPUBLIC void statusIndicatorSetValue(int percent);
 COMPHELPER_DLLPUBLIC void statusIndicatorFinish();
 
+COMPHELPER_DLLPUBLIC void setFreemiumDenyList(const char* freemiumDenyList);
+COMPHELPER_DLLPUBLIC const std::vector<OUString>& getFreemiumDenyList();
+COMPHELPER_DLLPUBLIC bool isCommandFreemiumDenied(const OUString& command);
 }
 }
 
