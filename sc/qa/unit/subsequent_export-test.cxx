@@ -221,6 +221,7 @@ public:
     void testTdf95640_ods_to_xlsx_with_standard_list();
     void testTdf95640_xlsx_to_xlsx();
     void testDateAutofilterXLSX();
+    void testDateStandardfilterXLSX();
     void testDateAutofilterODS();
     void testAutofilterColorsODF();
     void testAutofilterColorsOOXML();
@@ -413,6 +414,7 @@ public:
     CPPUNIT_TEST(testTdf95640_ods_to_xlsx_with_standard_list);
     CPPUNIT_TEST(testTdf95640_xlsx_to_xlsx);
     CPPUNIT_TEST(testDateAutofilterXLSX);
+    CPPUNIT_TEST(testDateStandardfilterXLSX);
     CPPUNIT_TEST(testDateAutofilterODS);
     CPPUNIT_TEST(testAutofilterColorsODF);
     CPPUNIT_TEST(testAutofilterColorsOOXML);
@@ -4646,6 +4648,24 @@ void ScExportTest::testDateAutofilterXLSX()
     assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[2]", "month", "10");
     assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[2]", "year", "2014");
     assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[2]", "dateTimeGrouping", "day");
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testDateStandardfilterXLSX()
+{
+    // XLSX Roundtripping standard filter with date
+    ScDocShellRef xDocSh = loadDoc(u"tdf142607.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "//x:autoFilter", "ref", "A1:B6");
+    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "day", "03");
+    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "month", "12");
+    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "year", "2011");
+    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "dateTimeGrouping", "day");
 
     xDocSh->DoClose();
 }
