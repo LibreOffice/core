@@ -115,11 +115,14 @@ bool SwFiltersTest::filter(const OUString &rFilter, const OUString &rURL,
     if (bLoaded)
         xDocShRef->ResetError();
 
-    utl::TempFile aTempFile;
-    aTempFile.EnableKillingFile();
-    SfxMedium aDstMed(aTempFile.GetURL(), StreamMode::STD_WRITE);
-    aDstMed.SetFilter(pExportFilter);
-    bool bSaved = xDocShRef->DoSaveAs(aDstMed);
+    bool bSaved;
+    {
+        utl::TempFile aTempFile;
+        aTempFile.EnableKillingFile();
+        SfxMedium aDstMed(aTempFile.GetURL(), StreamMode::STD_WRITE);
+        aDstMed.SetFilter(pExportFilter);
+        bSaved = xDocShRef->DoSaveAs(aDstMed);
+    }
     if (xDocShRef.is())
         xDocShRef->DoClose();
     return bSaved;
