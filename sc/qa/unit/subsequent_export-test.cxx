@@ -5970,12 +5970,12 @@ void ScExportTest::testTdf139258_rotated_image()
 
 void ScExportTest::testTdf113646()
 {
-    ScDocShellRef xShell = loadDoc(u"tdf113646", FORMAT_ODS);
+    ScDocShellRef xShell = loadDoc(u"tdf113646.", FORMAT_ODS);
     CPPUNIT_ASSERT(xShell.is());
 
     auto pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
     xmlDocUniquePtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/styles.xml");
-    CPPUNIT_ASSERT(pSheet)
+    CPPUNIT_ASSERT(pSheet);
 
     assertXPath(pSheet, "/x:styleSheet/x:dxfs/x:dxf/x:font/x:sz", "val", "36");
 
