@@ -22497,11 +22497,13 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "sfx/ui/linefragment.ui" &&
         rUIFile != "sfx/ui/loadtemplatedialog.ui" &&
         rUIFile != "sfx/ui/password.ui" &&
+        rUIFile != "sfx/ui/printeroptionsdialog.ui" &&
         rUIFile != "sfx/ui/securityinfopage.ui" &&
         rUIFile != "sfx/ui/singletabdialog.ui" &&
         rUIFile != "svt/ui/addresstemplatedialog.ui" &&
         rUIFile != "svt/ui/datewindow.ui" &&
         rUIFile != "svt/ui/javadisableddialog.ui" &&
+        rUIFile != "svt/ui/printersetupdialog.ui" &&
         rUIFile != "svx/ui/accessibilitycheckdialog.ui" &&
         rUIFile != "svx/ui/accessibilitycheckentry.ui" &&
         rUIFile != "svx/ui/asianphoneticguidedialog.ui" &&
@@ -22555,10 +22557,14 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/swriter/ui/inserttable.ui" &&
         rUIFile != "modules/swriter/ui/linenumbering.ui" &&
         rUIFile != "modules/swriter/ui/newuserindexdialog.ui" &&
+        rUIFile != "modules/swriter/ui/printoptionspage.ui" &&
         rUIFile != "modules/swriter/ui/renameobjectdialog.ui" &&
         rUIFile != "modules/swriter/ui/statisticsinfopage.ui" &&
         rUIFile != "modules/swriter/ui/titlepage.ui" &&
-        rUIFile != "modules/swriter/ui/wordcount.ui")
+        rUIFile != "modules/swriter/ui/wordcount.ui" &&
+        rUIFile != "vcl/ui/printerdevicepage.ui" &&
+        rUIFile != "vcl/ui/printerpaperpage.ui" &&
+        rUIFile != "vcl/ui/printerpropertiesdialog.ui")
     {
         SAL_WARN( "vcl.gtk", rUIFile);
         return SalInstance::CreateBuilder(pParent, rUIRoot, rUIFile);
