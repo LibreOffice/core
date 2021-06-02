@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6fae139b_34d38040",
+        "filename": "sal/osl/w32/thread.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-02T10:32:20Z",
+      "side": 0,
+      "message": "Or better revert all of \u003chttps://git.libreoffice.org/core/+/6727dc5d9414e77975b9fd765993c6e207f872f3%5E!/\u003e \"sb138: #i115619# fix for MinGW\", as an unrelated change now that we no longer support building with MinGW?",
+      "revId": "4da0de52bbd9a2f53ce0e838f7b22c228e510f97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
