@@ -1809,13 +1809,11 @@ void SdrModel::WriteUserDataSequence(css::uno::Sequence < css::beans::PropertyVa
 
 const SdrPage* SdrModel::GetPage(sal_uInt16 nPgNum) const
 {
-    DBG_ASSERT(nPgNum < maPages.size(), "SdrModel::GetPage: Access out of range (!)");
     return nPgNum < maPages.size() ? maPages[nPgNum].get() : nullptr;
 }
 
 SdrPage* SdrModel::GetPage(sal_uInt16 nPgNum)
 {
-    DBG_ASSERT(nPgNum < maPages.size(), "SdrModel::GetPage: Access out of range (!)");
     return nPgNum < maPages.size() ? maPages[nPgNum].get() : nullptr;
 }
 
