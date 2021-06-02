@@ -46,6 +46,30 @@
       "revId": "1193c331945481dd155a55c6695ff6fd88bd3d10",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed8d243f_3b033955",
+        "filename": "extensions/source/ole/oleobjw.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1432,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-02T07:51:14Z",
+      "side": 0,
+      "message": "This is because the documentation you refer to is already under https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-oaut/9c5a5ce4-ff5b-45ce-b915-ada381b34ac1, which mentions two different semantics of BSTR: its memory representation (discussed in this section of documentation), and its string semantics as exposed to consumers, where BSTR is defined as:\n\n    typedef /* [wire_marshal] */ OLECHAR *BSTR;\n\nwhich is what we see ~everywhere except for low-level code, where the underlying structure is exposed. Basically, for everyone, the BSTR is analogous to rtl_uString::buffer, when for low-level access, BSTR is analogous rtl_uString itself.",
+      "parentUuid": "7b0ab6ba_8f615ebf",
+      "range": {
+        "startLine": 1432,
+        "startChar": 30,
+        "endLine": 1432,
+        "endChar": 70
+      },
+      "revId": "1193c331945481dd155a55c6695ff6fd88bd3d10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
