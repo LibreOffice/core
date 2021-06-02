@@ -53,7 +53,7 @@ namespace dbaccess
     std::unique_ptr<OPrivateColumns> OPrivateColumns::createWithIntrinsicNames( const ::rtl::Reference< ::connectivity::OSQLColumns >& _rColumns,
         bool _bCase, ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex )
     {
-        std::vector< OUString > aNames; aNames.reserve( _rColumns->size() );
+        std::vector< OUString > aNames(_rColumns->size());
 
         OUString sColumName;
         for (auto const& column : *_rColumns)
