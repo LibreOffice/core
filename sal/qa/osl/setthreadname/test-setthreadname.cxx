@@ -51,8 +51,7 @@ void TestThread::run() {
     setName("TestThread");
     if (std::getenv("URE_TEST_SETTHREADNAME") != nullptr) {
         // On Linux, the thread name can now be observed with "ps -L"; on
-        // Windows with the Microsoft compiler, the thread name can now be
-        // observed in a debugger.
+        // Windows, the thread name can now be observed in a debugger.
         std::cout << "stop: ";
         std::cin.ignore(std::numeric_limits< int >::max(), '\n');
     }
