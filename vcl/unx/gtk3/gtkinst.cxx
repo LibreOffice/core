@@ -21458,6 +21458,9 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
                                 }
                             }
 
+                            auto xUseHeaderBar = CreateProperty(xDoc, "use-header-bar", "1");
+                            SetPropertyOnTopLevel(xContentAreaCandidate, xUseHeaderBar);
+
                             break;
                         }
                         xContentAreaCandidate = xContentAreaCandidate->getParentNode();
