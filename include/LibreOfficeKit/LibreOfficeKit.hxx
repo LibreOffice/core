@@ -787,6 +787,16 @@ public:
         mpDoc->pClass->sendFormFieldEvent(mpDoc, pArguments);
     }
 
+    void setFreemiumDenyList(const char* freemiumDenyList)
+    {
+        mpDoc->pClass->setFreemiumDenyList(freemiumDenyList);
+    }
+
+    void setFreemiumView(bool isFreemium, int viewId)
+    {
+        mpDoc->pClass->setFreemiumView(isFreemium, viewId);
+    }
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
