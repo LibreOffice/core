@@ -16837,6 +16837,7 @@ private:
     static void signalEntryFocusIn(GtkEventControllerFocus*, gpointer widget)
     {
         GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
+        SolarMutexGuard aGuard;
         pThis->signal_entry_focus_in();
     }
 #else
@@ -16857,6 +16858,7 @@ private:
     static void signalEntryFocusOut(GtkEventControllerFocus*, gpointer widget)
     {
         GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
+        SolarMutexGuard aGuard;
         pThis->signal_entry_focus_out();
     }
 #else
