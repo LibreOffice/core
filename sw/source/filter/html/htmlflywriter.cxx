@@ -41,6 +41,7 @@
 #include <editeng/brushitem.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <svx/svdograf.hxx>
 
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>
@@ -1747,15 +1748,27 @@ static Writer & OutHTML_FrameFormatAsImage( Writer& rWrt, const SwFrameFormat& r
     Graphic aGraphic( const_cast<SwFrameFormat &>(rFrameFormat).MakeGraphic( &aIMap ) );
     Size aSz( 0, 0 );
     OUString GraphicURL;
+    OUString aMimeType("image/jpeg");
     if(!rHTMLWrt.mbEmbedImages)
     {
         if( rHTMLWrt.GetOrigFileName() )
             GraphicURL = *rHTMLWrt.GetOrigFileName();
+
+        OUString aFilterName("JPG");
+        XOutFlags nFlags = XOutFlags::UseGifIfPossible | XOutFlags::UseNativeIfPossible;
+
+        if (rHTMLWrt.mbReqIF)
+        {
+            // Writing image without fallback PNG in ReqIF mode: force PNG output.
+            aFilterName = "PNG";
+            nFlags = XOutFlags::NONE;
+            aMimeType = "image/png";
+        }
+
         if( aGraphic.GetType() == GraphicType::NONE ||
             XOutBitmap::WriteGraphic( aGraphic, GraphicURL,
-                                      "JPG",
-                                      (XOutFlags::UseGifIfPossible|
-                                       XOutFlags::UseNativeIfPossible) ) != ERRCODE_NONE )
+                                      aFilterName,
+                                      nFlags ) != ERRCODE_NONE )
         {
             // empty or incorrect, because there is nothing to output
             rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD;
@@ -1767,10 +1780,11 @@ static Writer & OutHTML_FrameFormatAsImage( Writer& rWrt, const SwFrameFormat& r
             URIHelper::GetMaybeFileHdl() );
 
     }
+
     HtmlWriter aHtml(rWrt.Strm(), rHTMLWrt.maNamespace);
     OutHTML_ImageStart( aHtml, rWrt, rFrameFormat, GraphicURL, aGraphic, rFrameFormat.GetName(), aSz,
                     HtmlFrmOpts::GenImgMask, "frame",
-                    aIMap.GetIMapObjectCount() ? &aIMap : nullptr );
+                    aIMap.GetIMapObjectCount() ? &aIMap : nullptr, aMimeType );
     OutHTML_ImageEnd(aHtml, rWrt);
 
     return rWrt;
