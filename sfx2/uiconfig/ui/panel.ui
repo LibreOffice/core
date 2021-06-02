@@ -31,7 +31,6 @@
             <property name="can-focus">True</property>
             <property name="valign">center</property>
             <property name="hexpand">True</property>
-            <property name="label-fill">True</property>
             <child>
               <object class="GtkBox">
                 <property name="visible">True</property>

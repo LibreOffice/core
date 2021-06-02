@@ -20989,12 +20989,6 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
                     xRemoveList.push_back(xChild);
             }
 
-            if (sName == "label-fill")
-            {
-                if (GetParentObjectType(xChild) == "GtkExpander")
-                    xRemoveList.push_back(xChild);
-            }
-
             // remove 'Help' button label and replace with a help icon instead
             if (sName == "label" && GetParentObjectType(xChild) == "GtkButton")
             {

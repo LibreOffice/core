@@ -207,6 +207,21 @@ def remove_track_visited_links(current):
   if track_visited_links != None:
     current.remove(track_visited_links)
 
+def remove_label_fill(current):
+  label_fill = None
+  isexpander = current.get('class') == "GtkExpander"
+  for child in current:
+    remove_label_fill(child)
+    if not isexpander:
+        continue
+    if child.tag == "property":
+      attributes = child.attrib
+      if attributes.get("name") == "label_fill" or attributes.get("name") == "label-fill":
+        label_fill = child
+
+  if label_fill != None:
+    current.remove(label_fill)
+
 with open(sys.argv[1], encoding="utf-8") as f:
   header = f.readline()
   f.seek(0)
@@ -228,6 +243,7 @@ replace_button_use_stock(root)
 replace_image_stock(root)
 remove_check_button_align(root)
 remove_track_visited_links(root)
+remove_label_fill(root)
 
 with open(sys.argv[1], 'wb') as o:
   # without encoding='unicode' (and the matching encode("utf8")) we get &#XXXX replacements for non-ascii characters
