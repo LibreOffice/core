@@ -229,16 +229,16 @@ void LwpIndexManager::ReadObjIndex( LwpSvStream *pStrm )
 
     LwpObjectHeader ObjHdr;
     ObjHdr.Read(*pStrm);
-    std::unique_ptr<LwpObjectStream> pObjStrm( new LwpObjectStream(pStrm, ObjHdr.IsCompressed(),
-            static_cast<sal_uInt16>(ObjHdr.GetSize()) ) );
+    LwpObjectStream aObjStrm(pStrm, ObjHdr.IsCompressed(),
+            static_cast<sal_uInt16>(ObjHdr.GetSize()) );
 
     if( sal_uInt32(VO_OBJINDEX) == ObjHdr.GetTag() )
     {
-        ReadObjIndexData( pObjStrm.get() );
+        ReadObjIndexData( &aObjStrm );
     }
     else if( sal_uInt32(VO_LEAFOBJINDEX) == ObjHdr.GetTag() )
     {
-        ReadLeafData( pObjStrm.get() );
+        ReadLeafData( &aObjStrm );
     }
 }
 
@@ -249,10 +249,10 @@ void LwpIndexManager::ReadLeafIndex( LwpSvStream *pStrm )
 {
     LwpObjectHeader ObjHdr;
     ObjHdr.Read(*pStrm);
-    std::unique_ptr<LwpObjectStream> pObjStrm( new LwpObjectStream(pStrm, ObjHdr.IsCompressed(),
-            static_cast<sal_uInt16>(ObjHdr.GetSize()) ) );
+    LwpObjectStream aObjStrm( pStrm, ObjHdr.IsCompressed(),
+            static_cast<sal_uInt16>(ObjHdr.GetSize()) );
 
-    ReadLeafData(pObjStrm.get());
+    ReadLeafData(&aObjStrm);
 }
 /**
  * @descr   Read data in VO_LEAFOBJINDEX
