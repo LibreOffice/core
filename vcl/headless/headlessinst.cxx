@@ -82,6 +82,7 @@ SalData::SalData() :
 
 SalData::~SalData()
 {
+    assert(false);
 }
 
 // This is our main entry point:
