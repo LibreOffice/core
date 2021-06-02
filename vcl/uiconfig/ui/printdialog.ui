@@ -181,41 +181,25 @@
                   <object class="GtkBox" id="box3">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
+                    <property name="hexpand">True</property>
                     <child>
-                      <object class="GtkBox" id="box14">
+                      <object class="GtkBox" id="box10">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="spacing">6</property>
+                        <property name="halign">start</property>
+                        <property name="spacing">3</property>
                         <child>
-                          <object class="GtkButton" id="btnLast">
+                          <object class="GtkCheckButton" id="previewbox">
+                            <property name="label" translatable="yes" context="printdialog|previewbox">Pre_view</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
-                            <property name="receives-default">True</property>
-                            <property name="tooltip-text" translatable="yes" context="printdialog|lastpage">Last page</property>
-                            <property name="image">imgLast</property>
+                            <property name="receives-default">False</property>
+                            <property name="use-underline">True</property>
+                            <property name="active">True</property>
+                            <property name="draw-indicator">True</property>
                             <child internal-child="accessible">
-                              <object class="AtkObject" id="btnLast-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|btnLast">Shows preview of the last page.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="pack-type">end</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="forward">
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">True</property>
-                            <property name="tooltip-text" translatable="yes" context="printdialog|forward">Next page</property>
-                            <property name="image">imgForward</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="forward-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|forward">Shows preview of the next page.</property>
+                              <object class="AtkObject" id="previewbox-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|previewbox">Turn on or off display of the print preview.</property>
                               </object>
                             </child>
                           </object>
@@ -223,40 +207,40 @@
                             <property name="expand">False</property>
                             <property name="fill">False</property>
                             <property name="pack-type">end</property>
-                            <property name="position">1</property>
+                            <property name="position">0</property>
                           </packing>
                         </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="box14">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">end</property>
+                        <property name="hexpand">True</property>
+                        <property name="spacing">6</property>
                         <child>
-                          <object class="GtkLabel" id="totalnumpages">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="label" translatable="yes" context="printdialog|totalnumpages">/ %n</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="pack-type">end</property>
-                            <property name="position">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkEntry" id="pageedit">
+                          <object class="GtkButton" id="btnFirst">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
-                            <property name="width-chars">3</property>
-                            <property name="text">1</property>
-                            <property name="truncate-multiline">True</property>
+                            <property name="receives-default">True</property>
+                            <property name="tooltip-text" translatable="yes" context="printdialog|firstpage">First page</property>
+                            <property name="image">imgFirst</property>
                             <child internal-child="accessible">
-                              <object class="AtkObject" id="pageedit-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|pageedit">Enter the number of page to be shown in the preview.</property>
+                              <object class="AtkObject" id="btnFirst-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|btnFirst">Shows preview of the first page.</property>
                               </object>
                             </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="pack-type">end</property>
-                            <property name="position">3</property>
+                            <property name="fill">False</property>
+                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
@@ -275,27 +259,75 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
-                            <property name="pack-type">end</property>
-                            <property name="position">4</property>
+                            <property name="position">1</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkButton" id="btnFirst">
+                          <object class="GtkEntry" id="pageedit">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
-                            <property name="receives-default">True</property>
-                            <property name="tooltip-text" translatable="yes" context="printdialog|firstpage">First page</property>
-                            <property name="image">imgFirst</property>
+                            <property name="width-chars">3</property>
+                            <property name="text">1</property>
+                            <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
-                              <object class="AtkObject" id="btnFirst-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|btnFirst">Shows preview of the first page.</property>
+                              <object class="AtkObject" id="pageedit-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|pageedit">Enter the number of page to be shown in the preview.</property>
                               </object>
                             </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
-                            <property name="pack-type">end</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="totalnumpages">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="label" translatable="yes" context="printdialog|totalnumpages">/ %n</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="forward">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
+                            <property name="tooltip-text" translatable="yes" context="printdialog|forward">Next page</property>
+                            <property name="image">imgForward</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="forward-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|forward">Shows preview of the next page.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">4</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="btnLast">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
+                            <property name="tooltip-text" translatable="yes" context="printdialog|lastpage">Last page</property>
+                            <property name="image">imgLast</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="btnLast-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|btnLast">Shows preview of the last page.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
                             <property name="position">5</property>
                           </packing>
                         </child>
@@ -304,48 +336,13 @@
                         <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="pack-type">end</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkBox" id="box10">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="spacing">3</property>
-                        <child>
-                          <object class="GtkCheckButton" id="previewbox">
-                            <property name="label" translatable="yes" context="printdialog|previewbox">Pre_view</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">False</property>
-                            <property name="halign">center</property>
-                            <property name="use-underline">True</property>
-                            <property name="active">True</property>
-                            <property name="draw-indicator">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="previewbox-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|previewbox">Turn on or off display of the print preview.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="pack-type">end</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">4</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="fill">True</property>
+                    <property name="fill">False</property>
                     <property name="pack-type">end</property>
                     <property name="position">1</property>
                   </packing>
