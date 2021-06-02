@@ -52,6 +52,7 @@
 #include <debugevent.hxx>
 #include <scrwnd.hxx>
 #include <windowdev.hxx>
+#include <saldatabasic.hxx>
 
 #ifdef _WIN32
 #include <svsys.h>
@@ -594,6 +595,12 @@ void DeInitVCL()
         DestroySalInstance( pSVData->mpDefInst );
         pSVData->mpDefInst = nullptr;
     }
+
+    // This only works on Linux. On Mac and Windows I get very
+    // weird segment violations.
+#if defined LINUX
+    delete pSVData->mpSalData;
+#endif
 
     if( pOwnSvApp )
     {
