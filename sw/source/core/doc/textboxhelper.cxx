@@ -546,7 +546,7 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, std::u16string_view rP
             syncProperty(pShape, RES_FRAMEDIR, 0, uno::makeAny(eMode2));
     }
     else
-        SAL_WARN("sw.core", "SwTextBoxHelper::syncProperty: unhandled property: "
+        SAL_INFO("sw.core", "SwTextBoxHelper::syncProperty: unhandled property: "
                                 << static_cast<OUString>(rPropertyName));
 }
 
