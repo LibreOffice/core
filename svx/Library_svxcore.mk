@@ -83,7 +83,6 @@ $(eval $(call gb_Library_use_externals,svxcore,\
 	icuuc \
 	icu_headers \
 	libxml2 \
-	$(if $(filter PDFIUM,$(BUILD_TYPE)),pdfium) \
 ))
 ifeq ($(DISABLE_GUI),)
 $(eval $(call gb_Library_use_externals,svxcore,\
