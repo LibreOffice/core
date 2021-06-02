@@ -135,7 +135,7 @@ static Writer& OutHTML_FrameFormatAsMulticol( Writer& rWrt, const SwFrameFormat&
 static Writer& OutHTML_FrameFormatAsSpacer( Writer& rWrt, const SwFrameFormat& rFormat );
 static Writer& OutHTML_FrameFormatAsDivOrSpan( Writer& rWrt,
                                           const SwFrameFormat& rFrameFormat, bool bSpan );
-static Writer& OutHTML_FrameFormatAsImage( Writer& rWrt, const SwFrameFormat& rFormat );
+static Writer& OutHTML_FrameFormatAsImage( Writer& rWrt, const SwFrameFormat& rFormat, bool bPNGFallback );
 
 static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rFormat,
                                       bool bInCntnr, bool bPNGFallback );
@@ -502,7 +502,7 @@ void SwHTMLWriter::OutFrameFormat( AllHtmlFlags nMode, const SwFrameFormat& rFra
                     static_cast<const SwDrawFrameFormat &>(rFrameFormat), *pSdrObject );
         break;
     case HtmlOut::GraphicFrame:
-        OutHTML_FrameFormatAsImage( *this, rFrameFormat );
+        OutHTML_FrameFormatAsImage( *this, rFrameFormat, /*bPNGFallback=*/true );
         break;
     }
 
@@ -1737,7 +1737,7 @@ static Writer& OutHTML_FrameFormatAsDivOrSpan( Writer& rWrt,
     return rWrt;
 }
 
-static Writer & OutHTML_FrameFormatAsImage( Writer& rWrt, const SwFrameFormat& rFrameFormat )
+static Writer & OutHTML_FrameFormatAsImage( Writer& rWrt, const SwFrameFormat& rFrameFormat, bool bPNGFallback)
 {
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
@@ -1746,6 +1746,16 @@ static Writer & OutHTML_FrameFormatAsImage( Writer& rWrt, const SwFrameFormat& r
 
     ImageMap aIMap;
     Graphic aGraphic( const_cast<SwFrameFormat &>(rFrameFormat).MakeGraphic( &aIMap ) );
+
+    if (rHTMLWrt.mbReqIF)
+    {
+        // ImageMap doesn't seem to be allowed in reqif.
+        if (auto pGrafObj = dynamic_cast<const SdrGrafObj*>(rFrameFormat.FindSdrObject()))
+        {
+            aGraphic = pGrafObj->GetGraphic();
+        }
+    }
+
     Size aSz( 0, 0 );
     OUString GraphicURL;
     OUString aMimeType("image/jpeg");
@@ -1757,12 +1767,18 @@ static Writer & OutHTML_FrameFormatAsImage( Writer& rWrt, const SwFrameFormat& r
         OUString aFilterName("JPG");
         XOutFlags nFlags = XOutFlags::UseGifIfPossible | XOutFlags::UseNativeIfPossible;
 
-        if (rHTMLWrt.mbReqIF)
+        if (rHTMLWrt.mbReqIF && !bPNGFallback)
         {
             // Writing image without fallback PNG in ReqIF mode: force PNG output.
             aFilterName = "PNG";
             nFlags = XOutFlags::NONE;
             aMimeType = "image/png";
+        }
+        else if (rHTMLWrt.mbReqIF)
+        {
+            // Original format is wanted, don't force JPG.
+            aFilterName.clear();
+            aMimeType.clear();
         }
 
         if( aGraphic.GetType() == GraphicType::NONE ||
@@ -1780,11 +1796,21 @@ static Writer & OutHTML_FrameFormatAsImage( Writer& rWrt, const SwFrameFormat& r
             URIHelper::GetMaybeFileHdl() );
 
     }
+    uno::Reference<beans::XPropertySet> xGraphic(aGraphic.GetXGraphic(), uno::UNO_QUERY);
+    if (xGraphic.is() && aMimeType.isEmpty())
+        xGraphic->getPropertyValue("MimeType") >>= aMimeType;
 
     HtmlWriter aHtml(rWrt.Strm(), rHTMLWrt.maNamespace);
     OutHTML_ImageStart( aHtml, rWrt, rFrameFormat, GraphicURL, aGraphic, rFrameFormat.GetName(), aSz,
                     HtmlFrmOpts::GenImgMask, "frame",
                     aIMap.GetIMapObjectCount() ? &aIMap : nullptr, aMimeType );
+
+    GfxLink aLink = aGraphic.GetGfxLink();
+    if (bPNGFallback && aLink.GetType() != GfxLinkType::NativePng)
+    {
+        OutHTML_FrameFormatAsImage( rWrt, rFrameFormat, /*bPNGFallback=*/false);
+    }
+
     OutHTML_ImageEnd(aHtml, rWrt);
 
     return rWrt;
