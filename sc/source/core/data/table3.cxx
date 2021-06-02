@@ -3056,7 +3056,7 @@ public:
         if (rItem.meType != ScQueryEntry::ByString && rItem.meType != ScQueryEntry::ByDate)
             return;
 
-        if (rItem.mbFormattedValue)
+        if (rItem.mbFormattedValue && rItem.meType == ScQueryEntry::ByString)
             return;
 
         sal_uInt32 nIndex = 0;

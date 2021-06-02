@@ -4630,24 +4630,42 @@ void ScExportTest::testTdf95640_xlsx_to_xlsx()
 void ScExportTest::testDateAutofilterXLSX()
 {
     // XLSX Roundtripping autofilter with date list
-    ScDocShellRef xDocSh = loadDoc(u"dateAutofilter.", FORMAT_XLSX);
-    CPPUNIT_ASSERT(xDocSh.is());
+    {
+        ScDocShellRef xDocSh = loadDoc(u"dateAutofilter.", FORMAT_XLSX);
+        CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
-    CPPUNIT_ASSERT(pDoc);
+        xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+        CPPUNIT_ASSERT(pDoc);
 
-    assertXPath(pDoc, "//x:autoFilter", "ref", "A1:B4");
-    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "day", "02");
-    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "month", "03");
-    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "year", "2017");
-    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "dateTimeGrouping", "day");
+        assertXPath(pDoc, "//x:autoFilter", "ref", "A1:B4");
+        assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "day", "02");
+        assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "month", "03");
+        assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "year", "2017");
+        assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "dateTimeGrouping", "day");
 
-    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[2]", "day", "01");
-    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[2]", "month", "10");
-    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[2]", "year", "2014");
-    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[2]", "dateTimeGrouping", "day");
+        assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[2]", "day", "01");
+        assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[2]", "month", "10");
+        assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[2]", "year", "2014");
+        assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[2]", "dateTimeGrouping", "day");
 
-    xDocSh->DoClose();
+        xDocSh->DoClose();
+    }
+    // XLSX Roundtripping standard filter with date
+    {
+        ScDocShellRef xDocSh = loadDoc(u"tdf142607.", FORMAT_ODS);
+        CPPUNIT_ASSERT(xDocSh.is());
+
+        xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+        CPPUNIT_ASSERT(pDoc);
+
+        assertXPath(pDoc, "//x:autoFilter", "ref", "A1:B6");
+        assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "day", "03");
+        assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "month", "12");
+        assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "year", "2011");
+        assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "dateTimeGrouping", "day");
+
+        xDocSh->DoClose();
+    }
 }
 
 void ScExportTest::testDateAutofilterODS()

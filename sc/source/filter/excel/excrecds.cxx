@@ -702,8 +702,6 @@ bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
         }
     }
 
-    bool bLen = sText.getLength() > 0;
-
     // empty/nonempty fields
     if (rEntry.IsQueryByEmpty())
     {
@@ -719,13 +717,6 @@ bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
     // other conditions
     else
     {
-        double  fVal    = 0.0;
-        sal_uInt32  nIndex  = 0;
-        bool bIsNum  = !bLen || GetFormatter().IsNumberFormat( sText, nIndex, fVal );
-        OUString* pText = nullptr;
-        if (!bIsNum)
-            pText = &sText;
-
         // top10 flags
         sal_uInt16 nNewFlags = 0x0000;
         switch( rEntry.eOp )
@@ -749,21 +740,31 @@ bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
         bConflict = HasTop10() && bNewTop10;
         if( !bConflict )
         {
+            double  fVal = 0.0;
             if( bNewTop10 )
             {
-                if( fVal < 0 )      fVal = 0;
-                if( fVal >= 501 )   fVal = 500;
+                sal_uInt32  nIndex = 0;
+                if (GetFormatter().IsNumberFormat(sText, nIndex, fVal))
+                {
+                    if (fVal < 0)      fVal = 0;
+                    if (fVal >= 501)   fVal = 500;
+                }
                 nFlags |= (nNewFlags | static_cast<sal_uInt16>(fVal) << 7);
             }
             // normal condition
             else
             {
-                sal_uInt8 nType = bIsNum ? EXC_AFTYPE_DOUBLE : EXC_AFTYPE_STRING;
+                if (rEntry.eOp == SC_EQUAL)
+                {
+                    AddMultiValueEntry(rEntry);
+                    return false;
+                }
+
+                sal_uInt8 nType = EXC_AFTYPE_STRING;
                 sal_uInt8 nOper = EXC_AFOPER_NONE;
 
                 switch( rEntry.eOp )
                 {
-                    case SC_EQUAL:          nOper = EXC_AFOPER_EQUAL;           break;
                     case SC_LESS:           nOper = EXC_AFOPER_LESS;            break;
                     case SC_GREATER:        nOper = EXC_AFOPER_GREATER;         break;
                     case SC_LESS_EQUAL:     nOper = EXC_AFOPER_LESSEQUAL;       break;
@@ -779,7 +780,7 @@ bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
                                             nOper = EXC_AFOPER_NOTEQUAL;        break;
                     default:;
                 }
-                bConflict = !AddCondition( rEntry.eConnect, nType, nOper, fVal, pText );
+                bConflict = !AddCondition( rEntry.eConnect, nType, nOper, fVal, &sText);
             }
         }
     }
