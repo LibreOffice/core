@@ -20989,6 +20989,19 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
                     xRemoveList.push_back(xChild);
             }
 
+            if (sName == "width-chars")
+            {
+                if (GetParentObjectType(xChild) == "GtkEntry")
+                {
+                    // I don't quite get what the difference should be wrt width-chars and max-width-chars
+                    // but glade doesn't write max-width-chars and in gtk4 where we have width-chars, e.g
+                    // print dialog, then max-width-chars gives the effect we wanted with width-chars
+                    auto xDoc = xChild->getOwnerDocument();
+                    auto mMaxWidthChars = CreateProperty(xDoc, "max-width-chars", xChild->getFirstChild()->getNodeValue());
+                    xChild->getParentNode()->insertBefore(mMaxWidthChars, xChild);
+                }
+            }
+
             // remove 'Help' button label and replace with a help icon instead
             if (sName == "label" && GetParentObjectType(xChild) == "GtkButton")
             {
