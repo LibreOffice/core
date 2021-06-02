@@ -94,6 +94,30 @@
       "revId": "1193c331945481dd155a55c6695ff6fd88bd3d10",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2d04605_1274a507",
+        "filename": "extensions/source/ole/oleobjw.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1432,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-02T08:00:08Z",
+      "side": 0,
+      "message": "So SysStringLen receives an OLECHAR*p and grabs the length from somewhere else (at a well-known negative offset of p, say)?",
+      "parentUuid": "1a6984a7_a5c99ab4",
+      "range": {
+        "startLine": 1432,
+        "startChar": 30,
+        "endLine": 1432,
+        "endChar": 70
+      },
+      "revId": "1193c331945481dd155a55c6695ff6fd88bd3d10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
