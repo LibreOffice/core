@@ -20985,6 +20985,12 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
                     xRemoveList.push_back(xChild);
             }
 
+            if (sName == "label-fill")
+            {
+                if (GetParentObjectType(xChild) == "GtkExpander")
+                    xRemoveList.push_back(xChild);
+            }
+
             // remove 'Help' button label and replace with a help icon instead
             if (sName == "label" && GetParentObjectType(xChild) == "GtkButton")
             {
@@ -22481,6 +22487,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "svt/ui/javadisableddialog.ui" &&
         rUIFile != "svx/ui/accessibilitycheckdialog.ui" &&
         rUIFile != "svx/ui/accessibilitycheckentry.ui" &&
+        rUIFile != "svx/ui/findreplacedialog.ui" &&
         rUIFile != "svx/ui/fontworkgallerydialog.ui" &&
         rUIFile != "modules/BasicIDE/ui/basicmacrodialog.ui" &&
         rUIFile != "modules/BasicIDE/ui/dialogpage.ui" &&
