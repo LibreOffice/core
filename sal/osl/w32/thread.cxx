@@ -358,25 +358,43 @@ void SAL_CALL osl_yieldThread(void)
     Sleep(0);
 }
 
+static void impSetThreadDescription(char const * name) {
+    // SetThreadDescription is only available since Windows 10 version 1607
+    typedef HRESULT(WINAPI * TSetThreadDescription)(HANDLE, PCWSTR);
+    static const auto pSetThreadDescription = reinterpret_cast<TSetThreadDescription>(
+        GetProcAddress(GetModuleHandleA("KernelBase.dll"), "SetThreadDescription"));
+    if (pSetThreadDescription)
+    {
+        if (const int nReqCCh = MultiByteToWideChar(CP_ACP, 0, name, -1, nullptr, 0))
+        {
+            if (PWSTR wStr = static_cast<PWSTR>(malloc(nReqCCh * sizeof(WCHAR))))
+            {
+                if (MultiByteToWideChar(CP_ACP, 0, name, -1, wStr, nReqCCh))
+                    pSetThreadDescription(GetCurrentThread(), wStr);
+                free(wStr);
+            }
+        }
+    }
+}
+
 void SAL_CALL osl_setThreadName(char const * name) {
-    /* See <http://msdn.microsoft.com/en-us/library/xcb2z8hs.aspx>: */
+    /* See < https://docs.microsoft.com/en-us/visualstudio/debugger/how-to-set-a-thread-name-in-native-code >: */
 #pragma pack(push, 8)
     struct {
-        DWORD dwType;
+        DWORD dwType = 0x1000;
         LPCSTR szName;
-        DWORD dwThreadID;
-        DWORD dwFlags;
+        DWORD dwThreadID = DWORD(-1);
+        DWORD dwFlags = 0;
     } info;
 #pragma pack(pop)
-    info.dwType = 0x1000;
     info.szName = name;
-    info.dwThreadID = DWORD(-1);
-    info.dwFlags = 0;
     __try {
         RaiseException(
             0x406D1388, 0, sizeof info / sizeof (ULONG_PTR),
             reinterpret_cast<ULONG_PTR *>(&info));
     } __except (EXCEPTION_EXECUTE_HANDLER) {}
+
+    impSetThreadDescription(name);
 }
 
 namespace {
