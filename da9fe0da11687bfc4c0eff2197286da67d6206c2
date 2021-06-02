@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "db6047d4_d4dd38d9",
+        "filename": "dbaccess/source/core/api/HelperCollections.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-02T21:34:00Z",
+      "side": 1,
+      "message": "But now you have a vector of 2*_rColumns-\u003esize() elements, first half empty strings, the other half appended to the end. Initializing vector with _rColumns-\u003esize() empty elements is more expensive than creating an empty vector, then allocating memory without initializing (vector is *still empty!*), then appending elements (and using emplace_back instead of push_back could be even more efficient)",
+      "revId": "da9fe0da11687bfc4c0eff2197286da67d6206c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
