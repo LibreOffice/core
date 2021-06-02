@@ -239,7 +239,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
         }
 
         if ( !CheckPackageSignature_Impl( xInputStream, xSeekable ) )
-            throw io::IOException(); // TODO: this is not a package file
+            throw io::IOException("package signature check failed, probably not a package file", nullptr); // TODO: this is not a package file
 
         return static_cast<OWeakObject*>(
             new OStorage(xInputStream, nStorageMode, aPropsToSet, m_xContext, nStorageType));
