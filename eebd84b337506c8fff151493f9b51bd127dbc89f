@@ -22,6 +22,30 @@
       "revId": "eebd84b337506c8fff151493f9b51bd127dbc89f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bbabe2ca_8952358d",
+        "filename": "basic/source/runtime/dllmgr-x64.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-02T07:37:17Z",
+      "side": 1,
+      "message": "Ah, indeed, thanks for spotting.  (I must have naively assumed that it would be a char*.)  Will fix.",
+      "parentUuid": "0e3f98cd_84422ea0",
+      "range": {
+        "startLine": 500,
+        "startChar": 22,
+        "endLine": 500,
+        "endChar": 38
+      },
+      "revId": "eebd84b337506c8fff151493f9b51bd127dbc89f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }

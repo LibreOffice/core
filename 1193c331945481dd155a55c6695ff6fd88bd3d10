@@ -22,6 +22,30 @@
       "revId": "1193c331945481dd155a55c6695ff6fd88bd3d10",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b0ab6ba_8f615ebf",
+        "filename": "extensions/source/ole/oleobjw.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1432,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-02T07:37:17Z",
+      "side": 0,
+      "message": "Now that I look at this again I\u0027m puzzled:  So excepinfo is of type ExcepInfo (extensions/source/ole/windata.hxx), which is derived from EXCEPINFO (\u003chttps://docs.microsoft.com/en-us/windows/win32/api/oaidl/ns-oaidl-excepinfo\u003e), whose member bstrDescription is of type BSTR (\u003chttps://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-oaut/1c9d2cfc-cf7d-4f4b-95bf-584be5defd81\u003e), which is a typedef for FLAGGED_WORD_BLOB* (\u003chttps://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-oaut/f547135a-d76a-42c3-916f-30b4e46d79bc\u003e).  So how does the above\n\n  o3tl::toU(excepinfo.bstrDescription)\n\ncompile, seemingly converting a BSTR aka FLAGGED_WORD_BLOB* to a wchar_t*?",
+      "parentUuid": "e8e3e64c_725ac386",
+      "range": {
+        "startLine": 1432,
+        "startChar": 30,
+        "endLine": 1432,
+        "endChar": 70
+      },
+      "revId": "1193c331945481dd155a55c6695ff6fd88bd3d10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
