@@ -22457,6 +22457,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/percentdialog.ui" &&
         rUIFile != "cui/ui/scriptorganizer.ui" &&
         rUIFile != "cui/ui/signatureline.ui" &&
+        rUIFile != "cui/ui/thesaurus.ui" &&
         rUIFile != "cui/ui/tipofthedaydialog.ui" &&
         rUIFile != "cui/ui/wordcompletionpage.ui" &&
         rUIFile != "filter/ui/testxmlfilter.ui" &&
@@ -22478,6 +22479,8 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "svt/ui/addresstemplatedialog.ui" &&
         rUIFile != "svt/ui/datewindow.ui" &&
         rUIFile != "svt/ui/javadisableddialog.ui" &&
+        rUIFile != "svx/ui/accessibilitycheckdialog.ui" &&
+        rUIFile != "svx/ui/accessibilitycheckentry.ui" &&
         rUIFile != "svx/ui/fontworkgallerydialog.ui" &&
         rUIFile != "modules/BasicIDE/ui/basicmacrodialog.ui" &&
         rUIFile != "modules/BasicIDE/ui/dialogpage.ui" &&
