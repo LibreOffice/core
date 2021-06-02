@@ -3018,8 +3018,9 @@ public:
     {
         if (rItem.meType != ScQueryEntry::ByString && rItem.meType != ScQueryEntry::ByDate)
             return;
-
-        if (rItem.mbFormattedValue)
+        // return only if the type is ByString and the values are formatted, in other cases
+        // we have to optimize the filter in CanOptimizeQueryStringToNumber().
+        if (rItem.mbFormattedValue && rItem.meType == ScQueryEntry::ByString)
             return;
 
         sal_uInt32 nIndex = 0;
