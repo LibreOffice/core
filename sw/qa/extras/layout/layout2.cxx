@@ -412,7 +412,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf131707)
     assertXPath(pXmlDoc, "//body/tab/row[3]/cell[2]/txt/anchored/fly/infos/bounds", "top", "2185");
 }
 
-#if HAVE_MORE_FONTS
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf122225)
 {
     SwDoc* pDoc = createDoc("tdf122225.docx");
@@ -424,12 +423,19 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf122225)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPathContent(pXmlDoc,
-                       "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[8]/text",
-                       "Advanced Diploma");
+    // Bug 122225 - FILEOPEN DOCX Textbox of Column chart legend reduces and text of legend disappears
+    const sal_Int32 nLegendLabelLines
+        = getXPathContent(pXmlDoc, "count(//text[contains(text(),\"Advanced Diploma\")])")
+              .toInt32();
     // This failed, if the legend label is not "Advanced Diploma".
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nLegendLabelLines);
+
+    // Bug 140623 - Fileopen DOCX: Text Orientation of X-Axis 0 instead of 45 degrees
+    const sal_Int32 nThirdLabelLines
+        = getXPathContent(pXmlDoc, "count(//text[contains(text(),\"Hispanic\")])").toInt32();
+    // This failed, if the third X axis label broke to multiple lines.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nThirdLabelLines);
 }
-#endif
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf125335)
 {
