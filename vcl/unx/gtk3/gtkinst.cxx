@@ -22461,10 +22461,13 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/insertfloatingframe.ui" &&
         rUIFile != "cui/ui/objectnamedialog.ui" &&
         rUIFile != "cui/ui/objecttitledescdialog.ui" &&
+        rUIFile != "cui/ui/optjsearchpage.ui" &&
         rUIFile != "cui/ui/pastespecial.ui" &&
         rUIFile != "cui/ui/percentdialog.ui" &&
         rUIFile != "cui/ui/scriptorganizer.ui" &&
+        rUIFile != "cui/ui/searchattrdialog.ui" &&
         rUIFile != "cui/ui/signatureline.ui" &&
+        rUIFile != "cui/ui/similaritysearchdialog.ui" &&
         rUIFile != "cui/ui/thesaurus.ui" &&
         rUIFile != "cui/ui/tipofthedaydialog.ui" &&
         rUIFile != "cui/ui/wordcompletionpage.ui" &&
@@ -22484,6 +22487,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "sfx/ui/loadtemplatedialog.ui" &&
         rUIFile != "sfx/ui/password.ui" &&
         rUIFile != "sfx/ui/securityinfopage.ui" &&
+        rUIFile != "sfx/ui/singletabdialog.ui" &&
         rUIFile != "svt/ui/addresstemplatedialog.ui" &&
         rUIFile != "svt/ui/datewindow.ui" &&
         rUIFile != "svt/ui/javadisableddialog.ui" &&
