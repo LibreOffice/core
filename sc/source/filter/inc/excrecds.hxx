@@ -338,7 +338,6 @@ class ExcFilterCondition
 private:
     sal_uInt8               nType;
     sal_uInt8               nOper;
-    double                  fVal;
     std::unique_ptr<XclExpString>
                             pText;
 
@@ -350,7 +349,7 @@ public:
     bool             IsEmpty() const     { return (nType == EXC_AFTYPE_NOTUSED); }
     std::size_t             GetTextBytes() const;
 
-    void                    SetCondition( sal_uInt8 nTp, sal_uInt8 nOp, double fV, const OUString* pT );
+    void                    SetCondition( sal_uInt8 nTp, sal_uInt8 nOp, const OUString* pT );
 
     void                    Save( XclExpStream& rStrm );
     void                    SaveXml( XclExpXmlStream& rStrm );
@@ -376,8 +375,7 @@ private:
     std::vector<std::pair<::Color, bool>> maColorValues; // first->Color, second->bIsBackgroundColor (vs. TextColor)
 
     bool                    AddCondition( ScQueryConnect eConn, sal_uInt8 nType,
-                                sal_uInt8 nOp, double fVal, const OUString* pText,
-                                bool bSimple = false );
+                                sal_uInt8 nOp, const OUString* pText, bool bSimple = false );
 
     virtual void            WriteBody( XclExpStream& rStrm ) override;
 
