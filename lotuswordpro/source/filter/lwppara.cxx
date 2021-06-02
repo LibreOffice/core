@@ -136,9 +136,9 @@ void LwpPara::Read()
         {
             if (Notify)
             {
-                std::unique_ptr<LwpForked3NotifyList> pNotifyList( new LwpForked3NotifyList );
-                pNotifyList->GetExtraList().Read(m_pObjStrm.get());
-                pNotifyList->Read(m_pObjStrm.get());
+                LwpForked3NotifyList aNotifyList;
+                aNotifyList.GetExtraList().Read(m_pObjStrm.get());
+                aNotifyList.Read(m_pObjStrm.get());
             }
         }
     }

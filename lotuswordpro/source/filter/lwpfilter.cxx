@@ -93,10 +93,10 @@ static bool Decompress(SvStream* pCompressed, SvStream*& pOutDecompressed)
     pCompressed->ReadBytes(buffer, 16);
     aDecompressed->WriteBytes(buffer, 16);
 
-    std::unique_ptr<LwpSvStream> aLwpStream(new LwpSvStream(pCompressed));
+    LwpSvStream aLwpStream(pCompressed);
     std::unique_ptr<OpenStormBento::LtcBenContainer> pBentoContainer;
     {
-        sal_uLong ulRet = BenOpenContainer(aLwpStream.get(), &pBentoContainer);
+        sal_uLong ulRet = BenOpenContainer(&aLwpStream, &pBentoContainer);
         if (ulRet != BenErr_OK)
             return false;
     }
@@ -195,8 +195,8 @@ int ReadWordproFile(SvStream& rStream,
 
         aLwpSvStream.reset(pRawLwpSvStream);
 
-        std::unique_ptr<IXFStream> pStrm(new XFSaxStream(xHandler));
-        Lwp9Reader reader(aLwpSvStream.get(), pStrm.get());
+        XFSaxStream aStrm(xHandler);
+        Lwp9Reader reader(aLwpSvStream.get(), &aStrm);
         //Reset all static objects,because this function may be called many times.
         XFGlobalReset();
         const bool bOk = reader.Read();
