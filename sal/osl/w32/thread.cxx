@@ -359,28 +359,40 @@ void SAL_CALL osl_yieldThread(void)
 }
 
 void SAL_CALL osl_setThreadName(char const * name) {
-#ifdef _MSC_VER
-    /* See <http://msdn.microsoft.com/en-us/library/xcb2z8hs.aspx>: */
+    /* See < https://docs.microsoft.com/en-us/visualstudio/debugger/how-to-set-a-thread-name-in-native-code >: */
 #pragma pack(push, 8)
     struct {
-        DWORD dwType;
+        DWORD dwType = 0x1000;
         LPCSTR szName;
-        DWORD dwThreadID;
-        DWORD dwFlags;
+        DWORD dwThreadID = DWORD(-1);
+        DWORD dwFlags = 0;
     } info;
 #pragma pack(pop)
-    info.dwType = 0x1000;
     info.szName = name;
-    info.dwThreadID = DWORD(-1);
-    info.dwFlags = 0;
     __try {
         RaiseException(
             0x406D1388, 0, sizeof info / sizeof (ULONG_PTR),
             reinterpret_cast<ULONG_PTR *>(&info));
     } __except (EXCEPTION_EXECUTE_HANDLER) {}
-#else
-    (void) name;
-#endif
+
+    static auto pSetThreadDescription = [] {
+        typedef HRESULT(WINAPI * TSetThreadDescription)(HANDLE, PCWSTR);
+        return reinterpret_cast<TSetThreadDescription>(
+            GetProcAddress(GetModuleHandleA("KernelBase.dll"), "SetThreadDescription"));
+    }();
+    if (pSetThreadDescription)
+    {
+        const int nBufSize = MultiByteToWideChar(CP_ACP, 0, name, -1, nullptr, 0);
+        if (nBufSize)
+        {
+            if (PWSTR wStr = static_cast<PWSTR>(malloc(nBufSize)))
+            {
+                if (MultiByteToWideChar(CP_ACP, 0, name, -1, wStr, nBufSize))
+                    pSetThreadDescription(GetCurrentThread(), wStr);
+                free(wStr);
+            }
+        }
+    }
 }
 
 namespace {
