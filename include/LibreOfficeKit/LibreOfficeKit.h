@@ -463,6 +463,11 @@ struct _LibreOfficeKitDocumentClass
                                 const char* pSearchResult,
                                 unsigned char** pBitmapBuffer,
                                 int* pWidth, int* pHeight, size_t* pByteSize);
+    /// @see lok::Document::setFreemiumDenyList
+    void (*setFreemiumDenyList) (const char* freemiumDenyList);
+
+    /// @see lok::Document::setFreemiumView
+    void (*setFreemiumView) (int nViewId, bool isFreemium);
 
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };

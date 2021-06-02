@@ -802,6 +802,15 @@ public:
     {
         return mpDoc->pClass->renderSearchResult(mpDoc, pSearchResult, pBitmapBuffer, pWidth, pHeight, pByteSize);
     }
+    void setFreemiumDenyList(const char* freemiumDenyList)
+    {
+        mpDoc->pClass->setFreemiumDenyList(freemiumDenyList);
+    }
+
+    void setFreemiumView(int nViewId, bool isFreemium)
+    {
+        mpDoc->pClass->setFreemiumView(nViewId, isFreemium);
+    }
 
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
