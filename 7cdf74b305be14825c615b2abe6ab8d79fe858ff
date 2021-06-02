@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "27d4211e_8addac06",
+        "filename": "sd/qa/unit/activex-controls-tests.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1003,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-06-02T12:58:32Z",
+      "side": 0,
+      "message": "why this change ?",
+      "revId": "7cdf74b305be14825c615b2abe6ab8d79fe858ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

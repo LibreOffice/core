@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "05ac33cf_dc1613ae",
+        "filename": "sd/qa/unit/export-tests.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-06-02T12:58:32Z",
+      "side": 1,
+      "message": "do no add empty lines",
+      "revId": "571b4235bb7151e8a4e1f3e370d8be38bf49609b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42710448_fa609ea9",
+        "filename": "sd/qa/unit/export-tests.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-06-02T12:58:32Z",
+      "side": 1,
+      "message": "why this change ?",
+      "revId": "571b4235bb7151e8a4e1f3e370d8be38bf49609b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
