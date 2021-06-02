@@ -1125,18 +1125,21 @@ namespace emfio
 
             case W_META_CREATEBITMAPINDIRECT:
             {
+                SAL_WARN( "emfio", "TODO: W_META_CREATEBITMAPINDIRECT is not implemented. Please fill the bug report" );
                 CreateObject();
             }
             break;
 
             case W_META_CREATEBITMAP:
             {
+                SAL_WARN( "emfio", "TODO: W_META_CREATEBITMAP is not implemented. Please fill the bug report" );
                 CreateObject();
             }
             break;
 
             case W_META_CREATEREGION:
             {
+                SAL_WARN( "emfio", "TODO: W_META_CREATEREGION is not implemented. Please fill the bug report" );
                 CreateObject();
             }
             break;
@@ -1161,8 +1164,9 @@ namespace emfio
 
             case W_META_SELECTCLIPREGION:
             {
-                sal_Int16 nObjIndex = 0;
-                mpInputStream->ReadInt16( nObjIndex );
+                sal_uInt16 nObjIndex;
+                mpInputStream->ReadUInt16( nObjIndex );
+                SAL_WARN( "emfio", "TODO: W_META_SELECTCLIPREGION is not implemented. Please fill the bug report" );
                 if ( !nObjIndex )
                 {
                     tools::PolyPolygon aEmptyPolyPoly;
