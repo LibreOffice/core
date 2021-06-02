@@ -70,6 +70,30 @@
       "revId": "0643e5a3accc01e0ee7a2359ec283ced8d0cf0ab",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d19e77f_0fffbf4c",
+        "filename": "sc/source/ui/miscdlgs/datatableview.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-06-02T17:49:58Z",
+      "side": 1,
+      "message": "\u003e line 218 in file sc/source/ui/view/colrowba.cxx which controls the row header of home calc sheet , here also million entries( pTab \u003eGetViewData().GetDocument().MaxRow() that is 1048576) are loaded .\n\nYes, but that is the permanent row header control of the sheet. Question remains if one really wants to scroll down a million rows for the temporary *data table* view in the dialog.\n\nAnyway, this change is not related to the actual problem of the bug that shall be fixed here, so rather deserves a separate change that could be discussed independently. It\u0027s better to avoid mixing unrelated changes.",
+      "parentUuid": "5982b73c_db645897",
+      "range": {
+        "startLine": 93,
+        "startChar": 51,
+        "endLine": 93,
+        "endChar": 58
+      },
+      "revId": "0643e5a3accc01e0ee7a2359ec283ced8d0cf0ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
