@@ -527,8 +527,7 @@ XclExpAutofilterinfo::XclExpAutofilterinfo( const ScAddress& rStartPos, SCCOL nS
 
 ExcFilterCondition::ExcFilterCondition() :
         nType( EXC_AFTYPE_NOTUSED ),
-        nOper( EXC_AFOPER_EQUAL ),
-        fVal( 0.0 )
+        nOper( EXC_AFOPER_EQUAL )
 {
 }
 
@@ -541,32 +540,23 @@ std::size_t ExcFilterCondition::GetTextBytes() const
     return pText ? (1 + pText->GetBufferSize()) : 0;
 }
 
-void ExcFilterCondition::SetCondition( sal_uInt8 nTp, sal_uInt8 nOp, double fV, const OUString* pT )
+void ExcFilterCondition::SetCondition( sal_uInt8 nTp, sal_uInt8 nOp, const OUString* pT )
 {
     nType = nTp;
     nOper = nOp;
-    fVal = fV;
     pText.reset( pT ? new XclExpString( *pT, XclStrFlags::EightBitLength ) : nullptr);
 }
 
 void ExcFilterCondition::Save( XclExpStream& rStrm )
 {
     rStrm << nType << nOper;
-    switch( nType )
+    if (nType == EXC_AFTYPE_STRING)
     {
-        case EXC_AFTYPE_DOUBLE:
-            rStrm << fVal;
-        break;
-        case EXC_AFTYPE_STRING:
-            OSL_ENSURE( pText, "ExcFilterCondition::Save() -- pText is NULL!" );
-            rStrm << sal_uInt32(0) << static_cast<sal_uInt8>(pText->Len()) << sal_uInt16(0) << sal_uInt8(0);
-        break;
-        case EXC_AFTYPE_BOOLERR:
-            rStrm << sal_uInt8(0) << static_cast<sal_uInt8>((fVal != 0) ? 1 : 0) << sal_uInt32(0) << sal_uInt16(0);
-        break;
-        default:
-            rStrm << sal_uInt32(0) << sal_uInt32(0);
+        OSL_ENSURE(pText, "ExcFilterCondition::Save() -- pText is NULL!");
+        rStrm << sal_uInt32(0) << static_cast<sal_uInt8>(pText->Len()) << sal_uInt16(0) << sal_uInt8(0);
     }
+    else
+        rStrm << sal_uInt32(0) << sal_uInt32(0);
 }
 
 static const char* lcl_GetOperator( sal_uInt8 nOper )
@@ -584,15 +574,12 @@ static const char* lcl_GetOperator( sal_uInt8 nOper )
     }
 }
 
-static OString lcl_GetValue( sal_uInt8 nType, double fVal, const XclExpString* pStr )
+static OString lcl_GetValue( sal_uInt8 nType, const XclExpString* pStr )
 {
-    switch( nType )
-    {
-        case EXC_AFTYPE_STRING:     return XclXmlUtils::ToOString( *pStr );
-        case EXC_AFTYPE_DOUBLE:     return OString::number( fVal );
-        case EXC_AFTYPE_BOOLERR:    return OString::number(  ( fVal != 0 ? 1 : 0 ) );
-        default:                    return OString();
-    }
+    if (nType == EXC_AFTYPE_STRING)
+        return XclXmlUtils::ToOString(*pStr);
+    else
+        return OString();
 }
 
 void ExcFilterCondition::SaveXml( XclExpXmlStream& rStrm )
@@ -602,7 +589,7 @@ void ExcFilterCondition::SaveXml( XclExpXmlStream& rStrm )
 
     rStrm.GetCurrentStream()->singleElement( XML_customFilter,
             XML_operator,   lcl_GetOperator( nOper ),
-            XML_val,        lcl_GetValue(nType, fVal, pText.get()) );
+            XML_val,        lcl_GetValue(nType, pText.get()) );
 }
 
 void ExcFilterCondition::SaveText( XclExpStream& rStrm )
@@ -626,7 +613,7 @@ XclExpAutofilter::XclExpAutofilter( const XclExpRoot& rRoot, sal_uInt16 nC ) :
 }
 
 bool XclExpAutofilter::AddCondition( ScQueryConnect eConn, sal_uInt8 nType, sal_uInt8 nOp,
-                                     double fVal, const OUString* pText, bool bSimple )
+                                     const OUString* pText, bool bSimple )
 {
     if( !aCond[ 1 ].IsEmpty() )
         return false;
@@ -638,7 +625,7 @@ bool XclExpAutofilter::AddCondition( ScQueryConnect eConn, sal_uInt8 nType, sal_
     if( bSimple )
         nFlags |= (nInd == 0) ? EXC_AFFLAG_SIMPLE1 : EXC_AFFLAG_SIMPLE2;
 
-    aCond[ nInd ].SetCondition( nType, nOp, fVal, pText );
+    aCond[ nInd ].SetCondition( nType, nOp, pText );
 
     AddRecSize( aCond[ nInd ].GetTextBytes() );
 
@@ -701,26 +688,17 @@ bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
         }
     }
 
-    bool bLen = sText.getLength() > 0;
-
     // empty/nonempty fields
     if (rEntry.IsQueryByEmpty())
     {
-        bConflict = !AddCondition(rEntry.eConnect, EXC_AFTYPE_EMPTY, EXC_AFOPER_NONE, 0.0, nullptr, true);
+        bConflict = !AddCondition(rEntry.eConnect, EXC_AFTYPE_EMPTY, EXC_AFOPER_NONE, nullptr, true);
         bHasBlankValue = true;
     }
     else if(rEntry.IsQueryByNonEmpty())
-        bConflict = !AddCondition( rEntry.eConnect, EXC_AFTYPE_NOTEMPTY, EXC_AFOPER_NONE, 0.0, nullptr, true );
+        bConflict = !AddCondition( rEntry.eConnect, EXC_AFTYPE_NOTEMPTY, EXC_AFOPER_NONE, nullptr, true );
     // other conditions
     else
     {
-        double  fVal    = 0.0;
-        sal_uInt32  nIndex  = 0;
-        bool bIsNum  = !bLen || GetFormatter().IsNumberFormat( sText, nIndex, fVal );
-        OUString* pText = nullptr;
-        if (!bIsNum)
-            pText = &sText;
-
         // top10 flags
         sal_uInt16 nNewFlags = 0x0000;
         switch( rEntry.eOp )
@@ -746,14 +724,24 @@ bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
         {
             if( bNewTop10 )
             {
-                if( fVal < 0 )      fVal = 0;
-                if( fVal >= 501 )   fVal = 500;
+                sal_uInt32  nIndex = 0;
+                double  fVal = 0.0;
+                if (GetFormatter().IsNumberFormat(sText, nIndex, fVal))
+                {
+                    if (fVal < 0)      fVal = 0;
+                    if (fVal >= 501)   fVal = 500;
+                }
                 nFlags |= (nNewFlags | static_cast<sal_uInt16>(fVal) << 7);
             }
             // normal condition
             else
             {
-                sal_uInt8 nType = bIsNum ? EXC_AFTYPE_DOUBLE : EXC_AFTYPE_STRING;
+                if (GetOutput() != EXC_OUTPUT_BINARY && rEntry.eOp == SC_EQUAL)
+                {
+                    AddMultiValueEntry(rEntry);
+                    return false;
+                }
+
                 sal_uInt8 nOper = EXC_AFOPER_NONE;
 
                 switch( rEntry.eOp )
@@ -774,7 +762,7 @@ bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
                                             nOper = EXC_AFOPER_NOTEQUAL;        break;
                     default:;
                 }
-                bConflict = !AddCondition( rEntry.eConnect, nType, nOper, fVal, pText );
+                bConflict = !AddCondition( rEntry.eConnect, EXC_AFTYPE_STRING, nOper, &sText);
             }
         }
     }

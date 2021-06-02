@@ -285,6 +285,7 @@ public:
     void testTdf136721_paper_size();
     void testTdf139258_rotated_image();
     void testTdf140431();
+    void testDateStandardfilterXLSX();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -469,6 +470,7 @@ public:
     CPPUNIT_TEST(testTdf139258_rotated_image);
     CPPUNIT_TEST(testTdf140431);
 
+    CPPUNIT_TEST(testDateStandardfilterXLSX);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -5923,6 +5925,24 @@ void ScExportTest::testTdf140431()
     const SvxFieldData* pData = pEditText->GetFieldData(0, 0, text::textfield::Type::URL);
     const SvxURLField* pURLData = static_cast<const SvxURLField*>(pData);
     CPPUNIT_ASSERT(pURLData->GetURL().startsWith("file://ndhlis"));
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testDateStandardfilterXLSX()
+{
+    // XLSX Roundtripping standard filter with date
+    ScDocShellRef xDocSh = loadDoc(u"tdf142607.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "//x:autoFilter", "ref", "A1:B6");
+    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "day", "03");
+    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "month", "12");
+    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "year", "2011");
+    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "dateTimeGrouping", "day");
 
     xDocSh->DoClose();
 }
