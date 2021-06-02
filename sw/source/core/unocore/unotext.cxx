@@ -2079,7 +2079,7 @@ lcl_ApplyCellProperties(
             }
             catch (const uno::Exception&)
             {
-                TOOLS_WARN_EXCEPTION( "sw.uno", "Exception when getting PropertyState: " << rName );
+                TOOLS_WARN_EXCEPTION( "sw.uno", "Exception when setting cell property " << rName );
             }
         }
     }
