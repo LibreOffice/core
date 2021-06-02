@@ -70,6 +70,30 @@
       "revId": "1193c331945481dd155a55c6695ff6fd88bd3d10",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a6984a7_a5c99ab4",
+        "filename": "extensions/source/ole/oleobjw.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1432,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-02T07:53:12Z",
+      "side": 0,
+      "message": "(which is what SysStringLen is for: to centralize management of the underlying structure)",
+      "parentUuid": "ed8d243f_3b033955",
+      "range": {
+        "startLine": 1432,
+        "startChar": 30,
+        "endLine": 1432,
+        "endChar": 70
+      },
+      "revId": "1193c331945481dd155a55c6695ff6fd88bd3d10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
