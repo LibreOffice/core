@@ -22438,6 +22438,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/acorexceptpage.ui" &&
         rUIFile != "cui/ui/acoroptionspage.ui" &&
         rUIFile != "cui/ui/acorreplacepage.ui" &&
+        rUIFile != "cui/ui/applyautofmtpage.ui" &&
         rUIFile != "cui/ui/applylocalizedpage.ui" &&
         rUIFile != "cui/ui/eventassigndialog.ui" &&
         rUIFile != "cui/ui/eventassignpage.ui" &&
@@ -22457,6 +22458,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/scriptorganizer.ui" &&
         rUIFile != "cui/ui/signatureline.ui" &&
         rUIFile != "cui/ui/tipofthedaydialog.ui" &&
+        rUIFile != "cui/ui/wordcompletionpage.ui" &&
         rUIFile != "filter/ui/testxmlfilter.ui" &&
         rUIFile != "filter/ui/xmlfiltersettings.ui" &&
         rUIFile != "filter/ui/xmlfiltertabpagegeneral.ui" &&
