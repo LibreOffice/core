@@ -52,6 +52,7 @@
 #include <debugevent.hxx>
 #include <scrwnd.hxx>
 #include <windowdev.hxx>
+#include <saldatabasic.hxx>
 
 #ifdef _WIN32
 #include <svsys.h>
@@ -594,6 +595,7 @@ void DeInitVCL()
         DestroySalInstance( pSVData->mpDefInst );
         pSVData->mpDefInst = nullptr;
     }
+    delete pSVData->mpSalData;
 
     if( pOwnSvApp )
     {
