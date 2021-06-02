@@ -136,7 +136,7 @@ SymbolType VclBuilder::mapStockToSymbol(std::u16string_view sType)
         eRet = SymbolType::ARROW_DOWN;
     else if (sType == u"missing-image")
         eRet = SymbolType::IMAGE;
-    else if (sType == u"help-browser")
+    else if (sType == u"help-browser" || sType == u"help-browser-symbolic")
         eRet = SymbolType::HELP;
     else if (sType == u"window-close")
         eRet = SymbolType::CLOSE;
