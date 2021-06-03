@@ -340,7 +340,6 @@ static int XIOErrorHdl(Display *)
 
 GtkSalData::~GtkSalData()
 {
-    Yield( true, true );
     g_warning ("TESTME: We used to have a stop-timer here, but the central code should do this");
 
     // sanity check: at this point nobody should be yielding, but wake them
