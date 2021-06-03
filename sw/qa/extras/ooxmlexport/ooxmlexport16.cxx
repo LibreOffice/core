@@ -226,6 +226,24 @@ DECLARE_OOXMLEXPORT_TEST(testTdf142404_tabOverMarginC15, "tdf142404_tabOverMargi
     CPPUNIT_ASSERT_EQUAL_MESSAGE("too big for one page", 2, getPages());
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf142404_tabOverSpacingC15, "tdf142404_tabOverSpacingC15.odt")
+{
+    // Although TabOverMargin no longer applies to compatibilityMode 15 DOCX files,
+    // it still applies to a tab over the paragraph end (inside text boundaries).
+    // The original 3-page ODT saved as DOCX would fit on one page in MS Word 2010, but 3 in Word 2013.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("too big for two pages", 3, getPages());
+    // The tab goes over the paragraph margin
+    CPPUNIT_ASSERT_EQUAL(OUString("A left tab positioned at"), parseDump("//page[1]/body/txt[2]/Text[1]", "Portion"));
+    sal_Int32 nTextLen = parseDump("//page[1]/body/txt[2]/Text[1]", "nWidth").toInt32();
+    CPPUNIT_ASSERT_EQUAL(OUString("*"), parseDump("//page[1]/body/txt[2]/Text[2]", "Portion"));
+    sal_Int32 nTabLen = parseDump("//page[1]/body/txt[2]/Text[2]", "nWidth").toInt32();
+    CPPUNIT_ASSERT_MESSAGE("Large left tab", nTextLen < nTabLen);
+    // Not 1 line high (Word 2010 DOCX), or 3 lines high (LO DOCX) or 5 lines high (ODT), but 4 lines high
+    sal_Int32 nHeight = parseDump("//page[1]/body/txt[2]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_MESSAGE("4 lines high", 1100 < nHeight);
+    CPPUNIT_ASSERT_MESSAGE("4 lines high", nHeight < 1300);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf139580, "tdf139580.odt")
 {
     // Without the fix in place, this test would have crashed at export time
