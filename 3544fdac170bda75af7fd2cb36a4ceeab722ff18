@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f6fe468e_153acb54",
+        "filename": "chart2/qa/extras/xshape/data/reference/tdf90839-1.xml",
+        "patchSetId": 22
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-06-03T12:57:00Z",
+      "side": 1,
+      "message": "Do you understand why these small differences here\u0026there appeared? Is it possible to avoid them?\nIdeally all these are 1-column text, so the rendering of them would not change.",
+      "revId": "3544fdac170bda75af7fd2cb36a4ceeab722ff18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb2b1be4_7b43c8a9",
+        "filename": "editeng/source/editeng/editeng.cxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-06-03T12:57:00Z",
+      "side": 1,
+      "message": "Would it make sense to use sal_IntXX here, so that the type is not platform-dependent?",
+      "revId": "3544fdac170bda75af7fd2cb36a4ceeab722ff18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "022a6dc0_94641cd2",
+        "filename": "editeng/source/editeng/impedit.cxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-06-03T12:57:00Z",
+      "side": 1,
+      "message": "Use some more meaningful name here, not just \"f\"? Something that describes what does it do.",
+      "revId": "3544fdac170bda75af7fd2cb36a4ceeab722ff18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e9bd908_40337ffd",
+        "filename": "editeng/source/editeng/impedit.hxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-06-03T12:57:00Z",
+      "side": 1,
+      "message": "Same here, it\u0027s easier to reason about sal_uInt32 (when does it wrap around, etc) compared to tools::Long, it would be good to not use tools::Long in new code if possible.",
+      "revId": "3544fdac170bda75af7fd2cb36a4ceeab722ff18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28ab9eb7_5adf8527",
+        "filename": "editeng/source/editeng/impedit2.cxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-06-03T12:57:00Z",
+      "side": 1,
+      "message": "Same here, replace \"f\" with a meaningful name, describing what it does.",
+      "revId": "3544fdac170bda75af7fd2cb36a4ceeab722ff18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c360e95_68dc0d7f",
+        "filename": "editeng/source/editeng/impedit2.cxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 3079,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-06-03T12:57:00Z",
+      "side": 1,
+      "message": "And here.",
+      "revId": "3544fdac170bda75af7fd2cb36a4ceeab722ff18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba9e5d92_638d6521",
+        "filename": "editeng/source/editeng/impedit2.cxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 3206,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-06-03T12:57:00Z",
+      "side": 1,
+      "message": "And here.",
+      "revId": "3544fdac170bda75af7fd2cb36a4ceeab722ff18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9095d3e6_0e8e4569",
+        "filename": "editeng/source/editeng/impedit2.cxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 3479,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-06-03T12:57:00Z",
+      "side": 1,
+      "message": "And here.",
+      "revId": "3544fdac170bda75af7fd2cb36a4ceeab722ff18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a22c89f0_5f0c7f86",
+        "filename": "editeng/source/editeng/impedit3.cxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-06-03T12:57:00Z",
+      "side": 1,
+      "message": "And here.",
+      "revId": "3544fdac170bda75af7fd2cb36a4ceeab722ff18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63a95cce_19ad979e",
+        "filename": "sc/qa/uitest/chart/chartLegend.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-06-03T12:57:00Z",
+      "side": 1,
+      "message": "Again, why is this changing?",
+      "revId": "3544fdac170bda75af7fd2cb36a4ceeab722ff18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
