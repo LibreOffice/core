@@ -108,9 +108,7 @@ Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const 
 {
     if ( acceptsURL(url) )
     {
-        Sequence< OUString > aBooleanValues(2);
-        aBooleanValues[0] = "false";
-        aBooleanValues[1] = "true";
+        Sequence< OUString > aBooleanValues{ "false", "true" };
 
         std::vector< DriverPropertyInfo > aDriverInfo
         {

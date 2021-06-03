@@ -393,28 +393,30 @@ namespace connectivity
     {
         if ( !acceptsURL(url) )
             return Sequence< DriverPropertyInfo >();
-        std::vector< DriverPropertyInfo > aDriverInfo;
-        aDriverInfo.push_back(DriverPropertyInfo(
-                "Storage"
-                ,"Defines the storage where the database will be stored."
-                ,true
-                ,OUString()
-                ,Sequence< OUString >())
-                );
-        aDriverInfo.push_back(DriverPropertyInfo(
-                "URL"
-                ,"Defines the url of the data source."
-                ,true
-                ,OUString()
-                ,Sequence< OUString >())
-                );
-        aDriverInfo.push_back(DriverPropertyInfo(
-                "AutoRetrievingStatement"
-                ,"Defines the statement which will be executed to retrieve auto increment values."
-                ,false
-                ,"CALL IDENTITY()"
-                ,Sequence< OUString >())
-                );
+        std::vector< DriverPropertyInfo > aDriverInfo
+        {
+            {
+                "Storage",
+                "Defines the storage where the database will be stored.",
+                true,
+                {},
+                {}
+            },
+            {
+                "URL",
+                "Defines the url of the data source.",
+                true,
+                {},
+                {}
+            },
+            {
+                "AutoRetrievingStatement",
+                "Defines the statement which will be executed to retrieve auto increment values.",
+                false,
+                "CALL IDENTITY()",
+                {}
+            }
+        };
         return Sequence< DriverPropertyInfo >(aDriverInfo.data(),aDriverInfo.size());
     }
 
