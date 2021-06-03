@@ -117,7 +117,7 @@ sal_uInt16 PPTExBulletProvider::GetId(Graphic const & rGraphic, Size& rGraphicSi
                                      static_cast<sal_Int32>(static_cast<double>(rGraphicSize.Height()) / fYScale + 0.5 ) );
 
                     aMappedGraphic = Graphic( aBmpEx );
-                    aGraphicObject = GraphicObject(aMappedGraphic);
+                    aGraphicObject.SetGraphic(aMappedGraphic);
                 }
             }
         }
