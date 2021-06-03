@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2df0c581_7c97ffd9",
+        "filename": "sw/qa/extras/txtencexport/txtencexport.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-06-03T09:55:57Z",
+      "side": 1,
+      "message": "i dont think this \"##\" name construction is a good idea; it makes it more difficult to \"git grep\" for things. also you cnause CPPUNIT_TEST_NAME\u003d\"testBullets\" to run just a single test for debugging, and i\u0027m not sure if this works if the name has something appended to it?",
+      "range": {
+        "startLine": 41,
+        "startChar": 19,
+        "endLine": 41,
+        "endChar": 27
+      },
+      "revId": "165a8175ac250bf3c10784469b64ce75002532de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e74e7bf_7065634f",
+        "filename": "sw/qa/extras/txtencexport/txtencexport.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-06-03T09:55:57Z",
+      "side": 1,
+      "message": "hmm this double conversion from UTF-8 to OUString back to UTF-8 looks superfluous?",
+      "revId": "165a8175ac250bf3c10784469b64ce75002532de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
