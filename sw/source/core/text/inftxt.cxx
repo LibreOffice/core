@@ -1761,7 +1761,9 @@ SwTwips SwTextFormatInfo::GetLineWidth()
 
     const bool bTabOverMargin = GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
         DocumentSettingId::TAB_OVER_MARGIN);
-    if (!bTabOverMargin)
+    const bool bTabOverSpacing = GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
+        DocumentSettingId::TAB_OVER_SPACING);
+    if (!bTabOverMargin && !bTabOverSpacing)
         return nLineWidth;
 
     SwTabPortion* pLastTab = GetLastTab();
@@ -1792,6 +1794,12 @@ SwTwips SwTextFormatInfo::GetLineWidth()
     // text frame area to the right (RR above, but not LL).
     nLineWidth = nTextFrameWidth - X();
 
+    if (!bTabOverMargin) // thus bTabOverSpacing only
+    {
+        // right, center, decimal can back-fill all the available space - same as TabOverMargin
+        if (pLastTab->GetWhichPor() == PortionType::TabLeft)
+            nLineWidth = nTextFrameWidth - pLastTab->GetTabPos();
+    }
     return nLineWidth;
 }
 

@@ -82,6 +82,7 @@ enum class DocumentSettingId
     CLIPPED_PICTURES,
     BACKGROUND_PARA_OVER_DRAWINGS,
     TAB_OVER_MARGIN,
+    TAB_OVER_SPACING, //tdf#142404
     // MS Word still wraps text around objects with less space than LO would.
     SURROUND_TEXT_WRAP_SMALL,
     PROP_LINE_SPACING_SHRINKS_FIRST_LINE,
