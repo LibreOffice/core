@@ -38,7 +38,6 @@ using namespace std;
 using namespace osl;
 
 #define XML_LANG    "xml-lang"
-#define ID          "id"
 
 
 
@@ -343,7 +342,7 @@ void XMLFile::InsertL10NElement( XMLElement* pElement )
         {
             const OString sTempStr((*pElement->GetAttributeList())[ j ]->GetName());
             // Get the "id" Attribute
-            if (sTempStr == ID)
+            if (sTempStr == "id")
             {
                 sId = (*pElement->GetAttributeList())[ j ]->GetValue();
             }
@@ -449,24 +448,14 @@ void XMLFile::SearchL10NElements( XMLChildNode *pCur )
                 bool bInsert = true;
                 XMLElement *pElement = static_cast<XMLElement*>(pCur);
                 const OString sName(pElement->GetName().toAsciiLowerCase());
-                OString sLanguage("en-US");
-                OString sTmpStrVal;
                 if ( pElement->GetAttributeList())
                 {
                     for ( size_t j = 0 , cnt = pElement->GetAttributeList()->size(); j < cnt && bInsert; ++j )
                     {
-                        const OString sTmpStr = (*pElement->GetAttributeList())[j]->GetName();
-                        if (sTmpStr == ID)
-                        {
-                            sTmpStrVal=(*pElement->GetAttributeList())[ j ]->GetValue();
-                        }
-                        if (sTmpStr == "localize")
+                        if ((*pElement->GetAttributeList())[j]->GetName() == "localize")
                         {
                             bInsert=false;
-                        }
-                        if (sTmpStr == XML_LANG) // Get the "xml-lang" Attribute
-                        {
-                            sLanguage=(*pElement->GetAttributeList())[ j ]->GetValue();
+                            break;
                         }
                     }
                 }
