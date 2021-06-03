@@ -445,8 +445,9 @@ void Window::SetAccessibleDescription( const OUString& rDescription )
     if ( ! mpWindowImpl->mpAccessibleInfos )
         mpWindowImpl->mpAccessibleInfos.reset( new ImplAccessibleInfos );
 
-    SAL_WARN_IF( mpWindowImpl->mpAccessibleInfos->pAccessibleDescription != rDescription, "vcl", "AccessibleDescription already set!" );
-    mpWindowImpl->mpAccessibleInfos->pAccessibleDescription = rDescription;
+    std::optional<OUString>& rCurrentDescription = mpWindowImpl->mpAccessibleInfos->pAccessibleDescription;
+    SAL_WARN_IF( rCurrentDescription && *rCurrentDescription != rDescription, "vcl", "AccessibleDescription already set" );
+    rCurrentDescription = rDescription;
 }
 
 OUString Window::GetAccessibleDescription() const
