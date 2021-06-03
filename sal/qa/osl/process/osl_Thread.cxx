@@ -477,31 +477,8 @@ namespace osl_Thread
 
             }
 
-        /** only one running thread per instance, return false if create secondly
-         */
-        void create_002()
-            {
-                myThread* newthread = new myThread;
-                bool res1 = newthread->create();
-                bool res2 = newthread->create();
-                t_print("In non pro, an assertion should occurred. This behaviour is right.\n");
-                termAndJoinThread(newthread);
-                delete newthread;
-
-                CPPUNIT_ASSERT_MESSAGE(
-                    "Creates a new thread: can not create two threads per instance",
-                    res1
-                    );
-                CPPUNIT_ASSERT_MESSAGE(
-                    "Creates a new thread: can not create two threads per instance",
-                    !res2
-                    );
-
-            }
-
         CPPUNIT_TEST_SUITE(create);
         CPPUNIT_TEST(create_001);
-        CPPUNIT_TEST(create_002);
         CPPUNIT_TEST_SUITE_END();
     }; // class create
 
@@ -540,32 +517,8 @@ namespace osl_Thread
                     );
             }
 
-        void createSuspended_002()
-            {
-                myThread* newthread = new myThread;
-                bool res1 = newthread->createSuspended();
-                bool res2 = newthread->createSuspended();
-
-                resumeAndWaitThread(newthread);
-
-                termAndJoinThread(newthread);
-
-                delete newthread;
-
-                CPPUNIT_ASSERT_MESSAGE(
-                    "Creates a new thread: can not create two threads per instance",
-                    res1
-                    );
-                CPPUNIT_ASSERT_MESSAGE(
-                    "Creates a new thread: can not create two threads per instance",
-                    !res2
-                    );
-            }
-
         CPPUNIT_TEST_SUITE(createSuspended);
         CPPUNIT_TEST(createSuspended_001);
-        // LLA: Deadlocked!!!
-        CPPUNIT_TEST(createSuspended_002);
         CPPUNIT_TEST_SUITE_END();
     }; // class createSuspended
 
@@ -1670,20 +1623,20 @@ namespace osl_Thread
         CPPUNIT_TEST_SUITE_END();
     }; // class schedule
 
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::create, "osl_Thread");
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::createSuspended, "osl_Thread");
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::suspend, "osl_Thread");
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::resume, "osl_Thread");
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::terminate, "osl_Thread");
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::join, "osl_Thread");
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::isRunning, "osl_Thread");
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::setPriority, "osl_Thread");
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::getPriority, "osl_Thread");
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::getIdentifier, "osl_Thread");
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::getCurrentIdentifier, "osl_Thread");
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::waittest, "osl_Thread");
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::yield, "osl_Thread");
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::schedule, "osl_Thread");
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_Thread::create);
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_Thread::createSuspended);
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_Thread::suspend);
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_Thread::resume);
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_Thread::terminate);
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_Thread::join);
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_Thread::isRunning);
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_Thread::setPriority);
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_Thread::getPriority);
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_Thread::getIdentifier);
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_Thread::getCurrentIdentifier);
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_Thread::waittest);
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_Thread::yield);
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_Thread::schedule);
 } // namespace osl_Thread
 
 // destroy function when the binding thread terminate
