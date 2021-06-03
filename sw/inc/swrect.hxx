@@ -78,7 +78,20 @@ public:
 
     void Justify();
 
-    SwRect &Union( const SwRect& rRect );
+    SwRect &Union( const SwRect& rRect )
+    {
+        if ( Top() > rRect.Top() )
+            Top( rRect.Top() );
+        if ( Left() > rRect.Left() )
+            Left( rRect.Left() );
+        long n = rRect.Right();
+        if ( Right() < n )
+            Right( n );
+        n = rRect.Bottom();
+        if ( Bottom() < n )
+            Bottom( n );
+        return *this;
+    }
     SwRect &Intersection( const SwRect& rRect );
 
     // Same as Intersection, only assume that Rects are overlapping!
