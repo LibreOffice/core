@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "99fd18b1_bd078ed1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-03T08:32:37Z",
+      "side": 1,
+      "message": "Ash, can you please clarify where the external/cairo/cairo/cairo-1.10.2.patch CAIRO_FORMAT_RGB24_888 code comes from, and whether it should be fixed (upstream?).",
+      "revId": "f5e1314ffa564077c27fb9c954c792b498bcae12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
