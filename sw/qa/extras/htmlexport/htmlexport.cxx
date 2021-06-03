@@ -1694,6 +1694,37 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedPNGShapeAsOLE)
     assertXPath(pXmlDoc, "//reqif-xhtml:p/reqif-xhtml:object", "type", "text/rtf");
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedShapeAsPNG)
+{
+    // Given a document with a shape:
+    loadURL("private:factory/swriter", nullptr);
+    uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+    xShape->setSize(awt::Size(10000, 10000));
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    xDrawPageSupplier->getDrawPage()->add(xShape);
+
+    // When exporting to XHTML:
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+
+    // Then make sure the shape is embedded as a PNG:
+    SvMemoryStream aStream;
+    HtmlExportTest::wrapFragment(maTempFile, aStream);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: image/png
+    // - Actual  : image/x-vclgraphic
+    // i.e. the result was invalid ReqIF.
+    assertXPath(pXmlDoc, "//reqif-xhtml:p/reqif-xhtml:object", "type", "image/png");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
