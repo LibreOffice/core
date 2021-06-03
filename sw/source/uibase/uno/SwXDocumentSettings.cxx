@@ -134,6 +134,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_EMBED_COMPLEX_SCRIPT_FONTS,
     HANDLE_EMBED_SYSTEM_FONTS,
     HANDLE_TAB_OVER_MARGIN,
+    HANDLE_TAB_OVER_SPACING,
     HANDLE_TREAT_SINGLE_COLUMN_BREAK_AS_PAGE_BREAK,
     HANDLE_SURROUND_TEXT_WRAP_SMALL,
     HANDLE_APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING,
@@ -228,6 +229,7 @@ static rtl::Reference<MasterPropertySetInfo> lcl_createSettingsInfo()
         { OUString("EmbedComplexScriptFonts"), HANDLE_EMBED_COMPLEX_SCRIPT_FONTS, cppu::UnoType<bool>::get(), 0},
         { OUString("EmbedSystemFonts"), HANDLE_EMBED_SYSTEM_FONTS, cppu::UnoType<bool>::get(), 0},
         { OUString("TabOverMargin"), HANDLE_TAB_OVER_MARGIN, cppu::UnoType<bool>::get(), 0},
+        { OUString("TabOverSpacing"), HANDLE_TAB_OVER_SPACING, cppu::UnoType<bool>::get(), 0},
         { OUString("TreatSingleColumnBreakAsPageBreak"), HANDLE_TREAT_SINGLE_COLUMN_BREAK_AS_PAGE_BREAK, cppu::UnoType<bool>::get(), 0},
         { OUString("SurroundTextWrapSmall"), HANDLE_SURROUND_TEXT_WRAP_SMALL, cppu::UnoType<bool>::get(), 0},
         { OUString("ApplyParagraphMarkFormatToNumbering"), HANDLE_APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING, cppu::UnoType<bool>::get(), 0},
@@ -894,6 +896,12 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::TAB_OVER_MARGIN, bTmp);
         }
         break;
+        case HANDLE_TAB_OVER_SPACING:
+        {
+            bool bTmp = *o3tl::doAccess<bool>(rValue);
+            mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::TAB_OVER_SPACING, bTmp);
+        }
+        break;
         case HANDLE_TREAT_SINGLE_COLUMN_BREAK_AS_PAGE_BREAK:
         {
             bool bTmp = *o3tl::doAccess<bool>(rValue);
@@ -1439,6 +1447,11 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_TAB_OVER_MARGIN:
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get( DocumentSettingId::TAB_OVER_MARGIN );
+        }
+        break;
+        case HANDLE_TAB_OVER_SPACING:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::TAB_OVER_SPACING);
         }
         break;
         case HANDLE_TREAT_SINGLE_COLUMN_BREAK_AS_PAGE_BREAK:
