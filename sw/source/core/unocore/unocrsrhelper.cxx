@@ -72,6 +72,7 @@
 #include <fchrfmt.hxx>
 #include <editeng/editids.hrc>
 #include <editeng/flstitem.hxx>
+#include <editeng/prntitem.hxx>
 #include <vcl/metric.hxx>
 #include <svtools/ctrltool.hxx>
 #include <sfx2/docfilt.hxx>
@@ -1390,7 +1391,8 @@ void makeTableRowRedline( SwTableLine& rTableLine,
     const OUString& rRedlineType,
     const uno::Sequence< beans::PropertyValue >& rRedlineProperties )
 {
-    IDocumentRedlineAccess* pRedlineAccess = &rTableLine.GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess();
+    SwDoc* pDoc = rTableLine.GetFrameFormat()->GetDoc();
+    IDocumentRedlineAccess* pRedlineAccess = &pDoc->getIDocumentRedlineAccess();
 
     RedlineType eType;
     if ( rRedlineType == "TableRowInsert" )
@@ -1400,6 +1402,18 @@ void makeTableRowRedline( SwTableLine& rTableLine,
     else if ( rRedlineType == "TableRowDelete" )
     {
         eType = RedlineType::TableRowDelete;
+
+        // set table row property "HasTextChangesOnly" to false
+        // to handle tracked deletion of the table row on the UI
+        const SvxPrintItem *pHasTextChangesOnlyProp =
+             rTableLine.GetFrameFormat()->GetAttrSet().GetItem<SvxPrintItem>(RES_PRINT);
+        if ( !pHasTextChangesOnlyProp || pHasTextChangesOnlyProp->GetValue() )
+        {
+            SvxPrintItem aSetTracking(RES_PRINT, false);
+            SwPosition aPos( *rTableLine.GetTabBoxes()[0]->GetSttNd() );
+            SwCursor aCursor( aPos, nullptr );
+            pDoc->SetRowNotTracked( aCursor, aSetTracking );
+        }
     }
     else
     {
