@@ -1737,9 +1737,52 @@ static Writer& OutHTML_FrameFormatAsDivOrSpan( Writer& rWrt,
     return rWrt;
 }
 
+/// Starts the OLE version of an image in the ReqIF + OLE case.
+static void OutHTML_ImageOLEStart(SwHTMLWriter& rHTMLWrt, const Graphic& rGraphic,
+                                  const SwFrameFormat& rFrameFormat)
+{
+    if (rHTMLWrt.mbReqIF && rHTMLWrt.m_bExportImagesAsOLE)
+    {
+        // Write the original image as an RTF fragment.
+        OUString aFileName;
+        if (rHTMLWrt.GetOrigFileName())
+            aFileName = *rHTMLWrt.GetOrigFileName();
+        INetURLObject aURL(aFileName);
+        OUString aName = aURL.getBase() + "_" + aURL.getExtension() + "_"
+                         + OUString::number(rGraphic.GetChecksum(), 16);
+        aURL.setBase(aName);
+        aURL.setExtension(u"ole");
+        aFileName = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+
+        SvFileStream aOutStream(aFileName, StreamMode::WRITE);
+        if (!SwReqIfReader::WrapGraphicInRtf(rGraphic, rFrameFormat, aOutStream))
+            SAL_WARN("sw.html", "SwReqIfReader::WrapGraphicInRtf() failed");
+
+        // Refer to this data.
+        aFileName = URIHelper::simpleNormalizedMakeRelative(rHTMLWrt.GetBaseURL(), aFileName);
+        rHTMLWrt.Strm().WriteOString(
+            OString("<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object));
+        rHTMLWrt.Strm().WriteOString(OString(" data=\"" + aFileName.toUtf8() + "\""));
+        rHTMLWrt.Strm().WriteOString(" type=\"text/rtf\"");
+        rHTMLWrt.Strm().WriteOString(">");
+        rHTMLWrt.OutNewLine();
+    }
+}
+
+/// Ends the OLE version of an image in the ReqIF + OLE case.
+static void OutHTML_ImageOLEEnd(SwHTMLWriter& rHTMLWrt)
+{
+    if (rHTMLWrt.mbReqIF && rHTMLWrt.m_bExportImagesAsOLE)
+    {
+        rHTMLWrt.Strm().WriteOString(
+            OString("</" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object ">"));
+    }
+}
+
 static Writer & OutHTML_FrameFormatAsImage( Writer& rWrt, const SwFrameFormat& rFrameFormat, bool bPNGFallback)
 {
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
+    bool bWritePNGFallback = !rHTMLWrt.m_bExportImagesAsOLE && bPNGFallback;
 
     if (rHTMLWrt.mbSkipImages)
         return rWrt;
@@ -1767,7 +1810,7 @@ static Writer & OutHTML_FrameFormatAsImage( Writer& rWrt, const SwFrameFormat& r
         OUString aFilterName("JPG");
         XOutFlags nFlags = XOutFlags::UseGifIfPossible | XOutFlags::UseNativeIfPossible;
 
-        if (rHTMLWrt.mbReqIF && !bPNGFallback)
+        if (rHTMLWrt.mbReqIF && !bWritePNGFallback)
         {
             // Writing image without fallback PNG in ReqIF mode: force PNG output.
             aFilterName = "PNG";
@@ -1800,18 +1843,22 @@ static Writer & OutHTML_FrameFormatAsImage( Writer& rWrt, const SwFrameFormat& r
     if (xGraphic.is() && aMimeType.isEmpty())
         xGraphic->getPropertyValue("MimeType") >>= aMimeType;
 
+    OutHTML_ImageOLEStart(rHTMLWrt, aGraphic, rFrameFormat);
+
     HtmlWriter aHtml(rWrt.Strm(), rHTMLWrt.maNamespace);
     OutHTML_ImageStart( aHtml, rWrt, rFrameFormat, GraphicURL, aGraphic, rFrameFormat.GetName(), aSz,
                     HtmlFrmOpts::GenImgMask, "frame",
                     aIMap.GetIMapObjectCount() ? &aIMap : nullptr, aMimeType );
 
     GfxLink aLink = aGraphic.GetGfxLink();
-    if (bPNGFallback && aLink.GetType() != GfxLinkType::NativePng)
+    if (bWritePNGFallback && aLink.GetType() != GfxLinkType::NativePng)
     {
         OutHTML_FrameFormatAsImage( rWrt, rFrameFormat, /*bPNGFallback=*/false);
     }
 
     OutHTML_ImageEnd(aHtml, rWrt);
+
+    OutHTML_ImageOLEEnd(rHTMLWrt);
 
     return rWrt;
 }
@@ -1912,32 +1959,7 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
     if (xGraphic.is() && aMimeType.isEmpty())
         xGraphic->getPropertyValue("MimeType") >>= aMimeType;
 
-    if (rHTMLWrt.mbReqIF && rHTMLWrt.m_bExportImagesAsOLE)
-    {
-        // Write the original image as an RTF fragment.
-        OUString aFileName;
-        if (rHTMLWrt.GetOrigFileName())
-            aFileName = *rHTMLWrt.GetOrigFileName();
-        INetURLObject aURL(aFileName);
-        OUString aName = aURL.getBase() + "_" +
-            aURL.getExtension() + "_" +
-            OUString::number(aGraphic.GetChecksum(), 16);
-        aURL.setBase(aName);
-        aURL.setExtension(u"ole");
-        aFileName = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
-
-        SvFileStream aOutStream(aFileName, StreamMode::WRITE);
-        if (!SwReqIfReader::WrapGraphicInRtf(aGraphic, rFrameFormat, aOutStream))
-            SAL_WARN("sw.html", "SwReqIfReader::WrapGraphicInRtf() failed");
-
-        // Refer to this data.
-        aFileName = URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(), aFileName);
-        rWrt.Strm().WriteOString(OString("<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object));
-        rWrt.Strm().WriteOString(OString(" data=\"" + aFileName.toUtf8() + "\""));
-        rWrt.Strm().WriteOString(" type=\"text/rtf\"");
-        rWrt.Strm().WriteOString(">");
-        rHTMLWrt.OutNewLine();
-    }
+    OutHTML_ImageOLEStart(rHTMLWrt, aGraphic, rFrameFormat);
 
     HtmlWriter aHtml(rWrt.Strm(), rHTMLWrt.maNamespace);
     OutHTML_ImageStart( aHtml, rWrt, rFrameFormat, aGraphicURL, aGraphic, pGrfNd->GetTitle(),
@@ -1953,8 +1975,7 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
 
     OutHTML_ImageEnd(aHtml, rWrt);
 
-    if (rHTMLWrt.mbReqIF && rHTMLWrt.m_bExportImagesAsOLE)
-        rWrt.Strm().WriteOString(OString("</" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object ">"));
+    OutHTML_ImageOLEEnd(rHTMLWrt);
 
     return rWrt;
 }
