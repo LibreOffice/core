@@ -38,21 +38,6 @@ Point SwRect::Center() const
                   Top()  + Height() / 2 );
 }
 
-SwRect& SwRect::Union( const SwRect& rRect )
-{
-    if ( Top() > rRect.Top() )
-        Top( rRect.Top() );
-    if ( Left() > rRect.Left() )
-        Left( rRect.Left() );
-    tools::Long n = rRect.Right();
-    if ( Right() < n )
-        Right( n );
-    n = rRect.Bottom();
-    if ( Bottom() < n )
-        Bottom( n );
-    return *this;
-}
-
 SwRect& SwRect::Intersection( const SwRect& rRect )
 {
     // any similarity between me and given element?
