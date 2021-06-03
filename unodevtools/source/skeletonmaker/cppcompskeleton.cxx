@@ -980,7 +980,7 @@ void generateSkeleton(ProgramOptions const & options,
 
     try {
         if (!standardout && options.license) {
-            printLicenseHeader(*pofs, compFileName);
+            printLicenseHeader(*pofs);
         }
 
         generateIncludes(*pofs, interfaces, propertyhelper, serviceobject,
@@ -1138,7 +1138,7 @@ void generateCalcAddin(ProgramOptions const & options,
 
     try {
         if (!standardout && options.license) {
-            printLicenseHeader(*pofs, compFileName);
+            printLicenseHeader(*pofs);
         }
 
         generateIncludes(*pofs, interfaces, propertyhelper, serviceobject,
