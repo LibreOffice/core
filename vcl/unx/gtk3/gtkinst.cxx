@@ -4512,6 +4512,7 @@ namespace
         SurfacePaintable* paintable = paintable_new_from_virtual_device(rImageSurface);
         return gtk_image_new_from_paintable(GDK_PAINTABLE(paintable));
     }
+
 #else
     GtkWidget* image_new_from_virtual_device(const VirtualDevice& rImageSurface)
     {
@@ -4534,6 +4535,15 @@ namespace
     }
 #endif
 
+    void image_set_from_icon_name(GtkImage* pImage, const OUString& rIconName)
+    {
+        GdkPixbuf* pixbuf = load_icon_by_name(rIconName);
+        gtk_image_set_from_pixbuf(pImage, pixbuf);
+        if (!pixbuf)
+            return;
+        g_object_unref(pixbuf);
+    }
+
     void image_set_from_virtual_device(GtkImage* pImage, const VirtualDevice* pDevice)
     {
 #if GTK_CHECK_VERSION(4, 0, 0)
@@ -4550,6 +4560,83 @@ namespace
         if (pixbuf)
             g_object_unref(pixbuf);
     }
+
+#if GTK_CHECK_VERSION(4, 0, 0)
+    void picture_set_from_icon_name(GtkPicture* pPicture, const OUString& rIconName)
+    {
+        GdkPixbuf* pixbuf = load_icon_by_name(rIconName);
+        gtk_picture_set_pixbuf(pPicture, pixbuf);
+        if (pixbuf)
+            g_object_unref(pixbuf);
+    }
+
+    void picture_set_from_virtual_device(GtkPicture* pPicture, const VirtualDevice* pDevice)
+    {
+        if (!pDevice)
+            gtk_picture_set_paintable(pPicture, nullptr);
+        else
+            gtk_picture_set_paintable(pPicture, GDK_PAINTABLE(paintable_new_from_virtual_device(*pDevice)));
+    }
+
+    void picture_set_from_xgraphic(GtkPicture* pPicture, const css::uno::Reference<css::graphic::XGraphic>& rPicture)
+    {
+        GdkPixbuf* pixbuf = getPixbuf(rPicture);
+        gtk_picture_set_pixbuf(pPicture, pixbuf);
+        if (pixbuf)
+            g_object_unref(pixbuf);
+    }
+#endif
+
+    void set_from_icon_name(GtkButton* pButton, const OUString& rIconName)
+    {
+        GdkPixbuf* pixbuf = load_icon_by_name(rIconName);
+        GtkWidget* pImage;
+        if (!pixbuf)
+            pImage = nullptr;
+        else
+        {
+            pImage = gtk_image_new_from_pixbuf(pixbuf);
+            g_object_unref(pixbuf);
+        }
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_button_set_child(pButton, pImage);
+#else
+        gtk_button_set_image(pButton, pImage);
+#endif
+    }
+
+    void set_image(GtkButton* pButton, VirtualDevice* pDevice)
+    {
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        gtk_button_set_always_show_image(pButton, true);
+        gtk_button_set_image_position(pButton, GTK_POS_LEFT);
+#endif
+        GtkWidget* pImage = pDevice ? image_new_from_virtual_device(*pDevice) : nullptr;
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_button_set_child(pButton, pImage);
+#else
+        gtk_button_set_image(pButton, pImage);
+#endif
+    }
+
+    void set_image(GtkButton* pButton, const css::uno::Reference<css::graphic::XGraphic>& rImage)
+    {
+        GdkPixbuf* pixbuf = getPixbuf(rImage);
+        GtkWidget* pImage;
+        if (!pixbuf)
+            pImage = nullptr;
+        else
+        {
+            pImage = gtk_image_new_from_pixbuf(pixbuf);
+            g_object_unref(pixbuf);
+        }
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_button_set_child(pButton, pImage);
+#else
+        gtk_button_set_image(pButton, pImage);
+#endif
+    }
+
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
 class MenuHelper
@@ -8520,65 +8607,6 @@ void set_font(GtkLabel* pLabel, const vcl::Font& rFont)
 
 namespace {
 
-void set_from_icon_name(GtkButton* pButton, const OUString& rIconName)
-{
-    GdkPixbuf* pixbuf = load_icon_by_name(rIconName);
-    GtkWidget* pImage;
-    if (!pixbuf)
-        pImage = nullptr;
-    else
-    {
-        pImage = gtk_image_new_from_pixbuf(pixbuf);
-        g_object_unref(pixbuf);
-    }
-#if GTK_CHECK_VERSION(4, 0, 0)
-    gtk_button_set_child(pButton, pImage);
-#else
-    gtk_button_set_image(pButton, pImage);
-#endif
-}
-
-void set_from_icon_name(GtkImage* pImage, const OUString& rIconName)
-{
-    GdkPixbuf* pixbuf = load_icon_by_name(rIconName);
-    gtk_image_set_from_pixbuf(pImage, pixbuf);
-    if (!pixbuf)
-        return;
-    g_object_unref(pixbuf);
-}
-
-void set_image(GtkButton* pButton, VirtualDevice* pDevice)
-{
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    gtk_button_set_always_show_image(pButton, true);
-    gtk_button_set_image_position(pButton, GTK_POS_LEFT);
-#endif
-    GtkWidget* pImage = pDevice ? image_new_from_virtual_device(*pDevice) : nullptr;
-#if GTK_CHECK_VERSION(4, 0, 0)
-    gtk_button_set_child(pButton, pImage);
-#else
-    gtk_button_set_image(pButton, pImage);
-#endif
-}
-
-void set_image(GtkButton* pButton, const css::uno::Reference<css::graphic::XGraphic>& rImage)
-{
-    GdkPixbuf* pixbuf = getPixbuf(rImage);
-    GtkWidget* pImage;
-    if (!pixbuf)
-        pImage = nullptr;
-    else
-    {
-        pImage = gtk_image_new_from_pixbuf(pixbuf);
-        g_object_unref(pixbuf);
-    }
-#if GTK_CHECK_VERSION(4, 0, 0)
-    gtk_button_set_child(pButton, pImage);
-#else
-    gtk_button_set_image(pButton, pImage);
-#endif
-}
-
 class WidgetBackground
 {
 private:
@@ -9163,12 +9191,18 @@ protected:
     GtkMenuButton* m_pMenuButton;
 private:
     GtkBox* m_pBox;
+#if !GTK_CHECK_VERSION(4, 0, 0)
     GtkImage* m_pImage;
+#else
+    GtkPicture* m_pImage;
+#endif
     GtkWidget* m_pLabel;
+#if !GTK_CHECK_VERSION(4, 0, 0)
     //popover cannot escape dialog under X so stick up own window instead
     GtkWindow* m_pMenuHack;
     //when doing so, if it's a toolbar menubutton align the menu to the full toolitem
     GtkWidget* m_pMenuHackAlign;
+#endif
     GtkWidget* m_pPopover;
     gulong m_nSignalId;
 #if GTK_CHECK_VERSION(4, 0, 0)
@@ -9306,11 +9340,12 @@ private:
     {
         if (!m_pImage)
         {
-            m_pImage = GTK_IMAGE(gtk_image_new());
 #if !GTK_CHECK_VERSION(4, 0, 0)
+            m_pImage = GTK_IMAGE(gtk_image_new());
             gtk_box_pack_start(m_pBox, GTK_WIDGET(m_pImage), false, false, 0);
             gtk_box_reorder_child(m_pBox, GTK_WIDGET(m_pImage), 0);
 #else
+            m_pImage = GTK_PICTURE(gtk_picture_new());
             gtk_box_prepend(m_pBox, GTK_WIDGET(m_pImage));
 #endif
             gtk_widget_show(GTK_WIDGET(m_pImage));
@@ -9364,8 +9399,10 @@ public:
 #endif
         , m_pMenuButton(pMenuButton)
         , m_pImage(nullptr)
+#if !GTK_CHECK_VERSION(4, 0, 0)
         , m_pMenuHack(nullptr)
         , m_pMenuHackAlign(pMenuAlign)
+#endif
         , m_pPopover(nullptr)
         , m_nSignalId(0)
 #if GTK_CHECK_VERSION(4, 0, 0)
@@ -9374,10 +9411,11 @@ public:
     {
 #if !GTK_CHECK_VERSION(4, 0, 0)
         m_pLabel = gtk_bin_get_child(GTK_BIN(m_pMenuButton));
+        find_image(GTK_WIDGET(m_pMenuButton), &m_pImage);
 #else
         m_pLabel = find_label_widget(GTK_WIDGET(m_pMenuButton));
+        (void)pMenuAlign;
 #endif
-        find_image(GTK_WIDGET(m_pMenuButton), &m_pImage);
         m_pBox = formatMenuButton(m_pLabel);
     }
 
@@ -9402,20 +9440,28 @@ public:
     virtual void set_image(VirtualDevice* pDevice) override
     {
         ensure_image_widget();
+#if GTK_CHECK_VERSION(4, 0, 0)
+        picture_set_from_virtual_device(m_pImage, pDevice);
+#else
         image_set_from_virtual_device(m_pImage, pDevice);
+#endif
     }
 
     virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override
     {
         ensure_image_widget();
+#if GTK_CHECK_VERSION(4, 0, 0)
+        picture_set_from_xgraphic(m_pImage, rImage);
+#else
         image_set_from_xgraphic(m_pImage, rImage);
+#endif
     }
 
 #if GTK_CHECK_VERSION(4, 0, 0)
     virtual void set_from_icon_name(const OUString& rIconName) override
     {
         ensure_image_widget();
-        ::set_from_icon_name(m_pImage, rIconName);
+        picture_set_from_icon_name(m_pImage, rIconName);
     }
 
     virtual void set_custom_button(VirtualDevice* pDevice) override
@@ -11070,7 +11116,7 @@ public:
 
     virtual void set_from_icon_name(const OUString& rIconName) override
     {
-        ::set_from_icon_name(m_pImage, rIconName);
+        image_set_from_icon_name(m_pImage, rIconName);
     }
 
     virtual void set_image(VirtualDevice* pDevice) override
@@ -11100,27 +11146,17 @@ public:
 
     virtual void set_from_icon_name(const OUString& rIconName) override
     {
-        GdkPixbuf* pixbuf = load_icon_by_name(rIconName);
-        if (!pixbuf)
-            return;
-        gtk_picture_set_pixbuf(m_pPicture, pixbuf);
-        g_object_unref(pixbuf);
+        picture_set_from_icon_name(m_pPicture, rIconName);
     }
 
     virtual void set_image(VirtualDevice* pDevice) override
     {
-        if (!pDevice)
-            gtk_picture_set_paintable(m_pPicture, nullptr);
-        else
-            gtk_picture_set_paintable(m_pPicture, GDK_PAINTABLE(paintable_new_from_virtual_device(*pDevice)));
+        picture_set_from_virtual_device(m_pPicture, pDevice);
     }
 
     virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rPicture) override
     {
-        GdkPixbuf* pixbuf = getPixbuf(rPicture);
-        gtk_picture_set_pixbuf(m_pPicture, pixbuf);
-        if (pixbuf)
-            g_object_unref(pixbuf);
+        picture_set_from_xgraphic(m_pPicture, rPicture);
     }
 };
 #endif
