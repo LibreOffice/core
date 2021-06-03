@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "acc661aa_0e4ad37c",
+        "filename": "sc/qa/uitest/calc_tests8/tdf126248.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-03T14:37:10Z",
+      "side": 1,
+      "message": "Unit tests should not use \"Default\" entries: this relies on the system being set up to en-US locale, which might not hold. Please use specific \"English (USA)\".",
+      "revId": "7d48001ccf35417cb20ca7ea8bb772082583c79c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
