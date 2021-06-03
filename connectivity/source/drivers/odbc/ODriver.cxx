@@ -103,77 +103,74 @@ Sequence< DriverPropertyInfo > SAL_CALL ODBCDriver::getPropertyInfo( const OUStr
 {
     if ( acceptsURL(url) )
     {
-        std::vector< DriverPropertyInfo > aDriverInfo;
+        Sequence< OUString > aBooleanValues{ "false", "true" };
 
-        Sequence< OUString > aBooleanValues(2);
-        aBooleanValues[0] = "false";
-        aBooleanValues[1] = "true";
-
-        aDriverInfo.push_back(DriverPropertyInfo(
-                "CharSet"
-                ,"CharSet of the database."
-                ,false
-                ,OUString()
-                ,Sequence< OUString >())
-                );
-        aDriverInfo.push_back(DriverPropertyInfo(
-                "UseCatalog"
-                ,"Use catalog for file-based databases."
-                ,false
-                ,"false"
-                ,aBooleanValues)
-                );
-        aDriverInfo.push_back(DriverPropertyInfo(
-                "SystemDriverSettings"
-                ,"Driver settings."
-                ,false
-                ,OUString()
-                ,Sequence< OUString >())
-                );
-        aDriverInfo.push_back(DriverPropertyInfo(
-                "ParameterNameSubstitution"
-                ,"Change named parameters with '?'."
-                ,false
-                ,"false"
-                ,aBooleanValues)
-                );
-        aDriverInfo.push_back(DriverPropertyInfo(
-                "IgnoreDriverPrivileges"
-                ,"Ignore the privileges from the database driver."
-                ,false
-                ,"false"
-                ,aBooleanValues)
-                );
-        aDriverInfo.push_back(DriverPropertyInfo(
-                "IsAutoRetrievingEnabled"
-                ,"Retrieve generated values."
-                ,false
-                ,"false"
-                ,aBooleanValues)
-                );
-        aDriverInfo.push_back(DriverPropertyInfo(
-                "AutoRetrievingStatement"
-                ,"Auto-increment statement."
-                ,false
-                ,OUString()
-                ,Sequence< OUString >())
-                );
-        aDriverInfo.push_back(DriverPropertyInfo(
-                "GenerateASBeforeCorrelationName"
-                ,"Generate AS before table correlation names."
-                ,false
-                ,"false"
-                ,aBooleanValues)
-                );
-        aDriverInfo.push_back(DriverPropertyInfo(
-                "EscapeDateTime"
-                ,"Escape date time format."
-                ,false
-                ,"true"
-                ,aBooleanValues)
-                );
-
-        return Sequence< DriverPropertyInfo >(aDriverInfo.data(),aDriverInfo.size());
+        return
+        {
+            {
+                "CharSet",
+                "CharSet of the database.",
+                false,
+                {},
+                {}
+            },
+            {
+                "UseCatalog",
+                "Use catalog for file-based databases.",
+                false,
+                "false",
+                aBooleanValues
+            },
+            {
+                "SystemDriverSettings",
+                "Driver settings.",
+                false,
+                {},
+                {}
+            },
+            {
+                "ParameterNameSubstitution",
+                "Change named parameters with '?'.",
+                false,
+                "false",
+                aBooleanValues
+            },
+            {
+                "IgnoreDriverPrivileges",
+                "Ignore the privileges from the database driver.",
+                false,
+                "false",
+                aBooleanValues
+            },
+            {
+                "IsAutoRetrievingEnabled",
+                "Retrieve generated values.",
+                false,
+                "false",
+                aBooleanValues
+            },
+            {
+                "AutoRetrievingStatement",
+                "Auto-increment statement.",
+                false,
+                {},
+                {}
+            },
+            {
+                "GenerateASBeforeCorrelationName",
+                "Generate AS before table correlation names.",
+                false,
+                "false",
+                aBooleanValues
+            },
+            {
+                "EscapeDateTime",
+                "Escape date time format.",
+                false,
+                "true",
+                aBooleanValues
+            }
+        };
     }
     ::connectivity::SharedResources aResources;
     const OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
