@@ -59,6 +59,9 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg final
     std::vector<std::unique_ptr<SwRedlineDataParent>> m_RedlineParents;
     std::vector<std::unique_ptr<SwRedlineDataChild>>
                             m_RedlineChildren;
+    // purely here so we don't leak
+    std::vector<std::unique_ptr<RedlinData>>
+                            m_RedlinData;
     SwRedlineDataParentSortArr m_aUsedSeqNo;
     Timer                   m_aSelectTimer;
     OUString                m_sInserted;

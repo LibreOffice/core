@@ -201,18 +201,6 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(const std::shared_ptr<weld::Window>& rPar
 
 SwRedlineAcceptDlg::~SwRedlineAcceptDlg()
 {
-    weld::TreeView& rTreeView = m_pTable->GetWidget();
-    rTreeView.all_foreach(
-        [&rTreeView](weld::TreeIter& rEntry)
-        {
-            if (!rTreeView.get_iter_depth(rEntry))
-            {
-                RedlinData *pData = reinterpret_cast<RedlinData*>(rTreeView.get_id(rEntry).toInt64());
-                delete pData;
-            }
-            return false;
-        }
-    );
 }
 
 void SwRedlineAcceptDlg::Init(SwRedlineTable::size_type nStart)
@@ -227,6 +215,7 @@ void SwRedlineAcceptDlg::Init(SwRedlineTable::size_type nStart)
     else
     {
         rTreeView.clear();
+        m_RedlinData.clear();
         m_RedlineChildren.clear();
         m_RedlineParents.erase(m_RedlineParents.begin() + nStart, m_RedlineParents.end());
     }
@@ -597,9 +586,10 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRa
             OUString sComment = rRedln.GetComment(nStack);
 
             std::unique_ptr<weld::TreeIter> xChild(rTreeView.make_iterator());
-            OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pData.release())));
+            OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pData.get())));
             rTreeView.insert(pParent->xTLBParent.get(), -1, nullptr, &sId, nullptr, nullptr,
                              false, xChild.get());
+            m_RedlinData.push_back(std::move(pData));
 
             rTreeView.set_image(*xChild, sImage, -1);
             rTreeView.set_text(*xChild, sAuthor, 1);
@@ -768,9 +758,10 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
         pData->eType = rRedln.GetType(0);
         OUString sDateEntry = GetAppLangDateTimeString(pData->aDateTime);
 
-        OUString sId = OUString::number(reinterpret_cast<sal_Int64>(pData.release()));
+        OUString sId = OUString::number(reinterpret_cast<sal_Int64>(pData.get()));
         std::unique_ptr<weld::TreeIter> xParent(rTreeView.make_iterator());
         rTreeView.insert(nullptr, i, nullptr, &sId, nullptr, nullptr, false, xParent.get());
+        m_RedlinData.push_back(std::move(pData));
 
         rTreeView.set_image(*xParent, sImage, -1);
         rTreeView.set_text(*xParent, sAuthor, 1);
