@@ -103,13 +103,8 @@ MysqlCDriver::getPropertyInfo(const OUString& url, const Sequence<PropertyValue>
 {
     if (acceptsURL(url))
     {
-        ::std::vector<DriverPropertyInfo> aDriverInfo;
-
-        aDriverInfo.push_back(DriverPropertyInfo("Hostname", "Name of host", true, "localhost",
-                                                 Sequence<OUString>()));
-        aDriverInfo.push_back(
-            DriverPropertyInfo("Port", "Port", true, "3306", Sequence<OUString>()));
-        return Sequence<DriverPropertyInfo>(aDriverInfo.data(), aDriverInfo.size());
+        return { { "Hostname", "Name of host", true, "localhost", {} },
+                 { "Port", "Port", true, "3306", {} } };
     }
 
     return Sequence<DriverPropertyInfo>();

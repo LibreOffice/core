@@ -280,19 +280,16 @@ sal_Bool SAL_CALL ODriverDelegator::acceptsURL(const OUString& url)
 Sequence<DriverPropertyInfo> SAL_CALL
 ODriverDelegator::getPropertyInfo(const OUString& url, const Sequence<PropertyValue>& info)
 {
-    std::vector<DriverPropertyInfo> aDriverInfo;
     if (!acceptsURL(url))
         return Sequence<DriverPropertyInfo>();
 
-    Sequence<OUString> aBoolean(2);
-    aBoolean[0] = "0";
-    aBoolean[1] = "1";
+    Sequence<OUString> aBoolean{ "0", "1" };
 
-    aDriverInfo.push_back(DriverPropertyInfo("CharSet", "CharSet of the database.", false,
-                                             OUString(), Sequence<OUString>()));
-    aDriverInfo.push_back(DriverPropertyInfo("SuppressVersionColumns",
-                                             "Display version columns (when available).", false,
-                                             "0", aBoolean));
+    std::vector<DriverPropertyInfo> aDriverInfo{
+        { "CharSet", "CharSet of the database.", false, {}, {} },
+        { "SuppressVersionColumns", "Display version columns (when available).", false, "0",
+          aBoolean }
+    };
     const T_DRIVERTYPE eType = lcl_getDriverType(url);
     if (eType == T_DRIVERTYPE::Jdbc)
     {

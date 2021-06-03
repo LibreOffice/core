@@ -121,34 +121,32 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString
     impl_checkURL_throw(url);
     if ( acceptsURL(url) )
     {
-        std::vector< DriverPropertyInfo > aDriverInfo;
+        Sequence< OUString > aBooleanValues{ "false", "true" };
 
-        Sequence< OUString > aBooleanValues(2);
-        aBooleanValues[0] = "false";
-        aBooleanValues[1] = "true";
-
-        aDriverInfo.push_back(DriverPropertyInfo(
-                "IgnoreDriverPrivileges"
-                ,"Ignore the privileges from the database driver."
-                ,false
-                ,"false"
-                ,aBooleanValues)
-        );
-        aDriverInfo.push_back(DriverPropertyInfo(
-                "EscapeDateTime"
-                ,"Escape date time format."
-                ,false
-                ,"true"
-                ,aBooleanValues)
-        );
-        aDriverInfo.push_back(DriverPropertyInfo(
-                "TypeInfoSettings"
-                ,"Defines how the type info of the database metadata should be manipulated."
-                ,false
-                ,OUString( )
-                ,Sequence< OUString > ())
-        );
-        return Sequence< DriverPropertyInfo >(aDriverInfo.data(),aDriverInfo.size());
+        return
+        {
+            {
+                 "IgnoreDriverPrivileges",
+                 "Ignore the privileges from the database driver.",
+                 false,
+                 "false",
+                 aBooleanValues
+            },
+            {
+                "EscapeDateTime",
+                "Escape date time format.",
+                false,
+                "true",
+                aBooleanValues
+            },
+            {
+                "TypeInfoSettings",
+                "Defines how the type info of the database metadata should be manipulated.",
+                false,
+                {},
+                {}
+            }
+        };
     }
     return Sequence< DriverPropertyInfo >();
 }

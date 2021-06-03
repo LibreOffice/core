@@ -82,9 +82,7 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString
 {
     if ( acceptsURL(url) )
     {
-        Sequence< OUString > aBoolean(2);
-        aBoolean[0] = "0";
-        aBoolean[1] = "1";
+        Sequence< OUString > aBoolean { "0", "1" };
 
         std::vector< DriverPropertyInfo > aDriverInfo
         {
@@ -92,8 +90,8 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString
                 "FieldDelimiter"
                 ,"Field separator."
                 ,false
-                ,OUString()
-                ,Sequence< OUString >()
+                ,{}
+                ,{}
             },
             {
                 "HeaderLine"

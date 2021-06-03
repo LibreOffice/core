@@ -98,25 +98,23 @@ Sequence< DriverPropertyInfo > SAL_CALL OFileDriver::getPropertyInfo( const OUSt
     if ( acceptsURL(url) )
     {
 
-        Sequence< OUString > aBoolean(2);
-        aBoolean[0] = "0";
-        aBoolean[1] = "1";
+        Sequence< OUString > aBoolean { "0", "1" };
 
-        std::vector< DriverPropertyInfo > aDriverInfo
+        return
         {
              {
                 "CharSet"
                 ,"CharSet of the database."
                 ,false
-                ,OUString()
-                ,Sequence< OUString >()
+                ,{}
+                ,{}
              },
              {
                 "Extension"
                 ,"Extension of the file format."
                 ,false
                 ,".*"
-                ,Sequence< OUString >()
+                ,{}
              },
              {
                 "ShowDeleted"
@@ -143,11 +141,10 @@ Sequence< DriverPropertyInfo > SAL_CALL OFileDriver::getPropertyInfo( const OUSt
                 "URL"
                 ,"The URL of the database document which is used to create an absolute path."
                 ,false
-                ,OUString()
-                ,Sequence< OUString >()
+                ,{}
+                ,{}
              }
         };
-        return Sequence< DriverPropertyInfo >(aDriverInfo.data(),aDriverInfo.size());
     } // if ( acceptsURL(url) )
     {
         ::connectivity::SharedResources aResources;
