@@ -843,4 +843,61 @@ void GtkSalDisplay::deregisterFrame( SalFrame* pFrame )
     SalGenericDisplay::deregisterFrame( pFrame );
 }
 
+namespace {
+
+struct ButtonOrder
+{
+    const char * m_aType;
+    int m_nPriority;
+};
+
+}
+
+int getButtonPriority(const OString &rType)
+{
+    static const size_t N_TYPES = 8;
+    static const ButtonOrder aDiscardCancelSave[N_TYPES] =
+    {
+        { "/discard", 0 },
+        { "/cancel", 1 },
+        { "/close", 1 },
+        { "/no", 2 },
+        { "/open", 3 },
+        { "/save", 3 },
+        { "/yes", 3 },
+        { "/ok", 3 }
+    };
+
+    static const ButtonOrder aSaveDiscardCancel[N_TYPES] =
+    {
+        { "/open", 0 },
+        { "/save", 0 },
+        { "/yes", 0 },
+        { "/ok", 0 },
+        { "/discard", 1 },
+        { "/no", 1 },
+        { "/cancel", 2 },
+        { "/close", 2 }
+    };
+
+    const ButtonOrder* pOrder = &aDiscardCancelSave[0];
+
+    const OUString &rEnv = Application::GetDesktopEnvironment();
+
+    if (rEnv.equalsIgnoreAsciiCase("windows") ||
+        rEnv.equalsIgnoreAsciiCase("tde") ||
+        rEnv.startsWithIgnoreAsciiCase("kde"))
+    {
+        pOrder = &aSaveDiscardCancel[0];
+    }
+
+    for (size_t i = 0; i < N_TYPES; ++i, ++pOrder)
+    {
+        if (rType.endsWith(pOrder->m_aType))
+            return pOrder->m_nPriority;
+    }
+
+    return -1;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

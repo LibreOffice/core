@@ -195,6 +195,8 @@ inline GdkGLContext* surface_create_gl_context(GdkSurface* pSurface)
 typedef GtkClipboard GdkClipboard;
 #endif
 
+int getButtonPriority(const OString &rType);
+
 class GtkSalTimer final : public SalTimer
 {
     struct SalGtkTimeoutSource *m_pTimeout;
