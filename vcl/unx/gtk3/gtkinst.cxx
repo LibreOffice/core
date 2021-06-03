@@ -8512,33 +8512,77 @@ void set_font(GtkLabel* pLabel, const vcl::Font& rFont)
 
 namespace {
 
-class GtkInstanceButton : public GtkInstanceWidget, public virtual weld::Button
+void set_from_icon_name(GtkButton* pButton, const OUString& rIconName)
+{
+    GdkPixbuf* pixbuf = load_icon_by_name(rIconName);
+    GtkWidget* pImage;
+    if (!pixbuf)
+        pImage = nullptr;
+    else
+    {
+        pImage = gtk_image_new_from_pixbuf(pixbuf);
+        g_object_unref(pixbuf);
+    }
+#if GTK_CHECK_VERSION(4, 0, 0)
+    gtk_button_set_child(pButton, pImage);
+#else
+    gtk_button_set_image(pButton, pImage);
+#endif
+}
+
+void set_from_icon_name(GtkImage* pImage, const OUString& rIconName)
+{
+    GdkPixbuf* pixbuf = load_icon_by_name(rIconName);
+    gtk_image_set_from_pixbuf(pImage, pixbuf);
+    if (!pixbuf)
+        return;
+    g_object_unref(pixbuf);
+}
+
+void set_image(GtkButton* pButton, VirtualDevice* pDevice)
+{
+#if !GTK_CHECK_VERSION(4, 0, 0)
+    gtk_button_set_always_show_image(pButton, true);
+    gtk_button_set_image_position(pButton, GTK_POS_LEFT);
+#endif
+    GtkWidget* pImage = pDevice ? image_new_from_virtual_device(*pDevice) : nullptr;
+#if GTK_CHECK_VERSION(4, 0, 0)
+    gtk_button_set_child(pButton, pImage);
+#else
+    gtk_button_set_image(pButton, pImage);
+#endif
+}
+
+void set_image(GtkButton* pButton, const css::uno::Reference<css::graphic::XGraphic>& rImage)
+{
+    GdkPixbuf* pixbuf = getPixbuf(rImage);
+    GtkWidget* pImage;
+    if (!pixbuf)
+        pImage = nullptr;
+    else
+    {
+        pImage = gtk_image_new_from_pixbuf(pixbuf);
+        g_object_unref(pixbuf);
+    }
+#if GTK_CHECK_VERSION(4, 0, 0)
+    gtk_button_set_child(pButton, pImage);
+#else
+    gtk_button_set_image(pButton, pImage);
+#endif
+}
+
+class WidgetBackground
 {
 private:
-    GtkButton* m_pButton;
+    GtkWidget* m_pWidget;
     GtkCssProvider* m_pCustomCssProvider;
-    gulong m_nSignalId;
-    std::unique_ptr<vcl::Font> m_xFont;
     std::unique_ptr<utl::TempFile> m_xCustomImage;
 
-    static void signalClicked(GtkButton*, gpointer widget)
-    {
-        GtkInstanceButton* pThis = static_cast<GtkInstanceButton*>(widget);
-        SolarMutexGuard aGuard;
-        pThis->signal_clicked();
-    }
-
-    virtual void ensureMouseEventWidget() override
-    {
-        // The GtkButton is sufficient to get mouse events without an intermediate GtkEventBox
-        if (!m_pMouseEventBox)
-            m_pMouseEventBox = m_pWidget;
-    }
-
+public:
     // See: https://developer.gnome.org/Buttons/
     void use_custom_content(VirtualDevice* pDevice)
     {
-        GtkStyleContext *pWidgetContext = gtk_widget_get_style_context(GTK_WIDGET(m_pButton));
+        GtkStyleContext *pWidgetContext = gtk_widget_get_style_context(m_pWidget);
 
         if (m_pCustomCssProvider)
         {
@@ -8569,11 +8613,48 @@ private:
     }
 
 public:
+    WidgetBackground(GtkWidget* pWidget)
+        : m_pWidget(pWidget)
+        , m_pCustomCssProvider(nullptr)
+    {
+    }
+
+    ~WidgetBackground()
+    {
+        if (m_pCustomCssProvider)
+            use_custom_content(nullptr);
+        assert(!m_pCustomCssProvider);
+    }
+};
+
+class GtkInstanceButton : public GtkInstanceWidget, public virtual weld::Button
+{
+private:
+    GtkButton* m_pButton;
+    gulong m_nSignalId;
+    std::unique_ptr<vcl::Font> m_xFont;
+    WidgetBackground m_aCustomBackground;
+
+    static void signalClicked(GtkButton*, gpointer widget)
+    {
+        GtkInstanceButton* pThis = static_cast<GtkInstanceButton*>(widget);
+        SolarMutexGuard aGuard;
+        pThis->signal_clicked();
+    }
+
+    virtual void ensureMouseEventWidget() override
+    {
+        // The GtkButton is sufficient to get mouse events without an intermediate GtkEventBox
+        if (!m_pMouseEventBox)
+            m_pMouseEventBox = m_pWidget;
+    }
+
+public:
     GtkInstanceButton(GtkButton* pButton, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceWidget(GTK_WIDGET(pButton), pBuilder, bTakeOwnership)
         , m_pButton(pButton)
-        , m_pCustomCssProvider(nullptr)
         , m_nSignalId(g_signal_connect(pButton, "clicked", G_CALLBACK(signalClicked), this))
+        , m_aCustomBackground(GTK_WIDGET(pButton))
     {
         g_object_set_data(G_OBJECT(m_pButton), "g-lo-GtkInstanceButton", this);
     }
@@ -8585,57 +8666,22 @@ public:
 
     virtual void set_image(VirtualDevice* pDevice) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        gtk_button_set_always_show_image(m_pButton, true);
-        gtk_button_set_image_position(m_pButton, GTK_POS_LEFT);
-#endif
-        GtkWidget* pImage = pDevice ? image_new_from_virtual_device(*pDevice) : nullptr;
-#if GTK_CHECK_VERSION(4, 0, 0)
-        gtk_button_set_child(m_pButton, pImage);
-#else
-        gtk_button_set_image(m_pButton, pImage);
-#endif
+        ::set_image(m_pButton, pDevice);
     }
 
     virtual void set_from_icon_name(const OUString& rIconName) override
     {
-        GdkPixbuf* pixbuf = load_icon_by_name(rIconName);
-        GtkWidget* pImage;
-        if (!pixbuf)
-            pImage = nullptr;
-        else
-        {
-            pImage = gtk_image_new_from_pixbuf(pixbuf);
-            g_object_unref(pixbuf);
-        }
-#if GTK_CHECK_VERSION(4, 0, 0)
-        gtk_button_set_child(m_pButton, pImage);
-#else
-        gtk_button_set_image(m_pButton, pImage);
-#endif
+        ::set_from_icon_name(m_pButton, rIconName);
     }
 
     virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override
     {
-        GdkPixbuf* pixbuf = getPixbuf(rImage);
-        GtkWidget* pImage;
-        if (!pixbuf)
-            pImage = nullptr;
-        else
-        {
-            pImage = gtk_image_new_from_pixbuf(pixbuf);
-            g_object_unref(pixbuf);
-        }
-#if GTK_CHECK_VERSION(4, 0, 0)
-        gtk_button_set_child(m_pButton, pImage);
-#else
-        gtk_button_set_image(m_pButton, pImage);
-#endif
+        ::set_image(m_pButton, rImage);
     }
 
     virtual void set_custom_button(VirtualDevice* pDevice) override
     {
-        use_custom_content(pDevice);
+        m_aCustomBackground.use_custom_content(pDevice);
     }
 
     virtual OUString get_label() const override
@@ -8684,9 +8730,6 @@ public:
     {
         g_object_steal_data(G_OBJECT(m_pButton), "g-lo-GtkInstanceButton");
         g_signal_handler_disconnect(m_pButton, m_nSignalId);
-        if (m_pCustomCssProvider)
-            use_custom_content(nullptr);
-        assert(!m_pCustomCssProvider);
     }
 };
 
@@ -9105,7 +9148,7 @@ GtkPositionType show_menu(GtkWidget* pMenuButton, GtkWindow* pMenu)
 #if !GTK_CHECK_VERSION(4, 0, 0)
 class GtkInstanceMenuButton : public GtkInstanceToggleButton, public MenuHelper, public virtual weld::MenuButton
 #else
-class GtkInstanceMenuButton : public GtkInstanceToggleButton, public virtual weld::MenuButton
+class GtkInstanceMenuButton : public GtkInstanceWidget, public virtual weld::MenuButton
 #endif
 {
 protected:
@@ -9120,6 +9163,10 @@ private:
     GtkWidget* m_pMenuHackAlign;
     GtkWidget* m_pPopover;
     gulong m_nSignalId;
+#if GTK_CHECK_VERSION(4, 0, 0)
+    std::unique_ptr<vcl::Font> m_xFont;
+    WidgetBackground m_aCustomBackground;
+#endif
 
     static void signalToggled(GtkWidget*, gpointer widget)
     {
@@ -9299,10 +9346,13 @@ private:
     }
 
 public:
+#if !GTK_CHECK_VERSION(4, 0, 0)
     GtkInstanceMenuButton(GtkMenuButton* pMenuButton, GtkWidget* pMenuAlign, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceToggleButton(GTK_TOGGLE_BUTTON(pMenuButton), pBuilder, bTakeOwnership)
-#if !GTK_CHECK_VERSION(4, 0, 0)
         , MenuHelper(gtk_menu_button_get_popup(pMenuButton), false)
+#else
+    GtkInstanceMenuButton(GtkMenuButton* pMenuButton, GtkWidget* pMenuAlign, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : GtkInstanceWidget(GTK_WIDGET(pMenuButton), pBuilder, bTakeOwnership)
 #endif
         , m_pMenuButton(pMenuButton)
         , m_pImage(nullptr)
@@ -9310,6 +9360,9 @@ public:
         , m_pMenuHackAlign(pMenuAlign)
         , m_pPopover(nullptr)
         , m_nSignalId(0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+        , m_aCustomBackground(GTK_WIDGET(pMenuButton))
+#endif
     {
 #if !GTK_CHECK_VERSION(4, 0, 0)
         m_pLabel = gtk_bin_get_child(GTK_BIN(m_pMenuButton));
@@ -9356,6 +9409,64 @@ public:
         else
             image_set_from_virtual_device(m_pImage, nullptr);
     }
+
+#if GTK_CHECK_VERSION(4, 0, 0)
+    virtual void set_from_icon_name(const OUString& rIconName) override
+    {
+        ensure_image_widget();
+        ::set_from_icon_name(m_pImage, rIconName);
+    }
+
+    virtual void set_custom_button(VirtualDevice* pDevice) override
+    {
+        m_aCustomBackground.use_custom_content(pDevice);
+    }
+
+    virtual void set_inconsistent(bool inconsistent) override
+    {
+        if (inconsistent)
+            gtk_widget_set_state_flags(GTK_WIDGET(m_pMenuButton), GTK_STATE_FLAG_INCONSISTENT, false);
+        else
+            gtk_widget_unset_state_flags(GTK_WIDGET(m_pMenuButton), GTK_STATE_FLAG_INCONSISTENT);
+    }
+
+    virtual bool get_inconsistent() const override
+    {
+        return gtk_widget_get_state_flags(GTK_WIDGET(m_pMenuButton)) & GTK_STATE_FLAG_INCONSISTENT;
+    }
+
+    virtual void set_active(bool active) override
+    {
+        disable_notify_events();
+        set_inconsistent(false);
+        if (active)
+            gtk_menu_button_popup(m_pMenuButton);
+        else
+            gtk_menu_button_popdown(m_pMenuButton);
+        enable_notify_events();
+    }
+
+    virtual bool get_active() const override
+    {
+        GtkPopover* pPopover = gtk_menu_button_get_popover(m_pMenuButton);
+        return pPopover && gtk_widget_get_visible(GTK_WIDGET(pPopover));
+    }
+
+    virtual void set_font(const vcl::Font& rFont) override
+    {
+        m_xFont.reset(new vcl::Font(rFont));
+        GtkWidget* pChild = ::get_label_widget(GTK_WIDGET(m_pMenuButton));
+        ::set_font(GTK_LABEL(pChild), rFont);
+    }
+
+    virtual vcl::Font get_font() override
+    {
+        if (m_xFont)
+            return *m_xFont;
+        return GtkInstanceWidget::get_font();
+    }
+
+#endif
 
     virtual void insert_item(int pos, const OUString& rId, const OUString& rStr,
                         const OUString* pIconName, VirtualDevice* pImageSurface, TriState eCheckRadioFalse) override
@@ -9515,7 +9626,7 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_container_remove(GTK_CONTAINER(pContainer), pLabel);
 #else
-        gtk_widget_unparent(pLabel);
+        gtk_box_remove(GTK_BOX(pContainer), pLabel);
 #endif
 
         gint nImageSpacing(2);
@@ -9540,7 +9651,7 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_container_add(GTK_CONTAINER(pContainer), GTK_WIDGET(pBox));
 #else
-        gtk_widget_set_parent(pContainer, GTK_WIDGET(pBox));
+        gtk_box_prepend(GTK_BOX(pContainer), GTK_WIDGET(pBox));
 #endif
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_widget_show_all(GTK_WIDGET(pBox));
@@ -10958,11 +11069,7 @@ public:
 
     virtual void set_from_icon_name(const OUString& rIconName) override
     {
-        GdkPixbuf* pixbuf = load_icon_by_name(rIconName);
-        if (!pixbuf)
-            return;
-        gtk_image_set_from_pixbuf(m_pImage, pixbuf);
-        g_object_unref(pixbuf);
+        ::set_from_icon_name(m_pImage, rIconName);
     }
 
     virtual void set_image(VirtualDevice* pDevice) override
@@ -21065,9 +21172,19 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
                 }
             }
 
+            if (sName == "always-show-image")
+            {
+                if (GetParentObjectType(xChild) == "GtkButton")
+                {
+                    // TODO add an intermediate container ?
+                    xRemoveList.push_back(xChild);
+                }
+            }
+
             if (sName == "relief")
             {
-                if (GetParentObjectType(xChild) == "GtkLinkButton")
+                if (GetParentObjectType(xChild) == "GtkLinkButton" ||
+                    GetParentObjectType(xChild) == "GtkButton")
                 {
                     assert(xChild->getFirstChild()->getNodeValue() == "none");
                     auto xDoc = xChild->getOwnerDocument();
@@ -21079,7 +21196,9 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
 
             if (sName == "xalign")
             {
-                if (GetParentObjectType(xChild) == "GtkLinkButton")
+                if (GetParentObjectType(xChild) == "GtkLinkButton" ||
+                    GetParentObjectType(xChild) == "GtkMenuButton" ||
+                    GetParentObjectType(xChild) == "GtkButton")
                 {
                     // TODO expand into a GtkLabel child with alignment on that instead
                     assert(xChild->getFirstChild()->getNodeValue() == "0");
@@ -22522,6 +22641,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "svx/ui/accessibilitycheckdialog.ui" &&
         rUIFile != "svx/ui/accessibilitycheckentry.ui" &&
         rUIFile != "svx/ui/asianphoneticguidedialog.ui" &&
+        rUIFile != "svx/ui/colorwindow.ui" &&
         rUIFile != "svx/ui/docrecoverysavedialog.ui" &&
         rUIFile != "svx/ui/findreplacedialog.ui" &&
         rUIFile != "svx/ui/fontworkgallerydialog.ui" &&
@@ -22577,6 +22697,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/swriter/ui/renameobjectdialog.ui" &&
         rUIFile != "modules/swriter/ui/statisticsinfopage.ui" &&
         rUIFile != "modules/swriter/ui/titlepage.ui" &&
+        rUIFile != "modules/swriter/ui/watermarkdialog.ui" &&
         rUIFile != "modules/swriter/ui/wordcount.ui" &&
         rUIFile != "vcl/ui/printdialog.ui" &&
         rUIFile != "vcl/ui/printerdevicepage.ui" &&
