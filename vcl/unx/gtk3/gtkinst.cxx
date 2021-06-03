@@ -2230,7 +2230,6 @@ namespace
         return AllSettings::GetLayoutRTL();
     }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     GtkWidget* getPopupRect(GtkWidget* pWidget, const tools::Rectangle& rInRect, GdkRectangle& rOutRect)
     {
         if (GtkSalFrame* pFrame = GtkSalFrame::getFromWindow(pWidget))
@@ -2254,7 +2253,6 @@ namespace
         }
         return pWidget;
     }
-#endif
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
     void replaceWidget(GtkWidget* pWidget, GtkWidget* pReplacement)
@@ -20650,8 +20648,6 @@ namespace {
 
 }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-
 namespace {
 
 class GtkInstancePopover : public GtkInstanceContainer, public virtual weld::Popover
@@ -20680,7 +20676,11 @@ private:
 
 public:
     GtkInstancePopover(GtkPopover* pPopover, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
+#if !GTK_CHECK_VERSION(4, 0, 0)
         : GtkInstanceContainer(GTK_CONTAINER(pPopover), pBuilder, bTakeOwnership)
+#else
+        : GtkInstanceContainer(GTK_WIDGET(pPopover), pBuilder, bTakeOwnership)
+#endif
         , m_pPopover(pPopover)
         , m_nSignalId(g_signal_connect(m_pPopover, "closed", G_CALLBACK(signalClosed), this))
         , m_pClosedEvent(nullptr)
@@ -20697,7 +20697,9 @@ public:
         GdkRectangle aRect;
         pWidget = getPopupRect(pWidget, rRect, aRect);
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_popover_set_relative_to(m_pPopover, pWidget);
+#endif
         gtk_popover_set_pointing_to(m_pPopover, &aRect);
         gtk_popover_popup(m_pPopover);
     }
@@ -20723,6 +20725,8 @@ IMPL_LINK_NOARG(GtkInstancePopover, async_signal_closed, void*, void)
 }
 
 }
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
 
 namespace
 {
@@ -22360,15 +22364,10 @@ public:
 
     virtual std::unique_ptr<weld::Popover> weld_popover(const OString &id) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkPopover* pPopover = GTK_POPOVER(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pPopover)
             return nullptr;
         return std::make_unique<GtkInstancePopover>(pPopover, this, true);
-#else
-        (void)id;
-        return nullptr;
-#endif
     }
 
     virtual std::unique_ptr<weld::Toolbar> weld_toolbar(const OString &id) override
