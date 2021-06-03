@@ -10,7 +10,7 @@ from uitest.uihelper.common import change_measurement_unit
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, type_text
+from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, type_text, scope_guard
 
 #Chart Display Legend dialog
 
@@ -93,42 +93,37 @@ class chartLegend(UITestCase):
    def test_legends_move_with_arrows_keys(self):
 
     calc_doc = self.ui_test.load_file(get_url_for_data_file("dataLabels.ods"))
-    xCalcDoc = self.xUITest.getTopFocusWindow()
-    gridwin = xCalcDoc.getChild("grid_window")
+    with scope_guard(self.ui_test.close_doc):
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        gridwin = xCalcDoc.getChild("grid_window")
 
-    change_measurement_unit(self, "Centimeter")
+        change_measurement_unit(self, "Centimeter")
 
-    gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
-    gridwin.executeAction("ACTIVATE", tuple())
-    xChartMainTop = self.xUITest.getTopFocusWindow()
-    xChartMain = xChartMainTop.getChild("chart_window")
+        gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
+        gridwin.executeAction("ACTIVATE", tuple())
+        xChartMainTop = self.xUITest.getTopFocusWindow()
+        xChartMain = xChartMainTop.getChild("chart_window")
 
-    # Select the legends
-    xLegends = xChartMain.getChild("CID/D=0:Legend=")
-    xLegends.executeAction("SELECT", tuple())
+        # Select the legends
+        xLegends = xChartMain.getChild("CID/D=0:Legend=")
+        xLegends.executeAction("SELECT", tuple())
 
-    self.ui_test.execute_dialog_through_action(xLegends, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"}))
+        self.ui_test.execute_dialog_through_action(xLegends, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"}))
 
-    xDialog = self.xUITest.getTopFocusWindow()
-    self.assertEqual("4.61", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
-    self.assertEqual("1.54", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
+        xDialog = self.xUITest.getTopFocusWindow()
+        with scope_guard(lambda: xDialog.getChild("ok").executeAction("CLICK", ())):
+            self.assertEqual("4.62", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
+            self.assertEqual("1.54", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
 
-    xOkBtn = xDialog.getChild("ok")
-    xOkBtn.executeAction("CLICK", tuple())
+        xChartMain.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
+        xChartMain.executeAction("TYPE", mkPropertyValues({"KEYCODE": "LEFT"}))
 
-    xChartMain.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
-    xChartMain.executeAction("TYPE", mkPropertyValues({"KEYCODE": "LEFT"}))
+        self.ui_test.execute_dialog_through_action(xLegends, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"}))
 
-    self.ui_test.execute_dialog_through_action(xLegends, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"}))
-
-    # Check the position has changed after moving the label using the arrows keys
-    xDialog = self.xUITest.getTopFocusWindow()
-    self.assertEqual("4.51", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
-    self.assertEqual("1.44", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
-
-    xOkBtn = xDialog.getChild("ok")
-    xOkBtn.executeAction("CLICK", tuple())
-
-    self.ui_test.close_doc()
+        # Check the position has changed after moving the label using the arrows keys
+        xDialog = self.xUITest.getTopFocusWindow()
+        with scope_guard(lambda: xDialog.getChild("ok").executeAction("CLICK", ())):
+            self.assertEqual("4.51", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
+            self.assertEqual("1.44", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
