@@ -21924,6 +21924,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "svt/ui/addresstemplatedialog.ui" &&
         rUIFile != "svt/ui/datewindow.ui" &&
         rUIFile != "svt/ui/javadisableddialog.ui" &&
+        rUIFile != "svt/ui/linewindow.ui" &&
         rUIFile != "svt/ui/printersetupdialog.ui" &&
         rUIFile != "svx/ui/accessibilitycheckdialog.ui" &&
         rUIFile != "svx/ui/accessibilitycheckentry.ui" &&
@@ -21967,6 +21968,8 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/smath/ui/fontsizedialog.ui" &&
         rUIFile != "modules/smath/ui/savedefaultsdialog.ui" &&
         rUIFile != "modules/swriter/ui/bibliographyentry.ui" &&
+        rUIFile != "modules/swriter/ui/columndialog.ui" &&
+        rUIFile != "modules/swriter/ui/columnpage.ui" &&
         rUIFile != "modules/swriter/ui/endnotepage.ui" &&
         rUIFile != "modules/swriter/ui/exchangedatabases.ui" &&
         rUIFile != "modules/swriter/ui/footendnotedialog.ui" &&
