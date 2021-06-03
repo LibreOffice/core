@@ -110,7 +110,7 @@ class chartLegend(UITestCase):
     self.ui_test.execute_dialog_through_action(xLegends, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"}))
 
     xDialog = self.xUITest.getTopFocusWindow()
-    self.assertEqual("4.61", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
+    self.assertEqual("4.62", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
     self.assertEqual("1.54", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
 
     xOkBtn = xDialog.getChild("ok")

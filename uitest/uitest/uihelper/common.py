@@ -61,4 +61,12 @@ def change_measurement_unit(UITestCase, unit):
     xOKBtn = xDialogOpt.getChild("ok")
     UITestCase.ui_test.close_dialog_through_button(xOKBtn)
 
+class scope_guard:
+    def __init__(self, funcOnExit):
+        self.funcOnExit = funcOnExit
+    def __enter__(self):
+        return self
+    def __exit__(self, type, value, tb):
+        self.funcOnExit()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
