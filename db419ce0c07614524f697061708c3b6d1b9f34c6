@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1b7d656c_5005506e",
+        "filename": "sd/qa/unit/export-tests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-06-03T14:27:28Z",
+      "side": 1,
+      "message": "this, like many other changes, is a format change",
+      "revId": "db419ce0c07614524f697061708c3b6d1b9f34c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
