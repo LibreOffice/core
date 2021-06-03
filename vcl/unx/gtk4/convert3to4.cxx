@@ -348,6 +348,12 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 }
             }
 
+            if (sName == "use-popover")
+            {
+                if (GetParentObjectType(xChild) == "GtkMenuButton")
+                    xRemoveList.push_back(xChild);
+            }
+
             if (sName == "hscrollbar-policy")
             {
                 if (GetParentObjectType(xChild) == "GtkScrolledWindow")

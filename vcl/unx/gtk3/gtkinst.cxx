@@ -21966,6 +21966,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/smath/ui/alignmentdialog.ui" &&
         rUIFile != "modules/smath/ui/catalogdialog.ui" &&
         rUIFile != "modules/smath/ui/fontsizedialog.ui" &&
+        rUIFile != "modules/smath/ui/fonttypedialog.ui" &&
         rUIFile != "modules/smath/ui/savedefaultsdialog.ui" &&
         rUIFile != "modules/swriter/ui/bibliographyentry.ui" &&
         rUIFile != "modules/swriter/ui/columndialog.ui" &&
