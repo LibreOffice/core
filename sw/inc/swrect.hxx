@@ -84,9 +84,25 @@ public:
     // Same as Intersection, only assume that Rects are overlapping!
     SwRect &Intersection_( const SwRect &rRect );
 
-    bool IsInside( const Point& rPOINT ) const;
+    bool IsInside( const Point& rPoint ) const
+    {
+        return (Left()  <= rPoint.X()) &&
+               (Top()   <= rPoint.Y()) &&
+               (Right() >= rPoint.X()) &&
+               (Bottom()>= rPoint.Y());
+    }
     bool IsNear(const Point& rPoint, long nTolerance ) const;
-    bool IsInside( const SwRect& rRect ) const;
+    bool IsInside( const SwRect& rRect ) const
+    {
+        const long nRight  = Right();
+        const long nBottom = Bottom();
+        const long nrRight = rRect.Right();
+        const long nrBottom= rRect.Bottom();
+        return (Left() <= rRect.Left()) && (rRect.Left()<= nRight)  &&
+               (Left() <= nrRight)      && (nrRight     <= nRight)  &&
+               (Top()  <= rRect.Top())  && (rRect.Top() <= nBottom) &&
+               (Top()  <= nrBottom)     && (nrBottom    <= nBottom);
+    }
     bool IsOver( const SwRect& rRect ) const;
     inline bool HasArea() const;
     inline bool IsEmpty() const;
