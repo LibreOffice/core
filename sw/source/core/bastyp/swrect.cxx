@@ -75,26 +75,6 @@ SwRect& SwRect::Intersection_( const SwRect& rOther )
     return *this;
 }
 
-bool SwRect::IsInside( const SwRect& rRect ) const
-{
-    const tools::Long nRight  = Right();
-    const tools::Long nBottom = Bottom();
-    const tools::Long nrRight = rRect.Right();
-    const tools::Long nrBottom= rRect.Bottom();
-    return (Left() <= rRect.Left()) && (rRect.Left()<= nRight)  &&
-           (Left() <= nrRight)      && (nrRight     <= nRight)  &&
-           (Top()  <= rRect.Top())  && (rRect.Top() <= nBottom) &&
-           (Top()  <= nrBottom)     && (nrBottom    <= nBottom);
-}
-
-bool SwRect::IsInside( const Point& rPoint ) const
-{
-    return (Left()  <= rPoint.X()) &&
-           (Top()   <= rPoint.Y()) &&
-           (Right() >= rPoint.X()) &&
-           (Bottom()>= rPoint.Y());
-}
-
 // mouse moving of table borders
 bool SwRect::IsNear( const Point& rPoint, tools::Long nTolerance ) const
 {
