@@ -224,7 +224,6 @@ public:
     void testDateAutofilterODS();
     void testAutofilterColorsODF();
     void testAutofilterColorsOOXML();
-    void testAutofilterColorsStyleOOXML();
 
     void testRefStringXLSX();
     void testRefStringConfigXLSX();
@@ -416,7 +415,6 @@ public:
     CPPUNIT_TEST(testDateAutofilterODS);
     CPPUNIT_TEST(testAutofilterColorsODF);
     CPPUNIT_TEST(testAutofilterColorsOOXML);
-    CPPUNIT_TEST(testAutofilterColorsStyleOOXML);
 
     CPPUNIT_TEST(testRefStringXLSX);
     CPPUNIT_TEST(testRefStringConfigXLSX);
@@ -4678,27 +4676,51 @@ void ScExportTest::testAutofilterColorsODF()
 
 void ScExportTest::testAutofilterColorsOOXML()
 {
-    ScDocShellRef xDocSh = loadDoc(u"autofilter-colors.", FORMAT_XLSX);
-    CPPUNIT_ASSERT(xDocSh.is());
+    {
+        ScDocShellRef xDocSh = loadDoc(u"autofilter-colors.", FORMAT_XLSX);
+        CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory,
-                                                     "xl/tables/table1.xml", FORMAT_XLSX);
-    CPPUNIT_ASSERT(pDoc);
+        xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory,
+                                                         "xl/tables/table1.xml", FORMAT_XLSX);
+        CPPUNIT_ASSERT(pDoc);
 
-    assertXPath(pDoc, "/x:table/x:autoFilter/x:filterColumn/x:colorFilter", "dxfId", "4");
-}
+        assertXPath(pDoc, "/x:table/x:autoFilter/x:filterColumn/x:colorFilter", "dxfId", "5");
+    }
 
-void ScExportTest::testAutofilterColorsStyleOOXML()
-{
-    ScDocShellRef xDocSh = loadDoc(u"autofilter-colors.", FORMAT_XLSX);
-    CPPUNIT_ASSERT(xDocSh.is());
+    {
+        ScDocShellRef xDocSh = loadDoc(u"autofilter-colors.", FORMAT_XLSX);
+        CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocUniquePtr pDoc
-        = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
-    CPPUNIT_ASSERT(pDoc);
+        xmlDocUniquePtr pDoc
+            = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
+        CPPUNIT_ASSERT(pDoc);
 
-    assertXPath(pDoc, "/x:styleSheet/x:dxfs/x:dxf[5]/x:fill/x:patternFill/x:bgColor", "rgb",
-                "FFFFD7D7");
+        assertXPath(pDoc, "/x:styleSheet/x:dxfs/x:dxf[5]/x:fill/x:patternFill/x:bgColor", "rgb",
+                    "FFFFD7D7");
+    }
+
+    {
+        ScDocShellRef xDocSh = loadDoc(u"autofilter-colors-fg.", FORMAT_XLSX);
+        CPPUNIT_ASSERT(xDocSh.is());
+
+        xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory,
+                                                         "xl/tables/table1.xml", FORMAT_XLSX);
+        CPPUNIT_ASSERT(pDoc);
+
+        assertXPath(pDoc, "/x:table/x:autoFilter/x:filterColumn/x:colorFilter", "dxfId", "9");
+    }
+
+    {
+        ScDocShellRef xDocSh = loadDoc(u"autofilter-colors-fg.", FORMAT_XLSX);
+        CPPUNIT_ASSERT(xDocSh.is());
+
+        xmlDocUniquePtr pDoc
+            = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
+        CPPUNIT_ASSERT(pDoc);
+
+        assertXPath(pDoc, "/x:styleSheet/x:dxfs/x:dxf[9]/x:fill/x:patternFill/x:fgColor", "rgb",
+                    "FF3465A4");
+    }
 }
 
 void ScExportTest::testTdf88657ODS()
