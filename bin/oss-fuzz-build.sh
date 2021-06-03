@@ -48,7 +48,9 @@ popd
 df -h $OUT $WORK
 
 #starting corpuses
-cp $SRC/*_seed_corpus.zip $OUT
+for zip_file in $SRC/*_seed_corpus.zip; do
+    cp $zip_file $OUT
+done
 #fuzzing dictionaries
 cp $SRC/*.dict $OUT
 #options files
