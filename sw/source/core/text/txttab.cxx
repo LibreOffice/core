@@ -329,6 +329,7 @@ bool SwTabPortion::PreFormat( SwTextFormatInfo &rInf )
     const bool bTabCompat = rIDSA.get(DocumentSettingId::TAB_COMPAT);
     const bool bTabOverflow = rIDSA.get(DocumentSettingId::TAB_OVERFLOW);
     const bool bTabOverMargin = rIDSA.get(DocumentSettingId::TAB_OVER_MARGIN);
+    const bool bTabOverSpacing = rIDSA.get(DocumentSettingId::TAB_OVER_SPACING);
 
     // The minimal width of a tab is one blank at least.
     // #i37686# In compatibility mode, the minimum width
@@ -381,10 +382,13 @@ bool SwTabPortion::PreFormat( SwTextFormatInfo &rInf )
             case PortionType::TabLeft:
             {
                 // handle this case in PostFormat
-                if( bTabOverMargin && !m_bAutoTabStop && GetTabPos() > rInf.Width() )
+                if ((bTabOverMargin || bTabOverSpacing) && !m_bAutoTabStop && GetTabPos() > rInf.Width())
                 {
-                    rInf.SetLastTab( this );
-                    break;
+                    if (bTabOverMargin || GetTabPos() < rInf.GetTextFrame()->getFrameArea().Width())
+                    {
+                        rInf.SetLastTab(this);
+                        break;
+                    }
                 }
 
                 PrtWidth( o3tl::narrowing<sal_uInt16>(GetTabPos() - rInf.X()) );
@@ -443,13 +447,19 @@ bool SwTabPortion::PostFormat( SwTextFormatInfo &rInf )
 {
     bool bTabOverMargin = rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
         DocumentSettingId::TAB_OVER_MARGIN);
-
+    bool bTabOverSpacing = rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
+        DocumentSettingId::TAB_OVER_SPACING);
     if (rInf.GetTextFrame()->IsInSct())
         bTabOverMargin = false;
 
     // If the tab position is larger than the right margin, it gets scaled down by default.
     // However, if compat mode enabled, we allow tabs to go over the margin: the rest of the paragraph is not broken into lines.
-    const sal_uInt16 nRight = bTabOverMargin ? GetTabPos() : std::min(GetTabPos(), rInf.Width());
+    const sal_uInt16 nRight
+        = bTabOverMargin
+              ? GetTabPos()
+              : bTabOverSpacing
+                    ? std::min<long>(GetTabPos(), rInf.GetTextFrame()->getFrameArea().Right())
+                    : std::min(GetTabPos(), rInf.Width());
     const SwLinePortion *pPor = GetNextPortion();
 
     sal_uInt16 nPorWidth = 0;
@@ -462,7 +472,7 @@ bool SwTabPortion::PostFormat( SwTextFormatInfo &rInf )
     const PortionType nWhich = GetWhichPor();
     const bool bTabCompat = rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::TAB_COMPAT);
 
-    if ( bTabOverMargin && PortionType::TabLeft == nWhich )
+    if ((bTabOverMargin || bTabOverSpacing) && PortionType::TabLeft == nWhich)
     {
         nPorWidth = 0;
     }
