@@ -11,124 +11,97 @@ from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, type_text
+from uitest.uihelper import guarded
 
 #Chart Display Legend dialog
 
 class chartLegend(UITestCase):
    def test_chart_display_legend_dialog(self):
-    calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf98390.ods"))
-    xCalcDoc = self.xUITest.getTopFocusWindow()
-    gridwin = xCalcDoc.getChild("grid_window")
-    document = self.ui_test.get_component()
+    with guarded.load_file(self, get_url_for_data_file("tdf98390.ods")) as calc_doc:
+      xCalcDoc = self.xUITest.getTopFocusWindow()
+      gridwin = xCalcDoc.getChild("grid_window")
+      document = self.ui_test.get_component()
 
-    gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
-    gridwin.executeAction("ACTIVATE", tuple())
-    xChartMainTop = self.xUITest.getTopFocusWindow()
-    xChartMain = xChartMainTop.getChild("chart_window")
-    xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
-    self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "InsertMenuLegend"}))
-    xDialog = self.xUITest.getTopFocusWindow()
+      gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
+      gridwin.executeAction("ACTIVATE", tuple())
+      xChartMainTop = self.xUITest.getTopFocusWindow()
+      xChartMain = xChartMainTop.getChild("chart_window")
+      xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
+      with guarded.execute_dialog_through_action(self, xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "InsertMenuLegend"})) as xDialog:
+        left = xDialog.getChild("left")
+        right = xDialog.getChild("right")
+        top = xDialog.getChild("top")
+        bottom = xDialog.getChild("bottom")
 
-    left = xDialog.getChild("left")
-    right = xDialog.getChild("right")
-    top = xDialog.getChild("top")
-    bottom = xDialog.getChild("bottom")
+        left.executeAction("CLICK", tuple())
 
-    left.executeAction("CLICK", tuple())
+      #reopen and verify InsertMenuLegend dialog
+      gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
+      gridwin.executeAction("ACTIVATE", tuple())
+      xChartMainTop = self.xUITest.getTopFocusWindow()
+      xChartMain = xChartMainTop.getChild("chart_window")
+      xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
+      with guarded.execute_dialog_through_action(self, xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "InsertMenuLegend"})) as xDialog:
+        left = xDialog.getChild("left")
+        right = xDialog.getChild("right")
+        top = xDialog.getChild("top")
+        bottom = xDialog.getChild("bottom")
+        show = xDialog.getChild("show")
 
-    xOKBtn = xDialog.getChild("ok")
-    self.ui_test.close_dialog_through_button(xOKBtn)
+        self.assertEqual(get_state_as_dict(left)["Checked"], "true")
+        self.assertEqual(get_state_as_dict(right)["Checked"], "false")
+        self.assertEqual(get_state_as_dict(top)["Checked"], "false")
+        self.assertEqual(get_state_as_dict(bottom)["Checked"], "false")
 
-    #reopen and verify InsertMenuLegend dialog
-    gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
-    gridwin.executeAction("ACTIVATE", tuple())
-    xChartMainTop = self.xUITest.getTopFocusWindow()
-    xChartMain = xChartMainTop.getChild("chart_window")
-    xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
-    self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "InsertMenuLegend"}))
-    xDialog = self.xUITest.getTopFocusWindow()
+        show.executeAction("CLICK", tuple())
 
-    left = xDialog.getChild("left")
-    right = xDialog.getChild("right")
-    top = xDialog.getChild("top")
-    bottom = xDialog.getChild("bottom")
-    show = xDialog.getChild("show")
+      #reopen and verify InsertMenuLegend dialog
+      gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
+      gridwin.executeAction("ACTIVATE", tuple())
+      xChartMainTop = self.xUITest.getTopFocusWindow()
+      xChartMain = xChartMainTop.getChild("chart_window")
+      xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
+      with guarded.execute_dialog_through_action(self, xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "InsertMenuLegend"})) as xDialog:
+        left = xDialog.getChild("left")
+        right = xDialog.getChild("right")
+        top = xDialog.getChild("top")
+        bottom = xDialog.getChild("bottom")
+        show = xDialog.getChild("show")
 
-    self.assertEqual(get_state_as_dict(left)["Checked"], "true")
-    self.assertEqual(get_state_as_dict(right)["Checked"], "false")
-    self.assertEqual(get_state_as_dict(top)["Checked"], "false")
-    self.assertEqual(get_state_as_dict(bottom)["Checked"], "false")
+        self.assertEqual(get_state_as_dict(left)["Checked"], "true")
+        self.assertEqual(get_state_as_dict(right)["Checked"], "false")
+        self.assertEqual(get_state_as_dict(top)["Checked"], "false")
+        self.assertEqual(get_state_as_dict(bottom)["Checked"], "false")
 
-    show.executeAction("CLICK", tuple())
-
-    xOKBtn = xDialog.getChild("ok")
-    self.ui_test.close_dialog_through_button(xOKBtn)
-
-    #reopen and verify InsertMenuLegend dialog
-    gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
-    gridwin.executeAction("ACTIVATE", tuple())
-    xChartMainTop = self.xUITest.getTopFocusWindow()
-    xChartMain = xChartMainTop.getChild("chart_window")
-    xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
-    self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "InsertMenuLegend"}))
-    xDialog = self.xUITest.getTopFocusWindow()
-
-    left = xDialog.getChild("left")
-    right = xDialog.getChild("right")
-    top = xDialog.getChild("top")
-    bottom = xDialog.getChild("bottom")
-    show = xDialog.getChild("show")
-
-    self.assertEqual(get_state_as_dict(left)["Checked"], "true")
-    self.assertEqual(get_state_as_dict(right)["Checked"], "false")
-    self.assertEqual(get_state_as_dict(top)["Checked"], "false")
-    self.assertEqual(get_state_as_dict(bottom)["Checked"], "false")
-
-    self.assertEqual(get_state_as_dict(show)["Selected"], "false")
-
-    xOKBtn = xDialog.getChild("ok")
-    self.ui_test.close_dialog_through_button(xOKBtn)
-    self.ui_test.close_doc()
+        self.assertEqual(get_state_as_dict(show)["Selected"], "false")
 
    def test_legends_move_with_arrows_keys(self):
 
-    calc_doc = self.ui_test.load_file(get_url_for_data_file("dataLabels.ods"))
-    xCalcDoc = self.xUITest.getTopFocusWindow()
-    gridwin = xCalcDoc.getChild("grid_window")
+    with guarded.load_file(self, get_url_for_data_file("dataLabels.ods")) as calc_doc:
+      xCalcDoc = self.xUITest.getTopFocusWindow()
+      gridwin = xCalcDoc.getChild("grid_window")
 
-    change_measurement_unit(self, "Centimeter")
+      change_measurement_unit(self, "Centimeter")
 
-    gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
-    gridwin.executeAction("ACTIVATE", tuple())
-    xChartMainTop = self.xUITest.getTopFocusWindow()
-    xChartMain = xChartMainTop.getChild("chart_window")
+      gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
+      gridwin.executeAction("ACTIVATE", tuple())
+      xChartMainTop = self.xUITest.getTopFocusWindow()
+      xChartMain = xChartMainTop.getChild("chart_window")
 
-    # Select the legends
-    xLegends = xChartMain.getChild("CID/D=0:Legend=")
-    xLegends.executeAction("SELECT", tuple())
+      # Select the legends
+      xLegends = xChartMain.getChild("CID/D=0:Legend=")
+      xLegends.executeAction("SELECT", tuple())
 
-    self.ui_test.execute_dialog_through_action(xLegends, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"}))
+      with guarded.execute_dialog_through_action(self, xLegends, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"})) as xDialog:
+        self.assertEqual("4.61", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
+        self.assertEqual("1.54", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
 
-    xDialog = self.xUITest.getTopFocusWindow()
-    self.assertEqual("4.61", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
-    self.assertEqual("1.54", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
+      xChartMain.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
+      xChartMain.executeAction("TYPE", mkPropertyValues({"KEYCODE": "LEFT"}))
 
-    xOkBtn = xDialog.getChild("ok")
-    xOkBtn.executeAction("CLICK", tuple())
-
-    xChartMain.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
-    xChartMain.executeAction("TYPE", mkPropertyValues({"KEYCODE": "LEFT"}))
-
-    self.ui_test.execute_dialog_through_action(xLegends, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"}))
-
-    # Check the position has changed after moving the label using the arrows keys
-    xDialog = self.xUITest.getTopFocusWindow()
-    self.assertEqual("4.51", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
-    self.assertEqual("1.44", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
-
-    xOkBtn = xDialog.getChild("ok")
-    xOkBtn.executeAction("CLICK", tuple())
-
-    self.ui_test.close_doc()
+      # Check the position has changed after moving the label using the arrows keys
+      with guarded.execute_dialog_through_action(self, xLegends, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"})) as xDialog:
+        self.assertEqual("4.51", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
+        self.assertEqual("1.44", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
