@@ -735,40 +735,39 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                     // - all character attributes sre keep the area
                     // - all paragraph attributes to get the area
                     //   up to the previous paragraph
-                    std::unique_ptr<SvxRTFItemStackType> pNew(
-                        new SvxRTFItemStackType(*pOld, *mxInsertPosition, true));
-                    pNew->aAttrSet.SetParent( pOld->aAttrSet.GetParent() );
+                    auto xNew = std::make_unique<SvxRTFItemStackType>(*pOld, *mxInsertPosition, true);
+                    xNew->aAttrSet.SetParent( pOld->aAttrSet.GetParent() );
 
-                    // Delete all paragraph attributes from pNew
+                    // Delete all paragraph attributes from xNew
                     for( sal_uInt16 n = 0; n < (sizeof(aPardMap) / sizeof(sal_uInt16)) &&
-                                        pNew->aAttrSet.Count(); ++n )
+                                        xNew->aAttrSet.Count(); ++n )
                         if( reinterpret_cast<sal_uInt16*>(&aPardMap)[n] )
-                            pNew->aAttrSet.ClearItem( reinterpret_cast<sal_uInt16*>(&aPardMap)[n] );
-                    pNew->SetRTFDefaults( GetRTFDefaults() );
+                            xNew->aAttrSet.ClearItem( reinterpret_cast<sal_uInt16*>(&aPardMap)[n] );
+                    xNew->SetRTFDefaults( GetRTFDefaults() );
 
                     // Were there any?
-                    if( pNew->aAttrSet.Count() == pOld->aAttrSet.Count() )
+                    if( xNew->aAttrSet.Count() == pOld->aAttrSet.Count() )
                     {
-                        pNew.reset();
+                        xNew.reset();
                     }
                     else
                     {
-                        pNew->nStyleNo = 0;
+                        xNew->nStyleNo = 0;
 
-                        // Now span the real area of pNew from old
+                        // Now span the real area of xNew from old
                         SetEndPrevPara( pOld->mxEndNodeIdx, pOld->nEndCnt );
-                        pNew->nSttCnt = 0;
+                        xNew->nSttCnt = 0;
 
                         if( IsChkStyleAttr() )
                         {
                             ClearStyleAttr_( *pOld );
-                            ClearStyleAttr_( *pNew );   //#i10381#, methinks.
+                            ClearStyleAttr_( *xNew );   //#i10381#, methinks.
                         }
 
                         if( pCurrent )
                         {
                             pCurrent->Add(std::move(pOld));
-                            pCurrent->Add(std::move(pNew));
+                            pCurrent->Add(std::move(xNew));
                         }
                         else
                         {
@@ -776,7 +775,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                             // read. (Span no attributes!)
 
                             m_AttrSetList.push_back(std::move(pOld));
-                            m_AttrSetList.push_back(std::move(pNew));
+                            m_AttrSetList.push_back(std::move(xNew));
                         }
                         break;
                     }
