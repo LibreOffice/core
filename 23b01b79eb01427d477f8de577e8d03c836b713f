@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "cf580465_8c1947de",
+        "filename": "connectivity/source/drivers/ado/ADriver.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-06-03T12:11:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "27c8242b_f3e28aa4",
+      "range": {
+        "startLine": 146,
+        "startChar": 16,
+        "endLine": 146,
+        "endChar": 27
+      },
+      "revId": "23b01b79eb01427d477f8de577e8d03c836b713f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2b553d60_535ab3b0",
         "filename": "connectivity/source/drivers/ado/ADriver.cxx",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "23b01b79eb01427d477f8de577e8d03c836b713f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b05743e6_c1a329df",
+        "filename": "connectivity/source/drivers/ado/ADriver.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-06-03T12:11:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2b553d60_535ab3b0",
+      "range": {
+        "startLine": 147,
+        "startChar": 16,
+        "endLine": 147,
+        "endChar": 39
+      },
+      "revId": "23b01b79eb01427d477f8de577e8d03c836b713f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "7b101706_5c19305c",
+        "filename": "connectivity/source/drivers/mysql_jdbc/YDriver.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-06-03T12:11:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb47ddf0_e60530ad",
+      "range": {
+        "startLine": 291,
+        "startChar": 56,
+        "endLine": 291,
+        "endChar": 88
+      },
+      "revId": "23b01b79eb01427d477f8de577e8d03c836b713f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "50c7076a_772c9969",
         "filename": "connectivity/source/drivers/mysqlc/mysqlc_driver.cxx",
         "patchSetId": 2
@@ -91,6 +163,30 @@
       "revId": "23b01b79eb01427d477f8de577e8d03c836b713f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb40246a_567f0562",
+        "filename": "connectivity/source/drivers/mysqlc/mysqlc_driver.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-06-03T12:11:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "50c7076a_772c9969",
+      "range": {
+        "startLine": 107,
+        "startChar": 61,
+        "endLine": 107,
+        "endChar": 81
+      },
+      "revId": "23b01b79eb01427d477f8de577e8d03c836b713f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "141a792f_0a54e1ba",
+        "filename": "connectivity/source/drivers/mysqlc/mysqlc_driver.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-06-03T12:11:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f61f681a_17330077",
+      "range": {
+        "startLine": 108,
+        "startChar": 44,
+        "endLine": 108,
+        "endChar": 64
+      },
+      "revId": "23b01b79eb01427d477f8de577e8d03c836b713f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0dc67544_d51b4f44",
         "filename": "connectivity/source/drivers/odbc/ODriver.cxx",
         "patchSetId": 2
@@ -137,6 +257,30 @@
       "revId": "23b01b79eb01427d477f8de577e8d03c836b713f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9db21c13_33bdc1df",
+        "filename": "connectivity/source/drivers/odbc/ODriver.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-06-03T12:11:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0dc67544_d51b4f44",
+      "range": {
+        "startLine": 114,
+        "startChar": 16,
+        "endLine": 114,
+        "endChar": 26
+      },
+      "revId": "23b01b79eb01427d477f8de577e8d03c836b713f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
