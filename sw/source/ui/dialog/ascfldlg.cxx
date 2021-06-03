@@ -29,6 +29,7 @@
 #include <unotools/viewoptions.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/printer.hxx>
+#include <sfx2/docfile.hxx>
 #include <svl/languageoptions.hxx>
 #include <editeng/langitem.hxx>
 #include <swtypes.hxx>
@@ -77,6 +78,16 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( weld::Window* pParent, SwDocShell& rDocSh,
             aUserItem >>= m_sExtraData;
         }
 
+        const SfxPoolItem* pItem;
+        OUString sAsciiOptions;
+        if( rDocSh.GetMedium() != nullptr &&
+            rDocSh.GetMedium()->GetItemSet() != nullptr &&
+            SfxItemState::SET == rDocSh.GetMedium()->GetItemSet()->GetItemState(
+                SID_FILE_FILTEROPTIONS, true, &pItem ))
+        {
+            sAsciiOptions = static_cast<const SfxStringItem*>(pItem)->GetValue();
+        }
+
         const OUString sFindNm = OUString::createFromAscii(
                                     pStream ? sDialogImpExtraData
                                               : sDialogExpExtraData);
@@ -87,11 +98,14 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( weld::Window* pParent, SwDocShell& rDocSh,
             sal_Int32 nEnd = m_sExtraData.indexOf( cDialogExtraDataClose, nStt );
             if( -1 != nEnd )
             {
-                aOpt.ReadUserData(m_sExtraData.copy(nStt, nEnd - nStt));
+                if(sAsciiOptions.isEmpty())
+                    sAsciiOptions = m_sExtraData.copy(nStt, nEnd - nStt);
                 nStt -= nDialogExtraDataLen;
                 m_sExtraData = m_sExtraData.replaceAt(nStt, nEnd - nStt + 1, "");
             }
         }
+        if(!sAsciiOptions.isEmpty())
+            aOpt.ReadUserData(sAsciiOptions);
     }
 
     // read the first chars and check the charset, (language - with L&H)

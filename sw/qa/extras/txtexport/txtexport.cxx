@@ -64,6 +64,25 @@ DECLARE_TXTEXPORT_TEST(testBullets, "bullets.odt")
     CPPUNIT_ASSERT_EQUAL(aExpected, aData);
 }
 
+DECLARE_TXTEXPORT_TEST(testTdf120574_utf8, "UTF8BOMCRLF.txt")
+{
+    SvMemoryStream aMemoryStream;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    aStream.ReadStream(aMemoryStream);
+    const char* pData = static_cast<const char*>(aMemoryStream.GetData());
+    OString aData(std::string_view(pData, aMemoryStream.GetSize()));
+    CPPUNIT_ASSERT_EQUAL(OString(u8"\uFEFFフー\r\nバー\r\n"), aData);
+}
+
+DECLARE_TXTEXPORT_TEST(testTdf120574_utf16le, "UTF16LECRLF.txt")
+{
+    SvMemoryStream aMemoryStream;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    aStream.ReadStream(aMemoryStream);
+    const sal_Unicode* pData = static_cast<const sal_Unicode*>(aMemoryStream.GetData());
+    OUString aData(pData, aMemoryStream.GetSize() / sizeof(sal_Unicode));
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\uFEFFフー\r\nバー\r\n"), aData);
+}
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
