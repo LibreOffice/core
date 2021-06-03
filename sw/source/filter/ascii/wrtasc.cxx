@@ -27,6 +27,8 @@
 #include <frmfmt.hxx>
 #include "wrtasc.hxx"
 #include <frameformats.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/sfxsids.hrc>
 
 #include <strings.hrc>
 
@@ -200,6 +202,23 @@ ErrCode SwASCWriter::WriteStream()
         ::EndProgress( m_pDoc->GetDocShell() );
 
     return ERRCODE_NONE;
+}
+
+void SwASCWriter::SetupFilterOptions(SfxMedium& rMedium)
+{
+    const SfxItemSet* pSet = rMedium.GetItemSet();
+    if( nullptr != pSet )
+    {
+        const SfxPoolItem* pItem;
+        if( SfxItemState::SET == pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
+        {
+            SwAsciiOptions aOpt;
+            OUString sItemOpt;
+            sItemOpt = static_cast<const SfxStringItem*>(pItem)->GetValue();
+            aOpt.ReadUserData(sItemOpt);
+            SetAsciiOptions(aOpt);
+        }
+    }
 }
 
 void GetASCWriter(

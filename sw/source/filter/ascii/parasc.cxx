@@ -21,7 +21,9 @@
 
 #include <tools/stream.hxx>
 #include <hintids.hxx>
+#include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <editeng/fontitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/formatbreakitem.hxx>
@@ -53,6 +55,7 @@ class SwASCIIParser
     SvStream& m_rInput;
     std::unique_ptr<char[]> m_pArr;
     const SwAsciiOptions& m_rOpt;
+    SwAsciiOptions m_usedAsciiOptions;
     std::unique_ptr<SfxItemSet> m_pItemSet;
     tools::Long m_nFileSize;
     SvtScriptType m_nScript;
@@ -69,6 +72,7 @@ public:
                             bool bReadNewDoc, const SwAsciiOptions& rOpts );
 
     ErrCode CallParser();
+    SwAsciiOptions GetUsedAsciiOptions() {return m_usedAsciiOptions;};
 };
 
 }
@@ -86,6 +90,12 @@ ErrCode AsciiReader::Read( SwDoc& rDoc, const OUString&, SwPaM &rPam, const OUSt
                                         !m_bInsertMode, m_aOption.GetASCIIOpts() ));
     ErrCode nRet = xParser->CallParser();
 
+    OUString optionsString;
+    xParser->GetUsedAsciiOptions().WriteUserData(optionsString);
+
+    if(m_pMedium != nullptr && m_pMedium->GetItemSet() != nullptr)
+        m_pMedium->GetItemSet()->Put(SfxStringItem(SID_FILE_FILTEROPTIONS, optionsString));
+
     xParser.reset();
     // after Read reset the options
     m_aOption.ResetASCIIOpts();
@@ -97,6 +107,7 @@ SwASCIIParser::SwASCIIParser(SwDoc& rD, const SwPaM& rCursor, SvStream& rIn, boo
     : m_rDoc(rD)
     , m_rInput(rIn)
     , m_rOpt(rOpts)
+    , m_usedAsciiOptions(rOpts)
     , m_nFileSize(0)
     , m_nScript(SvtScriptType::NONE)
     , m_bNewDoc(bReadNewDoc)
@@ -280,6 +291,7 @@ ErrCode SwASCIIParser::ReadChars()
             m_rInput.SeekRel(-(tools::Long(nOrig)));
         pUseMe=&aEmpty;
     }
+    m_usedAsciiOptions = *pUseMe;
 
     rtl_TextToUnicodeConverter hConverter=nullptr;
     rtl_TextToUnicodeContext hContext=nullptr;

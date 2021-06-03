@@ -36,6 +36,7 @@ public:
     SwASCWriter(const OUString& rFilterName);
     virtual ~SwASCWriter() override;
 
+    void SetupFilterOptions(SfxMedium& rMedium) override;
     const OUString& GetLineEnd() const { return m_sLineEnd; }
 };
 
