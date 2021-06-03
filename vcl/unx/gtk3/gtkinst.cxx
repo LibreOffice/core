@@ -22599,7 +22599,11 @@ public:
         GtkPopover* pPopover = GTK_POPOVER(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pPopover)
             return nullptr;
+#if GTK_CHECK_VERSION(4, 0, 0)
+        return std::make_unique<GtkInstancePopover>(pPopover, this, false);
+#else
         return std::make_unique<GtkInstancePopover>(pPopover, this, true);
+#endif
     }
 
     virtual std::unique_ptr<weld::Toolbar> weld_toolbar(const OString &id) override
