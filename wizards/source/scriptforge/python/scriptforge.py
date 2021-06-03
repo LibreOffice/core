@@ -784,6 +784,58 @@ class SFScriptForge:
             return desktop
         starDesktop, stardesktop = StarDesktop, StarDesktop
 
+        @property
+        def ThisComponent(self):
+            """
+                When the current component is the Basic IDE, the ThisComponent object returns
+                in Basic the component owning the currently run user script.
+                Above behaviour cannot be reproduced in Python.
+                :return: the current component or None when not a document
+                """
+            comp = self.StarDesktop.getCurrentComponent()
+            if comp is None:
+                return None
+            impl = comp.ImplementationName
+            if impl in ('com.sun.star.comp.basic.BasicIDE', 'com.sun.star.comp.sfx2.BackingComp'):
+                return None     # None when Basic IDE or welcome screen
+            return comp
+        thisComponent, thiscomponent = ThisComponent, ThisComponent
+
+        @property
+        def ThisDatabaseDocument(self):
+            """
+                When the current component is the Basic IDE, the ThisDatabaseDocument object returns
+                in Basic the database owning the currently run user script.
+                Above behaviour cannot be reproduced in Python.
+                :return: the current Base (main) component or None when not a Base document or one of its subcomponents
+            """
+            comp = self.ThisComponent   # Get the current component
+            if comp is None:
+                return None
+            #
+            sess = CreateScriptService('Session')
+            impl, ident = '', ''
+            if sess.HasUnoProperty(comp, 'ImplementationName'):
+                impl = comp.ImplementationName
+            if sess.HasUnoProperty(comp, 'Identifier'):
+                ident = comp.Identifier
+            #
+            targetimpl = 'com.sun.star.comp.dba.ODatabaseDocument'
+            if impl == targetimpl:  # The current component is the main Base window
+                return comp
+            # Identify resp. form, table/query, table/query in edit mode, report, relations diagram
+            if impl == 'SwXTextDocument' and ident == 'com.sun.star.sdb.FormDesign' \
+                    or impl == 'org.openoffice.comp.dbu.ODatasourceBrowser' \
+                    or impl in ('org.openoffice.comp.dbu.OTableDesign', 'org.openoffice.comp.dbu.OQuertDesign') \
+                    or impl == 'SwXTextDocument' and ident == 'com.sun.star.sdb.TextReportDesign' \
+                    or impl == 'org.openoffice.comp.dbu.ORelationDesign':
+                db = comp.ScriptContainer
+                if sess.HasUnoProperty(db, 'ImplementationName'):
+                    if db.ImplementationName == targetimpl:
+                        return db
+            return None
+        thisDatabaseDocument, thisdatabasedocument = ThisDatabaseDocument, ThisDatabaseDocument
+
         @classmethod
         def Xray(cls, unoobject = None):
             return cls.SIMPLEEXEC('XrayTool._main.xray', unoobject)
