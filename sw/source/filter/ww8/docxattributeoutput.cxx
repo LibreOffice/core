@@ -89,6 +89,8 @@
 #include <editeng/editobj.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/borderline.hxx>
+#include <editeng/prntitem.hxx>
+#include <sax/tools/converter.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
@@ -4309,7 +4311,63 @@ void DocxAttributeOutput::TableRowRedline( ww8::WW8TableNodeInfoInner::Pointer_t
     const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
     const SwTableLine * pTabLine = pTabBox->GetUpper();
 
-    // search next Redline
+    // check table row property "HasTextChangesOnly" (used only for tracked deletion, yet)
+    const SwRedlineTable& aRedlineTable = m_rExport.m_rDoc.getIDocumentRedlineAccess().GetRedlineTable();
+    const SvxPrintItem *pHasTextChangesOnlyProp =
+            pTabLine->GetFrameFormat()->GetAttrSet().GetItem<SvxPrintItem>(RES_PRINT);
+    if ( !aRedlineTable.empty() && pHasTextChangesOnlyProp && !pHasTextChangesOnlyProp->GetValue() )
+    {
+        // Tracked row deletion is associated to the newest redline range in the row.
+        // Search it to get the date and the mandatory author.
+        const SwTableBoxes & rBoxes = pTabLine->GetTabBoxes();
+        SwPosition aRowStart( SwNodeIndex( *rBoxes[0]->GetSttNd(), 0 ) );
+        SwPosition aRowEnd( SwNodeIndex( *rBoxes[rBoxes.size() - 1]->GetSttNd()->EndOfSectionNode(), -1 ) );
+        SwNodeIndex pEndNodeIndex(aRowEnd.nNode.GetNode());
+
+        SwRedlineTable::size_type nLastDeletion = SwRedlineTable::npos;
+        for( SwRedlineTable::size_type n = 0; n < aRedlineTable.size(); ++n )
+        {
+            const SwRangeRedline* pRedline = aRedlineTable[ n ];
+
+            if ( pRedline->Start()->nNode > pEndNodeIndex )
+                break;
+
+            if( RedlineType::Delete != pRedline->GetType() )
+                continue;
+
+            // redline is in the table row, and newer, than the previous
+            if ( aRowStart <= *pRedline->Start() )
+            {
+                if ( nLastDeletion == SwRedlineTable::npos ||
+                         aRedlineTable [ nLastDeletion ]->GetRedlineData().GetTimeStamp() <
+                             pRedline->GetRedlineData().GetTimeStamp() )
+                {
+                    nLastDeletion = n;
+                }
+            }
+        }
+
+        if ( nLastDeletion != SwRedlineTable::npos )
+        {
+            const SwRedlineData& aRedlineData = aRedlineTable[ nLastDeletion ]->GetRedlineData();
+            // Note: all redline ranges and table row redline (with the same author and timestamp)
+            // use the same redline id in OOXML exported by MSO, but it seems, the recent solution
+            // (different IDs for different ranges, also row changes) is also portable.
+            OString aId( OString::number( m_nRedlineId++ ) );
+            const OUString &rAuthor( SW_MOD()->GetRedlineAuthor( aRedlineData.GetAuthor() ) );
+            OString aAuthor( OUStringToOString( rAuthor, RTL_TEXTENCODING_UTF8 ) );
+
+            OString aDate( DateTimeToOString( aRedlineData.GetTimeStamp() ) );
+
+            m_pSerializer->singleElementNS( XML_w, XML_del,
+                            FSNS( XML_w, XML_id ), aId,
+                            FSNS( XML_w, XML_author ), aAuthor,
+                            FSNS( XML_w, XML_date ), aDate );
+            return;
+        }
+    }
+
+    // search next Redline (only deletion of empty rows and all insertions imported from a DOCX)
     const SwExtraRedlineTable& aExtraRedlineTable = m_rExport.m_rDoc.getIDocumentRedlineAccess().GetExtraRedlineTable();
     for(sal_uInt16 nCurRedlinePos = 0; nCurRedlinePos < aExtraRedlineTable.GetSize(); ++nCurRedlinePos )
     {
