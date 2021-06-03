@@ -45,7 +45,7 @@ class tdf126248(UITestCase):
 
         localeSetting = xDialog.getChild("localesetting")
         select_by_text(localeSetting, language)
-
+        self.ui_test.wait_until_property_is_updated(localeSetting, 'SelectEntryText', language)
         self.assertEqual(language, get_state_as_dict(localeSetting)['SelectEntryText'])
 
         xOKBtn = xDialog.getChild("ok")
@@ -80,7 +80,7 @@ class tdf126248(UITestCase):
 
         self.assertFontName(gridwin, eastFontName)
 
-        self.changeLocalSetting("Default - English (USA)")
+        self.changeLocalSetting("English (USA)")
 
         enter_text_to_cell(gridwin, "C1", "Test")
 
