@@ -9611,7 +9611,11 @@ public:
         GtkInstanceWidget* pPopoverWidget = dynamic_cast<GtkInstanceWidget*>(pPopover);
         m_pPopover = pPopoverWidget ? pPopoverWidget->getWidget() : nullptr;
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_menu_button_set_popover(m_pMenuButton, m_pPopover);
+        return;
+#else
+
 #if defined(GDK_WINDOWING_X11)
         if (!m_pMenuHack)
         {
@@ -9631,9 +9635,7 @@ public:
             }
         }
 #endif
-#endif
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
         if (m_pMenuHack)
         {
             GtkWidget* pPlaceHolder = gtk_popover_new(GTK_WIDGET(m_pMenuButton));
@@ -9650,18 +9652,14 @@ public:
             gtk_menu_button_set_popover(m_pMenuButton, pPlaceHolder);
         }
         else
-#endif
         {
             gtk_menu_button_set_popover(m_pMenuButton, m_pPopover);
             if (m_pPopover)
             {
-#if !GTK_CHECK_VERSION(4, 0, 0)
                 gtk_widget_show_all(m_pPopover);
-#else
-                gtk_popover_popup(GTK_POPOVER(m_pPopover));
-#endif
             }
         }
+#endif
     }
 
     void set_menu(weld::Menu* pMenu);
@@ -21636,6 +21634,15 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
             else if (sClass == "GtkImage" && !bChildHasIconName)
             {
                 xClass->setNodeValue("GtkPicture");
+            }
+            else if (sClass == "GtkPopover" && !bHasVisible)
+            {
+                auto xVisible = CreateProperty(xDoc, "visible", "False");
+                auto xFirstChild = xChild->getFirstChild();
+                if (xFirstChild.is())
+                    xChild->insertBefore(xVisible, xFirstChild);
+                else
+                    xChild->appendChild(xVisible);
             }
         }
 
