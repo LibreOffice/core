@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1802cbee_e21e719a",
+        "filename": "connectivity/source/drivers/ado/ADriver.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-03T09:26:36Z",
+      "side": 1,
+      "message": "Oh, I overlooked this pattern (here and elsewhere) - first creating a vector, only to create Sequence from it.\n\nIt should be simply\n\n    return { {...}, {...}, {...} };",
+      "range": {
+        "startLine": 126,
+        "startChar": 8,
+        "endLine": 150,
+        "endChar": 85
+      },
+      "revId": "7c13274bc0447e1529c804d3ed99f330395830d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1611495e_f4812640",
+        "filename": "connectivity/source/drivers/mysql_jdbc/YDriver.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-03T09:26:36Z",
+      "side": 1,
+      "message": ";-)",
+      "range": {
+        "startLine": 286,
+        "startChar": 4,
+        "endLine": 288,
+        "endChar": 22
+      },
+      "revId": "7c13274bc0447e1529c804d3ed99f330395830d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
