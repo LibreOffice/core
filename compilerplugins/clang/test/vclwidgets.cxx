@@ -82,6 +82,7 @@ void bar3()
 {
     Widget* p;
     p = get<Widget>();
+    (void)p;
 }
 
 void bar4() {

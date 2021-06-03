@@ -127,6 +127,7 @@ struct Bar
     {
         css::uno::Any any;
         any <<= m_bar10;
+        (void)any;
     }
 
     // check that we see reads of the LHS when calling operator>>=

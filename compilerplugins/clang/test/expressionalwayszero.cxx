@@ -42,5 +42,6 @@ int main()
 
     auto v5 = Enum2::ONE;
     v5 &= Enum2::ZERO; // expected-error {{expression always evaluates to zero, lhs=unknown rhs=0 [loplugin:expressionalwayszero]}}
+    (void)v5;
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

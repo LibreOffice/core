@@ -61,6 +61,7 @@ int main()
     OUString s2;
     s2 = OUString(
         s1); // expected-error@-1 {{redundant functional cast from 'rtl::OUString' to 'rtl::OUString' [loplugin:redundantfcast]}}
+    (void)s2;
 
     Color col1;
     Color col2 = Color(

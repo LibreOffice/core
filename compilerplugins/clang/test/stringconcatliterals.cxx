@@ -14,6 +14,9 @@
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 
+#pragma clang diagnostic ignored "-Wunknown-warning-option" // for Clang < 13
+#pragma clang diagnostic ignored "-Wunused-but-set-variable"
+
 #define FOO "foo"
 #define FOOu u"foo"
 

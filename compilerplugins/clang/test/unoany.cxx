@@ -11,6 +11,9 @@
 
 #include "com/sun/star/uno/Any.hxx"
 
+#pragma clang diagnostic ignored "-Wunknown-warning-option" // for Clang < 13
+#pragma clang diagnostic ignored "-Wunused-but-set-variable"
+
 css::uno::Any getAny() { return css::uno::Any(true); }
 
 int main()
