@@ -123,7 +123,7 @@ Bitmap OutputDeviceTestLine::setupDashedLine()
     tools::Rectangle rectangle = maVDRectangle;
     rectangle.shrink(2);
 
-    std::vector stroke({ 2.0, 1.0 });
+    std::vector<double> stroke({ 2.0, 1.0 });
     mpVirtualDevice->DrawPolyLineDirect( basegfx::B2DHomMatrix(),
         basegfx::B2DPolygon{
             basegfx::B2DPoint(rectangle.getX(), rectangle.getY()),
