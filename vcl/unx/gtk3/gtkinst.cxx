@@ -4543,6 +4543,14 @@ namespace
 #endif
     }
 
+    void image_set_from_xgraphic(GtkImage* pImage, const css::uno::Reference<css::graphic::XGraphic>& rImage)
+    {
+        GdkPixbuf* pixbuf = getPixbuf(rImage);
+        gtk_image_set_from_pixbuf(pImage, pixbuf);
+        if (pixbuf)
+            g_object_unref(pixbuf);
+    }
+
 #if !GTK_CHECK_VERSION(4, 0, 0)
 class MenuHelper
 {
@@ -9400,14 +9408,7 @@ public:
     virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override
     {
         ensure_image_widget();
-        GdkPixbuf* pixbuf = getPixbuf(rImage);
-        if (pixbuf)
-        {
-            gtk_image_set_from_pixbuf(m_pImage, pixbuf);
-            g_object_unref(pixbuf);
-        }
-        else
-            image_set_from_virtual_device(m_pImage, nullptr);
+        image_set_from_xgraphic(m_pImage, rImage);
     }
 
 #if GTK_CHECK_VERSION(4, 0, 0)
@@ -11079,10 +11080,7 @@ public:
 
     virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override
     {
-        GdkPixbuf* pixbuf = getPixbuf(rImage);
-        gtk_image_set_from_pixbuf(m_pImage, pixbuf);
-        if (pixbuf)
-            g_object_unref(pixbuf);
+        image_set_from_xgraphic(m_pImage, rImage);
     }
 };
 
