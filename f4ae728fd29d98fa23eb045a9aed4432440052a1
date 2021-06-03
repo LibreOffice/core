@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0b50c4ba_4a2db2cb",
+        "filename": "connectivity/source/drivers/ado/ADriver.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-03T08:28:19Z",
+      "side": 1,
+      "message": "I\u0027d even try to simplify this, too, into something like\n\n    Sequence\u003c OUString \u003e aBooleanValues{ \"false\", \"true\" };",
+      "range": {
+        "startLine": 124,
+        "startChar": 8,
+        "endLine": 126,
+        "endChar": 35
+      },
+      "revId": "f4ae728fd29d98fa23eb045a9aed4432440052a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7ff0b58_a137a102",
+        "filename": "connectivity/source/drivers/hsqldb/HDriver.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-03T08:28:19Z",
+      "side": 1,
+      "message": "things like these may also be simplified to just {}",
+      "range": {
+        "startLine": 402,
+        "startChar": 16,
+        "endLine": 402,
+        "endChar": 26
+      },
+      "revId": "f4ae728fd29d98fa23eb045a9aed4432440052a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aaa02086_c4e5d372",
+        "filename": "connectivity/source/drivers/hsqldb/HDriver.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-03T08:28:19Z",
+      "side": 1,
+      "message": "And this, too, may be simply {} (unless there are several ctors of DriverPropertyInfo, each taking some object here, so that {} may be ambiguous)",
+      "range": {
+        "startLine": 403,
+        "startChar": 16,
+        "endLine": 403,
+        "endChar": 38
+      },
+      "revId": "f4ae728fd29d98fa23eb045a9aed4432440052a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
