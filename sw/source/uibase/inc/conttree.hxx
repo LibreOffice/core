@@ -121,6 +121,7 @@ class SwContentTree final : public SfxListener
     bool                m_bIsOutlineMoveable  :1;
     bool                m_bViewHasChanged     :1;
 
+    bool                m_bEditing              : 1;
     // outline root mode drag & drop
     std::vector<std::unique_ptr<weld::TreeIter>> m_aDndOutlinesSelected;
 
