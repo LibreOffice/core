@@ -304,6 +304,9 @@ class SvxRTFItemStackType
     SvxRTFItemStackType( SfxItemPool&, const sal_uInt16* pWhichRange,
                             const EditPosition& );
 
+    static std::unique_ptr<SvxRTFItemStackType> createSvxRTFItemStackType(
+        SfxItemPool&, const sal_uInt16* pWhichRange, const EditPosition&);
+
     void Add(std::unique_ptr<SvxRTFItemStackType>);
     void Compress( const SvxRTFParser& );
     void DropChildList();
