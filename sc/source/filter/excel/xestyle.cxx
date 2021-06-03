@@ -3054,8 +3054,7 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
     xFormatter->FillKeywordTableForExcel( *mpKeywordTable );
 
     SCTAB nTables = rRoot.GetDoc().GetTableCount();
-    sal_Int32 nForeColorIndex = 0;
-    sal_Int32 nBackColorIndex = 0;
+    sal_Int32 nColorIndex = 0;
     sal_Int32 nCondFormattingIndex = 0;
     for(SCTAB nTab = 0; nTab < nTables; ++nTab)
     {
@@ -3065,27 +3064,30 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
         {
             ScRange aRange;
             pData->GetArea(aRange);
-            ScFilterEntries aFilterEntries;
-            rRoot.GetDoc().GetFilterEntriesArea(aRange.aStart.Col(), aRange.aStart.Row(),
-                                                aRange.aEnd.Row(), nTab, true, aFilterEntries);
-
-            for (auto& rColor : aFilterEntries.getBackgroundColors())
+            for (auto nCol = aRange.aStart.Col(); nCol <= aRange.aEnd.Col(); nCol++)
             {
-                if (!maBackColorToDxfId.emplace(rColor, nBackColorIndex).second)
-                    continue;
+                ScFilterEntries aFilterEntries;
+                rRoot.GetDoc().GetFilterEntriesArea(nCol, aRange.aStart.Row(),
+                                                    aRange.aEnd.Row(), nTab, true, aFilterEntries);
 
-                std::unique_ptr<XclExpCellArea> pExpCellArea(new XclExpCellArea(0, rColor));
-                maDxf.push_back(std::make_unique<XclExpDxf>(rRoot, std::move(pExpCellArea)));
-                nBackColorIndex++;
-            }
-            for (auto& rColor : aFilterEntries.getTextColors())
-            {
-                if (!maForeColorToDxfId.emplace(rColor, nForeColorIndex).second)
-                    continue;
+                for (auto& rColor : aFilterEntries.getBackgroundColors())
+                {
+                    if (!maBackColorToDxfId.emplace(rColor, nColorIndex).second)
+                        continue;
 
-                std::unique_ptr<XclExpCellArea> pExpCellArea(new XclExpCellArea(rColor, 0));
-                maDxf.push_back(std::make_unique<XclExpDxf>(rRoot, std::move(pExpCellArea)));
-                nForeColorIndex++;
+                    std::unique_ptr<XclExpCellArea> pExpCellArea(new XclExpCellArea(0, rColor));
+                    maDxf.push_back(std::make_unique<XclExpDxf>(rRoot, std::move(pExpCellArea)));
+                    nColorIndex++;
+                }
+                for (auto& rColor : aFilterEntries.getTextColors())
+                {
+                    if (!maForeColorToDxfId.emplace(rColor, nColorIndex).second)
+                        continue;
+
+                    std::unique_ptr<XclExpCellArea> pExpCellArea(new XclExpCellArea(rColor, 0));
+                    maDxf.push_back(std::make_unique<XclExpDxf>(rRoot, std::move(pExpCellArea)));
+                    nColorIndex++;
+                }
             }
         }
 

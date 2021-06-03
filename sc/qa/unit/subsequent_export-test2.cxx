@@ -222,7 +222,6 @@ public:
     CPPUNIT_TEST(testDateAutofilterODS);
     CPPUNIT_TEST(testAutofilterColorsODF);
     CPPUNIT_TEST(testAutofilterColorsOOXML);
-    CPPUNIT_TEST(testAutofilterColorsStyleOOXML);
     CPPUNIT_TEST(testAutofilterTop10XLSX);
 
     CPPUNIT_TEST(testRefStringXLSX);
@@ -750,27 +749,40 @@ void ScExportTest2::testAutofilterColorsODF()
 
 void ScExportTest2::testAutofilterColorsOOXML()
 {
-    ScDocShellRef xDocSh = loadDoc(u"autofilter-colors.", FORMAT_XLSX);
-    CPPUNIT_ASSERT(xDocSh.is());
-
-    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory,
-                                                     "xl/tables/table1.xml", FORMAT_XLSX);
-    CPPUNIT_ASSERT(pDoc);
-
-    assertXPath(pDoc, "/x:table/x:autoFilter/x:filterColumn/x:colorFilter", "dxfId", "4");
-}
-
-void ScExportTest2::testAutofilterColorsStyleOOXML()
-{
-    ScDocShellRef xDocSh = loadDoc(u"autofilter-colors.", FORMAT_XLSX);
-    CPPUNIT_ASSERT(xDocSh.is());
-
-    xmlDocUniquePtr pDoc
-        = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
-    CPPUNIT_ASSERT(pDoc);
-
-    assertXPath(pDoc, "/x:styleSheet/x:dxfs/x:dxf[5]/x:fill/x:patternFill/x:bgColor", "rgb",
-                "FFFFD7D7");
+    {
+        ScDocShellRef xDocSh = loadDoc(u"autofilter-colors.", FORMAT_XLSX);
+        CPPUNIT_ASSERT(xDocSh.is());
+        xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory,
+                                                         "xl/tables/table1.xml", FORMAT_XLSX);
+        CPPUNIT_ASSERT(pDoc);
+        assertXPath(pDoc, "/x:table/x:autoFilter/x:filterColumn/x:colorFilter", "dxfId", "5");
+    }
+    {
+        ScDocShellRef xDocSh = loadDoc(u"autofilter-colors.", FORMAT_XLSX);
+        CPPUNIT_ASSERT(xDocSh.is());
+        xmlDocUniquePtr pDoc
+            = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
+        CPPUNIT_ASSERT(pDoc);
+        assertXPath(pDoc, "/x:styleSheet/x:dxfs/x:dxf[5]/x:fill/x:patternFill/x:bgColor", "rgb",
+                    "FFFFD7D7");
+    }
+    {
+        ScDocShellRef xDocSh = loadDoc(u"autofilter-colors-fg.", FORMAT_XLSX);
+        CPPUNIT_ASSERT(xDocSh.is());
+        xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory,
+                                                         "xl/tables/table1.xml", FORMAT_XLSX);
+        CPPUNIT_ASSERT(pDoc);
+        assertXPath(pDoc, "/x:table/x:autoFilter/x:filterColumn/x:colorFilter", "dxfId", "9");
+    }
+    {
+        ScDocShellRef xDocSh = loadDoc(u"autofilter-colors-fg.", FORMAT_XLSX);
+        CPPUNIT_ASSERT(xDocSh.is());
+        xmlDocUniquePtr pDoc
+            = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
+        CPPUNIT_ASSERT(pDoc);
+        assertXPath(pDoc, "/x:styleSheet/x:dxfs/x:dxf[9]/x:fill/x:patternFill/x:fgColor", "rgb",
+                    "FF3465A4");
+    }
 }
 
 void ScExportTest2::testAutofilterTop10XLSX()
