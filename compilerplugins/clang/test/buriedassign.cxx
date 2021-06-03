@@ -126,6 +126,7 @@ void main(OUString sUserAutoCorrFile, int* p2)
     // expected-error@+1 {{buried assignment, rather put on own line [loplugin:buriedassign]}}
     if ((p1 = p2) && sUserAutoCorrFile == "yyy")
         sRet = sUserAutoCorrFile;
+    (void)sRet;
 }
 }
 

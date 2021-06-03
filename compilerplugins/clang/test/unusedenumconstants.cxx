@@ -114,6 +114,7 @@ void test6()
     Enum6 foo = Enum6::Modules;
     foo &= ~Enum6::Top;
     foo &= (~Enum6::Top);
+    (void)foo;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -40,6 +40,7 @@ void test()
     int* m_bar3b;
     m_bar3 = nullptr;
     m_bar3b = m_bar3 = nullptr;
+    (void)m_bar3b;
 
     // check that we see reads of field when passed to a function pointer
     // check that we see read of a field that is a function pointer
@@ -91,6 +92,7 @@ void test()
     // expected-error@+1 {{read any2 [loplugin:writeonlyvars]}}
     css::uno::Any any2;
     any2 <<= m_bar10;
+    (void)any2;
 };
 };
 

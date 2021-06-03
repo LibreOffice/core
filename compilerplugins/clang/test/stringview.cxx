@@ -73,6 +73,7 @@ void f3(OUString s1)
     s2 = "xxx" + s1.copy(1);
     // expected-error@+1 {{rather than copy, pass with a view using subView() [loplugin:stringview]}}
     s2 += s1.copy(1);
+    (void)s2;
 }
 void f3(OString s1)
 {

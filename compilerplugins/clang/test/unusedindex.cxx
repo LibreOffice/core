@@ -9,6 +9,9 @@
 
 #include <vector>
 
+#pragma clang diagnostic ignored "-Wunknown-warning-option" // for Clang < 13
+#pragma clang diagnostic ignored "-Wunused-but-set-variable"
+
 void func1()
 {
     std::vector<int> v1;

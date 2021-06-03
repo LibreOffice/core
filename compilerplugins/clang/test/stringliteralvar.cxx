@@ -107,6 +107,7 @@ void f11(int nStreamType)
             sStreamType = sDocumentType;
             break;
     }
+    (void)sStreamType;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

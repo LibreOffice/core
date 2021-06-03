@@ -9,6 +9,9 @@
 
 #include <rtl/ustring.hxx>
 
+#pragma clang diagnostic ignored "-Wunknown-warning-option" // for Clang < 13
+#pragma clang diagnostic ignored "-Wunused-but-set-variable"
+
 namespace test1
 {
 void f(OUString s1)

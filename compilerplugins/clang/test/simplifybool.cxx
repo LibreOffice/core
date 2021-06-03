@@ -16,6 +16,9 @@
 
 #include <map>
 
+#pragma clang diagnostic ignored "-Wunknown-warning-option" // for Clang < 13
+#pragma clang diagnostic ignored "-Wunused-but-set-variable"
+
 namespace group1
 {
 void f1(int a, int b)

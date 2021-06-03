@@ -31,6 +31,7 @@ void f()
     (void)a;
     bool b2 = true;
     b2 &= g();
+    (void)b2;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

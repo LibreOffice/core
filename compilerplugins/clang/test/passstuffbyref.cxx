@@ -11,6 +11,9 @@
 #include <o3tl/cow_wrapper.hxx>
 #include <vector>
 
+#pragma clang diagnostic ignored "-Wunknown-warning-option" // for Clang < 13
+#pragma clang diagnostic ignored "-Wunused-but-set-variable"
+
 struct S1 {
     OUString mv1;
     OUString const & get() const { return mv1; }

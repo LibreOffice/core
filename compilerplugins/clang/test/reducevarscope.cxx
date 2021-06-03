@@ -9,6 +9,9 @@
 
 #include <rtl/ustring.hxx>
 
+#pragma clang diagnostic ignored "-Wunknown-warning-option" // for Clang < 13
+#pragma clang diagnostic ignored "-Wunused-but-set-variable"
+
 void test1()
 {
     int i = 2; // expected-error {{can reduce scope of var [loplugin:reducevarscope]}}
