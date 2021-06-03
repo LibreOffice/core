@@ -4,6 +4,9 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
+
+import unittest
+import platform
 from uitest.framework import UITestCase
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
@@ -11,6 +14,7 @@ from uitest.uihelper.common import get_url_for_data_file
 
 class CopyPaste(UITestCase):
 
+  @unittest.skipIf(platform.system() == "Windows", "Fails on Windows: tdf#142635")
   def test_copy_paste_chart_with_dot_in_sheet_name(self):
     calc_doc = self.ui_test.load_file(get_url_for_data_file("chartWithDotInSheetName.ods"))
     document = self.ui_test.get_component()
