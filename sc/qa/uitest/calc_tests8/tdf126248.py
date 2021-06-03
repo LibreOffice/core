@@ -80,7 +80,7 @@ class tdf126248(UITestCase):
 
         self.assertFontName(gridwin, eastFontName)
 
-        self.changeLocalSetting("Default - English (USA)")
+        self.changeLocalSetting("English (USA)")
 
         enter_text_to_cell(gridwin, "C1", "Test")
 
