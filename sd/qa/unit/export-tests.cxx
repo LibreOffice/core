@@ -576,8 +576,8 @@ void SdExportTest::testUnknownAttributes()
 
     xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "content.xml");
     assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:name='gr1']/style:graphic-properties[@foo:non-existent-att='bar']");
-// TODO: if the namespace is *known*, the attribute is not preserved, but that seems to be a pre-existing problem, or maybe it's even intentional?
-//    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:name='gr1']/style:graphic-properties[@svg:non-existent-att='blah']");
+    // TODO: if the namespace is *known*, the attribute is not preserved, but that seems to be a pre-existing problem, or maybe it's even intentional?
+    //    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:name='gr1']/style:graphic-properties[@svg:non-existent-att='blah']");
     // this was on style:graphic-properties on the import, but the export moves it to root node which is OK
     assertXPathNSDef(pXmlDoc, "/office:document-content", u"foo", u"http://example.com/");
 }
@@ -586,16 +586,16 @@ void SdExportTest::testTdf80020()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf80020.odp"), ODP);
     {
-        uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xDocShRef->GetModel(), uno::UNO_QUERY);
+        uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xDocShRef->GetModel(),uno::UNO_QUERY);
         uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
-        uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("graphics"), uno::UNO_QUERY);
+        uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("graphics"),uno::UNO_QUERY);
         uno::Reference<style::XStyle> xStyle(xStyleFamily->getByName("Test Style"), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(OUString("text"), xStyle->getParentStyle());
         xDocShRef = saveAndReload( xDocShRef.get(), ODP );
     }
-    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xDocShRef->GetModel(), uno::UNO_QUERY);
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xDocShRef->GetModel(),uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
-    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("graphics"), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("graphics"),uno::UNO_QUERY);
     uno::Reference<style::XStyle> xStyle(xStyleFamily->getByName("Test Style"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("text"), xStyle->getParentStyle());
 
@@ -607,9 +607,9 @@ void SdExportTest::testTdf128985()
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf128985.odp"), ODP);
 
     {
-        uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xDocShRef->GetModel(), uno::UNO_QUERY);
+        uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xDocShRef->GetModel(),uno::UNO_QUERY);
         uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
-        uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("LushGreen"), uno::UNO_QUERY);
+        uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("LushGreen"),uno::UNO_QUERY);
         uno::Reference<style::XStyle> xStyle(xStyleFamily->getByName("outline1"), uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xPropSet( xStyle, uno::UNO_QUERY );
 
@@ -622,14 +622,14 @@ void SdExportTest::testTdf128985()
         xDocShRef = saveAndReload( xDocShRef.get(), ODP );
     }
 
-    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xDocShRef->GetModel(), uno::UNO_QUERY);
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xDocShRef->GetModel(),uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
-    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("LushGreen"), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("LushGreen"),uno::UNO_QUERY);
     uno::Reference<style::XStyle> xStyle(xStyleFamily->getByName("outline1"), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropSet( xStyle, uno::UNO_QUERY );
 
     sal_Int16 nWritingMode = 0;
-    xPropSet->getPropertyValue( "WritingMode" ) >>= nWritingMode;
+    xPropSet->getPropertyValue("WritingMode") >>= nWritingMode;
 
     // Without the fix in place, this test would have failed with
     // - Expected: 0
@@ -645,10 +645,10 @@ void SdExportTest::testLinkedGraphicRT()
     const sal_Int32 vFormats[] = {
         ODP,
         PPT,
-//      PPTX, -> this fails now, need a fix
+        //      PPTX, -> this fails now, need a fix
     };
 
-    for( size_t nExportFormat = 0; nExportFormat < SAL_N_ELEMENTS(vFormats); ++nExportFormat )
+    for ( size_t nExportFormat = 0; nExportFormat < SAL_N_ELEMENTS(vFormats); ++nExportFormat )
     {
         // Load the original file with one image
         sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/document_with_linked_graphic.odp"), ODP);
@@ -691,13 +691,13 @@ void SdExportTest::testLinkedGraphicRT()
             CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pDoc != nullptr );
             const SdrPage *pPage = pDoc->GetPage(1);
             CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pPage != nullptr );
-            SdrGrafObj* pObject = dynamic_cast<SdrGrafObj*>(pPage->GetObj(2));
+            SdrGrafObj *pObject = dynamic_cast<SdrGrafObj*>(pPage->GetObj(2));
             CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pObject != nullptr );
             CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pObject->IsLinkedGraphic() );
 
             const GraphicObject& rGraphicObj = pObject->GetGraphicObject(true);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), int(GraphicType::Bitmap), int(rGraphicObj.GetGraphic().GetType()));
-            CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), sal_uLong(864900), rGraphicObj.GetGraphic().GetSizeBytes());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), int(GraphicType::Bitmap), int(rGraphicObj.GetGraphic().GetType()));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_uLong(864900), rGraphicObj.GetGraphic().GetSizeBytes());
         }
 
         xDocShRef->DoClose();
@@ -759,7 +759,7 @@ void SdExportTest::testImageWithSpecialID()
     officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::set(sal_Int32(1), batch);
     batch->commit();
 
-    for( size_t nExportFormat = 0; nExportFormat < SAL_N_ELEMENTS(vFormats); ++nExportFormat )
+    for ( size_t nExportFormat = 0; nExportFormat < SAL_N_ELEMENTS(vFormats); ++nExportFormat )
     {
         // Load the original file
         ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/images_with_special_IDs.odp"), ODP);
@@ -780,7 +780,7 @@ void SdExportTest::testImageWithSpecialID()
 
         // Check whether graphic was exported well
         uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xDocShRef->GetModel(), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), static_cast<sal_Int32>(2), xDrawPagesSupplier->getDrawPages()->getCount() );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(2), xDrawPagesSupplier->getDrawPages()->getCount());
         uno::Reference< drawing::XDrawPage > xDrawPage( xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
 
         uno::Reference<drawing::XShape> xImage(xDrawPage->getByIndex(2), uno::UNO_QUERY);
@@ -794,8 +794,8 @@ void SdExportTest::testImageWithSpecialID()
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic->getType() != graphic::GraphicType::EMPTY);
             uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(610), xBitmap->getSize().Width );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(381), xBitmap->getSize().Height );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(610), xBitmap->getSize().Width);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(381), xBitmap->getSize().Height);
         }
 
         // Second Image
@@ -842,7 +842,7 @@ void SdExportTest::testTdf62176()
 
     //Saving and Reloading the file
     xDocShRef = saveAndReload( xDocShRef.get(), ODP );
-    uno::Reference<drawing::XDrawPage> xPage2( getPage(0, xDocShRef ) );
+    uno::Reference<drawing::XDrawPage> xPage2( getPage( 0, xDocShRef ) );
     //there should be only *one* shape
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xPage2->getCount());
 
@@ -872,7 +872,7 @@ void SdExportTest::testEmbeddedPdf()
     }
 
     sd::DrawDocShellRef xShell = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/embedded-pdf.odp"), ODP);
-    xShell = saveAndReload( xShell.get(), ODP );
+    xShell = saveAndReload( xShell.get(), ODP);
     uno::Reference<drawing::XDrawPage> xPage = getPage(0, xShell);
     uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<graphic::XGraphic> xGraphic;
@@ -1105,7 +1105,7 @@ void SdExportTest::testTdf115394PPT()
 
 void SdExportTest::testBulletsAsImage()
 {
-    for (sal_Int32 nExportFormat : {ODP, PPTX, PPT})
+    for (sal_Int32 nExportFormat : { ODP, PPTX, PPT })
     {
         ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/odp/BulletsAsImage.odp"), ODP);
         const OString sFailedMessageBase = OString::Concat("Failed on filter '") + aFileFormats[nExportFormat].pFilterName + "': ";
@@ -1242,12 +1242,12 @@ void SdExportTest::testTdf119629()
     // MSO's effect node type Click parallel node, with group node, after group node
     // were missing.
     assertXPath(pXmlDoc, "//draw:page"
-            "/anim:par[@presentation:node-type='timing-root']"
-            "/anim:seq[@presentation:node-type='main-sequence']"
-            "/anim:par[@presentation:node-type='on-click']"
-            "/anim:par[@presentation:node-type='with-previous']"
-            "/anim:par[@presentation:node-type='on-click']"
-            "/anim:animate[@anim:formula='width*sin(2.5*pi*$)']", 1);
+                "/anim:par[@presentation:node-type='timing-root']"
+                "/anim:seq[@presentation:node-type='main-sequence']"
+                "/anim:par[@presentation:node-type='on-click']"
+                "/anim:par[@presentation:node-type='with-previous']"
+                "/anim:par[@presentation:node-type='on-click']"
+                "/anim:animate[@anim:formula='width*sin(2.5*pi*$)']", 1);
     xDocShRef->DoClose();
 }
 
@@ -1292,31 +1292,31 @@ void SdExportTest::testTdf123557()
     assertXPath(pXmlDoc, "//draw:page", 1);
     assertXPath(pXmlDoc, "//draw:page/anim:par", 1);
     assertXPath(pXmlDoc, "//draw:page"
-            "/anim:par[@presentation:node-type='timing-root']"
-            "/anim:seq[@presentation:node-type='interactive-sequence']", 2);
+                "/anim:par[@presentation:node-type='timing-root']"
+                "/anim:seq[@presentation:node-type='interactive-sequence']", 2);
     assertXPath(pXmlDoc, "//draw:page"
-            "/anim:par[@presentation:node-type='timing-root']"
-            "/anim:seq[@presentation:node-type='interactive-sequence']"
-            "/anim:par[@smil:begin]",3);
+                "/anim:par[@presentation:node-type='timing-root']"
+                "/anim:seq[@presentation:node-type='interactive-sequence']"
+                "/anim:par[@smil:begin]", 3);
     xDocShRef->DoClose();
 }
 
 void SdExportTest::testTdf126761()
 {
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/ppt/tdf126761.ppt"), PPT);
-    xDocShRef = saveAndReload( xDocShRef.get(), ODP );
+    xDocShRef = saveAndReload(xDocShRef.get(), ODP);
     uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
 
     // Get first paragraph of the text
     uno::Reference<text::XTextRange> const xParagraph( getParagraphFromShape( 0, xShape ) );
 
     // Get first run of the paragraph
-    uno::Reference<text::XTextRange> xRun( getRunFromParagraph (0, xParagraph ) );
+    uno::Reference<text::XTextRange> xRun( getRunFromParagraph( 0, xParagraph ) );
     uno::Reference< beans::XPropertySet > xPropSet( xRun, uno::UNO_QUERY_THROW );
 
     // Check character underline, to make sure it has been set correctly
     sal_uInt32 nCharUnderline;
-    xPropSet->getPropertyValue( "CharUnderline" ) >>= nCharUnderline;
+    xPropSet->getPropertyValue("CharUnderline") >>= nCharUnderline;
     CPPUNIT_ASSERT_EQUAL( sal_uInt32(1), nCharUnderline );
 
     xDocShRef->DoClose();
@@ -1417,7 +1417,7 @@ void SdExportTest::testShadowBlur()
 void SdExportTest::testRhbz1870501()
 {
     //Without the fix in place, it would crash at export time
-    ::sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc(u"/sd/qa/unit/data/odg/rhbz1870501.odg"), ODG);
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odg/rhbz1870501.odg"), ODG);
     xDocShRef = saveAndReload( xDocShRef.get(), ODG );
 }
 
@@ -1466,7 +1466,7 @@ void SdExportTest::testMasterPageBackgroundFullSize()
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xMP->getPropertyValue("BorderRight").get<sal_Int32>());
         uno::Reference<beans::XPropertySet> xBackgroundProps(
             xMP->getPropertyValue("Background").get<uno::Reference<beans::XPropertySet>>());
-        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, xBackgroundProps->getPropertyValue("FillStyle").get<drawing::FillStyle>());
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID,xBackgroundProps->getPropertyValue("FillStyle").get<drawing::FillStyle>());
         xBackgroundProps->getPropertyValue("FillColor") >>= nFillColor;
         CPPUNIT_ASSERT_EQUAL(Color(0x729fcf), nFillColor);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xBackgroundProps->getPropertyValue("FillTransparence").get<sal_Int16>());
@@ -1480,7 +1480,7 @@ void SdExportTest::testMasterPageBackgroundFullSize()
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xMP->getPropertyValue("BorderRight").get<sal_Int32>());
         uno::Reference<beans::XPropertySet> xBackgroundProps(
             xMP->getPropertyValue("Background").get<uno::Reference<beans::XPropertySet>>());
-        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, xBackgroundProps->getPropertyValue("FillStyle").get<drawing::FillStyle>());
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID,xBackgroundProps->getPropertyValue("FillStyle").get<drawing::FillStyle>());
         xBackgroundProps->getPropertyValue("FillColor") >>= nFillColor;
         CPPUNIT_ASSERT_EQUAL(Color(0x729fcf), nFillColor);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xBackgroundProps->getPropertyValue("FillTransparence").get<sal_Int16>());
@@ -1578,19 +1578,19 @@ void SdExportTest::testMasterPageBackgroundFullSize()
     assertXPath(pXmlDoc,
         "/office:document-styles/office:automatic-styles/style:style[@style:family='drawing-page' and @style:name = "
         "/office:document-styles/office:master-styles/style:master-page[@style:name='Default']/attribute::draw:style-name"
-        "]/style:drawing-page-properties", "background-size", "border");
+                "]/style:drawing-page-properties", "background-size", "border");
     assertXPath(pXmlDoc,
         "/office:document-styles/office:automatic-styles/style:style[@style:family='drawing-page' and @style:name = "
         "/office:document-styles/office:master-styles/style:master-page[@style:name='Default_20_3']/attribute::draw:style-name"
-        "]/style:drawing-page-properties", "background-size", "full");
+                "]/style:drawing-page-properties", "background-size", "full");
     assertXPath(pXmlDoc,
         "/office:document-styles/office:automatic-styles/style:style[@style:family='drawing-page' and @style:name = "
         "/office:document-styles/office:master-styles/style:master-page[@style:name='Default_20_2']/attribute::draw:style-name"
-        "]/style:drawing-page-properties", "background-size", "border");
+                "]/style:drawing-page-properties", "background-size", "border");
     assertXPath(pXmlDoc,
         "/office:document-styles/office:automatic-styles/style:style[@style:family='drawing-page' and @style:name = "
         "/office:document-styles/office:master-styles/style:master-page[@style:name='Default_20_1']/attribute::draw:style-name"
-        "]/style:drawing-page-properties", "background-size", "full");
+                "]/style:drawing-page-properties", "background-size", "full");
 
     tempFile.EnableKillingFile();
 }
