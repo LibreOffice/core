@@ -55,58 +55,7 @@ void Test::tearDown()
 
 void Test::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
 {
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w"),
-                       BAD_CAST("http://schemas.openxmlformats.org/wordprocessingml/2006/main"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("v"), BAD_CAST("urn:schemas-microsoft-com:vml"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("mc"),
-                       BAD_CAST("http://schemas.openxmlformats.org/markup-compatibility/2006"));
-    xmlXPathRegisterNs(
-        pXmlXpathCtx, BAD_CAST("wps"),
-        BAD_CAST("http://schemas.microsoft.com/office/word/2010/wordprocessingShape"));
-    xmlXPathRegisterNs(
-        pXmlXpathCtx, BAD_CAST("wpg"),
-        BAD_CAST("http://schemas.microsoft.com/office/word/2010/wordprocessingGroup"));
-    xmlXPathRegisterNs(
-        pXmlXpathCtx, BAD_CAST("wp"),
-        BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"));
-    xmlXPathRegisterNs(
-        pXmlXpathCtx, BAD_CAST("wp14"),
-        BAD_CAST("http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("a"),
-                       BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/main"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("pic"),
-                       BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/picture"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("rels"),
-                       BAD_CAST("http://schemas.openxmlformats.org/package/2006/relationships"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w14"),
-                       BAD_CAST("http://schemas.microsoft.com/office/word/2010/wordml"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("m"),
-                       BAD_CAST("http://schemas.openxmlformats.org/officeDocument/2006/math"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("ContentType"),
-                       BAD_CAST("http://schemas.openxmlformats.org/package/2006/content-types"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("lc"),
-                       BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/lockedCanvas"));
-    xmlXPathRegisterNs(
-        pXmlXpathCtx, BAD_CAST("cp"),
-        BAD_CAST("http://schemas.openxmlformats.org/package/2006/metadata/core-properties"));
-    xmlXPathRegisterNs(
-        pXmlXpathCtx, BAD_CAST("extended-properties"),
-        BAD_CAST("http://schemas.openxmlformats.org/officeDocument/2006/extended-properties"));
-    xmlXPathRegisterNs(
-        pXmlXpathCtx, BAD_CAST("custom-properties"),
-        BAD_CAST("http://schemas.openxmlformats.org/officeDocument/2006/custom-properties"));
-    xmlXPathRegisterNs(
-        pXmlXpathCtx, BAD_CAST("vt"),
-        BAD_CAST("http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("dcterms"), BAD_CAST("http://purl.org/dc/terms/"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("a14"),
-                       BAD_CAST("http://schemas.microsoft.com/office/drawing/2010/main"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("c"),
-                       BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/chart"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("o"),
-                       BAD_CAST("urn:schemas-microsoft-com:office:office"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w10"),
-                       BAD_CAST("urn:schemas-microsoft-com:office:word"));
+    XmlTestTools::registerOOXMLNamespaces(pXmlXpathCtx);
 }
 
 void Test::loadAndSave(const OUString& rURL, const OUString& rFilterName)
