@@ -1824,7 +1824,7 @@ namespace emfio
                             mpInputStream->ReadUInt32( ncStrings );
                             SAL_INFO("emfio", "\t\t Number of Text objects: " << ncStrings);
                         }
-                        for ( sal_uInt32 nStringNo = 0; nStringNo < ncStrings; nStringNo++ )
+                        for (sal_uInt32 nStringNo = 0; nStringNo < ncStrings && mpInputStream->good(); ++nStringNo)
                         {
                             mpInputStream->ReadInt32( ptlReferenceX ).ReadInt32( ptlReferenceY ).ReadUInt32( nLen ).ReadUInt32( nOffString ).ReadUInt32( nOptions );
                             SAL_INFO("emfio", "\t\tReference: (" << ptlReferenceX << ", " << ptlReferenceY << ")");
