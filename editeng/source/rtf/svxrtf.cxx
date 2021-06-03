@@ -924,6 +924,7 @@ SvxRTFItemStackType::SvxRTFItemStackType(
         const EditPosition& rPos )
     : aAttrSet( rPool, pWhichRange )
     , mxStartNodeIdx(rPos.MakeNodeIdx())
+    // coverity[read_parm_fld : FALSE] - difficulty with std::optional leading to bogus 'Uninitialized scalar variable'
     , mxEndNodeIdx(mxStartNodeIdx)
     , nSttCnt(rPos.GetCntIdx())
     , nEndCnt(nSttCnt)
