@@ -2204,7 +2204,6 @@ static MouseEventModifiers ImplGetMouseButtonMode(sal_uInt16 nButton, sal_uInt16
     return nMode;
 }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
 static MouseEventModifiers ImplGetMouseMoveMode(sal_uInt16 nCode)
 {
     MouseEventModifiers nMode = MouseEventModifiers::NONE;
@@ -2216,7 +2215,6 @@ static MouseEventModifiers ImplGetMouseMoveMode(sal_uInt16 nCode)
         nMode |= MouseEventModifiers::DRAGCOPY;
     return nMode;
 }
-#endif
 
 namespace
 {
@@ -2737,6 +2735,7 @@ private:
 #if GTK_CHECK_VERSION(4, 0, 0)
     GtkEventController* m_pFocusController;
     GtkEventController* m_pClickController;
+    GtkEventController* m_pMotionController;
 #endif
 
     rtl::Reference<GtkInstDropTarget> m_xDropTarget;
@@ -2924,7 +2923,32 @@ private:
     }
 #endif
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
+    bool simple_signal_motion(double x, double y, guint nState)
+    {
+        if (!m_aMouseMotionHdl.IsSet())
+            return false;
+
+        Point aPos(x, y);
+        if (SwapForRTL())
+            aPos.setX(gtk_widget_get_allocated_width(m_pWidget) - 1 - aPos.X());
+        sal_uInt32 nModCode = GtkSalFrame::GetMouseModCode(nState);
+        MouseEvent aMEvt(aPos, 0, ImplGetMouseMoveMode(nModCode), nModCode, nModCode);
+
+        m_aMouseMotionHdl.Call(aMEvt);
+        return true;
+    }
+
+#if GTK_CHECK_VERSION(4, 0, 0)
+    static void signalMotion(GtkEventControllerMotion *pController, double x, double y, gpointer widget)
+    {
+        GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        GdkModifierType eType = gtk_event_controller_get_current_event_state(GTK_EVENT_CONTROLLER(pController));
+
+        SolarMutexGuard aGuard;
+        pThis->simple_signal_motion(x, y, eType);
+    }
+
+#else
     static gboolean signalMotion(GtkWidget*, GdkEventMotion* pEvent, gpointer widget)
     {
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
@@ -2955,41 +2979,50 @@ private:
             return false;
         }
 
-        if (!m_aMouseMotionHdl.IsSet())
-            return false;
-
-        Point aPos(pEvent->x, pEvent->y);
-        if (SwapForRTL())
-            aPos.setX(gtk_widget_get_allocated_width(m_pWidget) - 1 - aPos.X());
-        sal_uInt32 nModCode = GtkSalFrame::GetMouseModCode(pEvent->state);
-        MouseEvent aMEvt(aPos, 0, ImplGetMouseMoveMode(nModCode), nModCode, nModCode);
-
-        m_aMouseMotionHdl.Call(aMEvt);
-        return true;
+        return simple_signal_motion(pEvent->x, pEvent->y, pEvent->state);
     }
+#endif
 
-    static gboolean signalCrossing(GtkWidget*, GdkEventCrossing* pEvent, gpointer widget)
-    {
-        GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
-        SolarMutexGuard aGuard;
-        return pThis->signal_crossing(pEvent);
-    }
-
-    bool signal_crossing(const GdkEventCrossing* pEvent)
+    bool signal_crossing(double x, double y, guint nState, MouseEventModifiers eMouseEventModifiers)
     {
         if (!m_aMouseMotionHdl.IsSet())
             return false;
 
-        Point aPos(pEvent->x, pEvent->y);
+        Point aPos(x, y);
         if (SwapForRTL())
             aPos.setX(gtk_widget_get_allocated_width(m_pWidget) - 1 - aPos.X());
-        sal_uInt32 nModCode = GtkSalFrame::GetMouseModCode(pEvent->state);
+        sal_uInt32 nModCode = GtkSalFrame::GetMouseModCode(nState);
         MouseEventModifiers eModifiers = ImplGetMouseMoveMode(nModCode);
-        eModifiers = eModifiers | (pEvent->type == GDK_ENTER_NOTIFY ? MouseEventModifiers::ENTERWINDOW : MouseEventModifiers::LEAVEWINDOW);
+        eModifiers = eModifiers | eMouseEventModifiers;
         MouseEvent aMEvt(aPos, 0, eModifiers, nModCode, nModCode);
 
         m_aMouseMotionHdl.Call(aMEvt);
         return true;
+    }
+
+#if GTK_CHECK_VERSION(4, 0, 0)
+    static void signalEnter(GtkEventControllerMotion *pController, double x, double y, gpointer widget)
+    {
+        GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        GdkModifierType eType = gtk_event_controller_get_current_event_state(GTK_EVENT_CONTROLLER(pController));
+        SolarMutexGuard aGuard;
+        pThis->signal_crossing(x, y, eType, MouseEventModifiers::ENTERWINDOW);
+    }
+
+    static void signalLeave(GtkEventControllerMotion *pController, gpointer widget)
+    {
+        GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        GdkModifierType eType = gtk_event_controller_get_current_event_state(GTK_EVENT_CONTROLLER(pController));
+        SolarMutexGuard aGuard;
+        pThis->signal_crossing(-1, -1, eType, MouseEventModifiers::LEAVEWINDOW);
+    }
+#else
+    static gboolean signalCrossing(GtkWidget*, GdkEventCrossing* pEvent, gpointer widget)
+    {
+        GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        MouseEventModifiers eMouseEventModifiers = pEvent->type == GDK_ENTER_NOTIFY ? MouseEventModifiers::ENTERWINDOW : MouseEventModifiers::LEAVEWINDOW;
+        SolarMutexGuard aGuard;
+        return pThis->signal_crossing(pEvent->x, pEvent->y, pEvent->state, eMouseEventModifiers);
     }
 #endif
 
@@ -3205,6 +3238,7 @@ public:
 #if GTK_CHECK_VERSION(4, 0, 0)
         , m_pFocusController(nullptr)
         , m_pClickController(nullptr)
+        , m_pMotionController(nullptr)
 #endif
     {
         if (!bTakeOwnership)
@@ -3239,8 +3273,16 @@ public:
 
     virtual void connect_mouse_move(const Link<const MouseEvent&, bool>& rLink) override
     {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        GtkEventController* pMotionController = get_motion_controller();
+        if (!m_nMotionSignalId)
+            m_nMotionSignalId = g_signal_connect(pMotionController, "motion", G_CALLBACK(signalMotion), this);
+        if (!m_nLeaveSignalId)
+            m_nLeaveSignalId = g_signal_connect(pMotionController, "leave", G_CALLBACK(signalEnter), this);
+        if (!m_nEnterSignalId)
+            m_nEnterSignalId = g_signal_connect(pMotionController, "enter", G_CALLBACK(signalLeave), this);
+#else
         ensureMouseEventWidget();
-#if !GTK_CHECK_VERSION(4, 0, 0)
         if (!m_nMotionSignalId)
             m_nMotionSignalId = g_signal_connect(m_pMouseEventBox, "motion-notify-event", G_CALLBACK(signalMotion), this);
         if (!m_nLeaveSignalId)
@@ -3706,6 +3748,16 @@ public:
         }
         return m_pClickController;
     }
+
+    GtkEventController* get_motion_controller()
+    {
+        if (!m_pMotionController)
+        {
+            m_pMotionController = gtk_event_controller_motion_new();
+            gtk_widget_add_controller(m_pWidget, m_pMotionController);
+        }
+        return m_pMotionController;
+    }
 #endif
 
 
@@ -3939,12 +3991,29 @@ public:
 #endif
         }
         if (m_nMotionSignalId)
+        {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            g_signal_handler_disconnect(get_motion_controller(), m_nMotionSignalId);
+#else
             g_signal_handler_disconnect(m_pMouseEventBox, m_nMotionSignalId);
+#endif
+        }
         if (m_nLeaveSignalId)
+        {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            g_signal_handler_disconnect(get_motion_controller(), m_nLeaveSignalId);
+#else
             g_signal_handler_disconnect(m_pMouseEventBox, m_nLeaveSignalId);
+#endif
+        }
         if (m_nEnterSignalId)
+        {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            g_signal_handler_disconnect(get_motion_controller(), m_nEnterSignalId);
+#else
             g_signal_handler_disconnect(m_pMouseEventBox, m_nEnterSignalId);
-
+#endif
+        }
         if (m_nButtonReleaseSignalId)
         {
 #if GTK_CHECK_VERSION(4, 0, 0)
@@ -22634,6 +22703,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/acorreplacepage.ui" &&
         rUIFile != "cui/ui/applyautofmtpage.ui" &&
         rUIFile != "cui/ui/applylocalizedpage.ui" &&
+        rUIFile != "cui/ui/colorpickerdialog.ui" &&
         rUIFile != "cui/ui/eventassigndialog.ui" &&
         rUIFile != "cui/ui/eventassignpage.ui" &&
         rUIFile != "cui/ui/autocorrectdialog.ui" &&
