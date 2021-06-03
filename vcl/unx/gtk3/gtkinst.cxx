@@ -9686,6 +9686,7 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_box_pack_start(pBox, pLabel, true, true, 0);
 #else
+        gtk_widget_set_halign(pLabel, GTK_ALIGN_START);
         gtk_box_prepend(pBox, pLabel);
 #endif
         g_object_unref(pLabel);
