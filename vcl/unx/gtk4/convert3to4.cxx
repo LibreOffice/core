@@ -794,6 +794,10 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                     = xDoc->createAttribute("class");
                 xBoxClassName->setValue("GtkBox");
                 xNewObjectNode->setAttributeNode(xBoxClassName);
+
+                auto xSpacing = CreateProperty(xDoc, "spacing", "6");
+                xNewObjectNode->appendChild(xSpacing);
+
                 xNewChildNode->appendChild(xNewObjectNode);
 
                 xChild->appendChild(xNewChildNode);
