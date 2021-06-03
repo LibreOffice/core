@@ -21096,13 +21096,19 @@ struct ConvertResult
     bool m_bChildCanFocus;
     bool m_bHasVisible;
     bool m_bHasIconName;
+    bool m_bAlwaysShowImage;
+    css::uno::Reference<css::xml::dom::XNode> m_xPropertyLabel;
 
     ConvertResult(bool bChildCanFocus,
                   bool bHasVisible,
-                  bool bHasIconName)
+                  bool bHasIconName,
+                  bool bAlwaysShowImage,
+                  const css::uno::Reference<css::xml::dom::XNode>& rPropertyLabel)
         : m_bChildCanFocus(bChildCanFocus)
         , m_bHasVisible(bHasVisible)
         , m_bHasIconName(bHasIconName)
+        , m_bAlwaysShowImage(bAlwaysShowImage)
+        , m_xPropertyLabel(rPropertyLabel)
     {
     }
 };
@@ -21111,7 +21117,7 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
 {
     css::uno::Reference<css::xml::dom::XNodeList> xNodeList = xNode->getChildNodes();
     if (!xNodeList.is())
-        return ConvertResult(false, false, false);
+        return ConvertResult(false, false, false, false, nullptr);
 
     std::vector<css::uno::Reference<css::xml::dom::XNode>> xRemoveList;
 
@@ -21119,6 +21125,8 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
     bool bChildCanFocus = false;
     bool bHasVisible = false;
     bool bHasIconName = false;
+    bool bAlwaysShowImage = false;
+    css::uno::Reference<css::xml::dom::XNode> xPropertyLabel;
     css::uno::Reference<css::xml::dom::XNode> xCantFocus;
 
     css::uno::Reference<css::xml::dom::XNode> xChild = xNode->getFirstChild();
@@ -21188,6 +21196,9 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
                     }
                 }
             }
+
+            if (sName == "label")
+                xPropertyLabel = xChild;
 
             if (sName == "visible")
                 bHasVisible = true;
@@ -21280,7 +21291,10 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
             {
                 if (GetParentObjectType(xChild) == "GtkButton")
                 {
-                    // TODO add an intermediate container ?
+                    // we will turn always-show-image into a GtkBox child for
+                    // GtkButton and a GtkLabel child for the GtkBox and move
+                    // the label property into it.
+                    bAlwaysShowImage = toBool(xChild->getFirstChild()->getNodeValue());
                     xRemoveList.push_back(xChild);
                 }
             }
@@ -21526,6 +21540,8 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
 
         bool bChildHasIconName = false;
         bool bChildHasVisible = false;
+        bool bChildAlwaysShowImage = false;
+        css::uno::Reference<css::xml::dom::XNode> xChildPropertyLabel;
         if (xChild->hasChildNodes())
         {
             auto aChildRes = Convert3To4(xChild);
@@ -21539,6 +21555,8 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
             {
                 bChildHasVisible = aChildRes.m_bHasVisible;
                 bChildHasIconName = aChildRes.m_bHasIconName;
+                bChildAlwaysShowImage = aChildRes.m_bAlwaysShowImage;
+                xChildPropertyLabel = aChildRes.m_xPropertyLabel;
             }
         }
 
@@ -21713,6 +21731,37 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
                 else
                     xChild->appendChild(xVisible);
             }
+
+            if (bChildAlwaysShowImage)
+            {
+                auto xImageCandidateNode = xChild->getLastChild();
+                if (xImageCandidateNode && xImageCandidateNode->getNodeName() != "child")
+                    xImageCandidateNode.clear();
+                if (xImageCandidateNode)
+                    xChild->removeChild(xImageCandidateNode);
+
+                css::uno::Reference<css::xml::dom::XElement> xNewChildNode = xDoc->createElement("child");
+                css::uno::Reference<css::xml::dom::XElement> xNewObjectNode = xDoc->createElement("object");
+                css::uno::Reference<css::xml::dom::XAttr> xBoxClassName = xDoc->createAttribute("class");
+                xBoxClassName->setValue("GtkBox");
+                xNewObjectNode->setAttributeNode(xBoxClassName);
+                xNewChildNode->appendChild(xNewObjectNode);
+
+                xChild->appendChild(xNewChildNode);
+
+                css::uno::Reference<css::xml::dom::XElement> xNewLabelChildNode = xDoc->createElement("child");
+                css::uno::Reference<css::xml::dom::XElement> xNewChildObjectNode = xDoc->createElement("object");
+                css::uno::Reference<css::xml::dom::XAttr> xLabelClassName = xDoc->createAttribute("class");
+                xLabelClassName->setValue("GtkLabel");
+                xNewChildObjectNode->setAttributeNode(xLabelClassName);
+                if (xChildPropertyLabel)
+                    xNewChildObjectNode->appendChild(xChildPropertyLabel->getParentNode()->removeChild(xChildPropertyLabel));
+                xNewLabelChildNode->appendChild(xNewChildObjectNode);
+
+                if (xImageCandidateNode)
+                    xNewObjectNode->appendChild(xImageCandidateNode);
+                xNewObjectNode->appendChild(xNewLabelChildNode);
+            }
         }
 
         xChild = xNextChild;
@@ -21724,7 +21773,7 @@ ConvertResult Convert3To4(const Reference<css::xml::dom::XNode>& xNode)
     for (auto& xRemove : xRemoveList)
         xNode->removeChild(xRemove);
 
-    return ConvertResult(bChildCanFocus, bHasVisible, bHasIconName);
+    return ConvertResult(bChildCanFocus, bHasVisible, bHasIconName, bAlwaysShowImage, xPropertyLabel);
 }
 #endif
 
