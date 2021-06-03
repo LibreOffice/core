@@ -609,22 +609,33 @@ const vcl::Font& SvxRTFParser::GetFont( sal_uInt16 nId )
     return *pDfltFont;
 }
 
+std::unique_ptr<SvxRTFItemStackType> SvxRTFItemStackType::createSvxRTFItemStackType(
+    SfxItemPool& rPool, const sal_uInt16* pWhichRange, const EditPosition& rEditPosition)
+{
+    struct MakeUniqueEnabler : public SvxRTFItemStackType
+    {
+        MakeUniqueEnabler(SfxItemPool& rPool, const sal_uInt16* pWhichRange, const EditPosition& rEditPosition)
+            : SvxRTFItemStackType(rPool, pWhichRange, rEditPosition)
+        {
+        }
+    };
+    return std::make_unique<MakeUniqueEnabler>(rPool, pWhichRange, rEditPosition);
+}
+
 SvxRTFItemStackType* SvxRTFParser::GetAttrSet_()
 {
     SvxRTFItemStackType* pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back().get();
-    std::unique_ptr<SvxRTFItemStackType> pNew;
+    std::unique_ptr<SvxRTFItemStackType> xNew;
     if( pCurrent )
-        pNew.reset(new SvxRTFItemStackType( *pCurrent, *mxInsertPosition, false/*bCopyAttr*/ ));
+        xNew = std::make_unique<SvxRTFItemStackType>(*pCurrent, *mxInsertPosition, false/*bCopyAttr*/);
     else
-        pNew.reset(new SvxRTFItemStackType( *pAttrPool, aWhichMap.data(),
-                                        *mxInsertPosition ));
-    pNew->SetRTFDefaults( GetRTFDefaults() );
+        xNew = SvxRTFItemStackType::createSvxRTFItemStackType(*pAttrPool, aWhichMap.data(), *mxInsertPosition);
+    xNew->SetRTFDefaults( GetRTFDefaults() );
 
-    aAttrStack.push_back( std::move(pNew) );
+    aAttrStack.push_back( std::move(xNew) );
     bNewGroup = false;
     return aAttrStack.back().get();
 }
-
 
 void SvxRTFParser::ClearStyleAttr_( SvxRTFItemStackType& rStkType )
 {
