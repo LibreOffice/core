@@ -9346,6 +9346,8 @@ private:
             gtk_box_reorder_child(m_pBox, GTK_WIDGET(m_pImage), 0);
 #else
             m_pImage = GTK_PICTURE(gtk_picture_new());
+            gtk_widget_set_halign(GTK_WIDGET(m_pImage), GTK_ALIGN_CENTER);
+            gtk_widget_set_valign(GTK_WIDGET(m_pImage), GTK_ALIGN_CENTER);
             gtk_box_prepend(m_pBox, GTK_WIDGET(m_pImage));
 #endif
             gtk_widget_show(GTK_WIDGET(m_pImage));
