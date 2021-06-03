@@ -1,8 +1,9 @@
 #!/usr/bin/python
 
-import sys, getopt, os, shutil, pprint
+import sys, getopt, os, shutil
 import xml.etree.ElementTree as ET
 from zipfile import ZipFile
+from lxml import etree
 
 def main(argv):
     inputdir = ''
@@ -28,9 +29,6 @@ def main(argv):
        elif opt in ("-o", "--odir"):
           outputdir = arg
 
-    # holds the result structer of analyze
-    result_list = []
-
     if(extracted_files_dir_by_user == ''):
         # use default directory path for extracted ooxml files.
         extracted_files_dir = os.path.join(outputdir, 'extractedfiles')
@@ -40,22 +38,39 @@ def main(argv):
         extracted_files_dir = extracted_files_dir_by_user
 
     # create seperate result files for each ooxml document as <document name>.result in output directory
+    # create seperate concanated texts for each ooxml document as <document name>.text in output directory
     for ext_dir in get_list_of_subdir(extracted_files_dir):
         i = ext_dir.rfind('/')
         sub_result_name = ext_dir[i+1:] + ".result"
+        sub_texts_name = ext_dir[i+1:] + ".text"
         sub_result_list = []
-        count_elements(ext_dir, sub_result_list)
+        concatenated_texts_list = [] # holds concanated texts for each paragraph
+        count_elements(ext_dir, sub_result_list, concatenated_texts_list)
+
         sub_result_path = os.path.join(outputdir, sub_result_name)
+        sub_texts_path = os.path.join(outputdir, sub_texts_name)
 
         # sort the result sub list according to tag names
         sub_result_list = sorted(sub_result_list, key=lambda x: list(x[0].keys())[0], reverse=False)
+        concatenated_texts_list.sort()
 
         if os.path.exists(sub_result_path):
             os.remove(sub_result_path)
+        if os.path.exists(sub_texts_path):
+            os.remove(sub_texts_path)
+
         for i in sub_result_list:
             with open(sub_result_path, "a") as log_file:
                 print(i, file=log_file)
-                log_file.close()
+            log_file.close()
+        for i in concatenated_texts_list:
+            with open(sub_texts_path, "a") as log_file:
+                print(i, file=log_file)
+            log_file.close()
+
+    # no need to keep extracted files anymore.
+    if(os.path.exists(extracted_files_dir)):
+        shutil.rmtree(extracted_files_dir)
 
 # unzip all ooxml files into the given path
 def extract_files(inputdir, extracted_files_dir):
@@ -98,6 +113,7 @@ def replace_namespace_with_alias(filename, element):
             element = element.replace("{" + element_ns + "}", "")
     return element
 
+# decides which files shouldn't be analyzed.
 def is_file_in_accepted_files(filename):
     if(filename.endswith("[Content_Types].xml") or \
        filename.endswith("docProps/custom.xml") or \
@@ -109,6 +125,7 @@ def is_file_in_accepted_files(filename):
        "ppt/slideLayouts" in filename or \
        "ppt/slideMasters" in filename or \
        "ppt/theme" in filename or \
+       "ppt/notesMasters" in filename or \
        filename.endswith("docProps/core.xml") or not \
        filename.endswith(".xml")):
        return False
@@ -116,7 +133,7 @@ def is_file_in_accepted_files(filename):
     return True
 
 # counts tags, attribute names and values of xmls
-def count_elements(extracted_files_dir, result_list):
+def count_elements(extracted_files_dir, result_list, concanated_texts_list):
 
     # make sure if extracted files directory exist
     if not (os.path.exists(extracted_files_dir)):
@@ -131,40 +148,52 @@ def count_elements(extracted_files_dir, result_list):
             continue
 
         print(xmlfile)
-        tree = ET.parse(xmlfile)
-        root = tree.getroot()
 
         # start to count
-        for child in root.iter():
+        for event, child in etree.iterparse(xmlfile, events=('start', 'end')):
             tag = replace_namespace_with_alias(xmlfile, child.tag)
             tag_idx = get_index_of_tag(tag, result_list)
 
-            # count tags
-            if (tag_idx == -1):
-                tmp_list = [{tag: 1},{},{},{}]
-                result_list.append(tmp_list)
-            else:
-                result_list[tag_idx][0][tag] += 1
-
-            # count attribute names and values of current tag
-            for attr_name, attr_value in child.attrib.items():
-                attr_name = replace_namespace_with_alias(xmlfile, attr_name)
-                if not attr_name in result_list[tag_idx][1].keys():
-                    result_list[tag_idx][1][attr_name] = 1
+            if event == "start":
+                # count tags
+                if (tag_idx == -1):
+                    tmp_list = [{tag: 1},{},{},{}]
+                    result_list.append(tmp_list)
                 else:
-                    result_list[tag_idx][1][attr_name] +=1
+                    result_list[tag_idx][0][tag] += 1
 
-                if not attr_value in result_list[tag_idx][2].keys():
-                    result_list[tag_idx][2][attr_value] = 1
-                else:
-                    result_list[tag_idx][2][attr_value] +=1
+                # count attribute names and values of current tag
+                for attr_name, attr_value in child.attrib.items():
+                    attr_name = replace_namespace_with_alias(xmlfile, attr_name)
+                    if not attr_name in result_list[tag_idx][1].keys():
+                        result_list[tag_idx][1][attr_name] = 1
+                    else:
+                        result_list[tag_idx][1][attr_name] +=1
 
-            # count text contents except consisted of whitespaces.
-            if not (str(child.text) == "None" or str(child.text).strip()==""):
-                if not child.text in result_list[tag_idx][3].keys():
-                    result_list[tag_idx][3][child.text] = 1
-                else:
-                    result_list[tag_idx][3][child.text] += 1
+                    if not attr_value in result_list[tag_idx][2].keys():
+                        result_list[tag_idx][2][attr_value] = 1
+                    else:
+                        result_list[tag_idx][2][attr_value] +=1
+
+                # concanated text will be resetted in every paragraph begining
+                if tag == "a:p":
+                    concatenated_text = ""
+
+
+            if event == "end":
+                # Detect seperate texts in paragraph and concanate them.
+                if tag == "a:t":
+                    concatenated_text += str(child.text)
+                # End of the paragraph element, add the text as list item.
+                if tag == "a:p" and concatenated_text != "":
+                    concanated_texts_list.append(concatenated_text)
+
+                # count text contents except consisted of whitespaces.
+                if not (str(child.text) == "None" or str(child.text).strip()==""):
+                    if not child.text in result_list[tag_idx][3].keys():
+                        result_list[tag_idx][3][child.text] = 1
+                    else:
+                        result_list[tag_idx][3][child.text] += 1
 
 # gets the position of "tag" element in result list. If element is not exist,
 # return -1 that points the last index of the list.
