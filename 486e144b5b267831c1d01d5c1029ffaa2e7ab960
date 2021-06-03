@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "179224da_12e6820b",
+        "filename": "sw/source/filter/ascii/wrtasc.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-06-03T09:56:51Z",
+      "side": 1,
+      "message": "good but this will hide only fully hidden paragraphs; you can also hide via a TEXT_AUTOFMT hint containing some RES_CHRATR_HIDDEN attribute; there\u0027s some SwASC_AttrIter class that could handle that case perhaps - maybe an idea for a follow-up patch",
+      "revId": "486e144b5b267831c1d01d5c1029ffaa2e7ab960",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
