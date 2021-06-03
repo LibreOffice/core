@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9c167ad9_317f4f70",
+        "filename": "chart2/qa/extras/xshape/data/reference/tdf90839-1.xml",
+        "patchSetId": 22
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-03T14:46:19Z",
+      "side": 1,
+      "message": "I am planning to investigate this (actually it\u0027s a problem of my wrong workflow - I seem to remember making some conscious decision about changing something - but didn\u0027t record at that time...)",
+      "parentUuid": "f6fe468e_153acb54",
+      "revId": "3544fdac170bda75af7fd2cb36a4ceeab722ff18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "eb2b1be4_7b43c8a9",
         "filename": "editeng/source/editeng/editeng.cxx",
         "patchSetId": 22
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "9d96a47d_50af8731",
+        "filename": "editeng/source/editeng/editeng.cxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-03T14:46:19Z",
+      "side": 1,
+      "message": "This comes from gen\u0027s rectangle/size, hence the type.",
+      "parentUuid": "eb2b1be4_7b43c8a9",
+      "revId": "3544fdac170bda75af7fd2cb36a4ceeab722ff18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "022a6dc0_94641cd2",
         "filename": "editeng/source/editeng/impedit.cxx",
         "patchSetId": 22
@@ -47,6 +83,24 @@
       "writtenOn": "2021-06-03T12:57:00Z",
       "side": 1,
       "message": "Use some more meaningful name here, not just \"f\"? Something that describes what does it do.",
+      "revId": "3544fdac170bda75af7fd2cb36a4ceeab722ff18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c62c83a1_0e2b7dc1",
+        "filename": "editeng/source/editeng/impedit.cxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-03T14:46:19Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "022a6dc0_94641cd2",
       "revId": "3544fdac170bda75af7fd2cb36a4ceeab722ff18",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
