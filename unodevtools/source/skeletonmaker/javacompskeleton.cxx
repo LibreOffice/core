@@ -874,7 +874,7 @@ void generateSkeleton(ProgramOptions const & options,
 
     try {
         if (!standardout && options.license) {
-            printLicenseHeader(*pofs, compFileName);
+            printLicenseHeader(*pofs);
         }
 
         generatePackage(*pofs, options.implname);

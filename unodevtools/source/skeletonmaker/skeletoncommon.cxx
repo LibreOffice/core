@@ -36,18 +36,8 @@ using namespace ::codemaker::cpp;
 
 namespace skeletonmaker {
 
-void printLicenseHeader(std::ostream& o, OString const & filename)
+void printLicenseHeader(std::ostream& o)
 {
-    sal_Int32 index;
-#ifdef SAL_UNX
-    index = filename.lastIndexOf('/');
-#else
-    index = filename.lastIndexOf('\\');
-#endif
-    OString shortfilename(filename);
-    if ( index != -1 )
-        shortfilename = filename.copy(index+1);
-
     o << "/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */\n"
          "/*\n"
          " * This file is part of the LibreOffice project.\n"

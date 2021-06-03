@@ -69,7 +69,7 @@ struct ProgramOptions {
    @param o specifies the output stream
    @param filename specifies the source file name
 */
-void printLicenseHeader(std::ostream& o, OString const & filename);
+void printLicenseHeader(std::ostream& o);
 
 /**
    create dependent on the output path, the implementation name and the
