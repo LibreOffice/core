@@ -19,6 +19,7 @@
 
 include $(SRCDIR)/sw/layoutwriter_setup.mk
 include $(SRCDIR)/sw/ooxmlexport_setup.mk
+include $(SRCDIR)/sw/rtfexport_setup.mk
 include $(SRCDIR)/sw/uiwriter_setup.mk
 include $(SRCDIR)/sw/ww8export_setup.mk
 
