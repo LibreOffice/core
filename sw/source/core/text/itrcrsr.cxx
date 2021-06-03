@@ -1223,7 +1223,9 @@ void SwTextCursor::GetCharRect( SwRect* pOrig, TextFrameIndex const nOfst,
         pCMS->m_x2Lines->aPortion.Pos().AdjustY(aCharPos.Y() );
     }
 
-    const bool bTabOverMargin = GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::TAB_OVER_MARGIN);
+    const IDocumentSettingAccess& rIDSA = GetTextFrame()->GetDoc().getIDocumentSettingAccess();
+    const bool bTabOverMargin = rIDSA.get(DocumentSettingId::TAB_OVER_MARGIN)
+        || rIDSA.get(DocumentSettingId::TAB_OVER_SPACING);
     // Make sure the cursor respects the right margin, unless in compat mode, where the tab size has priority over the margin size.
     if( pOrig->Left() > nTmpRight && !bTabOverMargin)
         pOrig->Pos().setX( nTmpRight );
