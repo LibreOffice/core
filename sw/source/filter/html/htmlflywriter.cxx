@@ -1797,6 +1797,11 @@ static Writer & OutHTML_FrameFormatAsImage( Writer& rWrt, const SwFrameFormat& r
         {
             aGraphic = pGrafObj->GetGraphic();
         }
+        else
+        {
+            // We only have a bitmap, write that as PNG without any fallback.
+            bWritePNGFallback = false;
+        }
     }
 
     Size aSz( 0, 0 );
