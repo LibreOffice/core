@@ -9,64 +9,6 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sw_ww8export3))
-
-$(eval $(call gb_CppunitTest_use_common_precompiled_header,sw_ww8export3))
-
-$(eval $(call gb_CppunitTest_add_exception_objects,sw_ww8export3, \
-    sw/qa/extras/ww8export/ww8export3 \
-))
-
-$(eval $(call gb_CppunitTest_use_libraries,sw_ww8export3, \
-    comphelper \
-    cppu \
-    cppuhelper \
-    editeng \
-    emboleobj \
-    sal \
-    sfx \
-    test \
-    unotest \
-    utl \
-    sw \
-	swqahelper \
-    tl \
-))
-
-$(eval $(call gb_CppunitTest_use_externals,sw_ww8export3,\
-    boost_headers \
-    libxml2 \
-))
-
-$(eval $(call gb_CppunitTest_set_include,sw_ww8export3,\
-    -I$(SRCDIR)/sw/inc \
-    -I$(SRCDIR)/sw/source/core/inc \
-    -I$(SRCDIR)/sw/qa/inc \
-    $$(INCLUDE) \
-))
-
-$(eval $(call gb_CppunitTest_use_api,sw_ww8export3,\
-	udkapi \
-	offapi \
-	oovbaapi \
-))
-
-$(eval $(call gb_CppunitTest_use_ure,sw_ww8export3))
-$(eval $(call gb_CppunitTest_use_vcl,sw_ww8export3))
-
-$(eval $(call gb_CppunitTest_use_rdb,sw_ww8export3,services))
-
-ifeq ($(OS),WNT)
-# gpgme-w32spawn.exe is needed in workdir/LinkTarget/Executable
-$(eval $(call gb_CppunitTest_use_packages,sw_ww8export3,\
-    $(call gb_Helper_optional,GPGMEPP,gpgmepp)\
-))
-endif
-
-$(eval $(call gb_CppunitTest_use_configuration,sw_ww8export3))
-
-$(eval $(call gb_CppunitTest_use_packages,sw_ww8export3,\
-	oox_customshapes \
-))
+$(eval $(call sw_ww8export_test,3))
 
 # vim: set noet sw=4 ts=4:
