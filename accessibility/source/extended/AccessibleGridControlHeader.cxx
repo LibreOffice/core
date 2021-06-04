@@ -140,14 +140,12 @@ Reference< XAccessibleTable > SAL_CALL AccessibleGridControlHeader::getAccessibl
 //not selectable
 Sequence< sal_Int32 > SAL_CALL AccessibleGridControlHeader::getSelectedAccessibleRows()
 {
-    Sequence< sal_Int32 > aSelSeq(0);
-    return aSelSeq;
+    return {};
 }
 //columns aren't selectable
 Sequence< sal_Int32 > SAL_CALL AccessibleGridControlHeader::getSelectedAccessibleColumns()
 {
-    Sequence< sal_Int32 > aSelSeq(0);
-    return aSelSeq;
+    return {};
 }
 //row headers not selectable
 sal_Bool SAL_CALL AccessibleGridControlHeader::isAccessibleRowSelected( sal_Int32 /*nRow*/ )

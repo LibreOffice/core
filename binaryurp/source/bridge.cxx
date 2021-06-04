@@ -951,8 +951,7 @@ void Bridge::sendCommitChangeRequest() {
     assert(mode_ == MODE_REQUESTED || mode_ == MODE_REPLY_1);
     css::uno::Sequence< css::bridge::ProtocolProperty > s(1);
     s[0].Name = "CurrentContext";
-    std::vector< BinaryAny > a;
-    a.push_back(mapCppToBinaryAny(css::uno::Any(s)));
+    std::vector< BinaryAny > a { mapCppToBinaryAny(css::uno::Any(s)) };
     sendProtPropRequest(OutgoingRequest::KIND_COMMIT_CHANGE, a);
 }
 
