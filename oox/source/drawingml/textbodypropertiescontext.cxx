@@ -22,16 +22,19 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
+#include <com/sun/star/text/XTextColumns.hpp>
 #include <drawingml/textbodyproperties.hxx>
 #include <drawingml/textbody.hxx>
 #include <drawingml/customshapegeometry.hxx>
 #include <drawingml/scene3dcontext.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/propertymap.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
+#include <svx/SvxXTextColumns.hxx>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star;
@@ -85,7 +88,18 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper cons
     mrTextBodyProp.msVertOverflow = rAttribs.getString(XML_vertOverflow, "");
 
     // ST_TextColumnCount
-    mrTextBodyProp.mnNumCol = rAttribs.getInteger( XML_numCol, 1 );
+    if (const sal_Int32 nColumns = rAttribs.getInteger(XML_numCol, 0); nColumns > 0)
+    {
+        css::uno::Reference<css::text::XTextColumns> xCols(SvxXTextColumns_createInstance(),
+                                                           css::uno::UNO_QUERY_THROW);
+        xCols->setColumnCount(nColumns);
+        css::uno::Reference<css::beans::XPropertySet> xProps(xCols, css::uno::UNO_QUERY_THROW);
+        // ST_PositiveCoordinate32
+        const sal_Int32 nSpacing = o3tl::convert(rAttribs.getInteger(XML_spcCol, 0),
+                                                 o3tl::Length::emu, o3tl::Length::mm100);
+        xProps->setPropertyValue("AutomaticDistance", css::uno::Any(nSpacing));
+        mrTextBodyProp.maPropertyMap.setAnyProperty(PROP_TextColumns, css::uno::Any(xCols));
+    }
 
     // ST_Angle
     mrTextBodyProp.moRotation = rAttribs.getInteger( XML_rot );
