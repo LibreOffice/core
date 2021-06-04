@@ -47,8 +47,8 @@
       <DoubleQuotationStart>„</DoubleQuotationStart>
       <DoubleQuotationEnd>”</DoubleQuotationEnd>
     </Markers>
-    <TimeAM>DE</TimeAM>
-    <TimePM>DU</TimePM>
+    <TimeAM>de.</TimeAM>
+    <TimePM>du.</TimePM>
     <MeasurementSystem>metric</MeasurementSystem>
   </LC_CTYPE>
   <LC_FORMAT>
@@ -277,10 +277,10 @@
       <FormatCode>[NatNum12 ordinal year]YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey1" default="true" type="short" usage="TIME" formatindex="39">
-      <FormatCode>HH:MM</FormatCode>
+      <FormatCode>H:MM</FormatCode>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey2" default="true" type="medium" usage="TIME" formatindex="40">
-      <FormatCode>HH:MM:SS</FormatCode>
+      <FormatCode>H:MM:SS</FormatCode>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey3" default="false" type="short" usage="TIME" formatindex="41">
       <FormatCode>HH:MM AM/PM</FormatCode>
