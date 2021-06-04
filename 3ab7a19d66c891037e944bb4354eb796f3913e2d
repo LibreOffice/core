@@ -22,6 +22,30 @@
       "revId": "3ab7a19d66c891037e944bb4354eb796f3913e2d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40e1eb0d_35e73424",
+        "filename": "sw/qa/extras/txtexport/txtexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1003237
+      },
+      "writtenOn": "2021-06-04T15:43:22Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "942375d5_0ab72d1e",
+      "range": {
+        "startLine": 83,
+        "startChar": 10,
+        "endLine": 83,
+        "endChar": 18
+      },
+      "revId": "3ab7a19d66c891037e944bb4354eb796f3913e2d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
