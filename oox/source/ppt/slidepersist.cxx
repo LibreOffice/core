@@ -23,7 +23,6 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <oox/ppt/timenode.hxx>
 #include <oox/ppt/pptshape.hxx>
-#include <oox/ppt/pptimport.hxx>
 #include <oox/ppt/slidepersist.hxx>
 #include <drawingml/fillproperties.hxx>
 #include <oox/drawingml/shapepropertymap.hxx>
@@ -35,7 +34,6 @@
 #include <oox/core/xmlfilterbase.hxx>
 #include <drawingml/textliststyle.hxx>
 #include <drawingml/textparagraphproperties.hxx>
-#include <drawingml/textbody.hxx>
 
 #include <osl/diagnose.h>
 
@@ -53,8 +51,6 @@ using namespace ::com::sun::star::animations;
 
 
 namespace oox::ppt {
-
-std::vector< PPTShape* > PowerPointImport::maPPTShapes;
 
 SlidePersist::SlidePersist( XmlFilterBase& rFilter, bool bMaster, bool bNotes,
     const css::uno::Reference< css::drawing::XDrawPage >& rxPage,
@@ -132,29 +128,12 @@ sal_Int16 SlidePersist::getLayoutFromValueToken() const
     return nLayout;
 }
 
-static bool hasSameSubTypeIndex(sal_Int32 checkSubTypeIndex)
-{
-    sal_Int32 nSubTypeIndex = -1;
-    for(PPTShape* pPPTShape : PowerPointImport::maPPTShapes)
-    {
-        if(!pPPTShape->getSubTypeIndex().has())
-            continue;
-
-        nSubTypeIndex = pPPTShape->getSubTypeIndex().get();
-
-        if( nSubTypeIndex == checkSubTypeIndex )
-            return true;
-    }
-    return false;
-}
 void SlidePersist::createXShapes( XmlFilterBase& rFilterBase )
 {
     applyTextStyles( rFilterBase );
 
     Reference< XShapes > xShapes( getPage() );
     std::vector< oox::drawingml::ShapePtr >& rShapes( maShapesPtr->getChildren() );
-    bool bhasSameSubTypeIndex = false;
-    sal_Int32 nNumCol = 1;
 
     for (auto const& shape : rShapes)
     {
@@ -164,17 +143,7 @@ void SlidePersist::createXShapes( XmlFilterBase& rFilterBase )
             PPTShape* pPPTShape = dynamic_cast< PPTShape* >( child.get() );
             basegfx::B2DHomMatrix aTransformation;
             if ( pPPTShape )
-            {
-                bhasSameSubTypeIndex = hasSameSubTypeIndex( pPPTShape->getSubTypeIndex().get());
-
-                if(pPPTShape->getTextBody())
-                    nNumCol = pPPTShape->getTextBody()->getTextProperties().mnNumCol;
-
-                if(pPPTShape->getSubTypeIndex().has() && nNumCol > 1 )
-                    PowerPointImport::maPPTShapes.push_back(pPPTShape);
-
-                pPPTShape->addShape( rFilterBase, *this, getTheme().get(), xShapes, aTransformation, &getShapeMap(), bhasSameSubTypeIndex );
-            }
+                pPPTShape->addShape( rFilterBase, *this, getTheme().get(), xShapes, aTransformation, &getShapeMap() );
             else
                 child->addShape( rFilterBase, getTheme().get(), xShapes, aTransformation, maShapesPtr->getFillProperties(), &getShapeMap() );
         }
