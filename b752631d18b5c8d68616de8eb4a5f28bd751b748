@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "60f6af9a_dcf17a18",
+        "filename": "sc/qa/uitest/calc_tests4/trackedChanges.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-04T22:54:26Z",
+      "side": 1,
+      "message": "OMG, this fails when executed in UTC+3 e.g. at 1:30 AM on my Windows :-D\n\ntextStart is\n\n  Changed contents\tSheet1.A1\t \t06/04/2021\n\nand get_state_as_dict(xChangesList.getChild(\u00270\u0027))[\"Text\"] is\n\n  Changed contents\tSheet1.A1\t \t06/05/2021 01:45:25\t(Cell A1 changed from \u0027\u003cempty\u003e\u0027 to \u0027Test LibreOffice\u0027)\n\nNote how 06/04/2021 is different from 06/05/2021. No idea why now() seems to give some non-local time, in the absence of tz argument...",
+      "revId": "b752631d18b5c8d68616de8eb4a5f28bd751b748",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
