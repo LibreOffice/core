@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "942375d5_0ab72d1e",
+        "filename": "sw/qa/extras/txtexport/txtexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-04T14:47:40Z",
+      "side": 1,
+      "message": "OUString constructor takes pointer to sal_Unicode, not to char16_t (although for internal case, one is the typedef for the other). I suggest to follow the API more strictly, and use sal_Unicode consistently instead of char16_t here.",
+      "range": {
+        "startLine": 83,
+        "startChar": 10,
+        "endLine": 83,
+        "endChar": 18
+      },
+      "revId": "3ab7a19d66c891037e944bb4354eb796f3913e2d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

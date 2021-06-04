@@ -104,6 +104,24 @@
       "revId": "4347bde02de58398449a64108731fc368789844a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1053ad0_f45288ec",
+        "filename": "sw/qa/extras/txtexport/txtexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-04T14:47:40Z",
+      "side": 1,
+      "message": "It\u0027s unexpected to me. Stephan, do we have some code to convert UTF-16 endianness in OUString ctor? It would be slowing things down... and unreliable generally, unless there\u0027s the BOM (which is untypical).",
+      "parentUuid": "6ce13bd4_e0107834",
+      "revId": "4347bde02de58398449a64108731fc368789844a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
