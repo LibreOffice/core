@@ -41,7 +41,7 @@ xmlns:css3t="http://www.w3.org/TR/css3-text/"
 xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0"
 xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0"
 >
-  <rng:include href="../odf1.3/OpenDocument-schema-v1.3.rng">
+  <rng:include href="../odf1.3/OpenDocument-v1.3-schema.rng">
 
     <rng:define name="office-document-common-attrs">
       <rng:interleave>

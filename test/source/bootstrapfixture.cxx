@@ -176,11 +176,11 @@ void test::BootstrapFixture::validate(const OUString& rPath, test::ValidationFor
         // invoke without -e so that we know when something new is written
         // in loext namespace that isn't yet in the custom schema
         aValidator += " -M "
-            + m_directories.getPathFromSrc(u"/schema/libreoffice/OpenDocument-manifest-schema-v1.3+libreoffice.rng")
+            + m_directories.getPathFromSrc(u"/schema/libreoffice/OpenDocument-v1.3+libreoffice-manifest-schema.rng")
             + " -D "
-            + m_directories.getPathFromSrc(u"/schema/libreoffice/OpenDocument-dsig-schema-v1.3+libreoffice.rng")
+            + m_directories.getPathFromSrc(u"/schema/libreoffice/OpenDocument-v1.3+libreoffice-dsig-schema.rng")
             + " -O "
-            + m_directories.getPathFromSrc(u"/schema/libreoffice/OpenDocument-schema-v1.3+libreoffice.rng")
+            + m_directories.getPathFromSrc(u"/schema/libreoffice/OpenDocument-v1.3+libreoffice-schema.rng")
             + " -m "
             + m_directories.getPathFromSrc(u"/schema/mathml2/mathml2.xsd");
     }
