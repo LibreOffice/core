@@ -122,6 +122,24 @@
       "revId": "4347bde02de58398449a64108731fc368789844a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2dab6447_8c9d0b9e",
+        "filename": "sw/qa/extras/txtexport/txtexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1003237
+      },
+      "writtenOn": "2021-06-04T15:30:51Z",
+      "side": 1,
+      "message": "I mean there is no conversion in OUString ctor. But after import/export the file has system endianess. The text filter options do not support LE/BE.",
+      "parentUuid": "b1053ad0_f45288ec",
+      "revId": "4347bde02de58398449a64108731fc368789844a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
