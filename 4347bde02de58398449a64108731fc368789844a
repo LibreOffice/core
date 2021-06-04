@@ -33,6 +33,23 @@
       "revId": "4347bde02de58398449a64108731fc368789844a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16f94d1d_c229f200",
+        "filename": "sw/qa/extras/txtexport/txtexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-04T07:57:38Z",
+      "side": 1,
+      "message": "This relies on system endianness. It would fail on all big-endian systems - since OUString uses ystem order, and reading LE needs special handling there. I believe it\u0027s better to check specific bytes in the stream instead.",
+      "revId": "4347bde02de58398449a64108731fc368789844a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
