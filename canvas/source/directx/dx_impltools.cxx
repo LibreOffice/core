@@ -349,14 +349,13 @@ namespace dxcanvas::tools
         uno::Sequence< sal_Int8 > argbToIntSequence( Gdiplus::ARGB rColor )
         {
             // TODO(F1): handle color space conversions, when defined on canvas/graphicDevice
-            uno::Sequence< sal_Int8 > aRet(4);
-
-            aRet[0] = static_cast<sal_Int8>((rColor >> 16) & 0xFF); // red
-            aRet[1] = static_cast<sal_Int8>((rColor >> 8) & 0xFF);  // green
-            aRet[2] = static_cast<sal_Int8>(rColor & 0xFF);         // blue
-            aRet[3] = static_cast<sal_Int8>((rColor >> 24) & 0xFF); // alpha
-
-            return aRet;
+            return
+            {
+                static_cast<sal_Int8>((rColor >> 16) & 0xFF), // red
+                static_cast<sal_Int8>((rColor >> 8) & 0xFF),  // green
+                static_cast<sal_Int8>(rColor & 0xFF),         // blue
+                static_cast<sal_Int8>((rColor >> 24) & 0xFF)  // alpha
+            };
         }
 
         Gdiplus::ARGB sequenceToArgb( const uno::Sequence< sal_Int8 >& rColor )
