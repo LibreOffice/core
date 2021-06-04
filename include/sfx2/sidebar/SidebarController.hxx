@@ -185,6 +185,7 @@ private:
     /// Use a combination of SwitchFlag_* as value.
     sal_Int32 mnRequestedForceFlags;
     sal_Int32 mnMaximumSidebarWidth;
+    bool mbMinimumSidebarWidth;
     OUString msCurrentDeckId;
     AsynchronousCall maPropertyChangeForwarder;
     AsynchronousCall maContextChangeUpdate;
