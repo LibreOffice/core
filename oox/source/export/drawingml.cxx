@@ -85,6 +85,7 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
@@ -3133,6 +3134,21 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
         sal_Int32 nShapeTextRotateAngle = 0;
         if (GetProperty(xTextSet, "RotateAngle"))
             nShapeTextRotateAngle = rXPropSet->getPropertyValue("RotateAngle").get<sal_Int32>() / 300;
+        sal_Int16 nCols = 1;
+        sal_Int32 nColSpacing = 0;
+        if (GetProperty(rXPropSet, "TextColumns"))
+        {
+            if (css::uno::Reference<css::text::XTextColumns> xCols; mAny >>= xCols)
+            {
+                nCols = xCols->getColumnCount();
+                if (css::uno::Reference<css::beans::XPropertySet> xProps; mAny >>= xProps)
+                {
+                    if (GetProperty(xProps, "AutomaticDistance"))
+                        mAny >>= nColSpacing;
+                }
+            }
+        }
+
         std::optional<OString> isUpright;
         if (GetProperty(rXPropSet, "InteropGrabBag"))
         {
@@ -3187,6 +3203,8 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
         }
 
         mpFS->startElementNS( (nXmlNamespace ? nXmlNamespace : XML_a), XML_bodyPr,
+                               XML_numCol, sax_fastparser::UseIf(OString::number(nCols), nCols > 1),
+                               XML_spcCol, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nColSpacing)), nCols > 1),
                                XML_wrap, pWrap,
                                XML_horzOverflow, sHorzOverflow,
                                XML_vertOverflow, sVertOverflow,
@@ -3302,10 +3320,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
                 {
                     SdrTextObj* pTextObject = dynamic_cast<SdrTextObj*>(pTextShape->GetSdrObject());
                     if (pTextObject)
-                    {
-                        double fScaleY = pTextObject->GetFontScaleY();
-                        nFontScale = static_cast<sal_uInt32>(fScaleY * 100) * 1000;
-                    }
+                        nFontScale = pTextObject->GetFontScaleY() * 1000;
                 }
 
                 mpFS->singleElementNS(XML_a, XML_normAutofit, XML_fontScale,
