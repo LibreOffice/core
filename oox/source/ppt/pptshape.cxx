@@ -30,6 +30,7 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/text/XTextColumns.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <sal/log.hxx>
 #include <oox/ppt/slidepersist.hxx>
@@ -224,36 +225,6 @@ void PPTShape::addShape(
                     if (mnSubType && meShapeLocation == Layout)
                         sServiceName = sOutlinerShapeService;
                 break;
-            }
-        }
-
-        if (sServiceName != "com.sun.star.drawing.TableShape")
-        {
-            if (TextBodyPtr pTextBody = getTextBody())
-            {
-                // If slide shape has not numCol but placeholder has we should inherit from placeholder.
-                if (pTextBody->getTextProperties().mnNumCol == 1 &&
-                    mnSubType &&
-                    getSubTypeIndex().has() &&
-                    rSlidePersist.getMasterPersist())
-                {
-                    oox::drawingml::ShapePtr pPlaceholder = PPTShape::findPlaceholderByIndex(
-                                                                            getSubTypeIndex().get(),
-                                                                            rSlidePersist.getMasterPersist()->getShapes()->getChildren());
-                    if (pPlaceholder && pPlaceholder->getTableProperties())
-                        pTextBody->getTextProperties().mnNumCol = pPlaceholder->getTableProperties()->getTableGrid().size();
-                }
-
-                sal_Int32 nNumCol = pTextBody->getTextProperties().mnNumCol;
-                if (nNumCol > 1)
-                {
-                    // This shape is not a table, but has multiple columns,
-                    // represent that as a table.
-                    sServiceName = "com.sun.star.drawing.TableShape";
-                    oox::drawingml::table::TablePropertiesPtr pTableProperties = getTableProperties();
-                    pTableProperties->pullFromTextBody(pTextBody, maSize.Width, bhasSameSubTypeIndex, meShapeLocation == Layout);
-                    setTextBody(nullptr);
-                }
             }
         }
 
