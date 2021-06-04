@@ -40,6 +40,9 @@ class tdf136941(UITestCase):
         self.xUITest.executeCommand("vnd.sun.star.findbar:FocusToFindbar")
 
         xfind = xWriterDoc.getChild("find")
+        self.ui_test.wait_until_property_is_updated(xfind, 'SelectedText', "Hello")
+        self.assertEqual("Hello", get_state_as_dict(xfind)['SelectedText'])
+
         xfind.executeAction("TYPE", mkPropertyValues({"TEXT": "World"}))
 
         # Without the fix in place, this test would have failed with

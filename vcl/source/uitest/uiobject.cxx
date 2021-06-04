@@ -1176,6 +1176,7 @@ void ComboBoxUIObject::execute(const OUString& rAction,
 StringMap ComboBoxUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
+    aMap["SelectedText"] = mxComboBox->GetSelected();
     return aMap;
 }
 
