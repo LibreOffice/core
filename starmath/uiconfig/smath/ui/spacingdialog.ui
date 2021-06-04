@@ -414,7 +414,6 @@
                             <property name="halign">center</property>
                             <property name="valign">start</property>
                             <property name="hexpand">True</property>
-                            <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkImage" id="10image1">
                                 <property name="can-focus">False</property>
