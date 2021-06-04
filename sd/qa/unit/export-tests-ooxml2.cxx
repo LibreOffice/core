@@ -36,6 +36,7 @@
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
+#include <com/sun/star/text/XTextColumns.hpp>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
@@ -213,6 +214,8 @@ public:
     void testTdf125560_textDeflate();
     void testTdf125560_textInflateTop();
     void testTdf96061_textHighlight();
+    void testTextColumns_tdf140852();
+    void testTextColumns_3columns();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -340,6 +343,8 @@ public:
     CPPUNIT_TEST(testTdf125560_textDeflate);
     CPPUNIT_TEST(testTdf125560_textInflateTop);
     CPPUNIT_TEST(testTdf96061_textHighlight);
+    CPPUNIT_TEST(testTextColumns_tdf140852);
+    CPPUNIT_TEST(testTextColumns_3columns);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3196,6 +3201,121 @@ void SdOOXMLExportTest2::testTdf96061_textHighlight()
     uno::Reference< beans::XPropertySet> xPropSet4(xRun4, uno::UNO_QUERY_THROW);
     xPropSet4->getPropertyValue("CharBackColor") >>= aColor;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aColor);
+}
+
+void SdOOXMLExportTest2::testTextColumns_tdf140852()
+{
+    // The document defines two columns in slideLayout12.xml, but explicitly redefines
+    // in slide1.xml. Here we check that the redefinition in the slide takes precedence.
+
+    auto xDocShRef = loadURL(
+        m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf140852.pptx"), PPTX);
+
+    {
+        uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier = getDoc(xDocShRef);
+        uno::Reference<drawing::XDrawPages> xPages = xDrawPagesSupplier->getDrawPages();
+        uno::Reference<drawing::XDrawPage> xPage(xPages->getByIndex(0), uno::UNO_QUERY_THROW);
+        uno::Reference<container::XIndexAccess> xIndexAccess(xPage, uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XShape> xShape(xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xProps(xShape, uno::UNO_QUERY_THROW);
+        uno::Reference<text::XTextRange> const xParagraph(getParagraphFromShape(0, xProps));
+        CPPUNIT_ASSERT_EQUAL(OUString("Training will be treated as part of sharing the sweet when "
+                                      "it comes to serving ice cream"),
+                             xParagraph->getString());
+        uno::Reference<text::XTextColumns> xCols(xProps->getPropertyValue("TextColumns"),
+                                                 uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCols->getColumnCount());
+        uno::Reference<beans::XPropertySet> xColProps(xCols, uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(1000)),
+                             xColProps->getPropertyValue("AutomaticDistance"));
+    }
+
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    {
+        uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier = getDoc(xDocShRef);
+        uno::Reference<drawing::XDrawPages> xPages = xDrawPagesSupplier->getDrawPages();
+        uno::Reference<drawing::XDrawPage> xPage(xPages->getByIndex(0), uno::UNO_QUERY_THROW);
+        uno::Reference<container::XIndexAccess> xIndexAccess(xPage, uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XShape> xShape(xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xProps(xShape, uno::UNO_QUERY_THROW);
+        uno::Reference<text::XTextRange> const xParagraph(getParagraphFromShape(0, xProps));
+        CPPUNIT_ASSERT_EQUAL(OUString("Training will be treated as part of sharing the sweet when "
+                                      "it comes to serving ice cream"),
+                             xParagraph->getString());
+        uno::Reference<text::XTextColumns> xCols(xProps->getPropertyValue("TextColumns"),
+                                                 uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCols->getColumnCount());
+        uno::Reference<beans::XPropertySet> xColProps(xCols, uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(1000)),
+                             xColProps->getPropertyValue("AutomaticDistance"));
+    }
+
+    xDocShRef->DoClose();
+
+    xmlDocUniquePtr pXmlDocRels = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:bodyPr", "numCol", "1");
+    assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:bodyPr", "spcCol", "360000");
+
+    tempFile.EnableKillingFile();
+}
+
+void SdOOXMLExportTest2::testTextColumns_3columns()
+{
+    auto xDocShRef = loadURL(
+        m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/3columns.pptx"), PPTX);
+
+    {
+        uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier = getDoc(xDocShRef);
+        uno::Reference<drawing::XDrawPages> xPages = xDrawPagesSupplier->getDrawPages();
+        uno::Reference<drawing::XDrawPage> xPage(xPages->getByIndex(0), uno::UNO_QUERY_THROW);
+        uno::Reference<container::XIndexAccess> xIndexAccess(xPage, uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XShape> xShape(xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xProps(xShape, uno::UNO_QUERY_THROW);
+        uno::Reference<text::XTextColumns> xCols(xProps->getPropertyValue("TextColumns"),
+                                                 uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(3), xCols->getColumnCount());
+        uno::Reference<beans::XPropertySet> xColProps(xCols, uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(300)),
+                             xColProps->getPropertyValue("AutomaticDistance"));
+        // Scale value may be unstable; just test that the text is actually scaled
+        sal_Int16 nScale;
+        CPPUNIT_ASSERT(xProps->getPropertyValue("TextFitToSizeScale") >>= nScale);
+        CPPUNIT_ASSERT_GREATER(sal_Int16(0), nScale);
+        CPPUNIT_ASSERT_LESS(sal_Int16(100), nScale);
+    }
+
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    {
+        uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier = getDoc(xDocShRef);
+        uno::Reference<drawing::XDrawPages> xPages = xDrawPagesSupplier->getDrawPages();
+        uno::Reference<drawing::XDrawPage> xPage(xPages->getByIndex(0), uno::UNO_QUERY_THROW);
+        uno::Reference<container::XIndexAccess> xIndexAccess(xPage, uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XShape> xShape(xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xProps(xShape, uno::UNO_QUERY_THROW);
+        uno::Reference<text::XTextColumns> xCols(xProps->getPropertyValue("TextColumns"),
+                                                 uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(3), xCols->getColumnCount());
+        uno::Reference<beans::XPropertySet> xColProps(xCols, uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(300)),
+                             xColProps->getPropertyValue("AutomaticDistance"));
+        // Scale value may be unstable; just test that the text is actually scaled
+        sal_Int16 nScale;
+        CPPUNIT_ASSERT(xProps->getPropertyValue("TextFitToSizeScale") >>= nScale);
+        CPPUNIT_ASSERT_GREATER(sal_Int16(0), nScale);
+        CPPUNIT_ASSERT_LESS(sal_Int16(100), nScale);
+    }
+
+    xDocShRef->DoClose();
+
+    xmlDocUniquePtr pXmlDocRels = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:bodyPr", "numCol", "3");
+    assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:bodyPr", "spcCol", "108000");
+
+    tempFile.EnableKillingFile();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
