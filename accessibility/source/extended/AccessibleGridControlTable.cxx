@@ -155,8 +155,7 @@ Sequence< sal_Int32 > SAL_CALL AccessibleGridControlTable::getSelectedAccessible
 //columns aren't selectable
 Sequence< sal_Int32 > SAL_CALL AccessibleGridControlTable::getSelectedAccessibleColumns()
 {
-    Sequence< sal_Int32 > aSelSeq(0);
-    return aSelSeq;
+    return {};
 }
 
 sal_Bool SAL_CALL AccessibleGridControlTable::isAccessibleRowSelected( sal_Int32 nRow )
