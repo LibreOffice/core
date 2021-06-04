@@ -1,0 +1,42 @@
+This filter is used when the "HTML (StarWriter)" filter is invoked.
+
+Import options:
+
+- FilterOptions: string
+
+  - xhtmlns=reqif-xhtml: actives the ReqIF mode
+
+- AllowedRTFOLEMimeTypes: sequence<string>
+
+  In case an (UNO) client wants to limit the accepted set of MIME types for
+  OLE objects in ReqIF mode, that's possible via this parameter.
+
+  Any MIME type is accepted by default.
+
+Export options:
+
+- FilterOptions: string
+
+  - SkipImages: skips images
+
+  - SkipHeaderFooter: skips the header and footer
+
+  - EmbedImages: inlines images
+
+  - XHTML: activates the XHTML mode
+
+  - xhtmlns=reqif-xhtml: actives the ReqIF mode
+
+- RTFOLEMimeType: string
+
+  Defines what MIME type to use for OLE objects in ReqIF mode, defaults to text/rtf.
+
+- ExportImagesAsOLE: boolean
+
+  Defines if images should be exported as OLE objects or bitmaps, defaults to
+  false.
+
+- ShapeDPI: long (32bit signed int)
+
+  Defines a custom DPI when converting vector shapes to bitmaps, defaults to
+  the system DPI (96 when not on HiDPI).

@@ -40,6 +40,7 @@
 #include <svtools/htmlcfg.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <vcl/graphicfilter.hxx>
 
 #include <swmodule.hxx>
 #include <swdll.hxx>
@@ -270,6 +271,7 @@ class SwHtmlDomExportTest : public SwModelTestBase, public HtmlTestTools
 public:
     /// Get the .ole path, assuming maTempFile is an XHTML export result.
     OUString GetOlePath();
+    OUString GetPngPath();
     /// Parse the ole1 data out of an RTF fragment URL.
     void ParseOle1FromRtfUrl(const OUString& rRtfUrl, SvMemoryStream& rOle1);
     /// Export using the C++ HTML export filter, with xhtmlns=reqif-xhtml.
@@ -289,6 +291,22 @@ OUString SwHtmlDomExportTest::GetOlePath()
     INetURLObject aUrl(maTempFile.GetURL());
     aUrl.setBase(aOlePath.subView(0, aOlePath.getLength() - aOleSuffix.getLength()));
     aUrl.setExtension(u"ole");
+    return aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+}
+
+OUString SwHtmlDomExportTest::GetPngPath()
+{
+    SvMemoryStream aStream;
+    HtmlExportTest::wrapFragment(maTempFile, aStream);
+    xmlDocUniquePtr pDoc = parseXmlStream(&aStream);
+    CPPUNIT_ASSERT(pDoc);
+    OUString aPngPath = getXPath(
+        pDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p/reqif-xhtml:object", "data");
+    OUString aPngSuffix(".png");
+    CPPUNIT_ASSERT(aPngPath.endsWith(aPngSuffix));
+    INetURLObject aUrl(maTempFile.GetURL());
+    aUrl.setBase(aPngPath.subView(0, aPngPath.getLength() - aPngSuffix.getLength()));
+    aUrl.setExtension(u"png");
     return aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 }
 
@@ -1730,6 +1748,55 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedShapeAsPNG)
     // Without the accompanying fix in place, this test would have failed with:
     // - no attribute 'width' exist
     // i.e. shapes had no width.
+    assertXPath(pXmlDoc, "//reqif-xhtml:p/reqif-xhtml:object", "width",
+                OUString::number(aPixelSize.getWidth()));
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedShapeAsPNGCustomDPI)
+{
+    // Given a document with a shape:
+    loadURL("private:factory/swriter", nullptr);
+    uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+    xShape->setSize(awt::Size(7145, 5240));
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    xDrawPageSupplier->getDrawPage()->add(xShape);
+    Size aSystemDPI(
+        Application::GetDefaultDevice()->LogicToPixel(Size(1, 1), MapMode(MapUnit::MapInch)));
+    sal_Int32 nDPI = aSystemDPI.getWidth() * 2;
+
+    // When exporting to XHTML:
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+        comphelper::makePropertyValue("ShapeDPI", nDPI),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+
+    // Then make sure the shape is embedded as a PNG:
+    SvMemoryStream aStream;
+    HtmlExportTest::wrapFragment(maTempFile, aStream);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "//reqif-xhtml:p/reqif-xhtml:object", "type", "image/png");
+
+    // Then check the pixel size of the shape:
+    Size aPixelSize(Application::GetDefaultDevice()->LogicToPixel(Size(7145, 5240),
+                                                                  MapMode(MapUnit::Map100thMM)));
+    tools::Long nPNGWidth = aPixelSize.getWidth() * 2;
+    OUString aPngUrl = GetPngPath();
+    SvFileStream aFileStream(aPngUrl, StreamMode::READ);
+    GraphicDescriptor aDescriptor(aFileStream, nullptr);
+    aDescriptor.Detect(/*bExtendedInfo=*/true);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 540
+    // - Actual  : 270
+    // i.e. setting a double DPI didn't result in larger pixel width of the PNG.
+    CPPUNIT_ASSERT_EQUAL(nPNGWidth, aDescriptor.GetSizePixel().getWidth());
+
+    // Then make sure the shape's logic size (in CSS pixels) don't change:
     assertXPath(pXmlDoc, "//reqif-xhtml:p/reqif-xhtml:object", "width",
                 OUString::number(aPixelSize.getWidth()));
 }

@@ -1804,7 +1804,12 @@ static Writer & OutHTML_FrameFormatAsImage( Writer& rWrt, const SwFrameFormat& r
         return rWrt;
 
     ImageMap aIMap;
-    Graphic aGraphic( const_cast<SwFrameFormat &>(rFrameFormat).MakeGraphic( &aIMap ) );
+    std::optional<Size> aDPI;
+    if (rHTMLWrt.m_nShapeDPI.has_value())
+    {
+        aDPI.emplace(*rHTMLWrt.m_nShapeDPI, *rHTMLWrt.m_nShapeDPI);
+    }
+    Graphic aGraphic( const_cast<SwFrameFormat &>(rFrameFormat).MakeGraphic( &aIMap, aDPI ) );
 
     if (rHTMLWrt.mbReqIF)
     {
