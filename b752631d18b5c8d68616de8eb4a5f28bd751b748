@@ -16,6 +16,24 @@
       "revId": "b752631d18b5c8d68616de8eb4a5f28bd751b748",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb9d93be_b540d0d2",
+        "filename": "sc/qa/uitest/calc_tests4/trackedChanges.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-04T23:14:26Z",
+      "side": 1,
+      "message": "When LO\u0027s Python is started from cmd.exe, its datetime.datetime.now() gives correct reading (in local time, Europe/Moscow). When I start cygwin\u0027s Python from cygwin, it also shows correct local time. But when LO\u0027s Python is started from cygwin, it is off by 2 hours. cygwin\u0027s TZ is set correctly (\u0027echo $TZ\u0027 gives \"Europe/Moscow\").\n\nVery confusing.",
+      "parentUuid": "60f6af9a_dcf17a18",
+      "revId": "b752631d18b5c8d68616de8eb4a5f28bd751b748",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
