@@ -246,6 +246,7 @@ OUString DefaultFontConfiguration::getUserInterfaceFont( const LanguageTag& rLan
     #define FALLBACKFONT_UI_SANS_ARABIC "Tahoma;Traditional Arabic;Simplified Arabic;Lucidasans;Lucida Sans;Supplement;Andale Sans UI;clearlyU;Interface User;Arial Unicode MS;Lucida Sans Unicode;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif"
     #define FALLBACKFONT_UI_SANS_THAI "OONaksit;Tahoma;Lucidasans;Arial Unicode MS"
     #define FALLBACKFONT_UI_SANS_KOREAN "Noto Sans KR;Noto Sans CJK KR;Noto Serif KR;Noto Serif CJK KR;Source Han Sans KR;NanumGothic;NanumBarunGothic;NanumBarunGothic YetHangul;KoPubWorld Dotum;Malgun Gothic;Apple SD Gothic Neo;Dotum;DotumChe;Gulim;GulimChe;Batang;BatangChe;Apple Gothic;UnDotum;Baekmuk Gulim;Arial Unicode MS;Lucida Sans Unicode;gnu-unifont;Andale Sans UI"
+    #define FALLBACKFONT_UI_SANS_JAPANESE "Noto Sans CJK JP;Noto Sans JP;Source Han Sans;Source Han Sans JP;Yu Gothic UI;Yu Gothic;YuGothic;Hiragino Sans;Hiragino Kaku Gothic ProN;Hiragino Kaku Gothic Pro;Hiragino Kaku Gothic StdN;Meiryo UI;Meiryo;IPAexGothic;IPAPGothic;IPAGothic;MS UI Gothic;MS PGothic;MS Gothic;Osaka;Unifont;gnu-unifont;Arial Unicode MS;Interface System"
     #define FALLBACKFONT_UI_SANS_CHINSIM "Andale Sans UI;Arial Unicode MS;ZYSong18030;AR PL SungtiL GB;AR PL KaitiM GB;SimSun;Lucida Sans Unicode;Fangsong;Hei;Song;Kai;Ming;gnu-unifont;Interface User;"
     #define FALLBACKFONT_UI_SANS_CHINTRD "Andale Sans UI;Arial Unicode MS;AR PL Mingti2L Big5;AR PL KaitiM Big5;Kai;PMingLiU;MingLiU;Ming;Lucida Sans Unicode;gnu-unifont;Interface User;"
 
@@ -263,6 +264,10 @@ OUString DefaultFontConfiguration::getUserInterfaceFont( const LanguageTag& rLan
     else if ( aLanguage == "ko" )
     {
         return FALLBACKFONT_UI_SANS_KOREAN;
+    }
+    else if ( aLanguage == "ja" )
+    {
+        return FALLBACKFONT_UI_SANS_JAPANESE;
     }
     else if( aLanguage == "cs" ||
              aLanguage == "hu" ||
