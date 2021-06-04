@@ -77,8 +77,6 @@ public:
 
     ::Color getSchemeColor( sal_Int32 nToken ) const;
 
-    static std::vector< PPTShape* > maPPTShapes;
-
 #if OSL_DEBUG_LEVEL > 0
     static XmlFilterBase* mpDebugFilterBase;
 #endif
