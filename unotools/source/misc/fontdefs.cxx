@@ -178,6 +178,18 @@ sal_Unicode const aHiraginoKakuGothicPro[]   = { 0x30D2, 0x30E9, 0x30AE, 0x30CE,
 sal_Unicode const aHiraginoKakuGothicProN[]  = { 0x30D2, 0x30E9, 0x30AE, 0x30CE, 0x89D2, 0x30B4, 'p','r','o','n',0};
 sal_Unicode const aHiraginoMaruGothicPro[]   = { 0x30D2, 0x30E9, 0x30AE, 0x30CE, 0x4E38, 0x30B4, 'p','r','o',0};
 sal_Unicode const aHiraginoMaruGothicProN[]  = { 0x30D2, 0x30E9, 0x30AE, 0x30CE, 0x4E38, 0x30B4, 'p','r','o','n',0};
+sal_Unicode const aYuGothic[] = { 0x6E38, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0};
+sal_Unicode const aYuGothicTai[] = { 0x6E38, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0x4F53, 0};
+sal_Unicode const aYuMincho[] = { 0x6E38, 0x660E, 0x671D, 0};
+sal_Unicode const aYuMinchoTai[] = { 0x6E38, 0x660E, 0x671D, 0x4F53, 0};
+sal_Unicode const aGennoKakuGothic[] = { 0x6E90, 0x30CE, 0x89D2, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0};
+sal_Unicode const aGennoKakuGothicJP[] = { 0x6E90, 0x30CE, 0x89D2, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 'j', 'p', 0};
+sal_Unicode const aGennoKakuGothicHW[] = { 0x6E90, 0x30CE, 0x89D2, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 'h','w', 0};
+sal_Unicode const aGennoMincho[] = { 0x6E90, 0x30CE, 0x660E, 0x671D, 0};
+sal_Unicode const aGennoMinchoJP[] = { 0x6E90, 0x30CE, 0x660E, 0x671D, 'j', 'p', 0};
+sal_Unicode const aIPAmjMincho[] = { 'i', 'p', 'a', 'm', 'j', 0x660E, 0x671D, 0};
+sal_Unicode const aIPAexGothic[] = { 'i', 'p', 'a', 'e', 'x', 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0};
+sal_Unicode const aIPAexMincho[] = { 'i', 'p', 'a', 'e', 'x', 0x660E, 0x671D, 0};
 
 OUString StripScriptFromName(const OUString& _aName)
 {
@@ -422,7 +434,20 @@ OUString GetEnglishSearchFontName(const OUString& rInName)
             {aHiraginoKakuGothicPro, "hiraginokakugothicpro"},
             {aHiraginoKakuGothicProN, "hiraginokakugothicpron"},
             {aHiraginoMaruGothicPro, "hiraginomarugothicpro"},
-            {aHiraginoMaruGothicProN, "hiraginomarugothicpron"}};
+            {aHiraginoMaruGothicProN, "hiraginomarugothicpron"},
+            {aHiraginoMaruGothicProN, "hiraginomarugothicpron"},
+            {aYuGothic, "yugothic"},
+            {aYuGothicTai, "yugothictai"},
+            {aYuMincho, "yumincho"},
+            {aYuMinchoTai, "yuminchotai"},
+            {aGennoKakuGothic, "sourcehansans"},
+            {aGennoKakuGothicJP, "sourcehansansjp"},
+            {aGennoKakuGothicHW, "sourcehansanshw"},
+            {aGennoMincho, "sourcehanserif"},
+            {aGennoMinchoJP, "sourcehanserifjp"},
+            {aIPAmjMincho, "ipamjmincho"},
+            {aIPAexGothic, "ipaexgothic"},
+            {aIPAexMincho, "ipaexmimcho"}};
 
         FontNameDictionary::const_iterator it = aDictionary.find( rNameStr );
         if( it != aDictionary.end() )
