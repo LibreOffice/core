@@ -174,6 +174,8 @@ public:
     void testTdf137734();
     void testTdf137874();
     void testTdfCustomShapePos();
+    void testTdf121281();
+    void testTdf139658();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -295,6 +297,8 @@ public:
     CPPUNIT_TEST(testTdf137734);
     CPPUNIT_TEST(testTdf137874);
     CPPUNIT_TEST(testTdfCustomShapePos);
+    CPPUNIT_TEST(testTdf121281);
+    CPPUNIT_TEST(testTdf139658);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2843,6 +2847,45 @@ void Chart2ImportTest::testTdfCustomShapePos()
         CPPUNIT_ASSERT_DOUBLES_EQUAL(4165, aSize.Width, 300);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(1334, aSize.Height, 300);
     }
+}
+
+void Chart2ImportTest::testTdf121281()
+{
+    load(u"/chart2/qa/extras/data/xlsx/", "incorrect_label_position.xlsx");
+    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
+                                               UNO_QUERY_THROW);
+    Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
+    Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
+    Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
+    Reference<drawing::XShape> xDataPointLabel(
+        getShapeByName(xShapes,
+                       "CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=0"),
+        UNO_SET_THROW);
+
+    CPPUNIT_ASSERT(xDataPointLabel.is());
+    awt::Point aLabelPosition = xDataPointLabel->getPosition();
+    // This failed, if the data label flowed out of the chart area.
+    CPPUNIT_ASSERT_GREATEREQUAL(static_cast<sal_Int32>(0), aLabelPosition.Y);
+}
+
+void Chart2ImportTest::testTdf139658()
+{
+    load(u"/chart2/qa/extras/data/docx/", "tdf139658.docx");
+    uno::Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    Reference<chart2::XInternalDataProvider> xInternalProvider(xChartDoc->getDataProvider(),
+                                                               uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xInternalProvider.is());
+
+    Reference<chart::XComplexDescriptionAccess> xDescAccess(xInternalProvider, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDescAccess.is());
+
+    // Get the category labels.
+    Sequence<OUString> aCategories = xDescAccess->getRowDescriptions();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aCategories.getLength());
+    CPPUNIT_ASSERT_EQUAL(OUString("category1"), aCategories[0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("\"category2\""), aCategories[1]);
+    CPPUNIT_ASSERT_EQUAL(OUString("category\"3"), aCategories[2]);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);

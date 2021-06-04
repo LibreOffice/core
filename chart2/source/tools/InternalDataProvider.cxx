@@ -518,7 +518,14 @@ InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, co
     bool bInQuote = false;
     for (; p != pEnd; ++p)
     {
-        if (*p == '"')
+        // Skip next "" within the title text: it's an escaped double quotation mark.
+        if (bInQuote && *p == '"' && *(p + 1) == '"')
+        {
+            if (!pElem)
+                pElem = p;
+            ++p;
+        }
+        else if (*p == '"')
         {
             bInQuote = !bInQuote;
             if (bInQuote)
@@ -534,7 +541,8 @@ InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, co
                 // Non empty string
                 if (!aElem.isEmpty())
                     bAllNumeric = false;
-                aRawElems.push_back(aElem);
+                // Restore also escaped double quotation marks
+                aRawElems.push_back(aElem.replaceAll("\"\"", "\""));
                 pElem = nullptr;
                 aElem.clear();
 
