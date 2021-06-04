@@ -190,6 +190,36 @@ ScTransferObj::~ScTransferObj()
 
 }
 
+void ScTransferObj::dispose()
+{
+    SolarMutexGuard aSolarGuard;
+
+    ScModule* pScMod = SC_MOD();
+    if (pScMod && pScMod->GetDragData().pCellTransfer == this)
+    {
+        OSL_FAIL("ScTransferObj wasn't released");
+        pScMod->ResetDragObject();
+    }
+
+    m_pDoc.reset();        // ScTransferObj is owner of clipboard document
+
+    if (m_aDocShellRef)
+        m_aDocShellRef->DoClose();
+    m_aDocShellRef.clear();   // before releasing the mutex
+
+    m_aDrawPersistRef.clear();                    // after the model
+}
+
+void ScTransferObj::addEventListener( const ::css::uno::Reference< ::css::lang::XEventListener >& )
+{
+    assert(false && "not implemented");
+}
+
+void ScTransferObj::removeEventListener( const ::css::uno::Reference< ::css::lang::XEventListener >& )
+{
+    assert(false && "not implemented");
+}
+
 ScTransferObj* ScTransferObj::GetOwnClipboard(const uno::Reference<datatransfer::XTransferable2>& xTransferable)
 {
     ScTransferObj* pObj = nullptr;

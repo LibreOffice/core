@@ -23,6 +23,7 @@
 #include <address.hxx>
 #include <document.hxx>
 #include <sfx2/objsh.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 class ScDocShell;
@@ -35,7 +36,7 @@ namespace com::sun::star {
     }
 }
 
-class SAL_DLLPUBLIC_RTTI ScTransferObj : public TransferDataContainer
+class SAL_DLLPUBLIC_RTTI ScTransferObj : public cppu::ImplInheritanceHelper< TransferDataContainer, css::lang::XComponent >
 {
 private:
     ScDocumentUniquePtr             m_pDoc;
@@ -76,6 +77,11 @@ public:
                                         const css::datatransfer::DataFlavor& rFlavor ) override;
     virtual void        DragFinished( sal_Int8 nDropAction ) override;
     virtual sal_Bool SAL_CALL isComplex() override;
+
+    // XComponent
+    virtual void SAL_CALL dispose() override;
+    virtual void SAL_CALL addEventListener( const ::css::uno::Reference< ::css::lang::XEventListener >& xListener ) override;
+    virtual void SAL_CALL removeEventListener( const ::css::uno::Reference< ::css::lang::XEventListener >& aListener ) override;
 
     ScDocument*         GetDocument() const     { return m_pDoc.get(); }        // owned by ScTransferObj
     const ScRange&      GetRange() const        { return m_aBlock; }
