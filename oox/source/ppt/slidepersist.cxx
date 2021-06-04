@@ -153,7 +153,6 @@ void SlidePersist::createXShapes( XmlFilterBase& rFilterBase )
 
     Reference< XShapes > xShapes( getPage() );
     std::vector< oox::drawingml::ShapePtr >& rShapes( maShapesPtr->getChildren() );
-    bool bhasSameSubTypeIndex = false;
     sal_Int32 nNumCol = 1;
 
     for (auto const& shape : rShapes)
@@ -165,15 +164,13 @@ void SlidePersist::createXShapes( XmlFilterBase& rFilterBase )
             basegfx::B2DHomMatrix aTransformation;
             if ( pPPTShape )
             {
-                bhasSameSubTypeIndex = hasSameSubTypeIndex( pPPTShape->getSubTypeIndex().get());
-
-                if(pPPTShape->getTextBody())
-                    nNumCol = pPPTShape->getTextBody()->getTextProperties().mnNumCol;
+//                if(pPPTShape->getTextBody())
+//                    nNumCol = pPPTShape->getTextBody()->getTextProperties().mnNumCol;
 
                 if(pPPTShape->getSubTypeIndex().has() && nNumCol > 1 )
                     PowerPointImport::maPPTShapes.push_back(pPPTShape);
 
-                pPPTShape->addShape( rFilterBase, *this, getTheme().get(), xShapes, aTransformation, &getShapeMap(), bhasSameSubTypeIndex );
+                pPPTShape->addShape( rFilterBase, *this, getTheme().get(), xShapes, aTransformation, &getShapeMap() );
             }
             else
                 child->addShape( rFilterBase, getTheme().get(), xShapes, aTransformation, maShapesPtr->getFillProperties(), &getShapeMap() );
