@@ -2475,7 +2475,7 @@ void EditEngine::DrawingTab( const Point& /*rStartPos*/, tools::Long /*nWidth*/,
 {
 }
 
-void EditEngine::PaintingFirstLine(sal_Int32, const Point&, tools::Long, const Point&, Degree10, OutputDevice&)
+void EditEngine::PaintingFirstLine(sal_Int32, const Point&, const Point&, Degree10, OutputDevice&)
 {
 }
 

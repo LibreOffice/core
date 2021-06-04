@@ -3126,7 +3126,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                     // does, too. No change for not-layouting (painting).
                     if(0 == nLine) // && !bStripOnly)
                     {
-                        GetEditEnginePtr()->PaintingFirstLine(n, aParaStart, aTmpPos.Y(), aOrigin, nOrientation, rOutDev);
+                        GetEditEnginePtr()->PaintingFirstLine(n, aParaStart, aOrigin, nOrientation, rOutDev);
 
                         // Remember whether a bullet was painted.
                         const SfxBoolItem& rBulletState = pEditEngine->GetParaAttrib(n, EE_PARA_BULLETSTATE);
