@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cc29e05a_c721fb07",
+        "filename": "sc/source/ui/view/tabvwsh3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-06-04T20:42:02Z",
+      "side": 1,
+      "message": "As a general rule of thumb, in a short-circuited boolean evaluation always have the least expensive condition evaluated first, so\n\n if (nSlot \u003d\u003d SID_JUMPTOMARK \u0026\u0026 comphelper::LibreOfficeKit::isActive())",
+      "revId": "aec5faafa8dd9e6b1c910a668b12224895cadff8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
