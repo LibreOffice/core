@@ -528,19 +528,31 @@ InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, st
             }
             else
             {
-                // Closing quote.
-                if (pElem)
-                    aElem = OUString(pElem, p-pElem);
-                // Non empty string
-                if (!aElem.isEmpty())
-                    bAllNumeric = false;
-                aRawElems.push_back(aElem);
-                pElem = nullptr;
-                aElem.clear();
+                ++p;
+                if (*p == '"')
+                {
+                    // tdf#139658 the chart label contains quotation marks
+                    if (!pElem)
+                        pElem = p;
+                    bInQuote = true;
+                }
+                else
+                {
+                    // Closing quote.
+                    --p;
+                    if (pElem)
+                        aElem = OUString(pElem, p - pElem);
+                    // Non empty string
+                    if (!aElem.isEmpty())
+                        bAllNumeric = false;
+                    aRawElems.push_back(aElem.replaceAll("\"\"", "\""));
+                    pElem = nullptr;
+                    aElem.clear();
 
-                ++p; // Skip '"'.
-                if (p == pEnd)
-                    break;
+                    ++p; // Skip '"'.
+                    if (p == pEnd)
+                        break;
+                }
             }
         }
         else if (*p == ';' && !bInQuote)
