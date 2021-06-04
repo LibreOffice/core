@@ -167,8 +167,8 @@ void SlidePersist::createXShapes( XmlFilterBase& rFilterBase )
             {
                 bhasSameSubTypeIndex = hasSameSubTypeIndex( pPPTShape->getSubTypeIndex().get());
 
-                if(pPPTShape->getTextBody())
-                    nNumCol = pPPTShape->getTextBody()->getTextProperties().mnNumCol;
+//                if(pPPTShape->getTextBody())
+//                    nNumCol = pPPTShape->getTextBody()->getTextProperties().mnNumCol;
 
                 if(pPPTShape->getSubTypeIndex().has() && nNumCol > 1 )
                     PowerPointImport::maPPTShapes.push_back(pPPTShape);
