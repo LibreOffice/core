@@ -300,6 +300,7 @@ StringMap WindowUIObject::get_state()
     aMap["Visible"] = OUString::boolean(mxWindow->IsVisible());
     aMap["ReallyVisible"] = OUString::boolean(mxWindow->IsReallyVisible());
     aMap["Enabled"] = OUString::boolean(mxWindow->IsEnabled());
+    aMap["HasFocus"] = OUString::boolean(mxWindow->HasChildPathFocus());
     aMap["WindowType"] = OUString::number(static_cast<sal_uInt16>(mxWindow->GetType()), 16);
 
     Point aPos = mxWindow->GetPosPixel();
