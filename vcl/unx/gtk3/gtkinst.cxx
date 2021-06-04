@@ -9419,6 +9419,17 @@ public:
         (void)pMenuAlign;
 #endif
         m_pBox = formatMenuButton(m_pLabel);
+
+#if GTK_CHECK_VERSION(4, 0, 0)
+        static GActionEntry entries[] =
+        {
+            { "action", action_activated, "s", nullptr, nullptr }
+        };
+
+        GActionGroup* pActions = G_ACTION_GROUP(g_simple_action_group_new());
+        g_action_map_add_action_entries(G_ACTION_MAP(pActions), entries, SAL_N_ELEMENTS(entries), this);
+        gtk_widget_insert_action_group(GTK_WIDGET(m_pMenuButton), "menu", pActions);
+#endif
     }
 
     virtual void set_size_request(int nWidth, int nHeight) override
@@ -9599,7 +9610,16 @@ public:
 #endif
     }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+    static void action_activated(GSimpleAction*, GVariant* pParameter, gpointer widget)
+    {
+        gsize nLength;
+        const gchar* pStr = g_variant_get_string(pParameter, &nLength);
+        OString aStr(pStr, nLength);
+        GtkInstanceMenuButton* pThis = static_cast<GtkInstanceMenuButton*>(widget);
+        pThis->signal_selected(aStr);
+    }
+#else
     virtual void signal_activate(GtkMenuItem* pItem) override
     {
         signal_selected(::get_buildable_id(GTK_BUILDABLE(pItem)));
