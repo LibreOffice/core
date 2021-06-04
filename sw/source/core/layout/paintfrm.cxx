@@ -7364,12 +7364,12 @@ void SetOutDevAndWin( SwViewShell *pSh, OutputDevice *pO,
     pSh->mpOpt->SetZoom( nZoom );
 }
 
-Graphic SwFrameFormat::MakeGraphic( ImageMap* )
+Graphic SwFrameFormat::MakeGraphic( ImageMap*, const std::optional<Size>& /*rTargetDPI*/ )
 {
     return Graphic();
 }
 
-Graphic SwFlyFrameFormat::MakeGraphic( ImageMap* pMap )
+Graphic SwFlyFrameFormat::MakeGraphic( ImageMap* pMap, const std::optional<Size>& /*rTargetDPI*/ )
 {
     Graphic aRet;
     //search any Fly!
@@ -7476,7 +7476,7 @@ Graphic SwFlyFrameFormat::MakeGraphic( ImageMap* pMap )
     return aRet;
 }
 
-Graphic SwDrawFrameFormat::MakeGraphic( ImageMap* )
+Graphic SwDrawFrameFormat::MakeGraphic( ImageMap*, const std::optional<Size>& rTargetDPI )
 {
     Graphic aRet;
     SwDrawModel* pMod = getIDocumentDrawModelAccess().GetDrawModel();
@@ -7486,7 +7486,7 @@ Graphic SwDrawFrameFormat::MakeGraphic( ImageMap* )
         std::unique_ptr<SdrView> pView( new SdrView( *pMod ) );
         SdrPageView *pPgView = pView->ShowSdrPage(pView->GetModel()->GetPage(0));
         pView->MarkObj( pObj, pPgView );
-        aRet = pView->GetMarkedObjBitmapEx();
+        aRet = pView->GetMarkedObjBitmapEx(/*bNoVDevIfOneBmpMarked=*/false, rTargetDPI);
         pView->HideSdrPage();
     }
     return aRet;

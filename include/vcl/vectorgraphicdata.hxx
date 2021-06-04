@@ -27,6 +27,7 @@
 #include <deque>
 #include <memory>
 #include <algorithm>
+#include <optional>
 
 namespace com::sun::star::graphic { class XPrimitive2D; }
 struct WmfExternal;
@@ -41,7 +42,8 @@ BitmapEx VCL_DLLPUBLIC convertPrimitive2DSequenceToBitmapEx(
     const std::deque< css::uno::Reference< css::graphic::XPrimitive2D > >& rSequence,
     const basegfx::B2DRange& rTargetRange,
     const sal_uInt32 nMaximumQuadraticPixels = 500000,
-    const MapUnit eTargetUnit = MapUnit::Map100thMM);
+    const MapUnit eTargetUnit = MapUnit::Map100thMM,
+    const std::optional<Size>& rTargetDPI = std::nullopt);
 
 
 enum class VectorGraphicDataType
