@@ -413,7 +413,6 @@ public:
     void DivOp(bool bFlag, double fVal, const ScMatrix& rMat) ;
     void PowOp(bool bFlag, double fVal, const ScMatrix& rMat) ;
 
-    DoubleIterateResultMultiple Collect(const std::vector<sc::op::Op>& aOp) ;
     KahanIterateResultMultiple CollectKahan(const std::vector<sc::op::kOp>& aOp) ;
 
     void ExecuteOperation(const std::pair<size_t, size_t>& rStartPos, const std::pair<size_t, size_t>& rEndPos,

@@ -211,8 +211,6 @@ public:
 
     size_t GetHash() const;
 
-    ScFormulaVectorState GetVectorState() const;
-
     void            GetFormula( OUString& rFormula,
                                 const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT,
                                 const ScInterpreterContext* pContext = nullptr ) const;

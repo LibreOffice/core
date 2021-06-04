@@ -3398,11 +3398,6 @@ void ScMatrix::ExecuteOperation(const std::pair<size_t, size_t>& rStartPos,
     pImpl->ExecuteOperation(rStartPos, rEndPos, aDoubleFunc, aBoolFunc, aStringFunc, aEmptyFunc);
 }
 
-ScMatrix::DoubleIterateResultMultiple ScMatrix::Collect(const std::vector<sc::op::Op>& aOp)
-{
-    return pImpl->ApplyCollectOperation<sc::op::Op, double>(aOp);
-}
-
 ScMatrix::KahanIterateResultMultiple ScMatrix::CollectKahan(const std::vector<sc::op::kOp>& aOp)
 {
     return pImpl->ApplyCollectOperation<sc::op::kOp, KahanSum>(aOp);
