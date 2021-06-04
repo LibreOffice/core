@@ -1,25 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
      Open Document Format for Office Applications (OpenDocument) Version 1.3
-     Committee Specification 01
-     25 December 2019
-     Copyright (c) OASIS Open 2019. All Rights Reserved.
-     Source: https://docs.oasis-open.org/office/OpenDocument/v1.3/cs01/schemas/
+     OASIS Standard
+     27 April 2021
+     Copyright (c) OASIS Open 2021. All Rights Reserved.
+     Source: https://docs.oasis-open.org/office/OpenDocument/v1.3/os/schemas/
      Latest stage of specification: https://docs.oasis-open.org/office/OpenDocument/v1.3/OpenDocument-v1.3-part1-introduction.html
      TC IPR Statement: https://www.oasis-open.org/committees/office/ipr.php 
--->
-<!--
+
         Open Document Format for Office Applications (OpenDocument) Version 1.3
-        OASIS Standard, In progress
-	Relax-NG Schema
-
-        Copyright © OASIS Open [2002-2018]. All Rights Reserved.
-        Distributed under the terms of the OASIS IPR Policy, [http://www.oasis-open.org/policies-guidelines/ipr],
-        AS-IS, WITHOUT ANY IMPLIED OR EXPRESS WARRANTY; there is no warranty of MERCHANTABILITY,
-        FITNESS FOR A PARTICULAR PURPOSE or NONINFRINGEMENT of the rights of others.
-
+        Relax-NG Schema
+        OpenDocument-v1.3-schema.rng
 -->
-
 <!-- https://issues.oasis-open.org/browse/OFFICE-2153 -->
 
 <rng:grammar xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:db="urn:oasis:names:tc:opendocument:xmlns:database:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
@@ -755,7 +747,7 @@
             <rng:ref name="double"/>
           </rng:attribute>
           <rng:ref name="common-draw-size-attlist"/>
-	  <!-- https://issues.oasis-open.org/browse/OFFICE-3883 -->
+	        <!-- https://issues.oasis-open.org/browse/OFFICE-3883 -->
         </rng:group>
         <rng:empty/>
       </rng:choice>
@@ -783,7 +775,7 @@
     <rng:element name="chart:plot-area">
       <rng:ref name="chart-plot-area-attlist"/>
       <rng:optional>
-	<!-- https://issues.oasis-open.org/browse/OFFICE-3928 -->
+	      <!-- https://issues.oasis-open.org/browse/OFFICE-3928 -->
         <rng:ref name="chart-coordinate-region"/>
       </rng:optional>
       <rng:zeroOrMore>
@@ -1520,7 +1512,7 @@
         <rng:ref name="integer"/>
       </rng:attribute>
     </rng:optional>
-<!-- https://issues.oasis-open.org/browse/OFFICE-3860  added number:min-decimal-places -->
+    <!-- https://issues.oasis-open.org/browse/OFFICE-3860  added number:min-decimal-places -->
   </rng:define>
   <rng:define name="common-delay-for-repeat">
     <rng:optional>
@@ -2234,7 +2226,7 @@
           <rng:ref name="nonNegativeInteger"/>
           <rng:value>auto</rng:value>
         </rng:choice>
-	<!-- https://issues.oasis-open.org/browse/OFFICE-3923 -->
+	      <!-- https://issues.oasis-open.org/browse/OFFICE-3923 -->
       </rng:attribute>
     </rng:optional>
   </rng:define>
@@ -5313,7 +5305,7 @@
         </rng:attribute>
       </rng:optional>
       <rng:ref name="common-draw-mime-type-attlist"/>
-  <!-- https://issues.oasis-open.org/browse/OFFICE-3943 -->
+      <!-- https://issues.oasis-open.org/browse/OFFICE-3943 -->
       <rng:optional>
         <rng:ref name="xml-id"/>
       </rng:optional>
@@ -7099,7 +7091,7 @@
         <rng:optional>
           <rng:ref name="number-text-with-fillchar"/>
         </rng:optional>
-	<!-- https://issues.oasis-open.org/browse/OFFICE-3765 -->
+	      <!-- https://issues.oasis-open.org/browse/OFFICE-3765 -->
       </rng:oneOrMore>
       <rng:zeroOrMore>
         <rng:ref name="style-map"/>
@@ -7368,12 +7360,12 @@
           <rng:ref name="positiveInteger"/>
         </rng:attribute>
       </rng:optional>
-<!-- https://issues.oasis-open.org/browse/OFFICE-1828 exponent-interval -->
+      <!-- https://issues.oasis-open.org/browse/OFFICE-1828 exponent-interval -->
       <rng:optional>
         <rng:attribute name="number:forced-exponent-sign">
           <rng:ref name="boolean"/>
         </rng:attribute>
-<!-- https://issues.oasis-open.org/browse/OFFICE-3860 added number:forced-exponent-sign -->
+        <!-- https://issues.oasis-open.org/browse/OFFICE-3860 added number:forced-exponent-sign -->
       </rng:optional>
     </rng:interleave>
   </rng:define>
@@ -7425,7 +7417,7 @@
         <rng:optional>
           <rng:ref name="number-text-with-fillchar"/>
         </rng:optional>
-	<!-- https://issues.oasis-open.org/browse/OFFICE-3765 -->
+	      <!-- https://issues.oasis-open.org/browse/OFFICE-3765 -->
       </rng:zeroOrMore>
       <rng:zeroOrMore>
         <rng:ref name="style-map"/>
@@ -7461,7 +7453,7 @@
         <rng:optional>
           <rng:ref name="number-text-with-fillchar"/>
         </rng:optional>
-	<!-- https://issues.oasis-open.org/browse/OFFICE-3765 -->
+	      <!-- https://issues.oasis-open.org/browse/OFFICE-3765 -->
       </rng:oneOrMore>
       <rng:zeroOrMore>
         <rng:ref name="style-map"/>
@@ -9800,10 +9792,10 @@
             <rng:value>none</rng:value>
             <rng:value>cubic-spline</rng:value>
             <rng:value>b-spline</rng:value>
-	    <rng:value>step-start</rng:value>
-	    <rng:value>step-end</rng:value>
-	    <rng:value>step-center-x</rng:value>
-	    <rng:value>step-center-y</rng:value>
+            <rng:value>step-start</rng:value>
+            <rng:value>step-end</rng:value>
+            <rng:value>step-center-x</rng:value>
+            <rng:value>step-center-y</rng:value>
           </rng:choice>
         </rng:attribute>
       </rng:optional>
@@ -10104,17 +10096,17 @@
       </rng:optional>
       <!-- https://issues.oasis-open.org/browse/OFFICE-3958 -->
       <rng:optional>
-          <rng:attribute name="chart:regression-period">
+        <rng:attribute name="chart:regression-period">
           <rng:ref name="positiveInteger"/>
         </rng:attribute>
       </rng:optional>
       <rng:optional>
-          <rng:attribute name="chart:regression-moving-type">
-            <rng:choice>
-              <rng:value>prior</rng:value>
-              <rng:value>central</rng:value>
-              <rng:value>averaged-abscissa</rng:value>
-            </rng:choice>
+        <rng:attribute name="chart:regression-moving-type">
+          <rng:choice>
+            <rng:value>prior</rng:value>
+            <rng:value>central</rng:value>
+            <rng:value>averaged-abscissa</rng:value>
+          </rng:choice>
         </rng:attribute>
       </rng:optional>
       <!-- https://issues.oasis-open.org/browse/OFFICE-3959 -->
@@ -10711,7 +10703,7 @@
     <rng:element name="style:footer-first">
       <rng:ref name="common-style-header-footer-attlist"/>
       <rng:ref name="header-footer-content"/>
-       <!-- https://issues.oasis-open.org/browse/OFFICE-3789 -->
+      <!-- https://issues.oasis-open.org/browse/OFFICE-3789 -->
     </rng:element>
   </rng:define>
   <rng:define name="style-footer-left">
@@ -11124,7 +11116,7 @@
         <rng:attribute name="draw:luminance">
           <rng:ref name="signedZeroToHundredPercent"/>
         </rng:attribute>
-	<!-- https://issues.oasis-open.org/browse/OFFICE-3821 -->
+	      <!-- https://issues.oasis-open.org/browse/OFFICE-3821 -->
       </rng:optional>
       <rng:optional>
         <rng:attribute name="draw:contrast">
@@ -11806,7 +11798,7 @@
     <rng:element name="style:header-first">
       <rng:ref name="common-style-header-footer-attlist"/>
       <rng:ref name="header-footer-content"/>
-       <!-- https://issues.oasis-open.org/browse/OFFICE-3789 -->
+      <!-- https://issues.oasis-open.org/browse/OFFICE-3789 -->
     </rng:element>
   </rng:define>
   <rng:define name="style-header-footer-properties">
@@ -11984,7 +11976,7 @@
         <rng:optional>
           <rng:ref name="style-header-first"/>
         </rng:optional>
-       <!-- https://issues.oasis-open.org/browse/OFFICE-3789 -->
+        <!-- https://issues.oasis-open.org/browse/OFFICE-3789 -->
       </rng:optional>
       <rng:optional>
         <rng:ref name="style-footer"/>
@@ -11994,7 +11986,7 @@
         <rng:optional>
           <rng:ref name="style-footer-first"/>
         </rng:optional>
-       <!-- https://issues.oasis-open.org/browse/OFFICE-3789 -->
+        <!-- https://issues.oasis-open.org/browse/OFFICE-3789 -->
       </rng:optional>
       <rng:optional>
         <rng:ref name="draw-layer-set"/>
@@ -15568,7 +15560,7 @@
     </rng:element>
   </rng:define>
   <rng:define name="table-source-cell-range-attlist">
-  <!-- OFFICE-3665 -->
+    <!-- OFFICE-3665 -->
     <rng:interleave>
       <rng:choice>
         <rng:attribute name="table:cell-range-address">
@@ -16907,7 +16899,7 @@
         <rng:ref name="text-index-entry-tab-stop"/>
         <rng:ref name="text-index-entry-link-start"/>
         <rng:ref name="text-index-entry-link-end"/>
-	<!-- https://issues.oasis-open.org/browse/OFFICE-3941 -->
+	      <!-- https://issues.oasis-open.org/browse/OFFICE-3941 -->
       </rng:choice>
     </rng:zeroOrMore>
   </rng:define>
@@ -18150,7 +18142,7 @@
           <rng:ref name="text-index-entry-tab-stop"/>
           <rng:ref name="text-index-entry-link-start"/>
           <rng:ref name="text-index-entry-link-end"/>
-	  <!-- https://issues.oasis-open.org/browse/OFFICE-3941 -->
+	        <!-- https://issues.oasis-open.org/browse/OFFICE-3941 -->
         </rng:choice>
       </rng:zeroOrMore>
     </rng:element>
