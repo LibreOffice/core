@@ -46,6 +46,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <unotools/weakref.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -115,21 +116,24 @@ public:
 
 class TerminateListener : public ::cppu::WeakImplHelper< css::frame::XTerminateListener >
 {
-    GenericClipboard& mrClipboard;
+    unotools::WeakReference<GenericClipboard> mxClipboard;
 
 public:
-    TerminateListener(GenericClipboard& rClipboard) : mrClipboard(rClipboard) {}
+    TerminateListener(GenericClipboard& rClipboard) : mxClipboard(&rClipboard) {}
 
     void SAL_CALL queryTermination( const css::lang::EventObject& ) override
     {}
     void SAL_CALL notifyTermination( const css::lang::EventObject& ) override
     {
-        if (mrClipboard.m_aContents)
+        Reference<GenericClipboard> xClipboard = mxClipboard.get();
+        if (!xClipboard)
+            return;
+        if (xClipboard->m_aContents)
         {
-            Reference<XComponent> xComp(mrClipboard.m_aContents, UNO_QUERY);
+            Reference<XComponent> xComp(xClipboard->m_aContents, UNO_QUERY);
             if (xComp)
                 xComp->dispose();
-            mrClipboard.m_aContents.clear();
+            xClipboard->m_aContents.clear();
         }
     }
     virtual void SAL_CALL disposing( const ::css::lang::EventObject& ) override
