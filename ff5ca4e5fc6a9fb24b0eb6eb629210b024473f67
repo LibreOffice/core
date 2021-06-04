@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a03856b_0269f6c2",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 2962,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-04T21:09:58Z",
+      "side": 1,
+      "message": "I don\u0027t quite see what might this mean. The rXPropSet *is* *already* a property set queried from the same interface as xXText (see line 2827); and additionally, after you check the \"RotateAngle\" property in the newly created xTextSet below on line 2964, you use the value that you read from rXPropSet on line 2965!\n\n(And actually, you do extra work when call GetProperty and then rXPropSet-\u003egetPropertyValue - check what GetProperty does, and what mAny is for.)",
+      "revId": "ff5ca4e5fc6a9fb24b0eb6eb629210b024473f67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
