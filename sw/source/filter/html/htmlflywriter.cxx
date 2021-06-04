@@ -933,12 +933,28 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
 
     // "width" and/or "height"
     // Only output SwFrameSize::Variable/SwFrameSize::Minimum if ANYSIZE is set
-    if( (nFrameOptions & HtmlFrmOpts::Size) &&
-        SfxItemState::SET == rItemSet.GetItemState( RES_FRM_SIZE, true, &pItem ) &&
-        ( (nFrameOptions & HtmlFrmOpts::AnySize) ||
-          SwFrameSize::Fixed == static_cast<const SwFormatFrameSize *>(pItem)->GetHeightSizeType()) )
+    const SwFormatFrameSize* pFSItem = nullptr;
+    std::optional<SwFormatFrameSize> aFrameSize;
+    if (SfxItemState::SET == rItemSet.GetItemState( RES_FRM_SIZE, true, &pItem ))
     {
-        const SwFormatFrameSize *pFSItem = static_cast<const SwFormatFrameSize *>(pItem);
+        pFSItem = static_cast<const SwFormatFrameSize *>(pItem);
+    }
+    else if (const SdrObject* pObject = rFrameFormat.FindSdrObject())
+    {
+        // Write size for Draw shapes as well.
+        const tools::Rectangle& rSnapRect = pObject->GetSnapRect();
+        aFrameSize.emplace();
+        aFrameSize->SetWidthSizeType(SwFrameSize::Fixed);
+        aFrameSize->SetWidth(rSnapRect.getWidth());
+        aFrameSize->SetHeightSizeType(SwFrameSize::Fixed);
+        aFrameSize->SetHeight(rSnapRect.getHeight());
+        pFSItem = &*aFrameSize;
+    }
+    if( (nFrameOptions & HtmlFrmOpts::Size) &&
+        pFSItem &&
+        ( (nFrameOptions & HtmlFrmOpts::AnySize) ||
+          SwFrameSize::Fixed == pFSItem->GetHeightSizeType()) )
+    {
         sal_uInt8 nPercentWidth = pFSItem->GetWidthPercent();
         sal_uInt8 nPercentHeight = pFSItem->GetHeightPercent();
 
