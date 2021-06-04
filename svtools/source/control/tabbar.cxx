@@ -1697,6 +1697,8 @@ void TabBar::Clear()
 
 bool TabBar::IsPageEnabled(sal_uInt16 nPageId) const
 {
+    if (isDisposed())
+        return false;
     sal_uInt16 nPos = GetPagePos(nPageId);
 
     return nPos != PAGE_NOT_FOUND;
