@@ -23,6 +23,9 @@ class tdf138232(UITestCase):
         self.xUITest.executeCommand("vnd.sun.star.findbar:FocusToFindbar")
 
         xfind = xWriterDoc.getChild("find")
+        self.ui_test.wait_until_property_is_updated(xfind, 'HasFocus', "true")
+        self.assertEqual("true", get_state_as_dict(xfind)['HasFocus'])
+
         xfind.executeAction("TYPE", mkPropertyValues({"TEXT": "Hello"}))
         self.assertEqual("Hello", get_state_as_dict(xfind)['Text'])
 
