@@ -21082,6 +21082,25 @@ private:
                 }
             }
         }
+#if GTK_CHECK_VERSION(4, 0, 0)
+        else if (GTK_IS_PICTURE(pWidget))
+        {
+            GtkPicture* pPicture = GTK_PICTURE(pWidget);
+            if (GFile* icon_file = gtk_picture_get_file(pPicture))
+            {
+                char* icon_name = g_file_get_uri(icon_file);
+                OUString aIconName(icon_name, strlen(icon_name), RTL_TEXTENCODING_UTF8);
+                g_free(icon_name);
+                assert(aIconName.startsWith("private:///graphicrepository/"));
+                aIconName.startsWith("private:///graphicrepository/", &aIconName);
+                if (GdkPixbuf* pixbuf = load_icon_by_name_theme_lang(aIconName, m_aIconTheme, m_aUILang))
+                {
+                    gtk_picture_set_pixbuf(GTK_PICTURE(pWidget), pixbuf);
+                    g_object_unref(pixbuf);
+                }
+            }
+        }
+#endif
 #if !GTK_CHECK_VERSION(4, 0, 0)
         else if (GTK_IS_TOOL_BUTTON(pWidget))
         {
