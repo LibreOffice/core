@@ -136,8 +136,8 @@ void XMLEmbeddedObjectImportContext::SetComponent( Reference< XComponent > const
 
     xComp = rComp;  // keep ref to component only if there is a handler
 
-    // #i34042: copy namepspace declarations
-    // We created a new instance of XMLImport, so we need to propogate the namespace
+    // #i34042: copy namespace declarations
+    // We created a new instance of XMLImport, so we need to propagate the namespace
     // declarations to it.
     pFastHandler->GetNamespaceMap() = GetImport().GetNamespaceMap();
 }
