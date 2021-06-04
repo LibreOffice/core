@@ -21999,6 +21999,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/thesaurus.ui" &&
         rUIFile != "cui/ui/tipofthedaydialog.ui" &&
         rUIFile != "cui/ui/wordcompletionpage.ui" &&
+        rUIFile != "cui/ui/zoomdialog.ui" &&
         rUIFile != "filter/ui/testxmlfilter.ui" &&
         rUIFile != "filter/ui/xmlfiltersettings.ui" &&
         rUIFile != "filter/ui/xmlfiltertabpagegeneral.ui" &&
@@ -22064,6 +22065,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/smath/ui/fontsizedialog.ui" &&
         rUIFile != "modules/smath/ui/fonttypedialog.ui" &&
         rUIFile != "modules/smath/ui/savedefaultsdialog.ui" &&
+        rUIFile != "modules/smath/ui/smathsettings.ui" &&
         rUIFile != "modules/smath/ui/spacingdialog.ui" &&
         rUIFile != "modules/swriter/ui/bibliographyentry.ui" &&
         rUIFile != "modules/swriter/ui/columndialog.ui" &&
