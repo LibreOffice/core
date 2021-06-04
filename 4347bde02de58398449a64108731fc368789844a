@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ca85ddd4_e242f9c9",
+        "filename": "sw/qa/extras/txtexport/txtexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1003237
+      },
+      "writtenOn": "2021-06-04T14:26:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0a7fc20d_213ade07",
+      "revId": "4347bde02de58398449a64108731fc368789844a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c28ac153_ab252a6a",
         "filename": "sw/qa/extras/txtexport/txtexport.cxx",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "77da45d2_36c4658d",
+        "filename": "sw/qa/extras/txtexport/txtexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1003237
+      },
+      "writtenOn": "2021-06-04T14:26:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c28ac153_ab252a6a",
+      "revId": "4347bde02de58398449a64108731fc368789844a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "16f94d1d_c229f200",
         "filename": "sw/qa/extras/txtexport/txtexport.cxx",
         "patchSetId": 2
@@ -47,6 +83,24 @@
       "writtenOn": "2021-06-04T07:57:38Z",
       "side": 1,
       "message": "This relies on system endianness. It would fail on all big-endian systems - since OUString uses ystem order, and reading LE needs special handling there. I believe it\u0027s better to check specific bytes in the stream instead.",
+      "revId": "4347bde02de58398449a64108731fc368789844a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ce13bd4_e0107834",
+        "filename": "sw/qa/extras/txtexport/txtexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1003237
+      },
+      "writtenOn": "2021-06-04T14:26:26Z",
+      "side": 1,
+      "message": "As a test I changed the endianess of the file to BE and the testcase passes nevertheless. It seems UTF16 files gets converted to system endianess on reading. I may add a testcase for UTF16BE.",
+      "parentUuid": "16f94d1d_c229f200",
       "revId": "4347bde02de58398449a64108731fc368789844a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true

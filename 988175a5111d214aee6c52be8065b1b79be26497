@@ -16,6 +16,24 @@
       "revId": "988175a5111d214aee6c52be8065b1b79be26497",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1193c533_747a847d",
+        "filename": "sw/source/ui/dialog/ascfldlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1003237
+      },
+      "writtenOn": "2021-06-04T14:26:26Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "e034c381_c7c2c5e8",
+      "revId": "988175a5111d214aee6c52be8065b1b79be26497",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
