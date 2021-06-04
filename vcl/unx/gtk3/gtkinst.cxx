@@ -9195,6 +9195,10 @@ private:
     GtkImage* m_pImage;
 #else
     GtkPicture* m_pImage;
+    o3tl::sorted_vector<OString> m_aInsertedActions; // must outlive m_aActionEntries
+    std::map<OString, OString> m_aIdToAction;
+    std::vector<GActionEntry> m_aActionEntries;
+    GActionGroup* m_pActionGroup;
 #endif
     GtkWidget* m_pLabel;
 #if !GTK_CHECK_VERSION(4, 0, 0)
@@ -9390,6 +9394,59 @@ private:
 #endif
     }
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+    // build an action group for the menu, "action" is the normal menu entry case
+    // the others are radiogroups
+    void update_action_group_from_popover_model()
+    {
+        for (const auto& rAction : m_aActionEntries)
+            g_action_map_remove_action(G_ACTION_MAP(m_pActionGroup), rAction.name);
+        m_aActionEntries.clear();
+        m_aInsertedActions.clear();
+        m_aIdToAction.clear();
+
+        m_aActionEntries.push_back({"action", action_activated, "s", nullptr, nullptr, {}});
+
+        GtkPopover* pPopover = gtk_menu_button_get_popover(m_pMenuButton);
+        if (GMenuModel* pMenuModel = GTK_IS_POPOVER_MENU(pPopover) ?
+                                     gtk_popover_menu_get_menu_model(GTK_POPOVER_MENU(pPopover)) :
+                                     nullptr)
+        {
+            for (int i = 0, nCount = g_menu_model_get_n_items(pMenuModel); i < nCount; ++i)
+            {
+                OString sAction, sTarget;
+                char *id;
+                if (g_menu_model_get_item_attribute(pMenuModel, i, "action", "s", &id))
+                {
+                    assert(OString(id).startsWith("menu."));
+
+                    sAction = OString(id + 5);
+
+                    auto res = m_aInsertedActions.insert(sAction);
+                    if (res.second)
+                    {
+                        // the const char* arg isn't copied by anything so it must continue to exist for the life time of
+                        // the action group
+                        m_aActionEntries.push_back({res.first->getStr(), action_activated, "s", "'none'", nullptr, {}});
+                    }
+
+                    g_free(id);
+                }
+
+                if (g_menu_model_get_item_attribute(pMenuModel, i, "target", "s", &id))
+                {
+                    sTarget = OString(id);
+                    g_free(id);
+                }
+
+                m_aIdToAction[sTarget] = sAction;
+            }
+        }
+
+        g_action_map_add_action_entries(G_ACTION_MAP(m_pActionGroup), m_aActionEntries.data(), m_aActionEntries.size(), this);
+    }
+#endif
+
 public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
     GtkInstanceMenuButton(GtkMenuButton* pMenuButton, GtkWidget* pMenuAlign, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
@@ -9421,14 +9478,10 @@ public:
         m_pBox = formatMenuButton(m_pLabel);
 
 #if GTK_CHECK_VERSION(4, 0, 0)
-        static GActionEntry entries[] =
-        {
-            { "action", action_activated, "s", nullptr, nullptr }
-        };
+        m_pActionGroup = G_ACTION_GROUP(g_simple_action_group_new());
+        gtk_widget_insert_action_group(GTK_WIDGET(m_pMenuButton), "menu", m_pActionGroup);
 
-        GActionGroup* pActions = G_ACTION_GROUP(g_simple_action_group_new());
-        g_action_map_add_action_entries(G_ACTION_MAP(pActions), entries, SAL_N_ELEMENTS(entries), this);
-        gtk_widget_insert_action_group(GTK_WIDGET(m_pMenuButton), "menu", pActions);
+        update_action_group_from_popover_model();
 #endif
     }
 
@@ -9559,7 +9612,10 @@ public:
 
     virtual void set_item_active(const OString& rIdent, bool bActive) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+        g_action_group_change_action_state(m_pActionGroup, m_aIdToAction[rIdent].getStr(),
+                                           g_variant_new_string(rIdent.getStr()));
+#else
         MenuHelper::set_item_active(rIdent, bActive);
 #endif
     }
@@ -9633,6 +9689,7 @@ public:
 
 #if GTK_CHECK_VERSION(4, 0, 0)
         gtk_menu_button_set_popover(m_pMenuButton, m_pPopover);
+        update_action_group_from_popover_model();
         return;
 #else
 
@@ -21988,6 +22045,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/smath/ui/fontsizedialog.ui" &&
         rUIFile != "modules/smath/ui/fonttypedialog.ui" &&
         rUIFile != "modules/smath/ui/savedefaultsdialog.ui" &&
+        rUIFile != "modules/smath/ui/spacingdialog.ui" &&
         rUIFile != "modules/swriter/ui/bibliographyentry.ui" &&
         rUIFile != "modules/swriter/ui/columndialog.ui" &&
         rUIFile != "modules/swriter/ui/columnpage.ui" &&
