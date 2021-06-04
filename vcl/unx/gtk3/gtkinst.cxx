@@ -9406,6 +9406,7 @@ private:
         m_aIdToAction.clear();
 
         m_aActionEntries.push_back({"action", action_activated, "s", nullptr, nullptr, {}});
+        m_aInsertedActions.insert("action");
 
         GtkPopover* pPopover = gtk_menu_button_get_popover(m_pMenuButton);
         if (GMenuModel* pMenuModel = GTK_IS_POPOVER_MENU(pPopover) ?
@@ -22067,6 +22068,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/smath/ui/savedefaultsdialog.ui" &&
         rUIFile != "modules/smath/ui/smathsettings.ui" &&
         rUIFile != "modules/smath/ui/spacingdialog.ui" &&
+        rUIFile != "modules/smath/ui/symdefinedialog.ui" &&
         rUIFile != "modules/swriter/ui/bibliographyentry.ui" &&
         rUIFile != "modules/swriter/ui/columndialog.ui" &&
         rUIFile != "modules/swriter/ui/columnpage.ui" &&
