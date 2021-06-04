@@ -60,6 +60,7 @@ void LpSolverTest::setUp()
 void LpSolverTest::tearDown()
 {
     uno::Reference<lang::XComponent>(m_xDocument, uno::UNO_QUERY_THROW)->dispose();
+    m_xDocument.clear();
     test::BootstrapFixture::tearDown();
 }
 
