@@ -9395,15 +9395,22 @@ private:
     }
 
 #if GTK_CHECK_VERSION(4, 0, 0)
-    // build an action group for the menu, "action" is the normal menu entry case
-    // the others are radiogroups
-    void update_action_group_from_popover_model()
+    void clear_actions()
     {
         for (const auto& rAction : m_aActionEntries)
             g_action_map_remove_action(G_ACTION_MAP(m_pActionGroup), rAction.name);
         m_aActionEntries.clear();
         m_aInsertedActions.clear();
         m_aIdToAction.clear();
+    }
+#endif
+
+#if GTK_CHECK_VERSION(4, 0, 0)
+    // build an action group for the menu, "action" is the normal menu entry case
+    // the others are radiogroups
+    void update_action_group_from_popover_model()
+    {
+        clear_actions();
 
         m_aActionEntries.push_back({"action", action_activated, "s", nullptr, nullptr, {}});
         m_aInsertedActions.insert("action");
@@ -9587,6 +9594,10 @@ public:
     {
 #if !GTK_CHECK_VERSION(4, 0, 0)
         MenuHelper::insert_item(pos, rId, rStr, pIconName, pImageSurface, eCheckRadioFalse);
+#else
+        // TODO see g_menu_item_set_action_and_target
+        (void)pos; (void)rId; (void) rStr; (void)pIconName; (void)pImageSurface; (void)eCheckRadioFalse;
+        std::abort();
 #endif
     }
 
@@ -9594,6 +9605,9 @@ public:
     {
 #if !GTK_CHECK_VERSION(4, 0, 0)
         MenuHelper::insert_separator(pos, rId);
+#else
+        (void)pos; (void)rId;
+        std::abort();
 #endif
     }
 
@@ -9601,12 +9615,24 @@ public:
     {
 #if !GTK_CHECK_VERSION(4, 0, 0)
         MenuHelper::remove_item(rId);
+#else
+        (void)rId;
+        std::abort();
 #endif
     }
 
     virtual void clear() override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+        GtkPopover* pPopover = gtk_menu_button_get_popover(m_pMenuButton);
+        if (GMenuModel* pMenuModel = GTK_IS_POPOVER_MENU(pPopover) ?
+                                     gtk_popover_menu_get_menu_model(GTK_POPOVER_MENU(pPopover)) :
+                                     nullptr)
+        {
+            g_menu_remove_all(G_MENU(pMenuModel));
+            update_action_group_from_popover_model();
+        }
+#else
         clear_items();
 #endif
     }
@@ -9614,8 +9640,12 @@ public:
     virtual void set_item_active(const OString& rIdent, bool bActive) override
     {
 #if GTK_CHECK_VERSION(4, 0, 0)
-        g_action_group_change_action_state(m_pActionGroup, m_aIdToAction[rIdent].getStr(),
-                                           g_variant_new_string(rIdent.getStr()));
+        if (bActive)
+        {
+            g_action_group_change_action_state(m_pActionGroup, m_aIdToAction[rIdent].getStr(),
+                                               g_variant_new_string(rIdent.getStr()));
+        }
+        // TODO checkboxes vs radiobuttons
 #else
         MenuHelper::set_item_active(rIdent, bActive);
 #endif
@@ -9623,7 +9653,10 @@ public:
 
     virtual void set_item_sensitive(const OString& rIdent, bool bSensitive) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+        GAction* pAction = g_action_map_lookup_action(G_ACTION_MAP(m_pActionGroup), rIdent.getStr());
+        g_simple_action_set_enabled(G_SIMPLE_ACTION(pAction), bSensitive);
+#else
         MenuHelper::set_item_sensitive(rIdent, bSensitive);
 #endif
     }
@@ -9632,6 +9665,10 @@ public:
     {
 #if !GTK_CHECK_VERSION(4, 0, 0)
         MenuHelper::set_item_label(rIdent, rLabel);
+
+#else
+        (void)rIdent; (void)rLabel;
+        std::abort();
 #endif
     }
 
@@ -9640,6 +9677,8 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         return MenuHelper::get_item_label(rIdent);
 #else
+        (void)rIdent;
+        std::abort();
         return OUString();
 #endif
     }
@@ -9648,6 +9687,9 @@ public:
     {
 #if !GTK_CHECK_VERSION(4, 0, 0)
         MenuHelper::set_item_visible(rIdent, bVisible);
+#else
+        (void)rIdent; (void)bVisible;
+        std::abort();
 #endif
     }
 
@@ -9655,6 +9697,9 @@ public:
     {
 #if !GTK_CHECK_VERSION(4, 0, 0)
         MenuHelper::set_item_help_id(rIdent, rHelpId);
+#else
+        (void)rIdent; (void)rHelpId;
+        std::abort();
 #endif
     }
 
@@ -9663,6 +9708,8 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         return MenuHelper::get_item_help_id(rIdent);
 #else
+        (void)rIdent;
+        std::abort();
         return OString();
 #endif
     }
@@ -9788,17 +9835,17 @@ public:
         return pBox;
     }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     virtual ~GtkInstanceMenuButton() override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         if (m_pMenuHack)
         {
             g_signal_handler_disconnect(m_pMenuButton, m_nSignalId);
             gtk_menu_button_set_popover(m_pMenuButton, nullptr);
             gtk_widget_destroy(GTK_WIDGET(m_pMenuHack));
         }
-#endif
     }
+#endif
 };
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
@@ -17427,28 +17474,6 @@ private:
         return reinterpret_cast<sal_Int64>(entry) - 1;
     }
 
-    void tree_view_set_cursor(int pos)
-    {
-#if 0
-        if (pos == -1)
-        {
-            gtk_tree_selection_unselect_all(gtk_tree_view_get_selection(m_pTreeView));
-            if (m_pCellView)
-                gtk_cell_view_set_displayed_row(m_pCellView, nullptr);
-        }
-        else
-        {
-            GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
-            if (gtk_tree_view_get_model(m_pTreeView))
-                gtk_tree_view_scroll_to_cell(m_pTreeView, path, nullptr, false, 0, 0);
-            gtk_tree_view_set_cursor(m_pTreeView, path, nullptr, false);
-            if (m_pCellView)
-                gtk_cell_view_set_displayed_row(m_pCellView, path);
-            gtk_tree_path_free(path);
-        }
-#endif
-    }
-
     int tree_view_get_cursor() const
     {
         int nRet = -1;
@@ -17597,8 +17622,10 @@ private:
         int nActive = get_active();
         if (m_pEditable)
             gtk_editable_set_text(m_pEditable, OUStringToOString(get_text(nActive), RTL_TEXTENCODING_UTF8).getStr());
+#if 0
         else
             tree_view_set_cursor(nActive);
+#endif
         enable_notify_events();
 //        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_pToggleButton), false);
         fire_signal_changed();
@@ -18422,6 +18449,8 @@ public:
         if (pMenuWidget)
             m_xCustomMenuButtonHelper.reset(new CustomRenderMenuButtonHelper(GTK_MENU(pMenuWidget), GTK_TOGGLE_BUTTON(m_pToggleButton)));
         m_sMenuButtonRow = OUString::fromUtf8(rIdent);
+#else
+        (void)rIdent; (void)pMenu;
 #endif
     }
 
@@ -22063,6 +22092,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/scalc/ui/xmlsourcedialog.ui" &&
         rUIFile != "modules/smath/ui/alignmentdialog.ui" &&
         rUIFile != "modules/smath/ui/catalogdialog.ui" &&
+        rUIFile != "modules/smath/ui/fontdialog.ui" &&
         rUIFile != "modules/smath/ui/fontsizedialog.ui" &&
         rUIFile != "modules/smath/ui/fonttypedialog.ui" &&
         rUIFile != "modules/smath/ui/savedefaultsdialog.ui" &&
