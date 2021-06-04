@@ -1076,6 +1076,7 @@ SwContentTree::SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNaviga
     , m_bIsLastReadOnly(false)
     , m_bIsOutlineMoveable(true)
     , m_bViewHasChanged(false)
+    , m_bEditing(false)
 {
     m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * 30,
                                   m_xTreeView->get_text_height() * 14);
@@ -1091,7 +1092,8 @@ SwContentTree::SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNaviga
     m_xTreeView->connect_popup_menu(LINK(this, SwContentTree, CommandHdl));
     m_xTreeView->connect_query_tooltip(LINK(this, SwContentTree, QueryTooltipHdl));
     m_xTreeView->connect_drag_begin(LINK(this, SwContentTree, DragBeginHdl));
-
+    m_xTreeView->connect_editing(LINK(this, SwContentTree, EditingEntryHdl),
+                                 LINK(this, SwContentTree, EditedEntryHdl));
     for (ContentTypeId i : o3tl::enumrange<ContentTypeId>())
     {
         m_aActiveContentArr[i] = nullptr;
@@ -2610,6 +2612,11 @@ bool SwContentTree::HasContentChanged()
     // changed visibility and should have its name rerendered with a new
     // grayed-out state
     bool bVisibilityChanged = false;
+
+    if(IsEditingActive())
+    {
+        return false ;
+    }
 
     if (State::HIDDEN == m_eState)
     {
@@ -4332,7 +4339,13 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
     sal_uInt16 nSlot = 0;
 
     if(EditEntryMode::DELETE == nMode)
+    {
         m_bIgnoreViewChange = true;
+    }else if(EditEntryMode::RENAME == nMode )
+    {
+        m_xTreeView->start_editing(rEntry) ;
+        return ;
+    }
 
     uno::Reference< container::XNameAccess >  xNameAccess, xSecond, xThird;
     switch(nType)
@@ -4370,9 +4383,9 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
             }
             else if(nMode == EditEntryMode::RENAME)
             {
-                uno::Reference< frame::XModel >  xModel = m_pActiveShell->GetView().GetDocShell()->GetBaseModel();
-                uno::Reference< text::XTextTablesSupplier >  xTables(xModel, uno::UNO_QUERY);
-                xNameAccess = xTables->getTextTables();
+                //uno::Reference< frame::XModel >  xModel = m_pActiveShell->GetView().GetDocShell()->GetBaseModel();
+                //uno::Reference< text::XTextTablesSupplier >  xTables(xModel, uno::UNO_QUERY);
+                //xNameAccess = xTables->getTextTables();
             }
             else
                 nSlot = FN_FORMAT_TABLE_DLG;
@@ -4385,13 +4398,15 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
             }
             else if(nMode == EditEntryMode::RENAME)
             {
-                uno::Reference< frame::XModel >  xModel = m_pActiveShell->GetView().GetDocShell()->GetBaseModel();
-                uno::Reference< text::XTextGraphicObjectsSupplier >  xGraphics(xModel, uno::UNO_QUERY);
-                xNameAccess = xGraphics->getGraphicObjects();
-                uno::Reference< text::XTextFramesSupplier >  xFrames(xModel, uno::UNO_QUERY);
-                xSecond = xFrames->getTextFrames();
-                uno::Reference< text::XTextEmbeddedObjectsSupplier >  xObjs(xModel, uno::UNO_QUERY);
-                xThird = xObjs->getEmbeddedObjects();
+                //m_xTreeView->start_editing(rEntry);
+                //return ;
+                //uno::Reference< frame::XModel >  xModel = m_pActiveShell->GetView().GetDocShell()->GetBaseModel();
+                //uno::Reference< text::XTextGraphicObjectsSupplier >  xGraphics(xModel, uno::UNO_QUERY);
+                //xNameAccess = xGraphics->getGraphicObjects();
+                //uno::Reference< text::XTextFramesSupplier >  xFrames(xModel, uno::UNO_QUERY);
+                //xSecond = xFrames->getTextFrames();
+                //uno::Reference< text::XTextEmbeddedObjectsSupplier >  xObjs(xModel, uno::UNO_QUERY);
+                //xThird = xObjs->getEmbeddedObjects();
             }
             else
                 nSlot = FN_FORMAT_GRAFIC_DLG;
@@ -4405,21 +4420,23 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
             }
             else if(nMode == EditEntryMode::RENAME)
             {
-                uno::Reference< frame::XModel >  xModel = m_pActiveShell->GetView().GetDocShell()->GetBaseModel();
-                uno::Reference< text::XTextFramesSupplier >  xFrames(xModel, uno::UNO_QUERY);
-                uno::Reference< text::XTextEmbeddedObjectsSupplier >  xObjs(xModel, uno::UNO_QUERY);
-                if(ContentTypeId::FRAME == nType)
-                {
-                    xNameAccess = xFrames->getTextFrames();
-                    xSecond = xObjs->getEmbeddedObjects();
-                }
-                else
-                {
-                    xNameAccess = xObjs->getEmbeddedObjects();
-                    xSecond = xFrames->getTextFrames();
-                }
-                uno::Reference< text::XTextGraphicObjectsSupplier >  xGraphics(xModel, uno::UNO_QUERY);
-                xThird = xGraphics->getGraphicObjects();
+                //m_xTreeView->start_editing(rEntry);
+                //return;
+                //uno::Reference< frame::XModel >  xModel = m_pActiveShell->GetView().GetDocShell()->GetBaseModel();
+                //uno::Reference< text::XTextFramesSupplier >  xFrames(xModel, uno::UNO_QUERY);
+                //uno::Reference< text::XTextEmbeddedObjectsSupplier >  xObjs(xModel, uno::UNO_QUERY);
+                //if(ContentTypeId::FRAME == nType)
+                //{
+                    //xNameAccess = xFrames->getTextFrames();
+                    //xSecond = xObjs->getEmbeddedObjects();
+                //}
+                //else
+                //{
+                    //xNameAccess = xObjs->getEmbeddedObjects();
+                    //xSecond = xFrames->getTextFrames();
+                //}
+                //uno::Reference< text::XTextGraphicObjectsSupplier >  xGraphics(xModel, uno::UNO_QUERY);
+                //xThird = xGraphics->getGraphicObjects();
             }
             else
                 nSlot = FN_FORMAT_FRAME_DLG;
@@ -4433,22 +4450,23 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
             }
             else if(nMode == EditEntryMode::RENAME)
             {
-                uno::Reference< frame::XModel >  xModel = m_pActiveShell->GetView().GetDocShell()->GetBaseModel();
-                uno::Reference< text::XBookmarksSupplier >  xBkms(xModel, uno::UNO_QUERY);
-                xNameAccess = xBkms->getBookmarks();
+                //m_xTreeView->start_editing(rEntry);
+                //return ;
+                //uno::Reference< frame::XModel >  xModel = m_pActiveShell->GetView().GetDocShell()->GetBaseModel();
+                //uno::Reference< text::XBookmarksSupplier >  xBkms(xModel, uno::UNO_QUERY);
+                //xNameAccess = xBkms->getBookmarks();
             }
             else
                 nSlot = FN_INSERT_BOOKMARK;
         break;
 
         case ContentTypeId::REGION    :
-            if(nMode == EditEntryMode::RENAME)
-            {
-                uno::Reference< frame::XModel >  xModel = m_pActiveShell->GetView().GetDocShell()->GetBaseModel();
-                uno::Reference< text::XTextSectionsSupplier >  xSects(xModel, uno::UNO_QUERY);
-                xNameAccess = xSects->getTextSections();
-            }
-            else
+            //if(nMode == EditEntryMode::RENAME)
+            //{
+                //m_xTreeView->start_editing(rEntry) ;
+                //return ;
+            //}
+            //else
                 nSlot = FN_EDIT_REGION;
         break;
 
@@ -4512,22 +4530,26 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
                 }
                 break;
                 case EditEntryMode::UPD_IDX:
-                case EditEntryMode::RENAME:
                 {
                     Reference< frame::XModel >  xModel = m_pActiveShell->GetView().GetDocShell()->GetBaseModel();
                     Reference< XDocumentIndexesSupplier >  xIndexes(xModel, UNO_QUERY);
                     Reference< XIndexAccess> xIdxAcc(xIndexes->getDocumentIndexes());
                     Reference< XNameAccess >xLocalNameAccess(xIdxAcc, UNO_QUERY);
-                    if(EditEntryMode::RENAME == nMode)
-                        xNameAccess = xLocalNameAccess;
-                    else if(xLocalNameAccess.is() && xLocalNameAccess->hasByName(pBase->GetTOXName()))
+                    if(xLocalNameAccess.is() && xLocalNameAccess->hasByName(pBase->GetTOXName()))
                     {
                         Any aIdx = xLocalNameAccess->getByName(pBase->GetTOXName());
                         Reference< XDocumentIndex> xIdx;
                         if(aIdx >>= xIdx)
                             xIdx->update();
                     }
+
                 }
+                break ;
+                //case EditEntryMode::RENAME:
+                //{
+                    //m_xTreeView->start_editing(rEntry) ;
+                    //return ;
+                //}
                 break;
                 default: break;
             }
@@ -4536,8 +4558,9 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
         case ContentTypeId::DRAWOBJECT :
             if(EditEntryMode::DELETE == nMode)
                 nSlot = SID_DELETE;
-            else if(nMode == EditEntryMode::RENAME)
-                nSlot = FN_NAME_SHAPE;
+            //else if(nMode == EditEntryMode::RENAME)
+                //m_xTreeView->start_editing(rEntry) ;
+                //return ;
         break;
         default: break;
     }
@@ -4573,6 +4596,156 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
         GetParentWindow()->UpdateListBox();
         TimerUpdate(&m_aUpdTimer);
         grab_focus();
+    }
+}
+
+IMPL_LINK(SwContentTree, EditingEntryHdl, const weld::TreeIter&, rIter, bool )
+{
+    const SwContentType* pContType = reinterpret_cast<SwContent*>(m_xTreeView->get_id(rIter).toInt64())->GetParent();
+    const ContentTypeId nContentType = pContType->GetType();
+    m_bEditing = lcl_IsContent(rIter, *m_xTreeView) &&
+                    (ContentTypeId::TABLE == nContentType ||
+                    ContentTypeId::FRAME == nContentType ||
+                    ContentTypeId::GRAPHIC == nContentType ||
+                    ContentTypeId::OLE == nContentType ||
+                    (ContentTypeId::BOOKMARK == nContentType ) ||
+                    ContentTypeId::REGION == nContentType ||
+                    ContentTypeId::INDEX == nContentType ||
+                    ContentTypeId::DRAWOBJECT == nContentType);
+
+    return m_bEditing;
+}
+
+IMPL_LINK(SwContentTree, EditedEntryHdl, const IterString&, rIterString, bool)
+{
+    m_bEditing = false ;
+    const weld::TreeIter& rIter = rIterString.first;
+    SwContent* pCnt = reinterpret_cast<SwContent*>(m_xTreeView->get_id(rIter).toInt64());
+    GotoContent(pCnt);
+    const ContentTypeId nType = pCnt->GetParent()->GetType();
+
+    uno::Reference< container::XNameAccess >  xNameAccess, xSecond, xThird;
+    switch(nType)
+    {
+        case ContentTypeId::TABLE :
+        {
+            uno::Reference<frame::XModel > xModel(m_pActiveShell->GetView().GetDocShell()->GetBaseModel()) ;
+            uno::Reference< text::XTextTablesSupplier >  xTables(xModel, uno::UNO_QUERY);
+            OUString sForbiddenChars ;
+            sForbiddenChars = " ." ;
+            bool m_bContainsForbiddenChars = false;
+            for(sal_Int32 index = 0 ; index < sForbiddenChars.getLength(); index++)
+            {
+                if(rIterString.second.indexOf(sForbiddenChars[index]) >= 0 )
+                {
+                    m_bContainsForbiddenChars = true ;
+                    break;
+                }
+            }
+            if(m_bContainsForbiddenChars)
+            {
+                break ;
+            }
+            xNameAccess = xTables->getTextTables();
+        }
+        break ;
+
+        case ContentTypeId::GRAPHIC :
+        {
+            uno::Reference<frame::XModel > xModel(m_pActiveShell->GetView().GetDocShell()->GetBaseModel()) ;
+            uno::Reference< text::XTextGraphicObjectsSupplier >  xGraphics(xModel, uno::UNO_QUERY);
+            xNameAccess = xGraphics->getGraphicObjects();
+            uno::Reference< text::XTextFramesSupplier >  xFrames(xModel, uno::UNO_QUERY);
+            xSecond = xFrames->getTextFrames();
+            uno::Reference< text::XTextEmbeddedObjectsSupplier >  xObjs(xModel, uno::UNO_QUERY);
+            xThird = xObjs->getEmbeddedObjects();
+        }
+        break ;
+
+        case ContentTypeId::OLE :
+        {
+            uno::Reference<frame::XModel > xModel(m_pActiveShell->GetView().GetDocShell()->GetBaseModel()) ;
+            uno::Reference< text::XTextFramesSupplier >  xFrames(xModel, uno::UNO_QUERY);
+            uno::Reference< text::XTextEmbeddedObjectsSupplier >  xObjs(xModel, uno::UNO_QUERY);
+            xNameAccess = xObjs->getEmbeddedObjects();
+            xSecond = xFrames->getTextFrames();
+            uno::Reference< text::XTextGraphicObjectsSupplier >  xGraphics(xModel, uno::UNO_QUERY);
+            xThird = xGraphics->getGraphicObjects();
+        }
+        break;
+
+        case ContentTypeId::BOOKMARK:
+        {
+            uno::Reference<frame::XModel > xModel(m_pActiveShell->GetView().GetDocShell()->GetBaseModel()) ;
+            uno::Reference< text::XBookmarksSupplier >  xBkms(xModel, uno::UNO_QUERY);
+            OUString sForbiddenChars ;
+            sForbiddenChars = "/\\@:*?\";,.#" ;
+            bool m_bContainsForbiddenChars = false;
+            for(sal_Int32 index = 0 ; index < sForbiddenChars.getLength(); index++ )
+            {
+                if(rIterString.second.indexOf(sForbiddenChars[index]) >= 0 )
+                {
+                    m_bContainsForbiddenChars = true;
+                    break ;
+                }
+            }
+            if(m_bContainsForbiddenChars)
+            {
+                break;
+            }
+            xNameAccess = xBkms->getBookmarks();
+        }
+        break;
+
+        case ContentTypeId::REGION:
+        {
+            uno::Reference<frame::XModel > xModel(m_pActiveShell->GetView().GetDocShell()->GetBaseModel()) ;
+            uno::Reference< text::XTextSectionsSupplier >  xSects(xModel, uno::UNO_QUERY);
+            xNameAccess = xSects->getTextSections();
+        }
+        break ;
+
+        case ContentTypeId::INDEX:
+        {
+            uno::Reference<frame::XModel > xModel(m_pActiveShell->GetView().GetDocShell()->GetBaseModel()) ;
+            Reference< XDocumentIndexesSupplier >  xIndexes(xModel, UNO_QUERY);
+            Reference< XIndexAccess> xIdxAcc(xIndexes->getDocumentIndexes());
+            Reference< XNameAccess >xLocalNameAccess(xIdxAcc, UNO_QUERY);
+            xNameAccess = xLocalNameAccess;
+        }
+        break ;
+
+        case ContentTypeId::DRAWOBJECT:
+        {
+            SdrView* pSdrView = m_pActiveShell->GetDrawView();
+            SdrObject* pSelected = pSdrView->GetMarkedObjectByIndex(0);
+            const OUString sCurrentName(pSelected->GetName());
+            OUString aName = rIterString.second;
+            if(sCurrentName.isEmpty() || aName == sCurrentName)
+            {
+                break ;
+            }
+            pSelected->SetName(rIterString.second);
+            m_pActiveShell->SetModified();
+        }
+        break;
+
+        default : break;
+    }
+    if(xNameAccess.is() && !xNameAccess->hasByName(rIterString.second))
+    {
+        uno::Any aObj = xNameAccess->getByName(pCnt->GetName());
+        uno::Reference< uno::XInterface >  xTmp;
+        aObj >>= xTmp;
+        uno::Reference< container::XNamed >  xNamed(xTmp, uno::UNO_QUERY);
+        try {
+            xNamed->setName(rIterString.second) ;
+            return true ;
+        }
+        catch (const uno::RuntimeException&)
+        {
+            OSL_FAIL("name wasn't changed") ;
+        }
     }
 }
 
