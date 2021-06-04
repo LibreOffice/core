@@ -363,7 +363,14 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 bHasVisible = true;
 
             if (sName == "icon-name")
+            {
+                auto xDoc = xChild->getOwnerDocument();
+                auto xPaintable
+                    = CreateProperty(xDoc, "name", xChild->getFirstChild()->getNodeValue());
+                xChild->getParentNode()->insertBefore(xPaintable, xChild);
+                xRemoveList.push_back(xChild);
                 bHasIconName = true;
+            }
 
             if (sName == "events")
                 xRemoveList.push_back(xChild);
@@ -921,7 +928,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             {
                 xClass->setNodeValue("GtkCheckButton");
             }
-            else if (sClass == "GtkImage" && !bChildHasIconName)
+            else if (sClass == "GtkImage")
             {
                 xClass->setNodeValue("GtkPicture");
             }

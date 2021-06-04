@@ -21082,6 +21082,20 @@ private:
                 }
             }
         }
+#if GTK_CHECK_VERSION(4, 0, 0)
+        else if (GTK_IS_PICTURE(pWidget))
+        {
+            if (const gchar* icon_name = gtk_widget_get_name(pWidget))
+            {
+                OUString aIconName(icon_name, strlen(icon_name), RTL_TEXTENCODING_UTF8);
+                if (GdkPixbuf* pixbuf = load_icon_by_name_theme_lang(aIconName, m_aIconTheme, m_aUILang))
+                {
+                    gtk_picture_set_pixbuf(GTK_PICTURE(pWidget), pixbuf);
+                    g_object_unref(pixbuf);
+                }
+            }
+        }
+#endif
 #if !GTK_CHECK_VERSION(4, 0, 0)
         else if (GTK_IS_TOOL_BUTTON(pWidget))
         {
