@@ -405,6 +405,20 @@ void XmlTestTools::registerOOXMLNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
                        BAD_CAST("http://schemas.microsoft.com/office/drawing/2010/main"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("c"),
                        BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/chart"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("x"),
+                       BAD_CAST("http://schemas.openxmlformats.org/spreadsheetml/2006/main"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("r"),
+                       BAD_CAST("http://schemas.openxmlformats.org/package/2006/relationships"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("xx"),
+                       BAD_CAST("urn:schemas-microsoft-com:office:excel"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("xdr"),
+                       BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("x14"),
+                       BAD_CAST("http://schemas.microsoft.com/office/spreadsheetml/2009/9/main"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("xm"),
+                       BAD_CAST("http://schemas.microsoft.com/office/excel/2006/main"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("x12ac"),
+                       BAD_CAST("http://schemas.microsoft.com/office/spreadsheetml/2011/1/ac"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("o"),
                        BAD_CAST("urn:schemas-microsoft-com:office:office"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w10"),
