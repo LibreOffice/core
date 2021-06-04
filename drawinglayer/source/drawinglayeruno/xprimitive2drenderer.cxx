@@ -36,6 +36,7 @@
 #include <converters.hxx>
 
 #include "xprimitive2drenderer.hxx"
+#include <comphelper/sequenceashashmap.hxx>
 
 using namespace ::com::sun::star;
 
@@ -108,6 +109,16 @@ namespace drawinglayer::unorenderer
             const css::geometry::RealRectangle2D& Range,
             ::sal_uInt32 MaximumQuadraticPixels)
         {
+            MapUnit eRangeUnit = MapUnit::Map100thMM;
+            comphelper::SequenceAsHashMap aViewInformationMap(aViewInformationSequence);
+            auto it = aViewInformationMap.find("RangeUnit");
+            if (it != aViewInformationMap.end())
+            {
+                sal_Int32 nVal{};
+                it->second >>= nVal;
+                eRangeUnit = static_cast<MapUnit>(nVal);
+            }
+
             uno::Reference< rendering::XBitmap > XBitmap;
 
             if(aPrimitive2DSequence.hasElements())
@@ -134,9 +145,17 @@ namespace drawinglayer::unorenderer
                     }
 
                     const geometry::ViewInformation2D aViewInformation2D(aViewInformationSequence);
-                    const double fFactor100th_mmToInch(1.0 / (2.54 * 1000.0));
-                    const sal_uInt32 nDiscreteWidth(basegfx::fround((fWidth * fFactor100th_mmToInch) * DPI_X));
-                    const sal_uInt32 nDiscreteHeight(basegfx::fround((fHeight * fFactor100th_mmToInch) * DPI_Y));
+                    double fFactor{};
+                    if (eRangeUnit == MapUnit::MapTwip)
+                    {
+                        fFactor = 1.0 / (1.44 * 1000.0);
+                    }
+                    else
+                    {
+                        fFactor = 1.0 / (2.54 * 1000.0);
+                    }
+                    const sal_uInt32 nDiscreteWidth(basegfx::fround((fWidth * fFactor) * DPI_X));
+                    const sal_uInt32 nDiscreteHeight(basegfx::fround((fHeight * fFactor) * DPI_Y));
 
                     basegfx::B2DHomMatrix aEmbedding(
                         basegfx::utils::createTranslateB2DHomMatrix(

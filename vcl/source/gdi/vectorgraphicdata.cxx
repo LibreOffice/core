@@ -45,7 +45,8 @@ using namespace ::com::sun::star;
 BitmapEx convertPrimitive2DSequenceToBitmapEx(
     const std::deque< css::uno::Reference< css::graphic::XPrimitive2D > >& rSequence,
     const basegfx::B2DRange& rTargetRange,
-    const sal_uInt32 nMaximumQuadraticPixels)
+    const sal_uInt32 nMaximumQuadraticPixels,
+    const MapUnit eTargetUnit)
 {
     BitmapEx aRetval;
 
@@ -58,7 +59,9 @@ BitmapEx convertPrimitive2DSequenceToBitmapEx(
             uno::Reference< uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
             const uno::Reference< graphic::XPrimitive2DRenderer > xPrimitive2DRenderer = graphic::Primitive2DTools::create(xContext);
 
-            uno::Sequence< beans::PropertyValue > aViewParameters;
+            uno::Sequence< beans::PropertyValue > aViewParameters = {
+                comphelper::makePropertyValue("RangeUnit", static_cast<sal_Int32>(eTargetUnit)),
+            };
             geometry::RealRectangle2D aRealRect;
 
             aRealRect.X1 = rTargetRange.getMinX();
