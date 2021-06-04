@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e034c381_c7c2c5e8",
+        "filename": "sw/source/ui/dialog/ascfldlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-04T07:40:24Z",
+      "side": 0,
+      "message": "Please avoid unrelated whitespace (and other formatting) changes. If needed, all formatting changes must belong to a dedicated separate commit. Please revert the change on this line.",
+      "revId": "988175a5111d214aee6c52be8065b1b79be26497",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

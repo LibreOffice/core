@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0a7fc20d_213ade07",
+        "filename": "sw/qa/extras/txtexport/txtexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-04T07:40:24Z",
+      "side": 1,
+      "message": "I believe this include is unused?",
+      "revId": "4347bde02de58398449a64108731fc368789844a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c28ac153_ab252a6a",
+        "filename": "sw/qa/extras/txtexport/txtexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-04T07:40:24Z",
+      "side": 1,
+      "message": "On one hand, you could just convert it all to OUString, since BOM is also a valid Unicode character U+FEFF, and so you could simplify it overall, checking everything in one go.\n\nOn the other hand, I think that testing OUString is not correct, because it relies also on UTF8-to-UTF16 conversion, and checking OString would be more proper.\n\n    OString aData(std::string_view(pData, aMemoryStream.GetSize());\n    CPPUNIT_ASSERT_EQUAL(OString(u8\"\\uFEFFフー\\r\\nバー\\r\\n\"), aData);",
+      "revId": "4347bde02de58398449a64108731fc368789844a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
