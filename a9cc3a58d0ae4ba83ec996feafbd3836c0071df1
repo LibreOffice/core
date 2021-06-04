@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "404f71d5_e559e1e6",
+        "filename": "sc/source/ui/view/tabvwsh3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-06-04T10:38:09Z",
+      "side": 1,
+      "message": "Please call Kit funtions only if comphelper::LibreOfficeKit::isActive().",
+      "revId": "a9cc3a58d0ae4ba83ec996feafbd3836c0071df1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
