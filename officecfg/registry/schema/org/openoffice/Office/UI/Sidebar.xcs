@@ -242,6 +242,13 @@
         </info>
         <value>500</value>
       </prop>
+      <prop oor:name="MinimumWidth" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Minimum width the sidebar can have. If true, the minumum width
+          is calculated from the largest deck.</desc>
+        </info>
+        <value>true</value>
+      </prop>
     </group>
     <group oor:name="Content">
       <info>
