@@ -125,6 +125,7 @@ SidebarController::SidebarController (
       maRequestedContext(),
       mnRequestedForceFlags(SwitchFlag_NoForce),
       mnMaximumSidebarWidth(officecfg::Office::UI::Sidebar::General::MaximumWidth::get()),
+      mbMinimumSidebarWidth(officecfg::Office::UI::Sidebar::General::MinimumWidth::get()),
       msCurrentDeckId(gsDefaultDeckId),
       maPropertyChangeForwarder([this](){ return this->BroadcastPropertyChange(); }),
       maContextChangeUpdate([this](){ return this->UpdateConfigurations(); }),
@@ -404,7 +405,7 @@ void SAL_CALL SidebarController::requestLayout()
     if (mpCurrentDeck && !mpCurrentDeck->isDisposed())
     {
         mpCurrentDeck->RequestLayout();
-        nMinimalWidth = mpCurrentDeck->GetMinimalWidth();
+        nMinimalWidth = mbMinimumSidebarWidth ? mpCurrentDeck->GetMinimalWidth() : 0;
     }
     RestrictWidth(nMinimalWidth);
 }
@@ -498,7 +499,7 @@ void SidebarController::NotifyResize()
         DeckTitleBar* pTitleBar = mpCurrentDeck->GetTitleBar();
         if (pTitleBar && pTitleBar->GetVisible())
             pTitleBar->SetCloserVisible(CanModifyChildWindowWidth());
-        nMinimalWidth = mpCurrentDeck->GetMinimalWidth();
+        nMinimalWidth = mbMinimumSidebarWidth ? mpCurrentDeck->GetMinimalWidth() : 0;
     }
 
     RestrictWidth(nMinimalWidth);
