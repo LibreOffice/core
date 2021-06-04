@@ -174,6 +174,7 @@ public:
     void testTdf137734();
     void testTdf137874();
     void testTdfCustomShapePos();
+    void testTdf139658();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -295,6 +296,7 @@ public:
     CPPUNIT_TEST(testTdf137734);
     CPPUNIT_TEST(testTdf137874);
     CPPUNIT_TEST(testTdfCustomShapePos);
+    CPPUNIT_TEST(testTdf139658);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2843,6 +2845,26 @@ void Chart2ImportTest::testTdfCustomShapePos()
         CPPUNIT_ASSERT_DOUBLES_EQUAL(4165, aSize.Width, 300);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(1334, aSize.Height, 300);
     }
+}
+
+void Chart2ImportTest::testTdf139658()
+{
+    load(u"/chart2/qa/extras/data/docx/", "tdf139658.docx");
+    uno::Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    Reference<chart2::XInternalDataProvider> xInternalProvider(xChartDoc->getDataProvider(),
+                                                               uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xInternalProvider.is());
+
+    Reference<chart::XComplexDescriptionAccess> xDescAccess(xInternalProvider, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDescAccess.is());
+
+    // Get the category labels.
+    Sequence<OUString> aCategories = xDescAccess->getRowDescriptions();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aCategories.getLength());
+    CPPUNIT_ASSERT_EQUAL(OUString("category1"), aCategories[0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("\"category2\""), aCategories[1]);
+    CPPUNIT_ASSERT_EQUAL(OUString("category\"3"), aCategories[2]);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
