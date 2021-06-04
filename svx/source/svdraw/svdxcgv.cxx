@@ -490,11 +490,20 @@ BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked) const
 
                 if(!aRange.isEmpty())
                 {
+                    o3tl::Length eRangeUnit = o3tl::Length::mm100;
+
+                    if (GetModel()->IsWriter())
+                    {
+                        eRangeUnit = o3tl::Length::twip;
+                    }
+
                     // if we have geometry and it has a range, convert to BitmapEx using
                     // common tooling
                     aBmp = convertPrimitive2DSequenceToBitmapEx(
                         xPrimitives,
-                        aRange);
+                        aRange,
+                        /*nMaximumQuadraticPixels=*/ 500000,
+                        eRangeUnit);
                 }
             }
         }

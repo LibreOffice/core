@@ -1723,6 +1723,15 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedShapeAsPNG)
     // - Actual  : image/x-vclgraphic
     // i.e. the result was invalid ReqIF.
     assertXPath(pXmlDoc, "//reqif-xhtml:p/reqif-xhtml:object", "type", "image/png");
+
+    // Then check the pixel size of the shape:
+    Size aPixelSize(Application::GetDefaultDevice()->LogicToPixel(Size(10000, 10000),
+                                                                  MapMode(MapUnit::Map100thMM)));
+    // Without the accompanying fix in place, this test would have failed with:
+    // - no attribute 'width' exist
+    // i.e. shapes had no width.
+    assertXPath(pXmlDoc, "//reqif-xhtml:p/reqif-xhtml:object", "width",
+                OUString::number(aPixelSize.getWidth()));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
