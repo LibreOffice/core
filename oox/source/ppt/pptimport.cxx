@@ -70,7 +70,6 @@ PowerPointImport::PowerPointImport( const Reference< XComponentContext >& rxCont
 
 PowerPointImport::~PowerPointImport()
 {
-    maPPTShapes.clear();
 }
 
 bool PowerPointImport::importDocument()
