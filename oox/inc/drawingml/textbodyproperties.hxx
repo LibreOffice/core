@@ -42,8 +42,6 @@ struct TextBodyProperties
     std::optional< sal_Int32 >                    moTextOffRight;
     css::drawing::TextVerticalAdjust                meVA;
     OUString                                        msPrst;
-    /// Number of requested columns.
-    sal_Int32 mnNumCol = 1;
     /// Normal autofit: font scale (default: 100%).
     sal_Int32 mnFontScale = 100000;
     OUString msHorzOverflow;
