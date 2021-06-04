@@ -34,25 +34,25 @@ include/basegfx/utils/unopolypolygon.hxx:94
 include/connectivity/sdbcx/IRefreshable.hxx:29
     void connectivity::sdbcx::IRefreshableGroups::refreshGroups()
     empty
-include/filter/msfilter/msdffimp.hxx:545
+include/filter/msfilter/msdffimp.hxx:546
     _Bool SvxMSDffManager::ShapeHasText(unsigned long,unsigned long,)const
     1
-include/svl/svdde.hxx:235
+include/svl/svdde.hxx:236
     class DdeData * DdeTopic::Get(enum SotClipboardFormatId,)
     0
-include/svl/svdde.hxx:236
+include/svl/svdde.hxx:237
     _Bool DdeTopic::Put(const class DdeData *,)
     0
-include/svl/svdde.hxx:237
+include/svl/svdde.hxx:238
     _Bool DdeTopic::Execute(const class rtl::OUString *,)
     0
-include/svl/svdde.hxx:239
+include/svl/svdde.hxx:240
     _Bool DdeTopic::MakeItem(const class rtl::OUString &,)
     0
-include/svl/svdde.hxx:242
+include/svl/svdde.hxx:243
     _Bool DdeTopic::StartAdviseLoop()
     0
-include/svtools/unoevent.hxx:199
+include/svtools/unoevent.hxx:198
     unsigned short SvEventDescriptor::getMacroItemWhich()const
     108
 include/ucbhelper/resultset.hxx:410
@@ -64,22 +64,19 @@ include/unotools/desktopterminationobserver.hxx:36
 include/vbahelper/vbahelperinterface.hxx:74
     int InheritedHelperInterfaceImpl::getCreator()
     1400204879
-include/vcl/toolkit/vclmedit.hxx:118
-    void VclMultiLineEdit::UpdateData()
-    empty
 sc/source/core/opencl/formulagroupcl.cxx:1069
     void sc::opencl::(anonymous namespace)::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class std::__cxx11::basic_stringstream<char> &,)
     empty
-sc/source/core/opencl/opbase.hxx:203
+sc/source/core/opencl/opbase.hxx:202
     _Bool sc::opencl::OpBase::takeNumeric()const
     1
-sc/source/ui/vba/vbasheetobject.hxx:117
+sc/source/ui/vba/vbasheetobject.hxx:116
     class rtl::OUString ScVbaSheetObjectBase::implGetBaseName()const
     "Button"
 sc/source/ui/vba/vbasheetobjects.cxx:142
     class rtl::OUString ScVbaObjectContainer::implGetShapeServiceName()const
     "com.sun.star.drawing.ControlShape"
-slideshow/source/engine/animationfactory.cxx:593
+slideshow/source/engine/animationfactory.cxx:616
     void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch()
     empty
 vcl/inc/qt5/Qt5FilePicker.hxx:172
@@ -94,32 +91,17 @@ vcl/inc/salframe.hxx:147
 vcl/inc/salframe.hxx:204
     _Bool SalFrame::MapUnicodeToKeyCode(char16_t,struct o3tl::strong_int<unsigned short, struct LanguageTypeTag>,class vcl::KeyCode &,)
     0
-vcl/inc/salgdiimpl.hxx:119
-    _Bool SalGraphicsImpl::drawPolyLineBezier(unsigned int,const struct SalPoint *,const enum PolyFlags *,)
-    0
-vcl/inc/salgdiimpl.hxx:124
-    _Bool SalGraphicsImpl::drawPolygonBezier(unsigned int,const struct SalPoint *,const enum PolyFlags *,)
-    0
-vcl/inc/salgdiimpl.hxx:129
-    _Bool SalGraphicsImpl::drawPolyPolygonBezier(unsigned int,const unsigned int *,const struct SalPoint *const *,const enum PolyFlags *const *,)
-    0
-vcl/inc/salgdiimpl.hxx:170
-    _Bool SalGraphicsImpl::drawEPS(long,long,long,long,void *,unsigned int,)
-    0
 vcl/inc/salinst.hxx:89
     _Bool SalInstance::SVMainHook(int *,)
     0
-vcl/inc/salinst.hxx:199
+vcl/inc/salinst.hxx:200
     void SalInstance::releaseMainThread()
+    empty
+vcl/inc/salinst.hxx:209
+    void SalInstance::BeforeAbort(const class rtl::OUString &,_Bool,)
     empty
 vcl/inc/salmenu.hxx:77
     void SalMenu::GetSystemMenuData(struct SystemMenuData *,)
-    empty
-vcl/inc/salmenu.hxx:80
-    _Bool SalMenu::AddMenuBarButton(const struct SalMenuButtonItem &,)
-    0
-vcl/inc/salmenu.hxx:81
-    void SalMenu::RemoveMenuBarButton(unsigned short,)
     empty
 vcl/inc/salobj.hxx:49
     void SalObject::Enable(_Bool,)

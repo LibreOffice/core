@@ -481,7 +481,7 @@ public:
     void            SetBeginPasteOrDropHdl( const Link<PasteOrDropInfos&,void>& rLink );
     void            SetEndPasteOrDropHdl( const Link<PasteOrDropInfos&,void>& rLink );
 
-    virtual void    PaintingFirstLine(sal_Int32 nPara, const Point& rStartPos, tools::Long nBaseLineY, const Point& rOrigin, Degree10 nOrientation, OutputDevice& rOutDev);
+    virtual void    PaintingFirstLine(sal_Int32 nPara, const Point& rStartPos, const Point& rOrigin, Degree10 nOrientation, OutputDevice& rOutDev);
     virtual void    ParagraphInserted( sal_Int32 nNewParagraph );
     virtual void    ParagraphDeleted( sal_Int32 nDeletedParagraph );
     virtual void    ParagraphConnected( sal_Int32 nLeftParagraph, sal_Int32 nRightParagraph );

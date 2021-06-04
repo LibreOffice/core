@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 
 import sys
 import re
@@ -15,7 +15,7 @@ def normalizeTypeParams( line ):
     return normalizeTypeParamsRegex.sub("type-parameter-?-?", line)
 
 # reading as binary (since we known it is pure ascii) is much faster than reading as unicode
-with io.open("workdir/loplugin.virtualdead.log", "rb", buffering=1024*1024) as txt:
+with io.open("workdir/loplugin.virtualdead.log", "r", encoding="ascii", errors="ignore", buffering=1024*1024) as txt:
     for line in txt:
         try:
             tokens = line.strip().split("\t")
@@ -36,11 +36,11 @@ with io.open("workdir/loplugin.virtualdead.log", "rb", buffering=1024*1024) as t
             else:
                 print( "unknown line: " + line)
         except IndexError:
-            print "problem with line " + line.strip()
+            print("problem with line " + line.strip())
             raise
 
 tmp1list = list()
-for callInfo, callValues in callDict.iteritems():
+for callInfo, callValues in iter(callDict.items()):
     nameAndParams = callInfo[1]
     if len(callValues) != 1:
         continue
@@ -63,6 +63,7 @@ for callInfo, callValues in callDict.iteritems():
     if srcloc.startswith("Core/"): continue
     if srcloc.startswith("/Qt"): continue
     if srcloc.startswith("Qt"): continue
+    if srcloc.startswith("64-"): continue
     functionSig = callInfo[0]
     tmp1list.append((srcloc, functionSig, callValue))
 
@@ -88,7 +89,7 @@ for paramInfo in paramSet:
         tmp2dict[name] = bitfield
     else:
         tmp2dict[name] = merge_bitfield(tmp2dict[name], bitfield)
-for name, bitfield in tmp2dict.iteritems():
+for name, bitfield in iter(tmp2dict.items()):
     srcloc = definitionToSourceLocationMap[name]
     # ignore Qt stuff
     if srcloc.startswith("Gui/"): continue
@@ -96,6 +97,7 @@ for name, bitfield in tmp2dict.iteritems():
     if srcloc.startswith("Core/"): continue
     if srcloc.startswith("/Qt"): continue
     if srcloc.startswith("Qt"): continue
+    if srcloc.startswith("64-"): continue
     # ignore external stuff
     if srcloc.startswith("workdir/"): continue
     # referenced by generated code in workdir/
