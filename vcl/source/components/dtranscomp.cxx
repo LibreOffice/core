@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <comphelper/lok.hxx>
+#include <comphelper/processfactory.hxx>
 #include <osl/mutex.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
@@ -39,6 +40,8 @@
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
+#include <com/sun/star/frame/XTerminateListener.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
@@ -52,6 +55,8 @@ namespace vcl
 {
 namespace {
 
+class TerminateListener;
+
 // generic implementation to satisfy SalInstance
 class GenericClipboard :
         public cppu::BaseMutex,
@@ -60,17 +65,15 @@ class GenericClipboard :
         XServiceInfo
         >
 {
+friend class TerminateListener;
     Reference< css::datatransfer::XTransferable >                           m_aContents;
     Reference< css::datatransfer::clipboard::XClipboardOwner >              m_aOwner;
     std::vector< Reference< css::datatransfer::clipboard::XClipboardListener > > m_aListeners;
 
 public:
 
-    GenericClipboard() : cppu::WeakComponentImplHelper<
-        datatransfer::clipboard::XSystemClipboard,
-        XServiceInfo
-        >( m_aMutex )
-    {}
+    GenericClipboard();
+    ~GenericClipboard();
 
     /*
      * XServiceInfo
@@ -110,6 +113,49 @@ public:
         const Reference< css::datatransfer::clipboard::XClipboardListener >& listener ) override;
 };
 
+class TerminateListener : public ::cppu::WeakImplHelper< css::frame::XTerminateListener >
+{
+    GenericClipboard& mrClipboard;
+
+public:
+    TerminateListener(GenericClipboard& rClipboard) : mrClipboard(rClipboard) {}
+
+    void SAL_CALL queryTermination( const css::lang::EventObject& ) override
+    {}
+    void SAL_CALL notifyTermination( const css::lang::EventObject& ) override
+    {
+        if (mrClipboard.m_aContents)
+        {
+            Reference<XComponent> xComp(mrClipboard.m_aContents, UNO_QUERY);
+            if (xComp)
+                xComp->dispose();
+            mrClipboard.m_aContents.clear();
+        }
+    }
+    virtual void SAL_CALL disposing( const ::css::lang::EventObject& ) override
+    {}
+};
+
+
+}
+
+GenericClipboard::GenericClipboard() : cppu::WeakComponentImplHelper<datatransfer::clipboard::XSystemClipboard,
+        XServiceInfo>( m_aMutex )
+{
+    css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create(comphelper::getProcessComponentContext());
+    css::uno::Reference< css::frame::XTerminateListener > xListener( new TerminateListener(*this) );
+    xDesktop->addTerminateListener( xListener );
+}
+
+
+GenericClipboard::~GenericClipboard()
+{
+    if (m_aContents)
+    {
+        Reference<XComponent> xComp(m_aContents, UNO_QUERY);
+        if (xComp)
+            xComp->dispose();
+    }
 }
 
 Sequence< OUString > GenericClipboard::getSupportedServiceNames_static()
