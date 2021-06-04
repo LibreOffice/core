@@ -36,7 +36,8 @@ class Tdf57841(UITestCase):
         xTextDelimiter.executeAction("TYPE", mkPropertyValues({"TEXT": "\""}))
 
         xOK = xDialog.getChild('ok')
-        self.ui_test.close_dialog_through_button(xOK)
+        with self.ui_test.wait_until_component_loaded():
+            self.ui_test.close_dialog_through_button(xOK)
 
         document = self.ui_test.get_component()
 

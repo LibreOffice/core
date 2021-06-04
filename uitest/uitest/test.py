@@ -7,6 +7,7 @@
 
 import time
 import threading
+from contextlib import contextmanager
 from uitest.config import DEFAULT_SLEEP
 from uitest.config import MAX_WAIT
 from uitest.uihelper.common import get_state_as_dict
@@ -72,10 +73,10 @@ class UITest(object):
                 time_ += DEFAULT_SLEEP
                 time.sleep(DEFAULT_SLEEP)
 
-    def load_file(self, url):
-        desktop = self.get_desktop()
+    @contextmanager
+    def wait_until_component_loaded(self):
         with EventListener(self._xContext, "OnLoad") as event:
-            component = desktop.loadComponentFromURL(url, "_default", 0, tuple())
+            yield
             time_ = 0
             while time_ < MAX_WAIT:
                 if event.executed:
@@ -83,9 +84,13 @@ class UITest(object):
                     if len(frames) == 1:
                         self.get_desktop().setActiveFrame(frames[0])
                     time.sleep(DEFAULT_SLEEP)
-                    return component
+                    break
                 time_ += DEFAULT_SLEEP
                 time.sleep(DEFAULT_SLEEP)
+
+    def load_file(self, url):
+        with self.wait_until_component_loaded():
+            return self.get_desktop().loadComponentFromURL(url, "_default", 0, tuple())
 
     def execute_dialog_through_command(self, command, printNames=False):
         with EventListener(self._xContext, "DialogExecute", printNames=printNames) as event:
