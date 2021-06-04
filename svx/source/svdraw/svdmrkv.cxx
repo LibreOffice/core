@@ -1022,7 +1022,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                         if (getSdrModelFromSdrView().IsWriter())
                             selectedNode = &anchor;
                         else
-                            // put it to others as we dont render them except in writer
+                            // put it to others as we don't render them except in writer
                             selectedNode = &others;
                     }
                     else
