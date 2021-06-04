@@ -208,6 +208,14 @@ void SwHTMLWriter::SetupFilterOptions(SfxMedium& rMedium)
     {
         it->second >>= m_bExportImagesAsOLE;
     }
+
+    it = aStoreMap.find("ShapeDPI");
+    if (it != aStoreMap.end())
+    {
+        sal_Int32 nVal{};
+        it->second >>= nVal;
+        m_nShapeDPI.emplace(nVal);
+    }
 }
 
 void SwHTMLWriter::SetupFilterOptions(const OUString& rFilterOptions)

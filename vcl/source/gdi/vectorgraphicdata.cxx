@@ -49,7 +49,8 @@ BitmapEx convertPrimitive2DSequenceToBitmapEx(
     const std::deque< css::uno::Reference< css::graphic::XPrimitive2D > >& rSequence,
     const basegfx::B2DRange& rTargetRange,
     const sal_uInt32 nMaximumQuadraticPixels,
-    const o3tl::Length eTargetUnit)
+    const o3tl::Length eTargetUnit,
+    const std::optional<Size>& rTargetDPI)
 {
     BitmapEx aRetval;
 
@@ -73,7 +74,11 @@ BitmapEx convertPrimitive2DSequenceToBitmapEx(
             aRealRect.Y2 = rTargetRange.getMaxY();
 
             // get system DPI
-            const Size aDPI(Application::GetDefaultDevice()->LogicToPixel(Size(1, 1), MapMode(MapUnit::MapInch)));
+            Size aDPI(Application::GetDefaultDevice()->LogicToPixel(Size(1, 1), MapMode(MapUnit::MapInch)));
+            if (rTargetDPI.has_value())
+            {
+                aDPI = *rTargetDPI;
+            }
 
             const uno::Reference< rendering::XBitmap > xBitmap(
                 xPrimitive2DRenderer->rasterize(

@@ -414,6 +414,9 @@ public:
     /// ReqIF mode: export images as OLE objects.
     bool m_bExportImagesAsOLE = false;
 
+    /// DPI used when exporting a vector shape as a bitmap.
+    std::optional<sal_Int32> m_nShapeDPI;
+
     /// Construct an instance of SwHTMLWriter and optionally give it
     /// the filter options directly, which can also be set via SetupFilterOptions().
     explicit SwHTMLWriter( const OUString& rBaseURL, const OUString& rFilterOptions = "" );
