@@ -475,7 +475,8 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
 
             if (sName == "always-show-image")
             {
-                if (GetParentObjectType(xChild) == "GtkButton")
+                if (GetParentObjectType(xChild) == "GtkButton"
+                    || GetParentObjectType(xChild) == "GtkToggleButton")
                 {
                     // we will turn always-show-image into a GtkBox child for
                     // GtkButton and a GtkLabel child for the GtkBox and move
@@ -487,7 +488,8 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
 
             if (sName == "relief")
             {
-                if (GetParentObjectType(xChild) == "GtkLinkButton"
+                if (GetParentObjectType(xChild) == "GtkToggleButton"
+                    || GetParentObjectType(xChild) == "GtkLinkButton"
                     || GetParentObjectType(xChild) == "GtkButton")
                 {
                     assert(xChild->getFirstChild()->getNodeValue() == "none");
@@ -556,7 +558,8 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
 
             if (sName == "image")
             {
-                if (GetParentObjectType(xChild) == "GtkButton")
+                if (GetParentObjectType(xChild) == "GtkButton"
+                    || GetParentObjectType(xChild) == "GtkToggleButton")
                 {
                     // find the image object, expected to be a child of "interface" and relocate
                     // it to be a child of this GtkButton

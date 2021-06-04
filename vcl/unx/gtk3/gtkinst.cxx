@@ -22048,6 +22048,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "sfx/ui/printeroptionsdialog.ui" &&
         rUIFile != "sfx/ui/securityinfopage.ui" &&
         rUIFile != "sfx/ui/singletabdialog.ui" &&
+        rUIFile != "sfx/ui/templatedlg.ui" &&
         rUIFile != "svt/ui/addresstemplatedialog.ui" &&
         rUIFile != "svt/ui/datewindow.ui" &&
         rUIFile != "svt/ui/javadisableddialog.ui" &&
