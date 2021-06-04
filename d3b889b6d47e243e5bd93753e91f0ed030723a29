@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "35fdb22e_83a391f0",
+        "filename": "sw/qa/uitest/writer_tests6/tdf136941.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-04T12:35:06Z",
+      "side": 1,
+      "message": "This relies upon vnd.sun.star.findbar:FocusToFindbar finished executing before typing starts. This is not always true, and fails occasionally. Do we have a way to know when the focus changed? Some \"wait_until_...?\"",
+      "revId": "d3b889b6d47e243e5bd93753e91f0ed030723a29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
