@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c14f7c83_6d080957",
+        "filename": "sw/source/uibase/uiview/pview.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-06-04T09:38:39Z",
+      "side": 1,
+      "message": "This looks wrong. When zooming in (bZoomIn\u003d\u003dtrue), the next greater value shall be returned, when zooming out (bZoomIn\u003d\u003dfalse) the next smaller value. The handling was correct before but now does the opposite.",
+      "revId": "d9b80bd284018750f2109b69fa9e64962c39090f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
