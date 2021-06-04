@@ -85,6 +85,7 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
@@ -3060,6 +3061,22 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
         sal_Int32 nShapeTextRotateAngle = 0;
         if (GetProperty(xTextSet, "RotateAngle"))
             nShapeTextRotateAngle = rXPropSet->getPropertyValue("RotateAngle").get<sal_Int32>() / 300;
+        sal_Int16 nCols = 0;
+        sal_Int32 nColSpacing = -1;
+        if (GetProperty(rXPropSet, "TextColumns"))
+        {
+            if (css::uno::Reference<css::text::XTextColumns> xCols{ mAny, css::uno::UNO_QUERY })
+            {
+                nCols = xCols->getColumnCount();
+                if (css::uno::Reference<css::beans::XPropertySet> xProps{ mAny,
+                                                                          css::uno::UNO_QUERY })
+                {
+                    if (GetProperty(xProps, "AutomaticDistance"))
+                        mAny >>= nColSpacing;
+                }
+            }
+        }
+
         std::optional<OString> isUpright;
         if (GetProperty(rXPropSet, "InteropGrabBag"))
         {
@@ -3114,6 +3131,8 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
         }
 
         mpFS->startElementNS( (nXmlNamespace ? nXmlNamespace : XML_a), XML_bodyPr,
+                               XML_numCol, sax_fastparser::UseIf(OString::number(nCols), nCols > 0),
+                               XML_spcCol, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nColSpacing)), nCols > 0 && nColSpacing >= 0),
                                XML_wrap, pWrap,
                                XML_horzOverflow, sHorzOverflow,
                                XML_vertOverflow, sVertOverflow,

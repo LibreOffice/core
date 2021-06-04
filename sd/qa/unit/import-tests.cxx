@@ -89,6 +89,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
+#include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 
 #include <stlpool.hxx>
@@ -225,7 +226,6 @@ public:
     void testPatternImport();
     void testPptCrop();
     void testTdf120028();
-    void testTdf120028b();
     void testDescriptionImport();
     void testTdf83247();
     void testTdf47365();
@@ -335,7 +335,6 @@ public:
     CPPUNIT_TEST(testTdf116266);
     CPPUNIT_TEST(testPptCrop);
     CPPUNIT_TEST(testTdf120028);
-    CPPUNIT_TEST(testTdf120028b);
     CPPUNIT_TEST(testDescriptionImport);
     CPPUNIT_TEST(testTdf83247);
     CPPUNIT_TEST(testTdf47365);
@@ -990,26 +989,20 @@ void SdImportTest::testMultiColTexts()
     sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/multicol.pptx"), PPTX );
     const SdrPage *pPage = GetPage( 1, xDocShRef );
 
-    sdr::table::SdrTableObj *pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
-    CPPUNIT_ASSERT( pTableObj );
+    auto pTextObj = dynamic_cast<SdrTextObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pTextObj);
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pTableObj->getRowCount());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pTableObj->getColumnCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), pTextObj->GetTextColumnsNumber());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), pTextObj->GetTextColumnsSpacing());
 
-    sdr::table::SdrTableObj *pMasterTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->TRG_GetMasterPage().GetObj(0));
-    CPPUNIT_ASSERT( pMasterTableObj );
+    auto pMasterTextObj = dynamic_cast<SdrTextObj*>(pPage->TRG_GetMasterPage().GetObj(0));
+    CPPUNIT_ASSERT(pMasterTextObj);
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMasterTableObj->getRowCount());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pMasterTableObj->getColumnCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), pMasterTextObj->GetTextColumnsNumber());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), pMasterTextObj->GetTextColumnsSpacing());
 
-    uno::Reference< table::XCellRange > xTable(pMasterTableObj->getTable(), uno::UNO_QUERY_THROW);
-    uno::Reference< beans::XPropertySet > xCell;
-    xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
-    uno::Reference<text::XTextRange> xParagraph(getParagraphFromShape(0, xCell));
-    uno::Reference<text::XTextRange> xRun( getRunFromParagraph (0, xParagraph ) );
-    OUString sText = xRun->getString();
-
-    CPPUNIT_ASSERT_EQUAL(OUString(""), sText); //We don't import master table text for multicolumn case.
+    uno::Reference<text::XTextRange> xText(pMasterTextObj->getUnoShape(), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("mastershape1\nmastershape2"), xText->getString());
 }
 
 void SdImportTest::testPredefinedTableStyle()
@@ -3023,7 +3016,7 @@ void SdImportTest::testTdf116266()
 
 void SdImportTest::testTdf120028()
 {
-    // Check that the table shape has 4 columns.
+    // Check that the text shape has 4 columns.
     ::sd::DrawDocShellRef xDocShRef
         = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf120028.pptx"), PPTX);
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(),
@@ -3033,63 +3026,22 @@ void SdImportTest::testTdf120028()
     uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPage.is());
 
-    // This failed, shape was not a table, all text was rendered in a single
-    // column.
     uno::Reference<beans::XPropertySet> xShape(getShape(0, xPage));
-    uno::Reference<table::XColumnRowRange> xModel(xShape->getPropertyValue("Model"),
-                                                  uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xModel.is());
+    uno::Reference<text::XTextColumns> xCols(xShape->getPropertyValue("TextColumns"),
+                                             uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(4), xCols->getColumnCount());
+    uno::Reference<beans::XPropertySet> xColProps(xCols, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(0)), xColProps->getPropertyValue("AutomaticDistance"));
 
-    uno::Reference<table::XTableColumns> xColumns = xModel->getColumns();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), xColumns->getCount());
-
-    // Check font size in the A1 cell.
-    uno::Reference<table::XCellRange> xCells(xModel, uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xCell(xCells->getCellByPosition(0, 0), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xParagraph(getParagraphFromShape(0, xCell));
+    // Check font size in the shape.
+    uno::Reference<text::XTextRange> xParagraph(getParagraphFromShape(0, xShape));
     uno::Reference<text::XTextRange> xRun(getRunFromParagraph(0, xParagraph));
-    uno::Reference<beans::XPropertySet> xPropSet(xRun, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropSet(xRun, uno::UNO_QUERY_THROW);
     double fCharHeight = 0;
     xPropSet->getPropertyValue("CharHeight") >>= fCharHeight;
-    // This failed, non-scaled height was 13.5.
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(11.5, fCharHeight, 1E-12);
-
-    xDocShRef->DoClose();
-}
-
-void SdImportTest::testTdf120028b()
-{
-    // Check that the table shape has 4 columns.
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf120028b.pptx"), PPTX);
-    uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(),
-                                                     uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xDoc.is());
-
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xPage.is());
-
-    uno::Reference<beans::XPropertySet> xShape(getShape(0, xPage));
-    CPPUNIT_ASSERT(xShape.is());
-
-    uno::Reference<table::XColumnRowRange> xModel(xShape->getPropertyValue("Model"),
-                                                  uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xModel.is());
-
-    uno::Reference<table::XTableColumns> xColumns = xModel->getColumns();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), xColumns->getCount());
-
-    // Check font color in the A1 cell.
-    uno::Reference<table::XCellRange> xCells(xModel, uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xCell(xCells->getCellByPosition(0, 0), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xParagraph(getParagraphFromShape(0, xCell));
-    uno::Reference<text::XTextRange> xRun(getRunFromParagraph(0, xParagraph));
-    uno::Reference<beans::XPropertySet> xPropSet(xRun, uno::UNO_QUERY);
-    sal_Int32 nCharColor = 0;
-    xPropSet->getPropertyValue("CharColor") >>= nCharColor;
-    // This was 0x1f497d, not white: text list style from placeholder shape
-    // from slide layout was ignored.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xffffff), nCharColor);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(13.5, fCharHeight, 1E-12);
+    // 13.5 * 86% is approx. 11.6 (the correct scaled font size)
+    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(86)), xShape->getPropertyValue("TextFitToSizeScale"));
 
     xDocShRef->DoClose();
 }

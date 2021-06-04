@@ -145,7 +145,7 @@ void TableProperties::pushToPropSet(const ::oox::core::XmlFilterBase& rFilterBas
     for (auto& tableRow : mvTableRows)
     {
         sal_Int32 nColumn = 0;
-        sal_Int32 nColumnSize = mvTableGrid.size();
+        sal_Int32 nColumnSize = tableRow.getTableCells().size();
         sal_Int32 nRemovedColumn = 0; //
 
         for (sal_Int32 nColIndex = 0; nColIndex < nColumnSize; nColIndex++)
@@ -205,65 +205,6 @@ void TableProperties::pushToPropSet(const ::oox::core::XmlFilterBase& rFilterBas
     }
 
     xTableStyleToDelete.reset();
-}
-
-void TableProperties::pullFromTextBody(oox::drawingml::TextBodyPtr pTextBody, sal_Int32 nShapeWidth, bool bhasSameSubTypeIndex, bool bMaster)
-{
-    // Create table grid and a single row.
-    sal_Int32 nNumCol = pTextBody->getTextProperties().mnNumCol;
-    std::vector<sal_Int32>& rTableGrid(getTableGrid());
-    std::vector<drawingml::table::TableRow>& rTableRows(getTableRows());
-    sal_Int32 nColWidth = nShapeWidth / nNumCol;
-
-    if(!bhasSameSubTypeIndex)
-    {
-        for (sal_Int32 nCol = 0; nCol < nNumCol; ++nCol)
-            rTableGrid.push_back(nColWidth);
-
-        rTableRows.emplace_back();
-    }
-
-    if(rTableRows.empty())
-        rTableRows.emplace_back();
-
-    oox::drawingml::table::TableRow& rTableRow = rTableRows.back();
-    std::vector<oox::drawingml::table::TableCell>& rTableCells = rTableRow.getTableCells();
-
-    // Create the cells and distribute the paragraphs from pTextBody.
-    sal_Int32 nNumPara = pTextBody->getParagraphs().size();
-    sal_Int32 nParaPerCol = std::ceil(double(nNumPara) / nNumCol);
-    // Font scale of text body will be applied at a text run level.
-    sal_Int32 nFontScale = pTextBody->getTextProperties().mnFontScale;
-    size_t nPara = 0;
-    for (sal_Int32 nCol = 0; nCol < nNumCol; ++nCol)
-    {
-        rTableCells.emplace_back();
-        oox::drawingml::table::TableCell& rTableCell = rTableCells.at(nCol);
-        TextBodyPtr pCellTextBody = std::make_shared<TextBody>();
-        rTableCell.setTextBody(pCellTextBody);
-
-        // Copy properties provided by <a:lstStyle>.
-        pCellTextBody->getTextListStyle() = pTextBody->getTextListStyle();
-
-        if (bMaster)
-            continue;
-
-        for (sal_Int32 nParaInCol = 0; nParaInCol < nParaPerCol; ++nParaInCol)
-        {
-            if (nPara < pTextBody->getParagraphs().size())
-            {
-                std::shared_ptr<oox::drawingml::TextParagraph> pParagraph
-                    = pTextBody->getParagraphs()[nPara];
-                if (nFontScale != 100000)
-                {
-                    for (auto& pRun : pParagraph->getRuns())
-                        pRun->getTextCharacterProperties().moFontScale = nFontScale;
-                }
-                pCellTextBody->appendParagraph(pParagraph);
-            }
-            ++nPara;
-        }
-    }
 }
 }
 
