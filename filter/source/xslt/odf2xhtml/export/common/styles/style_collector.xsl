@@ -516,10 +516,10 @@
 
             <!-- split border into border parts for better activation-check on style:joint-border feature -->
             <xsl:if test="*/@fo:border">
-                <xsl:attribute name="fo:border-top" select="*/@fo:border" />
-                <xsl:attribute name="fo:border-left" select="*/@fo:border" />
-                <xsl:attribute name="fo:border-bottom" select="*/@fo:border" />
-                <xsl:attribute name="fo:border-right" select="*/@fo:border" />
+                <xsl:attribute name="fo:border-top"><xsl:value-of select="*/@fo:border"/></xsl:attribute>
+                <xsl:attribute name="fo:border-left"><xsl:value-of select="*/@fo:border"/></xsl:attribute>
+                <xsl:attribute name="fo:border-bottom"><xsl:value-of select="*/@fo:border"/></xsl:attribute>
+                <xsl:attribute name="fo:border-right"><xsl:value-of select="*/@fo:border"/></xsl:attribute>
             </xsl:if>
 
            <!--All current attributes will override already inserted attributes of the same name
