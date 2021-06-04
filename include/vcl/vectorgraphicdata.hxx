@@ -41,7 +41,8 @@ typedef css::uno::Sequence<sal_Int8> VectorGraphicDataArray;
 BitmapEx VCL_DLLPUBLIC convertPrimitive2DSequenceToBitmapEx(
     const std::deque< css::uno::Reference< css::graphic::XPrimitive2D > >& rSequence,
     const basegfx::B2DRange& rTargetRange,
-    const sal_uInt32 nMaximumQuadraticPixels = 500000);
+    const sal_uInt32 nMaximumQuadraticPixels = 500000,
+    const o3tl::Length eTargetUnit = o3tl::Length::mm100);
 
 
 enum class VectorGraphicDataType
