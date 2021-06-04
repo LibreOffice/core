@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e5e87aa7_e2ea7b54",
+        "filename": "sw/qa/uitest/writer_tests7/forms.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-04T22:23:47Z",
+      "side": 1,
+      "message": "This still makes room for race. E.g., https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/88446/consoleFull#-12724759509567f988-cbcf-4519-af05-6000b834f13f\n\nIt needs some waiting here.",
+      "revId": "bfcbccbf0c2798e6a36f43b72060289a9c0ca73f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
