@@ -25,6 +25,7 @@
 #include <vcl/svapp.hxx>
 #include <svl/itemprop.hxx>
 #include <o3tl/any.hxx>
+#include <o3tl/temporary.hxx>
 #include <osl/mutex.hxx>
 #include <editeng/unotext.hxx>
 #include <svx/svdobj.hxx>
@@ -172,6 +173,7 @@ protected:
 };
 
 /// Calculates what scaling factor will be used for autofit text scaling of this shape.
+// See also SdrTextObj::GetFontScaleY
 sal_Int16 GetTextFitToSizeScale(SdrObject* pObject)
 {
     SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(pObject);
@@ -187,13 +189,10 @@ sal_Int16 GetTextFitToSizeScale(SdrObject* pObject)
         return 0;
     }
 
-    std::unique_ptr<SdrOutliner> pOutliner
-        = pTextObj->getSdrModelFromSdrObject().createOutliner(OutlinerMode::TextObject);
-    tools::Rectangle aBoundRect(pTextObj->GetCurrentBoundRect());
-    pTextObj->SetupOutlinerFormatting(*pOutliner, aBoundRect);
-    sal_uInt16 nX = 0;
-    sal_uInt16 nY = 0;
-    pOutliner->GetGlobalCharStretching(nX, nY);
+    SdrOutliner& rOutliner = pTextObj->getSdrModelFromSdrObject().GetDrawOutliner(pTextObj);
+    pTextObj->SetupOutlinerFormatting(rOutliner, o3tl::temporary(tools::Rectangle()));
+    sal_uInt16 nY;
+    rOutliner.GetGlobalCharStretching(o3tl::temporary(sal_uInt16()), nY);
     return nY;
 }
 }
