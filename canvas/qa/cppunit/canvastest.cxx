@@ -114,11 +114,8 @@ public:
         mRenderState.AffineTransform = geometry::AffineMatrix2D(2, 0, 0, 0, 2, 0);
         mViewState.AffineTransform = geometry::AffineMatrix2D(5, 0, 0, 0, 5, 0);
 
-        uno::Sequence<geometry::RealPoint2D> points(2);
-        points[0] = geometry::RealPoint2D(10, 5);
-        points[1] = geometry::RealPoint2D(88, 5);
-        uno::Sequence<uno::Sequence<geometry::RealPoint2D>> polygonPoints(1);
-        polygonPoints[0] = points;
+        uno::Sequence<uno::Sequence<geometry::RealPoint2D>> polygonPoints{ { { 10, 5 },
+                                                                             { 88, 5 } } };
         uno::Reference<rendering::XLinePolyPolygon2D> polygon
             = mDevice->createCompatibleLinePolyPolygon(polygonPoints);
         polygon->setClosed(0, false);

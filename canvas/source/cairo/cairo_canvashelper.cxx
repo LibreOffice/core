@@ -404,23 +404,25 @@ namespace cairocanvas
     {
         if( rLeft.getLength() == 3 )
         {
-            uno::Sequence<double> aRes(3);
-            aRes[0] = basegfx::utils::lerp(rLeft[0],rRight[0],fAlpha);
-            aRes[1] = basegfx::utils::lerp(rLeft[1],rRight[1],fAlpha);
-            aRes[2] = basegfx::utils::lerp(rLeft[2],rRight[2],fAlpha);
-            return aRes;
+            return
+            {
+                basegfx::utils::lerp(rLeft[0],rRight[0],fAlpha),
+                basegfx::utils::lerp(rLeft[1],rRight[1],fAlpha),
+                basegfx::utils::lerp(rLeft[2],rRight[2],fAlpha)
+            };
         }
         else if( rLeft.getLength() == 4 )
         {
-            uno::Sequence<double> aRes(4);
-            aRes[0] = basegfx::utils::lerp(rLeft[0],rRight[0],fAlpha);
-            aRes[1] = basegfx::utils::lerp(rLeft[1],rRight[1],fAlpha);
-            aRes[2] = basegfx::utils::lerp(rLeft[2],rRight[2],fAlpha);
-            aRes[3] = basegfx::utils::lerp(rLeft[3],rRight[3],fAlpha);
-            return aRes;
+            return
+            {
+                basegfx::utils::lerp(rLeft[0],rRight[0],fAlpha),
+                basegfx::utils::lerp(rLeft[1],rRight[1],fAlpha),
+                basegfx::utils::lerp(rLeft[2],rRight[2],fAlpha),
+                basegfx::utils::lerp(rLeft[3],rRight[3],fAlpha)
+            };
         }
 
-        return uno::Sequence<double>();
+        return {};
     }
 
     static cairo_pattern_t* patternFromParametricPolyPolygon( ::canvas::ParametricPolyPolygon const & rPolygon )

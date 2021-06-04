@@ -155,17 +155,16 @@ class DemoRenderer
 
         void drawRect( tools::Rectangle rRect, const uno::Sequence< double > &aColor, int /*nWidth*/ )
         {
-            uno::Sequence< geometry::RealPoint2D > aPoints(4);
-            uno::Reference< rendering::XLinePolyPolygon2D > xPoly;
-
-            aPoints[0] = geometry::RealPoint2D( rRect.Left(),  rRect.Top() );
-            aPoints[1] = geometry::RealPoint2D( rRect.Left(),  rRect.Bottom() );
-            aPoints[2] = geometry::RealPoint2D( rRect.Right(), rRect.Bottom() );
-            aPoints[3] = geometry::RealPoint2D( rRect.Right(), rRect.Top() );
-
-            uno::Sequence< uno::Sequence< geometry::RealPoint2D > > aPolys(1);
-            aPolys[0] = aPoints;
-            xPoly = mxDevice->createCompatibleLinePolyPolygon( aPolys );
+            uno::Sequence< uno::Sequence< geometry::RealPoint2D > > aPolys
+            {
+                {
+                    { rRect.Left(),  rRect.Top() },
+                    { rRect.Left(),  rRect.Bottom() },
+                    { rRect.Right(), rRect.Bottom() },
+                    { rRect.Right(), rRect.Top() }
+                }
+            };
+            auto xPoly = mxDevice->createCompatibleLinePolyPolygon( aPolys );
             xPoly->setClosed( 0, true );
 
             rendering::RenderState aRenderState( maRenderState );
@@ -241,8 +240,7 @@ class DemoRenderer
                 }
             }
 
-            uno::Sequence< uno::Sequence< geometry::RealPoint2D > > aPolys(1);
-            aPolys[0] = aPoints;
+            uno::Sequence< uno::Sequence< geometry::RealPoint2D > > aPolys { aPoints };
 
             xPoly = mxDevice->createCompatibleLinePolyPolygon( aPolys );
             xPoly->setClosed( 0, false );
@@ -399,8 +397,7 @@ class DemoRenderer
                                                             r * 2 * sin((i*2*M_PI + 2*M_PI)/num_curves),  //C1y
                                                             r * 2 * cos((i*2*M_PI + 2*M_PI)/num_curves),  //C2x
                                                             r * 2 * sin((i*2*M_PI + 2*M_PI)/num_curves)); //C2y
-            uno::Sequence< uno::Sequence< geometry::RealBezierSegment2D > > aPolys(1);
-            aPolys[0] = aBeziers;
+            uno::Sequence< uno::Sequence< geometry::RealBezierSegment2D > > aPolys { aBeziers };
             xPoly = mxDevice->createCompatibleBezierPolyPolygon(aPolys);
             xPoly->setClosed( 0, true );
             //uno::Reference< rendering::XBezierPolyPolygon2D> xPP( xPoly, uno::UNO_QUERY );
@@ -490,8 +487,7 @@ class DemoRenderer
                 aPoints[i]= geometry::RealPoint2D( centerx + r * cos(i*2 * M_PI/sides),
                                                    centery + r * sin(i*2 * M_PI/sides));
             }
-            uno::Sequence< uno::Sequence< geometry::RealPoint2D > > aPolys(1);
-            aPolys[0] = aPoints;
+            uno::Sequence< uno::Sequence< geometry::RealPoint2D > > aPolys { aPoints };
             xPoly = mxDevice->createCompatibleLinePolyPolygon( aPolys );
             xPoly->setClosed( 0, true );
             rendering::RenderState aRenderState( maRenderState );
