@@ -1402,8 +1402,10 @@ void SvTreeListBox::Resize()
 // take care of GetTextOffset when doing changes
 void SvTreeListBox::SetTabs()
 {
-    if( IsEditingActive() )
-        EndEditing( true );
+    // commented out so editing doesn't get ended. Not required to be commented out when
+    // return Size(16, 16) is used in Size Image::GetSizePixel()
+    // if( IsEditingActive() )
+    //    EndEditing( true );
     nTreeFlags &= ~SvTreeFlags::RECALCTABS;
     nFocusWidth = -1;
     const WinBits nStyle( GetStyle() );

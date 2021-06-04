@@ -88,7 +88,7 @@ Size Image::GetSizePixel() const
     if (mpImplData)
         return mpImplData->getSizePixel();
     else
-        return Size();
+        return Size(16, 16);
 }
 
 BitmapEx Image::GetBitmapEx() const
