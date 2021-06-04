@@ -25,6 +25,7 @@
 #include <vcl/svapp.hxx>
 #include <svl/itemprop.hxx>
 #include <o3tl/any.hxx>
+#include <o3tl/temporary.hxx>
 #include <osl/mutex.hxx>
 #include <editeng/unotext.hxx>
 #include <svx/svdobj.hxx>
@@ -187,14 +188,7 @@ sal_Int16 GetTextFitToSizeScale(SdrObject* pObject)
         return 0;
     }
 
-    std::unique_ptr<SdrOutliner> pOutliner
-        = pTextObj->getSdrModelFromSdrObject().createOutliner(OutlinerMode::TextObject);
-    tools::Rectangle aBoundRect(pTextObj->GetCurrentBoundRect());
-    pTextObj->SetupOutlinerFormatting(*pOutliner, aBoundRect);
-    sal_uInt16 nX = 0;
-    sal_uInt16 nY = 0;
-    pOutliner->GetGlobalCharStretching(nX, nY);
-    return nY;
+    return pTextObj->GetFontScaleY();
 }
 }
 
