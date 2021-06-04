@@ -140,6 +140,24 @@
       "revId": "4347bde02de58398449a64108731fc368789844a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9924cc6_4651a365",
+        "filename": "sw/qa/extras/txtexport/txtexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-04T15:38:18Z",
+      "side": 1,
+      "message": "Ah - right, this is a round-tripped file! And indeed, SwASCWriter::WriteStream sets endianness of the stream according to the system, not to the filter options. Pity.\n\nWell - then yes, this kind of testing is fine. Ignore me :-)",
+      "parentUuid": "2dab6447_8c9d0b9e",
+      "revId": "4347bde02de58398449a64108731fc368789844a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
