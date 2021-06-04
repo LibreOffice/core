@@ -803,7 +803,7 @@ namespace emfio
 
             case W_META_BITBLT:
             {
-                // 0-3   : nWinROP                      #93454#
+                // 0-3   : nRasterOperation                      #93454#
                 // 4-5   : y offset of source bitmap
                 // 6-7   : x offset of source bitmap
                 // 8-9   : used height of source bitmap
@@ -817,11 +817,11 @@ namespace emfio
                 // 24    : planes
                 // 25    : bitcount
 
-                sal_Int32   nWinROP = 0;
+                sal_uInt32  nRasterOperation = 0;
                 sal_uInt16  nSx = 0, nSy = 0, nSxe = 0, nSye = 0, nDontKnow = 0, nWidth = 0, nHeight = 0, nBytesPerScan = 0;
                 sal_uInt8   nPlanes, nBitCount;
 
-                mpInputStream->ReadInt32( nWinROP )
+                mpInputStream->ReadUInt32( nRasterOperation )
                      .ReadUInt16( nSy ).ReadUInt16( nSx ).ReadUInt16( nSye ).ReadUInt16( nSxe );
                 Point aPoint( ReadYX() );
                 mpInputStream->ReadUInt16( nDontKnow ).ReadUInt16( nWidth ).ReadUInt16( nHeight ).ReadUInt16( nBytesPerScan ).ReadUChar( nPlanes ).ReadUChar( nBitCount );
@@ -866,56 +866,65 @@ namespace emfio
                         aBitmap.Crop( aCropRect );
                     }
                     tools::Rectangle aDestRect( aPoint, Size( nSxe, nSye ) );
-                    maBmpSaveList.emplace_back(new BSaveStruct(aBitmap, aDestRect, nWinROP));
+                    maBmpSaveList.emplace_back(new BSaveStruct(aBitmap, aDestRect, nRasterOperation));
                 }
             }
             break;
 
-            case W_META_STRETCHBLT:
             case W_META_DIBBITBLT:
             case W_META_DIBSTRETCHBLT:
+            case W_META_STRETCHBLT:
             case W_META_STRETCHDIB:
             {
-                sal_Int32   nWinROP = 0;
-                sal_uInt16  nSx = 0, nSy = 0, nSxe = 0, nSye = 0, nUsage = 0;
+                sal_uInt32  nRasterOperation = 0;
+                sal_Int16   nYSrc = 0, nXSrc = 0, nSrcHeight = 0, nSrcWidth = 0;
+                sal_uInt16  nColorUsage = 0;
                 Bitmap      aBmp;
 
-                mpInputStream->ReadInt32( nWinROP );
+                mpInputStream->ReadUInt32( nRasterOperation );
+                SAL_INFO("emfio", "\t\t Raster Operation: 0x" << std::hex << nRasterOperation << std::dec);
 
                 if( nFunc == W_META_STRETCHDIB )
-                    mpInputStream->ReadUInt16( nUsage );
+                    mpInputStream->ReadUInt16( nColorUsage );
 
-                // nSye and nSxe is the number of pixels that has to been used
+                // nSrcHeight and nSrcWidth is the number of pixels that has to been used
                 // If they are set to zero, it is as indicator not to scale the bitmap later
-
-                if( nFunc == W_META_STRETCHDIB || nFunc == W_META_STRETCHBLT || nFunc == W_META_DIBSTRETCHBLT )
-                    mpInputStream->ReadUInt16( nSye ).ReadUInt16( nSxe );
+                if( nFunc == W_META_DIBSTRETCHBLT ||
+                    nFunc == W_META_STRETCHBLT ||
+                    nFunc == W_META_STRETCHDIB )
+                    mpInputStream->ReadInt16( nSrcHeight ).ReadInt16( nSrcWidth );
 
                 // nSy and nx is the offset of the first pixel
-                mpInputStream->ReadUInt16( nSy ).ReadUInt16( nSx );
+                mpInputStream->ReadInt16( nYSrc ).ReadInt16( nXSrc );
 
-                if( nFunc == W_META_STRETCHDIB || nFunc == W_META_DIBBITBLT || nFunc == W_META_DIBSTRETCHBLT )
+                if( nFunc == W_META_DIBBITBLT ||
+                    nFunc == W_META_DIBSTRETCHBLT ||
+                    nFunc == W_META_STRETCHDIB )
                 {
-                    if ( nWinROP == PATCOPY )
-                        mpInputStream->ReadUInt16( nUsage );    // i don't know anything of this parameter, so it's called nUsage
+                    if ( nRasterOperation == PATCOPY )
+                        mpInputStream->ReadUInt16( nColorUsage );    // i don't know anything of this parameter, so it's called nUsage
                                             // DrawRect( Rectangle( ReadYX(), aDestSize ), false );
 
                     Size aDestSize( ReadYXExt() );
                     if ( aDestSize.Width() && aDestSize.Height() )  // #92623# do not try to read buggy bitmaps
                     {
                         tools::Rectangle aDestRect( ReadYX(), aDestSize );
-                        if ( nWinROP != PATCOPY )
+                        SAL_INFO("emfio", "\t\t bako if ( nRasterOperation != PATCOPY )" );
+                        if ( nRasterOperation != PATCOPY )
                             ReadDIB(aBmp, *mpInputStream, false);
 
                         // test if it is sensible to crop
-                        if ( nSye && nSxe &&
-                             ( nSx + nSxe <= aBmp.GetSizePixel().Width() ) &&
-                             ( nSy + nSye <= aBmp.GetSizePixel().Height() ) )
+                        if ( nSrcHeight && nSrcWidth &&
+                             ( nXSrc + nSrcWidth <= aBmp.GetSizePixel().Width() ) &&
+                             ( nYSrc + nSrcHeight <= aBmp.GetSizePixel().Height() ) )
                         {
-                            tools::Rectangle aCropRect( Point( nSx, nSy ), Size( nSxe, nSye ) );
+                            tools::Rectangle aCropRect( Point( nXSrc, nYSrc ), Size( nSrcWidth, nSrcHeight ) );
                             aBmp.Crop( aCropRect );
                         }
-                        maBmpSaveList.emplace_back(new BSaveStruct(aBmp, aDestRect, nWinROP));
+                        SAL_INFO("emfio", "\t\t bako emplace_back(new BSaveStruct(aBmp, aDestRect, nRasterOperation))" );
+
+
+                        maBmpSaveList.emplace_back(new BSaveStruct(aBmp, aDestRect, nRasterOperation));
                     }
                 }
             }
@@ -1888,32 +1897,49 @@ namespace emfio
                     }
                     break;
                     case W_META_BITBLT:
-                    case W_META_STRETCHBLT:
                     case W_META_DIBBITBLT:
                     case W_META_DIBSTRETCHBLT:
+                    case W_META_STRETCHBLT:
                     case W_META_STRETCHDIB:
                     {
-                        sal_Int32   nWinROP;
-                        sal_uInt16  nSx, nSy, nUsage;
-                        pStm->ReadInt32( nWinROP );
+                        sal_uInt32 nRasterOperation;
+                        sal_Int16 nYSrc, nXSrc;
+                        sal_uInt16 nColorUsage;
+                        pStm->ReadUInt32( nRasterOperation );
 
                         if( nFunction == W_META_STRETCHDIB )
-                            pStm->ReadUInt16( nUsage );
+                            pStm->ReadUInt16( nColorUsage );
 
                         // nSye and nSxe is the number of pixels that has to been used
-                        if( nFunction == W_META_STRETCHDIB || nFunction == W_META_STRETCHBLT || nFunction == W_META_DIBSTRETCHBLT )
+                        if( nFunction == W_META_DIBSTRETCHBLT ||
+                            nFunction == W_META_STRETCHBLT ||
+                            nFunction == W_META_STRETCHDIB )
                         {
-                            sal_uInt16 nSxe, nSye;
-                            pStm->ReadUInt16( nSye ).ReadUInt16( nSxe );
+                            sal_Int16 nSrcHeight, nSrcWidth;
+                            pStm->ReadInt16( nSrcHeight ).ReadInt16( nSrcWidth );
                         }
 
-                        // nSy and nx is the offset of the first pixel
-                        pStm->ReadUInt16( nSy ).ReadUInt16( nSx );
-
-                        if( nFunction == W_META_STRETCHDIB || nFunction == W_META_DIBBITBLT || nFunction == W_META_DIBSTRETCHBLT )
+                        // nYSrc and nXSrc is the offset of the first pixel
+                        pStm->ReadInt16( nYSrc ).ReadInt16( nXSrc );
+/*
+                        if( nFunction == W_META_BITBLT ||
+                            nFunction == W_META_DIBBITBLT ||
+                            nFunction == W_META_DIBSTRETCHBLT ||
+                            nFunction == W_META_STRETCHBLT ||
+                            nFunction == W_META_STRETCHDIB )
                         {
-                            if ( nWinROP == PATCOPY )
-                                pStm->ReadUInt16( nUsage );    // i don't know anything of this parameter, so it's called nUsage
+                            sal_Int16 nHeight, nWidth;
+                            pStm->ReadInt16( nHeight ).ReadInt16( nWidth );
+
+                            sal_Int16 nYDest, nXDest;
+                            pStm->ReadInt16( nYDest ).ReadInt16( nXDest );
+                        }
+*/
+                        if( nFunction == W_META_DIBBITBLT ||
+                            nFunction == W_META_DIBSTRETCHBLT )
+                        {
+                            if ( nRasterOperation == PATCOPY )
+                                pStm->ReadUInt16( nColorUsage );    // i don't know anything of this parameter, so it's called nUsage
                                                     // DrawRect( Rectangle( ReadYX(), aDestSize ), false );
 
                             Size aDestSize( ReadYXExt() );
