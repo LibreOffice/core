@@ -2214,13 +2214,13 @@ void ScFiltersTest2::testActiveXCheckboxXLSX()
     CPPUNIT_ASSERT_EQUAL(OUString("Custom Caption"), sLabel);
 
     // Check background color (highlight system color)
-    sal_Int32 nColor;
+    Color nColor;
     xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x316AC5), nColor);
+    CPPUNIT_ASSERT_EQUAL(Color(0x316AC5), nColor);
 
     // Check Text color (active border system color)
     xPropertySet->getPropertyValue("TextColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xD4D0C8), nColor);
+    CPPUNIT_ASSERT_EQUAL(Color(0xD4D0C8), nColor);
 
     // Check state of the checkbox
     sal_Int16 nState;
