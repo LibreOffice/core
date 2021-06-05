@@ -24,27 +24,15 @@
 
 #include <com/sun/star/uno/RuntimeException.hpp>
 
+#include <mutex>
+
 using namespace ::cppu;
 using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-namespace
-{
-    class theImplHelperInitMutex : public rtl::Static<Mutex, theImplHelperInitMutex>{};
-}
-
 namespace cppu
 {
-
-/** Shared mutex for implementation helper initialization.
-    Not for public use.
-*/
-static ::osl::Mutex & getImplHelperInitMutex()
-{
-    return theImplHelperInitMutex::get();
-}
-
 
 static void checkInterface( Type const & rType )
 {
@@ -79,7 +67,8 @@ static type_entry * getTypeEntries( class_data * cd )
     type_entry * pEntries = cd->m_typeEntries;
     if (! cd->m_storedTypeRefs) // not inited?
     {
-        MutexGuard guard( getImplHelperInitMutex() );
+        static std::mutex aMutex;
+        std::lock_guard guard( aMutex );
         if (! cd->m_storedTypeRefs) // not inited?
         {
             // get all types
