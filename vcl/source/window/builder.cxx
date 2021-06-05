@@ -106,6 +106,8 @@ namespace
             return IMG_COPY;
         else if (sType == u"edit-paste")
             return IMG_PASTE;
+        else if (sType == u"open-menu-symbolic")
+            return IMG_MENU;
         return OUString();
     }
 
