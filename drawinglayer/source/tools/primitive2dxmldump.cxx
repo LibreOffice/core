@@ -16,6 +16,7 @@
 #include <memory>
 #include <sal/log.hxx>
 
+#include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/Tools.hxx>
@@ -37,6 +38,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 using namespace drawinglayer::primitive2d;
 
@@ -205,6 +207,32 @@ void Primitive2dXmlDump::decomposeAndWrite(
 
         switch (nId)
         {
+            case PRIMITIVE2D_ID_BITMAPPRIMITIVE2D:
+            {
+                const BitmapPrimitive2D& rBitmapPrimitive2D = dynamic_cast<const BitmapPrimitive2D&>(*pBasePrimitive);
+                rWriter.startElement("bitmap");
+
+                basegfx::B2DHomMatrix const & rMatrix = rBitmapPrimitive2D.getTransform();
+                rWriter.attribute("xy11", rMatrix.get(0,0));
+                rWriter.attribute("xy12", rMatrix.get(0,1));
+                rWriter.attribute("xy13", rMatrix.get(0,2));
+                rWriter.attribute("xy21", rMatrix.get(1,0));
+                rWriter.attribute("xy22", rMatrix.get(1,1));
+                rWriter.attribute("xy23", rMatrix.get(1,2));
+                rWriter.attribute("xy31", rMatrix.get(2,0));
+                rWriter.attribute("xy32", rMatrix.get(2,1));
+                rWriter.attribute("xy33", rMatrix.get(2,2));
+
+                const BitmapEx aBitmapEx(VCLUnoHelper::GetBitmap(rBitmapPrimitive2D.getXBitmap()));
+                const Size& rSizePixel(aBitmapEx.GetSizePixel());
+
+                rWriter.attribute("height", rSizePixel.getHeight());
+                rWriter.attribute("width", rSizePixel.getWidth());
+                rWriter.attribute("checksum", aBitmapEx.GetChecksum());
+
+                rWriter.endElement();
+            }
+            break;
             case PRIMITIVE2D_ID_HIDDENGEOMETRYPRIMITIVE2D:
             {
                 const HiddenGeometryPrimitive2D& rHiddenGeometryPrimitive2D = dynamic_cast<const HiddenGeometryPrimitive2D&>(*pBasePrimitive);
