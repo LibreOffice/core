@@ -41,6 +41,17 @@ constants ItemState
     const short DISABLED       = 1;
 
     /** specifies that the property is currently read-only.
+     *
+     * Deprecated: There is no equivalent in SfxItemState
+     * anymore due to not being used, so remove for simplification
+     * reasons and to prepare rework of Item/ItemSet/ItemPool stuff.
+     *
+     * There are only three usages of ::ItemState in the code which
+     * all set the internal SfxItem to SfxVoidItem when triggered,
+     * which is equlivalent to state SfxItemState::DISABLED (see
+     * e.g. SfxItemSet::GetItemState), so READ_ONLY gets not used
+     * in internal handling, even when eventually existing UNO API
+     * usages hand it over the office.
      */
     const short READ_ONLY      = 2;
 

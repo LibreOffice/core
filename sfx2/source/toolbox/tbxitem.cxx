@@ -409,7 +409,7 @@ void SAL_CALL SfxToolBoxControl::statusChanged( const FeatureStateEvent& rEvent 
                 SfxItemState tmpState = static_cast<SfxItemState>(aItemStatus.State);
                 // make sure no-one tries to send us a combination of states
                 if (tmpState != SfxItemState::UNKNOWN && tmpState != SfxItemState::DISABLED &&
-                    tmpState != SfxItemState::READONLY && tmpState != SfxItemState::DONTCARE &&
+                    tmpState != SfxItemState::DONTCARE &&
                     tmpState != SfxItemState::DEFAULT && tmpState != SfxItemState::SET)
                     throw css::uno::RuntimeException("unknown status");
                 eState = tmpState;

@@ -1999,7 +1999,6 @@ beans::PropertyState SvxShape::_getPropertyState( const OUString& PropertyName )
 
         switch( rSet.GetItemState( pMap->nWID, false ) )
         {
-        case SfxItemState::READONLY:
         case SfxItemState::SET:
             eState = beans::PropertyState_DIRECT_VALUE;
             break;

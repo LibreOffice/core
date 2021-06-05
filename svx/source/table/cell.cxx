@@ -1415,7 +1415,6 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName )
 
             switch( rSet.GetItemState( pMap->nWID, false ) )
             {
-            case SfxItemState::READONLY:
             case SfxItemState::SET:
                 eState = PropertyState_DIRECT_VALUE;
                 break;

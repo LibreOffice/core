@@ -964,7 +964,6 @@ beans::PropertyState SvxUnoTextRangeBase::_getPropertyState(const SfxItemPropert
                             }
                             break;
 
-                        case SfxItemState::READONLY:
                         case SfxItemState::SET:
                             if( eItemState != SfxItemState::SET )
                             {
@@ -1004,7 +1003,7 @@ beans::PropertyState SvxUnoTextRangeBase::_getPropertyState(const SfxItemPropert
             case SfxItemState::DONTCARE:
             case SfxItemState::DISABLED:
                 return beans::PropertyState_AMBIGUOUS_VALUE;
-            case SfxItemState::READONLY:
+//            case SfxItemState::READONLY:
             case SfxItemState::SET:
                 return beans::PropertyState_DIRECT_VALUE;
             case SfxItemState::DEFAULT:
@@ -1095,7 +1094,7 @@ bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const Sf
                             }
                             break;
 
-                        case SfxItemState::READONLY:
+//                        case SfxItemState::READONLY:
                         case SfxItemState::SET:
                             if( eItemState != SfxItemState::SET )
                             {
@@ -1131,7 +1130,7 @@ bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const Sf
 
         switch( eItemState )
         {
-                case SfxItemState::READONLY:
+//                case SfxItemState::READONLY:
                 case SfxItemState::SET:
                     rState = beans::PropertyState_DIRECT_VALUE;
                     break;

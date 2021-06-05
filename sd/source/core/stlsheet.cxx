@@ -1194,7 +1194,6 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
 
         switch( rStyleSet.GetItemState( pEntry->nWID, false ) )
         {
-        case SfxItemState::READONLY:
         case SfxItemState::SET:
             eState = PropertyState_DIRECT_VALUE;
             break;

@@ -770,7 +770,7 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
     else
     {
         pSizeBox->set_active_or_entry_text(OUString());
-        if ( eState <= SfxItemState::READONLY )
+        if ( eState <= SfxItemState::DISABLED )
         {
             pSizeBox->set_sensitive(false);
             pSizeLabel->set_sensitive(false);
@@ -794,7 +794,7 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
             break;
 
         case SfxItemState::DISABLED:
-        case SfxItemState::READONLY:
+//        case SfxItemState::READONLY:
             pLangFT->set_sensitive(false);
             pLangBox->set_sensitive(false);
             break;
@@ -1521,7 +1521,7 @@ void SvxCharEffectsPage::ResetColor_Impl( const SfxItemSet& rSet )
             break;
 
         case SfxItemState::DISABLED:
-        case SfxItemState::READONLY:
+//        case SfxItemState::READONLY:
             m_xFontColorFT->set_sensitive(false);
             m_xFontColorLB->set_sensitive(false);
             break;
@@ -1806,7 +1806,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
             break;
 
         case SfxItemState::DISABLED:
-        case SfxItemState::READONLY:
+//        case SfxItemState::READONLY:
             m_aIndividualWordsState.bTriStateEnabled = false;
             m_xIndividualWordsBtn->set_sensitive(false);
             break;
@@ -1860,7 +1860,8 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
         m_xEmphasisFT->hide();
         m_xEmphasisLB->hide();
     }
-    else // SfxItemState::DISABLED or SfxItemState::READONLY
+//    else // SfxItemState::DISABLED or SfxItemState::READONLY
+    else // SfxItemState::DISABLED
     {
         m_xEmphasisFT->set_sensitive(false);
         m_xEmphasisLB->set_sensitive(false);
@@ -1884,7 +1885,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
             break;
 
         case SfxItemState::DISABLED:
-        case SfxItemState::READONLY:
+//        case SfxItemState::READONLY:
             m_xEffectsFT->set_sensitive(false);
             m_xEffectsLB->set_sensitive(false);
             break;
@@ -1914,7 +1915,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
             break;
 
         case SfxItemState::DISABLED:
-        case SfxItemState::READONLY:
+//        case SfxItemState::READONLY:
             m_xReliefFT->set_sensitive(false);
             m_xReliefLB->set_sensitive(false);
             break;
@@ -1944,7 +1945,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
             break;
 
         case SfxItemState::DISABLED:
-        case SfxItemState::READONLY:
+//        case SfxItemState::READONLY:
             m_aOutlineState.bTriStateEnabled = false;
             m_xOutlineBtn->set_sensitive(false);
             break;
@@ -1976,7 +1977,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
             break;
 
         case SfxItemState::DISABLED:
-        case SfxItemState::READONLY:
+//        case SfxItemState::READONLY:
             m_aShadowState.bTriStateEnabled = false;
             m_xShadowBtn->set_sensitive(false);
             break;
@@ -2008,7 +2009,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
             break;
 
         case SfxItemState::DISABLED:
-        case SfxItemState::READONLY:
+//        case SfxItemState::READONLY:
             m_aHiddenState.bTriStateEnabled = false;
             m_xHiddenBtn->set_sensitive(false);
             break;

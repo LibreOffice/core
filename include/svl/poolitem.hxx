@@ -86,9 +86,6 @@ enum class SfxItemState {
     /** Specifies that the property is currently disabled. */
     DISABLED = 0x0001,
 
-    /** Specifies that the property is currently read-only. */
-    READONLY = 0x0002,
-
     /** Specifies that the property is currently in a don't care state.
      * <br/>
      * This is normally used if a selection provides more than one state
