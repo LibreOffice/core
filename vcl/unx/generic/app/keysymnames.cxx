@@ -67,7 +67,8 @@ namespace vcl_sal {
         { XK_Escape, "Esc" },
         { XK_space, "Space" },
         { XK_Page_Up, "PgUp"},
-        { XK_Page_Down, "PgDn"}
+        { XK_Page_Down, "PgDn"},
+        { XK_grave, "`"}
     };
 
     const struct KeysymNameReplacement aImplReplacements_Turkish[] =
