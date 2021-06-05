@@ -691,13 +691,13 @@ void SdExportTest::testLinkedGraphicRT()
             CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pDoc != nullptr );
             const SdrPage *pPage = pDoc->GetPage(1);
             CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pPage != nullptr );
-            SdrGrafObj* pObject = dynamic_cast<SdrGrafObj*>(pPage->GetObj(2));
+            SdrGrafObj *pObject = dynamic_cast<SdrGrafObj*>(pPage->GetObj(2));
             CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pObject != nullptr );
             CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pObject->IsLinkedGraphic() );
 
             const GraphicObject& rGraphicObj = pObject->GetGraphicObject(true);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), int(GraphicType::Bitmap), int(rGraphicObj.GetGraphic().GetType()));
-            CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), sal_uLong(864900), rGraphicObj.GetGraphic().GetSizeBytes());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), int(GraphicType::Bitmap), int(rGraphicObj.GetGraphic().GetType() ) );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), sal_uLong(864900), rGraphicObj.GetGraphic().GetSizeBytes() );
         }
 
         xDocShRef->DoClose();
@@ -790,12 +790,12 @@ void SdExportTest::testImageWithSpecialID()
         {
             uno::Reference<graphic::XGraphic> xGraphic;
             XPropSet->getPropertyValue("Graphic") >>= xGraphic;
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic->getType() != graphic::GraphicType::EMPTY);
-            uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(610), xBitmap->getSize().Width );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(381), xBitmap->getSize().Height );
+            CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), xGraphic.is() );
+            CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), xGraphic->getType() != graphic::GraphicType::EMPTY );
+            uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY );
+            CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), xBitmap.is() );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), static_cast<sal_Int32>(610), xBitmap->getSize().Width );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), static_cast<sal_Int32>(381), xBitmap->getSize().Height );
         }
 
         // Second Image
@@ -842,7 +842,7 @@ void SdExportTest::testTdf62176()
 
     //Saving and Reloading the file
     xDocShRef = saveAndReload( xDocShRef.get(), ODP );
-    uno::Reference<drawing::XDrawPage> xPage2( getPage(0, xDocShRef ) );
+    uno::Reference<drawing::XDrawPage> xPage2( getPage( 0, xDocShRef ) );
     //there should be only *one* shape
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xPage2->getCount());
 
@@ -1105,7 +1105,7 @@ void SdExportTest::testTdf115394PPT()
 
 void SdExportTest::testBulletsAsImage()
 {
-    for (sal_Int32 nExportFormat : {ODP, PPTX, PPT})
+    for(sal_Int32 nExportFormat : {ODP, PPTX, PPT})
     {
         ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/odp/BulletsAsImage.odp"), ODP);
         const OString sFailedMessageBase = OString::Concat("Failed on filter '") + aFileFormats[nExportFormat].pFilterName + "': ";
@@ -1242,12 +1242,12 @@ void SdExportTest::testTdf119629()
     // MSO's effect node type Click parallel node, with group node, after group node
     // were missing.
     assertXPath(pXmlDoc, "//draw:page"
-            "/anim:par[@presentation:node-type='timing-root']"
-            "/anim:seq[@presentation:node-type='main-sequence']"
-            "/anim:par[@presentation:node-type='on-click']"
-            "/anim:par[@presentation:node-type='with-previous']"
-            "/anim:par[@presentation:node-type='on-click']"
-            "/anim:animate[@anim:formula='width*sin(2.5*pi*$)']", 1);
+                "/anim:par[@presentation:node-type='timing-root']"
+                "/anim:seq[@presentation:node-type='main-sequence']"
+                "/anim:par[@presentation:node-type='on-click']"
+                "/anim:par[@presentation:node-type='with-previous']"
+                "/anim:par[@presentation:node-type='on-click']"
+                "/anim:animate[@anim:formula='width*sin(2.5*pi*$)']", 1);
     xDocShRef->DoClose();
 }
 
@@ -1292,26 +1292,26 @@ void SdExportTest::testTdf123557()
     assertXPath(pXmlDoc, "//draw:page", 1);
     assertXPath(pXmlDoc, "//draw:page/anim:par", 1);
     assertXPath(pXmlDoc, "//draw:page"
-            "/anim:par[@presentation:node-type='timing-root']"
-            "/anim:seq[@presentation:node-type='interactive-sequence']", 2);
+                "/anim:par[@presentation:node-type='timing-root']"
+                "/anim:seq[@presentation:node-type='interactive-sequence']", 2);
     assertXPath(pXmlDoc, "//draw:page"
-            "/anim:par[@presentation:node-type='timing-root']"
-            "/anim:seq[@presentation:node-type='interactive-sequence']"
-            "/anim:par[@smil:begin]",3);
+                "/anim:par[@presentation:node-type='timing-root']"
+                "/anim:seq[@presentation:node-type='interactive-sequence']"
+                "/anim:par[@smil:begin]", 3);
     xDocShRef->DoClose();
 }
 
 void SdExportTest::testTdf126761()
 {
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/ppt/tdf126761.ppt"), PPT);
-    xDocShRef = saveAndReload( xDocShRef.get(), ODP );
+    xDocShRef = saveAndReload(xDocShRef.get(), ODP);
     uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
 
     // Get first paragraph of the text
     uno::Reference<text::XTextRange> const xParagraph( getParagraphFromShape( 0, xShape ) );
 
     // Get first run of the paragraph
-    uno::Reference<text::XTextRange> xRun( getRunFromParagraph (0, xParagraph ) );
+    uno::Reference<text::XTextRange> xRun( getRunFromParagraph( 0, xParagraph ) );
     uno::Reference< beans::XPropertySet > xPropSet( xRun, uno::UNO_QUERY_THROW );
 
     // Check character underline, to make sure it has been set correctly
@@ -1480,7 +1480,7 @@ void SdExportTest::testMasterPageBackgroundFullSize()
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xMP->getPropertyValue("BorderRight").get<sal_Int32>());
         uno::Reference<beans::XPropertySet> xBackgroundProps(
             xMP->getPropertyValue("Background").get<uno::Reference<beans::XPropertySet>>());
-        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, xBackgroundProps->getPropertyValue("FillStyle").get<drawing::FillStyle>());
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID,xBackgroundProps->getPropertyValue("FillStyle").get<drawing::FillStyle>());
         xBackgroundProps->getPropertyValue("FillColor") >>= nFillColor;
         CPPUNIT_ASSERT_EQUAL(Color(0x729fcf), nFillColor);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xBackgroundProps->getPropertyValue("FillTransparence").get<sal_Int16>());
