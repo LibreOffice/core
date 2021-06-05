@@ -195,7 +195,7 @@ void SdImportTestSmartArt::testBase()
 
     uno::Reference<beans::XPropertySet> xShape(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
 
-    Color nFillColor;
+    Color nFillColor = 0;
     xShape->getPropertyValue("FillColor") >>= nFillColor;
     CPPUNIT_ASSERT_EQUAL(Color(0x4F81BD), nFillColor);
 
@@ -614,7 +614,7 @@ void SdImportTestSmartArt::testBaseRtoL()
 
     uno::Reference<beans::XPropertySet> xShape(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
 
-    Color nFillColor;
+    Color nFillColor = 0;
     xShape->getPropertyValue("FillColor") >>= nFillColor;
     CPPUNIT_ASSERT_EQUAL(Color(0x4F81BD), nFillColor);
 
@@ -870,11 +870,11 @@ void SdImportTestSmartArt::testOrgChart()
     uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xPara, uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
     uno::Reference<beans::XPropertySet> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
-    Color nActualColor;
-    xRun->getPropertyValue("CharColor") >>= nActualColor;
+
+    Color nActualColor = xRun->getPropertyValue("CharColor").get<Color>();
     // Without the accompanying fix in place, this test would have failed: the
     // "Manager" font color was black, not white.
-    CPPUNIT_ASSERT_EQUAL(COL_WHITE, nActualColor);
+    CPPUNIT_ASSERT_EQUAL(static_cast<COL_WHITE>, nActualColor);
 
     uno::Reference<drawing::XShape> xManagerShape(xManager, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xManagerShape.is());
@@ -998,11 +998,12 @@ void SdImportTestSmartArt::testCycleMatrix()
 
     uno::Reference<beans::XPropertySet> xB1Props(xB1, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xB1Props.is());
-    Color nFillColor;
+
+    Color nFillColor = 0;
     xB1Props->getPropertyValue("FillColor") >>= nFillColor;
     // Without the accompanying fix in place, this test would have failed: the background color was
     // 0x4f81bd, i.e. blue, not orange.
-    CPPUNIT_ASSERT_EQUAL(Color(0xf79646), nFillColor);
+    CPPUNIT_ASSERT_EQUAL(static_cast<Color>(0xf79646), nFillColor);
 
     // Without the accompanying fix in place, this test would have failed: the
     // content of the "A2" shape was lost.
@@ -1030,7 +1031,8 @@ void SdImportTestSmartArt::testCycleMatrix()
     CPPUNIT_ASSERT(xB2Props.is());
     Color nLineColor = 0;
     xB2Props->getPropertyValue("LineColor") >>= nLineColor;
-    CPPUNIT_ASSERT_EQUAL(Color(0xf79646), nLineColor);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<Color>(0xf79646), nLineColor);
 
     uno::Reference<text::XText> xC2(getChildShape(getChildShape(getChildShape(xGroup, 1), 2), 1),
                                     uno::UNO_QUERY);
@@ -1188,9 +1190,9 @@ void SdImportTestSmartArt::testBackground()
     xPropertySet->getPropertyValue("FillStyle") >>= eFillStyle;
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, eFillStyle);
 
-    Color nFillColor;
+    Color nFillColor = 0;
     xPropertySet->getPropertyValue("FillColor") >>= nFillColor;
-    CPPUNIT_ASSERT_EQUAL(Color(0x339933), nFillColor);
+    CPPUNIT_ASSERT_EQUAL(static_cast<Color>(0x339933), nFillColor);
 
     bool bMoveProtect = false;
     xPropertySet->getPropertyValue("MoveProtect") >>= bMoveProtect;
@@ -1227,9 +1229,9 @@ void SdImportTestSmartArt::testBackgroundDrawingmlFallback()
     xPropertySet->getPropertyValue("FillStyle") >>= eFillStyle;
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, eFillStyle);
 
-    Color nFillColor;
+    Color nFillColor = 0;
     xPropertySet->getPropertyValue("FillColor") >>= nFillColor;
-    CPPUNIT_ASSERT_EQUAL(Color(0x339933), nFillColor);
+    CPPUNIT_ASSERT_EQUAL(static_cast<Color>(0x339933), nFillColor);
 
     bool bMoveProtect = false;
     xPropertySet->getPropertyValue("MoveProtect") >>= bMoveProtect;
@@ -1560,13 +1562,14 @@ void SdImportTestSmartArt::testFillColorList()
     uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape = getChildShape(getChildShape(xGroup, 1), 0);
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY_THROW);
-    Color nFillColor;
+
+    Color nFillColor = 0;
     xPropertySet->getPropertyValue("FillColor") >>= nFillColor;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 12603469 (0xc0504d)
     // - Actual  : 16225862 (0xf79646)
     // i.e. the background of the "A" shape was orange-ish, rather than red-ish.
-    CPPUNIT_ASSERT_EQUAL(Color(0xC0504D), nFillColor);
+    CPPUNIT_ASSERT_EQUAL(static_cast<Color>(0xC0504D), nFillColor);
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 2239

@@ -691,7 +691,7 @@ void SdExportTest::testLinkedGraphicRT()
             CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pDoc != nullptr );
             const SdrPage *pPage = pDoc->GetPage(1);
             CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pPage != nullptr );
-            SdrGrafObj* pObject = dynamic_cast<SdrGrafObj*>(pPage->GetObj(2));
+            SdrGrafObj *pObject = dynamic_cast<SdrGrafObj*>(pPage->GetObj(2));
             CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pObject != nullptr );
             CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pObject->IsLinkedGraphic() );
 
@@ -1297,7 +1297,7 @@ void SdExportTest::testTdf123557()
     assertXPath(pXmlDoc, "//draw:page"
             "/anim:par[@presentation:node-type='timing-root']"
             "/anim:seq[@presentation:node-type='interactive-sequence']"
-            "/anim:par[@smil:begin]",3);
+            "/anim:par[@smil:begin]", 3);
     xDocShRef->DoClose();
 }
 

@@ -3151,6 +3151,7 @@ void SdImportTest::testTdf120028b()
     uno::Reference<text::XTextRange> xParagraph(getParagraphFromShape(0, xCell));
     uno::Reference<text::XTextRange> xRun(getRunFromParagraph(0, xParagraph));
     uno::Reference<beans::XPropertySet> xPropSet(xRun, uno::UNO_QUERY);
+
     Color nCharColor;
     xPropSet->getPropertyValue("CharColor") >>= nCharColor;
     // This was 0x1f497d, not white: text list style from placeholder shape
