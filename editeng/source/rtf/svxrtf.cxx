@@ -949,6 +949,7 @@ SvxRTFItemStackType::SvxRTFItemStackType(
         bool const bCopyAttr )
     : aAttrSet( *rCpy.aAttrSet.GetPool(), rCpy.aAttrSet.GetRanges() )
     , mxStartNodeIdx(rPos.MakeNodeIdx())
+    // coverity[read_parm_fld : FALSE] - difficulty with std::optional leading to bogus 'Uninitialized scalar variable'
     , mxEndNodeIdx(mxStartNodeIdx)
     , nSttCnt(rPos.GetCntIdx())
     , nEndCnt(nSttCnt)
