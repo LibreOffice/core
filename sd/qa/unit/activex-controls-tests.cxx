@@ -836,7 +836,7 @@ void SdActiveXControlsTest::testComboBoxProperties()
     CPPUNIT_ASSERT_EQUAL(false, bEnabled);
 
     xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(Color(0x800000), nColor);
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, nColor);
 
     xPropertySet->getPropertyValue("TextColor") >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, nColor);
@@ -1031,7 +1031,7 @@ void SdActiveXControlsTest::testToggleButtonProperties()
     CPPUNIT_ASSERT_EQUAL(Color(0xFF80FF), nColor);
 
     xPropertySet->getPropertyValue("TextColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(Color(0x808080), nColor);
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, nColor);
 
     xPropertySet->getPropertyValue("Toggle") >>= bToggle;
     CPPUNIT_ASSERT_EQUAL(true, bToggle);
