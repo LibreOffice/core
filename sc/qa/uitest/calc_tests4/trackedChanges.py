@@ -43,6 +43,7 @@ class CalcTrackedChanges(UITestCase):
 
     def test_tdf66263_Protect_Records(self):
         calc_doc = self.ui_test.create_doc_in_start_center("calc")
+        self.ui_test.wait_until_child_is_available("grid_window")
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
@@ -69,6 +70,7 @@ class CalcTrackedChanges(UITestCase):
     def test_tracked_changes_accept(self):
 
         calc_doc = self.ui_test.create_doc_in_start_center("calc")
+        self.ui_test.wait_until_child_is_available("grid_window")
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
@@ -123,6 +125,7 @@ class CalcTrackedChanges(UITestCase):
     def test_tracked_changes_acceptall(self):
 
         calc_doc = self.ui_test.create_doc_in_start_center("calc")
+        self.ui_test.wait_until_child_is_available("grid_window")
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
@@ -169,6 +172,7 @@ class CalcTrackedChanges(UITestCase):
     def test_tracked_changes_reject(self):
 
         calc_doc = self.ui_test.create_doc_in_start_center("calc")
+        self.ui_test.wait_until_child_is_available("grid_window")
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
@@ -235,6 +239,7 @@ class CalcTrackedChanges(UITestCase):
     def test_tracked_changes_rejectall(self):
 
         calc_doc = self.ui_test.create_doc_in_start_center("calc")
+        self.ui_test.wait_until_child_is_available("grid_window")
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
