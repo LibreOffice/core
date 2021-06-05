@@ -16,6 +16,24 @@
       "revId": "d9b80bd284018750f2109b69fa9e64962c39090f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2241d9b_a003af57",
+        "filename": "sw/source/uibase/uiview/pview.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-06-05T21:51:09Z",
+      "side": 1,
+      "message": "It seems to produce correct results. My understanding is, when zooming in the zoom percentage should increase, and when zooming out it should decrease. In patchset 4 I\u0027ve changed the conditional test back to bZoomIn \u003d\u003d true and switch the code blocks to return the next greater zoom percentage in the aZoomArr[] when zooming in and the next lesser zoom percentage when zooming out. Perhaps this helps to make this code less confusing.",
+      "parentUuid": "c14f7c83_6d080957",
+      "revId": "d9b80bd284018750f2109b69fa9e64962c39090f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
