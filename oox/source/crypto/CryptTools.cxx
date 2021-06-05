@@ -109,7 +109,7 @@ struct CryptoImpl
     void setupCryptoHashContext(std::vector<sal_uInt8>& rKey, CryptoHashType eType)
     {
         mpHmacContext.reset(HMAC_CTX_new());
-        const EVP_MD* aEvpMd;
+        const EVP_MD* aEvpMd = nullptr;
         switch (eType)
         {
             case CryptoHashType::SHA1:
