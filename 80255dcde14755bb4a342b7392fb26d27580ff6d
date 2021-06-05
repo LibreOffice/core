@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6acd1f2b_f307eab0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-05T11:03:35Z",
+      "side": 1,
+      "message": "\"thread\" must be a mistake :-)",
+      "revId": "80255dcde14755bb4a342b7392fb26d27580ff6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
