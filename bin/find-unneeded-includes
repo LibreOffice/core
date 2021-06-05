@@ -260,7 +260,7 @@ def tidy(compileCommands, paths):
             rulePath = os.path.join(moduleName, "IwyuFilter_" + moduleName + ".yaml")
             moduleRules = {}
             if os.path.exists(rulePath):
-                moduleRules = yaml.load(open(rulePath))
+                moduleRules = yaml.full_load(open(rulePath))
             assume = None
             pathAbs = os.path.abspath(path)
             compileFile = pathAbs
