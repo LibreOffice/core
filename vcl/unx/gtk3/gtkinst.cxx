@@ -9181,6 +9181,12 @@ GtkPositionType show_menu(GtkWidget* pMenuButton, GtkWindow* pMenu)
 
 #endif
 
+/* four types of uses of this
+   a) textual menubutton, always with pan-down symbol, e.g. math, format, font, modify
+   b) image + text, always with additional pan-down symbol, e.g. writer, format, watermark
+   c) gear menu, never with text and without pan-down symbol where there is a replacement
+      icon for pan-down, e.g.  file, new, templates
+   d) image, always with additional pan-down symbol, e.g. calc, insert, header/footer */
 #if !GTK_CHECK_VERSION(4, 0, 0)
 class GtkInstanceMenuButton : public GtkInstanceToggleButton, public MenuHelper, public virtual weld::MenuButton
 #else
@@ -9353,6 +9359,7 @@ private:
             gtk_widget_set_halign(GTK_WIDGET(m_pImage), GTK_ALIGN_CENTER);
             gtk_widget_set_valign(GTK_WIDGET(m_pImage), GTK_ALIGN_CENTER);
             gtk_box_prepend(m_pBox, GTK_WIDGET(m_pImage));
+            gtk_widget_set_halign(m_pLabel, GTK_ALIGN_START);
 #endif
             gtk_widget_show(GTK_WIDGET(m_pImage));
         }
@@ -9479,11 +9486,15 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         m_pLabel = gtk_bin_get_child(GTK_BIN(m_pMenuButton));
         find_image(GTK_WIDGET(m_pMenuButton), &m_pImage);
+        m_pBox = formatMenuButton(m_pLabel);
 #else
-        m_pLabel = find_label_widget(GTK_WIDGET(m_pMenuButton));
+        GtkWidget* pToggleButton = gtk_widget_get_first_child(GTK_WIDGET(m_pMenuButton));
+        assert(GTK_IS_BUTTON(pToggleButton));
+        GtkWidget* pChild = gtk_button_get_child(GTK_BUTTON(pToggleButton));
+        m_pBox = GTK_IS_BOX(pChild) ? GTK_BOX(pChild) : nullptr;
+        m_pLabel = m_pBox ? gtk_widget_get_first_child(GTK_WIDGET(m_pBox)) : nullptr;
         (void)pMenuAlign;
 #endif
-        m_pBox = formatMenuButton(m_pLabel);
 
 #if GTK_CHECK_VERSION(4, 0, 0)
         m_pActionGroup = G_ACTION_GROUP(g_simple_action_group_new());
