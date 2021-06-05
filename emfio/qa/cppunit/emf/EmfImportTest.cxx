@@ -65,6 +65,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools, public unotest:
     void TestExtTextOutOpaqueAndClipWMF();
     void TestPaletteWMF();
     void TestRoundrectWMF();
+    void TestStretchDIBWMF();
     void TestPolylinetoCloseStroke();
     void TestPolyLineWidth();
     void TestRoundRect();
@@ -98,6 +99,7 @@ public:
     CPPUNIT_TEST(TestExtTextOutOpaqueAndClipWMF);
     CPPUNIT_TEST(TestPaletteWMF);
     CPPUNIT_TEST(TestRoundrectWMF);
+    CPPUNIT_TEST(TestStretchDIBWMF);
     CPPUNIT_TEST(TestPolylinetoCloseStroke);
     CPPUNIT_TEST(TestPolyLineWidth);
     CPPUNIT_TEST(TestRoundRect);
@@ -683,6 +685,38 @@ void Test::TestRoundrectWMF()
                 "color", "#000000");
     assertXPath(pDocument, "/primitive2D/metafile/transform/polygonstroke/line",
                 "width", "143");
+}
+
+void Test::TestStretchDIBWMF()
+{
+    // WMF records: STRETCHDIB
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/wmf/data/TestStretchDIB.wmf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap",
+                "xy11", "12065");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap",
+                "xy12", "0");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap",
+                "xy13", "3598");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap",
+                "xy21", "0");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap",
+                "xy22", "12065");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap",
+                "xy23", "3598");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap",
+                "height", "10");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap",
+                "width", "10");
+#if !defined(MACOSX) // TODO DIB display needs to be fixed for macOS
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap",
+                "checksum", "275245357");
+#endif
 }
 
 void Test::TestPolyLineWidth()
