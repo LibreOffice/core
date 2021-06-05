@@ -138,6 +138,7 @@
 #define IMG_REMOVE  "extensions/res/scanner/minus.png"
 #define IMG_COPY    "cmd/sc_copy.png"
 #define IMG_PASTE   "cmd/sc_paste.png"
+#define IMG_MENU    "sfx2/res/actionaction013.png"
 
 #define RID_BMP_TREENODE_COLLAPSED  "res/plus.png"
 #define RID_BMP_TREENODE_EXPANDED   "res/minus.png"
