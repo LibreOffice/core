@@ -321,7 +321,6 @@ beans::PropertyState SAL_CALL SdUnoPageBackground::getPropertyState( const OUStr
 
         switch( mpSet->GetItemState( pEntry->nWID, false ) )
         {
-        case SfxItemState::READONLY:
         case SfxItemState::SET:
             return beans::PropertyState_DIRECT_VALUE;
         case SfxItemState::DEFAULT:
