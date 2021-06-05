@@ -55,7 +55,7 @@ namespace emfio
         bool            ReadHeader();
 
         // reads parameters of the record with the functionnumber nFunction.
-        void            ReadRecordParams(sal_uInt16 nFunction);
+        void            ReadRecordParams(sal_uInt32 nRecordSize, sal_uInt16 nFunction);
 
         Point           ReadPoint();                // reads and converts a point (first X then Y)
         Point           ReadYX();                   // reads and converts a point (first Y then X)
