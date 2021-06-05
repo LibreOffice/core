@@ -570,8 +570,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                     || GetParentObjectType(xChild) == "GtkMenuButton"
                     || GetParentObjectType(xChild) == "GtkToggleButton")
                 {
-                    // find the image object, expected to be a child of "interface" and relocate
-                    // it to be a child of this GtkButton
+                    // find the image object, expected to be a child of "interface"
                     auto xObjectCandidate = xChild->getParentNode();
                     if (xObjectCandidate->getNodeName() == "object")
                     {
@@ -606,11 +605,45 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                         }
 
                         auto xDoc = xChild->getOwnerDocument();
-                        css::uno::Reference<css::xml::dom::XElement> xImageChild
-                            = xDoc->createElement("child");
-                        xImageChild->appendChild(
-                            xImageNode->getParentNode()->removeChild(xImageNode));
-                        xObjectCandidate->appendChild(xImageChild);
+
+                        if (GetParentObjectType(xChild) == "GtkButton"
+                            || GetParentObjectType(xChild) == "GtkToggleButton")
+                        {
+                            // relocate it to be a child of this GtkButton
+                            css::uno::Reference<css::xml::dom::XElement> xImageChild
+                                = xDoc->createElement("child");
+                            xImageChild->appendChild(
+                                xImageNode->getParentNode()->removeChild(xImageNode));
+                            xObjectCandidate->appendChild(xImageChild);
+                        }
+                        else if (GetParentObjectType(xChild) == "GtkMenuButton")
+                        {
+                            auto xProp = xImageNode->getFirstChild();
+                            while (xProp.is())
+                            {
+                                if (xProp->getNodeName() == "property")
+                                {
+                                    css::uno::Reference<css::xml::dom::XNamedNodeMap> xPropMap
+                                        = xProp->getAttributes();
+                                    css::uno::Reference<css::xml::dom::XNode> xPropName
+                                        = xPropMap->getNamedItem("name");
+                                    OUString sPropName(xPropName->getNodeValue().replace('_', '-'));
+                                    if (sPropName == "icon-name")
+                                    {
+                                        OUString sIconName(xProp->getFirstChild()->getNodeValue());
+                                        fprintf(stderr, "icon name is %s\n",
+                                                sIconName.toUtf8().getStr());
+                                        auto xIconName
+                                            = CreateProperty(xDoc, "icon-name", sIconName);
+                                        xObjectCandidate->insertBefore(xIconName, xChild);
+                                        break;
+                                    }
+                                }
+
+                                xProp = xProp->getNextSibling();
+                            }
+                            xImageNode->getParentNode()->removeChild(xImageNode);
+                        }
                     }
 
                     xRemoveList.push_back(xChild);
