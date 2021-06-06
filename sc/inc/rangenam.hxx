@@ -239,6 +239,7 @@ public:
     SC_DLLPUBLIC iterator begin();
     SC_DLLPUBLIC iterator end();
     SC_DLLPUBLIC size_t size() const;
+    SC_DLLPUBLIC size_t index_size() const;
     bool empty() const;
 
     /** Insert object into set.

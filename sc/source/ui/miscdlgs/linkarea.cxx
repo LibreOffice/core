@@ -250,11 +250,15 @@ void ScLinkedAreaDlg::UpdateSourceRanges()
             m_xLbRanges->append_text("CSV_all");
         }
 
-        ScAreaNameIterator aIter(m_pSourceShell->GetDocument());
-        ScRange aDummy;
-        OUString aName;
-        while ( aIter.Next( aName, aDummy ) )
-            m_xLbRanges->append_text(aName);
+        // tdf#142600 - list tables in order of their appearance in the document's source
+        const ScRangeName* pRangeName = m_pSourceShell->GetDocument().GetRangeName();
+        for (size_t i = 1; i <= pRangeName->index_size(); i++)
+        {
+            if (const ScRangeData* pRangeData = pRangeName->findByIndex(i))
+            {
+                m_xLbRanges->append_text(pRangeData->GetName());
+            }
+        }
     }
 
     m_xLbRanges->thaw();
