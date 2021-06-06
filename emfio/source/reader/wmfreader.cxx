@@ -825,7 +825,7 @@ namespace emfio
                 SAL_WARN("emfio", "\t\t Raster operation: 0x" << std::hex << nRasterOperation << std::dec);
                 if ( nRecordSize == ( ( static_cast< sal_uInt32 >( nFunc ) >> 8 ) + 3 ) )
                 {
-                    SAL_WARN("emfio", "\t\t TODO The Bitmap record detected without Bitmap. This case in not supported. Please fill a bug.");
+                    SAL_WARN("emfio", "\t\t TODO The unsupported Bitmap record (without embedded source Bitmap). Please fill a bug.");
                     break;
                 }
                 mpInputStream->ReadUInt16( nYSrc ).ReadUInt16( nXSrc ).ReadUInt16( nSye ).ReadUInt16( nSxe );
@@ -893,7 +893,7 @@ namespace emfio
 
                 if ( nRecordSize == ( ( static_cast< sal_uInt32 >( nFunc ) >> 8 ) + 3 ) )
                 {
-                    SAL_WARN("emfio", "\t\t TODO The Bitmap record detected without Bitmap. This case in not supported. Please fill a bug.");
+                    SAL_WARN("emfio", "\t\t TODO The unsupported Bitmap record (without embedded source Bitmap). Please fill a bug.");
                     break;
                 }
                 if( nFunc == W_META_STRETCHDIB )
@@ -922,8 +922,25 @@ namespace emfio
                     {
                         tools::Rectangle aDestRect( ReadYX(), aDestSize );
                         if ( nRasterOperation != PATCOPY )
-                            ReadDIB(aBmp, *mpInputStream, false);
+                        {
+                            // tdf#142625 Read the DIBHeader and check if bitmap is supported
+                            // If bitmap is not supported don't run ReadDIB, as it will interrupt image processing
+                            const auto nOldPos(mpInputStream->Tell());
+                            sal_uInt32  nHeaderSize;
+                            sal_uInt16  nBitCount;
+                            mpInputStream->ReadUInt32( nHeaderSize );
+                            if ( nHeaderSize == 0xC ) // BitmapCoreHeader
+                                mpInputStream->SeekRel( 6 ); // skip Width (16), Height (16), Planes (16)
+                            else
+                                mpInputStream->SeekRel( 10 ); // skip Width (32), Height (32), Planes (16)
+                            mpInputStream->ReadUInt16( nBitCount );
+                            if ( nBitCount == 0 ) // TODO Undefined BitCount (JPEG/PNG), which are not supported
+                                break;
+                            mpInputStream->Seek(nOldPos);
 
+                            if ( !ReadDIB( aBmp, *mpInputStream, false ) )
+                                SAL_WARN( "emfio", "\tTODO Read DIB failed. Interrupting processing whole image. Please report bug report." );
+                        }
                         // test if it is sensible to crop
                         if ( nSrcHeight && nSrcWidth &&
                              ( nXSrc + nSrcWidth <= aBmp.GetSizePixel().Width() ) &&
@@ -932,6 +949,7 @@ namespace emfio
                             tools::Rectangle aCropRect( Point( nXSrc, nYSrc ), Size( nSrcWidth, nSrcHeight ) );
                             aBmp.Crop( aCropRect );
                         }
+
                         maBmpSaveList.emplace_back(new BSaveStruct(aBmp, aDestRect, nRasterOperation));
                     }
                 }
@@ -942,11 +960,18 @@ namespace emfio
             {
                 Bitmap  aBmp;
                 sal_uInt32  nRed = 0, nGreen = 0, nBlue = 0, nCount = 1;
-                sal_uInt16  nFunction = 0;
+                sal_uInt16  nStyle, nColorUsage;
 
-                mpInputStream->ReadUInt16( nFunction ).ReadUInt16( nFunction );
-
-                ReadDIB(aBmp, *mpInputStream, false);
+                mpInputStream->ReadUInt16( nStyle ).ReadUInt16( nColorUsage );
+                SAL_INFO( "emfio", "\t\t Style:" << nStyle << ", ColorUsage: " << nColorUsage );
+                if ( nStyle == BS_PATTERN ) // TODO tdf#142625 Add support for pattern
+                {
+                    SAL_WARN( "emfio", "\tTODO: Pattern brush style is not supported." );
+                    CreateObject();
+                    break;
+                }
+                if ( !ReadDIB( aBmp, *mpInputStream, false ) )
+                    SAL_WARN( "emfio", "\tTODO Read DIB failed. Interrupting processing whole image. Please report bug report." );
                 if ( !aBmp.IsEmpty() )
                 {
                     Bitmap::ScopedReadAccess pBmp(aBmp);

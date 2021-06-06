@@ -1633,7 +1633,7 @@ bool ImplReadDIB(
 
     if(!bRet)
     {
-        if(!rIStm.GetError())
+        if(!rIStm.GetError()) // Set error and stop processing whole stream due to security reason
         {
             rIStm.SetError(SVSTREAM_GENERALERROR);
         }
