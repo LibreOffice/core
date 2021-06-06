@@ -801,6 +801,11 @@ size_t ScRangeName::size() const
     return m_Data.size();
 }
 
+size_t ScRangeName::index_size() const
+{
+    return maIndexToData.size();
+}
+
 bool ScRangeName::empty() const
 {
     return m_Data.empty();
