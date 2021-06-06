@@ -61,6 +61,7 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <VectorGraphicSearchContext.hxx>
+#include <fusearch.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1550,6 +1551,11 @@ void SdOutliner::SetViewMode (PageKind ePageKind)
     bool bMatchMayExist = mbMatchMayExist;
 
     sd::ViewShellBase& rBase = pViewShell->GetViewShellBase();
+
+    rtl::Reference<sd::FuSearch> xFuSearch;
+    if (pViewShell->GetView())
+        xFuSearch = pViewShell->GetView()->getSearchContext().getFunctionSearch();
+
     SetViewShell(std::shared_ptr<sd::ViewShell>());
     sd::framework::FrameworkHelper::Instance(rBase)->RequestView(
         sViewURL,
@@ -1560,7 +1566,11 @@ void SdOutliner::SetViewMode (PageKind ePageKind)
     // instead.  But that would involve major restructuring of the
     // Outliner code.
     sd::framework::FrameworkHelper::Instance(rBase)->RequestSynchronousUpdate();
-    SetViewShell(rBase.GetMainViewShell());
+
+    auto pNewViewShell = rBase.GetMainViewShell();
+    SetViewShell(pNewViewShell);
+    if (xFuSearch.is() && pNewViewShell->GetView())
+        pNewViewShell->GetView()->getSearchContext().setSearchFunction(xFuSearch);
 
     // Switching to another view shell has intermediatly called
     // EndSpelling().  A PrepareSpelling() is pending, so call that now.
