@@ -631,8 +631,6 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                                     if (sPropName == "icon-name")
                                     {
                                         OUString sIconName(xProp->getFirstChild()->getNodeValue());
-                                        fprintf(stderr, "icon name is %s\n",
-                                                sIconName.toUtf8().getStr());
                                         auto xIconName
                                             = CreateProperty(xDoc, "icon-name", sIconName);
                                         xObjectCandidate->insertBefore(xIconName, xChild);
@@ -678,8 +676,10 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                     bContentArea = true;
                 }
                 else if (sName == "accessible")
-                    xRemoveList.push_back(
-                        xChild); // Yikes!, what's the replacement for this going to be
+                {
+                    // TODO what's the replacement for this going to be?
+                    xRemoveList.push_back(xChild);
+                }
             }
 
             if (bContentArea)
@@ -758,6 +758,26 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                         css::uno::Reference<css::xml::dom::XElement> xElem(
                             xParent, css::uno::UNO_QUERY_THROW);
                         xElem->setAttributeNode(xTypeStart);
+                    }
+                    else if (sName == "pack-type")
+                    {
+                        // turn parent tag of <child> into <child type="start">
+                        auto xParent = xChild->getParentNode();
+
+                        css::uno::Reference<css::xml::dom::XNamedNodeMap> xParentMap
+                            = xParent->getAttributes();
+                        css::uno::Reference<css::xml::dom::XNode> xParentType
+                            = xParentMap->getNamedItem("type");
+                        assert(!xParentType || xParentType->getNodeValue() == "titlebar");
+                        if (!xParentType)
+                        {
+                            css::uno::Reference<css::xml::dom::XAttr> xTypeStart
+                                = xDoc->createAttribute("type");
+                            xTypeStart->setValue(xCurrent->getFirstChild()->getNodeValue());
+                            css::uno::Reference<css::xml::dom::XElement> xElem(
+                                xParent, css::uno::UNO_QUERY_THROW);
+                            xElem->setAttributeNode(xTypeStart);
+                        }
                     }
                 }
                 xNew->appendChild(xChild->removeChild(xCurrent));
@@ -1036,7 +1056,8 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 xChild->appendChild(CreateProperty(xDoc, "visible", "False"));
             }
 
-            if (bChildAlwaysShowImage)
+            // only create the child box for GtkButton/GtkToggleButton
+            if (bChildAlwaysShowImage && sClass != "GtkMenuButton")
             {
                 auto xImageCandidateNode = xChild->getLastChild();
                 if (xImageCandidateNode && xImageCandidateNode->getNodeName() != "child")
