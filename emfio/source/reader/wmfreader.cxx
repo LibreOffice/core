@@ -932,6 +932,7 @@ namespace emfio
                             tools::Rectangle aCropRect( Point( nXSrc, nYSrc ), Size( nSrcWidth, nSrcHeight ) );
                             aBmp.Crop( aCropRect );
                         }
+
                         maBmpSaveList.emplace_back(new BSaveStruct(aBmp, aDestRect, nRasterOperation));
                     }
                 }
@@ -942,10 +943,16 @@ namespace emfio
             {
                 Bitmap  aBmp;
                 sal_uInt32  nRed = 0, nGreen = 0, nBlue = 0, nCount = 1;
-                sal_uInt16  nFunction = 0;
+                sal_uInt16  nStyle, nColorUsage;
 
-                mpInputStream->ReadUInt16( nFunction ).ReadUInt16( nFunction );
-
+                mpInputStream->ReadUInt16( nStyle ).ReadUInt16( nColorUsage );
+                SAL_INFO( "emfio", "\t\t Style:" << nStyle << ", ColorUsage: " << nColorUsage );
+                if ( nStyle == BS_PATTERN ) // TODO tdf#142625 Add support for pattern
+                {
+                    SAL_WARN( "emfio", "\t\t TODO: Pattern brush style is not supported." );
+                    CreateObject();
+                    break;
+                }
                 ReadDIB(aBmp, *mpInputStream, false);
                 if ( !aBmp.IsEmpty() )
                 {

@@ -148,6 +148,19 @@ bool isBitfieldCompression( ScanlineFormat nScanlineFormat )
     return ScanlineFormat::N32BitTcMask == nScanlineFormat;
 }
 
+enum Compression
+{
+    BI_RGB = 0x0000,
+    BI_RLE8 = 0x0001,
+    BI_RLE4 = 0x0002,
+    BI_BITFIELDS = 0x0003,
+    BI_JPEG = 0x0004,
+    BI_PNG = 0x0005,
+    BI_CMYK = 0x000B,
+    BI_CMYKRLE8 = 0x000C,
+    BI_CMYKRLE4 = 0x000D
+};
+
 bool ImplReadDIBInfoHeader(SvStream& rIStm, DIBV5Header& rHeader, bool& bTopDown, bool bMSOFormat)
 {
     if (rIStm.remainingSize() <= 4)
@@ -165,6 +178,7 @@ bool ImplReadDIBInfoHeader(SvStream& rIStm, DIBV5Header& rHeader, bool& bTopDown
         rIStm.ReadInt16( nTmp16 ); rHeader.nHeight = nTmp16;
         rIStm.ReadUInt16( rHeader.nPlanes );
         rIStm.ReadUInt16( rHeader.nBitCount );
+        SAL_INFO("vcl", "\t\t BitmapCoreHeader BitCount" << rHeader.nBitCount );
     }
     else if ( bMSOFormat && rHeader.nSize == DIBINFOHEADERSIZE )
     {
@@ -188,6 +202,14 @@ bool ImplReadDIBInfoHeader(SvStream& rIStm, DIBV5Header& rHeader, bool& bTopDown
         rIStm.ReadInt32( rHeader.nYPelsPerMeter );
         rIStm.ReadUInt32( rHeader.nColsUsed );
         rIStm.ReadUInt32( rHeader.nColsImportant );
+
+        SAL_INFO( "vcl", "\t\t BitmapInfoHeader BitCount" << rHeader.nBitCount << ", Compression: " << rHeader.nCompression );
+        if ( ( rHeader.nBitCount == BI_JPEG ) ||
+             ( rHeader.nBitCount == BI_PNG ) ) // TODO tdf#142625 Support for PNG and JPEG needs to be added
+        {
+            SAL_WARN( "vcl", "\t\t TODO: PNG and JPEG compression is not yet supported." );
+            return false;
+        }
     }
     else
     {
