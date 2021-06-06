@@ -1633,7 +1633,7 @@ bool ImplReadDIB(
 
     if(!bRet)
     {
-        if(!rIStm.GetError())
+        if(rIStm.GetError() != ERRCODE_NONE) // tdf#142625 Don't interrupt whole stream in case bRet return false
         {
             rIStm.SetError(SVSTREAM_GENERALERROR);
         }
