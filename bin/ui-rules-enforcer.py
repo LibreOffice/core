@@ -222,6 +222,38 @@ def remove_label_fill(current):
   if label_fill != None:
     current.remove(label_fill)
 
+def enforce_menubutton_indicator_consistency(current):
+  draw_indicator = None
+  image = None
+  ismenubutton = current.get('class') == "GtkMenuButton"
+  insertpos = 0
+  for child in current:
+    enforce_menubutton_indicator_consistency(child)
+    if not ismenubutton:
+      continue
+    if child.tag == "property":
+      insertpos = insertpos + 1;
+      attributes = child.attrib
+      if attributes.get("name") == "draw_indicator" or attributes.get("name") == "draw-indicator":
+        draw_indicator = child
+      elif attributes.get("name") == "image":
+        image = child
+
+  if ismenubutton:
+    if draw_indicator == None:
+      if image == None:
+        # if there is no draw indicator and no image there should be a draw indicator
+        draw_indicator = etree.Element("property")
+        attributes = draw_indicator.attrib
+        attributes["name"] = "draw-indicator"
+        draw_indicator.text = "True"
+        current.insert(insertpos, draw_indicator)
+      else:
+        # if there is no draw indicator but there is an image that image should be open-menu-symbolic or x-office-calendar
+        for status_elem in tree.xpath("/interface/object[@id='" + image.text + "']/property[@name='icon_name' or @name='icon-name']"):
+          if status_elem.text != 'x-office-calendar':
+            status_elem.text = "open-menu-symbolic"
+
 with open(sys.argv[1], encoding="utf-8") as f:
   header = f.readline()
   f.seek(0)
@@ -244,6 +276,7 @@ replace_image_stock(root)
 remove_check_button_align(root)
 remove_track_visited_links(root)
 remove_label_fill(root)
+enforce_menubutton_indicator_consistency(root)
 
 with open(sys.argv[1], 'wb') as o:
   # without encoding='unicode' (and the matching encode("utf8")) we get &#XXXX replacements for non-ascii characters

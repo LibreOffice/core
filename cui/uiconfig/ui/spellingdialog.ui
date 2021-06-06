@@ -605,6 +605,7 @@
                     <property name="use_underline">True</property>
                     <property name="popup">addmenu</property>
                     <property name="use_popover">False</property>
+                    <property name="draw-indicator">True</property>
                     <child>
                       <placeholder/>
                     </child>
