@@ -1675,11 +1675,11 @@ void SdImportTestSmartArt::testAutofitSync()
     sal_Int16 nFirstScale = 0;
     CPPUNIT_ASSERT(xFirstInner->getPropertyValue("TextFitToSizeScale") >>= nFirstScale);
     CPPUNIT_ASSERT_GREATER(static_cast<sal_Int16>(0), nFirstScale);
+    CPPUNIT_ASSERT_LESS(static_cast<sal_Int16>(100), nFirstScale);
     uno::Reference<beans::XPropertySet> xSecondInner(getChildShape(getChildShape(xMiddle, 2), 0),
                                                      uno::UNO_QUERY);
     sal_Int16 nSecondScale = 0;
     CPPUNIT_ASSERT(xSecondInner->getPropertyValue("TextFitToSizeScale") >>= nSecondScale);
-    CPPUNIT_ASSERT_GREATER(static_cast<sal_Int16>(0), nSecondScale);
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 56
