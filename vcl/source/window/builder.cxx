@@ -108,6 +108,8 @@ namespace
             return IMG_PASTE;
         else if (sType == u"open-menu-symbolic")
             return IMG_MENU;
+        else if (sType == u"x-office-calendar")
+            return IMG_CALENDAR;
         return OUString();
     }
 
