@@ -633,15 +633,15 @@ DECLARE_ODFEXPORT_TEST(testTdf92379, "tdf92379.fodt")
     uno::Reference<container::XNameAccess> xStyles(getStyles("FrameStyles"));
     uno::Reference<beans::XPropertySet> xStyle(xStyles->getByName("encarts"),
             uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffcc99), getProperty<sal_Int32>(xStyle, "BackColorRGB"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xffcc99), getProperty<Color>(xStyle, "BackColorRGB"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xStyle, "BackColorTransparency"));
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xStyle, "FillStyle"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffcc99), getProperty<sal_Int32>(xStyle, "FillColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xffcc99), getProperty<Color>(xStyle, "FillColor"));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xStyle, "FillTransparence"));
 
     uno::Reference<beans::XPropertySet> xFrameStyle2(xStyles->getByName("Untitled1"),
             uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), getProperty<sal_Int32>(xFrameStyle2, "BackColorRGB"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xffffff), getProperty<Color>(xFrameStyle2, "BackColorRGB"));
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xFrameStyle2, "BackTransparent"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(100), getProperty<sal_Int32>(xFrameStyle2, "BackColorTransparency"));
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xFrameStyle2, "FillStyle"));
@@ -661,41 +661,41 @@ DECLARE_ODFEXPORT_TEST(testTdf92379, "tdf92379.fodt")
     uno::Reference<container::XNameAccess> xParaStyles(getStyles("ParagraphStyles"));
     uno::Reference<beans::XPropertySet> xStyle1(xParaStyles->getByName(
             "Titre Avis expert"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x661900), getProperty<sal_Int32>(xStyle1, "ParaBackColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0x661900), getProperty<Color>(xStyle1, "ParaBackColor"));
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xStyle1, "ParaBackTransparent"));
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xStyle1, "FillStyle"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x661900), getProperty<sal_Int32>(xStyle1, "FillColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0x661900), getProperty<Color>(xStyle1, "FillColor"));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xStyle1, "FillTransparence"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), getProperty<sal_Int32>(xStyle1, "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xffffff), getProperty<Color>(xStyle1, "CharColor"));
 
     uno::Reference<beans::XPropertySet> xStyle2(xParaStyles->getByName(
             "Avis expert questions"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_TRANSPARENT), getProperty<sal_Int32>(xStyle2, "ParaBackColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(COL_TRANSPARENT), getProperty<Color>(xStyle2, "ParaBackColor"));
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle2, "ParaBackTransparent"));
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xStyle2, "FillStyle"));
 // unfortunately this is actually the pool default value, which would be hard to fix - but it isn't a problem because style is NONE
 //    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), getProperty<sal_Int32>(xStyle2, "FillColor"));
 //    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xStyle2, "FillTransparence"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x661900), getProperty<sal_Int32>(xStyle2, "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0x661900), getProperty<Color>(xStyle2, "CharColor"));
 
     uno::Reference<beans::XPropertySet> xStyle31(xParaStyles->getByName(
             "avis expert questions non cadres"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x801900), getProperty<sal_Int32>(xStyle31, "ParaBackColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0x801900), getProperty<Color>(xStyle31, "ParaBackColor"));
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xStyle31, "ParaBackTransparent"));
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xStyle31, "FillStyle"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x801900), getProperty<sal_Int32>(xStyle31, "FillColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0x801900), getProperty<Color>(xStyle31, "FillColor"));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xStyle31, "FillTransparence"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x661900), getProperty<sal_Int32>(xStyle31, "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0x661900), getProperty<Color>(xStyle31, "CharColor"));
 
     uno::Reference<beans::XPropertySet> xStyle32(xParaStyles->getByName(
             "Avis expert rXponses"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_TRANSPARENT), getProperty<sal_Int32>(xStyle32, "ParaBackColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(COL_TRANSPARENT), getProperty<Color>(xStyle32, "ParaBackColor"));
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle32, "ParaBackTransparent"));
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xStyle32, "FillStyle"));
 // unfortunately this is actually the pool default value, which would be hard to fix - but it isn't a problem because style is NONE
 //    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), getProperty<sal_Int32>(xStyle32, "FillColor"));
 //    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xStyle32, "FillTransparence"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x461900), getProperty<sal_Int32>(xStyle32, "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0x461900), getProperty<Color>(xStyle32, "CharColor"));
 
     if (xmlDocUniquePtr pXmlDoc = parseExport("styles.xml"))
     {
@@ -2559,7 +2559,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableStyles4)
     uno::Reference<beans::XPropertySet> xCell1Style;
 
     xTableStyle->getByName("first-row-start-column") >>= xCell1Style;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00ff00), getProperty<sal_Int32>(xCell1Style, "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0x00ff00), getProperty<Color>(xCell1Style, "BackColor"));
 }
 
 DECLARE_ODFEXPORT_EXPORTONLY_TEST(testTableStyles5, "table_styles_5.odt")
@@ -2600,7 +2600,7 @@ DECLARE_ODFEXPORT_TEST(testTdf129568, "tdf129568.fodt")
     // Test that export doesn't fail, and that style is imported and in use.
     uno::Reference<style::XStyle> xStyle(getStyles("CellStyles")->getByName("Default Style.1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xStyle->isInUse());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffff00), getProperty<sal_Int32>(xStyle, "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xffff00), getProperty<Color>(xStyle, "BackColor"));
 }
 
 DECLARE_ODFEXPORT_TEST(testTdf129568ui, "tdf129568-ui.fodt")
@@ -2608,7 +2608,7 @@ DECLARE_ODFEXPORT_TEST(testTdf129568ui, "tdf129568-ui.fodt")
     // Same as above, but styles referenced by UI name.
     uno::Reference<style::XStyle> xStyle(getStyles("CellStyles")->getByName("Default Style.1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xStyle->isInUse());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffff00), getProperty<sal_Int32>(xStyle, "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xffff00), getProperty<Color>(xStyle, "BackColor"));
 }
 
 DECLARE_ODFEXPORT_TEST(testTdf132642_keepWithNextTable, "tdf132642_keepWithNextTable.odt")
