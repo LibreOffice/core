@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fdc359b9_80a7660e",
+        "filename": "svx/source/unodraw/unoshape.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-06T14:35:14Z",
+      "side": 1,
+      "message": "aBoundRect is an out param, so possibly it\u0027s unnecessary to call SdrObject::GetCurrentBoundRect, which is documented to be \"expensive and sometimes problematic\"?\n\nSee also SdrTextObj::GetFontScaleY, that seems to solve the same problem (added in https://gerrit.libreoffice.org/c/core/+/49742/), which had a problem of not initializing outliner properly (I\u0027m fixing it now). Interesting that in my test case, SdrTextObj::GetFontScaleY returns proper 0.86 (86%), while xShape-\u003egetPropertyValue(\"TextFitToSizeScale\") gives Any(sal_Int16(22)), i.e. 22%. Does GetTextFitToSizeScale suffer from never setting the outliner\u0027s SdrTextObj properly?",
+      "range": {
+        "startLine": 189,
+        "startChar": 50,
+        "endLine": 189,
+        "endChar": 60
+      },
+      "revId": "cd268f0047443ddbb22361cdc15093e881f83588",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
