@@ -1,0 +1,205 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e2b90a92_68e9fde7",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4380,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-06-06T01:35:40Z",
+      "side": 1,
+      "message": "Since start_editing is the only thing being done when this function is entered with nMode \u003d\u003d EditEntryMode::RENAME it could be checked on entering so not to have to included in each case handling block.",
+      "range": {
+        "startLine": 4377,
+        "startChar": 12,
+        "endLine": 4380,
+        "endChar": 23
+      },
+      "revId": "4b1f4deb885e72931846f6e29d8459f5ea88d4d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "611193a3_dbd5a6ea",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4531,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-06-06T01:35:40Z",
+      "side": 1,
+      "message": "Wrap in if EditEntryMode::RENAME block. Above comment on checking for EditEntryMode::Rename and function entry will make if condition unnecessary.",
+      "range": {
+        "startLine": 4530,
+        "startChar": 1,
+        "endLine": 4531,
+        "endChar": 28
+      },
+      "revId": "4b1f4deb885e72931846f6e29d8459f5ea88d4d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "115c9dc2_ba436951",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4537,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-06-06T01:35:40Z",
+      "side": 1,
+      "message": "remove this and keep the rest of the commented out stuff in the EditEntryMode:UPD_IDX case",
+      "range": {
+        "startLine": 4536,
+        "startChar": 0,
+        "endLine": 4537,
+        "endChar": 57
+      },
+      "revId": "4b1f4deb885e72931846f6e29d8459f5ea88d4d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df9111c8_daf82da0",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4618,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-06-06T01:35:40Z",
+      "side": 1,
+      "message": "XTextTablesSupplier does not allow period or space chars. Try renaming a table using the Table Properties dialog \u003e Table tab \u003e Name edit box. It doesn\u0027t forbid .\u003c\u003e chars, only space character.",
+      "range": {
+        "startLine": 4614,
+        "startChar": 12,
+        "endLine": 4618,
+        "endChar": 15
+      },
+      "revId": "4b1f4deb885e72931846f6e29d8459f5ea88d4d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfd0953c_e55e4fda",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4655,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-06-06T01:35:40Z",
+      "side": 1,
+      "message": "One way is to step through the sForbiddenChars and check against rIterString.second.indexOf()",
+      "range": {
+        "startLine": 4653,
+        "startChar": 12,
+        "endLine": 4655,
+        "endChar": 15
+      },
+      "revId": "4b1f4deb885e72931846f6e29d8459f5ea88d4d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7678f48_08067618",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4683,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-06-06T01:35:40Z",
+      "side": 1,
+      "message": "See comments in EditEntry function for this.",
+      "range": {
+        "startLine": 4677,
+        "startChar": 12,
+        "endLine": 4683,
+        "endChar": 13
+      },
+      "revId": "4b1f4deb885e72931846f6e29d8459f5ea88d4d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b10d8198_3428c9af",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4689,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-06-06T01:35:40Z",
+      "side": 1,
+      "message": "These can\u0027t be renamed as far as I know.",
+      "range": {
+        "startLine": 4687,
+        "startChar": 7,
+        "endLine": 4689,
+        "endChar": 35
+      },
+      "revId": "4b1f4deb885e72931846f6e29d8459f5ea88d4d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae32cdb4_22e0c023",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4712,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-06-06T01:35:40Z",
+      "side": 1,
+      "message": "rIterString.second is the string we are trying to rename the drawing object. See IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, ...) in /sw/source/uibase/shells/drawbassh.cxx then since there is only going to be one marked object SdrObject* pSelected \u003d pSdrView-\u003eGetMarkedObjectByIndex(0) and use the SdrObject::SetName function. Probably have to tell the writer shell that something has been modified, SwWrtShell::SetModified(), m_pActiveShell can be used.",
+      "range": {
+        "startLine": 4691,
+        "startChar": 8,
+        "endLine": 4712,
+        "endChar": 14
+      },
+      "revId": "4b1f4deb885e72931846f6e29d8459f5ea88d4d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1acb8d2e_62ff2e64",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4715,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-06-06T01:35:40Z",
+      "side": 1,
+      "message": "Add handling for xNameAccess here. See IMPL_LINK_NOARG(SwRenameXNamedDlg, OkHdl, weld::Button\u0026, void) and IMPL_LINK(SwRenameXNamedDlg, ModifyHdl, weld::Entry\u0026, rEdit, void) in sw/source/ui/utlui/swrenamexnameddlg.cxx",
+      "revId": "4b1f4deb885e72931846f6e29d8459f5ea88d4d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
