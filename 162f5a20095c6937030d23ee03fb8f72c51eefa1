@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "89812975_7a3918fa",
+        "filename": "sw/qa/extras/txtexport/txtexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-06T16:57:15Z",
+      "side": 1,
+      "message": "This won\u0027t work, if GetSize returns a value not aligned with size of T. You need at least to assert on the assumption.",
+      "revId": "162f5a20095c6937030d23ee03fb8f72c51eefa1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
