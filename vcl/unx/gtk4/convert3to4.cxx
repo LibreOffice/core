@@ -257,15 +257,17 @@ struct ConvertResult
     bool m_bHasVisible;
     bool m_bHasSymbolicIconName;
     bool m_bAlwaysShowImage;
+    bool m_bUseUnderline;
     css::uno::Reference<css::xml::dom::XNode> m_xPropertyLabel;
 
     ConvertResult(bool bChildCanFocus, bool bHasVisible, bool bHasSymbolicIconName,
-                  bool bAlwaysShowImage,
+                  bool bAlwaysShowImage, bool bUseUnderline,
                   const css::uno::Reference<css::xml::dom::XNode>& rPropertyLabel)
         : m_bChildCanFocus(bChildCanFocus)
         , m_bHasVisible(bHasVisible)
         , m_bHasSymbolicIconName(bHasSymbolicIconName)
         , m_bAlwaysShowImage(bAlwaysShowImage)
+        , m_bUseUnderline(bUseUnderline)
         , m_xPropertyLabel(rPropertyLabel)
     {
     }
@@ -281,7 +283,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
 {
     css::uno::Reference<css::xml::dom::XNodeList> xNodeList = xNode->getChildNodes();
     if (!xNodeList.is())
-        return ConvertResult(false, false, false, false, nullptr);
+        return ConvertResult(false, false, false, false, false, nullptr);
 
     std::vector<css::uno::Reference<css::xml::dom::XNode>> xRemoveList;
 
@@ -290,6 +292,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
     bool bHasVisible = false;
     bool bHasSymbolicIconName = false;
     bool bAlwaysShowImage = false;
+    bool bUseUnderline = false;
     css::uno::Reference<css::xml::dom::XNode> xPropertyLabel;
     css::uno::Reference<css::xml::dom::XNode> xCantFocus;
 
@@ -486,6 +489,9 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                     xRemoveList.push_back(xChild);
                 }
             }
+
+            if (sName == "use-underline")
+                bUseUnderline = toBool(xChild->getFirstChild()->getNodeValue());
 
             if (sName == "relief")
             {
@@ -759,6 +765,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
         bool bChildHasSymbolicIconName = false;
         bool bChildHasVisible = false;
         bool bChildAlwaysShowImage = false;
+        bool bChildUseUnderline = false;
         css::uno::Reference<css::xml::dom::XNode> xChildPropertyLabel;
         if (xChild->hasChildNodes())
         {
@@ -774,6 +781,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 bChildHasVisible = aChildRes.m_bHasVisible;
                 bChildHasSymbolicIconName = aChildRes.m_bHasSymbolicIconName;
                 bChildAlwaysShowImage = aChildRes.m_bAlwaysShowImage;
+                bChildUseUnderline = aChildRes.m_bUseUnderline;
                 xChildPropertyLabel = aChildRes.m_xPropertyLabel;
             }
         }
@@ -1030,6 +1038,11 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 if (xChildPropertyLabel)
                     xNewChildObjectNode->appendChild(
                         xChildPropertyLabel->getParentNode()->removeChild(xChildPropertyLabel));
+                if (bChildUseUnderline)
+                {
+                    auto xUseUnderline = CreateProperty(xDoc, "use-underline", "True");
+                    xNewChildObjectNode->appendChild(xUseUnderline);
+                }
                 xNewLabelChildNode->appendChild(xNewChildObjectNode);
 
                 if (xImageCandidateNode)
@@ -1048,7 +1061,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
         xNode->removeChild(xRemove);
 
     return ConvertResult(bChildCanFocus, bHasVisible, bHasSymbolicIconName, bAlwaysShowImage,
-                         xPropertyLabel);
+                         bUseUnderline, xPropertyLabel);
 }
 }
 
