@@ -5,7 +5,7 @@
   <object class="GtkImage" id="image7">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="icon_name">sc/res/date.png</property>
+    <property name="icon_name">x-office-calendar</property>
     <property name="icon_size">2</property>
   </object>
   <object class="GtkBox" id="EditControl">
