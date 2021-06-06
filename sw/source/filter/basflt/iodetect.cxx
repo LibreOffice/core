@@ -239,11 +239,12 @@ std::shared_ptr<const SfxFilter> SwIoSystem::GetFileFilter(const OUString& rFile
 }
 
 bool SwIoSystem::IsDetectableText(const char* pBuf, sal_uLong &rLen,
-    rtl_TextEncoding *pCharSet, bool *pSwap, LineEnd *pLineEnd)
+    rtl_TextEncoding *pCharSet, bool *pSwap, LineEnd *pLineEnd, bool *pBom)
 {
     bool bSwap = false;
     rtl_TextEncoding eCharSet = RTL_TEXTENCODING_DONTKNOW;
     bool bLE = true;
+    bool bBom = false;
     /*See if it's a known unicode type*/
     if (rLen >= 2)
     {
@@ -253,17 +254,20 @@ bool SwIoSystem::IsDetectableText(const char* pBuf, sal_uLong &rLen,
         {
             eCharSet = RTL_TEXTENCODING_UTF8;
             nHead = 3;
+            bBom = true;
         }
         else if (sal_uInt8(pBuf[0]) == 0xFE && sal_uInt8(pBuf[1]) == 0xFF)
         {
             eCharSet = RTL_TEXTENCODING_UCS2;
             bLE = false;
             nHead = 2;
+            bBom = true;
         }
         else if (sal_uInt8(pBuf[1]) == 0xFE && sal_uInt8(pBuf[0]) == 0xFF)
         {
             eCharSet = RTL_TEXTENCODING_UCS2;
             nHead = 2;
+            bBom = true;
         }
         pBuf+=nHead;
         rLen-=nHead;
@@ -400,6 +404,8 @@ bool SwIoSystem::IsDetectableText(const char* pBuf, sal_uLong &rLen,
         *pSwap = bSwap;
     if (pLineEnd)
         *pLineEnd = eLineEnd;
+    if (pBom)
+        *pBom = bBom;
 
     return !bIsBareUnicode;
 }

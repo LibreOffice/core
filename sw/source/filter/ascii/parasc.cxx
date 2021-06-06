@@ -275,8 +275,10 @@ ErrCode SwASCIIParser::ReadChars()
         nOrig = nLen = m_rInput.ReadBytes(m_pArr.get(), ASC_BUFFLEN);
         rtl_TextEncoding eCharSet;
         LineEnd eLineEnd;
+        bool bHasBom;
         const bool bRet
-            = SwIoSystem::IsDetectableText(m_pArr.get(), nLen, &eCharSet, &bSwapUnicode, &eLineEnd);
+            = SwIoSystem::IsDetectableText(m_pArr.get(), nLen, &eCharSet,
+                                            &bSwapUnicode, &eLineEnd, &bHasBom);
         if (!bRet)
             return ERRCODE_IO_BROKENPACKAGE;
 
@@ -285,6 +287,7 @@ ErrCode SwASCIIParser::ReadChars()
         {
             aEmpty.SetCharSet(eCharSet);
             aEmpty.SetParaFlags(eLineEnd);
+            aEmpty.SetIncludeBOM(bHasBom);
             m_rInput.SeekRel(-(tools::Long(nLen)));
         }
         else

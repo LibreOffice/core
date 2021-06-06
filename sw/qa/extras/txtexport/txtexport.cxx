@@ -20,19 +20,25 @@ public:
     }
 
 protected:
-    OString readExportedFile()
+    template <class T> std::vector<T> readMemoryStream()
     {
         SvMemoryStream aMemoryStream;
         SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
         aStream.ReadStream(aMemoryStream);
-        const char* pData = static_cast<const char*>(aMemoryStream.GetData());
+        const T* pData = static_cast<const T*>(aMemoryStream.GetData());
+        return std::vector<T>(pData, pData + aMemoryStream.GetSize());
+    }
+
+    OString readExportedFile()
+    {
+        std::vector<char> aMemStream = readMemoryStream<char>();
 
         int offset = 0;
-        if (aMemoryStream.GetSize() > 2 && pData[0] == '\xEF' && pData[1] == '\xBB'
-            && pData[2] == '\xBF')
+        if (aMemStream.size() > 2 && aMemStream[0] == '\xEF' && aMemStream[1] == '\xBB'
+            && aMemStream[2] == '\xBF')
             offset = 3;
 
-        return OString(pData + offset, aMemoryStream.GetSize() - offset);
+        return OString(aMemStream.data() + offset, aMemStream.size() - offset);
     }
 };
 
@@ -64,25 +70,34 @@ DECLARE_TXTEXPORT_TEST(testBullets, "bullets.odt")
     CPPUNIT_ASSERT_EQUAL(aExpected, aData);
 }
 
-DECLARE_TXTEXPORT_TEST(testTdf120574_utf8, "UTF8BOMCRLF.txt")
+DECLARE_TXTEXPORT_TEST(testTdf120574_utf8bom, "UTF8BOMCRLF.txt")
 {
-    SvMemoryStream aMemoryStream;
-    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
-    aStream.ReadStream(aMemoryStream);
-    const char* pData = static_cast<const char*>(aMemoryStream.GetData());
-    OString aData(std::string_view(pData, aMemoryStream.GetSize()));
+    std::vector<char> aMemStream = readMemoryStream<char>();
+    OString aData(std::string_view(aMemStream.data(), aMemStream.size()));
     CPPUNIT_ASSERT_EQUAL(OString(u8"\uFEFFフー\r\nバー\r\n"), aData);
 }
 
-DECLARE_TXTEXPORT_TEST(testTdf120574_utf16le, "UTF16LECRLF.txt")
+DECLARE_TXTEXPORT_TEST(testTdf120574_utf16lebom, "UTF16LEBOMCRLF.txt")
 {
-    SvMemoryStream aMemoryStream;
-    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
-    aStream.ReadStream(aMemoryStream);
-    const sal_Unicode* pData = static_cast<const sal_Unicode*>(aMemoryStream.GetData());
-    OUString aData(pData, aMemoryStream.GetSize() / sizeof(sal_Unicode));
+    std::vector<sal_Unicode> aMemStream = readMemoryStream<sal_Unicode>();
+    OUString aData(aMemStream.data(), aMemStream.size() / sizeof(sal_Unicode));
     CPPUNIT_ASSERT_EQUAL(OUString(u"\uFEFFフー\r\nバー\r\n"), aData);
 }
+
+DECLARE_TXTEXPORT_TEST(testTdf142669_utf8, "UTF8CRLF.txt")
+{
+    std::vector<char> aMemStream = readMemoryStream<char>();
+    OString aData(std::string_view(aMemStream.data(), aMemStream.size()));
+    CPPUNIT_ASSERT_EQUAL(OString(u8"フー\r\nバー\r\n"), aData);
+}
+
+DECLARE_TXTEXPORT_TEST(testTdf142669_utf16le, "UTF16LECRLF.txt")
+{
+    std::vector<sal_Unicode> aMemStream = readMemoryStream<sal_Unicode>();
+    OUString aData(aMemStream.data(), aMemStream.size() / sizeof(sal_Unicode));
+    CPPUNIT_ASSERT_EQUAL(OUString(u"フー\r\nバー\r\n"), aData);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
