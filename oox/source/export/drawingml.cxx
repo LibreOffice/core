@@ -2959,10 +2959,7 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
                 {
                     SdrTextObj* pTextObject = dynamic_cast<SdrTextObj*>(pTextShape->GetSdrObject());
                     if (pTextObject)
-                    {
-                        double fScaleY = pTextObject->GetFontScaleY();
-                        nFontScale = static_cast<sal_uInt32>(fScaleY * 100) * 1000;
-                    }
+                        nFontScale = pTextObject->GetFontScaleY() * 1000;
                 }
 
                 mpFS->singleElementNS(XML_a, XML_normAutofit, XML_fontScale,
