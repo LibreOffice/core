@@ -70,6 +70,42 @@ DECLARE_HTMLEXPORT_TEST(testTdf118637, "tdf118637.odt")
         != -1);
 }
 
+DECLARE_HTMLEXPORT_TEST(testTdf142483, "tdf142483.odt")
+{
+    SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
+    CPPUNIT_ASSERT(pStream);
+    sal_uInt64 nLength = pStream->TellEnd();
+    OString aStream(read_uInt8s_ToOString(*pStream, nLength));
+    CPPUNIT_ASSERT(
+        aStream.indexOf("padding:0.0382in; border-left-width:thin; border-left-style:solid; "
+                        "border-left-color:#000000; border-right-style:none; "
+                        "border-top-width:thin; border-top-style:solid; border-top-color:#000000; "
+                        "border-bottom-width:thin; border-bottom-style:solid; "
+                        "border-bottom-color:#000000;")
+        != -1);
+    CPPUNIT_ASSERT(
+        aStream.indexOf("padding:0.0382in; border-left-width:thin; border-left-style:solid; "
+                        "border-left-color:#000000; border-right-style:none; "
+                        "border-top-style:none; border-bottom-width:thin; "
+                        "border-bottom-style:solid; border-bottom-color:#000000;")
+        != -1);
+    CPPUNIT_ASSERT(
+        aStream.indexOf("border-top-width:thin; border-top-style:solid; border-top-color:#000000; "
+                        "border-left-width:thin; border-left-style:solid; "
+                        "border-left-color:#000000; border-bottom-width:thin; "
+                        "border-bottom-style:solid; border-bottom-color:#000000; "
+                        "border-right-width:thin; border-right-style:solid; "
+                        "border-right-color:#000000; padding:0.0382in;")
+        != -1);
+    CPPUNIT_ASSERT(
+        aStream.indexOf("padding:0.0382in; border-left-width:thin; border-left-style:solid; "
+                        "border-left-color:#000000; border-right-width:thin; "
+                        "border-right-style:solid; border-right-color:#000000; "
+                        "border-top-style:none; border-bottom-width:thin; "
+                        "border-bottom-style:solid; border-bottom-color:#000000;")
+        != -1);
+}
+
 DECLARE_HTMLEXPORT_TEST(testTdf107696, "tdf107696.odt")
 {
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
