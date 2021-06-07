@@ -642,6 +642,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
             if( pPos->IsFlyCntPortion() )
             {
                 bool bDeleted = false;
+                size_t nAuthor = std::string::npos;
                 if ( bHasRedline )
                 {
                     OUString sRedlineText;
@@ -651,10 +652,11 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                         rInf.GetTextFrame()->MapViewToModel(nPorSttIdx));
                     bool bHasFlyRedline = rLine.GetRedln()->CheckLine(flyStart.first->GetIndex(),
                         flyStart.second, flyStart.first->GetIndex(), flyStart.second, sRedlineText,
-                        bHasRedlineEnd, eRedlineEnd, /*bFullLine=*/false);
+                        bHasRedlineEnd, eRedlineEnd, /*pAuthorAtPos=*/&nAuthor);
                     bDeleted = bHasFlyRedline && eRedlineEnd == RedlineType::Delete;
                 }
                 static_cast<SwFlyCntPortion*>(pPos)->SetDeleted(bDeleted);
+                static_cast<SwFlyCntPortion*>(pPos)->SetAuthor(nAuthor);
             }
             // anchored to characters
             else if ( pPos->IsFlyPortion() )
