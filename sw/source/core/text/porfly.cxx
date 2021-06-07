@@ -40,6 +40,7 @@
 
 #include <sortedobjs.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <PostItMgr.hxx>
 
 /**
  * class SwFlyPortion => we expect a frame-locale SwRect!
@@ -227,7 +228,7 @@ void sw::FlyContentPortion::Paint(const SwTextPaintInfo& rInf) const
 
         // track changes: cross out the image, if it is deleted
         const SwFrame *pFrame = m_pFly->Lower();
-        if ( IsDeleted() && pFrame )
+        if ( GetAuthor() != std::string::npos && IsDeleted() && pFrame )
         {
             SwRect aPaintRect( pFrame->GetPaintArea() );
 
@@ -237,7 +238,8 @@ void sw::FlyContentPortion::Paint(const SwTextPaintInfo& rInf) const
                 const_cast<vcl::RenderContext&>(*rInf.GetOut()).SetAntialiasing(AntialiasingFlags::Enable);
             tools::Long startX = aPaintRect.Left(  ), endX = aPaintRect.Right();
             tools::Long startY = aPaintRect.Top(  ),  endY = aPaintRect.Bottom();
-            const_cast<vcl::RenderContext&>(*rInf.GetOut()).SetLineColor(NON_PRINTING_CHARACTER_COLOR);
+            const_cast<vcl::RenderContext&>(*rInf.GetOut()).SetLineColor(
+                SwPostItMgr::GetColorAnchor(GetAuthor()) );
             const_cast<vcl::RenderContext&>(*rInf.GetOut()).DrawLine(Point(startX, startY), Point(endX, endY));
             const_cast<vcl::RenderContext&>(*rInf.GetOut()).DrawLine(Point(startX, endY), Point(endX, startY));
             if ( bIsAntiAliasing )
@@ -271,6 +273,7 @@ void sw::DrawFlyCntPortion::Paint(const SwTextPaintInfo&) const
 SwFlyCntPortion::SwFlyCntPortion()
     : m_bMax(false)
     , m_bDeleted(false)
+    , m_nAuthor(std::string::npos)
     , m_eAlign(sw::LineAlign::NONE)
 {
     nLineLength = TextFrameIndex(1);

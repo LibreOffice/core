@@ -2170,6 +2170,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf142130)
     // vertical lines before the two lines)
     assertXPath(pXmlDoc, "/metafile/push/push/push/line", 4);
 
+    // check line color
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/linecolor", 5);
+    // tdf#142128 This was 3 (NON_PRINTING_CHARACTER_COLOR = #268bd2)
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/linecolor[@color='#268bd2']", 0);
+
     // reject deletion of the second image
     IDocumentRedlineAccess& rIDRA(pDoc->getIDocumentRedlineAccess());
     rIDRA.AcceptAllRedline(false);

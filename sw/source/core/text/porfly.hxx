@@ -46,6 +46,7 @@ class SwFlyCntPortion : public SwLinePortion
     Point m_aRef;     // Relatively to this point we calculate the AbsPos
     bool m_bMax;      // Line adjustment and height == line height
     bool m_bDeleted;  // Part of tracked deletion: it needs strikethrough
+    size_t m_nAuthor; // Redline author for color of the strikethrough
     sw::LineAlign m_eAlign;
 
     virtual SdrObject* GetSdrObj(const SwTextFrame&) =0;
@@ -55,6 +56,8 @@ public:
     const Point& GetRefPoint() const { return m_aRef; }
     bool IsMax() const { return m_bMax; }
     bool IsDeleted() const { return m_bDeleted; }
+    void SetAuthor(size_t nAuthor) { m_nAuthor = nAuthor; }
+    size_t GetAuthor() const { return m_nAuthor; }
     sw::LineAlign GetAlign() const { return m_eAlign; }
     void SetAlign(sw::LineAlign eAlign) { m_eAlign = eAlign; }
     void SetMax(bool bMax) { m_bMax = bMax; }
