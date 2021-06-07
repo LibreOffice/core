@@ -1316,6 +1316,8 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
              bGotZoomFactor = false, bGotIsSelectedFrame = false,
              bGotViewLayoutColumns = false, bGotViewLayoutBookMode = false,
              bBrowseMode = false, bGotBrowseMode = false;
+    bool bKeepRatio = pVOpt->IsKeepRatio();
+    bool bGotKeepRatio = false;
 
     for (const beans::PropertyValue& rValue : rSequence)
     {
@@ -1382,6 +1384,11 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
         {
            rValue.Value >>= bBrowseMode;
            bGotBrowseMode = true;
+        }
+        else if (rValue.Name == "KeepRatio")
+        {
+            rValue.Value >>= bKeepRatio;
+            bGotKeepRatio = true;
         }
         // Fallback to common SdrModel processing
         else
@@ -1457,6 +1464,14 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
 
         // reset flag value
         m_pWrtShell->SetMacroExecAllowed( bSavedFlagValue );
+    }
+
+    if (bGotKeepRatio && bKeepRatio != pVOpt->IsKeepRatio())
+    {
+        // Got a custom value, then it makes sense to trigger notifications.
+        SwViewOption aUsrPref(*pVOpt);
+        aUsrPref.SetKeepRatio(bKeepRatio);
+        SW_MOD()->ApplyUsrPref(aUsrPref, this);
     }
 
     // Set ViewLayoutSettings
@@ -1556,6 +1571,9 @@ void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSe
     aVector.push_back(comphelper::makePropertyValue("ZoomFactor", static_cast < sal_Int16 > (m_pWrtShell->GetViewOptions()->GetZoom())));
 
     aVector.push_back(comphelper::makePropertyValue("IsSelectedFrame", FrameTypeFlags::NONE != m_pWrtShell->GetSelFrameType()));
+
+    aVector.push_back(
+        comphelper::makePropertyValue("KeepRatio", m_pWrtShell->GetViewOptions()->IsKeepRatio()));
 
     rSequence = comphelper::containerToSequence(aVector);
 

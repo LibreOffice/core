@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" office:mimetype="application/vnd.oasis.opendocument.text">
+  <office:settings>
+    <config:config-item-set config:name="ooo:view-settings">
+      <config:config-item-map-indexed config:name="Views">
+        <config:config-item-map-entry>
+          <config:config-item config:name="VisibleLeft" config:type="long">0</config:config-item>
+          <config:config-item config:name="VisibleTop" config:type="long">0</config:config-item>
+          <config:config-item config:name="VisibleRight" config:type="long">40190</config:config-item>
+          <config:config-item config:name="VisibleBottom" config:type="long">22728</config:config-item>
+          <config:config-item config:name="KeepRatio" config:type="boolean">true</config:config-item>
+        </config:config-item-map-entry>
+      </config:config-item-map-indexed>
+    </config:config-item-set>
+  </office:settings>
+  <office:body>
+    <office:text>
+      <text:p/>
+    </office:text>
+  </office:body>
+</office:document>

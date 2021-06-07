@@ -12,6 +12,7 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/scopeguard.hxx>
 
 #include <com/sun/star/frame/XDispatchHelper.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -19,6 +20,11 @@
 #include <com/sun/star/frame/XStorable2.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
+
+#include <unotxdoc.hxx>
+#include <docsh.hxx>
+#include <wrtsh.hxx>
+#include <swmodule.hxx>
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/uibase/uiview/data/";
 
@@ -106,6 +112,38 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testUpdateReplacementNosetting)
     // Without the accompanying fix in place, this test would have failed, because the embedded
     // object replacement image was not generated.
     CPPUNIT_ASSERT(xNameAccess->hasByName("ObjectReplacements/Components"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testKeepRatio)
+{
+    // Given a document with a custom KeepRatio:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "keep-ratio.fodt";
+
+    // When loading that document:
+    mxComponent = loadFromDesktop(aURL);
+
+    // Then make sure we read the custom value:
+    auto pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    const SwViewOption* pViewOption = pWrtShell->GetViewOptions();
+    comphelper::ScopeGuard g([pWrtShell, pViewOption] {
+        SwViewOption aViewOption(*pViewOption);
+        aViewOption.SetKeepRatio(false);
+        SW_MOD()->ApplyUsrPref(aViewOption, &pWrtShell->GetView());
+    });
+    // Without the accompanying fix in place, this test would have failed, because KeepRatio was not
+    // mapped to settings.xml
+    CPPUNIT_ASSERT(pViewOption->IsKeepRatio());
+
+    // Then export as well:
+    uno::Reference<frame::XStorable2> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreArgs = {
+        comphelper::makePropertyValue("FilterName", OUString("writer8")),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreArgs);
+    mbExported = true;
+    xmlDocUniquePtr pXmlDoc = parseExport("settings.xml");
+    assertXPathContent(pXmlDoc, "//config:config-item[@config:name='KeepRatio']", "true");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
