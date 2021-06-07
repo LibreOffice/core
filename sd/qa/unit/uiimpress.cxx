@@ -22,6 +22,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/intitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svdoashp.hxx>
 #include <svx/svdotable.hxx>
@@ -381,6 +382,30 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSpellOnlineParameter)
     params = comphelper::InitPropertySequence({ { "Enable", uno::makeAny(!bSet) } });
     dispatchCommand(mxComponent, ".uno:SpellOnline", params);
     CPPUNIT_ASSERT_EQUAL(!bSet, pImpressDocument->GetDoc()->GetOnlineSpell());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSearchAllInDocumentAndNotes)
+{
+    // tdf#142478
+    // "find all" produces a crash when the search string exists in notes
+    // and the document
+
+    mxComponent = loadFromDesktop(
+        m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/search-all-notes.odp"));
+
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
+        { "SearchItem.SearchString", uno::makeAny(OUString("Crash")) },
+        { "SearchItem.Backward", uno::makeAny(false) },
+        { "SearchItem.Command", uno::makeAny(sal_uInt16(SvxSearchCmd::FIND_ALL)) },
+    }));
+
+    dispatchCommand(mxComponent, ".uno:ExecuteSearch", aPropertyValues);
+
+    Scheduler::ProcessEventsToIdle();
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
