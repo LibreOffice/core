@@ -12,20 +12,9 @@
 #define INCLUDED_VCL_OUTDEVTESTS_HXX
 
 #include <vcl/virdev.hxx>
+#include <vcl/test/TestResult.hxx>
 
 namespace vcl::test {
-
-/** Rendering test result.
- *
- * Test either "Passed", "Failed" or "PassedWithQuirks" which means
- * the test passed but at least one rendering quirk was detected.
- */
-enum class TestResult
-{
-    Failed,
-    PassedWithQuirks,
-    Passed
-};
 
 /** Common subclass for output device rendering tests.
  */
