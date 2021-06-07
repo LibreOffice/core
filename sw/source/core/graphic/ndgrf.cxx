@@ -775,10 +775,31 @@ GraphicAttr& SwGrfNode::GetGraphicAttr( GraphicAttr& rGA,
     rGA.SetMirrorFlags( nMirror );
 
     const SwCropGrf& rCrop = rSet.GetCropGrf();
-    rGA.SetCrop( convertTwipToMm100( rCrop.GetLeft() ),
-                 convertTwipToMm100( rCrop.GetTop() ),
-                 convertTwipToMm100( rCrop.GetRight() ),
-                 convertTwipToMm100( rCrop.GetBottom() ));
+
+    tools::Long nCropLeft = rCrop.GetLeft();
+    tools::Long nCropTop = rCrop.GetTop();
+    tools::Long nCropRight = rCrop.GetRight();
+    tools::Long nCropBottom = rCrop.GetBottom();
+
+    // take mirroring of crop values into consideration
+    // while cropping a flipped image. otherwise,
+    // cropping will crop the opposite side of the image.
+    if (rGA.GetMirrorFlags() & BmpMirrorFlags::Vertical)
+    {
+        nCropTop = rCrop.GetBottom();
+        nCropBottom = rCrop.GetTop();
+    }
+
+    if (rGA.GetMirrorFlags() & BmpMirrorFlags::Horizontal)
+    {
+        nCropLeft = rCrop.GetRight();
+        nCropRight = rCrop.GetLeft();
+    }
+
+    rGA.SetCrop( convertTwipToMm100( nCropLeft ),
+                 convertTwipToMm100( nCropTop ),
+                 convertTwipToMm100( nCropRight ),
+                 convertTwipToMm100( nCropBottom ));
 
     const SwRotationGrf& rRotation = rSet.GetRotationGrf();
     rGA.SetRotation( rRotation.GetValue() );
