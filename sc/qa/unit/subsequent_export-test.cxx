@@ -500,7 +500,7 @@ void ScExportTest::testTdf111876()
 
     xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/_rels/sheet1.xml.rels", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
-    OUString sTarget = getXPath(pDoc, "/r:Relationships/r:Relationship", "Target");
+    OUString sTarget = getXPath(pDoc, "/rels:Relationships/rels:Relationship", "Target");
 
     // Document is saved to the temporary directory, relative path should be different than original one
     CPPUNIT_ASSERT(sTarget != "../xls/bug-fixes.xls");
@@ -3328,8 +3328,8 @@ void ScExportTest::testCustomXml()
     CPPUNIT_ASSERT(pRelsDoc);
 
     // Check there is a relation to itemProps1.xml.
-    assertXPath(pRelsDoc, "/r:Relationships/r:Relationship", 1);
-    assertXPath(pRelsDoc, "/r:Relationships/r:Relationship[@Id='rId1']", "Target", "itemProps1.xml");
+    assertXPath(pRelsDoc, "/rels:Relationships/rels:Relationship", 1);
+    assertXPath(pRelsDoc, "/rels:Relationships/rels:Relationship[@Id='rId1']", "Target", "itemProps1.xml");
 
     std::unique_ptr<SvStream> pStream = XPathHelper::parseExportStream(pXPathFile, m_xSFactory, "ddp/ddpfile.xen");
     CPPUNIT_ASSERT(pStream);
@@ -3935,7 +3935,7 @@ void ScExportTest::testHyperlinkXLSX()
 
     xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/drawings/_rels/drawing1.xml.rels", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
-    assertXPath(pDoc, "/r:Relationships/r:Relationship", "Target", "#Sheet2!A1");
+    assertXPath(pDoc, "/rels:Relationships/rels:Relationship", "Target", "#Sheet2!A1");
 
     xDocSh->DoClose();
 }

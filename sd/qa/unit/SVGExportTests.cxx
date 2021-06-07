@@ -101,7 +101,7 @@ class SdSVGFilterTest : public test::BootstrapFixture, public unotest::MacrosTes
 protected:
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override
     {
-        xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("svg"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"));
+        XmlTestTools::registerOOXMLNamespaces(pXmlXpathCtx);
     }
 
     void load(std::u16string_view pDir, const char* pName)
