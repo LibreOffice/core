@@ -40,6 +40,8 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
+#include <comphelper/sequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <tools/fontenum.hxx>
 #include <tools/color.hxx>
@@ -351,36 +353,27 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SvxXMLListLevelStyleCo
 
 Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties()
 {
-    sal_Int16 eType = NumberingType::NUMBER_NONE;
+    if (!bBullet && !bImage && !bNum)
+    {
+        return Sequence<beans::PropertyValue>();
+    }
 
-    sal_Int32 nCount = 0;
+    sal_Int16 eType = NumberingType::NUMBER_NONE;
+    std::vector<beans::PropertyValue> aProperties;
+
     if( bBullet )
     {
         eType = NumberingType::CHAR_SPECIAL;
-        nCount = 15; // 'cBullet' will be written anyway if 'bBullet' is true
     }
     if( bImage )
     {
         eType = NumberingType::BITMAP;
-        nCount = 15;
-
-        if( !sImageURL.isEmpty() || xBase64Stream.is() )
-            nCount++;
     }
     if( bNum )
     {
         eType = NumberingType::ARABIC;
         GetImport().GetMM100UnitConverter().convertNumFormat(
                 eType, sNumFormat, sNumLetterSync, true );
-        nCount = 15;
-    }
-
-    if( ( bBullet || bNum ) && nRelSize )
-        nCount++;
-
-    if( !bImage && bHasColor )
-    {
-        nCount++;
     }
 
     if (bBullet && !sSuffix.isEmpty())
@@ -399,142 +392,110 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties()
         }
     }
 
-    Sequence<beans::PropertyValue> aPropSeq( nCount );
-    if( nCount > 0 )
+    aProperties.push_back(comphelper::makePropertyValue("NumberingType", eType));
+
+    aProperties.push_back(comphelper::makePropertyValue("Prefix", sPrefix));
+
+    aProperties.push_back(comphelper::makePropertyValue("Suffix", sSuffix));
+
+    aProperties.push_back(comphelper::makePropertyValue("Adjust", eAdjust));
+
+    sal_Int32 nLeftMargin = nSpaceBefore + nMinLabelWidth;
+    aProperties.push_back(comphelper::makePropertyValue("LeftMargin", nLeftMargin));
+
+    sal_Int32 nFirstLineOffset = -nMinLabelWidth;
+    aProperties.push_back(comphelper::makePropertyValue("FirstLineOffset", nFirstLineOffset));
+
+    aProperties.push_back(comphelper::makePropertyValue("SymbolTextDistance", static_cast<sal_Int16>(nMinLabelDist)));
+
+    aProperties.push_back(comphelper::makePropertyValue("PositionAndSpaceMode", ePosAndSpaceMode));
+
+    aProperties.push_back(comphelper::makePropertyValue("LabelFollowedBy", eLabelFollowedBy));
+
+    aProperties.push_back(comphelper::makePropertyValue("ListtabStopPosition", nListtabStopPosition));
+
+    aProperties.push_back(comphelper::makePropertyValue("FirstLineIndent", nFirstLineIndent));
+
+    aProperties.push_back(comphelper::makePropertyValue("IndentAt", nIndentAt));
+
+    OUString sDisplayTextStyleName = GetImport().GetStyleDisplayName(XmlStyleFamily::TEXT_TEXT, sTextStyleName);
+    aProperties.push_back(comphelper::makePropertyValue("CharStyleName", sDisplayTextStyleName));
+
+    if( bBullet )
     {
-        beans::PropertyValue *pProps = aPropSeq.getArray();
-        sal_Int32 nPos = 0;
-        pProps[nPos].Name = "NumberingType";
-        pProps[nPos++].Value <<= eType ;
-
-        pProps[nPos].Name = "Prefix";
-        pProps[nPos++].Value <<= sPrefix;
-
-        pProps[nPos].Name = "Suffix";
-        pProps[nPos++].Value <<= sSuffix;
-
-        pProps[nPos].Name = "Adjust";
-        pProps[nPos++].Value <<= eAdjust;
-
-        sal_Int32 nLeftMargin = nSpaceBefore + nMinLabelWidth;
-        pProps[nPos].Name = "LeftMargin";
-        pProps[nPos++].Value <<= nLeftMargin;
-
-        sal_Int32 nFirstLineOffset = -nMinLabelWidth;
-
-        pProps[nPos].Name = "FirstLineOffset";
-        pProps[nPos++].Value <<= nFirstLineOffset;
-
-        pProps[nPos].Name = "SymbolTextDistance";
-        pProps[nPos++].Value <<= static_cast<sal_Int16>(nMinLabelDist);
-
-        pProps[nPos].Name = "PositionAndSpaceMode";
-        pProps[nPos++].Value <<= ePosAndSpaceMode;
-        pProps[nPos].Name = "LabelFollowedBy";
-        pProps[nPos++].Value <<= eLabelFollowedBy;
-        pProps[nPos].Name = "ListtabStopPosition";
-        pProps[nPos++].Value <<= nListtabStopPosition;
-        pProps[nPos].Name = "FirstLineIndent";
-        pProps[nPos++].Value <<= nFirstLineIndent;
-        pProps[nPos].Name = "IndentAt";
-        pProps[nPos++].Value <<= nIndentAt;
-
-        OUString sDisplayTextStyleName = GetImport().GetStyleDisplayName(
-                                XmlStyleFamily::TEXT_TEXT, sTextStyleName  );
-        pProps[nPos].Name = "CharStyleName";
-        pProps[nPos++].Value <<= sDisplayTextStyleName;
-
-        if( bBullet )
+        awt::FontDescriptor aFDesc;
+        aFDesc.Name = sBulletFontName;
+        if( !sBulletFontName.isEmpty() )
         {
-            awt::FontDescriptor aFDesc;
-            aFDesc.Name = sBulletFontName;
-            if( !sBulletFontName.isEmpty() )
+            aFDesc.StyleName = sBulletFontStyleName;
+            aFDesc.Family = eBulletFontFamily;
+            aFDesc.Pitch = eBulletFontPitch;
+            aFDesc.CharSet = eBulletFontEncoding;
+            aFDesc.Weight = WEIGHT_DONTKNOW;
+            bool bStarSymbol = false;
+            if( aFDesc.Name.equalsIgnoreAsciiCase( gsStarBats ) )
             {
-                aFDesc.StyleName = sBulletFontStyleName;
-                aFDesc.Family = eBulletFontFamily;
-                aFDesc.Pitch = eBulletFontPitch;
-                aFDesc.CharSet = eBulletFontEncoding;
-                aFDesc.Weight = WEIGHT_DONTKNOW;
-                bool bStarSymbol = false;
-                if( aFDesc.Name.equalsIgnoreAsciiCase( gsStarBats ) )
-                {
-                    cBullet = GetImport().ConvStarBatsCharToStarSymbol( cBullet );
-                    bStarSymbol = true;
-                }
-                else if( aFDesc.Name.equalsIgnoreAsciiCase( gsStarMath ) )
-                {
-                    cBullet = GetImport().ConvStarMathCharToStarSymbol( cBullet );
-                    bStarSymbol = true;
-                }
-                if( bStarSymbol )
-                    aFDesc.Name = "StarSymbol" ;
+                cBullet = GetImport().ConvStarBatsCharToStarSymbol( cBullet );
+                bStarSymbol = true;
             }
-
-            // Must append 'cBullet' even if it is zero
-            // if 'bBullet' is true and 'cBullet' is zero - BulletChar property must be 0.
-            pProps[nPos].Name = "BulletChar";
-            pProps[nPos++].Value <<= OUString(&cBullet, 1);
-
-            pProps[nPos].Name = "BulletFont";
-            pProps[nPos++].Value <<= aFDesc;
-
-        }
-
-        if( bImage )
-        {
-            uno::Reference<graphic::XGraphic> xGraphic;
-            if (!sImageURL.isEmpty())
+            else if( aFDesc.Name.equalsIgnoreAsciiCase( gsStarMath ) )
             {
-                xGraphic = GetImport().loadGraphicByURL(sImageURL);
+                cBullet = GetImport().ConvStarMathCharToStarSymbol( cBullet );
+                bStarSymbol = true;
             }
-            else if( xBase64Stream.is() )
-            {
-                xGraphic = GetImport().loadGraphicFromBase64(xBase64Stream);
-            }
-
-            uno::Reference<awt::XBitmap> xBitmap;
-            if (xGraphic.is())
-                xBitmap.set(xGraphic, uno::UNO_QUERY);
-
-            if (xBitmap.is())
-            {
-                pProps[nPos].Name = "GraphicBitmap";
-                pProps[nPos++].Value <<= xBitmap;
-            }
-
-            awt::Size aSize(nImageWidth, nImageHeight);
-            pProps[nPos].Name = "GraphicSize";
-            pProps[nPos++].Value <<= aSize;
-
-            pProps[nPos].Name = "VertOrient";
-            pProps[nPos++].Value <<= eImageVertOrient;
+            if( bStarSymbol )
+                aFDesc.Name = "StarSymbol" ;
         }
 
-        if( bNum )
-        {
-            pProps[nPos].Name = "StartWith";
-            pProps[nPos++].Value <<= nNumStartValue;
-
-            pProps[nPos].Name = "ParentNumbering";
-            pProps[nPos++].Value <<= nNumDisplayLevels;
-        }
-
-        if( ( bNum || bBullet ) && nRelSize )
-        {
-            pProps[nPos].Name = "BulletRelSize";
-            pProps[nPos++].Value <<= nRelSize;
-        }
-
-        if( !bImage && bHasColor )
-        {
-            pProps[nPos].Name = "BulletColor";
-            pProps[nPos++].Value <<= m_nColor;
-        }
-
-        SAL_WARN_IF( nPos != nCount, "xmloff", "array under/overflow" );
+        // Must append 'cBullet' even if it is zero
+        // if 'bBullet' is true and 'cBullet' is zero - BulletChar property must be 0.
+        aProperties.push_back(comphelper::makePropertyValue("BulletChar", OUString(&cBullet, 1)));
+        aProperties.push_back(comphelper::makePropertyValue("BulletFont", aFDesc));
     }
 
-    return aPropSeq;
+    if( bImage )
+    {
+        uno::Reference<graphic::XGraphic> xGraphic;
+        if (!sImageURL.isEmpty())
+        {
+            xGraphic = GetImport().loadGraphicByURL(sImageURL);
+        }
+        else if( xBase64Stream.is() )
+        {
+            xGraphic = GetImport().loadGraphicFromBase64(xBase64Stream);
+        }
+
+        uno::Reference<awt::XBitmap> xBitmap;
+        if (xGraphic.is())
+            xBitmap.set(xGraphic, uno::UNO_QUERY);
+
+        if (xBitmap.is())
+        {
+            aProperties.push_back(comphelper::makePropertyValue("GraphicBitmap", xBitmap));
+        }
+
+        awt::Size aSize(nImageWidth, nImageHeight);
+        aProperties.push_back(comphelper::makePropertyValue("GraphicSize", aSize));
+        aProperties.push_back(comphelper::makePropertyValue("VertOrient", eImageVertOrient));
+    }
+
+    if( bNum )
+    {
+        aProperties.push_back(comphelper::makePropertyValue("StartWith", nNumStartValue));
+        aProperties.push_back(comphelper::makePropertyValue("ParentNumbering", nNumDisplayLevels));
+    }
+
+    if( ( bNum || bBullet ) && nRelSize )
+    {
+        aProperties.push_back(comphelper::makePropertyValue("BulletRelSize", nRelSize));
+    }
+
+    if( !bImage && bHasColor )
+    {
+        aProperties.push_back(comphelper::makePropertyValue("BulletColor", m_nColor));
+    }
+
+    return comphelper::containerToSequence(aProperties);
 }
 
 SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
