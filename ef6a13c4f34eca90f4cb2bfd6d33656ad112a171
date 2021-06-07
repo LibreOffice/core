@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a82a36c7_12078de0",
+        "filename": "include/vcl/GraphicsRenderTests.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-06-07T11:13:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4847e41_8722b221",
+      "range": {
+        "startLine": 21,
+        "startChar": 4,
+        "endLine": 21,
+        "endChar": 44
+      },
+      "revId": "ef6a13c4f34eca90f4cb2bfd6d33656ad112a171",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "31898048_fc12cd09",
         "filename": "include/vcl/GraphicsRenderTests.hxx",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "518f210f_b7c49f70",
+        "filename": "include/vcl/GraphicsRenderTests.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-06-07T11:13:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31898048_fc12cd09",
+      "range": {
+        "startLine": 25,
+        "startChar": 44,
+        "endLine": 25,
+        "endChar": 62
+      },
+      "revId": "ef6a13c4f34eca90f4cb2bfd6d33656ad112a171",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2fb80b32_61919a69",
         "filename": "vcl/backendtest/GraphicsRenderTests.cxx",
         "patchSetId": 1
@@ -59,6 +107,30 @@
       "writtenOn": "2021-06-07T11:09:52Z",
       "side": 1,
       "message": "UpdateResult is not a class ... small case and maybe prefix with lcl (local)\n\nAlso this function makes no sense.... why are you putting the class instance as input parameter and manipulate its variables? Why is this then not an member function of GraphicRenderTests class?",
+      "range": {
+        "startLine": 20,
+        "startChar": 5,
+        "endLine": 20,
+        "endChar": 17
+      },
+      "revId": "ef6a13c4f34eca90f4cb2bfd6d33656ad112a171",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb785063_9ea8e61c",
+        "filename": "vcl/backendtest/GraphicsRenderTests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-06-07T11:13:29Z",
+      "side": 1,
+      "message": "I\u0027ll make it a member function then.",
+      "parentUuid": "2fb80b32_61919a69",
       "range": {
         "startLine": 20,
         "startChar": 5,
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "cc3eb155_7b1ae42e",
+        "filename": "vcl/backendtest/GraphicsRenderTests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-06-07T11:13:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "66d0747f_2898b4b0",
+      "range": {
+        "startLine": 21,
+        "startChar": 22,
+        "endLine": 21,
+        "endChar": 32
+      },
+      "revId": "ef6a13c4f34eca90f4cb2bfd6d33656ad112a171",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "41a267d2_85ef5468",
         "filename": "vcl/backendtest/GraphicsRenderTests.cxx",
         "patchSetId": 1
@@ -105,6 +201,30 @@
       "writtenOn": "2021-06-07T11:09:52Z",
       "side": 1,
       "message": "why numbers and not names?",
+      "range": {
+        "startLine": 43,
+        "startChar": 32,
+        "endLine": 43,
+        "endChar": 33
+      },
+      "revId": "ef6a13c4f34eca90f4cb2bfd6d33656ad112a171",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c98f2d82_e7177483",
+        "filename": "vcl/backendtest/GraphicsRenderTests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-06-07T11:13:29Z",
+      "side": 1,
+      "message": "I\u0027ll change it...",
+      "parentUuid": "41a267d2_85ef5468",
       "range": {
         "startLine": 43,
         "startChar": 32,
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "b729b165_1669565a",
+        "filename": "vcl/backendtest/GraphicsRenderTests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 830,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-06-07T11:13:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11011254_9be7b2ef",
+      "range": {
+        "startLine": 517,
+        "startChar": 1,
+        "endLine": 830,
+        "endChar": 1
+      },
+      "revId": "ef6a13c4f34eca90f4cb2bfd6d33656ad112a171",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "087a84f7_c1217bcd",
         "filename": "vcl/backendtest/GraphicsRenderTests.cxx",
         "patchSetId": 1
@@ -160,6 +304,30 @@
       "revId": "ef6a13c4f34eca90f4cb2bfd6d33656ad112a171",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4a49e6e_826fa1c8",
+        "filename": "vcl/backendtest/GraphicsRenderTests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 898,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-06-07T11:13:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "087a84f7_c1217bcd",
+      "range": {
+        "startLine": 898,
+        "startChar": 26,
+        "endLine": 898,
+        "endChar": 37
+      },
+      "revId": "ef6a13c4f34eca90f4cb2bfd6d33656ad112a171",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
