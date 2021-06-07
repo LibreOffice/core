@@ -252,7 +252,7 @@
       </prop>
       <prop oor:name="MinimumWidth" oor:type="xs:boolean" oor:nillable="false">
         <info>
-          <desc>Minimum width the sidebar can have. If true, the minumum width
+          <desc>Minimum width the sidebar can have. If true, the minimum width
           is calculated from the largest deck.</desc>
         </info>
         <value>true</value>
