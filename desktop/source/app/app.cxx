@@ -101,6 +101,7 @@
 #include <unotools/pathoptions.hxx>
 #include <svtools/menuoptions.hxx>
 #include <rtl/bootstrap.hxx>
+#include <vcl/GraphicsRenderTests.hxx>
 #include <vcl/glxtestprocess.hxx>
 #include <vcl/help.hxx>
 #include <vcl/weld.hxx>
@@ -1549,6 +1550,19 @@ int Desktop::Main()
 #if HAVE_FEATURE_OPENCL
         CheckOpenCLCompute(xDesktop);
 #endif
+
+        OUString sSetupVersion = utl::ConfigManager::getProductVersion();
+        sal_Int32 iCurrent
+        = sSetupVersion.getToken(0, '.').toInt32() * 10 + sSetupVersion.getToken(1, '.').toInt32();
+        OUString sLastVersion = officecfg::Setup::Product::ooSetupLastVersion::get().value_or("0.0");
+        sal_Int32 iLast
+        = sLastVersion.getToken(0, '.').toInt32() * 10 + sLastVersion.getToken(1, '.').toInt32();
+
+        if(iCurrent > iLast)
+        {
+            GraphicsRenderTests obj;
+            obj.RunVclTests();
+        }
 
         // Reap the process started by fire_glxtest_process().
         reap_glxtest_process();
