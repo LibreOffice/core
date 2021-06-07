@@ -10,7 +10,7 @@
 $(eval $(call gb_Package_Package,extras_tpldraw,$(call gb_CustomTarget_get_workdir,extras/source/templates/draw)))
 
 $(eval $(call gb_Package_add_files,extras_tpldraw,$(LIBO_SHARE_FOLDER)/template/common/draw,\
-	bpmn.ott \
+    bpmn.otg \
 ))
 
 # vim: set noet sw=4 ts=4:
