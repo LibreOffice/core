@@ -382,7 +382,8 @@ bool SwTabPortion::PreFormat( SwTextFormatInfo &rInf )
             case PortionType::TabLeft:
             {
                 // handle this case in PostFormat
-                if ((bTabOverMargin || bTabOverSpacing) && !m_bAutoTabStop && GetTabPos() > rInf.Width())
+                if ((bTabOverMargin || bTabOverSpacing) && GetTabPos() > rInf.Width()
+                    && (!m_bAutoTabStop || (!bTabOverMargin && rInf.X() > rInf.Width())))
                 {
                     if (bTabOverMargin || GetTabPos() < rInf.GetTextFrame()->getFrameArea().Width())
                     {
