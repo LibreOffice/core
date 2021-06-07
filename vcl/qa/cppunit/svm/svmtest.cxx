@@ -116,7 +116,7 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
     void checkGradient(const GDIMetaFile& rMetaFile);
     void testGradient();
 
-    //void checkGradientEx(const GDIMetaFile& rMetaFile);
+    void checkGradientEx(const GDIMetaFile& rMetaFile);
     void testGradientEx();
 
     void checkHatch(const GDIMetaFile& rMetaFile);
@@ -179,7 +179,7 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
     //void checkEPS(const GDIMetaFile& rMetaFile);
     void testEPS();
 
-    //void checkRefPoint(const GDIMetaFile& rMetaFile);
+    void checkRefPoint(const GDIMetaFile& rMetaFile);
     void testRefPoint();
 
     //void checkComment(const GDIMetaFile& rMetaFile);
@@ -1254,8 +1254,32 @@ void SvmTest::testGradient()
     checkGradient(readFile(u"gradient.svm"));
 }
 
+void SvmTest::checkGradientEx(const GDIMetaFile& rMetaFile)
+{
+    xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
+}
+
 void SvmTest::testGradientEx()
-{}
+{
+    GDIMetaFile aGDIMetaFile;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
+
+    tools::Polygon aPolygon(3);
+    aPolygon.SetPoint(Point(1, 8), 0);
+    aPolygon.SetPoint(Point(2, 7), 1);
+    aPolygon.SetPoint(Point(3, 6), 2);
+
+    tools::PolyPolygon aPolyPolygon(1);
+    aPolyPolygon.Insert(aPolygon);
+
+    Gradient aGradient(GradientStyle::Linear, COL_WHITE, COL_BLACK);
+    pVirtualDev->DrawGradient(aPolyPolygon, aGradient);
+
+    checkGradientEx(writeAndReadStream(aGDIMetaFile));
+    checkGradientEx(readFile(u"gradientex.svm"));
+
+}
 
 void SvmTest::checkHatch(const GDIMetaFile& rMetaFile)
 {
@@ -1636,8 +1660,36 @@ void SvmTest::testFloatTransparent()
 void SvmTest::testEPS()
 {}
 
+void SvmTest::checkRefPoint(const GDIMetaFile& rMetaFile)
+{
+    xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
+
+    assertXPathAttrs(pDoc, "/metafile/refpoint[1]", {
+        {"x", "0"},
+        {"y", "0"},
+        {"set", "false"}
+    });
+
+    assertXPathAttrs(pDoc, "/metafile/refpoint[2]", {
+        {"x", "1"},
+        {"y", "2"},
+        {"set", "true"}
+    });
+}
+
 void SvmTest::testRefPoint()
-{}
+{
+    GDIMetaFile aGDIMetaFile;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
+
+    pVirtualDev->SetRefPoint();
+
+    pVirtualDev->SetRefPoint(Point(1,2));
+
+    checkRefPoint(writeAndReadStream(aGDIMetaFile));
+    checkRefPoint(readFile(u"refpoint.svm"));
+}
 
 void SvmTest::testComment()
 {}
