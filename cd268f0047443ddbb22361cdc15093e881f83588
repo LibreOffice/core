@@ -22,6 +22,30 @@
       "revId": "cd268f0047443ddbb22361cdc15093e881f83588",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75815ec5_c48fabdc",
+        "filename": "svx/source/unodraw/unoshape.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-06-07T08:29:59Z",
+      "side": 1,
+      "message": "Thanks for fixing that up. When I did this, the difference between not applying auto-font-height at all and doing it was so large that once it was applied, I was already happy. I didn\u0027t notice there is a small difference here.",
+      "parentUuid": "fdc359b9_80a7660e",
+      "range": {
+        "startLine": 189,
+        "startChar": 50,
+        "endLine": 189,
+        "endChar": 60
+      },
+      "revId": "cd268f0047443ddbb22361cdc15093e881f83588",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
