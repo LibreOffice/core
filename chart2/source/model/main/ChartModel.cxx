@@ -1080,13 +1080,9 @@ uno::Any SAL_CALL ChartModel::getTransferData( const datatransfer::DataFlavor& a
 
 Sequence< datatransfer::DataFlavor > SAL_CALL ChartModel::getTransferDataFlavors()
 {
-    uno::Sequence< datatransfer::DataFlavor > aRet(1);
-
-    aRet[0] = datatransfer::DataFlavor( lcl_aGDIMetaFileMIMETypeHighContrast,
+    return { datatransfer::DataFlavor( lcl_aGDIMetaFileMIMETypeHighContrast,
         "GDIMetaFile",
-        cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
-
-    return aRet;
+        cppu::UnoType<uno::Sequence< sal_Int8 >>::get() ) };
 }
 
 sal_Bool SAL_CALL ChartModel::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )

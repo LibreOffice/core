@@ -192,11 +192,7 @@ OUString SAL_CALL ScatterChartType::getChartType()
 
 uno::Sequence< OUString > SAL_CALL ScatterChartType::getSupportedMandatoryRoles()
 {
-    uno::Sequence< OUString > aMandRolesSeq(3);
-    aMandRolesSeq[0] = "label";
-    aMandRolesSeq[1] = "values-x";
-    aMandRolesSeq[2] = "values-y";
-    return aMandRolesSeq;
+    return { "label", "values-x", "values-y" };
 }
 
 // ____ OPropertySet ____

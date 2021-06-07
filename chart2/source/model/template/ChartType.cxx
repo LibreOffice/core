@@ -98,10 +98,7 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
 
 Sequence< OUString > SAL_CALL ChartType::getSupportedMandatoryRoles()
 {
-    Sequence< OUString > aDefaultSeq(2);
-    aDefaultSeq[0] = "label";
-    aDefaultSeq[1] = "values-y";
-    return aDefaultSeq;
+    return { "label", "values-y" };
 }
 
 Sequence< OUString > SAL_CALL ChartType::getSupportedOptionalRoles()

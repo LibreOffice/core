@@ -388,11 +388,7 @@ awt::Size Direction3DToAWTSize( const drawing::Direction3D& rDirection )
 
 uno::Sequence< double > B3DPointToSequence( const ::basegfx::B3DPoint& rPoint )
 {
-    uno::Sequence< double > aRet(3);
-    aRet[0] = rPoint.getX();
-    aRet[1] = rPoint.getY();
-    aRet[2] = rPoint.getZ();
-    return aRet;
+    return { rPoint.getX(), rPoint.getY(), rPoint.getZ() };
 }
 
 drawing::Position3D SequenceToPosition3D( const uno::Sequence< double >& rSeq )
@@ -408,11 +404,7 @@ drawing::Position3D SequenceToPosition3D( const uno::Sequence< double >& rSeq )
 
 uno::Sequence< double > Position3DToSequence( const drawing::Position3D& rPosition )
 {
-    uno::Sequence< double > aRet(3);
-    aRet[0] = rPosition.PositionX;
-    aRet[1] = rPosition.PositionY;
-    aRet[2] = rPosition.PositionZ;
-    return aRet;
+    return { rPosition.PositionX, rPosition.PositionY, rPosition.PositionZ };
 }
 
 using namespace ::com::sun::star::chart2;
