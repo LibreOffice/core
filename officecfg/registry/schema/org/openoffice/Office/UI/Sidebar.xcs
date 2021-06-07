@@ -259,7 +259,7 @@
           <desc>Enables the calculation of the sidebar's minimum width based on the size of all decks.
           If false, the user has full control over the sidebar width.</desc>
         </info>
-        <value>true</value>
+        <value>false</value>
       </prop>
     </group>
     <group oor:name="Content">
