@@ -43,14 +43,16 @@
 #endif
 
 osl::Mutex CrashReporter::maMutex;
+osl::Mutex CrashReporter::maActiveNameMutex;
 std::unique_ptr<google_breakpad::ExceptionHandler> CrashReporter::mpExceptionHandler;
 bool CrashReporter::mbInit = false;
 CrashReporter::vmaKeyValues CrashReporter::maKeyValues;
-
+OUString CrashReporter::mActiveApp;
 
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
 static bool dumpCallback(const google_breakpad::MinidumpDescriptor& descriptor, void* /*context*/, bool succeeded)
 {
+    CrashReporter::addKeyValue("Active-App",CrashReporter::currentActiveApp(),CrashReporter::AddItem);
     CrashReporter::addKeyValue("DumpFile", OStringToOUString(descriptor.path(), RTL_TEXTENCODING_UTF8), CrashReporter::Write);
     SAL_WARN("desktop", "minidump generated: " << descriptor.path());
 
@@ -68,6 +70,7 @@ static bool dumpCallback(const wchar_t* path, const wchar_t* id,
 #endif
     std::wstring_convert<std::codecvt_utf8<wchar_t>> conv1;
     std::string aPath = conv1.to_bytes(std::wstring(path)) + conv1.to_bytes(std::wstring(id)) + ".dmp";
+    CrashReporter::addKeyValue("Active-App",CrashReporter::currentActiveApp(),CrashReporter::AddItem);
     CrashReporter::addKeyValue("DumpFile", OStringToOUString(aPath.c_str(), RTL_TEXTENCODING_UTF8), CrashReporter::AddItem);
     CrashReporter::addKeyValue("GDIHandles", OUString::number(::GetGuiResources(::GetCurrentProcess(), GR_GDIOBJECTS)), CrashReporter::Write);
     SAL_WARN("desktop", "minidump generated: " << aPath);
@@ -159,6 +162,16 @@ void CrashReporter::writeCommonInfo()
     updateMinidumpLocation();
 }
 
+void CrashReporter::setActiveApp(const OUString& rActiveApp)
+{
+    osl::MutexGuard aGuard(maActiveNameMutex);
+    mActiveApp=rActiveApp;
+}
+
+OUString CrashReporter::currentActiveApp()
+{
+    return mActiveApp;
+}
 
 namespace {
 

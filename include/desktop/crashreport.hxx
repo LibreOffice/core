@@ -56,8 +56,12 @@ public:
 
     static bool IsDumpEnable();
 
+    static void setActiveApp(const OUString& rActiveApp);
+    static OUString currentActiveApp();
+
 private:
     static osl::Mutex maMutex;
+    static osl::Mutex maActiveNameMutex;
     static bool mbInit;
     typedef  struct _mpair
     {
@@ -72,6 +76,7 @@ private:
 
     typedef std::vector<mpair> vmaKeyValues;
     static vmaKeyValues maKeyValues; // used to temporarily save entries before the old info has been uploaded
+    static OUString mActiveApp;
 
     static std::unique_ptr<google_breakpad::ExceptionHandler> mpExceptionHandler;
 
@@ -88,6 +93,8 @@ private:
     // // the code without linking to the lib and without adding HAVE_FEATURE_BREAKPAD
     // // everywhere we want to log something to the crash report system.
     inline static void addKeyValue(SAL_UNUSED_PARAMETER const OUString& /*rKey*/, SAL_UNUSED_PARAMETER const OUString& /*rValue*/, SAL_UNUSED_PARAMETER tAddKeyHandling /*AddKeyHandling*/) {};
+    static void setActiveApp(const OUString& /*rActiveApp*/);
+    static OUString currentActiveApp();
 #endif // HAVE_FEATURE_BREAKPAD
 };
 

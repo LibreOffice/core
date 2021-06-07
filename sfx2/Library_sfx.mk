@@ -65,6 +65,9 @@ $(eval $(call gb_Library_use_libraries,sfx,\
     ucbhelper \
     utl \
     vcl \
+    $(if $(ENABLE_BREAKPAD), \
+        crashreport \
+    ) \
 ))
 
 $(eval $(call gb_Library_use_externals,sfx,\
