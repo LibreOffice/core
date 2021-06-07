@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ecb3f78e_5ea4091b",
+        "filename": "sw/qa/uitest/writer_tests2/fontworks.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-07T14:34:22Z",
+      "side": 1,
+      "message": "This is not needed, but close button name must be passed as the \"close_button\" argument to guarded.execute_dialog_through_command.\n\nSomething like\n\n  with guarded.execute_dialog_through_command(\".uno:FontworkGalleryFloater\", close_button\u003d\"cancel\") as xDialog:",
+      "range": {
+        "startLine": 38,
+        "startChar": 12,
+        "endLine": 39,
+        "endChar": 63
+      },
+      "revId": "1d2b82a7efc6b2b640093d47d5743e5b3dc1be11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8346178b_8d072801",
+        "filename": "sw/qa/uitest/writer_tests2/fontworks.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-07T14:34:22Z",
+      "side": 1,
+      "message": "This should be outside of the scope of the \"with\"",
+      "range": {
+        "startLine": 41,
+        "startChar": 12,
+        "endLine": 41,
+        "endChar": 36
+      },
+      "revId": "1d2b82a7efc6b2b640093d47d5743e5b3dc1be11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
