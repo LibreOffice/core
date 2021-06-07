@@ -179,30 +179,7 @@ public:
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
     {
-        static const struct { char const * pPrefix; char const * pURI; } namespaces[] =
-        {
-            // OOXML
-            { "ContentType", "http://schemas.openxmlformats.org/package/2006/content-types" },
-            { "rels", "http://schemas.openxmlformats.org/package/2006/relationships" },
-            { "mc", "http://schemas.openxmlformats.org/markup-compatibility/2006" },
-            { "v", "urn:schemas-microsoft-com:vml" },
-            { "a", "http://schemas.openxmlformats.org/drawingml/2006/main" },
-            { "c", "http://schemas.openxmlformats.org/drawingml/2006/chart" },
-            { "m", "http://schemas.openxmlformats.org/officeDocument/2006/math" },
-            { "pic", "http://schemas.openxmlformats.org/drawingml/2006/picture" },
-            { "wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" },
-            { "p", "http://schemas.openxmlformats.org/presentationml/2006/main" },
-            { "w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main" },
-            { "a14", "http://schemas.microsoft.com/office/drawing/2010/main" },
-            { "wps", "http://schemas.microsoft.com/office/word/2010/wordprocessingShape" },
-            { "wpg", "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" },
-        };
-        for (size_t i = 0; i < SAL_N_ELEMENTS(namespaces); ++i)
-        {
-            xmlXPathRegisterNs(pXmlXPathCtx,
-                reinterpret_cast<xmlChar const *>(namespaces[i].pPrefix),
-                reinterpret_cast<xmlChar const *>(namespaces[i].pURI));
-        }
+        XmlTestTools::registerOOXMLNamespaces(pXmlXPathCtx);
     }
 };
 
