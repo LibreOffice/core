@@ -352,35 +352,21 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SvxXMLListLevelStyleCo
 Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties()
 {
     sal_Int16 eType = NumberingType::NUMBER_NONE;
+    std::vector<beans::PropertyValue> aProperties;
 
-    sal_Int32 nCount = 0;
     if( bBullet )
     {
         eType = NumberingType::CHAR_SPECIAL;
-        nCount = 15; // 'cBullet' will be written anyway if 'bBullet' is true
     }
     if( bImage )
     {
         eType = NumberingType::BITMAP;
-        nCount = 15;
-
-        if( !sImageURL.isEmpty() || xBase64Stream.is() )
-            nCount++;
     }
     if( bNum )
     {
         eType = NumberingType::ARABIC;
         GetImport().GetMM100UnitConverter().convertNumFormat(
                 eType, sNumFormat, sNumLetterSync, true );
-        nCount = 15;
-    }
-
-    if( ( bBullet || bNum ) && nRelSize )
-        nCount++;
-
-    if( !bImage && bHasColor )
-    {
-        nCount++;
     }
 
     if (bBullet && !sSuffix.isEmpty())
@@ -399,142 +385,139 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties()
         }
     }
 
-    Sequence<beans::PropertyValue> aPropSeq( nCount );
-    if( nCount > 0 )
+    aProperties.push_back(beans::PropertyValue("NumberingType", -1, uno::makeAny(eType),
+                                               beans::PropertyState_DIRECT_VALUE));
+
+    aProperties.push_back(beans::PropertyValue("Prefix", -1, uno::makeAny(sPrefix),
+                                               beans::PropertyState_DIRECT_VALUE));
+
+    aProperties.push_back(beans::PropertyValue("Suffix", -1, uno::makeAny(sSuffix),
+                                               beans::PropertyState_DIRECT_VALUE));
+
+    aProperties.push_back(beans::PropertyValue("Adjust", -1, uno::makeAny(eAdjust),
+                                               beans::PropertyState_DIRECT_VALUE));
+
+    sal_Int32 nLeftMargin = nSpaceBefore + nMinLabelWidth;
+    aProperties.push_back(beans::PropertyValue("LeftMargin", -1, uno::makeAny(nLeftMargin),
+                                            beans::PropertyState_DIRECT_VALUE));
+
+    sal_Int32 nFirstLineOffset = -nMinLabelWidth;
+    aProperties.push_back(beans::PropertyValue("FirstLineOffset", -1, uno::makeAny(nFirstLineOffset),
+                                            beans::PropertyState_DIRECT_VALUE));
+
+    aProperties.push_back(beans::PropertyValue("SymbolTextDistance", -1,
+                                            uno::makeAny(static_cast<sal_Int16>(nMinLabelDist)),
+                                            beans::PropertyState_DIRECT_VALUE));
+
+    aProperties.push_back(beans::PropertyValue("PositionAndSpaceMode", -1,
+                                               uno::makeAny(ePosAndSpaceMode),
+                                               beans::PropertyState_DIRECT_VALUE));
+
+    aProperties.push_back(beans::PropertyValue("LabelFollowedBy", -1, uno::makeAny(eLabelFollowedBy),
+                                               beans::PropertyState_DIRECT_VALUE));
+
+    aProperties.push_back(beans::PropertyValue("ListtabStopPosition", -1,
+                                               uno::makeAny(nListtabStopPosition),
+                                               beans::PropertyState_DIRECT_VALUE));
+
+    aProperties.push_back(beans::PropertyValue("FirstLineIndent", -1, uno::makeAny(nFirstLineIndent),
+                                               beans::PropertyState_DIRECT_VALUE));
+
+    aProperties.push_back(beans::PropertyValue("IndentAt", -1, uno::makeAny(nIndentAt),
+                                               beans::PropertyState_DIRECT_VALUE));
+
+    OUString sDisplayTextStyleName = GetImport().GetStyleDisplayName(
+                            XmlStyleFamily::TEXT_TEXT, sTextStyleName  );
+    aProperties.push_back(beans::PropertyValue("CharStyleName", -1,
+                                               uno::makeAny(sDisplayTextStyleName),
+                                               beans::PropertyState_DIRECT_VALUE));
+
+    if( bBullet )
     {
-        beans::PropertyValue *pProps = aPropSeq.getArray();
-        sal_Int32 nPos = 0;
-        pProps[nPos].Name = "NumberingType";
-        pProps[nPos++].Value <<= eType ;
-
-        pProps[nPos].Name = "Prefix";
-        pProps[nPos++].Value <<= sPrefix;
-
-        pProps[nPos].Name = "Suffix";
-        pProps[nPos++].Value <<= sSuffix;
-
-        pProps[nPos].Name = "Adjust";
-        pProps[nPos++].Value <<= eAdjust;
-
-        sal_Int32 nLeftMargin = nSpaceBefore + nMinLabelWidth;
-        pProps[nPos].Name = "LeftMargin";
-        pProps[nPos++].Value <<= nLeftMargin;
-
-        sal_Int32 nFirstLineOffset = -nMinLabelWidth;
-
-        pProps[nPos].Name = "FirstLineOffset";
-        pProps[nPos++].Value <<= nFirstLineOffset;
-
-        pProps[nPos].Name = "SymbolTextDistance";
-        pProps[nPos++].Value <<= static_cast<sal_Int16>(nMinLabelDist);
-
-        pProps[nPos].Name = "PositionAndSpaceMode";
-        pProps[nPos++].Value <<= ePosAndSpaceMode;
-        pProps[nPos].Name = "LabelFollowedBy";
-        pProps[nPos++].Value <<= eLabelFollowedBy;
-        pProps[nPos].Name = "ListtabStopPosition";
-        pProps[nPos++].Value <<= nListtabStopPosition;
-        pProps[nPos].Name = "FirstLineIndent";
-        pProps[nPos++].Value <<= nFirstLineIndent;
-        pProps[nPos].Name = "IndentAt";
-        pProps[nPos++].Value <<= nIndentAt;
-
-        OUString sDisplayTextStyleName = GetImport().GetStyleDisplayName(
-                                XmlStyleFamily::TEXT_TEXT, sTextStyleName  );
-        pProps[nPos].Name = "CharStyleName";
-        pProps[nPos++].Value <<= sDisplayTextStyleName;
-
-        if( bBullet )
+        awt::FontDescriptor aFDesc;
+        aFDesc.Name = sBulletFontName;
+        if( !sBulletFontName.isEmpty() )
         {
-            awt::FontDescriptor aFDesc;
-            aFDesc.Name = sBulletFontName;
-            if( !sBulletFontName.isEmpty() )
+            aFDesc.StyleName = sBulletFontStyleName;
+            aFDesc.Family = eBulletFontFamily;
+            aFDesc.Pitch = eBulletFontPitch;
+            aFDesc.CharSet = eBulletFontEncoding;
+            aFDesc.Weight = WEIGHT_DONTKNOW;
+            bool bStarSymbol = false;
+            if( aFDesc.Name.equalsIgnoreAsciiCase( gsStarBats ) )
             {
-                aFDesc.StyleName = sBulletFontStyleName;
-                aFDesc.Family = eBulletFontFamily;
-                aFDesc.Pitch = eBulletFontPitch;
-                aFDesc.CharSet = eBulletFontEncoding;
-                aFDesc.Weight = WEIGHT_DONTKNOW;
-                bool bStarSymbol = false;
-                if( aFDesc.Name.equalsIgnoreAsciiCase( gsStarBats ) )
-                {
-                    cBullet = GetImport().ConvStarBatsCharToStarSymbol( cBullet );
-                    bStarSymbol = true;
-                }
-                else if( aFDesc.Name.equalsIgnoreAsciiCase( gsStarMath ) )
-                {
-                    cBullet = GetImport().ConvStarMathCharToStarSymbol( cBullet );
-                    bStarSymbol = true;
-                }
-                if( bStarSymbol )
-                    aFDesc.Name = "StarSymbol" ;
+                cBullet = GetImport().ConvStarBatsCharToStarSymbol( cBullet );
+                bStarSymbol = true;
             }
-
-            // Must append 'cBullet' even if it is zero
-            // if 'bBullet' is true and 'cBullet' is zero - BulletChar property must be 0.
-            pProps[nPos].Name = "BulletChar";
-            pProps[nPos++].Value <<= OUString(&cBullet, 1);
-
-            pProps[nPos].Name = "BulletFont";
-            pProps[nPos++].Value <<= aFDesc;
-
-        }
-
-        if( bImage )
-        {
-            uno::Reference<graphic::XGraphic> xGraphic;
-            if (!sImageURL.isEmpty())
+            else if( aFDesc.Name.equalsIgnoreAsciiCase( gsStarMath ) )
             {
-                xGraphic = GetImport().loadGraphicByURL(sImageURL);
+                cBullet = GetImport().ConvStarMathCharToStarSymbol( cBullet );
+                bStarSymbol = true;
             }
-            else if( xBase64Stream.is() )
-            {
-                xGraphic = GetImport().loadGraphicFromBase64(xBase64Stream);
-            }
-
-            uno::Reference<awt::XBitmap> xBitmap;
-            if (xGraphic.is())
-                xBitmap.set(xGraphic, uno::UNO_QUERY);
-
-            if (xBitmap.is())
-            {
-                pProps[nPos].Name = "GraphicBitmap";
-                pProps[nPos++].Value <<= xBitmap;
-            }
-
-            awt::Size aSize(nImageWidth, nImageHeight);
-            pProps[nPos].Name = "GraphicSize";
-            pProps[nPos++].Value <<= aSize;
-
-            pProps[nPos].Name = "VertOrient";
-            pProps[nPos++].Value <<= eImageVertOrient;
+            if( bStarSymbol )
+                aFDesc.Name = "StarSymbol" ;
         }
 
-        if( bNum )
-        {
-            pProps[nPos].Name = "StartWith";
-            pProps[nPos++].Value <<= nNumStartValue;
-
-            pProps[nPos].Name = "ParentNumbering";
-            pProps[nPos++].Value <<= nNumDisplayLevels;
-        }
-
-        if( ( bNum || bBullet ) && nRelSize )
-        {
-            pProps[nPos].Name = "BulletRelSize";
-            pProps[nPos++].Value <<= nRelSize;
-        }
-
-        if( !bImage && bHasColor )
-        {
-            pProps[nPos].Name = "BulletColor";
-            pProps[nPos++].Value <<= m_nColor;
-        }
-
-        SAL_WARN_IF( nPos != nCount, "xmloff", "array under/overflow" );
+        // Must append 'cBullet' even if it is zero
+        // if 'bBullet' is true and 'cBullet' is zero - BulletChar property must be 0.
+        aProperties.push_back(beans::PropertyValue("BulletChar", -1,
+                                                   uno::makeAny(OUString(&cBullet, 1)),
+                                                   beans::PropertyState_DIRECT_VALUE));
+        aProperties.push_back(beans::PropertyValue("BulletFont", -1, uno::makeAny(aFDesc),
+                                                   beans::PropertyState_DIRECT_VALUE));
     }
 
-    return aPropSeq;
+    if( bImage )
+    {
+        uno::Reference<graphic::XGraphic> xGraphic;
+        if (!sImageURL.isEmpty())
+        {
+            xGraphic = GetImport().loadGraphicByURL(sImageURL);
+        }
+        else if( xBase64Stream.is() )
+        {
+            xGraphic = GetImport().loadGraphicFromBase64(xBase64Stream);
+        }
+
+        uno::Reference<awt::XBitmap> xBitmap;
+        if (xGraphic.is())
+            xBitmap.set(xGraphic, uno::UNO_QUERY);
+
+        if (xBitmap.is())
+        {
+            aProperties.push_back(beans::PropertyValue("GraphicBitmap", -1, uno::makeAny(xBitmap),
+                                                       beans::PropertyState_DIRECT_VALUE));
+        }
+
+        awt::Size aSize(nImageWidth, nImageHeight);
+        aProperties.push_back(beans::PropertyValue("GraphicSize", -1, uno::makeAny(aSize),
+                                                   beans::PropertyState_DIRECT_VALUE));
+        aProperties.push_back(beans::PropertyValue("VertOrient", -1, uno::makeAny(eImageVertOrient),
+                                                   beans::PropertyState_DIRECT_VALUE));
+    }
+
+    if( bNum )
+    {
+        aProperties.push_back(beans::PropertyValue("StartWith", -1, uno::makeAny(nNumStartValue),
+                                                   beans::PropertyState_DIRECT_VALUE));
+        aProperties.push_back(beans::PropertyValue("ParentNumbering", -1,
+                                                   uno::makeAny(nNumDisplayLevels),
+                                                   beans::PropertyState_DIRECT_VALUE));
+    }
+
+    if( ( bNum || bBullet ) && nRelSize )
+    {
+        aProperties.push_back(beans::PropertyValue("BulletRelSize", -1, uno::makeAny(nRelSize),
+                                                   beans::PropertyState_DIRECT_VALUE));
+    }
+
+    if( !bImage && bHasColor )
+    {
+        aProperties.push_back(beans::PropertyValue("BulletColor", -1, uno::makeAny(m_nColor),
+                                                   beans::PropertyState_DIRECT_VALUE));
+    }
+
+    return comphelper::containerToSequence(aProperties);
 }
 
 SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
