@@ -99,8 +99,10 @@
 #include <osl/process.h>
 #include <rtl/byteseq.hxx>
 #include <unotools/pathoptions.hxx>
+#include <unotools/VersionConfig.hxx>
 #include <svtools/menuoptions.hxx>
 #include <rtl/bootstrap.hxx>
+#include <vcl/test/GraphicsRenderTests.hxx>
 #include <vcl/glxtestprocess.hxx>
 #include <vcl/help.hxx>
 #include <vcl/weld.hxx>
@@ -335,6 +337,16 @@ void RemoveIconCacheDirectory()
 }
 
 namespace {
+
+void runGraphicsRenderTests()
+{
+    if (!utl::isProductVersionUpgraded(false))
+    {
+        return;
+    }
+    GraphicsRenderTests TestObject;
+    TestObject.run();
+}
 
 
 OUString MakeStartupErrorMessage(std::u16string_view aErrorMessage)
@@ -1549,6 +1561,9 @@ int Desktop::Main()
 #if HAVE_FEATURE_OPENCL
         CheckOpenCLCompute(xDesktop);
 #endif
+
+        //Running the VCL graphics rendering tests
+        runGraphicsRenderTests();
 
         // Reap the process started by fire_glxtest_process().
         reap_glxtest_process();
