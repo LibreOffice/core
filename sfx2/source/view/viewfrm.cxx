@@ -45,8 +45,10 @@
 #include <svl/whiter.hxx>
 #include <svl/undo.hxx>
 #include <vcl/stdtext.hxx>
+#include <vcl/test/GraphicsRenderTests.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/weldutils.hxx>
+#include <unotools/VersionConfig.hxx>
 #include <svtools/miscopt.hxx>
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -1367,12 +1369,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 }
 
                 //what's new infobar
-                OUString sSetupVersion = utl::ConfigManager::getProductVersion();
-                sal_Int32 iCurrent = sSetupVersion.getToken(0,'.').toInt32() * 10 + sSetupVersion.getToken(1,'.').toInt32();
-                OUString sLastVersion
-                    = officecfg::Setup::Product::ooSetupLastVersion::get().value_or("0.0");
-                sal_Int32 iLast = sLastVersion.getToken(0,'.').toInt32() * 10 + sLastVersion.getToken(1,'.').toInt32();
-                if ((iCurrent > iLast) && !Application::IsHeadlessModeEnabled() && !bIsUITest)
+                if ((utl::isProductVersionUpgraded(true)) && !Application::IsHeadlessModeEnabled() && !bIsUITest)
                 {
                     VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("whatsnew", "", SfxResId(STR_WHATSNEW_TEXT), InfobarType::INFO);
                     if (pInfoBar)
@@ -1381,10 +1378,6 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                         rWhatsNewButton.set_label(SfxResId(STR_WHATSNEW_BUTTON));
                         rWhatsNewButton.connect_clicked(LINK(this, SfxViewFrame, WhatsNewHandler));
                     }
-                    //update lastversion
-                    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-                    officecfg::Setup::Product::ooSetupLastVersion::set(sSetupVersion, batch);
-                    batch->commit();
                 }
 
                 // show tip-of-the-day dialog
