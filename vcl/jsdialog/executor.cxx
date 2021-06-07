@@ -153,7 +153,11 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
                         {
                             double posX = std::atof(clickPosX.data());
                             double posY = std::atof(clickPosY.data());
-                            Size size = pArea->get_size_request();
+                            OutputDevice& rRefDevice = pArea->get_ref_device();
+                            // We send OutPutSize for the drawing area bitmap
+                            // get_size_request is not necessarily updated
+                            // therefore it may be incorrect.
+                            Size size = rRefDevice.GetOutputSize();
                             posX = posX * size.Width();
                             posY = posY * size.Height();
                             LOKTrigger::trigger_click(*pArea, Point(posX, posY));
