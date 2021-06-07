@@ -626,8 +626,8 @@ void SdrModel::SetTextDefaults( SfxItemPool* pItemPool, sal_Int32 nDefTextHgt )
     else
         nLanguage = LANGUAGE_ENGLISH_US;
 
-    // get DEFAULTFONT_LATIN_TEXT and set at pool as dynamic default
-    vcl::Font aFont(OutputDevice::GetDefaultFont(DefaultFontType::LATIN_TEXT, nLanguage, GetDefaultFontFlags::OnlyOne));
+    // get DEFAULTFONT_LATIN_PRESENTATION and set at pool as dynamic default
+    vcl::Font aFont(OutputDevice::GetDefaultFont(DefaultFontType::LATIN_PRESENTATION, nLanguage, GetDefaultFontFlags::OnlyOne));
     aSvxFontItem.SetFamily(aFont.GetFamilyType());
     aSvxFontItem.SetFamilyName(aFont.GetFamilyName());
     aSvxFontItem.SetStyleName(OUString());
@@ -635,8 +635,8 @@ void SdrModel::SetTextDefaults( SfxItemPool* pItemPool, sal_Int32 nDefTextHgt )
     aSvxFontItem.SetCharSet( aFont.GetCharSet() );
     pItemPool->SetPoolDefaultItem(aSvxFontItem);
 
-    // get DEFAULTFONT_CJK_TEXT and set at pool as dynamic default
-    vcl::Font aFontCJK(OutputDevice::GetDefaultFont(DefaultFontType::CJK_TEXT, nLanguage, GetDefaultFontFlags::OnlyOne));
+    // get DEFAULTFONT_CJK_PRESENTATION and set at pool as dynamic default
+    vcl::Font aFontCJK(OutputDevice::GetDefaultFont(DefaultFontType::CJK_PRESENTATION, nLanguage, GetDefaultFontFlags::OnlyOne));
     aSvxFontItemCJK.SetFamily( aFontCJK.GetFamilyType());
     aSvxFontItemCJK.SetFamilyName(aFontCJK.GetFamilyName());
     aSvxFontItemCJK.SetStyleName(OUString());
@@ -644,8 +644,8 @@ void SdrModel::SetTextDefaults( SfxItemPool* pItemPool, sal_Int32 nDefTextHgt )
     aSvxFontItemCJK.SetCharSet( aFontCJK.GetCharSet());
     pItemPool->SetPoolDefaultItem(aSvxFontItemCJK);
 
-    // get DEFAULTFONT_CTL_TEXT and set at pool as dynamic default
-    vcl::Font aFontCTL(OutputDevice::GetDefaultFont(DefaultFontType::CTL_TEXT, nLanguage, GetDefaultFontFlags::OnlyOne));
+    // get DEFAULTFONT_CTL_PRESENTATION and set at pool as dynamic default
+    vcl::Font aFontCTL(OutputDevice::GetDefaultFont(DefaultFontType::CTL_PRESENTATION, nLanguage, GetDefaultFontFlags::OnlyOne));
     aSvxFontItemCTL.SetFamily(aFontCTL.GetFamilyType());
     aSvxFontItemCTL.SetFamilyName(aFontCTL.GetFamilyName());
     aSvxFontItemCTL.SetStyleName(OUString());
