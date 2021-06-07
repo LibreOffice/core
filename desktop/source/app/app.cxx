@@ -101,6 +101,7 @@
 #include <unotools/pathoptions.hxx>
 #include <svtools/menuoptions.hxx>
 #include <rtl/bootstrap.hxx>
+#include <vcl/GraphicsRenderTests.hxx>
 #include <vcl/glxtestprocess.hxx>
 #include <vcl/help.hxx>
 #include <vcl/weld.hxx>
@@ -1549,6 +1550,9 @@ int Desktop::Main()
 #if HAVE_FEATURE_OPENCL
         CheckOpenCLCompute(xDesktop);
 #endif
+
+        GraphicsRenderTests obj;
+        obj.RunVclTests();
 
         // Reap the process started by fire_glxtest_process().
         reap_glxtest_process();
