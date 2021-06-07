@@ -7,6 +7,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+include $(SRCDIR)/sd/export_setup.mk
+
 $(eval $(call gb_Module_Module,sd))
 
 $(eval $(call gb_Module_add_targets,sd,\
@@ -31,8 +33,8 @@ $(eval $(call gb_Module_add_slowcheck_targets,sd,\
 		CppunitTest_sd_uimpress) \
     CppunitTest_sd_import_tests \
     CppunitTest_sd_import_tests_smartart \
-    CppunitTest_sd_export_ooxml1 \
-    CppunitTest_sd_export_ooxml2 \
+    CppunitTest_sd_export_tests-ooxml1 \
+    CppunitTest_sd_export_tests-ooxml2 \
     CppunitTest_sd_export_tests \
     CppunitTest_sd_filters_test \
     CppunitTest_sd_layout_tests \
