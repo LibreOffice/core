@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "965112c1_d1c16408",
+        "filename": "xmloff/source/style/xmlnumi.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-06-07T11:29:08Z",
+      "side": 1,
+      "message": "hmm  - do we need a \"if (!bBullet \u0026\u0026 !bImage \u0026\u0026 !bNum) { return }\" here or is that impossible?",
+      "revId": "f428483b8f8abc6faf43e1e6435fc82e06b9e67f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6774052b_6a241d44",
+        "filename": "xmloff/source/style/xmlnumi.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-06-07T11:29:08Z",
+      "side": 1,
+      "message": "with emplace_back the beans::PropertyValue could be omitted",
+      "revId": "f428483b8f8abc6faf43e1e6435fc82e06b9e67f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
