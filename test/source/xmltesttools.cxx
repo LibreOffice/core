@@ -351,6 +351,15 @@ void XmlTestTools::registerODFNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
         BAD_CAST("urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("css3t"),
                        BAD_CAST("http://www.w3.org/TR/css3-text/"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("anim"),
+                       BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:animation:1.0"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("smil"),
+                       BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("presentation"),
+                       BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:presentation:1.0"));
+    // user-defined
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("foo"),
+                       BAD_CAST("http://example.com/"));
 }
 
 void XmlTestTools::registerOOXMLNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
@@ -408,7 +417,7 @@ void XmlTestTools::registerOOXMLNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("x"),
                        BAD_CAST("http://schemas.openxmlformats.org/spreadsheetml/2006/main"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("r"),
-                       BAD_CAST("http://schemas.openxmlformats.org/package/2006/relationships"));
+                       BAD_CAST("http://schemas.openxmlformats.org/officeDocument/2006/relationships"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("xx"),
                        BAD_CAST("urn:schemas-microsoft-com:office:excel"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("xdr"),
@@ -423,6 +432,12 @@ void XmlTestTools::registerOOXMLNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
                        BAD_CAST("urn:schemas-microsoft-com:office:office"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w10"),
                        BAD_CAST("urn:schemas-microsoft-com:office:word"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("p"),
+                       BAD_CAST("http://schemas.openxmlformats.org/presentationml/2006/main"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("p14"),
+                       BAD_CAST("http://schemas.microsoft.com/office/powerpoint/2010/main"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("dgm"),
+                       BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/diagram"));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
