@@ -22,6 +22,30 @@
       "revId": "f43fdcad400b6ff51f0810d923fe75d5a2cfde0c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fec45f3e_594c7299",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/UI/Sidebar.xcs",
+        "patchSetId": 2
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-06-07T06:49:20Z",
+      "side": 1,
+      "message": "In the first run it was an int. After deciding against I kept the description. Will change it to something like \"Allows to disable the automatic calculation of sidebar width...\"",
+      "parentUuid": "191704d2_8efd7a59",
+      "range": {
+        "startLine": 255,
+        "startChar": 16,
+        "endLine": 255,
+        "endChar": 51
+      },
+      "revId": "f43fdcad400b6ff51f0810d923fe75d5a2cfde0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
