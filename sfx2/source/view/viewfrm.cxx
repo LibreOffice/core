@@ -68,6 +68,8 @@
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/frame/UnknownModuleException.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
@@ -94,6 +96,8 @@
 #include <comphelper/sequenceashashmap.hxx>
 
 #include <commandpopup/CommandPopup.hxx>
+
+#include <desktop/crashreport.hxx>
 
 
 using namespace ::com::sun::star;
@@ -142,6 +146,42 @@ using ::com::sun::star::container::XIndexContainer;
 #define CHANGES_STR "private:resource/toolbar/changes"
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SfxViewFrame,SfxShell)
+
+static OUString lcl_getModuleId(SfxViewFrame* pFrame)
+{
+    try
+    {
+        const auto xContext= comphelper::getProcessComponentContext();
+        const Reference<frame::XFrame>& xFrame = pFrame->GetFrame().GetFrameInterface();
+        const Reference<frame::XModuleManager> xModuleManager = frame::ModuleManager::create(xContext);
+
+        return xModuleManager->identify(xFrame);
+    }
+    catch( css::frame::UnknownModuleException& )
+    {
+        return OUString();
+    }
+}
+
+static OUString lcl_activeAppName(SfxViewFrame* pFrame)
+{
+    const OUString aModuleId = lcl_getModuleId(pFrame);
+     if ( aModuleId.startsWith("com.sun.star.text.") || aModuleId.startsWith("com.sun.star.xforms.") )
+        return "Writer";
+    else if ( aModuleId.startsWith("com.sun.star.sheet.") )
+        return "Calc";
+    else if ( aModuleId.startsWith("com.sun.star.presentation.") )
+        return "Impress";
+    else if ( aModuleId.startsWith("com.sun.star.drawing." ) )
+        return "Draw";
+    else if ( aModuleId.startsWith("com.sun.star.formula." ) )
+        return "Math";
+    else if ( aModuleId.startsWith("com.sun.star.sdb.") )
+        return "Base";
+    else
+        return OUString();
+
+}
 
 void SfxViewFrame::InitInterface_Impl()
 {
@@ -3385,7 +3425,10 @@ void SfxViewFrame::UpdateDocument_Impl()
 void SfxViewFrame::SetViewFrame( SfxViewFrame* pFrame )
 {
     if(pFrame)
+    {
+        CrashReporter::setActiveApp(lcl_activeAppName(pFrame));
         SetSVHelpData(pFrame->m_pHelpData);
+    }
 
     SetSVWinData(pFrame ? pFrame->m_pWinData : nullptr);
 
