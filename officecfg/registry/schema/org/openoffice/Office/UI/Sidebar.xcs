@@ -247,7 +247,7 @@
           <desc>Minimum width the sidebar can have. If true, the minumum width
           is calculated from the largest deck.</desc>
         </info>
-        <value>true</value>
+        <value>false</value>
       </prop>
     </group>
     <group oor:name="Content">
