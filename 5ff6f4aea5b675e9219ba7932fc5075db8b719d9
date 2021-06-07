@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ed3353f1_b29c2f7e",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/UI/Sidebar.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-06-07T09:00:07Z",
+      "side": 1,
+      "message": "there is a typo here ? based on the size \u0027of\u0027 all decks ??",
+      "revId": "5ff6f4aea5b675e9219ba7932fc5075db8b719d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
