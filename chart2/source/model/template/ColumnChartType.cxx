@@ -149,11 +149,7 @@ OUString SAL_CALL ColumnChartType::getChartType()
 
 uno::Sequence< OUString > ColumnChartType::getSupportedPropertyRoles()
 {
-    uno::Sequence< OUString > aPropRoles(2);
-    aPropRoles[0] = "FillColor";
-    aPropRoles[1] = "BorderColor";
-
-    return aPropRoles;
+    return { "FillColor", "BorderColor" };
 }
 
 // ____ OPropertySet ____

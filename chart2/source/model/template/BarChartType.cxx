@@ -53,11 +53,7 @@ OUString SAL_CALL BarChartType::getChartType()
 
 uno::Sequence< OUString > BarChartType::getSupportedPropertyRoles()
 {
-    uno::Sequence< OUString > aPropRoles(2);
-    aPropRoles[0] = "FillColor";
-    aPropRoles[1] = "BorderColor";
-
-    return aPropRoles;
+    return { "FillColor", "BorderColor" };
 }
 
 OUString SAL_CALL BarChartType::getImplementationName()
