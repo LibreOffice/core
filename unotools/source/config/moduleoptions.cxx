@@ -468,6 +468,8 @@ OUString SvtModuleOptions::GetFactoryShortName(SvtModuleOptions::EFactory eFacto
                                                        break;
         case SvtModuleOptions::EFactory::DATABASE :  sShortName = "sdatabase";
                                                        break;
+        case SvtModuleOptions::EFactory::STARTMODULE :  sShortName = "startmodule";
+                                                       break;
         default:
             OSL_FAIL( "unknown factory" );
             break;
