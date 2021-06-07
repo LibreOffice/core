@@ -25,7 +25,7 @@ extras_DRAW_MIMETYPEFILES := $(foreach atexts,$(extras_TEMPLATES_DRAW),$(atexts)
 
 
 $(call gb_CustomTarget_get_target,extras/source/templates/draw) : \
-	$(foreach atexts,$(extras_TEMPLATES_DRAW),$(call gb_CustomTarget_get_workdir,extras/source/templates/draw)/$(atexts).ott)
+	$(foreach atexts,$(extras_TEMPLATES_DRAW),$(call gb_CustomTarget_get_workdir,extras/source/templates/draw)/$(atexts).otg)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/draw)/%/mimetype : $(SRCDIR)/extras/source/templates/draw/%/mimetype
 	$(call gb_Output_announce,templates/draw/$*/mimetype,$(true),CPY,1)
@@ -70,15 +70,15 @@ $(call gb_CustomTarget_get_workdir,extras/source/templates/draw)/%.xml : $(SRCDI
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet -o $@ $(SRCDIR)/extras/util/compact.xsl $<
 	$(call gb_Trace_EndRange,templates/draw/$*.xml,XSL)
 
-$(call gb_CustomTarget_get_workdir,extras/source/templates/draw)/%.ott :
-	$(call gb_Output_announce,templates/draw/$*.ott,$(true),ZIP,2)
-	$(call gb_Trace_StartRange,templates/draw/$*.ott,ZIP)
+$(call gb_CustomTarget_get_workdir,extras/source/templates/draw)/%.otg :
+	$(call gb_Output_announce,templates/draw/$*.otg,$(true),ZIP,2)
+	$(call gb_Trace_StartRange,templates/draw/$*.otg,ZIP)
 	$(call gb_Helper_abbreviate_dirs,\
 		cd $(EXTRAS_DRAW_DIR) && \
 		zip -q0X --filesync --must-match $@ $(EXTRAS_DRAW_MIMEFILES_FILTER) && \
 		zip -qrX --must-match $@ $(EXTRAS_DRAW_XMLFILES_FILTER) \
 	)
-	$(call gb_Trace_EndRange,templates/draw/$*.ott,ZIP)
+	$(call gb_Trace_EndRange,templates/draw/$*.otg,ZIP)
 
 define extras_Tpldraw_make_file_deps
 $(call gb_CustomTarget_get_workdir,$(1))/$(2) : $(SRCDIR)/$(1)/$(2) \
@@ -105,7 +105,7 @@ $(eval $(foreach file,$(extras_DRAW_MIMETYPEFILES) $(extras_DRAW_XMLFILES),\
 ))
 
 $(eval $(foreach atexts,$(extras_TEMPLATES_DRAW),\
-	$(call extras_Tpldraw_make_zip_deps,extras/source/templates/draw,$(atexts).ott,$(atexts)) \
+	$(call extras_Tpldraw_make_zip_deps,extras/source/templates/draw,$(atexts).otg,$(atexts)) \
 ))
 
 # vim: set noet sw=4 ts=4:
