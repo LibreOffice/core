@@ -43,6 +43,8 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
 #include <fmtornt.hxx>
 #include <tabcol.hxx>
 #include <fmtfsize.hxx>
@@ -282,7 +284,8 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
         {
             rMaster.SetFormatAttr(SfxBoolItem(RES_BACKGROUND_FULL_SIZE, bValue));
         }
-        if (pGrabBag->GetGrabBag().find("RtlGutter")->second >>= bValue)
+        auto it = pGrabBag->GetGrabBag().find("RtlGutter");
+        if (it != pGrabBag->GetGrabBag().end() && (it->second >>= bValue))
         {
             rMaster.SetFormatAttr(SfxBoolItem(RES_RTL_GUTTER, bValue));
         }
@@ -423,6 +426,27 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
             pColl->SetFormatAttr( SwRegisterItem ( true ));
         rPageDesc.SetRegisterFormatColl( pColl );
     }
+}
+
+namespace
+{
+bool IsOwnFormat(const SwDoc& rDoc)
+{
+    const SwDocShell* pDocShell = rDoc.GetDocShell();
+    SfxMedium* pMedium = pDocShell->GetMedium();
+    if (!pMedium)
+    {
+        return false;
+    }
+
+    std::shared_ptr<const SfxFilter> pFilter = pMedium->GetFilter();
+    if (!pFilter)
+    {
+        return false;
+    }
+
+    return pFilter->IsOwnFormat();
+}
 }
 
 void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
@@ -597,8 +621,13 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
     }
     oGrabBag->GetGrabBag()["BackgroundFullSize"] <<=
         rMaster.GetAttrSet().GetItem<SfxBoolItem>(RES_BACKGROUND_FULL_SIZE)->GetValue();
-    oGrabBag->GetGrabBag()["RtlGutter"] <<=
-        rMaster.GetAttrSet().GetItem<SfxBoolItem>(RES_RTL_GUTTER)->GetValue();
+
+    if (IsOwnFormat(*rMaster.GetDoc()))
+    {
+        oGrabBag->GetGrabBag()["RtlGutter"]
+            <<= rMaster.GetAttrSet().GetItem<SfxBoolItem>(RES_RTL_GUTTER)->GetValue();
+    }
+
     rSet.Put(*oGrabBag);
 }
 
