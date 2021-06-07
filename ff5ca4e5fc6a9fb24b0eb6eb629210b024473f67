@@ -16,6 +16,24 @@
       "revId": "ff5ca4e5fc6a9fb24b0eb6eb629210b024473f67",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4b29a3f_ef87493a",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 2962,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-06-07T14:11:21Z",
+      "side": 1,
+      "message": "Indeed. Thanks, Mike, for reviewing it.",
+      "parentUuid": "9a03856b_0269f6c2",
+      "revId": "ff5ca4e5fc6a9fb24b0eb6eb629210b024473f67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
