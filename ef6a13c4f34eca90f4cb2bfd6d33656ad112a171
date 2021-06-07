@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c4847e41_8722b221",
+        "filename": "include/vcl/GraphicsRenderTests.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-07T11:09:52Z",
+      "side": 1,
+      "message": "Don\u0027t comma separate.. every variable should be in its own line fully written.\nVariable names should be small case.\nMember variables should start with \"m\" or \"m_\"\nVariables should be prefixed with n for number, f for float, a for general, r for reference, p for pointer.\nSo they should be:\nstd::vector\u003cint\u003e m_aPassed;\nstd::vector\u003cint\u003e m_aQuirky;\nstd::vector\u003cint\u003e m_aFailed;",
+      "range": {
+        "startLine": 21,
+        "startChar": 4,
+        "endLine": 21,
+        "endChar": 44
+      },
+      "revId": "ef6a13c4f34eca90f4cb2bfd6d33656ad112a171",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31898048_fc12cd09",
+        "filename": "include/vcl/GraphicsRenderTests.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-07T11:09:52Z",
+      "side": 1,
+      "message": "There won\u0027t be any backendwise results.... you only test for one backend.",
+      "range": {
+        "startLine": 25,
+        "startChar": 44,
+        "endLine": 25,
+        "endChar": 62
+      },
+      "revId": "ef6a13c4f34eca90f4cb2bfd6d33656ad112a171",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2fb80b32_61919a69",
+        "filename": "vcl/backendtest/GraphicsRenderTests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-07T11:09:52Z",
+      "side": 1,
+      "message": "UpdateResult is not a class ... small case and maybe prefix with lcl (local)\n\nAlso this function makes no sense.... why are you putting the class instance as input parameter and manipulate its variables? Why is this then not an member function of GraphicRenderTests class?",
+      "range": {
+        "startLine": 20,
+        "startChar": 5,
+        "endLine": 20,
+        "endChar": 17
+      },
+      "revId": "ef6a13c4f34eca90f4cb2bfd6d33656ad112a171",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66d0747f_2898b4b0",
+        "filename": "vcl/backendtest/GraphicsRenderTests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-07T11:09:52Z",
+      "side": 1,
+      "message": "input parameters - small case, prefixed",
+      "range": {
+        "startLine": 21,
+        "startChar": 22,
+        "endLine": 21,
+        "endChar": 32
+      },
+      "revId": "ef6a13c4f34eca90f4cb2bfd6d33656ad112a171",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41a267d2_85ef5468",
+        "filename": "vcl/backendtest/GraphicsRenderTests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-07T11:09:52Z",
+      "side": 1,
+      "message": "why numbers and not names?",
+      "range": {
+        "startLine": 43,
+        "startChar": 32,
+        "endLine": 43,
+        "endChar": 33
+      },
+      "revId": "ef6a13c4f34eca90f4cb2bfd6d33656ad112a171",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11011254_9be7b2ef",
+        "filename": "vcl/backendtest/GraphicsRenderTests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 830,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-07T11:09:52Z",
+      "side": 1,
+      "message": "These aren\u0027t proper backend tests so don\u0027t add them... maybe they are useful but they need to be added into a new class o subclass of OutputDeviceTest",
+      "range": {
+        "startLine": 517,
+        "startChar": 1,
+        "endLine": 830,
+        "endChar": 1
+      },
+      "revId": "ef6a13c4f34eca90f4cb2bfd6d33656ad112a171",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "087a84f7_c1217bcd",
+        "filename": "vcl/backendtest/GraphicsRenderTests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 898,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-07T11:09:52Z",
+      "side": 1,
+      "message": "Please, methods should start with small case letter.\nAlso the name can be just run() -- as it is obvious what we run by the class name",
+      "range": {
+        "startLine": 898,
+        "startChar": 26,
+        "endLine": 898,
+        "endChar": 37
+      },
+      "revId": "ef6a13c4f34eca90f4cb2bfd6d33656ad112a171",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
