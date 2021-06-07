@@ -39,6 +39,24 @@
       "revId": "5ff6f4aea5b675e9219ba7932fc5075db8b719d9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71558cc5_d74ee8a4",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/UI/Sidebar.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-06-07T14:39:45Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ed3353f1_b29c2f7e",
+      "revId": "5ff6f4aea5b675e9219ba7932fc5075db8b719d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
