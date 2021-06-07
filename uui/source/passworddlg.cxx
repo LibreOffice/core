@@ -21,6 +21,7 @@
 #include <strings.hrc>
 
 #include <unotools/resmgr.hxx>
+#include <unotools/configmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
@@ -78,6 +79,14 @@ PasswordDialog::PasswordDialog(weld::Window* pParent,
     const char* pStrId = bOpenToModify ? STR_ENTER_PASSWORD_TO_MODIFY : STR_ENTER_PASSWORD_TO_OPEN;
     OUString aMessage(Translate::get(pStrId, rResLocale));
     INetURLObject url(aDocURL);
+
+    // tdf#66553 - add file name to title bar for password managers
+    OUString aFileName = url.getName(INetURLObject::LAST_SEGMENT, true,
+                                     INetURLObject::DecodeMechanism::Unambiguous);
+    if (!aFileName.isEmpty())
+        aFileName += " - " + utl::ConfigManager::getProductName();
+    m_xDialog->set_title(aTitle + " - " + aFileName);
+
     aMessage += url.HasError()
         ? aDocURL : url.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous);
     m_xFTPassword->set_label(aMessage);
