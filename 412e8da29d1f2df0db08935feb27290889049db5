@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "18219f6e_ae4aca16",
+        "filename": "sfx2/source/view/viewfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3429,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-06-07T14:59:55Z",
+      "side": 1,
+      "message": "I would be inclined to call this set of string comparisons in the crash-reporter code rather than every time we switch view: we switch view really quite a lot in normal online usage - every key-press or so when collaborating; and I\u0027d be inclined to work out if we can do this from the SfxViewFrame* itself - rather than via this xModuleManager / UNO-ness \u003d) I would imagine if we can use instead the pShell-\u003eGetName() then we get more useful semantic information cf sw:\n\nsource/uibase/shells/beziersh.cxx-SwBezierShell::SwBezierShell(SwView \u0026_rView):\nsource/uibase/shells/beziersh.cxx-    SwBaseShell( _rView )\nsource/uibase/shells/beziersh.cxx-{\nsource/uibase/shells/beziersh.cxx:    SetName(\"Bezier\");\n\nor\n\nsw/source/uibase/shells/drformsh.cxx:    SetName(\"DrawForm\");\n\nor\n\nsw/source/uibase/shells/drwtxtsh.cxx:    SetName(\"ObjectText\");\n\nWhich may give us more useful debugging context and ~instantly \u003d)\n\nAnd perhaps then we don\u0027t need the switch or comparison here at all since we can file a more useful / human readable string anyway I think \u003d)",
+      "revId": "412e8da29d1f2df0db08935feb27290889049db5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
