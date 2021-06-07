@@ -111,24 +111,7 @@ public:
 
 virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
     {
-        static const struct { char const * pPrefix; char const * pURI; } namespaces[] =
-        {
-            // ODF
-            { "config", "urn:oasis:names:tc:opendocument:xmlns:config:1.0"},
-            { "draw", "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" },
-            { "fo", "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" },
-            { "loext", "urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" },
-            { "office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0" },
-            { "style", "urn:oasis:names:tc:opendocument:xmlns:style:1.0" },
-            { "svg", "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" },
-            { "text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0" },
-        };
-        for (size_t i = 0; i < SAL_N_ELEMENTS(namespaces); ++i)
-        {
-            xmlXPathRegisterNs(pXmlXPathCtx,
-                reinterpret_cast<xmlChar const *>(namespaces[i].pPrefix),
-                reinterpret_cast<xmlChar const *>(namespaces[i].pURI));
-        }
+        XmlTestTools::registerODFNamespaces(pXmlXPathCtx);
     }
 
 private:
