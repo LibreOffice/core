@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ad68e24_4eb96415",
+        "filename": "canvas/qa/cppunit/canvastest.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-07T04:53:08Z",
+      "side": 1,
+      "message": "And unless RealPoint2D ctor is explicit, this could be further simplified to\n\n        uno::Sequence\u003cuno::Sequence\u003cgeometry::RealPoint2D\u003e\u003e\n            polygonPoints{ { { 10, 5 }, { 88, 5 } } };",
+      "range": {
+        "startLine": 117,
+        "startChar": 8,
+        "endLine": 119,
+        "endChar": 10
+      },
+      "revId": "77a434d013138d0f93f2a13917c57caae1d66b1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8cc90025_29d292ab",
+        "filename": "canvas/workben/canvasdemo.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-07T04:53:08Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "77a434d013138d0f93f2a13917c57caae1d66b1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
