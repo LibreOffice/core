@@ -131,6 +131,7 @@ protected:
     bool m_bLayout :1;       ///< RndStdIds::FLY_AT_PAGE, RndStdIds::FLY_AT_FLY, at page or at frame
     bool m_bAutoPosition :1; ///< RndStdIds::FLY_AT_CHAR, anchored at character
     bool m_bDeleted :1;      ///< Anchored to a tracked deletion
+    size_t m_nAuthor;        ///< Redline author index for colored crossing out
 
     friend class SwNoTextFrame; // is allowed to call NotifyBackground
 
@@ -217,6 +218,8 @@ public:
     bool IsFlyAtContentFrame() const { return m_bAtCnt; }
     bool IsDeleted() const { return m_bDeleted; }
     void SetDeleted(bool bDeleted) { m_bDeleted = bDeleted; }
+    void SetAuthor( size_t nAuthor ) { m_nAuthor = nAuthor; }
+    size_t GetAuthor() const { return m_nAuthor; }
 
     bool IsNotifyBack() const { return m_bNotifyBack; }
     void SetNotifyBack()      { m_bNotifyBack = true; }

@@ -670,20 +670,23 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                         if ( auto pFly = dynamic_cast<SwFlyFrame *>( pAnchoredObj ) )
                         {
                             bool bDeleted = false;
+                            size_t nAuthor = std::string::npos;
                             const SwFormatAnchor& rAnchor = pAnchoredObj->GetFrameFormat().GetAnchor();
                             if ( rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR )
                             {
                                 SwPosition aAnchor = *rAnchor.GetContentAnchor();
-                                const SwPaM aPam(aAnchor, aAnchor);
-                                if ( rIDRA.HasRedline( aPam, RedlineType::Delete,
-                                        /*bStartOrEndInRange=*/false) )
+                                SwRedlineTable::size_type n = 0;
+                                const SwRangeRedline* pFnd =
+                                        rIDRA.GetRedlineTable().FindAtPosition( aAnchor, n );
+                                if ( pFnd && RedlineType::Delete == pFnd->GetType() )
                                 {
                                     bDeleted = true;
+                                    nAuthor = pFnd->GetAuthor();
                                 }
                             }
                             pFly->SetDeleted(bDeleted);
+                            pFly->SetAuthor(nAuthor);
                         }
-
                     }
                 }
             }
