@@ -137,31 +137,7 @@ public:
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
     {
-        static const struct { char const * pPrefix; char const * pURI; } namespaces[] =
-        {
-            // ODF
-            { "anim", "urn:oasis:names:tc:opendocument:xmlns:animation:1.0" },
-            { "draw", "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" },
-            { "fo", "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" },
-            { "number", "urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" },
-            { "office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0" },
-            { "presentation", "urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" },
-            { "style", "urn:oasis:names:tc:opendocument:xmlns:style:1.0" },
-            { "svg", "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" },
-            { "table", "urn:oasis:names:tc:opendocument:xmlns:table:1.0" },
-            { "text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0" },
-            { "xlink", "http://www.w3c.org/1999/xlink" },
-            { "loext", "urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" },
-            { "smil", "urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" },
-            // user-defined
-            { "foo", "http://example.com/" },
-        };
-        for (size_t i = 0; i < SAL_N_ELEMENTS(namespaces); ++i)
-        {
-            xmlXPathRegisterNs(pXmlXPathCtx,
-                reinterpret_cast<xmlChar const *>(namespaces[i].pPrefix),
-                reinterpret_cast<xmlChar const *>(namespaces[i].pURI));
-        }
+        XmlTestTools::registerODFNamespaces(pXmlXPathCtx);
     }
 
 };

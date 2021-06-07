@@ -1198,9 +1198,11 @@ void ScExportTest2::testTdf115192XLSX()
     xmlDocUniquePtr pDoc = XPathHelper::parseExport2(
         *this, *xDocSh, m_xSFactory, "xl/drawings/_rels/drawing1.xml.rels", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
-    assertXPath(pDoc, "/r:Relationships/r:Relationship[@Id='rId1']", "TargetMode", "External");
-    assertXPathNoAttribute(pDoc, "/r:Relationships/r:Relationship[@Id='rId2']", "TargetMode");
-    assertXPath(pDoc, "/r:Relationships/r:Relationship[@Id='rId3']", "TargetMode", "External");
+    assertXPath(pDoc, "/rels:Relationships/rels:Relationship[@Id='rId1']", "TargetMode",
+                "External");
+    assertXPathNoAttribute(pDoc, "/rels:Relationships/rels:Relationship[@Id='rId2']", "TargetMode");
+    assertXPath(pDoc, "/rels:Relationships/rels:Relationship[@Id='rId3']", "TargetMode",
+                "External");
 
     xDocSh->DoClose();
 }
@@ -1220,9 +1222,10 @@ void ScExportTest2::testTdf91634XLSX()
     xmlDocUniquePtr pXmlRels
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/_rels/drawing1.xml.rels");
     CPPUNIT_ASSERT(pXmlRels);
-    assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId1']", "Target",
+    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='rId1']", "Target",
                 "https://www.google.com/");
-    assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId1']", "TargetMode", "External");
+    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='rId1']", "TargetMode",
+                "External");
 
     xDocSh->DoClose();
 }
@@ -1367,13 +1370,17 @@ void ScExportTest2::testTdf123645XLSX()
     xmlDocUniquePtr pXmlRels
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/_rels/drawing1.xml.rels");
     CPPUNIT_ASSERT(pXmlRels);
-    assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId1']", "TargetMode", "External");
-    assertXPathNoAttribute(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId3']", "TargetMode");
-    assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId5']", "TargetMode", "External");
-    assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId1']", "Target",
+    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='rId1']", "TargetMode",
+                "External");
+    assertXPathNoAttribute(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='rId3']",
+                           "TargetMode");
+    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='rId5']", "TargetMode",
+                "External");
+    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='rId1']", "Target",
                 "file:///C:/TEMP/test.xlsx");
-    assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId3']", "Target", "#Sheet2!A1");
-    assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId5']", "Target",
+    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='rId3']", "Target",
+                "#Sheet2!A1");
+    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='rId5']", "Target",
                 "https://bugs.documentfoundation.org/show_bug.cgi?id=123645");
 
     xDocSh->DoClose();
@@ -1394,9 +1401,10 @@ void ScExportTest2::testTdf125173XLSX()
     xmlDocUniquePtr pXmlRels
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/_rels/drawing1.xml.rels");
     CPPUNIT_ASSERT(pXmlRels);
-    assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId1']", "Target",
+    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='rId1']", "Target",
                 "http://www.google.com/");
-    assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId1']", "TargetMode", "External");
+    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='rId1']", "TargetMode",
+                "External");
 
     xDocSh->DoClose();
 }
@@ -1416,9 +1424,9 @@ void ScExportTest2::testTdf79972XLSX()
     xmlDocUniquePtr pXmlRels
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/_rels/sheet1.xml.rels");
     CPPUNIT_ASSERT(pXmlRels);
-    assertXPath(pXmlRels, "/r:Relationships/r:Relationship", "Target",
+    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship", "Target",
                 "https://bugs.documentfoundation.org/show_bug.cgi?id=79972");
-    assertXPath(pXmlRels, "/r:Relationships/r:Relationship", "TargetMode", "External");
+    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship", "TargetMode", "External");
 
     xDocSh->DoClose();
 }
@@ -1438,9 +1446,9 @@ void ScExportTest2::testTdf126024XLSX()
     xmlDocUniquePtr pXmlRels
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/_rels/sheet1.xml.rels");
     CPPUNIT_ASSERT(pXmlRels);
-    assertXPath(pXmlRels, "/r:Relationships/r:Relationship", "Target",
+    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship", "Target",
                 "https://bugs.documentfoundation.org/");
-    assertXPath(pXmlRels, "/r:Relationships/r:Relationship", "TargetMode", "External");
+    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship", "TargetMode", "External");
 
     xDocSh->DoClose();
 }
@@ -1460,9 +1468,9 @@ void ScExportTest2::testTdf126177XLSX()
     xmlDocUniquePtr pXmlRels
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/_rels/sheet1.xml.rels");
     CPPUNIT_ASSERT(pXmlRels);
-    OUString aTarget = getXPath(pXmlRels, "/r:Relationships/r:Relationship", "Target");
+    OUString aTarget = getXPath(pXmlRels, "/rels:Relationships/rels:Relationship", "Target");
     CPPUNIT_ASSERT(aTarget.endsWith("test.xlsx"));
-    assertXPath(pXmlRels, "/r:Relationships/r:Relationship", "TargetMode", "External");
+    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship", "TargetMode", "External");
 
     xDocSh->DoClose();
 }
@@ -2120,7 +2128,7 @@ void ScExportTest2::testTdf138824_linkToParentDirectory()
     CPPUNIT_ASSERT(pDoc);
 
     // test also the Linux specific bug tdf#121472
-    assertXPath(pDoc, "/r:Relationships/r:Relationship", "Target",
+    assertXPath(pDoc, "/rels:Relationships/rels:Relationship", "Target",
                 "../tdf138824_externalSource.ods");
 
     xDocSh->DoClose();
