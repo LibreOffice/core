@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "191704d2_8efd7a59",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/UI/Sidebar.xcs",
+        "patchSetId": 2
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-07T06:24:28Z",
+      "side": 1,
+      "message": "The property\u0027s name \"MinimumWidth\" and description \"Minimum width the sidebar can have.\" make it rather sound like this would be a property with a numeric value, specifying some actual width (in whatever units).  Is there perhaps a better name and description?",
+      "range": {
+        "startLine": 255,
+        "startChar": 16,
+        "endLine": 255,
+        "endChar": 51
+      },
+      "revId": "f43fdcad400b6ff51f0810d923fe75d5a2cfde0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
