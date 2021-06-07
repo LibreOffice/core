@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "5ee51abf_0438e181",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 44
+      },
+      "lineNbr": 4740,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-07T06:13:15Z",
+      "side": 1,
+      "message": "This loop modifies the container, so it can\u0027t use range-based for loop - rather it must be some index-based loop (e.g., using a vector of map keys), or it must operate on a copy of the container. Specifically, this crashes ATM.",
+      "revId": "95eb088802562b75f8b299908160145c7e88d763",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2decf126_6c9a843c",
         "filename": "uui/source/reloadeditable.cxx",
         "patchSetId": 44
