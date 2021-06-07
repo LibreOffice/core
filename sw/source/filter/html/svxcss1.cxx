@@ -663,8 +663,8 @@ void SvxCSS1PropertyInfo::SetBoxItem( SfxItemSet& rItemSet,
 
 SvxCSS1MapEntry::SvxCSS1MapEntry( const SfxItemSet& rItemSet,
                                   const SvxCSS1PropertyInfo& rProp ) :
-    aItemSet( rItemSet ),
-    aPropInfo( rProp )
+    m_aItemSet( rItemSet ),
+    m_aPropInfo( rProp )
 {}
 
 void SvxCSS1Parser::StyleParsed( const CSS1Selector * /*pSelector*/,

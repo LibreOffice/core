@@ -33,12 +33,12 @@ using namespace css;
 SwHTMLPosFlyFrame::SwHTMLPosFlyFrame( const SwPosFlyFrame& rPosFly,
                                   const SdrObject *pSdrObj,
                                   AllHtmlFlags nFlags ) :
-    pFrameFormat( &rPosFly.GetFormat() ),
-    pSdrObject( pSdrObj ),
-    pNdIdx( new SwNodeIndex( rPosFly.GetNdIndex() ) ),
-    nOrdNum( rPosFly.GetOrdNum() ),
-    nContentIdx( 0 ),
-    nAllFlags( nFlags )
+    m_pFrameFormat( &rPosFly.GetFormat() ),
+    m_pSdrObject( pSdrObj ),
+    m_pNodeIdex( new SwNodeIndex( rPosFly.GetNdIndex() ) ),
+    m_nOrdNum( rPosFly.GetOrdNum() ),
+    m_nContentIndex( 0 ),
+    m_nAllFlags( nFlags )
 {
     const SwFormatAnchor& rAnchor = rPosFly.GetFormat().GetAnchor();
     if ((RndStdIds::FLY_AT_CHAR != rAnchor.GetAnchorId()) ||
@@ -51,34 +51,34 @@ SwHTMLPosFlyFrame::SwHTMLPosFlyFrame( const SwPosFlyFrame& rPosFly,
     if( !rAnchor.GetContentAnchor() )
         return;
 
-    nContentIdx = rAnchor.GetContentAnchor()->nContent.GetIndex();
+    m_nContentIndex = rAnchor.GetContentAnchor()->nContent.GetIndex();
     sal_Int16 eHoriRel = rPosFly.GetFormat().GetHoriOrient().
                                         GetRelationOrient();
     if( text::RelOrientation::FRAME == eHoriRel || text::RelOrientation::PRINT_AREA == eHoriRel )
     {
-        const SwContentNode *pCNd = pNdIdx->GetNode().GetContentNode();
+        const SwContentNode *pCNd = m_pNodeIdex->GetNode().GetContentNode();
         OSL_ENSURE( pCNd, "No Content-Node at PaM position" );
-        if( pCNd && nContentIdx < pCNd->Len() )
-            nContentIdx++;
+        if( pCNd && m_nContentIndex < pCNd->Len() )
+            m_nContentIndex++;
     }
 }
 
 bool SwHTMLPosFlyFrame::operator<( const SwHTMLPosFlyFrame& rFrame ) const
 {
-    if( pNdIdx->GetIndex() == rFrame.pNdIdx->GetIndex() )
+    if( m_pNodeIdex->GetIndex() == rFrame.m_pNodeIdex->GetIndex() )
     {
-        if( nContentIdx == rFrame.nContentIdx )
+        if( m_nContentIndex == rFrame.m_nContentIndex )
         {
             if( GetOutPos() == rFrame.GetOutPos() )
-                return nOrdNum < rFrame.nOrdNum;
+                return m_nOrdNum < rFrame.m_nOrdNum;
             else
                 return GetOutPos() < rFrame.GetOutPos();
         }
         else
-            return nContentIdx < rFrame.nContentIdx;
+            return m_nContentIndex < rFrame.m_nContentIndex;
     }
     else
-        return pNdIdx->GetIndex() < rFrame.pNdIdx->GetIndex();
+        return m_pNodeIdex->GetIndex() < rFrame.m_pNodeIdex->GetIndex();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

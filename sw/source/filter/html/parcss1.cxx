@@ -1200,7 +1200,7 @@ void CSS1Parser::DeclarationParsed( const OUString& /*rProperty*/,
 
 CSS1Selector::~CSS1Selector()
 {
-    delete pNext;
+    delete m_pNext;
 }
 
 CSS1Expression::~CSS1Expression()

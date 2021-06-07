@@ -1029,30 +1029,29 @@ namespace {
 
 class HTMLStartEndPos
 {
-    sal_Int32 nStart;
-    sal_Int32 nEnd;
-    std::unique_ptr<SfxPoolItem> pItem;
+    sal_Int32 m_nStart;
+    sal_Int32 m_nEnd;
+    std::unique_ptr<SfxPoolItem> m_pItem;
 
 public:
 
     HTMLStartEndPos( const SfxPoolItem& rItem, sal_Int32 nStt, sal_Int32 nE );
 
-    const SfxPoolItem *GetItem() const { return pItem.get(); }
+    const SfxPoolItem* GetItem() const { return m_pItem.get(); }
 
-    void SetStart( sal_Int32 nStt ) { nStart = nStt; }
-    sal_Int32 GetStart() const { return nStart; }
+    void SetStart(sal_Int32 nStt) { m_nStart = nStt; }
+    sal_Int32 GetStart() const { return m_nStart; }
 
-    sal_Int32 GetEnd() const { return nEnd; }
-    void SetEnd( sal_Int32 nE ) { nEnd = nE; }
+    sal_Int32 GetEnd() const { return m_nEnd; }
+    void SetEnd(sal_Int32 nE) { m_nEnd = nE; }
 };
 
 }
 
-HTMLStartEndPos::HTMLStartEndPos( const SfxPoolItem& rItem, sal_Int32 nStt,
-                                                        sal_Int32 nE ) :
-    nStart( nStt ),
-    nEnd( nE ),
-    pItem( rItem.Clone() )
+HTMLStartEndPos::HTMLStartEndPos(const SfxPoolItem& rItem, sal_Int32 nStt, sal_Int32 nE)
+    : m_nStart(nStt)
+    , m_nEnd(nE)
+    , m_pItem(rItem.Clone())
 {}
 
 typedef std::vector<HTMLStartEndPos *> HTMLStartEndPositions;
