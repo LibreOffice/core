@@ -9,7 +9,6 @@
 #
 #*************************************************************************
 
-# empty second argument (i.e. no 1)
-$(eval $(call sd_export_test,))
+$(eval $(call sd_export_test,-ooxml2))
 
 # vim: set noet sw=4 ts=4:
