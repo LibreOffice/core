@@ -96,12 +96,12 @@ extern AllHtmlFlags const aHTMLOutFrameAsCharTable[MAX_FRMTYPES][MAX_BROWSERS];
 
 class SwHTMLPosFlyFrame
 {
-    const SwFrameFormat    *pFrameFormat;  // the frame
-    const SdrObject        *pSdrObject;    // maybe Sdr-Object
-    std::unique_ptr<SwNodeIndex> pNdIdx;        // Node-Index
-    sal_uInt32              nOrdNum;       // from SwPosFlyFrame
-    sal_Int32               nContentIdx;   // its position in content
-    AllHtmlFlags            nAllFlags;
+    const SwFrameFormat    *m_pFrameFormat;  // the frame
+    const SdrObject        *m_pSdrObject;    // maybe Sdr-Object
+    std::unique_ptr<SwNodeIndex> m_pNodeIdex;        // Node-Index
+    sal_uInt32              m_nOrdNum;       // from SwPosFlyFrame
+    sal_Int32               m_nContentIndex;   // its position in content
+    AllHtmlFlags            m_nAllFlags;
 
     SwHTMLPosFlyFrame(const SwHTMLPosFlyFrame&) = delete;
     SwHTMLPosFlyFrame& operator=(const SwHTMLPosFlyFrame&) = delete;
@@ -113,13 +113,13 @@ public:
 
     bool operator<( const SwHTMLPosFlyFrame& ) const;
 
-    const SwFrameFormat& GetFormat() const       { return *pFrameFormat; }
-    const SdrObject*     GetSdrObject() const    { return pSdrObject; }
-    const SwNodeIndex&   GetNdIndex() const      { return *pNdIdx; }
-    sal_Int32            GetContentIndex() const { return nContentIdx; }
-    AllHtmlFlags const & GetOutMode() const      { return nAllFlags; }
-    HtmlOut              GetOutFn() const        { return nAllFlags.nOut; }
-    HtmlPosition         GetOutPos() const       { return nAllFlags.nPosition; }
+    const SwFrameFormat& GetFormat() const       { return *m_pFrameFormat; }
+    const SdrObject*     GetSdrObject() const    { return m_pSdrObject; }
+    const SwNodeIndex&   GetNdIndex() const      { return *m_pNodeIdex; }
+    sal_Int32            GetContentIndex() const { return m_nContentIndex; }
+    AllHtmlFlags const & GetOutMode() const      { return m_nAllFlags; }
+    HtmlOut              GetOutFn() const        { return m_nAllFlags.nOut; }
+    HtmlPosition         GetOutPos() const       { return m_nAllFlags.nPosition; }
 };
 
 class SwHTMLPosFlyFrames

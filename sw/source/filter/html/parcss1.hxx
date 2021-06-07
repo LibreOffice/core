@@ -90,22 +90,22 @@ enum CSS1SelectorType
  */
 class CSS1Selector
 {
-    CSS1SelectorType eType; // the type
-    OUString aSelector;     // the selector itself
-    CSS1Selector *pNext;    // the following component
+    CSS1SelectorType m_eType; // the type
+    OUString m_aSelector;     // the selector itself
+    CSS1Selector *m_pNext;    // the following component
 
 public:
     CSS1Selector( CSS1SelectorType eTyp, const OUString &rSel )
-        : eType(eTyp), aSelector( rSel ), pNext( nullptr )
+        : m_eType(eTyp), m_aSelector( rSel ), m_pNext( nullptr )
     {}
 
     ~CSS1Selector();
 
-    CSS1SelectorType GetType() const { return eType; }
-    const OUString& GetString() const { return aSelector; }
+    CSS1SelectorType GetType() const { return m_eType; }
+    const OUString& GetString() const { return m_aSelector; }
 
-    void SetNext( CSS1Selector *pNxt ) { pNext = pNxt; }
-    const CSS1Selector *GetNext() const { return pNext; }
+    void SetNext( CSS1Selector *pNxt ) { m_pNext = pNxt; }
+    const CSS1Selector *GetNext() const { return m_pNext; }
 };
 
 /** a subexpression of a CSS1 declaration

@@ -163,18 +163,18 @@ public:
 
 class SvxCSS1MapEntry
 {
-    SfxItemSet aItemSet;
-    SvxCSS1PropertyInfo aPropInfo;
+    SfxItemSet m_aItemSet;
+    SvxCSS1PropertyInfo m_aPropInfo;
 
 public:
     SvxCSS1MapEntry( const SfxItemSet& rItemSet,
                      const SvxCSS1PropertyInfo& rProp );
 
-    const SfxItemSet& GetItemSet() const { return aItemSet; }
-    SfxItemSet& GetItemSet() { return aItemSet; }
+    const SfxItemSet& GetItemSet() const { return m_aItemSet; }
+    SfxItemSet& GetItemSet() { return m_aItemSet; }
 
-    const SvxCSS1PropertyInfo& GetPropertyInfo() const { return aPropInfo; }
-    SvxCSS1PropertyInfo& GetPropertyInfo() { return aPropInfo; }
+    const SvxCSS1PropertyInfo& GetPropertyInfo() const { return m_aPropInfo; }
+    SvxCSS1PropertyInfo& GetPropertyInfo() { return m_aPropInfo; }
 };
 
 // Class is processing the CSS1-Parser output by converting the CSS1 properties
