@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "00c8c054_257d5ba7",
+        "filename": "xmloff/source/style/xmlnumi.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2021-06-07T13:27:51Z",
+      "side": 1,
+      "message": "I was also thinking on this. Seems this is impossible, but let it be there to avoid unexpected/unpredicted behavior changes.",
+      "parentUuid": "965112c1_d1c16408",
+      "revId": "f428483b8f8abc6faf43e1e6435fc82e06b9e67f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6774052b_6a241d44",
         "filename": "xmloff/source/style/xmlnumi.cxx",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "f428483b8f8abc6faf43e1e6435fc82e06b9e67f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bdb6ff0_582cc848",
+        "filename": "xmloff/source/style/xmlnumi.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2021-06-07T13:27:51Z",
+      "side": 1,
+      "message": "Oh, nice hint. I forgot that this can be even more shorter. Thanks!",
+      "parentUuid": "6774052b_6a241d44",
+      "revId": "f428483b8f8abc6faf43e1e6435fc82e06b9e67f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
