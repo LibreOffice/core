@@ -178,7 +178,7 @@ void WW8Export::WriteNumbering()
 
     // list formats - LSTF
     pFib->m_fcPlcfLst = pTableStrm->Tell();
-    SwWW8Writer::WriteShort( *pTableStrm, m_pUsedNumTable->size() );
+    pTableStrm->WriteUInt16( m_pUsedNumTable->size() );
     NumberingDefinitions();
     // set len to FIB
     pFib->m_lcbPlcfLst = pTableStrm->Tell() - pFib->m_fcPlcfLst;
@@ -195,12 +195,12 @@ void WW8Export::WriteNumbering()
 
 void WW8AttributeOutput::NumberingDefinition( sal_uInt16 nId, const SwNumRule &rRule )
 {
-    SwWW8Writer::WriteLong( *m_rWW8Export.pTableStrm, nId );
-    SwWW8Writer::WriteLong( *m_rWW8Export.pTableStrm, nId );
+    m_rWW8Export.pTableStrm->WriteUInt32( nId );
+    m_rWW8Export.pTableStrm->WriteUInt32( nId );
 
     // not associated with a Style
     for ( int i = 0; i < WW8ListManager::nMaxLevel; ++i )
-        SwWW8Writer::WriteShort( *m_rWW8Export.pTableStrm, 0xFFF );
+        m_rWW8Export.pTableStrm->WriteUInt16( 0xFFF );
 
     sal_uInt8 nFlags = 0;
     if ( rRule.IsContinusNum() )
@@ -308,7 +308,7 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
     )
 {
     // Start value
-    SwWW8Writer::WriteLong( *m_rWW8Export.pTableStrm, nStart );
+    m_rWW8Export.pTableStrm->WriteUInt32( nStart );
 
     // Type
     m_rWW8Export.pTableStrm->WriteUChar( GetLevelNFC( nNumberingType ,pOutSet) );
@@ -337,8 +337,8 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
     m_rWW8Export.pTableStrm->WriteUChar( nFollow );
 
     // dxaSoace/dxaIndent (Word 6 compatibility)
-    SwWW8Writer::WriteLong( *m_rWW8Export.pTableStrm, 0 );
-    SwWW8Writer::WriteLong( *m_rWW8Export.pTableStrm, 0 );
+    m_rWW8Export.pTableStrm->WriteUInt32( 0 );
+    m_rWW8Export.pTableStrm->WriteUInt32( 0 );
 
     // cbGrpprlChpx
     std::unique_ptr<ww::bytes> pCharAtrs;
@@ -384,7 +384,7 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
     m_rWW8Export.pTableStrm->WriteUChar( sal_uInt8( sizeof( aPapSprms ) ) );
 
     // reserved
-    SwWW8Writer::WriteShort( *m_rWW8Export.pTableStrm, 0 );
+    m_rWW8Export.pTableStrm->WriteUInt16( 0 );
 
     // pap sprms
     sal_uInt8* pData = aPapSprms + 2;
@@ -401,7 +401,7 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
         m_rWW8Export.pTableStrm->WriteBytes(pCharAtrs->data(), pCharAtrs->size());
 
     // write the num string
-    SwWW8Writer::WriteShort( *m_rWW8Export.pTableStrm, rNumberingString.getLength() );
+    m_rWW8Export.pTableStrm->WriteUInt16( rNumberingString.getLength() );
     SwWW8Writer::WriteString16( *m_rWW8Export.pTableStrm, rNumberingString, false );
 }
 
@@ -621,15 +621,17 @@ void WW8Export::OutOverrideListTab()
     sal_uInt16 n;
 
     pFib->m_fcPlfLfo = pTableStrm->Tell();
-    SwWW8Writer::WriteLong( *pTableStrm, nCount );
+    pTableStrm->WriteUInt32( nCount );
 
+    // LFO ([MS-DOC] 2.9.131)
     for( n = 0; n < nCount; ++n )
     {
-        SwWW8Writer::WriteLong( *pTableStrm, n + 1 );
+        pTableStrm->WriteUInt32( n + 1 );
         SwWW8Writer::FillCount( *pTableStrm, 12 );
     }
+    // LFOData ([MS-DOC] 2.9.132)
     for( n = 0; n < nCount; ++n )
-        SwWW8Writer::WriteLong( *pTableStrm, -1 );  // no overwrite
+        pTableStrm->WriteInt32( -1 );  // no overwrite
 
     // set len to FIB
     pFib->m_lcbPlfLfo = pTableStrm->Tell() - pFib->m_fcPlfLfo;
@@ -644,8 +646,8 @@ void WW8Export::OutListNamesTab()
     sal_uInt16 nNms = 0, nCount = m_pUsedNumTable->size();
 
     pFib->m_fcSttbListNames = pTableStrm->Tell();
-    SwWW8Writer::WriteShort( *pTableStrm, -1 );
-    SwWW8Writer::WriteLong( *pTableStrm, nCount );
+    pTableStrm->WriteInt16( -1 );
+    pTableStrm->WriteUInt32( nCount );
 
     for( ; nNms < nCount; ++nNms )
     {
@@ -654,7 +656,7 @@ void WW8Export::OutListNamesTab()
         if( !rRule.IsAutoRule() )
             sNm = rRule.GetName();
 
-        SwWW8Writer::WriteShort( *pTableStrm, sNm.getLength() );
+        pTableStrm->WriteUInt16( sNm.getLength() );
         if (!sNm.isEmpty())
             SwWW8Writer::WriteString16(*pTableStrm, sNm, false);
     }
