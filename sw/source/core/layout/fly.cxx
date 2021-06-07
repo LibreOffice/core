@@ -87,7 +87,8 @@ SwFlyFrame::SwFlyFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch
     m_bAtCnt( false ),
     m_bLayout( false ),
     m_bAutoPosition( false ),
-    m_bDeleted (false ),
+    m_bDeleted( false ),
+    m_nAuthor( std::string::npos ),
     m_bValidContentPos( false )
 {
     mnFrameType = SwFrameType::Fly;
