@@ -147,20 +147,12 @@ OUString SAL_CALL BubbleChartType::getChartType()
 
 uno::Sequence< OUString > SAL_CALL BubbleChartType::getSupportedMandatoryRoles()
 {
-    uno::Sequence< OUString > aMandRolesSeq(4);
-    aMandRolesSeq[0] = "label";
-    aMandRolesSeq[1] = "values-x";
-    aMandRolesSeq[2] = "values-y";
-    aMandRolesSeq[3] = "values-size";
-    return aMandRolesSeq;
+    return { "label", "values-x", "values-y", "values-size" };
 }
 
 uno::Sequence< OUString > SAL_CALL BubbleChartType::getSupportedPropertyRoles()
 {
-    uno::Sequence< OUString > aPropertyRoles(2);
-    aPropertyRoles[0] = "FillColor";
-    aPropertyRoles[1] = "BorderColor";
-    return aPropertyRoles;
+    return { "FillColor", "BorderColor" };
 }
 
 OUString SAL_CALL BubbleChartType::getRoleOfSequenceForSeriesLabel()

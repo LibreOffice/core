@@ -53,8 +53,7 @@ void ChartConfigItem::Notify(const uno::Sequence<OUString>&) {}
 
 bool ChartConfigItem::getUseErrorRectangle()
 {
-    uno::Sequence<OUString> aNames(1);
-    aNames[0] = "ErrorRectangle";
+    uno::Sequence<OUString> aNames{ "ErrorRectangle" };
 
     auto b = o3tl::tryAccess<bool>(GetProperties(aNames)[0]);
     return b && *b;

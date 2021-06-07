@@ -155,18 +155,12 @@ uno::Sequence< beans::PropertyValue > DataSourceHelper::createArguments(
     if( bUseColumns )
         eRowSource = css::chart::ChartDataRowSource_COLUMNS;
 
-    uno::Sequence< beans::PropertyValue > aArguments(3);
-    aArguments[0] = beans::PropertyValue( "DataRowSource"
-        , -1, uno::Any( eRowSource )
-        , beans::PropertyState_DIRECT_VALUE );
-    aArguments[1] = beans::PropertyValue( "FirstCellAsLabel"
-        , -1, uno::Any( bFirstCellAsLabel )
-        , beans::PropertyState_DIRECT_VALUE );
-    aArguments[2] = beans::PropertyValue( "HasCategories"
-        , -1, uno::Any( bHasCategories )
-        , beans::PropertyState_DIRECT_VALUE );
-
-    return aArguments;
+    return
+    {
+        { "DataRowSource", -1, uno::Any( eRowSource), beans::PropertyState_DIRECT_VALUE },
+        { "FirstCellAsLabel", -1, uno::Any( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE },
+        { "HasCategories", -1, uno::Any( bHasCategories ), beans::PropertyState_DIRECT_VALUE }
+    };
 }
 
 uno::Sequence< beans::PropertyValue > DataSourceHelper::createArguments(
