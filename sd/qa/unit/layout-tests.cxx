@@ -68,7 +68,7 @@ void SdLayoutTest::testTdf136949()
 void SdLayoutTest::testTdf128212()
 {
     sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf128212.pptx"), PPTX);
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf128212.pptx"), PPTX);
 
     std::shared_ptr<GDIMetaFile> xMetaFile = xDocShRef->GetPreviewMetaFile();
     MetafileXmlDump dumper;
