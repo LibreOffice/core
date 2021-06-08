@@ -252,9 +252,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf142404_tabOverSpacingC15, "tdf142404_
     // Pages 2/3 are TabOverMargin - in this particular case tabs should not go over margin.
     CPPUNIT_ASSERT_EQUAL(OUString("TabOverflow does what?"), parseDump("//page[3]/body/txt[2]/Text[1]", "Portion"));
     // Not 1 line high (Word 2010 DOCX and ODT), or 4 lines high (prev LO DOCX),
-    // but 3 lines high (8 lines high in Word 2016 because of the same weirdness as previous test).
+    // but 8 lines high.
     nHeight = parseDump("//page[3]/body/txt[2]/infos/bounds", "height").toInt32();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("3 lines high (but 8 in Word)", 242*3, nHeight, 121);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("8 lines high", 242*8, nHeight, 121);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf139580, "tdf139580.odt")
