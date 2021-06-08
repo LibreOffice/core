@@ -38,6 +38,8 @@
 #include <tools/UnitConversion.hxx>
 #include <vcl/svapp.hxx>
 
+#include <numeric>
+
 namespace
 {
 enum : sal_uInt16
