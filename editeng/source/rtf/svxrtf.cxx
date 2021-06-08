@@ -935,12 +935,17 @@ SvxRTFItemStackType::SvxRTFItemStackType(
         const EditPosition& rPos )
     : aAttrSet( rPool, pWhichRange )
     , mxStartNodeIdx(rPos.MakeNodeIdx())
-    // coverity[read_parm_fld : FALSE] - difficulty with std::optional leading to bogus 'Uninitialized scalar variable'
+#if !defined(__COVERITY__)
+    // coverity 2020 has difficulty wrt std::optional leading to bogus 'Uninitialized scalar variable'
     , mxEndNodeIdx(mxStartNodeIdx)
+#endif
     , nSttCnt(rPos.GetCntIdx())
     , nEndCnt(nSttCnt)
     , nStyleNo(0)
 {
+#if defined(__COVERITY__)
+    mxEndNodeIdx = mxStartNodeIdx;
+#endif
 }
 
 SvxRTFItemStackType::SvxRTFItemStackType(
@@ -949,12 +954,17 @@ SvxRTFItemStackType::SvxRTFItemStackType(
         bool const bCopyAttr )
     : aAttrSet( *rCpy.aAttrSet.GetPool(), rCpy.aAttrSet.GetRanges() )
     , mxStartNodeIdx(rPos.MakeNodeIdx())
-    // coverity[read_parm_fld : FALSE] - difficulty with std::optional leading to bogus 'Uninitialized scalar variable'
+#if !defined(__COVERITY__)
+    // coverity 2020 has difficulty wrt std::optional leading to bogus 'Uninitialized scalar variable'
     , mxEndNodeIdx(mxStartNodeIdx)
+#endif
     , nSttCnt(rPos.GetCntIdx())
     , nEndCnt(nSttCnt)
     , nStyleNo(rCpy.nStyleNo)
 {
+#if defined(__COVERITY__)
+    mxEndNodeIdx = mxStartNodeIdx;
+#endif
     aAttrSet.SetParent( &rCpy.aAttrSet );
     if( bCopyAttr )
         aAttrSet.Put( rCpy.aAttrSet );
