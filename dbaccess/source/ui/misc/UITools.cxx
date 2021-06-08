@@ -195,7 +195,6 @@ Reference< XDataSource > getDataSourceByName( const OUString& _rDataSourceName,
     Reference< XDatabaseContext > xDatabaseContext = DatabaseContext::create(_rxContext);
 
     Reference< XDataSource > xDatasource;
-    Any aError;
     SQLExceptionInfo aSQLError;
     try
     {
@@ -218,8 +217,6 @@ Reference< XDataSource > getDataSourceByName( const OUString& _rDataSourceName,
         else
         {
             aSQLError = SQLExceptionInfo( e.TargetException );
-            if ( !aSQLError.isValid() )
-                aError = e.TargetException;
         }
     }
     catch( const Exception& )
