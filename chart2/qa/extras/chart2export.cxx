@@ -404,29 +404,7 @@ xmlDocUniquePtr Chart2ExportTest::parseExport(const OUString& rDir, const OUStri
 
 void Chart2ExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
 {
-    static struct { char const * pPrefix; char const * pURI; } const aNamespaces[] =
-    {
-        { "w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main" },
-        { "v", "urn:schemas-microsoft-com:vml" },
-        { "c", "http://schemas.openxmlformats.org/drawingml/2006/chart" },
-        { "a", "http://schemas.openxmlformats.org/drawingml/2006/main" },
-        { "mc", "http://schemas.openxmlformats.org/markup-compatibility/2006" },
-        { "wps", "http://schemas.microsoft.com/office/word/2010/wordprocessingShape" },
-        { "wpg", "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" },
-        { "wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" },
-        { "office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0" },
-        { "table", "urn:oasis:names:tc:opendocument:xmlns:table:1.0" },
-        { "text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0" },
-        { "xlink", "http://www.w3c.org/1999/xlink" },
-        { "c15", "http://schemas.microsoft.com/office/drawing/2012/chart" }
-    };
-    for(size_t i = 0; i < SAL_N_ELEMENTS(aNamespaces); ++i)
-    {
-        xmlXPathRegisterNs(
-            pXmlXPathCtx,
-            reinterpret_cast<xmlChar const *>(aNamespaces[i].pPrefix),
-            reinterpret_cast<xmlChar const *>(aNamespaces[i].pURI));
-    }
+    XmlTestTools::registerOOXMLNamespaces(pXmlXPathCtx);
 }
 
 namespace {

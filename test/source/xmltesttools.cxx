@@ -438,6 +438,8 @@ void XmlTestTools::registerOOXMLNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
                        BAD_CAST("http://schemas.microsoft.com/office/powerpoint/2010/main"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("dgm"),
                        BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/diagram"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("c15"),
+                       BAD_CAST("http://schemas.microsoft.com/office/drawing/2012/chart"));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
