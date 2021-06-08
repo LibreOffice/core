@@ -75,7 +75,7 @@ PageSizeControl::PageSizeControl(PageSizePopup* pControl, weld::Widget* pParent)
     , mxMoreButton(m_xBuilder->weld_button("moreoptions"))
     , mxWidthHeightField(m_xBuilder->weld_metric_spin_button("metric", FieldUnit::CM))
     , mxSizeValueSet(new svx::sidebar::ValueSetWithTextControl)
-    , mxSizeValueSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *mxSizeValueSet))
+    , mxSizeValueSetWin(new weld::CustomWeld(*m_xBuilder, "pagesizevalueset", *mxSizeValueSet))
     , mxControl(pControl)
     , maPaperList()
 {
