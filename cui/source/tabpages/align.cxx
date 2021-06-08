@@ -436,7 +436,6 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
             m_xLbHorAlign->hide();
             break;
         case SfxItemState::DISABLED:
-//        case SfxItemState::READONLY:
             m_xLbHorAlign->set_sensitive(false);
             break;
         case SfxItemState::DONTCARE:
@@ -480,7 +479,6 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
             m_xFtIndent->hide();
             break;
         case SfxItemState::DISABLED:
-//        case SfxItemState::READONLY:
             m_xEdIndent->set_sensitive(false);
             break;
         case SfxItemState::DONTCARE:
@@ -504,7 +502,6 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
             m_xFtVerAlign->hide();
             break;
         case SfxItemState::DISABLED:
-//        case SfxItemState::READONLY:
             m_xLbVerAlign->set_sensitive(false);
             break;
         case SfxItemState::DONTCARE:
@@ -545,7 +542,6 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
             m_xCtrlDialWin->hide();
             break;
         case SfxItemState::DISABLED:
-//        case SfxItemState::READONLY:
             m_xNfRotate->set_sensitive(false);
             m_xCtrlDialWin->set_sensitive(false);
             break;
@@ -569,7 +565,6 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
             m_xVsRefEdge->hide();
             break;
         case SfxItemState::DISABLED:
-//        case SfxItemState::READONLY:
             m_xVsRefEdge->set_sensitive(false);
             break;
         case SfxItemState::DONTCARE:
@@ -608,7 +603,6 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
             m_xLbFrameDir->hide();
             break;
         case SfxItemState::DISABLED:
-//        case SfxItemState::READONLY:
             m_xLbFrameDir->set_sensitive(false);
             break;
         case SfxItemState::DONTCARE:
