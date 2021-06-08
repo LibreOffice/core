@@ -116,6 +116,7 @@ public:
     void testTdf125560_textDeflate();
     void testTdf125560_textInflateTop();
     void testTdf96061_textHighlight();
+    void testTdf142235_TestPlaceholderTextAlignment();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest3);
 
@@ -184,6 +185,7 @@ public:
     CPPUNIT_TEST(testTdf125560_textDeflate);
     CPPUNIT_TEST(testTdf125560_textInflateTop);
     CPPUNIT_TEST(testTdf96061_textHighlight);
+    CPPUNIT_TEST(testTdf142235_TestPlaceholderTextAlignment);
     CPPUNIT_TEST_SUITE_END();
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
@@ -1686,6 +1688,23 @@ void SdOOXMLExportTest3::testTdf125560_textInflateTop()
                 "/office:document-content/office:body/office:presentation/draw:page/"
                 "draw:custom-shape/draw:enhanced-geometry",
                 "type", "mso-spt164");
+}
+
+void SdOOXMLExportTest3::testTdf142235_TestPlaceholderTextAlignment()
+{
+    auto xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/odp/tdf142235.odp"), ODP);
+
+    utl::TempFile tmpfile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tmpfile);
+    xDocShRef->DoClose();
+
+    xmlDocUniquePtr pXml = parseExport(tmpfile, "ppt/slides/slide1.xml");
+
+    // Without the fix in place many of these asserts failed, because alignment was bad.
+
+    assertXPath(pXml, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:bodyPr", "anchor", "t");
+    assertXPath(pXml, "/p:sld/p:cSld/p:spTree/p:sp[5]/p:txBody/a:bodyPr", "anchor", "t");
 }
 
 void SdOOXMLExportTest3::testTdf96061_textHighlight()
