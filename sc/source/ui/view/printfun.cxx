@@ -653,6 +653,7 @@ static void lcl_FillHFParam( ScPrintHFParam& rParam, const SfxItemSet* pHFSet )
         rParam.bEnable  = pHFSet->Get(ATTR_PAGE_ON).GetValue();
         rParam.bDynamic = pHFSet->Get(ATTR_PAGE_DYNAMIC).GetValue();
         rParam.bShared  = pHFSet->Get(ATTR_PAGE_SHARED).GetValue();
+        rParam.bSharedFirst = pHFSet->Get(ATTR_PAGE_SHARED_FIRST).GetValue();
         rParam.nHeight  = pHFSet->Get(ATTR_PAGE_SIZE).GetSize().Height();
         const SvxLRSpaceItem* pHFLR = &pHFSet->Get(ATTR_LRSPACE);
         tools::Long nTmp;
@@ -814,6 +815,12 @@ void ScPrintFunc::UpdateHFHeight( ScPrintHFParam& rParam )
         nMaxHeight = std::max( nMaxHeight, TextHeight( rParam.pRight->GetCenterArea() ) );
         nMaxHeight = std::max( nMaxHeight, TextHeight( rParam.pRight->GetRightArea() ) );
     }
+    if ( rParam.pFirst )
+    {
+        nMaxHeight = std::max( nMaxHeight, TextHeight( rParam.pFirst->GetLeftArea() ) );
+        nMaxHeight = std::max( nMaxHeight, TextHeight( rParam.pFirst->GetCenterArea() ) );
+        nMaxHeight = std::max( nMaxHeight, TextHeight( rParam.pFirst->GetRightArea() ) );
+    }
 
     rParam.nHeight = nMaxHeight + rParam.nDistance;
     if (rParam.pBorder)
@@ -868,6 +875,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
 
     aHdr.pLeft      = &pParamSet->Get(ATTR_PAGE_HEADERLEFT);      // Content
     aHdr.pRight     = &pParamSet->Get(ATTR_PAGE_HEADERRIGHT);
+    aHdr.pFirst     = &pParamSet->Get(ATTR_PAGE_HEADERFIRST);
 
     const SvxSetItem* pHeaderSetItem;
     const SfxItemSet* pHeaderSet = nullptr;
@@ -884,6 +892,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
 
     aFtr.pLeft      = &pParamSet->Get(ATTR_PAGE_FOOTERLEFT);      // Content
     aFtr.pRight     = &pParamSet->Get(ATTR_PAGE_FOOTERRIGHT);
+    aFtr.pFirst     = &pParamSet->Get(ATTR_PAGE_FOOTERFIRST);
 
     const SvxSetItem* pFooterSetItem;
     const SfxItemSet* pFooterSet = nullptr;
@@ -1742,8 +1751,9 @@ void ScPrintFunc::PrintHF( tools::Long nPageNo, bool bHeader, tools::Long nStart
 
     pDev->SetMapMode( aTwipMode );          // Head-/Footlines in Twips
 
+    bool bFirst = 0 == nPageNo && !rParam.bSharedFirst;
     bool bLeft = IsLeft(nPageNo) && !rParam.bShared;
-    const ScPageHFItem* pHFItem = bLeft ? rParam.pLeft : rParam.pRight;
+    const ScPageHFItem* pHFItem = bFirst ? rParam.pFirst : (bLeft ? rParam.pLeft : rParam.pRight);
 
     tools::Long nLineStartX = aPageRect.Left()  + rParam.nLeft;
     tools::Long nLineEndX   = aPageRect.Right() - rParam.nRight;
