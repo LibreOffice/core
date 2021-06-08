@@ -2133,12 +2133,6 @@ bool SwFEShell::ImpEndCreate()
             GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(bRestore);
         }
 
-        Point aRelNullPt;
-        if( OBJ_CAPTION == nIdent )
-            aRelNullPt = static_cast<SdrCaptionObj&>(rSdrObj).GetTailPos();
-        else
-            aRelNullPt = rBound.TopLeft();
-
         aSet.Put( aAnch );
         aSet.Put( SwFormatSurround( css::text::WrapTextMode_THROUGH ) );
         // OD 2004-03-30 #i26791# - set horizontal position
@@ -2826,12 +2820,6 @@ void SwFEShell::CheckUnboundObjects()
                 pPage = pLast;
             OSL_ENSURE( pPage, "Page not found." );
 
-            // Alien identifier should roll into the default,
-            // Duplications are possible!!
-            sal_uInt16 nIdent =
-                    Imp()->GetDrawView()->GetCurrentObjInventor() == SdrInventor::Default ?
-                            Imp()->GetDrawView()->GetCurrentObjIdentifier() : 0xFFFF;
-
             SwFormatAnchor aAnch;
             {
             const SwContentFrame *const pAnch = ::FindAnchor(pPage, aPt, true);
@@ -2849,13 +2837,6 @@ void SwFEShell::CheckUnboundObjects()
             SfxItemSet aSet( GetAttrPool(), svl::Items<RES_FRM_SIZE, RES_FRM_SIZE,
                                             RES_SURROUND, RES_ANCHOR>{} );
             aSet.Put( aAnch );
-
-            Point aRelNullPt;
-
-            if( OBJ_CAPTION == nIdent )
-                aRelNullPt = static_cast<SdrCaptionObj*>(pObj)->GetTailPos();
-            else
-                aRelNullPt = rBound.TopLeft();
 
             aSet.Put( aAnch );
             aSet.Put( SwFormatSurround( css::text::WrapTextMode_THROUGH ) );
