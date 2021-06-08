@@ -146,13 +146,15 @@ private:
     {
         sal_Int32           mnLeftPropId;
         sal_Int32           mnRightPropId;
+        sal_Int32           mnFirstPropId;
         sal_Int32           mnHeight;
         sal_Int32           mnBodyDist;
         bool                mbHasContent;
         bool                mbShareOddEven;
+        bool                mbShareFirst;
         bool                mbDynamicHeight;
 
-        explicit            HFHelperData( sal_Int32 nLeftPropId, sal_Int32 nRightPropId );
+        explicit            HFHelperData( sal_Int32 nLeftPropId, sal_Int32 nRightPropId, sal_Int32 nFirstPropId );
     };
 
 private:
@@ -161,7 +163,9 @@ private:
                             HFHelperData& orHFData,
                             const OUString& rOddContent,
                             const OUString& rEvenContent,
+                            const OUString& rFirstContent,
                             bool bUseEvenContent,
+                            bool bUseFirstContent,
                             double fPageMargin,
                             double fContentMargin );
 

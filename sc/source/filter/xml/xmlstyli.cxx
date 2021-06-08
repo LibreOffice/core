@@ -943,7 +943,7 @@ SvXMLImportContext *ScMasterPageContext::CreateHeaderFooterContext(
             const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
             const bool bFooter,
             const bool bLeft,
-            const bool /*bFirst*/ )
+            const bool bFirst )
 {
     if (!bLeft)
     {
@@ -958,7 +958,7 @@ SvXMLImportContext *ScMasterPageContext::CreateHeaderFooterContext(
                                                 nElement,
                                                 xAttrList,
                                                 xPropSet,
-                                                bFooter, bLeft );
+                                                bFooter, bLeft, bFirst );
 }
 
 void ScMasterPageContext::ClearContent(const OUString& rContent)

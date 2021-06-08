@@ -35,6 +35,11 @@ const sal_uInt16 EXC_ID_FOOTER              = 0x0015;
 const sal_uInt16 EXC_ID_HEADER_EVEN         = 0x0016;
 const sal_uInt16 EXC_ID_FOOTER_EVEN         = 0x0017;
 
+// (0x0018, 0x0019) FIRST HEADER, FIRST FOOTER ----------------------------------
+
+const sal_uInt16 EXC_ID_HEADER_FIRST        = 0x0018;
+const sal_uInt16 EXC_ID_FOOTER_FIRST        = 0x0019;
+
 // (0x001A, 0x001B) VERTICAL-, HORIZONTALPAGEBREAKS ---------------------------
 
 const sal_uInt16 EXC_ID_VERPAGEBREAKS       = 0x001A;
@@ -108,6 +113,8 @@ struct XclPageData
     OUString            maFooter;           /// Excel footer string (empty = off).
     OUString            maHeaderEven;       /// Excel header string for even pages (empty = off).
     OUString            maFooterEven;       /// Excel footer string for even pages (empty = off).
+    OUString            maHeaderFirst;      /// Excel header string for first page (empty = off).
+    OUString            maFooterFirst;      /// Excel footer string for first page (empty = off).
     double              mfLeftMargin;       /// Left margin in inches.
     double              mfRightMargin;      /// Right margin in inches.
     double              mfTopMargin;        /// Top margin in inches.
@@ -130,7 +137,7 @@ struct XclPageData
     sal_uInt16          mnHorPrintRes;      /// Horizontal printing resolution.
     sal_uInt16          mnVerPrintRes;      /// Vertical printing resolution.
     bool                mbUseEvenHF;        /// True = use maHeaderEven/maFooterEven.
-//  bool                mbUseFirstHF;       /// True = use maHeaderFirst/maFooterFirst.  TODO: not implemented yet.
+    bool                mbUseFirstHF;       /// True = use maHeaderFirst/maFooterFirst.
     bool                mbValid;            /// false = some of the values are not valid.
     bool                mbPortrait;         /// true = portrait; false = landscape.
     bool                mbPrintInRows;      /// true = in rows; false = in columns.

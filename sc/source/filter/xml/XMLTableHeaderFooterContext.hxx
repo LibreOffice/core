@@ -45,7 +45,7 @@ public:
     XMLTableHeaderFooterContext( SvXMLImport& rImport, sal_Int32 nElement,
             const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
             const css::uno::Reference< css::beans::XPropertySet > & rPageStylePropSet,
-               bool bFooter, bool bLft );
+               bool bFooter, bool bLft, bool bFirst );
 
     virtual ~XMLTableHeaderFooterContext() override;
 

@@ -299,6 +299,7 @@ void XclImpPageSettings::Finalize()
         aHFConv.ParseString( maData.maHeader );
         aHFConv.FillToItemSet( rItemSet, ATTR_PAGE_HEADERLEFT );
         aHFConv.FillToItemSet( rItemSet, ATTR_PAGE_HEADERRIGHT );
+        aHFConv.FillToItemSet( rItemSet, ATTR_PAGE_HEADERFIRST );
         // #i23296# In Calc, "top margin" is distance to header
         fTopMargin = maData.mfHeaderMargin;
         // Calc uses distance between header and sheet data area
@@ -335,6 +336,7 @@ void XclImpPageSettings::Finalize()
         aHFConv.ParseString( maData.maFooter );
         aHFConv.FillToItemSet( rItemSet, ATTR_PAGE_FOOTERLEFT );
         aHFConv.FillToItemSet( rItemSet, ATTR_PAGE_FOOTERRIGHT );
+        aHFConv.FillToItemSet( rItemSet, ATTR_PAGE_FOOTERFIRST );
         // #i23296# In Calc, "bottom margin" is distance to footer
         fBottomMargin = maData.mfFooterMargin;
         // Calc uses distance between footer and sheet data area
