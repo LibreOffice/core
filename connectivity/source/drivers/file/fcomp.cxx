@@ -457,7 +457,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode const * pPredicateNo
     }
     else if (SQL_ISRULE(pPredicateNode,parameter))
     {
-        pOperand = new OOperandParam(pPredicateNode, ++m_nParamCounter);
+        pOperand = new OOperandParam(++m_nParamCounter);
     }
     else if (pPredicateNode->getNodeType() == SQLNodeType::String ||
              pPredicateNode->getNodeType() == SQLNodeType::IntNum ||
