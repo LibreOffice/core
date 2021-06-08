@@ -134,10 +134,12 @@ void Deck::Resize()
  */
 void Deck::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
-    rJsonWriter.put("id", get_id());  // TODO could be missing - sort out
+    rJsonWriter.put("id", get_id().isEmpty() ? msId : get_id());
     rJsonWriter.put("type", "deck");
     rJsonWriter.put("text", GetText());
     rJsonWriter.put("enabled", IsEnabled());
+    if (!IsVisible())
+        rJsonWriter.put("visible", false);
 
     auto childrenNode = rJsonWriter.startArray("children");
     for (auto &it : maPanels)
