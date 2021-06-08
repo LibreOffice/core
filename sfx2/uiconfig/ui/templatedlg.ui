@@ -185,12 +185,13 @@
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="tooltip-text" translatable="yes" context="templatedlg|search_filter|tooltip_text">Search</property>
+                    <property name="hexpand">True</property>
                     <property name="activates-default">True</property>
                     <property name="truncate-multiline">True</property>
                     <property name="placeholder-text" translatable="yes" context="templatedlg|search_filter">Search...</property>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
+                    <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
@@ -264,7 +265,7 @@
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="fill">False</property>
+                            <property name="fill">True</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
