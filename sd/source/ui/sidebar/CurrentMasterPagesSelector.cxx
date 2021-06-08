@@ -66,7 +66,7 @@ CurrentMasterPagesSelector::CurrentMasterPagesSelector (
     ViewShellBase& rBase,
     const std::shared_ptr<MasterPageContainer>& rpContainer,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
-    : MasterPagesSelector (pParent, rDocument, rBase, rpContainer, rxSidebar)
+    : MasterPagesSelector (pParent, rDocument, rBase, rpContainer, rxSidebar, "modules/simpress/ui/masterpagepanel.ui", "usedvalueset")
 {
     Link<sd::tools::EventMultiplexerEvent&,void> aLink (LINK(this,CurrentMasterPagesSelector,EventMultiplexerListener));
     rBase.GetEventMultiplexer()->AddEventListener(aLink);

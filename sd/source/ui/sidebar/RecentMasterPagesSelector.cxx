@@ -57,7 +57,7 @@ RecentMasterPagesSelector::RecentMasterPagesSelector (
     ViewShellBase& rBase,
     const std::shared_ptr<MasterPageContainer>& rpContainer,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
-    : MasterPagesSelector (pParent, rDocument, rBase, rpContainer, rxSidebar)
+    : MasterPagesSelector (pParent, rDocument, rBase, rpContainer, rxSidebar, "modules/simpress/ui/masterpagepanelrecent.ui", "recentvalueset")
 {
 }
 

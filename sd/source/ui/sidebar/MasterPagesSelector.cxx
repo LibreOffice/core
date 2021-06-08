@@ -58,12 +58,14 @@ MasterPagesSelector::MasterPagesSelector (
     SdDrawDocument& rDocument,
     ViewShellBase& rBase,
     const std::shared_ptr<MasterPageContainer>& rpContainer,
-    const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
-    : PanelLayout( pParent, "MasterPagePanel", "modules/simpress/ui/masterpagepanel.ui" ),
+    const css::uno::Reference<css::ui::XSidebar>& rxSidebar,
+    const OUString& rUIFileName,
+    const OString& rValueSetName)
+    : PanelLayout( pParent, "MasterPagePanel", rUIFileName ),
       maMutex(),
       mpContainer(rpContainer),
       mxPreviewValueSet(new PreviewValueSet),
-      mxPreviewValueSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *mxPreviewValueSet)),
+      mxPreviewValueSetWin(new weld::CustomWeld(*m_xBuilder, rValueSetName, *mxPreviewValueSet)),
       mrDocument(rDocument),
       mrBase(rBase),
       maCurrentItemList(),

@@ -36,7 +36,7 @@ CellLineStylePopup::CellLineStylePopup(weld::Toolbar* pParent, const OString& rI
     , maToolButton(pParent, rId)
     , mpDispatcher(pDispatcher)
     , mxCellLineStyleValueSet(new sc::sidebar::CellLineStyleValueSet)
-    , mxCellLineStyleValueSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *mxCellLineStyleValueSet))
+    , mxCellLineStyleValueSetWin(new weld::CustomWeld(*m_xBuilder, "linestylevalueset", *mxCellLineStyleValueSet))
     , mxPushButtonMoreOptions(m_xBuilder->weld_button("more"))
 {
     Initialize();
