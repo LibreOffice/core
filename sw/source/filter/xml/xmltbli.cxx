@@ -802,7 +802,6 @@ SwXMLTableRowContext_Impl::SwXMLTableRowContext_Impl( SwXMLImport& rImport,
     nRowRepeat( 1 )
 {
     OUString aStyleName, aDfltCellStyleName;
-    OUString sXmlId;
 
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
@@ -825,7 +824,6 @@ SwXMLTableRowContext_Impl::SwXMLTableRowContext_Impl( SwXMLImport& rImport,
                 aDfltCellStyleName = aIter.toString();
                 break;
             case XML_ELEMENT(XML, XML_ID):
-                sXmlId = aIter.toString();
                 break;
             default:
                 XMLOFF_WARN_UNKNOWN("sw", aIter);
