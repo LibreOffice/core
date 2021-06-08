@@ -1555,7 +1555,13 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
     default:
         SAL_INFO("sd.eppt", "warning: unhandled placeholder type: " << ePlaceholder);
     }
+
     SAL_INFO("sd.eppt", "write placeholder " << pType);
+    if ((mePageType == PageType::LAYOUT || mePageType == PageType::NORMAL)
+        && ePlaceholder == Outliner)
+        mpFS->singleElementNS(XML_p, XML_ph);
+    else
+        mpFS->singleElementNS(XML_p, XML_ph, XML_type, pType);
     mpFS->singleElementNS(XML_p, XML_ph, XML_type, pType);
     mpFS->endElementNS(XML_p, XML_nvPr);
     mpFS->endElementNS(XML_p, XML_nvSpPr);
