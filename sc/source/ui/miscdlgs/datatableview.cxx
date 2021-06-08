@@ -295,7 +295,7 @@ void ScDataTableView::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
 
 Size ScDataTableView::GetOptimalSize() const
 {
-    return Size(600, 400);
+    return Size(450, 400);
 }
 
 void ScDataTableView::getColRange(SCCOL& rStartCol, SCCOL& rEndCol) const

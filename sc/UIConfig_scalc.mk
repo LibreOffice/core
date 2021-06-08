@@ -113,7 +113,6 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/dataformfragment \
 	sc/uiconfig/scalc/ui/datastreams \
 	sc/uiconfig/scalc/ui/dataproviderdlg \
-	sc/uiconfig/scalc/ui/dataproviderentry \
 	sc/uiconfig/scalc/ui/definedatabaserangedialog \
 	sc/uiconfig/scalc/ui/definename \
 	sc/uiconfig/scalc/ui/deletecells \
