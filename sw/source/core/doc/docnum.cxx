@@ -1185,16 +1185,6 @@ bool SwDoc::ReplaceNumRule( const SwPosition& rPos,
         if ( !aTextNodeList.empty() )
         {
             SwRegHistory aRegH( pUndo ? pUndo->GetHistory() : nullptr );
-            sal_uInt16 nChgFormatLevel = 0;
-            for( sal_uInt8 n = 0; n < MAXLEVEL; ++n )
-            {
-                const SwNumFormat& rOldFormat = pOldRule->Get( n ),
-                    & rNewFormat = pNewRule->Get( n );
-
-                if( rOldFormat.GetAbsLSpace() != rNewFormat.GetAbsLSpace() ||
-                    rOldFormat.GetFirstLineOffset() != rNewFormat.GetFirstLineOffset() )
-                    nChgFormatLevel |= ( 1 << n );
-            }
 
             const SwTextNode* pGivenTextNode = rPos.nNode.GetNode().GetTextNode();
             SwNumRuleItem aRule( rNewRule );
