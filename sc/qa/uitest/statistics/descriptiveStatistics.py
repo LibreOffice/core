@@ -99,7 +99,7 @@ class descriptiveStatistics(UITestCase):
         self.assertEqual(get_cell_by_position(document, 0, 5, 14).getString() , "Sum")
         self.assertEqual(get_cell_by_position(document, 0, 5, 15).getString() , "Count")
 
-        self.assertEqual(get_cell_by_position(document, 0, 6, 0).getString() , "Column 1")
+        self.assertEqual(get_cell_by_position(document, 0, 6, 0).getString() , "Math")
         self.assertEqual(round(get_cell_by_position(document, 0, 6, 1).getValue(),12) , 41.909090909091)
         self.assertEqual(round(get_cell_by_position(document, 0, 6, 2).getValue(),13) , 3.5610380137731)
         self.assertEqual(get_cell_by_position(document, 0, 6, 3).getValue() , 47)
@@ -116,7 +116,7 @@ class descriptiveStatistics(UITestCase):
         self.assertEqual(get_cell_by_position(document, 0, 6, 14).getValue() , 461)
         self.assertEqual(get_cell_by_position(document, 0, 6, 15).getValue() , 11)
 
-        self.assertEqual(get_cell_by_position(document, 0, 7, 0).getString() , "Column 2")
+        self.assertEqual(get_cell_by_position(document, 0, 7, 0).getString() , "Physics")
         self.assertEqual(round(get_cell_by_position(document, 0, 7, 1).getValue(),1) , 59.7)
         self.assertEqual(round(get_cell_by_position(document, 0, 7, 2).getValue(),14) , 5.35837869343164)
         self.assertEqual(get_cell_by_position(document, 0, 7, 3).getValue() , 49)
@@ -133,7 +133,7 @@ class descriptiveStatistics(UITestCase):
         self.assertEqual(get_cell_by_position(document, 0, 7, 14).getValue() , 597)
         self.assertEqual(get_cell_by_position(document, 0, 7, 15).getValue() , 10)
 
-        self.assertEqual(get_cell_by_position(document, 0, 8, 0).getString() , "Column 3")
+        self.assertEqual(get_cell_by_position(document, 0, 8, 0).getString() , "Biology")
         self.assertEqual(get_cell_by_position(document, 0, 8, 1).getValue() , 44.7)
         self.assertEqual(round(get_cell_by_position(document, 0, 8, 2).getValue(),13) , 4.7680650629416)
         self.assertEqual(get_cell_by_position(document, 0, 8, 3).getValue() , 60)
