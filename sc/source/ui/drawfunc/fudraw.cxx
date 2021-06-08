@@ -59,9 +59,11 @@ void collectUIInformation( const OUString& aevent )
 FuDraw::FuDraw(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP,
                SdrModel* pDoc, const SfxRequest& rReq)
     : FuPoor(rViewSh, pWin, pViewP, pDoc, rReq)
-    , aNewPointer(PointerStyle::FatCross)
+    , aNewPointer(false ? PointerStyle::FatCross : PointerStyle::Arrow)
     , aOldPointer(PointerStyle::Arrow)
 {
+//    const bool bThemedCursor = ScTabViewShell::GetActiveViewShell()->GetViewData().GetOptions().GetOption( VOPT_THEMEDCURSOR );
+    aNewPointer = false ? PointerStyle::FatCross : PointerStyle::Arrow;
 }
 
 FuDraw::~FuDraw()

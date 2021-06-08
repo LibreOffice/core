@@ -398,6 +398,14 @@
           </info>
           <value>true</value>
         </prop>
+        <prop oor:name="ThemedCursor" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options -Spreadsheets - View - [Section] Window -->
+          <info>
+            <desc>If true, a themed cursor is used (fat cross) otherwise the system default (arrow).</desc>
+            <label>Themed cursor</label>
+          </info>
+          <value>false</value>
+        </prop>
       </group>
       <group oor:name="Other">
         <info>

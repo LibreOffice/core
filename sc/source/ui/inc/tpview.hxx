@@ -54,6 +54,8 @@ class ScTpContentOptions : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xTblRegCB;
     std::unique_ptr<weld::CheckButton> m_xOutlineCB;
     std::unique_ptr<weld::CheckButton> m_xSummaryCB;
+    std::unique_ptr<weld::RadioButton> m_xThemedCursorRB;
+    std::unique_ptr<weld::RadioButton> m_xSystemCursorRB;
 
     void    InitGridOpt();
     DECL_LINK( GridHdl, weld::ComboBox&, void );

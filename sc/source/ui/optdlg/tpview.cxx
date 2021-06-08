@@ -57,6 +57,8 @@ ScTpContentOptions::ScTpContentOptions(weld::Container* pPage, weld::DialogContr
     , m_xTblRegCB(m_xBuilder->weld_check_button("tblreg"))
     , m_xOutlineCB(m_xBuilder->weld_check_button("outline"))
     , m_xSummaryCB(m_xBuilder->weld_check_button("cbSummary"))
+    , m_xThemedCursorRB(m_xBuilder->weld_radio_button("rbThemedCursor"))
+    , m_xSystemCursorRB(m_xBuilder->weld_radio_button("rbSystemCursor"))
 {
     SetExchangeSupport();
     Link<weld::ComboBox&,void> aSelObjHdl(LINK( this, ScTpContentOptions, SelLbObjHdl ) );
@@ -81,6 +83,7 @@ ScTpContentOptions::ScTpContentOptions(weld::Container* pPage, weld::DialogContr
     m_xGuideLineCB->connect_toggled(aCBHdl);
     m_xRowColHeaderCB->connect_toggled(aCBHdl);
     m_xSummaryCB->connect_toggled(aCBHdl);
+    m_xThemedCursorRB->connect_toggled(aCBHdl);
 
     m_xColorLB->SetSlotId(SID_ATTR_CHAR_COLOR);
     m_xColorLB->SetAutoDisplayColor(SC_STD_GRIDCOLOR);
@@ -118,6 +121,7 @@ bool    ScTpContentOptions::FillItemSet( SfxItemSet* rCoreSet )
         m_xColorLB->IsValueChangedFromSaved() ||
         m_xBreakCB->get_state_changed_from_saved() ||
         m_xSummaryCB->get_state_changed_from_saved() ||
+        m_xThemedCursorRB->get_state_changed_from_saved() ||
         m_xGuideLineCB->get_state_changed_from_saved())
     {
         NamedColor aNamedColor = m_xColorLB->GetSelectedEntry();
@@ -169,6 +173,10 @@ void    ScTpContentOptions::Reset( const SfxItemSet* rCoreSet )
     m_xTblRegCB ->set_active( m_xLocalOptions->GetOption(VOPT_TABCONTROLS) );
     m_xOutlineCB->set_active( m_xLocalOptions->GetOption(VOPT_OUTLINER) );
     m_xSummaryCB->set_active( m_xLocalOptions->GetOption(VOPT_SUMMARY) );
+    if ( m_xLocalOptions->GetOption(VOPT_THEMEDCURSOR) )
+        m_xThemedCursorRB->set_active( true );
+    else
+        m_xSystemCursorRB->set_active( true );
 
     InitGridOpt();
 
@@ -202,6 +210,7 @@ void    ScTpContentOptions::Reset( const SfxItemSet* rCoreSet )
     m_xBreakCB->save_state();
     m_xGuideLineCB->save_state();
     m_xSummaryCB->save_state();
+    m_xThemedCursorRB->save_state();
 }
 
 void ScTpContentOptions::ActivatePage( const SfxItemSet& rSet)
@@ -251,6 +260,7 @@ IMPL_LINK( ScTpContentOptions, CBHdl, weld::Toggleable&, rBtn, void )
     else if ( m_xGuideLineCB.get() == &rBtn )   eOption = VOPT_HELPLINES;
     else if ( m_xRowColHeaderCB.get() == &rBtn )   eOption = VOPT_HEADER;
     else if ( m_xSummaryCB.get()  == &rBtn )   eOption = VOPT_SUMMARY;
+    else if ( m_xThemedCursorRB.get() == &rBtn )   eOption = VOPT_THEMEDCURSOR;
 
     m_xLocalOptions->SetOption( eOption, bChecked );
 }
