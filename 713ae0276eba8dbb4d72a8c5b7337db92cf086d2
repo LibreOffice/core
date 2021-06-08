@@ -22,6 +22,30 @@
       "revId": "713ae0276eba8dbb4d72a8c5b7337db92cf086d2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e51d2785_fc2a5ed1",
+        "filename": "dbaccess/source/ui/browser/unodatbr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3156,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-08T11:04:56Z",
+      "side": 1,
+      "message": "Yes, Any ctors are explicit, and this is correct here.",
+      "parentUuid": "0f152684_326372fe",
+      "range": {
+        "startLine": 3156,
+        "startChar": 16,
+        "endLine": 3156,
+        "endChar": 81
+      },
+      "revId": "713ae0276eba8dbb4d72a8c5b7337db92cf086d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
