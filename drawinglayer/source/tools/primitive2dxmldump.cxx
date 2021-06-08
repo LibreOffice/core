@@ -228,8 +228,22 @@ void Primitive2dXmlDump::decomposeAndWrite(
 
                 rWriter.attribute("height", rSizePixel.getHeight());
                 rWriter.attribute("width", rSizePixel.getWidth());
-                rWriter.attribute("checksum", aBitmapEx.GetChecksum());
+                rWriter.attribute("checksum", OString(std::to_string( aBitmapEx.GetChecksum() )));
 
+                for (tools::Long y=0; y<rSizePixel.getHeight(); y++)
+                {
+
+                    rWriter.startElement("data");
+                    OUString aBitmapData = "";
+                    for (tools::Long x=0; x<rSizePixel.getHeight(); x++)
+                    {
+                        if (x !=0)
+                            aBitmapData = aBitmapData + ",";
+                        aBitmapData = aBitmapData + aBitmapEx.GetPixelColor(x, y).AsRGBHexString();
+                    }
+                    rWriter.attribute("row", aBitmapData);
+                    rWriter.endElement();
+                }
                 rWriter.endElement();
             }
             break;

@@ -62,6 +62,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools, public unotest:
     void TestFillRegion();
     void TestExtTextOutOpaqueAndClipTransform();
 
+    void TestBitBltStretchBltWMF();
     void TestExtTextOutOpaqueAndClipWMF();
     void TestPaletteWMF();
     void TestRoundrectWMF();
@@ -96,6 +97,8 @@ public:
     CPPUNIT_TEST(TestDrawPolyLine16WithClip);
     CPPUNIT_TEST(TestFillRegion);
     CPPUNIT_TEST(TestExtTextOutOpaqueAndClipTransform);
+
+    CPPUNIT_TEST(TestBitBltStretchBltWMF);
     CPPUNIT_TEST(TestExtTextOutOpaqueAndClipWMF);
     CPPUNIT_TEST(TestPaletteWMF);
     CPPUNIT_TEST(TestRoundrectWMF);
@@ -511,7 +514,6 @@ void Test::TestPolylinetoCloseStroke()
                 "color", "#000000");
 }
 
-
 void Test::TestExtTextOutOpaqueAndClipTransform()
 {
     // tdf#142495 EMF records: SETBKCOLOR, SELECTOBJECT, EXTTEXTOUTW, MODIFYWORLDTRANSFORM, CREATEFONTINDIRECT.
@@ -520,7 +522,6 @@ void Test::TestExtTextOutOpaqueAndClipTransform()
     drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
     CPPUNIT_ASSERT (pDocument);
-
 
     assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion", 2);
     assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion[1]",
@@ -574,6 +575,73 @@ void Test::TestExtTextOutOpaqueAndClipTransform()
                 "text", "Opaque ClipP-");
     assertXPath(pDocument, "/primitive2D/metafile/transform/group[3]/mask/group/textsimpleportion",
                 "fontcolor", "#000000");
+}
+
+void Test::TestBitBltStretchBltWMF()
+{
+    // tdf#55058 tdf#142722 WMF records: BITBLT, STRETCHBLT.
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/wmf/data/TestBitBltStretchBlt.wmf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap", 2);
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[1]",
+                "xy11", "508");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[1]",
+                "xy12", "0");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[1]",
+                "xy13", "711");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[1]",
+                "xy21", "0");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[1]",
+                "xy22", "508");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[1]",
+                "xy23", "508");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[1]",
+                "height", "10");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[1]",
+                "width", "10");
+#if !defined(MACOSX) && !defined(_WIN32) // TODO Bitmap display needs to be aligned for macOS and Windows
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[1]",
+                "checksum", "747141214295528493");
+#endif
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[1]/data",
+                10);
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[1]/data[1]",
+                "row", "000000,000000,000000,000000,000000,000000,000000,000000,000000,000000");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[1]/data[4]",
+                "row", "000000,ffffff,000000,ffffff,000000,ffffff,000000,ffffff,000000,ffffff");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[1]/data[5]",
+                "row", "ffffff,000000,ffffff,ffffff,000000,000000,000000,ffffff,ffffff,000000");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[2]",
+                "xy11", "1524");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[2]",
+                "xy12", "0");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[2]",
+                "xy13", "1524");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[2]",
+                "xy21", "0");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[2]",
+                "xy22", "1016");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[2]",
+                "xy23", "102");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[2]",
+                "height", "10");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[2]",
+                "width", "10");
+#if !defined(MACOSX) && !defined(_WIN32) // TODO Bitmap display needs to be aligned for macOS and Windows
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[2]",
+                "checksum", "3134789313661517563");
+#endif
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[2]/data",
+                10);
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[2]/data[1]",
+                "row", "000000,00001c,000038,000055,000071,00008d,0000aa,0000c6,0000e2,0000ff");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[2]/data[5]",
+                "row", "720000,721c1c,723838,725555,727171,72728d,55728d,39728d,1d728d,00728d");
 }
 
 void Test::TestExtTextOutOpaqueAndClipWMF()
@@ -713,10 +781,16 @@ void Test::TestStretchDIBWMF()
                 "height", "10");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/bitmap",
                 "width", "10");
-#if !defined(MACOSX) // TODO DIB display needs to be fixed for macOS
+#if !defined(MACOSX) // TODO DIB display needs to be aligned for macOS
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/bitmap",
-                "checksum", "275245357");
+                "checksum", "14148300367030905133");
 #endif
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/bitmap/data",
+                10);
+    assertXPath(pDocument, "/primitive2D/metafile/transform//mask/bitmap/data[1]",
+                "row", "000000,00001c,000038,000055,000071,00008d,0000aa,0000c6,0000e2,0000ff");
+    assertXPath(pDocument, "/primitive2D/metafile/transform//mask/bitmap/data[5]",
+                "row", "720000,721c1c,723838,725555,727171,72728d,55728d,39728d,1d728d,00728d");
 }
 
 void Test::TestPolyLineWidth()
