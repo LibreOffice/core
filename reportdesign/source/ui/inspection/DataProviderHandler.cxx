@@ -226,8 +226,7 @@ void DataProviderHandler::impl_updateChartTitle_throw(const uno::Any& _aValue)
         OUString sStr;
         _aValue >>= sStr;
         xFormatted->setString(sStr);
-        uno::Sequence< uno::Reference< chart2::XFormattedString> > aArgs(1);
-        aArgs[0] = xFormatted;
+        uno::Sequence< uno::Reference< chart2::XFormattedString> > aArgs { xFormatted };
         xTitle->setText(aArgs);
     }
 }

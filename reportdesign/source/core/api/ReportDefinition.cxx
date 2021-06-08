@@ -1926,10 +1926,7 @@ void SAL_CALL OReportDefinition::setMimeType( const OUString& _mimetype )
 
 uno::Sequence< OUString > SAL_CALL OReportDefinition::getAvailableMimeTypes(  )
 {
-    uno::Sequence< OUString > s_aList(2);
-    s_aList[0] = MIMETYPE_OASIS_OPENDOCUMENT_TEXT_ASCII;
-    s_aList[1] = MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_ASCII;
-    return s_aList;
+    return { MIMETYPE_OASIS_OPENDOCUMENT_TEXT_ASCII, MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_ASCII };
 }
 
 // css::XUnoTunnel
@@ -2649,13 +2646,7 @@ uno::Any SAL_CALL OReportDefinition::getTransferData( const datatransfer::DataFl
 
 uno::Sequence< datatransfer::DataFlavor > SAL_CALL OReportDefinition::getTransferDataFlavors(  )
 {
-    uno::Sequence< datatransfer::DataFlavor > aRet(1);
-
-    aRet[0] = datatransfer::DataFlavor( "image/png",
-        "PNG",
-        cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
-
-    return aRet;
+    return { { "image/png", "PNG", cppu::UnoType<uno::Sequence< sal_Int8 >>::get() } };
 }
 
 sal_Bool SAL_CALL OReportDefinition::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )

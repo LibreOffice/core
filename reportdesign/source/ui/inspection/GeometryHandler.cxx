@@ -1354,12 +1354,14 @@ uno::Sequence< OUString > SAL_CALL GeometryHandler::getActuatingProperties()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    uno::Sequence< OUString > aSeq(5);
-    aSeq[0] = PROPERTY_BACKTRANSPARENT;
-    aSeq[1] = PROPERTY_CONTROLBACKGROUNDTRANSPARENT;
-    aSeq[2] = PROPERTY_FORMULALIST;
-    aSeq[3] = PROPERTY_TYPE;
-    aSeq[4] = PROPERTY_DATAFIELD;
+    uno::Sequence< OUString > aSeq
+    {
+        PROPERTY_BACKTRANSPARENT,
+        PROPERTY_CONTROLBACKGROUNDTRANSPARENT,
+        PROPERTY_FORMULALIST,
+        PROPERTY_TYPE,
+        PROPERTY_DATAFIELD
+    };
 
     return ::comphelper::concatSequences(m_xFormComponentHandler->getActuatingProperties(),aSeq);
 }
