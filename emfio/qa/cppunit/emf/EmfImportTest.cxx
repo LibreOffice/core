@@ -62,6 +62,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools, public unotest:
     void TestFillRegion();
     void TestExtTextOutOpaqueAndClipTransform();
 
+    void TestBitBltStretchBltWMF();
     void TestExtTextOutOpaqueAndClipWMF();
     void TestPaletteWMF();
     void TestRoundrectWMF();
@@ -96,6 +97,8 @@ public:
     CPPUNIT_TEST(TestDrawPolyLine16WithClip);
     CPPUNIT_TEST(TestFillRegion);
     CPPUNIT_TEST(TestExtTextOutOpaqueAndClipTransform);
+
+    CPPUNIT_TEST(TestBitBltStretchBltWMF);
     CPPUNIT_TEST(TestExtTextOutOpaqueAndClipWMF);
     CPPUNIT_TEST(TestPaletteWMF);
     CPPUNIT_TEST(TestRoundrectWMF);
@@ -574,6 +577,55 @@ void Test::TestExtTextOutOpaqueAndClipTransform()
                 "text", "Opaque ClipP-");
     assertXPath(pDocument, "/primitive2D/metafile/transform/group[3]/mask/group/textsimpleportion",
                 "fontcolor", "#000000");
+}
+
+void Test::TestBitBltStretchBltWMF()
+{
+    // tdf#55058 WMF records: BITBLT, STRETCHBLT.
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/wmf/data/TestBitBltStretchBlt.wmf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap", 2);
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[1]",
+                "xy11", "508");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[1]",
+                "xy12", "0");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[1]",
+                "xy13", "711");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[1]",
+                "xy21", "0");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[1]",
+                "xy22", "508");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[1]",
+                "xy23", "508");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[1]",
+                "height", "10");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[1]",
+                "width", "10");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[1]",
+                "checksum", "-752643027");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[2]",
+                "xy11", "1524");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[2]",
+                "xy12", "0");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[2]",
+                "xy13", "1524");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[2]",
+                "xy21", "0");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[2]",
+                "xy22", "1016");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[2]",
+                "xy23", "102");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[2]",
+                "height", "10");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[2]",
+                "width", "10");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap[2]",
+                "checksum", "-1636024581");
 }
 
 void Test::TestExtTextOutOpaqueAndClipWMF()
