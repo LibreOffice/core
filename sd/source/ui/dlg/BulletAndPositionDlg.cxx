@@ -189,11 +189,10 @@ SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const Sf
     aSet.Put(SfxUInt16Item(SID_METRIC_ITEM, static_cast<sal_uInt16>(eMetric)));
 
     const SfxStringItem* pNumCharFmt = aSet.GetItem<SfxStringItem>(SID_NUM_CHAR_FMT, false);
-    const SfxStringItem* pBulletCharFmt = aSet.GetItem<SfxStringItem>(SID_BULLET_CHAR_FMT, false);
     const SfxUInt16Item* pMetricItem = aSet.GetItem<SfxUInt16Item>(SID_METRIC_ITEM, false);
 
-    if (pNumCharFmt && pBulletCharFmt)
-        SetCharFmts(pNumCharFmt->GetValue(), pBulletCharFmt->GetValue());
+    if (pNumCharFmt)
+        SetCharFmt(pNumCharFmt->GetValue());
 
     if (pMetricItem)
         SetMetric(static_cast<FieldUnit>(pMetricItem->GetValue()));
@@ -702,7 +701,6 @@ IMPL_LINK_NOARG(SvxBulletAndPositionDlg, PreviewInvalidateHdl_Impl, Timer*, void
 
 IMPL_LINK(SvxBulletAndPositionDlg, NumberTypeSelectHdl_Impl, weld::ComboBox&, rBox, void)
 {
-    OUString sSelectStyle;
     bool bBmp = false;
     sal_uInt16 nMask = 1;
     for (sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
@@ -737,7 +735,6 @@ IMPL_LINK(SvxBulletAndPositionDlg, NumberTypeSelectHdl_Impl, weld::ComboBox&, rB
                 pActNum->SetLevel(i, aNumFmt);
                 SwitchNumberType(SHOW_BULLET);
                 // allocation of the drawing pattern is automatic
-                sSelectStyle = m_sBulletCharFormatName;
             }
             else
             {
@@ -748,7 +745,6 @@ IMPL_LINK(SvxBulletAndPositionDlg, NumberTypeSelectHdl_Impl, weld::ComboBox&, rB
                 CheckForStartValue_Impl(nNumberingType);
 
                 // allocation of the drawing pattern is automatic
-                sSelectStyle = m_sNumCharFmtName;
             }
         }
         nMask <<= 1;
