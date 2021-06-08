@@ -54,9 +54,7 @@ void OHCatalog::refreshTables()
 {
     ::std::vector< OUString> aVector;
 
-    Sequence< OUString > sTableTypes(2);
-    sTableTypes[0] = "VIEW";
-    sTableTypes[1] = "TABLE";
+    Sequence< OUString > sTableTypes {"VIEW", "TABLE"};
 
     refreshObjects(sTableTypes,aVector);
 
