@@ -219,9 +219,8 @@ void SAL_CALL OAuthenticationContinuation::setPassword( const OUString& _rPasswo
 
 Sequence< RememberAuthentication > SAL_CALL OAuthenticationContinuation::getRememberPasswordModes( RememberAuthentication& _reDefault )
 {
-    Sequence< RememberAuthentication > aReturn(1);
-    _reDefault = aReturn[0] = RememberAuthentication_SESSION;
-    return aReturn;
+    _reDefault = RememberAuthentication_SESSION;
+    return { _reDefault };
 }
 
 void SAL_CALL OAuthenticationContinuation::setRememberPassword( RememberAuthentication _eRemember )

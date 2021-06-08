@@ -372,11 +372,12 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
 
 Sequence< OUString > SAL_CALL ODocumentContainer::getAvailableServiceNames(  )
 {
-    Sequence< OUString > aSe(3);
-    aSe[0] = SERVICE_SDB_DOCUMENTDEFINITION;
-    aSe[1] = SERVICE_NAME_FORM_COLLECTION;
-    aSe[2] = SERVICE_NAME_REPORT_COLLECTION;
-    return aSe;
+    return
+    {
+        SERVICE_SDB_DOCUMENTDEFINITION,
+        SERVICE_NAME_FORM_COLLECTION,
+        SERVICE_NAME_REPORT_COLLECTION
+    };
 }
 
 Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 CommandId, const Reference< XCommandEnvironment >& Environment )
