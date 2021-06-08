@@ -97,6 +97,7 @@ int file_image_pagein (file_image * image)
         c ^= ((volatile const char*)(image->m_base))[idx];
     }
     c ^= ((volatile const char*)(image->m_base))[image->m_size-1];
+    (void)c; // silence Clang 13 trunk -Wunused-but-set-variable
 
     return 0;
 }
