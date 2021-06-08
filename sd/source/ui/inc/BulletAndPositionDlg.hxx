@@ -46,7 +46,6 @@ class View;
 class SvxBulletAndPositionDlg : public weld::GenericDialogController
 {
     OUString m_sNumCharFmtName;
-    OUString m_sBulletCharFormatName;
 
     Timer aInvalidateTimer;
 
@@ -148,11 +147,7 @@ public:
     bool IsSlideScope() const;
     void Reset(const SfxItemSet* rSet);
 
-    void SetCharFmts(const OUString& rNumName, const OUString& rBulletName)
-    {
-        m_sNumCharFmtName = rNumName;
-        m_sBulletCharFormatName = rBulletName;
-    }
+    void SetCharFmt(const OUString& rNumName) { m_sNumCharFmtName = rNumName; }
     void SetMetric(FieldUnit eSet);
 
     void SetModified(bool bRepaint = true);
