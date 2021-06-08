@@ -696,25 +696,25 @@ void Test::TestStretchDIBWMF()
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
     CPPUNIT_ASSERT (pDocument);
 
-    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap",
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/bitmap",
                 "xy11", "12065");
-    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap",
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/bitmap",
                 "xy12", "0");
-    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap",
-                "xy13", "3598");
-    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap",
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/bitmap",
+                "xy13", "0");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/bitmap",
                 "xy21", "0");
-    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap",
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/bitmap",
                 "xy22", "12065");
-    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap",
-                "xy23", "3598");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/bitmap",
+                "xy23", "0");
 
-    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap",
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/bitmap",
                 "height", "10");
-    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap",
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/bitmap",
                 "width", "10");
 #if !defined(MACOSX) // TODO DIB display needs to be fixed for macOS
-    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap",
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/bitmap",
                 "checksum", "275245357");
 #endif
 }
