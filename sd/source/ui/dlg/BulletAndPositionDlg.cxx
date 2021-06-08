@@ -429,7 +429,6 @@ void SvxBulletAndPositionDlg::InitControls()
     bool bSameIndent = !bLabelAlignmentPosAndSpaceModeActive;
 
     const SvxNumberFormat* aNumFmtArr[SVX_MAX_NUM];
-    OUString sFirstCharFmt;
     SvxAdjust eFirstAdjust = SvxAdjust::Left;
     Size aFirstSize(0, 0);
     sal_uInt16 nMask = 1;
@@ -449,7 +448,6 @@ void SvxBulletAndPositionDlg::InitControls()
             if (SAL_MAX_UINT16 == nLvl)
             {
                 nLvl = i;
-                sFirstCharFmt = aNumFmtArr[i]->GetCharFormatName();
                 if (bShowBitmap)
                     aFirstSize = aNumFmtArr[i]->GetGraphicSize();
             }
