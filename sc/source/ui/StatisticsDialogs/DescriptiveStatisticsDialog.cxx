@@ -88,13 +88,22 @@ ScRange ScDescriptiveStatisticsDialog::ApplyOutput(ScDocShell* pDocShell)
     // Write column/row labels
     for( ; pIterator->hasNext(); pIterator->next() )
     {
-        if (mGroupedBy == BY_COLUMN)
-            aTemplate.setTemplate(ScResId(STR_COLUMN_LABEL_TEMPLATE));
-        else
-            aTemplate.setTemplate(ScResId(STR_ROW_LABEL_TEMPLATE));
+        // tdf#128018 - add column/row labels to the output
+        OUString aColRowLabel = mDocument.GetString(pIterator->get().aStart);
+        if (aColRowLabel.isEmpty())
+        {
+            if (mGroupedBy == BY_COLUMN)
+                aTemplate.setTemplate(ScResId(STR_COLUMN_LABEL_TEMPLATE));
+            else
+                aTemplate.setTemplate(ScResId(STR_ROW_LABEL_TEMPLATE));
 
-        aTemplate.applyNumber(u"%NUMBER%", pIterator->index() + 1);
-        aOutput.writeBoldString(aTemplate.getTemplate());
+            aTemplate.applyNumber(u"%NUMBER%", pIterator->index() + 1);
+            aOutput.writeBoldString(aTemplate.getTemplate());
+        }
+        else
+        {
+            aOutput.writeBoldString(aColRowLabel);
+        }
         aOutput.nextColumn();
     }
     aOutput.nextRow();
