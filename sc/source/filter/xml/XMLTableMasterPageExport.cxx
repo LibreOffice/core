@@ -116,9 +116,13 @@ void XMLTableMasterPageExport::exportMasterPageContent(
 
     Reference < sheet::XHeaderFooterContent > xHeaderLeft(rPropSet->getPropertyValue( SC_UNO_PAGE_LEFTHDRCONT ), uno::UNO_QUERY);
 
+    Reference < sheet::XHeaderFooterContent > xHeaderFirst(rPropSet->getPropertyValue( SC_UNO_PAGE_FIRSTHDRCONT ), uno::UNO_QUERY);
+
     Reference < sheet::XHeaderFooterContent > xFooter(rPropSet->getPropertyValue( SC_UNO_PAGE_RIGHTFTRCON ), uno::UNO_QUERY);
 
     Reference < sheet::XHeaderFooterContent > xFooterLeft(rPropSet->getPropertyValue( SC_UNO_PAGE_LEFTFTRCONT ), uno::UNO_QUERY);
+
+    Reference < sheet::XHeaderFooterContent > xFooterFirst(rPropSet->getPropertyValue( SC_UNO_PAGE_FIRSTFTRCONT ), uno::UNO_QUERY);
 
     if( bAutoStyles )
     {
@@ -134,6 +138,12 @@ void XMLTableMasterPageExport::exportMasterPageContent(
             exportHeaderFooterContent( xHeaderLeft->getLeftText(), true, false );
             exportHeaderFooterContent( xHeaderLeft->getRightText(), true, false );
         }
+        if( xHeaderFirst.is())
+        {
+            exportHeaderFooterContent( xHeaderFirst->getCenterText(), true, false );
+            exportHeaderFooterContent( xHeaderFirst->getLeftText(), true, false );
+            exportHeaderFooterContent( xHeaderFirst->getRightText(), true, false );
+        }
         if( xFooter.is() )
         {
             exportHeaderFooterContent( xFooter->getCenterText(), true, false );
@@ -146,6 +156,12 @@ void XMLTableMasterPageExport::exportMasterPageContent(
             exportHeaderFooterContent( xFooterLeft->getLeftText(), true, false );
             exportHeaderFooterContent( xFooterLeft->getRightText(), true, false );
         }
+        if( xFooterFirst.is())
+        {
+            exportHeaderFooterContent( xFooterFirst->getCenterText(), true, false );
+            exportHeaderFooterContent( xFooterFirst->getLeftText(), true, false );
+            exportHeaderFooterContent( xFooterFirst->getRightText(), true, false );
+        }
     }
     else
     {
@@ -157,6 +173,10 @@ void XMLTableMasterPageExport::exportMasterPageContent(
 
         exportHeaderFooter( xHeaderLeft, XML_HEADER_LEFT, bLeftHeader );
 
+        bool bFirstHeader(!::cppu::any2bool(rPropSet->getPropertyValue( SC_UNO_PAGE_FIRSTHDRSHARED )) && bHeader);
+
+        exportHeaderFooter( xHeaderFirst, XML_HEADER_FIRST, bFirstHeader );
+
         bool bFooter(::cppu::any2bool(rPropSet->getPropertyValue( SC_UNO_PAGE_FTRON )));
 
         exportHeaderFooter( xFooter, XML_FOOTER, bFooter );
@@ -164,6 +184,10 @@ void XMLTableMasterPageExport::exportMasterPageContent(
         bool bLeftFooter = (!::cppu::any2bool(rPropSet->getPropertyValue( SC_UNO_PAGE_FTRSHARED )) && bFooter);
 
         exportHeaderFooter( xFooterLeft, XML_FOOTER_LEFT, bLeftFooter );
+
+        bool bFirstFooter = (!::cppu::any2bool(rPropSet->getPropertyValue( SC_UNO_PAGE_FIRSTFTRSHARED )) && bFooter);
+
+        exportHeaderFooter( xFooterLeft, XML_FOOTER_FIRST, bFirstFooter );
     }
 }
 
