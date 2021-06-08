@@ -648,7 +648,8 @@ void ScTabView::ResetBrushDocument()
     if ( HasPaintBrush() )
     {
         SetBrushDocument( nullptr, false );
-        SetActivePointer( PointerStyle::FatCross );   // switch pointers also when ended with escape key
+        const bool bThemedCursor = false;// GetViewData().GetOptions().GetOption( VOPT_THEMEDCURSOR );
+        SetActivePointer( bThemedCursor ? PointerStyle::FatCross : PointerStyle::Arrow );   // switch pointers also when ended with escape key
     }
 }
 

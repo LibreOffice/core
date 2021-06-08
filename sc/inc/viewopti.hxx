@@ -44,6 +44,7 @@ enum ScViewOption
     VOPT_ANCHOR,
     VOPT_PAGEBREAKS,
     VOPT_SUMMARY,
+    VOPT_THEMEDCURSOR,
     VOPT_CLIPMARKS,
 };
 

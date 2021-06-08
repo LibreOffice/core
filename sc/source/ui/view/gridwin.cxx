@@ -2041,7 +2041,10 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
     rMark.SetMarking(false);
 
-    SetPointer( PointerStyle::FatCross );
+//    const ScTabViewShell* pScViewShell = ScTabViewShell::GetActiveViewShell();
+//    const ScViewOptions* pViewOpt = pScViewShell()->GetViewData().GetOptions();
+//    const bool bThemedCursor = pViewOpt()->GetOption( VOPT_THEMEDCURSOR );
+    SetPointer( true ? PointerStyle::Arrow : PointerStyle::FatCross );
 
     if (mrViewData.IsFillMode() ||
         ( mrViewData.GetFillMode() == ScFillMode::MATRIX && rMEvt.IsMod1() ))

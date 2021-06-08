@@ -59,7 +59,7 @@ void collectUIInformation( const OUString& aevent )
 FuDraw::FuDraw(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP,
                SdrModel* pDoc, const SfxRequest& rReq)
     : FuPoor(rViewSh, pWin, pViewP, pDoc, rReq)
-    , aNewPointer(PointerStyle::FatCross)
+    , aNewPointer(true ? PointerStyle::Arrow : PointerStyle::FatCross)
     , aOldPointer(PointerStyle::Arrow)
 {
 }

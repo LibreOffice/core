@@ -57,6 +57,7 @@ ScTpContentOptions::ScTpContentOptions(weld::Container* pPage, weld::DialogContr
     , m_xTblRegCB(m_xBuilder->weld_check_button("tblreg"))
     , m_xOutlineCB(m_xBuilder->weld_check_button("outline"))
     , m_xSummaryCB(m_xBuilder->weld_check_button("cbSummary"))
+    , m_xThemedCursorRB(m_xBuilder->weld_radio_button("rbThemedCursor"))
 {
     SetExchangeSupport();
     Link<weld::ComboBox&,void> aSelObjHdl(LINK( this, ScTpContentOptions, SelLbObjHdl ) );
@@ -169,6 +170,7 @@ void    ScTpContentOptions::Reset( const SfxItemSet* rCoreSet )
     m_xTblRegCB ->set_active( m_xLocalOptions->GetOption(VOPT_TABCONTROLS) );
     m_xOutlineCB->set_active( m_xLocalOptions->GetOption(VOPT_OUTLINER) );
     m_xSummaryCB->set_active( m_xLocalOptions->GetOption(VOPT_SUMMARY) );
+    m_xThemedCursorRB->set_active( m_xLocalOptions->GetOption(VOPT_THEMEDCURSOR) );
 
     InitGridOpt();
 
@@ -251,6 +253,7 @@ IMPL_LINK( ScTpContentOptions, CBHdl, weld::Toggleable&, rBtn, void )
     else if ( m_xGuideLineCB.get() == &rBtn )   eOption = VOPT_HELPLINES;
     else if ( m_xRowColHeaderCB.get() == &rBtn )   eOption = VOPT_HEADER;
     else if ( m_xSummaryCB.get()  == &rBtn )   eOption = VOPT_SUMMARY;
+    else if ( m_xThemedCursorRB.get() == &rBtn )   eOption = VOPT_THEMEDCURSOR;
 
     m_xLocalOptions->SetOption( eOption, bChecked );
 }

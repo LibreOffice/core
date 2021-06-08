@@ -101,6 +101,7 @@ static const SfxItemPropertyMapEntry* lcl_GetViewOptPropertyMap()
         {u"" SC_UNO_SHOWOBJ,      0,  cppu::UnoType<sal_Int16>::get(),    0, 0},
         {u"" SC_UNO_SHOWPAGEBR,   0,  cppu::UnoType<bool>::get(),          0, 0},
         {u"" SC_UNO_SHOWZERO,     0,  cppu::UnoType<bool>::get(),          0, 0},
+        {u"" SC_UNO_THEMEDCURSOR, 0,  cppu::UnoType<bool>::get(),          0, 0},
         {u"" OLD_UNO_VALUEHIGH,   0,  cppu::UnoType<bool>::get(),          0, 0},
         {u"" OLD_UNO_VERTSCROLL,  0,  cppu::UnoType<bool>::get(),          0, 0},
         {u"" SC_UNO_VISAREA,      0,  cppu::UnoType<awt::Rectangle>::get(), 0, 0},
@@ -1742,6 +1743,8 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
         aNewOpt.SetOption( VOPT_NOTES, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_SHOWPAGEBR )
         aNewOpt.SetOption( VOPT_PAGEBREAKS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if ( aPropertyName == SC_UNO_THEMEDCURSOR )
+        aNewOpt.SetOption( VOPT_THEMEDCURSOR, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_SHOWZERO )
         aNewOpt.SetOption( VOPT_NULLVALS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_VALUEHIGH || aPropertyName == OLD_UNO_VALUEHIGH )
@@ -1855,6 +1858,7 @@ uno::Any SAL_CALL ScTabViewObj::getPropertyValue( const OUString& aPropertyName 
         else if ( aPropertyName == SC_UNO_SHOWNOTES )  aRet <<= rOpt.GetOption( VOPT_NOTES );
         else if ( aPropertyName == SC_UNO_SHOWPAGEBR ) aRet <<= rOpt.GetOption( VOPT_PAGEBREAKS );
         else if ( aPropertyName == SC_UNO_SHOWZERO )   aRet <<= rOpt.GetOption( VOPT_NULLVALS );
+        else if ( aPropertyName == SC_UNO_THEMEDCURSOR )   aRet <<= rOpt.GetOption( VOPT_THEMEDCURSOR );
         else if ( aPropertyName == SC_UNO_VALUEHIGH || aPropertyName == OLD_UNO_VALUEHIGH )
             aRet <<= rOpt.GetOption( VOPT_SYNTAX );
         else if ( aPropertyName == SC_UNO_VERTSCROLL || aPropertyName == OLD_UNO_VERTSCROLL )
