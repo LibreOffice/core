@@ -16,6 +16,24 @@
       "revId": "c906d84ac5c957ad9db2c40810912d775c7a43ce",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f35ecb47_8f080b76",
+        "filename": "framework/Library_fwk.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-06-08T11:15:05Z",
+      "side": 1,
+      "message": "Call me Chuck Norris! Even cyclic dependencies cower in fear and compile!\n\nYeah, then I\u0027m out of ideas for fixing this - debugging the pyuno bridge is painful, and I\u0027ve no idea where it is going wrong.",
+      "parentUuid": "a97a02e0_c95b6cc1",
+      "revId": "c906d84ac5c957ad9db2c40810912d775c7a43ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
