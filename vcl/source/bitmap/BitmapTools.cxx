@@ -125,8 +125,10 @@ void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, 
     The block of data to copy
     @param nStride
     The number of bytes in a scanline, must >= (width * nBitCount / 8)
+    @param bReversColors
+    In case the indianess of pData is wrong, you could reverse colors
 */
-BitmapEx CreateFromData( sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int32 nStride, vcl::PixelFormat ePixelFormat)
+BitmapEx CreateFromData( sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int32 nStride, vcl::PixelFormat ePixelFormat, bool bReversColors )
 {
     auto nBitCount = sal_uInt16(ePixelFormat);
 
@@ -150,11 +152,12 @@ BitmapEx CreateFromData( sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHe
     {
         for( tools::Long y = 0; y < nHeight; ++y )
         {
+            sal_uInt8 const *p = pData + y * nStride / 8;
             Scanline pScanline = pWrite->GetScanline(y);
             for (tools::Long x = 0; x < nWidth; ++x)
             {
-                sal_uInt8 const *p = pData + y * nStride / 8;
-                int bitIndex = (y * nStride) % 8;
+                int bitIndex = (y * nStride + x) % 8;
+
                 pWrite->SetPixelOnData(pScanline, x, BitmapColor((*p >> bitIndex) & 1));
             }
         }
@@ -167,7 +170,11 @@ BitmapEx CreateFromData( sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHe
             Scanline pScanline = pWrite->GetScanline(y);
             for (tools::Long x = 0; x < nWidth; ++x)
             {
-                BitmapColor col(p[0], p[1], p[2]);
+                BitmapColor col;
+                if ( bReversColors )
+                    col = BitmapColor( p[2], p[1], p[0] );
+                else
+                    col = BitmapColor( p[0], p[1], p[2] );
                 pWrite->SetPixelOnData(pScanline, x, col);
                 p += nBitCount/8;
             }
