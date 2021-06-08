@@ -27,9 +27,7 @@ Catalog::Catalog(const uno::Reference< XConnection >& rConnection):
 //----- OCatalog -------------------------------------------------------------
 void Catalog::refreshTables()
 {
-    Sequence< OUString > aTypes(2);
-    aTypes[0] = "TABLE";
-    aTypes[1] = "VIEW";
+    Sequence< OUString > aTypes {"TABLE", "VIEW"};
 
     uno::Reference< XResultSet > xTables = m_xMetaData->getTables(Any(),
                                                             "%",

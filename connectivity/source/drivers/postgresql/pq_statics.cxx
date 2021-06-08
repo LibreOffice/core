@@ -200,9 +200,7 @@ Statics & getStatics()
 
             statics.refl.tableDescriptor.implName =
                 "org.openoffice.comp.pq.sdbcx.TableDescriptor";
-            statics.refl.tableDescriptor.serviceNames = Sequence< OUString > (1);
-            statics.refl.tableDescriptor.serviceNames[0] =
-                "com.sun.star.sdbcx.TableDescriptor";
+            statics.refl.tableDescriptor.serviceNames = { "com.sun.star.sdbcx.TableDescriptor" };
             PropertyDef tableDescDef[] =
                 {
                     PropertyDef( statics.CATALOG_NAME , tString ),

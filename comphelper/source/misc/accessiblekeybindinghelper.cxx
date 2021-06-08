@@ -64,10 +64,7 @@ namespace comphelper
     void OAccessibleKeyBindingHelper::AddKeyBinding( const awt::KeyStroke& rKeyStroke )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-
-        Sequence< awt::KeyStroke > aSeq(1);
-        aSeq[0] = rKeyStroke;
-        m_aKeyBindings.push_back( aSeq );
+        m_aKeyBindings.push_back( { rKeyStroke } );
     }
 
 
