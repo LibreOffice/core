@@ -553,6 +553,7 @@ public:
     bool    IsVScrollMode   () const            { return maOptions.GetOption(VOPT_VSCROLL); }
     bool    IsHScrollMode   () const            { return maOptions.GetOption(VOPT_HSCROLL); }
     bool    IsOutlineMode   () const            { return maOptions.GetOption(VOPT_OUTLINER); }
+    bool    IsThemedCursor  () const            { return maOptions.GetOption(VOPT_THEMEDCURSOR); }
 
     /// Force page size for PgUp/PgDown to overwrite the computation based on m_aVisArea.
     void ForcePageUpDownOffset(tools::Long nTwips) { m_nLOKPageUpDownOffset = nTwips; }

@@ -59,7 +59,7 @@ void collectUIInformation( const OUString& aevent )
 FuDraw::FuDraw(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP,
                SdrModel* pDoc, const SfxRequest& rReq)
     : FuPoor(rViewSh, pWin, pViewP, pDoc, rReq)
-    , aNewPointer(PointerStyle::FatCross)
+    , aNewPointer(PointerStyle::Arrow)
     , aOldPointer(PointerStyle::Arrow)
 {
 }
@@ -719,7 +719,10 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
     else if ( IsDetectiveHit( aPnt ) )
         rViewShell.SetActivePointer( PointerStyle::Detective );
     else
-        rViewShell.SetActivePointer( aNewPointer );            //! in Gridwin?
+    {
+        const bool bIsThemed = rViewShell.GetViewData().IsThemedCursor();
+        rViewShell.SetActivePointer( bIsThemed ? PointerStyle::FatCross : PointerStyle::Arrow ); //! in Gridwin?
+    }
 }
 
 bool FuDraw::IsEditingANote() const
