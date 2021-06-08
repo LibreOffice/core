@@ -2511,7 +2511,7 @@ SwLinePortion* SwTextFormatter::MakeRestPortion( const SwLineLayout* pLine,
 SwTextCursorSave::SwTextCursorSave( SwTextCursor* pCursor,
                                   SwMultiPortion* pMulti,
                                   SwTwips nY,
-                                  sal_uInt16& nX,
+                                  sal_uInt32& nX,
                                   TextFrameIndex const nCurrStart,
                                   tools::Long nSpaceAdd )
   : pTextCursor(pCursor),
