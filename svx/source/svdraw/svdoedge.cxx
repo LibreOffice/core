@@ -2560,8 +2560,6 @@ void SdrEdgeObj::SetTailPoint( bool bTail, const Point& rPt )
 */
 void SdrEdgeObj::setGluePointIndex( bool bTail, sal_Int32 nIndex /* = -1 */ )
 {
-    tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetCurrentBoundRect();
-
     SdrObjConnection& rConn1 = GetConnection( bTail );
 
     rConn1.SetAutoVertex( nIndex >= 0 && nIndex <= 3 );
