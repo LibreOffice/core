@@ -3293,19 +3293,11 @@ void ScViewData::ReadUserData(const OUString& rData)
         return;
     }
 
-    Fraction aZoomX, aZoomY, aPageZoomX, aPageZoomY;    // evaluate (all sheets?)
-
     sal_Int32 nMainIdx {0};
     sal_Int32 nIdx {0};
 
     OUString aZoomStr = rData.getToken(0, ';', nMainIdx);       // Zoom/PageZoom/Mode
-    sal_uInt16 nNormZoom = sal::static_int_cast<sal_uInt16>(aZoomStr.getToken(0, '/', nIdx).toInt32());
-    if ( nNormZoom >= MINZOOM && nNormZoom <= MAXZOOM )
-        aZoomX = aZoomY = Fraction( nNormZoom, 100 );           //  "normal" zoom (always)
-    sal_uInt16 nPageZoom = sal::static_int_cast<sal_uInt16>(aZoomStr.getToken(0, '/', nIdx).toInt32());
-    if ( nPageZoom >= MINZOOM && nPageZoom <= MAXZOOM )
-        aPageZoomX = aPageZoomY = Fraction( nPageZoom, 100 );   // Pagebreak zoom, if set
-    sal_Unicode cMode = aZoomStr.getToken(0, '/', nIdx)[0];     // 0 or "0"/"1"
+    sal_Unicode cMode = aZoomStr.getToken(2, '/', nIdx)[0];     // 0 or "0"/"1"
     SetPagebreakMode( cMode == '1' );
     // SetPagebreakMode must always be called due to CalcPPT / RecalcPixPos()
 
