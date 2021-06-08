@@ -228,7 +228,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
 
                 rWriter.attribute("height", rSizePixel.getHeight());
                 rWriter.attribute("width", rSizePixel.getWidth());
-                rWriter.attribute("checksum", aBitmapEx.GetChecksum());
+                rWriter.attribute("checksum", OString(std::to_string( aBitmapEx.GetChecksum() )));
 
                 rWriter.endElement();
             }
