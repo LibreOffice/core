@@ -26,15 +26,15 @@ class ScDataProviderDlg : public weld::GenericDialogController
 {
 private:
     std::shared_ptr<ScDocument> mxDoc;
-    std::unique_ptr<weld::Menu> mxStartMenu;
     std::unique_ptr<weld::Menu> mxColumnMenu;
     std::unique_ptr<weld::Container> mxBox;
     css::uno::Reference<css::awt::XWindow> m_xTableParent;
     VclPtr<ScDataTableView> mxTable;
-    std::unique_ptr<weld::ScrolledWindow> mxScroll;
     std::unique_ptr<weld::Container> mxList;
     std::unique_ptr<ScDataProviderBaseControl> mxDataProviderCtrl;
     std::unique_ptr<weld::ComboBox> mxDBRanges;
+    std::unique_ptr<weld::Button> mxOKBtn;
+    std::unique_ptr<weld::Button> mxCancelBtn;
 
     std::vector<std::unique_ptr<ScDataTransformationBaseControl>> maControls;
 
@@ -48,7 +48,8 @@ private:
     DECL_LINK(StartMenuHdl, const OString&, void);
     DECL_LINK(ColumnMenuHdl, const OString&, void);
     DECL_LINK(ImportHdl, ScDataProviderBaseControl*, void);
-    DECL_LINK(ScrollToEnd, Timer*, void);
+    DECL_LINK(ApplyQuitHdl, weld::Button&, void);
+    DECL_LINK(CancelQuitHdl, weld::Button&, void);
 
 public:
     ScDataProviderDlg(weld::Window* pWindow, std::shared_ptr<ScDocument> pDoc,

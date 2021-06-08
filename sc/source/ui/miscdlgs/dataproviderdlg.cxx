@@ -25,6 +25,7 @@
 class ScDataProviderBaseControl
 {
     std::unique_ptr<weld::Builder> mxBuilder;
+    std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Container> mxGrid;
     std::unique_ptr<weld::ComboBox> mxProviderList;
     std::unique_ptr<weld::Entry> mxEditURL;
@@ -53,11 +54,12 @@ public:
 ScDataProviderBaseControl::ScDataProviderBaseControl(weld::Container* pParent,
         const Link<ScDataProviderBaseControl*, void>& rImportCallback)
     : mxBuilder(Application::CreateBuilder(pParent, "modules/scalc/ui/dataproviderentry.ui"))
+    , m_xBuilder(Application::CreateBuilder(pParent, "modules/scalc/ui/dataproviderdlg.ui"))
     , mxGrid(mxBuilder->weld_container("grid"))
     , mxProviderList(mxBuilder->weld_combo_box("provider_lst"))
     , mxEditURL(mxBuilder->weld_entry("ed_url"))
     , mxEditID(mxBuilder->weld_entry("ed_id"))
-    , mxApplyBtn(mxBuilder->weld_button("apply"))
+    , mxApplyBtn(m_xBuilder->weld_button("apply"))
     , maImportCallback(rImportCallback)
 {
     auto aDataProvider = sc::DataProviderFactory::getDataProviders();
@@ -165,11 +167,6 @@ struct MenuData
     int nMenuID;
     const char* aMenuName;
     std::function<void(ScDataProviderDlg*)> maCallback;
-};
-
-MenuData aStartData[] = {
-    { 0, "Apply & Quit", &ScDataProviderDlg::applyAndQuit },
-    { 1, "Cancel & Quit", &ScDataProviderDlg::cancelAndQuit }
 };
 
 MenuData aColumnData[] = {
@@ -729,15 +726,15 @@ ScDataProviderDlg::ScDataProviderDlg(weld::Window* pParent, std::shared_ptr<ScDo
                                      const ScDocument* pDocument)
     : GenericDialogController(pParent, "modules/scalc/ui/dataproviderdlg.ui", "dataproviderdlg")
     , mxDoc(std::move(pDoc))
-    , mxStartMenu(m_xBuilder->weld_menu("start"))
     , mxColumnMenu(m_xBuilder->weld_menu("column"))
     , mxBox(m_xBuilder->weld_container("data_table"))
     , m_xTableParent(mxBox->CreateChildFrame())
     , mxTable(VclPtr<ScDataTableView>::Create(m_xTableParent))
-    , mxScroll(m_xBuilder->weld_scrolled_window("scroll"))
     , mxList(m_xBuilder->weld_container("operation_ctrl"))
     , mxDataProviderCtrl(new ScDataProviderBaseControl(mxList.get(), LINK(this, ScDataProviderDlg, ImportHdl)))
     , mxDBRanges(m_xBuilder->weld_combo_box("select_db_range"))
+    , mxOKBtn(m_xBuilder->weld_button("okay"))
+    , mxCancelBtn(m_xBuilder->weld_button("cancel"))
     , mnIndex(0)
 {
     Size aPrefSize = mxTable->GetOptimalSize();
@@ -756,10 +753,12 @@ ScDataProviderDlg::ScDataProviderDlg(weld::Window* pParent, std::shared_ptr<ScDo
     bool bSuccess = mxDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
     SAL_WARN_IF(!bSuccess, "sc", "temporary warning");
 
+    mxOKBtn->connect_clicked(LINK(this, ScDataProviderDlg, ApplyQuitHdl));
+    mxCancelBtn->connect_clicked(LINK(this, ScDataProviderDlg, CancelQuitHdl));
+
     InitMenu();
 
     maIdle.SetPriority( TaskPriority::LOWEST );
-    maIdle.SetInvokeHandler( LINK( this, ScDataProviderDlg, ScrollToEnd) );
 }
 
 ScDataProviderDlg::~ScDataProviderDlg()
@@ -771,31 +770,9 @@ ScDataProviderDlg::~ScDataProviderDlg()
 
 void ScDataProviderDlg::InitMenu()
 {
-    for (const auto& itrStartData : aStartData)
-        mxStartMenu->append(OUString::number(itrStartData.nMenuID), OUString::createFromAscii(itrStartData.aMenuName));
-    mxStartMenu->connect_activate(LINK(this, ScDataProviderDlg, StartMenuHdl));
-
     for (const auto& itrColumnData : aColumnData)
         mxColumnMenu->append(OUString::number(itrColumnData.nMenuID), OUString::createFromAscii(itrColumnData.aMenuName));
     mxColumnMenu->connect_activate(LINK(this, ScDataProviderDlg, ColumnMenuHdl));
-}
-
-IMPL_LINK(ScDataProviderDlg, StartMenuHdl, const OString&, rIdent, void)
-{
-    auto nId = rIdent.toInt32();
-    for (auto& i: aStartData)
-    {
-        if (i.nMenuID == nId)
-        {
-            i.maCallback(this);
-            return;
-        }
-    }
-}
-
-IMPL_LINK_NOARG(ScDataProviderDlg, ScrollToEnd, Timer*, void)
-{
-    mxScroll->vadjustment_set_value(mxScroll->vadjustment_get_upper());
 }
 
 IMPL_LINK(ScDataProviderDlg, ColumnMenuHdl, const OString&, rIdent, void)
@@ -821,12 +798,12 @@ IMPL_LINK(ScDataProviderDlg, ImportHdl, ScDataProviderBaseControl*, pCtrl, void)
     }
 }
 
-void ScDataProviderDlg::applyAndQuit()
+IMPL_LINK_NOARG(ScDataProviderDlg, ApplyQuitHdl, weld::Button&, void)
 {
     m_xDialog->response(RET_OK);
 }
 
-void ScDataProviderDlg::cancelAndQuit()
+IMPL_LINK_NOARG(ScDataProviderDlg, CancelQuitHdl, weld::Button&, void)
 {
     m_xDialog->response(RET_CANCEL);
 }
