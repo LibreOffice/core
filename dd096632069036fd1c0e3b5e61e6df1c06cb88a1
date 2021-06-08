@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "97abbd65_e6351684",
+        "filename": "chart2/source/tools/DataSourceHelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-08T07:00:19Z",
+      "side": 1,
+      "message": "This syntax is awkward (even without spaces between condition,firstandsecondresults). I\u0027d suggest just keep it separate, as it was before, and use the resulting eRowSource here.",
+      "range": {
+        "startLine": 156,
+        "startChar": 41,
+        "endLine": 156,
+        "endChar": 127
+      },
+      "revId": "dd096632069036fd1c0e3b5e61e6df1c06cb88a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
