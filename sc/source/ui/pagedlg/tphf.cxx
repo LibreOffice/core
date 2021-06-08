@@ -42,7 +42,7 @@
 
 ScHFPage::ScHFPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet, sal_uInt16 nSetId)
     : SvxHFPage(pPage, pController, rSet, nSetId)
-    , aDataSet(*rSet.GetPool(), svl::Items<ATTR_PAGE, ATTR_PAGE, ATTR_PAGE_HEADERLEFT, ATTR_PAGE_FOOTERRIGHT>{})
+    , aDataSet(*rSet.GetPool(), svl::Items<ATTR_PAGE, ATTR_PAGE, ATTR_PAGE_HEADERLEFT, ATTR_PAGE_FOOTERFIRST>{})
     , nPageUsage(SvxPageUsage::All)
     , pStyleDlg(nullptr)
     , m_xBtnEdit(m_xBuilder->weld_button("buttonEdit"))
@@ -91,11 +91,13 @@ bool ScHFPage::FillItemSet( SfxItemSet* rOutSet )
     {
         rOutSet->Put( aDataSet.Get( ATTR_PAGE_HEADERLEFT ) );
         rOutSet->Put( aDataSet.Get( ATTR_PAGE_HEADERRIGHT ) );
+        rOutSet->Put( aDataSet.Get( ATTR_PAGE_HEADERFIRST ) );
     }
     else
     {
         rOutSet->Put( aDataSet.Get( ATTR_PAGE_FOOTERLEFT ) );
         rOutSet->Put( aDataSet.Get( ATTR_PAGE_FOOTERRIGHT ) );
+        rOutSet->Put( aDataSet.Get( ATTR_PAGE_FOOTERFIRST ) );
     }
 
     return bResult;

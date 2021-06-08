@@ -77,7 +77,8 @@ ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(ScXMLExport& rExportP, 
     sal_uInt16 const aEditWhichIds[] { EE_CHAR_FONTINFO, EE_CHAR_FONTINFO_CJK,
                                        EE_CHAR_FONTINFO_CTL };
     sal_uInt16 const aPageWhichIds[] { ATTR_PAGE_HEADERLEFT, ATTR_PAGE_FOOTERLEFT,
-                                       ATTR_PAGE_HEADERRIGHT, ATTR_PAGE_FOOTERRIGHT };
+                                       ATTR_PAGE_HEADERRIGHT, ATTR_PAGE_FOOTERRIGHT,
+                                       ATTR_PAGE_HEADERFIRST, ATTR_PAGE_FOOTERFIRST };
 
     const SfxItemPool* pItemPool(rExportP.GetDocument()->GetPool());
     AddFontItems(aWhichIds, 3, pItemPool, true);

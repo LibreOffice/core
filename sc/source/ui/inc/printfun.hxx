@@ -50,6 +50,7 @@ struct ScPrintHFParam
     bool                bEnable;
     bool                bDynamic;
     bool                bShared;
+    bool                bSharedFirst;
     tools::Long                nHeight;            // in total (height + distance + frames)
     tools::Long                nManHeight;         // set size (min when dynamic)
     sal_uInt16          nDistance;
@@ -57,6 +58,7 @@ struct ScPrintHFParam
     sal_uInt16          nRight;
     const ScPageHFItem* pLeft;
     const ScPageHFItem* pRight;
+    const ScPageHFItem* pFirst;
     const SvxBoxItem*   pBorder;
     const SvxBrushItem* pBack;
     const SvxShadowItem* pShadow;

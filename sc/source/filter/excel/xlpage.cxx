@@ -185,7 +185,7 @@ void XclPageData::SetDefaults()
     mnScaling = 100;
     mnFitToWidth = mnFitToHeight = 1;
     mnHorPrintRes = mnVerPrintRes = 300;
-    mbUseEvenHF = /*mbUseFirstHF =*/ false;
+    mbUseEvenHF = mbUseFirstHF = false;
     mbValid = false;
     mbPortrait = true;
     mbPrintInRows = mbBlackWhite = mbDraftQuality = mbPrintNotes = mbManualStart = mbFitToPages = false;

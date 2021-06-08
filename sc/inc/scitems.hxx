@@ -175,31 +175,34 @@ constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_VERCENTER (163);
 constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_ON (164);     // editor: header/footer-page
 constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_DYNAMIC (165);
 constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_SHARED (166);
+constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_SHARED_FIRST (167);
 
-constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_NOTES (167);     // editor: table
-constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_GRID (168);
-constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_HEADERS (169);
-constexpr TypedWhichId<ScViewObjectModeItem> ATTR_PAGE_CHARTS (170);
-constexpr TypedWhichId<ScViewObjectModeItem> ATTR_PAGE_OBJECTS (171);
-constexpr TypedWhichId<ScViewObjectModeItem> ATTR_PAGE_DRAWINGS (172);
-constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_TOPDOWN (173);
-constexpr TypedWhichId<SfxUInt16Item> ATTR_PAGE_SCALE (174);
-constexpr TypedWhichId<SfxUInt16Item> ATTR_PAGE_SCALETOPAGES (175);
-constexpr TypedWhichId<SfxUInt16Item> ATTR_PAGE_FIRSTPAGENO (176);
+constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_NOTES (168);     // editor: table
+constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_GRID (169);
+constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_HEADERS (170);
+constexpr TypedWhichId<ScViewObjectModeItem> ATTR_PAGE_CHARTS (171);
+constexpr TypedWhichId<ScViewObjectModeItem> ATTR_PAGE_OBJECTS (172);
+constexpr TypedWhichId<ScViewObjectModeItem> ATTR_PAGE_DRAWINGS (173);
+constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_TOPDOWN (174);
+constexpr TypedWhichId<SfxUInt16Item> ATTR_PAGE_SCALE (175);
+constexpr TypedWhichId<SfxUInt16Item> ATTR_PAGE_SCALETOPAGES (176);
+constexpr TypedWhichId<SfxUInt16Item> ATTR_PAGE_FIRSTPAGENO (177);
 
-constexpr TypedWhichId<ScPageHFItem> ATTR_PAGE_HEADERLEFT (177);     // contents of header/
-constexpr TypedWhichId<ScPageHFItem> ATTR_PAGE_FOOTERLEFT (178);     // footer (left)
-constexpr TypedWhichId<ScPageHFItem> ATTR_PAGE_HEADERRIGHT (179);     // contents of header/
-constexpr TypedWhichId<ScPageHFItem> ATTR_PAGE_FOOTERRIGHT (180);     // footer (right)
-constexpr TypedWhichId<SvxSetItem> ATTR_PAGE_HEADERSET (181);     // the corresponding sets
-constexpr TypedWhichId<SvxSetItem> ATTR_PAGE_FOOTERSET (182);
+constexpr TypedWhichId<ScPageHFItem> ATTR_PAGE_HEADERLEFT (178);     // contents of header/
+constexpr TypedWhichId<ScPageHFItem> ATTR_PAGE_FOOTERLEFT (179);     // footer (left)
+constexpr TypedWhichId<ScPageHFItem> ATTR_PAGE_HEADERRIGHT (180);    // contents of header/
+constexpr TypedWhichId<ScPageHFItem> ATTR_PAGE_FOOTERRIGHT (181);    // footer (right)
+constexpr TypedWhichId<ScPageHFItem> ATTR_PAGE_HEADERFIRST (182);    // contents of header/
+constexpr TypedWhichId<ScPageHFItem> ATTR_PAGE_FOOTERFIRST (183);    // footer (first page)
+constexpr TypedWhichId<SvxSetItem> ATTR_PAGE_HEADERSET (184);     // the corresponding sets
+constexpr TypedWhichId<SvxSetItem> ATTR_PAGE_FOOTERSET (185);
 
-constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_FORMULAS (183);
-constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_NULLVALS (184);
+constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_FORMULAS (186);
+constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_NULLVALS (187);
 
-constexpr TypedWhichId<ScPageScaleToItem> ATTR_PAGE_SCALETO (185);     // #i8868# scale printout to width/height
+constexpr TypedWhichId<ScPageScaleToItem> ATTR_PAGE_SCALETO (188);     // #i8868# scale printout to width/height
 
-constexpr TypedWhichId<SfxBoolItem> ATTR_HIDDEN (186);
+constexpr TypedWhichId<SfxBoolItem> ATTR_HIDDEN (189);
 
 constexpr sal_uInt16 ATTR_ENDINDEX(ATTR_HIDDEN);        // end of pool-range
 
@@ -219,6 +222,8 @@ constexpr sal_uInt16 ATTR_ENDINDEX(ATTR_HIDDEN);        // end of pool-range
 #define SID_SCATTR_PAGE_FOOTERLEFT      ATTR_PAGE_FOOTERLEFT
 #define SID_SCATTR_PAGE_HEADERRIGHT     ATTR_PAGE_HEADERRIGHT
 #define SID_SCATTR_PAGE_FOOTERRIGHT     ATTR_PAGE_FOOTERRIGHT
+#define SID_SCATTR_PAGE_HEADERFIRST     ATTR_PAGE_HEADERFIRST
+#define SID_SCATTR_PAGE_FOOTERFIRST     ATTR_PAGE_FOOTERFIRST
 #define SID_SCATTR_PAGE_FORMULAS        ATTR_PAGE_FORMULAS
 #define SID_SCATTR_PAGE_NULLVALS        ATTR_PAGE_NULLVALS
 #define SID_SCATTR_PAGE_SCALETO         ATTR_PAGE_SCALETO
