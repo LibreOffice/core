@@ -895,7 +895,6 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
     OUString sDefaultTemplate    ;
     OUString sUserData           ;
     OUString sExtension          ;
-    OUString sPattern            ;
     OUString sServiceName        ;
     bool bEnabled = true         ;
 
@@ -974,12 +973,6 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
                             rTypeProperty.Value >>= lExtensions;
                             sExtension = implc_convertStringlistToString( lExtensions, ';', u"*." );
                         }
-                    }
-                    else if ( rTypeProperty.Name == "URLPattern" )
-                    {
-                            uno::Sequence< OUString > lPattern;
-                            rTypeProperty.Value >>= lPattern;
-                            sPattern = implc_convertStringlistToString( lPattern, ';', u"" );
                     }
                 }
             }
