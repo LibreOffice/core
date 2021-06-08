@@ -52,6 +52,7 @@
 #include <unotools/searchopt.hxx>
 #include <sal/log.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <officecfg/Office/UI/Sidebar.hxx>
 #include <officecfg/Setup.hxx>
 #include <comphelper/configuration.hxx>
 #include <tools/diagnose_ex.h>
@@ -681,6 +682,7 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xSkiaStatusDisabled(m_xBuilder->weld_label("skiadisabled"))
     , m_xMousePosLB(m_xBuilder->weld_combo_box("mousepos"))
     , m_xMouseMiddleLB(m_xBuilder->weld_combo_box("mousemiddle"))
+    , m_xMinimalSidebarWidth(m_xBuilder->weld_check_button("minimalsidebarwidth"))
 {
     if (Application::GetToolkitName() == "gtk3")
     {
@@ -736,6 +738,10 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
         m_xForceSkiaRaster->set_sensitive(false);
 
     UpdateSkiaStatus();
+
+    if (officecfg::Office::UI::Sidebar::General::MinimumWidth::get())
+        m_xMinimalSidebarWidth->set_active(true);
+    m_xMinimalSidebarWidth->save_state();
 }
 
 OfaViewTabPage::~OfaViewTabPage()
@@ -953,6 +959,19 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
     if (m_xUseSkia->get_state_changed_from_saved() ||
         m_xForceSkiaRaster->get_state_changed_from_saved())
     {
+        SolarMutexGuard aGuard;
+        if( svtools::executeRestartDialog(
+                comphelper::getProcessComponentContext(), nullptr,
+                svtools::RESTART_REASON_SKIA))
+            GetDialogController()->response(RET_OK);
+    }
+
+    if (m_xMinimalSidebarWidth->get_state_changed_from_saved())
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+        officecfg::Office::UI::Sidebar::General::MinimumWidth::set(m_xMinimalSidebarWidth->get_active(), batch);
+        batch->commit();
+
         SolarMutexGuard aGuard;
         if( svtools::executeRestartDialog(
                 comphelper::getProcessComponentContext(), nullptr,

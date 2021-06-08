@@ -120,6 +120,8 @@ private:
     std::unique_ptr<weld::ComboBox> m_xMousePosLB;
     std::unique_ptr<weld::ComboBox> m_xMouseMiddleLB;
 
+    std::unique_ptr<weld::CheckButton> m_xMinimalSidebarWidth;
+
     DECL_LINK(OnAntialiasingToggled, weld::ToggleButton&, void);
     DECL_LINK(OnForceSkiaRasterToggled, weld::ToggleButton&, void);
     void UpdateSkiaStatus();
