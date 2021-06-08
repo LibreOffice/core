@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include <datamapper.hxx>
+
 #include <sal/config.h>
 
 #include <com/sun/star/awt/XWindow.hpp>
@@ -18,7 +20,6 @@
 #include <memory>
 
 class ScDocument;
-class ScDataProviderBaseControl;
 class ScDataTransformationBaseControl;
 class ScDBData;
 
@@ -26,15 +27,25 @@ class ScDataProviderDlg : public weld::GenericDialogController
 {
 private:
     std::shared_ptr<ScDocument> mxDoc;
-    std::unique_ptr<weld::Menu> mxStartMenu;
-    std::unique_ptr<weld::Menu> mxColumnMenu;
     std::unique_ptr<weld::Container> mxBox;
     css::uno::Reference<css::awt::XWindow> m_xTableParent;
     VclPtr<ScDataTableView> mxTable;
-    std::unique_ptr<weld::ScrolledWindow> mxScroll;
     std::unique_ptr<weld::Container> mxList;
-    std::unique_ptr<ScDataProviderBaseControl> mxDataProviderCtrl;
     std::unique_ptr<weld::ComboBox> mxDBRanges;
+    std::unique_ptr<weld::Button> mxOKBtn;
+    std::unique_ptr<weld::Button> mxCancelBtn;
+    std::unique_ptr<weld::Button> mxAddTransformationBtn;
+    std::unique_ptr<weld::ScrolledWindow> mxScroll;
+    std::unique_ptr<weld::Container> mxTransformationList;
+    std::unique_ptr<weld::ComboBox> mxTransformationBox;
+    std::unique_ptr<weld::ComboBox> mxProviderList;
+    std::unique_ptr<weld::Entry> mxEditURL;
+    std::unique_ptr<weld::Entry> mxEditID;
+    std::unique_ptr<weld::Button> mxApplyBtn;
+    std::unique_ptr<weld::Button> mxBrowseBtn;
+
+    OUString msApplyTooltip;
+    OUString msAddTransformationToolTip;
 
     std::vector<std::unique_ptr<ScDataTransformationBaseControl>> maControls;
 
@@ -43,12 +54,18 @@ private:
     sal_uInt32 mnIndex;
     ScDBData* pDBData;
 
-    void InitMenu();
-
     DECL_LINK(StartMenuHdl, const OString&, void);
-    DECL_LINK(ColumnMenuHdl, const OString&, void);
-    DECL_LINK(ImportHdl, ScDataProviderBaseControl*, void);
+    DECL_LINK(ColumnMenuHdl, const weld::ComboBox&, void);
     DECL_LINK(ScrollToEnd, Timer*, void);
+    DECL_LINK(ApplyQuitHdl, weld::Button&, void);
+    DECL_LINK(CancelQuitHdl, weld::Button&, void);
+    DECL_LINK(TransformationListHdl, weld::Button&, void);
+    DECL_LINK(ProviderSelectHdl, weld::ComboBox&, void);
+    DECL_LINK(TransformationSelectHdl, weld::ComboBox&, void);
+    DECL_LINK(IDEditHdl, weld::Entry&, void);
+    DECL_LINK(URLEditHdl, weld::Entry&, void);
+    DECL_LINK(ApplyBtnHdl, weld::Button&, void);
+    DECL_LINK(BrowseBtnHdl, weld::Button&, void);
 
 public:
     ScDataProviderDlg(weld::Window* pWindow, std::shared_ptr<ScDocument> pDoc,
@@ -68,6 +85,10 @@ public:
     void deletefromList(sal_uInt32 nIndex);
     void replaceNullTransformation();
     void dateTimeTransformation();
+    void updateApplyBtn(bool bValidConfig);
+    void isValid();
+
+    sc::ExternalDataSource getDataSource(ScDocument* pDoc);
 
     void import(ScDocument& rDoc, bool bInternal = false);
 };
