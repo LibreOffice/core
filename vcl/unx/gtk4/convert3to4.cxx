@@ -1008,6 +1008,33 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 else // GtkMessageDialog
                     xClass->setNodeValue("GtkBox");
             }
+            else if (sClass == "GtkBox")
+            {
+                // reverse the order of the pack-type=end widgets
+                std::vector<css::uno::Reference<css::xml::dom::XNode>> xPackEnds;
+                css::uno::Reference<css::xml::dom::XNode> xBoxChild = xChild->getFirstChild();
+                while (xBoxChild.is())
+                {
+                    auto xNextBoxChild = xBoxChild->getNextSibling();
+
+                    if (xBoxChild->getNodeName() == "child")
+                    {
+                        css::uno::Reference<css::xml::dom::XNamedNodeMap> xBoxChildMap
+                            = xBoxChild->getAttributes();
+                        css::uno::Reference<css::xml::dom::XNode> xType
+                            = xBoxChildMap->getNamedItem("type");
+                        if (xType && xType->getNodeValue() == "end")
+                            xPackEnds.push_back(xChild->removeChild(xBoxChild));
+                    }
+
+                    xBoxChild = xNextBoxChild;
+                }
+
+                std::reverse(xPackEnds.begin(), xPackEnds.end());
+
+                for (auto& xPackEnd : xPackEnds)
+                    xChild->appendChild(xPackEnd);
+            }
             else if (sClass == "GtkRadioButton")
             {
                 xClass->setNodeValue("GtkCheckButton");
