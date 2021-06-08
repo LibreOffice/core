@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.22.2 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.20"/>
-  <!-- n-columns=1 n-rows=1 -->
   <object class="GtkGrid" id="grid">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -15,11 +14,12 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="aggregatefunctionentry|name">Aggregate Functions</property>
+            <property name="label" translatable="yes" context="aggregatefunctionentry|name">Aggregate Functions                                                                                       </property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -28,38 +28,10 @@
           </packing>
         </child>
         <child>
-          <!-- n-columns=1 n-rows=1 -->
           <object class="GtkGrid" id="grid_details">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkLabel" id="label1">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="aggregatefunctionentry|type">Type:</property>
-                <accessibility>
-                  <relation type="label-for" target="ed_lst"/>
-                </accessibility>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label2">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="aggregatefunctionentry|columns">Columns:</property>
-                <accessibility>
-                  <relation type="label-for" target="ed_columns"/>
-                </accessibility>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
-              </packing>
-            </child>
+            <property name="column_spacing">6</property>
             <child>
               <object class="GtkComboBoxText" id="ed_lst">
                 <property name="visible">True</property>
@@ -72,12 +44,9 @@
                   <item id="2" translatable="yes" context="aggregatefunctionentry|min">Minimum Value</item>
                   <item id="3" translatable="yes" context="aggregatefunctionentry|max">Maximum Value</item>
                 </items>
-                <accessibility>
-                  <relation type="labelled-by" target="label1"/>
-                </accessibility>
               </object>
               <packing>
-                <property name="left_attach">1</property>
+                <property name="left_attach">0</property>
                 <property name="top_attach">0</property>
               </packing>
             </child>
@@ -85,34 +54,34 @@
               <object class="GtkEntry" id="ed_columns">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="truncate-multiline">True</property>
-                <accessibility>
-                  <relation type="labelled-by" target="label2"/>
-                </accessibility>
+                <property name="truncate_multiline">True</property>
+                <property name="placeholder_text" translatable="yes" context="aggregatefunctionentry/cols">Columns</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
-                <property name="top_attach">1</property>
+                <property name="top_attach">0</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkButton" id="ed_delete">
+                <property name="label" translatable="yes" context="aggregatefunctionentry|delete">Delete</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <accessibility>
+              <relation type="labelled-by" target="label1"/>
+            </accessibility>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="ed_delete">
-            <property name="label" translatable="yes" context="aggregatefunctionentry|delete">Cancel</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
           </packing>
         </child>
       </object>
