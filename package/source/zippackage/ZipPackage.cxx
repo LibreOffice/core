@@ -1090,16 +1090,14 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< uno:
     pEntry->nTime = ZipOutputStream::getCurrentDosTime();
 
     // Add default entries, the count must be updated manually when appending.
-    uno::Sequence< beans::StringPair > aDefaultsSequence(4);
     // Add at least the standard default entries.
-    aDefaultsSequence[0].First = "xml";
-    aDefaultsSequence[0].Second= "application/xml";
-    aDefaultsSequence[1].First = "rels";
-    aDefaultsSequence[1].Second= "application/vnd.openxmlformats-package.relationships+xml";
-    aDefaultsSequence[2].First = "png";
-    aDefaultsSequence[2].Second= "image/png";
-    aDefaultsSequence[3].First = "jpeg";
-    aDefaultsSequence[3].Second= "image/jpeg";
+    uno::Sequence< beans::StringPair > aDefaultsSequence
+    {
+        { "xml", "application/xml" },
+        { "rels", "application/vnd.openxmlformats-package.relationships+xml" },
+        { "png", "image/png" },
+        { "jpeg", "image/jpeg" }
+    };
 
     uno::Sequence< beans::StringPair > aOverridesSequence(aManList.size());
     sal_Int32 nOverSeqLength = 0;

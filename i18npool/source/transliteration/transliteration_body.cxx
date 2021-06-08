@@ -60,10 +60,7 @@ sal_Bool SAL_CALL Transliteration_body::equals(
 Sequence< OUString > SAL_CALL
 Transliteration_body::transliterateRange( const OUString& str1, const OUString& str2 )
 {
-    Sequence< OUString > ostr(2);
-    ostr[0] = str1;
-    ostr[1] = str2;
-    return ostr;
+    return { str1, str2 };
 }
 
 static MappingType lcl_getMappingTypeForToggleCase( MappingType nMappingType, sal_Unicode cChar )

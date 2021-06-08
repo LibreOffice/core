@@ -1151,8 +1151,6 @@ uno::Sequence< OUString > GrammarCheckingIterator::GetServiceList(
 {
     ::osl::Guard< ::osl::Mutex > aGuard( MyMutex::get() );
 
-    uno::Sequence< OUString > aRes(1);
-
     OUString aImplName;     // there is only one grammar checker per language
     LanguageType nLang  = LinguLocaleToLanguage( rLocale );
     GCImplNames_t::const_iterator aIt( m_aGCImplNamesByLang.find( nLang ) );
@@ -1160,11 +1158,8 @@ uno::Sequence< OUString > GrammarCheckingIterator::GetServiceList(
         aImplName = aIt->second;
 
     if (!aImplName.isEmpty())
-        aRes[0] = aImplName;
-    else
-        aRes.realloc(0);
-
-    return aRes;
+        return { aImplName };
+    return {};
 }
 
 

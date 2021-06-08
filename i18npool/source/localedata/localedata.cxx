@@ -784,8 +784,7 @@ LocaleDataImpl::getAllCalendars2( const Locale& rLocale )
         return calendarsSeq;
     }
     else {
-        Sequence< Calendar2 > seq1(0);
-        return seq1;
+        return {};
     }
 }
 
@@ -828,8 +827,7 @@ LocaleDataImpl::getAllCurrencies2( const Locale& rLocale )
         return seq;
     }
     else {
-        Sequence< Currency2 > seq1(0);
-        return seq1;
+        return {};
     }
 }
 
@@ -910,8 +908,7 @@ LocaleDataImpl::getDateAcceptancePatterns( const Locale& rLocale )
     }
     else
     {
-        Sequence< OUString > seq(0);
-        return seq;
+        return {};
     }
 }
 
@@ -954,8 +951,7 @@ LocaleDataImpl::getCollatorImplementations( const Locale& rLocale )
         return seq;
     }
     else {
-        Sequence< Implementation > seq1(0);
-        return seq1;
+        return {};
     }
 }
 
@@ -974,8 +970,7 @@ LocaleDataImpl::getCollationOptions( const Locale& rLocale )
         return seq;
     }
     else {
-        Sequence< OUString > seq1(0);
-        return seq1;
+        return {};
     }
 }
 
@@ -994,8 +989,7 @@ LocaleDataImpl::getSearchOptions( const Locale& rLocale )
         return seq;
     }
     else {
-        Sequence< OUString > seq1(0);
-        return seq1;
+        return {};
     }
 }
 
@@ -1023,8 +1017,7 @@ LocaleDataImpl::getIndexAlgorithm( const Locale& rLocale )
         return seq;
     }
     else {
-        Sequence< OUString > seq1(0);
-        return seq1;
+        return {};
     }
 }
 
@@ -1108,8 +1101,7 @@ LocaleDataImpl::getUnicodeScripts( const Locale& rLocale )
         return seq;
     }
     else {
-        Sequence< UnicodeScript > seq1(0);
-        return seq1;
+        return {};
     }
 }
 
@@ -1128,8 +1120,7 @@ LocaleDataImpl::getFollowPageWords( const Locale& rLocale )
         return seq;
     }
     else {
-        Sequence< OUString > seq1(0);
-        return seq1;
+        return {};
     }
 }
 
@@ -1150,8 +1141,7 @@ LocaleDataImpl::getTransliterations( const Locale& rLocale )
         return seq;
     }
     else {
-        Sequence< OUString > seq1(0);
-        return seq1;
+        return {};
     }
 
 
@@ -1229,8 +1219,7 @@ LocaleDataImpl::getBreakIteratorRules( const Locale& rLocale  )
         return seq;
     }
     else {
-        Sequence< OUString > seq1(0);
-        return seq1;
+        return {};
     }
 }
 
@@ -1251,8 +1240,7 @@ LocaleDataImpl::getReservedWord( const Locale& rLocale  )
         return seq;
     }
     else {
-        Sequence< OUString > seq1(0);
-        return seq1;
+        return {};
     }
 }
 
@@ -1427,8 +1415,7 @@ LocaleDataImpl::getOutlineNumberingLevels( const lang::Locale& rLocale )
         return aRet;
     }
     else {
-        Sequence< Reference<container::XIndexAccess> > seq1(0);
-        return seq1;
+        return {};
     }
 }
 

@@ -3546,16 +3546,15 @@ bool DrawingML::WriteCustomGeometry(
 
                 if ( !aSegments.hasElements() )
                 {
-                    aSegments = uno::Sequence<drawing::EnhancedCustomShapeSegment>(4);
-                    aSegments[0].Count = 1;
-                    aSegments[0].Command = drawing::EnhancedCustomShapeSegmentCommand::MOVETO;
-                    aSegments[1].Count = static_cast<sal_Int16>(std::min( aPairs.getLength() - 1, sal_Int32(32767) ));
-                    aSegments[1].Command = drawing::EnhancedCustomShapeSegmentCommand::LINETO;
-                    aSegments[2].Count = 0;
-                    aSegments[2].Command = drawing::EnhancedCustomShapeSegmentCommand::CLOSESUBPATH;
-                    aSegments[3].Count = 0;
-                    aSegments[3].Command = drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH;
-                }
+                    aSegments = uno::Sequence<drawing::EnhancedCustomShapeSegment>
+                    {
+                        { drawing::EnhancedCustomShapeSegmentCommand::MOVETO, 1 },
+                        { drawing::EnhancedCustomShapeSegmentCommand::LINETO,
+                          static_cast<sal_Int16>(std::min( aPairs.getLength() - 1, sal_Int32(32767) )) },
+                        { drawing::EnhancedCustomShapeSegmentCommand::CLOSESUBPATH, 0 },
+                        { drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH, 0 }
+                    };
+                };
 
                 int nExpectedPairCount = std::accumulate(std::cbegin(aSegments), std::cend(aSegments), 0,
                     [](const int nSum, const drawing::EnhancedCustomShapeSegment& rSegment) { return nSum + rSegment.Count; });

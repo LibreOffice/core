@@ -73,17 +73,9 @@ Transliteration_caseignore::transliterateRange( const OUString& str1, const OUSt
     OUString u2 = l2u->transliterateString2String(str2, 0, str2.getLength());
 
     if ((l1 == u1) && (l2 == u2)) {
-        Sequence< OUString > r(2);
-        r[0] = l1;
-        r[1] = l2;
-        return r;
+        return { l1, l2 };
     } else {
-        Sequence< OUString > r(4);
-        r[0] = l1;
-        r[1] = l2;
-        r[2] = u1;
-        r[3] = u2;
-        return r;
+        return { l1, l2, u1, u2 };
     }
 }
 
