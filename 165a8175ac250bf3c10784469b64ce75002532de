@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3c1263e1_40a048e1",
+        "filename": "sw/qa/extras/txtencexport/txtencexport.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1002555
+      },
+      "writtenOn": "2021-06-08T08:53:40Z",
+      "side": 1,
+      "message": "I removed concatenation",
+      "parentUuid": "2df0c581_7c97ffd9",
+      "range": {
+        "startLine": 41,
+        "startChar": 19,
+        "endLine": 41,
+        "endChar": 27
+      },
+      "revId": "165a8175ac250bf3c10784469b64ce75002532de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1e74e7bf_7065634f",
         "filename": "sw/qa/extras/txtencexport/txtencexport.cxx",
         "patchSetId": 15
@@ -36,6 +60,24 @@
       "writtenOn": "2021-06-03T09:55:57Z",
       "side": 1,
       "message": "hmm this double conversion from UTF-8 to OUString back to UTF-8 looks superfluous?",
+      "revId": "165a8175ac250bf3c10784469b64ce75002532de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26f8f6de_32159028",
+        "filename": "sw/qa/extras/txtencexport/txtencexport.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1002555
+      },
+      "writtenOn": "2021-06-08T08:53:40Z",
+      "side": 1,
+      "message": "I tried to remove double conversion but didn\u0027t manage to pass equality assertion.",
+      "parentUuid": "1e74e7bf_7065634f",
       "revId": "165a8175ac250bf3c10784469b64ce75002532de",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
