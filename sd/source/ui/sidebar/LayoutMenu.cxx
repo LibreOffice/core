@@ -160,7 +160,7 @@ LayoutMenu::LayoutMenu (
     : PanelLayout( pParent, "LayoutPanel", "modules/simpress/ui/layoutpanel.ui" ),
       mrBase(rViewShellBase),
       mxLayoutValueSet(new LayoutValueSet(*this)),
-      mxLayoutValueSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *mxLayoutValueSet)),
+      mxLayoutValueSetWin(new weld::CustomWeld(*m_xBuilder, "layoutvalueset", *mxLayoutValueSet)),
       mbIsMainViewChangePending(false),
       mxSidebar(rxSidebar),
       mbIsDisposed(false)
