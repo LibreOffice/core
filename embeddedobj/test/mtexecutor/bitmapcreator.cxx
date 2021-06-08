@@ -29,10 +29,11 @@ using namespace ::com::sun::star;
 
 uno::Sequence< OUString > SAL_CALL VCLBitmapCreator::impl_staticGetSupportedServiceNames()
 {
-    uno::Sequence< OUString > aRet(2);
-    aRet[0] = "com.sun.star.embed.BitmapCreator";
-    aRet[1] = "com.sun.star.comp.embed.BitmapCreator";
-    return aRet;
+    return
+    {
+        "com.sun.star.embed.BitmapCreator",
+        "com.sun.star.comp.embed.BitmapCreator"
+    };
 }
 
 

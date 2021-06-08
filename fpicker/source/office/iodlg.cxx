@@ -1462,9 +1462,7 @@ bool SvtFileDialog::PrepareExecute()
                                                     INetURLObject::DecodeMechanism::NONE ),
                                  Reference< XCommandEnvironment >(),
                                  comphelper::getProcessComponentContext() );
-            Sequence< OUString > aProps(2);
-            aProps[0] = "IsVolume";
-            aProps[1] = "IsRemoveable";
+            Sequence< OUString > aProps { "IsVolume", "IsRemoveable" };
 
             Reference< XResultSet > xResultSet
                 = aCnt.createCursor( aProps, ::ucbhelper::INCLUDE_FOLDERS_ONLY );

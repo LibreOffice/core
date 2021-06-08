@@ -91,9 +91,7 @@ void OleEmbeddedObject::SwitchComponentToRunningState_Impl()
 uno::Sequence< sal_Int32 > OleEmbeddedObject::GetReachableStatesList_Impl(
                                                         const uno::Sequence< embed::VerbDescriptor >& aVerbList )
 {
-    uno::Sequence< sal_Int32 > aStates(2);
-    aStates[0] = embed::EmbedStates::LOADED;
-    aStates[1] = embed::EmbedStates::RUNNING;
+    uno::Sequence< sal_Int32 > aStates { embed::EmbedStates::LOADED, embed::EmbedStates::RUNNING };
     for ( embed::VerbDescriptor const & vd : aVerbList )
         if ( vd.VerbID == embed::EmbedVerbs::MS_OLEVERB_OPEN )
         {

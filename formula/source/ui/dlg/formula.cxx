@@ -50,7 +50,6 @@
 // For tab page
 #define TOKEN_OPEN  0
 #define TOKEN_CLOSE 1
-#define TOKEN_SEP   2
 namespace formula
 {
 
@@ -355,10 +354,8 @@ void FormulaDlg_Impl::InitFormulaOpCodeMapper()
     m_aFunctionOpCodes = m_xOpCodeMapper->getAvailableMappings( sheet::FormulaLanguage::ODFF, sheet::FormulaMapGroup::FUNCTIONS);
     m_pFunctionOpCodesEnd = m_aFunctionOpCodes.getConstArray() + m_aFunctionOpCodes.getLength();
 
-    uno::Sequence< OUString > aArgs(3);
-    aArgs[TOKEN_OPEN]   = "(";
-    aArgs[TOKEN_CLOSE]  = ")";
-    aArgs[TOKEN_SEP]    = ";";
+    // 0:TOKEN_OPEN, 1:TOKEN_CLOSE, 2:TOKEN_SEP
+    uno::Sequence< OUString > aArgs { "(", ")", ";" };
     m_aSeparatorsOpCodes = m_xOpCodeMapper->getMappings( aArgs, sheet::FormulaLanguage::ODFF);
 
     m_aSpecialOpCodes = m_xOpCodeMapper->getAvailableMappings( sheet::FormulaLanguage::ODFF, sheet::FormulaMapGroup::SPECIAL);
@@ -395,8 +392,7 @@ sal_Int32 FormulaDlg_Impl::GetFunctionPos(sal_Int32 nPos)
         while ( pIter != pEnd )
         {
             const sal_Int32 eOp = pIter->OpCode;
-            uno::Sequence<sheet::FormulaToken> aArgs(1);
-            aArgs[0] = *pIter;
+            uno::Sequence<sheet::FormulaToken> aArgs { *pIter };
             const OUString aString = xParser->printFormula( aArgs, aRefPos);
             const sheet::FormulaToken* pNextToken = pIter + 1;
 
@@ -593,12 +589,11 @@ void FormulaDlg_Impl::MakeTree(StructPage* _pTree, weld::TreeIter* pParent, cons
 
     // #i101512# for output, the original token is needed
     const FormulaToken* pOrigToken = (_pToken->GetType() == svFAP) ? _pToken->GetFAPOrigToken() : _pToken;
-    uno::Sequence<sheet::FormulaToken> aArgs(1);
     ::std::map<const FormulaToken*, sheet::FormulaToken>::const_iterator itr = m_aTokenMap.find(pOrigToken);
     if (itr == m_aTokenMap.end())
         return;
 
-    aArgs[0] = itr->second;
+    uno::Sequence<sheet::FormulaToken> aArgs { itr->second };
     try
     {
         const table::CellAddress aRefPos(m_pHelper->getReferencePosition());

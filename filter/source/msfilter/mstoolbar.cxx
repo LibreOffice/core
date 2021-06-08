@@ -53,8 +53,7 @@ void CustomToolBarImportHelper::applyIcons()
     for (auto const& concommand : iconcommands)
     {
         uno::Sequence<OUString> commands { concommand.sCommand };
-        uno::Sequence< uno::Reference< graphic::XGraphic > > images(1);
-        images[ 0 ] = concommand.image;
+        uno::Sequence< uno::Reference< graphic::XGraphic > > images { concommand.image };
 
         uno::Reference< ui::XImageManager > xImageManager( getCfgManager()->getImageManager(), uno::UNO_QUERY_THROW );
         sal_uInt16 nColor = ui::ImageType::COLOR_NORMAL;
