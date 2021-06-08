@@ -76,6 +76,7 @@ else
 		TestUserDir="$(call gb_Helper_make_url,$(dir $(call gb_UITest_get_target,$*)))" \
 		PYTHONDONTWRITEBYTECODE=0 \
 		$(if $(ENABLE_WERROR),PYTHONWARNINGS=error) \
+		$(if $(filter WNT,$(OS)),TZ=) \
 		$(gb_TEST_ENV_VARS) \
 		$(gb_UITest_COMMAND) \
 		--soffice="$(gb_UITest_SOFFICEARG)" \
