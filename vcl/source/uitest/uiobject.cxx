@@ -582,8 +582,7 @@ OUString WindowUIObject::get_action(VclEventId nEvent) const
         default:
             aActionName = OUString::number(static_cast<int>(nEvent));
     }
-    return "";
-    //return "Action on element: " + mxWindow->get_id() + " with action : " + aActionName;
+    return "Action on element: " + mxWindow->get_id() + " with action : " + aActionName;
 }
 
 std::unique_ptr<UIObject> WindowUIObject::create(vcl::Window* pWindow)
