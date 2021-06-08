@@ -319,7 +319,7 @@ void WriterFilter::setTargetDocument(const uno::Reference<lang::XComponent>& xDo
     xSettings->setPropertyValue("InvertBorderSpacing", uno::makeAny(true));
     xSettings->setPropertyValue("CollapseEmptyCellPara", uno::makeAny(true));
     xSettings->setPropertyValue("TabOverflow", uno::makeAny(true));
-    // tdf#142404 TabOverSpacing (new for compatiblityMode15/Word2013+) is a subset of TabOverMargin
+    // tdf#142404 TabOverSpacing (new for compatibilityMode15/Word2013+) is a subset of TabOverMargin
     // (which applied to DOCX <= compatibilityMode14).
     // TabOverMargin looks at tabs beyond the normal text area,
     // while TabOverSpacing only refers to a tab beyond the paragraph margin.
