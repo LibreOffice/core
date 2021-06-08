@@ -53,7 +53,9 @@ public:
         SdDrawDocument& rDocument,
         ViewShellBase& rBase,
         const std::shared_ptr<MasterPageContainer>& rpContainer,
-        const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
+        const css::uno::Reference<css::ui::XSidebar>& rxSidebar,
+        const OUString& rUIFileName,
+        const OString& rValueSetName);
     virtual ~MasterPagesSelector() override;
 
     virtual void LateInit();
