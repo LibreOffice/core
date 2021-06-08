@@ -66,10 +66,7 @@ transliteration_Ignore::transliterateRange( const OUString& str1, const OUString
     if (str1.isEmpty() || str2.isEmpty())
         throw RuntimeException();
 
-    Sequence< OUString > r(2);
-    r[0] = str1.copy(0, 1);
-    r[1] = str2.copy(0, 1);
-    return r;
+    return { str1.copy(0, 1), str2.copy(0, 1) };
 }
 
 
@@ -103,18 +100,9 @@ transliteration_Ignore::transliterateRange( const OUString& str1, const OUString
     OUString s22 = t2.transliterate( str2, 0, 1, offset );
 
     if ( (s11 == s21) && (s12 == s22) ) {
-        Sequence< OUString > r(2);
-        r[0] = s11;
-        r[1] = s12;
-        return r;
+        return { s11, s12 };
     }
-
-    Sequence< OUString > r(4);
-    r[0] = s11;
-    r[1] = s12;
-    r[2] = s21;
-    r[3] = s22;
-    return r;
+    return { s11, s12, s21, s22 };
 }
 
 OUString

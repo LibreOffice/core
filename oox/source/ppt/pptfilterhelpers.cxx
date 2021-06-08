@@ -302,10 +302,12 @@ namespace oox::ppt {
                         sal_Int32 nA = aString.getToken(0, ',', index).toInt32();
                         sal_Int32 nB = aString.getToken(0, ',', index).toInt32();
                         sal_Int32 nC = aString.getToken(0, ',', index).toInt32();
-                        css::uno::Sequence<double> aHSL(3);
-                        aHSL[0] = nA * 360.0 / 255.0;
-                        aHSL[1] = nB / 255.0;
-                        aHSL[2] = nC / 255.0;
+                        css::uno::Sequence<double> aHSL
+                        {
+                            nA * 360.0 / 255.0,
+                            nB / 255.0,
+                            nC / 255.0
+                        };
                         rValue <<= aHSL;
                         bRet = true;
                     }

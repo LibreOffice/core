@@ -476,8 +476,7 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
             // Reset TabStops - these would be auto calculated by Impress
             TabStop aTabStop;
             aTabStop.Position = 0;
-            Sequence< TabStop > aSeq(1);
-            aSeq[0] = aTabStop;
+            Sequence< TabStop > aSeq { aTabStop };
             aPropSet.setProperty( PROP_ParaTabStops, aSeq );
         }
     }
