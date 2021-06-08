@@ -3081,8 +3081,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
     const char* sVerticalAlignment = nullptr;
     if (GetProperty(rXPropSet, "TextVerticalAdjust"))
         mAny >>= eVerticalAlignment;
-    if( eVerticalAlignment != TextVerticalAdjust_TOP )
-        sVerticalAlignment = GetTextVerticalAdjust(eVerticalAlignment);
+    sVerticalAlignment = GetTextVerticalAdjust(eVerticalAlignment);
 
     const char* sWritingMode = nullptr;
     bool bVertical = false;
