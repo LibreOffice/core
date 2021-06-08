@@ -254,7 +254,7 @@ published service TextProperties
 
     /** Column layout properties for the text.
 
-        @since LibreOffice 7.3
+        @since LibreOffice 7.2
      */
     [optional, property] ::com::sun::star::text::XTextColumns TextColumns;
 };
