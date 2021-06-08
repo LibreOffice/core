@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2014d526_12f3fb27",
+        "filename": "cui/source/tabpages/tpbitmap.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2021-06-08T09:59:59Z",
+      "side": 1,
+      "message": "Any particular reason for this? The items in the parenthesis already have the WinBits type.",
+      "range": {
+        "startLine": 130,
+        "startChar": 27,
+        "endLine": 130,
+        "endChar": 35
+      },
+      "revId": "4138c2ddc81c9e05e0d74938239e62e6ecb29752",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f46170af_b090dae5",
+        "filename": "cui/source/tabpages/tpcolor.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2021-06-08T09:59:59Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 137,
+        "startChar": 33,
+        "endLine": 137,
+        "endChar": 41
+      },
+      "revId": "4138c2ddc81c9e05e0d74938239e62e6ecb29752",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae0614d7_5ca8adbf",
+        "filename": "cui/source/tabpages/tpcolor.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2021-06-08T09:59:59Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 141,
+        "startChar": 34,
+        "endLine": 141,
+        "endChar": 42
+      },
+      "revId": "4138c2ddc81c9e05e0d74938239e62e6ecb29752",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8dffa07_b9804625",
+        "filename": "cui/source/tabpages/tpgradnt.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2021-06-08T09:59:59Z",
+      "side": 1,
+      "message": "Also here.",
+      "range": {
+        "startLine": 113,
+        "startChar": 29,
+        "endLine": 113,
+        "endChar": 37
+      },
+      "revId": "4138c2ddc81c9e05e0d74938239e62e6ecb29752",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40c1211b_9176b870",
+        "filename": "cui/source/tabpages/tphatch.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2021-06-08T09:59:59Z",
+      "side": 1,
+      "message": "And here.",
+      "range": {
+        "startLine": 115,
+        "startChar": 26,
+        "endLine": 115,
+        "endChar": 34
+      },
+      "revId": "4138c2ddc81c9e05e0d74938239e62e6ecb29752",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0e86b96_7cc740ce",
+        "filename": "cui/source/tabpages/tppattern.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2021-06-08T09:59:59Z",
+      "side": 1,
+      "message": "And here...",
+      "range": {
+        "startLine": 114,
+        "startChar": 28,
+        "endLine": 114,
+        "endChar": 36
+      },
+      "revId": "4138c2ddc81c9e05e0d74938239e62e6ecb29752",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
