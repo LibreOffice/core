@@ -813,7 +813,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
 
     if (DBMGR_MERGE_SHELL == nMergeType)
     {
-        return makeAny( aMergeDesc.pMailMergeConfigItem->GetTargetView()->GetDocShell()->GetBaseModel() );
+        return makeAny( aMergeDesc.pMailMergeConfigItem->GetTargetView()->GetDocShell()->GetModel() );
     }
     else
         return makeAny( true );

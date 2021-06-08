@@ -57,6 +57,7 @@ struct  IMPL_SfxBaseController_DataContainer    ;   // impl. struct to hold memb
 class NotifyEvent;
 class SfxViewFrame;
 class SfxViewShell;
+class SfxBaseModel;
 
 sal_Int16 MapGroupIDToCommandGroup( SfxGroupId nGroupID );
 
@@ -206,6 +207,7 @@ private:
     SAL_DLLPRIVATE void ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect );
     SAL_DLLPRIVATE SfxViewFrame& GetViewFrame_Impl() const;
     SAL_DLLPRIVATE void ShowInfoBars( );
+    SAL_DLLPRIVATE SfxBaseModel* getBaseModel() const;
 
     DECL_LINK( CheckOutHandler, weld::Button&, void );
 

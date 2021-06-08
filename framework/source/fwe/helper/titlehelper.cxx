@@ -20,6 +20,7 @@
 #include <config_features.h>
 
 #include <framework/titlehelper.hxx>
+#include <sfx2/sfxbasemodel.hxx>
 #include <classes/fwkresid.hxx>
 #include <strings.hrc>
 #include <properties.h>
@@ -28,7 +29,6 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
-#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 
 #include <unotools/configmgr.hxx>
@@ -303,16 +303,17 @@ void TitleHelper::impl_sendTitleChangedEvent ()
 
 void TitleHelper::impl_updateTitle (bool init)
 {
-    css::uno::Reference< css::frame::XModel3 >     xModel;
+    rtl::Reference<SfxBaseModel> xModel;
     css::uno::Reference< css::frame::XController > xController;
     css::uno::Reference< css::frame::XFrame >      xFrame;
     // SYNCHRONIZED ->
     {
         osl::MutexGuard aLock(m_aMutex);
 
-        xModel.set     (m_xOwner.get(), css::uno::UNO_QUERY);
-        xController.set(m_xOwner.get(), css::uno::UNO_QUERY);
-        xFrame.set     (m_xOwner.get(), css::uno::UNO_QUERY);
+        css::uno::Reference<XInterface> xOwner = m_xOwner.get();
+        xModel.set(dynamic_cast<SfxBaseModel*>(xOwner.get()));
+        xController.set(xOwner, css::uno::UNO_QUERY);
+        xFrame.set     (xOwner, css::uno::UNO_QUERY);
     }
     // <- SYNCHRONIZED
 
@@ -330,7 +331,7 @@ void TitleHelper::impl_updateTitle (bool init)
     }
 }
 
-void TitleHelper::impl_updateTitleForModel (const css::uno::Reference< css::frame::XModel3 >& xModel, bool init)
+void TitleHelper::impl_updateTitleForModel (const rtl::Reference< SfxBaseModel >& xModel, bool init)
 {
     css::uno::Reference< css::uno::XInterface >         xOwner;
     css::uno::Reference< css::frame::XUntitledNumbers > xNumbers;
@@ -360,7 +361,7 @@ void TitleHelper::impl_updateTitleForModel (const css::uno::Reference< css::fram
     OUString sTitle;
     OUString sURL;
 
-    css::uno::Reference< css::frame::XStorable > xURLProvider(xModel , css::uno::UNO_QUERY);
+    css::uno::Reference< css::frame::XStorable > xURLProvider(static_cast<cppu::OWeakObject*>(xModel.get()) , css::uno::UNO_QUERY);
     if (xURLProvider.is())
         sURL = xURLProvider->getLocation ();
 

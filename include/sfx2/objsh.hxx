@@ -22,11 +22,11 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sfx2/signaturestate.hxx>
+#include <sfx2/sfxbasemodel.hxx>
 #include <sal/types.h>
 #include <vcl/errcode.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/frame/XModel3.hpp>
 #include <vcl/bitmapex.hxx>
 
 #include <svl/poolitem.hxx>
@@ -566,11 +566,11 @@ public:
 
     virtual SfxObjectShell*     GetObjectShell() override;
 
-    css::uno::Reference< css::frame::XModel3 >
+    css::uno::Reference< css::frame::XModel2 >
                                 GetModel() const;
     // Only temporarily for the applications!
     void                        SetBaseModel( SfxBaseModel* pModel );
-    css::uno::Reference< css::frame::XModel3 > GetBaseModel() const;
+    SfxBaseModel*               GetBaseModel() const;
     // Only temporarily for the applications!
 
     virtual css::uno::Sequence< OUString > GetEventNames();

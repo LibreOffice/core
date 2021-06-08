@@ -666,6 +666,11 @@ Reference< frame::XModel > SAL_CALL SfxBaseController::getModel()
     return m_pData->m_pViewShell ? m_pData->m_pViewShell->GetObjectShell()->GetModel() : Reference < frame::XModel > () ;
 }
 
+SfxBaseModel* SfxBaseController::getBaseModel() const
+{
+    SolarMutexGuard aGuard;
+    return m_pData->m_pViewShell ? m_pData->m_pViewShell->GetObjectShell()->GetBaseModel() : nullptr ;
+}
 
 //  SfxBaseController -> XDispatchProvider
 
@@ -1224,7 +1229,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
 
         if ( i_eConnect == E_CONNECT )
         {
-            css::uno::Reference<css::frame::XModel3> xModel(getModel(), css::uno::UNO_QUERY_THROW);
+            rtl::Reference<SfxBaseModel> xModel = getBaseModel();
             ::comphelper::NamedValueCollection aDocumentArgs( xModel->getArgs2( { "PluginMode" } ) );
 
             const sal_Int16 nPluginMode = aDocumentArgs.getOrDefault( "PluginMode", sal_Int16( 0 ) );

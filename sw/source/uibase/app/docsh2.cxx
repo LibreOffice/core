@@ -1493,7 +1493,7 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
     RemoveLink();
 
     // now also the UNO-Model has to be informed about the new Doc #51535#
-    uno::Reference<text::XTextDocument> xDoc(GetBaseModel(), uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xDoc(GetModel(), uno::UNO_QUERY);
     text::XTextDocument* pxDoc = xDoc.get();
     static_cast<SwXTextDocument*>(pxDoc)->InitNewDoc();
 

@@ -1119,7 +1119,7 @@ void DocxExport::WriteSettings()
         DocxAttributeOutput::WriteFootnoteEndnotePr( pFS, XML_endnotePr, m_rDoc.GetEndNoteInfo(), XML_endnote );
 
     // Has themeFontLang information
-    uno::Reference< beans::XPropertySet > xPropSet( m_rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xPropSet( m_rDoc.GetDocShell()->GetModel(), uno::UNO_QUERY_THROW );
 
     bool bUseGrabBagProtection = false;
     bool bWriterWantsToProtect = false;
@@ -1361,7 +1361,7 @@ void DocxExport::WriteSettings()
 
 void DocxExport::WriteTheme()
 {
-    uno::Reference< beans::XPropertySet > xPropSet( m_rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xPropSet( m_rDoc.GetDocShell()->GetModel(), uno::UNO_QUERY_THROW );
 
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
     OUString aName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
@@ -1394,7 +1394,7 @@ void DocxExport::WriteTheme()
 
 void DocxExport::WriteGlossary()
 {
-    uno::Reference< beans::XPropertySet > xPropSet( m_rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xPropSet( m_rDoc.GetDocShell()->GetModel(), uno::UNO_QUERY_THROW );
 
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
     OUString aName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
@@ -1463,7 +1463,7 @@ void DocxExport::WriteGlossary()
 
 void DocxExport::WriteCustomXml()
 {
-    uno::Reference< beans::XPropertySet > xPropSet( m_rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xPropSet( m_rDoc.GetDocShell()->GetModel(), uno::UNO_QUERY_THROW );
 
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
     static constexpr OUStringLiteral aName = u"" UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
@@ -1522,7 +1522,7 @@ void DocxExport::WriteCustomXml()
 
 void DocxExport::WriteVBA()
 {
-    uno::Reference<document::XStorageBasedDocument> xStorageBasedDocument(m_rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
+    uno::Reference<document::XStorageBasedDocument> xStorageBasedDocument(m_rDoc.GetDocShell()->GetModel(), uno::UNO_QUERY);
     if (!xStorageBasedDocument.is())
         return;
 
@@ -1581,7 +1581,7 @@ void DocxExport::WriteVBA()
 
 void DocxExport::WriteEmbeddings()
 {
-    uno::Reference< beans::XPropertySet > xPropSet( m_rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xPropSet( m_rDoc.GetDocShell()->GetModel(), uno::UNO_QUERY_THROW );
 
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
     OUString aName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;

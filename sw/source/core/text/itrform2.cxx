@@ -952,7 +952,7 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
                     rdf::URI::createKnown(xContext, rdf::URIs::LO_EXT_SHADING), uno::UNO_SET_THROW);
 
                 uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(
-                    rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
+                    rDoc.GetDocShell()->GetModel(), uno::UNO_QUERY);
 
                 const css::uno::Reference<css::rdf::XResource> xSubject(xRet, uno::UNO_QUERY);
                 const uno::Reference<rdf::XRepository>& xRepository =

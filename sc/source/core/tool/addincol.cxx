@@ -1302,7 +1302,7 @@ void ScUnoAddInCall::SetCallerFromObjectShell( const SfxObjectShell* pObjSh )
 {
     if (pObjSh)
     {
-        uno::Reference<uno::XInterface> xInt( pObjSh->GetBaseModel(), uno::UNO_QUERY );
+        uno::Reference<uno::XInterface> xInt( pObjSh->GetModel(), uno::UNO_QUERY );
         SetCaller( xInt );
     }
 }

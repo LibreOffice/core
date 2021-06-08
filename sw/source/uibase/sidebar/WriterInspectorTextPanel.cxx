@@ -399,7 +399,7 @@ static void MetadataToTreeNode(const css::uno::Reference<css::uno::XInterface>& 
         // list associated (predicate, object) pairs of the actual subject
         // under the tree node "Metadata Reference"
         SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
-        uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(pDocSh->GetBaseModel(),
+        uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(pDocSh->GetModel(),
                                                                              uno::UNO_QUERY);
         const uno::Reference<rdf::XRepository>& xRepo = xDocumentMetadataAccess->getRDFRepository();
         const css::uno::Reference<css::rdf::XResource> xSubject(rSource, uno::UNO_QUERY);
@@ -536,7 +536,7 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
 
     InsertValues(xRange, aIsDefined, aCharDFNode, false, aHiddenProperties);
 
-    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(pDocSh->GetBaseModel(),
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(pDocSh->GetModel(),
                                                                          uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
@@ -594,8 +594,7 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
                  aParaNode.children.end()); // Parent style should be first then children
 
     // Collect bookmarks at character position
-    uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(pDocSh->GetBaseModel(),
-                                                                uno::UNO_QUERY);
+    uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(pDocSh->GetModel(), uno::UNO_QUERY);
 
     uno::Reference<container::XIndexAccess> xBookmarks(xBookmarksSupplier->getBookmarks(),
                                                        uno::UNO_QUERY);

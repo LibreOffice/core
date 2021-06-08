@@ -2645,7 +2645,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/frame,\
 	XMenuBarMergingAcceptor \
 	XModel \
 	XModel2 \
-	XModel3 \
 	XModule \
 	XModuleManager \
 	XModuleManager2 \

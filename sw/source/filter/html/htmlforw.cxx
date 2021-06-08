@@ -348,7 +348,7 @@ void SwHTMLWriter::OutHiddenForms()
     if( !pDocSh )
         return;
 
-    uno::Reference< drawing::XDrawPageSupplier > xDPSupp( pDocSh->GetBaseModel(),
+    uno::Reference< drawing::XDrawPageSupplier > xDPSupp( pDocSh->GetModel(),
                                                      uno::UNO_QUERY );
     OSL_ENSURE( xDPSupp.is(), "XTextDocument not received from XModel" );
     uno::Reference< drawing::XDrawPage > xDrawPage = xDPSupp->getDrawPage();

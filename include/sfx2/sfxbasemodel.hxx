@@ -41,7 +41,7 @@
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/frame/XModel3.hpp>
+#include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/util/XModifiable2.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/view/XPrintable.hpp>
@@ -124,7 +124,7 @@ typedef ::cppu::WeakImplHelper  <   css::container::XChild
                                         ,   css::document::XEventsSupplier
                                         ,   css::document::XEmbeddedScripts
                                         ,   css::document::XScriptInvocationContext
-                                        ,   css::frame::XModel3
+                                        ,   css::frame::XModel2
                                         ,   css::util::XModifiable2
                                         ,   css::view::XPrintable
                                         ,   css::view::XPrintJobBroadcaster
@@ -328,10 +328,6 @@ public:
 
     virtual void SAL_CALL setArgs(const css::uno::Sequence<css::beans::PropertyValue>& aArgs) override;
 
-
-    //  XModel3
-
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getArgs2( const css::uno::Sequence< OUString > & requestedArgs ) override;
 
     //  XModifiable2
 
@@ -668,6 +664,8 @@ public:
     /// @throws css::uno::RuntimeException
     bool getBoolPropertyValue( const OUString& rName );
 
+    // retrieves only some args, rather than all args, for efficiency
+    css::uno::Sequence< css::beans::PropertyValue > getArgs2( const css::uno::Sequence< OUString > & requestedArgs );
 
     //  SfxListener
 

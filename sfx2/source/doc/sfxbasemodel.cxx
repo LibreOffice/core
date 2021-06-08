@@ -936,9 +936,7 @@ Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs()
     return getArgs2({});
 }
 
-//  frame::XModel3
-
-Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs2(const Sequence<OUString> & requestedArgsSeq )
+Sequence< beans::PropertyValue > SfxBaseModel::getArgs2(const Sequence<OUString> & requestedArgsSeq )
 {
     SfxModelGuard aGuard( *this );
 

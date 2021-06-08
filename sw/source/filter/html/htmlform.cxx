@@ -278,7 +278,7 @@ const uno::Reference< XMultiServiceFactory >& SwHTMLForm_Impl::GetServiceFactory
     if( !m_xServiceFactory.is() && m_pDocShell )
     {
         m_xServiceFactory =
-            uno::Reference< XMultiServiceFactory >( m_pDocShell->GetBaseModel(),
+            uno::Reference< XMultiServiceFactory >( m_pDocShell->GetModel(),
                                                UNO_QUERY );
         OSL_ENSURE( m_xServiceFactory.is(),
                 "XServiceFactory not received from model" );
@@ -290,7 +290,7 @@ void SwHTMLForm_Impl::GetDrawPage()
 {
     if( !m_xDrawPage.is() && m_pDocShell )
     {
-        uno::Reference< drawing::XDrawPageSupplier > xTextDoc( m_pDocShell->GetBaseModel(),
+        uno::Reference< drawing::XDrawPageSupplier > xTextDoc( m_pDocShell->GetModel(),
                                                          UNO_QUERY );
         OSL_ENSURE( xTextDoc.is(),
                 "drawing::XDrawPageSupplier not received from model" );

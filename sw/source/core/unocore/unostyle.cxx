@@ -1283,7 +1283,7 @@ static uno::Reference<container::XNameAccess> lcl_InitStyleFamily(SwDoc* pDoc, c
             && rEntry.m_eFamily != SfxStyleFamily::Para
             && rEntry.m_eFamily != SfxStyleFamily::Page)
         return {};
-    auto xModel(pDoc->GetDocShell()->GetBaseModel());
+    auto xModel(pDoc->GetDocShell()->GetModel());
     uno::Reference<style::XStyleFamiliesSupplier> xFamilySupplier(xModel, uno::UNO_QUERY);
     auto xFamilies = xFamilySupplier->getStyleFamilies();
     auto aResult(xFamilies->getByName(rEntry.m_sName));

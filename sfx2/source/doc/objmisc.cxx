@@ -1871,7 +1871,7 @@ bool SfxObjectShell::IsContinueImportOnFilterExceptions(std::u16string_view aErr
 
 bool SfxObjectShell::isEditDocLocked() const
 {
-    Reference<XModel3> xModel = GetModel();
+    rtl::Reference<SfxBaseModel> xModel = GetBaseModel();
     if (!xModel.is())
         return false;
     if (!officecfg::Office::Common::Misc::AllowEditReadonlyDocs::get())
@@ -1882,7 +1882,7 @@ bool SfxObjectShell::isEditDocLocked() const
 
 bool SfxObjectShell::isContentExtractionLocked() const
 {
-    Reference<XModel3> xModel = GetModel();
+    rtl::Reference<SfxBaseModel> xModel = GetBaseModel();
     if (!xModel.is())
         return false;
     comphelper::NamedValueCollection aArgs(xModel->getArgs2( { "LockContentExtraction" } ));
@@ -1891,7 +1891,7 @@ bool SfxObjectShell::isContentExtractionLocked() const
 
 bool SfxObjectShell::isExportLocked() const
 {
-    Reference<XModel3> xModel = GetModel();
+    rtl::Reference<SfxBaseModel> xModel = GetBaseModel();
     if (!xModel.is())
         return false;
     comphelper::NamedValueCollection aArgs(xModel->getArgs2( { "LockExport" } ));
@@ -1900,7 +1900,7 @@ bool SfxObjectShell::isExportLocked() const
 
 bool SfxObjectShell::isPrintLocked() const
 {
-    Reference<XModel3> xModel = GetModel();
+    rtl::Reference<SfxBaseModel> xModel = GetBaseModel();
     if (!xModel.is())
         return false;
     comphelper::NamedValueCollection aArgs(xModel->getArgs2( { "LockPrint" } ));
@@ -1909,7 +1909,7 @@ bool SfxObjectShell::isPrintLocked() const
 
 bool SfxObjectShell::isSaveLocked() const
 {
-    Reference<XModel3> xModel = GetModel();
+    rtl::Reference<SfxBaseModel> xModel = GetBaseModel();
     if (!xModel.is())
         return false;
     comphelper::NamedValueCollection aArgs(xModel->getArgs2( { "LockSave" } ));

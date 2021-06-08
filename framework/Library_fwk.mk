@@ -51,6 +51,7 @@ $(eval $(call gb_Library_use_libraries,fwk,\
     i18nlangtag \
     sal \
     salhelper \
+    sfx \
     sot \
     svl \
     svt \

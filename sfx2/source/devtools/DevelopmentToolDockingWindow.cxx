@@ -32,7 +32,7 @@ DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBi
     , mpDomToolbar(m_xBuilder->weld_toolbar("dom_toolbar"))
     , maDocumentModelTreeHandler(
           mpDocumentModelTreeView,
-          pInputBindings->GetDispatcher()->GetFrame()->GetObjectShell()->GetBaseModel())
+          pInputBindings->GetDispatcher()->GetFrame()->GetObjectShell()->GetModel())
     , maObjectInspectorTreeHandler(mpObjectInspectorWidgets)
 {
     mpDocumentModelTreeView->connect_changed(
@@ -44,7 +44,7 @@ DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBi
 
     uno::Reference<frame::XController> xController = pViewFrame->GetFrame().GetController();
 
-    mxRoot = pInputBindings->GetDispatcher()->GetFrame()->GetObjectShell()->GetBaseModel();
+    mxRoot = pInputBindings->GetDispatcher()->GetFrame()->GetObjectShell()->GetModel();
 
     maDocumentModelTreeHandler.inspectDocument();
     mxSelectionListener.set(new SelectionChangeHandler(xController, this));

@@ -82,8 +82,8 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, bool bCopyText)
     uno::Reference<text::XTextContent> xTextFrame(
         SwXServiceProvider::MakeInstance(SwServiceType::TypeTextFrame, *pShape->GetDoc()),
         uno::UNO_QUERY);
-    uno::Reference<text::XTextDocument> xTextDocument(
-        pShape->GetDoc()->GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(pShape->GetDoc()->GetDocShell()->GetModel(),
+                                                      uno::UNO_QUERY);
     uno::Reference<text::XTextContentAppend> xTextContentAppend(xTextDocument->getText(),
                                                                 uno::UNO_QUERY);
     try

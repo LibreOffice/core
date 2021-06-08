@@ -3822,7 +3822,7 @@ OString lcl_padStartToLength(OString const & aString, sal_Int32 nLen, char cFill
 //To identify how your code should handle a "-1", look in DocxExport::WriteSettings().
 sal_Int32 lcl_getWordCompatibilityMode( const SwDoc& rDoc )
 {
-    uno::Reference< beans::XPropertySet >     xPropSet( rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet >     xPropSet( rDoc.GetDocShell()->GetModel(), uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
 
     sal_Int32 nWordCompatibilityMode = -1;
@@ -4648,7 +4648,7 @@ DocxStringTokenMap const aExceptionTokens[] = {
 void DocxAttributeOutput::LatentStyles()
 {
     // Do we have latent styles available?
-    uno::Reference<beans::XPropertySet> xPropertySet(m_rExport.m_rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xPropertySet(m_rExport.m_rDoc.GetDocShell()->GetModel(), uno::UNO_QUERY_THROW);
     uno::Sequence<beans::PropertyValue> aInteropGrabBag;
     xPropertySet->getPropertyValue("InteropGrabBag") >>= aInteropGrabBag;
     uno::Sequence<beans::PropertyValue> aLatentStyles;
@@ -5684,7 +5684,7 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
     OSL_ASSERT(pFlyFrameFormat);
 
     // get interoperability information about embedded objects
-    uno::Reference< beans::XPropertySet > xPropSet( m_rExport.m_rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xPropSet( m_rExport.m_rDoc.GetDocShell()->GetModel(), uno::UNO_QUERY_THROW );
     uno::Sequence< beans::PropertyValue > aGrabBag, aObjectsInteropList,aObjectInteropAttributes;
     xPropSet->getPropertyValue( UNO_NAME_MISC_OBJ_INTEROPGRABBAG ) >>= aGrabBag;
     auto pProp = std::find_if(aGrabBag.begin(), aGrabBag.end(),

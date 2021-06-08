@@ -367,7 +367,7 @@ bool SfxObjectShell::CloseInternal()
             return false;
 
         pImpl->bClosing = true;
-        Reference< util::XCloseable > xCloseable( GetBaseModel(), UNO_QUERY );
+        Reference< util::XCloseable > xCloseable( GetModel(), UNO_QUERY );
 
         if ( xCloseable.is() )
         {
@@ -827,7 +827,7 @@ uno::Sequence< OUString > SfxObjectShell::GetEventNames()
 }
 
 
-css::uno::Reference< css::frame::XModel3 > SfxObjectShell::GetModel() const
+css::uno::Reference< css::frame::XModel2 > SfxObjectShell::GetModel() const
 {
     return GetBaseModel();
 }
@@ -843,9 +843,9 @@ void SfxObjectShell::SetBaseModel( SfxBaseModel* pModel )
 }
 
 
-css::uno::Reference< css::frame::XModel3 > SfxObjectShell::GetBaseModel() const
+SfxBaseModel* SfxObjectShell::GetBaseModel() const
 {
-    return pImpl->pBaseModel;
+    return pImpl->pBaseModel.get();
 }
 
 void SfxObjectShell::SetAutoStyleFilterIndex(sal_uInt16 nSet)

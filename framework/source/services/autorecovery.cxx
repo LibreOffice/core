@@ -34,7 +34,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
-#include <com/sun/star/frame/XModel3.hpp>
+#include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -94,6 +94,7 @@
 #include <tools/urlobj.hxx>
 #include <officecfg/Office/Recovery.hxx>
 #include <officecfg/Setup.hxx>
+#include <sfx2/sfxbasemodel.hxx>
 
 #include <stdtypes.h>
 
@@ -636,7 +637,7 @@ private:
 
         @threadsafe
      */
-    void implts_registerDocument(const css::uno::Reference< css::frame::XModel3 >& xDocument);
+    void implts_registerDocument(const rtl::Reference< SfxBaseModel >& xDocument);
 
     /** @short  remove the specified document from our internal document list.
 
@@ -1537,7 +1538,7 @@ void SAL_CALL AutoRecovery::removeStatusListener(const css::uno::Reference< css:
 
 void SAL_CALL AutoRecovery::documentEventOccured(const css::document::DocumentEvent& aEvent)
 {
-    css::uno::Reference< css::frame::XModel3 > xDocument(aEvent.Source, css::uno::UNO_QUERY);
+    rtl::Reference< SfxBaseModel > xDocument = dynamic_cast<SfxBaseModel*>(aEvent.Source.get());
 
     // new document => put it into the internal list
     if (
@@ -2361,7 +2362,7 @@ IMPL_LINK_NOARG(AutoRecovery, implts_asyncDispatch, LinkParamNone*, void)
     }
 }
 
-void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame::XModel3 > & xDocument)
+void AutoRecovery::implts_registerDocument(const rtl::Reference< SfxBaseModel > & xDocument)
 {
     // ignore corrupted events, where no document is given ... Runtime Error ?!
     if (!xDocument.is())
@@ -2408,7 +2409,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
         return;
 
     // if the document doesn't support the XDocumentRecovery interface, we're not interested in it.
-    Reference< XDocumentRecovery > xDocRecovery( xDocument, UNO_QUERY );
+    Reference< XDocumentRecovery > xDocRecovery( static_cast<cppu::OWeakObject*>(xDocument.get()), UNO_QUERY );
     if ( !xDocRecovery.is() )
         return;
 
@@ -2456,7 +2457,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
         aNew.TemplateURL = xDocProps->getTemplateURL();
     }
 
-    css::uno::Reference< css::util::XModifiable > xModifyCheck(xDocument, css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::util::XModifiable > xModifyCheck(static_cast<cppu::OWeakObject*>(xDocument.get()), css::uno::UNO_QUERY_THROW);
     if (xModifyCheck->isModified())
     {
         aNew.DocumentState |= DocState::Modified;
@@ -4004,11 +4005,11 @@ void AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList()
             // extract the model from the frame.
             // Ignore "view only" frames, which does not have a model.
             css::uno::Reference< css::frame::XController > xController;
-            css::uno::Reference< css::frame::XModel3 >     xModel;
+            rtl::Reference< SfxBaseModel >     xModel;
 
             xController = xFrame->getController();
             if (xController.is())
-                xModel.set( xController->getModel(), UNO_QUERY_THROW );
+                xModel = dynamic_cast<SfxBaseModel*>( xController->getModel().get() );
             if (!xModel.is())
                 continue;
 

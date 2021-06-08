@@ -1864,7 +1864,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 static const OUStringLiteral sDisplay(u"DisplayName");
                 const OUString sHeaderOn(nWhich == FN_INSERT_PAGEHEADER ? OUString("HeaderIsOn") : OUString("FooterIsOn"));
 
-                uno::Reference< XStyleFamiliesSupplier > xSupplier(GetView().GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
+                uno::Reference< XStyleFamiliesSupplier > xSupplier(GetView().GetDocShell()->GetModel(), uno::UNO_QUERY);
                 if (xSupplier.is())
                 {
                     uno::Reference< XNameContainer > xContainer;
