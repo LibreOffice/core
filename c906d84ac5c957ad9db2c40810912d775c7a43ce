@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a97a02e0_c95b6cc1",
+        "filename": "framework/Library_fwk.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-06-08T11:11:34Z",
+      "side": 1,
+      "message": "this is a cyclic dep, how did that even build for you",
+      "revId": "c906d84ac5c957ad9db2c40810912d775c7a43ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
