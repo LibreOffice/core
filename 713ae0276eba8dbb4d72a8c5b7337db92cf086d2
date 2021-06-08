@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0f152684_326372fe",
+        "filename": "dbaccess/source/ui/browser/unodatbr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3156,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-06-08T10:59:37Z",
+      "side": 1,
+      "message": "Mike: I tried with \"{ }\" instead of using \"Any\" but it doesn\u0027t build.\nOk with this way?",
+      "range": {
+        "startLine": 3156,
+        "startChar": 16,
+        "endLine": 3156,
+        "endChar": 81
+      },
+      "revId": "713ae0276eba8dbb4d72a8c5b7337db92cf086d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
