@@ -184,6 +184,10 @@ Filter
 FilterCriteriaSource
 FilterOptions
 FirstLineOffset
+FirstPageFooterContent
+FirstPageHeaderContent
+FirstPageFooterIsShared
+FirstPageHeaderIsShared
 FirstPageNumber
 FocusOnClick
 FontCharset
