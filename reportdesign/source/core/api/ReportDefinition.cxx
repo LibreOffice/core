@@ -149,6 +149,7 @@
 #define SC_UNO_PAGE_HDRON           "HeaderIsOn"
 #define SC_UNO_PAGE_HDRDYNAMIC      "HeaderIsDynamicHeight"
 #define SC_UNO_PAGE_HDRSHARED       "HeaderIsShared"
+#define SC_UNO_PAGE_FIRSTHDRSHARED  "FirstPageHeaderIsShared"
 #define SC_UNO_PAGE_FTRBACKCOL      "FooterBackColor"
 #define SC_UNO_PAGE_FTRBACKTRAN     "FooterBackTransparent"
 #define SC_UNO_PAGE_FTRGRFFILT      "FooterBackGraphicFilter"
@@ -171,6 +172,7 @@
 #define SC_UNO_PAGE_FTRON           "FooterIsOn"
 #define SC_UNO_PAGE_FTRDYNAMIC      "FooterIsDynamicHeight"
 #define SC_UNO_PAGE_FTRSHARED       "FooterIsShared"
+#define SC_UNO_PAGE_FIRSTFTRSHARED  "FirstPageFooterIsShared"
 
 namespace reportdesign
 {
@@ -309,6 +311,7 @@ OStyle::OStyle()
     registerPropertyNoMember(SC_UNO_PAGE_FTRDYNAMIC,  ++i,nBound,cppu::UnoType<bool>::get(), css::uno::Any(false));
     registerPropertyNoMember(SC_UNO_PAGE_FTRON,       ++i,nBound,cppu::UnoType<bool>::get(), css::uno::Any(false));
     registerPropertyNoMember(SC_UNO_PAGE_FTRSHARED,   ++i,nBound,cppu::UnoType<bool>::get(), css::uno::Any(false));
+    registerPropertyNoMember(SC_UNO_PAGE_FIRSTFTRSHARED, ++i,nBound,cppu::UnoType<bool>::get(), css::uno::Any(false));
     registerPropertyNoMember(SC_UNO_PAGE_FTRLEFTBOR,  ++i,nBound, cppu::UnoType<table::BorderLine2>::get(), css::uno::Any(table::BorderLine2()));
     registerPropertyNoMember(SC_UNO_PAGE_FTRLEFTBDIS, ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(0));
     registerPropertyNoMember(SC_UNO_PAGE_FTRLEFTMAR,  ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(0));
@@ -332,6 +335,7 @@ OStyle::OStyle()
     registerPropertyNoMember(SC_UNO_PAGE_HDRDYNAMIC,  ++i,nBound|nMayBeVoid,cppu::UnoType<bool>::get(), css::uno::Any(false));
     registerPropertyNoMember(SC_UNO_PAGE_HDRON,       ++i,nBound|nMayBeVoid,cppu::UnoType<bool>::get(), css::uno::Any(false));
     registerPropertyNoMember(SC_UNO_PAGE_HDRSHARED,   ++i,nBound|nMayBeVoid,cppu::UnoType<bool>::get(), css::uno::Any(false));
+    registerPropertyNoMember(SC_UNO_PAGE_FIRSTHDRSHARED, ++i,nBound|nMayBeVoid,cppu::UnoType<bool>::get(), css::uno::Any(false));
     registerPropertyNoMember(SC_UNO_PAGE_HDRLEFTBOR,  ++i,nBound|nMayBeVoid, cppu::UnoType<table::BorderLine2>::get(), css::uno::Any(table::BorderLine2()));
     registerPropertyNoMember(SC_UNO_PAGE_HDRLEFTBDIS, ++i,nBound|nMayBeVoid, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(0));
     registerPropertyNoMember(SC_UNO_PAGE_HDRLEFTMAR,  ++i,nBound|nMayBeVoid, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(0));

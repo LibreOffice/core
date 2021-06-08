@@ -60,11 +60,13 @@ void XclExpHeaderFooter::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     sal_Int32 nElement;
     switch(GetRecId()) {
-        case EXC_ID_HEADER_EVEN: nElement = XML_evenHeader; break;
-        case EXC_ID_FOOTER_EVEN: nElement = XML_evenFooter; break;
-        case EXC_ID_HEADER:      nElement = XML_oddHeader; break;
+        case EXC_ID_HEADER_FIRST: nElement = XML_firstHeader; break;
+        case EXC_ID_FOOTER_FIRST: nElement = XML_firstFooter; break;
+        case EXC_ID_HEADER_EVEN:  nElement = XML_evenHeader; break;
+        case EXC_ID_FOOTER_EVEN:  nElement = XML_evenFooter; break;
+        case EXC_ID_HEADER:       nElement = XML_oddHeader; break;
         case EXC_ID_FOOTER:
-        default:                 nElement = XML_oddFooter;
+        default:                  nElement = XML_oddFooter;
     }
     rWorksheet->startElement(nElement);
     rWorksheet->writeEscaped( maHdrString );
@@ -277,6 +279,7 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
 
         maData.mxBrushItem.reset( new SvxBrushItem( rItemSet.Get( ATTR_BACKGROUND ) ) );
         maData.mbUseEvenHF = false;
+        maData.mbUseFirstHF = false;
 
         // *** header and footer ***
 
@@ -300,6 +303,17 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
             {
                 // If maData.mbUseEvenHF become true, then we will need a copy of maHeader in maHeaderEven.
                 maData.maHeaderEven = maData.maHeader;
+            }
+            if (rHdrItemSet.HasItem(ATTR_PAGE_SHARED_FIRST) && !rHdrItemSet.Get(ATTR_PAGE_SHARED_FIRST).GetValue())
+            {
+                const ScPageHFItem& rHFItemFirst = rItemSet.Get( ATTR_PAGE_HEADERFIRST );
+                aHFConv.GenerateString( rHFItemFirst.GetLeftArea(), rHFItemFirst.GetCenterArea(), rHFItemFirst.GetRightArea() );
+                maData.maHeaderFirst = aHFConv.GetHFString();
+                maData.mbUseFirstHF = true;
+            }
+            else
+            {
+                maData.maHeaderFirst = maData.maHeader;
             }
             // header height (Excel excludes header from top margin)
             sal_Int32 nHdrHeight = rHdrItemSet.Get( ATTR_PAGE_DYNAMIC ).GetValue() ?
@@ -328,6 +342,17 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
             else
             {
                 maData.maFooterEven = maData.maFooter;
+            }
+            if (rFtrItemSet.HasItem(ATTR_PAGE_SHARED_FIRST) && !rFtrItemSet.Get(ATTR_PAGE_SHARED_FIRST).GetValue())
+            {
+                const ScPageHFItem& rHFItemFirst = rItemSet.Get( ATTR_PAGE_FOOTERFIRST );
+                aHFConv.GenerateString( rHFItemFirst.GetLeftArea(), rHFItemFirst.GetCenterArea(), rHFItemFirst.GetRightArea() );
+                maData.maFooterFirst = aHFConv.GetHFString();
+                maData.mbUseFirstHF = true;
+            }
+            else
+            {
+                maData.maFooterFirst = maData.maFooter;
             }
             // footer height (Excel excludes footer from bottom margin)
             sal_Int32 nFtrHeight = rFtrItemSet.Get( ATTR_PAGE_DYNAMIC ).GetValue() ?
@@ -373,12 +398,13 @@ namespace {
 class XclExpXmlStartHeaderFooterElementRecord : public XclExpXmlElementRecord
 {
 public:
-    explicit XclExpXmlStartHeaderFooterElementRecord(sal_Int32 const nElement, bool const bDifferentOddEven = false)
-         : XclExpXmlElementRecord(nElement), mbDifferentOddEven(bDifferentOddEven) {}
+    explicit XclExpXmlStartHeaderFooterElementRecord(sal_Int32 const nElement, bool const bDifferentOddEven = false, bool const bDifferentFirst = false)
+         : XclExpXmlElementRecord(nElement), mbDifferentOddEven(bDifferentOddEven), mbDifferentFirst(bDifferentFirst) {}
 
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 private:
     bool            mbDifferentOddEven;
+    bool            mbDifferentFirst;
 };
 
 }
@@ -390,7 +416,7 @@ void XclExpXmlStartHeaderFooterElementRecord::SaveXml(XclExpXmlStream& rStrm)
     sax_fastparser::FSHelperPtr& rStream = rStrm.GetCurrentStream();
     rStream->startElement( mnElement,
             // OOXTODO: XML_alignWithMargins,
-            XML_differentFirst,     "false",    // OOXTODO
+            XML_differentFirst,     mbDifferentFirst   ? "true" : "false",
             XML_differentOddEven,   mbDifferentOddEven ? "true" : "false"
             // OOXTODO: XML_scaleWithDoc
     );
@@ -439,13 +465,18 @@ void XclExpPageSettings::SaveXml( XclExpXmlStream& rStrm )
 
     XclExpSetup( maData ).SaveXml( rStrm );
 
-    XclExpXmlStartHeaderFooterElementRecord(XML_headerFooter, maData.mbUseEvenHF).SaveXml(rStrm);
+    XclExpXmlStartHeaderFooterElementRecord(XML_headerFooter, maData.mbUseEvenHF, maData.mbUseFirstHF).SaveXml(rStrm);
     XclExpHeaderFooter( EXC_ID_HEADER, maData.maHeader ).SaveXml( rStrm );
     XclExpHeaderFooter( EXC_ID_FOOTER, maData.maFooter ).SaveXml( rStrm );
     if (maData.mbUseEvenHF)
     {
         XclExpHeaderFooter( EXC_ID_HEADER_EVEN, maData.maHeaderEven ).SaveXml( rStrm );
         XclExpHeaderFooter( EXC_ID_FOOTER_EVEN, maData.maFooterEven ).SaveXml( rStrm );
+    }
+    if (maData.mbUseFirstHF)
+    {
+        XclExpHeaderFooter( EXC_ID_HEADER_FIRST, maData.maHeaderFirst ).SaveXml( rStrm );
+        XclExpHeaderFooter( EXC_ID_FOOTER_FIRST, maData.maFooterFirst ).SaveXml( rStrm );
     }
     XclExpXmlEndElementRecord( XML_headerFooter ).SaveXml( rStrm );
 
