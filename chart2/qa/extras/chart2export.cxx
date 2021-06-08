@@ -128,6 +128,7 @@ public:
     void testTdf96161();
     void testMultipleAxisXLSX();
     void testSecondaryAxisXLSX();
+    void testBarChartSecondaryAxisXLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -221,6 +222,7 @@ public:
     CPPUNIT_TEST(testTdf96161);
     CPPUNIT_TEST(testMultipleAxisXLSX);
     CPPUNIT_TEST(testSecondaryAxisXLSX);
+    CPPUNIT_TEST(testBarChartSecondaryAxisXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1923,6 +1925,24 @@ void Chart2ExportTest::testSecondaryAxisXLSX()
     // test there is just those series in the second <lineChart> tag which are attached to the secondary axis
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart[2]/c:ser", 1);
     assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart[2]/c:ser[1]/c:tx/c:strRef/c:strCache/c:pt/c:v", "a");
+}
+
+void Chart2ExportTest::testBarChartSecondaryAxisXLSX()
+{
+    load(u"/chart2/qa/extras/data/xlsx/", "testSecondaryAxis.xlsx");
+    xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Collect barchart axID on primary Axis
+    OUString XValueIdOf1Barchart = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart[1]/c:axId[1]", "val");
+    OUString YValueIdOf1Barchart = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart[1]/c:axId[2]", "val");
+    // Collect barchart axID on secondary Axis
+    OUString XValueIdOf2Barchart = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart[2]/c:axId[1]", "val");
+    OUString YValueIdOf2Barchart = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart[2]/c:axId[2]", "val");
+    // Check which c:catAx and c:valAx contain the AxisId of barcharts
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx[1]/c:axId", "val", XValueIdOf1Barchart);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx[1]/c:axId", "val", YValueIdOf1Barchart);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx[2]/c:axId", "val", XValueIdOf2Barchart);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx[2]/c:axId", "val", YValueIdOf2Barchart);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
