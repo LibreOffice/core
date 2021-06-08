@@ -59,6 +59,16 @@ bool ToplevelIsMessageDialog(const css::uno::Reference<css::xml::dom::XNode>& xN
     return false;
 }
 
+void insertAsFirstChild(const css::uno::Reference<css::xml::dom::XNode>& xParentNode,
+                        const css::uno::Reference<css::xml::dom::XNode>& xChildNode)
+{
+    auto xFirstChild = xParentNode->getFirstChild();
+    if (xFirstChild.is())
+        xParentNode->insertBefore(xChildNode, xFirstChild);
+    else
+        xParentNode->appendChild(xChildNode);
+}
+
 void SetPropertyOnTopLevel(const css::uno::Reference<css::xml::dom::XNode>& xNode,
                            const css::uno::Reference<css::xml::dom::XNode>& xProperty)
 {
@@ -72,12 +82,7 @@ void SetPropertyOnTopLevel(const css::uno::Reference<css::xml::dom::XNode>& xNod
             css::uno::Reference<css::xml::dom::XNode> xClass = xObjectMap->getNamedItem("class");
             if (xClass->getNodeValue() == "GtkDialog")
             {
-                auto xFirstChild = xObjectCandidate->getFirstChild();
-                if (xFirstChild.is())
-                    xObjectCandidate->insertBefore(xProperty, xFirstChild);
-                else
-                    xObjectCandidate->appendChild(xProperty);
-
+                insertAsFirstChild(xObjectCandidate, xProperty);
                 break;
             }
         }
@@ -93,6 +98,18 @@ OUString GetParentObjectType(const css::uno::Reference<css::xml::dom::XNode>& xN
     return xClass->getNodeValue();
 }
 
+css::uno::Reference<css::xml::dom::XNode>
+GetChildObject(const css::uno::Reference<css::xml::dom::XNode>& xChild)
+{
+    for (css::uno::Reference<css::xml::dom::XNode> xObjectCandidate = xChild->getFirstChild();
+         xObjectCandidate.is(); xObjectCandidate = xObjectCandidate->getNextSibling())
+    {
+        if (xObjectCandidate->getNodeName() == "object")
+            return xObjectCandidate;
+    }
+    return nullptr;
+}
+
 // currently runs the risk of duplicate margin-* properties if there was already such as well
 // as the border
 void AddBorderAsMargins(const css::uno::Reference<css::xml::dom::XNode>& xNode,
@@ -101,13 +118,7 @@ void AddBorderAsMargins(const css::uno::Reference<css::xml::dom::XNode>& xNode,
     auto xDoc = xNode->getOwnerDocument();
 
     auto xMarginEnd = CreateProperty(xDoc, "margin-end", rBorderWidth);
-
-    auto xFirstChild = xNode->getFirstChild();
-    if (xFirstChild.is())
-        xNode->insertBefore(xMarginEnd, xFirstChild);
-    else
-        xNode->appendChild(xMarginEnd);
-
+    insertAsFirstChild(xNode, xMarginEnd);
     xNode->insertBefore(CreateProperty(xDoc, "margin-top", rBorderWidth), xMarginEnd);
     xNode->insertBefore(CreateProperty(xDoc, "margin-bottom", rBorderWidth), xMarginEnd);
     xNode->insertBefore(CreateProperty(xDoc, "margin-start", rBorderWidth), xMarginEnd);
@@ -258,16 +269,18 @@ struct ConvertResult
     bool m_bHasSymbolicIconName;
     bool m_bAlwaysShowImage;
     bool m_bUseUnderline;
+    bool m_bVertOrientation;
     css::uno::Reference<css::xml::dom::XNode> m_xPropertyLabel;
 
     ConvertResult(bool bChildCanFocus, bool bHasVisible, bool bHasSymbolicIconName,
-                  bool bAlwaysShowImage, bool bUseUnderline,
+                  bool bAlwaysShowImage, bool bUseUnderline, bool bVertOrientation,
                   const css::uno::Reference<css::xml::dom::XNode>& rPropertyLabel)
         : m_bChildCanFocus(bChildCanFocus)
         , m_bHasVisible(bHasVisible)
         , m_bHasSymbolicIconName(bHasSymbolicIconName)
         , m_bAlwaysShowImage(bAlwaysShowImage)
         , m_bUseUnderline(bUseUnderline)
+        , m_bVertOrientation(bVertOrientation)
         , m_xPropertyLabel(rPropertyLabel)
     {
     }
@@ -283,7 +296,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
 {
     css::uno::Reference<css::xml::dom::XNodeList> xNodeList = xNode->getChildNodes();
     if (!xNodeList.is())
-        return ConvertResult(false, false, false, false, false, nullptr);
+        return ConvertResult(false, false, false, false, false, false, nullptr);
 
     std::vector<css::uno::Reference<css::xml::dom::XNode>> xRemoveList;
 
@@ -293,6 +306,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
     bool bHasSymbolicIconName = false;
     bool bAlwaysShowImage = false;
     bool bUseUnderline = false;
+    bool bVertOrientation = false;
     css::uno::Reference<css::xml::dom::XNode> xPropertyLabel;
     css::uno::Reference<css::xml::dom::XNode> xCantFocus;
 
@@ -493,6 +507,9 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             if (sName == "use-underline")
                 bUseUnderline = toBool(xChild->getFirstChild()->getNodeValue());
 
+            if (sName == "orientation")
+                bVertOrientation = xChild->getFirstChild()->getNodeValue() == "vertical";
+
             if (sName == "relief")
             {
                 if (GetParentObjectType(xChild) == "GtkToggleButton"
@@ -684,28 +701,18 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
 
             if (bContentArea)
             {
-                for (css::uno::Reference<css::xml::dom::XNode> xObjectCandidate
-                     = xChild->getFirstChild();
-                     xObjectCandidate.is(); xObjectCandidate = xObjectCandidate->getNextSibling())
+                css::uno::Reference<css::xml::dom::XNode> xObject = GetChildObject(xChild);
+                if (xObject)
                 {
-                    if (xObjectCandidate->getNodeName() == "object")
+                    auto xDoc = xChild->getOwnerDocument();
+
+                    auto xVExpand = CreateProperty(xDoc, "vexpand", "True");
+                    insertAsFirstChild(xObject, xVExpand);
+
+                    if (!sBorderWidth.isEmpty())
                     {
-                        auto xDoc = xChild->getOwnerDocument();
-
-                        auto xVExpand = CreateProperty(xDoc, "vexpand", "True");
-                        auto xFirstChild = xObjectCandidate->getFirstChild();
-                        if (xFirstChild.is())
-                            xObjectCandidate->insertBefore(xVExpand, xFirstChild);
-                        else
-                            xObjectCandidate->appendChild(xVExpand);
-
-                        if (!sBorderWidth.isEmpty())
-                        {
-                            AddBorderAsMargins(xObjectCandidate, sBorderWidth);
-                            sBorderWidth.clear();
-                        }
-
-                        break;
+                        AddBorderAsMargins(xObject, sBorderWidth);
+                        sBorderWidth.clear();
                     }
                 }
             }
@@ -788,16 +795,9 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 // go back to parent and find the object child and insert this "layout" as a
                 // new child of the object
                 auto xParent = xChild->getParentNode();
-                for (css::uno::Reference<css::xml::dom::XNode> xObjectCandidate
-                     = xParent->getFirstChild();
-                     xObjectCandidate.is(); xObjectCandidate = xObjectCandidate->getNextSibling())
-                {
-                    if (xObjectCandidate->getNodeName() == "object")
-                    {
-                        xObjectCandidate->appendChild(xNew);
-                        break;
-                    }
-                }
+                css::uno::Reference<css::xml::dom::XNode> xObject = GetChildObject(xParent);
+                if (xObject)
+                    xObject->appendChild(xNew);
             }
 
             xRemoveList.push_back(xChild);
@@ -819,6 +819,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
         bool bChildHasVisible = false;
         bool bChildAlwaysShowImage = false;
         bool bChildUseUnderline = false;
+        bool bChildVertOrientation = false;
         css::uno::Reference<css::xml::dom::XNode> xChildPropertyLabel;
         if (xChild->hasChildNodes())
         {
@@ -835,6 +836,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 bChildHasSymbolicIconName = aChildRes.m_bHasSymbolicIconName;
                 bChildAlwaysShowImage = aChildRes.m_bAlwaysShowImage;
                 bChildUseUnderline = aChildRes.m_bUseUnderline;
+                bChildVertOrientation = aChildRes.m_bVertOrientation;
                 xChildPropertyLabel = aChildRes.m_xPropertyLabel;
             }
         }
@@ -871,11 +873,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
 
                 {
                     auto xVisible = CreateProperty(xDoc, "visible", "False");
-                    auto xFirstChild = xChild->getFirstChild();
-                    if (xFirstChild.is())
-                        xChild->insertBefore(xVisible, xFirstChild);
-                    else
-                        xChild->appendChild(xVisible);
+                    insertAsFirstChild(xChild, xVisible);
                 }
             }
 
@@ -886,11 +884,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 {
                     xClass->setNodeValue("GtkHeaderBar");
                     auto xSpacingNode = CreateProperty(xDoc, "show-title-buttons", "False");
-                    auto xFirstChild = xChild->getFirstChild();
-                    if (xFirstChild.is())
-                        xChild->insertBefore(xSpacingNode, xFirstChild);
-                    else
-                        xChild->appendChild(xSpacingNode);
+                    insertAsFirstChild(xChild, xSpacingNode);
 
                     // move the replacement GtkHeaderBar up to before the content_area
                     auto xContentAreaCandidate = xChild->getParentNode();
@@ -928,20 +922,15 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                                 {
                                     OUString sNodeId;
 
-                                    for (css::uno::Reference<css::xml::dom::XNode> xObjectCandidate
-                                         = xTitleChild->getFirstChild();
-                                         xObjectCandidate.is();
-                                         xObjectCandidate = xObjectCandidate->getNextSibling())
+                                    css::uno::Reference<css::xml::dom::XNode> xObject
+                                        = GetChildObject(xTitleChild);
+                                    if (xObject)
                                     {
-                                        if (xObjectCandidate->getNodeName() == "object")
-                                        {
-                                            css::uno::Reference<css::xml::dom::XNamedNodeMap>
-                                                xObjectMap = xObjectCandidate->getAttributes();
-                                            css::uno::Reference<css::xml::dom::XNode> xObjectId
-                                                = xObjectMap->getNamedItem("id");
-                                            sNodeId = xObjectId->getNodeValue();
-                                            break;
-                                        }
+                                        css::uno::Reference<css::xml::dom::XNamedNodeMap> xObjectMap
+                                            = xObject->getAttributes();
+                                        css::uno::Reference<css::xml::dom::XNode> xObjectId
+                                            = xObjectMap->getNamedItem("id");
+                                        sNodeId = xObjectId->getNodeValue();
                                     }
 
                                     aChildren.push_back(std::make_pair(xTitleChild, sNodeId));
@@ -1011,7 +1000,8 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             else if (sClass == "GtkBox")
             {
                 // reverse the order of the pack-type=end widgets
-                std::vector<css::uno::Reference<css::xml::dom::XNode>> xPackEnds;
+                std::vector<css::uno::Reference<css::xml::dom::XNode>> aPackEnds;
+                std::vector<css::uno::Reference<css::xml::dom::XNode>> aPackStarts;
                 css::uno::Reference<css::xml::dom::XNode> xBoxChild = xChild->getFirstChild();
                 while (xBoxChild.is())
                 {
@@ -1024,16 +1014,69 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                         css::uno::Reference<css::xml::dom::XNode> xType
                             = xBoxChildMap->getNamedItem("type");
                         if (xType && xType->getNodeValue() == "end")
-                            xPackEnds.push_back(xChild->removeChild(xBoxChild));
+                            aPackEnds.push_back(xChild->removeChild(xBoxChild));
+                        else
+                            aPackStarts.push_back(xBoxChild);
                     }
 
                     xBoxChild = xNextBoxChild;
                 }
 
-                std::reverse(xPackEnds.begin(), xPackEnds.end());
+                if (!aPackEnds.empty())
+                {
+                    std::reverse(aPackEnds.begin(), aPackEnds.end());
 
-                for (auto& xPackEnd : xPackEnds)
-                    xChild->appendChild(xPackEnd);
+                    if (!bChildVertOrientation)
+                    {
+                        bool bHasStartObject = false;
+                        bool bLastStartExpands = false;
+                        if (!aPackStarts.empty())
+                        {
+                            css::uno::Reference<css::xml::dom::XNode> xLastStartObject;
+                            for (auto it = aPackStarts.rbegin(); it != aPackStarts.rend(); ++it)
+                            {
+                                xLastStartObject = GetChildObject(*it);
+                                if (xLastStartObject.is())
+                                {
+                                    bHasStartObject = true;
+                                    for (css::uno::Reference<css::xml::dom::XNode> xExpandCandidate
+                                         = xLastStartObject->getFirstChild();
+                                         xExpandCandidate.is();
+                                         xExpandCandidate = xExpandCandidate->getNextSibling())
+                                    {
+                                        if (xExpandCandidate->getNodeName() == "property")
+                                        {
+                                            css::uno::Reference<css::xml::dom::XNamedNodeMap>
+                                                xExpandMap = xExpandCandidate->getAttributes();
+                                            css::uno::Reference<css::xml::dom::XNode> xName
+                                                = xExpandMap->getNamedItem("name");
+                                            OUString sPropName(xName->getNodeValue());
+                                            if (sPropName == "hexpand")
+                                            {
+                                                bLastStartExpands
+                                                    = toBool(xExpandCandidate->getFirstChild()
+                                                                 ->getNodeValue());
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (bHasStartObject && !bLastStartExpands)
+                        {
+                            auto xAlign = CreateProperty(xDoc, "halign", "end");
+                            insertAsFirstChild(GetChildObject(aPackEnds[0]), xAlign);
+                            auto xExpand = CreateProperty(xDoc, "hexpand", "True");
+                            insertAsFirstChild(GetChildObject(aPackEnds[0]), xExpand);
+                        }
+                    }
+
+                    for (auto& xPackEnd : aPackEnds)
+                        xChild->appendChild(xPackEnd);
+                }
             }
             else if (sClass == "GtkRadioButton")
             {
@@ -1046,11 +1089,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             else if (sClass == "GtkPopover" && !bHasVisible)
             {
                 auto xVisible = CreateProperty(xDoc, "visible", "False");
-                auto xFirstChild = xChild->getFirstChild();
-                if (xFirstChild.is())
-                    xChild->insertBefore(xVisible, xFirstChild);
-                else
-                    xChild->appendChild(xVisible);
+                insertAsFirstChild(xChild, xVisible);
             }
             else if (sClass == "GtkMenu")
             {
@@ -1142,7 +1181,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
         xNode->removeChild(xRemove);
 
     return ConvertResult(bChildCanFocus, bHasVisible, bHasSymbolicIconName, bAlwaysShowImage,
-                         bUseUnderline, xPropertyLabel);
+                         bUseUnderline, bVertOrientation, xPropertyLabel);
 }
 }
 
