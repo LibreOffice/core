@@ -1271,8 +1271,7 @@ namespace frm
             aValue <<= m_aDefaultSelectSeq;
         else if (m_nNULLPos != -1)  // bound Listbox
         {
-            Sequence<sal_Int16> aSeq(1);
-            aSeq.getArray()[0] = m_nNULLPos;
+            Sequence<sal_Int16> aSeq { m_nNULLPos };
             aValue <<= aSeq;
         }
         else
@@ -1707,14 +1706,15 @@ namespace frm
 
     Sequence< Type > OListBoxModel::getSupportedBindingTypes()
     {
-        Sequence< Type > aTypes(6);
-        aTypes[0] = cppu::UnoType<Sequence< Any >>::get();
-        aTypes[1] = cppu::UnoType<Any>::get();
-        aTypes[2] = cppu::UnoType<Sequence< sal_Int32 >>::get();
-        aTypes[3] = cppu::UnoType<sal_Int32>::get();
-        aTypes[4] = cppu::UnoType<Sequence< OUString >>::get();
-        aTypes[5] = cppu::UnoType<OUString>::get();
-        return aTypes;
+        return
+        {
+            cppu::UnoType<Sequence< Any >>::get(),
+            cppu::UnoType<Any>::get(),
+            cppu::UnoType<Sequence< sal_Int32 >>::get(),
+            cppu::UnoType<sal_Int32>::get(),
+            cppu::UnoType<Sequence< OUString >>::get(),
+            cppu::UnoType<OUString>::get()
+        };
     }
 
 

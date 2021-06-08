@@ -664,24 +664,25 @@ void UpdateDialog::notifyMenubar( bool bPrepareOnly, bool bRecheckOnly )
         sal_Int32 nCount = 0;
         for (sal_uInt16 i = 0, nItemCount = m_xUpdates->n_children(); i < nItemCount; ++i)
         {
-            uno::Sequence< OUString > aItem(2);
 
             UpdateDialog::Index const * p = reinterpret_cast< UpdateDialog::Index const * >(m_xUpdates->get_id(i).toInt64());
 
             if ( p->m_eKind == ENABLED_UPDATE )
             {
                 dp_gui::UpdateData aUpdData = m_enabledUpdates[ p->m_nIndex ];
-                aItem[0] = dp_misc::getIdentifier( aUpdData.aInstalledPackage );
 
                 dp_misc::DescriptionInfoset aInfoset( m_context, aUpdData.aUpdateInfo );
-                aItem[1] = aInfoset.getVersion();
+                uno::Sequence< OUString > aItem
+                {
+                    dp_misc::getIdentifier( aUpdData.aInstalledPackage ),
+                    aInfoset.getVersion()
+                };
+                aItemList.realloc( nCount + 1 );
+                aItemList[ nCount ] = aItem;
+                nCount += 1;
             }
             else
                 continue;
-
-            aItemList.realloc( nCount + 1 );
-            aItemList[ nCount ] = aItem;
-            nCount += 1;
         }
     }
 

@@ -27,10 +27,11 @@ using namespace ::com::sun::star;
 
 uno::Sequence< OUString > SAL_CALL MainThreadExecutor::impl_staticGetSupportedServiceNames()
 {
-    uno::Sequence< OUString > aRet(2);
-    aRet[0] = "com.sun.star.thread.MainThreadExecutor";
-    aRet[1] = "com.sun.star.comp.thread.MainThreadExecutor";
-    return aRet;
+    return
+    {
+        "com.sun.star.thread.MainThreadExecutor",
+        "com.sun.star.comp.thread.MainThreadExecutor"
+    }
 }
 
 

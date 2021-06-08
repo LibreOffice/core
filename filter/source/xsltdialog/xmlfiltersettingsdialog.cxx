@@ -1306,17 +1306,16 @@ bool filter_info_impl::operator==( const filter_info_impl& r ) const
 
 Sequence< OUString > filter_info_impl::getFilterUserData() const
 {
-    Sequence< OUString > aUserData(8);
-
-    aUserData[0] = "com.sun.star.documentconversion.XSLTFilter";
-    aUserData[1] = OUString::boolean( mbNeedsXSLT2 );
-    aUserData[2] = maImportService;
-    aUserData[3] = maExportService;
-    aUserData[4] = maImportXSLT;
-    aUserData[5] = maExportXSLT;
-    aUserData[7] = maComment;
-
-    return aUserData;
+    return
+    {
+        "com.sun.star.documentconversion.XSLTFilter",
+        OUString::boolean( mbNeedsXSLT2 ),
+        maImportService,
+        maExportService,
+        maImportXSLT,
+        maExportXSLT,
+        maComment
+    };
 }
 
 OUString string_encode( const OUString & rText )
