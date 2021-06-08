@@ -1430,16 +1430,15 @@ void SwLayAction::FormatLayoutFly( SwFlyFrame* pFly )
         return;
 
     // Now, deal with the lowers that are LayoutFrames
-    bool bTabChanged = false;
     SwFrame *pLow = pFly->Lower();
     while ( pLow )
     {
         if ( pLow->IsLayoutFrame() )
         {
             if ( pLow->IsTabFrame() )
-                bTabChanged |= FormatLayoutTab( static_cast<SwTabFrame*>(pLow), bAddRect );
+                FormatLayoutTab( static_cast<SwTabFrame*>(pLow), bAddRect );
             else
-                bChanged |= FormatLayout( m_pImp->GetShell()->GetOut(), static_cast<SwLayoutFrame*>(pLow), bAddRect );
+                FormatLayout( m_pImp->GetShell()->GetOut(), static_cast<SwLayoutFrame*>(pLow), bAddRect );
         }
         pLow = pLow->GetNext();
     }
