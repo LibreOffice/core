@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f8e4e071_c5657dc3",
+        "filename": "sw/source/core/graphic/ndgrf.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 784,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2021-06-08T10:23:37Z",
+      "side": 1,
+      "message": "This is unnecessary. What we are adding here is not an unexpected behavior, but something necessary which was forgotten before.",
+      "range": {
+        "startLine": 784,
+        "startChar": 4,
+        "endLine": 784,
+        "endChar": 25
+      },
+      "revId": "9da8279f253cea1d2e0a8130ed8b5260b93f9c3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f42f0b64_1c7c353a",
+        "filename": "sw/source/core/graphic/ndgrf.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 785,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2021-06-08T10:23:37Z",
+      "side": 1,
+      "message": "Maybe something like \"Take mirroring into consideration while cropping\" ?",
+      "range": {
+        "startLine": 785,
+        "startChar": 4,
+        "endLine": 785,
+        "endChar": 39
+      },
+      "revId": "9da8279f253cea1d2e0a8130ed8b5260b93f9c3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
