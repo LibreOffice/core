@@ -84,8 +84,7 @@ namespace cppcanvas::internal
             }
 
             rendering::RenderState aLocalState( getRenderState() );
-            uno::Sequence<rendering::ARGBColor> aCol(1);
-            aCol[0] = rendering::ARGBColor( nAlphaModulation, 1.0, 1.0, 1.0 );
+            uno::Sequence<rendering::ARGBColor> aCol { { nAlphaModulation, 1.0, 1.0, 1.0 } };
             aLocalState.DeviceColor =
                 pCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace()->convertFromARGB(aCol);
 

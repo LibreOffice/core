@@ -278,8 +278,7 @@ namespace cppcanvas::internal
                 rendering::RenderState aLocalState( maState );
                 ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
 
-                uno::Sequence< rendering::Texture > aSeq(1);
-                aSeq[0] = maTexture;
+                uno::Sequence< rendering::Texture > aSeq { maTexture };
 
                 rCachedPrimitive = mpCanvas->getUNOCanvas()->fillTexturedPolyPolygon( mxPolyPoly,
                                                                                       mpCanvas->getViewState(),
