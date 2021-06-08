@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "02fff4b4_b7e37323",
+        "filename": "sd/qa/unit/import-tests-smartart.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 617,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-06-08T08:36:06Z",
+      "side": 1,
+      "message": "do not initialize color to 0",
+      "revId": "c76db3462d298ed3400f06bac645fede6932e3e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "154bf244_b87488f7",
+        "filename": "sd/qa/unit/import-tests-smartart.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 874,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-06-08T08:36:06Z",
+      "side": 1,
+      "message": "why this change ?",
+      "revId": "c76db3462d298ed3400f06bac645fede6932e3e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac68b102_cdc698a6",
+        "filename": "sd/qa/unit/import-tests-smartart.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 877,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-06-08T08:36:06Z",
+      "side": 1,
+      "message": "you are already asserting color and color, no need for static_cast",
+      "revId": "c76db3462d298ed3400f06bac645fede6932e3e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
