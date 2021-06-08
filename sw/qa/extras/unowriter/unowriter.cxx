@@ -1070,6 +1070,25 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testShapeAllowOverlap)
     CPPUNIT_ASSERT(getProperty<bool>(xShapeProperties, "AllowOverlap"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testAutoCorrect)
+{
+    // create a new document
+    loadURL("private:factory/swriter", nullptr);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, css::uno::UNO_QUERY_THROW);
+
+    // write some test
+    auto xSimpleText = xTextDocument->getText();
+    xSimpleText->insertString(xSimpleText->getStart(), "This should not fail", false);
+
+    // Press Insert Key
+
+    // This should fail without the fix
+    xSimpleText->insertString(xSimpleText->getStart(), " ", false);
+
+    // Assert if LO crashed or not
+
+}
+
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTextConvertToTableLineSpacing)
 {
     // Load a document which has a table with a single cell.
