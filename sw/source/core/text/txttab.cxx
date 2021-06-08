@@ -40,16 +40,24 @@
  * If the tab stop is outside the print area, we
  * return 0 if it is not the first tab stop.
  */
-const SvxTabStop *SwLineInfo::GetTabStop( const SwTwips nSearchPos, const SwTwips nRight ) const
+const SvxTabStop* SwLineInfo::GetTabStop(const SwTwips nSearchPos, SwTwips& nRight) const
 {
     for( sal_uInt16 i = 0; i < m_pRuler->Count(); ++i )
     {
         const SvxTabStop &rTabStop = m_pRuler->operator[](i);
-        if( rTabStop.GetTabPos() > SwTwips(nRight) )
+        if (nRight && rTabStop.GetTabPos() > nRight)
+        {
+            // Consider the first tabstop to always be in-bounds.
+            if (!i)
+                nRight = rTabStop.GetTabPos();
             return i ? nullptr : &rTabStop;
-
+        }
         if( rTabStop.GetTabPos() > nSearchPos )
+        {
+            if (!i && !nRight)
+                nRight = rTabStop.GetTabPos();
             return &rTabStop;
+        }
     }
     return nullptr;
 }
@@ -61,6 +69,10 @@ sal_uInt16 SwLineInfo::NumberOfTabStops() const
 
 SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto ) const
 {
+    IDocumentSettingAccess const& rIDSA(rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess());
+    const bool bTabOverSpacing = rIDSA.get(DocumentSettingId::TAB_OVER_SPACING);
+    const bool bTabsRelativeToIndent = rIDSA.get(DocumentSettingId::TABS_RELATIVE_TO_INDENT);
+
     // Update search location - since Center/Decimal tabstops' width is dependent on the following text.
     SwTabPortion* pTmpLastTab = rInf.GetLastTab();
     if (pTmpLastTab && (pTmpLastTab->IsTabCenterPortion() || pTmpLastTab->IsTabDecimalPortion()))
@@ -78,8 +90,6 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
         // nTabLeft: The absolute value, the tab stops are relative to: Tabs origin.
 
         // #i91133#
-        const bool bTabsRelativeToIndent =
-            m_pFrame->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::TABS_RELATIVE_TO_INDENT);
         const SwTwips nTabLeft = bRTL
                                  ? m_pFrame->getFrameArea().Right() -
                                    ( bTabsRelativeToIndent ? GetTabLeft() : 0 )
@@ -132,8 +142,15 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
         // any hard set tab stops:
         // Note: If there are no user defined tab stops, there is always a
         // default tab stop.
+        const SwTwips nOldRight = nMyRight;
+        // Accept left-tabstops beyond the paragraph margin for bTabOverSpacing
+        if (bTabOverSpacing)
+            nMyRight = 0;
         const SvxTabStop* pTabStop = m_aLineInf.GetTabStop( nSearchPos, nMyRight );
-        if ( pTabStop )
+        if (!nMyRight)
+            nMyRight = nOldRight;
+        if (pTabStop &&
+            (pTabStop->GetTabPos() <= nMyRight || pTabStop->GetAdjustment() == SvxTabAdjust::Left))
         {
             cFill = ' ' != pTabStop->GetFill() ? pTabStop->GetFill() : 0;
             cDec = pTabStop->GetDecimal();
@@ -179,6 +196,7 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
             }
             cFill = 0;
             eAdj = SvxTabAdjust::Left;
+            pTabStop = nullptr;
         }
 
         // #i115705# - correction and refactoring:
@@ -330,6 +348,7 @@ bool SwTabPortion::PreFormat( SwTextFormatInfo &rInf )
     const bool bTabOverflow = rIDSA.get(DocumentSettingId::TAB_OVERFLOW);
     const bool bTabOverMargin = rIDSA.get(DocumentSettingId::TAB_OVER_MARGIN);
     const bool bTabOverSpacing = rIDSA.get(DocumentSettingId::TAB_OVER_SPACING);
+    const sal_Int32 nTextFrameWidth = rInf.GetTextFrame()->getFrameArea().Width();
 
     // The minimal width of a tab is one blank at least.
     // #i37686# In compatibility mode, the minimum width
@@ -385,9 +404,15 @@ bool SwTabPortion::PreFormat( SwTextFormatInfo &rInf )
                 if ((bTabOverMargin || bTabOverSpacing) && GetTabPos() > rInf.Width()
                     && (!m_bAutoTabStop || (!bTabOverMargin && rInf.X() > rInf.Width())))
                 {
-                    if (bTabOverMargin || GetTabPos() < rInf.GetTextFrame()->getFrameArea().Width())
+                    if (bTabOverMargin || GetTabPos() < nTextFrameWidth)
                     {
                         rInf.SetLastTab(this);
+                        break;
+                    }
+                    else
+                    {
+                        assert(!bTabOverMargin && bTabOverSpacing && GetTabPos() >= nTextFrameWidth);
+                        bFull = true;
                         break;
                     }
                 }
@@ -401,7 +426,7 @@ bool SwTabPortion::PreFormat( SwTextFormatInfo &rInf )
                 bool bAtParaEnd = rInf.GetIdx() + GetLen() == TextFrameIndex(rInf.GetText().getLength());
                 if ( bFull && bTabCompat &&
                      ( ( bTabOverflow && ( rInf.IsTabOverflow() || !m_bAutoTabStop ) ) || bAtParaEnd ) &&
-                     GetTabPos() >= rInf.GetTextFrame()->getFrameArea().Width() )
+                     GetTabPos() >= nTextFrameWidth)
                 {
                     bFull = false;
                     if ( bTabOverflow && !m_bAutoTabStop )

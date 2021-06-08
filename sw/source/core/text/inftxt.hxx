@@ -75,8 +75,7 @@ class SwLineInfo
     ~SwLineInfo();
 public:
     // #i24363# tab stops relative to indent - returns the tab stop following nSearchPos or NULL
-    const SvxTabStop *GetTabStop( const SwTwips nSearchPos,
-                                 const SwTwips nRight ) const;
+    const SvxTabStop* GetTabStop(const SwTwips nSearchPos, SwTwips& nRight) const;
     const SvxLineSpacingItem *GetLineSpacing() const { return m_pSpace; }
     sal_uInt16 GetDefTabStop() const { return m_nDefTabStop; }
     void SetDefTabStop( sal_uInt16 nNew ) const
