@@ -68,42 +68,13 @@
 #include <vcl/TypeSerializer.hxx>
 #include <comphelper/scopeguard.hxx>
 
+constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/ooxmlimport/data/";
 
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase("/sw/qa/extras/ooxmlimport/data/", "Office Open XML Text")
+    Test() : SwModelTestBase(DATA_DIRECTORY, "Office Open XML Text")
     {
-    }
-};
-
-class FailTest : public Test
-{
-public:
-    // UGLY: hacky manual override of MacrosTest::loadFromDesktop
-    void executeImportTest(const char* filename, const char* /*password*/)
-    {
-        header();
-        preTest(filename);
-        {
-            if (mxComponent.is())
-                mxComponent->dispose();
-            std::cout << filename << ",";
-            mnStartTime = osl_getGlobalTimer();
-            {
-                OUString aURL(m_directories.getURLFromSrc(mpTestDocumentPath) + OUString::createFromAscii(filename));
-                CPPUNIT_ASSERT_MESSAGE("no desktop", mxDesktop.is());
-                uno::Sequence<beans::PropertyValue> args( comphelper::InitPropertySequence({
-                        { "DocumentService", uno::Any(OUString("com.sun.star.text.TextDocument")) }
-                    }));
-
-                uno::Reference<lang::XComponent> xComponent = mxDesktop->loadComponentFromURL(aURL, "_default", 0, args);
-                OUString sMessage = "loading succeeded: " + aURL;
-                CPPUNIT_ASSERT_MESSAGE(OUStringToOString(sMessage, RTL_TEXTENCODING_UTF8).getStr(), !xComponent.is());
-            }
-        }
-        verify();
-        finish();
     }
 };
 
@@ -114,8 +85,10 @@ CPPUNIT_TEST_FIXTURE(Test, testImageHyperlink)
     CPPUNIT_ASSERT_EQUAL(OUString("http://www.libreoffice.org/"), URL);
 }
 
-DECLARE_SW_IMPORT_TEST(testMathMalformedXml, "math-malformed_xml.docx", nullptr, FailTest)
+CPPUNIT_TEST_FIXTURE(Test, testMathMalformedXml)
 {
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "math-malformed_xml.docx";
+    mxComponent = mxDesktop->loadComponentFromURL(aURL, "_default", 0, {});
     CPPUNIT_ASSERT(!mxComponent.is());
 }
 
