@@ -22,6 +22,30 @@
       "revId": "c0d8e2dd4d8438abca527f99f5c20abb3cfee843",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ab6efa0_1f4d7ecc",
+        "filename": "vcl/source/uitest/uiobject.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-08T11:31:36Z",
+      "side": 1,
+      "message": "\u003e You could \"return aActionName;\" instead of this as this will case errors\n\nWhat errors exactly would this cause?  (It would be so much more helpful if you could explain exactly why you commented out the original return statement in \u003chttps://gerrit.libreoffice.org/c/core/+/74629\u003e \"Some new features in ui_logger project\".)",
+      "parentUuid": "587203be_7294a0f2",
+      "range": {
+        "startLine": 585,
+        "startChar": 0,
+        "endLine": 585,
+        "endChar": 88
+      },
+      "revId": "c0d8e2dd4d8438abca527f99f5c20abb3cfee843",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
