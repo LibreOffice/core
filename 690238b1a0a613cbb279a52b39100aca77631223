@@ -16,6 +16,24 @@
       "revId": "690238b1a0a613cbb279a52b39100aca77631223",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3516c1d4_1e497c5b",
+        "filename": "vcl/source/uitest/uiobject.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-08T07:59:49Z",
+      "side": 1,
+      "message": "see \u003chttps://gerrit.libreoffice.org/c/core/+/116811\u003e \"Lets assume this was commented out in error\"",
+      "parentUuid": "e0abbc18_8b0955bd",
+      "revId": "690238b1a0a613cbb279a52b39100aca77631223",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
