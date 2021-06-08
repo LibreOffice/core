@@ -1568,14 +1568,25 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
     SAL_INFO("sd.eppt", "write placeholder " << pType);
     if (bUsePlaceholderIndex)
     {
-        mpFS->singleElementNS(
-            XML_p, XML_ph, XML_type, pType, XML_idx,
-            OString::number(
-                static_cast<PowerPointExport*>(GetFB())->CreateNewPlaceholderIndex(xShape)));
+        if ((mePageType == PageType::LAYOUT || mePageType == PageType::NORMAL)
+            && ePlaceholder == Outliner)
+            mpFS->singleElementNS(
+                XML_p, XML_ph, XML_idx,
+                OString::number(
+                    static_cast<PowerPointExport*>(GetFB())->CreateNewPlaceholderIndex(xShape)));
+        else
+            mpFS->singleElementNS(
+                XML_p, XML_ph, XML_type, pType, XML_idx,
+                OString::number(
+                    static_cast<PowerPointExport*>(GetFB())->CreateNewPlaceholderIndex(xShape)));
     }
     else
     {
-        mpFS->singleElementNS(XML_p, XML_ph, XML_type, pType);
+        if ((mePageType == PageType::LAYOUT || mePageType == PageType::NORMAL)
+            && ePlaceholder == Outliner)
+            mpFS->singleElementNS(XML_p, XML_ph);
+        else
+            mpFS->singleElementNS(XML_p, XML_ph, XML_type, pType);
     }
     mpFS->endElementNS(XML_p, XML_nvPr);
     mpFS->endElementNS(XML_p, XML_nvSpPr);
