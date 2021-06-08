@@ -802,28 +802,18 @@ namespace emfio
             break;
 
             case W_META_BITBLT:
+            case W_META_STRETCHBLT:
             {
-                // 0-3   : nRasterOperation        #93454#
-                // 4-5   : y offset of source bitmap
-                // 6-7   : x offset of source bitmap
-                // 8-9   : height of source and destination bitmap
-                // 10-11 : width  of source and destination bitmap
-                // 12-13 : destination position y (in pixel)
-                // 14-15 : destination position x (in pixel)
-                // 16-17 : bitmap type
-                // 18-19 : Width Bitmap in Pixel
-                // 20-21 : Height Bitmap in Pixel
-                // 22-23 : bytes per scanline
-                // 24    : planes
-                // 25    : bitcount
-
                 sal_uInt32  nRasterOperation = 0;
-                sal_Int16   nYSrc = 0, nXSrc = 0, nSye = 0, nSxe = 0, nBitmapType = 0, nWidth = 0, nHeight = 0, nBytesPerScan = 0;
+                sal_Int16   nSrcHeight = 0, nSrcWidth = 0, nYSrc, nXSrc, nSye, nSxe, nBitmapType, nWidth, nHeight, nBytesPerScan;
                 sal_uInt8   nPlanes, nBitCount;
                 const bool bNoSourceBitmap = ( nRecordSize == ( static_cast< sal_uInt32 >( nFunc ) >> 8 ) + 3 );
 
                 mpInputStream->ReadUInt32( nRasterOperation );
                 SAL_INFO("emfio", "\t\t Raster operation: 0x" << std::hex << nRasterOperation << std::dec << ", No source bitmap: " << bNoSourceBitmap);
+
+                if( nFunc == W_META_STRETCHBLT )
+                    mpInputStream->ReadInt16( nSrcHeight ).ReadInt16( nSrcWidth );
 
                 mpInputStream->ReadInt16( nYSrc ).ReadInt16( nXSrc );
                 if ( bNoSourceBitmap )
@@ -833,12 +823,13 @@ namespace emfio
                 mpInputStream->ReadInt16( nBitmapType ).ReadInt16( nWidth ).ReadInt16( nHeight ).ReadInt16( nBytesPerScan ).ReadUChar( nPlanes ).ReadUChar( nBitCount );
 
                 SAL_INFO("emfio", "\t\t Bitmap type:" << nBitmapType << " Width:" << nWidth << " Height:" << nHeight << " WidthBytes:" << nBytesPerScan << " Planes: " << static_cast< sal_uInt16 >( nPlanes ) << " BitCount: " << static_cast< sal_uInt16 >( nBitCount ) );
-                if ( bNoSourceBitmap )
+                if ( bNoSourceBitmap || ( nBitCount == 4 ) || ( nBitCount == 8 ) || nPlanes != 1 )
                 {
-                    SAL_WARN("emfio", "\t\t TODO The unsupported Bitmap record (without embedded source Bitmap). Please fill a bug.");
+                    SAL_WARN("emfio", "\t\t TODO The unsupported Bitmap record. Please fill a bug.");
                     break;
                 }
-                bool bOk = nWidth && nHeight && nBytesPerScan > 0 && nPlanes == 1 && nBitCount == 1;
+                const vcl::PixelFormat ePixelFormat = vcl::bitDepthToPixelFormat( nBitCount );
+                bool bOk = nWidth && nHeight && nBytesPerScan > 0 && nPlanes == 1 && ePixelFormat != vcl::PixelFormat::INVALID;
                 if (bOk)
                 {
                     // must be enough data to fulfil the request
@@ -851,25 +842,10 @@ namespace emfio
                 }
                 if (bOk)
                 {
-                    vcl::bitmap::RawBitmap aBmp( Size( nWidth, nHeight ), 24 );
-                    for (sal_uInt16 y = 0; y < nHeight && mpInputStream->good(); ++y)
-                    {
-                        sal_uInt16 x = 0;
-                        for (sal_uInt16 scan = 0; scan < nBytesPerScan; scan++ )
-                        {
-                            sal_Int8 nEightPixels = 0;
-                            mpInputStream->ReadSChar( nEightPixels );
-                            for (sal_Int8 i = 7; i >= 0; i-- )
-                            {
-                                if ( x < nWidth )
-                                {
-                                    aBmp.SetPixel( y, x, ((nEightPixels>>i)&1) ? COL_BLACK : COL_WHITE );
-                                }
-                                x++;
-                            }
-                        }
-                    }
-                    BitmapEx aBitmap = vcl::bitmap::CreateFromData(std::move(aBmp));
+                    std::unique_ptr< sal_uInt8[] > pData;
+                    pData.reset( new sal_uInt8[ nHeight * nBytesPerScan ] );
+                    mpInputStream->ReadBytes( pData.get(), nHeight * nBytesPerScan );
+                    BitmapEx aBitmap = vcl::bitmap::CreateFromData( pData.get(), nWidth, nHeight, nBytesPerScan, ePixelFormat, true );
                     if ( nSye && nSxe &&
                          ( nXSrc + nSxe <= nWidth ) &&
                          ( nYSrc + nSye <= nHeight ) )
@@ -885,7 +861,6 @@ namespace emfio
 
             case W_META_DIBBITBLT:
             case W_META_DIBSTRETCHBLT:
-            case W_META_STRETCHBLT:
             case W_META_STRETCHDIB:
             {
                 sal_uInt32  nRasterOperation = 0;
@@ -902,56 +877,49 @@ namespace emfio
                 // nSrcHeight and nSrcWidth is the number of pixels that has to been used
                 // If they are set to zero, it is as indicator not to scale the bitmap later
                 if( nFunc == W_META_DIBSTRETCHBLT ||
-                    nFunc == W_META_STRETCHBLT ||
                     nFunc == W_META_STRETCHDIB )
                     mpInputStream->ReadInt16( nSrcHeight ).ReadInt16( nSrcWidth );
 
                 // nYSrc and nXSrc is the offset of the first pixel
                 mpInputStream->ReadInt16( nYSrc ).ReadInt16( nXSrc );
 
-                // TODO Add META_STRETCHBLT support, which is defined by Bitmap16 Object
-                if( nFunc == W_META_DIBBITBLT ||
-                    nFunc == W_META_DIBSTRETCHBLT ||
-                    nFunc == W_META_STRETCHDIB )
+                if ( bNoSourceBitmap )
+                    mpInputStream->SeekRel( 2 ); // Skip Reserved 2 bytes (it must be ignored)
+
+                Size aDestSize( ReadYXExt() );
+                if ( aDestSize.Width() && aDestSize.Height() )  // #92623# do not try to read buggy bitmaps
                 {
-                    if ( bNoSourceBitmap )
-                        mpInputStream->SeekRel( 2 ); // Skip Reserved 2 bytes (it must be ignored)
-
-                    Size aDestSize( ReadYXExt() );
-                    if ( aDestSize.Width() && aDestSize.Height() )  // #92623# do not try to read buggy bitmaps
+                    tools::Rectangle aDestRect( ReadYX(), aDestSize );
+                    if ( !bNoSourceBitmap )
                     {
-                        tools::Rectangle aDestRect( ReadYX(), aDestSize );
-                        if ( !bNoSourceBitmap )
-                        {
-                            // tdf#142625 Read the DIBHeader and check if bitmap is supported
-                            // If bitmap is not supported don't run ReadDIB, as it will interrupt image processing
-                            const auto nOldPos(mpInputStream->Tell());
-                            sal_uInt32  nHeaderSize;
-                            sal_uInt16  nBitCount;
-                            mpInputStream->ReadUInt32( nHeaderSize );
-                            if ( nHeaderSize == 0xC ) // BitmapCoreHeader
-                                mpInputStream->SeekRel( 6 ); // skip Width (16), Height (16), Planes (16)
-                            else
-                                mpInputStream->SeekRel( 10 ); // skip Width (32), Height (32), Planes (16)
-                            mpInputStream->ReadUInt16( nBitCount );
-                            if ( nBitCount == 0 ) // TODO Undefined BitCount (JPEG/PNG), which are not supported
-                                break;
-                            mpInputStream->Seek(nOldPos);
+                        // tdf#142625 Read the DIBHeader and check if bitmap is supported
+                        // If bitmap is not supported don't run ReadDIB, as it will interrupt image processing
+                        const auto nOldPos(mpInputStream->Tell());
+                        sal_uInt32  nHeaderSize;
+                        sal_uInt16  nBitCount;
+                        mpInputStream->ReadUInt32( nHeaderSize );
+                        if ( nHeaderSize == 0xC ) // BitmapCoreHeader
+                            mpInputStream->SeekRel( 6 ); // skip Width (16), Height (16), Planes (16)
+                        else
+                            mpInputStream->SeekRel( 10 ); // skip Width (32), Height (32), Planes (16)
+                        mpInputStream->ReadUInt16( nBitCount );
+                        if ( nBitCount == 0 ) // TODO Undefined BitCount (JPEG/PNG), which are not supported
+                            break;
+                        mpInputStream->Seek(nOldPos);
 
-                            if ( !ReadDIB( aBmp, *mpInputStream, false ) )
-                                SAL_WARN( "emfio", "\tTODO Read DIB failed. Interrupting processing whole image. Please report bug report." );
-                        }
-                        // test if it is sensible to crop
-                        if ( nSrcHeight && nSrcWidth &&
-                             ( nXSrc + nSrcWidth <= aBmp.GetSizePixel().Width() ) &&
-                             ( nYSrc + nSrcHeight <= aBmp.GetSizePixel().Height() ) )
-                        {
-                            tools::Rectangle aCropRect( Point( nXSrc, nYSrc ), Size( nSrcWidth, nSrcHeight ) );
-                            aBmp.Crop( aCropRect );
-                        }
-
-                        maBmpSaveList.emplace_back(new BSaveStruct(aBmp, aDestRect, nRasterOperation));
+                        if ( !ReadDIB( aBmp, *mpInputStream, false ) )
+                            SAL_WARN( "emfio", "\tTODO Read DIB failed. Interrupting processing whole image. Please report bug report." );
                     }
+                    // test if it is sensible to crop
+                    if ( nSrcHeight && nSrcWidth &&
+                            ( nXSrc + nSrcWidth <= aBmp.GetSizePixel().Width() ) &&
+                            ( nYSrc + nSrcHeight <= aBmp.GetSizePixel().Height() ) )
+                    {
+                        tools::Rectangle aCropRect( Point( nXSrc, nYSrc ), Size( nSrcWidth, nSrcHeight ) );
+                        aBmp.Crop( aCropRect );
+                    }
+
+                    maBmpSaveList.emplace_back(new BSaveStruct(aBmp, aDestRect, nRasterOperation));
                 }
             }
             break;
