@@ -4570,6 +4570,23 @@ void SwUiWriterTest::testTdf92648()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), nCount);
 }
 
+void SwUiWriterTest::testTdf105103()
+{
+    // create a new doc
+    SwDoc* pDoc = createDoc("tdf105103.docx");
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
+
+    // press Insert key
+    pImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::INSERT);
+    pImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::INSERT);
+
+    // test should fail here without the fix
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Insert("foobar");
+
+}
+
 void SwUiWriterTest::testTdf103978_backgroundTextShape()
 {
     SwDoc* pDoc = createDoc("tdf103978_backgroundTextShape.docx");
