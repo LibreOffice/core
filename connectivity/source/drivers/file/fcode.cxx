@@ -63,32 +63,9 @@ void OOperandValue::setValue(const ORowSetValue& _rVal)
     m_aValue = _rVal;
 }
 
-OOperandParam::OOperandParam(OSQLParseNode const * pNode, sal_Int32 _nPos)
+OOperandParam::OOperandParam(sal_Int32 _nPos)
     : OOperandRow(static_cast<sal_uInt16>(_nPos), DataType::VARCHAR)         // Standard-Type
 {
-    OSL_ENSURE(SQL_ISRULE(pNode,parameter),"Argument is not a parameter");
-    OSL_ENSURE(pNode->count() > 0,"Error in Parse Tree");
-    OSQLParseNode *pMark = pNode->getChild(0);
-
-    OUString aParameterName;
-    if (SQL_ISPUNCTUATION(pMark, "?"))
-        aParameterName = "?";
-    else if (SQL_ISPUNCTUATION(pMark, ":"))
-        aParameterName = pNode->getChild(1)->getTokenValue();
-    else
-    {
-        SAL_WARN( "connectivity.drivers","Error in Parse Tree");
-    }
-
-    // set up Parameter-Column with default type, can be specified more precisely later using Describe-Parameter
-
-    // save Identity (not especially necessary here, just for the sake of symmetry)
-
-    // todo
-    //  OColumn* pColumn = new OFILEColumn(aParameterName,eDBType,255,0,SQL_FLAGS_NULLALLOWED);
-    //  rParamColumns->AddColumn(pColumn);
-
-    // the value will be set just before the evaluation
 }
 
 
