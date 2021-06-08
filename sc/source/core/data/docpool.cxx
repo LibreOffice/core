@@ -157,6 +157,7 @@ SfxItemInfo const  aItemInfos[] =
     { SID_ATTR_PAGE_ON,             true },    // ATTR_PAGE_ON
     { SID_ATTR_PAGE_DYNAMIC,        true },    // ATTR_PAGE_DYNAMIC
     { SID_ATTR_PAGE_SHARED,         true },    // ATTR_PAGE_SHARED
+    { SID_ATTR_PAGE_SHARED_FIRST,   true },    // ATTR_PAGE_SHARED_FIRST
     { SID_SCATTR_PAGE_NOTES,        true },    // ATTR_PAGE_NOTES
     { SID_SCATTR_PAGE_GRID,         true },    // ATTR_PAGE_GRID
     { SID_SCATTR_PAGE_HEADERS,      true },    // ATTR_PAGE_HEADERS
@@ -171,6 +172,8 @@ SfxItemInfo const  aItemInfos[] =
     { SID_SCATTR_PAGE_FOOTERLEFT,   true },    // ATTR_PAGE_FOOTERLEFT
     { SID_SCATTR_PAGE_HEADERRIGHT,  true },    // ATTR_PAGE_HEADERRIGHT
     { SID_SCATTR_PAGE_FOOTERRIGHT,  true },    // ATTR_PAGE_FOOTERRIGHT
+    { SID_SCATTR_PAGE_HEADERFIRST,  true },    // ATTR_PAGE_HEADERFIRST
+    { SID_SCATTR_PAGE_FOOTERFIRST,  true },    // ATTR_PAGE_FOOTERFIRST
     { SID_ATTR_PAGE_HEADERSET,      true },    // ATTR_PAGE_HEADERSET
     { SID_ATTR_PAGE_FOOTERSET,      true },    // ATTR_PAGE_FOOTERSET
     { SID_SCATTR_PAGE_FORMULAS,     true },    // ATTR_PAGE_FORMULAS
@@ -206,7 +209,7 @@ ScDocumentPool::ScDocumentPool()
                                      ATTR_BORDER,     ATTR_SHADOW,
                                      ATTR_LRSPACE,    ATTR_ULSPACE,
                                      ATTR_PAGE_SIZE,  ATTR_PAGE_SIZE,
-                                     ATTR_PAGE_ON,    ATTR_PAGE_SHARED>{} );
+                                     ATTR_PAGE_ON,    ATTR_PAGE_SHARED_FIRST>{} );
 
     pGlobalBorderInnerAttr->SetLine(nullptr, SvxBoxInfoItemLine::HORI);
     pGlobalBorderInnerAttr->SetLine(nullptr, SvxBoxInfoItemLine::VERT);
@@ -292,6 +295,7 @@ ScDocumentPool::ScDocumentPool()
     mvPoolDefaults[ ATTR_PAGE_ON         - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_ON, true );
     mvPoolDefaults[ ATTR_PAGE_DYNAMIC    - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_DYNAMIC, true );
     mvPoolDefaults[ ATTR_PAGE_SHARED     - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_SHARED, true );
+    mvPoolDefaults[ ATTR_PAGE_SHARED_FIRST- ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_SHARED_FIRST, true );
     mvPoolDefaults[ ATTR_PAGE_NOTES      - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_NOTES, false );
     mvPoolDefaults[ ATTR_PAGE_GRID       - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_GRID, false );
     mvPoolDefaults[ ATTR_PAGE_HEADERS    - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_HEADERS, false );
@@ -306,6 +310,8 @@ ScDocumentPool::ScDocumentPool()
     mvPoolDefaults[ ATTR_PAGE_FOOTERLEFT - ATTR_STARTINDEX ] = new ScPageHFItem( ATTR_PAGE_FOOTERLEFT );
     mvPoolDefaults[ ATTR_PAGE_HEADERRIGHT- ATTR_STARTINDEX ] = new ScPageHFItem( ATTR_PAGE_HEADERRIGHT );
     mvPoolDefaults[ ATTR_PAGE_FOOTERRIGHT- ATTR_STARTINDEX ] = new ScPageHFItem( ATTR_PAGE_FOOTERRIGHT );
+    mvPoolDefaults[ ATTR_PAGE_HEADERFIRST- ATTR_STARTINDEX ] = new ScPageHFItem( ATTR_PAGE_HEADERFIRST );
+    mvPoolDefaults[ ATTR_PAGE_FOOTERFIRST- ATTR_STARTINDEX ] = new ScPageHFItem( ATTR_PAGE_FOOTERFIRST );
     mvPoolDefaults[ ATTR_PAGE_HEADERSET  - ATTR_STARTINDEX ] = new SvxSetItem( ATTR_PAGE_HEADERSET, aSetItemItemSet );
     mvPoolDefaults[ ATTR_PAGE_FOOTERSET  - ATTR_STARTINDEX ] = new SvxSetItem( ATTR_PAGE_FOOTERSET, aSetItemItemSet );
     mvPoolDefaults[ ATTR_PAGE_FORMULAS   - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_FORMULAS, false );
@@ -412,6 +418,7 @@ static bool lcl_HFPresentation
             case ATTR_PAGE_ON:
             case ATTR_PAGE_DYNAMIC:
             case ATTR_PAGE_SHARED:
+            case ATTR_PAGE_SHARED_FIRST:
             break;
 
             case ATTR_LRSPACE:

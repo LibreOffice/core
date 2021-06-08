@@ -874,13 +874,15 @@ void HeaderFooterParser::setNewPortion( HFPortionId ePortion )
     }
 }
 
-PageSettingsConverter::HFHelperData::HFHelperData( sal_Int32 nLeftPropId, sal_Int32 nRightPropId ) :
+PageSettingsConverter::HFHelperData::HFHelperData( sal_Int32 nLeftPropId, sal_Int32 nRightPropId, sal_Int32 nFirstPropId ) :
     mnLeftPropId( nLeftPropId ),
     mnRightPropId( nRightPropId ),
+    mnFirstPropId( nFirstPropId ),
     mnHeight( 0 ),
     mnBodyDist( 0 ),
     mbHasContent( false ),
     mbShareOddEven( false ),
+    mbShareFirst( false ),
     mbDynamicHeight( false )
 {
 }
@@ -888,8 +890,8 @@ PageSettingsConverter::HFHelperData::HFHelperData( sal_Int32 nLeftPropId, sal_In
 PageSettingsConverter::PageSettingsConverter( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
     mxHFParser( new HeaderFooterParser( rHelper ) ),
-    maHeaderData( PROP_LeftPageHeaderContent, PROP_RightPageHeaderContent ),
-    maFooterData( PROP_LeftPageFooterContent, PROP_RightPageFooterContent )
+    maHeaderData( PROP_LeftPageHeaderContent, PROP_RightPageHeaderContent, PROP_FirstPageHeaderContent ),
+    maFooterData( PROP_LeftPageFooterContent, PROP_RightPageFooterContent, PROP_FirstPageFooterContent )
 {
 }
 
@@ -955,8 +957,8 @@ void PageSettingsConverter::writePageSettingsProperties(
     }
 
     // header/footer
-    convertHeaderFooterData( rPropSet, maHeaderData, rModel.maOddHeader, rModel.maEvenHeader, rModel.mbUseEvenHF, rModel.mfTopMargin,    rModel.mfHeaderMargin );
-    convertHeaderFooterData( rPropSet, maFooterData, rModel.maOddFooter, rModel.maEvenFooter, rModel.mbUseEvenHF, rModel.mfBottomMargin, rModel.mfFooterMargin );
+    convertHeaderFooterData( rPropSet, maHeaderData, rModel.maOddHeader, rModel.maEvenHeader, rModel.maFirstHeader, rModel.mbUseEvenHF, rModel.mbUseFirstHF, rModel.mfTopMargin,    rModel.mfHeaderMargin );
+    convertHeaderFooterData( rPropSet, maFooterData, rModel.maOddFooter, rModel.maEvenFooter, rModel.maFirstFooter, rModel.mbUseEvenHF, rModel.mbUseFirstHF, rModel.mfBottomMargin, rModel.mfFooterMargin );
 
     // write all properties to property set
     const UnitConverter& rUnitConv = getUnitConverter();
@@ -977,11 +979,13 @@ void PageSettingsConverter::writePageSettingsProperties(
     aPropMap.setProperty( PROP_BottomMargin, rUnitConv.scaleToMm100( maFooterData.mbHasContent ? rModel.mfFooterMargin : rModel.mfBottomMargin, Unit::Inch ));
     aPropMap.setProperty( PROP_HeaderIsOn, maHeaderData.mbHasContent);
     aPropMap.setProperty( PROP_HeaderIsShared, maHeaderData.mbShareOddEven);
+    aPropMap.setProperty( PROP_FirstPageHeaderIsShared, maHeaderData.mbShareFirst);
     aPropMap.setProperty( PROP_HeaderIsDynamicHeight, maHeaderData.mbDynamicHeight);
     aPropMap.setProperty( PROP_HeaderHeight, maHeaderData.mnHeight);
     aPropMap.setProperty( PROP_HeaderBodyDistance, maHeaderData.mnBodyDist);
     aPropMap.setProperty( PROP_FooterIsOn, maFooterData.mbHasContent);
     aPropMap.setProperty( PROP_FooterIsShared, maFooterData.mbShareOddEven);
+    aPropMap.setProperty( PROP_FirstPageFooterIsShared, maFooterData.mbShareFirst);
     aPropMap.setProperty( PROP_FooterIsDynamicHeight, maFooterData.mbDynamicHeight);
     aPropMap.setProperty( PROP_FooterHeight, maFooterData.mnHeight);
     aPropMap.setProperty( PROP_FooterBodyDistance, maFooterData.mnBodyDist);
@@ -997,26 +1001,30 @@ void PageSettingsConverter::writePageSettingsProperties(
 
 void PageSettingsConverter::convertHeaderFooterData(
         PropertySet& rPropSet, HFHelperData& orHFData,
-        const OUString& rOddContent, const OUString& rEvenContent, bool bUseEvenContent,
+        const OUString& rOddContent, const OUString& rEvenContent, const OUString& rFirstContent,
+        bool bUseEvenContent, bool bUseFirstContent,
         double fPageMargin, double fContentMargin )
 {
     bool bHasOddContent  = !rOddContent.isEmpty();
     bool bHasEvenContent = bUseEvenContent && !rEvenContent.isEmpty();
+    bool bHasFirstContent = bUseFirstContent && !rFirstContent.isEmpty();
 
-    sal_Int32 nOddHeight  = bHasOddContent  ? writeHeaderFooter( rPropSet, orHFData.mnRightPropId, rOddContent  ) : 0;
-    sal_Int32 nEvenHeight = bHasEvenContent ? writeHeaderFooter( rPropSet, orHFData.mnLeftPropId,  rEvenContent ) : 0;
+    sal_Int32 nOddHeight   = bHasOddContent   ? writeHeaderFooter( rPropSet, orHFData.mnRightPropId, rOddContent   ) : 0;
+    sal_Int32 nEvenHeight  = bHasEvenContent  ? writeHeaderFooter( rPropSet, orHFData.mnLeftPropId,  rEvenContent  ) : 0;
+    sal_Int32 nFirstHeight = bHasFirstContent ? writeHeaderFooter( rPropSet, orHFData.mnFirstPropId, rFirstContent ) : 0;
 
     orHFData.mnHeight = 750;
     orHFData.mnBodyDist = 250;
-    orHFData.mbHasContent = bHasOddContent || bHasEvenContent;
+    orHFData.mbHasContent = bHasOddContent || bHasEvenContent || bHasFirstContent;
     orHFData.mbShareOddEven = !bUseEvenContent;
+    orHFData.mbShareFirst = !bUseFirstContent;
     orHFData.mbDynamicHeight = true;
 
     if( !orHFData.mbHasContent )
         return;
 
-    // use maximum height of odd/even header/footer
-    orHFData.mnHeight = ::std::max( nOddHeight, nEvenHeight );
+    // use maximum height of odd/even/first header/footer
+    orHFData.mnHeight = ::std::max( ::std::max( nOddHeight, nEvenHeight ), nFirstHeight );
     /*  Calc contains distance between bottom of header and top of page
         body in "HeaderBodyDistance" property, and distance between bottom
         of page body and top of footer in "FooterBodyDistance" property */
