@@ -319,7 +319,6 @@ sal_Bool SAL_CALL OStatement_Base::execute( const OUString& sql )
     OString aSql(OUStringToOString(sql,getOwnConnection()->getTextEncoding()));
 
     bool hasResultSet = false;
-    SQLWarning aWarning;
 
     // Reset the statement handle and warning
 
@@ -336,12 +335,7 @@ sal_Bool SAL_CALL OStatement_Base::execute( const OUString& sql )
     try {
         THROW_SQL(N3SQLExecDirect(m_aStatementHandle, reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(aSql.getStr())), aSql.getLength()));
     }
-    catch (const SQLWarning& ex) {
-
-        // Save pointer to warning and save with ResultSet
-        // object once it is created.
-
-        aWarning = ex;
+    catch (const SQLWarning&) {
     }
 
     // Now determine if there is a result set associated with
