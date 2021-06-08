@@ -3444,7 +3444,7 @@ tools::Long ImpEditEngine::CalcTextHeight(tools::Long* pHeightNTP)
     // This does the necessary column balancing for the case when the text does not fit min height.
     // When the height of column (taken from nCurTextHeight) is too small, the last column will
     // overflow, so the resulting height of the text will exceed the set column height. Increasing
-    // the column height step by step by the minimal value that allows one of columns to accomodate
+    // the column height step by step by the minimal value that allows one of columns to accommodate
     // one line more, we finally get to the point where all the text fits. At each iteration, the
     // height is only increased, so it's impossible to have infinite layout loops. The found value
     // is the global minimum.
@@ -3463,7 +3463,7 @@ tools::Long ImpEditEngine::CalcTextHeight(tools::Long* pHeightNTP)
     // * Line 4 goes to column 2 after Line 3.
     // * Final iteration columns are: {empty}, {Line 1}, {Line 2, Line 3, Line 4}
     // * Total text height is max({0, 10, 32}) == 32 > Tentative column height 5 => NEXT ITERATION
-    // * Minimal height increase that allows at least one column to accomodate one more line is
+    // * Minimal height increase that allows at least one column to accommodate one more line is
     //   min({5, 17, 17}) = 5.
     // * Tentative column height is set to 5 + 5 = 10.
     // <ITERATION 2>
@@ -3473,7 +3473,7 @@ tools::Long ImpEditEngine::CalcTextHeight(tools::Long* pHeightNTP)
     // * Line 4 is attempted to go to column 2 after Line 3; overflow is 10, stays in max column 2.
     // * Final iteration columns are: {Line 1}, {Line 2}, {Line 3, Line 4}
     // * Total text height is max({10, 12, 20}) == 20 > Tentative column height 10 => NEXT ITERATION
-    // * Minimal height increase that allows at least one column to accomodate one more line is
+    // * Minimal height increase that allows at least one column to accommodate one more line is
     //   min({12, 12, 10}) = 10.
     // * Tentative column height is set to 10 + 10 == 20.
     // <ITERATION 3>
