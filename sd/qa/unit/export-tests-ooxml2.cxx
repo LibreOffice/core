@@ -41,6 +41,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 #include <sdpage.hxx>
+#include <shapelist.hxx>
 #include <cfloat>
 #include <cstdlib>
 
