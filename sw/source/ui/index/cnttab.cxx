@@ -2167,48 +2167,40 @@ void SwTOXEntryTabPage::SetFocus2theAllBtn()
 // put here the UI dependent initializations
 IMPL_LINK(SwTOXEntryTabPage, InsertTokenHdl, weld::Button&, rBtn, void)
 {
-    OUString sText;
     FormTokenType eTokenType = TOKEN_ENTRY_NO;
     OUString sCharStyle;
     sal_uInt16  nChapterFormat = CF_NUMBER; // i89791
     if (&rBtn == m_xEntryNoPB.get())
     {
-        sText = SwForm::GetFormEntryNum();
         eTokenType = TOKEN_ENTRY_NO;
     }
     else if (&rBtn == m_xEntryPB.get())
     {
         if( TOX_CONTENT == m_pCurrentForm->GetTOXType() )
         {
-            sText = SwForm::GetFormEntryText();
             eTokenType = TOKEN_ENTRY_TEXT;
         }
         else
         {
-            sText = SwForm::GetFormEntry();
             eTokenType = TOKEN_ENTRY;
         }
     }
     else if (&rBtn == m_xChapterInfoPB.get())
     {
-        sText = SwForm::GetFormChapterMark();
         eTokenType = TOKEN_CHAPTER_INFO;
         nChapterFormat = CF_NUM_NOPREPST_TITLE; // i89791
     }
     else if (&rBtn == m_xPageNoPB.get())
     {
-        sText = SwForm::GetFormPageNums();
         eTokenType = TOKEN_PAGE_NUMS;
     }
     else if (&rBtn == m_xHyperLinkPB.get())
     {
-        sText = SwForm::GetFormLinkStt();
         eTokenType = TOKEN_LINK_START;
         sCharStyle = SwResId(STR_POOLCHR_TOXJUMP);
     }
     else if (&rBtn == m_xTabPB.get())
     {
-        sText = SwForm::GetFormTab();
         eTokenType = TOKEN_TAB_STOP;
     }
     SwFormToken aInsert(eTokenType);
