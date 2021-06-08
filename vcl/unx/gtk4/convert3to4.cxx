@@ -1156,8 +1156,15 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 xLabelClassName->setValue("GtkLabel");
                 xNewChildObjectNode->setAttributeNode(xLabelClassName);
                 if (xChildPropertyLabel)
+                {
                     xNewChildObjectNode->appendChild(
                         xChildPropertyLabel->getParentNode()->removeChild(xChildPropertyLabel));
+                }
+                else
+                {
+                    auto xNotVisible = CreateProperty(xDoc, "visible", "False");
+                    xNewChildObjectNode->appendChild(xNotVisible);
+                }
                 if (bChildUseUnderline)
                 {
                     auto xUseUnderline = CreateProperty(xDoc, "use-underline", "True");
