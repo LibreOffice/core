@@ -41,7 +41,7 @@ XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, 
                        const uno::Reference<
                             xml::sax::XFastAttributeList > & xAttrList,
                        const Reference < XPropertySet > & rPageStylePropSet,
-                       bool bFooter, bool bLeft ) :
+                       bool bFooter, bool bLeft, bool bFirst ) :
     SvXMLImportContext( rImport ),
     xPropSet( rPageStylePropSet ),
     bContainsLeft(false),
@@ -51,6 +51,7 @@ XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, 
     OUString sOn( bFooter ? OUString(SC_UNO_PAGE_FTRON) : OUString(SC_UNO_PAGE_HDRON) );
     OUString sContent( bFooter ? OUString(SC_UNO_PAGE_RIGHTFTRCON) : OUString(SC_UNO_PAGE_RIGHTHDRCON) );
     OUString sContentLeft( bFooter ? OUString(SC_UNO_PAGE_LEFTFTRCONT) : OUString(SC_UNO_PAGE_LEFTHDRCONT) );
+    OUString sContentFirst( bFooter ? OUString(SC_UNO_PAGE_FIRSTFTRCONT) : OUString(SC_UNO_PAGE_FIRSTHDRCONT) );
     OUString sShareContent( bFooter ? OUString(SC_UNO_PAGE_FTRSHARED) : OUString(SC_UNO_PAGE_HDRSHARED) );
     bool bDisplay( true );
     for( auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ) )
@@ -85,6 +86,8 @@ XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, 
     }
     if (bLeft)
         sCont = sContentLeft;
+    else if (bFirst)
+        sCont = sContentFirst;
     else
         sCont = sContent;
     xPropSet->getPropertyValue( sCont ) >>= xHeaderFooterContent;

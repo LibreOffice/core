@@ -163,6 +163,7 @@ public:
     void testTdf81470();
     void testTdf122331();
     void testTdf83779();
+    void testTdf121715_FirstPageHeaderFooterXLSX();
     void testTdf121716_ExportEvenHeaderFooterXLSX();
     void testTdf134459_HeaderFooterColorXLSX();
     void testTdf134817_HeaderFooterTextWith2SectionXLSX();
@@ -256,6 +257,7 @@ public:
     CPPUNIT_TEST(testTdf81470);
     CPPUNIT_TEST(testTdf122331);
     CPPUNIT_TEST(testTdf83779);
+    CPPUNIT_TEST(testTdf121715_FirstPageHeaderFooterXLSX);
     CPPUNIT_TEST(testTdf121716_ExportEvenHeaderFooterXLSX);
     CPPUNIT_TEST(testTdf134459_HeaderFooterColorXLSX);
     CPPUNIT_TEST(testTdf134817_HeaderFooterTextWith2SectionXLSX);
@@ -1675,6 +1677,25 @@ void ScExportTest2::testTdf83779()
 
     assertXPathContent(pVmlDrawing, "/x:worksheet/x:sheetData/x:row[1]/x:c/x:f", "FALSE()");
     assertXPathContent(pVmlDrawing, "/x:worksheet/x:sheetData/x:row[2]/x:c/x:f", "TRUE()");
+
+    xShell->DoClose();
+}
+
+void ScExportTest2::testTdf121715_FirstPageHeaderFooterXLSX()
+{
+    // Check if first page header and footer are exported properly
+    ScDocShellRef xShell = loadDoc(u"tdf121715.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+    xmlDocUniquePtr pDoc
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/x:worksheet/x:headerFooter", "differentFirst", "true");
+    assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:firstHeader", "&CFirst Page Header");
+    assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:firstFooter", "&CFirst Page Footer");
 
     xShell->DoClose();
 }
