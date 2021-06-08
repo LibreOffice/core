@@ -3147,24 +3147,14 @@ void SbaTableQueryBrowser::impl_initialize()
     {
         try
         {
-            Sequence< OUString> aProperties(5);
-            Sequence< Any> aValues(5);
-
-            OUString* pStringIter = aProperties.getArray();
-            Any* pValueIter = aValues.getArray();
-            *pStringIter++  = "AlwaysShowCursor";
-            *pValueIter++   <<= false;
-            *pStringIter++  = PROPERTY_BORDER;
-            *pValueIter++   <<= sal_Int16(0);
-
-            *pStringIter++  = "HasNavigationBar";
-            *pValueIter++   <<= false;
-            *pStringIter++  = "HasRecordMarker";
-            *pValueIter++   <<= false;
-
-            *pStringIter++  = "Tabstop";
-            *pValueIter++   <<= false;
-
+            Sequence< OUString> aProperties
+            {
+                "AlwaysShowCursor", PROPERTY_BORDER, "HasNavigationBar", "HasRecordMarker", "Tabstop"
+            };
+            Sequence< Any> aValues
+            {
+                Any(false), Any(sal_Int16(0)), Any(false), Any(false), Any(false)
+            };
             Reference< XMultiPropertySet >  xFormMultiSet(getFormComponent(), UNO_QUERY);
             if ( xFormMultiSet.is() )
                 xFormMultiSet->setPropertyValues(aProperties, aValues);

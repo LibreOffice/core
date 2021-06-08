@@ -290,9 +290,7 @@ void OCollectionView::Initialize()
     try
     {
         ::ucbhelper::Content aContent(m_xContent, m_xCmdEnv, comphelper::getProcessComponentContext());
-        Sequence<OUString> aProps(2);
-        aProps[0] = "Title";
-        aProps[1] = "IsFolder";
+        Sequence<OUString> aProps { "Title", "IsFolder" };
         auto xDynResultSet = aContent.createDynamicCursor(aProps, ucbhelper::INCLUDE_FOLDERS_ONLY);
         if (!xDynResultSet.is())
             return;

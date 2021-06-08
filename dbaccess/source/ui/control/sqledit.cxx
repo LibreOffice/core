@@ -142,9 +142,7 @@ void SQLEditView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
         osl::MutexGuard g(m_mutex);
         m_notifier = n;
     }
-    css::uno::Sequence< OUString > s(2);
-    s[0] = "FontHeight";
-    s[1] = "FontName";
+    css::uno::Sequence< OUString > s { "FontHeight", "FontName" };
     n->addPropertiesChangeListener(s, m_listener);
     m_ColorConfig.AddListener(this);
 }
