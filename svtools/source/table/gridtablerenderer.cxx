@@ -309,9 +309,6 @@ namespace svt::table
 
         Color backgroundColor = _rStyle.GetFieldColor();
 
-        std::optional<Color> const aLineColor( m_pImpl->rModel.getLineColor() );
-        Color lineColor = !aLineColor ? _rStyle.GetSeparatorColor() : *aLineColor;
-
         Color const activeSelectionBackColor = lcl_getEffectiveColor(m_pImpl->rModel.getActiveSelectionBackColor(),
                                                                      _rStyle, &StyleSettings::GetHighlightColor);
         if (_bSelected)
@@ -320,8 +317,6 @@ namespace svt::table
             backgroundColor = i_hasControlFocus
                 ? activeSelectionBackColor
                 : lcl_getEffectiveColor(m_pImpl->rModel.getInactiveSelectionBackColor(), _rStyle, &StyleSettings::GetDeactiveColor);
-            if (!aLineColor)
-                lineColor = backgroundColor;
         }
         else
         {
