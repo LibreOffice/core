@@ -88,8 +88,11 @@ def extract_files(inputdir, extracted_files_dir):
             filepath = os.path.join(inputdir, filename)
             extracted_file_path = os.path.join(extracted_files_dir, filename)
 
-            with ZipFile(filepath) as zipObj:
-                zipObj.extractall(extracted_file_path)
+            try:
+                with ZipFile(filepath) as zipObj:
+                    zipObj.extractall(extracted_file_path)
+            except:
+                print("%s is problematic" % filename)
         else:
             continue
 
@@ -126,6 +129,11 @@ def is_file_in_accepted_files(filename):
        "ppt/slideMasters" in filename or \
        "ppt/theme" in filename or \
        "ppt/notesMasters" in filename or \
+       "ppt/notesSlides" in filename or \
+       "ppt/handoutMasters" in filename or \
+       "ppt/tags" in filename or \
+       "pptx/customXml" in filename or \
+       "ppt/diagrams" in filename or \
        filename.endswith("docProps/core.xml") or not \
        filename.endswith(".xml")):
        return False
@@ -149,51 +157,54 @@ def count_elements(extracted_files_dir, result_list, concanated_texts_list):
 
         print(xmlfile)
 
-        # start to count
-        for event, child in etree.iterparse(xmlfile, events=('start', 'end')):
-            tag = replace_namespace_with_alias(xmlfile, child.tag)
-            tag_idx = get_index_of_tag(tag, result_list)
+        try:
+            # start to count
+            for event, child in etree.iterparse(xmlfile, events=('start', 'end')):
+                tag = replace_namespace_with_alias(xmlfile, child.tag)
+                tag_idx = get_index_of_tag(tag, result_list)
 
-            if event == "start":
-                # count tags
-                if (tag_idx == -1):
-                    tmp_list = [{tag: 1},{},{},{}]
-                    result_list.append(tmp_list)
-                else:
-                    result_list[tag_idx][0][tag] += 1
-
-                # count attribute names and values of current tag
-                for attr_name, attr_value in child.attrib.items():
-                    attr_name = replace_namespace_with_alias(xmlfile, attr_name)
-                    if not attr_name in result_list[tag_idx][1].keys():
-                        result_list[tag_idx][1][attr_name] = 1
+                if event == "start":
+                    # count tags
+                    if (tag_idx == -1):
+                        tmp_list = [{tag: 1},{},{},{}]
+                        result_list.append(tmp_list)
                     else:
-                        result_list[tag_idx][1][attr_name] +=1
+                        result_list[tag_idx][0][tag] += 1
 
-                    if not attr_value in result_list[tag_idx][2].keys():
-                        result_list[tag_idx][2][attr_value] = 1
-                    else:
-                        result_list[tag_idx][2][attr_value] +=1
+                    # count attribute names and values of current tag
+                    for attr_name, attr_value in child.attrib.items():
+                        attr_name = replace_namespace_with_alias(xmlfile, attr_name)
+                        if not attr_name in result_list[tag_idx][1].keys():
+                            result_list[tag_idx][1][attr_name] = 1
+                        else:
+                            result_list[tag_idx][1][attr_name] +=1
 
-                # concanated text will be resetted in every paragraph begining
-                if tag == "a:p":
-                    concatenated_text = ""
+                        if not attr_value in result_list[tag_idx][2].keys():
+                            result_list[tag_idx][2][attr_value] = 1
+                        else:
+                            result_list[tag_idx][2][attr_value] +=1
+
+                    # concanated text will be resetted in every paragraph begining
+                    if tag == "a:p":
+                        concatenated_text = ""
 
 
-            if event == "end":
-                # Detect seperate texts in paragraph and concanate them.
-                if tag == "a:t":
-                    concatenated_text += str(child.text)
-                # End of the paragraph element, add the text as list item.
-                if tag == "a:p" and concatenated_text != "":
-                    concanated_texts_list.append(concatenated_text)
+                if event == "end":
+                    # Detect seperate texts in paragraph and concanate them.
+                    if tag == "a:t" and str(child.text) != "None":
+                        concatenated_text += str(child.text)
+                    # End of the paragraph element, add the text as list item.
+                    if tag == "a:p" and concatenated_text != "":
+                        concanated_texts_list.append(concatenated_text)
 
-                # count text contents except consisted of whitespaces.
-                if not (str(child.text) == "None" or str(child.text).strip()==""):
-                    if not child.text in result_list[tag_idx][3].keys():
-                        result_list[tag_idx][3][child.text] = 1
-                    else:
-                        result_list[tag_idx][3][child.text] += 1
+                    # count text contents except consisted of whitespaces.
+                    if not (str(child.text) == "None" or str(child.text).strip()==""):
+                        if not child.text in result_list[tag_idx][3].keys():
+                            result_list[tag_idx][3][child.text] = 1
+                        else:
+                            result_list[tag_idx][3][child.text] += 1
+        except Exception as exception:
+            print("%s has %s " % xmlfile, exception)
 
 # gets the position of "tag" element in result list. If element is not exist,
 # return -1 that points the last index of the list.
