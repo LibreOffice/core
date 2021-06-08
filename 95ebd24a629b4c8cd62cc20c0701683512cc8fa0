@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8da03906_668e40b7",
+        "filename": "offapi/com/sun/star/drawing/TextProperties.idl",
+        "patchSetId": 30
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-08T12:53:51Z",
+      "side": 1,
+      "message": "Now will change this to 7.2",
+      "range": {
+        "startLine": 257,
+        "startChar": 8,
+        "endLine": 257,
+        "endChar": 30
+      },
+      "revId": "95ebd24a629b4c8cd62cc20c0701683512cc8fa0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
