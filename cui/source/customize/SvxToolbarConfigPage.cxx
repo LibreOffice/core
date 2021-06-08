@@ -508,8 +508,6 @@ IMPL_LINK(SvxToolbarConfigPage, ModifyItemHdl, const OString&, rIdent, void)
 
             if (newgraphic.is())
             {
-                css::uno::Sequence<css::uno::Reference<css::graphic::XGraphic>> aGraphicSeq(1);
-
                 css::uno::Sequence<OUString> aURLSeq{ pEntry->GetCommand() };
 
                 if (!pEntry->GetBackupGraphic().is())
@@ -524,7 +522,9 @@ IMPL_LINK(SvxToolbarConfigPage, ModifyItemHdl, const OString&, rIdent, void)
                     }
                 }
 
-                aGraphicSeq[0] = newgraphic;
+                css::uno::Sequence<css::uno::Reference<css::graphic::XGraphic>> aGraphicSeq{
+                    newgraphic
+                };
                 try
                 {
                     GetSaveInData()->GetImageManager()->replaceImages(
@@ -558,8 +558,7 @@ IMPL_LINK(SvxToolbarConfigPage, ModifyItemHdl, const OString&, rIdent, void)
 
         css::uno::Reference<css::graphic::XGraphic> backup = pEntry->GetBackupGraphic();
 
-        css::uno::Sequence<css::uno::Reference<css::graphic::XGraphic>> aGraphicSeq(1);
-        aGraphicSeq[0] = backup;
+        css::uno::Sequence<css::uno::Reference<css::graphic::XGraphic>> aGraphicSeq{ backup };
 
         css::uno::Sequence<OUString> aURLSeq{ pEntry->GetCommand() };
 

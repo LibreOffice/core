@@ -516,8 +516,7 @@ void SvxNotebookbarEntriesListBox::ChangedVisibility(int nRow)
     else
         sVisible = "False";
     OUString sSetEntries = sUIItemId + ",visible," + sVisible;
-    Sequence<OUString> sSeqOfEntries(1);
-    sSeqOfEntries[0] = sSetEntries;
+    Sequence<OUString> sSeqOfEntries{ sSetEntries };
     EditRegistryFile(sUIItemId, sSetEntries, sNotebookbarInterface);
     CustomNotebookbarGenerator::modifyCustomizedUIFile(sSeqOfEntries);
     OUString sUIPath = "modules/s" + m_pPage->GetAppName().toAsciiLowerCase() + "/ui/";
