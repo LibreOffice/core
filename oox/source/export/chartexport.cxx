@@ -1511,7 +1511,64 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape, const OUString
     pFS->endElement( FSNS( XML_c, XML_title ) );
 }
 
-void ChartExport::exportPlotArea( const Reference< css::chart::XChartDocument >& xChartDoc )
+namespace {
+
+    std::vector<Sequence<Reference<chart2::XDataSeries> > > splitDataSeriesByAxis(const Reference< chart2::XChartType >& xChartType)
+    {
+        std::vector<Sequence<Reference<chart2::XDataSeries> > > aSplitSeries;
+        std::map<sal_Int32, size_t> aMapAxisToIndex;
+
+        Reference< chart2::XDataSeriesContainer > xDSCnt(xChartType, uno::UNO_QUERY);
+        if (xDSCnt.is())
+        {
+            sal_Int32 nAxisIndexOfFirstSeries = -1;
+            const Sequence< Reference< chart2::XDataSeries > > aSeriesSeq(xDSCnt->getDataSeries());
+            for (const uno::Reference<chart2::XDataSeries>& xSeries : aSeriesSeq)
+            {
+                Reference<beans::XPropertySet> xPropSet(xSeries, uno::UNO_QUERY);
+                if (!xPropSet.is())
+                    continue;
+
+                sal_Int32 nAxisIndex = -1;
+                uno::Any aAny = xPropSet->getPropertyValue("AttachedAxisIndex");
+                aAny >>= nAxisIndex;
+                size_t nVectorPos = 0;
+                if (nAxisIndexOfFirstSeries == -1)
+                {
+                    nAxisIndexOfFirstSeries = nAxisIndex;
+                }
+
+                auto it = aMapAxisToIndex.find(nAxisIndex);
+                if (it == aMapAxisToIndex.end())
+                {
+                    aSplitSeries.emplace_back();
+                    nVectorPos = aSplitSeries.size() - 1;
+                    aMapAxisToIndex.insert(std::pair<sal_Int32, size_t>(nAxisIndex, nVectorPos));
+                }
+                else
+                {
+                    nVectorPos = it->second;
+                }
+
+                uno::Sequence<Reference<chart2::XDataSeries> >& rAxisSeriesSeq = aSplitSeries[nVectorPos];
+                sal_Int32 nLength = rAxisSeriesSeq.getLength();
+                rAxisSeriesSeq.realloc(nLength + 1);
+                rAxisSeriesSeq[nLength] = xSeries;
+            }
+            // if the first series attached to secondary axis, then export those series first, which are attached to primary axis
+            // also the MS Office export every time in this order
+            if (aSplitSeries.size() > 1 && nAxisIndexOfFirstSeries == 1)
+            {
+                std::swap(aSplitSeries[0], aSplitSeries[1]);
+            }
+        }
+
+        return aSplitSeries;
+    }
+
+}
+
+void ChartExport::exportPlotArea(const Reference< css::chart::XChartDocument >& xChartDoc)
 {
     Reference< chart2::XCoordinateSystemContainer > xBCooSysCnt( mxNewDiagram, uno::UNO_QUERY );
     if( ! xBCooSysCnt.is())
@@ -1542,7 +1599,14 @@ void ChartExport::exportPlotArea( const Reference< css::chart::XChartDocument >&
 
     // tdf#123647 Save empty chart as empty bar chart.
     if (!aCooSysSeq.hasElements())
-        exportBarChart(nullptr);
+    {
+        pFS->startElement(FSNS(XML_c, XML_barChart));
+        pFS->singleElement(FSNS(XML_c, XML_barDir), XML_val, "col");
+        pFS->singleElement(FSNS(XML_c, XML_grouping), XML_val, "clustered");
+        pFS->singleElement(FSNS(XML_c, XML_varyColors), XML_val, "0");
+        exportAxesId(true);
+        pFS->endElement(FSNS(XML_c, XML_barChart));
+    }
 
     for( const auto& rCS : aCooSysSeq )
     {
@@ -1959,65 +2023,79 @@ void ChartExport::exportDataTable( )
 void ChartExport::exportAreaChart( const Reference< chart2::XChartType >& xChartType )
 {
     FSHelperPtr pFS = GetFS();
-    sal_Int32 nTypeId = XML_areaChart;
-    if( mbIs3DChart )
-        nTypeId = XML_area3DChart;
-    pFS->startElement(FSNS(XML_c, nTypeId));
+    const std::vector<Sequence<Reference<chart2::XDataSeries> > > aSplitDataSeries = splitDataSeriesByAxis(xChartType);
+    for (const auto& splitDataSeries : aSplitDataSeries)
+    {
+        if (!splitDataSeries.hasElements())
+            continue;
 
-    exportGrouping( );
-    bool bPrimaryAxes = true;
-    exportAllSeries(xChartType, bPrimaryAxes);
-    exportAxesId(bPrimaryAxes);
+        sal_Int32 nTypeId = XML_areaChart;
+        if (mbIs3DChart)
+            nTypeId = XML_area3DChart;
+        pFS->startElement(FSNS(XML_c, nTypeId));
 
-    pFS->endElement( FSNS( XML_c, nTypeId ) );
+        exportGrouping();
+        bool bPrimaryAxes = true;
+        exportSeries(xChartType, splitDataSeries, bPrimaryAxes);
+        exportAxesId(bPrimaryAxes);
+
+        pFS->endElement(FSNS(XML_c, nTypeId));
+    }
 }
 
-void ChartExport::exportBarChart( const Reference< chart2::XChartType >& xChartType )
+void ChartExport::exportBarChart(const Reference< chart2::XChartType >& xChartType)
 {
     sal_Int32 nTypeId = XML_barChart;
-    if( mbIs3DChart )
+    if (mbIs3DChart)
         nTypeId = XML_bar3DChart;
     FSHelperPtr pFS = GetFS();
-    pFS->startElement(FSNS(XML_c, nTypeId));
-    // bar direction
-    bool bVertical = false;
-    Reference< XPropertySet > xPropSet( mxDiagram , uno::UNO_QUERY);
-    if( GetProperty( xPropSet, "Vertical" ) )
-        mAny >>= bVertical;
 
-    const char* bardir = bVertical? "bar":"col";
-    pFS->singleElement(FSNS(XML_c, XML_barDir), XML_val, bardir);
-
-    exportGrouping( true );
-
-    exportVaryColors(xChartType);
-
-    bool bPrimaryAxes = true;
-    exportAllSeries(xChartType, bPrimaryAxes);
-
-    Reference< XPropertySet > xTypeProp( xChartType, uno::UNO_QUERY );
-
-    if( xTypeProp.is() && GetProperty( xTypeProp, "GapwidthSequence") )
+    const std::vector<Sequence<Reference<chart2::XDataSeries> > > aSplitDataSeries = splitDataSeriesByAxis(xChartType);
+    for (const auto& splitDataSeries : aSplitDataSeries)
     {
-        uno::Sequence< sal_Int32 > aBarPositionSequence;
-        mAny >>= aBarPositionSequence;
-        if( aBarPositionSequence.hasElements() )
+        if (!splitDataSeries.hasElements())
+            continue;
+
+        pFS->startElement(FSNS(XML_c, nTypeId));
+        // bar direction
+        bool bVertical = false;
+        Reference< XPropertySet > xPropSet(mxDiagram, uno::UNO_QUERY);
+        if (GetProperty(xPropSet, "Vertical"))
+            mAny >>= bVertical;
+
+        const char* bardir = bVertical ? "bar" : "col";
+        pFS->singleElement(FSNS(XML_c, XML_barDir), XML_val, bardir);
+
+        exportGrouping(true);
+
+        exportVaryColors(xChartType);
+
+        bool bPrimaryAxes = true;
+        exportSeries(xChartType, splitDataSeries, bPrimaryAxes);
+
+        Reference< XPropertySet > xTypeProp(xChartType, uno::UNO_QUERY);
+
+        if (xTypeProp.is() && GetProperty(xTypeProp, "GapwidthSequence"))
         {
-            sal_Int32 nGapWidth = aBarPositionSequence[0];
-            pFS->singleElement(FSNS(XML_c, XML_gapWidth), XML_val, OString::number(nGapWidth));
+            uno::Sequence< sal_Int32 > aBarPositionSequence;
+            mAny >>= aBarPositionSequence;
+            if (aBarPositionSequence.hasElements())
+            {
+                sal_Int32 nGapWidth = aBarPositionSequence[0];
+                pFS->singleElement(FSNS(XML_c, XML_gapWidth), XML_val, OString::number(nGapWidth));
+            }
         }
-    }
 
-    if( mbIs3DChart )
-    {
-        // Shape
-        namespace cssc = css::chart;
-        sal_Int32 nGeom3d = cssc::ChartSolidType::RECTANGULAR_SOLID;
-        if( xPropSet.is() && GetProperty( xPropSet, "SolidType") )
-            mAny >>= nGeom3d;
-        const char* sShapeType = nullptr;
-        switch( nGeom3d )
+        if (mbIs3DChart)
         {
+            // Shape
+            namespace cssc = css::chart;
+            sal_Int32 nGeom3d = cssc::ChartSolidType::RECTANGULAR_SOLID;
+            if (xPropSet.is() && GetProperty(xPropSet, "SolidType"))
+                mAny >>= nGeom3d;
+            const char* sShapeType = nullptr;
+            switch (nGeom3d)
+            {
             case cssc::ChartSolidType::RECTANGULAR_SOLID:
                 sShapeType = "box";
                 break;
@@ -2030,53 +2108,61 @@ void ChartExport::exportBarChart( const Reference< chart2::XChartType >& xChartT
             case cssc::ChartSolidType::PYRAMID:
                 sShapeType = "pyramid";
                 break;
+            }
+            pFS->singleElement(FSNS(XML_c, XML_shape), XML_val, sShapeType);
         }
-        pFS->singleElement(FSNS(XML_c, XML_shape), XML_val, sShapeType);
-    }
 
-    //overlap
-    if( !mbIs3DChart && xTypeProp.is() && GetProperty( xTypeProp, "OverlapSequence") )
-    {
-        uno::Sequence< sal_Int32 > aBarPositionSequence;
-        mAny >>= aBarPositionSequence;
-        if( aBarPositionSequence.hasElements() )
+        //overlap
+        if (!mbIs3DChart && xTypeProp.is() && GetProperty(xTypeProp, "OverlapSequence"))
         {
-            sal_Int32 nOverlap = aBarPositionSequence[0];
-            // Stacked/Percent Bar/Column chart Overlap-workaround
-            // Export the Overlap value with 100% for stacked charts,
-            // because the default overlap value of the Bar/Column chart is 0% and
-            // LibreOffice do nothing with the overlap value in Stacked charts case,
-            // unlike the MS Office, which is interpreted differently.
-            if( ( mbStacked || mbPercent ) && nOverlap != 100 )
+            uno::Sequence< sal_Int32 > aBarPositionSequence;
+            mAny >>= aBarPositionSequence;
+            if (aBarPositionSequence.hasElements())
             {
-                nOverlap = 100;
-                pFS->singleElement(FSNS(XML_c, XML_overlap), XML_val, OString::number(nOverlap));
-            }
-            else // Normal bar chart
-            {
-                pFS->singleElement(FSNS(XML_c, XML_overlap), XML_val, OString::number(nOverlap));
+                sal_Int32 nOverlap = aBarPositionSequence[0];
+                // Stacked/Percent Bar/Column chart Overlap-workaround
+                // Export the Overlap value with 100% for stacked charts,
+                // because the default overlap value of the Bar/Column chart is 0% and
+                // LibreOffice do nothing with the overlap value in Stacked charts case,
+                // unlike the MS Office, which is interpreted differently.
+                if ((mbStacked || mbPercent) && nOverlap != 100)
+                {
+                    nOverlap = 100;
+                    pFS->singleElement(FSNS(XML_c, XML_overlap), XML_val, OString::number(nOverlap));
+                }
+                else // Normal bar chart
+                {
+                    pFS->singleElement(FSNS(XML_c, XML_overlap), XML_val, OString::number(nOverlap));
+                }
             }
         }
+
+        exportAxesId(bPrimaryAxes);
+
+        pFS->endElement(FSNS(XML_c, nTypeId));
     }
-
-    exportAxesId(bPrimaryAxes);
-
-    pFS->endElement( FSNS( XML_c, nTypeId ) );
 }
 
 void ChartExport::exportBubbleChart( const Reference< chart2::XChartType >& xChartType )
 {
     FSHelperPtr pFS = GetFS();
-    pFS->startElement(FSNS(XML_c, XML_bubbleChart));
+    const std::vector<Sequence<Reference<chart2::XDataSeries> > > aSplitDataSeries = splitDataSeriesByAxis(xChartType);
+    for (const auto& splitDataSeries : aSplitDataSeries)
+    {
+        if (!splitDataSeries.hasElements())
+            continue;
 
-    exportVaryColors(xChartType);
+        pFS->startElement(FSNS(XML_c, XML_bubbleChart));
 
-    bool bPrimaryAxes = true;
-    exportAllSeries(xChartType, bPrimaryAxes);
+        exportVaryColors(xChartType);
 
-    exportAxesId(bPrimaryAxes);
+        bool bPrimaryAxes = true;
+        exportSeries(xChartType, splitDataSeries, bPrimaryAxes);
 
-    pFS->endElement( FSNS( XML_c, XML_bubbleChart ) );
+        exportAxesId(bPrimaryAxes);
+
+        pFS->endElement(FSNS(XML_c, XML_bubbleChart));
+    }
 }
 
 void ChartExport::exportDoughnutChart( const Reference< chart2::XChartType >& xChartType )
@@ -2096,68 +2182,11 @@ void ChartExport::exportDoughnutChart( const Reference< chart2::XChartType >& xC
     pFS->endElement( FSNS( XML_c, XML_doughnutChart ) );
 }
 
-namespace {
-
-std::vector<Sequence<Reference<chart2::XDataSeries> > > splitDataSeriesByAxis(const Reference< chart2::XChartType >& xChartType)
-{
-    std::vector<Sequence<Reference<chart2::XDataSeries> > > aSplitSeries;
-    std::map<sal_Int32, size_t> aMapAxisToIndex;
-
-    Reference< chart2::XDataSeriesContainer > xDSCnt( xChartType, uno::UNO_QUERY );
-    if(xDSCnt.is())
-    {
-        sal_Int32 nAxisIndexOfFirstSeries = -1;
-        const Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xDSCnt->getDataSeries());
-        for (const uno::Reference<chart2::XDataSeries>& xSeries : aSeriesSeq)
-        {
-            Reference<beans::XPropertySet> xPropSet(xSeries, uno::UNO_QUERY);
-            if (!xPropSet.is())
-                continue;
-
-            sal_Int32 nAxisIndex = -1;
-            uno::Any aAny = xPropSet->getPropertyValue("AttachedAxisIndex");
-            aAny >>= nAxisIndex;
-            size_t nVectorPos = 0;
-            if (nAxisIndexOfFirstSeries == -1)
-            {
-                nAxisIndexOfFirstSeries = nAxisIndex;
-            }
-
-            auto it = aMapAxisToIndex.find(nAxisIndex);
-            if (it == aMapAxisToIndex.end())
-            {
-                aSplitSeries.emplace_back();
-                nVectorPos = aSplitSeries.size() - 1;
-                aMapAxisToIndex.insert(std::pair<sal_Int32, size_t>(nAxisIndex, nVectorPos));
-            }
-            else
-            {
-                nVectorPos = it->second;
-            }
-
-            uno::Sequence<Reference<chart2::XDataSeries> >& rAxisSeriesSeq = aSplitSeries[nVectorPos];
-            sal_Int32 nLength = rAxisSeriesSeq.getLength();
-            rAxisSeriesSeq.realloc(nLength + 1);
-            rAxisSeriesSeq[nLength] = xSeries;
-        }
-        // if the first series attached to secondary axis, then export those series first, which are attached to primary axis
-        // also the MS Office export every time in this order
-        if ( aSplitSeries.size() > 1 && nAxisIndexOfFirstSeries == 1 )
-        {
-            std::swap( aSplitSeries[0], aSplitSeries[1] );
-        }
-    }
-
-    return aSplitSeries;
-}
-
-}
-
 void ChartExport::exportLineChart( const Reference< chart2::XChartType >& xChartType )
 {
     FSHelperPtr pFS = GetFS();
-    std::vector<Sequence<Reference<chart2::XDataSeries> > > aSplitDataSeries = splitDataSeriesByAxis(xChartType);
-    for (auto & splitDataSeries : aSplitDataSeries)
+    const std::vector<Sequence<Reference<chart2::XDataSeries> > > aSplitDataSeries = splitDataSeriesByAxis(xChartType);
+    for (const auto& splitDataSeries : aSplitDataSeries)
     {
         if (!splitDataSeries.hasElements())
             continue;
@@ -2245,7 +2274,7 @@ void ChartExport::exportRadarChart( const Reference< chart2::XChartType >& xChar
 }
 
 void ChartExport::exportScatterChartSeries( const Reference< chart2::XChartType >& xChartType,
-        css::uno::Sequence<css::uno::Reference<chart2::XDataSeries>>* pSeries)
+        const css::uno::Sequence<css::uno::Reference<chart2::XDataSeries>>* pSeries)
 {
     FSHelperPtr pFS = GetFS();
     pFS->startElement(FSNS(XML_c, XML_scatterChart));
@@ -2276,9 +2305,9 @@ void ChartExport::exportScatterChartSeries( const Reference< chart2::XChartType 
 
 void ChartExport::exportScatterChart( const Reference< chart2::XChartType >& xChartType )
 {
-    std::vector<Sequence<Reference<chart2::XDataSeries> > > aSplitDataSeries = splitDataSeriesByAxis(xChartType);
+    const std::vector<Sequence<Reference<chart2::XDataSeries> > > aSplitDataSeries = splitDataSeriesByAxis(xChartType);
     bool bExported = false;
-    for (auto & splitDataSeries : aSplitDataSeries)
+    for (const auto& splitDataSeries : aSplitDataSeries)
     {
         if (!splitDataSeries.hasElements())
             continue;
@@ -2293,24 +2322,29 @@ void ChartExport::exportScatterChart( const Reference< chart2::XChartType >& xCh
 void ChartExport::exportStockChart( const Reference< chart2::XChartType >& xChartType )
 {
     FSHelperPtr pFS = GetFS();
-    pFS->startElement(FSNS(XML_c, XML_stockChart));
-
-    bool bPrimaryAxes = true;
-    Reference< chart2::XDataSeriesContainer > xDSCnt( xChartType, uno::UNO_QUERY );
-    if(xDSCnt.is())
-        exportCandleStickSeries( xDSCnt->getDataSeries(), bPrimaryAxes );
-
-    // export stock properties
-    Reference< css::chart::XStatisticDisplay > xStockPropProvider( mxDiagram, uno::UNO_QUERY );
-    if( xStockPropProvider.is())
+    const std::vector<Sequence<Reference<chart2::XDataSeries> > > aSplitDataSeries = splitDataSeriesByAxis(xChartType);
+    for (const auto& splitDataSeries : aSplitDataSeries)
     {
-        exportHiLowLines();
-        exportUpDownBars(xChartType);
+        if (!splitDataSeries.hasElements())
+            continue;
+
+        pFS->startElement(FSNS(XML_c, XML_stockChart));
+
+        bool bPrimaryAxes = true;
+        exportCandleStickSeries(splitDataSeries, bPrimaryAxes);
+
+        // export stock properties
+        Reference< css::chart::XStatisticDisplay > xStockPropProvider(mxDiagram, uno::UNO_QUERY);
+        if (xStockPropProvider.is())
+        {
+            exportHiLowLines();
+            exportUpDownBars(xChartType);
+        }
+
+        exportAxesId(bPrimaryAxes);
+
+        pFS->endElement(FSNS(XML_c, XML_stockChart));
     }
-
-    exportAxesId(bPrimaryAxes);
-
-    pFS->endElement( FSNS( XML_c, XML_stockChart ) );
 }
 
 void ChartExport::exportHiLowLines()
@@ -2417,13 +2451,13 @@ void ChartExport::exportVaryColors(const Reference<chart2::XChartType>& xChartTy
 }
 
 void ChartExport::exportSeries( const Reference<chart2::XChartType>& xChartType,
-        Sequence<Reference<chart2::XDataSeries> >& rSeriesSeq, bool& rPrimaryAxes )
+        const Sequence<Reference<chart2::XDataSeries> >& rSeriesSeq, bool& rPrimaryAxes )
 {
     OUString aLabelRole = xChartType->getRoleOfSequenceForSeriesLabel();
     OUString aChartType( xChartType->getChartType());
     sal_Int32 eChartType = lcl_getChartType( aChartType );
 
-    for( const auto& rSeries : std::as_const(rSeriesSeq) )
+    for( const auto& rSeries : rSeriesSeq )
     {
         // export series
         Reference< chart2::data::XDataSource > xSource( rSeries, uno::UNO_QUERY );

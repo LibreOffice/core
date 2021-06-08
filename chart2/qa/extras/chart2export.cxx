@@ -135,6 +135,7 @@ public:
     void testSetSeriesToSecondaryAxisXLSX();
     void testCombinedChartSecondaryAxisXLSX();
     void testCombinedChartSecondaryAxisODS();
+    void testBarChartSecondaryAxisXLSX();
     void testCrossBetweenXLSX();
     void testCrossBetweenWithDeletedAxis();
     void testCrossBetweenODS();
@@ -286,6 +287,7 @@ public:
     CPPUNIT_TEST(testSetSeriesToSecondaryAxisXLSX);
     CPPUNIT_TEST(testCombinedChartSecondaryAxisXLSX);
     CPPUNIT_TEST(testCombinedChartSecondaryAxisODS);
+    CPPUNIT_TEST(testBarChartSecondaryAxisXLSX);
     CPPUNIT_TEST(testCrossBetweenXLSX);
     CPPUNIT_TEST(testCrossBetweenWithDeletedAxis);
     CPPUNIT_TEST(testCrossBetweenODS);
@@ -2181,6 +2183,24 @@ void Chart2ExportTest::testCombinedChartSecondaryAxisODS()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx[2]/c:axId", "val", YValueIdOfBarchart);
     // do not need CT_crosses tag if the actual axis is deleted, so we need to make sure it is not saved
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx[2]/c:crosses", 0);
+}
+
+void Chart2ExportTest::testBarChartSecondaryAxisXLSX()
+{
+    load(u"/chart2/qa/extras/data/xlsx/", "testSecondaryAxis.xlsx");
+    xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Collect barchart axID on primary Axis
+    OUString XValueIdOf1Barchart = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart[1]/c:axId[1]", "val");
+    OUString YValueIdOf1Barchart = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart[1]/c:axId[2]", "val");
+    // Collect barchart axID on secondary Axis
+    OUString XValueIdOf2Barchart = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart[2]/c:axId[1]", "val");
+    OUString YValueIdOf2Barchart = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart[2]/c:axId[2]", "val");
+    // Check which c:catAx and c:valAx contain the AxisId of barcharts
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx[1]/c:axId", "val", XValueIdOf1Barchart);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx[1]/c:axId", "val", YValueIdOf1Barchart);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx[2]/c:axId", "val", XValueIdOf2Barchart);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx[2]/c:axId", "val", YValueIdOf2Barchart);
 }
 
 void Chart2ExportTest::testCrossBetweenXLSX()
