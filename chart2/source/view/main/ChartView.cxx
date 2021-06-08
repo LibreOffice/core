@@ -1192,16 +1192,11 @@ uno::Any SAL_CALL ChartView::getTransferData( const datatransfer::DataFlavor& aF
 }
 uno::Sequence< datatransfer::DataFlavor > SAL_CALL ChartView::getTransferDataFlavors()
 {
-    uno::Sequence< datatransfer::DataFlavor > aRet(2);
-
-    aRet[0] = datatransfer::DataFlavor( lcl_aGDIMetaFileMIMEType,
-        "GDIMetaFile",
-        cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
-    aRet[1] = datatransfer::DataFlavor( lcl_aGDIMetaFileMIMETypeHighContrast,
-        "GDIMetaFile",
-        cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
-
-    return aRet;
+    return
+    {
+        { lcl_aGDIMetaFileMIMEType, "GDIMetaFile", cppu::UnoType<uno::Sequence< sal_Int8 >>::get() },
+        { lcl_aGDIMetaFileMIMETypeHighContrast, "GDIMetaFile", cppu::UnoType<uno::Sequence< sal_Int8 >>::get() }
+    };
 }
 sal_Bool SAL_CALL ChartView::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
 {
