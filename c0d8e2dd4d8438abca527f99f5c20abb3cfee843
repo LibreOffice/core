@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "587203be_7294a0f2",
+        "filename": "vcl/source/uitest/uiobject.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1002066
+      },
+      "writtenOn": "2021-06-08T11:21:11Z",
+      "side": 1,
+      "message": "You could \"return aActionName;\" instead of this as this will case errors",
+      "range": {
+        "startLine": 585,
+        "startChar": 0,
+        "endLine": 585,
+        "endChar": 88
+      },
+      "revId": "c0d8e2dd4d8438abca527f99f5c20abb3cfee843",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
