@@ -286,6 +286,7 @@ public:
     void testTdf87922();
     void testTdf77014();
     void testTdf92648();
+    void testTdf105103();
     void testTdf103978_backgroundTextShape();
     void testTdf117225();
 
@@ -378,6 +379,7 @@ public:
     CPPUNIT_TEST(testTdf90808);
     CPPUNIT_TEST(testTdf97601);
     CPPUNIT_TEST(testTdf75137);
+    CPPUNIT_TEST(testTdf105103);
     CPPUNIT_TEST(testTdf83798);
     CPPUNIT_TEST(testTdf89714);
     CPPUNIT_TEST(testTdf130287);
@@ -4568,6 +4570,21 @@ void SwUiWriterTest::testTdf92648()
     }
     // and we have had five of them.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), nCount);
+}
+
+void SwUiWriterTest::testTdf105103()
+{
+    // create a new doc
+    SwDoc* pDoc = createSwDoc();
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
+
+    // press Insert key
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::INSERT);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::SPACE);
+
+    CPPUNIT_ASSERT(pXTextDocument);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
 }
 
 void SwUiWriterTest::testTdf103978_backgroundTextShape()
