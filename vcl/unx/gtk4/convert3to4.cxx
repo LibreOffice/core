@@ -127,13 +127,10 @@ void AddBorderAsMargins(const css::uno::Reference<css::xml::dom::XNode>& xNode,
 struct MenuEntry
 {
     bool m_bDrawAsRadio;
-    OUString m_sRadioGroup;
     css::uno::Reference<css::xml::dom::XNode> m_xPropertyLabel;
 
-    MenuEntry(bool bDrawAsRadio, const OUString& rRadioGroup,
-              const css::uno::Reference<css::xml::dom::XNode>& rPropertyLabel)
+    MenuEntry(bool bDrawAsRadio, const css::uno::Reference<css::xml::dom::XNode>& rPropertyLabel)
         : m_bDrawAsRadio(bDrawAsRadio)
-        , m_sRadioGroup(rRadioGroup)
         , m_xPropertyLabel(rPropertyLabel)
     {
     }
@@ -143,7 +140,6 @@ MenuEntry ConvertMenu(const css::uno::Reference<css::xml::dom::XNode>& xMenu,
                       const css::uno::Reference<css::xml::dom::XNode>& xNode)
 {
     bool bDrawAsRadio = false;
-    OUString sRadioGroup;
     css::uno::Reference<css::xml::dom::XNode> xPropertyLabel;
 
     css::uno::Reference<css::xml::dom::XNode> xChild = xNode->getFirstChild();
@@ -163,22 +159,16 @@ MenuEntry ConvertMenu(const css::uno::Reference<css::xml::dom::XNode>& xMenu,
             {
                 bDrawAsRadio = toBool(xChild->getFirstChild()->getNodeValue());
             }
-            else if (sName == "group")
-            {
-                sRadioGroup = xChild->getFirstChild()->getNodeValue();
-            }
         }
 
         auto xNextChild = xChild->getNextSibling();
 
         bool bChildDrawAsRadio = false;
-        OUString sChildRadioGroup;
         css::uno::Reference<css::xml::dom::XNode> xChildPropertyLabel;
         if (xChild->hasChildNodes())
         {
             MenuEntry aEntry = ConvertMenu(xMenu, xChild);
             bChildDrawAsRadio = aEntry.m_bDrawAsRadio;
-            sChildRadioGroup = aEntry.m_sRadioGroup;
             xChildPropertyLabel = aEntry.m_xPropertyLabel;
         }
 
@@ -236,13 +226,9 @@ MenuEntry ConvertMenu(const css::uno::Reference<css::xml::dom::XNode>& xMenu,
                 xActionName->setValue("action");
                 xActionAttr->setAttributeNode(xActionName);
                 if (bChildDrawAsRadio)
-                {
-                    if (sChildRadioGroup.isEmpty())
-                        sChildRadioGroup = sId;
-                    xActionAttr->appendChild(xDoc->createTextNode("menu." + sChildRadioGroup));
-                }
+                    xActionAttr->appendChild(xDoc->createTextNode("menu.radio." + sId));
                 else
-                    xActionAttr->appendChild(xDoc->createTextNode("menu.action"));
+                    xActionAttr->appendChild(xDoc->createTextNode("menu.normal." + sId));
                 xItem->appendChild(xActionAttr);
 
                 css::uno::Reference<css::xml::dom::XElement> xTargetAttr
@@ -259,7 +245,7 @@ MenuEntry ConvertMenu(const css::uno::Reference<css::xml::dom::XNode>& xMenu,
         xChild = xNextChild;
     }
 
-    return MenuEntry(bDrawAsRadio, sRadioGroup, xPropertyLabel);
+    return MenuEntry(bDrawAsRadio, xPropertyLabel);
 }
 
 struct ConvertResult

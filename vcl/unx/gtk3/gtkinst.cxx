@@ -9419,9 +9419,6 @@ private:
     {
         clear_actions();
 
-        m_aActionEntries.push_back({"action", action_activated, "s", nullptr, nullptr, {}});
-        m_aInsertedActions.insert("action");
-
         GtkPopover* pPopover = gtk_menu_button_get_popover(m_pMenuButton);
         if (GMenuModel* pMenuModel = GTK_IS_POPOVER_MENU(pPopover) ?
                                      gtk_popover_menu_get_menu_model(GTK_POPOVER_MENU(pPopover)) :
@@ -9442,7 +9439,10 @@ private:
                     {
                         // the const char* arg isn't copied by anything so it must continue to exist for the life time of
                         // the action group
-                        m_aActionEntries.push_back({res.first->getStr(), action_activated, "s", "'none'", nullptr, {}});
+                        if (sAction.startsWith("radio."))
+                            m_aActionEntries.push_back({res.first->getStr(), action_activated, "s", "'none'", nullptr, {}});
+                        else
+                            m_aActionEntries.push_back({res.first->getStr(), action_activated, "s", nullptr, nullptr, {}});
                     }
 
                     g_free(id);
@@ -9606,9 +9606,28 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         MenuHelper::insert_item(pos, rId, rStr, pIconName, pImageSurface, eCheckRadioFalse);
 #else
-        // TODO see g_menu_item_set_action_and_target
-        (void)pos; (void)rId; (void) rStr; (void)pIconName; (void)pImageSurface; (void)eCheckRadioFalse;
-        std::abort();
+        (void)pIconName; (void)pImageSurface;
+
+        GtkPopover* pPopover = gtk_menu_button_get_popover(m_pMenuButton);
+        if (GMenuModel* pMenuModel = GTK_IS_POPOVER_MENU(pPopover) ?
+                                     gtk_popover_menu_get_menu_model(GTK_POPOVER_MENU(pPopover)) :
+                                     nullptr)
+        {
+            GMenu* pMenu = G_MENU(pMenuModel);
+            // action with a target value ... the action name and target value are separated by a double
+            // colon ... For example: "app.action::target"
+            OUString sActionAndTarget;
+            if (eCheckRadioFalse == TRISTATE_INDET)
+                sActionAndTarget = "menu.normal." + rId + "::" + rId;
+            else
+                sActionAndTarget = "menu.radio." + rId + "::" + rId;
+            g_menu_insert(pMenu, pos, MapToGtkAccelerator(rStr).getStr(), sActionAndTarget.toUtf8().getStr());
+
+            assert(eCheckRadioFalse == TRISTATE_INDET); // come back to this later
+
+            // TODO not redo entire group
+            update_action_group_from_popover_model();
+        }
 #endif
     }
 
@@ -9617,8 +9636,17 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         MenuHelper::insert_separator(pos, rId);
 #else
-        (void)pos; (void)rId;
-        std::abort();
+        (void)rId;
+
+        GtkPopover* pPopover = gtk_menu_button_get_popover(m_pMenuButton);
+        if (GMenuModel* pMenuModel = GTK_IS_POPOVER_MENU(pPopover) ?
+                                     gtk_popover_menu_get_menu_model(GTK_POPOVER_MENU(pPopover)) :
+                                     nullptr)
+        {
+            GMenu* pMenu = G_MENU(pMenuModel);
+            g_menu_insert(pMenu, pos, "SEPARATOR", "menu.action");
+        }
+
 #endif
     }
 
@@ -9651,12 +9679,8 @@ public:
     virtual void set_item_active(const OString& rIdent, bool bActive) override
     {
 #if GTK_CHECK_VERSION(4, 0, 0)
-        if (bActive)
-        {
-            g_action_group_change_action_state(m_pActionGroup, m_aIdToAction[rIdent].getStr(),
-                                               g_variant_new_string(rIdent.getStr()));
-        }
-        // TODO checkboxes vs radiobuttons
+        g_action_group_change_action_state(m_pActionGroup, m_aIdToAction[rIdent].getStr(),
+                                           g_variant_new_string(bActive ? rIdent.getStr() : "'none'"));
 #else
         MenuHelper::set_item_active(rIdent, bActive);
 #endif
@@ -9665,7 +9689,7 @@ public:
     virtual void set_item_sensitive(const OString& rIdent, bool bSensitive) override
     {
 #if GTK_CHECK_VERSION(4, 0, 0)
-        GAction* pAction = g_action_map_lookup_action(G_ACTION_MAP(m_pActionGroup), rIdent.getStr());
+        GAction* pAction = g_action_map_lookup_action(G_ACTION_MAP(m_pActionGroup), m_aIdToAction[rIdent].getStr());
         g_simple_action_set_enabled(G_SIMPLE_ACTION(pAction), bSensitive);
 #else
         MenuHelper::set_item_sensitive(rIdent, bSensitive);
@@ -9699,8 +9723,9 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         MenuHelper::set_item_visible(rIdent, bVisible);
 #else
-        (void)rIdent; (void)bVisible;
-        std::abort();
+        // TODO visibility vs sensitivity
+        GAction* pAction = g_action_map_lookup_action(G_ACTION_MAP(m_pActionGroup), m_aIdToAction[rIdent].getStr());
+        g_simple_action_set_enabled(G_SIMPLE_ACTION(pAction), bVisible);
 #endif
     }
 
@@ -22051,6 +22076,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "sfx/ui/documentfontspage.ui" &&
         rUIFile != "sfx/ui/documentinfopage.ui" &&
         rUIFile != "sfx/ui/documentpropertiesdialog.ui" &&
+        rUIFile != "sfx/ui/inputdialog.ui" &&
         rUIFile != "sfx/ui/querysavedialog.ui" &&
         rUIFile != "sfx/ui/licensedialog.ui" &&
         rUIFile != "sfx/ui/linefragment.ui" &&
