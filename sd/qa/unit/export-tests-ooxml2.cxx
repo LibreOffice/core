@@ -41,6 +41,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 #include <sdpage.hxx>
+#include <shapelist.hxx>
 #include <cfloat>
 #include <cstdlib>
 
@@ -149,6 +150,7 @@ public:
     void testTdf118825();
     void testTextColumns_tdf140852();
     void testTextColumns_3columns();
+    void testTdf142235_TestPlaceholderTextAlignment();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -213,6 +215,7 @@ public:
     CPPUNIT_TEST(testTdf118825);
     CPPUNIT_TEST(testTextColumns_tdf140852);
     CPPUNIT_TEST(testTextColumns_3columns);
+    CPPUNIT_TEST(testTdf142235_TestPlaceholderTextAlignment);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1740,6 +1743,38 @@ void SdOOXMLExportTest2::testTextColumns_3columns()
     assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:bodyPr", "spcCol", "108000");
 
     tempFile.EnableKillingFile();
+}
+
+void SdOOXMLExportTest2::testTdf142235_TestPlaceholderTextAlignment()
+{
+    auto xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/odp/tdf142235.odp"), ODP);
+
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+    auto pDoc = xDocShRef->GetDoc();
+    auto pPage = pDoc->GetSdPage(0, PageKind::Standard);
+
+    std::vector<SdrTextVertAdjust> vVAligns;
+    for (auto pShape : pPage->GetPresentationShapeList().getList())
+    {
+        vVAligns.push_back(pShape->GetProperties().GetItem(SDRATTR_TEXT_VERTADJUST).GetValue());
+    }
+    xDocShRef->DoClose();
+
+    // Without the fix in place many of these asserts failed, because alignment was bad.
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Bad text alignment in the placeholder!",
+                                 SdrTextVertAdjust::SDRTEXTVERTADJUST_TOP, vVAligns[1]);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Bad text alignment in the placeholder!",
+                                 SdrTextVertAdjust::SDRTEXTVERTADJUST_CENTER, vVAligns[2]);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Bad text alignment in the placeholder!",
+                                 SdrTextVertAdjust::SDRTEXTVERTADJUST_BOTTOM, vVAligns[3]);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Bad text alignment in the placeholder!",
+                                 SdrTextVertAdjust::SDRTEXTVERTADJUST_TOP, vVAligns[4]);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Bad text alignment in the placeholder!",
+                                 SdrTextVertAdjust::SDRTEXTVERTADJUST_CENTER, vVAligns[5]);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Bad text alignment in the placeholder!",
+                                 SdrTextVertAdjust::SDRTEXTVERTADJUST_BOTTOM, vVAligns[6]);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
