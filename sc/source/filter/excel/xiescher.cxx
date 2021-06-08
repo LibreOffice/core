@@ -740,7 +740,7 @@ void XclImpDrawObjBase::ConvertFillStyle( SdrObject& rSdrObj, const XclObjFillDa
                 aMemStrm.WriteUInt32( pnPattern[ nIdx ] ); // 32-bit little-endian
             aMemStrm.Seek( STREAM_SEEK_TO_BEGIN );
             Bitmap aBitmap;
-            ReadDIB(aBitmap, aMemStrm, false);
+            (void)ReadDIB(aBitmap, aMemStrm, false);
 
             XOBitmap aXOBitmap(( BitmapEx(aBitmap) ));
             aXOBitmap.Bitmap2Array();
