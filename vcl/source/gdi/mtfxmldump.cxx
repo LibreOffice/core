@@ -722,7 +722,6 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                     }
                     rWriter.endElement();
                 }
-
                 rWriter.endElement();
             }
             break;
@@ -1273,7 +1272,34 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
             }
             break;
 
-            //case MetaActionType::GRADIENTEX:
+            case MetaActionType::GRADIENTEX:
+            {
+                const MetaGradientExAction* pMetaGradientExAction = static_cast<MetaGradientExAction*>(pAction);
+
+                rWriter.startElement(sCurrentElementTag);
+                writeGradient(rWriter, pMetaGradientExAction->GetGradient());
+
+                tools::PolyPolygon const& rPolyPolygon(pMetaGradientExAction->GetPolyPolygon());
+                for (sal_uInt16 j = 0; j < rPolyPolygon.Count(); ++j)
+                {
+                    rWriter.startElement("polygon");
+                    tools::Polygon const& rPolygon = rPolyPolygon[j];
+                    bool bFlags = rPolygon.HasFlags();
+                    for (sal_uInt16 i = 0; i < rPolygon.GetSize(); ++i)
+                    {
+                        rWriter.startElement("point");
+                        writePoint(rWriter, rPolygon[i]);
+                        if (bFlags)
+                            rWriter.attribute("flags", convertPolygonFlags(rPolygon.GetFlags(i)));
+                        rWriter.endElement();
+                    }
+                    rWriter.endElement();
+                }
+
+                rWriter.endElement();
+            }
+            break;
+
             //case MetaActionType::LAYOUTMODE:
             //case MetaActionType::TEXTLANGUAGE:
 
