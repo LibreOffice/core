@@ -1899,7 +1899,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
     else if (GetProperty(rXPropSet, "CharHeight"))
     {
         nSize = static_cast<sal_Int32>(100*(*o3tl::doAccess<float>(mAny)));
-        if ( nElement == XML_rPr )
+        if ( nElement == XML_rPr || nElement == XML_defRPr )
         {
             rbOverridingCharHeight = true;
             rnCharHeight = nSize;
@@ -2822,14 +2822,14 @@ void DrawingML::WriteLinespacing( const LineSpacing& rSpacing )
     }
 }
 
-void DrawingML::WriteParagraphProperties( const Reference< XTextContent >& rParagraph, float fFirstCharHeight)
+bool DrawingML::WriteParagraphProperties( const Reference< XTextContent >& rParagraph, float fFirstCharHeight, sal_Int32 nElement)
 {
     Reference< XPropertySet > rXPropSet( rParagraph, UNO_QUERY );
     Reference< XPropertyState > rXPropState( rParagraph, UNO_QUERY );
     PropertyState eState;
 
     if( !rXPropSet.is() || !rXPropState.is() )
-        return;
+        return false;
 
     sal_Int16 nLevel = -1;
     if (GetProperty(rXPropSet, "NumberingLevel"))
@@ -2878,17 +2878,17 @@ void DrawingML::WriteParagraphProperties( const Reference< XTextContent >& rPara
     if( !(nLevel != -1
         || nAlignment != style::ParagraphAdjust_LEFT
         || bHasLinespacing) )
-        return;
+        return false;
 
     if (nParaLeftMargin) // For Paragraph
-        mpFS->startElementNS( XML_a, XML_pPr,
+        mpFS->startElementNS( XML_a, nElement,
                            XML_lvl, sax_fastparser::UseIf(OString::number(nLevel), nLevel > 0),
                            XML_marL, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nParaLeftMargin)), nParaLeftMargin > 0),
                            XML_indent, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nParaFirstLineIndent)), nParaFirstLineIndent != 0),
                            XML_algn, GetAlignment( nAlignment ),
                            XML_rtl, sax_fastparser::UseIf(ToPsz10(bRtl), bRtl));
     else
-        mpFS->startElementNS( XML_a, XML_pPr,
+        mpFS->startElementNS( XML_a, nElement,
                            XML_lvl, sax_fastparser::UseIf(OString::number(nLevel), nLevel > 0),
                            XML_marL, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nLeftMargin)), nLeftMargin > 0),
                            XML_indent, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nLineIndentation)), nLineIndentation != 0),
@@ -2927,7 +2927,50 @@ void DrawingML::WriteParagraphProperties( const Reference< XTextContent >& rPara
 
     WriteParagraphTabStops( rXPropSet );
 
-    mpFS->endElementNS( XML_a, XML_pPr );
+    // do not end element for lstStyles since, defRPr should be stacked inside it
+    if( nElement != XML_lvl1pPr )
+        mpFS->endElementNS( XML_a, nElement );
+
+    return true;
+}
+
+void DrawingML::WriteLstStyles(const css::uno::Reference<css::text::XTextContent>& rParagraph,
+                               bool& rbOverridingCharHeight, sal_Int32& rnCharHeight,
+                               const css::uno::Reference<css::beans::XPropertySet>& rXShapePropSet)
+{
+    Reference<XEnumerationAccess> access(rParagraph, UNO_QUERY);
+    if (!access.is())
+        return;
+
+    Reference<XEnumeration> enumeration(access->createEnumeration());
+    if (!enumeration.is())
+        return;
+
+
+    Reference<XTextRange> rRun;
+
+    if (enumeration->hasMoreElements())
+    {
+        Any aAny(enumeration->nextElement());
+        if (aAny >>= rRun)
+        {
+            float fFirstCharHeight = rnCharHeight / 1000.;
+            Reference<XPropertySet> xFirstRunPropSet(rRun, UNO_QUERY);
+            Reference<XPropertySetInfo> xFirstRunPropSetInfo
+                = xFirstRunPropSet->getPropertySetInfo();
+
+            if (xFirstRunPropSetInfo->hasPropertyByName("CharHeight"))
+                fFirstCharHeight = xFirstRunPropSet->getPropertyValue("CharHeight").get<float>();
+
+            mpFS->startElementNS(XML_a, XML_lstStyle);
+            if( !WriteParagraphProperties(rParagraph, fFirstCharHeight, XML_lvl1pPr) )
+                mpFS->startElementNS(XML_a, XML_lvl1pPr);
+            WriteRunProperties(xFirstRunPropSet, false, XML_defRPr, true, rbOverridingCharHeight,
+                               rnCharHeight, GetScriptType(rRun->getString()), rXShapePropSet);
+            mpFS->endElementNS(XML_a, XML_lvl1pPr);
+            mpFS->endElementNS(XML_a, XML_lstStyle);
+        }
+    }
 }
 
 void DrawingML::WriteParagraph( const Reference< XTextContent >& rParagraph,
@@ -3005,7 +3048,7 @@ bool DrawingML::IsFontworkShape(const css::uno::Reference<css::beans::XPropertyS
 }
 
 void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bool bText,
-                           sal_Int32 nXmlNamespace)
+                          sal_Int32 nXmlNamespace, bool bWritePropertiesAsLstStyles)
 {
     // ToDo: Fontwork in DOCX
     Reference< XText > xXText( rXIface, UNO_QUERY );
@@ -3433,6 +3476,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
 
     bool bOverridingCharHeight = false;
     sal_Int32 nCharHeight = -1;
+    bool bFirstParagraph = true;
 
     while( enumeration->hasMoreElements() )
     {
@@ -3440,7 +3484,13 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
         Any any ( enumeration->nextElement() );
 
         if( any >>= paragraph)
-            WriteParagraph( paragraph, bOverridingCharHeight, nCharHeight, rXPropSet );
+        {
+            if (bFirstParagraph && bWritePropertiesAsLstStyles)
+                WriteLstStyles(paragraph, bOverridingCharHeight, nCharHeight, rXPropSet);
+
+            WriteParagraph(paragraph, bOverridingCharHeight, nCharHeight, rXPropSet);
+            bFirstParagraph = false;
+        }
     }
 }
 
