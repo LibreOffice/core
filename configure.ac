@@ -9923,11 +9923,10 @@ if test "$enable_firebird_sdbc" = "yes" ; then
         AC_MSG_CHECKING([Firebird version])
         if test -n "${FIREBIRD_VERSION}"; then
             FIREBIRD_MAJOR=`echo $FIREBIRD_VERSION | cut -d"." -f1`
-            FIREBIRD_MINOR=`echo $FIREBIRD_VERSION | cut -d"." -f2`
-            if test "$FIREBIRD_MAJOR" -eq "3" -a "$FIREBIRD_MINOR" -eq "0"; then
+            if test "$FIREBIRD_MAJOR" -ge "3"; then
                 AC_MSG_RESULT([OK])
             else
-                AC_MSG_ERROR([Ensure firebird 3.0.x is installed])
+                AC_MSG_ERROR([Ensure firebird >= 3 is installed])
             fi
         else
             save_CFLAGS="${CFLAGS}"
@@ -9948,7 +9947,6 @@ int fb_api_is_30(void) { return 0; }
         AC_MSG_RESULT([none])
     else
         dnl Embedded Firebird has version 3.0
-        AC_DEFINE(HAVE_FIREBIRD_30, 1)
         dnl We need libatomic_ops for any non X86/X64 system
         if test "${CPUNAME}" != INTEL -a "${CPUNAME}" != X86_64; then
             dnl ===================================================================
