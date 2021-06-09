@@ -82,4 +82,3 @@
 <!ELEMENT converter-target       EMPTY>
 
 <!ATTLIST converter-target type  CDATA      #REQUIRED>
-
