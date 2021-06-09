@@ -2978,7 +2978,7 @@ uno::Sequence< uno::Sequence<double> > SAL_CALL ScCellRangesBase::getData()
         return aRowSeq;
     }
 
-    return uno::Sequence< uno::Sequence<double> >(0);
+    return {};
 }
 
 ScRangeListRef ScCellRangesBase::GetLimitedChartRanges_Impl( sal_Int32 nDataColumns, sal_Int32 nDataRows ) const
@@ -3080,7 +3080,7 @@ uno::Sequence<OUString> SAL_CALL ScCellRangesBase::getRowDescriptions()
 
         return aSeq;
     }
-    return uno::Sequence<OUString>(0);
+    return {};
 }
 
 void SAL_CALL ScCellRangesBase::setRowDescriptions(
@@ -3149,7 +3149,7 @@ uno::Sequence<OUString> SAL_CALL ScCellRangesBase::getColumnDescriptions()
 
         return aSeq;
     }
-    return uno::Sequence<OUString>(0);
+    return {};
 }
 
 void SAL_CALL ScCellRangesBase::setColumnDescriptions(
@@ -4094,7 +4094,7 @@ uno::Sequence<table::CellRangeAddress> SAL_CALL ScCellRangesObj::getRangeAddress
         return aSeq;
     }
 
-    return uno::Sequence<table::CellRangeAddress>(0);   // can be empty
+    return {};   // can be empty
 }
 
 uno::Reference<container::XEnumerationAccess> SAL_CALL ScCellRangesObj::getCells()
@@ -4484,7 +4484,7 @@ uno::Sequence<OUString> SAL_CALL ScCellRangesObj::getElementNames()
         }
         return aSeq;
     }
-    return uno::Sequence<OUString>(0);
+    return {};
 }
 
 sal_Bool SAL_CALL ScCellRangesObj::hasByName( const OUString& aName )
@@ -6829,7 +6829,7 @@ uno::Sequence<sheet::TablePageBreakData> SAL_CALL ScTableSheetObj::getColumnPage
         }
         return aSeq;
     }
-    return uno::Sequence<sheet::TablePageBreakData>(0);
+    return {};
 }
 
 uno::Sequence<sheet::TablePageBreakData> SAL_CALL ScTableSheetObj::getRowPageBreaks()
@@ -6852,7 +6852,7 @@ uno::Sequence<sheet::TablePageBreakData> SAL_CALL ScTableSheetObj::getRowPageBre
         }
         return rDoc.GetRowBreakData(nTab);
     }
-    return uno::Sequence<sheet::TablePageBreakData>(0);
+    return {};
 }
 
 void SAL_CALL ScTableSheetObj::removeAllManualPageBreaks()

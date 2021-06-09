@@ -1340,9 +1340,11 @@ uno::Any SAL_CALL ScDataBarFormatObj::getPropertyValue( const OUString& aPropert
         break;
         case DataBarEntries:
         {
-            uno::Sequence<uno::Reference<sheet::XDataBarEntry> > aEntries(2);
-            aEntries[0] = new ScDataBarEntryObj(this, 0);
-            aEntries[1] = new ScDataBarEntryObj(this, 1);
+            uno::Sequence<uno::Reference<sheet::XDataBarEntry> > aEntries
+            {
+                new ScDataBarEntryObj(this, 0),
+                new ScDataBarEntryObj(this, 1)
+            };
             aAny <<= aEntries;
         }
         break;

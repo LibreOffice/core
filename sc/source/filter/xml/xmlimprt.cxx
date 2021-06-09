@@ -1687,11 +1687,16 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODS(SvStream &rStream)
     uno::Reference<io::XInputStream> xStream(new ::utl::OSeekableInputStreamWrapper(rStream));
     uno::Reference<uno::XInterface> xInterface(xMultiServiceFactory->createInstance("com.sun.star.comp.Writer.XmlFilterAdaptor"), uno::UNO_SET_THROW);
 
-    css::uno::Sequence<OUString> aUserData(7);
-    aUserData[0] = "com.sun.star.comp.filter.OdfFlatXml";
-    aUserData[2] = "com.sun.star.comp.Calc.XMLOasisImporter";
-    aUserData[3] = "com.sun.star.comp.Calc.XMLOasisExporter";
-    aUserData[6] = "true";
+    css::uno::Sequence<OUString> aUserData
+    {
+        "com.sun.star.comp.filter.OdfFlatXml",
+        "",
+        "com.sun.star.comp.Calc.XMLOasisImporter",
+        "com.sun.star.comp.Calc.XMLOasisExporter",
+        "",
+        "",
+        "true"
+    };
     uno::Sequence<beans::PropertyValue> aAdaptorArgs(comphelper::InitPropertySequence(
     {
         { "UserData", uno::Any(aUserData) },
