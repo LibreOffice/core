@@ -382,7 +382,7 @@ uno::Sequence<sal_Int32> SAL_CALL ScRecentFunctionsObj::getRecentFunctionIds()
             pAry[i] = pFuncs[i];
         return aSeq;
     }
-    return uno::Sequence<sal_Int32>(0);
+    return {};
 }
 
 void SAL_CALL ScRecentFunctionsObj::setRecentFunctionIds(
@@ -597,7 +597,7 @@ uno::Sequence<OUString> SAL_CALL ScFunctionListObj::getElementNames()
         }
         return aSeq;
     }
-    return uno::Sequence<OUString>(0);
+    return {};
 }
 
 sal_Bool SAL_CALL ScFunctionListObj::hasByName( const OUString& aName )

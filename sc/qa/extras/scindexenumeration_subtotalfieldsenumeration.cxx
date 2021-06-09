@@ -70,10 +70,7 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_SubTotalFieldsEnumeration::in
     uno::Reference<sheet::XSubTotalDescriptor> xSTD(xSTC->createSubTotalDescriptor(true),
                                                     uno::UNO_SET_THROW);
 
-    uno::Sequence<sheet::SubTotalColumn> aSubTotalColumns(1);
-    aSubTotalColumns[0].Column = 5;
-    aSubTotalColumns[0].Function = sheet::GeneralFunction_SUM;
-    xSTD->addNew(aSubTotalColumns, 1);
+    xSTD->addNew({ { 5, sheet::GeneralFunction_SUM } }, 1);
 
     uno::Reference<container::XIndexAccess> xIA_STD(xSTD, uno::UNO_QUERY_THROW);
     uno::Reference<container::XEnumerationAccess> xEA(xIA_STD, uno::UNO_QUERY_THROW);

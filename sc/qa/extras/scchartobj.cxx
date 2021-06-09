@@ -157,8 +157,7 @@ uno::Reference<uno::XInterface> ScChartObj::init()
                                                   uno::UNO_SET_THROW);
     uno::Reference<sheet::XCellRangeAddressable> xCRA(xCellRange1, uno::UNO_QUERY_THROW);
 
-    uno::Sequence<table::CellRangeAddress> aCRA(1);
-    aCRA[0] = xCRA->getRangeAddress();
+    uno::Sequence<table::CellRangeAddress> aCRA{ xCRA->getRangeAddress() };
 
     uno::Reference<table::XTableChartsSupplier> xTCS(xSheet0, uno::UNO_QUERY_THROW);
     uno::Reference<table::XTableCharts> xTC = xTCS->getCharts();

@@ -132,12 +132,10 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_TableChartsEnumeration::init(
                                                   uno::UNO_SET_THROW);
     uno::Reference<sheet::XCellRangeAddressable> xCRA(xCellRange1, uno::UNO_QUERY_THROW);
 
-    uno::Sequence<table::CellRangeAddress> aCRA(1);
-    aCRA[0] = xCRA->getRangeAddress();
-
     uno::Reference<table::XTableChartsSupplier> xTCS(xSheet0, uno::UNO_QUERY_THROW);
     uno::Reference<table::XTableCharts> xTC = xTCS->getCharts();
-    xTC->addNewByName("ScChartObj", awt::Rectangle(500, 3000, 25000, 11000), aCRA, true, false);
+    xTC->addNewByName("ScChartObj", awt::Rectangle(500, 3000, 25000, 11000),
+                      { xCRA->getRangeAddress() }, true, false);
 
     uno::Reference<container::XEnumerationAccess> xEA(xTC, uno::UNO_QUERY_THROW);
 
