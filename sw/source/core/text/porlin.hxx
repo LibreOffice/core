@@ -78,8 +78,8 @@ public:
     sal_uInt32 GetAscent() const { return nAscent; }
     void SetAscent( const sal_uInt32 nNewAsc ) { nAscent = nNewAsc; }
     void  PrtWidth( sal_uInt16 nNewWidth ) { Width( nNewWidth ); }
-    sal_uInt16 PrtWidth() const { return Width(); }
-    void AddPrtWidth( const sal_uInt16 nNew ) { Width( Width() + nNew ); }
+    sal_uInt32 PrtWidth() const { return Width(); }
+    void AddPrtWidth( const sal_uInt32 nNew ) { Width( Width() + nNew ); }
     void SubPrtWidth( const sal_uInt16 nNew ) { Width( Width() - nNew ); }
 
     // Insert methods

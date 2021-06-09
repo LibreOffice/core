@@ -290,7 +290,7 @@ void SwLinePortion::Move( SwTextPaintInfo &rInf )
             rInf.IncKanaIdx();
         }
         if( rInf.IsRotated() )
-            rInf.Y( rInf.Y() + ( bB2T ? -PrtWidth() : PrtWidth() ) );
+            rInf.Y( rInf.Y() + ( bB2T ? -static_cast<SwTwips>(PrtWidth()) : static_cast<SwTwips>(PrtWidth()) ) );
         else if ( bCounterDir )
             rInf.X( rInf.X() - PrtWidth() );
         else
