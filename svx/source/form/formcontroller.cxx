@@ -4150,12 +4150,13 @@ void FormController::deleteInterceptor(const Reference< XDispatchProviderInterce
 
 void FormController::implInvalidateCurrentControlDependentFeatures()
 {
-    Sequence< sal_Int16 > aCurrentControlDependentFeatures(4);
-
-    aCurrentControlDependentFeatures[0] = FormFeature::SortAscending;
-    aCurrentControlDependentFeatures[1] = FormFeature::SortDescending;
-    aCurrentControlDependentFeatures[2] = FormFeature::AutoFilter;
-    aCurrentControlDependentFeatures[3] = FormFeature::RefreshCurrentControl;
+    Sequence< sal_Int16 > aCurrentControlDependentFeatures
+    {
+        FormFeature::SortAscending,
+        FormFeature::SortDescending,
+        FormFeature::AutoFilter,
+        FormFeature::RefreshCurrentControl
+    };
 
     invalidateFeatures( aCurrentControlDependentFeatures );
 }

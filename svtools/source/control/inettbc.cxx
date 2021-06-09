@@ -317,31 +317,20 @@ void SvtMatchContext_Impl::ReadFolder( const OUString& rURL,
                                                      uno::Reference< XProgressHandler >() ),
                       comphelper::getProcessComponentContext() );
         uno::Reference< XResultSet > xResultSet;
-        Sequence< OUString > aProps(2);
-        OUString* pProps = aProps.getArray();
-        pProps[0] = "Title";
-        pProps[1] = "IsFolder";
 
         try
         {
             ResultSetInclude eInclude = INCLUDE_FOLDERS_AND_DOCUMENTS;
             if ( bOnlyDirectories )
                 eInclude = INCLUDE_FOLDERS_ONLY;
-            uno::Reference< XDynamicResultSet > xDynResultSet = aCnt.createDynamicCursor( aProps, eInclude );
+            uno::Reference< XDynamicResultSet > xDynResultSet = aCnt.createDynamicCursor( { "Title", "IsFolder" }, eInclude );
 
             uno::Reference < XAnyCompareFactory > xCompare;
             uno::Reference < XSortedDynamicResultSetFactory > xSRSFac =
                 SortedDynamicResultSetFactory::create( ::comphelper::getProcessComponentContext() );
 
-            Sequence< NumberedSortingInfo > aSortInfo( 2 );
-            NumberedSortingInfo* pInfo = aSortInfo.getArray();
-            pInfo[ 0 ].ColumnIndex = 2;
-            pInfo[ 0 ].Ascending   = false;
-            pInfo[ 1 ].ColumnIndex = 1;
-            pInfo[ 1 ].Ascending   = true;
-
             uno::Reference< XDynamicResultSet > xDynamicResultSet =
-                xSRSFac->createSortedDynamicResultSet( xDynResultSet, aSortInfo, xCompare );
+                xSRSFac->createSortedDynamicResultSet( xDynResultSet, { { 2, false }, { 1, true } }, xCompare );
 
             if ( xDynamicResultSet.is() )
             {
