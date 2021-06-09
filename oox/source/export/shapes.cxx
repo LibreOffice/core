@@ -1544,7 +1544,7 @@ ShapeExport& ShapeExport::WriteShape( const Reference< XShape >& xShape )
     return *this;
 }
 
-ShapeExport& ShapeExport::WriteTextBox( const Reference< XInterface >& xIface, sal_Int32 nXmlNamespace )
+ShapeExport& ShapeExport::WriteTextBox( const Reference< XInterface >& xIface, sal_Int32 nXmlNamespace, bool bWritePropertiesAsLstStyles )
 {
     // In case this shape has an associated textbox, then export that, and we're done.
     if (GetDocumentType() == DOCUMENT_DOCX && GetTextExport())
@@ -1569,7 +1569,7 @@ ShapeExport& ShapeExport::WriteTextBox( const Reference< XInterface >& xIface, s
 
         pFS->startElementNS(nXmlNamespace,
                             (GetDocumentType() != DOCUMENT_DOCX ? XML_txBody : XML_txbx));
-        WriteText( xIface, /*bBodyPr=*/(GetDocumentType() != DOCUMENT_DOCX) );
+        WriteText( xIface, /*bBodyPr=*/(GetDocumentType() != DOCUMENT_DOCX), true, 0, bWritePropertiesAsLstStyles );
         pFS->endElementNS( nXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_txBody : XML_txbx) );
         if (GetDocumentType() == DOCUMENT_DOCX)
             WriteText( xIface, /*bBodyPr=*/true, /*bText=*/false, /*nXmlNamespace=*/nXmlNamespace );
