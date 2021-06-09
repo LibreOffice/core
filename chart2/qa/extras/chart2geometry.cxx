@@ -28,7 +28,7 @@
 using uno::Reference;
 using beans::XPropertySet;
 
-class Chart2GeometryTest : public ChartTest, public XmlTestTools
+class Chart2GeometryTest : public ChartTest
 {
 protected:
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override;
