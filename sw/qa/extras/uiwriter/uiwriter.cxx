@@ -196,6 +196,7 @@ public:
     void testFdo75898();
     void testFdo74981();
     void testTdf98512();
+    void testTdf78150();
     void testShapeTextboxSelect();
     void testShapeTextboxDelete();
     void testAnchorChangeSelection();
@@ -334,6 +335,7 @@ public:
     CPPUNIT_TEST(testTdf83260);
     CPPUNIT_TEST(testTdf130274);
     CPPUNIT_TEST(testMergeDoc);
+    CPPUNIT_TEST(testTdf78150);
     CPPUNIT_TEST(testCreatePortions);
     CPPUNIT_TEST(testBookmarkUndo);
     CPPUNIT_TEST(testFdo85876);
@@ -1713,6 +1715,21 @@ void SwUiWriterTest::testTdf79717()
         CPPUNIT_ASSERT_EQUAL(OUString("new"), xCursor->getString());
         CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xCursor, "CharWeight"));
     }
+}
+
+void SwUiWriterTest::testTdf78150(){
+
+    SwDoc* pDoc = createDoc("tdf78150.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Insert("test");
+
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
+
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | KEY_BACKSPACE);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
 }
 
 void SwUiWriterTest::testTdf137532()
