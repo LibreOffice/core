@@ -221,6 +221,11 @@ SdOutliner::~SdOutliner()
 {
 }
 
+OutlinerView* SdOutliner::getOutlinerView()
+{
+    return mpImpl->GetOutlinerView();
+}
+
 /** Prepare find&replace or spellchecking.  This distinguishes between three
     cases:
     <ol>
@@ -310,7 +315,7 @@ void SdOutliner::EndSpelling()
 
         // Remove and, if previously created by us, delete the outline
         // view.
-        OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+        OutlinerView* pOutlinerView = getOutlinerView();
         if (pOutlinerView != nullptr)
         {
             RemoveView(pOutlinerView);
@@ -363,7 +368,7 @@ bool SdOutliner::SpellNextDocument()
         Initialize (true);
 
         mpWindow = pViewShell->GetActiveWindow();
-        OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+        OutlinerView* pOutlinerView = getOutlinerView();
         if (pOutlinerView != nullptr)
             pOutlinerView->SetWindow(mpWindow);
         ProvideNextTextObject ();
@@ -521,7 +526,7 @@ void SdOutliner::Initialize (bool bDirectionIsForward)
         // current selection and place cursor at its start or end.
         if( nullptr != dynamic_cast< const sd::OutlineViewShell *>( pViewShell.get() ))
         {
-            ESelection aSelection = mpImpl->GetOutlinerView()->GetSelection ();
+            ESelection aSelection = getOutlinerView()->GetSelection ();
             if (mbDirectionIsForward)
             {
                 aSelection.nEndPara = aSelection.nStartPara;
@@ -532,7 +537,7 @@ void SdOutliner::Initialize (bool bDirectionIsForward)
                 aSelection.nStartPara = aSelection.nEndPara;
                 aSelection.nStartPos = aSelection.nEndPos;
             }
-            mpImpl->GetOutlinerView()->SetSelection (aSelection);
+            getOutlinerView()->SetSelection (aSelection);
         }
 
         // When not beginning the search at the beginning of the search area
@@ -587,7 +592,7 @@ bool SdOutliner::SearchAndReplaceAll()
     if( nullptr != dynamic_cast< const sd::OutlineViewShell *>( pViewShell.get() ))
     {
         // Put the cursor to the beginning/end of the outliner.
-        mpImpl->GetOutlinerView()->SetSelection (GetSearchStartPosition ());
+        getOutlinerView()->SetSelection (GetSearchStartPosition ());
 
         // The outliner does all the work for us when we are in this mode.
         SearchAndReplaceOnce();
@@ -808,20 +813,18 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
 {
     DetectChange ();
 
-    OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
     std::shared_ptr<sd::ViewShell> pViewShell (mpWeakViewShell.lock());
 
-    if (!pOutlinerView || !GetEditEngine().HasView(&pOutlinerView->GetEditView()))
+    if (!getOutlinerView() || !GetEditEngine().HasView(&getOutlinerView()->GetEditView()))
     {
         mpImpl->ProvideOutlinerView(*this, pViewShell, mpWindow);
-        pOutlinerView = mpImpl->GetOutlinerView();
     }
 
     if (pViewShell)
     {
         mpView = pViewShell->GetView();
         mpWindow = pViewShell->GetActiveWindow();
-        pOutlinerView->SetWindow(mpWindow);
+        getOutlinerView()->SetWindow(mpWindow);
         auto& rVectorGraphicSearchContext = mpImpl->getVectorGraphicSearchContext();
         if (nullptr != dynamic_cast<const sd::DrawViewShell*>(pViewShell.get()))
         {
@@ -873,14 +876,14 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
                 // the next match.
                 if (meMode == SEARCH && mpSearchItem->GetCommand() == SvxSearchCmd::REPLACE)
                 {
-                    if (pOutlinerView->GetSelection().HasRange())
-                        pOutlinerView->StartSearchAndReplace(*mpSearchItem);
+                    if (getOutlinerView()->GetSelection().HasRange())
+                        getOutlinerView()->StartSearchAndReplace(*mpSearchItem);
                 }
 
                 // Search for the next match.
                 if (mpSearchItem->GetCommand() != SvxSearchCmd::REPLACE_ALL)
                 {
-                    nMatchCount = pOutlinerView->StartSearchAndReplace(*mpSearchItem);
+                    nMatchCount = getOutlinerView()->StartSearchAndReplace(*mpSearchItem);
                 }
             }
 
@@ -900,16 +903,16 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
                     // Now that the mbEndOfSearch flag guards this block the
                     // following assertion and return should not be
                     // necessary anymore.
-                    DBG_ASSERT(GetEditEngine().HasView(&pOutlinerView->GetEditView() ),
+                    DBG_ASSERT(GetEditEngine().HasView(&getOutlinerView()->GetEditView() ),
                         "SearchAndReplace without valid view!" );
-                    if ( ! GetEditEngine().HasView( &pOutlinerView->GetEditView() ) )
+                    if ( ! GetEditEngine().HasView( &getOutlinerView()->GetEditView() ) )
                     {
                         mpDrawDocument->GetDocSh()->SetWaitCursor( false );
                         return true;
                     }
 
                     if (meMode == SEARCH)
-                        pOutlinerView->StartSearchAndReplace(*mpSearchItem);
+                        getOutlinerView()->StartSearchAndReplace(*mpSearchItem);
                 }
             }
         }
@@ -920,12 +923,12 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
             // wrap around search is done.
             while (true)
             {
-                int nResult = pOutlinerView->StartSearchAndReplace(*mpSearchItem);
+                int nResult = getOutlinerView()->StartSearchAndReplace(*mpSearchItem);
                 if (nResult == 0)
                 {
                     if (HandleFailedSearch ())
                     {
-                        pOutlinerView->SetSelection (GetSearchStartPosition ());
+                        getOutlinerView()->SetSelection (GetSearchStartPosition ());
                         continue;
                     }
                 }
@@ -940,7 +943,7 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
 
     if (pViewShell && comphelper::LibreOfficeKit::isActive() && mbStringFound)
     {
-        sendLOKSearchResultCallback(pViewShell, pOutlinerView, pSelections);
+        sendLOKSearchResultCallback(pViewShell, getOutlinerView(), pSelections);
     }
 
     return mbEndOfSearch;
@@ -970,7 +973,7 @@ void SdOutliner::DetectChange()
             mpView->UnmarkAllObj (pPageView);
         mpView->SdrEndTextEdit();
         SetUpdateMode(false);
-        OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+        OutlinerView* pOutlinerView = getOutlinerView();
         if (pOutlinerView != nullptr)
             pOutlinerView->SetOutputArea( ::tools::Rectangle( Point(), Size(1, 1) ) );
         if (meMode == SPELL)
@@ -1126,8 +1129,8 @@ void SdOutliner::RestoreStartPosition()
             {
                 PutTextIntoOutliner();
                 EnterEditMode(false);
-                if (OutlinerView* pOutlinerView = mpImpl->GetOutlinerView())
-                    pOutlinerView->SetSelection(maStartSelection);
+                if (getOutlinerView())
+                    getOutlinerView()->SetSelection(maStartSelection);
             }
         }
     }
@@ -1192,7 +1195,7 @@ void SdOutliner::ProvideNextTextObject()
         DBG_UNHANDLED_EXCEPTION("sd.view");
     }
     SetUpdateMode(false);
-    OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+    OutlinerView* pOutlinerView = getOutlinerView();
     if (pOutlinerView != nullptr)
         pOutlinerView->SetOutputArea( ::tools::Rectangle( Point(), Size(1, 1) ) );
     if (meMode == SPELL)
@@ -1362,7 +1365,7 @@ void SdOutliner::EndOfSearch()
             if( nullptr != dynamic_cast< const sd::OutlineViewShell *>( pViewShell.get() ))
             {
                 // Set cursor to first character of the document.
-                OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+                OutlinerView* pOutlinerView = getOutlinerView();
                 if (pOutlinerView != nullptr)
                     pOutlinerView->SetSelection (GetSearchStartPosition ());
             }
@@ -1514,7 +1517,7 @@ void SdOutliner::PrepareSearchAndReplace()
     mpDrawDocument->GetDocSh()->SetWaitCursor( false );
     // Start search at the right end of the current object's text
     // depending on the search direction.
-    OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+    OutlinerView* pOutlinerView = getOutlinerView();
     if (pOutlinerView != nullptr)
         pOutlinerView->SetSelection (GetSearchStartPosition ());
 }
@@ -1610,7 +1613,7 @@ void SdOutliner::SetPage (EditMode eEditMode, sal_uInt16 nPageIndex)
 
 void SdOutliner::EnterEditMode (bool bGrabFocus)
 {
-    OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+    OutlinerView* pOutlinerView = getOutlinerView();
     if (!(pOutlinerView && mpSearchSpellTextObj))
         return;
 
@@ -1678,7 +1681,7 @@ ESelection SdOutliner::GetSearchStartPosition() const
 
 bool SdOutliner::HasNoPreviousMatch()
 {
-    OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+    OutlinerView* pOutlinerView = getOutlinerView();
 
     DBG_ASSERT (pOutlinerView!=nullptr, "outline view in SdOutliner::HasNoPreviousMatch is NULL");
 
@@ -1691,7 +1694,7 @@ bool SdOutliner::HandleFailedSearch()
 {
     bool bContinueSearch = false;
 
-    OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+    OutlinerView* pOutlinerView = getOutlinerView();
     if (pOutlinerView != nullptr && mpSearchItem != nullptr)
     {
         // Detect whether there is/may be a prior match.  If there is then
@@ -1741,7 +1744,7 @@ void SdOutliner::SetViewShell (const std::shared_ptr<sd::ViewShell>& rpViewShell
         mpWindow = rpViewShell->GetActiveWindow();
 
         mpImpl->ProvideOutlinerView(*this, rpViewShell, mpWindow);
-        OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+        OutlinerView* pOutlinerView = getOutlinerView();
         if (pOutlinerView != nullptr)
             pOutlinerView->SetWindow(mpWindow);
     }
@@ -1787,7 +1790,7 @@ void SdOutliner::StartConversion( LanguageType nSourceLanguage,  LanguageType nT
 
     BeginConversion();
 
-    OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+    OutlinerView* pOutlinerView = getOutlinerView();
     if (pOutlinerView != nullptr)
     {
         pOutlinerView->StartTextConversion(
@@ -1870,7 +1873,7 @@ bool SdOutliner::ConvertNextDocument()
 
     Initialize ( true );
 
-    OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+    OutlinerView* pOutlinerView = getOutlinerView();
     if (pOutlinerView != nullptr)
     {
         mpWindow = pViewShell->GetActiveWindow();
