@@ -20,6 +20,10 @@ bool VCL_DLLPUBLIC isUnipoll();
 void VCL_DLLPUBLIC registerPollCallbacks(LibreOfficeKitPollCallback pPollCallback,
                                          LibreOfficeKitWakeCallback pWakeCallback, void* pData);
 void VCL_DLLPUBLIC unregisterPollCallbacks();
+
+// Called to tell VCL that the number of document views has changed, so that VCL
+// can adjust e.g. sizes of bitmap caches to scale well with larger number of users.
+void VCL_DLLPUBLIC numberOfViewsChanged(int count);
 }
 
 #endif // INCLUDE_VCL_LOK_HXX
