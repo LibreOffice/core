@@ -77,14 +77,14 @@ namespace {
 struct PathUserData_Impl
 {
     SvtPathOptions::Paths  nRealId;
-    SfxItemState    eState;
+    bool            bItemStateSet;
     OUString        sUserPath;
     OUString        sWritablePath;
     bool            bReadOnly;
 
     explicit PathUserData_Impl(SvtPathOptions::Paths nId)
         : nRealId(nId)
-        , eState(SfxItemState::UNKNOWN)
+        , bItemStateSet(false)
         , bReadOnly(false)
     {
     }
@@ -227,7 +227,7 @@ bool SvxPathTabPage::FillItemSet( SfxItemSet* )
     {
         PathUserData_Impl* pPathImpl = reinterpret_cast<PathUserData_Impl*>(m_xPathBox->get_id(i).toInt64());
         SvtPathOptions::Paths nRealId = pPathImpl->nRealId;
-        if (pPathImpl->eState == SfxItemState::SET)
+        if (pPathImpl->bItemStateSet )
             SetPathList( nRealId, pPathImpl->sUserPath, pPathImpl->sWritablePath );
     }
     return true;
@@ -403,7 +403,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, StandardHdl_Impl, weld::Button&, void)
                 }
             }
             m_xPathBox->set_text(rEntry, Convert_Impl(sTemp), 1);
-            pPathImpl->eState = SfxItemState::SET;
+            pPathImpl->bItemStateSet = true;
             pPathImpl->sUserPath = sUserPath.makeStringAndClear();
             pPathImpl->sWritablePath = sWritablePath;
         }
@@ -448,7 +448,7 @@ void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
         return;
 
     m_xPathBox->set_text(nEntry, Convert_Impl(sNewPathStr), 1);
-    pPathImpl->eState = SfxItemState::SET;
+    pPathImpl->bItemStateSet = true;
     pPathImpl->sWritablePath = sNewPathStr;
     if ( SvtPathOptions::Paths::Work == pPathImpl->nRealId )
     {
@@ -530,7 +530,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl, weld::Button&, void)
 
             m_xPathBox->set_text(nEntry, Convert_Impl(sFullPath), 1);
             // save modified flag
-            pPathImpl->eState = SfxItemState::SET;
+            pPathImpl->bItemStateSet = true;
             pPathImpl->sUserPath = sUser;
             pPathImpl->sWritablePath = sWritable;
         }
