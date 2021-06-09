@@ -620,7 +620,7 @@
                 <property name="hexpand">True</property>
                 <child>
                   <object class="GtkExpander" id="OptionsExpander">
-                    <property name="visible">True</property>
+                    <property name="visible">False</property>
                     <property name="can_focus">True</property>
                     <property name="margin-start">6</property>
                     <property name="margin_top">1</property>
