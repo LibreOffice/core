@@ -862,6 +862,17 @@ std::unique_ptr<weld::RadioButton> JSInstanceBuilder::weld_radio_button(const OS
     return pWeldWidget;
 }
 
+std::unique_ptr<weld::Frame> JSInstanceBuilder::weld_frame(const OString& id)
+{
+    ::VclFrame* pFrame = m_xBuilder->get<::VclFrame>(id);
+    auto pWeldWidget = pFrame ? std::make_unique<JSFrame>(this, pFrame, this, false) : nullptr;
+
+    if (pWeldWidget)
+        RememberWidget(id, pWeldWidget.get());
+
+    return pWeldWidget;
+}
+
 weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParent,
                                                             VclMessageType eMessageType,
                                                             VclButtonsType eButtonType,
@@ -1388,6 +1399,12 @@ void JSRadioButton::set_active(bool active)
 {
     SalInstanceRadioButton::set_active(active);
     sendUpdate();
+}
+
+JSFrame::JSFrame(JSDialogSender* pSender, ::VclFrame* pFrame, SalInstanceBuilder* pBuilder,
+                 bool bTakeOwnership)
+    : JSWidget<SalInstanceFrame, ::VclFrame>(pSender, pFrame, pBuilder, bTakeOwnership)
+{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
