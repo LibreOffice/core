@@ -69,7 +69,7 @@ ScAccessibleEditObject::ScAccessibleEditObject(
     , mbHasFocus(false)
     , m_pScDoc(nullptr)
 {
-    InitAcc(rxParent, pEditView, pWin, nullptr, rName, rDescription);
+    InitAcc(rxParent, pEditView, pWin, rName, rDescription);
 }
 
 ScAccessibleEditObject::ScAccessibleEditObject(EditObjectType eObjectType)
@@ -86,13 +86,12 @@ ScAccessibleEditObject::ScAccessibleEditObject(EditObjectType eObjectType)
 void ScAccessibleEditObject::InitAcc(
         const uno::Reference<XAccessible>& rxParent,
         EditView* pEditView, vcl::Window* pWin,
-        ScTextWnd* pTxtWnd, const OUString& rName,
+        const OUString& rName,
         const OUString& rDescription)
 {
     SetParent(rxParent);
     mpEditView = pEditView;
     mpWindow = pWin;
-    mpTextWnd = pTxtWnd;
 
     CreateTextHelper();
     SetName(rName);
