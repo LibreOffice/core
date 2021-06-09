@@ -46,4 +46,3 @@
 	manifest:key-derivation-name CDATA #REQUIRED
 	manifest:salt CDATA #REQUIRED
 	manifest:iteration-count CDATA #REQUIRED>
-
