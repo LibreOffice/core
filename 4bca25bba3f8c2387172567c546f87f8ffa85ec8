@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ae673a09_bcb4bcad",
+        "filename": "sc/inc/unonames.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-06-09T09:03:39Z",
+      "side": 1,
+      "message": "Likely not needed",
+      "revId": "4bca25bba3f8c2387172567c546f87f8ffa85ec8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14509ba9_9e4ed826",
+        "filename": "sc/source/ui/drawfunc/fudraw.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-06-09T09:03:39Z",
+      "side": 1,
+      "message": "ScTabViewShell not initialized yet?",
+      "range": {
+        "startLine": 65,
+        "startChar": 17,
+        "endLine": 65,
+        "endChar": 30
+      },
+      "revId": "4bca25bba3f8c2387172567c546f87f8ffa85ec8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5e48871_b313e150",
+        "filename": "sc/source/ui/unoobj/viewuno.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-06-09T09:03:39Z",
+      "side": 1,
+      "message": "Likely not needed",
+      "range": {
+        "startLine": 104,
+        "startChar": 15,
+        "endLine": 104,
+        "endChar": 34
+      },
+      "revId": "4bca25bba3f8c2387172567c546f87f8ffa85ec8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "341f4e3f_2a398a20",
+        "filename": "sc/source/ui/unoobj/viewuno.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1746,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-06-09T09:03:39Z",
+      "side": 1,
+      "message": "Same here",
+      "range": {
+        "startLine": 1746,
+        "startChar": 33,
+        "endLine": 1746,
+        "endChar": 52
+      },
+      "revId": "4bca25bba3f8c2387172567c546f87f8ffa85ec8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47d9b8ce_c01c6299",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2631,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-06-09T09:03:39Z",
+      "side": 1,
+      "message": "Perhaps a variable is more efficient than reading all the data every time.",
+      "range": {
+        "startLine": 2631,
+        "startChar": 28,
+        "endLine": 2631,
+        "endChar": 33
+      },
+      "revId": "4bca25bba3f8c2387172567c546f87f8ffa85ec8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
