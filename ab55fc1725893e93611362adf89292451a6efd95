@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "4a45673f_6e0ec986",
+        "filename": "sc/source/ui/miscdlgs/dataproviderdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2021-06-09T18:30:16Z",
+      "side": 1,
+      "message": "I can\u0027t think of a reason why it would make sense to have two ui files in one class. Tushar can you maybe explain what you are trying to do?",
+      "parentUuid": "5758f7a9_a418b0ba",
+      "range": {
+        "startLine": 57,
+        "startChar": 30,
+        "endLine": 57,
+        "endChar": 43
+      },
+      "revId": "ab55fc1725893e93611362adf89292451a6efd95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "484b741f_2bb7a89c",
         "filename": "sc/source/ui/miscdlgs/dataproviderdlg.cxx",
         "patchSetId": 1
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "Please check the event handler at line 76 -\u003e mxApplyBtn-\u003econnect_clicked(LINK(this, ScDataProviderBaseControl, ApplyBtnHdl));",
       "parentUuid": "484b741f_2bb7a89c",
+      "range": {
+        "startLine": 62,
+        "startChar": 6,
+        "endLine": 62,
+        "endChar": 16
+      },
+      "revId": "ab55fc1725893e93611362adf89292451a6efd95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d652cf9_e70b63d6",
+        "filename": "sc/source/ui/miscdlgs/dataproviderdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2021-06-09T18:30:16Z",
+      "side": 1,
+      "message": "I think the issue is more that is now connected to the wrong builder object.",
+      "parentUuid": "184b4d98_e40265a2",
       "range": {
         "startLine": 62,
         "startChar": 6,
