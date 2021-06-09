@@ -175,7 +175,9 @@ private:
     std::unique_ptr<accessibility::AccessibleTextHelper> mpTextHelper;
     EditView*      mpEditView;
     VclPtr<vcl::Window> mpWindow;
+protected:
     ScTextWnd* mpTextWnd;
+private:
     EditObjectType meObjectType;
     bool           mbHasFocus;
 
@@ -220,6 +222,12 @@ public:
 
     using ScAccessibleContextBase::disposing;
     virtual void SAL_CALL disposing() override;
+};
+
+class ScAccessibleEditLineObject : public ScAccessibleEditControlObject
+{
+public:
+    ScAccessibleEditLineObject(ScTextWnd* pTextWnd);
 };
 
 #endif

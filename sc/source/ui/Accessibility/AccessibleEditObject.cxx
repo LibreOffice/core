@@ -27,6 +27,7 @@
 #include <editsrc.hxx>
 #include <scmod.hxx>
 #include <inputhdl.hxx>
+#include <inputwin.hxx>
 
 #include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -593,6 +594,14 @@ OutputDevice* ScAccessibleEditControlObject::GetOutputDeviceForView()
     if (!m_pController || !m_pController->GetDrawingArea())
         return nullptr;
     return &m_pController->GetDrawingArea()->get_ref_device();
+}
+
+ScAccessibleEditLineObject::ScAccessibleEditLineObject(ScTextWnd* pTextWnd)
+    : ScAccessibleEditControlObject(pTextWnd, ScAccessibleEditObject::EditLine)
+{
+    // tdf#141769 set this early so its always available, even before the on-demand
+    // editview is created
+    mpTextWnd = pTextWnd;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

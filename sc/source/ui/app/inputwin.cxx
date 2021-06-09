@@ -2139,7 +2139,7 @@ void ScTextWnd::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
 css::uno::Reference< css::accessibility::XAccessible > ScTextWnd::CreateAccessible()
 {
-    pAcc = new ScAccessibleEditControlObject(this, ScAccessibleEditObject::EditLine);
+    pAcc = new ScAccessibleEditLineObject(this);
     return pAcc;
 }
 
