@@ -271,10 +271,19 @@ public:
     void WriteTransformation(const css::uno::Reference< css::drawing::XShape >& xShape, const tools::Rectangle& rRectangle,
                   sal_Int32 nXmlNamespace, bool bFlipH = false, bool bFlipV = false, sal_Int32 nRotation = 0, bool bIsGroupShape = false);
 
-    void WriteText( const css::uno::Reference< css::uno::XInterface >& rXIface, bool bBodyPr, bool bText = true, sal_Int32 nXmlNamespace = 0);
+    void WriteText( const css::uno::Reference< css::uno::XInterface >& rXIface, bool bBodyPr, bool bText = true, sal_Int32 nXmlNamespace = 0, bool bWritePropertiesAsLstStyles = false);
+
+    /** Populates the lstStyle with the shape's text run and paragraph properties */
+    void WriteLstStyles(const css::uno::Reference<css::text::XTextContent>& rParagraph,
+                       bool& rbOverridingCharHeight, sal_Int32& rnCharHeight,
+                       const css::uno::Reference<css::beans::XPropertySet>& rXShapePropSet);
     void WriteParagraph( const css::uno::Reference< css::text::XTextContent >& rParagraph,
                          bool& rbOverridingCharHeight, sal_Int32& rnCharHeight, const css::uno::Reference< css::beans::XPropertySet >& rXShapePropSet);
-    void WriteParagraphProperties(const css::uno::Reference< css::text::XTextContent >& rParagraph, float fFirstCharHeight);
+    /** Writes paragraph properties
+
+        @returns true if any paragraph properties were written
+    */
+    bool WriteParagraphProperties(const css::uno::Reference< css::text::XTextContent >& rParagraph, float fFirstCharHeight, const sal_Int32 nElement = XML_pPr );
     void WriteParagraphNumbering(const css::uno::Reference< css::beans::XPropertySet >& rXPropSet, float fFirstCharHeight,
                                   sal_Int16 nLevel );
     void WriteParagraphTabStops(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet);
