@@ -1824,4 +1824,19 @@ public:
     virtual ~SalInstanceRadioButton() override;
 };
 
+class SalInstanceFrame : public SalInstanceContainer, public virtual weld::Frame
+{
+private:
+    VclPtr<VclFrame> m_xFrame;
+
+public:
+    SalInstanceFrame(VclFrame* pFrame, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+
+    virtual void set_label(const OUString& rText) override;
+
+    virtual OUString get_label() const override;
+
+    virtual std::unique_ptr<weld::Label> weld_label_widget() const override;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
