@@ -116,7 +116,7 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
     void checkGradient(const GDIMetaFile& rMetaFile);
     void testGradient();
 
-    //void checkGradientEx(const GDIMetaFile& rMetaFile);
+    void checkGradientEx(const GDIMetaFile& rMetaFile);
     void testGradientEx();
 
     void checkHatch(const GDIMetaFile& rMetaFile);
@@ -1254,8 +1254,109 @@ void SvmTest::testGradient()
     checkGradient(readFile(u"gradient.svm"));
 }
 
+void SvmTest::checkGradientEx(const GDIMetaFile& rMetaFile)
+{
+    xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
+
+    assertXPathAttrs(pDoc, "/metafile/gradientex[1]", {
+        {"style", "Linear"},
+        {"startcolor", "#ffffff"},
+        {"endcolor", "#000000"},
+        {"angle", "0"},
+        {"border", "0"},
+        {"offsetx", "50"},
+        {"offsety", "50"},
+        {"startintensity", "100"},
+        {"endintensity", "100"},
+        {"steps", "0"}
+    });
+    assertXPathAttrs(pDoc, "/metafile/gradientex[1]/polygon/point[1]", {
+        {"x", "1"},
+        {"y", "8"}
+    });
+    assertXPathAttrs(pDoc, "/metafile/gradientex[1]/polygon/point[2]", {
+        {"x", "2"},
+        {"y", "7"}
+    });
+    assertXPathAttrs(pDoc, "/metafile/gradientex[1]/polygon/point[3]", {
+        {"x", "3"},
+        {"y", "6"}
+    });
+    assertXPathAttrs(pDoc, "/metafile/gradientex[2]", {
+        {"style", "Axial"},
+        {"startcolor", "#ff00ff"},
+        {"endcolor", "#008080"},
+        {"angle", "55"},
+        {"border", "10"},
+        {"offsetx", "22"},
+        {"offsety", "24"},
+        {"startintensity", "4"},
+        {"endintensity", "14"},
+        {"steps", "64"}
+    });
+    assertXPathAttrs(pDoc, "/metafile/gradientex[2]/polygon[1]/point[1]", {
+        {"x", "1"},
+        {"y", "2"}
+    });
+    assertXPathAttrs(pDoc, "/metafile/gradientex[2]/polygon[1]/point[2]", {
+        {"x", "3"},
+        {"y", "4"}
+    });
+    assertXPathAttrs(pDoc, "/metafile/gradientex[2]/polygon[2]/point[1]", {
+        {"x", "8"},
+        {"y", "9"}
+    });
+    assertXPathAttrs(pDoc, "/metafile/gradientex[2]/polygon[2]/point[2]", {
+        {"x", "6"},
+        {"y", "7"}
+    });
+}
+
 void SvmTest::testGradientEx()
-{}
+{
+    GDIMetaFile aGDIMetaFile;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
+
+    tools::Polygon aPolygon(3);
+    aPolygon.SetPoint(Point(1, 8), 0);
+    aPolygon.SetPoint(Point(2, 7), 1);
+    aPolygon.SetPoint(Point(3, 6), 2);
+
+    tools::PolyPolygon aPolyPolygon(1);
+    aPolyPolygon.Insert(aPolygon);
+
+    Gradient aGradient(GradientStyle::Linear, COL_WHITE, COL_BLACK);
+    pVirtualDev->DrawGradient(aPolyPolygon, aGradient);
+
+    tools::Polygon aPolygon2(2);
+    aPolygon2.SetPoint(Point(1, 2), 0);
+    aPolygon2.SetPoint(Point(3, 4), 1);
+
+    tools::Polygon aPolygon3(2);
+    aPolygon3.SetPoint(Point(8, 9), 0);
+    aPolygon3.SetPoint(Point(6, 7), 1);
+
+    tools::PolyPolygon aPolyPolygon2(1);
+    aPolyPolygon2.Insert(aPolygon2);
+    aPolyPolygon2.Insert(aPolygon3);
+
+    Gradient aGradient2;
+    aGradient2.SetStyle(GradientStyle::Axial);
+    aGradient2.SetStartColor(COL_LIGHTMAGENTA);
+    aGradient2.SetEndColor(COL_CYAN);
+    aGradient2.SetAngle(Degree10(55));
+    aGradient2.SetBorder(10);
+    aGradient2.SetOfsX(22);
+    aGradient2.SetOfsY(24);
+    aGradient2.SetStartIntensity(4);
+    aGradient2.SetEndIntensity(14);
+    aGradient2.SetSteps(64);
+    pVirtualDev->DrawGradient(aPolyPolygon2, aGradient2);
+
+    checkGradientEx(writeAndReadStream(aGDIMetaFile));
+    checkGradientEx(readFile(u"gradientex.svm"));
+}
 
 void SvmTest::checkHatch(const GDIMetaFile& rMetaFile)
 {
