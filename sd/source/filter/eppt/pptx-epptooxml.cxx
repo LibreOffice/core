@@ -28,6 +28,7 @@
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/xmltools.hxx>
 #include <sax/fshelper.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
@@ -51,6 +52,10 @@
 
 #include "pptx-animations.hxx"
 #include "../ppt/pptanimations.hxx"
+
+#include <svx/svdpage.hxx>
+#include <svx/unoapi.hxx>
+#include <sdpage.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
@@ -106,7 +111,11 @@ public:
     ShapeExport&        WriteTextShape(const Reference< XShape >& xShape) override;
     ShapeExport&        WriteUnknownShape(const Reference< XShape >& xShape) override;
     ShapeExport&        WritePlaceholderShape(const Reference< XShape >& xShape, PlaceholderType ePlaceholder);
+    /** Writes a placeholder shape that references the placeholder on the master slide */
+    ShapeExport&        WritePlaceholderReferenceShape(PlaceholderType ePlaceholder, unsigned nReferencedPlaceholderIdx, PageType ePageType, Reference<XPropertySet>& rXPagePropSet);
     ShapeExport&        WritePageShape(const Reference< XShape >& xShape, PageType ePageType, bool bPresObj);
+    /** Writes textbody of a placeholder that references the placeholder on the master slide */
+    ShapeExport&        WritePlaceholderReferenceTextBody(PlaceholderType ePlaceholder, PageType ePageType, const Reference<XPropertySet> xPagePropSet);
 
     // helper parts
     bool WritePlaceholder(const Reference< XShape >& xShape, PlaceholderType ePlaceholder, bool bMaster);
@@ -1452,6 +1461,8 @@ void PowerPointExport::WriteShapeTree(const FSHelperPtr& pFS, PageType ePageType
         }
     }
 
+    if ( ePageType == NORMAL || ePageType == LAYOUT )
+        WritePlaceholderReferenceShapes(aDML, ePageType);
     pFS->endElementNS(XML_p, XML_spTree);
 }
 
@@ -1517,9 +1528,142 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
         WriteBlipFill(xProps, "Graphic");
     mpFS->endElementNS(XML_p, XML_spPr);
 
-    WriteTextBox(xShape, XML_p);
+    WriteTextBox(xShape, XML_p, bUsePlaceholderIndex);
 
     mpFS->endElementNS(XML_p, XML_sp);
+
+    return *this;
+}
+
+ShapeExport& PowerPointShapeExport::WritePlaceholderReferenceShape(
+    PlaceholderType ePlaceholder, unsigned nReferencedPlaceholderIdx, PageType ePageType,
+    Reference<XPropertySet>& rXPagePropSet)
+{
+    mpFS->startElementNS(XML_p, XML_sp);
+
+    // non visual shape properties
+    mpFS->startElementNS(XML_p, XML_nvSpPr);
+    const OString aPlaceholderID("PlaceHolder " + OString::number(mnShapeIdMax++));
+    GetFS()->singleElementNS(XML_p, XML_cNvPr, XML_id, OString::number(mnShapeIdMax), XML_name,
+                             aPlaceholderID.getStr());
+
+    mpFS->startElementNS(XML_p, XML_cNvSpPr);
+    mpFS->singleElementNS(XML_a, XML_spLocks, XML_noGrp, "1");
+    mpFS->endElementNS(XML_p, XML_cNvSpPr);
+    mpFS->startElementNS(XML_p, XML_nvPr);
+
+    const char* pType = getPlaceholderTypeName(ePlaceholder);
+    mpFS->singleElementNS(XML_p, XML_ph, XML_type, pType, XML_idx,
+                          OString::number(nReferencedPlaceholderIdx));
+    mpFS->endElementNS(XML_p, XML_nvPr);
+    mpFS->endElementNS(XML_p, XML_nvSpPr);
+
+    // visual shape properties
+    mpFS->startElementNS(XML_p, XML_spPr);
+    mpFS->endElementNS(XML_p, XML_spPr);
+
+    WritePlaceholderReferenceTextBody(ePlaceholder, ePageType, rXPagePropSet);
+
+    mpFS->endElementNS(XML_p, XML_sp);
+
+    return *this;
+}
+
+ShapeExport& PowerPointShapeExport::WritePlaceholderReferenceTextBody(
+    PlaceholderType ePlaceholder, PageType ePageType, const Reference<XPropertySet> xPagePropSet)
+{
+    mpFS->startElementNS(XML_p, XML_txBody);
+    mpFS->singleElementNS(XML_a, XML_bodyPr);
+    mpFS->startElementNS(XML_a, XML_p);
+
+    switch (ePlaceholder)
+    {
+        case Header:
+            break;
+        case Footer:
+        {
+            OUString aFooterText;
+            if (ePageType == LAYOUT)
+            {
+                aFooterText = "Footer";
+            }
+            else
+            {
+                xPagePropSet->getPropertyValue("FooterText") >>= aFooterText;
+            }
+            mpFS->startElementNS(XML_a, XML_r);
+            mpFS->startElementNS(XML_a, XML_t);
+            mpFS->writeEscaped(aFooterText);
+            mpFS->endElementNS(XML_a, XML_t);
+            mpFS->endElementNS(XML_a, XML_r);
+            break;
+        }
+        case SlideNumber:
+        {
+            OUString aSlideNum;
+            sal_Int32 nSlideNum = 0;
+            if (ePageType == LAYOUT)
+            {
+                aSlideNum = "<#>";
+            }
+            else
+            {
+                xPagePropSet->getPropertyValue("Number") >>= nSlideNum;
+                aSlideNum = OUString::number(nSlideNum);
+            }
+            OString aUUID(comphelper::xml::generateGUIDString());
+            mpFS->startElementNS(XML_a, XML_fld, XML_id, aUUID.getStr(), XML_type, "slidenum");
+            mpFS->startElementNS(XML_a, XML_t);
+            mpFS->writeEscaped(aSlideNum);
+            mpFS->endElementNS(XML_a, XML_t);
+            mpFS->endElementNS(XML_a, XML_fld);
+            break;
+        }
+        case DateAndTime:
+        {
+            OUString aDateTimeType = "datetime1";
+            bool bIsDateTimeFixed;
+            xPagePropSet->getPropertyValue("IsDateTimeFixed") >>= bIsDateTimeFixed;
+
+            if(ePageType != LAYOUT && !bIsDateTimeFixed)
+            {
+                sal_Int32 nDateTimeFormat;
+                xPagePropSet->getPropertyValue("DateTimeFormat") >>= nDateTimeFormat;
+
+                // 4 LSBs represent the date
+                SvxDateFormat eDate = static_cast<SvxDateFormat>(nDateTimeFormat & 0x0f);
+                // the 4 bits after the date bits represent the time
+                SvxTimeFormat eTime = static_cast<SvxTimeFormat>(nDateTimeFormat >> 4);
+                aDateTimeType = GetDatetimeTypeFromDateTime(eDate, eTime);
+
+                if (aDateTimeType == "datetime")
+                    aDateTimeType = "datetime1";
+            }
+
+            if(!bIsDateTimeFixed)
+            {
+                OString aUUID(comphelper::xml::generateGUIDString());
+                mpFS->startElementNS(XML_a, XML_fld, XML_id, aUUID.getStr(), XML_type, aDateTimeType);
+                mpFS->endElementNS(XML_a, XML_fld);
+            }
+            else
+            {
+                OUString aDateTimeText;
+                xPagePropSet->getPropertyValue("DateTimeText") >>= aDateTimeText;
+                mpFS->startElementNS(XML_a, XML_r);
+                mpFS->startElementNS(XML_a, XML_t);
+                mpFS->writeEscaped(aDateTimeText);
+                mpFS->endElementNS(XML_a, XML_t);
+                mpFS->endElementNS(XML_a, XML_r);
+            }
+            break;
+        }
+        default:
+            SAL_INFO("sd.eppt", "warning: no defined textbody for referenced placeholder type: "
+                                    << ePlaceholder);
+    }
+    mpFS->endElementNS(XML_a, XML_p);
+    mpFS->endElementNS(XML_p, XML_txBody);
 
     return *this;
 }
@@ -2032,10 +2176,104 @@ void PowerPointExport::WriteDiagram(const FSHelperPtr& pFS, PowerPointShapeExpor
     pFS->endElementNS(XML_p, XML_graphicFrame);
 }
 
+void PowerPointExport::WritePlaceholderReferenceShapes(PowerPointShapeExport& rDML, PageType ePageType)
+{
+    bool bCheckProps = ePageType == NORMAL;
+    Reference<XShape> xShape;
+    Any aAny;
+    OUString aText;
+    if (ePageType == LAYOUT
+        || (bCheckProps && PropValue::GetPropertyValue(aAny, mXPagePropSet, "IsFooterVisible", true)
+            && aAny == true && GetPropertyValue(aAny, mXPagePropSet, "FooterText", true)
+            && (aAny >>= aText) && !aText.isEmpty()))
+    {
+        if ((xShape = GetReferencedPlaceholderXShape(Footer, ePageType)))
+            rDML.WritePlaceholderReferenceShape(Footer,
+                                                maPlaceholderShapeToIndexMap.find(xShape)->second,
+                                                ePageType, mXPagePropSet);
+    }
+
+    if (ePageType == LAYOUT
+        || (bCheckProps
+            && PropValue::GetPropertyValue(aAny, mXPagePropSet, "IsPageNumberVisible", true)
+            && aAny == true))
+    {
+        if ((xShape = GetReferencedPlaceholderXShape(SlideNumber, ePageType)))
+            rDML.WritePlaceholderReferenceShape(SlideNumber,
+                                                maPlaceholderShapeToIndexMap.find(xShape)->second,
+                                                ePageType, mXPagePropSet);
+    }
+
+    if (ePageType == LAYOUT
+        || (bCheckProps
+            && PropValue::GetPropertyValue(aAny, mXPagePropSet, "IsDateTimeVisible", true)
+            && aAny == true
+            && ((GetPropertyValue(aAny, mXPagePropSet, "DateTimeText", true) && (aAny >>= aText)
+                 && !aText.isEmpty())
+                || mXPagePropSet->getPropertyValue("IsDateTimeFixed") == false)))
+    {
+        if ((xShape = GetReferencedPlaceholderXShape(DateAndTime, ePageType)))
+            rDML.WritePlaceholderReferenceShape(DateAndTime,
+                                                maPlaceholderShapeToIndexMap.find(xShape)->second,
+                                                ePageType, mXPagePropSet);
+    }
+}
+
 unsigned PowerPointExport::CreateNewPlaceholderIndex(const css::uno::Reference<XShape> &rXShape)
 {
     maPlaceholderShapeToIndexMap.insert({rXShape, mnPlaceholderIndexMax});
     return mnPlaceholderIndexMax++;
+}
+
+Reference<XShape> PowerPointExport::GetReferencedPlaceholderXShape(const PlaceholderType eType,
+                                                        PageType ePageType) const
+{
+    PresObjKind ePresObjKind = PresObjKind::NONE;
+    switch (eType)
+    {
+        case oox::core::None:
+            break;
+        case oox::core::SlideImage:
+            break;
+        case oox::core::Notes:
+            break;
+        case oox::core::Header:
+            ePresObjKind = PresObjKind::Header;
+            break;
+        case oox::core::Footer:
+            ePresObjKind = PresObjKind::Footer;
+            break;
+        case oox::core::SlideNumber:
+            ePresObjKind = PresObjKind::SlideNumber;
+            break;
+        case oox::core::DateAndTime:
+            ePresObjKind = PresObjKind::DateTime;
+            break;
+        case oox::core::Outliner:
+            break;
+        case oox::core::Title:
+            ePresObjKind = PresObjKind::Title;
+            break;
+        case oox::core::Subtitle:
+            break;
+    }
+    if (ePresObjKind != PresObjKind::NONE)
+    {
+        SdPage* pMasterPage;
+        if (ePageType == LAYOUT)
+        {
+            // since Layout pages do not have drawpages themselves - mXDrawPage is still the master they reference to..
+            pMasterPage = SdPage::getImplementation(mXDrawPage);
+        }
+        else
+        {
+            pMasterPage
+                = &static_cast<SdPage&>(SdPage::getImplementation(mXDrawPage)->TRG_GetMasterPage());
+        }
+        if (SdrObject* pMasterFooter = pMasterPage->GetPresObj(ePresObjKind))
+            return GetXShapeForSdrObject(pMasterFooter);
+    }
+    return nullptr;
 }
 
 // UNO component

@@ -123,6 +123,9 @@ private:
         @returns Placeholder index
     */
     unsigned CreateNewPlaceholderIndex(const css::uno::Reference<css::drawing::XShape>& rXShape);
+    css::uno::Reference<css::drawing::XShape> GetReferencedPlaceholderXShape(const PlaceholderType eType, PageType ePageType) const;
+    void WritePlaceholderReferenceShapes(PowerPointShapeExport& rDML, PageType ePageType);
+
     /// Should we export as .pptm, ie. do we contain macros?
     bool mbPptm;
 
