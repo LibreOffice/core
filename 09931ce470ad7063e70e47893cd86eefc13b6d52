@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "957adb9f_e06ef2ad",
+        "filename": "include/vcl/test/GraphicsRenderTests.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-09T13:56:32Z",
+      "side": 1,
+      "message": "all header file should have #pragma once",
+      "revId": "09931ce470ad7063e70e47893cd86eefc13b6d52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
