@@ -7,6 +7,4 @@ Settings for Firebird
 
 #define ENABLE_FIREBIRD_SDBC 0
 
-#define HAVE_FIREBIRD_30 0
-
 #endif
