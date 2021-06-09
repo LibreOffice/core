@@ -199,6 +199,9 @@ private:
     class Implementation;
     ::std::unique_ptr<Implementation> mpImpl;
 
+    /// Returns the current outline view
+    OutlinerView* getOutlinerView();
+
     /// Specifies whether to search and replace, to spell check or to do a
     /// text conversion.
     enum mode
