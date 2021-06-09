@@ -473,7 +473,7 @@ void SwViewShell::ImplUnlockPaint( bool bVirDev )
     CurrShell aCurr( this );
     if ( GetWin() && GetWin()->IsVisible() )
     {
-        if ( (bInSizeNotify || bVirDev ) && VisArea().HasArea() )
+        if ( (bInSizeNotify || bVirDev ) && VisArea().HasArea() && !comphelper::LibreOfficeKit::isActive())
         {
             //Refresh with virtual device to avoid flickering.
             VclPtrInstance<VirtualDevice> pVout( *mpOut );
