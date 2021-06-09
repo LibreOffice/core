@@ -125,8 +125,35 @@ void WriteSndAc(const FSHelperPtr& pFS, const OUString& sSoundRelId, const OUStr
         pFS->endElement(FSNS(XML_p, XML_stSnd));
         pFS->endElement(FSNS(XML_p, XML_sndAc));
 }
-}
 
+const char* getPlaceholderTypeName(PlaceholderType ePlaceholder)
+{
+    switch (ePlaceholder)
+    {
+        case SlideImage:
+            return "sldImg";
+        case Notes:
+            return "body";
+        case Header:
+            return "hdr";
+        case Footer:
+            return "ftr";
+        case SlideNumber:
+            return "sldNum";
+        case DateAndTime:
+            return "dt";
+        case Outliner:
+            return "body";
+        case Title:
+            return "title";
+        case Subtitle:
+            return "subTitle";
+        default:
+            SAL_INFO("sd.eppt", "warning: unhandled placeholder type: " << ePlaceholder);
+            return "";
+    }
+}
+}
 }
 
 namespace {
@@ -335,6 +362,7 @@ PowerPointExport::PowerPointExport(const Reference< XComponentContext >& rContex
     , mnAnimationNodeIdMax(1)
     , mnDiagramId(1)
     , mbCreateNotes(false)
+    , mnPlaceholderIndexMax(1)
 {
     comphelper::SequenceAsHashMap aArgumentsMap(rArguments);
     mbPptm = aArgumentsMap.getUnpackedValueOrDefault("IsPPTM", false);
@@ -1461,41 +1489,22 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
     mpFS->endElementNS(XML_p, XML_cNvSpPr);
     mpFS->startElementNS(XML_p, XML_nvPr);
 
-    const char* pType = nullptr;
-    switch (ePlaceholder)
-    {
-    case SlideImage:
-        pType = "sldImg";
-        break;
-    case Notes:
-        pType = "body";
-        break;
-    case Header:
-        pType = "hdr";
-        break;
-    case Footer:
-        pType = "ftr";
-        break;
-    case SlideNumber:
-        pType = "sldNum";
-        break;
-    case DateAndTime:
-        pType = "dt";
-        break;
-    case Outliner:
-        pType = "body";
-        break;
-    case Title:
-        pType = "title";
-        break;
-    case Subtitle:
-        pType = "subTitle";
-        break;
-    default:
-        SAL_INFO("sd.eppt", "warning: unhandled placeholder type: " << ePlaceholder);
-    }
+    bool bUsePlaceholderIndex
+        = ePlaceholder == Footer || ePlaceholder == DateAndTime || ePlaceholder == SlideNumber;
+    const char* pType = getPlaceholderTypeName(ePlaceholder);
+
     SAL_INFO("sd.eppt", "write placeholder " << pType);
-    mpFS->singleElementNS(XML_p, XML_ph, XML_type, pType);
+    if (bUsePlaceholderIndex)
+    {
+        mpFS->singleElementNS(
+            XML_p, XML_ph, XML_type, pType, XML_idx,
+            OString::number(
+                static_cast<PowerPointExport*>(GetFB())->CreateNewPlaceholderIndex(xShape)));
+    }
+    else
+    {
+        mpFS->singleElementNS(XML_p, XML_ph, XML_type, pType);
+    }
     mpFS->endElementNS(XML_p, XML_nvPr);
     mpFS->endElementNS(XML_p, XML_nvSpPr);
 
@@ -2021,6 +2030,12 @@ void PowerPointExport::WriteDiagram(const FSHelperPtr& pFS, PowerPointShapeExpor
     pFS->startElementNS(XML_p, XML_graphicFrame);
     rDML.WriteDiagram(rXShape, nDiagramId);
     pFS->endElementNS(XML_p, XML_graphicFrame);
+}
+
+unsigned PowerPointExport::CreateNewPlaceholderIndex(const css::uno::Reference<XShape> &rXShape)
+{
+    maPlaceholderShapeToIndexMap.insert({rXShape, mnPlaceholderIndexMax});
+    return mnPlaceholderIndexMax++;
 }
 
 // UNO component
