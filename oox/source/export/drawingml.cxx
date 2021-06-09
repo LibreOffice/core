@@ -2213,40 +2213,13 @@ OUString DrawingML::GetFieldValue( const css::uno::Reference< css::text::XTextRa
                 {
                     sal_Int32 nNumFmt = -1;
                     rXPropSet->getPropertyValue(UNO_TC_PROP_NUMFORMAT) >>= nNumFmt;
-                    switch(static_cast<SvxDateFormat>(nNumFmt))
-                    {
-                        case SvxDateFormat::StdSmall:
-                        case SvxDateFormat::A: aFieldValue = "datetime"; // 13/02/96
-                                              break;
-                        case SvxDateFormat::B: aFieldValue = "datetime1"; // 13/02/1996
-                                              break;
-                        case SvxDateFormat::StdBig:
-                        case SvxDateFormat::D: aFieldValue = "datetime3"; // 13 February 1996
-                                              break;
-                        default: break;
-                    }
+                    aFieldValue = GetDatetimeTypeFromDate(static_cast<SvxDateFormat>(nNumFmt));
                 }
                 else if(aFieldKind == "ExtTime")
                 {
                     sal_Int32 nNumFmt = -1;
                     rXPropSet->getPropertyValue(UNO_TC_PROP_NUMFORMAT) >>= nNumFmt;
-                    switch(static_cast<SvxTimeFormat>(nNumFmt))
-                    {
-                        case SvxTimeFormat::Standard:
-                        case SvxTimeFormat::HH24_MM_SS:
-                            aFieldValue = "datetime11"; // 13:49:38
-                            break;
-                        case SvxTimeFormat::HH24_MM:
-                            aFieldValue = "datetime10"; // 13:49
-                            break;
-                        case SvxTimeFormat::HH12_MM:
-                            aFieldValue = "datetime12"; // 01:49 PM
-                            break;
-                        case SvxTimeFormat::HH12_MM_SS:
-                            aFieldValue = "datetime13"; // 01:49:38 PM
-                            break;
-                        default: break;
-                    }
+                    aFieldValue = GetDatetimeTypeFromTime(static_cast<SvxTimeFormat>(nNumFmt));
                 }
                 else if(aFieldKind == "ExtFile")
                 {
@@ -2271,6 +2244,83 @@ OUString DrawingML::GetFieldValue( const css::uno::Reference< css::text::XTextRa
         }
     }
     return aFieldValue;
+}
+
+OUString DrawingML::GetDatetimeTypeFromDate(SvxDateFormat eDate)
+{
+    return GetDatetimeTypeFromDateTime(eDate, SvxTimeFormat::AppDefault);
+}
+
+OUString DrawingML::GetDatetimeTypeFromTime(SvxTimeFormat eTime)
+{
+    return GetDatetimeTypeFromDateTime(SvxDateFormat::AppDefault, eTime);
+}
+
+OUString DrawingML::GetDatetimeTypeFromDateTime(SvxDateFormat eDate, SvxTimeFormat eTime)
+{
+    OUString aDateField;
+    switch (eDate)
+    {
+        case SvxDateFormat::StdSmall:
+        case SvxDateFormat::A:
+            aDateField = "datetime";
+            break;
+        case SvxDateFormat::B:
+            aDateField = "datetime1"; // 13/02/1996
+            break;
+        case SvxDateFormat::StdBig:
+        case SvxDateFormat::C:
+        case SvxDateFormat::D:
+            aDateField = "datetime3"; // 13 February 1996
+            break;
+        case SvxDateFormat::E:
+        case SvxDateFormat::F:
+            aDateField = "datetime2";
+            break;
+        default:
+            break;
+    }
+
+    OUString aTimeField;
+    switch (eTime)
+    {
+        case SvxTimeFormat::Standard:
+        case SvxTimeFormat::HH24_MM_SS:
+        case SvxTimeFormat::HH24_MM_SS_00:
+            aTimeField = "datetime11"; // 13:49:38
+            break;
+        case SvxTimeFormat::HH24_MM:
+            aTimeField = "datetime10"; // 13:49
+            break;
+        case SvxTimeFormat::HH12_MM:
+        case SvxTimeFormat::HH12_MM_AMPM:
+            aTimeField = "datetime12"; // 01:49 PM
+            break;
+        case SvxTimeFormat::HH12_MM_SS:
+        case SvxTimeFormat::HH12_MM_SS_AMPM:
+        case SvxTimeFormat::HH12_MM_SS_00:
+        case SvxTimeFormat::HH12_MM_SS_00_AMPM:
+            aTimeField = "datetime13"; // 01:49:38 PM
+            break;
+        default:
+            break;
+    }
+
+    if (!aDateField.isEmpty() && aTimeField.isEmpty())
+        return aDateField;
+    else if (!aTimeField.isEmpty() && aDateField.isEmpty())
+        return aTimeField;
+    else if (!aDateField.isEmpty() && !aTimeField.isEmpty())
+    {
+        if (aTimeField == "datetime11" || aTimeField == "datetime13")
+            // only datetime format that has Date and HH:MM:SS
+            return "datetime9"; // dd/mm/yyyy H:MM:SS
+        else
+            // only datetime format that has Date and HH:MM
+            return "datetime8"; // dd/mm/yyyy H:MM
+    }
+    else
+        return "";
 }
 
 void DrawingML::WriteRun( const Reference< XTextRange >& rRun,

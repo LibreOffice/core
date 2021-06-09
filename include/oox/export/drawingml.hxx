@@ -45,6 +45,8 @@
 
 class Graphic;
 class SdrObjCustomShape;
+enum class SvxDateFormat;
+enum class SvxTimeFormat;
 
 namespace com::sun::star {
 namespace awt {
@@ -161,6 +163,22 @@ protected:
                   const css::uno::Reference< css::beans::XPropertyState >& rXPropState,
                   const OUString& aName, css::beans::PropertyState& eState );
     OUString GetFieldValue( const css::uno::Reference< css::text::XTextRange >& rRun, bool& bIsURLField );
+    /** Gets OOXML datetime field type from LO Date format
+
+        @param eDate LO Date format
+    */
+    static OUString GetDatetimeTypeFromDate(SvxDateFormat eDate);
+    /** Gets OOXML datetime field type from LO Time format
+
+        @param eTime LO Time format
+    */
+    static OUString GetDatetimeTypeFromTime(SvxTimeFormat eTime);
+    /** Gets OOXML datetime field type from combination of LO Time and Date formats
+
+        @param eDate LO Date format
+        @param eTime LO Time format
+    */
+    static OUString GetDatetimeTypeFromDateTime(SvxDateFormat eDate, SvxTimeFormat eTime);
 
     /// Output the media (including copying a video from vnd.sun.star.Package: to the output if necessary).
     void WriteMediaNonVisualProperties(const css::uno::Reference<css::drawing::XShape>& xShape);
