@@ -605,6 +605,22 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl, LinkParamNone*, void)
             if( aTmpSet.GetItemState( m_rDocSh.GetPool().GetTrueWhich( SID_ATTR_FRAMEDIRECTION, false ) , true, &pItem ) == SfxItemState::SET )
                 SwChartHelper::DoUpdateAllCharts( pDoc );
         }
+
+        if (m_nFamily == SfxStyleFamily::Frame)
+        {
+            const SfxPoolItem* pItem = nullptr;
+            if (aTmpSet.HasItem(FN_KEEP_ASPECT_RATIO, &pItem))
+            {
+                const auto& rBoolItem = static_cast<const SfxBoolItem&>(*pItem);
+                const SwViewOption* pVOpt = pWrtShell->GetViewOptions();
+                SwViewOption aUsrPref(*pVOpt);
+                aUsrPref.SetKeepRatio(rBoolItem.GetValue());
+                if (rBoolItem.GetValue() != pVOpt->IsKeepRatio())
+                {
+                    SW_MOD()->ApplyUsrPref(aUsrPref, &pWrtShell->GetView());
+                }
+            }
+        }
     }
 
     if(m_bNew)
@@ -869,6 +885,14 @@ void SwDocShell::Edit(
         rSet.Put(SvxPatternListItem(pDrawModel->GetPatternList(), SID_PATTERN_LIST));
     }
 
+    SwWrtShell* pCurrShell = pActShell ? pActShell : m_pWrtShell;
+    if (nFamily == SfxStyleFamily::Frame)
+    {
+        SfxItemSet& rSet = xTmp->GetItemSet();
+        const SwViewOption* pVOpt = pCurrShell->GetViewOptions();
+        rSet.Put(SfxBoolItem(FN_KEEP_ASPECT_RATIO, pVOpt->IsKeepRatio()));
+    }
+
     if (!bBasic)
     {
         // prior to the dialog the HtmlMode at the DocShell is being sunk
@@ -877,7 +901,6 @@ void SwDocShell::Edit(
         // In HTML mode, we do not always have a printer. In order to show
         // the correct page size in the Format - Page dialog, we have to
         // get one here.
-        SwWrtShell* pCurrShell = pActShell ? pActShell : m_pWrtShell;
         if( ( HTMLMODE_ON & nHtmlMode ) &&
             !pCurrShell->getIDocumentDeviceAccess().getPrinter( false ) )
             pCurrShell->InitPrt( pCurrShell->getIDocumentDeviceAccess().getPrinter( true ) );
