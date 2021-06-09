@@ -214,7 +214,6 @@ std::unique_ptr<SfxTabPage> SvxStdParagraphTabPage::Create( weld::Container* pPa
 
 bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
 {
-    SfxItemState eState = SfxItemState::UNKNOWN;
     const SfxPoolItem* pOld = nullptr;
     SfxItemPool* pPool = rOutSet->GetPool();
     DBG_ASSERT( pPool, "Where is the pool?" );
@@ -260,12 +259,11 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
                 OSL_FAIL( "unknown LineDist entry" );
                 break;
         }
-        eState = GetItemSet().GetItemState( nWhich );
         pOld = GetOldItem( *rOutSet, SID_ATTR_PARA_LINESPACE );
 
         if ( m_bLineDistToggled ||
              !pOld || !( *static_cast<const SvxLineSpacingItem*>(pOld) == aSpacing ) ||
-             SfxItemState::DONTCARE == eState )
+             SfxItemState::DONTCARE == GetItemSet().GetItemState( nWhich ) )
         {
             rOutSet->Put( aSpacing );
             bModified = true;
@@ -306,10 +304,9 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
             aMargin.SetLower(static_cast<sal_uInt16>(m_xBottomDist->GetCoreValue(eUnit)));
         }
         aMargin.SetContextValue(m_xContextualCB->get_active());
-        eState = GetItemSet().GetItemState( nWhich );
 
         if ( !pOld || *static_cast<const SvxULSpaceItem*>(pOld) != aMargin ||
-             SfxItemState::DONTCARE == eState )
+             SfxItemState::DONTCARE == GetItemSet().GetItemState( nWhich ) )
         {
             rOutSet->Put( aMargin );
             bModified = true;
@@ -361,10 +358,9 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
         aMargin.SetAutoFirst(m_xAutoCB->get_active());
         if ( aMargin.GetTextFirstLineOffset() < 0 )
             bNullTab = true;
-        eState = GetItemSet().GetItemState( nWhich );
 
         if ( !pOld || *static_cast<const SvxLRSpaceItem*>(pOld) != aMargin ||
-             SfxItemState::DONTCARE == eState )
+             SfxItemState::DONTCARE == GetItemSet().GetItemState( nWhich ) )
         {
             rOutSet->Put( aMargin );
             bModified = true;
