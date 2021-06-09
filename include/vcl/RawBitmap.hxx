@@ -49,6 +49,12 @@ public:
         if (mnBitCount == 32)
             mpData[p] = nColor.GetTransparency();
     }
+    void SetAlpha(tools::Long nY, tools::Long nX, sal_uInt8 nAlpha)
+    {
+        assert(mnBitCount == 32);
+        tools::Long p = (nY * maSize.getWidth() + nX) * (mnBitCount / 8) + 3;
+        mpData[p] = nAlpha;
+    }
     Color GetPixel(tools::Long nY, tools::Long nX) const
     {
         tools::Long p = (nY * maSize.getWidth() + nX) * mnBitCount / 8;
