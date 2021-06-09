@@ -87,8 +87,7 @@ void LpSolverTest::testSolver(OUString const & rName)
     table::CellAddress aObjective(0, 0, 0);
 
     // "changing cells" - unknown variables
-    uno::Sequence<table::CellAddress> aVariables(1);
-    aVariables[0] = table::CellAddress(0, 0, 0);
+    uno::Sequence<table::CellAddress> aVariables { {0, 0, 0 } };
 
     // constraints
     uno::Sequence<sheet::SolverConstraint> aConstraints(1);
