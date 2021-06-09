@@ -592,12 +592,12 @@ void SwControlCharPortion::Paint( const SwTextPaintInfo &rInf ) const
                     aNewPos.AdjustY(deltaY);
                     break;
                 case 900:
-                    aNewPos.AdjustY(-deltaX);
+                    aNewPos.AdjustY(-static_cast<SwTwips>(deltaX));
                     aNewPos.AdjustX(deltaY);
                     break;
                 case 2700:
                     aNewPos.AdjustY(deltaX);
-                    aNewPos.AdjustX(-deltaY);
+                    aNewPos.AdjustX(-static_cast<SwTwips>(deltaY));
                     break;
                 default:
                     assert(false);
