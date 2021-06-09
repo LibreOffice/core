@@ -211,6 +211,7 @@ public:
     void testTdf96061_textHighlight();
     void testTextColumns_tdf140852();
     void testTextColumns_3columns();
+    void testTdf59323_slideFooters();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -336,6 +337,7 @@ public:
     CPPUNIT_TEST(testTdf96061_textHighlight);
     CPPUNIT_TEST(testTextColumns_tdf140852);
     CPPUNIT_TEST(testTextColumns_3columns);
+    CPPUNIT_TEST(testTdf59323_slideFooters);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3243,6 +3245,41 @@ void SdOOXMLExportTest2::testTextColumns_3columns()
     assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:bodyPr", "spcCol", "108000");
 
     tempFile.EnableKillingFile();
+}
+
+void SdOOXMLExportTest2::testTdf59323_slideFooters()
+{
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf59323.pptx"), PPTX);
+
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(),
+                                                     uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xDoc->getDrawPages()->getCount());
+
+    for (int nPageIndex = 0; nPageIndex < 3; nPageIndex++)
+    {
+        uno::Reference<drawing::XDrawPage> xPage(getPage(0, xDocShRef));
+        uno::Reference<beans::XPropertySet> xPropSet(xPage, uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(true, xPropSet->getPropertyValue("IsFooterVisible").get<bool>());
+        CPPUNIT_ASSERT_EQUAL(true, xPropSet->getPropertyValue("IsDateTimeVisible").get<bool>());
+        CPPUNIT_ASSERT_EQUAL(true, xPropSet->getPropertyValue("IsPageNumberVisible").get<bool>());
+    }
+
+    // Test placeholder indexes
+    xmlDocUniquePtr pXmlDocMaster = parseExport(tempFile, "ppt/slideMasters/slideMaster1.xml");
+    assertXPath(pXmlDocMaster, "//p:ph [@type='dt']", "idx", "1");
+    assertXPath(pXmlDocMaster, "//p:ph [@type='ftr']", "idx", "2");
+    assertXPath(pXmlDocMaster, "//p:ph [@type='sldNum']", "idx", "3");
+
+    xmlDocUniquePtr pXmlDocSlide1 = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocSlide1, "//p:ph [@type='dt']", "idx", "1");
+    assertXPath(pXmlDocSlide1, "//p:ph [@type='ftr']", "idx", "2");
+    assertXPath(pXmlDocSlide1, "//p:ph [@type='sldNum']", "idx", "3");
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
