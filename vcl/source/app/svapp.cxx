@@ -1687,6 +1687,18 @@ bool isUnipoll()
     return pSVData && pSVData->mpPollCallback != nullptr;
 }
 
+<<<<<<< HEAD   (cb7a97 Fix click on the drawing area of CSV dialog)
 } } // namespace lok, namespace vcl
+=======
+void numberOfViewsChanged(int count)
+{
+    ImplSVData * pSVData = ImplGetSVData();
+    auto& rCache = pSVData->maGDIData.maScaleCache;
+    // Normally the cache size is set to 10, scale according to the number of users.
+    rCache.setMaxSize(count * 10);
+}
+
+} // namespace lok, namespace vcl
+>>>>>>> CHANGE (c85220 scale VCL's scale cache according to the number of Online vi)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
