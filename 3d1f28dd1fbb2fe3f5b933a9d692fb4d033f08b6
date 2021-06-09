@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9154dea5_9e3062ad",
+        "filename": "configure.ac",
+        "patchSetId": 12
+      },
+      "lineNbr": 919,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-09T06:37:34Z",
+      "side": 1,
+      "message": "Any reason you effectively dropped test_openldap\u003dyes for this case?  (That now caused my incremental macOS build to fail linking Library_libpostgresql-sdbc-impl with\n\n  Undefined symbols for architecture x86_64:\n    \"_ldap_count_entries\", referenced from:\n        _ldapServiceLookup in libpq.a(fe-connect.o)\n\netc.)",
+      "revId": "3d1f28dd1fbb2fe3f5b933a9d692fb4d033f08b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
