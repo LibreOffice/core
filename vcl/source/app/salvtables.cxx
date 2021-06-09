@@ -2003,27 +2003,19 @@ IMPL_LINK_NOARG(SalInstanceAssistant, UpdateRoadmap_Hdl, Timer*, void)
     enable_notify_events();
 }
 
+SalInstanceFrame::SalInstanceFrame(VclFrame* pFrame, SalInstanceBuilder* pBuilder,
+                                   bool bTakeOwnership)
+    : SalInstanceContainer(pFrame, pBuilder, bTakeOwnership)
+    , m_xFrame(pFrame)
+{
+}
+
+void SalInstanceFrame::set_label(const OUString& rText) { m_xFrame->set_label(rText); }
+
+OUString SalInstanceFrame::get_label() const { return m_xFrame->get_label(); }
+
 namespace
 {
-class SalInstanceFrame : public SalInstanceContainer, public virtual weld::Frame
-{
-private:
-    VclPtr<VclFrame> m_xFrame;
-
-public:
-    SalInstanceFrame(VclFrame* pFrame, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : SalInstanceContainer(pFrame, pBuilder, bTakeOwnership)
-        , m_xFrame(pFrame)
-    {
-    }
-
-    virtual void set_label(const OUString& rText) override { m_xFrame->set_label(rText); }
-
-    virtual OUString get_label() const override { return m_xFrame->get_label(); }
-
-    virtual std::unique_ptr<weld::Label> weld_label_widget() const override;
-};
-
 class SalInstancePaned : public SalInstanceContainer, public virtual weld::Paned
 {
 private:
