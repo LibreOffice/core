@@ -64,6 +64,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <o3tl/safeint.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
@@ -976,11 +977,13 @@ Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs2(const Sequence<
             tools::Rectangle aTmpRect = m_pData->m_pObjectShell->GetVisArea( ASPECT_CONTENT );
             aTmpRect = OutputDevice::LogicToLogic(aTmpRect, MapMode(m_pData->m_pObjectShell->GetMapUnit()), MapMode(MapUnit::Map100thMM));
 
-            Sequence< sal_Int32 > aRectSeq(4);
-            aRectSeq[0] = aTmpRect.Left();
-            aRectSeq[1] = aTmpRect.Top();
-            aRectSeq[2] = aTmpRect.IsWidthEmpty() ? aTmpRect.Left() : aTmpRect.Right();
-            aRectSeq[3] = aTmpRect.IsHeightEmpty() ? aTmpRect.Top() : aTmpRect.Bottom();
+            Sequence< sal_Int32 > aRectSeq
+            {
+                o3tl::narrowing<int>(aTmpRect.Left()),
+                o3tl::narrowing<int>(aTmpRect.Top()),
+                o3tl::narrowing<int>(aTmpRect.IsWidthEmpty() ? aTmpRect.Left() : aTmpRect.Right()),
+                o3tl::narrowing<int>(aTmpRect.IsHeightEmpty() ? aTmpRect.Top() : aTmpRect.Bottom())
+            };
 
             seqArgsNew.realloc( ++nNewLength );
             seqArgsNew[ nNewLength - 1 ].Name = "WinExtent";
@@ -1004,11 +1007,13 @@ Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs2(const Sequence<
             {
                 SvBorder aBorder = pFrame->GetBorderPixelImpl();
 
-                Sequence< sal_Int32 > aBorderSeq(4);
-                aBorderSeq[0] = aBorder.Left();
-                aBorderSeq[1] = aBorder.Top();
-                aBorderSeq[2] = aBorder.Right();
-                aBorderSeq[3] = aBorder.Bottom();
+                Sequence< sal_Int32 > aBorderSeq
+                {
+                    o3tl::narrowing<int>(aBorder.Left()),
+                    o3tl::narrowing<int>(aBorder.Top()),
+                    o3tl::narrowing<int>(aBorder.Right()),
+                    o3tl::narrowing<int>(aBorder.Bottom())
+                };
 
                 seqArgsNew.realloc( ++nNewLength );
                 seqArgsNew[ nNewLength - 1 ].Name = "DocumentBorder";

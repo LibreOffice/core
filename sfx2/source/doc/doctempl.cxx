@@ -1488,16 +1488,10 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
 
     // now get the content of the region
     uno::Reference< XResultSet > xResultSet;
-    Sequence< OUString > aProps(2);
-    aProps[0] = TITLE;
-    aProps[1] = TARGET_URL;
 
     try
     {
-        Sequence< NumberedSortingInfo >     aSortingInfo(1);
-        aSortingInfo.getArray()->ColumnIndex = 1;
-        aSortingInfo.getArray()->Ascending = true;
-        xResultSet = rContent.createSortedCursor( aProps, aSortingInfo, m_rCompareFactory, INCLUDE_DOCUMENTS_ONLY );
+        xResultSet = rContent.createSortedCursor( { TITLE, TARGET_URL }, { { 1, true } }, m_rCompareFactory, INCLUDE_DOCUMENTS_ONLY );
     }
     catch ( Exception& ) {}
 

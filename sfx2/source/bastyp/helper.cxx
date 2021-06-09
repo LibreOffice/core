@@ -49,15 +49,10 @@ std::vector<OUString> SfxContentHelper::GetResultSet( const OUString& rURL )
         ::ucbhelper::Content aCnt( rURL, uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         uno::Reference< sdbc::XResultSet > xResultSet;
         uno::Reference< ucb::XDynamicResultSet > xDynResultSet;
-        uno::Sequence< OUString > aProps(3);
-        OUString* pProps = aProps.getArray();
-        pProps[0] = "Title";
-        pProps[1] = "ContentType";
-        pProps[2] = "IsFolder";
 
         try
         {
-            xDynResultSet = aCnt.createDynamicCursor( aProps );
+            xDynResultSet = aCnt.createDynamicCursor( { "Title", "ContentType", "IsFolder" } );
             if ( xDynResultSet.is() )
                 xResultSet = xDynResultSet->getStaticResultSet();
         }
@@ -112,14 +107,10 @@ std::vector< OUString > SfxContentHelper::GetHelpTreeViewContents( const OUStrin
 
         ::ucbhelper::Content aCnt( rURL, new ::ucbhelper::CommandEnvironment( xInteractionHandler, uno::Reference< ucb::XProgressHandler >() ), comphelper::getProcessComponentContext() );
         uno::Reference< sdbc::XResultSet > xResultSet;
-        uno::Sequence< OUString > aProps(2);
-        OUString* pProps = aProps.getArray();
-        pProps[0] = "Title";
-        pProps[1] = "IsFolder";
 
         try
         {
-            uno::Reference< ucb::XDynamicResultSet > xDynResultSet = aCnt.createDynamicCursor( aProps );
+            uno::Reference< ucb::XDynamicResultSet > xDynResultSet = aCnt.createDynamicCursor( { "Title", "IsFolder" } );
             if ( xDynResultSet.is() )
                 xResultSet = xDynResultSet->getStaticResultSet();
         }

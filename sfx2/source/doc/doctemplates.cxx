@@ -699,11 +699,6 @@ bool SfxDocTplService_Impl::addEntry( Content& rParentFolder,
 
     if ( ! Content::create( aLinkURL, maCmdEnv, comphelper::getProcessComponentContext(), aLink ) )
     {
-        Sequence< OUString > aNames(3);
-        aNames[0] = TITLE;
-        aNames[1] = IS_FOLDER;
-        aNames[2] = TARGET_URL;
-
         Sequence< Any > aValues(3);
         aValues[0] <<= rTitle;
         aValues[1] <<= false;
@@ -711,7 +706,7 @@ bool SfxDocTplService_Impl::addEntry( Content& rParentFolder,
 
         try
         {
-            rParentFolder.insertNewContent( TYPE_LINK, aNames, aValues, aLink );
+            rParentFolder.insertNewContent( TYPE_LINK, { TITLE, IS_FOLDER, TARGET_URL }, aValues, aLink );
             setProperty( aLink, PROPERTY_TYPE, makeAny( rType ) );
             bAddedEntry = true;
         }
@@ -747,10 +742,6 @@ bool SfxDocTplService_Impl::createFolder( const OUString& rNewFolderURL,
     {
         try
         {
-            Sequence< OUString > aNames(2);
-            aNames[0] = TITLE;
-            aNames[1] = IS_FOLDER;
-
             Sequence< Any > aValues(2);
             aValues[0] <<= aFolderName;
             aValues[1] <<= true;
@@ -762,7 +753,7 @@ bool SfxDocTplService_Impl::createFolder( const OUString& rNewFolderURL,
             else
                 aType = TYPE_FOLDER;
 
-            aParent.insertNewContent( aType, aNames, aValues, rNewFolder );
+            aParent.insertNewContent( aType, { TITLE, IS_FOLDER }, aValues, rNewFolder );
             bCreatedFolder = true;
         }
         catch( Exception const & )
@@ -808,15 +799,11 @@ bool SfxDocTplService_Impl::CreateNewUniqueFolderWithPrefix( const OUString& aPa
 
             try
             {
-                Sequence< OUString > aNames(2);
-                aNames[0] = TITLE;
-                aNames[1] = IS_FOLDER;
-
                 Sequence< Any > aValues(2);
                 aValues[0] <<= aTryName;
                 aValues[1] <<= true;
 
-                bCreated = aParent.insertNewContent( TYPE_FSYS_FOLDER, aNames, aValues, aNewFolder );
+                bCreated = aParent.insertNewContent( TYPE_FSYS_FOLDER, { TITLE, IS_FOLDER }, aValues, aNewFolder );
             }
             catch( ucb::NameClashException& )
             {
@@ -872,15 +859,11 @@ OUString SfxDocTplService_Impl::CreateNewUniqueFileWithPrefix( const OUString& a
 
             try
             {
-                Sequence< OUString > aNames(2);
-                aNames[0] = TITLE;
-                aNames[1] = IS_DOCUMENT;
-
                 Sequence< Any > aValues(2);
                 aValues[0] <<= aTryName;
                 aValues[1] <<= true;
 
-                bCreated = aParent.insertNewContent( TYPE_FSYS_FILE, aNames, aValues, aNewFile );
+                bCreated = aParent.insertNewContent( TYPE_FSYS_FILE, { TITLE, IS_DOCUMENT }, aValues, aNewFile );
             }
             catch( ucb::NameClashException& )
             {
@@ -2295,16 +2278,11 @@ void SfxDocTplService_Impl::addHierGroup( GroupList_Impl& rList,
     // now get the content of the Group
     Content aContent;
     uno::Reference<XResultSet> xResultSet;
-    Sequence<OUString> aProps(3);
-
-    aProps[0] = TITLE;
-    aProps[1] = TARGET_URL;
-    aProps[2] = PROPERTY_TYPE;
 
     try
     {
         aContent = Content(rOwnURL, maCmdEnv, comphelper::getProcessComponentContext());
-        xResultSet = aContent.createCursor( aProps, INCLUDE_DOCUMENTS_ONLY );
+        xResultSet = aContent.createCursor( { TITLE, TARGET_URL, PROPERTY_TYPE }, INCLUDE_DOCUMENTS_ONLY );
     }
     catch (ContentCreationException&)
     {
