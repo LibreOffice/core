@@ -16,6 +16,24 @@
       "revId": "8e7a9b0243a4a63841d1cb1faba118274d574053",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1f435bc_b2475fcf",
+        "filename": "desktop/source/app/app.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1554,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-06-09T14:25:52Z",
+      "side": 0,
+      "message": "I\u0027m a little confused here as to where to add this function?",
+      "parentUuid": "3339d84e_e937f4e4",
+      "revId": "8e7a9b0243a4a63841d1cb1faba118274d574053",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
