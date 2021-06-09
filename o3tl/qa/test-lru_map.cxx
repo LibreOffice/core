@@ -29,6 +29,7 @@ public:
     void testCustomHash();
     void testRemoveIf();
     void testNoAutoCleanup();
+    void testChangeMaxSize();
 
     CPPUNIT_TEST_SUITE(lru_map_test);
     CPPUNIT_TEST(testBaseUsage);
@@ -38,6 +39,7 @@ public:
     CPPUNIT_TEST(testCustomHash);
     CPPUNIT_TEST(testRemoveIf);
     CPPUNIT_TEST(testNoAutoCleanup);
+    CPPUNIT_TEST(testChangeMaxSize);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -308,6 +310,18 @@ void lru_map_test::testNoAutoCleanup()
         CPPUNIT_ASSERT_EQUAL(i, rPair.first);
         ++i;
     }
+}
+
+void lru_map_test::testChangeMaxSize()
+{
+    o3tl::lru_map<int, int> lru(3);
+    CPPUNIT_ASSERT_EQUAL(size_t(0), lru.size());
+    lru.insert({ 0, 0 });
+    lru.insert({ 1, 1 });
+    lru.insert({ 2, 2 });
+    CPPUNIT_ASSERT_EQUAL(size_t(3), lru.size());
+    lru.setMaxSize(1);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), lru.size());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(lru_map_test);

@@ -49,7 +49,7 @@ private:
 
     list_t mLruList;
     map_t mLruMap;
-    const size_t mMaxSize;
+    size_t mMaxSize;
 
     void checkLRU()
     {
@@ -78,6 +78,13 @@ public:
         mLruMap.clear();
         list_t aLruListTemp;
         aLruListTemp.swap(mLruList);
+    }
+
+    void setMaxSize(size_t nMaxSize)
+    {
+        mMaxSize = nMaxSize ? nMaxSize : std::min(mLruMap.max_size(), mLruList.max_size());
+        while (mLruMap.size() > mMaxSize)
+            checkLRU();
     }
 
     void insert(key_value_pair_t& rPair)
