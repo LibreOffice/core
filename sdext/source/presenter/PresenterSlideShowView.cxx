@@ -666,20 +666,21 @@ void PresenterSlideShowView::PaintOuterWindow (const awt::Rectangle& rRepaintBox
     Reference<rendering::XBitmap> xBackgroundBitmap (mpBackground->GetNormalBitmap());
     if (xBackgroundBitmap.is())
     {
-        Sequence<rendering::Texture> aTextures (1);
         const geometry::IntegerSize2D aBitmapSize(xBackgroundBitmap->getSize());
-        aTextures[0] = rendering::Texture (
-            geometry::AffineMatrix2D(
-                aBitmapSize.Width,0,0,
-                0,aBitmapSize.Height,0),
-            1,
-            0,
-            xBackgroundBitmap,
-            nullptr,
-            nullptr,
-            rendering::StrokeAttributes(),
-            rendering::TexturingMode::REPEAT,
-            rendering::TexturingMode::REPEAT);
+        Sequence<rendering::Texture> aTextures
+        {
+            {
+                geometry::AffineMatrix2D( aBitmapSize.Width,0,0, 0,aBitmapSize.Height,0),
+                1,
+                0,
+                xBackgroundBitmap,
+                nullptr,
+                nullptr,
+                rendering::StrokeAttributes(),
+                rendering::TexturingMode::REPEAT,
+                rendering::TexturingMode::REPEAT
+            }
+        };
 
         if (mxBackgroundPolygon1.is())
             mxCanvas->fillTexturedPolyPolygon(
