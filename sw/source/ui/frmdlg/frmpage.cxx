@@ -886,7 +886,10 @@ void SwFramePage::Reset( const SfxItemSet *rSet )
     {
         // at formats no anchor editing
         m_xAnchorFrame->set_sensitive(false);
-        m_xFixedRatioCB->set_sensitive(false);
+        if (rSet->GetItemState(FN_KEEP_ASPECT_RATIO) != SfxItemState::SET)
+        {
+            m_xFixedRatioCB->set_sensitive(false);
+        }
     }
     else
     {
@@ -1205,7 +1208,7 @@ bool SwFramePage::FillItemSet(SfxItemSet *rSet)
                 aSz.SetWidthSizeType( eFrameSize );
         }
     }
-    if (!m_bFormat && m_xFixedRatioCB->get_state_changed_from_saved())
+    if (m_xFixedRatioCB->get_state_changed_from_saved())
         bRet |= nullptr != rSet->Put(SfxBoolItem(FN_KEEP_ASPECT_RATIO, m_xFixedRatioCB->get_active()));
 
     pOldItem = GetOldItem(*rSet, RES_FRM_SIZE);
