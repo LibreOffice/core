@@ -75,63 +75,30 @@ class SvAddressParser_Impl
     sal_uInt32 m_nCurToken;
     sal_Unicode const * m_pCurTokenBegin;
     sal_Unicode const * m_pCurTokenEnd;
-    sal_Unicode const * m_pCurTokenContentBegin;
-    sal_Unicode const * m_pCurTokenContentEnd;
-    bool m_bCurTokenReparse;
     ParsedAddrSpec m_aOuterAddrSpec;
     ParsedAddrSpec m_aInnerAddrSpec;
     ParsedAddrSpec * m_pAddrSpec;
-    sal_Unicode const * m_pRealNameBegin;
-    sal_Unicode const * m_pRealNameEnd;
-    sal_Unicode const * m_pRealNameContentBegin;
-    sal_Unicode const * m_pRealNameContentEnd;
-    bool m_bRealNameReparse;
-    bool m_bRealNameFinished;
-    sal_Unicode const * m_pFirstCommentBegin;
-    sal_Unicode const * m_pFirstCommentEnd;
-    bool m_bFirstCommentReparse;
     State m_eState;
     TokenType m_eType;
-
-    inline void resetRealNameAndFirstComment();
 
     inline void reset();
 
     void addTokenToAddrSpec(ElementType eTokenElem);
-
-    inline void addTokenToRealName();
 
     bool readToken();
 
     static OUString reparse(sal_Unicode const * pBegin,
                             sal_Unicode const * pEnd, bool bAddrSpec);
 
-    static OUString reparseComment(sal_Unicode const * pBegin,
-                                   sal_Unicode const * pEnd);
-
 public:
     SvAddressParser_Impl(SvAddressParser * pParser, const OUString& rIn);
 };
-
-inline void SvAddressParser_Impl::resetRealNameAndFirstComment()
-{
-    m_pRealNameBegin = nullptr;
-    m_pRealNameEnd = nullptr;
-    m_pRealNameContentBegin = nullptr;
-    m_pRealNameContentEnd = nullptr;
-    m_bRealNameReparse = false;
-    m_bRealNameFinished = false;
-    m_pFirstCommentBegin = nullptr;
-    m_pFirstCommentEnd = nullptr;
-    m_bFirstCommentReparse = false;
-}
 
 inline void SvAddressParser_Impl::reset()
 {
     m_aOuterAddrSpec.reset();
     m_aInnerAddrSpec.reset();
     m_pAddrSpec = &m_aOuterAddrSpec;
-    resetRealNameAndFirstComment();
     m_eState = BEFORE_COLON;
     m_eType = TOKEN_ATOM;
 }
@@ -146,20 +113,6 @@ void SvAddressParser_Impl::addTokenToAddrSpec(ElementType eTokenElem)
     m_pAddrSpec->m_eLastElem = eTokenElem;
 }
 
-inline void SvAddressParser_Impl::addTokenToRealName()
-{
-    if (!m_bRealNameFinished && m_eState != AFTER_LESS)
-    {
-        if (!m_pRealNameBegin)
-            m_pRealNameBegin = m_pRealNameContentBegin = m_pCurTokenBegin;
-        else if (m_pRealNameEnd < m_pCurTokenBegin - 1
-                 || (m_pRealNameEnd == m_pCurTokenBegin - 1
-                    && *m_pRealNameEnd != ' '))
-            m_bRealNameReparse = true;
-        m_pRealNameEnd = m_pRealNameContentEnd = m_pCurTokenEnd;
-    }
-}
-
 
 //  SvAddressParser_Impl
 
@@ -167,13 +120,11 @@ inline void SvAddressParser_Impl::addTokenToRealName()
 bool SvAddressParser_Impl::readToken()
 {
     m_nCurToken = m_eType;
-    m_bCurTokenReparse = false;
     switch (m_eType)
     {
         case TOKEN_QUOTED:
         {
             m_pCurTokenBegin = m_pInputPos - 1;
-            m_pCurTokenContentBegin = m_pInputPos;
             bool bEscaped = false;
             for (;;)
             {
@@ -182,13 +133,11 @@ bool SvAddressParser_Impl::readToken()
                 sal_Unicode cChar = *m_pInputPos++;
                 if (bEscaped)
                 {
-                    m_bCurTokenReparse = true;
                     bEscaped = false;
                 }
                 else if (cChar == '"')
                 {
                     m_pCurTokenEnd = m_pInputPos;
-                    m_pCurTokenContentEnd = m_pInputPos - 1;
                     return true;
                 }
                 else if (cChar == '\\')
@@ -199,7 +148,6 @@ bool SvAddressParser_Impl::readToken()
         case TOKEN_DOMAIN:
         {
             m_pCurTokenBegin = m_pInputPos - 1;
-            m_pCurTokenContentBegin = m_pInputPos;
             bool bEscaped = false;
             for (;;)
             {
@@ -221,8 +169,6 @@ bool SvAddressParser_Impl::readToken()
         case TOKEN_COMMENT:
         {
             m_pCurTokenBegin = m_pInputPos - 1;
-            m_pCurTokenContentBegin = nullptr;
-            m_pCurTokenContentEnd = nullptr;
             bool bEscaped = false;
             int nLevel = 0;
             for (;;)
@@ -232,36 +178,22 @@ bool SvAddressParser_Impl::readToken()
                 sal_Unicode cChar = *m_pInputPos++;
                 if (bEscaped)
                 {
-                    m_bCurTokenReparse = true;
-                    m_pCurTokenContentEnd = m_pInputPos;
                     bEscaped = false;
                 }
                 else if (cChar == '(')
                 {
-                    if (!m_pCurTokenContentBegin)
-                        m_pCurTokenContentBegin = m_pInputPos - 1;
-                    m_pCurTokenContentEnd = m_pInputPos;
                     ++nLevel;
                 }
                 else if (cChar == ')')
                     if (nLevel)
                     {
-                        m_pCurTokenContentEnd = m_pInputPos;
                         --nLevel;
                     }
                     else
                         return true;
                 else if (cChar == '\\')
                 {
-                    if (!m_pCurTokenContentBegin)
-                        m_pCurTokenContentBegin = m_pInputPos - 1;
                     bEscaped = true;
-                }
-                else if (cChar > ' ' && cChar != 0x7F) // DEL
-                {
-                    if (!m_pCurTokenContentBegin)
-                        m_pCurTokenContentBegin = m_pInputPos - 1;
-                    m_pCurTokenContentEnd = m_pInputPos;
                 }
             }
         }
@@ -423,27 +355,10 @@ OUString SvAddressParser_Impl::reparse(sal_Unicode const * pBegin,
     return aResult.makeStringAndClear();
 }
 
-// static
-OUString SvAddressParser_Impl::reparseComment(sal_Unicode const * pBegin,
-                                              sal_Unicode const * pEnd)
-{
-    OUStringBuffer aResult;
-    while (pBegin < pEnd)
-    {
-        sal_Unicode cChar = *pBegin++;
-        if (cChar == '\\')
-            cChar = *pBegin++;
-        aResult.append(cChar);
-    }
-    return aResult.makeStringAndClear();
-}
-
 SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
                                            const OUString& rInput)
     : m_pCurTokenBegin(nullptr)
     , m_pCurTokenEnd(nullptr)
-    , m_pCurTokenContentBegin(nullptr)
-    , m_pCurTokenContentEnd(nullptr)
 {
     m_pInputPos = rInput.getStr();
     m_pInputEnd = m_pInputPos + rInput.getLength();
@@ -454,7 +369,6 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
     {
         if (!readToken())
         {
-            m_bRealNameFinished = true;
             if (m_eState == AFTER_LESS)
                 m_nCurToken = '>';
             else
@@ -473,29 +387,6 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
                     m_pAddrSpec->reset();
                 addTokenToAddrSpec(ELEMENT_ITEM);
             }
-            if (!m_bRealNameFinished && m_eState != AFTER_LESS)
-            {
-                if (m_bCurTokenReparse)
-                {
-                    if (!m_pRealNameBegin)
-                        m_pRealNameBegin = m_pCurTokenBegin;
-                    m_pRealNameEnd = m_pCurTokenEnd;
-                    m_bRealNameReparse = true;
-                }
-                else if (m_bRealNameReparse)
-                    m_pRealNameEnd = m_pCurTokenEnd;
-                else if (!m_pRealNameBegin)
-                {
-                    m_pRealNameBegin = m_pCurTokenBegin;
-                    m_pRealNameContentBegin = m_pCurTokenContentBegin;
-                    m_pRealNameEnd = m_pRealNameContentEnd = m_pCurTokenContentEnd;
-                }
-                else
-                {
-                    m_pRealNameEnd = m_pCurTokenEnd;
-                    m_bRealNameReparse = true;
-                }
-            }
             m_eType = TOKEN_ATOM;
             break;
 
@@ -507,18 +398,10 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
                 else
                     m_pAddrSpec->reset();
             }
-            addTokenToRealName();
             m_eType = TOKEN_ATOM;
             break;
 
         case TOKEN_COMMENT:
-            if (!m_bRealNameFinished && m_eState != AFTER_LESS
-                && !m_pFirstCommentBegin && m_pCurTokenContentBegin)
-            {
-                m_pFirstCommentBegin = m_pCurTokenContentBegin;
-                m_pFirstCommentEnd = m_pCurTokenContentEnd;
-                m_bFirstCommentReparse = m_bCurTokenReparse;
-            }
             m_eType = TOKEN_ATOM;
             break;
 
@@ -529,7 +412,6 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
                     m_pAddrSpec->reset();
                 addTokenToAddrSpec(ELEMENT_ITEM);
             }
-            addTokenToRealName();
             break;
 
         case '(':
@@ -540,7 +422,6 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
         case '\\':
         case ']':
             m_pAddrSpec->finish();
-            addTokenToRealName();
             break;
 
         case '<':
@@ -549,8 +430,6 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
             case BEFORE_COLON:
             case BEFORE_LESS:
                 m_aOuterAddrSpec.finish();
-                if (m_pRealNameBegin)
-                    m_bRealNameFinished = true;
                 m_pAddrSpec = &m_aInnerAddrSpec;
                 m_eState = AFTER_LESS;
                 break;
@@ -561,7 +440,6 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
 
             case AFTER_GREATER:
                 m_aOuterAddrSpec.finish();
-                addTokenToRealName();
                 break;
             }
             break;
@@ -578,7 +456,6 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
             else
             {
                 m_aOuterAddrSpec.finish();
-                addTokenToRealName();
             }
             break;
 
@@ -594,7 +471,6 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
                 else
                     m_pAddrSpec->reset();
             }
-            addTokenToRealName();
             break;
 
         case ',':
@@ -636,32 +512,6 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
                             aTheAddrSpec = rInput.copy( (m_pAddrSpec->m_pBegin - rInput.getStr()),
                                                         nLen);
                     }
-                    OUString aTheRealName;
-                    if (!m_pRealNameBegin ||
-                        (m_pAddrSpec == &m_aOuterAddrSpec &&
-                         m_pRealNameBegin == m_aOuterAddrSpec.m_pBegin &&
-                         m_pRealNameEnd == m_aOuterAddrSpec.m_pEnd &&
-                         m_pFirstCommentBegin))
-                    {
-                        if (!m_pFirstCommentBegin)
-                            aTheRealName = aTheAddrSpec;
-                        else if (m_bFirstCommentReparse)
-                            aTheRealName = reparseComment(m_pFirstCommentBegin,
-                                                          m_pFirstCommentEnd);
-                        else
-                            aTheRealName = rInput.copy( (m_pFirstCommentBegin - rInput.getStr()),
-                                                        (m_pFirstCommentEnd - m_pFirstCommentBegin));
-                    }
-                    else if (m_bRealNameReparse)
-                        aTheRealName = reparse(m_pRealNameBegin, m_pRealNameEnd, false);
-                    else
-                    {
-                        sal_Int32 nLen = m_pRealNameContentEnd - m_pRealNameContentBegin;
-                        if (nLen == rInput.getLength())
-                            aTheRealName = rInput;
-                        else
-                            aTheRealName = rInput.copy( (m_pRealNameContentBegin - rInput.getStr()), nLen);
-                    }
                     pParser->m_vAddresses.emplace_back( aTheAddrSpec );
                 }
                 if (bDone)
@@ -675,14 +525,12 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
             {
             case BEFORE_COLON:
                 m_aOuterAddrSpec.reset();
-                resetRealNameAndFirstComment();
                 m_eState = BEFORE_LESS;
                 break;
 
             case BEFORE_LESS:
             case AFTER_GREATER:
                 m_aOuterAddrSpec.finish();
-                addTokenToRealName();
                 break;
 
             case AFTER_LESS:
@@ -703,7 +551,6 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
                 else
                     m_pAddrSpec->reset();
             }
-            addTokenToRealName();
             break;
 
         case '[':
