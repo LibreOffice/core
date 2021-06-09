@@ -105,7 +105,7 @@ void ScEditWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
             break;
     }
 
-    tmpAcc->InitAcc(nullptr, m_xEditView.get(), nullptr,
+    tmpAcc->InitAcc(nullptr, m_xEditView.get(),
                   sName, pDrawingArea->get_tooltip_text());
 }
 

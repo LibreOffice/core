@@ -1536,7 +1536,7 @@ void ScTextWnd::InitEditEngine()
 
     if (pAcc)
     {
-        pAcc->InitAcc(nullptr, m_xEditView.get(), nullptr,
+        pAcc->InitAcc(nullptr, m_xEditView.get(),
                       ScResId(STR_ACC_EDITLINE_NAME),
                       ScResId(STR_ACC_EDITLINE_DESCR));
     }
@@ -2010,7 +2010,7 @@ void ScTextWnd::MakeDialogEditView()
 
     if (pAcc)
     {
-        pAcc->InitAcc(nullptr, m_xEditView.get(), nullptr,
+        pAcc->InitAcc(nullptr, m_xEditView.get(),
                       ScResId(STR_ACC_EDITLINE_NAME),
                       ScResId(STR_ACC_EDITLINE_DESCR));
     }

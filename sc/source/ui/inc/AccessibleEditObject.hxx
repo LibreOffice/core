@@ -59,8 +59,7 @@ public:
 
     void InitAcc(
         const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
-        EditView* pEditView, vcl::Window* pWin,
-        const OUString& rName, const OUString& rDescription);
+        EditView* pEditView, const OUString& rName, const OUString& rDescription);
 
 protected:
     virtual ~ScAccessibleEditObject() override;
