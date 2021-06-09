@@ -3351,11 +3351,12 @@ bool SwCursorShell::HasReadonlySel() const
         SwWrtShell* pWrtSh = GetDoc()->GetDocShell()->GetWrtShell();
         if (pWrtSh)
         {
-            for(SwPaM& rPaM : GetCursor()->GetRingContainer())
+            for(const SwPaM& rPaM : GetCursor()->GetRingContainer())
             {
-                rPaM.Normalize();
-                SwNodeIndex aPointIdx(rPaM.GetPoint()->nNode.GetNode());
-                SwNodeIndex aMarkIdx(rPaM.GetMark()->nNode.GetNode());
+                SwPaM aPaM(*rPaM.GetMark(), *rPaM.GetPoint());
+                aPaM.Normalize();
+                SwNodeIndex aPointIdx(aPaM.GetPoint()->nNode.GetNode());
+                SwNodeIndex aMarkIdx(aPaM.GetMark()->nNode.GetNode());
                 if (aPointIdx == aMarkIdx)
                     continue;
                 // If any nodes in PaM are folded outline content nodes, then set read-only.
