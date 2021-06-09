@@ -141,15 +141,10 @@ TemplateScanner::State TemplateScanner::InitializeEntryScanning()
     {
         mxEntryEnvironment.clear();
 
+        //  Create a cursor to iterate over the templates in this folders.
         //  We are interested only in three properties: the entry's name,
         //  its URL, and its content type.
-        Sequence<OUString> aProps (3);
-        aProps[0] = TITLE;
-        aProps[1] = "TargetURL";
-        aProps[2] = "TypeDescription";
-
-        //  Create a cursor to iterate over the templates in this folders.
-        mxEntryResultSet.set( maFolderContent.createCursor(aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY));
+        mxEntryResultSet.set( maFolderContent.createCursor({ TITLE, "TargetURL", "TypeDescription" }, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY));
     }
     else
         eNextState = ERROR;
@@ -218,13 +213,8 @@ TemplateScanner::State TemplateScanner::InitializeFolderScanning()
         mxFolderEnvironment.clear();
         ::ucbhelper::Content aTemplateDir (mxTemplateRoot, mxFolderEnvironment, comphelper::getProcessComponentContext());
 
-        //  Define the list of properties we are interested in.
-        Sequence<OUString> aProps (2);
-        aProps[0] = TITLE;
-        aProps[1] = "TargetDirURL";
-
         //  Create a cursor to iterate over the template folders.
-        mxFolderResultSet.set( aTemplateDir.createCursor(aProps, ::ucbhelper::INCLUDE_FOLDERS_ONLY));
+        mxFolderResultSet.set( aTemplateDir.createCursor({ TITLE, "TargetDirURL" }, ::ucbhelper::INCLUDE_FOLDERS_ONLY));
         if (mxFolderResultSet.is())
             eNextState = GATHER_FOLDER_LIST;
     }

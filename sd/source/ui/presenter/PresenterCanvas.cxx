@@ -660,12 +660,15 @@ Reference<rendering::XPolyPolygon2D> PresenterCanvas::UpdateSpriteClip (
     else
     {
         // Create a new clip polygon from the window clip rectangle.
-        Sequence<Sequence<geometry::RealPoint2D> > aPoints (1);
-        aPoints[0] = Sequence<geometry::RealPoint2D>(4);
-        aPoints[0][0] = geometry::RealPoint2D(nMinX,nMinY);
-        aPoints[0][1] = geometry::RealPoint2D(nMaxX,nMinY);
-        aPoints[0][2] = geometry::RealPoint2D(nMaxX,nMaxY);
-        aPoints[0][3] = geometry::RealPoint2D(nMinX,nMaxY);
+        Sequence<Sequence<geometry::RealPoint2D> > aPoints
+        {
+            {
+                { nMinX,nMinY },
+                { nMaxX,nMinY },
+                { nMaxX,nMaxY },
+                { nMinX,nMaxY }
+            }
+        };
         Reference<rendering::XLinePolyPolygon2D> xLinePolygon(
             xDevice->createCompatibleLinePolyPolygon(aPoints));
         if (xLinePolygon.is())
