@@ -25,6 +25,7 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/table/XTableRows.hpp>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/configuration.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <i18nlangtag/languagetag.hxx>
@@ -3087,6 +3088,34 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTrackImageDeletion)
 
     const SwRedlineTable& rTable = rIDRA.GetRedlineTable();
     // this was 0 (missing recording of deletion of images)
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), rTable.size());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTrackImageInsertion)
+{
+    loadURL("private:factory/swriter", nullptr);
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+
+    // turn on red-lining and show changes
+    IDocumentRedlineAccess& rIDRA(pDoc->getIDocumentRedlineAccess());
+
+    rIDRA.SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // Insert an image with change tracking
+    OUString aImageURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "ole2.png";
+    uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("FileName", aImageURL),
+    };
+    dispatchCommand(mxComponent, ".uno:InsertGraphic", aArgs);
+
+    const SwRedlineTable& rTable = rIDRA.GetRedlineTable();
+    // this was 0 (missing recording of insertion of images)
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), rTable.size());
 }
 

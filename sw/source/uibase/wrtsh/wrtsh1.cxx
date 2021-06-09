@@ -315,6 +315,11 @@ void SwWrtShell::Insert( const OUString &rPath, const OUString &rFilter,
         pFrameMgr->SetHeightSizeType(SwFrameSize::Fixed);
     }
 
+    // during change tracking, insert the image anchored as character
+    // (to create an SwRangeRedline on its anchor point)
+    if ( IsRedlineOn() && nAnchorType != RndStdIds::FLY_AS_CHAR )
+        pFrameMgr->SetAnchor( RndStdIds::FLY_AS_CHAR );
+
     // Insert the graphic
     SwFEShell::Insert(rPath, rFilter, &rGrf, &pFrameMgr->GetAttrSet());
     if ( bOwnMgr )
