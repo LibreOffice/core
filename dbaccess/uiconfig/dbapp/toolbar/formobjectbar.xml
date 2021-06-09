@@ -21,7 +21,7 @@
  <toolbar:toolbaritem xlink:href=".uno:DBNewForm"/>
  <toolbar:toolbaritem xlink:href=".uno:DBFormOpen"/>
  <toolbar:toolbaritem xlink:href=".uno:DBFormEdit"/>
- <menu:menuseparator/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:DBFormDelete"/>
  <toolbar:toolbaritem xlink:href=".uno:DBFormRename"/>
  <toolbar:toolbarseparator/>
