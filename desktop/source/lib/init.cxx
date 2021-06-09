@@ -5233,6 +5233,8 @@ static int doc_createViewWithOptions(LibreOfficeKitDocument* pThis,
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
     const int nId = SfxLokHelper::createView(pDocument->mnDocumentId);
 
+    vcl::lok::numberOfViewsChanged(SfxLokHelper::getViewsCount(pDocument->mnDocumentId));
+
 #ifdef IOS
     (void) pThis;
 #else
@@ -5247,7 +5249,7 @@ static int doc_createView(LibreOfficeKitDocument* pThis)
     return doc_createViewWithOptions(pThis, nullptr); // No options.
 }
 
-static void doc_destroyView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId)
+static void doc_destroyView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* pThis, int nId)
 {
     comphelper::ProfileZone aZone("doc_destroyView");
 
@@ -5257,6 +5259,9 @@ static void doc_destroyView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis
     LOKClipboardFactory::releaseClipboardForView(nId);
 
     SfxLokHelper::destroyView(nId);
+
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    vcl::lok::numberOfViewsChanged(SfxLokHelper::getViewsCount(pDocument->mnDocumentId));
 }
 
 static void doc_setView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId)
