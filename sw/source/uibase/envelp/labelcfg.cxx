@@ -63,13 +63,7 @@ static OUString lcl_getValue(xmlreader::XmlReader& reader,
 
 static Sequence<OUString> lcl_CreatePropertyNames(const OUString& rPrefix)
 {
-    Sequence<OUString> aProperties(2);
-    OUString* pProperties = aProperties.getArray();
-    std::fill(aProperties.begin(), aProperties.end(), rPrefix);
-
-    pProperties[ 0] += "Name";
-    pProperties[ 1] += "Measure";
-    return aProperties;
+    return { OUString::Concat(rPrefix) + "Name", OUString::Concat(rPrefix) + "Measure" };
 }
 
 SwLabelConfig::SwLabelConfig() :

@@ -856,9 +856,7 @@ bool ::sw::GetDefaultTextContentValue(
         case FN_UNO_TEXT_WRAP:  rAny <<= text::WrapTextMode_NONE; break;
         case FN_UNO_ANCHOR_TYPE: rAny <<= text::TextContentAnchorType_AT_PARAGRAPH; break;
         case FN_UNO_ANCHOR_TYPES:
-        {   uno::Sequence<text::TextContentAnchorType> aTypes(1);
-            text::TextContentAnchorType* pArray = aTypes.getArray();
-            pArray[0] = text::TextContentAnchorType_AT_PARAGRAPH;
+        {   uno::Sequence<text::TextContentAnchorType> aTypes { text::TextContentAnchorType_AT_PARAGRAPH };
             rAny <<= aTypes;
         }
         break;

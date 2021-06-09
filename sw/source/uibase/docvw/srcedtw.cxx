@@ -260,10 +260,7 @@ SwSrcEditWindow::SwSrcEditWindow( vcl::Window* pParent, SwSrcView* pParentView )
         osl::MutexGuard g(mutex_);
         m_xNotifier = n;
     }
-    css::uno::Sequence< OUString > s(2);
-    s[0] = "FontHeight";
-    s[1] = "FontName";
-    n->addPropertiesChangeListener(s, m_xListener);
+    n->addPropertiesChangeListener({ "FontHeight", "FontName" }, m_xListener);
 }
 
 SwSrcEditWindow::~SwSrcEditWindow()

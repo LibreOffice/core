@@ -2527,9 +2527,6 @@ SwUnoCursorHelper::CreateSortDescriptor(const bool bFromTable)
     pArray[3] = beans::PropertyValue("MaxSortFieldsCount", -1, aVal,
                     beans::PropertyState_DIRECT_VALUE);
 
-    uno::Sequence< table::TableSortField > aFields(3);
-    table::TableSortField* pFields = aFields.getArray();
-
     lang::Locale aLang( SvtSysLocale().GetLanguageTag().getLocale());
     // get collator algorithm to be used for the locale
     uno::Sequence< OUString > aSeq(
@@ -2542,26 +2539,13 @@ SwUnoCursorHelper::CreateSortDescriptor(const bool bFromTable)
         aCollAlg = aSeq.getConstArray()[0];
     }
 
-    pFields[0].Field = 1;
-    pFields[0].IsAscending = true;
-    pFields[0].IsCaseSensitive = false;
-    pFields[0].FieldType = table::TableSortFieldType_ALPHANUMERIC;
-    pFields[0].CollatorLocale = aLang;
-    pFields[0].CollatorAlgorithm = aCollAlg;
-
-    pFields[1].Field = 1;
-    pFields[1].IsAscending = true;
-    pFields[1].IsCaseSensitive = false;
-    pFields[1].FieldType = table::TableSortFieldType_ALPHANUMERIC;
-    pFields[1].CollatorLocale = aLang;
-    pFields[1].CollatorAlgorithm = aCollAlg;
-
-    pFields[2].Field = 1;
-    pFields[2].IsAscending = true;
-    pFields[2].IsCaseSensitive = false;
-    pFields[2].FieldType = table::TableSortFieldType_ALPHANUMERIC;
-    pFields[2].CollatorLocale = aLang;
-    pFields[2].CollatorAlgorithm = aCollAlg;
+    uno::Sequence< table::TableSortField > aFields
+    {
+        // Field, IsAscending, IsCaseSensitive, FieldType, CollatorLocale, CollatorAlgorithm
+        { 1, true, false, table::TableSortFieldType_ALPHANUMERIC, aLang, aCollAlg },
+        { 1, true, false, table::TableSortFieldType_ALPHANUMERIC, aLang, aCollAlg },
+        { 1, true, false, table::TableSortFieldType_ALPHANUMERIC, aLang, aCollAlg }
+    };
 
     aVal <<= aFields;
     pArray[4] = beans::PropertyValue("SortFields", -1, aVal,

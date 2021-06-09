@@ -1442,15 +1442,15 @@ static Sequence<OUString> lcl_createSourceNames(std::u16string_view rNodeName)
 
 static Sequence<OUString> lcl_CreateSubNames(std::u16string_view rSubNodeName)
 {
-    Sequence<OUString> aSubSourceNames(6);
-    OUString* pNames = aSubSourceNames.getArray();
-    pNames[0] = OUString::Concat(rSubNodeName) + "/ColumnName";
-    pNames[1] = OUString::Concat(rSubNodeName) + "/ColumnIndex";
-    pNames[2] = OUString::Concat(rSubNodeName) + "/IsNumberFormat";
-    pNames[3] = OUString::Concat(rSubNodeName) + "/IsNumberFormatFromDataBase";
-    pNames[4] = OUString::Concat(rSubNodeName) + "/NumberFormat";
-    pNames[5] = OUString::Concat(rSubNodeName) + "/NumberFormatLocale";
-    return aSubSourceNames;
+    return
+    {
+        OUString::Concat(rSubNodeName) + "/ColumnName",
+        OUString::Concat(rSubNodeName) + "/ColumnIndex",
+        OUString::Concat(rSubNodeName) + "/IsNumberFormat",
+        OUString::Concat(rSubNodeName) + "/IsNumberFormatFromDataBase",
+        OUString::Concat(rSubNodeName) + "/NumberFormat",
+        OUString::Concat(rSubNodeName) + "/NumberFormatLocale"
+    };
 }
 
 static OUString lcl_CreateUniqueName(const Sequence<OUString>& aNames)
@@ -1472,19 +1472,14 @@ void SwInsertDBColAutoPilot::ImplCommit()
     //remove entries that contain this data source + table at first
     for(OUString const & nodeName : std::as_const(aNames))
     {
-        Sequence<OUString> aSourceNames(2);
-        OUString* pSourceNames = aSourceNames.getArray();
-        pSourceNames[0] = nodeName + "/DataSource";
-        pSourceNames[1] = nodeName + "/Command";
-        Sequence<Any> aSourceProperties = GetProperties(aSourceNames);
+        Sequence<Any> aSourceProperties = GetProperties({ nodeName + "/DataSource", nodeName + "/Command" });
         const Any* pSourceProps = aSourceProperties.getArray();
         OUString sSource, sCommand;
         pSourceProps[0] >>= sSource;
         pSourceProps[1] >>= sCommand;
         if(sSource==aDBData.sDataSource && sCommand==aDBData.sCommand)
         {
-            Sequence<OUString> aElements { nodeName };
-            ClearNodeElements(OUString(), aElements);
+            ClearNodeElements(OUString(), { nodeName });
         }
     }
 
