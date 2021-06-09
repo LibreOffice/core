@@ -53,7 +53,7 @@
 #include <comphelper/types.hxx>
 #include <connectivity/formattedcolumnvalue.hxx>
 #include <i18nlangtag/lang.h>
-
+#include <o3tl/safeint.hxx>
 #include <svl/numuno.hxx>
 #include <svl/zforlist.hxx>
 #include <svx/dialmgr.hxx>
@@ -4064,7 +4064,6 @@ sal_Int16 SAL_CALL FmXListBoxCell::getSelectedItemPos()
 Sequence< sal_Int16 > SAL_CALL FmXListBoxCell::getSelectedItemsPos()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    Sequence<sal_Int16> aSeq;
 
     if (m_pBox)
     {
@@ -4073,11 +4072,10 @@ Sequence< sal_Int16 > SAL_CALL FmXListBoxCell::getSelectedItemsPos()
         auto nActive = rBox.get_active();
         if (nActive != -1)
         {
-            aSeq = Sequence<sal_Int16>(1);
-            aSeq.getArray()[0] = nActive;
+            return { o3tl::narrowing<short>(nActive) };
         }
     }
-    return aSeq;
+    return {};
 }
 
 OUString SAL_CALL FmXListBoxCell::getSelectedItem()
@@ -4100,8 +4098,6 @@ css::uno::Sequence<OUString> SAL_CALL FmXListBoxCell::getSelectedItems()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    css::uno::Sequence<OUString> aSeq;
-
     if (m_pBox)
     {
         UpdateFromColumn();
@@ -4109,11 +4105,10 @@ css::uno::Sequence<OUString> SAL_CALL FmXListBoxCell::getSelectedItems()
         auto nActive = rBox.get_active();
         if (nActive != -1)
         {
-            aSeq = css::uno::Sequence<OUString>(1);
-            aSeq.getArray()[0] = rBox.get_text(nActive);
+            return { rBox.get_text(nActive) };
         }
     }
-    return aSeq;
+    return {};
 }
 
 void SAL_CALL FmXListBoxCell::selectItemPos(sal_Int16 nPos, sal_Bool bSelect)

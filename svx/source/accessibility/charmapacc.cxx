@@ -287,18 +287,14 @@ Sequence< sal_Int32 > SAL_CALL SvxShowCharSetAcc::getSelectedAccessibleRows(  )
 {
     OExternalLockGuard aGuard( this );
 
-    Sequence< sal_Int32 > aSel(1);
-    aSel[0] = SvxShowCharSet::GetRowPos(m_pParent->GetSelectIndexId());
-    return aSel;
+    return { SvxShowCharSet::GetRowPos(m_pParent->GetSelectIndexId()) };
 }
 
 Sequence< sal_Int32 > SAL_CALL SvxShowCharSetAcc::getSelectedAccessibleColumns(  )
 {
     OExternalLockGuard aGuard( this );
 
-    Sequence< sal_Int32 > aSel(1);
-    aSel[0] = SvxShowCharSet::GetColumnPos(m_pParent->GetSelectIndexId());
-    return aSel;
+    return { SvxShowCharSet::GetColumnPos(m_pParent->GetSelectIndexId()) };
 }
 
 sal_Bool SAL_CALL SvxShowCharSetAcc::isAccessibleRowSelected( sal_Int32 nRow )

@@ -1670,20 +1670,14 @@ void UCBStorage_Impl::ReadContent()
 
     m_bListCreated = true;
 
-    // create cursor for access to children
-    Sequence< OUString > aProps(4);
-    aProps[0] = "Title";
-    aProps[1] = "IsFolder";
-    aProps[2] = "MediaType";
-    aProps[3] = "Size";
-
     try
     {
         GetContent();
         if ( !m_pContent )
             return;
 
-        Reference< XResultSet > xResultSet = m_pContent->createCursor( aProps, ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS );
+        // create cursor for access to children
+        Reference< XResultSet > xResultSet = m_pContent->createCursor( { "Title", "IsFolder", "MediaType", "Size" }, ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS );
         Reference< XRow > xRow( xResultSet, UNO_QUERY );
         if ( xResultSet.is() )
         {

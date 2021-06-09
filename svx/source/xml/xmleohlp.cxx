@@ -666,7 +666,7 @@ Any SAL_CALL SvXMLEmbeddedObjectHelper::getByName(
 
 Sequence< OUString > SAL_CALL SvXMLEmbeddedObjectHelper::getElementNames()
 {
-   return Sequence< OUString >(0);
+   return {};
 }
 
 sal_Bool SAL_CALL SvXMLEmbeddedObjectHelper::hasByName( const OUString& rURLStr )

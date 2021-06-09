@@ -513,12 +513,7 @@ void test_DefaultRegistry(
             OSL_ENSURE( seqValue.getArray()[2] == "come",
                           "test_DefaultRegistry error 13" );
 
-            Sequence<sal_Int32> seqLong(3);
-            seqLong.getArray()[0] = 1234;
-            seqLong.getArray()[1] = 4567;
-            seqLong.getArray()[2] = 7890;
-
-            xKey->setLongListValue(seqLong);
+            xKey->setLongListValue({ 1234, 4567, 7890 });
 
             Sequence<sal_Int32> seqLongValue = xKey->getLongListValue();
 

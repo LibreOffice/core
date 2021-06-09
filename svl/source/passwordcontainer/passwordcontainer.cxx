@@ -231,15 +231,11 @@ PassMap StorageItem::getInfo()
 
 void StorageItem::setUseStorage( bool bUse )
 {
-    Sequence< OUString > sendNames(1);
     Sequence< uno::Any > sendVals(1);
-
-    sendNames[0] = "UseStorage";
-
     sendVals[0] <<= bUse;
 
     ConfigItem::SetModified();
-    ConfigItem::PutProperties( sendNames, sendVals );
+    ConfigItem::PutProperties( { "UseStorage" }, sendVals );
 }
 
 
@@ -293,18 +289,14 @@ bool StorageItem::getEncodedMP( OUString& aResult )
 
 void StorageItem::setEncodedMP( const OUString& aEncoded, bool bAcceptEmpty )
 {
-    Sequence< OUString > sendNames(2);
     Sequence< uno::Any > sendVals(2);
-
-    sendNames[0] = "HasMaster";
-    sendNames[1] = "Master";
 
     bool bHasMaster = ( !aEncoded.isEmpty() || bAcceptEmpty );
     sendVals[0] <<= bHasMaster;
     sendVals[1] <<= aEncoded;
 
     ConfigItem::SetModified();
-    ConfigItem::PutProperties( sendNames, sendVals );
+    ConfigItem::PutProperties( { "HasMaster", "Master" }, sendVals );
 
     hasEncoded = bHasMaster;
     mEncoded = aEncoded;
@@ -313,13 +305,8 @@ void StorageItem::setEncodedMP( const OUString& aEncoded, bool bAcceptEmpty )
 
 void StorageItem::remove( const OUString& aURL, const OUString& aName )
 {
-    std::vector < OUString > forIndex;
-    forIndex.push_back( aURL );
-    forIndex.push_back( aName );
-
-    Sequence< OUString > sendSeq(1);
-
-    sendSeq[0] = createIndex( forIndex );
+    std::vector < OUString > forIndex { aURL, aName };
+    Sequence< OUString > sendSeq { createIndex( forIndex ) };
 
     ConfigItem::ClearNodeElements( "Store", sendSeq );
 }
@@ -673,18 +660,15 @@ UrlRecord SAL_CALL PasswordContainer::findForName( const OUString& aURL, const O
 
 Sequence< UserRecord > PasswordContainer::FindUsr( const std::vector< NamePassRecord >& userlist, std::u16string_view aName, const Reference< XInteractionHandler >& aHandler )
 {
-    sal_uInt32 nInd = 0;
     for (auto const& aNPIter : userlist)
     {
         if( aNPIter.GetUserName() == aName )
         {
-            Sequence< UserRecord > aResult(1);
             bool bTryToDecode = true;
-            aResult[0] = CopyToUserRecord( aNPIter, bTryToDecode, aHandler );
+            Sequence< UserRecord > aResult { CopyToUserRecord( aNPIter, bTryToDecode, aHandler ) };
 
             return aResult;
         }
-        ++nInd;
     }
 
     return Sequence< UserRecord >();
