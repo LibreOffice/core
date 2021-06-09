@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5d583f27_9447db5f",
+        "filename": "reportdesign/source/ui/inspection/DataProviderHandler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-09T07:07:29Z",
+      "side": 0,
+      "message": "In such simple cases, it may even become\n\n        xTitle-\u003esetText({ xFormatted });",
+      "revId": "96f8ed6619a73655f9c3b94e6a4a3979cc67f551",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
