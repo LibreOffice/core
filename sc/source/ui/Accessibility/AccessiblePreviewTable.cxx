@@ -246,13 +246,13 @@ uno::Reference< XAccessibleTable > SAL_CALL ScAccessiblePreviewTable::getAccessi
 uno::Sequence< sal_Int32 > SAL_CALL ScAccessiblePreviewTable::getSelectedAccessibleRows()
 {
     //  in the page preview, there is no selection
-    return uno::Sequence<sal_Int32>(0);
+    return {};
 }
 
 uno::Sequence< sal_Int32 > SAL_CALL ScAccessiblePreviewTable::getSelectedAccessibleColumns()
 {
     //  in the page preview, there is no selection
-    return uno::Sequence<sal_Int32>(0);
+    return {};
 }
 
 sal_Bool SAL_CALL ScAccessiblePreviewTable::isAccessibleRowSelected( sal_Int32 nRow )

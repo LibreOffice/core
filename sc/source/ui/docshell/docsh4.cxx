@@ -1395,8 +1395,7 @@ bool ScDocShell::ExecuteChangeProtectionDialog( bool bJustQueryIfProtected )
                     if ( bJustQueryIfProtected )
                         bDone = true;
                     else
-                        pChangeTrack->SetProtection(
-                            css::uno::Sequence< sal_Int8 > (0) );
+                        pChangeTrack->SetProtection( {} );
                 }
                 else
                 {

@@ -686,7 +686,7 @@ uno::Sequence<OUString> SAL_CALL ScNamedRangesObj::getElementNames()
             return aSeq;
         }
     }
-    return uno::Sequence<OUString>(0);
+    return {};
 }
 
 sal_Bool SAL_CALL ScNamedRangesObj::hasByName( const OUString& aName )
