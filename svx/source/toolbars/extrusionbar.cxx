@@ -1227,93 +1227,33 @@ bool checkForSelectedCustomShapes( SdrView const * pSdrView, bool bOnlyExtruded 
 
 void ExtrusionBar::getState( SdrView const * pSdrView, SfxItemSet& rSet )
 {
-    if (rSet.GetItemState(SID_EXTRUSION_DIRECTION) != SfxItemState::UNKNOWN)
+    getExtrusionDirectionState( pSdrView, rSet );
+    getExtrusionProjectionState( pSdrView, rSet );
+
+    const bool bOnlyExtrudedCustomShapes(checkForSelectedCustomShapes( pSdrView, true ));
+
+    if (! bOnlyExtrudedCustomShapes)
     {
-        getExtrusionDirectionState( pSdrView, rSet );
-    }
-    if (rSet.GetItemState(SID_EXTRUSION_PROJECTION) != SfxItemState::UNKNOWN)
-    {
-        getExtrusionProjectionState( pSdrView, rSet );
-    }
-    const bool bOnlyExtrudedCustomShapes =
-        checkForSelectedCustomShapes( pSdrView, true );
-    if (rSet.GetItemState(SID_EXTRUSION_TILT_DOWN) != SfxItemState::UNKNOWN)
-    {
-        if (! bOnlyExtrudedCustomShapes)
-            rSet.DisableItem( SID_EXTRUSION_TILT_DOWN );
-    }
-    if (rSet.GetItemState(SID_EXTRUSION_TILT_DOWN) != SfxItemState::UNKNOWN)
-    {
-        if (! bOnlyExtrudedCustomShapes)
-            rSet.DisableItem( SID_EXTRUSION_TILT_DOWN );
-    }
-    if (rSet.GetItemState(SID_EXTRUSION_TILT_UP) != SfxItemState::UNKNOWN)
-    {
-        if (! bOnlyExtrudedCustomShapes)
-            rSet.DisableItem( SID_EXTRUSION_TILT_UP );
-    }
-    if (rSet.GetItemState(SID_EXTRUSION_TILT_LEFT) != SfxItemState::UNKNOWN)
-    {
-        if (! bOnlyExtrudedCustomShapes)
-            rSet.DisableItem( SID_EXTRUSION_TILT_LEFT );
-    }
-    if (rSet.GetItemState(SID_EXTRUSION_TILT_RIGHT) != SfxItemState::UNKNOWN)
-    {
-        if (! bOnlyExtrudedCustomShapes)
-            rSet.DisableItem( SID_EXTRUSION_TILT_RIGHT );
-    }
-    if (rSet.GetItemState(SID_EXTRUSION_3D_COLOR) != SfxItemState::UNKNOWN)
-    {
-        if (! bOnlyExtrudedCustomShapes)
-            rSet.DisableItem( SID_EXTRUSION_3D_COLOR );
-    }
-    if (rSet.GetItemState(SID_EXTRUSION_DEPTH_FLOATER) != SfxItemState::UNKNOWN)
-    {
-        if (! bOnlyExtrudedCustomShapes)
-            rSet.DisableItem( SID_EXTRUSION_DEPTH_FLOATER );
-    }
-    if (rSet.GetItemState(SID_EXTRUSION_DIRECTION_FLOATER) != SfxItemState::UNKNOWN)
-    {
-        if (! bOnlyExtrudedCustomShapes)
-            rSet.DisableItem( SID_EXTRUSION_DIRECTION_FLOATER );
-    }
-    if (rSet.GetItemState(SID_EXTRUSION_LIGHTING_FLOATER) != SfxItemState::UNKNOWN)
-    {
-        if (! bOnlyExtrudedCustomShapes)
-            rSet.DisableItem( SID_EXTRUSION_LIGHTING_FLOATER );
-    }
-    if (rSet.GetItemState(SID_EXTRUSION_SURFACE_FLOATER) != SfxItemState::UNKNOWN)
-    {
-        if(! bOnlyExtrudedCustomShapes)
-            rSet.DisableItem( SID_EXTRUSION_SURFACE_FLOATER );
-    }
-    if (rSet.GetItemState(SID_EXTRUSION_TOGGLE) != SfxItemState::UNKNOWN)
-    {
-        if( !checkForSelectedCustomShapes( pSdrView, false ) )
-            rSet.DisableItem( SID_EXTRUSION_TOGGLE );
-    }
-    if (rSet.GetItemState(SID_EXTRUSION_DEPTH) != SfxItemState::UNKNOWN)
-    {
-        getExtrusionDepthState( pSdrView, rSet );
-    }
-    if (rSet.GetItemState(SID_EXTRUSION_SURFACE) != SfxItemState::UNKNOWN)
-    {
-        getExtrusionSurfaceState( pSdrView, rSet );
-    }
-    if (rSet.GetItemState(SID_EXTRUSION_LIGHTING_INTENSITY) != SfxItemState::UNKNOWN)
-    {
-        getExtrusionLightingIntensityState( pSdrView, rSet );
+        rSet.DisableItem( SID_EXTRUSION_TILT_DOWN );
+        rSet.DisableItem( SID_EXTRUSION_TILT_DOWN );
+        rSet.DisableItem( SID_EXTRUSION_TILT_UP );
+        rSet.DisableItem( SID_EXTRUSION_TILT_LEFT );
+        rSet.DisableItem( SID_EXTRUSION_TILT_RIGHT );
+        rSet.DisableItem( SID_EXTRUSION_3D_COLOR );
+        rSet.DisableItem( SID_EXTRUSION_DEPTH_FLOATER );
+        rSet.DisableItem( SID_EXTRUSION_DIRECTION_FLOATER );
+        rSet.DisableItem( SID_EXTRUSION_LIGHTING_FLOATER );
+        rSet.DisableItem( SID_EXTRUSION_SURFACE_FLOATER );
     }
 
-    if (rSet.GetItemState(SID_EXTRUSION_LIGHTING_DIRECTION) != SfxItemState::UNKNOWN)
-    {
-        getExtrusionLightingDirectionState( pSdrView, rSet );
-    }
+    if( !checkForSelectedCustomShapes( pSdrView, false ) )
+        rSet.DisableItem( SID_EXTRUSION_TOGGLE );
 
-    if (rSet.GetItemState(SID_EXTRUSION_3D_COLOR) != SfxItemState::UNKNOWN)
-    {
-        getExtrusionColorState( pSdrView, rSet );
-    }
+    getExtrusionDepthState( pSdrView, rSet );
+    getExtrusionSurfaceState( pSdrView, rSet );
+    getExtrusionLightingIntensityState( pSdrView, rSet );
+    getExtrusionLightingDirectionState( pSdrView, rSet );
+    getExtrusionColorState( pSdrView, rSet );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
