@@ -117,6 +117,12 @@ private:
 
     static void WriteDiagram(const FSHelperPtr& pFS, PowerPointShapeExport& rDML, const css::uno::Reference<css::drawing::XShape>& rXShape, int nDiagramId);
 
+    /** Create a new placeholder index for a master placeholder shape
+
+        @param rXShape Master placeholder shape
+        @returns Placeholder index
+    */
+    unsigned CreateNewPlaceholderIndex(const css::uno::Reference<css::drawing::XShape>& rXShape);
     /// Should we export as .pptm, ie. do we contain macros?
     bool mbPptm;
 
@@ -138,6 +144,10 @@ private:
     bool mbCreateNotes;
 
     ::oox::drawingml::ShapeExport::ShapeHashMap maShapeMap;
+
+    unsigned mnPlaceholderIndexMax; ///< Last used placeholder index
+    /// Map of placeholder indexes for Master placeholders
+    std::unordered_map< css::uno::Reference<css::drawing::XShape>, unsigned > maPlaceholderShapeToIndexMap;
 
     struct AuthorComments {
         sal_Int32 nId;
