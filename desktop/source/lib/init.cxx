@@ -956,29 +956,6 @@ void hideSidebar()
         SetLastExceptionMsg("No view shell or sidebar");
 }
 
-VclPtr<Window> getSidebarWindow()
-{
-    VclPtr<Window> xRet;
-
-    setupSidebar();
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-    SfxViewFrame* pViewFrame = pViewShell? pViewShell->GetViewFrame(): nullptr;
-    if (!pViewFrame)
-        return xRet;
-
-    // really a SidebarChildWindow
-    SfxChildWindow *pChild = pViewFrame->GetChildWindow(SID_SIDEBAR);
-    if (!pChild)
-        return xRet;
-
-    // really a SidebarDockingWindow
-    vcl::Window *pWin = pChild->GetWindow();
-    if (!pWin)
-        return xRet;
-    xRet = pWin;
-    return xRet;
-}
-
 }  // end anonymous namespace
 
 // Could be anonymous in principle, but for the unit testing purposes, we
@@ -3803,92 +3780,28 @@ static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pA
     SolarMutexGuard aGuard;
 
     StringMap aMap(jsdialog::jsonToStringMap(pArguments));
-    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nWindowId);
-
-    if (!pWindow && nWindowId >= 1000000000 /* why unsigned? */)
-        pWindow = getSidebarWindow();
 
     if (aMap.find("id") == aMap.end())
         return;
 
-    static constexpr OUStringLiteral sClickAction(u"CLICK");
-    static constexpr OUStringLiteral sSelectAction(u"SELECT");
-    static constexpr OUStringLiteral sClearAction(u"CLEAR");
-    static constexpr OUStringLiteral sTypeAction(u"TYPE");
-    static constexpr OUStringLiteral sUpAction(u"UP");
-    static constexpr OUStringLiteral sDownAction(u"DOWN");
-    static constexpr OUStringLiteral sValue(u"VALUE");
-
-    bool bExecutedWeldedAction = false;
+    sal_uInt64 nCurrentShellId = reinterpret_cast<sal_uInt64>(SfxViewShell::Current());
 
     try
     {
         OString sControlId = OUStringToOString(aMap["id"], RTL_TEXTENCODING_ASCII_US);
 
-        bExecutedWeldedAction = jsdialog::ExecuteAction(nWindowId, sControlId, aMap);
-        if (!bExecutedWeldedAction)
-            bExecutedWeldedAction = jsdialog::ExecuteAction(reinterpret_cast<sal_uInt64>(SfxViewShell::Current()),
-                                                      sControlId, aMap);
+        // dialogs send own id but notebookbar and sidebar controls are remembered by SfxViewShell id
+        bool bFoundWeldedControl = jsdialog::ExecuteAction(nWindowId, sControlId, aMap);
+        if (!bFoundWeldedControl)
+            bFoundWeldedControl = jsdialog::ExecuteAction(nCurrentShellId, sControlId, aMap);
 
-        if (bExecutedWeldedAction)
+        if (bFoundWeldedControl)
             return;
 
-        if (!pWindow)
-        {
-            SetLastExceptionMsg("Document doesn't support dialog rendering, or window not found.");
-            return;
-        }
+        // force resend - used in mobile-wizard
+        jsdialog::SendFullUpdate(nCurrentShellId, "Panel");
 
-        WindowUIObject aUIObject(pWindow);
-        std::unique_ptr<UIObject> pUIWindow(aUIObject.get_visible_child(aMap["id"]));
-        if (pUIWindow) {
-            OUString sAction((aMap.find("cmd") != aMap.end())? aMap["cmd"]: "");
-
-            if (sAction == "selected")
-            {
-                aMap["POS"] = aMap["data"];
-                aMap["TEXT"] = aMap["data"];
-
-                pUIWindow->execute(sSelectAction, aMap);
-            }
-            else if (sAction == "plus")
-            {
-                pUIWindow->execute(sUpAction, aMap);
-            }
-            else if (sAction == "minus")
-            {
-                pUIWindow->execute(sDownAction, aMap);
-            }
-            else if (sAction == "set")
-            {
-                aMap["TEXT"] = aMap["data"];
-
-                pUIWindow->execute(sClearAction, aMap);
-                pUIWindow->execute(sTypeAction, aMap);
-            }
-            else if (sAction == "value")
-            {
-                aMap["VALUE"] = aMap["data"];
-                pUIWindow->execute(sValue, aMap);
-            }
-            else if (sAction == "click" && aMap["type"] == "drawingarea")
-            {
-                int separatorPos = aMap["data"].indexOf(';');
-                if (separatorPos > 0)
-                {
-                    // x;y
-                    aMap["POSX"] = aMap["data"].copy(0, separatorPos);
-                    aMap["POSY"] = aMap["data"].copy(separatorPos + 1);
-                }
-                pUIWindow->execute(sClickAction, aMap);
-            }
-            else
-                pUIWindow->execute(sClickAction, aMap);
-        }
     } catch(...) {}
-
-    // force resend
-    pWindow->Resize();
 }
 
 
