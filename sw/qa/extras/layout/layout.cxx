@@ -2978,6 +2978,17 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf113014)
     assertXPathContent(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/textarray[5]/text", "3.");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf134965)
+{
+    SwDoc* pDoc = createDoc("tdf134965.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    pWrtShell->Insert("foobar");
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf130218)
 {
     SwDoc* pDoc = createDoc("tdf130218.fodt");
