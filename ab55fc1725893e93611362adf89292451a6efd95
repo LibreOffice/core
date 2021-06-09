@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c82f921_6104b9c4",
+        "filename": "sc/source/ui/miscdlgs/dataproviderdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-06-09T06:06:16Z",
+      "side": 1,
+      "message": "Have never seen this initialization of two ui files in one class before. Does it make sense?",
+      "range": {
+        "startLine": 57,
+        "startChar": 30,
+        "endLine": 57,
+        "endChar": 43
+      },
+      "revId": "ab55fc1725893e93611362adf89292451a6efd95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "484b741f_2bb7a89c",
+        "filename": "sc/source/ui/miscdlgs/dataproviderdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-06-09T06:06:16Z",
+      "side": 1,
+      "message": "The variable is linked to the UI element but but no event handler assigned yet. See your code below mxOKBtn-\u003econnect_clicked(LINK(this, ScDataProviderDlg, ApplyQuitHdl)); how to do it.",
+      "range": {
+        "startLine": 62,
+        "startChar": 6,
+        "endLine": 62,
+        "endChar": 16
+      },
+      "revId": "ab55fc1725893e93611362adf89292451a6efd95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
