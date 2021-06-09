@@ -81,6 +81,24 @@
       "revId": "165a8175ac250bf3c10784469b64ce75002532de",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e252c94_49430d93",
+        "filename": "sw/qa/extras/txtencexport/txtencexport.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-06-09T09:09:10Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "26f8f6de_32159028",
+      "revId": "165a8175ac250bf3c10784469b64ce75002532de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
