@@ -28,7 +28,7 @@
 using uno::Reference;
 using beans::XPropertySet;
 
-class Chart2GeometryTest : public ChartTest, public XmlTestTools
+class Chart2GeometryTest : public ChartTest
 {
 protected:
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override;
@@ -71,71 +71,7 @@ public:
     CPPUNIT_TEST(testTdf135366_CustomLabelText);
 
     CPPUNIT_TEST_SUITE_END();
-
-protected:
-    /**
-     * Given that some problem doesn't affect the result in the importer, we
-     * test the resulting file directly, by opening the zip file, parsing an
-     * xml stream, and asserting an XPath expression. This method returns the
-     * xml stream, so that you can do the asserting.
-     */
-    xmlDocUniquePtr parseExport(const OUString& rDir, const OUString& rFilterFormat);
 };
-
-namespace
-{
-// This is copied from Chart2ExportTest. It allows to access the chart from a MS Office document
-// without knowing whether the file is a chart1.xml or chart2.xml... As of August 2020, Calc
-// and Impress use a static variable for the number and therefore the number depends on whether
-// there had already been savings before.
-struct CheckForChartName
-{
-private:
-    OUString aDir;
-
-public:
-    explicit CheckForChartName(const OUString& rDir)
-        : aDir(rDir)
-    {
-    }
-
-    bool operator()(const OUString& rName)
-    {
-        if (!rName.startsWith(aDir))
-            return false;
-
-        if (!rName.endsWith(".xml"))
-            return false;
-
-        return true;
-    }
-};
-
-OUString findChartFile(const OUString& rDir, uno::Reference<container::XNameAccess> const& xNames)
-{
-    uno::Sequence<OUString> aNames = xNames->getElementNames();
-    OUString* pElement = std::find_if(aNames.begin(), aNames.end(), CheckForChartName(rDir));
-
-    CPPUNIT_ASSERT(pElement != aNames.end());
-    return *pElement;
-}
-}
-
-xmlDocUniquePtr Chart2GeometryTest::parseExport(const OUString& rDir, const OUString& rFilterFormat)
-{
-    std::shared_ptr<utl::TempFile> pTempFile = save(rFilterFormat);
-
-    // Read the XML stream we're interested in.
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
-        = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
-                                                      pTempFile->GetURL());
-    uno::Reference<io::XInputStream> xInputStream(
-        xNameAccess->getByName(findChartFile(rDir, xNameAccess)), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xInputStream.is());
-    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
-
-    return parseXmlStream(pStream.get());
-}
 
 void Chart2GeometryTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
 {
