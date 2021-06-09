@@ -48,6 +48,8 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
+#include <redline.hxx>
 #include <dview.hxx>
 #include <dflyobj.hxx>
 #include <dcontact.hxx>
@@ -890,6 +892,16 @@ void SwFEShell::Insert( const OUString& rGrfName, const OUString& rFltName,
 
     if( pFrame )
     {
+        // add a redline to the anchor point at tracked insertion of picture
+        if ( IsRedlineOn() )
+        {
+            SwPosition aPos(*pFormat->GetAnchor().GetContentAnchor());
+            SwPaM aPaM(aPos.nNode.GetNode(), aPos.nContent.GetIndex(),
+                    aPos.nNode.GetNode(), aPos.nContent.GetIndex() + 1);
+            GetDoc()->getIDocumentRedlineAccess().AppendRedline(
+                    new SwRangeRedline( RedlineType::Insert, aPaM ), true);
+        }
+
         // fdo#36681: Invalidate the content and layout to refresh
         // the picture anchoring properly
         SwPageFrame* pPageFrame = pFrame->FindPageFrameOfAnchor();
