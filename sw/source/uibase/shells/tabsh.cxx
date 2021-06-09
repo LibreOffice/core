@@ -596,18 +596,22 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 auto pRequest = std::make_shared<SfxRequest>(rReq);
                 rReq.Ignore(); // the 'old' request is not relevant any more
 
-                SwPaM* pCursor = rSh.IsTableMode() ? rSh.GetTableCrs() : rSh.GetCursor(); // tdf#142165 use table cursor if in table mode
+                const bool bTableMode = rSh.IsTableMode();
+                SwPaM* pCursor = bTableMode ? rSh.GetTableCrs() : rSh.GetCursor(); // tdf#142165 use table cursor if in table mode
                 auto vCursors = CopyPaMRing(*pCursor); // tdf#135636 make a copy to use at later apply
-                pDlg->StartExecuteAsync([pDlg, pRequest, pTableRep, &rBindings, &rSh, vCursors](sal_Int32 nResult){
+                pDlg->StartExecuteAsync([pDlg, pRequest, pTableRep, &rBindings, &rSh, vCursors, bTableMode](sal_Int32 nResult){
                     if (RET_OK == nResult)
                     {
-                        if (rSh.IsTableMode()) // tdf#140977 drop possible table-cursor before setting the new one
-                            rSh.TableCursorToCursor();
+                        if (!bTableMode && rSh.IsTableMode()) // tdf#140977 drop current table-cursor if setting a replacement
+                            rSh.TableCursorToCursor();        // non-table one
 
-                        // tdf#135636 set the table selected at dialog launch as current selection
+                        // tdf#135636 set the selection at dialog launch as current selection
                         rSh.SetSelection(*vCursors->front()); // UpdateCursor() will be called which in the case
                                                               // of a table selection should recreate a
-                                                              // SwShellTableCursor
+                                                              // SwShellTableCursor if the selection is more than a single cell
+
+                        if (bTableMode && !rSh.IsTableMode()) // tdf#142721 ensure the new selection is a SwShellTableCursor in
+                            rSh.SelTableBox();                // the case of of a single cell
 
                         const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
 
