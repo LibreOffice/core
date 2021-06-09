@@ -517,9 +517,6 @@ void SwTextFrame::AdjustFrame( const SwTwips nChgHght, bool bHasToFit )
 
 css::uno::Sequence< css::style::TabStop > SwTextFrame::GetTabStopInfo( SwTwips CurrentPos )
 {
-    css::uno::Sequence< css::style::TabStop > tabs(1);
-    css::style::TabStop ts;
-
     SwTextFormatInfo     aInf( getRootFrame()->GetCurrShell()->GetOut(), this );
     SwTextFormatter      aLine( this, &aInf );
     SwTextCursor         TextCursor( this, &aInf );
@@ -533,10 +530,11 @@ css::uno::Sequence< css::style::TabStop > SwTextFrame::GetTabStopInfo( SwTwips C
 
     if( !pTS )
     {
-        return css::uno::Sequence< css::style::TabStop >();
+        return {};
     }
 
     // copy tab stop information into a Sequence, which only contains one element.
+    css::style::TabStop ts;
     ts.Position = pTS->GetTabPos();
     ts.DecimalChar = pTS->GetDecimal();
     ts.FillChar = pTS->GetFill();
@@ -550,8 +548,7 @@ css::uno::Sequence< css::style::TabStop > SwTextFrame::GetTabStopInfo( SwTwips C
     default: break; // prevent warning
     }
 
-    tabs[0] = ts;
-    return tabs;
+    return { ts };
 }
 
 // AdjustFollow expects the following situation:

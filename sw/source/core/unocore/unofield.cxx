@@ -2336,9 +2336,7 @@ uno::Any SAL_CALL SwXTextField::getPropertyValue(const OUString& rPropertyName)
         break;
     case FN_UNO_ANCHOR_TYPES:
         {
-            uno::Sequence<text::TextContentAnchorType> aTypes(1);
-            text::TextContentAnchorType* pArray = aTypes.getArray();
-            pArray[0] = text::TextContentAnchorType_AS_CHARACTER;
+            uno::Sequence<text::TextContentAnchorType> aTypes { text::TextContentAnchorType_AS_CHARACTER };
             aRet <<= aTypes;
         }
         break;

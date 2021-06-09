@@ -1988,13 +1988,14 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
 
     if(FN_UNO_ANCHOR_TYPES == pEntry->nWID)
     {
-        uno::Sequence<text::TextContentAnchorType> aTypes(5);
-        text::TextContentAnchorType* pArray = aTypes.getArray();
-        pArray[0] = text::TextContentAnchorType_AT_PARAGRAPH;
-        pArray[1] = text::TextContentAnchorType_AS_CHARACTER;
-        pArray[2] = text::TextContentAnchorType_AT_PAGE;
-        pArray[3] = text::TextContentAnchorType_AT_FRAME;
-        pArray[4] = text::TextContentAnchorType_AT_CHARACTER;
+        uno::Sequence<text::TextContentAnchorType> aTypes
+        {
+            text::TextContentAnchorType_AT_PARAGRAPH,
+            text::TextContentAnchorType_AS_CHARACTER,
+            text::TextContentAnchorType_AT_PAGE,
+            text::TextContentAnchorType_AT_FRAME,
+            text::TextContentAnchorType_AT_CHARACTER
+        };
         aAny <<= aTypes;
     }
     else if(pFormat)

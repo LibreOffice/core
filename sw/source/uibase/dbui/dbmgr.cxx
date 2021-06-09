@@ -2654,7 +2654,6 @@ OUString LoadAndRegisterDataSource_Impl(DBConnURIType type, const uno::Reference
     uno::Any aInfoAny;
     bool bStore = true;
     OUString sFind;
-    uno::Sequence<OUString> aFilters(1);
 
     uno::Any aURLAny = GetDBunoURI(rURL, type);
     switch (type) {
@@ -2668,8 +2667,10 @@ OUString LoadAndRegisterDataSource_Impl(DBConnURIType type, const uno::Reference
     case DBConnURIType::FLAT:
     case DBConnURIType::DBASE:
         //set the filter to the file name without extension
-        aFilters[0] = rURL.getBase(INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset);
-        aTableFilterAny <<= aFilters;
+        {
+            uno::Sequence<OUString> aFilters { rURL.getBase(INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset) };
+            aTableFilterAny <<= aFilters;
+        }
         break;
     case DBConnURIType::MSJET:
     case DBConnURIType::MSACE:
