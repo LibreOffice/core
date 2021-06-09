@@ -18,7 +18,7 @@
 #include <fstream>
 #include <string_view>
 
-class Chart2XShapeTest : public ChartTest, public XmlTestTools
+class Chart2XShapeTest : public ChartTest
 {
 public:
     void testFdo75075();

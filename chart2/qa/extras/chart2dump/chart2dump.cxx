@@ -85,7 +85,7 @@
         } \
     }
 
-class Chart2DumpTest : public ChartTest, public XmlTestTools
+class Chart2DumpTest : public ChartTest
 {
 protected:
     Chart2DumpTest(bool bDumpMode)

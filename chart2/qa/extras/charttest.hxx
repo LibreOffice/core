@@ -10,6 +10,7 @@
 #pragma once
 
 #include <test/bootstrapfixture.hxx>
+#include <test/xmltesttools.hxx>
 #include <unotest/macros_test.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -27,6 +28,7 @@
 #include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
 #include <unotools/tempfile.hxx>
 #include <rtl/math.hxx>
@@ -60,6 +62,8 @@
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
 
+#include <unotools/ucbstreamhelper.hxx>
+
 using namespace css;
 using namespace css::uno;
 
@@ -68,7 +72,41 @@ namespace com::sun::star::chart2 { class XDiagram; }
 namespace com::sun::star::table { class XTableCharts; }
 namespace com::sun::star::table { class XTablePivotCharts; }
 
-class ChartTest : public test::BootstrapFixture, public unotest::MacrosTest
+namespace {
+
+struct CheckForChartName
+{
+private:
+    OUString aDir;
+
+public:
+    explicit CheckForChartName( const OUString& rDir ):
+        aDir(rDir) {}
+
+    bool operator()(const OUString& rName)
+    {
+        if(!rName.startsWith(aDir))
+            return false;
+
+        if(!rName.endsWith(".xml"))
+            return false;
+
+        return true;
+    }
+};
+
+OUString findChartFile(const OUString& rDir, uno::Reference< container::XNameAccess > const & xNames )
+{
+    uno::Sequence<OUString> aNames = xNames->getElementNames();
+    OUString* pElement = std::find_if(aNames.begin(), aNames.end(), CheckForChartName(rDir));
+
+    CPPUNIT_ASSERT(pElement != aNames.end());
+    return *pElement;
+}
+
+}
+
+class ChartTest : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
 {
 public:
     ChartTest():mbSkipValidation(false) {}
@@ -93,6 +131,14 @@ protected:
     Reference< lang::XComponent > mxComponent;
     OUString maServiceName;
     bool mbSkipValidation; // if you set this flag for a new test I'm going to haunt you!
+
+    /**
+     * Given that some problem doesn't affect the result in the importer, we
+     * test the resulting file directly, by opening the zip file, parsing an
+     * xml stream, and asserting an XPath expression. This method returns the
+     * xml stream, so that you can do the asserting.
+     */
+    xmlDocUniquePtr parseExport(const OUString& rDir, const OUString& rFilterFormat);
 };
 
 OUString ChartTest::getFileExtension( const OUString& aFileName )
@@ -637,6 +683,19 @@ getShapeByName(const uno::Reference<drawing::XShapes>& rShapes, const OUString& 
         }
     }
     return uno::Reference<drawing::XShape>();
+}
+
+xmlDocUniquePtr ChartTest::parseExport(const OUString& rDir, const OUString& rFilterFormat)
+{
+    std::shared_ptr<utl::TempFile> pTempFile = save(rFilterFormat);
+
+    // Read the XML stream we're interested in.
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), pTempFile->GetURL());
+    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName(findChartFile(rDir, xNameAccess)), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xInputStream.is());
+    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+
+    return parseXmlStream(pStream.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
