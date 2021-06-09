@@ -179,7 +179,7 @@ public:
      * @return   <tt>*this</tt>
      */
     ShapeExport&       WriteShape( const css::uno::Reference< css::drawing::XShape >& xShape );
-    ShapeExport&       WriteTextBox( const css::uno::Reference< css::uno::XInterface >& xIface, sal_Int32 nXmlNamespace );
+    ShapeExport&       WriteTextBox( const css::uno::Reference< css::uno::XInterface >& xIface, sal_Int32 nXmlNamespace, bool bWritePropertiesAsLstStyles = false );
     virtual ShapeExport&
                         WriteTextShape( const css::uno::Reference< css::drawing::XShape >& xShape );
     ShapeExport&
