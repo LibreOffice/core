@@ -75,8 +75,7 @@ void SwarmSolverTest::testUnconstrained()
     table::CellAddress aObjective(0, 1, 1);
 
     // "changing cells" - unknown variables
-    uno::Sequence<table::CellAddress> aVariables(1);
-    aVariables[0] = table::CellAddress(0, 1, 0);
+    uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
 
     // constraints
     uno::Sequence<sheet::SolverConstraint> aConstraints;
@@ -125,8 +124,7 @@ void SwarmSolverTest::testVariableBounded()
     table::CellAddress aObjective(0, 1, 1);
 
     // "changing cells" - unknown variables
-    uno::Sequence<table::CellAddress> aVariables(1);
-    aVariables[0] = table::CellAddress(0, 1, 0);
+    uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
 
     // constraints
     uno::Sequence<sheet::SolverConstraint> aConstraints(2);
@@ -177,8 +175,7 @@ void SwarmSolverTest::testVariableConstrained()
     table::CellAddress aObjective(0, 1, 1);
 
     // "changing cells" - unknown variables
-    uno::Sequence<table::CellAddress> aVariables(1);
-    aVariables[0] = table::CellAddress(0, 1, 0);
+    uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
 
     // constraints
     uno::Sequence<sheet::SolverConstraint> aConstraints(3);
@@ -233,9 +230,7 @@ void SwarmSolverTest::testTwoVariables()
     table::CellAddress aObjective(0, 1, 5);
 
     // "changing cells" - unknown variables
-    uno::Sequence<table::CellAddress> aVariables(2);
-    aVariables[0] = table::CellAddress(0, 1, 2);
-    aVariables[1] = table::CellAddress(0, 1, 3);
+    uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 2 }, { 0, 1, 3 } };
 
     // constraints
     uno::Sequence<sheet::SolverConstraint> aConstraints(4);
@@ -299,11 +294,9 @@ void SwarmSolverTest::testMultipleVariables()
     table::CellAddress aObjective(0, 5, 7);
 
     // "changing cells" - unknown variables
-    uno::Sequence<table::CellAddress> aVariables(4);
-    aVariables[0] = table::CellAddress(0, 6, 1);
-    aVariables[1] = table::CellAddress(0, 6, 2);
-    aVariables[2] = table::CellAddress(0, 6, 3);
-    aVariables[3] = table::CellAddress(0, 6, 4);
+    uno::Sequence<table::CellAddress> aVariables{
+        { 0, 6, 1 }, { 0, 6, 2 }, { 0, 6, 3 }, { 0, 6, 4 }
+    };
 
     // constraints
     uno::Sequence<sheet::SolverConstraint> aConstraints(12);
