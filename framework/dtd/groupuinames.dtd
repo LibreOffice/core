@@ -24,4 +24,3 @@
 	groupuinames:name CDATA #REQUIRED
 	groupuinames:default-ui-name CDATA #REQUIRED
 >
-
