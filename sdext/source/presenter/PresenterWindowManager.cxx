@@ -925,20 +925,21 @@ void PresenterWindowManager::PaintBackground (const awt::Rectangle& rUpdateBox)
 
     if (mxScaledBackgroundBitmap.is())
     {
-        Sequence<rendering::Texture> aTextures (1);
         const geometry::IntegerSize2D aBitmapSize(mxScaledBackgroundBitmap->getSize());
-        aTextures[0] = rendering::Texture (
-            geometry::AffineMatrix2D(
-                aBitmapSize.Width,0,0,
-                0,aBitmapSize.Height,0),
-            1,
-            0,
-            mxScaledBackgroundBitmap,
-            nullptr,
-            nullptr,
-            rendering::StrokeAttributes(),
-            rendering::TexturingMode::REPEAT,
-            rendering::TexturingMode::REPEAT);
+        Sequence<rendering::Texture> aTextures
+        {
+            {
+                geometry::AffineMatrix2D( aBitmapSize.Width,0,0, 0,aBitmapSize.Height,0),
+                1,
+                0,
+                mxScaledBackgroundBitmap,
+                nullptr,
+                nullptr,
+                rendering::StrokeAttributes(),
+                rendering::TexturingMode::REPEAT,
+                rendering::TexturingMode::REPEAT
+            }
+        };
 
         mxParentCanvas->fillTexturedPolyPolygon(
             xBackgroundPolygon,

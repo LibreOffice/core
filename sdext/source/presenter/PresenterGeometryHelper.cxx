@@ -21,6 +21,8 @@
 
 #include <math.h>
 #include <algorithm>
+#include <o3tl/safeint.hxx>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -183,12 +185,15 @@ Reference<rendering::XPolyPolygon2D> PresenterGeometryHelper::CreatePolygon(
     if ( ! rxDevice.is())
         return nullptr;
 
-    Sequence<Sequence<geometry::RealPoint2D> > aPoints(1);
-    aPoints[0] = Sequence<geometry::RealPoint2D>(4);
-    aPoints[0][0] = geometry::RealPoint2D(rBox.X, rBox.Y);
-    aPoints[0][1] = geometry::RealPoint2D(rBox.X, rBox.Y+rBox.Height);
-    aPoints[0][2] = geometry::RealPoint2D(rBox.X+rBox.Width, rBox.Y+rBox.Height);
-    aPoints[0][3] = geometry::RealPoint2D(rBox.X+rBox.Width, rBox.Y);
+    Sequence<Sequence<geometry::RealPoint2D> > aPoints
+    {
+        {
+            { o3tl::narrowing<double>(rBox.X), o3tl::narrowing<double>(rBox.Y) },
+            { o3tl::narrowing<double>(rBox.X), o3tl::narrowing<double>(rBox.Y+rBox.Height) },
+            { o3tl::narrowing<double>(rBox.X+rBox.Width), o3tl::narrowing<double>(rBox.Y+rBox.Height) },
+            { o3tl::narrowing<double>(rBox.X+rBox.Width), o3tl::narrowing<double>(rBox.Y) }
+        }
+    };
     Reference<rendering::XLinePolyPolygon2D> xPolygon (
         rxDevice->createCompatibleLinePolyPolygon(aPoints));
     if (xPolygon.is())
@@ -204,12 +209,15 @@ Reference<rendering::XPolyPolygon2D> PresenterGeometryHelper::CreatePolygon(
     if ( ! rxDevice.is())
         return nullptr;
 
-    Sequence<Sequence<geometry::RealPoint2D> > aPoints(1);
-    aPoints[0] = Sequence<geometry::RealPoint2D>(4);
-    aPoints[0][0] = geometry::RealPoint2D(rBox.X1, rBox.Y1);
-    aPoints[0][1] = geometry::RealPoint2D(rBox.X1, rBox.Y2);
-    aPoints[0][2] = geometry::RealPoint2D(rBox.X2, rBox.Y2);
-    aPoints[0][3] = geometry::RealPoint2D(rBox.X2, rBox.Y1);
+    Sequence<Sequence<geometry::RealPoint2D> > aPoints
+    {
+        {
+            { rBox.X1, rBox.Y1 },
+            { rBox.X1, rBox.Y2 },
+            { rBox.X2, rBox.Y2 },
+            { rBox.X2, rBox.Y1 }
+        }
+    };
     Reference<rendering::XLinePolyPolygon2D> xPolygon (
         rxDevice->createCompatibleLinePolyPolygon(aPoints));
     if (xPolygon.is())
@@ -230,11 +238,13 @@ Reference<rendering::XPolyPolygon2D> PresenterGeometryHelper::CreatePolygon(
     for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
     {
         const awt::Rectangle& rBox (rBoxes[nIndex]);
-        aPoints[nIndex] = Sequence<geometry::RealPoint2D>(4);
-        aPoints[nIndex][0] = geometry::RealPoint2D(rBox.X, rBox.Y);
-        aPoints[nIndex][1] = geometry::RealPoint2D(rBox.X, rBox.Y+rBox.Height);
-        aPoints[nIndex][2] = geometry::RealPoint2D(rBox.X+rBox.Width, rBox.Y+rBox.Height);
-        aPoints[nIndex][3] = geometry::RealPoint2D(rBox.X+rBox.Width, rBox.Y);
+        aPoints[nIndex] = Sequence<geometry::RealPoint2D>
+        {
+            { o3tl::narrowing<double>(rBox.X), o3tl::narrowing<double>(rBox.Y) },
+            { o3tl::narrowing<double>(rBox.X), o3tl::narrowing<double>(rBox.Y+rBox.Height) },
+            { o3tl::narrowing<double>(rBox.X+rBox.Width), o3tl::narrowing<double>(rBox.Y+rBox.Height) },
+            { o3tl::narrowing<double>(rBox.X+rBox.Width), o3tl::narrowing<double>(rBox.Y) }
+        };
     }
 
     Reference<rendering::XLinePolyPolygon2D> xPolygon (
