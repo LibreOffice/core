@@ -1720,6 +1720,14 @@ bool isUnipoll()
     return pSVData && pSVData->mpPollCallback != nullptr;
 }
 
+void numberOfViewsChanged(int count)
+{
+    ImplSVData * pSVData = ImplGetSVData();
+    auto& rCache = pSVData->maGDIData.maScaleCache;
+    // Normally the cache size is set to 10, scale according to the number of users.
+    rCache.setMaxSize(count * 10);
+}
+
 } // namespace lok, namespace vcl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
