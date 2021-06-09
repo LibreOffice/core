@@ -16,6 +16,24 @@
       "revId": "96f8ed6619a73655f9c3b94e6a4a3979cc67f551",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3845fb1a_55f90079",
+        "filename": "reportdesign/source/ui/inspection/DataProviderHandler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-06-09T07:20:48Z",
+      "side": 0,
+      "message": "Thank you!\nDone with https://gerrit.libreoffice.org/c/core/+/116880",
+      "parentUuid": "5d583f27_9447db5f",
+      "revId": "96f8ed6619a73655f9c3b94e6a4a3979cc67f551",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
