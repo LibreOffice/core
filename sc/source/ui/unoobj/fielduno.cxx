@@ -1252,8 +1252,7 @@ uno::Any SAL_CALL ScEditFieldObj::getPropertyValue( const OUString& aPropertyNam
     if (aPropertyName == SC_UNONAME_ANCTYPES)
     {
         uno::Any aRet;
-        uno::Sequence<text::TextContentAnchorType> aSeq(1);
-        aSeq[0] = text::TextContentAnchorType_AS_CHARACTER;
+        uno::Sequence<text::TextContentAnchorType> aSeq { text::TextContentAnchorType_AS_CHARACTER };
         aRet <<= aSeq;
         return aRet;
     }

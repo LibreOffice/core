@@ -564,15 +564,12 @@ ScVbaChart::setSourceData( const css::uno::Reference< ::ooo::vba::excel::XRange 
 {
     try
     {
-        uno::Sequence< table::CellRangeAddress > aRangeAddresses(1);
         table::CellRangeAddress aSingleRangeAddress;
 
         uno::Reference< sheet::XCellRangeAddressable > xAddressable( _xCalcRange->getCellRange(), uno::UNO_QUERY_THROW );
         aSingleRangeAddress = xAddressable->getRangeAddress();
 
-        aRangeAddresses[0] = aSingleRangeAddress;
-
-        mxTableChart->setRanges(aRangeAddresses);
+        mxTableChart->setRanges({ aSingleRangeAddress } );
 
         bool bsetRowHeaders = false;
         bool bsetColumnHeaders = false;

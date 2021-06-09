@@ -271,8 +271,7 @@ uno::Reference< uno::XInterface > ScTableSheetObj::init()
     xSheet->getCellByPosition(8, 6)->setFormula("= SUM(G7:H7)");
     xSheet->getCellByPosition(9, 6)->setFormula("= G7*I7");
 
-    uno::Sequence<table::CellRangeAddress> aCellRangeAddr(1);
-    aCellRangeAddr[0] = table::CellRangeAddress(0, 0, 0, 10, 10);
+    uno::Sequence<table::CellRangeAddress> aCellRangeAddr { { 0, 0, 0, 10, 10 } };
 
     uno::Reference<sheet::XScenariosSupplier> xScence(xSheet, UNO_QUERY_THROW);
     xScence->getScenarios()->addNewByName("Scenario", aCellRangeAddr, "Comment");
@@ -309,8 +308,7 @@ uno::Reference<uno::XInterface> ScTableSheetObj::getScenarioSpreadsheet()
     xSheet->getCellByPosition(8, 6)->setFormula("= SUM(G7:H7)");
     xSheet->getCellByPosition(9, 6)->setFormula("= G7*I7");
 
-    uno::Sequence<table::CellRangeAddress> aCellRangeAddr(1);
-    aCellRangeAddr[0] = table::CellRangeAddress(0, 0, 0, 10, 10);
+    uno::Sequence<table::CellRangeAddress> aCellRangeAddr { { 0, 0, 0, 10, 10 } };
 
     uno::Reference<sheet::XScenariosSupplier> xScence(xSheet, UNO_QUERY_THROW);
     xScence->getScenarios()->addNewByName("Scenario", aCellRangeAddr, "Comment");
@@ -336,8 +334,7 @@ uno::Reference< uno::XInterface > ScTableSheetObj::getXSpreadsheet()
     xSheet->getCellByPosition(8, 6)->setFormula("= SUM(G7:H7)");
     xSheet->getCellByPosition(9, 6)->setFormula("= G7*I7");
 
-    uno::Sequence<table::CellRangeAddress> aCellRangeAddr(1);
-    aCellRangeAddr[0] = table::CellRangeAddress(0, 0, 0, 10, 10);
+    uno::Sequence<table::CellRangeAddress> aCellRangeAddr { {0, 0, 0, 10, 10} };
     uno::Reference<sheet::XScenariosSupplier> xScence(xSheet, UNO_QUERY_THROW);
     xScence->getScenarios()->addNewByName("Scenario", aCellRangeAddr, "Comment");
     xSheets->getByName("Scenario");

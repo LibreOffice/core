@@ -146,10 +146,7 @@ uno::Reference<uno::XInterface> ScDataPilotFieldGroupItemObj::init()
 
     uno::Reference<sheet::XDataPilotFieldGrouping> xDPFG(xIA_RF0->getByIndex(0),
                                                          uno::UNO_QUERY_THROW);
-    uno::Sequence<OUString> aElements(2);
-    aElements[0] = "aName";
-    aElements[1] = "otherName";
-    xDPFG->createNameGroup(aElements);
+    xDPFG->createNameGroup({ "aName", "otherName" });
 
     uno::Reference<container::XIndexAccess> xIA_DPT1(xDPTS->getDataPilotTables(),
                                                      uno::UNO_QUERY_THROW);

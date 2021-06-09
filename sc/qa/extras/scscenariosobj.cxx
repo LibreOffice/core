@@ -110,10 +110,8 @@ uno::Reference<uno::XInterface> ScScenariosObj::init()
     uno::Reference<sheet::XCellRangeAddressable> xCRAddressable(xCellRange2, uno::UNO_QUERY_THROW);
     table::CellRangeAddress aCellRangeAddr = xCRAddressable->getRangeAddress();
 
-    uno::Sequence<table::CellRangeAddress> aCellRangeAddresses(1);
-    aCellRangeAddresses[0] = aCellRangeAddr;
     uno::Reference<sheet::XScenariosSupplier> xSupplier(xSheet, uno::UNO_QUERY_THROW);
-    xSupplier->getScenarios()->addNewByName("ScScenarios", aCellRangeAddresses, "Range");
+    xSupplier->getScenarios()->addNewByName("ScScenarios", { aCellRangeAddr }, "Range");
 
     return xSupplier->getScenarios();
 }

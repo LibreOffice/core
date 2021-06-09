@@ -75,9 +75,8 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_ScenariosEnumeration::init()
                                                   uno::UNO_SET_THROW);
     uno::Reference<sheet::XCellRangeAddressable> xCRA(xCellRange1, uno::UNO_QUERY_THROW);
 
-    uno::Sequence<table::CellRangeAddress> aCRA(1);
-    aCRA[0] = xCRA->getRangeAddress();
-    xScenariosSupplier->getScenarios()->addNewByName("ScScenario", aCRA, "Range");
+    xScenariosSupplier->getScenarios()->addNewByName("ScScenario", { xCRA->getRangeAddress() },
+                                                     "Range");
     uno::Reference<container::XEnumerationAccess> xEA(xScenariosSupplier->getScenarios(),
                                                       uno::UNO_QUERY_THROW);
 
