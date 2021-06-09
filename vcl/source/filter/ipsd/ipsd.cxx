@@ -121,7 +121,7 @@ bool PSDReader::ReadPSD(Graphic & rGraphic )
     }
 
     Size aBitmapSize( mpFileHeader->nColumns, mpFileHeader->nRows );
-    mpBitmap.reset( new vcl::bitmap::RawBitmap( aBitmapSize, 24 ) );
+    mpBitmap.reset( new vcl::bitmap::RawBitmap( aBitmapSize, mbTransparent ? 32 : 24 ) );
     if ( mpPalette && mbStatus )
     {
         mvPalette.resize( 256 );
@@ -131,8 +131,9 @@ bool PSDReader::ReadPSD(Graphic & rGraphic )
         }
     }
 
-    if ((mnDestBitDepth == 1 || mnDestBitDepth == 8 || mbTransparent) && mvPalette.empty())
+    if ((mnDestBitDepth == 1 || mnDestBitDepth == 8) && mvPalette.empty())
     {
+        SAL_WARN("vcl", "no palette, but bit depth is " << mnDestBitDepth);
         mbStatus = false;
         return mbStatus;
     }
@@ -723,7 +724,7 @@ bool PSDReader::ImplReadBody()
                     m_rPSD.ReadUChar( nDummy );
                 for ( sal_uInt16 i = 0; i < ( -nRunCount + 1 ); i++ )
                 {
-                    mpBitmap->SetPixel(nY, nX, SanitizePaletteIndex(mvPalette, nDat));
+                    mpBitmap->SetAlpha(nY, nX, nDat ? 0 : 255);
                     if ( ++nX == mpFileHeader->nColumns )
                     {
                         nX = 0;
@@ -744,7 +745,7 @@ bool PSDReader::ImplReadBody()
                         nDat = 1;
                     if ( mpFileHeader->nDepth == 16 )   // 16 bit depth is to be skipped
                         m_rPSD.ReadUChar( nDummy );
-                    mpBitmap->SetPixel(nY, nX, SanitizePaletteIndex(mvPalette, nDat));
+                    mpBitmap->SetAlpha(nY, nX, nDat ? 0 : 255);
                     if ( ++nX == mpFileHeader->nColumns )
                     {
                         nX = 0;
