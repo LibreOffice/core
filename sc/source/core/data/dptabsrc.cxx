@@ -410,9 +410,7 @@ uno::Sequence<double> ScDPSource::getFilteredResults(
         double fVal = maResFilterSet.getLeafResult(aFilters[0]);
         if (!std::isnan(fVal))
         {
-            uno::Sequence<double> aRet(1);
-            aRet[0] = fVal;
-            return aRet;
+            return { fVal };
         }
     }
 
@@ -1988,7 +1986,7 @@ uno::Sequence<sheet::MemberResult> SAL_CALL ScDPLevel::getResults()
     if (pRes)
         return *pRes;
 
-    return uno::Sequence<sheet::MemberResult>(0);       //TODO: Error?
+    return {};       //TODO: Error?
 }
 
 OUString SAL_CALL ScDPLevel::getName()
@@ -2059,7 +2057,7 @@ uno::Sequence<sal_Int16> ScDPLevel::getSubTotals() const
 
     tools::Long nSrcDim = pSource->GetSourceDim( nDim );
     if ( !pSource->SubTotalAllowed( nSrcDim ) )
-        return uno::Sequence<sal_Int16>(0);
+        return {};
 
     return aSubTotals;
 }

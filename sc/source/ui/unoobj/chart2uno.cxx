@@ -2948,8 +2948,7 @@ uno::Sequence< OUString > SAL_CALL ScChart2DataSequence::getTextualData()
     {
         if( m_aTokens.front()->GetType() == svString )
         {
-            aSeq = uno::Sequence<OUString>(1);
-            aSeq[0] = m_aTokens.front()->GetString().getString();
+            aSeq = uno::Sequence<OUString> { m_aTokens.front()->GetString().getString() };
         }
     }
 

@@ -554,7 +554,7 @@ Sequence<OUString> SAL_CALL ScDataPilotTablesObj::getElementNames()
             return aSeq;
         }
     }
-    return Sequence<OUString>(0);
+    return {};
 }
 
 sal_Bool SAL_CALL ScDataPilotTablesObj::hasByName( const OUString& aName )

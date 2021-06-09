@@ -553,9 +553,7 @@ namespace {
         uno::Sequence< uno::Sequence< OUString > > aFormulae(1000);
         for (sal_Int32 i = 0; i < 1000; ++i)
         {
-            uno::Sequence< OUString > aRow(1);
-            aRow[0] = rFormula;
-            aFormulae[i] = aRow;
+            aFormulae[i] = { rFormula };
         }
 
         // NB. not set Array (matrix) formula
