@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7870aa0d_eef6fc10",
+        "filename": "oox/source/drawingml/textbodypropertiescontext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-06-10T08:15:50Z",
+      "side": 1,
+      "message": "Nitpick: I bet this could go via a doc-level factory, that way you can create a columns object even from a Basic macro. Perhaps address that in a follow-up change.",
+      "revId": "17525ffc1d3b9f383e30b7f4515f0bb42de9cad4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
