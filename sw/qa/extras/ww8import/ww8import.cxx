@@ -140,6 +140,12 @@ DECLARE_WW8IMPORT_TEST(testTdf106799, "tdf106799.doc")
         }
 }
 
+DECLARE_WW8IMPORT_TEST(testTdf49208, "tdf49208.doc"){
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+}
+
 DECLARE_WW8IMPORT_TEST(testTdf121734, "tdf121734.doc")
 {
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
