@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3eaa201f_6c1fe3d0",
+        "filename": "svl/source/passwordcontainer/passwordcontainer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-10T06:57:44Z",
+      "side": 1,
+      "message": "And since ConfigItem::PutProperties knows the type of sequence in its second argument, you may even replace everything with just a single line:\n\n    ConfigItem::PutProperties( { \"UseStorage\" }, { uno::Any(bUse) } );",
+      "revId": "159030991c70fc3c4018ef28abf1814902a0aebb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4eebeae0_ce0a8493",
+        "filename": "svl/source/passwordcontainer/passwordcontainer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-10T06:57:44Z",
+      "side": 1,
+      "message": "Same here:\n\n    ConfigItem::PutProperties( { \"HasMaster\", \"Master\" }, { uno::Any(bHasMaster), uno::Any(aEncoded) } );",
+      "revId": "159030991c70fc3c4018ef28abf1814902a0aebb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9cd0bae_5c52ff3a",
+        "filename": "svl/source/passwordcontainer/passwordcontainer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-10T06:57:44Z",
+      "side": 1,
+      "message": "Or just\n\n  Sequence\u003c OUString \u003e sendSeq { createIndex( { aURL, aName } ) };",
+      "revId": "159030991c70fc3c4018ef28abf1814902a0aebb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

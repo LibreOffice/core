@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d7be595a_02be1397",
+        "filename": "svl/source/passwordcontainer/passwordcontainer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-10T06:57:44Z",
+      "side": 0,
+      "message": "Anys are only explicitly constructed; still, you may do\n\n  Sequence\u003c uno::Any \u003e sendVals{ uno::Any(bUse) };",
+      "revId": "36db408b9027da01464927e5853950435596ae05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
