@@ -126,7 +126,7 @@ private:
     sal_Int16 m_nSepLineStyle = css::text::ColumnSeparatorStyle::NONE;
 };
 
-OUString SvxXTextColumns::getImplementationName() { return "SvxXTextColumns"; }
+OUString SvxXTextColumns::getImplementationName() { return "com.sun.star.comp.svx.TextColumns"; }
 
 sal_Bool SvxXTextColumns::supportsService(const OUString& rServiceName)
 {
@@ -322,6 +322,13 @@ void SvxXTextColumns::removeVetoableChangeListener(
 css::uno::Reference<css::uno::XInterface> SvxXTextColumns_createInstance() noexcept
 {
     return static_cast<cppu::OWeakObject*>(new SvxXTextColumns);
+}
+
+extern "C" SVXCORE_DLLPUBLIC css::uno::XInterface*
+com_sun_star_comp_svx_TextColumns_get_implementation(css::uno::XComponentContext*,
+                                                     css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new SvxXTextColumns);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
