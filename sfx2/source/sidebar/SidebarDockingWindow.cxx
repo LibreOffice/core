@@ -41,81 +41,11 @@ using namespace css::uno;
 
 namespace sfx2::sidebar {
 
-class SidebarNotifyIdle : public Idle
-{
-    SidebarDockingWindow& m_rSidebarDockingWin;
-    std::string m_LastNotificationMessage;
-    vcl::LOKWindowId m_LastLOKWindowId;
-
-public:
-    SidebarNotifyIdle(SidebarDockingWindow &rSidebarDockingWin) :
-        Idle("Sidebar notify"),
-        m_rSidebarDockingWin(rSidebarDockingWin),
-        m_LastNotificationMessage(),
-        m_LastLOKWindowId(0)
-    {
-        SetPriority(TaskPriority::POST_PAINT);
-    }
-
-    void Invoke() override
-    {
-        auto pNotifier = m_rSidebarDockingWin.GetLOKNotifier();
-        if (!pNotifier || !comphelper::LibreOfficeKit::isActive())
-            return;
-
-        try
-        {
-            const SfxViewShell* pOwnerView = dynamic_cast<const SfxViewShell*>(pNotifier);
-            if (pOwnerView && pOwnerView->isLOKMobilePhone())
-            {
-                // Mobile phone.
-                tools::JsonWriter aJsonWriter;
-                m_rSidebarDockingWin.DumpAsPropertyTree(aJsonWriter);
-                aJsonWriter.put("id", m_rSidebarDockingWin.GetLOKWindowId());
-                std::unique_ptr<char[], o3tl::free_delete> data( aJsonWriter.extractData());
-                std::string_view message(data.get());
-                if (message != m_LastNotificationMessage)
-                {
-                    m_LastNotificationMessage = message;
-                    pOwnerView->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, m_LastNotificationMessage.c_str());
-                }
-            }
-
-            // Notify the sidebar is created, and its LOKWindowId, which
-            // is needed on mobile phones, tablets, and desktop.
-            const Point pos(m_rSidebarDockingWin.GetOutOffXPixel(),
-                            m_rSidebarDockingWin.GetOutOffYPixel());
-            const OString posMessage = pos.toString();
-            const OString sizeMessage = m_rSidebarDockingWin.GetSizePixel().toString();
-
-            const std::string message = OString(posMessage + sizeMessage).getStr();
-            const vcl::LOKWindowId lokWindowId = m_rSidebarDockingWin.GetLOKWindowId();
-
-            if (lokWindowId != m_LastLOKWindowId || message != m_LastNotificationMessage)
-            {
-                m_LastLOKWindowId = lokWindowId;
-                m_LastNotificationMessage = message;
-
-                std::vector<vcl::LOKPayloadItem> aItems;
-                aItems.emplace_back("type", "deck");
-                aItems.emplace_back("position", posMessage);
-                aItems.emplace_back("size", sizeMessage);
-                pNotifier->notifyWindow(lokWindowId, "created", aItems);
-            }
-        }
-        catch (boost::property_tree::json_parser::json_parser_error& rError)
-        {
-            SAL_WARN("sfx.sidebar", rError.message());
-        }
-    }
-};
-
 SidebarDockingWindow::SidebarDockingWindow(SfxBindings* pSfxBindings, SidebarChildWindow& rChildWindow,
                                            vcl::Window* pParentWindow, WinBits nBits)
     : SfxDockingWindow(pSfxBindings, &rChildWindow, pParentWindow, nBits)
     , mpSidebarController()
     , mbIsReadyToDrag(false)
-    , mpIdleNotify(new SidebarNotifyIdle(*this))
 {
     // Get the XFrame from the bindings.
     if (pSfxBindings==nullptr || pSfxBindings->GetDispatcher()==nullptr)
@@ -151,13 +81,8 @@ void SidebarDockingWindow::dispose()
 void SidebarDockingWindow::LOKClose()
 {
     assert(comphelper::LibreOfficeKit::isActive());
-    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
-    {
-        mpIdleNotify->Stop();
-
-        pNotifier->notifyWindow(GetLOKWindowId(), "close");
+    if (GetLOKNotifier())
         ReleaseLOKNotifier();
-    }
 }
 
 void SidebarDockingWindow::GetFocus()
@@ -206,8 +131,6 @@ void SidebarDockingWindow::NotifyResize()
 
         SetLOKNotifier(pCurrentView);
     }
-
-    mpIdleNotify->Start();
 }
 
 SfxChildAlignment SidebarDockingWindow::CheckAlignment (
