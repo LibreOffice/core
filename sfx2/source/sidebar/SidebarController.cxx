@@ -1230,26 +1230,6 @@ IMPL_LINK(SidebarController, OnSubMenuItemSelected, const OString&, rCurItemId, 
 
 void SidebarController::RequestCloseDeck()
 {
-    if (comphelper::LibreOfficeKit::isActive() && mpCurrentDeck)
-    {
-        const SfxViewShell* pViewShell = SfxViewShell::Current();
-        if (pViewShell && pViewShell->isLOKMobilePhone())
-        {
-            // Mobile phone.
-            std::stringstream aStream;
-            boost::property_tree::ptree aTree;
-            aTree.put("id", mpParentWindow->get_id()); // TODO could be missing - sort out
-            aTree.put("type", "dockingwindow");
-            aTree.put("text", mpParentWindow->GetText());
-            aTree.put("enabled", false);
-            boost::property_tree::write_json(aStream, aTree);
-            const std::string message = aStream.str();
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.c_str());
-        }
-        else if (const vcl::ILibreOfficeKitNotifier* pNotifier = mpCurrentDeck->GetLOKNotifier())
-            pNotifier->notifyWindow(mpCurrentDeck->GetLOKWindowId(), "close");
-    }
-
     mbIsDeckRequestedOpen = false;
     UpdateDeckOpenState();
 
