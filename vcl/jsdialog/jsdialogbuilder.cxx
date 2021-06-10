@@ -873,6 +873,18 @@ std::unique_ptr<weld::Frame> JSInstanceBuilder::weld_frame(const OString& id)
     return pWeldWidget;
 }
 
+std::unique_ptr<weld::MenuButton> JSInstanceBuilder::weld_menu_button(const OString& id)
+{
+    ::MenuButton* pMenuButton = m_xBuilder->get<::MenuButton>(id);
+    auto pWeldWidget
+        = pMenuButton ? std::make_unique<JSMenuButton>(this, pMenuButton, this, false) : nullptr;
+
+    if (pWeldWidget)
+        RememberWidget(id, pWeldWidget.get());
+
+    return pWeldWidget;
+}
+
 weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParent,
                                                             VclMessageType eMessageType,
                                                             VclButtonsType eButtonType,
@@ -1404,6 +1416,12 @@ void JSRadioButton::set_active(bool active)
 JSFrame::JSFrame(JSDialogSender* pSender, ::VclFrame* pFrame, SalInstanceBuilder* pBuilder,
                  bool bTakeOwnership)
     : JSWidget<SalInstanceFrame, ::VclFrame>(pSender, pFrame, pBuilder, bTakeOwnership)
+{
+}
+
+JSMenuButton::JSMenuButton(JSDialogSender* pSender, ::MenuButton* pMenuButton,
+                           SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : JSWidget<SalInstanceMenuButton, ::MenuButton>(pSender, pMenuButton, pBuilder, bTakeOwnership)
 {
 }
 
