@@ -906,4 +906,4 @@ sal_Bool SAL_CALL OResultSet::supportsService(const OUString& _rServiceName)
     return cppu::supportsService(this, _rServiceName);
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
