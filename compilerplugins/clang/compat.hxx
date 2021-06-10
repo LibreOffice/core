@@ -17,6 +17,7 @@
 #include "clang/AST/Expr.h"
 #include "clang/AST/ExprCXX.h"
 #include "clang/Basic/SourceManager.h"
+#include "clang/Basic/Specifiers.h"
 #include "clang/Frontend/CompilerInstance.h"
 #include "clang/Lex/Lexer.h"
 #include "llvm/ADT/StringRef.h"
@@ -168,6 +169,12 @@ inline bool CPlusPlus17(clang::LangOptions const & opts) {
     return opts.CPlusPlus1z;
 #endif
 }
+
+#if CLANG_VERSION >= 130000
+constexpr clang::ExprValueKind VK_PRValue = clang::VK_PRValue;
+#else
+constexpr clang::ExprValueKind VK_PRValue = clang::VK_RValue;
+#endif
 
 inline bool EvaluateAsInt(clang::Expr const * expr, llvm::APSInt& intRes, const clang::ASTContext& ctx) {
 #if CLANG_VERSION >= 80000
