@@ -34,6 +34,24 @@
       "revId": "8e7a9b0243a4a63841d1cb1faba118274d574053",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "750ac01d_b1140d9f",
+        "filename": "desktop/source/app/app.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1554,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-10T00:59:02Z",
+      "side": 0,
+      "message": "Here... in this file... just a new function into anonymous namespace or something. I would be fine if you added a new member function (even when that would trigger a recompile of the whole LibreOffice probably) or even a new class.\nYou need to think about readability - as it is now it is some chunk of code that you have read to know what it does. If you have only something like runGraphickBackendTests(); you know what is done in this step and if you want details, you can look into the code.\n\nAlso I mentioned that you should probably share the code that checks the version numbers with the code in InfoBar sfx2/source/view/viewfrm.cxx - you copied from there into here, which is fine for now, but ideally you need to solve this duplication by extracting the code to some common function or class and use that in both.",
+      "parentUuid": "a1f435bc_b2475fcf",
+      "revId": "8e7a9b0243a4a63841d1cb1faba118274d574053",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
