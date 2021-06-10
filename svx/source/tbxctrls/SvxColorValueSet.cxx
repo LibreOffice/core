@@ -124,7 +124,7 @@ void SvxColorValueSet::Resize()
     ValueSet::Resize();
 }
 
-Size SvxColorValueSet::layoutToGivenHeight(sal_uInt32 nHeight, sal_uInt32 nEntryCount)
+void SvxColorValueSet::layoutToGivenHeight(sal_uInt32 nHeight, sal_uInt32 nEntryCount)
 {
     if(!nEntryCount)
     {
@@ -157,15 +157,10 @@ Size SvxColorValueSet::layoutToGivenHeight(sal_uInt32 nHeight, sal_uInt32 nEntry
         SetStyle(aWinBits|WB_VSCROLL);
     }
 
-    // set height to wanted height
-    aNewSize.setHeight( nHeight );
-
     SetItemWidth(aItemSize.Width());
     SetItemHeight(aItemSize.Height());
     SetColCount(SvxColorValueSet::getColumnCount());
     SetLineCount(nLineCount);
-
-    return aNewSize;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
