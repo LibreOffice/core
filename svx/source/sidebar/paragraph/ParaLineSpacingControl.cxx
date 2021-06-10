@@ -124,14 +124,16 @@ void ParaLineSpacingControl::Initialize()
 {
     const SfxPoolItem* pItem(nullptr);
     SfxViewFrame* pCurrent = SfxViewFrame::Current();
-    SfxItemState eState = pCurrent ? pCurrent->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PARA_LINESPACE, pItem) : SfxItemState::UNKNOWN;
-
-    const SvxLineSpacingItem* currSPItem = static_cast<const SvxLineSpacingItem*>(pItem);
+    const bool bItemStateSet(nullptr != pCurrent);
+    const SfxItemState eState(bItemStateSet
+        ? pCurrent->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PARA_LINESPACE, pItem)
+        : SfxItemState::DEFAULT);
 
     mxLineDist->set_sensitive(true);
 
-    if( eState >= SfxItemState::DEFAULT )
+    if( bItemStateSet && (eState == SfxItemState::DEFAULT || eState == SfxItemState::SET) )
     {
+        const SvxLineSpacingItem* currSPItem = static_cast<const SvxLineSpacingItem*>(pItem);
         MapUnit eUnit = pCurrent->GetPool().GetMetric(currSPItem->Which());
         meLNSpaceUnit = eUnit;
 
@@ -201,7 +203,7 @@ void ParaLineSpacingControl::Initialize()
             break;
         }
     }
-    else if( eState == SfxItemState::DISABLED )
+    else if( bItemStateSet && eState == SfxItemState::DISABLED )
     {
         mxLineDist->set_sensitive(false);
         mxLineDistLabel->set_sensitive(false);
@@ -209,7 +211,7 @@ void ParaLineSpacingControl::Initialize()
         mpActLineDistFld->set_text("");
 
     }
-    else
+    else // !bItemStateSet || eState == SfxItemState::DONTCARE || eState == SfxItemState::UNKNOWN
     {
         mxLineDistLabel->set_sensitive(false);
         mpActLineDistFld->set_sensitive(false);
