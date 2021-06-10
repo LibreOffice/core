@@ -1117,32 +1117,22 @@ css::uno::Sequence< css::ucb::ContentInfo > Content::queryCreatableContentsInfo(
 {
     if ( isFolder( xEnv ) )
     {
-        css::uno::Sequence< css::ucb::ContentInfo > seq(2);
 
         // Minimum set of props we really need
-        css::uno::Sequence< css::beans::Property > props( 1 );
-        props[0] = css::beans::Property(
-            "Title",
-            -1,
-            cppu::UnoType<OUString>::get(),
-            css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::BOUND );
+        css::uno::Sequence< css::beans::Property > props
+        {
+            { "Title", -1, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::BOUND }
+        };
 
-        // file
-        seq[0].Type       = GIO_FILE_TYPE;
-        seq[0].Attributes = ( css::ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM |
-                              css::ucb::ContentInfoAttribute::KIND_DOCUMENT );
-        seq[0].Properties = props;
-
-        // folder
-        seq[1].Type       = GIO_FOLDER_TYPE;
-        seq[1].Attributes = css::ucb::ContentInfoAttribute::KIND_FOLDER;
-        seq[1].Properties = props;
-
-        return seq;
+        return
+        {
+            { GIO_FILE_TYPE, ( css::ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM | css::ucb::ContentInfoAttribute::KIND_DOCUMENT ), props },
+            { GIO_FOLDER_TYPE, css::ucb::ContentInfoAttribute::KIND_FOLDER, props }
+        };
     }
     else
     {
-        return css::uno::Sequence< css::ucb::ContentInfo >();
+        return {};
     }
 }
 

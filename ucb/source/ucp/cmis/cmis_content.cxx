@@ -1969,28 +1969,32 @@ namespace cmis
         {
             if ( isFolder( xEnv ) )
             {
-                uno::Sequence< ucb::ContentInfo > seq(2);
 
                 // Minimum set of props we really need
-                uno::Sequence< beans::Property > props( 1 );
-                props[0] = beans::Property(
-                    "Title",
-                    -1,
-                    cppu::UnoType<OUString>::get(),
-                    beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::BOUND );
+                uno::Sequence< beans::Property > props
+                {
+                    {
+                        "Title",
+                        -1,
+                        cppu::UnoType<OUString>::get(),
+                        beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::BOUND
+                    }
+                };
 
-                // file
-                seq[0].Type       =  CMIS_FILE_TYPE;
-                seq[0].Attributes = ( ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM |
-                                      ucb::ContentInfoAttribute::KIND_DOCUMENT );
-                seq[0].Properties = props;
-
-                // folder
-                seq[1].Type       = CMIS_FOLDER_TYPE;
-                seq[1].Attributes = ucb::ContentInfoAttribute::KIND_FOLDER;
-                seq[1].Properties = props;
-
-                return seq;
+                return
+                {
+                    {
+                        CMIS_FILE_TYPE,
+                        ( ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM |
+                                      ucb::ContentInfoAttribute::KIND_DOCUMENT ),
+                        props
+                    },
+                    {
+                        CMIS_FOLDER_TYPE,
+                        ucb::ContentInfoAttribute::KIND_FOLDER,
+                        props
+                    }
+                };
             }
         }
         catch (const uno::RuntimeException&)
@@ -2004,7 +2008,7 @@ namespace cmis
                 "wrapped Exception " + e.Message,
                 uno::Reference<uno::XInterface>(), a);
         }
-        return uno::Sequence< ucb::ContentInfo >();
+        return {};
     }
 
     std::vector< uno::Reference< ucb::XContent > > Content::getChildren( )

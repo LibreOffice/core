@@ -615,16 +615,11 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
 XResultSet_impl::getPropertySetInfo()
 {
 
-    uno::Sequence< beans::Property > seq(2);
-    seq[0].Name = "RowCount";
-    seq[0].Handle = -1;
-    seq[0].Type = cppu::UnoType<sal_Int32>::get();
-    seq[0].Attributes = beans::PropertyAttribute::READONLY;
-
-    seq[1].Name = "IsRowCountFinal";
-    seq[1].Handle = -1;
-    seq[1].Type = cppu::UnoType<sal_Bool>::get();
-    seq[1].Attributes = beans::PropertyAttribute::READONLY;
+    uno::Sequence< beans::Property > seq
+    {
+        { "RowCount", -1, cppu::UnoType<sal_Int32>::get(), beans::PropertyAttribute::READONLY },
+        { "IsRowCountFinal", -1, cppu::UnoType<sal_Bool>::get(), beans::PropertyAttribute::READONLY }
+    };
 
     return new XPropertySetInfo_impl( m_pMyShell, seq );
 }

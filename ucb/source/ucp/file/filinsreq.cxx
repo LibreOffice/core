@@ -70,9 +70,7 @@ XInteractionRequestImpl::XInteractionRequestImpl(
         prop.Name = "ResourceName";
         prop.Handle = -1;
         prop.Value <<= aClashingName;
-        Sequence<Any> seq(1);
-        seq[0] <<= prop;
-        excep.Arguments = seq;
+        excep.Arguments = { Any(prop) };
         excep.Classification = InteractionClassification_ERROR;
         excep.Context = m_xOrigin;
         excep.Message = "the name contained invalid characters";

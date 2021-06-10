@@ -564,9 +564,7 @@ namespace fileaccess {
                     rtl_UriDecodeWithCharset,
                     RTL_TEXTENCODING_UTF8));
             prop.Value <<= aClashingName;
-            Sequence<Any> seq(1);
-            seq[0] <<= prop;
-            excep.Arguments = seq;
+            excep.Arguments = { Any(prop) };
             excep.Classification = InteractionClassification_ERROR;
             excep.Context = Reference<XInterface>( xComProc, UNO_QUERY );
             excep.Message = "the name contained invalid characters";
