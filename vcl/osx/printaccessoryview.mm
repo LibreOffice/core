@@ -1063,7 +1063,6 @@ static void addEdit( NSView* pCurParent, CGFloat rCurX, CGFloat& rCurY, CGFloat 
         OUString aPropertyName;
         OUString aGroupHint;
         Sequence< OUString > aChoices;
-        bool bEnabled = true;
         sal_Int64 nMinValue = 0, nMaxValue = 0;
         CGFloat nAttachOffset = 0;
         bool bIgnore = false;
@@ -1088,12 +1087,6 @@ static void addEdit( NSView* pCurParent, CGFloat rCurX, CGFloat& rCurY, CGFloat 
                 PropertyValue aVal;
                 rEntry.Value >>= aVal;
                 aPropertyName = aVal.Name;
-            }
-            else if( rEntry.Name == "Enabled" )
-            {
-                bool bValue = true;
-                rEntry.Value >>= bValue;
-                bEnabled = bValue;
             }
             else if( rEntry.Name == "MinValue" )
             {
