@@ -484,7 +484,7 @@ namespace vcl
         return Dialog::EventNotify( rNEvt );
     }
 
-    TabPage* RoadmapWizard::GetOrCreatePage( const WizardTypes::WizardState i_nState )
+    void RoadmapWizard::GetOrCreatePage( const WizardTypes::WizardState i_nState )
     {
         if ( nullptr == GetPage( i_nState ) )
         {
@@ -508,7 +508,6 @@ namespace vcl
                 // already had this page - just change it
                 SetPage( i_nState, pNewPage );
         }
-        return GetPage( i_nState );
     }
 
     void RoadmapWizard::ActivatePage()
@@ -527,13 +526,12 @@ namespace vcl
         return true;
     }
 
-    bool RoadmapWizard::Finish( tools::Long nResult )
+    void RoadmapWizard::Finish( tools::Long nResult )
     {
         if ( IsInExecute() )
             EndDialog( nResult );
         else if ( GetStyle() & WB_CLOSEABLE )
             Close();
-        return true;
     }
 
     void RoadmapWizard::AddPage( TabPage* pPage )
@@ -753,17 +751,17 @@ namespace vcl
         return true;
     }
 
-    bool RoadmapWizard::travelNext()
+    void RoadmapWizard::travelNext()
     {
         // allowed to leave the current page?
         if ( !prepareLeaveCurrentState( WizardTypes::eTravelForward ) )
-            return false;
+            return;
 
         // determine the next state to travel to
         WizardTypes::WizardState nCurrentState = getCurrentState();
         WizardTypes::WizardState nNextState = determineNextState(nCurrentState);
         if (WZS_INVALID_STATE == nNextState)
-            return false;
+            return;
 
         // the state history is used by the enterState method
         // all fine
@@ -771,19 +769,16 @@ namespace vcl
         if (!ShowPage(nNextState))
         {
             m_xWizardImpl->aStateHistory.pop();
-            return false;
         }
-
-        return true;
     }
 
-    bool RoadmapWizard::travelPrevious()
+    void RoadmapWizard::travelPrevious()
     {
         DBG_ASSERT(!m_xWizardImpl->aStateHistory.empty(), "RoadmapWizard::travelPrevious: have no previous page!");
 
         // allowed to leave the current page?
         if ( !prepareLeaveCurrentState( WizardTypes::eTravelBackward ) )
-            return false;
+            return;
 
         // the next state to switch to
         WizardTypes::WizardState nPreviousState = m_xWizardImpl->aStateHistory.top();
@@ -794,11 +789,9 @@ namespace vcl
         if (!ShowPage(nPreviousState))
         {
             m_xWizardImpl->aStateHistory.push(nPreviousState);
-            return false;
         }
 
         // all fine
-        return true;
     }
 
     void  RoadmapWizard::removePageFromHistory( WizardTypes::WizardState nToRemove )

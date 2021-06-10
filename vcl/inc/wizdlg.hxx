@@ -120,7 +120,7 @@ namespace vcl
         virtual void        queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
 
         bool                ShowPage( sal_uInt16 nLevel );
-        bool                Finish( tools::Long nResult = 0 );
+        void                Finish( tools::Long nResult = 0 );
         sal_uInt16          GetCurLevel() const { return mnCurLevel; }
 
         void                AddPage( TabPage* pPage );
@@ -182,10 +182,10 @@ namespace vcl
         WizardTypes::WizardState determineNextState(WizardTypes::WizardState nCurrentState) const;
 
         /// travel to the next state
-        bool                travelNext();
+        void                travelNext();
 
         /// travel to the previous state
-        bool                travelPrevious();
+        void                travelPrevious();
 
         /** enables the automatic enabled/disabled state of the "Next" button
 
@@ -270,7 +270,7 @@ namespace vcl
         bool                   isTravelingSuspended() const;
 
     protected:
-        TabPage* GetOrCreatePage(const WizardTypes::WizardState i_nState);
+        void GetOrCreatePage(const WizardTypes::WizardState i_nState);
 
     private:
         void             ImplCalcSize( Size& rSize );
