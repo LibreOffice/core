@@ -10127,7 +10127,6 @@ int fb_api_is_30(void) { return 0; }
         AC_MSG_RESULT([none])
     else
         dnl Embedded Firebird has version 3.0
-        AC_DEFINE(HAVE_FIREBIRD_30, 1)
         dnl We need libatomic_ops for any non X86/X64 system
         if test "${CPUNAME}" != INTEL -a "${CPUNAME}" != X86_64; then
             dnl ===================================================================
