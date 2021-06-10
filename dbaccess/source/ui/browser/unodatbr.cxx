@@ -296,7 +296,7 @@ bool SbaTableQueryBrowser::Construct(vcl::Window* pParent)
         m_pSplitter->SetPosSizePixel( ::Point(0,0), ::Size(nFrameWidth,0) );
         m_pSplitter->SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
 
-        m_pTreeView = VclPtr<InterimDBTreeListBox>::Create(getBrowserView(), E_TABLE);
+        m_pTreeView = VclPtr<InterimDBTreeListBox>::Create(getBrowserView());
 
         weld::TreeView& rTreeView = m_pTreeView->GetWidget();
         rTreeView.connect_expanding(LINK(this, SbaTableQueryBrowser, OnExpandEntry));

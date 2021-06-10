@@ -53,9 +53,9 @@ using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::view;
 
-InterimDBTreeListBox::InterimDBTreeListBox(vcl::Window* pParent, bool bSQLType)
+InterimDBTreeListBox::InterimDBTreeListBox(vcl::Window* pParent)
     : InterimItemWindow(pParent, "dbaccess/ui/dbtreelist.ui", "DBTreeList")
-    , TreeListBox(m_xBuilder->weld_tree_view("treeview"), bSQLType)
+    , TreeListBox(m_xBuilder->weld_tree_view("treeview"), true)
     , m_xStatusBar(m_xBuilder->weld_label("statusbar"))
 {
     InitControlBase(&GetWidget());
