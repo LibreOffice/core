@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "82b54d08_40f7916c",
+        "filename": "chart2/source/tools/InternalDataProvider.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-06-10T11:16:01Z",
+      "side": 1,
+      "message": "It\u0027s better to move the logic 1-level up, handling \"\" as a character. See in the clean-up.",
+      "range": {
+        "startLine": 531,
+        "startChar": 5,
+        "endLine": 555,
+        "endChar": 17
+      },
+      "revId": "3d1b0c4bd95e538f564e6eed19f8829d1f84803e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
