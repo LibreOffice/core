@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8ddd2510_dc683fee",
+        "filename": "vcl/backendtest/GraphicsRenderTests.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 923,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-06-10T10:18:42Z",
+      "side": 1,
+      "message": "How should I go on writing this directly to SvFileStream object given that it cannot directly write a string but a char pointer array and so what should be a direct approach to this then?\nAlso, is there any way to convert OUString to string directly as the m_aCurGraphicsBackend variable is empty even after proving info to it in the constructor?",
+      "range": {
+        "startLine": 918,
+        "startChar": 4,
+        "endLine": 923,
+        "endChar": 47
+      },
+      "revId": "c866a181e27721e2a271d486603a3ce5f689d5b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
