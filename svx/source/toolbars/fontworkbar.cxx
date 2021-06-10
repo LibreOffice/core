@@ -221,11 +221,8 @@ bool checkForFontWork( SdrObject* pObj )
     return bFound;
 }
 
-bool checkForSelectedFontWork( SdrView const * pSdrView, sal_uInt32& nCheckStatus )
+bool checkForSelectedFontWork( SdrView const * pSdrView )
 {
-    if ( nCheckStatus & 2 )
-        return ( nCheckStatus & 1 ) != 0;
-
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
     bool bFound = false;
@@ -234,11 +231,7 @@ bool checkForSelectedFontWork( SdrView const * pSdrView, sal_uInt32& nCheckStatu
         SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         bFound = checkForFontWork(pObj);
     }
-    if ( bFound )
-        nCheckStatus |= 1;
-    nCheckStatus |= 2;
     return bFound;
-}
 }
 
 static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& rGeometryItem, SdrObject* pObj )
@@ -547,51 +540,24 @@ void FontworkBar::execute( SdrView& rSdrView, SfxRequest const & rReq, SfxBindin
 
 void FontworkBar::getState( SdrView const * pSdrView, SfxItemSet& rSet )
 {
-    sal_uInt32 nCheckStatus = 0;
-
-    if ( rSet.GetItemState( SID_FONTWORK_ALIGNMENT_FLOATER ) != SfxItemState::UNKNOWN )
+    if ( checkForSelectedFontWork( pSdrView ) )
     {
-        if ( !checkForSelectedFontWork( pSdrView, nCheckStatus ) )
-            rSet.DisableItem( SID_FONTWORK_ALIGNMENT_FLOATER );
+        SetAlignmentState( pSdrView, rSet );
+        SetCharacterSpacingState( pSdrView, rSet );
+        SetKernCharacterPairsState( pSdrView, rSet );
+        SetFontWorkShapeTypeState( pSdrView, rSet );
     }
-    if ( rSet.GetItemState( SID_FONTWORK_ALIGNMENT ) != SfxItemState::UNKNOWN )
+    else
     {
-        if ( !checkForSelectedFontWork( pSdrView, nCheckStatus ) )
-            rSet.DisableItem( SID_FONTWORK_ALIGNMENT );
-        else
-            SetAlignmentState( pSdrView, rSet );
+        rSet.DisableItem( SID_FONTWORK_ALIGNMENT_FLOATER );
+        rSet.DisableItem( SID_FONTWORK_ALIGNMENT );
+        rSet.DisableItem( SID_FONTWORK_CHARACTER_SPACING_FLOATER );
+        rSet.DisableItem( SID_FONTWORK_CHARACTER_SPACING );
+        rSet.DisableItem( SID_FONTWORK_KERN_CHARACTER_PAIRS );
+        rSet.DisableItem( SID_FONTWORK_SAME_LETTER_HEIGHTS );
+        rSet.DisableItem( SID_FONTWORK_SHAPE_TYPE );
     }
-    if ( rSet.GetItemState( SID_FONTWORK_CHARACTER_SPACING_FLOATER ) != SfxItemState::UNKNOWN )
-    {
-        if ( !checkForSelectedFontWork( pSdrView, nCheckStatus ) )
-            rSet.DisableItem( SID_FONTWORK_CHARACTER_SPACING_FLOATER );
-    }
-    if ( rSet.GetItemState( SID_FONTWORK_CHARACTER_SPACING ) != SfxItemState::UNKNOWN )
-    {
-        if ( !checkForSelectedFontWork( pSdrView, nCheckStatus ) )
-            rSet.DisableItem( SID_FONTWORK_CHARACTER_SPACING );
-        else
-            SetCharacterSpacingState( pSdrView, rSet );
-    }
-    if ( rSet.GetItemState( SID_FONTWORK_KERN_CHARACTER_PAIRS ) != SfxItemState::UNKNOWN )
-    {
-        if ( !checkForSelectedFontWork( pSdrView, nCheckStatus ) )
-            rSet.DisableItem( SID_FONTWORK_KERN_CHARACTER_PAIRS );
-        else
-            SetKernCharacterPairsState( pSdrView, rSet );
-    }
-    if ( rSet.GetItemState( SID_FONTWORK_SAME_LETTER_HEIGHTS ) != SfxItemState::UNKNOWN )
-    {
-        if ( !checkForSelectedFontWork( pSdrView, nCheckStatus ) )
-            rSet.DisableItem( SID_FONTWORK_SAME_LETTER_HEIGHTS );
-    }
-    if ( rSet.GetItemState( SID_FONTWORK_SHAPE_TYPE ) != SfxItemState::UNKNOWN )
-    {
-        if ( !checkForSelectedFontWork( pSdrView, nCheckStatus  ) )
-            rSet.DisableItem( SID_FONTWORK_SHAPE_TYPE );
-        else
-            SetFontWorkShapeTypeState( pSdrView, rSet );
-    }
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

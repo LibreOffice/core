@@ -1465,8 +1465,8 @@ SelectionType SwWrtShell::GetSelectionType() const
             {
                 nCnt |= SelectionType::ExtrudedCustomShape;
             }
-            sal_uInt32 nCheckStatus = 0;
-            if (svx::checkForSelectedFontWork( GetDrawView(), nCheckStatus ))
+
+            if (svx::checkForSelectedFontWork( GetDrawView() ))
             {
                 nCnt |= SelectionType::FontWork;
             }
