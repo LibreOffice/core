@@ -224,13 +224,13 @@ sal_uInt32 FontTable::size()
     return m_pImpl->aFontEntries.size();
 }
 
-bool FontTable::addEmbeddedFont(const css::uno::Reference<css::io::XInputStream>& stream,
+void FontTable::addEmbeddedFont(const css::uno::Reference<css::io::XInputStream>& stream,
                                 const OUString& fontName, const char* extra,
                                 std::vector<unsigned char> const & key)
 {
     if (!m_pImpl->xEmbeddedFontHelper)
         m_pImpl->xEmbeddedFontHelper.reset(new EmbeddedFontsHelper);
-    return m_pImpl->xEmbeddedFontHelper->addEmbeddedFont(stream, fontName, extra, key);
+    m_pImpl->xEmbeddedFontHelper->addEmbeddedFont(stream, fontName, extra, key);
 }
 
 EmbeddedFontHandler::EmbeddedFontHandler(FontTable& rFontTable, const OUString& _fontName, const char* _style )
