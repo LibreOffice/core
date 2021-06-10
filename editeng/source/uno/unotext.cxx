@@ -933,42 +933,41 @@ beans::PropertyState SvxUnoTextRangeBase::_getPropertyState(const SfxItemPropert
         SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : nullptr;
         if( pForwarder )
         {
-            SfxItemState eItemState = SfxItemState::UNKNOWN;
-            sal_uInt16 nWID = 0;
+            SfxItemState eItemState(SfxItemState::DEFAULT);
+            bool bItemStateSet(false);
 
             switch( pMap->nWID )
             {
             case WID_FONTDESC:
                 {
                     const sal_uInt16* pWhichId = aSvxUnoFontDescriptorWhichMap;
-                    SfxItemState eTempItemState = SfxItemState::UNKNOWN;
                     while( *pWhichId )
                     {
-                        if(nPara != -1)
-                            eTempItemState = pForwarder->GetItemState( nPara, *pWhichId );
-                        else
-                            eTempItemState = pForwarder->GetItemState( GetSelection(), *pWhichId );
+                        const SfxItemState eTempItemState(nPara != -1
+                            ? pForwarder->GetItemState( nPara, *pWhichId )
+                            : pForwarder->GetItemState( GetSelection(), *pWhichId ));
 
                         switch( eTempItemState )
                         {
                         case SfxItemState::DISABLED:
                         case SfxItemState::DONTCARE:
                             eItemState = SfxItemState::DONTCARE;
+                            bItemStateSet = true;
                             break;
 
                         case SfxItemState::DEFAULT:
-                            if( eItemState != SfxItemState::DEFAULT )
+                            if( !bItemStateSet )
                             {
-                                if( eItemState == SfxItemState::UNKNOWN )
-                                    eItemState = SfxItemState::DEFAULT;
+                                eItemState = SfxItemState::DEFAULT;
+                                bItemStateSet = true;
                             }
                             break;
 
                         case SfxItemState::SET:
-                            if( eItemState != SfxItemState::SET )
+                            if( !bItemStateSet )
                             {
-                                if( eItemState == SfxItemState::UNKNOWN )
-                                    eItemState = SfxItemState::SET;
+                                eItemState = SfxItemState::SET;
+                                bItemStateSet = true;
                             }
                             break;
                         default:
@@ -984,31 +983,35 @@ beans::PropertyState SvxUnoTextRangeBase::_getPropertyState(const SfxItemPropert
             case WID_NUMBERINGSTARTVALUE:
             case WID_PARAISNUMBERINGRESTART:
                 eItemState = SfxItemState::SET;
+                bItemStateSet = true;
                 break;
 
             default:
-                nWID = pMap->nWID;
+                if(0 != pMap->nWID)
+                {
+                    if( nPara != -1 )
+                        eItemState = pForwarder->GetItemState( nPara, pMap->nWID );
+                    else
+                        eItemState = pForwarder->GetItemState( GetSelection(), pMap->nWID );
+
+                    bItemStateSet = true;
+                }
+                break;
             }
 
-            if( nWID != 0 )
+            if(bItemStateSet)
             {
-                if( nPara != -1 )
-                    eItemState = pForwarder->GetItemState( nPara, nWID );
-                else
-                    eItemState = pForwarder->GetItemState( GetSelection(), nWID );
-            }
-
-            switch( eItemState )
-            {
-            case SfxItemState::DONTCARE:
-            case SfxItemState::DISABLED:
-                return beans::PropertyState_AMBIGUOUS_VALUE;
-            case SfxItemState::SET:
-                return beans::PropertyState_DIRECT_VALUE;
-            case SfxItemState::DEFAULT:
-                return beans::PropertyState_DEFAULT_VALUE;
-            default: break;
-//              case SfxItemState::UNKNOWN:
+                switch( eItemState )
+                {
+                case SfxItemState::DONTCARE:
+                case SfxItemState::DISABLED:
+                    return beans::PropertyState_AMBIGUOUS_VALUE;
+                case SfxItemState::SET:
+                    return beans::PropertyState_DIRECT_VALUE;
+                case SfxItemState::DEFAULT:
+                    return beans::PropertyState_DEFAULT_VALUE;
+                default: break;
+                }
             }
         }
     }
@@ -1065,39 +1068,39 @@ bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const Sf
     bool bUnknownPropertyFound = false;
     if(pSet && pMap)
     {
-        SfxItemState eItemState = SfxItemState::UNKNOWN;
-        sal_uInt16 nWID = 0;
+        SfxItemState eItemState = SfxItemState::DEFAULT;
+        bool bItemStateSet(false);
 
         switch( pMap->nWID )
         {
             case WID_FONTDESC:
                 {
                     const sal_uInt16* pWhichId = aSvxUnoFontDescriptorWhichMap;
-                    SfxItemState eTempItemState = SfxItemState::UNKNOWN;
                     while( *pWhichId )
                     {
-                        eTempItemState = pSet->GetItemState( *pWhichId );
+                        const SfxItemState eTempItemState(pSet->GetItemState( *pWhichId ));
 
                         switch( eTempItemState )
                         {
                         case SfxItemState::DISABLED:
                         case SfxItemState::DONTCARE:
                             eItemState = SfxItemState::DONTCARE;
+                            bItemStateSet = true;
                             break;
 
                         case SfxItemState::DEFAULT:
-                            if( eItemState != SfxItemState::DEFAULT )
+                            if( !bItemStateSet )
                             {
-                                if( eItemState == SfxItemState::UNKNOWN )
-                                    eItemState = SfxItemState::DEFAULT;
+                                eItemState = SfxItemState::DEFAULT;
+                                bItemStateSet = true;
                             }
                             break;
 
                         case SfxItemState::SET:
-                            if( eItemState != SfxItemState::SET )
+                            if( !bItemStateSet )
                             {
-                                if( eItemState == SfxItemState::UNKNOWN )
-                                    eItemState = SfxItemState::SET;
+                                eItemState = SfxItemState::SET;
+                                bItemStateSet = true;
                             }
                             break;
                         default:
@@ -1114,31 +1117,40 @@ bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const Sf
             case WID_NUMBERINGSTARTVALUE:
             case WID_PARAISNUMBERINGRESTART:
                 eItemState = SfxItemState::SET;
+                bItemStateSet = true;
                 break;
 
             default:
-                nWID = pMap->nWID;
+                if(0 != pMap->nWID)
+                {
+                    eItemState = pSet->GetItemState( pMap->nWID, false );
+                    bItemStateSet = true;
+                }
+                break;
         }
 
         if( bUnknownPropertyFound )
             return false;
 
-        if( nWID != 0 )
-            eItemState = pSet->GetItemState( nWID, false );
-
-        switch( eItemState )
+        if(bItemStateSet)
         {
+            switch( eItemState )
+            {
                 case SfxItemState::SET:
                     rState = beans::PropertyState_DIRECT_VALUE;
                     break;
                 case SfxItemState::DEFAULT:
                     rState = beans::PropertyState_DEFAULT_VALUE;
                     break;
-//                  case SfxItemState::UNKNOWN:
 //                  case SfxItemState::DONTCARE:
 //                  case SfxItemState::DISABLED:
                 default:
                     rState = beans::PropertyState_AMBIGUOUS_VALUE;
+            }
+        }
+        else
+        {
+            rState = beans::PropertyState_AMBIGUOUS_VALUE;
         }
     }
     return true;
