@@ -22,6 +22,46 @@
       "revId": "80af725a3399a589d75a97436c1de1a89474a361",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d03825eb_f9bc1615",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-10T07:07:40Z",
+      "side": 1,
+      "message": "There is some inconsistency in the project regarding use of \"x\" prefix. Yet, the documentation at [1] states:\n\n\u003e prefix\tmeaning\n\u003e x\tUNO-Reference\n\u003e p\tpointer (including stl-style iterators and any kind of smart pointer but UNO-Reference - they share the same semantic)\n\nstd::unique_ptr is exactly the case where we must use p prefix, because it\u0027s an object that is intended to be used like ordinary pointer. UNO references, on the other side, as mst puts it: \"require lots of UNO_QUERY\".\n\nNote that I understand why did you choose \"x\" here: Caolan uses \"x\" for all smart pointers, and specifically in the naming of welded objects - like \"mxTreeBox\". But let\u0027s at least follow the convention in the case of local variables. Thank you!\n\n[1] https://wiki.openoffice.org/wiki/Writer/Code_Conventions#local_variables",
+      "range": {
+        "startLine": 346,
+        "startChar": 4,
+        "endLine": 346,
+        "endChar": 42
+      },
+      "revId": "80af725a3399a589d75a97436c1de1a89474a361",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "daace91c_e790960c",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 884,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-10T07:07:40Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "80af725a3399a589d75a97436c1de1a89474a361",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
