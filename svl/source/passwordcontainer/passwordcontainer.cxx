@@ -231,11 +231,8 @@ PassMap StorageItem::getInfo()
 
 void StorageItem::setUseStorage( bool bUse )
 {
-    Sequence< uno::Any > sendVals(1);
-    sendVals[0] <<= bUse;
-
     ConfigItem::SetModified();
-    ConfigItem::PutProperties( { "UseStorage" }, sendVals );
+    ConfigItem::PutProperties( { "UseStorage" }, { uno::Any(bUse) } );
 }
 
 
@@ -289,14 +286,10 @@ bool StorageItem::getEncodedMP( OUString& aResult )
 
 void StorageItem::setEncodedMP( const OUString& aEncoded, bool bAcceptEmpty )
 {
-    Sequence< uno::Any > sendVals(2);
-
     bool bHasMaster = ( !aEncoded.isEmpty() || bAcceptEmpty );
-    sendVals[0] <<= bHasMaster;
-    sendVals[1] <<= aEncoded;
 
     ConfigItem::SetModified();
-    ConfigItem::PutProperties( { "HasMaster", "Master" }, sendVals );
+    ConfigItem::PutProperties( { "HasMaster", "Master" }, { uno::Any(bHasMaster), uno::Any(aEncoded) } );
 
     hasEncoded = bHasMaster;
     mEncoded = aEncoded;
@@ -305,8 +298,7 @@ void StorageItem::setEncodedMP( const OUString& aEncoded, bool bAcceptEmpty )
 
 void StorageItem::remove( const OUString& aURL, const OUString& aName )
 {
-    std::vector < OUString > forIndex { aURL, aName };
-    Sequence< OUString > sendSeq { createIndex( forIndex ) };
+    Sequence< OUString > sendSeq { createIndex( { aURL, aName } ) };
 
     ConfigItem::ClearNodeElements( "Store", sendSeq );
 }
@@ -326,13 +318,9 @@ void StorageItem::update( const OUString& aURL, const NamePassRecord& aRecord )
         return;
     }
 
-    std::vector < OUString > forIndex;
-    forIndex.push_back( aURL );
-    forIndex.push_back( aRecord.GetUserName() );
-
     Sequence< beans::PropertyValue > sendSeq(1);
 
-    sendSeq[0].Name  = "Store/Passwordstorage['" + createIndex( forIndex ) + "']/Password";
+    sendSeq[0].Name  = "Store/Passwordstorage['" + createIndex( { aURL, aRecord.GetUserName() } ) + "']/Password";
 
     sendSeq[0].Value <<= aRecord.GetPersPasswords();
 
