@@ -117,7 +117,7 @@ namespace dbaui
                                , public TreeListBox
     {
     public:
-        InterimDBTreeListBox(vcl::Window* pParent, bool bSQLType);
+        InterimDBTreeListBox(vcl::Window* pParent);
         virtual void dispose() override;
         virtual ~InterimDBTreeListBox() override;
         void show_container() { m_xContainer->show(); }
