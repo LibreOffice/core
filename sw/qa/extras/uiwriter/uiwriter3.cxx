@@ -401,6 +401,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132321)
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf49208)
+{
+    load(DATA_DIRECTORY, "tdf49208.doc");
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135056)
 {
     load(DATA_DIRECTORY, "tdf135056.odt");
