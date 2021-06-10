@@ -291,9 +291,9 @@ class AddonsOptions_Impl : public ConfigItem
         void                 ReadStatusbarMergeInstructions( MergeStatusbarInstructionContainer& rContainer );
 
         void                 ReadMergeMenuData( std::u16string_view aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeMenu );
-        bool                 ReadMergeToolbarData( std::u16string_view aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeToolbarItems );
-        bool                 ReadMergeNotebookBarData( std::u16string_view aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeNotebookBarItems );
-        bool                 ReadMergeStatusbarData( std::u16string_view aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeStatusbar );
+        void                 ReadMergeToolbarData( std::u16string_view aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeToolbarItems );
+        void                 ReadMergeNotebookBarData( std::u16string_view aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeNotebookBarItems );
+        void                 ReadMergeStatusbarData( std::u16string_view aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeStatusbar );
         bool                 ReadMenuItem( std::u16string_view aMenuItemNodeName, Sequence< PropertyValue >& aMenuItem, bool bIgnoreSubMenu = false );
         bool                 ReadPopupMenu( std::u16string_view aPopupMenuNodeName, Sequence< PropertyValue >& aPopupMenu );
         void                 AppendPopupMenu( Sequence< PropertyValue >& aTargetPopupMenu, const Sequence< PropertyValue >& rSourcePopupMenu );
@@ -1065,12 +1065,12 @@ void AddonsOptions_Impl::ReadToolbarMergeInstructions( ToolbarMergingInstruction
     }
 }
 
-bool AddonsOptions_Impl::ReadMergeToolbarData( std::u16string_view aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeToolbarItems )
+void AddonsOptions_Impl::ReadMergeToolbarData( std::u16string_view aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeToolbarItems )
 {
     OUString aMergeToolbarBaseNode = aMergeAddonInstructionBase +
         m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_TOOLBARITEMS ];
 
-    return ReadToolBarItemSet( aMergeToolbarBaseNode, rMergeToolbarItems );
+    ReadToolBarItemSet( aMergeToolbarBaseNode, rMergeToolbarItems );
 }
 
 void AddonsOptions_Impl::ReadNotebookBarMergeInstructions(
@@ -1138,14 +1138,14 @@ void AddonsOptions_Impl::ReadNotebookBarMergeInstructions(
     }
 }
 
-bool AddonsOptions_Impl::ReadMergeNotebookBarData(
+void AddonsOptions_Impl::ReadMergeNotebookBarData(
     std::u16string_view aMergeAddonInstructionBase,
     Sequence<Sequence<PropertyValue>>& rMergeNotebookBarItems)
 {
     OUString aMergeNotebookBarBaseNode = aMergeAddonInstructionBase +
         m_aPropMergeNotebookBarNames[OFFSET_MERGENOTEBOOKBAR_NOTEBOOKBARITEMS];
 
-    return ReadNotebookBarItemSet(aMergeNotebookBarBaseNode, rMergeNotebookBarItems);
+    ReadNotebookBarItemSet(aMergeNotebookBarBaseNode, rMergeNotebookBarItems);
 }
 
 void AddonsOptions_Impl::ReadStatusbarMergeInstructions( MergeStatusbarInstructionContainer& aContainer )
@@ -1204,12 +1204,10 @@ void AddonsOptions_Impl::ReadStatusbarMergeInstructions( MergeStatusbarInstructi
     }
 }
 
-bool AddonsOptions_Impl::ReadMergeStatusbarData(
+void AddonsOptions_Impl::ReadMergeStatusbarData(
     std::u16string_view aMergeAddonInstructionBase,
     Sequence< Sequence< PropertyValue > >& rMergeStatusbarItems )
 {
-    sal_uInt32 nStatusbarItemCount = rMergeStatusbarItems.getLength();
-
     OUString aMergeStatusbarBaseNode = aMergeAddonInstructionBase +
         m_aPropMergeStatusbarNames[ OFFSET_MERGESTATUSBAR_STATUSBARITEMS ];
 
@@ -1238,8 +1236,6 @@ bool AddonsOptions_Impl::ReadMergeStatusbarData(
             rMergeStatusbarItems[nAddonCount] = aStatusbarItem;
         }
     }
-
-    return ( o3tl::make_unsigned(rMergeStatusbarItems.getLength()) > nStatusbarItemCount );
 }
 
 bool AddonsOptions_Impl::ReadStatusBarItem(
