@@ -119,7 +119,7 @@ namespace dbaui
     private:
         std::unique_ptr<weld::Label> m_xStatusBar;
     public:
-        InterimDBTreeListBox(vcl::Window* pParent, bool bSQLType);
+        InterimDBTreeListBox(vcl::Window* pParent);
         virtual void dispose() override;
         weld::Label& GetStatusBar() { return *m_xStatusBar; }
         virtual ~InterimDBTreeListBox() override;
