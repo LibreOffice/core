@@ -10121,7 +10121,7 @@ int fb_api_is_30(void) { return 0; }
         fi
         ENABLE_FIREBIRD_SDBC=TRUE
         AC_DEFINE([ENABLE_FIREBIRD_SDBC],1)
-    elif test "$enable_database_connectivity" != yes; then
+    elif test "$enable_database_connectivity" = no; then
         AC_MSG_RESULT([none])
     elif test "$cross_compiling" = "yes"; then
         AC_MSG_RESULT([none])
@@ -10317,7 +10317,7 @@ if test "$with_system_odbc" = "yes" -o '(' "$with_system_headers" = "yes" -a "$w
         AC_CHECK_HEADER(sqlext.h, [],
             [AC_MSG_ERROR(odbc not found. install odbc)],[])
     fi
-elif test "$enable_database_connectivity" != yes; then
+elif test "$enable_database_connectivity" = no; then
     AC_MSG_RESULT([none])
 else
     AC_MSG_RESULT([internal])
