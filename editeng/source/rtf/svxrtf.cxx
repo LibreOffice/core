@@ -943,9 +943,6 @@ SvxRTFItemStackType::SvxRTFItemStackType(
     , nEndCnt(nSttCnt)
     , nStyleNo(0)
 {
-#if defined(__COVERITY__)
-    mxEndNodeIdx = mxStartNodeIdx;
-#endif
 }
 
 SvxRTFItemStackType::SvxRTFItemStackType(
@@ -962,9 +959,6 @@ SvxRTFItemStackType::SvxRTFItemStackType(
     , nEndCnt(nSttCnt)
     , nStyleNo(rCpy.nStyleNo)
 {
-#if defined(__COVERITY__)
-    mxEndNodeIdx = mxStartNodeIdx;
-#endif
     aAttrSet.SetParent( &rCpy.aAttrSet );
     if( bCopyAttr )
         aAttrSet.Put( rCpy.aAttrSet );
