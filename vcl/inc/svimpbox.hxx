@@ -165,7 +165,7 @@ private:
     void                InitScrollBarBox();
     SvLBoxTab*          NextTab( SvLBoxTab const * );
 
-    bool                SetMostRight( SvTreeListEntry* pEntry );
+    void                SetMostRight( SvTreeListEntry* pEntry );
     void                FindMostRight( SvTreeListEntry* pParent );
     void                FindMostRight_Impl( SvTreeListEntry* pParent );
     void                NotifyTabsChanged();

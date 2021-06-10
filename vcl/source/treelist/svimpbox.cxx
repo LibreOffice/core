@@ -2961,7 +2961,7 @@ void SvImpLBox::SetUpdateMode( bool bMode )
     }
 }
 
-bool SvImpLBox::SetMostRight( SvTreeListEntry* pEntry )
+void SvImpLBox::SetMostRight( SvTreeListEntry* pEntry )
 {
     if( m_pView->nTreeFlags & SvTreeFlags::RECALCTABS )
     {
@@ -2997,10 +2997,8 @@ bool SvImpLBox::SetMostRight( SvTreeListEntry* pEntry )
         {
             m_nMostRight = nRight;
             m_pMostRightEntry = pEntry;
-            return true;
         }
     }
-    return false;
 }
 
 void SvImpLBox::FindMostRight()
