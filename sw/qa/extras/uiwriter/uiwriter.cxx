@@ -411,22 +411,9 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    SwDoc* createDoc(const char* pName = nullptr);
     std::unique_ptr<SwTextBlocks> readDOCXAutotext(
         std::u16string_view sFileName, bool bEmpty = false);
 };
-
-SwDoc* SwUiWriterTest::createDoc(const char* pName)
-{
-    if (!pName)
-        loadURL("private:factory/swriter", nullptr);
-    else
-        load(DATA_DIRECTORY, pName);
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    return pTextDoc->GetDocShell()->GetDoc();
-}
 
 std::unique_ptr<SwTextBlocks> SwUiWriterTest::readDOCXAutotext(std::u16string_view sFileName, bool bEmpty)
 {
@@ -438,7 +425,7 @@ std::unique_ptr<SwTextBlocks> SwUiWriterTest::readDOCXAutotext(std::u16string_vi
         osl::File::copy(m_directories.getURLFromSrc(DATA_DIRECTORY) + sFileName, rURL));
 
     SfxMedium aSrcMed(rURL, StreamMode::STD_READ);
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
 
     SwReader aReader(aSrcMed, rURL, pDoc);
     Reader* pDOCXReader = SwReaderWriter::GetDOCXReader();
@@ -464,7 +451,7 @@ constexpr OUStringLiteral EXPECTED_REPLACE_CONTENT(u"toto toto tutu");
 
 void SwUiWriterTest::testReplaceForward()
 {
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
 
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
 
@@ -486,7 +473,7 @@ void SwUiWriterTest::testReplaceForward()
 
 void SwUiWriterTest::testRedlineFrame(char const*const file)
 {
-    SwDoc * pDoc(createDoc(file));
+    SwDoc * pDoc(createSwDoc(DATA_DIRECTORY, file));
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     // there is exactly one frame
@@ -557,7 +544,7 @@ void SwUiWriterTest::testThreadedException()
 
 void SwUiWriterTest::testBookmarkCopy()
 {
-    SwDoc * pDoc(createDoc());
+    SwDoc * pDoc(createSwDoc());
 
     // add text and bookmark
     IDocumentMarkAccess & rIDMA(*pDoc->getIDocumentMarkAccess());
@@ -614,7 +601,7 @@ void SwUiWriterTest::testBookmarkCopy()
 void SwUiWriterTest::testTdf67238()
 {
     //create a new writer document
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
     //insert a 3X3 table in the newly created document
@@ -706,7 +693,7 @@ void SwUiWriterTest::testTdf67238()
 
 void SwUiWriterTest::testFdo75110()
 {
-    SwDoc* pDoc = createDoc("fdo75110.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "fdo75110.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     pWrtShell->SelAll();
@@ -719,7 +706,7 @@ void SwUiWriterTest::testFdo75110()
 
 void SwUiWriterTest::testFdo75898()
 {
-    SwDoc* pDoc = createDoc("fdo75898.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "fdo75898.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->SelAll();
     pWrtShell->InsertRow(1, true);
@@ -734,7 +721,7 @@ void SwUiWriterTest::testFdo75898()
 
 void SwUiWriterTest::testReplaceBackward()
 {
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
 
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
 
@@ -756,7 +743,7 @@ void SwUiWriterTest::testReplaceBackward()
 
 void SwUiWriterTest::testFdo69893()
 {
-    SwDoc* pDoc = createDoc("fdo69893.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "fdo69893.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     pWrtShell->SelAll(); // A1 is empty -> selects the whole table.
@@ -799,7 +786,7 @@ void SwUiWriterTest::testFdo70807()
 void SwUiWriterTest::testImportRTF()
 {
     // Insert "foobar" and position the cursor between "foo" and "bar".
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Insert("foobar");
     pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 3, /*bBasicCall=*/false);
@@ -820,7 +807,7 @@ void SwUiWriterTest::testImportRTF()
 void SwUiWriterTest::testExportRTF()
 {
     // Insert "aaabbbccc" and select "bbb".
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Insert("aaabbbccc");
     pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 3, /*bBasicCall=*/false);
@@ -938,7 +925,7 @@ void SwUiWriterTest::testDOCXAutoTextGallery()
 
 void SwUiWriterTest::testWatermarkDOCX()
 {
-    SwDoc* const pDoc = createDoc("watermark.docx");
+    SwDoc* const pDoc = createSwDoc(DATA_DIRECTORY, "watermark.docx");
     SwDocShell* pDocShell = pDoc->GetDocShell();
     const SfxPoolItem* pItem;
     SfxItemState eState = pDocShell->GetViewShell()->GetViewFrame()->GetDispatcher()->QueryState(SID_WATERMARK, pItem);
@@ -967,7 +954,7 @@ void SwUiWriterTest::testWatermarkPosition()
         int aPages = aPagesInDocument + aAdditionalPagesCount[i];
 
         // Empty document with one Page Break
-        SwDoc* pDoc = createDoc("watermark-position.odt");
+        SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "watermark-position.odt");
         SwEditShell* pEditShell = pDoc->GetEditShell();
         SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
         uno::Reference<frame::XModel> xModel = pDoc->GetDocShell()->GetBaseModel();
@@ -1035,7 +1022,7 @@ void SwUiWriterTest::testWatermarkPosition()
 void SwUiWriterTest::testFdo74981()
 {
     // create a document with an input field
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwInputField aField(static_cast<SwInputFieldType*>(pWrtShell->GetFieldType(0, SwFieldIds::Input)), "foo", "bar", 0, 0);
     pWrtShell->Insert(aField);
@@ -1064,7 +1051,7 @@ void SwUiWriterTest::testFdo74981()
 
 void SwUiWriterTest::testTdf98512()
 {
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwInputFieldType *const pType(static_cast<SwInputFieldType*>(
                 pWrtShell->GetFieldType(0, SwFieldIds::Input)));
@@ -1102,7 +1089,7 @@ void SwUiWriterTest::testTdf98512()
 
 void SwUiWriterTest::testShapeTextboxSelect()
 {
-    SwDoc* pDoc = createDoc("shape-textbox.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "shape-textbox.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(1);
@@ -1120,7 +1107,7 @@ void SwUiWriterTest::testShapeTextboxSelect()
 
 void SwUiWriterTest::testShapeTextboxDelete()
 {
-    SwDoc* pDoc = createDoc("shape-textbox.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "shape-textbox.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(0);
@@ -1137,7 +1124,7 @@ void SwUiWriterTest::testShapeTextboxDelete()
 
 void SwUiWriterTest::testAnchorChangeSelection()
 {
-    SwDoc* pDoc = createDoc("test_anchor_as_character.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "test_anchor_as_character.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(0);
@@ -1156,7 +1143,7 @@ void SwUiWriterTest::testAnchorChangeSelection()
 
 void SwUiWriterTest::testCp1000071()
 {
-    SwDoc* pDoc = createDoc("cp1000071.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "cp1000071.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
@@ -1195,7 +1182,7 @@ void SwUiWriterTest::testCp1000071()
 
 void SwUiWriterTest::testShapeTextboxVertadjust()
 {
-    SwDoc* pDoc = createDoc("shape-textbox-vertadjust.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "shape-textbox-vertadjust.odt");
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(1);
     SwFrameFormat* pFormat = static_cast<SwContact*>(pObject->GetUserCall())->GetFormat();
@@ -1205,7 +1192,7 @@ void SwUiWriterTest::testShapeTextboxVertadjust()
 
 void SwUiWriterTest::testShapeTextboxAutosize()
 {
-    SwDoc* pDoc = createDoc("shape-textbox-autosize.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "shape-textbox-autosize.odt");
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     // 0-1 is the first UI-visible shape+textbox.
     SdrObject* pFirst = pPage->GetObj(0);
@@ -1223,7 +1210,7 @@ void SwUiWriterTest::testShapeTextboxAutosize()
 
 void SwUiWriterTest::testFdo82191()
 {
-    SwDoc* pDoc = createDoc("fdo82191.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "fdo82191.odt");
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     // Make sure we have a single draw shape.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), SwTextBoxHelper::getCount(pPage));
@@ -1244,7 +1231,7 @@ void SwUiWriterTest::testCommentedWord()
 {
     // This word is commented. <- string in document
     // 123456789 <- character positions
-    SwDoc* pDoc = createDoc("commented-word.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "commented-word.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     // Move the cursor into the second word.
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 5, /*bBasicCall=*/false);
@@ -1265,7 +1252,7 @@ void SwUiWriterTest::testCommentedWord()
 }
 
 void SwUiWriterTest::testTextFieldGetAnchorGetTextInFooter() {
-    createDoc("textfield-getanchor-gettext-in-footer.odt");
+    createSwDoc(DATA_DIRECTORY, "textfield-getanchor-gettext-in-footer.odt");
 
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
@@ -1287,7 +1274,7 @@ void SwUiWriterTest::testChineseConversionBlank()
 {
 
     // Given
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwView* pView = pDoc->GetDocShell()->GetView();
     const uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
@@ -1310,7 +1297,7 @@ void SwUiWriterTest::testChineseConversionNonChineseText()
 {
 
     // Given
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwView* pView = pDoc->GetDocShell()->GetView();
     const uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
@@ -1334,7 +1321,7 @@ void SwUiWriterTest::testChineseConversionTraditionalToSimplified()
 {
 
     // Given
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwView* pView = pDoc->GetDocShell()->GetView();
     const uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
@@ -1358,7 +1345,7 @@ void SwUiWriterTest::testChineseConversionSimplifiedToTraditional()
 {
 
     // Given
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwView* pView = pDoc->GetDocShell()->GetView();
     const uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
@@ -1400,7 +1387,7 @@ void SwUiWriterTest::testFdo85554()
 
 void SwUiWriterTest::testAutoCorr()
 {
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
     const sal_Unicode cIns = ' ';
@@ -1428,7 +1415,7 @@ void SwUiWriterTest::testAutoCorr()
 
 void SwUiWriterTest::testTdf83260()
 {
-    SwDoc* const pDoc(createDoc("tdf83260-1.odt"));
+    SwDoc* const pDoc(createSwDoc(DATA_DIRECTORY, "tdf83260-1.odt"));
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
 
@@ -1486,7 +1473,7 @@ void SwUiWriterTest::testTdf83260()
 
 void SwUiWriterTest::testTdf130274()
 {
-    SwDoc *const pDoc(createDoc());
+    SwDoc *const pDoc(createSwDoc());
     SwWrtShell *const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
 
@@ -1509,7 +1496,7 @@ void SwUiWriterTest::testTdf130274()
 
 void SwUiWriterTest::testMergeDoc()
 {
-    SwDoc* const pDoc1(createDoc("merge-change1.odt"));
+    SwDoc* const pDoc1(createSwDoc(DATA_DIRECTORY, "merge-change1.odt"));
 
     auto xDoc2Component(loadFromDesktop(
             m_directories.getURLFromSrc(DATA_DIRECTORY) + "merge-change2.odt",
@@ -1540,7 +1527,7 @@ void SwUiWriterTest::testMergeDoc()
 
 void SwUiWriterTest::testCreatePortions()
 {
-    createDoc("uno-cycle.odt");
+    createSwDoc(DATA_DIRECTORY, "uno-cycle.odt");
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextContent> xText(xBookmarksSupplier->getBookmarks()->getByName("Mark"), uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xTextCursor(xText->getAnchor(), uno::UNO_QUERY);
@@ -1555,7 +1542,7 @@ void SwUiWriterTest::testCreatePortions()
 
 void SwUiWriterTest::testBookmarkUndo()
 {
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
     SwPaM aPaM( SwNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1) );
@@ -1599,7 +1586,7 @@ static void lcl_setWeight(SwWrtShell* pWrtShell, FontWeight aWeight)
 
 void SwUiWriterTest::testFdo85876()
 {
-    SwDoc* const pDoc = createDoc();
+    SwDoc* const pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     lcl_setWeight(pWrtShell, WEIGHT_BOLD);
     pWrtShell->Insert("test");
@@ -1627,7 +1614,7 @@ void SwUiWriterTest::testFdo85876()
 
 void SwUiWriterTest::testCaretPositionMovingUp()
 {
-    SwDoc* const pDoc = createDoc();
+    SwDoc* const pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Insert("after");
     pWrtShell->InsertLineBreak();
@@ -1639,7 +1626,7 @@ void SwUiWriterTest::testCaretPositionMovingUp()
 
 void SwUiWriterTest::testTdf93441()
 {
-    SwDoc* const pDoc = createDoc();
+    SwDoc* const pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Insert("Hello");
     pWrtShell->InsertLineBreak();
@@ -1655,7 +1642,7 @@ void SwUiWriterTest::testTdf93441()
 
 void SwUiWriterTest::testTdf81226()
 {
-    SwDoc* const pDoc = createDoc();
+    SwDoc* const pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Insert("before");
     pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 4, /*bBasicCall=*/false);
@@ -1670,7 +1657,7 @@ void SwUiWriterTest::testTdf81226()
 
 void SwUiWriterTest::testTdf79717()
 {
-    SwDoc* const pDoc = createDoc();
+    SwDoc* const pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Insert("normal");
     lcl_setWeight(pWrtShell, WEIGHT_BOLD);
@@ -1717,7 +1704,7 @@ void SwUiWriterTest::testTdf79717()
 
 void SwUiWriterTest::testTdf137532()
 {
-    SwDoc* const pDoc = createDoc();
+    SwDoc* const pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Insert("test");
 
@@ -1761,7 +1748,7 @@ void SwUiWriterTest::testTdf137532()
 
 void SwUiWriterTest::testFdo87448()
 {
-    createDoc("fdo87448.odt");
+    createSwDoc(DATA_DIRECTORY, "fdo87448.odt");
 
     // Save the first shape to a metafile.
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter = drawing::GraphicExportFilter::create(comphelper::getProcessComponentContext());
@@ -1800,8 +1787,8 @@ void SwUiWriterTest::testFdo87448()
 
 void SwUiWriterTest::testTextCursorInvalidation()
 {
-    createDoc();
-    SwDoc* pDoc = createDoc();
+    createSwDoc();
+    SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPageStyle.is());
@@ -1823,7 +1810,7 @@ void SwUiWriterTest::testTextCursorInvalidation()
 void SwUiWriterTest::testTdf68183()
 {
     // First disable RSID and check if indeed no such attribute is inserted.
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SW_MOD()->GetModuleConfig()->SetStoreRsid(false);
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Insert2("X");
@@ -1844,7 +1831,7 @@ void SwUiWriterTest::testTdf68183()
 
 void SwUiWriterTest::testCp1000115()
 {
-    createDoc("cp1000115.fodt");
+    createSwDoc(DATA_DIRECTORY, "cp1000115.fodt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "/root/page[2]/body/tab/row/cell[2]/txt");
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
@@ -1858,7 +1845,7 @@ void SwUiWriterTest::testCp1000115()
 void SwUiWriterTest::testTdf63214()
 {
     //This is a crash test
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
     pWrtShell->Insert("V");
@@ -1884,7 +1871,7 @@ void SwUiWriterTest::testTdf63214()
 
 void SwUiWriterTest::testTdf90003()
 {
-    createDoc("tdf90003.odt");
+    createSwDoc(DATA_DIRECTORY, "tdf90003.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT(pXmlDoc);
     // This was 1: an unexpected fly portion was created, resulting in too
@@ -1894,7 +1881,7 @@ void SwUiWriterTest::testTdf90003()
 
 void SwUiWriterTest::testTdf51741()
 {
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
@@ -1981,7 +1968,7 @@ void SwUiWriterTest::testDefaultsOfOutlineNumbering()
 
 void SwUiWriterTest::testDeleteTableRedlines()
 {
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwInsertTableOptions TableOpt(SwInsertTableFlags::DefaultBorder, 0);
     const SwTable& rTable = pWrtShell->InsertTable(TableOpt, 1, 3);
@@ -2000,7 +1987,7 @@ void SwUiWriterTest::testDeleteTableRedlines()
 
 void SwUiWriterTest::testXFlatParagraph()
 {
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     //Inserting some text in the document
     pWrtShell->Insert("This is sample text");
@@ -2078,7 +2065,7 @@ void SwUiWriterTest::testTdf81995()
 
 void SwUiWriterTest::testForcepoint3()
 {
-    createDoc("flowframe_null_ptr_deref.sample");
+    createSwDoc(DATA_DIRECTORY, "flowframe_null_ptr_deref.sample");
     uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
         { "FilterName", uno::Any(OUString("writer_pdf_Export")) },
     }));
@@ -2093,7 +2080,7 @@ void SwUiWriterTest::testForcepoint80()
 {
     try
     {
-        createDoc("forcepoint80-1.rtf");
+        createSwDoc(DATA_DIRECTORY, "forcepoint80-1.rtf");
         uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
             { "FilterName", uno::Any(OUString("writer_pdf_Export")) },
         }));
@@ -2110,7 +2097,7 @@ void SwUiWriterTest::testForcepoint80()
 
 void SwUiWriterTest::testExportToPicture()
 {
-    createDoc();
+    createSwDoc();
     uno::Sequence<beans::PropertyValue> aFilterData( comphelper::InitPropertySequence({
         { "PixelWidth", uno::Any(sal_Int32(610)) },
         { "PixelHeight", uno::Any(sal_Int32(610)) }
@@ -2134,7 +2121,7 @@ void SwUiWriterTest::testExportToPicture()
 
 void SwUiWriterTest::testTdf77340()
 {
-    createDoc();
+    createSwDoc();
     //Getting some paragraph style in our document
     uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<style::XStyle> xStyle(xFactory->createInstance("com.sun.star.style.ParagraphStyle"), uno::UNO_QUERY);
@@ -2156,7 +2143,7 @@ void SwUiWriterTest::testTdf77340()
 
 void SwUiWriterTest::testTdf79236()
 {
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
     //Getting some paragraph style
     SwTextFormatColl* pTextFormat = pDoc->FindTextFormatCollByName(u"Text Body");
@@ -2215,7 +2202,7 @@ void SwUiWriterTest::testTdf79236()
 void SwUiWriterTest::testTextSearch()
 {
     // Create a new empty Writer document
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
     IDocumentContentOperations & rIDCO(pDoc->getIDocumentContentOperations());
     // Insert some text
@@ -2366,7 +2353,7 @@ void SwUiWriterTest::testTdf69282()
     SwDoc* source = pTextDoc->GetDocShell()->GetDoc();
     uno::Reference<lang::XComponent> xSourceDoc = mxComponent;
     mxComponent.clear();
-    SwDoc* target = createDoc();
+    SwDoc* target = createSwDoc();
     SwPageDesc* sPageDesc = source->MakePageDesc("SourceStyle");
     SwPageDesc* tPageDesc = target->MakePageDesc("TargetStyle");
     sPageDesc->ChgFirstShare(false);
@@ -2427,7 +2414,7 @@ void SwUiWriterTest::testTdf69282WithMirror()
     SwDoc* source = pTextDoc->GetDocShell()->GetDoc();
     uno::Reference<lang::XComponent> xSourceDoc = mxComponent;
     mxComponent.clear();
-    SwDoc* target = createDoc();
+    SwDoc* target = createSwDoc();
     SwPageDesc* sPageDesc = source->MakePageDesc("SourceStyle");
     SwPageDesc* tPageDesc = target->MakePageDesc("TargetStyle");
     //Enabling Mirror
@@ -2514,7 +2501,7 @@ void SwUiWriterTest::testTdf78742()
 
 void SwUiWriterTest::testUnoParagraph()
 {
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     //Inserting some text content in the document
     pWrtShell->Insert("This is initial text in paragraph one");
@@ -2549,7 +2536,7 @@ void SwUiWriterTest::testUnoParagraph()
 void SwUiWriterTest::testTdf72788()
 {
     //Create a new empty Writer document
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
     IDocumentContentOperations & rIDCO(pDoc->getIDocumentContentOperations());
@@ -2609,7 +2596,7 @@ void SwUiWriterTest::testTdf72788()
 
 void SwUiWriterTest::testTdf60967()
 {
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
@@ -2661,7 +2648,7 @@ void SwUiWriterTest::testTdf60967()
 
 void SwUiWriterTest::testSearchWithTransliterate()
 {
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     {
         SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
@@ -2701,7 +2688,7 @@ void SwUiWriterTest::testSearchWithTransliterate()
 
 void SwUiWriterTest::testTdf73660()
 {
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     OUString aData1 = "First" + OUStringChar(CHAR_SOFTHYPHEN) + "Word";
     OUString aData2 = "Seco" + OUStringChar(CHAR_SOFTHYPHEN) + "nd";
@@ -2747,7 +2734,7 @@ void SwUiWriterTest::testNewDocModifiedState()
 
 void SwUiWriterTest::testTdf77342()
 {
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
     //inserting first footnote
@@ -2988,7 +2975,7 @@ void SwUiWriterTest::testTdf77342()
 
 void SwUiWriterTest::testTdf63553()
 {
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
     //inserting sequence field 1
@@ -3248,7 +3235,7 @@ void SwUiWriterTest::testTdf63553()
 
 void SwUiWriterTest::testTdf74230()
 {
-    createDoc();
+    createSwDoc();
     //exporting the empty document to ODT via TempFile
     uno::Sequence<beans::PropertyValue> aDescriptor;
     utl::TempFile aTempFile;
@@ -3268,7 +3255,7 @@ void SwUiWriterTest::testTdf74230()
 
 void SwUiWriterTest::testTdf74363()
 {
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     //testing autocorrect of initial capitals on start of first paragraph
     SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
@@ -3283,7 +3270,7 @@ void SwUiWriterTest::testTdf74363()
 
 void SwUiWriterTest::testTdf80663()
 {
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     //Inserting 2x2 Table
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
@@ -3370,7 +3357,7 @@ void SwUiWriterTest::testTdf80663()
 
 void SwUiWriterTest::testTdf57197()
 {
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     //Inserting 1x1 Table
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
@@ -3452,7 +3439,7 @@ void SwUiWriterTest::testTdf57197()
 
 void SwUiWriterTest::testTdf131990()
 {
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT(!pWrtShell->Up( false, 1, true ));
@@ -3461,7 +3448,7 @@ void SwUiWriterTest::testTdf131990()
 
 void SwUiWriterTest::testTdf90808()
 {
-    createDoc();
+    createSwDoc();
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xTextRange = xTextDocument->getText();
     uno::Reference<text::XText> xText = xTextRange->getText();
@@ -3507,7 +3494,7 @@ void SwUiWriterTest::testTdf90808()
 void SwUiWriterTest::testTdf97601()
 {
     // Instructions from the bugreport to trigger an infinite loop.
-    createDoc("tdf97601.odt");
+    createSwDoc(DATA_DIRECTORY, "tdf97601.odt");
     uno::Reference<text::XTextEmbeddedObjectsSupplier> xEmbeddedObjectsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xEmbeddedObjects = xEmbeddedObjectsSupplier->getEmbeddedObjects();
     uno::Reference<beans::XPropertySet> xChart;
@@ -3530,7 +3517,7 @@ void SwUiWriterTest::testTdf97601()
 
 void SwUiWriterTest::testTdf75137()
 {
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(true);
     pWrtShell->InsertFootnote("This is first footnote");
@@ -3547,7 +3534,7 @@ void SwUiWriterTest::testTdf75137()
 
 void SwUiWriterTest::testTdf83798()
 {
-    SwDoc* pDoc = createDoc("tdf83798.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf83798.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->GotoNextTOXBase();
     const SwTOXBase* pTOXBase = pWrtShell->GetCurTOX();
@@ -3586,7 +3573,7 @@ void SwUiWriterTest::testTdf83798()
 
 void SwUiWriterTest::testTdf89714()
 {
-    createDoc();
+    createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFact(mxComponent, uno::UNO_QUERY);
     uno::Reference<uno::XInterface> xInterface(xFact->createInstance("com.sun.star.text.Defaults"), uno::UNO_QUERY);
     uno::Reference<beans::XPropertyState> xPropState(xInterface, uno::UNO_QUERY);
@@ -3598,7 +3585,7 @@ void SwUiWriterTest::testTdf89714()
 void SwUiWriterTest::testTdf130287()
 {
     //create a new writer document
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     //insert a 1-cell table in the newly created document
     SwInsertTableOptions TableOpt(SwInsertTableFlags::DefaultBorder, 0);
@@ -3617,7 +3604,7 @@ void SwUiWriterTest::testTdf130287()
 
 void SwUiWriterTest::testPropertyDefaults()
 {
-    createDoc();
+    createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFact(mxComponent, uno::UNO_QUERY);
     uno::Reference<uno::XInterface> xInterface(xFact->createInstance("com.sun.star.text.Defaults"), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropSet(xInterface, uno::UNO_QUERY_THROW);
@@ -3664,7 +3651,7 @@ void SwUiWriterTest::testPropertyDefaults()
 
 void SwUiWriterTest::testTableBackgroundColor()
 {
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwInsertTableOptions TableOpt(SwInsertTableFlags::DefaultBorder, 0);
     pWrtShell->InsertTable(TableOpt, 3, 3); //Inserting Table
@@ -3701,7 +3688,7 @@ void SwUiWriterTest::testTableBackgroundColor()
 
 void SwUiWriterTest::testTdf88899()
 {
-    createDoc();
+    createSwDoc();
     uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<document::XDocumentProperties> xProps(xDocumentPropertiesSupplier->getDocumentProperties());
     uno::Reference<beans::XPropertyContainer> xUserProps = xProps->getUserDefinedProperties();
@@ -3731,7 +3718,7 @@ void SwUiWriterTest::testTdf88899()
 
 void SwUiWriterTest::testTdf90362()
 {
-    SwDoc* pDoc = createDoc("tdf90362.fodt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf90362.fodt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
     // Ensure correct initial setting
@@ -3750,7 +3737,7 @@ void SwUiWriterTest::testTdf90362()
 
 void SwUiWriterTest::testUndoDelAsCharTdf107512()
 {
-    SwDoc * pDoc(createDoc());
+    SwDoc * pDoc(createSwDoc());
     sw::UndoManager & rUndoManager(pDoc->GetUndoManager());
     IDocumentContentOperations & rIDCO(pDoc->getIDocumentContentOperations());
     SwCursorShell * pShell(pDoc->GetEditShell());
@@ -3870,7 +3857,7 @@ void SwUiWriterTest::testUndoDelAsCharTdf107512()
 void SwUiWriterTest::testUndoCharAttribute()
 {
     // Create a new empty Writer document
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
     IDocumentContentOperations & rIDCO(pDoc->getIDocumentContentOperations());
@@ -3904,7 +3891,7 @@ void SwUiWriterTest::testUndoCharAttribute()
 
 void SwUiWriterTest::testUndoDelAsChar()
 {
-    SwDoc * pDoc(createDoc());
+    SwDoc * pDoc(createSwDoc());
     sw::UndoManager & rUndoManager(pDoc->GetUndoManager());
     IDocumentContentOperations & rIDCO(pDoc->getIDocumentContentOperations());
     SwCursorShell * pShell(pDoc->GetEditShell());
@@ -3937,7 +3924,7 @@ void SwUiWriterTest::testUndoDelAsChar()
 
 void SwUiWriterTest::testTdf86639()
 {
-    SwDoc* pDoc = createDoc("tdf86639.rtf");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf86639.rtf");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwTextFormatColl* pColl = pDoc->FindTextFormatCollByName(u"Heading");
     pWrtShell->SetTextFormatColl(pColl);
@@ -3948,7 +3935,7 @@ void SwUiWriterTest::testTdf86639()
 
 void SwUiWriterTest::testTdf90883TableBoxGetCoordinates()
 {
-    SwDoc* pDoc = createDoc("tdf90883.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf90883.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Down(true);
     SwSelBoxes aBoxes;
@@ -4045,7 +4032,7 @@ void SwUiWriterTest::testTextTableCellNames()
 
 void SwUiWriterTest::testShapeAnchorUndo()
 {
-    SwDoc* pDoc = createDoc("draw-anchor-undo.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "draw-anchor-undo.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(0);
@@ -4070,7 +4057,7 @@ void SwUiWriterTest::testShapeAnchorUndo()
 
 void SwUiWriterTest::testTdf127635()
 {
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
 
     SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pXTextDocument);
@@ -4114,7 +4101,7 @@ void SwUiWriterTest::testDde()
 {
 #if HAVE_FEATURE_UI
     // Type asdf and copy it.
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Insert("asdf");
     pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 4, /*bBasicCall=*/false);
@@ -4180,7 +4167,7 @@ IMPL_LINK(IdleTask, FlipFlag, Timer*, , void)
 void SwUiWriterTest::testDocModState()
 {
     //creating a new writer document via the XDesktop(to have more shells etc.)
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     //creating instance of IdleTask Class
     IdleTask idleTask;
     //checking the state of the document via IDocumentState
@@ -4205,7 +4192,7 @@ void SwUiWriterTest::testDocModState()
 void SwUiWriterTest::testTdf94804()
 {
     //create new writer document
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     //get cursor for making bookmark at a particular location
     SwPaM* pCrsr = pDoc->GetEditShell()->GetCursor();
     IDocumentMarkAccess* pIDMAccess(pDoc->getIDocumentMarkAccess());
@@ -4229,7 +4216,7 @@ void SwUiWriterTest::testTdf94804()
 
 void SwUiWriterTest::testUnicodeNotationToggle()
 {
-    SwDoc* pDoc = createDoc("unicodeAltX.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "unicodeAltX.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     OUString sOriginalDocString;
     OUString sDocString;
@@ -4262,7 +4249,7 @@ void SwUiWriterTest::testTdf34957()
 
 void SwUiWriterTest::testTdf89954()
 {
-    SwDoc* pDoc = createDoc("tdf89954.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf89954.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->EndPara();
     SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument *>(mxComponent.get());
@@ -4283,7 +4270,7 @@ void SwUiWriterTest::testTdf89954()
 
 void SwUiWriterTest::testTdf89720()
 {
-    SwDoc* pDoc = createDoc("tdf89720.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf89720.odt");
     SwView* pView = pDoc->GetDocShell()->GetView();
     SwPostItMgr* pPostItMgr = pView->GetPostItMgr();
     for (std::unique_ptr<SwSidebarItem> const & pItem : *pPostItMgr)
@@ -4298,7 +4285,7 @@ void SwUiWriterTest::testTdf89720()
 void SwUiWriterTest::testTdf88986()
 {
     // Create a text shell.
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwView* pView = pDoc->GetDocShell()->GetView();
     SwTextShell aShell(*pView);
 
@@ -4314,7 +4301,7 @@ void SwUiWriterTest::testTdf88986()
 void SwUiWriterTest::testTdf87922()
 {
     // Create an SwDrawTextInfo.
-    SwDoc* pDoc = createDoc("tdf87922.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf87922.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwScriptInfo* pScriptInfo = nullptr;
     // Get access to the single paragraph in the document.
@@ -4409,7 +4396,7 @@ void SwUiWriterTest::testTdf77014()
     // This test checks that the input field is in one piece and if the
     // input field has more words, it is broken up at the correct place.
 
-    SwDoc* pDoc = createDoc("tdf77014.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf77014.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     SwTextFrame* pTextFrame = static_cast<SwTextFrame*>(pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower());
@@ -4550,7 +4537,7 @@ void SwUiWriterTest::testTdf77014()
 
 void SwUiWriterTest::testTdf92648()
 {
-    SwDoc* pDoc = createDoc("tdf92648.docx");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf92648.docx");
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     // Make sure we have ten draw shapes.
     // Yes, we have if the left/right pages have different header/footer,
@@ -4572,7 +4559,7 @@ void SwUiWriterTest::testTdf92648()
 
 void SwUiWriterTest::testTdf103978_backgroundTextShape()
 {
-    SwDoc* pDoc = createDoc("tdf103978_backgroundTextShape.docx");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf103978_backgroundTextShape.docx");
 
     // there is only one shape. It has an attached textbox
     bool bShapeIsOpaque = getProperty<bool>(getShape(1), "Opaque");

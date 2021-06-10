@@ -98,24 +98,11 @@ public:
 
 protected:
     AllSettings m_aSavedSettings;
-    SwDoc* createDoc(const char* pName = nullptr);
 };
-
-SwDoc* SwUiWriterTest2::createDoc(const char* pName)
-{
-    if (!pName)
-        loadURL("private:factory/swriter", nullptr);
-    else
-        load(DATA_DIRECTORY, pName);
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    return pTextDoc->GetDocShell()->GetDoc();
-}
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf47471_paraStyleBackground)
 {
-    SwDoc* pDoc = createDoc("tdf47471_paraStyleBackground.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf47471_paraStyleBackground.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(OUString("00Background"),
@@ -148,7 +135,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf47471_paraStyleBackground)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdfChangeNumberingListAutoFormat)
 {
-    createDoc("tdf117923.docx");
+    createSwDoc(DATA_DIRECTORY, "tdf117923.docx");
     // Ensure that all text portions are calculated before testing.
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -354,7 +341,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineSplitContentNode)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf136704)
 {
-    SwDoc* const pDoc(createDoc());
+    SwDoc* const pDoc(createSwDoc());
     SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
     corr.GetSwFlags().bReplaceStyles = true;
@@ -654,7 +641,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf136453)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137245)
 {
-    SwDoc* const pDoc(createDoc());
+    SwDoc* const pDoc(createSwDoc());
     SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
     corr.GetSwFlags().bSetBorder = true;
@@ -758,7 +745,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf132236)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf131912)
 {
-    SwDoc* const pDoc = createDoc();
+    SwDoc* const pDoc = createSwDoc();
     SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
@@ -1283,7 +1270,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119571_keep_numbering_with_Reject)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf109376_redline)
 {
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     // need 2 paragraphs to get to the bMoveNds case
@@ -1334,7 +1321,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf109376_redline)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf109376)
 {
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     // need 2 paragraphs to get to the bMoveNds case
@@ -1381,7 +1368,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf109376)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf64242_optimizeTable)
 {
-    SwDoc* pDoc = createDoc("tdf64242_optimizeTable.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf64242_optimizeTable.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -1422,7 +1409,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf64242_optimizeTable)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf126784_distributeSelectedColumns)
 {
-    SwDoc* pDoc = createDoc("tdf126784_distributeSelectedColumns.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf126784_distributeSelectedColumns.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -1449,7 +1436,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf126784_distributeSelectedColumns)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf108687_tabstop)
 {
-    SwDoc* pDoc = createDoc("tdf108687_tabstop.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf108687_tabstop.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     sal_Int32 nStartIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(9), nStartIndex);
@@ -1538,7 +1525,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119019)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119824)
 {
     // check handling of overlapping redlines with Redo
-    SwDoc* pDoc = createDoc("tdf119019.docx");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf119019.docx");
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -1869,7 +1856,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf76817_custom_outline)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf123102)
 {
-    createDoc("tdf123102.odt");
+    createSwDoc(DATA_DIRECTORY, "tdf123102.odt");
     // insert a new row after a vertically merged cell
     dispatchCommand(mxComponent, ".uno:InsertRowsAfter", {});
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -2051,7 +2038,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRTLparaStyle_LocaleArabic)
     // Set the locale to "ar" for this test - see preTest() at the top of this file.
     std::unique_ptr<Resetter> const pChanges(preTest("LocaleArabic"));
 
-    createDoc(); // new, empty doc - everything defaults to RTL with Arabic locale
+    createSwDoc(); // new, empty doc - everything defaults to RTL with Arabic locale
 
     // Save it and load it back.
     reload("Office Open XML Text", "tdf116404_paraStyleFrameDir.docx");
@@ -2319,7 +2306,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137503)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf138605)
 {
-    SwDoc* const pDoc(createDoc());
+    SwDoc* const pDoc(createSwDoc());
     SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -2526,7 +2513,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf142196)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf139120)
 {
-    SwDoc* pDoc = createDoc("tdf54819.fodt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf54819.fodt");
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -2718,7 +2705,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf139127)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf138479)
 {
-    SwDoc* const pDoc = createDoc();
+    SwDoc* const pDoc = createSwDoc();
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -2770,7 +2757,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf138479)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf138666)
 {
-    SwDoc* pDoc = createDoc("tdf39721.fodt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf39721.fodt");
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -2805,7 +2792,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf138666)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf140982)
 {
-    SwDoc* pDoc = createDoc("tdf115815.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf115815.odt");
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -2908,7 +2895,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf126206)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf101873)
 {
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     CPPUNIT_ASSERT(pDoc);
 
     SwDocShell* pDocShell = pDoc->GetDocShell();
@@ -2942,7 +2929,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf101873)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTextFormFieldInsertion)
 {
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     CPPUNIT_ASSERT(pDoc);
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
     CPPUNIT_ASSERT(pMarkAccess);
@@ -2979,7 +2966,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTextFormFieldInsertion)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testCheckboxFormFieldInsertion)
 {
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     CPPUNIT_ASSERT(pDoc);
 
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
@@ -3018,7 +3005,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testCheckboxFormFieldInsertion)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testDropDownFormFieldInsertion)
 {
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     CPPUNIT_ASSERT(pDoc);
 
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
@@ -3058,7 +3045,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testDropDownFormFieldInsertion)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testMixedFormFieldInsertion)
 {
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     CPPUNIT_ASSERT(pDoc);
 
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
@@ -3088,7 +3075,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf124261)
 {
 #if !defined(_WIN32)
     // Make sure that pressing a key in a btlr cell frame causes an immediate, correct repaint.
-    SwDoc* pDoc = createDoc("tdf124261.docx");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf124261.docx");
     SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     SwFrame* pPageFrame = pLayout->GetLower();
     CPPUNIT_ASSERT(pPageFrame->IsPageFrame());
@@ -3120,7 +3107,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf124261)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testDocxAttributeTableExport)
 {
-    createDoc("floating-table-position.docx");
+    createSwDoc(DATA_DIRECTORY, "floating-table-position.docx");
 
     // get the table frame, set new values and dismiss the references
     {
@@ -3252,7 +3239,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf125310)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf125310b)
 {
-    SwDoc* pDoc = createDoc("tdf125310b.fodt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf125310b.fodt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
@@ -3329,7 +3316,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf106843)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testImageComment)
 {
     // Load a document with an as-char image in it.
-    SwDoc* pDoc = createDoc("image-comment.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "image-comment.odt");
     SwView* pView = pDoc->GetDocShell()->GetView();
 
     // Test document has "before<image>after", remove the content before the image.
@@ -3428,7 +3415,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testImageComment)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testImageCommentAtChar)
 {
     // Load a document with an at-char image in it.
-    SwDoc* pDoc = createDoc("image-comment-at-char.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "image-comment-at-char.odt");
     SwView* pView = pDoc->GetDocShell()->GetView();
 
     // Select the image.
@@ -3497,7 +3484,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testImageCommentAtChar)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTrackImageDeletion)
 {
     // load a document with an image anchored to paragraph in it
-    SwDoc* pDoc = createDoc("image.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "image.odt");
     SwView* pView = pDoc->GetDocShell()->GetView();
 
     // select the image
@@ -3602,7 +3589,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf120338_multiple_paragraph_join)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testShapePageMove)
 {
     // Load a document with 2 pages, shape on the first page.
-    SwDoc* pDoc = createDoc("shape-page-move.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "shape-page-move.odt");
     SwView* pView = pDoc->GetDocShell()->GetView();
     // Make sure that the 2nd page is below the 1st one.
     pView->SetViewLayout(/*nColumns=*/1, /*bBookMode=*/false);
@@ -3647,7 +3634,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testShapePageMove)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testDateFormFieldInsertion)
 {
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     CPPUNIT_ASSERT(pDoc);
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
     CPPUNIT_ASSERT(pMarkAccess);
@@ -3684,7 +3671,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testDateFormFieldInsertion)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testDateFormFieldContentOperations)
 {
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     CPPUNIT_ASSERT(pDoc);
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
     CPPUNIT_ASSERT(pMarkAccess);
@@ -3717,7 +3704,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testDateFormFieldContentOperations)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testDateFormFieldCurrentDateHandling)
 {
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     CPPUNIT_ASSERT(pDoc);
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
     CPPUNIT_ASSERT(pMarkAccess);
@@ -3771,7 +3758,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testDateFormFieldCurrentDateHandling)
 #if !defined(_WIN32)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testDateFormFieldCurrentDateInvalidation)
 {
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     CPPUNIT_ASSERT(pDoc);
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
     CPPUNIT_ASSERT(pMarkAccess);
@@ -3834,7 +3821,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testOleSaveWhileEdit)
     comphelper::LibreOfficeKit::setActive();
 
     // Load a document with a Draw doc in it.
-    SwDoc* pDoc = createDoc("ole-save-while-edit.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "ole-save-while-edit.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->GotoObj(/*bNext=*/true, GotoObjFlags::Any);
 
@@ -3928,7 +3915,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineTableRowDeletion)
     // load a 1-row table, and delete the row with enabled change tracking:
     // now the row is not deleted silently, but keeps the deleted cell contents,
     // and only accepting all of them will result the deletion of the table row.
-    SwDoc* pDoc = createDoc("tdf118311.fodt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf118311.fodt");
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -4044,7 +4031,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineTableRowDeletionWithExport)
     // load a 1-row table, and delete the row with enabled change tracking:
     // now the row is not deleted silently, but keeps the deleted cell contents,
     // and only accepting all of them will result the deletion of the table row.
-    SwDoc* pDoc = createDoc("tdf118311.fodt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf118311.fodt");
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -4101,7 +4088,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineTableRowDeletionWithDOCXExport)
     // load a 1-row table, and delete the row with enabled change tracking:
     // now the row is not deleted silently, but keeps the deleted cell contents,
     // and only accepting all of them will result the deletion of the table row.
-    SwDoc* pDoc = createDoc("tdf118311.fodt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf118311.fodt");
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -4158,7 +4145,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineTableRowDeletionWithDOCXExport)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf128335)
 {
     // Load the bugdoc, which has 3 textboxes.
-    SwDoc* pDoc = createDoc("tdf128335.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf128335.odt");
 
     // Select the 3rd textbox.
     SwView* pView = pDoc->GetDocShell()->GetView();
@@ -4195,7 +4182,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineTableRowDeletionWithReject)
     // load a 1-row table, and delete the row with enabled change tracking:
     // now the row is not deleted silently, but keeps the deleted cell contents,
     // and only accepting all of them will result the deletion of the table row.
-    SwDoc* pDoc = createDoc("tdf118311.fodt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf118311.fodt");
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -4272,7 +4259,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineTableRowDeletionWithReject)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf128603)
 {
     // Load the bugdoc, which has 3 textboxes.
-    SwDoc* pDoc = createDoc("tdf128603.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf128603.odt");
 
     // Select the 3rd textbox.
     SwView* pView = pDoc->GetDocShell()->GetView();
@@ -4323,7 +4310,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testOfz18563)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf90069)
 {
-    SwDoc* pDoc = createDoc("tdf90069.docx");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf90069.docx");
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -4353,7 +4340,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf90069)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf109266)
 {
     // transliteration with redlining
-    SwDoc* pDoc = createDoc("lorem.fodt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "lorem.fodt");
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -4421,7 +4408,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf109266)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf129655)
 {
-    createDoc("tdf129655-vtextbox.odt");
+    createSwDoc(DATA_DIRECTORY, "tdf129655-vtextbox.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//anchored/fly/txt[@WritingMode='Vertical']", 1);
 }
@@ -4504,7 +4491,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf123218)
     ClockwisePieChartDirection::set(true, batch);
     batch->commit();
 
-    createDoc();
+    createSwDoc();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
 
@@ -4560,7 +4547,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf123218)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf126735)
 {
-    SwDoc* pDoc = createDoc("tdf39721.fodt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf39721.fodt");
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
