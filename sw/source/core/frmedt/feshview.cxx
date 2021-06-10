@@ -2837,8 +2837,6 @@ void SwFEShell::CheckUnboundObjects()
             SfxItemSet aSet( GetAttrPool(), svl::Items<RES_FRM_SIZE, RES_FRM_SIZE,
                                             RES_SURROUND, RES_ANCHOR>{} );
             aSet.Put( aAnch );
-
-            aSet.Put( aAnch );
             aSet.Put( SwFormatSurround( css::text::WrapTextMode_THROUGH ) );
             SwFrameFormat* pFormat = getIDocumentLayoutAccess().MakeLayoutFormat( RndStdIds::DRAW_OBJECT, &aSet );
 
