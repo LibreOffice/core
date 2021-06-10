@@ -32,8 +32,6 @@ class SidebarChildWindow;
 
 class SidebarController;
 
-class SidebarNotifyIdle;
-
 class SFX2_DLLPUBLIC SidebarDockingWindow final : public SfxDockingWindow
 {
 public:
@@ -66,8 +64,6 @@ private:
     ::rtl::Reference<sfx2::sidebar::SidebarController> mpSidebarController;
     bool mbIsReadyToDrag;
     std::unique_ptr<svt::AcceleratorExecute> mpAccel;
-
-    std::unique_ptr<SidebarNotifyIdle> mpIdleNotify;
 };
 
 } // end of namespace sfx2::sidebar
