@@ -884,8 +884,8 @@ void SwFramePage::Reset( const SfxItemSet *rSet )
 
     if (m_bFormat)
     {
-        // at formats no anchor editing
-        m_xAnchorFrame->set_sensitive(false);
+        // at formats no to-fly anchor
+        m_xAnchorAtFrameRB->set_sensitive(false);
         if (rSet->GetItemState(FN_KEEP_ASPECT_RATIO) != SfxItemState::SET)
         {
             m_xFixedRatioCB->set_sensitive(false);
@@ -1047,7 +1047,7 @@ bool SwFramePage::FillItemSet(SfxItemSet *rSet)
 
     RndStdIds eAnchorId = GetAnchor();
 
-    if ( !m_bFormat )
+    if ( !m_bFormat || eAnchorId != RndStdIds::FLY_AT_FLY )
     {
         pOldItem = GetOldItem(*rSet, RES_ANCHOR);
         if (m_bNew || !pOldItem || eAnchorId != static_cast<const SwFormatAnchor*>(pOldItem)->GetAnchorId())
@@ -2287,7 +2287,7 @@ void SwFramePage::SetFormatUsed(bool bFormatUsed)
 {
     m_bFormat = bFormatUsed;
     if (m_bFormat)
-        m_xAnchorFrame->hide();
+        m_xAnchorAtFrameRB->hide();
 }
 
 void SwFramePage::EnableVerticalPositioning( bool bEnable )
