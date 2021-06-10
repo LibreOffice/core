@@ -817,7 +817,6 @@ void ControlHelper::layoutControls()
         //get the control's bounds
         NSRect controlRect = [activeControl frame];
         int nControlHeight = controlRect.size.height;
-        int nControlWidth = controlRect.size.width;
 
         //subtract the height from the current vertical position, because the control's bounds origin rect will be its lower left hand corner
         currenttop -= nControlHeight;
@@ -859,7 +858,6 @@ void ControlHelper::layoutControls()
         } else {
             currenttop += kAquaSpaceSwitchButtonFrameBoundsDiff;//from top
 
-            nControlWidth = nCheckboxMaxWidth;
             int left = (nUsableWidth - nCheckboxMaxWidth) / 2;
             controlRect.origin.x = left;
             controlRect.origin.y = currenttop;
