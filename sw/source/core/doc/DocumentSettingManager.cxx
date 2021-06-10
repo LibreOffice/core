@@ -656,7 +656,7 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     // No mbProtectForm
     mbMsWordCompTrailingBlanks = rSource.mbMsWordCompTrailingBlanks;
     mbMsWordCompMinLineHeightByFly = rSource.mbMsWordCompMinLineHeightByFly;
-    // No mbInvertBorderSpacing
+    mbInvertBorderSpacing = rSource.mbInvertBorderSpacing;
     mbCollapseEmptyCellPara = rSource.mbCollapseEmptyCellPara;
     mbTabAtLeftIndentForParagraphsInList = rSource.mbTabAtLeftIndentForParagraphsInList;
     mbSmallCapsPercentage66 = rSource.mbSmallCapsPercentage66;
