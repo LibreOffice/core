@@ -128,10 +128,10 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
     void checkClipRegion(const GDIMetaFile& rMetaFile);
     void testClipRegion();
 
-    //void checkIntersectRectClipRegion(const GDIMetaFile& rMetaFile);
+    void checkIntersectRectClipRegion(const GDIMetaFile& rMetaFile);
     void testIntersectRectClipRegion();
 
-    //void checkIntersectRegionClipRegion(const GDIMetaFile& rMetaFile);
+    void checkIntersectRegionClipRegion(const GDIMetaFile& rMetaFile);
     void testIntersectRegionClipRegion();
 
     //void checkMoveClipRegion(const GDIMetaFile& rMetaFile);
@@ -1467,10 +1467,98 @@ void SvmTest::testClipRegion()
     checkClipRegion(readFile(u"clipregion.svm"));
 }
 
+void SvmTest::checkIntersectRectClipRegion(const GDIMetaFile& rMetaFile)
+{
+    xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
+
+    assertXPathAttrs(pDoc, "/metafile/sectregionclipregion[1]", {
+        {"left", "1"},
+        {"top", "2"},
+        {"right", "4"},
+        {"bottom", "9"}
+    });
+}
+
 void SvmTest::testIntersectRectClipRegion()
-{}
+{
+    GDIMetaFile aGDIMetaFile;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
+
+    tools::Rectangle aRectangle(Point(1, 2), Size(4, 8));
+
+    vcl::Region aRegion(aRectangle);
+
+    pVirtualDev->IntersectClipRegion(aRegion);
+    checkIntersectRectClipRegion(writeAndReadStream(aGDIMetaFile));
+    checkIntersectRectClipRegion(readFile(u"intersectrectclipregion.svm"));
+}
+
+void SvmTest::checkIntersectRegionClipRegion(const GDIMetaFile& rMetaFile)
+{
+    xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
+
+    assertXPathAttrs(pDoc, "/metafile/sectregionclipregion[1]", {
+        {"left", "1"},
+        {"top", "2"},
+        {"right", "5"},
+        {"bottom", "6"}
+    });
+
+    assertXPathAttrs(pDoc, "/metafile/sectregionclipregion[2]", {
+        {"left", "1"},
+        {"top", "2"},
+        {"right", "7"},
+        {"bottom", "8"}
+    });
+
+    assertXPathAttrs(pDoc, "/metafile/sectregionclipregion[3]", {
+        {"left", "0"},
+        {"top", "3"},
+        {"right", "2"},
+        {"bottom", "6"}
+    });
+}
+
 void SvmTest::testIntersectRegionClipRegion()
-{}
+{
+    GDIMetaFile aGDIMetaFile;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
+
+    tools::Polygon aPolygon(3);
+    aPolygon.SetPoint(Point(1, 2), 0);
+    aPolygon.SetPoint(Point(3, 4), 1);
+    aPolygon.SetPoint(Point(5, 6), 2);
+
+    vcl::Region aRegion(aPolygon);
+    pVirtualDev->IntersectClipRegion(aRegion);
+
+    tools::Polygon aPolygon1(2);
+    aPolygon1.SetPoint(Point(5, 6), 0);
+    aPolygon1.SetPoint(Point(7, 8), 1);
+
+    tools::PolyPolygon aPolyPolygon(2);
+    aPolyPolygon.Insert(aPolygon);
+    aPolyPolygon.Insert(aPolygon1);
+
+    vcl::Region aRegion1(aPolyPolygon);
+    pVirtualDev->IntersectClipRegion(aRegion1);
+
+    basegfx::B2DPolygon aB2DPolygon;
+    aB2DPolygon.append(basegfx::B2DPoint(0.0, 3.3));
+    aB2DPolygon.append(basegfx::B2DPoint(1.1, 4.4));
+    aB2DPolygon.append(basegfx::B2DPoint(2.2, 5.5));
+
+    basegfx::B2DPolyPolygon aB2DPolyPolygon(aB2DPolygon);
+
+    vcl::Region aRegion2(aB2DPolyPolygon);
+    pVirtualDev->IntersectClipRegion(aRegion2);
+
+    checkIntersectRegionClipRegion(writeAndReadStream(aGDIMetaFile));
+    checkIntersectRegionClipRegion(readFile(u"intersectregionclipregion.svm"));
+}
+
 void SvmTest::testMoveClipRegion()
 {}
 
