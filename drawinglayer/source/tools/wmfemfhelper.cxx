@@ -2982,11 +2982,11 @@ namespace wmfemfhelper
                         if (aEMFPlus)
                         {
                             // error: should not yet exist
-                            SAL_INFO("drawinglayer", "Error: multiple EMF_PLUS_HEADER_INFO");
+                            SAL_INFO("drawinglayer.emf", "Error: multiple EMF_PLUS_HEADER_INFO");
                         }
                         else
                         {
-                            SAL_INFO("drawinglayer", "EMF+ passed to canvas mtf renderer - header info, size: " << pA->GetDataSize());
+                            SAL_INFO("drawinglayer.emf", "EMF+ passed to canvas mtf renderer - header info, size: " << pA->GetDataSize());
                             SvMemoryStream aMemoryStream(const_cast<sal_uInt8 *>(pA->GetData()), pA->GetDataSize(), StreamMode::READ);
 
                             aEMFPlus.reset(
@@ -3001,7 +3001,7 @@ namespace wmfemfhelper
                         if (!aEMFPlus)
                         {
                             // error: should exist
-                            SAL_INFO("drawinglayer", "Error: EMF_PLUS before EMF_PLUS_HEADER_INFO");
+                            SAL_INFO("drawinglayer.emf", "Error: EMF_PLUS before EMF_PLUS_HEADER_INFO");
                         }
                         else
                         {
@@ -3014,11 +3014,11 @@ namespace wmfemfhelper
                                 if (char *env = getenv("EMF_PLUS_LIMIT"))
                                 {
                                     limit = atoi(env);
-                                    SAL_INFO("drawinglayer", "EMF+ records limit: " << limit);
+                                    SAL_INFO("drawinglayer.emf", "EMF+ records limit: " << limit);
                                 }
                             }
 
-                            SAL_INFO("drawinglayer", "EMF+ passed to canvas mtf renderer, size: " << pA->GetDataSize());
+                            SAL_INFO("drawinglayer.emf", "EMF+ passed to canvas mtf renderer, size: " << pA->GetDataSize());
 
                             if (count < limit)
                             {
