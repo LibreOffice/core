@@ -58,16 +58,16 @@ void EMFPImageAttributes::Read(SvStream& s)
     clampColor.SetBlue(clampColorBlue);
     clampColor.SetAlpha(255 - clampColorAlpha);
 
-    SAL_INFO("drawinglayer", "EMF+\timage attributes");
-    SAL_WARN_IF((reserved1 != 0) || (reserved2 != 0), "drawinglayer",
+    SAL_INFO("drawinglayer.emf", "EMF+\timage attributes");
+    SAL_WARN_IF((reserved1 != 0) || (reserved2 != 0), "drawinglayer.emf",
                 "Reserved field(s) not zero - reserved1: " << std::hex << reserved1
                                                            << " reserved2: " << reserved2);
     SAL_WARN_IF((objectClamp != EmpPlusRectClamp) && (objectClamp != EmpPlusBitmapClamp),
-                "drawinglayer", "Invalid object clamp - set to" << std::hex << objectClamp);
-    SAL_INFO("drawinglayer", "EMF+\t image graphics version: 0x"
-                                 << std::hex << graphicsVersion << " wrap mode: " << wrapMode
-                                 << " clamp color: " << clampColor
-                                 << " object clamp: " << objectClamp);
+                "drawinglayer.emf", "Invalid object clamp - set to" << std::hex << objectClamp);
+    SAL_INFO("drawinglayer.emf", "EMF+\t image graphics version: 0x"
+                                     << std::hex << graphicsVersion << " wrap mode: " << wrapMode
+                                     << " clamp color: " << clampColor
+                                     << " object clamp: " << objectClamp);
 }
 }
 

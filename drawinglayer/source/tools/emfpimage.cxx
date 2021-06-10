@@ -26,20 +26,20 @@ namespace emfplushelper
     {
         sal_uInt32 header, bitmapType;
         s.ReadUInt32(header).ReadUInt32(type);
-        SAL_INFO("drawinglayer", "EMF+\timage\nEMF+\theader: 0x" << std::hex << header << " type: " << type << std::dec);
+        SAL_INFO("drawinglayer.emf", "EMF+\timage\nEMF+\theader: 0x" << std::hex << header << " type: " << type << std::dec);
 
         if (ImageDataTypeBitmap == type)
         {
             // bitmap
             s.ReadInt32(width).ReadInt32(height).ReadInt32(stride).ReadUInt32(pixelFormat).ReadUInt32(bitmapType);
-            SAL_INFO("drawinglayer", "EMF+\tbitmap width: " << width << " height: " << height << " stride: " << stride << " pixelFormat: 0x" << std::hex << pixelFormat << " bitmapType: 0x" << bitmapType << std::dec);
+            SAL_INFO("drawinglayer.emf", "EMF+\tbitmap width: " << width << " height: " << height << " stride: " << stride << " pixelFormat: 0x" << std::hex << pixelFormat << " bitmapType: 0x" << bitmapType << std::dec);
 
             if ((bitmapType != 0) || (width == 0))
             {
                 // non native formats
                 GraphicFilter filter;
                 filter.ImportGraphic(graphic, OUString(), s);
-                SAL_INFO("drawinglayer", "EMF+\tbitmap width: " << graphic.GetSizePixel().Width() << " height: " << graphic.GetSizePixel().Height());
+                SAL_INFO("drawinglayer.emf", "EMF+\tbitmap width: " << graphic.GetSizePixel().Width() << " height: " << graphic.GetSizePixel().Height());
             }
         }
         else if (ImageDataTypeMetafile == type)
@@ -53,7 +53,7 @@ namespace emfplushelper
             else
                 dataSize -= 16;
 
-            SAL_INFO("drawinglayer", "EMF+\tmetafile type: " << mfType << " dataSize: " << mfSize << " real size calculated from record dataSize: " << dataSize);
+            SAL_INFO("drawinglayer.emf", "EMF+\tmetafile type: " << mfType << " dataSize: " << mfSize << " real size calculated from record dataSize: " << dataSize);
 
             GraphicFilter filter;
             // workaround buggy metafiles, which have wrong mfSize set (n#705956 for example)

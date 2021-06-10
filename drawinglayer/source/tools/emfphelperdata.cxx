@@ -245,11 +245,11 @@ namespace emfplushelper
 
             case UnitTypeWorld:
             case UnitTypeDisplay:
-                SAL_WARN("drawinglayer", "EMF+\t Converting to World/Display.");
+                SAL_WARN("drawinglayer.emf", "EMF+\t Converting to World/Display.");
                 return 1.0f;
 
             default:
-                SAL_WARN("drawinglayer", "EMF+\tTODO Unimplemented support of Unit Type: 0x" << std::hex << aUnitType);
+                SAL_WARN("drawinglayer.emf", "EMF+\tTODO Unimplemented support of Unit Type: 0x" << std::hex << aUnitType);
                 return 1.0f;
         }
     }
@@ -258,9 +258,9 @@ namespace emfplushelper
     {
         sal_uInt16 objecttype = flags & 0x7f00;
         sal_uInt16 index = flags & 0xff;
-        SAL_INFO("drawinglayer", "EMF+ Object: " << emfObjectToName(objecttype) << " (0x" << objecttype << ")");
-        SAL_INFO("drawinglayer", "EMF+\tObject slot: " << index);
-        SAL_INFO("drawinglayer", "EMF+\tFlags: " << (flags & 0xff00));
+        SAL_INFO("drawinglayer.emf", "EMF+ Object: " << emfObjectToName(objecttype) << " (0x" << objecttype << ")");
+        SAL_INFO("drawinglayer.emf", "EMF+\tObject slot: " << index);
+        SAL_INFO("drawinglayer.emf", "EMF+\tFlags: " << (flags & 0xff00));
 
         switch (objecttype)
         {
@@ -285,9 +285,9 @@ namespace emfplushelper
                 sal_Int32 points;
 
                 rObjectStream.ReadUInt32(header).ReadInt32(points).ReadUInt32(pathFlags);
-                SAL_INFO("drawinglayer", "EMF+\t\tHeader: 0x" << std::hex << header);
-                SAL_INFO("drawinglayer", "EMF+\t\tPoints: " << std::dec << points);
-                SAL_INFO("drawinglayer", "EMF+\t\tAdditional flags: 0x" << std::hex << pathFlags << std::dec);
+                SAL_INFO("drawinglayer.emf", "EMF+\t\tHeader: 0x" << std::hex << header);
+                SAL_INFO("drawinglayer.emf", "EMF+\t\tPoints: " << std::dec << points);
+                SAL_INFO("drawinglayer.emf", "EMF+\t\tAdditional flags: 0x" << std::hex << pathFlags << std::dec);
                 EMFPPath *path = new EMFPPath(points);
                 maEMFPObjects[index].reset(path);
                 path->Read(rObjectStream, pathFlags);
@@ -341,12 +341,12 @@ namespace emfplushelper
             }
             case EmfPlusObjectTypeCustomLineCap:
             {
-                SAL_WARN("drawinglayer", "EMF+\t TODO Object type 'custom line cap' not yet implemented");
+                SAL_WARN("drawinglayer.emf", "EMF+\t TODO Object type 'custom line cap' not yet implemented");
                 break;
             }
             default:
             {
-                SAL_WARN("drawinglayer", "EMF+\t TODO Object unhandled flags: 0x" << std::hex << (flags & 0xff00) << std::dec);
+                SAL_WARN("drawinglayer.emf", "EMF+\t TODO Object unhandled flags: 0x" << std::hex << (flags & 0xff00) << std::dec);
             }
         }
     }
@@ -358,7 +358,7 @@ namespace emfplushelper
             // specifies a location in the coordinate space that is relative to
             // the location specified by the previous element in the array. In the case of the first element in
             // PointData, a previous location at coordinates (0,0) is assumed.
-            SAL_WARN("drawinglayer", "EMF+\t\t TODO Relative coordinates bit detected. Implement parse EMFPlusPointR");
+            SAL_WARN("drawinglayer.emf", "EMF+\t\t TODO Relative coordinates bit detected. Implement parse EMFPlusPointR");
         }
 
         if (flags & 0x4000)
@@ -425,7 +425,7 @@ namespace emfplushelper
     {
         if (mnPixX == 0 || mnPixY == 0)
         {
-            SAL_WARN("drawinglayer", "dimensions in pixels is 0");
+            SAL_WARN("drawinglayer.emf", "dimensions in pixels is 0");
             return;
         }
         // Call when mnMmX/mnMmY/mnPixX/mnPixY/mnFrameLeft/mnFrameTop/maWorldTransform/ changes.
@@ -475,7 +475,7 @@ namespace emfplushelper
         if ( iter != map.end() )
         {
             map.erase( iter );
-            SAL_INFO("drawinglayer", "EMF+\t\tStack index: " << index << " found and erased");
+            SAL_INFO("drawinglayer.emf", "EMF+\t\tStack index: " << index << " found and erased");
         }
 
         wmfemfhelper::PropertyHolder state = mrPropertyHolders.Current();
@@ -495,14 +495,14 @@ namespace emfplushelper
             maWorldTransform = state.getTransformation();
             rState.setClipPolyPolygon( state.getClipPolyPolygon() );
             mappingChanged();
-            SAL_INFO("drawinglayer", "EMF+\t\tStack index: " << index << " found, maWorldTransform: " << maWorldTransform);
+            SAL_INFO("drawinglayer.emf", "EMF+\t\tStack index: " << index << " found, maWorldTransform: " << maWorldTransform);
         }
     }
 
     void EmfPlusHelperData::EMFPPlusDrawPolygon(const ::basegfx::B2DPolyPolygon& polygon, sal_uInt32 penIndex)
     {
         const EMFPPen* pen = dynamic_cast<EMFPPen*>(maEMFPObjects[penIndex & 0xff].get());
-        SAL_WARN_IF(!pen, "drawinglayer", "emf+ missing pen");
+        SAL_WARN_IF(!pen, "drawinglayer.emf", "emf+ missing pen");
 
         if (!(pen && polygon.count()))
             return;
@@ -519,7 +519,7 @@ namespace emfplushelper
         if (pen->penDataFlags & EmfPlusPenDataStartCap) // additional line cap information
         {
             lineCap = static_cast<css::drawing::LineCap>(EMFPPen::lcl_convertStrokeCap(pen->startCap));
-            SAL_WARN_IF(pen->startCap != pen->endCap, "drawinglayer", "emf+ pen uses different start and end cap");
+            SAL_WARN_IF(pen->startCap != pen->endCap, "drawinglayer.emf", "emf+ pen uses different start and end cap");
         }
 
         const double transformedPenWidth = maMapTransform.get(0, 0) * pen->penWidth;
@@ -593,7 +593,7 @@ namespace emfplushelper
 
         if ((pen->penDataFlags & EmfPlusPenDataCustomStartCap) && (pen->customStartCap->polygon.begin()->count() > 1))
         {
-            SAL_WARN("drawinglayer", "EMF+\tCustom Start Line Cap");
+            SAL_WARN("drawinglayer.emf", "EMF+\tCustom Start Line Cap");
             ::basegfx::B2DPolyPolygon startCapPolygon(pen->customStartCap->polygon);
 
             // get the gradient of the first line in the polypolygon
@@ -638,7 +638,7 @@ namespace emfplushelper
 
         if ((pen->penDataFlags & EmfPlusPenDataCustomEndCap) && (pen->customEndCap->polygon.begin()->count() > 1))
         {
-            SAL_WARN("drawinglayer", "EMF+\tCustom End Line Cap");
+            SAL_WARN("drawinglayer.emf", "EMF+\tCustom End Line Cap");
 
             ::basegfx::B2DPolyPolygon endCapPolygon(pen->customEndCap->polygon);
 
@@ -720,7 +720,7 @@ namespace emfplushelper
 
         if (isColor) // use Color
         {
-            SAL_INFO("drawinglayer", "EMF+\t\t Fill polygon, ARGB color: 0x" << std::hex << brushIndexOrColor << std::dec);
+            SAL_INFO("drawinglayer.emf", "EMF+\t\t Fill polygon, ARGB color: 0x" << std::hex << brushIndexOrColor << std::dec);
 
             // EMF Alpha (1 byte): An 8-bit unsigned integer that specifies the transparency of the background,
             // ranging from 0 for completely transparent to 0xFF for completely opaque.
@@ -734,7 +734,7 @@ namespace emfplushelper
         else // use Brush
         {
             EMFPBrush* brush = static_cast<EMFPBrush*>( maEMFPObjects[brushIndexOrColor & 0xff].get() );
-            SAL_INFO("drawinglayer", "EMF+\t\t Fill polygon, brush slot: " << brushIndexOrColor << " (brush type: " << (brush ? brush->GetType() : -1) << ")");
+            SAL_INFO("drawinglayer.emf", "EMF+\t\t Fill polygon, brush slot: " << brushIndexOrColor << " (brush type: " << (brush ? brush->GetType() : -1) << ")");
 
             // give up in case something wrong happened
             if( !brush )
@@ -793,14 +793,14 @@ namespace emfplushelper
             }
             else if (brush->type == BrushTypeTextureFill)
             {
-                SAL_WARN("drawinglayer", "EMF+\tTODO: implement BrushTypeTextureFill brush");
+                SAL_WARN("drawinglayer.emf", "EMF+\tTODO: implement BrushTypeTextureFill brush");
             }
             else if (brush->type == BrushTypePathGradient || brush->type == BrushTypeLinearGradient)
 
             {
                 if (brush->type == BrushTypePathGradient && !(brush->additionalFlags & 0x1))
                 {
-                    SAL_WARN("drawinglayer", "EMF+\t TODO Implement displaying BrushTypePathGradient with Boundary: ");
+                    SAL_WARN("drawinglayer.emf", "EMF+\t TODO Implement displaying BrushTypePathGradient with Boundary: ");
                 }
                 ::basegfx::B2DHomMatrix aTextureTransformation;
 
@@ -821,7 +821,7 @@ namespace emfplushelper
 
                 if (brush->blendPositions)
                 {
-                    SAL_INFO("drawinglayer", "EMF+\t\tUse blend");
+                    SAL_INFO("drawinglayer.emf", "EMF+\t\tUse blend");
 
                     // store the blendpoints in the vector
                     for (int i = 0; i < brush->blendPoints; i++)
@@ -846,7 +846,7 @@ namespace emfplushelper
                 }
                 else if (brush->colorblendPositions)
                 {
-                    SAL_INFO("drawinglayer", "EMF+\t\tUse color blend");
+                    SAL_INFO("drawinglayer.emf", "EMF+\t\tUse color blend");
 
                     // store the colorBlends in the vector
                     for (int i = 0; i < brush->colorblendPoints; i++)
@@ -979,11 +979,11 @@ namespace emfplushelper
         bIsGetDCProcessing(false)
     {
         rMS.ReadInt32(mnFrameLeft).ReadInt32(mnFrameTop).ReadInt32(mnFrameRight).ReadInt32(mnFrameBottom);
-        SAL_INFO("drawinglayer", "EMF+ picture frame: " << mnFrameLeft << "," << mnFrameTop << " - " << mnFrameRight << "," << mnFrameBottom);
+        SAL_INFO("drawinglayer.emf", "EMF+ picture frame: " << mnFrameLeft << "," << mnFrameTop << " - " << mnFrameRight << "," << mnFrameBottom);
         rMS.ReadInt32(mnPixX).ReadInt32(mnPixY).ReadInt32(mnMmX).ReadInt32(mnMmY);
-        SAL_INFO("drawinglayer", "EMF+ ref device pixel size: " << mnPixX << "x" << mnPixY << " mm size: " << mnMmX << "x" << mnMmY);
+        SAL_INFO("drawinglayer.emf", "EMF+ ref device pixel size: " << mnPixX << "x" << mnPixY << " mm size: " << mnMmX << "x" << mnMmY);
         readXForm(rMS, maBaseTransform);
-        SAL_INFO("drawinglayer", "EMF+ base transform: " << maBaseTransform);
+        SAL_INFO("drawinglayer.emf", "EMF+ base transform: " << maBaseTransform);
         mappingChanged();
     }
 
@@ -1046,7 +1046,7 @@ namespace emfplushelper
         sal_uInt64 length = rMS.GetSize();
 
         if (length < 12)
-            SAL_WARN("drawinglayer", "length is less than required header size");
+            SAL_WARN("drawinglayer.emf", "length is less than required header size");
 
         // 12 is minimal valid EMF+ record size; remaining bytes are padding
         while (length >= 12)
@@ -1061,29 +1061,29 @@ namespace emfplushelper
 
             if (size < 12)
             {
-                SAL_WARN("drawinglayer", "Size field is less than 12 bytes");
+                SAL_WARN("drawinglayer.emf", "Size field is less than 12 bytes");
                 break;
             }
             else if (size > length)
             {
-                SAL_WARN("drawinglayer", "Size field is greater than bytes left");
+                SAL_WARN("drawinglayer.emf", "Size field is greater than bytes left");
                 break;
             }
 
             if (dataSize > (size - 12))
             {
-                SAL_WARN("drawinglayer", "DataSize field is greater than Size-12");
+                SAL_WARN("drawinglayer.emf", "DataSize field is greater than Size-12");
                 break;
             }
 
-            SAL_INFO("drawinglayer", "EMF+ " << emfTypeToName(type) << " (0x" << std::hex << type << ")" << std::dec);
-            SAL_INFO("drawinglayer", "EMF+\t record size: " << size);
-            SAL_INFO("drawinglayer", "EMF+\t flags: 0x" << std::hex << flags << std::dec);
-            SAL_INFO("drawinglayer", "EMF+\t data size: " << dataSize);
+            SAL_INFO("drawinglayer.emf", "EMF+ " << emfTypeToName(type) << " (0x" << std::hex << type << ")" << std::dec);
+            SAL_INFO("drawinglayer.emf", "EMF+\t record size: " << size);
+            SAL_INFO("drawinglayer.emf", "EMF+\t flags: 0x" << std::hex << flags << std::dec);
+            SAL_INFO("drawinglayer.emf", "EMF+\t data size: " << dataSize);
 
             if (bIsGetDCProcessing)
             {
-                SAL_INFO("drawinglayer", "EMF+\t reset the current clipping region for the world space to infinity.");
+                SAL_INFO("drawinglayer.emf", "EMF+\t reset the current clipping region for the world space to infinity.");
                 wmfemfhelper::HandleNewClipRegion(::basegfx::B2DPolyPolygon(), mrTargetHolders, mrPropertyHolders);
                 bIsGetDCProcessing = false;
             }
@@ -1100,13 +1100,13 @@ namespace emfplushelper
 
                 // 1st 4 bytes are TotalObjectSize
                 mMStream.WriteBytes(static_cast<const char *>(rMS.GetData()) + rMS.Tell() + 4, dataSize - 4);
-                SAL_INFO("drawinglayer", "EMF+ read next object part size: " << size << " type: " << type << " flags: " << flags << " data size: " << dataSize);
+                SAL_INFO("drawinglayer.emf", "EMF+ read next object part size: " << size << " type: " << type << " flags: " << flags << " data size: " << dataSize);
             }
             else
             {
                 if (mbMultipart)
                 {
-                    SAL_INFO("drawinglayer", "EMF+ multipart record flags: " << mMFlags);
+                    SAL_INFO("drawinglayer.emf", "EMF+ multipart record flags: " << mMFlags);
                     mMStream.Seek(0);
                     processObjectRecord(mMStream, mMFlags, 0, true);
                 }
@@ -1123,11 +1123,11 @@ namespace emfplushelper
                         sal_uInt32 header, version;
 
                         rMS.ReadUInt32(header).ReadUInt32(version).ReadUInt32(mnHDPI).ReadUInt32(mnVDPI);
-                        SAL_INFO("drawinglayer", "EMF+\tHeader: 0x" << std::hex << header);
-                        SAL_INFO("drawinglayer", "EMF+\tVersion: " << std::dec << version);
-                        SAL_INFO("drawinglayer", "EMF+\tHorizontal DPI: " << mnHDPI);
-                        SAL_INFO("drawinglayer", "EMF+\tVertical DPI: " << mnVDPI);
-                        SAL_INFO("drawinglayer", "EMF+\tDual: " << ((flags & 1) ? "true" : "false"));
+                        SAL_INFO("drawinglayer.emf", "EMF+\tHeader: 0x" << std::hex << header);
+                        SAL_INFO("drawinglayer.emf", "EMF+\tVersion: " << std::dec << version);
+                        SAL_INFO("drawinglayer.emf", "EMF+\tHorizontal DPI: " << mnHDPI);
+                        SAL_INFO("drawinglayer.emf", "EMF+\tVertical DPI: " << mnVDPI);
+                        SAL_INFO("drawinglayer.emf", "EMF+\tDual: " << ((flags & 1) ? "true" : "false"));
                         break;
                     }
                     case EmfPlusRecordTypeEndOfFile:
@@ -1140,7 +1140,7 @@ namespace emfplushelper
                         unsigned char data;
                         OUString hexdata;
 
-                        SAL_INFO("drawinglayer", "EMF+\tDatasize: 0x" << std::hex << dataSize << std::dec);
+                        SAL_INFO("drawinglayer.emf", "EMF+\tDatasize: 0x" << std::hex << dataSize << std::dec);
 
                         for (sal_uInt32 i=0; i<dataSize; i++)
                         {
@@ -1156,14 +1156,14 @@ namespace emfplushelper
                             hexdata += "0x" + padding + OUString::number(data, 16) + " ";
                         }
 
-                        SAL_INFO("drawinglayer", "EMF+\t" << hexdata);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t" << hexdata);
 #endif
                         break;
                     }
                     case EmfPlusRecordTypeGetDC:
                     {
                         bIsGetDCProcessing = true;
-                        SAL_INFO("drawinglayer", "EMF+\tAlready used in svtools wmf/emf filter parser");
+                        SAL_INFO("drawinglayer.emf", "EMF+\tAlready used in svtools wmf/emf filter parser");
                         break;
                     }
                     case EmfPlusRecordTypeObject:
@@ -1183,21 +1183,21 @@ namespace emfplushelper
                         if (type == EmfPlusRecordTypeFillPie)
                         {
                             rMS.ReadUInt32(brushIndexOrColor);
-                            SAL_INFO("drawinglayer", "EMF+\t FillPie colorOrIndex: " << brushIndexOrColor);
+                            SAL_INFO("drawinglayer.emf", "EMF+\t FillPie colorOrIndex: " << brushIndexOrColor);
                         }
                         else if (type == EmfPlusRecordTypeDrawPie)
                         {
-                            SAL_INFO("drawinglayer", "EMF+\t DrawPie");
+                            SAL_INFO("drawinglayer.emf", "EMF+\t DrawPie");
                         }
                         else
                         {
-                            SAL_INFO("drawinglayer", "EMF+\t DrawArc");
+                            SAL_INFO("drawinglayer.emf", "EMF+\t DrawArc");
                         }
 
                         rMS.ReadFloat(startAngle).ReadFloat(sweepAngle);
                         float dx, dy, dw, dh;
                         ReadRectangle(rMS, dx, dy, dw, dh, bool(flags & 0x4000));
-                        SAL_INFO("drawinglayer", "EMF+\t RectData: " << dx << "," << dy << " " << dw << "x" << dh);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t RectData: " << dx << "," << dy << " " << dw << "x" << dh);
                         startAngle = basegfx::deg2rad(startAngle);
                         sweepAngle = basegfx::deg2rad(sweepAngle);
                         float endAngle = startAngle + sweepAngle;
@@ -1218,7 +1218,7 @@ namespace emfplushelper
                             std::swap(endAngle, startAngle);
                         }
 
-                        SAL_INFO("drawinglayer", "EMF+\t Adjusted angles: start " <<
+                        SAL_INFO("drawinglayer.emf", "EMF+\t Adjusted angles: start " <<
                             basegfx::rad2deg(startAngle) << ", end: " << basegfx::rad2deg(endAngle) <<
                             " startAngle: " << startAngle << " sweepAngle: " << sweepAngle);
                         const ::basegfx::B2DPoint centerPoint(dx + 0.5 * dw, dy + 0.5 * dh);
@@ -1244,13 +1244,13 @@ namespace emfplushelper
                         sal_uInt32 index = flags & 0xff;
                         sal_uInt32 brushIndexOrColor;
                         rMS.ReadUInt32(brushIndexOrColor);
-                        SAL_INFO("drawinglayer", "EMF+ FillPath slot: " << index);
+                        SAL_INFO("drawinglayer.emf", "EMF+ FillPath slot: " << index);
 
                         EMFPPath* path = dynamic_cast<EMFPPath*>(maEMFPObjects[index].get());
                         if (path)
                             EMFPPlusFillPolygon(path->GetPolygon(*this), flags & 0x8000, brushIndexOrColor);
                         else
-                            SAL_WARN("drawinglayer", "EMF+\tEmfPlusRecordTypeFillPath missing path");
+                            SAL_WARN("drawinglayer.emf", "EMF+\tEmfPlusRecordTypeFillPath missing path");
                     }
                     break;
                     case EmfPlusRecordTypeFillRegion:
@@ -1258,7 +1258,7 @@ namespace emfplushelper
                         sal_uInt32 index = flags & 0xff;
                         sal_uInt32 brushIndexOrColor;
                         rMS.ReadUInt32(brushIndexOrColor);
-                        SAL_INFO("drawinglayer", "EMF+\t FillRegion slot: " << index);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t FillRegion slot: " << index);
 
                         EMFPPlusFillPolygon(static_cast<EMFPRegion*>(maEMFPObjects[flags & 0xff].get())->regionPolyPolygon, flags & 0x8000, brushIndexOrColor);
                     }
@@ -1276,10 +1276,10 @@ namespace emfplushelper
                             rMS.ReadUInt32(brushIndexOrColor);
                         }
 
-                        SAL_INFO("drawinglayer", "EMF+\t " << (type == EmfPlusRecordTypeFillEllipse ? "Fill" : "Draw") << "Ellipse slot: " << (flags & 0xff));
+                        SAL_INFO("drawinglayer.emf", "EMF+\t " << (type == EmfPlusRecordTypeFillEllipse ? "Fill" : "Draw") << "Ellipse slot: " << (flags & 0xff));
                         float dx, dy, dw, dh;
                         ReadRectangle(rMS, dx, dy, dw, dh, bool(flags & 0x4000));
-                        SAL_INFO("drawinglayer", "EMF+\t RectData: " << dx << "," << dy << " " << dw << "x" << dh);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t RectData: " << dx << "," << dy << " " << dw << "x" << dh);
                         ::basegfx::B2DPolyPolygon polyPolygon(
                             ::basegfx::utils::createPolygonFromEllipse(::basegfx::B2DPoint(dx + 0.5 * dw, dy + 0.5 * dh),
                                                                        0.5 * dw, 0.5 * dh));
@@ -1301,13 +1301,13 @@ namespace emfplushelper
 
                         if (EmfPlusRecordTypeFillRects == type)
                         {
-                            SAL_INFO("drawinglayer", "EMF+\t FillRects");
+                            SAL_INFO("drawinglayer.emf", "EMF+\t FillRects");
                             rMS.ReadUInt32(brushIndexOrColor);
-                            SAL_INFO("drawinglayer", "EMF+\t" << (isColor ? "color" : "brush index") << ": 0x" << std::hex << brushIndexOrColor << std::dec);
+                            SAL_INFO("drawinglayer.emf", "EMF+\t" << (isColor ? "color" : "brush index") << ": 0x" << std::hex << brushIndexOrColor << std::dec);
                         }
                         else
                         {
-                            SAL_INFO("drawinglayer", "EMF+\t DrawRects");
+                            SAL_INFO("drawinglayer.emf", "EMF+\t DrawRects");
                         }
 
                         rMS.ReadInt32(rectangles);
@@ -1323,7 +1323,7 @@ namespace emfplushelper
                             polygon.append(Map(x, y + height));
                             polygon.setClosed(true);
 
-                            SAL_INFO("drawinglayer", "EMF+\t\t rectangle: " << x << ", "<< y << " " << width << "x" << height);
+                            SAL_INFO("drawinglayer.emf", "EMF+\t\t rectangle: " << x << ", "<< y << " " << width << "x" << height);
 
                             ::basegfx::B2DPolyPolygon polyPolygon(polygon);
                             if (type == EmfPlusRecordTypeFillRects)
@@ -1341,8 +1341,8 @@ namespace emfplushelper
 
                         rMS.ReadUInt32(brushIndexOrColor);
                         rMS.ReadInt32(points);
-                        SAL_INFO("drawinglayer", "EMF+\t FillPolygon in slot: " << index << " points: " << points);
-                        SAL_INFO("drawinglayer", "EMF+\t " << ((flags & 0x8000) ? "Color" : "Brush index") << " : 0x" << std::hex << brushIndexOrColor << std::dec);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t FillPolygon in slot: " << index << " points: " << points);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t " << ((flags & 0x8000) ? "Color" : "Brush index") << " : 0x" << std::hex << brushIndexOrColor << std::dec);
 
                         EMFPPath path(points, true);
                         path.Read(rMS, flags);
@@ -1355,7 +1355,7 @@ namespace emfplushelper
                     {
                         sal_uInt32 points;
                         rMS.ReadUInt32(points);
-                        SAL_INFO("drawinglayer", "EMF+\t DrawLines in slot: " << (flags & 0xff) << " points: " << points);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t DrawLines in slot: " << (flags & 0xff) << " points: " << points);
                         EMFPPath path(points, true);
                         path.Read(rMS, flags);
 
@@ -1369,13 +1369,13 @@ namespace emfplushelper
                     {
                         sal_uInt32 penIndex;
                         rMS.ReadUInt32(penIndex);
-                        SAL_INFO("drawinglayer", "EMF+\t Pen: " << penIndex);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t Pen: " << penIndex);
 
                         EMFPPath* path = dynamic_cast<EMFPPath*>(maEMFPObjects[flags & 0xff].get());
                         if (path)
                             EMFPPlusDrawPolygon(path->GetPolygon(*this), penIndex);
                         else
-                            SAL_WARN("drawinglayer", "\t\tEmfPlusRecordTypeDrawPath missing path");
+                            SAL_WARN("drawinglayer.emf", "\t\tEmfPlusRecordTypeDrawPath missing path");
 
                         break;
                     }
@@ -1386,13 +1386,13 @@ namespace emfplushelper
                         ::basegfx::B2DPoint aStartPoint, aControlPointA, aControlPointB, aEndPoint;
                         ::basegfx::B2DPolygon aPolygon;
                         rMS.ReadUInt32(aCount);
-                        SAL_INFO("drawinglayer", "EMF+\t DrawBeziers slot: " << (flags & 0xff));
-                        SAL_INFO("drawinglayer", "EMF+\t Number of points: " << aCount);
-                        SAL_WARN_IF((aCount - 1) % 3 != 0, "drawinglayer", "EMF+\t Bezier Draw not support number of points other than 4, 7, 10, 13, 16...");
+                        SAL_INFO("drawinglayer.emf", "EMF+\t DrawBeziers slot: " << (flags & 0xff));
+                        SAL_INFO("drawinglayer.emf", "EMF+\t Number of points: " << aCount);
+                        SAL_WARN_IF((aCount - 1) % 3 != 0, "drawinglayer.emf", "EMF+\t Bezier Draw not support number of points other than 4, 7, 10, 13, 16...");
 
                         if (aCount < 4)
                         {
-                            SAL_WARN("drawinglayer", "EMF+\t Bezier Draw does not support less than 4 points. Number of points: " << aCount);
+                            SAL_WARN("drawinglayer.emf", "EMF+\t Bezier Draw does not support less than 4 points. Number of points: " << aCount);
                             break;
                         }
 
@@ -1407,7 +1407,7 @@ namespace emfplushelper
                             ReadPoint(rMS, x3, y3, flags);
                             ReadPoint(rMS, x4, y4, flags);
 
-                            SAL_INFO("drawinglayer", "EMF+\t Bezier points: " << x1 << "," << y1 << " " << x2 << "," << y2 << " " << x3 << "," << y3 << " " << x4 << "," << y4);
+                            SAL_INFO("drawinglayer.emf", "EMF+\t Bezier points: " << x1 << "," << y1 << " " << x2 << "," << y2 << " " << x3 << "," << y3 << " " << x4 << "," << y4);
 
                             aStartPoint = Map(x1, y1);
                             aControlPointA = Map(x2, y2);
@@ -1431,8 +1431,8 @@ namespace emfplushelper
                         sal_uInt32 imageAttributesId;
                         sal_Int32 sourceUnit;
                         rMS.ReadUInt32(imageAttributesId).ReadInt32(sourceUnit);
-                        SAL_INFO("drawinglayer", "EMF+\t " << (type == EmfPlusRecordTypeDrawImagePoints ? "DrawImagePoints" : "DrawImage") << " image attributes Id: " << imageAttributesId << " source unit: " << sourceUnit);
-                        SAL_INFO("drawinglayer", "EMF+\t TODO: use image attributes");
+                        SAL_INFO("drawinglayer.emf", "EMF+\t " << (type == EmfPlusRecordTypeDrawImagePoints ? "DrawImagePoints" : "DrawImage") << " image attributes Id: " << imageAttributesId << " source unit: " << sourceUnit);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t TODO: use image attributes");
 
                         // For DrawImage and DrawImagePoints, source unit of measurement type must be 1 pixel
                         if (sourceUnit == UnitTypePixel && maEMFPObjects[flags & 0xff])
@@ -1441,7 +1441,7 @@ namespace emfplushelper
                             float sx, sy, sw, sh;
                             ReadRectangle(rMS, sx, sy, sw, sh);
                             ::tools::Rectangle aSource(Point(sx, sy), Size(sw, sh));
-                            SAL_INFO("drawinglayer", "EMF+\t " << (type == EmfPlusRecordTypeDrawImagePoints ? "DrawImagePoints" : "DrawImage") << " source rectangle: " << sx << "," << sy << " " << sw << "x" << sh);
+                            SAL_INFO("drawinglayer.emf", "EMF+\t " << (type == EmfPlusRecordTypeDrawImagePoints ? "DrawImagePoints" : "DrawImage") << " source rectangle: " << sx << "," << sy << " " << sw << "x" << sh);
                             ::basegfx::B2DPoint aDstPoint;
                             ::basegfx::B2DSize aDstSize;
 
@@ -1461,7 +1461,7 @@ namespace emfplushelper
                                     ReadPoint(rMS, x2, y2, flags); // upper-right
                                     ReadPoint(rMS, x3, y3, flags); // lower-left
 
-                                    SAL_INFO("drawinglayer", "EMF+\t destination points: P1:" << x1 << "," << y1 << " P2:" << x2 << "," << y2 << " P3:" << x3 << "," << y3);
+                                    SAL_INFO("drawinglayer.emf", "EMF+\t destination points: P1:" << x1 << "," << y1 << " P2:" << x2 << "," << y2 << " P3:" << x3 << "," << y3);
 
                                     aDstPoint = ::basegfx::B2DPoint(x1, y1);
                                     aDstSize = ::basegfx::B2DSize(x2 - x1, y3 - y1);
@@ -1470,7 +1470,7 @@ namespace emfplushelper
                                 }
                                 else
                                 {
-                                    SAL_WARN("drawinglayer", "EMF+\t DrawImagePoints Wrong EMF+ file. Expected 3 points, received: "<< aCount);
+                                    SAL_WARN("drawinglayer.emf", "EMF+\t DrawImagePoints Wrong EMF+ file. Expected 3 points, received: "<< aCount);
                                     break;
                                 }
                             }
@@ -1478,7 +1478,7 @@ namespace emfplushelper
                             {
                                 float dx, dy, dw, dh;
                                 ReadRectangle(rMS, dx, dy, dw, dh, bool(flags & 0x4000));
-                                SAL_INFO("drawinglayer", "EMF+\t destination rectangle: " << dx << "," << dy << " " << dw << "x" << dh);
+                                SAL_INFO("drawinglayer.emf", "EMF+\t destination rectangle: " << dx << "," << dy << " " << dw << "x" << dh);
                                 aDstPoint = ::basegfx::B2DPoint(dx, dy);
                                 aDstSize = ::basegfx::B2DSize(dw, dh);
                             }
@@ -1497,7 +1497,7 @@ namespace emfplushelper
                                 BitmapEx aBmp(image.graphic.GetBitmapEx());
                                 aBmp.Crop(aSource);
                                 Size aSize(aBmp.GetSizePixel());
-                                SAL_INFO("drawinglayer", "EMF+\t Bitmap size: " << aSize.Width() << "x" << aSize.Height());
+                                SAL_INFO("drawinglayer.emf", "EMF+\t Bitmap size: " << aSize.Width() << "x" << aSize.Height());
                                 if (aSize.Width() > 0 && aSize.Height() > 0)
                                 {
                                     mrTargetHolders.Current().append(
@@ -1507,7 +1507,7 @@ namespace emfplushelper
                                 }
                                 else
                                 {
-                                    SAL_WARN("drawinglayer", "EMF+\t warning: empty bitmap");
+                                    SAL_WARN("drawinglayer.emf", "EMF+\t warning: empty bitmap");
                                     break;
                                 }
                             }
@@ -1521,7 +1521,7 @@ namespace emfplushelper
                         }
                         else
                         {
-                            SAL_WARN("drawinglayer", "EMF+\tDrawImage(Points) Wrong EMF+ file. Only Unit Type Pixel is support by EMF+ specification for DrawImage(Points)");
+                            SAL_WARN("drawinglayer.emf", "EMF+\tDrawImage(Points) Wrong EMF+ file. Only Unit Type Pixel is support by EMF+ specification for DrawImage(Points)");
                         }
                         break;
                     }
@@ -1531,10 +1531,10 @@ namespace emfplushelper
                         sal_uInt32 formatId;
                         sal_uInt32 stringLength;
                         rMS.ReadUInt32(brushId).ReadUInt32(formatId).ReadUInt32(stringLength);
-                        SAL_INFO("drawinglayer", "EMF+\t FontId: " << OUString::number(flags & 0xFF));
-                        SAL_INFO("drawinglayer", "EMF+\t BrushId: " << BrushIDToString(flags, brushId));
-                        SAL_INFO("drawinglayer", "EMF+\t FormatId: " << formatId);
-                        SAL_INFO("drawinglayer", "EMF+\t Length: " << stringLength);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t FontId: " << OUString::number(flags & 0xFF));
+                        SAL_INFO("drawinglayer.emf", "EMF+\t BrushId: " << BrushIDToString(flags, brushId));
+                        SAL_INFO("drawinglayer.emf", "EMF+\t FormatId: " << formatId);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t Length: " << stringLength);
 
                         if (flags & 0x8000)
                         {
@@ -1542,10 +1542,10 @@ namespace emfplushelper
                             float lx, ly, lw, lh;
                             rMS.ReadFloat(lx).ReadFloat(ly).ReadFloat(lw).ReadFloat(lh);
 
-                            SAL_INFO("drawinglayer", "EMF+\t DrawString layoutRect: " << lx << "," << ly << " - " << lw << "x" << lh);
+                            SAL_INFO("drawinglayer.emf", "EMF+\t DrawString layoutRect: " << lx << "," << ly << " - " << lw << "x" << lh);
                             // parse the string
                             const OUString text = read_uInt16s_ToOUString(rMS, stringLength);
-                            SAL_INFO("drawinglayer", "EMF+\t DrawString string: " << text);
+                            SAL_INFO("drawinglayer.emf", "EMF+\t DrawString string: " << text);
                             // get the stringFormat from the Object table ( this is OPTIONAL and may be nullptr )
                             const EMFPStringFormat *stringFormat = dynamic_cast<EMFPStringFormat*>(maEMFPObjects[formatId & 0xff].get());
                             // get the font from the flags
@@ -1572,7 +1572,7 @@ namespace emfplushelper
                             double stringAlignmentHorizontalOffset = 0.0;
                             if (stringFormat)
                             {
-                                SAL_WARN_IF(stringFormat->DirectionRightToLeft(), "drawinglayer", "EMF+\t DrawString Alignment TODO For a right-to-left layout rectangle, the origin should be at the upper right.");
+                                SAL_WARN_IF(stringFormat->DirectionRightToLeft(), "drawinglayer.emf", "EMF+\t DrawString Alignment TODO For a right-to-left layout rectangle, the origin should be at the upper right.");
                                 if (stringFormat->stringAlignment == StringAlignmentNear)
                                 // Alignment is to the left side of the layout rectangle (lx, ly, lw, lh)
                                 {
@@ -1681,18 +1681,18 @@ namespace emfplushelper
                         }
                         else
                         {
-                            SAL_WARN("drawinglayer", "EMF+\t DrawString TODO - drawing with brush not yet supported");
+                            SAL_WARN("drawinglayer.emf", "EMF+\t DrawString TODO - drawing with brush not yet supported");
                         }
                         break;
                     }
                     case EmfPlusRecordTypeSetPageTransform:
                     {
                         rMS.ReadFloat(mfPageScale);
-                        SAL_INFO("drawinglayer", "EMF+\t Scale: " << mfPageScale << " unit: " << UnitTypeToString(flags));
+                        SAL_INFO("drawinglayer.emf", "EMF+\t Scale: " << mfPageScale << " unit: " << UnitTypeToString(flags));
 
                         if ((flags == UnitTypeDisplay) || (flags == UnitTypeWorld))
                         {
-                            SAL_WARN("drawinglayer", "EMF+\t file error. UnitTypeDisplay and UnitTypeWorld are not supported by SetPageTransform in EMF+ specification.");
+                            SAL_WARN("drawinglayer.emf", "EMF+\t file error. UnitTypeDisplay and UnitTypeWorld are not supported by SetPageTransform in EMF+ specification.");
                         }
                         else
                         {
@@ -1705,7 +1705,7 @@ namespace emfplushelper
                     case EmfPlusRecordTypeSetRenderingOrigin:
                     {
                         rMS.ReadInt32(mnOriginX).ReadInt32(mnOriginY);
-                        SAL_INFO("drawinglayer", "EMF+\t SetRenderingOrigin, [x,y]: " << mnOriginX << "," << mnOriginY);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t SetRenderingOrigin, [x,y]: " << mnOriginX << "," << mnOriginY);
                         break;
                     }
                     case EmfPlusRecordTypeSetTextContrast:
@@ -1716,51 +1716,51 @@ namespace emfplushelper
                         mbSetTextContrast = true;
                         mnTextContrast = flags & 0xFFF;
                         SAL_WARN_IF(mnTextContrast > UPPERGAMMA || mnTextContrast < LOWERGAMMA,
-                            "drawinglayer", "EMF+\t Gamma value is not with bounds 1000 to 2200, value is " << mnTextContrast);
+                            "drawinglayer.emf", "EMF+\t Gamma value is not with bounds 1000 to 2200, value is " << mnTextContrast);
                         mnTextContrast = std::min(mnTextContrast, UPPERGAMMA);
                         mnTextContrast = std::max(mnTextContrast, LOWERGAMMA);
-                        SAL_INFO("drawinglayer", "EMF+\t Text contrast: " << (mnTextContrast / 1000) << " gamma");
+                        SAL_INFO("drawinglayer.emf", "EMF+\t Text contrast: " << (mnTextContrast / 1000) << " gamma");
                         break;
                     }
                     case EmfPlusRecordTypeSetTextRenderingHint:
                     {
                         sal_uInt8 nTextRenderingHint = (flags & 0xFF) >> 1;
-                        SAL_INFO("drawinglayer", "EMF+\t Text rendering hint: " << TextRenderingHintToString(nTextRenderingHint));
-                        SAL_WARN("drawinglayer", "EMF+\t TODO SetTextRenderingHint");
+                        SAL_INFO("drawinglayer.emf", "EMF+\t Text rendering hint: " << TextRenderingHintToString(nTextRenderingHint));
+                        SAL_WARN("drawinglayer.emf", "EMF+\t TODO SetTextRenderingHint");
                         break;
                     }
                     case EmfPlusRecordTypeSetAntiAliasMode:
                     {
                         bool bUseAntiAlias = (flags & 0x0001);
                         sal_uInt8 nSmoothingMode = (flags & 0xFE00) >> 1;
-                        SAL_INFO("drawinglayer", "EMF+\t Antialiasing: " << (bUseAntiAlias ? "enabled" : "disabled"));
-                        SAL_INFO("drawinglayer", "EMF+\t Smoothing mode: " << SmoothingModeToString(nSmoothingMode));
-                        SAL_WARN("drawinglayer", "EMF+\t TODO SetAntiAliasMode");
+                        SAL_INFO("drawinglayer.emf", "EMF+\t Antialiasing: " << (bUseAntiAlias ? "enabled" : "disabled"));
+                        SAL_INFO("drawinglayer.emf", "EMF+\t Smoothing mode: " << SmoothingModeToString(nSmoothingMode));
+                        SAL_WARN("drawinglayer.emf", "EMF+\t TODO SetAntiAliasMode");
                         break;
                     }
                     case EmfPlusRecordTypeSetInterpolationMode:
                     {
                         sal_uInt16 nInterpolationMode = flags & 0xFF;
-                        SAL_INFO("drawinglayer", "EMF+\t Interpolation mode: " << InterpolationModeToString(nInterpolationMode));
-                        SAL_WARN("drawinglayer", "EMF+\t TODO InterpolationMode");
+                        SAL_INFO("drawinglayer.emf", "EMF+\t Interpolation mode: " << InterpolationModeToString(nInterpolationMode));
+                        SAL_WARN("drawinglayer.emf", "EMF+\t TODO InterpolationMode");
                         break;
                     }
                     case EmfPlusRecordTypeSetPixelOffsetMode:
                     {
-                        SAL_INFO("drawinglayer", "EMF+\t Pixel offset mode: " << PixelOffsetModeToString(flags));
-                        SAL_WARN("drawinglayer", "EMF+\t TODO SetPixelOffsetMode");
+                        SAL_INFO("drawinglayer.emf", "EMF+\t Pixel offset mode: " << PixelOffsetModeToString(flags));
+                        SAL_WARN("drawinglayer.emf", "EMF+\t TODO SetPixelOffsetMode");
                         break;
                     }
                     case EmfPlusRecordTypeSetCompositingQuality:
                     {
-                        SAL_INFO("drawinglayer", "EMF+\t TODO SetCompositingQuality");
+                        SAL_INFO("drawinglayer.emf", "EMF+\t TODO SetCompositingQuality");
                         break;
                     }
                     case EmfPlusRecordTypeSave:
                     {
                         sal_uInt32 stackIndex;
                         rMS.ReadUInt32(stackIndex);
-                        SAL_INFO("drawinglayer", "EMF+\t Save stack index: " << stackIndex);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t Save stack index: " << stackIndex);
 
                         GraphicStatePush(mGSStack, stackIndex);
 
@@ -1770,7 +1770,7 @@ namespace emfplushelper
                     {
                         sal_uInt32 stackIndex;
                         rMS.ReadUInt32(stackIndex);
-                        SAL_INFO("drawinglayer", "EMF+\t Restore stack index: " << stackIndex);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t Restore stack index: " << stackIndex);
 
                         GraphicStatePop(mGSStack, stackIndex, mrPropertyHolders.Current());
                         break;
@@ -1779,19 +1779,19 @@ namespace emfplushelper
                     {
                         float dx, dy, dw, dh;
                         ReadRectangle(rMS, dx, dy, dw, dh);
-                        SAL_INFO("drawinglayer", "EMF+\t Dest RectData: " << dx << "," << dy << " " << dw << "x" << dh);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t Dest RectData: " << dx << "," << dy << " " << dw << "x" << dh);
 
                         float sx, sy, sw, sh;
                         ReadRectangle(rMS, sx, sy, sw, sh);
-                        SAL_INFO("drawinglayer", "EMF+\t Source RectData: " << sx << "," << sy << " " << sw << "x" << sh);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t Source RectData: " << sx << "," << sy << " " << sw << "x" << sh);
 
                         sal_uInt32 stackIndex;
                         rMS.ReadUInt32(stackIndex);
-                        SAL_INFO("drawinglayer", "EMF+\t Begin Container stack index: " << stackIndex << ", PageUnit: " << flags);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t Begin Container stack index: " << stackIndex << ", PageUnit: " << flags);
 
                         if ((flags == UnitTypeDisplay) || (flags == UnitTypeWorld))
                         {
-                            SAL_WARN("drawinglayer", "EMF+\t file error. UnitTypeDisplay and UnitTypeWorld are not supported by BeginContainer in EMF+ specification.");
+                            SAL_WARN("drawinglayer.emf", "EMF+\t file error. UnitTypeDisplay and UnitTypeWorld are not supported by BeginContainer in EMF+ specification.");
                             break;
                         }
                         const float aPageScaleX = getUnitToPixelMultiplier(static_cast<UnitType>(flags), mnHDPI);
@@ -1808,7 +1808,7 @@ namespace emfplushelper
                     {
                         sal_uInt32 stackIndex;
                         rMS.ReadUInt32(stackIndex);
-                        SAL_INFO("drawinglayer", "EMF+\t Begin Container No Params stack index: " << stackIndex);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t Begin Container No Params stack index: " << stackIndex);
 
                         GraphicStatePush(mGSContainerStack, stackIndex);
                         break;
@@ -1817,33 +1817,33 @@ namespace emfplushelper
                     {
                         sal_uInt32 stackIndex;
                         rMS.ReadUInt32(stackIndex);
-                        SAL_INFO("drawinglayer", "EMF+\t End Container stack index: " << stackIndex);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t End Container stack index: " << stackIndex);
 
                         GraphicStatePop(mGSContainerStack, stackIndex, mrPropertyHolders.Current());
                         break;
                     }
                     case EmfPlusRecordTypeSetWorldTransform:
                     {
-                        SAL_INFO("drawinglayer", "EMF+\t SetWorldTransform, Post multiply: " << bool(flags & 0x2000));
+                        SAL_INFO("drawinglayer.emf", "EMF+\t SetWorldTransform, Post multiply: " << bool(flags & 0x2000));
                         readXForm(rMS, maWorldTransform);
                         mappingChanged();
-                        SAL_INFO("drawinglayer", "EMF+\t\t: " << maWorldTransform);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t\t: " << maWorldTransform);
                         break;
                     }
                     case EmfPlusRecordTypeResetWorldTransform:
                     {
                         maWorldTransform.identity();
-                        SAL_INFO("drawinglayer", "EMF+\t World transform: " << maWorldTransform);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t World transform: " << maWorldTransform);
                         mappingChanged();
                         break;
                     }
                     case EmfPlusRecordTypeMultiplyWorldTransform:
                     {
-                        SAL_INFO("drawinglayer", "EMF+\t MultiplyWorldTransform, post multiply: " << bool(flags & 0x2000));
+                        SAL_INFO("drawinglayer.emf", "EMF+\t MultiplyWorldTransform, post multiply: " << bool(flags & 0x2000));
                         basegfx::B2DHomMatrix transform;
                         readXForm(rMS, transform);
 
-                        SAL_INFO("drawinglayer",
+                        SAL_INFO("drawinglayer.emf",
                                  "EMF+\t Transform matrix: " << transform);
 
                         if (flags & 0x2000)
@@ -1860,13 +1860,13 @@ namespace emfplushelper
 
                         mappingChanged();
 
-                        SAL_INFO("drawinglayer",
+                        SAL_INFO("drawinglayer.emf",
                                  "EMF+\t World transform matrix: " << maWorldTransform);
                         break;
                     }
                     case EmfPlusRecordTypeTranslateWorldTransform:
                     {
-                        SAL_INFO("drawinglayer", "EMF+\t TranslateWorldTransform, Post multiply: " << bool(flags & 0x2000));
+                        SAL_INFO("drawinglayer.emf", "EMF+\t TranslateWorldTransform, Post multiply: " << bool(flags & 0x2000));
 
                         basegfx::B2DHomMatrix transform;
                         float eDx, eDy;
@@ -1874,7 +1874,7 @@ namespace emfplushelper
                         transform.set(0, 2, eDx);
                         transform.set(1, 2, eDy);
 
-                        SAL_INFO("drawinglayer",
+                        SAL_INFO("drawinglayer.emf",
                             "EMF+\t Translate matrix: " << transform);
 
                         if (flags & 0x2000)
@@ -1891,7 +1891,7 @@ namespace emfplushelper
 
                         mappingChanged();
 
-                        SAL_INFO("drawinglayer",
+                        SAL_INFO("drawinglayer.emf",
                                  "EMF+\t World transform matrix: " << maWorldTransform);
                         break;
                     }
@@ -1903,9 +1903,9 @@ namespace emfplushelper
                         transform.set(0, 0, eSx);
                         transform.set(1, 1, eSy);
 
-                        SAL_INFO("drawinglayer", "EMF+\t ScaleWorldTransform Sx: " << eSx <<
+                        SAL_INFO("drawinglayer.emf", "EMF+\t ScaleWorldTransform Sx: " << eSx <<
                                  " Sy: " << eSy << ", Post multiply:" << bool(flags & 0x2000));
-                        SAL_INFO("drawinglayer",
+                        SAL_INFO("drawinglayer.emf",
                                  "EMF+\t World transform matrix: " << maWorldTransform);
 
                         if (flags & 0x2000)
@@ -1922,7 +1922,7 @@ namespace emfplushelper
 
                         mappingChanged();
 
-                        SAL_INFO("drawinglayer",
+                        SAL_INFO("drawinglayer.emf",
                                  "EMF+\t World transform matrix: " << maWorldTransform);
                         break;
                     }
@@ -1932,20 +1932,20 @@ namespace emfplushelper
                         float eAngle;
                         rMS.ReadFloat(eAngle);
 
-                        SAL_INFO("drawinglayer", "EMF+\t RotateWorldTransform Angle: " << eAngle <<
+                        SAL_INFO("drawinglayer.emf", "EMF+\t RotateWorldTransform Angle: " << eAngle <<
                                  ", post multiply: " << bool(flags & 0x2000));
                         // Skipping flags & 0x2000
                         // For rotation transformation there is no difference between post and pre multiply
                         maWorldTransform.rotate(basegfx::deg2rad(eAngle));
                         mappingChanged();
 
-                        SAL_INFO("drawinglayer",
+                        SAL_INFO("drawinglayer.emf",
                                 "EMF+\t " << maWorldTransform);
                         break;
                     }
                     case EmfPlusRecordTypeResetClip:
                     {
-                        SAL_INFO("drawinglayer", "EMF+ ResetClip");
+                        SAL_INFO("drawinglayer.emf", "EMF+ ResetClip");
                         // We don't need to read anything more, as Size needs to be set 0x0000000C
                         // and DataSize must be set to 0.
 
@@ -1957,11 +1957,11 @@ namespace emfplushelper
                     {
                         int combineMode = (flags >> 8) & 0xf;
 
-                        SAL_INFO("drawinglayer", "EMF+\t SetClipRect combine mode: " << combineMode);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t SetClipRect combine mode: " << combineMode);
 
                         float dx, dy, dw, dh;
                         ReadRectangle(rMS, dx, dy, dw, dh);
-                        SAL_INFO("drawinglayer", "EMF+\t RectData: " << dx << "," << dy << " " << dw << "x" << dh);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t RectData: " << dx << "," << dy << " " << dw << "x" << dh);
                         ::basegfx::B2DPoint mappedPoint1(Map(dx, dy));
                         ::basegfx::B2DPoint mappedPoint2(Map(dx + dw, dy + dh));
 
@@ -1980,13 +1980,13 @@ namespace emfplushelper
                     case EmfPlusRecordTypeSetClipPath:
                     {
                         int combineMode = (flags >> 8) & 0xf;
-                        SAL_INFO("drawinglayer", "EMF+\t SetClipPath combine mode: " << combineMode);
-                        SAL_INFO("drawinglayer", "EMF+\t Path in slot: " << (flags & 0xff));
+                        SAL_INFO("drawinglayer.emf", "EMF+\t SetClipPath combine mode: " << combineMode);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t Path in slot: " << (flags & 0xff));
 
                         EMFPPath *path = static_cast<EMFPPath*>(maEMFPObjects[flags & 0xff].get());
                         if (!path)
                         {
-                            SAL_WARN("drawinglayer", "EMF+\t TODO Unable to find path in slot: " << (flags & 0xff));
+                            SAL_WARN("drawinglayer.emf", "EMF+\t TODO Unable to find path in slot: " << (flags & 0xff));
                             break;
                         }
 
@@ -1999,12 +1999,12 @@ namespace emfplushelper
                     case EmfPlusRecordTypeSetClipRegion:
                     {
                         int combineMode = (flags >> 8) & 0xf;
-                        SAL_INFO("drawinglayer", "EMF+\t Region in slot: " << (flags & 0xff));
-                        SAL_INFO("drawinglayer", "EMF+\t Combine mode: " << combineMode);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t Region in slot: " << (flags & 0xff));
+                        SAL_INFO("drawinglayer.emf", "EMF+\t Combine mode: " << combineMode);
                         EMFPRegion *region = static_cast<EMFPRegion*>(maEMFPObjects[flags & 0xff].get());
                         if (!region)
                         {
-                            SAL_WARN("drawinglayer", "EMF+\t TODO Unable to find region in slot: " << (flags & 0xff));
+                            SAL_WARN("drawinglayer.emf", "EMF+\t TODO Unable to find region in slot: " << (flags & 0xff));
                             break;
                         }
 
@@ -2016,12 +2016,12 @@ namespace emfplushelper
                     {
                         float dx, dy;
                         rMS.ReadFloat(dx).ReadFloat(dy);
-                        SAL_INFO("drawinglayer", "EMF+\tOffset x:" << dx << ", y:" << dy);
+                        SAL_INFO("drawinglayer.emf", "EMF+\tOffset x:" << dx << ", y:" << dy);
 
                         basegfx::B2DPolyPolygon aPolyPolygon(
                                     mrPropertyHolders.Current().getClipPolyPolygon());
 
-                        SAL_INFO("drawinglayer",
+                        SAL_INFO("drawinglayer.emf",
                                  "EMF+\t PolyPolygon before translate: " << aPolyPolygon);
 
                         basegfx::B2DPoint aOffset = Map(dx, dy);
@@ -2030,7 +2030,7 @@ namespace emfplushelper
                         transformMatrix.set(1, 2, aOffset.getY());
                         aPolyPolygon.transform(transformMatrix);
 
-                        SAL_INFO("drawinglayer",
+                        SAL_INFO("drawinglayer.emf",
                                  "EMF+\t PolyPolygon after translate: " << aPolyPolygon <<
                                  ", mapped offset x" << aOffset.getX() << ", mapped offset y" << aOffset.getY());
                         HandleNewClipRegion(aPolyPolygon, mrTargetHolders, mrPropertyHolders);
@@ -2043,22 +2043,22 @@ namespace emfplushelper
                         sal_uInt32 hasMatrix;
                         sal_uInt32 glyphsCount;
                         rMS.ReadUInt32(brushIndexOrColor).ReadUInt32(optionFlags).ReadUInt32(hasMatrix).ReadUInt32(glyphsCount);
-                        SAL_INFO("drawinglayer", "EMF+\t " << ((flags & 0x8000) ? "Color" : "Brush index") << ": 0x" << std::hex << brushIndexOrColor << std::dec);
-                        SAL_INFO("drawinglayer", "EMF+\t Option flags: 0x" << std::hex << optionFlags << std::dec);
-                        SAL_INFO("drawinglayer", "EMF+\t Has matrix: " << hasMatrix);
-                        SAL_INFO("drawinglayer", "EMF+\t Glyphs: " << glyphsCount);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t " << ((flags & 0x8000) ? "Color" : "Brush index") << ": 0x" << std::hex << brushIndexOrColor << std::dec);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t Option flags: 0x" << std::hex << optionFlags << std::dec);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t Has matrix: " << hasMatrix);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t Glyphs: " << glyphsCount);
 
                         if ((optionFlags & 1) && glyphsCount > 0)
                         {
                             std::unique_ptr<float[]> charsPosX(new float[glyphsCount]);
                             std::unique_ptr<float[]> charsPosY(new float[glyphsCount]);
                             OUString text = read_uInt16s_ToOUString(rMS, glyphsCount);
-                            SAL_INFO("drawinglayer", "EMF+\t DrawDriverString string: " << text);
+                            SAL_INFO("drawinglayer.emf", "EMF+\t DrawDriverString string: " << text);
 
                             for (sal_uInt32 i = 0; i<glyphsCount; i++)
                             {
                                 rMS.ReadFloat(charsPosX[i]).ReadFloat(charsPosY[i]);
-                                SAL_INFO("drawinglayer", "EMF+\t\t glyphPosition[" << i << "]: " << charsPosX[i] << "," << charsPosY[i]);
+                                SAL_INFO("drawinglayer.emf", "EMF+\t\t glyphPosition[" << i << "]: " << charsPosX[i] << "," << charsPosY[i]);
                             }
 
                             basegfx::B2DHomMatrix transform;
@@ -2066,7 +2066,7 @@ namespace emfplushelper
                             if (hasMatrix)
                             {
                                 readXForm(rMS, transform);
-                                SAL_INFO("drawinglayer", "EMF+\tmatrix: " << transform);
+                                SAL_INFO("drawinglayer.emf", "EMF+\tmatrix: " << transform);
                             }
 
                             // get the font from the flags
@@ -2169,13 +2169,13 @@ namespace emfplushelper
                         }
                         else
                         {
-                            SAL_WARN("drawinglayer", "EMF+\tTODO: fonts (non-unicode glyphs chars)");
+                            SAL_WARN("drawinglayer.emf", "EMF+\tTODO: fonts (non-unicode glyphs chars)");
                         }
                         break;
                     }
                     default:
                     {
-                        SAL_WARN("drawinglayer", "EMF+ TODO unhandled record type: 0x" << std::hex << type << std::dec);
+                        SAL_WARN("drawinglayer.emf", "EMF+ TODO unhandled record type: 0x" << std::hex << type << std::dec);
                     }
                 }
             }
@@ -2188,7 +2188,7 @@ namespace emfplushelper
             }
             else
             {
-                SAL_WARN("drawinglayer", "ImplRenderer::processEMFPlus: "
+                SAL_WARN("drawinglayer.emf", "ImplRenderer::processEMFPlus: "
                     "size " << size << " > length " << length);
                 length = 0;
             }

@@ -89,7 +89,7 @@ namespace emfplushelper
                 sal_Int32 y = GetEmfPlusInteger(s);
                 pPoints [i*2] = x;
                 pPoints [i*2 + 1] = y;
-                SAL_INFO("drawinglayer", "EMF+\t\t\tEmfPlusPointR [x,y]: " << x << ", " << y);
+                SAL_INFO("drawinglayer.emf", "EMF+\t\t\tEmfPlusPointR [x,y]: " << x << ", " << y);
             }
             else if (pathFlags & 0x4000)
             {
@@ -97,7 +97,7 @@ namespace emfplushelper
                 sal_Int16 x, y;
 
                 s.ReadInt16( x ).ReadInt16( y );
-                SAL_INFO ("drawinglayer", "EMF+\t\t\tEmfPlusPoint [x,y]: " << x << "," << y);
+                SAL_INFO ("drawinglayer.emf", "EMF+\t\t\tEmfPlusPoint [x,y]: " << x << "," << y);
                 pPoints [i*2] = x;
                 pPoints [i*2 + 1] = y;
             }
@@ -105,7 +105,7 @@ namespace emfplushelper
             {
                 // EMFPlusPointF: stored in Single (float) format
                 s.ReadFloat( pPoints [i*2] ).ReadFloat( pPoints [i*2 + 1] );
-                SAL_INFO ("drawinglayer", "EMF+\t EMFPlusPointF [x,y]: " << pPoints [i*2] << "," << pPoints [i*2 + 1]);
+                SAL_INFO ("drawinglayer.emf", "EMF+\t EMFPlusPointF [x,y]: " << pPoints [i*2] << "," << pPoints [i*2 + 1]);
             }
         }
 
@@ -114,7 +114,7 @@ namespace emfplushelper
             for (int i = 0; i < nPoints; i++)
             {
                 s.ReadUChar(pPointTypes[i]);
-                SAL_INFO("drawinglayer", "EMF+\tpoint type: " << static_cast<int>(pPointTypes[i]));
+                SAL_INFO("drawinglayer.emf", "EMF+\tpoint type: " << static_cast<int>(pPointTypes[i]));
             }
         }
 
@@ -151,7 +151,7 @@ namespace emfplushelper
                     if (((i - last_normal )% 3) == 1)
                     {
                         polygon.setNextControlPoint (p - 1, mapped);
-                        SAL_INFO ("drawinglayer", "EMF+\t\tPolygon append next: " << p - 1 << " mapped: " << mapped.getX () << "," << mapped.getY ());
+                        SAL_INFO ("drawinglayer.emf", "EMF+\t\tPolygon append next: " << p - 1 << " mapped: " << mapped.getX () << "," << mapped.getY ());
                         continue;
                     }
                     else if (((i - last_normal) % 3) == 2)
@@ -168,12 +168,12 @@ namespace emfplushelper
             }
 
             polygon.append (mapped);
-            SAL_INFO ("drawinglayer", "EMF+\t\tPolygon append point: " << pPoints [i*2] << "," << pPoints [i*2 + 1] << " mapped: " << mapped.getX () << ":" << mapped.getY ());
+            SAL_INFO ("drawinglayer.emf", "EMF+\t\tPolygon append point: " << pPoints [i*2] << "," << pPoints [i*2 + 1] << " mapped: " << mapped.getX () << ":" << mapped.getY ());
 
             if (hasPrev)
             {
                 polygon.setPrevControlPoint (p, prev);
-                SAL_INFO ("drawinglayer", "EMF+\t\tPolygon append  prev: " << p << " mapped: " << prev.getX () << "," << prev.getY ());
+                SAL_INFO ("drawinglayer.emf", "EMF+\t\tPolygon append  prev: " << p << " mapped: " << prev.getX () << "," << prev.getY ());
                 hasPrev = false;
             }
 
@@ -184,7 +184,7 @@ namespace emfplushelper
                 // closed polygon
                 polygon.setClosed (true);
                 aPolygon.append (polygon);
-                SAL_INFO ("drawinglayer", "EMF+\t\tClose polygon");
+                SAL_INFO ("drawinglayer.emf", "EMF+\t\tClose polygon");
                 last_normal = i + 1;
                 p = 0;
                 polygon.clear ();
@@ -204,17 +204,17 @@ namespace emfplushelper
 #if OSL_DEBUG_LEVEL > 1
             for (unsigned int i=0; i<aPolygon.count(); i++) {
                 polygon = aPolygon.getB2DPolygon(i);
-                SAL_INFO ("drawinglayer", "EMF+\t\tPolygon: " << i);
+                SAL_INFO ("drawinglayer.emf", "EMF+\t\tPolygon: " << i);
                 for (unsigned int j=0; j<polygon.count(); j++) {
                     ::basegfx::B2DPoint point = polygon.getB2DPoint(j);
-                    SAL_INFO ("drawinglayer", "EMF+\t\t\tPoint: " << point.getX() << "," << point.getY());
+                    SAL_INFO ("drawinglayer.emf", "EMF+\t\t\tPoint: " << point.getX() << "," << point.getY());
                     if (polygon.isPrevControlPointUsed(j)) {
                         point = polygon.getPrevControlPoint(j);
-                        SAL_INFO ("drawinglayer", "EMF+\t\t\tPrev: " << point.getX() << "," << point.getY());
+                        SAL_INFO ("drawinglayer.emf", "EMF+\t\t\tPrev: " << point.getX() << "," << point.getY());
                     }
                     if (polygon.isNextControlPointUsed(j)) {
                         point = polygon.getNextControlPoint(j);
-                        SAL_INFO ("drawinglayer", "EMF+\t\t\tNext: " << point.getX() << "," << point.getY());
+                        SAL_INFO ("drawinglayer.emf", "EMF+\t\t\tNext: " << point.getX() << "," << point.getY());
                     }
                 }
             }

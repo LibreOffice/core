@@ -46,7 +46,7 @@ namespace emfplushelper
         sal_uInt32 dataType;
         ::basegfx::B2DPolyPolygon polygon;
         s.ReadUInt32(dataType);
-        SAL_INFO("drawinglayer", "EMF+\t Region node data type 0x" << std::hex << dataType << std::dec);
+        SAL_INFO("drawinglayer.emf", "EMF+\t Region node data type 0x" << std::hex << dataType << std::dec);
 
         switch (dataType)
         {
@@ -65,7 +65,7 @@ namespace emfplushelper
         {
             float dx, dy, dw, dh;
             s.ReadFloat(dx).ReadFloat(dy).ReadFloat(dw).ReadFloat(dh);
-            SAL_INFO("drawinglayer", "EMF+\t\t RegionNodeDataTypeRect x:" << dx << ", y:" << dy <<
+            SAL_INFO("drawinglayer.emf", "EMF+\t\t RegionNodeDataTypeRect x:" << dx << ", y:" << dy <<
                      ", width:" << dw << ", height:" << dh);
 
             const ::basegfx::B2DPoint mappedStartPoint(rR.Map(dx, dy));
@@ -83,13 +83,13 @@ namespace emfplushelper
         {
             sal_Int32 pathLength;
             s.ReadInt32(pathLength);
-            SAL_INFO("drawinglayer", "EMF+\t\t RegionNodeDataTypePath, Path Length: " << pathLength << " bytes");
+            SAL_INFO("drawinglayer.emf", "EMF+\t\t RegionNodeDataTypePath, Path Length: " << pathLength << " bytes");
 
             sal_uInt32 header, pathFlags;
             sal_Int32 points;
 
             s.ReadUInt32(header).ReadInt32(points).ReadUInt32(pathFlags);
-            SAL_INFO("drawinglayer", "EMF+\t\t header: 0x" << std::hex << header <<
+            SAL_INFO("drawinglayer.emf", "EMF+\t\t header: 0x" << std::hex << header <<
                      " points: " << std::dec << points << " additional flags: 0x" << std::hex << pathFlags << std::dec);
 
             EMFPPath path(points);
@@ -99,21 +99,21 @@ namespace emfplushelper
         }
         case RegionNodeDataTypeEmpty:
         {
-            SAL_INFO("drawinglayer", "EMF+\t\t RegionNodeDataTypeEmpty");
-            SAL_WARN("drawinglayer", "EMF+\t\t TODO we need to set empty polygon here");
+            SAL_INFO("drawinglayer.emf", "EMF+\t\t RegionNodeDataTypeEmpty");
+            SAL_WARN("drawinglayer.emf", "EMF+\t\t TODO we need to set empty polygon here");
             polygon = ::basegfx::B2DPolyPolygon();
 
             break;
         }
         case RegionNodeDataTypeInfinite:
         {
-            SAL_INFO("drawinglayer", "EMF+\t\t RegionNodeDataTypeInfinite");
+            SAL_INFO("drawinglayer.emf", "EMF+\t\t RegionNodeDataTypeInfinite");
             polygon = ::basegfx::B2DPolyPolygon();
             break;
         }
         default:
         {
-            SAL_WARN("drawinglayer", "EMF+\t\t Unhandled region type: 0x" << std::hex << dataType << std::dec);
+            SAL_WARN("drawinglayer.emf", "EMF+\t\t Unhandled region type: 0x" << std::hex << dataType << std::dec);
             polygon = ::basegfx::B2DPolyPolygon();
         }
         }
@@ -125,7 +125,7 @@ namespace emfplushelper
         sal_uInt32 header, count;
         s.ReadUInt32(header).ReadUInt32(count);
         // An array should be RegionNodeCount+1 of EmfPlusRegionNode objects.
-        SAL_INFO("drawinglayer", "EMF+\t version: 0x" << std::hex << header << std::dec << ", region node count: " << count);
+        SAL_INFO("drawinglayer.emf", "EMF+\t version: 0x" << std::hex << header << std::dec << ", region node count: " << count);
 
         regionPolyPolygon = ReadRegionNode(s, rR);
     }

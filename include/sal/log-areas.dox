@@ -131,6 +131,7 @@ certain functionality.
 @section drawinglayer
 
 @li @c drawinglayer
+@li @c drawinglayer.emf
 
 @section emfio
 
