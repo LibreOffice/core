@@ -356,8 +356,6 @@ sal_Bool SAL_CALL MacSpellChecker::hasLocale(const Locale& rLocale)
 
 sal_Int16 MacSpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLocale )
 {
-    rtl_TextEncoding aEnc;
-
     // initialize a myspell object for each dictionary once
         // (note: mutex is held higher up in isValid)
 
@@ -377,7 +375,6 @@ sal_Int16 MacSpellChecker::GetSpellFailure( const OUString &rWord, const Locale 
 
     if (n)
     {
-        aEnc = 0;
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         NSString* aNSStr = [[[NSString alloc] initWithCharacters: reinterpret_cast<unichar const *>(nWord.getStr()) length: nWord.getLength()]autorelease];
         NSString* aLang = [[[NSString alloc] initWithCharacters: reinterpret_cast<unichar const *>(rLocale.Language.getStr()) length: rLocale.Language.getLength()]autorelease];
