@@ -237,7 +237,7 @@ public:
     // reparent window to act as a plugin; implementation
     // may choose to use a new system window internally
     // return false to indicate failure
-    virtual bool            SetPluginParent( SystemParentData* pNewParent ) = 0;
+    virtual void            SetPluginParent( SystemParentData* pNewParent ) = 0;
 
     // move the frame to a new screen
     virtual void            SetScreenNumber( unsigned int nScreen ) = 0;

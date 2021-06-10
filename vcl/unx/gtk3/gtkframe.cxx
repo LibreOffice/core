@@ -2586,10 +2586,9 @@ void GtkSalFrame::SetParent( SalFrame* pNewParent )
                                      );
 }
 
-bool GtkSalFrame::SetPluginParent( SystemParentData* )
+void GtkSalFrame::SetPluginParent( SystemParentData* )
 {
     //FIXME: no SetPluginParent impl. for gtk3
-    return false;
 }
 
 void GtkSalFrame::ResetClipRegion()

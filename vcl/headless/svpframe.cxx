@@ -482,9 +482,8 @@ void SvpSalFrame::SetParent( SalFrame* pNewParent )
     m_pParent = static_cast<SvpSalFrame*>(pNewParent);
 }
 
-bool SvpSalFrame::SetPluginParent( SystemParentData* )
+void SvpSalFrame::SetPluginParent( SystemParentData* )
 {
-    return true;
 }
 
 void SvpSalFrame::ResetClipRegion()

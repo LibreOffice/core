@@ -1587,13 +1587,12 @@ void AquaSalFrame::SimulateKeyPress( sal_uInt16 /*nKeyCode*/ )
 {
 }
 
-bool AquaSalFrame::SetPluginParent( SystemParentData* )
+void AquaSalFrame::SetPluginParent( SystemParentData* )
 {
     // plugin parent may be killed unexpectedly by
     // plugging process;
 
     //TODO: implement
-    return false;
 }
 
 bool AquaSalFrame::MapUnicodeToKeyCode( sal_Unicode , LanguageType , vcl::KeyCode& )

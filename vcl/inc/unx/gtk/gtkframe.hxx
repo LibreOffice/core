@@ -551,7 +551,7 @@ public:
     // reparent window to act as a plugin; implementation
     // may choose to use a new system window internally
     // return false to indicate failure
-    virtual bool                SetPluginParent( SystemParentData* pNewParent ) override;
+    virtual void                SetPluginParent( SystemParentData* pNewParent ) override;
 
     virtual void                SetScreenNumber( unsigned int ) override;
     virtual void                SetApplicationID( const OUString &rWMClass ) override;
