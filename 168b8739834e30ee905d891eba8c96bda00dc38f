@@ -72,6 +72,23 @@
     },
     {
       "key": {
+        "uuid": "182df220_3f683c3e",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1240,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-06-10T12:00:33Z",
+      "side": 1,
+      "message": "I think we should give this timer a lower priority than DEFAULT (which still is the second highest priority). Maybe HIGH_IDLE so it\u0027s processed before drawing events, but on the other hand the page breaks are of a low importance so even a DEFAULT_IDLE may be sufficient, they\u0027ll be painted then with the next REPAINT. Try this\n\n maShowPageBreaksTimer.SetPriority(TaskPriority::DEFAULT_IDLE);\n maShowPageBreaksTimer.Start();",
+      "revId": "168b8739834e30ee905d891eba8c96bda00dc38f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "460e3ad5_fd6556de",
         "filename": "sc/source/ui/view/tabview5.cxx",
         "patchSetId": 14
