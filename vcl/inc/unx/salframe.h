@@ -245,7 +245,7 @@ public:
     virtual KeyIndicatorState   GetIndicatorState() override;
     virtual void                SimulateKeyPress( sal_uInt16 nKeyCode ) override;
     virtual void                SetParent( SalFrame* pNewParent ) override;
-    virtual bool                SetPluginParent( SystemParentData* pNewParent ) override;
+    virtual void                SetPluginParent( SystemParentData* pNewParent ) override;
 
     virtual void                SetScreenNumber( unsigned int ) override;
     virtual void                SetApplicationID( const OUString &rWMClass ) override;

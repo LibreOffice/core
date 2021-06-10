@@ -2457,14 +2457,12 @@ void X11SalFrame::createNewWindow( ::Window aNewParent, SalX11Screen nXScreen )
     // FIXME: SalObjects
 }
 
-bool X11SalFrame::SetPluginParent( SystemParentData* pNewParent )
+void X11SalFrame::SetPluginParent( SystemParentData* pNewParent )
 {
     if( pNewParent->nSize >= sizeof(SystemParentData) )
         m_bXEmbed = pNewParent->aWindow != None && pNewParent->bXEmbedSupport;
 
     createNewWindow(pNewParent->aWindow);
-
-    return true;
 }
 
 // Sound

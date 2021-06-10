@@ -1555,7 +1555,7 @@ void WinSalFrame::SetParent( SalFrame* pNewParent )
     WinSalFrame::mbInReparent = false;
 }
 
-bool WinSalFrame::SetPluginParent( SystemParentData* pNewParent )
+void WinSalFrame::SetPluginParent( SystemParentData* pNewParent )
 {
     if ( pNewParent->hWnd == nullptr )
     {
@@ -1565,7 +1565,6 @@ bool WinSalFrame::SetPluginParent( SystemParentData* pNewParent )
     WinSalFrame::mbInReparent = true;
     ImplSetParentFrame( pNewParent->hWnd, true );
     WinSalFrame::mbInReparent = false;
-    return true;
 }
 
 void WinSalFrame::GetWorkArea( tools::Rectangle &rRect )

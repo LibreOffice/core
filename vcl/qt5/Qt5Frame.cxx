@@ -1178,10 +1178,9 @@ void Qt5Frame::SimulateKeyPress(sal_uInt16 nKeyCode)
 
 void Qt5Frame::SetParent(SalFrame* pNewParent) { m_pParent = static_cast<Qt5Frame*>(pNewParent); }
 
-bool Qt5Frame::SetPluginParent(SystemParentData* /*pNewParent*/)
+void Qt5Frame::SetPluginParent(SystemParentData* /*pNewParent*/)
 {
     //FIXME: no SetPluginParent impl. for qt5
-    return false;
 }
 
 void Qt5Frame::ResetClipRegion() { m_bNullRegion = true; }
