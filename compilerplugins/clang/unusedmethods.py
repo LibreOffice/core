@@ -227,19 +227,30 @@ for d in definitionSet:
     # debug code
     if d[1] == "writerfilter::ooxml::OOXMLPropertySet::toString()":
         continue
+    # ignore lambdas
+    if "::__invoke(" in d[1]:
+        continue;
+    if "::operator " in d[1] and "(*)(" in d[1]:
+        continue;
     location = definitionToSourceLocationMap[d];
     # windows only
     if location.startswith("include/svl/svdde.hxx"): continue
     # fluent API (return ref to self)
     if location.startswith("include/tools/stream.hxx"): continue
+    if location.startswith("include/oox/helper/refvector.hxx"): continue
+    if location.startswith("include/oox/drawingml/chart/modelbase.hxx"): continue
+    # templates
+    if location.startswith("include/vcl/vclptr.hxx"): continue
+    # external API
+    if location.startswith("include/LibreOfficeKit/LibreOfficeKit.hxx"): continue
     tmp2set.add((method, location))
 
 #Disable this for now, not really using it
 # print output, sorted by name and line number
-#with open("compilerplugins/clang/unusedmethods.unused-returns.results", "wt") as f:
-#    for t in sort_set_by_natural_key(tmp2set):
-#        f.write(t[1] + "\n")
-#        f.write("    " +  t[0] + "\n")
+with open("compilerplugins/clang/unusedmethods.unused-returns.results", "wt") as f:
+    for t in sort_set_by_natural_key(tmp2set):
+        f.write(t[1] + "\n")
+        f.write("    " +  t[0] + "\n")
 
 
 # --------------------------------------------------------------------------------------------
