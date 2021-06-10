@@ -2655,120 +2655,107 @@ weld::Button* SalInstanceAssistant::weld_widget_for_response(int nResponse)
     return nullptr;
 }
 
-namespace
+SalInstanceMenuButton::SalInstanceMenuButton(::MenuButton* pButton, SalInstanceBuilder* pBuilder,
+                                             bool bTakeOwnership)
+    : SalInstanceButton(pButton, pBuilder, bTakeOwnership)
+    , m_xMenuButton(pButton)
+    , m_nLastId(0)
 {
-class SalInstanceMenuButton : public SalInstanceButton, public virtual weld::MenuButton
+    m_xMenuButton->SetActivateHdl(LINK(this, SalInstanceMenuButton, ActivateHdl));
+    m_xMenuButton->SetSelectHdl(LINK(this, SalInstanceMenuButton, MenuSelectHdl));
+    if (PopupMenu* pMenu = m_xMenuButton->GetPopupMenu())
+    {
+        pMenu->SetMenuFlags(MenuFlags::NoAutoMnemonics);
+        const auto nCount = pMenu->GetItemCount();
+        m_nLastId = nCount ? pMenu->GetItemId(nCount - 1) : 0;
+    }
+}
+
+void SalInstanceMenuButton::set_active(bool active)
 {
-private:
-    VclPtr<::MenuButton> m_xMenuButton;
-    sal_uInt16 m_nLastId;
+    if (active == get_active())
+        return;
+    if (active)
+        m_xMenuButton->ExecuteMenu();
+    else
+        m_xMenuButton->CancelMenu();
+}
 
-    DECL_LINK(MenuSelectHdl, ::MenuButton*, void);
-    DECL_LINK(ActivateHdl, ::MenuButton*, void);
+bool SalInstanceMenuButton::get_active() const { return m_xMenuButton->InPopupMode(); }
 
-public:
-    SalInstanceMenuButton(::MenuButton* pButton, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : SalInstanceButton(pButton, pBuilder, bTakeOwnership)
-        , m_xMenuButton(pButton)
-        , m_nLastId(0)
-    {
-        m_xMenuButton->SetActivateHdl(LINK(this, SalInstanceMenuButton, ActivateHdl));
-        m_xMenuButton->SetSelectHdl(LINK(this, SalInstanceMenuButton, MenuSelectHdl));
-        if (PopupMenu* pMenu = m_xMenuButton->GetPopupMenu())
-        {
-            pMenu->SetMenuFlags(MenuFlags::NoAutoMnemonics);
-            const auto nCount = pMenu->GetItemCount();
-            m_nLastId = nCount ? pMenu->GetItemId(nCount - 1) : 0;
-        }
-    }
+void SalInstanceMenuButton::set_inconsistent(bool /*inconsistent*/)
+{
+    //not available
+}
 
-    virtual void set_active(bool active) override
-    {
-        if (active == get_active())
-            return;
-        if (active)
-            m_xMenuButton->ExecuteMenu();
-        else
-            m_xMenuButton->CancelMenu();
-    }
+bool SalInstanceMenuButton::get_inconsistent() const { return false; }
 
-    virtual bool get_active() const override { return m_xMenuButton->InPopupMode(); }
+void SalInstanceMenuButton::insert_item(int pos, const OUString& rId, const OUString& rStr,
+                                        const OUString* pIconName, VirtualDevice* pImageSurface,
+                                        TriState eCheckRadioFalse)
+{
+    m_nLastId = insert_to_menu(m_nLastId, m_xMenuButton->GetPopupMenu(), pos, rId, rStr, pIconName,
+                               pImageSurface, nullptr, eCheckRadioFalse);
+}
 
-    virtual void set_inconsistent(bool /*inconsistent*/) override
-    {
-        //not available
-    }
+void SalInstanceMenuButton::insert_separator(int pos, const OUString& rId)
+{
+    auto nInsertPos = pos == -1 ? MENU_APPEND : pos;
+    m_xMenuButton->GetPopupMenu()->InsertSeparator(rId.toUtf8(), nInsertPos);
+}
 
-    virtual bool get_inconsistent() const override { return false; }
+void SalInstanceMenuButton::set_item_sensitive(const OString& rIdent, bool bSensitive)
+{
+    PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
+    pMenu->EnableItem(rIdent, bSensitive);
+}
 
-    virtual void insert_item(int pos, const OUString& rId, const OUString& rStr,
-                             const OUString* pIconName, VirtualDevice* pImageSurface,
-                             TriState eCheckRadioFalse) override
-    {
-        m_nLastId = insert_to_menu(m_nLastId, m_xMenuButton->GetPopupMenu(), pos, rId, rStr,
-                                   pIconName, pImageSurface, nullptr, eCheckRadioFalse);
-    }
+void SalInstanceMenuButton::remove_item(const OString& rId)
+{
+    PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
+    pMenu->RemoveItem(pMenu->GetItemPos(pMenu->GetItemId(rId)));
+}
 
-    virtual void insert_separator(int pos, const OUString& rId) override
-    {
-        auto nInsertPos = pos == -1 ? MENU_APPEND : pos;
-        m_xMenuButton->GetPopupMenu()->InsertSeparator(rId.toUtf8(), nInsertPos);
-    }
+void SalInstanceMenuButton::clear()
+{
+    PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
+    pMenu->Clear();
+}
 
-    virtual void set_item_sensitive(const OString& rIdent, bool bSensitive) override
-    {
-        PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
-        pMenu->EnableItem(rIdent, bSensitive);
-    }
+void SalInstanceMenuButton::set_item_active(const OString& rIdent, bool bActive)
+{
+    PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
+    pMenu->CheckItem(rIdent, bActive);
+}
 
-    virtual void remove_item(const OString& rId) override
-    {
-        PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
-        pMenu->RemoveItem(pMenu->GetItemPos(pMenu->GetItemId(rId)));
-    }
+void SalInstanceMenuButton::set_item_label(const OString& rIdent, const OUString& rText)
+{
+    PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
+    pMenu->SetItemText(pMenu->GetItemId(rIdent), rText);
+}
 
-    virtual void clear() override
-    {
-        PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
-        pMenu->Clear();
-    }
+OUString SalInstanceMenuButton::get_item_label(const OString& rIdent) const
+{
+    PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
+    return pMenu->GetItemText(pMenu->GetItemId(rIdent));
+}
 
-    virtual void set_item_active(const OString& rIdent, bool bActive) override
-    {
-        PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
-        pMenu->CheckItem(rIdent, bActive);
-    }
+void SalInstanceMenuButton::set_item_visible(const OString& rIdent, bool bShow)
+{
+    PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
+    pMenu->ShowItem(pMenu->GetItemId(rIdent), bShow);
+}
 
-    virtual void set_item_label(const OString& rIdent, const OUString& rText) override
-    {
-        PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
-        pMenu->SetItemText(pMenu->GetItemId(rIdent), rText);
-    }
+void SalInstanceMenuButton::set_popover(weld::Widget* pPopover)
+{
+    SalInstanceWidget* pPopoverWidget = dynamic_cast<SalInstanceWidget*>(pPopover);
+    m_xMenuButton->SetPopover(pPopoverWidget ? pPopoverWidget->getWidget() : nullptr);
+}
 
-    virtual OUString get_item_label(const OString& rIdent) const override
-    {
-        PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
-        return pMenu->GetItemText(pMenu->GetItemId(rIdent));
-    }
-
-    virtual void set_item_visible(const OString& rIdent, bool bShow) override
-    {
-        PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
-        pMenu->ShowItem(pMenu->GetItemId(rIdent), bShow);
-    }
-
-    virtual void set_popover(weld::Widget* pPopover) override
-    {
-        SalInstanceWidget* pPopoverWidget = dynamic_cast<SalInstanceWidget*>(pPopover);
-        m_xMenuButton->SetPopover(pPopoverWidget ? pPopoverWidget->getWidget() : nullptr);
-    }
-
-    virtual ~SalInstanceMenuButton() override
-    {
-        m_xMenuButton->SetSelectHdl(Link<::MenuButton*, void>());
-        m_xMenuButton->SetActivateHdl(Link<::MenuButton*, void>());
-    }
-};
+SalInstanceMenuButton::~SalInstanceMenuButton()
+{
+    m_xMenuButton->SetSelectHdl(Link<::MenuButton*, void>());
+    m_xMenuButton->SetActivateHdl(Link<::MenuButton*, void>());
 }
 
 IMPL_LINK_NOARG(SalInstanceMenuButton, MenuSelectHdl, ::MenuButton*, void)
