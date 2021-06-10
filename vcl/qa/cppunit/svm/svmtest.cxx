@@ -23,6 +23,8 @@
 
 #include <bitmap/BitmapWriteAccess.hxx>
 
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+
 #include <config_features.h>
 #include <vcl/skia/SkiaHelper.hxx>
 
@@ -1447,6 +1449,66 @@ void SvmTest::checkClipRegion(const GDIMetaFile& rMetaFile)
         {"right", "5"},
         {"bottom", "5"},
     });
+
+    assertXPathAttrs(pDoc, "/metafile/clipregion[2]/polygon[1]/point[1]", {
+        {"x", "1"},
+        {"y", "8"}
+    });
+
+    assertXPathAttrs(pDoc, "/metafile/clipregion[2]/polygon[1]/point[2]", {
+        {"x", "2"},
+        {"y", "7"}
+    });
+
+    assertXPathAttrs(pDoc, "/metafile/clipregion[2]/polygon[1]/point[3]", {
+        {"x", "3"},
+        {"y", "6"}
+    });
+
+    assertXPathAttrs(pDoc, "/metafile/clipregion[3]/polygon[1]/point[1]", {
+        {"x", "1"},
+        {"y", "8"}
+    });
+
+    assertXPathAttrs(pDoc, "/metafile/clipregion[3]/polygon[1]/point[2]", {
+        {"x", "2"},
+        {"y", "7"}
+    });
+
+    assertXPathAttrs(pDoc, "/metafile/clipregion[3]/polygon[1]/point[3]", {
+        {"x", "3"},
+        {"y", "6"}
+    });
+
+    assertXPathAttrs(pDoc, "/metafile/clipregion[3]/polygon[2]/point[1]", {
+        {"x", "4"},
+        {"y", "9"}
+    });
+
+    assertXPathAttrs(pDoc, "/metafile/clipregion[3]/polygon[2]/point[2]", {
+        {"x", "5"},
+        {"y", "10"}
+    });
+
+    assertXPathAttrs(pDoc, "/metafile/clipregion[3]/polygon[2]/point[3]", {
+        {"x", "6"},
+        {"y", "11"}
+    });
+
+    assertXPathAttrs(pDoc, "/metafile/clipregion[4]/polygon[1]/point[1]", {
+        {"x", "0"},
+        {"y", "1"}
+    });
+
+    assertXPathAttrs(pDoc, "/metafile/clipregion[4]/polygon[1]/point[2]", {
+        {"x", "2"},
+        {"y", "3"}
+    });
+
+    assertXPathAttrs(pDoc, "/metafile/clipregion[4]/polygon[1]/point[3]", {
+        {"x", "4"},
+        {"y", "4"}
+    });
 }
 
 void SvmTest::testClipRegion()
@@ -1457,11 +1519,37 @@ void SvmTest::testClipRegion()
 
     vcl::Region aRegion(tools::Rectangle(Point(2, 2), Size(4, 4)));
 
-    // TODO
-    // explicit Region(const tools::Polygon& rPolygon);
-    // explicit Region(const tools::PolyPolygon& rPolyPoly);
-    // explicit Region(const basegfx::B2DPolyPolygon&);
     pVirtualDev->SetClipRegion(aRegion);
+
+    tools::Polygon aPolygon(3);
+    aPolygon.SetPoint(Point(1, 8), 0);
+    aPolygon.SetPoint(Point(2, 7), 1);
+    aPolygon.SetPoint(Point(3, 6), 2);
+
+    vcl::Region aRegion2(aPolygon);
+    pVirtualDev->SetClipRegion(aRegion2);
+
+    tools::Polygon aPolygon1(3);
+    aPolygon1.SetPoint(Point(4, 9), 0);
+    aPolygon1.SetPoint(Point(5, 10), 1);
+    aPolygon1.SetPoint(Point(6, 11), 2);
+
+    tools::PolyPolygon aPolyPolygon(2);
+    aPolyPolygon.Insert(aPolygon);
+    aPolyPolygon.Insert(aPolygon1);
+
+    vcl::Region aRegion3(aPolyPolygon);
+    pVirtualDev->SetClipRegion(aRegion3);
+
+    basegfx::B2DPolygon aB2DPolygon;
+    aB2DPolygon.append(basegfx::B2DPoint(0.0, 1.1));
+    aB2DPolygon.append(basegfx::B2DPoint(2.2, 3.3));
+    aB2DPolygon.append(basegfx::B2DPoint(3.7, 3.8));
+
+    basegfx::B2DPolyPolygon aB2DPolyPolygon(aB2DPolygon);
+
+    vcl::Region aRegion4(aB2DPolyPolygon);
+    pVirtualDev->SetClipRegion(aRegion4);
 
     checkClipRegion(writeAndReadStream(aGDIMetaFile));
     checkClipRegion(readFile(u"clipregion.svm"));
