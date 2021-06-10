@@ -419,8 +419,6 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIR
 {
     vcl::Window* pRoot = m_xBuilder->get_widget_root();
 
-    m_aParentDialog = pRoot->GetParentWithLOKNotifier();
-
     if (rUIFile == "sfx/ui/panel.ui")
     {
         // builder for Panel, get SidebarDockingWindow as m_aContentWindow
@@ -435,6 +433,8 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIR
         for (int i = 0; i < 9 && m_aContentWindow; i++)
             m_aContentWindow = m_aContentWindow->GetParent();
     }
+
+    m_aParentDialog = m_aContentWindow;
 
     InsertWindowToMap(m_nWindowId);
 
