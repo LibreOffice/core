@@ -79,7 +79,6 @@
 #include <xmloff/odffields.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
-#include <tools/stream.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <unotools/tempfile.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -151,7 +150,6 @@ SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL, const OUString& rFilterOpt
     , mbSkipImages(false)
     , mbSkipHeaderFooter(false)
     , mbEmbedImages(false)
-    , mbIndexingOutput(false)
     , m_bCfgPrintLayout( false )
     , m_bParaDotLeaders( false )
 {
@@ -224,13 +222,6 @@ void SwHTMLWriter::SetupFilterOptions(const OUString& rFilterOptions)
     {
         mbEmbedImages = true;
     }
-    else if (rFilterOptions == "IndexingOutput")
-    {
-        mbIndexingOutput = true;
-        mbSkipHeaderFooter = true;
-        mbSkipImages = true;
-        mbXHTML = true;
-    }
 
     const uno::Sequence<OUString> aOptionSeq = comphelper::string::convertCommaSeparated(rFilterOptions);
     static const OUStringLiteral aXhtmlNsKey(u"xhtmlns=");
@@ -273,8 +264,6 @@ ErrCode SwHTMLWriter::WriteStream()
         }
     }
     comphelper::ScopeGuard g([this, pOldPasteStream] { this->SetStream(pOldPasteStream); });
-
-    HtmlWriter aHtmlWriter(Strm(), GetNamespace());
 
     SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
 
@@ -460,7 +449,7 @@ ErrCode SwHTMLWriter::WriteStream()
     CollectLinkTargets();
 
     sal_uInt16 nHeaderAttrs = 0;
-    m_pCurrPageDesc = MakeHeader(aHtmlWriter, nHeaderAttrs);
+    m_pCurrPageDesc = MakeHeader( nHeaderAttrs );
 
     m_bLFPossible = true;
 
@@ -512,14 +501,8 @@ ErrCode SwHTMLWriter::WriteStream()
         HTMLOutFuncs::Out_AsciiTag( Strm(), OString(GetNamespace() + OOO_STRING_SVTOOLS_HTML_html), false );
     }
     else if (mbReqIF)
-    {
         // ReqIF: end xhtml.BlkStruct.class.
         HTMLOutFuncs::Out_AsciiTag(Strm(), OString(GetNamespace() + OOO_STRING_SVTOOLS_HTML_division), false);
-    }
-    else if (mbIndexingOutput)
-    {
-        aHtmlWriter.end("indexing");
-    }
 
     // delete the table with floating frames
     OSL_ENSURE( !m_pHTMLPosFlyFrames, "Were not all frames output?" );
@@ -1000,7 +983,7 @@ sal_uInt16 SwHTMLWriter::OutHeaderAttrs()
     return nAttrs;
 }
 
-const SwPageDesc* SwHTMLWriter::MakeHeader(HtmlWriter & rHtmlWriter, sal_uInt16 &rHeaderAttrs )
+const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 {
     OStringBuffer sOut;
     if (!mbSkipHeaderFooter)
@@ -1016,7 +999,6 @@ const SwPageDesc* SwHTMLWriter::MakeHeader(HtmlWriter & rHtmlWriter, sal_uInt16 
         HTMLOutFuncs::Out_AsciiTag( Strm(), OString(GetNamespace() + OOO_STRING_SVTOOLS_HTML_html) );
 
         OutNewLine();
-
         HTMLOutFuncs::Out_AsciiTag( Strm(), OString(GetNamespace() + OOO_STRING_SVTOOLS_HTML_head) );
 
         IncIndentLevel();   // indent content of <HEAD>
@@ -1042,14 +1024,6 @@ const SwPageDesc* SwHTMLWriter::MakeHeader(HtmlWriter & rHtmlWriter, sal_uInt16 
         rHeaderAttrs = OutHeaderAttrs();
 
         OutFootEndNoteInfo();
-    }
-    else if (mbIndexingOutput)
-    {
-        Strm().WriteCharPtr("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-        Strm().WriteCharPtr(SAL_NEWLINE_STRING);
-        rHtmlWriter.start("indexing");
-        rHtmlWriter.characters("");
-        Strm().WriteCharPtr(SAL_NEWLINE_STRING);
     }
 
     const SwPageDesc *pPageDesc = nullptr;
@@ -1094,7 +1068,6 @@ const SwPageDesc* SwHTMLWriter::MakeHeader(HtmlWriter & rHtmlWriter, sal_uInt16 
 
         DecIndentLevel();   // indent content of <HEAD>
         OutNewLine();
-
         HTMLOutFuncs::Out_AsciiTag( Strm(), OString(GetNamespace() + OOO_STRING_SVTOOLS_HTML_head), false );
 
         // the body won't be indented, because then everything would be indented!
