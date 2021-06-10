@@ -16,7 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <emfreader.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
@@ -327,7 +328,7 @@ SvStream& operator>>(SvStream& rInStream, BLENDFUNCTION& rBlendFun)
     return rInStream;
 }
 
-bool ImplReadRegion( tools::PolyPolygon& rPolyPoly, SvStream& rStream, sal_uInt32 nLen )
+bool ImplReadRegion( basegfx::B2DPolyPolygon& rPolyPoly, SvStream& rStream, sal_uInt32 nLen )
 {
     if (nLen < 32) // 32 bytes - Size of RegionDataHeader
         return false;
@@ -348,7 +349,7 @@ bool ImplReadRegion( tools::PolyPolygon& rPolyPoly, SvStream& rStream, sal_uInt3
     if (!rStream.good() || nCountRects == 0 || nType != RDH_RECTANGLES)
         return false;
 
-    SAL_INFO("emfio", "\t\tLeft: " << nLeft << ", top: " << nTop << ", right: " << nRight << ", bottom: " << nBottom);
+    SAL_INFO("emfio", "\t\tBounds Left: " << nLeft << ", top: " << nTop << ", right: " << nRight << ", bottom: " << nBottom);
 
     nLen -= 32;
 
@@ -364,11 +365,12 @@ bool ImplReadRegion( tools::PolyPolygon& rPolyPoly, SvStream& rStream, sal_uInt3
         rStream.ReadInt32(nTop);
         rStream.ReadInt32(nRight);
         rStream.ReadInt32(nBottom);
-
-        SAL_INFO("emfio", "\t\tLeft: " << nLeft << ", top: " << nTop << ", right: " << nRight << ", bottom: " << nBottom);
-        tools::PolyPolygon aPolyPolyOr1(tools::Polygon(tools::Rectangle(nLeft, nTop, nRight, nBottom)));
-        rPolyPoly.GetUnion(aPolyPolyOr1, rPolyPoly);
+        rPolyPoly.append( basegfx::utils::createPolygonFromRect( ::basegfx::B2DRectangle( nLeft, nTop, nRight, nBottom ) ) );
+        SAL_INFO("emfio", "\t\t" << i << " Left: " << nLeft << ", top: " << nTop << ", right: " << nRight << ", bottom: " << nBottom);
     }
+    rPolyPoly = basegfx::utils::solveCrossovers(rPolyPoly);
+    rPolyPoly = basegfx::utils::stripNeutralPolygons(rPolyPoly);
+    rPolyPoly = basegfx::utils::stripDispensablePolygons(rPolyPoly);
     return true;
 }
 
@@ -1453,10 +1455,11 @@ namespace emfio
                             }
                             else
                             {
-                                tools::PolyPolygon aPolyPoly;
+                                basegfx::B2DPolyPolygon aPolyPoly;
                                 if (cbRgnData)
                                     ImplReadRegion(aPolyPoly, *mpInputStream, nRemainingRecSize);
-                                SetClipPath(aPolyPoly, nClippingMode, false);
+                                const tools::PolyPolygon aPolyPolygon(aPolyPoly);
+                                SetClipPath(aPolyPolygon, nClippingMode, false);
                             }
                         }
                     }
@@ -1934,7 +1937,7 @@ namespace emfio
                         else
                         {
                             sal_uInt32 nRgnDataSize;
-                            tools::PolyPolygon aPolyPoly;
+                            basegfx::B2DPolyPolygon aPolyPoly;
                             mpInputStream->SeekRel(16);  // RectL bounds
                             mpInputStream->ReadUInt32( nRgnDataSize ).ReadUInt32( nIndex );
                             nRemainingRecSize -= 24;
@@ -1943,7 +1946,8 @@ namespace emfio
                             {
                                 Push();
                                 SelectObject( nIndex );
-                                DrawPolyPolygon( aPolyPoly );
+                                tools::PolyPolygon aPolyPolygon(aPolyPoly);
+                                DrawPolyPolygon( aPolyPolygon );
                                 Pop();
                             }
                         }
@@ -1958,13 +1962,16 @@ namespace emfio
                         else
                         {
                             sal_uInt32 nRgnDataSize;
-                            tools::PolyPolygon aPolyPoly;
+                            basegfx::B2DPolyPolygon aPolyPoly;
                             mpInputStream->SeekRel(16); // Skipping RectL bounds
                             mpInputStream->ReadUInt32( nRgnDataSize );
                             nRemainingRecSize -= 20;
 
                             if (ImplReadRegion(aPolyPoly, *mpInputStream, nRemainingRecSize))
-                                DrawPolyPolygon( aPolyPoly );
+                            {
+                                tools::PolyPolygon aPolyPolygon(aPolyPoly);
+                                DrawPolyPolygon( aPolyPolygon );
+                            }
                         }
                     }
                     break;
