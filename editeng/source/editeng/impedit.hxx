@@ -625,7 +625,6 @@ private:
     tools::Long GetXPos(const ParaPortion* pParaPortion, const EditLine* pLine, sal_Int32 nIndex, bool bPreferPortionStart = false) const;
     tools::Long GetPortionXOffset(const ParaPortion* pParaPortion, const EditLine* pLine, sal_Int32 nTextPortion) const;
     sal_Int32 GetChar(const ParaPortion* pParaPortion, const EditLine* pLine, tools::Long nX, bool bSmart = true);
-    Range               GetInvalidYOffsets( ParaPortion* pPortion );
     Range GetLineXPosStartEnd( const ParaPortion* pParaPortion, const EditLine* pLine ) const;
 
     void                ParaAttribsToCharAttribs( ContentNode* pNode );
