@@ -364,15 +364,10 @@ void OFileAccess::createFolder( const OUString& NewFolderURL )
             if ( rProps[ 0 ].Name != "Title" )
                 continue;
 
-            Sequence<OUString> aNames { "Title" };
-            Sequence< Any > aValues(1);
-            Any* pValues = aValues.getArray();
-            pValues[0] <<= aTitle;
-
             ucbhelper::Content aNew;
             try
             {
-                if ( !aCnt.insertNewContent( rCurr.Type, aNames, aValues, aNew ) )
+                if ( !aCnt.insertNewContent( rCurr.Type, { "Title" }, { Any(aTitle) }, aNew ) )
                     continue;
 
                 // Success. We're done.
@@ -429,13 +424,12 @@ Sequence< OUString > OFileAccess::getFolderContents( const OUString& FolderURL, 
 
     ucbhelper::Content aCnt( aFolderObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
     Reference< XResultSet > xResultSet;
-    Sequence< OUString > aProps(0);
 
     ucbhelper::ResultSetInclude eInclude = bIncludeFolders ? ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS : ucbhelper::INCLUDE_DOCUMENTS_ONLY;
 
     try
     {
-        xResultSet = aCnt.createCursor( aProps, eInclude );
+        xResultSet = aCnt.createCursor( {}, eInclude );
     }
     catch ( css::ucb::CommandFailedException const & )
     {
@@ -598,16 +592,11 @@ bool OFileAccess::createNewFile( const OUString & rParentURL,
             if ( rProps[ 0 ].Name != "Title" )
                 continue;
 
-            Sequence<OUString> aNames { "Title" };
-            Sequence< Any > aValues(1);
-            Any* pValues = aValues.getArray();
-            pValues[0] <<= rTitle;
-
             try
             {
                 ucbhelper::Content aNew;
                 if ( aParentCnt.insertNewContent(
-                         rCurr.Type, aNames, aValues, data, aNew ) )
+                         rCurr.Type, { "Title" }, { Any(rTitle) }, data, aNew ) )
                     return true; // success.
                 else
                     continue;

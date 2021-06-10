@@ -2901,27 +2901,17 @@ TaskManager::copyPersistentSet( const OUString& srcUnqPath,
 
 uno::Sequence< ucb::ContentInfo > TaskManager::queryCreatableContentsInfo()
 {
-    uno::Sequence< ucb::ContentInfo > seq(2);
 
-    // file
-    seq[0].Type       = FileContentType;
-    seq[0].Attributes = ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM
-                        | ucb::ContentInfoAttribute::KIND_DOCUMENT;
 
-    uno::Sequence< beans::Property > props( 1 );
-    props[0] = beans::Property(
-        "Title",
-        -1,
-        cppu::UnoType<OUString>::get(),
-        beans::PropertyAttribute::MAYBEVOID
-        | beans::PropertyAttribute::BOUND );
-    seq[0].Properties = props;
-
-    // folder
-    seq[1].Type       = FolderContentType;
-    seq[1].Attributes = ucb::ContentInfoAttribute::KIND_FOLDER;
-    seq[1].Properties = props;
-    return seq;
+    uno::Sequence< beans::Property > props
+    {
+        { "Title", -1, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::BOUND }
+    };
+    return
+    {
+        { FileContentType, ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM | ucb::ContentInfoAttribute::KIND_DOCUMENT, props },
+        { FolderContentType, ucb::ContentInfoAttribute::KIND_FOLDER, props }
+    };
 }
 
 /*******************************************************************************/

@@ -294,13 +294,7 @@ BaseContent::execute( const Command& aCommand,
     }
     else if ( aCommand.Name == "getCasePreservingURL" )
     {
-        Sequence< beans::Property > seq(1);
-        seq[0] = beans::Property(
-            "CasePreservingURL",
-            -1,
-            cppu::UnoType<sal_Bool>::get(),
-            0 );
-        Reference< sdbc::XRow > xRow = getPropertyValues( CommandId,seq );
+        Reference< sdbc::XRow > xRow = getPropertyValues( CommandId, { { "CasePreservingURL", -1, cppu::UnoType<sal_Bool>::get(), 0 } });
         OUString CasePreservingURL = xRow->getString(1);
         if(!xRow->wasNull())
             aAny <<= CasePreservingURL;
@@ -398,12 +392,7 @@ BaseContent::getContentType()
             try
             {
                 // Who am I ?
-                Sequence< beans::Property > seq(1);
-                seq[0] = beans::Property( "IsDocument",
-                                          -1,
-                                          cppu::UnoType<sal_Bool>::get(),
-                                          0 );
-                Reference< sdbc::XRow > xRow = getPropertyValues( -1,seq );
+                Reference< sdbc::XRow > xRow = getPropertyValues( -1, { { "IsDocument", -1, cppu::UnoType<sal_Bool>::get(), 0 } });
                 bool IsDocument = xRow->getBoolean( 1 );
 
                 if ( !xRow->wasNull() )
@@ -516,12 +505,7 @@ BaseContent::createNewContent( const ContentInfo& Info )
 
     try
     {
-        Sequence< beans::Property > seq(1);
-        seq[0] = beans::Property( "IsDocument",
-                                  -1,
-                                  cppu::UnoType<sal_Bool>::get(),
-                                  0 );
-        Reference< sdbc::XRow > xRow = getPropertyValues( -1,seq );
+        Reference< sdbc::XRow > xRow = getPropertyValues( -1, { { "IsDocument", -1, cppu::UnoType<sal_Bool>::get(), 0 } });
         IsDocument = xRow->getBoolean( 1 );
 
         if ( xRow->wasNull() )
@@ -946,12 +930,7 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
         NewTitle = srcUncPath.copy( 1 + srcUncPath.lastIndexOf( '/' ) );
 
     // Is destination a document or a folder ?
-    Sequence< beans::Property > seq(1);
-    seq[0] = beans::Property( "IsDocument",
-                              -1,
-                              cppu::UnoType<sal_Bool>::get(),
-                              0 );
-    Reference< sdbc::XRow > xRow = getPropertyValues( nMyCommandIdentifier,seq );
+    Reference< sdbc::XRow > xRow = getPropertyValues( nMyCommandIdentifier,{ { "IsDocument", -1, cppu::UnoType<sal_Bool>::get(), 0 } } );
     bool IsDocument = xRow->getBoolean( 1 );
     if( xRow->wasNull() )
     {   // Destination file type could not be determined
@@ -1012,13 +991,7 @@ void BaseContent::insert( sal_Int32 nMyCommandIdentifier,
     // Inserting a document or a file?
     bool bDocument = false;
 
-    Sequence< beans::Property > seq(1);
-    seq[0] = beans::Property( "IsDocument",
-                              -1,
-                              cppu::UnoType<sal_Bool>::get(),
-                              0 );
-
-    Reference< sdbc::XRow > xRow = getPropertyValues( -1,seq );
+    Reference< sdbc::XRow > xRow = getPropertyValues( -1, { { "IsDocument", -1, cppu::UnoType<sal_Bool>::get(), 0 } });
 
     bool contentTypeSet = true;  // is set to false, if contentType not set
     try

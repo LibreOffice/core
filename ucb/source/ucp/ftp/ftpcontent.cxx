@@ -571,11 +571,6 @@ FTPContent::queryCreatableContentsInfo(  )
 Sequence<ContentInfo >
 FTPContent::queryCreatableContentsInfo_Static(  )
 {
-    Sequence< ContentInfo > seq(2);
-
-    seq[0].Type = FTP_FILE;
-    seq[0].Attributes = ContentInfoAttribute::INSERT_WITH_INPUTSTREAM
-        | ContentInfoAttribute::KIND_DOCUMENT;
     Sequence< Property > props( 1 );
     props[0] = Property(
         "Title",
@@ -583,14 +578,11 @@ FTPContent::queryCreatableContentsInfo_Static(  )
         cppu::UnoType<OUString>::get(),
         PropertyAttribute::MAYBEVOID
         | PropertyAttribute::BOUND );
-    seq[0].Properties = props;
-
-    // folder
-    seq[1].Type       = FTP_FOLDER;
-    seq[1].Attributes = ContentInfoAttribute::KIND_FOLDER;
-    seq[1].Properties = props;
-
-    return seq;
+    return
+    {
+        { FTP_FILE, ContentInfoAttribute::INSERT_WITH_INPUTSTREAM | ContentInfoAttribute::KIND_DOCUMENT, props },
+        { FTP_FOLDER, ContentInfoAttribute::KIND_FOLDER, props }
+    };
 }
 
 Reference<XContent > SAL_CALL

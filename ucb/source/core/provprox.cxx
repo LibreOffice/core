@@ -306,9 +306,7 @@ UcbContentProviderProxy::getContentProvider()
             {
                 Reference<XInitialization> xInit(m_xProvider,UNO_QUERY);
                 if(xInit.is()) {
-                    Sequence<Any> aArgs(1);
-                    aArgs[0] <<= m_aArguments;
-                    xInit->initialize(aArgs);
+                    xInit->initialize({ Any(m_aArguments) });
                 }
             }
         }
