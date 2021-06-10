@@ -304,7 +304,7 @@ protected:
 
     mutable Time    m_nLastUserEventTime; // mutable because changed on first access
 
-    virtual bool    Dispatch( XEvent *pEvent ) = 0;
+    virtual void    Dispatch( XEvent *pEvent ) = 0;
     void            InitXinerama();
     void            InitRandR( ::Window aRoot ) const;
     static void     DeInitRandR();
@@ -400,7 +400,7 @@ public:
              SalX11Display( Display* pDisp );
     virtual ~SalX11Display() override;
 
-    virtual bool        Dispatch( XEvent *pEvent ) override;
+    virtual void        Dispatch( XEvent *pEvent ) override;
     virtual void        Yield();
     virtual void        TriggerUserEventProcessing() override;
 

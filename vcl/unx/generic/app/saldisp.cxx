@@ -1907,7 +1907,7 @@ void SalX11Display::Yield()
     GetX11SalData()->ResetXErrorOccurred();
 }
 
-bool SalX11Display::Dispatch( XEvent *pEvent )
+void SalX11Display::Dispatch( XEvent *pEvent )
 {
     SalI18N_InputMethod* const pInputMethod =
         pXLib_ ? pXLib_->GetInputMethod() : nullptr;
@@ -1930,7 +1930,7 @@ bool SalX11Display::Dispatch( XEvent *pEvent )
             }
         }
         if( pInputMethod->FilterEvent( pEvent, aFrameWindow ) )
-            return false;
+            return;
     }
 
     SalInstance* pInstance = GetSalData()->m_pInstance;
@@ -1955,7 +1955,7 @@ bool SalX11Display::Dispatch( XEvent *pEvent )
                     {
                         for (auto pSalFrame : m_aFrames )
                              pSalFrame->CallCallback( SalEvent::SettingsChanged, nullptr );
-                        return false;
+                        return;
                     }
                 }
             }
@@ -1981,7 +1981,7 @@ bool SalX11Display::Dispatch( XEvent *pEvent )
                 && GetKbdExtension()->GetEventBase() == pEvent->type )
             {
                 GetKbdExtension()->Dispatch( pEvent );
-                return true;
+                return;
             }
             break;
     }
@@ -1996,11 +1996,13 @@ bool SalX11Display::Dispatch( XEvent *pEvent )
             || pFrame->GetForeignParent() == aDispatchWindow
             )
         {
-            return pFrame->Dispatch( pEvent );
+            pFrame->Dispatch( pEvent );
+            return;
         }
         if( pEvent->type == ConfigureNotify && pEvent->xconfigure.window == pFrame->GetStackingWindow() )
         {
-            return pFrame->Dispatch( pEvent );
+            pFrame->Dispatch( pEvent );
+            return;
         }
     }
 
@@ -2009,8 +2011,6 @@ bool SalX11Display::Dispatch( XEvent *pEvent )
 
     // is this perhaps a root window that changed size ?
     processRandREvent( pEvent );
-
-    return false;
 }
 
 #ifdef DBG_UTIL
