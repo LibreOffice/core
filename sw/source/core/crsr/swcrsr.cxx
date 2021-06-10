@@ -1626,9 +1626,8 @@ bool SwCursor::GoSentence(SentenceMoveType eMoveType, SwRootFrame const*const pL
     return bRet;
 }
 
-bool SwCursor::ExpandToSentenceBorders(SwRootFrame const*const pLayout)
+void SwCursor::ExpandToSentenceBorders(SwRootFrame const*const pLayout)
 {
-    bool bRes = false;
     SwTextNode* pStartNd = Start()->nNode.GetNode().GetTextNode();
     SwTextNode* pEndNd   = End()->nNode.GetNode().GetTextNode();
     if (pStartNd && pEndNd)
@@ -1660,21 +1659,15 @@ bool SwCursor::ExpandToSentenceBorders(SwRootFrame const*const pLayout)
 
         // it is allowed to place the PaM just behind the last
         // character in the text thus <= ...Len
-        bool bChanged = false;
         if (nStartPos <= pStartNd->GetText().getLength() && nStartPos >= 0)
         {
             *GetMark() = SwPosition(*pStartNd, nStartPos);
-            bChanged = true;
         }
         if (nEndPos <= pEndNd->GetText().getLength() && nEndPos >= 0)
         {
             *GetPoint() = SwPosition(*pEndNd, nEndPos);
-            bChanged = true;
         }
-        if (bChanged && !IsSelOvr())
-            bRes = true;
     }
-    return bRes;
 }
 
 bool SwTableCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 /*nMode*/,

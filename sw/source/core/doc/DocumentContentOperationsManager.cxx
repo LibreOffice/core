@@ -2552,7 +2552,7 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
     return true;
 }
 
-bool DocumentContentOperationsManager::MoveAndJoin( SwPaM& rPaM, SwPosition& rPos )
+void DocumentContentOperationsManager::MoveAndJoin( SwPaM& rPaM, SwPosition& rPos )
 {
     SwNodeIndex aIdx( rPaM.Start()->nNode );
     bool bJoinText = aIdx.GetNode().IsTextNode();
@@ -2575,7 +2575,6 @@ bool DocumentContentOperationsManager::MoveAndJoin( SwPaM& rPaM, SwPosition& rPo
             pTextNd->JoinNext();
         }
     }
-    return bRet;
 }
 
 // Overwrite only uses the point of the PaM, the mark is ignored; characters

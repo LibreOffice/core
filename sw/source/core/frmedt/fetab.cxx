@@ -1199,19 +1199,19 @@ bool SwFEShell::IsAdjustCellWidthAllowed( bool bBalance ) const
     return false;
 }
 
-bool SwFEShell::SetTableStyle(const OUString& rStyleName)
+void SwFEShell::SetTableStyle(const OUString& rStyleName)
 {
     // make sure SwDoc has the style
     SwTableAutoFormat *pTableFormat = GetDoc()->GetTableStyles().FindAutoFormat(rStyleName);
     if (!pTableFormat)
-        return false;
+        return;
 
     SwTableNode *pTableNode = const_cast<SwTableNode*>(IsCursorInTable());
     if (!pTableNode)
-        return false;
+        return;
 
     // set the name & update
-    return UpdateTableStyleFormatting(pTableNode, false, &rStyleName);
+    UpdateTableStyleFormatting(pTableNode, false, &rStyleName);
 }
 
     // AutoFormat for the table/table selection

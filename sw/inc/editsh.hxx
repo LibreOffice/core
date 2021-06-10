@@ -257,11 +257,8 @@ public:
      * @param rSet
      * output parameter - the SfxItemSet where the automatic paragraph format attribute(s) will be store.
      * The attributes aren't invalidated or cleared if the function reaches the getMaxLookup limit.
-     *
-     * @return true if the function inspects all the nodes point by the pPaM parameter,
-     * false if the function reaches the limit of getMaxLookup number of nodes inspected.
      */
-    bool GetPaMParAttr( SwPaM* pPaM, SfxItemSet& rSet ) const;
+    void GetPaMParAttr( SwPaM* pPaM, SfxItemSet& rSet ) const;
 
     /// Set attribute as new default attribute in document.
     void SetDefault( const SfxPoolItem& );

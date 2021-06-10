@@ -185,7 +185,7 @@ void SwEditShell::GetCurParAttr( SfxItemSet& rSet) const
     GetPaMParAttr( GetCursor(), rSet );
 }
 
-bool SwEditShell::GetPaMParAttr( SwPaM* pPaM, SfxItemSet& rSet ) const
+void SwEditShell::GetPaMParAttr( SwPaM* pPaM, SfxItemSet& rSet ) const
 {
     // number of nodes the function has explored so far
     sal_uInt16 numberOfLookup = 0;
@@ -236,11 +236,9 @@ bool SwEditShell::GetPaMParAttr( SwPaM* pPaM, SfxItemSet& rSet ) const
 
             // if the maximum number of node that can be inspected has been reached
             if (numberOfLookup >= getMaxLookup())
-                return false;
+                return;
         }
     }
-
-    return true;
 }
 
 SwTextFormatColl* SwEditShell::GetCurTextFormatColl( ) const
