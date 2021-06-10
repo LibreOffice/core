@@ -58,9 +58,9 @@ void SvtListener::EndListening( SvtBroadcaster& rBroadcaster )
     if (it == maBroadcasters.end())
         // Not listening to this broadcaster.
         return;
+    maBroadcasters.erase(it);
 
     rBroadcaster.Remove(this);
-    maBroadcasters.erase(it);
 }
 
 // called from the SvtBroadcaster destructor, used to avoid calling
