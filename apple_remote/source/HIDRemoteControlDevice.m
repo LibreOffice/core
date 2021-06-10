@@ -407,8 +407,6 @@ static void QueueCallbackFunction(void* target,  IOReturn result, void* refcon, 
 - (BOOL) initializeCookies {
     IOHIDDeviceInterface122** handle = (IOHIDDeviceInterface122**)hidDeviceInterface;
     IOHIDElementCookie      cookie;
-    long                    usage;
-    long                    usagePage;
     id                      object;
     NSArray*                elements = nil;
     NSDictionary*           element;
@@ -439,16 +437,6 @@ static void QueueCallbackFunction(void* target,  IOReturn result, void* refcon, 
             if (object == NULL || CFGetTypeID(object) != CFNumberGetTypeID()) continue;
             cookie = (IOHIDElementCookie) [object longValue];
 
-            //Get usage
-            object = [element valueForKey: (NSString*)CFSTR(kIOHIDElementUsageKey) ];
-            if (object == nil || ![object isKindOfClass:[NSNumber class]]) continue;
-            usage = [object longValue];
-
-            //Get usage page
-            object = [element valueForKey: (NSString*)CFSTR(kIOHIDElementUsagePageKey) ];
-            if (object == nil || ![object isKindOfClass:[NSNumber class]]) continue;
-            usagePage = [object longValue];
-
             [allCookies addObject: [NSNumber numberWithInt:(int)cookie]];
         }
         CFRelease(elements);
@@ -461,8 +449,6 @@ static void QueueCallbackFunction(void* target,  IOReturn result, void* refcon, 
 }
 
 - (BOOL) openDevice {
-    HRESULT  result;
-
     IOHIDOptionsType openMode = kIOHIDOptionsTypeNone;
     if ([self isOpenInExclusiveMode]) openMode = kIOHIDOptionsTypeSeizeDevice;
     IOReturn ioReturnValue = (*hidDeviceInterface)->open(hidDeviceInterface, openMode);
@@ -470,7 +456,7 @@ static void QueueCallbackFunction(void* target,  IOReturn result, void* refcon, 
     if (ioReturnValue == KERN_SUCCESS) {
         queue = (*hidDeviceInterface)->allocQueue(hidDeviceInterface);
         if (queue) {
-            result = (*queue)->create(queue, 0, 12);    //depth: maximum number of elements in queue before oldest elements in queue begin to be lost.
+            (*queue)->create(queue, 0, 12);    //depth: maximum number of elements in queue before oldest elements in queue begin to be lost.
 
             IOHIDElementCookie cookie;
             NSEnumerator *allCookiesEnumerator = [allCookies objectEnumerator];
