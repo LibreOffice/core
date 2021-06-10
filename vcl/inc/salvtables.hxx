@@ -1839,4 +1839,49 @@ public:
     virtual std::unique_ptr<weld::Label> weld_label_widget() const override;
 };
 
+class SalInstanceMenuButton : public SalInstanceButton, public virtual weld::MenuButton
+{
+private:
+    VclPtr<::MenuButton> m_xMenuButton;
+    sal_uInt16 m_nLastId;
+
+    DECL_LINK(MenuSelectHdl, ::MenuButton*, void);
+    DECL_LINK(ActivateHdl, ::MenuButton*, void);
+
+public:
+    SalInstanceMenuButton(::MenuButton* pButton, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+
+    virtual void set_active(bool active) override;
+
+    virtual bool get_active() const override;
+
+    virtual void set_inconsistent(bool /*inconsistent*/) override;
+
+    virtual bool get_inconsistent() const override;
+
+    virtual void insert_item(int pos, const OUString& rId, const OUString& rStr,
+                             const OUString* pIconName, VirtualDevice* pImageSurface,
+                             TriState eCheckRadioFalse) override;
+
+    virtual void insert_separator(int pos, const OUString& rId) override;
+
+    virtual void set_item_sensitive(const OString& rIdent, bool bSensitive) override;
+
+    virtual void remove_item(const OString& rId) override;
+
+    virtual void clear() override;
+
+    virtual void set_item_active(const OString& rIdent, bool bActive) override;
+
+    virtual void set_item_label(const OString& rIdent, const OUString& rText) override;
+
+    virtual OUString get_item_label(const OString& rIdent) const override;
+
+    virtual void set_item_visible(const OString& rIdent, bool bShow) override;
+
+    virtual void set_popover(weld::Widget* pPopover) override;
+
+    virtual ~SalInstanceMenuButton() override;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
