@@ -761,18 +761,16 @@ void SwWrtShell::ToggleAddMode()
     Invalidate();
 }
 
-bool SwWrtShell::ToggleBlockMode()
+void SwWrtShell::ToggleBlockMode()
 {
     m_bBlockMode ? LeaveBlockMode(): EnterBlockMode();
     Invalidate();
-    return !m_bBlockMode;
 }
 
-bool SwWrtShell::ToggleExtMode()
+void SwWrtShell::ToggleExtMode()
 {
     m_bExtMode ? LeaveExtMode() : EnterExtMode();
     Invalidate();
-    return !m_bExtMode;
 }
 
 // Dragging in standard mode (Selecting of content)

@@ -150,7 +150,7 @@ public:
 
     void    EnterExtMode();
     void    LeaveExtMode();
-    bool    ToggleExtMode();
+    void    ToggleExtMode();
     bool    IsExtMode() const { return m_bExtMode; }
 
     void    EnterAddMode();
@@ -160,7 +160,7 @@ public:
 
     void    EnterBlockMode();
     void    LeaveBlockMode();
-    bool    ToggleBlockMode();
+    void    ToggleBlockMode();
     bool    IsBlockMode() const { return m_bBlockMode; }
 
     void    SetInsMode( bool bOn = true );
