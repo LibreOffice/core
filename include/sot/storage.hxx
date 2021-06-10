@@ -64,7 +64,7 @@ public:
 
     virtual void SetSize(sal_uInt64 nNewSize) override;
     sal_uInt32 GetSize() const;
-    bool Commit();
+    void Commit();
     bool SetProperty(OUString const & rName, css::uno::Any const & rValue);
     virtual sal_uInt64 TellEnd() override;
 };
