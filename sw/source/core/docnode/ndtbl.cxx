@@ -3097,16 +3097,16 @@ void sw_BoxSetSplitBoxFormats( SwTableBox* pBox, SwCollectTableLineBoxes* pSplPa
  *                     Boxes' Max; but only if Size is using absolute
  *                     values (USHRT_MAX)
  */
-bool SwDoc::SplitTable( const SwPosition& rPos, SplitTable_HeadlineOption eHdlnMode,
+void SwDoc::SplitTable( const SwPosition& rPos, SplitTable_HeadlineOption eHdlnMode,
                         bool bCalcNewSize )
 {
     SwNode* pNd = &rPos.nNode.GetNode();
     SwTableNode* pTNd = pNd->FindTableNode();
     if( !pTNd || pNd->IsTableNode() )
-        return false;
+        return;
 
     if( dynamic_cast<const SwDDETable*>( &pTNd->GetTable() ) !=  nullptr)
-        return false;
+        return;
 
     SwTable& rTable = pTNd->GetTable();
     rTable.SetHTMLTableLayout(std::shared_ptr<SwHTMLTableLayout>()); // Delete HTML Layout
@@ -3235,8 +3235,6 @@ bool SwDoc::SplitTable( const SwPosition& rPos, SplitTable_HeadlineOption eHdlnM
     GetDocShell()->GetFEShell()->UpdateTableStyleFormatting(pNew);
 
     getIDocumentFieldsAccess().SetFieldsDirty( true, nullptr, 0 );
-
-    return nullptr != pNew;
 }
 
 static bool lcl_ChgTableSize( SwTable& rTable )
@@ -3973,7 +3971,7 @@ SwTableFormat* SwDoc::FindTableFormatByName( std::u16string_view rName, bool bAl
     return const_cast<SwTableFormat*>(static_cast<const SwTableFormat*>(pRet));
 }
 
-bool SwDoc::SetColRowWidthHeight( SwTableBox& rCurrentBox, TableChgWidthHeightType eType,
+void SwDoc::SetColRowWidthHeight( SwTableBox& rCurrentBox, TableChgWidthHeightType eType,
                                     SwTwips nAbsDiff, SwTwips nRelDiff )
 {
     SwTableNode* pTableNd = const_cast<SwTableNode*>(rCurrentBox.GetSttNd()->FindTableNode());
@@ -4017,7 +4015,6 @@ bool SwDoc::SetColRowWidthHeight( SwTableBox& rCurrentBox, TableChgWidthHeightTy
     {
         getIDocumentState().SetModified();
     }
-    return bRet;
 }
 
 bool SwDoc::IsNumberFormat( const OUString& rString, sal_uInt32& F_Index, double& fOutNumber )

@@ -1090,7 +1090,7 @@ public:
 
     void UpdateNumRule();   // Update all invalids.
     void ChgNumRuleFormats( const SwNumRule& rRule );
-    bool ReplaceNumRule( const SwPosition& rPos, const OUString& rOldRule,
+    void ReplaceNumRule( const SwPosition& rPos, const OUString& rOldRule,
                         const OUString& rNewRule );
 
     // Goto next/previous on same level.
@@ -1254,7 +1254,7 @@ public:
 
     void AppendUndoForInsertFromDB( const SwPaM& rPam, bool bIsTable );
 
-    bool SetColRowWidthHeight( SwTableBox& rCurrentBox, TableChgWidthHeightType eType,
+    void SetColRowWidthHeight( SwTableBox& rCurrentBox, TableChgWidthHeightType eType,
                                 SwTwips nAbsDiff, SwTwips nRelDiff );
     SwTableBoxFormat* MakeTableBoxFormat();
     SwTableLineFormat* MakeTableLineFormat();
@@ -1279,7 +1279,7 @@ public:
                               bool* pFullTableProtection );
 
     // Split table at baseline position, i.e. create a new table.
-    bool SplitTable( const SwPosition& rPos, SplitTable_HeadlineOption eMode,
+    void SplitTable( const SwPosition& rPos, SplitTable_HeadlineOption eMode,
                         bool bCalcNewSize );
 
     /** And vice versa: rPos must be in the table that remains. The flag indicates

@@ -1390,7 +1390,7 @@ bool SwCursorShell::GoPrevCursor()
     return true;
 }
 
-bool SwCursorShell::GoNextPrevCursorSetSearchLabel(const bool bNext)
+void SwCursorShell::GoNextPrevCursorSetSearchLabel(const bool bNext)
 {
     SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
 
@@ -1398,10 +1398,13 @@ bool SwCursorShell::GoNextPrevCursorSetSearchLabel(const bool bNext)
     {
         if( !m_pCurrentCursor->HasMark() )
             SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::NavElementNotFound );
-        return false;
+        return;
     }
 
-    return bNext ? GoNextCursor() : GoPrevCursor();
+    if (bNext)
+        GoNextCursor();
+    else
+        GoPrevCursor();
 }
 
 void SwCursorShell::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect)

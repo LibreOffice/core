@@ -1163,10 +1163,9 @@ void SwDoc::StopNumRuleAnimations( const OutputDevice* pOut )
     }
 }
 
-bool SwDoc::ReplaceNumRule( const SwPosition& rPos,
+void SwDoc::ReplaceNumRule( const SwPosition& rPos,
                             const OUString& rOldRule, const OUString& rNewRule )
 {
-    bool bRet = false;
     SwNumRule *pOldRule = FindNumRulePtr( rOldRule ),
               *pNewRule = FindNumRulePtr( rNewRule );
     if( pOldRule && pNewRule && pOldRule != pNewRule )
@@ -1201,12 +1200,8 @@ bool SwDoc::ReplaceNumRule( const SwPosition& rPos,
             }
             GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
             getIDocumentState().SetModified();
-
-            bRet = true;
         }
     }
-
-    return bRet;
 }
 
 namespace
