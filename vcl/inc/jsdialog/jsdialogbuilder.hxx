@@ -253,6 +253,7 @@ public:
     virtual std::unique_ptr<weld::IconView> weld_icon_view(const OString& id) override;
     virtual std::unique_ptr<weld::RadioButton> weld_radio_button(const OString& id) override;
     virtual std::unique_ptr<weld::Frame> weld_frame(const OString& id) override;
+    virtual std::unique_ptr<weld::MenuButton> weld_menu_button(const OString& id) override;
 
     static weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent,
                                                     VclMessageType eMessageType,
@@ -606,6 +607,13 @@ class JSFrame : public JSWidget<SalInstanceFrame, ::VclFrame>
 public:
     JSFrame(JSDialogSender* pSender, ::VclFrame* pFrame, SalInstanceBuilder* pBuilder,
             bool bTakeOwnership);
+};
+
+class JSMenuButton : public JSWidget<SalInstanceMenuButton, ::MenuButton>
+{
+public:
+    JSMenuButton(JSDialogSender* pSender, ::MenuButton* pMenuButton, SalInstanceBuilder* pBuilder,
+                 bool bTakeOwnership);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
