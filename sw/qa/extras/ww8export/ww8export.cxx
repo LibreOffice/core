@@ -969,6 +969,12 @@ DECLARE_WW8EXPORT_TEST(test56513, "fdo56513.doc")
     CPPUNIT_ASSERT_EQUAL(OUString("This is the non-first-page header of the second section"),  parseDump("/root/page[3]/header/txt/text()"));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf49208, "tdf49208.doc"){
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+}
+
 DECLARE_WW8EXPORT_TEST(testNewPageStylesTable, "new-page-styles.doc")
 {
     CPPUNIT_ASSERT_EQUAL(OUString("Sigma Space Performance Goals and Results (Page 1)*"),  parseDump("/root/page[1]/header/txt/text()"));
