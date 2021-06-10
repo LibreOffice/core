@@ -176,13 +176,12 @@ sal_uInt64 SotStorageStream::TellEnd()
     return pOwnStm->GetSize();
 }
 
-bool SotStorageStream::Commit()
+void SotStorageStream::Commit()
 {
     pOwnStm->Flush();
     if( pOwnStm->GetError() == ERRCODE_NONE )
         pOwnStm->Commit();
     SetError( pOwnStm->GetError() );
-    return GetError() == ERRCODE_NONE;
 }
 
 bool SotStorageStream::SetProperty( const OUString& rName, const css::uno::Any& rValue )
