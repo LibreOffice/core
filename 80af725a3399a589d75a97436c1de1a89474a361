@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f46074f6_6c165380",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-10T07:04:13Z",
+      "side": 1,
+      "message": "Oops..Missed this..Submitting a new patch asap.. :)",
+      "range": {
+        "startLine": 346,
+        "startChar": 36,
+        "endLine": 346,
+        "endChar": 42
+      },
+      "revId": "80af725a3399a589d75a97436c1de1a89474a361",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
