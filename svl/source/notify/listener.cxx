@@ -52,16 +52,15 @@ bool SvtListener::StartListening( SvtBroadcaster& rBroadcaster )
     return r.second;
 }
 
-bool SvtListener::EndListening( SvtBroadcaster& rBroadcaster )
+void SvtListener::EndListening( SvtBroadcaster& rBroadcaster )
 {
     BroadcastersType::const_iterator it = maBroadcasters.find(&rBroadcaster);
     if (it == maBroadcasters.end())
         // Not listening to this broadcaster.
-        return false;
+        return;
 
     rBroadcaster.Remove(this);
     maBroadcasters.erase(it);
-    return true;
 }
 
 // called from the SvtBroadcaster destructor, used to avoid calling
