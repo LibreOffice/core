@@ -35,7 +35,7 @@ public:
     virtual ~SwDDETable() override;
 
     void ChangeContent();
-    bool NoDDETable();
+    void NoDDETable();
 
     SwDDEFieldType* GetDDEFieldType();
     inline const SwDDEFieldType* GetDDEFieldType() const;

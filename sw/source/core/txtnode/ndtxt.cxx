@@ -4019,16 +4019,12 @@ void SwTextNode::SetAttrOutlineLevel(int nLevel)
     }
 }
 
-bool SwTextNode::GetAttrOutlineContentVisible(bool& bOutlineContentVisibleAttr)
+void SwTextNode::GetAttrOutlineContentVisible(bool& bOutlineContentVisibleAttr)
 {
     SfxGrabBagItem aGrabBagItem(dynamic_cast<const SfxGrabBagItem&>(GetAttr(RES_PARATR_GRABBAG)));
     auto it = aGrabBagItem.GetGrabBag().find("OutlineContentVisibleAttr");
     if (it != aGrabBagItem.GetGrabBag().end())
-    {
         it->second >>= bOutlineContentVisibleAttr;
-        return true;
-    }
-    return false;
 }
 
 void SwTextNode::SetAttrOutlineContentVisible(bool bVisible)

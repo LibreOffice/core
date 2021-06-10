@@ -175,7 +175,7 @@ SwDDEFieldType* SwDDETable::GetDDEFieldType()
     return m_pDDEType;
 }
 
-bool SwDDETable::NoDDETable()
+void SwDDETable::NoDDETable()
 {
     // search table node
     OSL_ENSURE( GetFrameFormat(), "No FrameFormat" );
@@ -183,11 +183,11 @@ bool SwDDETable::NoDDETable()
 
     // Is this the correct NodesArray? (because of UNDO)
     if( m_aLines.empty() )
-        return false;
+        return;
     OSL_ENSURE( !GetTabSortBoxes().empty(), "Table without content?" );
     SwNode* pNd = const_cast<SwNode*>(static_cast<SwNode const *>(GetTabSortBoxes()[0]->GetSttNd()));
     if( !pNd->GetNodes().IsDocNodes() )
-        return false;
+        return;
 
     SwTableNode* pTableNd = pNd->FindTableNode();
     OSL_ENSURE( pTableNd, "Where is the table?");
@@ -206,8 +206,6 @@ bool SwDDETable::NoDDETable()
         m_pDDEType->DecRefCnt();
 
     pTableNd->SetNewTable( std::move(pNewTable) );       // replace table
-
-    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -158,7 +158,7 @@ public:
         END_SENT
     };
     bool GoSentence(SentenceMoveType eMoveType, SwRootFrame const*pLayout = nullptr);
-    bool ExpandToSentenceBorders(SwRootFrame const* pLayout);
+    void ExpandToSentenceBorders(SwRootFrame const* pLayout);
 
     virtual bool LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
         bool bAllowVisual, bool bSkipHidden, bool bInsertCursor,

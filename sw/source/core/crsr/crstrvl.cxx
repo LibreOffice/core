@@ -1164,13 +1164,13 @@ SwOutlineNodes::size_type SwCursorShell::GetOutlinePos(sal_uInt8 nLevel, SwPaM* 
     return SwOutlineNodes::npos; // no more left
 }
 
-bool SwCursorShell::MakeOutlineSel(SwOutlineNodes::size_type nSttPos, SwOutlineNodes::size_type nEndPos,
+void SwCursorShell::MakeOutlineSel(SwOutlineNodes::size_type nSttPos, SwOutlineNodes::size_type nEndPos,
                                   bool bWithChildren , bool bKillPams)
 {
     const SwNodes& rNds = GetDoc()->GetNodes();
     const SwOutlineNodes& rOutlNds = rNds.GetOutLineNds();
     if( rOutlNds.empty() )
-        return false;
+        return;
 
     CurrShell aCurr( this );
     SwCallLink aLk( *this ); // watch Cursor-Moves
@@ -1218,7 +1218,6 @@ bool SwCursorShell::MakeOutlineSel(SwOutlineNodes::size_type nSttPos, SwOutlineN
     bool bRet = !m_pCurrentCursor->IsSelOvr();
     if( bRet )
         UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
-    return bRet;
 }
 
 /// jump to reference marker
