@@ -92,4 +92,8 @@
     constructor="com_sun_star_comp_svx_StylesPreviewToolBoxControl_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
+  <implementation name="com.sun.star.comp.svx.TextColumns"
+    constructor="com_sun_star_comp_svx_TextColumns_get_implementation">
+    <service name="com.sun.star.text.TextColumns"/>
+  </implementation>
 </component>
