@@ -1036,11 +1036,38 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                 const auto* pMetaClipRegionAction = static_cast<const MetaClipRegionAction*>(pAction);
                 rWriter.startElement(sCurrentElementTag);
 
+                vcl::Region aRegion = pMetaClipRegionAction->GetRegion();
+
+                if(aRegion.IsRectangle())
+                {
+                    tools::Rectangle aRectangle = aRegion.GetBoundRect();
+                    writeRectangle(rWriter, aRectangle);
+                }
+                else if(aRegion.HasPolyPolygonOrB2DPolyPolygon())
+                {
+                    tools::PolyPolygon aPolyPolygon = aRegion.GetAsPolyPolygon();
+
+                    for (sal_uInt16 j = 0; j < aPolyPolygon.Count(); ++j)
+                    {
+                        rWriter.startElement("polygon");
+                        tools::Polygon const& rPolygon = aPolyPolygon[j];
+                        bool bFlags = rPolygon.HasFlags();
+                        for (sal_uInt16 i = 0; i < rPolygon.GetSize(); ++i)
+                        {
+                            rWriter.startElement("point");
+                            writePoint(rWriter, rPolygon[i]);
+                            if (bFlags)
+                                rWriter.attribute("flags", convertPolygonFlags(rPolygon.GetFlags(i)));
+                            rWriter.endElement();
+                        }
+                        rWriter.endElement();
+                    }
+                }
                 // FIXME for now we dump only the bounding box; this is
                 // enough for the tests we have, but may need extending to
                 // dumping the real polypolygon in the future
-                tools::Rectangle aRectangle = pMetaClipRegionAction->GetRegion().GetBoundRect();
-                writeRectangle(rWriter, aRectangle);
+                // tools::Rectangle aRectangle = pMetaClipRegionAction->GetRegion().GetBoundRect();
+                // writeRectangle(rWriter, aRectangle);
                 rWriter.endElement();
             }
             break;
