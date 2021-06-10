@@ -53,7 +53,7 @@ private:
     void DoPaint(vcl::RenderContext& rRenderContext);
 public:
     ScZoomSlider(const css::uno::Reference<css::frame::XDispatchProvider>& rDispatchProvider,
-                 sal_uInt16 nCurrentZoom, vcl::Window*);
+                 sal_uInt16 nCurrentZoom);
 
     void UpdateFromItem(const SvxZoomSliderItem* pZoomSliderItem);
 
