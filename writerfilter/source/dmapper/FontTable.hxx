@@ -51,7 +51,7 @@ class FontTable : public LoggedProperties, public LoggedTable
     sal_uInt32          size();
     FontEntry::Pointer_t  getFontEntry(sal_uInt32 nIndex);
 
-    bool addEmbeddedFont(const css::uno::Reference<css::io::XInputStream>& stream,
+    void addEmbeddedFont(const css::uno::Reference<css::io::XInputStream>& stream,
                          const OUString& fontName, const char* extra,
                          std::vector<unsigned char> const & key);
 
