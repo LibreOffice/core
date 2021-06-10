@@ -835,9 +835,9 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, bool bForce)
                     pExtrusionBarShell.reset( new svx::ExtrusionBar(this) );
                 AddSubShell( *pExtrusionBarShell );
             }
-            sal_uInt32 nCheckStatus = 0;
+
             if (svx::checkForSelectedFontWork(
-                        GetScDrawView(), nCheckStatus )) {
+                        GetScDrawView() )) {
                 if (pFontworkBarShell == nullptr)
                     pFontworkBarShell.reset( new svx::FontworkBar(this) );
                 AddSubShell( *pFontworkBarShell );

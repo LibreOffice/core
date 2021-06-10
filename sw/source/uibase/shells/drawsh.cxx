@@ -545,8 +545,8 @@ SwDrawShell::SwDrawShell(SwView &_rView) :
 
     SwWrtShell &rSh = GetShell();
     SdrView* pDrView = rSh.GetDrawView();
-    sal_uInt32 nCheckStatus = 0;
-    if (pDrView && svx::checkForSelectedFontWork(pDrView, nCheckStatus))
+
+    if (pDrView && svx::checkForSelectedFontWork(pDrView))
         eContext = vcl::EnumContext::Context::DrawFontwork;
 
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(eContext));

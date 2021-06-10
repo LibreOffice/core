@@ -1098,8 +1098,8 @@ void ToolBarRules::SelectionHasChanged (
     // be activated.
     if (svx::checkForSelectedCustomShapes(pView, true /* bOnlyExtruded */ ))
         mpToolBarManager->AddToolBarShell(ToolBarManager::ToolBarGroup::Function, ToolbarId::Svx_Extrusion_Bar);
-    sal_uInt32 nCheckStatus = 0;
-    if (svx::checkForSelectedFontWork(pView, nCheckStatus))
+
+    if (svx::checkForSelectedFontWork(pView))
         mpToolBarManager->AddToolBarShell(ToolBarManager::ToolBarGroup::Function, ToolbarId::Svx_Fontwork_Bar);
 
     // Switch on additional context-sensitive tool bars.
