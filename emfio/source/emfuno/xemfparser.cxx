@@ -151,7 +151,10 @@ namespace emfio::emfreader
                     }
                     else
                     {
-                        emfio::WmfReader(*pStream, aMtf, bExternalHeaderUsed ? &aExternalHeader : nullptr).ReadWMF();
+                        emfio::WmfReader aReader(*pStream, aMtf, bExternalHeaderUsed ? &aExternalHeader : nullptr);
+                        if (!bEnableEMFPlus)
+                            aReader.SetEnableEMFPlus(bEnableEMFPlus);
+                        aReader.ReadWMF();
 
                         // Need to check for ErrCode at stream to not lose former work.
                         // This may contain important information and will behave the
