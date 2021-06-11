@@ -950,11 +950,13 @@ bool T602ImportFilterDialog::OptionsDlg()
     propBool_(xPSetCodeLB,"Dropdown",true);
     propBool_(xPSetCodeLB,"MultiSelection",false);
 
-    Sequence< OUString > ous(4);
-    ous[0] = getResStr(T602FILTER_STR_ENCODING_AUTO);
-    ous[1] = getResStr(T602FILTER_STR_ENCODING_CP852);
-    ous[2] = getResStr(T602FILTER_STR_ENCODING_CP895);
-    ous[3] = getResStr(T602FILTER_STR_ENCODING_KOI8CS2);
+    Sequence< OUString > ous
+    {
+        getResStr(T602FILTER_STR_ENCODING_AUTO),
+        getResStr(T602FILTER_STR_ENCODING_CP852),
+        getResStr(T602FILTER_STR_ENCODING_CP895),
+        getResStr(T602FILTER_STR_ENCODING_KOI8CS2)
+    };
     any <<= ous;
     xPSetCodeLB->setPropertyValue("StringItemList", any);
 

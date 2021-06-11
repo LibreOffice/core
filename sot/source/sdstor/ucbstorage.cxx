@@ -1939,12 +1939,8 @@ bool UCBStorage_Impl::Insert( ::ucbhelper::Content *pContent )
                 if ( rProps[ 0 ].Name != "Title" )
                     continue;
 
-                Sequence < OUString > aNames { "Title" };
-                Sequence < Any > aValues(1);
-                aValues[0] <<= m_aName;
-
                 Content aNewFolder;
-                if ( !pContent->insertNewContent( rCurr.Type, aNames, aValues, aNewFolder ) )
+                if ( !pContent->insertNewContent( rCurr.Type, { "Title" }, { Any(m_aName) }, aNewFolder ) )
                     continue;
 
                 // remove old content, create an "empty" new one and initialize it with the new inserted
