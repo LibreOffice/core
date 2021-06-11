@@ -13,6 +13,8 @@
 #include <docsh.hxx>
 #include <unotxdoc.hxx>
 
+#include <IndexingExport.hxx>
+
 namespace
 {
 constexpr OUStringLiteral DATA_DIRECTORY = u"sw/qa/extras/indexing/data/";
@@ -47,6 +49,33 @@ void IndexingExportTest::testIndexingExport()
 {
     SwDoc* pDoc = createDoc("IndexingExport_VariousParagraphs.odt");
     CPPUNIT_ASSERT(pDoc);
+
+    SvMemoryStream aMemoryStream;
+    sw::IndexingExport aIndexingExport(aMemoryStream, pDoc);
+    aIndexingExport.runExport();
+    aMemoryStream.Seek(0);
+
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aMemoryStream);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/indexing");
+    assertXPathContent(pXmlDoc, "/indexing/paragraph[1]", "Title");
+    assertXPathContent(pXmlDoc, "/indexing/paragraph[2]", "Heading 1");
+    assertXPathContent(pXmlDoc, "/indexing/paragraph[3]", "Heading 2");
+    assertXPathContent(pXmlDoc, "/indexing/paragraph[4]", "Paragraph 1");
+    assertXPathContent(pXmlDoc, "/indexing/paragraph[5]", "Paragraph 2");
+    assertXPathContent(pXmlDoc, "/indexing/paragraph[6]", "Bullet 1");
+    assertXPathContent(pXmlDoc, "/indexing/paragraph[7]", "Bullet 2");
+    assertXPathContent(pXmlDoc, "/indexing/paragraph[8]", "Bullet 3");
+    assertXPathContent(pXmlDoc, "/indexing/paragraph[9]", "Paragraph 3");
+    assertXPathContent(pXmlDoc, "/indexing/paragraph[10]", "Paragraph 4");
+    assertXPathContent(pXmlDoc, "/indexing/paragraph[11]", "List 1");
+    assertXPathContent(pXmlDoc, "/indexing/paragraph[12]", "List 2");
+    assertXPathContent(pXmlDoc, "/indexing/paragraph[13]", "List 3");
+    assertXPathContent(pXmlDoc, "/indexing/paragraph[14]", "Left");
+    assertXPathContent(pXmlDoc, "/indexing/paragraph[15]", "Center");
+    assertXPathContent(pXmlDoc, "/indexing/paragraph[16]", "Right");
+    assertXPathContent(pXmlDoc, "/indexing/paragraph[17]", "Bold Italic Underline Strikeout");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(IndexingExportTest);
