@@ -41,7 +41,7 @@ constexpr bool validRange(sal_uInt16 wid1, sal_uInt16 wid2)
 { return wid1 != 0 && wid1 <= wid2; }
 
 constexpr bool validGap(sal_uInt16 wid1, sal_uInt16 wid2)
-{ return wid2 > wid1 && wid2 - wid1 > 1; }
+{ return wid2 > wid1; }
 
 template<sal_uInt16 WID1, sal_uInt16 WID2> constexpr bool validRanges()
 { return validRange(WID1, WID2); }
@@ -88,7 +88,7 @@ friend class SfxItemPoolCache;
 friend class SfxAllItemSet;
 
 private:
-    SVL_DLLPRIVATE void                     InitRanges_Impl(const sal_uInt16 *nWhichPairTable);
+    SVL_DLLPRIVATE sal_uInt16 InitRanges_Impl(const sal_uInt16 *nWhichPairTable);
 
     SfxItemSet(
         SfxItemPool & pool, std::initializer_list<sal_uInt16> wids,
@@ -249,8 +249,6 @@ class SVL_DLLPUBLIC SfxAllItemSet: public SfxItemSet
 //  Handles all Ranges. Ranges are automatically modified by putting items.
 
 {
-    sal_uInt16                      nFree;
-
 public:
                                 SfxAllItemSet( SfxItemPool &rPool );
                                 SfxAllItemSet( const SfxItemSet & );
