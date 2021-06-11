@@ -2452,15 +2452,29 @@ namespace emfio
         SAL_INFO("emfio", "\t\t WinExt: " << mnWinExtX << " x " << mnWinExtY);
         SAL_INFO("emfio", "\t\t DevOrg: " << mnDevOrgX << ", " << mnDevOrgY);
         SAL_INFO("emfio", "\t\t DevWidth/Height: " << mnDevWidth << " x " << mnDevHeight);
+        SAL_INFO("emfio", "\t\t LineStyle: " << maLineStyle.aLineColor << " FillStyle: " << maFillStyle.aFillColor );
         mvSaveStack.push_back( pSave );
     }
 
-    void MtfTools::Pop()
+    void MtfTools::Pop( const sal_Int32 nSavedDC )
     {
-        // Get the latest data from the stack
-        if( mvSaveStack.empty() )
+        if ( nSavedDC == 0 )
             return;
 
+        sal_Int32 aIndex;
+        if ( nSavedDC < 0 ) // WMF/EMF, if negative, nSavedDC represents an instance relative to the current state.
+            aIndex = static_cast< sal_Int32 >( mvSaveStack.size() ) + nSavedDC;
+        else
+            aIndex = nSavedDC; // WMF, if positive, nSavedDC represents a specific instance of the state to be restored.
+        if( aIndex < 0 )
+        {
+            mvSaveStack.clear();
+            return;
+        }
+        if( mvSaveStack.empty() || ( aIndex >= static_cast< sal_Int32 >( mvSaveStack.size() ) ) )
+            return;
+
+        mvSaveStack.resize( aIndex + 1 );
         // Backup the current data on the stack
         std::shared_ptr<SaveStruct>& pSave( mvSaveStack.back() );
 
@@ -2508,6 +2522,7 @@ namespace emfio
         SAL_INFO("emfio", "\t\t WinExt: " << mnWinExtX << " x " << mnWinExtY);
         SAL_INFO("emfio", "\t\t DevOrg: " << mnDevOrgX << ", " << mnDevOrgY);
         SAL_INFO("emfio", "\t\t DevWidth/Height: " << mnDevWidth << " x " << mnDevHeight);
+        SAL_INFO("emfio", "\t\t LineStyle: " << maLineStyle.aLineColor << " FillStyle: " << maFillStyle.aFillColor );
         mvSaveStack.pop_back();
     }
 

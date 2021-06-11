@@ -65,10 +65,13 @@ class Test : public test::BootstrapFixture, public XmlTestTools, public unotest:
     void TestBitBltStretchBltWMF();
     void TestExtTextOutOpaqueAndClipWMF();
     void TestPaletteWMF();
+    void TestRestoreDCWMF();
     void TestRoundrectWMF();
     void TestStretchDIBWMF();
     void TestPolylinetoCloseStroke();
     void TestPolyLineWidth();
+
+    void TestRestoreDC();
     void TestRoundRect();
     void TestCreatePen();
     void TestPdfInEmf();
@@ -101,10 +104,12 @@ public:
     CPPUNIT_TEST(TestBitBltStretchBltWMF);
     CPPUNIT_TEST(TestExtTextOutOpaqueAndClipWMF);
     CPPUNIT_TEST(TestPaletteWMF);
+    CPPUNIT_TEST(TestRestoreDCWMF);
     CPPUNIT_TEST(TestRoundrectWMF);
     CPPUNIT_TEST(TestStretchDIBWMF);
     CPPUNIT_TEST(TestPolylinetoCloseStroke);
     CPPUNIT_TEST(TestPolyLineWidth);
+    CPPUNIT_TEST(TestRestoreDC);
     CPPUNIT_TEST(TestRoundRect);
     CPPUNIT_TEST(TestCreatePen);
     CPPUNIT_TEST(TestPdfInEmf);
@@ -699,6 +704,7 @@ void Test::TestExtTextOutOpaqueAndClipWMF()
 #endif
 }
 
+
 void Test::TestPaletteWMF()
 {
     // WMF import with records: CREATEPALETTE, SELECTOBJECT, CREATEPENINDIRECT, CREATEBRUSHINDIRECT, ELLIPSE.
@@ -733,6 +739,40 @@ void Test::TestPaletteWMF()
                 "color", "#ff0000");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonstroke[2]/line",
                 "width", "132");
+}
+
+void Test::TestRestoreDCWMF()
+{
+    // WMF records: RESTOREDC, SAVEDC, CREATEBRUSHINDIRECT, RECTANGLE.
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/wmf/data/TestRestoreDC.wmf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor", 3);
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor[1]",
+                "color", "#0000ff");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor[1]/polypolygon",
+                "path", "m238 2884h1640v1110h-1640z");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polygonhairline[1]",
+                "color", "#000000");
+    assertXPathContent(pDocument, "/primitive2D/metafile/transform/polygonhairline[1]/polygon",
+                       "238,2884 1878,2884 1878,3994 238,3994");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor[2]",
+                "color", "#ff0000");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor[2]/polypolygon",
+                "path", "m238 238h1640v1110h-1640z");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polygonhairline[2]",
+                "color", "#000000");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor[3]",
+                "color", "#ff0000");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor[3]/polypolygon",
+                "path", "m238 5530h1640v1110h-1640z");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polygonhairline[3]",
+                "color", "#000000");
 }
 
 void Test::TestRoundrectWMF()
@@ -813,6 +853,25 @@ void Test::TestPolyLineWidth()
                 "color", "#000000");
     assertXPath(pDocument, "/primitive2D/metafile/transform/polygonstroke/line",
                 "width", "71");
+}
+
+void Test::TestRestoreDC()
+{
+    // EMF records: SAVEDC, RESTOREDC, POLYGON16, MODIFYWORLDTRANSFORM
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestRestoreDC.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor",
+                "color", "#ff0000");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor/polypolygon",
+                "path", "m1148 4354v1481h4943v-1481z");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polygonhairline",
+                "color", "#000000");
+    assertXPathContent(pDocument, "/primitive2D/metafile/transform/polygonhairline/polygon",
+                       "1148,4354 1148,5835 6091,5835 6091,4354");
 }
 
 void Test::TestRoundRect()

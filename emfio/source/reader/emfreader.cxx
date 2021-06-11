@@ -1098,7 +1098,11 @@ namespace emfio
 
                     case EMR_RESTOREDC :
                     {
-                        Pop();
+                        sal_Int32 nSavedDC;
+                        mpInputStream->ReadInt32( nSavedDC );
+                        SAL_INFO( "emfio", "\t\t SavedDC Index: " << nSavedDC );
+                        if ( nSavedDC < 0 ) // For EMF values above -1 is ignored
+                            Pop( nSavedDC );
                     }
                     break;
 
