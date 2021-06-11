@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "e945ad2c_67191da6",
+        "filename": "vcl/CppunitTest_vcl_svm_test.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-06-11T07:18:51Z",
+      "side": 1,
+      "message": "It would be good to get this hunk in rather sooner than later, my clang build already fails with:\n\n vcl/qa/cppunit/svm/svmtest.cxx:1548: error: undefined reference to \u0027basegfx::B2DPolygon::B2DPolygon()\u0027\n\neven without this patch, interestingly.",
+      "revId": "bbc6ac56902b7c44b96a69c948c43dd158c3b88f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "feff6f9f_b4fd0869",
         "filename": "vcl/source/gdi/mtfxmldump.cxx",
         "patchSetId": 4
