@@ -107,7 +107,8 @@ SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = false )
                  * atk-bridge's atexit handler gets called.
                  */
                 if (aUsedModuleBase == "gtk4" || aUsedModuleBase == "gtk3" ||
-                    aUsedModuleBase == "gtk3_kde5" || aUsedModuleBase == "win")
+                    aUsedModuleBase == "gtk3_kde5" || aUsedModuleBase == "kf5" ||
+                    aUsedModuleBase == "qt5" || aUsedModuleBase == "win")
                 {
                     pCloseModule = nullptr;
                 }
