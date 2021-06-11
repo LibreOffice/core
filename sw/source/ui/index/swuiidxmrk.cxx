@@ -1598,28 +1598,14 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
             else
                 m_aOrigContainers.back()->move(m_xTypeListBox.get(), m_xRight.get());
 
-            for (int j = 0; j <= AUTH_TYPE_END; j++)
+            for (int j = 0; j < AUTH_TYPE_END; j++)
             {
-                if (j < AUTH_TYPE_END)
-                {
-                    m_xTypeListBox->append_text(
-                        SwAuthorityFieldType::GetAuthTypeName(static_cast<ToxAuthorityType>(j)));
-                }
-                else
-                {
-                    // UI-only type: local file.
-                    m_xTypeListBox->append_text(SwResId(STR_AUTH_TYPE_LOCAL_FILE));
-                }
+                m_xTypeListBox->append_text(
+                    SwAuthorityFieldType::GetAuthTypeName(static_cast<ToxAuthorityType>(j)));
             }
             if(!pFields[aCurInfo.nToxField].isEmpty())
             {
-                int nPos = pFields[aCurInfo.nToxField].toInt32();
-                if (nPos == AUTH_TYPE_WWW && comphelper::isFileUrl(pFields[AUTH_FIELD_URL]))
-                {
-                    // Map file URL to local file.
-                    nPos = AUTH_TYPE_END;
-                }
-                m_xTypeListBox->set_active(nPos);
+                m_xTypeListBox->set_active(pFields[aCurInfo.nToxField].toInt32());
             }
             m_xTypeListBox->set_grid_left_attach(1);
             m_xTypeListBox->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
@@ -1741,13 +1727,7 @@ OUString  SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) cons
     if( AUTH_FIELD_AUTHORITY_TYPE == eField )
     {
         OSL_ENSURE(m_xTypeListBox, "No ListBox");
-        int nActive = m_xTypeListBox->get_active();
-        if (nActive == AUTH_TYPE_END)
-        {
-            // Map local file to file URL.
-            nActive = AUTH_TYPE_WWW;
-        }
-        return OUString::number(nActive);
+        return OUString::number(m_xTypeListBox->get_active());
     }
 
     if( AUTH_FIELD_IDENTIFIER == eField && !m_bNewEntryMode)
@@ -1814,18 +1794,7 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, ShortNameHdl, weld::Entry&, rEdit, void)
 IMPL_LINK(SwCreateAuthEntryDlg_Impl, EnableHdl, weld::ComboBox&, rBox, void)
 {
     m_xOKBT->set_sensitive(m_bNameAllowed && rBox.get_active() != -1);
-
-    int nType = m_xTypeListBox->get_active();
-    if (nType == AUTH_TYPE_END && !m_xBrowseButton->is_visible())
-    {
-        // File URL -> show the browse button.
-        m_xBrowseButton->show();
-    }
-    else if (nType != AUTH_TYPE_END && m_xBrowseButton->is_visible())
-    {
-        // Not a file URL -> hide the browse button.
-        m_xBrowseButton->hide();
-    }
+    m_xBrowseButton->show();
 };
 
 IMPL_LINK_NOARG(SwCreateAuthEntryDlg_Impl, BrowseHdl, weld::Button&, void)
