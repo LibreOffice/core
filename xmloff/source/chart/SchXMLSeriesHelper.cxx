@@ -170,9 +170,7 @@ uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPISeriesProp
                 Reference< lang::XInitialization > xInit( xRet, uno::UNO_QUERY );
                 if(xInit.is())
                 {
-                    Sequence< uno::Any > aArguments(1);
-                    aArguments[0] <<= xSeries;
-                    xInit->initialize(aArguments);
+                    xInit->initialize( { uno::Any(xSeries) });
                 }
             }
         }
@@ -204,10 +202,7 @@ uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPIDataPointP
                 Reference< lang::XInitialization > xInit( xRet, uno::UNO_QUERY );
                 if(xInit.is())
                 {
-                    Sequence< uno::Any > aArguments(2);
-                    aArguments[0] <<= xSeries;
-                    aArguments[1] <<= nPointIndex;
-                    xInit->initialize(aArguments);
+                    xInit->initialize({ uno::Any(xSeries), uno::Any(nPointIndex) });
                 }
             }
         }

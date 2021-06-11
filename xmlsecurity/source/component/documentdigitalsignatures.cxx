@@ -480,7 +480,7 @@ DocumentDigitalSignatures::ImplVerifySignatures(
     SAL_WARN_IF(!bInit, "xmlsecurity.comp", "Error initializing security context!");
 
     if (!bInit)
-        return uno::Sequence<security::DocumentSignatureInformation>(0);
+        return {};
 
     if (!rxStorage.is())
     {
@@ -507,7 +507,7 @@ DocumentDigitalSignatures::ImplVerifySignatures(
     }
 
     if (!xInputStream.is() && aStreamHelper.nStorageFormat != embed::StorageFormats::OFOPXML)
-        return Sequence< css::security::DocumentSignatureInformation >(0);
+        return {};
 
 
     XMLSignatureHelper& rSignatureHelper = aSignatureManager.getSignatureHelper();

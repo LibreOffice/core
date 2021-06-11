@@ -777,8 +777,7 @@ void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& x
         {
             // use dummy protection key to forbid disabling of Record changes without a notice
             // (extending the recent GrabBag support)    TODO support password verification...
-            css::uno::Sequence<sal_Int8> aDummyKey(1);
-            aDummyKey[0] = 1;
+            css::uno::Sequence<sal_Int8> aDummyKey { 1 };
             xDocProps->setPropertyValue("RedlineProtectionKey", uno::makeAny( aDummyKey ));
         }
     }

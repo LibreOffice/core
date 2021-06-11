@@ -776,14 +776,11 @@ bool WPXSvInputStreamImpl::isZip()
 
         try
         {
-            Sequence<Any> aArgs(1);
-            aArgs[0] <<= mxStream;
-
             const Reference<XComponentContext> xContext(comphelper::getProcessComponentContext(),
                                                         UNO_SET_THROW);
             const Reference<packages::zip::XZipFileAccess2> xZip(
                 xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                    "com.sun.star.packages.zip.ZipFileAccess", aArgs, xContext),
+                    "com.sun.star.packages.zip.ZipFileAccess", { Any(mxStream) }, xContext),
                 UNO_QUERY_THROW);
             mpZipStorage.reset(new ZipStorageImpl(xZip));
         }

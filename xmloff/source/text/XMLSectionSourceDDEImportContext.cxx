@@ -93,20 +93,8 @@ void XMLSectionSourceDDEImportContext::startFastElement(sal_Int32 /*nElement*/,
         return;
 
     // use multi property set to force single update of connection #83654#
-    Sequence<OUString> aNames(4);
-    Sequence<Any> aValues(4);
-
-    aValues[0] <<= sApplication;
-    aNames[0] = "DDECommandFile";
-
-    aValues[1] <<= sTopic;
-    aNames[1] = "DDECommandType";
-
-    aValues[2] <<= sItem;
-    aNames[2] = "DDECommandElement";
-
-    aValues[3] <<= bAutomaticUpdate;
-    aNames[3] = "IsAutomaticUpdate";
+    Sequence<OUString> aNames { "DDECommandFile", "DDECommandType", "DDECommandElement", "IsAutomaticUpdate" };
+    Sequence<Any> aValues { Any(sApplication), Any(sTopic), Any(sItem), Any(bAutomaticUpdate) };
 
     Reference<XMultiPropertySet> rMultiPropSet(rSectionPropertySet,
                                                UNO_QUERY);

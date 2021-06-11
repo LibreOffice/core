@@ -501,8 +501,7 @@ XMLImageMapContext::XMLImageMapContext(
     }
     catch(const css::uno::Exception& e)
     {
-        uno::Sequence<OUString> aSeq(0);
-        rImport.SetError( XMLERROR_FLAG_WARNING | XMLERROR_API, aSeq, e.Message, nullptr );
+        rImport.SetError( XMLERROR_FLAG_WARNING | XMLERROR_API, {}, e.Message, nullptr );
     }
 }
 

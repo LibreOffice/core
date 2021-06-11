@@ -446,10 +446,12 @@ bool XMLColorPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, cons
 
             sal_Int32 nIndex = 0;
 
-            Sequence< double > aHSL(3);
-            aHSL[0] = aTmp.getToken( 0, ',', nIndex ).toDouble();
-            aHSL[1] = aTmp.getToken( 0, ',', nIndex ).toDouble() / 100.0;
-            aHSL[2] = aTmp.getToken( 0, ',', nIndex ).toDouble() / 100.0;
+            Sequence< double > aHSL
+            {
+                aTmp.getToken( 0, ',', nIndex ).toDouble(),
+                aTmp.getToken( 0, ',', nIndex ).toDouble() / 100.0,
+                aTmp.getToken( 0, ',', nIndex ).toDouble() / 100.0
+            };
             rValue <<= aHSL;
             bRet = true;
         }

@@ -2255,9 +2255,8 @@ void SvXMLExport::IgnorableWhitespace()
     }
     catch (const SAXException& e)
     {
-        Sequence<OUString> aPars(0);
         SetError( XMLERROR_SAX|XMLERROR_FLAG_ERROR|XMLERROR_FLAG_SEVERE,
-                  aPars, e.Message, nullptr );
+                  {}, e.Message, nullptr );
     }
 }
 

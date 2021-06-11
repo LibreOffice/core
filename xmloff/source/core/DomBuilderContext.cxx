@@ -176,11 +176,8 @@ void DomBuilderContext::HandleAttributes(
         case XML_NAMESPACE_UNKNOWN:
             // unknown namespace: illegal input. Raise Warning.
             {
-                Sequence<OUString> aSeq(2);
-                aSeq[0] = rLocalName;
-                aSeq[1] = aValue;
                 GetImport().SetError(
-                    XMLERROR_FLAG_WARNING | XMLERROR_NAMESPACE_TROUBLE, aSeq );
+                    XMLERROR_FLAG_WARNING | XMLERROR_NAMESPACE_TROUBLE, { rLocalName, aValue } );
             }
             break;
         default:
@@ -202,11 +199,8 @@ void DomBuilderContext::HandleAttributes(
         if (!rUnknownAttrib.NamespaceURL.isEmpty())
         {
             // unknown namespace: illegal input. Raise Warning.
-            Sequence<OUString> aSeq(2);
-            aSeq[0] = rUnknownAttrib.Name;
-            aSeq[1] = rUnknownAttrib.Value;
             GetImport().SetError(
-                XMLERROR_FLAG_WARNING | XMLERROR_NAMESPACE_TROUBLE, aSeq );
+                XMLERROR_FLAG_WARNING | XMLERROR_NAMESPACE_TROUBLE, { rUnknownAttrib.Name, rUnknownAttrib.Value } );
         }
         else
         {

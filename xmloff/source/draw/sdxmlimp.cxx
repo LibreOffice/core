@@ -515,8 +515,7 @@ void SdXMLImport::SetViewSettings(const css::uno::Sequence<css::beans::PropertyV
     catch(const css::uno::Exception&)
     {
 /* #i79978# since old documents may contain invalid view settings, this is nothing to worry the user about.
-        uno::Sequence<OUString> aSeq(0);
-        SetError( XMLERROR_FLAG_WARNING | XMLERROR_API, aSeq, e.Message, NULL );
+        SetError( XMLERROR_FLAG_WARNING | XMLERROR_API, {}, e.Message, NULL );
 */
     }
 }

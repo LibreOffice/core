@@ -480,15 +480,11 @@ void XMLPropStyleContext::Finish( bool bOverwrite )
             // We can't set the parent style. For a proper
             // Error-Message, we should pass in the name of the
             // style, as well as the desired parent style.
-            Sequence<OUString> aSequence(2);
 
             // getName() throws no non-Runtime exception:
-            aSequence[0] = mxStyle->getName();
-            aSequence[1] = sParent;
-
             GetImport().SetError(
                 XMLERROR_FLAG_ERROR | XMLERROR_PARENT_STYLE_NOT_ALLOWED,
-                aSequence, e.Message, nullptr );
+                { mxStyle->getName(), sParent }, e.Message, nullptr );
         }
     }
 
