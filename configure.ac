@@ -821,6 +821,7 @@ build_crypto=yes
 test_cmis=yes
 test_curl=yes
 test_gdb_index=no
+test_openldap=yes
 test_split_debug=no
 test_webdav=yes
 
@@ -910,6 +911,7 @@ cygwin*|wsl*)
 
     using_freetype_fontconfig=no
     using_x11=no
+    test_openldap=no
     build_skia=yes
     _os=WINNT
 
@@ -965,6 +967,7 @@ ios*) # iOS
     using_x11=no
     build_crypto=no
     test_cmis=no
+    test_openldap=no
     test_webdav=no
     if test -n "$LODE_HOME" ; then
         mac_sanitize_path
@@ -1066,6 +1069,7 @@ linux-android*)
     using_headless_plugin=no
     using_x11=no
     build_crypto=no
+    test_openldap=no
     test_system_freetype=no
     test_webdav=no
     disable_database_connectivity_dependencies
@@ -1086,7 +1090,6 @@ haiku*)
     using_x11=no
     test_gtk3_kde5=no
     test_kf5=yes
-    test_openldap=yes
     enable_odk=no
     enable_coinmp=no
     enable_pdfium=no
@@ -1099,6 +1102,7 @@ haiku*)
 emscripten)
     using_freetype_fontconfig=yes
     using_x11=no
+    test_openldap=no
     enable_compiler_plugins=no
     test_cmis=no
     test_webdav=no
@@ -1127,7 +1131,6 @@ test "${test_gstreamer_1_0+set}" = set || test_gstreamer_1_0="$using_x11"
 test "${test_gtk3+set}" = set || test_gtk3="$using_x11"
 test "${test_gtk4+set}" = set || test_gtk4="$using_x11"
 test "${test_kf5+set}" = set || test_kf5="$using_x11"
-test "${test_openldap+set}" = set || test_openldap="$using_x11"
 # don't handle test_qt5, so it can disable test_kf5 later
 test "${test_randr+set}" = set || test_randr="$using_x11"
 test "${test_xrender+set}" = set || test_xrender="$using_x11"
@@ -1155,7 +1158,6 @@ disable_x11_tests()
     test_gtk3=no
     test_gtk4=no
     test_kf5=no
-    test_openldap=no
     test_qt5=no
     test_randr=no
     test_xrender=no
