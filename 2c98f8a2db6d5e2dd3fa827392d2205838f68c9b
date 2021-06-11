@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b3b68f33_8407c886",
+        "filename": "vcl/backendtest/GraphicsRenderTests.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-06-11T10:48:55Z",
+      "side": 1,
+      "message": "It\u0027s strange that the m_aCurGraphicsBackend variable is coming out to be empty, and as a matter of fact even the aTemp.getStr() is empty. How to fix this?",
+      "range": {
+        "startLine": 35,
+        "startChar": 3,
+        "endLine": 38,
+        "endChar": 70
+      },
+      "revId": "2c98f8a2db6d5e2dd3fa827392d2205838f68c9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
