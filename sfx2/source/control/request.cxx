@@ -592,14 +592,17 @@ void SfxRequest::Done_Impl
     if ( !pImpl->pSlot->IsMode(SfxSlotMode::METHOD) )
     {
         // get the property as SfxPoolItem
-        const SfxPoolItem *pItem;
-        sal_uInt16 nWhich = rPool.GetWhich(pImpl->pSlot->GetSlotId());
-        SfxItemState eState = pSet ? pSet->GetItemState( nWhich, false, &pItem ) : SfxItemState::UNKNOWN;
-        SAL_WARN_IF( SfxItemState::SET != eState, "sfx", "Recording property not available: "
+        const SfxPoolItem *pItem(nullptr);
+        const sal_uInt16 nWhich(rPool.GetWhich(pImpl->pSlot->GetSlotId()));
+        const bool bItemStateSet(nullptr != pSet);
+        const SfxItemState eState(bItemStateSet ? pSet->GetItemState( nWhich, false, &pItem ) : SfxItemState::DEFAULT);
+        SAL_WARN_IF( !bItemStateSet || SfxItemState::SET != eState, "sfx", "Recording property not available: "
                      << pImpl->pSlot->GetSlotId() );
         uno::Sequence < beans::PropertyValue > aSeq;
-        if ( eState == SfxItemState::SET )
+
+        if ( bItemStateSet && SfxItemState::SET == eState )
             TransformItems( pImpl->pSlot->GetSlotId(), *pSet, aSeq, pImpl->pSlot );
+
         pImpl->Record( aSeq );
     }
 
