@@ -131,6 +131,7 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
         }
 
         SwTwips nNextPos = 0;
+        bool bAbsoluteNextPos = false;
 
         // #i24363# tab stops relative to indent
         // nSearchPos: The current position relative to the tabs origin
@@ -149,8 +150,7 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
         const SvxTabStop* pTabStop = m_aLineInf.GetTabStop( nSearchPos, nMyRight );
         if (!nMyRight)
             nMyRight = nOldRight;
-        if (pTabStop &&
-            (pTabStop->GetTabPos() <= nMyRight || pTabStop->GetAdjustment() == SvxTabAdjust::Left))
+        if (pTabStop)
         {
             cFill = ' ' != pTabStop->GetFill() ? pTabStop->GetFill() : 0;
             cDec = pTabStop->GetDecimal();
@@ -160,6 +160,21 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
             {
                 //calculate default tab position of default tabs in negative indent
                 nNextPos = ( nSearchPos / nNextPos ) * nNextPos;
+            }
+            else if (pTabStop->GetTabPos() > nMyRight
+                     && pTabStop->GetAdjustment() != SvxTabAdjust::Left)
+            {
+                // A rather special situation. The tabstop found is:
+                // 1.) in a document compatible with MS formats
+                // 2.) not a left tabstop.
+                // 3.) not the first tabstop (in that case nMyRight was adjusted to match tabPos).
+                // 4.) beyond the end of the text area
+                // Therefore, they act like right-tabstops at the edge of the para area.
+                // This benefits DOCX 2013+, and doesn't hurt the earlier formats,
+                // since up till now these were just treated as automatic tabstops.
+                eAdj = SvxTabAdjust::Right;
+                bAbsoluteNextPos = true;
+                nNextPos = rInf.Width();
             }
             bAutoTabStop = false;
         }
@@ -196,7 +211,6 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
             }
             cFill = 0;
             eAdj = SvxTabAdjust::Left;
-            pTabStop = nullptr;
         }
 
         // #i115705# - correction and refactoring:
@@ -265,7 +279,8 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
             }
         }
 
-        nNextPos += bRTL ? nLinePos - nTabLeft : nTabLeft - nLinePos;
+        if (!bAbsoluteNextPos)
+            nNextPos += bRTL ? nLinePos - nTabLeft : nTabLeft - nLinePos;
         OSL_ENSURE( nNextPos >= 0, "GetTabStop: Don't go back!" );
         nNewTabPos = sal_uInt16(nNextPos);
     }
