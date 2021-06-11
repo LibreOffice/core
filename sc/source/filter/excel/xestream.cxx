@@ -22,6 +22,7 @@
 #include <utility>
 
 #include <filter/msfilter/util.hxx>
+#include <o3tl/safeint.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/random.h>
@@ -490,26 +491,29 @@ void XclExpBiff8Encrypter::GetDocId( sal_uInt8 pnDocId[16] ) const
 
 void XclExpBiff8Encrypter::Encrypt( SvStream& rStrm, sal_uInt8 nData )
 {
-    vector<sal_uInt8> aByte(1);
-    aByte[0] = nData;
+    vector<sal_uInt8> aByte { nData };
     EncryptBytes(rStrm, aByte);
 }
 
 void XclExpBiff8Encrypter::Encrypt( SvStream& rStrm, sal_uInt16 nData )
 {
-    ::std::vector<sal_uInt8> pnBytes(2);
-    pnBytes[0] = nData & 0xFF;
-    pnBytes[1] = (nData >> 8) & 0xFF;
+    ::std::vector<sal_uInt8> pnBytes
+    {
+        o3tl::narrowing<sal_uInt8>(nData & 0xFF),
+        o3tl::narrowing<sal_uInt8>((nData >> 8) & 0xFF)
+    };
     EncryptBytes(rStrm, pnBytes);
 }
 
 void XclExpBiff8Encrypter::Encrypt( SvStream& rStrm, sal_uInt32 nData )
 {
-    ::std::vector<sal_uInt8> pnBytes(4);
-    pnBytes[0] = nData & 0xFF;
-    pnBytes[1] = (nData >>  8) & 0xFF;
-    pnBytes[2] = (nData >> 16) & 0xFF;
-    pnBytes[3] = (nData >> 24) & 0xFF;
+    ::std::vector<sal_uInt8> pnBytes
+    {
+        o3tl::narrowing<sal_uInt8>(nData & 0xFF),
+        o3tl::narrowing<sal_uInt8>((nData >>  8) & 0xFF),
+        o3tl::narrowing<sal_uInt8>((nData >> 16) & 0xFF),
+        o3tl::narrowing<sal_uInt8>((nData >> 24) & 0xFF)
+    };
     EncryptBytes(rStrm, pnBytes);
 }
 

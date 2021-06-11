@@ -723,9 +723,7 @@ void ScColumn::AttachNewFormulaCells( const sc::CellStoreType::position_type& aP
         {
             // Merge into one span.
             // The original two spans are ordered from top to bottom.
-            std::vector<SCROW> aRows(2);
-            aRows[0] = std::min( rNewSharedRows[0], nTopRow);
-            aRows[1] = std::max( rNewSharedRows[3], nBotRow);
+            std::vector<SCROW> aRows { std::min( rNewSharedRows[0], nTopRow), std::max( rNewSharedRows[3], nBotRow) };
             rNewSharedRows.swap( aRows);
         }
         else

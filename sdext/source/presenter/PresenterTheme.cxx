@@ -52,12 +52,13 @@ public:
 
     vector<sal_Int32> ToVector()
     {
-        vector<sal_Int32> aSequence (4);
-        aSequence[0] = mnLeft == mnInvalidValue ? 0 : mnLeft;
-        aSequence[1] = mnTop == mnInvalidValue ? 0 : mnTop;
-        aSequence[2] = mnRight == mnInvalidValue ? 0 : mnRight;
-        aSequence[3] = mnBottom == mnInvalidValue ? 0 : mnBottom;
-        return aSequence;
+        return
+        {
+            mnLeft == mnInvalidValue ? 0 : mnLeft,
+            mnTop == mnInvalidValue ? 0 : mnTop,
+            mnRight == mnInvalidValue ? 0 : mnRight,
+            mnBottom == mnInvalidValue ? 0 : mnBottom
+        };
     };
 
     void Merge (const BorderSize& rBorderSize)
@@ -1034,9 +1035,7 @@ void StyleAssociationContainer::Read (
     if (!xStyleAssociationList.is())
         return;
 
-    ::std::vector<OUString> aProperties (2);
-    aProperties[0] = "ResourceURL";
-    aProperties[1] = "StyleName";
+    ::std::vector<OUString> aProperties { "ResourceURL", "StyleName" };
     PresenterConfigurationAccess::ForAll(
         xStyleAssociationList,
         aProperties,

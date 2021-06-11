@@ -56,9 +56,7 @@ struct lcl_NumberedStringGenerator
     }
     vector< uno::Any > operator()()
     {
-        vector< uno::Any > aRet(1);
-        aRet[0] <<= m_aStub.replaceAt( m_nStubStartIndex, m_nWildcardLength, OUString::number( ++m_nCounter ));
-        return aRet;
+        return { uno::Any(m_aStub.replaceAt( m_nStubStartIndex, m_nWildcardLength, OUString::number( ++m_nCounter ))) };
     }
 private:
     OUString m_aStub;

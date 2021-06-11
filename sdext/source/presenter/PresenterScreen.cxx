@@ -663,13 +663,15 @@ void PresenterScreen::ProcessLayout (
                 "Layout"),
             UNO_QUERY_THROW);
 
-        ::std::vector<OUString> aProperties (6);
-        aProperties[0] = "PaneURL";
-        aProperties[1] = "ViewURL";
-        aProperties[2] = "RelativeX";
-        aProperties[3] = "RelativeY";
-        aProperties[4] = "RelativeWidth";
-        aProperties[5] = "RelativeHeight";
+        ::std::vector<OUString> aProperties
+        {
+            "PaneURL",
+            "ViewURL",
+            "RelativeX",
+            "RelativeY",
+            "RelativeWidth",
+            "RelativeHeight"
+        };
         PresenterConfigurationAccess::ForAll(
             xList,
             aProperties,
@@ -692,11 +694,13 @@ void PresenterScreen::ProcessViewDescriptions (
             rConfiguration.GetConfigurationNode("Presenter/Views"),
             UNO_QUERY_THROW);
 
-        ::std::vector<OUString> aProperties (4);
-        aProperties[0] = "ViewURL";
-        aProperties[1] = "Title";
-        aProperties[2] = "AccessibleTitle";
-        aProperties[3] = "IsOpaque";
+        ::std::vector<OUString> aProperties
+        {
+            "ViewURL",
+            "Title",
+            "AccessibleTitle",
+            "IsOpaque"
+        };
         PresenterConfigurationAccess::ForAll(
             xViewDescriptionsNode,
             aProperties,
