@@ -136,9 +136,11 @@ struct MenuEntry
     }
 };
 
-MenuEntry ConvertMenu(const css::uno::Reference<css::xml::dom::XNode>& xMenu,
+MenuEntry ConvertMenu(const css::uno::Reference<css::xml::dom::XNode>& xOutMenu,
                       const css::uno::Reference<css::xml::dom::XNode>& xNode)
 {
+    css::uno::Reference<css::xml::dom::XNode> xMenu(xOutMenu);
+
     bool bDrawAsRadio = false;
     css::uno::Reference<css::xml::dom::XNode> xPropertyLabel;
 
@@ -163,6 +165,45 @@ MenuEntry ConvertMenu(const css::uno::Reference<css::xml::dom::XNode>& xMenu,
 
         auto xNextChild = xChild->getNextSibling();
 
+        auto xCurrentMenu = xMenu;
+
+        if (xChild->getNodeName() == "object")
+        {
+            auto xDoc = xChild->getOwnerDocument();
+
+            css::uno::Reference<css::xml::dom::XNamedNodeMap> xMap = xChild->getAttributes();
+            css::uno::Reference<css::xml::dom::XNode> xClass = xMap->getNamedItem("class");
+            OUString sClass(xClass->getNodeValue());
+
+            if (sClass == "GtkMenuItem" || sClass == "GtkRadioMenuItem")
+            {
+                /* <item> */
+                css::uno::Reference<css::xml::dom::XElement> xItem = xDoc->createElement("item");
+                xMenu->appendChild(xItem);
+            }
+            else if (sClass == "GtkMenu")
+            {
+                xMenu->removeChild(xMenu->getLastChild()); // remove preceding <item>
+
+                css::uno::Reference<css::xml::dom::XElement> xSubMenu
+                    = xDoc->createElement("submenu");
+                css::uno::Reference<css::xml::dom::XAttr> xIdAttr = xDoc->createAttribute("id");
+
+                css::uno::Reference<css::xml::dom::XNode> xId = xMap->getNamedItem("id");
+                OUString sId(xId->getNodeValue());
+
+                xIdAttr->setValue(sId);
+                xSubMenu->setAttributeNode(xIdAttr);
+                xMenu->appendChild(xSubMenu);
+
+                css::uno::Reference<css::xml::dom::XElement> xSection
+                    = xDoc->createElement("section");
+                xSubMenu->appendChild(xSection);
+
+                xMenu = xSubMenu;
+            }
+        }
+
         bool bChildDrawAsRadio = false;
         css::uno::Reference<css::xml::dom::XNode> xChildPropertyLabel;
         if (xChild->hasChildNodes())
@@ -174,6 +215,8 @@ MenuEntry ConvertMenu(const css::uno::Reference<css::xml::dom::XNode>& xMenu,
 
         if (xChild->getNodeName() == "object")
         {
+            xMenu = xCurrentMenu;
+
             auto xDoc = xChild->getOwnerDocument();
 
             css::uno::Reference<css::xml::dom::XNamedNodeMap> xMap = xChild->getAttributes();
@@ -186,14 +229,11 @@ MenuEntry ConvertMenu(const css::uno::Reference<css::xml::dom::XNode>& xMenu,
                 OUString sId = xId->getNodeValue();
 
                 /*
-                  <item>
                     <attribute name='label' translatable='yes'>whatever</attribute>
                     <attribute name='action'>menu.action</attribute>
                     <attribute name='target'>id</attribute>
-                  </item>
                 */
-                css::uno::Reference<css::xml::dom::XElement> xItem = xDoc->createElement("item");
-                xMenu->appendChild(xItem);
+                auto xItem = xMenu->getLastChild();
 
                 if (xChildPropertyLabel)
                 {
@@ -801,6 +841,50 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
 
         auto xNextChild = xChild->getNextSibling();
 
+        if (xChild->getNodeName() == "object")
+        {
+            auto xDoc = xChild->getOwnerDocument();
+
+            css::uno::Reference<css::xml::dom::XNamedNodeMap> xMap = xChild->getAttributes();
+            css::uno::Reference<css::xml::dom::XNode> xClass = xMap->getNamedItem("class");
+            OUString sClass(xClass->getNodeValue());
+
+            if (sClass == "GtkMenu")
+            {
+                css::uno::Reference<css::xml::dom::XNode> xId = xMap->getNamedItem("id");
+                OUString sId(xId->getNodeValue() + "-menu-model");
+
+                // <menu id='menubar'>
+                css::uno::Reference<css::xml::dom::XElement> xMenu = xDoc->createElement("menu");
+                css::uno::Reference<css::xml::dom::XAttr> xIdAttr = xDoc->createAttribute("id");
+                xIdAttr->setValue(sId);
+                xMenu->setAttributeNode(xIdAttr);
+                xChild->getParentNode()->insertBefore(xMenu, xChild);
+
+                css::uno::Reference<css::xml::dom::XElement> xSection
+                    = xDoc->createElement("section");
+                xMenu->appendChild(xSection);
+
+                ConvertMenu(xSection, xChild);
+
+                // now remove GtkMenu contents
+                while (true)
+                {
+                    auto xFirstChild = xChild->getFirstChild();
+                    if (!xFirstChild.is())
+                        break;
+                    xChild->removeChild(xFirstChild);
+                }
+
+                // change to GtkPopoverMenu
+                xClass->setNodeValue("GtkPopoverMenu");
+
+                // <property name="menu-model">
+                xChild->appendChild(CreateProperty(xDoc, "menu-model", sId));
+                xChild->appendChild(CreateProperty(xDoc, "visible", "False"));
+            }
+        }
+
         bool bChildHasSymbolicIconName = false;
         bool bChildHasVisible = false;
         bool bChildAlwaysShowImage = false;
@@ -1076,40 +1160,6 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             {
                 auto xVisible = CreateProperty(xDoc, "visible", "False");
                 insertAsFirstChild(xChild, xVisible);
-            }
-            else if (sClass == "GtkMenu")
-            {
-                css::uno::Reference<css::xml::dom::XNode> xId = xMap->getNamedItem("id");
-                OUString sId(xId->getNodeValue() + "-menu-model");
-
-                // <menu id='menubar'>
-                css::uno::Reference<css::xml::dom::XElement> xMenu = xDoc->createElement("menu");
-                css::uno::Reference<css::xml::dom::XAttr> xIdAttr = xDoc->createAttribute("id");
-                xIdAttr->setValue(sId);
-                xMenu->setAttributeNode(xIdAttr);
-                xChild->getParentNode()->insertBefore(xMenu, xChild);
-
-                css::uno::Reference<css::xml::dom::XElement> xSection
-                    = xDoc->createElement("section");
-                xMenu->appendChild(xSection);
-
-                ConvertMenu(xSection, xChild);
-
-                // now remove GtkMenu contents
-                while (true)
-                {
-                    auto xFirstChild = xChild->getFirstChild();
-                    if (!xFirstChild.is())
-                        break;
-                    xChild->removeChild(xFirstChild);
-                }
-
-                // change to GtkPopoverMenu
-                xClass->setNodeValue("GtkPopoverMenu");
-
-                // <property name="menu-model">
-                xChild->appendChild(CreateProperty(xDoc, "menu-model", sId));
-                xChild->appendChild(CreateProperty(xDoc, "visible", "False"));
             }
 
             // only create the child box for GtkButton/GtkToggleButton
