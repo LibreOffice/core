@@ -34,8 +34,11 @@
 #include <ChartController.hxx>
 
 #include <DataSeriesHelper.hxx>
+#include <DiagramHelper.hxx>
 #include <RegressionCurveHelper.hxx>
 #include <StatisticsHelper.hxx>
+
+#include <comphelper/processfactory.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -212,14 +215,14 @@ bool isPrimaryAxis(const css::uno::Reference<css::frame::XModel>&
 void setAttachedAxisType(const css::uno::Reference<css::frame::XModel>&
         xModel, const OUString& rCID, bool bPrimary)
 {
-    css::uno::Reference< css::beans::XPropertySet > xSeries(
-        ObjectIdentifier::getDataSeriesForCID(rCID, xModel), uno::UNO_QUERY );
+    const uno::Reference<chart2::XDataSeries>& xDataSeries = ObjectIdentifier::getDataSeriesForCID(rCID, xModel);
 
-    if (!xSeries.is())
+    if (!xDataSeries.is())
         return;
 
-    sal_Int32 nIndex = bPrimary ? 0 : 1;
-    xSeries->setPropertyValue("AttachedAxisIndex", css::uno::Any(nIndex));
+    uno::Reference<chart2::XChartDocument> xChartDoc(xModel, css::uno::UNO_QUERY);
+    uno::Reference<chart2::XDiagram> xDiagram = xChartDoc->getFirstDiagram();
+    DiagramHelper::attachSeriesToAxis(bPrimary, xDataSeries, xDiagram, comphelper::getProcessComponentContext());
 }
 
 css::uno::Reference<css::chart2::XChartType> getChartType(
