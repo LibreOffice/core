@@ -22,6 +22,12 @@ $(eval $(call gb_UnpackedTarball_add_patches,breakpad,\
 	external/breakpad/breakpad-stackwalk.patch.1 \
 	external/breakpad/0001-Handle-race-between-ExceptionHandler-SignalHandler-a.patch.1 \
 	external/breakpad/c++20-allocator.patch \
+	external/breakpad/breakpad-dump_syms.patch.1 \
+))
+
+$(eval $(call gb_UnpackedTarball_add_files,breakpad,src/tools/windows/dump_syms,\
+    external/breakpad/dump_syms.vcxproj \
+    external/breakpad/dump_syms.sln \
 ))
 
 ifeq ($(COM_IS_CLANG),TRUE)
