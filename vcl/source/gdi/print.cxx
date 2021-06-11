@@ -123,17 +123,15 @@ void PrinterOptions::ReadFromConfig( bool i_bFile )
         {
             xConfigProvider = css::configuration::theDefaultProvider::get( xContext );
 
-            css::uno::Sequence< css::uno::Any > aArgs(1);
             css::beans::PropertyValue aVal;
             aVal.Name = "nodepath";
             if( i_bFile )
                 aVal.Value <<= OUString( "/org.openoffice.Office.Common/Print/Option/File" );
             else
                 aVal.Value <<= OUString( "/org.openoffice.Office.Common/Print/Option/Printer" );
-            aArgs.getArray()[0] <<= aVal;
             xConfigAccess.set(
                     xConfigProvider->createInstanceWithArguments(
-                        "com.sun.star.configuration.ConfigurationAccess", aArgs ),
+                        "com.sun.star.configuration.ConfigurationAccess", { css::uno::Any(aVal) } ),
                         css::uno::UNO_QUERY );
             if( xConfigAccess.is() )
             {

@@ -216,19 +216,27 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
     if( nOriginalDepth <= 8 )
         return;
 
-    uno::Sequence<rendering::ARGBColor> aARGBColor(1);
-    uno::Sequence<rendering::RGBColor>  aRGBColor(1);
     uno::Sequence<sal_Int8> aPixel3, aPixel4;
 
     const Color aCol(COL_GREEN);
-    aARGBColor[0].Red   = vcl::unotools::toDoubleColor(aCol.GetRed());
-    aARGBColor[0].Green = vcl::unotools::toDoubleColor(aCol.GetGreen());
-    aARGBColor[0].Blue  = vcl::unotools::toDoubleColor(aCol.GetBlue());
-    aARGBColor[0].Alpha = 1.0;
+    uno::Sequence<rendering::ARGBColor> aARGBColor
+    {
+        {
+            1.0,
+            vcl::unotools::toDoubleColor(aCol.GetRed()),
+            vcl::unotools::toDoubleColor(aCol.GetGreen()),
+            vcl::unotools::toDoubleColor(aCol.GetBlue())
+        }
+    };
 
-    aRGBColor[0].Red   = vcl::unotools::toDoubleColor(aCol.GetRed());
-    aRGBColor[0].Green = vcl::unotools::toDoubleColor(aCol.GetGreen());
-    aRGBColor[0].Blue  = vcl::unotools::toDoubleColor(aCol.GetBlue());
+    uno::Sequence<rendering::RGBColor>  aRGBColor
+    {
+        {
+            vcl::unotools::toDoubleColor(aCol.GetRed()),
+            vcl::unotools::toDoubleColor(aCol.GetGreen()),
+            vcl::unotools::toDoubleColor(aCol.GetBlue())
+        }
+    };
 
     aPixel3 = xBmp->convertIntegerFromARGB( aARGBColor );
     aPixel4 = xBmp->getPixel( aLayout, geometry::IntegerPoint2D(5,0) );
