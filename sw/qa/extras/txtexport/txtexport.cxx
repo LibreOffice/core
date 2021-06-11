@@ -26,7 +26,9 @@ protected:
         SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
         aStream.ReadStream(aMemoryStream);
         const T* pData = static_cast<const T*>(aMemoryStream.GetData());
-        return std::vector<T>(pData, pData + aMemoryStream.GetSize());
+        sal_uInt64 size = aMemoryStream.GetSize();
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), size % sizeof(T));
+        return std::vector<T>(pData, pData + size / sizeof(T));
     }
 
     OString readExportedFile()
@@ -80,7 +82,7 @@ DECLARE_TXTEXPORT_TEST(testTdf120574_utf8bom, "UTF8BOMCRLF.txt")
 DECLARE_TXTEXPORT_TEST(testTdf120574_utf16lebom, "UTF16LEBOMCRLF.txt")
 {
     std::vector<sal_Unicode> aMemStream = readMemoryStream<sal_Unicode>();
-    OUString aData(aMemStream.data(), aMemStream.size() / sizeof(sal_Unicode));
+    OUString aData(aMemStream.data(), aMemStream.size());
     CPPUNIT_ASSERT_EQUAL(OUString(u"\uFEFFフー\r\nバー\r\n"), aData);
 }
 
@@ -94,7 +96,7 @@ DECLARE_TXTEXPORT_TEST(testTdf142669_utf8, "UTF8CRLF.txt")
 DECLARE_TXTEXPORT_TEST(testTdf142669_utf16le, "UTF16LECRLF.txt")
 {
     std::vector<sal_Unicode> aMemStream = readMemoryStream<sal_Unicode>();
-    OUString aData(aMemStream.data(), aMemStream.size() / sizeof(sal_Unicode));
+    OUString aData(aMemStream.data(), aMemStream.size());
     CPPUNIT_ASSERT_EQUAL(OUString(u"フー\r\nバー\r\n"), aData);
 }
 
