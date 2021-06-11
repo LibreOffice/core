@@ -90,13 +90,14 @@ bool ConvertGraphicToWMF(const Graphic& rGraphic, SvStream& rTargetStream,
     GfxLink aLink = rGraphic.GetGfxLink();
     if (aLink.GetType() == GfxLinkType::NativeWmf && aLink.GetData() && aLink.GetDataSize())
     {
-        // This may be an EMF+ file or WMF file with EMF+ embedded. In EmfReader::ReadEnhWMF()
-        // we normally drop non-EMF commands when reading EMF+, so converting that to WMF
-        // is better done by re-parsing with EMF+ disabled.
+        if(!aLink.IsEMF()) // If WMF, just write directly.
+            return rTargetStream.WriteBytes(aLink.GetData(), aLink.GetDataSize()) == aLink.GetDataSize();
+
+        // This may be an EMF+ file. In EmfReader::ReadEnhWMF() we normally drop non-EMF commands
+        // when reading EMF+, so converting that to WMF is better done by re-parsing with EMF+ disabled.
         auto & rDataContainer = aLink.getDataContainer();
         auto aVectorGraphicData
-            = std::make_shared<VectorGraphicData>(rDataContainer,
-                aLink.IsEMF() ? VectorGraphicDataType::Emf : VectorGraphicDataType::Wmf);
+            = std::make_shared<VectorGraphicData>(rDataContainer, VectorGraphicDataType::Emf);
         aVectorGraphicData->setEnableEMFPlus(false);
         Graphic aGraphic(aVectorGraphicData);
         bool bRet = ConvertGDIMetaFileToWMF(aGraphic.GetGDIMetaFile(), rTargetStream, pConfigItem,
