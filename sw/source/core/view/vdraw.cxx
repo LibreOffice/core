@@ -112,7 +112,7 @@ void SwViewShellImp::PaintLayer( const SdrLayerID _nLayerID,
     // page background color is set as the background color at the
     // outliner of the draw view.  Only necessary for the layers
     // hell and heaven
-    Color aOldOutlinerBackgrdColor;
+    Color aOldOutlinerBackgroundColor;
     // set default horizontal text direction on painting <hell> or
     // <heaven>.
     EEHorizontalTextDirection aOldEEHoriTextDir = EEHorizontalTextDirection::L2R;
@@ -124,7 +124,7 @@ void SwViewShellImp::PaintLayer( const SdrLayerID _nLayerID,
                 "incorrect usage of SwViewShellImp::PaintLayer: pPageBackgrdColor have to be set for painting layer <hell> or <heaven>");
         if ( _pPageBackgrdColor )
         {
-            aOldOutlinerBackgrdColor =
+            aOldOutlinerBackgroundColor =
                     GetDrawView()->GetModel()->GetDrawOutliner().GetBackgroundColor();
             GetDrawView()->GetModel()->GetDrawOutliner().SetBackgroundColor( *_pPageBackgrdColor );
         }
@@ -151,7 +151,7 @@ void SwViewShellImp::PaintLayer( const SdrLayerID _nLayerID,
     if ( (_nLayerID == rIDDMA.GetHellId()) ||
          (_nLayerID == rIDDMA.GetHeavenId()) )
     {
-        GetDrawView()->GetModel()->GetDrawOutliner().SetBackgroundColor( aOldOutlinerBackgrdColor );
+        GetDrawView()->GetModel()->GetDrawOutliner().SetBackgroundColor( aOldOutlinerBackgroundColor );
         GetDrawView()->GetModel()->GetDrawOutliner().SetDefaultHorizontalTextDirection( aOldEEHoriTextDir );
     }
 

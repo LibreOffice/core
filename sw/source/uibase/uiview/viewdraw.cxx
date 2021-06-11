@@ -580,7 +580,7 @@ bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
 
         if(pView)
         {
-            Color aBackground(pSh->GetShapeBackgrd());
+            Color aBackground(pSh->GetShapeBackground());
             pView->SetBackgroundColor(aBackground);
         }
 

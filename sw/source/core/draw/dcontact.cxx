@@ -897,7 +897,7 @@ SdrObject* SwDrawContact::GetDrawObjectByAnchorFrame( const SwFrame& _rAnchorFra
     return pRetDrawObj;
 }
 
-void SwDrawContact::NotifyBackgrdOfAllVirtObjs(const tools::Rectangle* pOldBoundRect)
+void SwDrawContact::NotifyBackgroundOfAllVirtObjs(const tools::Rectangle* pOldBoundRect)
 {
     for(const auto& rpDrawVirtObj : maDrawVirtObjs)
     {
@@ -1127,7 +1127,7 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                     lcl_NotifyBackgroundOfObj( *this, rObj, pOldBoundRect );
                     // --> #i36181# - background of 'virtual'
                     // drawing objects have also been notified.
-                    NotifyBackgrdOfAllVirtObjs( pOldBoundRect );
+                    NotifyBackgroundOfAllVirtObjs( pOldBoundRect );
                 }
                 DisconnectFromLayout( false );
                 mbMasterObjCleared = true;
@@ -1426,7 +1426,7 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
                     ConnectToLayout(pNewAnchorFormat);
                     // notify background of drawing objects
                     lcl_NotifyBackgroundOfObj(*this, *GetMaster(), pOldRect);
-                    NotifyBackgrdOfAllVirtObjs(pOldRect);
+                    NotifyBackgroundOfAllVirtObjs(pOldRect);
 
                     const SwFormatAnchor* pOldAnchorFormat = pLegacyHint->m_pOld ? lcl_getAnchorFormat(*pLegacyHint->m_pOld) : nullptr;
                     if(!pOldAnchorFormat || (pOldAnchorFormat->GetAnchorId() != pNewAnchorFormat->GetAnchorId()))
@@ -1482,7 +1482,7 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
                     assert(!"<SwDraw Contact::Modify(..)> - unhandled attribute?");
             }
             lcl_NotifyBackgroundOfObj(*this, *GetMaster(), nullptr);
-            NotifyBackgrdOfAllVirtObjs(nullptr);
+            NotifyBackgroundOfAllVirtObjs(nullptr);
             InvalidateObjs_(bUpdateSortedObjsList);
         }
 
@@ -1651,7 +1651,7 @@ void SwDrawContact::DisconnectFromLayout( bool _bMoveMasterToInvisibleLayer )
     {
         const tools::Rectangle aOldRect( maAnchoredDrawObj.GetObjRectWithSpaces().SVRect() );
         lcl_NotifyBackgroundOfObj( *this, *GetMaster(), &aOldRect );
-        NotifyBackgrdOfAllVirtObjs( &aOldRect );
+        NotifyBackgroundOfAllVirtObjs( &aOldRect );
     }
 
     // remove 'virtual' drawing objects from writer

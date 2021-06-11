@@ -238,14 +238,14 @@ public:
     bool IsInvalidAutoCompleteWords() const { return m_bInvalidAutoCmplWrds; }
     bool IsInvalidWordCount() const { return m_bInvalidWordCount; }
 
-    /** SwPageFrame::GetDrawBackgrdColor
+    /** SwPageFrame::GetDrawBackgroundColor
 
         determine the color, that is respectively will be drawn as background
         for the page frame.
 
         @return reference to an instance of class Color
     */
-    Color GetDrawBackgrdColor() const;
+    Color GetDrawBackgroundColor() const;
 
     /** paint margin area of a page
 

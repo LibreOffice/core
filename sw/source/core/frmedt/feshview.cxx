@@ -3218,7 +3218,7 @@ void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rect
     ImpEndCreate();
 }
 
-/** SwFEShell::GetShapeBackgrd
+/** SwFEShell::GetShapeBackground
     method determines background color of the page the selected drawing
     object is on and returns this color.
     If no color is found, because no drawing object is selected or ...,
@@ -3227,24 +3227,24 @@ void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rect
 
     @returns an object of class Color
 */
-Color SwFEShell::GetShapeBackgrd() const
+Color SwFEShell::GetShapeBackground() const
 {
     Color aRetColor;
 
     // check, if a draw view exists
-    OSL_ENSURE( Imp()->GetDrawView(), "wrong usage of SwFEShell::GetShapeBackgrd - no draw view!");
+    OSL_ENSURE( Imp()->GetDrawView(), "wrong usage of SwFEShell::GetShapeBackground - no draw view!");
     if( Imp()->GetDrawView() )
     {
         // determine list of selected objects
         const SdrMarkList* pMrkList = &Imp()->GetDrawView()->GetMarkedObjectList();
         // check, if exactly one object is selected.
-        OSL_ENSURE( pMrkList->GetMarkCount() == 1, "wrong usage of SwFEShell::GetShapeBackgrd - no selected object!");
+        OSL_ENSURE( pMrkList->GetMarkCount() == 1, "wrong usage of SwFEShell::GetShapeBackground - no selected object!");
         if ( pMrkList->GetMarkCount() == 1)
         {
             // get selected object
             const SdrObject *pSdrObj = pMrkList->GetMark( 0 )->GetMarkedSdrObj();
             // check, if selected object is a shape (drawing object)
-            OSL_ENSURE( dynamic_cast<const SwVirtFlyDrawObj*>( pSdrObj) ==  nullptr, "wrong usage of SwFEShell::GetShapeBackgrd - selected object is not a drawing object!");
+            OSL_ENSURE( dynamic_cast<const SwVirtFlyDrawObj*>( pSdrObj) ==  nullptr, "wrong usage of SwFEShell::GetShapeBackground - selected object is not a drawing object!");
             if ( dynamic_cast<const SwVirtFlyDrawObj*>( pSdrObj) ==  nullptr )
             {
                 // determine page frame of the frame the shape is anchored.
@@ -3257,7 +3257,7 @@ Color SwFEShell::GetShapeBackgrd() const
                     OSL_ENSURE( pPageFrame, "inconsistent model - no page!");
                     if ( pPageFrame )
                     {
-                        aRetColor = pPageFrame->GetDrawBackgrdColor();
+                        aRetColor = pPageFrame->GetDrawBackgroundColor();
                     }
                 }
             }
@@ -3280,19 +3280,19 @@ bool SwFEShell::IsShapeDefaultHoriTextDirR2L() const
     bool bRet = false;
 
     // check, if a draw view exists
-    OSL_ENSURE( Imp()->GetDrawView(), "wrong usage of SwFEShell::GetShapeBackgrd - no draw view!");
+    OSL_ENSURE( Imp()->GetDrawView(), "wrong usage of SwFEShell::GetShapeBackground - no draw view!");
     if( Imp()->GetDrawView() )
     {
         // determine list of selected objects
         const SdrMarkList* pMrkList = &Imp()->GetDrawView()->GetMarkedObjectList();
         // check, if exactly one object is selected.
-        OSL_ENSURE( pMrkList->GetMarkCount() == 1, "wrong usage of SwFEShell::GetShapeBackgrd - no selected object!");
+        OSL_ENSURE( pMrkList->GetMarkCount() == 1, "wrong usage of SwFEShell::GetShapeBackground - no selected object!");
         if ( pMrkList->GetMarkCount() == 1)
         {
             // get selected object
             const SdrObject *pSdrObj = pMrkList->GetMark( 0 )->GetMarkedSdrObj();
             // check, if selected object is a shape (drawing object)
-            OSL_ENSURE( dynamic_cast<const SwVirtFlyDrawObj*>( pSdrObj) ==  nullptr, "wrong usage of SwFEShell::GetShapeBackgrd - selected object is not a drawing object!");
+            OSL_ENSURE( dynamic_cast<const SwVirtFlyDrawObj*>( pSdrObj) ==  nullptr, "wrong usage of SwFEShell::GetShapeBackground - selected object is not a drawing object!");
             if ( dynamic_cast<const SwVirtFlyDrawObj*>( pSdrObj) ==  nullptr )
             {
                 // determine page frame of the frame the shape is anchored.
