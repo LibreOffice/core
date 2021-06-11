@@ -131,40 +131,73 @@ void ScTpFormulaOptions::LaunchCustomCalcSettings()
     }
 }
 
-bool ScTpFormulaOptions::IsValidSeparator(const OUString& rSep) const
+bool ScTpFormulaOptions::IsValidSeparator(const OUString& rSep, bool bArray) const
 {
     if (rSep.getLength() != 1)
         // Must be one-character long.
         return false;
 
-    if (rSep.compareToAscii("a") >= 0 && rSep.compareToAscii("z") <= 0)
-        return false;
-
-    if (rSep.compareToAscii("A") >= 0 && rSep.compareToAscii("Z") <= 0)
-        return false;
-
-    sal_Unicode c = rSep[0];
-    switch (c)
-    {
-        case '+':
-        case '-':
-        case '/':
-        case '*':
-        case '<':
-        case '>':
-        case '[':
-        case ']':
-        case '(':
-        case ')':
-        case '"':
-        case '\'':
-            // Disallowed characters.  Anything else we want to disallow ?
-            return false;
-    }
+    const sal_Unicode c = rSep[0];
 
     if (c == mnDecSep)
         // decimal separator is not allowed.
         return false;
+
+    if (c <= 0x20 || c == 0x7f)
+        // Disallow non-printables including space and DEL.
+        return false;
+
+    if (('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') || ('0' <= c && c <= '9'))
+        // Disallow alphanumeric.
+        return false;
+
+    if (bArray)
+    {
+        switch (c)
+        {
+            case '+':
+            case '-':
+            case '{':
+            case '}':
+            case '"':
+                // All following just to prevent confusion, they are not
+                // evaluated in inline arrays and theoretically would be
+                // possible.
+            case '%':
+            case '/':
+            case '*':
+            case '=':
+            case '<':
+            case '>':
+            case '[':
+            case ']':
+            case '(':
+            case ')':
+            case '\'':
+                // Disallowed characters.  Anything else we want to disallow ?
+                return false;
+        }
+    }
+    else if (c <= 0x7f)
+    {
+        switch (c)
+        {
+            default:
+                // Anything bad except the knowns.
+                return false;
+            case ';':
+            case ',':
+                ; // nothing
+        }
+    }
+    else
+    {
+        // Any Unicode character, would have to ask the compiler's localized
+        // symbol map whether it's a known symbol but not a separator
+        // (ocSep,ocArrayRowSep,ocArrayColSep), which we're about to set here.
+        // But really..
+        return false;
+    }
 
     return true;
 }
@@ -189,7 +222,7 @@ IMPL_LINK( ScTpFormulaOptions, ToggleHdl, weld::Toggleable&, rBtn, void )
 
 IMPL_LINK(ScTpFormulaOptions, SepInsertTextHdl, OUString&, rTest, bool)
 {
-    if (!IsValidSeparator(rTest) && !maOldSepValue.isEmpty())
+    if (!IsValidSeparator(rTest, false) && !maOldSepValue.isEmpty())
         // Invalid separator.  Restore the old value.
         rTest = maOldSepValue;
     return true;
@@ -198,7 +231,7 @@ IMPL_LINK(ScTpFormulaOptions, SepInsertTextHdl, OUString&, rTest, bool)
 IMPL_LINK(ScTpFormulaOptions, RowSepInsertTextHdl, OUString&, rTest, bool)
 {
     // Invalid separator or same as ColStr - Restore the old value.
-    if ((!IsValidSeparator(rTest) || rTest == mxEdSepArrayCol->get_text()) && !maOldSepValue.isEmpty())
+    if ((!IsValidSeparator(rTest, true) || rTest == mxEdSepArrayCol->get_text()) && !maOldSepValue.isEmpty())
         rTest = maOldSepValue;
     return true;
 }
@@ -206,7 +239,7 @@ IMPL_LINK(ScTpFormulaOptions, RowSepInsertTextHdl, OUString&, rTest, bool)
 IMPL_LINK(ScTpFormulaOptions, ColSepInsertTextHdl, OUString&, rTest, bool)
 {
     // Invalid separator or same as RowStr - Restore the old value.
-    if ((!IsValidSeparator(rTest) || rTest == mxEdSepArrayRow->get_text()) && !maOldSepValue.isEmpty())
+    if ((!IsValidSeparator(rTest, true) || rTest == mxEdSepArrayRow->get_text()) && !maOldSepValue.isEmpty())
         rTest = maOldSepValue;
     return true;
 }
