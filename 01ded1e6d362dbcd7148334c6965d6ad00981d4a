@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dcd87fa4_24cc9a1a",
+        "filename": "emfio/source/reader/wmfreader.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 841,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-06-11T09:17:17Z",
+      "side": 1,
+      "message": "if this gets backported to 7-1 then backport https://gerrit.libreoffice.org/c/core/+/117038 too",
+      "revId": "01ded1e6d362dbcd7148334c6965d6ad00981d4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
