@@ -28,6 +28,7 @@
 #include <unotools/tempfile.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/wmf.hxx>
 
 #include <impgraph.hxx>
 #include <graphic/GraphicFormatDetector.hxx>
@@ -53,6 +54,7 @@ private:
     void testUnloadedGraphicSizeUnit();
 
     void testWMFRoundtrip();
+    void testWMFWithEmfPlusRoundtrip();
     void testEmfToWmfConversion();
 
     void testSwappingGraphic_PNG_WithGfxLink();
@@ -89,6 +91,7 @@ private:
     CPPUNIT_TEST(testUnloadedGraphicAlpha);
     CPPUNIT_TEST(testUnloadedGraphicSizeUnit);
     CPPUNIT_TEST(testWMFRoundtrip);
+    CPPUNIT_TEST(testWMFWithEmfPlusRoundtrip);
     CPPUNIT_TEST(testEmfToWmfConversion);
 
     CPPUNIT_TEST(testSwappingGraphic_PNG_WithGfxLink);
@@ -409,6 +412,82 @@ void GraphicTest::testWMFRoundtrip()
     // - Actual  : 2826
     // i.e. we lost some of the WMF data on roundtrip.
     CPPUNIT_ASSERT_EQUAL(nExpectedSize, nActualSize);
+}
+
+int getEmfPlusActionsCount(const Graphic& graphic)
+{
+    const GDIMetaFile& metafile = graphic.GetGDIMetaFile();
+    int emfPlusCount = 0;
+    for (size_t i = 0; i < metafile.GetActionSize(); ++i)
+    {
+        MetaAction* action = metafile.GetAction(i);
+        if (action->GetType() == MetaActionType::COMMENT)
+        {
+            const MetaCommentAction* commentAction = static_cast<const MetaCommentAction*>(action);
+            if (commentAction->GetComment() == "EMF_PLUS")
+                ++emfPlusCount;
+        }
+    }
+    return emfPlusCount;
+}
+
+int getPolygonActionsCount(const Graphic& graphic)
+{
+    const GDIMetaFile& metafile = graphic.GetGDIMetaFile();
+    int polygonCount = 0;
+    for (size_t i = 0; i < metafile.GetActionSize(); ++i)
+    {
+        MetaAction* action = metafile.GetAction(i);
+        if (action->GetType() == MetaActionType::POLYGON)
+            ++polygonCount;
+    }
+    return polygonCount;
+}
+
+void GraphicTest::testWMFWithEmfPlusRoundtrip()
+{
+    // Load a WMF file.
+    test::Directories aDirectories;
+    OUString aURL = aDirectories.getURLFromSrc(u"vcl/qa/cppunit/data/wmf-embedded-emfplus.wmf");
+    SvFileStream aStream(aURL, StreamMode::READ);
+    sal_uInt64 nExpectedSize = aStream.TellEnd();
+    GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
+    Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
+
+    CPPUNIT_ASSERT_GREATER(0, getEmfPlusActionsCount(aGraphic));
+    CPPUNIT_ASSERT_EQUAL(0, getPolygonActionsCount(aGraphic));
+
+    for (bool useConvertMetafile : { false, true })
+    {
+        // Save as WMF.
+        utl::TempFile aTempFile;
+        aTempFile.EnableKillingFile();
+        SvStream& rOutStream = *aTempFile.GetStream(StreamMode::READWRITE);
+        if (useConvertMetafile)
+            ConvertGraphicToWMF(aGraphic, rOutStream, nullptr);
+        else
+        {
+            sal_uInt16 nFormat = rGraphicFilter.GetExportFormatNumberForShortName(u"WMF");
+            rGraphicFilter.ExportGraphic(aGraphic, OUString(), rOutStream, nFormat);
+        }
+        CPPUNIT_ASSERT_EQUAL(nExpectedSize, rOutStream.TellEnd());
+
+        rOutStream.Seek(0);
+        Graphic aNewGraphic = rGraphicFilter.ImportUnloadedGraphic(rOutStream);
+        // Check that reading the WMF back preserves the EMF+ actions in it.
+        CPPUNIT_ASSERT_GREATER(0, getEmfPlusActionsCount(aNewGraphic));
+        // EmfReader::ReadEnhWMF() drops non-EMF+ drawing actions if EMF+ is found.
+        CPPUNIT_ASSERT_EQUAL(0, getPolygonActionsCount(aNewGraphic));
+
+        // With EMF+ disabled there should be no EMF+ actions.
+        auto& rDataContainer = aNewGraphic.GetGfxLink().getDataContainer();
+        auto aVectorGraphicData
+            = std::make_shared<VectorGraphicData>(rDataContainer, VectorGraphicDataType::Wmf);
+        aVectorGraphicData->setEnableEMFPlus(false);
+        Graphic aNoEmfPlusGraphic(aVectorGraphicData);
+        CPPUNIT_ASSERT_EQUAL(0, getEmfPlusActionsCount(aNoEmfPlusGraphic));
+        CPPUNIT_ASSERT_GREATER(0, getPolygonActionsCount(aNoEmfPlusGraphic));
+    }
 }
 
 void GraphicTest::testEmfToWmfConversion()
