@@ -9413,6 +9413,47 @@ private:
 #endif
 
 #if GTK_CHECK_VERSION(4, 0, 0)
+    void process_menu_model(GMenuModel* pMenuModel)
+    {
+        for (int i = 0, nCount = g_menu_model_get_n_items(pMenuModel); i < nCount; ++i)
+        {
+            OString sAction, sTarget;
+            char *id;
+            if (g_menu_model_get_item_attribute(pMenuModel, i, "action", "s", &id))
+            {
+                assert(OString(id).startsWith("menu."));
+
+                sAction = OString(id + 5);
+
+                auto res = m_aInsertedActions.insert(sAction);
+                if (res.second)
+                {
+                    // the const char* arg isn't copied by anything so it must continue to exist for the life time of
+                    // the action group
+                    if (sAction.startsWith("radio."))
+                        m_aActionEntries.push_back({res.first->getStr(), action_activated, "s", "'none'", nullptr, {}});
+                    else
+                        m_aActionEntries.push_back({res.first->getStr(), action_activated, "s", nullptr, nullptr, {}});
+                }
+
+                g_free(id);
+            }
+
+            if (g_menu_model_get_item_attribute(pMenuModel, i, "target", "s", &id))
+            {
+                sTarget = OString(id);
+                g_free(id);
+            }
+
+            m_aIdToAction[sTarget] = sAction;
+
+            if (GMenuModel* pSectionModel = g_menu_model_get_item_link(pMenuModel, i, G_MENU_LINK_SECTION))
+                process_menu_model(pSectionModel);
+            if (GMenuModel* pSubMenuModel = g_menu_model_get_item_link(pMenuModel, i, G_MENU_LINK_SUBMENU))
+                process_menu_model(pSubMenuModel);
+        }
+    }
+
     // build an action group for the menu, "action" is the normal menu entry case
     // the others are radiogroups
     void update_action_group_from_popover_model()
@@ -9424,38 +9465,7 @@ private:
                                      gtk_popover_menu_get_menu_model(GTK_POPOVER_MENU(pPopover)) :
                                      nullptr)
         {
-            for (int i = 0, nCount = g_menu_model_get_n_items(pMenuModel); i < nCount; ++i)
-            {
-                OString sAction, sTarget;
-                char *id;
-                if (g_menu_model_get_item_attribute(pMenuModel, i, "action", "s", &id))
-                {
-                    assert(OString(id).startsWith("menu."));
-
-                    sAction = OString(id + 5);
-
-                    auto res = m_aInsertedActions.insert(sAction);
-                    if (res.second)
-                    {
-                        // the const char* arg isn't copied by anything so it must continue to exist for the life time of
-                        // the action group
-                        if (sAction.startsWith("radio."))
-                            m_aActionEntries.push_back({res.first->getStr(), action_activated, "s", "'none'", nullptr, {}});
-                        else
-                            m_aActionEntries.push_back({res.first->getStr(), action_activated, "s", nullptr, nullptr, {}});
-                    }
-
-                    g_free(id);
-                }
-
-                if (g_menu_model_get_item_attribute(pMenuModel, i, "target", "s", &id))
-                {
-                    sTarget = OString(id);
-                    g_free(id);
-                }
-
-                m_aIdToAction[sTarget] = sAction;
-            }
+            process_menu_model(pMenuModel);
         }
 
         g_action_map_add_action_entries(G_ACTION_MAP(m_pActionGroup), m_aActionEntries.data(), m_aActionEntries.size(), this);

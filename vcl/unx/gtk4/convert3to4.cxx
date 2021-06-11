@@ -1089,7 +1089,11 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 xMenu->setAttributeNode(xIdAttr);
                 xChild->getParentNode()->insertBefore(xMenu, xChild);
 
-                ConvertMenu(xMenu, xChild);
+                css::uno::Reference<css::xml::dom::XElement> xSection
+                    = xDoc->createElement("section");
+                xMenu->appendChild(xSection);
+
+                ConvertMenu(xSection, xChild);
 
                 // now remove GtkMenu contents
                 while (true)
