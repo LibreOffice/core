@@ -30,6 +30,7 @@ $(eval $(call gb_CppunitTest_set_include,vcl_svm_test,\
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,vcl_svm_test, \
+	basegfx \
 	comphelper \
 	cppu \
 	cppuhelper \
