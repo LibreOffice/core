@@ -735,7 +735,7 @@ namespace emfio
             bEnableEMFPlus = mbEnableEMFPlus;
         }
 
-        SAL_INFO("emfio", "EMF_PLUS_DISABLE is " << (bEnableEMFPlus ? "enabled" : "disabled"));
+        SAL_INFO("emfio", "EMF+ reading is " << (bEnableEMFPlus ? "enabled" : "disabled"));
 
         while( bStatus && mnRecordCount-- && mpInputStream->good())
         {

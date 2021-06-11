@@ -1443,6 +1443,7 @@ namespace emfio
                             GDIMetaFile aMeta;
                             mpEMFStream->Seek( 0 );
                             std::unique_ptr<EmfReader> pEMFReader(std::make_unique<EmfReader>( *mpEMFStream, aMeta ));
+                            pEMFReader->SetEnableEMFPlus(mbEnableEMFPlus);
                             bEMFAvailable = pEMFReader->ReadEnhWMF();
                             pEMFReader.reset(); // destroy first!!!
 
