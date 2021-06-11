@@ -10192,15 +10192,27 @@ public:
         assert(false && "not implemented");
     }
 };
+#endif
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 class GtkInstanceMenu : public MenuHelper, public virtual weld::Menu
+#else
+class GtkInstanceMenu : public virtual weld::Menu
+#endif
 {
 protected:
+#if !GTK_CHECK_VERSION(4, 0, 0)
     std::vector<GtkMenuItem*> m_aExtraItems;
+#endif
     OString m_sActivated;
+#if !GTK_CHECK_VERSION(4, 0, 0)
     MenuHelper* m_pTopLevelMenuHelper;
+#else
+    GtkPopoverMenu* m_pMenu;
+#endif
 
 private:
+#if !GTK_CHECK_VERSION(4, 0, 0)
     virtual void signal_activate(GtkMenuItem* pItem) override
     {
         m_sActivated = ::get_buildable_id(GTK_BUILDABLE(pItem));
@@ -10218,13 +10230,20 @@ private:
         }
         m_aExtraItems.clear();
     }
+#endif
 
 public:
+#if !GTK_CHECK_VERSION(4, 0, 0)
     GtkInstanceMenu(GtkMenu* pMenu, bool bTakeOwnership)
         : MenuHelper(pMenu, bTakeOwnership)
         , m_pTopLevelMenuHelper(nullptr)
+#else
+    GtkInstanceMenu(GtkPopoverMenu* pMenu, bool /*bTakeOwnership*/)
+        : m_pMenu(pMenu)
+#endif
     {
         g_object_set_data(G_OBJECT(m_pMenu), "g-lo-GtkInstanceMenu", this);
+#if !GTK_CHECK_VERSION(4, 0, 0)
         // tdf#122527 if we're welding a submenu of a menu of a MenuButton,
         // then find that MenuButton parent so that when adding items to this
         // menu we can inform the MenuButton of their addition
@@ -10255,6 +10274,7 @@ public:
             void* pData = g_object_get_data(G_OBJECT(pTopLevelMenu), "g-lo-GtkInstanceMenu");
             m_pTopLevelMenuHelper = static_cast<GtkInstanceMenu*>(pData);
         }
+#endif
     }
 
     virtual OString popup_at_rect(weld::Widget* pParent, const tools::Rectangle &rRect) override
@@ -10264,6 +10284,7 @@ public:
         GtkInstanceWidget* pGtkWidget = dynamic_cast<GtkInstanceWidget*>(pParent);
         assert(pGtkWidget);
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkWidget* pWidget = pGtkWidget->getWidget();
         gtk_menu_attach_to_widget(m_pMenu, pWidget, nullptr);
 
@@ -10327,54 +10348,79 @@ public:
         g_main_loop_unref(pLoop);
         g_signal_handler_disconnect(m_pMenu, nSignalId);
         gtk_menu_detach(m_pMenu);
+#endif
 
         return m_sActivated;
     }
 
     virtual void set_sensitive(const OString& rIdent, bool bSensitive) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         set_item_sensitive(rIdent, bSensitive);
+#endif
     }
 
     virtual bool get_sensitive(const OString& rIdent) const override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         return get_item_sensitive(rIdent);
+#else
+        return false;
+#endif
     }
 
     virtual void set_active(const OString& rIdent, bool bActive) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         set_item_active(rIdent, bActive);
+#endif
     }
 
     virtual bool get_active(const OString& rIdent) const override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         return get_item_active(rIdent);
+#else
+        return false;
+#endif
     }
 
     virtual void set_visible(const OString& rIdent, bool bShow) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         set_item_visible(rIdent, bShow);
+#endif
     }
 
     virtual void set_label(const OString& rIdent, const OUString& rLabel) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         set_item_label(rIdent, rLabel);
+#endif
     }
 
     virtual OUString get_label(const OString& rIdent) const override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         return get_item_label(rIdent);
+#else
+        return OUString();
+#endif
     }
 
     virtual void insert_separator(int pos, const OUString& rId) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         MenuHelper::insert_separator(pos, rId);
+#endif
     }
 
     virtual void clear() override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         clear_extras();
         clear_items();
+#endif
     }
 
     virtual void insert(int pos, const OUString& rId, const OUString& rStr,
@@ -10382,6 +10428,7 @@ public:
                         const css::uno::Reference<css::graphic::XGraphic>& rGraphic,
                         TriState eCheckRadioFalse) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkWidget* pImage = nullptr;
         if (pIconName)
         {
@@ -10435,27 +10482,37 @@ public:
             m_pTopLevelMenuHelper->add_to_map(pMenuItem);
         if (pos != -1)
             gtk_menu_reorder_child(m_pMenu, pItem, pos);
+#endif
     }
 
     virtual OString get_id(int pos) const override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GList* pChildren = gtk_container_get_children(GTK_CONTAINER(m_pMenu));
         gpointer pMenuItem = g_list_nth_data(pChildren, pos);
         OString id = ::get_buildable_id(GTK_BUILDABLE(pMenuItem));
         g_list_free(pChildren);
         return id;
+#else
+        return OString();
+#endif
     }
 
     virtual int n_children() const override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GList* pChildren = gtk_container_get_children(GTK_CONTAINER(m_pMenu));
         int nLen = g_list_length(pChildren);
         g_list_free(pChildren);
         return nLen;
+#else
+        return 0;
+#endif
     }
 
     void remove(const OString& rIdent) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         if (!m_aExtraItems.empty())
         {
             GtkMenuItem* pMenuItem = m_aMap[rIdent];
@@ -10468,14 +10525,19 @@ public:
             }
         }
         MenuHelper::remove_item(rIdent);
+#endif
     }
 
     virtual ~GtkInstanceMenu() override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         clear_extras();
+#endif
         g_object_steal_data(G_OBJECT(m_pMenu), "g-lo-GtkInstanceMenu");
     }
 };
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
 
     vcl::ImageType GtkToVcl(GtkIconSize eSize)
     {
@@ -21977,15 +22039,14 @@ public:
 
     virtual std::unique_ptr<weld::Menu> weld_menu(const OString &id) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+        GtkPopoverMenu* pMenu = GTK_POPOVER_MENU(gtk_builder_get_object(m_pBuilder, id.getStr()));
+#else
         GtkMenu* pMenu = GTK_MENU(gtk_builder_get_object(m_pBuilder, id.getStr()));
+#endif
         if (!pMenu)
             return nullptr;
         return std::make_unique<GtkInstanceMenu>(pMenu, true);
-#else
-        (void)id;
-        return nullptr;
-#endif
     }
 
     virtual std::unique_ptr<weld::Popover> weld_popover(const OString &id) override
