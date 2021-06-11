@@ -51,7 +51,7 @@
             ScriptForge(hostname = 'localhost', port = 2021)
 
     Specific documentation about the use of ScriptForge from Python scripts:
-        TBD
+        https://help.libreoffice.org/7.2/en-US/text/sbasic/shared/03/sf_intro.html
     """
 
 import uno
