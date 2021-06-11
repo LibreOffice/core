@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "feff6f9f_b4fd0869",
+        "filename": "vcl/source/gdi/mtfxmldump.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1041,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-11T01:05:20Z",
+      "side": 1,
+      "message": "space after if statement",
+      "range": {
+        "startLine": 1041,
+        "startChar": 18,
+        "endLine": 1041,
+        "endChar": 19
+      },
+      "revId": "bbc6ac56902b7c44b96a69c948c43dd158c3b88f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
