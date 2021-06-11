@@ -45,10 +45,13 @@ namespace
 sal_uInt16 Count_Impl( const sal_uInt16 *pRanges )
 {
     sal_uInt16 nCount = 0;
-    while ( *pRanges )
+    if (pRanges)
     {
-        nCount += 2;
-        pRanges += 2;
+        while (*pRanges)
+        {
+            nCount += 2;
+            pRanges += 2;
+        }
     }
     return nCount;
 }
@@ -105,6 +108,8 @@ void SfxItemSet::InitRanges_Impl(const sal_uInt16 *pWhichPairTable)
     const sal_uInt16* pPtr = pWhichPairTable;
     while( *pPtr )
     {
+        assert(pPtr[0] <= pPtr[1]);
+        assert(!pPtr[2] || pPtr[2] > pPtr[1]);
         nCnt += ( *(pPtr+1) - *pPtr ) + 1;
         pPtr += 2;
     }
@@ -666,12 +671,11 @@ void SfxItemSet::MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo )
 
 #ifdef DBG_UTIL
     assert(nFrom <= nTo);
-    for (const sal_uInt16 *pRange = m_pWhichRanges; *pRange; pRange += 2)
+    for (const sal_uInt16 *pRange = m_pWhichRanges; pRange && *pRange; pRange += 2)
     {
         assert(pRange[0] <= pRange[1]);
         // ranges must be sorted and discrete
-        assert(
-            !pRange[2] || (pRange[2] > pRange[1] && pRange[2] - pRange[1] > 1));
+        assert(!pRange[2] || pRange[2] > pRange[1]);
     }
 #endif
 
@@ -736,14 +740,17 @@ void SfxItemSet::SetRanges( const sal_uInt16 *pNewRanges )
     // Identical Ranges?
     if (m_pWhichRanges == pNewRanges)
         return;
-    const sal_uInt16* pOld = m_pWhichRanges;
-    const sal_uInt16* pNew = pNewRanges;
-    while ( *pOld == *pNew )
+    if (m_pWhichRanges)
     {
-        if ( !*pOld && !*pNew )
-            return;
-        ++pOld;
-        ++pNew;
+        const sal_uInt16* pOld = m_pWhichRanges;
+        const sal_uInt16* pNew = pNewRanges;
+        while (*pOld == *pNew)
+        {
+            if (!*pOld && !*pNew)
+                return;
+            ++pOld;
+            ++pNew;
+        }
     }
 
     // create new item-array (by iterating through all new ranges)
