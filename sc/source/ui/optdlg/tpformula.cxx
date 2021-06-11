@@ -372,9 +372,9 @@ void ScTpFormulaOptions::Reset(const SfxItemSet* rCoreSet)
     OUString aSepArrayRow = aOpt.GetFormulaSepArrayRow();
     OUString aSepArrayCol = aOpt.GetFormulaSepArrayCol();
 
-    if (aSep.getLength() == 1 && aSepArrayRow.getLength() == 1 && aSepArrayCol.getLength() == 1)
+    if (IsValidSeparator(aSep, false) && IsValidSeparator(aSepArrayRow, true) && IsValidSeparator(aSepArrayCol, true))
     {
-        // Each separator must be one character long.
+        // Each and all separators must be valid.
         mxEdSepFuncArg->set_text(aSep);
         mxEdSepArrayCol->set_text(aSepArrayCol);
         mxEdSepArrayRow->set_text(aSepArrayRow);
