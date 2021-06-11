@@ -305,18 +305,26 @@ public:
 
     virtual void show() override
     {
+        bool bWasVisible = BaseInstanceClass::get_visible();
         BaseInstanceClass::show();
-        std::unique_ptr<ActionDataMap> pMap = std::make_unique<ActionDataMap>();
-        (*pMap)[ACTION_TYPE] = "show";
-        sendAction(std::move(pMap));
+        if (!bWasVisible)
+        {
+            std::unique_ptr<ActionDataMap> pMap = std::make_unique<ActionDataMap>();
+            (*pMap)[ACTION_TYPE] = "show";
+            sendAction(std::move(pMap));
+        }
     }
 
     virtual void hide() override
     {
+        bool bWasVisible = BaseInstanceClass::get_visible();
         BaseInstanceClass::hide();
-        std::unique_ptr<ActionDataMap> pMap = std::make_unique<ActionDataMap>();
-        (*pMap)[ACTION_TYPE] = "hide";
-        sendAction(std::move(pMap));
+        if (bWasVisible)
+        {
+            std::unique_ptr<ActionDataMap> pMap = std::make_unique<ActionDataMap>();
+            (*pMap)[ACTION_TYPE] = "hide";
+            sendAction(std::move(pMap));
+        }
     }
 
     using BaseInstanceClass::set_sensitive;
