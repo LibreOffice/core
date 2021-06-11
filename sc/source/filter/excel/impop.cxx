@@ -858,16 +858,28 @@ void ImportExcel::Shrfmla()
 
 void ImportExcel::Mulrk()
 {
+    /* rw (2 bytes):  An Rw structure that specifies the row containing the
+       cells with numeric data.
+
+       colFirst (2 bytes):  A Col structure that specifies the first column in
+       the series of numeric cells within the sheet. The value of colFirst.col
+       MUST be less than or equal to 254.
+
+       rgrkrec (variable): An array of RkRec structures.  Each element in the
+       array specifies an RkRec in the row. The number of entries in the array
+       MUST be equal to the value given by the following formula:
+
+       Number of entries in rgrkrec = (colLast.col – colFirst.col +1)
+
+       colLast (2 bytes):  A Col structure that specifies the last column in
+       the set of numeric cells within the sheet. This colLast.col value MUST
+       be greater than the colFirst.col value.  */
+
     XclAddress aXclPos;
     aIn >> aXclPos;
 
-    XclAddress aCurrXclPos(aXclPos);
-    while (true)
+    for( XclAddress aCurrXclPos( aXclPos ); (aXclPos.mnCol <= aCurrXclPos.mnCol) && (aIn.GetRecLeft() > 2); ++aCurrXclPos.mnCol )
     {
-        if (aIn.GetRecLeft() < 6)
-            break;
-        if (aCurrXclPos.mnCol < aXclPos.mnCol)
-            break;
         sal_uInt16 nXF = aIn.ReaduInt16();
         sal_Int32 nRkNum = aIn.ReadInt32();
 
@@ -877,28 +889,39 @@ void ImportExcel::Mulrk()
             GetXFRangeBuffer().SetXF( aScPos, nXF );
             GetDocImport().setNumericCell(aScPos, XclTools::GetDoubleFromRK(nRkNum));
         }
-        ++aCurrXclPos.mnCol;
     }
 }
 
 void ImportExcel::Mulblank()
 {
+    /* rw (2 bytes):  An Rw structure that specifies a row containing the blank
+       cells.
+
+       colFirst (2 bytes):  A Col structure that specifies the first column in
+       the series of blank cells within the sheet. The value of colFirst.col
+       MUST be less than or equal to 254.
+
+       rgixfe (variable): An array of IXFCell structures. Each element of this
+       array contains an IXFCell structure corresponding to a blank cell in the
+       series. The number of entries in the array MUST be equal to the value
+       given by the following formula:
+
+       Number of entries in rgixfe = (colLast.col – colFirst.col +1)
+
+       colLast (2 bytes):  A Col structure that specifies the last column in
+       the series of blank cells within the sheet. This colLast.col value MUST
+       be greater than colFirst.col value. */
+
     XclAddress aXclPos;
     aIn >> aXclPos;
 
-    XclAddress aCurrXclPos(aXclPos);
-    while (true)
+    for( XclAddress aCurrXclPos( aXclPos ); (aXclPos.mnCol <= aCurrXclPos.mnCol) && (aIn.GetRecLeft() > 2); ++aCurrXclPos.mnCol )
     {
-        if (aIn.GetRecLeft() < 2)
-            break;
-        if (aCurrXclPos.mnCol < aXclPos.mnCol)
-            break;
         sal_uInt16 nXF = aIn.ReaduInt16();
 
         ScAddress aScPos( ScAddress::UNINITIALIZED );
         if( GetAddressConverter().ConvertAddress( aScPos, aCurrXclPos, GetCurrScTab(), true ) )
             GetXFRangeBuffer().SetBlankXF( aScPos, nXF );
-        ++aCurrXclPos.mnCol;
     }
 }
 
