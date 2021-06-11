@@ -210,9 +210,7 @@ void VistaFilePicker::ensureInit()
         }
         else
         {
-            css::uno::Sequence < css::uno::Any > aInitArguments(1);
-            aInitArguments[0] <<= css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE;
-            initialize(aInitArguments);
+            initialize( { css::uno::Any(css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE) });
         }
     }
 }

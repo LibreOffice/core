@@ -235,9 +235,7 @@ void ExtendedColorConfig_Impl::Load(const OUString& rScheme)
     OUString sDisplayName("/DisplayName");
     for(OUString & componentName : aComponentNames)
     {
-        uno::Sequence < OUString > aComponentDisplayNames(1);
-        aComponentDisplayNames[0] = componentName + sDisplayName;
-        uno::Sequence< uno::Any > aComponentDisplayNamesValue = GetProperties( aComponentDisplayNames );
+        uno::Sequence< uno::Any > aComponentDisplayNamesValue = GetProperties( { componentName + sDisplayName } );
         OUString sComponentDisplayName;
         if ( aComponentDisplayNamesValue.hasElements() && (aComponentDisplayNamesValue[0] >>= sComponentDisplayName) )
         {

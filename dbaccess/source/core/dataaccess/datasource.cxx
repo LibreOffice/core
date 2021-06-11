@@ -240,10 +240,8 @@ void SAL_CALL OAuthenticationContinuation::setAccount( const OUString& )
 
 Sequence< RememberAuthentication > SAL_CALL OAuthenticationContinuation::getRememberAccountModes( RememberAuthentication& _reDefault )
 {
-    Sequence < RememberAuthentication > aReturn(1);
-    aReturn[0] = RememberAuthentication_NO;
     _reDefault = RememberAuthentication_NO;
-    return aReturn;
+    return { RememberAuthentication_NO };
 }
 
 void SAL_CALL OAuthenticationContinuation::setRememberAccount( RememberAuthentication /*Remember*/ )

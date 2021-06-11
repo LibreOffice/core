@@ -866,11 +866,8 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                 else
                 {
                     // check for "internal" protocols that should not be forwarded to the system
-                    std::vector < OUString > aProtocols(2);
-
                     // add special protocols that always should be treated as internal
-                    aProtocols[0] = "private:*";
-                    aProtocols[1] = "vnd.sun.star.*";
+                    std::vector < OUString > aProtocols { "private:*", "vnd.sun.star.*" };
 
                     // get registered protocol handlers from configuration
                     Reference < XNameAccess > xAccess(officecfg::Office::ProtocolHandler::HandlerSet::get());
