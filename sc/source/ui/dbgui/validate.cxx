@@ -77,8 +77,8 @@ namespace ValidListType = css::sheet::TableValidationVisibility;
 
 const sal_uInt16 ScTPValidationValue::pValueRanges[] =
 {
-    FID_VALID_MODE, FID_VALID_ERRTEXT,
     FID_VALID_LISTTYPE, FID_VALID_LISTTYPE,
+    FID_VALID_MODE, FID_VALID_ERRTEXT,
     0
 };
 
