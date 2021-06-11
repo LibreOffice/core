@@ -44,15 +44,11 @@ NumberFormatDialog::NumberFormatDialog(weld::Window* pParent, SfxItemSet& rSet)
 
 SfxItemSet NumberFormatDialog::CreateEmptyItemSetForNumberFormatDialog( SfxItemPool& rItemPool )
 {
-    static const sal_uInt16 nWhichPairs[] =
-    {
+    return SfxItemSet( rItemPool, svl::Items<
         SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_INFO,
-        SID_ATTR_NUMBERFORMAT_NOLANGUAGE, SID_ATTR_NUMBERFORMAT_NOLANGUAGE,
         SID_ATTR_NUMBERFORMAT_ONE_AREA, SID_ATTR_NUMBERFORMAT_ONE_AREA,
-        SID_ATTR_NUMBERFORMAT_SOURCE, SID_ATTR_NUMBERFORMAT_SOURCE,
-        0
-    };
-    return SfxItemSet( rItemPool, nWhichPairs );
+        SID_ATTR_NUMBERFORMAT_NOLANGUAGE, SID_ATTR_NUMBERFORMAT_NOLANGUAGE,
+        SID_ATTR_NUMBERFORMAT_SOURCE, SID_ATTR_NUMBERFORMAT_SOURCE>{} );
 }
 
 } //namespace chart
