@@ -983,13 +983,13 @@ sal_Int32 SwGetExpField::GetReferenceTextPos( const SwFormatField& rFormat, SwDo
 
         static const sal_uInt16 nIds[] =
         {
-            RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE,
             RES_CHRATR_FONT, RES_CHRATR_FONT,
-            RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_LANGUAGE,
+            RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE,
             RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONT,
-            RES_CHRATR_CTL_LANGUAGE, RES_CHRATR_CTL_LANGUAGE,
+            RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_LANGUAGE,
             RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONT,
-            0, 0
+            RES_CHRATR_CTL_LANGUAGE, RES_CHRATR_CTL_LANGUAGE,
+            0
         };
         SwAttrSet aSet(rDoc.GetAttrPool(), nIds);
         rTextNode.GetParaAttr(aSet, nRet, nRet+1);

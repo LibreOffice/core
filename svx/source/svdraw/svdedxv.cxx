@@ -2629,25 +2629,21 @@ bool SdrObjEditView::SupportsFormatPaintbrush(SdrInventor nObjectInventor,
 
 static const sal_uInt16* GetFormatRangeImpl(bool bTextOnly)
 {
-    static const sal_uInt16 gRanges[] = { SDRATTR_SHADOW_FIRST,
-                                          SDRATTR_SHADOW_LAST,
-                                          SDRATTR_GRAF_FIRST,
-                                          SDRATTR_GRAF_LAST,
-                                          SDRATTR_TABLE_FIRST,
-                                          SDRATTR_TABLE_LAST,
-                                          XATTR_LINE_FIRST,
-                                          XATTR_LINE_LAST,
-                                          XATTR_FILL_FIRST,
-                                          XATTRSET_FILL,
-                                          EE_PARA_START,
-                                          EE_PARA_END, // text-only from here on
-                                          EE_CHAR_START,
-                                          EE_CHAR_END,
-                                          SDRATTR_MISC_FIRST,
-                                          SDRATTR_MISC_LAST, // table cell formats
-                                          0,
-                                          0 };
-    return &gRanges[bTextOnly ? 10 : 0];
+    static constexpr auto gFull
+        = svl::ItemsArray({ { XATTR_LINE_FIRST, XATTR_LINE_LAST },
+                            { XATTR_FILL_FIRST, XATTRSET_FILL },
+                            { SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST },
+                            { SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST }, // table cell formats
+                            { SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST },
+                            { SDRATTR_TABLE_FIRST, SDRATTR_TABLE_LAST },
+                            { EE_PARA_START, EE_PARA_END },
+                            { EE_CHAR_START, EE_CHAR_END } });
+
+    static constexpr auto gTextOnly = svl::ItemsArray({ { SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST },
+                                                        { EE_PARA_START, EE_PARA_END },
+                                                        { EE_CHAR_START, EE_CHAR_END } });
+
+    return bTextOnly ? gTextOnly.data() : gFull.data();
 }
 
 void SdrObjEditView::TakeFormatPaintBrush(std::shared_ptr<SfxItemSet>& rFormatSet)

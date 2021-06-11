@@ -21,11 +21,13 @@
 
 #include <sal/config.h>
 
+#include <array>
 #include <cassert>
 #include <cstddef>
 #include <initializer_list>
 #include <type_traits>
 #include <memory>
+#include <utility>
 
 #include <svl/svldllapi.h>
 #include <svl/poolitem.hxx>
@@ -41,7 +43,7 @@ constexpr bool validRange(sal_uInt16 wid1, sal_uInt16 wid2)
 { return wid1 != 0 && wid1 <= wid2; }
 
 constexpr bool validGap(sal_uInt16 wid1, sal_uInt16 wid2)
-{ return wid2 > wid1 && wid2 - wid1 > 1; }
+{ return wid2 > wid1; }
 
 template<sal_uInt16 WID1, sal_uInt16 WID2> constexpr bool validRanges()
 { return validRange(WID1, WID2); }
@@ -50,6 +52,19 @@ template<sal_uInt16 WID1, sal_uInt16 WID2, sal_uInt16 WID3, sal_uInt16... WIDs>
 constexpr bool validRanges() {
     return validRange(WID1, WID2) && validGap(WID2, WID3)
         && validRanges<WID3, WIDs...>();
+}
+
+inline constexpr bool validRanges(const sal_uInt16* pRanges)
+{
+    for (auto p = pRanges; p && *p; p += 2)
+    {
+        if (!validRange(p[0], p[1]))
+            return false;
+        // ranges must be sorted
+        if (p[2] != 0 && !validGap(p[1], p[2]))
+            return false;
+    }
+    return true;
 }
 
 // The calculations in rangeSize and rangesSize cannot overflow, assuming
@@ -71,6 +86,24 @@ constexpr std::size_t rangesSize()
 
 template<sal_uInt16... WIDs> struct Items {};
 
+// This allows creating compile-time which id arrays using syntax like
+//
+//     constexpr auto aWids = svl::ItemsArray({ { widFrom1, widTo2 }, { widFrom2, widTo2 }, ... });
+//
+// so that e.g. clang-format would not try to rearrange the initializer sequence to break pairs.
+// Additionally, the array validity is checked in debug builds.
+template <size_t N> constexpr auto ItemsArray(const std::pair<sal_uInt16, sal_uInt16> (&wids)[N])
+{
+    std::array<sal_uInt16, N * 2 + 1> aArray{};
+    sal_uInt16* p = aArray.data();
+    for (const auto& [wid1, wid2] : wids)
+    {
+        *p++ = wid1;
+        *p++ = wid2;
+    }
+    assert(svl::detail::validRanges(aArray.data()));
+    return aArray;
+}
 }
 
 class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxItemSet
@@ -88,7 +121,7 @@ friend class SfxItemPoolCache;
 friend class SfxAllItemSet;
 
 private:
-    SVL_DLLPRIVATE void                     InitRanges_Impl(const sal_uInt16 *nWhichPairTable);
+    SVL_DLLPRIVATE sal_uInt16 InitRanges_Impl(const sal_uInt16 *nWhichPairTable);
 
     SfxItemSet(
         SfxItemPool & pool, std::initializer_list<sal_uInt16> wids,
@@ -248,8 +281,6 @@ class SVL_DLLPUBLIC SfxAllItemSet: public SfxItemSet
 //  Handles all Ranges. Ranges are automatically modified by putting items.
 
 {
-    sal_uInt16                      nFree;
-
 public:
                                 SfxAllItemSet( SfxItemPool &rPool );
                                 SfxAllItemSet( const SfxItemSet & );

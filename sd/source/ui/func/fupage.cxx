@@ -200,15 +200,17 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest&
     if (!mpDrawViewShell)
         return nullptr;
 
-    SfxItemSet aNewAttr(mpDoc->GetPool(),
-                        {{mpDoc->GetPool().GetWhich(SID_ATTR_LRSPACE),
-                        mpDoc->GetPool().GetWhich(SID_ATTR_ULSPACE)},
-                        {SID_ATTR_PAGE, SID_ATTR_PAGE_SHARED},
-                        {SID_ATTR_BORDER_OUTER, SID_ATTR_BORDER_OUTER},
-                        {SID_ATTR_BORDER_SHADOW, SID_ATTR_BORDER_SHADOW},
-                        {XATTR_FILL_FIRST, XATTR_FILL_LAST},
-                        {SID_ATTR_PAGE_COLOR,SID_ATTR_PAGE_FILLSTYLE},
-                        {EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR}});
+    SfxItemSet aNewAttr(mpDoc->GetPool(), {
+                                              { XATTR_FILL_FIRST, XATTR_FILL_LAST },
+                                              { EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR },
+                                              { SID_ATTR_BORDER_OUTER, SID_ATTR_BORDER_OUTER },
+                                              { SID_ATTR_BORDER_SHADOW, SID_ATTR_BORDER_SHADOW },
+                                              { SID_ATTR_PAGE, SID_ATTR_PAGE_SHARED },
+                                              { SID_ATTR_PAGE_COLOR, SID_ATTR_PAGE_FILLSTYLE },
+                                          });
+    // Keep it sorted
+    aNewAttr.MergeRange(mpDoc->GetPool().GetWhich(SID_ATTR_LRSPACE),
+                        mpDoc->GetPool().GetWhich(SID_ATTR_ULSPACE));
 
     // Retrieve additional data for dialog
 
