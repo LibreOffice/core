@@ -202,30 +202,25 @@ bool SvxHFPage::FillItemSet( SfxItemSet* rSet )
     const sal_uInt16 nWBoxInfo = GetWhich(SID_ATTR_BORDER_INNER);
     const sal_uInt16 nWShadow = GetWhich(SID_ATTR_BORDER_SHADOW);
 
-    const sal_uInt16 aWhichTab[] = {
-        nWSize, nWSize,
-        nWLRSpace, nWLRSpace,
-        nWULSpace, nWULSpace,
-        nWOn, nWOn,
-        nWDynamic, nWDynamic,
-        nWShared, nWShared,
-        nWSharedFirst, nWSharedFirst,
-        nWBrush, nWBrush,
-        nWBoxInfo, nWBoxInfo,
-        nWBox, nWBox,
-        nWShadow, nWShadow,
-        nWDynSpacing, nWDynSpacing,
-
-        // take over DrawingLayer FillStyles
-        XATTR_FILL_FIRST, XATTR_FILL_LAST,                // [1014
-
-        0, 0};
-
     const SfxItemSet& rOldSet = GetItemSet();
     SfxItemPool* pPool = rOldSet.GetPool();
     DBG_ASSERT(pPool,"no pool :-(");
     MapUnit eUnit = pPool->GetMetric(nWSize);
-    SfxItemSet aSet(*pPool,aWhichTab);
+    // take over DrawingLayer FillStyles
+    SfxItemSet aSet(*pPool, svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
+    // Keep it valid
+    aSet.MergeRange(nWSize, nWSize);
+    aSet.MergeRange(nWLRSpace, nWLRSpace);
+    aSet.MergeRange(nWULSpace, nWULSpace);
+    aSet.MergeRange(nWOn, nWOn);
+    aSet.MergeRange(nWDynamic, nWDynamic);
+    aSet.MergeRange(nWShared, nWShared);
+    aSet.MergeRange(nWSharedFirst, nWSharedFirst);
+    aSet.MergeRange(nWBrush, nWBrush);
+    aSet.MergeRange(nWBoxInfo, nWBoxInfo);
+    aSet.MergeRange(nWBox, nWBox);
+    aSet.MergeRange(nWShadow, nWShadow);
+    aSet.MergeRange(nWDynSpacing, nWDynSpacing);
 
     if(mbEnableDrawingLayerFillStyles)
     {
@@ -540,11 +535,12 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, weld::Button&, void)
         {
             pBBSet.reset(new SfxItemSet(
                 *GetItemSet().GetPool(),
-                {{XATTR_FILL_FIRST, XATTR_FILL_LAST},  // DrawingLayer FillStyle definitions
-                {SID_COLOR_TABLE, SID_PATTERN_LIST},   // XPropertyLists for Color, Gradient, Hatch and Graphic fills
-                {nOuter, nOuter},
-                {nInner, nInner},
-                {nShadow, nShadow}}));
+                svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST,      // DrawingLayer FillStyle definitions
+                           SID_COLOR_TABLE, SID_PATTERN_LIST>{})); // XPropertyLists for Color, Gradient, Hatch and Graphic fills
+            // Keep it valid
+            pBBSet->MergeRange(nOuter, nOuter);
+            pBBSet->MergeRange(nInner, nInner);
+            pBBSet->MergeRange(nShadow, nShadow);
 
             // copy items for XPropertyList entries from the DrawModel so that
             // the Area TabPage can access them
@@ -577,11 +573,12 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, weld::Button&, void)
 
             pBBSet.reset( new SfxItemSet(
                 *GetItemSet().GetPool(),
-                {{XATTR_FILL_FIRST, XATTR_FILL_LAST},
-                {nBrush, nBrush},
-                {nOuter, nOuter},
-                {nInner, nInner},
-                {nShadow, nShadow}}) );
+                svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{}) );
+            // Keep it valid
+            pBBSet->MergeRange(nBrush, nBrush);
+            pBBSet->MergeRange(nOuter, nOuter);
+            pBBSet->MergeRange(nInner, nInner);
+            pBBSet->MergeRange(nShadow, nShadow);
         }
 
         const SfxPoolItem* pItem;
