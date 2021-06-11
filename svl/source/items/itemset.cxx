@@ -105,6 +105,8 @@ void SfxItemSet::InitRanges_Impl(const sal_uInt16 *pWhichPairTable)
     const sal_uInt16* pPtr = pWhichPairTable;
     while( *pPtr )
     {
+        assert(pPtr[0] <= pPtr[1]);
+        assert(!pPtr[2] || pPtr[2] > pPtr[1] && pPtr[2] - pPtr[1] > 1);
         nCnt += ( *(pPtr+1) - *pPtr ) + 1;
         pPtr += 2;
     }
