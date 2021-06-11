@@ -121,7 +121,7 @@ public class FileUtilities {
      */
     public static boolean isTemplateMimeType(final String mimeType) {
         // this works for ODF and OOXML template MIME types
-        return mimeType.endsWith("template");
+        return mimeType != null && mimeType.endsWith("template");
     }
 
     /**
