@@ -858,7 +858,8 @@ writeCustomProperties( XmlFilterBase& rSelf, const Reference< XDocumentPropertie
     {
         if ( !rProp.Name.isEmpty() )
         {
-            OString aName = OUStringToOString( rProp.Name, RTL_TEXTENCODING_ASCII_US );
+            // tdf#127864 - export custom document properties using utf8 text encoding
+            OString aName = OUStringToOString(rProp.Name, RTL_TEXTENCODING_UTF8);
             // Skip storing these values in Custom Properties as it will be stored in Core/Extended Properties
             if (( aName == "OOXMLCorePropertyCategory" ) || // stored in cp:category
                 ( aName == "OOXMLCorePropertyContentStatus" ) || // stored in cp:contentStatus
