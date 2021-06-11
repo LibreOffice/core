@@ -1162,21 +1162,18 @@ std::unique_ptr<SfxItemSet> SfxBindings::CreateSet_Impl
     }
 
     // Create a Set from the ranges
-    std::unique_ptr<sal_uInt16[]> pRanges(new sal_uInt16[rFound.size() * 2 + 1]);
-    int j = 0;
     size_t i = 0;
+    auto pSet(std::make_unique<SfxItemSet>(rPool, nullptr));
     while ( i < rFound.size() )
     {
-        pRanges[j++] = rFound[i].nWhichId;
+        const sal_uInt16 nWhich1 = rFound[i].nWhichId;
             // consecutive numbers
         for ( ; i < rFound.size()-1; ++i )
             if ( rFound[i].nWhichId+1 != rFound[i+1].nWhichId )
                 break;
-        pRanges[j++] = rFound[i++].nWhichId;
+        const sal_uInt16 nWhich2 = rFound[i++].nWhichId;
+        pSet->MergeRange(nWhich1, nWhich2);
     }
-    pRanges[j] = 0; // terminating NULL
-    std::unique_ptr<SfxItemSet> pSet(new SfxItemSet(rPool, pRanges.get()));
-    pRanges.reset();
     return pSet;
 }
 

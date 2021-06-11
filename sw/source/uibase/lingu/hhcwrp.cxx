@@ -466,12 +466,9 @@ void SwHHCWrapper::ReplaceUnit(
             OSL_ENSURE( GetTargetLanguage() == LANGUAGE_CHINESE_SIMPLIFIED || GetTargetLanguage() == LANGUAGE_CHINESE_TRADITIONAL,
                     "SwHHCWrapper::ReplaceUnit : unexpected target language" );
 
-            sal_uInt16 const aRanges[] {
-                    RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_LANGUAGE,
+            SfxItemSet aSet( m_rWrtShell.GetAttrPool(), svl::Items<
                     RES_CHRATR_CJK_FONT,     RES_CHRATR_CJK_FONT,
-                    0, 0, 0  };
-
-            SfxItemSet aSet( m_rWrtShell.GetAttrPool(), aRanges );
+                    RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_LANGUAGE>{} );
             if (pNewUnitLanguage)
             {
                 aSet.Put( SvxLanguageItem( *pNewUnitLanguage, RES_CHRATR_CJK_LANGUAGE ) );

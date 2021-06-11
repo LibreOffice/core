@@ -1070,15 +1070,10 @@ void SwTextNode::SetLanguageAndFont( const SwPaM &rPaM,
     LanguageType nLang, sal_uInt16 nLangWhichId,
     const vcl::Font *pFont,  sal_uInt16 nFontWhichId )
 {
-    sal_uInt16 aRanges[] = {
-            nLangWhichId, nLangWhichId,
-            nFontWhichId, nFontWhichId,
-            0, 0, 0 };
-    if (!pFont)
-        aRanges[2] = aRanges[3] = 0;    // clear entries with font WhichId
-
     SwEditShell *pEditShell = GetDoc().GetEditShell();
-    SfxItemSet aSet( pEditShell->GetAttrPool(), aRanges );
+    SfxItemSet aSet(pEditShell->GetAttrPool(), { { nLangWhichId, nLangWhichId } });
+    if (pFont)
+        aSet.MergeRange(nFontWhichId, nFontWhichId); // Keep it sorted
     aSet.Put( SvxLanguageItem( nLang, nLangWhichId ) );
 
     OSL_ENSURE( pFont, "target font missing?" );
