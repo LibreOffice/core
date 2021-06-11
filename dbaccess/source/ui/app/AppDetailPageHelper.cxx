@@ -672,7 +672,8 @@ void OAppDetailPageHelper::fillNames( const Reference< XNameAccess >& _xContaine
 
 std::unique_ptr<DBTreeViewBase> OAppDetailPageHelper::createSimpleTree(const OString& rHelpId, ElementType eType)
 {
-    std::unique_ptr<DBTreeViewBase> xTreeView(new DBTreeView(m_xBox.get(), eType));
+    const bool bSQLType = eType == E_TABLE || eType == E_QUERY;
+    std::unique_ptr<DBTreeViewBase> xTreeView(new DBTreeView(m_xBox.get(), bSQLType));
     xTreeView->GetWidget().set_help_id(rHelpId);
     setupTree(*xTreeView);
     return xTreeView;
