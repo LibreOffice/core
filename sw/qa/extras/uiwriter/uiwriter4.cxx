@@ -2065,7 +2065,7 @@ void SwUiWriterTest4::testRhbz1810732()
 
 void SwUiWriterTest4::testTdf142157()
 {
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    createSwDoc();
 
     const OUString insertFileid = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf142157.odt";
     uno::Sequence<beans::PropertyValue> aPropertyValues(

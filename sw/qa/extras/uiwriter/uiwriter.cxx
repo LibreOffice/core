@@ -2347,10 +2347,7 @@ void SwUiWriterTest::testTextSearch()
 
 void SwUiWriterTest::testTdf69282()
 {
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* source = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* source = createSwDoc();
     uno::Reference<lang::XComponent> xSourceDoc = mxComponent;
     mxComponent.clear();
     SwDoc* target = createSwDoc();
@@ -2408,10 +2405,7 @@ void SwUiWriterTest::testTdf69282()
 
 void SwUiWriterTest::testTdf69282WithMirror()
 {
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* source = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* source = createSwDoc();
     uno::Reference<lang::XComponent> xSourceDoc = mxComponent;
     mxComponent.clear();
     SwDoc* target = createSwDoc();
