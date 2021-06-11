@@ -45,10 +45,13 @@ namespace
 sal_uInt16 Count_Impl( const sal_uInt16 *pRanges )
 {
     sal_uInt16 nCount = 0;
-    while ( *pRanges )
+    if (pRanges)
     {
-        nCount += 2;
-        pRanges += 2;
+        while (*pRanges)
+        {
+            nCount += 2;
+            pRanges += 2;
+        }
     }
     return nCount;
 }
@@ -72,6 +75,17 @@ sal_uInt16 Capacity_Impl( const sal_uInt16 *pRanges )
     return nCount;
 }
 
+void assertValidRanges(const sal_uInt16* pRanges)
+{
+#ifdef DBG_UTIL
+    for (const sal_uInt16* pRange = pRanges; pRange && *pRange; pRange += 2)
+    {
+        assert(pRange[0] <= pRange[1]);
+        // ranges must be sorted
+        assert(!pRange[2] || pRange[2] > pRange[1]);
+    }
+#endif
+}
 }
 
 /**
@@ -94,7 +108,7 @@ SfxItemSet::SfxItemSet(SfxItemPool& rPool)
         m_pPool->FillItemIdRanges_Impl(tmp);
         m_pWhichRanges = tmp.release();
     }
-
+    assertValidRanges(m_pWhichRanges);
     const sal_uInt16 nSize = TotalCount();
     m_pItems.reset(new const SfxPoolItem*[nSize]{});
 }
@@ -114,6 +128,7 @@ void SfxItemSet::InitRanges_Impl(const sal_uInt16 *pWhichPairTable)
     std::ptrdiff_t cnt = pPtr - pWhichPairTable +1;
     m_pWhichRanges = new sal_uInt16[ cnt ];
     memcpy( m_pWhichRanges, pWhichPairTable, sizeof( sal_uInt16 ) * cnt );
+    assertValidRanges(m_pWhichRanges);
 }
 
 SfxItemSet::SfxItemSet(
@@ -132,6 +147,7 @@ SfxItemSet::SfxItemSet(
     assert(wids.size() % 2 == 0);
     std::copy(wids.begin(), wids.end(), m_pWhichRanges);
     m_pWhichRanges[wids.size()] = 0;
+    assertValidRanges(m_pWhichRanges);
 }
 
 SfxItemSet::SfxItemSet(
@@ -159,6 +175,7 @@ SfxItemSet::SfxItemSet(
 #endif
     }
     m_pWhichRanges[i] = 0;
+    assertValidRanges(m_pWhichRanges);
     m_pItems.reset( new SfxPoolItem const *[size]{} );
 }
 
@@ -214,6 +231,7 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet )
     std::ptrdiff_t cnt = pPtr - rASet.m_pWhichRanges+1;
     m_pWhichRanges = new sal_uInt16[ cnt ];
     memcpy( m_pWhichRanges, rASet.m_pWhichRanges, sizeof( sal_uInt16 ) * cnt);
+    assertValidRanges(m_pWhichRanges);
 }
 
 SfxItemSet::SfxItemSet(SfxItemSet&& rASet) noexcept
@@ -227,6 +245,7 @@ SfxItemSet::SfxItemSet(SfxItemSet&& rASet) noexcept
     rASet.m_pParent = nullptr;
     rASet.m_pWhichRanges = nullptr;
     rASet.m_nCount = 0;
+    assertValidRanges(m_pWhichRanges);
 }
 
 SfxItemSet::~SfxItemSet()
@@ -664,16 +683,8 @@ void SfxItemSet::MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo )
             eItemState == SfxItemState::DEFAULT || eItemState == SfxItemState::SET)
             return;
 
-#ifdef DBG_UTIL
     assert(nFrom <= nTo);
-    for (const sal_uInt16 *pRange = m_pWhichRanges; *pRange; pRange += 2)
-    {
-        assert(pRange[0] <= pRange[1]);
-        // ranges must be sorted and discrete
-        assert(
-            !pRange[2] || (pRange[2] > pRange[1] && pRange[2] - pRange[1] > 1));
-    }
-#endif
+    assertValidRanges(m_pWhichRanges);
 
     // create vector of ranges (sal_uInt16 pairs of lower and upper bound)
     const size_t nOldCount = Count_Impl(m_pWhichRanges);
@@ -736,14 +747,17 @@ void SfxItemSet::SetRanges( const sal_uInt16 *pNewRanges )
     // Identical Ranges?
     if (m_pWhichRanges == pNewRanges)
         return;
-    const sal_uInt16* pOld = m_pWhichRanges;
-    const sal_uInt16* pNew = pNewRanges;
-    while ( *pOld == *pNew )
+    if (m_pWhichRanges)
     {
-        if ( !*pOld && !*pNew )
-            return;
-        ++pOld;
-        ++pNew;
+        const sal_uInt16* pOld = m_pWhichRanges;
+        const sal_uInt16* pNew = pNewRanges;
+        while (*pOld == *pNew)
+        {
+            if (!*pOld && !*pNew)
+                return;
+            ++pOld;
+            ++pNew;
+        }
     }
 
     // create new item-array (by iterating through all new ranges)
@@ -813,6 +827,7 @@ void SfxItemSet::SetRanges( const sal_uInt16 *pNewRanges )
         m_pWhichRanges = new sal_uInt16[ nCount ];
         memcpy( m_pWhichRanges, pNewRanges, sizeof( sal_uInt16 ) * nCount );
     }
+    assertValidRanges(m_pWhichRanges);
 }
 
 /**
