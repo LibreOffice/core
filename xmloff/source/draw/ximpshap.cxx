@@ -490,9 +490,7 @@ void SdXMLShapeContext::AddShape(OUString const & serviceName)
                  || serviceName == "com.sun.star.drawing.MediaShape"
                  || serviceName == "com.sun.star.presentation.MediaShape")
         {
-            css::uno::Sequence<css::uno::Any> args(1);
-            args[0] <<= GetImport().GetDocumentBase();
-            xShape.set( xServiceFact->createInstanceWithArguments(serviceName, args),
+            xShape.set( xServiceFact->createInstanceWithArguments(serviceName, { css::uno::Any(GetImport().GetDocumentBase()) }),
                         css::uno::UNO_QUERY);
         }
         else

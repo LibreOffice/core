@@ -1227,8 +1227,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAc
         }
         catch(const Exception& e)
         {
-            uno::Sequence<OUString> aSeq(0);
-            const_cast<SdXMLImport*>(&GetSdImport())->SetError( XMLERROR_FLAG_WARNING | XMLERROR_API, aSeq, e.Message, nullptr );
+            const_cast<SdXMLImport*>(&GetSdImport())->SetError( XMLERROR_FLAG_WARNING | XMLERROR_API, {}, e.Message, nullptr );
         }
     }
 
@@ -1267,8 +1266,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAc
         }
         catch( const Exception& e )
         {
-            uno::Sequence<OUString> aSeq(0);
-            const_cast<SdXMLImport*>(&GetSdImport())->SetError( XMLERROR_FLAG_WARNING | XMLERROR_API, aSeq, e.Message, nullptr );
+            const_cast<SdXMLImport*>(&GetSdImport())->SetError( XMLERROR_FLAG_WARNING | XMLERROR_API, {}, e.Message, nullptr );
         }
     }
 }

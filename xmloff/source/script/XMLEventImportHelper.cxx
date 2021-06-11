@@ -140,13 +140,8 @@ SvXMLImportContext* XMLEventImportHelper::CreateContext(
     {
         pContext = new SvXMLImportContext(rImport);
 
-        Sequence<OUString> aMsgParams(2);
-
-        aMsgParams[0] = rXmlEventName;
-        aMsgParams[1] = rLanguage;
-
         rImport.SetError(XMLERROR_FLAG_ERROR | XMLERROR_ILLEGAL_EVENT,
-                         aMsgParams);
+                         { rXmlEventName, rLanguage });
 
     }
 

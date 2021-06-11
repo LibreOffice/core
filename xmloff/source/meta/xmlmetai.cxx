@@ -129,12 +129,10 @@ lcl_initDocumentProperties(SvXMLImport & rImport,
         uno::Reference<xml::dom::XSAXDocumentBuilder2> const& xDocBuilder,
         uno::Reference<document::XDocumentProperties> const& xDocProps)
 {
-    uno::Sequence< uno::Any > aSeq(1);
-    aSeq[0] <<= xDocBuilder->getDocument();
     uno::Reference< lang::XInitialization > const xInit(xDocProps,
         uno::UNO_QUERY_THROW);
     try {
-        xInit->initialize(aSeq);
+        xInit->initialize({ uno::Any(xDocBuilder->getDocument()) });
         rImport.SetStatistics(xDocProps->getDocumentStatistics());
         // convert all URLs from relative to absolute
         xDocProps->setTemplateURL(rImport.GetAbsoluteReference(
