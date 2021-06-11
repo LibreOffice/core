@@ -131,6 +131,7 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
         }
 
         SwTwips nNextPos = 0;
+        bool bAbsoluteNextPos = false;
 
         // #i24363# tab stops relative to indent
         // nSearchPos: The current position relative to the tabs origin
@@ -183,9 +184,22 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
                 nDefTabDist = 1;
 
             nCount /= nDefTabDist;
-            nNextPos = ( nCount < 0 || ( !nCount && nSearchPos <= 0 ) )
-                       ? ( nCount * nDefTabDist )
-                       : ( ( nCount + 1 ) * nDefTabDist );
+            nNextPos = (nCount + 1) * nDefTabDist;
+            if (pTabStop)
+            {
+                assert(nMyRight && pTabStop->GetTabPos() > nMyRight
+                       && pTabStop->GetAdjustment() != SvxTabAdjust::Left);
+                // A rather special situation. The tabstop found is
+                // 1.) in a document compatible with MS formats
+                // 2.) beyond the end of the text area
+                // 3.) not a left tabstop.
+                // 4.) not the first tabstop.
+                // Therefore, we can treat them all as right tabstops at the edge of the para area.
+                bAbsoluteNextPos = true;
+                nNextPos = rInf.Width();
+            }
+            else if (nCount < 0 || (!nCount && nSearchPos <= 0))
+                nNextPos = nCount * nDefTabDist;
 
             // --> FME 2004-09-21 #117919 Minimum tab stop width is 1 or 51 twips:
             const SwTwips nMinimumTabWidth = m_pFrame->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::TAB_COMPAT) ? 0 : 50;
@@ -194,8 +208,8 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
             {
                 nNextPos += nDefTabDist;
             }
-            cFill = 0;
-            eAdj = SvxTabAdjust::Left;
+            cFill = pTabStop && ' ' != pTabStop->GetFill() ? pTabStop->GetFill() : 0;
+            eAdj = pTabStop ? SvxTabAdjust::Right : SvxTabAdjust::Left;
             pTabStop = nullptr;
         }
 
@@ -265,7 +279,8 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
             }
         }
 
-        nNextPos += bRTL ? nLinePos - nTabLeft : nTabLeft - nLinePos;
+        if (!bAbsoluteNextPos)
+            nNextPos += bRTL ? nLinePos - nTabLeft : nTabLeft - nLinePos;
         OSL_ENSURE( nNextPos >= 0, "GetTabStop: Don't go back!" );
         nNewTabPos = sal_uInt16(nNextPos);
     }
