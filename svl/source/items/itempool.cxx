@@ -27,6 +27,8 @@
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/hint.hxx>
 #include <svl/itemset.hxx>
+
+#include <items_helper.hxx>
 #include <poolio.hxx>
 
 #include <cassert>
@@ -771,20 +773,12 @@ void SfxItemPool::FillItemIdRanges_Impl( std::unique_ptr<sal_uInt16[]>& pWhichRa
 {
     DBG_ASSERT( !pImpl->mpPoolRanges, "GetFrozenRanges() would be faster!" );
 
-    const SfxItemPool *pPool;
-    sal_uInt16 nLevel = 0;
-    for( pPool = this; pPool; pPool = pPool->pImpl->mpSecondary.get() )
-        ++nLevel;
+    pWhichRanges.reset();
 
-    pWhichRanges.reset(new sal_uInt16[ 2*nLevel + 1 ]);
-
-    nLevel = 0;
-    for( pPool = this; pPool; pPool = pPool->pImpl->mpSecondary.get() )
-    {
-        pWhichRanges[nLevel++] = pPool->pImpl->mnStart;
-        pWhichRanges[nLevel++] = pPool->pImpl->mnEnd;
-        pWhichRanges[nLevel] = 0;
-    }
+    // Merge all ranges, keeping them sorted
+    for (const SfxItemPool* pPool = this; pPool; pPool = pPool->pImpl->mpSecondary.get())
+        pWhichRanges = svl::detail::MergeRange(pWhichRanges.get(), pPool->pImpl->mnStart,
+                                               pPool->pImpl->mnEnd);
 }
 
 const sal_uInt16* SfxItemPool::GetFrozenIdRanges() const
