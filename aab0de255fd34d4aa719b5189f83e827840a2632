@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0a27f633_0ae4f1d6",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 2085,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-11T13:53:39Z",
+      "side": 1,
+      "message": "Hi \n\nI think Preview box for character styles in the has to be implemented completely separately because nActFamily for Character Styles is 1.. When I write the following pieces of code\n\nif (mxCharPreviewCheckbox-\u003eget_active()){\n.\n.\nFamilySelect(1, true);\n}\n\nthe screen automatically shows Character styles in the mxTreeBox and not mxCharTreeBox.. I think this is because the toolbar Id of Character Styles in mxTreeView is 1.. In the new scenario Character Styles in mxCharTreeView will not have any toolbar Id..\n\nPlease discuss the workflow for the new implementation..\nThanks :)",
+      "range": {
+        "startLine": 2085,
+        "startChar": 17,
+        "endLine": 2085,
+        "endChar": 27
+      },
+      "revId": "aab0de255fd34d4aa719b5189f83e827840a2632",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
