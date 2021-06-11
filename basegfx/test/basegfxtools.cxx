@@ -32,14 +32,7 @@ class KeyStopLerpTest : public CppUnit::TestFixture
 {
     utils::KeyStopLerp maKeyStops;
 
-    static std::vector<double> getTestVector()
-    {
-        std::vector<double> aStops(3);
-        aStops[0] = 0.1;
-        aStops[1] = 0.5;
-        aStops[2] = 0.9;
-        return aStops;
-    }
+    static std::vector<double> getTestVector() { return { 0.1, 0.5, 0.9 }; }
 
 public:
     KeyStopLerpTest()

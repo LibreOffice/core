@@ -369,9 +369,7 @@ InternalDataProvider::InternalDataProvider(
                         aNewCategories.reserve( nLength );
                         for( sal_Int32 nN=0; nN<nLength; nN++)
                         {
-                            vector< uno::Any > aVector(1);
-                            aVector[0] <<= aSimplecategories[nN];
-                            aNewCategories.push_back( aVector );
+                            aNewCategories.push_back( { uno::Any(aSimplecategories[nN]) } );
                         }
                     }
                 }

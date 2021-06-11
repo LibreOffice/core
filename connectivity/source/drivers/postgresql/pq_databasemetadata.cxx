@@ -1251,9 +1251,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getSchemas(  )
     std::vector< std::vector<Any> > vec;
     while( rs->next() )
     {
-        std::vector<Any> row(1);
-        row[0] <<= xRow->getString(1);
-        vec.push_back( row );
+        vec.push_back( { Any(xRow->getString(1)) } );
     }
 
     // sort public first, sort internal schemas last, sort rest in alphabetic order
