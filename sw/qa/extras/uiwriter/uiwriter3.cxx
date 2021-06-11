@@ -52,17 +52,14 @@ class SwUiWriterTest3 : public SwModelTestBase
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf129382)
 {
-    load(DATA_DIRECTORY, "tdf129382.docx");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf129382.docx");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(8, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
     xTransfer->Cut();
 
@@ -85,16 +82,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf129382)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135662)
 {
-    load(DATA_DIRECTORY, "tdf135662.odt");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf135662.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
     xTransfer->Cut();
 
@@ -111,10 +105,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135662)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134227)
 {
-    load(DATA_DIRECTORY, "tdf134227.docx");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf134227.docx");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
 
@@ -122,7 +114,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134227)
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
     // Without the fix in place, it would have crashed here
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
     xTransfer->Cut();
 
@@ -142,10 +133,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134227)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135412)
 {
-    load(DATA_DIRECTORY, "tdf135412.docx");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf135412.docx");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
     uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
@@ -153,7 +142,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135412)
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
     xTransfer->Cut();
 
@@ -179,10 +167,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135412)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf138482)
 {
-    load(DATA_DIRECTORY, "tdf138482.docx");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    createSwDoc(DATA_DIRECTORY, "tdf138482.docx");
 
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
@@ -201,10 +186,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf138482)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132911)
 {
-    load(DATA_DIRECTORY, "tdf132911.odt");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf132911.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
@@ -214,7 +197,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132911)
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
     xTransfer->Cut();
     Scheduler::ProcessEventsToIdle();
@@ -274,14 +256,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132911)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf61154)
 {
-    load(DATA_DIRECTORY, "tdf61154.fodt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
-    CPPUNIT_ASSERT(pWrtShell);
-
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf61154.fodt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     pWrtShell->GotoNextTOXBase();
 
@@ -308,14 +284,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf61154)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf100691)
 {
-    load(DATA_DIRECTORY, "tdf100691.fodt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
-    CPPUNIT_ASSERT(pWrtShell);
-
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf100691.fodt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     pWrtShell->GotoNextTOXBase();
 
@@ -333,10 +303,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf100691)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134404)
 {
-    load(DATA_DIRECTORY, "tdf134404.odt");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    createSwDoc(DATA_DIRECTORY, "tdf134404.odt");
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -364,7 +331,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134404)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf112342)
 {
-    load(DATA_DIRECTORY, "tdf112342.docx");
+    createSwDoc(DATA_DIRECTORY, "tdf112342.docx");
 
     //Get the last para
     uno::Reference<text::XTextRange> xPara = getParagraph(3);
@@ -381,10 +348,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf112342)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132321)
 {
-    load(DATA_DIRECTORY, "tdf132321.odt");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    createSwDoc(DATA_DIRECTORY, "tdf132321.odt");
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
@@ -403,13 +367,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132321)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135056)
 {
-    load(DATA_DIRECTORY, "tdf135056.odt");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
-    CPPUNIT_ASSERT(pWrtShell);
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf135056.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pWrtShell->GetTOXCount());
 
@@ -428,17 +387,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135056)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132597)
 {
-    load(DATA_DIRECTORY, "tdf132597.odt");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf132597.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
     xTransfer->Copy();
 
@@ -459,16 +415,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132597)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf131963)
 {
-    load(DATA_DIRECTORY, "tdf131963.docx");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf131963.docx");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(11, getPages());
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
     xTransfer->Copy();
 
@@ -487,16 +440,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf131963)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132596)
 {
-    load(DATA_DIRECTORY, "tdf132596.docx");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf132596.docx");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
     xTransfer->Copy();
 
@@ -516,16 +466,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132596)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126626)
 {
-    load(DATA_DIRECTORY, "tdf126626.docx");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf126626.docx");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
     xTransfer->Copy();
 
@@ -548,10 +495,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126626)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133967)
 {
-    load(DATA_DIRECTORY, "tdf133967.odt");
+    createSwDoc(DATA_DIRECTORY, "tdf133967.odt");
 
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
     CPPUNIT_ASSERT_EQUAL(6, getPages());
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
@@ -576,16 +521,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133967)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132187)
 {
-    load(DATA_DIRECTORY, "tdf132187.odt");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf132187.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
     xTransfer->Copy();
 
@@ -607,10 +549,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132187)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135733)
 {
-    load(DATA_DIRECTORY, "tdf135733.odt");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf135733.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
@@ -618,8 +558,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135733)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
-
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
 
     //Move the cursor inside the table
     pWrtShell->Down(/*bSelect=*/false);
@@ -658,16 +596,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135733)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf128739)
 {
-    load(DATA_DIRECTORY, "tdf128739.docx");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf128739.docx");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(OUString("Fehler: Verweis nicht gefunden"), getParagraph(1)->getString());
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
     xTransfer->Cut();
 
@@ -684,16 +619,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf128739)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf124722)
 {
-    load(DATA_DIRECTORY, "tdf124722.rtf");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf124722.rtf");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(22, getPages());
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
     xTransfer->Copy();
 
@@ -709,133 +641,127 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf124722)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testToxmarkLinks)
 {
-    load(DATA_DIRECTORY, "udindex3.odt");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwWrtShell& rWrtShell(*pTextDoc->GetDocShell()->GetWrtShell());
-    SwView& rView(*pTextDoc->GetDocShell()->GetView());
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "udindex3.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwView& rView(*pDoc->GetDocShell()->GetView());
 
     // update indexes
-    for (auto i = rWrtShell.GetTOXCount(); 0 < i;)
+    for (auto i = pWrtShell->GetTOXCount(); 0 < i;)
     {
         --i;
-        rWrtShell.UpdateTableOf(*rWrtShell.GetTOX(i));
+        pWrtShell->UpdateTableOf(*pWrtShell->GetTOX(i));
     }
 
     // click on the links...
     {
         OUString const tmp("Table of Contents");
-        rWrtShell.GotoNextTOXBase(&tmp);
+        pWrtShell->GotoNextTOXBase(&tmp);
     }
 
     { // ToC toxmark
-        rWrtShell.Down(false);
-        SfxItemSet aSet(rWrtShell.GetAttrPool(),
+        pWrtShell->Down(false);
+        SfxItemSet aSet(pWrtShell->GetAttrPool(),
                         svl::Items<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT>{});
-        rWrtShell.GetCurAttr(aSet);
+        pWrtShell->GetCurAttr(aSet);
         CPPUNIT_ASSERT(aSet.HasItem(RES_TXTATR_INETFMT));
-        rWrtShell.Push();
+        pWrtShell->Push();
         OUString const url(aSet.GetItem<SwFormatINetFormat>(RES_TXTATR_INETFMT)->GetValue());
         CPPUNIT_ASSERT_EQUAL(OUString("#1%19the%20tocmark%19C%7Ctoxmark"), url);
         rView.JumpToSwMark(url.subView(1)); // SfxApplication::OpenDocExec_Impl eats the "#"
         CPPUNIT_ASSERT_EQUAL(OUString(OUStringChar(CH_TXTATR_INWORD) + "tocmark"),
-                             rWrtShell.GetCursor()->GetNode().GetTextNode()->GetText());
-        rWrtShell.Pop(SwCursorShell::PopMode::DeleteCurrent);
+                             pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText());
+        pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
     }
 
     { // ToC heading
-        rWrtShell.Down(false);
-        SfxItemSet aSet(rWrtShell.GetAttrPool(),
+        pWrtShell->Down(false);
+        SfxItemSet aSet(pWrtShell->GetAttrPool(),
                         svl::Items<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT>{});
-        rWrtShell.GetCurAttr(aSet);
+        pWrtShell->GetCurAttr(aSet);
         CPPUNIT_ASSERT(aSet.HasItem(RES_TXTATR_INETFMT));
-        rWrtShell.Push();
+        pWrtShell->Push();
         OUString const url(aSet.GetItem<SwFormatINetFormat>(RES_TXTATR_INETFMT)->GetValue());
         CPPUNIT_ASSERT_EQUAL(OUString("#__RefHeading___Toc105_706348105"), url);
         rView.JumpToSwMark(url.subView(1));
         CPPUNIT_ASSERT_EQUAL(OUString("foo"),
-                             rWrtShell.GetCursor()->GetNode().GetTextNode()->GetText());
-        rWrtShell.Pop(SwCursorShell::PopMode::DeleteCurrent);
+                             pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText());
+        pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
     }
 
     {
         OUString const tmp("User-Defined1");
-        rWrtShell.GotoNextTOXBase(&tmp);
+        pWrtShell->GotoNextTOXBase(&tmp);
     }
 
     { // UD1 toxmark 1
-        rWrtShell.Down(false);
-        SfxItemSet aSet(rWrtShell.GetAttrPool(),
+        pWrtShell->Down(false);
+        SfxItemSet aSet(pWrtShell->GetAttrPool(),
                         svl::Items<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT>{});
-        rWrtShell.GetCurAttr(aSet);
+        pWrtShell->GetCurAttr(aSet);
         CPPUNIT_ASSERT(aSet.HasItem(RES_TXTATR_INETFMT));
-        rWrtShell.Push();
+        pWrtShell->Push();
         OUString const url(aSet.GetItem<SwFormatINetFormat>(RES_TXTATR_INETFMT)->GetValue());
         CPPUNIT_ASSERT_EQUAL(OUString("#1%19the%20udmark%19UUser-Defined%7Ctoxmark"), url);
         rView.JumpToSwMark(url.subView(1));
         CPPUNIT_ASSERT_EQUAL(OUString(OUStringChar(CH_TXTATR_INWORD) + "udmark the first"),
-                             rWrtShell.GetCursor()->GetNode().GetTextNode()->GetText());
-        rWrtShell.Pop(SwCursorShell::PopMode::DeleteCurrent);
+                             pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText());
+        pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
     }
 
     { // UD1 toxmark 2 (with same text)
-        rWrtShell.Down(false);
-        SfxItemSet aSet(rWrtShell.GetAttrPool(),
+        pWrtShell->Down(false);
+        SfxItemSet aSet(pWrtShell->GetAttrPool(),
                         svl::Items<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT>{});
-        rWrtShell.GetCurAttr(aSet);
+        pWrtShell->GetCurAttr(aSet);
         CPPUNIT_ASSERT(aSet.HasItem(RES_TXTATR_INETFMT));
-        rWrtShell.Push();
+        pWrtShell->Push();
         OUString const url(aSet.GetItem<SwFormatINetFormat>(RES_TXTATR_INETFMT)->GetValue());
         CPPUNIT_ASSERT_EQUAL(OUString("#2%19the%20udmark%19UUser-Defined%7Ctoxmark"), url);
         rView.JumpToSwMark(url.subView(1));
         CPPUNIT_ASSERT_EQUAL(OUString(OUStringChar(CH_TXTATR_INWORD) + "udmark the 2nd"),
-                             rWrtShell.GetCursor()->GetNode().GetTextNode()->GetText());
-        rWrtShell.Pop(SwCursorShell::PopMode::DeleteCurrent);
+                             pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText());
+        pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
     }
 
     { // UD heading
-        rWrtShell.Down(false);
-        SfxItemSet aSet(rWrtShell.GetAttrPool(),
+        pWrtShell->Down(false);
+        SfxItemSet aSet(pWrtShell->GetAttrPool(),
                         svl::Items<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT>{});
-        rWrtShell.GetCurAttr(aSet);
+        pWrtShell->GetCurAttr(aSet);
         CPPUNIT_ASSERT(aSet.HasItem(RES_TXTATR_INETFMT));
-        rWrtShell.Push();
+        pWrtShell->Push();
         OUString const url(aSet.GetItem<SwFormatINetFormat>(RES_TXTATR_INETFMT)->GetValue());
         CPPUNIT_ASSERT_EQUAL(OUString("#__RefHeading___Toc105_706348105"), url);
         rView.JumpToSwMark(url.subView(1));
         CPPUNIT_ASSERT_EQUAL(OUString("foo"),
-                             rWrtShell.GetCursor()->GetNode().GetTextNode()->GetText());
-        rWrtShell.Pop(SwCursorShell::PopMode::DeleteCurrent);
+                             pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText());
+        pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
     }
 
     {
         OUString const tmp("NewUD!|1");
-        rWrtShell.GotoNextTOXBase(&tmp);
+        pWrtShell->GotoNextTOXBase(&tmp);
     }
 
     { // UD2 toxmark, with same text as those in other UD
-        rWrtShell.Down(false);
-        SfxItemSet aSet(rWrtShell.GetAttrPool(),
+        pWrtShell->Down(false);
+        SfxItemSet aSet(pWrtShell->GetAttrPool(),
                         svl::Items<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT>{});
-        rWrtShell.GetCurAttr(aSet);
+        pWrtShell->GetCurAttr(aSet);
         CPPUNIT_ASSERT(aSet.HasItem(RES_TXTATR_INETFMT));
-        rWrtShell.Push();
+        pWrtShell->Push();
         OUString const url(aSet.GetItem<SwFormatINetFormat>(RES_TXTATR_INETFMT)->GetValue());
         CPPUNIT_ASSERT_EQUAL(OUString("#1%19the%20udmark%19UNewUD!%7C%7Ctoxmark"), url);
         rView.JumpToSwMark(url.subView(1));
         CPPUNIT_ASSERT_EQUAL(OUString("the udmark"),
-                             rWrtShell.GetCursor()->GetNode().GetTextNode()->GetText());
-        rWrtShell.Pop(SwCursorShell::PopMode::DeleteCurrent);
+                             pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText());
+        pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
     }
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf125261)
 {
-    load(DATA_DIRECTORY, "tdf125261.odt");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    createSwDoc(DATA_DIRECTORY, "tdf125261.odt");
 
     CPPUNIT_ASSERT_EQUAL(OUString("https://www.example.com/"),
                          getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
@@ -851,10 +777,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf125261)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133990)
 {
-    load(DATA_DIRECTORY, "tdf133990.odt");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    createSwDoc(DATA_DIRECTORY, "tdf133990.odt");
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
@@ -878,10 +801,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133990)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126504)
 {
-    load(DATA_DIRECTORY, "tdf126504.odt");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf126504.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
@@ -893,7 +814,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126504)
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
     xTransfer->Copy();
 
@@ -929,10 +849,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126504)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133982)
 {
-    load(DATA_DIRECTORY, "tdf133982.docx");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf133982.docx");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
@@ -944,7 +862,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133982)
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
     //Without the fix in place, it would have crashed here
     xTransfer->Cut();
@@ -957,10 +874,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133982)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134253)
 {
-    load(DATA_DIRECTORY, "tdf134253.odt");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf134253.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
@@ -973,7 +888,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134253)
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
     xTransfer->Copy();
     TransferableDataHelper aHelper(xTransfer);
@@ -994,9 +908,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, TestAsCharTextBox)
     // tdf#140158 Remove horizontal positioning of As_char textboxes, because
     // the anchor moving does the same for it.
 
-    load(DATA_DIRECTORY, "AsCharTxBxTest.docx");
+    createSwDoc(DATA_DIRECTORY, "AsCharTxBxTest.docx");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
 
     // Add 3x tab to the doc
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
@@ -1042,9 +955,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, TestAsCharTextBox)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf140975)
 {
     // Load the bugdoc
-    load(DATA_DIRECTORY, "tdf140975.docx");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    createSwDoc(DATA_DIRECTORY, "tdf140975.docx");
 
     // Set the Anchor of the shape to As_Char
     dispatchCommand(mxComponent, ".uno:JumpToNextFrame", {});
@@ -1071,10 +982,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf140975)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf76636)
 {
-    load(DATA_DIRECTORY, "tdf76636.doc");
-
+    createSwDoc(DATA_DIRECTORY, "tdf76636.doc");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
@@ -1111,10 +1020,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf76636)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf76636_2)
 {
-    load(DATA_DIRECTORY, "tdf76636.doc");
-
+    createSwDoc(DATA_DIRECTORY, "tdf76636.doc");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
@@ -1148,9 +1055,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf76636_2)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf140828)
 {
-    load(DATA_DIRECTORY, "tdf140828.docx");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    createSwDoc(DATA_DIRECTORY, "tdf140828.docx");
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     uno::Reference<drawing::XShape> xShp = getShape(1);
@@ -1179,10 +1084,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf140828)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132725)
 {
-    load(DATA_DIRECTORY, "tdf132725.odt");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    createSwDoc(DATA_DIRECTORY, "tdf132725.odt");
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(OUString("AA"), getParagraph(1)->getString());
@@ -1221,10 +1123,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132725)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126340)
 {
-    load(DATA_DIRECTORY, "tdf126340.odt");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    createSwDoc(DATA_DIRECTORY, "tdf126340.odt");
 
     dispatchCommand(mxComponent, ".uno:GoDown", {});
     // without the fix, it crashes
@@ -1236,10 +1135,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126340)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf124397)
 {
-    load(DATA_DIRECTORY, "tdf124397.docx");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    createSwDoc(DATA_DIRECTORY, "tdf124397.docx");
 
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(),
@@ -1257,10 +1153,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf124397)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf108124)
 {
-    load(DATA_DIRECTORY, "tdf108124.odt");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf108124.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     uno::Reference<text::XTextGraphicObjectsSupplier> xTextGraphicObjectsSupplier(mxComponent,
                                                                                   uno::UNO_QUERY);
@@ -1271,7 +1165,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf108124)
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
     xTransfer->Copy();
 
@@ -1307,10 +1200,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf107975)
 {
     // This test also covers tdf#117185 tdf#110442
 
-    load(DATA_DIRECTORY, "tdf107975.odt");
-
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf107975.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
 
     uno::Reference<text::XTextGraphicObjectsSupplier> xTextGraphicObjectsSupplier(mxComponent,
                                                                                   uno::UNO_QUERY);
@@ -1326,7 +1218,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf107975)
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
     xTransfer->Copy();
 
@@ -1391,10 +1282,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf107975)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134021)
 {
-    load(DATA_DIRECTORY, "tdf134021.docx");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    createSwDoc(DATA_DIRECTORY, "tdf134021.docx");
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
@@ -1419,10 +1307,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134021)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf136778)
 {
-    load(DATA_DIRECTORY, "tdf136778.docx");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    createSwDoc(DATA_DIRECTORY, "tdf136778.docx");
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
@@ -1447,10 +1332,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf136778)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf123285)
 {
-    load(DATA_DIRECTORY, "tdf123285.odt");
-
+    createSwDoc(DATA_DIRECTORY, "tdf123285.odt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
 
     CPPUNIT_ASSERT_EQUAL(true,
                          getParagraph(1)->getString().endsWith(
@@ -1472,10 +1355,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf123285)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130746)
 {
-    load(DATA_DIRECTORY, "tdf130746.odt");
-
+    createSwDoc(DATA_DIRECTORY, "tdf130746.odt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
@@ -1509,15 +1390,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130746)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf129805)
 {
-    load(DATA_DIRECTORY, "tdf129805.docx");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf129805.docx");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(OUString("x"), getParagraph(1)->getString());
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
     // without the fix in place, it would crash here
     xTransfer->Cut();
@@ -1529,15 +1407,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf129805)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130685)
 {
-    load(DATA_DIRECTORY, "tdf130685.odt");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf130685.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
     xTransfer->Cut();
     Scheduler::ProcessEventsToIdle();
@@ -1566,10 +1441,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130685)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132944)
 {
-    load(DATA_DIRECTORY, "tdf132944.odt");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    createSwDoc(DATA_DIRECTORY, "tdf132944.odt");
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
@@ -1587,10 +1459,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132944)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf104649)
 {
-    load(DATA_DIRECTORY, "tdf104649.docx");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    createSwDoc(DATA_DIRECTORY, "tdf104649.docx");
 
     CPPUNIT_ASSERT_EQUAL(OUString("Test"), getParagraph(1)->getString());
 
@@ -1608,10 +1477,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf104649)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134931)
 {
-    load(DATA_DIRECTORY, "tdf134931.odt");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf134931.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
@@ -1621,7 +1488,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134931)
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
     xTransfer->Copy();
     Scheduler::ProcessEventsToIdle();
@@ -1647,10 +1513,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134931)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130680)
 {
-    load(DATA_DIRECTORY, "tdf130680.odt");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf130680.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
@@ -1662,7 +1526,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130680)
     rtl::Reference<SwDoc> xClpDoc(new SwDoc());
     xClpDoc->SetClipBoard(true);
 
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
     // without the fix, it crashes
     xTransfer->Cut();
@@ -1683,10 +1546,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130680)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf131684)
 {
-    load(DATA_DIRECTORY, "tdf131684.docx");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf131684.docx");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
@@ -1698,7 +1559,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf131684)
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
     xTransfer->Cut();
     Scheduler::ProcessEventsToIdle();
@@ -1727,10 +1587,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf131684)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132420)
 {
-    load(DATA_DIRECTORY, "tdf132420.odt");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    createSwDoc(DATA_DIRECTORY, "tdf132420.odt");
 
     CPPUNIT_ASSERT_EQUAL(12, getShapes());
 
@@ -1750,17 +1607,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132420)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132744)
 {
-    load(DATA_DIRECTORY, "tdf132744.odt");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf132744.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     Scheduler::ProcessEventsToIdle();
 
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
     xTransfer->Cut();
     Scheduler::ProcessEventsToIdle();
@@ -1804,8 +1658,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135014)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130629)
 {
     createSwDoc();
-
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+
     uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({ { "KeyModifier", uno::makeAny(KEY_MOD1) } }));
 
@@ -1921,14 +1775,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf80663)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130805)
 {
-    load(DATA_DIRECTORY, "tdf130805.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf130805.odt");
 
-    SwWrtShell* pWrtSh = pTextDoc->GetDocShell()->GetWrtShell();
-    CPPUNIT_ASSERT(pWrtSh);
-
-    const SwFrameFormats& rFrmFormats = *pWrtSh->GetDoc()->GetSpzFrameFormats();
+    const SwFrameFormats& rFrmFormats = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT(rFrmFormats.size() >= size_t(o3tl::make_unsigned(1)));
     auto pShape = rFrmFormats.front();
     CPPUNIT_ASSERT(pShape);
@@ -1948,16 +1797,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130805)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf107893)
 {
     //Open the sample doc
-    load(DATA_DIRECTORY, "tdf107893.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-
-    //Get the Writer shell
-    SwWrtShell* pWrtSh = pTextDoc->GetDocShell()->GetWrtShell();
-    CPPUNIT_ASSERT(pWrtSh);
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf107893.odt");
 
     //Get the format of the shape
-    const SwFrameFormats& rFrmFormats = *pWrtSh->GetDoc()->GetSpzFrameFormats();
+    const SwFrameFormats& rFrmFormats = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT(rFrmFormats.size() >= size_t(o3tl::make_unsigned(1)));
     SwFrameFormat* pShape = rFrmFormats.front();
     CPPUNIT_ASSERT(pShape);
@@ -2009,16 +1852,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf121031)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, TestTextBoxCrashAfterLineDel)
 {
     // Open the desired file
-    load(DATA_DIRECTORY, "txbx_crash.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-
-    // Get the Writer shell
-    SwWrtShell* pWrtSh = pTextDoc->GetDocShell()->GetWrtShell();
-    CPPUNIT_ASSERT(pWrtSh);
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "txbx_crash.odt");
 
     // Get the format of the shape
-    const SwFrameFormats& rFrmFormats = *pWrtSh->GetDoc()->GetSpzFrameFormats();
+    const SwFrameFormats& rFrmFormats = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT(rFrmFormats.size() >= size_t(o3tl::make_unsigned(1)));
     SwFrameFormat* pShape = rFrmFormats.front();
     CPPUNIT_ASSERT(pShape);
@@ -2039,23 +1876,20 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, TestTextBoxCrashAfterLineDel)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134626)
 {
-    load(DATA_DIRECTORY, "tdf134626.odt");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf134626.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(OUString("Apple"), getParagraph(1)->getString());
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
     xTransfer->Copy();
     Scheduler::ProcessEventsToIdle();
     TransferableDataHelper aHelper(xTransfer);
 
     // Create a new document
-    SwDoc* const pDoc = createSwDoc();
+    pDoc = createSwDoc();
     pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
@@ -2291,9 +2125,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf117601)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf138130)
 {
-    load(DATA_DIRECTORY, "tdf138130.docx");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    createSwDoc(DATA_DIRECTORY, "tdf138130.docx");
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     uno::Reference<drawing::XShape> xShape = getShape(1);
@@ -2321,9 +2153,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf138130)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf136385)
 {
-    load(DATA_DIRECTORY, "tdf136385.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    createSwDoc(DATA_DIRECTORY, "tdf136385.odt");
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     uno::Reference<drawing::XShape> xShape = getShape(1);
@@ -2353,9 +2183,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf136385)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf128782)
 {
-    load(DATA_DIRECTORY, "tdf128782.odt");
+    createSwDoc(DATA_DIRECTORY, "tdf128782.odt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
 
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     uno::Reference<drawing::XShape> xShape1 = getShape(1);
@@ -2392,9 +2221,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf128782)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135623)
 {
-    load(DATA_DIRECTORY, "tdf135623.docx");
+    createSwDoc(DATA_DIRECTORY, "tdf135623.docx");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
 
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
@@ -2436,15 +2264,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135623)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133490)
 {
-    load(DATA_DIRECTORY, "tdf133490.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf133490.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
     xTransfer->Cut();
     Scheduler::ProcessEventsToIdle();
@@ -2528,20 +2355,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133490)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132637_protectTrackChanges)
 {
-    load(DATA_DIRECTORY, "tdf132637_protectTrackChanges.doc");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf132637_protectTrackChanges.doc");
 
     // The password should only prevent turning off track changes, not open as read-only
-    CPPUNIT_ASSERT(!pTextDoc->GetDocShell()->IsReadOnly());
+    CPPUNIT_ASSERT(!pDoc->GetDocShell()->IsReadOnly());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf127652)
 {
-    load(DATA_DIRECTORY, "tdf127652.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
-    SwCursorShell* pShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf127652.odt");
+    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     // get a page cursor
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
@@ -2572,6 +2395,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf127652)
     // in the bug one issue was that the cursor was placed incorrectly, so
     // moving up to the previous page would not work any more
     sal_uInt16 assertPage = 3;
+    SwCursorShell* pShell(pDoc->GetEditShell());
     sal_uInt16 currentPage = pShell->GetPageNumSeqNonEmpty();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("We are on the wrong page!", assertPage, currentPage);
 }
@@ -2579,16 +2403,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf127652)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, AtPageTextBoxCrash)
 {
     // Load sample file
-    load(DATA_DIRECTORY, "AtPageTextBoxCrash.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-
-    // Get the Writer-Shell for later use
-    SwWrtShell* pWrtSh = pTextDoc->GetDocShell()->GetWrtShell();
-    CPPUNIT_ASSERT(pWrtSh);
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "AtPageTextBoxCrash.odt");
 
     // Get the format of the shape
-    const SwFrameFormats& rFrmFormats = *pWrtSh->GetDoc()->GetSpzFrameFormats();
+    const SwFrameFormats& rFrmFormats = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT(rFrmFormats.size() >= size_t(o3tl::make_unsigned(1)));
     auto pShape = rFrmFormats.front();
     CPPUNIT_ASSERT(pShape);
@@ -2617,9 +2435,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, AtPageTextBoxCrash)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135661)
 {
-    load(DATA_DIRECTORY, "tdf135661.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    createSwDoc(DATA_DIRECTORY, "tdf135661.odt");
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
@@ -2646,9 +2462,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133477)
 {
     if (getDefaultDeviceBitCount() < 24)
         return;
-    load(DATA_DIRECTORY, "tdf133477.fodt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    createSwDoc(DATA_DIRECTORY, "tdf133477.fodt");
 
     // Save the shape to a BMP.
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
@@ -2677,17 +2491,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133477)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf137964)
 {
-    load(DATA_DIRECTORY, "tdf137964.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf137964.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3579), xShape->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4090), xShape->getPosition().Y);
 
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(1);
     SwContact* pTextBox = static_cast<SwContact*>(pObject->GetUserCall());
@@ -2706,7 +2518,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf137964)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf138897)
 {
-    load(DATA_DIRECTORY, "tdf100018-1.odt");
+    createSwDoc(DATA_DIRECTORY, "tdf100018-1.odt");
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     dispatchCommand(mxComponent, ".uno:Cut", {});
