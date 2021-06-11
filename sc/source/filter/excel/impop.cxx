@@ -878,8 +878,14 @@ void ImportExcel::Mulrk()
     XclAddress aXclPos;
     aIn >> aXclPos;
 
-    for( XclAddress aCurrXclPos( aXclPos ); (aXclPos.mnCol <= aCurrXclPos.mnCol) && (aIn.GetRecLeft() > 2); ++aCurrXclPos.mnCol )
+    XclAddress aCurrXclPos(aXclPos);
+    while (true)
     {
+        if (aXclPos.mnCol > aCurrXclPos.mnCol)
+            break;
+        if (aIn.GetRecLeft() <= 2)
+            break;
+
         sal_uInt16 nXF = aIn.ReaduInt16();
         sal_Int32 nRkNum = aIn.ReadInt32();
 
@@ -889,6 +895,7 @@ void ImportExcel::Mulrk()
             GetXFRangeBuffer().SetXF( aScPos, nXF );
             GetDocImport().setNumericCell(aScPos, XclTools::GetDoubleFromRK(nRkNum));
         }
+        ++aCurrXclPos.mnCol;
     }
 }
 
@@ -915,13 +922,20 @@ void ImportExcel::Mulblank()
     XclAddress aXclPos;
     aIn >> aXclPos;
 
-    for( XclAddress aCurrXclPos( aXclPos ); (aXclPos.mnCol <= aCurrXclPos.mnCol) && (aIn.GetRecLeft() > 2); ++aCurrXclPos.mnCol )
+    XclAddress aCurrXclPos(aXclPos);
+    while (true)
     {
+        if (aXclPos.mnCol > aCurrXclPos.mnCol)
+            break;
+        if (aIn.GetRecLeft() <= 2)
+            break;
+
         sal_uInt16 nXF = aIn.ReaduInt16();
 
         ScAddress aScPos( ScAddress::UNINITIALIZED );
         if( GetAddressConverter().ConvertAddress( aScPos, aCurrXclPos, GetCurrScTab(), true ) )
             GetXFRangeBuffer().SetBlankXF( aScPos, nXF );
+        ++aCurrXclPos.mnCol;
     }
 }
 
