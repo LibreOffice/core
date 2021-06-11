@@ -451,15 +451,11 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                 SvMemoryStream aStream (aSequence.getArray(), nSize,
                                         StreamMode::READ );
                 aStream.Seek ( STREAM_SEEK_TO_BEGIN );
-                static sal_uInt16 const nRange[] =
-                {
-                    FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER,
-                    SID_HTML_MODE,  SID_HTML_MODE,
+                auto pItemSet = std::make_unique<SfxItemSet>( mpDoc->GetAttrPool(), svl::Items<
                     SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                     SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
-                    0
-                };
-                auto pItemSet = std::make_unique<SfxItemSet>( mpDoc->GetAttrPool(), nRange );
+                    SID_HTML_MODE,  SID_HTML_MODE,
+                    FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER>{} );
                 VclPtr<SfxPrinter> pPrinter = SfxPrinter::Create ( aStream, std::move(pItemSet) );
                 assert (! pPrinter->isDisposed() );
                 // set printer only once; in _postSetValues
