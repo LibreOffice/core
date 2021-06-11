@@ -3044,15 +3044,11 @@ void sw_BoxSetSplitBoxFormats( SwTableBox* pBox, SwCollectTableLineBoxes* pSplPa
         }
         else
         {
-            sal_uInt16 const aTableSplitBoxSetRange[] {
-                RES_LR_SPACE,       RES_UL_SPACE,
-                RES_BACKGROUND,     RES_SHADOW,
-                RES_PROTECT,        RES_PROTECT,
-                RES_VERT_ORIENT,    RES_VERT_ORIENT,
-                0 };
-
             SfxItemSet aTmpSet( pFormat->GetDoc()->GetAttrPool(),
-                                aTableSplitBoxSetRange );
+                                svl::Items<RES_LR_SPACE,    RES_UL_SPACE,
+                                           RES_PROTECT,     RES_PROTECT,
+                                           RES_VERT_ORIENT, RES_VERT_ORIENT,
+                                           RES_BACKGROUND,  RES_SHADOW>{} );
             aTmpSet.Put( pFormat->GetAttrSet() );
             if( aTmpSet.Count() )
                 pBox->ClaimFrameFormat()->SetFormatAttr( aTmpSet );

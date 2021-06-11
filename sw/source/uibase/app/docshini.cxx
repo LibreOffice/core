@@ -624,11 +624,11 @@ void SwDocShell::SubInitNew()
     bool bWeb = dynamic_cast< const SwWebDocShell *>( this ) !=  nullptr;
 
     sal_uInt16 nRange[] =   {
-        RES_PARATR_ADJUST, RES_PARATR_ADJUST,
         RES_CHRATR_COLOR, RES_CHRATR_COLOR,
         RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE,
         RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_LANGUAGE,
         RES_CHRATR_CTL_LANGUAGE, RES_CHRATR_CTL_LANGUAGE,
+        RES_PARATR_ADJUST, RES_PARATR_ADJUST,
         0, 0, 0  };
     if(!bWeb)
     {
