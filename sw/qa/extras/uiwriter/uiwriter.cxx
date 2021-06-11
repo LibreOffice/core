@@ -4586,6 +4586,7 @@ void SwUiWriterTest::testTdf105103()
     // test should fail here without the fix
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Insert("foobar");
+    pWrtShell->Insert("      ");
 
 }
 
