@@ -27,6 +27,7 @@
 #include <unotools/tempfile.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/wmf.hxx>
 
 #include <impgraph.hxx>
 #include <graphic/GraphicFormatDetector.hxx>
@@ -53,6 +54,7 @@ private:
     void testSwapping();
     void testSwappingVectorGraphic();
     void testWMFRoundtrip();
+    void testWMFWithEmfPlusRoundtrip();
     void testEmfToWmfConversion();
 
     CPPUNIT_TEST_SUITE(GraphicTest);
@@ -64,6 +66,7 @@ private:
     CPPUNIT_TEST(testSwapping);
     CPPUNIT_TEST(testSwappingVectorGraphic);
     CPPUNIT_TEST(testWMFRoundtrip);
+    CPPUNIT_TEST(testWMFWithEmfPlusRoundtrip);
     CPPUNIT_TEST(testEmfToWmfConversion);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -301,6 +304,84 @@ void GraphicTest::testUnloadedGraphicSizeUnit()
     // - Actual  : 42x42
     // i.e. a mm100 size was used as a hint and the inch size was set for a non-matching unit.
     CPPUNIT_ASSERT_EQUAL(Size(400, 363), aGraphic.GetPrefSize());
+}
+
+int getEmfPlusActionsCount(const Graphic& graphic)
+{
+    const GDIMetaFile& metafile = graphic.GetGDIMetaFile();
+    int emfPlusCount = 0;
+    for (size_t i = 0; i < metafile.GetActionSize(); ++i)
+    {
+        MetaAction* action = metafile.GetAction(i);
+        if (action->GetType() == MetaActionType::COMMENT)
+        {
+            const MetaCommentAction* commentAction = static_cast<const MetaCommentAction*>(action);
+            if (commentAction->GetComment() == "EMF_PLUS")
+                ++emfPlusCount;
+        }
+    }
+    return emfPlusCount;
+}
+
+int getPolygonActionsCount(const Graphic& graphic)
+{
+    const GDIMetaFile& metafile = graphic.GetGDIMetaFile();
+    int polygonCount = 0;
+    for (size_t i = 0; i < metafile.GetActionSize(); ++i)
+    {
+        MetaAction* action = metafile.GetAction(i);
+        if (action->GetType() == MetaActionType::POLYGON)
+            ++polygonCount;
+    }
+    return polygonCount;
+}
+
+void GraphicTest::testWMFWithEmfPlusRoundtrip()
+{
+    // Load a WMF file.
+    test::Directories aDirectories;
+    OUString aURL = aDirectories.getURLFromSrc(u"vcl/qa/cppunit/data/wmf-embedded-emfplus.wmf");
+    SvFileStream aStream(aURL, StreamMode::READ);
+    sal_uInt64 nExpectedSize = aStream.TellEnd();
+    GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
+    Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
+
+    CPPUNIT_ASSERT_GREATER(0, getEmfPlusActionsCount(aGraphic));
+    CPPUNIT_ASSERT_EQUAL(0, getPolygonActionsCount(aGraphic));
+
+    for (bool useConvertMetafile : { false, true })
+    {
+        // Save as WMF.
+        utl::TempFile aTempFile;
+        aTempFile.EnableKillingFile();
+        SvStream& rOutStream = *aTempFile.GetStream(StreamMode::READWRITE);
+        if (useConvertMetafile)
+            ConvertGraphicToWMF(aGraphic, rOutStream, nullptr);
+        else
+        {
+            sal_uInt16 nFormat = rGraphicFilter.GetExportFormatNumberForShortName(u"WMF");
+            rGraphicFilter.ExportGraphic(aGraphic, OUString(), rOutStream, nFormat);
+        }
+        CPPUNIT_ASSERT_EQUAL(nExpectedSize, rOutStream.TellEnd());
+
+        rOutStream.Seek(0);
+        Graphic aNewGraphic = rGraphicFilter.ImportUnloadedGraphic(rOutStream);
+        // Check that reading the WMF back preserves the EMF+ actions in it.
+        CPPUNIT_ASSERT_GREATER(0, getEmfPlusActionsCount(aNewGraphic));
+        // EmfReader::ReadEnhWMF() drops non-EMF+ drawing actions if EMF+ is found.
+        CPPUNIT_ASSERT_EQUAL(0, getPolygonActionsCount(aNewGraphic));
+
+        // With EMF+ disabled there should be no EMF+ actions.
+        const GfxLink& rLink = aNewGraphic.GetGfxLink();
+        uno::Sequence<sal_Int8> aData(reinterpret_cast<const sal_Int8*>(rLink.GetData()),
+                                      rLink.GetDataSize());
+        auto aVectorGraphicData
+            = std::make_shared<VectorGraphicData>(aData, OUString(), VectorGraphicDataType::Wmf);
+        aVectorGraphicData->setEnableEMFPlus(false);
+        Graphic aNoEmfPlusGraphic(aVectorGraphicData);
+        CPPUNIT_ASSERT_EQUAL(0, getEmfPlusActionsCount(aNoEmfPlusGraphic));
+        CPPUNIT_ASSERT_GREATER(0, getPolygonActionsCount(aNoEmfPlusGraphic));
+    }
 }
 
 void GraphicTest::testEmfToWmfConversion()
