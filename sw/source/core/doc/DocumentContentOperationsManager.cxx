@@ -4571,20 +4571,18 @@ SwFlyFrameFormat* DocumentContentOperationsManager::InsNoTextNode( const SwPosit
 }
 
 #define NUMRULE_STATE \
-     SfxItemState aNumRuleState = SfxItemState::UNKNOWN; \
-     std::shared_ptr<SwNumRuleItem> aNumRuleItem; \
-     SfxItemState aListIdState = SfxItemState::UNKNOWN; \
-     std::shared_ptr<SfxStringItem> aListIdItem; \
+    std::shared_ptr<SwNumRuleItem> aNumRuleItemHolderIfSet; \
+    std::shared_ptr<SfxStringItem> aListIdItemHolderIfSet; \
 
 #define PUSH_NUMRULE_STATE \
-     lcl_PushNumruleState( aNumRuleState, aNumRuleItem, aListIdState, aListIdItem, pDestTextNd );
+     lcl_PushNumruleState( aNumRuleItemHolderIfSet, aListIdItemHolderIfSet, pDestTextNd );
 
 #define POP_NUMRULE_STATE \
-     lcl_PopNumruleState( aNumRuleState, aNumRuleItem, aListIdState, aListIdItem, pDestTextNd, rPam );
+     lcl_PopNumruleState( aNumRuleItemHolderIfSet, aListIdItemHolderIfSet, pDestTextNd, rPam );
 
 static void lcl_PushNumruleState(
-    SfxItemState &aNumRuleState, std::shared_ptr<SwNumRuleItem>& aNumRuleItem,
-    SfxItemState &aListIdState, std::shared_ptr<SfxStringItem>& aListIdItem,
+    std::shared_ptr<SwNumRuleItem>& aNumRuleItemHolderIfSet,
+    std::shared_ptr<SfxStringItem>& aListIdItemHolderIfSet,
     const SwTextNode *pDestTextNd )
 {
     // Safe numrule item at destination.
@@ -4593,23 +4591,21 @@ static void lcl_PushNumruleState(
     if (pAttrSet == nullptr)
         return;
 
-    const SfxPoolItem * pItem = nullptr;
-    aNumRuleState = pAttrSet->GetItemState(RES_PARATR_NUMRULE, false, &pItem);
-    if (SfxItemState::SET == aNumRuleState)
+    const SfxPoolItem* pItem(nullptr);
+    if (SfxItemState::SET == pAttrSet->GetItemState(RES_PARATR_NUMRULE, false, &pItem))
     {
-        aNumRuleItem.reset(&pItem->Clone()->StaticWhichCast(RES_PARATR_NUMRULE));
+        aNumRuleItemHolderIfSet.reset(&pItem->Clone()->StaticWhichCast(RES_PARATR_NUMRULE));
     }
 
-    aListIdState = pAttrSet->GetItemState(RES_PARATR_LIST_ID, false, &pItem);
-    if (SfxItemState::SET == aListIdState)
+    if (SfxItemState::SET == pAttrSet->GetItemState(RES_PARATR_LIST_ID, false, &pItem))
     {
-        aListIdItem.reset(&pItem->Clone()->StaticWhichCast(RES_PARATR_LIST_ID));
+        aListIdItemHolderIfSet.reset(&pItem->Clone()->StaticWhichCast(RES_PARATR_LIST_ID));
     }
 }
 
 static void lcl_PopNumruleState(
-    SfxItemState aNumRuleState, const std::shared_ptr<SwNumRuleItem>& aNumRuleItem,
-    SfxItemState aListIdState, const std::shared_ptr<SfxStringItem>& aListIdItem,
+    std::shared_ptr<SwNumRuleItem>& aNumRuleItemHolderIfSet,
+    std::shared_ptr<SfxStringItem>& aListIdItemHolderIfSet,
     SwTextNode *pDestTextNd, const SwPaM& rPam )
 {
     /* If only a part of one paragraph is copied
@@ -4618,17 +4614,18 @@ static void lcl_PopNumruleState(
     if ( lcl_MarksWholeNode(rPam) )
         return;
 
-    if (SfxItemState::SET == aNumRuleState)
+    if (aNumRuleItemHolderIfSet)
     {
-        pDestTextNd->SetAttr(*aNumRuleItem);
+        pDestTextNd->SetAttr(*aNumRuleItemHolderIfSet);
     }
     else
     {
         pDestTextNd->ResetAttr(RES_PARATR_NUMRULE);
     }
-    if (SfxItemState::SET == aListIdState)
+
+    if (aListIdItemHolderIfSet)
     {
-        pDestTextNd->SetAttr(*aListIdItem);
+        pDestTextNd->SetAttr(*aListIdItemHolderIfSet);
     }
     else
     {
