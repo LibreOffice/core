@@ -565,15 +565,13 @@ namespace vcl::unotools
 
         uno::Sequence< double > colorToStdColorSpaceSequence( const Color& rColor )
         {
-            uno::Sequence< double > aRet(4);
-            double* pRet = aRet.getArray();
-
-            pRet[0] = toDoubleColor(rColor.GetRed());
-            pRet[1] = toDoubleColor(rColor.GetGreen());
-            pRet[2] = toDoubleColor(rColor.GetBlue());
-            pRet[3] = toDoubleColor(rColor.GetAlpha());
-
-            return aRet;
+            return
+            {
+                toDoubleColor(rColor.GetRed()),
+                toDoubleColor(rColor.GetGreen()),
+                toDoubleColor(rColor.GetBlue()),
+                toDoubleColor(rColor.GetAlpha())
+            };
         }
 
         Color stdColorSpaceSequenceToColor( const uno::Sequence< double >& rColor        )
@@ -595,12 +593,15 @@ namespace vcl::unotools
             const Color&                                    rColor,
             const uno::Reference< rendering::XColorSpace >& xColorSpace )
         {
-            uno::Sequence<rendering::ARGBColor> aSeq(1);
-            aSeq[0] = rendering::ARGBColor(
+            uno::Sequence<rendering::ARGBColor> aSeq
+            {
+                {
                     toDoubleColor(rColor.GetAlpha()),
                     toDoubleColor(rColor.GetRed()),
                     toDoubleColor(rColor.GetGreen()),
-                    toDoubleColor(rColor.GetBlue()) );
+                    toDoubleColor(rColor.GetBlue())
+                }
+            };
 
             return xColorSpace->convertFromARGB(aSeq);
         }
