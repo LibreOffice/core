@@ -81,10 +81,9 @@ ScVbaListBox::setValue( const uno::Any& _value )
     if( nValue == -1 )
         throw uno::RuntimeException( "Attribute use invalid." );
 
-    uno::Sequence< sal_Int16 > nSelectedIndices(1);
+    uno::Sequence< sal_Int16 > nSelectedIndices { nValue };
     uno::Sequence< sal_Int16 > nOldSelectedIndices;
     m_xProps->getPropertyValue( "SelectedItems" ) >>= nOldSelectedIndices;
-    nSelectedIndices[ 0 ] = nValue;
     m_xProps->setPropertyValue( "SelectedItems", uno::makeAny( nSelectedIndices ) );
     if ( nSelectedIndices != nOldSelectedIndices )
         fireClickEvent();

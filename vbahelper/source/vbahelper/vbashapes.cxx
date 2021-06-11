@@ -180,8 +180,7 @@ ScVbaShapes::Range( const uno::Any& shapes )
     else
     {
         // wrap single index into a sequence
-        uno::Sequence< uno::Any > sIndices(1);
-        sIndices[ 0 ] = shapes;
+        uno::Sequence< uno::Any > sIndices { shapes };
         uno::Any aIndex;
         aIndex <<= sIndices;
         xShapes = getShapesByArrayIndices( aIndex );

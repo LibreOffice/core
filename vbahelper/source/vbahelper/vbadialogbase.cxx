@@ -31,8 +31,7 @@ void SAL_CALL VbaDialogBase::Show()
         if (aURL.isEmpty())
             throw uno::RuntimeException("Unable to open the specified dialog");
 
-        uno::Sequence<beans::PropertyValue> dispatchProps(0);
-        dispatchRequests(m_xModel, aURL, dispatchProps);
+        dispatchRequests(m_xModel, aURL, {});
     }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
