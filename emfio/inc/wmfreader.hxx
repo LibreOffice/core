@@ -51,6 +51,8 @@ namespace emfio
         // eventually handed over external header
         const WmfExternal* mpExternalHeader;
 
+        bool mbEnableEMFPlus = true;
+
         // reads header of the WMF-Datei
         bool            ReadHeader();
 
@@ -68,6 +70,9 @@ namespace emfio
 
         // read WMF file from stream and fill the GDIMetaFile
         void ReadWMF();
+
+        // Allows disabling EMF+ if EMF is embedded in this WMF.
+        void SetEnableEMFPlus(bool bEnableEMFPlus) { mbEnableEMFPlus = bEnableEMFPlus; }
     };
 }
 
