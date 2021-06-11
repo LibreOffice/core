@@ -1549,7 +1549,7 @@ static void lcl_SubtractFlys( const SwFrame *pFrame, const SwPageFrame *pPage,
         gProp.pSRetoucheFly = nullptr;
 }
 
-static void lcl_implDrawGraphicBackgrd(const SvxBrushItem& _rBackgrdBrush,
+static void lcl_implDrawGraphicBackground(const SvxBrushItem& _rBackgrdBrush,
                                        vcl::RenderContext& _rOut,
                                        const SwRect& _rAlignedPaintRect,
                                        const GraphicObject& _rGraphicObj,
@@ -1609,7 +1609,7 @@ static void lcl_implDrawGraphicBackgrd(const SvxBrushItem& _rBackgrdBrush,
  * background graphics. Previously, this code was integrated in method
  * <lcl_DrawGraphic>.
  * Method implemented as an inline, checking the conditions and calling method
- * method <lcl_implDrawGraphicBackgrd(..)> for the intrinsic drawing.
+ * method <lcl_implDrawGraphicBackground(..)> for the intrinsic drawing.
  *
  * @param _rBackgrdBrush
  * background brush contain the color the background has to be drawn.
@@ -1631,7 +1631,7 @@ static void lcl_implDrawGraphicBackgrd(const SvxBrushItem& _rBackgrdBrush,
  * @param _bBackgrdAlreadyDrawn
  * boolean (optional; default: false) indicating, if the background is already drawn.
 */
-static void lcl_DrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
+static void lcl_DrawGraphicBackground( const SvxBrushItem& _rBackgrdBrush,
                                     OutputDevice& _rOut,
                                     const SwRect& _rAlignedPaintRect,
                                     const GraphicObject& _rGraphicObj,
@@ -1648,7 +1648,7 @@ static void lcl_DrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
          ( _rGraphicObj.IsTransparent() || _rGraphicObj.GetType() == GraphicType::NONE  )
        )
     {
-        lcl_implDrawGraphicBackgrd( _rBackgrdBrush, _rOut, _rAlignedPaintRect, _rGraphicObj, properties );
+        lcl_implDrawGraphicBackground( _rBackgrdBrush, _rOut, _rAlignedPaintRect, _rGraphicObj, properties );
     }
 }
 
@@ -1663,7 +1663,7 @@ static void lcl_DrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
  * Use align rectangle for drawing graphic Pixel-align coordinates for
  * drawing graphic
  * Outsource code for drawing background of the graphic
- * with a background color in method <lcl_DrawGraphicBackgrd>
+ * with a background color in method <lcl_DrawGraphicBackground>
  *
  * Also, change type of <bGrfNum> and <bClip> from <bool> to <bool>
  */
@@ -1691,7 +1691,7 @@ static void lcl_DrawGraphic( const SvxBrushItem& rBrush, vcl::RenderContext &rOu
     GraphicObject *pGrf = const_cast<GraphicObject*>(rBrush.GetGraphicObject());
 
     // Outsource drawing of background with a background color
-    ::lcl_DrawGraphicBackgrd( rBrush, rOutDev, aAlignedGrfRect, *pGrf, bGrfNum, properties, bBackgrdAlreadyDrawn );
+    ::lcl_DrawGraphicBackground( rBrush, rOutDev, aAlignedGrfRect, *pGrf, bGrfNum, properties, bBackgrdAlreadyDrawn );
 
     // Because for drawing a graphic left-top-corner and size coordinates are
     // used, these coordinates have to be determined on pixel level.
@@ -1917,7 +1917,7 @@ void DrawGraphic(
             SwRect aAlignedPaintRect = rOut;
             ::SwAlignRect( aAlignedPaintRect, &rSh, &rOutDev );
             // draw background color for aligned paint rectangle
-            lcl_DrawGraphicBackgrd( *pBrush, rOutDev, aAlignedPaintRect, *pGraphicObj, bGrfNum, gProp );
+            lcl_DrawGraphicBackground( *pBrush, rOutDev, aAlignedPaintRect, *pGraphicObj, bGrfNum, gProp );
 
             // set left-top-corner of background graphic to left-top-corner of the
             // area, from which the background brush is determined.
@@ -3201,7 +3201,7 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
 
                 // determine background color of page for <PaintLayer> method
                 // calls, paint <hell> or <heaven>
-                const Color aPageBackgrdColor(pPage->GetDrawBackgrdColor());
+                const Color aPageBackgrdColor(pPage->GetDrawBackgroundColor());
 
                 pPage->PaintBaBo( aPaintRect, pPage );
 
@@ -3816,12 +3816,12 @@ bool SwFlyFrame::IsBackgroundTransparent() const
     if ( !bBackgroundTransparent &&
          GetFormat()->IsBackgroundBrushInherited() )
     {
-        const SvxBrushItem* pBackgrdBrush = nullptr;
+        const SvxBrushItem* pBackgroundBrush = nullptr;
         std::optional<Color> xSectionTOXColor;
         SwRect aDummyRect;
         drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
 
-        if ( GetBackgroundBrush( aFillAttributes, pBackgrdBrush, xSectionTOXColor, aDummyRect, false, /*bConsiderTextBox=*/false) )
+        if ( GetBackgroundBrush( aFillAttributes, pBackgroundBrush, xSectionTOXColor, aDummyRect, false, /*bConsiderTextBox=*/false) )
         {
             if ( xSectionTOXColor &&
                  (xSectionTOXColor->IsTransparent()) &&
@@ -3833,17 +3833,17 @@ bool SwFlyFrame::IsBackgroundTransparent() const
             {
                 bBackgroundTransparent = aFillAttributes->isTransparent();
             }
-            else if ( pBackgrdBrush )
+            else if ( pBackgroundBrush )
             {
-                if ( (pBackgrdBrush->GetColor().IsTransparent()) &&
-                     (pBackgrdBrush->GetColor() != COL_TRANSPARENT) )
+                if ( (pBackgroundBrush->GetColor().IsTransparent()) &&
+                     (pBackgroundBrush->GetColor() != COL_TRANSPARENT) )
                 {
                     bBackgroundTransparent = true;
                 }
                 else
                 {
                     const GraphicObject *pTmpGrf =
-                            pBackgrdBrush->GetGraphicObject();
+                            pBackgroundBrush->GetGraphicObject();
                     if ( pTmpGrf &&
                          (pTmpGrf->GetAttr().IsTransparent())
                        )
@@ -7085,7 +7085,7 @@ void SwLayoutFrame::RefreshExtraData( const SwRect &rRect ) const
  *
  * @return Color
  */
-Color SwPageFrame::GetDrawBackgrdColor() const
+Color SwPageFrame::GetDrawBackgroundColor() const
 {
     const SvxBrushItem* pBrushItem;
     std::optional<Color> xDummyColor;
@@ -7190,7 +7190,7 @@ void SwFrame::Retouch( const SwPageFrame * pPage, const SwRect &rRect ) const
             ResetRetouche();
             if ( rRetouche.HasArea() )
             {
-                const Color aPageBackgrdColor(pPage->GetDrawBackgrdColor());
+                const Color aPageBackgrdColor(pPage->GetDrawBackgroundColor());
                 const IDocumentDrawModelAccess& rIDDMA = pSh->getIDocumentDrawModelAccess();
                 // --> OD #i76669#
                 SwViewObjectContactRedirector aSwRedirector( *pSh );
@@ -7510,7 +7510,7 @@ Graphic SwFlyFrameFormat::MakeGraphic( ImageMap* pMap, const std::optional<Size>
 
         // determine page, fly frame is on
         const SwPageFrame* pFlyPage = pFly->FindPageFrame();
-        const Color aPageBackgrdColor(pFlyPage->GetDrawBackgrdColor());
+        const Color aPageBackgrdColor(pFlyPage->GetDrawBackgroundColor());
         const IDocumentDrawModelAccess& rIDDMA = pSh->getIDocumentDrawModelAccess();
         // --> OD #i76669#
         SwViewObjectContactRedirector aSwRedirector( *pSh );

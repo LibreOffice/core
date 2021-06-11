@@ -778,7 +778,7 @@ public:
      std::vector< OUString > & aNextPageVec,
      std::vector< OUString > & aRestVec);
 
-    /** SwFEShell::GetShapeBackgrd
+    /** SwFEShell::GetShapeBackground
 
         method determines background color of the page the selected drawing
         object is on and returns this color.
@@ -788,7 +788,7 @@ public:
 
         @returns an object of class Color
     */
-    Color GetShapeBackgrd() const;
+    Color GetShapeBackground() const;
 
     /** Is default horizontal text direction for selected drawing object right-to-left
 

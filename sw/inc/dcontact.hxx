@@ -403,7 +403,7 @@ class SAL_DLLPUBLIC_RTTI SwDrawContact final : public SwContact
 
         SwDrawVirtObj* AddVirtObj(SwFrame const& rAnchorFrame);
 
-        void NotifyBackgrdOfAllVirtObjs( const tools::Rectangle* pOldBoundRect );
+        void NotifyBackgroundOfAllVirtObjs( const tools::Rectangle* pOldBoundRect );
 
         /** get data collection of anchored objects, handled by with contact */
 

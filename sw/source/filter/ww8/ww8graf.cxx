@@ -2721,9 +2721,9 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( tools::Long nGrafAnchorCp )
 
     // both flags <bBelowText> and <bDrawHell> have to be set to move object into the background.
     // #i46794# - it reveals that value of flag <bBelowText> can be neglected.
-    const bool bMoveToBackgrd = pRecord->bDrawHell ||
+    const bool bMoveToBackground = pRecord->bDrawHell ||
                                 ((m_bIsHeader || m_bIsFooter) && aFSFA.nwr == 3);
-    if ( bMoveToBackgrd )
+    if ( bMoveToBackground )
         aFlySet.Put(SvxOpaqueItem(RES_OPAQUE,false));
 
     OUString aObjName = pObject->GetName();
@@ -2766,7 +2766,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( tools::Long nGrafAnchorCp )
         if (!bDone)
         {
             sw::util::SetLayer aSetLayer(m_rDoc);
-            if ( bMoveToBackgrd )
+            if ( bMoveToBackground )
                 aSetLayer.SendObjectToHell(*pObject);
             else
                 aSetLayer.SendObjectToHeaven(*pObject);
