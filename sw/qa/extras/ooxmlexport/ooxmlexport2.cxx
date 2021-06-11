@@ -155,6 +155,17 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testCustomProperties, "custom-properties.doc
     assertXPathContent(pXmlDoc, "/cp:coreProperties/dc:identifier", "zzzzidentifier");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testUTF8CustomProperties, "tdf127864.docx")
+{
+    uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(
+        mxComponent, uno::UNO_QUERY);
+    uno::Reference<document::XDocumentProperties> xDocumentProperties
+        = xDocumentPropertiesSupplier->getDocumentProperties();
+    uno::Reference<beans::XPropertySet> xPropertySet(
+        xDocumentProperties->getUserDefinedProperties(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"первый"), getProperty<OUString>(xPropertySet, u"первый"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testZoom, "zoom.docx")
 {
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
