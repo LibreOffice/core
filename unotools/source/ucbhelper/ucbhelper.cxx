@@ -227,10 +227,7 @@ bool utl::UCBContentHelper::MakeFolder(
                 {
                     continue;
                 }
-                css::uno::Sequence<OUString> keys { "Title" };
-                css::uno::Sequence<css::uno::Any> values(1);
-                values[0] <<= title;
-                if (parent.insertNewContent(rInfo.Type, keys, values, result))
+                if (parent.insertNewContent(rInfo.Type, { "Title" }, { css::uno::Any(title) }, result))
                 {
                     return true;
                 }

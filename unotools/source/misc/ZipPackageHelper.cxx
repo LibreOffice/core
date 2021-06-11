@@ -102,10 +102,7 @@ Reference< XInterface > ZipPackageHelper::addFolder( Reference< XInterface > con
     if ( rName == ".." || rName == "." )
         throw lang::IllegalArgumentException();
 
-    Sequence< Any > aArgs(1);
-    aArgs[0] <<= true;
-
-    Reference< XInterface > xFolder( mxFactory->createInstanceWithArguments(aArgs) );
+    Reference< XInterface > xFolder( mxFactory->createInstanceWithArguments({ Any(true) } ));
     Reference< XNamed > xNamed( xFolder, UNO_QUERY );
     Reference< XChild > xChild( xFolder, UNO_QUERY );
 
