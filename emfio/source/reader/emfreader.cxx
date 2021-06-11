@@ -1101,8 +1101,10 @@ namespace emfio
                         sal_Int32 nSavedDC;
                         mpInputStream->ReadInt32( nSavedDC );
                         SAL_INFO( "emfio", "\t\t SavedDC Index: " << nSavedDC );
-                        if ( nSavedDC < 0 ) // For EMF values above -1 is ignored
+                        if ( nSavedDC < 0 )
                             Pop( nSavedDC );
+                        else
+                            Pop( -1 ); // For RestoreDC values above -1, treat as get last element
                     }
                     break;
 
