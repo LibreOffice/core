@@ -1350,6 +1350,24 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121176, "tdf121176.docx")
     CPPUNIT_ASSERT_EQUAL( OUString( "must" ), getRun( getParagraph( 1 ), 2 )->getString());
 }
 
+<<<<<<< HEAD   (e04725 tdf#79069 DOCX: support tracked table (row) deletion)
+=======
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128913, "tdf128913.docx")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport();
+    // w:ins and w:del are imported correctly, if they contain only inline images
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:r/w:drawing/wp:inline/a:graphic");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:del/w:r/w:drawing/wp:inline/a:graphic");
+}
+
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf142387, "tdf142387.docx")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport();
+    // w:del in w:ins is exported correctly (only w:del was exported)
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del/w:r/w:delText", "inserts ");
+}
+
+>>>>>>> CHANGE (eeee19 tdf#142387 DOCX track changes: export w:del in w:ins)
 DECLARE_OOXMLEXPORT_TEST(testTdf123054, "tdf123054.docx")
 {
     CPPUNIT_ASSERT_EQUAL(OUString("No Spacing"),
