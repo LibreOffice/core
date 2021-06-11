@@ -1771,7 +1771,7 @@ std::unique_ptr<SfxItemSet> SfxAllItemSet::Clone(bool bItems, SfxItemPool *pToPo
         std::unique_ptr<SfxAllItemSet> pNewSet(new SfxAllItemSet( *pToPool ));
         if ( bItems )
             pNewSet->Set( *this );
-        return std::unique_ptr<SfxItemSet>(pNewSet.release()); // clang3.8 does not seem to be able to upcast std::unique_ptr
+        return std::move(pNewSet);
     }
     else
         return std::unique_ptr<SfxItemSet>(bItems ? new SfxAllItemSet(*this) : new SfxAllItemSet(*m_pPool));
