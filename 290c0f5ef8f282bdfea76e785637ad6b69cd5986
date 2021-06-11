@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffc7eb13_13820ca6",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 1707,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-11T20:36:00Z",
+      "side": 1,
+      "message": "These two ifs going together, one not inside another\u0027s braces, with following else is triggering the error.",
+      "range": {
+        "startLine": 1706,
+        "startChar": 4,
+        "endLine": 1707,
+        "endChar": 20
+      },
+      "revId": "290c0f5ef8f282bdfea76e785637ad6b69cd5986",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
