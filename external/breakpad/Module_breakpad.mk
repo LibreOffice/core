@@ -13,11 +13,10 @@ $(eval $(call gb_Module_add_targets,breakpad,\
 	UnpackedTarball_breakpad \
 ))
 
-ifneq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,breakpad,\
 	ExternalProject_breakpad \
 ))
-else
+ifeq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,breakpad,\
 	StaticLibrary_breakpad \
 ))
