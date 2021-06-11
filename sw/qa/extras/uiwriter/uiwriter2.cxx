@@ -206,9 +206,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf101534)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineMoveInsertInDelete)
 {
-    loadURL("private:factory/swriter", nullptr);
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwWrtShell* const pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwDoc* const pDoc = createSwDoc();
+    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     pWrtShell->Insert(" foo");
     pWrtShell->SttEndDoc(true);
@@ -242,9 +241,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineMoveInsertInDelete)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineInHiddenSection)
 {
-    loadURL("private:factory/swriter", nullptr);
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwWrtShell* const pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwDoc* const pDoc = createSwDoc();
+    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     pWrtShell->SplitNode();
     pWrtShell->Insert("foo");
@@ -3523,9 +3521,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTrackImageDeletion)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTrackImageInsertion)
 {
-    loadURL("private:factory/swriter", nullptr);
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = createSwDoc();
 
     // turn on red-lining and show changes
     IDocumentRedlineAccess& rIDRA(pDoc->getIDocumentRedlineAccess());

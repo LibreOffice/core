@@ -1777,10 +1777,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132744)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135014)
 {
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    createSwDoc();
 
     uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({ { "KeyModifier", uno::makeAny(sal_Int32(0)) } }));
@@ -1806,11 +1803,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135014)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130629)
 {
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    createSwDoc();
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-
     uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({ { "KeyModifier", uno::makeAny(KEY_MOD1) } }));
 
@@ -1838,12 +1833,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130629)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf141613)
 {
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-
-    SwWrtShell* pWrtSh = pTextDoc->GetDocShell()->GetWrtShell();
+    SwDoc* const pDoc = createSwDoc();
+    SwWrtShell* const pWrtSh = pDoc->GetDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtSh);
 
     pWrtSh->Insert("Test");
@@ -1869,12 +1860,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf141613)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133358)
 {
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-
-    SwWrtShell* pWrtSh = pTextDoc->GetDocShell()->GetWrtShell();
+    SwDoc* const pDoc = createSwDoc();
+    SwWrtShell* const pWrtSh = pDoc->GetDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtSh);
 
     pWrtSh->Insert("Test");
@@ -1901,10 +1888,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133358)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf80663)
 {
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    createSwDoc();
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
         { { "Rows", uno::makeAny(sal_Int32(2)) }, { "Columns", uno::makeAny(sal_Int32(2)) } }));
@@ -1996,10 +1980,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf107893)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf121031)
 {
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    createSwDoc();
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
         { { "Rows", uno::makeAny(sal_Int32(3)) }, { "Columns", uno::makeAny(sal_Int32(3)) } }));
@@ -2073,15 +2054,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134626)
     Scheduler::ProcessEventsToIdle();
     TransferableDataHelper aHelper(xTransfer);
 
-    mxComponent->dispose();
-
     // Create a new document
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
-
-    pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-
-    pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwDoc* const pDoc = createSwDoc();
+    pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
 
     // Without the fix in place, this test would have crashed here
     for (sal_Int32 i = 0; i < 5; ++i)
@@ -2110,19 +2086,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134626)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf139566)
 {
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtSh = pDoc->GetDocShell()->GetWrtShell();
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
         { { "Rows", uno::makeAny(sal_Int32(1)) }, { "Columns", uno::makeAny(sal_Int32(1)) } }));
 
     dispatchCommand(mxComponent, ".uno:InsertTable", aArgs);
     Scheduler::ProcessEventsToIdle();
-
-    SwWrtShell* pWrtSh = pTextDoc->GetDocShell()->GetWrtShell();
-    CPPUNIT_ASSERT(pWrtSh);
 
     // Move the cursor outside the table
     pWrtSh->Down(/*bSelect=*/false);
@@ -2158,10 +2129,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf139566)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf96067)
 {
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    createSwDoc();
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
         { { "Rows", uno::makeAny(sal_Int32(3)) }, { "Columns", uno::makeAny(sal_Int32(3)) } }));
@@ -2195,10 +2163,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf96067)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf87199)
 {
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    createSwDoc();
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
         { { "Rows", uno::makeAny(sal_Int32(2)) }, { "Columns", uno::makeAny(sal_Int32(1)) } }));
@@ -2243,10 +2208,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf87199)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132603)
 {
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
-
+    createSwDoc();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
 
     uno::Sequence<beans::PropertyValue> aPropertyValues
         = comphelper::InitPropertySequence({ { "Text", uno::makeAny(OUString("Comment")) } });
@@ -2278,10 +2241,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132603)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf117601)
 {
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
-
+    createSwDoc();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
         { { "Rows", uno::makeAny(sal_Int32(5)) }, { "Columns", uno::makeAny(sal_Int32(3)) } }));
@@ -2760,7 +2721,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf138897)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf136740)
 {
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    createSwDoc();
     css::uno::Reference<css::lang::XMultiServiceFactory> xFact(mxComponent,
                                                                css::uno::UNO_QUERY_THROW);
     css::uno::Reference<css::beans::XPropertySet> xTextDefaults(
