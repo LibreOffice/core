@@ -841,7 +841,7 @@ namespace emfio
                 if (bOk)
                 {
                     // scanline must be large enough to provide all pixels
-                    bOk = nBytesPerScan >= nWidth / 8;
+                    bOk = nBytesPerScan >= nWidth * nBitCount / 8;
                 }
                 if (bOk)
                 {
