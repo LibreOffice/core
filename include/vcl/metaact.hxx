@@ -79,7 +79,7 @@ public:
 
     oslInterlockedCount GetRefCount() const { return m_nCount; }
 
-    virtual rtl::Reference<MetaAction> Clone();
+    virtual rtl::Reference<MetaAction> Clone() const;
 
     virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove );
     virtual void        Scale( double fScaleX, double fScaleY );
@@ -116,7 +116,7 @@ private:
     virtual             ~MetaPixelAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -144,7 +144,7 @@ private:
     virtual             ~MetaPointAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -174,7 +174,7 @@ private:
     virtual             ~MetaLineAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -206,7 +206,7 @@ private:
     virtual             ~MetaRectAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -236,7 +236,7 @@ private:
     virtual             ~MetaRoundRectAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -267,7 +267,7 @@ private:
     virtual             ~MetaEllipseAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -297,7 +297,7 @@ private:
     virtual             ~MetaArcAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -330,7 +330,7 @@ private:
     virtual             ~MetaPieAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -363,7 +363,7 @@ private:
     virtual             ~MetaChordAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -395,7 +395,7 @@ private:
     virtual             ~MetaPolyLineAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -425,7 +425,7 @@ private:
     virtual             ~MetaPolygonAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -453,7 +453,7 @@ private:
     virtual             ~MetaPolyPolygonAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -484,7 +484,7 @@ private:
     virtual             ~MetaTextAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -522,7 +522,7 @@ public:
 
     virtual void        Execute( OutputDevice* pOut ) override;
 
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
 
     virtual void    Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void    Scale( double fScaleX, double fScaleY ) override;
@@ -557,7 +557,7 @@ private:
     virtual             ~MetaStretchTextAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -593,7 +593,7 @@ private:
     virtual             ~MetaTextRectAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -628,7 +628,7 @@ private:
     virtual             ~MetaTextLineAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -663,7 +663,7 @@ private:
     virtual             ~MetaBmpAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -694,7 +694,7 @@ private:
     virtual             ~MetaBmpScaleAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -729,7 +729,7 @@ private:
     virtual             ~MetaBmpScalePartAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -764,7 +764,7 @@ private:
     virtual             ~MetaBmpExAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -796,7 +796,7 @@ private:
     virtual             ~MetaBmpExScaleAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -832,7 +832,7 @@ private:
     virtual             ~MetaBmpExScalePartAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -869,7 +869,7 @@ private:
     virtual             ~MetaMaskAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -904,7 +904,7 @@ private:
     virtual             ~MetaMaskScaleAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -942,7 +942,7 @@ private:
     virtual             ~MetaMaskScalePartAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -979,7 +979,7 @@ private:
     virtual             ~MetaGradientAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -1009,7 +1009,7 @@ private:
     virtual             ~MetaGradientExAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -1039,7 +1039,7 @@ private:
     virtual             ~MetaHatchAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -1069,7 +1069,7 @@ private:
     virtual             ~MetaWallpaperAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -1100,7 +1100,7 @@ private:
     virtual             ~MetaClipRegionAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -1129,7 +1129,7 @@ private:
     virtual             ~MetaISectRectClipRegionAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -1157,7 +1157,7 @@ private:
     virtual             ~MetaISectRegionClipRegionAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -1186,7 +1186,7 @@ private:
     virtual             ~MetaMoveClipRegionAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -1215,7 +1215,7 @@ private:
     virtual             ~MetaLineColorAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -1242,7 +1242,7 @@ private:
     virtual             ~MetaFillColorAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -1268,7 +1268,7 @@ private:
     virtual             ~MetaTextColorAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -1294,7 +1294,7 @@ private:
     virtual             ~MetaTextFillColorAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -1321,7 +1321,7 @@ private:
     virtual             ~MetaTextLineColorAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -1348,7 +1348,7 @@ private:
     virtual             ~MetaOverlineColorAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -1374,7 +1374,7 @@ private:
     virtual             ~MetaTextAlignAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -1399,7 +1399,7 @@ private:
     virtual             ~MetaMapModeAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -1434,7 +1434,7 @@ private:
     virtual             ~MetaFontAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -1461,7 +1461,7 @@ private:
     virtual             ~MetaPushAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -1483,7 +1483,7 @@ private:
     virtual             ~MetaPopAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 };
@@ -1504,7 +1504,7 @@ private:
     virtual             ~MetaRasterOpAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -1530,7 +1530,7 @@ private:
     virtual             ~MetaTransparentAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -1564,7 +1564,7 @@ private:
     virtual             ~MetaFloatTransparentAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -1600,7 +1600,7 @@ private:
     virtual             ~MetaEPSAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -1633,7 +1633,7 @@ private:
     virtual             ~MetaRefPointAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -1667,7 +1667,7 @@ public:
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -1693,7 +1693,7 @@ private:
     virtual             ~MetaLayoutModeAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
@@ -1718,7 +1718,7 @@ private:
     virtual             ~MetaTextLanguageAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
