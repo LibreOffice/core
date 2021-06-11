@@ -92,7 +92,19 @@ SwFlyFrameAttrMgr::SwFlyFrameAttrMgr( bool bNew, SwWrtShell* pSh, Frmmgr_Type nT
             {
                 // Default anchor for new graphics and objects is at-char, except for Math objects.
                 SwViewOption aViewOpt(*pSh->GetViewOptions());
-                m_aSet.Put(SwFormatAnchor(aViewOpt.GetDefaultAnchorType()));//RndStdIds::FLY_AT_CHAR
+
+                RndStdIds eAnchorType = aViewOpt.GetDefaultAnchorType();
+
+                const SwFormatAnchor rStyleAnchor
+                    = m_pOwnSh->GetFormatFromPool(nId)->GetAttrSet().GetAnchor();
+                if (rStyleAnchor.GetAnchorId() != RndStdIds::FLY_AT_PARA)
+                {
+                    // The style has a custom anchor type, prefer that over the user profile
+                    // default.
+                    eAnchorType = rStyleAnchor.GetAnchorId();
+                }
+
+                m_aSet.Put(SwFormatAnchor(eAnchorType));
             }
         }
     }
