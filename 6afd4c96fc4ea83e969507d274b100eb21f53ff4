@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cf9c4d12_2200b55b",
+        "filename": "sw/qa/extras/txtexport/txtexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-11T06:43:34Z",
+      "side": 1,
+      "message": "sal_uInt64 is not \"ul\" (unsigned long), which on Windows is a 32-bit unsigned integer. It\u0027s best not to use standard types with undefined size (int, long, etc) when dealing with specific size types. Use explicit \u0027sal_uInt64(0)\u0027 instead, which would be immune to platform differences, including possible differences in conditional #defines/typedefs.",
+      "revId": "6afd4c96fc4ea83e969507d274b100eb21f53ff4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
