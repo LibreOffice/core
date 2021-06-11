@@ -600,7 +600,10 @@ namespace emfio
 
             case W_META_RESTOREDC:
             {
-                Pop();
+                sal_Int16 nSavedDC;
+                mpInputStream->ReadInt16( nSavedDC );
+                SAL_INFO( "emfio", "\t\t SavedDC: " << nSavedDC );
+                Pop( nSavedDC );
             }
             break;
 

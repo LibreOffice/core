@@ -614,7 +614,7 @@ namespace emfio
         void                ModifyWorldTransform(const XForm& rXForm, sal_uInt32 nMode);
 
         void                Push();
-        void                Pop();
+        void                Pop( const sal_Int32 nSavedDC = -1 );
 
         WMFRasterOp         SetRasterOp(WMFRasterOp nRasterOp);
         void                StrokeAndFillPath(bool bStroke, bool bFill);
