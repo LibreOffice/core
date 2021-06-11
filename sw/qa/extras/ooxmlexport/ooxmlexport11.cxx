@@ -1350,6 +1350,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121176, "tdf121176.docx")
     CPPUNIT_ASSERT_EQUAL( OUString( "must" ), getRun( getParagraph( 1 ), 2 )->getString());
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf142387, "tdf142387.docx")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport();
+    // w:del in w:ins is exported correctly (only w:del was exported)
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del/w:r/w:delText", "inserts ");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf123054, "tdf123054.docx")
 {
     CPPUNIT_ASSERT_EQUAL(OUString("No Spacing"),

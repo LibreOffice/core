@@ -3196,7 +3196,8 @@ void DocxAttributeOutput::StartRedline( const SwRedlineData * pRedlineData )
     if ( !pRedlineData )
         return;
 
-    // FIXME check if it's necessary to travel over the Next()'s in pRedlineData
+    // write out stack of this redline recursively (first the oldest)
+    StartRedline( pRedlineData->Next() );
 
     OString aId( OString::number( m_nRedlineId++ ) );
 
@@ -3250,6 +3251,9 @@ void DocxAttributeOutput::EndRedline( const SwRedlineData * pRedlineData )
         default:
             break;
     }
+
+    // write out stack of this redline recursively (first the newest)
+    EndRedline( pRedlineData->Next() );
 }
 
 void DocxAttributeOutput::FormatDrop( const SwTextNode& /*rNode*/, const SwFormatDrop& /*rSwFormatDrop*/, sal_uInt16 /*nStyle*/, ww8::WW8TableNodeInfo::Pointer_t /*pTextNodeInfo*/, ww8::WW8TableNodeInfoInner::Pointer_t )
