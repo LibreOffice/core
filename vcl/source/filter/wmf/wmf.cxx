@@ -90,14 +90,16 @@ bool ConvertGraphicToWMF(const Graphic& rGraphic, SvStream& rTargetStream,
                          FilterConfigItem const* pConfigItem, bool bPlaceable)
 {
     GfxLink aLink = rGraphic.GetGfxLink();
-    if (aLink.IsEMF() && aLink.GetData() && aLink.GetDataSize())
+    if (aLink.GetType() == GfxLinkType::NativeWmf && aLink.GetData() && aLink.GetDataSize())
     {
-        // This may be an EMF+ file, converting that to WMF is better done by re-parsing EMF+ as EMF
-        // and converting that to WMF.
+        // This may be an EMF+ file or WMF file with EMF+ embedded. In EmfReader::ReadEnhWMF()
+        // we normally drop non-EMF commands when reading EMF+, so converting that to WMF
+        // is better done by re-parsing with EMF+ disabled.
         uno::Sequence<sal_Int8> aData(reinterpret_cast<const sal_Int8*>(aLink.GetData()),
                                       aLink.GetDataSize());
         auto aVectorGraphicData
-            = std::make_shared<VectorGraphicData>(aData, OUString(), VectorGraphicDataType::Emf);
+            = std::make_shared<VectorGraphicData>(aData, OUString(),
+                aLink.IsEMF() ? VectorGraphicDataType::Emf : VectorGraphicDataType::Wmf);
         aVectorGraphicData->setEnableEMFPlus(false);
         Graphic aGraphic(aVectorGraphicData);
         bool bRet = ConvertGDIMetaFileToWMF(aGraphic.GetGDIMetaFile(), rTargetStream, pConfigItem,
