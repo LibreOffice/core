@@ -452,7 +452,8 @@ const SfxPoolItem* SfxShell::GetSlotState
     // Get Slot on the given Interface
     if ( !pIF )
         pIF = GetInterface();
-    SfxItemState eState = SfxItemState::UNKNOWN;
+    SfxItemState eState(SfxItemState::DEFAULT);
+    bool bItemStateSet(false);
     SfxItemPool &rPool = GetPool();
 
     const SfxSlot* pSlot = nullptr;
@@ -467,13 +468,14 @@ const SfxPoolItem* SfxShell::GetSlotState
     // Get Item and Item status
     const SfxPoolItem *pItem = nullptr;
     SfxItemSet aSet( rPool, {{nSlotId, nSlotId}} ); // else pItem dies too soon
-    if ( pSlot )
+    if ( nullptr != pSlot )
     {
         // Call Status method
         SfxStateFunc pFunc = pSlot->GetStateFnc();
         if ( pFunc )
             (*pFunc)( this, aSet );
         eState = aSet.GetItemState( nSlotId, true, &pItem );
+        bItemStateSet = true;
 
         // get default Item if possible
         if ( eState == SfxItemState::DEFAULT )
@@ -484,24 +486,22 @@ const SfxPoolItem* SfxShell::GetSlotState
                 eState = SfxItemState::DONTCARE;
         }
     }
-    else
-        eState = SfxItemState::UNKNOWN;
 
     // Evaluate Item and item status and possibly maintain them in pStateSet
     std::unique_ptr<SfxPoolItem> pRetItem;
-    if ( eState <= SfxItemState::DISABLED )
+    if ( !bItemStateSet || eState <= SfxItemState::DISABLED )
     {
         if ( pStateSet )
             pStateSet->DisableItem(nSlotId);
         return nullptr;
     }
-    else if ( eState == SfxItemState::DONTCARE )
+    else if ( bItemStateSet && eState == SfxItemState::DONTCARE )
     {
         if ( pStateSet )
             pStateSet->ClearItem(nSlotId);
         pRetItem.reset( new SfxVoidItem(0) );
     }
-    else
+    else // bItemStateSet && eState >= SfxItemState::DEFAULT
     {
         if ( pStateSet && pStateSet->Put( *pItem ) )
             return &pStateSet->Get( pItem->Which() );
