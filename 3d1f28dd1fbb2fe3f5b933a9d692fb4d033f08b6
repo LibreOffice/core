@@ -16,6 +16,24 @@
       "revId": "3d1f28dd1fbb2fe3f5b933a9d692fb4d033f08b6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9354a86f_2d12fc1c",
+        "filename": "configure.ac",
+        "patchSetId": 12
+      },
+      "lineNbr": 919,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-06-11T09:45:13Z",
+      "side": 1,
+      "message": "\u003e Any reason you effectively dropped test_openldap\u003dyes for this case?\n\nNope. I had a hard time to guess / dig up intention and made some errors / missed stuff. The whole point of the change was to make test dependencies more obvious and eventually replace long lists of per-architecture test_* settings. Interestingly, your LO PostgreSQL build now must use the system OpenLDAP. I probably just assumed MacOS wouldn\u0027t use / provide a system OpenLDAP, like the tinderboxes. So just add a test_openldap\u003dyes, like I already did for Haiku.\n\nOr maybe it\u0027s better to keep test_openldap\u003dyes the default and not depend on X11 at all and drop it from the disable_x11_tests() list. It definitely doesn\u0027t have a hard dependency on X11 and quite probably makes sense in a headless build too.",
+      "parentUuid": "9154dea5_9e3062ad",
+      "revId": "3d1f28dd1fbb2fe3f5b933a9d692fb4d033f08b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
