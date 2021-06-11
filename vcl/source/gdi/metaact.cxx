@@ -169,7 +169,7 @@ void MetaAction::Execute( OutputDevice* )
 {
 }
 
-rtl::Reference<MetaAction> MetaAction::Clone()
+rtl::Reference<MetaAction> MetaAction::Clone() const
 {
     return new MetaAction;
 }
@@ -301,7 +301,7 @@ void MetaPixelAction::Execute( OutputDevice* pOut )
     pOut->DrawPixel( maPt, maColor );
 }
 
-rtl::Reference<MetaAction> MetaPixelAction::Clone()
+rtl::Reference<MetaAction> MetaPixelAction::Clone() const
 {
     return new MetaPixelAction( *this );
 }
@@ -350,7 +350,7 @@ void MetaPointAction::Execute( OutputDevice* pOut )
     pOut->DrawPixel( maPt );
 }
 
-rtl::Reference<MetaAction> MetaPointAction::Clone()
+rtl::Reference<MetaAction> MetaPointAction::Clone() const
 {
     return new MetaPointAction( *this );
 }
@@ -409,7 +409,7 @@ void MetaLineAction::Execute( OutputDevice* pOut )
         pOut->DrawLine( maStartPt, maEndPt, maLineInfo );
 }
 
-rtl::Reference<MetaAction> MetaLineAction::Clone()
+rtl::Reference<MetaAction> MetaLineAction::Clone() const
 {
     return new MetaLineAction( *this );
 }
@@ -473,7 +473,7 @@ void MetaRectAction::Execute( OutputDevice* pOut )
     pOut->DrawRect( maRect );
 }
 
-rtl::Reference<MetaAction> MetaRectAction::Clone()
+rtl::Reference<MetaAction> MetaRectAction::Clone() const
 {
     return new MetaRectAction( *this );
 }
@@ -525,7 +525,7 @@ void MetaRoundRectAction::Execute( OutputDevice* pOut )
     pOut->DrawRect( maRect, mnHorzRound, mnVertRound );
 }
 
-rtl::Reference<MetaAction> MetaRoundRectAction::Clone()
+rtl::Reference<MetaAction> MetaRoundRectAction::Clone() const
 {
     return new MetaRoundRectAction( *this );
 }
@@ -576,7 +576,7 @@ void MetaEllipseAction::Execute( OutputDevice* pOut )
     pOut->DrawEllipse( maRect );
 }
 
-rtl::Reference<MetaAction> MetaEllipseAction::Clone()
+rtl::Reference<MetaAction> MetaEllipseAction::Clone() const
 {
     return new MetaEllipseAction( *this );
 }
@@ -626,7 +626,7 @@ void MetaArcAction::Execute( OutputDevice* pOut )
     pOut->DrawArc( maRect, maStartPt, maEndPt );
 }
 
-rtl::Reference<MetaAction> MetaArcAction::Clone()
+rtl::Reference<MetaAction> MetaArcAction::Clone() const
 {
     return new MetaArcAction( *this );
 }
@@ -684,7 +684,7 @@ void MetaPieAction::Execute( OutputDevice* pOut )
     pOut->DrawPie( maRect, maStartPt, maEndPt );
 }
 
-rtl::Reference<MetaAction> MetaPieAction::Clone()
+rtl::Reference<MetaAction> MetaPieAction::Clone() const
 {
     return new MetaPieAction( *this );
 }
@@ -742,7 +742,7 @@ void MetaChordAction::Execute( OutputDevice* pOut )
     pOut->DrawChord( maRect, maStartPt, maEndPt );
 }
 
-rtl::Reference<MetaAction> MetaChordAction::Clone()
+rtl::Reference<MetaAction> MetaChordAction::Clone() const
 {
     return new MetaChordAction( *this );
 }
@@ -806,7 +806,7 @@ void MetaPolyLineAction::Execute( OutputDevice* pOut )
         pOut->DrawPolyLine( maPoly, maLineInfo );
 }
 
-rtl::Reference<MetaAction> MetaPolyLineAction::Clone()
+rtl::Reference<MetaAction> MetaPolyLineAction::Clone() const
 {
     return new MetaPolyLineAction( *this );
 }
@@ -875,7 +875,7 @@ void MetaPolygonAction::Execute( OutputDevice* pOut )
     pOut->DrawPolygon( maPoly );
 }
 
-rtl::Reference<MetaAction> MetaPolygonAction::Clone()
+rtl::Reference<MetaAction> MetaPolygonAction::Clone() const
 {
     return new MetaPolygonAction( *this );
 }
@@ -937,7 +937,7 @@ void MetaPolyPolygonAction::Execute( OutputDevice* pOut )
     pOut->DrawPolyPolygon( maPolyPoly );
 }
 
-rtl::Reference<MetaAction> MetaPolyPolygonAction::Clone()
+rtl::Reference<MetaAction> MetaPolyPolygonAction::Clone() const
 {
     return new MetaPolyPolygonAction( *this );
 }
@@ -1043,7 +1043,7 @@ void MetaTextAction::Execute( OutputDevice* pOut )
     pOut->DrawText( maPt, maStr, mnIndex, mnLen );
 }
 
-rtl::Reference<MetaAction> MetaTextAction::Clone()
+rtl::Reference<MetaAction> MetaTextAction::Clone() const
 {
     return new MetaTextAction( *this );
 }
@@ -1137,7 +1137,7 @@ void MetaTextArrayAction::Execute( OutputDevice* pOut )
     pOut->DrawTextArray( maStartPt, maStr, mpDXAry.get(), mnIndex, mnLen );
 }
 
-rtl::Reference<MetaAction> MetaTextArrayAction::Clone()
+rtl::Reference<MetaAction> MetaTextArrayAction::Clone() const
 {
     return new MetaTextArrayAction( *this );
 }
@@ -1268,7 +1268,7 @@ void MetaStretchTextAction::Execute( OutputDevice* pOut )
     pOut->DrawStretchText( maPt, mnWidth, maStr, mnIndex, mnLen );
 }
 
-rtl::Reference<MetaAction> MetaStretchTextAction::Clone()
+rtl::Reference<MetaAction> MetaStretchTextAction::Clone() const
 {
     return new MetaStretchTextAction( *this );
 }
@@ -1337,7 +1337,7 @@ void MetaTextRectAction::Execute( OutputDevice* pOut )
     pOut->DrawText( maRect, maStr, mnStyle );
 }
 
-rtl::Reference<MetaAction> MetaTextRectAction::Clone()
+rtl::Reference<MetaAction> MetaTextRectAction::Clone() const
 {
     return new MetaTextRectAction( *this );
 }
@@ -1406,7 +1406,7 @@ void MetaTextLineAction::Execute( OutputDevice* pOut )
     pOut->DrawTextLine( maPos, mnWidth, meStrikeout, meUnderline, meOverline );
 }
 
-rtl::Reference<MetaAction> MetaTextLineAction::Clone()
+rtl::Reference<MetaAction> MetaTextLineAction::Clone() const
 {
     return new MetaTextLineAction( *this );
 }
@@ -1481,7 +1481,7 @@ void MetaBmpAction::Execute( OutputDevice* pOut )
     pOut->DrawBitmap( maPt, maBmp );
 }
 
-rtl::Reference<MetaAction> MetaBmpAction::Clone()
+rtl::Reference<MetaAction> MetaBmpAction::Clone() const
 {
     return new MetaBmpAction( *this );
 }
@@ -1536,7 +1536,7 @@ void MetaBmpScaleAction::Execute( OutputDevice* pOut )
     pOut->DrawBitmap( maPt, maSz, maBmp );
 }
 
-rtl::Reference<MetaAction> MetaBmpScaleAction::Clone()
+rtl::Reference<MetaAction> MetaBmpScaleAction::Clone() const
 {
     return new MetaBmpScaleAction( *this );
 }
@@ -1600,7 +1600,7 @@ void MetaBmpScalePartAction::Execute( OutputDevice* pOut )
     pOut->DrawBitmap( maDstPt, maDstSz, maSrcPt, maSrcSz, maBmp );
 }
 
-rtl::Reference<MetaAction> MetaBmpScalePartAction::Clone()
+rtl::Reference<MetaAction> MetaBmpScalePartAction::Clone() const
 {
     return new MetaBmpScalePartAction( *this );
 }
@@ -1663,7 +1663,7 @@ void MetaBmpExAction::Execute( OutputDevice* pOut )
     pOut->DrawBitmapEx( maPt, maBmpEx );
 }
 
-rtl::Reference<MetaAction> MetaBmpExAction::Clone()
+rtl::Reference<MetaAction> MetaBmpExAction::Clone() const
 {
     return new MetaBmpExAction( *this );
 }
@@ -1718,7 +1718,7 @@ void MetaBmpExScaleAction::Execute( OutputDevice* pOut )
     pOut->DrawBitmapEx( maPt, maSz, maBmpEx );
 }
 
-rtl::Reference<MetaAction> MetaBmpExScaleAction::Clone()
+rtl::Reference<MetaAction> MetaBmpExScaleAction::Clone() const
 {
     return new MetaBmpExScaleAction( *this );
 }
@@ -1781,7 +1781,7 @@ void MetaBmpExScalePartAction::Execute( OutputDevice* pOut )
     pOut->DrawBitmapEx( maDstPt, maDstSz, maSrcPt, maSrcSz, maBmpEx );
 }
 
-rtl::Reference<MetaAction> MetaBmpExScalePartAction::Clone()
+rtl::Reference<MetaAction> MetaBmpExScalePartAction::Clone() const
 {
     return new MetaBmpExScalePartAction( *this );
 }
@@ -1846,7 +1846,7 @@ void MetaMaskAction::Execute( OutputDevice* pOut )
     pOut->DrawMask( maPt, maBmp, maColor );
 }
 
-rtl::Reference<MetaAction> MetaMaskAction::Clone()
+rtl::Reference<MetaAction> MetaMaskAction::Clone() const
 {
     return new MetaMaskAction( *this );
 }
@@ -1903,7 +1903,7 @@ void MetaMaskScaleAction::Execute( OutputDevice* pOut )
     pOut->DrawMask( maPt, maSz, maBmp, maColor );
 }
 
-rtl::Reference<MetaAction> MetaMaskScaleAction::Clone()
+rtl::Reference<MetaAction> MetaMaskScaleAction::Clone() const
 {
     return new MetaMaskScaleAction( *this );
 }
@@ -1968,7 +1968,7 @@ void MetaMaskScalePartAction::Execute( OutputDevice* pOut )
     pOut->DrawMask( maDstPt, maDstSz, maSrcPt, maSrcSz, maBmp, maColor, MetaActionType::MASKSCALE );
 }
 
-rtl::Reference<MetaAction> MetaMaskScalePartAction::Clone()
+rtl::Reference<MetaAction> MetaMaskScalePartAction::Clone() const
 {
     return new MetaMaskScalePartAction( *this );
 }
@@ -2032,7 +2032,7 @@ void MetaGradientAction::Execute( OutputDevice* pOut )
     pOut->DrawGradient( maRect, maGradient );
 }
 
-rtl::Reference<MetaAction> MetaGradientAction::Clone()
+rtl::Reference<MetaAction> MetaGradientAction::Clone() const
 {
     return new MetaGradientAction( *this );
 }
@@ -2085,7 +2085,7 @@ void MetaGradientExAction::Execute( OutputDevice* pOut )
     }
 }
 
-rtl::Reference<MetaAction> MetaGradientExAction::Clone()
+rtl::Reference<MetaAction> MetaGradientExAction::Clone() const
 {
     return new MetaGradientExAction( *this );
 }
@@ -2141,7 +2141,7 @@ void MetaHatchAction::Execute( OutputDevice* pOut )
     pOut->DrawHatch( maPolyPoly, maHatch );
 }
 
-rtl::Reference<MetaAction> MetaHatchAction::Clone()
+rtl::Reference<MetaAction> MetaHatchAction::Clone() const
 {
     return new MetaHatchAction( *this );
 }
@@ -2196,7 +2196,7 @@ void MetaWallpaperAction::Execute( OutputDevice* pOut )
     pOut->DrawWallpaper( maRect, maWallpaper );
 }
 
-rtl::Reference<MetaAction> MetaWallpaperAction::Clone()
+rtl::Reference<MetaAction> MetaWallpaperAction::Clone() const
 {
     return new MetaWallpaperAction( *this );
 }
@@ -2247,7 +2247,7 @@ void MetaClipRegionAction::Execute( OutputDevice* pOut )
         pOut->SetClipRegion();
 }
 
-rtl::Reference<MetaAction> MetaClipRegionAction::Clone()
+rtl::Reference<MetaAction> MetaClipRegionAction::Clone() const
 {
     return new MetaClipRegionAction( *this );
 }
@@ -2295,7 +2295,7 @@ void MetaISectRectClipRegionAction::Execute( OutputDevice* pOut )
     pOut->IntersectClipRegion( maRect );
 }
 
-rtl::Reference<MetaAction> MetaISectRectClipRegionAction::Clone()
+rtl::Reference<MetaAction> MetaISectRectClipRegionAction::Clone() const
 {
     return new MetaISectRectClipRegionAction( *this );
 }
@@ -2343,7 +2343,7 @@ void MetaISectRegionClipRegionAction::Execute( OutputDevice* pOut )
     pOut->IntersectClipRegion( maRegion );
 }
 
-rtl::Reference<MetaAction> MetaISectRegionClipRegionAction::Clone()
+rtl::Reference<MetaAction> MetaISectRegionClipRegionAction::Clone() const
 {
     return new MetaISectRegionClipRegionAction( *this );
 }
@@ -2391,7 +2391,7 @@ void MetaMoveClipRegionAction::Execute( OutputDevice* pOut )
     pOut->MoveClipRegion( mnHorzMove, mnVertMove );
 }
 
-rtl::Reference<MetaAction> MetaMoveClipRegionAction::Clone()
+rtl::Reference<MetaAction> MetaMoveClipRegionAction::Clone() const
 {
     return new MetaMoveClipRegionAction( *this );
 }
@@ -2440,7 +2440,7 @@ void MetaLineColorAction::Execute( OutputDevice* pOut )
         pOut->SetLineColor();
 }
 
-rtl::Reference<MetaAction> MetaLineColorAction::Clone()
+rtl::Reference<MetaAction> MetaLineColorAction::Clone() const
 {
     return new MetaLineColorAction( *this );
 }
@@ -2482,7 +2482,7 @@ void MetaFillColorAction::Execute( OutputDevice* pOut )
         pOut->SetFillColor();
 }
 
-rtl::Reference<MetaAction> MetaFillColorAction::Clone()
+rtl::Reference<MetaAction> MetaFillColorAction::Clone() const
 {
     return new MetaFillColorAction( *this );
 }
@@ -2519,7 +2519,7 @@ void MetaTextColorAction::Execute( OutputDevice* pOut )
     pOut->SetTextColor( maColor );
 }
 
-rtl::Reference<MetaAction> MetaTextColorAction::Clone()
+rtl::Reference<MetaAction> MetaTextColorAction::Clone() const
 {
     return new MetaTextColorAction( *this );
 }
@@ -2559,7 +2559,7 @@ void MetaTextFillColorAction::Execute( OutputDevice* pOut )
         pOut->SetTextFillColor();
 }
 
-rtl::Reference<MetaAction> MetaTextFillColorAction::Clone()
+rtl::Reference<MetaAction> MetaTextFillColorAction::Clone() const
 {
     return new MetaTextFillColorAction( *this );
 }
@@ -2601,7 +2601,7 @@ void MetaTextLineColorAction::Execute( OutputDevice* pOut )
         pOut->SetTextLineColor();
 }
 
-rtl::Reference<MetaAction> MetaTextLineColorAction::Clone()
+rtl::Reference<MetaAction> MetaTextLineColorAction::Clone() const
 {
     return new MetaTextLineColorAction( *this );
 }
@@ -2643,7 +2643,7 @@ void MetaOverlineColorAction::Execute( OutputDevice* pOut )
         pOut->SetOverlineColor();
 }
 
-rtl::Reference<MetaAction> MetaOverlineColorAction::Clone()
+rtl::Reference<MetaAction> MetaOverlineColorAction::Clone() const
 {
     return new MetaOverlineColorAction( *this );
 }
@@ -2681,7 +2681,7 @@ void MetaTextAlignAction::Execute( OutputDevice* pOut )
     pOut->SetTextAlign( maAlign );
 }
 
-rtl::Reference<MetaAction> MetaTextAlignAction::Clone()
+rtl::Reference<MetaAction> MetaTextAlignAction::Clone() const
 {
     return new MetaTextAlignAction( *this );
 }
@@ -2718,7 +2718,7 @@ void MetaMapModeAction::Execute( OutputDevice* pOut )
     pOut->SetMapMode( maMapMode );
 }
 
-rtl::Reference<MetaAction> MetaMapModeAction::Clone()
+rtl::Reference<MetaAction> MetaMapModeAction::Clone() const
 {
     return new MetaMapModeAction( *this );
 }
@@ -2773,7 +2773,7 @@ void MetaFontAction::Execute( OutputDevice* pOut )
     pOut->SetFont( maFont );
 }
 
-rtl::Reference<MetaAction> MetaFontAction::Clone()
+rtl::Reference<MetaAction> MetaFontAction::Clone() const
 {
     return new MetaFontAction( *this );
 }
@@ -2823,7 +2823,7 @@ void MetaPushAction::Execute( OutputDevice* pOut )
     pOut->Push( mnFlags );
 }
 
-rtl::Reference<MetaAction> MetaPushAction::Clone()
+rtl::Reference<MetaAction> MetaPushAction::Clone() const
 {
     return new MetaPushAction( *this );
 }
@@ -2855,7 +2855,7 @@ void MetaPopAction::Execute( OutputDevice* pOut )
     pOut->Pop();
 }
 
-rtl::Reference<MetaAction> MetaPopAction::Clone()
+rtl::Reference<MetaAction> MetaPopAction::Clone() const
 {
     return new MetaPopAction( *this );
 }
@@ -2890,7 +2890,7 @@ void MetaRasterOpAction::Execute( OutputDevice* pOut )
     pOut->SetRasterOp( meRasterOp );
 }
 
-rtl::Reference<MetaAction> MetaRasterOpAction::Clone()
+rtl::Reference<MetaAction> MetaRasterOpAction::Clone() const
 {
     return new MetaRasterOpAction( *this );
 }
@@ -2929,7 +2929,7 @@ void MetaTransparentAction::Execute( OutputDevice* pOut )
     pOut->DrawTransparent( maPolyPoly, mnTransPercent );
 }
 
-rtl::Reference<MetaAction> MetaTransparentAction::Clone()
+rtl::Reference<MetaAction> MetaTransparentAction::Clone() const
 {
     return new MetaTransparentAction( *this );
 }
@@ -2994,7 +2994,7 @@ void MetaFloatTransparentAction::Execute( OutputDevice* pOut )
     pOut->DrawTransparent( maMtf, maPoint, maSize, maGradient );
 }
 
-rtl::Reference<MetaAction> MetaFloatTransparentAction::Clone()
+rtl::Reference<MetaAction> MetaFloatTransparentAction::Clone() const
 {
     return new MetaFloatTransparentAction( *this );
 }
@@ -3055,7 +3055,7 @@ void MetaEPSAction::Execute( OutputDevice* pOut )
     pOut->DrawEPS( maPoint, maSize, maGfxLink, &maSubst );
 }
 
-rtl::Reference<MetaAction> MetaEPSAction::Clone()
+rtl::Reference<MetaAction> MetaEPSAction::Clone() const
 {
     return new MetaEPSAction( *this );
 }
@@ -3117,7 +3117,7 @@ void MetaRefPointAction::Execute( OutputDevice* pOut )
         pOut->SetRefPoint();
 }
 
-rtl::Reference<MetaAction> MetaRefPointAction::Clone()
+rtl::Reference<MetaAction> MetaRefPointAction::Clone() const
 {
     return new MetaRefPointAction( *this );
 }
@@ -3190,7 +3190,7 @@ void MetaCommentAction::Execute( OutputDevice* pOut )
     }
 }
 
-rtl::Reference<MetaAction> MetaCommentAction::Clone()
+rtl::Reference<MetaAction> MetaCommentAction::Clone() const
 {
     return new MetaCommentAction( *this );
 }
@@ -3365,7 +3365,7 @@ void MetaLayoutModeAction::Execute( OutputDevice* pOut )
     pOut->SetLayoutMode( mnLayoutMode );
 }
 
-rtl::Reference<MetaAction> MetaLayoutModeAction::Clone()
+rtl::Reference<MetaAction> MetaLayoutModeAction::Clone() const
 {
     return new MetaLayoutModeAction( *this );
 }
@@ -3403,7 +3403,7 @@ void MetaTextLanguageAction::Execute( OutputDevice* pOut )
     pOut->SetDigitLanguage( meTextLanguage );
 }
 
-rtl::Reference<MetaAction> MetaTextLanguageAction::Clone()
+rtl::Reference<MetaAction> MetaTextLanguageAction::Clone() const
 {
     return new MetaTextLanguageAction( *this );
 }
