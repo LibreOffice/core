@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f7b7e218_3df3ec57",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1729,
+      "author": {
+        "id": 1002857
+      },
+      "writtenOn": "2021-06-11T17:57:12Z",
+      "side": 1,
+      "message": "Hi Xisco! Need some help here. Can\u0027t find the function to \"press Control + Backspace\" together.",
+      "range": {
+        "startLine": 1729,
+        "startChar": 33,
+        "endLine": 1729,
+        "endChar": 70
+      },
+      "revId": "89abd3b3e26e7e83e7c935dd4e05be393b87f84f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
