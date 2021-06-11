@@ -169,7 +169,7 @@ void LocaleDataWrapper::loadData()
     catch (const Exception&)
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "getDateAcceptancePatterns" );
-        aDateAcceptancePatterns = css::uno::Sequence< OUString >(0);
+        aDateAcceptancePatterns = {};
     }
 
 
@@ -182,7 +182,7 @@ void LocaleDataWrapper::loadData()
     catch ( const Exception& )
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "getReservedWord" );
-        aReservedWordSeq = css::uno::Sequence< OUString >(0);
+        aReservedWordSeq = {};
     }
     for (int i=0; i < css::i18n::reservedWords::COUNT; ++i)
         aReservedWord[i] = aReservedWordSeq[i];
@@ -248,7 +248,7 @@ css::uno::Sequence< css::i18n::Currency2 > LocaleDataWrapper::getAllCurrencies()
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "getAllCurrencies" );
     }
-    return css::uno::Sequence< css::i18n::Currency2 >(0);
+    return {};
 }
 
 css::uno::Sequence< css::i18n::FormatElement > LocaleDataWrapper::getAllFormats() const
@@ -261,7 +261,7 @@ css::uno::Sequence< css::i18n::FormatElement > LocaleDataWrapper::getAllFormats(
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "getAllFormats" );
     }
-    return css::uno::Sequence< css::i18n::FormatElement >(0);
+    return {};
 }
 
 css::i18n::ForbiddenCharacters LocaleDataWrapper::getForbiddenCharacters() const
@@ -1557,7 +1557,7 @@ css::uno::Sequence< css::i18n::Calendar2 > LocaleDataWrapper::getAllCalendars() 
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "getAllCalendars" );
     }
-    return css::uno::Sequence< css::i18n::Calendar2 >(0);
+    return {};
 }
 
 // --- XLocaleData4 ----------------------------------------------------------

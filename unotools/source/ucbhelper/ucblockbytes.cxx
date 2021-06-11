@@ -740,13 +740,11 @@ static bool UCBOpenContentSync(
                     request <<= aExcep;
                     rtl::Reference<ucbhelper::InteractionRequest> xIR =
                         new ucbhelper::InteractionRequest(request);
-                    Sequence<Reference<XInteractionContinuation> > aSeq(2);
                     rtl::Reference<ucbhelper::InteractionRetry> retryP =
                         new ucbhelper::InteractionRetry(xIR.get());
-                    aSeq[0] = retryP;
                     rtl::Reference<ucbhelper::InteractionAbort> abortP =
                         new ucbhelper::InteractionAbort(xIR.get());
-                    aSeq[1] = abortP;
+                    Sequence<Reference<XInteractionContinuation> > aSeq { retryP, abortP };
 
                     xIR->setContinuations(aSeq);
                     xInteract->handle(xIR);

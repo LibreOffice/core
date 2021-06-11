@@ -78,7 +78,7 @@ css::uno::Sequence< OUString > CalendarWrapper::getAllCalendars( const css::lang
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "getAllCalendars" );
     }
 
-    return css::uno::Sequence< OUString > (0);
+    return {};
 }
 
 OUString CalendarWrapper::getUniqueID() const
@@ -247,7 +247,7 @@ css::uno::Sequence< css::i18n::CalendarItem2 > CalendarWrapper::getMonths() cons
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "getMonths" );
     }
-    return css::uno::Sequence< css::i18n::CalendarItem2 > (0);
+    return {};
 }
 
 css::uno::Sequence< css::i18n::CalendarItem2 > CalendarWrapper::getDays() const
@@ -261,7 +261,7 @@ css::uno::Sequence< css::i18n::CalendarItem2 > CalendarWrapper::getDays() const
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "getDays" );
     }
-    return css::uno::Sequence< css::i18n::CalendarItem2 > (0);
+    return {};
 }
 
 OUString CalendarWrapper::getDisplayName( sal_Int16 nCalendarDisplayIndex, sal_Int16 nIdx, sal_Int16 nNameType ) const
@@ -321,7 +321,7 @@ css::uno::Sequence< css::i18n::CalendarItem2 > CalendarWrapper::getGenitiveMonth
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "getGenitiveMonths" );
     }
-    return css::uno::Sequence< css::i18n::CalendarItem2 > (0);
+    return {};
 }
 
 css::uno::Sequence< css::i18n::CalendarItem2 > CalendarWrapper::getPartitiveMonths() const
@@ -335,7 +335,7 @@ css::uno::Sequence< css::i18n::CalendarItem2 > CalendarWrapper::getPartitiveMont
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "getPartitiveMonths" );
     }
-    return css::uno::Sequence< css::i18n::CalendarItem2 > (0);
+    return {};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
