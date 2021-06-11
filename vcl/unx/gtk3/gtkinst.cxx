@@ -9610,6 +9610,38 @@ public:
 
 #endif
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+    /* LibreOffice likes to think of separators between menu entries, while gtk likes
+       to think of sections of menus with separators drawn between sections. We always
+       arrange to have a section in a menua so toplevel menumodels comprise of
+       sections and we move entries between sections on pretending to insert separators */
+    static std::pair<GMenuModel*, int> get_section_and_pos_for(GMenuModel* pMenuModel, int pos)
+    {
+        int nSectionCount = g_menu_model_get_n_items(pMenuModel);
+        assert(nSectionCount);
+
+        GMenuModel* pSectionModel = nullptr;
+        int nIndexWithinSection = 0;
+
+        int nExternalPos = 0;
+        for (int nSection = 0; nSection < nSectionCount; ++nSection)
+        {
+            pSectionModel = g_menu_model_get_item_link(pMenuModel, nSection, G_MENU_LINK_SECTION);
+            assert(pSectionModel);
+            int nCount = g_menu_model_get_n_items(pSectionModel);
+            for (nIndexWithinSection = 0; nIndexWithinSection < nCount; ++nIndexWithinSection)
+            {
+                if (pos == nExternalPos)
+                    break;
+                ++nExternalPos;
+            }
+            ++nExternalPos;
+        }
+
+        return std::make_pair(pSectionModel, nIndexWithinSection);
+    }
+#endif
+
     virtual void insert_item(int pos, const OUString& rId, const OUString& rStr,
                         const OUString* pIconName, VirtualDevice* pImageSurface, TriState eCheckRadioFalse) override
     {
@@ -9623,7 +9655,8 @@ public:
                                      gtk_popover_menu_get_menu_model(GTK_POPOVER_MENU(pPopover)) :
                                      nullptr)
         {
-            GMenu* pMenu = G_MENU(pMenuModel);
+            auto aSectionAndPos = get_section_and_pos_for(pMenuModel, pos);
+            GMenu* pMenu = G_MENU(aSectionAndPos.first);
             // action with a target value ... the action name and target value are separated by a double
             // colon ... For example: "app.action::target"
             OUString sActionAndTarget;
@@ -9631,7 +9664,7 @@ public:
                 sActionAndTarget = "menu.normal." + rId + "::" + rId;
             else
                 sActionAndTarget = "menu.radio." + rId + "::" + rId;
-            g_menu_insert(pMenu, pos, MapToGtkAccelerator(rStr).getStr(), sActionAndTarget.toUtf8().getStr());
+            g_menu_insert(pMenu, aSectionAndPos.second, MapToGtkAccelerator(rStr).getStr(), sActionAndTarget.toUtf8().getStr());
 
             assert(eCheckRadioFalse == TRISTATE_INDET); // come back to this later
 
@@ -9646,15 +9679,33 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         MenuHelper::insert_separator(pos, rId);
 #else
-        (void)rId;
-
         GtkPopover* pPopover = gtk_menu_button_get_popover(m_pMenuButton);
         if (GMenuModel* pMenuModel = GTK_IS_POPOVER_MENU(pPopover) ?
                                      gtk_popover_menu_get_menu_model(GTK_POPOVER_MENU(pPopover)) :
                                      nullptr)
         {
-            GMenu* pMenu = G_MENU(pMenuModel);
-            g_menu_insert(pMenu, pos, "SEPARATOR", "menu.action");
+            auto aSectionAndPos = get_section_and_pos_for(pMenuModel, pos);
+
+            for (int nSection = 0, nSectionCount = g_menu_model_get_n_items(pMenuModel); nSection < nSectionCount; ++nSection)
+            {
+                GMenuModel* pSectionModel = g_menu_model_get_item_link(pMenuModel, nSection, G_MENU_LINK_SECTION);
+                assert(pSectionModel);
+                if (aSectionAndPos.first == pSectionModel)
+                {
+                    GMenu* pNewSection = g_menu_new();
+                    GMenuItem* pSectionItem = g_menu_item_new_section(nullptr, G_MENU_MODEL(pNewSection));
+                    OUString sActionAndTarget = "menu.separator." + rId + "::" + rId;
+                    g_menu_item_set_detailed_action(pSectionItem, sActionAndTarget.toUtf8().getStr());
+                    g_menu_insert_item(G_MENU(pMenuModel), nSection + 1, pSectionItem);
+                    int nOldSectionCount = g_menu_model_get_n_items(pSectionModel);
+                    for (int i = nOldSectionCount - 1; i >= aSectionAndPos.second; --i)
+                    {
+                        GMenuItem* pMenuItem = g_menu_item_new_from_model(pSectionModel, i);
+                        g_menu_prepend_item(pNewSection, pMenuItem);
+                        g_menu_remove(G_MENU(pSectionModel), i);
+                    }
+                }
+            }
         }
 
 #endif
@@ -9678,7 +9729,9 @@ public:
                                      gtk_popover_menu_get_menu_model(GTK_POPOVER_MENU(pPopover)) :
                                      nullptr)
         {
-            g_menu_remove_all(G_MENU(pMenuModel));
+            GMenu* pMenu = G_MENU(pMenuModel);
+            g_menu_remove_all(pMenu);
+            g_menu_insert_section(pMenu, 0, nullptr, G_MENU_MODEL(g_menu_new()));
             update_action_group_from_popover_model();
         }
 #else
