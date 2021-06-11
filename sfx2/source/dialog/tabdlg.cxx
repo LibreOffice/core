@@ -687,7 +687,7 @@ const sal_uInt16* SfxTabDialogController::GetInputRanges(const SfxItemPool& rPoo
 
     if ( m_pRanges )
         return m_pRanges.get();
-    std::vector<sal_uInt16> aUS;
+    SfxItemSet aUS(const_cast<SfxItemPool&>(rPool));
 
     for (auto const& elem : m_pImpl->aData)
     {
@@ -695,30 +695,24 @@ const sal_uInt16* SfxTabDialogController::GetInputRanges(const SfxItemPool& rPoo
         if ( elem->fnGetRanges )
         {
             const sal_uInt16* pTmpRanges = (elem->fnGetRanges)();
-            const sal_uInt16* pIter = pTmpRanges;
 
-            sal_uInt16 nLen;
-            for( nLen = 0; *pIter; ++nLen, ++pIter )
-                ;
-            aUS.insert( aUS.end(), pTmpRanges, pTmpRanges + nLen );
+            for (const sal_uInt16* pIter = pTmpRanges; *pIter;)
+            {
+                sal_uInt16 nWidFrom = rPool.GetWhich(*pIter++);
+                assert(*pIter);
+                sal_uInt16 nWidTo = rPool.GetWhich(*pIter++);
+                aUS.MergeRange(nWidFrom, nWidTo); // Keep it valid
+            }
         }
     }
 
-    //! Remove duplicated Ids?
-    {
-        for (auto & elem : aUS)
-            elem = rPool.GetWhich(elem);
-    }
+    int nSize = 0;
+    for (const sal_uInt16* pIter = aUS.GetRanges(); pIter && *pIter; pIter++)
+        ++nSize;
 
-    // sort
-    if ( aUS.size() > 1 )
-    {
-        std::sort( aUS.begin(), aUS.end() );
-    }
-
-    m_pRanges.reset(new sal_uInt16[aUS.size() + 1]);
-    std::copy( aUS.begin(), aUS.end(), m_pRanges.get() );
-    m_pRanges[aUS.size()] = 0;
+    m_pRanges.reset(new sal_uInt16[nSize + 1]);
+    std::copy(aUS.GetRanges(), aUS.GetRanges() + nSize, m_pRanges.get());
+    m_pRanges[nSize] = 0;
     return m_pRanges.get();
 }
 

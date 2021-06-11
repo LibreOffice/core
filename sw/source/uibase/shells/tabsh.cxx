@@ -95,29 +95,29 @@ void SwTableShell::InitInterface_Impl()
 
 const sal_uInt16 aUITableAttrRange[] =
 {
-    XATTR_FILL_FIRST,               XATTR_FILL_LAST,
-    FN_PARAM_TABLE_NAME,            FN_PARAM_TABLE_NAME,
-    FN_PARAM_TABLE_HEADLINE,        FN_PARAM_TABLE_HEADLINE,
-    FN_PARAM_TABLE_SPACE,           FN_PARAM_TABLE_SPACE,
-    FN_TABLE_REP,                   FN_TABLE_REP,
-    SID_RULER_BORDERS,              SID_RULER_BORDERS,
     RES_LR_SPACE,                   RES_UL_SPACE,
-    SID_ATTR_BORDER_INNER,          SID_ATTR_BORDER_SHADOW,
-    RES_BOX,                        RES_SHADOW,
-    RES_BACKGROUND,                 RES_BACKGROUND,
-    SID_BACKGRND_DESTINATION,       SID_BACKGRND_DESTINATION,
-    SID_HTML_MODE,                  SID_HTML_MODE,
-    SID_ATTR_BRUSH_ROW,             SID_ATTR_BRUSH_TABLE,
     RES_PAGEDESC,                   RES_BREAK,
+    RES_BACKGROUND,                 RES_BACKGROUND,
+    RES_BOX,                        RES_SHADOW,
     RES_KEEP,                       RES_KEEP,
     RES_LAYOUT_SPLIT,               RES_LAYOUT_SPLIT,
-    FN_TABLE_SET_VERT_ALIGN,        FN_TABLE_SET_VERT_ALIGN,
     RES_FRAMEDIR,                   RES_FRAMEDIR,
     RES_ROW_SPLIT,                  RES_ROW_SPLIT,
-    FN_TABLE_BOX_TEXTORIENTATION,   FN_TABLE_BOX_TEXTORIENTATION,
 // #i29550#
     RES_COLLAPSING_BORDERS,         RES_COLLAPSING_BORDERS,
 // <-- collapsing borders
+    XATTR_FILL_FIRST,               XATTR_FILL_LAST,
+    SID_ATTR_BORDER_INNER,          SID_ATTR_BORDER_SHADOW,
+    SID_RULER_BORDERS,              SID_RULER_BORDERS,
+    SID_ATTR_BRUSH_ROW,             SID_ATTR_BRUSH_TABLE, // ??? This is very strange range
+//  SID_BACKGRND_DESTINATION,       SID_BACKGRND_DESTINATION, // included into above
+//  SID_HTML_MODE,                  SID_HTML_MODE, // included into above
+    FN_TABLE_REP,                   FN_TABLE_REP,
+    FN_TABLE_SET_VERT_ALIGN,        FN_TABLE_SET_VERT_ALIGN,
+    FN_TABLE_BOX_TEXTORIENTATION,   FN_TABLE_BOX_TEXTORIENTATION,
+    FN_PARAM_TABLE_NAME,            FN_PARAM_TABLE_NAME,
+    FN_PARAM_TABLE_HEADLINE,        FN_PARAM_TABLE_HEADLINE,
+    FN_PARAM_TABLE_SPACE,           FN_PARAM_TABLE_SPACE,
     0
 };
 
