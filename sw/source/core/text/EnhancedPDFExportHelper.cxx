@@ -1969,39 +1969,35 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
             // Goto footnote text:
             if ( mrSh.GotoFootnoteText() )
             {
-                // Link PageNums
-                std::vector<sal_Int32> aLinkPageNums = CalcOutputPageNums( aLinkRect );
-
                 // Destination Rectangle
                 const SwRect& rDestRect = mrSh.GetCharRect();
-
-                const SwPageFrame* pCurrPage =
-                    static_cast<const SwPageFrame*>( mrSh.GetLayout()->Lower() );
-
-                // Destination PageNum
                 const sal_Int32 nDestPageNum = CalcOutputPageNum( rDestRect );
-
-                for (sal_Int32 aLinkPageNum : aLinkPageNums)
+                if ( -1 != nDestPageNum )
                 {
+                    const SwPageFrame* pCurrPage = static_cast<const SwPageFrame*>( mrSh.GetLayout()->Lower() );
+                    // Destination PageNum
+                    tools::Rectangle aRect = SwRectToPDFRect(pCurrPage, rDestRect.SVRect());
+                    // Destination Export
+                    const sal_Int32 nDestId = pPDFExtOutDevData->CreateDest(aRect, nDestPageNum);
+                    mrSh.GotoFootnoteAnchor();
+
+                    // Link PageNums
+                    sal_Int32 aLinkPageNum = CalcOutputPageNum( aLinkRect );
+
+                    pCurrPage = static_cast<const SwPageFrame*>( mrSh.GetLayout()->Lower() );
+
                     // Link Export
-                    tools::Rectangle aRect(SwRectToPDFRect(pCurrPage, aLinkRect.SVRect()));
-                    const sal_Int32 nLinkId =
-                        pPDFExtOutDevData->CreateLink(aRect, aLinkPageNum);
+                    aRect = SwRectToPDFRect(pCurrPage, aLinkRect.SVRect());
+                    const sal_Int32 nLinkId = pPDFExtOutDevData->CreateLink(aRect, aLinkPageNum);
 
                     // Store link info for tagged pdf output:
                     const IdMapEntry aLinkEntry( aLinkRect, nLinkId );
                     s_aLinkIdMap.push_back( aLinkEntry );
 
-                    if ( -1 != nDestPageNum )
-                    {
-                        aRect = SwRectToPDFRect(pCurrPage, rDestRect.SVRect());
-                        // Destination Export
-                        const sal_Int32 nDestId = pPDFExtOutDevData->CreateDest(rDestRect.SVRect(), nDestPageNum);
-
-                        // Connect Link and Destination:
-                        pPDFExtOutDevData->SetLinkDest( nLinkId, nDestId );
-                    }
+                    // Connect Link and Destination:
+                    pPDFExtOutDevData->SetLinkDest( nLinkId, nDestId );
                 }
+
             }
         }
 
