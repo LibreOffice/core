@@ -1038,6 +1038,11 @@ DECLARE_WW8EXPORT_TEST(testTdf118133, "tdf118133.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(15240), getShape(1)->getSize().Width);
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf64761, "tdf64761.docx")
+{
+    // The document should crash as soon as it loads according to the bug
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf118412, "tdf118412.doc")
 {
     /* Check that the first page's bottom margin is 1.251cm (not 2.540cm) */
