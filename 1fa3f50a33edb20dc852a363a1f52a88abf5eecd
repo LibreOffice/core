@@ -22,6 +22,30 @@
       "revId": "1fa3f50a33edb20dc852a363a1f52a88abf5eecd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "925a46d6_b921bb92",
+        "filename": "sw/uiconfig/swriter/ui/outlinepositionpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1002947
+      },
+      "writtenOn": "2021-06-12T12:03:54Z",
+      "side": 1,
+      "message": "Hi Heiko\nSorry, obviously very new to all this, but could you point me to an example of a UI element making use of this syntax? It would be helpful to see how it all fits in.\nI really appreciate your input and help!",
+      "parentUuid": "2185f080_f795bc2e",
+      "range": {
+        "startLine": 23,
+        "startChar": 36,
+        "endLine": 23,
+        "endChar": 39
+      },
+      "revId": "1fa3f50a33edb20dc852a363a1f52a88abf5eecd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
