@@ -612,7 +612,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                                                               // SwShellTableCursor if the selection is more than a single cell
 
                         if (bTableMode && !rSh.IsTableMode()) // tdf#142721 ensure the new selection is a SwShellTableCursor in
-                            rSh.SelTableBox();                // the case of of a single cell
+                            rSh.SelTableBox();                // the case of a single cell
 
                         const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
 
