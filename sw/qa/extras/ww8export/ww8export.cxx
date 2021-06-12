@@ -833,6 +833,17 @@ DECLARE_WW8EXPORT_TEST(testTdf38778, "tdf38778_properties_in_run_for_field.doc")
     CPPUNIT_ASSERT_EQUAL(OUString("Courier New"), getProperty<OUString>(getRun(getParagraph(1), 1), "CharFontName"));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf39510 "tdf39510.odt")
+{
+    // Adding new text and then saving the document should crash LO without the fix
+    SwXTextDocument* pTextDoc     = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc*           pDoc         = pTextDoc->GetDocShell()->GetDoc();
+    SwWrtShell*      pWrtShell    = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 3, /*bBasicCall=*/false);
+    pWrtShell->Insert("X");
+}
+
 DECLARE_WW8EXPORT_TEST(testN325936, "n325936.doc")
 {
     /*
