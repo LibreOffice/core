@@ -222,7 +222,7 @@ OUString SvtUserOptions::Impl::GetFullName () const
         sFullName += GetToken(UserOptToken::FathersName).trim();
         if (!sFullName.isEmpty())
             sFullName += " ";
-        sFullName += GetToken(UserOptToken::LastName).trim();
+        sFullName += GetToken(UserOptToken::LastName);
     }
     else
     {
@@ -231,16 +231,17 @@ OUString SvtUserOptions::Impl::GetFullName () const
             sFullName = GetToken(UserOptToken::LastName).trim();
             if (!sFullName.isEmpty())
                 sFullName += " ";
-            sFullName += GetToken(UserOptToken::FirstName).trim();
+            sFullName += GetToken(UserOptToken::FirstName);
         }
         else
         {
             sFullName = GetToken(UserOptToken::FirstName).trim();
             if (!sFullName.isEmpty())
                 sFullName += " ";
-            sFullName += GetToken(UserOptToken::LastName).trim();
+            sFullName += GetToken(UserOptToken::LastName);
         }
     }
+    sFullName = sFullName.trim();
 
     return sFullName;
 }
