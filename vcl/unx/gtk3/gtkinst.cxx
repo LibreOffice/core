@@ -22190,6 +22190,13 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/tipofthedaydialog.ui" &&
         rUIFile != "cui/ui/wordcompletionpage.ui" &&
         rUIFile != "cui/ui/zoomdialog.ui" &&
+        rUIFile != "filter/ui/pdfgeneralpage.ui" &&
+        rUIFile != "filter/ui/pdfsecuritypage.ui" &&
+        rUIFile != "filter/ui/pdfsignpage.ui" &&
+        rUIFile != "filter/ui/pdflinkspage.ui" &&
+        rUIFile != "filter/ui/pdfoptionsdialog.ui" &&
+        rUIFile != "filter/ui/pdfuserinterfacepage.ui" &&
+        rUIFile != "filter/ui/pdfviewpage.ui" &&
         rUIFile != "filter/ui/testxmlfilter.ui" &&
         rUIFile != "filter/ui/xmlfiltersettings.ui" &&
         rUIFile != "filter/ui/xmlfiltertabpagegeneral.ui" &&
