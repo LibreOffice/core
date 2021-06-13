@@ -22287,7 +22287,8 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "vcl/ui/printdialog.ui" &&
         rUIFile != "vcl/ui/printerdevicepage.ui" &&
         rUIFile != "vcl/ui/printerpaperpage.ui" &&
-        rUIFile != "vcl/ui/printerpropertiesdialog.ui")
+        rUIFile != "vcl/ui/printerpropertiesdialog.ui" &&
+        rUIFile != "xmlsec/ui/selectcertificatedialog.ui")
     {
         SAL_WARN( "vcl.gtk", rUIFile);
         return SalInstance::CreateBuilder(pParent, rUIRoot, rUIFile);
