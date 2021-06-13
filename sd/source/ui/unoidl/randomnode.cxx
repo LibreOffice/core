@@ -33,6 +33,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <osl/mutex.hxx>
 #include <CustomAnimationPreset.hxx>
 #include <randomnode.hxx>
@@ -45,6 +46,7 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::XInterface;
+using ::com::sun::star::uno::WeakReference;
 using ::com::sun::star::beans::NamedValue;
 using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::container::XEnumeration;
@@ -58,6 +60,7 @@ using ::com::sun::star::presentation::ParagraphTarget;
 using ::com::sun::star::drawing::XShape;
 
 using namespace ::com::sun::star::animations;
+
 namespace sd
 {
 
@@ -139,7 +142,7 @@ private:
     Mutex maMutex;
 
     sal_Int16 mnPresetClass;
-    Reference< XInterface > mxParent;
+    WeakReference<XInterface> mxParent;
 
     Any maBegin, maDuration, maEnd, maEndSync, maRepeatCount, maRepeatDuration, maTarget;
     sal_Int16 mnFill, mnFillDefault, mnRestart, mnRestartDefault;
@@ -426,7 +429,7 @@ void SAL_CALL RandomAnimationNode::setUserData( const Sequence< NamedValue >& _u
 Reference< XInterface > SAL_CALL RandomAnimationNode::getParent()
 {
     Guard< Mutex > aGuard( maMutex );
-    return mxParent;
+    return mxParent.get();
 }
 
 // XChild
