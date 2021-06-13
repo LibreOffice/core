@@ -81,7 +81,7 @@ void SidebarDockingWindow::dispose()
 void SidebarDockingWindow::LOKClose()
 {
     assert(comphelper::LibreOfficeKit::isActive());
-    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+    if (GetLOKNotifier())
         ReleaseLOKNotifier();
 }
 
