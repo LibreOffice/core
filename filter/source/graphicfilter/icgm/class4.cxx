@@ -107,6 +107,11 @@ bool CGM::ImplGetEllipse( FloatPoint& rCenter, FloatPoint& rRadius, double& rAng
     return true;
 }
 
+static bool useless(double value)
+{
+    return std::isnan(value) || std::isinf(value);
+}
+
 void CGM::ImplDoClass4()
 {
     if ( mbFirstOutPut )
@@ -377,11 +382,18 @@ void CGM::ImplDoClass4()
 
                 double fG = 2.0 * ( fA * ( aEndingPoint.Y - aIntermediatePoint.Y ) - fB * ( aEndingPoint.X - aIntermediatePoint.X ) );
 
-                if ( fG != 0 )
+                bool bUseless = fG == 0;
+
+                FloatPoint aCenterPoint;
+                if (!bUseless)
                 {
-                    FloatPoint aCenterPoint;
                     aCenterPoint.X = ( fD * fE - fB * fF ) / fG;
                     aCenterPoint.Y = ( fA * fF - fC * fE ) / fG;
+                    bUseless = useless(aCenterPoint.X) || useless(aCenterPoint.Y);
+                }
+
+                if (!bUseless)
+                {
                     double fStartAngle = ImplGetOrientation( aCenterPoint, aStartingPoint );
                     double fInterAngle = ImplGetOrientation( aCenterPoint, aIntermediatePoint );
                     double fEndAngle = ImplGetOrientation( aCenterPoint, aEndingPoint );
@@ -516,35 +528,39 @@ void CGM::ImplDoClass4()
                 ImplMapDouble( aRadius.X );
                 aRadius.Y = aRadius.X;
 
-                const double fStartSqrt = sqrt(vector[0] * vector[ 0 ] + vector[1] * vector[1]);
-                fStartAngle = fStartSqrt != 0.0 ? (acos(vector[0] / fStartSqrt) * 57.29577951308) : 0.0;
-                const double fEndSqrt = sqrt(vector[2] * vector[ 2 ] + vector[3] * vector[3]);
-                fEndAngle = fEndSqrt != 0.0 ? (acos(vector[ 2 ] / fEndSqrt) * 57.29577951308) : 0.0;
-
-                if ( vector[ 1 ] > 0 )
-                    fStartAngle = 360 - fStartAngle;
-                if ( vector[ 3 ] > 0 )
-                    fEndAngle = 360 - fEndAngle;
-
-                if ( mbAngReverse )
-                    ImplSwitchStartEndAngle( fStartAngle, fEndAngle );
-
-                if ( mbFigure )
+                bool bUseless = useless(vector[0]) || useless(vector[1]) || useless(vector[2]) || useless(vector[3]);
+                if (!bUseless)
                 {
-                    tools::Rectangle aBoundingBox(aCenter.X - aRadius.X, aCenter.Y - aRadius.X);
-                    aBoundingBox.SaturatingSetSize(Size(2 * aRadius.X, 2 * aRadius.X));
-                    tools::Polygon aPolygon( aBoundingBox,
-                        Point( static_cast<tools::Long>(vector[ 0 ]), static_cast<tools::Long>(vector[ 1 ]) ),
-                        Point( static_cast<tools::Long>(vector[ 2 ]), static_cast<tools::Long>(vector[ 3 ]) ), PolyStyle::Arc );
-                    mpOutAct->RegPolyLine( aPolygon );
+                    const double fStartSqrt = sqrt(vector[0] * vector[ 0 ] + vector[1] * vector[1]);
+                    fStartAngle = fStartSqrt != 0.0 ? (acos(vector[0] / fStartSqrt) * 57.29577951308) : 0.0;
+                    const double fEndSqrt = sqrt(vector[2] * vector[ 2 ] + vector[3] * vector[3]);
+                    fEndAngle = fEndSqrt != 0.0 ? (acos(vector[ 2 ] / fEndSqrt) * 57.29577951308) : 0.0;
+
+                    if ( vector[ 1 ] > 0 )
+                        fStartAngle = 360 - fStartAngle;
+                    if ( vector[ 3 ] > 0 )
+                        fEndAngle = 360 - fEndAngle;
+
+                    if ( mbAngReverse )
+                        ImplSwitchStartEndAngle( fStartAngle, fEndAngle );
+
+                    if ( mbFigure )
+                    {
+                        tools::Rectangle aBoundingBox(aCenter.X - aRadius.X, aCenter.Y - aRadius.X);
+                        aBoundingBox.SaturatingSetSize(Size(2 * aRadius.X, 2 * aRadius.X));
+                        tools::Polygon aPolygon( aBoundingBox,
+                            Point( static_cast<tools::Long>(vector[ 0 ]), static_cast<tools::Long>(vector[ 1 ]) ),
+                            Point( static_cast<tools::Long>(vector[ 2 ]), static_cast<tools::Long>(vector[ 3 ]) ), PolyStyle::Arc );
+                        mpOutAct->RegPolyLine( aPolygon );
+                    }
+                    else
+                    {
+                        double fOrientation = 0;
+                        mpOutAct->DrawEllipticalArc( aCenter, aRadius, fOrientation, 2, fStartAngle, fEndAngle );
+                    }
                 }
-                else
-                {
-                    double fOrientation = 0;
-                    mpOutAct->DrawEllipticalArc( aCenter, aRadius, fOrientation, 2, fStartAngle, fEndAngle );
-                }
+
                 mnParaSize = mnElementSize;
-
             }
             break;
 
@@ -568,29 +584,35 @@ void CGM::ImplDoClass4()
                 }
                 ImplMapDouble( aRadius.X );
                 aRadius.Y = aRadius.X;
-                const double fStartSqrt = sqrt(vector[0] * vector[0] + vector[1] * vector[1]);
-                double fStartAngle = fStartSqrt ? (acos(vector[0] / fStartSqrt) * 57.29577951308) : 0.0;
-                const double fEndSqrt = sqrt(vector[2] * vector[2] + vector[3] * vector[3]);
-                double fEndAngle = fEndSqrt ? acos(vector[2] / fEndSqrt) * 57.29577951308 : 0.0;
-
-                if ( vector[ 1 ] > 0 )
-                    fStartAngle = 360 - fStartAngle;
-                if ( vector[ 3 ] > 0 )
-                    fEndAngle = 360 - fEndAngle;
-
-                if ( mbAngReverse )
-                    ImplSwitchStartEndAngle( fStartAngle, fEndAngle );
-
 
                 sal_uInt32 nType = ImplGetUI16();
-                if ( nType == 0 )
-                    nType = 0;          // is PIE
-                else
-                    nType = 1;          // is CHORD
-                fOrientation = 0;
 
-                mpOutAct->DrawEllipticalArc( aCenter, aRadius, fOrientation,
-                            nType, fStartAngle, fEndAngle );
+                bool bUseless = useless(vector[0]) || useless(vector[1]) || useless(vector[2]) || useless(vector[3]);
+                if (!bUseless)
+                {
+                    const double fStartSqrt = sqrt(vector[0] * vector[0] + vector[1] * vector[1]);
+                    double fStartAngle = fStartSqrt ? (acos(vector[0] / fStartSqrt) * 57.29577951308) : 0.0;
+                    const double fEndSqrt = sqrt(vector[2] * vector[2] + vector[3] * vector[3]);
+                    double fEndAngle = fEndSqrt ? acos(vector[2] / fEndSqrt) * 57.29577951308 : 0.0;
+
+                    if ( vector[ 1 ] > 0 )
+                        fStartAngle = 360 - fStartAngle;
+                    if ( vector[ 3 ] > 0 )
+                        fEndAngle = 360 - fEndAngle;
+
+                    if ( mbAngReverse )
+                        ImplSwitchStartEndAngle( fStartAngle, fEndAngle );
+
+                    if ( nType == 0 )
+                        nType = 0;          // is PIE
+                    else
+                        nType = 1;          // is CHORD
+                    fOrientation = 0;
+
+                    mpOutAct->DrawEllipticalArc( aCenter, aRadius, fOrientation,
+                                nType, fStartAngle, fEndAngle );
+                }
+
                 mnParaSize = mnElementSize;
             }
             break;
@@ -622,22 +644,26 @@ void CGM::ImplDoClass4()
                 bool bDirection = ImplGetEllipse( aCenter, aRadius, fOrientation );
                 ImplGetVector( &vector[ 0 ] );
 
-                double fStartSqrt = sqrt(vector[0] * vector[0] + vector[1] * vector[1]);
-                fStartAngle = fStartSqrt ? (acos(vector[0] / fStartSqrt) * 57.29577951308) : 0.0;
-                double fEndSqrt = sqrt(vector[2] * vector[2] + vector[3] * vector[3]);
-                fEndAngle = fEndSqrt ? (acos(vector[2] / fEndSqrt) * 57.29577951308) : 0.0;
+                bool bUseless = useless(vector[0]) || useless(vector[1]) || useless(vector[2]) || useless(vector[3]);
+                if (!bUseless)
+                {
+                    double fStartSqrt = sqrt(vector[0] * vector[0] + vector[1] * vector[1]);
+                    fStartAngle = fStartSqrt ? (acos(vector[0] / fStartSqrt) * 57.29577951308) : 0.0;
+                    double fEndSqrt = sqrt(vector[2] * vector[2] + vector[3] * vector[3]);
+                    fEndAngle = fEndSqrt ? (acos(vector[2] / fEndSqrt) * 57.29577951308) : 0.0;
 
-                if ( vector[ 1 ] > 0 )
-                    fStartAngle = 360 - fStartAngle;
-                if ( vector[ 3 ] > 0 )
-                    fEndAngle = 360 - fEndAngle;
+                    if ( vector[ 1 ] > 0 )
+                        fStartAngle = 360 - fStartAngle;
+                    if ( vector[ 3 ] > 0 )
+                        fEndAngle = 360 - fEndAngle;
 
-                if ( bDirection )
-                    mpOutAct->DrawEllipticalArc( aCenter, aRadius, fOrientation,
-                                2, fStartAngle, fEndAngle );
-                else
-                    mpOutAct->DrawEllipticalArc( aCenter, aRadius, fOrientation,
-                                2, fEndAngle, fStartAngle);
+                    if ( bDirection )
+                        mpOutAct->DrawEllipticalArc( aCenter, aRadius, fOrientation,
+                                    2, fStartAngle, fEndAngle );
+                    else
+                        mpOutAct->DrawEllipticalArc( aCenter, aRadius, fOrientation,
+                                    2, fEndAngle, fStartAngle);
+                }
             }
             break;
 
@@ -652,28 +678,33 @@ void CGM::ImplDoClass4()
                 bool bDirection = ImplGetEllipse( aCenter, aRadius, fOrientation );
                 ImplGetVector( &vector[ 0 ] );
 
-                double fStartSqrt = sqrt(vector[0] * vector[0] + vector[1] * vector[1]);
-                fStartAngle = fStartSqrt ? (acos(vector[0] / fStartSqrt) * 57.29577951308) : 0.0;
-                double fEndSqrt = sqrt(vector[2] * vector[2] + vector[3] * vector[3]);
-                fEndAngle = fEndSqrt ? (acos(vector[2] / fEndSqrt) * 57.29577951308) : 0.0;
-
-                if ( vector[ 1 ] > 0 )
-                    fStartAngle = 360 - fStartAngle;
-                if ( vector[ 3 ] > 0 )
-                    fEndAngle = 360 - fEndAngle;
-
                 sal_uInt32 nType = ImplGetUI16();
-                if ( nType == 0 )
-                    nType = 0;          // is PIE
-                else
-                    nType = 1;          // is CHORD
 
-                if ( bDirection )
-                    mpOutAct->DrawEllipticalArc( aCenter, aRadius, fOrientation,
-                                nType, fStartAngle, fEndAngle );
-                else
-                    mpOutAct->DrawEllipticalArc( aCenter, aRadius, fOrientation,
-                                nType, fEndAngle, fStartAngle);
+                bool bUseless = useless(vector[0]) || useless(vector[1]) || useless(vector[2]) || useless(vector[3]);
+                if (!bUseless)
+                {
+                    double fStartSqrt = sqrt(vector[0] * vector[0] + vector[1] * vector[1]);
+                    fStartAngle = fStartSqrt ? (acos(vector[0] / fStartSqrt) * 57.29577951308) : 0.0;
+                    double fEndSqrt = sqrt(vector[2] * vector[2] + vector[3] * vector[3]);
+                    fEndAngle = fEndSqrt ? (acos(vector[2] / fEndSqrt) * 57.29577951308) : 0.0;
+
+                    if ( vector[ 1 ] > 0 )
+                        fStartAngle = 360 - fStartAngle;
+                    if ( vector[ 3 ] > 0 )
+                        fEndAngle = 360 - fEndAngle;
+
+                    if ( nType == 0 )
+                        nType = 0;          // is PIE
+                    else
+                        nType = 1;          // is CHORD
+
+                    if ( bDirection )
+                        mpOutAct->DrawEllipticalArc( aCenter, aRadius, fOrientation,
+                                    nType, fStartAngle, fEndAngle );
+                    else
+                        mpOutAct->DrawEllipticalArc( aCenter, aRadius, fOrientation,
+                                    nType, fEndAngle, fStartAngle);
+                }
             }
             break;
             case 0x14 : /*Circular Arc Centre Reversed*/
