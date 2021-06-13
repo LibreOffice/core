@@ -323,6 +323,8 @@ private:
 
     OUString getFormula(SCCOL nCol, SCROW nRow, SCTAB nTab);
     OUString getRangeByName(const OUString& aRangeName);
+    ScAddress setNote(SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString noteText);
+    OUString getNote(SCCOL nCol, SCROW nRow, SCTAB nTab);
 };
 
 TestCopyPaste::TestCopyPaste() {}
@@ -379,6 +381,21 @@ OUString TestCopyPaste::getFormula(SCCOL nCol, SCROW nRow, SCTAB nTab)
 OUString TestCopyPaste::getRangeByName(const OUString& aRangeName)
 {
     return ::getRangeByName(m_pDoc, aRangeName);
+}
+
+ScAddress TestCopyPaste::setNote(SCCOL nCol, SCROW nRow, SCTAB nTab, OUString noteText)
+{
+    ScAddress aAdr(nCol, nRow, nTab);
+    ScPostIt* pNote = m_pDoc->GetOrCreateNote(aAdr);
+    pNote->SetText(aAdr, noteText);
+    return aAdr;
+}
+
+OUString TestCopyPaste::getNote(SCCOL nCol, SCROW nRow, SCTAB nTab)
+{
+    ScPostIt* pNote = m_pDoc->GetNote(nCol, nRow, nTab);
+    CPPUNIT_ASSERT_MESSAGE("Note expected", pNote);
+    return pNote->GetText();
 }
 
 // Cannot be moved to qahelper since ScDocument::CopyToDocument() is not SC_DLLPUBLIC
@@ -508,15 +525,9 @@ void TestCopyPaste::testCopyPaste()
     ASSERT_DOUBLES_EQUAL_MESSAGE("formula should return 11", fValue, 11);
 
     // add notes to A1:C1
-    ScAddress aAdrA1(0, 0, 0); // empty cell content
-    ScPostIt* pNoteA1 = m_pDoc->GetOrCreateNote(aAdrA1);
-    pNoteA1->SetText(aAdrA1, "Hello world in A1");
-    ScAddress aAdrB1(1, 0, 0); // formula cell content
-    ScPostIt* pNoteB1 = m_pDoc->GetOrCreateNote(aAdrB1);
-    pNoteB1->SetText(aAdrB1, "Hello world in B1");
-    ScAddress aAdrC1(2, 0, 0); // string cell content
-    ScPostIt* pNoteC1 = m_pDoc->GetOrCreateNote(aAdrC1);
-    pNoteC1->SetText(aAdrC1, "Hello world in C1");
+    setNote(0, 0, 0, "Hello world in A1"); // empty cell content
+    setNote(1, 0, 0, "Hello world in B1"); // formula cell content
+    setNote(2, 0, 0, "Hello world in C1"); // string cell content
 
     //copy Sheet1.A1:C1 to Sheet2.A2:C2
     ScRange aRange(0, 0, 0, 2, 0, 0);
@@ -582,24 +593,18 @@ void TestCopyPaste::testCopyPaste()
                                  aRangeLocal5);
 
     // check notes after copying
-    CPPUNIT_ASSERT_MESSAGE("There should be a note on Sheet2.A2",
-                           m_pDoc->HasNote(ScAddress(0, 1, 1)));
-    CPPUNIT_ASSERT_MESSAGE("There should be a note on Sheet2.B2",
-                           m_pDoc->HasNote(ScAddress(1, 1, 1)));
-    CPPUNIT_ASSERT_MESSAGE("There should be a note on Sheet2.C2",
-                           m_pDoc->HasNote(ScAddress(2, 1, 1)));
+    CPPUNIT_ASSERT_MESSAGE("There should be a note on Sheet2.A2", m_pDoc->HasNote(0, 1, 1));
+    CPPUNIT_ASSERT_MESSAGE("There should be a note on Sheet2.B2", m_pDoc->HasNote(1, 1, 1));
+    CPPUNIT_ASSERT_MESSAGE("There should be a note on Sheet2.C2", m_pDoc->HasNote(2, 1, 1));
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "Note content on Sheet1.A1 not copied to Sheet2.A2, empty cell content",
-        m_pDoc->GetNote(ScAddress(0, 0, 0))->GetText(),
-        m_pDoc->GetNote(ScAddress(0, 1, 1))->GetText());
+        m_pDoc->GetNote(0, 0, 0)->GetText(), m_pDoc->GetNote(0, 1, 1)->GetText());
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "Note content on Sheet1.B1 not copied to Sheet2.B2, formula cell content",
-        m_pDoc->GetNote(ScAddress(1, 0, 0))->GetText(),
-        m_pDoc->GetNote(ScAddress(1, 1, 1))->GetText());
+        m_pDoc->GetNote(1, 0, 0)->GetText(), m_pDoc->GetNote(1, 1, 1)->GetText());
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "Note content on Sheet1.C1 not copied to Sheet2.C2, string cell content",
-        m_pDoc->GetNote(ScAddress(2, 0, 0))->GetText(),
-        m_pDoc->GetNote(ScAddress(2, 1, 1))->GetText());
+        m_pDoc->GetNote(2, 0, 0)->GetText(), m_pDoc->GetNote(2, 1, 1)->GetText());
 
     //check undo and redo
     pUndo->Undo();
@@ -607,12 +612,9 @@ void TestCopyPaste::testCopyPaste()
     ASSERT_DOUBLES_EQUAL_MESSAGE("after undo formula should return nothing", fValue, 0);
     aString = m_pDoc->GetString(2, 1, 1);
     CPPUNIT_ASSERT_MESSAGE("after undo, string should be removed", aString.isEmpty());
-    CPPUNIT_ASSERT_MESSAGE("after undo, note on A2 should be removed",
-                           !m_pDoc->HasNote(ScAddress(0, 1, 1)));
-    CPPUNIT_ASSERT_MESSAGE("after undo, note on B2 should be removed",
-                           !m_pDoc->HasNote(ScAddress(1, 1, 1)));
-    CPPUNIT_ASSERT_MESSAGE("after undo, note on C2 should be removed",
-                           !m_pDoc->HasNote(ScAddress(2, 1, 1)));
+    CPPUNIT_ASSERT_MESSAGE("after undo, note on A2 should be removed", !m_pDoc->HasNote(0, 1, 1));
+    CPPUNIT_ASSERT_MESSAGE("after undo, note on B2 should be removed", !m_pDoc->HasNote(1, 1, 1));
+    CPPUNIT_ASSERT_MESSAGE("after undo, note on C2 should be removed", !m_pDoc->HasNote(2, 1, 1));
 
     pUndo->Redo();
     fValue = m_pDoc->GetValue(ScAddress(1, 1, 1));
@@ -623,20 +625,17 @@ void TestCopyPaste::testCopyPaste()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula should be correct again", aFormulaString, aString);
 
     CPPUNIT_ASSERT_MESSAGE("After Redo, there should be a note on Sheet2.A2",
-                           m_pDoc->HasNote(ScAddress(0, 1, 1)));
+                           m_pDoc->HasNote(0, 1, 1));
     CPPUNIT_ASSERT_MESSAGE("After Redo, there should be a note on Sheet2.B2",
-                           m_pDoc->HasNote(ScAddress(1, 1, 1)));
+                           m_pDoc->HasNote(1, 1, 1));
     CPPUNIT_ASSERT_MESSAGE("After Redo, there should be a note on Sheet2.C2",
-                           m_pDoc->HasNote(ScAddress(2, 1, 1)));
+                           m_pDoc->HasNote(2, 1, 1));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("After Redo, note again on Sheet2.A2, empty cell content",
-                                 m_pDoc->GetNote(ScAddress(0, 0, 0))->GetText(),
-                                 m_pDoc->GetNote(ScAddress(0, 1, 1))->GetText());
+                                 getNote(0, 0, 0), getNote(0, 1, 1));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("After Redo, note again on Sheet2.B2, formula cell content",
-                                 m_pDoc->GetNote(ScAddress(1, 0, 0))->GetText(),
-                                 m_pDoc->GetNote(ScAddress(1, 1, 1))->GetText());
+                                 getNote(1, 0, 0), getNote(1, 1, 1));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("After Redo, note again on Sheet2.C2, string cell content",
-                                 m_pDoc->GetNote(ScAddress(2, 0, 0))->GetText(),
-                                 m_pDoc->GetNote(ScAddress(2, 1, 1))->GetText());
+                                 getNote(2, 0, 0), getNote(2, 1, 1));
 
     // Copy Sheet1.A11:A13 to Sheet1.A7:A9, both within global2 range.
     aRange = ScRange(0, 10, 0, 0, 12, 0);
@@ -709,15 +708,9 @@ void TestCopyPaste::testCopyPasteTranspose()
     m_pDoc->SetString(2, 0, 0, "test");
 
     // add notes to A1:C1
-    ScAddress aAdrA1(0, 0, 0); // numerical cell content
-    ScPostIt* pNoteA1 = m_pDoc->GetOrCreateNote(aAdrA1);
-    pNoteA1->SetText(aAdrA1, "Hello world in A1");
-    ScAddress aAdrB1(1, 0, 0); // formula cell content
-    ScPostIt* pNoteB1 = m_pDoc->GetOrCreateNote(aAdrB1);
-    pNoteB1->SetText(aAdrB1, "Hello world in B1");
-    ScAddress aAdrC1(2, 0, 0); // string cell content
-    ScPostIt* pNoteC1 = m_pDoc->GetOrCreateNote(aAdrC1);
-    pNoteC1->SetText(aAdrC1, "Hello world in C1");
+    setNote(0, 0, 0, "Hello world in A1"); // numerical cell content
+    setNote(1, 0, 0, "Hello world in B1"); // formula cell content
+    setNote(2, 0, 0, "Hello world in C1"); // string cell content
 
     // transpose clipboard, paste and check on Sheet2
     m_pDoc->InsertTab(1, "Sheet2");
@@ -747,21 +740,15 @@ void TestCopyPaste::testCopyPasteTranspose()
                                  aString);
 
     // check notes after transposed copy/paste
-    CPPUNIT_ASSERT_MESSAGE("There should be a note on Sheet2.D2",
-                           m_pDoc->HasNote(ScAddress(3, 1, 1)));
-    CPPUNIT_ASSERT_MESSAGE("There should be a note on Sheet2.D3",
-                           m_pDoc->HasNote(ScAddress(3, 2, 1)));
-    CPPUNIT_ASSERT_MESSAGE("There should be a note on Sheet2.D4",
-                           m_pDoc->HasNote(ScAddress(3, 3, 1)));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Content of cell note on Sheet2.D2",
-                                 m_pDoc->GetNote(ScAddress(0, 0, 0))->GetText(),
-                                 m_pDoc->GetNote(ScAddress(3, 1, 1))->GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Content of cell note on Sheet2.D3",
-                                 m_pDoc->GetNote(ScAddress(1, 0, 0))->GetText(),
-                                 m_pDoc->GetNote(ScAddress(3, 2, 1))->GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Content of cell note on Sheet2.D4",
-                                 m_pDoc->GetNote(ScAddress(2, 0, 0))->GetText(),
-                                 m_pDoc->GetNote(ScAddress(3, 3, 1))->GetText());
+    CPPUNIT_ASSERT_MESSAGE("There should be a note on Sheet2.D2", m_pDoc->HasNote(3, 1, 1));
+    CPPUNIT_ASSERT_MESSAGE("There should be a note on Sheet2.D3", m_pDoc->HasNote(3, 2, 1));
+    CPPUNIT_ASSERT_MESSAGE("There should be a note on Sheet2.D4", m_pDoc->HasNote(3, 3, 1));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Content of cell note on Sheet2.D2", getNote(0, 0, 0),
+                                 getNote(3, 1, 1));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Content of cell note on Sheet2.D3", getNote(1, 0, 0),
+                                 getNote(3, 2, 1));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Content of cell note on Sheet2.D4", getNote(2, 0, 0),
+                                 getNote(3, 3, 1));
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -956,18 +943,15 @@ void TestCopyPaste::testCopyPasteSpecialAsLinkTranspose()
                          true, false);
     pTransClip.reset();
 
-    OUString aString;
     // Check pasted content to make sure they reference the correct cells.
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell B2.", pFC);
-    m_pDoc->GetFormula(1, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell B2", OUString("=$Sheet1.$A$1"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B2", OUString("=$Sheet1.$A$1"), getFormula(1, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(1.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(2, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    m_pDoc->GetFormula(2, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell C2", OUString("=$Sheet1.$A$2"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C2", OUString("=$Sheet1.$A$2"), getFormula(2, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(2.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(3, 1, destSheet));
@@ -975,8 +959,7 @@ void TestCopyPaste::testCopyPasteSpecialAsLinkTranspose()
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(4, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    m_pDoc->GetFormula(4, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell E2", OUString("=$Sheet1.$A$4"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E2", OUString("=$Sheet1.$A$4"), getFormula(4, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(4.0, pFC->GetValue());
 
     m_pDoc->DeleteTab(destSheet);
@@ -1050,12 +1033,10 @@ void TestCopyPaste::testCopyPasteSpecialAsLinkFilteredTranspose()
                          true, false, false);
     pTransClip.reset();
 
-    OUString aString;
     // Check pasted content to make sure they reference the correct cells.
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell B2.", pFC);
-    m_pDoc->GetFormula(1, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell B2", OUString("=$Sheet1.$A$1"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B2", OUString("=$Sheet1.$A$1"), getFormula(1, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(1.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(2, 1, destSheet));
@@ -1063,8 +1044,7 @@ void TestCopyPaste::testCopyPasteSpecialAsLinkFilteredTranspose()
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(3, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    m_pDoc->GetFormula(3, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell D2", OUString("=$Sheet1.$A$4"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D2", OUString("=$Sheet1.$A$4"), getFormula(3, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(4.0, pFC->GetValue());
 
     m_pDoc->DeleteTab(destSheet);
@@ -1113,18 +1093,15 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeRowAsLinkTranspose()
         pTransClip.get(), true, false /* false fixes tdf#141683 */, false, false);
     pTransClip.reset();
 
-    OUString aString;
     // Check pasted content to make sure they reference the correct cells.
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell B2.", pFC);
-    m_pDoc->GetFormula(1, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell B2", OUString("=$Sheet1.$A$1"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B2", OUString("=$Sheet1.$A$1"), getFormula(1, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(1.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(1, 2, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell B3.", pFC);
-    m_pDoc->GetFormula(1, 2, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell B3", OUString("=$Sheet1.$B$1"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B3", OUString("=$Sheet1.$B$1"), getFormula(1, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(2.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(1, 3, destSheet));
@@ -1132,20 +1109,17 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeRowAsLinkTranspose()
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(1, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    m_pDoc->GetFormula(1, 4, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell B5", OUString("=$Sheet1.$D$1"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B5", OUString("=$Sheet1.$D$1"), getFormula(1, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(4.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(2, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell C2.", pFC);
-    m_pDoc->GetFormula(2, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell C2", OUString("=$Sheet1.$A$3"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C2", OUString("=$Sheet1.$A$3"), getFormula(2, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(11.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(2, 2, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell C3.", pFC);
-    m_pDoc->GetFormula(2, 2, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell C3", OUString("=$Sheet1.$B$3"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C3", OUString("=$Sheet1.$B$3"), getFormula(2, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(12.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(2, 3, destSheet));
@@ -1153,8 +1127,7 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeRowAsLinkTranspose()
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(2, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    m_pDoc->GetFormula(2, 4, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell C5", OUString("=$Sheet1.$D$3"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C5", OUString("=$Sheet1.$D$3"), getFormula(2, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(14.0, pFC->GetValue());
 
     m_pDoc->DeleteTab(destSheet);
@@ -1244,18 +1217,15 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeRowAsLinkFilteredTranspose()
     pTransClip.reset();
     printRange(m_pDoc, aDestRange, "Transposed dest sheet");
 
-    OUString aString;
     // Check pasted content to make sure they reference the correct cells.
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell B2.", pFC);
-    m_pDoc->GetFormula(1, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell B2", OUString("=$Sheet1.$A$1"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B2", OUString("=$Sheet1.$A$1"), getFormula(1, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(1.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(1, 2, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell B3.", pFC);
-    m_pDoc->GetFormula(1, 2, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell B3", OUString("=$Sheet1.$B$1"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B3", OUString("=$Sheet1.$B$1"), getFormula(1, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(2.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(1, 3, destSheet));
@@ -1263,20 +1233,17 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeRowAsLinkFilteredTranspose()
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(1, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    m_pDoc->GetFormula(1, 4, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell B5", OUString("=$Sheet1.$D$1"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B5", OUString("=$Sheet1.$D$1"), getFormula(1, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(4.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(2, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell C2.", pFC);
-    m_pDoc->GetFormula(2, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell C2", OUString("=$Sheet1.$A$3"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C2", OUString("=$Sheet1.$A$3"), getFormula(2, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(11.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(2, 2, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell C3.", pFC);
-    m_pDoc->GetFormula(2, 2, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell C3", OUString("=$Sheet1.$B$3"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C3", OUString("=$Sheet1.$B$3"), getFormula(2, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(12.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(2, 3, destSheet));
@@ -1284,20 +1251,17 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeRowAsLinkFilteredTranspose()
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(2, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    m_pDoc->GetFormula(2, 4, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell C5", OUString("=$Sheet1.$D$3"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C5", OUString("=$Sheet1.$D$3"), getFormula(2, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(14.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(3, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell D2.", pFC);
-    m_pDoc->GetFormula(3, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell D2", OUString("=$Sheet1.$A$6"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D2", OUString("=$Sheet1.$A$6"), getFormula(3, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(111.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(3, 2, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell D3.", pFC);
-    m_pDoc->GetFormula(3, 2, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell D3", OUString("=$Sheet1.$B$6"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D3", OUString("=$Sheet1.$B$6"), getFormula(3, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(112.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(3, 3, destSheet));
@@ -1305,8 +1269,7 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeRowAsLinkFilteredTranspose()
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(3, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    m_pDoc->GetFormula(3, 4, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell D5", OUString("=$Sheet1.$D$6"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D5", OUString("=$Sheet1.$D$6"), getFormula(3, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(114.0, pFC->GetValue());
 
     m_pDoc->DeleteTab(destSheet);
@@ -1355,18 +1318,15 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeColAsLinkTranspose()
         pTransClip.get(), true, false /* false fixes tdf#141683 */, false, false);
     pTransClip.reset();
 
-    OUString aString;
     // Check pasted content to make sure they reference the correct cells.
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell B2.", pFC);
-    m_pDoc->GetFormula(1, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell B2", OUString("=$Sheet1.$A$1"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B2", OUString("=$Sheet1.$A$1"), getFormula(1, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(1.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(2, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell C2.", pFC);
-    m_pDoc->GetFormula(2, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell C2", OUString("=$Sheet1.$A$2"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C2", OUString("=$Sheet1.$A$2"), getFormula(2, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(2.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(3, 1, destSheet));
@@ -1374,20 +1334,17 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeColAsLinkTranspose()
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(4, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    m_pDoc->GetFormula(4, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell E2", OUString("=$Sheet1.$A$4"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E2", OUString("=$Sheet1.$A$4"), getFormula(4, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(4.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(1, 2, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell B3.", pFC);
-    m_pDoc->GetFormula(1, 2, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell B3", OUString("=$Sheet1.$C$1"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B3", OUString("=$Sheet1.$C$1"), getFormula(1, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(11.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(2, 2, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell C3.", pFC);
-    m_pDoc->GetFormula(2, 2, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell C3", OUString("=$Sheet1.$C$2"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C3", OUString("=$Sheet1.$C$2"), getFormula(2, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(12.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(3, 2, destSheet));
@@ -1395,8 +1352,7 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeColAsLinkTranspose()
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(4, 2, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    m_pDoc->GetFormula(4, 2, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell E3", OUString("=$Sheet1.$C$4"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E3", OUString("=$Sheet1.$C$4"), getFormula(4, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(14.0, pFC->GetValue());
 
     m_pDoc->DeleteTab(destSheet);
@@ -1469,12 +1425,10 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeColAsLinkFilteredTranspose()
         pTransClip.get(), true, false /* false fixes tdf#141683 */, false, false);
     pTransClip.reset();
 
-    OUString aString;
     // Check pasted content to make sure they reference the correct cells.
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell B2.", pFC);
-    m_pDoc->GetFormula(1, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell B2", OUString("=$Sheet1.$A$1"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B2", OUString("=$Sheet1.$A$1"), getFormula(1, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(1.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(2, 1, destSheet));
@@ -1482,14 +1436,12 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeColAsLinkFilteredTranspose()
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(3, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    m_pDoc->GetFormula(3, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell D2", OUString("=$Sheet1.$A$4"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D2", OUString("=$Sheet1.$A$4"), getFormula(3, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(4.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(1, 2, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell B3.", pFC);
-    m_pDoc->GetFormula(1, 2, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell B3", OUString("=$Sheet1.$C$1"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B3", OUString("=$Sheet1.$C$1"), getFormula(1, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(11.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(2, 2, destSheet));
@@ -1497,8 +1449,7 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeColAsLinkFilteredTranspose()
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(3, 2, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    m_pDoc->GetFormula(3, 2, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell D3", OUString("=$Sheet1.$C$4"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D3", OUString("=$Sheet1.$C$4"), getFormula(3, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(14.0, pFC->GetValue());
 
     m_pDoc->DeleteTab(destSheet);
@@ -1535,30 +1486,25 @@ void TestCopyPaste::testCopyPasteSpecialAllAsLinkTranspose()
                          false);
     pTransClip.reset();
 
-    OUString aString;
     // Check pasted content to make sure they reference the correct cells.
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell B2.", pFC);
-    m_pDoc->GetFormula(1, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell B2", OUString("=$Sheet1.$A$1"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B2", OUString("=$Sheet1.$A$1"), getFormula(1, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(1.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(2, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    m_pDoc->GetFormula(2, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell C2", OUString("=$Sheet1.$A$2"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C2", OUString("=$Sheet1.$A$2"), getFormula(2, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(2.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(3, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    m_pDoc->GetFormula(3, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell D2", OUString("=$Sheet1.$A$3"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D2", OUString("=$Sheet1.$A$3"), getFormula(3, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(0.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(4, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    m_pDoc->GetFormula(4, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell E2", OUString("=$Sheet1.$A$4"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E2", OUString("=$Sheet1.$A$4"), getFormula(4, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(4.0, pFC->GetValue());
 
     m_pDoc->DeleteTab(destSheet);
@@ -1632,24 +1578,20 @@ void TestCopyPaste::testCopyPasteSpecialAllAsLinkFilteredTranspose()
                          false, false);
     pTransClip.reset();
 
-    OUString aString;
     // Check pasted content to make sure they reference the correct cells.
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell B2.", pFC);
-    m_pDoc->GetFormula(1, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell B2", OUString("=$Sheet1.$A$1"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B2", OUString("=$Sheet1.$A$1"), getFormula(1, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(1.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(2, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    m_pDoc->GetFormula(2, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell C2", OUString("=$Sheet1.$A$3"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C2", OUString("=$Sheet1.$A$3"), getFormula(2, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(0.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(3, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    m_pDoc->GetFormula(3, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula cell D2", OUString("=$Sheet1.$A$4"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D2", OUString("=$Sheet1.$A$4"), getFormula(3, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(4.0, pFC->GetValue());
 
     m_pDoc->DeleteTab(destSheet);
@@ -1939,75 +1881,39 @@ void TestCopyPaste::executeCopyPasteSpecial(const SCTAB srcSheet, const SCTAB de
     // add notes to B3:F4
 
     // add notes row 2
-    ScAddress aAdrB3(1, 2, srcSheet);
-    ScPostIt* pNoteB3 = m_pDoc->GetOrCreateNote(aAdrB3);
-    pNoteB3->SetText(aAdrB3, "Note A1");
-    ScAddress aAdrC3(2, 2, srcSheet);
-    ScPostIt* pNoteC3 = m_pDoc->GetOrCreateNote(aAdrC3);
-    pNoteC3->SetText(aAdrC3, "Note B1");
+    setNote(1, 2, srcSheet, "Note A1");
+    setNote(2, 2, srcSheet, "Note B1");
     // No note on D3
-    ScAddress aAdrE3(4, 2, srcSheet);
-    ScPostIt* pNoteE3 = m_pDoc->GetOrCreateNote(aAdrE3);
-    pNoteE3->SetText(aAdrE3, "Note D1");
+    setNote(4, 2, srcSheet, "Note D1");
     // No note on F3
     // No note on G3
 
     // add notes row 3
-    ScAddress aAdrB4(1, 3, srcSheet);
-    ScPostIt* pNoteB4 = m_pDoc->GetOrCreateNote(aAdrB4);
-    pNoteB4->SetText(aAdrB4, "Note A2");
+    setNote(1, 3, srcSheet, "Note A2");
     // No note on C4
-    ScAddress aAdrD4(3, 3, srcSheet);
-    ScPostIt* pNoteD4 = m_pDoc->GetOrCreateNote(aAdrD4);
-    pNoteD4->SetText(aAdrD4, "Note C2");
-    ScAddress aAdrE4(4, 3, srcSheet);
-    ScPostIt* pNoteE4 = m_pDoc->GetOrCreateNote(aAdrE4);
-    pNoteE4->SetText(aAdrE4, "Note D2");
-    ScAddress aAdrF4(5, 4, srcSheet);
-    ScPostIt* pNoteF4 = m_pDoc->GetOrCreateNote(aAdrF4);
-    pNoteF4->SetText(aAdrF4, "Note E2");
-    ScAddress aAdrG4(6, 3, srcSheet);
-    ScPostIt* pNoteG4 = m_pDoc->GetOrCreateNote(aAdrG4);
-    pNoteG4->SetText(aAdrG4, "Note F2");
+    setNote(3, 3, srcSheet, "Note C2");
+    setNote(4, 3, srcSheet, "Note D2");
+    setNote(5, 4, srcSheet, "Note E2");
+    setNote(6, 3, srcSheet, "Note F2");
 
     // add notes row 4
-    ScAddress aAdrB5(1, 4, srcSheet);
-    ScPostIt* pNoteB5 = m_pDoc->GetOrCreateNote(aAdrB5);
-    pNoteB5->SetText(aAdrB5, "Note A3");
-    ScAddress aAdrC5(2, 4, srcSheet);
-    ScPostIt* pNoteC5 = m_pDoc->GetOrCreateNote(aAdrC5);
-    pNoteC5->SetText(aAdrC5, "Note B3");
-    ScAddress aAdrD5(3, 4, srcSheet);
-    ScPostIt* pNoteD5 = m_pDoc->GetOrCreateNote(aAdrD5);
-    pNoteD5->SetText(aAdrD5, "Note C3");
-    ScAddress aAdrE5(4, 4, srcSheet);
-    ScPostIt* pNoteE5 = m_pDoc->GetOrCreateNote(aAdrE5);
-    pNoteE5->SetText(aAdrE5, "Note D3");
+    setNote(1, 4, srcSheet, "Note A3");
+    setNote(2, 4, srcSheet, "Note B3");
+    setNote(3, 4, srcSheet, "Note C3");
+    setNote(4, 4, srcSheet, "Note D3");
     // No note on F5
     // No note on G5
 
     // add notes row 5
     // No note on B6
-    ScAddress aAdrC6(2, 5, srcSheet);
-    ScPostIt* pNoteC6 = m_pDoc->GetOrCreateNote(aAdrC6);
-    pNoteC6->SetText(aAdrC6, "Note B4");
-    ScAddress aAdrD6(3, 5, srcSheet);
-    ScPostIt* pNoteD6 = m_pDoc->GetOrCreateNote(aAdrD6);
-    pNoteD6->SetText(aAdrD6, "Note C4");
-    ScAddress aAdrE6(4, 5, srcSheet);
-    ScPostIt* pNoteE6 = m_pDoc->GetOrCreateNote(aAdrE6);
-    pNoteE6->SetText(aAdrE6, "Note D4");
-    ScAddress aAdrF6(5, 5, srcSheet);
-    ScPostIt* pNoteF6 = m_pDoc->GetOrCreateNote(aAdrF6);
-    pNoteF6->SetText(aAdrF6, "Note E4");
-    ScAddress aAdrG6(6, 5, srcSheet);
-    ScPostIt* pNoteG6 = m_pDoc->GetOrCreateNote(aAdrG6);
-    pNoteG6->SetText(aAdrG6, "Note F4");
+    setNote(2, 5, srcSheet, "Note B4");
+    setNote(3, 5, srcSheet, "Note C4");
+    setNote(4, 5, srcSheet, "Note D4");
+    setNote(5, 5, srcSheet, "Note E4");
+    setNote(6, 5, srcSheet, "Note F4");
 
     // row 6 for multi range row selection
-    ScAddress aAdrD7(3, 6, srcSheet);
-    ScPostIt* pNoteD7 = m_pDoc->GetOrCreateNote(aAdrD7);
-    pNoteD7->SetText(aAdrD7, "Note C5");
+    setNote(3, 6, srcSheet, "Note C5");
 
     // Recalc if needed
     if (bMultiRangeSelection && bTranspose && eDirection == ScClipParam::Row
@@ -2675,36 +2581,26 @@ void TestCopyPaste::testCutPasteSpecialSkipEmptyTranspose()
 // check initial source
 void TestCopyPaste::checkCopyPasteSpecialInitial(const SCTAB srcSheet)
 {
-    OUString aString;
-    double fValue;
     const EditTextObject* pEditObj;
     // col 1
-    ASSERT_DOUBLES_EQUAL(1, m_pDoc->GetValue(1, 2, srcSheet));
-    ASSERT_DOUBLES_EQUAL(2, m_pDoc->GetValue(1, 3, srcSheet));
-    ASSERT_DOUBLES_EQUAL(3, m_pDoc->GetValue(1, 4, srcSheet));
-    ASSERT_DOUBLES_EQUAL(4, m_pDoc->GetValue(1, 5, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(1, 2, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(1, 3, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(1, 4, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(1, 5, srcSheet));
     // col 2, formulas
-    ASSERT_DOUBLES_EQUAL(11, m_pDoc->GetValue(2, 2, srcSheet));
-    m_pDoc->GetFormula(2, 2, srcSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=B3+10"), aString);
-    m_pDoc->GetFormula(2, 3, srcSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=B4+20"), aString);
-    ASSERT_DOUBLES_EQUAL(22, m_pDoc->GetValue(2, 3, srcSheet));
-    ASSERT_DOUBLES_EQUAL(35, m_pDoc->GetValue(2, 4, srcSheet));
-    m_pDoc->GetFormula(2, 4, srcSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=E5+30"), aString);
-    ASSERT_DOUBLES_EQUAL(42, m_pDoc->GetValue(2, 5, srcSheet));
-    m_pDoc->GetFormula(2, 5, srcSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=B4+40"), aString);
+    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(2, 2, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=B3+10"), getFormula(2, 2, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=B4+20"), getFormula(2, 3, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(22.0, m_pDoc->GetValue(2, 3, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(2, 4, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=E5+30"), getFormula(2, 4, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(42.0, m_pDoc->GetValue(2, 5, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=B4+40"), getFormula(2, 5, srcSheet));
     // col 3, strings
-    aString = m_pDoc->GetString(3, 2, srcSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("a"), aString);
-    aString = m_pDoc->GetString(3, 3, srcSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("b"), aString);
-    aString = m_pDoc->GetString(3, 4, srcSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("c"), aString);
-    aString = m_pDoc->GetString(3, 5, srcSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("d"), aString);
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), m_pDoc->GetString(3, 2, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("b"), m_pDoc->GetString(3, 3, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("c"), m_pDoc->GetString(3, 4, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("d"), m_pDoc->GetString(3, 5, srcSheet));
     // col 4, rich text
     pEditObj = m_pDoc->GetEditText(ScAddress(4, 2, srcSheet));
     CPPUNIT_ASSERT(pEditObj);
@@ -2712,34 +2608,24 @@ void TestCopyPaste::checkCopyPasteSpecialInitial(const SCTAB srcSheet)
     pEditObj = m_pDoc->GetEditText(ScAddress(4, 3, srcSheet));
     CPPUNIT_ASSERT(pEditObj);
     CPPUNIT_ASSERT_EQUAL(OUString("R2"), pEditObj->GetText(0));
-    ASSERT_DOUBLES_EQUAL(5, m_pDoc->GetValue(4, 4, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(4, 4, srcSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(4, 5, srcSheet));
     CPPUNIT_ASSERT(pEditObj);
     CPPUNIT_ASSERT_EQUAL(OUString("R4"), pEditObj->GetText(0));
     // col 5, formulas
-    m_pDoc->GetFormula(5, 2, srcSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=B3+B5+60"), aString);
-    ASSERT_DOUBLES_EQUAL(64, m_pDoc->GetValue(5, 2, srcSheet));
-    aString = m_pDoc->GetString(5, 3, srcSheet);
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aString);
-    aString = m_pDoc->GetString(5, 4, srcSheet);
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aString);
-    fValue = m_pDoc->GetValue(5, 5, srcSheet);
-    m_pDoc->GetFormula(5, 5, srcSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=B3+B5+70"), aString);
-    ASSERT_DOUBLES_EQUAL(74, fValue);
+    CPPUNIT_ASSERT_EQUAL(OUString("=B3+B5+60"), getFormula(5, 2, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(64.0, m_pDoc->GetValue(5, 2, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(5, 3, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(5, 4, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=B3+B5+70"), getFormula(5, 5, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(74.0, m_pDoc->GetValue(5, 5, srcSheet));
     // col 6, formulas
-    m_pDoc->GetFormula(6, 2, srcSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(B3:B6;\"<4\")"), aString);
-    ASSERT_DOUBLES_EQUAL(6, m_pDoc->GetValue(6, 2, srcSheet));
-    aString = m_pDoc->GetString(6, 3, srcSheet);
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aString);
-    aString = m_pDoc->GetString(6, 4, srcSheet);
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aString);
-    fValue = m_pDoc->GetValue(6, 5, srcSheet);
-    m_pDoc->GetFormula(6, 5, srcSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=C$3+$B$5+80"), aString);
-    ASSERT_DOUBLES_EQUAL(94, fValue);
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(B3:B6;\"<4\")"), getFormula(6, 2, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(6, 2, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(6, 3, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(6, 4, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=C$3+$B$5+80"), getFormula(6, 5, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(94.0, m_pDoc->GetValue(6, 5, srcSheet));
 
     // check patterns
     const SfxPoolItem* pItem = nullptr;
@@ -2792,71 +2678,57 @@ void TestCopyPaste::checkCopyPasteSpecialInitial(const SCTAB srcSheet)
 
     // check notes after transposed copy/paste
     // check presence of notes
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(1, 2, srcSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(2, 2, srcSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(3, 2, srcSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(4, 2, srcSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(5, 2, srcSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(6, 2, srcSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 2, srcSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(1, 3, srcSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 3, srcSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(3, 3, srcSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(4, 3, srcSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(5, 3, srcSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(6, 3, srcSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 3, srcSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(1, 4, srcSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(2, 4, srcSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(3, 4, srcSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(4, 4, srcSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(5, 4, srcSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(6, 4, srcSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 4, srcSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(1, 5, srcSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(2, 5, srcSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(3, 5, srcSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(4, 5, srcSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(5, 5, srcSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(6, 5, srcSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 5, srcSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(1, 6, srcSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 6, srcSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(3, 6, srcSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(4, 6, srcSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(5, 6, srcSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(6, 6, srcSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 6, srcSheet)));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(1, 2, srcSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(2, 2, srcSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(3, 2, srcSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(4, 2, srcSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(5, 2, srcSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(6, 2, srcSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 2, srcSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(1, 3, srcSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 3, srcSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(3, 3, srcSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(4, 3, srcSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(5, 3, srcSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(6, 3, srcSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 3, srcSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(1, 4, srcSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(2, 4, srcSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(3, 4, srcSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(4, 4, srcSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(5, 4, srcSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(6, 4, srcSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 4, srcSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(1, 5, srcSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(2, 5, srcSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(3, 5, srcSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(4, 5, srcSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(5, 5, srcSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(6, 5, srcSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 5, srcSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(1, 6, srcSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 6, srcSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(3, 6, srcSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(4, 6, srcSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(5, 6, srcSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(6, 6, srcSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 6, srcSheet));
 
     // check values of notes
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A1"),
-                         m_pDoc->GetNote(ScAddress(1, 2, srcSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A2"),
-                         m_pDoc->GetNote(ScAddress(1, 3, srcSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A3"),
-                         m_pDoc->GetNote(ScAddress(1, 4, srcSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B1"),
-                         m_pDoc->GetNote(ScAddress(2, 2, srcSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B3"),
-                         m_pDoc->GetNote(ScAddress(2, 4, srcSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note C2"),
-                         m_pDoc->GetNote(ScAddress(3, 3, srcSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note C3"),
-                         m_pDoc->GetNote(ScAddress(3, 4, srcSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D1"),
-                         m_pDoc->GetNote(ScAddress(4, 2, srcSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D2"),
-                         m_pDoc->GetNote(ScAddress(4, 3, srcSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D3"),
-                         m_pDoc->GetNote(ScAddress(4, 4, srcSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note E2"),
-                         m_pDoc->GetNote(ScAddress(5, 4, srcSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note E4"),
-                         m_pDoc->GetNote(ScAddress(5, 5, srcSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note F2"),
-                         m_pDoc->GetNote(ScAddress(6, 3, srcSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note F4"),
-                         m_pDoc->GetNote(ScAddress(6, 5, srcSheet))->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("Note A1"), getNote(1, 2, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note A2"), getNote(1, 3, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note A3"), getNote(1, 4, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note B1"), getNote(2, 2, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note B3"), getNote(2, 4, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note C2"), getNote(3, 3, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note C3"), getNote(3, 4, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note D1"), getNote(4, 2, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note D2"), getNote(4, 3, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note D3"), getNote(4, 4, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note E2"), getNote(5, 4, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note E4"), getNote(5, 5, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note F2"), getNote(6, 3, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note F4"), getNote(6, 5, srcSheet));
 
     CPPUNIT_ASSERT_EQUAL(OUString("=C5"), getFormula(1, 16, srcSheet));
     CPPUNIT_ASSERT_EQUAL(OUString("=$C$5"), getFormula(2, 16, srcSheet));
@@ -2973,55 +2845,43 @@ void TestCopyPaste::checkCopyPasteSpecial(bool bSkipEmpty, bool bCut)
     b means border
     */
 
-    OUString aString;
-    double fValue;
     const EditTextObject* pEditObj;
     // col 2
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 1, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 2, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 3, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 4, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 5, destSheet));
     // col 3, numbers
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(3, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1, m_pDoc->GetValue(3, 1, destSheet));
-    ASSERT_DOUBLES_EQUAL(2, m_pDoc->GetValue(3, 2, destSheet));
-    ASSERT_DOUBLES_EQUAL(3, m_pDoc->GetValue(3, 3, destSheet));
-    ASSERT_DOUBLES_EQUAL(4, m_pDoc->GetValue(3, 4, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(3, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(3, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(3, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(3, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(3, 5, destSheet));
     // col 4, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(11, m_pDoc->GetValue(4, 1, destSheet));
-    m_pDoc->GetFormula(4, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2+10"), aString);
-    m_pDoc->GetFormula(4, 2, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=D3+20"), aString);
-    ASSERT_DOUBLES_EQUAL(22, m_pDoc->GetValue(4, 2, destSheet));
-    ASSERT_DOUBLES_EQUAL(35, m_pDoc->GetValue(4, 3, destSheet));
-    m_pDoc->GetFormula(4, 3, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=G4+30"), aString);
-    ASSERT_DOUBLES_EQUAL(42, m_pDoc->GetValue(4, 4, destSheet));
-    m_pDoc->GetFormula(4, 4, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=D3+40"), aString);
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=D2+10"), getFormula(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=D3+20"), getFormula(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(22.0, m_pDoc->GetValue(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=G4+30"), getFormula(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(42.0, m_pDoc->GetValue(4, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=D3+40"), getFormula(4, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 5, destSheet));
     // col 5, strings
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(5, 0, destSheet));
-    aString = m_pDoc->GetString(5, 0, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    aString = m_pDoc->GetString(5, 1, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("a"), aString);
-    aString = m_pDoc->GetString(5, 2, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("b"), aString);
-    aString = m_pDoc->GetString(5, 3, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("c"), aString);
-    aString = m_pDoc->GetString(5, 4, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("d"), aString);
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(5, 5, destSheet));
-    aString = m_pDoc->GetString(5, 5, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(5, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), m_pDoc->GetString(5, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("b"), m_pDoc->GetString(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("c"), m_pDoc->GetString(5, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("d"), m_pDoc->GetString(5, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(5, 5, destSheet));
     // col 6, rich text
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(6, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 0, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 0, destSheet));
     CPPUNIT_ASSERT(pEditObj == nullptr);
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 1, destSheet));
@@ -3030,80 +2890,69 @@ void TestCopyPaste::checkCopyPasteSpecial(bool bSkipEmpty, bool bCut)
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 2, destSheet));
     CPPUNIT_ASSERT(pEditObj);
     CPPUNIT_ASSERT_EQUAL(OUString("R2"), pEditObj->GetText(0));
-    ASSERT_DOUBLES_EQUAL(5, m_pDoc->GetValue(6, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(6, 3, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 4, destSheet));
     CPPUNIT_ASSERT(pEditObj);
     CPPUNIT_ASSERT_EQUAL(OUString("R4"), pEditObj->GetText(0));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(6, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 5, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 5, destSheet));
     CPPUNIT_ASSERT(pEditObj == nullptr);
     // col 7, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 0, destSheet));
-    aString = m_pDoc->GetString(7, 0, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    m_pDoc->GetFormula(7, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2+D4+60"), aString);
-    ASSERT_DOUBLES_EQUAL(64, m_pDoc->GetValue(7, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=D2+D4+60"), getFormula(7, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(64.0, m_pDoc->GetValue(7, 1, destSheet));
     if (!bSkipEmpty)
     {
-        aString = m_pDoc->GetString(7, 2, destSheet);
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aString);
-        aString = m_pDoc->GetString(7, 3, destSheet);
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aString);
+        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(7, 2, destSheet));
+        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(7, 3, destSheet));
     }
     else
     {
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 2, destSheet));
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 3, destSheet));
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 2, destSheet));
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 3, destSheet));
     }
-    fValue = m_pDoc->GetValue(7, 4, destSheet);
-    m_pDoc->GetFormula(7, 4, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2+D4+70"), aString);
-    ASSERT_DOUBLES_EQUAL(74, fValue);
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 5, destSheet));
-    aString = m_pDoc->GetString(7, 5, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+    CPPUNIT_ASSERT_EQUAL(OUString("=D2+D4+70"), getFormula(7, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(74.0, m_pDoc->GetValue(7, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 5, destSheet));
     // col 8, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(8, 0, destSheet));
-    aString = m_pDoc->GetString(8, 0, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    m_pDoc->GetFormula(8, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(D2:D5;\"<4\")"), aString);
-    ASSERT_DOUBLES_EQUAL(6, m_pDoc->GetValue(8, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(8, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(D2:D5;\"<4\")"), getFormula(8, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(8, 1, destSheet));
     if (!bSkipEmpty)
     {
-        aString = m_pDoc->GetString(8, 2, destSheet);
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aString);
-        aString = m_pDoc->GetString(8, 3, destSheet);
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aString);
+        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(8, 2, destSheet));
+        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(8, 3, destSheet));
     }
     else
     {
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(8, 2, destSheet));
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(8, 3, destSheet));
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 2, destSheet));
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 3, destSheet));
     }
-    fValue = m_pDoc->GetValue(8, 4, destSheet);
-    m_pDoc->GetFormula(8, 4, destSheet, aString);
+    OUString aStr;
+    double fValue = m_pDoc->GetValue(8, 4, destSheet);
+    m_pDoc->GetFormula(8, 4, destSheet, aStr);
     if (!bCut)
     {
-        CPPUNIT_ASSERT_EQUAL(OUString("=E$3+$B$5+80"), aString);
-        ASSERT_DOUBLES_EQUAL(1102, fValue);
+        CPPUNIT_ASSERT_EQUAL(OUString("=E$3+$B$5+80"), aStr);
+        CPPUNIT_ASSERT_EQUAL(1102.0, fValue);
     }
     else
     {
-        CPPUNIT_ASSERT_EQUAL(OUString("=E$2+$D$4+80"), aString);
-        ASSERT_DOUBLES_EQUAL(94, fValue);
+        CPPUNIT_ASSERT_EQUAL(OUString("=E$2+$D$4+80"), aStr);
+        CPPUNIT_ASSERT_EQUAL(94.0, fValue);
     }
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(8, 5, destSheet));
-    aString = m_pDoc->GetString(8, 5, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(8, 5, destSheet));
     // col 9, numbers
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 1, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 2, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 3, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 4, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 5, destSheet));
 
     // check patterns
     const SfxPoolItem* pItem = nullptr;
@@ -3157,86 +3006,72 @@ void TestCopyPaste::checkCopyPasteSpecial(bool bSkipEmpty, bool bCut)
 
     // check notes after transposed copy/paste
     // check presence of notes
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(3, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(4, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(5, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(6, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(8, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(9, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 1, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(3, 1, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(4, 1, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(5, 1, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(6, 1, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 1, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(8, 1, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(9, 1, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 2, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(3, 2, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(4, 2, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(5, 2, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(6, 2, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 2, destSheet)));
-    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(ScAddress(8, 2, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(9, 2, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 3, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(3, 3, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(4, 3, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(5, 3, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(6, 3, destSheet)));
-    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(ScAddress(7, 3, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(8, 3, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(9, 3, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(3, 4, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(4, 4, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(5, 4, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(6, 4, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(7, 4, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(8, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(9, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(3, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(4, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(5, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(6, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(8, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(9, 5, destSheet)));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(3, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(4, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(5, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(6, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(8, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(9, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 1, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(3, 1, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(4, 1, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(5, 1, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(6, 1, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 1, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(8, 1, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(9, 1, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 2, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(3, 2, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(4, 2, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(5, 2, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(6, 2, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(8, 2, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(9, 2, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 3, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(3, 3, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(4, 3, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(5, 3, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(6, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(7, 3, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(8, 3, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(9, 3, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(3, 4, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(4, 4, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(5, 4, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(6, 4, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(7, 4, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(8, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(9, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(3, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(4, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(5, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(6, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(8, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(9, 5, destSheet));
 
     // check values of notes
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A1"),
-                         m_pDoc->GetNote(ScAddress(3, 1, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A2"),
-                         m_pDoc->GetNote(ScAddress(3, 2, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A3"),
-                         m_pDoc->GetNote(ScAddress(3, 3, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B1"),
-                         m_pDoc->GetNote(ScAddress(4, 1, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B3"),
-                         m_pDoc->GetNote(ScAddress(4, 3, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note C2"),
-                         m_pDoc->GetNote(ScAddress(5, 2, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note C3"),
-                         m_pDoc->GetNote(ScAddress(5, 3, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D1"),
-                         m_pDoc->GetNote(ScAddress(6, 1, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D2"),
-                         m_pDoc->GetNote(ScAddress(6, 2, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D3"),
-                         m_pDoc->GetNote(ScAddress(6, 3, destSheet))->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("Note A1"), getNote(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note A2"), getNote(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note A3"), getNote(3, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note B1"), getNote(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note B3"), getNote(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note C2"), getNote(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note C3"), getNote(5, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note D1"), getNote(6, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note D2"), getNote(6, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note D3"), getNote(6, 3, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"),
-                             m_pDoc->GetNote(ScAddress(7, 3, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note E4"),
-                         m_pDoc->GetNote(ScAddress(7, 4, destSheet))->GetText());
+        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"), getNote(7, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note E4"), getNote(7, 4, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(OUString("Note F2"),
-                             m_pDoc->GetNote(ScAddress(8, 2, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note F4"),
-                         m_pDoc->GetNote(ScAddress(8, 4, destSheet))->GetText());
+        CPPUNIT_ASSERT_EQUAL(OUString("Note F2"), getNote(8, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note F4"), getNote(8, 4, destSheet));
 
     // Existing references to the destination range must not change
     CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D1"), getFormula(3, 101, srcSheet));
@@ -3405,135 +3240,99 @@ void TestCopyPaste::checkCopyPasteSpecialFiltered(bool bSkipEmpty)
     b means border
     */
 
-    OUString aString;
-    double fValue;
     const EditTextObject* pEditObj;
 
     // col 2
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 1, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 2, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 3, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 4, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 5, destSheet));
     // col 3, numbers
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(3, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1, m_pDoc->GetValue(3, 1, destSheet));
-    ASSERT_DOUBLES_EQUAL(3, m_pDoc->GetValue(3, 2, destSheet));
-    ASSERT_DOUBLES_EQUAL(4, m_pDoc->GetValue(3, 3, destSheet));
-    fValue = m_pDoc->GetValue(3, 4, destSheet); // repeated row 1
-    ASSERT_DOUBLES_EQUAL(1, fValue);
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(3, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(3, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(3, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(3, 4, destSheet)); // repeated row 1
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(3, 5, destSheet));
     // col 4, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 0, destSheet));
-    m_pDoc->GetFormula(4, 0, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aString);
-    ASSERT_DOUBLES_EQUAL(11, m_pDoc->GetValue(4, 1, destSheet));
-    m_pDoc->GetFormula(4, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2+10"), aString);
-    fValue = m_pDoc->GetValue(4, 2, destSheet);
-    m_pDoc->GetFormula(4, 2, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=G3+30"), aString);
-    ASSERT_DOUBLES_EQUAL(35, fValue);
-    fValue = m_pDoc->GetValue(4, 3, destSheet);
-    m_pDoc->GetFormula(4, 3, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2+40"), aString);
-    ASSERT_DOUBLES_EQUAL(41, fValue);
-    fValue = m_pDoc->GetValue(4, 4, destSheet); // repeated row 1
-    ASSERT_DOUBLES_EQUAL(11, fValue);
-    m_pDoc->GetFormula(4, 4, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=D5+10"), aString);
-    ASSERT_DOUBLES_EQUAL(11, m_pDoc->GetValue(4, 4, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, getFormula(4, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=D2+10"), getFormula(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=G3+30"), getFormula(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=D2+40"), getFormula(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(41.0, m_pDoc->GetValue(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(4, 4, destSheet)); // repeated row 1
+    CPPUNIT_ASSERT_EQUAL(OUString("=D5+10"), getFormula(4, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(4, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 5, destSheet));
     // col 5, strings
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(5, 0, destSheet));
-    aString = m_pDoc->GetString(5, 1, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("a"), aString);
-    aString = m_pDoc->GetString(5, 2, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("c"), aString);
-    aString = m_pDoc->GetString(5, 3, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("d"), aString);
-    aString = m_pDoc->GetString(5, 4, destSheet); // repeated row 1
-    CPPUNIT_ASSERT_EQUAL(OUString("a"), aString);
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(5, 5, destSheet));
-    m_pDoc->GetFormula(4, 5, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aString);
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), m_pDoc->GetString(5, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("c"), m_pDoc->GetString(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("d"), m_pDoc->GetString(5, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), m_pDoc->GetString(5, 4, destSheet)); // repeated row 1
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, getFormula(4, 5, destSheet));
     // col 6, rich text
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(6, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 0, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 0, destSheet));
     CPPUNIT_ASSERT(pEditObj == nullptr);
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 1, destSheet));
     CPPUNIT_ASSERT(pEditObj);
     CPPUNIT_ASSERT_EQUAL(OUString("R1"), pEditObj->GetText(0));
-    ASSERT_DOUBLES_EQUAL(5, m_pDoc->GetValue(6, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(6, 2, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 3, destSheet));
     CPPUNIT_ASSERT(pEditObj);
     CPPUNIT_ASSERT_EQUAL(OUString("R4"), pEditObj->GetText(0));
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 4, destSheet)); // repeated row 1
     CPPUNIT_ASSERT(pEditObj);
     CPPUNIT_ASSERT_EQUAL(OUString("R1"), pEditObj->GetText(0));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(6, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 5, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 5, destSheet));
     CPPUNIT_ASSERT(pEditObj == nullptr);
     // col 7, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 0, destSheet));
-    aString = m_pDoc->GetString(7, 0, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    m_pDoc->GetFormula(7, 1, destSheet, aString);
-    fValue = m_pDoc->GetValue(7, 1, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2+D4+60"), aString);
-    ASSERT_DOUBLES_EQUAL(65, fValue); // formula is not adjusted due to filter row
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=D2+D4+60"), getFormula(7, 1, destSheet));
+    // formula is not adjusted due to filter row
+    CPPUNIT_ASSERT_EQUAL(65.0, m_pDoc->GetValue(7, 1, destSheet));
     if (!bSkipEmpty)
-    {
-        aString = m_pDoc->GetString(7, 2, destSheet);
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aString);
-    }
+        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(7, 2, destSheet));
     else
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 2, destSheet));
-    fValue = m_pDoc->GetValue(7, 3, destSheet);
-    m_pDoc->GetFormula(7, 3, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=D1+D3+70"), aString);
-    ASSERT_DOUBLES_EQUAL(1073, fValue);
-    m_pDoc->GetFormula(7, 4, destSheet, aString); // repeated row 1
-    fValue = m_pDoc->GetValue(7, 4, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("=D5+D7+60"), aString);
-    ASSERT_DOUBLES_EQUAL(1061, fValue); // formula is not adjusted due to filter row
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 5, destSheet));
-    aString = m_pDoc->GetString(7, 5, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=D1+D3+70"), getFormula(7, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1073.0, m_pDoc->GetValue(7, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=D5+D7+60"), getFormula(7, 4, destSheet)); // repeated row 1
+    // formula is not adjusted due to filter row
+    CPPUNIT_ASSERT_EQUAL(1061.0, m_pDoc->GetValue(7, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 5, destSheet));
     // col 8, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(8, 0, destSheet));
-    aString = m_pDoc->GetString(8, 0, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    m_pDoc->GetFormula(8, 1, destSheet, aString);
-    fValue = m_pDoc->GetValue(8, 1, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(D2:D5;\"<4\")"), aString);
-    ASSERT_DOUBLES_EQUAL(5, fValue);
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(8, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(D2:D5;\"<4\")"), getFormula(8, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(8, 1, destSheet));
     if (!bSkipEmpty)
-    {
-        aString = m_pDoc->GetString(8, 2, destSheet);
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aString);
-    }
+        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(8, 2, destSheet));
     else
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(8, 2, destSheet));
-    fValue = m_pDoc->GetValue(8, 3, destSheet);
-    m_pDoc->GetFormula(8, 3, destSheet, aString);
-    ASSERT_DOUBLES_EQUAL(1115, fValue);
-    CPPUNIT_ASSERT_EQUAL(OUString("=E$3+$B$5+80"), aString);
-    m_pDoc->GetFormula(8, 4, destSheet, aString); // repeated row 1
-    fValue = m_pDoc->GetValue(8, 4, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(D5:D8;\"<4\")"), aString);
-    ASSERT_DOUBLES_EQUAL(1, fValue);
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(8, 5, destSheet));
-    aString = m_pDoc->GetString(8, 5, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1115.0, m_pDoc->GetValue(8, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=E$3+$B$5+80"), getFormula(8, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(D5:D8;\"<4\")"), getFormula(8, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(8, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(8, 5, destSheet));
     // col 9, numbers
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 1, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 2, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 3, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 4, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 5, destSheet));
 
     // check patterns
     const SfxPoolItem* pItem = nullptr;
@@ -3582,77 +3381,67 @@ void TestCopyPaste::checkCopyPasteSpecialFiltered(bool bSkipEmpty)
 
     // check notes after transposed copy/paste
     // check presence of notes
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(3, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(4, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(5, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(6, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(8, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(9, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 1, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(3, 1, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(4, 1, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(5, 1, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(6, 1, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 1, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(8, 1, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(9, 1, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 2, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(3, 2, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(4, 2, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(5, 2, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(6, 2, destSheet)));
-    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(ScAddress(7, 2, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(8, 2, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(9, 2, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 3, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(3, 3, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(4, 3, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(5, 3, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(6, 3, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(7, 3, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(8, 3, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(9, 3, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 4, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(3, 4, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(4, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(5, 4, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(6, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(8, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(9, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(3, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(4, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(5, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(6, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(8, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(9, 5, destSheet)));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(3, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(4, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(5, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(6, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(8, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(9, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 1, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(3, 1, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(4, 1, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(5, 1, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(6, 1, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 1, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(8, 1, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(9, 1, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 2, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(3, 2, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(4, 2, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(5, 2, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(6, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(7, 2, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(8, 2, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(9, 2, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 3, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(3, 3, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(4, 3, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(5, 3, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(6, 3, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(7, 3, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(8, 3, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(9, 3, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 4, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(3, 4, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(4, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(5, 4, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(6, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(8, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(9, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(3, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(4, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(5, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(6, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(8, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(9, 5, destSheet));
 
     // check values of notes
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A1"),
-                         m_pDoc->GetNote(ScAddress(3, 1, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A3"),
-                         m_pDoc->GetNote(ScAddress(3, 2, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B1"),
-                         m_pDoc->GetNote(ScAddress(4, 1, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B3"),
-                         m_pDoc->GetNote(ScAddress(4, 2, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note C3"),
-                         m_pDoc->GetNote(ScAddress(5, 2, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D1"),
-                         m_pDoc->GetNote(ScAddress(6, 1, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D3"),
-                         m_pDoc->GetNote(ScAddress(6, 2, destSheet))->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("Note A1"), getNote(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note A3"), getNote(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note B1"), getNote(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note B3"), getNote(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note C3"), getNote(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note D1"), getNote(6, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note D3"), getNote(6, 2, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"),
-                             m_pDoc->GetNote(ScAddress(7, 2, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note E4"),
-                         m_pDoc->GetNote(ScAddress(7, 3, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note F4"),
-                         m_pDoc->GetNote(ScAddress(8, 3, destSheet))->GetText());
+        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"), getNote(7, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note E4"), getNote(7, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note F4"), getNote(8, 3, destSheet));
 
     m_pDoc->DeleteTab(destSheet);
     m_pDoc->DeleteTab(srcSheet);
@@ -3681,71 +3470,45 @@ void TestCopyPaste::checkCopyPasteSpecialTranspose(bool bSkipEmpty, bool bCut)
     //check cell content after transposed copy/paste of filtered data
     // Note: column F is a repetition of srcSheet.Column A
     // Col C and G are checked to be empty
-    OUString aString;
-    double fValue;
     const EditTextObject* pEditObj;
     // row 0
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(3, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(5, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(6, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(3, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 0, destSheet));
     // row 1, numbers
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 1, destSheet));
-    fValue = m_pDoc->GetValue(3, 1, destSheet); // D2
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied cell D2", 1, fValue);
-    fValue = m_pDoc->GetValue(4, 1, destSheet); // E2
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied cell E2", 2, fValue);
-    fValue = m_pDoc->GetValue(5, 1, destSheet); // F2
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied cell F2", 3, fValue);
-    fValue = m_pDoc->GetValue(6, 1, destSheet); // G2
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied cell G2", 4, fValue);
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed cell D2", 1.0, m_pDoc->GetValue(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed cell E2", 2.0, m_pDoc->GetValue(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed cell F2", 3.0, m_pDoc->GetValue(5, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed cell G2", 4.0, m_pDoc->GetValue(6, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 1, destSheet));
     // row 2, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 2, destSheet));
-    aString = m_pDoc->GetString(2, 2, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    m_pDoc->GetFormula(3, 2, destSheet, aString); // D3
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed formula D3 should point on D2", OUString("=D2+10"),
-                                 aString);
-    fValue = m_pDoc->GetValue(3, 2, destSheet); // D3
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied formula D3", 11, fValue);
-    m_pDoc->GetFormula(4, 2, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed formula E3 should point on E2", OUString("=E2+20"),
-                                 aString);
-    fValue = m_pDoc->GetValue(4, 2, destSheet); // E3
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied formula E3", 22, fValue);
-    m_pDoc->GetFormula(5, 2, destSheet, aString); // F3
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed formula F3 should point on F2", OUString("=F5+30"),
-                                 aString);
-    fValue = m_pDoc->GetValue(5, 2, destSheet); // F3
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied formula F3", 35, fValue);
-    m_pDoc->GetFormula(6, 2, destSheet, aString); // G3
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed formula G3 should point on E2", OUString("=E2+40"),
-                                 aString);
-    fValue = m_pDoc->GetValue(6, 2, destSheet); // G3
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied formula G3", 42, fValue);
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 2, destSheet));
-    aString = m_pDoc->GetString(7, 2, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D3", OUString("=D2+10"), getFormula(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D3", 11.0, m_pDoc->GetValue(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed E3", OUString("=E2+20"), getFormula(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed E3", 22.0, m_pDoc->GetValue(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed F3", OUString("=F5+30"), getFormula(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed F3", 35.0, m_pDoc->GetValue(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed G3", OUString("=E2+40"), getFormula(6, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed G3", 42.0, m_pDoc->GetValue(6, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 2, destSheet));
     // row 3, strings
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 3, destSheet));
-    aString = m_pDoc->GetString(2, 3, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    aString = m_pDoc->GetString(3, 3, destSheet); // D4
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D4 should contain: a", OUString("a"), aString);
-    aString = m_pDoc->GetString(4, 3, destSheet); // E4
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E4 should contain: b", OUString("b"), aString);
-    aString = m_pDoc->GetString(5, 3, destSheet); // F4
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F4 should contain: c", OUString("c"), aString);
-    aString = m_pDoc->GetString(6, 3, destSheet); // G4
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G4 should contain: d", OUString("d"), aString);
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 3, destSheet));
-    aString = m_pDoc->GetString(7, 3, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D4", OUString("a"), m_pDoc->GetString(3, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E4", OUString("b"), m_pDoc->GetString(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F4", OUString("c"), m_pDoc->GetString(5, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G4", OUString("d"), m_pDoc->GetString(6, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 3, destSheet));
     // row 4, rich text
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 4, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(2, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("There should be no edit cell in C5.", pEditObj == nullptr);
     pEditObj = m_pDoc->GetEditText(ScAddress(3, 4, destSheet));
@@ -3755,84 +3518,72 @@ void TestCopyPaste::checkCopyPasteSpecialTranspose(bool bSkipEmpty, bool bCut)
     pEditObj = m_pDoc->GetEditText(ScAddress(4, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("There should be an edit cell in E5.", pEditObj);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Edit cell value wrong E5.", OUString("R2"), pEditObj->GetText(0));
-    fValue = m_pDoc->GetValue(5, 4, destSheet); // F5
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied cell F5", 5, fValue);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed cell F5", 5.0, m_pDoc->GetValue(5, 4, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("There should be an edit cell in G5.", pEditObj);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Edit cell value wrong G5.", OUString("R4"), pEditObj->GetText(0));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 4, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(7, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("There should be no edit cell in H5.", pEditObj == nullptr);
     // row 5, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 5, destSheet));
-    aString = m_pDoc->GetString(2, 5, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    m_pDoc->GetFormula(3, 5, destSheet, aString); // D6
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed formula D6", OUString("=D2+F2+60"), aString);
-    fValue = m_pDoc->GetValue(3, 5, destSheet); // D6
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied formula D6", 64, fValue);
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D6", OUString("=D2+F2+60"),
+                                 getFormula(3, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D6", 64.0, m_pDoc->GetValue(3, 5, destSheet));
     if (!bSkipEmpty)
     {
-        aString = m_pDoc->GetString(4, 5, destSheet); // E6
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, aString);
-        aString = m_pDoc->GetString(5, 5, destSheet); // F6
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, aString);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, m_pDoc->GetString(4, 5, destSheet));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, m_pDoc->GetString(5, 5, destSheet));
     }
     else
     {
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 5, destSheet));
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(5, 5, destSheet));
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 5, destSheet));
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 5, destSheet));
     }
-    fValue = m_pDoc->GetValue(6, 5, destSheet); // G6
-    m_pDoc->GetFormula(6, 5, destSheet, aString); // G6
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed formula G6", OUString("=D2+F2+70"), aString);
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied formula G6", 74, fValue);
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 5, destSheet));
-    aString = m_pDoc->GetString(7, 5, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed G6", OUString("=D2+F2+70"),
+                                 getFormula(6, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed G6", 74.0, m_pDoc->GetValue(6, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 5, destSheet));
     // row 6, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 6, destSheet));
-    aString = m_pDoc->GetString(2, 6, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    m_pDoc->GetFormula(3, 6, destSheet, aString); // D7
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed formula D7", OUString("=SUMIF(D2:G2;\"<4\")"),
-                                 aString);
-    fValue = m_pDoc->GetValue(3, 6, destSheet); // D7
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied formula D7", 6, fValue);
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D7", OUString("=SUMIF(D2:G2;\"<4\")"),
+                                 getFormula(3, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D7", 6.0, m_pDoc->GetValue(3, 6, destSheet));
     if (!bSkipEmpty)
     {
-        aString = m_pDoc->GetString(4, 6, destSheet); // E6
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, aString);
-        aString = m_pDoc->GetString(5, 6, destSheet); // F6
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, aString);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, m_pDoc->GetString(4, 6, destSheet));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, m_pDoc->GetString(5, 6, destSheet));
     }
     else
     {
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 6, destSheet));
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(5, 6, destSheet));
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 6, destSheet));
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 6, destSheet));
     }
-    fValue = m_pDoc->GetValue(6, 6, destSheet); // G7
-    m_pDoc->GetFormula(6, 6, destSheet, aString); // G7
+    double fValue = m_pDoc->GetValue(6, 6, destSheet); // G7
+    OUString aStr;
+    m_pDoc->GetFormula(6, 6, destSheet, aStr); // G7
     if (!bCut)
     {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed formula G7", OUString("=C$3+$B$5+80"), aString);
-        ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied formula G7", 2080, fValue);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed G7", OUString("=C$3+$B$5+80"), aStr);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed G7", 2080.0, fValue);
     }
     else
     {
-        CPPUNIT_ASSERT_EQUAL(OUString("=D$3+$F$2+80"), aString);
-        ASSERT_DOUBLES_EQUAL(94, fValue);
+        CPPUNIT_ASSERT_EQUAL(OUString("=D$3+$F$2+80"), aStr);
+        CPPUNIT_ASSERT_EQUAL(94.0, fValue);
     }
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 6, destSheet));
-    aString = m_pDoc->GetString(7, 6, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 6, destSheet));
     // row 7
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(3, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(5, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(6, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(3, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 7, destSheet));
 
     // check patterns
     const SfxPoolItem* pItem = nullptr;
@@ -3913,135 +3664,75 @@ void TestCopyPaste::checkCopyPasteSpecialTranspose(bool bSkipEmpty, bool bCut)
 
     // check notes after transposed copy/paste
     // check presence of notes
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on C1",
-                           !m_pDoc->HasNote(ScAddress(2, 0, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on D1",
-                           !m_pDoc->HasNote(ScAddress(3, 0, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on E1",
-                           !m_pDoc->HasNote(ScAddress(4, 0, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on F1",
-                           !m_pDoc->HasNote(ScAddress(5, 0, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on G1",
-                           !m_pDoc->HasNote(ScAddress(6, 0, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on H1",
-                           !m_pDoc->HasNote(ScAddress(7, 0, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on C2",
-                           !m_pDoc->HasNote(ScAddress(2, 1, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on D2",
-                           m_pDoc->HasNote(ScAddress(3, 1, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on E2",
-                           m_pDoc->HasNote(ScAddress(4, 1, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on F2",
-                           m_pDoc->HasNote(ScAddress(5, 1, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on G2",
-                           !m_pDoc->HasNote(ScAddress(6, 1, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on H2",
-                           !m_pDoc->HasNote(ScAddress(7, 1, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on C3",
-                           !m_pDoc->HasNote(ScAddress(2, 2, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on D3",
-                           m_pDoc->HasNote(ScAddress(3, 2, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on E3",
-                           !m_pDoc->HasNote(ScAddress(4, 2, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on F3",
-                           m_pDoc->HasNote(ScAddress(5, 2, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on G3",
-                           m_pDoc->HasNote(ScAddress(6, 2, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on H3",
-                           !m_pDoc->HasNote(ScAddress(7, 2, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on C4",
-                           !m_pDoc->HasNote(ScAddress(2, 3, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on D4",
-                           !m_pDoc->HasNote(ScAddress(3, 3, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on E4",
-                           m_pDoc->HasNote(ScAddress(4, 3, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on F4",
-                           m_pDoc->HasNote(ScAddress(5, 3, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on G4",
-                           m_pDoc->HasNote(ScAddress(6, 3, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on H4",
-                           !m_pDoc->HasNote(ScAddress(7, 3, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on C5",
-                           !m_pDoc->HasNote(ScAddress(2, 4, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on D5",
-                           m_pDoc->HasNote(ScAddress(3, 4, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on E5",
-                           m_pDoc->HasNote(ScAddress(4, 4, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on F5",
-                           m_pDoc->HasNote(ScAddress(5, 4, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on G5",
-                           m_pDoc->HasNote(ScAddress(6, 4, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on H5",
-                           !m_pDoc->HasNote(ScAddress(7, 4, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on C6",
-                           !m_pDoc->HasNote(ScAddress(2, 5, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on D6",
-                           !m_pDoc->HasNote(ScAddress(3, 5, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on E6",
-                           !m_pDoc->HasNote(ScAddress(4, 5, destSheet)));
-    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(ScAddress(5, 5, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on G6",
-                           m_pDoc->HasNote(ScAddress(6, 5, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on H6",
-                           !m_pDoc->HasNote(ScAddress(7, 5, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on C7",
-                           !m_pDoc->HasNote(ScAddress(2, 6, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on D7",
-                           !m_pDoc->HasNote(ScAddress(3, 6, destSheet)));
-    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(ScAddress(4, 6, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on F7",
-                           !m_pDoc->HasNote(ScAddress(5, 6, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note  a G7",
-                           m_pDoc->HasNote(ScAddress(6, 6, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on H7",
-                           !m_pDoc->HasNote(ScAddress(7, 6, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on C8",
-                           !m_pDoc->HasNote(ScAddress(2, 7, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on D8",
-                           !m_pDoc->HasNote(ScAddress(3, 7, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on E8",
-                           !m_pDoc->HasNote(ScAddress(4, 7, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on F8",
-                           !m_pDoc->HasNote(ScAddress(5, 7, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on G8",
-                           !m_pDoc->HasNote(ScAddress(6, 7, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on H8",
-                           !m_pDoc->HasNote(ScAddress(7, 7, destSheet)));
+    CPPUNIT_ASSERT_MESSAGE("C1: no note", !m_pDoc->HasNote(2, 0, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("D1: no note", !m_pDoc->HasNote(3, 0, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("E1: no note", !m_pDoc->HasNote(4, 0, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("F1: no note", !m_pDoc->HasNote(5, 0, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("G1: no note", !m_pDoc->HasNote(6, 0, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("H1: no note", !m_pDoc->HasNote(7, 0, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("C2: no note", !m_pDoc->HasNote(2, 1, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("D2:  a note", m_pDoc->HasNote(3, 1, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("E2:  a note", m_pDoc->HasNote(4, 1, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("F2:  a note", m_pDoc->HasNote(5, 1, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("G2: no note", !m_pDoc->HasNote(6, 1, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("H2: no note", !m_pDoc->HasNote(7, 1, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("C3: no note", !m_pDoc->HasNote(2, 2, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("D3:  a note", m_pDoc->HasNote(3, 2, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("E3: no note", !m_pDoc->HasNote(4, 2, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("F3:  a note", m_pDoc->HasNote(5, 2, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("G3:  a note", m_pDoc->HasNote(6, 2, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("H3: no note", !m_pDoc->HasNote(7, 2, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("C4: no note", !m_pDoc->HasNote(2, 3, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("D4: no note", !m_pDoc->HasNote(3, 3, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("E4:  a note", m_pDoc->HasNote(4, 3, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("F4:  a note", m_pDoc->HasNote(5, 3, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("G4:  a note", m_pDoc->HasNote(6, 3, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("H4: no note", !m_pDoc->HasNote(7, 3, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("C5: no note", !m_pDoc->HasNote(2, 4, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("D5:  a note", m_pDoc->HasNote(3, 4, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("E5:  a note", m_pDoc->HasNote(4, 4, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("F5:  a note", m_pDoc->HasNote(5, 4, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("G5:  a note", m_pDoc->HasNote(6, 4, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("H5: no note", !m_pDoc->HasNote(7, 4, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("C6: no note", !m_pDoc->HasNote(2, 5, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("D6: no note", !m_pDoc->HasNote(3, 5, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("E6: no note", !m_pDoc->HasNote(4, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(5, 5, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("G6:  a note", m_pDoc->HasNote(6, 5, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("H6: no note", !m_pDoc->HasNote(7, 5, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("C7: no note", !m_pDoc->HasNote(2, 6, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("D7: no note", !m_pDoc->HasNote(3, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(4, 6, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("F7: no note", !m_pDoc->HasNote(5, 6, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("G7:  a note", m_pDoc->HasNote(6, 6, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("H7: no note", !m_pDoc->HasNote(7, 6, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("C8: no note", !m_pDoc->HasNote(2, 7, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("D8: no note", !m_pDoc->HasNote(3, 7, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("E8: no note", !m_pDoc->HasNote(4, 7, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("F8: no note", !m_pDoc->HasNote(5, 7, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("G8: no note", !m_pDoc->HasNote(6, 7, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("H8: no note", !m_pDoc->HasNote(7, 7, destSheet));
 
     // check values of notes
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong content of cell note on D2", OUString("Note A1"),
-                                 m_pDoc->GetNote(ScAddress(3, 1, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong content of cell note on E2", OUString("Note A2"),
-                                 m_pDoc->GetNote(ScAddress(4, 1, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong content of cell note on F2", OUString("Note A3"),
-                                 m_pDoc->GetNote(ScAddress(5, 1, destSheet))->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D2", OUString("Note A1"), getNote(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E2", OUString("Note A2"), getNote(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F2", OUString("Note A3"), getNote(5, 1, destSheet));
     // G2 has no note
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong content of cell note on D3", OUString("Note B1"),
-                                 m_pDoc->GetNote(ScAddress(3, 2, destSheet))->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D3", OUString("Note B1"), getNote(3, 2, destSheet));
     // E3 has no note
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong content of cell note on F3", OUString("Note B3"),
-                                 m_pDoc->GetNote(ScAddress(5, 2, destSheet))->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F3", OUString("Note B3"), getNote(5, 2, destSheet));
     // D4 has no note
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong content of cell note on E4", OUString("Note C2"),
-                                 m_pDoc->GetNote(ScAddress(4, 3, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong content of cell note on F4", OUString("Note C3"),
-                                 m_pDoc->GetNote(ScAddress(5, 3, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Content of cell note on D5", OUString("Note D1"),
-                                 m_pDoc->GetNote(ScAddress(3, 4, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Content of cell note on E5", OUString("Note D2"),
-                                 m_pDoc->GetNote(ScAddress(4, 4, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Content of cell note on F5", OUString("Note D3"),
-                                 m_pDoc->GetNote(ScAddress(5, 4, destSheet))->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E4", OUString("Note C2"), getNote(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F4", OUString("Note C3"), getNote(5, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D5", OUString("Note D1"), getNote(3, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E5", OUString("Note D2"), getNote(4, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F5", OUString("Note D3"), getNote(5, 4, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"),
-                             m_pDoc->GetNote(ScAddress(5, 5, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Content of cell note on G6", OUString("Note E4"),
-                                 m_pDoc->GetNote(ScAddress(6, 5, destSheet))->GetText());
+        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"), getNote(5, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G6", OUString("Note E4"), getNote(6, 5, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Content of cell note on E7", OUString("Note F2"),
-                                     m_pDoc->GetNote(ScAddress(4, 6, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Content of cell note on G7", OUString("Note F4"),
-                                 m_pDoc->GetNote(ScAddress(6, 6, destSheet))->GetText());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E7", OUString("Note F2"), getNote(4, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G7", OUString("Note F4"), getNote(6, 6, destSheet));
 
     // row 14 on src sheet, refs to copied/cut range
     if (!bCut)
@@ -4267,84 +3958,57 @@ void TestCopyPaste::checkCopyPasteSpecialFilteredTranspose(bool bSkipEmpty)
     //check cell content after transposed copy/paste of filtered data
     // Note: column F is a repetition of srcSheet.Column A
     // Col C and G are checked to be empty
-    OUString aString;
-    double fValue;
     const EditTextObject* pEditObj;
     // row 0
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(3, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(5, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(6, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(3, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 0, destSheet));
     // row 1, numbers
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 1, destSheet));
-    aString = m_pDoc->GetString(2, 1, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    fValue = m_pDoc->GetValue(3, 1, destSheet); // D2
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied cell D2", 1, fValue);
-    fValue = m_pDoc->GetValue(4, 1, destSheet); // E2
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied cell E2", 3, fValue);
-    fValue = m_pDoc->GetValue(5, 1, destSheet); // F2
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied cell F2", 4, fValue);
-    fValue = m_pDoc->GetValue(6, 1, destSheet); // G2
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied cell G2 (repetition of D2)", 1, fValue);
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 1, destSheet));
-    aString = m_pDoc->GetString(7, 1, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed cell D2", 1.0, m_pDoc->GetValue(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed cell E2", 3.0, m_pDoc->GetValue(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed cell F2", 4.0, m_pDoc->GetValue(5, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed cell G2 (repetition of D2)", 1.0,
+                                 m_pDoc->GetValue(6, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 1, destSheet));
     // row 2, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 2, destSheet));
-    aString = m_pDoc->GetString(2, 2, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    fValue = m_pDoc->GetValue(3, 2, destSheet); // D3
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied formula D3", 11, fValue);
-    m_pDoc->GetFormula(3, 2, destSheet, aString); // D3
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed formula D3 should point on D2", OUString("=D2+10"),
-                                 aString);
-    m_pDoc->GetFormula(4, 2, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed formula E3 should point on E2", OUString("=E5+30"),
-                                 aString);
-    fValue = m_pDoc->GetValue(4, 2, destSheet); // E3
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied formula E3", 35, fValue);
-    m_pDoc->GetFormula(5, 2, destSheet, aString); // F3
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed formula F3 should point on F2", OUString("=D2+40"),
-                                 aString);
-    fValue = m_pDoc->GetValue(5, 2, destSheet); // F3
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied formula F3", 41, fValue);
-    fValue = m_pDoc->GetValue(6, 2, destSheet); // G3
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied formula F3", 11, fValue);
-    m_pDoc->GetFormula(6, 2, destSheet, aString); // G3
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed formula G3 should point on G2 (repetition of D3)",
-                                 OUString("=G2+10"), aString);
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 2, destSheet));
-    aString = m_pDoc->GetString(7, 2, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D3", 11.0, m_pDoc->GetValue(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D3", OUString("=D2+10"), getFormula(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed E3", OUString("=E5+30"), getFormula(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed E3", 35.0, m_pDoc->GetValue(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed F3", OUString("=D2+40"), getFormula(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed F3", 41.0, m_pDoc->GetValue(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed F3", 11.0, m_pDoc->GetValue(6, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed G3 (repetition of D3)", OUString("=G2+10"),
+                                 getFormula(6, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 2, destSheet));
     // row 3, strings
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 3, destSheet));
-    aString = m_pDoc->GetString(2, 3, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    aString = m_pDoc->GetString(3, 3, destSheet); // D4
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D4 should contain: a", OUString("a"), aString);
-    aString = m_pDoc->GetString(4, 3, destSheet); // E4
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E4 should contain: c", OUString("c"), aString);
-    aString = m_pDoc->GetString(5, 3, destSheet); // F4
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F4 should contain: d", OUString("d"), aString);
-    aString = m_pDoc->GetString(6, 3, destSheet); // G4
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G4 should contain: a (repetition of D4)", OUString("a"),
-                                 aString);
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 3, destSheet));
-    aString = m_pDoc->GetString(7, 3, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D4", OUString("a"), m_pDoc->GetString(3, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E4", OUString("c"), m_pDoc->GetString(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F4", OUString("d"), m_pDoc->GetString(5, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G4 (repetition of D4)", OUString("a"),
+                                 m_pDoc->GetString(6, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 3, destSheet));
     // row 4, rich text
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 4, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(2, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("There should be no edit cell in C5.", pEditObj == nullptr);
     pEditObj = m_pDoc->GetEditText(ScAddress(3, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("There should be an edit cell in D5.", pEditObj);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Edit cell value wrong in D5 ", OUString("R1"),
                                  pEditObj->GetText(0));
-    fValue = m_pDoc->GetValue(4, 4, destSheet); // E5
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied cell E5", 5, fValue);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed cell E5", 5.0, m_pDoc->GetValue(4, 4, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(5, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("There should be an edit cell in F5.", pEditObj);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Edit cell value wrong F5.", OUString("R4"), pEditObj->GetText(0));
@@ -4352,75 +4016,59 @@ void TestCopyPaste::checkCopyPasteSpecialFilteredTranspose(bool bSkipEmpty)
     CPPUNIT_ASSERT_MESSAGE("There should be an edit cell in G5. (repetition of D5)", pEditObj);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Edit cell value wrong G5. (repetition of D5)", OUString("R1"),
                                  pEditObj->GetText(0));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 4, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(7, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("There should be no edit cell in H5.", pEditObj == nullptr);
     // row 5, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 5, destSheet));
-    aString = m_pDoc->GetString(2, 5, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    m_pDoc->GetFormula(3, 5, destSheet, aString); // D6
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed formula D6", OUString("=D2+F2+60"), aString);
-    fValue = m_pDoc->GetValue(
-        ScAddress(3, 5, destSheet)); // D6, formulas over filtered rows are not adjusted
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied formula D6", 65,
-                                 fValue); // formulas over filtered rows are not adjusted
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D6", OUString("=D2+F2+60"),
+                                 getFormula(3, 5, destSheet));
+    // formulas over filtered rows are not adjusted
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D6", 65.0,
+                                 m_pDoc->GetValue(ScAddress(3, 5, destSheet)));
     if (!bSkipEmpty)
-    {
-        aString = m_pDoc->GetString(4, 5, destSheet); // E6
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, aString);
-    }
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, m_pDoc->GetString(4, 5, destSheet));
     else
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 5, destSheet));
-    m_pDoc->GetFormula(5, 5, destSheet, aString); // F6
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed formula F6", OUString("=C2+E2+70"), aString);
-    fValue = m_pDoc->GetValue(
-        ScAddress(5, 5, destSheet)); // F6,  formulas over filtered rows are not adjusted
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied formula F6", 1073, fValue);
-    m_pDoc->GetFormula(6, 5, destSheet, aString); // G6
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed formula G6 (repetition of D6)", OUString("=G2+I2+60"),
-                                 aString);
-    fValue = m_pDoc->GetValue(6, 5, destSheet); // G6
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied formula G6 (repetition of D6)", 1061, fValue);
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 5, destSheet));
-    aString = m_pDoc->GetString(7, 5, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed F6", OUString("=C2+E2+70"),
+                                 getFormula(5, 5, destSheet));
+    // F6,  formulas over filtered rows are not adjusted
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed F6", 1073.0,
+                                 m_pDoc->GetValue(ScAddress(5, 5, destSheet)));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed G6 (repetition of D6)", OUString("=G2+I2+60"),
+                                 getFormula(6, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed G6 (repetition of D6)", 1061.0,
+                                 m_pDoc->GetValue(6, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 5, destSheet));
     // row 6, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 6, destSheet));
-    aString = m_pDoc->GetString(2, 6, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    m_pDoc->GetFormula(3, 6, destSheet, aString); // D7
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed formula D7", OUString("=SUMIF(D2:G2;\"<4\")"),
-                                 aString);
-    fValue = m_pDoc->GetValue(3, 6, destSheet); // D7
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied formula D7", 5, fValue);
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D7", OUString("=SUMIF(D2:G2;\"<4\")"),
+                                 getFormula(3, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D7", 5.0, m_pDoc->GetValue(3, 6, destSheet));
     if (!bSkipEmpty)
-    {
-        aString = m_pDoc->GetString(4, 6, destSheet); // E7
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, aString);
-    }
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, m_pDoc->GetString(4, 6, destSheet));
     else
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 6, destSheet));
-    m_pDoc->GetFormula(5, 6, destSheet, aString); // F7
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed formula F7", OUString("=B$3+$B$5+80"), aString);
-    fValue = m_pDoc->GetValue(5, 6, destSheet); // F7
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied formula F6", 2080, fValue);
-    m_pDoc->GetFormula(6, 6, destSheet, aString); // G7
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed formula G7 (repetition of D7)",
-                                 OUString("=SUMIF(G2:J2;\"<4\")"), aString);
-    fValue = m_pDoc->GetValue(6, 5, destSheet); // G7
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied formula G7 (repetition of D7)", 1061, fValue);
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 6, destSheet));
-    aString = m_pDoc->GetString(7, 6, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed F7", OUString("=B$3+$B$5+80"),
+                                 getFormula(5, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed F6", 2080.0, m_pDoc->GetValue(5, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed G7 (repetition of D7)",
+                                 OUString("=SUMIF(G2:J2;\"<4\")"), getFormula(6, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed G7 (repetition of D7)", 1061.0,
+                                 m_pDoc->GetValue(6, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 6, destSheet));
 
     // row
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(3, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(5, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(6, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(3, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 7, destSheet));
 
     // check patterns
 
@@ -4497,139 +4145,76 @@ void TestCopyPaste::checkCopyPasteSpecialFilteredTranspose(bool bSkipEmpty)
 
     // check notes after transposed copy/paste
     // check presence of notes
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on C1",
-                           !m_pDoc->HasNote(ScAddress(2, 0, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on D1",
-                           !m_pDoc->HasNote(ScAddress(3, 0, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on E1",
-                           !m_pDoc->HasNote(ScAddress(4, 0, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on F1",
-                           !m_pDoc->HasNote(ScAddress(5, 0, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on G1",
-                           !m_pDoc->HasNote(ScAddress(6, 0, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on H1",
-                           !m_pDoc->HasNote(ScAddress(7, 0, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on C2",
-                           !m_pDoc->HasNote(ScAddress(2, 1, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on D2",
-                           m_pDoc->HasNote(ScAddress(3, 1, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on E2",
-                           m_pDoc->HasNote(ScAddress(4, 1, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on F2",
-                           !m_pDoc->HasNote(ScAddress(5, 1, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on G2",
-                           m_pDoc->HasNote(ScAddress(6, 1, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on H2",
-                           !m_pDoc->HasNote(ScAddress(7, 1, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on C3",
-                           !m_pDoc->HasNote(ScAddress(2, 2, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on D3",
-                           m_pDoc->HasNote(ScAddress(3, 2, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on E3",
-                           m_pDoc->HasNote(ScAddress(4, 2, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on F3",
-                           m_pDoc->HasNote(ScAddress(5, 2, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on G3",
-                           m_pDoc->HasNote(ScAddress(6, 2, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on H3",
-                           !m_pDoc->HasNote(ScAddress(7, 2, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on C4",
-                           !m_pDoc->HasNote(ScAddress(2, 3, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on D4",
-                           !m_pDoc->HasNote(ScAddress(3, 3, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on E4",
-                           m_pDoc->HasNote(ScAddress(4, 3, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on F4",
-                           m_pDoc->HasNote(ScAddress(5, 3, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on G4",
-                           !m_pDoc->HasNote(ScAddress(6, 3, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on H4",
-                           !m_pDoc->HasNote(ScAddress(7, 3, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on C5",
-                           !m_pDoc->HasNote(ScAddress(2, 4, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on D5",
-                           m_pDoc->HasNote(ScAddress(3, 4, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on E5",
-                           m_pDoc->HasNote(ScAddress(4, 4, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on F5",
-                           m_pDoc->HasNote(ScAddress(5, 4, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on G5",
-                           m_pDoc->HasNote(ScAddress(6, 4, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on H5",
-                           !m_pDoc->HasNote(ScAddress(7, 4, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on C6",
-                           !m_pDoc->HasNote(ScAddress(2, 5, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on D6",
-                           !m_pDoc->HasNote(ScAddress(3, 5, destSheet)));
-    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(ScAddress(4, 5, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on F6",
-                           m_pDoc->HasNote(ScAddress(5, 5, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on G6",
-                           !m_pDoc->HasNote(ScAddress(6, 5, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on H6",
-                           !m_pDoc->HasNote(ScAddress(7, 5, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on C7",
-                           !m_pDoc->HasNote(ScAddress(2, 6, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on D7",
-                           !m_pDoc->HasNote(ScAddress(3, 6, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on E7",
-                           !m_pDoc->HasNote(ScAddress(4, 6, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note  a F7",
-                           m_pDoc->HasNote(ScAddress(5, 6, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on G7",
-                           !m_pDoc->HasNote(ScAddress(6, 6, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on H7",
-                           !m_pDoc->HasNote(ScAddress(7, 6, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on C8",
-                           !m_pDoc->HasNote(ScAddress(2, 7, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on D8",
-                           !m_pDoc->HasNote(ScAddress(3, 7, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on E8",
-                           !m_pDoc->HasNote(ScAddress(4, 7, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on F8",
-                           !m_pDoc->HasNote(ScAddress(5, 7, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on G8",
-                           !m_pDoc->HasNote(ScAddress(6, 7, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on H8",
-                           !m_pDoc->HasNote(ScAddress(7, 7, destSheet)));
+    CPPUNIT_ASSERT_MESSAGE("C1: no note", !m_pDoc->HasNote(2, 0, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("D1: no note", !m_pDoc->HasNote(3, 0, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("E1: no note", !m_pDoc->HasNote(4, 0, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("F1: no note", !m_pDoc->HasNote(5, 0, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("G1: no note", !m_pDoc->HasNote(6, 0, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("H1: no note", !m_pDoc->HasNote(7, 0, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("C2: no note", !m_pDoc->HasNote(2, 1, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("D2:  a note", m_pDoc->HasNote(3, 1, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("E2:  a note", m_pDoc->HasNote(4, 1, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("F2: no note", !m_pDoc->HasNote(5, 1, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("G2:  a note", m_pDoc->HasNote(6, 1, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("H2: no note", !m_pDoc->HasNote(7, 1, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("C3: no note", !m_pDoc->HasNote(2, 2, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("D3:  a note", m_pDoc->HasNote(3, 2, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("E3:  a note", m_pDoc->HasNote(4, 2, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("F3:  a note", m_pDoc->HasNote(5, 2, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("G3:  a note", m_pDoc->HasNote(6, 2, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("H3: no note", !m_pDoc->HasNote(7, 2, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("C4: no note", !m_pDoc->HasNote(2, 3, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("D4: no note", !m_pDoc->HasNote(3, 3, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("E4:  a note", m_pDoc->HasNote(4, 3, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("F4:  a note", m_pDoc->HasNote(5, 3, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("G4: no note", !m_pDoc->HasNote(6, 3, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("H4: no note", !m_pDoc->HasNote(7, 3, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("C5: no note", !m_pDoc->HasNote(2, 4, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("D5:  a note", m_pDoc->HasNote(3, 4, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("E5:  a note", m_pDoc->HasNote(4, 4, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("F5:  a note", m_pDoc->HasNote(5, 4, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("G5:  a note", m_pDoc->HasNote(6, 4, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("H5: no note", !m_pDoc->HasNote(7, 4, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("C6: no note", !m_pDoc->HasNote(2, 5, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("D6: no note", !m_pDoc->HasNote(3, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(4, 5, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("F6:  a note", m_pDoc->HasNote(5, 5, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("G6: no note", !m_pDoc->HasNote(6, 5, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("H6: no note", !m_pDoc->HasNote(7, 5, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("C7: no note", !m_pDoc->HasNote(2, 6, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("D7: no note", !m_pDoc->HasNote(3, 6, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("E7: no note", !m_pDoc->HasNote(4, 6, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("F7:  a note", m_pDoc->HasNote(5, 6, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("G7: no note", !m_pDoc->HasNote(6, 6, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("H7: no note", !m_pDoc->HasNote(7, 6, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("C8: no note", !m_pDoc->HasNote(2, 7, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("D8: no note", !m_pDoc->HasNote(3, 7, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("E8: no note", !m_pDoc->HasNote(4, 7, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("F8: no note", !m_pDoc->HasNote(5, 7, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("G8: no note", !m_pDoc->HasNote(6, 7, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("H8: no note", !m_pDoc->HasNote(7, 7, destSheet));
 
     // check values of notes
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong content of cell note on D2", OUString("Note A1"),
-                                 m_pDoc->GetNote(ScAddress(3, 1, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong content of cell note on E2", OUString("Note A3"),
-                                 m_pDoc->GetNote(ScAddress(4, 1, destSheet))->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D2", OUString("Note A1"), getNote(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E2", OUString("Note A3"), getNote(4, 1, destSheet));
     // F2 has no note
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong content of cell note on G2", OUString("Note A1"),
-                                 m_pDoc->GetNote(ScAddress(6, 1, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong content of cell note on D3", OUString("Note B1"),
-                                 m_pDoc->GetNote(ScAddress(3, 2, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong content of cell note on E3", OUString("Note B3"),
-                                 m_pDoc->GetNote(ScAddress(4, 2, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong content of cell note on F3", OUString("Note B4"),
-                                 m_pDoc->GetNote(ScAddress(5, 2, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong content of cell note on G3", OUString("Note B1"),
-                                 m_pDoc->GetNote(ScAddress(6, 2, destSheet))->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G2", OUString("Note A1"), getNote(6, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D3", OUString("Note B1"), getNote(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E3", OUString("Note B3"), getNote(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F3", OUString("Note B4"), getNote(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G3", OUString("Note B1"), getNote(6, 2, destSheet));
     // D4 has no note
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong content of cell note on E4", OUString("Note C3"),
-                                 m_pDoc->GetNote(ScAddress(4, 3, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong content of cell note on F4", OUString("Note C4"),
-                                 m_pDoc->GetNote(ScAddress(5, 3, destSheet))->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E4", OUString("Note C3"), getNote(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F4", OUString("Note C4"), getNote(5, 3, destSheet));
     // G4 has no note
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Content of cell note on D5", OUString("Note D1"),
-                                 m_pDoc->GetNote(ScAddress(3, 4, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Content of cell note on E5", OUString("Note D3"),
-                                 m_pDoc->GetNote(ScAddress(4, 4, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Content of cell note on F5", OUString("Note D4"),
-                                 m_pDoc->GetNote(ScAddress(5, 4, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Content of cell note on G5", OUString("Note D1"),
-                                 m_pDoc->GetNote(ScAddress(6, 4, destSheet))->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D5", OUString("Note D1"), getNote(3, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E5", OUString("Note D3"), getNote(4, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F5", OUString("Note D4"), getNote(5, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G5", OUString("Note D1"), getNote(6, 4, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"),
-                             m_pDoc->GetNote(ScAddress(4, 5, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Content of cell note on F6", OUString("Note E4"),
-                                 m_pDoc->GetNote(ScAddress(5, 5, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Content of cell note on F7", OUString("Note F4"),
-                                 m_pDoc->GetNote(ScAddress(5, 6, destSheet))->GetText());
+        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"), getNote(4, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F6", OUString("Note E4"), getNote(5, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F7", OUString("Note F4"), getNote(5, 6, destSheet));
 
     // check row 16 on src sheet, refs to copied/cut range
     CPPUNIT_ASSERT_EQUAL(OUString("=C5"), getFormula(1, 16, srcSheet));
@@ -4752,49 +4337,38 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeCol(bool bSkipEmpty)
     b means border
     */
 
-    OUString aString;
-    double fValue;
     const EditTextObject* pEditObj;
     // col 2
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 1, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 2, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 3, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 4, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 5, destSheet));
     // col 3, numbers
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(3, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1, m_pDoc->GetValue(3, 1, destSheet));
-    ASSERT_DOUBLES_EQUAL(2, m_pDoc->GetValue(3, 2, destSheet));
-    ASSERT_DOUBLES_EQUAL(3, m_pDoc->GetValue(3, 3, destSheet));
-    ASSERT_DOUBLES_EQUAL(4, m_pDoc->GetValue(3, 4, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(3, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(3, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(3, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(3, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(3, 5, destSheet));
     // col 4, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 0, destSheet));
-    aString = m_pDoc->GetString(4, 0, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    ASSERT_DOUBLES_EQUAL(11, m_pDoc->GetValue(4, 1, destSheet));
-    m_pDoc->GetFormula(4, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2+10"), aString);
-    m_pDoc->GetFormula(4, 2, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=D3+20"), aString);
-    ASSERT_DOUBLES_EQUAL(22, m_pDoc->GetValue(4, 2, destSheet));
-    fValue = m_pDoc->GetValue(4, 3, destSheet);
-    m_pDoc->GetFormula(4, 3, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=G4+30"),
-                         aString); // references over selection gaps are not adjusted
-    ASSERT_DOUBLES_EQUAL(bSkipEmpty ? 1030 : 30, fValue); // It was 35
-    fValue = m_pDoc->GetValue(4, 4, destSheet);
-    m_pDoc->GetFormula(4, 4, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=D3+40"), aString);
-    ASSERT_DOUBLES_EQUAL(42, fValue);
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 5, destSheet));
-    aString = m_pDoc->GetString(4, 5, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(4, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=D2+10"), getFormula(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=D3+20"), getFormula(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(22.0, m_pDoc->GetValue(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=G4+30"), getFormula(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(bSkipEmpty ? 1030.0 : 30.0,
+                         m_pDoc->GetValue(4, 3, destSheet)); // It was 35
+    CPPUNIT_ASSERT_EQUAL(OUString("=D3+40"), getFormula(4, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(42.0, m_pDoc->GetValue(4, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(4, 5, destSheet));
     // col 5, strings are not selected
     // col 5, rich text
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(5, 0, destSheet));
-    aString = m_pDoc->GetString(4, 5, destSheet);
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 0, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(5, 0, destSheet));
     CPPUNIT_ASSERT(pEditObj == nullptr);
     pEditObj = m_pDoc->GetEditText(ScAddress(5, 1, destSheet));
@@ -4803,79 +4377,65 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeCol(bool bSkipEmpty)
     pEditObj = m_pDoc->GetEditText(ScAddress(5, 2, destSheet));
     CPPUNIT_ASSERT(pEditObj);
     CPPUNIT_ASSERT_EQUAL(OUString("R2"), pEditObj->GetText(0));
-    ASSERT_DOUBLES_EQUAL(5, m_pDoc->GetValue(5, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(5, 3, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(5, 4, destSheet));
     CPPUNIT_ASSERT(pEditObj);
     CPPUNIT_ASSERT_EQUAL(OUString("R4"), pEditObj->GetText(0));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(5, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 5, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(5, 5, destSheet));
     CPPUNIT_ASSERT(pEditObj == nullptr);
     // col 6, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(6, 0, destSheet));
-    aString = m_pDoc->GetString(6, 0, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    m_pDoc->GetFormula(6, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=C2+C4+60"), aString);
-    ASSERT_DOUBLES_EQUAL(2060, m_pDoc->GetValue(6, 1, destSheet)); // It was 64
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(6, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=C2+C4+60"), getFormula(6, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(2060.0, m_pDoc->GetValue(6, 1, destSheet)); // It was 64
     if (!bSkipEmpty)
     {
-        aString = m_pDoc->GetString(6, 2, destSheet);
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aString);
-        aString = m_pDoc->GetString(6, 3, destSheet);
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aString);
+        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(6, 2, destSheet));
+        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(6, 3, destSheet));
     }
     else
     {
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(6, 2, destSheet));
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(6, 3, destSheet));
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 2, destSheet));
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 3, destSheet));
     }
-    fValue = m_pDoc->GetValue(6, 4, destSheet);
-    m_pDoc->GetFormula(6, 4, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=C2+C4+70"), aString);
-    ASSERT_DOUBLES_EQUAL(2070, fValue); // It was 74
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(6, 5, destSheet));
-    aString = m_pDoc->GetString(6, 5, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+    CPPUNIT_ASSERT_EQUAL(OUString("=C2+C4+70"), getFormula(6, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(2070.0, m_pDoc->GetValue(6, 4, destSheet)); // It was 74
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(6, 5, destSheet));
     // col 7, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 0, destSheet));
-    aString = m_pDoc->GetString(7, 0, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    m_pDoc->GetFormula(7, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(C2:C5;\"<4\")"), aString);
-    ASSERT_DOUBLES_EQUAL(0, m_pDoc->GetValue(7, 1, destSheet)); // It was 6
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(C2:C5;\"<4\")"), getFormula(7, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(7, 1, destSheet)); // It was 6
     if (!bSkipEmpty)
     {
-        aString = m_pDoc->GetString(7, 2, destSheet);
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aString);
-        aString = m_pDoc->GetString(7, 3, destSheet);
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aString);
+        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(7, 2, destSheet));
+        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(7, 3, destSheet));
     }
     else
     {
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 2, destSheet));
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 3, destSheet));
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 2, destSheet));
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 3, destSheet));
     }
-    fValue = m_pDoc->GetValue(7, 4, destSheet);
-    m_pDoc->GetFormula(7, 4, destSheet, aString);
-    ASSERT_DOUBLES_EQUAL(1082, fValue);
-    CPPUNIT_ASSERT_EQUAL(OUString("=D$3+$B$5+80"), aString);
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 5, destSheet));
-    aString = m_pDoc->GetString(7, 5, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+    CPPUNIT_ASSERT_EQUAL(1082.0, m_pDoc->GetValue(7, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=D$3+$B$5+80"), getFormula(7, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 5, destSheet));
     // col 8, numbers
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(8, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(121, m_pDoc->GetValue(8, 1, destSheet));
-    ASSERT_DOUBLES_EQUAL(122, m_pDoc->GetValue(8, 2, destSheet));
-    ASSERT_DOUBLES_EQUAL(123, m_pDoc->GetValue(8, 3, destSheet));
-    ASSERT_DOUBLES_EQUAL(124, m_pDoc->GetValue(8, 4, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(8, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(121.0, m_pDoc->GetValue(8, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(122.0, m_pDoc->GetValue(8, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(123.0, m_pDoc->GetValue(8, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(124.0, m_pDoc->GetValue(8, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 5, destSheet));
     // col 9, col repetition is not supported for multi range copy/paste
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 1, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 2, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 3, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 4, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 5, destSheet));
 
     // check patterns
     const SfxPoolItem* pItem = nullptr;
@@ -4929,76 +4489,64 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeCol(bool bSkipEmpty)
 
     // check notes after transposed copy/paste
     // check presence of notes
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(3, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(4, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(5, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(6, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(8, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 1, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(3, 1, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(4, 1, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(5, 1, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(6, 1, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 1, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(8, 1, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 2, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(3, 2, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(4, 2, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(5, 2, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(6, 2, destSheet)));
-    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(ScAddress(7, 2, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(8, 2, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 3, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(3, 3, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(4, 3, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(5, 3, destSheet)));
-    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(ScAddress(6, 3, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 3, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(8, 3, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(3, 4, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(4, 4, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(5, 4, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(6, 4, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(7, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(8, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(3, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(4, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(5, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(6, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(8, 5, destSheet)));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(3, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(4, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(5, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(6, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(8, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 1, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(3, 1, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(4, 1, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(5, 1, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(6, 1, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 1, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(8, 1, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 2, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(3, 2, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(4, 2, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(5, 2, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(6, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(7, 2, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(8, 2, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 3, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(3, 3, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(4, 3, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(5, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(6, 3, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 3, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(8, 3, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(3, 4, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(4, 4, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(5, 4, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(6, 4, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(7, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(8, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(3, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(4, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(5, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(6, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(8, 5, destSheet));
 
     // check values of notes
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A1"),
-                         m_pDoc->GetNote(ScAddress(3, 1, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A2"),
-                         m_pDoc->GetNote(ScAddress(3, 2, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A3"),
-                         m_pDoc->GetNote(ScAddress(3, 3, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B1"),
-                         m_pDoc->GetNote(ScAddress(4, 1, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B3"),
-                         m_pDoc->GetNote(ScAddress(4, 3, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D1"),
-                         m_pDoc->GetNote(ScAddress(5, 1, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D2"),
-                         m_pDoc->GetNote(ScAddress(5, 2, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D3"),
-                         m_pDoc->GetNote(ScAddress(5, 3, destSheet))->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("Note A1"), getNote(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note A2"), getNote(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note A3"), getNote(3, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note B1"), getNote(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note B3"), getNote(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note D1"), getNote(5, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note D2"), getNote(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note D3"), getNote(5, 3, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"),
-                             m_pDoc->GetNote(ScAddress(6, 3, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note E4"),
-                         m_pDoc->GetNote(ScAddress(6, 4, destSheet))->GetText());
+        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"), getNote(6, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note E4"), getNote(6, 4, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(OUString("Note F2"),
-                             m_pDoc->GetNote(ScAddress(7, 2, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note F4"),
-                         m_pDoc->GetNote(ScAddress(7, 4, destSheet))->GetText());
+        CPPUNIT_ASSERT_EQUAL(OUString("Note F2"), getNote(7, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note F4"), getNote(7, 4, destSheet));
 
     // check row 16 on src sheet, refs to copied/cut range
     CPPUNIT_ASSERT_EQUAL(OUString("=C5"), getFormula(1, 16, srcSheet));
@@ -5120,111 +4668,88 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColFiltered(bool bSkipEmpty)
     b means border
     */
 
-    OUString aString;
-    double fValue;
     const EditTextObject* pEditObj;
     // col 2
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 1, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 2, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 3, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 4, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 5, destSheet));
     // col 3, numbers
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(3, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1, m_pDoc->GetValue(3, 1, destSheet));
-    ASSERT_DOUBLES_EQUAL(3, m_pDoc->GetValue(3, 2, destSheet));
-    ASSERT_DOUBLES_EQUAL(4, m_pDoc->GetValue(3, 3, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(3, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(3, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(3, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(3, 4, destSheet));
     // col 4, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 0, destSheet));
-    m_pDoc->GetFormula(4, 0, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aString);
-    ASSERT_DOUBLES_EQUAL(11, m_pDoc->GetValue(4, 1, destSheet));
-    m_pDoc->GetFormula(4, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2+10"), aString);
-    fValue = m_pDoc->GetValue(4, 2, destSheet);
-    m_pDoc->GetFormula(4, 2, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=G3+30"),
-                         aString); // references over selection gaps are not adjusted
-    ASSERT_DOUBLES_EQUAL(bSkipEmpty ? 1030 : 30, fValue); // It was 35
-    fValue = m_pDoc->GetValue(4, 3, destSheet);
-    m_pDoc->GetFormula(4, 3, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2+40"), aString);
-    ASSERT_DOUBLES_EQUAL(41, fValue); // was originally 42, not adjusted by filtering
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 4, destSheet));
-    m_pDoc->GetFormula(4, 4, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aString);
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, getFormula(4, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=D2+10"), getFormula(4, 1, destSheet));
+    // references over selection gaps are not adjusted
+    CPPUNIT_ASSERT_EQUAL(OUString("=G3+30"), getFormula(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(bSkipEmpty ? 1030.0 : 30.0,
+                         m_pDoc->GetValue(4, 2, destSheet)); // It was 35
+    CPPUNIT_ASSERT_EQUAL(OUString("=D2+40"), getFormula(4, 3, destSheet));
+    // was originally 42, not adjusted by filtering
+    CPPUNIT_ASSERT_EQUAL(41.0, m_pDoc->GetValue(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, getFormula(4, 4, destSheet));
     // col 5, strings are not selected
     // col 5, rich text
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(5, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 0, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(5, 0, destSheet));
     CPPUNIT_ASSERT(pEditObj == nullptr);
     pEditObj = m_pDoc->GetEditText(ScAddress(5, 1, destSheet));
     CPPUNIT_ASSERT(pEditObj);
     CPPUNIT_ASSERT_EQUAL(OUString("R1"), pEditObj->GetText(0));
-    ASSERT_DOUBLES_EQUAL(5, m_pDoc->GetValue(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(5, 2, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(5, 3, destSheet));
     CPPUNIT_ASSERT(pEditObj);
     CPPUNIT_ASSERT_EQUAL(OUString("R4"), pEditObj->GetText(0));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(5, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 4, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(5, 4, destSheet));
     CPPUNIT_ASSERT(pEditObj == nullptr);
     // col 6, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(6, 0, destSheet));
-    m_pDoc->GetFormula(6, 0, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aString);
-    m_pDoc->GetFormula(6, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=C2+C4+60"), aString);
-    ASSERT_DOUBLES_EQUAL(2060, m_pDoc->GetValue(6, 1, destSheet)); // It was 64
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, getFormula(6, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=C2+C4+60"), getFormula(6, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(2060.0, m_pDoc->GetValue(6, 1, destSheet)); // It was 64
     if (!bSkipEmpty)
-    {
-        aString = m_pDoc->GetString(6, 2, destSheet);
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aString);
-    }
+        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(6, 2, destSheet));
     else
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(6, 2, destSheet));
-    fValue = m_pDoc->GetValue(6, 3, destSheet);
-    m_pDoc->GetFormula(6, 3, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=C1+C3+70"), aString);
-    ASSERT_DOUBLES_EQUAL(2070, fValue); // It was 74
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(6, 4, destSheet));
-    m_pDoc->GetFormula(6, 4, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aString);
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=C1+C3+70"), getFormula(6, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(2070.0, m_pDoc->GetValue(6, 3, destSheet)); // It was 74
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, getFormula(6, 4, destSheet));
     // col 7, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 0, destSheet));
-    m_pDoc->GetFormula(7, 0, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aString);
-    m_pDoc->GetFormula(7, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(C2:C5;\"<4\")"), aString);
-    ASSERT_DOUBLES_EQUAL(0, m_pDoc->GetValue(7, 1, destSheet)); // It was 6
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, getFormula(7, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(C2:C5;\"<4\")"), getFormula(7, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(7, 1, destSheet)); // It was 6
     if (!bSkipEmpty)
-    {
-        aString = m_pDoc->GetString(7, 2, destSheet);
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aString);
-    }
+        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(7, 2, destSheet));
     else
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 2, destSheet));
-    fValue = m_pDoc->GetValue(7, 3, destSheet);
-    m_pDoc->GetFormula(7, 3, destSheet, aString);
-    ASSERT_DOUBLES_EQUAL(1083, fValue);
-    CPPUNIT_ASSERT_EQUAL(OUString("=D$3+$B$5+80"), aString);
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 4, destSheet));
-    m_pDoc->GetFormula(7, 4, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aString);
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1083.0, m_pDoc->GetValue(7, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=D$3+$B$5+80"), getFormula(7, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, getFormula(7, 4, destSheet));
     // col 8, numbers
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(8, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(121, m_pDoc->GetValue(8, 1, destSheet));
-    ASSERT_DOUBLES_EQUAL(123, m_pDoc->GetValue(8, 2, destSheet));
-    ASSERT_DOUBLES_EQUAL(124, m_pDoc->GetValue(8, 3, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(8, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(121.0, m_pDoc->GetValue(8, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(123.0, m_pDoc->GetValue(8, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(124.0, m_pDoc->GetValue(8, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 4, destSheet));
     // col 9, col repetition is not supported for multi range copy/paste
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 1, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 2, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 3, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 4, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 5, destSheet));
 
     // check patterns
     const SfxPoolItem* pItem = nullptr;
@@ -5269,62 +4794,53 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColFiltered(bool bSkipEmpty)
 
     // check notes after transposed copy/paste
     // check presence of notes
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(3, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(4, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(5, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(6, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(8, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 1, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(3, 1, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(4, 1, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(5, 1, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(6, 1, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 1, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(8, 1, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 2, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(3, 2, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(4, 2, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(5, 2, destSheet)));
-    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(ScAddress(6, 2, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 2, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(8, 2, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 3, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(3, 3, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(4, 3, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(5, 3, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(6, 3, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(7, 3, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(8, 3, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(3, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(4, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(5, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(6, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(8, 4, destSheet)));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(3, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(4, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(5, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(6, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(8, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 1, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(3, 1, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(4, 1, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(5, 1, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(6, 1, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 1, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(8, 1, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 2, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(3, 2, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(4, 2, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(6, 2, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 2, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(8, 2, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 3, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(3, 3, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(4, 3, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(5, 3, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(6, 3, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(7, 3, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(8, 3, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(3, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(4, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(5, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(6, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(8, 4, destSheet));
 
     // check values of notes
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A1"),
-                         m_pDoc->GetNote(ScAddress(3, 1, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A3"),
-                         m_pDoc->GetNote(ScAddress(3, 2, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B1"),
-                         m_pDoc->GetNote(ScAddress(4, 1, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B3"),
-                         m_pDoc->GetNote(ScAddress(4, 2, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D1"),
-                         m_pDoc->GetNote(ScAddress(5, 1, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D3"),
-                         m_pDoc->GetNote(ScAddress(5, 2, destSheet))->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("Note A1"), getNote(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note A3"), getNote(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note B1"), getNote(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note B3"), getNote(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note D1"), getNote(5, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note D3"), getNote(5, 2, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"),
-                             m_pDoc->GetNote(ScAddress(6, 2, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note E4"),
-                         m_pDoc->GetNote(ScAddress(6, 3, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note F4"),
-                         m_pDoc->GetNote(ScAddress(7, 3, destSheet))->GetText());
+        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"), getNote(6, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note E4"), getNote(6, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note F4"), getNote(7, 3, destSheet));
 
     // check row 16 on src sheet, refs to copied/cut range
     CPPUNIT_ASSERT_EQUAL(OUString("=C5"), getFormula(1, 16, srcSheet));
@@ -5448,47 +4964,38 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColTranspose(bool bSkipEmpty)
 
     // check cell content after transposed copy/paste of filtered data
     // Col C and G are checked to be empty
-    OUString aString;
-    double fValue;
     const EditTextObject* pEditObj;
     // row 0
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(3, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(5, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(6, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(3, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 0, destSheet));
     // row 1, numbers
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 1, destSheet));
-    ASSERT_DOUBLES_EQUAL(1, m_pDoc->GetValue(3, 1, destSheet));
-    ASSERT_DOUBLES_EQUAL(2, m_pDoc->GetValue(4, 1, destSheet));
-    ASSERT_DOUBLES_EQUAL(3, m_pDoc->GetValue(5, 1, destSheet));
-    ASSERT_DOUBLES_EQUAL(4, m_pDoc->GetValue(6, 1, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(5, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(6, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 1, destSheet));
     // row 2, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 2, destSheet));
-    aString = m_pDoc->GetString(2, 2, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    ASSERT_DOUBLES_EQUAL(11, m_pDoc->GetValue(3, 2, destSheet));
-    m_pDoc->GetFormula(3, 2, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2+10"), aString);
-    m_pDoc->GetFormula(4, 2, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=E2+20"), aString);
-    ASSERT_DOUBLES_EQUAL(22, m_pDoc->GetValue(4, 2, destSheet));
-    fValue = m_pDoc->GetValue(5, 2, destSheet);
-    m_pDoc->GetFormula(5, 2, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=F5+30"), aString);
-    ASSERT_DOUBLES_EQUAL(bSkipEmpty ? 1030 : 30, fValue); // It was 35
-    fValue = m_pDoc->GetValue(6, 2, destSheet);
-    m_pDoc->GetFormula(6, 2, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=E2+40"), aString);
-    ASSERT_DOUBLES_EQUAL(42, fValue);
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 2, destSheet));
-    aString = m_pDoc->GetString(7, 2, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=D2+10"), getFormula(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=E2+20"), getFormula(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(22.0, m_pDoc->GetValue(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=F5+30"), getFormula(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(bSkipEmpty ? 1030.0 : 30.0,
+                         m_pDoc->GetValue(5, 2, destSheet)); // It was 35
+    CPPUNIT_ASSERT_EQUAL(OUString("=E2+40"), getFormula(6, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(42.0, m_pDoc->GetValue(6, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 2, destSheet));
     // row 3, strings was not selected in multi range selection
     // row 3, rich text
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 3, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(2, 3, destSheet));
     CPPUNIT_ASSERT(pEditObj == nullptr);
     pEditObj = m_pDoc->GetEditText(ScAddress(3, 3, destSheet));
@@ -5497,80 +5004,66 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColTranspose(bool bSkipEmpty)
     pEditObj = m_pDoc->GetEditText(ScAddress(4, 3, destSheet));
     CPPUNIT_ASSERT(pEditObj);
     CPPUNIT_ASSERT_EQUAL(OUString("R2"), pEditObj->GetText(0));
-    ASSERT_DOUBLES_EQUAL(5, m_pDoc->GetValue(5, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(5, 3, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 3, destSheet));
     CPPUNIT_ASSERT(pEditObj);
     CPPUNIT_ASSERT_EQUAL(OUString("R4"), pEditObj->GetText(0));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 3, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(7, 3, destSheet));
     CPPUNIT_ASSERT(pEditObj == nullptr);
     // row 4, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 4, destSheet));
-    aString = m_pDoc->GetString(2, 4, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    m_pDoc->GetFormula(3, 4, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=D1+F1+60"), aString);
-    ASSERT_DOUBLES_EQUAL(2060, m_pDoc->GetValue(3, 4, destSheet)); // It was 64
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=D1+F1+60"), getFormula(3, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(2060.0, m_pDoc->GetValue(3, 4, destSheet)); // It was 64
     if (!bSkipEmpty)
     {
-        aString = m_pDoc->GetString(4, 4, destSheet); // E5
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E5", EMPTY_OUSTRING, aString);
-        aString = m_pDoc->GetString(5, 4, destSheet); // F5
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E5", EMPTY_OUSTRING, aString);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E5", EMPTY_OUSTRING, m_pDoc->GetString(4, 4, destSheet));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E5", EMPTY_OUSTRING, m_pDoc->GetString(5, 4, destSheet));
     }
     else
     {
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 4, destSheet));
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(5, 4, destSheet));
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 4, destSheet));
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 4, destSheet));
     }
-    fValue = m_pDoc->GetValue(6, 4, destSheet);
-    m_pDoc->GetFormula(6, 4, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=D1+F1+70"), aString);
-    ASSERT_DOUBLES_EQUAL(2070, fValue); // It was 74
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 4, destSheet));
-    aString = m_pDoc->GetString(7, 4, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+    CPPUNIT_ASSERT_EQUAL(OUString("=D1+F1+70"), getFormula(6, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(2070.0, m_pDoc->GetValue(6, 4, destSheet)); // It was 74
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 4, destSheet));
     // row 5, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 5, destSheet));
-    aString = m_pDoc->GetString(2, 5, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    m_pDoc->GetFormula(3, 5, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(D1:G1;\"<4\")"), aString);
-    ASSERT_DOUBLES_EQUAL(0, m_pDoc->GetValue(3, 5, destSheet)); // It was 6
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(D1:G1;\"<4\")"), getFormula(3, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(3, 5, destSheet)); // It was 6
     if (!bSkipEmpty)
     {
-        aString = m_pDoc->GetString(4, 5, destSheet); // E6
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, aString);
-        aString = m_pDoc->GetString(5, 5, destSheet); // F6
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, aString);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, m_pDoc->GetString(4, 5, destSheet));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, m_pDoc->GetString(5, 5, destSheet));
     }
     else
     {
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 5, destSheet));
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(5, 5, destSheet));
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 5, destSheet));
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 5, destSheet));
     }
 
-    fValue = m_pDoc->GetValue(6, 5, destSheet);
-    m_pDoc->GetFormula(6, 5, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=C$3+$B$5+80"), aString);
-    ASSERT_DOUBLES_EQUAL(2080, fValue);
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 5, destSheet));
-    aString = m_pDoc->GetString(7, 5, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+    CPPUNIT_ASSERT_EQUAL(OUString("=C$3+$B$5+80"), getFormula(6, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(2080.0, m_pDoc->GetValue(6, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 5, destSheet));
     // row 6, numbers
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 6, destSheet));
-    ASSERT_DOUBLES_EQUAL(121, m_pDoc->GetValue(3, 6, destSheet));
-    ASSERT_DOUBLES_EQUAL(122, m_pDoc->GetValue(4, 6, destSheet));
-    ASSERT_DOUBLES_EQUAL(123, m_pDoc->GetValue(5, 6, destSheet));
-    ASSERT_DOUBLES_EQUAL(124, m_pDoc->GetValue(6, 6, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(121.0, m_pDoc->GetValue(3, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(122.0, m_pDoc->GetValue(4, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(123.0, m_pDoc->GetValue(5, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(124.0, m_pDoc->GetValue(6, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 6, destSheet));
     // row 7, not selected
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(3, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(5, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(6, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(3, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 7, destSheet));
 
     // check patterns
     const SfxPoolItem* pItem = nullptr;
@@ -5630,75 +5123,63 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColTranspose(bool bSkipEmpty)
 
     // check notes after transposed copy/paste
     // check presence of notes
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(3, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(4, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(5, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(6, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 1, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(3, 1, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(4, 1, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(5, 1, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(6, 1, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 1, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 2, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(3, 2, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(4, 2, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(5, 2, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(6, 2, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 2, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 3, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(3, 3, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(4, 3, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(5, 3, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(6, 3, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 3, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(3, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(4, 4, destSheet)));
-    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(ScAddress(5, 4, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(6, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(3, 5, destSheet)));
-    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(ScAddress(4, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(5, 5, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(6, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 6, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(3, 6, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(4, 6, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(5, 6, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(6, 6, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 6, destSheet)));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(3, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(4, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(5, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(6, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 1, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(3, 1, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(4, 1, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(5, 1, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(6, 1, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 1, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 2, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(3, 2, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(4, 2, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(5, 2, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(6, 2, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 2, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 3, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(3, 3, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(4, 3, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(5, 3, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(6, 3, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 3, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(3, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(4, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(5, 4, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(6, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(3, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(4, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(5, 5, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(6, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 6, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(3, 6, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(4, 6, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(5, 6, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(6, 6, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 6, destSheet));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A1"),
-                         m_pDoc->GetNote(ScAddress(3, 1, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A2"),
-                         m_pDoc->GetNote(ScAddress(4, 1, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A3"),
-                         m_pDoc->GetNote(ScAddress(5, 1, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B1"),
-                         m_pDoc->GetNote(ScAddress(3, 2, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B3"),
-                         m_pDoc->GetNote(ScAddress(5, 2, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D1"),
-                         m_pDoc->GetNote(ScAddress(3, 3, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D2"),
-                         m_pDoc->GetNote(ScAddress(4, 3, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D3"),
-                         m_pDoc->GetNote(ScAddress(5, 3, destSheet))->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("Note A1"), getNote(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note A2"), getNote(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note A3"), getNote(5, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note B1"), getNote(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note B3"), getNote(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note D1"), getNote(3, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note D2"), getNote(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note D3"), getNote(5, 3, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"),
-                             m_pDoc->GetNote(ScAddress(5, 4, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note E4"),
-                         m_pDoc->GetNote(ScAddress(6, 4, destSheet))->GetText());
+        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"), getNote(5, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note E4"), getNote(6, 4, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(OUString("Note F2"),
-                             m_pDoc->GetNote(ScAddress(4, 5, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note F4"),
-                         m_pDoc->GetNote(ScAddress(6, 5, destSheet))->GetText());
+        CPPUNIT_ASSERT_EQUAL(OUString("Note F2"), getNote(4, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note F4"), getNote(6, 5, destSheet));
 
     // check row 16 on src sheet, refs to copied/cut range
     CPPUNIT_ASSERT_EQUAL(OUString("=C5"), getFormula(1, 16, srcSheet));
@@ -5826,120 +5307,96 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColFilteredTranspose(bool bSk
 
     // check cell content after transposed copy/paste of filtered data
     // Col C and G are checked to be empty
-    OUString aString;
-    double fValue;
     const EditTextObject* pEditObj;
     // row 0
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(3, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(5, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(6, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(3, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 0, destSheet));
     // row 1, numbers
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 1, destSheet));
-    ASSERT_DOUBLES_EQUAL(1, m_pDoc->GetValue(3, 1, destSheet));
-    ASSERT_DOUBLES_EQUAL(3, m_pDoc->GetValue(4, 1, destSheet));
-    ASSERT_DOUBLES_EQUAL(4, m_pDoc->GetValue(5, 1, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(6, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(5, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 1, destSheet));
     // row 2, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 5, destSheet));
-    aString = m_pDoc->GetString(2, 5, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    ASSERT_DOUBLES_EQUAL(11, m_pDoc->GetValue(3, 2, destSheet));
-    m_pDoc->GetFormula(3, 2, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2+10"), aString);
-    fValue = m_pDoc->GetValue(4, 2, destSheet);
-    m_pDoc->GetFormula(4, 2, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=E5+30"), aString);
-    ASSERT_DOUBLES_EQUAL(bSkipEmpty ? 1030 : 30, fValue); // It was 35
-    fValue = m_pDoc->GetValue(5, 2, destSheet);
-    m_pDoc->GetFormula(5, 2, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2+40"), aString);
-    ASSERT_DOUBLES_EQUAL(41, fValue); // was originally 42, not adjusted by filtering
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(6, 2, destSheet));
-    aString = m_pDoc->GetString(6, 2, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=D2+10"), getFormula(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=E5+30"), getFormula(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(bSkipEmpty ? 1030.0 : 30.0,
+                         m_pDoc->GetValue(4, 2, destSheet)); // It was 35
+    CPPUNIT_ASSERT_EQUAL(OUString("=D2+40"), getFormula(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(
+        41.0, m_pDoc->GetValue(5, 2, destSheet)); // was originally 42, not adjusted by filtering
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(6, 2, destSheet));
     // row 3, strings was not selected in multi range selection
     // row 3, rich text
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 3, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(2, 3, destSheet));
     CPPUNIT_ASSERT(pEditObj == nullptr);
     pEditObj = m_pDoc->GetEditText(ScAddress(3, 3, destSheet));
     CPPUNIT_ASSERT(pEditObj);
     CPPUNIT_ASSERT_EQUAL(OUString("R1"), pEditObj->GetText(0));
-    ASSERT_DOUBLES_EQUAL(5, m_pDoc->GetValue(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(4, 3, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(5, 3, destSheet));
     CPPUNIT_ASSERT(pEditObj);
     CPPUNIT_ASSERT_EQUAL(OUString("R4"), pEditObj->GetText(0));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(6, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 3, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 3, destSheet));
     CPPUNIT_ASSERT(pEditObj == nullptr);
     // row 4, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 4, destSheet));
-    aString = m_pDoc->GetString(2, 4, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    m_pDoc->GetFormula(3, 4, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=D1+F1+60"),
-                         aString); // formulas over filtered rows are not adjusted
-    ASSERT_DOUBLES_EQUAL(2060, m_pDoc->GetValue(3, 4, destSheet)); // It was 64
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 4, destSheet));
+    // formulas over filtered rows are not adjusted
+    CPPUNIT_ASSERT_EQUAL(OUString("=D1+F1+60"), getFormula(3, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(2060.0, m_pDoc->GetValue(3, 4, destSheet)); // It was 64
     if (!bSkipEmpty)
-    {
-        aString = m_pDoc->GetString(4, 4, destSheet);
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aString);
-    }
+        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(4, 4, destSheet));
     else
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 4, destSheet));
-    fValue = m_pDoc->GetValue(5, 4, destSheet);
-    m_pDoc->GetFormula(5, 4, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=C1+E1+70"),
-                         aString); // formulas over filtered rows are not adjusted
-    ASSERT_DOUBLES_EQUAL(2070, fValue); // It was 74
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(6, 4, destSheet));
-    aString = m_pDoc->GetString(6, 4, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=C1+E1+70"), getFormula(5, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(2070.0, m_pDoc->GetValue(5, 4, destSheet)); // It was 74
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(6, 4, destSheet));
     // row 5, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 5, destSheet));
-    aString = m_pDoc->GetString(2, 5, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    m_pDoc->GetFormula(3, 5, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(D1:G1;\"<4\")"),
-                         aString); // formulas over filtered rows are not adjusted
-    ASSERT_DOUBLES_EQUAL(0, m_pDoc->GetValue(3, 5, destSheet)); // It was 6
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 5, destSheet));
+    // formulas over filtered rows are not adjusted
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(D1:G1;\"<4\")"), getFormula(3, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(3, 5, destSheet)); // It was 6
     if (!bSkipEmpty)
-    {
-        aString = m_pDoc->GetString(4, 5, destSheet); // E6
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, aString);
-    }
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, m_pDoc->GetString(4, 5, destSheet));
     else
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 5, destSheet));
-    fValue = m_pDoc->GetValue(5, 5, destSheet);
-    m_pDoc->GetFormula(5, 5, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=B$3+$B$5+80"), aString);
-    ASSERT_DOUBLES_EQUAL(2080, fValue);
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(6, 5, destSheet));
-    aString = m_pDoc->GetString(6, 5, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=B$3+$B$5+80"), getFormula(5, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(2080.0, m_pDoc->GetValue(5, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(6, 5, destSheet));
     // row 6, numbers
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 6, destSheet));
-    ASSERT_DOUBLES_EQUAL(121, m_pDoc->GetValue(3, 6, destSheet));
-    ASSERT_DOUBLES_EQUAL(123, m_pDoc->GetValue(4, 6, destSheet));
-    ASSERT_DOUBLES_EQUAL(124, m_pDoc->GetValue(5, 6, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(6, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(121.0, m_pDoc->GetValue(3, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(123.0, m_pDoc->GetValue(4, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(124.0, m_pDoc->GetValue(5, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 6, destSheet));
     // row 7, not copied
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(3, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(5, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(6, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(3, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 7, destSheet));
     // row 8, not copied
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(3, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(5, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(6, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(3, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 7, destSheet));
 
     // check patterns
     const SfxPoolItem* pItem = nullptr;
@@ -5990,61 +5447,52 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColFilteredTranspose(bool bSk
 
     // check notes after transposed copy/paste
     // check presence of notes
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(3, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(4, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(5, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(6, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 1, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(3, 1, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(4, 1, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(5, 1, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(6, 1, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 2, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(3, 2, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(4, 2, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(5, 2, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(6, 2, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 3, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(3, 3, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(4, 3, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(5, 3, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(6, 3, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(3, 4, destSheet)));
-    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(ScAddress(4, 4, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(5, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(6, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(3, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(4, 5, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(5, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(6, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 6, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(3, 6, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(4, 6, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(5, 6, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(6, 6, destSheet)));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(3, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(4, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(5, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(6, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 1, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(3, 1, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(4, 1, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(5, 1, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(6, 1, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 2, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(3, 2, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(4, 2, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(5, 2, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(6, 2, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 3, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(3, 3, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(4, 3, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(5, 3, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(6, 3, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(3, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(4, 4, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(5, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(6, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(3, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(4, 5, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(5, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(6, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 6, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(3, 6, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(4, 6, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(5, 6, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(6, 6, destSheet));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A1"),
-                         m_pDoc->GetNote(ScAddress(3, 1, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A3"),
-                         m_pDoc->GetNote(ScAddress(4, 1, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B1"),
-                         m_pDoc->GetNote(ScAddress(3, 2, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B3"),
-                         m_pDoc->GetNote(ScAddress(4, 2, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D1"),
-                         m_pDoc->GetNote(ScAddress(3, 3, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D3"),
-                         m_pDoc->GetNote(ScAddress(4, 3, destSheet))->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("Note A1"), getNote(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note A3"), getNote(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note B1"), getNote(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note B3"), getNote(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note D1"), getNote(3, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note D3"), getNote(4, 3, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"),
-                             m_pDoc->GetNote(ScAddress(4, 4, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note E4"),
-                         m_pDoc->GetNote(ScAddress(5, 4, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note F4"),
-                         m_pDoc->GetNote(ScAddress(5, 5, destSheet))->GetText());
+        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"), getNote(4, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note E4"), getNote(5, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note F4"), getNote(5, 5, destSheet));
 
     // check row 16 on src sheet, refs to copied/cut range
     CPPUNIT_ASSERT_EQUAL(OUString("=C5"), getFormula(1, 16, srcSheet));
@@ -6166,60 +5614,47 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRow(bool bSkipEmpty)
     b means border
     */
 
-    OUString aString;
     const EditTextObject* pEditObj;
     // col 2
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 1, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 2, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 3, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 4, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 5, destSheet));
     // col 3, numbers
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(3, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1, m_pDoc->GetValue(3, 1, destSheet));
-    ASSERT_DOUBLES_EQUAL(2, m_pDoc->GetValue(3, 2, destSheet));
-    ASSERT_DOUBLES_EQUAL(3, m_pDoc->GetValue(3, 3, destSheet));
-    ASSERT_DOUBLES_EQUAL(6, m_pDoc->GetValue(3, 4, destSheet));
-    ASSERT_DOUBLES_EQUAL(-11, m_pDoc->GetValue(3, 5, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(3, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(3, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(3, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(3, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(-11.0, m_pDoc->GetValue(3, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(3, 6, destSheet));
     // col 4, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 0, destSheet));
-    aString = m_pDoc->GetString(4, 0, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    ASSERT_DOUBLES_EQUAL(11, m_pDoc->GetValue(4, 1, destSheet));
-    m_pDoc->GetFormula(4, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2+10"), aString);
-    m_pDoc->GetFormula(4, 2, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=D3+20"), aString);
-    ASSERT_DOUBLES_EQUAL(22, m_pDoc->GetValue(4, 2, destSheet));
-    m_pDoc->GetFormula(4, 3, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=G4+30"), aString);
-    ASSERT_DOUBLES_EQUAL(35, m_pDoc->GetValue(4, 3, destSheet));
-    aString = m_pDoc->GetString(4, 4, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("q"), aString);
-    ASSERT_DOUBLES_EQUAL(-12, m_pDoc->GetValue(4, 5, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 6, destSheet));
-    aString = m_pDoc->GetString(4, 6, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(4, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=D2+10"), getFormula(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=D3+20"), getFormula(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(22.0, m_pDoc->GetValue(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=G4+30"), getFormula(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("q"), m_pDoc->GetString(4, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(-12.0, m_pDoc->GetValue(4, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(4, 6, destSheet));
     // col 5, strings
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(5, 0, destSheet));
-    aString = m_pDoc->GetString(5, 0, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    aString = m_pDoc->GetString(5, 1, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("a"), aString);
-    aString = m_pDoc->GetString(5, 2, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("b"), aString);
-    aString = m_pDoc->GetString(5, 3, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("c"), aString);
-    aString = m_pDoc->GetString(5, 4, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("r"), aString);
-    ASSERT_DOUBLES_EQUAL(-13, m_pDoc->GetValue(5, 5, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(5, 6, destSheet));
-    aString = m_pDoc->GetString(5, 6, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(5, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), m_pDoc->GetString(5, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("b"), m_pDoc->GetString(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("c"), m_pDoc->GetString(5, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("r"), m_pDoc->GetString(5, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(-13.0, m_pDoc->GetValue(5, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(5, 6, destSheet));
     // col 6, rich text
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(6, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 0, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 0, destSheet));
     CPPUNIT_ASSERT(pEditObj == nullptr);
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 1, destSheet));
@@ -6228,70 +5663,57 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRow(bool bSkipEmpty)
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 2, destSheet));
     CPPUNIT_ASSERT(pEditObj);
     CPPUNIT_ASSERT_EQUAL(OUString("R2"), pEditObj->GetText(0));
-    ASSERT_DOUBLES_EQUAL(5, m_pDoc->GetValue(6, 3, destSheet));
-    aString = m_pDoc->GetString(6, 4, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("s"), aString);
-    ASSERT_DOUBLES_EQUAL(-14, m_pDoc->GetValue(6, 5, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(6, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(6, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("s"), m_pDoc->GetString(6, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(-14.0, m_pDoc->GetValue(6, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 6, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 6, destSheet));
     CPPUNIT_ASSERT(pEditObj == nullptr);
     // col 7, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 0, destSheet));
-    aString = m_pDoc->GetString(7, 0, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    m_pDoc->GetFormula(7, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2+D4+60"), aString);
-    ASSERT_DOUBLES_EQUAL(64, m_pDoc->GetValue(7, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=D2+D4+60"), getFormula(7, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(64.0, m_pDoc->GetValue(7, 1, destSheet));
     if (!bSkipEmpty)
     {
-        aString = m_pDoc->GetString(7, 2, destSheet);
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aString);
-        aString = m_pDoc->GetString(7, 3, destSheet);
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aString);
+        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(7, 2, destSheet));
+        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(7, 3, destSheet));
     }
     else
     {
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 2, destSheet));
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 3, destSheet));
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 2, destSheet));
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 3, destSheet));
     }
-    aString = m_pDoc->GetString(7, 4, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("t"), aString);
-    ASSERT_DOUBLES_EQUAL(-15, m_pDoc->GetValue(7, 5, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 6, destSheet));
-    aString = m_pDoc->GetString(7, 6, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+    CPPUNIT_ASSERT_EQUAL(OUString("t"), m_pDoc->GetString(7, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(-15.0, m_pDoc->GetValue(7, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 6, destSheet));
     // col 8, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(8, 0, destSheet));
-    aString = m_pDoc->GetString(7, 0, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    m_pDoc->GetFormula(8, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(D2:D5;\"<4\")"), aString);
-    ASSERT_DOUBLES_EQUAL(6, m_pDoc->GetValue(8, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(D2:D5;\"<4\")"), getFormula(8, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(8, 1, destSheet));
     if (!bSkipEmpty)
     {
-        aString = m_pDoc->GetString(8, 2, destSheet);
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aString);
-        aString = m_pDoc->GetString(8, 3, destSheet);
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aString);
+        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(8, 2, destSheet));
+        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(8, 3, destSheet));
     }
     else
     {
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(8, 2, destSheet));
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(8, 3, destSheet));
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 2, destSheet));
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 3, destSheet));
     }
-    aString = m_pDoc->GetString(8, 4, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("u"), aString);
-    ASSERT_DOUBLES_EQUAL(-16, m_pDoc->GetValue(8, 5, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(8, 6, destSheet));
-    aString = m_pDoc->GetString(8, 6, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+    CPPUNIT_ASSERT_EQUAL(OUString("u"), m_pDoc->GetString(8, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(-16.0, m_pDoc->GetValue(8, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(8, 6, destSheet));
     // col 9
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 1, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 2, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 3, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 4, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 5, destSheet));
 
     // check patterns
     const SfxPoolItem* pItem = nullptr;
@@ -6386,84 +5808,71 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRow(bool bSkipEmpty)
 
     // check notes after transposed copy/paste
     // check presence of notes
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(3, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(4, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(5, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(6, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(8, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(9, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 1, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(3, 1, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(4, 1, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(5, 1, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(6, 1, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 1, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(8, 1, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(9, 1, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 2, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(3, 2, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(4, 2, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(5, 2, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(6, 2, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 2, destSheet)));
-    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(ScAddress(8, 2, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(9, 2, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 3, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(3, 3, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(4, 3, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(5, 3, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(6, 3, destSheet)));
-    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(ScAddress(7, 3, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(8, 3, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(9, 3, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(3, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(4, 4, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(5, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(6, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(8, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(9, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(3, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(4, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(5, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(6, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(8, 5, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(9, 5, destSheet)));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(3, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(4, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(5, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(6, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(8, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(9, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 1, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(3, 1, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(4, 1, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(5, 1, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(6, 1, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 1, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(8, 1, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(9, 1, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 2, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(3, 2, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(4, 2, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(5, 2, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(6, 2, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(8, 2, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(9, 2, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 3, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(3, 3, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(4, 3, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(5, 3, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(6, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(7, 3, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(8, 3, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(9, 3, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(3, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(4, 4, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(5, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(6, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(8, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(9, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(3, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(4, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(5, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(6, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(8, 5, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(9, 5, destSheet));
 
     // check values of notes
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A1"),
-                         m_pDoc->GetNote(ScAddress(3, 1, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A2"),
-                         m_pDoc->GetNote(ScAddress(3, 2, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A3"),
-                         m_pDoc->GetNote(ScAddress(3, 3, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B1"),
-                         m_pDoc->GetNote(ScAddress(4, 1, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B3"),
-                         m_pDoc->GetNote(ScAddress(4, 3, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note C2"),
-                         m_pDoc->GetNote(ScAddress(5, 2, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note C3"),
-                         m_pDoc->GetNote(ScAddress(5, 3, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D1"),
-                         m_pDoc->GetNote(ScAddress(6, 1, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D2"),
-                         m_pDoc->GetNote(ScAddress(6, 2, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D3"),
-                         m_pDoc->GetNote(ScAddress(6, 3, destSheet))->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("Note A1"), getNote(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note A2"), getNote(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note A3"), getNote(3, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note B1"), getNote(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note B3"), getNote(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note C2"), getNote(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note C3"), getNote(5, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note D1"), getNote(6, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note D2"), getNote(6, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note D3"), getNote(6, 3, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"),
-                             m_pDoc->GetNote(ScAddress(7, 3, destSheet))->GetText());
+        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"), getNote(7, 3, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(OUString("Note F2"),
-                             m_pDoc->GetNote(ScAddress(8, 2, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note C5"),
-                         m_pDoc->GetNote(ScAddress(5, 4, destSheet))->GetText());
+        CPPUNIT_ASSERT_EQUAL(OUString("Note F2"), getNote(8, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note C5"), getNote(5, 4, destSheet));
 
     // check row 16 on src sheet, refs to copied/cut range
     CPPUNIT_ASSERT_EQUAL(OUString("=C5"), getFormula(1, 16, srcSheet));
@@ -6584,113 +5993,87 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowFiltered(bool bSkipEmpty)
     b means border
     */
 
-    OUString aString;
     const EditTextObject* pEditObj;
     // col 2
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 1, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 2, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 3, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 4, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 5, destSheet));
     // col 3, numbers
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(3, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1, m_pDoc->GetValue(3, 1, destSheet));
-    ASSERT_DOUBLES_EQUAL(3, m_pDoc->GetValue(3, 2, destSheet));
-    ASSERT_DOUBLES_EQUAL(6, m_pDoc->GetValue(3, 3, destSheet));
-    ASSERT_DOUBLES_EQUAL(-11, m_pDoc->GetValue(3, 4, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(3, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(3, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(3, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(-11.0, m_pDoc->GetValue(3, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(3, 5, destSheet));
     // col 4, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 0, destSheet));
-    aString = m_pDoc->GetString(4, 0, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    ASSERT_DOUBLES_EQUAL(11, m_pDoc->GetValue(4, 1, destSheet));
-    m_pDoc->GetFormula(4, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2+10"), aString);
-    m_pDoc->GetFormula(4, 2, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=G3+30"), aString);
-    ASSERT_DOUBLES_EQUAL(35, m_pDoc->GetValue(4, 2, destSheet));
-    aString = m_pDoc->GetString(4, 3, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("q"), aString);
-    ASSERT_DOUBLES_EQUAL(-12, m_pDoc->GetValue(4, 4, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 5, destSheet));
-    aString = m_pDoc->GetString(4, 5, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(4, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=D2+10"), getFormula(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=G3+30"), getFormula(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("q"), m_pDoc->GetString(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(-12.0, m_pDoc->GetValue(4, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(4, 5, destSheet));
     // col 5, strings
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(5, 0, destSheet));
-    aString = m_pDoc->GetString(5, 0, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    aString = m_pDoc->GetString(5, 1, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("a"), aString);
-    aString = m_pDoc->GetString(5, 2, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("c"), aString);
-    aString = m_pDoc->GetString(5, 3, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("r"), aString);
-    ASSERT_DOUBLES_EQUAL(-13, m_pDoc->GetValue(5, 4, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(5, 5, destSheet));
-    aString = m_pDoc->GetString(5, 5, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(5, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), m_pDoc->GetString(5, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("c"), m_pDoc->GetString(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("r"), m_pDoc->GetString(5, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(-13.0, m_pDoc->GetValue(5, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(5, 5, destSheet));
     // col 6, rich text
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(6, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 0, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 0, destSheet));
     CPPUNIT_ASSERT(pEditObj == nullptr);
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 1, destSheet));
     CPPUNIT_ASSERT(pEditObj);
     CPPUNIT_ASSERT_EQUAL(OUString("R1"), pEditObj->GetText(0));
-    ASSERT_DOUBLES_EQUAL(5, m_pDoc->GetValue(6, 2, destSheet));
-    aString = m_pDoc->GetString(6, 3, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("s"), aString);
-    ASSERT_DOUBLES_EQUAL(-14, m_pDoc->GetValue(6, 4, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(6, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(6, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("s"), m_pDoc->GetString(6, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(-14.0, m_pDoc->GetValue(6, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 5, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 5, destSheet));
     CPPUNIT_ASSERT(pEditObj == nullptr);
     // col 7, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 0, destSheet));
-    aString = m_pDoc->GetString(7, 0, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    m_pDoc->GetFormula(7, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2+D4+60"), aString);
-    ASSERT_DOUBLES_EQUAL(67, m_pDoc->GetValue(7, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=D2+D4+60"), getFormula(7, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(67.0, m_pDoc->GetValue(7, 1, destSheet));
     if (!bSkipEmpty)
-    {
-        aString = m_pDoc->GetString(7, 2, destSheet);
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aString);
-    }
+        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(7, 2, destSheet));
     else
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 2, destSheet));
-    aString = m_pDoc->GetString(7, 3, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("t"), aString);
-    ASSERT_DOUBLES_EQUAL(-15, m_pDoc->GetValue(7, 4, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 5, destSheet));
-    aString = m_pDoc->GetString(7, 5, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("t"), m_pDoc->GetString(7, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(-15.0, m_pDoc->GetValue(7, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 5, destSheet));
     // col 8, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(8, 0, destSheet));
-    aString = m_pDoc->GetString(8, 0, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    m_pDoc->GetFormula(8, 1, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(D2:D5;\"<4\")"), aString);
-    ASSERT_DOUBLES_EQUAL(6, m_pDoc->GetValue(8, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(8, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(D2:D5;\"<4\")"), getFormula(8, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(8, 1, destSheet));
     if (!bSkipEmpty)
-    {
-        aString = m_pDoc->GetString(8, 2, destSheet);
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aString);
-    }
+        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(8, 2, destSheet));
     else
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(8, 2, destSheet));
-    aString = m_pDoc->GetString(8, 3, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("u"), aString);
-    ASSERT_DOUBLES_EQUAL(-16, m_pDoc->GetValue(8, 4, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(8, 5, destSheet));
-    aString = m_pDoc->GetString(8, 5, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("u"), m_pDoc->GetString(8, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(-16.0, m_pDoc->GetValue(8, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(8, 5, destSheet));
     // col 9
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 1, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 2, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 3, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 4, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(9, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 5, destSheet));
 
     // check patterns
     const SfxPoolItem* pItem = nullptr;
@@ -6776,67 +6159,58 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowFiltered(bool bSkipEmpty)
 
     // check notes after transposed copy/paste
     // check presence of notes
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(3, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(4, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(5, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(6, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(8, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(9, 0, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 1, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(3, 1, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(4, 1, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(5, 1, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(6, 1, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 1, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(8, 1, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(9, 1, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 2, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(3, 2, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(4, 2, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(5, 2, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(6, 2, destSheet)));
-    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(ScAddress(7, 2, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(8, 2, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(9, 2, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 3, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(3, 3, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(4, 3, destSheet)));
-    CPPUNIT_ASSERT(m_pDoc->HasNote(ScAddress(5, 3, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(6, 3, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 3, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(8, 3, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(9, 3, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(2, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(3, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(4, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(5, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(6, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(7, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(8, 4, destSheet)));
-    CPPUNIT_ASSERT(!m_pDoc->HasNote(ScAddress(9, 4, destSheet)));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(3, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(4, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(5, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(6, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(8, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(9, 0, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 1, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(3, 1, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(4, 1, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(5, 1, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(6, 1, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 1, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(8, 1, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(9, 1, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 2, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(3, 2, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(4, 2, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(5, 2, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(6, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(7, 2, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(8, 2, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(9, 2, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 3, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(3, 3, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(4, 3, destSheet));
+    CPPUNIT_ASSERT(m_pDoc->HasNote(5, 3, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(6, 3, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 3, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(8, 3, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(9, 3, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(2, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(3, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(4, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(5, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(6, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(8, 4, destSheet));
+    CPPUNIT_ASSERT(!m_pDoc->HasNote(9, 4, destSheet));
 
     // check values of notes
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A1"),
-                         m_pDoc->GetNote(ScAddress(3, 1, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A3"),
-                         m_pDoc->GetNote(ScAddress(3, 2, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B1"),
-                         m_pDoc->GetNote(ScAddress(4, 1, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B3"),
-                         m_pDoc->GetNote(ScAddress(4, 2, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note C3"),
-                         m_pDoc->GetNote(ScAddress(5, 2, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D1"),
-                         m_pDoc->GetNote(ScAddress(6, 1, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D3"),
-                         m_pDoc->GetNote(ScAddress(6, 2, destSheet))->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("Note A1"), getNote(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note A3"), getNote(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note B1"), getNote(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note B3"), getNote(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note C3"), getNote(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note D1"), getNote(6, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note D3"), getNote(6, 2, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"),
-                             m_pDoc->GetNote(ScAddress(7, 2, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note C5"),
-                         m_pDoc->GetNote(ScAddress(5, 3, destSheet))->GetText());
+        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"), getNote(7, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note C5"), getNote(5, 3, destSheet));
 
     // check row 16 on src sheet, refs to copied/cut range
     CPPUNIT_ASSERT_EQUAL(OUString("=C5"), getFormula(1, 16, srcSheet));
@@ -6961,73 +6335,47 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowTranspose(bool bSkipEmpty)
     //check cell content after transposed copy/paste of filtered data
     // Note: column F is a repetition of srcSheet.Column A
     // Col C and G are checked to be empty
-    OUString aString;
-    double fValue;
     const EditTextObject* pEditObj;
     // row 0
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(3, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(5, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(6, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(3, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 0, destSheet));
     // row 1, numbers
-    fValue = m_pDoc->GetValue(2, 1, destSheet); // C2
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied cell C2", 1000, fValue);
-    fValue = m_pDoc->GetValue(3, 1, destSheet); // D2
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied cell D2", 1, fValue);
-    fValue = m_pDoc->GetValue(4, 1, destSheet); // E2
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied cell E2", 2, fValue);
-    fValue = m_pDoc->GetValue(5, 1, destSheet); // F2
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied cell F2", 3, fValue);
-    fValue = m_pDoc->GetValue(6, 1, destSheet); // G2
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied cell G2", 6, fValue);
-    ASSERT_DOUBLES_EQUAL(-11, m_pDoc->GetValue(7, 1, destSheet));
-    fValue = m_pDoc->GetValue(8, 1, destSheet); // I2
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied cell I2", 1000, fValue);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed cell C2", 1000.0, m_pDoc->GetValue(2, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed cell D2", 1.0, m_pDoc->GetValue(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed cell E2", 2.0, m_pDoc->GetValue(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed cell F2", 3.0, m_pDoc->GetValue(5, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed cell G2", 6.0, m_pDoc->GetValue(6, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(-11.0, m_pDoc->GetValue(7, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed cell I2", 1000.0, m_pDoc->GetValue(8, 1, destSheet));
     // row 2, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 2, destSheet));
-    aString = m_pDoc->GetString(2, 2, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    fValue = m_pDoc->GetValue(3, 2, destSheet); // D3
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied formula D3", 11, fValue);
-    m_pDoc->GetFormula(3, 2, destSheet, aString); // D3
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed formula D3 should point on D2", OUString("=D2+10"),
-                                 aString);
-    m_pDoc->GetFormula(4, 2, destSheet, aString);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed formula E3 should point on E2", OUString("=E2+20"),
-                                 aString);
-    fValue = m_pDoc->GetValue(4, 2, destSheet); // E3
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied formula E3", 22, fValue);
-    fValue = m_pDoc->GetValue(5, 2, destSheet); // F3
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied formula F3", 35, fValue);
-    m_pDoc->GetFormula(5, 2, destSheet, aString); // F3
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed formula F3 should point on F2", OUString("=F5+30"),
-                                 aString);
-    aString = m_pDoc->GetString(6, 2, destSheet); // G3
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G4 should contain: q", OUString("q"), aString);
-    ASSERT_DOUBLES_EQUAL(-12, m_pDoc->GetValue(7, 2, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(8, 2, destSheet));
-    aString = m_pDoc->GetString(8, 2, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D3", 11.0, m_pDoc->GetValue(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D3", OUString("=D2+10"), getFormula(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed E3", OUString("=E2+20"), getFormula(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed E3", 22.0, m_pDoc->GetValue(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed F3", 35.0, m_pDoc->GetValue(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed F3", OUString("=F5+30"), getFormula(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G4", OUString("q"), m_pDoc->GetString(6, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(-12.0, m_pDoc->GetValue(7, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(8, 2, destSheet));
     // row 3, strings
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 3, destSheet));
-    aString = m_pDoc->GetString(2, 3, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    aString = m_pDoc->GetString(3, 3, destSheet); // D4
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D4 should contain: a", OUString("a"), aString);
-    aString = m_pDoc->GetString(4, 3, destSheet); // E4
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E4 should contain: b", OUString("b"), aString);
-    aString = m_pDoc->GetString(5, 3, destSheet); // F4
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F4 should contain: c", OUString("c"), aString);
-    aString = m_pDoc->GetString(6, 3, destSheet); // G4
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G4 should contain: r", OUString("r"), aString);
-    ASSERT_DOUBLES_EQUAL(-13, m_pDoc->GetValue(7, 3, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(8, 3, destSheet));
-    aString = m_pDoc->GetString(8, 3, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D4", OUString("a"), m_pDoc->GetString(3, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E4", OUString("b"), m_pDoc->GetString(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F4", OUString("c"), m_pDoc->GetString(5, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G4", OUString("r"), m_pDoc->GetString(6, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(-13.0, m_pDoc->GetValue(7, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(8, 3, destSheet));
     // row 4, rich text
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 4, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(2, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("There should be no edit cell in C5.", pEditObj == nullptr);
     pEditObj = m_pDoc->GetEditText(ScAddress(3, 4, destSheet));
@@ -7037,74 +6385,59 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowTranspose(bool bSkipEmpty)
     pEditObj = m_pDoc->GetEditText(ScAddress(4, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("There should be an edit cell in E5.", pEditObj);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Edit cell value wrong E5.", OUString("R2"), pEditObj->GetText(0));
-    fValue = m_pDoc->GetValue(5, 4, destSheet); // F5
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied cell F5", 5, fValue);
-    aString = m_pDoc->GetString(6, 4, destSheet); // G5
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G5 should contain: s", OUString("s"), aString);
-    ASSERT_DOUBLES_EQUAL(-14, m_pDoc->GetValue(7, 4, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(8, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed cell F5", 5.0, m_pDoc->GetValue(5, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G5", OUString("s"), m_pDoc->GetString(6, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(-14.0, m_pDoc->GetValue(7, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 4, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(8, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("There should be no edit cell in I5.", pEditObj == nullptr);
     // row 5, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 5, destSheet));
-    aString = m_pDoc->GetString(2, 5, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    m_pDoc->GetFormula(3, 5, destSheet, aString); // D6
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed formula D6", OUString("=D2+F2+60"), aString);
-    fValue = m_pDoc->GetValue(3, 5, destSheet); // D6
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied formula D6", 64, fValue);
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D6", OUString("=D2+F2+60"),
+                                 getFormula(3, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D6", 64.0, m_pDoc->GetValue(3, 5, destSheet));
     if (!bSkipEmpty)
     {
-        aString = m_pDoc->GetString(4, 5, destSheet); // E6
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, aString);
-        aString = m_pDoc->GetString(5, 5, destSheet); // F6
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, aString);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, m_pDoc->GetString(4, 5, destSheet));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, m_pDoc->GetString(5, 5, destSheet));
     }
     else
     {
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 5, destSheet));
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(5, 5, destSheet));
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 5, destSheet));
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 5, destSheet));
     }
-    aString = m_pDoc->GetString(6, 5, destSheet); // G6
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G6 should contain: t", OUString("t"), aString);
-    ASSERT_DOUBLES_EQUAL(-15, m_pDoc->GetValue(7, 5, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(8, 5, destSheet));
-    aString = m_pDoc->GetString(8, 5, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G6", OUString("t"), m_pDoc->GetString(6, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(-15.0, m_pDoc->GetValue(7, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(8, 5, destSheet));
     // row 6, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 6, destSheet));
-    aString = m_pDoc->GetString(2, 6, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    m_pDoc->GetFormula(3, 6, destSheet, aString); // D7
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed formula D7", OUString("=SUMIF(D2:G2;\"<4\")"),
-                                 aString);
-    fValue = m_pDoc->GetValue(3, 6, destSheet); // D7
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied formula D7", 6, fValue);
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D7", OUString("=SUMIF(D2:G2;\"<4\")"),
+                                 getFormula(3, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D7", 6.0, m_pDoc->GetValue(3, 6, destSheet));
     if (!bSkipEmpty)
     {
-        aString = m_pDoc->GetString(4, 6, destSheet); // E6
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, aString);
-        aString = m_pDoc->GetString(5, 6, destSheet); // F6
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, aString);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, m_pDoc->GetString(4, 6, destSheet));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, m_pDoc->GetString(5, 6, destSheet));
     }
     else
     {
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 6, destSheet));
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(5, 6, destSheet));
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 6, destSheet));
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 6, destSheet));
     }
-    aString = m_pDoc->GetString(6, 6, destSheet); // G4
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G7 should contain: u", OUString("u"), aString);
-    ASSERT_DOUBLES_EQUAL(-16, m_pDoc->GetValue(7, 6, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(8, 6, destSheet));
-    aString = m_pDoc->GetString(8, 6, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G7", OUString("u"), m_pDoc->GetString(6, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(-16.0, m_pDoc->GetValue(7, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(8, 6, destSheet));
     // row 7
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(3, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(5, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(6, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(3, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 7, destSheet));
 
     // check patterns
     const SfxPoolItem* pItem = nullptr;
@@ -7184,133 +6517,74 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowTranspose(bool bSkipEmpty)
 
     // check notes after transposed copy/paste
     // check presence of notes
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on C1",
-                           !m_pDoc->HasNote(ScAddress(2, 0, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on D1",
-                           !m_pDoc->HasNote(ScAddress(3, 0, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on E1",
-                           !m_pDoc->HasNote(ScAddress(4, 0, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on F1",
-                           !m_pDoc->HasNote(ScAddress(5, 0, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on G1",
-                           !m_pDoc->HasNote(ScAddress(6, 0, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on H1",
-                           !m_pDoc->HasNote(ScAddress(7, 0, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on C2",
-                           !m_pDoc->HasNote(ScAddress(2, 1, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on D2",
-                           m_pDoc->HasNote(ScAddress(3, 1, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on E2",
-                           m_pDoc->HasNote(ScAddress(4, 1, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on F2",
-                           m_pDoc->HasNote(ScAddress(5, 1, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on G2",
-                           !m_pDoc->HasNote(ScAddress(6, 1, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on H2",
-                           !m_pDoc->HasNote(ScAddress(7, 1, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on C3",
-                           !m_pDoc->HasNote(ScAddress(2, 2, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on D3",
-                           m_pDoc->HasNote(ScAddress(3, 2, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on E3",
-                           !m_pDoc->HasNote(ScAddress(4, 2, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on F3",
-                           m_pDoc->HasNote(ScAddress(5, 2, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on G3",
-                           !m_pDoc->HasNote(ScAddress(6, 2, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on H3",
-                           !m_pDoc->HasNote(ScAddress(7, 2, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on C4",
-                           !m_pDoc->HasNote(ScAddress(2, 3, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on D4",
-                           !m_pDoc->HasNote(ScAddress(3, 3, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on E4",
-                           m_pDoc->HasNote(ScAddress(4, 3, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on F4",
-                           m_pDoc->HasNote(ScAddress(5, 3, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on G4",
-                           m_pDoc->HasNote(ScAddress(6, 3, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on H4",
-                           !m_pDoc->HasNote(ScAddress(7, 3, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on C5",
-                           !m_pDoc->HasNote(ScAddress(2, 4, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on D5",
-                           m_pDoc->HasNote(ScAddress(3, 4, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on E5",
-                           m_pDoc->HasNote(ScAddress(4, 4, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on F5",
-                           m_pDoc->HasNote(ScAddress(5, 4, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on G5",
-                           !m_pDoc->HasNote(ScAddress(6, 4, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on H5",
-                           !m_pDoc->HasNote(ScAddress(7, 4, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on C6",
-                           !m_pDoc->HasNote(ScAddress(2, 5, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on D6",
-                           !m_pDoc->HasNote(ScAddress(3, 5, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on E6",
-                           !m_pDoc->HasNote(ScAddress(4, 5, destSheet)));
-    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(ScAddress(5, 5, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on G6",
-                           !m_pDoc->HasNote(ScAddress(6, 5, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on H6",
-                           !m_pDoc->HasNote(ScAddress(7, 5, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on C7",
-                           !m_pDoc->HasNote(ScAddress(2, 6, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on D7",
-                           !m_pDoc->HasNote(ScAddress(3, 6, destSheet)));
-    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(ScAddress(4, 6, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on F7",
-                           !m_pDoc->HasNote(ScAddress(5, 6, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note  a G7",
-                           !m_pDoc->HasNote(ScAddress(6, 6, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on H7",
-                           !m_pDoc->HasNote(ScAddress(7, 6, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on C8",
-                           !m_pDoc->HasNote(ScAddress(2, 7, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on D8",
-                           !m_pDoc->HasNote(ScAddress(3, 7, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on E8",
-                           !m_pDoc->HasNote(ScAddress(4, 7, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on F8",
-                           !m_pDoc->HasNote(ScAddress(5, 7, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on G8",
-                           !m_pDoc->HasNote(ScAddress(6, 7, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on H8",
-                           !m_pDoc->HasNote(ScAddress(7, 7, destSheet)));
+    CPPUNIT_ASSERT_MESSAGE("C1: no note", !m_pDoc->HasNote(2, 0, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("D1: no note", !m_pDoc->HasNote(3, 0, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("E1: no note", !m_pDoc->HasNote(4, 0, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("F1: no note", !m_pDoc->HasNote(5, 0, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("G1: no note", !m_pDoc->HasNote(6, 0, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("H1: no note", !m_pDoc->HasNote(7, 0, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("C2: no note", !m_pDoc->HasNote(2, 1, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("D2:  a note", m_pDoc->HasNote(3, 1, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("E2:  a note", m_pDoc->HasNote(4, 1, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("F2:  a note", m_pDoc->HasNote(5, 1, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("G2: no note", !m_pDoc->HasNote(6, 1, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("H2: no note", !m_pDoc->HasNote(7, 1, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("C3: no note", !m_pDoc->HasNote(2, 2, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("D3:  a note", m_pDoc->HasNote(3, 2, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("E3: no note", !m_pDoc->HasNote(4, 2, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("F3:  a note", m_pDoc->HasNote(5, 2, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("G3: no note", !m_pDoc->HasNote(6, 2, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("H3: no note", !m_pDoc->HasNote(7, 2, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("C4: no note", !m_pDoc->HasNote(2, 3, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("D4: no note", !m_pDoc->HasNote(3, 3, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("E4:  a note", m_pDoc->HasNote(4, 3, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("F4:  a note", m_pDoc->HasNote(5, 3, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("G4:  a note", m_pDoc->HasNote(6, 3, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("H4: no note", !m_pDoc->HasNote(7, 3, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("C5: no note", !m_pDoc->HasNote(2, 4, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("D5:  a note", m_pDoc->HasNote(3, 4, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("E5:  a note", m_pDoc->HasNote(4, 4, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("F5:  a note", m_pDoc->HasNote(5, 4, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("G5: no note", !m_pDoc->HasNote(6, 4, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("H5: no note", !m_pDoc->HasNote(7, 4, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("C6: no note", !m_pDoc->HasNote(2, 5, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("D6: no note", !m_pDoc->HasNote(3, 5, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("E6: no note", !m_pDoc->HasNote(4, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(5, 5, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("G6: no note", !m_pDoc->HasNote(6, 5, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("H6: no note", !m_pDoc->HasNote(7, 5, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("C7: no note", !m_pDoc->HasNote(2, 6, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("D7: no note", !m_pDoc->HasNote(3, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(4, 6, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("F7: no note", !m_pDoc->HasNote(5, 6, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("G7: no note", !m_pDoc->HasNote(6, 6, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("H7: no note", !m_pDoc->HasNote(7, 6, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("C8: no note", !m_pDoc->HasNote(2, 7, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("D8: no note", !m_pDoc->HasNote(3, 7, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("E8: no note", !m_pDoc->HasNote(4, 7, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("F8: no note", !m_pDoc->HasNote(5, 7, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("G8: no note", !m_pDoc->HasNote(6, 7, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("H8: no note", !m_pDoc->HasNote(7, 7, destSheet));
 
     // check values of notes
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong content of cell note on D2", OUString("Note A1"),
-                                 m_pDoc->GetNote(ScAddress(3, 1, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong content of cell note on E2", OUString("Note A2"),
-                                 m_pDoc->GetNote(ScAddress(4, 1, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong content of cell note on F2", OUString("Note A3"),
-                                 m_pDoc->GetNote(ScAddress(5, 1, destSheet))->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D2", OUString("Note A1"), getNote(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E2", OUString("Note A2"), getNote(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F2", OUString("Note A3"), getNote(5, 1, destSheet));
     // G2 has no note
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong content of cell note on D3", OUString("Note B1"),
-                                 m_pDoc->GetNote(ScAddress(3, 2, destSheet))->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D3", OUString("Note B1"), getNote(3, 2, destSheet));
     // E3 has no note
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong content of cell note on F3", OUString("Note B3"),
-                                 m_pDoc->GetNote(ScAddress(5, 2, destSheet))->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F3", OUString("Note B3"), getNote(5, 2, destSheet));
     // D4 has no note
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong content of cell note on E4", OUString("Note C2"),
-                                 m_pDoc->GetNote(ScAddress(4, 3, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong content of cell note on F4", OUString("Note C3"),
-                                 m_pDoc->GetNote(ScAddress(5, 3, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Content of cell note on D5", OUString("Note D1"),
-                                 m_pDoc->GetNote(ScAddress(3, 4, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Content of cell note on E5", OUString("Note D2"),
-                                 m_pDoc->GetNote(ScAddress(4, 4, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Content of cell note on F5", OUString("Note D3"),
-                                 m_pDoc->GetNote(ScAddress(5, 4, destSheet))->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E4", OUString("Note C2"), getNote(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F4", OUString("Note C3"), getNote(5, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D5", OUString("Note D1"), getNote(3, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E5", OUString("Note D2"), getNote(4, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F5", OUString("Note D3"), getNote(5, 4, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"),
-                             m_pDoc->GetNote(ScAddress(5, 5, destSheet))->GetText());
+        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"), getNote(5, 5, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Content of cell note on E7", OUString("Note F2"),
-                                     m_pDoc->GetNote(ScAddress(4, 6, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note C5"),
-                         m_pDoc->GetNote(ScAddress(6, 3, destSheet))->GetText());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E7", OUString("Note F2"), getNote(4, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note C5"), getNote(6, 3, destSheet));
 
     // check row 16 on src sheet, refs to copied/cut range
     CPPUNIT_ASSERT_EQUAL(OUString("=C5"), getFormula(1, 16, srcSheet));
@@ -7435,128 +6709,92 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowFilteredTranspose(bool bSk
     //check cell content after transposed copy/paste of filtered data
     // Note: column F is a repetition of srcSheet.Column A
     // Col C and G are checked to be empty
-    OUString aString;
-    double fValue;
     const EditTextObject* pEditObj;
     // row 0
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(3, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(5, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(6, 0, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(3, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 0, destSheet));
     // row 1, numbers
-    fValue = m_pDoc->GetValue(2, 1, destSheet); // C2
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied cell C2", 1000, fValue);
-    fValue = m_pDoc->GetValue(3, 1, destSheet); // D2
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied cell D2", 1, fValue);
-    fValue = m_pDoc->GetValue(4, 1, destSheet); // E2
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied cell E2", 3, fValue);
-    fValue = m_pDoc->GetValue(5, 1, destSheet); // F2
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied cell F2", 6, fValue);
-    ASSERT_DOUBLES_EQUAL(-11, m_pDoc->GetValue(6, 1, destSheet));
-    fValue = m_pDoc->GetValue(7, 1, destSheet); // H2
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied cell H2", 1000, fValue);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed cell C2", 1000.0, m_pDoc->GetValue(2, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed cell D2", 1.0, m_pDoc->GetValue(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed cell E2", 3.0, m_pDoc->GetValue(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed cell F2", 6.0, m_pDoc->GetValue(5, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(-11.0, m_pDoc->GetValue(6, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed cell H2", 1000.0, m_pDoc->GetValue(7, 1, destSheet));
     // row 2, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 2, destSheet));
-    aString = m_pDoc->GetString(2, 2, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    fValue = m_pDoc->GetValue(3, 2, destSheet); // D3
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied formula D3", 11, fValue);
-    m_pDoc->GetFormula(3, 2, destSheet, aString); // D3
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed formula D3 should point on D2", OUString("=D2+10"),
-                                 aString);
-    fValue = m_pDoc->GetValue(4, 2, destSheet); // E3
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied formula E3", 35, fValue);
-    m_pDoc->GetFormula(4, 2, destSheet, aString); // E3
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed formula E3 should point on F2", OUString("=E5+30"),
-                                 aString);
-    aString = m_pDoc->GetString(5, 2, destSheet); // F3
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F4 should contain: q", OUString("q"), aString);
-    ASSERT_DOUBLES_EQUAL(-12, m_pDoc->GetValue(6, 2, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 2, destSheet));
-    aString = m_pDoc->GetString(7, 2, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D3", 11.0, m_pDoc->GetValue(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D3", OUString("=D2+10"), getFormula(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed E3", 35.0, m_pDoc->GetValue(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed E3", OUString("=E5+30"), getFormula(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F4", OUString("q"), m_pDoc->GetString(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(-12.0, m_pDoc->GetValue(6, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 2, destSheet));
     // row 3, strings
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 3, destSheet));
-    aString = m_pDoc->GetString(2, 3, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    aString = m_pDoc->GetString(3, 3, destSheet); // D4
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D4 should contain: a", OUString("a"), aString);
-    aString = m_pDoc->GetString(4, 3, destSheet); // E4
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E4 should contain: c", OUString("c"), aString);
-    aString = m_pDoc->GetString(5, 3, destSheet); // F4
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F4 should contain: r", OUString("r"), aString);
-    ASSERT_DOUBLES_EQUAL(-13, m_pDoc->GetValue(6, 3, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 3, destSheet));
-    aString = m_pDoc->GetString(7, 3, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D4", OUString("a"), m_pDoc->GetString(3, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E4", OUString("c"), m_pDoc->GetString(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F4", OUString("r"), m_pDoc->GetString(5, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(-13.0, m_pDoc->GetValue(6, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 3, destSheet));
     // row 4, rich text
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 4, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(2, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("There should be no edit cell in C5.", pEditObj == nullptr);
     pEditObj = m_pDoc->GetEditText(ScAddress(3, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("There should be an edit cell in D5.", pEditObj);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Edit cell value wrong in D5 ", OUString("R1"),
                                  pEditObj->GetText(0));
-    fValue = m_pDoc->GetValue(4, 4, destSheet); // E5
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied cell E5", 5, fValue);
-    aString = m_pDoc->GetString(5, 4, destSheet); // F5
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F5 should contain: s", OUString("s"), aString);
-    ASSERT_DOUBLES_EQUAL(-14, m_pDoc->GetValue(6, 4, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed cell E5", 5.0, m_pDoc->GetValue(4, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F5", OUString("s"), m_pDoc->GetString(5, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(-14.0, m_pDoc->GetValue(6, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 4, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(7, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("There should be no edit cell in H5.", pEditObj == nullptr);
     // row 5, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 5, destSheet));
-    aString = m_pDoc->GetString(2, 5, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    m_pDoc->GetFormula(3, 5, destSheet, aString); // D6
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed formula D6", OUString("=D2+F2+60"), aString);
-    fValue = m_pDoc->GetValue(3, 5, destSheet); // D6
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied formula D6", 67, fValue);
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D6", OUString("=D2+F2+60"),
+                                 getFormula(3, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D6", 67.0, m_pDoc->GetValue(3, 5, destSheet));
     if (!bSkipEmpty)
     {
-        aString = m_pDoc->GetString(4, 5, destSheet); // E6
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, aString);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, m_pDoc->GetString(4, 5, destSheet));
     }
     else
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 5, destSheet));
-    aString = m_pDoc->GetString(5, 5, destSheet); // F6
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F6 should contain: t", OUString("t"), aString);
-    ASSERT_DOUBLES_EQUAL(-15, m_pDoc->GetValue(6, 5, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 5, destSheet));
-    aString = m_pDoc->GetString(7, 5, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F6", OUString("t"), m_pDoc->GetString(5, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(-15.0, m_pDoc->GetValue(6, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 5, destSheet));
     // row 6, formulas
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 6, destSheet));
-    aString = m_pDoc->GetString(2, 6, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
-    m_pDoc->GetFormula(3, 6, destSheet, aString); // D7
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed formula D7", OUString("=SUMIF(D2:G2;\"<4\")"),
-                                 aString);
-    fValue = m_pDoc->GetValue(3, 6, destSheet); // D7
-    ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied formula D7", -7, fValue);
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D7", OUString("=SUMIF(D2:G2;\"<4\")"),
+                                 getFormula(3, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D7", -7.0, m_pDoc->GetValue(3, 6, destSheet));
     if (!bSkipEmpty)
-    {
-        aString = m_pDoc->GetString(4, 6, destSheet); // E7
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, aString);
-    }
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E7", EMPTY_OUSTRING, m_pDoc->GetString(4, 6, destSheet));
     else
-        ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 6, destSheet));
-    aString = m_pDoc->GetString(5, 6, destSheet); // F4
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F7 should contain: u", OUString("u"), aString);
-    ASSERT_DOUBLES_EQUAL(-16, m_pDoc->GetValue(6, 6, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 6, destSheet));
-    aString = m_pDoc->GetString(7, 6, destSheet);
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), aString);
+        CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F7", OUString("u"), m_pDoc->GetString(5, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(-16.0, m_pDoc->GetValue(6, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 6, destSheet));
     // row 7
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(2, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(3, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(4, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(5, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(6, 7, destSheet));
-    ASSERT_DOUBLES_EQUAL(1000, m_pDoc->GetValue(7, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(3, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 7, destSheet));
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 7, destSheet));
 
     // check patterns
     const SfxPoolItem* pItem = nullptr;
@@ -7646,106 +6884,58 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowFilteredTranspose(bool bSk
 
     // check notes after transposed copy/paste
     // check presence of notes
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on C1",
-                           !m_pDoc->HasNote(ScAddress(2, 0, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on D1",
-                           !m_pDoc->HasNote(ScAddress(3, 0, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on E1",
-                           !m_pDoc->HasNote(ScAddress(4, 0, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on F1",
-                           !m_pDoc->HasNote(ScAddress(5, 0, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on G1",
-                           !m_pDoc->HasNote(ScAddress(6, 0, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on C2",
-                           !m_pDoc->HasNote(ScAddress(2, 1, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on D2",
-                           m_pDoc->HasNote(ScAddress(3, 1, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on E2",
-                           m_pDoc->HasNote(ScAddress(4, 1, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on F2",
-                           !m_pDoc->HasNote(ScAddress(5, 1, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on G2",
-                           !m_pDoc->HasNote(ScAddress(6, 1, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on C3",
-                           !m_pDoc->HasNote(ScAddress(2, 2, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on D3",
-                           m_pDoc->HasNote(ScAddress(3, 2, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on E3",
-                           m_pDoc->HasNote(ScAddress(4, 2, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on F3",
-                           !m_pDoc->HasNote(ScAddress(5, 2, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on G3",
-                           !m_pDoc->HasNote(ScAddress(6, 2, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on C4",
-                           !m_pDoc->HasNote(ScAddress(2, 3, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on D4",
-                           !m_pDoc->HasNote(ScAddress(3, 3, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on E4",
-                           m_pDoc->HasNote(ScAddress(4, 3, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on F4",
-                           m_pDoc->HasNote(ScAddress(5, 3, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on G4",
-                           !m_pDoc->HasNote(ScAddress(6, 3, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on C5",
-                           !m_pDoc->HasNote(ScAddress(2, 4, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on D5",
-                           m_pDoc->HasNote(ScAddress(3, 4, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on E5",
-                           m_pDoc->HasNote(ScAddress(4, 4, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on F5",
-                           !m_pDoc->HasNote(ScAddress(5, 4, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on G5",
-                           !m_pDoc->HasNote(ScAddress(6, 4, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on C6",
-                           !m_pDoc->HasNote(ScAddress(2, 5, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on D6",
-                           !m_pDoc->HasNote(ScAddress(3, 5, destSheet)));
-    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(ScAddress(4, 5, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be  a note on F6",
-                           !m_pDoc->HasNote(ScAddress(5, 5, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on G6",
-                           !m_pDoc->HasNote(ScAddress(6, 5, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on C7",
-                           !m_pDoc->HasNote(ScAddress(2, 6, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on D7",
-                           !m_pDoc->HasNote(ScAddress(3, 6, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on E7",
-                           !m_pDoc->HasNote(ScAddress(4, 6, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note  a F7",
-                           !m_pDoc->HasNote(ScAddress(5, 6, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on G7",
-                           !m_pDoc->HasNote(ScAddress(6, 6, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on C8",
-                           !m_pDoc->HasNote(ScAddress(2, 7, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on D8",
-                           !m_pDoc->HasNote(ScAddress(3, 7, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on E8",
-                           !m_pDoc->HasNote(ScAddress(4, 7, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on F8",
-                           !m_pDoc->HasNote(ScAddress(5, 7, destSheet)));
-    CPPUNIT_ASSERT_MESSAGE("There should be no note on G8",
-                           !m_pDoc->HasNote(ScAddress(6, 7, destSheet)));
+    CPPUNIT_ASSERT_MESSAGE("C1: no note", !m_pDoc->HasNote(2, 0, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("D1: no note", !m_pDoc->HasNote(3, 0, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("E1: no note", !m_pDoc->HasNote(4, 0, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("F1: no note", !m_pDoc->HasNote(5, 0, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("G1: no note", !m_pDoc->HasNote(6, 0, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("C2: no note", !m_pDoc->HasNote(2, 1, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("D2:  a note", m_pDoc->HasNote(3, 1, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("E2:  a note", m_pDoc->HasNote(4, 1, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("F2: no note", !m_pDoc->HasNote(5, 1, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("G2: no note", !m_pDoc->HasNote(6, 1, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("C3: no note", !m_pDoc->HasNote(2, 2, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("D3:  a note", m_pDoc->HasNote(3, 2, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("E3:  a note", m_pDoc->HasNote(4, 2, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("F3: no note", !m_pDoc->HasNote(5, 2, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("G3: no note", !m_pDoc->HasNote(6, 2, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("C4: no note", !m_pDoc->HasNote(2, 3, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("D4: no note", !m_pDoc->HasNote(3, 3, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("E4:  a note", m_pDoc->HasNote(4, 3, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("F4:  a note", m_pDoc->HasNote(5, 3, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("G4: no note", !m_pDoc->HasNote(6, 3, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("C5: no note", !m_pDoc->HasNote(2, 4, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("D5:  a note", m_pDoc->HasNote(3, 4, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("E5:  a note", m_pDoc->HasNote(4, 4, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("F5: no note", !m_pDoc->HasNote(5, 4, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("G5: no note", !m_pDoc->HasNote(6, 4, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("C6: no note", !m_pDoc->HasNote(2, 5, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("D6: no note", !m_pDoc->HasNote(3, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(!bSkipEmpty, m_pDoc->HasNote(4, 5, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("F6: no note", !m_pDoc->HasNote(5, 5, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("G6: no note", !m_pDoc->HasNote(6, 5, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("C7: no note", !m_pDoc->HasNote(2, 6, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("D7: no note", !m_pDoc->HasNote(3, 6, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("E7: no note", !m_pDoc->HasNote(4, 6, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("F7: no note", !m_pDoc->HasNote(5, 6, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("G7: no note", !m_pDoc->HasNote(6, 6, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("C8: no note", !m_pDoc->HasNote(2, 7, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("D8: no note", !m_pDoc->HasNote(3, 7, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("E8: no note", !m_pDoc->HasNote(4, 7, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("F8: no note", !m_pDoc->HasNote(5, 7, destSheet));
+    CPPUNIT_ASSERT_MESSAGE("G8: no note", !m_pDoc->HasNote(6, 7, destSheet));
 
     // check values of notes
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong content of cell note on D2", OUString("Note A1"),
-                                 m_pDoc->GetNote(ScAddress(3, 1, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong content of cell note on E2", OUString("Note A3"),
-                                 m_pDoc->GetNote(ScAddress(4, 1, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong content of cell note on D3", OUString("Note B1"),
-                                 m_pDoc->GetNote(ScAddress(3, 2, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong content of cell note on E3", OUString("Note B3"),
-                                 m_pDoc->GetNote(ScAddress(4, 2, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong content of cell note on E4", OUString("Note C3"),
-                                 m_pDoc->GetNote(ScAddress(4, 3, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Content of cell note on D5", OUString("Note D1"),
-                                 m_pDoc->GetNote(ScAddress(3, 4, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Content of cell note on E5", OUString("Note D3"),
-                                 m_pDoc->GetNote(ScAddress(4, 4, destSheet))->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D2", OUString("Note A1"), getNote(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E2", OUString("Note A3"), getNote(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D3", OUString("Note B1"), getNote(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E3", OUString("Note B3"), getNote(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E4", OUString("Note C3"), getNote(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D5", OUString("Note D1"), getNote(3, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E5", OUString("Note D3"), getNote(4, 4, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"),
-                             m_pDoc->GetNote(ScAddress(4, 5, destSheet))->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("Note C5"),
-                         m_pDoc->GetNote(ScAddress(5, 3, destSheet))->GetText());
+        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"), getNote(4, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note C5"), getNote(5, 3, destSheet));
 
     // check row 16 on src sheet, refs to copied/cut range
     CPPUNIT_ASSERT_EQUAL(OUString("=C5"), getFormula(1, 16, srcSheet));
@@ -10680,15 +9870,9 @@ void TestCopyPaste::testMoveBlock()
     m_pDoc->SetString(2, 0, 0, "test");
 
     // add notes to A1:C1
-    ScAddress aAddrA1(0, 0, 0);
-    ScPostIt* pNoteA1 = m_pDoc->GetOrCreateNote(aAddrA1);
-    pNoteA1->SetText(aAddrA1, "Hello world in A1");
-    ScAddress aAddrB1(1, 0, 0);
-    ScPostIt* pNoteB1 = m_pDoc->GetOrCreateNote(aAddrB1);
-    pNoteB1->SetText(aAddrB1, "Hello world in B1");
-    ScAddress aAddrC1(2, 0, 0);
-    ScPostIt* pNoteC1 = m_pDoc->GetOrCreateNote(aAddrC1);
-    pNoteC1->SetText(aAddrC1, "Hello world in C1");
+    ScAddress aAddrA1 = setNote(0, 0, 0, "Hello world in A1");
+    ScAddress aAddrB1 = setNote(1, 0, 0, "Hello world in B1");
+    ScAddress aAddrC1 = setNote(2, 0, 0, "Hello world in C1");
     ScAddress aAddrD1(3, 0, 0);
 
     // previous tests on cell note content are ok. this one fails !!! :(
@@ -10974,17 +10158,11 @@ void TestCopyPaste::testCopyPasteFormulas()
     CPPUNIT_ASSERT(bMoveDone);
     ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(10, 10, 0), 1.0);
     ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(10, 11, 0), 1.0);
-    OUString aFormula;
-    m_pDoc->GetFormula(10, 10, 0, aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("=COLUMN($A$1)"), aFormula);
-    m_pDoc->GetFormula(10, 11, 0, aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("=$A$1+L12"), aFormula);
-    m_pDoc->GetFormula(10, 12, 0, aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("=$Sheet2.K11"), aFormula);
-    m_pDoc->GetFormula(10, 13, 0, aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("=$Sheet2.$A$1"), aFormula);
-    m_pDoc->GetFormula(10, 14, 0, aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("=$Sheet2.K$1"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=COLUMN($A$1)"), getFormula(10, 10, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("=$A$1+L12"), getFormula(10, 11, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("=$Sheet2.K11"), getFormula(10, 12, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("=$Sheet2.$A$1"), getFormula(10, 13, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("=$Sheet2.K$1"), getFormula(10, 14, 0));
 }
 
 void TestCopyPaste::testCopyPasteFormulasExternalDoc()
@@ -11265,12 +10443,9 @@ void TestCopyPaste::testMixDataAsLinkTdf116413()
 
     m_pDoc->MixDocument(aDestRange, ScPasteFunc::ADD, false, aMixDoc);
 
-    OUString aFormula;
-
     // Test precondition
     CPPUNIT_ASSERT_EQUAL(1001.0, m_pDoc->GetValue(0, 1, nTab)); // A2
-    m_pDoc->GetFormula(0, 1, nTab, aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$1)"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$1)"), getFormula(0, 1, nTab));
 
     // Change A1 from 1.0 to 2.0 (auto calculation is triggered)
     m_pDoc->SetValue(0, 0, nTab, 2.0); // A1
@@ -11279,8 +10454,7 @@ void TestCopyPaste::testMixDataAsLinkTdf116413()
     // - Expected: =1002
     // - Actual  : =1001
     CPPUNIT_ASSERT_EQUAL(1002.0, m_pDoc->GetValue(0, 1, nTab)); // A2
-    m_pDoc->GetFormula(0, 1, nTab, aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$1)"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$1)"), getFormula(0, 1, nTab));
 
     // Clear everything and start over.
     clearSheet(m_pDoc, nTab);
@@ -11313,16 +10487,13 @@ void TestCopyPaste::testMixDataAsLinkTdf116413()
 
     // Test precondition
     CPPUNIT_ASSERT_EQUAL(1001.0, m_pDoc->GetValue(0, 1, nTab)); // A2
-    m_pDoc->GetFormula(0, 1, nTab, aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$1)"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$1)"), getFormula(0, 1, nTab));
 
     CPPUNIT_ASSERT_EQUAL(1001.0, m_pDoc->GetValue(1, 1, nTab)); // B2
-    m_pDoc->GetFormula(1, 1, nTab, aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$B$1)"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$B$1)"), getFormula(1, 1, nTab));
 
     CPPUNIT_ASSERT_EQUAL(1001.0, m_pDoc->GetValue(2, 1, nTab)); // C2
-    m_pDoc->GetFormula(2, 1, nTab, aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$C$1)"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$C$1)"), getFormula(2, 1, nTab));
 
     // Change A1:C1 from 1.0 to 2.0 (auto calculation is triggered)
     m_pDoc->SetValue(0, 0, nTab, 2.0); // A1
@@ -11333,16 +10504,13 @@ void TestCopyPaste::testMixDataAsLinkTdf116413()
     // - Expected: =1002
     // - Actual  : =1001
     CPPUNIT_ASSERT_EQUAL(1002.0, m_pDoc->GetValue(0, 1, nTab)); // A2
-    m_pDoc->GetFormula(0, 1, nTab, aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$1)"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$1)"), getFormula(0, 1, nTab));
 
     CPPUNIT_ASSERT_EQUAL(1002.0, m_pDoc->GetValue(1, 1, nTab)); // B2
-    m_pDoc->GetFormula(1, 1, nTab, aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$B$1)"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$B$1)"), getFormula(1, 1, nTab));
 
     CPPUNIT_ASSERT_EQUAL(1002.0, m_pDoc->GetValue(2, 1, nTab)); // C2
-    m_pDoc->GetFormula(2, 1, nTab, aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$C$1)"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$C$1)"), getFormula(2, 1, nTab));
 
     // Scenario 3: Like Scenario 2, but transposed
     m_pDoc->InsertTab(nTab, "Test");
@@ -11370,16 +10538,13 @@ void TestCopyPaste::testMixDataAsLinkTdf116413()
 
     // Test precondition
     CPPUNIT_ASSERT_EQUAL(1001.0, m_pDoc->GetValue(1, 0, nTab)); // B1
-    m_pDoc->GetFormula(1, 0, nTab, aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$1)"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$1)"), getFormula(1, 0, nTab));
 
     CPPUNIT_ASSERT_EQUAL(1001.0, m_pDoc->GetValue(1, 1, nTab)); // B2
-    m_pDoc->GetFormula(1, 1, nTab, aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$2)"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$2)"), getFormula(1, 1, nTab));
 
     CPPUNIT_ASSERT_EQUAL(1001.0, m_pDoc->GetValue(1, 2, nTab)); // B3
-    m_pDoc->GetFormula(1, 2, nTab, aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$3)"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$3)"), getFormula(1, 2, nTab));
 
     // Change A1:C1 from 1.0 to 2.0 (auto calculation is triggered)
     m_pDoc->SetValue(0, 0, nTab, 2.0); // A1
@@ -11390,16 +10555,13 @@ void TestCopyPaste::testMixDataAsLinkTdf116413()
     // - Expected: =1002
     // - Actual  : =1001
     CPPUNIT_ASSERT_EQUAL(1002.0, m_pDoc->GetValue(1, 0, nTab)); // B1
-    m_pDoc->GetFormula(1, 0, nTab, aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$1)"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$1)"), getFormula(1, 0, nTab));
 
     CPPUNIT_ASSERT_EQUAL(1002.0, m_pDoc->GetValue(1, 1, nTab)); // B2
-    m_pDoc->GetFormula(1, 1, nTab, aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$2)"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$2)"), getFormula(1, 1, nTab));
 
     CPPUNIT_ASSERT_EQUAL(1002.0, m_pDoc->GetValue(1, 2, nTab)); // B3
-    m_pDoc->GetFormula(1, 2, nTab, aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$3)"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$3)"), getFormula(1, 2, nTab));
 
     m_pDoc->DeleteTab(nTab);
 }
@@ -11431,12 +10593,9 @@ void TestCopyPaste::testMixDataWithFormulaTdf116413()
     pasteFromClip(m_pDoc, aDestRange, &aClipDoc);
     m_pDoc->MixDocument(aDestRange, ScPasteFunc::ADD, false, aMixDoc);
 
-    OUString aFormula;
-
     // Test precondition
     CPPUNIT_ASSERT_EQUAL(101.0, m_pDoc->GetValue(0, 2, nTab)); // A3
-    m_pDoc->GetFormula(0, 2, nTab, aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("=(A2)+100"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=(A2)+100"), getFormula(0, 2, nTab));
 
     // Change A2 from 1.0 to 2.0 (auto calculation is triggered)
     m_pDoc->SetValue(0, 1, nTab, 2.0); // A2
@@ -11445,8 +10604,7 @@ void TestCopyPaste::testMixDataWithFormulaTdf116413()
     // - Expected: =102
     // - Actual  : =101
     CPPUNIT_ASSERT_EQUAL(102.0, m_pDoc->GetValue(0, 2, nTab)); // A3
-    m_pDoc->GetFormula(0, 2, nTab, aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("=(A2)+100"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=(A2)+100"), getFormula(0, 2, nTab));
 
     // Clear everything and start over.
     clearSheet(m_pDoc, nTab);
@@ -11485,20 +10643,16 @@ void TestCopyPaste::testMixDataWithFormulaTdf116413()
 
     // Test precondition
     CPPUNIT_ASSERT_EQUAL(1100.0, m_pDoc->GetValue(0, 2, nTab)); // A3
-    m_pDoc->GetFormula(0, 2, nTab, aFormula);
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aFormula);
+    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, getFormula(0, 2, nTab));
 
     CPPUNIT_ASSERT_EQUAL(101.0, m_pDoc->GetValue(1, 2, nTab)); // B3
-    m_pDoc->GetFormula(1, 2, nTab, aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("=(B2)+100"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=(B2)+100"), getFormula(1, 2, nTab));
 
     CPPUNIT_ASSERT_EQUAL(101.0, m_pDoc->GetValue(2, 2, nTab)); // C3
-    m_pDoc->GetFormula(2, 2, nTab, aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("=(C2)+100"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=(C2)+100"), getFormula(2, 2, nTab));
 
     CPPUNIT_ASSERT_EQUAL(1100.0, m_pDoc->GetValue(3, 2, nTab)); // D3
-    m_pDoc->GetFormula(3, 2, nTab, aFormula);
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aFormula);
+    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, getFormula(3, 2, nTab));
 
     // Change A2:D2 from 1.0 to 2.0 (auto calculation is triggered)
     m_pDoc->SetValue(0, 1, nTab, 2.0); // A2
@@ -11507,23 +10661,19 @@ void TestCopyPaste::testMixDataWithFormulaTdf116413()
     m_pDoc->SetValue(3, 1, nTab, 2.0); // D2
 
     CPPUNIT_ASSERT_EQUAL(1100.0, m_pDoc->GetValue(0, 2, nTab)); // A3
-    m_pDoc->GetFormula(0, 2, nTab, aFormula);
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aFormula);
+    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, getFormula(0, 2, nTab));
 
     // Without the fix in place, this would have failed with
     // - Expected: =102
     // - Actual  : =101
     CPPUNIT_ASSERT_EQUAL(102.0, m_pDoc->GetValue(1, 2, nTab)); // B3
-    m_pDoc->GetFormula(1, 2, nTab, aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("=(B2)+100"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=(B2)+100"), getFormula(1, 2, nTab));
 
     CPPUNIT_ASSERT_EQUAL(102.0, m_pDoc->GetValue(2, 2, nTab)); // C3
-    m_pDoc->GetFormula(2, 2, nTab, aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("=(C2)+100"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=(C2)+100"), getFormula(2, 2, nTab));
 
     CPPUNIT_ASSERT_EQUAL(1100.0, m_pDoc->GetValue(3, 2, nTab)); // D3
-    m_pDoc->GetFormula(3, 2, nTab, aFormula);
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aFormula);
+    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, getFormula(3, 2, nTab));
 
     // Scenario 3: Similar to scenario 2, but transposed
     m_pDoc->InsertTab(nTab, "Test");
@@ -11557,20 +10707,16 @@ void TestCopyPaste::testMixDataWithFormulaTdf116413()
 
     // Test precondition
     CPPUNIT_ASSERT_EQUAL(1100.0, m_pDoc->GetValue(2, 0, nTab)); // C1
-    m_pDoc->GetFormula(2, 0, nTab, aFormula);
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aFormula);
+    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, getFormula(2, 0, nTab));
 
     CPPUNIT_ASSERT_EQUAL(101.0, m_pDoc->GetValue(2, 1, nTab)); // C2
-    m_pDoc->GetFormula(2, 1, nTab, aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("=(B2)+100"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=(B2)+100"), getFormula(2, 1, nTab));
 
     CPPUNIT_ASSERT_EQUAL(101.0, m_pDoc->GetValue(2, 2, nTab)); // C3
-    m_pDoc->GetFormula(2, 2, nTab, aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("=(B3)+100"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=(B3)+100"), getFormula(2, 2, nTab));
 
     CPPUNIT_ASSERT_EQUAL(1100.0, m_pDoc->GetValue(2, 3, nTab)); // C4
-    m_pDoc->GetFormula(2, 3, nTab, aFormula);
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aFormula);
+    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, getFormula(2, 3, nTab));
 
     // Change B1:B4 from 1.0 to 2.0 (auto calculation is triggered)
     m_pDoc->SetValue(1, 0, nTab, 2.0); // B1
@@ -11579,23 +10725,19 @@ void TestCopyPaste::testMixDataWithFormulaTdf116413()
     m_pDoc->SetValue(1, 3, nTab, 2.0); // B4
 
     CPPUNIT_ASSERT_EQUAL(1100.0, m_pDoc->GetValue(2, 0, nTab)); // C1
-    m_pDoc->GetFormula(2, 0, nTab, aFormula);
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aFormula);
+    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, getFormula(2, 0, nTab));
 
     // Without the fix in place, this would have failed with
     // - Expected: =102
     // - Actual  : =101
     CPPUNIT_ASSERT_EQUAL(102.0, m_pDoc->GetValue(2, 1, nTab)); // C2
-    m_pDoc->GetFormula(2, 1, nTab, aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("=(B2)+100"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=(B2)+100"), getFormula(2, 1, nTab));
 
     CPPUNIT_ASSERT_EQUAL(102.0, m_pDoc->GetValue(2, 2, nTab)); // C3
-    m_pDoc->GetFormula(2, 2, nTab, aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("=(B3)+100"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=(B3)+100"), getFormula(2, 2, nTab));
 
     CPPUNIT_ASSERT_EQUAL(1100.0, m_pDoc->GetValue(2, 3, nTab)); // C4
-    m_pDoc->GetFormula(2, 3, nTab, aFormula);
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aFormula);
+    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, getFormula(2, 3, nTab));
 
     m_pDoc->DeleteTab(nTab);
 }
