@@ -34,6 +34,24 @@
       "revId": "3d1f28dd1fbb2fe3f5b933a9d692fb4d033f08b6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b53614c_6d1464e8",
+        "filename": "configure.ac",
+        "patchSetId": 12
+      },
+      "lineNbr": 919,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-13T20:44:21Z",
+      "side": 1,
+      "message": "\u003e Interestingly, your LO PostgreSQL build now must use the system OpenLDAP.\n\nNo, my build doesn\u0027t use any system OpenLDAP.  My incremental build started to fail, as the stale libpq.a still referenced OpenLDAP symbols, but a newly linked Library_libpostgresql-sdbc-impl, which links against libpq.a, no longer links against OpenLDAP.\n\n\u003e Or maybe it\u0027s better to keep test_openldap\u003dyes the default and not depend on X11 at all and drop it from the disable_x11_tests() list. It definitely doesn\u0027t have a hard dependency on X11 and quite probably makes sense in a headless build too.\n\nYes, I was puzzled why you tied test_openldap\u003dyes to X11, when it clearly has other uses too.  Can you clean that up?",
+      "parentUuid": "9354a86f_2d12fc1c",
+      "revId": "3d1f28dd1fbb2fe3f5b933a9d692fb4d033f08b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
