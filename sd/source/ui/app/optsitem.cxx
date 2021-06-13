@@ -517,8 +517,8 @@ bool SdOptionsMisc::ReadData( const Any* pValues )
     if( pValues[6].hasValue() ) SetDoubleClickTextEdit( *o3tl::doAccess<bool>(pValues[ 6 ]) );
     if( pValues[7].hasValue() ) SetClickChangeRotation( *o3tl::doAccess<bool>(pValues[ 7 ]) );
     if( pValues[9].hasValue() ) SetSolidDragging( *o3tl::doAccess<bool>(pValues[ 9 ]) );
-    if( pValues[10].hasValue() ) SetDefaultObjectSizeWidth( *o3tl::doAccess<sal_uInt32>(pValues[ 10 ]) );
-    if( pValues[11].hasValue() ) SetDefaultObjectSizeHeight( *o3tl::doAccess<sal_uInt32>(pValues[ 11 ]) );
+    if( pValues[10].hasValue() ) SetDefaultObjectSizeWidth( *o3tl::doAccess<sal_Int32>(pValues[ 10 ]) );
+    if( pValues[11].hasValue() ) SetDefaultObjectSizeHeight( *o3tl::doAccess<sal_Int32>(pValues[ 11 ]) );
     if( pValues[12].hasValue() ) SetPrinterIndependentLayout( *o3tl::doAccess<sal_uInt16>(pValues[ 12 ]) );
 
     if( pValues[13].hasValue() )

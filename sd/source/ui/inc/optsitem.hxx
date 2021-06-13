@@ -182,8 +182,8 @@ class SD_DLLPUBLIC SdOptionsMisc : public SdOptionsGeneric
 {
 private:
 
-    sal_uLong   nDefaultObjectSizeWidth;
-    sal_uLong   nDefaultObjectSizeHeight;
+    sal_Int32   nDefaultObjectSizeWidth;
+    sal_Int32   nDefaultObjectSizeHeight;
 
     bool    bStartWithTemplate      : 1;    // Misc/NewDoc/AutoPilot
     bool    bMarkedHitMovesAlways   : 1;    // Misc/ObjectMoveable
@@ -259,8 +259,8 @@ public:
     sal_uInt16  GetPrinterIndependentLayout() const { Init(); return mnPrinterIndependentLayout; };
     bool    IsShowUndoDeleteWarning() const { Init(); return bShowUndoDeleteWarning; }
     bool    IsSlideshowRespectZOrder() const { Init(); return bSlideshowRespectZOrder; }
-    sal_uLong   GetDefaultObjectSizeWidth() const { Init(); return nDefaultObjectSizeWidth; }
-    sal_uLong   GetDefaultObjectSizeHeight() const { Init(); return nDefaultObjectSizeHeight; }
+    sal_Int32   GetDefaultObjectSizeWidth() const { Init(); return nDefaultObjectSizeWidth; }
+    sal_Int32   GetDefaultObjectSizeHeight() const { Init(); return nDefaultObjectSizeHeight; }
 
     bool    IsPreviewNewEffects() const { Init(); return bPreviewNewEffects; }
     bool    IsPreviewChangedEffects() const { Init(); return bPreviewChangedEffects; }
@@ -299,8 +299,8 @@ public:
     void    SetSolidDragging( bool bOn ) { if( bSolidDragging != bOn ) { OptionsChanged(); bSolidDragging = bOn; } }
     void    SetShowUndoDeleteWarning( bool bOn ) { if( bShowUndoDeleteWarning != bOn ) { OptionsChanged(); bShowUndoDeleteWarning = bOn; } }
     void    SetSlideshowRespectZOrder( bool bOn ) { if( bSlideshowRespectZOrder != bOn ) { OptionsChanged(); bSlideshowRespectZOrder = bOn; } }
-    void    SetDefaultObjectSizeWidth( sal_uLong nWidth ) { if( nDefaultObjectSizeWidth != nWidth ) { OptionsChanged(); nDefaultObjectSizeWidth = nWidth; } }
-    void    SetDefaultObjectSizeHeight( sal_uLong nHeight ) { if( nDefaultObjectSizeHeight != nHeight ) { OptionsChanged(); nDefaultObjectSizeHeight = nHeight; } }
+    void    SetDefaultObjectSizeWidth( sal_Int32 nWidth ) { if( nDefaultObjectSizeWidth != nWidth ) { OptionsChanged(); nDefaultObjectSizeWidth = nWidth; } }
+    void    SetDefaultObjectSizeHeight( sal_Int32 nHeight ) { if( nDefaultObjectSizeHeight != nHeight ) { OptionsChanged(); nDefaultObjectSizeHeight = nHeight; } }
 
     void    SetPreviewNewEffects( bool bOn )  { if( bPreviewNewEffects != bOn ) { OptionsChanged(); bPreviewNewEffects = bOn; } }
     void    SetPreviewChangedEffects( bool bOn )  { if( bPreviewChangedEffects != bOn ) { OptionsChanged(); bPreviewChangedEffects = bOn; } }
