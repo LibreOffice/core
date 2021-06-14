@@ -254,6 +254,37 @@ def enforce_menubutton_indicator_consistency(current):
           if status_elem.text != 'x-office-calendar':
             status_elem.text = "open-menu-symbolic"
 
+def enforce_active_in_group_consistency(current):
+  group = None
+  active = None
+  isradiobutton = current.get('class') == "GtkRadioButton"
+  insertpos = 0
+  for child in current:
+    enforce_active_in_group_consistency(child)
+    if not isradiobutton:
+        continue
+    if child.tag == "property":
+      insertpos = insertpos + 1;
+      attributes = child.attrib
+      if attributes.get("name") == "group":
+        group = child
+      if attributes.get("name") == "active":
+        active = child
+
+  if isradiobutton:
+    if active != None and active.text != "True":
+      raise Exception(sys.argv[1] + ': non-standard active value', active.text)
+    if group != None and active != None:
+      # if there is a group then we are not the leader and should not be active
+      current.remove(active)
+    elif group == None and active == None:
+      # if there is no group then we are the leader and should be active
+      active = etree.Element("property")
+      attributes = active.attrib
+      attributes["name"] = "active"
+      active.text = "True"
+      current.insert(insertpos, active)
+
 with open(sys.argv[1], encoding="utf-8") as f:
   header = f.readline()
   f.seek(0)
@@ -277,6 +308,7 @@ remove_check_button_align(root)
 remove_track_visited_links(root)
 remove_label_fill(root)
 enforce_menubutton_indicator_consistency(root)
+enforce_active_in_group_consistency(root)
 
 with open(sys.argv[1], 'wb') as o:
   # without encoding='unicode' (and the matching encode("utf8")) we get &#XXXX replacements for non-ascii characters
