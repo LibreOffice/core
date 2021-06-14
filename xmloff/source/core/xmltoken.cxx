@@ -1376,6 +1376,7 @@ namespace xmloff::token {
         TOKEN( "null-year",                       XML_NULL_YEAR ),
         TOKEN( "num-format",                      XML_NUM_FORMAT ),
         TOKEN( "num-letter-sync",                 XML_NUM_LETTER_SYNC ),
+        TOKEN( "num-list-format",                 XML_NUM_LIST_FORMAT ),
         TOKEN( "num-prefix",                      XML_NUM_PREFIX ),
         TOKEN( "num-suffix",                      XML_NUM_SUFFIX ),
         TOKEN( "numalign",                        XML_NUMALIGN ),
