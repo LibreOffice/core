@@ -12,7 +12,6 @@
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <rtl/strbuf.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <rtl/character.hxx>
 #include <sal/log.hxx>
 #include "rtfskipdestination.hxx"

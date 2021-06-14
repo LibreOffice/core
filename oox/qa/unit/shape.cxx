@@ -14,7 +14,6 @@
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
 
-#include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
