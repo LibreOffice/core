@@ -161,7 +161,7 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
     //void checkMapMode(const GDIMetaFile& rMetaFile);
     void testMapMode();
 
-    //void checkFont(const GDIMetaFile& rMetaFile);
+    void checkFont(const GDIMetaFile& rMetaFile);
     void testFont();
 
     void checkPushPop(const GDIMetaFile& rMetaFile);
@@ -1717,8 +1717,43 @@ void SvmTest::testTextAlign()
 
 void SvmTest::testMapMode()
 {}
+
+void SvmTest::checkFont(const GDIMetaFile& rMetafile)
+{
+    xmlDocUniquePtr pDoc = dumpMeta(rMetafile);
+
+    assertXPathAttrs(pDoc, "/metafile/font[1]", {
+        {"color", "#ffffff"},
+        {"fillcolor", "#ffffff"},
+        {"name", "Test Family Name"},
+        {"stylename", "Test Style Name"},
+        {"width", "12"},
+        {"height", "14"},
+        {"orientation", "50"},
+        {"weight", "thin"},
+        {"vertical", "true"},
+    });
+}
+
 void SvmTest::testFont()
-{}
+{
+    GDIMetaFile aGDIMetaFile;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
+
+    vcl::Font aFont(FontFamily::FAMILY_SCRIPT, Size(12, 12));
+    aFont.SetWeight(FontWeight::WEIGHT_THIN);
+    aFont.SetFamilyName("Test Family Name");
+    aFont.SetStyleName("Test Style Name");
+    aFont.SetFontHeight(14.4);
+    aFont.SetVertical(true);
+    aFont.SetOrientation(Degree10(50));
+
+    pVirtualDev->SetFont(aFont);
+
+    checkFont(writeAndReadStream(aGDIMetaFile));
+    checkFont(readFile(u"font.svm"));
+}
 
 void SvmTest::checkPushPop(const GDIMetaFile& rMetaFile)
 {
