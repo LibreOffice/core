@@ -4734,21 +4734,11 @@ static char* getFontSubset (std::string_view aFontName)
 
     if ( pList && !aFoundFont.isEmpty() )
     {
-        sal_uInt16 nFontCount = pList->GetFontNameCount();
-        sal_uInt16 nItFont = 0;
-        for (; nItFont < nFontCount; ++nItFont)
-        {
-            if (aFoundFont == pList->GetFontName(nItFont).GetFamilyName())
-            {
-                break;
-            }
-        }
-
-        if ( nItFont < nFontCount )
+        if (sal_Handle hMetric = pList->GetFirstFontMetric(aFoundFont))
         {
             FontCharMapRef xFontCharMap (new FontCharMap());
             auto aDevice(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
-            const vcl::Font& aFont(pList->GetFontName(nItFont));
+            const vcl::Font& aFont(FontList::GetFontMetric(hMetric));
 
             aDevice->SetFont(aFont);
             aDevice->GetFontCharMap(xFontCharMap);
@@ -5383,43 +5373,38 @@ unsigned char* doc_renderFontOrientation(SAL_UNUSED_PARAMETER LibreOfficeKitDocu
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    OString aSearchedFontName(pFontName);
-    OUString aText(OStringToOUString(pChar, RTL_TEXTENCODING_UTF8));
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     const SvxFontListItem* pFonts = static_cast<const SvxFontListItem*>(
         pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST));
     const FontList* pList = pFonts ? pFonts->GetFontList() : nullptr;
 
-    const int nDefaultFontSize = 25;
-
     if ( pList )
     {
-        sal_uInt16 nFontCount = pList->GetFontNameCount();
-        for (sal_uInt16 i = 0; i < nFontCount; ++i)
+        if (sal_Handle hMetric
+            = pList->GetFirstFontMetric(OStringToOUString(pFontName, RTL_TEXTENCODING_UTF8)))
         {
-            const FontMetric& rFontMetric = pList->GetFontName(i);
-            const OUString& aFontName = rFontMetric.GetFamilyName();
-            if (aSearchedFontName != aFontName.toUtf8())
-                continue;
+            const FontMetric& rFontMetric = FontList::GetFontMetric(hMetric);
 
+            OUString aText(OStringToOUString(pChar, RTL_TEXTENCODING_UTF8));
             if (aText.isEmpty())
                 aText = rFontMetric.GetFamilyName();
 
             auto aDevice(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
             ::tools::Rectangle aRect;
             vcl::Font aFont(rFontMetric);
+            const int nDefaultFontSize = 25;
             aFont.SetFontSize(Size(0, nDefaultFontSize));
             aFont.SetOrientation(Degree10(pOrientation));
             aDevice->SetFont(aFont);
             aDevice->GetTextBoundRect(aRect, aText);
             if (aRect.IsEmpty())
-                break;
+                return nullptr;
 
             int nFontWidth = aRect.Right() + 1;
             int nFontHeight = aRect.Bottom() + 1;
 
             if (nFontWidth <= 0 || nFontHeight <= 0)
-                break;
+                return nullptr;
 
             if (*pFontWidth > 0 && *pFontHeight > 0)
             {
@@ -5444,7 +5429,7 @@ unsigned char* doc_renderFontOrientation(SAL_UNUSED_PARAMETER LibreOfficeKitDocu
 
             unsigned char* pBuffer = static_cast<unsigned char*>(malloc(4 * nFontWidth * nFontHeight));
             if (!pBuffer)
-                break;
+                return nullptr;
 
             memset(pBuffer, 0, nFontWidth * nFontHeight * 4);
             aDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
