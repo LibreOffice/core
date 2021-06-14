@@ -43,6 +43,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 
 #include <unotools/saveopt.hxx>
+#include <unotools/securityoptions.hxx>
 
 #include <xmloff/XMLPageExport.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -69,6 +70,7 @@ namespace com::sun::star::xml::sax { class XExtendedDocumentHandler; }
 namespace com::sun::star::xml::sax { class XLocator; }
 
 class SvXMLNamespaceMap;
+class SvtSecurityMapPersonalInfo;
 class SvXMLExport_Impl;
 class ProgressBarHelper;
 class XMLEventExport;
@@ -135,6 +137,7 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public cppu::WeakImplHelper<
     OUString     msFilterName;
     OUString     msImgFilterName;
     std::unique_ptr<SvXMLNamespaceMap> mpNamespaceMap;    // the namespace map
+    std::unique_ptr<SvtSecurityMapPersonalInfo> mpAuthorIDs; // map authors to remove personal info
     SvXMLUnitConverter          maUnitConv;        // the unit converter
     std::unique_ptr<SvXMLNumFmtExport> mpNumExport;
     std::unique_ptr<ProgressBarHelper> mpProgressBarHelper;
@@ -389,6 +392,9 @@ public:
 
     // Get (const) namespace map.
     const SvXMLNamespaceMap& GetNamespaceMap() const { return *mpNamespaceMap; }
+
+    // Get author id to remove personal info
+    size_t GetInfoID( const OUString sPersonalInfo ) const { return mpAuthorIDs->GetInfoID(sPersonalInfo); }
 
     // Get unit converter
     const SvXMLUnitConverter& GetMM100UnitConverter() const { return maUnitConv; }
