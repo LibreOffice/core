@@ -46,6 +46,30 @@
       "revId": "2c98f8a2db6d5e2dd3fa827392d2205838f68c9b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f2e5ff2_caa0055a",
+        "filename": "vcl/backendtest/GraphicsRenderTests.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-06-14T10:18:21Z",
+      "side": 1,
+      "message": "I\u0027ve fixed this problem by passing the value to m_aCurGraphicsBackend in one of the methods after calling the setup method and now it works fine...\nAlso, I\u0027ll change it right away then(std::string)!",
+      "parentUuid": "09561669_602d2d4e",
+      "range": {
+        "startLine": 35,
+        "startChar": 3,
+        "endLine": 38,
+        "endChar": 70
+      },
+      "revId": "2c98f8a2db6d5e2dd3fa827392d2205838f68c9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
