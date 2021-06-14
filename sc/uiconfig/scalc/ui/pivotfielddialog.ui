@@ -137,7 +137,6 @@
                         <property name="use_underline">True</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">auto</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>

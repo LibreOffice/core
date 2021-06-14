@@ -196,7 +196,6 @@
                         <property name="use_underline">True</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">RB_INSERT_NEW_PAGES</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -212,7 +211,6 @@
                         <property name="receives_default">False</property>
                         <property name="halign">start</property>
                         <property name="use_underline">True</property>
-                        <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">RB_USE_EXISTING_PAGES</property>
                       </object>

@@ -180,7 +180,6 @@
                         <property name="always_show_image">True</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">vert</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
