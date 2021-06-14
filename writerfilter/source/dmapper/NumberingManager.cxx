@@ -44,6 +44,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/string.hxx>
+#include <regex>
 
 using namespace com::sun::star;
 
@@ -676,18 +677,19 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
     {
         case NS_ooxml::LN_CT_LevelText_val:
         {
-            //this strings contains the definition of the level
-            //the level number is marked as %n
-            //these numbers can be mixed randomly together with separators pre- and suffixes
-            //the Writer supports only a number of upper levels to show, separators is always a dot
-            //and each level can have a prefix and a suffix
             if(pCurrentLvl)
             {
                 //if the BulletChar is a soft-hyphen (0xad)
                 //replace it with a hard-hyphen (0x2d)
                 //-> this fixes missing hyphen export in PDF etc.
                 // see tdf#101626
-                pCurrentLvl->SetBulletChar( rVal.getString().replace( 0xad, 0x2d ) );
+                std::string sLevelText = rVal.getString().replace(0xad, 0x2d).toUtf8().getStr();
+
+                // DOCX level-text contains levels definition in format "%1.%2.%3"
+                // we need to convert it to LO internal representation: "%1%.%2%.%3%"
+                std::regex aTokenRegex("(%\\d)");
+                sLevelText = std::regex_replace(sLevelText, aTokenRegex, "$1%");
+                pCurrentLvl->SetBulletChar( OUString::fromUtf8(sLevelText) );
             }
         }
         break;

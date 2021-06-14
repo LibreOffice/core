@@ -1283,6 +1283,7 @@ null-date
 null-year
 num-format
 num-letter-sync
+num-list-format
 num-prefix
 num-suffix
 numalign
