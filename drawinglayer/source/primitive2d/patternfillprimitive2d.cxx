@@ -93,6 +93,30 @@ namespace drawinglayer::primitive2d
             }
         }
 
+        void PatternFillPrimitive2D::getTileSize(
+            sal_uInt32& rWidth,
+            sal_uInt32& rHeight,
+            const geometry::ViewInformation2D& rViewInformation) const
+        {
+            const basegfx::B2DRange aMaskRange(getMask().getB2DRange());
+
+            // get discrete rounded up square size of a single tile
+            const basegfx::B2DHomMatrix aMaskRangeTransformation(
+                basegfx::utils::createScaleTranslateB2DHomMatrix(
+                    aMaskRange.getRange(),
+                    aMaskRange.getMinimum()));
+            const basegfx::B2DHomMatrix aTransform(
+                rViewInformation.getObjectToViewTransformation() * aMaskRangeTransformation);
+            const basegfx::B2DPoint aTopLeft(aTransform * getReferenceRange().getMinimum());
+            const basegfx::B2DPoint aX(aTransform * basegfx::B2DPoint(getReferenceRange().getMaxX(), getReferenceRange().getMinY()));
+            const basegfx::B2DPoint aY(aTransform * basegfx::B2DPoint(getReferenceRange().getMinX(), getReferenceRange().getMaxY()));
+            const double fW(basegfx::B2DVector(aX - aTopLeft).getLength());
+            const double fH(basegfx::B2DVector(aY - aTopLeft).getLength());
+
+            rWidth = basegfx::fround(ceil(fW));
+            rHeight = basegfx::fround(ceil(fH));
+        }
+
         Primitive2DContainer PatternFillPrimitive2D::createContent(const geometry::ViewInformation2D& rViewInformation) const
         {
             Primitive2DContainer aContent;
@@ -142,7 +166,7 @@ namespace drawinglayer::primitive2d
 
                 // check if content needs to be clipped
                 const basegfx::B2DRange aUnitRange(0.0, 0.0, 1.0, 1.0);
-                const basegfx::B2DRange aContentRange(getChildren().getB2DRange(rViewInformation));
+                const basegfx::B2DRange aContentRange(aContent.getB2DRange(rViewInformation));
 
                 if(!aUnitRange.isInside(aContentRange))
                 {
@@ -156,6 +180,25 @@ namespace drawinglayer::primitive2d
             }
 
             return aContent;
+        }
+
+        //  create buffered content in given resolution
+        BitmapEx PatternFillPrimitive2D::createTileImage(sal_uInt32 nWidth, sal_uInt32 nHeight) const
+        {
+            const geometry::ViewInformation2D aViewInformation2D;
+            const Primitive2DContainer aContent(createContent(aViewInformation2D));
+            const primitive2d::Primitive2DReference xEmbedRef(
+                    new primitive2d::TransformPrimitive2D(
+                        basegfx::utils::createScaleB2DHomMatrix(nWidth, nHeight),
+                        aContent));
+            const primitive2d::Primitive2DContainer xEmbedSeq { xEmbedRef };
+
+            return convertToBitmapEx(
+                        xEmbedSeq,
+                        aViewInformation2D,
+                        nWidth,
+                        nHeight,
+                        nWidth * nHeight);
         }
 
         void PatternFillPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const

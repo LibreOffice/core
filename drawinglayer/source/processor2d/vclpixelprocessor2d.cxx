@@ -57,6 +57,7 @@
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
 #include <drawinglayer/primitive2d/softedgeprimitive2d.hxx>
 #include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
+#include <drawinglayer/primitive2d/patternfillprimitive2d.hxx>
 
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XControl.hpp>
@@ -425,6 +426,12 @@ void VclPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitiv
         {
             processFillGradientPrimitive2D(
                 static_cast<const drawinglayer::primitive2d::FillGradientPrimitive2D&>(rCandidate));
+            break;
+        }
+        case PRIMITIVE2D_ID_PATTERNFILLPRIMITIVE2D:
+        {
+            processPatternFillPrimitive2D(
+                static_cast<const drawinglayer::primitive2d::PatternFillPrimitive2D&>(rCandidate));
             break;
         }
         default:
@@ -1229,6 +1236,72 @@ void VclPixelProcessor2D::processFillGradientPrimitive2D(
     mpOutputDevice->IntersectClipRegion(aOutputRectangle);
     mpOutputDevice->DrawGradient(aFullRectangle, aGradient);
     mpOutputDevice->Pop();
+}
+
+void VclPixelProcessor2D::processPatternFillPrimitive2D(
+    const primitive2d::PatternFillPrimitive2D& rPrimitive)
+{
+    const basegfx::B2DRange& rReferenceRange = rPrimitive.getReferenceRange();
+    if (rReferenceRange.isEmpty() || rReferenceRange.getWidth() <= 0.0
+        || rReferenceRange.getHeight() <= 0.0)
+        return;
+
+    basegfx::B2DPolyPolygon aMask = rPrimitive.getMask();
+    const basegfx::B2DRange aMaskRange(aMask.getB2DRange());
+
+    if (aMaskRange.isEmpty() || aMaskRange.getWidth() <= 0.0 || aMaskRange.getHeight() <= 0.0)
+        return;
+
+    aMask.transform(maCurrentTransformation);
+
+    sal_uInt32 nTileWidth, nTileHeight;
+    rPrimitive.getTileSize(nTileWidth, nTileHeight, getViewInformation2D());
+    if (nTileWidth == 0 || nTileHeight == 0)
+        return;
+    BitmapEx aTileImage = rPrimitive.createTileImage(nTileWidth, nTileHeight);
+    tools::Rectangle aMaskRect = vcl::unotools::rectangleFromB2DRectangle(aMaskRange);
+
+    // Unless smooth edges are needed, simply use clipping.
+    if (basegfx::utils::isRectangle(aMask) || !SvtOptionsDrawinglayer::IsAntiAliasing())
+    {
+        mpOutputDevice->Push(PushFlags::CLIPREGION);
+        mpOutputDevice->IntersectClipRegion(vcl::Region(aMask));
+        mpOutputDevice->DrawWallpaper(aMaskRect, Wallpaper(aTileImage));
+        return;
+    }
+
+    const basegfx::B2DRange aRange(basegfx::utils::getRange(aMask));
+    impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
+
+    if (!aBufferDevice.isVisible())
+        return;
+
+    // remember last OutDev and set to content
+    OutputDevice* pLastOutputDevice = mpOutputDevice;
+    mpOutputDevice = &aBufferDevice.getContent();
+
+    // paint to it
+    if (nTileWidth == 1 && nTileHeight == 1)
+    {
+        Color col = aTileImage.GetPixelColor(0, 0);
+        mpOutputDevice->SetLineColor(col);
+        mpOutputDevice->SetFillColor(col);
+        mpOutputDevice->DrawRect(aMaskRect);
+    }
+    else
+        mpOutputDevice->DrawWallpaper(aMaskRect, Wallpaper(aTileImage));
+
+    // back to old OutDev
+    mpOutputDevice = pLastOutputDevice;
+
+    // draw mask
+    //    VirtualDevice& rMask = aBufferDevice.getTransparence();
+    //    rMask.SetLineColor();
+    //    rMask.SetFillColor(COL_BLACK);
+    //    rMask.DrawPolyPolygon(aMask);
+
+    // dump buffer to outdev
+    aBufferDevice.paint();
 }
 
 } // end of namespace
