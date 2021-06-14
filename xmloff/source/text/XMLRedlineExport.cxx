@@ -42,6 +42,7 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmluconv.hxx>
+#include <unotools/securityoptions.hxx>
 
 
 using namespace ::com::sun::star;
@@ -433,6 +434,9 @@ OUString XMLRedlineExport::GetRedlineID(
 void XMLRedlineExport::ExportChangeInfo(
     const Reference<XPropertySet> & rPropSet)
 {
+    SvtSecurityOptions aSecOpt;
+    bool bRemovePersonalInfo = aSecOpt.IsOptionSet(
+            SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo );
 
     SvXMLElementExport aChangeInfo(rExport, XML_NAMESPACE_OFFICE,
                                    XML_CHANGE_INFO, true, true);
@@ -445,7 +449,9 @@ void XMLRedlineExport::ExportChangeInfo(
         SvXMLElementExport aCreatorElem( rExport, XML_NAMESPACE_DC,
                                           XML_CREATOR, true,
                                           false );
-        rExport.Characters(sTmp);
+        rExport.Characters(bRemovePersonalInfo
+                ? OUString::number(rExport.GetInfoID(sTmp))
+                : sTmp );
     }
 
     aAny = rPropSet->getPropertyValue("RedlineDateTime");
@@ -457,7 +463,9 @@ void XMLRedlineExport::ExportChangeInfo(
         SvXMLElementExport aDateElem( rExport, XML_NAMESPACE_DC,
                                           XML_DATE, true,
                                           false );
-        rExport.Characters(sBuf.makeStringAndClear());
+        rExport.Characters(bRemovePersonalInfo
+                ? "1970-01-01T00:00:00"
+                :  sBuf.makeStringAndClear());
     }
 
     // comment as <text:p> sequence
@@ -470,6 +478,9 @@ void XMLRedlineExport::ExportChangeInfo(
     const Sequence<PropertyValue> & rPropertyValues)
 {
     OUString sComment;
+    SvtSecurityOptions aSecOpt;
+    bool bRemovePersonalInfo = aSecOpt.IsOptionSet(
+            SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo );
 
     for(const PropertyValue& rVal : rPropertyValues)
     {
@@ -479,7 +490,9 @@ void XMLRedlineExport::ExportChangeInfo(
             rVal.Value >>= sTmp;
             if (!sTmp.isEmpty())
             {
-                rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_CHG_AUTHOR, sTmp);
+                rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_CHG_AUTHOR, bRemovePersonalInfo
+                        ? OUString::number(rExport.GetInfoID(sTmp))
+                        : sTmp);
             }
         }
         else if( rVal.Name == "RedlineComment" )
@@ -492,8 +505,9 @@ void XMLRedlineExport::ExportChangeInfo(
             rVal.Value >>= aDateTime;
             OUStringBuffer sBuf;
             ::sax::Converter::convertDateTime(sBuf, aDateTime, nullptr);
-            rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_CHG_DATE_TIME,
-                                 sBuf.makeStringAndClear());
+            rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_CHG_DATE_TIME, bRemovePersonalInfo
+                    ? "1970-01-01T00:00:00"
+                    : sBuf.makeStringAndClear());
         }
         else if( rVal.Name == "RedlineType" )
         {
