@@ -6063,116 +6063,133 @@ void DocxAttributeOutput::WritePostponedDMLDrawing()
         return;
 
     // Clear the list early, this method may be called recursively.
-    std::unique_ptr< std::vector<PostponedDrawing> > pPostponedDMLDrawings(std::move(m_pPostponedDMLDrawings));
-    std::unique_ptr< std::vector<PostponedOLE> > pPostponedOLEs(std::move(m_pPostponedOLEs));
+    std::unique_ptr<std::vector<PostponedDrawing>> pPostponedDMLDrawings(
+        std::move(m_pPostponedDMLDrawings));
+    std::unique_ptr<std::vector<PostponedOLE>> pPostponedOLEs(std::move(m_pPostponedOLEs));
 
-    for( const auto & rPostponedDrawing : *pPostponedDMLDrawings )
+    for (const auto& rPostponedDrawing : *pPostponedDMLDrawings)
     {
         // Avoid w:drawing within another w:drawing.
-        if ( IsAlternateContentChoiceOpen() && !( m_rExport.SdrExporter().IsDrawingOpen()) )
-           m_rExport.SdrExporter().writeDMLDrawing(rPostponedDrawing.object, rPostponedDrawing.frame, m_anchorId++);
+        if (IsAlternateContentChoiceOpen() && !(m_rExport.SdrExporter().IsDrawingOpen()))
+            m_rExport.SdrExporter().writeDMLDrawing(rPostponedDrawing.object,
+                                                    rPostponedDrawing.frame, m_anchorId++);
         else
-            m_rExport.SdrExporter().writeDMLAndVMLDrawing(rPostponedDrawing.object, *rPostponedDrawing.frame, m_anchorId++);
+            m_rExport.SdrExporter().writeDMLAndVMLDrawing(rPostponedDrawing.object,
+                                                          *rPostponedDrawing.frame, m_anchorId++);
     }
 
     m_pPostponedOLEs = std::move(pPostponedOLEs);
 }
 
-void DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame &rFrame, const Point& /*rNdTopLeft*/ )
+bool DocxAttributeOutput::WriteFlyFrame(const ww8::Frame& rFrame)
 {
-    m_pSerializer->mark(Tag_OutputFlyFrame);
-
-    switch ( rFrame.GetWriterType() )
+    try
     {
-        case ww8::Frame::eGraphic:
+        m_pSerializer->mark(Tag_OutputFlyFrame);
+
+        switch (rFrame.GetWriterType())
+        {
+            case ww8::Frame::eGraphic:
             {
                 const SdrObject* pSdrObj = rFrame.GetFrameFormat().FindRealSdrObject();
-                const SwNode *pNode = rFrame.GetContent();
-                const SwGrfNode *pGrfNode = pNode ? pNode->GetGrfNode() : nullptr;
-                if ( pGrfNode )
+                const SwNode* pNode = rFrame.GetContent();
+                const SwGrfNode* pGrfNode = pNode ? pNode->GetGrfNode() : nullptr;
+                if (pGrfNode)
                 {
                     if (!m_pPostponedGraphic)
                     {
-                        m_bPostponedProcessingFly = false ;
-                        FlyFrameGraphic( pGrfNode, rFrame.GetLayoutSize(), nullptr, nullptr, pSdrObj);
+                        m_bPostponedProcessingFly = false;
+                        FlyFrameGraphic(pGrfNode, rFrame.GetLayoutSize(), nullptr, nullptr,
+                                        pSdrObj);
                     }
                     else // we are writing out attributes, but w:drawing should not be inside w:rPr,
-                    {    // so write it out later
-                        m_bPostponedProcessingFly = true ;
-                        m_pPostponedGraphic->push_back(PostponedGraphic(pGrfNode, rFrame.GetLayoutSize(), pSdrObj));
+                    { // so write it out later
+                        m_bPostponedProcessingFly = true;
+                        m_pPostponedGraphic->push_back(
+                            PostponedGraphic(pGrfNode, rFrame.GetLayoutSize(), pSdrObj));
                     }
                 }
             }
             break;
-        case ww8::Frame::eDrawing:
+            case ww8::Frame::eDrawing:
             {
                 const SdrObject* pSdrObj = rFrame.GetFrameFormat().FindRealSdrObject();
-                if ( pSdrObj )
+                if (pSdrObj)
                 {
                     uno::Reference<drawing::XShape> xShape(
                         const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY);
 
                     if (xShape.is() && oox::drawingml::DrawingML::IsDiagram(xShape))
                     {
-                        if ( !m_pPostponedDiagrams )
+                        if (!m_pPostponedDiagrams)
                         {
-                            m_bPostponedProcessingFly = false ;
-                            m_rExport.SdrExporter().writeDiagram( pSdrObj, rFrame.GetFrameFormat(), m_anchorId++);
+                            m_bPostponedProcessingFly = false;
+                            m_rExport.SdrExporter().writeDiagram(pSdrObj, rFrame.GetFrameFormat(),
+                                                                 m_anchorId++);
                         }
                         else // we are writing out attributes, but w:drawing should not be inside w:rPr,
-                        {    // so write it out later
-                            m_bPostponedProcessingFly = true ;
-                            m_pPostponedDiagrams->push_back( PostponedDiagram( pSdrObj, &(rFrame.GetFrameFormat()) ));
+                        { // so write it out later
+                            m_bPostponedProcessingFly = true;
+                            m_pPostponedDiagrams->push_back(
+                                PostponedDiagram(pSdrObj, &(rFrame.GetFrameFormat())));
                         }
                     }
                     else
                     {
                         if (!m_pPostponedDMLDrawings)
                         {
-                            if ( IsAlternateContentChoiceOpen() )
+                            if (IsAlternateContentChoiceOpen())
                             {
                                 // Do not write w:drawing inside w:drawing. Instead Postpone the Inner Drawing.
-                                if( m_rExport.SdrExporter().IsDrawingOpen() )
-                                    m_pPostponedCustomShape->push_back(PostponedDrawing(pSdrObj, &(rFrame.GetFrameFormat())));
+                                if (m_rExport.SdrExporter().IsDrawingOpen())
+                                    m_pPostponedCustomShape->push_back(
+                                        PostponedDrawing(pSdrObj, &(rFrame.GetFrameFormat())));
                                 else
-                                    m_rExport.SdrExporter().writeDMLDrawing( pSdrObj, &rFrame.GetFrameFormat(), m_anchorId++);
+                                    m_rExport.SdrExporter().writeDMLDrawing(
+                                        pSdrObj, &rFrame.GetFrameFormat(), m_anchorId++);
                             }
                             else
-                                m_rExport.SdrExporter().writeDMLAndVMLDrawing( pSdrObj, rFrame.GetFrameFormat(), m_anchorId++);
+                                m_rExport.SdrExporter().writeDMLAndVMLDrawing(
+                                    pSdrObj, rFrame.GetFrameFormat(), m_anchorId++);
 
-                            m_bPostponedProcessingFly = false ;
+                            m_bPostponedProcessingFly = false;
                         }
                         // IsAlternateContentChoiceOpen(): check is to ensure that only one object is getting added. Without this check, plus one object gets added
                         // m_bParagraphFrameOpen: check if the frame is open.
                         else if (IsAlternateContentChoiceOpen() && m_bParagraphFrameOpen)
-                            m_pPostponedCustomShape->push_back(PostponedDrawing(pSdrObj, &(rFrame.GetFrameFormat())));
+                            m_pPostponedCustomShape->push_back(
+                                PostponedDrawing(pSdrObj, &(rFrame.GetFrameFormat())));
                         else
                         {
                             // we are writing out attributes, but w:drawing should not be inside w:rPr, so write it out later
-                            m_bPostponedProcessingFly = true ;
-                            m_pPostponedDMLDrawings->push_back(PostponedDrawing(pSdrObj, &(rFrame.GetFrameFormat())));
+                            m_bPostponedProcessingFly = true;
+                            m_pPostponedDMLDrawings->push_back(
+                                PostponedDrawing(pSdrObj, &(rFrame.GetFrameFormat())));
                         }
                     }
                 }
             }
             break;
-        case ww8::Frame::eTextBox:
+            case ww8::Frame::eTextBox:
             {
                 // If this is a TextBox of a shape, then ignore: it's handled in WriteTextBox().
                 if (DocxSdrExport::isTextBox(rFrame.GetFrameFormat()))
                     break;
 
                 // If this is a TextBox containing a table which we already exported directly, ignore it
-                if (m_aFloatingTablesOfParagraph.find(&rFrame.GetFrameFormat()) != m_aFloatingTablesOfParagraph.end())
+                if (m_aFloatingTablesOfParagraph.find(&rFrame.GetFrameFormat())
+                    != m_aFloatingTablesOfParagraph.end())
                     break;
 
                 // The frame output is postponed to the end of the anchor paragraph
                 bool bDuplicate = false;
                 const OUString& rName = rFrame.GetFrameFormat().GetName();
-                unsigned nSize = m_aFramesOfParagraph.size() ? m_aFramesOfParagraph.top().size() : 0;
-                for( unsigned nIndex = 0; nIndex < nSize; ++nIndex )
+                unsigned nSize
+                    = m_aFramesOfParagraph.size() ? m_aFramesOfParagraph.top().size() : 0;
+                for (unsigned nIndex = 0; nIndex < nSize; ++nIndex)
                 {
-                    const OUString& rNameExisting = m_aFramesOfParagraph.top()[nIndex].GetFrameFormat().GetName();
+                    const OUString& rNameExisting
+                        = m_aFramesOfParagraph.top()[nIndex].GetFrameFormat().GetName();
 
                     if (!rName.isEmpty() && !rNameExisting.isEmpty())
                     {
@@ -6181,19 +6198,19 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame &rFrame, const P
                     }
                 }
 
-                if( !bDuplicate )
+                if (!bDuplicate)
                 {
-                    m_bPostponedProcessingFly = true ;
-                    if ( m_aFramesOfParagraph.size() )
+                    m_bPostponedProcessingFly = true;
+                    if (m_aFramesOfParagraph.size())
                         m_aFramesOfParagraph.top().emplace_back(rFrame);
                 }
             }
             break;
-        case ww8::Frame::eOle:
+            case ww8::Frame::eOle:
             {
-                const SwFrameFormat &rFrameFormat = rFrame.GetFrameFormat();
-                const SdrObject *pSdrObj = rFrameFormat.FindRealSdrObject();
-                if ( pSdrObj )
+                const SwFrameFormat& rFrameFormat = rFrame.GetFrameFormat();
+                const SdrObject* pSdrObj = rFrameFormat.FindRealSdrObject();
+                if (pSdrObj)
                 {
                     SwNodeIndex aIdx(*rFrameFormat.GetContent().GetContentIdx(), 1);
                     SwOLENode& rOLENd = *aIdx.GetNode().GetOLENode();
@@ -6204,17 +6221,18 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame &rFrame, const P
 
                     //tdf133030: Export formula position
                     //If we have a formula with inline anchor...
-                    if(SotExchange::IsMath(xObj->getClassID()) && rFrame.IsInline())
+                    if (SotExchange::IsMath(xObj->getClassID()) && rFrame.IsInline())
                     {
                         SwPosition const* const aAPos = rFrameFormat.GetAnchor().GetContentAnchor();
-                        if(aAPos)
+                        if (aAPos)
                         {
                             //Get the text node what the formula anchored to
                             const SwTextNode* pTextNode = aAPos->nNode.GetNode().GetTextNode();
-                            if(pTextNode && pTextNode->Len() == 1)
+                            if (pTextNode && pTextNode->Len() == 1)
                             {
                                 //Get the paragraph alignment
-                                auto aParaAdjust = pTextNode->GetSwAttrSet().GetAdjust().GetAdjust();
+                                auto aParaAdjust
+                                    = pTextNode->GetSwAttrSet().GetAdjust().GetAdjust();
                                 //And set the formula according to the paragraph alignment
                                 if (aParaAdjust == SvxAdjust::Center)
                                     nAlign = FormulaExportBase::eFormulaAlign::CENTER;
@@ -6225,29 +6243,104 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame &rFrame, const P
                             }
                         }
                     }
-                    WriteOLE2Obj( pSdrObj, rOLENd, rFrame.GetLayoutSize(), dynamic_cast<const SwFlyFrameFormat*>( &rFrameFormat ), nAlign);
-                    m_bPostponedProcessingFly = false ;
+                    WriteOLE2Obj(pSdrObj, rOLENd, rFrame.GetLayoutSize(),
+                                 dynamic_cast<const SwFlyFrameFormat*>(&rFrameFormat), nAlign);
+                    m_bPostponedProcessingFly = false;
                 }
             }
             break;
-        case ww8::Frame::eFormControl:
+            case ww8::Frame::eFormControl:
             {
                 const SdrObject* pObject = rFrame.GetFrameFormat().FindRealSdrObject();
-                if(ExportAsActiveXControl(pObject))
+                if (ExportAsActiveXControl(pObject))
                     m_aPostponedActiveXControls.emplace_back(pObject, &(rFrame.GetFrameFormat()));
                 else
                     m_aPostponedFormControls.push_back(pObject);
-                m_bPostponedProcessingFly = true ;
+                m_bPostponedProcessingFly = true;
             }
             break;
-        default:
-            SAL_INFO("sw.ww8", "TODO DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame& rFrame ) - frame type " <<
-                    ( rFrame.GetWriterType() == ww8::Frame::eTextBox ? "eTextBox":
-                      ( rFrame.GetWriterType() == ww8::Frame::eOle ? "eOle": "???" ) ) );
-            break;
+            default:
+                SAL_INFO(
+                    "sw.ww8",
+                    "TODO DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame& rFrame ) - "
+                    "frame type "
+                        << (rFrame.GetWriterType() == ww8::Frame::eTextBox
+                                ? "eTextBox"
+                                : (rFrame.GetWriterType() == ww8::Frame::eOle ? "eOle" : "???")));
+                break;
+        }
+
+        m_pSerializer->mergeTopMarks(Tag_OutputFlyFrame);
+    }
+    catch (...)
+    {
+        return false;
+    }
+    return true;
+}
+
+void DocxAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Point& /*rNdTopLeft*/)
+{
+    /// The old OutputFlyFrame_Impl() moved to WriteFlyFrame().
+    /// Now if a frame anchored inside another frame, it will
+    /// not be exported immediatelly, because OOXML does not
+    /// support that feature, instead it postponed and exported
+    /// later when the original shape closed.
+
+    if (rFrame.GetFrameFormat().GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR ||
+       rFrame.IsInline())
+    {
+        m_nEmbedFlyLevel++;
+        WriteFlyFrame(rFrame);
+        m_nEmbedFlyLevel--;
+        return;
     }
 
-    m_pSerializer->mergeTopMarks(Tag_OutputFlyFrame);
+    if (m_nEmbedFlyLevel == 0)
+    {
+        if (m_vPostponedFlys.empty())
+        {
+            m_nEmbedFlyLevel++;
+            WriteFlyFrame(rFrame);
+            m_nEmbedFlyLevel--;
+        }
+        else
+            for (size_t i = 0; i < m_vPostponedFlys.size(); i++)
+            {
+                m_nEmbedFlyLevel++;
+                WriteFlyFrame(m_vPostponedFlys[i]);
+                m_vPostponedFlys.erase(m_vPostponedFlys.begin() + i);
+                m_nEmbedFlyLevel--;
+            }
+    }
+    else
+    {
+        bool bFound = false;
+        for (const auto& i : m_vPostponedFlys)
+        {
+            if (i.RefersToSameFrameAs(rFrame))
+            {
+                bFound = true;
+                break;
+            }
+        }
+        if (!bFound)
+        {
+            if (auto pParentFly = rFrame.GetContentNode()->GetFlyFormat())
+            {
+                auto aHori(rFrame.GetFrameFormat().GetHoriOrient());
+                aHori.SetPos(aHori.GetPos() + pParentFly->GetHoriOrient().GetPos());
+                auto aVori(rFrame.GetFrameFormat().GetVertOrient());
+                aVori.SetPos(aVori.GetPos() + pParentFly->GetVertOrient().GetPos());
+
+                const_cast<SwFrameFormat&>(rFrame.GetFrameFormat()).SetFormatAttr(aHori);
+                const_cast<SwFrameFormat&>(rFrame.GetFrameFormat()).SetFormatAttr(aVori);
+                const_cast<SwFrameFormat&>(rFrame.GetFrameFormat()).SetFormatAttr(pParentFly->GetAnchor());
+
+                m_vPostponedFlys.push_back(rFrame);
+            }
+        }
+    }
 }
 
 void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
@@ -9989,6 +10082,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, const FSHelperPtr
       m_sFieldBkm( ),
       m_nNextBookmarkId( 0 ),
       m_nNextAnnotationMarkId( 0 ),
+      m_nEmbedFlyLevel(0),
       m_pCurrentFrame( nullptr ),
       m_bParagraphOpened( false ),
       m_bParagraphFrameOpen( false ),
