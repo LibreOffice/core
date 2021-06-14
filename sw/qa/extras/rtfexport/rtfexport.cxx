@@ -672,7 +672,7 @@ DECLARE_RTFEXPORT_TEST(testFdo66682, "fdo66682.rtf")
             aListFormat = rProp.Value.get<OUString>();
     }
     // Suffix was '\0' instead of ' '.
-    CPPUNIT_ASSERT_EQUAL(OUString(" %1 "), aListFormat);
+    CPPUNIT_ASSERT_EQUAL(OUString(" %1% "), aListFormat);
 }
 
 DECLARE_RTFEXPORT_TEST(testParaShadow, "para-shadow.rtf")
