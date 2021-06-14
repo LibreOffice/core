@@ -22225,10 +22225,12 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/acorreplacepage.ui" &&
         rUIFile != "cui/ui/applyautofmtpage.ui" &&
         rUIFile != "cui/ui/applylocalizedpage.ui" &&
+        rUIFile != "cui/ui/autocorrectdialog.ui" &&
+        rUIFile != "cui/ui/breaknumberoption.ui" &&
         rUIFile != "cui/ui/colorpickerdialog.ui" &&
+        rUIFile != "cui/ui/editdictionarydialog.ui" &&
         rUIFile != "cui/ui/eventassigndialog.ui" &&
         rUIFile != "cui/ui/eventassignpage.ui" &&
-        rUIFile != "cui/ui/autocorrectdialog.ui" &&
         rUIFile != "cui/ui/hangulhanjaadddialog.ui" &&
         rUIFile != "cui/ui/hangulhanjaconversiondialog.ui" &&
         rUIFile != "cui/ui/hangulhanjaeditdictdialog.ui" &&
@@ -22245,6 +22247,8 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/objectnamedialog.ui" &&
         rUIFile != "cui/ui/objecttitledescdialog.ui" &&
         rUIFile != "cui/ui/optjsearchpage.ui" &&
+        rUIFile != "cui/ui/optlingupage.ui" &&
+        rUIFile != "cui/ui/optnewdictionarydialog.ui" &&
         rUIFile != "cui/ui/pastespecial.ui" &&
         rUIFile != "cui/ui/percentdialog.ui" &&
         rUIFile != "cui/ui/qrcodegen.ui" &&
@@ -22254,8 +22258,10 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/signatureline.ui" &&
         rUIFile != "cui/ui/similaritysearchdialog.ui" &&
         rUIFile != "cui/ui/specialcharacters.ui" &&
+        rUIFile != "cui/ui/spelloptionsdialog.ui" &&
         rUIFile != "cui/ui/thesaurus.ui" &&
         rUIFile != "cui/ui/tipofthedaydialog.ui" &&
+        rUIFile != "cui/ui/toolbarmodedialog.ui" &&
         rUIFile != "cui/ui/wordcompletionpage.ui" &&
         rUIFile != "cui/ui/zoomdialog.ui" &&
         rUIFile != "filter/ui/pdfgeneralpage.ui" &&
@@ -22373,7 +22379,11 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "vcl/ui/printerdevicepage.ui" &&
         rUIFile != "vcl/ui/printerpaperpage.ui" &&
         rUIFile != "vcl/ui/printerpropertiesdialog.ui" &&
-        rUIFile != "xmlsec/ui/selectcertificatedialog.ui")
+        rUIFile != "xmlsec/ui/certdetails.ui" &&
+        rUIFile != "xmlsec/ui/certgeneral.ui" &&
+        rUIFile != "xmlsec/ui/digitalsignaturesdialog.ui" &&
+        rUIFile != "xmlsec/ui/selectcertificatedialog.ui" &&
+        rUIFile != "xmlsec/ui/viewcertdialog.ui")
     {
         SAL_WARN( "vcl.gtk", rUIFile);
         return SalInstance::CreateBuilder(pParent, rUIRoot, rUIFile);
