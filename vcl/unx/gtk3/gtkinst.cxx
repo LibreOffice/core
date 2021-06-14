@@ -22183,6 +22183,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/qrcodegen.ui" &&
         rUIFile != "cui/ui/scriptorganizer.ui" &&
         rUIFile != "cui/ui/searchattrdialog.ui" &&
+        rUIFile != "cui/ui/selectpathdialog.ui" &&
         rUIFile != "cui/ui/signatureline.ui" &&
         rUIFile != "cui/ui/similaritysearchdialog.ui" &&
         rUIFile != "cui/ui/specialcharacters.ui" &&
@@ -22214,6 +22215,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "sfx/ui/loadtemplatedialog.ui" &&
         rUIFile != "sfx/ui/password.ui" &&
         rUIFile != "sfx/ui/printeroptionsdialog.ui" &&
+        rUIFile != "sfx/ui/safemodequerydialog.ui" &&
         rUIFile != "sfx/ui/securityinfopage.ui" &&
         rUIFile != "sfx/ui/singletabdialog.ui" &&
         rUIFile != "sfx/ui/templatecategorydlg.ui" &&
@@ -22269,9 +22271,11 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/smath/ui/smathsettings.ui" &&
         rUIFile != "modules/smath/ui/spacingdialog.ui" &&
         rUIFile != "modules/smath/ui/symdefinedialog.ui" &&
+        rUIFile != "modules/swriter/ui/autotext.ui" &&
         rUIFile != "modules/swriter/ui/bibliographyentry.ui" &&
         rUIFile != "modules/swriter/ui/columndialog.ui" &&
         rUIFile != "modules/swriter/ui/columnpage.ui" &&
+        rUIFile != "modules/swriter/ui/editcategories.ui" &&
         rUIFile != "modules/swriter/ui/endnotepage.ui" &&
         rUIFile != "modules/swriter/ui/exchangedatabases.ui" &&
         rUIFile != "modules/swriter/ui/footendnotedialog.ui" &&
@@ -22284,8 +22288,13 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/swriter/ui/inserttable.ui" &&
         rUIFile != "modules/swriter/ui/linenumbering.ui" &&
         rUIFile != "modules/swriter/ui/newuserindexdialog.ui" &&
+        rUIFile != "modules/swriter/ui/numberingnamedialog.ui" &&
+        rUIFile != "modules/swriter/ui/outlinenumbering.ui" &&
+        rUIFile != "modules/swriter/ui/outlinenumberingpage.ui" &&
+        rUIFile != "modules/swriter/ui/outlinepositionpage.ui" &&
         rUIFile != "modules/swriter/ui/printeroptions.ui" &&
         rUIFile != "modules/swriter/ui/printoptionspage.ui" &&
+        rUIFile != "modules/swriter/ui/renameautotextdialog.ui" &&
         rUIFile != "modules/swriter/ui/renameobjectdialog.ui" &&
         rUIFile != "modules/swriter/ui/statisticsinfopage.ui" &&
         rUIFile != "modules/swriter/ui/titlepage.ui" &&
