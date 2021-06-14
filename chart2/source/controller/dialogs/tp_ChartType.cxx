@@ -349,7 +349,8 @@ void ChartTypeTabPage::initializePage()
 
     if( !bFound )
     {
-        m_xSubTypeList->Hide();
+        m_xMainTypeList->show();
+        m_xSubTypeList->Show();
         m_pDim3DLookResourceGroup->showControls( false );
         m_pStackingResourceGroup->showControls( false );
         m_pSplineResourceGroup->showControls( false );
