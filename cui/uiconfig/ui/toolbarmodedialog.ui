@@ -130,7 +130,6 @@
                         <property name="receives-default">False</property>
                         <property name="halign">start</property>
                         <property name="valign">start</property>
-                        <property name="active">True</property>
                         <property name="draw-indicator">True</property>
                         <property name="group">rbButton1</property>
                       </object>
@@ -159,7 +158,6 @@
                         <property name="receives-default">False</property>
                         <property name="halign">start</property>
                         <property name="valign">start</property>
-                        <property name="active">True</property>
                         <property name="draw-indicator">True</property>
                         <property name="group">rbButton1</property>
                       </object>
@@ -177,7 +175,6 @@
                         <property name="receives-default">False</property>
                         <property name="halign">start</property>
                         <property name="valign">start</property>
-                        <property name="active">True</property>
                         <property name="draw-indicator">True</property>
                         <property name="group">rbButton1</property>
                       </object>
@@ -195,7 +192,6 @@
                         <property name="receives-default">False</property>
                         <property name="halign">start</property>
                         <property name="valign">start</property>
-                        <property name="active">True</property>
                         <property name="draw-indicator">True</property>
                         <property name="group">rbButton1</property>
                       </object>
@@ -213,7 +209,6 @@
                         <property name="receives-default">False</property>
                         <property name="halign">start</property>
                         <property name="valign">start</property>
-                        <property name="active">True</property>
                         <property name="draw-indicator">True</property>
                         <property name="group">rbButton1</property>
                       </object>
@@ -231,7 +226,6 @@
                         <property name="receives-default">False</property>
                         <property name="halign">start</property>
                         <property name="valign">start</property>
-                        <property name="active">True</property>
                         <property name="draw-indicator">True</property>
                         <property name="group">rbButton1</property>
                       </object>
@@ -249,7 +243,6 @@
                         <property name="receives-default">False</property>
                         <property name="halign">start</property>
                         <property name="valign">start</property>
-                        <property name="active">True</property>
                         <property name="draw-indicator">True</property>
                         <property name="group">rbButton1</property>
                       </object>
@@ -267,7 +260,6 @@
                         <property name="receives-default">False</property>
                         <property name="halign">start</property>
                         <property name="valign">start</property>
-                        <property name="active">True</property>
                         <property name="draw-indicator">True</property>
                         <property name="group">rbButton1</property>
                       </object>
