@@ -49,6 +49,9 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdotext.hxx>
 #include <dcontact.hxx>
+#include <frameformats.hxx>
+#include <fmtcntnt.hxx>
+#include <unotextrange.hxx>
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/layout/data/";
 
@@ -1448,6 +1451,61 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf127118)
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // This was Horizontal: merged cell split between pages didn't keep vertical writing direction
     assertXPath(pXmlDoc, "/root/page[2]/body/tab/row[1]/cell[1]/txt[1]", "WritingMode", "VertBTLR");
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf121509)
+{
+    auto pDoc = createDoc("Tdf121509.odt");
+    CPPUNIT_ASSERT(pDoc);
+
+    // Get all shape/frame formats
+    auto vFrmFmts = pDoc->GetSpzFrameFormats();
+    // Get the textbox
+    auto xTxFrm = SwTextBoxHelper::getUnoTextFrame(getShape(1));
+    // Get The triangle
+    auto pTriangleShapeFormat = vFrmFmts->GetFormat(2);
+    CPPUNIT_ASSERT(xTxFrm);
+    CPPUNIT_ASSERT(pTriangleShapeFormat);
+
+    // Get the position inside the textbox
+    auto xTextCntSt = xTxFrm->getText()->getStart();
+    SwUnoInternalPaM TxBxCur(*pDoc);
+    CPPUNIT_ASSERT(sw::XTextRangeToSwPaM(TxBxCur, xTextCntSt));
+
+    // Put the triangle indto the textbox
+    SwFormatAnchor aNewAnch(pTriangleShapeFormat->GetAnchor());
+    aNewAnch.SetAnchor(TxBxCur.Start());
+    CPPUNIT_ASSERT(pTriangleShapeFormat->SetFormatAttr(aNewAnch));
+
+    // Reload (docx)
+    auto aTmp = utl::TempFile();
+    save("Office Open XML Text", aTmp);
+
+    // The sencond part: check if the reloaded doc has flys inside a fly
+    uno::Reference<lang::XComponent> xComp
+        = loadFromDesktop(aTmp.GetURL(), "com.sun.star.text.TextDocument");
+    uno::Reference<text::XTextDocument> xTextDoc(xComp, uno::UNO_QUERY);
+    auto pTextDoc = dynamic_cast<SwXTextDocument*>(xTextDoc.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    auto pSecondDoc = pTextDoc->GetDocShell()->GetDoc();
+    auto pSecondFormats = pSecondDoc->GetSpzFrameFormats();
+
+    bool bFlyInFLyFound = false;
+    for (auto secondformat : *pSecondFormats)
+    {
+        auto& pNd = secondformat->GetAnchor().GetContentAnchor()->nNode.GetNode();
+        if (pNd.FindFlyStartNode())
+        {
+            // So there is a fly inside annother -> problem.
+            bFlyInFLyFound = true;
+            break;
+        }
+    }
+    // Drop the tempfile
+    aTmp.CloseStream();
+
+    // With the fix this cannot be true, if it is, that means Word unable to read the file..
+    CPPUNIT_ASSERT_MESSAGE("Corrupt exported docx file!", !bFlyInFLyFound);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134685)
