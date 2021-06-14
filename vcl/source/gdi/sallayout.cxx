@@ -486,8 +486,23 @@ void ImplLayoutArgs::AddRun( int nCharPos0, int nCharPos1, bool bRTL )
     maRuns.AddRun( nCharPos0, nCharPos1, bRTL );
 }
 
-bool ImplLayoutArgs::PrepareFallback()
+bool ImplLayoutArgs::PrepareFallback(const SalLayoutGlyphsImpl* pGlyphsImpl)
 {
+    // Generate runs with pre-calculated glyph items instead maFallbackRuns.
+    if( pGlyphsImpl != nullptr )
+    {
+        maRuns.Clear();
+        maFallbackRuns.Clear();
+
+        for (auto const& aGlyphItem : *pGlyphsImpl)
+        {
+            for(int i = aGlyphItem.charPos(); i < aGlyphItem.charPos() + aGlyphItem.charCount(); ++i)
+                maRuns.AddPos(i, aGlyphItem.IsRTLGlyph());
+        }
+
+        return !maRuns.IsEmpty();
+    }
+
     // short circuit if no fallback is needed
     if( maFallbackRuns.IsEmpty() )
     {
