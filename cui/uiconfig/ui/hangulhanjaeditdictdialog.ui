@@ -146,9 +146,7 @@
                           <object class="GtkEntry" id="combobox-entry">
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
-                            <property name="shadow_type">none</property>
                             <property name="truncate-multiline">True</property>
-                            <property name="caps_lock_warning">False</property>
                           </object>
                         </child>
                         <child internal-child="accessible">
