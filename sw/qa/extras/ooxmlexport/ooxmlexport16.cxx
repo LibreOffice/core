@@ -492,6 +492,18 @@ DECLARE_OOXMLEXPORT_TEST(testCommentDoneModel, "CommentDone.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Test_ShadowDirection, "tdf142361ShadowDirection.odt")
+{
+    // The attribute 'rotWithShape' has the default value 'true' in OOXML, so Words interprets a
+    // missing attribute as 'true'. That means that Word rotates the shadow if the shape is
+    // rotated. Because in LibreOffice a shadow is never rotated, we must not omit this
+    // attribute.
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    OString sPath = "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/"
+                    "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw";
+    assertXPath(pXmlDoc, sPath, "rotWithShape", "0");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

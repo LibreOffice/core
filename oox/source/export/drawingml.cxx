@@ -4241,7 +4241,7 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
             if( bHasShadow )
             {
                 Sequence< PropertyValue > aShadowGrabBag( 3 );
-                Sequence< PropertyValue > aShadowAttribsGrabBag( 3 );
+                Sequence< PropertyValue > aShadowAttribsGrabBag( 4 );
 
                 double dX = +0.0, dY = +0.0;
                 sal_Int32 nBlur =0;
@@ -4255,6 +4255,8 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
                 aShadowAttribsGrabBag[1].Value <<= lcl_CalculateDir(dX, dY);
                 aShadowAttribsGrabBag[2].Name = "blurRad";
                 aShadowAttribsGrabBag[2].Value <<=  oox::drawingml::convertHmmToEmu(nBlur);
+                aShadowAttribsGrabBag[3].Name = "rotWithShape";
+                aShadowAttribsGrabBag[3].Value <<= false; //ooxml default is 'true', so must write it
 
                 aShadowGrabBag[0].Name = "Attribs";
                 aShadowGrabBag[0].Value <<= aShadowAttribsGrabBag;
