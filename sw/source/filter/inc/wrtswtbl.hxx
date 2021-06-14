@@ -46,50 +46,50 @@ namespace editeng { class SvxBorderLine; }
 
 class SW_DLLPUBLIC SwWriteTableCell
 {
-    const SwTableBox *pBox;             // SwTableBox of the cell
-    const SvxBrushItem *pBackground;    // inherited background of a row
+    const SwTableBox *m_pBox;             // SwTableBox of the cell
+    const SvxBrushItem *m_pBackground;    // inherited background of a row
 
-    tools::Long nHeight;                   // fix/minimum height of a row
+    tools::Long m_nHeight;                   // fix/minimum height of a row
 
-    sal_uInt32 nWidthOpt;           // width from option;
+    sal_uInt32 m_nWidthOpt;           // width from option;
 
-    sal_uInt16 nRow;                // start row
-    sal_uInt16 nCol;                // start column
+    sal_uInt16 m_nRow;                // start row
+    sal_uInt16 m_nCol;                // start column
 
-    sal_uInt16 nRowSpan;            // spanned rows
-    sal_uInt16 nColSpan;            // spanned columns
+    sal_uInt16 m_nRowSpan;            // spanned rows
+    sal_uInt16 m_nColSpan;            // spanned columns
 
-    bool bPercentWidthOpt;
+    bool m_bPercentWidthOpt;
 
 public:
 
     SwWriteTableCell(const SwTableBox *pB, sal_uInt16 nR, sal_uInt16 nC, sal_uInt16 nRSpan,
         sal_uInt16 nCSpan, tools::Long nHght, const SvxBrushItem *pBGround)
-    : pBox( pB ), pBackground( pBGround ), nHeight( nHght ), nWidthOpt( 0 ),
-    nRow( nR ), nCol( nC ), nRowSpan( nRSpan ), nColSpan( nCSpan ),
-    bPercentWidthOpt( false )
+    : m_pBox( pB ), m_pBackground( pBGround ), m_nHeight( nHght ), m_nWidthOpt( 0 ),
+    m_nRow( nR ), m_nCol( nC ), m_nRowSpan( nRSpan ), m_nColSpan( nCSpan ),
+    m_bPercentWidthOpt( false )
     {}
 
-    const SwTableBox *GetBox() const { return pBox; }
+    const SwTableBox *GetBox() const { return m_pBox; }
 
-    sal_uInt16 GetRow() const { return nRow; }
-    sal_uInt16 GetCol() const { return nCol; }
+    sal_uInt16 GetRow() const { return m_nRow; }
+    sal_uInt16 GetCol() const { return m_nCol; }
 
-    sal_uInt16 GetRowSpan() const { return nRowSpan; }
-    sal_uInt16 GetColSpan() const { return nColSpan; }
+    sal_uInt16 GetRowSpan() const { return m_nRowSpan; }
+    sal_uInt16 GetColSpan() const { return m_nColSpan; }
 
-    tools::Long GetHeight() const { return nHeight; }
+    tools::Long GetHeight() const { return m_nHeight; }
     sal_Int16 GetVertOri() const;
 
-    const SvxBrushItem *GetBackground() const { return pBackground; }
+    const SvxBrushItem *GetBackground() const { return m_pBackground; }
 
     void SetWidthOpt( sal_uInt16 nWidth, bool bPercent )
     {
-        nWidthOpt = nWidth; bPercentWidthOpt = bPercent;
+        m_nWidthOpt = nWidth; m_bPercentWidthOpt = bPercent;
     }
 
-    sal_uInt32 GetWidthOpt() const { return nWidthOpt; }
-    bool HasPercentWidthOpt() const { return bPercentWidthOpt; }
+    sal_uInt32 GetWidthOpt() const { return m_nWidthOpt; }
+    bool HasPercentWidthOpt() const { return m_bPercentWidthOpt; }
 };
 
 typedef std::vector<std::unique_ptr<SwWriteTableCell>> SwWriteTableCells;

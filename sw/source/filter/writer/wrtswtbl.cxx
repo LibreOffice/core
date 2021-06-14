@@ -38,9 +38,9 @@ using namespace ::com::sun::star;
 sal_Int16 SwWriteTableCell::GetVertOri() const
 {
     sal_Int16 eCellVertOri = text::VertOrientation::TOP;
-    if( pBox->GetSttNd() )
+    if( m_pBox->GetSttNd() )
     {
-        const SfxItemSet& rItemSet = pBox->GetFrameFormat()->GetAttrSet();
+        const SfxItemSet& rItemSet = m_pBox->GetFrameFormat()->GetAttrSet();
         const SfxPoolItem *pItem;
         if( SfxItemState::SET == rItemSet.GetItemState( RES_VERT_ORIENT, false, &pItem ) )
         {

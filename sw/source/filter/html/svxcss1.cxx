@@ -678,14 +678,14 @@ void SvxCSS1Parser::SelectorParsed( std::unique_ptr<CSS1Selector> pSelector, boo
 {
     if( bFirst )
     {
-        OSL_ENSURE( pSheetItemSet, "Where is the Item-Set for Style-Sheets?" );
+        OSL_ENSURE( m_pSheetItemSet, "Where is the Item-Set for Style-Sheets?" );
 
         for (const std::unique_ptr<CSS1Selector> & rpSelection : m_Selectors)
         {
-            StyleParsed(rpSelection.get(), *pSheetItemSet, *pSheetPropInfo);
+            StyleParsed(rpSelection.get(), *m_pSheetItemSet, *m_pSheetPropInfo);
         }
-        pSheetItemSet->ClearItem();
-        pSheetPropInfo->Clear();
+        m_pSheetItemSet->ClearItem();
+        m_pSheetPropInfo->Clear();
 
         // prepare the next rule
         m_Selectors.clear();
@@ -697,11 +697,11 @@ void SvxCSS1Parser::SelectorParsed( std::unique_ptr<CSS1Selector> pSelector, boo
 SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const OUString& rBaseURL,
                               sal_uInt16 const *pWhichIds, sal_uInt16 nWhichIds ) :
     CSS1Parser(),
-    sBaseURL( rBaseURL ),
-    pItemSet(nullptr),
-    pPropInfo( nullptr ),
-    eDfltEnc( RTL_TEXTENCODING_DONTKNOW ),
-    bIgnoreFontFamily( false )
+    m_sBaseURL( rBaseURL ),
+    m_pItemSet(nullptr),
+    m_pPropInfo( nullptr ),
+    m_eDefaultEnc( RTL_TEXTENCODING_DONTKNOW ),
+    m_bIgnoreFontFamily( false )
 {
     // also initialize item IDs
     aItemIds.nFont = rPool.GetTrueWhich( SID_ATTR_CHAR_FONT, false );
@@ -740,20 +740,20 @@ SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const OUString& rBaseURL,
     aItemIds.nLanguageCTL = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_LANGUAGE, false );
     aItemIds.nDirection = rPool.GetTrueWhich( SID_ATTR_FRAMEDIRECTION, false );
 
-    aWhichMap.insert( aWhichMap.begin(), 0 );
-    BuildWhichTable( aWhichMap, reinterpret_cast<sal_uInt16 *>(&aItemIds),
+    m_aWhichMap.insert( m_aWhichMap.begin(), 0 );
+    BuildWhichTable( m_aWhichMap, reinterpret_cast<sal_uInt16 *>(&aItemIds),
                              sizeof(aItemIds) / sizeof(sal_uInt16) );
     if( pWhichIds && nWhichIds )
-        BuildWhichTable( aWhichMap, pWhichIds, nWhichIds );
+        BuildWhichTable( m_aWhichMap, pWhichIds, nWhichIds );
 
-    pSheetItemSet.reset( new SfxItemSet( rPool, aWhichMap.data() ) );
-    pSheetPropInfo.reset( new SvxCSS1PropertyInfo );
+    m_pSheetItemSet.reset( new SfxItemSet( rPool, m_aWhichMap.data() ) );
+    m_pSheetPropInfo.reset( new SvxCSS1PropertyInfo );
 }
 
 SvxCSS1Parser::~SvxCSS1Parser()
 {
-    pSheetItemSet.reset();
-    pSheetPropInfo.reset();
+    m_pSheetItemSet.reset();
+    m_pSheetPropInfo.reset();
 }
 
 void SvxCSS1Parser::InsertId( const OUString& rId,
@@ -818,23 +818,23 @@ SvxCSS1MapEntry* SvxCSS1Parser::GetTag( const OUString& rTag )
 
 bool SvxCSS1Parser::ParseStyleSheet( const OUString& rIn )
 {
-    pItemSet = pSheetItemSet.get();
-    pPropInfo = pSheetPropInfo.get();
+    m_pItemSet = m_pSheetItemSet.get();
+    m_pPropInfo = m_pSheetPropInfo.get();
 
     CSS1Parser::ParseStyleSheet( rIn );
 
     for (const std::unique_ptr<CSS1Selector> & rpSelector : m_Selectors)
     {
-        StyleParsed(rpSelector.get(), *pSheetItemSet, *pSheetPropInfo);
+        StyleParsed(rpSelector.get(), *m_pSheetItemSet, *m_pSheetPropInfo);
     }
 
     // and clean up a little bit
     m_Selectors.clear();
-    pSheetItemSet->ClearItem();
-    pSheetPropInfo->Clear();
+    m_pSheetItemSet->ClearItem();
+    m_pSheetPropInfo->Clear();
 
-    pItemSet = nullptr;
-    pPropInfo = nullptr;
+    m_pItemSet = nullptr;
+    m_pPropInfo = nullptr;
 
     return true;
 }
@@ -843,14 +843,14 @@ void SvxCSS1Parser::ParseStyleOption( const OUString& rIn,
                                       SfxItemSet& rItemSet,
                                       SvxCSS1PropertyInfo& rPropInfo )
 {
-    pItemSet = &rItemSet;
-    pPropInfo = &rPropInfo;
+    m_pItemSet = &rItemSet;
+    m_pPropInfo = &rPropInfo;
 
     CSS1Parser::ParseStyleOption( rIn );
     rItemSet.ClearItem( aItemIds.nDirection );
 
-    pItemSet = nullptr;
-    pPropInfo = nullptr;
+    m_pItemSet = nullptr;
+    m_pPropInfo = nullptr;
 }
 
 bool SvxCSS1Parser::GetEnum( const CSS1PropertyEnum *pPropTable,
@@ -977,7 +977,7 @@ void SvxCSS1Parser::MergeStyles( const SfxItemSet& rSrcSet,
 
 void SvxCSS1Parser::SetDfltEncoding( rtl_TextEncoding eEnc )
 {
-    eDfltEnc = eEnc;
+    m_eDefaultEnc = eEnc;
 }
 
 static void ParseCSS1_font_size( const CSS1Expression *pExpr,
@@ -3160,7 +3160,7 @@ static bool CSS1PropEntryFindCompare(CSS1PropEntry const & lhs, OUString const &
 void SvxCSS1Parser::DeclarationParsed( const OUString& rProperty,
                                        std::unique_ptr<CSS1Expression> pExpr )
 {
-    OSL_ENSURE( pItemSet, "DeclarationParsed() without ItemSet" );
+    OSL_ENSURE( m_pItemSet, "DeclarationParsed() without ItemSet" );
 
     static bool bSortedPropFns = false;
 
@@ -3175,7 +3175,7 @@ void SvxCSS1Parser::DeclarationParsed( const OUString& rProperty,
                                 CSS1PropEntryFindCompare );
     if( it != std::end(aCSS1PropFnTab) && !CSS1PropEntryFindCompare(*it,rProperty)  )
     {
-        it->pFunc( pExpr.get(), *pItemSet, *pPropInfo, *this );
+        it->pFunc( pExpr.get(), *m_pItemSet, *m_pPropInfo, *this );
     }
 }
 

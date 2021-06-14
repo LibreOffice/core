@@ -194,19 +194,19 @@ class SvxCSS1Parser : public CSS1Parser
     CSS1Map m_Pages;
     CSS1Map m_Tags;
 
-    OUString sBaseURL;
+    OUString m_sBaseURL;
 
-    std::unique_ptr<SfxItemSet> pSheetItemSet;  // item set of Style-Sheet
-    SfxItemSet *pItemSet;       // current item set
+    std::unique_ptr<SfxItemSet> m_pSheetItemSet;  // item set of Style-Sheet
+    SfxItemSet *m_pItemSet;       // current item set
 
-    std::unique_ptr<SvxCSS1PropertyInfo> pSheetPropInfo;
-    SvxCSS1PropertyInfo *pPropInfo;
+    std::unique_ptr<SvxCSS1PropertyInfo> m_pSheetPropInfo;
+    SvxCSS1PropertyInfo *m_pPropInfo;
 
     static constexpr sal_uInt16 gnMinFixLineSpace = MM50/2;    // minimum spacing for fixed line spacing
 
-    rtl_TextEncoding    eDfltEnc;
-    bool bIgnoreFontFamily;
-    std::vector<sal_uInt16> aWhichMap;        // Which-Map of Parser
+    rtl_TextEncoding    m_eDefaultEnc;
+    bool m_bIgnoreFontFamily;
+    std::vector<sal_uInt16> m_aWhichMap;        // Which-Map of Parser
 
     using CSS1Parser::ParseStyleOption;
 
@@ -242,8 +242,8 @@ public:
                    sal_uInt16 const *pWhichIds, sal_uInt16 nWhichIds );
     virtual ~SvxCSS1Parser() override;
 
-    bool IsIgnoreFontFamily() const { return bIgnoreFontFamily; }
-    void SetIgnoreFontFamily( bool bSet ) { bIgnoreFontFamily = bSet; }
+    bool IsIgnoreFontFamily() const { return m_bIgnoreFontFamily; }
+    void SetIgnoreFontFamily( bool bSet ) { m_bIgnoreFontFamily = bSet; }
 
     // Parse a style sheet. For every found selector a StyleParsed with
     // according item set is called.
@@ -264,7 +264,7 @@ public:
 
     virtual const FontList *GetFontList() const;
 
-    const sal_uInt16 *GetWhichMap() const { return aWhichMap.data(); }
+    const sal_uInt16 *GetWhichMap() const { return m_aWhichMap.data(); }
 
     static void InsertMapEntry( const OUString& rKey, const SfxItemSet& rItemSet,
                          const SvxCSS1PropertyInfo& rProp, CSS1Map& rMap );
@@ -299,9 +299,9 @@ public:
     static sal_uInt16 GetMinFixLineSpace() { return gnMinFixLineSpace; }
 
     virtual void SetDfltEncoding( rtl_TextEncoding eEnc );
-    rtl_TextEncoding GetDfltEncoding() const { return eDfltEnc; }
+    rtl_TextEncoding GetDfltEncoding() const { return m_eDefaultEnc; }
 
-    const OUString& GetBaseURL() const { return sBaseURL;}
+    const OUString& GetBaseURL() const { return m_sBaseURL;}
 
 };
 
