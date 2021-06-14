@@ -114,7 +114,7 @@ public:
     // methods used by BiDi and glyph fallback
     bool        NeedFallback() const
                     { return !maFallbackRuns.IsEmpty(); }
-    bool        PrepareFallback();
+    bool        PrepareFallback(const SalLayoutGlyphsImpl* pGlyphsImpl);
 
 private:
     void        AddRun( int nMinCharPos, int nEndCharPos, bool bRTL );
