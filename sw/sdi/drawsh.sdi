@@ -421,6 +421,20 @@ interface TextDraw : TextDrawBase
     [
         StateMethod = StateDisableItems ;
     ]
+
+    SID_ATTR_TEXTCOLUMNS_NUMBER
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_TEXTCOLUMNS_SPACING
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
 }
 
 shell SwDrawShell : SwDrawBaseShell
