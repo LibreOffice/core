@@ -1977,27 +1977,50 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     const SwPageFrame* pCurrPage = static_cast<const SwPageFrame*>( mrSh.GetLayout()->Lower() );
                     // Destination PageNum
                     tools::Rectangle aRect = SwRectToPDFRect(pCurrPage, rDestRect.SVRect());
+                    // Back link rectangle calculation
+                    const SwPageFrame* fnBodyPage = pCurrPage->getRootFrame()->GetPageByPageNum(nDestPageNum+1);
+                    SwRect fnSymbolRect;
+                    if (fnBodyPage->IsVertical()){
+                        tools::Long fnSymbolTop = fnBodyPage->GetTopMargin() + fnBodyPage->getFrameArea().Top();
+                        tools::Long symbolHeight = rDestRect.Top() - fnSymbolTop;
+                        fnSymbolRect = SwRect(rDestRect.Pos().X(),fnSymbolTop,rDestRect.Width(),symbolHeight);
+                    } else {
+                       if (fnBodyPage->IsRightToLeft()){
+                           tools::Long fnSymbolRight = fnBodyPage->getFrameArea().Right() - fnBodyPage->GetRightMargin();
+                           tools::Long symbolWidth = fnSymbolRight - rDestRect.Right();
+                           fnSymbolRect = SwRect(rDestRect.Pos().X(),rDestRect.Pos().Y(),symbolWidth,rDestRect.Height());
+                       } else {
+                           tools::Long fnSymbolLeft = fnBodyPage->GetLeftMargin() + fnBodyPage->getFrameArea().Left();
+                           tools::Long symbolWidth = rDestRect.Left() - fnSymbolLeft;
+                           fnSymbolRect = SwRect(fnSymbolLeft,rDestRect.Pos().Y(),symbolWidth,rDestRect.Height());
+                       }
+                    }
+                    tools::Rectangle aFootnoteSymbolRect = SwRectToPDFRect(pCurrPage, fnSymbolRect.SVRect());
+
+                    // Export back link
+                    const sal_Int32 nBackLinkId = pPDFExtOutDevData->CreateLink(aFootnoteSymbolRect, nDestPageNum);
                     // Destination Export
                     const sal_Int32 nDestId = pPDFExtOutDevData->CreateDest(aRect, nDestPageNum);
                     mrSh.GotoFootnoteAnchor();
-
                     // Link PageNums
                     sal_Int32 aLinkPageNum = CalcOutputPageNum( aLinkRect );
-
                     pCurrPage = static_cast<const SwPageFrame*>( mrSh.GetLayout()->Lower() );
-
                     // Link Export
                     aRect = SwRectToPDFRect(pCurrPage, aLinkRect.SVRect());
                     const sal_Int32 nLinkId = pPDFExtOutDevData->CreateLink(aRect, aLinkPageNum);
-
+                    // Back link destination Export
+                    const sal_Int32 nBackDestId = pPDFExtOutDevData->CreateDest(aRect, aLinkPageNum);
                     // Store link info for tagged pdf output:
                     const IdMapEntry aLinkEntry( aLinkRect, nLinkId );
                     s_aLinkIdMap.push_back( aLinkEntry );
 
-                    // Connect Link and Destination:
+                    // Store backlink info for tagged pdf output:
+                    const IdMapEntry aBackLinkEntry( aFootnoteSymbolRect, nBackLinkId );
+                    s_aLinkIdMap.push_back( aBackLinkEntry );
+                    // Connect Links and Destinations:
                     pPDFExtOutDevData->SetLinkDest( nLinkId, nDestId );
+                    pPDFExtOutDevData->SetLinkDest( nBackLinkId, nBackDestId );
                 }
-
             }
         }
 
