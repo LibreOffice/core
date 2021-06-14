@@ -507,7 +507,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
     return bRet;
 }
 
-bool SwAutoCorrDoc::TransliterateRTLWord( sal_Int32& rSttPos, sal_Int32 nEndPos )
+bool SwAutoCorrDoc::TransliterateRTLWord( sal_Int32& rSttPos, sal_Int32 nEndPos, bool bApply )
 {
     if( m_bUndoIdInitialized )
         m_bUndoIdInitialized = true;
@@ -530,7 +530,7 @@ bool SwAutoCorrDoc::TransliterateRTLWord( sal_Int32& rSttPos, sal_Int32 nEndPos 
 
     const OUString sFrameText = pFrame->GetText();
     SwDoc* pDoc = m_rEditSh.GetDoc();
-    if ( pFrame->IsRightToLeft() )
+    if ( pFrame->IsRightToLeft() || bApply )
     {
         // transliterate to Old Hungarian using Numbertext via NatNum12 number format modifier
         OUString sWord(sFrameText.copy(rSttPos, nEndPos - rSttPos));
