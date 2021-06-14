@@ -1425,4 +1425,24 @@ JSMenuButton::JSMenuButton(JSDialogSender* pSender, ::MenuButton* pMenuButton,
 {
 }
 
+void JSMenuButton::set_label(const OUString& rText)
+{
+    OUString aPreviousLabel = get_label();
+    SalInstanceMenuButton::set_label(rText);
+    if (aPreviousLabel != rText)
+        sendUpdate();
+}
+
+void JSMenuButton::set_image(VirtualDevice* pDevice)
+{
+    SalInstanceMenuButton::set_image(pDevice);
+    sendUpdate();
+}
+
+void JSMenuButton::set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage)
+{
+    SalInstanceMenuButton::set_image(rImage);
+    sendUpdate();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
