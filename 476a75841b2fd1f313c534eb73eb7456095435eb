@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "92b45000_2a636d65",
+        "filename": "include/basic/versionhelper.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-14T11:00:03Z",
+      "side": 1,
+      "message": "Basic refers to the programming language basic, that is used for macros....\n\n\n\nHow about adding it to unotools - ConfigManager is there too..",
+      "revId": "476a75841b2fd1f313c534eb73eb7456095435eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5cceb36c_e6c7c9dc",
+        "filename": "include/basic/versionhelper.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-14T11:00:03Z",
+      "side": 1,
+      "message": "I\u0027m not a fan of \"helpers\".",
+      "range": {
+        "startLine": 15,
+        "startChar": 10,
+        "endLine": 15,
+        "endChar": 23
+      },
+      "revId": "476a75841b2fd1f313c534eb73eb7456095435eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bdc11226_5af6b3f7",
+        "filename": "include/basic/versionhelper.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-14T11:00:03Z",
+      "side": 1,
+      "message": "what version is updated?",
+      "revId": "476a75841b2fd1f313c534eb73eb7456095435eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4db2f2ae_cfff5e17",
+        "filename": "include/basic/versionhelper.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-14T11:00:03Z",
+      "side": 1,
+      "message": "what\u0027s this parameter about",
+      "range": {
+        "startLine": 18,
+        "startChar": 34,
+        "endLine": 18,
+        "endChar": 48
+      },
+      "revId": "476a75841b2fd1f313c534eb73eb7456095435eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
