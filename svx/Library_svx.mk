@@ -211,6 +211,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/sidebar/possize/PosSizePropertyPanel \
     svx/source/sidebar/shapes/DefaultShapesPanel \
     svx/source/sidebar/shapes/ShapesUtil \
+    svx/source/sidebar/textcolumns/TextColumnsPropertyPanel \
     svx/source/sidebar/tools/ValueSetWithTextControl \
     svx/source/stbctrls/pszctrl \
     svx/source/stbctrls/insctrl \

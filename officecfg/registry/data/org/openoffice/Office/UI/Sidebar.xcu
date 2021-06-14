@@ -1843,6 +1843,39 @@
         </prop>
       </node>
 
+      <node oor:name="TextColumnsPropertyPanel" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Columns</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>TextColumnsPropertyPanel</value>
+        </prop>
+        <prop oor:name="DeckId" oor:type="xs:string">
+          <value>PropertyDeck</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            Calc,           Draw,       hidden ;
+            Calc,           Graphic,    hidden ;
+            Calc,           Media,      hidden ;
+            DrawImpress,    Draw,       hidden ;
+            DrawImpress,    Graphic,    hidden ;
+            DrawImpress,    TextObject, hidden ;
+            WriterVariants, Draw,       hidden ;
+            WriterVariants, Graphic,    hidden ;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/SvxPanelFactory/TextColumnsPropertyPanel</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>800</value>
+        </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+      </node>
+
     </node>
   </node>
 </oor:component-data>

@@ -130,6 +130,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/sidebarlists \
 	svx/uiconfig/ui/sidebarpossize \
 	svx/uiconfig/ui/sidebarstylespanel \
+	svx/uiconfig/ui/sidebartextcolumnspanel \
 	svx/uiconfig/ui/sidebartextpanel \
 	svx/uiconfig/ui/stylemenu \
 	svx/uiconfig/ui/surfacewindow \

@@ -2927,4 +2927,15 @@ interface DrawView
     [
         ExecMethod = FuTemporary ;
     ]
+    SID_ATTR_TEXTCOLUMNS_NUMBER
+    [
+        ExecMethod = FuTemporary;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_TEXTCOLUMNS_SPACING
+    [
+        ExecMethod = FuTemporary;
+        StateMethod = GetAttrState;
+    ]
+
 }
