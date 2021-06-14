@@ -116,6 +116,7 @@ void SwView::ExecDlgExt(SfxRequest const &rReq)
 
 bool SwView::isSignatureLineSelected() const
 {
+    uno::Reference<frame::XModel> xModel(GetCurrentDocument());
     SwWrtShell& rSh = GetWrtShell();
     SdrView* pSdrView = rSh.GetDrawView();
     if (!pSdrView)
