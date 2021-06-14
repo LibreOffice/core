@@ -933,4 +933,18 @@ Mutex& SvtSecurityOptions::GetInitMutex()
     return theSecurityOptionsMutex::get();
 }
 
+// map personal info strings to 1, 2, ... to remove personal info
+size_t SvtSecurityMapPersonalInfo::GetInfoID( const OUString sPersonalInfo )
+{
+    SvtSecurityMapPersonalInfoType::iterator aIter = aInfoIDs.find( sPersonalInfo );
+    if ( aIter == aInfoIDs.end() )
+    {
+        size_t nNewID = aInfoIDs.size() + 1;
+        aInfoIDs[sPersonalInfo] = nNewID;
+        return nNewID;
+    }
+
+    return aIter->second;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
