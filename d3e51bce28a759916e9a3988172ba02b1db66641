@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c662db70_922a7e3a",
+        "filename": "svx/source/svdraw/svdedxv.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2648,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-14T15:48:54Z",
+      "side": 1,
+      "message": "Ah! It only needs a single trailing 0 :-)",
+      "range": {
+        "startLine": 2648,
+        "startChar": 40,
+        "endLine": 2648,
+        "endChar": 41
+      },
+      "revId": "d3e51bce28a759916e9a3988172ba02b1db66641",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
