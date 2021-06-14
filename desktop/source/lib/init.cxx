@@ -1239,6 +1239,26 @@ rtl::Reference<LOKClipboard> forceSetClipboardForCurrentView(LibreOfficeKitDocum
 
 #endif
 
+static const vcl::Font* FindFont(const OUString& rFontName)
+{
+    SfxObjectShell* pDocSh = SfxObjectShell::Current();
+    const SvxFontListItem* pFonts
+        = static_cast<const SvxFontListItem*>(pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST));
+    const FontList* pList = pFonts ? pFonts->GetFontList() : nullptr;
+    if (pList && !rFontName.isEmpty())
+        if (sal_Handle hMetric = pList->GetFirstFontMetric(rFontName))
+            return &FontList::GetFontMetric(hMetric);
+    return nullptr;
+}
+
+static vcl::Font FindFont_FallbackToDefault(const OUString& rFontName)
+{
+    if (auto pFound = FindFont(rFontName))
+        return *pFound;
+
+    return OutputDevice::GetDefaultFont(DefaultFontType::SANS_UNICODE, LANGUAGE_NONE,
+                                        GetDefaultFontFlags::NONE);
+}
 } // anonymous namespace
 
 LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent, int nDocumentId)
@@ -4723,43 +4743,25 @@ static char* getFonts (const char* pCommand)
 static char* getFontSubset (std::string_view aFontName)
 {
     OUString aFoundFont(::rtl::Uri::decode(OStringToOUString(aFontName, RTL_TEXTENCODING_UTF8), rtl_UriDecodeStrict, RTL_TEXTENCODING_UTF8));
-    SfxObjectShell* pDocSh = SfxObjectShell::Current();
-    const SvxFontListItem* pFonts = static_cast<const SvxFontListItem*>(
-        pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST));
-    const FontList* pList = pFonts ? pFonts->GetFontList() : nullptr;
 
     boost::property_tree::ptree aTree;
     aTree.put("commandName", ".uno:FontSubset");
     boost::property_tree::ptree aValues;
 
-    if ( pList && !aFoundFont.isEmpty() )
+    if (const vcl::Font* pFont = FindFont(aFoundFont))
     {
-        sal_uInt16 nFontCount = pList->GetFontNameCount();
-        sal_uInt16 nItFont = 0;
-        for (; nItFont < nFontCount; ++nItFont)
+        FontCharMapRef xFontCharMap (new FontCharMap());
+        auto aDevice(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
+
+        aDevice->SetFont(*pFont);
+        aDevice->GetFontCharMap(xFontCharMap);
+        SubsetMap aSubMap(xFontCharMap);
+
+        for (auto const& subset : aSubMap.GetSubsetMap())
         {
-            if (aFoundFont == pList->GetFontName(nItFont).GetFamilyName())
-            {
-                break;
-            }
-        }
-
-        if ( nItFont < nFontCount )
-        {
-            FontCharMapRef xFontCharMap (new FontCharMap());
-            auto aDevice(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
-            const vcl::Font& aFont(pList->GetFontName(nItFont));
-
-            aDevice->SetFont(aFont);
-            aDevice->GetFontCharMap(xFontCharMap);
-            SubsetMap aSubMap(xFontCharMap);
-
-            for (auto const& subset : aSubMap.GetSubsetMap())
-            {
-                boost::property_tree::ptree aChild;
-                aChild.put("", static_cast<int>(ublock_getCode(subset.GetRangeMin())));
-                aValues.push_back(std::make_pair("", aChild));
-            }
+            boost::property_tree::ptree aChild;
+            aChild.put("", static_cast<int>(ublock_getCode(subset.GetRangeMin())));
+            aValues.push_back(std::make_pair("", aChild));
         }
     }
 
@@ -5383,98 +5385,80 @@ unsigned char* doc_renderFontOrientation(SAL_UNUSED_PARAMETER LibreOfficeKitDocu
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    OString aSearchedFontName(pFontName);
-    OUString aText(OStringToOUString(pChar, RTL_TEXTENCODING_UTF8));
-    SfxObjectShell* pDocSh = SfxObjectShell::Current();
-    const SvxFontListItem* pFonts = static_cast<const SvxFontListItem*>(
-        pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST));
-    const FontList* pList = pFonts ? pFonts->GetFontList() : nullptr;
-
     const int nDefaultFontSize = 25;
 
-    if ( pList )
+    auto aFont = FindFont_FallbackToDefault(OStringToOUString(pFontName, RTL_TEXTENCODING_UTF8));
+
+    OUString aText(OStringToOUString(pChar, RTL_TEXTENCODING_UTF8));
+    if (aText.isEmpty())
+        aText = aFont.GetFamilyName();
+
+    auto aDevice(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
+    ::tools::Rectangle aRect;
+    aFont.SetFontSize(Size(0, nDefaultFontSize));
+    aFont.SetOrientation(Degree10(pOrientation));
+    aDevice->SetFont(aFont);
+    aDevice->GetTextBoundRect(aRect, aText);
+    if (aRect.IsEmpty())
+        return nullptr;
+
+    int nFontWidth = aRect.Right() + 1;
+    int nFontHeight = aRect.Bottom() + 1;
+
+    if (nFontWidth <= 0 || nFontHeight <= 0)
+        return nullptr;
+
+    if (*pFontWidth > 0 && *pFontHeight > 0)
     {
-        sal_uInt16 nFontCount = pList->GetFontNameCount();
-        for (sal_uInt16 i = 0; i < nFontCount; ++i)
+        double fScaleX = *pFontWidth / static_cast<double>(nFontWidth) / 1.5;
+        double fScaleY = *pFontHeight / static_cast<double>(nFontHeight) / 1.5;
+
+        double fScale = std::min(fScaleX, fScaleY);
+
+        if (fScale >= 1.0)
         {
-            const FontMetric& rFontMetric = pList->GetFontName(i);
-            const OUString& aFontName = rFontMetric.GetFamilyName();
-            if (aSearchedFontName != aFontName.toUtf8())
-                continue;
-
-            if (aText.isEmpty())
-                aText = rFontMetric.GetFamilyName();
-
-            auto aDevice(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
-            ::tools::Rectangle aRect;
-            vcl::Font aFont(rFontMetric);
-            aFont.SetFontSize(Size(0, nDefaultFontSize));
-            aFont.SetOrientation(Degree10(pOrientation));
+            int nFontSize = fScale * nDefaultFontSize;
+            aFont.SetFontSize(Size(0, nFontSize));
             aDevice->SetFont(aFont);
-            aDevice->GetTextBoundRect(aRect, aText);
-            if (aRect.IsEmpty())
-                break;
-
-            int nFontWidth = aRect.Right() + 1;
-            int nFontHeight = aRect.Bottom() + 1;
-
-            if (nFontWidth <= 0 || nFontHeight <= 0)
-                break;
-
-            if (*pFontWidth > 0 && *pFontHeight > 0)
-            {
-                double fScaleX = *pFontWidth / static_cast<double>(nFontWidth) / 1.5;
-                double fScaleY = *pFontHeight / static_cast<double>(nFontHeight) / 1.5;
-
-                double fScale = std::min(fScaleX, fScaleY);
-
-                if (fScale >= 1.0)
-                {
-                    int nFontSize = fScale * nDefaultFontSize;
-                    aFont.SetFontSize(Size(0, nFontSize));
-                    aDevice->SetFont(aFont);
-                }
-
-                aRect = tools::Rectangle(0, 0, *pFontWidth, *pFontHeight);
-
-                nFontWidth = *pFontWidth;
-                nFontHeight = *pFontHeight;
-
-            }
-
-            unsigned char* pBuffer = static_cast<unsigned char*>(malloc(4 * nFontWidth * nFontHeight));
-            if (!pBuffer)
-                break;
-
-            memset(pBuffer, 0, nFontWidth * nFontHeight * 4);
-            aDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
-            aDevice->SetOutputSizePixelScaleOffsetAndBuffer(
-                        Size(nFontWidth, nFontHeight), Fraction(1.0), Point(),
-                        pBuffer);
-
-            if (*pFontWidth > 0 && *pFontHeight > 0)
-            {
-                DrawTextFlags const nStyle =
-                        DrawTextFlags::Center
-                        | DrawTextFlags::VCenter
-                        | DrawTextFlags::MultiLine
-                        | DrawTextFlags::WordBreak;// | DrawTextFlags::WordBreakHyphenation ;
-
-                aDevice->DrawText(aRect, aText, nStyle);
-            }
-            else
-            {
-                *pFontWidth = nFontWidth;
-                *pFontHeight = nFontHeight;
-
-                aDevice->DrawText(Point(0,0), aText);
-            }
-
-
-            return pBuffer;
         }
+
+        aRect = tools::Rectangle(0, 0, *pFontWidth, *pFontHeight);
+
+        nFontWidth = *pFontWidth;
+        nFontHeight = *pFontHeight;
+
     }
-    return nullptr;
+
+    unsigned char* pBuffer = static_cast<unsigned char*>(malloc(4 * nFontWidth * nFontHeight));
+    if (!pBuffer)
+        return nullptr;
+
+    memset(pBuffer, 0, nFontWidth * nFontHeight * 4);
+    aDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
+    aDevice->SetOutputSizePixelScaleOffsetAndBuffer(
+                Size(nFontWidth, nFontHeight), Fraction(1.0), Point(),
+                pBuffer);
+
+    if (*pFontWidth > 0 && *pFontHeight > 0)
+    {
+        DrawTextFlags const nStyle =
+                DrawTextFlags::Center
+                | DrawTextFlags::VCenter
+                | DrawTextFlags::MultiLine
+                | DrawTextFlags::WordBreak;// | DrawTextFlags::WordBreakHyphenation ;
+
+        aDevice->DrawText(aRect, aText, nStyle);
+    }
+    else
+    {
+        *pFontWidth = nFontWidth;
+        *pFontHeight = nFontHeight;
+
+        aDevice->DrawText(Point(0,0), aText);
+    }
+
+
+    return pBuffer;
 }
 
 
