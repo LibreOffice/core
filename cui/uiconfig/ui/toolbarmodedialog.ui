@@ -62,7 +62,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="btnClose">
+              <object class="GtkButton" id="close">
                 <property name="label" translatable="yes" context="stock">_Close</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -384,7 +384,7 @@
     <action-widgets>
       <action-widget response="-5">btnApplyAll</action-widget>
       <action-widget response="-5">btnApply</action-widget>
-      <action-widget response="-7">btnClose</action-widget>
+      <action-widget response="-7">close</action-widget>
     </action-widgets>
   </object>
 </interface>
