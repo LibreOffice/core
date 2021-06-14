@@ -2697,7 +2697,7 @@ DECLARE_ODFEXPORT_TEST(testReferenceLanguage, "referencelanguage.odt")
     const char* aFieldTexts[] = { "A 2", "Az Isten", "Az 50-esek",
         "A 2018-asok", "Az egyebek", "A fejezetek",
         reinterpret_cast<char const *>(u8"Az „Őseinket...”"), "a 2",
-        "Az v", "az 1", "Az e", "az 1",
+        "Az v.", "az 1", "Az e)", "az 1",
         "Az (5)", "az 1", "A 2", "az 1" };
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     // update "A (4)" to "Az (5)"
