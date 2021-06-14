@@ -22,6 +22,30 @@
       "revId": "2c98f8a2db6d5e2dd3fa827392d2205838f68c9b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09561669_602d2d4e",
+        "filename": "vcl/backendtest/GraphicsRenderTests.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-14T09:57:27Z",
+      "side": 1,
+      "message": "Well .. it can happen that the backend doesn\u0027t set a name for some reason. Set it to unknown then.\n\nBTW why are you using std::string? We use OUString (UTF-16) and OString (similar to std:string but it\u0027s not the same) in LO, so it makes sense that you should use it too in GraphicsRenderTests instead of std::string.",
+      "parentUuid": "b3b68f33_8407c886",
+      "range": {
+        "startLine": 35,
+        "startChar": 3,
+        "endLine": 38,
+        "endChar": 70
+      },
+      "revId": "2c98f8a2db6d5e2dd3fa827392d2205838f68c9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
