@@ -560,6 +560,50 @@ OUString SvxNumberFormat::CreateRomanString( sal_Int32 nNo, bool bUpper )
     return sRet.makeStringAndClear();
 }
 
+void SvxNumberFormat::SetListFormat(const OUString& rPrefix, const OUString& rSuffix, int nLevel)
+{
+    sPrefix = rPrefix;
+    sSuffix = rSuffix;
+
+    // Generate list format
+    sListFormat = std::make_optional(sPrefix);
+
+    for (int i = 1; i <= nInclUpperLevels; i++)
+    {
+        *sListFormat += "%";
+        *sListFormat += OUString::number(nLevel - nInclUpperLevels + i + 1);
+        if (i != nInclUpperLevels)
+            *sListFormat += "."; // Default separator for older ODT
+    }
+
+    *sListFormat += sSuffix;
+}
+
+void SvxNumberFormat::SetListFormat(std::optional<OUString> oSet)
+{
+    if (!oSet.has_value())
+    {
+        sPrefix.clear();
+        sSuffix.clear();
+        return;
+    }
+
+    sListFormat = oSet;
+
+    // For backward compatibility and UI we should create prefix/suffix also
+    // For backward compatibility lets initialize prefix/suffix
+    sal_Int32 nFirstReplacement = sListFormat->indexOf('%');
+    sal_Int32 nLastReplacement = sListFormat->lastIndexOf('%') + 1;
+    if (nFirstReplacement > 0)
+        // Everything before first '%' will be prefix
+        sPrefix = sListFormat->copy(0, nFirstReplacement);
+    if (nLastReplacement >= 0 && nLastReplacement < sListFormat->getLength() - 1)
+        // Everything beyond last '%' (+1 for follow up id) is a suffix
+        // TODO: can be issues with "%10"?
+        sSuffix = sListFormat->copy(nLastReplacement + 1);
+}
+
+
 OUString SvxNumberFormat::GetCharFormatName()const
 {
     return sCharStyleName;

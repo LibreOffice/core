@@ -171,7 +171,9 @@ public:
     const OUString& GetPrefix() const { return sPrefix;}
     void            SetSuffix(const OUString& rSet) { sSuffix = rSet;}
     const OUString& GetSuffix() const { return sSuffix;}
-    void            SetListFormat(std::optional<OUString> oSet = std::nullopt) { sListFormat = oSet; }
+    // Based on prefix and suffix ininialize them (for backward compatibility) and generate listformat string
+    void            SetListFormat(const OUString& rPrefix, const OUString& rSuffix, int nLevel);
+    void            SetListFormat(std::optional<OUString> oSet = std::nullopt);
     bool            HasListFormat() const { return sListFormat.has_value(); }
     const OUString& GetListFormat() const { return *sListFormat; }
 

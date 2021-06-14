@@ -1370,6 +1370,7 @@ namespace xmloff::token {
         XML_NULL_YEAR,
         XML_NUM_FORMAT,
         XML_NUM_LETTER_SYNC,
+        XML_NUM_LIST_FORMAT,
         XML_NUM_PREFIX,
         XML_NUM_SUFFIX,
         XML_NUMALIGN,
