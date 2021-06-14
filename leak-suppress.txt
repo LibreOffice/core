@@ -10,6 +10,7 @@
 
 # uno typelib
 leak:cppu/source/typelib/typelib.cxx
+leak:cppuhelper/source/typemanager.cxx
 
 # uno component context
 leak:cppu::defaultBootstrap_InitialComponentContext
@@ -77,6 +78,8 @@ leak:CoinMessages::operator=(CoinMessages const&)
 # ignore the in-process Java VM
 leak:libjvm
 
-# TODO The code in Signing::Verify is clearly leaking this structure, but naively destroying it instead
+# TODO The code in Signing::Verify is clearly leaking this structure, but naively destroying it inside
 # that method results in heap-use-after-free errors
 leak:NSS_CMSMessage_CreateFromDER
+leak:PK11_FindPrivateKeyFromCert
+leak:PK11_ImportDERPrivateKeyInfoAndReturnKey
