@@ -1188,8 +1188,8 @@ void SdrTextObj::impDecomposeStretchTextPrimitive(
     // now get back the laid out text size from outliner
     const Size aOutlinerTextSize(rOutliner.CalcTextSize());
     const basegfx::B2DVector aOutlinerScale(
-        basegfx::fTools::equalZero(aOutlinerTextSize.Width()) ? 1.0 : aOutlinerTextSize.Width(),
-        basegfx::fTools::equalZero(aOutlinerTextSize.Height()) ? 1.0 : aOutlinerTextSize.Height());
+        aOutlinerTextSize.Width() == tools::Long(0) ? 1.0 : aOutlinerTextSize.Width(),
+        aOutlinerTextSize.Height()  == tools::Long(0) ? 1.0 : aOutlinerTextSize.Height());
 
     // prepare matrices to apply to newly created primitives
     basegfx::B2DHomMatrix aNewTransformA;
