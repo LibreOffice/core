@@ -1971,33 +1971,43 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
             {
                 // Destination Rectangle
                 const SwRect& rDestRect = mrSh.GetCharRect();
+
                 const sal_Int32 nDestPageNum = CalcOutputPageNum( rDestRect );
                 if ( -1 != nDestPageNum )
                 {
                     const SwPageFrame* pCurrPage = static_cast<const SwPageFrame*>( mrSh.GetLayout()->Lower() );
                     // Destination PageNum
                     tools::Rectangle aRect = SwRectToPDFRect(pCurrPage, rDestRect.SVRect());
+                    const SwPageFrame* fnBodyPage = pCurrPage->getRootFrame()->GetPageByPageNum(nDestPageNum+1);
+                    tools::Long fnSymbolLeft = fnBodyPage->GetLeftMargin() + fnBodyPage->getFrameArea().Left();
+                    tools::Long symbolWidth = rDestRect.Left() - fnSymbolLeft;
+                    const SwRect& fnSymbolRect = SwRect(fnSymbolLeft,rDestRect.Pos().Y(),symbolWidth,rDestRect.Height());
+                    tools::Rectangle aFootnoteSymbolRect = SwRectToPDFRect(pCurrPage, fnSymbolRect.SVRect());
+
+                    // Export back link
+                    const sal_Int32 nBackLinkId = pPDFExtOutDevData->CreateLink(aFootnoteSymbolRect, nDestPageNum);
                     // Destination Export
                     const sal_Int32 nDestId = pPDFExtOutDevData->CreateDest(aRect, nDestPageNum);
                     mrSh.GotoFootnoteAnchor();
-
                     // Link PageNums
                     sal_Int32 aLinkPageNum = CalcOutputPageNum( aLinkRect );
-
                     pCurrPage = static_cast<const SwPageFrame*>( mrSh.GetLayout()->Lower() );
-
                     // Link Export
                     aRect = SwRectToPDFRect(pCurrPage, aLinkRect.SVRect());
                     const sal_Int32 nLinkId = pPDFExtOutDevData->CreateLink(aRect, aLinkPageNum);
-
+                    // Back link destination Export
+                    const sal_Int32 nBackDestId = pPDFExtOutDevData->CreateDest(aRect, aLinkPageNum);
                     // Store link info for tagged pdf output:
                     const IdMapEntry aLinkEntry( aLinkRect, nLinkId );
                     s_aLinkIdMap.push_back( aLinkEntry );
 
-                    // Connect Link and Destination:
+                    // Store backlink info for tagged pdf output:
+                    const IdMapEntry aBackLinkEntry( aFootnoteSymbolRect, nBackLinkId );
+                    s_aLinkIdMap.push_back( aBackLinkEntry );
+                    // Connect Links and Destinations:
                     pPDFExtOutDevData->SetLinkDest( nLinkId, nDestId );
+                    pPDFExtOutDevData->SetLinkDest( nBackLinkId, nBackDestId );
                 }
-
             }
         }
 
