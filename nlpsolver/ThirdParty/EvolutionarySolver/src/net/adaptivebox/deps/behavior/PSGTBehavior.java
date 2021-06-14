@@ -92,27 +92,35 @@ public class PSGTBehavior extends AbsGTBehavior {
 
   @Override
   public void generateBehavior(SearchPoint trailPoint, ProblemEncoder problemEncoder) {
-    SearchPoint gbest_t = socialLib.getGbest();
     DesignSpace designSpace = problemEncoder.getDesignSpace();
+
+    double[] pold_t_location = pold_t.getLocation();
+    double[] pbest_t_location = pbest_t.getLocation();
+    double[] pcurrent_t_location = pcurrent_t.getLocation();
+    double[] gbest_t_location = socialLib.getGbest().getLocation();
+    double[] trailPointLocation = trailPoint.getLocation();
+
     int DIMENSION = designSpace.getDimension();
-    double deltaxb, deltaxbm;
     for (int b = 0; b < DIMENSION; b++) {
       if (Math.random() < CL) {
-        designSpace.mutationAt(trailPoint.getLocation(), b);
-      } else {
-        deltaxb = weight * (pcurrent_t.getLocation()[b] - pold_t.getLocation()[b])
-            + c1 * Math.random() * (pbest_t.getLocation()[b] - pcurrent_t.getLocation()[b])
-            + c2 * Math.random() * (gbest_t.getLocation()[b] - pcurrent_t.getLocation()[b]);
-
-        // limitation for delta_x
-        deltaxbm = 0.5 * designSpace.getMagnitudeIn(b);
-        if (deltaxb < -deltaxbm) {
-          deltaxb = -deltaxbm;
-        } else if (deltaxb > deltaxbm) {
-          deltaxb = deltaxbm;
-        }
-        trailPoint.getLocation()[b] = pcurrent_t.getLocation()[b] + deltaxb;
+        designSpace.mutationAt(trailPointLocation, b);
+        continue;
       }
+
+      double deltaxb = weight * (pcurrent_t_location[b] - pold_t_location[b])
+            + c1 * Math.random() * (pbest_t_location[b] - pcurrent_t_location[b])
+            + c2 * Math.random() * (gbest_t_location[b] - pcurrent_t_location[b]);
+
+      // limitation for delta_x
+      double deltaxbm = 0.5 * designSpace.getMagnitudeIn(b);
+
+      if (deltaxb < -deltaxbm) {
+        deltaxb = -deltaxbm;
+      } else if (deltaxb > deltaxbm) {
+        deltaxb = deltaxbm;
+      }
+
+      trailPointLocation[b] = pcurrent_t_location[b] + deltaxb;
     }
   }
 
