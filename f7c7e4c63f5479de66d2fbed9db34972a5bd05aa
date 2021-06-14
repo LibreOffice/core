@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c8d6f3ee_e72b6fd1",
+        "filename": "svx/source/svdraw/svdedxv.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 2648,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-14T08:40:31Z",
+      "side": 0,
+      "message": "This is how clang-format *rightfully* wants to see it; but it is not useful for a human reader, who wants to see the pairs - hence the utility function that uses explicit pairs",
+      "revId": "f7c7e4c63f5479de66d2fbed9db34972a5bd05aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

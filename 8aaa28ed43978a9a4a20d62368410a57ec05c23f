@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bba055e0_36e1d422",
+        "filename": "include/svl/itemset.hxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-14T08:40:31Z",
+      "side": 1,
+      "message": "And the compiler seems to dislike this function. In fact, this function is created to avoid clang-format re-formatting the which pairs to non-pairs, like it did in svx/source/svdraw/svdedxv.cxx - and I actually dislike our implementation of the which pair list, where we use plain list as list of pairs...\n\nDo you think I should revert this part?",
+      "revId": "8aaa28ed43978a9a4a20d62368410a57ec05c23f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
