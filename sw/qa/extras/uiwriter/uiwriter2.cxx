@@ -67,7 +67,6 @@
 #include <unotxdoc.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <rootfrm.hxx>
-#include <unotools/mediadescriptor.hxx>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <comphelper/processfactory.hxx>
 

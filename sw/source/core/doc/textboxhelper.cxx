@@ -40,7 +40,7 @@
 #include <svx/swframetypes.hxx>
 #include <drawdoc.hxx>
 #include <IDocumentUndoRedo.hxx>
-#include <DocumentDrawModelManager.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
