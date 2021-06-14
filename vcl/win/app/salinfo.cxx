@@ -65,10 +65,8 @@ bool WinSalSystem::handleMonitorCallback( sal_IntPtr hMonitor, sal_IntPtr, sal_I
         if( it != m_aDeviceNameToMonitor.end() )
         {
             DisplayMonitor& rMon( m_aMonitors[ it->second ] );
-            rMon.m_aArea = tools::Rectangle( Point( aInfo.rcMonitor.left,
-                                             aInfo.rcMonitor.top ),
-                                      Size( aInfo.rcMonitor.right - aInfo.rcMonitor.left,
-                                            aInfo.rcMonitor.bottom - aInfo.rcMonitor.top ) );
+            rMon.m_aArea = tools::Rectangle(aInfo.rcMonitor.left, aInfo.rcMonitor.top,
+                                            aInfo.rcMonitor.right, aInfo.rcMonitor.bottom);
             if( (aInfo.dwFlags & MONITORINFOF_PRIMARY) != 0 )
                 m_nPrimary = it->second;
         }
