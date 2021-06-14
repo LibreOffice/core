@@ -175,7 +175,7 @@ std::string ConstantParam::getCallValue(const Expr* arg)
     APSInt x1;
     if (compat::EvaluateAsInt(arg, x1, compiler.getASTContext()))
     {
-        return x1.toString(10);
+        return compat::toString(x1, 10);
     }
     if (isa<CXXNullPtrLiteralExpr>(arg)) {
         return "0";

@@ -9,6 +9,7 @@
 
 #include "plugin.hxx"
 #include "check.hxx"
+#include "compat.hxx"
 
 #include <cassert>
 #include <string>
@@ -204,7 +205,7 @@ std::string VirtualDead::getCallValue(const Expr* arg)
     APSInt x1;
     if (compat::EvaluateAsInt(arg, x1, compiler.getASTContext()))
     {
-        return x1.toString(10);
+        return compat::toString(x1, 10);
     }
     if (isa<CXXNullPtrLiteralExpr>(arg))
     {
