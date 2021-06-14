@@ -716,8 +716,7 @@ IMPL_LINK(SvxBulletAndPositionDlg, NumberTypeSelectHdl_Impl, weld::ComboBox&, rB
             {
                 bBmp |= nullptr != aNumFmt.GetBrush();
                 aNumFmt.SetIncludeUpperLevels(0);
-                aNumFmt.SetSuffix("");
-                aNumFmt.SetPrefix("");
+                aNumFmt.SetListFormat("", "", i);
                 if (!bBmp)
                     aNumFmt.SetGraphic("");
                 pActNum->SetLevel(i, aNumFmt);
@@ -726,8 +725,7 @@ IMPL_LINK(SvxBulletAndPositionDlg, NumberTypeSelectHdl_Impl, weld::ComboBox&, rB
             else if (SVX_NUM_CHAR_SPECIAL == nNumberingType)
             {
                 aNumFmt.SetIncludeUpperLevels(0);
-                aNumFmt.SetSuffix("");
-                aNumFmt.SetPrefix("");
+                aNumFmt.SetListFormat("", "", i);
                 if (!aNumFmt.GetBulletFont())
                     aNumFmt.SetBulletFont(&aActBulletFont);
                 if (!aNumFmt.GetBulletChar())
@@ -738,8 +736,7 @@ IMPL_LINK(SvxBulletAndPositionDlg, NumberTypeSelectHdl_Impl, weld::ComboBox&, rB
             }
             else
             {
-                aNumFmt.SetPrefix(m_xPrefixED->get_text());
-                aNumFmt.SetSuffix(m_xSuffixED->get_text());
+                aNumFmt.SetListFormat(m_xPrefixED->get_text(), m_xSuffixED->get_text(), i);
                 SwitchNumberType(SHOW_NUMBERING);
                 pActNum->SetLevel(i, aNumFmt);
                 CheckForStartValue_Impl(nNumberingType);
@@ -1233,8 +1230,7 @@ IMPL_LINK(SvxBulletAndPositionDlg, RelativeHdl_Impl, weld::Toggleable&, rBox, vo
 
 void SvxBulletAndPositionDlg::EditModifyHdl_Impl(const weld::Entry* pEdit)
 {
-    bool bPrefix = pEdit == m_xPrefixED.get();
-    bool bSuffix = pEdit == m_xSuffixED.get();
+    bool bPrefixOrSuffix = (pEdit == m_xPrefixED.get()) || (pEdit == m_xSuffixED.get());
     bool bStart = pEdit == m_xStartED.get();
     sal_uInt16 nMask = 1;
     for (sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
@@ -1242,10 +1238,8 @@ void SvxBulletAndPositionDlg::EditModifyHdl_Impl(const weld::Entry* pEdit)
         if (nActNumLvl & nMask)
         {
             SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
-            if (bPrefix)
-                aNumFmt.SetPrefix(m_xPrefixED->get_text());
-            else if (bSuffix)
-                aNumFmt.SetSuffix(m_xSuffixED->get_text());
+            if (bPrefixOrSuffix)
+                aNumFmt.SetListFormat(m_xPrefixED->get_text(), m_xSuffixED->get_text(), i);
             else if (bStart)
                 aNumFmt.SetStart(m_xStartED->get_value());
             pActNum->SetLevel(i, aNumFmt);
