@@ -438,6 +438,9 @@ class SdrAngleItem;
 
 //#define SID_SIDEBAR                                   ( SID_SVX_START + 336 )   -> sfxsids.hrc
 
+#define SID_ATTR_TEXTCOLUMNS_NUMBER                     ( SID_SVX_START + 337 )
+#define SID_ATTR_TEXTCOLUMNS_SPACING                    ( SID_SVX_START + 338 )
+
 #define SID_SB_CONNECTIONPOOLING                        ( SID_SVX_START + 348 )
 #define SID_SB_DBREGISTEROPTIONS                        ( SID_SVX_START + 349 )
 #define SID_BMPMASK                                     ( SID_SVX_START + 350 )
