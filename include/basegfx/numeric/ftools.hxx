@@ -166,60 +166,67 @@ namespace basegfx
      */
     BASEGFX_DLLPUBLIC double normalizeToRange(double v, const double fRange);
 
-    class BASEGFX_DLLPUBLIC fTools
+    namespace fTools
     {
-    public:
         /// Get threshold value for equalZero and friends
-        static double getSmallValue() { return 0.000000001f; }
+        inline double getSmallValue() { return 0.000000001f; }
 
         /// Compare against small value
-        static bool equalZero(const double& rfVal)
+        template <typename T, typename std::enable_if<std::is_floating_point<T>::value, bool>::type = false>
+        inline bool equalZero(const T& rfVal)
         {
             return (fabs(rfVal) <= getSmallValue());
         }
 
         /// Compare against given small value
-        static bool equalZero(const double& rfVal, const double& rfSmallValue)
+        template <typename T, typename std::enable_if<std::is_floating_point<T>::value, bool>::type = false>
+        inline bool equalZero(const T& rfVal, const T& rfSmallValue)
         {
             return (fabs(rfVal) <= rfSmallValue);
         }
 
-        static bool equal(const double& rfValA, const double& rfValB)
+        template <typename T, typename std::enable_if<std::is_floating_point<T>::value, bool>::type = false>
+        inline bool equal(T const& rfValA, T const& rfValB)
         {
             // changed to approxEqual usage for better numerical correctness
             return rtl_math_approxEqual(rfValA, rfValB);
         }
 
-        static bool equal(const double& rfValA, const double& rfValB, const double& rfSmallValue)
+        template <typename T, typename std::enable_if<std::is_floating_point<T>::value, bool>::type = false>
+        inline bool equal(const T& rfValA, const T& rfValB, const T& rfSmallValue)
         {
             return (fabs(rfValA - rfValB) <= rfSmallValue);
         }
 
-        static bool less(const double& rfValA, const double& rfValB)
+        template <typename T, typename std::enable_if<std::is_floating_point<T>::value, bool>::type = false>
+        inline bool less(const T& rfValA, const T& rfValB)
         {
             return (rfValA < rfValB && !equal(rfValA, rfValB));
         }
 
-        static bool lessOrEqual(const double& rfValA, const double& rfValB)
+        template <typename T, typename std::enable_if<std::is_floating_point<T>::value, bool>::type = false>
+        inline bool lessOrEqual(const T& rfValA, const T& rfValB)
         {
             return (rfValA < rfValB || equal(rfValA, rfValB));
         }
 
-        static bool more(const double& rfValA, const double& rfValB)
+        template <typename T, typename std::enable_if<std::is_floating_point<T>::value, bool>::type = false>
+        inline bool more(const T& rfValA, const T& rfValB)
         {
             return (rfValA > rfValB && !equal(rfValA, rfValB));
         }
 
-        static bool moreOrEqual(const double& rfValA, const double& rfValB)
+        template <typename T, typename std::enable_if<std::is_floating_point<T>::value, bool>::type = false>
+        inline bool moreOrEqual(const T& rfValA, const T& rfValB)
         {
             return (rfValA > rfValB || equal(rfValA, rfValB));
         }
 
-        static bool betweenOrEqualEither(const double& rfValA, const double& rfValB, const double& rfValC)
+        template <typename T, typename std::enable_if<std::is_floating_point<T>::value, bool>::type = false>
+        inline bool betweenOrEqualEither(const T& rfValA, const T& rfValB, const T& rfValC)
         {
             return (rfValA > rfValB && rfValA < rfValC) || equal(rfValA, rfValB) || equal(rfValA, rfValC);
         }
-
     };
 } // end of namespace basegfx
 

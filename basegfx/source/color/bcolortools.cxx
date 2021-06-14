@@ -152,7 +152,7 @@ namespace basegfx::utils
         }
         else
         {
-            if( fTools::equal(h,360) )
+            if( fTools::equal(h, 360.0) )
                 h = 0; // 360 degrees is equivalent to 0 degrees
 
             h /= 60.0;
