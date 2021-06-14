@@ -160,10 +160,9 @@ static OUString ImplMakeSearchString(const OUString& rStr)
 static OUString ImplMakeSearchStringFromName(const OUString& rStr)
 {
     // check for features before alternate font separator
-    sal_Int32 nColon = rStr.indexOf(':');
-    sal_Int32 nSemiColon = rStr.indexOf(';');
-    if (nColon != -1 && (nSemiColon == -1 || nColon < nSemiColon))
-        return ImplMakeSearchString(rStr.getToken( 0, ':' ));
+    if (sal_Int32 nColon = rStr.indexOf(':'); nColon != -1)
+        if (sal_Int32 nSemiColon = rStr.indexOf(';'); nSemiColon == -1 || nColon < nSemiColon)
+            return ImplMakeSearchString(rStr.getToken( 0, ':' ));
     return ImplMakeSearchString(rStr.getToken( 0, ';' ));
 }
 
