@@ -30,6 +30,7 @@
 #include "graphic/GraphicPropertyPanel.hxx"
 #include "line/LinePropertyPanel.hxx"
 #include "possize/PosSizePropertyPanel.hxx"
+#include "textcolumns/TextColumnsPropertyPanel.hxx"
 #include <DefaultShapesPanel.hxx>
 #if HAVE_FEATURE_AVMEDIA
 #include "media/MediaPlaybackPanel.hxx"
@@ -191,6 +192,10 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     {
         xControl = std::make_unique<EmptyPanel>(pParent);
         aLayoutSize = ui::LayoutSize(20,-1, 50);
+    }
+    else if (rsResourceURL.endsWith("/TextColumnsPropertyPanel"))
+    {
+        xControl = TextColumnsPropertyPanel::Create(pParent, pBindings);
     }
 
     if (xControl)
