@@ -9201,6 +9201,7 @@ private:
     GtkImage* m_pImage;
 #else
     GtkPicture* m_pImage;
+    GtkToggleButton* m_pToggleButton;
     o3tl::sorted_vector<OString> m_aInsertedActions; // must outlive m_aActionEntries
     std::map<OString, OString> m_aIdToAction;
     std::vector<GActionEntry> m_aActionEntries;
@@ -9216,20 +9217,30 @@ private:
     GtkWidget* m_pPopover;
     gulong m_nSignalId;
 #if GTK_CHECK_VERSION(4, 0, 0)
+    gulong m_nToggleSignalId;
     std::unique_ptr<vcl::Font> m_xFont;
     WidgetBackground m_aCustomBackground;
 #endif
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+    static void signalToggled(GtkToggleButton*, gpointer widget)
+    {
+        GtkInstanceMenuButton* pThis = static_cast<GtkInstanceMenuButton*>(widget);
+        SolarMutexGuard aGuard;
+        pThis->signal_toggled();
+    }
+#else
     static void signalToggled(GtkWidget*, gpointer widget)
     {
         GtkInstanceMenuButton* pThis = static_cast<GtkInstanceMenuButton*>(widget);
         SolarMutexGuard aGuard;
         pThis->toggle_menu();
     }
+#endif
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     void toggle_menu()
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         if (!m_pMenuHack)
             return;
         if (!get_active())
@@ -9271,8 +9282,8 @@ private:
             // tdf#132540 keep the placeholder popover on this same side as the replacement menu
             gtk_popover_set_position(gtk_menu_button_get_popover(m_pMenuButton), ePosUsed);
         }
-#endif
     }
+#endif
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
     static void signalGrabBroken(GtkWidget*, GdkEventGrabBroken *pEvent, gpointer widget)
@@ -9499,7 +9510,9 @@ public:
         m_pBox = formatMenuButton(m_pLabel);
 #else
         GtkWidget* pToggleButton = gtk_widget_get_first_child(GTK_WIDGET(m_pMenuButton));
-        assert(GTK_IS_BUTTON(pToggleButton));
+        assert(GTK_IS_TOGGLE_BUTTON(pToggleButton));
+        m_pToggleButton = GTK_TOGGLE_BUTTON(pToggleButton);
+        m_nToggleSignalId = g_signal_connect(m_pToggleButton, "toggled", G_CALLBACK(signalToggled), this);
         GtkWidget* pChild = gtk_button_get_child(GTK_BUTTON(pToggleButton));
         m_pBox = GTK_IS_BOX(pChild) ? GTK_BOX(pChild) : nullptr;
         m_pLabel = m_pBox ? gtk_widget_get_first_child(GTK_WIDGET(m_pBox)) : nullptr;
@@ -9934,17 +9947,33 @@ public:
         return pBox;
     }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+    virtual void disable_notify_events() override
+    {
+        g_signal_handler_block(m_pToggleButton, m_nToggleSignalId);
+        GtkInstanceWidget::disable_notify_events();
+    }
+
+    virtual void enable_notify_events() override
+    {
+        GtkInstanceWidget::enable_notify_events();
+        g_signal_handler_unblock(m_pToggleButton, m_nToggleSignalId);
+    }
+#endif
+
     virtual ~GtkInstanceMenuButton() override
     {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        g_signal_handler_disconnect(m_pToggleButton, m_nToggleSignalId);
+#else
         if (m_pMenuHack)
         {
             g_signal_handler_disconnect(m_pMenuButton, m_nSignalId);
             gtk_menu_button_set_popover(m_pMenuButton, nullptr);
             gtk_widget_destroy(GTK_WIDGET(m_pMenuHack));
         }
-    }
 #endif
+    }
 };
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
