@@ -1746,6 +1746,10 @@ void XMLTextFieldExport::ExportFieldHelper(
         DBG_ASSERT(sPresentation.isEmpty(),
                    "Unexpected presentation for annotation field");
 
+        SvtSecurityOptions aSecOpt;
+        bool bRemovePersonalInfo = aSecOpt.IsOptionSet(
+            SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo );
+
         // annotation element + content
         OUString aName;
         rPropSet->getPropertyValue(gsPropertyName) >>= aName;
@@ -1774,11 +1778,14 @@ void XMLTextFieldExport::ExportFieldHelper(
             SvXMLElementExport aCreatorElem( GetExport(), XML_NAMESPACE_DC,
                                               XML_CREATOR, true,
                                               false );
-            GetExport().Characters(aAuthor);
+            GetExport().Characters( bRemovePersonalInfo
+                    ? OUString::number( rExport.GetInfoID(aAuthor) )
+                    : aAuthor );
         }
 
         // date time
         util::DateTime aDate( GetDateTimeProperty(gsPropertyDateTimeValue, rPropSet) );
+        if ( !bRemovePersonalInfo )
         {
             OUStringBuffer aBuffer;
             ::sax::Converter::convertDateTime(aBuffer, aDate, nullptr, true);
@@ -1804,7 +1811,9 @@ void XMLTextFieldExport::ExportFieldHelper(
                             ? XML_CREATOR_INITIALS
                             : XML_SENDER_INITIALS,
                         true, false );
-                GetExport().Characters(aInitials);
+                GetExport().Characters( bRemovePersonalInfo
+                        ? OUString::number( rExport.GetInfoID(aInitials) )
+                        : aInitials);
             }
         }
 
