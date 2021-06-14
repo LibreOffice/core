@@ -874,7 +874,6 @@
                         <property name="use_underline">True</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">sortcontents</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="sortpos-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|sortpos">Sorts the bibliography entries according to the position of their references in the document.</property>

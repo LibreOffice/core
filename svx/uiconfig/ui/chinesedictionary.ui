@@ -119,7 +119,6 @@
                     <property name="use_underline">True</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">simpletotrad</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="tradtosimple-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="chinesedictionary|extended_tip|tradtosimple">Converts traditional Chinese to simplified Chinese.</property>

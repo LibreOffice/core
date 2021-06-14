@@ -63,7 +63,6 @@
                 <property name="use_underline">True</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
-                <property name="group">maxheight</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="maxheightpage-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="footnoteareapage|extended_tip|maxheightpage">Automatically adjusts the height of the footnote area depending on the number of footnotes.</property>
