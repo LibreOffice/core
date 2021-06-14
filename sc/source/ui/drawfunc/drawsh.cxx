@@ -417,6 +417,8 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
         case SID_ATTR_GLOW_RADIUS:
         case SID_ATTR_GLOW_TRANSPARENCY:
         case SID_ATTR_SOFTEDGE_RADIUS:
+        case SID_ATTR_TEXTCOLUMNS_NUMBER:
+        case SID_ATTR_TEXTCOLUMNS_SPACING:
             if (const SfxItemSet* pNewArgs = rReq.GetArgs())
                 pView->SetAttrToMarked(*pNewArgs, false);
             rReq.Done();

@@ -368,7 +368,24 @@ void SwDrawShell::GetDrawAttrState(SfxItemSet& rSet)
 
         if( !bDisable )
         {
-            pSdrView->GetAttributes( rSet );
+            SfxItemSet aSet(rSet);
+            aSet.MergeRange(SDRATTR_TEXTCOLUMNS_NUMBER, SDRATTR_TEXTCOLUMNS_SPACING);
+            pSdrView->GetAttributes(aSet);
+            if (const SfxPoolItem * pItem;
+                aSet.GetItemState(SDRATTR_TEXTCOLUMNS_NUMBER, false, &pItem)
+                    >= SfxItemState::DEFAULT
+                && pItem)
+            {
+                aSet.Put(pItem->CloneSetWhich(SID_ATTR_TEXTCOLUMNS_NUMBER));
+            }
+            if (const SfxPoolItem * pItem;
+                aSet.GetItemState(SDRATTR_TEXTCOLUMNS_SPACING, false, &pItem)
+                    >= SfxItemState::DEFAULT
+                && pItem)
+            {
+                aSet.Put(pItem->CloneSetWhich(SID_ATTR_TEXTCOLUMNS_SPACING));
+            }
+            rSet.Put(aSet, false);
             if (comphelper::LibreOfficeKit::isActive())
                 lcl_unifyFillTransparencyItems(rSet);
         }
