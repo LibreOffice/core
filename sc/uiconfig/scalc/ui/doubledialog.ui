@@ -33,7 +33,6 @@
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">0</property>
-                <property name="secondary">True</property>
               </packing>
             </child>
             <child>
@@ -48,7 +47,6 @@
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">1</property>
-                <property name="secondary">True</property>
               </packing>
             </child>
           </object>
