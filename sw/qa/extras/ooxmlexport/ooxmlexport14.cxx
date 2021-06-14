@@ -1070,12 +1070,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf120394, "tdf120394.docx")
     {
         uno::Reference<beans::XPropertySet> xPara(getParagraph(2), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(1), getProperty<sal_Int16>(xPara, "NumberingLevel"));
-        CPPUNIT_ASSERT_EQUAL(OUString(CHAR_ZWSP), getProperty<OUString>(xPara, "ListLabelString"));
+        CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(xPara, "ListLabelString"));
     }
     {
         uno::Reference<beans::XPropertySet> xPara(getParagraph(3), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(1), getProperty<sal_Int16>(xPara, "NumberingLevel"));
-        CPPUNIT_ASSERT_EQUAL(OUString(CHAR_ZWSP), getProperty<OUString>(xPara, "ListLabelString"));
+        CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(xPara, "ListLabelString"));
     }
     {
         uno::Reference<beans::XPropertySet> xPara(getParagraph(5), uno::UNO_QUERY);
@@ -1090,7 +1090,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf133605, "tdf133605.docx")
     {
         uno::Reference<beans::XPropertySet> xPara(getParagraph(3), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(0), getProperty<sal_Int16>(xPara, "NumberingLevel"));
-        CPPUNIT_ASSERT_EQUAL(OUString(CHAR_ZWSP), getProperty<OUString>(xPara, "ListLabelString"));
+        CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(xPara, "ListLabelString"));
     }
     {
         uno::Reference<beans::XPropertySet> xPara(getParagraph(4), uno::UNO_QUERY);
@@ -1116,7 +1116,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf133605_2, "tdf133605_2.docx")
     {
         uno::Reference<beans::XPropertySet> xPara(getParagraph(3), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(0), getProperty<sal_Int16>(xPara, "NumberingLevel"));
-        CPPUNIT_ASSERT_EQUAL(OUString(CHAR_ZWSP), getProperty<OUString>(xPara, "ListLabelString"));
+        CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(xPara, "ListLabelString"));
     }
     {
         uno::Reference<beans::XPropertySet> xPara(getParagraph(4), uno::UNO_QUERY);
