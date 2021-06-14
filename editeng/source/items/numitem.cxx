@@ -560,6 +560,55 @@ OUString SvxNumberFormat::CreateRomanString( sal_Int32 nNo, bool bUpper )
     return sRet.makeStringAndClear();
 }
 
+void SvxNumberFormat::SetListFormat(const OUString& rPrefix, const OUString& rSuffix, int nLevel)
+{
+    sPrefix = rPrefix;
+    sSuffix = rSuffix;
+
+    // Generate list format
+    sListFormat = std::make_optional(sPrefix);
+
+    for (int i = 1; i <= nInclUpperLevels; i++)
+    {
+        int nLevelId = nLevel - nInclUpperLevels + i;
+        if (nLevelId < 0)
+            // There can be cases with curent level 1, but request to show 10 upper levels. Trim it
+            continue;
+
+        *sListFormat += "%";
+        *sListFormat += OUString::number(nLevelId + 1);
+        *sListFormat += "%";
+        if (i != nInclUpperLevels)
+            *sListFormat += "."; // Default separator for older ODT
+    }
+
+    *sListFormat += sSuffix;
+}
+
+void SvxNumberFormat::SetListFormat(std::optional<OUString> oSet)
+{
+    sPrefix.clear();
+    sSuffix.clear();
+
+    if (!oSet.has_value())
+    {
+        return;
+    }
+
+    sListFormat = oSet;
+
+    // For backward compatibility and UI we should create prefix/suffix also
+    sal_Int32 nFirstReplacement = sListFormat->indexOf('%');
+    sal_Int32 nLastReplacement = sListFormat->lastIndexOf('%') + 1;
+    if (nFirstReplacement > 0)
+        // Everything before first '%' will be prefix
+        sPrefix = sListFormat->copy(0, nFirstReplacement);
+    if (nLastReplacement >= 0 && nLastReplacement < sListFormat->getLength())
+        // Everything beyond last '%' is a suffix
+        sSuffix = sListFormat->copy(nLastReplacement);
+}
+
+
 OUString SvxNumberFormat::GetCharFormatName()const
 {
     return sCharStyleName;

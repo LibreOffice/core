@@ -939,7 +939,7 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
     }
     else
     {
-        // Replace symbols at aOfsNumsXCH offsets to %1, %2 as supported by DOCX and LO
+        // Replace symbols at aOfsNumsXCH offsets to %1%, %2% as supported by LO
         OUString sListFormat = sNumString;
         if (sListFormat.getLength())
         {
@@ -957,7 +957,7 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
                 }
                 sal_uInt8 nReplacement = sListFormat[nOffset] + 1;
 
-                OUString sReplacement("%" + OUString::number(nReplacement));
+                OUString sReplacement("%" + OUString::number(nReplacement) + "%");
                 sListFormat = sListFormat.replaceAt(nOffset, 1, sReplacement);
 
                 // We need also update an offset, since we are replacing one symbol by at least two

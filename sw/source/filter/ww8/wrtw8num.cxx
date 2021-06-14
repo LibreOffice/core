@@ -496,7 +496,7 @@ void MSWordExportBase::NumberingLevel(
                 sal_Int32 nFnd = sNumStr.indexOf(sSrch);
                 if (-1 != nFnd)
                 {
-                    *pLvlPos = static_cast<sal_uInt8>(nFnd + rFormat.GetPrefix().getLength() + 1);
+                    *pLvlPos = static_cast<sal_uInt8>(nFnd + 1);
                     ++pLvlPos;
                     sNumStr = sNumStr.replaceAt(nFnd, 1, OUString(static_cast<char>(i)));
                 }

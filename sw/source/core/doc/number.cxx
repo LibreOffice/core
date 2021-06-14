@@ -388,8 +388,8 @@ SwNumRule::SwNumRule( const OUString& rNm,
             pFormat->SetStart( 1 );
             pFormat->SetAbsLSpace( lNumberIndent + SwNumRule::GetNumIndent( n ) );
             pFormat->SetFirstLineOffset( lNumberFirstLineOffset );
-            pFormat->SetSuffix( "." );
-            pFormat->SetBulletChar( numfunc::GetBulletChar(n));
+            pFormat->SetListFormat("%" + OUString::number(n + 1) + "%.");
+            pFormat->SetBulletChar(numfunc::GetBulletChar(n));
             SwNumRule::saBaseFormats[ NUM_RULE ][ n ] = pFormat;
         }
         // position-and-space mode LABEL_ALIGNMENT
@@ -411,7 +411,7 @@ SwNumRule::SwNumRule( const OUString& rNm,
             pFormat->SetListtabPos( cIndentAt[ n ] );
             pFormat->SetFirstLineIndent( cFirstLineIndent );
             pFormat->SetIndentAt( cIndentAt[ n ] );
-            pFormat->SetSuffix( "." );
+            pFormat->SetListFormat( "%" + OUString::number(n + 1) + "%.");
             pFormat->SetBulletChar( numfunc::GetBulletChar(n));
             SwNumRule::saLabelAlignmentBaseFormats[ NUM_RULE ][ n ] = pFormat;
         }
@@ -682,17 +682,11 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
                     else
                         sReplacement = "0";        // all 0 level are a 0
 
-                    OUString sFind("%" + OUString::number(i + 1));
+                    OUString sFind("%" + OUString::number(i + 1) + "%");
                     sal_Int32 nPosition = sLevelFormat.indexOf(sFind);
                     if (nPosition >= 0)
                         sLevelFormat = sLevelFormat.replaceAt(nPosition, sFind.getLength(), sReplacement);
                 }
-
-                // As a fallback: caller code expects nonempty string as a result.
-                // But if we have empty string (and had no errors before) this is valid result.
-                // So use classical hack with zero-width-space as a string filling.
-                if (sLevelFormat.isEmpty())
-                    sLevelFormat = OUStringChar(CHAR_ZWSP);
 
                 aStr = sLevelFormat;
             }

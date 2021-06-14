@@ -340,8 +340,7 @@ void BulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
             aFmt.SetBulletFont(&rActBulletFont);
             aFmt.SetBulletChar(cChar);
             aFmt.SetCharFormatName(sBulletCharFormatName);
-            aFmt.SetPrefix( "" );
-            aFmt.SetSuffix( "" );
+            aFmt.SetListFormat( "" );
             if (isResetSize) aFmt.SetBulletRelSize(45);
             aNum.SetLevel(i, aFmt);
         }
@@ -524,9 +523,7 @@ void NumberingTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uIn
             SvxNumberFormat aFmt(aNum.GetLevel(i));
             if (eNewType!=aFmt.GetNumberingType()) isResetSize=true;
             aFmt.SetNumberingType(eNewType);
-            aFmt.SetPrefix(_pSet->pNumSetting->sPrefix);
-            aFmt.SetSuffix(_pSet->pNumSetting->sSuffix);
-
+            aFmt.SetListFormat(_pSet->pNumSetting->sPrefix, _pSet->pNumSetting->sSuffix, i);
             aFmt.SetCharFormatName(sNumCharFmtName);
             if (isResetSize) aFmt.SetBulletRelSize(100);
             aNum.SetLevel(i, aFmt);
@@ -875,8 +872,7 @@ void OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
             aFmt.SetFirstLineIndent(pLevelSettings->nNumAlignAt);
             aFmt.SetIndentAt(pLevelSettings->nNumIndentAt);
         }
-        aFmt.SetPrefix(pLevelSettings->sPrefix);
-        aFmt.SetSuffix(pLevelSettings->sSuffix);
+        aFmt.SetListFormat(pLevelSettings->sPrefix, pLevelSettings->sSuffix, i);
         aNum.SetLevel(i, aFmt);
     }
 }
