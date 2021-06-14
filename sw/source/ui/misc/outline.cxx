@@ -648,9 +648,7 @@ IMPL_LINK_NOARG(SwOutlineSettingsTabPage, DelimModify, weld::Entry&, void)
         if(nActLevel & nMask)
         {
             SwNumFormat aNumFormat(pNumRule->Get(i));
-            aNumFormat.SetPrefix( m_xPrefixED->get_text() );
-            aNumFormat.SetSuffix( m_xSuffixED->get_text() );
-            aNumFormat.SetListFormat();  // clear custom format
+            aNumFormat.SetListFormat( m_xPrefixED->get_text(), m_xSuffixED->get_text(), i );
             pNumRule->Set(i, aNumFormat);
         }
         nMask <<= 1;
