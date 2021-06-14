@@ -276,12 +276,6 @@ void TestBreakIterator::testWordBoundaries()
         //make sure that in all cases isBeginWord and isEndWord matches getWordBoundary
         for (size_t i = 0; i < SAL_N_ELEMENTS(aBreakTests); ++i)
         {
-#if (U_ICU_VERSION_MAJOR_NUM == 4) && (U_ICU_VERSION_MINOR_NUM <= 2)
-            //Note the breakiterator test is known to fail on older icu
-            //versions (4.2.1) for the 200B (ZWSP) Zero Width Space testcase.
-            if (aBreakTests[i] == 0x200B)
-                continue;
-#endif
             OUString aTest = "Word" + OUStringChar(aBreakTests[i]) + "Word";
             aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale, mode, true);
             switch (mode)
