@@ -411,7 +411,7 @@ SwNumRule::SwNumRule( const OUString& rNm,
             pFormat->SetListtabPos( cIndentAt[ n ] );
             pFormat->SetFirstLineIndent( cFirstLineIndent );
             pFormat->SetIndentAt( cIndentAt[ n ] );
-            pFormat->SetSuffix( "." );
+            pFormat->SetListFormat( OUString::number(n + 1) + "." );
             pFormat->SetBulletChar( numfunc::GetBulletChar(n));
             SwNumRule::saLabelAlignmentBaseFormats[ NUM_RULE ][ n ] = pFormat;
         }
@@ -425,7 +425,8 @@ SwNumRule::SwNumRule( const OUString& rNm,
             pFormat->SetIncludeUpperLevels( MAXLEVEL );
             pFormat->SetStart( 1 );
             pFormat->SetCharTextDistance( lOutlineMinTextDistance );
-            pFormat->SetBulletChar( numfunc::GetBulletChar(n));
+            pFormat->SetListFormat( OUString::number(n + 1) );
+            pFormat->SetBulletChar(numfunc::GetBulletChar(n));
             SwNumRule::saBaseFormats[ OUTLINE_RULE ][ n ] = pFormat;
         }
         // position-and-space mode LABEL_ALIGNMENT:
@@ -436,7 +437,8 @@ SwNumRule::SwNumRule( const OUString& rNm,
             pFormat->SetIncludeUpperLevels( MAXLEVEL );
             pFormat->SetStart( 1 );
             pFormat->SetPositionAndSpaceMode( SvxNumberFormat::LABEL_ALIGNMENT );
-            pFormat->SetBulletChar( numfunc::GetBulletChar(n));
+            pFormat->SetListFormat( OUString::number(n + 1) );
+            pFormat->SetBulletChar(numfunc::GetBulletChar(n));
             SwNumRule::saLabelAlignmentBaseFormats[ OUTLINE_RULE ][ n ] = pFormat;
         }
     }
