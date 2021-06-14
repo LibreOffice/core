@@ -25,6 +25,7 @@
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
 #include <memory>
+#include <unordered_map>
 
 namespace osl { class Mutex; }
 
@@ -183,6 +184,17 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtSecurityOptions final : public utl::
         std::shared_ptr<SvtSecurityOptions_Impl> m_pImpl;
 
 };      // class SvtSecurityOptions
+
+// map personal info strings, e.g. authors to 1, 2, 3... for removing personal info
+typedef ::std::unordered_map< OUString, size_t > SvtSecurityMapPersonalInfoType;
+
+class UNOTOOLS_DLLPUBLIC SvtSecurityMapPersonalInfo final
+{
+    SvtSecurityMapPersonalInfoType aInfoIDs;
+
+public:
+    size_t GetInfoID( const OUString sPersonalInfo );
+};
 
 #endif // INCLUDED_UNOTOOLS_SECURITYOPTIONS_HXX
 
