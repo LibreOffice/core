@@ -84,6 +84,30 @@
     },
     {
       "key": {
+        "uuid": "f3204cf4_4aa7f237",
+        "filename": "include/basic/versionhelper.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-14T12:32:45Z",
+      "side": 1,
+      "message": "I would use just use utl namespace (like ConfigManager) .. if the name of the function is clear enough, then a sub namespace is not needed.",
+      "parentUuid": "ec15231f_e0124110",
+      "range": {
+        "startLine": 15,
+        "startChar": 10,
+        "endLine": 15,
+        "endChar": 23
+      },
+      "revId": "476a75841b2fd1f313c534eb73eb7456095435eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bdc11226_5af6b3f7",
         "filename": "include/basic/versionhelper.hxx",
         "patchSetId": 14
@@ -95,6 +119,24 @@
       "writtenOn": "2021-06-14T11:00:03Z",
       "side": 1,
       "message": "what version is updated?",
+      "revId": "476a75841b2fd1f313c534eb73eb7456095435eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e6b0b5a_80509f37",
+        "filename": "include/basic/versionhelper.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-14T12:32:45Z",
+      "side": 1,
+      "message": "Also - this is not a question you answer - it is to point out that it doesn\u0027t describe good enough the function\u0027s intention.",
+      "parentUuid": "bdc11226_5af6b3f7",
       "revId": "476a75841b2fd1f313c534eb73eb7456095435eb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
@@ -136,6 +178,30 @@
       "side": 1,
       "message": "It prevents the updation of the current version and I\u0027ve called it in such a sequence that it will carry out its purpose, For instance: I\u0027ve called it in the Graphics test\u0027s run() method which is called in Desktop::Main() giving the parameter false, also I\u0027ve called this method in the file viewfrm.cxx where it originally resided with parameter true and since the module Desktop::Main() is called before the SfxViewFrame::Notify() the purpose of this function would be served by not updating the version during its initial call.",
       "parentUuid": "4db2f2ae_cfff5e17",
+      "range": {
+        "startLine": 18,
+        "startChar": 34,
+        "endLine": 18,
+        "endChar": 48
+      },
+      "revId": "476a75841b2fd1f313c534eb73eb7456095435eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f109c060_93fbf918",
+        "filename": "include/basic/versionhelper.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-14T12:32:45Z",
+      "side": 1,
+      "message": "I know what the parameter does - I asked the question because you didn\u0027t document it.",
+      "parentUuid": "44ceb29e_ca65eb5e",
       "range": {
         "startLine": 18,
         "startChar": 34,
