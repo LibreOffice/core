@@ -480,9 +480,8 @@ void GraphicTest::testWMFWithEmfPlusRoundtrip()
         CPPUNIT_ASSERT_EQUAL(0, getPolygonActionsCount(aNewGraphic));
 
         // With EMF+ disabled there should be no EMF+ actions.
-        auto& rDataContainer = aNewGraphic.GetGfxLink().getDataContainer();
-        auto aVectorGraphicData
-            = std::make_shared<VectorGraphicData>(rDataContainer, VectorGraphicDataType::Wmf);
+        auto aVectorGraphicData = std::make_shared<VectorGraphicData>(
+            aNewGraphic.GetGfxLink().getDataContainer(), VectorGraphicDataType::Wmf);
         aVectorGraphicData->setEnableEMFPlus(false);
         Graphic aNoEmfPlusGraphic(aVectorGraphicData);
         CPPUNIT_ASSERT_EQUAL(0, getEmfPlusActionsCount(aNoEmfPlusGraphic));
