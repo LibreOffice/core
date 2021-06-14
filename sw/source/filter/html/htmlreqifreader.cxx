@@ -545,7 +545,13 @@ bool WrapGraphicInRtf(const Graphic& rGraphic, const SwFrameFormat& rFormat, SvS
 
     // NativeDataSize
     SvMemoryStream aNativeData;
-    if (GraphicConverter::Export(aNativeData, rGraphic, ConvertDataFormat::BMP) != ERRCODE_NONE)
+
+    // Set white background for the semi-transparent pixels.
+    BitmapEx aBitmapEx = rGraphic.GetBitmapEx();
+    Bitmap aBitmap = aBitmapEx.GetBitmap(/*aTransparentReplaceColor=*/COL_WHITE);
+
+    if (GraphicConverter::Export(aNativeData, BitmapEx(aBitmap), ConvertDataFormat::BMP)
+        != ERRCODE_NONE)
     {
         SAL_WARN("sw.html", "WrapGraphicInRtf: bmp conversion failed");
     }
