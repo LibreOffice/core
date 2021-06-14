@@ -997,6 +997,7 @@ namespace emfio
 
             case W_META_CREATEBRUSH:
             {
+                SAL_WARN( "emfio", "TODO: Not implemented. Please fill the bug report" );
                 CreateObject(std::make_unique<WinMtfFillStyle>( COL_WHITE, false ));
             }
             break;
