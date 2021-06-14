@@ -12,21 +12,16 @@
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
 
+constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/core/accessibilitycheck/data/";
+
 class AccessibilityCheckTest : public SwModelTestBase
 {
 public:
-    SwDoc* createDoc(const char* pName = nullptr)
-    {
-        load(u"/sw/qa/core/accessibilitycheck/data/", pName);
-        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-        CPPUNIT_ASSERT(pTextDoc);
-        return pTextDoc->GetDocShell()->GetDoc();
-    }
 };
 
 CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckDocumentIssues)
 {
-    SwDoc* pDoc = createDoc("DocumentTest.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "DocumentTest.odt");
     CPPUNIT_ASSERT(pDoc);
     sw::AccessibilityCheck aCheck(pDoc);
     aCheck.check();
@@ -38,7 +33,7 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckDocumentIssues)
 
 CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testTableSplitMergeAndAltText)
 {
-    SwDoc* pDoc = createDoc("AccessibilityTests1.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "AccessibilityTests1.odt");
     CPPUNIT_ASSERT(pDoc);
     sw::AccessibilityCheck aCheck(pDoc);
     aCheck.check();
