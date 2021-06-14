@@ -12511,3 +12511,37 @@ SfxVoidItem MoveShapeHandle SID_MOVE_SHAPE_HANDLE
     ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Format;
 ]
+
+SfxInt16Item TextColumnsNumber SID_ATTR_TEXTCOLUMNS_NUMBER
+
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Format;
+]
+
+SdrMetricItem TextColumnsSpacing SID_ATTR_TEXTCOLUMNS_SPACING
+
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Format;
+]
