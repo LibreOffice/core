@@ -22,6 +22,7 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive2d/BufferedDecompositionPrimitive2D.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <vcl/bitmapex.hxx>
 
 
 namespace drawinglayer::primitive2d
@@ -85,6 +86,17 @@ namespace drawinglayer::primitive2d
 
             // XAccounting
             virtual sal_Int64 SAL_CALL estimateUsage() override;
+
+            /// helper which creates the content - checks if clipping is needed and eventually
+            /// creates buffered content to speed up rendering
+            BitmapEx createTileImage(sal_uInt32 nWidth, sal_uInt32 nHeight) const;
+
+            /// helper that is capable to calculate the needed discrete buffer size for
+            /// eventually buffered content
+            void getTileSize(
+                sal_uInt32& rWidth,
+                sal_uInt32& rHeight,
+                const geometry::ViewInformation2D& rViewInformation) const;
         };
 } // end of namespace drawinglayer::primitive2d
 
