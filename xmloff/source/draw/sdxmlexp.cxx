@@ -2516,6 +2516,10 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
         Reference< XAnnotationEnumeration > xAnnotationEnumeration( xAnnotationAccess->createAnnotationEnumeration() );
         if( xAnnotationEnumeration.is() && xAnnotationEnumeration->hasMoreElements() )
         {
+            SvtSecurityOptions aSecOpt;
+            bool bRemovePersonalInfo = aSecOpt.IsOptionSet(
+                SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo );
+
             OUStringBuffer sStringBuffer;
             do
             {
@@ -2551,7 +2555,9 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
                 if( !aAuthor.isEmpty() )
                 {
                     SvXMLElementExport aCreatorElem( *this, XML_NAMESPACE_DC, XML_CREATOR, true, false );
-                    Characters(aAuthor);
+                    Characters( bRemovePersonalInfo
+                            ? "Author" + OUString::number( SvXMLExport::GetInfoID(aAuthor) )
+                            : aAuthor );
                 }
 
                 // initials
@@ -2567,7 +2573,9 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
                                 ? XML_CREATOR_INITIALS
                                 : XML_SENDER_INITIALS,
                             true, false );
-                    Characters(aInitials);
+                    Characters( bRemovePersonalInfo
+                            ? OUString::number( SvXMLExport::GetInfoID(aInitials) )
+                            : aInitials );
                 }
 
                 {
@@ -2575,7 +2583,9 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
                     css::util::DateTime aDate( xAnnotation->getDateTime() );
                     ::sax::Converter::convertDateTime(sStringBuffer, aDate, nullptr, true);
                     SvXMLElementExport aDateElem( *this, XML_NAMESPACE_DC, XML_DATE, true, false );
-                    Characters(sStringBuffer.makeStringAndClear());
+                    Characters( bRemovePersonalInfo
+                            ? "1970-01-01T00:00::00"
+                            : sStringBuffer.makeStringAndClear() );
                 }
 
                 css::uno::Reference < css::text::XText > xText( xAnnotation->getTextRange() );
