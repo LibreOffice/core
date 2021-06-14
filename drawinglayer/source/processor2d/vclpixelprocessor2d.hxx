@@ -43,6 +43,7 @@ class GlowPrimitive2D;
 class ShadowPrimitive2D;
 class SoftEdgePrimitive2D;
 class FillGradientPrimitive2D;
+class PatternFillPrimitive2D;
 }
 
 namespace drawinglayer::processor2d
@@ -101,6 +102,7 @@ class VclPixelProcessor2D final : public VclProcessor2D
     void processSoftEdgePrimitive2D(const primitive2d::SoftEdgePrimitive2D& rCandidate);
     void processShadowPrimitive2D(const primitive2d::ShadowPrimitive2D& rCandidate);
     void processFillGradientPrimitive2D(const primitive2d::FillGradientPrimitive2D& rPrimitive);
+    void processPatternFillPrimitive2D(const primitive2d::PatternFillPrimitive2D& rPrimitive);
 
 public:
     /// constructor/destructor
