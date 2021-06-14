@@ -22229,6 +22229,10 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/eventassigndialog.ui" &&
         rUIFile != "cui/ui/eventassignpage.ui" &&
         rUIFile != "cui/ui/autocorrectdialog.ui" &&
+        rUIFile != "cui/ui/hangulhanjaadddialog.ui" &&
+        rUIFile != "cui/ui/hangulhanjaconversiondialog.ui" &&
+        rUIFile != "cui/ui/hangulhanjaeditdictdialog.ui" &&
+        rUIFile != "cui/ui/hangulhanjaoptdialog.ui" &&
         rUIFile != "cui/ui/hyperlinkdialog.ui" &&
         rUIFile != "cui/ui/hyperlinkdocpage.ui" &&
         rUIFile != "cui/ui/hyperlinkinternetpage.ui" &&
@@ -22291,6 +22295,8 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "svx/ui/accessibilitycheckdialog.ui" &&
         rUIFile != "svx/ui/accessibilitycheckentry.ui" &&
         rUIFile != "svx/ui/asianphoneticguidedialog.ui" &&
+        rUIFile != "svx/ui/chineseconversiondialog.ui" &&
+        rUIFile != "svx/ui/chinesedictionary.ui" &&
         rUIFile != "svx/ui/colorwindow.ui" &&
         rUIFile != "svx/ui/docrecoverysavedialog.ui" &&
         rUIFile != "svx/ui/findreplacedialog.ui" &&
