@@ -279,6 +279,15 @@ MenuEntry ConvertMenu(const css::uno::Reference<css::xml::dom::XNode>& xOutMenu,
                 xTargetAttr->setAttributeNode(xTargetName);
                 xTargetAttr->appendChild(xDoc->createTextNode(sId));
                 xItem->appendChild(xTargetAttr);
+
+                css::uno::Reference<css::xml::dom::XElement> xHiddenWhenAttr
+                    = xDoc->createElement("attribute");
+                css::uno::Reference<css::xml::dom::XAttr> xHiddenWhenName
+                    = xDoc->createAttribute("name");
+                xHiddenWhenName->setValue("hidden-when");
+                xHiddenWhenAttr->setAttributeNode(xHiddenWhenName);
+                xHiddenWhenAttr->appendChild(xDoc->createTextNode("action-missing"));
+                xItem->appendChild(xHiddenWhenAttr);
             }
         }
 
