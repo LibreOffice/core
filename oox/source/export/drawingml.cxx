@@ -3127,13 +3127,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
 
         std::optional<OUString> sHorzOverflow;
         std::optional<OUString> sVertOverflow;
-        sal_Int32 nShapeRotateAngle = 0;
-        if (GetProperty(rXPropSet, "RotateAngle"))
-            nShapeRotateAngle = rXPropSet->getPropertyValue("RotateAngle").get<sal_Int32>() / 300;
-        Reference< XPropertySet > xTextSet(xXText, UNO_QUERY);
-        sal_Int32 nShapeTextRotateAngle = 0;
-        if (GetProperty(xTextSet, "RotateAngle"))
-            nShapeTextRotateAngle = rXPropSet->getPropertyValue("RotateAngle").get<sal_Int32>() / 300;
+        sal_Int32 nShapeRotateAngle = rXPropSet->getPropertyValue("RotateAngle").get<sal_Int32>() / 300;
         sal_Int16 nCols = 0;
         sal_Int32 nColSpacing = -1;
         if (GetProperty(rXPropSet, "TextColumns"))
@@ -3193,7 +3187,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
                     // Keep upright and make the preRotateAngle 0, it is an attribute
                     // of textBodyPr and must be 0 when upright is true, otherwise
                     // bad rotation happens in MSO.
-                    if (nShapeRotateAngle == nOldShapeRotation && nShapeTextRotateAngle == nOldTextRotation)
+                    if (nShapeRotateAngle == nOldShapeRotation && nShapeRotateAngle == nOldTextRotation)
                         nTextPreRotateAngle = 0;
                     // So we rotated the shape, in this case lose upright and do
                     // as LO normally does.
