@@ -1070,7 +1070,16 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
             }
             break;
 
-            // case MetaActionType::MOVECLIPREGION:
+            case MetaActionType::MOVECLIPREGION:
+            {
+                const auto* pMetaMoveClipRegionAction = static_cast<MetaMoveClipRegionAction*>(pAction);
+                rWriter.startElement(sCurrentElementTag);
+
+                rWriter.attribute("horzmove", pMetaMoveClipRegionAction->GetHorzMove());
+                rWriter.attribute("vertmove", pMetaMoveClipRegionAction->GetVertMove());
+                rWriter.endElement();
+            }
+            break;
 
             case MetaActionType::LINECOLOR:
             {

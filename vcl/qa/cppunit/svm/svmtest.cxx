@@ -134,7 +134,7 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
     void checkIntersectRegionClipRegion(const GDIMetaFile& rMetaFile);
     void testIntersectRegionClipRegion();
 
-    //void checkMoveClipRegion(const GDIMetaFile& rMetaFile);
+    void checkMoveClipRegion(const GDIMetaFile& rMetaFile);
     void testMoveClipRegion();
 
     void checkLineColor(const GDIMetaFile& rMetaFile);
@@ -1559,8 +1559,39 @@ void SvmTest::testIntersectRegionClipRegion()
     checkIntersectRegionClipRegion(readFile(u"intersectregionclipregion.svm"));
 }
 
+void SvmTest::checkMoveClipRegion(const GDIMetaFile& rMetaFile)
+{
+    xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
+
+    assertXPathAttrs(pDoc, "/metafile/moveclipregion[1]", {
+        {"horzmove", "1"},
+        {"vertmove", "2"}
+    });
+
+    assertXPathAttrs(pDoc, "/metafile/moveclipregion[2]", {
+        {"horzmove", "-3"},
+        {"vertmove", "-4"}
+    });
+}
+
 void SvmTest::testMoveClipRegion()
-{}
+{
+    GDIMetaFile aGDIMetaFile;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
+
+    tools::Rectangle aRectangle(Point(1, 2), Size(4, 8));
+
+    vcl::Region aRegion(aRectangle);
+    aRegion.Move(2, 2);
+    pVirtualDev->SetClipRegion(aRegion);
+
+    pVirtualDev->MoveClipRegion(1, 2);
+    pVirtualDev->MoveClipRegion(-3, -4);
+
+    checkMoveClipRegion(writeAndReadStream(aGDIMetaFile));
+    checkMoveClipRegion(readFile(u"moveclipregion.svm"));
+}
 
 void SvmTest::checkLineColor(const GDIMetaFile& rMetaFile)
 {
