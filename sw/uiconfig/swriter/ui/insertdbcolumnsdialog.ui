@@ -635,6 +635,7 @@
                         <child>
                           <object class="GtkRadioButton" id="columnname">
                             <property name="label" translatable="yes" context="insertdbcolumnsdialog|columnname">Apply column _name</property>
+                            <property name="active">True</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
