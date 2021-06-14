@@ -483,8 +483,6 @@ void SwUiWriterTest4::testTdf96479()
         = OUStringChar(CH_TXT_ATR_INPUTFIELDSTART) + OUStringChar(CH_TXT_ATR_INPUTFIELDEND);
 
     SwDoc* pDoc = createSwDoc();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
 
     // So we can clean up all references for reload
     {
@@ -553,10 +551,8 @@ void SwUiWriterTest4::testTdf96479()
         // Actually not needed, but the bug symptom of a missing bookmark
         // occurred because a broken bookmark was saved and loading silently
         // dropped the broken bookmark!
-        utl::TempFile aTempFile;
-        save("writer8", aTempFile);
-        loadURL(aTempFile.GetURL(), nullptr);
-        pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+        reload("writer8", "testTdf96479.odt");
+        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
         CPPUNIT_ASSERT(pTextDoc);
         pDoc = pTextDoc->GetDocShell()->GetDoc();
 
@@ -641,8 +637,6 @@ void SwUiWriterTest4::testRemoveBookmarkText()
     {
         // create a text document with "abcdef"
         SwDoc* pDoc = createSwDoc();
-        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-        CPPUNIT_ASSERT(pTextDoc);
 
         {
             SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
@@ -727,9 +721,6 @@ void SwUiWriterTest4::testRemoveBookmarkTextAndAddNew()
     {
         // create a text document with "abcdef"
         SwDoc* pDoc = createSwDoc();
-        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-        CPPUNIT_ASSERT(pTextDoc);
-
         {
             SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
             SwPaM aPaM(aIdx);
@@ -1813,7 +1804,7 @@ void SwUiWriterTest4::testTdf58604()
 #ifdef _WIN32
     // Allow linebreak character follows hanging punctuation immediately instead of
     // breaking at the start of the next line.
-    load(DATA_DIRECTORY, "tdf58604.odt");
+    createSwDoc(DATA_DIRECTORY, "tdf58604.odt");
     CPPUNIT_ASSERT_EQUAL(
         OUString("PortionType::Break"),
         parseDump("(/root/page/body/txt/LineBreak[1]/preceding::Text)[last()]", "nType"));
@@ -1822,7 +1813,7 @@ void SwUiWriterTest4::testTdf58604()
 
 void SwUiWriterTest4::testTdf112025()
 {
-    load(DATA_DIRECTORY, "fdo112025.odt");
+    createSwDoc(DATA_DIRECTORY, "fdo112025.odt");
     const int numberOfParagraphs = getParagraphs();
     CPPUNIT_ASSERT_EQUAL(1, numberOfParagraphs);
 
@@ -1848,7 +1839,7 @@ void SwUiWriterTest4::testTdf112025()
 
 void SwUiWriterTest4::testTdf72942()
 {
-    load(DATA_DIRECTORY, "fdo72942.docx");
+    createSwDoc(DATA_DIRECTORY, "fdo72942.docx");
 
     // get a page cursor
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
@@ -1889,7 +1880,7 @@ void SwUiWriterTest4::testTdf72942()
 
 void SwUiWriterTest4::testTdf114306()
 {
-    load(DATA_DIRECTORY, "fdo114306.odt");
+    createSwDoc(DATA_DIRECTORY, "fdo114306.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // There are 2 long paragraphs in cell A1.
@@ -1904,7 +1895,7 @@ void SwUiWriterTest4::testTdf114306_2()
 {
     // tdf#114306 fix unexpected page break in row-spanned table
     // load regression document without writer crash
-    load(DATA_DIRECTORY, "fdo114306_2.odt");
+    createSwDoc(DATA_DIRECTORY, "fdo114306_2.odt");
 
     // correct number of pages
     CPPUNIT_ASSERT_EQUAL(4, getPages());
@@ -1912,7 +1903,7 @@ void SwUiWriterTest4::testTdf114306_2()
 
 void SwUiWriterTest4::testTdf113877_mergeDocs(const char* aDestDoc, const char* aInsertDoc)
 {
-    load(DATA_DIRECTORY, aDestDoc);
+    createSwDoc(DATA_DIRECTORY, aDestDoc);
 
     // set a page cursor into the end of the document
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
@@ -2043,7 +2034,7 @@ void SwUiWriterTest4::testTdf113877_blank_bold_off()
 // just care that this does crash/assert
 void SwUiWriterTest4::testRhbz1810732()
 {
-    load(DATA_DIRECTORY, "tdf113877_blank.odt");
+    createSwDoc(DATA_DIRECTORY, "tdf113877_blank.odt");
 
     // set a page cursor into the end of the document
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
@@ -2812,16 +2803,14 @@ void SwUiWriterTest4::testXDrawPagesSupplier()
 
 void SwUiWriterTest4::testTdf116403()
 {
-    createSwDoc(DATA_DIRECTORY, "tdf116403-considerborders.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf116403-considerborders.odt");
     // Check that before ToX update, the tab stop position is the old one
     uno::Reference<text::XTextRange> xParagraph = getParagraph(2, "1\t1");
     auto aTabs = getProperty<uno::Sequence<style::TabStop>>(xParagraph, "ParaTabStops");
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aTabs.getLength());
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(17000), aTabs[0].Position);
 
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     const SwTOXBase* pTOX = pWrtShell->GetTOX(0);
     CPPUNIT_ASSERT(pTOX);
     pWrtShell->UpdateTableOf(*pTOX);
@@ -3602,8 +3591,6 @@ void SwUiWriterTest4::testInsertPdf()
     }
 
     createSwDoc();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
 
     // insert the PDF into the document
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
@@ -3612,11 +3599,7 @@ void SwUiWriterTest4::testInsertPdf()
     dispatchCommand(mxComponent, ".uno:InsertGraphic", aArgs);
 
     // Save and load cycle
-    utl::TempFile aTempFile;
-    save("writer8", aTempFile);
-    loadURL(aTempFile.GetURL(), nullptr);
-    pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    reload("writer8", "testInsertPdf.odt");
 
     uno::Reference<drawing::XShape> xShape = getShape(1);
     // Assert that we have a replacement graphics
