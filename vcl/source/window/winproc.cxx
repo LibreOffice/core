@@ -509,6 +509,8 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
                 pMouseDownWin->ImplGetFrameData()->mbStartDragCalled  = true;
         }
 
+        if (xWindow->isDisposed())
+            return true;
         // test for mouseleave and mouseenter
         VclPtr<vcl::Window> pMouseMoveWin = pWinFrameData->mpMouseMoveWin;
         if ( pChild != pMouseMoveWin )
