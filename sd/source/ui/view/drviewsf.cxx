@@ -444,6 +444,18 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             }
             break;
 
+            case SID_ATTR_TEXTCOLUMNS_NUMBER:
+            case SID_ATTR_TEXTCOLUMNS_SPACING:
+            {
+                SfxItemSet aAttrs(GetDoc()->GetPool());
+                mpDrawView->GetAttributes(aAttrs);
+                const sal_uInt16 nActWhich = nSlotId == SID_ATTR_TEXTCOLUMNS_NUMBER
+                                                    ? SDRATTR_TEXTCOLUMNS_NUMBER
+                                                    : SDRATTR_TEXTCOLUMNS_SPACING;
+                rSet.Put(aAttrs.Get(nActWhich).CloneSetWhich(nSlotId));
+            }
+            break;
+
             case SID_HYPHENATION:
             {
                 SfxItemSet aAttrs( GetDoc()->GetPool() );
