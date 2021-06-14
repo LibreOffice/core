@@ -121,8 +121,8 @@ IMPL_LINK(DefaultShapesPanel, ShapeSelectHdl, ValueSet*, rValueSet, void)
     {
         if(rValueSet == aSetMap.first)
         {
-            int aSelection = aSetMap.first->GetSelectedItemId();
-            comphelper::dispatchCommand(aSetMap.second[aSelection], {});
+            sal_uInt16 nSelectionId = aSetMap.first->GetSelectedItemId();
+            comphelper::dispatchCommand(aSetMap.second[nSelectionId - 1], {});
         }
         else
             aSetMap.first->SetNoSelection();
@@ -143,7 +143,8 @@ void DefaultShapesPanel::populateShapes()
             auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(sSlotStr,
                 vcl::CommandInfoProvider::GetModuleIdentifier(mxFrame));
             sLabel = vcl::CommandInfoProvider::GetTooltipForCommand(sSlotStr, aProperties, mxFrame);
-            aSet.first->InsertItem(i, aSlotImage, sLabel);
+            sal_uInt16 nSelectionId = i + 1; // tdf#142767 id 0 is reserved for nothing-selected
+            aSet.first->InsertItem(nSelectionId, aSlotImage, sLabel);
         }
     }
 }
