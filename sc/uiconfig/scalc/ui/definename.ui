@@ -230,7 +230,6 @@
               <object class="GtkExpander" id="more">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="spacing">6</property>
                 <property name="resize_toplevel">True</property>
                 <child>
                   <!-- n-columns=1 n-rows=1 -->
