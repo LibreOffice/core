@@ -32,9 +32,7 @@
 
 using namespace com::sun::star;
 
-#define MAXIMUM_SQUARE_LENGTH (186.0)
 #define MINIMUM_SQUARE_LENGTH (16.0)
-#define MINIMUM_TILES_LENGTH (3)
 
 namespace drawinglayer::primitive2d
 {
@@ -64,23 +62,6 @@ namespace drawinglayer::primitive2d
             const double fH(basegfx::B2DVector(aY - aTopLeft).getLength());
             const double fSquare(fW * fH);
 
-            if(fSquare <= 0.0)
-                return;
-
-            // check if less than a maximum square pixels is used
-            static const sal_uInt32 fMaximumSquare(MAXIMUM_SQUARE_LENGTH * MAXIMUM_SQUARE_LENGTH);
-
-            if(fSquare >= fMaximumSquare)
-                return;
-
-            // calculate needed number of tiles and check if used more than a minimum count
-            const texture::GeoTexSvxTiled aTiling(getReferenceRange());
-            const sal_uInt32 nTiles(aTiling.getNumberOfTiles());
-            static const sal_uInt32 nMinimumTiles(MINIMUM_TILES_LENGTH * MINIMUM_TILES_LENGTH);
-
-            if(nTiles < nMinimumTiles)
-                return;
-
             rWidth = basegfx::fround(ceil(fW));
             rHeight = basegfx::fround(ceil(fH));
             static const sal_uInt32 fMinimumSquare(MINIMUM_SQUARE_LENGTH * MINIMUM_SQUARE_LENGTH);
@@ -91,6 +72,30 @@ namespace drawinglayer::primitive2d
                 rWidth = basegfx::fround(sqrt(fMinimumSquare * fRel));
                 rHeight = basegfx::fround(sqrt(fMinimumSquare / fRel));
             }
+        }
+
+        void PatternFillPrimitive2D::getTileSize(
+            sal_uInt32& rWidth,
+            sal_uInt32& rHeight,
+            const geometry::ViewInformation2D& rViewInformation) const
+        {
+            const basegfx::B2DRange aMaskRange(getMask().getB2DRange());
+
+            // get discrete rounded up square size of a single tile
+            const basegfx::B2DHomMatrix aMaskRangeTransformation(
+                basegfx::utils::createScaleTranslateB2DHomMatrix(
+                    aMaskRange.getRange(),
+                    aMaskRange.getMinimum()));
+            const basegfx::B2DHomMatrix aTransform(
+                rViewInformation.getObjectToViewTransformation() * aMaskRangeTransformation);
+            const basegfx::B2DPoint aTopLeft(aTransform * getReferenceRange().getMinimum());
+            const basegfx::B2DPoint aX(aTransform * basegfx::B2DPoint(getReferenceRange().getMaxX(), getReferenceRange().getMinY()));
+            const basegfx::B2DPoint aY(aTransform * basegfx::B2DPoint(getReferenceRange().getMinX(), getReferenceRange().getMaxY()));
+            const double fW(basegfx::B2DVector(aX - aTopLeft).getLength());
+            const double fH(basegfx::B2DVector(aY - aTopLeft).getLength());
+
+            rWidth = basegfx::fround(ceil(fW));
+            rHeight = basegfx::fround(ceil(fH));
         }
 
         Primitive2DContainer PatternFillPrimitive2D::createContent(const geometry::ViewInformation2D& rViewInformation) const
@@ -158,6 +163,24 @@ namespace drawinglayer::primitive2d
             return aContent;
         }
 
+        //  create buffered content in given resolution
+        BitmapEx PatternFillPrimitive2D::createContentImage(sal_uInt32 nWidth, sal_uInt32 nHeight) const
+        {
+            const geometry::ViewInformation2D aViewInformation2D;
+            const primitive2d::Primitive2DReference xEmbedRef(
+                    new primitive2d::TransformPrimitive2D(
+                        basegfx::utils::createScaleB2DHomMatrix(nWidth, nHeight),
+                        getChildren()));
+            const primitive2d::Primitive2DContainer xEmbedSeq { xEmbedRef };
+
+            return convertToBitmapEx(
+                        xEmbedSeq,
+                        aViewInformation2D,
+                        nWidth,
+                        nHeight,
+                        nWidth * nHeight);
+        }
+
         void PatternFillPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
         {
             Primitive2DContainer aRetval;
@@ -172,6 +195,8 @@ namespace drawinglayer::primitive2d
 
             if(!(!aMaskRange.isEmpty() && aMaskRange.getWidth() > 0.0 && aMaskRange.getHeight() > 0.0))
                 return;
+
+// >>>>>---------------<<<<<<
 
             // create tiling matrices
             std::vector< basegfx::B2DHomMatrix > aMatrices;
