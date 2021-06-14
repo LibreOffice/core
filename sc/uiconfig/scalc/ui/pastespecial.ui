@@ -594,6 +594,7 @@
                             <property name="image">img_paste_formats</property>
                             <property name="use-underline">True</property>
                             <property name="image-position">top</property>
+                            <property name="always-show-image">True</property>
                           </object>
                           <packing>
                             <property name="expand">True</property>
