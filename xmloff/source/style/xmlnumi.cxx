@@ -114,6 +114,7 @@ class SvxXMLListLevelStyleContext_Impl : public SvXMLImportContext
 
     OUString            sPrefix;
     OUString            sSuffix;
+    OUString            sListFormat;
     OUString            sTextStyleName;
     OUString            sNumFormat;
     OUString            sNumLetterSync;
@@ -298,6 +299,9 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
         case XML_ELEMENT(STYLE, XML_NUM_SUFFIX):
             sSuffix = aIter.toString();
             break;
+        case XML_ELEMENT(LO_EXT, XML_NUM_LIST_FORMAT):
+            sListFormat = aIter.toString();
+            break;
         case XML_ELEMENT(STYLE, XML_NUM_LETTER_SYNC):
             if( bNum )
                 sNumLetterSync = aIter.toString();
@@ -392,11 +396,30 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties()
         }
     }
 
+    if ( bNum && sListFormat.isEmpty() && (!sPrefix.isEmpty() || !sSuffix.isEmpty()) )
+    {
+        // This is older document: it has no list format, but has prefix and/or suffix
+        // Generate list format string, based on this
+        sListFormat = sPrefix;
+
+        for (int i = 1; i <= nNumDisplayLevels; i++)
+        {
+            sListFormat += "%";
+            sListFormat += OUString::number(nLevel - nNumDisplayLevels + i + 1);
+            if (i != nNumDisplayLevels)
+                sListFormat += ".";     // Default separator for older ODT
+        }
+
+        sListFormat += sSuffix;
+    }
+
     aProperties.push_back(comphelper::makePropertyValue("NumberingType", eType));
 
     aProperties.push_back(comphelper::makePropertyValue("Prefix", sPrefix));
 
     aProperties.push_back(comphelper::makePropertyValue("Suffix", sSuffix));
+
+    aProperties.push_back(comphelper::makePropertyValue("ListFormat", sListFormat));
 
     aProperties.push_back(comphelper::makePropertyValue("Adjust", eAdjust));
 
