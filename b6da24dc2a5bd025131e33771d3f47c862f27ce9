@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c2bfac1a_ae3d7b7a",
+        "filename": "include/basic/versionhelper.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-14T11:01:50Z",
+      "side": 1,
+      "message": "This should give you a hint how to better name this function",
+      "range": {
+        "startLine": 20,
+        "startChar": 49,
+        "endLine": 20,
+        "endChar": 66
+      },
+      "revId": "b6da24dc2a5bd025131e33771d3f47c862f27ce9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
