@@ -6082,7 +6082,7 @@ void DocxAttributeOutput::WritePostponedDMLDrawing()
     m_pPostponedOLEs = std::move(pPostponedOLEs);
 }
 
-void DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame &rFrame, const Point& /*rNdTopLeft*/ )
+void DocxAttributeOutput::WriteFlyFrame(const ww8::Frame& rFrame)
 {
     m_pSerializer->mark(Tag_OutputFlyFrame);
 
@@ -6252,6 +6252,71 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame &rFrame, const P
     }
 
     m_pSerializer->mergeTopMarks(Tag_OutputFlyFrame);
+}
+
+void DocxAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Point& /*rNdTopLeft*/)
+{
+    /// The old OutputFlyFrame_Impl() moved to WriteFlyFrame().
+    /// Now if a frame anchored inside another frame, it will
+    /// not be exported immediately, because OOXML does not
+    /// support that feature, instead it postponed and exported
+    /// later when the original shape closed.
+
+    if (rFrame.GetFrameFormat().GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR
+        || rFrame.IsInline())
+    {
+        m_nEmbedFlyLevel++;
+        WriteFlyFrame(rFrame);
+        m_nEmbedFlyLevel--;
+        return;
+    }
+
+    if (m_nEmbedFlyLevel == 0)
+    {
+        if (m_vPostponedFlys.empty())
+        {
+            m_nEmbedFlyLevel++;
+            WriteFlyFrame(rFrame);
+            m_nEmbedFlyLevel--;
+        }
+        else
+            for (auto it = m_vPostponedFlys.begin(); it != m_vPostponedFlys.end();)
+            {
+                m_nEmbedFlyLevel++;
+                WriteFlyFrame(*it);
+                it = m_vPostponedFlys.erase(it);
+                m_nEmbedFlyLevel--;
+            }
+    }
+    else
+    {
+        bool bFound = false;
+        for (const auto& i : m_vPostponedFlys)
+        {
+            if (i.RefersToSameFrameAs(rFrame))
+            {
+                bFound = true;
+                break;
+            }
+        }
+        if (!bFound)
+        {
+            if (auto pParentFly = rFrame.GetContentNode()->GetFlyFormat())
+            {
+                auto aHori(rFrame.GetFrameFormat().GetHoriOrient());
+                aHori.SetPos(aHori.GetPos() + pParentFly->GetHoriOrient().GetPos());
+                auto aVori(rFrame.GetFrameFormat().GetVertOrient());
+                aVori.SetPos(aVori.GetPos() + pParentFly->GetVertOrient().GetPos());
+
+                const_cast<SwFrameFormat&>(rFrame.GetFrameFormat()).SetFormatAttr(aHori);
+                const_cast<SwFrameFormat&>(rFrame.GetFrameFormat()).SetFormatAttr(aVori);
+                const_cast<SwFrameFormat&>(rFrame.GetFrameFormat()).SetFormatAttr(pParentFly->GetAnchor());
+
+                m_vPostponedFlys.push_back(rFrame);
+            }
+
+        }
+    }
 }
 
 void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
@@ -9993,6 +10058,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, const FSHelperPtr
       m_sFieldBkm( ),
       m_nNextBookmarkId( 0 ),
       m_nNextAnnotationMarkId( 0 ),
+      m_nEmbedFlyLevel(0),
       m_pCurrentFrame( nullptr ),
       m_bParagraphOpened( false ),
       m_bParagraphFrameOpen( false ),
