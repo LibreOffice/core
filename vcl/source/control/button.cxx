@@ -20,6 +20,7 @@
 #include <tools/poly.hxx>
 
 #include <vcl/builder.hxx>
+#include <vcl/cvtgrf.hxx>
 #include <vcl/image.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/decoview.hxx>
@@ -42,11 +43,13 @@
 #include <vclstatuslistener.hxx>
 #include <osl/diagnose.h>
 
+#include <comphelper/base64.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/lok.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <boost/property_tree/ptree.hpp>
 #include <tools/json_writer.hxx>
+#include <tools/stream.hxx>
 
 
 using namespace css;
@@ -580,6 +583,17 @@ void Button::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
     Control::DumpAsPropertyTree(rJsonWriter);
     rJsonWriter.put("text", GetText());
+    if (HasImage())
+    {
+        SvMemoryStream aOStm(6535, 6535);
+        if(GraphicConverter::Export(aOStm, GetModeImage().GetBitmapEx(), ConvertDataFormat::PNG) == ERRCODE_NONE)
+        {
+            css::uno::Sequence<sal_Int8> aSeq( static_cast<sal_Int8 const *>(aOStm.GetData()), aOStm.Tell());
+            OUStringBuffer aBuffer("data:image/png;base64,");
+            ::comphelper::Base64::encode(aBuffer, aSeq);
+            rJsonWriter.put("image", aBuffer.makeStringAndClear());
+        }
+    }
 }
 
 IMPL_STATIC_LINK( Button, dispatchCommandHandler, Button*, pButton, void )

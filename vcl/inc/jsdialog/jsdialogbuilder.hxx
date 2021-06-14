@@ -623,6 +623,10 @@ class JSMenuButton : public JSWidget<SalInstanceMenuButton, ::MenuButton>
 public:
     JSMenuButton(JSDialogSender* pSender, ::MenuButton* pMenuButton, SalInstanceBuilder* pBuilder,
                  bool bTakeOwnership);
+
+    virtual void set_label(const OUString& rText) override;
+    virtual void set_image(VirtualDevice* pDevice) override;
+    virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
