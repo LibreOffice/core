@@ -387,19 +387,11 @@ DECLARE_WW8EXPORT_TEST(testTdf119232_startEvenPage, "tdf119232_startEvenPage.doc
 
 DECLARE_WW8EXPORT_TEST(testTdf104805, "tdf104805.doc")
 {
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("NumberingStyles")->getByName("WW8Num1"), uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aNumberingRule;
-    xLevels->getByIndex(1) >>= aNumberingRule; // 2nd level
-    for (const auto& rPair : std::as_const(aNumberingRule))
-    {
-        if (rPair.Name == "Prefix")
-            // This was "." instead of empty, so the second paragraph was
-            // rendered as ".1" instead of "1.".
-            CPPUNIT_ASSERT_EQUAL(OUString(), rPair.Value.get<OUString>());
-        else if (rPair.Name == "Suffix")
-            CPPUNIT_ASSERT_EQUAL(OUString("."), rPair.Value.get<OUString>());
-    }
+    // Preifx was "." instead of empty, so the second paragraph was
+    // rendered as ".1" instead of "1.".
+    // Unittest modified due to Prefix/Suffix support obsolete
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("1."), getProperty<OUString>(xPara, "ListLabelString"));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf104334, "tdf104334.doc")

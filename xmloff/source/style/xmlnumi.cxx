@@ -64,6 +64,7 @@
 #include <xmloff/maptype.hxx>
 
 #include <xmloff/xmlnumi.hxx>
+#include <optional>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -114,6 +115,8 @@ class SvxXMLListLevelStyleContext_Impl : public SvXMLImportContext
 
     OUString            sPrefix;
     OUString            sSuffix;
+    std::optional<OUString> sListFormat;    // It is optional to distinguish empty format string
+                                            // from not existing format string in old docs
     OUString            sTextStyleName;
     OUString            sNumFormat;
     OUString            sNumLetterSync;
@@ -298,6 +301,9 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
         case XML_ELEMENT(STYLE, XML_NUM_SUFFIX):
             sSuffix = aIter.toString();
             break;
+        case XML_ELEMENT(LO_EXT, XML_NUM_LIST_FORMAT):
+            sListFormat = std::make_optional(aIter.toString());
+            break;
         case XML_ELEMENT(STYLE, XML_NUM_LETTER_SYNC):
             if( bNum )
                 sNumLetterSync = aIter.toString();
@@ -392,11 +398,30 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties()
         }
     }
 
+    if (!sListFormat.has_value())
+    {
+        // This is older document: it has no list format, but can probably contain prefix and/or suffix
+        // Generate list format string, based on this
+        sListFormat = std::make_optional(sPrefix);
+
+        for (int i = 1; i <= nNumDisplayLevels; i++)
+        {
+            *sListFormat += "%";
+            *sListFormat += OUString::number(nLevel - nNumDisplayLevels + i + 1);
+            if (i != nNumDisplayLevels)
+                *sListFormat += ".";     // Default separator for older ODT
+        }
+
+        *sListFormat += sSuffix;
+    }
+
     aProperties.push_back(comphelper::makePropertyValue("NumberingType", eType));
 
     aProperties.push_back(comphelper::makePropertyValue("Prefix", sPrefix));
 
     aProperties.push_back(comphelper::makePropertyValue("Suffix", sSuffix));
+
+    aProperties.push_back(comphelper::makePropertyValue("ListFormat", sListFormat.value()));
 
     aProperties.push_back(comphelper::makePropertyValue("Adjust", eAdjust));
 

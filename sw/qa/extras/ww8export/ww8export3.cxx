@@ -801,12 +801,12 @@ DECLARE_WW8EXPORT_TEST(testTdf120394, "tdf120394.doc")
     {
         uno::Reference<beans::XPropertySet> xPara(getParagraph(5), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(0), getProperty<sal_Int16>(xPara, "NumberingLevel"));
-        CPPUNIT_ASSERT_EQUAL(OUString(CHAR_ZWSP), getProperty<OUString>(xPara, "ListLabelString"));
+        CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(xPara, "ListLabelString"));
     }
     {
         uno::Reference<beans::XPropertySet> xPara(getParagraph(8), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(2), getProperty<sal_Int16>(xPara, "NumberingLevel"));
-        CPPUNIT_ASSERT_EQUAL(OUString(CHAR_ZWSP), getProperty<OUString>(xPara, "ListLabelString"));
+        CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(xPara, "ListLabelString"));
     }
     {
         uno::Reference<beans::XPropertySet> xPara(getParagraph(9), uno::UNO_QUERY);
@@ -816,7 +816,7 @@ DECLARE_WW8EXPORT_TEST(testTdf120394, "tdf120394.doc")
     {
         uno::Reference<beans::XPropertySet> xPara(getParagraph(10), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(2), getProperty<sal_Int16>(xPara, "NumberingLevel"));
-        CPPUNIT_ASSERT_EQUAL(OUString(CHAR_ZWSP), getProperty<OUString>(xPara, "ListLabelString"));
+        CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(xPara, "ListLabelString"));
     }
 }
 
