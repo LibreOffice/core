@@ -1393,7 +1393,6 @@ void SubsetMap::InitList()
                 case UBLOCK_DOMINO_TILES:
                     aAllSubsets.emplace_back( 0x1F030, 0x1F09F, SvxResId(RID_SUBSETSTR_DOMINO_TILES) );
                     break;
-#if (U_ICU_VERSION_MAJOR_NUM > 4) || (U_ICU_VERSION_MAJOR_NUM == 4 && U_ICU_VERSION_MINOR_NUM >= 4)
                 case UBLOCK_SAMARITAN:
                     aAllSubsets.emplace_back( 0x0800, 0x083F, SvxResId(RID_SUBSETSTR_SAMARITAN) );
                     break;
@@ -1472,8 +1471,6 @@ void SubsetMap::InitList()
                 case UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_C:
                     aAllSubsets.emplace_back( 0x2A700, 0x2B73F, SvxResId(RID_SUBSETSTR_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_C) );
                     break;
-#endif
-#if (U_ICU_VERSION_MAJOR_NUM > 4) || (U_ICU_VERSION_MAJOR_NUM == 4 && U_ICU_VERSION_MINOR_NUM >= 6)
                 case UBLOCK_MANDAIC:
                     aAllSubsets.emplace_back( 0x0840, 0x085F, SvxResId(RID_SUBSETSTR_MANDAIC) );
                     break;
@@ -1510,7 +1507,6 @@ void SubsetMap::InitList()
                 case UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_D:
                     aAllSubsets.emplace_back( 0x2B740, 0x2B81F, SvxResId(RID_SUBSETSTR_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_D) );
                     break;
-#endif
 // Note ICU version 49 (NOT 4.9), so the MAJOR_NUM is two digits.
 #if U_ICU_VERSION_MAJOR_NUM >= 49
                 case UBLOCK_ARABIC_EXTENDED_A:
