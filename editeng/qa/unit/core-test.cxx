@@ -427,7 +427,8 @@ private:
 
         return false;
     }
-    virtual bool TransliterateRTLWord( sal_Int32& /*rSttPos*/, sal_Int32 /*nEndPos*/ ) override
+    virtual bool TransliterateRTLWord( sal_Int32& /*rSttPos*/,
+            sal_Int32 /*nEndPos*/, bool /*bApply*/ ) override
     {
         return false;
     }

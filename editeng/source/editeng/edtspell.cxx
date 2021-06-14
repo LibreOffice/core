@@ -681,7 +681,7 @@ bool EdtAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos,
 }
 
 bool EdtAutoCorrDoc::TransliterateRTLWord( sal_Int32& /*rSttPos*/,
-            sal_Int32 /*nEndPos*/ )
+            sal_Int32 /*nEndPos*/, bool /*bApply*/ )
 {
     // Paragraph-start or a blank found, search for the word
     // shortcut in Auto

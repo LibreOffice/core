@@ -271,6 +271,7 @@ public:
     void testTdf128860();
     void testTdf123786();
     void testTdf133589();
+    void testTdf143176();
     void testInconsistentBookmark();
     void testInsertLongDateFormat();
     void testSpellOnlineParameter();
@@ -386,6 +387,7 @@ public:
     CPPUNIT_TEST(testTdf128860);
     CPPUNIT_TEST(testTdf123786);
     CPPUNIT_TEST(testTdf133589);
+    CPPUNIT_TEST(testTdf143176);
     CPPUNIT_TEST(testInsertLongDateFormat);
     CPPUNIT_TEST(testSpellOnlineParameter);
     CPPUNIT_TEST(testRedlineAutoCorrect);
@@ -3568,6 +3570,24 @@ void SwUiWriterTest4::testTdf133589()
     pWrtShell->AutoCorrect(corr, ' ');
     sReplaced += u"𐳺𐳺𐳿𐳼𐳼 ";
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+}
+
+void SwUiWriterTest4::testTdf143176()
+{
+    // Hungarian test document with right-to-left paragraph setting
+    createSwDoc(DATA_DIRECTORY, "tdf143176.fodt");
+
+    // transliterate the document to Old Hungarian (note: it only works
+    // with right-to-left text direction and Default Paragraph Style)
+    dispatchCommand(mxComponent, ".uno:AutoFormatApply", {});
+
+    // This was the original "Lorem ipsum..."
+    CPPUNIT_ASSERT_EQUAL(OUString(u"𐲖𐳛𐳢𐳉𐳘 𐳐𐳠𐳤𐳪𐳘 𐳇𐳛𐳖𐳛𐳢 "
+                                  u"𐳤𐳐𐳦 𐳀𐳘𐳉𐳦⹁"),
+                         getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(u"𐳄𐳛𐳙𐳤𐳉𐳄𐳦𐳉𐳦𐳪𐳢 "
+                                  u"𐳀𐳇𐳐𐳠𐳐𐳤𐳄𐳐𐳙𐳍 𐳉𐳖𐳐𐳦."),
+                         getParagraph(2)->getString());
 }
 
 void SwUiWriterTest4::testInsertLongDateFormat()

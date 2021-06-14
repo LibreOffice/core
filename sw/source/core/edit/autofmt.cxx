@@ -94,6 +94,7 @@ class SwAutoFormat
     SwDoc* m_pDoc;
     SwTextNode* m_pCurTextNd;     // the current TextNode
     SwTextFrame* m_pCurTextFrame;     // frame of the current TextNode
+    bool m_bIsRightToLeft;      // text direction of the current frame
     sal_uLong m_nEndNdIdx;      // for the percentage-display
     mutable std::unique_ptr<CharClass> m_pCharClass; // Character classification
     mutable LanguageType m_eCharClassLang;
@@ -336,6 +337,7 @@ void SwAutoFormat::GoNextPara()
 
     m_pCurTextNd = static_cast<SwTextNode*>(pNewNd);
     m_pCurTextFrame = GetFrame( *m_pCurTextNd );
+    m_bIsRightToLeft = m_pCurTextFrame->IsRightToLeft();
 }
 
 bool SwAutoFormat::HasObjects(const SwTextFrame & rFrame)
@@ -2142,8 +2144,14 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
         {
             *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(nPos);
             SetRedlineText( STR_AUTOFMTREDL_USE_REPLACE );
-            if( m_aFlags.bAutoCorrect &&
-                aACorrDoc.ChgAutoCorrWord(reinterpret_cast<sal_Int32&>(nSttPos), sal_Int32(nPos), *pATst, nullptr))
+
+            LanguageType eLang = bGetLanguage
+                    ? m_pCurTextFrame->GetLangOfChar(nSttPos, 0, true)
+                    : LANGUAGE_SYSTEM;
+
+            if( m_bIsRightToLeft && m_aFlags.bTransliterateRTL && eLang == LANGUAGE_HUNGARIAN &&
+                SetRedlineText( STR_AUTOFMTREDL_TRANSLITERATE_RTL ) &&
+                aACorrDoc.TransliterateRTLWord(reinterpret_cast<sal_Int32&>(nSttPos), sal_Int32(nPos), /*bApply=*/true))
             {
                 nPos = m_pCurTextFrame->MapModelToViewPos(*m_aDelPam.GetPoint());
 
@@ -2160,13 +2168,8 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
                 continue;       // do not check further
             }
 
-            LanguageType eLang = bGetLanguage
-                    ? m_pCurTextFrame->GetLangOfChar(nSttPos, 0, true)
-                    : LANGUAGE_SYSTEM;
-
-            if( m_aFlags.bTransliterateRTL && eLang == LANGUAGE_HUNGARIAN &&
-                SetRedlineText( STR_AUTOFMTREDL_TRANSLITERATE_RTL ) &&
-                aACorrDoc.TransliterateRTLWord(reinterpret_cast<sal_Int32&>(nSttPos), sal_Int32(nPos)))
+            if( m_aFlags.bAutoCorrect &&
+                aACorrDoc.ChgAutoCorrWord(reinterpret_cast<sal_Int32&>(nSttPos), sal_Int32(nPos), *pATst, nullptr) )
             {
                 nPos = m_pCurTextFrame->MapModelToViewPos(*m_aDelPam.GetPoint());
                 if( m_aFlags.bWithRedlining )
