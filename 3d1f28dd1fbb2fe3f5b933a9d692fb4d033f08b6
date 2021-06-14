@@ -52,6 +52,24 @@
       "revId": "3d1f28dd1fbb2fe3f5b933a9d692fb4d033f08b6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bdb475ce_18180e3f",
+        "filename": "configure.ac",
+        "patchSetId": 12
+      },
+      "lineNbr": 919,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-14T06:38:15Z",
+      "side": 1,
+      "message": "\u003e Yes, I was puzzled why you tied test_openldap\u003dyes to X11, when it clearly has other uses too.  Can you clean that up?\n\nseen addressed with \u003chttps://gerrit.libreoffice.org/c/core/+/117046\u003e \"configure: make OpenLDAP test independent from X11\"",
+      "parentUuid": "2b53614c_6d1464e8",
+      "revId": "3d1f28dd1fbb2fe3f5b933a9d692fb4d033f08b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
