@@ -4582,6 +4582,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf123218)
     CPPUNIT_ASSERT_EQUAL(chart2::AxisOrientation_REVERSE, aScaleData.Orientation);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf126735){
+
+    uno::Reference< chart::XChartDocument > xChartDoc;
+    CPPUNIT_ASSERT(xChartDoc);
+
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+    CPPUNIT_ASSERT(xChartDoc.is());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf126735)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf39721.fodt");
