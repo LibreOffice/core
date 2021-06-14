@@ -122,7 +122,8 @@ public:
     virtual bool ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                                   SvxAutoCorrect& rACorrect,
                                   OUString* pPara ) = 0;
-    virtual bool TransliterateRTLWord( sal_Int32& rSttPos, sal_Int32 nEndPos ) = 0;
+    virtual bool TransliterateRTLWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
+                                  bool bApply = false ) = 0;
 
     // Is called after the change of the signs by the functions
     //  - FnCapitalStartWord
