@@ -757,7 +757,7 @@ void SwUiWriterTest::testFdo69893()
 
 void SwUiWriterTest::testFdo70807()
 {
-    load(DATA_DIRECTORY, "fdo70807.odt");
+    createSwDoc(DATA_DIRECTORY, "fdo70807.odt");
 
     uno::Reference<container::XIndexAccess> xStylesIter(getStyles("PageStyles"), uno::UNO_QUERY);
 
@@ -1367,7 +1367,7 @@ void SwUiWriterTest::testChineseConversionSimplifiedToTraditional()
 void SwUiWriterTest::testFdo85554()
 {
     // Load the document, it contains one shape with a textbox.
-    load(u"/sw/qa/extras/uiwriter/data/", "fdo85554.odt");
+    createSwDoc(DATA_DIRECTORY, "fdo85554.odt");
 
     // Add a second shape to the document.
     uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
@@ -3952,7 +3952,7 @@ void SwUiWriterTest::testEmbeddedDataSource()
 
     // Load: should have a component and a data source, too.
     // Path with "#" must not cause issues
-    load(OUString(DATA_DIRECTORY + OUString::Concat(u"hash%23path/")), "embedded-data-source.odt");
+    createSwDoc(OUString(DATA_DIRECTORY + OUString::Concat(u"hash%23path/")), "embedded-data-source.odt");
     CPPUNIT_ASSERT(xDatabaseContext->hasByName("calc-data-source"));
 
     // Data source has a table named Sheet1.
@@ -4233,7 +4233,7 @@ void SwUiWriterTest::testUnicodeNotationToggle()
 
 void SwUiWriterTest::testTdf34957()
 {
-    load(DATA_DIRECTORY, "tdf34957.odt");
+    createSwDoc(DATA_DIRECTORY, "tdf34957.odt");
     // table with "keep with next" always started on a new page if the table was large,
     // regardless of whether it was already kept with the previous paragraph,
     // or whether the following paragraph actually fit on the same page (MAB 3.6 - 5.0)
