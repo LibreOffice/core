@@ -718,6 +718,7 @@ private:
     void WritePostponedOLE();
     void WritePostponedDMLDrawing();
     void WritePostponedCustomShape();
+    bool WriteFlyFrame(const ww8::Frame& rFrame);
 
     void WriteSdtBlock(sal_Int32& nSdtPrToken,
                        rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrTokenChildren,
@@ -801,6 +802,14 @@ private:
     sal_Int32 m_nNextParaId = 1; // MUST be greater than 0
 
     OUString m_sRawText;
+
+    /// The first frame (anchored to the main text) is 0.
+    /// The second frame what is anchored to the previous in, is 1
+    /// The third anchored inside the second is the 2 etc.
+    sal_uInt32 m_nEmbedFlyLevel;
+
+    /// Stores the flys what are anchored inside a fly
+    std::vector<ww8::Frame> m_vPostponedFlys;
 
     /// Bookmarks to output
     std::vector<OUString> m_rBookmarksStart;
