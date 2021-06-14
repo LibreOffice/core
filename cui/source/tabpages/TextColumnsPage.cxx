@@ -21,7 +21,7 @@ const sal_uInt16 SvxTextColumnsPage::pRanges[]
 
 SvxTextColumnsPage::SvxTextColumnsPage(weld::Container* pPage, weld::DialogController* pController,
                                        const SfxItemSet& rInAttrs)
-    : SfxTabPage(pPage, pController, "cui/ui/textcolumnstabpage.ui", "TextColumnsPage", &rInAttrs)
+    : SfxTabPage(pPage, pController, "svx/ui/textcolumnspage.ui", "TextColumnsPage", &rInAttrs)
     , m_xColumnsNumber(m_xBuilder->weld_spin_button("FLD_COL_NUMBER"))
     , m_xColumnsSpacing(
           m_xBuilder->weld_metric_spin_button("MTR_FLD_COL_SPACING", GetModuleFieldUnit(rInAttrs)))
