@@ -86,24 +86,6 @@ constexpr std::size_t rangesSize()
 
 template<sal_uInt16... WIDs> struct Items {};
 
-// This allows creating compile-time which id arrays using syntax like
-//
-//     constexpr auto aWids = svl::ItemsArray({ { widFrom1, widTo2 }, { widFrom2, widTo2 }, ... });
-//
-// so that e.g. clang-format would not try to rearrange the initializer sequence to break pairs.
-// Additionally, the array validity is checked in debug builds.
-template <size_t N> constexpr auto ItemsArray(const std::pair<sal_uInt16, sal_uInt16> (&wids)[N])
-{
-    std::array<sal_uInt16, N * 2 + 1> aArray{};
-    sal_uInt16* p = aArray.data();
-    for (const auto& [wid1, wid2] : wids)
-    {
-        *p++ = wid1;
-        *p++ = wid2;
-    }
-    assert(svl::detail::validRanges(aArray.data()));
-    return aArray;
-}
 }
 
 class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxItemSet
