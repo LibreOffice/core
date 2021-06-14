@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9b32c378_b78ea660",
+        "filename": "vcl/CppunitTest_vcl_svm_test.mk",
+        "patchSetId": 6
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-14T09:49:30Z",
+      "side": 1,
+      "message": "Now we have basegfx entered 2 times... can you remove it from this commit now?",
+      "range": {
+        "startLine": 44,
+        "startChar": 1,
+        "endLine": 44,
+        "endChar": 8
+      },
+      "revId": "23c366f608453612a2942b741da77e77e6882e8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
