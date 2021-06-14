@@ -560,6 +560,25 @@ OUString SvxNumberFormat::CreateRomanString( sal_Int32 nNo, bool bUpper )
     return sRet.makeStringAndClear();
 }
 
+void SvxNumberFormat::SetListFormat(const OUString& rPrefix, const OUString& rSuffix, int nLevel)
+{
+    sPrefix = rPrefix;
+    sSuffix = rSuffix;
+
+    // Generate list format
+    sListFormat = std::make_optional(sPrefix);
+
+    for (int i = 1; i <= nInclUpperLevels; i++)
+    {
+        *sListFormat += "%";
+        *sListFormat += OUString::number(nLevel - nInclUpperLevels + i + 1);
+        if (i != nInclUpperLevels)
+            *sListFormat += "."; // Default separator for older ODT
+    }
+
+    *sListFormat += sSuffix;
+}
+
 OUString SvxNumberFormat::GetCharFormatName()const
 {
     return sCharStyleName;
