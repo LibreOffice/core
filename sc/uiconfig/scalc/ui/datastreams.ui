@@ -295,6 +295,7 @@
                             <property name="receives_default">False</property>
                             <property name="use_underline">True</property>
                             <property name="draw_indicator">True</property>
+                            <property name="group">rangedown</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -311,7 +312,6 @@
                             <property name="use_underline">True</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">datadown</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -327,7 +327,7 @@
                             <property name="receives_default">False</property>
                             <property name="use_underline">True</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">datadown</property>
+                            <property name="group">rangedown</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
