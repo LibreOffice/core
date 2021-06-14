@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4719a0ba_71601a05",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-14T06:36:38Z",
+      "side": 1,
+      "message": "I\u0027m not sure it causes more enlightenment than confusion to mention my failed *incremental* build here.  (A from-scratch macOS build would have worked fine, it would just have silently disabled OpenLDAP support in LO\u0027s PostgreSQL functionality.  The failing incremental build was just the way I noticed that building OpenLDAP had silently been disabled on macOS with that commit.)",
+      "range": {
+        "startLine": 10,
+        "startChar": 9,
+        "endLine": 16,
+        "endChar": 51
+      },
+      "revId": "297a06e3b846127409d597433d344c18424f035a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
