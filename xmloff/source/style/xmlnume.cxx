@@ -82,7 +82,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
     sal_Int16 eType = NumberingType::CHAR_SPECIAL;
 
     sal_Int16 eAdjust = HoriOrientation::LEFT;
-    OUString sPrefix, sSuffix;
+    OUString sPrefix, sSuffix, sListFormat;
     OUString sTextStyleName;
     bool bHasColor = false;
     sal_Int32 nColor = 0;
@@ -123,12 +123,9 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
         }
         else if (rProp.Name == "ListFormat")
         {
-            OUString sListFormat;
             rProp.Value >>= sListFormat;
 
-            // Since we have no support for entire format string it should be converted
-            // to prefix and suffix. Of course, it is not so flexible as format string,
-            // but it is the only option
+            // For backward compatibility lets initialize prefix/suffix
             sal_Int32 nFirstReplacement = sListFormat.indexOf('%');
             sal_Int32 nLastReplacement = sListFormat.lastIndexOf('%') + 1;
             if (nFirstReplacement > 0)
@@ -268,6 +265,15 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
         {
             GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
                     GetExport().EncodeStyleName( sTextStyleName ) );
+        }
+        if (!sListFormat.isEmpty())
+        {
+            if (GetExport().getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
+            {
+                // Write only in extended mode: in ODF 1.3 we write only prefix/suffix,
+                // no list format yet available. Praying we did not lost some formatting.
+                GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_NUM_LIST_FORMAT, sListFormat);
+            }
         }
         if (!sPrefix.isEmpty())
         {

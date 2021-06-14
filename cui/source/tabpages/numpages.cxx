@@ -314,14 +314,8 @@ IMPL_LINK_NOARG(SvxSingleNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
         {
             SvxNumberFormat aFmt(pActNum->GetLevel(i));
             aFmt.SetNumberingType(eNewType);
-            if(cLocalPrefix == ' ')
-                aFmt.SetPrefix( "" );
-            else
-                aFmt.SetPrefix(_pSet->sPrefix);
-            if(cLocalSuffix == ' ')
-                aFmt.SetSuffix( "" );
-            else
-                aFmt.SetSuffix(_pSet->sSuffix);
+            aFmt.SetListFormat(cLocalPrefix == ' ' ? "" : _pSet->sPrefix,
+                               cLocalSuffix == ' ' ? "" : _pSet->sSuffix, i);
             aFmt.SetCharFormatName("");
             aFmt.SetBulletRelSize(100);
             pActNum->SetLevel(i, aFmt);
@@ -459,8 +453,7 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
             SvxNumberFormat aFmt(pActNum->GetLevel(i));
             aFmt.SetNumberingType( SVX_NUM_CHAR_SPECIAL );
             // #i93908# clear suffix for bullet lists
-            aFmt.SetPrefix( OUString() );
-            aFmt.SetSuffix( OUString() );
+            aFmt.SetListFormat("", "", i);
             aFmt.SetBulletFont(&rActBulletFont);
             aFmt.SetBulletChar(cChar );
             aFmt.SetCharFormatName(sBulletCharFormatName);
@@ -652,8 +645,7 @@ IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
         if(aFmt.GetNumberingType() == SVX_NUM_CHAR_SPECIAL)
         {
             // #i93908# clear suffix for bullet lists
-            aFmt.SetPrefix(OUString());
-            aFmt.SetSuffix(OUString());
+            aFmt.SetListFormat("", "", i);
             if( !pLevelSettings->sBulletFont.isEmpty() &&
                 pLevelSettings->sBulletFont != rActBulletFont.GetFamilyName())
             {
@@ -702,8 +694,7 @@ IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
             aFmt.SetCharFormatName(sNumCharFmtName);
             aFmt.SetBulletRelSize(100);
             // #i93908#
-            aFmt.SetPrefix(pLevelSettings->sPrefix);
-            aFmt.SetSuffix(pLevelSettings->sSuffix);
+            aFmt.SetListFormat(pLevelSettings->sPrefix, pLevelSettings->sSuffix, i);
         }
         pActNum->SetLevel(i, aFmt);
     }
@@ -885,8 +876,7 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
         {
             SvxNumberFormat aFmt(pActNum->GetLevel(i));
             aFmt.SetNumberingType(SVX_NUM_BITMAP);
-            aFmt.SetPrefix( "" );
-            aFmt.SetSuffix( "" );
+            aFmt.SetListFormat("", "", i);
             aFmt.SetCharFormatName( "" );
 
             Graphic aGraphic;
@@ -1644,8 +1634,7 @@ IMPL_LINK(SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, weld::ComboBox&, rBox,
             {
                 bBmp |= nullptr != aNumFmt.GetBrush();
                 aNumFmt.SetIncludeUpperLevels( 0 );
-                aNumFmt.SetSuffix( "" );
-                aNumFmt.SetPrefix( "" );
+                aNumFmt.SetListFormat("", "", i);
                 if(!bBmp)
                     aNumFmt.SetGraphic("");
                 pActNum->SetLevel(i, aNumFmt);
@@ -1655,8 +1644,7 @@ IMPL_LINK(SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, weld::ComboBox&, rBox,
             else if( SVX_NUM_CHAR_SPECIAL == nNumberingType )
             {
                 aNumFmt.SetIncludeUpperLevels( 0 );
-                aNumFmt.SetSuffix( "" );
-                aNumFmt.SetPrefix( "" );
+                aNumFmt.SetListFormat("", "", i);
                 if( !aNumFmt.GetBulletFont() )
                     aNumFmt.SetBulletFont(&aActBulletFont);
                 if( !aNumFmt.GetBulletChar() )
@@ -1671,8 +1659,8 @@ IMPL_LINK(SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, weld::ComboBox&, rBox,
             }
             else
             {
-                aNumFmt.SetPrefix( m_xPrefixED->get_text() );
-                aNumFmt.SetSuffix( m_xSuffixED->get_text() );
+                aNumFmt.SetListFormat(m_xPrefixED->get_text(), m_xSuffixED->get_text(), i);
+
                 SwitchNumberType(SHOW_NUMBERING);
                 pActNum->SetLevel(i, aNumFmt);
                 CheckForStartValue_Impl(nNumberingType);
@@ -2098,8 +2086,7 @@ IMPL_LINK(SvxNumOptionsTabPage, SpinModifyHdl_Impl, weld::SpinButton&, rSpinButt
 
 void SvxNumOptionsTabPage::EditModifyHdl_Impl(const weld::Entry* pEdit)
 {
-    bool bPrefix = pEdit == m_xPrefixED.get();
-    bool bSuffix = pEdit == m_xSuffixED.get();
+    bool bPrefixSuffix = (pEdit == m_xPrefixED.get())|| (pEdit == m_xSuffixED.get());
     bool bStart = pEdit == m_xStartED.get();
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
@@ -2107,10 +2094,8 @@ void SvxNumOptionsTabPage::EditModifyHdl_Impl(const weld::Entry* pEdit)
         if(nActNumLvl & nMask)
         {
             SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
-            if(bPrefix)
-                aNumFmt.SetPrefix(m_xPrefixED->get_text());
-            else if(bSuffix)
-                aNumFmt.SetSuffix(m_xSuffixED->get_text());
+            if (bPrefixSuffix)
+                aNumFmt.SetListFormat(m_xPrefixED->get_text(), m_xSuffixED->get_text(), i);
             else if(bStart)
                 aNumFmt.SetStart(m_xStartED->get_value());
             pActNum->SetLevel(i, aNumFmt);
