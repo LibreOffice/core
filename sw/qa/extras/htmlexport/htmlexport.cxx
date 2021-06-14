@@ -38,6 +38,7 @@
 #include <filter/msfilter/rtfutil.hxx>
 #include <sot/storage.hxx>
 #include <svl/eitem.hxx>
+#include <vcl/dibtools.hxx>
 
 namespace
 {
@@ -129,6 +130,7 @@ bool TestReqIfRtfReader::WriteObjectData(SvStream& rOLE)
 struct OLE1Reader
 {
     sal_uInt32 m_nNativeDataSize;
+    std::vector<char> m_aNativeData;
     sal_uInt32 m_nPresentationDataSize;
 
     OLE1Reader(SvStream& rStream);
@@ -150,7 +152,8 @@ OLE1Reader::OLE1Reader(SvStream& rStream)
     rStream.SeekRel(nData);
 
     rStream.ReadUInt32(m_nNativeDataSize);
-    rStream.SeekRel(m_nNativeDataSize);
+    m_aNativeData.resize(m_nNativeDataSize);
+    rStream.ReadBytes(m_aNativeData.data(), m_aNativeData.size());
 
     rStream.ReadUInt32(nData); // OLEVersion for presentation data
     CPPUNIT_ASSERT(rStream.good());
@@ -1492,6 +1495,49 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifImageToOle)
     // Without the accompanying fix in place, this test would have failed, as aOle1 only contained
     // the native data.
     CPPUNIT_ASSERT(aOle1Reader.m_nPresentationDataSize);
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOleBmpTransparent)
+{
+    // Given a document with a transparent image:
+    loadURL("private:factory/swriter", nullptr);
+    OUString aImageURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "transparent.png";
+    uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("FileName", aImageURL),
+    };
+    dispatchCommand(mxComponent, ".uno:InsertGraphic", aArgs);
+
+    // When exporting to reqif with ExportImagesAsOLE=true:
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+        comphelper::makePropertyValue("ExportImagesAsOLE", true),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+
+    // Then make sure the transparent pixel turns into white:
+    OUString aRtfUrl = GetOlePath();
+    SvMemoryStream aRtf;
+    HtmlExportTest::wrapRtfFragment(aRtfUrl, aRtf);
+    tools::SvRef<TestReqIfRtfReader> xReader(new TestReqIfRtfReader(aRtf));
+    CPPUNIT_ASSERT(xReader->CallParser() != SvParserState::Error);
+    SvMemoryStream aOle1;
+    CPPUNIT_ASSERT(xReader->WriteObjectData(aOle1));
+    OLE1Reader aOle1Reader(aOle1);
+    SvMemoryStream aBitmapStream(aOle1Reader.m_aNativeData.data(), aOle1Reader.m_aNativeData.size(),
+                                 StreamMode::READ);
+    Bitmap aBitmap;
+    ReadDIB(aBitmap, aBitmapStream, /*bFileHeader=*/true);
+    Size aBitmapSize = aBitmap.GetSizePixel();
+    BitmapEx aBitmapEx(aBitmap);
+    Color nActualColor
+        = aBitmapEx.GetPixelColor(aBitmapSize.getWidth() - 1, aBitmapSize.getHeight() - 1);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: Color: R:255 G:255 B:255 A:0
+    // - Actual  : Color: R:0 G:0 B:0 A:0
+    // i.e. the bitmap without an alpha channel was black, not white.
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, nActualColor);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
