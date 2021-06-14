@@ -372,11 +372,11 @@ namespace {
 class SwHTMLImageWatcher :
     public cppu::WeakImplHelper< awt::XImageConsumer, XEventListener >
 {
-    uno::Reference< drawing::XShape >       xShape;     // the control
-    uno::Reference< XImageProducerSupplier >    xSrc;
-    uno::Reference< awt::XImageConsumer >   xThis;      // reference to self
-    bool                            bSetWidth;
-    bool                            bSetHeight;
+    uno::Reference< drawing::XShape >       m_xShape;     // the control
+    uno::Reference< XImageProducerSupplier >    m_xSrc;
+    uno::Reference< awt::XImageConsumer >   m_xThis;      // reference to self
+    bool                            m_bSetWidth;
+    bool                            m_bSetHeight;
 
     void clear();
 
@@ -386,7 +386,7 @@ public:
 
     // startProduction can not be called in the constructor because it can
     // destruct itself, hence a separate method.
-    void start() { xSrc->getImageProducer()->startProduction(); }
+    void start() { m_xSrc->getImageProducer()->startProduction(); }
 
     // UNO binding
 
@@ -417,45 +417,45 @@ public:
 SwHTMLImageWatcher::SwHTMLImageWatcher(
         const uno::Reference< drawing::XShape >& rShape,
         bool bWidth, bool bHeight ) :
-    xShape( rShape ),
-    bSetWidth( bWidth ), bSetHeight( bHeight )
+    m_xShape( rShape ),
+    m_bSetWidth( bWidth ), m_bSetHeight( bHeight )
 {
     // Remember the source of the image
-    uno::Reference< drawing::XControlShape > xControlShape( xShape, UNO_QUERY );
+    uno::Reference< drawing::XControlShape > xControlShape( m_xShape, UNO_QUERY );
     uno::Reference< awt::XControlModel > xControlModel(
             xControlShape->getControl() );
-    xSrc.set( xControlModel, UNO_QUERY );
-    OSL_ENSURE( xSrc.is(), "No XImageProducerSupplier" );
+    m_xSrc.set( xControlModel, UNO_QUERY );
+    OSL_ENSURE( m_xSrc.is(), "No XImageProducerSupplier" );
 
     // Register as Event-Listener on the shape to be able to release it on dispose.
     uno::Reference< XEventListener > xEvtLstnr = static_cast<XEventListener *>(this);
-    uno::Reference< XComponent > xComp( xShape, UNO_QUERY );
+    uno::Reference< XComponent > xComp( m_xShape, UNO_QUERY );
     xComp->addEventListener( xEvtLstnr );
 
     // Lastly we keep a reference to ourselves so we are not destroyed
     // (should not be necessary since we're still registered elsewhere)
-    xThis = static_cast<awt::XImageConsumer *>(this);
+    m_xThis = static_cast<awt::XImageConsumer *>(this);
 
     // Register at ImageProducer to retrieve the size...
-    xSrc->getImageProducer()->addConsumer( xThis );
+    m_xSrc->getImageProducer()->addConsumer( m_xThis );
 }
 
 void SwHTMLImageWatcher::clear()
 {
     // Unregister on Shape
     uno::Reference< XEventListener > xEvtLstnr = static_cast<XEventListener *>(this);
-    uno::Reference< XComponent > xComp( xShape, UNO_QUERY );
+    uno::Reference< XComponent > xComp( m_xShape, UNO_QUERY );
     xComp->removeEventListener( xEvtLstnr );
 
     // Unregister on ImageProducer
-    uno::Reference<awt::XImageProducer> xProd = xSrc->getImageProducer();
+    uno::Reference<awt::XImageProducer> xProd = m_xSrc->getImageProducer();
     if( xProd.is() )
-        xProd->removeConsumer( xThis );
+        xProd->removeConsumer( m_xThis );
 }
 
 void SwHTMLImageWatcher::init( sal_Int32 Width, sal_Int32 Height )
 {
-    OSL_ENSURE( bSetWidth || bSetHeight,
+    OSL_ENSURE( m_bSetWidth || m_bSetHeight,
             "Width or height has to be adjusted" );
 
     // If no width or height is given, it is initialized to those of
@@ -476,16 +476,16 @@ void SwHTMLImageWatcher::init( sal_Int32 Width, sal_Int32 Height )
         aNewSz.Height = aTmp.Height();
     }
 
-    if( !bSetWidth || !bSetHeight )
+    if( !m_bSetWidth || !m_bSetHeight )
     {
-        awt::Size aSz( xShape->getSize() );
-        if( bSetWidth && aNewSz.Height )
+        awt::Size aSz( m_xShape->getSize() );
+        if( m_bSetWidth && aNewSz.Height )
         {
             aNewSz.Width *= aSz.Height;
             aNewSz.Width /= aNewSz.Height;
             aNewSz.Height = aSz.Height;
         }
-        if( bSetHeight && aNewSz.Width )
+        if( m_bSetHeight && aNewSz.Width )
         {
             aNewSz.Height *= aSz.Width;
             aNewSz.Height /= aNewSz.Width;
@@ -497,14 +497,14 @@ void SwHTMLImageWatcher::init( sal_Int32 Width, sal_Int32 Height )
     if( aNewSz.Height < MINFLY )
         aNewSz.Height = MINFLY;
 
-    xShape->setSize( aNewSz );
-    if( bSetWidth )
+    m_xShape->setSize( aNewSz );
+    if( m_bSetWidth )
     {
         // If the control is anchored to a table, the column have to be recalculated
 
         // To get to the SwXShape* we need an interface that is implemented by SwXShape
 
-        uno::Reference< beans::XPropertySet > xPropSet( xShape, UNO_QUERY );
+        uno::Reference< beans::XPropertySet > xPropSet( m_xShape, UNO_QUERY );
         SwXShape *pSwShape = comphelper::getUnoTunnelImplementation<SwXShape>(xPropSet);
 
         OSL_ENSURE( pSwShape, "Where is SW-Shape?" );
@@ -538,7 +538,7 @@ void SwHTMLImageWatcher::init( sal_Int32 Width, sal_Int32 Height )
 
     // unregister and delete self
     clear();
-    xThis = nullptr;
+    m_xThis = nullptr;
 }
 
 void SwHTMLImageWatcher::setColorModel(
@@ -566,7 +566,7 @@ void SwHTMLImageWatcher::complete( sal_Int32 Status,
     {
         // unregister and delete self
         clear();
-        xThis = nullptr;
+        m_xThis = nullptr;
     }
 }
 
@@ -575,11 +575,11 @@ void SwHTMLImageWatcher::disposing(const lang::EventObject& evt)
     uno::Reference< awt::XImageConsumer > xTmp;
 
     // We need to release the shape if it is disposed of
-    if( evt.Source == xShape )
+    if( evt.Source == m_xShape )
     {
         clear();
         xTmp = static_cast<awt::XImageConsumer*>(this);
-        xThis = nullptr;
+        m_xThis = nullptr;
     }
 }
 

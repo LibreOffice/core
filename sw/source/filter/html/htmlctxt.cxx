@@ -44,67 +44,67 @@ using namespace ::com::sun::star;
 
 class HTMLAttrContext_SaveDoc
 {
-    SwHTMLNumRuleInfo aNumRuleInfo; // Numbering for this environment
+    SwHTMLNumRuleInfo m_aNumRuleInfo; // Numbering for this environment
     std::unique_ptr<SwPosition>
-                      pPos;         // Jump back to here when leaving context
+                      m_pPos;         // Jump back to here when leaving context
     std::shared_ptr<HTMLAttrTable>
-                      xAttrTab;     // Valid attributes for the environment,
+                      m_xAttrTab;     // Valid attributes for the environment,
                                     // if attributes shouldn't be preserved
 
-    size_t nContextStMin;           // Stack lower bound for the environment
+    size_t m_nContextStMin;           // Stack lower bound for the environment
                                     // if stack needs to be protected
-    size_t nContextStAttrMin;       // Stack lower bound for the environment
+    size_t m_nContextStAttrMin;       // Stack lower bound for the environment
                                     // if the attributes shouldn't be preserved
-    bool bStripTrailingPara : 1;
-    bool bKeepNumRules : 1;
-    bool bFixHeaderDist : 1;
-    bool bFixFooterDist : 1;
+    bool m_bStripTrailingPara : 1;
+    bool m_bKeepNumRules : 1;
+    bool m_bFixHeaderDist : 1;
+    bool m_bFixFooterDist : 1;
 
 public:
 
     HTMLAttrContext_SaveDoc() :
-        nContextStMin( SIZE_MAX ), nContextStAttrMin( SIZE_MAX ),
-        bStripTrailingPara( false ), bKeepNumRules( false ),
-        bFixHeaderDist( false ), bFixFooterDist( false )
+        m_nContextStMin( SIZE_MAX ), m_nContextStAttrMin( SIZE_MAX ),
+        m_bStripTrailingPara( false ), m_bKeepNumRules( false ),
+        m_bFixHeaderDist( false ), m_bFixFooterDist( false )
     {}
 
     // The position is ours, so we need to create and delete it
-    void SetPos( const SwPosition& rPos ) { pPos.reset( new SwPosition(rPos) ); }
-    const SwPosition *GetPos() const { return pPos.get(); }
+    void SetPos( const SwPosition& rPos ) { m_pPos.reset( new SwPosition(rPos) ); }
+    const SwPosition *GetPos() const { return m_pPos.get(); }
 
     // The index isn't ours. So no creation or deletion
-    void SetNumInfo( const SwHTMLNumRuleInfo& rInf ) { aNumRuleInfo.Set(rInf); }
-    const SwHTMLNumRuleInfo& GetNumInfo() const { return aNumRuleInfo; }
+    void SetNumInfo( const SwHTMLNumRuleInfo& rInf ) { m_aNumRuleInfo.Set(rInf); }
+    const SwHTMLNumRuleInfo& GetNumInfo() const { return m_aNumRuleInfo; }
 
     std::shared_ptr<HTMLAttrTable> const & GetAttrTab(bool bCreate = false);
 
-    void SetContextStMin( size_t nMin ) { nContextStMin = nMin; }
-    size_t GetContextStMin() const { return nContextStMin; }
+    void SetContextStMin( size_t nMin ) { m_nContextStMin = nMin; }
+    size_t GetContextStMin() const { return m_nContextStMin; }
 
-    void SetContextStAttrMin( size_t nMin ) { nContextStAttrMin = nMin; }
-    size_t GetContextStAttrMin() const { return nContextStAttrMin; }
+    void SetContextStAttrMin( size_t nMin ) { m_nContextStAttrMin = nMin; }
+    size_t GetContextStAttrMin() const { return m_nContextStAttrMin; }
 
-    void SetStripTrailingPara( bool bSet ) { bStripTrailingPara = bSet; }
-    bool GetStripTrailingPara() const { return bStripTrailingPara; }
+    void SetStripTrailingPara( bool bSet ) { m_bStripTrailingPara = bSet; }
+    bool GetStripTrailingPara() const { return m_bStripTrailingPara; }
 
-    void SetKeepNumRules( bool bSet ) { bKeepNumRules = bSet; }
-    bool GetKeepNumRules() const { return bKeepNumRules; }
+    void SetKeepNumRules( bool bSet ) { m_bKeepNumRules = bSet; }
+    bool GetKeepNumRules() const { return m_bKeepNumRules; }
 
-    void SetFixHeaderDist( bool bSet ) { bFixHeaderDist = bSet; }
-    bool GetFixHeaderDist() const { return bFixHeaderDist; }
+    void SetFixHeaderDist( bool bSet ) { m_bFixHeaderDist = bSet; }
+    bool GetFixHeaderDist() const { return m_bFixHeaderDist; }
 
-    void SetFixFooterDist( bool bSet ) { bFixFooterDist = bSet; }
-    bool GetFixFooterDist() const { return bFixFooterDist; }
+    void SetFixFooterDist( bool bSet ) { m_bFixFooterDist = bSet; }
+    bool GetFixFooterDist() const { return m_bFixFooterDist; }
 };
 
 std::shared_ptr<HTMLAttrTable> const & HTMLAttrContext_SaveDoc::GetAttrTab( bool bCreate )
 {
-    if (!xAttrTab && bCreate)
+    if (!m_xAttrTab && bCreate)
     {
-        xAttrTab = std::make_shared<HTMLAttrTable>();
-        memset(xAttrTab.get(), 0, sizeof(HTMLAttrTable));
+        m_xAttrTab = std::make_shared<HTMLAttrTable>();
+        memset(m_xAttrTab.get(), 0, sizeof(HTMLAttrTable));
     }
-    return xAttrTab;
+    return m_xAttrTab;
 }
 
 HTMLAttrContext_SaveDoc *HTMLAttrContext::GetSaveDocContext( bool bCreate )
