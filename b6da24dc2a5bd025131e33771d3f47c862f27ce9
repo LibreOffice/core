@@ -22,6 +22,92 @@
       "revId": "b6da24dc2a5bd025131e33771d3f47c862f27ce9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97f64b9c_b49a6c6f",
+        "filename": "vcl/backendtest/GraphicsRenderTests.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 885,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-14T12:42:23Z",
+      "side": 1,
+      "message": "Not current backend but something like \"Graphic backend used: \"",
+      "range": {
+        "startLine": 885,
+        "startChar": 28,
+        "endLine": 885,
+        "endChar": 55
+      },
+      "revId": "b6da24dc2a5bd025131e33771d3f47c862f27ce9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93b48245_45733e22",
+        "filename": "vcl/backendtest/GraphicsRenderTests.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 885,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-14T12:42:23Z",
+      "side": 1,
+      "message": "huh... why? why overwrite this variable?",
+      "range": {
+        "startLine": 885,
+        "startChar": 4,
+        "endLine": 885,
+        "endChar": 25
+      },
+      "revId": "b6da24dc2a5bd025131e33771d3f47c862f27ce9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6307bb82_b1674a80",
+        "filename": "vcl/backendtest/GraphicsRenderTests.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 890,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-14T12:42:23Z",
+      "side": 1,
+      "message": "Noticed you don\u0027t write which test actually failed.... That would be useful.",
+      "revId": "b6da24dc2a5bd025131e33771d3f47c862f27ce9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69683b14_f3a4abde",
+        "filename": "vcl/backendtest/GraphicsRenderTests.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 891,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-14T12:42:23Z",
+      "side": 1,
+      "message": "WriteOString???\nyou could even use WriteLine for each line instead of creating a very long OString",
+      "range": {
+        "startLine": 891,
+        "startChar": 12,
+        "endLine": 891,
+        "endChar": 24
+      },
+      "revId": "b6da24dc2a5bd025131e33771d3f47c862f27ce9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
