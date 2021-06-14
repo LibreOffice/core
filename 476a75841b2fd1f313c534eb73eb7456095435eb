@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da6786dc_8f81b6fc",
+        "filename": "include/basic/versionhelper.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-06-14T11:22:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "92b45000_2a636d65",
+      "revId": "476a75841b2fd1f313c534eb73eb7456095435eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5cceb36c_e6c7c9dc",
         "filename": "include/basic/versionhelper.hxx",
         "patchSetId": 14
@@ -30,6 +48,30 @@
       "writtenOn": "2021-06-14T11:00:03Z",
       "side": 1,
       "message": "I\u0027m not a fan of \"helpers\".",
+      "range": {
+        "startLine": 15,
+        "startChar": 10,
+        "endLine": 15,
+        "endChar": 23
+      },
+      "revId": "476a75841b2fd1f313c534eb73eb7456095435eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec15231f_e0124110",
+        "filename": "include/basic/versionhelper.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-06-14T11:22:01Z",
+      "side": 1,
+      "message": "I think I would change it to VersionConfig then... would it be fine?",
+      "parentUuid": "5cceb36c_e6c7c9dc",
       "range": {
         "startLine": 15,
         "startChar": 10,
@@ -70,6 +112,30 @@
       "writtenOn": "2021-06-14T11:00:03Z",
       "side": 1,
       "message": "what\u0027s this parameter about",
+      "range": {
+        "startLine": 18,
+        "startChar": 34,
+        "endLine": 18,
+        "endChar": 48
+      },
+      "revId": "476a75841b2fd1f313c534eb73eb7456095435eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44ceb29e_ca65eb5e",
+        "filename": "include/basic/versionhelper.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-06-14T11:22:01Z",
+      "side": 1,
+      "message": "It prevents the updation of the current version and I\u0027ve called it in such a sequence that it will carry out its purpose, For instance: I\u0027ve called it in the Graphics test\u0027s run() method which is called in Desktop::Main() giving the parameter false, also I\u0027ve called this method in the file viewfrm.cxx where it originally resided with parameter true and since the module Desktop::Main() is called before the SfxViewFrame::Notify() the purpose of this function would be served by not updating the version during its initial call.",
+      "parentUuid": "4db2f2ae_cfff5e17",
       "range": {
         "startLine": 18,
         "startChar": 34,
