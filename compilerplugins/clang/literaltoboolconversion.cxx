@@ -219,7 +219,7 @@ void LiteralToBoolConversion::handleImplicitCastSubExpr(
                  " %1 with value %2 to %3"),
                 compat::getBeginLoc(expr2))
                 << castExpr->getCastKindName() << subExpr->getType()
-                << res->toString(10) << castExpr->getType()
+                << compat::toString(*res, 10) << castExpr->getType()
                 << expr2->getSourceRange();
         }
     }

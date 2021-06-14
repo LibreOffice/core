@@ -91,8 +91,9 @@ bool ExpressionAlwaysZero::VisitBinaryOperator(BinaryOperator const* binaryOpera
         return true;
     report(DiagnosticsEngine::Warning, "expression always evaluates to zero, lhs=%0 rhs=%1",
            compat::getBeginLoc(binaryOperator))
-        << (lhsValue ? lhsValue->toString(10) : "unknown")
-        << (rhsValue ? rhsValue->toString(10) : "unknown") << binaryOperator->getSourceRange();
+        << (lhsValue ? compat::toString(*lhsValue, 10) : "unknown")
+        << (rhsValue ? compat::toString(*rhsValue, 10) : "unknown")
+        << binaryOperator->getSourceRange();
     return true;
 }
 
@@ -121,8 +122,9 @@ bool ExpressionAlwaysZero::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* c
         return true;
     report(DiagnosticsEngine::Warning, "expression always evaluates to zero, lhs=%0 rhs=%1",
            compat::getBeginLoc(cxxOperatorCallExpr))
-        << (lhsValue ? lhsValue->toString(10) : "unknown")
-        << (rhsValue ? rhsValue->toString(10) : "unknown") << cxxOperatorCallExpr->getSourceRange();
+        << (lhsValue ? compat::toString(*lhsValue, 10) : "unknown")
+        << (rhsValue ? compat::toString(*rhsValue, 10) : "unknown")
+        << cxxOperatorCallExpr->getSourceRange();
     return true;
 }
 

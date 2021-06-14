@@ -15,6 +15,7 @@
 
 #include "config_clang.h"
 
+#include "compat.hxx"
 #include "plugin.hxx"
 
 #if CLANG_VERSION >= 110000
@@ -574,7 +575,7 @@ std::string SingleValFields::getExprValue(const Expr* arg)
     }
     APSInt x1;
     if (compat::EvaluateAsInt(arg, x1, compiler.getASTContext()))
-        return x1.toString(10);
+        return compat::toString(x1, 10);
     if (isa<CXXNullPtrLiteralExpr>(arg))
         return "0";
     return "?";

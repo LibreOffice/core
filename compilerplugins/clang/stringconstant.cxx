@@ -945,7 +945,7 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                         ("suspicious 'rtl::OUString' constructor with literal"
                          " of length %0 and non-matching length argument %1"),
                         expr->getExprLoc())
-                        << n << res.toString(10) << expr->getSourceRange();
+                        << n << compat::toString(res, 10) << expr->getSourceRange();
                     return true;
                 }
                 APSInt enc;
@@ -969,7 +969,7 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                          " encoding %0 but plain ASCII content; use"
                          " 'RTL_TEXTENCODING_ASCII_US' instead"),
                         expr->getArg(2)->getExprLoc())
-                        << enc.toString(10) << expr->getSourceRange();
+                        << compat::toString(enc, 10) << expr->getSourceRange();
                     return true;
                 }
                 if (encIsUtf8) {

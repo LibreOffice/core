@@ -10,6 +10,7 @@
 #pragma once
 
 #include <cstddef>
+#include <string>
 #include <utility>
 
 #include "clang/AST/Decl.h"
@@ -20,6 +21,7 @@
 #include "clang/Basic/Specifiers.h"
 #include "clang/Frontend/CompilerInstance.h"
 #include "clang/Lex/Lexer.h"
+#include "llvm/ADT/StringExtras.h"
 #include "llvm/ADT/StringRef.h"
 #include "llvm/Support/Casting.h"
 #include "llvm/Support/Compiler.h"
@@ -38,6 +40,14 @@ template<typename... X, typename Y> LLVM_NODISCARD inline bool isa_and_nonnull(Y
         return false;
     }
     return llvm::isa<X...>(Val);
+#endif
+}
+
+inline std::string toString(llvm::APSInt const & i, unsigned radix) {
+#if CLANG_VERSION >= 130000
+    return llvm::toString(i, radix);
+#else
+    return i.toString(radix);
 #endif
 }
 
