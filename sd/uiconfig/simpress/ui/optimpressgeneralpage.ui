@@ -322,7 +322,6 @@
                   <object class="GtkLabel" id="tapstoplabel">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="double-buffered">False</property>
                     <property name="label" translatable="yes" context="optimpressgeneralpage|tapstoplabel">Ta_b stops:</property>
                     <property name="use-underline">True</property>
                     <property name="justify">fill</property>
@@ -386,7 +385,6 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
-                <property name="double-buffered">False</property>
                 <property name="use-underline">True</property>
                 <property name="draw-indicator">True</property>
               </object>
@@ -518,7 +516,6 @@
           <object class="GtkGrid" id="grid7">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="double-buffered">False</property>
             <property name="margin-start">12</property>
             <property name="margin-top">6</property>
             <property name="row-spacing">6</property>
@@ -527,7 +524,6 @@
               <object class="GtkLabel" id="label8">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="double-buffered">False</property>
                 <property name="margin-end">3</property>
                 <property name="label" translatable="yes" context="optimpressgeneralpage|label8">_Drawing scale:</property>
                 <property name="use-underline">True</property>

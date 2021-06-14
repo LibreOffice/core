@@ -77,7 +77,6 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="double_buffered">False</property>
                     <property name="label" translatable="yes" context="renameautotextdialog|label2">Na_me</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">oldname</property>
@@ -92,7 +91,6 @@
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="double_buffered">False</property>
                     <property name="label" translatable="yes" context="renameautotextdialog|label3">_New</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">newname</property>
@@ -160,7 +158,6 @@
                   <object class="GtkLabel" id="label4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="double_buffered">False</property>
                     <property name="label" translatable="yes" context="renameautotextdialog|label4">Short_cut</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">oldsc</property>
@@ -175,7 +172,6 @@
                   <object class="GtkLabel" id="label5">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="double_buffered">False</property>
                     <property name="label" translatable="yes" context="renameautotextdialog|label5">_Shortcut</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">newsc</property>

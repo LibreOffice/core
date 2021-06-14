@@ -207,6 +207,18 @@ def remove_track_visited_links(current):
   if track_visited_links != None:
     current.remove(track_visited_links)
 
+def remove_double_buffered(current):
+  double_buffered = None
+  for child in current:
+    remove_double_buffered(child)
+    if child.tag == "property":
+      attributes = child.attrib
+      if attributes.get("name") == "double_buffered" or attributes.get("name") == "double-buffered":
+        double_buffered = child
+
+  if double_buffered != None:
+    current.remove(double_buffered)
+
 def remove_label_fill(current):
   label_fill = None
   isexpander = current.get('class') == "GtkExpander"
@@ -309,6 +321,7 @@ remove_track_visited_links(root)
 remove_label_fill(root)
 enforce_menubutton_indicator_consistency(root)
 enforce_active_in_group_consistency(root)
+remove_double_buffered(root)
 
 with open(sys.argv[1], 'wb') as o:
   # without encoding='unicode' (and the matching encode("utf8")) we get &#XXXX replacements for non-ascii characters
