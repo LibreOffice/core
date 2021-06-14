@@ -997,12 +997,14 @@ namespace emfio
 
             case W_META_CREATEBRUSH:
             {
+                SAL_WARN( "emfio", "TODO: Not implemented. Please fill the bug report" );
                 CreateObject(std::make_unique<WinMtfFillStyle>( COL_WHITE, false ));
             }
             break;
 
             case W_META_CREATEPATTERNBRUSH:
             {
+                SAL_WARN( "emfio", "TODO: Not implemented. Please fill the bug report" );
                 CreateObject(std::make_unique<WinMtfFillStyle>( COL_WHITE, false ));
             }
             break;
@@ -1086,9 +1088,10 @@ namespace emfio
 
             case W_META_CREATEBRUSHINDIRECT:
             {
-                sal_uInt16  nStyle = 0;
-                mpInputStream->ReadUInt16( nStyle );
-                CreateObject(std::make_unique<WinMtfFillStyle>( ReadColor(), ( nStyle == BS_HOLLOW ) ));
+                sal_uInt16  nBrushStyle = 0;
+                mpInputStream->ReadUInt16( nBrushStyle );
+                CreateObject(std::make_unique<WinMtfFillStyle>( ReadColor(), ( nBrushStyle == BS_NULL ) ));
+                SAL_WARN_IF( (nBrushStyle != BS_SOLID) && (nBrushStyle != BS_NULL), "emfio", "TODO: Brush style not implemented. Please fill the bug report" );
             }
             break;
 
@@ -1159,6 +1162,7 @@ namespace emfio
 
             case W_META_EXCLUDECLIPRECT :
             {
+                SAL_WARN( "emfio", "TODO:  Not working correctly. Please fill the bug report" );
                 ExcludeClipRect( ReadRectangle() );
             }
             break;
