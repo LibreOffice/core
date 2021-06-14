@@ -9204,8 +9204,11 @@ private:
     GtkToggleButton* m_pToggleButton;
     o3tl::sorted_vector<OString> m_aInsertedActions; // must outlive m_aActionEntries
     std::map<OString, OString> m_aIdToAction;
+    std::set<OString> m_aHiddenIds;
     std::vector<GActionEntry> m_aActionEntries;
     GActionGroup* m_pActionGroup;
+    // move 'invisible' entries to m_pHiddenActionGroup
+    GActionGroup* m_pHiddenActionGroup;
 #endif
     GtkWidget* m_pLabel;
 #if !GTK_CHECK_VERSION(4, 0, 0)
@@ -9416,7 +9419,10 @@ private:
     void clear_actions()
     {
         for (const auto& rAction : m_aActionEntries)
+        {
             g_action_map_remove_action(G_ACTION_MAP(m_pActionGroup), rAction.name);
+            g_action_map_remove_action(G_ACTION_MAP(m_pHiddenActionGroup), rAction.name);
+        }
         m_aActionEntries.clear();
         m_aInsertedActions.clear();
         m_aIdToAction.clear();
@@ -9479,7 +9485,14 @@ private:
             process_menu_model(pMenuModel);
         }
 
+        // move hidden entries to m_pHiddenActionGroup
         g_action_map_add_action_entries(G_ACTION_MAP(m_pActionGroup), m_aActionEntries.data(), m_aActionEntries.size(), this);
+        for (const auto& id : m_aHiddenIds)
+        {
+            GAction* pAction = g_action_map_lookup_action(G_ACTION_MAP(m_pActionGroup), m_aIdToAction[id].getStr());
+            g_action_map_add_action(G_ACTION_MAP(m_pHiddenActionGroup), pAction);
+            g_action_map_remove_action(G_ACTION_MAP(m_pActionGroup), m_aIdToAction[id].getStr());
+        }
     }
 #endif
 
@@ -9521,6 +9534,7 @@ public:
 
 #if GTK_CHECK_VERSION(4, 0, 0)
         m_pActionGroup = G_ACTION_GROUP(g_simple_action_group_new());
+        m_pHiddenActionGroup = G_ACTION_GROUP(g_simple_action_group_new());
         gtk_widget_insert_action_group(GTK_WIDGET(m_pMenuButton), "menu", m_pActionGroup);
 
         update_action_group_from_popover_model();
@@ -9745,6 +9759,7 @@ public:
             GMenu* pMenu = G_MENU(pMenuModel);
             g_menu_remove_all(pMenu);
             g_menu_insert_section(pMenu, 0, nullptr, G_MENU_MODEL(g_menu_new()));
+            m_aHiddenIds.clear();
             update_action_group_from_popover_model();
         }
 #else
@@ -9755,7 +9770,8 @@ public:
     virtual void set_item_active(const OString& rIdent, bool bActive) override
     {
 #if GTK_CHECK_VERSION(4, 0, 0)
-        g_action_group_change_action_state(m_pActionGroup, m_aIdToAction[rIdent].getStr(),
+        GActionGroup* pActionGroup = m_aHiddenIds.find(rIdent) == m_aHiddenIds.end() ? m_pActionGroup : m_pHiddenActionGroup;
+        g_action_group_change_action_state(pActionGroup, m_aIdToAction[rIdent].getStr(),
                                            g_variant_new_string(bActive ? rIdent.getStr() : "'none'"));
 #else
         MenuHelper::set_item_active(rIdent, bActive);
@@ -9765,7 +9781,8 @@ public:
     virtual void set_item_sensitive(const OString& rIdent, bool bSensitive) override
     {
 #if GTK_CHECK_VERSION(4, 0, 0)
-        GAction* pAction = g_action_map_lookup_action(G_ACTION_MAP(m_pActionGroup), m_aIdToAction[rIdent].getStr());
+        GActionGroup* pActionGroup = m_aHiddenIds.find(rIdent) == m_aHiddenIds.end() ? m_pActionGroup : m_pHiddenActionGroup;
+        GAction* pAction = g_action_map_lookup_action(G_ACTION_MAP(pActionGroup), m_aIdToAction[rIdent].getStr());
         g_simple_action_set_enabled(G_SIMPLE_ACTION(pAction), bSensitive);
 #else
         MenuHelper::set_item_sensitive(rIdent, bSensitive);
@@ -9799,9 +9816,24 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         MenuHelper::set_item_visible(rIdent, bVisible);
 #else
-        // TODO visibility vs sensitivity
-        GAction* pAction = g_action_map_lookup_action(G_ACTION_MAP(m_pActionGroup), m_aIdToAction[rIdent].getStr());
-        g_simple_action_set_enabled(G_SIMPLE_ACTION(pAction), bVisible);
+        bool bOldVisible = m_aHiddenIds.find(rIdent) == m_aHiddenIds.end();
+        if (bVisible == bOldVisible)
+            return;
+
+        if (!bVisible)
+        {
+            GAction* pAction = g_action_map_lookup_action(G_ACTION_MAP(m_pActionGroup), m_aIdToAction[rIdent].getStr());
+            g_action_map_add_action(G_ACTION_MAP(m_pHiddenActionGroup), pAction);
+            g_action_map_remove_action(G_ACTION_MAP(m_pActionGroup), m_aIdToAction[rIdent].getStr());
+            m_aHiddenIds.insert(rIdent);
+        }
+        else
+        {
+            GAction* pAction = g_action_map_lookup_action(G_ACTION_MAP(m_pHiddenActionGroup), m_aIdToAction[rIdent].getStr());
+            g_action_map_add_action(G_ACTION_MAP(m_pActionGroup), pAction);
+            g_action_map_remove_action(G_ACTION_MAP(m_pHiddenActionGroup), m_aIdToAction[rIdent].getStr());
+            m_aHiddenIds.erase(rIdent);
+        }
 #endif
     }
 
@@ -9965,6 +9997,8 @@ public:
     {
 #if GTK_CHECK_VERSION(4, 0, 0)
         g_signal_handler_disconnect(m_pToggleButton, m_nToggleSignalId);
+        g_object_unref(m_pActionGroup);
+        g_object_unref(m_pHiddenActionGroup);
 #else
         if (m_pMenuHack)
         {
