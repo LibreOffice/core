@@ -10,6 +10,9 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
+#include <com/sun/star/presentation/XCustomPresentationSupplier.hpp>
+#include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/container/XIndexContainer.hpp>
 
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/helper/attributelist.hxx>
@@ -33,6 +36,17 @@ void PresPropsFragmentHandler::finalizeImport()
     css::uno::Reference<css::beans::XPropertySet> xPresentationProps(
         xPresentationSupplier->getPresentation(), css::uno::UNO_QUERY_THROW);
     xPresentationProps->setPropertyValue("IsEndless", css::uno::Any(m_bLoop));
+
+    if (!m_sId.isEmpty())
+    {
+        css::uno::Reference<css::presentation::XCustomPresentationSupplier>
+            XCustPresentationSupplier(getFilter().getModel(), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::container::XNameContainer> mxCustShows(
+            XCustPresentationSupplier->getCustomPresentations(), css::uno::UNO_QUERY);
+        const css::uno::Sequence<OUString> aNameSeq(mxCustShows->getElementNames());
+        xPresentationProps->setPropertyValue("CustomShow",
+                                             css::uno::Any(aNameSeq[m_sId.toInt32()]));
+    }
 }
 
 core::ContextHandlerRef PresPropsFragmentHandler::onCreateContext(sal_Int32 aElementToken,
@@ -44,6 +58,8 @@ core::ContextHandlerRef PresPropsFragmentHandler::onCreateContext(sal_Int32 aEle
             return this;
         case PPT_TOKEN(showPr):
             m_bLoop = rAttribs.getBool(XML_loop, false);
+        case PPT_TOKEN(custShow):
+            m_sId = rAttribs.getString(XML_id).get();
             return this;
     }
     return this;
