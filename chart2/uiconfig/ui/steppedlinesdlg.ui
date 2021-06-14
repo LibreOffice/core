@@ -150,7 +150,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
-                    <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">step_start_rb</property>
                     <child internal-child="accessible">
@@ -171,7 +170,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
-                    <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">step_start_rb</property>
                     <child internal-child="accessible">
@@ -192,7 +190,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
-                    <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">step_start_rb</property>
                     <child internal-child="accessible">

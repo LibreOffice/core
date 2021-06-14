@@ -266,7 +266,6 @@
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
                 <property name="use-underline">True</property>
-                <property name="active">True</property>
                 <property name="draw-indicator">True</property>
                 <property name="group">originalcolors</property>
                 <child internal-child="accessible">
@@ -288,7 +287,6 @@
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
                 <property name="use-underline">True</property>
-                <property name="active">True</property>
                 <property name="draw-indicator">True</property>
                 <property name="group">originalcolors</property>
                 <child internal-child="accessible">
@@ -364,7 +362,6 @@
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
                 <property name="use-underline">True</property>
-                <property name="active">True</property>
                 <property name="draw-indicator">True</property>
                 <property name="group">originalsize</property>
                 <child internal-child="accessible">
@@ -386,7 +383,6 @@
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
                 <property name="use-underline">True</property>
-                <property name="active">True</property>
                 <property name="draw-indicator">True</property>
                 <property name="group">originalsize</property>
                 <child internal-child="accessible">
@@ -408,7 +404,6 @@
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
                 <property name="use-underline">True</property>
-                <property name="active">True</property>
                 <property name="draw-indicator">True</property>
                 <property name="group">originalsize</property>
                 <child internal-child="accessible">
