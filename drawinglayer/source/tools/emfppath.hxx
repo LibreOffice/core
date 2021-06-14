@@ -26,11 +26,11 @@ namespace emfplushelper
     struct EMFPPath : public EMFPObject
     {
         ::basegfx::B2DPolyPolygon    aPolygon;
-        sal_Int32                    nPoints;
+        sal_uInt32                   nPoints;
         std::unique_ptr<float[]>     pPoints;
         std::unique_ptr<sal_uInt8[]> pPointTypes;
 
-        EMFPPath(sal_Int32 _nPoints, bool bLines = false);
+        EMFPPath(sal_uInt32 _nPoints, bool bLines = false);
 
         virtual ~EMFPPath() override;
 

@@ -58,11 +58,11 @@ namespace emfplushelper
         return static_cast<sal_Int16>(nRet);
     }
 
-    EMFPPath::EMFPPath (sal_Int32 _nPoints, bool bLines)
+    EMFPPath::EMFPPath (sal_uInt32 _nPoints, bool bLines)
     {
-        if (_nPoints<0 || o3tl::make_unsigned(_nPoints)>SAL_MAX_INT32 / (2 * sizeof(float)))
+        if (_nPoints > SAL_MAX_UINT32 / (2 * sizeof(float)))
         {
-            _nPoints = SAL_MAX_INT32 / (2 * sizeof(float));
+            _nPoints = SAL_MAX_UINT32 / (2 * sizeof(float));
         }
 
         nPoints = _nPoints;
@@ -78,7 +78,7 @@ namespace emfplushelper
 
     void EMFPPath::Read (SvStream& s, sal_uInt32 pathFlags)
     {
-        for (int i = 0; i < nPoints; i ++)
+        for (sal_uInt32 i = 0; i < nPoints; i ++)
         {
             if (pathFlags & 0x800)
             {
@@ -89,7 +89,7 @@ namespace emfplushelper
                 sal_Int32 y = GetEmfPlusInteger(s);
                 pPoints [i*2] = x;
                 pPoints [i*2 + 1] = y;
-                SAL_INFO("drawinglayer.emf", "EMF+\t\t\tEmfPlusPointR [x,y]: " << x << ", " << y);
+                SAL_INFO("drawinglayer.emf", "EMF+\t\t\t" << i << ". EmfPlusPointR [x,y]: " << x << ", " << y);
             }
             else if (pathFlags & 0x4000)
             {
@@ -97,7 +97,7 @@ namespace emfplushelper
                 sal_Int16 x, y;
 
                 s.ReadInt16( x ).ReadInt16( y );
-                SAL_INFO ("drawinglayer.emf", "EMF+\t\t\tEmfPlusPoint [x,y]: " << x << "," << y);
+                SAL_INFO ("drawinglayer.emf", "EMF+\t\t\t" << i << ". EmfPlusPoint [x,y]: " << x << ", " << y);
                 pPoints [i*2] = x;
                 pPoints [i*2 + 1] = y;
             }
@@ -105,16 +105,16 @@ namespace emfplushelper
             {
                 // EMFPlusPointF: stored in Single (float) format
                 s.ReadFloat( pPoints [i*2] ).ReadFloat( pPoints [i*2 + 1] );
-                SAL_INFO ("drawinglayer.emf", "EMF+\t EMFPlusPointF [x,y]: " << pPoints [i*2] << "," << pPoints [i*2 + 1]);
+                SAL_INFO("drawinglayer.emf", "EMF+\t" << i << ". EMFPlusPointF [x,y]: " << pPoints [i * 2] << ", " << pPoints [i * 2 + 1]);
             }
         }
 
         if (pPointTypes)
         {
-            for (int i = 0; i < nPoints; i++)
+            for (sal_uInt32 i = 0; i < nPoints; i++)
             {
                 s.ReadUChar(pPointTypes[i]);
-                SAL_INFO("drawinglayer.emf", "EMF+\tpoint type: " << static_cast<int>(pPointTypes[i]));
+                SAL_INFO("drawinglayer.emf", "EMF+\tpoint type: 0x" << std::hex << static_cast<int>(pPointTypes[i]) << std::dec);
             }
         }
 
@@ -125,11 +125,11 @@ namespace emfplushelper
     {
         ::basegfx::B2DPolygon polygon;
         aPolygon.clear ();
-        int last_normal = 0, p = 0;
+        sal_uInt32 last_normal = 0, p = 0;
         ::basegfx::B2DPoint prev, mapped;
         bool hasPrev = false;
 
-        for (int i = 0; i < nPoints; i ++)
+        for (sal_uInt32 i = 0; i < nPoints; i ++)
         {
             if (p && pPointTypes && (pPointTypes [i] == 0))
             {
@@ -168,20 +168,19 @@ namespace emfplushelper
             }
 
             polygon.append (mapped);
-            SAL_INFO ("drawinglayer.emf", "EMF+\t\tPolygon append point: " << pPoints [i*2] << "," << pPoints [i*2 + 1] << " mapped: " << mapped.getX () << ":" << mapped.getY ());
+            SAL_INFO ("drawinglayer.emf", "EMF+\t\tPoint: " << pPoints [i*2] << "," << pPoints [i*2 + 1] << " mapped: " << mapped.getX () << ":" << mapped.getY ());
 
             if (hasPrev)
             {
                 polygon.setPrevControlPoint (p, prev);
-                SAL_INFO ("drawinglayer.emf", "EMF+\t\tPolygon append  prev: " << p << " mapped: " << prev.getX () << "," << prev.getY ());
+                SAL_INFO ("drawinglayer.emf", "EMF+\t\tPolygon append prev: " << p << " mapped: " << prev.getX () << "," << prev.getY ());
                 hasPrev = false;
             }
 
-            p ++;
+            p++;
 
-            if (pPointTypes && (pPointTypes [i] & 0x80))
+            if (pPointTypes && (pPointTypes [i] & 0x80)) // closed polygon
             {
-                // closed polygon
                 polygon.setClosed (true);
                 aPolygon.append (polygon);
                 SAL_INFO ("drawinglayer.emf", "EMF+\t\tClose polygon");

@@ -281,16 +281,15 @@ namespace emfplushelper
             }
             case EmfPlusObjectTypePath:
             {
-                sal_uInt32 header, pathFlags;
-                sal_Int32 points;
+                sal_uInt32 aVersion, aPathPointCount, aPathPointFlags;
 
-                rObjectStream.ReadUInt32(header).ReadInt32(points).ReadUInt32(pathFlags);
-                SAL_INFO("drawinglayer.emf", "EMF+\t\tHeader: 0x" << std::hex << header);
-                SAL_INFO("drawinglayer.emf", "EMF+\t\tPoints: " << std::dec << points);
-                SAL_INFO("drawinglayer.emf", "EMF+\t\tAdditional flags: 0x" << std::hex << pathFlags << std::dec);
-                EMFPPath *path = new EMFPPath(points);
+                rObjectStream.ReadUInt32(aVersion).ReadUInt32(aPathPointCount).ReadUInt32(aPathPointFlags);
+                SAL_INFO("drawinglayer.emf", "EMF+\t\tVersion: 0x" << std::hex << aVersion);
+                SAL_INFO("drawinglayer.emf", "EMF+\t\tNumber of points: " << std::dec << aPathPointCount);
+                SAL_INFO("drawinglayer.emf", "EMF+\t\tPath point flags: 0x" << std::hex << aPathPointFlags << std::dec);
+                EMFPPath *path = new EMFPPath(aPathPointCount);
                 maEMFPObjects[index].reset(path);
-                path->Read(rObjectStream, pathFlags);
+                path->Read(rObjectStream, aPathPointFlags);
                 break;
             }
             case EmfPlusObjectTypeRegion:
@@ -1336,11 +1335,10 @@ namespace emfplushelper
                     case EmfPlusRecordTypeFillPolygon:
                     {
                         const sal_uInt8 index = flags & 0xff;
-                        sal_uInt32 brushIndexOrColor;
-                        sal_Int32 points;
+                        sal_uInt32 brushIndexOrColor, points;
 
                         rMS.ReadUInt32(brushIndexOrColor);
-                        rMS.ReadInt32(points);
+                        rMS.ReadUInt32(points);
                         SAL_INFO("drawinglayer.emf", "EMF+\t FillPolygon in slot: " << index << " points: " << points);
                         SAL_INFO("drawinglayer.emf", "EMF+\t " << ((flags & 0x8000) ? "Color" : "Brush index") << " : 0x" << std::hex << brushIndexOrColor << std::dec);
 
