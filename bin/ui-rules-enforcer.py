@@ -219,11 +219,11 @@ def remove_double_buffered(current):
   if double_buffered != None:
     current.remove(double_buffered)
 
-def remove_label_fill(current):
+def remove_expander_label_fill(current):
   label_fill = None
   isexpander = current.get('class') == "GtkExpander"
   for child in current:
-    remove_label_fill(child)
+    remove_expander_label_fill(child)
     if not isexpander:
         continue
     if child.tag == "property":
@@ -233,6 +233,21 @@ def remove_label_fill(current):
 
   if label_fill != None:
     current.remove(label_fill)
+
+def remove_expander_spacing(current):
+  spacing = None
+  isexpander = current.get('class') == "GtkExpander"
+  for child in current:
+    remove_expander_spacing(child)
+    if not isexpander:
+        continue
+    if child.tag == "property":
+      attributes = child.attrib
+      if attributes.get("name") == "spacing":
+        spacing = child
+
+  if spacing != None:
+    current.remove(spacing)
 
 def enforce_menubutton_indicator_consistency(current):
   draw_indicator = None
@@ -318,7 +333,8 @@ replace_button_use_stock(root)
 replace_image_stock(root)
 remove_check_button_align(root)
 remove_track_visited_links(root)
-remove_label_fill(root)
+remove_expander_label_fill(root)
+remove_expander_spacing(root)
 enforce_menubutton_indicator_consistency(root)
 enforce_active_in_group_consistency(root)
 remove_double_buffered(root)
