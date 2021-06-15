@@ -1978,10 +1978,24 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     const SwPageFrame* pCurrPage = static_cast<const SwPageFrame*>( mrSh.GetLayout()->Lower() );
                     // Destination PageNum
                     tools::Rectangle aRect = SwRectToPDFRect(pCurrPage, rDestRect.SVRect());
+                    // Back link rectangle calculation
                     const SwPageFrame* fnBodyPage = pCurrPage->getRootFrame()->GetPageByPageNum(nDestPageNum+1);
-                    tools::Long fnSymbolLeft = fnBodyPage->GetLeftMargin() + fnBodyPage->getFrameArea().Left();
-                    tools::Long symbolWidth = rDestRect.Left() - fnSymbolLeft;
-                    const SwRect& fnSymbolRect = SwRect(fnSymbolLeft,rDestRect.Pos().Y(),symbolWidth,rDestRect.Height());
+                    SwRect fnSymbolRect;
+                    if (fnBodyPage->IsVertical()){
+                        tools::Long fnSymbolTop = fnBodyPage->GetTopMargin() + fnBodyPage->getFrameArea().Top();
+                        tools::Long symbolHeight = rDestRect.Top() - fnSymbolTop;
+                        fnSymbolRect = SwRect(rDestRect.Pos().X(),fnSymbolTop,rDestRect.Width(),symbolHeight);
+                    } else {
+                       if (fnBodyPage->IsRightToLeft()){
+                           tools::Long fnSymbolRight = fnBodyPage->getFrameArea().Right() - fnBodyPage->GetRightMargin();
+                           tools::Long symbolWidth = fnSymbolRight - rDestRect.Right();
+                           fnSymbolRect = SwRect(rDestRect.Pos().X(),rDestRect.Pos().Y(),symbolWidth,rDestRect.Height());
+                       } else {
+                           tools::Long fnSymbolLeft = fnBodyPage->GetLeftMargin() + fnBodyPage->getFrameArea().Left();
+                           tools::Long symbolWidth = rDestRect.Left() - fnSymbolLeft;
+                           fnSymbolRect = SwRect(fnSymbolLeft,rDestRect.Pos().Y(),symbolWidth,rDestRect.Height());
+                       }
+                    }
                     tools::Rectangle aFootnoteSymbolRect = SwRectToPDFRect(pCurrPage, fnSymbolRect.SVRect());
 
                     // Export back link
