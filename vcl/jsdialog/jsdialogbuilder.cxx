@@ -384,7 +384,7 @@ void JSDropTarget::fire_dragEnter(const css::datatransfer::dnd::DropTargetDragEn
 
 // used for dialogs
 JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIRoot,
-                                     const OUString& rUIFile)
+                                     const OUString& rUIFile, bool bPopup)
     : SalInstanceBuilder(extract_sal_widget(pParent), rUIRoot, rUIFile)
     , m_nWindowId(0)
     , m_aParentDialog(nullptr)
@@ -397,7 +397,21 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIR
 
     if (pRoot && pRoot->GetParent())
     {
-        m_aParentDialog = pRoot->GetParent()->GetParentWithLOKNotifier();
+        if (bPopup)
+        {
+            // for popups we need to set LOKNotifier to assign unique LOKWindowId for every instance
+            if (VclPtr<vcl::Window> pWin = pRoot->GetParent()->GetParentWithLOKNotifier())
+            {
+                pRoot->SetLOKNotifier(pWin->GetLOKNotifier());
+                m_aParentDialog = pRoot;
+            }
+        }
+        else
+        {
+            // dialogs have already set LOKNotifier, see dialog.cxx
+            m_aParentDialog = pRoot->GetParent()->GetParentWithLOKNotifier();
+        }
+
         if (m_aParentDialog)
             m_nWindowId = m_aParentDialog->GetLOKWindowId();
         InsertWindowToMap(m_nWindowId);
@@ -522,6 +536,13 @@ JSInstanceBuilder* JSInstanceBuilder::CreateSidebarBuilder(weld::Widget* pParent
                                                            sal_uInt64 nLOKWindowId)
 {
     return new JSInstanceBuilder(pParent, rUIRoot, rUIFile, nLOKWindowId);
+}
+
+JSInstanceBuilder* JSInstanceBuilder::CreatePopupBuilder(weld::Widget* pParent,
+                                                         const OUString& rUIRoot,
+                                                         const OUString& rUIFile)
+{
+    return new JSInstanceBuilder(pParent, rUIRoot, rUIFile, true);
 }
 
 JSInstanceBuilder::~JSInstanceBuilder()
@@ -1442,6 +1463,12 @@ void JSMenuButton::set_image(VirtualDevice* pDevice)
 void JSMenuButton::set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage)
 {
     SalInstanceMenuButton::set_image(rImage);
+    sendUpdate();
+}
+
+void JSMenuButton::set_active(bool active)
+{
+    SalInstanceMenuButton::set_active(active);
     sendUpdate();
 }
 

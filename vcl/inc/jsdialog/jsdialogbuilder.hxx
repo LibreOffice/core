@@ -205,8 +205,9 @@ class JSInstanceBuilder : public SalInstanceBuilder, public JSDialogSender
     void RememberWidget(const OString& id, weld::Widget* pWidget);
     static weld::Widget* FindWeldWidgetsMap(sal_uInt64 nWindowId, const OString& rWidget);
 
-    /// used for dialogs
-    JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile);
+    /// used for dialogs or popups
+    JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile,
+                      bool bPopup = false);
     /// used for sidebar panels
     JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile,
                       sal_uInt64 nLOKWindowId);
@@ -230,6 +231,8 @@ public:
     static JSInstanceBuilder* CreateSidebarBuilder(weld::Widget* pParent, const OUString& rUIRoot,
                                                    const OUString& rUIFile,
                                                    sal_uInt64 nLOKWindowId = 0);
+    static JSInstanceBuilder* CreatePopupBuilder(weld::Widget* pParent, const OUString& rUIRoot,
+                                                 const OUString& rUIFile);
 
     virtual ~JSInstanceBuilder() override;
     virtual std::unique_ptr<weld::MessageDialog> weld_message_dialog(const OString& id) override;
@@ -626,6 +629,7 @@ public:
     virtual void set_label(const OUString& rText) override;
     virtual void set_image(VirtualDevice* pDevice) override;
     virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override;
+    virtual void set_active(bool active) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

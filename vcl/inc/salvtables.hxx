@@ -1814,7 +1814,7 @@ public:
 
 class SalInstanceMenuButton : public SalInstanceButton, public virtual weld::MenuButton
 {
-private:
+protected:
     VclPtr<::MenuButton> m_xMenuButton;
     sal_uInt16 m_nLastId;
 
