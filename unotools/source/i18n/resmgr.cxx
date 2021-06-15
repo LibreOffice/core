@@ -50,6 +50,7 @@
 
 #include <unordered_map>
 #include <memory>
+#include <string_view>
 
 #ifdef ANDROID
 #include <osl/detail/android-bootstrap.h>
@@ -113,6 +114,14 @@ static int IgnoringCrtReportHook(int reportType, wchar_t *message, int * /* retu
 }
 #endif
 
+namespace std {
+template<>
+struct hash<std::pair<std::string_view,std::string_view>>
+{
+    std::size_t operator()(std::pair<std::string_view,std::string_view> const & pair) const
+    { return std::hash<std::string_view>{}(pair.first) ^ std::hash<std::string_view>{}(pair.second); }
+};
+}
 
 namespace Translate
 {
@@ -199,13 +208,13 @@ namespace Translate
 
     OUString get(const char* pContextAndId, const std::locale &loc)
     {
-        OString sContext;
+        std::string_view sContext;
         const char *pId = strchr(pContextAndId, '\004');
         if (!pId)
             pId = pContextAndId;
         else
         {
-            sContext = OString(pContextAndId, pId - pContextAndId);
+            sContext = std::string_view(pContextAndId, pId - pContextAndId);
             ++pId;
             assert(!strchr(pId, '\004') && "should be using nget, not get");
         }
@@ -217,8 +226,20 @@ namespace Translate
             return OUString::fromUtf8(sKeyId) + u"\u2016" + createFromUtf8(pId, strlen(pId));
         }
 
+        // small cache for frequent access e.g. when loading docx
+        static std::unordered_map<std::pair<std::string_view,std::string_view>, OUString> aCache;
+        static std::locale cachedLocale = std::locale::classic();
+        if (cachedLocale == loc)
+        {
+            auto it = aCache.find(std::pair<std::string_view, std::string_view>{sContext, pId});
+            if (it != aCache.end())
+                return it->second;
+        }
+        else
+            aCache.clear();
+
         //otherwise translate it
-        const std::string ret = boost::locale::pgettext(sContext.getStr(), pId, loc);
+        const std::string ret = boost::locale::pgettext(sContext.data(), pId, loc);
         OUString result(ExpandVariables(createFromUtf8(ret.data(), ret.size())));
 
         if (comphelper::LibreOfficeKit::isActive())
@@ -228,6 +249,10 @@ namespace Translate
                 std::use_facet<boost::locale::info>(loc).language() == "de")
                 result = result.replaceAll(OUString::fromUtf8("\xC3\x9F"), "ss");
         }
+        cachedLocale = loc;
+        aCache.emplace(std::pair<std::string_view, std::string_view>{sContext, pId}, result);
+        if (aCache.size() > 1024)
+            aCache.clear();
         return result;
     }
 
