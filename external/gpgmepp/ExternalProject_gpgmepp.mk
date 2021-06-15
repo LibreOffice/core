@@ -39,7 +39,7 @@ $(call gb_ExternalProject_get_state_target,gpgmepp,build): $(call gb_Executable_
 					$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) \
 				$(if $(call gb_Module__symbols_enabled,gpgmepp),$(gb_DEBUGINFO_FLAGS))' \
            --host=$(gb_ExternalProject_gpgmepp_host) \
-		   RC='windres -O COFF --target=$(gb_ExternalProject_gpgmepp_target) --preprocessor='\''$(call gb_Executable_get_target,cpp) -+ -DRC_INVOKED -DWINAPI_FAMILY=0 $(SOLARINC)'\' \
+		   RC='windres -O COFF --target=$(gb_ExternalProject_gpgmepp_target) --preprocessor=$(call gb_Executable_get_target,cpp) --preprocessor-arg=-+ -DRC_INVOKED -DWINAPI_FAMILY=0 $(SOLARINC)' \
 		   MAKE=$(MAKE) \
 	    && $(MAKE) \
 	)
