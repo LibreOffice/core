@@ -80,14 +80,14 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
     mpVirtualRefDevice->SetReferenceDevice ( VirtualDevice::RefDevMode::Dpi600 );
 }
 
-OUString SdResId(const char* pId)
+OUString SdResId(std::string_view aId)
 {
-    return Translate::get(pId, SD_MOD()->GetResLocale());
+    return Translate::get(aId, SD_MOD()->GetResLocale());
 }
 
-OUString SdResId(const char* pId, int nCardinality)
+OUString SdResId(std::string_view aId, int nCardinality)
 {
-    return Translate::nget(pId, nCardinality, SD_MOD()->GetResLocale());
+    return Translate::nget(aId, nCardinality, SD_MOD()->GetResLocale());
 }
 
 // Dtor

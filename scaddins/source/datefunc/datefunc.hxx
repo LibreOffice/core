@@ -120,7 +120,7 @@ private:
 public:
                                 ScaDateAddIn();
 
-    OUString ScaResId(const char* pId);
+    OUString ScaResId(std::string_view aId);
 
                                 // XAddIn
     virtual OUString SAL_CALL getProgrammaticFuntionName( const OUString& aDisplayName ) override;

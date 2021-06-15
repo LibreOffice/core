@@ -256,9 +256,9 @@ const std::locale& ImplGetResLocale()
     return pSVData->maResLocale;
 }
 
-OUString VclResId(const char* pId)
+OUString VclResId(std::string_view aId)
 {
-    return Translate::get(pId, ImplGetResLocale());
+    return Translate::get(aId, ImplGetResLocale());
 }
 
 const FieldUnitStringList& ImplGetFieldUnits()

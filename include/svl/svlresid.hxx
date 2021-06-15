@@ -12,8 +12,9 @@
 
 #include <svl/svldllapi.h>
 #include <rtl/ustring.hxx>
+#include <string_view>
 
-SVL_DLLPUBLIC OUString SvlResId(const char* pId);
+SVL_DLLPUBLIC OUString SvlResId(std::string_view aId);
 
 #endif // INCLUDED_SVL_SVTRESID_HXX
 

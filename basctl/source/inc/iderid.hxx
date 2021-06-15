@@ -20,10 +20,11 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
+#include <string_view>
 
 namespace basctl
 {
-OUString IDEResId(const char* pId);
+OUString IDEResId(std::string_view aId);
 
 } // namespace basctl
 

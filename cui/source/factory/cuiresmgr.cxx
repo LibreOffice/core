@@ -20,6 +20,6 @@
 #include <dialmgr.hxx>
 #include <unotools/resmgr.hxx>
 
-OUString CuiResId(const char* pKey) { return Translate::get(pKey, Translate::Create("cui")); }
+OUString CuiResId(std::string_view aKey) { return Translate::get(aKey, Translate::Create("cui")); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

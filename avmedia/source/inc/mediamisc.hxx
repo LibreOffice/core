@@ -35,9 +35,9 @@
 // Mime types
 #define AVMEDIA_MIMETYPE_COMMON "application/vnd.sun.star.media"
 
-inline OUString AvmResId(const char* pId)
+inline OUString AvmResId(std::string_view aId)
 {
-    return Translate::get(pId, Translate::Create("avmedia"));
+    return Translate::get(aId, Translate::Create("avmedia"));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

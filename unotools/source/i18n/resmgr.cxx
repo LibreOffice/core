@@ -125,11 +125,11 @@ struct hash<std::pair<std::string_view,std::string_view>>
 
 namespace Translate
 {
-    std::locale Create(const char* pPrefixName, const LanguageTag& rLocale)
+    std::locale Create(std::string_view aPrefixName, const LanguageTag& rLocale)
     {
         static std::unordered_map<OString, std::locale> aCache;
         OString sIdentifier = rLocale.getGlibcLocaleString(u".UTF-8").toUtf8();
-        OString sUnique = sIdentifier + pPrefixName;
+        OString sUnique = sIdentifier + aPrefixName;
         auto aFind = aCache.find(sUnique);
         if (aFind != aCache.end())
             return aFind->second;
@@ -155,11 +155,11 @@ namespace Translate
         gen.add_messages_path(sPath.getStr());
 #if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID
         // allow gettext to find these .mo files e.g. so gtk dialogs can use them
-        bindtextdomain(pPrefixName, sPath.getStr());
+        bindtextdomain(aPrefixName.data(), sPath.getStr());
         // tdf#131069 gtk, and anything sane, always wants utf-8 strings as output
-        bind_textdomain_codeset(pPrefixName, "UTF-8");
+        bind_textdomain_codeset(aPrefixName.data(), "UTF-8");
 #endif
-        gen.add_messages_domain(pPrefixName);
+        gen.add_messages_domain(aPrefixName.data());
 
 #if defined(_WIN32) && defined(DBG_UTIL)
         // With a newer C++ debug runtime (in an --enable-dbgutil build), passing an invalid locale
@@ -206,24 +206,25 @@ namespace Translate
         return aRet;
     }
 
-    OUString get(const char* pContextAndId, const std::locale &loc)
+    OUString get(std::string_view aContextAndId, const std::locale &loc)
     {
         std::string_view sContext;
-        const char *pId = strchr(pContextAndId, '\004');
-        if (!pId)
-            pId = pContextAndId;
+        const char *p = strchr(aContextAndId.data(), '\004');
+        std::string_view aId;
+        if (!p)
+            aId = aContextAndId;
         else
         {
-            sContext = std::string_view(pContextAndId, pId - pContextAndId);
-            ++pId;
-            assert(!strchr(pId, '\004') && "should be using nget, not get");
+            sContext = std::string_view(aContextAndId.data(), p - aContextAndId.data());
+            aId = aContextAndId.substr(1);
+            assert(!strchr(aId.data(), '\004') && "should be using nget, not get");
         }
 
         //if it's a key id locale, generate it here
         if (std::use_facet<boost::locale::info>(loc).language() == "qtz")
         {
-            OString sKeyId(genKeyId(OString(pContextAndId).replace('\004', '|')));
-            return OUString::fromUtf8(sKeyId) + u"\u2016" + createFromUtf8(pId, strlen(pId));
+            OString sKeyId(genKeyId(OString(aContextAndId).replace('\004', '|')));
+            return OUString::fromUtf8(sKeyId) + u"\u2016" + createFromUtf8(aId.data(), aId.size());
         }
 
         // small cache for frequent access e.g. when loading docx
@@ -231,7 +232,7 @@ namespace Translate
         static std::locale cachedLocale = std::locale::classic();
         if (cachedLocale == loc)
         {
-            auto it = aCache.find(std::pair<std::string_view, std::string_view>{sContext, pId});
+            auto it = aCache.find(std::pair<std::string_view, std::string_view>{sContext, aId});
             if (it != aCache.end())
                 return it->second;
         }
@@ -239,7 +240,7 @@ namespace Translate
             aCache.clear();
 
         //otherwise translate it
-        const std::string ret = boost::locale::pgettext(sContext.data(), pId, loc);
+        const std::string ret = boost::locale::pgettext(sContext.data(), aId.data(), loc);
         OUString result(ExpandVariables(createFromUtf8(ret.data(), ret.size())));
 
         if (comphelper::LibreOfficeKit::isActive())
@@ -250,15 +251,15 @@ namespace Translate
                 result = result.replaceAll(OUString::fromUtf8("\xC3\x9F"), "ss");
         }
         cachedLocale = loc;
-        aCache.emplace(std::pair<std::string_view, std::string_view>{sContext, pId}, result);
+        aCache.emplace(std::pair<std::string_view, std::string_view>{sContext, aId}, result);
         if (aCache.size() > 1024)
             aCache.clear();
         return result;
     }
 
-    OUString nget(const char* pContextAndIds, int n, const std::locale &loc)
+    OUString nget(std::string_view aContextAndIds, int n, const std::locale &loc)
     {
-        OString sContextIdId(pContextAndIds);
+        OString sContextIdId(aContextAndIds);
         std::vector<OString> aContextIdId;
         sal_Int32 nIndex = 0;
         do
