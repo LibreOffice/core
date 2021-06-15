@@ -194,7 +194,7 @@ bool SdrCircObj::PaintNeedsXPolyCirc() const
     // ellipse segments.
     // If not WIN, then (for now) also for circle/ellipse segments and circle/
     // ellipse arcs (for precision)
-    bool bNeed=aGeo.nRotationAngle || aGeo.nShearAngle || meCircleKind==SdrCircKind::Cut;
+    bool bNeed = maGeo.nRotationAngle || maGeo.nShearAngle || meCircleKind == SdrCircKind::Cut;
     // If not WIN, then for everything except full circle (for now!)
     if (meCircleKind!=SdrCircKind::Full) bNeed = true;
 
@@ -291,7 +291,7 @@ basegfx::B2DPolygon SdrCircObj::ImpCalcXPolyCirc(const SdrCircKind eCircleKind, 
     }
 
     // #i76950#
-    if(aGeo.nShearAngle || aGeo.nRotationAngle)
+    if (maGeo.nShearAngle || maGeo.nRotationAngle)
     {
         // translate top left to (0,0)
         const basegfx::B2DPoint aTopLeft(aRange.getMinimum());
@@ -300,8 +300,8 @@ basegfx::B2DPolygon SdrCircObj::ImpCalcXPolyCirc(const SdrCircKind eCircleKind, 
 
         // shear, rotate and back to top left (if needed)
         aMatrix = basegfx::utils::createShearXRotateTranslateB2DHomMatrix(
-            -aGeo.mfTanShearAngle,
-            aGeo.nRotationAngle ? (36000_deg100 - aGeo.nRotationAngle).get() * F_PI18000 : 0.0,
+            -maGeo.mfTanShearAngle,
+            maGeo.nRotationAngle ? (36000_deg100 - maGeo.nRotationAngle).get() * F_PI18000 : 0.0,
             aTopLeft) * aMatrix;
 
         // apply transformation
@@ -320,7 +320,7 @@ void SdrCircObj::RecalcXPoly()
 OUString SdrCircObj::TakeObjNameSingul() const
 {
     const char* pID=STR_ObjNameSingulCIRC;
-    if (maRect.GetWidth() == maRect.GetHeight() && aGeo.nShearAngle==0_deg100)
+    if (maRect.GetWidth() == maRect.GetHeight() && maGeo.nShearAngle==0_deg100)
     {
         switch (meCircleKind) {
             case SdrCircKind::Full: pID=STR_ObjNameSingulCIRC; break;
@@ -349,7 +349,7 @@ OUString SdrCircObj::TakeObjNameSingul() const
 OUString SdrCircObj::TakeObjNamePlural() const
 {
     const char* pID=STR_ObjNamePluralCIRC;
-    if (maRect.GetWidth() == maRect.GetHeight() && aGeo.nShearAngle==0_deg100)
+    if (maRect.GetWidth() == maRect.GetHeight() && maGeo.nShearAngle==0_deg100)
     {
         switch (meCircleKind) {
             case SdrCircKind::Full: pID=STR_ObjNamePluralCIRC; break;
@@ -471,20 +471,20 @@ void SdrCircObj::AddToHdlList(SdrHdlList& rHdlList) const
                 break;
         }
 
-        if (aGeo.nShearAngle)
+        if (maGeo.nShearAngle)
         {
-            ShearPoint(aPnt,maRect.TopLeft(),aGeo.mfTanShearAngle);
+            ShearPoint(aPnt, maRect.TopLeft(), maGeo.mfTanShearAngle);
         }
 
-        if (aGeo.nRotationAngle)
+        if (maGeo.nRotationAngle)
         {
-            RotatePoint(aPnt,maRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
+            RotatePoint(aPnt, maRect.TopLeft(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
         }
 
         std::unique_ptr<SdrHdl> pH(new SdrHdl(aPnt,eLocalKind));
         pH->SetPointNum(nPNum);
         pH->SetObj(const_cast<SdrCircObj*>(this));
-        pH->SetRotationAngle(aGeo.nRotationAngle);
+        pH->SetRotationAngle(maGeo.nRotationAngle);
         rHdlList.AddHdl(std::move(pH));
     }
 }
@@ -520,11 +520,11 @@ bool SdrCircObj::applySpecialDrag(SdrDragStat& rDrag)
     {
         Point aPt(rDrag.GetNow());
 
-        if (aGeo.nRotationAngle)
-            RotatePoint(aPt,maRect.TopLeft(),-aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
+        if (maGeo.nRotationAngle)
+            RotatePoint(aPt,maRect.TopLeft(), -maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
 
-        if (aGeo.nShearAngle)
-            ShearPoint(aPt,maRect.TopLeft(),-aGeo.mfTanShearAngle);
+        if (maGeo.nShearAngle)
+            ShearPoint(aPt,maRect.TopLeft(), -maGeo.mfTanShearAngle);
 
         aPt -= maRect.Center();
 
@@ -819,10 +819,10 @@ void SdrCircObj::NbcMove(const Size& aSiz)
 
 void SdrCircObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
-    Degree100 nAngle0=aGeo.nRotationAngle;
-    bool bNoShearRota=(aGeo.nRotationAngle==0_deg100 && aGeo.nShearAngle==0_deg100);
+    Degree100 nAngle0 = maGeo.nRotationAngle;
+    bool bNoShearRota = (maGeo.nRotationAngle == 0_deg100 && maGeo.nShearAngle == 0_deg100);
     SdrTextObj::NbcResize(rRef,xFact,yFact);
-    bNoShearRota|=(aGeo.nRotationAngle==0_deg100 && aGeo.nShearAngle==0_deg100);
+    bNoShearRota |= (maGeo.nRotationAngle == 0_deg100 && maGeo.nShearAngle == 0_deg100);
     if (meCircleKind!=SdrCircKind::Full) {
         bool bXMirr=(xFact.GetNumerator()<0) != (xFact.GetDenominator()<0);
         bool bYMirr=(yFact.GetNumerator()<0) != (yFact.GetDenominator()<0);
@@ -854,8 +854,8 @@ void SdrCircObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
                         nS0=-nE0;
                         nE0=-nTmp;
                     }
-                    nS0-=aGeo.nRotationAngle;
-                    nE0-=aGeo.nRotationAngle;
+                    nS0 -= maGeo.nRotationAngle;
+                    nE0 -= maGeo.nRotationAngle;
                 }
             }
             Degree100 nAngleDif=nE0-nS0;
@@ -898,13 +898,15 @@ void SdrCircObj::NbcMirror(const Point& rRef1, const Point& rRef2)
         if (nWdt==0) aTmpPt2.setX(0 );
         if (nHgt==0) aTmpPt2.setY(0 );
         aTmpPt2+=aCenter;
-        if (aGeo.nRotationAngle) {
-            RotatePoint(aTmpPt1,maRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
-            RotatePoint(aTmpPt2,maRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
+        if (maGeo.nRotationAngle)
+        {
+            RotatePoint(aTmpPt1, maRect.TopLeft(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
+            RotatePoint(aTmpPt2, maRect.TopLeft(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
         }
-        if (aGeo.nShearAngle) {
-            ShearPoint(aTmpPt1,maRect.TopLeft(),aGeo.mfTanShearAngle);
-            ShearPoint(aTmpPt2,maRect.TopLeft(),aGeo.mfTanShearAngle);
+        if (maGeo.nShearAngle)
+        {
+            ShearPoint(aTmpPt1, maRect.TopLeft(), maGeo.mfTanShearAngle);
+            ShearPoint(aTmpPt2, maRect.TopLeft(), maGeo.mfTanShearAngle);
         }
     }
     SdrTextObj::NbcMirror(rRef1,rRef2);
@@ -912,14 +914,16 @@ void SdrCircObj::NbcMirror(const Point& rRef1, const Point& rRef2)
         MirrorPoint(aTmpPt1,rRef1,rRef2);
         MirrorPoint(aTmpPt2,rRef1,rRef2);
         // unrotate:
-        if (aGeo.nRotationAngle) {
-            RotatePoint(aTmpPt1,maRect.TopLeft(),-aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle); // -sin for reversion
-            RotatePoint(aTmpPt2,maRect.TopLeft(),-aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle); // -sin for reversion
+        if (maGeo.nRotationAngle)
+        {
+            RotatePoint(aTmpPt1, maRect.TopLeft(), -maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle); // -sin for reversion
+            RotatePoint(aTmpPt2, maRect.TopLeft(), -maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle); // -sin for reversion
         }
         // unshear:
-        if (aGeo.nShearAngle) {
-            ShearPoint(aTmpPt1,maRect.TopLeft(),-aGeo.mfTanShearAngle); // -tan for reversion
-            ShearPoint(aTmpPt2,maRect.TopLeft(),-aGeo.mfTanShearAngle); // -tan for reversion
+        if (maGeo.nShearAngle)
+        {
+            ShearPoint(aTmpPt1, maRect.TopLeft(), -maGeo.mfTanShearAngle); // -tan for reversion
+            ShearPoint(aTmpPt2, maRect.TopLeft(), -maGeo.mfTanShearAngle); // -tan for reversion
         }
         Point aCenter(maRect.Center());
         aTmpPt1-=aCenter;
@@ -996,24 +1000,26 @@ void SdrCircObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
         if (meCircleKind==SdrCircKind::Section) {
             Union(rRect,maRect.Center());
         }
-        if (aGeo.nRotationAngle) {
+        if (maGeo.nRotationAngle)
+        {
             Point aDst(rRect.TopLeft());
             aDst-=maRect.TopLeft();
             Point aDst0(aDst);
-            RotatePoint(aDst,Point(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
+            RotatePoint(aDst,Point(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
             aDst-=aDst0;
             rRect.Move(aDst.X(),aDst.Y());
         }
     }
-    if (aGeo.nShearAngle==0_deg100)
+    if (maGeo.nShearAngle==0_deg100)
         return;
 
-    tools::Long nDst=FRound((rRect.Bottom()-rRect.Top())*aGeo.mfTanShearAngle);
-    if (aGeo.nShearAngle>0_deg100) {
+    tools::Long nDst = FRound((rRect.Bottom() - rRect.Top()) * maGeo.mfTanShearAngle);
+    if (maGeo.nShearAngle > 0_deg100)
+    {
         Point aRef(rRect.TopLeft());
         rRect.AdjustLeft( -nDst );
         Point aTmpPt(rRect.TopLeft());
-        RotatePoint(aTmpPt,aRef,aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
+        RotatePoint(aTmpPt, aRef, maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
         aTmpPt-=rRect.TopLeft();
         rRect.Move(aTmpPt.X(),aTmpPt.Y());
     } else {
@@ -1032,7 +1038,8 @@ void SdrCircObj::RecalcSnapRect()
 
 void SdrCircObj::NbcSetSnapRect(const tools::Rectangle& rRect)
 {
-    if (aGeo.nRotationAngle || aGeo.nShearAngle || meCircleKind!=SdrCircKind::Full) {
+    if (maGeo.nRotationAngle || maGeo.nShearAngle || meCircleKind != SdrCircKind::Full)
+    {
         tools::Rectangle aSR0(GetSnapRect());
         tools::Long nWdt0=aSR0.Right()-aSR0.Left();
         tools::Long nHgt0=aSR0.Bottom()-aSR0.Top();

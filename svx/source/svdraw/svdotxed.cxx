@@ -39,8 +39,8 @@ bool SdrTextObj::HasTextEdit() const
 
 bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
 {
-    if (pEdtOutl!=nullptr) return false; // Textedit might already run in another View!
-    pEdtOutl=&rOutl;
+    if (mpEdtOutl!=nullptr) return false; // Textedit might already run in another View!
+    mpEdtOutl=&rOutl;
 
     mbInEditMode = true;
 
@@ -115,7 +115,7 @@ bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
 
     if(pOutlinerParaObject)
     {
-        if(aGeo.nRotationAngle || IsFontwork())
+        if (maGeo.nRotationAngle || IsFontwork())
         {
             // only repaint here, no real objectchange
             BroadcastObjectChange();
@@ -134,11 +134,11 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools::Recta
     Size aPaperMin,aPaperMax;
     tools::Rectangle aViewInit;
     TakeTextAnchorRect(aViewInit);
-    if (aGeo.nRotationAngle) {
+    if (maGeo.nRotationAngle) {
         Point aCenter(aViewInit.Center());
         aCenter-=aViewInit.TopLeft();
         Point aCenter0(aCenter);
-        RotatePoint(aCenter,Point(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
+        RotatePoint(aCenter,Point(),maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
         aCenter-=aCenter0;
         aViewInit.Move(aCenter.X(),aCenter.Y());
     }
@@ -291,7 +291,7 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
     /* Chaining-related code */
     rOutl.ClearOverflowingParaNum();
 
-    pEdtOutl = nullptr;
+    mpEdtOutl = nullptr;
     rOutl.Clear();
     EEControlBits nStat = rOutl.GetControlWord();
     nStat &= ~EEControlBits::AUTOPAGESIZE;
@@ -336,26 +336,26 @@ EEAnchorMode SdrTextObj::GetOutlinerViewAnchorMode() const
 
 void SdrTextObj::ImpSetTextEditParams() const
 {
-    if (pEdtOutl==nullptr)
+    if (mpEdtOutl==nullptr)
         return;
 
-    bool bUpdBuf=pEdtOutl->GetUpdateMode();
-    if (bUpdBuf) pEdtOutl->SetUpdateMode(false);
+    bool bUpdBuf=mpEdtOutl->GetUpdateMode();
+    if (bUpdBuf) mpEdtOutl->SetUpdateMode(false);
     Size aPaperMin;
     Size aPaperMax;
     tools::Rectangle aEditArea;
     TakeTextEditArea(&aPaperMin,&aPaperMax,&aEditArea,nullptr);
     bool bContourFrame=IsContourTextFrame();
-    pEdtOutl->SetMinAutoPaperSize(aPaperMin);
-    pEdtOutl->SetMaxAutoPaperSize(aPaperMax);
-    pEdtOutl->SetPaperSize(Size());
-    pEdtOutl->SetTextColumns(GetTextColumnsNumber(), GetTextColumnsSpacing());
+    mpEdtOutl->SetMinAutoPaperSize(aPaperMin);
+    mpEdtOutl->SetMaxAutoPaperSize(aPaperMax);
+    mpEdtOutl->SetPaperSize(Size());
+    mpEdtOutl->SetTextColumns(GetTextColumnsNumber(), GetTextColumnsSpacing());
     if (bContourFrame) {
         tools::Rectangle aAnchorRect;
         TakeTextAnchorRect(aAnchorRect);
-        ImpSetContourPolygon(*pEdtOutl,aAnchorRect, true);
+        ImpSetContourPolygon(*mpEdtOutl,aAnchorRect, true);
     }
-    if (bUpdBuf) pEdtOutl->SetUpdateMode(true);
+    if (bUpdBuf) mpEdtOutl->SetUpdateMode(true);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

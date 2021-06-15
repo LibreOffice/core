@@ -80,8 +80,8 @@ SdrRectObj::SdrRectObj(
     SdrObjKind eNewTextKind)
 :   SdrTextObj(rSdrModel, eNewTextKind)
 {
-    DBG_ASSERT(eTextKind==OBJ_TEXT ||
-               eTextKind==OBJ_OUTLINETEXT || eTextKind==OBJ_TITLETEXT,
+    DBG_ASSERT(meTextKind == OBJ_TEXT ||
+               meTextKind == OBJ_OUTLINETEXT || meTextKind == OBJ_TITLETEXT,
                "SdrRectObj::SdrRectObj(SdrObjKind) can only be applied to text frames.");
     m_bClosedObj=true;
 }
@@ -92,8 +92,8 @@ SdrRectObj::SdrRectObj(
     const tools::Rectangle& rRect)
 :   SdrTextObj(rSdrModel, eNewTextKind, rRect)
 {
-    DBG_ASSERT(eTextKind==OBJ_TEXT ||
-               eTextKind==OBJ_OUTLINETEXT || eTextKind==OBJ_TITLETEXT,
+    DBG_ASSERT(meTextKind == OBJ_TEXT ||
+               meTextKind == OBJ_OUTLINETEXT || meTextKind == OBJ_TITLETEXT,
                "SdrRectObj::SdrRectObj(SdrObjKind,...) can only be applied to text frames.");
     m_bClosedObj=true;
 }
@@ -126,8 +126,8 @@ XPolygon SdrRectObj::ImpCalcXPoly(const tools::Rectangle& rRect1, tools::Long nR
     aXPoly=aNewPoly;
 
     // these angles always relate to the top left corner of aRect
-    if (aGeo.nShearAngle) ShearXPoly(aXPoly,maRect.TopLeft(),aGeo.mfTanShearAngle);
-    if (aGeo.nRotationAngle) RotateXPoly(aXPoly,maRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
+    if (maGeo.nShearAngle) ShearXPoly(aXPoly,maRect.TopLeft(),maGeo.mfTanShearAngle);
+    if (maGeo.nRotationAngle) RotateXPoly(aXPoly,maRect.TopLeft(),maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
     return aXPoly;
 }
 
@@ -149,7 +149,7 @@ const XPolygon& SdrRectObj::GetXPoly() const
 void SdrRectObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
     bool bNoTextFrame=!IsTextFrame();
-    rInfo.bResizeFreeAllowed=bNoTextFrame || ((aGeo.nRotationAngle.get() % 9000) == 0);
+    rInfo.bResizeFreeAllowed=bNoTextFrame || ((maGeo.nRotationAngle.get() % 9000) == 0);
     rInfo.bResizePropAllowed=true;
     rInfo.bRotateFreeAllowed=true;
     rInfo.bRotate90Allowed  =true;
@@ -174,23 +174,24 @@ void SdrRectObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 
 SdrObjKind SdrRectObj::GetObjIdentifier() const
 {
-    if (IsTextFrame()) return eTextKind;
+    if (IsTextFrame())
+        return meTextKind;
     else return OBJ_RECT;
 }
 
 void SdrRectObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
 {
     rRect = maRect;
-    if (aGeo.nShearAngle==0_deg100)
+    if (maGeo.nShearAngle==0_deg100)
         return;
 
-    tools::Long nDst=FRound((maRect.Bottom()-maRect.Top())*aGeo.mfTanShearAngle);
-    if (aGeo.nShearAngle>0_deg100)
+    tools::Long nDst=FRound((maRect.Bottom()-maRect.Top()) * maGeo.mfTanShearAngle);
+    if (maGeo.nShearAngle>0_deg100)
     {
         Point aRef(rRect.TopLeft());
         rRect.AdjustLeft( -nDst );
         Point aTmpPt(rRect.TopLeft());
-        RotatePoint(aTmpPt,aRef,aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
+        RotatePoint(aTmpPt,aRef,maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
         aTmpPt-=rRect.TopLeft();
         rRect.Move(aTmpPt.X(),aTmpPt.Y());
     }
@@ -209,7 +210,7 @@ OUString SdrRectObj::TakeObjNameSingul() const
 
     bool bRounded = GetEckenradius() != 0; // rounded down
     const char* pResId = bRounded ? STR_ObjNameSingulRECTRND : STR_ObjNameSingulRECT;
-    if (aGeo.nShearAngle)
+    if (maGeo.nShearAngle)
     {
         pResId = bRounded ? STR_ObjNameSingulPARALRND : STR_ObjNameSingulPARAL;  // parallelogram or, maybe, rhombus
     }
@@ -235,7 +236,7 @@ OUString SdrRectObj::TakeObjNamePlural() const
 
     bool bRounded = GetEckenradius() != 0; // rounded down
     const char* pResId = bRounded ? STR_ObjNamePluralRECTRND : STR_ObjNamePluralRECT;
-    if (aGeo.nShearAngle)
+    if (maGeo.nShearAngle)
     {
         pResId = bRounded ? STR_ObjNamePluralPARALRND : STR_ObjNamePluralPARAL;  // parallelogram or rhombus
     }
@@ -262,7 +263,7 @@ basegfx::B2DPolyPolygon SdrRectObj::TakeXorPoly() const
 void SdrRectObj::RecalcSnapRect()
 {
     tools::Long nEckRad=GetEckenradius();
-    if ((aGeo.nRotationAngle || aGeo.nShearAngle) && nEckRad!=0) {
+    if ((maGeo.nRotationAngle || maGeo.nShearAngle) && nEckRad!=0) {
         maSnapRect=GetXPoly().GetBoundRect();
     } else {
         SdrTextObj::RecalcSnapRect();
@@ -294,7 +295,7 @@ void SdrRectObj::AddToHdlList(SdrHdlList& rHdlList) const
         OSL_ENSURE(!IsTextEditActive(), "Do not use an ImpTextframeHdl for highlighting text in active text edit, this will collide with EditEngine paints (!)");
         std::unique_ptr<SdrHdl> pH(new ImpTextframeHdl(maRect));
         pH->SetObj(const_cast<SdrRectObj*>(this));
-        pH->SetRotationAngle(aGeo.nRotationAngle);
+        pH->SetRotationAngle(maGeo.nRotationAngle);
         rHdlList.AddHdl(std::move(pH));
     }
 
@@ -326,18 +327,18 @@ void SdrRectObj::AddToHdlList(SdrHdlList& rHdlList) const
             case 9: aPnt=maRect.BottomRight();  eKind = SdrHdlKind::LowerRight; break;
         }
 
-        if(aGeo.nShearAngle)
+        if (maGeo.nShearAngle)
         {
-            ShearPoint(aPnt,maRect.TopLeft(),aGeo.mfTanShearAngle);
+            ShearPoint(aPnt,maRect.TopLeft(),maGeo.mfTanShearAngle);
         }
-        if(aGeo.nRotationAngle)
+        if (maGeo.nRotationAngle)
         {
-            RotatePoint(aPnt,maRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
+            RotatePoint(aPnt,maRect.TopLeft(),maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
         }
 
         std::unique_ptr<SdrHdl> pH(new SdrHdl(aPnt,eKind));
         pH->SetObj(const_cast<SdrRectObj*>(this));
-        pH->SetRotationAngle(aGeo.nRotationAngle);
+        pH->SetRotationAngle(maGeo.nRotationAngle);
         rHdlList.AddHdl(std::move(pH));
     }
 }
@@ -369,8 +370,8 @@ bool SdrRectObj::applySpecialDrag(SdrDragStat& rDrag)
     {
         Point aPt(rDrag.GetNow());
 
-        if(aGeo.nRotationAngle)
-            RotatePoint(aPt,maRect.TopLeft(),-aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
+        if (maGeo.nRotationAngle)
+            RotatePoint(aPt, maRect.TopLeft(), -maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
 
         sal_Int32 nRad(aPt.X() - maRect.Left());
 
@@ -407,8 +408,8 @@ OUString SdrRectObj::getSpecialDragComment(const SdrDragStat& rDrag) const
             Point aPt(rDrag.GetNow());
 
             // -sin for reversal
-            if(aGeo.nRotationAngle)
-                RotatePoint(aPt, maRect.TopLeft(), -aGeo.mfSinRotationAngle, aGeo.mfCosRotationAngle);
+            if (maGeo.nRotationAngle)
+                RotatePoint(aPt, maRect.TopLeft(), -maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
 
             sal_Int32 nRad(aPt.X() - maRect.Left());
 
@@ -493,8 +494,8 @@ SdrGluePoint SdrRectObj::GetVertexGluePoint(sal_uInt16 nPosNum) const
         case 2: aPt=maRect.BottomCenter(); aPt.AdjustY(nWdt ); break;
         case 3: aPt=maRect.LeftCenter();   aPt.AdjustX( -nWdt ); break;
     }
-    if (aGeo.nShearAngle) ShearPoint(aPt,maRect.TopLeft(),aGeo.mfTanShearAngle);
-    if (aGeo.nRotationAngle) RotatePoint(aPt,maRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
+    if (maGeo.nShearAngle) ShearPoint(aPt, maRect.TopLeft(), maGeo.mfTanShearAngle);
+    if (maGeo.nRotationAngle) RotatePoint(aPt, maRect.TopLeft(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
     aPt-=GetSnapRect().Center();
     SdrGluePoint aGP(aPt);
     aGP.SetPercent(false);
@@ -519,8 +520,8 @@ SdrGluePoint SdrRectObj::GetCornerGluePoint(sal_uInt16 nPosNum) const
         case 2: aPt=maRect.BottomRight(); aPt.AdjustX(nWdt ); aPt.AdjustY(nWdt ); break;
         case 3: aPt=maRect.BottomLeft();  aPt.AdjustX( -nWdt ); aPt.AdjustY(nWdt ); break;
     }
-    if (aGeo.nShearAngle) ShearPoint(aPt,maRect.TopLeft(),aGeo.mfTanShearAngle);
-    if (aGeo.nRotationAngle) RotatePoint(aPt,maRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
+    if (maGeo.nShearAngle) ShearPoint(aPt,maRect.TopLeft(),maGeo.mfTanShearAngle);
+    if (maGeo.nRotationAngle) RotatePoint(aPt,maRect.TopLeft(),maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
     aPt-=GetSnapRect().Center();
     SdrGluePoint aGP(aPt);
     aGP.SetPercent(false);

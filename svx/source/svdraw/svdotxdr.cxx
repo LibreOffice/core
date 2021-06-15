@@ -54,11 +54,11 @@ void SdrTextObj::AddToHdlList(SdrHdlList& rHdlList) const
             case 6: aPnt=maRect.BottomCenter(); eKind=SdrHdlKind::Lower; break;
             case 7: aPnt=maRect.BottomRight();  eKind=SdrHdlKind::LowerRight; break;
         }
-        if (aGeo.nShearAngle) ShearPoint(aPnt,maRect.TopLeft(),aGeo.mfTanShearAngle);
-        if (aGeo.nRotationAngle) RotatePoint(aPnt,maRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
+        if (maGeo.nShearAngle) ShearPoint(aPnt,maRect.TopLeft(),maGeo.mfTanShearAngle);
+        if (maGeo.nRotationAngle) RotatePoint(aPnt,maRect.TopLeft(),maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
         std::unique_ptr<SdrHdl> pH(new SdrHdl(aPnt,eKind));
         pH->SetObj(const_cast<SdrTextObj*>(this));
-        pH->SetRotationAngle(aGeo.nRotationAngle);
+        pH->SetRotationAngle(maGeo.nRotationAngle);
         rHdlList.AddHdl(std::move(pH));
     }
 }
@@ -79,9 +79,9 @@ tools::Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
     bool bBigOrtho=bEcke && bOrtho && rDrag.GetView()->IsBigOrtho();
     Point aPos(rDrag.GetNow());
     // Unrotate:
-    if (aGeo.nRotationAngle) RotatePoint(aPos,aTmpRect.TopLeft(),-aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
+    if (maGeo.nRotationAngle) RotatePoint(aPos,aTmpRect.TopLeft(),-maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
     // Unshear:
-    if (aGeo.nShearAngle) ShearPoint(aPos,aTmpRect.TopLeft(),-aGeo.mfTanShearAngle);
+    if (maGeo.nShearAngle) ShearPoint(aPos,aTmpRect.TopLeft(),-maGeo.mfTanShearAngle);
 
     bool bLft=(eHdl==SdrHdlKind::UpperLeft || eHdl==SdrHdlKind::Left  || eHdl==SdrHdlKind::LowerLeft);
     bool bRgt=(eHdl==SdrHdlKind::UpperRight || eHdl==SdrHdlKind::Right || eHdl==SdrHdlKind::LowerRight);
@@ -150,15 +150,15 @@ bool SdrTextObj::applySpecialDrag(SdrDragStat& rDrag)
 {
     tools::Rectangle aNewRect(ImpDragCalcRect(rDrag));
 
-    if(aNewRect.TopLeft() != maRect.TopLeft() && (aGeo.nRotationAngle || aGeo.nShearAngle))
+    if(aNewRect.TopLeft() != maRect.TopLeft() && (maGeo.nRotationAngle || maGeo.nShearAngle))
     {
         Point aNewPos(aNewRect.TopLeft());
 
-        if(aGeo.nShearAngle)
-            ShearPoint(aNewPos,maRect.TopLeft(),aGeo.mfTanShearAngle);
+        if (maGeo.nShearAngle)
+            ShearPoint(aNewPos,maRect.TopLeft(),maGeo.mfTanShearAngle);
 
-        if(aGeo.nRotationAngle)
-            RotatePoint(aNewPos,maRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
+        if (maGeo.nRotationAngle)
+            RotatePoint(aNewPos,maRect.TopLeft(),maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
 
         aNewRect.SetPos(aNewPos);
     }

@@ -34,14 +34,14 @@ namespace sdr::properties
         void CustomShapeProperties::UpdateTextFrameStatus(bool bInvalidateRenderGeometry)
         {
             SdrObjCustomShape& rObj = static_cast< SdrObjCustomShape& >(GetSdrObject());
-            const bool bOld(rObj.bTextFrame);
+            const bool bOld(rObj.mbTextFrame);
 
             // change TextFrame flag when bResizeShapeToFitText changes (which is mapped
             // on the item SDRATTR_TEXT_AUTOGROWHEIGHT for custom shapes, argh)
-            rObj.bTextFrame = GetObjectItemSet().Get(SDRATTR_TEXT_AUTOGROWHEIGHT).GetValue();
+            rObj.mbTextFrame = GetObjectItemSet().Get(SDRATTR_TEXT_AUTOGROWHEIGHT).GetValue();
 
             // check if it did change
-            if(rObj.bTextFrame != bOld)
+            if(rObj.mbTextFrame != bOld)
             {
                 // on change also invalidate render geometry
                 bInvalidateRenderGeometry = true;

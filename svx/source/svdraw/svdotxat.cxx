@@ -41,7 +41,7 @@ const char PADDING_CHARACTER_FOR_STYLE_FAMILY = ' ';
 
 bool SdrTextObj::AdjustTextFrameWidthAndHeight( tools::Rectangle& rR, bool bHgt, bool bWdt ) const
 {
-    if (!bTextFrame)
+    if (!mbTextFrame)
         // Not a text frame.  Bail out.
         return false;
 
@@ -123,19 +123,19 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight( tools::Rectangle& rR, bool bHgt,
             aNewSize.setHeight( 0x0FFFFFFF );
     }
 
-    if (pEdtOutl)
+    if (mpEdtOutl)
     {
-        pEdtOutl->SetMaxAutoPaperSize(aNewSize);
+        mpEdtOutl->SetMaxAutoPaperSize(aNewSize);
         if (bWdtGrow)
         {
-            Size aSiz2(pEdtOutl->CalcTextSize());
+            Size aSiz2(mpEdtOutl->CalcTextSize());
             nWdt = aSiz2.Width() + 1; // a little tolerance
             if (bHgtGrow)
                 nHgt = aSiz2.Height() + 1; // a little tolerance
         }
         else
         {
-            nHgt = pEdtOutl->GetTextHeight() + 1; // a little tolerance
+            nHgt = mpEdtOutl->GetTextHeight() + 1; // a little tolerance
         }
     }
     else
@@ -222,13 +222,13 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight( tools::Rectangle& rR, bool bHgt,
         }
     }
 
-    if (aGeo.nRotationAngle)
+    if (maGeo.nRotationAngle)
     {
         // Object is rotated.
         Point aD1(rR.TopLeft());
         aD1 -= aOldRect.TopLeft();
         Point aD2(aD1);
-        RotatePoint(aD2, Point(), aGeo.mfSinRotationAngle, aGeo.mfCosRotationAngle);
+        RotatePoint(aD2, Point(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
         aD2 -= aD1;
         rR.Move(aD2.X(), aD2.Y());
     }
@@ -387,8 +387,8 @@ void SdrTextObj::RemoveOutlinerCharacterAttribs( const std::vector<sal_uInt16>& 
         {
             Outliner* pOutliner = nullptr;
 
-            if( pEdtOutl || (pText == getActiveText()) )
-                pOutliner = pEdtOutl;
+            if( mpEdtOutl || (pText == getActiveText()) )
+                pOutliner = mpEdtOutl;
 
             if(!pOutliner)
             {
@@ -402,7 +402,7 @@ void SdrTextObj::RemoveOutlinerCharacterAttribs( const std::vector<sal_uInt16>& 
                 pOutliner->RemoveAttribs( aSelAll, false, rWhichId );
             }
 
-            if(!pEdtOutl || (pText != getActiveText()) )
+            if(!mpEdtOutl || (pText != getActiveText()) )
             {
                 const sal_Int32 nParaCount = pOutliner->GetParagraphCount();
                 std::unique_ptr<OutlinerParaObject> pTemp = pOutliner->CreateParaObject(0, nParaCount);
@@ -415,8 +415,8 @@ void SdrTextObj::RemoveOutlinerCharacterAttribs( const std::vector<sal_uInt16>& 
 
 bool SdrTextObj::HasText() const
 {
-    if( pEdtOutl )
-        return HasTextImpl(pEdtOutl);
+    if (mpEdtOutl)
+        return HasTextImpl(mpEdtOutl);
 
     OutlinerParaObject* pOPO = GetOutlinerParaObject();
 
