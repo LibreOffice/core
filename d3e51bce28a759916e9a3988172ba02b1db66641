@@ -22,6 +22,30 @@
       "revId": "d3e51bce28a759916e9a3988172ba02b1db66641",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e400c15_f9b1ffbd",
+        "filename": "svx/source/svdraw/svdedxv.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2648,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-15T06:39:17Z",
+      "side": 1,
+      "message": "Yes, that\u0027s what I think too, but it had two prior to \u003chttps://git.libreoffice.org/core/+/8aaa28ed43978a9a4a20d62368410a57ec05c23f%5E!/\u003e \"Assert on valid order of which ids in ranges on SfxItemSet creation\", so that\u0027s what I reverted to here (just to be on the safe side).",
+      "parentUuid": "c662db70_922a7e3a",
+      "range": {
+        "startLine": 2648,
+        "startChar": 40,
+        "endLine": 2648,
+        "endChar": 41
+      },
+      "revId": "d3e51bce28a759916e9a3988172ba02b1db66641",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
