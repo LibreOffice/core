@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "12e4883a_be0f3b12",
+        "filename": "sw/source/uibase/app/docst.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1343,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-06-15T13:13:30Z",
+      "side": 1,
+      "message": "it looks like in GetTableAutoFormat there\u0027s some if to check for the table selection and to use only the selected cells but use the whole table if no table selection ... a table selection for the entire table has the same problem.\n\nand oddly enough this *does* update the table style when i try it - just it doesn\u0027t immediately apply it to other table in the document, that works only with the full table selected via no-table-selection.\n\nwhen using \"Create New Style From Selection\", it works to have a table selection of part of the table...\n\nmaybe try to debug the ChgTableStyle function, if you can find out why one case will update the other table and the other doesn\u0027t? because i find that really mysterious",
+      "revId": "0927210a8a8bfe661403973b78990f0393cf4fd3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
