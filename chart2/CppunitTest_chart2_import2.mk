@@ -9,7 +9,6 @@
 #
 #*************************************************************************
 
-# empty second argument (i.e. no 1)
-$(eval $(call chart2_import_test,))
+$(eval $(call chart2_import_test,2))
 
 # vim: set noet sw=4 ts=4:
