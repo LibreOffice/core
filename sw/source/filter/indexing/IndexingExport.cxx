@@ -10,7 +10,9 @@
 
 #include <IndexingExport.hxx>
 
+#include <node.hxx>
 #include <ndtxt.hxx>
+#include <ndgrf.hxx>
 
 namespace sw
 {
@@ -29,10 +31,27 @@ public:
 
     void handleNode(SwNode* pNode) override
     {
-        if (!pNode->IsTextNode())
-            return;
+        if (pNode->IsGrfNode())
+        {
+            handleGraphicNode(pNode->GetGrfNode());
+        }
+        else if (pNode->IsTextNode())
+        {
+            handleTextNode(pNode->GetTextNode());
+        }
+    }
 
-        SwTextNode* pTextNode = pNode->GetTextNode();
+    void handleGraphicNode(SwGrfNode* pGraphicNode)
+    {
+        auto pFrameFormat = pGraphicNode->GetFlyFormat();
+        m_rXmlWriter.startElement("graphic");
+        m_rXmlWriter.attribute("alt", pGraphicNode->GetTitle());
+        m_rXmlWriter.attribute("name", pFrameFormat->GetName());
+        m_rXmlWriter.endElement();
+    }
+
+    void handleTextNode(SwTextNode* pTextNode)
+    {
         const OUString& rString
             = pTextNode->GetText().replaceAll(OUStringChar(CH_TXTATR_BREAKWORD), "");
         m_rXmlWriter.startElement("paragraph");
