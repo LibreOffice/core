@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkBox" id="AreaTabPage">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
-    <property name="border_width">6</property>
+    <property name="border-width">6</property>
     <property name="spacing">6</property>
     <child>
       <object class="GtkBox" id="box1">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
         <property name="orientation">vertical</property>
@@ -20,14 +20,14 @@
         <child>
           <object class="GtkButtonBox" id="buttonbox1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_top">3</property>
+            <property name="can-focus">False</property>
+            <property name="margin-top">3</property>
             <property name="hexpand">True</property>
             <property name="spacing">12</property>
-            <property name="layout_style">center</property>
+            <property name="layout-style">center</property>
             <child>
               <object class="GtkComboBoxText" id="tablelb">
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="active">0</property>
                 <items>
                   <item id="cellid" translatable="yes" context="areatabpage|tablelb">Cell</item>
@@ -50,8 +50,8 @@
               <object class="GtkToggleButton" id="btnnone">
                 <property name="label" translatable="yes" context="areatabpage|btnnone">None</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="btnnone-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="areatabpage|extended_tip|btnnone">Do not fill the selected object.</property>
@@ -68,8 +68,8 @@
               <object class="GtkToggleButton" id="btncolor">
                 <property name="label" translatable="yes" context="areatabpage|btncolor">Color</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="btncolor-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="areatabpage|extended_tip|btncolor">Fills the object with a color selected on this page.</property>
@@ -86,8 +86,8 @@
               <object class="GtkToggleButton" id="btngradient">
                 <property name="label" translatable="yes" context="areatabpage|btngradient">Gradient</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="btngradient-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="areatabpage|extended_tip|btngradient">Fills the object with a gradient selected on this page.</property>
@@ -104,8 +104,8 @@
               <object class="GtkToggleButton" id="btnbitmap">
                 <property name="label" translatable="yes" context="areatabpage|btnbitmap">Bitmap</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="btnbitmap-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="areatabpage|extended_tip|btnbitmap">Fills the object with a bitmap image selected on this page.</property>
@@ -122,8 +122,8 @@
               <object class="GtkToggleButton" id="btnpattern">
                 <property name="label" translatable="yes" context="areatabpage|btnpattern">Pattern</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="btnpattern-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="areatabpage|extended_tip|btnpattern">Fills the object with a dot pattern selected on this page.</property>
@@ -140,8 +140,8 @@
               <object class="GtkToggleButton" id="btnhatch">
                 <property name="label" translatable="yes" context="areatabpage|btnhatch">Hatch</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="btnhatch-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="areatabpage|extended_tip|btnhatch">Fills the object with a hatching pattern selected on this page.</property>
@@ -164,7 +164,7 @@
         <child>
           <object class="GtkSeparator" id="separator1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -175,7 +175,7 @@
         <child>
           <object class="GtkBox" id="fillstylebox">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <property name="orientation">vertical</property>
