@@ -308,25 +308,27 @@ struct ConvertResult
 {
     bool m_bChildCanFocus;
     bool m_bHasVisible;
-    bool m_bHasSymbolicIconName;
+    bool m_bHasIconSize;
     bool m_bAlwaysShowImage;
     bool m_bImageAtTop;
     bool m_bUseUnderline;
     bool m_bVertOrientation;
     css::uno::Reference<css::xml::dom::XNode> m_xPropertyLabel;
+    css::uno::Reference<css::xml::dom::XNode> m_xPropertyIconName;
 
-    ConvertResult(bool bChildCanFocus, bool bHasVisible, bool bHasSymbolicIconName,
-                  bool bAlwaysShowImage, bool bImageAtTop, bool bUseUnderline,
-                  bool bVertOrientation,
-                  const css::uno::Reference<css::xml::dom::XNode>& rPropertyLabel)
+    ConvertResult(bool bChildCanFocus, bool bHasVisible, bool bHasIconSize, bool bAlwaysShowImage,
+                  bool bImageAtTop, bool bUseUnderline, bool bVertOrientation,
+                  const css::uno::Reference<css::xml::dom::XNode>& rPropertyLabel,
+                  const css::uno::Reference<css::xml::dom::XNode>& rPropertyIconName)
         : m_bChildCanFocus(bChildCanFocus)
         , m_bHasVisible(bHasVisible)
-        , m_bHasSymbolicIconName(bHasSymbolicIconName)
+        , m_bHasIconSize(bHasIconSize)
         , m_bAlwaysShowImage(bAlwaysShowImage)
         , m_bImageAtTop(bImageAtTop)
         , m_bUseUnderline(bUseUnderline)
         , m_bVertOrientation(bVertOrientation)
         , m_xPropertyLabel(rPropertyLabel)
+        , m_xPropertyIconName(rPropertyIconName)
     {
     }
 };
@@ -341,19 +343,20 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
 {
     css::uno::Reference<css::xml::dom::XNodeList> xNodeList = xNode->getChildNodes();
     if (!xNodeList.is())
-        return ConvertResult(false, false, false, false, false, false, false, nullptr);
+        return ConvertResult(false, false, false, false, false, false, false, nullptr, nullptr);
 
     std::vector<css::uno::Reference<css::xml::dom::XNode>> xRemoveList;
 
     OUString sBorderWidth;
     bool bChildCanFocus = false;
     bool bHasVisible = false;
-    bool bHasSymbolicIconName = false;
+    bool bHasIconSize = false;
     bool bAlwaysShowImage = false;
     bool bImageAtTop = false;
     bool bUseUnderline = false;
     bool bVertOrientation = false;
     css::uno::Reference<css::xml::dom::XNode> xPropertyLabel;
+    css::uno::Reference<css::xml::dom::XNode> xPropertyIconName;
     css::uno::Reference<css::xml::dom::XNode> xCantFocus;
 
     css::uno::Reference<css::xml::dom::XNode> xChild = xNode->getFirstChild();
@@ -433,22 +436,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 bHasVisible = true;
 
             if (sName == "icon-name")
-            {
-                OUString sIconName(xChild->getFirstChild()->getNodeValue());
-                bHasSymbolicIconName = IsAllowedBuiltInIcon(sIconName);
-                if (!bHasSymbolicIconName)
-                {
-                    auto xDoc = xChild->getOwnerDocument();
-                    // private:graphicrepository/ would be turned by gio (?) into private:///graphicrepository/
-                    // so use private:///graphicrepository/ here. At the moment we just want this to be transported
-                    // as-is to postprocess_widget. Though it might be nice to register a protocol handler with gio
-                    // to avoid us doing the load in that second pass.
-                    auto xUri
-                        = CreateProperty(xDoc, "file", "private:///graphicrepository/" + sIconName);
-                    xChild->getParentNode()->insertBefore(xUri, xChild);
-                    xRemoveList.push_back(xChild);
-                }
-            }
+                xPropertyIconName = xChild;
 
             if (sName == "events")
                 xRemoveList.push_back(xChild);
@@ -493,6 +481,8 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             {
                 if (GetParentObjectType(xChild) == "GtkImage")
                 {
+                    bHasIconSize = true;
+
                     OUString sSize = xChild->getFirstChild()->getNodeValue();
                     /*
                       old:
@@ -514,8 +504,6 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                                                 << xChild->getFirstChild()->getNodeValue());
                     xRemoveList.push_back(xChild);
                 }
-                else if (GetParentObjectType(xChild) == "GtkPicture")
-                    xRemoveList.push_back(xChild);
             }
 
             if (sName == "truncate-multiline")
@@ -929,13 +917,14 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             }
         }
 
-        bool bChildHasSymbolicIconName = false;
+        bool bChildHasIconSize = false;
         bool bChildHasVisible = false;
         bool bChildAlwaysShowImage = false;
         bool bChildImageAtTop = false;
         bool bChildUseUnderline = false;
         bool bChildVertOrientation = false;
         css::uno::Reference<css::xml::dom::XNode> xChildPropertyLabel;
+        css::uno::Reference<css::xml::dom::XNode> xChildPropertyIconName;
         if (xChild->hasChildNodes())
         {
             auto aChildRes = Convert3To4(xChild);
@@ -948,12 +937,13 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             if (xChild->getNodeName() == "object")
             {
                 bChildHasVisible = aChildRes.m_bHasVisible;
-                bChildHasSymbolicIconName = aChildRes.m_bHasSymbolicIconName;
+                bChildHasIconSize = aChildRes.m_bHasIconSize;
                 bChildAlwaysShowImage = aChildRes.m_bAlwaysShowImage;
                 bChildImageAtTop = aChildRes.m_bImageAtTop;
                 bChildUseUnderline = aChildRes.m_bUseUnderline;
                 bChildVertOrientation = aChildRes.m_bVertOrientation;
                 xChildPropertyLabel = aChildRes.m_xPropertyLabel;
+                xChildPropertyIconName = aChildRes.m_xPropertyIconName;
             }
         }
 
@@ -1198,9 +1188,39 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             {
                 xClass->setNodeValue("GtkCheckButton");
             }
-            else if (sClass == "GtkImage" && !bChildHasSymbolicIconName)
+            else if (sClass == "GtkImage")
             {
-                xClass->setNodeValue("GtkPicture");
+                /* a) keep symbolic icon-names as GtkImage, e.g. writer, format, columns, next/prev
+                      buttons
+                   b) assume that an explicit icon-size represents a request for a scaled icon
+                      so keep those as GtkImage. e.g. hyperlink dialog notebook tab images and
+                      calc paste special button images
+                   c) turn everything else into a GtkPicture, e.g. help, about. If a GtkPicture
+                      ends up used to display just a simple icon that's generally not a problem.
+                */
+                bool bKeepAsImage = false;
+                if (bChildHasIconSize)
+                    bKeepAsImage = true;
+                else if (xChildPropertyIconName.is())
+                {
+                    OUString sIconName(xChildPropertyIconName->getFirstChild()->getNodeValue());
+                    bool bHasSymbolicIconName = IsAllowedBuiltInIcon(sIconName);
+                    if (bHasSymbolicIconName)
+                        bKeepAsImage = true;
+                    else
+                    {
+                        // private:graphicrepository/ would be turned by gio (?) into private:///graphicrepository/
+                        // so use private:///graphicrepository/ here. At the moment we just want this to be transported
+                        // as-is to postprocess_widget. Though it might be nice to register a protocol handler with gio
+                        // to avoid us doing the load in that second pass.
+                        auto xUri = CreateProperty(xDoc, "file",
+                                                   "private:///graphicrepository/" + sIconName);
+                        xChild->insertBefore(xUri, xChildPropertyIconName);
+                        xChild->removeChild(xChildPropertyIconName);
+                    }
+                }
+                if (!bKeepAsImage)
+                    xClass->setNodeValue("GtkPicture");
             }
             else if (sClass == "GtkPopover" && !bHasVisible)
             {
@@ -1279,8 +1299,8 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
     for (auto& xRemove : xRemoveList)
         xNode->removeChild(xRemove);
 
-    return ConvertResult(bChildCanFocus, bHasVisible, bHasSymbolicIconName, bAlwaysShowImage,
-                         bImageAtTop, bUseUnderline, bVertOrientation, xPropertyLabel);
+    return ConvertResult(bChildCanFocus, bHasVisible, bHasIconSize, bAlwaysShowImage, bImageAtTop,
+                         bUseUnderline, bVertOrientation, xPropertyLabel, xPropertyIconName);
 }
 }
 
