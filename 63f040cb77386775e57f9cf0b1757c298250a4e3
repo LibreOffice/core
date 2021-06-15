@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "149fd553_eafd5f2d",
+        "filename": "oox/source/drawingml/textcharacterpropertiescontext.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-06-15T07:28:47Z",
+      "side": 1,
+      "message": "Style: please always break the opening curly braces to the start of a next line.",
+      "revId": "63f040cb77386775e57f9cf0b1757c298250a4e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
