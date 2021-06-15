@@ -92,6 +92,7 @@ public:
 
     void SetCurItemId();
 
+    void DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
