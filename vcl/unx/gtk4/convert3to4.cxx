@@ -359,6 +359,8 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
     css::uno::Reference<css::xml::dom::XNode> xPropertyIconName;
     css::uno::Reference<css::xml::dom::XNode> xCantFocus;
 
+    css::uno::Reference<css::xml::dom::XElement> xGeneratedImageChild;
+
     css::uno::Reference<css::xml::dom::XNode> xChild = xNode->getFirstChild();
     while (xChild.is())
     {
@@ -684,11 +686,10 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                             || GetParentObjectType(xChild) == "GtkToggleButton")
                         {
                             // relocate it to be a child of this GtkButton
-                            css::uno::Reference<css::xml::dom::XElement> xImageChild
-                                = xDoc->createElement("child");
-                            xImageChild->appendChild(
+                            xGeneratedImageChild = xDoc->createElement("child");
+                            xGeneratedImageChild->appendChild(
                                 xImageNode->getParentNode()->removeChild(xImageNode));
-                            xObjectCandidate->appendChild(xImageChild);
+                            xObjectCandidate->appendChild(xGeneratedImageChild);
                         }
                         else if (GetParentObjectType(xChild) == "GtkMenuButton")
                         {
@@ -925,7 +926,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
         bool bChildVertOrientation = false;
         css::uno::Reference<css::xml::dom::XNode> xChildPropertyLabel;
         css::uno::Reference<css::xml::dom::XNode> xChildPropertyIconName;
-        if (xChild->hasChildNodes())
+        if (xChild->hasChildNodes() && xChild != xGeneratedImageChild)
         {
             auto aChildRes = Convert3To4(xChild);
             bChildCanFocus |= aChildRes.m_bChildCanFocus;
