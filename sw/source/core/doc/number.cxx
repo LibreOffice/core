@@ -916,10 +916,15 @@ SvxNumRule SwNumRule::MakeSvxNumRule() const
                      meRuleType == NUM_RULE ? SvxNumRuleType::NUMBERING : SvxNumRuleType::OUTLINE_NUMBERING );
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
     {
-        SwNumFormat aNumFormat = Get(n);
-        if(aNumFormat.GetCharFormat())
-            aNumFormat.SetCharFormatName(aNumFormat.GetCharFormat()->GetName());
-        aRule.SetLevel(n, aNumFormat, maFormats[n] != nullptr);
+        const SwNumFormat & rNumFormat = Get(n);
+        if(rNumFormat.GetCharFormat())
+        {
+            SwNumFormat aNewFormat = rNumFormat;
+            aNewFormat.SetCharFormatName(rNumFormat.GetCharFormat()->GetName());
+            aRule.SetLevel(n, aNewFormat, maFormats[n] != nullptr);
+        }
+        else
+            aRule.SetLevel(n, rNumFormat, maFormats[n] != nullptr);
     }
     return aRule;
 }
