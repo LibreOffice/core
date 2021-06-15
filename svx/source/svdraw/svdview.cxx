@@ -895,7 +895,7 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
         case SdrEventKind::BeginDragHelpline: bRet = BegDragHelpLine(rVEvt.mnHlplIdx,rVEvt.mpPV); break;
         case SdrEventKind::BeginDragObj: bRet=BegDragObj(aLogicPos, nullptr, rVEvt.mpHdl, mnMinMovLog); break;
         case SdrEventKind::BeginCreateObj: {
-            if (nCurrentInvent==SdrInventor::Default && nCurrentIdent==OBJ_CAPTION) {
+            if (mnCurrentInvent==SdrInventor::Default && mnCurrentIdent==OBJ_CAPTION) {
                 tools::Long nHgt=SdrEngineDefaults::GetFontHeight();
                 bRet=BegCreateCaptionObj(aLogicPos,Size(5*nHgt,2*nHgt));
             } else bRet=BegCreateObj(aLogicPos);
@@ -947,7 +947,7 @@ PointerStyle SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDe
     // Actions
     if (IsCreateObj())
     {
-        return pCurrentCreate->GetCreatePointer();
+        return mpCurrentCreate->GetCreatePointer();
     }
     if (mpCurrentSdrDragMethod)
     {
@@ -998,7 +998,7 @@ PointerStyle SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDe
     switch (eEvent)
     {
         case SdrEventKind::BeginCreateObj:
-            return aCurrentCreatePointer;
+            return maCurrentCreatePointer;
         case SdrEventKind::MarkObj:
             return PointerStyle::Move;
         case SdrEventKind::BeginMark:
@@ -1150,7 +1150,7 @@ PointerStyle SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDe
             return PointerStyle::Move;
         }
     }
-    if (meEditMode==SdrViewEditMode::Create) return aCurrentCreatePointer;
+    if (meEditMode==SdrViewEditMode::Create) return maCurrentCreatePointer;
     return PointerStyle::Arrow;
 }
 
@@ -1160,13 +1160,13 @@ OUString SdrView::GetStatusText()
     OUString aName;
     OUString aStr = STR_NOTHING;
 
-    if (pCurrentCreate!=nullptr)
+    if (mpCurrentCreate!=nullptr)
     {
-        aStr=pCurrentCreate->getSpecialDragComment(maDragStat);
+        aStr=mpCurrentCreate->getSpecialDragComment(maDragStat);
 
         if(aStr.isEmpty())
         {
-            aName = pCurrentCreate->TakeObjNameSingul();
+            aName = mpCurrentCreate->TakeObjNameSingul();
             aStr = SvxResId(STR_ViewCreateObj);
         }
     }
