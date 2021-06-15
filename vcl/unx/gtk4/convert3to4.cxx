@@ -493,17 +493,26 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             {
                 if (GetParentObjectType(xChild) == "GtkImage")
                 {
-                    if (xChild->getFirstChild()->getNodeValue() == "6")
+                    OUString sSize = xChild->getFirstChild()->getNodeValue();
+                    /*
+                      old:
+                       3 -> GTK_ICON_SIZE_LARGE_TOOLBAR: Size appropriate for large toolbars (24px)
+                       5 -> GTK_ICON_SIZE_DND: Size appropriate for drag and drop (32px)
+                       6 -> GTK_ICON_SIZE_DIALOG: Size appropriate for dialogs (48px)
+
+                      new:
+                       2 -> GTK_ICON_SIZE_LARGE
+                    */
+                    if (sSize == "3" || sSize == "5" || sSize == "6")
                     {
                         auto xDoc = xChild->getOwnerDocument();
-                        // convert old GTK_ICON_SIZE_DIALOG to new GTK_ICON_SIZE_LARGE
                         auto xIconSize = CreateProperty(xDoc, "icon-size", "2");
                         xChild->getParentNode()->insertBefore(xIconSize, xChild);
-                        xRemoveList.push_back(xChild);
                     }
                     else
                         SAL_WARN("vcl.gtk", "what should we do with an icon-size of: "
                                                 << xChild->getFirstChild()->getNodeValue());
+                    xRemoveList.push_back(xChild);
                 }
                 else if (GetParentObjectType(xChild) == "GtkPicture")
                     xRemoveList.push_back(xChild);
