@@ -17,14 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVDSOB_HXX
-#define INCLUDED_SVX_SVDSOB_HXX
+#pragma once
 
 #include <com/sun/star/uno/Any.hxx>
 
 #include <svx/svxdllapi.h>
 #include <svx/svdtypes.hxx>
-
 
 /*
  Stores a bitfield of the layer values that have been set.
@@ -86,7 +84,5 @@ public:
     void PutValue(const css::uno::Any & rAny);
 
 };
-
-#endif // INCLUDED_SVX_SVDSOB_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

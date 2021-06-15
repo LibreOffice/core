@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVDOPATH_HXX
-#define INCLUDED_SVX_SVDOPATH_HXX
+#pragma once
 
 #include <svx/svdotext.hxx>
 #include <svx/svxdllapi.h>
@@ -171,7 +170,5 @@ public:
      */
     void SetHandleScale(bool bHandleScale);
 };
-
-#endif // INCLUDED_SVX_SVDOPATH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

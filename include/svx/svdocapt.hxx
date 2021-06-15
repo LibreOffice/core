@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVDOCAPT_HXX
-#define INCLUDED_SVX_SVDOCAPT_HXX
+#pragma once
 
 #include <svx/svdorect.hxx>
 #include <svx/svxdllapi.h>
@@ -151,8 +150,5 @@ public:
     // geometry access
     ::basegfx::B2DPolygon getTailPolygon() const;
 };
-
-
-#endif //_SVDOCAPT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
