@@ -1300,6 +1300,16 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
     for (auto& xRemove : xRemoveList)
         xNode->removeChild(xRemove);
 
+    // https://gitlab.gnome.org/GNOME/gtk/-/issues/4041 double encode ampersands if use-underline is used
+    if (xPropertyLabel && bUseUnderline)
+    {
+        OString sText = xPropertyLabel->getFirstChild()->getNodeValue().toUtf8();
+        gchar* pText = g_markup_escape_text(sText.getStr(), sText.getLength());
+        xPropertyLabel->getFirstChild()->setNodeValue(
+            OUString(pText, strlen(pText), RTL_TEXTENCODING_UTF8));
+        g_free(pText);
+    }
+
     return ConvertResult(bChildCanFocus, bHasVisible, bHasIconSize, bAlwaysShowImage, bImageAtTop,
                          bUseUnderline, bVertOrientation, xPropertyLabel, xPropertyIconName);
 }
