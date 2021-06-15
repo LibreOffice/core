@@ -124,6 +124,24 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
                 }
             }
         }
+        else if (sControlType == "menubutton")
+        {
+            auto pButton = dynamic_cast<weld::MenuButton*>(pWidget);
+            if (pButton)
+            {
+                if (sAction == "toggle")
+                {
+                    if (pButton->get_active())
+                        pButton->set_active(false);
+                    else
+                        pButton->set_active(true);
+
+                    LOKTrigger::trigger_toggled(*static_cast<weld::ToggleButton*>(pButton));
+
+                    return true;
+                }
+            }
+        }
         else if (sControlType == "checkbox")
         {
             auto pCheckButton = dynamic_cast<weld::CheckButton*>(pWidget);

@@ -28,6 +28,7 @@
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 #include <menutogglebutton.hxx>
+#include <tools/json_writer.hxx>
 
 namespace
 {
@@ -262,6 +263,23 @@ FactoryFunction MenuButton::GetUITestFactory() const
 void MenuButton::SetCurItemId(){
     mnCurItemId = mpMenu->GetCurItemId();
     msCurItemIdent = mpMenu->GetCurItemIdent();
+}
+
+void MenuButton::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
+{
+    Button::DumpAsPropertyTree(rJsonWriter);
+    if (mpFloatingWindow)
+    {
+        auto aPopup = rJsonWriter.startNode("popup");
+        if (InPopupMode())
+            mpFloatingWindow->DumpAsPropertyTree(rJsonWriter);
+        else
+            rJsonWriter.put("action", "close");
+
+        VclPtr<vcl::Window> pParentWithNotifier = mpFloatingWindow->GetParentWithLOKNotifier();
+        if (pParentWithNotifier)
+            rJsonWriter.put("id", pParentWithNotifier->GetLOKWindowId());
+    }
 }
 
 //class MenuToggleButton ----------------------------------------------------
