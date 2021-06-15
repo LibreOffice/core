@@ -93,8 +93,8 @@ private:
     // // the code without linking to the lib and without adding HAVE_FEATURE_BREAKPAD
     // // everywhere we want to log something to the crash report system.
     inline static void addKeyValue(SAL_UNUSED_PARAMETER const OUString& /*rKey*/, SAL_UNUSED_PARAMETER const OUString& /*rValue*/, SAL_UNUSED_PARAMETER tAddKeyHandling /*AddKeyHandling*/) {};
-    static void setActiveApp(const OUString& /*rActiveApp*/);
-    static OUString currentActiveApp();
+    inline static void setActiveApp(const OUString& /*rActiveApp*/){};
+    inline static OUString currentActiveApp(){};
 #endif // HAVE_FEATURE_BREAKPAD
 };
 
