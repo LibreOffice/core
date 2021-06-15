@@ -120,6 +120,26 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
                 }
             }
         }
+        else if (sControlType == "menubutton")
+        {
+            auto pButton = dynamic_cast<weld::MenuButton*>(pWidget);
+            if (pButton)
+            {
+                if (sAction == "toggle")
+                {
+                    if (pButton->get_active())
+                        pButton->set_active(false);
+                    else
+                        pButton->set_active(true);
+
+                    BaseJSWidget* pMenuButton = dynamic_cast<BaseJSWidget*>(pButton);
+                    if (pMenuButton)
+                        pMenuButton->sendUpdate(true);
+
+                    return true;
+                }
+            }
+        }
         else if (sControlType == "checkbox")
         {
             auto pCheckButton = dynamic_cast<weld::CheckButton*>(pWidget);
