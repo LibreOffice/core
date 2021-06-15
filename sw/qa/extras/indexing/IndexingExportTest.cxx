@@ -28,10 +28,12 @@ private:
 public:
     void testIndexingExport_Paragraphs();
     void testIndexingExport_Images();
+    void testIndexingExport_OLE();
 
     CPPUNIT_TEST_SUITE(IndexingExportTest);
     CPPUNIT_TEST(testIndexingExport_Paragraphs);
     CPPUNIT_TEST(testIndexingExport_Images);
+    CPPUNIT_TEST(testIndexingExport_OLE);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -98,6 +100,24 @@ void IndexingExportTest::testIndexingExport_Images()
     assertXPath(pXmlDoc, "/indexing/graphic[1]", "name", "Image_NonCaption");
     assertXPath(pXmlDoc, "/indexing/graphic[2]", "alt", "Image_InCaption - Alternative text");
     assertXPath(pXmlDoc, "/indexing/graphic[2]", "name", "Image_InCaption");
+}
+
+void IndexingExportTest::testIndexingExport_OLE()
+{
+    SwDoc* pDoc = createDoc("IndexingExport_OLE.odt");
+    CPPUNIT_ASSERT(pDoc);
+
+    SvMemoryStream aMemoryStream;
+    sw::IndexingExport aIndexingExport(aMemoryStream, pDoc);
+    aIndexingExport.runExport();
+    aMemoryStream.Seek(0);
+
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aMemoryStream);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/indexing");
+    assertXPath(pXmlDoc, "/indexing/ole[1]", "name", "Object - Chart");
+    assertXPath(pXmlDoc, "/indexing/ole[1]", "alt", "Alt Text");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(IndexingExportTest);
