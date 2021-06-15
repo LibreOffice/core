@@ -99,18 +99,18 @@ bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
         if (eHit == SdrHitKind::Handle)
         {
             // drag handle
-            SdrHdl* pHdl = aVEvt.pHdl;
+            SdrHdl* pHdl = aVEvt.mpHdl;
 
-            if (mpView->IsGluePointMarked(aVEvt.pObj, aVEvt.nGlueId) && rMEvt.IsShift())
+            if (mpView->IsGluePointMarked(aVEvt.mpObj, aVEvt.mnGlueId) && rMEvt.IsShift())
             {
-                mpView->UnmarkGluePoint(aVEvt.pObj, aVEvt.nGlueId);
+                mpView->UnmarkGluePoint(aVEvt.mpObj, aVEvt.mnGlueId);
                 pHdl = nullptr;
             }
 
             if (pHdl)
             {
                 // drag handle
-                mpView->BegDragObj(aMDPos, nullptr, aVEvt.pHdl, nDrgLog);
+                mpView->BegDragObj(aMDPos, nullptr, aVEvt.mpHdl, nDrgLog);
             }
         }
         else if (eHit == SdrHitKind::MarkedObject && mpView->IsInsGluePointMode())
@@ -137,8 +137,8 @@ bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
             if (!rMEvt.IsShift())
                 mpView->UnmarkAllGluePoints();
 
-            mpView->MarkGluePoint(aVEvt.pObj, aVEvt.nGlueId, false);
-            SdrHdl* pHdl = mpView->GetGluePointHdl(aVEvt.pObj, aVEvt.nGlueId);
+            mpView->MarkGluePoint(aVEvt.mpObj, aVEvt.mnGlueId, false);
+            SdrHdl* pHdl = mpView->GetGluePointHdl(aVEvt.mpObj, aVEvt.mnGlueId);
 
             if (pHdl)
             {
@@ -171,7 +171,7 @@ bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
                 (!rMEvt.IsShift() || eHit == SdrHitKind::MarkedObject))
             {
                 // move object
-                mpView->BegDragObj(aMDPos, nullptr, aVEvt.pHdl, nDrgLog);
+                mpView->BegDragObj(aMDPos, nullptr, aVEvt.mpHdl, nDrgLog);
             }
             else if (mpView->AreObjectsMarked())
             {

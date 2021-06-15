@@ -47,10 +47,10 @@ bool FuConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 
     SdrViewEvent aVEvt;
     (void)pView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
-    if (aVEvt.eEvent == SdrEventKind::BeginTextEdit)
+    if (aVEvt.meEvent == SdrEventKind::BeginTextEdit)
     {
         // Text input not allowed here
-        aVEvt.eEvent = SdrEventKind::BeginDragObj;
+        aVEvt.meEvent = SdrEventKind::BeginDragObj;
         pView->EnableExtendedMouseEventDispatcher(false);
     }
     else
@@ -83,7 +83,7 @@ bool FuConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
 
     pView->MouseButtonUp(rMEvt, pWindow->GetOutDev());
 
-    if (aVEvt.eEvent == SdrEventKind::EndCreate)
+    if (aVEvt.meEvent == SdrEventKind::EndCreate)
     {
         bReturn = true;
         bSimple = true;         // Do not pass on double-click

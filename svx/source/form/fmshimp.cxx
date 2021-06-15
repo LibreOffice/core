@@ -3879,9 +3879,9 @@ void FmXFormShell::handleShowPropertiesRequest_Lock()
 void FmXFormShell::handleMouseButtonDown_Lock(const SdrViewEvent& _rViewEvent)
 {
     // catch simple double clicks
-    if ( ( _rViewEvent.nMouseClicks == 2 ) && ( _rViewEvent.nMouseCode == MOUSE_LEFT ) )
+    if (_rViewEvent.mnMouseClicks == 2 && _rViewEvent.mnMouseCode == MOUSE_LEFT)
     {
-        if ( _rViewEvent.eHit == SdrHitKind::MarkedObject )
+        if ( _rViewEvent.meHit == SdrHitKind::MarkedObject )
         {
             if (onlyControlsAreMarked_Lock())
                 ShowSelectionProperties_Lock( true );

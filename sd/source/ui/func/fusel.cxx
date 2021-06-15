@@ -192,7 +192,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         SdrViewEvent aVEvt;
         SdrHitKind eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
-        if ( eHit == SdrHitKind::TextEditObj && ( mpViewShell->GetFrameView()->IsQuickEdit() || dynamic_cast< sdr::table::SdrTableObj* >( aVEvt.pObj ) != nullptr ) )
+        if (eHit == SdrHitKind::TextEditObj && (mpViewShell->GetFrameView()->IsQuickEdit() || dynamic_cast< sdr::table::SdrTableObj* >(aVEvt.mpObj) != nullptr))
         {
             bTextEdit = true;
         }
@@ -248,13 +248,13 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             }
             else if ( bTextEdit )
             {
-                sal_uInt16 nSdrObjKind = aVEvt.pObj->GetObjIdentifier();
+                sal_uInt16 nSdrObjKind = aVEvt.mpObj->GetObjIdentifier();
 
-                if (aVEvt.pObj->GetObjInventor() == SdrInventor::Default &&
+                if (aVEvt.mpObj->GetObjInventor() == SdrInventor::Default &&
                     (nSdrObjKind == OBJ_TEXT ||
                      nSdrObjKind == OBJ_TITLETEXT ||
                      nSdrObjKind == OBJ_OUTLINETEXT ||
-                     !aVEvt.pObj->IsEmptyPresObj()))
+                     !aVEvt.mpObj->IsEmptyPresObj()))
                 {
                     // Seamless Editing: branch to text input
                     if (!rMEvt.IsShift())
@@ -269,7 +269,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 }
             }
             else if ( !rMEvt.IsMod2() && rMEvt.GetClicks() == 1 &&
-                      aVEvt.eEvent == SdrEventKind::ExecuteUrl )
+                      aVEvt.meEvent == SdrEventKind::ExecuteUrl )
              {
                 mpWindow->ReleaseMouse();
 
@@ -277,14 +277,14 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 if (comphelper::LibreOfficeKit::isActive())
                 {
                     SfxViewShell& rSfxViewShell = mpViewShell->GetViewShellBase();
-                    rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, aVEvt.pURLField->GetURL().toUtf8().getStr());
+                    rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, aVEvt.mpURLField->GetURL().toUtf8().getStr());
                     return true;
                 }
 
                 if (!lcl_followHyperlinkAllowed(rMEvt))
                     return true;
 
-                SfxStringItem aStrItem(SID_FILE_NAME, aVEvt.pURLField->GetURL());
+                SfxStringItem aStrItem(SID_FILE_NAME, aVEvt.mpURLField->GetURL());
                 SfxStringItem aReferer(SID_REFERER, mpDocSh->GetMedium()->GetName());
                 SfxBoolItem aBrowseItem( SID_BROWSE, true );
                 SfxViewFrame* pFrame = mpViewShell->GetViewFrame();
@@ -458,13 +458,13 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         SdrViewEvent aVEvt;
         SdrHitKind eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
-        if (eHit == SdrHitKind::Handle && aVEvt.pHdl->GetKind() == SdrHdlKind::BezierWeight)
+        if (eHit == SdrHitKind::Handle && aVEvt.mpHdl->GetKind() == SdrHdlKind::BezierWeight)
         {
             /******************************************************************
             * Drag Handle
             ******************************************************************/
             if ( ! rMEvt.IsRight())
-                mpView->BegDragObj(aMDPos, nullptr, aVEvt.pHdl, nDrgLog);
+                mpView->BegDragObj(aMDPos, nullptr, aVEvt.mpHdl, nDrgLog);
         }
         else if (eHit == SdrHitKind::MarkedObject && nEditMode == SID_BEZIER_INSERT)
         {
@@ -497,7 +497,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             /******************************************************************
             * Select glue point
             ******************************************************************/
-            if (!mpView->IsPointMarked(*aVEvt.pHdl) || rMEvt.IsShift())
+            if (!mpView->IsPointMarked(*aVEvt.mpHdl) || rMEvt.IsShift())
             {
                 if (!rMEvt.IsShift())
                 {
@@ -506,9 +506,9 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 }
                 else
                 {
-                    if (mpView->IsPointMarked(*aVEvt.pHdl))
+                    if (mpView->IsPointMarked(*aVEvt.mpHdl))
                     {
-                        mpView->UnmarkPoint(*aVEvt.pHdl);
+                        mpView->UnmarkPoint(*aVEvt.mpHdl);
                         pHdl = nullptr;
                     }
                     else
@@ -563,7 +563,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             {
                 // Move object
                 if ( ! rMEvt.IsRight())
-                    mpView->BegDragObj(aMDPos, nullptr, aVEvt.pHdl, nDrgLog);
+                    mpView->BegDragObj(aMDPos, nullptr, aVEvt.mpHdl, nDrgLog);
             }
             else if (mpView->AreObjectsMarked())
             {

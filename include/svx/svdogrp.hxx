@@ -35,7 +35,7 @@ private:
     virtual std::unique_ptr<sdr::properties::BaseProperties>
     CreateObjectSpecificProperties() override;
 
-    Point aRefPoint; // Reference point inside the object group
+    Point maRefPoint; // Reference point inside the object group
 
 private:
     // protected destructor - due to final, make private

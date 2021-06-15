@@ -107,11 +107,11 @@ bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
             m_aStartPos = m_pWin->PixelToLogic(rMEvt.GetPosPixel());
             sal_uInt16 nEditMode = m_pWin->GetBezierMode();
 
-            if (eHit == SdrHitKind::Handle && aVEvt.pHdl->GetKind() == SdrHdlKind::BezierWeight)
+            if (eHit == SdrHitKind::Handle && aVEvt.mpHdl->GetKind() == SdrHdlKind::BezierWeight)
             {
                 // Drag handle
                 g_bNoInterrupt = true;
-                bReturn = pSdrView->BegDragObj(m_aStartPos, nullptr, aVEvt.pHdl);
+                bReturn = pSdrView->BegDragObj(m_aStartPos, nullptr, aVEvt.mpHdl);
                 m_pWin->SetDrawAction(true);
             }
             else if (eHit == SdrHitKind::MarkedObject && nEditMode == SID_BEZIER_INSERT)
@@ -138,7 +138,7 @@ bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
             else if (eHit == SdrHitKind::Handle)
             {
                 // Select gluepoint
-                if (pSdrView->HasMarkablePoints() && (!pSdrView->IsPointMarked(*aVEvt.pHdl) || rMEvt.IsShift()))
+                if (pSdrView->HasMarkablePoints() && (!pSdrView->IsPointMarked(*aVEvt.mpHdl) || rMEvt.IsShift()))
                 {
                     SdrHdl* pHdl = nullptr;
 
@@ -149,9 +149,9 @@ bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
                     }
                     else
                     {
-                        if (pSdrView->IsPointMarked(*aVEvt.pHdl))
+                        if (pSdrView->IsPointMarked(*aVEvt.mpHdl))
                         {
-                            bReturn = pSdrView->UnmarkPoint(*aVEvt.pHdl);
+                            bReturn = pSdrView->UnmarkPoint(*aVEvt.mpHdl);
                             pHdl = nullptr;
                         }
                         else

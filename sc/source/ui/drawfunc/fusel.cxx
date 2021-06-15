@@ -203,22 +203,22 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 SdrViewEvent aVEvt;
                 if ( !bAlt &&
                     pView->PickAnything( rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt ) != SdrHitKind::NONE &&
-                    aVEvt.pObj != nullptr )
+                    aVEvt.mpObj != nullptr )
                 {
-                    if ( SvxIMapInfo::GetIMapInfo( aVEvt.pObj ) )       // ImageMap
+                    if ( SvxIMapInfo::GetIMapInfo( aVEvt.mpObj ) )       // ImageMap
                     {
                         const IMapObject* pIMapObj =
-                                SvxIMapInfo::GetHitIMapObject( aVEvt.pObj, aMDPos, pWindow->GetOutDev() );
+                                SvxIMapInfo::GetHitIMapObject( aVEvt.mpObj, aMDPos, pWindow->GetOutDev() );
                         if ( pIMapObj && !pIMapObj->GetURL().isEmpty() )
                         {
                             sURL = pIMapObj->GetURL();
                             sTarget = pIMapObj->GetTarget();
                         }
                     }
-                    if ( aVEvt.eEvent == SdrEventKind::ExecuteUrl && aVEvt.pURLField )   // URL
+                    if ( aVEvt.meEvent == SdrEventKind::ExecuteUrl && aVEvt.mpURLField )   // URL
                     {
-                        sURL = aVEvt.pURLField->GetURL();
-                        sTarget = aVEvt.pURLField->GetTargetFrame();
+                        sURL = aVEvt.mpURLField->GetURL();
+                        sTarget = aVEvt.mpURLField->GetTargetFrame();
                     }
                 }
 
@@ -456,7 +456,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
                 SdrViewEvent aVEvt;
                 SdrHitKind eHit = pView->PickAnything( rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt );
-                if (eHit != SdrHitKind::NONE && aVEvt.pObj == pObj)
+                if (eHit != SdrHitKind::NONE && aVEvt.mpObj == pObj)
                 {
                     sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
 

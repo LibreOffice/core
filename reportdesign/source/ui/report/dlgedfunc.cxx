@@ -173,8 +173,8 @@ bool DlgEdFunc::MouseButtonDown( const MouseEvent& rMEvt )
             // TODO character in shapes
             //    SdrViewEvent aVEvt;
             // m_rView.PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
-            //    if ( aVEvt.pRootObj && aVEvt.pRootObj->ISA(SdrTextObj) )
-            //        SetInEditMode(static_cast<SdrTextObj *>(aVEvt.pRootObj),rMEvt, sal_False);
+            //    if ( aVEvt.mpRootObj && aVEvt.pRootObj->ISA(SdrTextObj) )
+            //        SetInEditMode(static_cast<SdrTextObj *>(aVEvt.mpRootObj),rMEvt, sal_False);
             bHandled = true;
         }
         else
@@ -196,8 +196,8 @@ bool DlgEdFunc::MouseButtonDown( const MouseEvent& rMEvt )
         SdrViewEvent aVEvt;
         if ( m_rView.PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt) != SdrHitKind::MarkedObject && !rMEvt.IsShift() )
             m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(nullptr);
-        if ( aVEvt.pRootObj )
-            m_rView.MarkObj(aVEvt.pRootObj, pPV);
+        if ( aVEvt.mpRootObj )
+            m_rView.MarkObj(aVEvt.mpRootObj, pPV);
         else
             m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(nullptr);
 
@@ -476,9 +476,9 @@ bool DlgEdFunc::isOverlapping(const MouseEvent& rMEvt)
 {
     SdrViewEvent aVEvt;
     bool bOverlapping = m_rView.PickAnything(rMEvt, SdrMouseEventKind::BUTTONUP, aVEvt) != SdrHitKind::NONE;
-    if (bOverlapping && aVEvt.pObj)
+    if (bOverlapping && aVEvt.mpObj)
     {
-        colorizeOverlappedObject(aVEvt.pObj);
+        colorizeOverlappedObject(aVEvt.mpObj);
     }
     else
     {
@@ -596,9 +596,9 @@ bool DlgEdFunc::isRectangleHit(const MouseEvent& rMEvt)
             }
         }
     }
-    else if ( aVEvt.pObj && (aVEvt.pObj->GetObjIdentifier() != OBJ_CUSTOMSHAPE) && !m_bSelectionMode)
+    else if (aVEvt.mpObj && (aVEvt.mpObj->GetObjIdentifier() != OBJ_CUSTOMSHAPE) && !m_bSelectionMode)
     {
-        colorizeOverlappedObject(aVEvt.pObj);
+        colorizeOverlappedObject(aVEvt.mpObj);
     }
     else
         bIsSetPoint = false;
@@ -721,7 +721,7 @@ bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
         SdrPageView* pPV = m_rView.GetSdrPageView();
         SdrViewEvent aVEvt;
         m_rView.PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
-        m_rView.MarkObj(aVEvt.pRootObj, pPV);
+        m_rView.MarkObj(aVEvt.mpRootObj, pPV);
     }
     checkTwoClicks(rMEvt);
     m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->UpdatePropertyBrowserDelayed(m_rView);
@@ -812,7 +812,7 @@ bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
         }
         else
         {
-            m_rView.SdrBeginTextEdit( aVEvt.pRootObj,m_rView.GetSdrPageView(),m_pParent );
+            m_rView.SdrBeginTextEdit( aVEvt.mpRootObj,m_rView.GetSdrPageView(),m_pParent );
         }
     }
 
