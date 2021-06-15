@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVDPAGV_HXX
-#define INCLUDED_SVX_SVDPAGV_HXX
+#pragma once
 
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <rtl/ustring.hxx>
@@ -118,7 +117,7 @@ private:
 public:
     SdrPageView(SdrPage* pPage1, SdrView& rNewView);
     ~SdrPageView();
-  
+
     SdrPageView& operator=( SdrPageView const & ) = delete; // MSVC2017 workaround
     SdrPageView( SdrPageView const & ) = delete; // MSVC2017 workaround
 
@@ -256,7 +255,6 @@ public:
     const Color& GetApplicationDocumentColor() const { return maDocumentColor;}
 };
 
-
-#endif // INCLUDED_SVX_SVDPAGV_HXX
+#pragma once
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

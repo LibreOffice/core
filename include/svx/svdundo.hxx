@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVDUNDO_HXX
-#define INCLUDED_SVX_SVDUNDO_HXX
+#pragma once
 
 #include <config_options.h>
 #include <sal/config.h>
@@ -737,7 +736,5 @@ public:
     virtual std::unique_ptr<SdrUndoAction> CreateUndoPageRemoveMasterPage(SdrPage& rChangedPage);
     virtual std::unique_ptr<SdrUndoAction> CreateUndoPageChangeMasterPage(SdrPage& rChangedPage);
 };
-
-#endif // INCLUDED_SVX_SVDUNDO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
