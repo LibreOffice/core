@@ -84,7 +84,7 @@ namespace sdr::table {
 //   Defines
 
 
-#define SDRUSERDATA_OBJTEXTLINK         (1)
+constexpr const sal_uInt16 SDRUSERDATA_OBJTEXTLINK = 1;
 
 
 //   helper class SdrTextObjGeoData
