@@ -792,7 +792,7 @@ SdrObjCustomShape::SdrObjCustomShape(SdrModel& rSdrModel)
     , mpLastShadowGeometry(nullptr)
 {
     m_bClosedObj = true; // custom shapes may be filled
-    bTextFrame = true;
+    mbTextFrame = true;
 }
 
 SdrObjCustomShape::SdrObjCustomShape(SdrModel& rSdrModel, SdrObjCustomShape const & rSource)
@@ -802,7 +802,7 @@ SdrObjCustomShape::SdrObjCustomShape(SdrModel& rSdrModel, SdrObjCustomShape cons
     , mpLastShadowGeometry(nullptr)
 {
     m_bClosedObj = true; // custom shapes may be filled
-    bTextFrame = true;
+    mbTextFrame = true;
 
     fObjectRotation = rSource.fObjectRotation;
     mbAdjustingTextFrameWidthAndHeight = rSource.mbAdjustingTextFrameWidthAndHeight;
@@ -1545,7 +1545,7 @@ void SdrObjCustomShape::NbcResize( const Point& rRef, const Fraction& rxFact, co
     }
 
     // updating fObjectRotation
-    Degree100 nTextObjRotation = aGeo.nRotationAngle;
+    Degree100 nTextObjRotation = maGeo.nRotationAngle;
     double fAngle = toDegrees(nTextObjRotation);
     if (IsMirroredX())
     {
@@ -1579,12 +1579,12 @@ void SdrObjCustomShape::NbcRotate( const Point& rRef, Degree100 nAngle, double s
         fObjectRotation = 360 + fObjectRotation;
 
     // the rotation angle for ashapes is stored in fObjectRotation, this rotation
-    // has to be applied to the text object (which is internally using aGeo.nAngle).
-    SdrTextObj::NbcRotate( maRect.TopLeft(), -aGeo.nRotationAngle,        // retrieving the unrotated text object
-                            -aGeo.mfSinRotationAngle,
-                            aGeo.mfCosRotationAngle );
-    aGeo.nRotationAngle = 0_deg100;                                             // resetting aGeo data
-    aGeo.RecalcSinCos();
+    // has to be applied to the text object (which is internally using maGeo.nAngle).
+    SdrTextObj::NbcRotate( maRect.TopLeft(), -maGeo.nRotationAngle,        // retrieving the unrotated text object
+                            -maGeo.mfSinRotationAngle,
+                            maGeo.mfCosRotationAngle );
+    maGeo.nRotationAngle = 0_deg100;                                             // resetting aGeo data
+    maGeo.RecalcSinCos();
 
     tools::Long nW = static_cast<tools::Long>( fObjectRotation * 100 );                      // applying our object rotation
     if ( bMirroredX )
@@ -1641,7 +1641,7 @@ void SdrObjCustomShape::NbcMirror( const Point& rRef1, const Point& rRef2 )
             SdrTextObj::NbcMirror( rRef1, rRef2 );
 
             // update fObjectRotation
-            Degree100 nTextObjRotation = aGeo.nRotationAngle;
+            Degree100 nTextObjRotation = maGeo.nRotationAngle;
             double fAngle = toDegrees(nTextObjRotation);
 
             bool bSingleFlip = (IsMirroredX()!= IsMirroredY());
@@ -1669,7 +1669,7 @@ void SdrObjCustomShape::NbcShear( const Point& rRef, Degree100 nAngle, double tn
     SdrTextObj::NbcShear(rRef,nAngle,tn,bVShear);
 
     // updating fObjectRotation
-    Degree100 nTextObjRotation = aGeo.nRotationAngle;
+    Degree100 nTextObjRotation = maGeo.nRotationAngle;
     double fAngle = toDegrees(nTextObjRotation);
     if (IsMirroredX())
     {
@@ -1711,8 +1711,8 @@ SdrGluePoint SdrObjCustomShape::GetVertexGluePoint(sal_uInt16 nPosNum) const
         case 2: aPt=maRect.BottomCenter(); aPt.AdjustY(nWdt ); break;
         case 3: aPt=maRect.LeftCenter();   aPt.AdjustX( -nWdt ); break;
     }
-    if (aGeo.nShearAngle!=0_deg100) ShearPoint(aPt,maRect.TopLeft(),aGeo.mfTanShearAngle);
-    if (aGeo.nRotationAngle!=0_deg100) RotatePoint(aPt,maRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
+    if (maGeo.nShearAngle != 0_deg100) ShearPoint(aPt, maRect.TopLeft(), maGeo.mfTanShearAngle);
+    if (maGeo.nRotationAngle != 0_deg100) RotatePoint(aPt, maRect.TopLeft(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
     aPt-=GetSnapRect().Center();
     SdrGluePoint aGP(aPt);
     aGP.SetPercent(false);
@@ -1756,10 +1756,10 @@ void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
     bool bMirroredX = IsMirroredX();
     bool bMirroredY = IsMirroredY();
 
-    Degree100 nShearAngle = aGeo.nShearAngle;
-    double fTan = aGeo.mfTanShearAngle;
+    Degree100 nShearAngle = maGeo.nShearAngle;
+    double fTan = maGeo.mfTanShearAngle;
 
-    if ( aGeo.nRotationAngle || nShearAngle || bMirroredX || bMirroredY )
+    if (maGeo.nRotationAngle || nShearAngle || bMirroredX || bMirroredY)
     {
         tools::Polygon aPoly( maRect );
         if( nShearAngle )
@@ -1768,8 +1768,8 @@ void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
             for (sal_uInt16 i=0; i<nPointCount; i++)
                 ShearPoint(aPoly[i],maRect.Center(), fTan );
         }
-        if ( aGeo.nRotationAngle )
-            aPoly.Rotate( maRect.Center(), toDegree10(aGeo.nRotationAngle) );
+        if (maGeo.nRotationAngle)
+            aPoly.Rotate( maRect.Center(), toDegree10(maGeo.nRotationAngle) );
 
         tools::Rectangle aBoundRect( aPoly.GetBoundRect() );
         sal_Int32 nXDiff = aBoundRect.Left() - maRect.Left();
@@ -1930,11 +1930,11 @@ void SdrObjCustomShape::DragResizeCustomShape( const tools::Rectangle& rNewRect 
 
     GeoStat aGeoStat( GetGeoStat() );
     if ( aNewRect.TopLeft()!= maRect.TopLeft() &&
-        ( aGeo.nRotationAngle || aGeo.nShearAngle ) )
+        ( maGeo.nRotationAngle || maGeo.nShearAngle ) )
     {
         Point aNewPos( aNewRect.TopLeft() );
-        if ( aGeo.nShearAngle ) ShearPoint( aNewPos, aOld.TopLeft(), aGeoStat.mfTanShearAngle );
-        if ( aGeo.nRotationAngle )  RotatePoint(aNewPos, aOld.TopLeft(), aGeoStat.mfSinRotationAngle, aGeoStat.mfCosRotationAngle );
+        if ( maGeo.nShearAngle ) ShearPoint( aNewPos, aOld.TopLeft(), aGeoStat.mfTanShearAngle );
+        if ( maGeo.nRotationAngle )  RotatePoint(aNewPos, aOld.TopLeft(), aGeoStat.mfSinRotationAngle, aGeoStat.mfCosRotationAngle );
         aNewRect.SetPos( aNewPos );
     }
     if ( aNewRect == maRect )
@@ -2298,17 +2298,17 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(tools::Rectangle& rR, bool
 
             if (HasText())
             {
-                if(pEdtOutl)
+                if(mpEdtOutl)
                 {
-                    pEdtOutl->SetMaxAutoPaperSize( aSiz );
+                    mpEdtOutl->SetMaxAutoPaperSize( aSiz );
                     if (bWdtGrow)
                     {
-                        Size aSiz2(pEdtOutl->CalcTextSize());
+                        Size aSiz2(mpEdtOutl->CalcTextSize());
                         nWdt=aSiz2.Width()+1; // a little more tolerance
                         if (bHgtGrow) nHgt=aSiz2.Height()+1; // a little more tolerance
                     } else
                     {
-                        nHgt=pEdtOutl->GetTextHeight()+1; // a little more tolerance
+                        nHgt=mpEdtOutl->GetTextHeight()+1; // a little more tolerance
                     }
                 }
                 else
@@ -2398,12 +2398,12 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(tools::Rectangle& rR, bool
                         rR.SetBottom(rR.Top()+nHgt );
                     }
                 }
-                if ( aGeo.nRotationAngle )
+                if ( maGeo.nRotationAngle )
                 {
                     Point aD1(rR.TopLeft());
                     aD1-=aR0.TopLeft();
                     Point aD2(aD1);
-                    RotatePoint(aD2,Point(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
+                    RotatePoint(aD2,Point(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
                     aD2-=aD1;
                     rR.Move(aD2.X(),aD2.Y());
                 }
@@ -2517,12 +2517,12 @@ void SdrObjCustomShape::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools
 {
     tools::Rectangle aViewInit;
     TakeTextAnchorRect( aViewInit );
-    if ( aGeo.nRotationAngle )
+    if (maGeo.nRotationAngle)
     {
         Point aCenter(aViewInit.Center());
         aCenter-=aViewInit.TopLeft();
         Point aCenter0(aCenter);
-        RotatePoint(aCenter,Point(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
+        RotatePoint(aCenter, Point(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
         aCenter-=aCenter0;
         aViewInit.Move(aCenter.X(),aCenter.Y());
     }
@@ -2619,10 +2619,10 @@ void SdrObjCustomShape::TakeTextAnchorRect( tools::Rectangle& rAnchorRect ) cons
             rAnchorRect.SetRight( rAnchorRect.Left() + 1 );   // minimal width is 2
         if ( rAnchorRect.GetHeight() < 2 )
             rAnchorRect.SetBottom( rAnchorRect.Top() + 1 );   // minimal height is 2
-        if ( aGeo.nRotationAngle )
+        if (maGeo.nRotationAngle)
         {
             Point aP( rAnchorRect.TopLeft() );
-            RotatePoint( aP, aRotateRef, aGeo.mfSinRotationAngle, aGeo.mfCosRotationAngle );
+            RotatePoint(aP, aRotateRef, maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
             rAnchorRect.SetPos( aP );
         }
     }
@@ -2668,8 +2668,8 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& 
 
     // put text into the Outliner - if necessary the use the text from the EditOutliner
     OutlinerParaObject* pPara= GetOutlinerParaObject();
-    if (pEdtOutl && !bNoEditText)
-        pPara=pEdtOutl->CreateParaObject().release();
+    if (mpEdtOutl && !bNoEditText)
+        pPara=mpEdtOutl->CreateParaObject().release();
 
     if (pPara)
     {
@@ -2690,7 +2690,7 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& 
     {
         rOutliner.SetTextObj( nullptr );
     }
-    if (pEdtOutl && !bNoEditText && pPara)
+    if (mpEdtOutl && !bNoEditText && pPara)
         delete pPara;
 
     rOutliner.SetUpdateMode(true);
@@ -2753,8 +2753,8 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& 
         if (eVAdj==SDRTEXTVERTADJUST_BOTTOM)
             aTextPos.AdjustY(nFreeHgt );
     }
-    if (aGeo.nRotationAngle!=0_deg100)
-        RotatePoint(aTextPos,aAnkRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
+    if (maGeo.nRotationAngle != 0_deg100)
+        RotatePoint(aTextPos,aAnkRect.TopLeft(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
 
     if (pAnchorRect)
         *pAnchorRect=aAnkRect;
@@ -2994,10 +2994,10 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
 
     // reset object shear and rotations
     fObjectRotation = 0.0;
-    aGeo.nRotationAngle = 0_deg100;
-    aGeo.RecalcSinCos();
-    aGeo.nShearAngle = 0_deg100;
-    aGeo.RecalcTan();
+    maGeo.nRotationAngle = 0_deg100;
+    maGeo.RecalcSinCos();
+    maGeo.nShearAngle = 0_deg100;
+    maGeo.RecalcTan();
 
     // if anchor is used, make position relative to it
     if(getSdrModelFromSdrObject().IsWriter())
@@ -3083,7 +3083,7 @@ bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegf
 {
     // get turn and shear
     double fRotate = basegfx::deg2rad(fObjectRotation);
-    double fShearX = toRadians(aGeo.nShearAngle);
+    double fShearX = toRadians(maGeo.nShearAngle);
 
     // get aRect, this is the unrotated snaprect
     tools::Rectangle aRectangle(maRect);
@@ -3093,7 +3093,7 @@ bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegf
     if ( bMirroredX || bMirroredY )
     {   // we have to retrieve the unmirrored rect
 
-        GeoStat aNewGeo( aGeo );
+        GeoStat aNewGeo(maGeo);
 
         if ( bMirroredX )
         {

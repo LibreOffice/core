@@ -193,7 +193,7 @@ SdrGrafObj::SdrGrafObj(SdrModel& rSdrModel)
     onGraphicChanged();
 
     // #i118485# Shear allowed and possible now
-    bNoShear = false;
+    mbNoShear = false;
 
     mbGrafAnimationAllowed = true;
 
@@ -212,7 +212,7 @@ SdrGrafObj::SdrGrafObj(SdrModel& rSdrModel, SdrGrafObj const & rSource)
     onGraphicChanged();
 
     // #i118485# Shear allowed and possible now
-    bNoShear = false;
+    mbNoShear = false;
 
     mbGrafAnimationAllowed = true;
 
@@ -274,7 +274,7 @@ SdrGrafObj::SdrGrafObj(
     onGraphicChanged();
 
     // #i118485# Shear allowed and possible now
-    bNoShear = false;
+    mbNoShear = false;
 
     mbGrafAnimationAllowed = true;
 
@@ -300,7 +300,7 @@ SdrGrafObj::SdrGrafObj(
     onGraphicChanged();
 
     // #i118485# Shear allowed and possible now
-    bNoShear = false;
+    mbNoShear = false;
 
     mbGrafAnimationAllowed = true;
 
@@ -416,7 +416,7 @@ GraphicAttr SdrGrafObj::GetGraphicAttr( SdrGrafObjTransformsAttrs nTransformFlag
     {
         const bool      bMirror = bool( nTransformFlags & SdrGrafObjTransformsAttrs::MIRROR );
         const bool      bRotate = bool( nTransformFlags & SdrGrafObjTransformsAttrs::ROTATE ) &&
-            (aGeo.nRotationAngle && aGeo.nRotationAngle != 18000_deg100);
+            (maGeo.nRotationAngle && maGeo.nRotationAngle != 18000_deg100);
 
         // Need cropping info earlier
         const_cast<SdrGrafObj*>(this)->ImpSetAttrToGrafInfo();
@@ -427,7 +427,7 @@ GraphicAttr SdrGrafObj::GetGraphicAttr( SdrGrafObjTransformsAttrs nTransformFlag
 
         if( bMirror )
         {
-            sal_uInt16      nMirrorCase = ( aGeo.nRotationAngle == 18000_deg100 ) ? ( bMirrored ? 3 : 4 ) : ( bMirrored ? 2 : 1 );
+            sal_uInt16      nMirrorCase = ( maGeo.nRotationAngle == 18000_deg100 ) ? ( bMirrored ? 3 : 4 ) : ( bMirrored ? 2 : 1 );
             bool bHMirr = nMirrorCase == 2 || nMirrorCase == 4;
             bool bVMirr = nMirrorCase == 3 || nMirrorCase == 4;
 
@@ -435,7 +435,7 @@ GraphicAttr SdrGrafObj::GetGraphicAttr( SdrGrafObjTransformsAttrs nTransformFlag
         }
 
         if( bRotate )
-            aActAttr.SetRotation( toDegree10(aGeo.nRotationAngle ) );
+            aActAttr.SetRotation( toDegree10(maGeo.nRotationAngle ) );
     }
 
     return aActAttr;
@@ -567,9 +567,9 @@ void SdrGrafObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
     bool bNoPresGrf = ( mpGraphicObject->GetType() != GraphicType::NONE ) && !m_bEmptyPresObj;
 
-    rInfo.bResizeFreeAllowed = aGeo.nRotationAngle.get() % 9000 == 0 ||
-                               aGeo.nRotationAngle.get() % 18000 == 0 ||
-                               aGeo.nRotationAngle.get() % 27000 == 0;
+    rInfo.bResizeFreeAllowed = maGeo.nRotationAngle.get() % 9000 == 0 ||
+                               maGeo.nRotationAngle.get() % 18000 == 0 ||
+                               maGeo.nRotationAngle.get() % 27000 == 0;
 
     rInfo.bResizePropAllowed = true;
     rInfo.bRotateFreeAllowed = bNoPresGrf;

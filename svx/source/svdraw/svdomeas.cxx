@@ -607,9 +607,9 @@ void SdrMeasureObj::UndirtyText() const
     Size aSiz(rOutliner.CalcTextSize());
     rOutliner.Clear();
     // cast to nonconst three times
-    const_cast<SdrMeasureObj*>(this)->aTextSize=aSiz;
-    const_cast<SdrMeasureObj*>(this)->bTextSizeDirty=false;
-    const_cast<SdrMeasureObj*>(this)->bTextDirty=false;
+    const_cast<SdrMeasureObj*>(this)->maTextSize = aSiz;
+    const_cast<SdrMeasureObj*>(this)->mbTextSizeDirty = false;
+    const_cast<SdrMeasureObj*>(this)->bTextDirty = false;
 }
 
 void SdrMeasureObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
@@ -691,9 +691,9 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
             aTextPos.AdjustY( -(aTextSize2.Width()) );
         }
     }
-    if (aMPol.nTextAngle!=aGeo.nRotationAngle) {
-        const_cast<SdrMeasureObj*>(this)->aGeo.nRotationAngle=aMPol.nTextAngle;
-        const_cast<SdrMeasureObj*>(this)->aGeo.RecalcSinCos();
+    if (aMPol.nTextAngle != maGeo.nRotationAngle) {
+        const_cast<SdrMeasureObj*>(this)->maGeo.nRotationAngle=aMPol.nTextAngle;
+        const_cast<SdrMeasureObj*>(this)->maGeo.RecalcSinCos();
     }
     RotatePoint(aTextPos,aPt1b,aMPol.nLineSin,aMPol.nLineCos);
     aTextSize2.AdjustWidth( 1 ); aTextSize2.AdjustHeight( 1 ); // because of the Rect-Ctor's odd behavior
@@ -701,9 +701,9 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
     rRect.Justify();
     const_cast<SdrMeasureObj*>(this)->maRect=rRect;
 
-    if (aMPol.nTextAngle!=aGeo.nRotationAngle) {
-        const_cast<SdrMeasureObj*>(this)->aGeo.nRotationAngle=aMPol.nTextAngle;
-        const_cast<SdrMeasureObj*>(this)->aGeo.RecalcSinCos();
+    if (aMPol.nTextAngle != maGeo.nRotationAngle) {
+        const_cast<SdrMeasureObj*>(this)->maGeo.nRotationAngle=aMPol.nTextAngle;
+        const_cast<SdrMeasureObj*>(this)->maGeo.RecalcSinCos();
     }
 }
 

@@ -69,13 +69,13 @@ std::unique_ptr<sdr::contact::ViewContact> SdrTextObj::CreateObjectSpecificViewC
 
 SdrTextObj::SdrTextObj(SdrModel& rSdrModel)
 :   SdrAttrObj(rSdrModel),
-    pEdtOutl(nullptr),
-    eTextKind(OBJ_TEXT)
+    mpEdtOutl(nullptr),
+    meTextKind(OBJ_TEXT)
 {
-    bTextSizeDirty=false;
-    bTextFrame=false;
-    bNoShear=false;
-    bDisableAutoWidthOnDragging=false;
+    mbTextSizeDirty = false;
+    mbTextFrame = false;
+    mbNoShear = false;
+    mbDisableAutoWidthOnDragging = false;
 
     mbInEditMode = false;
     mbTextAnimationAllowed = true;
@@ -88,7 +88,7 @@ SdrTextObj::SdrTextObj(SdrModel& rSdrModel)
 
 SdrTextObj::SdrTextObj(SdrModel& rSdrModel, SdrTextObj const & rSource)
 :   SdrAttrObj(rSdrModel, rSource),
-    pEdtOutl(nullptr)
+    mpEdtOutl(nullptr)
 {
     mbInEditMode = false;
     mbTextAnimationAllowed = true;
@@ -99,15 +99,15 @@ SdrTextObj::SdrTextObj(SdrModel& rSdrModel, SdrTextObj const & rSource)
     mbInDownScale = false;
 
     maRect = rSource.maRect;
-    aGeo      =rSource.aGeo;
-    eTextKind =rSource.eTextKind;
-    bTextFrame=rSource.bTextFrame;
-    aTextSize=rSource.aTextSize;
-    bTextSizeDirty=rSource.bTextSizeDirty;
+    maGeo = rSource.maGeo;
+    meTextKind = rSource.meTextKind;
+    mbTextFrame = rSource.mbTextFrame;
+    maTextSize = rSource.maTextSize;
+    mbTextSizeDirty = rSource.mbTextSizeDirty;
 
     // Not all of the necessary parameters were copied yet.
-    bNoShear = rSource.bNoShear;
-    bDisableAutoWidthOnDragging = rSource.bDisableAutoWidthOnDragging;
+    mbNoShear = rSource.mbNoShear;
+    mbDisableAutoWidthOnDragging = rSource.mbDisableAutoWidthOnDragging;
     SdrText* pText = getActiveText();
 
     if( pText && rSource.HasText() )
@@ -117,7 +117,7 @@ SdrTextObj::SdrTextObj(SdrModel& rSdrModel, SdrTextObj const & rSource)
         // empty (this operator== seems not prepared for MultiText
         // objects). In the current form it makes only sense to
         // create locally and use locally on a known existing SdrText
-        const Outliner* pEO=rSource.pEdtOutl;
+        const Outliner* pEO = rSource.mpEdtOutl;
         std::unique_ptr<OutlinerParaObject> pNewOutlinerParaObject;
 
         if (pEO!=nullptr)
@@ -140,13 +140,13 @@ SdrTextObj::SdrTextObj(
     const tools::Rectangle& rNewRect)
 :   SdrAttrObj(rSdrModel),
     maRect(rNewRect),
-    pEdtOutl(nullptr),
-    eTextKind(OBJ_TEXT)
+    mpEdtOutl(nullptr),
+    meTextKind(OBJ_TEXT)
 {
-    bTextSizeDirty=false;
-    bTextFrame=false;
-    bNoShear=false;
-    bDisableAutoWidthOnDragging=false;
+    mbTextSizeDirty = false;
+    mbTextFrame = false;
+    mbNoShear = false;
+    mbDisableAutoWidthOnDragging = false;
     ImpJustifyRect(maRect);
 
     mbInEditMode = false;
@@ -162,13 +162,13 @@ SdrTextObj::SdrTextObj(
     SdrModel& rSdrModel,
     SdrObjKind eNewTextKind)
 :   SdrAttrObj(rSdrModel),
-    pEdtOutl(nullptr),
-    eTextKind(eNewTextKind)
+    mpEdtOutl(nullptr),
+    meTextKind(eNewTextKind)
 {
-    bTextSizeDirty=false;
-    bTextFrame=true;
-    bNoShear=true;
-    bDisableAutoWidthOnDragging=false;
+    mbTextSizeDirty = false;
+    mbTextFrame = true;
+    mbNoShear = true;
+    mbDisableAutoWidthOnDragging = false;
 
     mbInEditMode = false;
     mbTextAnimationAllowed = true;
@@ -185,13 +185,13 @@ SdrTextObj::SdrTextObj(
     const tools::Rectangle& rNewRect)
 :   SdrAttrObj(rSdrModel),
     maRect(rNewRect),
-    pEdtOutl(nullptr),
-    eTextKind(eNewTextKind)
+    mpEdtOutl(nullptr),
+    meTextKind(eNewTextKind)
 {
-    bTextSizeDirty=false;
-    bTextFrame=true;
-    bNoShear=true;
-    bDisableAutoWidthOnDragging=false;
+    mbTextSizeDirty = false;
+    mbTextFrame = true;
+    mbNoShear = true;
+    mbDisableAutoWidthOnDragging = false;
     ImpJustifyRect(maRect);
 
     mbInEditMode = false;
@@ -244,11 +244,11 @@ void SdrTextObj::NbcSetText(const OUString& rStr)
     rOutliner.SetUpdateMode(true);
     rOutliner.SetText(rStr,rOutliner.GetParagraph( 0 ));
     std::unique_ptr<OutlinerParaObject> pNewText=rOutliner.CreateParaObject();
-    Size aSiz(rOutliner.CalcTextSize());
+    Size aSize(rOutliner.CalcTextSize());
     rOutliner.Clear();
     NbcSetOutlinerParaObject(std::move(pNewText));
-    aTextSize=aSiz;
-    bTextSizeDirty=false;
+    maTextSize = aSize;
+    mbTextSizeDirty=false;
 }
 
 void SdrTextObj::SetText(const OUString& rStr)
@@ -267,11 +267,11 @@ void SdrTextObj::NbcSetText(SvStream& rInput, const OUString& rBaseURL, EETextFo
     rOutliner.Read(rInput,rBaseURL,eFormat);
     std::unique_ptr<OutlinerParaObject> pNewText=rOutliner.CreateParaObject();
     rOutliner.SetUpdateMode(true);
-    Size aSiz(rOutliner.CalcTextSize());
+    Size aSize(rOutliner.CalcTextSize());
     rOutliner.Clear();
     NbcSetOutlinerParaObject(std::move(pNewText));
-    aTextSize=aSiz;
-    bTextSizeDirty=false;
+    maTextSize=aSize;
+    mbTextSizeDirty=false;
 }
 
 void SdrTextObj::SetText(SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat)
@@ -285,7 +285,7 @@ void SdrTextObj::SetText(SvStream& rInput, const OUString& rBaseURL, EETextForma
 
 const Size& SdrTextObj::GetTextSize() const
 {
-    if (bTextSizeDirty)
+    if (mbTextSizeDirty)
     {
         Size aSiz;
         SdrText* pText = getActiveText();
@@ -298,15 +298,15 @@ const Size& SdrTextObj::GetTextSize() const
             rOutliner.Clear();
         }
         // casting to nonconst twice
-        const_cast<SdrTextObj*>(this)->aTextSize=aSiz;
-        const_cast<SdrTextObj*>(this)->bTextSizeDirty=false;
+        const_cast<SdrTextObj*>(this)->maTextSize = aSiz;
+        const_cast<SdrTextObj*>(this)->mbTextSizeDirty = false;
     }
-    return aTextSize;
+    return maTextSize;
 }
 
 bool SdrTextObj::IsAutoGrowHeight() const
 {
-    if(!bTextFrame)
+    if(!mbTextFrame)
         return false; // AutoGrow only together with TextFrames
 
     const SfxItemSet& rSet = GetObjectItemSet();
@@ -331,7 +331,7 @@ bool SdrTextObj::IsAutoGrowHeight() const
 
 bool SdrTextObj::IsAutoGrowWidth() const
 {
-    if(!bTextFrame)
+    if (!mbTextFrame)
         return false; // AutoGrow only together with TextFrames
 
     const SfxItemSet& rSet = GetObjectItemSet();
@@ -432,16 +432,17 @@ void SdrTextObj::ImpJustifyRect(tools::Rectangle& rRect)
 
 void SdrTextObj::ImpCheckShear()
 {
-    if (bNoShear && aGeo.nShearAngle) {
-        aGeo.nShearAngle=0_deg100;
-        aGeo.mfTanShearAngle=0;
+    if (mbNoShear && maGeo.nShearAngle)
+    {
+        maGeo.nShearAngle = 0_deg100;
+        maGeo.mfTanShearAngle = 0;
     }
 }
 
 void SdrTextObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
     bool bNoTextFrame=!IsTextFrame();
-    rInfo.bResizeFreeAllowed=bNoTextFrame || ((aGeo.nRotationAngle.get() % 9000) == 0);
+    rInfo.bResizeFreeAllowed=bNoTextFrame || ((maGeo.nRotationAngle.get() % 9000) == 0);
     rInfo.bResizePropAllowed=true;
     rInfo.bRotateFreeAllowed=true;
     rInfo.bRotate90Allowed  =true;
@@ -464,7 +465,7 @@ void SdrTextObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 
 SdrObjKind SdrTextObj::GetObjIdentifier() const
 {
-    return eTextKind;
+    return meTextKind;
 }
 
 bool SdrTextObj::HasTextImpl( SdrOutliner const * pOutliner )
@@ -518,7 +519,7 @@ void SdrTextObj::NbcSetEckenradius(tools::Long nRad)
 // states of IsAutoGrowWidth/Height to correctly set TextMinFrameWidth/Height
 void SdrTextObj::AdaptTextMinSize()
 {
-    if (!bTextFrame)
+    if (!mbTextFrame)
         // Only do this for text frame.
         return;
 
@@ -546,9 +547,9 @@ void SdrTextObj::AdaptTextMinSize()
 
         aSet.Put(makeSdrTextMinFrameWidthItem(nW));
 
-        if(!IsVerticalWriting() && bDisableAutoWidthOnDragging)
+        if(!IsVerticalWriting() && mbDisableAutoWidthOnDragging)
         {
-            bDisableAutoWidthOnDragging = true;
+            mbDisableAutoWidthOnDragging = true;
             aSet.Put(makeSdrTextAutoGrowWidthItem(false));
         }
     }
@@ -561,9 +562,9 @@ void SdrTextObj::AdaptTextMinSize()
 
         aSet.Put(makeSdrTextMinFrameHeightItem(nH));
 
-        if(IsVerticalWriting() && bDisableAutoWidthOnDragging)
+        if(IsVerticalWriting() && mbDisableAutoWidthOnDragging)
         {
-            bDisableAutoWidthOnDragging = false;
+            mbDisableAutoWidthOnDragging = false;
             aSet.Put(makeSdrTextAutoGrowHeightItem(false));
         }
     }
@@ -578,10 +579,10 @@ void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, tools::Rectangle 
     basegfx::B2DHomMatrix aMatrix(basegfx::utils::createTranslateB2DHomMatrix(
         -rAnchorRect.Left(), -rAnchorRect.Top()));
 
-    if(aGeo.nRotationAngle)
+    if(maGeo.nRotationAngle)
     {
         // Unrotate!
-        aMatrix.rotate(-aGeo.nRotationAngle.get() * F_PI18000);
+        aMatrix.rotate(-maGeo.nRotationAngle.get() * F_PI18000);
     }
 
     aXorPolyPolygon.transform(aMatrix);
@@ -659,9 +660,9 @@ void SdrTextObj::TakeTextAnchorRect(tools::Rectangle& rAnchorRect) const
         if (aAnkRect.GetWidth()<2) aAnkRect.SetRight(aAnkRect.Left()+1 ); // minimum size h and v: 2 px
         if (aAnkRect.GetHeight()<2) aAnkRect.SetBottom(aAnkRect.Top()+1 );
     }
-    if (aGeo.nRotationAngle) {
+    if (maGeo.nRotationAngle) {
         Point aTmpPt(aAnkRect.TopLeft());
-        RotatePoint(aTmpPt,aRotateRef,aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
+        RotatePoint(aTmpPt,aRotateRef,maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
         aTmpPt-=aAnkRect.TopLeft();
         aAnkRect.Move(aTmpPt.X(),aTmpPt.Y());
     }
@@ -749,7 +750,7 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRe
     // put text into the outliner, if available from the edit outliner
     SdrText* pText = getActiveText();
     OutlinerParaObject* pOutlinerParaObject = pText ? pText->GetOutlinerParaObject() : nullptr;
-    OutlinerParaObject* pPara = (pEdtOutl && !bNoEditText) ? pEdtOutl->CreateParaObject().release() : pOutlinerParaObject;
+    OutlinerParaObject* pPara = (mpEdtOutl && !bNoEditText) ? mpEdtOutl->CreateParaObject().release() : pOutlinerParaObject;
 
     if (pPara)
     {
@@ -774,7 +775,7 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRe
         rOutliner.SetTextObj( nullptr );
     }
 
-    if (pEdtOutl && !bNoEditText && pPara)
+    if (mpEdtOutl && !bNoEditText && pPara)
         delete pPara;
 
     rOutliner.SetUpdateMode(true);
@@ -828,8 +829,8 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRe
         if (eVAdj==SDRTEXTVERTADJUST_BOTTOM)
             aTextPos.AdjustY(nFreeHgt );
     }
-    if (aGeo.nRotationAngle)
-        RotatePoint(aTextPos,aAnkRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
+    if (maGeo.nRotationAngle)
+        RotatePoint(aTextPos,aAnkRect.TopLeft(),maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
 
     if (pAnchorRect)
         *pAnchorRect=aAnkRect;
@@ -842,9 +843,9 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRe
 
 bool SdrTextObj::CanCreateEditOutlinerParaObject() const
 {
-    if( HasTextImpl( pEdtOutl ) )
+    if( HasTextImpl( mpEdtOutl ) )
     {
-        return pEdtOutl->GetParagraphCount() > 0;
+        return mpEdtOutl->GetParagraphCount() > 0;
     }
     return false;
 }
@@ -852,10 +853,10 @@ bool SdrTextObj::CanCreateEditOutlinerParaObject() const
 std::unique_ptr<OutlinerParaObject> SdrTextObj::CreateEditOutlinerParaObject() const
 {
     std::unique_ptr<OutlinerParaObject> pPara;
-    if( HasTextImpl( pEdtOutl ) )
+    if( HasTextImpl( mpEdtOutl ) )
     {
-        sal_Int32 nParaCount = pEdtOutl->GetParagraphCount();
-        pPara = pEdtOutl->CreateParaObject(0, nParaCount);
+        sal_Int32 nParaCount = mpEdtOutl->GetParagraphCount();
+        pPara = mpEdtOutl->CreateParaObject(0, nParaCount);
     }
     return pPara;
 }
@@ -974,7 +975,7 @@ OUString SdrTextObj::TakeObjNameSingul() const
 {
     OUString aStr;
 
-    switch(eTextKind)
+    switch(meTextKind)
     {
         case OBJ_OUTLINETEXT:
         {
@@ -999,7 +1000,7 @@ OUString SdrTextObj::TakeObjNameSingul() const
     }
 
     OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
-    if(pOutlinerParaObject && eTextKind != OBJ_OUTLINETEXT)
+    if(pOutlinerParaObject && meTextKind != OBJ_OUTLINETEXT)
     {
         // shouldn't currently cause any problems at OUTLINETEXT
         OUString aStr2(comphelper::string::stripStart(pOutlinerParaObject->GetTextObject().GetText(0), ' '));
@@ -1032,7 +1033,8 @@ OUString SdrTextObj::TakeObjNameSingul() const
 OUString SdrTextObj::TakeObjNamePlural() const
 {
     OUString sName;
-    switch (eTextKind) {
+    switch (meTextKind)
+    {
         case OBJ_OUTLINETEXT: sName=SvxResId(STR_ObjNamePluralOUTLINETEXT); break;
         case OBJ_TITLETEXT  : sName=SvxResId(STR_ObjNamePluralTITLETEXT);   break;
         default: {
@@ -1054,8 +1056,8 @@ SdrTextObj* SdrTextObj::CloneSdrObject(SdrModel& rTargetModel) const
 basegfx::B2DPolyPolygon SdrTextObj::TakeXorPoly() const
 {
     tools::Polygon aPol(maRect);
-    if (aGeo.nShearAngle) ShearPoly(aPol,maRect.TopLeft(),aGeo.mfTanShearAngle);
-    if (aGeo.nRotationAngle) RotatePoly(aPol,maRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
+    if (maGeo.nShearAngle) ShearPoly(aPol,maRect.TopLeft(),maGeo.mfTanShearAngle);
+    if (maGeo.nRotationAngle) RotatePoly(aPol,maRect.TopLeft(),maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
 
     basegfx::B2DPolyPolygon aRetval;
     aRetval.append(aPol.getB2DPolygon());
@@ -1081,7 +1083,7 @@ basegfx::B2DPolyPolygon SdrTextObj::TakeContour() const
         bool bFitToSize(IsFitToSize());
         if (bFitToSize) aR=aAnchor2;
         tools::Polygon aPol(aR);
-        if (aGeo.nRotationAngle) RotatePoly(aPol,aR.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
+        if (maGeo.nRotationAngle) RotatePoly(aPol,aR.TopLeft(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
 
         aRetval.append(aPol.getB2DPolygon());
     }
@@ -1091,11 +1093,11 @@ basegfx::B2DPolyPolygon SdrTextObj::TakeContour() const
 
 void SdrTextObj::RecalcSnapRect()
 {
-    if (aGeo.nRotationAngle || aGeo.nShearAngle)
+    if (maGeo.nRotationAngle || maGeo.nShearAngle)
     {
         tools::Polygon aPol(maRect);
-        if (aGeo.nShearAngle) ShearPoly(aPol,maRect.TopLeft(),aGeo.mfTanShearAngle);
-        if (aGeo.nRotationAngle) RotatePoly(aPol,maRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
+        if (maGeo.nShearAngle) ShearPoly(aPol,maRect.TopLeft(),maGeo.mfTanShearAngle);
+        if (maGeo.nRotationAngle) RotatePoly(aPol,maRect.TopLeft(),maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
         maSnapRect=aPol.GetBoundRect();
     } else {
         maSnapRect = maRect;
@@ -1117,8 +1119,8 @@ Point SdrTextObj::GetSnapPoint(sal_uInt32 i) const
         case 3: aP=maRect.BottomRight(); break;
         default: aP=maRect.Center(); break;
     }
-    if (aGeo.nShearAngle) ShearPoint(aP,maRect.TopLeft(),aGeo.mfTanShearAngle);
-    if (aGeo.nRotationAngle) RotatePoint(aP,maRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
+    if (maGeo.nShearAngle) ShearPoint(aP,maRect.TopLeft(),maGeo.mfTanShearAngle);
+    if (maGeo.nRotationAngle) RotatePoint(aP,maRect.TopLeft(),maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
     return aP;
 }
 
@@ -1361,7 +1363,7 @@ void SdrTextObj::NbcReformatText()
         return;
 
     pText->ReformatText();
-    if (bTextFrame)
+    if (mbTextFrame)
     {
         NbcAdjustTextFrameWidthAndHeight();
     }
@@ -1390,16 +1392,16 @@ void SdrTextObj::SaveGeoData(SdrObjGeoData& rGeo) const
 {
     SdrAttrObj::SaveGeoData(rGeo);
     SdrTextObjGeoData& rTGeo=static_cast<SdrTextObjGeoData&>(rGeo);
-    rTGeo.aRect = maRect;
-    rTGeo.aGeo   =aGeo;
+    rTGeo.maRect = maRect;
+    rTGeo.maGeo = maGeo;
 }
 
 void SdrTextObj::RestoreGeoData(const SdrObjGeoData& rGeo)
 { // RectsDirty is called by SdrObject
     SdrAttrObj::RestoreGeoData(rGeo);
     const SdrTextObjGeoData& rTGeo=static_cast<const SdrTextObjGeoData&>(rGeo);
-    NbcSetLogicRect(rTGeo.aRect);
-    aGeo   =rTGeo.aGeo;
+    NbcSetLogicRect(rTGeo.maRect);
+    maGeo = rTGeo.maGeo;
     SetTextSizeDirty();
 }
 
@@ -1424,7 +1426,7 @@ void SdrTextObj::ForceOutlinerParaObject()
     if( pText && (pText->GetOutlinerParaObject() == nullptr) )
     {
         OutlinerMode nOutlMode = OutlinerMode::TextObject;
-        if( IsTextFrame() && eTextKind == OBJ_OUTLINETEXT )
+        if( IsTextFrame() && meTextKind == OBJ_OUTLINETEXT )
             nOutlMode = OutlinerMode::OutlineObject;
 
         pText->ForceOutlinerParaObject( nOutlMode );
@@ -1441,9 +1443,9 @@ TextChain *SdrTextObj::GetTextChain() const
 
 bool SdrTextObj::IsVerticalWriting() const
 {
-    if(pEdtOutl)
+    if(mpEdtOutl)
     {
-        return pEdtOutl->IsVertical();
+        return mpEdtOutl->IsVertical();
     }
 
     OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
@@ -1534,8 +1536,8 @@ void SdrTextObj::SetVerticalWriting(bool bVertical)
 bool SdrTextObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& /*rPolyPolygon*/) const
 {
     // get turn and shear
-    double fRotate = basegfx::deg2rad(aGeo.nRotationAngle.get() / 100.0);
-    double fShearX = basegfx::deg2rad(aGeo.nShearAngle.get() / 100.0);
+    double fRotate = basegfx::deg2rad(maGeo.nRotationAngle.get() / 100.0);
+    double fShearX = basegfx::deg2rad(maGeo.nShearAngle.get() / 100.0);
 
     // get aRect, this is the unrotated snaprect
     tools::Rectangle aRectangle(maRect);
@@ -1588,10 +1590,10 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     }
 
     // reset object shear and rotations
-    aGeo.nRotationAngle = 0_deg100;
-    aGeo.RecalcSinCos();
-    aGeo.nShearAngle = 0_deg100;
-    aGeo.RecalcTan();
+    maGeo.nRotationAngle = 0_deg100;
+    maGeo.RecalcSinCos();
+    maGeo.nShearAngle = 0_deg100;
+    maGeo.RecalcTan();
 
     // if anchor is used, make position relative to it
     if( getSdrModelFromSdrObject().IsWriter() )
@@ -1648,7 +1650,7 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
 
 bool SdrTextObj::IsReallyEdited() const
 {
-    return pEdtOutl && pEdtOutl->IsModified();
+    return mpEdtOutl && mpEdtOutl->IsModified();
 }
 
 // moved inlines here form hxx
@@ -1680,19 +1682,19 @@ tools::Long SdrTextObj::GetMaxTextFrameWidth() const
 
 bool SdrTextObj::IsFontwork() const
 {
-    return !bTextFrame // Default is FALSE
+    return !mbTextFrame // Default is FALSE
         && GetObjectItemSet().Get(XATTR_FORMTXTSTYLE).GetValue() != XFormTextStyle::NONE;
 }
 
 bool SdrTextObj::IsHideContour() const
 {
-    return !bTextFrame // Default is: no, don't HideContour; HideContour not together with TextFrames
+    return !mbTextFrame // Default is: no, don't HideContour; HideContour not together with TextFrames
         && GetObjectItemSet().Get(XATTR_FORMTXTHIDEFORM).GetValue();
 }
 
 bool SdrTextObj::IsContourTextFrame() const
 {
-    return !bTextFrame // ContourFrame not together with normal TextFrames
+    return !mbTextFrame // ContourFrame not together with normal TextFrames
         && GetObjectItemSet().Get(SDRATTR_TEXT_CONTOURFRAME).GetValue();
 }
 
@@ -1771,10 +1773,10 @@ GDIMetaFile* SdrTextObj::GetTextScrollMetaFileAndRectangle(
 
     // get outliner set up. To avoid getting a somehow rotated MetaFile,
     // temporarily disable object rotation.
-    Degree100 nAngle(aGeo.nRotationAngle);
-    aGeo.nRotationAngle = 0_deg100;
+    Degree100 nAngle(maGeo.nRotationAngle);
+    maGeo.nRotationAngle = 0_deg100;
     ImpSetupDrawOutlinerForPaint( bContourFrame, rOutliner, aTextRect, aAnchorRect, aPaintRect, aFitXCorrection );
-    aGeo.nRotationAngle = nAngle;
+    maGeo.nRotationAngle = nAngle;
 
     tools::Rectangle aScrollFrameRect(aPaintRect);
     const SfxItemSet& rSet = GetObjectItemSet();
@@ -1839,7 +1841,7 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
     const EditStatusFlags nStat = pEditStatus->GetStatusWord();
     const bool bGrowX = bool(nStat & EditStatusFlags::TEXTWIDTHCHANGED);
     const bool bGrowY = bool(nStat & EditStatusFlags::TextHeightChanged);
-    if(!(bTextFrame && (bGrowX || bGrowY)))
+    if(!(mbTextFrame && (bGrowX || bGrowY)))
         return;
 
     if ((bGrowX && IsAutoGrowWidth()) || (bGrowY && IsAutoGrowHeight()))
@@ -1848,13 +1850,13 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
     }
     else if ( (IsAutoFit() || IsFitToSize()) && !mbInDownScale)
     {
-        assert(pEdtOutl);
+        assert(mpEdtOutl);
         mbInDownScale = true;
 
         // sucks that we cannot disable paints via
-        // pEdtOutl->SetUpdateMode(FALSE) - but EditEngine skips
+        // mpEdtOutl->SetUpdateMode(FALSE) - but EditEngine skips
         // formatting as well, then.
-        ImpAutoFitText(*pEdtOutl);
+        ImpAutoFitText(*mpEdtOutl);
         mbInDownScale = false;
     }
 }
@@ -1925,20 +1927,20 @@ bool SdrTextObj::IsChainable() const
 
 void SdrTextObj::onChainingEvent()
 {
-    if (!pEdtOutl)
+    if (!mpEdtOutl)
         return;
 
     // Outliner for text transfer
     SdrOutliner &aDrawOutliner = ImpGetDrawOutliner();
 
     EditingTextChainFlow aTxtChainFlow(this);
-    aTxtChainFlow.CheckForFlowEvents(pEdtOutl);
+    aTxtChainFlow.CheckForFlowEvents(mpEdtOutl);
 
     if (aTxtChainFlow.IsOverflow()) {
         SAL_INFO("svx.chaining", "[CHAINING] Overflow going on");
         // One outliner is for non-overflowing text, the other for overflowing text
         // We remove text directly from the editing outliner
-        aTxtChainFlow.ExecuteOverflow(pEdtOutl, &aDrawOutliner);
+        aTxtChainFlow.ExecuteOverflow(mpEdtOutl, &aDrawOutliner);
     } else if (aTxtChainFlow.IsUnderflow()) {
         SAL_INFO("svx.chaining", "[CHAINING] Underflow going on");
         // underflow-induced overflow
@@ -2085,8 +2087,8 @@ void SdrTextObj::SetObjectItemNoBroadcast(const SfxPoolItem& rItem)
 // - enum vertical text anchoring top, middle, bottom, block, stretch(ni)
 // - enum ticker text                  (if it is not FontWork)
 
-// Every derived object is either a text frame (bTextFrame=true)
-// or a drawing object with a caption (bTextFrame=false).
+// Every derived object is either a text frame (mbTextFrame=true)
+// or a drawing object with a caption (mbTextFrame=false).
 
 // Default anchoring for text frames:
 //   SDRTEXTHORZADJUST_BLOCK, SDRTEXTVERTADJUST_TOP
@@ -2097,7 +2099,7 @@ void SdrTextObj::SetObjectItemNoBroadcast(const SfxPoolItem& rItem)
 
 // Every object derived from SdrTextObj must return an "UnrotatedSnapRect"
 // (->TakeUnrotatedSnapRect()) (the reference point for the rotation is the top
-// left of the rectangle (aGeo.nRotationAngle)) which is the basis for anchoring
+// left of the rectangle (maGeo.nRotationAngle)) which is the basis for anchoring
 // text. We then subtract the text frame margins from this rectangle, as a re-
 // sult we get the anchoring area (->TakeTextAnchorRect()). Within this area, we
 // calculate the anchoring point and the painting area, depending on the hori-

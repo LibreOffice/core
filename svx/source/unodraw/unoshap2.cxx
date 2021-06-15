@@ -1613,7 +1613,7 @@ awt::Point SAL_CALL SvxCustomShape::getPosition()
         if ( bMirroredX || bMirroredY )
         {   // we have to retrieve the unmirrored rect
 
-            GeoStat aNewGeo( aCustomShapeGeoData.aGeo );
+            GeoStat aNewGeo(aCustomShapeGeoData.maGeo);
             if ( bMirroredX )
             {
                 tools::Polygon aPol( Rect2Poly( aRect, aNewGeo ) );

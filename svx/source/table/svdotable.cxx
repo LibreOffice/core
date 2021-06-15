@@ -878,13 +878,13 @@ SdrTableObj::SdrTableObj(SdrModel& rSdrModel, SdrTableObj const & rSource)
 
     maLogicRect = rSource.maLogicRect;
     maRect = rSource.maRect;
-    aGeo = rSource.aGeo;
-    eTextKind = rSource.eTextKind;
-    bTextFrame = rSource.bTextFrame;
-    aTextSize = rSource.aTextSize;
-    bTextSizeDirty = rSource.bTextSizeDirty;
-    bNoShear = rSource.bNoShear;
-    bDisableAutoWidthOnDragging = rSource.bDisableAutoWidthOnDragging;
+    maGeo = rSource.maGeo;
+    meTextKind = rSource.meTextKind;
+    mbTextFrame = rSource.mbTextFrame;
+    maTextSize = rSource.maTextSize;
+    mbTextSizeDirty = rSource.mbTextSizeDirty;
+    mbNoShear = rSource.mbNoShear;
+    mbDisableAutoWidthOnDragging = rSource.mbDisableAutoWidthOnDragging;
 
     // use SdrTableObjImpl::operator= now to
     // copy model data and other stuff (see there)
@@ -1407,7 +1407,7 @@ sal_Int32 SdrTableObj::CheckTextHit(const Point& rPnt) const
 SdrOutliner* SdrTableObj::GetCellTextEditOutliner( const Cell& rCell ) const
 {
     if( mpImpl.is() && (mpImpl->getCell( mpImpl->maEditPos ).get() == &rCell) )
-        return pEdtOutl;
+        return mpEdtOutl;
     else
         return nullptr;
 }
@@ -1435,7 +1435,7 @@ bool SdrTableObj::HasText() const
 
 bool SdrTableObj::IsTextEditActive( const CellPos& rPos )
 {
-    return pEdtOutl && mpImpl.is() && (rPos == mpImpl->maEditPos);
+    return mpEdtOutl && mpImpl.is() && (rPos == mpImpl->maEditPos);
 }
 
 
@@ -1524,8 +1524,8 @@ void SdrTableObj::TakeTextRect( const CellPos& rPos, SdrOutliner& rOutliner, too
 
     // set text at outliner, maybe from edit outliner
     OutlinerParaObject* pPara= xCell->GetOutlinerParaObject();
-    if (pEdtOutl && !bNoEditText && mpImpl->mxActiveCell == xCell )
-        pPara=pEdtOutl->CreateParaObject().release();
+    if (mpEdtOutl && !bNoEditText && mpImpl->mxActiveCell == xCell )
+        pPara=mpEdtOutl->CreateParaObject().release();
 
     if (pPara)
     {
@@ -1546,7 +1546,7 @@ void SdrTableObj::TakeTextRect( const CellPos& rPos, SdrOutliner& rOutliner, too
         rOutliner.SetTextObj( nullptr );
     }
 
-    if (pEdtOutl && !bNoEditText && pPara && mpImpl->mxActiveCell == xCell )
+    if (mpEdtOutl && !bNoEditText && pPara && mpImpl->mxActiveCell == xCell )
         delete pPara;
 
     rOutliner.SetUpdateMode(true);
@@ -1808,10 +1808,10 @@ void SdrTableObj::RecalcSnapRect()
 
 bool SdrTableObj::BegTextEdit(SdrOutliner& rOutl)
 {
-    if( pEdtOutl != nullptr )
+    if( mpEdtOutl != nullptr )
         return false;
 
-    pEdtOutl=&rOutl;
+    mpEdtOutl=&rOutl;
 
     mbInEditMode = true;
 
@@ -1877,7 +1877,7 @@ void SdrTableObj::EndTextEdit(SdrOutliner& rOutl)
         SetOutlinerParaObject(std::move(pNewText));
     }
 
-    pEdtOutl = nullptr;
+    mpEdtOutl = nullptr;
     rOutl.Clear();
     EEControlBits nStat = rOutl.GetControlWord();
     nStat &= ~EEControlBits::AUTOPAGESIZE;
@@ -2060,7 +2060,7 @@ void SdrTableObj::SetSkipChangeLayout(bool bSkipChangeLayout)
 
 bool SdrTableObj::IsReallyEdited() const
 {
-    return pEdtOutl && pEdtOutl->IsModified();
+    return mpEdtOutl && mpEdtOutl->IsModified();
 }
 
 bool SdrTableObj::IsFontwork() const
