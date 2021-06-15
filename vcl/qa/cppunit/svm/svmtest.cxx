@@ -20,6 +20,8 @@
 #include <vcl/lineinfo.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/pngwrite.hxx>
+#include <vcl/metaact.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 #include <bitmap/BitmapWriteAccess.hxx>
 
@@ -184,7 +186,7 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
     void checkRefPoint(const GDIMetaFile& rMetaFile);
     void testRefPoint();
 
-    //void checkComment(const GDIMetaFile& rMetaFile);
+    void checkComment(const GDIMetaFile& rMetaFile);
     void testComment();
 
     //void checkLayoutMode(const GDIMetaFile& rMetaFile);
@@ -1944,8 +1946,36 @@ void SvmTest::testRefPoint()
     checkRefPoint(readFile(u"refpoint.svm"));
 }
 
+void SvmTest::checkComment(const GDIMetaFile& rMetafile)
+{
+    xmlDocUniquePtr pDoc = dumpMeta(rMetafile);
+
+    assertXPathContent(pDoc, "/metafile/comment[1]/comment[1]", "Test comment");
+
+    assertXPathAttrs(pDoc, "/metafile/comment[2]", {
+        {"datasize", "64"}
+    });
+
+    assertXPathContent(pDoc, "/metafile/comment[2]/comment[1]", "New test comment with a number 1");
+}
+
 void SvmTest::testComment()
-{}
+{
+    GDIMetaFile aGDIMetaFile;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
+
+    aGDIMetaFile.AddAction(new MetaCommentAction("Test comment"));
+
+    OUString aString = "New test comment with a number 1";
+    aGDIMetaFile.AddAction(new MetaCommentAction("New test comment with a number 1", \
+                                                    0, \
+                                                    reinterpret_cast<const sal_uInt8*>(aString.getStr()), \
+                                                    2*aString.getLength() ));
+
+    checkComment(writeAndReadStream(aGDIMetaFile));
+    checkComment(readFile(u"comment.svm"));
+}
 
 void SvmTest::testLayoutMode()
 {}
