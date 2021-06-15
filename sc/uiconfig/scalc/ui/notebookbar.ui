@@ -14795,7 +14795,7 @@
                                       <object class="GtkToolButton" id="Print-ZoomOut">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:ZoomOut</property>
+                                        <property name="action_name">.uno:ZoomMinus</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -14820,7 +14820,7 @@
                                       <object class="GtkToolButton" id="Print-ZoomIn">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:ZoomIn</property>
+                                        <property name="action_name">.uno:ZoomPlus</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
