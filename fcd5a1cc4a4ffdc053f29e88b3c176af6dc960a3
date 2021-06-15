@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fc29ebd4_3e03ee47",
+        "filename": "sc/qa/uitest/calc_tests8/tdf126248.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-15T13:04:55Z",
+      "side": 1,
+      "message": "Likely because of previous call to changeLocalSetting, there\u0027s no need to switch tabs - but possibly it still makes sense to do this (and won\u0027t harm)?",
+      "revId": "fcd5a1cc4a4ffdc053f29e88b3c176af6dc960a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb6a4c66_e4ae0cff",
+        "filename": "sc/qa/uitest/calc_tests8/tdf126248.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-15T13:04:55Z",
+      "side": 1,
+      "message": "https://opengrok.libreoffice.org/xref/core/uitest/uitest/uihelper/guarded.py?r\u003dc4f615b3#21:\n\n\u003e # Calls UITest.close_doc at exit\n\nSo this line is not needed :-)",
+      "revId": "fcd5a1cc4a4ffdc053f29e88b3c176af6dc960a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
