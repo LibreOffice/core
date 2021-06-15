@@ -1020,8 +1020,8 @@ public:
         : MessageDialogController(pParent, "sfx/ui/helpmanual.ui", "onlinehelpmanual", "hidedialog")
         , m_xHideOfflineHelpCB(m_xBuilder->weld_check_button("hidedialog"))
     {
-        LanguageTag aLangTag = Application::GetSettings().GetUILanguageTag();
-        OUString sLocaleString = SvtLanguageTable::GetLanguageString(aLangTag.getLanguageType());
+        LanguageType aLangType = Application::GetSettings().GetUILanguageTag().getLanguageType();
+        OUString sLocaleString = SvtLanguageTable::GetLanguageString(aLangType);
         OUString sPrimText = get_primary_text();
         set_primary_text(sPrimText.replaceAll("$UILOCALE", sLocaleString));
     }

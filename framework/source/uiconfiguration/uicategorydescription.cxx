@@ -365,18 +365,18 @@ public:
 UICategoryDescription::UICategoryDescription( const Reference< XComponentContext >& rxContext ) :
     UICommandDescription(rxContext,true)
 {
-    LanguageTag aCurrentLanguage = SvtSysLocale().GetUILanguageTag();
+    const LanguageTag& rCurrentLanguage = SvtSysLocale().GetUILanguageTag();
     Reference< XNameAccess > xEmpty;
     OUString aGenericCategories( "GenericCategories" );
-    m_xGenericUICommands[aCurrentLanguage] = new ConfigurationAccess_UICategory( aGenericCategories, xEmpty, rxContext );
+    m_xGenericUICommands[rCurrentLanguage] = new ConfigurationAccess_UICategory( aGenericCategories, xEmpty, rxContext );
 
     // insert generic categories mappings
     m_aModuleToCommandFileMap.emplace( OUString("generic"), aGenericCategories );
 
-    auto& rMap = m_aUICommandsHashMap[aCurrentLanguage];
+    auto& rMap = m_aUICommandsHashMap[rCurrentLanguage];
     UICommandsHashMap::iterator pCatIter = rMap.find( aGenericCategories );
     if ( pCatIter != rMap.end() )
-        pCatIter->second = m_xGenericUICommands[aCurrentLanguage];
+        pCatIter->second = m_xGenericUICommands[rCurrentLanguage];
 
     impl_fillElements("ooSetupFactoryCmdCategoryConfigRef");
 }
