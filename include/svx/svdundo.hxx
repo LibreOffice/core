@@ -53,8 +53,8 @@ class OutlinerParaObject;
 class SVXCORE_DLLPUBLIC SdrUndoAction : public SfxUndoAction
 {
 protected:
-    SdrModel&     rMod;
-    ViewShellId   m_nViewShellId;
+    SdrModel& rMod;
+    ViewShellId m_nViewShellId;
 
 protected:
     SdrUndoAction(SdrModel& rNewMod);
@@ -87,10 +87,10 @@ class SVXCORE_DLLPUBLIC SdrUndoGroup final : public SdrUndoAction
     std::vector<std::unique_ptr<SdrUndoAction>> maActions;
 
     // No expanded description of the Action (contains %O)
-    OUString                    aComment;
-    OUString                    aObjDescription;
+    OUString aComment;
+    OUString aObjDescription;
 
-    SdrRepeatFunc               eFunction;
+    SdrRepeatFunc eFunction;
 
 public:
     SdrUndoGroup(SdrModel& rNewMod);
@@ -120,7 +120,7 @@ public:
 class SVXCORE_DLLPUBLIC SdrUndoObj : public SdrUndoAction
 {
 protected:
-    SdrObject*                  pObj;
+    SdrObject* pObj;
 
 protected:
     SdrUndoObj(SdrObject& rNewObj);
@@ -148,16 +148,14 @@ protected:
     // FIXME: Or should we better remember the StyleSheetNames?
     rtl::Reference< SfxStyleSheetBase > mxUndoStyleSheet;
     rtl::Reference< SfxStyleSheetBase > mxRedoStyleSheet;
-    bool                        bStyleSheet;
-    bool                        bHaveToTakeRedoSet;
+    bool bStyleSheet;
+    bool bHaveToTakeRedoSet;
 
     // When assigning TextItems to a drawing object with text:
-    std::unique_ptr<OutlinerParaObject>
-                                pTextUndo;
+    std::unique_ptr<OutlinerParaObject> pTextUndo;
     // #i8508#
     // The text rescue mechanism needs also to be implemented for redo actions.
-    std::unique_ptr<OutlinerParaObject>
-                                pTextRedo;
+    std::unique_ptr<OutlinerParaObject> pTextRedo;
 
     // If we have a group object:
     std::unique_ptr<SdrUndoGroup> pUndoGroup;
@@ -182,7 +180,7 @@ public:
 
 class SVXCORE_DLLPUBLIC SdrUndoMoveObj final : public SdrUndoObj
 {
-    Size                        aDistance;     // Distance by which we move
+    Size aDistance; // Distance by which we move
 
 public:
     SdrUndoMoveObj(SdrObject& rNewObj, const Size& rDist): SdrUndoObj(rNewObj),aDistance(rDist) {}
@@ -205,10 +203,10 @@ public:
 
 class SVXCORE_DLLPUBLIC SdrUndoGeoObj : public SdrUndoObj
 {
-    std::unique_ptr<SdrObjGeoData>  pUndoGeo;
-    std::unique_ptr<SdrObjGeoData>  pRedoGeo;
+    std::unique_ptr<SdrObjGeoData> pUndoGeo;
+    std::unique_ptr<SdrObjGeoData> pRedoGeo;
     // If we have a group object:
-    std::unique_ptr<SdrUndoGroup>   pUndoGroup;
+    std::unique_ptr<SdrUndoGroup> pUndoGroup;
     /// If we have a table object, should its layout change?
     bool mbSkipChangeLayout;
 
@@ -233,11 +231,11 @@ class SVXCORE_DLLPUBLIC SdrUndoObjList : public SdrUndoObj {
     friend class ObjListListener;
 
 private:
-    bool                        bOwner;
+    bool bOwner;
 
 protected:
-    SdrObjList*                 pObjList;
-    sal_uInt32                      nOrdNum;
+    SdrObjList* pObjList;
+    sal_uInt32 nOrdNum;
 
 protected:
     SdrUndoObjList(SdrObject& rNewObj, bool bOrdNumDirect);
@@ -328,11 +326,11 @@ public:
 
 class SVXCORE_DLLPUBLIC SdrUndoReplaceObj : public SdrUndoObj
 {
-    bool                        bOldOwner;
-    bool                        bNewOwner;
+    bool bOldOwner;
+    bool bNewOwner;
 
-    SdrObjList*                 pObjList;
-    SdrObject*                  pNewObj;
+    SdrObjList* pObjList;
+    SdrObject* pNewObj;
 
 public:
     SdrUndoReplaceObj(SdrObject& rOldObj1, SdrObject& rNewObj1);
@@ -364,8 +362,8 @@ public:
 
 class SdrUndoObjOrdNum final : public SdrUndoObj
 {
-    sal_uInt32                      nOldOrdNum;
-    sal_uInt32                      nNewOrdNum;
+    sal_uInt32 nOldOrdNum;
+    sal_uInt32 nNewOrdNum;
 
 public:
     SdrUndoObjOrdNum(SdrObject& rNewObj, sal_uInt32 nOldOrdNum1, sal_uInt32 nNewOrdNum1);
@@ -381,8 +379,8 @@ public:
 
 class SVXCORE_DLLPUBLIC SdrUndoObjectLayerChange final : public SdrUndoObj
 {
-    SdrLayerID                  maOldLayer;
-    SdrLayerID                  maNewLayer;
+    SdrLayerID maOldLayer;
+    SdrLayerID maNewLayer;
 
 public:
     SdrUndoObjectLayerChange(SdrObject& rObj, SdrLayerID aOldLayer, SdrLayerID aNewLayer);
@@ -462,10 +460,10 @@ private:
 class SdrUndoLayer : public SdrUndoAction
 {
 protected:
-    SdrLayer*                   pLayer;
-    SdrLayerAdmin*              pLayerAdmin;
-    sal_uInt16                  nNum;
-    bool                        bItsMine;
+    SdrLayer* pLayer;
+    SdrLayerAdmin* pLayerAdmin;
+    sal_uInt16 nNum;
+    bool bItsMine;
 
 protected:
     SdrUndoLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel);
@@ -517,7 +515,7 @@ public:
 class SdrUndoPage : public SdrUndoAction
 {
 protected:
-    rtl::Reference<SdrPage>   mxPage;
+    rtl::Reference<SdrPage> mxPage;
 
 protected:
     void ImpInsertPage(sal_uInt16 nNum);
@@ -538,7 +536,7 @@ protected:
 class SVXCORE_DLLPUBLIC SdrUndoPageList : public SdrUndoPage
 {
 protected:
-    sal_uInt16                      nPageNum;
+    sal_uInt16 nPageNum;
 
 protected:
     SdrUndoPageList(SdrPage& rNewPg);
@@ -554,9 +552,9 @@ class SVXCORE_DLLPUBLIC SdrUndoDelPage final : public SdrUndoPageList
 {
     // When deleting a MasterPage, we remember all relations of the
     // Character Page with the MasterPage in this UndoGroup.
-    std::unique_ptr<SdrUndoGroup>  pUndoGroup;
-    std::unique_ptr<SfxPoolItem>   mpFillBitmapItem;
-    bool                           mbHasFillBitmap;
+    std::unique_ptr<SdrUndoGroup> pUndoGroup;
+    std::unique_ptr<SfxPoolItem> mpFillBitmapItem;
+    bool mbHasFillBitmap;
 
 public:
     SdrUndoDelPage(SdrPage& rNewPg);
@@ -617,8 +615,8 @@ public:
 
 class SdrUndoSetPageNum final : public SdrUndoPage
 {
-    sal_uInt16                      nOldPageNum;
-    sal_uInt16                      nNewPageNum;
+    sal_uInt16 nOldPageNum;
+    sal_uInt16 nNewPageNum;
 
 public:
     SdrUndoSetPageNum(SdrPage& rNewPg, sal_uInt16 nOldPageNum1, sal_uInt16 nNewPageNum1)
@@ -643,9 +641,9 @@ public:
 class SdrUndoPageMasterPage : public SdrUndoPage
 {
 protected:
-    bool                        mbOldHadMasterPage;
-    SdrLayerIDSet               maOldSet;
-    sal_uInt16                  maOldMasterPageNumber;
+    bool mbOldHadMasterPage;
+    SdrLayerIDSet maOldSet;
+    sal_uInt16 maOldMasterPageNumber;
 
 protected:
     SdrUndoPageMasterPage(SdrPage& rChangedPage);
@@ -677,9 +675,9 @@ public:
 
 class SdrUndoPageChangeMasterPage final : public SdrUndoPageMasterPage
 {
-    bool                        mbNewHadMasterPage;
-    SdrLayerIDSet                   maNewSet;
-    sal_uInt16                  maNewMasterPageNumber;
+    bool mbNewHadMasterPage;
+    SdrLayerIDSet maNewSet;
+    sal_uInt16 maNewMasterPageNumber;
 
 public:
     SdrUndoPageChangeMasterPage(SdrPage& rChangedPage);

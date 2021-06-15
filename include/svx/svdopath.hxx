@@ -32,7 +32,7 @@ class SdrPathObjGeoData final : public SdrTextObjGeoData
 {
 public:
     basegfx::B2DPolyPolygon maPathPolygon;
-    SdrObjKind                  meKind;
+    SdrObjKind meKind;
 
     SdrPathObjGeoData();
     virtual ~SdrPathObjGeoData() override;
@@ -47,7 +47,7 @@ private:
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
 
     basegfx::B2DPolyPolygon maPathPolygon;
-    SdrObjKind                  meKind;
+    SdrObjKind meKind;
     bool mbHandleScale = false;
 
     // for isolation of old Drag/Create code
