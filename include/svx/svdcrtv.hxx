@@ -37,23 +37,23 @@ class SVXCORE_DLLPUBLIC SdrCreateView : public SdrDragView
     friend class                SdrPageView;
 
 protected:
-    SdrObject*                  pCurrentCreate;   // The currently being created object
-    SdrPageView*                pCreatePV;    // Here, the creation is started
+    SdrObject* mpCurrentCreate; // The currently being created object
+    SdrPageView* mpCreatePV; // Here, the creation is started
     std::unique_ptr<ImplConnectMarkerOverlay> mpCoMaOverlay;
 
     // for migrating stuff from XOR, use ImpSdrCreateViewExtraData ATM to not need to
     // compile the apps all the time
     std::unique_ptr<ImpSdrCreateViewExtraData> mpCreateViewExtraData;
 
-    PointerStyle                aCurrentCreatePointer;
+    PointerStyle maCurrentCreatePointer;
 
-    sal_Int32                   nAutoCloseDistPix;
-    sal_Int32                   nFreeHandMinDistPix;
-    SdrInventor                 nCurrentInvent;     // set the current ones
-    SdrObjKind                  nCurrentIdent;      // Obj for re-creating
+    sal_Int32 mnAutoCloseDistPix;
+    sal_Int32 mnFreeHandMinDistPix;
+    SdrInventor mnCurrentInvent; // set the current ones
+    SdrObjKind mnCurrentIdent; // Obj for re-creating
 
-    bool                        b1stPointAsCenter : 1;
-    bool                        bUseIncompatiblePathCreateInterface : 1;
+    bool mb1stPointAsCenter : 1;
+    bool mbUseIncompatiblePathCreateInterface : 1;
 
     void ImpClearConnectMarker();
 
@@ -101,9 +101,13 @@ public:
     bool IsMeasureTool() const;
 
     void SetCurrentObj(SdrObjKind nIdent, SdrInventor nInvent=SdrInventor::Default);
-    void TakeCurrentObj(SdrObjKind& nIdent, SdrInventor& nInvent) const  { nInvent=nCurrentInvent; nIdent=nCurrentIdent; }
-    SdrInventor GetCurrentObjInventor() const { return nCurrentInvent; }
-    SdrObjKind GetCurrentObjIdentifier() const { return nCurrentIdent; }
+    void TakeCurrentObj(SdrObjKind& nIdent, SdrInventor& nInvent) const
+    {
+        nInvent = mnCurrentInvent;
+        nIdent = mnCurrentIdent;
+    }
+    SdrInventor GetCurrentObjInventor() const { return mnCurrentInvent; }
+    SdrObjKind GetCurrentObjIdentifier() const { return mnCurrentIdent; }
 
     // Beginning the regular Create
     bool BegCreateObj(const Point& rPnt, OutputDevice* pOut=nullptr, short nMinMov=-3);
@@ -112,8 +116,8 @@ public:
     bool EndCreateObj(SdrCreateCmd eCmd);
     void BckCreateObj();  // go back one polygon point
     void BrkCreateObj();
-    bool IsCreateObj() const { return pCurrentCreate!=nullptr; }
-    SdrObject* GetCreateObj() const { return pCurrentCreate; }
+    bool IsCreateObj() const { return mpCurrentCreate != nullptr; }
+    SdrObject* GetCreateObj() const { return mpCurrentCreate; }
 
     /// Setup layer (eg. foreground / background) of the given object.
     static void SetupObjLayer(const SdrPageView* pPageView, const OUString& aActiveLayer, SdrObject* pObj);
@@ -126,16 +130,16 @@ public:
     // Create a circle/rectangle/text frame with the first Point being
     // the center of the object instead of the upper-left corner.
     // Persistent flag. Default = FALSE.
-    bool IsCreate1stPointAsCenter() const { return b1stPointAsCenter; }
-    void SetCreate1stPointAsCenter(bool bOn) { b1stPointAsCenter = bOn; }
+    bool IsCreate1stPointAsCenter() const { return mb1stPointAsCenter; }
+    void SetCreate1stPointAsCenter(bool bOn) { mb1stPointAsCenter = bOn; }
 
     // Default = 5 Pixel
-    sal_uInt16 GetAutoCloseDistPix() const { return sal_uInt16(nAutoCloseDistPix); }
+    sal_uInt16 GetAutoCloseDistPix() const { return sal_uInt16(mnAutoCloseDistPix); }
 
     // Setting for the minimum distance in pixels between 2 bezier points when
     // creating a freehand line.
     // Default = 10 Pixel
-    sal_uInt16 GetFreeHandMinDistPix() const { return sal_uInt16(nFreeHandMinDistPix); }
+    sal_uInt16 GetFreeHandMinDistPix() const { return sal_uInt16(mnFreeHandMinDistPix); }
 
     // FIXME: Whoever wants to keep the Create Interface for the PathObj which is
     // incompatible with the rest of the Create functionality of SvDraw, needs
@@ -145,8 +149,8 @@ public:
     // This flag should be regarded as temporary. The affected applications should
     // be changed soon.
     // Default = sal_False;
-    bool IsUseIncompatiblePathCreateInterface() const { return bUseIncompatiblePathCreateInterface; }
-    void SetUseIncompatiblePathCreateInterface(bool bOn) { bUseIncompatiblePathCreateInterface = bOn; }
+    bool IsUseIncompatiblePathCreateInterface() const { return mbUseIncompatiblePathCreateInterface; }
+    void SetUseIncompatiblePathCreateInterface(bool bOn) { mbUseIncompatiblePathCreateInterface = bOn; }
     void SetConnectMarker(const SdrObjConnection& rCon);
     void HideConnectMarker();
 
