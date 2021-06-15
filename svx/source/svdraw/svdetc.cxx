@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <algorithm>
+
 #include <officecfg/Office/Common.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svx/svdetc.hxx>
@@ -371,63 +373,35 @@ bool SearchOutlinerItems(const SfxItemSet& rSet, bool bInklDefaults, bool* pbOnl
 std::unique_ptr<sal_uInt16[]> RemoveWhichRange(const sal_uInt16* pOldWhichTable, sal_uInt16 nRangeBeg, sal_uInt16 nRangeEnd)
 {
     // Six possible cases (per range):
-    //         [Beg..End]          Range, to delete
+    //         [Beg..End]          [nRangeBeg, nRangeEnd], to delete
     // [b..e]    [b..e]    [b..e]  Cases 1,3,2: doesn't matter, delete, doesn't matter  + Ranges
     // [b........e]  [b........e]  Cases 4,5  : shrink range                            | in
     // [b......................e]  Case  6    : splitting                               + pOldWhichTable
-    sal_uInt16 nCount=0;
-    while (pOldWhichTable[nCount]!=0) nCount++;
-    nCount++; // nCount should now be an odd number (0 for end of array)
-    DBG_ASSERT((nCount&1)==1,"RemoveWhichRange: WhichTable doesn't have an odd number of entries.");
-    sal_uInt16 nAlloc=nCount;
-    // check necessary size of new array
-    sal_uInt16 nNum=nCount-1;
-    while (nNum!=0) {
-        nNum-=2;
-        sal_uInt16 nBeg=pOldWhichTable[nNum];
-        sal_uInt16 nEnd=pOldWhichTable[nNum+1];
-        if (nEnd<nRangeBeg)  /*nCase=1*/ ;
-        else if (nBeg>nRangeEnd) /* nCase=2 */ ;
-        else if (nBeg>=nRangeBeg && nEnd<=nRangeEnd) /* nCase=3 */ nAlloc-=2;
-        else if (nEnd<=nRangeEnd) /* nCase=4 */;
-        else if (nBeg>=nRangeBeg) /* nCase=5*/ ;
-        else /* nCase=6 */ nAlloc+=2;
+    std::vector<sal_uInt16> buf;
+    for (auto p = pOldWhichTable; *p != 0; p += 2) {
+        auto const begin = p[0];
+        auto const end = p[1];
+        if (end < nRangeBeg || begin > nRangeEnd) { // cases 1, 2
+            buf.push_back(begin);
+            buf.push_back(end);
+        } else if (begin >= nRangeBeg && end <= nRangeEnd) { // case 3
+            // drop
+        } else if (end <= nRangeEnd) { // case 4
+            buf.push_back(begin);
+            buf.push_back(nRangeBeg - 1);
+        } else if (begin >= nRangeBeg) { // case 5
+            buf.push_back(nRangeEnd + 1);
+            buf.push_back(end);
+        } else { // case 6
+            buf.push_back(begin);
+            buf.push_back(nRangeBeg - 1);
+            buf.push_back(nRangeEnd + 1);
+            buf.push_back(end);
+        }
     }
-
-    std::unique_ptr<sal_uInt16[]> pNewWhichTable(new sal_uInt16[nAlloc]);
-    memcpy(pNewWhichTable.get(), pOldWhichTable, nAlloc*sizeof(sal_uInt16));
-    pNewWhichTable[nAlloc-1]=0; // in case 3, there's no 0 at the end.
-    // now remove the unwanted ranges
-    nNum=nAlloc-1;
-    while (nNum!=0) {
-        nNum-=2;
-        sal_uInt16 nBeg=pNewWhichTable[nNum];
-        sal_uInt16 nEnd=pNewWhichTable[nNum+1];
-        unsigned nCase=0;
-        if (nEnd<nRangeBeg) nCase=1;
-        else if (nBeg>nRangeEnd) nCase=2;
-        else if (nBeg>=nRangeBeg && nEnd<=nRangeEnd) nCase=3;
-        else if (nEnd<=nRangeEnd) nCase=4;
-        else if (nBeg>=nRangeBeg) nCase=5;
-        else nCase=6;
-        switch (nCase) {
-            case 3: {
-                unsigned nTailBytes=(nCount-(nNum+2))*sizeof(sal_uInt16);
-                memcpy(&pNewWhichTable[nNum],&pNewWhichTable[nNum+2],nTailBytes);
-                nCount-=2; // remember: array is now smaller
-            } break;
-            case 4: pNewWhichTable[nNum+1]=nRangeBeg-1; break;
-            case 5: pNewWhichTable[nNum]=nRangeEnd+1;     break;
-            case 6: {
-                unsigned nTailBytes=(nCount-(nNum+2))*sizeof(sal_uInt16);
-                memcpy(&pNewWhichTable[nNum+4],&pNewWhichTable[nNum+2],nTailBytes);
-                nCount+=2; // remember:array is now larger
-                pNewWhichTable[nNum+2]=nRangeEnd+1;
-                pNewWhichTable[nNum+3]=pNewWhichTable[nNum+1];
-                pNewWhichTable[nNum+1]=nRangeBeg-1;
-            } break;
-        } // switch
-    }
+    std::unique_ptr<sal_uInt16[]> pNewWhichTable(new sal_uInt16[buf.size() + 1]);
+    std::copy(buf.begin(), buf.end(), pNewWhichTable.get());
+    pNewWhichTable[buf.size()] = 0;
     return pNewWhichTable;
 }
 
