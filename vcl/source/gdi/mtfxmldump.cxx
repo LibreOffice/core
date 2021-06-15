@@ -439,6 +439,17 @@ OUString hex32(sal_uInt32 nNumber)
     return OUString::createFromAscii(ss.str().c_str());
 }
 
+OUString toHexString(const sal_uInt8* nData, sal_uInt32 nDataSize){
+
+    std::stringstream aStrm;
+    for (sal_uInt32 i = 0; i < nDataSize; i++)
+    {
+        aStrm << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(nData[i]);
+    }
+
+    return OUString::createFromAscii(aStrm.str().c_str());
+}
+
 void writePoint(tools::XmlWriter& rWriter, Point const& rPoint)
 {
     rWriter.attribute("x", rPoint.X());
@@ -1353,14 +1364,16 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                 if (pMetaCommentAction->GetDataSize() > 0)
                 {
                     rWriter.attribute("datasize", pMetaCommentAction->GetDataSize());
+                    rWriter.attribute("data", toHexString(pMetaCommentAction->GetData(), pMetaCommentAction->GetDataSize()));
                 }
+                rWriter.attribute("value", pMetaCommentAction->GetValue());
+
                 if (!pMetaCommentAction->GetComment().isEmpty())
                 {
                     rWriter.startElement("comment");
                     rWriter.content(pMetaCommentAction->GetComment());
                     rWriter.endElement();
                 }
-
                 rWriter.endElement();
             }
             break;
