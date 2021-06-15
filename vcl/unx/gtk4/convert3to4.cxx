@@ -310,23 +310,23 @@ struct ConvertResult
     bool m_bHasVisible;
     bool m_bHasIconSize;
     bool m_bAlwaysShowImage;
-    bool m_bImageAtTop;
     bool m_bUseUnderline;
     bool m_bVertOrientation;
+    GtkPositionType m_eImagePos;
     css::uno::Reference<css::xml::dom::XNode> m_xPropertyLabel;
     css::uno::Reference<css::xml::dom::XNode> m_xPropertyIconName;
 
     ConvertResult(bool bChildCanFocus, bool bHasVisible, bool bHasIconSize, bool bAlwaysShowImage,
-                  bool bImageAtTop, bool bUseUnderline, bool bVertOrientation,
+                  bool bUseUnderline, bool bVertOrientation, GtkPositionType eImagePos,
                   const css::uno::Reference<css::xml::dom::XNode>& rPropertyLabel,
                   const css::uno::Reference<css::xml::dom::XNode>& rPropertyIconName)
         : m_bChildCanFocus(bChildCanFocus)
         , m_bHasVisible(bHasVisible)
         , m_bHasIconSize(bHasIconSize)
         , m_bAlwaysShowImage(bAlwaysShowImage)
-        , m_bImageAtTop(bImageAtTop)
         , m_bUseUnderline(bUseUnderline)
         , m_bVertOrientation(bVertOrientation)
+        , m_eImagePos(eImagePos)
         , m_xPropertyLabel(rPropertyLabel)
         , m_xPropertyIconName(rPropertyIconName)
     {
@@ -343,7 +343,8 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
 {
     css::uno::Reference<css::xml::dom::XNodeList> xNodeList = xNode->getChildNodes();
     if (!xNodeList.is())
-        return ConvertResult(false, false, false, false, false, false, false, nullptr, nullptr);
+        return ConvertResult(false, false, false, false, false, false, GTK_POS_LEFT, nullptr,
+                             nullptr);
 
     std::vector<css::uno::Reference<css::xml::dom::XNode>> xRemoveList;
 
@@ -352,7 +353,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
     bool bHasVisible = false;
     bool bHasIconSize = false;
     bool bAlwaysShowImage = false;
-    bool bImageAtTop = false;
+    GtkPositionType eImagePos = GTK_POS_LEFT;
     bool bUseUnderline = false;
     bool bVertOrientation = false;
     css::uno::Reference<css::xml::dom::XNode> xPropertyLabel;
@@ -501,9 +502,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                         auto xIconSize = CreateProperty(xDoc, "icon-size", "2");
                         xChild->getParentNode()->insertBefore(xIconSize, xChild);
                     }
-                    else
-                        SAL_WARN("vcl.gtk", "what should we do with an icon-size of: "
-                                                << xChild->getFirstChild()->getNodeValue());
+
                     xRemoveList.push_back(xChild);
                 }
             }
@@ -557,8 +556,15 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                     // we will turn always-show-image into a GtkBox child for
                     // GtkButton and a GtkLabel child for the GtkBox and move
                     // the label property into it.
-                    assert(xChild->getFirstChild()->getNodeValue() == "top");
-                    bImageAtTop = xChild->getFirstChild()->getNodeValue() == "top";
+                    OUString sImagePos = xChild->getFirstChild()->getNodeValue();
+                    if (sImagePos == "top")
+                        eImagePos = GTK_POS_TOP;
+                    else if (sImagePos == "bottom")
+                        eImagePos = GTK_POS_BOTTOM;
+                    else if (sImagePos == "right")
+                        eImagePos = GTK_POS_RIGHT;
+                    else
+                        assert(sImagePos == "left");
                     xRemoveList.push_back(xChild);
                 }
             }
@@ -921,7 +927,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
         bool bChildHasIconSize = false;
         bool bChildHasVisible = false;
         bool bChildAlwaysShowImage = false;
-        bool bChildImageAtTop = false;
+        GtkPositionType eChildImagePos = GTK_POS_LEFT;
         bool bChildUseUnderline = false;
         bool bChildVertOrientation = false;
         css::uno::Reference<css::xml::dom::XNode> xChildPropertyLabel;
@@ -940,7 +946,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 bChildHasVisible = aChildRes.m_bHasVisible;
                 bChildHasIconSize = aChildRes.m_bHasIconSize;
                 bChildAlwaysShowImage = aChildRes.m_bAlwaysShowImage;
-                bChildImageAtTop = aChildRes.m_bImageAtTop;
+                eChildImagePos = aChildRes.m_eImagePos;
                 bChildUseUnderline = aChildRes.m_bUseUnderline;
                 bChildVertOrientation = aChildRes.m_bVertOrientation;
                 xChildPropertyLabel = aChildRes.m_xPropertyLabel;
@@ -1262,7 +1268,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 xBoxClassName->setValue("GtkBox");
                 xNewObjectNode->setAttributeNode(xBoxClassName);
 
-                if (bChildImageAtTop)
+                if (eChildImagePos == GTK_POS_TOP || eChildImagePos == GTK_POS_BOTTOM)
                 {
                     auto xOrientation = CreateProperty(xDoc, "orientation", "vertical");
                     xNewObjectNode->appendChild(xOrientation);
@@ -1300,9 +1306,18 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 }
                 xNewLabelChildNode->appendChild(xNewChildObjectNode);
 
-                if (xImageCandidateNode)
-                    xNewObjectNode->appendChild(xImageCandidateNode);
-                xNewObjectNode->appendChild(xNewLabelChildNode);
+                if (eChildImagePos == GTK_POS_LEFT || eChildImagePos == GTK_POS_TOP)
+                {
+                    if (xImageCandidateNode)
+                        xNewObjectNode->appendChild(xImageCandidateNode);
+                    xNewObjectNode->appendChild(xNewLabelChildNode);
+                }
+                else
+                {
+                    xNewObjectNode->appendChild(xNewLabelChildNode);
+                    if (xImageCandidateNode)
+                        xNewObjectNode->appendChild(xImageCandidateNode);
+                }
             }
         }
 
@@ -1325,8 +1340,8 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
         g_free(pText);
     }
 
-    return ConvertResult(bChildCanFocus, bHasVisible, bHasIconSize, bAlwaysShowImage, bImageAtTop,
-                         bUseUnderline, bVertOrientation, xPropertyLabel, xPropertyIconName);
+    return ConvertResult(bChildCanFocus, bHasVisible, bHasIconSize, bAlwaysShowImage, bUseUnderline,
+                         bVertOrientation, eImagePos, xPropertyLabel, xPropertyIconName);
 }
 }
 
