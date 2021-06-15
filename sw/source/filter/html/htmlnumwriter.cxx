@@ -99,6 +99,7 @@ Writer& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
         // If the list only consists of non-numbered text nodes, then don't start the list.
         bool bAtLeastOneNumbered = false;
         sal_uLong nPos = rWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex() + 1;
+        SwNumRule* pNumRule = nullptr;
         while (true)
         {
             const SwNode* pNode = rWrt.m_pDoc->GetNodes()[nPos];
@@ -108,11 +109,13 @@ Writer& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
             }
 
             const SwTextNode* pTextNode = pNode->GetTextNode();
-            if (!pTextNode->GetNumRule())
+            if (!pTextNode->GetNumRule() || (pNumRule && pTextNode->GetNumRule() != pNumRule))
             {
+                // Node is not in the same numbering as the previous one.
                 break;
             }
 
+            pNumRule = pTextNode->GetNumRule();
             if (pTextNode->IsNumbered())
             {
                 bAtLeastOneNumbered = true;
@@ -333,6 +336,7 @@ Writer& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
         // If the list only consisted of non-numbered text nodes, then don't end the list.
         bool bAtLeastOneNumbered = false;
         sal_uLong nPos = rWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex() - 1;
+        SwNumRule* pNumRule = nullptr;
         while (true)
         {
             const SwNode* pNode = rWrt.m_pDoc->GetNodes()[nPos];
@@ -342,11 +346,13 @@ Writer& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
             }
 
             const SwTextNode* pTextNode = pNode->GetTextNode();
-            if (!pTextNode->GetNumRule())
+            if (!pTextNode->GetNumRule() || (pNumRule && pTextNode->GetNumRule() != pNumRule))
             {
+                // Node is not in the same numbering as the next one.
                 break;
             }
 
+            pNumRule = pTextNode->GetNumRule();
             if (pTextNode->IsNumbered())
             {
                 bAtLeastOneNumbered = true;
