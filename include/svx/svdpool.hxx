@@ -17,15 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVDPOOL_HXX
-#define INCLUDED_SVX_SVDPOOL_HXX
+#pragma once
 
 #include <svx/xpool.hxx>
 #include <svx/svxdllapi.h>
 
 class XLineAttrSetItem;
 class XFillAttrSetItem;
-
 
 class SVXCORE_DLLPUBLIC SdrItemPool final : public XOutdevItemPool
 {
@@ -44,7 +42,5 @@ public:
 
     static OUString GetItemName(sal_uInt16 nWhich);
 };
-
-#endif // INCLUDED_SVX_SVDPOOL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVDPAGE_HXX
-#define INCLUDED_SVX_SVDPAGE_HXX
+#pragma once
 
 #include <cppuhelper/weak.hxx>
 #include <svl/stylesheetuser.hxx>
@@ -532,8 +531,5 @@ public:
         const sdr::contact::DisplayInfo& rDisplayInfo,
         bool bEdit );
 };
-
-
-#endif // INCLUDED_SVX_SVDPAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
