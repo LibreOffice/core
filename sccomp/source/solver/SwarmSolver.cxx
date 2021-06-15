@@ -130,7 +130,7 @@ private:
     std::vector<sheet::SolverConstraint> maNonBoundedConstraints;
 
 private:
-    static OUString getResourceString(const char* pId);
+    static OUString getResourceString(std::string_view aId);
 
     uno::Reference<table::XCell> getCell(const table::CellAddress& rPosition);
     void setValue(const table::CellAddress& rPosition, double fValue);
@@ -283,12 +283,12 @@ public:
 };
 }
 
-OUString SwarmSolver::getResourceString(const char* pId)
+OUString SwarmSolver::getResourceString(std::string_view aId)
 {
-    if (!pId)
+    if (aId.empty())
         return OUString();
 
-    return Translate::get(pId, Translate::Create("scc"));
+    return Translate::get(aId, Translate::Create("scc"));
 }
 
 uno::Reference<table::XCell> SwarmSolver::getCell(const table::CellAddress& rPosition)

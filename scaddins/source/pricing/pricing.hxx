@@ -140,7 +140,7 @@ public:
                                 ScaPricingAddIn();
     virtual                     ~ScaPricingAddIn() override;
 
-    OUString ScaResId(const char* pResId);
+    OUString ScaResId(std::string_view aResId);
 
                                 // XAddIn
     virtual OUString SAL_CALL getProgrammaticFuntionName( const OUString& aDisplayName ) override;

@@ -162,14 +162,14 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
     }
 }
 
-OUString SwResId(const char* pId)
+OUString SwResId(std::string_view aId)
 {
-    return Translate::get(pId, SW_MOD()->GetResLocale());
+    return Translate::get(aId, SW_MOD()->GetResLocale());
 }
 
-OUString SwResId(const char* pId, int nCardinality)
+OUString SwResId(std::string_view aId, int nCardinality)
 {
-    return Translate::nget(pId, nCardinality, SW_MOD()->GetResLocale());
+    return Translate::nget(aId, nCardinality, SW_MOD()->GetResLocale());
 }
 
 uno::Reference< scanner::XScannerManager2 > const &

@@ -22,8 +22,9 @@
 #include "dllapi.h"
 
 #include <rtl/ustring.hxx>
+#include <string_view>
 
-OUString REPORTDESIGN_DLLPUBLIC RptResId(const char* pId);
+OUString REPORTDESIGN_DLLPUBLIC RptResId(std::string_view pId);
 
 #endif // INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_CORE_RESOURCE_HXX
 

@@ -77,6 +77,6 @@ struct application_info_impl
 extern std::vector< application_info_impl > const & getApplicationInfos();
 extern OUString getApplicationUIName( std::u16string_view rServiceName );
 extern const application_info_impl* getApplicationInfo( std::u16string_view rServiceName );
-OUString XsltResId(const char* pId);
+OUString XsltResId(std::string_view pId);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

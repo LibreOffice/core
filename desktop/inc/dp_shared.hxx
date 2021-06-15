@@ -33,9 +33,9 @@ struct DeploymentLocale :
 
 } // namespace dp
 
-inline OUString DpResId(const char* pId)
+inline OUString DpResId(std::string_view aId)
 {
-    return Translate::get(pId, dp::DeploymentLocale::get());
+    return Translate::get(aId, dp::DeploymentLocale::get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1144,12 +1144,12 @@ OUString Application::GetAppName()
 
 enum {hwAll=0, hwEnv=1, hwUI=2};
 
-static OUString Localize(const char *pId, const bool bLocalize)
+static OUString Localize(std::string_view aId, const bool bLocalize)
 {
     if (bLocalize)
-        return VclResId(pId);
+        return VclResId(aId);
     else
-        return Translate::get(pId, Translate::Create("vcl", LanguageTag("en-US")));
+        return Translate::get(aId, Translate::Create("vcl", LanguageTag("en-US")));
 }
 
 OUString Application::GetHWOSConfInfo(const int bSelection, const bool bLocalize)

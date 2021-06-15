@@ -22,9 +22,9 @@
 
 namespace chart
 {
-    OUString SchResId(const char *pId)
+    OUString SchResId(std::string_view aId)
     {
-        return Translate::get(pId, Translate::Create("chart"));
+        return Translate::get(aId, Translate::Create("chart"));
     }
 } //  namespace chart
 

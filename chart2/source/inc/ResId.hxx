@@ -20,10 +20,11 @@
 
 #include <rtl/ustring.hxx>
 #include "charttoolsdllapi.hxx"
+#include <string_view>
 
 namespace chart
 {
-OUString OOO_DLLPUBLIC_CHARTTOOLS SchResId(const char* pId);
+OUString OOO_DLLPUBLIC_CHARTTOOLS SchResId(std::string_view aId);
 
 } //  namespace chart
 

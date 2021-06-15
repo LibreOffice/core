@@ -2858,7 +2858,7 @@ void VclBuilder::handleChild(vcl::Window *pParent, stringmap* pAtkProps, xmlread
                     {
                         name = reader.getAttributeValue(false);
                         sType = OString(name.begin, name.length);
-                        m_pParserState->m_aResLocale = Translate::Create(sType.getStr());
+                        m_pParserState->m_aResLocale = Translate::Create(sType);
                     }
                 }
                 ++nLevel;
