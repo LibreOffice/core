@@ -50,7 +50,7 @@ std::unique_ptr<sdr::contact::ViewContact> SdrObjGroup::CreateObjectSpecificView
 SdrObjGroup::SdrObjGroup(SdrModel& rSdrModel)
 :   SdrObject(rSdrModel),
     SdrObjList(),
-    aRefPoint(0, 0)
+    maRefPoint(0, 0)
 {
     m_bClosedObj=false;
 }
@@ -76,7 +76,7 @@ SdrObjGroup::SdrObjGroup(SdrModel& rSdrModel, SdrObjGroup const & rSource)
     }
 
     // copy local parameters
-    aRefPoint  = rSource.aRefPoint;
+    maRefPoint  = rSource.maRefPoint;
 }
 
 SdrObjGroup::~SdrObjGroup()
@@ -348,7 +348,7 @@ void SdrObjGroup::NbcSetLogicRect(const tools::Rectangle& rRect)
 
 void SdrObjGroup::NbcMove(const Size& rSiz)
 {
-    aRefPoint.Move(rSiz);
+    maRefPoint.Move(rSiz);
     const size_t nObjCount(GetObjCount());
 
     if(0 != nObjCount)
@@ -385,7 +385,7 @@ void SdrObjGroup::NbcResize(const Point& rRef, const Fraction& xFact, const Frac
         }
     }
 
-    ResizePoint(aRefPoint,rRef,xFact,yFact);
+    ResizePoint(maRefPoint, rRef, xFact, yFact);
 
     const size_t nObjCount(GetObjCount());
     if(0 != nObjCount)
@@ -407,7 +407,7 @@ void SdrObjGroup::NbcResize(const Point& rRef, const Fraction& xFact, const Frac
 void SdrObjGroup::NbcRotate(const Point& rRef, Degree100 nAngle, double sn, double cs)
 {
     SetGlueReallyAbsolute(true);
-    RotatePoint(aRefPoint,rRef,sn,cs);
+    RotatePoint(maRefPoint, rRef, sn, cs);
     const size_t nObjCount(GetObjCount());
 
     for (size_t i=0; i<nObjCount; ++i)
@@ -424,7 +424,7 @@ void SdrObjGroup::NbcRotate(const Point& rRef, Degree100 nAngle, double sn, doub
 void SdrObjGroup::NbcMirror(const Point& rRef1, const Point& rRef2)
 {
     SetGlueReallyAbsolute(true);
-    MirrorPoint(aRefPoint,rRef1,rRef2); // implementation missing in SvdEtc!
+    MirrorPoint(maRefPoint, rRef1, rRef2); // implementation missing in SvdEtc!
     const size_t nObjCount(GetObjCount());
 
     for (size_t i=0; i<nObjCount; ++i)
@@ -441,7 +441,7 @@ void SdrObjGroup::NbcMirror(const Point& rRef1, const Point& rRef2)
 void SdrObjGroup::NbcShear(const Point& rRef, Degree100 nAngle, double tn, bool bVShear)
 {
     SetGlueReallyAbsolute(true);
-    ShearPoint(aRefPoint,rRef,tn);
+    ShearPoint(maRefPoint, rRef, tn);
     const size_t nObjCount(GetObjCount());
 
     for (size_t i=0; i<nObjCount; ++i)
@@ -459,7 +459,7 @@ void SdrObjGroup::NbcSetAnchorPos(const Point& rPnt)
 {
     m_aAnchor=rPnt;
     Size aSiz(rPnt.X()-m_aAnchor.X(),rPnt.Y()-m_aAnchor.Y());
-    aRefPoint.Move(aSiz);
+    maRefPoint.Move(aSiz);
     const size_t nObjCount(GetObjCount());
 
     for (size_t i=0; i<nObjCount; ++i)
@@ -516,7 +516,7 @@ void SdrObjGroup::Move(const Size& rSiz)
         return;
 
     tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
-    aRefPoint.Move(rSiz);
+    maRefPoint.Move(rSiz);
     const size_t nObjCount(GetObjCount());
 
     if(0 != nObjCount)
@@ -569,7 +569,7 @@ void SdrObjGroup::Resize(const Point& rRef, const Fraction& xFact, const Fractio
         }
     }
     tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
-    ResizePoint(aRefPoint,rRef,xFact,yFact);
+    ResizePoint(maRefPoint, rRef, xFact, yFact);
     const size_t nObjCount(GetObjCount());
 
     if(0 != nObjCount)
@@ -608,7 +608,7 @@ void SdrObjGroup::Rotate(const Point& rRef, Degree100 nAngle, double sn, double 
 
     SetGlueReallyAbsolute(true);
     tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
-    RotatePoint(aRefPoint,rRef,sn,cs);
+    RotatePoint(maRefPoint, rRef, sn, cs);
     // move the connectors first, everything else afterwards
     const size_t nObjCount(GetObjCount());
 
@@ -638,7 +638,7 @@ void SdrObjGroup::Mirror(const Point& rRef1, const Point& rRef2)
 {
     SetGlueReallyAbsolute(true);
     tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
-    MirrorPoint(aRefPoint,rRef1,rRef2); // implementation missing in SvdEtc!
+    MirrorPoint(maRefPoint, rRef1, rRef2); // implementation missing in SvdEtc!
     // move the connectors first, everything else afterwards
     const size_t nObjCount(GetObjCount());
 
@@ -671,7 +671,7 @@ void SdrObjGroup::Shear(const Point& rRef, Degree100 nAngle, double tn, bool bVS
 
     SetGlueReallyAbsolute(true);
     tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
-    ShearPoint(aRefPoint,rRef,tn);
+    ShearPoint(maRefPoint, rRef, tn);
     // move the connectors first, everything else afterwards
     const size_t nObjCount(GetObjCount());
 
@@ -704,7 +704,7 @@ void SdrObjGroup::SetAnchorPos(const Point& rPnt)
     bool bChg=m_aAnchor!=rPnt;
     m_aAnchor=rPnt;
     Size aSiz(rPnt.X()-m_aAnchor.X(),rPnt.Y()-m_aAnchor.Y());
-    aRefPoint.Move(aSiz);
+    maRefPoint.Move(aSiz);
     // move the connectors first, everything else afterwards
     const size_t nObjCount(GetObjCount());
 

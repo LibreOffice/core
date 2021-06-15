@@ -652,13 +652,13 @@ static bool lcl_UrlHit( const SdrView* pView, const Point& rPosPixel, const vcl:
     MouseEvent aMEvt( rPosPixel, 1, MouseEventModifiers::NONE, MOUSE_LEFT );
     SdrHitKind eHit = pView->PickAnything( aMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt );
 
-    if ( eHit != SdrHitKind::NONE && aVEvt.pObj != nullptr )
+    if (eHit != SdrHitKind::NONE && aVEvt.mpObj != nullptr)
     {
-        if ( SvxIMapInfo::GetIMapInfo( aVEvt.pObj ) && SvxIMapInfo::GetHitIMapObject(
-                                aVEvt.pObj, pWindow->PixelToLogic(rPosPixel), pWindow->GetOutDev() ) )
+        if ( SvxIMapInfo::GetIMapInfo(aVEvt.mpObj) && SvxIMapInfo::GetHitIMapObject(
+                                aVEvt.mpObj, pWindow->PixelToLogic(rPosPixel), pWindow->GetOutDev() ) )
             return true;
 
-        if ( aVEvt.eEvent == SdrEventKind::ExecuteUrl )
+        if (aVEvt.meEvent == SdrEventKind::ExecuteUrl)
             return true;
     }
 

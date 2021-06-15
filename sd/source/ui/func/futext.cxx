@@ -194,9 +194,9 @@ void FuText::DoExecute( SfxRequest& )
         SdrPageView* pPV = mpView->GetSdrPageView();
         SdrViewEvent aVEvt;
         mpView->PickAnything(aMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
-        mpView->MarkObj(aVEvt.pRootObj, pPV);
+        mpView->MarkObj(aVEvt.mpRootObj, pPV);
 
-        mxTextObj.reset( dynamic_cast< SdrTextObj* >( aVEvt.pObj ) );
+        mxTextObj.reset( dynamic_cast< SdrTextObj* >( aVEvt.mpObj ) );
     }
     else if (mpView->AreObjectsMarked())
     {
@@ -268,8 +268,8 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                 if (auto pURLField = dynamic_cast< const SvxURLField *>( pField ))
                 {
                     eHit = SdrHitKind::MarkedObject;
-                    aVEvt.eEvent = SdrEventKind::ExecuteUrl;
-                    aVEvt.pURLField = pURLField;
+                    aVEvt.meEvent = SdrEventKind::ExecuteUrl;
+                    aVEvt.mpURLField = pURLField;
                 }
             }
         }
@@ -322,7 +322,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                 if (eHit == SdrHitKind::TextEditObj && xSelectionController.is())
                 {
                     const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-                    if (rMarkList.GetMarkCount() == 1 && rMarkList.GetMark(0)->GetMarkedSdrObj() == aVEvt.pRootObj)
+                    if (rMarkList.GetMarkCount() == 1 && rMarkList.GetMark(0)->GetMarkedSdrObj() == aVEvt.mpRootObj)
                         bMarkChanges = false;
                 }
 
@@ -339,7 +339,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                     }
                 }
 
-                if ( aVEvt.eEvent == SdrEventKind::ExecuteUrl                   ||
+                if ( aVEvt.meEvent == SdrEventKind::ExecuteUrl                   ||
                      eHit == SdrHitKind::Handle                                 ||
                      eHit == SdrHitKind::MarkedObject                           ||
                      eHit == SdrHitKind::TextEditObj                            ||
@@ -352,20 +352,20 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                         /* hit text of unmarked object:
                            select object and set to EditMode */
                         if (bMarkChanges)
-                            mpView->MarkObj(aVEvt.pRootObj, pPV);
+                            mpView->MarkObj(aVEvt.mpRootObj, pPV);
 
-                        if (auto pSdrTextObj = dynamic_cast<SdrTextObj *>( aVEvt.pObj ))
+                        if (auto pSdrTextObj = dynamic_cast<SdrTextObj*>(aVEvt.mpObj))
                         {
                             mxTextObj.reset( pSdrTextObj );
                         }
 
                         SetInEditMode(rMEvt, true);
                     }
-                    else if (aVEvt.eEvent == SdrEventKind::ExecuteUrl && !rMEvt.IsMod2())
+                    else if (aVEvt.meEvent == SdrEventKind::ExecuteUrl && !rMEvt.IsMod2())
                     {
                         // execute URL
                         mpWindow->ReleaseMouse();
-                        SfxStringItem aStrItem(SID_FILE_NAME, aVEvt.pURLField->GetURL());
+                        SfxStringItem aStrItem(SID_FILE_NAME, aVEvt.mpURLField->GetURL());
                         SfxStringItem aReferer(SID_REFERER, mpDocSh->GetMedium()->GetName());
                         SfxBoolItem aBrowseItem( SID_BROWSE, true );
                         SfxViewFrame* pFrame = mpViewShell->GetViewFrame();
@@ -393,7 +393,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
 
                         // #i78748#
                         // do the EndTextEdit first, it will delete the handles and force a
-                        // recreation. This will make aVEvt.pHdl to point to a deleted handle,
+                        // recreation. This will make aVEvt.mpHdl to point to a deleted handle,
                         // thus it is necessary to reset it and to get it again.
 
                         // #i112855#
@@ -406,23 +406,23 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                             mpView->SdrEndTextEdit();
                             bJustEndedEdit = true;
 
-                            if(aVEvt.pHdl)
+                            if(aVEvt.mpHdl)
                             {
                                 // force new handle identification, the pointer will be dead here
                                 // since SdrEndTextEdit has reset (deleted) the handles.
-                                aVEvt.pHdl = nullptr;
+                                aVEvt.mpHdl = nullptr;
                                 mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
                             }
                         }
 
-                        if (!aVEvt.pHdl)
+                        if (!aVEvt.mpHdl)
                         {
                             if( eHit == SdrHitKind::UnmarkedObject )
                             {
                                 if ( !rMEvt.IsShift() )
                                     mpView->UnmarkAll();
 
-                                mpView->MarkObj(aVEvt.pRootObj, pPV);
+                                mpView->MarkObj(aVEvt.mpRootObj, pPV);
                             }
 
                             // Drag object
@@ -437,7 +437,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                             if( (eHit == SdrHitKind::Handle) || (eHit == SdrHitKind::MarkedObject) )
                             {
                                 sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
-                                mpView->BegDragObj(aMDPos, nullptr, aVEvt.pHdl, nDrgLog);
+                                mpView->BegDragObj(aMDPos, nullptr, aVEvt.mpHdl, nDrgLog);
                             }
                         }
                         bReturn = true;
@@ -779,7 +779,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
         SdrPageView* pPV2 = mpView->GetSdrPageView();
         SdrViewEvent aVEvt;
         mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
-        mpView->MarkObj(aVEvt.pRootObj, pPV2);
+        mpView->MarkObj(aVEvt.mpRootObj, pPV2);
     }
 
     if ( !mxTextObj.is() && mpView )
@@ -1273,9 +1273,9 @@ void FuText::ReceiveRequest(SfxRequest& rReq)
             SdrPageView* pPV = mpView->GetSdrPageView();
             SdrViewEvent aVEvt;
             mpView->PickAnything(aMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
-            mpView->MarkObj(aVEvt.pRootObj, pPV);
+            mpView->MarkObj(aVEvt.mpRootObj, pPV);
 
-            if (auto pSdrTextObj = dynamic_cast< SdrTextObj *>( aVEvt.pObj ))
+            if (auto pSdrTextObj = dynamic_cast<SdrTextObj*>(aVEvt.mpObj))
             {
                 mxTextObj.reset( pSdrTextObj );
             }

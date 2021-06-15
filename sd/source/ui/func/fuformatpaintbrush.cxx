@@ -91,7 +91,7 @@ bool FuFormatPaintBrush::MouseButtonDown(const MouseEvent& rMEvt)
         SdrViewEvent aVEvt;
         SdrHitKind eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
-        if( (eHit == SdrHitKind::TextEdit) || (eHit == SdrHitKind::TextEditObj && ( mpViewShell->GetFrameView()->IsQuickEdit() || dynamic_cast< sdr::table::SdrTableObj* >( aVEvt.pObj ) != nullptr ) ))
+        if( (eHit == SdrHitKind::TextEdit) || (eHit == SdrHitKind::TextEditObj && ( mpViewShell->GetFrameView()->IsQuickEdit() || dynamic_cast<sdr::table::SdrTableObj*>(aVEvt.mpObj) != nullptr ) ))
         {
             SdrPageView* pPV=nullptr;
             sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
@@ -121,13 +121,13 @@ bool FuFormatPaintBrush::MouseButtonDown(const MouseEvent& rMEvt)
                 return FuText::MouseButtonDown(aMEvt);
             }
 
-            if( aVEvt.pObj == nullptr )
-                aVEvt.pObj = pPickObj;
+            if (aVEvt.mpObj == nullptr)
+                aVEvt.mpObj = pPickObj;
         }
 
         unmarkimpl( mpView );
 
-        if( aVEvt.pObj )
+        if (aVEvt.mpObj)
         {
             sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
             mpView->MarkObj(mpWindow->PixelToLogic( rMEvt.GetPosPixel() ), nHitLog, false/*bToggle*/);
