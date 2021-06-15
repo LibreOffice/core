@@ -12,6 +12,8 @@
 
 #include <node.hxx>
 #include <ndtxt.hxx>
+#include <ndole.hxx>
+#include <ndnotxt.hxx>
 #include <ndgrf.hxx>
 
 namespace sw
@@ -31,7 +33,11 @@ public:
 
     void handleNode(SwNode* pNode) override
     {
-        if (pNode->IsGrfNode())
+        if (pNode->IsOLENode())
+        {
+            handleOLENode(pNode->GetOLENode());
+        }
+        else if (pNode->IsGrfNode())
         {
             handleGraphicNode(pNode->GetGrfNode());
         }
@@ -39,6 +45,15 @@ public:
         {
             handleTextNode(pNode->GetTextNode());
         }
+    }
+
+    void handleOLENode(SwOLENode* pOleNode)
+    {
+        auto pFrameFormat = pOleNode->GetFlyFormat();
+        m_rXmlWriter.startElement("ole");
+        m_rXmlWriter.attribute("alt", pOleNode->GetTitle());
+        m_rXmlWriter.attribute("name", pFrameFormat->GetName());
+        m_rXmlWriter.endElement();
     }
 
     void handleGraphicNode(SwGrfNode* pGraphicNode)
