@@ -363,6 +363,11 @@ void ChartSeriesPanel::updateData()
     mxRBPrimaryAxis->set_active(bPrimaryAxis);
     mxRBSecondaryAxis->set_active(!bPrimaryAxis);
 
+    css::uno::Reference<css::chart2::XChartDocument> xChartDoc(mxModel, css::uno::UNO_QUERY_THROW);
+    css::uno::Reference<css::chart2::XDiagram> xDiagram = xChartDoc->getFirstDiagram();
+    if (xDiagram.is())
+        mxRBSecondaryAxis->set_sensitive(DiagramHelper::isMultipleSeries(xDiagram));
+
     mxBoxLabelPlacement->set_sensitive(bLabelVisible);
     mxLBLabelPlacement->set_active(getDataLabelPlacement(mxModel, aCID));
 

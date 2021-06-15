@@ -48,15 +48,6 @@ void TitleDialogData::readFromModel( const uno::Reference< frame::XModel>& xChar
 {
     uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram(xChartModel);
 
-    //get possibilities
-    uno::Sequence< sal_Bool > aAxisPossibilityList;
-    AxisHelper::getAxisOrGridPossibilities( aAxisPossibilityList, xDiagram );
-    aPossibilityList[2]=aAxisPossibilityList[0];//x axis title
-    aPossibilityList[3]=aAxisPossibilityList[1];//y axis title
-    aPossibilityList[4]=aAxisPossibilityList[2];//z axis title
-    aPossibilityList[5]=aAxisPossibilityList[3];//secondary x axis title
-    aPossibilityList[6]=aAxisPossibilityList[4];//secondary y axis title
-
     //find out which title exists and get their text
     //main title:
     for( sal_Int32 nTitleIndex = static_cast< sal_Int32 >( TitleHelper::TITLE_BEGIN);
@@ -68,6 +59,15 @@ void TitleDialogData::readFromModel( const uno::Reference< frame::XModel>& xChar
         aExistenceList[nTitleIndex] = xTitle.is();
         aTextList[nTitleIndex]=TitleHelper::getCompleteString( xTitle );
     }
+
+    //get possibilities
+    uno::Sequence< sal_Bool > aAxisPossibilityList;
+    AxisHelper::getAxisOrGridPossibilities(aAxisPossibilityList, aExistenceList, xDiagram);
+    aPossibilityList[2] = aAxisPossibilityList[0];//x axis title
+    aPossibilityList[3] = aAxisPossibilityList[1];//y axis title
+    aPossibilityList[4] = aAxisPossibilityList[2];//z axis title
+    aPossibilityList[5] = aAxisPossibilityList[3];//secondary x axis title
+    aPossibilityList[6] = aAxisPossibilityList[4];//secondary y axis title
 }
 
 bool TitleDialogData::writeDifferenceToModel(

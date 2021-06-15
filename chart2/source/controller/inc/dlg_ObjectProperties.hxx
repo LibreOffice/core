@@ -40,6 +40,7 @@ public:
     bool HasGeometryProperties() const { return m_bHasGeometryProperties;}
     bool HasStatisticProperties() const { return m_bHasStatisticProperties;}
     bool ProvidesSecondaryYAxis() const { return m_bProvidesSecondaryYAxis;}
+    bool AllowSecondaryYAxis() const { return m_bAllowSecondaryYAxis;}
     bool ProvidesOverlapAndGapWidth() const { return m_bProvidesOverlapAndGapWidth;}
     bool ProvidesBarConnectors() const { return m_bProvidesBarConnectors;}
     bool HasAreaProperties() const { return m_bHasAreaProperties;}
@@ -74,6 +75,7 @@ private:
     bool m_bHasGeometryProperties;
     bool m_bHasStatisticProperties;
     bool m_bProvidesSecondaryYAxis;
+    bool m_bAllowSecondaryYAxis;
     bool m_bProvidesOverlapAndGapWidth;
     bool m_bProvidesBarConnectors;
     bool m_bHasAreaProperties;
