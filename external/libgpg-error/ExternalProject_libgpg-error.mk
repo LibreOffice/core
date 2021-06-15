@@ -28,7 +28,7 @@ $(call gb_ExternalProject_get_state_target,libgpg-error,build): $(call gb_Execut
 			--disable-doc \
 			--disable-tests \
 			--host=$(gb_ExternalProject_libgpg-error_host) \
-			RC='windres -O COFF --target=$(gb_ExternalProject_libgpg-error_target) --preprocessor='\''$(call gb_Executable_get_target,cpp) -+ -DRC_INVOKED -DWINAPI_FAMILY=0 $(SOLARINC)'\' \
+			RC='windres -O COFF --target=$(gb_ExternalProject_libgpg-error_target) --preprocessor=$(call gb_Executable_get_target,cpp) --preprocessor-arg=-+ -DRC_INVOKED -DWINAPI_FAMILY=0 $(SOLARINC)' \
 	    && $(MAKE) \
 	)
 else
