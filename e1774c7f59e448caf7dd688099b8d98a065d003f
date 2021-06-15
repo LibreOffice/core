@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9b5b44eb_2ce0d689",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 4586,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-06-15T07:16:47Z",
+      "side": 1,
+      "message": "I believe this should say \u0027test should crash here without the fix\u0027\nOTOH, did you check it fails without the fix in place in a debug build ?",
+      "revId": "e1774c7f59e448caf7dd688099b8d98a065d003f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
