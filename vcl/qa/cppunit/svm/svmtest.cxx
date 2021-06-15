@@ -20,6 +20,7 @@
 #include <vcl/lineinfo.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/pngwrite.hxx>
+#include <tools/fract.hxx>
 
 #include <bitmap/BitmapWriteAccess.hxx>
 
@@ -160,7 +161,7 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
     void checkTextAlign(const GDIMetaFile& rMetaFile);
     void testTextAlign();
 
-    //void checkMapMode(const GDIMetaFile& rMetaFile);
+    void checkMapMode(const GDIMetaFile& rMetaFile);
     void testMapMode();
 
     //void checkFont(const GDIMetaFile& rMetaFile);
@@ -1803,8 +1804,76 @@ void SvmTest::testTextAlign()
     checkTextAlign(readFile(u"textalign.svm"));
 }
 
+void SvmTest::checkMapMode(const GDIMetaFile& rMetafile)
+{
+    xmlDocUniquePtr pDoc = dumpMeta(rMetafile);
+
+    assertXPathAttrs(pDoc, "/metafile/mapmode[1]", {
+        {"mapunit", "MapPixel"},
+        {"x", "0"},
+        {"y", "0"},
+        {"scalex", "(1/1)"},
+        {"scaley", "(1/1)"}
+    });
+
+    assertXPathAttrs(pDoc, "/metafile/mapmode[2]", {
+        {"mapunit", "Map100thInch"},
+        {"x", "0"},
+        {"y", "1"},
+        {"scalex", "(1/2)"},
+        {"scaley", "(2/3)"}
+    });
+
+    assertXPathAttrs(pDoc, "/metafile/mapmode[3]", {
+        {"mapunit", "MapRelative"},
+        {"x", "0"},
+        {"y", "-1"},
+        {"scalex", "(25/12)"},
+        {"scaley", "(25/16)"}
+    });
+}
+
 void SvmTest::testMapMode()
-{}
+{
+    GDIMetaFile aGDIMetafile;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetafile);
+
+    MapMode aMapMode;
+
+    pVirtualDev->SetMapMode(aMapMode);
+
+    MapMode aMapMode1(MapUnit::Map100thInch);
+    aMapMode1.SetOrigin(Point(0, 1));
+    aMapMode1.SetScaleX(Fraction(1, 2));
+    aMapMode1.SetScaleY(Fraction(2, 3));
+
+    pVirtualDev->SetMetafileMapMode(aMapMode1, false);
+
+    MapMode aMapMode2;
+    pVirtualDev->SetMetafileMapMode(aMapMode2, true);
+
+    checkMapMode(writeAndReadStream(aGDIMetafile));
+    checkMapMode(readFile(u"mapmode.svm"));
+}
+
+void SvmTest::checkFont(const GDIMetaFile& rMetafile)
+{
+    xmlDocUniquePtr pDoc = dumpMeta(rMetafile);
+
+    assertXPathAttrs(pDoc, "/metafile/font[1]", {
+        {"color", "#ffffff"},
+        {"fillcolor", "#ffffff"},
+        {"name", "Test Family Name"},
+        {"stylename", "Test Style Name"},
+        {"width", "12"},
+        {"height", "14"},
+        {"orientation", "50"},
+        {"weight", "thin"},
+        {"vertical", "true"},
+    });
+}
+
 void SvmTest::testFont()
 {}
 
