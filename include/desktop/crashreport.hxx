@@ -94,7 +94,7 @@ private:
     // // everywhere we want to log something to the crash report system.
     inline static void addKeyValue(SAL_UNUSED_PARAMETER const OUString& /*rKey*/, SAL_UNUSED_PARAMETER const OUString& /*rValue*/, SAL_UNUSED_PARAMETER tAddKeyHandling /*AddKeyHandling*/) {};
     inline static void setActiveApp(const OUString& /*rActiveApp*/){};
-    inline static OUString currentActiveApp(){};
+    inline static OUString currentActiveApp(){return OUString();};
 #endif // HAVE_FEATURE_BREAKPAD
 };
 
