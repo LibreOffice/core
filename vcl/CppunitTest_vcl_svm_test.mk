@@ -35,6 +35,7 @@ $(eval $(call gb_CppunitTest_use_libraries,vcl_svm_test, \
 	cppu \
 	cppuhelper \
 	sal \
+	salhelper \
     svt \
 	test \
 	tl \
