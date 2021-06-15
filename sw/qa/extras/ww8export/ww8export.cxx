@@ -1065,6 +1065,11 @@ DECLARE_WW8EXPORT_TEST(testFdo77454, "fdo77454.doc")
     }
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf129529, "tdf129529.odt")
+{
+    // This should crash or go into a infinite loop
+}
+
 DECLARE_WW8EXPORT_TEST(testFdo59530, "fdo59530.doc")
 {
     // See ooxmlexport's testFdo38244().
