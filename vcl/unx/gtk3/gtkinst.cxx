@@ -5061,7 +5061,9 @@ public:
         weld::Container::connect_container_focus_changed(rLink);
     }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+    GtkWidget* getContainer() { return m_pContainer; }
+#else
     GtkContainer* getContainer() { return m_pContainer; }
 #endif
 
@@ -5088,22 +5090,31 @@ public:
 
     virtual void move(weld::Widget* pWidget, weld::Container* pNewParent) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkInstanceWidget* pGtkWidget = dynamic_cast<GtkInstanceWidget*>(pWidget);
         assert(pGtkWidget);
         GtkWidget* pChild = pGtkWidget->getWidget();
         g_object_ref(pChild);
-        gtk_container_remove(getContainer(), pChild);
+        auto pOldContainer = getContainer();
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        gtk_container_remove(pOldContainer, pChild);
+#else
+        assert(GTK_IS_BOX(pOldContainer));
+        gtk_box_remove(GTK_BOX(pOldContainer), pChild);
+#endif
 
         GtkInstanceContainer* pNewGtkParent = dynamic_cast<GtkInstanceContainer*>(pNewParent);
         assert(!pNewParent || pNewGtkParent);
         if (pNewGtkParent)
-            gtk_container_add(pNewGtkParent->getContainer(), pChild);
-        g_object_unref(pChild);
+        {
+            auto pNewContainer = pNewGtkParent->getContainer();
+#if !GTK_CHECK_VERSION(4, 0, 0)
+            gtk_container_add(pNewContainer, pChild);
 #else
-        (void)pWidget;
-        (void)pNewParent;
+            assert(GTK_IS_BOX(pNewContainer));
+            gtk_box_append(GTK_BOX(pNewContainer), pChild);
 #endif
+        }
+        g_object_unref(pChild);
     }
 
     virtual void recursively_unset_default_buttons() override
