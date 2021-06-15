@@ -469,8 +469,9 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 }
             }
 
-            // remove 'Help' button label and replace with a help icon instead
-            if (sName == "label" && GetParentObjectType(xChild) == "GtkButton")
+            // remove 'Help' button label and replace with a help icon instead. Unless the toplevel is a message dialog
+            if (sName == "label" && GetParentObjectType(xChild) == "GtkButton"
+                && !ToplevelIsMessageDialog(xChild))
             {
                 css::uno::Reference<css::xml::dom::XNamedNodeMap> xParentMap
                     = xChild->getParentNode()->getAttributes();
