@@ -99,7 +99,8 @@ public:
     static void makeGridInvisible( const css::uno::Reference< css::beans::XPropertySet >& xGridProperties );
 
     static void hideAxisIfNoDataIsAttached( const css::uno::Reference< css::chart2::XAxis >& xAxis
-                                          , const css::uno::Reference< css::chart2::XDiagram >& xDiagram);
+                                          , const css::uno::Reference< css::chart2::XDiagram >& xDiagram
+                                          , sal_Int32 nOldAxisIndex );
 
     SAL_DLLPRIVATE static bool areAxisLabelsVisible( const css::uno::Reference< css::beans::XPropertySet >& xAxisProperties );
     static bool isAxisVisible( const css::uno::Reference< css::chart2::XAxis >& xAxis );
@@ -168,7 +169,7 @@ public:
     static css::uno::Sequence< css::uno::Reference< css::beans::XPropertySet > >
             getAllGrids( const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
 
-    static void getAxisOrGridPossibilities( css::uno::Sequence< sal_Bool >& rPossibilityList
+    static void getAxisOrGridPossibilities( css::uno::Sequence< sal_Bool >& rPossibilityList, css::uno::Sequence< sal_Bool >& rExistenceList
         , const css::uno::Reference< css::chart2::XDiagram>& xDiagram, bool bAxis=true );
 
     static void getAxisOrGridExistence( css::uno::Sequence< sal_Bool >& rExistenceList

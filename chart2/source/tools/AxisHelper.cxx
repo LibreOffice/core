@@ -495,22 +495,42 @@ void AxisHelper::makeAxisInvisible( const Reference< XAxis >& xAxis )
     }
 }
 
-void AxisHelper::hideAxisIfNoDataIsAttached( const Reference< XAxis >& xAxis, const Reference< XDiagram >& xDiagram )
+void AxisHelper::hideAxisIfNoDataIsAttached( const Reference< XAxis >& xAxis, const Reference< XDiagram >& xDiagram, sal_Int32 nOldAxisIndex )
 {
     //axis is hidden if no data is attached anymore but data is available
     bool bOtherSeriesAttachedToThisAxis = false;
     std::vector< Reference< chart2::XDataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
+    uno::Reference< chart2::XAxis > xCurrentAxis;
     for (auto const& series : aSeriesVector)
     {
-        uno::Reference< chart2::XAxis > xCurrentAxis = DiagramHelper::getAttachedAxis(series, xDiagram );
+        xCurrentAxis = DiagramHelper::getAttachedAxis(series, xDiagram);
         if( xCurrentAxis==xAxis )
         {
             bOtherSeriesAttachedToThisAxis = true;
             break;
         }
     }
-    if(!bOtherSeriesAttachedToThisAxis && !aSeriesVector.empty() )
-        AxisHelper::makeAxisInvisible( xAxis );
+    if (!bOtherSeriesAttachedToThisAxis && !aSeriesVector.empty())
+    {
+        if (nOldAxisIndex != MAIN_AXIS_INDEX)
+            AxisHelper::makeAxisInvisible(xAxis);
+        else
+        {
+            for (auto const& series : aSeriesVector)
+            {
+                try
+                {
+                    Reference< beans::XPropertySet > xProp(series, uno::UNO_QUERY_THROW);
+                    xProp->setPropertyValue("AttachedAxisIndex", uno::Any(sal_Int32(MAIN_AXIS_INDEX)));
+                }
+                catch (const uno::Exception&)
+                {
+                    DBG_UNHANDLED_EXCEPTION("chart2");
+                }
+            }
+            AxisHelper::makeAxisInvisible(xCurrentAxis);
+        }
+    }
 }
 
 void AxisHelper::hideGrid( sal_Int32 nDimensionIndex, sal_Int32 nCooSysIndex, bool bMainGrid
@@ -882,7 +902,7 @@ Sequence< Reference< beans::XPropertySet > > AxisHelper::getAllGrids( const Refe
     return comphelper::containerToSequence( aGridVector );
 }
 
-void AxisHelper::getAxisOrGridPossibilities( Sequence< sal_Bool >& rPossibilityList
+void AxisHelper::getAxisOrGridPossibilities( Sequence< sal_Bool >& rPossibilityList, Sequence< sal_Bool >& rExistenceList
         , const Reference< XDiagram>& xDiagram, bool bAxis )
 {
     rPossibilityList.realloc(6);
@@ -895,8 +915,11 @@ void AxisHelper::getAxisOrGridPossibilities( Sequence< sal_Bool >& rPossibilityL
     for(nIndex=0;nIndex<3;nIndex++)
         rPossibilityList[nIndex]=ChartTypeHelper::isSupportingMainAxis(xChartType,nDimensionCount,nIndex);
     for(nIndex=3;nIndex<6;nIndex++)
-        if( bAxis )
-            rPossibilityList[nIndex]=ChartTypeHelper::isSupportingSecondaryAxis(xChartType,nDimensionCount);
+        if (bAxis)
+        {
+            rPossibilityList[nIndex] = ChartTypeHelper::isSupportingSecondaryAxis(xChartType, nDimensionCount) &&
+                (DiagramHelper::isMultipleSeries(xDiagram) || rExistenceList[nIndex]);
+        }
         else
             rPossibilityList[nIndex] = rPossibilityList[nIndex-3];
 }
