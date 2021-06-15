@@ -13,6 +13,7 @@ namespace jsdialog
 {
 bool isBuilderEnabled(const OUString& rUIFile, bool bMobile)
 {
+    // mobile only dialogs
     if (bMobile)
     {
         if (rUIFile == "modules/swriter/ui/wordcount-mobile.ui"
@@ -28,6 +29,7 @@ bool isBuilderEnabled(const OUString& rUIFile, bool bMobile)
         }
     }
 
+    // dialogs
     if (rUIFile == "modules/scalc/ui/pivottablelayoutdialog.ui"
         || rUIFile == "modules/scalc/ui/selectsource.ui"
         || rUIFile == "modules/scalc/ui/managenamesdialog.ui"
@@ -54,6 +56,14 @@ bool isBuilderEnabled(const OUString& rUIFile, bool bMobile)
     {
         return true;
     }
+
+    return false;
+}
+
+bool isBuilderEnabledForPopup(const OUString& rUIFile)
+{
+    if (rUIFile == "svx/ui/colorwindow.ui")
+        return true;
 
     return false;
 }

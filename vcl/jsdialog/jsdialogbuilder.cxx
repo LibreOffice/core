@@ -384,7 +384,7 @@ void JSDropTarget::fire_dragEnter(const css::datatransfer::dnd::DropTargetDragEn
 
 // used for dialogs
 JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIRoot,
-                                     const OUString& rUIFile)
+                                     const OUString& rUIFile, bool bPopup)
     : SalInstanceBuilder(extract_sal_widget(pParent), rUIRoot, rUIFile)
     , m_nWindowId(0)
     , m_aParentDialog(nullptr)
@@ -392,7 +392,12 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIR
     , m_sTypeOfJSON("dialog")
     , m_bHasTopLevelDialog(false)
     , m_bIsNotebookbar(false)
+    , m_aWindowToRelease(nullptr)
 {
+    // when it is a popup we initialize sender in weld_popover
+    if (bPopup)
+        return;
+
     vcl::Window* pRoot = m_xBuilder->get_widget_root();
 
     if (pRoot && pRoot->GetParent())
@@ -416,6 +421,7 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIR
     , m_sTypeOfJSON("sidebar")
     , m_bHasTopLevelDialog(false)
     , m_bIsNotebookbar(false)
+    , m_aWindowToRelease(nullptr)
 {
     vcl::Window* pRoot = m_xBuilder->get_widget_root();
 
@@ -453,6 +459,7 @@ JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRo
     , m_sTypeOfJSON("notebookbar")
     , m_bHasTopLevelDialog(false)
     , m_bIsNotebookbar(false)
+    , m_aWindowToRelease(nullptr)
 {
     vcl::Window* pRoot = m_xBuilder->get_widget_root();
     if (pRoot && pRoot->GetParent())
@@ -481,6 +488,7 @@ JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRo
     , m_sTypeOfJSON("autofilter")
     , m_bHasTopLevelDialog(false)
     , m_bIsNotebookbar(false)
+    , m_aWindowToRelease(nullptr)
 {
     vcl::Window* pRoot = m_xBuilder->get_widget_root();
     m_aContentWindow = pParent;
@@ -524,8 +532,21 @@ JSInstanceBuilder* JSInstanceBuilder::CreateSidebarBuilder(weld::Widget* pParent
     return new JSInstanceBuilder(pParent, rUIRoot, rUIFile, nLOKWindowId);
 }
 
+JSInstanceBuilder* JSInstanceBuilder::CreatePopupBuilder(weld::Widget* pParent,
+                                                         const OUString& rUIRoot,
+                                                         const OUString& rUIFile)
+{
+    return new JSInstanceBuilder(pParent, rUIRoot, rUIFile, true);
+}
+
 JSInstanceBuilder::~JSInstanceBuilder()
 {
+    if (m_aWindowToRelease)
+    {
+        m_aWindowToRelease->ReleaseLOKNotifier();
+        m_aWindowToRelease.clear();
+    }
+
     if (m_nWindowId && (m_bHasTopLevelDialog || m_bIsNotebookbar))
     {
         GetLOKWeldWidgetsMap().erase(m_nWindowId);
@@ -883,6 +904,30 @@ std::unique_ptr<weld::MenuButton> JSInstanceBuilder::weld_menu_button(const OStr
         RememberWidget(id, pWeldWidget.get());
 
     return pWeldWidget;
+}
+
+std::unique_ptr<weld::Popover> JSInstanceBuilder::weld_popover(const OString& id)
+{
+    DockingWindow* pDockingWindow = m_xBuilder->get<DockingWindow>(id);
+    std::unique_ptr<weld::Popover> pRet(
+        pDockingWindow ? new JSPopover(this, pDockingWindow, this, false) : nullptr);
+    if (pDockingWindow)
+    {
+        assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
+        m_aOwnedToplevel.set(pDockingWindow);
+        m_xBuilder->drop_ownership(pDockingWindow);
+
+        if (VclPtr<vcl::Window> pWin = pDockingWindow->GetParentWithLOKNotifier())
+        {
+            pDockingWindow->SetLOKNotifier(pWin->GetLOKNotifier());
+            m_aParentDialog = pDockingWindow;
+            m_aWindowToRelease = pDockingWindow;
+            m_nWindowId = m_aParentDialog->GetLOKWindowId();
+            InsertWindowToMap(m_nWindowId);
+            initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
+        }
+    }
+    return pRet;
 }
 
 weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParent,
@@ -1443,6 +1488,18 @@ void JSMenuButton::set_image(const css::uno::Reference<css::graphic::XGraphic>& 
 {
     SalInstanceMenuButton::set_image(rImage);
     sendUpdate();
+}
+
+void JSMenuButton::set_active(bool active)
+{
+    SalInstanceMenuButton::set_active(active);
+    sendUpdate();
+}
+
+JSPopover::JSPopover(JSDialogSender* pSender, DockingWindow* pDockingWindow,
+                     SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : JSWidget<SalInstancePopover, DockingWindow>(pSender, pDockingWindow, pBuilder, bTakeOwnership)
+{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
