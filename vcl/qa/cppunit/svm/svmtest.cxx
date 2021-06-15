@@ -21,6 +21,8 @@
 #include <vcl/virdev.hxx>
 #include <vcl/pngwrite.hxx>
 #include <tools/fract.hxx>
+#include <vcl/metaact.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 #include <bitmap/BitmapWriteAccess.hxx>
 
@@ -185,7 +187,7 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
     void checkRefPoint(const GDIMetaFile& rMetaFile);
     void testRefPoint();
 
-    //void checkComment(const GDIMetaFile& rMetaFile);
+    void checkComment(const GDIMetaFile& rMetaFile);
     void testComment();
 
     //void checkLayoutMode(const GDIMetaFile& rMetaFile);
@@ -2027,8 +2029,48 @@ void SvmTest::testRefPoint()
     checkRefPoint(readFile(u"refpoint.svm"));
 }
 
+void SvmTest::checkComment(const GDIMetaFile& rMetafile)
+{
+    xmlDocUniquePtr pDoc = dumpMeta(rMetafile);
+
+    assertXPathAttrs(pDoc, "/metafile/comment[1]", {
+        {"value", "0"}
+    });
+
+    assertXPathContent(pDoc, "/metafile/comment[1]/comment[1]", "Test comment");
+
+    assertXPathAttrs(pDoc, "/metafile/comment[2]", {
+        {"datasize", "48"}
+    });
+
+    assertXPathAttrs(pDoc, "/metafile/comment[2]", {
+        {"data", "540068006500730065002000610072006500200073006f006d0065002000740065007300740020006400610074006100"}
+    });
+
+    assertXPathAttrs(pDoc, "/metafile/comment[2]", {
+        {"value", "4"}
+    });
+
+    assertXPathContent(pDoc, "/metafile/comment[2]/comment[1]", "This is a test comment");
+}
+
 void SvmTest::testComment()
-{}
+{
+    GDIMetaFile aGDIMetaFile;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
+
+    aGDIMetaFile.AddAction(new MetaCommentAction("Test comment"));
+
+    OUString aString = "These are some test data";
+    aGDIMetaFile.AddAction(new MetaCommentAction("This is a test comment", \
+                                                    4, \
+                                                    reinterpret_cast<const sal_uInt8*>(aString.getStr()), \
+                                                    2*aString.getLength() ));
+
+    checkComment(writeAndReadStream(aGDIMetaFile));
+    checkComment(readFile(u"comment.svm"));
+}
 
 void SvmTest::testLayoutMode()
 {}
