@@ -22,6 +22,30 @@
       "revId": "baf4e677a85dab2ab470ad651ee056f3ebdd74c8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af3ff02c_25322f65",
+        "filename": "sc/qa/uitest/calc_tests8/tdf126248.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-06-15T14:43:24Z",
+      "side": 1,
+      "message": "no, in that code we are not selecting a tab, we are expanding and selecting the entries in the left tree of the Options dialog. I don\u0027t think this is causing the problem here. We have many tests where this is done: https://opengrok.libreoffice.org/search?project\u003dcore\u0026full\u003dOptionsTreeDialog\u0026defs\u003d\u0026refs\u003d\u0026path\u003duitest\u0026hist\u003d\u0026type\u003d\u0026xrd\u003d\u0026nn\u003d1\u0026si\u003dpath\u0026si\u003dpath",
+      "parentUuid": "4c1d0a29_7b8d89b6",
+      "range": {
+        "startLine": 35,
+        "startChar": 12,
+        "endLine": 39,
+        "endChar": 72
+      },
+      "revId": "baf4e677a85dab2ab470ad651ee056f3ebdd74c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
