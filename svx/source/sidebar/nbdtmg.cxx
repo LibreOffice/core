@@ -852,7 +852,7 @@ void OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
                     const Graphic* pGrf = pLevelSettings->pBrushItem->GetGraphic();
                     Size aSize = pLevelSettings->aSize;
                     sal_Int16 eOrient = text::VertOrientation::LINE_CENTER;
-                    if (!isResetSize  && aFmt.GetGraphicSize()!=Size(0,0))\
+                    if (!isResetSize  && aFmt.GetGraphicSize()!=Size(0,0))
                         aSize = aFmt.GetGraphicSize();
                     else if (aSize.IsEmpty() && pGrf)
                         aSize = SvxNumberFormat::GetGraphicSizeMM100( pGrf );
