@@ -312,12 +312,14 @@ struct ConvertResult
     bool m_bAlwaysShowImage;
     bool m_bUseUnderline;
     bool m_bVertOrientation;
+    bool m_bXAlign;
     GtkPositionType m_eImagePos;
     css::uno::Reference<css::xml::dom::XNode> m_xPropertyLabel;
     css::uno::Reference<css::xml::dom::XNode> m_xPropertyIconName;
 
     ConvertResult(bool bChildCanFocus, bool bHasVisible, bool bHasIconSize, bool bAlwaysShowImage,
-                  bool bUseUnderline, bool bVertOrientation, GtkPositionType eImagePos,
+                  bool bUseUnderline, bool bVertOrientation, bool bXAlign,
+                  GtkPositionType eImagePos,
                   const css::uno::Reference<css::xml::dom::XNode>& rPropertyLabel,
                   const css::uno::Reference<css::xml::dom::XNode>& rPropertyIconName)
         : m_bChildCanFocus(bChildCanFocus)
@@ -326,6 +328,7 @@ struct ConvertResult
         , m_bAlwaysShowImage(bAlwaysShowImage)
         , m_bUseUnderline(bUseUnderline)
         , m_bVertOrientation(bVertOrientation)
+        , m_bXAlign(bXAlign)
         , m_eImagePos(eImagePos)
         , m_xPropertyLabel(rPropertyLabel)
         , m_xPropertyIconName(rPropertyIconName)
@@ -343,8 +346,10 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
 {
     css::uno::Reference<css::xml::dom::XNodeList> xNodeList = xNode->getChildNodes();
     if (!xNodeList.is())
-        return ConvertResult(false, false, false, false, false, false, GTK_POS_LEFT, nullptr,
+    {
+        return ConvertResult(false, false, false, false, false, false, false, GTK_POS_LEFT, nullptr,
                              nullptr);
+    }
 
     std::vector<css::uno::Reference<css::xml::dom::XNode>> xRemoveList;
 
@@ -356,6 +361,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
     GtkPositionType eImagePos = GTK_POS_LEFT;
     bool bUseUnderline = false;
     bool bVertOrientation = false;
+    bool bXAlign = false;
     css::uno::Reference<css::xml::dom::XNode> xPropertyLabel;
     css::uno::Reference<css::xml::dom::XNode> xPropertyIconName;
     css::uno::Reference<css::xml::dom::XNode> xCantFocus;
@@ -598,6 +604,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 {
                     // TODO expand into a GtkLabel child with alignment on that instead
                     assert(xChild->getFirstChild()->getNodeValue() == "0");
+                    bXAlign = true;
                     xRemoveList.push_back(xChild);
                 }
             }
@@ -930,6 +937,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
         GtkPositionType eChildImagePos = GTK_POS_LEFT;
         bool bChildUseUnderline = false;
         bool bChildVertOrientation = false;
+        bool bChildXAlign = false;
         css::uno::Reference<css::xml::dom::XNode> xChildPropertyLabel;
         css::uno::Reference<css::xml::dom::XNode> xChildPropertyIconName;
         if (xChild->hasChildNodes() && xChild != xGeneratedImageChild)
@@ -949,6 +957,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 eChildImagePos = aChildRes.m_eImagePos;
                 bChildUseUnderline = aChildRes.m_bUseUnderline;
                 bChildVertOrientation = aChildRes.m_bVertOrientation;
+                bChildXAlign = aChildRes.m_bXAlign;
                 xChildPropertyLabel = aChildRes.m_xPropertyLabel;
                 xChildPropertyIconName = aChildRes.m_xPropertyIconName;
             }
@@ -1274,8 +1283,9 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                     xNewObjectNode->appendChild(xOrientation);
                 }
 
-                auto xSpacing = CreateProperty(xDoc, "spacing", "6");
-                xNewObjectNode->appendChild(xSpacing);
+                xNewObjectNode->appendChild(CreateProperty(xDoc, "spacing", "6"));
+                if (!bChildXAlign)
+                    xNewObjectNode->appendChild(CreateProperty(xDoc, "halign", "center"));
 
                 xNewChildNode->appendChild(xNewObjectNode);
 
@@ -1341,7 +1351,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
     }
 
     return ConvertResult(bChildCanFocus, bHasVisible, bHasIconSize, bAlwaysShowImage, bUseUnderline,
-                         bVertOrientation, eImagePos, xPropertyLabel, xPropertyIconName);
+                         bVertOrientation, bXAlign, eImagePos, xPropertyLabel, xPropertyIconName);
 }
 }
 
