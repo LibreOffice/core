@@ -24,8 +24,8 @@
  <toolbar:toolbaritem xlink:href=".uno:NextPage"/>
  <toolbar:toolbaritem xlink:href=".uno:LastPage"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ZoomOut"/>
- <toolbar:toolbaritem xlink:href=".uno:ZoomIn"/>
+ <toolbar:toolbaritem xlink:href=".uno:ZoomMinus"/>
+ <toolbar:toolbaritem xlink:href=".uno:ZoomPlus"/>
  <toolbar:toolbaritem xlink:href=".uno:FullScreen"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:PageFormatDialog"/>
