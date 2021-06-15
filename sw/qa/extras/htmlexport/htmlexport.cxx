@@ -1849,6 +1849,93 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOleBmpTransparent)
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, nActualColor);
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testListsHeading)
+{
+    // Given a document with lh, lh, li, li, lh and lh nodes:
+    loadURL("private:factory/swriter", nullptr);
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Insert("list 1, header 1");
+    pWrtShell->SplitNode();
+    pWrtShell->Insert("list 1, header 2");
+    pWrtShell->SplitNode();
+    pWrtShell->Insert("list 2, item 1");
+    pWrtShell->SplitNode();
+    pWrtShell->Insert("list 2, item 2");
+    pWrtShell->SplitNode();
+    pWrtShell->Insert("list 3, header 1");
+    pWrtShell->SplitNode();
+    pWrtShell->Insert("list 3, header 2");
+    SwDoc* pDoc = pWrtShell->GetDoc();
+    pWrtShell->Up(false, 5);
+    {
+        sal_uInt16 nPos = pDoc->MakeNumRule(pDoc->GetUniqueNumRuleName());
+        SwNumRule* pNumRule = pDoc->GetNumRuleTable()[nPos];
+        {
+            SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->nNode.GetNode();
+            SwTextNode& rTextNode = *rNode.GetTextNode();
+            rTextNode.SetAttr(SwNumRuleItem(pNumRule->GetName()));
+            rTextNode.SetCountedInList(false);
+        }
+        pWrtShell->Down(false, 1);
+        {
+            SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->nNode.GetNode();
+            SwTextNode& rTextNode = *rNode.GetTextNode();
+            rTextNode.SetAttr(SwNumRuleItem(pNumRule->GetName()));
+            rTextNode.SetCountedInList(false);
+        }
+    }
+    pWrtShell->Down(false, 1);
+    {
+        sal_uInt16 nPos = pDoc->MakeNumRule(pDoc->GetUniqueNumRuleName());
+        SwNumRule* pNumRule = pDoc->GetNumRuleTable()[nPos];
+        {
+            SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->nNode.GetNode();
+            SwTextNode& rTextNode = *rNode.GetTextNode();
+            rTextNode.SetAttr(SwNumRuleItem(pNumRule->GetName()));
+        }
+        pWrtShell->Down(false, 1);
+        {
+            SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->nNode.GetNode();
+            SwTextNode& rTextNode = *rNode.GetTextNode();
+            rTextNode.SetAttr(SwNumRuleItem(pNumRule->GetName()));
+        }
+    }
+    pWrtShell->Down(false, 1);
+    {
+        sal_uInt16 nPos = pDoc->MakeNumRule(pDoc->GetUniqueNumRuleName());
+        SwNumRule* pNumRule = pDoc->GetNumRuleTable()[nPos];
+        {
+            SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->nNode.GetNode();
+            SwTextNode& rTextNode = *rNode.GetTextNode();
+            rTextNode.SetAttr(SwNumRuleItem(pNumRule->GetName()));
+            rTextNode.SetCountedInList(false);
+        }
+        pWrtShell->Down(false, 1);
+        {
+            SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->nNode.GetNode();
+            SwTextNode& rTextNode = *rNode.GetTextNode();
+            rTextNode.SetAttr(SwNumRuleItem(pNumRule->GetName()));
+            rTextNode.SetCountedInList(false);
+        }
+    }
+
+    // When exporting to ReqIF:
+    ExportToReqif();
+
+    // Then make sure the output is valid xhtml:
+    SvMemoryStream aStream;
+    HtmlExportTest::wrapFragment(maTempFile, aStream);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    CPPUNIT_ASSERT(pDoc);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - In <>, XPath '/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p' not found
+    // Because the headers of list 1 were inside <div><ol>, not directly under <div>.
+    assertXPathContent(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p",
+                       "list 1, header 1");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
