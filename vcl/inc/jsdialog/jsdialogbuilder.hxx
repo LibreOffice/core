@@ -195,6 +195,8 @@ class JSInstanceBuilder final : public SalInstanceBuilder, public JSDialogSender
     std::string m_sTypeOfJSON;
     bool m_bHasTopLevelDialog;
     bool m_bIsNotebookbar;
+    /// When LOKNotifier is set by jsdialogs code we need to release it
+    VclPtr<vcl::Window> m_aWindowToRelease;
 
     friend VCL_DLLPUBLIC bool jsdialog::ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget,
                                                       StringMap& rData);
@@ -206,8 +208,9 @@ class JSInstanceBuilder final : public SalInstanceBuilder, public JSDialogSender
     void RememberWidget(const OString& id, weld::Widget* pWidget);
     static weld::Widget* FindWeldWidgetsMap(sal_uInt64 nWindowId, const OString& rWidget);
 
-    /// used for dialogs
-    JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile);
+    /// used for dialogs or popups
+    JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile,
+                      bool bPopup = false);
     /// used for sidebar panels
     JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile,
                       sal_uInt64 nLOKWindowId);
@@ -231,6 +234,8 @@ public:
     static JSInstanceBuilder* CreateSidebarBuilder(weld::Widget* pParent, const OUString& rUIRoot,
                                                    const OUString& rUIFile,
                                                    sal_uInt64 nLOKWindowId = 0);
+    static JSInstanceBuilder* CreatePopupBuilder(weld::Widget* pParent, const OUString& rUIRoot,
+                                                 const OUString& rUIFile);
 
     virtual ~JSInstanceBuilder() override;
     virtual std::unique_ptr<weld::MessageDialog> weld_message_dialog(const OString& id) override;
@@ -255,6 +260,7 @@ public:
     virtual std::unique_ptr<weld::RadioButton> weld_radio_button(const OString& id) override;
     virtual std::unique_ptr<weld::Frame> weld_frame(const OString& id) override;
     virtual std::unique_ptr<weld::MenuButton> weld_menu_button(const OString& id) override;
+    virtual std::unique_ptr<weld::Popover> weld_popover(const OString& id) override;
 
     static weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent,
                                                     VclMessageType eMessageType,
@@ -627,6 +633,14 @@ public:
     virtual void set_label(const OUString& rText) override;
     virtual void set_image(VirtualDevice* pDevice) override;
     virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override;
+    virtual void set_active(bool active) override;
+};
+
+class JSPopover : public JSWidget<SalInstancePopover, DockingWindow>
+{
+public:
+    JSPopover(JSDialogSender* pSender, DockingWindow* pPopover, SalInstanceBuilder* pBuilder,
+              bool bTakeOwnership);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -13,6 +13,7 @@ namespace jsdialog
 {
 bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
 {
+    // mobile only dialogs
     if (bMobile)
     {
         if (rUIFile == u"modules/swriter/ui/wordcount-mobile.ui"
@@ -54,6 +55,14 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
     {
         return true;
     }
+
+    return false;
+}
+
+bool isBuilderEnabledForPopup(std::u16string_view rUIFile)
+{
+    if (rUIFile == u"svx/ui/colorwindow.ui")
+        return true;
 
     return false;
 }

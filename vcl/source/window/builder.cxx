@@ -184,7 +184,9 @@ weld::Builder* Application::CreateBuilder(weld::Widget* pParent, const OUString 
     {
         if (jsdialog::isBuilderEnabledForSidebar(rUIFile))
             return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, nLOKWindowId);
-        if (jsdialog::isBuilderEnabled(rUIFile, bMobile))
+        else if (jsdialog::isBuilderEnabledForPopup(rUIFile))
+            return JSInstanceBuilder::CreatePopupBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
+        else if (jsdialog::isBuilderEnabled(rUIFile, bMobile))
             return JSInstanceBuilder::CreateDialogBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
     }
 
