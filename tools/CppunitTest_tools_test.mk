@@ -31,6 +31,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,tools_test, \
     tools/qa/cppunit/test_100mm2twips \
     tools/qa/cppunit/test_fround \
     tools/qa/cppunit/test_xmlwalker \
+    tools/qa/cppunit/test_xmlwriter \
     tools/qa/cppunit/test_GenericTypeSerializer \
     tools/qa/cppunit/test_cpuid \
     tools/qa/cppunit/test_cpu_runtime_detection_AVX2 \
