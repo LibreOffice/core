@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8f251e56_ef6e28ec",
+        "filename": "include/desktop/crashreport.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-06-15T08:24:14Z",
+      "side": 1,
+      "message": "Probably should use the same SAL_UNUSED_PARAMETER as in the preceding lines here. Also, more whitespace around the {} to match style of surrounding code.\n\nWe certainly don\u0027t have any uniform coding style all over the codebase, but we should at least try to keep the style locally consistent. (Even if it certainly is not that, generally, let\u0027s not introduce new inconsistencies.)",
+      "revId": "e1fe1fc5082715a3bf43fb9343f7f40807480ae5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
