@@ -162,6 +162,9 @@ public:
         getDataSeriesFromDiagram(
             const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
 
+    static bool isMultipleSeries(
+        const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
+
     /** return all data series in this diagram grouped by chart-types
      */
     static css::uno::Sequence<

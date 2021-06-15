@@ -85,6 +85,7 @@ ObjectPropertiesDialogParameter::ObjectPropertiesDialogParameter( const OUString
         , m_bHasGeometryProperties(false)
         , m_bHasStatisticProperties(false)
         , m_bProvidesSecondaryYAxis(false)
+        , m_bAllowSecondaryYAxis(false)
         , m_bProvidesOverlapAndGapWidth(false)
         , m_bProvidesBarConnectors(false)
         , m_bHasAreaProperties(false)
@@ -132,6 +133,7 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
         {
             m_bHasStatisticProperties =  ChartTypeHelper::isSupportingStatisticProperties( xChartType, nDimensionCount );
             m_bProvidesSecondaryYAxis =  ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimensionCount );
+            m_bAllowSecondaryYAxis = DiagramHelper::isMultipleSeries( xDiagram );
             m_bProvidesOverlapAndGapWidth =  ChartTypeHelper::isSupportingOverlapAndGapWidthProperties( xChartType, nDimensionCount );
             m_bProvidesBarConnectors =  ChartTypeHelper::isSupportingBarConnectors( xChartType, nDimensionCount );
             m_bProvidesStartingAngle = ChartTypeHelper::isSupportingStartingAngle( xChartType );
@@ -600,7 +602,7 @@ void SchAttribTabDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
     {
         SchOptionTabPage* pTabPage = dynamic_cast< SchOptionTabPage* >( &rPage );
         if( pTabPage && m_pParameter )
-            pTabPage->Init( m_pParameter->ProvidesSecondaryYAxis(), m_pParameter->ProvidesOverlapAndGapWidth(),
+            pTabPage->Init( m_pParameter->ProvidesSecondaryYAxis(), m_pParameter->AllowSecondaryYAxis(), m_pParameter->ProvidesOverlapAndGapWidth(),
                 m_pParameter->ProvidesBarConnectors() );
     }
     else if (rId == "trendline")

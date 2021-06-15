@@ -34,6 +34,7 @@ SchOptionTabPage::SchOptionTabPage(weld::Container* pPage, weld::DialogControlle
     : SfxTabPage(pPage, pController, "modules/schart/ui/tp_SeriesToAxis.ui", "TP_OPTIONS", &rInAttrs)
     , m_nAllSeriesAxisIndex(0)
     , m_bProvidesSecondaryYAxis(true)
+    , m_bAllowSecondaryYAxis(true)
     , m_bProvidesOverlapAndGapWidth(false)
     , m_bProvidesBarConnectors(false)
     , m_xGrpAxis(m_xBuilder->weld_widget("frameGrpAxis"))
@@ -224,9 +225,10 @@ void SchOptionTabPage::Reset(const SfxItemSet* rInAttrs)
     AdaptControlPositionsAndVisibility();
 }
 
-void SchOptionTabPage::Init( bool bProvidesSecondaryYAxis, bool bProvidesOverlapAndGapWidth, bool bProvidesBarConnectors )
+void SchOptionTabPage::Init( bool bProvidesSecondaryYAxis, bool bAllowSecondaryYAxis, bool bProvidesOverlapAndGapWidth, bool bProvidesBarConnectors )
 {
     m_bProvidesSecondaryYAxis = bProvidesSecondaryYAxis;
+    m_bAllowSecondaryYAxis = bAllowSecondaryYAxis;
     m_bProvidesOverlapAndGapWidth = bProvidesOverlapAndGapWidth;
     m_bProvidesBarConnectors = bProvidesBarConnectors;
 
@@ -236,6 +238,7 @@ void SchOptionTabPage::Init( bool bProvidesSecondaryYAxis, bool bProvidesOverlap
 void SchOptionTabPage::AdaptControlPositionsAndVisibility()
 {
     m_xGrpAxis->set_visible(m_bProvidesSecondaryYAxis);
+    m_xRbtAxis2->set_sensitive(m_bAllowSecondaryYAxis);
     m_xGrpBar->set_visible(m_bProvidesOverlapAndGapWidth);
     m_xCBConnect->set_visible(m_bProvidesBarConnectors);
 

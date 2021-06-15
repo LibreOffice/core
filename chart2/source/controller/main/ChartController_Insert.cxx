@@ -96,7 +96,7 @@ void ChartController::executeDispatch_InsertAxes()
         InsertAxisOrGridDialogData aDialogInput;
         uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram(getModel());
         AxisHelper::getAxisOrGridExistence( aDialogInput.aExistenceList, xDiagram );
-        AxisHelper::getAxisOrGridPossibilities( aDialogInput.aPossibilityList, xDiagram );
+        AxisHelper::getAxisOrGridPossibilities( aDialogInput.aPossibilityList, aDialogInput.aExistenceList, xDiagram );
 
         SolarMutexGuard aGuard;
         SchAxisDlg aDlg(GetChartFrame(), aDialogInput);
@@ -134,7 +134,7 @@ void ChartController::executeDispatch_InsertGrid()
         InsertAxisOrGridDialogData aDialogInput;
         uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram(getModel());
         AxisHelper::getAxisOrGridExistence( aDialogInput.aExistenceList, xDiagram, false );
-        AxisHelper::getAxisOrGridPossibilities( aDialogInput.aPossibilityList, xDiagram, false );
+        AxisHelper::getAxisOrGridPossibilities( aDialogInput.aPossibilityList, aDialogInput.aExistenceList, xDiagram, false );
 
         SolarMutexGuard aGuard;
         SchGridDlg aDlg(GetChartFrame(), aDialogInput);//aItemSet, b3D, bNet, bSecondaryX, bSecondaryY );
