@@ -2458,6 +2458,25 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135661)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1545), xShape->getPosition().Y);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132940)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf132940.odt");
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    // this was crashing
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133477)
 {
     if (getDefaultDeviceBitCount() < 24)
