@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.1 -->
+<!-- Generated with glade 3.38.2 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkImage" id="img_paste_formats">
@@ -115,10 +115,10 @@
                   <object class="GtkGrid">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="column-spacing">3</property>
                     <property name="margin-start">12</property>
                     <property name="margin-top">3</property>
                     <property name="margin-bottom">6</property>
+                    <property name="column-spacing">3</property>
                     <child>
                       <object class="GtkCheckButton" id="paste_all">
                         <property name="label" translatable="yes" context="pastespecial|paste_all">_All</property>
@@ -300,10 +300,10 @@
                   <object class="GtkBox" id="box4">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="spacing">3</property>
                     <property name="margin-start">12</property>
                     <property name="margin-top">3</property>
                     <property name="margin-bottom">6</property>
+                    <property name="spacing">3</property>
                     <child>
                       <object class="GtkRadioButton" id="none">
                         <property name="label" translatable="yes" context="pastespecial|none">Non_e</property>
@@ -438,10 +438,10 @@
                   <object class="GtkBox" id="box2">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="spacing">3</property>
                     <property name="margin-start">12</property>
                     <property name="margin-top">3</property>
                     <property name="margin-bottom">6</property>
+                    <property name="spacing">3</property>
                     <child>
                       <object class="GtkRadioButton" id="no_shift">
                         <property name="label" translatable="yes" context="pastespecial|no_shift">Don't sh_ift</property>
@@ -534,10 +534,10 @@
                   <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="orientation">vertical</property>
                     <property name="margin-start">12</property>
                     <property name="margin-top">3</property>
                     <property name="margin-bottom">6</property>
+                    <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkButtonBox">
                         <property name="visible">True</property>
@@ -674,10 +674,10 @@
                   <object class="GtkGrid">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="column-spacing">3</property>
                     <property name="margin-start">12</property>
                     <property name="margin-top">3</property>
                     <property name="margin-bottom">6</property>
+                    <property name="column-spacing">3</property>
                     <child>
                       <object class="GtkCheckButton" id="link">
                         <property name="label" translatable="yes" context="pastespecial|link">As _Link</property>
