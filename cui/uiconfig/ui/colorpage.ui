@@ -696,7 +696,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
-                    <property name="primary_icon_tooltip_text" translatable="yes" context="colorpage|B_custom">Blue</property>
+                    <property name="tooltip-text" translatable="yes" context="colorpage|B_custom">Blue</property>
                     <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustment7</property>
                   </object>
@@ -710,7 +710,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
-                    <property name="primary_icon_tooltip_text" translatable="yes" context="colorpage|R_custom">Red</property>
+                    <property name="tooltip-text" translatable="yes" context="colorpage|R_custom">Red</property>
                     <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustment2</property>
                   </object>
@@ -763,7 +763,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
-                    <property name="primary_icon_tooltip_text" translatable="yes" context="colorpage|G_custom">Green</property>
+                    <property name="tooltip-text" translatable="yes" context="colorpage|G_custom">Green</property>
                     <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustment6</property>
                   </object>
