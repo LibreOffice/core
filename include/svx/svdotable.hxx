@@ -278,7 +278,7 @@ private:
     const TableLayouter& getTableLayouter() const;
 
     tools::Rectangle   maLogicRect;
-    rtl::Reference<SdrTableObjImpl>    mpImpl;
+    rtl::Reference<SdrTableObjImpl> mpImpl;
 };
 
 /** Hack for clipboard with calc and writer, export and import table content as rtf table */

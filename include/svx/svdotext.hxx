@@ -93,8 +93,8 @@ namespace sdr::table {
 class SdrTextObjGeoData : public SdrObjGeoData
 {
 public:
-    tools::Rectangle                   aRect;
-    GeoStat                     aGeo;
+    tools::Rectangle aRect;
+    GeoStat aGeo;
 };
 
 
@@ -120,14 +120,11 @@ public:
     virtual std::unique_ptr<SdrObjUserData> Clone(SdrObject* pObj1) const override;
 };
 
-namespace sdr
+namespace sdr::properties
 {
-    namespace properties
-    {
-        class CustomShapeProperties;
-        class CellProperties;
-    } // end of namespace properties
-} // end of namespace sdr
+    class CustomShapeProperties;
+    class CellProperties;
+}
 
 //   SdrTextObj
 

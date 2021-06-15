@@ -61,12 +61,12 @@ class SdrLayerIDSet;
 
 class SVXCORE_DLLPUBLIC SdrViewIter
 {
-    const SdrModel*                                     mpModel;
-    const SdrPage*                                      mpPage;
-    const SdrObject*                                    mpObject;
-    SdrView*                                            mpCurrentView;
+    const SdrModel* mpModel;
+    const SdrPage* mpPage;
+    const SdrObject* mpObject;
+    SdrView* mpCurrentView;
 
-    size_t                                              mnListenerNum;
+    size_t mnListenerNum;
 
 private:
     SVX_DLLPRIVATE void          ImpInitVars();

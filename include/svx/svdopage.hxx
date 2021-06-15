@@ -33,7 +33,7 @@ public:
 
 private:
     // To make things more safe, remember the page, not a number
-    SdrPage*                                mpShownPage;
+    SdrPage* mpShownPage;
 
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
     virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
