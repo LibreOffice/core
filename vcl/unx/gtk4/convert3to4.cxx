@@ -1207,7 +1207,22 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                     OUString sIconName(xChildPropertyIconName->getFirstChild()->getNodeValue());
                     bool bHasSymbolicIconName = IsAllowedBuiltInIcon(sIconName);
                     if (bHasSymbolicIconName)
-                        bKeepAsImage = true;
+                    {
+                        if (sIconName != "missing-image")
+                            bKeepAsImage = true;
+                        else
+                        {
+                            // If the symbolic icon-name is missing-image then decide to make
+                            // it a GtkPicture if it has a parent widget and keep it as GtkImage
+                            // if it has just the root "interface" as parent.
+                            // for e.g. view, user interface
+                            css::uno::Reference<css::xml::dom::XNode> xParent
+                                = xChild->getParentNode();
+                            bKeepAsImage = xParent->getNodeName() == "interface";
+                            if (!bKeepAsImage)
+                                xChild->removeChild(xChildPropertyIconName);
+                        }
+                    }
                     else
                     {
                         // private:graphicrepository/ would be turned by gio (?) into private:///graphicrepository/
