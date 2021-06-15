@@ -36,24 +36,11 @@ class HtmlImportTest : public SwModelTestBase
 {
     public:
         HtmlImportTest() : SwModelTestBase("sw/qa/extras/htmlimport/data/", "HTML (StarWriter)") {}
-    private:
-        std::unique_ptr<Resetter> preTest(const char* /*filename*/) override
-        {
-            if (getTestName().indexOf("ReqIf") != -1)
-            {
-                setImportFilterOptions("xhtmlns=reqif-xhtml");
-                // Bypass type detection, this is an XHTML fragment only.
-                setImportFilterName("HTML (StarWriter)");
-            }
-
-            return nullptr;
-        }
 };
 
-#define DECLARE_HTMLIMPORT_TEST(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, nullptr, HtmlImportTest)
-
-DECLARE_HTMLIMPORT_TEST(testPictureImport, "picture.html")
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testPictureImport)
 {
+    load(mpTestDocumentPath, "picture.html");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     // The document contains two pictures stored as a link.
@@ -68,8 +55,9 @@ DECLARE_HTMLIMPORT_TEST(testPictureImport, "picture.html")
     CPPUNIT_ASSERT_EQUAL(size_t(0), rLinkManager.GetLinks().size());
 }
 
-DECLARE_HTMLIMPORT_TEST(testInlinedImage, "inlined_image.html")
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testInlinedImage)
 {
+    load(mpTestDocumentPath, "inlined_image.html");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     // The document contains only one embedded picture inlined in img's src attribute.
@@ -105,8 +93,9 @@ DECLARE_HTMLIMPORT_TEST(testInlinedImage, "inlined_image.html")
     }
 }
 
-DECLARE_HTMLIMPORT_TEST(testInlinedImagesPageAndParagraph, "PageAndParagraphFilled.html")
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testInlinedImagesPageAndParagraph)
 {
+    load(mpTestDocumentPath, "PageAndParagraphFilled.html");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
 
@@ -145,8 +134,9 @@ DECLARE_HTMLIMPORT_TEST(testInlinedImagesPageAndParagraph, "PageAndParagraphFill
     }
 }
 
-DECLARE_HTMLIMPORT_TEST(testListStyleType, "list-style.html")
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testListStyleType)
 {
+    load(mpTestDocumentPath, "list-style.html");
     // check unnumbered list style - should be type circle here
     uno::Reference< beans::XPropertySet > xParagraphProperties(getParagraph(4),
                                                                uno::UNO_QUERY);
@@ -189,8 +179,9 @@ DECLARE_HTMLIMPORT_TEST(testListStyleType, "list-style.html")
     CPPUNIT_FAIL("no NumberingType property found for para 14");
 }
 
-DECLARE_HTMLIMPORT_TEST(testMetaIsoDates, "meta-ISO8601-dates.html")
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testMetaIsoDates)
 {
+    load(mpTestDocumentPath, "meta-ISO8601-dates.html");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDocShell* pDocShell(pTextDoc->GetDocShell());
@@ -209,8 +200,9 @@ DECLARE_HTMLIMPORT_TEST(testMetaIsoDates, "meta-ISO8601-dates.html")
     CPPUNIT_ASSERT_EQUAL(DateTime(Date(8, 5, 2017), tools::Time(12, 47, 0, 386000000)), aModified);
 }
 
-DECLARE_HTMLIMPORT_TEST(testImageWidthAuto, "image-width-auto.html")
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testImageWidthAuto)
 {
+    load(mpTestDocumentPath, "image-width-auto.html");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwTextAttr const*const pAttr(pTextDoc->GetDocShell()->GetDoc()->GetEditShell()->
@@ -221,16 +213,18 @@ DECLARE_HTMLIMPORT_TEST(testImageWidthAuto, "image-width-auto.html")
     CPPUNIT_ASSERT_EQUAL(Size(1835, 560), rSize.GetSize());
 }
 
-DECLARE_HTMLIMPORT_TEST(testImageLazyRead, "image-lazy-read.html")
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testImageLazyRead)
 {
+    load(mpTestDocumentPath, "image-lazy-read.html");
     auto xGraphic = getProperty<uno::Reference<graphic::XGraphic>>(getShape(1), "Graphic");
     Graphic aGraphic(xGraphic);
     // This failed, import loaded the graphic, it wasn't lazy-read.
     CPPUNIT_ASSERT(!aGraphic.isAvailable());
 }
 
-DECLARE_HTMLIMPORT_TEST(testChangedby, "meta-changedby.html")
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testChangedby)
 {
+    load(mpTestDocumentPath, "meta-changedby.html");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDocShell* pDocShell(pTextDoc->GetDocShell());
@@ -254,8 +248,9 @@ DECLARE_HTMLIMPORT_TEST(testChangedby, "meta-changedby.html")
     CPPUNIT_ASSERT(!xFields->hasMoreElements());
 }
 
-DECLARE_HTMLIMPORT_TEST(testTableBorder1px, "table_border_1px.html")
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTableBorder1px)
 {
+    load(mpTestDocumentPath, "table_border_1px.html");
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
@@ -304,22 +299,27 @@ DECLARE_HTMLIMPORT_TEST(testTableBorder1px, "table_border_1px.html")
     CPPUNIT_ASSERT_MESSAGE("Missing cell right border", aBorder.InnerLineWidth > 0);
 }
 
-DECLARE_HTMLIMPORT_TEST(testOutlineLevel, "outline-level.html")
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testOutlineLevel)
 {
+    load(mpTestDocumentPath, "outline-level.html");
     // This was 0, HTML imported into Writer lost the outline numbering for
     // Heading 1 styles.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1),
                          getProperty<sal_Int32>(getParagraph(1), "OutlineLevel"));
 }
 
-DECLARE_HTMLIMPORT_TEST(testReqIfBr, "reqif-br.xhtml")
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testReqIfBr)
 {
+    setImportFilterOptions("xhtmlns=reqif-xhtml");
+    setImportFilterName("HTML (StarWriter)");
+    load(mpTestDocumentPath, "reqif-br.xhtml");
     // <reqif-xhtml:br/> was not recognized as a line break from a ReqIf file.
     CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("aaa\nbbb"));
 }
 
-DECLARE_HTMLIMPORT_TEST(testTdf80194_subscript, "tdf80194_subscript.html")
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf80194_subscript)
 {
+    load(mpTestDocumentPath, "tdf80194_subscript.html");
     uno::Reference<text::XTextRange> xPara = getParagraph(1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.f, getProperty<float>(getRun(xPara, 1), "CharEscapement"), 0);
     // Most recently, the default subscript was 33%, which is much too large for a subscript.
@@ -337,8 +337,11 @@ DECLARE_HTMLIMPORT_TEST(testTdf80194_subscript, "tdf80194_subscript.html")
     CPPUNIT_ASSERT( 70 < getProperty<sal_Int8>(xRun, "CharEscapementHeight"));
 }
 
-DECLARE_HTMLIMPORT_TEST(testReqIfTable, "reqif-table.xhtml")
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testReqIfTable)
 {
+    setImportFilterOptions("xhtmlns=reqif-xhtml");
+    setImportFilterName("HTML (StarWriter)");
+    load(mpTestDocumentPath, "reqif-table.xhtml");
     // to see this: soffice --infilter="HTML (StarWriter):xhtmlns=reqif-xhtml" sw/qa/extras/htmlimport/data/reqif-table.xhtml
     // Load a table with xhtmlns=reqif-xhtml filter param.
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -360,8 +363,9 @@ DECLARE_HTMLIMPORT_TEST(testReqIfTable, "reqif-table.xhtml")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Right Border", static_cast<sal_uInt32>(18), aBorder.LineWidth);
 }
 
-DECLARE_HTMLIMPORT_TEST(testImageSize, "image-size.html")
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testImageSize)
 {
+    load(mpTestDocumentPath, "image-size.html");
     awt::Size aSize = getShape(1)->getSize();
     OutputDevice* pDevice = Application::GetDefaultDevice();
     Size aPixelSize(200, 400);
@@ -373,8 +377,9 @@ DECLARE_HTMLIMPORT_TEST(testImageSize, "image-size.html")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(aExpected.getHeight()), aSize.Height);
 }
 
-DECLARE_HTMLIMPORT_TEST(testTdf122789, "tdf122789.html")
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf122789)
 {
+    load(mpTestDocumentPath, "tdf122789.html");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
@@ -384,15 +389,19 @@ DECLARE_HTMLIMPORT_TEST(testTdf122789, "tdf122789.html")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(70), rFormats[0]->GetAttrSet().GetFrameSize().GetWidthPercent());
 }
 
-DECLARE_HTMLIMPORT_TEST(testTdf118579, "tdf118579.html")
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf118579)
 {
+    load(mpTestDocumentPath, "tdf118579.html");
     //Without the fix in place, the file fails to load
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
 }
 
-DECLARE_HTMLIMPORT_TEST(testReqIfPageStyle, "reqif-page-style.xhtml")
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testReqIfPageStyle)
 {
+    setImportFilterOptions("xhtmlns=reqif-xhtml");
+    setImportFilterName("HTML (StarWriter)");
+    load(mpTestDocumentPath, "reqif-page-style.xhtml");
     // Without the accompanying fix in place, this test would have failed with
     // 'Expected: Standard, Actual  : HTML'.
     CPPUNIT_ASSERT_EQUAL(OUString("Standard"),
