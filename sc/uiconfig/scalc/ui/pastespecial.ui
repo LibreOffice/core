@@ -585,7 +585,6 @@
                         <child>
                           <object class="GtkButton" id="paste_formats">
                             <property name="label" translatable="yes" context="pastespecial|paste_format|label">Formats Onl_y</property>
-                            <property name="height-request">60</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="receives-default">True</property>
