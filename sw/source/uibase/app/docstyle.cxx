@@ -370,7 +370,7 @@ static const SwBoxAutoFormat* lcl_FindCellStyle(SwDoc& rDoc, std::u16string_view
 }
 
 sal_uInt32 SwStyleSheetIterator::SwPoolFormatList::FindName(SfxStyleFamily eFam,
-                                                         std::u16string_view rName)
+                                                         const OUString& rName)
 {
     if(!maImpl.empty())
     {
@@ -402,9 +402,7 @@ sal_uInt32 SwStyleSheetIterator::SwPoolFormatList::FindName(SfxStyleFamily eFam,
             cStyle = ' ';
             break;
         }
-        const OUString sSrch = OUStringChar(cStyle) + rName;
-
-        UniqueHash::const_iterator it = maUnique.find(sSrch);
+        UniqueHash::const_iterator it = maUnique.find(std::pair<char,OUString>{cStyle, rName});
         if (it != maUnique.end())
         {
             sal_uInt32 nIdx = it->second;
@@ -425,7 +423,7 @@ void SwStyleSheetIterator::SwPoolFormatList::rehash()
 }
 
 void SwStyleSheetIterator::SwPoolFormatList::RemoveName(SfxStyleFamily eFam,
-                                                     std::u16string_view rName)
+                                                     const OUString& rName)
 {
     sal_uInt32 nTmpPos = FindName( eFam, rName );
     if( nTmpPos < maImpl.size() )
@@ -437,16 +435,14 @@ void SwStyleSheetIterator::SwPoolFormatList::RemoveName(SfxStyleFamily eFam,
 }
 
 // Add Strings to the list of templates
-void SwStyleSheetIterator::SwPoolFormatList::Append( char cChar, std::u16string_view rStr )
+void SwStyleSheetIterator::SwPoolFormatList::Append( char cChar, const OUString& rStr )
 {
-    const OUString aStr = OUStringChar(cChar) + rStr;
-
-    UniqueHash::const_iterator it = maUnique.find(aStr);
+    UniqueHash::const_iterator it = maUnique.find(std::pair<char,OUString>{cChar, rStr});
     if (it != maUnique.end())
         return;
 
-    maUnique[aStr] = static_cast<sal_uInt32>(maImpl.size());
-    maImpl.push_back(aStr);
+    maUnique.emplace(std::pair<char,OUString>{cChar, rStr}, static_cast<sal_uInt32>(maImpl.size()));
+    maImpl.push_back(std::pair<char,OUString>{cChar, rStr});
 }
 
 // UI-sided implementation of StyleSheets
@@ -2199,9 +2195,9 @@ SwTableAutoFormat* SwDocStyleSheet::GetTableFormat()
 // re-generate Name AND Family from String
 // First() and Next() (see below) insert an identification letter at Pos.1
 
-void SwDocStyleSheet::PresetNameAndFamily(const OUString& rName)
+void SwDocStyleSheet::PresetNameAndFamily(char cFamily, const OUString& rName)
 {
-    switch( rName[0] )
+    switch( cFamily )
     {
     case cPARA:     nFamily = SfxStyleFamily::Para; break;
     case cFRAME:    nFamily = SfxStyleFamily::Frame; break;
@@ -2210,7 +2206,7 @@ void SwDocStyleSheet::PresetNameAndFamily(const OUString& rName)
     case cTABSTYLE: nFamily = SfxStyleFamily::Table; break;
     default:        nFamily = SfxStyleFamily::Char; break;
     }
-    aName = rName.copy(1);
+    aName = rName;
 }
 
 // Is the format physically present yet
@@ -2679,7 +2675,8 @@ SfxStyleSheetBase* SwStyleSheetIterator::operator[]( sal_Int32 nIdx )
     // found
     if( !m_bFirstCalled )
         First();
-    mxStyleSheet->PresetNameAndFamily( m_aLst[ nIdx ] );
+    auto const & rEntry = m_aLst[ nIdx ];
+    mxStyleSheet->PresetNameAndFamily( rEntry.first, rEntry.second );
     mxStyleSheet->SetPhysical( false );
     mxStyleSheet->FillStyleSheet( SwDocStyleSheet::FillOnlyName );
 
@@ -3104,7 +3101,8 @@ SfxStyleSheetBase* SwStyleSheetIterator::Next()
     ++m_nLastPos;
     if(m_nLastPos < m_aLst.size())
     {
-        mxIterSheet->PresetNameAndFamily(m_aLst[m_nLastPos]);
+        auto const & rEntry = m_aLst[m_nLastPos];
+        mxIterSheet->PresetNameAndFamily(rEntry.first, rEntry.second);
         mxIterSheet->SetPhysical( false );
         mxIterSheet->SetMask( nMask );
         if(mxIterSheet->pSet)
@@ -3127,7 +3125,8 @@ SfxStyleSheetBase* SwStyleSheetIterator::Find(const OUString& rName)
     if( SAL_MAX_UINT32 != m_nLastPos )
     {
         // found
-        mxStyleSheet->PresetNameAndFamily(m_aLst[m_nLastPos]);
+        auto const & rEntry = m_aLst[m_nLastPos];
+        mxStyleSheet->PresetNameAndFamily(rEntry.first, rEntry.second);
         // new name is set, so determine its Data
         mxStyleSheet->FillStyleSheet( SwDocStyleSheet::FillOnlyName );
         if( !mxStyleSheet->IsPhysical() )

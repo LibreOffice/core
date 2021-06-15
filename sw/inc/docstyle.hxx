@@ -115,7 +115,7 @@ public:
     /** Preset the members without physical access.
      Used by StyleSheetPool. */
     void                    PresetName(const OUString& rName)  { aName   = rName; }
-    void                    PresetNameAndFamily(const OUString& rName);
+    void                    PresetNameAndFamily(char cFamily, const OUString& rName);
     void                    PresetParent(const OUString& rName){ aParent = rName; }
     void                    PresetFollow(const OUString& rName){ aFollow = rName; }
 
@@ -141,25 +141,35 @@ public:
     virtual bool            IsUsed() const override;
 };
 
+namespace std {
+template<>
+struct hash<std::pair<char,OUString>>
+{
+    std::size_t operator()(std::pair<char,OUString> const & pair) const
+    { return static_cast<std::size_t>(pair.first) ^ std::size_t(pair.second.hashCode()); }
+};
+}
+
+
 // Iterator for Pool.
 class SwStyleSheetIterator : public SfxStyleSheetIterator, public SfxListener
 {
     // Local helper class.
     class SwPoolFormatList
     {
-        std::vector<OUString> maImpl;
-        typedef std::unordered_map<OUString, sal_uInt32> UniqueHash;
+        std::vector<std::pair<char, OUString>> maImpl;
+        typedef std::unordered_map<std::pair<char, OUString>, sal_uInt32> UniqueHash;
         UniqueHash maUnique;
         void rehash();
     public:
         SwPoolFormatList() {}
-        void Append( char cChar, std::u16string_view rStr );
+        void Append( char cChar, const OUString& rStr );
         void clear() { maImpl.clear(); maUnique.clear(); }
         size_t size() { return maImpl.size(); }
         bool empty() { return maImpl.empty(); }
-        sal_uInt32 FindName(SfxStyleFamily eFam, std::u16string_view rName);
-        void RemoveName(SfxStyleFamily eFam, std::u16string_view rName);
-        const OUString &operator[](sal_uInt32 nIdx) { return maImpl[ nIdx ]; }
+        sal_uInt32 FindName(SfxStyleFamily eFam, const OUString& rName);
+        void RemoveName(SfxStyleFamily eFam, const OUString& rName);
+        const std::pair<char,OUString> &operator[](sal_uInt32 nIdx) { return maImpl[ nIdx ]; }
     };
 
     rtl::Reference< SwDocStyleSheet > mxIterSheet;
