@@ -7,6 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+include $(SRCDIR)/chart2/import_setup.mk
 include $(SRCDIR)/chart2/export_setup.mk
 
 $(eval $(call gb_Module_Module,chart2))
@@ -30,6 +31,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,chart2,\
     CppunitTest_chart2_export \
     CppunitTest_chart2_export2 \
     CppunitTest_chart2_import \
+    CppunitTest_chart2_import2 \
     CppunitTest_chart2_trendcalculators \
     CppunitTest_chart2_dump \
     CppunitTest_chart2_pivot_chart_test \
