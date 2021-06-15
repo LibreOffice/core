@@ -96,30 +96,30 @@ enum class SdrMouseEventKind
 // helper class SdrViewEvent
 struct SVXCORE_DLLPUBLIC SdrViewEvent
 {
-    SdrHdl*                     pHdl;
-    SdrObject*                  pObj;
-    SdrObject*                  pRootObj;        // mark this when SdrBeginTextEdit is executed
-    SdrPageView*                pPV;
-    const SvxURLField*          pURLField;
+    SdrHdl* mpHdl;
+    SdrObject* mpObj;
+    SdrObject* mpRootObj; // mark this when SdrBeginTextEdit is executed
+    SdrPageView* mpPV;
+    const SvxURLField* mpURLField;
 
-    Point                       aLogicPos;
-    SdrHitKind                  eHit;
-    SdrEventKind                eEvent;
+    Point maLogicPos;
+    SdrHitKind meHit;
+    SdrEventKind meEvent;
 
-    sal_uInt16                  nMouseClicks;
-    MouseEventModifiers         nMouseMode;
-    sal_uInt16                  nMouseCode;
-    sal_uInt16                  nHlplIdx;
-    sal_uInt16                  nGlueId;
+    sal_uInt16 mnMouseClicks;
+    MouseEventModifiers mnMouseMode;
+    sal_uInt16 mnMouseCode;
+    sal_uInt16 mnHlplIdx;
+    sal_uInt16 mnGlueId;
 
-    bool                        bMouseDown : 1;
-    bool                        bMouseUp : 1;
-    bool                        bIsAction : 1;       // Action is active
-    bool                        bIsTextEdit : 1;     // TextEdit runs currently
-    bool                        bAddMark : 1;
-    bool                        bUnmark : 1;
-    bool                        bPrevNextMark : 1;
-    bool                        bMarkPrev : 1;
+    bool mbMouseDown : 1;
+    bool mbMouseUp : 1;
+    bool mbIsAction : 1;       // Action is active
+    bool mbIsTextEdit : 1;     // TextEdit runs currently
+    bool mbAddMark : 1;
+    bool mbUnmark : 1;
+    bool mbPrevNextMark : 1;
+    bool mbMarkPrev : 1;
 
 public:
     SdrViewEvent();
@@ -130,7 +130,7 @@ public:
 class SVXCORE_DLLPUBLIC SdrDropMarkerOverlay
 {
     // The OverlayObjects
-    sdr::overlay::OverlayObjectList               maObjects;
+    sdr::overlay::OverlayObjectList maObjects;
 
     void ImplCreateOverlays(
         const SdrView& rView,
@@ -146,11 +146,11 @@ public:
 
 class SVXCORE_DLLPUBLIC SdrView : public SdrCreateView, public tools::WeakBase
 {
-    friend class                SdrPageView;
+    friend class SdrPageView;
 
-    bool                        bNoExtendedMouseDispatcher : 1;
-    bool                        bNoExtendedKeyDispatcher : 1;
-    bool                        mbMasterPagePaintCaching : 1;
+    bool mbNoExtendedMouseDispatcher : 1;
+    bool mbNoExtendedKeyDispatcher : 1;
+    bool mbMasterPagePaintCaching : 1;
 
     SvtAccessibilityOptions maAccessibilityOptions;
 
@@ -171,11 +171,11 @@ public:
     //      pSdrView->DoMouseEvent(aVEvt);
     //      SetPointer(GetPreferredPointer(...))
     //      CaptureMouse(...)
-    void EnableExtendedMouseEventDispatcher(bool bOn) { bNoExtendedMouseDispatcher = !bOn; }
-    bool IsExtendedMouseEventDispatcherEnabled() const { return bNoExtendedMouseDispatcher; }
+    void EnableExtendedMouseEventDispatcher(bool bOn) { mbNoExtendedMouseDispatcher = !bOn; }
+    bool IsExtendedMouseEventDispatcherEnabled() const { return mbNoExtendedMouseDispatcher; }
 
-    void EnableExtendedKeyInputDispatcher(bool bOn) { bNoExtendedKeyDispatcher=!bOn; }
-    bool IsExtendedKeyInputDispatcherEnabled() const { return bNoExtendedKeyDispatcher; }
+    void EnableExtendedKeyInputDispatcher(bool bOn) { mbNoExtendedKeyDispatcher=!bOn; }
+    bool IsExtendedKeyInputDispatcherEnabled() const { return mbNoExtendedKeyDispatcher; }
 
     void SetMasterPagePaintCaching(bool bOn);
     bool IsMasterPagePaintCaching() const { return mbMasterPagePaintCaching; }

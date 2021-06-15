@@ -531,16 +531,16 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
             }
             else if (eHit == SdrHitKind::UnmarkedObject)
             {
-                pObj = aVEvt.pObj;
+                pObj = aVEvt.mpObj;
             }
             else if (eHit == SdrHitKind::TextEditObj && dynamic_cast< const FuSelection *>( this ) !=  nullptr)
             {
-                sal_uInt16 nSdrObjKind = aVEvt.pObj->GetObjIdentifier();
+                sal_uInt16 nSdrObjKind = aVEvt.mpObj->GetObjIdentifier();
 
                 if ( nSdrObjKind != OBJ_TEXT        &&
                      nSdrObjKind != OBJ_TITLETEXT   &&
                      nSdrObjKind != OBJ_OUTLINETEXT &&
-                     aVEvt.pObj->IsEmptyPresObj() )
+                     aVEvt.mpObj->IsEmptyPresObj() )
                 {
                     pObj = nullptr;
                     bDefPointer = false;
@@ -690,7 +690,7 @@ bool FuDraw::RequestHelp(const HelpEvent& rHEvt)
 
         SdrHitKind eHit = mpView->PickAnything(aMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
-        SdrObject* pObj = aVEvt.pObj;
+        SdrObject* pObj = aVEvt.mpObj;
 
         if (eHit != SdrHitKind::NONE && pObj != nullptr)
         {
@@ -729,12 +729,12 @@ bool FuDraw::SetHelpText(const SdrObject* pObj, const Point& rPosPixel, const Sd
     Point aPos(mpWindow->PixelToLogic(mpWindow->ScreenToOutputPixel(rPosPixel)));
     IMapObject* pIMapObj = SvxIMapInfo::GetHitIMapObject(pObj, aPos);
 
-    if (!rVEvt.pURLField && !pIMapObj)
+    if (!rVEvt.mpURLField && !pIMapObj)
         return false;
 
     OUString aURL;
-    if (rVEvt.pURLField)
-        aURL = INetURLObject::decode(rVEvt.pURLField->GetURL(),
+    if (rVEvt.mpURLField)
+        aURL = INetURLObject::decode(rVEvt.mpURLField->GetURL(),
                                      INetURLObject::DecodeMechanism::WithCharset);
     else if (pIMapObj)
     {

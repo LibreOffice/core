@@ -205,10 +205,10 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView const * pView,
             MouseEvent aMEvt(pWindow->ScreenToOutputPixel(rEvt.GetMousePosPixel()), 1,
                              MouseEventModifiers::NONE, MOUSE_LEFT);
             pView->PickAnything(aMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
-            if (aVEvt.eEvent == SdrEventKind::ExecuteUrl)
+            if (aVEvt.meEvent == SdrEventKind::ExecuteUrl)
             {
-                sText = aVEvt.pURLField->GetURL();
-                aPixRect = pWindow->LogicToPixel(aVEvt.pObj->GetLogicRect());
+                sText = aVEvt.mpURLField->GetURL();
+                aPixRect = pWindow->LogicToPixel(aVEvt.mpObj->GetLogicRect());
             }
         }
 
