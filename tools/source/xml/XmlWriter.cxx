@@ -59,8 +59,9 @@ XmlWriter::~XmlWriter()
 bool XmlWriter::startDocument(sal_Int32 nIndent, bool bWriteXmlHeader)
 {
     mpImpl->mbWriteXmlHeader = bWriteXmlHeader;
-    xmlOutputBufferPtr xmlOutBuffer
-        = xmlOutputBufferCreateIO(funcWriteCallback, funcCloseCallback, mpImpl->mpStream, nullptr);
+    xmlCharEncodingHandlerPtr pEncodingHandler = xmlGetCharEncodingHandler(XML_CHAR_ENCODING_UTF8);
+    xmlOutputBufferPtr xmlOutBuffer = xmlOutputBufferCreateIO(funcWriteCallback, funcCloseCallback,
+                                                              mpImpl->mpStream, pEncodingHandler);
     mpImpl->mpWriter = xmlNewTextWriter(xmlOutBuffer);
     if (mpImpl->mpWriter == nullptr)
         return false;
