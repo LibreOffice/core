@@ -310,17 +310,20 @@ struct ConvertResult
     bool m_bHasVisible;
     bool m_bHasSymbolicIconName;
     bool m_bAlwaysShowImage;
+    bool m_bImageAtTop;
     bool m_bUseUnderline;
     bool m_bVertOrientation;
     css::uno::Reference<css::xml::dom::XNode> m_xPropertyLabel;
 
     ConvertResult(bool bChildCanFocus, bool bHasVisible, bool bHasSymbolicIconName,
-                  bool bAlwaysShowImage, bool bUseUnderline, bool bVertOrientation,
+                  bool bAlwaysShowImage, bool bImageAtTop, bool bUseUnderline,
+                  bool bVertOrientation,
                   const css::uno::Reference<css::xml::dom::XNode>& rPropertyLabel)
         : m_bChildCanFocus(bChildCanFocus)
         , m_bHasVisible(bHasVisible)
         , m_bHasSymbolicIconName(bHasSymbolicIconName)
         , m_bAlwaysShowImage(bAlwaysShowImage)
+        , m_bImageAtTop(bImageAtTop)
         , m_bUseUnderline(bUseUnderline)
         , m_bVertOrientation(bVertOrientation)
         , m_xPropertyLabel(rPropertyLabel)
@@ -338,7 +341,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
 {
     css::uno::Reference<css::xml::dom::XNodeList> xNodeList = xNode->getChildNodes();
     if (!xNodeList.is())
-        return ConvertResult(false, false, false, false, false, false, nullptr);
+        return ConvertResult(false, false, false, false, false, false, false, nullptr);
 
     std::vector<css::uno::Reference<css::xml::dom::XNode>> xRemoveList;
 
@@ -347,6 +350,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
     bool bHasVisible = false;
     bool bHasSymbolicIconName = false;
     bool bAlwaysShowImage = false;
+    bool bImageAtTop = false;
     bool bUseUnderline = false;
     bool bVertOrientation = false;
     css::uno::Reference<css::xml::dom::XNode> xPropertyLabel;
@@ -543,6 +547,19 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                     // GtkButton and a GtkLabel child for the GtkBox and move
                     // the label property into it.
                     bAlwaysShowImage = toBool(xChild->getFirstChild()->getNodeValue());
+                    xRemoveList.push_back(xChild);
+                }
+            }
+
+            if (sName == "image-position")
+            {
+                if (GetParentObjectType(xChild) == "GtkButton")
+                {
+                    // we will turn always-show-image into a GtkBox child for
+                    // GtkButton and a GtkLabel child for the GtkBox and move
+                    // the label property into it.
+                    assert(xChild->getFirstChild()->getNodeValue() == "top");
+                    bImageAtTop = xChild->getFirstChild()->getNodeValue() == "top";
                     xRemoveList.push_back(xChild);
                 }
             }
@@ -906,6 +923,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
         bool bChildHasSymbolicIconName = false;
         bool bChildHasVisible = false;
         bool bChildAlwaysShowImage = false;
+        bool bChildImageAtTop = false;
         bool bChildUseUnderline = false;
         bool bChildVertOrientation = false;
         css::uno::Reference<css::xml::dom::XNode> xChildPropertyLabel;
@@ -923,6 +941,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 bChildHasVisible = aChildRes.m_bHasVisible;
                 bChildHasSymbolicIconName = aChildRes.m_bHasSymbolicIconName;
                 bChildAlwaysShowImage = aChildRes.m_bAlwaysShowImage;
+                bChildImageAtTop = aChildRes.m_bImageAtTop;
                 bChildUseUnderline = aChildRes.m_bUseUnderline;
                 bChildVertOrientation = aChildRes.m_bVertOrientation;
                 xChildPropertyLabel = aChildRes.m_xPropertyLabel;
@@ -1198,6 +1217,12 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 xBoxClassName->setValue("GtkBox");
                 xNewObjectNode->setAttributeNode(xBoxClassName);
 
+                if (bChildImageAtTop)
+                {
+                    auto xOrientation = CreateProperty(xDoc, "orientation", "vertical");
+                    xNewObjectNode->appendChild(xOrientation);
+                }
+
                 auto xSpacing = CreateProperty(xDoc, "spacing", "6");
                 xNewObjectNode->appendChild(xSpacing);
 
@@ -1246,7 +1271,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
         xNode->removeChild(xRemove);
 
     return ConvertResult(bChildCanFocus, bHasVisible, bHasSymbolicIconName, bAlwaysShowImage,
-                         bUseUnderline, bVertOrientation, xPropertyLabel);
+                         bImageAtTop, bUseUnderline, bVertOrientation, xPropertyLabel);
 }
 }
 
