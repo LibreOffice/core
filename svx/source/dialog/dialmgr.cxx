@@ -22,6 +22,6 @@
 
 std::locale SvxResLocale() { return Translate::Create("svx"); }
 
-OUString SvxResId(const char* pId) { return Translate::get(pId, SvxResLocale()); }
+OUString SvxResId(std::string_view aId) { return Translate::get(aId, SvxResLocale()); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

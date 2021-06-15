@@ -20,7 +20,8 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
+#include <string_view>
 
-OUString AccResId(const char* pId);
+OUString AccResId(std::string_view aId);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

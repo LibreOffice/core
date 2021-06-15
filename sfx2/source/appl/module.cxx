@@ -98,7 +98,7 @@ SfxModule::~SfxModule()
 
 std::locale SfxModule::GetResLocale() const
 {
-    return Translate::Create(pImpl->maResName.getStr());
+    return Translate::Create(pImpl->maResName);
 }
 
 SfxSlotPool* SfxModule::GetSlotPool() const

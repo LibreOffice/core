@@ -429,7 +429,7 @@ VCL_PLUGIN_PUBLIC basegfx::SystemDependentDataManager& ImplGetSystemDependentDat
 VCL_PLUGIN_PUBLIC vcl::Window* ImplGetDefaultWindow();
 vcl::Window* ImplGetDefaultContextWindow();
 const std::locale& ImplGetResLocale();
-VCL_PLUGIN_PUBLIC OUString VclResId(const char* pId);
+VCL_PLUGIN_PUBLIC OUString VclResId(std::string_view aId);
 DockingManager*     ImplGetDockingManager();
 BlendFrameCache*    ImplGetBlendFrameCache();
 

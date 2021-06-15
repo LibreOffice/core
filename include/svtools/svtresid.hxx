@@ -24,6 +24,6 @@
 #include <locale>
 
 SVT_DLLPUBLIC std::locale SvtResLocale();
-SVT_DLLPUBLIC OUString SvtResId(const char* pId);
+SVT_DLLPUBLIC OUString SvtResId(std::string_view aId);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

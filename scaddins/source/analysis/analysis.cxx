@@ -1045,9 +1045,9 @@ double SAL_CALL AnalysisAddIn::getConvert( double f, const OUString& aFU, const 
     RETURN_FINITE( fRet );
 }
 
-OUString AnalysisAddIn::AnalysisResId(const char* pResId)
+OUString AnalysisAddIn::AnalysisResId(std::string_view aResId)
 {
-    return Translate::get(pResId, aResLocale);
+    return Translate::get(aResId, aResLocale);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

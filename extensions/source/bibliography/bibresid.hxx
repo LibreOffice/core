@@ -20,7 +20,8 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
+#include <string_view>
 
-OUString BibResId(const char* pId);
+OUString BibResId(std::string_view aId);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

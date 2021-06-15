@@ -73,7 +73,7 @@ public:
     explicit                    AnalysisAddIn(
                                     const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
-    OUString AnalysisResId(const char* pId);
+    OUString AnalysisResId(std::string_view aId);
 
     virtual                     ~AnalysisAddIn() override;
 

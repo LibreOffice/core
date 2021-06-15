@@ -30,7 +30,7 @@ namespace editeng
 class SharedVclResources;
 }
 
-OUString EDITENG_DLLPUBLIC EditResId(const char* pId);
+OUString EDITENG_DLLPUBLIC EditResId(std::string_view aId);
 
 class EditDLL
 {

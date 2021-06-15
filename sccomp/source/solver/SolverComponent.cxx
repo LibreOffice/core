@@ -41,9 +41,9 @@ using namespace com::sun::star;
 
 //  Resources from tools are used for translated strings
 
-OUString SolverComponent::GetResourceString(const char* pId)
+OUString SolverComponent::GetResourceString(std::string_view aId)
 {
-    return Translate::get(pId, Translate::Create("scc"));
+    return Translate::get(aId, Translate::Create("scc"));
 }
 
 size_t ScSolverCellHash::operator()( const css::table::CellAddress& rAddress ) const

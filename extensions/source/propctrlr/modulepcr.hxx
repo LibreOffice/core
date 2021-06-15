@@ -20,10 +20,11 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
+#include <string_view>
 
 namespace pcr
 {
-OUString PcrRes(const char* pId);
+OUString PcrRes(std::string_view pId);
 } // namespace pcr
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

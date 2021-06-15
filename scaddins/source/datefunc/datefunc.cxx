@@ -717,9 +717,9 @@ OUString SAL_CALL ScaDateAddIn::getRot13( const OUString& aSrcString )
     return aBuffer.makeStringAndClear();
 }
 
-OUString ScaDateAddIn::ScaResId(const char* pId)
+OUString ScaDateAddIn::ScaResId(std::string_view aId)
 {
-    return Translate::get(pId, aResLocale);
+    return Translate::get(aId, aResLocale);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

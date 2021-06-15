@@ -42,9 +42,9 @@
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-static OUString PDFFilterResId(const char* pId)
+static OUString PDFFilterResId(std::string_view aId)
 {
-    return Translate::get(pId, Translate::Create("flt"));
+    return Translate::get(aId, Translate::Create("flt"));
 }
 
 using namespace ::com::sun::star;

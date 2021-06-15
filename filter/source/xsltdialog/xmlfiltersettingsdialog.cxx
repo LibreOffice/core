@@ -58,9 +58,9 @@ using namespace com::sun::star::util;
 
 using ::rtl::Uri;
 
-OUString XsltResId(const char* pId)
+OUString XsltResId(std::string_view aId)
 {
-    return Translate::get(pId, Translate::Create("flt"));
+    return Translate::get(aId, Translate::Create("flt"));
 }
 
 XMLFilterSettingsDialog::XMLFilterSettingsDialog(weld::Window* pParent,
