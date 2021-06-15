@@ -23,7 +23,7 @@
 #include <svx/svxdllapi.h>
 
 SVXCORE_DLLPUBLIC std::locale SvxResLocale();
-SVXCORE_DLLPUBLIC OUString SvxResId(const char* pId);
+SVXCORE_DLLPUBLIC OUString SvxResId(std::string_view aId);
 
 #endif
 

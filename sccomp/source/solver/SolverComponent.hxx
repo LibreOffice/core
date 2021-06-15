@@ -82,7 +82,7 @@ protected:
     css::uno::Sequence< double >                            maSolution;
     OUString                                                maStatus;
 
-    static OUString GetResourceString(const char* pId);
+    static OUString GetResourceString(std::string_view aId);
     static css::uno::Reference<css::table::XCell> GetCell(
             const css::uno::Reference<css::sheet::XSpreadsheetDocument>& xDoc,
             const css::table::CellAddress& rPos );

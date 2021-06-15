@@ -500,9 +500,9 @@ double SAL_CALL ScaPricingAddIn::getOptProbInMoney( double spot, double vol,
     RETURN_FINITE( fRet );
 }
 
-OUString ScaPricingAddIn::ScaResId(const char* pResId)
+OUString ScaPricingAddIn::ScaResId(std::string_view aResId)
 {
-    return Translate::get(pResId, aResLocale);
+    return Translate::get(aResId, aResLocale);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

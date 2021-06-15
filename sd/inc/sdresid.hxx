@@ -22,7 +22,7 @@
 #include <rtl/ustring.hxx>
 #include "sddllapi.h"
 
-SD_DLLPUBLIC OUString SdResId(const char* pId);
-SD_DLLPUBLIC OUString SdResId(const char* pId, int nCardinality);
+SD_DLLPUBLIC OUString SdResId(std::string_view aId);
+SD_DLLPUBLIC OUString SdResId(std::string_view aId, int nCardinality);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

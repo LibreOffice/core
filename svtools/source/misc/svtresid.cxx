@@ -22,6 +22,6 @@
 
 std::locale SvtResLocale() { return Translate::Create("svt"); }
 
-OUString SvtResId(const char* pId) { return Translate::get(pId, SvtResLocale()); }
+OUString SvtResId(std::string_view aId) { return Translate::get(aId, SvtResLocale()); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

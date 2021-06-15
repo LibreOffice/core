@@ -273,9 +273,9 @@ SaneDlg::~SaneDlg()
 
 namespace {
 
-OUString SaneResId(const char *pID)
+OUString SaneResId(std::string_view aID)
 {
-    return Translate::get(pID, Translate::Create("pcr"));
+    return Translate::get(aID, Translate::Create("pcr"));
 }
 
 }

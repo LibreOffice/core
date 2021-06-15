@@ -22,9 +22,9 @@
 
 namespace frm::ResourceManager
 {
-        OUString loadString(const char* pResId)
+        OUString loadString(std::string_view aResId)
         {
-            return Translate::get(pResId, Translate::Create("frm"));
+            return Translate::get(aResId, Translate::Create("frm"));
         }
 }
 

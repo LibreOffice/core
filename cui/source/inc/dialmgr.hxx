@@ -21,6 +21,6 @@
 
 #include <rtl/ustring.hxx>
 
-OUString CuiResId(const char* pKey);
+OUString CuiResId(std::string_view aKey);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

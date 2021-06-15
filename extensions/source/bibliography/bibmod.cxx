@@ -54,9 +54,9 @@ void CloseBibModul(HdlBibModul ppBibModul)
     }
 }
 
-OUString BibResId(const char* pId)
+OUString BibResId(std::string_view aId)
 {
-    return Translate::get(pId, pBibModul->GetResLocale());
+    return Translate::get(aId, pBibModul->GetResLocale());
 }
 
 BibConfig* BibModul::pBibConfig = nullptr;

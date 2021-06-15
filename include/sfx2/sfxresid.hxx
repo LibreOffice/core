@@ -21,8 +21,9 @@
 
 #include <sfx2/dllapi.h>
 #include <rtl/ustring.hxx>
+#include <string_view>
 
-SFX2_DLLPUBLIC OUString SfxResId(const char* pId);
+SFX2_DLLPUBLIC OUString SfxResId(std::string_view aId);
 
 #endif
 
