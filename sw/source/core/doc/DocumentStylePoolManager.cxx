@@ -2585,13 +2585,12 @@ const std::vector<OUString>& SwStyleNameMapper::GetTextUINameArray()
     const LanguageTag& rCurrentLanguage = SvtSysLocale().GetUILanguageTag();
     static std::map<LanguageTag, std::vector<OUString>> s_aTextUINameArray;
 
-    auto aFound = s_aTextUINameArray.find(rCurrentLanguage);
-    if (aFound == s_aTextUINameArray.end()) {
-        s_aTextUINameArray[rCurrentLanguage] =
-            lcl_NewUINameArray(STR_POOLCOLL_TEXT_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_TEXT_ARY));
-    }
+    auto it = s_aTextUINameArray.find(rCurrentLanguage);
+    if (it == s_aTextUINameArray.end())
+        it = s_aTextUINameArray.emplace(rCurrentLanguage,
+                lcl_NewUINameArray(STR_POOLCOLL_TEXT_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_TEXT_ARY))).first;
 
-    return s_aTextUINameArray[rCurrentLanguage];
+    return it->second;
 }
 
 const std::vector<OUString>& SwStyleNameMapper::GetListsUINameArray()
@@ -2599,13 +2598,12 @@ const std::vector<OUString>& SwStyleNameMapper::GetListsUINameArray()
     const LanguageTag& rCurrentLanguage = SvtSysLocale().GetUILanguageTag();
     static std::map<LanguageTag, std::vector<OUString>> s_aListsUINameArray;
 
-    auto aFound = s_aListsUINameArray.find(rCurrentLanguage);
-    if (aFound == s_aListsUINameArray.end()) {
-        s_aListsUINameArray[rCurrentLanguage] =
-            lcl_NewUINameArray(STR_POOLCOLL_LISTS_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_LISTS_ARY));
-    }
+    auto it = s_aListsUINameArray.find(rCurrentLanguage);
+    if (it == s_aListsUINameArray.end())
+        it = s_aListsUINameArray.emplace(rCurrentLanguage,
+            lcl_NewUINameArray(STR_POOLCOLL_LISTS_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_LISTS_ARY))).first;
 
-    return s_aListsUINameArray[rCurrentLanguage];
+    return it->second;
 }
 
 const std::vector<OUString>& SwStyleNameMapper::GetExtraUINameArray()
@@ -2613,13 +2611,12 @@ const std::vector<OUString>& SwStyleNameMapper::GetExtraUINameArray()
     const LanguageTag& rCurrentLanguage = SvtSysLocale().GetUILanguageTag();
     static std::map<LanguageTag, std::vector<OUString>> s_aExtraUINameArray;
 
-    auto aFound = s_aExtraUINameArray.find(rCurrentLanguage);
-    if (aFound == s_aExtraUINameArray.end()) {
-        s_aExtraUINameArray[rCurrentLanguage] =
-            lcl_NewUINameArray(STR_POOLCOLL_EXTRA_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_EXTRA_ARY));
-    }
+    auto it = s_aExtraUINameArray.find(rCurrentLanguage);
+    if (it == s_aExtraUINameArray.end())
+        it = s_aExtraUINameArray.emplace(rCurrentLanguage,
+            lcl_NewUINameArray(STR_POOLCOLL_EXTRA_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_EXTRA_ARY))).first;
 
-    return s_aExtraUINameArray[rCurrentLanguage];
+    return it->second;
 }
 
 const std::vector<OUString>& SwStyleNameMapper::GetRegisterUINameArray()
@@ -2627,13 +2624,12 @@ const std::vector<OUString>& SwStyleNameMapper::GetRegisterUINameArray()
     const LanguageTag& rCurrentLanguage = SvtSysLocale().GetUILanguageTag();
     static std::map<LanguageTag, std::vector<OUString>> s_aRegisterUINameArray;
 
-    auto aFound = s_aRegisterUINameArray.find(rCurrentLanguage);
-    if (aFound == s_aRegisterUINameArray.end()) {
-        s_aRegisterUINameArray[rCurrentLanguage] =
-            lcl_NewUINameArray(STR_POOLCOLL_REGISTER_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_REGISTER_ARY));
-    }
+    auto it = s_aRegisterUINameArray.find(rCurrentLanguage);
+    if (it == s_aRegisterUINameArray.end())
+        it = s_aRegisterUINameArray.emplace(rCurrentLanguage,
+            lcl_NewUINameArray(STR_POOLCOLL_REGISTER_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_REGISTER_ARY))).first;
 
-    return s_aRegisterUINameArray[rCurrentLanguage];
+    return it->second;
 }
 
 const std::vector<OUString>& SwStyleNameMapper::GetDocUINameArray()
@@ -2641,12 +2637,12 @@ const std::vector<OUString>& SwStyleNameMapper::GetDocUINameArray()
     const LanguageTag& rCurrentLanguage = SvtSysLocale().GetUILanguageTag();
     static std::map<LanguageTag, std::vector<OUString>> s_aDocUINameArray;
 
-    auto aFound = s_aDocUINameArray.find(rCurrentLanguage);
-    if (aFound == s_aDocUINameArray.end())
-        s_aDocUINameArray[rCurrentLanguage] =
-            lcl_NewUINameArray(STR_POOLCOLL_DOC_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_DOC_ARY));
+    auto it = s_aDocUINameArray.find(rCurrentLanguage);
+    if (it == s_aDocUINameArray.end())
+        it = s_aDocUINameArray.emplace(rCurrentLanguage,
+            lcl_NewUINameArray(STR_POOLCOLL_DOC_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_DOC_ARY))).first;
 
-    return s_aDocUINameArray[rCurrentLanguage];
+    return it->second;
 }
 
 const std::vector<OUString>& SwStyleNameMapper::GetHTMLUINameArray()
@@ -2654,13 +2650,12 @@ const std::vector<OUString>& SwStyleNameMapper::GetHTMLUINameArray()
     const LanguageTag& rCurrentLanguage = SvtSysLocale().GetUILanguageTag();
     static std::map<LanguageTag, std::vector<OUString>> s_aHTMLUINameArray;
 
-    auto aFound = s_aHTMLUINameArray.find(rCurrentLanguage);
-    if (aFound == s_aHTMLUINameArray.end()) {
-        s_aHTMLUINameArray[rCurrentLanguage] =
-            lcl_NewUINameArray(STR_POOLCOLL_HTML_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_HTML_ARY));
-    }
+    auto it = s_aHTMLUINameArray.find(rCurrentLanguage);
+    if (it == s_aHTMLUINameArray.end())
+        it = s_aHTMLUINameArray.emplace(rCurrentLanguage,
+            lcl_NewUINameArray(STR_POOLCOLL_HTML_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_HTML_ARY))).first;
 
-    return s_aHTMLUINameArray[rCurrentLanguage];
+    return it->second;
 }
 
 const std::vector<OUString>& SwStyleNameMapper::GetFrameFormatUINameArray()
@@ -2668,13 +2663,12 @@ const std::vector<OUString>& SwStyleNameMapper::GetFrameFormatUINameArray()
     const LanguageTag& rCurrentLanguage = SvtSysLocale().GetUILanguageTag();
     static std::map<LanguageTag, std::vector<OUString>> s_aFrameFormatUINameArray;
 
-    auto aFound = s_aFrameFormatUINameArray.find(rCurrentLanguage);
-    if (aFound == s_aFrameFormatUINameArray.end()) {
-        s_aFrameFormatUINameArray[rCurrentLanguage] =
-            lcl_NewUINameArray(STR_POOLFRM_ARY, SAL_N_ELEMENTS(STR_POOLFRM_ARY));
-    }
+    auto it = s_aFrameFormatUINameArray.find(rCurrentLanguage);
+    if (it == s_aFrameFormatUINameArray.end())
+        it = s_aFrameFormatUINameArray.emplace(rCurrentLanguage,
+            lcl_NewUINameArray(STR_POOLFRM_ARY, SAL_N_ELEMENTS(STR_POOLFRM_ARY))).first;
 
-    return s_aFrameFormatUINameArray[rCurrentLanguage];
+    return it->second;
 }
 
 const std::vector<OUString>& SwStyleNameMapper::GetChrFormatUINameArray()
@@ -2682,13 +2676,12 @@ const std::vector<OUString>& SwStyleNameMapper::GetChrFormatUINameArray()
     const LanguageTag& rCurrentLanguage = SvtSysLocale().GetUILanguageTag();
     static std::map<LanguageTag, std::vector<OUString>> s_aChrFormatUINameArray;
 
-    auto aFound = s_aChrFormatUINameArray.find(rCurrentLanguage);
-    if (aFound == s_aChrFormatUINameArray.end()) {
-        s_aChrFormatUINameArray[rCurrentLanguage] =
-            lcl_NewUINameArray(STR_POOLCHR_ARY, SAL_N_ELEMENTS(STR_POOLCHR_ARY));
-    }
+    auto it = s_aChrFormatUINameArray.find(rCurrentLanguage);
+    if (it == s_aChrFormatUINameArray.end())
+        it = s_aChrFormatUINameArray.emplace(rCurrentLanguage,
+            lcl_NewUINameArray(STR_POOLCHR_ARY, SAL_N_ELEMENTS(STR_POOLCHR_ARY))).first;
 
-    return s_aChrFormatUINameArray[rCurrentLanguage];
+    return it->second;
 }
 
 const std::vector<OUString>& SwStyleNameMapper::GetHTMLChrFormatUINameArray()
@@ -2696,13 +2689,12 @@ const std::vector<OUString>& SwStyleNameMapper::GetHTMLChrFormatUINameArray()
     const LanguageTag& rCurrentLanguage = SvtSysLocale().GetUILanguageTag();
     static std::map<LanguageTag, std::vector<OUString>> s_aHTMLChrFormatUINameArray;
 
-    auto aFound = s_aHTMLChrFormatUINameArray.find(rCurrentLanguage);
-    if (aFound == s_aHTMLChrFormatUINameArray.end()) {
-        s_aHTMLChrFormatUINameArray[rCurrentLanguage] =
-            lcl_NewUINameArray(STR_POOLCHR_HTML_ARY, SAL_N_ELEMENTS(STR_POOLCHR_HTML_ARY));
-    }
+    auto it = s_aHTMLChrFormatUINameArray.find(rCurrentLanguage);
+    if (it == s_aHTMLChrFormatUINameArray.end())
+        it = s_aHTMLChrFormatUINameArray.emplace(rCurrentLanguage,
+            lcl_NewUINameArray(STR_POOLCHR_HTML_ARY, SAL_N_ELEMENTS(STR_POOLCHR_HTML_ARY))).first;
 
-    return s_aHTMLChrFormatUINameArray[rCurrentLanguage];
+    return it->second;
 }
 
 const std::vector<OUString>& SwStyleNameMapper::GetPageDescUINameArray()
@@ -2710,13 +2702,12 @@ const std::vector<OUString>& SwStyleNameMapper::GetPageDescUINameArray()
     const LanguageTag& rCurrentLanguage = SvtSysLocale().GetUILanguageTag();
     static std::map<LanguageTag, std::vector<OUString>> s_aPageDescUINameArray;
 
-    auto aFound = s_aPageDescUINameArray.find(rCurrentLanguage);
-    if (aFound == s_aPageDescUINameArray.end()) {
-        s_aPageDescUINameArray[rCurrentLanguage] =
-            lcl_NewUINameArray(STR_POOLPAGE_ARY, SAL_N_ELEMENTS(STR_POOLPAGE_ARY));
-    }
+    auto it = s_aPageDescUINameArray.find(rCurrentLanguage);
+    if (it == s_aPageDescUINameArray.end())
+        it = s_aPageDescUINameArray.emplace(rCurrentLanguage,
+            lcl_NewUINameArray(STR_POOLPAGE_ARY, SAL_N_ELEMENTS(STR_POOLPAGE_ARY))).first;
 
-    return s_aPageDescUINameArray[rCurrentLanguage];
+    return it->second;
 }
 
 const std::vector<OUString>& SwStyleNameMapper::GetNumRuleUINameArray()
@@ -2724,13 +2715,12 @@ const std::vector<OUString>& SwStyleNameMapper::GetNumRuleUINameArray()
     const LanguageTag& rCurrentLanguage = SvtSysLocale().GetUILanguageTag();
     static std::map<LanguageTag, std::vector<OUString>> s_aNumRuleUINameArray;
 
-    auto aFound = s_aNumRuleUINameArray.find(rCurrentLanguage);
-    if (aFound == s_aNumRuleUINameArray.end()) {
-        s_aNumRuleUINameArray[rCurrentLanguage] =
-            lcl_NewUINameArray(STR_POOLNUMRULE_NUM_ARY, SAL_N_ELEMENTS(STR_POOLNUMRULE_NUM_ARY));
-    }
+    auto it = s_aNumRuleUINameArray.find(rCurrentLanguage);
+    if (it == s_aNumRuleUINameArray.end())
+        it = s_aNumRuleUINameArray.emplace(rCurrentLanguage,
+            lcl_NewUINameArray(STR_POOLNUMRULE_NUM_ARY, SAL_N_ELEMENTS(STR_POOLNUMRULE_NUM_ARY))).first;
 
-    return s_aNumRuleUINameArray[rCurrentLanguage];
+    return it->second;
 }
 
 const std::vector<OUString>& SwStyleNameMapper::GetTableStyleUINameArray()
@@ -2738,15 +2728,14 @@ const std::vector<OUString>& SwStyleNameMapper::GetTableStyleUINameArray()
     const LanguageTag& rCurrentLanguage = SvtSysLocale().GetUILanguageTag();
     static std::map<LanguageTag, std::vector<OUString>> s_aTableStyleUINameArray;
 
-    auto aFound = s_aTableStyleUINameArray.find(rCurrentLanguage);
-    if (aFound == s_aTableStyleUINameArray.end()) {
-        s_aTableStyleUINameArray[rCurrentLanguage] =
+    auto it = s_aTableStyleUINameArray.find(rCurrentLanguage);
+    if (it == s_aTableStyleUINameArray.end())
+        it = s_aTableStyleUINameArray.emplace(rCurrentLanguage,
             // 1 Writer resource string (XXX if this ever changes rather use offset math)
             lcl_NewUINameArray(STR_TABSTYLE_ARY, SAL_N_ELEMENTS(STR_TABSTYLE_ARY),
-                    static_cast<size_t>(SAL_N_ELEMENTS(STR_TABSTYLE_ARY) - 1));
-    }
+                    static_cast<size_t>(SAL_N_ELEMENTS(STR_TABSTYLE_ARY) - 1))).first;
 
-    return s_aTableStyleUINameArray[rCurrentLanguage];
+    return it->second;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
