@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2ca01672_ca783795",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 1876,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-15T06:01:33Z",
+      "side": 1,
+      "message": "Hii..\n\nThis is the block of code responsible for mxCharShowPreview..\n\nWhen I click on mxCharShowPreview, the panel for Character Styles automatically gets displayed.. I think this is because aItem is an item of Character Styles panel..\n\nPlease help me with it..",
+      "range": {
+        "startLine": 1864,
+        "startChar": 0,
+        "endLine": 1876,
+        "endChar": 5
+      },
+      "revId": "060b9f44ac0aa22e054ffb9db9cae5861c524a85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
