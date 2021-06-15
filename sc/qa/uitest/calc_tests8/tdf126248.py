@@ -11,6 +11,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.calc import enter_text_to_cell
 from uitest.uihelper.common import select_pos
 from uitest.uihelper.common import select_by_text
+from uitest.uihelper import guarded
 
 class tdf126248(UITestCase):
 
@@ -30,67 +31,56 @@ class tdf126248(UITestCase):
         self.xUITest.executeCommand(".uno:Sidebar")
 
     def changeLocalSetting(self, language):
-        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
+        with guarded.execute_dialog_through_command(self, ".uno:OptionsTreeDialog") as xDialog:
+            xPages = xDialog.getChild("pages")
+            xLanguageEntry = xPages.getChild('2')
+            xLanguageEntry.executeAction("EXPAND", tuple())
+            xxLanguageEntryGeneralEntry = xLanguageEntry.getChild('0')
+            xxLanguageEntryGeneralEntry.executeAction("SELECT", tuple())
 
-        xPages = xDialog.getChild("pages")
-        xLanguageEntry = xPages.getChild('2')
-        xLanguageEntry.executeAction("EXPAND", tuple())
-        xxLanguageEntryGeneralEntry = xLanguageEntry.getChild('0')
-        xxLanguageEntryGeneralEntry.executeAction("SELECT", tuple())
+            # Check asian support is enabled
+            asianlanguage = xDialog.getChild("asiansupport")
+            self.assertEqual("true", get_state_as_dict(asianlanguage)['Selected'])
 
-        # Check asian support is enabled
-        asianlanguage = xDialog.getChild("asiansupport")
-        self.assertEqual("true", get_state_as_dict(asianlanguage)['Selected'])
-
-        localeSetting = xDialog.getChild("localesetting")
-        select_by_text(localeSetting, language)
-        self.ui_test.wait_until_property_is_updated(localeSetting, 'SelectEntryText', language)
-        self.assertEqual(language, get_state_as_dict(localeSetting)['SelectEntryText'])
-
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
-
+            localeSetting = xDialog.getChild("localesetting")
+            select_by_text(localeSetting, language)
+            self.ui_test.wait_until_property_is_updated(localeSetting, 'SelectEntryText', language)
+            self.assertEqual(language, get_state_as_dict(localeSetting)['SelectEntryText'])
 
     def test_tdf126248(self):
 
-        self.ui_test.create_doc_in_start_center("calc")
+        with guarded.create_doc_in_start_center(self, "calc"):
 
-        self.changeLocalSetting("Chinese (traditional)")
+            self.changeLocalSetting("Chinese (traditional)")
 
-        self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
-        xCellsDlg = self.xUITest.getTopFocusWindow()
+            with guarded.execute_dialog_through_command(self, ".uno:FormatCellDialog") as xDialog:
+                # Get current font names from the Format Cell dialog
+                westFontName = get_state_as_dict(xDialog.getChild("westfontnamelb-cjk"))['Text']
+                eastFontName = get_state_as_dict(xDialog.getChild("eastfontnamelb"))['Text']
 
-        # Get current font names from the Format Cell dialog
-        westFontName = get_state_as_dict(xCellsDlg.getChild("westfontnamelb-cjk"))['Text']
-        eastFontName = get_state_as_dict(xCellsDlg.getChild("eastfontnamelb"))['Text']
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
 
-        okBtn = xCellsDlg.getChild("ok")
-        self.ui_test.close_dialog_through_button(okBtn)
+            enter_text_to_cell(gridwin, "A1", "Test")
 
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
+            # Without the fix in place, this test would have failed here
+            self.assertFontName(gridwin, westFontName)
 
-        enter_text_to_cell(gridwin, "A1", "Test")
+            enter_text_to_cell(gridwin, "B1", "測試")
 
-        # Without the fix in place, this test would have failed here
-        self.assertFontName(gridwin, westFontName)
+            self.assertFontName(gridwin, eastFontName)
 
-        enter_text_to_cell(gridwin, "B1", "測試")
+            self.changeLocalSetting("English (USA)")
 
-        self.assertFontName(gridwin, eastFontName)
+            enter_text_to_cell(gridwin, "C1", "Test")
 
-        self.changeLocalSetting("English (USA)")
+            self.assertFontName(gridwin, westFontName)
 
-        enter_text_to_cell(gridwin, "C1", "Test")
+            enter_text_to_cell(gridwin, "D1", "測試")
 
-        self.assertFontName(gridwin, westFontName)
+            self.assertFontName(gridwin, eastFontName)
 
-        enter_text_to_cell(gridwin, "D1", "測試")
-
-        self.assertFontName(gridwin, eastFontName)
-
-        self.ui_test.close_doc()
+            self.ui_test.close_doc()
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
