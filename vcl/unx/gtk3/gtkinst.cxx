@@ -5098,8 +5098,11 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_container_remove(pOldContainer, pChild);
 #else
-        assert(GTK_IS_BOX(pOldContainer));
-        gtk_box_remove(GTK_BOX(pOldContainer), pChild);
+        assert(GTK_IS_BOX(pOldContainer) || GTK_IS_GRID(pOldContainer));
+        if (GTK_IS_BOX(pOldContainer))
+            gtk_box_remove(GTK_BOX(pOldContainer), pChild);
+        else if (GTK_IS_GRID(pOldContainer))
+            gtk_grid_remove(GTK_GRID(pOldContainer), pChild);
 #endif
 
         GtkInstanceContainer* pNewGtkParent = dynamic_cast<GtkInstanceContainer*>(pNewParent);
@@ -5110,8 +5113,11 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
             gtk_container_add(pNewContainer, pChild);
 #else
-            assert(GTK_IS_BOX(pNewContainer));
-            gtk_box_append(GTK_BOX(pNewContainer), pChild);
+            assert(GTK_IS_BOX(pNewContainer) || GTK_IS_GRID(pNewContainer));
+            if (GTK_IS_BOX(pNewContainer))
+                gtk_box_append(GTK_BOX(pNewContainer), pChild);
+            else if (GTK_IS_GRID(pNewContainer))
+                gtk_grid_attach(GTK_GRID(pNewContainer), pChild, 0, 0, 1, 1);
 #endif
         }
         g_object_unref(pChild);
