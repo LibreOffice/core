@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fffdffb9_97512fbf",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1730,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-06-15T07:19:20Z",
+      "side": 1,
+      "message": "Do you want to use KEY_MOD1 + KEY_BACKSPACE twice or is it a mistake?\nOTOH, you forgot Scheduler::ProcessEventsToIdle();. Did you test it locally ?",
+      "revId": "39e456d56522632ea741d2de9b5d9e6c4460dfd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
