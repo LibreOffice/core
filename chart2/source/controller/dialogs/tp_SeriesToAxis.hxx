@@ -41,7 +41,7 @@ public:
     virtual bool FillItemSet(SfxItemSet* rOutAttrs) override;
     virtual void Reset(const SfxItemSet* rInAttrs) override;
 
-    void Init( bool bProvidesSecondaryYAxis, bool bProvidesOverlapAndGapWidth, bool bProvidesBarConnectors );
+    void Init( bool bProvidesSecondaryYAxis, bool bAllowSecondaryYAxis, bool bProvidesOverlapAndGapWidth, bool bProvidesBarConnectors );
 
 private: //methods
     void AdaptControlPositionsAndVisibility();
@@ -52,6 +52,7 @@ private: //member
     sal_Int32   m_nAllSeriesAxisIndex;
 
     bool m_bProvidesSecondaryYAxis;
+    bool m_bAllowSecondaryYAxis;
     bool m_bProvidesOverlapAndGapWidth;
     bool m_bProvidesBarConnectors;
 

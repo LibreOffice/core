@@ -78,8 +78,8 @@ void TitlesAndObjectsTabPage::initializePage()
         uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( m_xChartModel );
         uno::Sequence< sal_Bool > aPossibilityList;
         uno::Sequence< sal_Bool > aExistenceList;
-        AxisHelper::getAxisOrGridPossibilities( aPossibilityList, xDiagram, false );
         AxisHelper::getAxisOrGridExistence( aExistenceList, xDiagram, false );
+        AxisHelper::getAxisOrGridPossibilities(aPossibilityList, aExistenceList, xDiagram, false);
         m_xCB_Grid_X->set_sensitive( aPossibilityList[0] );
         m_xCB_Grid_Y->set_sensitive( aPossibilityList[1] );
         m_xCB_Grid_Z->set_sensitive( aPossibilityList[2] );

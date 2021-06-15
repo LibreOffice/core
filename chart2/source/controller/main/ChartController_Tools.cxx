@@ -112,10 +112,11 @@ bool lcl_deleteDataSeries(
 
             Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( xModel ) );
             uno::Reference< chart2::XAxis > xAxis( DiagramHelper::getAttachedAxis( xSeries, xDiagram ) );
+            sal_Int32 nOldAxisIndex = DataSeriesHelper::getAttachedAxisIndex(xSeries);
 
             DataSeriesHelper::deleteSeries( xSeries, xChartType );
 
-            AxisHelper::hideAxisIfNoDataIsAttached( xAxis, xDiagram );
+            AxisHelper::hideAxisIfNoDataIsAttached( xAxis, xDiagram, nOldAxisIndex );
 
             bResult = true;
             aUndoGuard.commit();

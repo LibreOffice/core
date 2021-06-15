@@ -34,6 +34,7 @@
 #include <ChartController.hxx>
 
 #include <DataSeriesHelper.hxx>
+#include <DiagramHelper.hxx>
 #include <RegressionCurveHelper.hxx>
 #include <StatisticsHelper.hxx>
 
@@ -362,6 +363,11 @@ void ChartSeriesPanel::updateData()
     bool bPrimaryAxis = isPrimaryAxis(mxModel, aCID);
     mxRBPrimaryAxis->set_active(bPrimaryAxis);
     mxRBSecondaryAxis->set_active(!bPrimaryAxis);
+
+    css::uno::Reference<css::chart2::XChartDocument> xChartDoc(mxModel, css::uno::UNO_QUERY_THROW);
+    css::uno::Reference<css::chart2::XDiagram> xDiagram = xChartDoc->getFirstDiagram();
+    if (xDiagram.is())
+        mxRBSecondaryAxis->set_sensitive(DiagramHelper::isMultipleSeries(xDiagram));
 
     mxBoxLabelPlacement->set_sensitive(bLabelVisible);
     mxLBLabelPlacement->set_active(getDataLabelPlacement(mxModel, aCID));

@@ -565,7 +565,6 @@ bool DiagramHelper::attachSeriesToAxis( bool bAttachToMainAxis
 
     //set property at axis
     Reference< beans::XPropertySet > xProp( xDataSeries, uno::UNO_QUERY_THROW );
-
     sal_Int32 nNewAxisIndex = bAttachToMainAxis ? 0 : 1;
     sal_Int32 nOldAxisIndex = DataSeriesHelper::getAttachedAxisIndex(xDataSeries);
     uno::Reference< chart2::XAxis > xOldAxis( DiagramHelper::getAttachedAxis( xDataSeries, xDiagram ) );
@@ -591,7 +590,7 @@ bool DiagramHelper::attachSeriesToAxis( bool bAttachToMainAxis
         if( bAdaptAxes )
         {
             AxisHelper::makeAxisVisible( xAxis );
-            AxisHelper::hideAxisIfNoDataIsAttached( xOldAxis, xDiagram );
+            AxisHelper::hideAxisIfNoDataIsAttached( xOldAxis, xDiagram, nOldAxisIndex );
         }
     }
 
@@ -709,6 +708,37 @@ Sequence< Sequence< Reference< XDataSeries > > >
         }
     }
     return comphelper::containerToSequence( aResult );
+}
+
+bool DiagramHelper::isMultipleSeries( const css::uno::Reference< css::chart2::XDiagram >& xDiagram )
+{
+    sal_Int32 nSeries = 0;
+
+    try
+    {
+        Reference< XCoordinateSystemContainer > xCooSysCnt(
+            xDiagram, uno::UNO_QUERY_THROW);
+        const Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
+            xCooSysCnt->getCoordinateSystems());
+        for (Reference< XCoordinateSystem > const& coords : aCooSysSeq)
+        {
+            Reference< XChartTypeContainer > xCTCnt(coords, uno::UNO_QUERY_THROW);
+            const Sequence< Reference< XChartType > > aChartTypeSeq(xCTCnt->getChartTypes());
+            for (Reference< XChartType> const& chartType : aChartTypeSeq)
+            {
+                Reference< XDataSeriesContainer > xDSCnt(chartType, uno::UNO_QUERY_THROW);
+                if (!xDSCnt.is())
+                    continue;
+                nSeries += xDSCnt->getDataSeries().getLength();
+            }
+        }
+    }
+    catch (const uno::Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
+
+    return nSeries > 1;
 }
 
 Reference< XChartType >
