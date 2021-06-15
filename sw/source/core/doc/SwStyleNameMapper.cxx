@@ -108,14 +108,14 @@ template <auto initFunc> struct TablePair
             return s_aProgMap;
         }
 
-        LanguageTag aCurrentLanguage = SvtSysLocale().GetUILanguageTag();
+        const LanguageTag& rCurrentLanguage = SvtSysLocale().GetUILanguageTag();
         static std::map<LanguageTag, NameToIdHash> s_aUIMap;
 
-        auto aFound = s_aUIMap.find(aCurrentLanguage);
+        auto aFound = s_aUIMap.find(rCurrentLanguage);
         if (aFound == s_aUIMap.end())
-            s_aUIMap[aCurrentLanguage] = initFunc(false);
+            s_aUIMap[rCurrentLanguage] = initFunc(false);
 
-        return s_aUIMap[aCurrentLanguage];
+        return s_aUIMap[rCurrentLanguage];
     }
 };
 

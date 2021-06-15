@@ -574,17 +574,17 @@ UICommandDescription::UICommandDescription(const Reference< XComponentContext >&
     , m_aPrivateResourceURL(PRIVATE_RESOURCE_URL)
     , m_xContext(rxContext)
 {
-    LanguageTag aCurrentLanguage = SvtSysLocale().GetUILanguageTag();
+    const LanguageTag& rCurrentLanguage = SvtSysLocale().GetUILanguageTag();
 
-    ensureGenericUICommandsForLanguage(aCurrentLanguage);
+    ensureGenericUICommandsForLanguage(rCurrentLanguage);
 
     impl_fillElements("ooSetupFactoryCommandConfigRef");
 
     // insert generic commands
-    auto& rMap = m_aUICommandsHashMap[aCurrentLanguage];
+    auto& rMap = m_aUICommandsHashMap[rCurrentLanguage];
     UICommandsHashMap::iterator pIter = rMap.find( "GenericCommands" );
     if ( pIter != rMap.end() )
-        pIter->second = m_xGenericUICommands[aCurrentLanguage];
+        pIter->second = m_xGenericUICommands[rCurrentLanguage];
 }
 
 UICommandDescription::UICommandDescription(const Reference< XComponentContext >& rxContext, bool)
@@ -624,8 +624,8 @@ void UICommandDescription::impl_fillElements(const char* _pName)
             m_aModuleToCommandFileMap.emplace( aModuleIdentifier, aCommandStr );
 
             // Create second mapping Command File ==> commands instance
-            LanguageTag aCurrentLanguage = SvtSysLocale().GetUILanguageTag();
-            auto& rMap = m_aUICommandsHashMap[aCurrentLanguage];
+            const LanguageTag& rCurrentLanguage = SvtSysLocale().GetUILanguageTag();
+            auto& rMap = m_aUICommandsHashMap[rCurrentLanguage];
             UICommandsHashMap::iterator pIter = rMap.find( aCommandStr );
             if ( pIter == rMap.end() )
                 rMap.emplace( aCommandStr, Reference< XNameAccess >() );
@@ -635,7 +635,7 @@ void UICommandDescription::impl_fillElements(const char* _pName)
 
 Any SAL_CALL UICommandDescription::getByName( const OUString& aName )
 {
-    LanguageTag aCurrentLanguage = SvtSysLocale().GetUILanguageTag();
+    const LanguageTag& rCurrentLanguage = SvtSysLocale().GetUILanguageTag();
     Any a;
 
     osl::MutexGuard g(rBHelper.rMutex);
@@ -644,11 +644,11 @@ Any SAL_CALL UICommandDescription::getByName( const OUString& aName )
     if ( pM2CIter != m_aModuleToCommandFileMap.end() )
     {
         OUString aCommandFile( pM2CIter->second );
-        auto pMapIter = m_aUICommandsHashMap.find( aCurrentLanguage );
+        auto pMapIter = m_aUICommandsHashMap.find( rCurrentLanguage );
         if ( pMapIter == m_aUICommandsHashMap.end() )
             impl_fillElements("ooSetupFactoryCommandConfigRef");
 
-        auto& rMap = m_aUICommandsHashMap[aCurrentLanguage];
+        auto& rMap = m_aUICommandsHashMap[rCurrentLanguage];
         UICommandsHashMap::iterator pIter = rMap.find( aCommandFile );
         if ( pIter != rMap.end() )
         {
@@ -656,10 +656,10 @@ Any SAL_CALL UICommandDescription::getByName( const OUString& aName )
                 a <<= pIter->second;
             else
             {
-                ensureGenericUICommandsForLanguage(aCurrentLanguage);
+                ensureGenericUICommandsForLanguage(rCurrentLanguage);
 
                 Reference< XNameAccess > xUICommands = new ConfigurationAccess_UICommand( aCommandFile,
-                                                                                          m_xGenericUICommands[aCurrentLanguage],
+                                                                                          m_xGenericUICommands[rCurrentLanguage],
                                                                                           m_xContext );
                 pIter->second = xUICommands;
                 a <<= xUICommands;
@@ -668,10 +668,10 @@ Any SAL_CALL UICommandDescription::getByName( const OUString& aName )
     }
     else if ( !m_aPrivateResourceURL.isEmpty() && aName.startsWith( m_aPrivateResourceURL ) )
     {
-        ensureGenericUICommandsForLanguage(aCurrentLanguage);
+        ensureGenericUICommandsForLanguage(rCurrentLanguage);
 
         // special keys to retrieve information about a set of commands
-        return m_xGenericUICommands[aCurrentLanguage]->getByName( aName );
+        return m_xGenericUICommands[rCurrentLanguage]->getByName( aName );
     }
     else
     {
