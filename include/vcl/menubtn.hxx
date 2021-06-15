@@ -89,6 +89,8 @@ public:
 
     void SetCurItemId();
 
+    void DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
+
 };
 
 #endif // INCLUDED_VCL_MENUBTN_HXX
