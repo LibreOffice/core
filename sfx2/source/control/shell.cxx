@@ -47,6 +47,8 @@
 #include <vector>
 #include <map>
 
+#include <desktop/crashreport.hxx>
+
 using namespace com::sun::star;
 
 struct SfxShell_Impl: public SfxBroadcaster
@@ -289,6 +291,20 @@ void SfxShell::HandleOpenXmlFilterSettings(SfxRequest & rReq)
 
 void SfxShell::DoActivate_Impl( SfxViewFrame *pFrame, bool bMDI )
 {
+    SfxObjectShell* pObjectShell = GetObjectShell();
+    if ( pObjectShell )
+    {
+        const OUString sActiveDocName = pObjectShell->GetTitle();
+        if( !pImpl->aObjectName.startsWith(sActiveDocName) )
+        {
+           CrashReporter::setActiveSfxObjectName(pImpl->aObjectName);
+        }
+    }
+    else
+    {
+        CrashReporter::setActiveSfxObjectName(pImpl->aObjectName);
+    }
+
 #ifdef DBG_UTIL
     const SfxInterface *p_IF = GetInterface();
     if ( !p_IF )
