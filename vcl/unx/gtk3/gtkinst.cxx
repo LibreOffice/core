@@ -22278,6 +22278,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/optjsearchpage.ui" &&
         rUIFile != "cui/ui/optlingupage.ui" &&
         rUIFile != "cui/ui/optnewdictionarydialog.ui" &&
+        rUIFile != "cui/ui/pageformatpage.ui" &&
         rUIFile != "cui/ui/pastespecial.ui" &&
         rUIFile != "cui/ui/patterntabpage.ui" &&
         rUIFile != "cui/ui/percentdialog.ui" &&
@@ -22321,6 +22322,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "sfx/ui/licensedialog.ui" &&
         rUIFile != "sfx/ui/linefragment.ui" &&
         rUIFile != "sfx/ui/loadtemplatedialog.ui" &&
+        rUIFile != "sfx/ui/managestylepage.ui" &&
         rUIFile != "sfx/ui/password.ui" &&
         rUIFile != "sfx/ui/printeroptionsdialog.ui" &&
         rUIFile != "sfx/ui/safemodequerydialog.ui" &&
@@ -22346,6 +22348,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "svx/ui/docrecoverysavedialog.ui" &&
         rUIFile != "svx/ui/findreplacedialog.ui" &&
         rUIFile != "svx/ui/fontworkgallerydialog.ui" &&
+        rUIFile != "svx/ui/headfootformatpage.ui" &&
         rUIFile != "modules/BasicIDE/ui/basicmacrodialog.ui" &&
         rUIFile != "modules/BasicIDE/ui/dialogpage.ui" &&
         rUIFile != "modules/BasicIDE/ui/libpage.ui" &&
@@ -22419,6 +22422,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/swriter/ui/endnotepage.ui" &&
         rUIFile != "modules/swriter/ui/exchangedatabases.ui" &&
         rUIFile != "modules/swriter/ui/footendnotedialog.ui" &&
+        rUIFile != "modules/swriter/ui/footnoteareapage.ui" &&
         rUIFile != "modules/swriter/ui/footnotepage.ui" &&
         rUIFile != "modules/swriter/ui/footnotesendnotestabpage.ui" &&
         rUIFile != "modules/swriter/ui/framedialog.ui" &&
@@ -22445,6 +22449,8 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/swriter/ui/renameobjectdialog.ui" &&
         rUIFile != "modules/swriter/ui/sectionpage.ui" &&
         rUIFile != "modules/swriter/ui/statisticsinfopage.ui" &&
+        rUIFile != "modules/swriter/ui/templatedialog8.ui" &&
+        rUIFile != "modules/swriter/ui/textgridpage.ui" &&
         rUIFile != "modules/swriter/ui/titlepage.ui" &&
         rUIFile != "modules/swriter/ui/watermarkdialog.ui" &&
         rUIFile != "modules/swriter/ui/wrappage.ui" &&
