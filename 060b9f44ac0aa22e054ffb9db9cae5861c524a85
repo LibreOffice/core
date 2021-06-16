@@ -22,6 +22,30 @@
       "revId": "060b9f44ac0aa22e054ffb9db9cae5861c524a85",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd5e78a8_68f634d5",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 1876,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-16T08:29:17Z",
+      "side": 1,
+      "message": "I suppose that you need to look at what CheckItem does... I suppose that is what might activate the other panel.",
+      "parentUuid": "2ca01672_ca783795",
+      "range": {
+        "startLine": 1864,
+        "startChar": 0,
+        "endLine": 1876,
+        "endChar": 5
+      },
+      "revId": "060b9f44ac0aa22e054ffb9db9cae5861c524a85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
