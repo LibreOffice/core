@@ -1809,7 +1809,7 @@ static Writer & OutHTML_FrameFormatAsImage( Writer& rWrt, const SwFrameFormat& r
     {
         aDPI.emplace(*rHTMLWrt.m_nShapeDPI, *rHTMLWrt.m_nShapeDPI);
     }
-    Graphic aGraphic( const_cast<SwFrameFormat &>(rFrameFormat).MakeGraphic( &aIMap, aDPI ) );
+    Graphic aGraphic( const_cast<SwFrameFormat &>(rFrameFormat).MakeGraphic( &aIMap, /*nMaximumQuadraticPixels=*/2100000, aDPI ) );
 
     if (rHTMLWrt.mbReqIF)
     {
