@@ -50,18 +50,18 @@ public:
     static void installExceptionHandler();
     static void removeExceptionHandler();
 
+    static void setActiveSfxObjectName(const OUString& rActiveSfxObjectName);
+    static OUString getActiveSfxObjectName();
+
     static bool crashReportInfoExists();
 
     static bool readSendConfig(std::string& response);
 
     static bool IsDumpEnable();
 
-    static void setActiveApp(const OUString& rActiveApp);
-    static OUString currentActiveApp();
-
 private:
     static osl::Mutex maMutex;
-    static osl::Mutex maActiveNameMutex;
+    static osl::Mutex maActiveSfxObjectNameMutex;
     static bool mbInit;
     typedef  struct _mpair
     {
@@ -76,7 +76,7 @@ private:
 
     typedef std::vector<mpair> vmaKeyValues;
     static vmaKeyValues maKeyValues; // used to temporarily save entries before the old info has been uploaded
-    static OUString mActiveApp;
+    static OUString msActiveSfxObjectName;
 
     static std::unique_ptr<google_breakpad::ExceptionHandler> mpExceptionHandler;
 
@@ -93,11 +93,11 @@ private:
     // // the code without linking to the lib and without adding HAVE_FEATURE_BREAKPAD
     // // everywhere we want to log something to the crash report system.
     inline static void addKeyValue(SAL_UNUSED_PARAMETER const OUString& /*rKey*/, SAL_UNUSED_PARAMETER const OUString& /*rValue*/, SAL_UNUSED_PARAMETER tAddKeyHandling /*AddKeyHandling*/) {};
-    inline static void setActiveApp(SAL_UNUSED_PARAMETER const OUString& /*rActiveApp*/) {};
-    inline static OUString currentActiveApp()
+    inline static void setActiveSfxObjectName(SAL_UNUSED_PARAMETER const OUString& /*rActiveSfxObjectName*/) {};
+    inline static OUString getActiveSfxObjectName()
     {
         return OUString();
-    };
+    }
 #endif // HAVE_FEATURE_BREAKPAD
 };
 
