@@ -22,6 +22,30 @@
       "revId": "4073f3920c6dc3e48cbfa7774d83e142092f0204",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eba56fbc_93ee1853",
+        "filename": "vcl/qa/cppunit/svm/svmtest.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1974,
+      "author": {
+        "id": 1003158
+      },
+      "writtenOn": "2021-06-16T09:40:13Z",
+      "side": 1,
+      "message": "I am trying to encode data to hex, using the hex32 function inside mtfxmldump, but I can not convert the data type (sal_uInt8*) to sal_uInt32 in order for the function to work..",
+      "parentUuid": "799bca16_1267727c",
+      "range": {
+        "startLine": 1968,
+        "startChar": 4,
+        "endLine": 1974,
+        "endChar": 77
+      },
+      "revId": "4073f3920c6dc3e48cbfa7774d83e142092f0204",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
