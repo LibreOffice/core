@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "403aee49_b22292c4",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 2486,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-16T16:28:19Z",
+      "side": 1,
+      "message": "Hii.. I modified this part of CheckItem..\n\nIts coming to this point and all the character styles are being listed with bcheck \u003d true\nBut its not getting updated..\nPlease help me with it..",
+      "range": {
+        "startLine": 2486,
+        "startChar": 11,
+        "endLine": 2486,
+        "endChar": 53
+      },
+      "revId": "2bccbdb86a109e6be130b56350b00787fc16b938",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
