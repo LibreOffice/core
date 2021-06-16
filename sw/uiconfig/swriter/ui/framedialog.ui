@@ -7,6 +7,8 @@
     <property name="border-width">6</property>
     <property name="title" translatable="yes" context="framedialog|FrameDialog">Frame</property>
     <property name="modal">True</property>
+    <property name="default-width">0</property>
+    <property name="default-height">0</property>
     <property name="type-hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
