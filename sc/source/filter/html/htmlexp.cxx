@@ -189,7 +189,7 @@ static OString lcl_makeHTMLColorTriplet(const Color& rColor)
     // <font COLOR="#00FF40">hello</font>
     snprintf( buf, 24, "\"#%02X%02X%02X\"", rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue() );
 
-    return buf;
+    return OString(buf);
 }
 
 ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const OUString& rBaseURL, ScDocument* pDocP,
