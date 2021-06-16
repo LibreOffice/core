@@ -17,7 +17,7 @@ from uitest.uihelper import guarded
 
 class chartLegend(UITestCase):
    def test_chart_display_legend_dialog(self):
-    with guarded.load_file(self, get_url_for_data_file("tdf98390.ods")) as calc_doc:
+      calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf98390.ods"))
       xCalcDoc = self.xUITest.getTopFocusWindow()
       gridwin = xCalcDoc.getChild("grid_window")
       document = self.ui_test.get_component()
@@ -51,7 +51,7 @@ class chartLegend(UITestCase):
         self.assertEqual(get_state_as_dict(left)["Checked"], "true")
         self.assertEqual(get_state_as_dict(right)["Checked"], "false")
         self.assertEqual(get_state_as_dict(top)["Checked"], "false")
-        self.assertEqual(get_state_as_dict(bottom)["Checked"], "false")
+        self.assertEqual(get_state_as_dict(bottom)["Checked"], "true")
 
         show.executeAction("CLICK", tuple())
 
@@ -74,6 +74,8 @@ class chartLegend(UITestCase):
         self.assertEqual(get_state_as_dict(bottom)["Checked"], "false")
 
         self.assertEqual(get_state_as_dict(show)["Selected"], "false")
+      self.ui_test.close_doc()
+
 
    def test_legends_move_with_arrows_keys(self):
 
