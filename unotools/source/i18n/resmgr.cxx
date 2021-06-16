@@ -90,7 +90,7 @@ namespace
             nCRC >>= 6;
         }
         sKeyId[5] = '\0';
-        return sKeyId;
+        return OString(sKeyId);
     }
 }
 

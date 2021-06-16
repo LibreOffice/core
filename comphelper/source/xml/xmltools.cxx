@@ -100,7 +100,7 @@ namespace comphelper::xml
                     aSeq[0], aSeq[1], aSeq[2], aSeq[3], aSeq[4], aSeq[5], aSeq[6], aSeq[7], aSeq[8],
                     aSeq[9], aSeq[10], aSeq[11], aSeq[12], aSeq[13], aSeq[14], aSeq[15]);
 
-            return str;
+            return OString(str);
         }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

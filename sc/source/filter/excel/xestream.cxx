@@ -705,7 +705,7 @@ OString XclXmlUtils::ToOString( const Color& rColor )
     char buf[9];
     sprintf( buf, "%.2X%.2X%.2X%.2X", rColor.GetAlpha(), rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue() );
     buf[8] = '\0';
-    return buf;
+    return OString(buf);
 }
 
 OStringBuffer& XclXmlUtils::ToOString( OStringBuffer& s, const ScAddress& rAddress )
