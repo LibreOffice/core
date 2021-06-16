@@ -18,7 +18,7 @@ namespace o3tl
 // and some call site doesn't need the value beyond the call itself (e.g., in a call like
 // std::modf(x, &o3tl::temporary(double())) to obtain the fractional part of x, ignoring the
 // integral part).
-template <typename T> constexpr T& temporary(T&& x) { return x; }
+template <typename T> constexpr T& temporary(T&& x) { return static_cast<T&>(x); }
 template <typename T> constexpr T& temporary(T&) = delete;
 }
 
