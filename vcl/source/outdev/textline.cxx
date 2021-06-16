@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "vcl/alpha.hxx"
 #include <cassert>
 
 #include <sal/types.h>
@@ -1000,6 +1001,41 @@ void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, lo
         nLineWidth = 1;
     }
 
+    if ( fOrientation == 0.0 )
+    {
+        static WavyLineCache _lineCache;
+        std::shared_ptr< BitmapEx > wavylinebmp;
+        if ( !_lineCache.find( GetLineColor(), nLineWidth, nWaveHeight, nEndX - nStartX, wavylinebmp ) )
+        {
+            size_t nWordLength = nEndX - nStartX;
+            // start with something big to avoid updating it frequently
+            nWordLength = nWordLength < 1024 ? 1024 : nWordLength;
+            ScopedVclPtrInstance< VirtualDevice > pVirtDev( *this, DeviceFormat::DEFAULT,
+                                                           DeviceFormat::DEFAULT );
+            pVirtDev->SetAntialiasing( AntialiasingFlags::EnableB2dDraw );
+            pVirtDev->SetOutputSizePixel( Size( nWordLength, nWaveHeight * 2 ), false );
+            pVirtDev->SetLineColor( GetLineColor() );
+            pVirtDev->SetBackground( Wallpaper( COL_TRANSPARENT ) );
+            pVirtDev->ImplDrawWaveLineBezier( 0, 0, nWordLength, 0, nWaveHeight, fOrientation, nLineWidth );
+            _lineCache.insert(
+                    pVirtDev->GetBitmapEx( Point( 0, 0 ), pVirtDev->GetOutputSize() ),
+                    GetLineColor(), nLineWidth, nWaveHeight, nWordLength, Size( nEndX - nStartX, nWaveHeight * 2 ),
+                    wavylinebmp
+            );
+        }
+        if ( wavylinebmp != nullptr )
+            DrawBitmapEx( Point( rStartPos.X(), rStartPos.Y() ), PixelToLogic(wavylinebmp->GetSizePixel()), *wavylinebmp );
+        return;
+    }
+
+    ImplDrawWaveLineBezier( nStartX, nStartY, nEndX, nEndY, nWaveHeight, fOrientation, nLineWidth );
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawWaveLine( rStartPos, rEndPos, nLineWidth );
+}
+
+void OutputDevice::ImplDrawWaveLineBezier(long nStartX, long nStartY, long nEndX, long nEndY, long nWaveHeight, double fOrientation, long nLineWidth)
+{
     const basegfx::B2DRectangle aWaveLineRectangle(nStartX, nStartY, nEndX, nEndY + nWaveHeight);
     const basegfx::B2DPolygon aWaveLinePolygon = basegfx::createWaveLinePolygon(aWaveLineRectangle);
     const basegfx::B2DHomMatrix aRotationMatrix = basegfx::utils::createRotateAroundPoint(nStartX, nStartY, basegfx::deg2rad(-fOrientation));
@@ -1018,9 +1054,6 @@ void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, lo
             basegfx::deg2rad(15.0),
             bPixelSnapHairline,
             this);
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawWaveLine( rStartPos, rEndPos, nLineWidth );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
