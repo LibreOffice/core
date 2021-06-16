@@ -249,6 +249,10 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf142404_tabOverSpacingC15, "tdf142404_
     nHeight = parseDump("//page[1]/body/txt[7]/infos/bounds", "height").toInt32();
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("2 lines high (but 3 in Word)", 242*2.5, nHeight, 242);
 
+    CPPUNIT_ASSERT_EQUAL(OUString("A centered tab positioned at"), parseDump("//page[1]/body/txt[3]/Text[1]", "Portion"));
+    sal_Int32 nLineWidth = parseDump("//page[1]/body/txt[3]/Text[2]", "nWidth").toInt32();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Big tab: full paragraph area used", 737, nLineWidth, 100);
+
     // Pages 2/3 are TabOverMargin - in this particular case tabs should not go over margin.
     CPPUNIT_ASSERT_EQUAL(OUString("TabOverflow does what?"), parseDump("//page[3]/body/txt[2]/Text[1]", "Portion"));
     // Not 1 line high (Word 2010 DOCX and ODT), or 4 lines high (prev LO DOCX),
