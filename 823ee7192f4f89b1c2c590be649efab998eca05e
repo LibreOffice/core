@@ -1,0 +1,293 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "08d55a5c_8cbde69c",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-16T20:38:04Z",
+      "side": 1,
+      "message": "This block is absolutely identical to the code above, with just names changed. In theory, to avoid duplication, the common code should be moved to a separate function, and in this function, just call it twice:\n\n  void SfxCommonTemplateDialog_Impl::PrepareMenu_Impl(const Point\u0026 rPos, std::unique_ptr\u003cweld::TreeView\u003e\u0026 pBox)\n  {\n      weld::TreeView* pTreeView \u003d pBox-\u003eget_visible() ? pBox.get() : mxFmtLb.get();\n      ...\n  }\n\n  ...\n\n    PrepareMenu_Impl(mxTreeBox);\n    PrepareMenu_Impl\n\nBut I think it\u0027s suspicious that there\u0027s a possibility, that this code *might* work on the *same* object for the two cases - namely, mxFmtLb. It looks actually odd here.",
+      "revId": "823ee7192f4f89b1c2c590be649efab998eca05e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2cca126_622a70c6",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-16T20:38:04Z",
+      "side": 1,
+      "message": "What does ShowMenu actually do? It looks odd that it now unconditionally does its job for two menus.",
+      "revId": "823ee7192f4f89b1c2c590be649efab998eca05e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "792c4eb6_2ff77c27",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 891,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-16T20:38:04Z",
+      "side": 1,
+      "message": "So whenever there\u0027s a request to select style \"Foo\", it would select such thing n the both lists, in there are both paragraph style and character style with this name?",
+      "revId": "823ee7192f4f89b1c2c590be649efab998eca05e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9da16244_b6ec4f77",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 1066,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-16T20:38:04Z",
+      "side": 1,
+      "message": "It seems to me that there\u0027s a code related to character styles, that gets executed for every page, regardless if this is paragraph styles page, or e.g. page styles.\n\nI would prefer if you do not mix character-related code with \"main\" code; please group all the character-related code together (I mean lines 1065-1075, 1077, 1079, 1081, ...), and then it would be easier to e.g. conditionally execute that code only in case of paragraph styles (text styles) panel.\n\nAdditionally, it would enable seeing common patterns, and moving the common code to utility functions, and deduplicating the code. Among other things, it could make it less error-prone.",
+      "revId": "823ee7192f4f89b1c2c590be649efab998eca05e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6f2313a_96661c1a",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 1146,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-16T20:38:04Z",
+      "side": 1,
+      "message": "See, how this could break, in a style named \"aCharStyle\" is present also in Paragraph styles.",
+      "revId": "823ee7192f4f89b1c2c590be649efab998eca05e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96d949c0_efa74b49",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 1188,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-16T20:38:04Z",
+      "side": 1,
+      "message": "As said, do *not* use help ids to disambiguate boxes. Compare not their get_help_id\u0027s, but rBox to mxFilterLb directly.\n\nMove \u0027{\u0027 to new line",
+      "revId": "823ee7192f4f89b1c2c590be649efab998eca05e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a8c7ee0_fd845ff5",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 1189,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-16T20:38:04Z",
+      "side": 1,
+      "message": "Why do you check get_help_id again? do you suspect that it has changed between line 1188 and 1189? ;-P",
+      "revId": "823ee7192f4f89b1c2c590be649efab998eca05e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce3f0ee0_7e6d2bbc",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 1230,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-16T20:38:04Z",
+      "side": 1,
+      "message": "This is indented wrong!",
+      "revId": "823ee7192f4f89b1c2c590be649efab998eca05e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9b0846b_3b0f63e7",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 1295,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-16T20:38:04Z",
+      "side": 1,
+      "message": "And lines 1231 to 1292 are now indented wrong!\n\nLines 1293 and 1294 are not needed.",
+      "revId": "823ee7192f4f89b1c2c590be649efab998eca05e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93d971a4_81d8acbf",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 1401,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-16T20:38:04Z",
+      "side": 1,
+      "message": "This all is indented wrong.",
+      "revId": "823ee7192f4f89b1c2c590be649efab998eca05e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28b13225_e94a2909",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 1407,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-16T20:38:04Z",
+      "side": 1,
+      "message": "Use four spaces indents.",
+      "revId": "823ee7192f4f89b1c2c590be649efab998eca05e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9fe5ac1_b3d8b39e",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 1410,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-16T20:38:04Z",
+      "side": 1,
+      "message": "Again - unneeded empty lines",
+      "revId": "823ee7192f4f89b1c2c590be649efab998eca05e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0732a5cc_78fe662f",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 1775,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-16T20:38:04Z",
+      "side": 1,
+      "message": "No help id comparisons!",
+      "revId": "823ee7192f4f89b1c2c590be649efab998eca05e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a364162_023aa928",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 1811,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-16T20:38:04Z",
+      "side": 1,
+      "message": "Is this correct? shouldn\u0027t it be m_bWantCharHierarchical ?",
+      "revId": "823ee7192f4f89b1c2c590be649efab998eca05e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df8ad1a3_ecb3f02d",
+        "filename": "sfx2/source/inc/templdgi.hxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-16T20:38:04Z",
+      "side": 1,
+      "message": "Please use m_ prefix. If you feel it more comfortable (so that the name does not look \"alien\" relative to neighbors), please group the char-related members together: e.g., move CharHierarchical below m_bWantHierarchical, and it would become\n\n     bool m_bWantHierarchical :1;\n+    bool m_bCharHierarchical :1;\n+    bool m_bWantCharHierarchical :1;\n     bool bBindingUpdate :1;",
+      "revId": "823ee7192f4f89b1c2c590be649efab998eca05e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fae9286c_95d1b689",
+        "filename": "sfx2/source/inc/templdgi.hxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-16T20:38:04Z",
+      "side": 1,
+      "message": "Add space *before* weld::CheckButton\u0026, remove after:\n\n    virtual void CheckItem(const OString\u0026 /*rMesId*/, weld::CheckButton\u0026, bool /*bCheck*/ \u003d true)",
+      "revId": "823ee7192f4f89b1c2c590be649efab998eca05e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "171b7fa9_c327148f",
+        "filename": "sfx2/source/inc/templdgi.hxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-16T20:38:04Z",
+      "side": 1,
+      "message": "See comment to line 155.",
+      "revId": "823ee7192f4f89b1c2c590be649efab998eca05e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
