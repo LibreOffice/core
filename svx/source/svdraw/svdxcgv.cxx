@@ -425,7 +425,7 @@ void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Po
     }
 }
 
-BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked, const std::optional<Size>& rTargetDPI) const
+BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked, const sal_uInt32 nMaximumQuadraticPixels, const std::optional<Size>& rTargetDPI) const
 {
     BitmapEx aBmp;
 
@@ -502,7 +502,7 @@ BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked, const
                     aBmp = convertPrimitive2DSequenceToBitmapEx(
                         xPrimitives,
                         aRange,
-                        /*nMaximumQuadraticPixels=*/ 500000,
+                        nMaximumQuadraticPixels,
                         eRangeUnit,
                         rTargetDPI);
                 }
