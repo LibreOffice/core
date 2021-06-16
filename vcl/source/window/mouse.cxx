@@ -292,7 +292,8 @@ void Window::ImplGrabFocus( GetFocusFlags nFlags )
 
     // mark this windows as the last FocusWindow
     vcl::Window* pOverlapWindow = ImplGetFirstOverlapWindow();
-    pOverlapWindow->mpWindowImpl->mpLastFocusWindow = this;
+    if (pOverlapWindow->mpWindowImpl)
+        pOverlapWindow->mpWindowImpl->mpLastFocusWindow = this;
     mpWindowImpl->mpFrameData->mpFocusWin = this;
 
     if( !bHasFocus )
