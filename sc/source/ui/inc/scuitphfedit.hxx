@@ -113,6 +113,13 @@ private:
     DECL_LINK( MenuHdl, const OString&, void );
 };
 
+class ScFirstHeaderEditPage : public ScHFEditPage
+{
+public:
+    static std::unique_ptr<SfxTabPage>  Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rCoreSet );
+    ScFirstHeaderEditPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet );
+};
+
 class ScRightHeaderEditPage : public ScHFEditPage
 {
 public:
@@ -125,6 +132,13 @@ class ScLeftHeaderEditPage : public ScHFEditPage
 public:
     static std::unique_ptr<SfxTabPage>  Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rCoreSet );
     ScLeftHeaderEditPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet );
+};
+
+class ScFirstFooterEditPage : public ScHFEditPage
+{
+public:
+    static std::unique_ptr<SfxTabPage>  Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rCoreSet );
+    ScFirstFooterEditPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet );
 };
 
 class ScRightFooterEditPage : public ScHFEditPage
