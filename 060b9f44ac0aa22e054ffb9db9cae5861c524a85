@@ -46,6 +46,29 @@
       "revId": "060b9f44ac0aa22e054ffb9db9cae5861c524a85",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23f556ae_3fe29703",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 2477,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-16T12:47:29Z",
+      "side": 1,
+      "message": "Hii \n\nIf I introduces an additional condition as \n\nif (rMesId \u003d\u003d \"watercan\")\n    {\n        bIsWater\u003dbCheck;\n        m_xActionTbR-\u003eset_item_active(\"watercan\", bCheck);\n    }\n    else if (rMesId \u003d\u003d \"1\") {              // additional condition\n        return;\n    }\n    else\n        m_xActionTbL-\u003eset_item_active(rMesId, bCheck);\n\nI expected it to do nothing and just return.. But its behaving in a same manner as before..",
+      "range": {
+        "startLine": 2477,
+        "startChar": 29,
+        "endLine": 2477,
+        "endChar": 38
+      },
+      "revId": "060b9f44ac0aa22e054ffb9db9cae5861c524a85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
