@@ -172,57 +172,57 @@ namespace basegfx
         inline double getSmallValue() { return 0.000000001f; }
 
         /// Compare against small value
-        template <typename T, typename std::enable_if<std::is_floating_point<T>::value, bool>::type = false>
+        template <typename T, std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
         inline bool equalZero(const T& rfVal)
         {
             return (fabs(rfVal) <= getSmallValue());
         }
 
         /// Compare against given small value
-        template <typename T, typename std::enable_if<std::is_floating_point<T>::value, bool>::type = false>
+        template <typename T, std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
         inline bool equalZero(const T& rfVal, const T& rfSmallValue)
         {
             return (fabs(rfVal) <= rfSmallValue);
         }
 
-        template <typename T, typename std::enable_if<std::is_floating_point<T>::value, bool>::type = false>
+        template <typename T, std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
         inline bool equal(T const& rfValA, T const& rfValB)
         {
             // changed to approxEqual usage for better numerical correctness
             return rtl_math_approxEqual(rfValA, rfValB);
         }
 
-        template <typename T, typename std::enable_if<std::is_floating_point<T>::value, bool>::type = false>
+        template <typename T, std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
         inline bool equal(const T& rfValA, const T& rfValB, const T& rfSmallValue)
         {
             return (fabs(rfValA - rfValB) <= rfSmallValue);
         }
 
-        template <typename T, typename std::enable_if<std::is_floating_point<T>::value, bool>::type = false>
+        template <typename T, std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
         inline bool less(const T& rfValA, const T& rfValB)
         {
             return (rfValA < rfValB && !equal(rfValA, rfValB));
         }
 
-        template <typename T, typename std::enable_if<std::is_floating_point<T>::value, bool>::type = false>
+        template <typename T, std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
         inline bool lessOrEqual(const T& rfValA, const T& rfValB)
         {
             return (rfValA < rfValB || equal(rfValA, rfValB));
         }
 
-        template <typename T, typename std::enable_if<std::is_floating_point<T>::value, bool>::type = false>
+        template <typename T, std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
         inline bool more(const T& rfValA, const T& rfValB)
         {
             return (rfValA > rfValB && !equal(rfValA, rfValB));
         }
 
-        template <typename T, typename std::enable_if<std::is_floating_point<T>::value, bool>::type = false>
+        template <typename T, std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
         inline bool moreOrEqual(const T& rfValA, const T& rfValB)
         {
             return (rfValA > rfValB || equal(rfValA, rfValB));
         }
 
-        template <typename T, typename std::enable_if<std::is_floating_point<T>::value, bool>::type = false>
+        template <typename T, std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
         inline bool betweenOrEqualEither(const T& rfValA, const T& rfValB, const T& rfValC)
         {
             return (rfValA > rfValB && rfValA < rfValC) || equal(rfValA, rfValB) || equal(rfValA, rfValC);
