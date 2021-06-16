@@ -242,6 +242,10 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf142404_tabOverSpacingC15, "tdf142404_
     sal_Int32 nHeight = parseDump("//page[1]/body/txt[2]/infos/bounds", "height").toInt32();
     CPPUNIT_ASSERT_MESSAGE("4 lines high", 1100 < nHeight);
     CPPUNIT_ASSERT_MESSAGE("4 lines high", nHeight < 1300);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("A centered tab positioned at"), parseDump("//page[1]/body/txt[3]/Text[1]", "Portion"));
+    sal_Int32 nLineWidth = parseDump("//page[1]/body/txt[3]/Text[2]", "nWidth").toInt32();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Big tab: full paragraph area used", 737, nLineWidth, 100);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf139580, "tdf139580.odt")
