@@ -7785,6 +7785,98 @@ public:
 
 }
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+
+G_BEGIN_DECLS
+
+G_DECLARE_FINAL_TYPE(NotifyingLayout, notifying_layout, NOTIFYING, LAYOUT, GtkLayoutManager)
+
+struct _NotifyingLayout
+{
+    GtkLayoutManager parent_instance;
+
+    GtkWidget* m_pWidget;
+    GtkLayoutManager* m_pOrigManager;
+    Link<void*, void> m_aLink;
+
+    void StartWatch(GtkWidget* pWidget, const Link<void*, void>& rLink)
+    {
+        m_pWidget = pWidget;
+        m_aLink = rLink;
+
+        m_pOrigManager = gtk_widget_get_layout_manager(m_pWidget);
+        g_object_ref(m_pOrigManager);
+
+        gtk_widget_set_layout_manager(pWidget, GTK_LAYOUT_MANAGER(this));
+    }
+
+    void StopWatch()
+    {
+        gtk_widget_set_layout_manager(m_pWidget, m_pOrigManager);
+    }
+};
+
+struct _NotifyingLayoutClass
+{
+    GtkLayoutManagerClass parent_class;
+};
+
+G_DEFINE_TYPE(NotifyingLayout, notifying_layout, GTK_TYPE_LAYOUT_MANAGER)
+
+static void notifying_layout_measure(GtkLayoutManager* pLayoutManager,
+                                     GtkWidget* widget,
+                                     GtkOrientation orientation,
+                                     int for_size,
+                                     int *minimum,
+                                     int *natural,
+                                     int *minimum_baseline,
+                                     int *natural_baseline)
+{
+    NotifyingLayout* self = NOTIFYING_LAYOUT(pLayoutManager);
+    GtkLayoutManagerClass* pKlass = GTK_LAYOUT_MANAGER_CLASS(G_OBJECT_GET_CLASS(self->m_pOrigManager));
+    pKlass->measure(self->m_pOrigManager, widget, orientation, for_size,
+                    minimum, natural, minimum_baseline, natural_baseline);
+}
+
+static void notifying_layout_allocate(GtkLayoutManager* pLayoutManager,
+                                      GtkWidget* widget,
+                                      int width,
+                                      int height,
+                                      int baseline)
+{
+    NotifyingLayout* self = NOTIFYING_LAYOUT(pLayoutManager);
+    GtkLayoutManagerClass* pKlass = GTK_LAYOUT_MANAGER_CLASS(G_OBJECT_GET_CLASS(self->m_pOrigManager));
+    pKlass->allocate(self->m_pOrigManager, widget, width, height, baseline);
+    self->m_aLink.Call(nullptr);
+}
+
+static GtkSizeRequestMode notifying_layout_get_request_mode(GtkLayoutManager* pLayoutManager,
+                                                            GtkWidget* widget)
+{
+    NotifyingLayout* self = NOTIFYING_LAYOUT(pLayoutManager);
+    GtkLayoutManagerClass* pKlass = GTK_LAYOUT_MANAGER_CLASS(G_OBJECT_GET_CLASS(self->m_pOrigManager));
+    return pKlass->get_request_mode(self->m_pOrigManager, widget);
+}
+
+static void notifying_layout_class_init(NotifyingLayoutClass* klass)
+{
+    GtkLayoutManagerClass *layout_class = GTK_LAYOUT_MANAGER_CLASS(klass);
+
+    layout_class->get_request_mode = notifying_layout_get_request_mode;
+    layout_class->measure = notifying_layout_measure;
+    layout_class->allocate = notifying_layout_allocate;
+}
+
+static void notifying_layout_init(NotifyingLayout* self)
+{
+    self->m_pWidget = nullptr;
+    self->m_pOrigManager = nullptr;
+}
+
+G_END_DECLS
+
+#endif
+
 namespace {
 
 class GtkInstanceNotebook : public GtkInstanceWidget, public virtual weld::Notebook
@@ -7795,8 +7887,10 @@ private:
     GtkNotebook* m_pOverFlowNotebook;
     gulong m_nSwitchPageSignalId;
     gulong m_nOverFlowSwitchPageSignalId;
+#if GTK_CHECK_VERSION(4, 0, 0)
+    NotifyingLayout* m_pLayout;
+#else
     gulong m_nNotebookSizeAllocateSignalId;
-#if !GTK_CHECK_VERSION(4, 0, 0)
     gulong m_nFocusSignalId;
 #endif
     gulong m_nChangeCurrentPageId;
@@ -8177,11 +8271,15 @@ private:
         enable_notify_events();
     }
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+    DECL_LINK(SizeAllocateHdl, void*, void);
+#else
     static void signalSizeAllocate(GtkWidget*, GdkRectangle*, gpointer widget)
     {
         GtkInstanceNotebook* pThis = static_cast<GtkInstanceNotebook*>(widget);
         pThis->signal_notebook_size_allocate();
     }
+#endif
 
     bool signal_focus(GtkDirectionType direction)
     {
@@ -8242,7 +8340,10 @@ public:
         , m_pOverFlowNotebook(GTK_NOTEBOOK(gtk_notebook_new()))
         , m_nSwitchPageSignalId(g_signal_connect(pNotebook, "switch-page", G_CALLBACK(signalSwitchPage), this))
         , m_nOverFlowSwitchPageSignalId(g_signal_connect(m_pOverFlowNotebook, "switch-page", G_CALLBACK(signalOverFlowSwitchPage), this))
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+        , m_pLayout(nullptr)
+#else
+        , m_nNotebookSizeAllocateSignalId(0)
         , m_nFocusSignalId(g_signal_connect(pNotebook, "focus", G_CALLBACK(signalFocus), this))
 #endif
         , m_nChangeCurrentPageId(g_signal_connect(pNotebook, "change-current-page", G_CALLBACK(signalChangeCurrentPage), this))
@@ -8256,10 +8357,16 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_widget_add_events(GTK_WIDGET(pNotebook), GDK_SCROLL_MASK);
 #endif
-        if (get_n_pages() > 6)
+        gint nPages = gtk_notebook_get_n_pages(m_pNotebook);
+        if (nPages > 6)
+        {
+#if !GTK_CHECK_VERSION(4, 0, 0)
             m_nNotebookSizeAllocateSignalId = g_signal_connect_after(pNotebook, "size-allocate", G_CALLBACK(signalSizeAllocate), this);
-        else
-            m_nNotebookSizeAllocateSignalId = 0;
+#else
+            m_pLayout = NOTIFYING_LAYOUT(g_object_new(notifying_layout_get_type(), nullptr));
+            m_pLayout->StartWatch(GTK_WIDGET(pNotebook), LINK(this, GtkInstanceNotebook, SizeAllocateHdl));
+#endif
+        }
         gtk_notebook_set_show_border(m_pOverFlowNotebook, false);
 
         // tdf#122623 it's nigh impossible to have a GtkNotebook without an active (checked) tab, so try and theme
@@ -8527,8 +8634,16 @@ public:
     {
         if (m_nLaunchSplitTimeoutId)
             g_source_remove(m_nLaunchSplitTimeoutId);
+#if !GTK_CHECK_VERSION(4, 0, 0)
         if (m_nNotebookSizeAllocateSignalId)
             g_signal_handler_disconnect(m_pNotebook, m_nNotebookSizeAllocateSignalId);
+#else
+        if (m_pLayout)
+        {
+            // put it back how we found it initially
+            m_pLayout->StopWatch();
+        }
+#endif
         g_signal_handler_disconnect(m_pNotebook, m_nSwitchPageSignalId);
 #if !GTK_CHECK_VERSION(4, 0, 0)
         g_signal_handler_disconnect(m_pNotebook, m_nFocusSignalId);
@@ -8547,8 +8662,8 @@ public:
             // put it back to how we found it initially
             GtkWidget* pParent = gtk_widget_get_parent(GTK_WIDGET(m_pOverFlowBox));
             g_object_ref(m_pNotebook);
-            gtk_container_remove(GTK_CONTAINER(m_pOverFlowBox), GTK_WIDGET(m_pNotebook));
-            gtk_container_add(GTK_CONTAINER(pParent), GTK_WIDGET(m_pNotebook));
+            container_remove(GTK_WIDGET(m_pOverFlowBox), GTK_WIDGET(m_pNotebook));
+            container_add(GTK_WIDGET(pParent), GTK_WIDGET(m_pNotebook));
             g_object_unref(m_pNotebook);
 #endif
 
@@ -8561,6 +8676,13 @@ public:
         }
     }
 };
+
+#if GTK_CHECK_VERSION(4, 0, 0)
+IMPL_LINK_NOARG(GtkInstanceNotebook, SizeAllocateHdl, void*, void)
+{
+    signal_notebook_size_allocate();
+}
+#endif
 
 void update_attr_list(PangoAttrList* pAttrList, const vcl::Font& rFont)
 {
