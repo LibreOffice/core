@@ -525,7 +525,7 @@ bool SwTabPortion::PostFormat( SwTextFormatInfo &rInf )
         // centered tabs are problematic:
         // We have to detect how much fits into the line.
         sal_uInt16 nNewWidth = nPorWidth /2;
-        if( !bTabOverMargin && nNewWidth > rInf.Width() - nRight )
+        if (!bTabOverMargin && !bTabOverSpacing && nNewWidth > rInf.Width() - nRight)
             nNewWidth = nPorWidth - (rInf.Width() - nRight);
         nPorWidth = nNewWidth;
     }
