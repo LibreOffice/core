@@ -166,7 +166,7 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
     void checkMapMode(const GDIMetaFile& rMetaFile);
     void testMapMode();
 
-    //void checkFont(const GDIMetaFile& rMetaFile);
+    void checkFont(const GDIMetaFile& rMetaFile);
     void testFont();
 
     void checkPushPop(const GDIMetaFile& rMetaFile);
@@ -1890,8 +1890,43 @@ void SvmTest::testMapMode()
     checkMapMode(readFile(u"mapmode.svm"));
 }
 
+void SvmTest::checkFont(const GDIMetaFile& rMetafile)
+{
+    xmlDocUniquePtr pDoc = dumpMeta(rMetafile);
+
+    assertXPathAttrs(pDoc, "/metafile/font[1]", {
+        {"color", "#ffffff"},
+        {"fillcolor", "#ffffff"},
+        {"name", "Liberation Sans"},
+        {"stylename", "Liberation Serif"},
+        {"width", "12"},
+        {"height", "12"},
+        {"orientation", "50"},
+        {"weight", "thin"},
+        {"vertical", "true"},
+    });
+}
+
 void SvmTest::testFont()
-{}
+{
+    GDIMetaFile aGDIMetaFile;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
+
+    vcl::Font aFont(FontFamily::FAMILY_SCRIPT, Size(15, 15));
+    aFont.SetWeight(FontWeight::WEIGHT_THIN);
+    aFont.SetFamilyName("Liberation Sans");
+    aFont.SetStyleName("Liberation Serif");
+    aFont.SetFontHeight(12);
+    aFont.SetAverageFontWidth(12);
+    aFont.SetVertical(true);
+    aFont.SetOrientation(Degree10(50));
+
+    pVirtualDev->SetFont(aFont);
+
+    checkFont(writeAndReadStream(aGDIMetaFile));
+    checkFont(readFile(u"font.svm"));
+}
 
 void SvmTest::checkPushPop(const GDIMetaFile& rMetaFile)
 {
