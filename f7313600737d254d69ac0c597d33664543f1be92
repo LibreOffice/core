@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "00b103bc_50cc98e9",
+        "filename": "sfx2/source/view/viewfrm.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-16T05:31:33Z",
+      "side": 1,
+      "message": "you don\u0027t need this include anymore",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 1
+      },
+      "revId": "f7313600737d254d69ac0c597d33664543f1be92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3f5e7a8_4ac8dd40",
+        "filename": "vcl/backendtest/GraphicsRenderTests.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 886,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-16T05:31:33Z",
+      "side": 1,
+      "message": "Small nitpick but better to use else instead of returning here. Also better to revert the condition - if (m_aFailed.size() \u003e 0) { write failing tests } else { write no test failed }.\n\nIt reads better if you have positive case first and then the negative. \n\nAlso would be good to write which tests are quirky and skipped.",
+      "range": {
+        "startLine": 886,
+        "startChar": 8,
+        "endLine": 886,
+        "endChar": 14
+      },
+      "revId": "f7313600737d254d69ac0c597d33664543f1be92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
