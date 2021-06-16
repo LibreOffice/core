@@ -37,6 +37,46 @@
     },
     {
       "key": {
+        "uuid": "3898db00_5f26b4bb",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 1187,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-16T16:27:53Z",
+      "side": 1,
+      "message": "Do not check help id here. If you need to disambiguate controls, check if the control is e.g. mxCharFilterLb. Also, even if you would use strings, you would need to compare to defined constants, like HID_TEMPLATE_FILTER, not to copied strings.",
+      "range": {
+        "startLine": 1187,
+        "startChar": 31,
+        "endLine": 1187,
+        "endChar": 55
+      },
+      "revId": "060b9f44ac0aa22e054ffb9db9cae5861c524a85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f225f8a9_7d8690eb",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 1864,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-16T16:27:53Z",
+      "side": 1,
+      "message": "This line should be indented differently.",
+      "revId": "060b9f44ac0aa22e054ffb9db9cae5861c524a85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2ca01672_ca783795",
         "filename": "sfx2/source/dialog/templdlg.cxx",
         "patchSetId": 21
@@ -84,6 +124,47 @@
     },
     {
       "key": {
+        "uuid": "114721e1_3b153799",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 1876,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-16T16:27:53Z",
+      "side": 1,
+      "message": "Yes, indeed, I see. The whole idea of SfxCommonTemplateDialog_Impl::FamilySelect is, well, *select style family*, as the name implies. You should *not* change this method, nor the one that calls it; you must find the code that *actually* does dendering of the dtyle preview, where it checks if it needs the preview; and there you should implement checking for two checkboxes, and updating two boxes.",
+      "parentUuid": "cd5e78a8_68f634d5",
+      "range": {
+        "startLine": 1864,
+        "startChar": 0,
+        "endLine": 1876,
+        "endChar": 5
+      },
+      "revId": "060b9f44ac0aa22e054ffb9db9cae5861c524a85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b05447dd_573920ba",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 2237,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-16T16:27:53Z",
+      "side": 1,
+      "message": "This is incorrect. Besides incorrectly formatted, it is only executed when the checkbox *is checked* - bit not when user unchecks it. As I wrote above in SfxCommonTemplateDialog_Impl::FamilySelect, this place must not be modified here at all - but note the logic error.",
+      "revId": "060b9f44ac0aa22e054ffb9db9cae5861c524a85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "23f556ae_3fe29703",
         "filename": "sfx2/source/dialog/templdlg.cxx",
         "patchSetId": 21
@@ -101,6 +182,23 @@
         "endLine": 2477,
         "endChar": 38
       },
+      "revId": "060b9f44ac0aa22e054ffb9db9cae5861c524a85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eaed29d0_97d849ef",
+        "filename": "sfx2/uiconfig/ui/templatepanel.ui",
+        "patchSetId": 21
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-16T16:27:53Z",
+      "side": 1,
+      "message": "Please format the code correctly from the start. It helps reviewing the change, when the hierarchy is clear. Do not postpone correct formatting to somewhere in the future. Thanks!\n\nE.g., this should be indented left.",
       "revId": "060b9f44ac0aa22e054ffb9db9cae5861c524a85",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true

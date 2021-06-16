@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a578b4a_bf60ed59",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 1941,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-16T16:27:53Z",
+      "side": 0,
+      "message": "Note how the value of old preview is used here. What you actually need to do is assigning the render to the new box in case the new checkbox is selected.",
+      "revId": "6ef69234cf9138000a1dcf483114ea7c792fe3ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
