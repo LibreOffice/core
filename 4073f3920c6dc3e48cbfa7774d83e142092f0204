@@ -46,6 +46,30 @@
       "revId": "4073f3920c6dc3e48cbfa7774d83e142092f0204",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cffd4fea_dc9a078d",
+        "filename": "vcl/qa/cppunit/svm/svmtest.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1974,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-16T10:15:55Z",
+      "side": 1,
+      "message": "That\u0027s because hex32 only works on a 32bit number only (because there was no need for more until now). You can write a function yourself... but there is one in vcl/qa/cppunit/TypeSerializerTest.cxx:54: already.",
+      "parentUuid": "eba56fbc_93ee1853",
+      "range": {
+        "startLine": 1968,
+        "startChar": 4,
+        "endLine": 1974,
+        "endChar": 77
+      },
+      "revId": "4073f3920c6dc3e48cbfa7774d83e142092f0204",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
