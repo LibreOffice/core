@@ -209,7 +209,7 @@ void SwParaDlg::PageCreated(const OString& rId, SfxTabPage& rPage)
         static_cast<SwParagraphNumTabPage&>(rPage).EnableNewStart();
         weld::ComboBox& rBox = static_cast<SwParagraphNumTabPage&>(rPage).GetStyleBox();
         SfxStyleSheetBasePool* pPool = rView.GetDocShell()->GetStyleSheetPool();
-        const SfxStyleSheetBase* pBase = pPool->First(SfxStyleFamily::Pseudo);
+        const SfxStyleSheetBase* pBase = pPool->First(SfxStyleFamily::Number);
         std::set<OUString> aNames;
         while(pBase)
         {

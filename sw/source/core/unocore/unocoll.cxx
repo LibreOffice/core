@@ -686,7 +686,7 @@ SwXServiceProvider::MakeInstance(SwServiceType nObjectType, SwDoc & rDoc)
                     eFamily = SfxStyleFamily::Page;
                 break;
                 case SwServiceType::StyleNumbering:
-                    eFamily = SfxStyleFamily::Pseudo;
+                    eFamily = SfxStyleFamily::Number;
                 break;
                 case SwServiceType::StyleTable:
                     eFamily = SfxStyleFamily::Table;

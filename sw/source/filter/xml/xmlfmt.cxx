@@ -851,7 +851,7 @@ bool SwXMLStylesContext_Impl::InsertStyleFamily( XmlStyleFamily nFamily ) const
         bIns = bool(nStyleFamilyMask & SfxStyleFamily::Frame);
         break;
     case XmlStyleFamily::TEXT_LIST:
-        bIns = bool(nStyleFamilyMask & SfxStyleFamily::Pseudo);
+        bIns = bool(nStyleFamilyMask & SfxStyleFamily::Number);
         break;
     case XmlStyleFamily::TEXT_OUTLINE:
     case XmlStyleFamily::TEXT_FOOTNOTECONFIG:

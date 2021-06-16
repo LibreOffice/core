@@ -425,7 +425,7 @@ void SwXMLImport::startDocument()
                     else if( rFamily=="ParagraphStyles" )
                         nFamilyMask |= SfxStyleFamily::Para;
                     else if( rFamily=="NumberingStyles" )
-                        nFamilyMask |= SfxStyleFamily::Pseudo;
+                        nFamilyMask |= SfxStyleFamily::Number;
                 }
 
                 bool bOverwrite = false;

@@ -1066,7 +1066,7 @@ bool SwDoc::DelNumRule( const OUString& rName, bool bBroadcast )
         }
 
         if (bBroadcast)
-            BroadcastStyleOperation(rName, SfxStyleFamily::Pseudo,
+            BroadcastStyleOperation(rName, SfxStyleFamily::Number,
                                     SfxHintId::StyleSheetErased);
 
         getIDocumentListsAccess().deleteListForListStyle( rName );
@@ -1137,7 +1137,7 @@ bool SwDoc::RenameNumRule(const OUString & rOldName, const OUString & rNewName,
         bResult = true;
 
         if (bBroadcast)
-            BroadcastStyleOperation(rOldName, SfxStyleFamily::Pseudo,
+            BroadcastStyleOperation(rOldName, SfxStyleFamily::Number,
                                     SfxHintId::StyleSheetModified);
     }
 
@@ -2472,7 +2472,7 @@ sal_uInt16 SwDoc::MakeNumRule( const OUString &rName,
     }
 
     if (bBroadcast)
-        BroadcastStyleOperation(pNew->GetName(), SfxStyleFamily::Pseudo,
+        BroadcastStyleOperation(pNew->GetName(), SfxStyleFamily::Number,
                                 SfxHintId::StyleSheetCreated);
 
     return nRet;

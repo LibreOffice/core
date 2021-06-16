@@ -302,7 +302,7 @@ IMPL_LINK_NOARG(SwParagraphNumTabPage, EditNumStyleSelectHdl_Impl, weld::ComboBo
 IMPL_LINK_NOARG(SwParagraphNumTabPage, EditNumStyleHdl_Impl, weld::Button&, void)
 {
     OUString aTemplName(m_xNumberStyleLB->get_active_text());
-    ExecuteEditNumStyle_Impl( SID_STYLE_EDIT, aTemplName, SfxStyleFamily::Pseudo );
+    ExecuteEditNumStyle_Impl( SID_STYLE_EDIT, aTemplName, SfxStyleFamily::Number );
 }
 
 // Internal: Perform functions through the Dispatcher

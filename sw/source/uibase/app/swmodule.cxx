@@ -365,7 +365,7 @@ std::optional<SfxStyleFamilies> SwModule::CreateStyleFamilies()
                                  BMP_STYLES_FAMILY_PAGE,
                                  RID_PAGESTYLEFAMILY, GetResLocale());
 
-    aStyleFamilies.emplace_back(SfxStyleFamily::Pseudo,
+    aStyleFamilies.emplace_back(SfxStyleFamily::Number,
                                  SwResId(STR_LISTSTYLEFAMILY),
                                  BMP_STYLES_FAMILY_LIST,
                                  RID_LISTSTYLEFAMILY, GetResLocale());

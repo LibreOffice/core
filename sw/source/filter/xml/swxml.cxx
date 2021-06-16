@@ -680,7 +680,7 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
             *pSeq++ = "ParagraphStyles";
         }
         if( m_aOption.IsNumRules() )
-            // SfxStyleFamily::Pseudo;
+            // SfxStyleFamily::Number;
             *pSeq++ = "NumberingStyles";
 
         xInfoSet->setPropertyValue( "StyleInsertModeFamilies",
