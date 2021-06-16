@@ -51,23 +51,79 @@ ScHFEditHeaderDlg::ScHFEditHeaderDlg(
     :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
         "modules/scalc/ui/headerdialog.ui", "HeaderDialog")
 {
+    AddTabPage("headerfirst", ScFirstHeaderEditPage::Create, nullptr);
     AddTabPage("headerright", ScRightHeaderEditPage::Create, nullptr);
     AddTabPage("headerleft", ScLeftHeaderEditPage::Create, nullptr);
 }
 
 ScHFEditFooterDlg::ScHFEditFooterDlg(
-                          weld::Window*           pParent,
+                          weld::Window* pParent,
                           const SfxItemSet& rCoreSet,
                           std::u16string_view rPageStyle)
     :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
         "modules/scalc/ui/footerdialog.ui", "FooterDialog" )
 {
+    AddTabPage("footerfirst", ScFirstFooterEditPage::Create, nullptr);
     AddTabPage("footerright", ScRightFooterEditPage::Create, nullptr);
     AddTabPage("footerleft", ScLeftFooterEditPage::Create, nullptr);
 }
 
+ScHFEditSharedFirstHeaderDlg::ScHFEditSharedFirstHeaderDlg(
+                          weld::Window* pParent,
+                          const SfxItemSet& rCoreSet,
+                          std::u16string_view rPageStyle)
+    :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
+        "modules/scalc/ui/sharedfirstheaderdialog.ui", "SharedFirstHeaderDialog" )
+{
+    AddTabPage("headerright", ScRightHeaderEditPage::Create, nullptr);
+    AddTabPage("headerleft", ScLeftHeaderEditPage::Create, nullptr);
+}
+
+ScHFEditSharedFirstFooterDlg::ScHFEditSharedFirstFooterDlg(
+                          weld::Window* pParent,
+                          const SfxItemSet& rCoreSet,
+                          std::u16string_view rPageStyle)
+    :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
+        "modules/scalc/ui/sharedfirstfooterdialog.ui", "SharedFirstFooterDialog" )
+{
+    AddTabPage("footerright", ScRightFooterEditPage::Create, nullptr);
+    AddTabPage("footerleft", ScLeftFooterEditPage::Create, nullptr);
+}
+
+ScHFEditSharedLeftHeaderDlg::ScHFEditSharedLeftHeaderDlg(
+                          weld::Window* pParent,
+                          const SfxItemSet& rCoreSet,
+                          std::u16string_view rPageStyle)
+    :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
+        "modules/scalc/ui/sharedleftheaderdialog.ui", "SharedLeftHeaderDialog" )
+{
+    AddTabPage("headerfirst", ScFirstHeaderEditPage::Create, nullptr);
+    AddTabPage("headerright", ScRightHeaderEditPage::Create, nullptr);
+}
+
+ScHFEditSharedLeftFooterDlg::ScHFEditSharedLeftFooterDlg(
+                          weld::Window* pParent,
+                          const SfxItemSet& rCoreSet,
+                          std::u16string_view rPageStyle)
+    :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
+        "modules/scalc/ui/sharedleftfooterdialog.ui", "SharedLeftFooterDialog" )
+{
+    AddTabPage("footerfirst", ScFirstFooterEditPage::Create, nullptr);
+    AddTabPage("footerright", ScRightFooterEditPage::Create, nullptr);
+}
+
+ScHFEditFirstHeaderDlg::ScHFEditFirstHeaderDlg(
+                          weld::Window* pParent,
+                          const SfxItemSet& rCoreSet,
+                          std::u16string_view rPageStyle)
+    :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
+        "modules/scalc/ui/firstheaderdialog.ui", "FirstHeaderDialog" )
+{
+    AddTabPage("headerfirst", ScFirstHeaderEditPage::Create, nullptr);
+}
+
 ScHFEditLeftHeaderDlg::ScHFEditLeftHeaderDlg(
-                          weld::Window*           pParent,
+                          weld::Window* pParent,
                           const SfxItemSet& rCoreSet,
                           std::u16string_view rPageStyle)
     :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
@@ -77,7 +133,7 @@ ScHFEditLeftHeaderDlg::ScHFEditLeftHeaderDlg(
 }
 
 ScHFEditRightHeaderDlg::ScHFEditRightHeaderDlg(
-                          weld::Window*           pParent,
+                          weld::Window* pParent,
                           const SfxItemSet& rCoreSet,
                           std::u16string_view rPageStyle)
     :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
@@ -86,8 +142,18 @@ ScHFEditRightHeaderDlg::ScHFEditRightHeaderDlg(
     AddTabPage("headerright", ScRightHeaderEditPage::Create, nullptr);
 }
 
+ScHFEditFirstFooterDlg::ScHFEditFirstFooterDlg(
+                          weld::Window* pParent,
+                          const SfxItemSet& rCoreSet,
+                          std::u16string_view rPageStyle)
+    :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
+        "modules/scalc/ui/firstfooterdialog.ui", "FirstFooterDialog" )
+{
+    AddTabPage("footerfirst", ScFirstFooterEditPage::Create, nullptr);
+}
+
 ScHFEditLeftFooterDlg::ScHFEditLeftFooterDlg(
-                          weld::Window*           pParent,
+                          weld::Window* pParent,
                           const SfxItemSet& rCoreSet,
                           std::u16string_view rPageStyle)
     :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
@@ -97,7 +163,7 @@ ScHFEditLeftFooterDlg::ScHFEditLeftFooterDlg(
 }
 
 ScHFEditRightFooterDlg::ScHFEditRightFooterDlg(
-                          weld::Window*           pParent,
+                          weld::Window* pParent,
                           const SfxItemSet& rCoreSet,
                           std::u16string_view rPageStyle)
     :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
@@ -107,44 +173,50 @@ ScHFEditRightFooterDlg::ScHFEditRightFooterDlg(
 }
 
 ScHFEditSharedHeaderDlg::ScHFEditSharedHeaderDlg(
-                          weld::Window*           pParent,
+                          weld::Window* pParent,
                           const SfxItemSet& rCoreSet,
                           std::u16string_view rPageStyle)
     :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
         "modules/scalc/ui/sharedheaderdialog.ui", "SharedHeaderDialog" )
 {
+    AddTabPage("headerfirst", ScFirstHeaderEditPage::Create, nullptr);
     AddTabPage("header", ScRightHeaderEditPage::Create, nullptr);
+    AddTabPage("footerfirst", ScFirstFooterEditPage::Create, nullptr);
     AddTabPage("footerright", ScRightFooterEditPage::Create, nullptr);
     AddTabPage("footerleft", ScLeftFooterEditPage::Create, nullptr);
 }
 
 ScHFEditSharedFooterDlg::ScHFEditSharedFooterDlg(
-                          weld::Window*           pParent,
+                          weld::Window* pParent,
                           const SfxItemSet& rCoreSet,
                           std::u16string_view rPageStyle)
     :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
         "modules/scalc/ui/sharedfooterdialog.ui", "SharedFooterDialog" )
 {
+    AddTabPage("headerfirst", ScFirstFooterEditPage::Create, nullptr);
     AddTabPage("headerright", ScRightHeaderEditPage::Create, nullptr);
     AddTabPage("headerleft", ScLeftHeaderEditPage::Create, nullptr);
+    AddTabPage("footerfirst", ScFirstFooterEditPage::Create, nullptr);
     AddTabPage("footer", ScRightFooterEditPage::Create, nullptr);
 }
 
 ScHFEditAllDlg::ScHFEditAllDlg(
-                          weld::Window*           pParent,
+                          weld::Window* pParent,
                           const SfxItemSet& rCoreSet,
                           std::u16string_view rPageStyle)
     :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
         "modules/scalc/ui/allheaderfooterdialog.ui", "AllHeaderFooterDialog" )
 {
+    AddTabPage("headerfirst", ScFirstHeaderEditPage::Create, nullptr);
     AddTabPage("headerright", ScRightHeaderEditPage::Create, nullptr);
     AddTabPage("headerleft", ScLeftHeaderEditPage::Create, nullptr);
+    AddTabPage("footerfirst", ScFirstFooterEditPage::Create, nullptr);
     AddTabPage("footerright", ScRightFooterEditPage::Create, nullptr);
     AddTabPage("footerleft", ScLeftFooterEditPage::Create, nullptr);
 }
 
 ScHFEditActiveDlg::ScHFEditActiveDlg(
-                          weld::Window*           pParent,
+                          weld::Window* pParent,
                           const SfxItemSet& rCoreSet,
                           std::u16string_view rPageStyle)
     :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,

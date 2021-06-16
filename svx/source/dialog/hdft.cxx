@@ -327,14 +327,6 @@ void SvxHFPage::Reset( const SfxItemSet* rSet )
     DBG_ASSERT( pPool, "Where is the pool" );
     MapUnit eUnit = pPool->GetMetric( GetWhich( SID_ATTR_PAGE_SIZE ) );
 
-    //hide "same content on first page when this is calc
-    bool bIsCalc = false;
-    const SfxPoolItem* pExt1 = GetItem(*rSet, SID_ATTR_PAGE_EXT1);
-    const SfxPoolItem* pExt2 = GetItem(*rSet, SID_ATTR_PAGE_EXT2);
-    if (dynamic_cast<const SfxBoolItem*>(pExt1) && dynamic_cast<const SfxBoolItem*>(pExt2) )
-        bIsCalc = true;
-    m_xCntSharedFirstBox->set_visible(!bIsCalc);
-
     // Evaluate header-/footer- attributes
     const SvxSetItem* pSetItem = nullptr;
 
@@ -387,14 +379,18 @@ void SvxHFPage::Reset( const SfxItemSet* rSet )
             m_xCntSharedBox->set_active(rShared.GetValue());
             if (pSharedFirst)
                 m_xCntSharedFirstBox->set_active(pSharedFirst->GetValue());
-            else
-                m_xCntSharedFirstBox->hide();
         }
         else
             pSetItem = nullptr;
     }
     else
     {
+        bool bIsCalc = false;
+        const SfxPoolItem* pExt1 = GetItem(*rSet, SID_ATTR_PAGE_EXT1);
+        const SfxPoolItem* pExt2 = GetItem(*rSet, SID_ATTR_PAGE_EXT2);
+        if (dynamic_cast<const SfxBoolItem*>(pExt1) && dynamic_cast<const SfxBoolItem*>(pExt2) )
+            bIsCalc = true;
+
         // defaults for distance and height
         tools::Long nDefaultDist = bIsCalc ? DEF_DIST_CALC : DEF_DIST_WRITER;
         SetMetricValue( *m_xDistEdit, nDefaultDist, MapUnit::Map100thMM );

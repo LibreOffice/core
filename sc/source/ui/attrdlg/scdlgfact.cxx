@@ -1232,6 +1232,18 @@ VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScHFEditDlg( we
         case RID_SCDLG_HFEDIT_FOOTER:
             xDlg = std::make_shared<ScHFEditFooterDlg>(pParent, rCoreSet, rPageStyle);
             break;
+        case RID_SCDLG_HFEDIT_SHAREDFIRSTHEADER:
+            xDlg = std::make_shared<ScHFEditSharedFirstHeaderDlg>(pParent, rCoreSet, rPageStyle);
+            break;
+        case RID_SCDLG_HFEDIT_SHAREDLEFTHEADER:
+            xDlg = std::make_shared<ScHFEditSharedLeftHeaderDlg>(pParent, rCoreSet, rPageStyle);
+            break;
+        case RID_SCDLG_HFEDIT_SHAREDFIRSTFOOTER:
+            xDlg = std::make_shared<ScHFEditSharedFirstFooterDlg>(pParent, rCoreSet, rPageStyle);
+            break;
+        case RID_SCDLG_HFEDIT_SHAREDLEFTFOOTER:
+            xDlg = std::make_shared<ScHFEditSharedLeftFooterDlg>(pParent, rCoreSet, rPageStyle);
+            break;
         case RID_SCDLG_HFEDIT_LEFTHEADER:
             xDlg = std::make_shared<ScHFEditLeftHeaderDlg>(pParent, rCoreSet, rPageStyle);
             break;
