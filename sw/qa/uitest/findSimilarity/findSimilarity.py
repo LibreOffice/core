@@ -45,7 +45,7 @@ class findSimilarities(UITestCase):
             otherfld = dialog.getChild("otherfld")
             longerfld = dialog.getChild("longerfld")
             shorterfld = dialog.getChild("shorterfld")
-            self.assertEqual(get_state_as_dict(otherfld)["Text"], "1")
+            self.assertEqual(get_state_as_dict(otherfld)["Text"], "2")
             self.assertEqual(get_state_as_dict(longerfld)["Text"], "1")
             self.assertEqual(get_state_as_dict(shorterfld)["Text"], "1")
 
