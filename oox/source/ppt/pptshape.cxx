@@ -355,7 +355,12 @@ void PPTShape::addShape(
                         Reference<XDrawPage> xDrawPage(xDrawPages->getByIndex(nPage), uno::UNO_QUERY);
                         Reference<container::XNamed> xNamed(xDrawPage, UNO_QUERY_THROW);
                         if ( xNamed->getName() == aTitleText )
+                        {
                             bUseTitleAsSlideName = false;
+                            // if duplicated, use numbered title text instead of default numbered slide names.
+                            Reference<container::XNamed> xName(rSlidePersist.getPage(), UNO_QUERY_THROW);
+                            xName->setName(aTitleText + " (" + OUString::number(nMaxPages) + ")");
+                        }
                     }
                     if ( bUseTitleAsSlideName )
                     {

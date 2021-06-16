@@ -3430,11 +3430,11 @@ void SdImportTest::testTdf103347()
 
     uno::Reference<drawing::XDrawPage> xPage2(xDoc->getDrawPages()->getByIndex(1), uno::UNO_QUERY);
     uno::Reference<container::XNamed> xNamed2(xPage2, uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(OUString("page2"), xNamed2->getName());
+    CPPUNIT_ASSERT_EQUAL(OUString("Hello (2)"), xNamed2->getName());
 
     uno::Reference<drawing::XDrawPage> xPage3(xDoc->getDrawPages()->getByIndex(2), uno::UNO_QUERY);
     uno::Reference<container::XNamed> xNamed3(xPage3, uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(OUString("page3"), xNamed3->getName());
+    CPPUNIT_ASSERT_EQUAL(OUString("Hello (3)"), xNamed3->getName());
 
     xDocShRef->DoClose();
 }
