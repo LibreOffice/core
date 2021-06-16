@@ -102,7 +102,7 @@
             <property name="layout-style">end</property>
             <child>
               <object class="GtkButton" id="reset">
-                <property name="label">Reset</property>
+                <property name="label" translatable="yes" context="stock">_Reset</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
