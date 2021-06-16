@@ -1764,12 +1764,10 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedShapeAsPNGCustomDPI)
     uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(
         xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
-    xShape->setSize(awt::Size(7145, 5240));
+    xShape->setSize(awt::Size(5080, 2540));
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     xDrawPageSupplier->getDrawPage()->add(xShape);
-    Size aSystemDPI(
-        Application::GetDefaultDevice()->LogicToPixel(Size(1, 1), MapMode(MapUnit::MapInch)));
-    sal_Int32 nDPI = aSystemDPI.getWidth() * 2;
+    sal_Int32 nDPI = 600;
 
     // When exporting to XHTML:
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
@@ -1788,17 +1786,18 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedShapeAsPNGCustomDPI)
     assertXPath(pXmlDoc, "//reqif-xhtml:p/reqif-xhtml:object", "type", "image/png");
 
     // Then check the pixel size of the shape:
-    Size aPixelSize(Application::GetDefaultDevice()->LogicToPixel(Size(7145, 5240),
+    Size aPixelSize(Application::GetDefaultDevice()->LogicToPixel(Size(5080, 2540),
                                                                   MapMode(MapUnit::Map100thMM)));
-    long nPNGWidth = aPixelSize.getWidth() * 2;
+    long nPNGWidth = 1200;
     OUString aPngUrl = GetPngPath();
     SvFileStream aFileStream(aPngUrl, StreamMode::READ);
     GraphicDescriptor aDescriptor(aFileStream, nullptr);
     aDescriptor.Detect(/*bExtendedInfo=*/true);
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 540
-    // - Actual  : 270
-    // i.e. setting a double DPI didn't result in larger pixel width of the PNG.
+    // - Expected: 1200
+    // - Actual  : 1000
+    // i.e. first setting a double DPI didn't result in larger pixel width of the PNG, then it was
+    // limited to 1000 pixels (because the pixel limit was 500k).
     CPPUNIT_ASSERT_EQUAL(nPNGWidth, aDescriptor.GetSizePixel().getWidth());
 
     // Then make sure the shape's logic size (in CSS pixels) don't change:
