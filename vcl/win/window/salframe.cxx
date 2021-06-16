@@ -2519,6 +2519,9 @@ OUString WinSalFrame::GetKeyName( sal_uInt16 nKeyCode )
             case KEY_BRACKETRIGHT:
                 cSVCode = ']';
                 break;
+            case KEY_QUOTELEFT:
+                cSVCode = '`';
+                break;
         }
     }
 
