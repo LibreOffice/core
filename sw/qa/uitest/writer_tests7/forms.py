@@ -23,7 +23,7 @@ class Forms(UITestCase):
 
         # Without the fix in place, this test would have failed with
         # AssertionError: 'Yes' != 'No'
-        self.assertEqual("Yes", get_state_as_dict(xChild)['SelectEntryText'])
+        self.assertEqual("No", get_state_as_dict(xChild)['SelectEntryText'])
 
         self.ui_test.close_doc()
 
