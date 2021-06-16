@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3151f687_20bfe0ab",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2942,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-06-16T13:01:14Z",
+      "side": 1,
+      "message": "Nitpick: surrounding code uses the xFoo naming convention for uno references, it\u0027s a good idea to be consistent with that.",
+      "revId": "192fce96720d2ad040b18397e044666bf6d06d67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0b322b99_a5a47a67",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2946,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-06-16T13:01:14Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "192fce96720d2ad040b18397e044666bf6d06d67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2cac9eb5_666eda1e",
+        "filename": "oox/source/export/shapes.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1580,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-06-16T13:01:14Z",
+      "side": 1,
+      "message": "It helps readability to use named parameters for the new parameters as well, at least as C++ allows you to do so. If I just read \"true\" and \"0\", I don\u0027t know what it means. If you write /*nXmlNamespace\u003d*/0, then I immediately see that no namespace is passed explicitly in this case. (Existing code on the same line uses this style, so it\u0027s good to keep it.)",
+      "revId": "192fce96720d2ad040b18397e044666bf6d06d67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
