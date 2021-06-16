@@ -116,7 +116,7 @@ public:
     /// Creates the views.
     virtual void MakeFrames();
 
-    virtual Graphic MakeGraphic( ImageMap* pMap = nullptr, const std::optional<Size>& rTargetDPI = std::nullopt );
+    virtual Graphic MakeGraphic( ImageMap* pMap = nullptr, const sal_uInt32 nMaximumQuadraticPixels = 500000, const std::optional<Size>& rTargetDPI = std::nullopt );
 
     /**  @return the IMapObject defined at format (Fly)
         in the ImageMap at position Point.
@@ -212,7 +212,7 @@ public:
 
     SwAnchoredObject* GetAnchoredObj() const;
 
-    virtual Graphic MakeGraphic( ImageMap* pMap = nullptr, const std::optional<Size>& rTargetDPI = std::nullopt ) override;
+    virtual Graphic MakeGraphic( ImageMap* pMap = nullptr, const sal_uInt32 nMaximumQuadraticPixels = 500000, const std::optional<Size>& rTargetDPI = std::nullopt ) override;
 
     virtual bool GetInfo( SfxPoolItem& rInfo ) const override;
 
@@ -388,7 +388,7 @@ public:
      Reset delete marks. */
     virtual void MakeFrames() override;
 
-    virtual Graphic MakeGraphic( ImageMap* pMap = nullptr, const std::optional<Size>& rTargetDPI = std::nullopt ) override;
+    virtual Graphic MakeGraphic( ImageMap* pMap = nullptr, const sal_uInt32 nMaximumQuadraticPixels = 500000, const std::optional<Size>& rTargetDPI = std::nullopt ) override;
 
     virtual SwFrameFormat::tLayoutDir GetLayoutDir() const override;
     virtual void SetLayoutDir( const SwFrameFormat::tLayoutDir _eLayoutDir ) override;
