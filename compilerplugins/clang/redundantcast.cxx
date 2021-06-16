@@ -109,6 +109,14 @@ public:
                 expr->isSemanticForm() ? expr : expr->getSemanticForm(), queue);
     }
 
+    bool TraverseReturnStmt(ReturnStmt * stmt) {
+        auto const saved = returnExpr_;
+        returnExpr_ = stmt->getRetValue();
+        auto const ret = FilteringRewritePlugin::TraverseReturnStmt(stmt);
+        returnExpr_ = saved;
+        return ret;
+    }
+
     bool VisitImplicitCastExpr(ImplicitCastExpr const * expr);
 
     bool VisitCXXStaticCastExpr(CXXStaticCastExpr const * expr);
@@ -154,6 +162,8 @@ private:
         return compiler.getSourceManager().isMacroBodyExpansion(loc)
             && ignoreLocation(compiler.getSourceManager().getSpellingLoc(loc));
     }
+
+    Expr const * returnExpr_ = nullptr;
 };
 
 bool RedundantCast::VisitImplicitCastExpr(const ImplicitCastExpr * expr) {
@@ -500,6 +510,21 @@ bool RedundantCast::VisitCXXStaticCastExpr(CXXStaticCastExpr const * expr) {
     if ((k3 == VK_XValue && k1 != VK_XValue)
         || (k3 == VK_LValue && k1 == VK_XValue))
     {
+        return true;
+    }
+    // For <http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2021/p2266r1.html> "P2266R1: Simpler
+    // implicit move" (as implemented with <https://github.com/llvm/llvm-project/commit/
+    // bf20631782183cd19e0bb7219e908c2bbb01a75f> "[clang] Implement P2266 Simpler implicit move"
+    // towards Clang 13), don't warn about a static_cast in a return statement like
+    //
+    //   return static_cast<int &>(x);
+    //
+    // that needs an lvalue but where in a return statement like
+    //
+    //   return x;
+    //
+    // the expression would now be an xvalue:
+    if (k3 == VK_LValue && k1 == VK_LValue && expr == returnExpr_->IgnoreParens()) {
         return true;
     }
     // Don't warn if a static_cast on a pointer to function or member function is used to
