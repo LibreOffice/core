@@ -288,7 +288,7 @@ void SwStyleNameMapper::FillProgName(
         fillNameFromId(nId, rFillName, true);
     }
 
-    if (eFlags == SwGetPoolIdFromName::ChrFmt && rName == SwResId(STR_POOLCHR_STANDARD))
+    if (eFlags == SwGetPoolIdFromName::ChrFmt && rFillName == "No Character Style")
         rFillName = "Standard";
 }
 
