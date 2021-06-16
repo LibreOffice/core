@@ -118,7 +118,7 @@ public class DEGTBehavior extends AbsGTBehavior implements ILibEngine {
   private SearchPoint[] getReferPoints() {
     SearchPoint[] referPoints = new SearchPoint[DVNum * 2];
     for (int i = 0; i < referPoints.length; i++) {
-      referPoints[i] = socialLib.getSelectedPoint(RandomGenerator.intRangeRandom(0, socialLib.getPopSize() - 1));
+      referPoints[i] = socialLib.getRandomPoint();
     }
     return referPoints;
   }

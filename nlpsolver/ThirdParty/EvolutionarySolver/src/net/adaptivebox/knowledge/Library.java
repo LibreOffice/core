@@ -56,6 +56,10 @@ public class Library {
     return libPoints[index];
   }
 
+  public SearchPoint getRandomPoint() {
+    return libPoints[RandomGenerator.intRangeRandom(0, libPoints.length - 1)];
+  }
+
   public static boolean replace(IGoodnessCompareEngine comparator, SearchPoint outPoint,
       SearchPoint tobeReplacedPoint) {
     boolean isBetter = false;
