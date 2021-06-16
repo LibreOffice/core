@@ -58,4 +58,6 @@ $(eval $(call gb_CppunitTest_use_components,vcl_svm_test,\
 
 $(eval $(call gb_CppunitTest_use_configuration,vcl_svm_test))
 
+$(eval $(call gb_CppunitTest_use_more_fonts,vcl_svm_test))
+
 # vim: set noet sw=4 ts=4:
