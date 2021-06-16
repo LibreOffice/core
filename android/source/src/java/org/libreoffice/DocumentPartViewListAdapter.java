@@ -42,6 +42,7 @@ public class DocumentPartViewListAdapter extends ArrayAdapter<DocumentPartView> 
 
         ImageView imageView = view.findViewById(R.id.image);
         thumbnailCollector.createThumbnail(position, imageView);
+        LOKitShell.sendEvent(new LOEvent(LOEvent.REFRESH));
 
         return view;
     }
