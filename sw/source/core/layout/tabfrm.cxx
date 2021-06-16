@@ -84,7 +84,6 @@ SwTabFrame::SwTabFrame( SwTable &rTab, SwFrame* pSib )
     , m_bConsiderObjsForMinCellHeight(true)
     , m_bObjsDoesFit(true)
     , m_bInRecalcLowerRow(false)
-    , m_bSplitRowDisabled(false)
 {
     mbFixSize = false;     //Don't fall for import filter again.
     mnFrameType = SwFrameType::Tab;
@@ -123,7 +122,6 @@ SwTabFrame::SwTabFrame( SwTabFrame &rTab )
     , m_bConsiderObjsForMinCellHeight(true)
     , m_bObjsDoesFit(true)
     , m_bInRecalcLowerRow(false)
-    , m_bSplitRowDisabled(false)
 {
     mbFixSize = false;     //Don't fall for import filter again.
     mnFrameType = SwFrameType::Tab;
@@ -1058,8 +1056,8 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
     //                   table, or it will be set to false under certain
     //                   conditions that are not suitable for splitting
     //                   the row.
-    bool bSplitRowAllowed = !IsSplitRowDisabled();
-    if ( bSplitRowAllowed && !pRow->IsRowSplitAllowed() )
+    bool bSplitRowAllowed = true;
+    if (!pRow->IsRowSplitAllowed())
     {
         // A row larger than the entire page ought to be allowed to split regardless of setting,
         // otherwise it has hidden content and that makes no sense
