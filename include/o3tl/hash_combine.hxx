@@ -11,15 +11,15 @@
 
 namespace o3tl
 {
-template <typename T, typename N, std::enable_if_t<(sizeof(N) == 4), bool> = false>
-inline void hash_combine(N& nSeed, T const& nValue)
+template <typename T, typename N>
+inline std::enable_if_t<(sizeof(N) == 4)> hash_combine(N& nSeed, T const& nValue)
 {
     static_assert(sizeof(nSeed) == 4);
     nSeed ^= std::hash<T>{}(nValue) + 0x9E3779B9u + (nSeed << 6) + (nSeed >> 2);
 }
 
-template <typename T, typename N, std::enable_if_t<(sizeof(N) == 8), bool> = false>
-inline void hash_combine(N& nSeed, T const& nValue)
+template <typename T, typename N>
+inline std::enable_if_t<(sizeof(N) == 8)> hash_combine(N& nSeed, T const& nValue)
 {
     static_assert(sizeof(nSeed) == 8);
     nSeed ^= std::hash<T>{}(nValue) + 0x9E3779B97F4A7C15llu + (nSeed << 12) + (nSeed >> 4);
