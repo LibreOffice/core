@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb40f1f1_4acfecd6",
+        "filename": "sd/source/filter/eppt/epptooxml.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-06-16T12:56:18Z",
+      "side": 1,
+      "message": "Nitpick: good to be explicit about the size of the integer, like sal_uInt32. Otherwise it\u0027s more tricky to find out when it will or will not be wrapping around for large values. Similarly, if you don\u0027t have a good reason for it, you may just go with signed integers. The reason is that unsigned integers wrap around silently, while signed integers over or underflowing is at least caught by https://ci.libreoffice.org/job/lo_ubsan/",
+      "revId": "ea4893ef97470beb39a2c942c5e62525207f9d6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
