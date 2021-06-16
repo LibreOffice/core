@@ -340,6 +340,7 @@ void PPTShape::addShape(
             {
                 try
                 {
+                    sal_Int32 nCount = 1;
                     OUString aTitleText;
                     Reference<XTextRange> xText(xShape, UNO_QUERY_THROW);
                     aTitleText = xText->getString();
@@ -350,17 +351,23 @@ void PPTShape::addShape(
                           // just a magic value, but we don't want to set slide names which are too long
                           aTitleText.getLength() < 64;
                     // check duplicated title name
-                    for (sal_uInt32 nPage = 0; bUseTitleAsSlideName && nPage < nMaxPages; ++nPage)
+                    for (sal_uInt32 nPage = 0; nPage < nMaxPages; ++nPage)
                     {
                         Reference<XDrawPage> xDrawPage(xDrawPages->getByIndex(nPage), uno::UNO_QUERY);
                         Reference<container::XNamed> xNamed(xDrawPage, UNO_QUERY_THROW);
-                        if ( xNamed->getName() == aTitleText )
-                            bUseTitleAsSlideName = false;
+                        OUString sRest;
+                        if (xNamed->getName().startsWith(aTitleText, &sRest)
+                            && (sRest.isEmpty()
+                                || (sRest.startsWith(" (") && sRest.endsWith(")")
+                                    && sRest.copy(2, sRest.getLength() - 3).toInt32() > 0)))
+                            nCount++;
                     }
                     if ( bUseTitleAsSlideName )
                     {
                         Reference<container::XNamed> xName(rSlidePersist.getPage(), UNO_QUERY_THROW);
-                        xName->setName(aTitleText);
+                        xName->setName(
+                            aTitleText
+                            + (nCount == 1 ? OUString("") : " (" + OUString::number(nCount) + ")"));
                     }
                 }
                 catch (uno::Exception&)
