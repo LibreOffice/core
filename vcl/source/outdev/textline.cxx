@@ -25,6 +25,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/lazydelete.hxx>
 
 #include <tools/helpers.hxx>
 
@@ -33,9 +34,69 @@
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/WaveLine.hxx>
+#include <boost/functional/hash.hpp>
+#include <o3tl/lru_map.hxx>
 
 #define UNDERLINE_LAST      LINESTYLE_BOLDWAVE
 #define STRIKEOUT_LAST      STRIKEOUT_X
+
+struct WavyLineCache final
+{
+    WavyLineCache () : m_aItems( 10 ) {}
+
+    bool find( Color aLineColor, size_t nLineWidth, size_t nWaveHeight, size_t nWordWidth, BitmapEx& rOutput )
+    {
+        Key aKey = { nWaveHeight, aLineColor.mValue };
+        auto item = m_aItems.find( aKey );
+        if ( item == m_aItems.end() )
+            return false;
+        // needs update
+        if ( item->second.m_aLineWidth != nLineWidth || item->second.m_aWordWidth < nWordWidth )
+        {
+            return false;
+        }
+        rOutput = item->second.m_Bitmap;
+        return true;
+    }
+
+    void insert( const BitmapEx& aBitmap, const Color& aLineColor, const size_t nLineWidth, const size_t nWaveHeight, const size_t nWordWidth, BitmapEx& rOutput )
+    {
+        Key aKey = { nWaveHeight, aLineColor.mValue };
+        m_aItems.insert( std::pair< Key, WavyLineCacheItem>( aKey, { nLineWidth, nWordWidth, aBitmap } ) );
+        rOutput = aBitmap;
+    }
+
+    private:
+    struct WavyLineCacheItem
+    {
+        size_t m_aLineWidth;
+        size_t m_aWordWidth;
+        BitmapEx m_Bitmap;
+    };
+
+    struct Key
+    {
+        size_t m_aFirst;
+        size_t m_aSecond;
+        bool operator ==( const Key& rOther ) const
+        {
+            return ( m_aFirst == rOther.m_aFirst && m_aSecond == rOther.m_aSecond );
+        }
+    };
+
+    struct Hash
+    {
+        size_t operator() ( const Key& rKey ) const
+        {
+            size_t aSeed = 0;
+            boost::hash_combine(aSeed, rKey.m_aFirst);
+            boost::hash_combine(aSeed, rKey.m_aSecond);
+            return aSeed;
+        }
+    };
+
+    o3tl::lru_map< Key, WavyLineCacheItem, Hash > m_aItems;
+};
 
 void OutputDevice::ImplInitTextLineSize()
 {
@@ -1001,6 +1062,43 @@ void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, to
         nLineWidth = 0;
     }
 
+    if ( fOrientation == 0.0 )
+    {
+        static vcl::DeleteOnDeinit< WavyLineCache > snLineCache( new WavyLineCache() );
+        if ( !snLineCache.get() )
+            return;
+        WavyLineCache& rLineCache = *snLineCache.get();
+        BitmapEx aWavylinebmp;
+        if ( !rLineCache.find( GetLineColor(), nLineWidth, nWaveHeight, nEndX - nStartX, aWavylinebmp ) )
+        {
+            size_t nWordLength = nEndX - nStartX;
+            // start with something big to avoid updating it frequently
+            nWordLength = nWordLength < 1024 ? 1024 : nWordLength;
+            ScopedVclPtrInstance< VirtualDevice > pVirtDev( *this, DeviceFormat::DEFAULT,
+                                                           DeviceFormat::DEFAULT );
+            pVirtDev->SetAntialiasing( AntialiasingFlags::Enable );
+            pVirtDev->SetOutputSizePixel( Size( nWordLength, nWaveHeight * 2 ), false );
+            pVirtDev->SetLineColor( GetLineColor() );
+            pVirtDev->SetBackground( Wallpaper( COL_TRANSPARENT ) );
+            pVirtDev->ImplDrawWaveLineBezier( 0, 0, nWordLength, 0, nWaveHeight, fOrientation, nLineWidth );
+            rLineCache.insert( pVirtDev->GetBitmapEx( Point( 0, 0 ), pVirtDev->GetOutputSize() ), GetLineColor(), nLineWidth, nWaveHeight, nWordLength, aWavylinebmp );
+        }
+        if ( aWavylinebmp.ImplGetBitmapSalBitmap() != nullptr )
+        {
+            Size _size( nEndX - nStartX, aWavylinebmp.GetSizePixel().Height() );
+            DrawBitmapEx(Point( rStartPos.X(), rStartPos.Y() ), PixelToLogic( _size ), Point(), _size, aWavylinebmp);
+        }
+        return;
+    }
+
+    ImplDrawWaveLineBezier( nStartX, nStartY, nEndX, nEndY, nWaveHeight, fOrientation, nLineWidth );
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawWaveLine( rStartPos, rEndPos, nLineWidth );
+}
+
+void OutputDevice::ImplDrawWaveLineBezier(long nStartX, long nStartY, long nEndX, long nEndY, long nWaveHeight, double fOrientation, long nLineWidth)
+{
     const basegfx::B2DRectangle aWaveLineRectangle(nStartX, nStartY, nEndX, nEndY + nWaveHeight);
     const basegfx::B2DPolygon aWaveLinePolygon = basegfx::createWaveLinePolygon(aWaveLineRectangle);
     const basegfx::B2DHomMatrix aRotationMatrix = basegfx::utils::createRotateAroundPoint(nStartX, nStartY, basegfx::deg2rad(-fOrientation));
@@ -1018,9 +1116,6 @@ void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, to
             basegfx::deg2rad(15.0),
             bPixelSnapHairline,
             this);
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawWaveLine( rStartPos, rEndPos, nLineWidth );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
