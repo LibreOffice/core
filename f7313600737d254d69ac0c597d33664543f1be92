@@ -25,6 +25,53 @@
     },
     {
       "key": {
+        "uuid": "15dd7174_9d62be42",
+        "filename": "sfx2/source/view/viewfrm.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-06-16T07:01:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00b103bc_50cc98e9",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 1
+      },
+      "revId": "f7313600737d254d69ac0c597d33664543f1be92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ca0fc292_7df8ed49",
+        "filename": "vcl/backendtest/GraphicsRenderTests.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 869,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-06-16T07:01:00Z",
+      "side": 1,
+      "message": "Since we are also going to run our tests via the dialog box, I am thinking to place it elsewhere - preferably at desktop::Main() where the run() is called...",
+      "range": {
+        "startLine": 866,
+        "startChar": 4,
+        "endLine": 869,
+        "endChar": 5
+      },
+      "revId": "f7313600737d254d69ac0c597d33664543f1be92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c3f5e7a8_4ac8dd40",
         "filename": "vcl/backendtest/GraphicsRenderTests.cxx",
         "patchSetId": 19
@@ -36,6 +83,30 @@
       "writtenOn": "2021-06-16T05:31:33Z",
       "side": 1,
       "message": "Small nitpick but better to use else instead of returning here. Also better to revert the condition - if (m_aFailed.size() \u003e 0) { write failing tests } else { write no test failed }.\n\nIt reads better if you have positive case first and then the negative. \n\nAlso would be good to write which tests are quirky and skipped.",
+      "range": {
+        "startLine": 886,
+        "startChar": 8,
+        "endLine": 886,
+        "endChar": 14
+      },
+      "revId": "f7313600737d254d69ac0c597d33664543f1be92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6bd92c2_bdfc8345",
+        "filename": "vcl/backendtest/GraphicsRenderTests.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 886,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-06-16T07:01:00Z",
+      "side": 1,
+      "message": "Sounds promising I\u0027ll do it right away then...\nAlso, there\u0027s one more thing I\u0027d like to propose that we should store the result string into a member variable as after running our tests via the dialog box it would save the duplication of the result code(as I think we would show the similar there) and so I think creating an OUString member variable and storing the whole result into it would be helpful... What do you think, would it be feasible or should it be left as is?",
+      "parentUuid": "c3f5e7a8_4ac8dd40",
       "range": {
         "startLine": 886,
         "startChar": 8,
