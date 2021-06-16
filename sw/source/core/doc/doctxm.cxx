@@ -1850,7 +1850,7 @@ void SwTOXBaseSection::UpdatePageNum_( SwTextNode* pNd,
 
     // search by name
     SwDoc& rDoc = pNd->GetDoc();
-    sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( GetMainEntryCharStyle(), SwGetPoolIdFromName::ChrFmt );
+    sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( GetMainEntryCharStyle(), SfxStyleFamily::Char );
     SwCharFormat* pCharFormat = nullptr;
     if(USHRT_MAX != nPoolId)
         pCharFormat = rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool(nPoolId);

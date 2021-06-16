@@ -201,7 +201,7 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
     SwWrtShell &rSh = GetWrtShell();
     if(!rName.isEmpty())
     {
-        sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName(rName, SwGetPoolIdFromName::TxtColl);
+        sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName(rName, SfxStyleFamily::Para);
         if( USHRT_MAX != nPoolId )
             rSh.GetTextCollFromPool(nPoolId);
             // Pool template does not exist: Does it exist on the document?

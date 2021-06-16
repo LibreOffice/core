@@ -134,17 +134,15 @@ class SwStyleProperties_Impl;
         SfxStyleFamily m_eFamily;
         sal_uInt16 m_nPropMapType;
         uno::Reference<beans::XPropertySetInfo> m_xPSInfo;
-        SwGetPoolIdFromName m_aPoolId;
         OUString m_sName;
         const char* m_pResId;
         GetCountOrName_t m_fGetCountOrName;
         CreateStyle_t m_fCreateStyle;
         TranslateIndex_t m_fTranslateIndex;
-        StyleFamilyEntry(SfxStyleFamily eFamily, sal_uInt16 nPropMapType, SwGetPoolIdFromName aPoolId, OUString const& sName, const char* pResId, GetCountOrName_t const & fGetCountOrName, CreateStyle_t const & fCreateStyle, TranslateIndex_t const & fTranslateIndex)
+        StyleFamilyEntry(SfxStyleFamily eFamily, sal_uInt16 nPropMapType, OUString const& sName, const char* pResId, GetCountOrName_t const & fGetCountOrName, CreateStyle_t const & fCreateStyle, TranslateIndex_t const & fTranslateIndex)
                 : m_eFamily(eFamily)
                 , m_nPropMapType(nPropMapType)
                 , m_xPSInfo(aSwMapProvider.GetPropertySet(nPropMapType)->getPropertySetInfo())
-                , m_aPoolId(aPoolId)
                 , m_sName(sName)
                 , m_pResId(pResId)
                 , m_fGetCountOrName(fGetCountOrName)
@@ -766,7 +764,7 @@ sal_Int32 lcl_GetCountOrName<SfxStyleFamily::Cell>(const SwDoc& rDoc, OUString* 
             const sal_Int32 nAutoFormat = nIndex / rTableTemplateMap.size();
             const sal_Int32 nBoxFormat = rTableTemplateMap[nIndex % rTableTemplateMap.size()];
             const SwTableAutoFormat& rTableFormat = rAutoFormats[nAutoFormat];
-            SwStyleNameMapper::FillProgName(rTableFormat.GetName(), *pString, SwGetPoolIdFromName::TabStyle);
+            SwStyleNameMapper::FillProgName(rTableFormat.GetName(), *pString, SfxStyleFamily::Table);
             *pString += rTableFormat.GetTableTemplateCellSubName(rTableFormat.GetBoxFormat(nBoxFormat));
         }
         else
@@ -886,7 +884,7 @@ uno::Any XStyleFamily::getByName(const OUString& rName)
 {
     SolarMutexGuard aGuard;
     OUString sStyleName;
-    SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.m_aPoolId);
+    SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.m_eFamily);
     if(!m_pBasePool)
         throw uno::RuntimeException();
     SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName, m_rEntry.m_eFamily);
@@ -908,7 +906,7 @@ uno::Sequence<OUString> XStyleFamily::getElementNames()
     for (SfxStyleSheetBase* pStyle = pIt->First(); pStyle; pStyle = pIt->Next())
     {
         OUString sName;
-        SwStyleNameMapper::FillProgName(pStyle->GetName(), sName, m_rEntry.m_aPoolId);
+        SwStyleNameMapper::FillProgName(pStyle->GetName(), sName, m_rEntry.m_eFamily);
         vRet.push_back(sName);
     }
     return comphelper::containerToSequence(vRet);
@@ -920,7 +918,7 @@ sal_Bool XStyleFamily::hasByName(const OUString& rName)
     if(!m_pBasePool)
         throw uno::RuntimeException();
     OUString sStyleName;
-    SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.m_aPoolId);
+    SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.m_eFamily);
     SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName, m_rEntry.m_eFamily);
     return nullptr != pBase;
 }
@@ -931,14 +929,14 @@ void XStyleFamily::insertByName(const OUString& rName, const uno::Any& rElement)
     if(!m_pBasePool)
         throw uno::RuntimeException();
     OUString sStyleName;
-    SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.m_aPoolId);
+    SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.m_eFamily);
     SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName, m_rEntry.m_eFamily);
     SfxStyleSheetBase* pUINameBase = m_pBasePool->Find(sStyleName, m_rEntry.m_eFamily);
     if(pBase || pUINameBase)
         throw container::ElementExistException();
     if(rElement.getValueType().getTypeClass() != uno::TypeClass_INTERFACE)
         throw lang::IllegalArgumentException();
-    if (SwGetPoolIdFromName::CellStyle == m_rEntry.m_aPoolId)
+    if (SfxStyleFamily::Cell == m_rEntry.m_eFamily)
     {
         // handle cell style
         uno::Reference<style::XStyle> xStyle = rElement.get<uno::Reference<style::XStyle>>();
@@ -950,7 +948,7 @@ void XStyleFamily::insertByName(const OUString& rName, const uno::Any& rElement)
         m_pDocShell->GetDoc()->GetCellStyles().AddBoxFormat(*pNewStyle->GetBoxFormat(), sStyleName);
         pNewStyle->SetPhysical();
     }
-    else if (SwGetPoolIdFromName::TabStyle == m_rEntry.m_aPoolId)
+    else if (SfxStyleFamily::Table == m_rEntry.m_eFamily)
     {
         // handle table style
         uno::Reference<style::XStyle> xStyle = rElement.get<uno::Reference<style::XStyle>>();
@@ -1000,12 +998,12 @@ void XStyleFamily::replaceByName(const OUString& rName, const uno::Any& rElement
     if(!m_pBasePool)
         throw uno::RuntimeException();
     OUString sStyleName;
-    SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.m_aPoolId);
+    SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.m_eFamily);
     SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName, m_rEntry.m_eFamily);
     // replacements only for userdefined styles
     if(!pBase)
         throw container::NoSuchElementException();
-    if (SwGetPoolIdFromName::CellStyle == m_rEntry.m_aPoolId)
+    if (SfxStyleFamily::Cell == m_rEntry.m_eFamily)
     {
         // handle cell styles, don't call on assigned cell styles (TableStyle child)
         OUString sParent;
@@ -1022,7 +1020,7 @@ void XStyleFamily::replaceByName(const OUString& rName, const uno::Any& rElement
             pStyleToReplaceWith->SetPhysical();
         }
     }
-    else if (SwGetPoolIdFromName::TabStyle == m_rEntry.m_aPoolId)
+    else if (SfxStyleFamily::Table == m_rEntry.m_eFamily)
     {
         // handle table styles
         SwTableAutoFormat* pTableAutoFormat = SwXTextTableStyle::GetTableAutoFormat(m_pDocShell, sStyleName);
@@ -1061,16 +1059,16 @@ void XStyleFamily::removeByName(const OUString& rName)
     if(!m_pBasePool)
         throw uno::RuntimeException();
     OUString sName;
-    SwStyleNameMapper::FillUIName(rName, sName, m_rEntry.m_aPoolId);
+    SwStyleNameMapper::FillUIName(rName, sName, m_rEntry.m_eFamily);
     SfxStyleSheetBase* pBase = m_pBasePool->Find(sName, m_rEntry.m_eFamily);
     if(!pBase)
         throw container::NoSuchElementException();
-    if (SwGetPoolIdFromName::CellStyle == m_rEntry.m_aPoolId)
+    if (SfxStyleFamily::Cell == m_rEntry.m_eFamily)
     {
         // handle cell style
         m_pDocShell->GetDoc()->GetCellStyles().RemoveBoxFormat(rName);
     }
-    else if (SwGetPoolIdFromName::TabStyle == m_rEntry.m_aPoolId)
+    else if (SfxStyleFamily::Table == m_rEntry.m_eFamily)
     {
         // handle table style
         m_pDocShell->GetDoc()->GetTableStyles().EraseAutoFormat(rName);
@@ -1106,13 +1104,13 @@ static const std::vector<StyleFamilyEntry>* lcl_GetStyleFamilyEntries()
     if(!our_pStyleFamilyEntries)
     {
         our_pStyleFamilyEntries = new std::vector<StyleFamilyEntry>{
-            { SfxStyleFamily::Char,   PROPERTY_MAP_CHAR_STYLE,  SwGetPoolIdFromName::ChrFmt,   "CharacterStyles", STR_STYLE_FAMILY_CHARACTER, &lcl_GetCountOrName<SfxStyleFamily::Char>,   &lcl_CreateStyle<SfxStyleFamily::Char>,   &lcl_TranslateIndex<SfxStyleFamily::Char>                       },
-            { SfxStyleFamily::Para,   PROPERTY_MAP_PARA_STYLE,  SwGetPoolIdFromName::TxtColl,  "ParagraphStyles", STR_STYLE_FAMILY_PARAGRAPH, &lcl_GetCountOrName<SfxStyleFamily::Para>,   &lcl_CreateStyle<SfxStyleFamily::Para>,   &lcl_TranslateIndex<SfxStyleFamily::Para>                       },
-            { SfxStyleFamily::Page,   PROPERTY_MAP_PAGE_STYLE,  SwGetPoolIdFromName::PageDesc, "PageStyles",      STR_STYLE_FAMILY_PAGE,      &lcl_GetCountOrName<SfxStyleFamily::Page>,   &lcl_CreateStyle<SfxStyleFamily::Page>,   &lcl_TranslateIndexRange<RES_POOLPAGE_BEGIN,    nPoolPageRange>  },
-            { SfxStyleFamily::Frame,  PROPERTY_MAP_FRAME_STYLE, SwGetPoolIdFromName::FrmFmt,   "FrameStyles",     STR_STYLE_FAMILY_FRAME,     &lcl_GetCountOrName<SfxStyleFamily::Frame>,  &lcl_CreateStyle<SfxStyleFamily::Frame>,  &lcl_TranslateIndexRange<RES_POOLFRM_BEGIN,     nPoolFrameRange> },
-            { SfxStyleFamily::Number, PROPERTY_MAP_NUM_STYLE,   SwGetPoolIdFromName::NumRule,  "NumberingStyles", STR_STYLE_FAMILY_NUMBERING, &lcl_GetCountOrName<SfxStyleFamily::Number>, &lcl_CreateStyle<SfxStyleFamily::Number>, &lcl_TranslateIndexRange<RES_POOLNUMRULE_BEGIN, nPoolNumRange>   },
-            { SfxStyleFamily::Table,  PROPERTY_MAP_TABLE_STYLE, SwGetPoolIdFromName::TabStyle, "TableStyles",     STR_STYLE_FAMILY_TABLE,     &lcl_GetCountOrName<SfxStyleFamily::Table>,  &lcl_CreateStyle<SfxStyleFamily::Table>,  &lcl_TranslateIndex<SfxStyleFamily::Table>                       },
-            { SfxStyleFamily::Cell,   PROPERTY_MAP_CELL_STYLE,  SwGetPoolIdFromName::CellStyle,"CellStyles",      STR_STYLE_FAMILY_CELL,      &lcl_GetCountOrName<SfxStyleFamily::Cell>,   &lcl_CreateStyle<SfxStyleFamily::Cell>,   &lcl_TranslateIndex<SfxStyleFamily::Cell>                        }
+            { SfxStyleFamily::Char,   PROPERTY_MAP_CHAR_STYLE,  "CharacterStyles", STR_STYLE_FAMILY_CHARACTER, &lcl_GetCountOrName<SfxStyleFamily::Char>,   &lcl_CreateStyle<SfxStyleFamily::Char>,   &lcl_TranslateIndex<SfxStyleFamily::Char>                       },
+            { SfxStyleFamily::Para,   PROPERTY_MAP_PARA_STYLE,  "ParagraphStyles", STR_STYLE_FAMILY_PARAGRAPH, &lcl_GetCountOrName<SfxStyleFamily::Para>,   &lcl_CreateStyle<SfxStyleFamily::Para>,   &lcl_TranslateIndex<SfxStyleFamily::Para>                       },
+            { SfxStyleFamily::Page,   PROPERTY_MAP_PAGE_STYLE,  "PageStyles",      STR_STYLE_FAMILY_PAGE,      &lcl_GetCountOrName<SfxStyleFamily::Page>,   &lcl_CreateStyle<SfxStyleFamily::Page>,   &lcl_TranslateIndexRange<RES_POOLPAGE_BEGIN,    nPoolPageRange>  },
+            { SfxStyleFamily::Frame,  PROPERTY_MAP_FRAME_STYLE, "FrameStyles",     STR_STYLE_FAMILY_FRAME,     &lcl_GetCountOrName<SfxStyleFamily::Frame>,  &lcl_CreateStyle<SfxStyleFamily::Frame>,  &lcl_TranslateIndexRange<RES_POOLFRM_BEGIN,     nPoolFrameRange> },
+            { SfxStyleFamily::Number, PROPERTY_MAP_NUM_STYLE,   "NumberingStyles", STR_STYLE_FAMILY_NUMBERING, &lcl_GetCountOrName<SfxStyleFamily::Number>, &lcl_CreateStyle<SfxStyleFamily::Number>, &lcl_TranslateIndexRange<RES_POOLNUMRULE_BEGIN, nPoolNumRange>   },
+            { SfxStyleFamily::Table,  PROPERTY_MAP_TABLE_STYLE, "TableStyles",     STR_STYLE_FAMILY_TABLE,     &lcl_GetCountOrName<SfxStyleFamily::Table>,  &lcl_CreateStyle<SfxStyleFamily::Table>,  &lcl_TranslateIndex<SfxStyleFamily::Table>                       },
+            { SfxStyleFamily::Cell,   PROPERTY_MAP_CELL_STYLE,  "CellStyles",      STR_STYLE_FAMILY_CELL,      &lcl_GetCountOrName<SfxStyleFamily::Cell>,   &lcl_CreateStyle<SfxStyleFamily::Cell>,   &lcl_TranslateIndex<SfxStyleFamily::Cell>                        }
        };
     }
     return our_pStyleFamilyEntries;
@@ -1189,21 +1187,6 @@ public:
     }
 };
 
-}
-
-static SwGetPoolIdFromName lcl_GetSwEnumFromSfxEnum(SfxStyleFamily eFamily)
-{
-    auto pEntries(lcl_GetStyleFamilyEntries());
-    const auto pEntry = std::find_if(pEntries->begin(), pEntries->end(),
-            [eFamily] (const StyleFamilyEntry& e) { return e.m_eFamily == eFamily; });
-    if(pEntry != pEntries->end())
-        return pEntry->m_aPoolId;
-    SAL_WARN("sw.uno", "someone asking for all styles in unostyle.cxx!" );
-    return SwGetPoolIdFromName::ChrFmt;
-}
-
-namespace
-{
 }
 
 const uno::Sequence<sal_Int8>& SwXStyle::getUnoTunnelId()
@@ -1300,7 +1283,7 @@ static bool lcl_InitConditional(SfxStyleSheetBasePool* pBasePool, const SfxStyle
     SAL_WARN_IF(!pBase, "sw.uno", "where is the style?" );
     if(!pBase)
         return false;
-    const sal_uInt16 nId(SwStyleNameMapper::GetPoolIdFromUIName(rStyleName, SwGetPoolIdFromName::TxtColl));
+    const sal_uInt16 nId(SwStyleNameMapper::GetPoolIdFromUIName(rStyleName, SfxStyleFamily::Para));
     if(nId != USHRT_MAX)
         return ::IsConditionalByPoolId(nId);
     return RES_CONDTXTFMTCOLL == static_cast<SwDocStyleSheet*>(pBase)->GetCollection()->Which();
@@ -1369,7 +1352,7 @@ OUString SwXStyle::getName()
     if(!pBase)
         throw uno::RuntimeException();
     OUString aString;
-    SwStyleNameMapper::FillProgName(pBase->GetName(), aString, lcl_GetSwEnumFromSfxEnum ( m_rEntry.m_eFamily ));
+    SwStyleNameMapper::FillProgName(pBase->GetName(), aString, m_rEntry.m_eFamily );
     return aString;
 }
 
@@ -1423,7 +1406,7 @@ OUString SwXStyle::getParentStyle()
     OUString aString;
     if(pBase)
         aString = pBase->GetParent();
-    SwStyleNameMapper::FillProgName(aString, aString, lcl_GetSwEnumFromSfxEnum(m_rEntry.m_eFamily));
+    SwStyleNameMapper::FillProgName(aString, aString, m_rEntry.m_eFamily);
     return aString;
 }
 
@@ -1431,7 +1414,7 @@ void SwXStyle::setParentStyle(const OUString& rParentStyle)
 {
     SolarMutexGuard aGuard;
     OUString sParentStyle;
-    SwStyleNameMapper::FillUIName(rParentStyle, sParentStyle, lcl_GetSwEnumFromSfxEnum ( m_rEntry.m_eFamily ) );
+    SwStyleNameMapper::FillUIName(rParentStyle, sParentStyle, m_rEntry.m_eFamily );
     if(!m_pBasePool)
     {
         if(!m_bIsDescriptor)
@@ -1793,7 +1776,7 @@ void SwXStyle::SetPropertyValue<FN_UNO_FOLLOW_STYLE>(const SfxItemPropertyMapEnt
         return;
     const auto sValue(rValue.get<OUString>());
     OUString aString;
-    SwStyleNameMapper::FillUIName(sValue, aString, m_rEntry.m_aPoolId);
+    SwStyleNameMapper::FillUIName(sValue, aString, m_rEntry.m_eFamily);
     o_rStyleBase.getNewBase()->SetFollow(aString);
 }
 template<>
@@ -1816,7 +1799,7 @@ void SwXStyle::SetPropertyValue<sal_uInt16(RES_PAGEDESC)>(const SfxItemPropertyM
         pNewDesc.reset(new SwFormatPageDesc);
     const auto sValue(rValue.get<OUString>());
     OUString sDescName;
-    SwStyleNameMapper::FillUIName(sValue, sDescName, SwGetPoolIdFromName::PageDesc);
+    SwStyleNameMapper::FillUIName(sValue, sDescName, SfxStyleFamily::Page);
     if(pNewDesc->GetPageDesc() && pNewDesc->GetPageDesc()->GetName() == sDescName)
         return;
     if(sDescName.isEmpty())
@@ -1875,7 +1858,7 @@ void SwXStyle::SetPropertyValue<FN_UNO_PARA_STYLE_CONDITIONS>(const SfxItemPrope
         const OUString sValue(rNamedValue.Value.get<OUString>());
         // get UI style name from programmatic style name
         OUString aStyleName;
-        SwStyleNameMapper::FillUIName(sValue, aStyleName, lcl_GetSwEnumFromSfxEnum(m_rEntry.m_eFamily));
+        SwStyleNameMapper::FillUIName(sValue, aStyleName, m_rEntry.m_eFamily);
 
         // check for correct context and style name
         const auto nIdx(GetCommandContextIndex(rNamedValue.Name));
@@ -1921,7 +1904,7 @@ void SwXStyle::SetPropertyValue<SID_SWREGISTER_COLLECTION>(const SfxItemProperty
     aReg.SetWhich(SID_SWREGISTER_MODE);
     o_rStyleBase.GetItemSet().Put(aReg);
     OUString aString;
-    SwStyleNameMapper::FillUIName(sName, aString, SwGetPoolIdFromName::TxtColl);
+    SwStyleNameMapper::FillUIName(sName, aString, SfxStyleFamily::Para);
     o_rStyleBase.GetItemSet().Put(SfxStringItem(SID_SWREGISTER_COLLECTION, aString ) );
 }
 template<>
@@ -1940,12 +1923,12 @@ void SwXStyle::SetPropertyValue<sal_uInt16(RES_TXTATR_CJK_RUBY)>(const SfxItemPr
     else
         pRuby.reset(new SwFormatRuby(OUString()));
     OUString sStyle;
-    SwStyleNameMapper::FillUIName(sValue, sStyle, SwGetPoolIdFromName::ChrFmt);
+    SwStyleNameMapper::FillUIName(sValue, sStyle, SfxStyleFamily::Char);
     pRuby->SetCharFormatName(sValue);
     pRuby->SetCharFormatId(0);
     if(!sValue.isEmpty())
     {
-        const sal_uInt16 nId(SwStyleNameMapper::GetPoolIdFromUIName(sValue, SwGetPoolIdFromName::ChrFmt));
+        const sal_uInt16 nId(SwStyleNameMapper::GetPoolIdFromUIName(sValue, SfxStyleFamily::Char));
         pRuby->SetCharFormatId(nId);
     }
     rStyleSet.Put(*pRuby);
@@ -1970,7 +1953,7 @@ void SwXStyle::SetPropertyValue<sal_uInt16(RES_PARATR_DROP)>(const SfxItemProper
         pDrop.reset(new SwFormatDrop);
     const auto sValue(rValue.get<OUString>());
     OUString sStyle;
-    SwStyleNameMapper::FillUIName(sValue, sStyle, SwGetPoolIdFromName::ChrFmt);
+    SwStyleNameMapper::FillUIName(sValue, sStyle, SfxStyleFamily::Char);
     auto pStyle(static_cast<SwDocStyleSheet*>(m_pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle, SfxStyleFamily::Char)));
     //default character style must not be set as default format
     if(!pStyle || pStyle->GetCharFormat() == m_pDoc->GetDfltCharFormat() )
@@ -2191,7 +2174,7 @@ uno::Any SwXStyle::GetStyleProperty<FN_UNO_FOLLOW_STYLE>(const SfxItemPropertyMa
 {
     PrepareStyleBase(rBase);
     OUString aString;
-    SwStyleNameMapper::FillProgName(rBase.getNewBase()->GetFollow(), aString, lcl_GetSwEnumFromSfxEnum(GetFamily()));
+    SwStyleNameMapper::FillProgName(rBase.getNewBase()->GetFollow(), aString, GetFamily());
     return uno::makeAny(aString);
 }
 template<>
@@ -2208,7 +2191,7 @@ uno::Any SwXStyle::GetStyleProperty<sal_uInt16(RES_PAGEDESC)>(const SfxItemPrope
     if(!pDesc)
         return uno::Any();
     OUString aString;
-    SwStyleNameMapper::FillProgName(pDesc->GetName(), aString, SwGetPoolIdFromName::PageDesc);
+    SwStyleNameMapper::FillProgName(pDesc->GetName(), aString, SfxStyleFamily::Page);
     return uno::makeAny(aString);
 }
 template<>
@@ -2252,7 +2235,7 @@ uno::Any SwXStyle::GetStyleProperty<FN_UNO_PARA_STYLE_CONDITIONS>(const SfxItemP
                 continue;
             // get programmatic style name from UI style name
             OUString aStyleName = pCond->GetTextFormatColl()->GetName();
-            SwStyleNameMapper::FillProgName(aStyleName, aStyleName, lcl_GetSwEnumFromSfxEnum(GetFamily()));
+            SwStyleNameMapper::FillProgName(aStyleName, aStyleName, GetFamily());
             pSeq[n].Value <<= aStyleName;
         }
     }
@@ -2287,7 +2270,7 @@ uno::Any SwXStyle::GetStyleProperty<SID_SWREGISTER_COLLECTION>(const SfxItemProp
     if(!pCol)
         return uno::makeAny(OUString());
     OUString aName;
-    SwStyleNameMapper::FillProgName(pCol->GetName(), aName, SwGetPoolIdFromName::TxtColl);
+    SwStyleNameMapper::FillProgName(pCol->GetName(), aName, SfxStyleFamily::Para);
     return uno::makeAny(aName);
 }
 template<>
@@ -4480,7 +4463,7 @@ OUString SAL_CALL SwXTextTableStyle::getName()
 {
     SolarMutexGuard aGuard;
     OUString sProgName;
-    SwStyleNameMapper::FillProgName(m_pTableAutoFormat->GetName(), sProgName, SwGetPoolIdFromName::TabStyle);
+    SwStyleNameMapper::FillProgName(m_pTableAutoFormat->GetName(), sProgName, SfxStyleFamily::Table);
     return sProgName;
 }
 
@@ -4721,7 +4704,7 @@ SwBoxAutoFormat* SwXTextCellStyle::GetBoxAutoFormat(SwDocShell* pDocShell, const
         if (rTableTemplateMap.size() <= o3tl::make_unsigned(nTemplateIndex))
             return nullptr;
 
-        SwStyleNameMapper::FillUIName(sParentName, sParentName, SwGetPoolIdFromName::TabStyle);
+        SwStyleNameMapper::FillUIName(sParentName, sParentName, SfxStyleFamily::Table);
         SwTableAutoFormat* pTableAutoFormat = pDocShell->GetDoc()->GetTableStyles().FindAutoFormat(sParentName);
         if (!pTableAutoFormat)
             return nullptr;
@@ -4831,7 +4814,7 @@ OUString SAL_CALL SwXTextCellStyle::getName()
         else
         {
             OUString sParentStyle;
-            SwStyleNameMapper::FillProgName(m_sParentStyle, sParentStyle, SwGetPoolIdFromName::TabStyle);
+            SwStyleNameMapper::FillProgName(m_sParentStyle, sParentStyle, SfxStyleFamily::Table);
             sName = sParentStyle + pTableFormat->GetTableTemplateCellSubName(*m_pBoxAutoFormat);
         }
     }

@@ -2217,7 +2217,7 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, OUString& rStr )
             SwFormatINetFormat aURL( sURL, "" );
             static const OUStringLiteral sLinkStyle(u"Index Link");
             const sal_uInt16 nPoolId =
-                SwStyleNameMapper::GetPoolIdFromUIName( sLinkStyle, SwGetPoolIdFromName::ChrFmt );
+                SwStyleNameMapper::GetPoolIdFromUIName( sLinkStyle, SfxStyleFamily::Char );
             aURL.SetVisitedFormatAndId( sLinkStyle, nPoolId);
             aURL.SetINetFormatAndId( sLinkStyle, nPoolId );
             m_xCtrlStck->NewAttr( *m_pPaM->GetPoint(), aURL );
@@ -3564,7 +3564,7 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, OUString& rStr 
     {
         OUString sLinkStyle("Index Link");
         sal_uInt16 nPoolId =
-            SwStyleNameMapper::GetPoolIdFromUIName( sLinkStyle, SwGetPoolIdFromName::ChrFmt );
+            SwStyleNameMapper::GetPoolIdFromUIName( sLinkStyle, SfxStyleFamily::Char );
         aURL.SetVisitedFormatAndId( sLinkStyle, nPoolId );
         aURL.SetINetFormatAndId( sLinkStyle, nPoolId );
     }

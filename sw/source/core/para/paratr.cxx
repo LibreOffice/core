@@ -26,6 +26,7 @@
 #include <charfmt.hxx>
 #include <libxml/xmlwriter.h>
 #include <osl/diagnose.h>
+#include <svl/style.hxx>
 #include <tools/UnitConversion.hxx>
 
 using namespace ::com::sun::star;
@@ -115,7 +116,7 @@ bool SwFormatDrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             OUString sName;
             if(GetCharFormat())
                 sName = SwStyleNameMapper::GetProgName(
-                        GetCharFormat()->GetName(), SwGetPoolIdFromName::ChrFmt );
+                        GetCharFormat()->GetName(), SfxStyleFamily::Char );
             rVal <<= sName;
         }
         break;
@@ -192,7 +193,7 @@ bool SwNumRuleItem::operator==( const SfxPoolItem& rAttr ) const
 
 bool    SwNumRuleItem::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
-    OUString sRet = SwStyleNameMapper::GetProgName(GetValue(), SwGetPoolIdFromName::NumRule );
+    OUString sRet = SwStyleNameMapper::GetProgName(GetValue(), SfxStyleFamily::Number );
     rVal <<= sRet;
     return true;
 }
@@ -201,7 +202,7 @@ bool    SwNumRuleItem::PutValue( const uno::Any& rVal, sal_uInt8 )
 {
     OUString uName;
     rVal >>= uName;
-    SetValue(SwStyleNameMapper::GetUIName(uName, SwGetPoolIdFromName::NumRule));
+    SetValue(SwStyleNameMapper::GetUIName(uName, SfxStyleFamily::Number));
     return true;
 }
 

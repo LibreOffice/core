@@ -922,7 +922,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
                 SwCharFormat* pCharFormat = rDoc.FindCharFormatByName(rCharacterStyle);
                 if( !pCharFormat )
                 {
-                    const sal_uInt16 nMyId = SwStyleNameMapper::GetPoolIdFromUIName(rCharacterStyle, SwGetPoolIdFromName::ChrFmt);
+                    const sal_uInt16 nMyId = SwStyleNameMapper::GetPoolIdFromUIName(rCharacterStyle, SfxStyleFamily::Char);
                     pCharFormat = rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( nMyId );
                 }
                 if (pCharFormat)
@@ -1216,7 +1216,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable
                 SwCharFormat * pCharFormat = rDoc.FindCharFormatByName(rCharacterStyle);
                 if ( !pCharFormat )
                 {
-                    const sal_uInt16 nMyId = SwStyleNameMapper::GetPoolIdFromUIName( rCharacterStyle, SwGetPoolIdFromName::ChrFmt );
+                    const sal_uInt16 nMyId = SwStyleNameMapper::GetPoolIdFromUIName( rCharacterStyle, SfxStyleFamily::Char );
                     pCharFormat = rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( nMyId );
                 }
                 if ( pCharFormat )

@@ -23,6 +23,7 @@
 #include <swtypes.hxx>
 #include <unotools/syslocale.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <svl/style.hxx>
 #include <map>
 
 #ifdef _NEED_TO_DEBUG_MAPPING
@@ -197,7 +198,7 @@ void SwStyleNameMapper::testNameTable( SwGetPoolIdFromName const nFamily, sal_uI
 }
 #endif
 
-const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlags, bool bProgName )
+const NameToIdHash & SwStyleNameMapper::getHashTable ( SfxStyleFamily eFlags, bool bProgName )
 {
 #ifdef _NEED_TO_DEBUG_MAPPING
     static bool bTested = false;
@@ -205,45 +206,46 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
     {
         bTested = true;
 
-        testNameTable( SwGetPoolIdFromName::TxtColl, RES_POOLCOLL_TEXT_BEGIN, RES_POOLCOLL_TEXT_END );
-        testNameTable( SwGetPoolIdFromName::TxtColl, RES_POOLCOLL_LISTS_BEGIN, RES_POOLCOLL_LISTS_END );
-        testNameTable( SwGetPoolIdFromName::TxtColl, RES_POOLCOLL_EXTRA_BEGIN, RES_POOLCOLL_EXTRA_END );
-        testNameTable( SwGetPoolIdFromName::TxtColl, RES_POOLCOLL_REGISTER_BEGIN, RES_POOLCOLL_REGISTER_END );
-        testNameTable( SwGetPoolIdFromName::TxtColl, RES_POOLCOLL_DOC_BEGIN, RES_POOLCOLL_DOC_END );
-        testNameTable( SwGetPoolIdFromName::TxtColl, RES_POOLCOLL_HTML_BEGIN, RES_POOLCOLL_HTML_END );
-        testNameTable( SwGetPoolIdFromName::ChrFmt, RES_POOLCHR_NORMAL_BEGIN, RES_POOLCHR_NORMAL_END );
-        testNameTable( SwGetPoolIdFromName::ChrFmt, RES_POOLCHR_HTML_BEGIN, RES_POOLCHR_HTML_END );
-        testNameTable( SwGetPoolIdFromName::FrmFmt, RES_POOLFRM_BEGIN, RES_POOLFRM_END );
-        testNameTable( SwGetPoolIdFromName::PageDesc, RES_POOLPAGE_BEGIN, RES_POOLPAGE_END );
-        testNameTable( SwGetPoolIdFromName::NumRule, RES_POOLNUMRULE_BEGIN, RES_POOLNUMRULE_END );
+        testNameTable( SfxStyleFamily::Para, RES_POOLCOLL_TEXT_BEGIN, RES_POOLCOLL_TEXT_END );
+        testNameTable( SfxStyleFamily::Para, RES_POOLCOLL_LISTS_BEGIN, RES_POOLCOLL_LISTS_END );
+        testNameTable( SfxStyleFamily::Para, RES_POOLCOLL_EXTRA_BEGIN, RES_POOLCOLL_EXTRA_END );
+        testNameTable( SfxStyleFamily::Para, RES_POOLCOLL_REGISTER_BEGIN, RES_POOLCOLL_REGISTER_END );
+        testNameTable( SfxStyleFamily::Para, RES_POOLCOLL_DOC_BEGIN, RES_POOLCOLL_DOC_END );
+        testNameTable( SfxStyleFamily::Para, RES_POOLCOLL_HTML_BEGIN, RES_POOLCOLL_HTML_END );
+        testNameTable( SfxStyleFamily::Char, RES_POOLCHR_NORMAL_BEGIN, RES_POOLCHR_NORMAL_END );
+        testNameTable( SfxStyleFamily::Char, RES_POOLCHR_HTML_BEGIN, RES_POOLCHR_HTML_END );
+        testNameTable( SfxStyleFamily::Frame, RES_POOLFRM_BEGIN, RES_POOLFRM_END );
+        testNameTable( SfxStyleFamily::Page, RES_POOLPAGE_BEGIN, RES_POOLPAGE_END );
+        testNameTable( SfxStyleFamily::Number, RES_POOLNUMRULE_BEGIN, RES_POOLNUMRULE_END );
     }
 #endif
 
     switch ( eFlags )
     {
-        case SwGetPoolIdFromName::TxtColl:
+        case SfxStyleFamily::Para:
             return TablePair<GetParaMap>::getMap(bProgName);
-        case SwGetPoolIdFromName::ChrFmt:
+        case SfxStyleFamily::Char:
             return TablePair<GetCharMap>::getMap(bProgName);
-        case SwGetPoolIdFromName::FrmFmt:
+        case SfxStyleFamily::Frame:
             return TablePair<GetFrameMap>::getMap(bProgName);
-        case SwGetPoolIdFromName::PageDesc:
+        case SfxStyleFamily::Page:
             return TablePair<GetPageMap>::getMap(bProgName);
-        case SwGetPoolIdFromName::NumRule:
+        case SfxStyleFamily::Number:
             return TablePair<GetNumRuleMap>::getMap(bProgName);
-        case SwGetPoolIdFromName::TabStyle:
+        case SfxStyleFamily::Table:
             return TablePair<GetTableStyleMap>::getMap(bProgName);
-        case SwGetPoolIdFromName::CellStyle:
+        case SfxStyleFamily::Cell:
             return TablePair<GetCellStyleMap>::getMap(bProgName);
+        default:
+            assert(false); // must not reach here
+            abort();
     }
 
-    assert(false); // must not reach here
-    abort();
 }
 
 // This gets the UI name from the programmatic name
 const OUString& SwStyleNameMapper::GetUIName(const OUString& rName,
-                                             SwGetPoolIdFromName const eFlags)
+                                             SfxStyleFamily const eFlags)
 {
     sal_uInt16 nId = GetPoolIdFromProgName ( rName, eFlags );
     return nId != USHRT_MAX ? GetUIName( nId, rName ) : rName;
@@ -251,7 +253,7 @@ const OUString& SwStyleNameMapper::GetUIName(const OUString& rName,
 
 // Get the programmatic name from the UI name
 const OUString& SwStyleNameMapper::GetProgName(
-        const OUString& rName, SwGetPoolIdFromName const eFlags)
+        const OUString& rName, SfxStyleFamily const eFlags)
 {
     sal_uInt16 nId = GetPoolIdFromUIName ( rName, eFlags );
     return nId != USHRT_MAX ? GetProgName( nId, rName ) : rName;
@@ -260,7 +262,7 @@ const OUString& SwStyleNameMapper::GetProgName(
 // Get the programmatic name from the UI name in rName and put it into rFillName
 void SwStyleNameMapper::FillProgName(
         const OUString& rName, OUString& rFillName,
-        SwGetPoolIdFromName const eFlags)
+        SfxStyleFamily const eFlags)
 {
     sal_uInt16 nId = GetPoolIdFromUIName ( rName, eFlags );
     if ( nId == USHRT_MAX )
@@ -288,17 +290,17 @@ void SwStyleNameMapper::FillProgName(
         fillNameFromId(nId, rFillName, true);
     }
 
-    if (eFlags == SwGetPoolIdFromName::ChrFmt && rName == SwResId(STR_POOLCHR_STANDARD))
+    if (eFlags == SfxStyleFamily::Char && rName == SwResId(STR_POOLCHR_STANDARD))
         rFillName = "Standard";
 }
 
 // Get the UI name from the programmatic name in rName and put it into rFillName
 void SwStyleNameMapper::FillUIName(
         const OUString& rName, OUString& rFillName,
-        SwGetPoolIdFromName const eFlags)
+        SfxStyleFamily const eFlags)
 {
     OUString aName = rName;
-    if (eFlags == SwGetPoolIdFromName::ChrFmt && rName == "Standard")
+    if (eFlags == SfxStyleFamily::Char && rName == "Standard")
         aName = SwResId(STR_POOLCHR_STANDARD);
 
     sal_uInt16 nId = GetPoolIdFromProgName ( aName, eFlags );
@@ -443,7 +445,7 @@ SwStyleNameMapper::GetProgName(sal_uInt16 const nId, const OUString& rName)
 
 // This gets the PoolId from the UI Name
 sal_uInt16 SwStyleNameMapper::GetPoolIdFromUIName(
-        const OUString& rName, SwGetPoolIdFromName const eFlags)
+        const OUString& rName, SfxStyleFamily const eFlags)
 {
     const NameToIdHash & rHashMap = getHashTable ( eFlags, false );
     NameToIdHash::const_iterator aIter = rHashMap.find(rName);
@@ -452,7 +454,7 @@ sal_uInt16 SwStyleNameMapper::GetPoolIdFromUIName(
 
 // Get the Pool ID from the programmatic name
 sal_uInt16 SwStyleNameMapper::GetPoolIdFromProgName(
-            const OUString& rName, SwGetPoolIdFromName const eFlags)
+            const OUString& rName, SfxStyleFamily const eFlags)
 {
     const NameToIdHash & rHashMap = getHashTable ( eFlags, true );
     NameToIdHash::const_iterator aIter = rHashMap.find(rName);

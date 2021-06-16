@@ -459,7 +459,7 @@ namespace sw
             {
                 // Collection not found, try in Pool ?
                 sal_uInt16 n = SwStyleNameMapper::GetPoolIdFromUIName(rName,
-                    SwGetPoolIdFromName::TxtColl);
+                    SfxStyleFamily::Para);
                 if (n != SAL_MAX_UINT16)       // found or standard
                     pColl = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(n, false);
             }
@@ -473,7 +473,7 @@ namespace sw
             {
                 // Collection not found, try in Pool ?
                 sal_uInt16 n = SwStyleNameMapper::GetPoolIdFromUIName(rName,
-                    SwGetPoolIdFromName::ChrFmt);
+                    SfxStyleFamily::Char);
                 if (n != SAL_MAX_UINT16)       // found or standard
                     pFormat = rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool(n);
             }

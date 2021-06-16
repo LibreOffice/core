@@ -210,7 +210,7 @@ SwNumFormat::SwNumFormat(const SvxNumberFormat& rNumFormat, SwDoc* pDoc)
         if( !pCFormat )
         {
             sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( rCharStyleName,
-                                            SwGetPoolIdFromName::ChrFmt );
+                                            SfxStyleFamily::Char );
             pCFormat = nId != USHRT_MAX
                         ? pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool( nId )
                         : pDoc->MakeCharFormat( rCharStyleName, nullptr );

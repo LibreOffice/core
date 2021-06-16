@@ -37,6 +37,7 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include "xmlexp.hxx"
 #include <SwStyleNameMapper.hxx>
+#include <svl/style.hxx>
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star::beans;
@@ -92,7 +93,7 @@ void SwXMLExport::ExportFormat( const SwFormat& rFormat, enum XMLTokenEnum eFami
                 SwStyleNameMapper::FillProgName(
                                     pPageDesc->GetName(),
                                     sName,
-                                    SwGetPoolIdFromName::PageDesc);
+                                    SfxStyleFamily::Page);
             AddAttribute( XML_NAMESPACE_STYLE, XML_MASTER_PAGE_NAME,
                           EncodeStyleName( sName ) );
         }

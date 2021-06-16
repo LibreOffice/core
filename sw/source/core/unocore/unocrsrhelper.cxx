@@ -412,7 +412,7 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
                 if( pAny )
                 {
                     OUString sVal;
-                    SwStyleNameMapper::FillProgName(pFormat->GetName(), sVal, SwGetPoolIdFromName::TxtColl );
+                    SwStyleNameMapper::FillProgName(pFormat->GetName(), sVal, SfxStyleFamily::Para );
                     *pAny <<= sVal;
                 }
             }
@@ -787,7 +787,7 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
                             OSL_ENSURE(pAttr->GetCharFormat().GetCharFormat(), "no character format set");
                             aCharStyles.getArray()[aCharStyles.getLength() - 1] =
                                         SwStyleNameMapper::GetProgName(
-                                            pAttr->GetCharFormat().GetCharFormat()->GetName(), SwGetPoolIdFromName::ChrFmt);
+                                            pAttr->GetCharFormat().GetCharFormat()->GetName(), SfxStyleFamily::Char);
                         }
                     }
 
@@ -980,7 +980,7 @@ void GetCurPageStyle(SwPaM const & rPaM, OUString &rString)
         if(pPage)
         {
             SwStyleNameMapper::FillProgName(pPage->GetPageDesc()->GetName(),
-                rString, SwGetPoolIdFromName::PageDesc);
+                rString, SfxStyleFamily::Page);
         }
     }
 }

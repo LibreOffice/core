@@ -1533,7 +1533,7 @@ namespace //local functions originally from docfmt.cxx
                                     false, reinterpret_cast<const SfxPoolItem**>(&pRule) ) &&
                     !rDoc.FindNumRulePtr( pRule->GetValue() ) &&
                     USHRT_MAX != (nPoolId = SwStyleNameMapper::GetPoolIdFromUIName ( pRule->GetValue(),
-                                    SwGetPoolIdFromName::NumRule )) )
+                                    SfxStyleFamily::Number )) )
                     rDoc.getIDocumentStylePoolAccess().GetNumRuleFromPool( nPoolId );
             }
         }

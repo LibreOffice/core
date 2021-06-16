@@ -622,13 +622,13 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
                                              sMasterPageName );
     SwStyleNameMapper::FillUIName( sName,
                                    sName,
-                                   SwGetPoolIdFromName::PageDesc);
+                                   SfxStyleFamily::Page);
     SwPageDesc *pPageDesc = pDoc->FindPageDesc(sName);
     if( !pPageDesc )
     {
         // If the page style is a pool style, then we maybe have to create it
         // first if it hasn't been used by now.
-        const sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( sName, SwGetPoolIdFromName::PageDesc );
+        const sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( sName, SfxStyleFamily::Page );
         if( USHRT_MAX != nPoolId )
             pPageDesc = pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool( nPoolId, false );
     }

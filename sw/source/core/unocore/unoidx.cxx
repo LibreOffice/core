@@ -740,7 +740,7 @@ SwXDocumentIndex::setPropertyValue(
         {
             OUString aString;
             SwStyleNameMapper::FillUIName(lcl_AnyToType<OUString>(rValue),
-                aString, SwGetPoolIdFromName::ChrFmt);
+                aString, SfxStyleFamily::Char);
             rTOXBase.SetMainEntryCharStyle( aString );
         }
         break;
@@ -776,7 +776,7 @@ SwXDocumentIndex::setPropertyValue(
         {
             OUString aString;
             SwStyleNameMapper::FillUIName( lcl_AnyToType<OUString>(rValue),
-                aString, SwGetPoolIdFromName::TxtColl);
+                aString, SfxStyleFamily::Para);
             bForm = true;
             // Header is on Pos 0
             aForm.SetTemplate( 0, aString );
@@ -791,7 +791,7 @@ SwXDocumentIndex::setPropertyValue(
             OUString aString;
             bForm = true;
             SwStyleNameMapper::FillUIName( lcl_AnyToType<OUString>(rValue),
-                aString, SwGetPoolIdFromName::TxtColl);
+                aString, SfxStyleFamily::Para);
             aForm.SetTemplate( 1, aString );
         }
         break;
@@ -815,7 +815,7 @@ SwXDocumentIndex::setPropertyValue(
             const sal_uInt16 nLPos = rTOXBase.GetType() == TOX_INDEX ? 2 : 1;
             OUString aString;
             SwStyleNameMapper::FillUIName( lcl_AnyToType<OUString>(rValue),
-                aString, SwGetPoolIdFromName::TxtColl);
+                aString, SfxStyleFamily::Para);
             aForm.SetTemplate(nLPos + pEntry->nWID - WID_PARA_LEV1, aString );
         }
         break;
@@ -1075,7 +1075,7 @@ SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
                 SwStyleNameMapper::FillProgName(
                         pTOXBase->GetMainEntryCharStyle(),
                         aString,
-                        SwGetPoolIdFromName::ChrFmt);
+                        SfxStyleFamily::Char);
                 aRet <<= aString;
             }
             break;
@@ -1115,7 +1115,7 @@ SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
                 //Header is at position 0
                 OUString aString;
                 SwStyleNameMapper::FillProgName(rForm.GetTemplate( 0 ), aString,
-                        SwGetPoolIdFromName::TxtColl );
+                        SfxStyleFamily::Para );
                 aRet <<= aString;
             }
             break;
@@ -1125,7 +1125,7 @@ SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
                 SwStyleNameMapper::FillProgName(
                         rForm.GetTemplate( 1 ),
                         aString,
-                        SwGetPoolIdFromName::TxtColl);
+                        SfxStyleFamily::Para);
                 aRet <<= aString;
             }
             break;
@@ -1146,7 +1146,7 @@ SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
                 SwStyleNameMapper::FillProgName(
                         rForm.GetTemplate(nLPos + pEntry->nWID - WID_PARA_LEV1),
                         aString,
-                        SwGetPoolIdFromName::TxtColl);
+                        SfxStyleFamily::Para);
                 aRet <<= aString;
             }
             break;
@@ -2554,7 +2554,7 @@ SwXDocumentIndex::StyleAccess_Impl::replaceByIndex(
             sSetStyles.append(TOX_STYLE_DELIMITER);
         }
         SwStyleNameMapper::FillUIName(pStyles[i], aString,
-                SwGetPoolIdFromName::TxtColl);
+                SfxStyleFamily::Para);
         sSetStyles.append(aString);
     }
     rTOXBase.SetStyleNames(sSetStyles.makeStringAndClear(), o3tl::narrowing<sal_uInt16>(nIndex));
@@ -2590,7 +2590,7 @@ SwXDocumentIndex::StyleAccess_Impl::getByIndex(sal_Int32 nIndex)
         SwStyleNameMapper::FillProgName(
             rStyles.getToken(0, TOX_STYLE_DELIMITER, nPos),
             aString,
-            SwGetPoolIdFromName::TxtColl);
+            SfxStyleFamily::Para);
         pStyles[i] = aString;
     }
     uno::Any aRet(&aStyles, cppu::UnoType<uno::Sequence<OUString>>::get());
@@ -2708,10 +2708,10 @@ SwXDocumentIndex::TokenAccess_Impl::replaceByIndex(
                 SwStyleNameMapper::FillUIName(
                         lcl_AnyToType<OUString>(pProperties[j].Value),
                         sCharStyleName,
-                        SwGetPoolIdFromName::ChrFmt);
+                        SfxStyleFamily::Char);
                 aToken.sCharStyleName = sCharStyleName;
                 aToken.nPoolId = SwStyleNameMapper::GetPoolIdFromUIName (
-                    sCharStyleName, SwGetPoolIdFromName::ChrFmt );
+                    sCharStyleName, SfxStyleFamily::Char );
             }
             else if ( pProperties[j].Name == "TabStopRightAligned" )
             {
@@ -2885,7 +2885,7 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
         SwStyleNameMapper::FillProgName(
                         aToken.sCharStyleName,
                         aProgCharStyle,
-                        SwGetPoolIdFromName::ChrFmt);
+                        SfxStyleFamily::Char);
         switch(aToken.eTokenType)
         {
             case TOKEN_ENTRY_NO:

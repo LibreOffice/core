@@ -415,7 +415,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
         if( !pColl )
         {
             const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(
-                rColl, SwGetPoolIdFromName::TxtColl );
+                rColl, SfxStyleFamily::Para );
             if( USHRT_MAX != nId )
                 pColl = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( nId );
             else
@@ -789,7 +789,7 @@ void FillCharStyleListBox(weld::ComboBox& rToFill, SwDocShell* pDocSh, bool bSor
     {
         if(bWithDefault || pBase->GetName() !=  sStandard)
         {
-            sal_IntPtr nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( pBase->GetName(), SwGetPoolIdFromName::ChrFmt );
+            sal_IntPtr nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( pBase->GetName(), SfxStyleFamily::Char );
             OUString sId(OUString::number(nPoolId));
             if (bSorted)
                 InsertStringSorted(sId, pBase->GetName(), rToFill, nOffset);

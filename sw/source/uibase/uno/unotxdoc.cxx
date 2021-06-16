@@ -234,7 +234,7 @@ static SwTextFormatColl *lcl_GetParaStyle(const OUString& rCollName, SwDoc& rDoc
     if( !pColl )
     {
         const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(
-            rCollName, SwGetPoolIdFromName::TxtColl );
+            rCollName, SfxStyleFamily::Para );
         if( USHRT_MAX != nId )
             pColl = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( nId );
     }

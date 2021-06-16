@@ -13,6 +13,7 @@
 #include <SwStyleNameMapper.hxx>
 #include <ndtxt.hxx>
 #include <sal/log.hxx>
+#include <svl/style.hxx>
 #include <rtl/uri.hxx>
 
 namespace sw {
@@ -71,7 +72,7 @@ ToxLinkProcessor::ObtainPoolId(const OUString& characterStyle) const
         return USHRT_MAX;
     }
     else {
-        return SwStyleNameMapper::GetPoolIdFromUIName(characterStyle, SwGetPoolIdFromName::ChrFmt);
+        return SwStyleNameMapper::GetPoolIdFromUIName(characterStyle, SfxStyleFamily::Char);
     }
 }
 

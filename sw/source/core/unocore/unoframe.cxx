@@ -987,7 +987,7 @@ bool SwFrameProperties_Impl::AnyToItemSet(SwDoc *pDoc, SfxItemSet& rSet, SfxItem
     {
         OUString sStyle;
         *pStyleName >>= sStyle;
-        SwStyleNameMapper::FillUIName(sStyle, sStyle, SwGetPoolIdFromName::FrmFmt);
+        SwStyleNameMapper::FillUIName(sStyle, sStyle, SfxStyleFamily::Frame);
         pStyle = static_cast<SwDocStyleSheet*>(pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle,
                                                     SfxStyleFamily::Frame));
     }
@@ -1064,7 +1064,7 @@ bool SwGraphicProperties_Impl::AnyToItemSet(
     {
         OUString sStyle;
         *pStyleName >>= sStyle;
-        SwStyleNameMapper::FillUIName(sStyle, sStyle, SwGetPoolIdFromName::FrmFmt);
+        SwStyleNameMapper::FillUIName(sStyle, sStyle, SfxStyleFamily::Frame);
         pStyle = static_cast<SwDocStyleSheet*>(pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle,
                                                     SfxStyleFamily::Frame));
     }
@@ -1382,7 +1382,7 @@ static SwFrameFormat *lcl_GetFrameFormat( const ::uno::Any& rValue, SwDoc *pDoc 
         rValue >>= uTemp;
         OUString sStyle;
         SwStyleNameMapper::FillUIName(uTemp, sStyle,
-                SwGetPoolIdFromName::FrmFmt);
+                SfxStyleFamily::Frame);
         SwDocStyleSheet* pStyle =
                 static_cast<SwDocStyleSheet*>(pDocSh->GetStyleSheetPool()->Find(sStyle,
                                                     SfxStyleFamily::Frame));
@@ -2123,7 +2123,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         }
         else if(FN_UNO_FRAME_STYLE_NAME == pEntry->nWID)
         {
-            aAny <<= SwStyleNameMapper::GetProgName(pFormat->DerivedFrom()->GetName(), SwGetPoolIdFromName::FrmFmt );
+            aAny <<= SwStyleNameMapper::GetProgName(pFormat->DerivedFrom()->GetName(), SfxStyleFamily::Frame );
         }
         // #i73249#
         else if( FN_UNO_TITLE == pEntry->nWID )

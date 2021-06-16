@@ -66,9 +66,6 @@ excludelist:
     # inline dtor, complete type is needed
     - com/sun/star/linguistic2/XSpellAlternatives.hpp
     - com/sun/star/linguistic2/XSpellChecker1.hpp
-    sw/inc/SwGetPoolIdFromName.hxx:
-    # Needed for enum type
-    - sal/types.h
     sw/inc/unocoll.hxx:
     # base class has to be a complete type
     - com/sun/star/container/XEnumerationAccess.hpp

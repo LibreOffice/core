@@ -589,7 +589,7 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool /*bAuto
         pValues[1].Name = UNO_NAME_RUBY_TEXT;
         pValues[1].Value <<= rAttr.GetText();
         pValues[2].Name = UNO_NAME_RUBY_CHAR_STYLE_NAME;
-        SwStyleNameMapper::FillProgName(rAttr.GetCharFormatName(), aString, SwGetPoolIdFromName::ChrFmt );
+        SwStyleNameMapper::FillProgName(rAttr.GetCharFormatName(), aString, SfxStyleFamily::Char );
         pValues[2].Value <<= aString;
         pValues[3].Name = UNO_NAME_RUBY_ADJUST;
         pValues[3].Value <<= static_cast<sal_Int16>(rAttr.GetAdjustment());
@@ -639,10 +639,10 @@ void SAL_CALL SwXTextView::setRubyList(
                 if(rProperty.Value >>= sTmp)
                 {
                     OUString sName;
-                    SwStyleNameMapper::FillUIName(sTmp, sName, SwGetPoolIdFromName::ChrFmt );
+                    SwStyleNameMapper::FillUIName(sTmp, sName, SfxStyleFamily::Char );
                     const sal_uInt16 nPoolId = sName.isEmpty() ? 0
                         : SwStyleNameMapper::GetPoolIdFromUIName(sName,
-                                SwGetPoolIdFromName::ChrFmt );
+                                SfxStyleFamily::Char );
 
                     pEntry->GetRubyAttr().SetCharFormatName( sName );
                     pEntry->GetRubyAttr().SetCharFormatId( nPoolId );

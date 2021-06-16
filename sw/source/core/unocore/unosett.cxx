@@ -197,14 +197,14 @@ static SwCharFormat* lcl_getCharFormat(SwDoc* pDoc, const uno::Any& aValue)
     OUString uTmp;
     aValue >>= uTmp;
     OUString sCharFormat;
-    SwStyleNameMapper::FillUIName(uTmp, sCharFormat, SwGetPoolIdFromName::ChrFmt);
+    SwStyleNameMapper::FillUIName(uTmp, sCharFormat, SfxStyleFamily::Char);
     if (sCharFormat != SwResId(STR_POOLCHR_STANDARD))
     {
         pRet = pDoc->FindCharFormatByName( sCharFormat );
     }
     if(!pRet)
     {
-        const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(sCharFormat, SwGetPoolIdFromName::ChrFmt);
+        const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(sCharFormat, SfxStyleFamily::Char);
         if(USHRT_MAX != nId)
             pRet = pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool( nId );
     }
@@ -216,11 +216,11 @@ static SwTextFormatColl* lcl_GetParaStyle(SwDoc* pDoc, const uno::Any& aValue)
     OUString uTmp;
     aValue >>= uTmp;
     OUString sParaStyle;
-    SwStyleNameMapper::FillUIName(uTmp, sParaStyle, SwGetPoolIdFromName::TxtColl );
+    SwStyleNameMapper::FillUIName(uTmp, sParaStyle, SfxStyleFamily::Para );
     SwTextFormatColl* pRet = pDoc->FindTextFormatCollByName( sParaStyle );
     if( !pRet  )
     {
-        const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( sParaStyle, SwGetPoolIdFromName::TxtColl );
+        const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( sParaStyle, SfxStyleFamily::Para );
         if( USHRT_MAX != nId  )
             pRet = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( nId );
     }
@@ -232,11 +232,11 @@ static SwPageDesc* lcl_GetPageDesc(SwDoc* pDoc, const uno::Any& aValue)
     OUString uTmp;
     aValue >>= uTmp;
     OUString sPageDesc;
-    SwStyleNameMapper::FillUIName(uTmp, sPageDesc, SwGetPoolIdFromName::PageDesc );
+    SwStyleNameMapper::FillUIName(uTmp, sPageDesc, SfxStyleFamily::Page );
     SwPageDesc* pRet = pDoc->FindPageDesc( sPageDesc );
     if(!pRet)
     {
-        const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(sPageDesc, SwGetPoolIdFromName::PageDesc);
+        const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(sPageDesc, SfxStyleFamily::Page);
         if(USHRT_MAX != nId)
             pRet = pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool( nId );
     }
@@ -473,7 +473,7 @@ uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
             OUString aString;
             if(pColl)
                 aString = pColl->GetName();
-            SwStyleNameMapper::FillProgName(aString, aString, SwGetPoolIdFromName::TxtColl);
+            SwStyleNameMapper::FillProgName(aString, aString, SfxStyleFamily::Para);
             aRet <<= aString;
         }
         break;
@@ -485,7 +485,7 @@ uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
                 SwStyleNameMapper::FillProgName(
                         rFootnoteInfo.GetPageDesc( *m_pDoc )->GetName(),
                         aString,
-                        SwGetPoolIdFromName::PageDesc);
+                        SfxStyleFamily::Page);
             }
             aRet <<= aString;
         }
@@ -500,7 +500,7 @@ uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
                 SwStyleNameMapper::FillProgName(
                         pCharFormat->GetName(),
                         aString,
-                        SwGetPoolIdFromName::ChrFmt);
+                        SfxStyleFamily::Char);
             }
             aRet <<= aString;
         }
@@ -684,7 +684,7 @@ uno::Any SwXEndnoteProperties::getPropertyValue(const OUString& rPropertyName)
                 SwStyleNameMapper::FillProgName(
                         aString,
                         aString,
-                        SwGetPoolIdFromName::TxtColl);
+                        SfxStyleFamily::Para);
                 aRet <<= aString;
 
             }
@@ -697,7 +697,7 @@ uno::Any SwXEndnoteProperties::getPropertyValue(const OUString& rPropertyName)
                     SwStyleNameMapper::FillProgName(
                         rEndInfo.GetPageDesc( *m_pDoc )->GetName(),
                         aString,
-                        SwGetPoolIdFromName::PageDesc);
+                        SfxStyleFamily::Page);
                 }
                 aRet <<= aString;
             }
@@ -712,7 +712,7 @@ uno::Any SwXEndnoteProperties::getPropertyValue(const OUString& rPropertyName)
                     SwStyleNameMapper::FillProgName(
                             pCharFormat->GetName(),
                             aString,
-                            SwGetPoolIdFromName::ChrFmt);
+                            SfxStyleFamily::Char);
                 }
                 aRet <<= aString;
             }
@@ -919,7 +919,7 @@ Any SwXLineNumberingProperties::getPropertyValue(const OUString& rPropertyName)
                 SwStyleNameMapper::FillProgName(
                             rInfo.GetCharFormat(m_pDoc->getIDocumentStylePoolAccess())->GetName(),
                             aString,
-                            SwGetPoolIdFromName::ChrFmt);
+                            SfxStyleFamily::Char);
             }
             aRet <<= aString;
         }
@@ -1288,7 +1288,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
                 sValue.clear();
             }
         }
-        SwStyleNameMapper::FillProgName(sValue, aUString, SwGetPoolIdFromName::TxtColl);
+        SwStyleNameMapper::FillProgName(sValue, aUString, SfxStyleFamily::Para);
     }
 
     OUString referer;
@@ -1338,7 +1338,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFormat
 
     //char style name
     aUString.clear();
-    SwStyleNameMapper::FillProgName( rCharFormatName, aUString, SwGetPoolIdFromName::ChrFmt);
+    SwStyleNameMapper::FillProgName( rCharFormatName, aUString, SfxStyleFamily::Char);
     aPropertyValues.push_back(comphelper::makePropertyValue("CharStyleName", aUString));
 
     //startvalue
@@ -1580,7 +1580,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
             OUString uTmp;
             rProp.Value >>= uTmp;
             OUString sCharFormatName;
-            SwStyleNameMapper::FillUIName( uTmp, sCharFormatName, SwGetPoolIdFromName::ChrFmt );
+            SwStyleNameMapper::FillUIName( uTmp, sCharFormatName, SfxStyleFamily::Char );
             SwDoc *const pLocalDoc = pDocShell ? pDocShell->GetDoc() : pDoc;
             if (sCharFormatName == UNO_NAME_CHARACTER_FORMAT_NONE)
             {
@@ -1740,7 +1740,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                 OUString uTmp;
                 rProp.Value >>= uTmp;
                 OUString sStyleName;
-                SwStyleNameMapper::FillUIName(uTmp, sStyleName, SwGetPoolIdFromName::TxtColl );
+                SwStyleNameMapper::FillUIName(uTmp, sStyleName, SfxStyleFamily::Para );
                 *pParagraphStyleName = sStyleName;
             }
         }
@@ -1881,7 +1881,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                 OUString uTmp;
                 rProp.Value >>= uTmp;
                 OUString sStyleName;
-                SwStyleNameMapper::FillUIName(uTmp, sStyleName, SwGetPoolIdFromName::TxtColl );
+                SwStyleNameMapper::FillUIName(uTmp, sStyleName, SfxStyleFamily::Para );
                 *pHeadingStyleName = sStyleName;
             }
         }
@@ -2105,7 +2105,7 @@ OUString SwXNumberingRules::getName()
     if(m_pNumRule)
     {
         OUString aString;
-        SwStyleNameMapper::FillProgName(m_pNumRule->GetName(), aString, SwGetPoolIdFromName::NumRule );
+        SwStyleNameMapper::FillProgName(m_pNumRule->GetName(), aString, SfxStyleFamily::Number );
         return aString;
     }
     // consider chapter numbering <SwXNumberingRules>
@@ -2113,7 +2113,7 @@ OUString SwXNumberingRules::getName()
     {
         OUString aString;
         SwStyleNameMapper::FillProgName( m_pDocShell->GetDoc()->GetOutlineNumRule()->GetName(),
-                                         aString, SwGetPoolIdFromName::NumRule );
+                                         aString, SfxStyleFamily::Number );
         return aString;
     }
     return m_sCreatedNumRuleName;

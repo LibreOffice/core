@@ -1534,7 +1534,7 @@ SwTextFormatColl *SwWrtShell::GetParaStyle(const OUString &rCollName, GetStyle e
     SwTextFormatColl* pColl = FindTextFormatCollByName( rCollName );
     if( !pColl && GETSTYLE_NOCREATE != eCreate )
     {
-        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( rCollName, SwGetPoolIdFromName::TxtColl );
+        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( rCollName, SfxStyleFamily::Para );
         if( USHRT_MAX != nId || GETSTYLE_CREATEANY == eCreate )
             pColl = GetTextCollFromPool( nId );
     }
@@ -1551,7 +1551,7 @@ SwCharFormat *SwWrtShell::GetCharStyle(const OUString &rFormatName, GetStyle eCr
     SwCharFormat* pFormat = FindCharFormatByName( rFormatName );
     if( !pFormat && GETSTYLE_NOCREATE != eCreate )
     {
-        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( rFormatName, SwGetPoolIdFromName::ChrFmt );
+        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( rFormatName, SfxStyleFamily::Char );
         if( USHRT_MAX != nId || GETSTYLE_CREATEANY == eCreate )
             pFormat = static_cast<SwCharFormat*>(GetFormatFromPool( nId ));
     }

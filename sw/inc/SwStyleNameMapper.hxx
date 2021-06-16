@@ -21,11 +21,12 @@
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
-#include "SwGetPoolIdFromName.hxx"
 #include "swdllapi.h"
 
 #include <unordered_map>
 #include <vector>
+
+enum class SfxStyleFamily;
 
 /** This class holds all data about the names of styles used in the user
  * interface (UI names...these are localised into different languages).
@@ -81,22 +82,22 @@ class SwStyleNameMapper final
     static void fillNameFromId(sal_uInt16 nId, OUString &rName, bool bProgName);
     static const OUString& getNameFromId(sal_uInt16 nId, const OUString &rName,
                                          bool bProgName);
-    static const NameToIdHash& getHashTable ( SwGetPoolIdFromName, bool bProgName );
+    static const NameToIdHash& getHashTable ( SfxStyleFamily, bool bProgName );
 #ifdef _NEED_TO_DEBUG_MAPPING
-    static void testNameTable( SwGetPoolIdFromName const nFamily, sal_uInt16 const nStartIndex, sal_uInt16 const nEndIndex );
+    static void testNameTable( SfxStyleFamily const nFamily, sal_uInt16 const nStartIndex, sal_uInt16 const nEndIndex );
 #endif
 
 public:
     // This gets the UI Name from the programmatic name
-    static const OUString& GetUIName(const OUString& rName, SwGetPoolIdFromName);
+    static const OUString& GetUIName(const OUString& rName, SfxStyleFamily);
     static         void FillUIName(const OUString& rName, OUString& rFillName,
-                            SwGetPoolIdFromName);
+                            SfxStyleFamily);
 
     // Get the programmatic Name from the UI name
     static const OUString& GetProgName(const OUString& rName,
-                                       SwGetPoolIdFromName);
+                                       SfxStyleFamily);
     static         void FillProgName(const OUString& rName, OUString& rFillName,
-                            SwGetPoolIdFromName);
+                            SfxStyleFamily);
 
     // This gets the UI Name from the Pool ID
     SW_DLLPUBLIC static void FillUIName(sal_uInt16 nId, OUString& rFillName);
@@ -110,11 +111,11 @@ public:
 
     // This gets the PoolId from the UI Name
     SW_DLLPUBLIC static sal_uInt16 GetPoolIdFromUIName(const OUString& rName,
-                                                       SwGetPoolIdFromName);
+                                                       SfxStyleFamily);
 
     // Get the Pool ID from the programmatic name
     static sal_uInt16 GetPoolIdFromProgName(const OUString& rName,
-                                            SwGetPoolIdFromName);
+                                            SfxStyleFamily);
 
     // used to convert the 4 special ExtraProg/UINames for
     // RES_POOLCOLL_LABEL_DRAWING,  RES_POOLCOLL_LABEL_ABB,

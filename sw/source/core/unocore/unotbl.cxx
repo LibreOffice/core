@@ -250,7 +250,7 @@ static void lcl_SetSpecialProperty(SwFrameFormat* pFormat,
             const SwPageDesc* pDesc = nullptr;
             if (!sPageStyle.isEmpty())
             {
-                SwStyleNameMapper::FillUIName(sPageStyle, sPageStyle, SwGetPoolIdFromName::PageDesc);
+                SwStyleNameMapper::FillUIName(sPageStyle, sPageStyle, SfxStyleFamily::Page);
                 pDesc = SwPageDesc::GetByName(*pFormat->GetDoc(), sPageStyle);
             }
             SwFormatPageDesc aDesc( pDesc );
@@ -300,7 +300,7 @@ static uno::Any lcl_GetSpecialProperty(SwFrameFormat* pFormat, const SfxItemProp
             {
                 const SwPageDesc* pDsc = static_cast<const SwFormatPageDesc*>(pItem)->GetPageDesc();
                 if(pDsc)
-                    return uno::makeAny<OUString>(SwStyleNameMapper::GetProgName(pDsc->GetName(), SwGetPoolIdFromName::PageDesc ));
+                    return uno::makeAny<OUString>(SwStyleNameMapper::GetProgName(pDsc->GetName(), SfxStyleFamily::Page ));
             }
             return uno::makeAny(OUString());
         }
@@ -1841,7 +1841,7 @@ void SwTableProperties_Impl::ApplyTableAttr(const SwTable& rTable, SwDoc& rDoc)
         OUString sPageStyle = pPage->get<OUString>();
         if(!sPageStyle.isEmpty())
         {
-            SwStyleNameMapper::FillUIName(sPageStyle, sPageStyle, SwGetPoolIdFromName::PageDesc);
+            SwStyleNameMapper::FillUIName(sPageStyle, sPageStyle, SfxStyleFamily::Page);
             const SwPageDesc* pDesc = SwPageDesc::GetByName(rDoc, sPageStyle);
             if(pDesc)
             {
@@ -2713,7 +2713,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                     OUString sName;
                     if (!(aValue >>= sName))
                         break;
-                    SwStyleNameMapper::FillUIName(sName, sName, SwGetPoolIdFromName::TabStyle);
+                    SwStyleNameMapper::FillUIName(sName, sName, SfxStyleFamily::Table);
                     pTable->SetTableStyleName(sName);
                     SwDoc* pDoc = pFormat->GetDoc();
                     pDoc->GetDocShell()->GetFEShell()->UpdateTableStyleFormatting(pTable->GetTableNode());
@@ -2957,7 +2957,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                 {
                     SwTable* pTable = SwTable::FindTable(pFormat);
                     OUString sName;
-                    SwStyleNameMapper::FillProgName(pTable->GetTableStyleName(), sName, SwGetPoolIdFromName::TabStyle);
+                    SwStyleNameMapper::FillProgName(pTable->GetTableStyleName(), sName, SfxStyleFamily::Table);
                     aRet <<= sName;
                 }
                 break;

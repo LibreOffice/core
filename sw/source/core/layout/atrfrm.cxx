@@ -741,7 +741,7 @@ bool SwFormatPageDesc::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 if( pDesc )
                 {
                     OUString aString;
-                    SwStyleNameMapper::FillProgName(pDesc->GetName(), aString, SwGetPoolIdFromName::PageDesc);
+                    SwStyleNameMapper::FillProgName(pDesc->GetName(), aString, SfxStyleFamily::Page);
                     rVal <<= aString;
                 }
                 else

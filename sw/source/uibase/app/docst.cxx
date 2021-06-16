@@ -809,7 +809,7 @@ void SwDocShell::Edit(
                     SwTextFormatColl* pColl = m_pWrtShell->FindTextFormatCollByName( rParent );
                     if(!pColl)
                     {
-                        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, SwGetPoolIdFromName::TxtColl);
+                        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, SfxStyleFamily::Para);
                         if(USHRT_MAX != nId)
                             pColl = m_pWrtShell->GetTextCollFromPool( nId );
                     }
@@ -832,7 +832,7 @@ void SwDocShell::Edit(
                     SwCharFormat* pCFormat = m_pWrtShell->FindCharFormatByName(rParent);
                     if(!pCFormat)
                     {
-                        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, SwGetPoolIdFromName::ChrFmt);
+                        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, SfxStyleFamily::Char);
                         if(USHRT_MAX != nId)
                             pCFormat = m_pWrtShell->GetCharFormatFromPool( nId );
                     }
@@ -856,7 +856,7 @@ void SwDocShell::Edit(
                     SwFrameFormat* pFFormat = m_pWrtShell->GetDoc()->FindFrameFormatByName( rParent );
                     if(!pFFormat)
                     {
-                        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, SwGetPoolIdFromName::FrmFmt);
+                        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, SfxStyleFamily::Frame);
                         if(USHRT_MAX != nId)
                             pFFormat = m_pWrtShell->GetFrameFormatFromPool( nId );
                     }

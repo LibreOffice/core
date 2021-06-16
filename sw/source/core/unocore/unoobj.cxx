@@ -189,7 +189,7 @@ lcl_setCharStyle(SwDoc& rDoc, const uno::Any & rValue, SfxItemSet & rSet)
     }
     OUString sStyle;
     SwStyleNameMapper::FillUIName(uStyle, sStyle,
-            SwGetPoolIdFromName::ChrFmt);
+            SfxStyleFamily::Char);
     SwDocStyleSheet *const pStyle = static_cast<SwDocStyleSheet*>(
         pDocSh->GetStyleSheetPool()->Find(sStyle, SfxStyleFamily::Char));
     if (!pStyle)
@@ -236,7 +236,7 @@ SwUnoCursorHelper::SetTextFormatColl(const uno::Any & rAny, SwPaM & rPaM)
     rAny >>= uStyle;
     OUString sStyle;
     SwStyleNameMapper::FillUIName(uStyle, sStyle,
-            SwGetPoolIdFromName::TxtColl );
+            SfxStyleFamily::Para );
     SwDocStyleSheet *const pStyle = static_cast<SwDocStyleSheet*>(
             pDocSh->GetStyleSheetPool()->Find(sStyle, SfxStyleFamily::Para));
     if (!pStyle)
@@ -277,7 +277,7 @@ SwUnoCursorHelper::SetPageDesc(
     }
     OUString sDescName;
     SwStyleNameMapper::FillUIName(uDescName, sDescName,
-            SwGetPoolIdFromName::PageDesc);
+            SfxStyleFamily::Page);
     if (!pNewDesc->GetPageDesc() ||
         (pNewDesc->GetPageDesc()->GetName() != sDescName))
     {
@@ -373,7 +373,7 @@ lcl_setDropcapCharStyle(SwPaM const & rPam, SfxItemSet & rItemSet,
     }
     OUString sStyle;
     SwStyleNameMapper::FillUIName(uStyle, sStyle,
-            SwGetPoolIdFromName::ChrFmt);
+            SfxStyleFamily::Char);
     SwDoc& rDoc = rPam.GetDoc();
     //default character style must not be set as default format
     SwDocStyleSheet *const pStyle = static_cast<SwDocStyleSheet*>(
@@ -421,13 +421,13 @@ lcl_setRubyCharstyle(SfxItemSet & rItemSet, uno::Any const& rValue)
     }
     OUString sStyle;
     SwStyleNameMapper::FillUIName(sTmp, sStyle,
-            SwGetPoolIdFromName::ChrFmt);
+            SfxStyleFamily::Char);
     pRuby->SetCharFormatName(sStyle);
     pRuby->SetCharFormatId(0);
     if (!sStyle.isEmpty())
     {
         const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(
-                sStyle, SwGetPoolIdFromName::ChrFmt);
+                sStyle, SfxStyleFamily::Char);
         pRuby->SetCharFormatId(nId);
     }
     rItemSet.Put(*pRuby);

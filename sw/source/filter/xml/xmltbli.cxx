@@ -2513,7 +2513,7 @@ void SwXMLTableContext::MakeTable()
     sal_uInt8 nPercentWidth = 0U;
 
     OUString sStyleName;
-    SwStyleNameMapper::FillUIName( m_aTemplateName, sStyleName, SwGetPoolIdFromName::TabStyle );
+    SwStyleNameMapper::FillUIName( m_aTemplateName, sStyleName, SfxStyleFamily::Table );
     m_pTableNode->GetTable().SetTableStyleName( sStyleName );
     m_pTableNode->GetTable().SetRowsToRepeat( m_nHeaderRows );
     m_pTableNode->GetTable().SetTableModel( !m_bHasSubTables );

@@ -62,7 +62,7 @@ void SwNoTextNode::NewAttrSet( SwAttrPool& rPool )
     // put names of parent style and conditional style:
     const SwFormatColl* pFormatColl = GetFormatColl();
     OUString sVal;
-    SwStyleNameMapper::FillProgName( pFormatColl->GetName(), sVal, SwGetPoolIdFromName::TxtColl );
+    SwStyleNameMapper::FillProgName( pFormatColl->GetName(), sVal, SfxStyleFamily::Para );
     SfxStringItem aFormatColl( RES_FRMATR_STYLE_NAME, sVal );
     aNewAttrSet.Put( aFormatColl );
 

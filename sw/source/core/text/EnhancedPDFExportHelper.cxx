@@ -179,7 +179,7 @@ bool lcl_IsHeadlineCell( const SwCellFrame& rCellFrame )
         const SwFormat* pTextFormat = pTextNode->GetFormatColl();
 
         OUString sStyleName;
-        SwStyleNameMapper::FillProgName( pTextFormat->GetName(), sStyleName, SwGetPoolIdFromName::TxtColl );
+        SwStyleNameMapper::FillProgName( pTextFormat->GetName(), sStyleName, SfxStyleFamily::Para );
         bRet = sStyleName == aTableHeadingName;
     }
 
@@ -1067,9 +1067,9 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 OUString sParentStyleName;
 
                 if ( pTextFormat)
-                    SwStyleNameMapper::FillProgName( pTextFormat->GetName(), sStyleName, SwGetPoolIdFromName::TxtColl );
+                    SwStyleNameMapper::FillProgName( pTextFormat->GetName(), sStyleName, SfxStyleFamily::Para );
                 if ( pParentTextFormat)
-                    SwStyleNameMapper::FillProgName( pParentTextFormat->GetName(), sParentStyleName, SwGetPoolIdFromName::TxtColl );
+                    SwStyleNameMapper::FillProgName( pParentTextFormat->GetName(), sParentStyleName, SfxStyleFamily::Para );
 
                 // This is the default. If the paragraph could not be mapped to
                 // any of the standard pdf tags, we write a user defined tag
@@ -1354,7 +1354,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                     const SwCharFormat* pCharFormat = (charAttrs.size())
                         ? (*charAttrs.begin())->GetCharFormat().GetCharFormat() : nullptr;
                     if ( pCharFormat )
-                        SwStyleNameMapper::FillProgName( pCharFormat->GetName(), sStyleName, SwGetPoolIdFromName::TxtColl );
+                        SwStyleNameMapper::FillProgName( pCharFormat->GetName(), sStyleName, SfxStyleFamily::Para );
                 }
 
                 // Check for Link:

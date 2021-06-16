@@ -100,7 +100,7 @@ bool SwFormatCharFormat::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
     OUString sCharFormatName;
     if(GetCharFormat())
-        SwStyleNameMapper::FillProgName(GetCharFormat()->GetName(), sCharFormatName,  SwGetPoolIdFromName::ChrFmt );
+        SwStyleNameMapper::FillProgName(GetCharFormat()->GetName(), sCharFormatName,  SfxStyleFamily::Char );
     rVal <<= sCharFormatName;
     return true;
 }
@@ -281,7 +281,7 @@ bool SwFormatINetFormat::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 SwStyleNameMapper::FillUIName(mnVisitedFormatId, sVal);
             if (!sVal.isEmpty())
                 SwStyleNameMapper::FillProgName(sVal, sVal,
-                        SwGetPoolIdFromName::ChrFmt);
+                        SfxStyleFamily::Char);
             rVal <<= sVal;
         }
         break;
@@ -292,7 +292,7 @@ bool SwFormatINetFormat::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 SwStyleNameMapper::FillUIName(mnINetFormatId, sVal);
             if (!sVal.isEmpty())
                 SwStyleNameMapper::FillProgName(sVal, sVal,
-                        SwGetPoolIdFromName::ChrFmt);
+                        SfxStyleFamily::Char);
             rVal <<= sVal;
         }
         break;
@@ -361,10 +361,10 @@ bool SwFormatINetFormat::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 OUString sVal;
                 rVal >>= sVal;
                 OUString aString;
-                SwStyleNameMapper::FillUIName( sVal, aString, SwGetPoolIdFromName::ChrFmt );
+                SwStyleNameMapper::FillUIName( sVal, aString, SfxStyleFamily::Char );
                 msVisitedFormatName = aString;
                 mnVisitedFormatId = SwStyleNameMapper::GetPoolIdFromUIName( msVisitedFormatName,
-                                               SwGetPoolIdFromName::ChrFmt );
+                                               SfxStyleFamily::Char );
             }
             break;
             case MID_URL_UNVISITED_FMT:
@@ -372,9 +372,9 @@ bool SwFormatINetFormat::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 OUString sVal;
                 rVal >>= sVal;
                 OUString aString;
-                SwStyleNameMapper::FillUIName( sVal, aString, SwGetPoolIdFromName::ChrFmt );
+                SwStyleNameMapper::FillUIName( sVal, aString, SfxStyleFamily::Char );
                 msINetFormatName = aString;
-                mnINetFormatId = SwStyleNameMapper::GetPoolIdFromUIName( msINetFormatName, SwGetPoolIdFromName::ChrFmt );
+                mnINetFormatId = SwStyleNameMapper::GetPoolIdFromUIName( msINetFormatName, SfxStyleFamily::Char );
             }
             break;
             default:
@@ -450,7 +450,7 @@ bool SwFormatRuby::QueryValue( uno::Any& rVal,
         case MID_RUBY_CHARSTYLE:
         {
             OUString aString;
-            SwStyleNameMapper::FillProgName(m_sCharFormatName, aString, SwGetPoolIdFromName::ChrFmt );
+            SwStyleNameMapper::FillProgName(m_sCharFormatName, aString, SfxStyleFamily::Char );
             rVal <<= aString;
         }
         break;
@@ -514,7 +514,7 @@ bool SwFormatRuby::PutValue( const uno::Any& rVal,
             OUString sTmp;
             bRet = rVal >>= sTmp;
             if(bRet)
-                m_sCharFormatName = SwStyleNameMapper::GetUIName(sTmp, SwGetPoolIdFromName::ChrFmt );
+                m_sCharFormatName = SwStyleNameMapper::GetUIName(sTmp, SfxStyleFamily::Char );
         }
         break;
         default:

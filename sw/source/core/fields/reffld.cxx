@@ -916,7 +916,7 @@ bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         OUString sTmp(GetPar1());
         if(REF_SEQUENCEFLD == m_nSubType)
         {
-            sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( sTmp, SwGetPoolIdFromName::TxtColl );
+            sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( sTmp, SfxStyleFamily::Para );
             switch( nPoolId )
             {
                 case RES_POOLCOLL_LABEL_ABB:
@@ -1037,7 +1037,7 @@ void SwGetRefField::ConvertProgrammaticToUIName()
     if (rDoc.getIDocumentFieldsAccess().GetFieldType(SwFieldIds::SetExp, rPar1, false))
         return;
 
-    sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromProgName( rPar1, SwGetPoolIdFromName::TxtColl );
+    sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromProgName( rPar1, SfxStyleFamily::Para );
     const char* pResId = nullptr;
     switch( nPoolId )
     {

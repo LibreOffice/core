@@ -135,7 +135,7 @@ SwPageDesc* SwFEShell::FindPageDescByName( const OUString& rName,
     SwPageDesc* pDesc = GetDoc()->FindPageDesc(rName, pPos);
     if( !pDesc && bGetFromPool )
     {
-        sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( rName, SwGetPoolIdFromName::PageDesc );
+        sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( rName, SfxStyleFamily::Page );
         if( USHRT_MAX != nPoolId &&
             nullptr != (pDesc = GetDoc()->getIDocumentStylePoolAccess().GetPageDescFromPool( nPoolId ))
             && pPos )

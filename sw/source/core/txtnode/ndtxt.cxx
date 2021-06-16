@@ -1145,10 +1145,10 @@ void SwTextNode::NewAttrSet( SwAttrPool& rPool )
     const SwFormatColl* pAnyFormatColl = &GetAnyFormatColl();
     const SwFormatColl* pFormatColl = GetFormatColl();
     OUString sVal;
-    SwStyleNameMapper::FillProgName( pAnyFormatColl->GetName(), sVal, SwGetPoolIdFromName::TxtColl );
+    SwStyleNameMapper::FillProgName( pAnyFormatColl->GetName(), sVal, SfxStyleFamily::Para );
     SfxStringItem aAnyFormatColl( RES_FRMATR_STYLE_NAME, sVal );
     if ( pFormatColl != pAnyFormatColl )
-        SwStyleNameMapper::FillProgName( pFormatColl->GetName(), sVal, SwGetPoolIdFromName::TxtColl );
+        SwStyleNameMapper::FillProgName( pFormatColl->GetName(), sVal, SfxStyleFamily::Para );
     SfxStringItem aFormatColl( RES_FRMATR_CONDITIONAL_STYLE_NAME, sVal );
     aNewAttrSet.Put( aAnyFormatColl );
     aNewAttrSet.Put( aFormatColl );
