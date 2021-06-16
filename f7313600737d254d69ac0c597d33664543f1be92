@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "93db0cd2_b25a150d",
+        "filename": "vcl/backendtest/GraphicsRenderTests.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 869,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-16T08:23:01Z",
+      "side": 1,
+      "message": "That\u0027s what I have already said in - GraphicRenderTest class is responsible to run the tests. It\u0027s not responsible to decide if it can run the tests or not and what to do with the results.\nTechnically also writing the results into a file shouldn\u0027t be done here, but sometimes it\u0027s not productive to do thinks completely correct in the first try. This things should be improved over time when you get new requirements.",
+      "parentUuid": "ca0fc292_7df8ed49",
+      "range": {
+        "startLine": 866,
+        "startChar": 4,
+        "endLine": 869,
+        "endChar": 5
+      },
+      "revId": "f7313600737d254d69ac0c597d33664543f1be92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c3f5e7a8_4ac8dd40",
         "filename": "vcl/backendtest/GraphicsRenderTests.cxx",
         "patchSetId": 19
@@ -107,6 +131,30 @@
       "side": 1,
       "message": "Sounds promising I\u0027ll do it right away then...\nAlso, there\u0027s one more thing I\u0027d like to propose that we should store the result string into a member variable as after running our tests via the dialog box it would save the duplication of the result code(as I think we would show the similar there) and so I think creating an OUString member variable and storing the whole result into it would be helpful... What do you think, would it be feasible or should it be left as is?",
       "parentUuid": "c3f5e7a8_4ac8dd40",
+      "range": {
+        "startLine": 886,
+        "startChar": 8,
+        "endLine": 886,
+        "endChar": 14
+      },
+      "revId": "f7313600737d254d69ac0c597d33664543f1be92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f588d7e3_50161841",
+        "filename": "vcl/backendtest/GraphicsRenderTests.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 886,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-16T08:23:01Z",
+      "side": 1,
+      "message": "You\u0027re thinking about what will be when you implement the dialog - that\u0027s ok, but there is no dialog now in this commit, so there is no need to do anything for the dialog. When you will add a dialog and you will see a need to refactor or change the code here, then you do it, but not before that point.",
+      "parentUuid": "c6bd92c2_bdfc8345",
       "range": {
         "startLine": 886,
         "startChar": 8,
