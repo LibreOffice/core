@@ -27,6 +27,7 @@
 #include <tools/poly.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/bitmapex.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
@@ -51,6 +52,7 @@
 
 #include <memory>
 #include <vector>
+#include <unordered_map>
 
 struct ImplOutDevData;
 class LogicalFontInstance;
@@ -67,7 +69,6 @@ class Gradient;
 class Hatch;
 class AllSettings;
 class BitmapReadAccess;
-class BitmapEx;
 class Image;
 class TextRectInfo;
 class FontMetric;
@@ -295,6 +296,51 @@ namespace vcl {
 VCL_DLLPUBLIC void DrawFocusRect(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
 
 typedef struct _cairo_surface cairo_surface_t;
+
+struct WavyLineCache final
+{
+    WavyLineCache () {}
+
+    bool find( Color lineColor, size_t lineWidth, size_t waveHeight, size_t wordWidth, std::shared_ptr<BitmapEx>& output )
+    {
+        const sal_uInt32 key = waveHeight * 100000 + lineColor.mValue;
+        if ( _items.find( key ) == _items.end() )
+            return false;
+        WavyLineCacheItem item = _items[ key ];
+        // needs update
+        if ( item.lineWidth != lineWidth || item.wordWidth < wordWidth )
+        {
+            _items.erase( key );
+            return false;
+        }
+        output = getCropped( Size( wordWidth, waveHeight * 2 ), _items[ key ].bitmap );
+        return true;
+    }
+
+    void insert( const BitmapEx& bitmap, const Color& lineColor, const size_t lineWidth, const size_t waveHeight, const size_t wordWidth, const Size& outputSize, std::shared_ptr<BitmapEx>& output )
+    {
+        const sal_uInt32 key = waveHeight * 100000 + lineColor.mValue;
+        _items[ key ] = { lineWidth, wordWidth, bitmap };
+        output = getCropped( outputSize, bitmap );
+    }
+
+    private:
+    std::shared_ptr< BitmapEx > getCropped( const Size& size, const BitmapEx& bitmap )
+    {
+        const tools::Rectangle cropRect( Point( 0, 0 ), size );
+        std::shared_ptr< BitmapEx > requestedBmp = std::make_shared< BitmapEx >( bitmap );
+        requestedBmp->Crop( cropRect );
+        return requestedBmp;
+    }
+
+    struct WavyLineCacheItem
+    {
+        size_t lineWidth;
+        size_t wordWidth;
+        BitmapEx bitmap;
+    };
+    std::unordered_map< sal_uInt32, WavyLineCacheItem > _items;
+};
 
 /**
 * Some things multiple-inherit from VclAbstractDialog and OutputDevice,
@@ -853,6 +899,8 @@ private:
     // without MetaFile processing
     SAL_DLLPRIVATE void         ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyPolygon& rB2DPolyPoly);
     ///@}
+
+    SAL_DLLPRIVATE void         ImplDrawWaveLineBezier(long nStartX, long nStartY, long nEndX, long nEndY, long nWaveHeight, double fOrientation, long nLineWidth);
 
 
     /** @name Curved shape functions
