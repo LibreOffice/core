@@ -417,30 +417,41 @@ bool GtkSalData::Yield( bool bWait, bool bHandleAllCurrentEvents )
     return bWasEvent;
 }
 
-static GtkStyleProvider* CreateSmallButtonProvider()
+static GtkStyleProvider* CreateStyleProvider()
 {
     /*
-       set a provider to allow certain widgets to have no padding
+       set a provider to:
 
-       a) little close button in menubar to close back to start-center
-       b) and small buttons in view->data sources (button.small-button)
-       c) small toolbar button in infobars (toolbar.small-button button)
-       d) comboboxes in the data browser for tdf#137695 (box#combobox button.small-button,
+       1) allow certain widgets to have no padding
+
+       1.a) little close button in menubar to close back to start-center
+       1.b) and small buttons in view->data sources (button.small-button)
+       1.c.1) gtk3 small toolbar button in infobars (toolbar.small-button button)
+       1.c.2) gtk4 small toolbar button in infobars (box.small-button button)
+       1.d) comboboxes in the data browser for tdf#137695 (box#combobox button.small-button,
           which would instead be combobox button.small-button if we didn't replace GtkComboBox,
           see GtkInstanceComboBox for an explanation for why we do that)
-       e) entry in the data browser for tdf#137695 (entry.small-button)
+       1.e) entry in the data browser for tdf#137695 (entry.small-button)
+
+       2) hide the unwanted active tab in an 'overflow' notebook of double-decker notebooks.
+          (tdf#122623) it's nigh impossible to have a GtkNotebook without an active (checked) tab,
+          so theme the unwanted tab into invisibility
     */
-    GtkCssProvider* pSmallButtonProvider = gtk_css_provider_new();
+    GtkCssProvider* pStyleProvider = gtk_css_provider_new();
     static const gchar data[] =
-      "button.small-button, toolbar.small-button button, combobox.small-button *.combo, box#combobox.small-button *.combo, entry.small-button { "
-      "padding: 0;"
-      "margin-left: 0px;"
-      "margin-right: 0px;"
-      "min-height: 18px;"
-      "min-width: 18px;"
-      "}";
-    css_provider_load_from_data(pSmallButtonProvider, data, -1);
-    return GTK_STYLE_PROVIDER(pSmallButtonProvider);
+      "button.small-button, toolbar.small-button button, box.small-button button, "
+      "combobox.small-button *.combo, box#combobox.small-button *.combo, entry.small-button { "
+      "padding: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;"
+      "border-width: 0; min-height: 0; min-width: 0; }"
+      "notebook.overflow > header.top > tabs > tab:checked { "
+      "box-shadow: none; padding: 0 0 0 0; margin: 0 0 0 0;"
+      "border-image: none; border-image-width: 0 0 0 0;"
+      "background-image: none; background-color: transparent;"
+      "border-radius: 0 0 0 0; border-width: 0 0 0 0;"
+      "border-style: none; border-color: transparent;"
+      "opacity: 0; min-height: 0; min-width: 0; }";
+    css_provider_load_from_data(pStyleProvider, data, -1);
+    return GTK_STYLE_PROVIDER(pStyleProvider);
 }
 
 void GtkSalData::Init()
@@ -543,7 +554,7 @@ void GtkSalData::Init()
     GListModel *pMonitors = gdk_display_get_monitors(pGdkDisp);
     g_signal_connect(pMonitors, "items-changed", G_CALLBACK(signalMonitorsChanged), pDisplay);
 
-    gtk_style_context_add_provider_for_display(pGdkDisp, CreateSmallButtonProvider(),
+    gtk_style_context_add_provider_for_display(pGdkDisp, CreateStyleProvider(),
             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 #else
     int nScreens = gdk_display_get_n_screens( pGdkDisp );
@@ -561,7 +572,7 @@ void GtkSalData::Init()
         g_signal_connect( G_OBJECT(pScreen), "monitors-changed",
                           G_CALLBACK(signalMonitorsChanged), pDisplay );
 
-        gtk_style_context_add_provider_for_screen(pScreen, CreateSmallButtonProvider(),
+        gtk_style_context_add_provider_for_screen(pScreen, CreateStyleProvider(),
             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
 #endif
