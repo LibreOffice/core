@@ -892,6 +892,11 @@ vcl::Window* Window::ImplGetFirstOverlapWindow()
 
 const vcl::Window* Window::ImplGetFirstOverlapWindow() const
 {
+    if (!mpWindowImpl)
+    {
+        return nullptr;
+    }
+
     if ( mpWindowImpl->mbOverlapWin )
         return this;
     else
