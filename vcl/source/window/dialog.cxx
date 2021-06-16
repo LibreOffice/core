@@ -418,7 +418,8 @@ vcl::Window* Dialog::GetDefaultParent(WinBits nStyle)
         auto& rExecuteDialogs = pSVData->mpWinData->mpExecuteDialogs;
         auto it = std::find_if(rExecuteDialogs.rbegin(), rExecuteDialogs.rend(),
             [&pParent](VclPtr<Dialog>& rDialogPtr) {
-                return pParent->ImplGetFirstOverlapWindow()->IsWindowOrChild(rDialogPtr, true) &&
+                return pParent->ImplGetFirstOverlapWindow() &&
+                    pParent->ImplGetFirstOverlapWindow()->IsWindowOrChild(rDialogPtr, true) &&
                     rDialogPtr->IsReallyVisible() && rDialogPtr->IsEnabled() &&
                     rDialogPtr->IsInputEnabled() && !rDialogPtr->IsInModalMode(); });
         if (it != rExecuteDialogs.rend())
@@ -964,12 +965,15 @@ bool Dialog::ImplStartExecute()
         if ( pParent )
         {
             pParent = pParent->ImplGetFirstOverlapWindow();
-            SAL_WARN_IF( !pParent->IsReallyVisible(), "vcl",
-                         "Dialog::StartExecuteModal() - Parent not visible" );
-            SAL_WARN_IF( !pParent->IsInputEnabled(), "vcl",
-                         "Dialog::StartExecuteModal() - Parent input disabled, use another parent to ensure modality!" );
-            SAL_WARN_IF(  pParent->IsInModalMode(), "vcl",
-                          "Dialog::StartExecuteModal() - Parent already modally disabled, use another parent to ensure modality!" );
+            if (pParent)
+            {
+                SAL_WARN_IF( !pParent->IsReallyVisible(), "vcl",
+                            "Dialog::StartExecuteModal() - Parent not visible" );
+                SAL_WARN_IF( !pParent->IsInputEnabled(), "vcl",
+                            "Dialog::StartExecuteModal() - Parent input disabled, use another parent to ensure modality!" );
+                SAL_WARN_IF(  pParent->IsInModalMode(), "vcl",
+                            "Dialog::StartExecuteModal() - Parent already modally disabled, use another parent to ensure modality!" );
+            }
         }
 #endif
 
@@ -1287,12 +1291,11 @@ void Dialog::ImplSetModalInputMode( bool bModal )
 
 void Dialog::GrabFocusToFirstControl()
 {
-    vcl::Window* pFocusControl;
+    vcl::Window* pFocusControl = nullptr;
+    vcl::Window* pFirstOverlapWindow = ImplGetFirstOverlapWindow();
 
     // find focus control, even if the dialog has focus
-    if ( HasFocus() )
-        pFocusControl = nullptr;
-    else
+    if (!HasFocus() && pFirstOverlapWindow && pFirstOverlapWindow->mpWindowImpl)
     {
         // prefer a child window which had focus before
         pFocusControl = ImplGetFirstOverlapWindow()->mpWindowImpl->mpLastFocusWindow;
