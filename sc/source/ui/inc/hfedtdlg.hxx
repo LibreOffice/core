@@ -51,6 +51,41 @@ public:
         const SfxItemSet& rCoreSet, std::u16string_view rPageStyle);
 };
 
+class ScHFEditSharedFirstHeaderDlg : public ScHFEditDlg
+{
+public:
+    ScHFEditSharedFirstHeaderDlg(weld::Window* pParent,
+        const SfxItemSet& rCoreSet, std::u16string_view rPageStyle);
+};
+
+class ScHFEditSharedFirstFooterDlg : public ScHFEditDlg
+{
+public:
+    ScHFEditSharedFirstFooterDlg(weld::Window* pParent,
+        const SfxItemSet& rCoreSet, std::u16string_view rPageStyle);
+};
+
+class ScHFEditSharedLeftHeaderDlg : public ScHFEditDlg
+{
+public:
+    ScHFEditSharedLeftHeaderDlg(weld::Window* pParent,
+        const SfxItemSet& rCoreSet, std::u16string_view rPageStyle);
+};
+
+class ScHFEditSharedLeftFooterDlg : public ScHFEditDlg
+{
+public:
+    ScHFEditSharedLeftFooterDlg(weld::Window* pParent,
+        const SfxItemSet& rCoreSet, std::u16string_view rPageStyle);
+};
+
+class ScHFEditFirstHeaderDlg : public ScHFEditDlg
+{
+public:
+    ScHFEditFirstHeaderDlg(weld::Window* pParent,
+        const SfxItemSet& rCoreSet, std::u16string_view rPageStyle);
+};
+
 class ScHFEditLeftHeaderDlg : public ScHFEditDlg
 {
 public:
@@ -62,6 +97,13 @@ class ScHFEditRightHeaderDlg : public ScHFEditDlg
 {
 public:
     ScHFEditRightHeaderDlg(weld::Window* pParent,
+        const SfxItemSet& rCoreSet, std::u16string_view rPageStyle);
+};
+
+class ScHFEditFirstFooterDlg : public ScHFEditDlg
+{
+public:
+    ScHFEditFirstFooterDlg(weld::Window* pParent,
         const SfxItemSet& rCoreSet, std::u16string_view rPageStyle);
 };
 
