@@ -49,6 +49,7 @@ enum ColorAlphaTag { ColorAlpha = 0 };
 
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Color
 {
+public:
     union
     {
         sal_uInt32 mValue;
