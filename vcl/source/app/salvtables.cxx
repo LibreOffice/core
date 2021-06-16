@@ -6638,54 +6638,43 @@ IMPL_LINK(SalInstanceEntryTreeView, AutocompleteHdl, Edit&, rEdit, void)
     }
 }
 
-namespace
+SalInstancePopover::SalInstancePopover(DockingWindow* pPopover, SalInstanceBuilder* pBuilder,
+                                       bool bTakeOwnership)
+    : SalInstanceContainer(pPopover, pBuilder, bTakeOwnership)
+    , m_xPopover(pPopover)
 {
-class SalInstancePopover : public SalInstanceContainer, public virtual weld::Popover
+}
+
+SalInstancePopover::~SalInstancePopover() { signal_closed(); }
+
+void SalInstancePopover::popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect)
 {
-private:
-    VclPtr<DockingWindow> m_xPopover;
+    SalInstanceWidget* pVclWidget = dynamic_cast<SalInstanceWidget*>(pParent);
+    assert(pVclWidget);
+    vcl::Window* pWidget = pVclWidget->getWidget();
 
-    DECL_LINK(PopupModeEndHdl, FloatingWindow*, void);
+    tools::Rectangle aRect;
+    Point aPt = pWidget->OutputToScreenPixel(rRect.TopLeft());
+    aRect.SetLeft(aPt.X());
+    aRect.SetTop(aPt.Y());
+    aPt = pWidget->OutputToScreenPixel(rRect.BottomRight());
+    aRect.SetRight(aPt.X());
+    aRect.SetBottom(aPt.Y());
 
-public:
-    SalInstancePopover(DockingWindow* pPopover, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : SalInstanceContainer(pPopover, pBuilder, bTakeOwnership)
-        , m_xPopover(pPopover)
-    {
-    }
+    FloatWinPopupFlags nFlags = FloatWinPopupFlags::Down | FloatWinPopupFlags::GrabFocus
+                                | FloatWinPopupFlags::NoMouseUpClose;
+    m_xPopover->EnableDocking();
+    DockingManager* pDockingManager = vcl::Window::GetDockingManager();
+    pDockingManager->SetPopupModeEndHdl(m_xPopover,
+                                        LINK(this, SalInstancePopover, PopupModeEndHdl));
+    pDockingManager->StartPopupMode(m_xPopover, aRect, nFlags);
+}
 
-    ~SalInstancePopover() { signal_closed(); }
-
-    virtual void popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect) override
-    {
-        SalInstanceWidget* pVclWidget = dynamic_cast<SalInstanceWidget*>(pParent);
-        assert(pVclWidget);
-        vcl::Window* pWidget = pVclWidget->getWidget();
-
-        tools::Rectangle aRect;
-        Point aPt = pWidget->OutputToScreenPixel(rRect.TopLeft());
-        aRect.SetLeft(aPt.X());
-        aRect.SetTop(aPt.Y());
-        aPt = pWidget->OutputToScreenPixel(rRect.BottomRight());
-        aRect.SetRight(aPt.X());
-        aRect.SetBottom(aPt.Y());
-
-        FloatWinPopupFlags nFlags = FloatWinPopupFlags::Down | FloatWinPopupFlags::GrabFocus
-                                    | FloatWinPopupFlags::NoMouseUpClose;
-        m_xPopover->EnableDocking();
-        DockingManager* pDockingManager = vcl::Window::GetDockingManager();
-        pDockingManager->SetPopupModeEndHdl(m_xPopover,
-                                            LINK(this, SalInstancePopover, PopupModeEndHdl));
-        pDockingManager->StartPopupMode(m_xPopover, aRect, nFlags);
-    }
-
-    virtual void popdown() override
-    {
-        vcl::Window::GetDockingManager()->EndPopupMode(m_xPopover);
-        m_xPopover->EnableDocking(false);
-        signal_closed();
-    }
-};
+void SalInstancePopover::popdown()
+{
+    vcl::Window::GetDockingManager()->EndPopupMode(m_xPopover);
+    m_xPopover->EnableDocking(false);
+    signal_closed();
 }
 
 IMPL_LINK_NOARG(SalInstancePopover, PopupModeEndHdl, FloatingWindow*, void) { signal_closed(); }

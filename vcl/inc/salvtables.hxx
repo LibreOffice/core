@@ -1884,4 +1884,21 @@ public:
     virtual ~SalInstanceMenuButton() override;
 };
 
+class SalInstancePopover : public SalInstanceContainer, public virtual weld::Popover
+{
+private:
+    VclPtr<DockingWindow> m_xPopover;
+
+    DECL_LINK(PopupModeEndHdl, FloatingWindow*, void);
+
+public:
+    SalInstancePopover(DockingWindow* pPopover, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+
+    ~SalInstancePopover();
+
+    virtual void popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect) override;
+
+    virtual void popdown() override;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
