@@ -8140,7 +8140,12 @@ private:
             for (gint i = 0; i < nPages; ++i)
             {
                 GtkWidget* pTabWidget = gtk_notebook_get_tab_label(m_pNotebook, gtk_notebook_get_nth_page(m_pNotebook, i));
-                if (!gtk_widget_get_child_visible(pTabWidget))
+#if GTK_CHECK_VERSION(4, 0, 0)
+                bool bTabVisible = gtk_widget_get_child_visible(gtk_widget_get_parent(pTabWidget));
+#else
+                bool bTabVisible = gtk_widget_get_child_visible(pTabWidget);
+#endif
+                if (!bTabVisible)
                 {
                     m_nLaunchSplitTimeoutId = g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, reinterpret_cast<GSourceFunc>(launch_split_notebooks), this, nullptr);
                     break;
