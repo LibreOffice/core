@@ -1000,6 +1000,72 @@ void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, lo
         nLineWidth = 1;
     }
 
+    if ( fOrientation == 0.0 )
+    {
+        // a one item cache for the hot path
+        static Color saWavyColor;
+        static BitmapEx saWavyLine;
+        static long snWavyLineHeight = 0;
+        static long snWavyLineWidth = 0;
+        if ( snWavyLineHeight != nWaveHeight || saWavyColor != GetLineColor() ||
+            !saWavyLine || snWavyLineWidth != nLineWidth )
+        {
+            ScopedVclPtrInstance< VirtualDevice > pVirtDev( *this, DeviceFormat::DEFAULT,
+                                                           DeviceFormat::DEFAULT );
+            pVirtDev->SetAntialiasing( AntialiasingFlags::EnableB2dDraw );
+            pVirtDev->SetOutputSizePixel( Size( 256, nWaveHeight * 2 ), false );
+            pVirtDev->SetLineColor( GetLineColor() );
+            pVirtDev->SetBackground( Wallpaper( COL_TRANSPARENT ) );
+            pVirtDev->ImplDrawWaveLineBezier( 0, 0, 256, 0, nWaveHeight, fOrientation, nLineWidth );
+            saWavyLine = pVirtDev->GetBitmapEx( Point( 0, 0 ), Size( 256, nWaveHeight * 2 ) );
+            saWavyColor = GetLineColor();
+            snWavyLineHeight = nWaveHeight;
+            snWavyLineWidth = nLineWidth;
+        }
+
+        const size_t lineWidthDevice = nEndX - nStartX;
+        const size_t logic256 = ImplDevicePixelToLogicWidth( 256 );
+        size_t remainingWidth = 0;
+        bool remaining = false;
+        Point tStartPos( rStartPos.X(), rStartPos.Y() );
+        if ( lineWidthDevice >= 256 )
+        {
+            const size_t repeatCount = static_cast<size_t>( lineWidthDevice / 256 );
+            for ( size_t i = 0; i < repeatCount; ++i )
+            {
+                DrawBitmapEx( tStartPos, PixelToLogic( Size( 256, nWaveHeight * 2 ) ), saWavyLine );
+                tStartPos.AdjustX( logic256 );
+            }
+            if ( repeatCount * 256 < lineWidthDevice )
+            {
+                remainingWidth = lineWidthDevice - ( repeatCount * 256 );
+                remaining = true;
+            }
+        }
+        else {
+                remainingWidth = lineWidthDevice;
+                remaining = true;
+        }
+
+        if ( remaining )
+        {
+            const Size remainingSize( remainingWidth, nWaveHeight * 2 );
+            const tools::Rectangle cropRect( Point( 0, 0 ), remainingSize );
+            BitmapEx cropped = saWavyLine;
+            cropped.Crop( cropRect );
+            DrawBitmapEx( tStartPos, PixelToLogic( remainingSize ), cropped );
+        }
+        return;
+    }
+
+    ImplDrawWaveLineBezier( nStartX, nStartY, nEndX, nEndY, nWaveHeight, fOrientation, nLineWidth );
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawWaveLine( rStartPos, rEndPos, nLineWidth );
+}
+
+void OutputDevice::ImplDrawWaveLineBezier(long nStartX, long nStartY, long nEndX, long nEndY, long nWaveHeight, double fOrientation, long nLineWidth)
+{
     const basegfx::B2DRectangle aWaveLineRectangle(nStartX, nStartY, nEndX, nEndY + nWaveHeight);
     const basegfx::B2DPolygon aWaveLinePolygon = basegfx::createWaveLinePolygon(aWaveLineRectangle);
     const basegfx::B2DHomMatrix aRotationMatrix = basegfx::utils::createRotateAroundPoint(nStartX, nStartY, basegfx::deg2rad(-fOrientation));
@@ -1018,9 +1084,6 @@ void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, lo
             basegfx::deg2rad(15.0),
             bPixelSnapHairline,
             this);
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawWaveLine( rStartPos, rEndPos, nLineWidth );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
