@@ -191,7 +191,7 @@ class findReplace(UITestCase):
 
         type_text(xWriterEdit, "x")
 
-        self.assertEqual(document.Text.String, "x")
+        self.assertEqual(document.Text.String, "xxxx")
 
         self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
         xDialog = self.xUITest.getTopFocusWindow()

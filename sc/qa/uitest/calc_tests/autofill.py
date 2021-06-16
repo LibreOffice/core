@@ -25,7 +25,7 @@ class CalcAutofill(UITestCase):
         xOK = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOK)
         #Compare with the content in the right next column
-        self.assertEqual(get_cell_by_position(document, 0, 0, 11).getValue(), 18.34)
+        self.assertEqual(get_cell_by_position(document, 0, 0, 11).getValue(), 19.34)
         self.assertEqual(get_cell_by_position(document, 0, 0, 12).getValue(), 19.34)
         self.assertEqual(get_cell_by_position(document, 0, 0, 13).getValue(), 20.34)
         self.assertEqual(get_cell_by_position(document, 0, 0, 14).getValue(), 21.34)
