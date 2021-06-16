@@ -252,10 +252,7 @@ SwLayAction::SwLayAction( SwRootFrame *pRt, SwViewShellImp *pI ) :
     m_nStartTicks( std::clock() ),
     m_nInputType( VclInputFlags::NONE ),
     m_nEndPage( USHRT_MAX ),
-    m_nCheckPageNum( USHRT_MAX ),
-    m_pCurPage( nullptr ),
-    m_nTabLevel( 0 ),
-    m_nCallCount( 0 )
+    m_nCheckPageNum( USHRT_MAX )
 {
     m_bPaintExtraData = ::IsExtraData( m_pImp->GetShell()->GetDoc() );
     m_bPaint = m_bComplete = m_bWaitAllowed = m_bCheckPages = true;
@@ -283,7 +280,6 @@ void SwLayAction::Reset()
     m_bPaint = m_bComplete = m_bWaitAllowed = m_bCheckPages = true;
     m_bInterrupt = m_bAgain = m_bNextCycle = m_bCalcLayout = m_bIdle = m_bReschedule =
     m_bUpdateExpFields = m_bBrowseActionStop = false;
-    m_pCurPage = nullptr;
 }
 
 bool SwLayAction::RemoveEmptyBrowserPages()
@@ -1152,12 +1148,6 @@ bool SwLayAction::IsShortCut( SwPageFrame *&prPage )
 // introduce support for vertical layout
 bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrame *pLay, bool bAddRect )
 {
-    // save page for loop control
-    if( pLay->IsPageFrame() && static_cast<SwPageFrame*>(pLay) != m_pCurPage )
-    {
-        m_nCallCount = 0;
-        m_pCurPage = static_cast<SwPageFrame*>(pLay);
-    }
     OSL_ENSURE( !IsAgain(), "Attention to the invalid page." );
     if ( IsAgain() )
         return false;
@@ -1339,13 +1329,6 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrame *pLa
         {
             if ( pLow->IsTabFrame() )
             {
-                // loop control for embedded tables
-                if ( m_nTabLevel > 0 && ++m_nCallCount > 50 ) {
-                    static_cast<SwTabFrame*>(pLow)->SetSplitRowDisabled();
-                }
-
-                ++m_nTabLevel;
-
                 // Remember what was the next of the lower. Formatting may move it to the previous
                 // page, in which case it looses its next.
                 pNext = pLow->GetNext();
@@ -1362,7 +1345,6 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrame *pLa
                 }
 
                 bTabChanged |= FormatLayoutTab( static_cast<SwTabFrame*>(pLow), bAddRect );
-                --m_nTabLevel;
             }
             // Skip the ones already registered for deletion
             else if( !pLow->IsSctFrame() || static_cast<SwSectionFrame*>(pLow)->GetSection() )
