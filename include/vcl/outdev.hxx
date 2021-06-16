@@ -27,6 +27,7 @@
 #include <tools/poly.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/bitmapex.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
@@ -51,6 +52,7 @@
 
 #include <memory>
 #include <vector>
+#include <unordered_map>
 
 struct ImplOutDevData;
 class LogicalFontInstance;
@@ -67,7 +69,6 @@ class Gradient;
 class Hatch;
 class AllSettings;
 class BitmapReadAccess;
-class BitmapEx;
 class Image;
 class TextRectInfo;
 class FontMetric;
@@ -295,6 +296,51 @@ namespace vcl {
 VCL_DLLPUBLIC void DrawFocusRect(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
 
 typedef struct _cairo_surface cairo_surface_t;
+
+struct WavyLineCache final
+{
+    WavyLineCache () {}
+
+    bool find( Color lineColor, size_t lineWidth, size_t waveHeight, size_t wordWidth, BitmapEx& output )
+    {
+        const sal_uInt64 key = hash( waveHeight, lineColor.mValue );
+        if ( _items.find( key ) == _items.end() )
+            return false;
+        WavyLineCacheItem item = _items[ key ];
+        // needs update
+        if ( item.lineWidth != lineWidth || item.wordWidth < wordWidth )
+        {
+            _items.erase( key );
+            return false;
+        }
+        output = _items[ key ].bitmap;
+        return true;
+    }
+
+    void insert( const BitmapEx& bitmap, const Color& lineColor, const size_t lineWidth, const size_t waveHeight, const size_t wordWidth, BitmapEx& output )
+    {
+        const sal_uInt64 key = hash( waveHeight, lineColor.mValue );
+        // clear the cache if we achive to have 10 items to prevent it from over expanding.
+        if ( _items.size() >= 10 )
+            _items.clear();
+        _items[ key ] = { lineWidth, wordWidth, bitmap };
+        output = bitmap;
+    }
+
+    private:
+    sal_uInt64 hash( size_t height, size_t color )
+    {
+        return ( height << 32 ) + color;
+    }
+
+    struct WavyLineCacheItem
+    {
+        size_t lineWidth;
+        size_t wordWidth;
+        BitmapEx bitmap;
+    };
+    std::unordered_map< sal_uInt64, WavyLineCacheItem > _items;
+};
 
 /**
 * Some things multiple-inherit from VclAbstractDialog and OutputDevice,
@@ -853,6 +899,8 @@ private:
     // without MetaFile processing
     SAL_DLLPRIVATE void         ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyPolygon& rB2DPolyPoly);
     ///@}
+
+    SAL_DLLPRIVATE void         ImplDrawWaveLineBezier(long nStartX, long nStartY, long nEndX, long nEndY, long nWaveHeight, double fOrientation, long nLineWidth);
 
 
     /** @name Curved shape functions
