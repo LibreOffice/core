@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "ab9041ff_ad1cf417",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 21
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-16T14:42:56Z",
+      "side": 1,
+      "message": "For ease of tracking, it would be nice if you create some \"codename\" for your project, and use it in the commit message headers, like\n\n  \u003ccodename\u003e: place treeview for character styles under paragraph",
+      "revId": "060b9f44ac0aa22e054ffb9db9cae5861c524a85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2ca01672_ca783795",
         "filename": "sfx2/source/dialog/templdlg.cxx",
         "patchSetId": 21
