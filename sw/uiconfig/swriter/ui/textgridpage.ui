@@ -268,7 +268,6 @@
                       <object class="GtkSpinButton" id="spinNF_LINESPERPAGE">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="input_purpose">digits</property>
                         <property name="adjustment">adjustmentLINESPERPAGE</property>
                         <property name="numeric">True</property>
                         <property name="truncate-multiline">True</property>

@@ -69,7 +69,6 @@
               <object class="GtkSpinButton" id="num_cols">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="input_purpose">digits</property>
                 <property name="numeric">True</property>
                 <property name="truncate-multiline">True</property>
                 <property name="value">-1</property>
