@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "799bca16_1267727c",
+        "filename": "vcl/qa/cppunit/svm/svmtest.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1974,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-16T06:45:42Z",
+      "side": 1,
+      "message": "So comment has a comment string, a number and arbitrary data as parameters. It would be good to test all those and dump them in the mtfxmldumper too - data especially - you can encode it into a hex or a base64 string, and maybe alternatively also calculate the md5  sha1-1 hash for easier asserting.  \n\nWould be good that the data isn\u0027t a UTF-16 encoded string but probably ascii as that is easier to assert values of.",
+      "range": {
+        "startLine": 1968,
+        "startChar": 4,
+        "endLine": 1974,
+        "endChar": 77
+      },
+      "revId": "4073f3920c6dc3e48cbfa7774d83e142092f0204",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
