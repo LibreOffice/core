@@ -145,6 +145,7 @@ View::~View()
     while(PaintWindowCount())
     {
         // remove all registered OutDevs
+        // coverity[fun_call_w_exception : SUPPRESS] - cid#485150 silence Uncaught exception
         DeleteWindowFromPaintView(GetFirstOutputDevice() /*GetWin(0)*/);
     }
 }
