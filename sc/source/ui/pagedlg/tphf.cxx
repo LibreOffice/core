@@ -150,11 +150,31 @@ IMPL_LINK_NOARG(ScHFPage, BtnHdl, weld::Button&, void)
         return;
     }
 
-    if (m_xCntSharedBox->get_sensitive() && !m_xCntSharedBox->get_active())
+    if ( (m_xCntSharedBox->get_sensitive() && !m_xCntSharedBox->get_active()) ||
+         (m_xCntSharedFirstBox->get_sensitive() && !m_xCntSharedFirstBox->get_active()) )
     {
-        sal_uInt16 nResId = ( nId == SID_ATTR_PAGE_HEADERSET )
-                            ? RID_SCDLG_HFED_HEADER
-                            : RID_SCDLG_HFED_FOOTER;
+        sal_uInt16 nResId;
+
+        if ( m_xCntSharedBox->get_sensitive() && !m_xCntSharedBox->get_active() &&
+             m_xCntSharedFirstBox->get_sensitive() && !m_xCntSharedFirstBox->get_active() )
+        {
+            nResId = ( nId == SID_ATTR_PAGE_HEADERSET )
+                     ? RID_SCDLG_HFED_HEADER
+                     : RID_SCDLG_HFED_FOOTER;
+        }
+        else if (m_xCntSharedBox->get_sensitive() && !m_xCntSharedBox->get_active())
+        {
+            nResId = ( nId == SID_ATTR_PAGE_HEADERSET )
+                     ? RID_SCDLG_HFEDIT_SHAREDFIRSTHEADER
+                     : RID_SCDLG_HFEDIT_SHAREDFIRSTFOOTER;
+        }
+        else
+        {
+            OSL_ENSURE( m_xCntSharedFirstBox->get_sensitive() && !m_xCntSharedFirstBox->get_active(), "This should be logically impossible." );
+            nResId = ( nId == SID_ATTR_PAGE_HEADERSET )
+                     ? RID_SCDLG_HFEDIT_SHAREDLEFTHEADER
+                     : RID_SCDLG_HFEDIT_SHAREDLEFTFOOTER;
+        }
 
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
