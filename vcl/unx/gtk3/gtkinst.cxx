@@ -8086,6 +8086,9 @@ private:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_widget_freeze_child_notify(GTK_WIDGET(m_pNotebook));
         gtk_widget_freeze_child_notify(GTK_WIDGET(m_pOverFlowNotebook));
+#else
+        g_object_freeze_notify(G_OBJECT(m_pNotebook));
+        g_object_freeze_notify(G_OBJECT(m_pOverFlowNotebook));
 #endif
 
         gtk_widget_show(GTK_WIDGET(m_pOverFlowNotebook));
@@ -8167,6 +8170,9 @@ private:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_widget_thaw_child_notify(GTK_WIDGET(m_pOverFlowNotebook));
         gtk_widget_thaw_child_notify(GTK_WIDGET(m_pNotebook));
+#else
+        g_object_thaw_notify(G_OBJECT(m_pOverFlowNotebook));
+        g_object_thaw_notify(G_OBJECT(m_pNotebook));
 #endif
 
         m_bOverFlowBoxActive = true;
@@ -8293,13 +8299,9 @@ public:
         gtk_notebook_set_show_border(m_pOverFlowNotebook, false);
 
         // tdf#122623 it's nigh impossible to have a GtkNotebook without an active (checked) tab, so try and theme
-        // the unwanted tab into invisibility
+        // the unwanted tab into invisibility via the 'overflow' class themed by global CreateStyleProvider
         GtkStyleContext *pNotebookContext = gtk_widget_get_style_context(GTK_WIDGET(m_pOverFlowNotebook));
-        GtkCssProvider *pProvider = gtk_css_provider_new();
-        static const gchar data[] = "header.top > tabs > tab:checked { box-shadow: none; padding: 0 0 0 0; margin: 0 0 0 0; border-image: none; border-image-width: 0 0 0 0; background-image: none; background-color: transparent; border-radius: 0 0 0 0; border-width: 0 0 0 0; border-style: none; border-color: transparent; opacity: 0; min-height: 0; min-width: 0; }";
-        css_provider_load_from_data(pProvider, data, -1);
-        gtk_style_context_add_provider(pNotebookContext, GTK_STYLE_PROVIDER(pProvider),
-                                       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        gtk_style_context_add_class(pNotebookContext, "overflow");
     }
 
     virtual int get_current_page() const override
