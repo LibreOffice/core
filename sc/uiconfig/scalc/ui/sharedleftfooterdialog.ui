@@ -2,10 +2,10 @@
 <!-- Generated with glade 3.38.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.20"/>
-  <object class="GtkDialog" id="FooterDialog">
+  <object class="GtkDialog" id="SharedLeftFooterDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes" context="footerdialog|FooterDialog">Footers</property>
+    <property name="title" translatable="yes" context="sharedleftfooterdialog|SharedLeftFooterDialog">Footers</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="default_width">0</property>
@@ -136,7 +136,7 @@
               <object class="GtkLabel" id="footerfirst">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="footerdialog|footerfirst">Footer (first)</property>
+                <property name="label" translatable="yes" context="sharedleftfooterdialog|footerfirst">Footer (first)</property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
@@ -180,57 +180,9 @@
               <object class="GtkLabel" id="footerright">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="footerdialog|footerright">Footer (right)</property>
+                <property name="label" translatable="yes" context="sharedleftfooterdialog|footerright">Footer (rest)</property>
               </object>
               <packing>
-                <property name="tab_fill">False</property>
-              </packing>
-            </child>
-            <child>
-              <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-              </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="footerleft">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="footerdialog|footerleft">Footer (left)</property>
-              </object>
-              <packing>
-                <property name="position">1</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
