@@ -217,6 +217,10 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/selectsource \
 	sc/uiconfig/scalc/ui/sheetprintpage \
 	sc/uiconfig/scalc/ui/sharedocumentdlg \
+	sc/uiconfig/scalc/ui/sharedfirstfooterdialog \
+	sc/uiconfig/scalc/ui/sharedfirstheaderdialog \
+	sc/uiconfig/scalc/ui/sharedleftfooterdialog \
+	sc/uiconfig/scalc/ui/sharedleftheaderdialog \
 	sc/uiconfig/scalc/ui/sharedfooterdialog \
 	sc/uiconfig/scalc/ui/sharedheaderdialog \
 	sc/uiconfig/scalc/ui/sharedwarningdialog \
