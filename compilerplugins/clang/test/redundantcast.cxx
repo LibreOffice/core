@@ -286,6 +286,8 @@ void testStaticCast() {
     (void) static_cast<S const &&>(csr());
 }
 
+template<typename T> T & testReturnStaticCast(T && x) { return static_cast<T &>(x); }
+
 void testFunctionalCast() {
     (void) int(nir()); // expected-error {{redundant functional cast from 'int' to 'int' [loplugin:redundantcast]}}
     (void) S(nsr());
