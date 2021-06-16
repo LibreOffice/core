@@ -1865,6 +1865,9 @@ IMPL_LINK_NOARG(vcl::Window, ImplAsyncFocusHdl, void*, void)
 
 static void ImplHandleGetFocus( vcl::Window* pWindow )
 {
+    if (!pWindow || !pWindow->ImplGetWindowImpl() || !pWindow->ImplGetWindowImpl()->mpFrameData)
+        return;
+
     pWindow->ImplGetWindowImpl()->mpFrameData->mbHasFocus = true;
 
     // execute Focus-Events after a delay, such that SystemChildWindows
@@ -1881,6 +1884,9 @@ static void ImplHandleGetFocus( vcl::Window* pWindow )
 
 static void ImplHandleLoseFocus( vcl::Window* pWindow )
 {
+    if (!pWindow)
+        return;
+
     ImplSVData* pSVData = ImplGetSVData();
 
     // Abort the autoscroll if the frame loses focus
@@ -1890,23 +1896,27 @@ static void ImplHandleLoseFocus( vcl::Window* pWindow )
     // Abort tracking if the frame loses focus
     if (pSVData->mpWinData->mpTrackWin)
     {
-        if (pSVData->mpWinData->mpTrackWin->ImplGetWindowImpl()->mpFrameWindow == pWindow)
+        if (pSVData->mpWinData->mpTrackWin->ImplGetWindowImpl() &&
+            pSVData->mpWinData->mpTrackWin->ImplGetWindowImpl()->mpFrameWindow == pWindow)
             pSVData->mpWinData->mpTrackWin->EndTracking(TrackingEventFlags::Cancel);
     }
 
-    pWindow->ImplGetWindowImpl()->mpFrameData->mbHasFocus = false;
-
-    // execute Focus-Events after a delay, such that SystemChildWindows
-    // do not flicker when they receive focus
-    if ( !pWindow->ImplGetWindowImpl()->mpFrameData->mnFocusId )
+    if (pWindow->ImplGetWindowImpl() && pWindow->ImplGetWindowImpl()->mpFrameData)
     {
-        pWindow->ImplGetWindowImpl()->mpFrameData->mbStartFocusState = !pWindow->ImplGetWindowImpl()->mpFrameData->mbHasFocus;
-        pWindow->ImplGetWindowImpl()->mpFrameData->mnFocusId = Application::PostUserEvent( LINK( pWindow, vcl::Window, ImplAsyncFocusHdl ), nullptr, true );
-    }
+        pWindow->ImplGetWindowImpl()->mpFrameData->mbHasFocus = false;
 
-    vcl::Window* pFocusWin = pWindow->ImplGetWindowImpl()->mpFrameData->mpFocusWin;
-    if ( pFocusWin && pFocusWin->ImplGetWindowImpl()->mpCursor )
-        pFocusWin->ImplGetWindowImpl()->mpCursor->ImplHide();
+        // execute Focus-Events after a delay, such that SystemChildWindows
+        // do not flicker when they receive focus
+        if ( !pWindow->ImplGetWindowImpl()->mpFrameData->mnFocusId )
+        {
+            pWindow->ImplGetWindowImpl()->mpFrameData->mbStartFocusState = !pWindow->ImplGetWindowImpl()->mpFrameData->mbHasFocus;
+            pWindow->ImplGetWindowImpl()->mpFrameData->mnFocusId = Application::PostUserEvent( LINK( pWindow, vcl::Window, ImplAsyncFocusHdl ), nullptr, true );
+        }
+
+        vcl::Window* pFocusWin = pWindow->ImplGetWindowImpl()->mpFrameData->mpFocusWin;
+        if ( pFocusWin && pFocusWin->ImplGetWindowImpl()->mpCursor )
+            pFocusWin->ImplGetWindowImpl()->mpCursor->ImplHide();
+    }
 
     // Make sure that no menu is visible when a toplevel window loses focus.
     VclPtr<FloatingWindow> pFirstFloat = pSVData->mpWinData->mpFirstFloat;

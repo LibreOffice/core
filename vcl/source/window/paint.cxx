@@ -622,6 +622,9 @@ void Window::ImplCallPaint(const vcl::Region* pRegion, ImplPaintFlags nPaintFlag
 
 void Window::ImplCallOverlapPaint()
 {
+    if (!mpWindowImpl)
+        return;
+
     // emit overlapping windows first
     vcl::Window* pTempWindow = mpWindowImpl->mpFirstOverlap;
     while ( pTempWindow )
@@ -988,7 +991,7 @@ void Window::ImplValidate()
 
 void Window::ImplUpdateAll()
 {
-    if ( !mpWindowImpl->mbReallyVisible )
+    if ( !mpWindowImpl || !mpWindowImpl->mbReallyVisible )
         return;
 
     bool bFlush = false;
@@ -1287,6 +1290,9 @@ bool Window::HasPaintEvent() const
 
 void Window::PaintImmediately()
 {
+    if (!mpWindowImpl)
+        return;
+
     if ( mpWindowImpl->mpBorderWindow )
     {
         mpWindowImpl->mpBorderWindow->PaintImmediately();
@@ -1338,7 +1344,11 @@ void Window::PaintImmediately()
 
         // trigger an update also for system windows on top of us,
         // otherwise holes would remain
-        vcl::Window* pUpdateOverlapWindow = ImplGetFirstOverlapWindow()->mpWindowImpl->mpFirstOverlap;
+        vcl::Window* pUpdateOverlapWindow = ImplGetFirstOverlapWindow();
+        if (pUpdateOverlapWindow->mpWindowImpl)
+            pUpdateOverlapWindow = pUpdateOverlapWindow->mpWindowImpl->mpFirstOverlap;
+        else
+            pUpdateOverlapWindow = nullptr;
         while ( pUpdateOverlapWindow )
         {
              pUpdateOverlapWindow->PaintImmediately();
@@ -1568,6 +1578,9 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
 
 void Window::PaintToDevice(OutputDevice* pDev, const Point& rPos)
 {
+    if( !mpWindowImpl )
+        return;
+
     SAL_WARN_IF(  pDev->HasMirroredGraphics(), "vcl.window", "PaintToDevice to mirroring graphics" );
     SAL_WARN_IF(  pDev->IsRTLEnabled(), "vcl.window", "PaintToDevice to mirroring device" );
 
