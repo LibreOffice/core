@@ -143,7 +143,6 @@
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="activates_default">True</property>
-        <property name="input_purpose">alpha</property>
         <property name="adjustment">adjustmentROTATION3</property>
         <property name="truncate-multiline">True</property>
         <child internal-child="accessible">
