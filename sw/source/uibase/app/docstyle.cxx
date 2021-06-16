@@ -389,7 +389,7 @@ sal_uInt32 SwStyleSheetIterator::SwPoolFormatList::FindName(SfxStyleFamily eFam,
         case SfxStyleFamily::Page:
             cStyle = cPAGE;
             break;
-        case SfxStyleFamily::Pseudo:
+        case SfxStyleFamily::Number:
             cStyle = cNUMRULE;
             break;
         case SfxStyleFamily::Table:
@@ -526,7 +526,7 @@ void SwDocStyleSheet::SetGrabBagItem(const uno::Any& rVal)
                 bChg = true;
             }
             break;
-        case SfxStyleFamily::Pseudo:
+        case SfxStyleFamily::Number:
             {
                 SwNumRule* pRule = m_rDoc.FindNumRulePtr(aName);
                 if (pRule)
@@ -565,7 +565,7 @@ void SwDocStyleSheet::GetGrabBagItem(uno::Any& rVal) const
             if (pFormat)
                 pFormat->GetGrabBagItem(rVal);
             break;
-        case SfxStyleFamily::Pseudo:
+        case SfxStyleFamily::Number:
             {
                 SwNumRule* pRule = m_rDoc.FindNumRulePtr(aName);
                 if (pRule)
@@ -624,7 +624,7 @@ void SwDocStyleSheet::SetHidden( bool bValue )
             }
             break;
 
-        case SfxStyleFamily::Pseudo:
+        case SfxStyleFamily::Number:
             {
                 SwNumRule* pRule = m_rDoc.FindNumRulePtr( aName );
                 if ( pRule )
@@ -689,7 +689,7 @@ bool SwDocStyleSheet::IsHidden( ) const
                 bRet = pPgDesc && pPgDesc->IsHidden( );
             }
             break;
-        case SfxStyleFamily::Pseudo:
+        case SfxStyleFamily::Number:
             {
                 SwNumRule* pRule = m_rDoc.FindNumRulePtr( aName );
                 bRet = pRule && pRule->IsHidden( );
@@ -733,7 +733,7 @@ const OUString&  SwDocStyleSheet::GetParent() const
             break;
 
         case SfxStyleFamily::Page:
-        case SfxStyleFamily::Pseudo:
+        case SfxStyleFamily::Number:
         default:
             {
                 static const OUString sEmpty;
@@ -781,7 +781,7 @@ bool  SwDocStyleSheet::HasFollowSupport() const
         case SfxStyleFamily::Page : return true;
         case SfxStyleFamily::Frame:
         case SfxStyleFamily::Char :
-        case SfxStyleFamily::Pseudo: return false;
+        case SfxStyleFamily::Number: return false;
         default:
             OSL_ENSURE(false, "unknown style family");
     }
@@ -1018,7 +1018,7 @@ OUString  SwDocStyleSheet::GetDescription(MapUnit eUnit)
         return aDesc.makeStringAndClear();
     }
 
-    if( SfxStyleFamily::Pseudo == nFamily )
+    if( SfxStyleFamily::Number == nFamily )
     {
         return OUString();
     }
@@ -1106,7 +1106,7 @@ bool  SwDocStyleSheet::SetName(const OUString& rStr, bool bReindexNow)
                 bChg = true;
             }
             break;
-        case SfxStyleFamily::Pseudo:
+        case SfxStyleFamily::Number:
             OSL_ENSURE(m_pNumRule, "NumRule missing!");
 
             if (m_pNumRule)
@@ -1176,7 +1176,7 @@ bool   SwDocStyleSheet::SetParent( const OUString& rStr)
             break;
 
         case SfxStyleFamily::Page:
-        case SfxStyleFamily::Pseudo:
+        case SfxStyleFamily::Number:
             break;
         default:
             OSL_ENSURE(false, "unknown style family");
@@ -1245,7 +1245,7 @@ bool   SwDocStyleSheet::SetFollow( const OUString& rStr)
     }
     case SfxStyleFamily::Char:
     case SfxStyleFamily::Frame:
-    case SfxStyleFamily::Pseudo:
+    case SfxStyleFamily::Number:
         break;
     default:
         OSL_ENSURE(false, "unknown style family");
@@ -1277,7 +1277,7 @@ std::unique_ptr<SfxItemSet> lcl_SwFormatToFlatItemSet(SwFormat const *const pFor
 
 std::unique_ptr<SfxItemSet> SwDocStyleSheet::GetItemSetForPreview()
 {
-    if (SfxStyleFamily::Page == nFamily || SfxStyleFamily::Pseudo == nFamily || SfxStyleFamily::Table == nFamily)
+    if (SfxStyleFamily::Page == nFamily || SfxStyleFamily::Number == nFamily || SfxStyleFamily::Table == nFamily)
     {
         SAL_WARN("sw.ui", "GetItemSetForPreview not implemented for page or number or table style");
         return std::unique_ptr<SfxItemSet>();
@@ -1392,7 +1392,7 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
             }
             break;
 
-        case SfxStyleFamily::Pseudo:
+        case SfxStyleFamily::Number:
             {
                 OSL_ENSURE(m_pNumRule, "No NumRule");
                 SvxNumRule aRule = m_pNumRule->MakeSvxNumRule();
@@ -1625,7 +1625,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
             }
             break;
 
-        case SfxStyleFamily::Pseudo:
+        case SfxStyleFamily::Number:
             {
                 OSL_ENSURE(m_pNumRule, "Where's NumRule");
 
@@ -1760,7 +1760,7 @@ static void lcl_SaveStyles( SfxStyleFamily nFamily, std::vector<void*>& rArr, Sw
         }
         break;
 
-    case SfxStyleFamily::Pseudo:
+    case SfxStyleFamily::Number:
         {
             const SwNumRuleTable& rTable = rDoc.GetNumRuleTable();
             for( size_t n = 0, nCnt = rTable.size(); n < nCnt; ++n )
@@ -1838,7 +1838,7 @@ static void lcl_DeleteInfoStyles( SfxStyleFamily nFamily, std::vector<void*> con
         }
         break;
 
-    case SfxStyleFamily::Pseudo:
+    case SfxStyleFamily::Number:
         {
             std::deque<SwNumRule*> aDelArr;
             const SwNumRuleTable& rTable = rDoc.GetNumRuleTable();
@@ -1973,7 +1973,7 @@ bool SwDocStyleSheet::FillStyleSheet(
             m_pDesc = nullptr;
         break;
 
-    case SfxStyleFamily::Pseudo:
+    case SfxStyleFamily::Number:
         m_pNumRule = lcl_FindNumRule(m_rDoc, aName, this, bCreate);
         m_bPhysical = nullptr != m_pNumRule;
         if( bFillOnlyInfo && !m_pNumRule )
@@ -2113,7 +2113,7 @@ void SwDocStyleSheet::Create()
             }
             break;
 
-        case SfxStyleFamily::Pseudo:
+        case SfxStyleFamily::Number:
             m_pNumRule = lcl_FindNumRule( m_rDoc, aName );
             if( !m_pNumRule )
             {
@@ -2202,7 +2202,7 @@ void SwDocStyleSheet::PresetNameAndFamily(char cFamily, const OUString& rName)
     case cPARA:     nFamily = SfxStyleFamily::Para; break;
     case cFRAME:    nFamily = SfxStyleFamily::Frame; break;
     case cPAGE:     nFamily = SfxStyleFamily::Page; break;
-    case cNUMRULE:  nFamily = SfxStyleFamily::Pseudo; break;
+    case cNUMRULE:  nFamily = SfxStyleFamily::Number; break;
     case cTABSTYLE: nFamily = SfxStyleFamily::Table; break;
     default:        nFamily = SfxStyleFamily::Char; break;
     }
@@ -2249,7 +2249,7 @@ bool  SwDocStyleSheet::IsUsed() const
     case SfxStyleFamily::Frame: pMod = m_pFrameFormat;    break;
     case SfxStyleFamily::Page : pMod = m_pDesc;      break;
 
-    case SfxStyleFamily::Pseudo:
+    case SfxStyleFamily::Number:
             return m_pNumRule && m_rDoc.IsUsed(*m_pNumRule);
 
     case SfxStyleFamily::Table:
@@ -2321,7 +2321,7 @@ sal_uLong  SwDocStyleSheet::GetHelpId( OUString& rFile )
         nPoolId = m_pDesc->GetPoolFormatId();
         break;
 
-    case SfxStyleFamily::Pseudo:
+    case SfxStyleFamily::Number:
         if( !m_pNumRule &&
             nullptr == ( m_pNumRule = lcl_FindNumRule( m_rDoc, aName, nullptr, false ) ) )
         {
@@ -2382,7 +2382,7 @@ void  SwDocStyleSheet::SetHelpId( const OUString& r, sal_uLong nId )
         const_cast<SwPageDesc*>(m_pDesc)->SetPoolHlpFileId( nFileId );
         break;
 
-    case SfxStyleFamily::Pseudo:
+    case SfxStyleFamily::Number:
         const_cast<SwNumRule*>(m_pNumRule)->SetPoolHelpId( nHId );
         const_cast<SwNumRule*>(m_pNumRule)->SetPoolHlpFileId( nFileId );
         break;
@@ -2486,7 +2486,7 @@ void SwDocStyleSheetPool::Remove( SfxStyleSheetBase* pStyle)
         }
         break;
 
-    case SfxStyleFamily::Pseudo:
+    case SfxStyleFamily::Number:
         {
             if( !m_rDoc.DelNumRule( sName ) )
                 // Only send Broadcast, when something was deleted
@@ -2531,7 +2531,7 @@ bool  SwDocStyleSheetPool::SetParent( SfxStyleFamily eFam,
         break;
 
     case SfxStyleFamily::Page:
-    case SfxStyleFamily::Pseudo:
+    case SfxStyleFamily::Number:
         break;
 
     default:
@@ -2609,7 +2609,7 @@ SfxStyleSheetBase* SwDocStyleSheetPool::Find( const OUString& rName,
             pMod = mxStyleSheet->GetPageDesc();
             break;
 
-        case SfxStyleFamily::Pseudo:
+        case SfxStyleFamily::Number:
             {
                 const SwNumRule* pRule = mxStyleSheet->GetNumRule();
                 if( pRule &&
@@ -3004,7 +3004,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                             bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::PageDesc, cPAGE);
     }
 
-    if( nSearchFamily == SfxStyleFamily::Pseudo ||
+    if( nSearchFamily == SfxStyleFamily::Number ||
         nSearchFamily == SfxStyleFamily::All )
     {
         const SwNumRuleTable& rNumTable = rDoc.GetNumRuleTable();

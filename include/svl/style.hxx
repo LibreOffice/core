@@ -46,9 +46,10 @@ enum class SfxStyleFamily {
     Para    = 0x02,
     Frame   = 0x04,
     Page    = 0x08,
-    Pseudo  = 0x10,
+    Pseudo  = 0x10, // only used by sd/
     Table   = 0x20,
     Cell    = 0x40,
+    Number  = 0x80, // only used by sw/
     All     = 0x7fff
 };
 

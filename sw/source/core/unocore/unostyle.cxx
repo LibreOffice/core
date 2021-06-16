@@ -718,7 +718,7 @@ sal_Int32 lcl_GetCountOrName<SfxStyleFamily::Page>(const SwDoc& rDoc, OUString* 
 }
 
 template<>
-sal_Int32 lcl_GetCountOrName<SfxStyleFamily::Pseudo>(const SwDoc& rDoc, OUString* pString, sal_Int32 nIndex)
+sal_Int32 lcl_GetCountOrName<SfxStyleFamily::Number>(const SwDoc& rDoc, OUString* pString, sal_Int32 nIndex)
 {
     nIndex -= nPoolNumRange;
     sal_Int32 nCount = 0;
@@ -1110,7 +1110,7 @@ static const std::vector<StyleFamilyEntry>* lcl_GetStyleFamilyEntries()
             { SfxStyleFamily::Para,   PROPERTY_MAP_PARA_STYLE,  SwGetPoolIdFromName::TxtColl,  "ParagraphStyles", STR_STYLE_FAMILY_PARAGRAPH, &lcl_GetCountOrName<SfxStyleFamily::Para>,   &lcl_CreateStyle<SfxStyleFamily::Para>,   &lcl_TranslateIndex<SfxStyleFamily::Para>                       },
             { SfxStyleFamily::Page,   PROPERTY_MAP_PAGE_STYLE,  SwGetPoolIdFromName::PageDesc, "PageStyles",      STR_STYLE_FAMILY_PAGE,      &lcl_GetCountOrName<SfxStyleFamily::Page>,   &lcl_CreateStyle<SfxStyleFamily::Page>,   &lcl_TranslateIndexRange<RES_POOLPAGE_BEGIN,    nPoolPageRange>  },
             { SfxStyleFamily::Frame,  PROPERTY_MAP_FRAME_STYLE, SwGetPoolIdFromName::FrmFmt,   "FrameStyles",     STR_STYLE_FAMILY_FRAME,     &lcl_GetCountOrName<SfxStyleFamily::Frame>,  &lcl_CreateStyle<SfxStyleFamily::Frame>,  &lcl_TranslateIndexRange<RES_POOLFRM_BEGIN,     nPoolFrameRange> },
-            { SfxStyleFamily::Pseudo, PROPERTY_MAP_NUM_STYLE,   SwGetPoolIdFromName::NumRule,  "NumberingStyles", STR_STYLE_FAMILY_NUMBERING, &lcl_GetCountOrName<SfxStyleFamily::Pseudo>, &lcl_CreateStyle<SfxStyleFamily::Pseudo>, &lcl_TranslateIndexRange<RES_POOLNUMRULE_BEGIN, nPoolNumRange>   },
+            { SfxStyleFamily::Number, PROPERTY_MAP_NUM_STYLE,   SwGetPoolIdFromName::NumRule,  "NumberingStyles", STR_STYLE_FAMILY_NUMBERING, &lcl_GetCountOrName<SfxStyleFamily::Number>, &lcl_CreateStyle<SfxStyleFamily::Number>, &lcl_TranslateIndexRange<RES_POOLNUMRULE_BEGIN, nPoolNumRange>   },
             { SfxStyleFamily::Table,  PROPERTY_MAP_TABLE_STYLE, SwGetPoolIdFromName::TabStyle, "TableStyles",     STR_STYLE_FAMILY_TABLE,     &lcl_GetCountOrName<SfxStyleFamily::Table>,  &lcl_CreateStyle<SfxStyleFamily::Table>,  &lcl_TranslateIndex<SfxStyleFamily::Table>                       },
             { SfxStyleFamily::Cell,   PROPERTY_MAP_CELL_STYLE,  SwGetPoolIdFromName::CellStyle,"CellStyles",      STR_STYLE_FAMILY_CELL,      &lcl_GetCountOrName<SfxStyleFamily::Cell>,   &lcl_CreateStyle<SfxStyleFamily::Cell>,   &lcl_TranslateIndex<SfxStyleFamily::Cell>                        }
        };
@@ -2386,7 +2386,7 @@ uno::Any SwXStyle::GetPropertyValue_Impl(const SfxItemPropertySet* pPropSet, SwS
     uno::Any aValue;
     switch(m_rEntry.m_eFamily)
     {
-        case SfxStyleFamily::Pseudo:
+        case SfxStyleFamily::Number:
             throw uno::RuntimeException("No default value for: " + rPropertyName);
         break;
         case SfxStyleFamily::Para:

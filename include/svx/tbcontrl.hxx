@@ -183,7 +183,7 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 private:
-#define MAX_FAMILIES 5
+#define MAX_FAMILIES 6
 
     SfxStyleSheetBasePool* pStyleSheetPool;
     rtl::Reference<SfxStyleControllerItem_Impl> m_xBoundItems[MAX_FAMILIES];

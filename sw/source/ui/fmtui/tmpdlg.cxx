@@ -199,7 +199,7 @@ SwTemplateDlgController::SwTemplateDlgController(weld::Window* pParent,
         }
         break;
         // numbering styles
-        case SfxStyleFamily::Pseudo:
+        case SfxStyleFamily::Number:
         {
             AddTabPage("numbering", RID_SVXPAGE_PICK_SINGLE_NUM);
             AddTabPage("bullets", RID_SVXPAGE_PICK_BULLET);
@@ -310,7 +310,7 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
             aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, SVX_PREVIEW_CHARACTER));
             rPage.PageCreated(aSet);
         }
-        else if (SfxStyleFamily::Pseudo == nType)
+        else if (SfxStyleFamily::Number == nType)
         {
             SwDocShell* pDocShell = ::GetActiveWrtShell()->GetView().GetDocShell();
             FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebDocShell*>( pDocShell) !=  nullptr );
@@ -437,7 +437,7 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
     }
     else if (rId == "outline")
     {
-        if (SfxStyleFamily::Pseudo == nType)
+        if (SfxStyleFamily::Number == nType)
         {
             aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFormat));
             aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFormat));
@@ -454,7 +454,7 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
             }//<-end
             weld::ComboBox& rBox = static_cast<SwParagraphNumTabPage&>(rPage).GetStyleBox();
             SfxStyleSheetBasePool* pPool = pWrtShell->GetView().GetDocShell()->GetStyleSheetPool();
-            const SfxStyleSheetBase* pBase = pPool->First(SfxStyleFamily::Pseudo);
+            const SfxStyleSheetBase* pBase = pPool->First(SfxStyleFamily::Number);
             std::set<OUString> aNames;
             while(pBase)
             {

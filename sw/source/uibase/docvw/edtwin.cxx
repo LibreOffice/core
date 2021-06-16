@@ -4993,7 +4993,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                         std::min(m_pApplyTempl->nUndo, rSh.GetDoc()->GetIDocumentUndoRedo().GetUndoActionCount());
                     bCallBase = false;
                     break;
-                case SfxStyleFamily::Pseudo:
+                case SfxStyleFamily::Number:
                     if( !rSh.HasReadonlySel() )
                     {
                         rSh.SetCurNumRule( *m_pApplyTempl->aColl.pNumRule,

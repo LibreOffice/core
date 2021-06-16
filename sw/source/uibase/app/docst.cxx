@@ -247,7 +247,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                         ? SfxStyleFamily::Frame != nActualFamily
                         : ( SfxStyleFamily::Frame == nActualFamily ||
                             SfxStyleFamily::Page == nActualFamily ||
-                            (SfxStyleFamily::Pseudo == nActualFamily && !pShell->GetNumRuleAtCurrCursorPos()) ||
+                            (SfxStyleFamily::Number == nActualFamily && !pShell->GetNumRuleAtCurrCursorPos()) ||
                             (SfxStyleFamily::Table == nActualFamily && !pShell->GetTableAutoFormat(aTableAutoFormat))) )
                 {
                     rSet.DisableItem( nWhich );
@@ -258,7 +258,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                 if( (pShell->IsFrameSelected()
                         ? SfxStyleFamily::Frame != nActualFamily
                         : SfxStyleFamily::Frame == nActualFamily) ||
-                    (SfxStyleFamily::Pseudo == nActualFamily && !pShell->GetNumRuleAtCurrCursorPos()) ||
+                    (SfxStyleFamily::Number == nActualFamily && !pShell->GetNumRuleAtCurrCursorPos()) ||
                     (SfxStyleFamily::Table == nActualFamily && !pShell->GetTableAutoFormat(aTableAutoFormat)) )
                 {
                     rSet.DisableItem( nWhich );
@@ -428,7 +428,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                         nFamily = SfxStyleFamily::Frame;
                     else
                     if(aFamily == "NumberingStyles")
-                        nFamily = SfxStyleFamily::Pseudo;
+                        nFamily = SfxStyleFamily::Number;
                     else
                     if(aFamily == "TableStyles")
                         nFamily = SfxStyleFamily::Table;
@@ -466,7 +466,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                                 aParam = pChar->GetName();
                         }
                         break;
-                        case SfxStyleFamily::Pseudo:
+                        case SfxStyleFamily::Number:
                         if(SfxItemState::SET == pArgs->GetItemState(SID_STYLE_UPD_BY_EX_NAME, false, &pItem))
                         {
                             aParam = static_cast<const SfxStringItem*>(pItem)->GetValue();
@@ -1174,7 +1174,7 @@ SfxStyleFamily SwDocShell::ApplyStyles(const OUString &rName, SfxStyleFamily nFa
             pSh->SetPageStyle(pStyle->GetPageDesc()->GetName());
             break;
         }
-        case SfxStyleFamily::Pseudo:
+        case SfxStyleFamily::Number:
         {
             // reset indent attribute on applying list style
             // continue list of list style
@@ -1239,7 +1239,7 @@ SfxStyleFamily SwDocShell::DoWaterCan(const OUString &rName, SfxStyleFamily nFam
             case SfxStyleFamily::Page:
                 aTemplate.aColl.pPageDesc = const_cast<SwPageDesc*>(pStyle->GetPageDesc());
                 break;
-            case SfxStyleFamily::Pseudo:
+            case SfxStyleFamily::Number:
                 aTemplate.aColl.pNumRule = const_cast<SwNumRule*>(pStyle->GetNumRule());
                 break;
 
@@ -1322,7 +1322,7 @@ void SwDocShell::UpdateStyle(const OUString &rName, SfxStyleFamily nFamily, SwWr
 
         }
         break;
-        case SfxStyleFamily::Pseudo:
+        case SfxStyleFamily::Number:
         {
             const SwNumRule* pCurRule;
             if( pStyle->GetNumRule() &&
@@ -1508,7 +1508,7 @@ void SwDocShell::MakeByExample( const OUString &rName, SfxStyleFamily nFamily,
         }
         break;
 
-        case SfxStyleFamily::Pseudo:
+        case SfxStyleFamily::Number:
         {
             const SwNumRule* pCurRule = pCurrWrtShell->GetNumRuleAtCurrCursorPos();
 

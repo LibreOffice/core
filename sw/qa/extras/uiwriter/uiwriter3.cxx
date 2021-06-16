@@ -1642,7 +1642,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135014)
 
     uno::Sequence<beans::PropertyValue> aArgs2(comphelper::InitPropertySequence(
         { { "Param", uno::makeAny(OUString("NewNumberingStyle")) },
-          { "Family", uno::makeAny(static_cast<sal_Int16>(SfxStyleFamily::Pseudo)) } }));
+          { "Family", uno::makeAny(static_cast<sal_Int16>(SfxStyleFamily::Number)) } }));
 
     // New Style from selection
     dispatchCommand(mxComponent, ".uno:StyleNewByExample", aArgs2);
