@@ -4998,6 +4998,32 @@ IMPL_LINK_NOARG(ChildFrame, ImplHandleLayoutTimerHdl, Timer*, void)
     Layout();
 }
 
+void container_remove(GtkWidget* pContainer, GtkWidget* pChild)
+{
+#if !GTK_CHECK_VERSION(4, 0, 0)
+    gtk_container_remove(GTK_CONTAINER(pContainer), pChild);
+#else
+    assert(GTK_IS_BOX(pContainer) || GTK_IS_GRID(pContainer));
+    if (GTK_IS_BOX(pContainer))
+        gtk_box_remove(GTK_BOX(pContainer), pChild);
+    else if (GTK_IS_GRID(pContainer))
+        gtk_grid_remove(GTK_GRID(pContainer), pChild);
+#endif
+}
+
+void container_add(GtkWidget* pContainer, GtkWidget* pChild)
+{
+#if !GTK_CHECK_VERSION(4, 0, 0)
+    gtk_container_add(GTK_CONTAINER(pContainer), pChild);
+#else
+    assert(GTK_IS_BOX(pContainer) || GTK_IS_GRID(pContainer));
+    if (GTK_IS_BOX(pContainer))
+        gtk_box_append(GTK_BOX(pContainer), pChild);
+    else if (GTK_IS_GRID(pContainer))
+        gtk_grid_attach(GTK_GRID(pContainer), pChild, 0, 0, 1, 1);
+#endif
+}
+
 class GtkInstanceContainer : public GtkInstanceWidget, public virtual weld::Container
 {
 private:
@@ -5095,30 +5121,14 @@ public:
         GtkWidget* pChild = pGtkWidget->getWidget();
         g_object_ref(pChild);
         auto pOldContainer = getContainer();
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        gtk_container_remove(pOldContainer, pChild);
-#else
-        assert(GTK_IS_BOX(pOldContainer) || GTK_IS_GRID(pOldContainer));
-        if (GTK_IS_BOX(pOldContainer))
-            gtk_box_remove(GTK_BOX(pOldContainer), pChild);
-        else if (GTK_IS_GRID(pOldContainer))
-            gtk_grid_remove(GTK_GRID(pOldContainer), pChild);
-#endif
+        container_remove(GTK_WIDGET(pOldContainer), pChild);
 
         GtkInstanceContainer* pNewGtkParent = dynamic_cast<GtkInstanceContainer*>(pNewParent);
         assert(!pNewParent || pNewGtkParent);
         if (pNewGtkParent)
         {
             auto pNewContainer = pNewGtkParent->getContainer();
-#if !GTK_CHECK_VERSION(4, 0, 0)
-            gtk_container_add(pNewContainer, pChild);
-#else
-            assert(GTK_IS_BOX(pNewContainer) || GTK_IS_GRID(pNewContainer));
-            if (GTK_IS_BOX(pNewContainer))
-                gtk_box_append(GTK_BOX(pNewContainer), pChild);
-            else if (GTK_IS_GRID(pNewContainer))
-                gtk_grid_attach(GTK_GRID(pNewContainer), pChild, 0, 0, 1, 1);
-#endif
+            container_add(GTK_WIDGET(pNewContainer), pChild);
         }
         g_object_unref(pChild);
     }
@@ -7995,18 +8005,24 @@ private:
 
     void make_overflow_boxes()
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         m_pOverFlowBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL, 0));
         GtkWidget* pParent = gtk_widget_get_parent(GTK_WIDGET(m_pNotebook));
-        gtk_container_add(GTK_CONTAINER(pParent), GTK_WIDGET(m_pOverFlowBox));
+        container_add(pParent, GTK_WIDGET(m_pOverFlowBox));
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_box_append(m_pOverFlowBox, GTK_WIDGET(m_pOverFlowNotebook));
+#else
         gtk_box_pack_start(m_pOverFlowBox, GTK_WIDGET(m_pOverFlowNotebook), false, false, 0);
+#endif
         g_object_ref(m_pNotebook);
-        gtk_container_remove(GTK_CONTAINER(pParent), GTK_WIDGET(m_pNotebook));
+        container_remove(pParent, GTK_WIDGET(m_pNotebook));
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_box_append(m_pOverFlowBox, GTK_WIDGET(m_pNotebook));
+#else
         gtk_box_pack_start(m_pOverFlowBox, GTK_WIDGET(m_pNotebook), true, true, 0);
+#endif
         // coverity[freed_arg : FALSE] - this does not free m_pNotebook , it is reffed by pParent
         g_object_unref(m_pNotebook);
         gtk_widget_show(GTK_WIDGET(m_pOverFlowBox));
-#endif
     }
 
     void split_notebooks()
