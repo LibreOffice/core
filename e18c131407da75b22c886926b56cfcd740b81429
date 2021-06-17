@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7666467b_5c745bb0",
+        "filename": "unotools/source/config/securityoptions.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 936,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2021-06-17T06:37:19Z",
+      "side": 1,
+      "message": "Could this be Author1, Author2 ... ?\nThat sounds more user-friendly, seeing only a number some could think this is some error. \nWord also uses \"Author\".",
+      "range": {
+        "startLine": 936,
+        "startChar": 0,
+        "endLine": 936,
+        "endChar": 65
+      },
+      "revId": "e18c131407da75b22c886926b56cfcd740b81429",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
