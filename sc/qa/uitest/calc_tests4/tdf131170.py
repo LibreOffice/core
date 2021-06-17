@@ -23,15 +23,11 @@ class tdf131170(UITestCase):
         self.assertEqual(get_state_as_dict(xRange.getChild('2'))["Text"].strip(), "--- Row ---")
         self.assertEqual(get_state_as_dict(xRange.getChild('3'))["Text"].strip(), "$Sheet1.$H$7:$H$9 [X, Y, Z]")
 
-        def handle_confirmation_dlg(dialog2):
-            xOKBtn2 = dialog2.getChild("yes")
-            self.ui_test.close_dialog_through_button(xOKBtn2)
-
         xDeleteBtn = xDialog.getChild("delete")
 
         xRange.getChild('1').executeAction("SELECT", tuple())
-        self.ui_test.execute_blocking_action(xDeleteBtn.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_confirmation_dlg)
+        with self.ui_test.execute_blocking_action(xDeleteBtn.executeAction, args=('CLICK', ()), close_button="yes"):
+            pass
 
         self.assertEqual(3, len(xRange.getChildren()))
         self.assertEqual(get_state_as_dict(xRange.getChild('0'))["Text"].strip(), "--- Column ---")
@@ -39,8 +35,8 @@ class tdf131170(UITestCase):
         self.assertEqual(get_state_as_dict(xRange.getChild('2'))["Text"].strip(), "$Sheet1.$H$7:$H$9 [X, Y, Z]")
 
         xRange.getChild('2').executeAction("SELECT", tuple())
-        self.ui_test.execute_blocking_action(xDeleteBtn.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_confirmation_dlg)
+        with self.ui_test.execute_blocking_action(xDeleteBtn.executeAction, args=('CLICK', ()), close_button="yes"):
+            pass
 
         self.assertEqual(2, len(xRange.getChildren()))
         self.assertEqual(get_state_as_dict(xRange.getChild('0'))["Text"].strip(), "--- Column ---")

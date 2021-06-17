@@ -28,32 +28,22 @@ class findSimilarities(UITestCase):
         similarity = xDialog.getChild("similarity")
         similaritybtn = xDialog.getChild("similaritybtn")
         similarity.executeAction("CLICK", tuple())
-        def handle_similarity_dlg(dialog):
+        with self.ui_test.execute_blocking_action(similaritybtn.executeAction, args=('CLICK', ())) as dialog:
             otherfld = dialog.getChild("otherfld")
             longerfld = dialog.getChild("longerfld")
             shorterfld = dialog.getChild("shorterfld")
             otherfld.executeAction("DOWN", tuple())
             longerfld.executeAction("DOWN", tuple())
             shorterfld.executeAction("DOWN", tuple())
-            xOKBtn = dialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
 
-        self.ui_test.execute_blocking_action(similaritybtn.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_similarity_dlg)
         #open dialog again, verify values = 1; close dialog with cancel
-        def handle_similarity_dlg2(dialog):
+        with self.ui_test.execute_blocking_action(similaritybtn.executeAction, args=('CLICK', ()), close_button="cancel") as dialog:
             otherfld = dialog.getChild("otherfld")
             longerfld = dialog.getChild("longerfld")
             shorterfld = dialog.getChild("shorterfld")
             self.assertEqual(get_state_as_dict(otherfld)["Text"], "1")
             self.assertEqual(get_state_as_dict(longerfld)["Text"], "1")
             self.assertEqual(get_state_as_dict(shorterfld)["Text"], "1")
-
-            xCancelBtn = dialog.getChild("cancel")
-            self.ui_test.close_dialog_through_button(xCancelBtn)
-
-        self.ui_test.execute_blocking_action(similaritybtn.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_similarity_dlg2)
 
         xsearch = xDialog.getChild("search")
         xsearch.executeAction("CLICK", tuple())

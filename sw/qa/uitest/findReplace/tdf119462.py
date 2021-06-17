@@ -21,18 +21,13 @@ class tdf119462(UITestCase):
         xDialog = self.xUITest.getTopFocusWindow()
         #2. Choose Format
         format = xDialog.getChild("format")
-        def handle_format_dlg(dialog):
-
+        with self.ui_test.execute_blocking_action(format.executeAction, args=('CLICK', ())) as dialog:
             #3. Choose Bold
             xTabs = dialog.getChild("tabcontrol")
             select_pos(xTabs, "0")
             xweststylelbcjk = dialog.getChild("weststylelb-cjk")
             xweststylelbcjk.executeAction("TYPE", mkPropertyValues({"TEXT":"Bold"}))
-            xOkBtn = dialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOkBtn)
 
-        self.ui_test.execute_blocking_action(format.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_format_dlg)
         #verify label searchdesc
         searchdesc = xDialog.getChild("searchdesc")
         self.assertEqual(get_state_as_dict(searchdesc)["Text"], "bold")

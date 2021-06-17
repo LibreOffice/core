@@ -42,12 +42,9 @@ class chartDefaultColors(UITestCase):
         self.assertEqual(get_state_as_dict(xColors)["Children"], str(nrDefaultColors1))
 
         #delete new color
-        def handle_delete_dlg(dialog):
-            xyesBtn = dialog.getChild("yes")
-            self.ui_test.close_dialog_through_button(xyesBtn)
+        with self.ui_test.execute_blocking_action(xDelete.executeAction, args=('CLICK', ()), close_button="yes"):
+            pass
 
-        self.ui_test.execute_blocking_action(xDelete.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_delete_dlg)
         self.assertEqual(get_state_as_dict(xColors)["Children"], nrDefaultColors)
 
         xAdd.executeAction("CLICK", tuple())    #add new color

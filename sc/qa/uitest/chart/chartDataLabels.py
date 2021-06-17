@@ -161,26 +161,20 @@ class chartDataLabels(UITestCase):
     valueAsPercentage.executeAction("CLICK", tuple())
     #button Percentage format
 
-    def handle_perc_dlg(dialog):
-            sourceformat = dialog.getChild("sourceformat")
-            decimalsed = dialog.getChild("decimalsed")
-            leadzerosed = dialog.getChild("leadzerosed")
-            negnumred = dialog.getChild("negnumred")
-            thousands = dialog.getChild("thousands")
-            formatted = dialog.getChild("formatted")
+    with self.ui_test.execute_blocking_action(buttonPercentage.executeAction, args=('CLICK', ())) as dialog:
+        sourceformat = dialog.getChild("sourceformat")
+        decimalsed = dialog.getChild("decimalsed")
+        leadzerosed = dialog.getChild("leadzerosed")
+        negnumred = dialog.getChild("negnumred")
+        thousands = dialog.getChild("thousands")
+        formatted = dialog.getChild("formatted")
 
-            sourceformat.executeAction("CLICK", tuple())
-            decimalsed.executeAction("UP", tuple())
-            leadzerosed.executeAction("UP", tuple())
-            negnumred.executeAction("CLICK", tuple())
-            thousands.executeAction("CLICK", tuple())
-            self.assertEqual(get_state_as_dict(formatted)["Text"], "#,#00.0%;[RED]-#,#00.0%")
-
-            xOKButton = dialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKButton)
-
-    self.ui_test.execute_blocking_action(buttonPercentage.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_perc_dlg)
+        sourceformat.executeAction("CLICK", tuple())
+        decimalsed.executeAction("UP", tuple())
+        leadzerosed.executeAction("UP", tuple())
+        negnumred.executeAction("CLICK", tuple())
+        thousands.executeAction("CLICK", tuple())
+        self.assertEqual(get_state_as_dict(formatted)["Text"], "#,#00.0%;[RED]-#,#00.0%")
 
     self.assertEqual(get_state_as_dict(valueAsNumber)["Selected"], "false")
     self.assertEqual(get_state_as_dict(valueAsPercentage)["Selected"], "true")
@@ -262,7 +256,7 @@ class chartDataLabels(UITestCase):
 
     xNumberFormatBtn = xDialog.getChild("PB_NUMBERFORMAT")
 
-    def handle_number_dlg(dialog):
+    with self.ui_test.execute_blocking_action(xNumberFormatBtn.executeAction, args=('CLICK', ())) as dialog:
         categoryformat = dialog.getChild("categorylb")
         formatted = dialog.getChild("formatted")
         sourceformat = dialog.getChild("sourceformat")
@@ -274,12 +268,6 @@ class chartDataLabels(UITestCase):
         self.assertEqual(get_state_as_dict(categoryformat)["SelectEntryText"], "Currency")
 
         self.assertEqual(get_state_as_dict(formatted)["Text"], "[$$-409]#,##0.00;[RED]-[$$-409]#,##0.00")
-
-        xOKButton = dialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKButton)
-
-    self.ui_test.execute_blocking_action(xNumberFormatBtn.executeAction, args=('CLICK', ()),
-        dialog_handler=handle_number_dlg)
 
     xOKBtn = xDialog.getChild("ok")
     self.ui_test.close_dialog_through_button(xOKBtn)

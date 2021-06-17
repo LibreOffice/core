@@ -24,19 +24,13 @@ class Tdf140528(UITestCase):
 
         xFormat = xDialog.getChild("format")
 
-        def handle_format_dlg(dialog):
+        with self.ui_test.execute_blocking_action(xFormat.executeAction, args=('OPENFROMLIST', mkPropertyValues({"POS": "10"}))) as dialog:
             xEntry = dialog.getChild("entry")
             self.assertEqual("Untitled 1", get_state_as_dict(xEntry)['Text'])
 
             xEntry.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
             xEntry.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
             xEntry.executeAction("TYPE", mkPropertyValues({"TEXT" : "newFormat"}))
-
-            xOKBtn = dialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
-
-        self.ui_test.execute_blocking_action(xFormat.executeAction, args=('OPENFROMLIST', mkPropertyValues({"POS": "10"})),
-                dialog_handler=handle_format_dlg)
 
         self.assertEqual("saveas", get_state_as_dict(xFormat)['CurrentItem'])
 
