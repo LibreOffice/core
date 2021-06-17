@@ -75,6 +75,24 @@
       "revId": "1b39fd26358e1e8f17255d65de2de543ac2ce2db",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "904dca0a_852b62b9",
+        "filename": "sd/qa/uitest/impress_tests/customSlideShow.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-06-17T10:46:55Z",
+      "side": 1,
+      "message": "In this case, we use execute_blocking_action to open a second dialog from an action in the first dialog",
+      "parentUuid": "c461f104_9aeb3ce6",
+      "revId": "1b39fd26358e1e8f17255d65de2de543ac2ce2db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
