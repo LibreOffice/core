@@ -10,11 +10,14 @@
 
 #include <IndexingExport.hxx>
 
-#include <node.hxx>
 #include <ndtxt.hxx>
 #include <ndole.hxx>
 #include <ndnotxt.hxx>
 #include <ndgrf.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/svdotext.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/editobj.hxx>
 
 namespace sw
 {
@@ -72,6 +75,34 @@ public:
         m_rXmlWriter.startElement("paragraph");
         m_rXmlWriter.attribute("index", pTextNode->GetIndex());
         m_rXmlWriter.content(rString);
+        m_rXmlWriter.endElement();
+    }
+
+    void handleSdrObject(SdrObject* pObject) override
+    {
+        if (pObject->GetName().isEmpty())
+            return;
+        m_rXmlWriter.startElement("shape");
+        m_rXmlWriter.attribute("name", pObject->GetName());
+        m_rXmlWriter.attribute("alt", pObject->GetTitle());
+        m_rXmlWriter.attribute("description", pObject->GetDescription());
+
+        SdrTextObj* pTextObject = dynamic_cast<SdrTextObj*>(pObject);
+        if (pTextObject)
+        {
+            OutlinerParaObject* pOutlinerParagraphObject = pTextObject->GetOutlinerParaObject();
+            const EditTextObject& aEdit = pOutlinerParagraphObject->GetTextObject();
+            for (sal_Int32 nParagraph = 0; nParagraph < aEdit.GetParagraphCount(); ++nParagraph)
+            {
+                OUString sText = aEdit.GetText(nParagraph);
+
+                m_rXmlWriter.startElement("paragraph");
+                m_rXmlWriter.attribute("index", nParagraph);
+                m_rXmlWriter.content(sText);
+                m_rXmlWriter.endElement();
+            }
+        }
+
         m_rXmlWriter.endElement();
     }
 };
