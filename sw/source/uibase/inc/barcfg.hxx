@@ -24,7 +24,7 @@
 
 enum class SelectionType : sal_Int32;
 
-class SwToolbarConfigItem : public utl::ConfigItem
+class SwToolbarConfigItem final : public utl::ConfigItem
 {
     sal_Int32 aTbxIdArray[5];
 

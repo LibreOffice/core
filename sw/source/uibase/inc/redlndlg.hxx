@@ -122,7 +122,7 @@ public:
     void            Activate();
 };
 
-class SwModelessRedlineAcceptDlg : public SfxModelessDialogController
+class SwModelessRedlineAcceptDlg final : public SfxModelessDialogController
 {
     std::unique_ptr<weld::Container> m_xContentArea;
     std::unique_ptr<SwRedlineAcceptDlg> m_xImplDlg;
@@ -137,7 +137,7 @@ public:
     void            Initialize(SfxChildWinInfo * pInfo);
 };
 
-class SwRedlineAcceptChild : public SwChildWinWrapper
+class SwRedlineAcceptChild final : public SwChildWinWrapper
 {
 public:
     SwRedlineAcceptChild(vcl::Window* ,
@@ -151,7 +151,7 @@ public:
 };
 
 /// Redline (Manage Changes) panel for the sidebar.
-class SwRedlineAcceptPanel : public PanelLayout, public SfxListener
+class SwRedlineAcceptPanel final : public PanelLayout, public SfxListener
 {
     std::unique_ptr<SwRedlineAcceptDlg> mpImplDlg;
     std::unique_ptr<weld::Container> mxContentArea;

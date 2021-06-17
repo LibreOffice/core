@@ -26,7 +26,7 @@ class SwScriptField;
 
 namespace sfx2 { class FileDialogHelper; }
 
-class SwJavaEditDialog : public weld::GenericDialogController
+class SwJavaEditDialog final : public weld::GenericDialogController
 {
 private:
     OUString       m_aText;

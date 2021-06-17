@@ -33,7 +33,7 @@ class SwTableAutoFormat;
 class SwTableAutoFormatTable;
 class SwWrtShell;
 
-class SwAutoFormatDlg : public SfxDialogController
+class SwAutoFormatDlg final : public SfxDialogController
 {
     OUString        m_aStrTitle;
     OUString        m_aStrLabel;

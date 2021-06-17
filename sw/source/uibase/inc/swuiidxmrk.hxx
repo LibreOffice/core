@@ -133,7 +133,7 @@ public:
     bool    IsTOXType(const OUString& rName) { return m_xTypeDCB->find_text(rName) != -1; }
 };
 
-class SwIndexMarkFloatDlg : public SfxModelessDialogController
+class SwIndexMarkFloatDlg final : public SfxModelessDialogController
 {
     SwIndexMarkPane m_aContent;
 
@@ -147,7 +147,7 @@ public:
     void    ReInitDlg(SwWrtShell& rWrtShell);
 };
 
-class SwIndexMarkModalDlg : public SfxDialogController
+class SwIndexMarkModalDlg final : public SfxDialogController
 {
     SwIndexMarkPane m_aContent;
 public:
@@ -207,7 +207,7 @@ public:
     void ReInitDlg(SwWrtShell& rWrtShell);
 };
 
-class SwAuthMarkFloatDlg : public SfxModelessDialogController
+class SwAuthMarkFloatDlg final : public SfxModelessDialogController
 {
     SwAuthorMarkPane m_aContent;
     virtual void    Activate() override;
@@ -220,7 +220,7 @@ public:
     void    ReInitDlg(SwWrtShell& rWrtShell);
 };
 
-class SwAuthMarkModalDlg : public SfxDialogController
+class SwAuthMarkModalDlg final : public SfxDialogController
 {
     SwAuthorMarkPane m_aContent;
 

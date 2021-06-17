@@ -32,7 +32,7 @@ struct SwLabelMeasure
     bool     m_bPredefined;  // used to distinguish predefined from user-defined labels
 };
 
-class SW_DLLPUBLIC SwLabelConfig : public utl::ConfigItem
+class SW_DLLPUBLIC SwLabelConfig final : public utl::ConfigItem
 {
 private:
     std::vector<OUString> m_aManufacturers;

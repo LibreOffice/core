@@ -22,7 +22,7 @@ class SwPageFrame;
     This control shows a line indicating a manual page break and a
     button providing a few actions on that page break.
   */
-class SwPageBreakWin : public SwFrameMenuButtonBase
+class SwPageBreakWin final : public SwFrameMenuButtonBase
 {
     std::unique_ptr<weld::MenuButton> m_xMenuButton;
     VclPtr<vcl::Window>   m_pLine;

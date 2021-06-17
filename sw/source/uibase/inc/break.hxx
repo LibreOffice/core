@@ -25,7 +25,7 @@
 
 class SwWrtShell;
 
-class SwBreakDlg : public weld::GenericDialogController
+class SwBreakDlg final : public weld::GenericDialogController
 {
     std::unique_ptr<weld::RadioButton> m_xLineBtn;
     std::unique_ptr<weld::RadioButton> m_xColumnBtn;

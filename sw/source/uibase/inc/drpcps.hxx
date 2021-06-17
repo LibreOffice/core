@@ -28,7 +28,7 @@
 
 class SwWrtShell;
 
-class SwDropCapsDlg : public SfxSingleTabDialogController
+class SwDropCapsDlg final : public SfxSingleTabDialogController
 {
 public:
     SwDropCapsDlg(weld::Window *pParent, const SfxItemSet &rSet);
@@ -36,7 +36,7 @@ public:
 
 class SwDropCapsPage;
 
-class SwDropCapsPict : public weld::CustomWidgetController
+class SwDropCapsPict final : public weld::CustomWidgetController
 {
     SwDropCapsPage* mpPage;
     OUString        maText;
@@ -107,7 +107,7 @@ public:
     void DrawPrev(vcl::RenderContext& rRenderContext, const Point& rPt);
 };
 
-class SwDropCapsPage : public SfxTabPage
+class SwDropCapsPage final : public SfxTabPage
 {
 friend class SwDropCapsPict;
     SwDropCapsPict  m_aPict;

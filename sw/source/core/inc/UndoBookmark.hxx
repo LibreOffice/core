@@ -64,7 +64,7 @@ public:
     virtual SwRewriter GetRewriter() const override;
 };
 
-class SwUndoInsBookmark : public SwUndoBookmark
+class SwUndoInsBookmark final : public SwUndoBookmark
 {
 public:
     SwUndoInsBookmark(const ::sw::mark::IMark&);
@@ -73,7 +73,7 @@ public:
     virtual void RedoImpl(::sw::UndoRedoContext&) override;
 };
 
-class SwUndoDeleteBookmark : public SwUndoBookmark
+class SwUndoDeleteBookmark final : public SwUndoBookmark
 {
 public:
     SwUndoDeleteBookmark(const ::sw::mark::IMark&);
@@ -82,7 +82,7 @@ public:
     virtual void RedoImpl(::sw::UndoRedoContext&) override;
 };
 
-class SwUndoRenameBookmark : public SwUndo
+class SwUndoRenameBookmark final : public SwUndo
 {
     const OUString m_sOldName;
     const OUString m_sNewName;
@@ -99,7 +99,7 @@ private:
 };
 
 /// Handling undo / redo of checkbox and drop-down form field insertion
-class SwUndoInsNoTextFieldmark : public SwUndo
+class SwUndoInsNoTextFieldmark final : public SwUndo
 {
 private:
     const std::unique_ptr<SwHistoryNoTextFieldmark> m_pHistoryNoTextFieldmark;
@@ -112,7 +112,7 @@ public:
 };
 
 /// Handling undo / redo of checkbox and drop-down form field deletion
-class SwUndoDelNoTextFieldmark : public SwUndo
+class SwUndoDelNoTextFieldmark final : public SwUndo
 {
 private:
     const std::unique_ptr<SwHistoryNoTextFieldmark> m_pHistoryNoTextFieldmark;
@@ -126,7 +126,7 @@ public:
 };
 
 /// Handling undo / redo of text form field insertion
-class SwUndoInsTextFieldmark : public SwUndo
+class SwUndoInsTextFieldmark final : public SwUndo
 {
 private:
     const std::unique_ptr<SwHistoryTextFieldmark> m_pHistoryTextFieldmark;
@@ -139,7 +139,7 @@ public:
 };
 
 /// Handling undo / redo of text form field deletion
-class SwUndoDelTextFieldmark : public SwUndo
+class SwUndoDelTextFieldmark final : public SwUndo
 {
 private:
     const std::unique_ptr<SwHistoryTextFieldmark> m_pHistoryTextFieldmark;

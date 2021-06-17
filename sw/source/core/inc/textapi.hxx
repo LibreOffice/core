@@ -27,7 +27,7 @@
 class SwDoc;
 
 struct SwTextAPIEditSource_Impl;
-class SwTextAPIEditSource : public SvxEditSource
+class SwTextAPIEditSource final : public SvxEditSource
 {
     SwTextAPIEditSource_Impl* m_pImpl;
 

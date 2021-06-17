@@ -19,7 +19,7 @@
 
 #include <AnnotationWin.hxx>
 
-class SwEditWinUIObject : public WindowUIObject
+class SwEditWinUIObject final : public WindowUIObject
 {
 public:
 
@@ -32,8 +32,6 @@ public:
 
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
-protected:
-
     virtual OUString get_name() const override;
 
 private:
@@ -43,7 +41,7 @@ private:
 };
 
 // This class handles the Comments as a UIObject to be used in UITest Framework
-class CommentUIObject : public WindowUIObject
+class CommentUIObject final : public WindowUIObject
 {
     VclPtr<sw::annotation::SwAnnotationWin> mxCommentUIObject;
 
@@ -58,13 +56,13 @@ public:
 
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
-protected:
+private:
 
     OUString get_name() const override;
 
 };
 
-class PageBreakUIObject : public WindowUIObject
+class PageBreakUIObject final : public WindowUIObject
 {
 public:
 
@@ -75,11 +73,9 @@ public:
 
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
-protected:
+private:
 
     virtual OUString get_name() const override;
-
-private:
 
     VclPtr<SwPageBreakWin> mxPageBreakUIObject;
 

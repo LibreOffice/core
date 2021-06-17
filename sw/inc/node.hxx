@@ -339,7 +339,7 @@ private:
 };
 
 /// Ends a section of nodes in the document model.
-class SwEndNode : public SwNode
+class SwEndNode final : public SwNode
 {
     friend class SwNodes;
     friend class SwTableNode;       ///< To enable creation of its EndNote.
@@ -348,10 +348,8 @@ class SwEndNode : public SwNode
     /// for the initial StartNode
     SwEndNode( SwNodes& rNodes, sal_uLong nPos, SwStartNode& rSttNd );
 
-protected:
     SwEndNode( const SwNodeIndex &rWhere, SwStartNode& rSttNd );
 
-private:
     SwEndNode( const SwEndNode & rNode ) = delete;
     SwEndNode & operator= ( const SwEndNode & rNode ) = delete;
 };
@@ -488,11 +486,11 @@ private:
 
 // SwTableNode
 
-class SW_DLLPUBLIC SwTableNode : public SwStartNode, public sw::BroadcastingModify
+class SW_DLLPUBLIC SwTableNode final : public SwStartNode, public sw::BroadcastingModify
 {
     friend class SwNodes;
     std::unique_ptr<SwTable> m_pTable;
-protected:
+
     virtual ~SwTableNode() override;
 
 public:
@@ -524,7 +522,7 @@ private:
     SwTableNode & operator= ( const SwTableNode & rNode ) = delete;
 };
 
-class SAL_DLLPUBLIC_RTTI SwSectionNode
+class SAL_DLLPUBLIC_RTTI SwSectionNode final
     : public SwStartNode
 {
     friend class SwNodes;
@@ -535,7 +533,6 @@ private:
 
     std::unique_ptr<SwSection> const m_pSection;
 
-protected:
     virtual ~SwSectionNode() override;
 
 public:

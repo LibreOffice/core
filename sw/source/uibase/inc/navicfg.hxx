@@ -24,7 +24,7 @@
 enum class RegionMode;
 enum class ContentTypeId;
 
-class SwNavigationConfig : public utl::ConfigItem
+class SwNavigationConfig final : public utl::ConfigItem
 {
     ContentTypeId  nRootType;      //RootType
     sal_Int32      nSelectedPos;   //SelectedPosition

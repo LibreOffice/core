@@ -81,7 +81,7 @@ public:
     void SetSuffix(const OUString& rSet)   { m_sSuffix = rSet; }
 };
 
-class SW_DLLPUBLIC SwFormatFootnoteAtTextEnd : public SwFormatFootnoteEndAtTextEnd
+class SW_DLLPUBLIC SwFormatFootnoteAtTextEnd final : public SwFormatFootnoteEndAtTextEnd
 {
 public:
     SwFormatFootnoteAtTextEnd( SwFootnoteEndPosEnum ePos = FTNEND_ATPGORDOCEND )
@@ -91,7 +91,7 @@ public:
     virtual SwFormatFootnoteAtTextEnd* Clone( SfxItemPool *pPool = nullptr ) const override;
 };
 
-class SW_DLLPUBLIC SwFormatEndAtTextEnd : public SwFormatFootnoteEndAtTextEnd
+class SW_DLLPUBLIC SwFormatEndAtTextEnd final : public SwFormatFootnoteEndAtTextEnd
 {
 public:
     SwFormatEndAtTextEnd( SwFootnoteEndPosEnum ePos = FTNEND_ATPGORDOCEND )

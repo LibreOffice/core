@@ -87,7 +87,7 @@ namespace sw {
     class MetaFieldManager;
 }
 
-class SwFormatMeta
+class SwFormatMeta final
     : public SfxPoolItem
 {
 private:

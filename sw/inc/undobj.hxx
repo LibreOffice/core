@@ -317,7 +317,7 @@ public:
 
 };
 
-class SwUndoInsLayFormat : public SwUndoFlyBase
+class SwUndoInsLayFormat final : public SwUndoFlyBase
 {
     sal_uLong mnCursorSaveIndexPara;           // Cursor position
     sal_Int32 mnCursorSaveIndexPos;            // for undo

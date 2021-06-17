@@ -64,7 +64,7 @@ enum SwColLineAdj
     COLADJ_BOTTOM
 };
 
-class SW_DLLPUBLIC SwFormatCol : public SfxPoolItem
+class SW_DLLPUBLIC SwFormatCol final : public SfxPoolItem
 {
     SvxBorderLineStyle m_eLineStyle;     ///< style of the separator line
     sal_uLong   m_nLineWidth;                 ///< Width of the separator line.

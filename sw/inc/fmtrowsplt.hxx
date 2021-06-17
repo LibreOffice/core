@@ -26,7 +26,7 @@
 
 class IntlWrapper;
 
-class SW_DLLPUBLIC SwFormatRowSplit : public SfxBoolItem
+class SW_DLLPUBLIC SwFormatRowSplit final : public SfxBoolItem
 {
 public:
     SwFormatRowSplit( bool bSplit = true ) : SfxBoolItem( RES_ROW_SPLIT, bSplit ) {}

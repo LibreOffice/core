@@ -349,7 +349,7 @@ namespace sw
     };
 }
 
-class SW_DLLPUBLIC SwDrawFrameFormat: public SwFrameFormat
+class SW_DLLPUBLIC SwDrawFrameFormat final : public SwFrameFormat
 {
     friend class SwDoc;
 
@@ -365,7 +365,6 @@ class SW_DLLPUBLIC SwDrawFrameFormat: public SwFrameFormat
 
     bool mbPosAttrSet;
 
-protected:
     SwDrawFrameFormat( SwAttrPool& rPool, const OUString &rFormatNm,
                     SwFrameFormat *pDrvdFrame )
         : SwFrameFormat( rPool, rFormatNm, pDrvdFrame, RES_DRAWFRMFMT ),

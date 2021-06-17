@@ -26,7 +26,7 @@ class SfxItemSet;
 class SwWrtShell;
 
 // the tab dialog carrier of TabPages
-class SwTemplateDlgController : public SfxStyleDialogController
+class SwTemplateDlgController final : public SfxStyleDialogController
 {
 
     SfxStyleFamily  nType;

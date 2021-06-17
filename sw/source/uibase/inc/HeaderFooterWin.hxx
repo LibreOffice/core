@@ -32,7 +32,7 @@ public:
     This control is showing the header / footer style name and provides
     a few useful actions to the user.
   */
-class SwHeaderFooterWin : public SwFrameMenuButtonBase
+class SwHeaderFooterWin final : public SwFrameMenuButtonBase
 {
     std::unique_ptr<weld::MenuButton> m_xMenuButton;
     std::unique_ptr<weld::Button> m_xPushButton;

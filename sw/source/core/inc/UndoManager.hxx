@@ -33,7 +33,7 @@ class SwView;
 
 namespace sw {
 
-class SAL_DLLPUBLIC_RTTI UndoManager
+class SAL_DLLPUBLIC_RTTI UndoManager final
     : public IDocumentUndoRedo
     , public SdrUndoManager
 {
@@ -95,10 +95,9 @@ public:
     SwNodes      & GetUndoNodes();
     void SetDocShell(SwDocShell* pDocShell);
 
-protected:
+private:
     virtual void EmptyActionsChanged() override;
 
-private:
     IDocumentDrawModelAccess & m_rDrawModelAccess;
     IDocumentRedlineAccess & m_rRedlineAccess;
     IDocumentState & m_rState;

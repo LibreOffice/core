@@ -163,7 +163,7 @@ public:
 
 class SwFltAnchorListener;
 
-class SW_DLLPUBLIC SwFltAnchor: public SfxPoolItem
+class SW_DLLPUBLIC SwFltAnchor final : public SfxPoolItem
 {
     SwFrameFormat* m_pFrameFormat;
     std::unique_ptr<SwFltAnchorListener> m_pListener;
@@ -181,7 +181,7 @@ public:
           SwFrameFormat* GetFrameFormat() { return m_pFrameFormat; }
 };
 
-class SwFltAnchorListener : public SvtListener
+class SwFltAnchorListener final : public SvtListener
 {
     SwFltAnchor* m_pFltAnchor;
     public:
@@ -189,7 +189,7 @@ class SwFltAnchorListener : public SvtListener
         virtual void Notify(const SfxHint&) override;
 };
 
-class SW_DLLPUBLIC SwFltRedline : public SfxPoolItem
+class SW_DLLPUBLIC SwFltRedline final : public SfxPoolItem
 {
 public:
     DateTime        m_aStamp;
@@ -210,7 +210,7 @@ public:
     virtual SwFltRedline* Clone(SfxItemPool* = nullptr) const override;
 };
 
-class SW_DLLPUBLIC SwFltBookmark : public SfxPoolItem
+class SW_DLLPUBLIC SwFltBookmark final : public SfxPoolItem
 {
 private:
 
@@ -239,7 +239,7 @@ public:
 };
 
 /// Stores RDF statements on a paragraph (key-value pairs where the subject is the paragraph).
-class SW_DLLPUBLIC SwFltRDFMark : public SfxPoolItem
+class SW_DLLPUBLIC SwFltRDFMark final : public SfxPoolItem
 {
     tools::Long m_nHandle;
     std::vector< std::pair<OUString, OUString> > m_aAttributes;
@@ -256,7 +256,7 @@ public:
     const std::vector< std::pair<OUString, OUString> >& GetAttributes() const;
 };
 
-class SW_DLLPUBLIC SwFltTOX : public SfxPoolItem
+class SW_DLLPUBLIC SwFltTOX final : public SfxPoolItem
 {
     std::shared_ptr<SwTOXBase> m_xTOXBase;
     bool m_bHadBreakItem; // there was a break item BEFORE insertion of the TOX

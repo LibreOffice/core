@@ -26,7 +26,7 @@
 #include <svx/colorbox.hxx>
 
 // TabPage Format/(Styles/)Page/Text grid
-class SwTextGridPage: public SfxTabPage
+class SwTextGridPage final : public SfxTabPage
 {
     sal_Int32       m_nRubyUserValue;
     bool        m_bRubyUserValue;

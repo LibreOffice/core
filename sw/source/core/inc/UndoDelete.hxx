@@ -33,7 +33,7 @@ namespace sfx2 {
     class MetadatableUndo;
 }
 
-class SwUndoDelete
+class SwUndoDelete final
     : public SwUndo
     , private SwUndRng
     , private SwUndoSaveContent

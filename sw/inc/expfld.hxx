@@ -196,7 +196,7 @@ inline sal_uInt16 SwSetExpFieldType::GetType() const
 inline const OUString& SwSetExpFieldType::GetSetRefName() const
     { return m_sName; }
 
-class SW_DLLPUBLIC SwSetExpField : public SwFormulaField
+class SW_DLLPUBLIC SwSetExpField final : public SwFormulaField
 {
     double          m_fValueRLHidden; ///< SwValueField; hidden redlines
     OUString        msExpand;

@@ -40,7 +40,7 @@ public:
     static FieldUnit GetValue(sal_uInt32 i);
 };
 
-class TextFilterAutoConvert : public TextFilter
+class TextFilterAutoConvert final : public TextFilter
 {
 private:
     OUString m_sLastGoodText;
@@ -53,7 +53,7 @@ public:
     virtual OUString filter(const OUString &rText) override;
 };
 
-class SwLoadOptPage : public SfxTabPage
+class SwLoadOptPage final : public SfxTabPage
 {
 private:
     SwWrtShell*      m_pWrtShell;
@@ -90,13 +90,13 @@ public:
     virtual void        Reset( const SfxItemSet* rSet ) override;
 };
 
-class SwCaptionOptDlg : public SfxSingleTabDialogController
+class SwCaptionOptDlg final : public SfxSingleTabDialogController
 {
 public:
     SwCaptionOptDlg(weld::Window* pParent, const SfxItemSet& rSet);
 };
 
-class SwCaptionPreview : public weld::CustomWidgetController
+class SwCaptionPreview final : public weld::CustomWidgetController
 {
 private:
     OUString maText;
@@ -112,7 +112,7 @@ public:
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
 };
 
-class SwCaptionOptPage : public SfxTabPage
+class SwCaptionOptPage final : public SfxTabPage
 {
 private:
     OUString m_sSWTable;

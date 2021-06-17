@@ -26,7 +26,7 @@
 class SwWrtShell;
 
 // frame dialog
-class SwFrameDlg : public SfxTabDialogController
+class SwFrameDlg final : public SfxTabDialogController
 {
     bool m_bFormat;
     bool m_bNew;

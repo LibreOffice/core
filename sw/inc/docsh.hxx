@@ -323,7 +323,7 @@ public:
     virtual std::unique_ptr<LockAllViewsGuard> LockAllViews() override;
 
 protected:
-    class LockAllViewsGuard_Impl : public LockAllViewsGuard
+    class LockAllViewsGuard_Impl final : public LockAllViewsGuard
     {
         std::vector<SwViewShell*> m_aViewWasUnLocked;
 

@@ -35,11 +35,10 @@ class TextEngine;
 class TextView;
 class DataChangedEvent;
 
-class TextViewOutWin : public vcl::Window
+class TextViewOutWin final : public vcl::Window
 {
     TextView*    pTextView;
 
-protected:
     virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& ) override;
     virtual void    KeyInput( const KeyEvent& rKeyEvt ) override;
     virtual void    MouseMove( const MouseEvent& rMEvt ) override;
@@ -56,7 +55,7 @@ public:
 
 };
 
-class SwSrcEditWindow : public vcl::Window, public SfxListener
+class SwSrcEditWindow final : public vcl::Window, public SfxListener
 {
 private:
     class ChangesListener;
@@ -91,8 +90,6 @@ private:
     DECL_LINK( SyntaxTimerHdl, Timer *, void );
 
     using Window::Invalidate;
-
-protected:
 
     virtual void    Resize() override;
     virtual void    DataChanged( const DataChangedEvent& ) override;

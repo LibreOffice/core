@@ -30,7 +30,7 @@ class SwWrtShell;
 struct SwConversionArgs;
 class SwPaM;
 
-class SW_DLLPUBLIC SwHHCWrapper : public editeng::HangulHanjaConversion
+class SW_DLLPUBLIC SwHHCWrapper final : public editeng::HangulHanjaConversion
 {
     SwView *    m_pView;
     VclPtr<vcl::Window>     m_pWin;
@@ -70,7 +70,6 @@ class SW_DLLPUBLIC SwHHCWrapper : public editeng::HangulHanjaConversion
                             SwPaM *pCursor );
     void        ChangeText_impl( const OUString &rNewText, bool bKeepAttributes );
 
-protected:
     virtual void    GetNextPortion( OUString& rNextPortion,
                             LanguageType& rLangOfPortion,
                             bool bAllowImplicitChangesForNotConvertibleText ) override;

@@ -52,7 +52,7 @@
 #define FONTSIZE_CJK_DEFAULT        210
 #define FONTSIZE_OUTLINE            280
 
-class SW_DLLPUBLIC SwStdFontConfig : public utl::ConfigItem
+class SW_DLLPUBLIC SwStdFontConfig final : public utl::ConfigItem
 {
     OUString    sDefaultFonts[DEF_FONT_COUNT];
     sal_Int32   nDefaultFontHeight[DEF_FONT_COUNT];

@@ -29,7 +29,7 @@ class SwNodeIndex;
 
 // the special readers
 
-class HTMLReader : public Reader
+class HTMLReader final : public Reader
 {
     // we don't want to have the streams/storages open
     virtual bool SetStrmStgPtr() override;
@@ -45,7 +45,7 @@ public:
     virtual ErrCode Read(SwDoc&, const OUString& rBaseURL, SwPaM&, const OUString&) override;
 };
 
-class XMLReader : public Reader
+class XMLReader final : public Reader
 {
     virtual ErrCode Read(SwDoc&, const OUString& rBaseURL, SwPaM&, const OUString&) override;
 

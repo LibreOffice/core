@@ -28,7 +28,7 @@ class SwView;
 class SwWrtShell;
 struct SwInsertTableOptions;
 
-class SwConvertTableDlg : public SfxDialogController
+class SwConvertTableDlg final : public SfxDialogController
 {
     std::unique_ptr<weld::RadioButton> m_xTabBtn;
     std::unique_ptr<weld::RadioButton> m_xSemiBtn;

@@ -23,7 +23,7 @@ struct SwDocStat;
 #include <sfx2/childwin.hxx>
 #include <swabstdlg.hxx>
 
-class SwWordCountFloatDlg : public SfxModelessDialogController
+class SwWordCountFloatDlg final : public SfxModelessDialogController
 {
     void SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc);
     void showCJK(bool bShowCJK);

@@ -70,7 +70,7 @@ public:
     virtual ~SwNumFormatBase() {}
 };
 
-class SW_DLLPUBLIC NumFormatListBox : public SwNumFormatBase
+class SW_DLLPUBLIC NumFormatListBox final : public SwNumFormatBase
 {
     std::unique_ptr<weld::ComboBox> mxControl;
 
@@ -101,7 +101,7 @@ public:
     void            connect_changed(const Link<weld::ComboBox&, void>& rLink) { mxControl->connect_changed(rLink); }
 };
 
-class SW_DLLPUBLIC SwNumFormatTreeView : public SwNumFormatBase
+class SW_DLLPUBLIC SwNumFormatTreeView final : public SwNumFormatBase
 {
     std::unique_ptr<weld::TreeView> mxControl;
 

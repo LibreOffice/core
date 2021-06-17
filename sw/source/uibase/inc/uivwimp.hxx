@@ -42,7 +42,7 @@ namespace com::sun::star {
     }
 }
 
-class SwScannerEventListener : public ::cppu::WeakImplHelper<
+class SwScannerEventListener final : public ::cppu::WeakImplHelper<
     css::lang::XEventListener >
 {
     SwView* pView;
@@ -60,7 +60,7 @@ public:
 };
 
 // Clipboard EventListener
-class SwClipboardChangeListener : public ::cppu::WeakImplHelper<
+class SwClipboardChangeListener final : public ::cppu::WeakImplHelper<
     css::datatransfer::clipboard::XClipboardListener >
 {
     SwView* pView;

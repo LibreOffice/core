@@ -41,7 +41,8 @@ class IMailDispatcherListener;
     must not be shared among different client threads. Instead each client
     thread should create an own instance of this class.
 */
-class SW_DLLPUBLIC MailDispatcher : public salhelper::SimpleReferenceObject, private ::osl::Thread
+class SW_DLLPUBLIC MailDispatcher final : public salhelper::SimpleReferenceObject,
+                                          private ::osl::Thread
 {
 public:
     // bringing operator new/delete into scope
@@ -130,15 +131,13 @@ public:
      */
     void addListener(::rtl::Reference<IMailDispatcherListener> const& listener);
 
-protected:
+private:
     virtual void SAL_CALL run() override;
     virtual void SAL_CALL onTerminated() override;
 
-private:
     std::vector<::rtl::Reference<IMailDispatcherListener>> cloneListener();
     void sendMailMessageNotifyListener(css::uno::Reference<css::mail::XMailMessage> const& message);
 
-private:
     css::uno::Reference<css::mail::XSmtpService> m_xMailserver;
     std::list<css::uno::Reference<css::mail::XMailMessage>> m_aXMessageList;
     std::vector<::rtl::Reference<IMailDispatcherListener>> m_aListenerVector;

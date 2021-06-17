@@ -26,7 +26,7 @@
 
 class IntlWrapper;
 
-class SW_DLLPUBLIC SwFormatEditInReadonly : public SfxBoolItem
+class SW_DLLPUBLIC SwFormatEditInReadonly final : public SfxBoolItem
 {
 public:
     SwFormatEditInReadonly( sal_uInt16 nId = RES_EDIT_IN_READONLY,

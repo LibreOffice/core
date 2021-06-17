@@ -44,7 +44,7 @@ class SwTableNode;
 class SwTableAutoFormat;
 class SwTableSortBoxes;
 
-class SwUndoInsTable : public SwUndo
+class SwUndoInsTable final : public SwUndo
 {
     OUString m_sTableName;
     SwInsertTableOptions m_aInsTableOptions;
@@ -71,7 +71,7 @@ public:
     virtual SwRewriter GetRewriter() const override;
 };
 
-class SwUndoTextToTable : public SwUndo, public SwUndRng
+class SwUndoTextToTable final : public SwUndo, public SwUndRng
 {
     OUString m_sTableName;
     SwInsertTableOptions m_aInsertTableOpts;
@@ -97,7 +97,7 @@ public:
     void AddFillBox( const SwTableBox& rBox );
 };
 
-class SwUndoTableToText : public SwUndo
+class SwUndoTableToText final : public SwUndo
 {
     OUString m_sTableName;
     std::unique_ptr<SwDDEFieldType> m_pDDEFieldType;
@@ -123,7 +123,7 @@ public:
                     sal_Int32 nContentIdx = SAL_MAX_INT32);
 };
 
-class SwUndoAttrTable : public SwUndo
+class SwUndoAttrTable final : public SwUndo
 {
     sal_uLong m_nStartNode;
     std::unique_ptr<SaveTable> m_pSaveTable;
@@ -140,7 +140,7 @@ public:
 
 class SwUndoTableNumFormat;
 
-class SwUndoTableAutoFormat : public SwUndo
+class SwUndoTableAutoFormat final : public SwUndo
 {
     OUString m_TableStyleName;
     sal_uLong m_nStartNode;
@@ -164,7 +164,7 @@ public:
 
 using SwUndoSaveSections = std::vector<std::unique_ptr<SwUndoSaveSection, o3tl::default_delete<SwUndoSaveSection>>>;
 
-class SwUndoTableNdsChg : public SwUndo
+class SwUndoTableNdsChg final : public SwUndo
 {
     std::unique_ptr<SaveTable> m_pSaveTable;
     std::set<sal_uLong> m_Boxes;
@@ -208,7 +208,7 @@ public:
 
 class SwUndoMove;
 
-class SwUndoTableMerge : public SwUndo, private SwUndRng
+class SwUndoTableMerge final : public SwUndo, private SwUndRng
 {
     sal_uLong m_nTableNode;
     std::unique_ptr<SaveTable> m_pSaveTable;
@@ -235,7 +235,7 @@ public:
     void SaveCollection( const SwTableBox& rBox );
 };
 
-class SwUndoTableNumFormat : public SwUndo
+class SwUndoTableNumFormat final : public SwUndo
 {
     std::unique_ptr<SfxItemSet> m_pBoxSet;
     std::unique_ptr<SwHistory> m_pHistory;
@@ -265,7 +265,7 @@ public:
 
 struct UndoTableCpyTable_Entry;
 
-class SwUndoTableCpyTable : public SwUndo
+class SwUndoTableCpyTable final : public SwUndo
 {
     std::vector<std::unique_ptr<UndoTableCpyTable_Entry>> m_vArr;
     std::unique_ptr<SwUndoTableNdsChg> m_pInsRowUndo;
@@ -292,7 +292,7 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
-class SwUndoCpyTable : public SwUndo
+class SwUndoCpyTable final : public SwUndo
 {
     std::unique_ptr<SwUndoDelete> m_pDelete;
     sal_uLong m_nTableNode;
@@ -308,7 +308,7 @@ public:
     void SetTableSttIdx( sal_uLong nIdx )           { m_nTableNode = nIdx; }
 };
 
-class SwUndoSplitTable : public SwUndo
+class SwUndoSplitTable final : public SwUndo
 {
     sal_uLong m_nTableNode, m_nOffset;
     std::unique_ptr<SwSaveRowSpan> mpSaveRowSpan; // stores row span values at the splitting row
@@ -333,7 +333,7 @@ public:
     void SaveFormula( SwHistory& rHistory );
 };
 
-class SwUndoMergeTable : public SwUndo
+class SwUndoMergeTable final : public SwUndo
 {
     OUString m_aName;
     sal_uLong m_nTableNode;
@@ -355,7 +355,7 @@ public:
     void SaveFormula( SwHistory& rHistory );
 };
 
-class SwUndoTableHeadline : public SwUndo
+class SwUndoTableHeadline final : public SwUndo
 {
     sal_uLong m_nTableNode;
     sal_uInt16 m_nOldHeadline;
@@ -371,7 +371,7 @@ public:
 
 void InsertSort( std::vector<sal_uInt16>& rArr, sal_uInt16 nIdx );
 
-class SwUndoTableStyleMake : public SwUndo
+class SwUndoTableStyleMake final : public SwUndo
 {
     OUString m_sName;
     std::unique_ptr<SwTableAutoFormat> m_pAutoFormat;
@@ -386,7 +386,7 @@ public:
     virtual SwRewriter GetRewriter() const override;
 };
 
-class SwUndoTableStyleDelete : public SwUndo
+class SwUndoTableStyleDelete final : public SwUndo
 {
     std::unique_ptr<SwTableAutoFormat> m_pAutoFormat;
     std::vector<SwTable*> m_rAffectedTables;
@@ -401,7 +401,7 @@ public:
     virtual SwRewriter GetRewriter() const override;
 };
 
-class SwUndoTableStyleUpdate : public SwUndo
+class SwUndoTableStyleUpdate final : public SwUndo
 {
     std::unique_ptr<SwTableAutoFormat> m_pOldFormat, m_pNewFormat;
 public:

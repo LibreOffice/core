@@ -38,7 +38,7 @@ class SwShdwCursorOptionsTabPage;
 enum class SwFillMode;
 
 /// Item for settings dialog - document view
-class SW_DLLPUBLIC SwDocDisplayItem : public SfxPoolItem
+class SW_DLLPUBLIC SwDocDisplayItem final : public SfxPoolItem
 {
     friend class SwShdwCursorOptionsTabPage;
     friend class SwModule;
@@ -64,7 +64,7 @@ public:
 
 // OS 12.01.95
 // Item for settings dialog, element page
-class SW_DLLPUBLIC SwElemItem : public SfxPoolItem
+class SW_DLLPUBLIC SwElemItem final : public SfxPoolItem
 {
     //view
     bool m_bVertRuler     :1;
@@ -99,7 +99,7 @@ public:
 
 // OS 12.01.95
 // Item for settings dialog - printer/add-ons
-class SW_DLLPUBLIC SwAddPrinterItem : public SfxPoolItem, public SwPrintData
+class SW_DLLPUBLIC SwAddPrinterItem final : public SfxPoolItem, public SwPrintData
 {
     using  SwPrintData::operator ==;
 
@@ -113,7 +113,7 @@ public:
 };
 
 /// Item for settings dialog, ShadowCursorPage
-class SW_DLLPUBLIC SwShadowCursorItem : public SfxPoolItem
+class SW_DLLPUBLIC SwShadowCursorItem final : public SfxPoolItem
 {
     SwFillMode m_eMode;
     bool m_bOn;
@@ -136,7 +136,7 @@ public:
 #ifdef DBG_UTIL
 
 // Item for settings dialog - test settings
-class SW_DLLPUBLIC SwTestItem : public SfxPoolItem
+class SW_DLLPUBLIC SwTestItem final : public SfxPoolItem
 {
     friend class SwModule;
     friend class SwTestTabPage;

@@ -24,7 +24,7 @@
 #include <svx/colorbox.hxx>
 
 // footnote settings TabPage
-class SwFootNotePage: public SfxTabPage
+class SwFootNotePage final : public SfxTabPage
 {
     static const sal_uInt16 aPageRg[];
 public:

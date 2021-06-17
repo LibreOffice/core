@@ -56,7 +56,7 @@ struct SwAddressPreview_Impl;
 
 // Preview window used to show the possible selection of address blocks
 // and also the resulting address filled with database data
-class SW_DLLPUBLIC SwAddressPreview : public weld::CustomWidgetController
+class SW_DLLPUBLIC SwAddressPreview final : public weld::CustomWidgetController
 {
     std::unique_ptr<SwAddressPreview_Impl> pImpl;
     std::unique_ptr<weld::ScrolledWindow> m_xVScrollBar;
@@ -133,7 +133,7 @@ public:
     bool HasMore() const { return !sAddress.isEmpty(); }
 };
 
-class SW_DLLPUBLIC SwAuthenticator :
+class SW_DLLPUBLIC SwAuthenticator final :
     public cppu::WeakImplHelper<css::mail::XAuthenticator>
 {
     OUString m_aUserName;
@@ -155,7 +155,7 @@ public:
 
 };
 
-class SW_DLLPUBLIC SwConnectionContext : public cppu::WeakImplHelper<css::uno::XCurrentContext>
+class SW_DLLPUBLIC SwConnectionContext final : public cppu::WeakImplHelper<css::uno::XCurrentContext>
 {
     OUString m_sMailServer;
     sal_Int16 m_nPort;
@@ -174,7 +174,7 @@ public:
     osl::Mutex m_aMutex;
 };
 
-class SW_DLLPUBLIC SwConnectionListener :
+class SW_DLLPUBLIC SwConnectionListener final :
         public SwMutexBase,
         public cppu::WeakComponentImplHelper<css::mail::XConnectionListener>
 {
@@ -193,7 +193,7 @@ public:
     virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
 };
 
-class SW_DLLPUBLIC SwMailTransferable :
+class SW_DLLPUBLIC SwMailTransferable final :
         public SwMutexBase,
         public cppu::WeakComponentImplHelper<css::datatransfer::XTransferable, css::beans::XPropertySet>
 {
@@ -228,7 +228,7 @@ class SW_DLLPUBLIC SwMailTransferable :
 
 };
 
-class SW_DLLPUBLIC SwMailMessage :
+class SW_DLLPUBLIC SwMailMessage final :
         public SwMutexBase,
         public cppu::WeakComponentImplHelper<css::mail::XMailMessage>
 {

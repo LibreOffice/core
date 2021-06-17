@@ -23,7 +23,7 @@
 
 class SwWrtShell;
 
-class SwFootNoteOptionDlg : public SfxTabDialogController
+class SwFootNoteOptionDlg final : public SfxTabDialogController
 {
     SwWrtShell& rSh;
 

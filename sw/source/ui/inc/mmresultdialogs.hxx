@@ -31,7 +31,7 @@ namespace com::sun::star::mail { class XMailMessage; }
 
 
 /// Dialog implementing the saving as of the result document.
-class SwMMResultSaveDialog : public SfxDialogController
+class SwMMResultSaveDialog final : public SfxDialogController
 {
     bool                   m_bCancelSaving;
 
@@ -52,7 +52,7 @@ public:
 };
 
 /// Dialog implementing the printing of the result document.
-class SwMMResultPrintDialog : public SfxDialogController
+class SwMMResultPrintDialog final : public SfxDialogController
 {
     VclPtr<Printer>        m_pTempPrinter;
 
@@ -79,7 +79,7 @@ public:
 };
 
 /// Dialog implementing the sending as email of the result document.
-class SwMMResultEmailDialog : public SfxDialogController
+class SwMMResultEmailDialog final : public SfxDialogController
 {
     OUString        m_sConfigureMail;
     OUString        m_sCC;
@@ -135,7 +135,7 @@ struct SwMailDescriptor
 };
 struct SwSendMailDialog_Impl;
 class SwMailMergeConfigItem;
-class SwSendMailDialog : public weld::GenericDialogController
+class SwSendMailDialog final : public weld::GenericDialogController
 {
     OUString                m_sContinue;
     OUString                m_sStop;

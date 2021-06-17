@@ -43,7 +43,7 @@ namespace sfx2
 class SectRepr;
 typedef std::map<size_t, std::unique_ptr<SectRepr>> SectReprs_t;
 
-class SwEditRegionDlg : public SfxDialogController
+class SwEditRegionDlg final : public SfxDialogController
 {
     bool            m_bSubRegionsFilled;
 
@@ -115,7 +115,7 @@ public:
 };
 
 // dialog "insert region"
-class SwInsertSectionTabPage : public SfxTabPage
+class SwInsertSectionTabPage final : public SfxTabPage
 {
     OUString        m_sFileName;
     OUString        m_sFilterName;
@@ -205,7 +205,7 @@ public:
                                 const SfxItemSet* rAttrSet);
 };
 
-class SwSectionIndentTabPage : public SfxTabPage
+class SwSectionIndentTabPage final : public SfxTabPage
 {
     SvxParaPrevWindow m_aPreviewWin;
     std::unique_ptr<weld::MetricSpinButton> m_xBeforeMF;
@@ -225,12 +225,11 @@ public:
     void    SetWrtShell(SwWrtShell const & rSh);
 };
 
-class SwInsertSectionTabDialog : public SfxTabDialogController
+class SwInsertSectionTabDialog final : public SfxTabDialogController
 {
     SwWrtShell&     rWrtSh;
     std::unique_ptr<SwSectionData> m_pSectionData;
 
-protected:
     virtual void    PageCreated(const OString& rId, SfxTabPage &rPage) override;
     virtual short   Ok() override;
 public:
@@ -241,11 +240,10 @@ public:
     SwSectionData * GetSectionData() { return m_pSectionData.get(); }
 };
 
-class SwSectionPropertyTabDialog : public SfxTabDialogController
+class SwSectionPropertyTabDialog final : public SfxTabDialogController
 {
     SwWrtShell& rWrtSh;
 
-protected:
     virtual void    PageCreated(const OString& rId, SfxTabPage &rPage) override;
 public:
     SwSectionPropertyTabDialog(weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh);
