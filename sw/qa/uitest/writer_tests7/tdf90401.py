@@ -40,15 +40,14 @@ class tdf90401(UITestCase):
         xSecurityPage.executeAction('SELECT', tuple())
         # Click Button Options...
         xOptions = xDialog.getChild('options')
-        def handle_options_dlg(dialog):
+
+        with self.ui_test.execute_blocking_action(xOptions.executeAction, args=('CLICK', ()), close_button="") as dialog:
             xRemovePersonal = dialog.getChild('removepersonal')
             xRemovePersonal.executeAction('CLICK', tuple())
-            #Click on its button Close
             xOkBtn = dialog.getChild('ok')
+            # FIXME: we can't use close_dialog_through_button here, the dialog doesn't emit the
+            # event DialogClosed after closing
             xOkBtn.executeAction('CLICK', tuple())
-
-        self.ui_test.execute_blocking_action(xOptions.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_options_dlg)
 
         xOKBtn = xDialog.getChild('ok')
         self.ui_test.close_dialog_through_button(xOKBtn)

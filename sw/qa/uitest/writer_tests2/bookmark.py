@@ -78,15 +78,9 @@ class bookmarkDialog(UITestCase):
         xFirstListEntry.executeAction("SELECT", tuple())
         xRenameBtn = xBookDlg.getChild("rename")
 
-        def handle_rename_dlg(dialog):                     #handle rename dialog - need special handling
-
+        with self.ui_test.execute_blocking_action(xRenameBtn.executeAction, args=('CLICK', ())) as dialog:
             xNewNameTxt=dialog.getChild("entry")
             xNewNameTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"newname"}))
-            xOKBtn = dialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
-
-        self.ui_test.execute_blocking_action(xRenameBtn.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_rename_dlg)             #close rename dialog with OK button
 
         xBookDlg = self.xUITest.getTopFocusWindow()
         x1stListEntry = xBmk.getChild("O") #  select first bookmark - name "newname"

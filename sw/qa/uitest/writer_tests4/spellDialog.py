@@ -86,15 +86,16 @@ frog, dogg, catt"""
         changeall.executeAction("CLICK", ())
         # The third time we click on changeall, the click action is going to
         # block while two message boxes are shown, so we need to do this third
-        # click specially:
-        self.ui_test.execute_blocking_action(
-            changeall.executeAction, args=('CLICK', ()),
+        # click specially
+        # Use empty close_button to open consecutive dialogs
+        with self.ui_test.execute_blocking_action(
+                changeall.executeAction, args=('CLICK', ()), close_button="") as dialog:
             # Step 5: Confirm to "Continue check at beginning of document"
-            dialog_handler=lambda dialog :
-                self.ui_test.execute_blocking_action(
-                    dialog.getChild('yes').executeAction, 'ok', ('CLICK', ())
-                )
-            )
+            xYesBtn = dialog.getChild("yes")
+
+            with self.ui_test.execute_blocking_action(
+                    xYesBtn.executeAction, args=('CLICK', ())):
+                pass
 
         output_text = document.Text.getString().replace('\r\n', '\n')
         self.assertTrue(re.match(self.TDF46852_REGEX, output_text))

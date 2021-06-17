@@ -68,24 +68,18 @@ class AutoRedactDialog(UITestCase):
         ["target3", "content3"],
         ]
 
-        def handle_add_dlg(dialog):                     #handle add target dialog - need special handling
-            xNewNameTxt=dialog.getChild("name")
-            xNewContentTxt=dialog.getChild("content")
-            xOKBtn = dialog.getChild("close")
-            xTypeList = dialog.getChild("type") #0: Text, 1: Regex, 2: Predefined
-
-            select_pos(xTypeList, 0) #Text
-            self.assertEqual(int(get_state_as_dict(xTypeList)["SelectEntryPos"]), 0)
-
-            type_text(xNewNameTxt, targets_list[self.add_target_counter][0])
-            type_text(xNewContentTxt, targets_list[self.add_target_counter][1])
-
-            self.ui_test.close_dialog_through_button(xOKBtn)
-
         for i in range(0, len(targets_list)):
             self.add_target_counter = i
-            self.ui_test.execute_blocking_action(xAddBtn.executeAction, args=('CLICK', ()),
-                    dialog_handler=handle_add_dlg)             #close add target dialog with OK button
+            with self.ui_test.execute_blocking_action(xAddBtn.executeAction, args=('CLICK', ()), close_button="close") as dialog:
+                xNewNameTxt=dialog.getChild("name")
+                xNewContentTxt=dialog.getChild("content")
+                xTypeList = dialog.getChild("type") #0: Text, 1: Regex, 2: Predefined
+
+                select_pos(xTypeList, 0) #Text
+                self.assertEqual(int(get_state_as_dict(xTypeList)["SelectEntryPos"]), 0)
+
+                type_text(xNewNameTxt, targets_list[self.add_target_counter][0])
+                type_text(xNewContentTxt, targets_list[self.add_target_counter][1])
 
         # Make sure targets are added successfully
         xTargetsListbox = xDialog.getChild("targets")
@@ -131,10 +125,9 @@ class AutoRedactDialog(UITestCase):
         self.clearTargetsbox(xDialog)
 
         # We first need to add a target so that we can edit it
-        def handle_add_dlg(dialog):                     #handle add target dialog - need special handling
+        with self.ui_test.execute_blocking_action(xAddBtn.executeAction, args=('CLICK', ()), close_button="close") as dialog:
             xNewNameTxt=dialog.getChild("name")
             xNewContentTxt=dialog.getChild("content")
-            xOKBtn = dialog.getChild("close")
             xTypeList = dialog.getChild("type") #0: Text, 1: Regex, 2: Predefined
 
             select_pos(xTypeList, 0) #Text
@@ -142,11 +135,6 @@ class AutoRedactDialog(UITestCase):
 
             type_text(xNewNameTxt, "TestTarget")
             type_text(xNewContentTxt, "TestContent")
-
-            self.ui_test.close_dialog_through_button(xOKBtn)
-
-        self.ui_test.execute_blocking_action(xAddBtn.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_add_dlg)             #close add target dialog with OK button
 
         # Make sure target is added successfully
         xTargetsListbox = xDialog.getChild("targets")
@@ -158,21 +146,15 @@ class AutoRedactDialog(UITestCase):
         target_entry.executeAction("SELECT", tuple())
 
         # Now edit the target
-        def handle_edit_dlg(dialog):                     #handle add target dialog - need special handling
+        with self.ui_test.execute_blocking_action(xEditBtn.executeAction, args=('CLICK', ()), close_button="close") as dialog:
             xNameTxt=dialog.getChild("name")
             xContentTxt=dialog.getChild("content")
-            xOKBtn = dialog.getChild("close")
 
             xNameTxt.executeAction("CLEAR", tuple())
             xContentTxt.executeAction("CLEAR", tuple())
 
             type_text(xNameTxt, "TestTargetEdited")
             type_text(xContentTxt, "TestContentEdited")
-
-            self.ui_test.close_dialog_through_button(xOKBtn)
-
-        self.ui_test.execute_blocking_action(xEditBtn.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_edit_dlg)             #close add target dialog with OK button
 
         # Make sure target is still there
         xTargetsListbox = xDialog.getChild("targets")

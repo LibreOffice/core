@@ -44,12 +44,9 @@ class tdf118208(UITestCase):
         xDialog = self.xUITest.getTopFocusWindow()
 
         format = xDialog.getChild("format")
-        def handle_format_dlg(dialog):
-            xOkBtn = dialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOkBtn)
 
-        self.ui_test.execute_blocking_action(format.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_format_dlg)
+        with self.ui_test.execute_blocking_action(format.executeAction, args=('CLICK', ())):
+            pass
 
         #verify
         self.assertEqual(document.Text.String[0:14], "Aaaaaaaaaaaaaa")

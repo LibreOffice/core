@@ -19,7 +19,7 @@ class customSlideShow(UITestCase):
         new = CustomSlideShows.getChild("new")
         ok = CustomSlideShows.getChild("ok")
 
-        def handle_new_dlg(DefineCustomSlideShow):
+        with self.ui_test.execute_blocking_action(new.executeAction, args=('CLICK', ())) as DefineCustomSlideShow:
             customname = DefineCustomSlideShow.getChild("customname")
             customname.executeAction("TYPE", mkPropertyValues({"KEYCODE": "BACKSPACE"}))
             customname.executeAction("TYPE", mkPropertyValues({"TEXT": "a"}))
@@ -29,11 +29,7 @@ class customSlideShow(UITestCase):
             xEntry.executeAction("SELECT", tuple())
             add = DefineCustomSlideShow.getChild("add")
             add.executeAction("CLICK",tuple())
-            ok = DefineCustomSlideShow.getChild("ok")
-            self.ui_test.close_dialog_through_button(ok)
 
-        self.ui_test.execute_blocking_action(new.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_new_dlg)
         self.ui_test.close_dialog_through_button(ok)
         #verify
         self.ui_test.execute_dialog_through_command(".uno:CustomShowDialog")
@@ -43,7 +39,7 @@ class customSlideShow(UITestCase):
         self.assertEqual(get_state_as_dict(customshowlist)["SelectionCount"], "1")
         ok = CustomSlideShows.getChild("ok")
 
-        def handle_edit_dlg(DefineCustomSlideShow):
+        with self.ui_test.execute_blocking_action(edit.executeAction, args=('CLICK', ()), close_button="cancel") as DefineCustomSlideShow:
             customname = DefineCustomSlideShow.getChild("customname")
             self.assertEqual(get_state_as_dict(customname)["Text"], "aa")
 #            print(DefineCustomSlideShow.getChildren())
@@ -58,11 +54,6 @@ class customSlideShow(UITestCase):
 #            remove.executeAction("CLICK",tuple())  #tdf126951
             self.assertEqual(get_state_as_dict(custompages)["Children"], "1")
             self.assertEqual(get_state_as_dict(pages)["Children"], "1")
-            cancel = DefineCustomSlideShow.getChild("cancel")
-            self.ui_test.close_dialog_through_button(cancel)
-
-        self.ui_test.execute_blocking_action(edit.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_edit_dlg)
 
         CustomSlideShows = self.xUITest.getTopFocusWindow()
         delete = CustomSlideShows.getChild("delete")

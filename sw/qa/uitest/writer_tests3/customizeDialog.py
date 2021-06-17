@@ -108,23 +108,22 @@ class ConfigureDialog(UITestCase):
         self.ui_test.create_doc_in_start_center("writer")
 
         self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog")
-        def close_dialog(dlg):
-            CancelBtn = dlg.getChild("cancel")
-            self.ui_test.close_dialog_through_button(CancelBtn)
 
         # Open the New Menu Dialog with id = 0
         xDialog = self.xUITest.getTopFocusWindow()
         xmenugearbtn=xDialog.getChild("menugearbtn")
         def show_dialog0():
             xmenugearbtn.executeAction("OPENFROMLIST", mkPropertyValues({"POS": "0" }))
-        self.ui_test.execute_blocking_action( action=show_dialog0, dialog_handler=close_dialog)
+        with self.ui_test.execute_blocking_action( action=show_dialog0, close_button="cancel"):
+            pass
 
         # Open the Rename Menu Dialog with id = 2
         xDialog = self.xUITest.getTopFocusWindow()
         xmenugearbtn=xDialog.getChild("menugearbtn")
         def show_dialog2():
             xmenugearbtn.executeAction("OPENFROMLIST", mkPropertyValues({"POS": "2"}))
-        self.ui_test.execute_blocking_action( action=show_dialog2, dialog_handler=close_dialog)
+        with self.ui_test.execute_blocking_action( action=show_dialog2, close_button="cancel"):
+            pass
 
         xDialog = self.xUITest.getTopFocusWindow()
         xcancBtn = xDialog.getChild("cancel")
