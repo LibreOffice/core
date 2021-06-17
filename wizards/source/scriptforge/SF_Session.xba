@@ -23,6 +23,9 @@ Option Explicit
 &apos;&apos;&apos;		Service invocation example:
 &apos;&apos;&apos;			Dim session As Variant
 &apos;&apos;&apos;			session = CreateScriptService(&quot;Session&quot;)
+&apos;&apos;&apos;
+&apos;&apos;&apos;		Detailed user documentation:
+&apos;&apos;&apos;			https://help.libreoffice.org/latest/en-US/text/sbasic/shared/03/sf_session.html?DbPAR=BASIC
 &apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;
 
 REM ================================================================== EXCEPTIONS

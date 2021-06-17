@@ -71,6 +71,9 @@ Option Explicit
 &apos;&apos;&apos;					myDoc.Range(&quot;SheetX.D2:F6&quot;)
 &apos;&apos;&apos;											A range within the sheet SheetX in file associated with the myDoc Calc instance
 &apos;&apos;&apos;
+&apos;&apos;&apos;		Detailed user documentation:
+&apos;&apos;&apos;			https://help.libreoffice.org/latest/en-US/text/sbasic/shared/03/sf_calc.html?DbPAR=BASIC
+&apos;&apos;&apos;
 &apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;
 
 REM ================================================================== EXCEPTIONS

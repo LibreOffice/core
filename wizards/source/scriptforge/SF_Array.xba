@@ -17,6 +17,9 @@ Option Explicit
 &apos;&apos;&apos;			With the noticeable exception of the CountDims method (&gt;2 dims allowed)
 &apos;&apos;&apos;		The first argument of almost every method is the array to consider
 &apos;&apos;&apos;			It is always passed by reference and left unchanged
+&apos;&apos;&apos;
+&apos;&apos;&apos;		Detailed user documentation:
+&apos;&apos;&apos;			https://help.libreoffice.org/latest/en-US/text/sbasic/shared/03/sf_array.html?DbPAR=BASIC
 &apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;
 
 REM ================================================================== EXCEPTIONS

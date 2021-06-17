@@ -65,6 +65,9 @@ Option Explicit
 &apos;&apos;&apos;			Dim myForm As Object
 &apos;&apos;&apos;				Set myForm = CreateScriptService(&quot;SFDocuments.FormEvent&quot;, poEvent)
 &apos;&apos;&apos;
+&apos;&apos;&apos;		Detailed user documentation:
+&apos;&apos;&apos;			https://help.libreoffice.org/latest/en-US/text/sbasic/shared/03/sf_form.html?DbPAR=BASIC
+&apos;&apos;&apos;
 &apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;
 
 REM ================================================================== EXCEPTIONS

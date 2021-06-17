@@ -611,6 +611,9 @@ class SFScriptForge:
 
             The signatures of Basic builtin functions are derived from
                 core/basic/source/runtime/stdobj.cxx
+
+            Detailed user documentation:
+                https://help.libreoffice.org/latest/en-US/text/sbasic/shared/03/sf_basic.html?DbPAR=BASIC
             """
         # Mandatory class properties for service registration
         serviceimplementation = 'python'

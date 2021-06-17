@@ -55,6 +55,9 @@ Option Explicit
 &apos;&apos;&apos;			myPO = CreateScriptService(&quot;L10N&quot;)	&apos;	AddText and ExportToPOTFile are allowed
 &apos;&apos;&apos;			myPO = CreateScriptService(&quot;L10N&quot;, &quot;C:\myPOFiles\&quot;, &quot;fr-BE&quot;)
 &apos;&apos;&apos;				&apos;All functionalities are available
+&apos;&apos;&apos;
+&apos;&apos;&apos;		Detailed user documentation:
+&apos;&apos;&apos;			https://help.libreoffice.org/latest/en-US/text/sbasic/shared/03/sf_l10n.html?DbPAR=BASIC
 &apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;
 
 REM =============================================================== PRIVATE TYPES

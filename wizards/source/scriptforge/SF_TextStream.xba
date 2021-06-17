@@ -35,6 +35,9 @@ Option Explicit
 &apos;&apos;&apos;			Dim FSO As Object, myFile As Object
 &apos;&apos;&apos;				Set FSO = CreateScriptService(&quot;FileSystem&quot;)
 &apos;&apos;&apos;				Set myFile = FSO.OpenTextFile(&quot;C:\Temp\ThisFile.txt&quot;, FSO.ForReading)	&apos;	Once per file
+&apos;&apos;&apos;
+&apos;&apos;&apos;		Detailed user documentation:
+&apos;&apos;&apos;			https://help.libreoffice.org/latest/en-US/text/sbasic/shared/03/sf_textstream.html?DbPAR=BASIC
 &apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;
 
 REM ================================================================== EXCEPTIONS
