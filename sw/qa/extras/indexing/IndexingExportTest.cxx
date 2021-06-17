@@ -29,11 +29,13 @@ public:
     void testIndexingExport_Paragraphs();
     void testIndexingExport_Images();
     void testIndexingExport_OLE();
+    void testIndexingExport_Shapes();
 
     CPPUNIT_TEST_SUITE(IndexingExportTest);
     CPPUNIT_TEST(testIndexingExport_Paragraphs);
     CPPUNIT_TEST(testIndexingExport_Images);
     CPPUNIT_TEST(testIndexingExport_OLE);
+    CPPUNIT_TEST(testIndexingExport_Shapes);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -118,6 +120,34 @@ void IndexingExportTest::testIndexingExport_OLE()
     assertXPath(pXmlDoc, "/indexing");
     assertXPath(pXmlDoc, "/indexing/ole[1]", "name", "Object - Chart");
     assertXPath(pXmlDoc, "/indexing/ole[1]", "alt", "Alt Text");
+}
+
+void IndexingExportTest::testIndexingExport_Shapes()
+{
+    SwDoc* pDoc = createDoc("IndexingExport_Shapes.odt");
+    CPPUNIT_ASSERT(pDoc);
+
+    SvMemoryStream aMemoryStream;
+    sw::IndexingExport aIndexingExport(aMemoryStream, pDoc);
+    aIndexingExport.runExport();
+    aMemoryStream.Seek(0);
+
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aMemoryStream);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/indexing");
+
+    assertXPath(pXmlDoc, "/indexing/shape[1]", "name", "Circle");
+    assertXPathContent(pXmlDoc, "/indexing/shape[1]/paragraph[1]", "This is a circle");
+    assertXPathContent(pXmlDoc, "/indexing/shape[1]/paragraph[2]", "This is a second paragraph");
+
+    assertXPath(pXmlDoc, "/indexing/shape[2]", "name", "Diamond");
+    assertXPathContent(pXmlDoc, "/indexing/shape[2]/paragraph[1]", "This is a diamond");
+
+    assertXPath(pXmlDoc, "/indexing/shape[3]", "name", "Text Frame 1");
+    assertXPathContent(pXmlDoc, "/indexing/shape[3]/paragraph[1]", "This is a TextBox - Para1");
+    assertXPathContent(pXmlDoc, "/indexing/shape[3]/paragraph[2]", "Para2");
+    assertXPathContent(pXmlDoc, "/indexing/shape[3]/paragraph[3]", "Para3");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(IndexingExportTest);
