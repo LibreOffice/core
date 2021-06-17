@@ -96,6 +96,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gtk4,\
 	vcl/unx/gtk4/glomenu \
 	vcl/unx/gtk4/gloactiongroup \
     vcl/unx/gtk4/hudawareness \
+    vcl/unx/gtk4/notifyinglayout \
 ))
 
 ifeq ($(OS),LINUX)

@@ -11,6 +11,7 @@
 #define GTK_TOOLKIT_NAME "gtk4"
 
 #include "convert3to4.hxx"
+#include "notifyinglayout.hxx"
 
 #include "../gtk3/gtkinst.cxx"
 

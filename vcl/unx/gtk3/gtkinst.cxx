@@ -7785,98 +7785,6 @@ public:
 
 }
 
-#if GTK_CHECK_VERSION(4, 0, 0)
-
-G_BEGIN_DECLS
-
-G_DECLARE_FINAL_TYPE(NotifyingLayout, notifying_layout, NOTIFYING, LAYOUT, GtkLayoutManager)
-
-struct _NotifyingLayout
-{
-    GtkLayoutManager parent_instance;
-
-    GtkWidget* m_pWidget;
-    GtkLayoutManager* m_pOrigManager;
-    Link<void*, void> m_aLink;
-
-    void StartWatch(GtkWidget* pWidget, const Link<void*, void>& rLink)
-    {
-        m_pWidget = pWidget;
-        m_aLink = rLink;
-
-        m_pOrigManager = gtk_widget_get_layout_manager(m_pWidget);
-        g_object_ref(m_pOrigManager);
-
-        gtk_widget_set_layout_manager(pWidget, GTK_LAYOUT_MANAGER(this));
-    }
-
-    void StopWatch()
-    {
-        gtk_widget_set_layout_manager(m_pWidget, m_pOrigManager);
-    }
-};
-
-struct _NotifyingLayoutClass
-{
-    GtkLayoutManagerClass parent_class;
-};
-
-G_DEFINE_TYPE(NotifyingLayout, notifying_layout, GTK_TYPE_LAYOUT_MANAGER)
-
-static void notifying_layout_measure(GtkLayoutManager* pLayoutManager,
-                                     GtkWidget* widget,
-                                     GtkOrientation orientation,
-                                     int for_size,
-                                     int *minimum,
-                                     int *natural,
-                                     int *minimum_baseline,
-                                     int *natural_baseline)
-{
-    NotifyingLayout* self = NOTIFYING_LAYOUT(pLayoutManager);
-    GtkLayoutManagerClass* pKlass = GTK_LAYOUT_MANAGER_CLASS(G_OBJECT_GET_CLASS(self->m_pOrigManager));
-    pKlass->measure(self->m_pOrigManager, widget, orientation, for_size,
-                    minimum, natural, minimum_baseline, natural_baseline);
-}
-
-static void notifying_layout_allocate(GtkLayoutManager* pLayoutManager,
-                                      GtkWidget* widget,
-                                      int width,
-                                      int height,
-                                      int baseline)
-{
-    NotifyingLayout* self = NOTIFYING_LAYOUT(pLayoutManager);
-    GtkLayoutManagerClass* pKlass = GTK_LAYOUT_MANAGER_CLASS(G_OBJECT_GET_CLASS(self->m_pOrigManager));
-    pKlass->allocate(self->m_pOrigManager, widget, width, height, baseline);
-    self->m_aLink.Call(nullptr);
-}
-
-static GtkSizeRequestMode notifying_layout_get_request_mode(GtkLayoutManager* pLayoutManager,
-                                                            GtkWidget* widget)
-{
-    NotifyingLayout* self = NOTIFYING_LAYOUT(pLayoutManager);
-    GtkLayoutManagerClass* pKlass = GTK_LAYOUT_MANAGER_CLASS(G_OBJECT_GET_CLASS(self->m_pOrigManager));
-    return pKlass->get_request_mode(self->m_pOrigManager, widget);
-}
-
-static void notifying_layout_class_init(NotifyingLayoutClass* klass)
-{
-    GtkLayoutManagerClass *layout_class = GTK_LAYOUT_MANAGER_CLASS(klass);
-
-    layout_class->get_request_mode = notifying_layout_get_request_mode;
-    layout_class->measure = notifying_layout_measure;
-    layout_class->allocate = notifying_layout_allocate;
-}
-
-static void notifying_layout_init(NotifyingLayout* self)
-{
-    self->m_pWidget = nullptr;
-    self->m_pOrigManager = nullptr;
-}
-
-G_END_DECLS
-
-#endif
-
 namespace {
 
 class GtkInstanceNotebook : public GtkInstanceWidget, public virtual weld::Notebook
@@ -8364,7 +8272,7 @@ public:
             m_nNotebookSizeAllocateSignalId = g_signal_connect_after(pNotebook, "size-allocate", G_CALLBACK(signalSizeAllocate), this);
 #else
             m_pLayout = NOTIFYING_LAYOUT(g_object_new(notifying_layout_get_type(), nullptr));
-            m_pLayout->StartWatch(GTK_WIDGET(pNotebook), LINK(this, GtkInstanceNotebook, SizeAllocateHdl));
+            notifying_layout_start_watch(m_pLayout, GTK_WIDGET(pNotebook), LINK(this, GtkInstanceNotebook, SizeAllocateHdl));
 #endif
         }
         gtk_notebook_set_show_border(m_pOverFlowNotebook, false);
@@ -8641,7 +8549,7 @@ public:
         if (m_pLayout)
         {
             // put it back how we found it initially
-            m_pLayout->StopWatch();
+            notifying_layout_stop_watch(m_pLayout);
         }
 #endif
         g_signal_handler_disconnect(m_pNotebook, m_nSwitchPageSignalId);
