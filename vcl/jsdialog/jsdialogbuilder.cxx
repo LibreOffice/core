@@ -909,7 +909,7 @@ std::unique_ptr<weld::MenuButton> JSInstanceBuilder::weld_menu_button(const OStr
 std::unique_ptr<weld::Popover> JSInstanceBuilder::weld_popover(const OString& id)
 {
     DockingWindow* pDockingWindow = m_xBuilder->get<DockingWindow>(id);
-    std::unique_ptr<weld::Popover> pRet(
+    std::unique_ptr<weld::Popover> pWeldWidget(
         pDockingWindow ? new JSPopover(this, pDockingWindow, this, false) : nullptr);
     if (pDockingWindow)
     {
@@ -927,7 +927,11 @@ std::unique_ptr<weld::Popover> JSInstanceBuilder::weld_popover(const OString& id
             initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
         }
     }
-    return pRet;
+
+    if (pWeldWidget)
+        RememberWidget("__POPOVER__", pWeldWidget.get());
+
+    return pWeldWidget;
 }
 
 weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParent,
