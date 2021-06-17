@@ -22233,6 +22233,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/applyautofmtpage.ui" &&
         rUIFile != "cui/ui/applylocalizedpage.ui" &&
         rUIFile != "cui/ui/areatabpage.ui" &&
+        rUIFile != "cui/ui/asiantypography.ui" &&
         rUIFile != "cui/ui/autocorrectdialog.ui" &&
         rUIFile != "cui/ui/bitmaptabpage.ui" &&
         rUIFile != "cui/ui/borderpage.ui" &&
@@ -22273,6 +22274,9 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/optlingupage.ui" &&
         rUIFile != "cui/ui/optnewdictionarydialog.ui" &&
         rUIFile != "cui/ui/pageformatpage.ui" &&
+        rUIFile != "cui/ui/paragalignpage.ui" &&
+        rUIFile != "cui/ui/paraindentspacing.ui" &&
+        rUIFile != "cui/ui/paratabspage.ui" &&
         rUIFile != "cui/ui/pastespecial.ui" &&
         rUIFile != "cui/ui/patterntabpage.ui" &&
         rUIFile != "cui/ui/percentdialog.ui" &&
@@ -22289,6 +22293,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/similaritysearchdialog.ui" &&
         rUIFile != "cui/ui/specialcharacters.ui" &&
         rUIFile != "cui/ui/spelloptionsdialog.ui" &&
+        rUIFile != "cui/ui/textflowpage.ui" &&
         rUIFile != "cui/ui/thesaurus.ui" &&
         rUIFile != "cui/ui/tipofthedaydialog.ui" &&
         rUIFile != "cui/ui/toolbarmodedialog.ui" &&
@@ -22416,6 +22421,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/swriter/ui/charurlpage.ui" &&
         rUIFile != "modules/swriter/ui/columndialog.ui" &&
         rUIFile != "modules/swriter/ui/columnpage.ui" &&
+        rUIFile != "modules/swriter/ui/dropcapspage.ui" &&
         rUIFile != "modules/swriter/ui/editcategories.ui" &&
         rUIFile != "modules/swriter/ui/endnotepage.ui" &&
         rUIFile != "modules/swriter/ui/exchangedatabases.ui" &&
@@ -22438,9 +22444,11 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/swriter/ui/linenumbering.ui" &&
         rUIFile != "modules/swriter/ui/newuserindexdialog.ui" &&
         rUIFile != "modules/swriter/ui/numberingnamedialog.ui" &&
+        rUIFile != "modules/swriter/ui/numparapage.ui" &&
         rUIFile != "modules/swriter/ui/outlinenumbering.ui" &&
         rUIFile != "modules/swriter/ui/outlinenumberingpage.ui" &&
         rUIFile != "modules/swriter/ui/outlinepositionpage.ui" &&
+        rUIFile != "modules/swriter/ui/paradialog.ui" &&
         rUIFile != "modules/swriter/ui/printeroptions.ui" &&
         rUIFile != "modules/swriter/ui/printoptionspage.ui" &&
         rUIFile != "modules/swriter/ui/renameautotextdialog.ui" &&
