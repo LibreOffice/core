@@ -13,6 +13,7 @@
 #include <doc.hxx>
 
 class SwNode;
+class SdrObject;
 
 namespace sw
 {
@@ -22,6 +23,7 @@ public:
     virtual ~ModelTraverseHandler() {}
 
     virtual void handleNode(SwNode* pNode) = 0;
+    virtual void handleSdrObject(SdrObject* pObject) = 0;
 };
 
 class SW_DLLPUBLIC ModelTraverser
