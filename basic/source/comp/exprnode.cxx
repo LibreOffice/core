@@ -262,7 +262,7 @@ void SbiExprNode::FoldConstantsBinaryNode(SbiParser* pParser)
         }
         else
         {
-            eType = SbxDOUBLE;
+            eType = SbxBOOL;
             eNodeType = SbxNUMVAL;
             int eRes = rr.compareTo( rl );
             switch( eTok )
@@ -365,22 +365,22 @@ void SbiExprNode::FoldConstantsBinaryNode(SbiParser* pParser)
                 nVal = nl - nr; break;
             case EQ:
                 nVal = ( nl == nr ) ? SbxTRUE : SbxFALSE;
-                eType = SbxINTEGER; break;
+                eType = SbxBOOL; break;
             case NE:
                 nVal = ( nl != nr ) ? SbxTRUE : SbxFALSE;
-                eType = SbxINTEGER; break;
+                eType = SbxBOOL; break;
             case LT:
                 nVal = ( nl <  nr ) ? SbxTRUE : SbxFALSE;
-                eType = SbxINTEGER; break;
+                eType = SbxBOOL; break;
             case GT:
                 nVal = ( nl >  nr ) ? SbxTRUE : SbxFALSE;
-                eType = SbxINTEGER; break;
+                eType = SbxBOOL; break;
             case LE:
                 nVal = ( nl <= nr ) ? SbxTRUE : SbxFALSE;
-                eType = SbxINTEGER; break;
+                eType = SbxBOOL; break;
             case GE:
                 nVal = ( nl >= nr ) ? SbxTRUE : SbxFALSE;
-                eType = SbxINTEGER; break;
+                eType = SbxBOOL; break;
             case IDIV:
                 if( !lr )
                 {
