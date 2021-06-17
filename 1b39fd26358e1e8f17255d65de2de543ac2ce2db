@@ -22,6 +22,23 @@
       "revId": "1b39fd26358e1e8f17255d65de2de543ac2ce2db",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0904a9c6_20455b02",
+        "filename": "sd/qa/uitest/impress_tests/customSlideShow.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-06-17T07:15:19Z",
+      "side": 1,
+      "message": "Hi Mike,\nRegarding the execute_blocking_action, I tried to guarded it as well but the only working solution I found so far is to add the try/finally to the dialog_handler parameter.\nAny opinion on this ?",
+      "revId": "1b39fd26358e1e8f17255d65de2de543ac2ce2db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
