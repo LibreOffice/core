@@ -3448,60 +3448,71 @@ public:
 
     virtual void set_grid_left_attach(int nAttach) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        GtkContainer* pParent = GTK_CONTAINER(gtk_widget_get_parent(m_pWidget));
-        gtk_container_child_set(pParent, m_pWidget, "left-attach", nAttach, nullptr);
+        GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
+#if GTK_CHECK_VERSION(4, 0, 0)
+        int row, width, height;
+        gtk_grid_query_child(GTK_GRID(pParent), m_pWidget, nullptr, &row, &width, &height);
+        g_object_ref(m_pWidget);
+        gtk_grid_remove(GTK_GRID(pParent), m_pWidget);
+        gtk_grid_attach(GTK_GRID(pParent), m_pWidget, nAttach, row, width, height);
+        g_object_unref(m_pWidget);
 #else
-        (void)nAttach;
+        gtk_container_child_set(GTK_CONTAINER(pParent), m_pWidget, "left-attach", nAttach, nullptr);
 #endif
     }
 
     virtual int get_grid_left_attach() const override
     {
         gint nAttach(0);
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        GtkContainer* pParent = GTK_CONTAINER(gtk_widget_get_parent(m_pWidget));
-        gtk_container_child_get(pParent, m_pWidget, "left-attach", &nAttach, nullptr);
-        return nAttach;
+        GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_grid_query_child(GTK_GRID(pParent), m_pWidget, &nAttach, nullptr, nullptr, nullptr);
 #else
-        GtkGrid* pParent = GTK_GRID(gtk_widget_get_parent(m_pWidget));
-        gtk_grid_query_child(pParent, m_pWidget, &nAttach, nullptr, nullptr, nullptr);
-        return nAttach;
+        gtk_container_child_get(GTK_CONTAINER(pParent), m_pWidget, "left-attach", &nAttach, nullptr);
 #endif
+        return nAttach;
     }
 
     virtual void set_grid_width(int nCols) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        GtkContainer* pParent = GTK_CONTAINER(gtk_widget_get_parent(m_pWidget));
-        gtk_container_child_set(pParent, m_pWidget, "width", nCols, nullptr);
+        GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
+#if GTK_CHECK_VERSION(4, 0, 0)
+        int col, row, height;
+        gtk_grid_query_child(GTK_GRID(pParent), m_pWidget, &col, &row, nullptr, &height);
+        g_object_ref(m_pWidget);
+        gtk_grid_remove(GTK_GRID(pParent), m_pWidget);
+        gtk_grid_attach(GTK_GRID(pParent), m_pWidget, col, row, nCols, height);
+        g_object_unref(m_pWidget);
 #else
-        (void)nCols;
+        gtk_container_child_set(GTK_CONTAINER(pParent), m_pWidget, "width", nCols, nullptr);
 #endif
     }
 
     virtual void set_grid_top_attach(int nAttach) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        GtkContainer* pParent = GTK_CONTAINER(gtk_widget_get_parent(m_pWidget));
-        gtk_container_child_set(pParent, m_pWidget, "top-attach", nAttach, nullptr);
+        GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
+#if GTK_CHECK_VERSION(4, 0, 0)
+        int col, width, height;
+        gtk_grid_query_child(GTK_GRID(pParent), m_pWidget, &col, nullptr, &width, &height);
+        g_object_ref(m_pWidget);
+        gtk_grid_remove(GTK_GRID(pParent), m_pWidget);
+        gtk_grid_attach(GTK_GRID(pParent), m_pWidget, col, nAttach, width, height);
+        g_object_unref(m_pWidget);
 #else
-        (void)nAttach;
+        gtk_container_child_set(GTK_CONTAINER(pParent), m_pWidget, "top-attach", nAttach, nullptr);
 #endif
     }
 
     virtual int get_grid_top_attach() const override
     {
         gint nAttach(0);
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        GtkContainer* pParent = GTK_CONTAINER(gtk_widget_get_parent(m_pWidget));
-        gtk_container_child_get(pParent, m_pWidget, "top-attach", &nAttach, nullptr);
-        return nAttach;
+        GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_grid_query_child(GTK_GRID(pParent), m_pWidget, nullptr, &nAttach, nullptr, nullptr);
 #else
-        GtkGrid* pParent = GTK_GRID(gtk_widget_get_parent(m_pWidget));
-        gtk_grid_query_child(pParent, m_pWidget, nullptr, &nAttach, nullptr, nullptr);
-        return nAttach;
+        gtk_container_child_get(GTK_CONTAINER(pParent), m_pWidget, "top-attach", &nAttach, nullptr);
 #endif
+        return nAttach;
     }
 
     virtual void set_hexpand(bool bExpand) override
@@ -22217,11 +22228,15 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/bitmaptabpage.ui" &&
         rUIFile != "cui/ui/borderpage.ui" &&
         rUIFile != "cui/ui/breaknumberoption.ui" &&
+        rUIFile != "cui/ui/charnamepage.ui" &&
         rUIFile != "cui/ui/colorpage.ui" &&
         rUIFile != "cui/ui/colorpickerdialog.ui" &&
         rUIFile != "cui/ui/editdictionarydialog.ui" &&
+        rUIFile != "cui/ui/effectspage.ui" &&
         rUIFile != "cui/ui/eventassigndialog.ui" &&
         rUIFile != "cui/ui/eventassignpage.ui" &&
+        rUIFile != "cui/ui/fontfeaturesdialog.ui" &&
+        rUIFile != "cui/ui/fontfragment.ui" &&
         rUIFile != "cui/ui/gradientpage.ui" &&
         rUIFile != "cui/ui/hatchpage.ui" &&
         rUIFile != "cui/ui/hangulhanjaadddialog.ui" &&
@@ -22256,6 +22271,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/pickgraphicpage.ui" &&
         rUIFile != "cui/ui/picknumberingpage.ui" &&
         rUIFile != "cui/ui/pickoutlinepage.ui" &&
+        rUIFile != "cui/ui/positionpage.ui" &&
         rUIFile != "cui/ui/qrcodegen.ui" &&
         rUIFile != "cui/ui/scriptorganizer.ui" &&
         rUIFile != "cui/ui/searchattrdialog.ui" &&
@@ -22268,6 +22284,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/tipofthedaydialog.ui" &&
         rUIFile != "cui/ui/toolbarmodedialog.ui" &&
         rUIFile != "cui/ui/transparencytabpage.ui" &&
+        rUIFile != "cui/ui/twolinespage.ui" &&
         rUIFile != "cui/ui/wordcompletionpage.ui" &&
         rUIFile != "cui/ui/zoomdialog.ui" &&
         rUIFile != "filter/ui/pdfgeneralpage.ui" &&
@@ -22386,6 +22403,8 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/swriter/ui/autotext.ui" &&
         rUIFile != "modules/swriter/ui/bibliographyentry.ui" &&
         rUIFile != "modules/swriter/ui/bulletsandnumbering.ui" &&
+        rUIFile != "modules/swriter/ui/characterproperties.ui" &&
+        rUIFile != "modules/swriter/ui/charurlpage.ui" &&
         rUIFile != "modules/swriter/ui/columndialog.ui" &&
         rUIFile != "modules/swriter/ui/columnpage.ui" &&
         rUIFile != "modules/swriter/ui/editcategories.ui" &&
