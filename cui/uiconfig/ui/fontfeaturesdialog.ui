@@ -99,7 +99,6 @@
                         <property name="row-homogeneous">True</property>
                         <property name="row_spacing">6</property>
                         <property name="column_spacing">12</property>
-                        <property name="margin">6</property>
                         <child>
                           <placeholder/>
                         </child>
