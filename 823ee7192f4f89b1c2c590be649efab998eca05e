@@ -104,6 +104,24 @@
     },
     {
       "key": {
+        "uuid": "51f32139_923bbacb",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 1188,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-17T05:44:16Z",
+      "side": 1,
+      "message": "Hii.. \n\nI tried to compare mxFilterLb with rBox but it shows compile time error and says that combo boxes cannot be compared.. Same is the case with checkboxes..",
+      "parentUuid": "96d949c0_efa74b49",
+      "revId": "823ee7192f4f89b1c2c590be649efab998eca05e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6a8c7ee0_fd845ff5",
         "filename": "sfx2/source/dialog/templdlg.cxx",
         "patchSetId": 23
