@@ -26,19 +26,14 @@ class tdf141244(UITestCase):
         xLinks = xDialog.getChild("TB_LINKS")
         self.assertEqual(1, len(xLinks.getChildren()))
 
-        def handle_modify_dlg(dialog):
+        xChangeBtn = xDialog.getChild("CHANGE_SOURCE")
+
+        with self.ui_test.execute_blocking_action(xChangeBtn.executeAction, args=('CLICK', ()), close_button="cancel") as dialog:
             self.assertEqual("soffice", get_state_as_dict(dialog.getChild("app"))['Text'])
             self.assertEqual("data1.ods", get_state_as_dict(dialog.getChild("file"))['Text'])
             self.assertEqual("sheet1.A1", get_state_as_dict(dialog.getChild("category"))['Text'])
 
             # tdf#141770: Without the fix in place, the cancel button wouldn't have worked here
-            xCancelBtn = dialog.getChild("cancel")
-            self.ui_test.close_dialog_through_button(xCancelBtn)
-
-        xChangeBtn = xDialog.getChild("CHANGE_SOURCE")
-
-        self.ui_test.execute_blocking_action(xChangeBtn.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_modify_dlg)
 
         xClose = xDialog.getChild("close")
         self.ui_test.close_dialog_through_button(xClose)
