@@ -1307,6 +1307,13 @@ DECLARE_WW8EXPORT_TEST(testWw8Cjklist34, "cjklist34.doc")
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_UPPER_ZH_TW, numFormat);
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf131147, "tdf131147.odt")
+{
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Cut", {}); // test should crash here without the fix
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+}
+
 DECLARE_WW8EXPORT_TEST(testWw8Cjklist35, "cjklist35.doc")
 {
     sal_Int16   numFormat = getNumberingTypeOfParagraph(1);
