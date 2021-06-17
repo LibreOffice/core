@@ -59,7 +59,7 @@ public:
     uno_type get() const { return maValue; }
 };
 
-class COMPHELPER_DLLPUBLIC ConfigurationListener :
+class COMPHELPER_DLLPUBLIC ConfigurationListener final :
         public cppu::WeakImplHelper< css::beans::XPropertyChangeListener >
 {
     css::uno::Reference< css::beans::XPropertySet > mxConfig;

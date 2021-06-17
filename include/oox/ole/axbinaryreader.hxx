@@ -168,7 +168,7 @@ private:
     };
 
     /** Complex property for a 32-bit value pair, e.g. point or size. */
-    struct PairProperty : public ComplexProperty
+    struct PairProperty final : public ComplexProperty
     {
         AxPairData&         mrPairData;
 
@@ -178,7 +178,7 @@ private:
     };
 
     /** Complex property for a string value. */
-    struct StringProperty : public ComplexProperty
+    struct StringProperty final : public ComplexProperty
     {
         OUString&    mrValue;
         sal_uInt32          mnSize;
@@ -189,7 +189,7 @@ private:
     };
 
     /** Complex property for an array of strings. */
-    struct ArrayStringProperty : public ComplexProperty
+    struct ArrayStringProperty final : public ComplexProperty
     {
         AxArrayString&      mrArray;
         sal_uInt32          mnSize;
@@ -199,7 +199,7 @@ private:
     };
 
     /** Complex property for a GUID value. */
-    struct GuidProperty : public ComplexProperty
+    struct GuidProperty final : public ComplexProperty
     {
         OUString&    mrGuid;
 
@@ -209,7 +209,7 @@ private:
     };
 
     /** Stream property for a font structure. */
-    struct FontProperty : public ComplexProperty
+    struct FontProperty final : public ComplexProperty
     {
         AxFontData&         mrFontData;
 
@@ -219,7 +219,7 @@ private:
     };
 
     /** Stream property for a picture or mouse icon. */
-    struct PictureProperty : public ComplexProperty
+    struct PictureProperty final : public ComplexProperty
     {
         StreamDataSequence& mrPicData;
 

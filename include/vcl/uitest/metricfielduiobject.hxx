@@ -14,7 +14,7 @@
 
 class MetricField;
 
-class MetricFieldUIObject : public SpinFieldUIObject
+class MetricFieldUIObject final : public SpinFieldUIObject
 {
     VclPtr<MetricField> mxMetricField;
 
@@ -28,7 +28,7 @@ public:
 
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
-protected:
+private:
     virtual OUString get_name() const override;
 };
 

@@ -70,7 +70,7 @@ public:
 };
 
 class  BaseStorage;
-class SOT_DLLPUBLIC SotStorage : virtual public SotObject
+class SOT_DLLPUBLIC SotStorage final : virtual public SotObject
 {
 friend class SotStorageStream;
 
@@ -83,7 +83,6 @@ friend class SotStorageStream;
     OString m_aKey; // aKey.Len != 0  -> encryption
     sal_Int32 m_nVersion;
 
-protected:
     virtual ~SotStorage() override;
     void CreateStorage(bool bUCBStorage, StreamMode);
 public:

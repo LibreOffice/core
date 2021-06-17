@@ -54,9 +54,8 @@ class Imp3DDepthRemapper;
 |*
 \************************************************************************/
 
-class SVXCORE_DLLPUBLIC E3dScene : public E3dObject, public SdrObjList
+class SVXCORE_DLLPUBLIC E3dScene final : public E3dObject, public SdrObjList
 {
-protected:
     virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
 
@@ -184,7 +183,7 @@ public:
     virtual SdrObjList* GetSubList() const override;
     virtual void SetTransformChanged() override;
 
-protected:
+private:
     virtual basegfx::B3DRange RecalcBoundVolume() const override;
 };
 

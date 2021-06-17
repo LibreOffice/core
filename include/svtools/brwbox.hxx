@@ -140,7 +140,7 @@ class BrowseBox;
 class ScrollBarBox;
 class BrowserMouseEvent;
 
-class BrowserDataWin
+class BrowserDataWin final
             :public Control
             ,public DragSourceHelper
             ,public DropTargetHelper
@@ -214,7 +214,7 @@ public:
     void            Invalidate( const tools::Rectangle& rRect, InvalidateFlags nFlags = InvalidateFlags::NONE ) override;
     using Control::Invalidate;
 
-protected:
+private:
     void            StartRowDividerDrag( const Point& _rStartPos );
     bool            ImplRowDividerHitTest( const BrowserMouseEvent& _rEvent );
 };

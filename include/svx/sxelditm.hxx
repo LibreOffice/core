@@ -22,7 +22,7 @@
 #include <svx/svddef.hxx>
 #include <svx/sdmetitm.hxx>
 
-class SdrEdgeLineDeltaCountItem : public SfxUInt16Item
+class SdrEdgeLineDeltaCountItem final : public SfxUInt16Item
 {
 public:
     SdrEdgeLineDeltaCountItem(sal_uInt16 nVal = 0)
