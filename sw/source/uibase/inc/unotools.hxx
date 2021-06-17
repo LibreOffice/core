@@ -36,7 +36,7 @@
 
 class SwView;
 
-class SW_DLLPUBLIC SwOneExampleFrame : public weld::CustomWidgetController
+class SW_DLLPUBLIC SwOneExampleFrame final : public weld::CustomWidgetController
 {
     ScopedVclPtr<VirtualDevice> m_xVirDev;
     css::uno::Reference< css::frame::XModel >         m_xModel;

@@ -26,7 +26,7 @@
 
 class IntlWrapper;
 
-class SW_DLLPUBLIC SwFormatFollowTextFlow : public SfxBoolItem
+class SW_DLLPUBLIC SwFormatFollowTextFlow final : public SfxBoolItem
 {
 public:
 

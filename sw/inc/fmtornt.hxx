@@ -30,7 +30,7 @@
 
 class IntlWrapper;
 
-class SW_DLLPUBLIC SwFormatVertOrient: public SfxPoolItem
+class SW_DLLPUBLIC SwFormatVertOrient final : public SfxPoolItem
 {
     SwTwips         m_nYPos;  ///< Contains *always* the current RelPos.
     sal_Int16       m_eOrient;
@@ -62,7 +62,7 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
-class SW_DLLPUBLIC SwFormatHoriOrient: public SfxPoolItem
+class SW_DLLPUBLIC SwFormatHoriOrient final : public SfxPoolItem
 {
     SwTwips         m_nXPos;              ///< Contains *always* the current RelPos.
     sal_Int16       m_eOrient;

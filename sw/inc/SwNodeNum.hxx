@@ -26,7 +26,7 @@ class SwTextNode;
 struct SwPosition;
 class SwNumRule;
 
-class SAL_DLLPUBLIC_RTTI SwNodeNum : public SwNumberTreeNode
+class SAL_DLLPUBLIC_RTTI SwNodeNum final : public SwNumberTreeNode
 {
 public:
     explicit SwNodeNum(SwTextNode* pTextNode, bool isHiddenRedlines);
@@ -68,7 +68,7 @@ public:
     */
     const SwNodeNum* GetPrecedingNodeNumOf(const SwTextNode& rTextNode) const;
 
-protected:
+private:
     virtual SwNumberTreeNode* Create() const override;
 
     // --> #i64010#
@@ -80,7 +80,6 @@ protected:
     // method called at a child after this child has been removed from the list tree
     virtual void PostRemove() override;
 
-private:
     SwTextNode* const mpTextNode;
     SwNumRule* mpNumRule;
     bool m_isHiddenRedlines;

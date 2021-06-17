@@ -29,7 +29,7 @@ class IntlWrapper;
 class SwPaM;
 
 // container for FootNote
-class SW_DLLPUBLIC SwPageFootnoteInfoItem : public SfxPoolItem
+class SW_DLLPUBLIC SwPageFootnoteInfoItem final : public SfxPoolItem
 {
     SwPageFootnoteInfo aFootnoteInfo;
 
@@ -58,7 +58,7 @@ public:
     const SwPageFootnoteInfo& GetPageFootnoteInfo() const { return aFootnoteInfo; }
 };
 
-class SW_DLLPUBLIC SwPtrItem : public SfxPoolItem
+class SW_DLLPUBLIC SwPtrItem final : public SfxPoolItem
 {
     void* pMisc;
 
@@ -71,7 +71,7 @@ public:
     void*   GetValue() const        { return pMisc; }
 };
 
-class SW_DLLPUBLIC SwUINumRuleItem : public SfxPoolItem
+class SW_DLLPUBLIC SwUINumRuleItem final : public SfxPoolItem
 {
     std::unique_ptr<SwNumRule> pRule;
 
@@ -90,7 +90,7 @@ public:
           SwNumRule* GetNumRule()               { return pRule.get(); }
 };
 
-class SwPaMItem : public SfxPoolItem
+class SwPaMItem final : public SfxPoolItem
 {
     SwPaM* m_pPaM;
 

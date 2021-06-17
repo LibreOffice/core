@@ -23,7 +23,7 @@
 
 #include <swdllapi.h>
 
-class PrintMonitor : public weld::GenericDialogController
+class PrintMonitor final : public weld::GenericDialogController
 {
 public:
     std::unique_ptr<weld::Label> m_xDocName;
@@ -34,7 +34,7 @@ public:
     virtual ~PrintMonitor() override;
 };
 
-class SW_DLLPUBLIC SaveMonitor : public weld::GenericDialogController
+class SW_DLLPUBLIC SaveMonitor final : public weld::GenericDialogController
 {
 public:
     std::unique_ptr<weld::Label> m_xDocName;
@@ -45,7 +45,7 @@ public:
     virtual ~SaveMonitor() override;
 };
 
-class CreateMonitor : public weld::GenericDialogController
+class CreateMonitor final : public weld::GenericDialogController
 {
 public:
     CreateMonitor(weld::Window* pParent);

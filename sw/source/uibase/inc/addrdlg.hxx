@@ -21,7 +21,7 @@
 
 #include <sfx2/basedlgs.hxx>
 
-class SwAddrDlg : public SfxSingleTabDialogController
+class SwAddrDlg final : public SfxSingleTabDialogController
 {
 public:
     SwAddrDlg(weld::Window* pParent, const SfxItemSet& rSet);

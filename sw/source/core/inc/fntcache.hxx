@@ -64,7 +64,7 @@ struct SwTextGlyphsKey;
 bool operator<(const SwTextGlyphsKey& l, const SwTextGlyphsKey& r);
 struct SwTextGlyphsData;
 
-class SwFntObj : public SwCacheObj
+class SwFntObj final : public SwCacheObj
 {
     friend class SwFntAccess;
     friend void InitCore();
@@ -139,10 +139,10 @@ SwFntObj *SwFntCache::Next( SwFntObj *pFntObj)
     return static_cast<SwFntObj *>(SwCache::Next( pFntObj ));
 }
 
-class SwFntAccess : public SwCacheAccess
+class SwFntAccess final : public SwCacheAccess
 {
     SwViewShell const *m_pShell;
-protected:
+
     virtual SwCacheObj *NewObj( ) override;
 
 public:

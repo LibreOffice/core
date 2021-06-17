@@ -48,7 +48,7 @@ class SwXBodyText;
 typedef tools::SvRef<SwDocShell> SwDocShellRef;
 #endif
 
-class SwXAutoTextContainer : public cppu::WeakImplHelper
+class SwXAutoTextContainer final : public cppu::WeakImplHelper
 <
     css::text::XAutoTextContainer2,
     css::lang::XServiceInfo
@@ -56,7 +56,6 @@ class SwXAutoTextContainer : public cppu::WeakImplHelper
 {
     SwGlossaries *pGlossaries;
 
-protected:
     virtual ~SwXAutoTextContainer() override;    // ref-counted objects are not to be deleted from outside -> protected dtor
 
 public:
@@ -86,7 +85,7 @@ public:
 
 };
 
-class SwXAutoTextGroup : public cppu::WeakImplHelper
+class SwXAutoTextGroup final : public cppu::WeakImplHelper
 <
     css::text::XAutoTextGroup,
     css::beans::XPropertySet,
@@ -101,7 +100,6 @@ class SwXAutoTextGroup : public cppu::WeakImplHelper
     OUString                sName;
     OUString                m_sGroupName;   // prefix m_ to disambiguate from some local vars in the implementation
 
-protected:
     virtual ~SwXAutoTextGroup() override;    // ref-counted objects are not to be deleted from outside -> protected dtor
 
 public:
@@ -239,7 +237,7 @@ public:
 };
 
 /** Implement the XNameAccess for the AutoText events */
-class SwAutoTextEventDescriptor : public SvBaseEventDescriptor
+class SwAutoTextEventDescriptor final : public SvBaseEventDescriptor
 {
     SwXAutoTextEntry& rAutoTextEntry;
 
@@ -253,7 +251,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override;
 
-protected:
+private:
 
     virtual void replaceByName(
         const SvMacroItemId nEvent,  /// item ID of event

@@ -25,7 +25,7 @@ class SwTableLine;
 class SwBorderAttrs;
 
 /// SwRowFrame is one table row in the document layout.
-class SwRowFrame : public SwLayoutFrame
+class SwRowFrame final : public SwLayoutFrame
 {
     virtual void Format(vcl::RenderContext* pRenderContext,
                         const SwBorderAttrs* pAttrs = nullptr) override;
@@ -50,7 +50,6 @@ class SwRowFrame : public SwLayoutFrame
     virtual void DestroyImpl() override;
     virtual ~SwRowFrame() override;
 
-protected:
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 

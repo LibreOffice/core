@@ -51,7 +51,7 @@ class SwView;
 #define NID_FIELD_BYTYPE    20020
 #define NID_COUNT  21
 
-class SwTbxAutoTextCtrl : public SfxToolBoxControl
+class SwTbxAutoTextCtrl final : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -67,7 +67,7 @@ public:
     DECL_STATIC_LINK(SwTbxAutoTextCtrl, PopupHdl, Menu*, bool);
 };
 
-class SwPreviewZoomControl : public SfxToolBoxControl
+class SwPreviewZoomControl final : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -82,7 +82,7 @@ public:
     virtual VclPtr<InterimItemWindow> CreateItemWindow( vcl::Window *pParent ) override;
 };
 
-class SwJumpToSpecificPageControl : public SfxToolBoxControl
+class SwJumpToSpecificPageControl final : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();

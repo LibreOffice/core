@@ -32,7 +32,7 @@
 #include <itabenum.hxx>
 #include <memory>
 
-class SwInsTableDlg : public SfxDialogController
+class SwInsTableDlg final : public SfxDialogController
 {
     TextFilter m_aTextFilter;
 

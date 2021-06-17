@@ -39,7 +39,7 @@ class SfxObjectShellLock;
 enum class RegionMode;
 class SpinField;
 
-class SwNavigationPI : public PanelLayout
+class SwNavigationPI final : public PanelLayout
                      , public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
                      , public SfxListener
 {
@@ -114,8 +114,6 @@ class SwNavigationPI : public PanelLayout
     void UsePage();
 
     void UpdateInitShow();
-
-protected:
 
     // release ObjectShellLock early enough for app end
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;

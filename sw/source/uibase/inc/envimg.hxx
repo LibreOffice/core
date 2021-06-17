@@ -35,7 +35,7 @@ enum SwEnvAlign
     ENV_VER_RGHT
 };
 
-class SW_DLLPUBLIC SwEnvItem : public SfxPoolItem
+class SW_DLLPUBLIC SwEnvItem final : public SfxPoolItem
 {
 public:
 
@@ -66,7 +66,7 @@ public:
     virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 };
 
-class SwEnvCfgItem : public utl::ConfigItem
+class SwEnvCfgItem final : public utl::ConfigItem
 {
 private:
     SwEnvItem m_aEnvItem;

@@ -27,7 +27,7 @@
 
 class SwMasterUsrPref;
 
-class SwContentViewConfig : public utl::ConfigItem
+class SwContentViewConfig final : public utl::ConfigItem
 {
 private:
     SwMasterUsrPref&        m_rParent;
@@ -48,7 +48,7 @@ public:
     using ConfigItem::SetModified;
 };
 
-class SwLayoutViewConfig : public utl::ConfigItem
+class SwLayoutViewConfig final : public utl::ConfigItem
 {
 private:
     SwMasterUsrPref&    m_rParent;
@@ -67,7 +67,7 @@ public:
     using ConfigItem::SetModified;
 };
 
-class SwGridConfig : public utl::ConfigItem
+class SwGridConfig final : public utl::ConfigItem
 {
 private:
     SwMasterUsrPref&    m_rParent;
@@ -85,7 +85,7 @@ public:
     using ConfigItem::SetModified;
 };
 
-class SwCursorConfig : public utl::ConfigItem
+class SwCursorConfig final : public utl::ConfigItem
 {
 private:
     SwMasterUsrPref&    m_rParent;
@@ -103,7 +103,7 @@ public:
     using ConfigItem::SetModified;
 };
 
-class SwWebColorConfig : public utl::ConfigItem
+class SwWebColorConfig final : public utl::ConfigItem
 {
 private:
     SwMasterUsrPref&        m_rParent;

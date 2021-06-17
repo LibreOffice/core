@@ -22,7 +22,7 @@
 #include <rtl/ustring.hxx>
 #include <sfx2/stbitem.hxx>
 
-class SwBookmarkControl : public SfxStatusBarControl
+class SwBookmarkControl final : public SfxStatusBarControl
 {
     virtual void Command(const CommandEvent& rCEvt) override;
 

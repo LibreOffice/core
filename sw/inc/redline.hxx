@@ -149,7 +149,7 @@ public:
     OUString GetDescr() const;
 };
 
-class SW_DLLPUBLIC SwRangeRedline : public SwPaM
+class SW_DLLPUBLIC SwRangeRedline final : public SwPaM
 {
     SwRedlineData* m_pRedlineData;
     SwNodeIndex* m_pContentSect;
@@ -277,7 +277,7 @@ public:
 };
 
 /// Redline that holds information about a table-row that had some change
-class SW_DLLPUBLIC SwTableRowRedline : public SwExtraRedline
+class SW_DLLPUBLIC SwTableRowRedline final : public SwExtraRedline
 {
 private:
     SwRedlineData m_aRedlineData;
@@ -298,7 +298,7 @@ public:
 };
 
 /// Redline that holds information about a table-cell that had some change
-class SW_DLLPUBLIC SwTableCellRedline : public SwExtraRedline
+class SW_DLLPUBLIC SwTableCellRedline final : public SwExtraRedline
 {
 private:
     SwRedlineData m_aRedlineData;

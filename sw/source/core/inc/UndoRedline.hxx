@@ -51,7 +51,7 @@ public:
     sal_uInt16 GetRedlSaveCount() const;
 };
 
-class SwUndoRedlineDelete : public SwUndoRedline
+class SwUndoRedlineDelete final : public SwUndoRedline
 {
     bool m_bCanGroup : 1;
     bool m_bIsDelim : 1;
@@ -75,7 +75,7 @@ public:
     void SetRedlineText(const OUString & rText);
 };
 
-class SwUndoRedlineSort : public SwUndoRedline
+class SwUndoRedlineSort final : public SwUndoRedline
 {
     std::unique_ptr<SwSortOptions> m_pOpt;
     sal_uLong m_nSaveEndNode;
@@ -94,7 +94,7 @@ public:
     void SetSaveRange( const SwPaM& rRange );
 };
 
-class SwUndoAcceptRedline : public SwUndoRedline
+class SwUndoAcceptRedline final : public SwUndoRedline
 {
 private:
     virtual void RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam) override;
@@ -105,7 +105,7 @@ public:
     virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 };
 
-class SwUndoRejectRedline : public SwUndoRedline
+class SwUndoRejectRedline final : public SwUndoRedline
 {
 private:
     virtual void RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam) override;
@@ -116,7 +116,7 @@ public:
     virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 };
 
-class SwUndoCompDoc : public SwUndo, public SwUndRng
+class SwUndoCompDoc final : public SwUndo, public SwUndRng
 {
     std::unique_ptr<SwRedlineData> m_pRedlineData;
     std::unique_ptr<SwUndoDelete> m_pUndoDelete, m_pUndoDelete2;

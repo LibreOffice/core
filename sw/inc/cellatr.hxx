@@ -33,7 +33,7 @@
  */
 constexpr sal_uInt32 getSwDefaultTextFormat() { return NF_STANDARD_FORMAT_TEXT; }
 
-class SW_DLLPUBLIC SwTableBoxNumFormat : public SfxUInt32Item
+class SW_DLLPUBLIC SwTableBoxNumFormat final : public SfxUInt32Item
 {
 public:
     SwTableBoxNumFormat( sal_uInt32 nFormat = getSwDefaultTextFormat() );
@@ -49,7 +49,7 @@ public:
     }
 };
 
-class SAL_DLLPUBLIC_RTTI SwTableBoxFormula : public SfxPoolItem, public SwTableFormula
+class SW_DLLPUBLIC SwTableBoxFormula final : public SfxPoolItem, public SwTableFormula
 {
     sw::BroadcastingModify* m_pDefinedIn;   // Modify object where the formula is located
                             // can only be TableBoxFormat
@@ -75,7 +75,7 @@ public:
     void Calc( SwTableCalcPara& rCalcPara, double& rValue );
 };
 
-class SW_DLLPUBLIC SwTableBoxValue : public SfxPoolItem
+class SW_DLLPUBLIC SwTableBoxValue final : public SfxPoolItem
 {
     double m_nValue;
 public:

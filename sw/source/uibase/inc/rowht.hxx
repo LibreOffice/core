@@ -23,7 +23,7 @@
 
 class SwWrtShell;
 
-class SwTableHeightDlg : public weld::GenericDialogController
+class SwTableHeightDlg final : public weld::GenericDialogController
 {
     SwWrtShell& m_rSh;
 

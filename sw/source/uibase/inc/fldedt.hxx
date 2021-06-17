@@ -27,7 +27,7 @@ class SwView;
 class SwWrtShell;
 class SwFieldMgr;
 
-class SwFieldEditDlg : public SfxSingleTabDialogController
+class SwFieldEditDlg final : public SfxSingleTabDialogController
 {
     SwWrtShell* pSh;
     std::unique_ptr<weld::Button> m_xPrevBT;

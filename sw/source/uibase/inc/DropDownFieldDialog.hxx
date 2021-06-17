@@ -28,7 +28,7 @@ class SwWrtShell;
 // Dialog to edit drop down field selection
 namespace sw
 {
-class DropDownFieldDialog : public weld::GenericDialogController
+class DropDownFieldDialog final : public weld::GenericDialogController
 {
     SwWrtShell                 &m_rSh;
     SwDropDownField*           m_pDropField;

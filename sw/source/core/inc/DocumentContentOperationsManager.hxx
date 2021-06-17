@@ -31,7 +31,7 @@ class SwHistory;
 namespace sw
 {
 
-class DocumentContentOperationsManager : public IDocumentContentOperations
+class DocumentContentOperationsManager final : public IDocumentContentOperations
 {
 public:
     DocumentContentOperationsManager( SwDoc& i_rSwdoc );

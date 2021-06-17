@@ -57,7 +57,7 @@ public:
     void SetLastTableBox( const SwTableBox* pBox )    { m_pLastTableBox = pBox; }
 };
 
-class SAL_DLLPUBLIC_RTTI SwTableFormula
+class SW_DLLPUBLIC SwTableFormula
 {
 typedef void (SwTableFormula::*FnScanFormula)( const SwTable&, OUStringBuffer&,
                                                 OUString&, OUString*, void* ) const;

@@ -22,7 +22,7 @@
 
 #include <sfx2/basedlgs.hxx>
 
-class SwBackgroundDlg : public SfxSingleTabDialogController
+class SwBackgroundDlg final : public SfxSingleTabDialogController
 {
 public:
     SwBackgroundDlg(weld::Window* pParent, const SfxItemSet& rSet);

@@ -60,7 +60,7 @@ public:
     static const char     cSeparator;
 };
 
-class SwInsertBookmarkDlg : public SfxDialogController
+class SwInsertBookmarkDlg final : public SfxDialogController
 {
     SwWrtShell&                         rSh;
     std::vector<std::pair<sw::mark::IMark*, OUString>> aTableBookmarks;

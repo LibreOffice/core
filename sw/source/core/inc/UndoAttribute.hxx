@@ -34,7 +34,7 @@ class SwFootnoteInfo;
 class SwEndNoteInfo;
 class SwDoc;
 
-class SwUndoAttr : public SwUndo, private SwUndRng
+class SwUndoAttr final : public SwUndo, private SwUndRng
 {
     SfxItemSet m_AttrSet;                           // attributes for Redo
     const std::unique_ptr<SwHistory> m_pHistory;      // History for Undo
@@ -61,7 +61,7 @@ public:
     SwHistory& GetHistory() { return *m_pHistory; }
 };
 
-class SwUndoResetAttr : public SwUndo, private SwUndRng
+class SwUndoResetAttr final : public SwUndo, private SwUndRng
 {
     const std::unique_ptr<SwHistory> m_pHistory;
     o3tl::sorted_vector<sal_uInt16> m_Ids;
@@ -82,7 +82,7 @@ public:
     SwHistory& GetHistory() { return *m_pHistory; }
 };
 
-class SwUndoFormatAttr : public SwUndo
+class SwUndoFormatAttr final : public SwUndo
 {
     friend class SwUndoDefaultAttr;
     OUString m_sFormatName;
@@ -127,7 +127,7 @@ public:
 };
 
 // --> OD 2008-02-12 #newlistlevelattrs#
-class SwUndoFormatResetAttr : public SwUndo
+class SwUndoFormatResetAttr final : public SwUndo
 {
     public:
         SwUndoFormatResetAttr( SwFormat& rChangedFormat,
@@ -146,7 +146,7 @@ class SwUndoFormatResetAttr : public SwUndo
         std::unique_ptr<SfxPoolItem> m_pOldItem;
 };
 
-class SwUndoDontExpandFormat : public SwUndo
+class SwUndoDontExpandFormat final : public SwUndo
 {
     const sal_uLong m_nNodeIndex;
     const sal_Int32 m_nContentIndex;
@@ -176,7 +176,7 @@ public:
     std::unique_ptr<SwUndoFormatAttr> ReleaseUndo() { return std::move(m_pUndo); }
 };
 
-class SwUndoMoveLeftMargin : public SwUndo, private SwUndRng
+class SwUndoMoveLeftMargin final : public SwUndo, private SwUndRng
 {
     const std::unique_ptr<SwHistory> m_pHistory;
     const bool m_bModulus;
@@ -194,7 +194,7 @@ public:
 
 };
 
-class SwUndoDefaultAttr : public SwUndo
+class SwUndoDefaultAttr final : public SwUndo
 {
     std::unique_ptr<SfxItemSet> m_pOldSet;          // the old attributes
     std::unique_ptr<SvxTabStopItem> m_pTabStop;
@@ -209,7 +209,7 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 };
 
-class SwUndoChangeFootNote : public SwUndo, private SwUndRng
+class SwUndoChangeFootNote final : public SwUndo, private SwUndRng
 {
     const std::unique_ptr<SwHistory> m_pHistory;
     const OUString m_Text;
@@ -227,7 +227,7 @@ public:
     SwHistory& GetHistory() { return *m_pHistory; }
 };
 
-class SwUndoFootNoteInfo : public SwUndo
+class SwUndoFootNoteInfo final : public SwUndo
 {
     std::unique_ptr<SwFootnoteInfo> m_pFootNoteInfo;
 
@@ -240,7 +240,7 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 };
 
-class SwUndoEndNoteInfo : public SwUndo
+class SwUndoEndNoteInfo final : public SwUndo
 {
     std::unique_ptr<SwEndNoteInfo> m_pEndNoteInfo;
 

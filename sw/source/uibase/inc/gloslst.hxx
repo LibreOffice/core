@@ -44,7 +44,7 @@ struct AutoTextGroup
     }
 };
 
-class SwGlossaryList : public AutoTimer
+class SwGlossaryList final : public AutoTimer
 {
     std::vector<std::unique_ptr<AutoTextGroup>> aGroupArr;
     OUString        sPath;

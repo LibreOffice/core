@@ -24,7 +24,7 @@
 
 struct SwDBData;
 
-class SW_DLLPUBLIC SwDBConfig : public utl::ConfigItem
+class SW_DLLPUBLIC SwDBConfig final : public utl::ConfigItem
 {
 private:
     SAL_DLLPRIVATE static const css::uno::Sequence<OUString>& GetPropertyNames();

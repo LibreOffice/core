@@ -23,7 +23,7 @@ class DateFieldmark;
  * This button is shown when the cursor is on a date form field.
  * The user can select a date from a date picker while filling in a form.
  */
-class DateFormFieldButton : public FormFieldButton
+class DateFormFieldButton final : public FormFieldButton
 {
 private:
     SvNumberFormatter* m_pNumberFormatter;

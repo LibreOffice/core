@@ -26,7 +26,7 @@
 
 class SwLabCfgItem;
 
-class SW_DLLPUBLIC SwLabItem : public SfxPoolItem
+class SW_DLLPUBLIC SwLabItem final : public SfxPoolItem
 {
 
 public:
@@ -102,7 +102,7 @@ public:
     OUString   m_sGlossaryBlockName;
 };
 
-class SwLabCfgItem : public utl::ConfigItem
+class SwLabCfgItem final : public utl::ConfigItem
 {
 private:
     SwLabItem   aItem;

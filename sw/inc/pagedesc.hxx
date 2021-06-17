@@ -135,7 +135,7 @@ namespace o3tl {
     template<> struct typed_flags<UseOnPage> : is_typed_flags<UseOnPage, 0xffff> {};
 }
 
-class SW_DLLPUBLIC SwPageDesc
+class SW_DLLPUBLIC SwPageDesc final
     : public sw::BroadcastingModify
 {
     friend class SwDoc;
@@ -190,7 +190,6 @@ class SW_DLLPUBLIC SwPageDesc
         const OUString &mName;
     };
 
-protected:
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
 public:

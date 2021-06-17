@@ -614,7 +614,7 @@ enum class SwCreateDrawTable {
     Dash = 1, Gradient, Hatch, Bitmap, TransGradient, Marker, Defaults
 };
 
-class SwXDocumentPropertyHelper : public SvxUnoForbiddenCharsTable
+class SwXDocumentPropertyHelper final : public SvxUnoForbiddenCharsTable
 {
     css::uno::Reference < css::uno::XInterface > m_xDashTable;
     css::uno::Reference < css::uno::XInterface > m_xGradientTable;

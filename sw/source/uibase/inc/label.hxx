@@ -29,7 +29,7 @@ class SwLabPrtPage;
 class SwDBManager;
 class Printer;
 
-class SwLabDlg : public SfxTabDialogController
+class SwLabDlg final : public SfxTabDialogController
 {
     SwLabelConfig   aLabelsCfg;
     SwDBManager*    pDBManager;

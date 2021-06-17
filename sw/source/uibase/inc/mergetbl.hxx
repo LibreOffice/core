@@ -21,7 +21,7 @@
 
 #include <vcl/weld.hxx>
 
-class SwMergeTableDlg : public weld::GenericDialogController
+class SwMergeTableDlg final : public weld::GenericDialogController
 {
     bool& m_rMergePrev;
 

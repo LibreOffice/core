@@ -37,7 +37,7 @@ namespace sw {
     enum class FieldmarkMode;
 };
 
-class SwUndoInsSection : public SwUndo, private SwUndRng
+class SwUndoInsSection final : public SwUndo, private SwUndRng
 {
 private:
     const std::unique_ptr<SwSectionData> m_pSectionData;
@@ -77,7 +77,7 @@ std::unique_ptr<SwUndo> MakeUndoUpdateSection(SwSectionFormat const&, bool const
 class SwTOXBaseSection;
 class SwUndoDelSection;
 
-class SwUndoUpdateIndex : public SwUndo
+class SwUndoUpdateIndex final : public SwUndo
 {
 private:
     std::unique_ptr<SwUndoDelSection> m_pTitleSectionUpdated;

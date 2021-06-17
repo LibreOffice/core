@@ -41,7 +41,7 @@ namespace com::sun::star{
     }
 }
 
-class SwMailMergeDlg : public SfxDialogController
+class SwMailMergeDlg final : public SfxDialogController
 {
     friend class SwXSelChgLstnr_Impl;
 
@@ -137,7 +137,7 @@ public:
 
 };
 
-class SwMailMergeCreateFromDlg : public weld::GenericDialogController
+class SwMailMergeCreateFromDlg final : public weld::GenericDialogController
 {
     std::unique_ptr<weld::RadioButton> m_xThisDocRB;
 public:
@@ -149,7 +149,7 @@ public:
     }
 };
 
-class SwMailMergeFieldConnectionsDlg : public weld::GenericDialogController
+class SwMailMergeFieldConnectionsDlg final : public weld::GenericDialogController
 {
     std::unique_ptr<weld::RadioButton> m_xUseExistingRB;
 public:
