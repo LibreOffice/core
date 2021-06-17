@@ -8658,14 +8658,12 @@ public:
 #endif
         if (m_pOverFlowBox)
         {
-#if !GTK_CHECK_VERSION(4, 0, 0)
             // put it back to how we found it initially
             GtkWidget* pParent = gtk_widget_get_parent(GTK_WIDGET(m_pOverFlowBox));
             g_object_ref(m_pNotebook);
             container_remove(GTK_WIDGET(m_pOverFlowBox), GTK_WIDGET(m_pNotebook));
             container_add(GTK_WIDGET(pParent), GTK_WIDGET(m_pNotebook));
             g_object_unref(m_pNotebook);
-#endif
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
             gtk_widget_destroy(GTK_WIDGET(m_pOverFlowBox));
