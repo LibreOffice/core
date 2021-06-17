@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "023a055d_8d1b4f71",
+        "filename": "sd/qa/uitest/impress_tests/autocorrectOptions.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-17T07:15:03Z",
+      "side": 1,
+      "message": "By the way, this repeated Impress-specific chunk looks like a good candidate for a function :-)",
+      "range": {
+        "startLine": 17,
+        "startChar": 12,
+        "endLine": 20,
+        "endChar": 51
+      },
+      "revId": "1b39fd26358e1e8f17255d65de2de543ac2ce2db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
