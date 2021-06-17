@@ -458,6 +458,9 @@ private:
     css::uno::Reference<css::container::XNameContainer> m_xPageStyles1;
     // cache next available number, expensive to repeatedly compute
     std::optional<int> m_xNextUnusedPageStyleNo;
+    css::uno::Reference<css::container::XNameContainer> m_xCharacterStyles;
+    // cache next available number, expensive to repeatedly compute
+    std::optional<int> m_xNextUnusedCharacterStyleNo;
     css::uno::Reference<css::text::XText> m_xBodyText;
     css::uno::Reference<css::text::XTextContent> m_xEmbedded;
 
@@ -631,6 +634,8 @@ public:
 
     css::uno::Reference<css::container::XNameContainer> const & GetPageStyles();
     OUString GetUnusedPageStyleName();
+    css::uno::Reference<css::container::XNameContainer> const & GetCharacterStyles();
+    OUString GetUnusedCharacterStyleName();
     css::uno::Reference<css::text::XText> const & GetBodyText();
     const css::uno::Reference<css::lang::XMultiServiceFactory>& GetTextFactory() const
     {

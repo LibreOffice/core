@@ -133,6 +133,9 @@ public:
 
     virtual void commentProps(const OUString& sId, const CommentProperties& rProps) override;
 
+    css::uno::Reference<css::container::XNameContainer> const & GetCharacterStyles();
+    OUString GetUnusedCharacterStyleName();
+
 private:
     // Stream
     virtual void lcl_startSectionGroup() override;
