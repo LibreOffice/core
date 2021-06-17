@@ -4127,6 +4127,16 @@ void DomainMapper::commentProps(const OUString& sId, const CommentProperties& rP
     m_pImpl->commentProps(sId, rProps);
 }
 
+css::uno::Reference<css::container::XNameContainer> const & DomainMapper::GetCharacterStyles()
+{
+    return m_pImpl->GetCharacterStyles();
+}
+
+OUString DomainMapper::GetUnusedCharacterStyleName()
+{
+    return m_pImpl->GetUnusedCharacterStyleName();
+}
+
 } //namespace writerfilter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
