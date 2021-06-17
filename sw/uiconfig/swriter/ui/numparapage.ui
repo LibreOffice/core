@@ -198,7 +198,6 @@
                 <property name="tooltip_text" translatable="yes" context="numparapage|checkCB_NEW_START">For ordered lists and List Styles with numbering</property>
                 <property name="no_show_all">True</property>
                 <property name="hexpand">True</property>
-                <property name="relief">none</property>
                 <property name="use_underline">True</property>
                 <property name="inconsistent">True</property>
                 <property name="draw_indicator">True</property>
