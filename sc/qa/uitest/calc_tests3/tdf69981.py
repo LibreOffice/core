@@ -45,12 +45,9 @@ class tdf69981(UITestCase):
         #overwrite warning come up
         #press Ok.
         xOK = xDialog.getChild("ok")
-        def handle_warn_dlg(dialog):
-            xyesBtn = dialog.getChild("yes")
-            self.ui_test.close_dialog_through_button(xyesBtn)
+        with self.ui_test.execute_blocking_action(xOkBtn.executeAction, args=('CLICK', ()), close_button="yes"):
+            pass
 
-        self.ui_test.execute_blocking_action(xOK.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_warn_dlg)
         #Verify
         self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "Original")
         self.assertEqual(get_cell_by_position(document, 0, 0, 1).getString(), "a")

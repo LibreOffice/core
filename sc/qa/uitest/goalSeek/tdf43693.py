@@ -28,12 +28,10 @@ class tdf43693(UITestCase):
         xtarget.executeAction("TYPE", mkPropertyValues({"TEXT":"0"}))
         xvaredit.executeAction("TYPE", mkPropertyValues({"TEXT":"H5"}))
         xOKBtn = xDialog.getChild("ok")
-        def handle_OK_dlg(dialog):
-            xYesButn = dialog.getChild("yes")
-            self.ui_test.close_dialog_through_button(xYesButn)
 
-        self.ui_test.execute_blocking_action(xOKBtn.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_OK_dlg)
+        with self.ui_test.execute_blocking_action(xOKBtn.executeAction, args=('CLICK', ()), close_button="yes"):
+            pass
+
         #verify
         self.assertEqual(get_cell_by_position(document, 0, 7, 4).getValue(), 0.04)
         self.ui_test.close_doc()

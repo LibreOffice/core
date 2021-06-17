@@ -19,25 +19,21 @@ class TestSwuiidxmrk(UITestCase):
         # Given an empty Writer document:
         self.ui_test.create_doc_in_start_center("writer")
 
+        self.ui_test.execute_modeless_dialog_through_command(".uno:InsertAuthoritiesEntry")
+        insert_entry = self.xUITest.getTopFocusWindow()
+        from_document = insert_entry.getChild("fromdocument")
+        from_document.executeAction("CLICK", tuple())
+        new = insert_entry.getChild("new")
+
         # When inserting a biblio entry field with a page number:
-        def handle_define_entry(define_entry):
+        with self.ui_test.execute_blocking_action(new.executeAction, args=('CLICK', ())) as define_entry:
             entry = define_entry.getChild("entry")
             type_text(entry, "aaa")
             listbox = define_entry.getChild("listbox")
             select_pos(listbox, "16")  # WWW document
             pagecb = define_entry.getChild("pagecb-visible")
             pagecb.executeAction("CLICK", tuple())
-            ok = define_entry.getChild("ok")
-            self.ui_test.close_dialog_through_button(ok)
 
-        self.ui_test.execute_modeless_dialog_through_command(".uno:InsertAuthoritiesEntry")
-        insert_entry = self.xUITest.getTopFocusWindow()
-        from_document = insert_entry.getChild("fromdocument")
-        from_document.executeAction("CLICK", tuple())
-        new = insert_entry.getChild("new")
-        self.ui_test.execute_blocking_action(new.executeAction,
-                                             args=('CLICK', ()),
-                                             dialog_handler=handle_define_entry)
         insert = insert_entry.getChild("insert")
         insert.executeAction("CLICK", tuple())
         close = insert_entry.getChild("close")
