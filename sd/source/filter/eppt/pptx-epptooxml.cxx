@@ -1622,12 +1622,12 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderReferenceTextBody(
         case DateAndTime:
         {
             OUString aDateTimeType = "datetime1";
-            bool bIsDateTimeFixed;
+            bool bIsDateTimeFixed = false;
             xPagePropSet->getPropertyValue("IsDateTimeFixed") >>= bIsDateTimeFixed;
 
             if(ePageType != LAYOUT && !bIsDateTimeFixed)
             {
-                sal_Int32 nDateTimeFormat;
+                sal_Int32 nDateTimeFormat = 0;
                 xPagePropSet->getPropertyValue("DateTimeFormat") >>= nDateTimeFormat;
 
                 // 4 LSBs represent the date
