@@ -154,8 +154,6 @@ SwLabDlg::SwLabDlg(weld::Window* pParent, const SfxItemSet& rSet,
         AddTabPage("private", SwPrivateDataPage::Create, nullptr);
         m_xDialog->set_title(m_sBusinessCardDlg);
     }
-
-    pParent->set_busy_cursor(false);
 }
 
 SwLabDlg::~SwLabDlg()
