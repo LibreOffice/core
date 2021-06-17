@@ -41,13 +41,10 @@ class sheetRename(UITestCase):
         nameVal = get_state_as_dict(xname_entry)["Text"]
         xname_entry.executeAction("TYPE", mkPropertyValues({"TEXT":"NewName**"}))
         xOKBtn = xDialog.getChild("ok")
-        def handle_warn_dlg(dialog):
-            #show warning
-            xok = dialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xok)
 
-        self.ui_test.execute_blocking_action(xOKBtn.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_warn_dlg)
+        with self.ui_test.execute_blocking_action(xOKBtn.executeAction, args=('CLICK', ())):
+            pass
+
         xCancelBtn = xDialog.getChild("cancel")
         self.ui_test.close_dialog_through_button(xCancelBtn)
 

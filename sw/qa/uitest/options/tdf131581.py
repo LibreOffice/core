@@ -25,16 +25,10 @@ class tdf131581(UITestCase):
 
         xExpertBtn = xDialogOpt.getChild("expertconfig")
 
-        def handle_expert_dlg(dialog):
+        with self.ui_test.execute_blocking_action(xExpertBtn.executeAction, args=('CLICK', ())) as dialog:
             # Without the fix in place, this would have hung
             xSearchBtn = dialog.getChild("searchButton")
             xSearchBtn.executeAction("CLICK", tuple())
-
-            xOkBtn = dialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOkBtn)
-
-        self.ui_test.execute_blocking_action(xExpertBtn.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_expert_dlg)
 
         xOKBtn = xDialogOpt.getChild("ok")
         xOKBtn.executeAction("CLICK", tuple())
