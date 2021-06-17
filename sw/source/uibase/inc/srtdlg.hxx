@@ -25,7 +25,7 @@
 
 class SwWrtShell;
 
-class SwSortDlg : public weld::GenericDialogController
+class SwSortDlg final : public weld::GenericDialogController
 {
     weld::Window* m_pParent;
     std::unique_ptr<weld::Label> m_xColLbl;

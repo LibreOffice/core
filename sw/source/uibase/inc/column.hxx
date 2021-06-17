@@ -33,7 +33,7 @@ class SwColMgr;
 class SwWrtShell;
 class SwColumnPage;
 
-class SwColumnDlg : public SfxDialogController
+class SwColumnDlg final : public SfxDialogController
 {
     SwWrtShell&         m_rWrtShell;
     std::unique_ptr<SwColumnPage> m_xTabPage;
@@ -81,7 +81,7 @@ public:
 };
 
 // column dialog now as TabPage
-class SwColumnPage : public SfxTabPage
+class SwColumnPage final : public SfxTabPage
 {
     std::unique_ptr<SwColMgr> m_xColMgr;
 

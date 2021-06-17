@@ -52,7 +52,7 @@ struct SwIndexSections_Impl
     css::uno::Reference< css::text::XDocumentIndex >    xDocumentIndex;
 };
 
-class SwMultiTOXTabDialog : public SfxTabDialogController
+class SwMultiTOXTabDialog final : public SfxTabDialogController
 {
     std::unique_ptr<SwTOXMgr> m_pMgr;
     SwWrtShell&             m_rWrtShell;
@@ -114,7 +114,7 @@ public:
     static bool IsNoNum(SwWrtShell& rSh, const OUString& rName);
 };
 
-class SwTOXSelectTabPage : public SfxTabPage
+class SwTOXSelectTabPage final : public SfxTabPage
 {
     std::unique_ptr<IndexEntryResource> pIndexRes;
 
@@ -301,7 +301,7 @@ private:
     sal_uInt32 GetControlIndex(FormTokenType eType) const;
 };
 
-class SwTOXEntryTabPage : public SfxTabPage
+class SwTOXEntryTabPage final : public SfxTabPage
 {
     OUString        sDelimStr;
     OUString        sLevelStr;
@@ -399,7 +399,7 @@ public:
     void SetFocus2theAllBtn();
 };
 
-class SwTOXStylesTabPage : public SfxTabPage
+class SwTOXStylesTabPage final : public SfxTabPage
 {
     std::unique_ptr<SwForm> m_pCurrentForm;
 

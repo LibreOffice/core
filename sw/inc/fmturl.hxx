@@ -30,7 +30,7 @@ class IntlWrapper;
 
 // URL, ServerMap and ClientMap
 
-class SW_DLLPUBLIC SwFormatURL: public SfxPoolItem
+class SW_DLLPUBLIC SwFormatURL final : public SfxPoolItem
 {
     OUString  m_sTargetFrameName; ///< Target frame for URL.
     OUString  m_sURL;             ///< Simple URL.

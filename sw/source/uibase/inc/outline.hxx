@@ -63,7 +63,7 @@ public:
     static void         SetActNumLevel(sal_uInt16 nSet) {nNumLevel = nSet;}
 };
 
-class SwOutlineSettingsTabPage : public SfxTabPage
+class SwOutlineSettingsTabPage final : public SfxTabPage
 {
     OUString            aNoFormatName;
     OUString            aSaveCollNames[MAXLEVEL];

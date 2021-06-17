@@ -76,7 +76,7 @@ inline SwFootnoteFrame* SwFootnoteContFrame::PrependChained(SwFrame* pThis, bool
     return AddChained(false, pThis, bDefaultFormat);
 }
 
-class SwFootnoteFrame: public SwLayoutFrame
+class SwFootnoteFrame final : public SwLayoutFrame
 {
     // Pointer to FootnoteFrame in which the footnote will be continued:
     //  - 0     no following existent

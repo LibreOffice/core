@@ -25,7 +25,7 @@
 class SwTestAccountSettingsDialog;
 class SwMailMergeConfigItem;
 
-class SwMailConfigPage : public SfxTabPage
+class SwMailConfigPage final : public SfxTabPage
 {
     friend class SwTestAccountSettingsDialog;
 
@@ -58,7 +58,7 @@ public:
     virtual void        Reset( const SfxItemSet* rSet ) override;
 };
 
-class SwMailConfigDlg : public SfxSingleTabDialogController
+class SwMailConfigDlg final : public SfxSingleTabDialogController
 {
 public:
     SwMailConfigDlg(weld::Window* pParent, SfxItemSet& rSet);

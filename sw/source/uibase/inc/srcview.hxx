@@ -30,7 +30,7 @@ class SwDocShell;
 class SvxSearchItem;
 class SfxMedium;
 
-class SwSrcView: public SfxViewShell
+class SwSrcView final : public SfxViewShell
 {
     VclPtr<SwSrcEditWindow> aEditWin;
 
@@ -43,7 +43,6 @@ class SwSrcView: public SfxViewShell
     // for read-only switching
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-protected:
     void                StartSearchAndReplace(const SvxSearchItem& rItem,
                                                   bool bApi,
                                                   bool bRecursive = false);

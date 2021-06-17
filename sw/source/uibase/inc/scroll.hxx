@@ -20,7 +20,7 @@
 
 #include <vcl/scrbar.hxx>
 
-class SwScrollbar: public ScrollBar
+class SwScrollbar final : public ScrollBar
 {
     Size    aDocSz;
     bool    bHori       :1;     // horizontal = salTrue, otherwise vertical

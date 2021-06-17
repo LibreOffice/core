@@ -60,10 +60,10 @@ public:
     const SfxPoolItem** GetDefault() { return m_pDefaultArray; }
 };
 
-class SwFontAccess : public SwCacheAccess
+class SwFontAccess final : public SwCacheAccess
 {
     SwViewShell *m_pShell;
-protected:
+
     virtual SwCacheObj *NewObj( ) override;
 
 public:

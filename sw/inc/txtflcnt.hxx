@@ -27,7 +27,7 @@ class SwTextNode;
 class SwDoc;
 
 // Attribute for line-bound frames (without end index).
-class SwTextFlyCnt : public SwTextAttr
+class SwTextFlyCnt final : public SwTextAttr
 {
     SwFlyInContentFrame  *GetFlyFrame_( const SwFrame *pCurrFrame );
 public:

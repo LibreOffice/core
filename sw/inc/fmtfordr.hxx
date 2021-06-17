@@ -33,7 +33,7 @@ enum SwFillOrder
     SW_FILL_ORDER_END
 };
 
-class SwFormatFillOrder: public SfxEnumItem<SwFillOrder>
+class SwFormatFillOrder final : public SfxEnumItem<SwFillOrder>
 {
 public:
     SwFormatFillOrder( SwFillOrder = ATT_TOP_DOWN );

@@ -29,7 +29,7 @@
 class SwFieldMgr;
 class SwView;
 
-class SwCaptionDialog : public SfxDialogController
+class SwCaptionDialog final : public SfxDialogController
 {
     OUString m_sNone;
     TextFilterAutoConvert m_aTextFilter;

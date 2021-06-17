@@ -28,7 +28,7 @@
 class IntlWrapper;
 
 // SwFormatSurround: How document content under the frame shall behave.
-class SW_DLLPUBLIC SwFormatSurround: public SfxEnumItem<css::text::WrapTextMode>
+class SW_DLLPUBLIC SwFormatSurround final : public SfxEnumItem<css::text::WrapTextMode>
 {
     bool    m_bAnchorOnly :1;
     bool    m_bContour    :1;

@@ -30,7 +30,7 @@ class SfxTabPage;
 class SwChildWinWrapper;
 struct SfxChildWinInfo;
 
-class SwFieldDlg : public SfxTabDialogController
+class SwFieldDlg final : public SfxTabDialogController
 {
     SwChildWinWrapper*  m_pChildWin;
     SfxBindings*        m_pBindings;

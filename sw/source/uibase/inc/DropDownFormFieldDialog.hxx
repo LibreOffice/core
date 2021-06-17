@@ -20,7 +20,7 @@ class IFieldmark;
 /// Dialog to specify the properties of drop-down form field
 namespace sw
 {
-class DropDownFormFieldDialog : public weld::GenericDialogController
+class DropDownFormFieldDialog final : public weld::GenericDialogController
 {
 private:
     mark::IFieldmark* m_pDropDownField;

@@ -25,7 +25,7 @@
 class SwView;
 class SvxMacroItem;
 
-class SwCharDlg : public SfxTabDialogController
+class SwCharDlg final : public SfxTabDialogController
 {
     SwView&   m_rView;
     SwCharDlgMode m_nDialogMode;
@@ -39,7 +39,7 @@ public:
     virtual void PageCreated(const OString& rId, SfxTabPage &rPage) override;
 };
 
-class SwCharURLPage : public SfxTabPage
+class SwCharURLPage final : public SfxTabPage
 {
     std::unique_ptr<SvxMacroItem> pINetItem;
     bool                bModified;

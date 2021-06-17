@@ -248,7 +248,7 @@ namespace sw
             explicit FontMapExport(const OUString &rFontDescription);
         };
 
-        class InsertedTableListener: public SvtListener
+        class InsertedTableListener final : public SvtListener
         {
             SwTableNode* m_pTableNode;
         public:

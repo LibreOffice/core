@@ -152,7 +152,7 @@ struct hash<std::pair<char,OUString>>
 
 
 // Iterator for Pool.
-class SwStyleSheetIterator : public SfxStyleSheetIterator, public SfxListener
+class SwStyleSheetIterator final : public SfxStyleSheetIterator, public SfxListener
 {
     // Local helper class.
     class SwPoolFormatList
@@ -201,7 +201,7 @@ public:
     void InvalidateIterator();
 };
 
-class SwDocStyleSheetPool : public SfxStyleSheetBasePool
+class SwDocStyleSheetPool final : public SfxStyleSheetBasePool
 {
     rtl::Reference< SwDocStyleSheet > mxStyleSheet;
     SwDoc&              m_rDoc;
@@ -236,10 +236,9 @@ public:
 
     void InvalidateIterator();
 
-protected:
+private:
     virtual ~SwDocStyleSheetPool() override;
 
-private:
     SwDocStyleSheetPool( const SwDocStyleSheetPool& ) = delete;
 };
 

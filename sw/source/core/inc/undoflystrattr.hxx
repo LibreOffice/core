@@ -24,7 +24,7 @@
 
 class SwFlyFrameFormat;
 
-class SwUndoFlyStrAttr : public SwUndo
+class SwUndoFlyStrAttr final : public SwUndo
 {
     public:
         SwUndoFlyStrAttr( SwFlyFrameFormat& rFlyFrameFormat,

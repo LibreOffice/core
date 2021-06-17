@@ -23,7 +23,7 @@
 
 #include <sfx2/tabdlg.hxx>
 
-class SwParaDlg: public SfxTabDialogController
+class SwParaDlg final : public SfxTabDialogController
 {
     SwView& rView;
     bool bDrawParaDlg;

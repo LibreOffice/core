@@ -25,7 +25,7 @@
 class SwTOXMgr;
 
 // insert mark for index entry
-class SwMultiTOXMarkDlg : public weld::GenericDialogController
+class SwMultiTOXMarkDlg final : public weld::GenericDialogController
 {
     DECL_LINK(SelectHdl, weld::TreeView&, void);
     SwTOXMgr& m_rMgr;

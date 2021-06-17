@@ -71,7 +71,7 @@ namespace o3tl {
 
 class SwContentTree;
 
-class SwContentTreeDropTarget : public DropTargetHelper
+class SwContentTreeDropTarget final : public DropTargetHelper
 {
 private:
     SwContentTree& m_rTreeView;
@@ -270,7 +270,7 @@ namespace sfx2 { class FileDialogHelper; }
 
 class SwGlobalTree;
 
-class SwGlobalTreeDropTarget : public DropTargetHelper
+class SwGlobalTreeDropTarget final : public DropTargetHelper
 {
 private:
     SwGlobalTree& m_rTreeView;

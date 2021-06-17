@@ -22,7 +22,7 @@
 
 #include <undobj.hxx>
 
-class SwUndoSplitNode: public SwUndo
+class SwUndoSplitNode final : public SwUndo
 {
     std::unique_ptr<SwHistory> m_pHistory;
     std::unique_ptr<SwRedlineData> m_pRedlineData;
@@ -44,7 +44,7 @@ public:
     void SetTableFlag()       { m_bTableFlag = true; }
 };
 
-class SwUndoMove : public SwUndo, private SwUndRng, private SwUndoSaveContent
+class SwUndoMove final : public SwUndo, private SwUndRng, private SwUndoSaveContent
 {
     // nDest... - destination range of move (after move!)
     // nIns...  - source Position of move (after move!)

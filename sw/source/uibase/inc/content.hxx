@@ -152,7 +152,7 @@ public:
  * GetMember. It is reloaded after Invalidate() only if the content
  * should be read again.
 */
-class SwContentType : public SwTypeNumber
+class SwContentType final : public SwTypeNumber
 {
     SwWrtShell*         m_pWrtShell;
     std::unique_ptr<SwContentArr>
@@ -166,7 +166,7 @@ class SwContentType : public SwTypeNumber
     bool                m_bDataValid :    1;
     bool                m_bEdit:          1;  // can this type be edited?
     bool                m_bDelete:        1;  // can this type be deleted?
-protected:
+
         static OUString     RemoveNewline(const OUString&);
 public:
         SwContentType(SwWrtShell* pParent, ContentTypeId nType, sal_uInt8 nLevel );

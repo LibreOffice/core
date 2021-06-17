@@ -62,7 +62,7 @@ typedef cppu::OMultiTypeInterfaceContainerHelperVar<sal_Int32>
 class SwDBManager;
 class MailMergeExecuteFinalizer;
 
-class SwXMailMerge :
+class SwXMailMerge final :
     public cppu::WeakImplHelper
     <
         css::task::XJob,
@@ -128,7 +128,7 @@ class SwXMailMerge :
 
     SwXMailMerge( const SwXMailMerge & ) = delete;
     SwXMailMerge & operator = ( const SwXMailMerge & ) = delete;
-protected:
+
     virtual ~SwXMailMerge() override;
 public:
     SwXMailMerge();

@@ -29,7 +29,7 @@ class SwWrtShell;
 class SwFieldMgr;
 
 // insert fields
-class SwFieldInputDlg : public weld::GenericDialogController
+class SwFieldInputDlg final : public weld::GenericDialogController
 {
     void Apply();
 

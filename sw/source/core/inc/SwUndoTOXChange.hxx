@@ -25,7 +25,7 @@
 class SwDoc;
 class SwTOXBaseSection;
 
-class SwUndoTOXChange : public SwUndo
+class SwUndoTOXChange final : public SwUndo
 {
 private:
     SwTOXBase m_Old;

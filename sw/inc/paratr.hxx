@@ -59,7 +59,7 @@ namespace sw {
    DropCaps. If it is not a Client, formatting uses the CharFormat of the paragraph.
    If the CharFormat is modified, this change is propagated to the paragraphs
    via the Modify of SwFormatDrop. */
-class SW_DLLPUBLIC SwFormatDrop: public SfxPoolItem, public SwClient
+class SW_DLLPUBLIC SwFormatDrop final : public SfxPoolItem, public SwClient
 {
     sw::FormatDropDefiner* m_pDefinedIn;  ///< TextNode or FormatColl that contains the CapDrops.
     sal_uInt16 m_nDistance;       ///< Distance to beginning of text.
@@ -78,7 +78,6 @@ private:
     // @@@ public copy ctor, but no copy assignment?
     SwFormatDrop & operator= (const SwFormatDrop &) = delete;
 
-protected:
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override
     {
         if (!m_pDefinedIn)
@@ -122,7 +121,7 @@ public:
             { m_pDefinedIn = const_cast<sw::FormatDropDefiner*>(pDefiner); };
 };
 
-class SwRegisterItem : public SfxBoolItem
+class SwRegisterItem final : public SfxBoolItem
 {
 public:
     static SfxPoolItem* CreateDefault();
@@ -142,7 +141,7 @@ inline SwRegisterItem::SwRegisterItem( const bool bRegister ) :
     SfxBoolItem( RES_PARATR_REGISTER, bRegister )
 {}
 
-class SW_DLLPUBLIC SwNumRuleItem : public SfxStringItem
+class SW_DLLPUBLIC SwNumRuleItem final : public SfxStringItem
 {
 public:
     static SfxPoolItem* CreateDefault();
@@ -170,7 +169,7 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
-class SwParaConnectBorderItem : public SfxBoolItem
+class SwParaConnectBorderItem final : public SfxBoolItem
 {
 public:
 

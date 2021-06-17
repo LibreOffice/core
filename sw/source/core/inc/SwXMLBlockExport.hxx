@@ -41,7 +41,7 @@ public:
     void ExportContent_() override {}
 };
 
-class SwXMLTextBlockExport : public SvXMLExport
+class SwXMLTextBlockExport final : public SvXMLExport
 {
 private:
     SwXMLTextBlocks &m_rBlockList;

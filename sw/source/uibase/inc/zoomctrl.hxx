@@ -21,7 +21,7 @@
 
 #include <svx/zoomctrl.hxx>
 
-class SwZoomControl : public SvxZoomStatusBarControl
+class SwZoomControl final : public SvxZoomStatusBarControl
 {
 private:
     OUString sPreviewZoom;

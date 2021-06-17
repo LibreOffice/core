@@ -27,7 +27,7 @@ class Window;
 }
 class SfxItemSet;
 
-class SwNumFormatDlg : public SfxSingleTabDialogController
+class SwNumFormatDlg final : public SfxSingleTabDialogController
 {
 public:
     SwNumFormatDlg(weld::Widget* pParent, const SfxItemSet& rSet);

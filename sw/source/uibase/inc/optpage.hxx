@@ -33,7 +33,7 @@ class FontList;
 
 // Tools->Options->Writer->View
 // Tools->Options->Writer/Web->View
-class SwContentOptPage : public SfxTabPage
+class SwContentOptPage final : public SfxTabPage
 {
     std::unique_ptr<weld::CheckButton> m_xCrossCB;
 
@@ -74,7 +74,7 @@ public:
 };
 
 // TabPage printer settings additions
-class SwAddPrinterTabPage : public SfxTabPage
+class SwAddPrinterTabPage final : public SfxTabPage
 {
     OUString sNone;
     bool bAttrModified;
@@ -120,7 +120,7 @@ public:
     virtual void PageCreated(const SfxAllItemSet& aSet) override;
 };
 
-class SwStdFontTabPage : public SfxTabPage
+class SwStdFontTabPage final : public SfxTabPage
 {
     OUString m_sShellStd;
     OUString m_sShellTitle;
@@ -181,7 +181,7 @@ public:
     virtual void PageCreated(const SfxAllItemSet& aSet) override;
 };
 
-class SwTableOptionsTabPage : public SfxTabPage
+class SwTableOptionsTabPage final : public SfxTabPage
 {
     SwWrtShell* m_pWrtShell;
     bool        m_bHTMLMode;
@@ -221,7 +221,7 @@ public:
 };
 
 // TabPage for ShadowCursor
-class SwShdwCursorOptionsTabPage : public SfxTabPage
+class SwShdwCursorOptionsTabPage final : public SfxTabPage
 {
     SwWrtShell *    m_pWrtShell;
 
@@ -262,7 +262,7 @@ public:
 };
 
 // mark preview
-class SwMarkPreview : public weld::CustomWidgetController
+class SwMarkPreview final : public weld::CustomWidgetController
 {
     Color m_aBgCol;    // background
     Color m_aTransCol; // transparency
@@ -292,7 +292,7 @@ public:
 };
 
 // redlining options
-class SwRedlineOptionsTabPage : public SfxTabPage
+class SwRedlineOptionsTabPage final : public SfxTabPage
 {
     std::unique_ptr<weld::ComboBox> m_xInsertLB;
     std::unique_ptr<ColorListBox> m_xInsertColorLB;
@@ -336,7 +336,7 @@ public:
 
 #ifdef DBG_UTIL
 
-class SwTestTabPage : public SfxTabPage
+class SwTestTabPage final : public SfxTabPage
 {
 public:
     SwTestTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
@@ -366,7 +366,7 @@ private:
 };
 #endif // DBG_UTIL
 
-class SwCompareOptionsTabPage : public SfxTabPage
+class SwCompareOptionsTabPage final : public SfxTabPage
 {
     std::unique_ptr<weld::RadioButton> m_xAutoRB;
     std::unique_ptr<weld::RadioButton> m_xWordRB;

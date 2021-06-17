@@ -42,10 +42,10 @@ public:
     void UpdateExample( const SfxItemSet& rSet );
 };
 
-class SW_DLLPUBLIC SwPageGridExample : public SwPageExample
+class SW_DLLPUBLIC SwPageGridExample final : public SwPageExample
 {
     std::unique_ptr<SwTextGridItem> pGridItem;
-protected:
+
     virtual void DrawPage(vcl::RenderContext& rRenderContext,
                           const Point& rPoint,
                           const bool bSecond,
@@ -57,13 +57,12 @@ public:
 };
 
 
-class SW_DLLPUBLIC SwColExample : public SwPageExample
+class SW_DLLPUBLIC SwColExample final : public SwPageExample
 {
     SwColMgr*   pColMgr;
 
     using SwPageExample::UpdateExample;
 
-protected:
     virtual void DrawPage(vcl::RenderContext& rRenderContext,
                           const Point& rPoint,
                           const bool bSecond,
@@ -82,7 +81,7 @@ public:
     }
 };
 
-class SW_DLLPUBLIC SwColumnOnlyExample : public weld::CustomWidgetController
+class SW_DLLPUBLIC SwColumnOnlyExample final : public weld::CustomWidgetController
 {
 private:
     Size        m_aWinSize;
@@ -90,7 +89,6 @@ private:
     Size        m_aFrameSize;
     SwFormatCol    m_aCols;
 
-protected:
     virtual void Resize() override;
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
 

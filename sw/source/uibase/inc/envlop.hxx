@@ -43,7 +43,7 @@ class SwEnvFormatPage;
 class SwWrtShell;
 class Printer;
 
-class SwEnvPreview : public weld::CustomWidgetController
+class SwEnvPreview final : public weld::CustomWidgetController
 {
 private:
     SwEnvDlg* m_pDialog;
@@ -56,7 +56,7 @@ public:
     void SetDialog(SwEnvDlg* pDialog) { m_pDialog = pDialog; }
 };
 
-class SwEnvDlg : public SfxTabDialogController
+class SwEnvDlg final : public SfxTabDialogController
 {
     friend class SwEnvPage;
     friend class SwEnvFormatPage;
@@ -80,7 +80,7 @@ public:
     virtual ~SwEnvDlg() override;
 };
 
-class SwEnvPage : public SfxTabPage
+class SwEnvPage final : public SfxTabPage
 {
     SwEnvDlg* m_pDialog;
     SwWrtShell* m_pSh;

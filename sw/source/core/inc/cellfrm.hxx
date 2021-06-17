@@ -27,14 +27,13 @@ struct SwCursorMoveState;
 class SwBorderAttrs;
 
 /// SwCellFrame is one table cell in the document layout.
-class SwCellFrame: public SwLayoutFrame
+class SwCellFrame final : public SwLayoutFrame
 {
     const SwTableBox* m_pTabBox;
 
     virtual void DestroyImpl() override;
     virtual ~SwCellFrame() override;
 
-protected:
     virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 

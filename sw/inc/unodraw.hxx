@@ -261,11 +261,10 @@ public:
     static void AddExistingShapeToFormat( SdrObject const & _rObj );
 };
 
-class SwXGroupShape :
+class SwXGroupShape final :
     public SwXShape,
     public css::drawing::XShapes
 {
-protected:
     virtual ~SwXGroupShape() override;
 public:
     SwXGroupShape(css::uno::Reference<css::uno::XInterface> & xShape, SwDoc const* pDoc);

@@ -28,7 +28,7 @@ class SwAsciiOptions;
 class SvStream;
 class SwDocShell;
 
-class SwAsciiFilterDlg : public SfxDialogController
+class SwAsciiFilterDlg final : public SfxDialogController
 {
     bool m_bSaveLineStatus;
     OUString m_sExtraData;

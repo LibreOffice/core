@@ -29,7 +29,7 @@ class IntlWrapper;
 
 enum SwTextGrid { GRID_NONE, GRID_LINES_ONLY, GRID_LINES_CHARS };
 
-class SW_DLLPUBLIC SwTextGridItem : public SfxPoolItem
+class SW_DLLPUBLIC SwTextGridItem final : public SfxPoolItem
 {
 private:
     Color m_aColor;

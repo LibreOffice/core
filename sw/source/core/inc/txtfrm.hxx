@@ -155,7 +155,7 @@ bool HasNumberingWhichNeedsLayoutUpdate(const SwTextNode& rTextNode);
 
 /// Represents the visualization of a paragraph. Typical upper is an
 /// SwBodyFrame. The first text portion of the first line is az SwParaPortion.
-class SW_DLLPUBLIC SwTextFrame: public SwContentFrame
+class SW_DLLPUBLIC SwTextFrame final : public SwContentFrame
 {
     friend class SwTextIter;
     friend class SwTestFormat;
@@ -323,7 +323,6 @@ class SW_DLLPUBLIC SwTextFrame: public SwContentFrame
     void UpdateOutlineContentVisibilityButton(SwWrtShell* pWrtSh) const;
     void PaintOutlineContentVisibilityButton() const;
 
-protected:
     virtual void SwClientNotify(SwModify const& rModify, SfxHint const& rHint) override;
 
 public:

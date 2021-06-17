@@ -22,7 +22,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <svx/flagsdef.hxx>
 
-class SwBorderDlg : public SfxSingleTabDialogController
+class SwBorderDlg final : public SfxSingleTabDialogController
 {
 public:
     // nType may be:

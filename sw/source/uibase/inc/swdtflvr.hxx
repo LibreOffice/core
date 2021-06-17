@@ -72,7 +72,7 @@ enum class PasteTableType
         PASTE_TABLE    // paste table as nested table
 };
 
-class SW_DLLPUBLIC SwTransferable : public TransferableHelper
+class SW_DLLPUBLIC SwTransferable final : public TransferableHelper
 {
     friend class SwView_Impl;
     SfxObjectShellLock              m_aDocShellRef;
@@ -155,7 +155,6 @@ class SW_DLLPUBLIC SwTransferable : public TransferableHelper
                                     SwTransferable( const SwTransferable& ) = delete;
     SwTransferable&                 operator=( const SwTransferable& ) = delete;
 
-protected:
     virtual void        AddSupportedFormats() override;
     virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
     virtual bool        WriteObject( tools::SvRef<SotTempStream>& rxOStm,

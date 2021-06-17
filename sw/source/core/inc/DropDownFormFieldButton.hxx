@@ -21,7 +21,7 @@ class DropDownFieldmark;
  * This button is shown when the cursor is on a drop-down form field.
  * The user can select an item of the field using this button while filling in a form.
  */
-class DropDownFormFieldButton : public FormFieldButton
+class DropDownFormFieldButton final : public FormFieldButton
 {
 private:
     std::unique_ptr<weld::TreeView> m_xTreeView;

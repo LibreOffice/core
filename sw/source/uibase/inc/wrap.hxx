@@ -27,14 +27,14 @@ namespace vcl { class Window; }
 class SfxItemSet;
 class SwWrtShell;
 
-class SwWrapDlg : public SfxSingleTabDialogController
+class SwWrapDlg final : public SfxSingleTabDialogController
 {
 public:
     SwWrapDlg(weld::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, bool bDrawMode);
 };
 
 // circulation TabPage
-class SwWrapTabPage: public SfxTabPage
+class SwWrapTabPage final : public SfxTabPage
 {
     RndStdIds             m_nAnchorId;
     sal_uInt16            m_nHtmlMode;

@@ -21,7 +21,7 @@ class Window;
 class SwWrtShell;
 class SwPageDesc;
 
-class SwTitlePageDlg : public SfxDialogController
+class SwTitlePageDlg final : public SfxDialogController
 {
 private:
     SwWrtShell& mrSh;

@@ -25,7 +25,7 @@ class SwWrtShell;
 
 class VclFrame;
 
-class SwInsFootNoteDlg: public weld::GenericDialogController
+class SwInsFootNoteDlg final : public weld::GenericDialogController
 {
     SwWrtShell     &m_rSh;
 

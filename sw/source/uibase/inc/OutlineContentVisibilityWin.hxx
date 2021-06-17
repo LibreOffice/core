@@ -19,7 +19,7 @@ enum class ButtonSymbol
     NONE
 };
 
-class SwOutlineContentVisibilityWin : public InterimItemWindow, public ISwFrameControl
+class SwOutlineContentVisibilityWin final : public InterimItemWindow, public ISwFrameControl
 {
 private:
     std::unique_ptr<weld::Button> m_xShowBtn;

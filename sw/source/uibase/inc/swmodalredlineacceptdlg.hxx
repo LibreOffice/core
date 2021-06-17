@@ -22,7 +22,7 @@
 
 class SwRedlineAcceptDlg;
 
-class SwModalRedlineAcceptDlg : public SfxDialogController
+class SwModalRedlineAcceptDlg final : public SfxDialogController
 {
     std::unique_ptr<weld::Container> m_xContentArea;
     std::unique_ptr<SwRedlineAcceptDlg> m_xImplDlg;

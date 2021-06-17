@@ -25,9 +25,8 @@ class SwBorderAttrs;
 
 /// Container of body content (i.e. not header or footer). Typical parent is an
 /// SwPageFrame, typical lower is an SwTextFrame.
-class SAL_DLLPUBLIC_RTTI SwBodyFrame: public SwLayoutFrame
+class SAL_DLLPUBLIC_RTTI SwBodyFrame final : public SwLayoutFrame
 {
-protected:
     virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
 
 public:

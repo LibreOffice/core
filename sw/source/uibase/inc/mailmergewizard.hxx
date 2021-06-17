@@ -34,7 +34,7 @@ using vcl::WizardTypes::CommitPageReason;
 #define MM_GREETINGSPAGE        3
 #define MM_LAYOUTPAGE           4
 
-class SwMailMergeWizard : public ::vcl::RoadmapWizardMachine
+class SwMailMergeWizard final : public ::vcl::RoadmapWizardMachine
 {
     SwView*                 m_pSwView;
     OUString                sDocumentURL;
@@ -53,7 +53,6 @@ class SwMailMergeWizard : public ::vcl::RoadmapWizardMachine
 
     using vcl::WizardMachine::skipUntil;
 
-protected:
     virtual std::unique_ptr<BuilderPage> createPage( WizardState _nState ) override;
     virtual void                    enterState( WizardState _nState ) override;
 

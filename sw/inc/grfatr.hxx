@@ -36,7 +36,7 @@ enum class MirrorGraph
     Both
 };
 
-class SW_DLLPUBLIC SwMirrorGrf : public SfxEnumItem<MirrorGraph>
+class SW_DLLPUBLIC SwMirrorGrf final : public SfxEnumItem<MirrorGraph>
 {
     bool m_bGrfToggle; // Flip graphics on even pages.
 
@@ -66,7 +66,7 @@ public:
     void SetGrfToggle( bool bNew )   { m_bGrfToggle = bNew; }
 };
 
-class SW_DLLPUBLIC SwCropGrf : public SvxGrfCrop
+class SW_DLLPUBLIC SwCropGrf final : public SvxGrfCrop
 {
 public:
     SwCropGrf();
@@ -77,7 +77,7 @@ public:
     virtual SwCropGrf* Clone( SfxItemPool *pPool = nullptr ) const override;
 };
 
-class SAL_DLLPUBLIC_RTTI SwRotationGrf : public SfxUInt16Item
+class SAL_DLLPUBLIC_RTTI SwRotationGrf final : public SfxUInt16Item
 {
 private:
     Size m_aUnrotatedSize;
@@ -110,7 +110,7 @@ public:
     void SetValue(Degree10 d) { SfxUInt16Item::SetValue(d.get()); }
 };
 
-class SW_DLLPUBLIC SwLuminanceGrf : public SfxInt16Item
+class SW_DLLPUBLIC SwLuminanceGrf final : public SfxInt16Item
 {
 public:
     SwLuminanceGrf( sal_Int16 nVal = 0 )
@@ -126,7 +126,7 @@ public:
                                   const IntlWrapper& rIntl ) const override;
 };
 
-class SW_DLLPUBLIC SwContrastGrf : public SfxInt16Item
+class SW_DLLPUBLIC SwContrastGrf final : public SfxInt16Item
 {
 public:
     SwContrastGrf( sal_Int16 nVal = 0 )
@@ -158,7 +158,7 @@ public:
                                   const IntlWrapper& rIntl ) const override;
 };
 
-class SwChannelRGrf : public SwChannelGrf
+class SwChannelRGrf final : public SwChannelGrf
 {
 public:
     SwChannelRGrf( sal_Int16 nVal = 0 )
@@ -166,7 +166,7 @@ public:
     {}
     virtual SwChannelRGrf* Clone( SfxItemPool *pPool = nullptr ) const override;
 };
-class SwChannelGGrf : public SwChannelGrf
+class SwChannelGGrf final : public SwChannelGrf
 {
 public:
     SwChannelGGrf( sal_Int16 nVal = 0 )
@@ -174,7 +174,7 @@ public:
     {}
     virtual SwChannelGGrf* Clone( SfxItemPool *pPool = nullptr ) const override;
 };
-class SwChannelBGrf : public SwChannelGrf
+class SwChannelBGrf final : public SwChannelGrf
 {
 public:
     SwChannelBGrf( sal_Int16 nVal = 0 )
@@ -183,7 +183,7 @@ public:
     virtual SwChannelBGrf* Clone( SfxItemPool *pPool = nullptr ) const override;
 };
 
-class SW_DLLPUBLIC SwGammaGrf : public SfxPoolItem
+class SW_DLLPUBLIC SwGammaGrf final : public SfxPoolItem
 {
     double m_nValue;
 public:
@@ -211,7 +211,7 @@ public:
     const double& GetValue() const              { return m_nValue; }
 };
 
-class SwInvertGrf: public SfxBoolItem
+class SwInvertGrf final : public SfxBoolItem
 {
 public:
     SwInvertGrf( bool bVal = false )
@@ -227,7 +227,7 @@ public:
                                   const IntlWrapper& rIntl ) const override;
 };
 
-class SwTransparencyGrf : public SfxByteItem
+class SwTransparencyGrf final : public SfxByteItem
 {
 public:
     SwTransparencyGrf( sal_Int8 nVal = 0 )
@@ -254,7 +254,7 @@ protected:
         SfxEnumItem(RES_GRFATR_DRAWMODE, nMode) {}
 };
 
-class SW_DLLPUBLIC SwDrawModeGrf : public SwDrawModeGrf_Base
+class SW_DLLPUBLIC SwDrawModeGrf final : public SwDrawModeGrf_Base
 {
 public:
     SwDrawModeGrf( GraphicDrawMode nMode = GraphicDrawMode::Standard )

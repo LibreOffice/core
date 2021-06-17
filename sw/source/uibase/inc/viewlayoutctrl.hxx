@@ -22,7 +22,7 @@
 #include <sfx2/stbitem.hxx>
 #include <memory>
 
-class SwViewLayoutControl : public SfxStatusBarControl
+class SwViewLayoutControl final : public SfxStatusBarControl
 {
 private:
 

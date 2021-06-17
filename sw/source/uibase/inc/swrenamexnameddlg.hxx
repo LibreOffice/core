@@ -23,7 +23,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
-class SwRenameXNamedDlg : public weld::GenericDialogController
+class SwRenameXNamedDlg final : public weld::GenericDialogController
 {
     css::uno::Reference< css::container::XNamed > &   xNamed;
     css::uno::Reference< css::container::XNameAccess > & xNameAccess;
