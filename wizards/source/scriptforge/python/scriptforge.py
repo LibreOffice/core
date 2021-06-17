@@ -1541,6 +1541,13 @@ class SFDatabases:
         servicesynonyms = ('database', 'sfdatabases.database')
         serviceproperties = dict(Queries = False, Tables = False, XConnection = False, XMetaData = False)
 
+        @classmethod
+        def ReviewServiceArgs(cls, filename = '', registrationname = '', readonly = True, user = '', password = ''):
+            """
+                Transform positional and keyword arguments into positional only
+                """
+            return (filename, registrationname, readonly, user, password)
+
         def CloseDatabase(self):
             return self.ExecMethod(self.vbMethod, 'CloseDatabase')
 
@@ -1608,21 +1615,12 @@ class SFDialogs:
         OKBUTTON, CANCELBUTTON = 1, 0
 
         @classmethod
-        def PreProcessArgs(cls, args):
+        def ReviewServiceArgs(cls, container = '', library = 'Standard', dialogname = ''):
             """
-                Review the arguments of the creation of the Basic service (must be a class method)
-                    - accept None as default values for Container and Library arguments
-                    - add the XComponentContext as last argument
+                Transform positional and keyword arguments into positional only
+                Add the XComponentContext as last argument
                 """
-            listargs = list(args)   # Make a mutable list because args is an immutable tuple
-            if len(listargs) >= 1:
-                if listargs[0] is None:         # Container
-                    listargs[0] = ''
-            if len(listargs) >= 2:
-                if listargs[1] is None:
-                    listargs[1] = 'Standard'    # Library
-            newargs = (*listargs, ScriptForge.componentcontext)
-            return newargs
+            return (container, library, dialogname, ScriptForge.componentcontext)
 
         def Activate(self):
             return self.ExecMethod(self.vbMethod, 'Activate')
@@ -1726,6 +1724,13 @@ class SFDocuments:
         # Force for each property to get its value from Basic - due to intense interactivity with user
         forceGetProperty = True
 
+        @classmethod
+        def ReviewServiceArgs(cls, windowname = ''):
+            """
+                Transform positional and keyword arguments into positional only
+                """
+            return (windowname,)
+
         def Activate(self):
             return self.ExecMethod(self.vbMethod, 'Activate')
 
@@ -1765,6 +1770,13 @@ class SFDocuments:
                                  IsDraw = False, IsImpress = False, IsMath = False, IsWriter = False,
                                  XComponent = False)
 
+        @classmethod
+        def ReviewServiceArgs(cls, windowname = ''):
+            """
+                Transform positional and keyword arguments into positional only
+                """
+            return (windowname,)
+
         def CloseDocument(self, saveask = True):
             return self.ExecMethod(self.vbMethod, 'CloseDocument', saveask)
 
@@ -1803,6 +1815,13 @@ class SFDocuments:
                                  XComponent = False)
         # Force for each property to get its value from Basic - due to intense interactivity with user
         forceGetProperty = True
+
+        @classmethod
+        def ReviewServiceArgs(cls, windowname = ''):
+            """
+                Transform positional and keyword arguments into positional only
+                """
+            return (windowname,)
 
         # Next functions are implemented in Basic as read-only properties with 1 argument
         def Height(self, rangename):
@@ -2045,7 +2064,7 @@ class SFDocuments:
 # ##############################################False##################################################################
 #                           CreateScriptService()                                                                   ###
 # #####################################################################################################################
-def CreateScriptService(service, *args):
+def CreateScriptService(service, *args, **kwargs):
     """
         A service being the name of a collection of properties and methods,
         this method returns either
@@ -2095,9 +2114,9 @@ def CreateScriptService(service, *args):
     # The requested service is to be found in the Basic world
     # Check if the service must review the arguments
     if serv is not None:
-        if hasattr(serv, 'PreProcessArgs'):
-            # PreProcessArgs() must be a class method
-            args = serv.PreProcessArgs(args)
+        if hasattr(serv, 'ReviewServiceArgs'):
+            # ReviewServiceArgs() must be a class method
+            args = serv.ReviewServiceArgs(*args, **kwargs)
     # Get the service object back from Basic
     if len(args) == 0:
         serv = ScriptForge.InvokeBasicService('SF_Services', SFServices.vbMethod, 'CreateScriptService', service)
