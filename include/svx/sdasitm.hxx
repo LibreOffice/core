@@ -30,7 +30,7 @@
 
 namespace com::sun::star::uno { class Any; }
 
-class SVXCORE_DLLPUBLIC SdrCustomShapeGeometryItem : public SfxPoolItem
+class SVXCORE_DLLPUBLIC SdrCustomShapeGeometryItem final : public SfxPoolItem
 {
 public:
     typedef std::pair < const OUString, const OUString > PropertyPair;

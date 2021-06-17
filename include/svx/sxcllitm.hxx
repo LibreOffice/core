@@ -28,7 +28,7 @@
  * Only for Type3 and Type4
  * Only relevant, if SdrCaptionFitLineLenItem = false
  */
-class SVXCORE_DLLPUBLIC SdrCaptionLineLenItem: public SdrMetricItem {
+class SVXCORE_DLLPUBLIC SdrCaptionLineLenItem final : public SdrMetricItem {
 public:
     SdrCaptionLineLenItem(tools::Long nLineLen=0): SdrMetricItem(SDRATTR_CAPTIONLINELEN,nLineLen) {}
     virtual ~SdrCaptionLineLenItem() override;
@@ -44,7 +44,7 @@ public:
  * The length of the first caption line is either automatically
  * calculated or the default setting is used (SdrCaptionLineLenItem)
  */
-class SVXCORE_DLLPUBLIC SdrCaptionFitLineLenItem: public SdrYesNoItem {
+class SVXCORE_DLLPUBLIC SdrCaptionFitLineLenItem final : public SdrYesNoItem {
 public:
     SdrCaptionFitLineLenItem(bool bBestFit=true): SdrYesNoItem(SDRATTR_CAPTIONFITLINELEN,bBestFit) {}
     virtual ~SdrCaptionFitLineLenItem() override;

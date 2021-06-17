@@ -382,7 +382,7 @@ public:
 };
 
 
-class ImpEdgeHdl: public SdrHdl
+class ImpEdgeHdl final : public SdrHdl
 {
     SdrEdgeLineCode eLineCode;
 
@@ -427,7 +427,6 @@ public:
 
 class SVXCORE_DLLPUBLIC SdrHdlList
 {
-protected:
     size_t                      mnFocusIndex;
     SdrMarkView*                pView;
     std::deque<std::unique_ptr<SdrHdl>> maList;
@@ -437,7 +436,6 @@ protected:
     bool                        bDistortShear : 1;
     bool                        bMoveOutside : 1;      // move handles outwards (for TextEdit)
 
-private:
     SVX_DLLPRIVATE SdrHdlList(const SdrHdlList&) = delete;
     SVX_DLLPRIVATE void operator=(const SdrHdlList&) = delete;
 

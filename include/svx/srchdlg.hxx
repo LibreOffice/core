@@ -106,7 +106,7 @@ public:
 
  */
 
-class SVX_DLLPUBLIC SvxSearchDialog : public SfxModelessDialogController
+class SVX_DLLPUBLIC SvxSearchDialog final : public SfxModelessDialogController
 {
 friend class SvxSearchController;
 friend class SvxSearchDialogWrapper;

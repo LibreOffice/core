@@ -199,7 +199,7 @@ private:
     OUString                maCustomUnitText;
 };
 
-class VCL_DLLPUBLIC MetricField : public SpinField, public MetricFormatter
+class VCL_DLLPUBLIC MetricField final : public SpinField, public MetricFormatter
 {
 public:
     explicit                MetricField( vcl::Window* pParent, WinBits nWinStyle );
@@ -231,7 +231,7 @@ public:
     virtual FactoryFunction GetUITestFactory() const override;
 };
 
-class VCL_DLLPUBLIC MetricBox : public ComboBox, public MetricFormatter
+class VCL_DLLPUBLIC MetricBox final : public ComboBox, public MetricFormatter
 {
 public:
     explicit                MetricBox( vcl::Window* pParent, WinBits nWinStyle );
@@ -499,7 +499,7 @@ public:
     virtual void            dispose() override;
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) NumericBox : public ComboBox, public NumericFormatter
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) NumericBox final : public ComboBox, public NumericFormatter
 {
     SAL_DLLPRIVATE void     ImplNumericReformat( const OUString& rStr, sal_Int64& rValue, OUString& rOutStr );
 public:

@@ -24,7 +24,7 @@
 
 namespace i18nutil { struct SearchOptions; }
 
-class VCL_DLLPUBLIC ExtTextEngine : public TextEngine
+class VCL_DLLPUBLIC ExtTextEngine final : public TextEngine
 {
 public:
                         ExtTextEngine();

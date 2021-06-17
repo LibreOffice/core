@@ -52,7 +52,7 @@ namespace o3tl
     template<> struct typed_flags<SvxZoomEnableFlags> : is_typed_flags<SvxZoomEnableFlags, 0x701f> {};
 }
 
-class SFX2_DLLPUBLIC SvxZoomItem: public SfxUInt16Item
+class SFX2_DLLPUBLIC SvxZoomItem final : public SfxUInt16Item
 {
     SvxZoomEnableFlags      nValueSet;  // allowed values (see #defines below)
     SvxZoomType             eType;

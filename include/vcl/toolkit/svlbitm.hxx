@@ -147,7 +147,7 @@ public:
     virtual std::unique_ptr<SvLBoxItem> Clone(SvLBoxItem const * pSource) const override;
 };
 
-class SvLBoxButton : public SvLBoxItem
+class SvLBoxButton final : public SvLBoxItem
 {
     bool    isVis;
     SvLBoxButtonData*   pData;

@@ -27,7 +27,7 @@
 
 /** SvxColorItem item describes a color.
 */
-class EDITENG_DLLPUBLIC SvxColorItem : public SfxPoolItem
+class EDITENG_DLLPUBLIC SvxColorItem final : public SfxPoolItem
 {
 private:
     Color mColor;

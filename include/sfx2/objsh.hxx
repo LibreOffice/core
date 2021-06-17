@@ -814,7 +814,6 @@ typedef tools::SvRef<SfxObjectShell> SfxObjectShellRef;
 
 class SfxObjectShellLock
 {
-protected:
     SfxObjectShell * pObj;
 public:
     SfxObjectShellLock() { pObj = nullptr; }

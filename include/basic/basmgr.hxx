@@ -104,7 +104,7 @@ struct BasicManagerImpl;
 
 #define LIB_NOTFOUND    0xFFFF
 
-class BASIC_DLLPUBLIC BasicManager : public SfxBroadcaster
+class BASIC_DLLPUBLIC BasicManager final : public SfxBroadcaster
 {
     friend class LibraryContainer_Impl;
     friend class StarBasicAccess_Impl;
@@ -121,8 +121,6 @@ private:
     std::unique_ptr<BasicManagerImpl>   mpImpl;
 
     BASIC_DLLPRIVATE void Init();
-
-protected:
     bool            ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStorage );
     void            ImpCreateStdLib( StarBASIC* pParentFromStdLib );
     void            ImpMgrNotLoaded(  const OUString& rStorageName  );

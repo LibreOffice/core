@@ -324,7 +324,7 @@ namespace vcl
         TabPage* pCurrentPage = GetPage( getCurrentState() );
         if ( pCurrentPage )
         {
-            const IWizardPageController* pController = getPageController( GetPage( getCurrentState() ) );
+            const IWizardPageController* pController = nullptr;
             OSL_ENSURE( pController != nullptr, "RoadmapWizard::implUpdateRoadmap: no controller for the current page!" );
             bCurrentPageCanAdvance = !pController || pController->canAdvance();
         }
@@ -717,23 +717,8 @@ namespace vcl
         return bResult;
     }
 
-    void RoadmapWizard::enterState(WizardTypes::WizardState nState)
+    void RoadmapWizard::enterState(WizardTypes::WizardState /*nState*/)
     {
-        // tell the page
-        IWizardPageController* pController = getPageController( GetPage( nState ) );
-        if (pController)
-        {
-            pController->initializePage();
-
-            if ( isAutomaticNextButtonStateEnabled() )
-                enableButtons( WizardButtonFlags::NEXT, canAdvance() );
-
-            enableButtons( WizardButtonFlags::PREVIOUS, !m_xWizardImpl->aStateHistory.empty() );
-
-            // set the new title - it depends on the current page (i.e. state)
-            implUpdateTitle();
-        }
-
         // synchronize the roadmap
         implUpdateRoadmap( );
         m_xRoadmapImpl->pRoadmap->SelectRoadmapItemByID( getCurrentState() );

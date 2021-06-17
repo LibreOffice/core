@@ -39,7 +39,7 @@ namespace connectivity
 
     public:
         OSQLScanner();
-        virtual ~OSQLScanner();
+        ~OSQLScanner();
 
         sal_Int32 SQLyygetc();
         void SQLyyerror(char const *fmt);

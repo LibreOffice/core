@@ -45,7 +45,7 @@ enum SvxLinkInsertMode
     HLINK_HTMLMODE = 0x0080
 };
 
-class SVX_DLLPUBLIC SvxHyperlinkItem : public SfxPoolItem
+class SVX_DLLPUBLIC SvxHyperlinkItem final : public SfxPoolItem
 {
     OUString sName;
     OUString sURL;

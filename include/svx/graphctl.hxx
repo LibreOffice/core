@@ -128,11 +128,9 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 };
 
-class GraphCtrlView : public SdrView
+class GraphCtrlView final : public SdrView
 {
     GraphCtrl& rGraphCtrl;
-
-protected:
 
     virtual void MarkListHasChanged() override
     {

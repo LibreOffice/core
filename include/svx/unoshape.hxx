@@ -479,7 +479,7 @@ public:
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
-class SvxShapeConnector : public css::drawing::XConnectorShape,
+class SvxShapeConnector final : public css::drawing::XConnectorShape,
                           public SvxShapeText
 {
 public:

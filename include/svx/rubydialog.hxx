@@ -52,7 +52,7 @@ public:
 
 class SvxRubyData_Impl;
 
-class SvxRubyDialog : public SfxModelessDialogController
+class SvxRubyDialog final : public SfxModelessDialogController
 {
     friend class RubyPreview;
 

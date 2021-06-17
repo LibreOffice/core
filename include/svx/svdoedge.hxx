@@ -124,7 +124,7 @@ public:
 
 
 /// Utility class SdrEdgeObj
-class SVXCORE_DLLPUBLIC SdrEdgeObj : public SdrTextObj
+class SVXCORE_DLLPUBLIC SdrEdgeObj final : public SdrTextObj
 {
 private:
     // to allow sdr::properties::ConnectorProperties access to ImpSetAttrToEdgeInfo()
@@ -133,7 +133,6 @@ private:
     friend class                SdrCreateView;
     friend class                ImpEdgeHdl;
 
-protected:
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
     virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
 
@@ -167,7 +166,7 @@ public:
     void SetSuppressDefaultConnect(bool bNew) { mbSuppressDefaultConnect = bNew; }
     bool GetSuppressDefaultConnect() const { return mbSuppressDefaultConnect; }
 
-protected:
+private:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
     static XPolygon ImpCalcObjToCenter(const Point& rStPt, tools::Long nEscAngle, const tools::Rectangle& rRect, const Point& rCenter);
