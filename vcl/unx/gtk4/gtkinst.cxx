@@ -12,6 +12,7 @@
 
 #include "convert3to4.hxx"
 #include "notifyinglayout.hxx"
+#include "surfacepaintable.hxx"
 
 #include "../gtk3/gtkinst.cxx"
 
