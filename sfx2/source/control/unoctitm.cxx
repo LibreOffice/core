@@ -77,6 +77,8 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 
+#include <desktop/crashreport.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -613,6 +615,10 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
         const css::uno::Sequence< css::beans::PropertyValue >& aArgs,
         const css::uno::Reference< css::frame::XDispatchResultListener >& rListener )
 {
+    if ( aURL.Protocol == ".uno:")
+    {
+        CrashReporter::logUnoCommand(aURL.Path);
+    }
     collectUsageInformation(aURL, aArgs);
     collectUIInformation(aURL, aArgs);
 
