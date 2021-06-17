@@ -1760,6 +1760,11 @@ void SwWW8ImplReader::RegisterNumFormatOnTextNode(sal_uInt16 nCurrentLFO,
     if (!pTextNd)
         return;
 
+    // Undefined listLevel is treated as the first level with valid numbering rule.
+    // TODO:This doesn't allow for inheriting from a style(HOW?), but it matches previous behaviour.
+    if (nCurrentLFO < USHRT_MAX && nCurrentLevel == MAXLEVEL)
+        nCurrentLevel = 0;
+
     std::vector<sal_uInt8> aParaSprms;
     const SwNumRule* pRule = bSetAttr ?
         m_xLstManager->GetNumRuleForActivation( nCurrentLFO, nCurrentLevel,
@@ -1983,21 +1988,9 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
             // here the stream data is 1-based, we subtract ONE
             if (m_nLFOPosition != 2047-1) //Normal ww8+ list behaviour
             {
-                if (WW8ListManager::nMaxLevel <= m_nListLevel)
-                {
-                    // This looks like a mistake. What should happen here?
-                    // If iLvl is undefined, then treat as level 1? (yes - list-nolevel.doc)
-                    // What about inheritance? (good question - inheritance completely ignored)
-                    // What about if iLvl is specified as Body Text(nMaxLevel)?
-                    assert(MAXLEVEL == m_nListLevel && "Looking for proof document showing a specified body text level should not become numbered.");
-                    m_nListLevel = 0;
-                }
-                if (WW8ListManager::nMaxLevel > m_nListLevel)
-                {
-                    RegisterNumFormat(m_nLFOPosition, m_nListLevel);
-                    m_nLFOPosition = USHRT_MAX;
-                    m_nListLevel = MAXLEVEL;
-                }
+                RegisterNumFormat(m_nLFOPosition, m_nListLevel);
+                m_nLFOPosition = USHRT_MAX;
+                m_nListLevel = MAXLEVEL;
             }
             else if (m_xPlcxMan && m_xPlcxMan->HasParaSprm(NS_sprm::LN_PAnld).pSprm)
             {

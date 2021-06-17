@@ -5933,6 +5933,13 @@ void SwWW8ImplReader::SetOutlineStyles()
                 bReRegister = true;
             }
 
+            // Undefined listLevel is treated as the first level with valid numbering rule.
+            if (rSI.m_nLFOIndex < USHRT_MAX && rSI.m_nListLevel == MAXLEVEL)
+            {
+                rSI.m_nListLevel = 0;
+                bReRegister = true;
+            }
+
             if (bReRegister)
                 RegisterNumFormatOnStyle(nStyle);
 
