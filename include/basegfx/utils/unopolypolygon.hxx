@@ -36,7 +36,7 @@ namespace basegfx::unotools
             css::rendering::XBezierPolyPolygon2D,
             css::lang::XServiceInfo > UnoPolyPolygonBase;
 
-    class BASEGFX_DLLPUBLIC UnoPolyPolygon
+    class BASEGFX_DLLPUBLIC UnoPolyPolygon final
         : private cppu::BaseMutex
         , public UnoPolyPolygonBase
     {
@@ -71,7 +71,7 @@ namespace basegfx::unotools
 
         B2DPolyPolygon getPolyPolygon() const;
 
-    protected:
+    private:
         /// Check whether index is a valid polygon index
         void checkIndex( sal_Int32 nIndex ) const // throw (css::lang::IndexOutOfBoundsException);
         {
@@ -93,7 +93,6 @@ namespace basegfx::unotools
         /// Called whenever internal polypolygon gets modified
         virtual void modifying() const {}
 
-    private:
         UnoPolyPolygon(const UnoPolyPolygon&) = delete;
         UnoPolyPolygon& operator=(const UnoPolyPolygon&) = delete;
 

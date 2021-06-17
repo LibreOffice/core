@@ -44,7 +44,7 @@ class FmFormModel;
 class GalleryTheme;
 class GalleryThemeEntry;
 
-class SVXCORE_DLLPUBLIC GalleryBinaryEngine : public GalleryFileStorage
+class SVXCORE_DLLPUBLIC GalleryBinaryEngine final : public GalleryFileStorage
 {
 private:
     tools::SvRef<SotStorage> m_aSvDrawStorageRef;

@@ -256,9 +256,8 @@ public:
 |*
 \************************************************************************/
 
-class Svx3DCtrlItem : public SfxControllerItem
+class Svx3DCtrlItem final : public SfxControllerItem
 {
- protected:
     virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
                                 const SfxPoolItem* pState ) override;
 
@@ -273,11 +272,10 @@ class Svx3DCtrlItem : public SfxControllerItem
 |*
 \************************************************************************/
 
-class SvxConvertTo3DItem : public SfxControllerItem
+class SvxConvertTo3DItem final : public SfxControllerItem
 {
     bool                        bState;
 
-protected:
     virtual void StateChanged(sal_uInt16 nSId, SfxItemState eState, const SfxPoolItem* pState) override;
 
 public:

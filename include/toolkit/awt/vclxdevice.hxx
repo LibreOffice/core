@@ -74,7 +74,7 @@ public:
 
 
 
-class VCLXVirtualDevice : public VCLXDevice
+class VCLXVirtualDevice final : public VCLXDevice
 {
 public:
                     virtual ~VCLXVirtualDevice() override;

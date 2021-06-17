@@ -538,7 +538,7 @@ private:
     //Any Commands an EventBoxHelper receives are forwarded to its parent
     //The VclEventBox ensures that m_aEventBoxHelper is the
     //first child and is transparent, but covers the rest of the children
-    class EventBoxHelper : public vcl::Window
+    class EventBoxHelper final : public vcl::Window
     {
     public:
         EventBoxHelper(vcl::Window* pParent)

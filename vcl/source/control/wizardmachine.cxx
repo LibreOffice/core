@@ -681,7 +681,7 @@ namespace vcl
 
     bool RoadmapWizard::prepareLeaveCurrentState( WizardTypes::CommitPageReason _eReason )
     {
-        IWizardPageController* pController = getPageController( GetPage( getCurrentState() ) );
+        IWizardPageController* pController = nullptr;
         ENSURE_OR_RETURN( pController != nullptr, "RoadmapWizard::prepareLeaveCurrentState: no controller for the current page!", true );
         return pController->commitPage( _eReason );
     }
@@ -833,12 +833,6 @@ namespace vcl
             return;
         RoadmapWizardTravelSuspension aTravelGuard( *this );
         travelNext();
-    }
-
-    IWizardPageController* RoadmapWizard::getPageController( TabPage* _pCurrentPage )
-    {
-        IWizardPageController* pController = dynamic_cast< IWizardPageController* >( _pCurrentPage );
-        return pController;
     }
 
     bool RoadmapWizard::isTravelingSuspended() const

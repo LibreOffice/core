@@ -47,7 +47,7 @@ namespace unogallery
     class GalleryItem;
 }
 
-class SVXCORE_DLLPUBLIC GalleryTheme : public SfxBroadcaster
+class SVXCORE_DLLPUBLIC GalleryTheme final : public SfxBroadcaster
 {
     friend class Gallery;
     friend class GalleryThemeCacheEntry;
