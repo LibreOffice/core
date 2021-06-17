@@ -47,7 +47,7 @@ class UNLESS_MERGELIBS(SFX2_DLLPUBLIC) SfxStatusListener : public cppu::WeakImpl
         void    UnBind();
         void    ReBind();
 
-        virtual void StateChanged( SfxItemState eState, const SfxPoolItem* pState );
+        virtual void StateChangedAtStatusListener( SfxItemState eState, const SfxPoolItem* pState );
 
         // XComponent
         virtual void SAL_CALL dispose() override;

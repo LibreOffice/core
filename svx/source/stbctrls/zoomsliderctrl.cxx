@@ -163,7 +163,7 @@ SvxZoomSliderControl::~SvxZoomSliderControl()
 {
 }
 
-void SvxZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
+void SvxZoomSliderControl::StateChangedAtStatusBarControl( sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
     if ( (SfxItemState::DEFAULT != eState) || pState->IsVoidItem() )
     {

@@ -56,7 +56,7 @@ public:
 
     virtual ~FmFieldWin() override;
 
-    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
+    virtual void StateChangedAtToolBoxControl(sal_uInt16 nSID, SfxItemState eState,
                               const SfxPoolItem* pState) override;
 
     void UpdateContent(FmFormShell const *);

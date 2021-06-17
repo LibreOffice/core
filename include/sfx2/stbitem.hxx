@@ -92,7 +92,7 @@ protected:
     virtual void SAL_CALL doubleClick( const css::awt::Point& aPos ) override;
 
     // Old sfx2 interface
-    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
+    virtual void    StateChangedAtStatusBarControl( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState );
     virtual void    Click();
     virtual void    Command( const CommandEvent& rCEvt );

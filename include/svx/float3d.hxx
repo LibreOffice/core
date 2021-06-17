@@ -259,7 +259,7 @@ public:
 class Svx3DCtrlItem : public SfxControllerItem
 {
  protected:
-    virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
+    virtual void StateChangedAtToolBoxControl( sal_uInt16 nSId, SfxItemState eState,
                                 const SfxPoolItem* pState ) override;
 
  public:
@@ -278,7 +278,7 @@ class SvxConvertTo3DItem : public SfxControllerItem
     bool                        bState;
 
 protected:
-    virtual void StateChanged(sal_uInt16 nSId, SfxItemState eState, const SfxPoolItem* pState) override;
+    virtual void StateChangedAtToolBoxControl(sal_uInt16 nSId, SfxItemState eState, const SfxPoolItem* pState) override;
 
 public:
     SvxConvertTo3DItem(sal_uInt16 nId, SfxBindings* pBindings);

@@ -84,7 +84,7 @@ SvxFillToolBoxControl::~SvxFillToolBoxControl()
 {
 }
 
-void SvxFillToolBoxControl::StateChanged(
+void SvxFillToolBoxControl::StateChangedAtToolBoxControl(
     sal_uInt16 nSID,
     SfxItemState eState,
     const SfxPoolItem* pState)

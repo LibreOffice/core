@@ -35,7 +35,7 @@ ScNumberFormatControl::~ScNumberFormatControl()
 {
 }
 
-void ScNumberFormatControl::StateChanged(sal_uInt16, SfxItemState eState,
+void ScNumberFormatControl::StateChangedAtToolBoxControl(sal_uInt16, SfxItemState eState,
                                          const SfxPoolItem* pState)
 {
     ToolBoxItemId nId = GetId();

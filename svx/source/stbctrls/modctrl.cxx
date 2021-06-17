@@ -73,7 +73,7 @@ SvxModifyControl::SvxModifyControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, Status
 }
 
 
-void SvxModifyControl::StateChanged( sal_uInt16, SfxItemState eState,
+void SvxModifyControl::StateChangedAtStatusBarControl( sal_uInt16, SfxItemState eState,
                                      const SfxPoolItem* pState )
 {
     if ( SfxItemState::DEFAULT != eState )

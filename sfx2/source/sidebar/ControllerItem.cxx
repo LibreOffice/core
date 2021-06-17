@@ -40,7 +40,7 @@ ControllerItem::~ControllerItem()
     dispose();
 }
 
-void ControllerItem::StateChanged (
+void ControllerItem::StateChangedAtToolBoxControl (
     sal_uInt16 nSID,
     SfxItemState eState,
     const SfxPoolItem* pState)

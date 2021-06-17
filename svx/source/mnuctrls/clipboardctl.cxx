@@ -93,7 +93,7 @@ void SvxClipBoardControl::CreatePopupWindow()
     GetToolBox().EndSelection();
 }
 
-void SvxClipBoardControl::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
+void SvxClipBoardControl::StateChangedAtToolBoxControl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
     if ( SID_CLIPBOARD_FORMAT_ITEMS == nSID )
     {

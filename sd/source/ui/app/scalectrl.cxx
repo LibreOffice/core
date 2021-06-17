@@ -44,8 +44,8 @@ SdScaleControl::SdScaleControl(sal_uInt16 _nSlotId, sal_uInt16 _nId, StatusBar& 
 
 SdScaleControl::~SdScaleControl() {}
 
-void SdScaleControl::StateChanged(sal_uInt16 /*nSID*/, SfxItemState eState,
-                                  const SfxPoolItem* pState)
+void SdScaleControl::StateChangedAtStatusBarControl(sal_uInt16 /*nSID*/, SfxItemState eState,
+                                                    const SfxPoolItem* pState)
 {
     if (eState != SfxItemState::DEFAULT || pState->IsVoidItem())
         return;

@@ -68,7 +68,7 @@ public:
     SvxFillToolBoxControl(sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx);
     virtual ~SvxFillToolBoxControl() override;
 
-    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState) override;
+    virtual void StateChangedAtToolBoxControl(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState) override;
     void Update();
     virtual VclPtr<InterimItemWindow> CreateItemWindow(vcl::Window* pParent) override;
 };

@@ -61,8 +61,8 @@ public:
      * @param eState -- enum value which contains ComboBox state
      * @param pState --
      */
-    virtual void StateChanged(sal_uInt16 nSlotID, SfxItemState eState,
-                              const SfxPoolItem* pState) override;
+    virtual void StateChangedAtToolBoxControl(sal_uInt16 nSlotID, SfxItemState eState,
+                                              const SfxPoolItem* pState) override;
     /*!
      * Create combobox of Macro and Dialog Library
      *
@@ -205,8 +205,8 @@ public:
      * @param eState -- enum value which contains ComboBox state
      * @param pState --
      */
-    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
-                              const SfxPoolItem* pState) override;
+    virtual void StateChangedAtToolBoxControl(sal_uInt16 nSID, SfxItemState eState,
+                                              const SfxPoolItem* pState) override;
     /*!
      * Create ComboBox of Language
      *

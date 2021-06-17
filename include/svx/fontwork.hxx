@@ -49,7 +49,7 @@ class SvxFontWorkControllerItem final : public SfxControllerItem
 {
     SvxFontWorkDialog  &rFontWorkDlg;
 
-    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
+    virtual void StateChangedAtToolBoxControl(sal_uInt16 nSID, SfxItemState eState,
                               const SfxPoolItem* pState) override;
 
 public:

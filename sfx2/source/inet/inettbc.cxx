@@ -217,7 +217,7 @@ IMPL_LINK_NOARG(SfxURLToolBoxControl_Impl, OpenHdl, weld::ComboBox&, bool)
     return true;
 }
 
-void SfxURLToolBoxControl_Impl::StateChanged
+void SfxURLToolBoxControl_Impl::StateChangedAtToolBoxControl
 (
     sal_uInt16          nSID,
     SfxItemState        eState,

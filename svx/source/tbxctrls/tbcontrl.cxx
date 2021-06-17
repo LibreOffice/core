@@ -821,7 +821,7 @@ class SfxStyleControllerItem_Impl : public SfxStatusListener
                                      SvxStyleToolBoxControl& rTbxCtl );
 
     protected:
-        virtual void StateChanged( SfxItemState eState, const SfxPoolItem* pState ) override;
+        virtual void StateChangedAtStatusListener( SfxItemState eState, const SfxPoolItem* pState ) override;
 
     private:
         SvxStyleToolBoxControl& rControl;
@@ -2494,7 +2494,7 @@ SfxStyleControllerItem_Impl::SfxStyleControllerItem_Impl(
 {
 }
 
-void SfxStyleControllerItem_Impl::StateChanged(
+void SfxStyleControllerItem_Impl::StateChangedAtStatusListener(
     SfxItemState eState, const SfxPoolItem* pState )
 {
     switch ( GetId() )

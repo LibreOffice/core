@@ -52,7 +52,7 @@ ParaULSpacingControl::~ParaULSpacingControl()
 {
 }
 
-void ParaULSpacingControl::StateChanged(sal_uInt16 nSID, SfxItemState eState,
+void ParaULSpacingControl::StateChangedAtToolBoxControl(sal_uInt16 nSID, SfxItemState eState,
                               const SfxPoolItem* pState)
 {
     ToolBoxItemId nId = GetId();
@@ -133,7 +133,7 @@ void SAL_CALL ParaLRSpacingControl::dispose()
     SfxToolBoxControl::dispose();
 }
 
-void ParaLRSpacingControl::StateChanged(sal_uInt16 nSID, SfxItemState eState,
+void ParaLRSpacingControl::StateChangedAtToolBoxControl(sal_uInt16 nSID, SfxItemState eState,
                               const SfxPoolItem* pState)
 {
     ToolBoxItemId nId = GetId();

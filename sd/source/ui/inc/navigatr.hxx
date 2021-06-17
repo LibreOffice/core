@@ -178,7 +178,7 @@ public:
         const SdNavigatorWin::UpdateRequestFunctor& rUpdateRequest);
 
 protected:
-    virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
+    virtual void StateChangedAtToolBoxControl( sal_uInt16 nSId, SfxItemState eState,
                                 const SfxPoolItem* pState ) override;
 
 private:
@@ -195,7 +195,7 @@ public:
     SdPageNameControllerItem( sal_uInt16, SdNavigatorWin*, SfxBindings*);
 
 protected:
-    virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
+    virtual void StateChangedAtToolBoxControl( sal_uInt16 nSId, SfxItemState eState,
                                 const SfxPoolItem* pState ) override;
 
 private:

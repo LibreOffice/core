@@ -58,7 +58,7 @@ void SvxHlinkCtrl::dispose()
     ::SfxControllerItem::dispose();
 }
 
-void SvxHlinkCtrl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
+void SvxHlinkCtrl::StateChangedAtToolBoxControl( sal_uInt16 nSID, SfxItemState eState,
                                  const SfxPoolItem* pState )
 {
     if (!(eState == SfxItemState::DEFAULT && pParent))

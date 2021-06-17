@@ -628,7 +628,7 @@ SdNavigatorControllerItem::SdNavigatorControllerItem(
 {
 }
 
-void SdNavigatorControllerItem::StateChanged( sal_uInt16 nSId,
+void SdNavigatorControllerItem::StateChangedAtToolBoxControl( sal_uInt16 nSId,
                         SfxItemState eState, const SfxPoolItem* pItem )
 {
     if( eState < SfxItemState::DEFAULT || nSId != SID_NAVIGATOR_STATE )
@@ -707,7 +707,7 @@ SdPageNameControllerItem::SdPageNameControllerItem(
 {
 }
 
-void SdPageNameControllerItem::StateChanged( sal_uInt16 nSId,
+void SdPageNameControllerItem::StateChangedAtToolBoxControl( sal_uInt16 nSId,
                         SfxItemState eState, const SfxPoolItem* pItem )
 {
     if( eState < SfxItemState::DEFAULT || nSId != SID_NAVIGATOR_PAGENAME )

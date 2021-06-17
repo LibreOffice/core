@@ -180,7 +180,7 @@ void FmFieldWin::_propertyChanged(const css::beans::PropertyChangeEvent& evt)
     UpdateContent(xForm);
 }
 
-void FmFieldWin::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState)
+void FmFieldWin::StateChangedAtToolBoxControl(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState)
 {
     if (!pState  || SID_FM_FIELDS_CONTROL != nSID)
         return;
