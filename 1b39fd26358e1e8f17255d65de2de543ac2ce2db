@@ -39,6 +39,24 @@
       "revId": "1b39fd26358e1e8f17255d65de2de543ac2ce2db",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd63c920_ec85cda4",
+        "filename": "sd/qa/uitest/impress_tests/customSlideShow.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-06-17T07:42:49Z",
+      "side": 1,
+      "message": "or any idea how to implement it as \u0027with guarded.execute_blocking_action...\u0027 ?",
+      "parentUuid": "0904a9c6_20455b02",
+      "revId": "1b39fd26358e1e8f17255d65de2de543ac2ce2db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
