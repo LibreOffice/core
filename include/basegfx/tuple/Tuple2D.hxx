@@ -75,29 +75,25 @@ public:
 
     // comparators with tolerance
 
-    template <typename T = TYPE,
-              typename std::enable_if<std::is_integral<T>::value, bool>::type = false>
+    template <typename T = TYPE, std::enable_if_t<std::is_integral_v<T>, int> = 0>
     bool equal(const Tuple2D<TYPE>& rTup) const
     {
         return mfX == rTup.mfX && mfY == rTup.mfY;
     }
 
-    template <typename T = TYPE,
-              typename std::enable_if<std::is_floating_point<T>::value, bool>::type = false>
+    template <typename T = TYPE, std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
     bool equal(const Tuple2D<TYPE>& rTup) const
     {
         return this == &rTup || (fTools::equal(mfX, rTup.mfX) && fTools::equal(mfY, rTup.mfY));
     }
 
-    template <typename T = TYPE,
-              typename std::enable_if<std::is_integral<T>::value, bool>::type = false>
+    template <typename T = TYPE, std::enable_if_t<std::is_integral_v<T>, int> = 0>
     bool equalZero() const
     {
         return mnX == 0 && mnY == 0;
     }
 
-    template <typename T = TYPE,
-              typename std::enable_if<std::is_floating_point<T>::value, bool>::type = false>
+    template <typename T = TYPE, std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
     bool equalZero() const
     {
         return fTools::equalZero(mfX) && fTools::equalZero(mfY);
