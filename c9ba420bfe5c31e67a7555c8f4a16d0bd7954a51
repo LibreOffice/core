@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "1fdc858a_39d78252",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 1591,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-17T05:55:39Z",
+      "side": 0,
+      "message": "Hii..\n\nI did Ctrl+k + Ctrl+f  in these lines of code.. And it autmatically got formatted.. I am really sorry for the inconvenience you faced due to formatting issues.. I will try to resolve them in the next patch",
+      "parentUuid": "91dd8cd6_488b22aa",
+      "range": {
+        "startLine": 1589,
+        "startChar": 4,
+        "endLine": 1591,
+        "endChar": 54
+      },
+      "revId": "c9ba420bfe5c31e67a7555c8f4a16d0bd7954a51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2cbfc9a4_7878fa8b",
         "filename": "sfx2/source/dialog/templdlg.cxx",
         "patchSetId": 23
