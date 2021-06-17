@@ -199,7 +199,7 @@ void SfxControllerItem::dispose()
         UnBind();
 }
 
-void SfxControllerItem::StateChanged
+void SfxControllerItem::StateChangedAtToolBoxControl
 (
     sal_uInt16,          // <SID> of the triggering slot
     SfxItemState,       // <SfxItemState> of 'pState'
@@ -234,7 +234,7 @@ void SfxControllerItem::GetControlState
 {
 }
 
-void SfxStatusForwarder::StateChanged
+void SfxStatusForwarder::StateChangedAtToolBoxControl
 (
     sal_uInt16          nSID,    // <SID> of the triggering slot
     SfxItemState        eState,  // <SfxItemState> of 'pState'
@@ -242,7 +242,7 @@ void SfxStatusForwarder::StateChanged
 )
 
 {
-    pMaster->StateChanged( nSID, eState, pState );
+    pMaster->StateChangedAtToolBoxControl( nSID, eState, pState );
 }
 
 

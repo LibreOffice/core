@@ -48,7 +48,7 @@ SwTemplateControl::~SwTemplateControl()
 {
 }
 
-void SwTemplateControl::StateChanged(
+void SwTemplateControl::StateChangedAtStatusBarControl(
     sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
     const SfxStringItem* pItem = nullptr;

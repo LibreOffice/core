@@ -320,7 +320,7 @@ SvxBmpMaskSelectItem::SvxBmpMaskSelectItem( SvxBmpMask& rMask,
 {
 }
 
-void SvxBmpMaskSelectItem::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/,
+void SvxBmpMaskSelectItem::StateChangedAtToolBoxControl( sal_uInt16 nSID, SfxItemState /*eState*/,
                                          const SfxPoolItem* pItem )
 {
     if ( ( nSID == SID_BMPMASK_EXEC ) && pItem )

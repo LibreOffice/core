@@ -26,8 +26,8 @@ class SwTemplateControl final : public SfxStatusBarControl
     virtual void Command(const CommandEvent& rCEvt) override;
 
 public:
-    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
-                              const SfxPoolItem* pState) override;
+    virtual void StateChangedAtStatusBarControl(sal_uInt16 nSID, SfxItemState eState,
+                                                const SfxPoolItem* pState) override;
     virtual void Paint(const UserDrawEvent& rEvt) override;
 
     SFX_DECL_STATUSBAR_CONTROL();

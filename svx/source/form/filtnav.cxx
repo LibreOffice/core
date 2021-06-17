@@ -1771,7 +1771,7 @@ void FmFilterNavigatorWin::UpdateContent(FmFormShell const * pFormShell)
     }
 }
 
-void FmFilterNavigatorWin::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
+void FmFilterNavigatorWin::StateChangedAtToolBoxControl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
     if( !pState  || SID_FM_FILTER_NAVIGATOR_CONTROL != nSID )
         return;

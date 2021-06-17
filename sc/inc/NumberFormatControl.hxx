@@ -32,7 +32,7 @@ public:
     ScNumberFormatControl(sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx);
     virtual ~ScNumberFormatControl() override;
 
-    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
+    virtual void StateChangedAtToolBoxControl(sal_uInt16 nSID, SfxItemState eState,
                               const SfxPoolItem* pState) override;
     virtual VclPtr<InterimItemWindow> CreateItemWindow( vcl::Window *pParent ) override;
 };

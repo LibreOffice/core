@@ -128,7 +128,7 @@ void SwTbxAutoTextCtrl::CreatePopupWindow()
     GetToolBox().EndSelection();
 }
 
-void SwTbxAutoTextCtrl::StateChanged( sal_uInt16,
+void SwTbxAutoTextCtrl::StateChangedAtToolBoxControl( sal_uInt16,
                                               SfxItemState,
                                               const SfxPoolItem* pState )
 {
@@ -495,7 +495,7 @@ SwPreviewZoomControl::~SwPreviewZoomControl()
 {
 }
 
-void SwPreviewZoomControl::StateChanged( sal_uInt16 /*nSID*/,
+void SwPreviewZoomControl::StateChangedAtToolBoxControl( sal_uInt16 /*nSID*/,
                                          SfxItemState eState,
                                          const SfxPoolItem* pState )
 {

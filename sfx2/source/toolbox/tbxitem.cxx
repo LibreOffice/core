@@ -435,7 +435,7 @@ void SAL_CALL SfxToolBoxControl::statusChanged( const FeatureStateEvent& rEvent 
             }
         }
 
-        StateChanged( nSlotId, eState, pItem.get() );
+        StateChangedAtToolBoxControl( nSlotId, eState, pItem.get() );
     }
 }
 
@@ -471,7 +471,7 @@ Reference< css::awt::XWindow > SAL_CALL SfxToolBoxControl::createItemWindow( con
     return VCLUnoHelper::GetInterface( CreateItemWindow( VCLUnoHelper::GetWindow( rParent )));
 }
 
-void SfxToolBoxControl::StateChanged
+void SfxToolBoxControl::StateChangedAtToolBoxControl
 (
     sal_uInt16          /*nSlotId*/,
     SfxItemState        eState,

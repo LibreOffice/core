@@ -116,7 +116,7 @@ SvxZoomStatusBarControl::SvxZoomStatusBarControl( sal_uInt16 _nSlotId,
     ImplUpdateItemText();
 }
 
-void SvxZoomStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState,
+void SvxZoomStatusBarControl::StateChangedAtStatusBarControl( sal_uInt16, SfxItemState eState,
                                             const SfxPoolItem* pState )
 {
     if( SfxItemState::DEFAULT != eState )

@@ -51,7 +51,7 @@ SfxTemplateControllerItem::~SfxTemplateControllerItem()
 // Notice about change of status, is  propagated through the Controller
 // passed on by the constructor
 
-void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eState,
+void SfxTemplateControllerItem::StateChangedAtToolBoxControl( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pItem )
 {
     switch(nSID)

@@ -268,7 +268,7 @@ void SAL_CALL SfxStatusBarControl::statusChanged( const frame::FeatureStateEvent
             }
         }
 
-        StateChanged( nSlotID, eState, pItem.get() );
+        StateChangedAtStatusBarControl( nSlotID, eState, pItem.get() );
     }
 }
 
@@ -356,7 +356,7 @@ void SAL_CALL SfxStatusBarControl::doubleClick( const awt::Point& )
 }
 
 // old sfx2 interface
-void SfxStatusBarControl::StateChanged
+void SfxStatusBarControl::StateChangedAtStatusBarControl
 (
     sal_uInt16              nSID,
     SfxItemState        eState,

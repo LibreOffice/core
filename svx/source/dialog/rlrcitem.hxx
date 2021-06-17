@@ -29,7 +29,7 @@ private:
     SvxRuler& rRuler;
 
 protected:
-    virtual void StateChanged( sal_uInt16,
+    virtual void StateChangedAtToolBoxControl( sal_uInt16,
                                SfxItemState, const SfxPoolItem* pState ) override;
 
 public:

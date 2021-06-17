@@ -38,7 +38,7 @@ public:
         StylesPreviewWindow_Base* pPreviewControl,
         const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider);
 
-    void StateChanged(SfxItemState eState, const SfxPoolItem* pState) override;
+    void StateChangedAtStatusListener(SfxItemState eState, const SfxPoolItem* pState) override;
 };
 
 /// Listener for styles creation or modification

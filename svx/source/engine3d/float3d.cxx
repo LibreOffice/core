@@ -2893,7 +2893,7 @@ Svx3DCtrlItem::Svx3DCtrlItem( sal_uInt16 _nId,
 }
 
 
-void Svx3DCtrlItem::StateChanged( sal_uInt16 /*nSId*/,
+void Svx3DCtrlItem::StateChangedAtToolBoxControl( sal_uInt16 /*nSId*/,
                         SfxItemState /*eState*/, const SfxPoolItem* /*pItem*/ )
 {
 }
@@ -2906,7 +2906,7 @@ SvxConvertTo3DItem::SvxConvertTo3DItem(sal_uInt16 _nId, SfxBindings* _pBindings)
 {
 }
 
-void SvxConvertTo3DItem::StateChanged(sal_uInt16 /*_nId*/, SfxItemState eState, const SfxPoolItem* /*pState*/)
+void SvxConvertTo3DItem::StateChangedAtToolBoxControl(sal_uInt16 /*_nId*/, SfxItemState eState, const SfxPoolItem* /*pState*/)
 {
     bool bNewState = (eState != SfxItemState::DISABLED);
     if(bNewState != bState)
