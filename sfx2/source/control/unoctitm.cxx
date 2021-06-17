@@ -791,7 +791,7 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
                 {
                     const SfxPoolItem* pState=nullptr;
                     SfxItemState eState = pDispatcher->QueryState( GetId(), pState );
-                    StateChanged( GetId(), eState, pState );
+                    StateChangedAtToolBoxControl( GetId(), eState, pState );
                 }
             }
 
@@ -975,7 +975,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     }
 }
 
-void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
+void SfxDispatchController_Impl::StateChangedAtToolBoxControl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
     StateChanged( nSID, eState, pState, nullptr );
 }

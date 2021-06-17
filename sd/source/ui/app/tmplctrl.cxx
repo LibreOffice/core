@@ -48,7 +48,7 @@ SdTemplateControl::~SdTemplateControl()
 {
 }
 
-void SdTemplateControl::StateChanged(
+void SdTemplateControl::StateChangedAtStatusBarControl(
     sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
     if( eState != SfxItemState::DEFAULT || pState->IsVoidItem() )

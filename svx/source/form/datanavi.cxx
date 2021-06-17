@@ -2012,7 +2012,7 @@ namespace svxform
         SfxDockingWindow::dispose();
     }
 
-    void DataNavigator::StateChanged( sal_uInt16 , SfxItemState , const SfxPoolItem*  )
+    void DataNavigator::StateChangedAtToolBoxControl( sal_uInt16 , SfxItemState , const SfxPoolItem*  )
     {
     }
 

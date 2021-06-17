@@ -385,7 +385,7 @@ SvxGrafToolBoxControl::~SvxGrafToolBoxControl()
 {
 }
 
-void SvxGrafToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
+void SvxGrafToolBoxControl::StateChangedAtToolBoxControl( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 {
     ImplGrafControl* pCtrl = static_cast<ImplGrafControl*>( GetToolBox().GetItemWindow( GetId() ) );
     DBG_ASSERT( pCtrl, "Control not found" );
@@ -471,7 +471,7 @@ SvxGrafModeToolBoxControl::~SvxGrafModeToolBoxControl()
 {
 }
 
-void SvxGrafModeToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
+void SvxGrafModeToolBoxControl::StateChangedAtToolBoxControl( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 
 {
     ImplGrafModeControl* pCtrl = static_cast<ImplGrafModeControl*>( GetToolBox().GetItemWindow( GetId() ) );

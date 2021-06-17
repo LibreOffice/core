@@ -1113,7 +1113,7 @@ AnimationControllerItem::AnimationControllerItem(
 {
 }
 
-void AnimationControllerItem::StateChanged( sal_uInt16 nSId,
+void AnimationControllerItem::StateChangedAtToolBoxControl( sal_uInt16 nSId,
                         SfxItemState eState, const SfxPoolItem* pItem )
 {
     if( eState >= SfxItemState::DEFAULT && nSId == SID_ANIMATOR_STATE )

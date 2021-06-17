@@ -27,7 +27,7 @@ SwWordCountStatusBarControl::~SwWordCountStatusBarControl()
 {
 }
 
-void SwWordCountStatusBarControl::StateChanged(
+void SwWordCountStatusBarControl::StateChangedAtStatusBarControl(
     sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
     if (eState == SfxItemState::DEFAULT) // Can access pState

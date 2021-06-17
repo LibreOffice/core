@@ -49,7 +49,7 @@ public:
     SvxHlinkCtrl( sal_uInt16 nId, SfxBindings & rBindings, SvxHpLinkDlg* pDlg);
     virtual void dispose() override;
 
-    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
+    virtual void    StateChangedAtToolBoxControl( sal_uInt16 nSID, SfxItemState eState,
                                 const SfxPoolItem* pState ) override;
 };
 

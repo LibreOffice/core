@@ -43,8 +43,8 @@ public:
 
     virtual VclPtr<InterimItemWindow> CreateItemWindow(vcl::Window* pParent) override;
 
-    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
-                              const SfxPoolItem* pState) override;
+    virtual void StateChangedAtToolBoxControl(sal_uInt16 nSID, SfxItemState eState,
+                                              const SfxPoolItem* pState) override;
 };
 
 class SvxFmTbxCtlRecText : public SfxToolBoxControl
@@ -82,8 +82,8 @@ public:
     virtual ~SvxFmTbxCtlRecTotal() override;
 
     virtual VclPtr<InterimItemWindow> CreateItemWindow(vcl::Window* pParent) override;
-    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
-                              const SfxPoolItem* pState) override;
+    virtual void StateChangedAtToolBoxControl(sal_uInt16 nSID, SfxItemState eState,
+                                              const SfxPoolItem* pState) override;
 };
 
 class SvxFmTbxNextRec : public SfxToolBoxControl

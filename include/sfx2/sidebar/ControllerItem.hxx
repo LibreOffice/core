@@ -68,7 +68,7 @@ public:
 
 private:
 
-    virtual void StateChanged (sal_uInt16 nSId, SfxItemState eState, const SfxPoolItem* pState) override;
+    virtual void StateChangedAtToolBoxControl (sal_uInt16 nSId, SfxItemState eState, const SfxPoolItem* pState) override;
     virtual void GetControlState (sal_uInt16 nSId, boost::property_tree::ptree& rState) override;
 
     ItemUpdateReceiverInterface& mrItemUpdateReceiver;

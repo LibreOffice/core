@@ -41,7 +41,7 @@ public:
     virtual ~SvxClipBoardControl() override;
 
     void CreatePopupWindow() override;
-    virtual void                StateChanged( sal_uInt16 nSID,
+    virtual void                StateChangedAtToolBoxControl( sal_uInt16 nSID,
                                               SfxItemState eState,
                                               const SfxPoolItem* pState ) override;
 };

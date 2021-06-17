@@ -142,7 +142,7 @@ SdTbxCtlGlueEscDir::SdTbxCtlGlueEscDir(
 /**
  * Represents state in the listbox of the controller
  */
-void SdTbxCtlGlueEscDir::StateChanged( sal_uInt16 nSId,
+void SdTbxCtlGlueEscDir::StateChangedAtToolBoxControl( sal_uInt16 nSId,
                         SfxItemState eState, const SfxPoolItem* pState )
 {
     if( eState == SfxItemState::DEFAULT )
@@ -172,7 +172,7 @@ void SdTbxCtlGlueEscDir::StateChanged( sal_uInt16 nSId,
         }
     }
 
-    SfxToolBoxControl::StateChanged( nSId, eState, pState );
+    SfxToolBoxControl::StateChangedAtToolBoxControl( nSId, eState, pState );
 }
 
 VclPtr<InterimItemWindow> SdTbxCtlGlueEscDir::CreateItemWindow( vcl::Window *pParent )

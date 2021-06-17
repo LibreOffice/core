@@ -64,7 +64,7 @@ SvxFmTbxCtlAbsRec::~SvxFmTbxCtlAbsRec()
 {
 }
 
-void SvxFmTbxCtlAbsRec::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
+void SvxFmTbxCtlAbsRec::StateChangedAtToolBoxControl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
     ToolBoxItemId       nId = GetId();
     ToolBox*            pToolBox = &GetToolBox();
@@ -86,7 +86,7 @@ void SvxFmTbxCtlAbsRec::StateChanged( sal_uInt16 nSID, SfxItemState eState, cons
 
     // enabling/disabling of the window
     pToolBox->EnableItem(nId, bEnable);
-    SfxToolBoxControl::StateChanged( nSID, eState,pState );
+    SfxToolBoxControl::StateChangedAtToolBoxControl( nSID, eState,pState );
 }
 
 VclPtr<InterimItemWindow> SvxFmTbxCtlAbsRec::CreateItemWindow( vcl::Window* pParent )
@@ -160,7 +160,7 @@ VclPtr<InterimItemWindow> SvxFmTbxCtlRecTotal::CreateItemWindow( vcl::Window* pP
     return m_xFixedText;
 }
 
-void SvxFmTbxCtlRecTotal::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
+void SvxFmTbxCtlRecTotal::StateChangedAtToolBoxControl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
     // setting the FixedText
     if (GetSlotId() != SID_FM_RECORD_TOTAL)
@@ -174,7 +174,7 @@ void SvxFmTbxCtlRecTotal::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
 
     m_xFixedText->set_label(aText);
 
-    SfxToolBoxControl::StateChanged( nSID, eState,pState );
+    SfxToolBoxControl::StateChangedAtToolBoxControl( nSID, eState,pState );
 }
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxNextRec, SfxBoolItem );

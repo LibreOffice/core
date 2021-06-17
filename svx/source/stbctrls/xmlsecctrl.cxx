@@ -64,7 +64,7 @@ XmlSecStatusBarControl::~XmlSecStatusBarControl()
 {
 }
 
-void XmlSecStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
+void XmlSecStatusBarControl::StateChangedAtStatusBarControl( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 {
     if( SfxItemState::DEFAULT != eState )
     {
@@ -76,7 +76,7 @@ void XmlSecStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState, cons
     }
     else
     {
-        SAL_WARN( "svx.stbcrtls", "+XmlSecStatusBarControl::StateChanged(): invalid item type" );
+        SAL_WARN( "svx.stbcrtls", "+XmlSecStatusBarControl::StateChangedAtStatusBarControl(): invalid item type" );
         mpImpl->mnState = SignatureState::UNKNOWN;
     }
 

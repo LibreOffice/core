@@ -462,7 +462,7 @@ namespace svxform
         m_xNavigatorTree->UpdateContent(pFormShell);
     }
 
-    void NavigatorFrame::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
+    void NavigatorFrame::StateChangedAtToolBoxControl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
     {
         if( !pState  || SID_FM_FMEXPLORER_CONTROL != nSID )
             return;

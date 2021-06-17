@@ -152,7 +152,7 @@ public:
     AnimationControllerItem( sal_uInt16, AnimationWindow*, SfxBindings* );
 
 protected:
-    virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
+    virtual void StateChangedAtToolBoxControl( sal_uInt16 nSId, SfxItemState eState,
         const SfxPoolItem* pState ) override;
 private:
     VclPtr<AnimationWindow> pAnimationWin;
