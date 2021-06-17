@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "67f9a864_7bce5489",
+        "filename": "uitest/uitest/uihelper/guarded.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-17T12:07:25Z",
+      "side": 1,
+      "message": "Likely the \"return\" must move outside the \"finally\"",
+      "revId": "8685ba9f1849482e8405a307f5b34587fde9af53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
