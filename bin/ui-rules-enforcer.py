@@ -192,6 +192,22 @@ def remove_check_button_align(current):
         raise Exception(sys.argv[1] + ': non-default yalign', yalign.text)
       current.remove(yalign)
 
+def remove_check_button_relief(current):
+  relief = None
+  ischeckorradiobutton = current.get('class') == "GtkCheckButton" or current.get('class') == "GtkRadioButton"
+  for child in current:
+    remove_check_button_relief(child)
+    if not ischeckorradiobutton:
+        continue
+    if child.tag == "property":
+      attributes = child.attrib
+      if attributes.get("name") == "relief":
+        relief = child
+
+  if ischeckorradiobutton:
+    if relief != None:
+      current.remove(relief)
+
 def remove_spin_button_input_purpose(current):
   input_purpose = None
   isspinbutton = current.get('class') == "GtkSpinButton"
@@ -348,6 +364,7 @@ if not sys.argv[1].endswith('/multiline.ui'): # let this one alone not truncate 
 replace_button_use_stock(root)
 replace_image_stock(root)
 remove_check_button_align(root)
+remove_check_button_relief(root)
 remove_spin_button_input_purpose(root)
 remove_track_visited_links(root)
 remove_expander_label_fill(root)
