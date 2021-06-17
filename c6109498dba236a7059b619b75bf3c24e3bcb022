@@ -1,0 +1,248 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "66941256_aeb7c56e",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 894,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-17T15:03:07Z",
+      "side": 1,
+      "message": "This line will execute when you pass mxTreeBox to the function - is this expected?",
+      "revId": "c6109498dba236a7059b619b75bf3c24e3bcb022",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3da34a83_05c1bb2d",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 925,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-17T15:03:07Z",
+      "side": 1,
+      "message": "And this block will run when mxCharTreeBox is passed.",
+      "revId": "c6109498dba236a7059b619b75bf3c24e3bcb022",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32754a6f_cc37eb62",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 1032,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-17T15:03:07Z",
+      "side": 1,
+      "message": "Possibly you would like to clarify the error message, mentioning that it\u0027s not any \"treebox\", but \"char treebox\" that is missing?",
+      "revId": "c6109498dba236a7059b619b75bf3c24e3bcb022",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45f7aca5_76cfc327",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-17T15:03:07Z",
+      "side": 1,
+      "message": "Do you really need to make mxCharTreeBox invisible several times, potentially 0 times?",
+      "revId": "c6109498dba236a7059b619b75bf3c24e3bcb022",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2c2b0fb_3f6ae801",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-17T15:03:07Z",
+      "side": 1,
+      "message": "You also call EnableDelete second time down there; both calls do not differ - are the two necessary, or e.g. this may be removed?",
+      "revId": "c6109498dba236a7059b619b75bf3c24e3bcb022",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e10dc87_7b0f214f",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 1177,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-17T15:03:07Z",
+      "side": 1,
+      "message": "Please add a space between \u0027if\u0027 and opening parenthesis \u0027(\u0027.",
+      "revId": "c6109498dba236a7059b619b75bf3c24e3bcb022",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d33065eb_5fae7b9e",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 1282,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-17T15:03:07Z",
+      "side": 1,
+      "message": "This block is indented incorrectly!",
+      "range": {
+        "startLine": 1220,
+        "startChar": 4,
+        "endLine": 1282,
+        "endChar": 19
+      },
+      "revId": "c6109498dba236a7059b619b75bf3c24e3bcb022",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41b7c8ca_f091e1d6",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 1411,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-17T15:03:07Z",
+      "side": 1,
+      "message": "Here and two lines below: please add a space between comma \u0027,\u0027 and following \u0027pItem\u0027.",
+      "revId": "c6109498dba236a7059b619b75bf3c24e3bcb022",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d668e838_d2d53ee4",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 1414,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-17T15:03:07Z",
+      "side": 1,
+      "message": "Here you check and enable the element twice, with the end result that only the last two operations are effective. This looks wrong.",
+      "revId": "c6109498dba236a7059b619b75bf3c24e3bcb022",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c564294c_3ed61b5a",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 1804,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-17T15:03:07Z",
+      "side": 1,
+      "message": "Please add spaces before and after the \u0027\u003d\u0027.",
+      "revId": "c6109498dba236a7059b619b75bf3c24e3bcb022",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91c15721_5c2c418f",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 1850,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-17T15:03:07Z",
+      "side": 1,
+      "message": "Please drop the space here - you do not change this line functionally, please do not change its formatting",
+      "revId": "c6109498dba236a7059b619b75bf3c24e3bcb022",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9486192c_9e09a2ea",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 1852,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-17T15:03:07Z",
+      "side": 1,
+      "message": "Please remove the spaces between opening parenthesis \u0027(\u0027 and following \u0027OString\u0027, and between \u0027false\u0027 and following closing parenthesis \u0027)\u0027.",
+      "revId": "c6109498dba236a7059b619b75bf3c24e3bcb022",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71ad2083_4bd098fe",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 2225,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-17T15:03:07Z",
+      "side": 1,
+      "message": "Please remove the space before the closing parenthesis \u0027)\u0027.",
+      "revId": "c6109498dba236a7059b619b75bf3c24e3bcb022",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78cfddc9_10555bfd",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 2482,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-17T15:03:07Z",
+      "side": 1,
+      "message": "1. Please move the opening brace \u0027{\u0027 to new line.\n2. What is \"27\"?",
+      "revId": "c6109498dba236a7059b619b75bf3c24e3bcb022",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
