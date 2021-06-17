@@ -556,6 +556,7 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xMousePosLB(m_xBuilder->weld_combo_box("mousepos"))
     , m_xMouseMiddleLB(m_xBuilder->weld_combo_box("mousemiddle"))
     , m_xMoreIcons(m_xBuilder->weld_button("btnMoreIcons"))
+    , m_xRunGPTests(m_xBuilder->weld_button("btn_rungptest"))
 {
     if (Application::GetToolkitName().startsWith("gtk"))
         m_xMenuIconBox->hide();
@@ -590,10 +591,17 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
 
     m_xMoreIcons->set_from_icon_name("cmd/sc_additionsdialog.png");
     m_xMoreIcons->connect_clicked(LINK(this, OfaViewTabPage, OnMoreIconsClick));
+    m_xRunGPTests->connect_clicked( LINK( this, OfaViewTabPage, OnRunGPTestClick));
 }
 
 OfaViewTabPage::~OfaViewTabPage()
 {
+}
+
+IMPL_STATIC_LINK_NOARG(OfaViewTabPage, OnRunGPTestClick, weld::Button&, void)
+{
+    comphelper::dispatchCommand(".uno:GraphicTestDialog",{});
+    //Launch the Dialog box from here.
 }
 
 IMPL_STATIC_LINK_NOARG(OfaViewTabPage, OnMoreIconsClick, weld::Button&, void)
