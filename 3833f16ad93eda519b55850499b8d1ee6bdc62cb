@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "37c2f820_6bad33e3",
+        "filename": "sd/qa/unit/activex-controls-tests.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 839,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-06-17T07:28:18Z",
+      "side": 1,
+      "message": "0x800000 is not black.\nI\u0027m getting tired of this continuous nonsense. Please, do not submit random stuff without running the unittest first",
+      "revId": "3833f16ad93eda519b55850499b8d1ee6bdc62cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
