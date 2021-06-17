@@ -1343,7 +1343,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
     // https://gitlab.gnome.org/GNOME/gtk/-/issues/4041 double encode ampersands if use-underline is used
     if (gtk_check_version(4, 3, 2) != nullptr)
     {
-        if (xPropertyLabel && bUseUnderline)
+        if (xPropertyLabel)
         {
             auto xLabelText = xPropertyLabel->getFirstChild();
             if (xLabelText.is())
