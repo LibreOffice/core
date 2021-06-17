@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a01e255a_06b9d305",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-17T12:22:16Z",
+      "side": 1,
+      "message": "addressed with \u003chttps://gerrit.libreoffice.org/c/core/+/117385\u003e \"Add RemoveWhichRange unit test\"",
+      "range": {
+        "startLine": 68,
+        "startChar": 25,
+        "endLine": 68,
+        "endChar": 29
+      },
+      "revId": "541f94df85756d3a383b1f9ba49841ca0011b52e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
