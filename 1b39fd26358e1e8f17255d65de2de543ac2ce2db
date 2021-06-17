@@ -57,6 +57,24 @@
       "revId": "1b39fd26358e1e8f17255d65de2de543ac2ce2db",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c461f104_9aeb3ce6",
+        "filename": "sd/qa/uitest/impress_tests/customSlideShow.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-17T10:36:29Z",
+      "side": 1,
+      "message": "I don\u0027t quite understand this code. \n\nThe \"with guarded.execute_dialog_through_command(self, \".uno:CustomShowDialog\") as CustomSlideShows:\" line already opens a dialog, provides you with the CustomSlideShows variable set to the dialog window (so that you don\u0027t need to call \"CustomSlideShows \u003d self.xUITest.getTopFocusWindow()\" on the next line), and guarantees that whatever you do, the dialog will be closed using the button that is defined in the \"guarded.execute_dialog_through_command\" - if you do not explicitly set it, it\u0027s \"ok\".\n\nI need to look into the execute_blocking_action, on it.",
+      "parentUuid": "cd63c920_ec85cda4",
+      "revId": "1b39fd26358e1e8f17255d65de2de543ac2ce2db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
