@@ -16,6 +16,24 @@
       "revId": "91b2239783dc716bd71ce7962bfd7e341dfe4175",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83b04269_4e7fdb63",
+        "filename": "sw/source/core/inc/tabfrm.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-06-17T07:40:08Z",
+      "side": 1,
+      "message": "Hi Michael,\n\nThe proposed fix: https://gerrit.libreoffice.org/c/core/+/117363\n\nIt seems, it doesn\u0027t slow down the editing around the problematic nested table.\n\nThanks, László",
+      "parentUuid": "1b1d97ba_06ffb215",
+      "revId": "91b2239783dc716bd71ce7962bfd7e341dfe4175",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
