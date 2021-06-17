@@ -116,7 +116,7 @@ private:
     };
 
     /** Complex property for a 32-bit value pair, e.g. point or size. */
-    struct PairProperty : public ComplexProperty
+    struct PairProperty final : public ComplexProperty
     {
         AxPairData&         mrPairData;
 
@@ -126,7 +126,7 @@ private:
     };
 
     /** Complex property for a string value. */
-    struct StringProperty : public ComplexProperty
+    struct StringProperty final : public ComplexProperty
     {
         OUString&    mrValue;
         sal_uInt32          mnSize;
@@ -137,7 +137,7 @@ private:
     };
 
     /** Stream property for a picture or mouse icon. */
-    struct PictureProperty : public ComplexProperty
+    struct PictureProperty final : public ComplexProperty
     {
         virtual bool        writeProperty( AxAlignedOutputStream& rOutStrm ) override;
     };

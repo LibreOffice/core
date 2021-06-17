@@ -29,7 +29,7 @@
 
 class BitmapEx;
 
-class VCL_DLLPUBLIC AlphaMask : public Bitmap
+class VCL_DLLPUBLIC AlphaMask final : public Bitmap
 {
 public:
 

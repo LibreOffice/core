@@ -324,9 +324,8 @@ namespace comphelper
                                   >   OWrappedAccessibleChildrenManager_Base;
     /** manages wrapping XAccessible's to XAccessible's
     */
-    class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OWrappedAccessibleChildrenManager : public OWrappedAccessibleChildrenManager_Base
+    class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OWrappedAccessibleChildrenManager final : public OWrappedAccessibleChildrenManager_Base
     {
-    protected:
         css::uno::Reference< css::uno::XComponentContext >
                                 m_xContext;
         css::uno::WeakReference< css::accessibility::XAccessible >
@@ -381,17 +380,14 @@ namespace comphelper
                     css::accessibility::AccessibleEventObject& _rTranslatedEvent
         );
 
-    protected:
+    private:
         // XEventListener
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
-    protected:
         void    implTranslateChildEventValue( const css::uno::Any& _rInValue, css::uno::Any& _rOutValue );
 
-    protected:
         virtual ~OWrappedAccessibleChildrenManager( ) override;
 
-    private:
         OWrappedAccessibleChildrenManager( const OWrappedAccessibleChildrenManager& ) = delete;
         OWrappedAccessibleChildrenManager& operator=( const OWrappedAccessibleChildrenManager& ) = delete;
     };

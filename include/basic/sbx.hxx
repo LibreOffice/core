@@ -48,7 +48,7 @@ struct SbxParamInfo
 
 typedef std::vector<std::unique_ptr<SbxParamInfo>> SbxParams;
 
-class UNLESS_MERGELIBS(BASIC_DLLPUBLIC) SbxInfo : public SvRefBase
+class UNLESS_MERGELIBS(BASIC_DLLPUBLIC) SbxInfo final : public SvRefBase
 {
     friend class SbxVariable;
     friend class SbMethod;
@@ -61,7 +61,6 @@ class UNLESS_MERGELIBS(BASIC_DLLPUBLIC) SbxInfo : public SvRefBase
     SbxInfo(SbxInfo const&) = delete;
     void operator=(SbxInfo const&) = delete;
 
-protected:
     void LoadData( SvStream&, sal_uInt16 );
     void StoreData( SvStream& ) const;
     virtual ~SbxInfo() override;

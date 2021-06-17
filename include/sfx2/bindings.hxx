@@ -67,7 +67,7 @@ template<> struct typed_flags<SfxCallMode>: is_typed_flags<SfxCallMode, 0x0F>
 
 }
 
-class SFX2_DLLPUBLIC SfxBindings: public SfxBroadcaster
+class SFX2_DLLPUBLIC SfxBindings final : public SfxBroadcaster
 
 /*  [Description]
 

@@ -121,7 +121,6 @@ namespace dbtools
 
 //      friend sal_Int32 operator-(const CharsetIterator& lhs, const CharsetIterator& rhs);
 
-    protected:
         const OCharsetMap*                      m_pContainer;
         OCharsetMap::TextEncBag::const_iterator m_aPos;
 

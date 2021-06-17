@@ -168,7 +168,7 @@ class BulletsTypeMgr final : public NBOTypeMgrBase
 };
 
 
-class NumberingTypeMgr: public NBOTypeMgrBase
+class NumberingTypeMgr final : public NBOTypeMgrBase
 {
     private:
         NumberingTypeMgr(const NumberingTypeMgr&) = delete;
@@ -187,7 +187,7 @@ class NumberingTypeMgr: public NBOTypeMgrBase
         static NumberingTypeMgr& GetInstance();
 };
 
-class OutlineTypeMgr: public NBOTypeMgrBase
+class OutlineTypeMgr final : public NBOTypeMgrBase
 {
     private:
         OutlineTypeMgr(const OutlineTypeMgr&) = delete;

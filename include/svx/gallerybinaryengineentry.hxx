@@ -29,7 +29,7 @@ class GalleryBinaryStorageLocations;
 class GalleryObjectCollection;
 class GalleryBinaryEngine;
 
-class GalleryBinaryEngineEntry : public GalleryFileStorageEntry
+class GalleryBinaryEngineEntry final : public GalleryFileStorageEntry
 {
 private:
     std::unique_ptr<GalleryBinaryStorageLocations> mpGalleryStorageLocations;

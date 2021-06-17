@@ -84,7 +84,7 @@ class MaskSet;
 class BmpColorWindow;
 class ColorListBox;
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxBmpMask : public SfxDockingWindow
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxBmpMask final : public SfxDockingWindow
 {
     friend class MaskData;
     friend class MaskSet;

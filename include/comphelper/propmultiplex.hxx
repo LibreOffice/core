@@ -72,7 +72,7 @@ namespace comphelper
     //= OPropertyChangeMultiplexer
 
     /// multiplexer for property changes
-    class COMPHELPER_DLLPUBLIC OPropertyChangeMultiplexer   :public cppu::WeakImplHelper< css::beans::XPropertyChangeListener>
+    class COMPHELPER_DLLPUBLIC OPropertyChangeMultiplexer final : public cppu::WeakImplHelper< css::beans::XPropertyChangeListener>
     {
         friend class OPropertyChangeListener;
         std::vector< OUString >                         m_aProperties;

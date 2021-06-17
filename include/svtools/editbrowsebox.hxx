@@ -231,7 +231,7 @@ namespace svt
         std::unique_ptr<weld::Entry> m_xWidget;
     };
 
-    class SVT_DLLPUBLIC EntryImplementation : public IEditImplementation
+    class SVT_DLLPUBLIC EntryImplementation final : public IEditImplementation
     {
         EditControlBase& m_rEdit;
         int m_nMaxTextLen;
@@ -377,7 +377,7 @@ namespace svt
         virtual bool ProcessKey(const KeyEvent& rKEvt) override;
     };
 
-    class SVT_DLLPUBLIC MultiLineEditImplementation : public IEditImplementation
+    class SVT_DLLPUBLIC MultiLineEditImplementation final : public IEditImplementation
     {
         MultiLineTextCell& m_rEdit;
         int m_nMaxTextLen;
@@ -627,7 +627,7 @@ namespace svt
     };
 
     //= ComboBoxCellController
-    class SVT_DLLPUBLIC ComboBoxCellController : public CellController
+    class SVT_DLLPUBLIC ComboBoxCellController final : public CellController
     {
     public:
 
@@ -637,9 +637,8 @@ namespace svt
         virtual bool IsValueChangedFromSaved() const override;
         virtual void SaveValue() override;
 
-    protected:
-        virtual bool MoveAllowed(const KeyEvent& rEvt) const override;
     private:
+        virtual bool MoveAllowed(const KeyEvent& rEvt) const override;
         DECL_LINK(ModifyHdl, LinkParamNone*, void);
     };
 
@@ -725,31 +724,31 @@ namespace svt
         void InitFormattedControlBase();
     };
 
-    class SVT_DLLPUBLIC FormattedControl : public FormattedControlBase
+    class SVT_DLLPUBLIC FormattedControl final : public FormattedControlBase
     {
     public:
         FormattedControl(BrowserDataWin* pParent, bool bSpinVariant);
     };
 
-    class SVT_DLLPUBLIC DoubleNumericControl : public FormattedControlBase
+    class SVT_DLLPUBLIC DoubleNumericControl final : public FormattedControlBase
     {
     public:
         DoubleNumericControl(BrowserDataWin* pParent, bool bSpinVariant);
     };
 
-    class SVT_DLLPUBLIC LongCurrencyControl : public FormattedControlBase
+    class SVT_DLLPUBLIC LongCurrencyControl final : public FormattedControlBase
     {
     public:
         LongCurrencyControl(BrowserDataWin* pParent, bool bSpinVariant);
     };
 
-    class SVT_DLLPUBLIC TimeControl : public FormattedControlBase
+    class SVT_DLLPUBLIC TimeControl final : public FormattedControlBase
     {
     public:
         TimeControl(BrowserDataWin* pParent, bool bSpinVariant);
     };
 
-    class SVT_DLLPUBLIC DateControl : public FormattedControlBase
+    class SVT_DLLPUBLIC DateControl final : public FormattedControlBase
     {
     public:
         DateControl(BrowserDataWin* pParent, bool bDropDown);

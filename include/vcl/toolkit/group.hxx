@@ -27,7 +27,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) GroupBox : public Control
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) GroupBox final : public Control
 {
 private:
     using Control::ImplInitSettings;

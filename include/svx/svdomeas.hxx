@@ -43,15 +43,13 @@ public:
     virtual ~SdrMeasureObjGeoData() override;
 };
 
-class SVXCORE_DLLPUBLIC SdrMeasureObj : public SdrTextObj
+class SVXCORE_DLLPUBLIC SdrMeasureObj final : public SdrTextObj
 {
 private:
     // to allow sdr::properties::MeasureProperties access to SetTextDirty()
     friend class sdr::properties::MeasureProperties;
-
     friend class                SdrMeasureField;
 
-protected:
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
     virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
 
@@ -59,7 +57,6 @@ protected:
     Point                       aPt2;
     bool                        bTextDirty;
 
-protected:
     void ImpTakeAttr(ImpMeasureRec& rRec) const;
     OUString TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind) const;
     void ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly& rPol) const;
