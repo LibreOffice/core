@@ -1340,8 +1340,16 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrame *pLa
             if ( pLow->IsTabFrame() )
             {
                 // loop control for embedded tables
-                if ( m_nTabLevel > 0 && ++m_nCallCount > 50 ) {
-                    static_cast<SwTabFrame*>(pLow)->SetSplitRowDisabled();
+                if ( m_nTabLevel > 0 )
+                {
+                    if ( ++m_nCallCount > 50 )
+                    {
+                        static_cast<SwTabFrame*>(pLow)->SetSplitRowDisabled(true);
+                    }
+                    else if ( static_cast<SwTabFrame*>(pLow)->IsSplitRowDisabled() )
+                    {
+                        static_cast<SwTabFrame*>(pLow)->SetSplitRowDisabled(false);
+                    }
                 }
 
                 ++m_nTabLevel;
