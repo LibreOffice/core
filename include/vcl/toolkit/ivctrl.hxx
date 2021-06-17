@@ -174,14 +174,12 @@ public:
 
 class MnemonicGenerator;
 
-class VCL_DLLPUBLIC SvtIconChoiceCtrl : public Control
+class VCL_DLLPUBLIC SvtIconChoiceCtrl final : public Control
 {
     friend class SvxIconChoiceCtrl_Impl;
 
     Link<SvtIconChoiceCtrl*,void>  _aClickIconHdl;
     std::unique_ptr<SvxIconChoiceCtrl_Impl, o3tl::default_delete<SvxIconChoiceCtrl_Impl>> _pImpl;
-
-protected:
 
     virtual void        KeyInput( const KeyEvent& rKEvt ) override;
     virtual void        Command( const CommandEvent& rCEvt ) override;

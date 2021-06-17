@@ -23,7 +23,7 @@
 #include <svx/sdynitm.hxx>
 
 // text across the dimension line (90deg counter-clockwise rotation)
-class SVXCORE_DLLPUBLIC SdrMeasureTextRota90Item: public SdrYesNoItem {
+class SVXCORE_DLLPUBLIC SdrMeasureTextRota90Item final : public SdrYesNoItem {
 public:
     SdrMeasureTextRota90Item(bool bOn=false): SdrYesNoItem(SDRATTR_MEASURETEXTROTA90,bOn) {}
     virtual ~SdrMeasureTextRota90Item() override;

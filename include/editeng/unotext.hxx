@@ -579,7 +579,7 @@ public:
 };
 
 
-class SvxUnoTextContentEnumeration : public ::cppu::WeakAggImplHelper1< css::container::XEnumeration >
+class SvxUnoTextContentEnumeration final : public ::cppu::WeakAggImplHelper1< css::container::XEnumeration >
 {
 private:
     css::uno::Reference< css::text::XText > mxParentText;
@@ -597,7 +597,7 @@ public:
 };
 
 
-class SvxUnoTextRangeEnumeration : public ::cppu::WeakAggImplHelper1< css::container::XEnumeration >
+class SvxUnoTextRangeEnumeration final : public ::cppu::WeakAggImplHelper1< css::container::XEnumeration >
 {
 private:
     std::unique_ptr<SvxEditSource>      mpEditSource;

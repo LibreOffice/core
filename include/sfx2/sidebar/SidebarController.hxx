@@ -59,7 +59,7 @@ namespace sfx2::sidebar {
 class DeckDescriptor;
 class SidebarDockingWindow;
 
-class SFX2_DLLPUBLIC SidebarController
+class SFX2_DLLPUBLIC SidebarController final
     : private ::cppu::BaseMutex,
       public SidebarControllerInterfaceBase
 {

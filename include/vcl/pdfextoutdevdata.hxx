@@ -66,7 +66,7 @@ struct PDFExtOutDevBookmarkEntry
 */
 struct PageSyncData;
 struct GlobalSyncData;
-class VCL_DLLPUBLIC PDFExtOutDevData : public ExtOutDevData
+class VCL_DLLPUBLIC PDFExtOutDevData final : public ExtOutDevData
 {
 
     const OutputDevice&         mrOutDev;

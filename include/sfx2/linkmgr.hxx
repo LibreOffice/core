@@ -61,7 +61,7 @@ class SFX2_DLLPUBLIC LinkManager
     SvLinkSources aServerTbl;
 
     SfxObjectShell *pPersist; // LinkMgr must be release before SfxObjectShell
-protected:
+
     bool        InsertLink( SvBaseLink* pLink, SvBaseLinkObjectType nObjType, SfxLinkUpdateMode nUpdateType,
                             const OUString* pName );
 public:

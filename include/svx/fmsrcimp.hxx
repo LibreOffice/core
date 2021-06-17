@@ -69,7 +69,9 @@ struct FmSearchProgress
  * class FmRecordCountListener - utility class for FmSearchEngine, listens at a certain cursor and provides
  *                               the differences in RecordCount
  */
-class SAL_WARN_UNUSED FmRecordCountListener final : public cppu::WeakImplHelper< css::beans::XPropertyChangeListener >
+// workaround for incremental linking bugs in MSVC2019
+class SAL_DLLPUBLIC_TEMPLATE FmRecordCountListener_Base : public cppu::WeakImplHelper< css::beans::XPropertyChangeListener > {};
+class SAL_WARN_UNUSED FmRecordCountListener final : public FmRecordCountListener_Base
 {
 // attribute
     Link<sal_Int32,void>     m_lnkWhoWantsToKnow;

@@ -32,7 +32,7 @@ class MediaItem;
 
 namespace sdr::contact
 {
-class SVXCORE_DLLPUBLIC ViewContactOfSdrMediaObj : public ViewContactOfSdrObj
+class SVXCORE_DLLPUBLIC ViewContactOfSdrMediaObj final : public ViewContactOfSdrObj
 {
     friend class ViewObjectContactOfSdrMediaObj;
 
@@ -53,7 +53,7 @@ public:
     void updateMediaItem(::avmedia::MediaItem& rItem) const;
     void executeMediaItem(const ::avmedia::MediaItem& rItem);
 
-protected:
+private:
     // Create an Object-Specific ViewObjectContact, set ViewContact and
     // ObjectContact. Always needs to return something.
     virtual ViewObjectContact&
@@ -62,7 +62,6 @@ protected:
     // get notified if some properties have changed
     void mediaPropertiesChanged(const ::avmedia::MediaItem& rNewState);
 
-protected:
     // This method is responsible for creating the graphical visualisation data
     // ONLY based on model data
     virtual drawinglayer::primitive2d::Primitive2DContainer

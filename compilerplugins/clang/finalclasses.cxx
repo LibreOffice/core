@@ -22,7 +22,7 @@ or
 
 In the case of (a), those members/fields can be made private.
 In the case of (b), making the class final means the compiler can devirtualise
-some method class.
+some method calls
 
 The process goes something like this:
   $ make check
@@ -86,7 +86,6 @@ bool FinalClasses::VisitCXXRecordDecl(const CXXRecordDecl* decl)
 {
     if (ignoreLocation(decl))
         return true;
-    decl = decl->getCanonicalDecl();
     if (!decl->hasDefinition())
         return true;
 
@@ -114,6 +113,7 @@ bool FinalClasses::VisitCXXRecordDecl(const CXXRecordDecl* decl)
         if ( i->isVirtual() )
             bFoundVirtual = true;
     }
+
     if (!bFoundProtected)
     {
         for (auto it = decl->field_begin(); it != decl->field_end(); ++it) {

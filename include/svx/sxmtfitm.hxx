@@ -27,7 +27,7 @@
 // Nail text down to a fix angle.
 // The text angle is independent of the dimension line.
 // Abrogate TextUpsideDown, TextRota90 and TextAutoAngle. (n.i.)
-class SdrMeasureTextIsFixedAngleItem: public SdrYesNoItem {
+class SdrMeasureTextIsFixedAngleItem final : public SdrYesNoItem {
 public:
     SdrMeasureTextIsFixedAngleItem(bool bOn=false): SdrYesNoItem(SDRATTR_MEASURETEXTISFIXEDANGLE,bOn) {}
     virtual ~SdrMeasureTextIsFixedAngleItem() override;
@@ -40,7 +40,7 @@ public:
 };
 
 //Angle of the text in 1/100deg. 0=horizontal; read from left to right. (n.i.)
-class SdrMeasureTextFixedAngleItem: public SdrAngleItem {
+class SdrMeasureTextFixedAngleItem final : public SdrAngleItem {
 public:
     SdrMeasureTextFixedAngleItem(Degree100 nVal=0_deg100): SdrAngleItem(SDRATTR_MEASURETEXTFIXEDANGLE,nVal)  {}
     virtual ~SdrMeasureTextFixedAngleItem() override;
@@ -53,7 +53,7 @@ public:
 };
 
 // The decimal places used for the measure value
-class SVXCORE_DLLPUBLIC SdrMeasureDecimalPlacesItem: public SfxInt16Item {
+class SVXCORE_DLLPUBLIC SdrMeasureDecimalPlacesItem final : public SfxInt16Item {
 public:
     SdrMeasureDecimalPlacesItem(sal_Int16 nVal=2): SfxInt16Item(SDRATTR_MEASUREDECIMALPLACES,nVal)  {}
     virtual ~SdrMeasureDecimalPlacesItem() override;

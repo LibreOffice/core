@@ -59,8 +59,9 @@ public:
     uno_type get() const { return maValue; }
 };
 
-class COMPHELPER_DLLPUBLIC ConfigurationListener :
-        public cppu::WeakImplHelper< css::beans::XPropertyChangeListener >
+// workaround for incremental linking bugs in MSVC2019
+class SAL_DLLPUBLIC_TEMPLATE ConfigurationListener_Base : public cppu::WeakImplHelper< css::beans::XPropertyChangeListener > {};
+class COMPHELPER_DLLPUBLIC ConfigurationListener final : public ConfigurationListener_Base
 {
     css::uno::Reference< css::beans::XPropertySet > mxConfig;
     std::vector< ConfigurationListenerPropertyBase * > maListeners;

@@ -410,7 +410,7 @@ public:
     const OUString& get_id() const { return maID; }
 };
 
-class VCL_DLLPUBLIC MenuBar : public Menu
+class VCL_DLLPUBLIC MenuBar final : public Menu
 {
     Link<void*,void> maCloseHdl;
     bool mbCloseBtnVisible : 1;
@@ -428,8 +428,6 @@ class VCL_DLLPUBLIC MenuBar : public Menu
     SAL_DLLPRIVATE static void ImplDestroy(MenuBar* pMenu, bool bDelete);
     SAL_DLLPRIVATE bool ImplHandleKeyEvent(const KeyEvent& rKEvent);
     SAL_DLLPRIVATE bool ImplHandleCmdEvent(const CommandEvent& rCEvent);
-
-protected:
 
     /// Return the MenuBarWindow.
     MenuBarWindow* getMenuBarWindow();
@@ -500,7 +498,7 @@ inline MenuBar& MenuBar::operator=( const MenuBar& rMenu )
     return *this;
 }
 
-class VCL_DLLPUBLIC PopupMenu : public Menu
+class VCL_DLLPUBLIC PopupMenu final : public Menu
 {
     friend class Menu;
     friend class MenuFloatingWindow;
@@ -509,8 +507,6 @@ class VCL_DLLPUBLIC PopupMenu : public Menu
 
 private:
     SAL_DLLPRIVATE MenuFloatingWindow * ImplGetFloatingWindow() const;
-
-protected:
     SAL_DLLPRIVATE sal_uInt16 ImplExecute( const VclPtr<vcl::Window>& pW, const tools::Rectangle& rRect, FloatWinPopupFlags nPopupModeFlags, Menu* pSFrom, bool bPreSelectFirst );
     SAL_DLLPRIVATE void ImplFlushPendingSelect();
     SAL_DLLPRIVATE tools::Long ImplCalcHeight( sal_uInt16 nEntries ) const;

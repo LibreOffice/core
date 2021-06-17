@@ -201,13 +201,12 @@ public:
 };
 
 class UCBStorageStream_Impl;
-class UCBStorageStream : public BaseStorageStream
+class UCBStorageStream final : public BaseStorageStream
 {
 friend class UCBStorage;
 
     UCBStorageStream_Impl*
             pImp;
-protected:
                                 virtual ~UCBStorageStream() override;
 public:
                                 UCBStorageStream( const OUString& rName, StreamMode nMode, bool bDirect, bool bRepair, css::uno::Reference< css::ucb::XProgressHandler > const & xProgress );
@@ -237,11 +236,10 @@ namespace ucbhelper
 
 class UCBStorage_Impl;
 struct UCBStorageElement_Impl;
-class SOT_DLLPUBLIC UCBStorage : public BaseStorage
+class SOT_DLLPUBLIC UCBStorage final : public BaseStorage
 {
     UCBStorage_Impl*            pImp;
 
-protected:
                                 virtual ~UCBStorage() override;
 public:
     static bool                 IsStorageFile( SvStream* );

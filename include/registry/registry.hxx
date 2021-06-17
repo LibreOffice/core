@@ -208,7 +208,8 @@ public:
     inline sal_uInt32 getLength() const;
 
     friend class RegistryKey;
-protected:
+
+private:
     /** sets the data of the key array.
 
         @param registry specifies the registry files where the keys are located.
@@ -216,7 +217,7 @@ protected:
         @param length specifies the length of the array specified by phKeys.
      */
     inline void setKeyHandles(Registry const & registry, RegKeyHandle* phKeys, sal_uInt32 length);
-private:
+
     /// stores the number of open subkeys, the number of elements.
     sal_uInt32      m_length;
     /// stores an array of open subkeys.
@@ -246,7 +247,8 @@ public:
     inline sal_uInt32 getLength() const;
 
     friend class RegistryKey;
-protected:
+
+private:
     /** sets the data of the array.
 
         @param registry specifies the registry files where the keys are located.
@@ -254,7 +256,7 @@ protected:
         @param length specifies the length of the array specified by pKeyNames.
      */
     inline void setKeyNames(Registry const & registry, rtl_uString** pKeyNames, sal_uInt32 length);
-private:
+
     /// stores the number of key names, the number of elements.
     sal_uInt32      m_length;
     /// stores an array of key names.
@@ -557,7 +559,7 @@ public:
     inline RegistryKey(Registry const & registry,
                        RegKeyHandle hKey);
 
-protected:
+private:
     /** sets the internal registry on which this key should work.
      */
     inline void setRegistry(Registry const & registry);

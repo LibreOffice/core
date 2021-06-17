@@ -46,7 +46,7 @@ class SfxInfoBarWindow;
 enum class InfobarType;
 class CommandPopupHandler;
 
-class SFX2_DLLPUBLIC SfxViewFrame: public SfxShell, public SfxListener
+class SFX2_DLLPUBLIC SfxViewFrame final : public SfxShell, public SfxListener
 {
     std::unique_ptr<struct SfxViewFrame_Impl>   m_pImpl;
 
@@ -59,12 +59,8 @@ class SFX2_DLLPUBLIC SfxViewFrame: public SfxShell, public SfxListener
 
     std::unique_ptr<CommandPopupHandler> m_pCommandPopupHandler;
 
-private:
     SAL_DLLPRIVATE void Construct_Impl( SfxObjectShell *pObjSh );
-
-protected:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
-
     DECL_LINK(GetInvolvedHandler, weld::Button&, void);
     DECL_LINK(DonationHandler, weld::Button&, void);
     DECL_LINK(WhatsNewHandler, weld::Button&, void);
