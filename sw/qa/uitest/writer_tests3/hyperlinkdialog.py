@@ -105,8 +105,9 @@ class HyperlinkDialog(UITestCase):
         xHelp.executeAction('FOCUS', tuple())
 
         # Without the fix in place, this test would have crashed here
-        self.ui_test.execute_blocking_action(xHelp.executeAction,
-                args=("CLICK", tuple()), dialog_element="cancel")
+        with self.ui_test.execute_blocking_action(xHelp.executeAction,
+                args=("CLICK", tuple()), close_button="cancel"):
+            pass
 
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
