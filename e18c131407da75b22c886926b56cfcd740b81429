@@ -22,6 +22,30 @@
       "revId": "e18c131407da75b22c886926b56cfcd740b81429",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64c88c57_2ad56192",
+        "filename": "unotools/source/config/securityoptions.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 936,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-06-17T06:59:33Z",
+      "side": 1,
+      "message": "Indeed. Fixed. Thanks for your suggestion.",
+      "parentUuid": "7666467b_5c745bb0",
+      "range": {
+        "startLine": 936,
+        "startChar": 0,
+        "endLine": 936,
+        "endChar": 65
+      },
+      "revId": "e18c131407da75b22c886926b56cfcd740b81429",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
