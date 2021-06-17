@@ -2289,6 +2289,7 @@ extern "C" void SAL_CALL typelib_setCacheSize( sal_Int32 nNewSize )
         return;
 
     TypeDescriptor_Init_Impl &rInit = Init::get();
+    MutexGuard aGuard( rInit.maMutex );
     if (nNewSize < nCacheSize)
     {
         while (static_cast<sal_Int32>(rInit.maCache.size()) != nNewSize)
