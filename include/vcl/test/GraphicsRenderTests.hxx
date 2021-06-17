@@ -19,6 +19,7 @@
 
 class VCL_PLUGIN_PUBLIC GraphicsRenderTests
 {
+public:
     //For storing the results correspondingly to the tests.
     std::vector<OString> m_aPassed;
     std::vector<OString> m_aQuirky;
@@ -28,6 +29,7 @@ class VCL_PLUGIN_PUBLIC GraphicsRenderTests
     //For storing the current graphics Backend in use.
     OUString m_aCurGraphicsBackend;
 
+private:
     void testDrawRectWithRectangle();
     void testDrawRectWithPixel();
     void testDrawRectWithLine();
