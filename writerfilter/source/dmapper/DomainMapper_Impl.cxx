@@ -442,6 +442,43 @@ OUString DomainMapper_Impl::GetUnusedPageStyleName()
     return sPageStyleName;
 }
 
+uno::Reference< container::XNameContainer > const &  DomainMapper_Impl::GetCharacterStyles()
+{
+    if(!m_xCharacterStyles.is())
+    {
+        uno::Reference< style::XStyleFamiliesSupplier > xSupplier( m_xTextDocument, uno::UNO_QUERY );
+        if (xSupplier.is())
+            xSupplier->getStyleFamilies()->getByName("CharacterStyles") >>= m_xCharacterStyles;
+    }
+    return m_xCharacterStyles;
+}
+
+OUString DomainMapper_Impl::GetUnusedCharacterStyleName()
+{
+    static const char cListLabel[] = "ListLabel ";
+    if (!m_xNextUnusedCharacterStyleNo)
+    {
+        //search for all character styles with the name sListLabel + <index>
+        const uno::Sequence< OUString > aCharacterStyleNames = GetCharacterStyles()->getElementNames();
+        sal_Int32         nMaxIndex       = 0;
+        for ( const auto& rStyleName : aCharacterStyleNames )
+        {
+            OUString sSuffix;
+            if ( rStyleName.startsWith( cListLabel, &sSuffix ) )
+            {
+                sal_Int32 nSuffix = sSuffix.toInt32();
+                if( nSuffix > 0 && nSuffix > nMaxIndex )
+                    nMaxIndex = nSuffix;
+            }
+        }
+        m_xNextUnusedCharacterStyleNo = nMaxIndex + 1;
+    }
+
+    OUString sPageStyleName = cListLabel + OUString::number( *m_xNextUnusedCharacterStyleNo );
+    *m_xNextUnusedCharacterStyleNo = *m_xNextUnusedCharacterStyleNo + 1;
+    return sPageStyleName;
+}
+
 uno::Reference< text::XText > const & DomainMapper_Impl::GetBodyText()
 {
     if(!m_xBodyText.is())
