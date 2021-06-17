@@ -30,7 +30,7 @@ class SdrModel;
 
 
 
-class SVXCORE_DLLPUBLIC XLineDashItem : public NameOrIndex
+class SVXCORE_DLLPUBLIC XLineDashItem final : public NameOrIndex
 {
     XDash   aDash;
 

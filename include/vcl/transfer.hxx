@@ -134,7 +134,7 @@ class VCL_DLLPUBLIC TransferableHelper : public cppu::WeakImplHelper< css::datat
 private:
 
     // nested class to implement the XTerminateListener interface
-    class VCL_DLLPRIVATE TerminateListener : public cppu::WeakImplHelper< css::frame::XTerminateListener, css::lang::XServiceInfo >
+    class VCL_DLLPRIVATE TerminateListener final : public cppu::WeakImplHelper< css::frame::XTerminateListener, css::lang::XServiceInfo >
     {
     private:
 
@@ -376,7 +376,7 @@ class VCL_DLLPUBLIC DragSourceHelper
 private:
 
     // nested class to implement the XDragGestureListener interface
-    class SAL_DLLPRIVATE DragGestureListener : public cppu::WeakImplHelper< css::datatransfer::dnd::XDragGestureListener >
+    class SAL_DLLPRIVATE DragGestureListener final : public cppu::WeakImplHelper< css::datatransfer::dnd::XDragGestureListener >
     {
     private:
 
@@ -422,7 +422,7 @@ class VCL_DLLPUBLIC DropTargetHelper
 private:
 
     // nested class to implement the XDropTargetListener interface
-    class SAL_DLLPRIVATE DropTargetListener : public cppu::WeakImplHelper< css::datatransfer::dnd::XDropTargetListener >
+    class SAL_DLLPRIVATE DropTargetListener final : public cppu::WeakImplHelper< css::datatransfer::dnd::XDropTargetListener >
     {
     private:
 

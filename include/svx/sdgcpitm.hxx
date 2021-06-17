@@ -28,7 +28,7 @@
 // SdrGrafCropItem -
 
 
-class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SdrGrafCropItem : public SvxGrfCrop
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SdrGrafCropItem final : public SvxGrfCrop
 {
 public:
 

@@ -55,7 +55,7 @@ namespace comphelper
     //= OSelectionChangeMultiplexer
 
     /// multiplexer for selection changes
-    class COMPHELPER_DLLPUBLIC OSelectionChangeMultiplexer  :public cppu::WeakImplHelper< css::view::XSelectionChangeListener>
+    class COMPHELPER_DLLPUBLIC OSelectionChangeMultiplexer final : public cppu::WeakImplHelper< css::view::XSelectionChangeListener>
     {
         friend class OSelectionChangeListener;
         css::uno::Reference< css::view::XSelectionSupplier>  m_xSet;
@@ -64,7 +64,7 @@ namespace comphelper
 
         OSelectionChangeMultiplexer(const OSelectionChangeMultiplexer&) = delete;
         OSelectionChangeMultiplexer& operator=(const OSelectionChangeMultiplexer&) = delete;
-    protected:
+
         virtual ~OSelectionChangeMultiplexer() override;
     public:
         OSelectionChangeMultiplexer(OSelectionChangeListener* _pListener, const  css::uno::Reference< css::view::XSelectionSupplier>& _rxSet);

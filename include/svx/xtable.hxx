@@ -234,9 +234,8 @@ public:
         rtl::Reference<XPropertyList> const & plist);
 };
 
-class SVXCORE_DLLPUBLIC XColorList : public XPropertyList
+class SVXCORE_DLLPUBLIC XColorList final : public XPropertyList
 {
-protected:
     virtual BitmapEx  CreateBitmapForUI(tools::Long nIndex) override;
 
 public:
@@ -253,9 +252,8 @@ public:
     static XColorListRef GetStdColorList(); // returns a singleton
 };
 
-class SVXCORE_DLLPUBLIC XLineEndList : public XPropertyList
+class SVXCORE_DLLPUBLIC XLineEndList final : public XPropertyList
 {
-protected:
     virtual BitmapEx CreateBitmapForUI(tools::Long nIndex) override;
 
 public:
@@ -268,14 +266,13 @@ public:
     virtual bool Create() override;
 };
 
-class SVXCORE_DLLPUBLIC XDashList : public XPropertyList
+class SVXCORE_DLLPUBLIC XDashList final : public XPropertyList
 {
 private:
     BitmapEx            maBitmapSolidLine;
     OUString            maStringSolidLine;
     OUString            maStringNoLine;
 
-protected:
     static BitmapEx ImpCreateBitmapForXDash(const XDash* pDash);
     virtual BitmapEx CreateBitmapForUI(tools::Long nIndex) override;
 
@@ -300,11 +297,10 @@ public:
     OUString const & GetStringForUiNoLine() const;
 };
 
-class SVXCORE_DLLPUBLIC XHatchList : public XPropertyList
+class SVXCORE_DLLPUBLIC XHatchList final : public XPropertyList
 {
 private:
     BitmapEx CreateBitmap(tools::Long nIndex, const Size& rSize) const;
-protected:
     virtual BitmapEx CreateBitmapForUI(tools::Long nIndex) override;
 public:
     XHatchList(const OUString& rPath, const OUString& rReferer);
@@ -318,12 +314,10 @@ public:
     virtual bool Create() override;
 };
 
-class SVXCORE_DLLPUBLIC XGradientList : public XPropertyList
+class SVXCORE_DLLPUBLIC XGradientList final : public XPropertyList
 {
 private:
     BitmapEx CreateBitmap(tools::Long nIndex, const Size& rSize) const;
-
-protected:
     virtual BitmapEx CreateBitmapForUI(tools::Long nIndex) override;
 
 public:
@@ -338,12 +332,10 @@ public:
     virtual bool Create() override;
 };
 
-class SVXCORE_DLLPUBLIC XBitmapList : public XPropertyList
+class SVXCORE_DLLPUBLIC XBitmapList final : public XPropertyList
 {
 private:
     BitmapEx CreateBitmap( tools::Long nIndex, const Size& rSize ) const;
-
-protected:
     virtual BitmapEx CreateBitmapForUI(tools::Long nIndex) override;
 
 public:
@@ -357,12 +349,10 @@ public:
     virtual bool Create() override;
 };
 
-class SVXCORE_DLLPUBLIC XPatternList : public XPropertyList
+class SVXCORE_DLLPUBLIC XPatternList final : public XPropertyList
 {
 private:
     BitmapEx CreateBitmap( tools::Long nIndex, const Size& rSize ) const;
-
-protected:
     virtual BitmapEx CreateBitmapForUI(tools::Long nIndex) override;
 
 public:

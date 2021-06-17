@@ -73,7 +73,7 @@ class SdrGraphicLink;
 /**
  * This class represents an embedded or linked bitmap graphic object.
  */
-class SVXCORE_DLLPUBLIC SdrGrafObj : public SdrRectObj
+class SVXCORE_DLLPUBLIC SdrGrafObj final : public SdrRectObj
 {
 private:
     // to allow sdr::properties::GraphicProperties access to SetXPolyDirty()
@@ -118,7 +118,6 @@ private:
     void onGraphicChanged();
     GDIMetaFile             GetMetaFile(GraphicType &rGraphicType) const;
 
-protected:
     // protected destructor
     virtual ~SdrGrafObj() override;
 
