@@ -33,6 +33,8 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cfenv>
+#include <cmath>
 #include <float.h>
 #include <limits>
 #include <limits.h>
@@ -1137,8 +1139,22 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
     if (fValue == 0.0)
         return fValue;
 
-    if ( nDecPlaces == 0 && eMode == rtl_math_RoundingMode_Corrected )
-        return std::round( fValue );
+    if (nDecPlaces == 0)
+    {
+        switch (eMode)
+        {
+            case rtl_math_RoundingMode_Corrected:
+                return std::round(fValue);
+            case rtl_math_RoundingMode_HalfEven:
+                if (const int oldMode = std::fegetround(); std::fesetround(FE_TONEAREST) == 0)
+                {
+                    fValue = std::nearbyint(fValue);
+                    std::fesetround(oldMode);
+                    return fValue;
+                }
+                break;
+        }
+    }
 
     const double fOrigValue = fValue;
 
