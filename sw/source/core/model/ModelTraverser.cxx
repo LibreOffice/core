@@ -10,6 +10,11 @@
 
 #include <ModelTraverser.hxx>
 
+#include <node.hxx>
+#include <IDocumentDrawModelAccess.hxx>
+#include <svx/svdpage.hxx>
+#include <drawdoc.hxx>
+
 namespace sw
 {
 void ModelTraverser::traverse()
@@ -27,6 +32,24 @@ void ModelTraverser::traverse()
             for (auto& pNodeHandler : mpNodeHandler)
             {
                 pNodeHandler->handleNode(pNode);
+            }
+        }
+    }
+
+    IDocumentDrawModelAccess& rDrawModelAccess = m_pDoc->getIDocumentDrawModelAccess();
+    auto* pModel = rDrawModelAccess.GetDrawModel();
+    for (sal_uInt16 nPage = 0; nPage < pModel->GetPageCount(); ++nPage)
+    {
+        SdrPage* pPage = pModel->GetPage(nPage);
+        for (size_t nObject = 0; nObject < pPage->GetObjCount(); ++nObject)
+        {
+            SdrObject* pObject = pPage->GetObj(nObject);
+            if (pObject)
+            {
+                for (auto& pNodeHandler : mpNodeHandler)
+                {
+                    pNodeHandler->handleSdrObject(pObject);
+                }
             }
         }
     }
