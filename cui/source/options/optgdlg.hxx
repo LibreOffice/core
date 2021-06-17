@@ -114,10 +114,12 @@ private:
     std::unique_ptr<weld::ComboBox> m_xMousePosLB;
     std::unique_ptr<weld::ComboBox> m_xMouseMiddleLB;
     std::unique_ptr<weld::Button> m_xMoreIcons;
+    std::unique_ptr<weld::Button> m_xRunGPTests;
 
     DECL_LINK(OnAntialiasingToggled, weld::Toggleable&, void);
     DECL_LINK(OnUseSkiaToggled, weld::Toggleable&, void);
     DECL_STATIC_LINK(OfaViewTabPage, OnMoreIconsClick, weld::Button&, void);
+    DECL_STATIC_LINK(OfaViewTabPage, OnRunGPTestClick, weld::Button&, void);
     void UpdateSkiaStatus();
     void HideSkiaWidgets();
     void UpdateHardwareAccelStatus();
