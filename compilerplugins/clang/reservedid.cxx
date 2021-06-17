@@ -209,8 +209,7 @@ bool ReservedId::VisitNamedDecl(NamedDecl const * decl) {
             && s != "_GstVideoOverlay"
                 // avmedia/source/gstreamer/gstplayer.hxx
             && s != "_Module" // extensions/source/activex/StdAfx2.h, CComModule
-            && s != "_NotifyingLayout" // vcl/unx/gtk3/gtkinst.cxx
-            && s != "_NotifyingLayoutClass" // vcl/unx/gtk3/gtkinst.cxx
+            && s != "_NotifyingLayout" // vcl/unx/gtk4/notifyinglayout.cxx
             && s != "_SurfacePaintable" // vcl/unx/gtk3/gtkinst.cxx
             && s != "_SurfacePaintableClass" // vcl/unx/gtk3/gtkinst.cxx
             && s != "_XRegion" // vcl/unx/generic/gdi/x11cairotextrender.cxx
