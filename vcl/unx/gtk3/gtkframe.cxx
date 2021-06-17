@@ -939,12 +939,14 @@ void GtkSalFrame::InitCommon()
     gtk_widget_set_redraw_on_allocate(GTK_WIDGET(m_pDrawingArea), false);
 #endif
 
-#if !GTK_CHECK_VERSION(4,0,0)
-    // connect signals
+#if GTK_CHECK_VERSION(4,0,0)
+    g_signal_connect(G_OBJECT(gtk_widget_get_display(pEventWidget)), "setting-changed", G_CALLBACK(signalStyleUpdated), this);
+#else
     // use pEventWidget instead of m_pWindow to avoid infinite event loop under Linux Mint Mate 18.3
-    g_signal_connect( G_OBJECT(pEventWidget), "style-updated", G_CALLBACK(signalStyleUpdated), this );
+    g_signal_connect(G_OBJECT(pEventWidget), "style-updated", G_CALLBACK(signalStyleUpdated), this);
 #endif
     gtk_widget_set_has_tooltip(pEventWidget, true);
+    // connect signals
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "query-tooltip", G_CALLBACK(signalTooltipQuery), this ));
 #if !GTK_CHECK_VERSION(4,0,0)
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "button-press-event", G_CALLBACK(signalButton), this ));
@@ -4074,14 +4076,24 @@ gboolean GtkSalFrame::signalDelete(GtkWidget*, GdkEvent*, gpointer frame)
 }
 #endif
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+void GtkSalFrame::signalStyleUpdated(GtkWidget*, const gchar* pSetting, gpointer frame)
+#else
 void GtkSalFrame::signalStyleUpdated(GtkWidget*, gpointer frame)
+#endif
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
     // note: settings changed for multiple frames is avoided in winproc.cxx ImplHandleSettings
     GtkSalFrame::getDisplay()->SendInternalEvent( pThis, nullptr, SalEvent::SettingsChanged );
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+    OString sSetting(pSetting);
+    if (sSetting.startsWith("gtk-xft"))
+        GtkSalFrame::getDisplay()->SendInternalEvent( pThis, nullptr, SalEvent::FontChanged );
+#endif
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
     // fire off font-changed when the system cairo font hints change
     GtkInstance *pInstance = static_cast<GtkInstance*>(GetSalData()->m_pInstance);
     const cairo_font_options_t* pLastCairoFontOptions = pInstance->GetLastSeenCairoFontOptions();
@@ -4096,8 +4108,10 @@ void GtkSalFrame::signalStyleUpdated(GtkWidget*, gpointer frame)
         pInstance->ResetLastSeenCairoFontOptions(pCurrentCairoFontOptions);
         GtkSalFrame::getDisplay()->SendInternalEvent( pThis, nullptr, SalEvent::FontChanged );
     }
+#endif
 }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 gboolean GtkSalFrame::signalWindowState( GtkWidget*, GdkEvent* pEvent, gpointer frame )
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);

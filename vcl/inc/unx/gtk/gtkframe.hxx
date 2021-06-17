@@ -239,10 +239,12 @@ class GtkSalFrame final : public SalFrame
     void InitCommon();
     void InvalidateGraphics();
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     // signals
+#if !GTK_CHECK_VERSION(4, 0, 0)
     static gboolean     signalButton( GtkWidget*, GdkEventButton*, gpointer );
     static void         signalStyleUpdated(GtkWidget*, gpointer);
+#else
+    static void         signalStyleUpdated(GtkWidget*, const gchar* pSetting, pointer);
 #endif
     void DrawingAreaResized(GtkWidget* pWidget, int nWidth, int nHeight);
     void DrawingAreaDraw(cairo_t *cr);
