@@ -14,7 +14,7 @@
 
 class FormattedField;
 
-class FormattedFieldUIObject : public SpinFieldUIObject
+class FormattedFieldUIObject final : public SpinFieldUIObject
 {
     VclPtr<FormattedField> mxFormattedField;
 
@@ -28,7 +28,7 @@ public:
 
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
-protected:
+private:
     virtual OUString get_name() const override;
 };
 

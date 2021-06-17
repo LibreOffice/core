@@ -67,7 +67,7 @@ public:
 
 typedef tools::SvRef<SbMethod> SbMethodRef;
 
-class SbIfaceMapperMethod : public SbMethod
+class SbIfaceMapperMethod final : public SbMethod
 {
     friend class SbiRuntime;
 

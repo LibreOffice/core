@@ -40,7 +40,7 @@ namespace connectivity::parse
         typedef sdbcx::OColumn OParseColumn_BASE;
         typedef ::comphelper::OPropertyArrayUsageHelper<OParseColumn> OParseColumn_PROP;
 
-        class OOO_DLLPUBLIC_DBTOOLS OParseColumn :
+        class OOO_DLLPUBLIC_DBTOOLS OParseColumn final :
             public OParseColumn_BASE, public OParseColumn_PROP
         {
             OUString    m_aRealName;
@@ -50,7 +50,6 @@ namespace connectivity::parse
             bool        m_bAggregateFunction;
             bool        m_bIsSearchable;
 
-        protected:
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
@@ -112,12 +111,11 @@ namespace connectivity::parse
         typedef sdbcx::OColumn OOrderColumn_BASE;
         typedef ::comphelper::OPropertyArrayUsageHelper<OOrderColumn> OOrderColumn_PROP;
 
-        class OOrderColumn :
+        class OOrderColumn final :
             public OOrderColumn_BASE, public OOrderColumn_PROP
         {
             const   bool        m_bAscending;
 
-        protected:
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 

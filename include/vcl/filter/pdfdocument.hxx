@@ -138,7 +138,7 @@ public:
 };
 
 /// Array object: a list.
-class VCL_DLLPUBLIC PDFArrayElement : public PDFElement
+class VCL_DLLPUBLIC PDFArrayElement final : public PDFElement
 {
     std::vector<PDFElement*> m_aElements;
     /// The object that contains this array.
@@ -164,7 +164,7 @@ public:
 };
 
 /// Reference object: something with a unique ID.
-class VCL_DLLPUBLIC PDFReferenceElement : public PDFElement
+class VCL_DLLPUBLIC PDFReferenceElement final : public PDFElement
 {
     PDFDocument& m_rDoc;
     int m_fObjectValue;
@@ -197,7 +197,7 @@ public:
 };
 
 /// Stream object: a byte array with a known length.
-class VCL_DLLPUBLIC PDFStreamElement : public PDFElement
+class VCL_DLLPUBLIC PDFStreamElement final : public PDFElement
 {
     size_t m_nLength;
     sal_uInt64 m_nOffset;
@@ -241,7 +241,7 @@ public:
 };
 
 /// Dictionary object: a set key-value pairs.
-class VCL_DLLPUBLIC PDFDictionaryElement : public PDFElement
+class VCL_DLLPUBLIC PDFDictionaryElement final : public PDFElement
 {
     /// Key-value pairs when the dictionary is a nested value.
     std::map<OString, PDFElement*> m_aItems;
@@ -376,7 +376,7 @@ public:
 };
 
 /// Numbering object: an integer or a real.
-class VCL_DLLPUBLIC PDFNumberElement : public PDFElement
+class VCL_DLLPUBLIC PDFNumberElement final : public PDFElement
 {
     /// Input file start location.
     sal_uInt64 m_nOffset = 0;
@@ -397,7 +397,7 @@ public:
 };
 
 /// A one-liner comment.
-class VCL_DLLPUBLIC PDFCommentElement : public PDFElement
+class VCL_DLLPUBLIC PDFCommentElement final : public PDFElement
 {
     PDFDocument& m_rDoc;
     OString m_aComment;
@@ -409,7 +409,7 @@ public:
 };
 
 /// End of a dictionary: '>>'.
-class VCL_DLLPUBLIC PDFEndDictionaryElement : public PDFElement
+class VCL_DLLPUBLIC PDFEndDictionaryElement final : public PDFElement
 {
     /// Offset before the '>>' token.
     sal_uInt64 m_nLocation = 0;
@@ -423,7 +423,7 @@ public:
 };
 
 /// End of a stream: 'endstream' keyword.
-class VCL_DLLPUBLIC PDFEndStreamElement : public PDFElement
+class VCL_DLLPUBLIC PDFEndStreamElement final : public PDFElement
 {
 public:
     bool Read(SvStream& rStream) override;
@@ -432,7 +432,7 @@ public:
 };
 
 /// End of an object: 'endobj' keyword.
-class VCL_DLLPUBLIC PDFEndObjectElement : public PDFElement
+class VCL_DLLPUBLIC PDFEndObjectElement final : public PDFElement
 {
 public:
     bool Read(SvStream& rStream) override;
@@ -441,7 +441,7 @@ public:
 };
 
 /// End of an array: ']'.
-class VCL_DLLPUBLIC PDFEndArrayElement : public PDFElement
+class VCL_DLLPUBLIC PDFEndArrayElement final : public PDFElement
 {
     /// Location before the ']' token.
     sal_uInt64 m_nOffset = 0;
@@ -455,7 +455,7 @@ public:
 };
 
 /// Boolean object: a 'true' or a 'false'.
-class VCL_DLLPUBLIC PDFBooleanElement : public PDFElement
+class VCL_DLLPUBLIC PDFBooleanElement final : public PDFElement
 {
     bool m_aValue;
 
@@ -474,7 +474,7 @@ public:
 };
 
 /// Null object: the 'null' singleton.
-class VCL_DLLPUBLIC PDFNullElement : public PDFElement
+class VCL_DLLPUBLIC PDFNullElement final : public PDFElement
 {
 public:
     bool Read(SvStream& rStream) override;
@@ -489,7 +489,7 @@ public:
  * elements remember their source offset / length, and based on that it's
  * possible to modify the input file.
  */
-class VCL_DLLPUBLIC PDFDocument : public PDFObjectContainer
+class VCL_DLLPUBLIC PDFDocument final : public PDFObjectContainer
 {
     /// This vector owns all elements.
     std::vector<std::unique_ptr<PDFElement>> m_aElements;
@@ -597,7 +597,7 @@ public:
 };
 
 /// The trailer singleton is at the end of the doc.
-class VCL_DLLPUBLIC PDFTrailerElement : public PDFElement
+class VCL_DLLPUBLIC PDFTrailerElement final : public PDFElement
 {
     PDFDocument& m_rDoc;
     PDFDictionaryElement* m_pDictionaryElement;

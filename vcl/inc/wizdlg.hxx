@@ -169,7 +169,7 @@ namespace vcl
             @return
                 <TRUE/> if and only if the page is allowed to be left
         */
-        bool                prepareLeaveCurrentState( WizardTypes::CommitPageReason eReason );
+        static bool         prepareLeaveCurrentState( WizardTypes::CommitPageReason eReason );
 
         /** determine the next state to travel from the given one
 
@@ -237,8 +237,6 @@ namespace vcl
             Vulgo, this is the identifier of the current tab page :)
         */
         WizardTypes::WizardState getCurrentState() const { return GetCurLevel(); }
-
-        static IWizardPageController*  getPageController( TabPage* _pCurrentPage );
 
         /** returns a human readable name for a given state
 

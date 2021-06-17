@@ -81,7 +81,7 @@ class IMapOwnData;
 class IMapWindow;
 class GraphCtrl;
 
-class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialogController
+class SVX_DLLPUBLIC SvxIMapDlg final : public SfxModelessDialogController
 {
     friend class IMapOwnData;
     friend class IMapWindow;

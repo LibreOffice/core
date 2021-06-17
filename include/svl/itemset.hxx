@@ -259,7 +259,7 @@ inline void SfxItemSet::SetParent( const SfxItemSet* pNew )
     m_pParent = pNew;
 }
 
-class SVL_DLLPUBLIC SfxAllItemSet: public SfxItemSet
+class SVL_DLLPUBLIC SfxAllItemSet final : public SfxItemSet
 
 //  Handles all Ranges. Ranges are automatically modified by putting items.
 
@@ -271,7 +271,7 @@ public:
 
     virtual std::unique_ptr<SfxItemSet> Clone( bool bItems = true, SfxItemPool *pToPool = nullptr ) const override;
     virtual SfxItemSet CloneAsValue( bool bItems = true, SfxItemPool *pToPool = nullptr ) const override;
-protected:
+private:
     virtual const SfxPoolItem*  PutImpl( const SfxPoolItem&, sal_uInt16 nWhich, bool bPassingOwnership ) override;
 };
 

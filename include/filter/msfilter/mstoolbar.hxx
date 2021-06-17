@@ -207,7 +207,7 @@ public:
     bool Read(SvStream &rS) override;
 };
 
-class TBCBSpecific :  public TBBase
+class TBCBSpecific final : public TBBase
 {
     sal_uInt8 bFlags;
     std::shared_ptr< TBCBitMap > icon; // optional
@@ -245,7 +245,7 @@ public:
 0x16 (ActiveX control)             controlSpecificInfo MUST NOT exist
 
 */
-class MSFILTER_DLLPUBLIC TBCHeader : public TBBase
+class MSFILTER_DLLPUBLIC TBCHeader final : public TBBase
 {
     sal_Int8 bSignature;
     sal_Int8 bVersion;

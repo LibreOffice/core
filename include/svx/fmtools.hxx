@@ -144,7 +144,7 @@ protected:
     void setAdapter(FmXDisposeMultiplexer* pAdapter);
 };
 
-class SAL_WARN_UNUSED FmXDisposeMultiplexer : public cppu::WeakImplHelper< css::lang::XEventListener >
+class SAL_WARN_UNUSED FmXDisposeMultiplexer final : public cppu::WeakImplHelper< css::lang::XEventListener >
 {
     css::uno::Reference< css::lang::XComponent>       m_xObject;
     FmXDisposeListener* m_pListener;
