@@ -20,6 +20,7 @@
 // vector not sort the entries
 #include <memory>
 #include <vector>
+#include <deque>
 #include <string>
 
 namespace google_breakpad
@@ -53,6 +54,9 @@ public:
     static void setActiveSfxObjectName(const OUString& rActiveSfxObjectName);
     static OUString getActiveSfxObjectName();
 
+    static void logUnoCommand(const OUString& rUnoCommand);
+    static OUString getLoggedUnoCommands();
+
     static bool crashReportInfoExists();
 
     static bool readSendConfig(std::string& response);
@@ -62,6 +66,7 @@ public:
 private:
     static osl::Mutex maMutex;
     static osl::Mutex maActiveSfxObjectNameMutex;
+    static osl::Mutex maUnoLogCmdMutex;
     static bool mbInit;
     typedef  struct _mpair
     {
@@ -76,6 +81,8 @@ private:
 
     typedef std::vector<mpair> vmaKeyValues;
     static vmaKeyValues maKeyValues; // used to temporarily save entries before the old info has been uploaded
+    typedef std::deque<OUString> vmaloggedUnoCommands;
+    static vmaloggedUnoCommands maloggedUnoCommands;
     static OUString msActiveSfxObjectName;
 
     static std::unique_ptr<google_breakpad::ExceptionHandler> mpExceptionHandler;
@@ -95,6 +102,11 @@ private:
     inline static void addKeyValue(SAL_UNUSED_PARAMETER const OUString& /*rKey*/, SAL_UNUSED_PARAMETER const OUString& /*rValue*/, SAL_UNUSED_PARAMETER tAddKeyHandling /*AddKeyHandling*/) {};
     inline static void setActiveSfxObjectName(SAL_UNUSED_PARAMETER const OUString& /*rActiveSfxObjectName*/) {};
     inline static OUString getActiveSfxObjectName()
+    {
+        return OUString();
+    }
+    inline static void logUnoCommand(SAL_UNUSED_PARAMETER const OUString& /*rUnoCommand*/) {};
+    inline static OUString getLoggedUnoCommands()
     {
         return OUString();
     }
