@@ -140,6 +140,24 @@
     },
     {
       "key": {
+        "uuid": "5f4ffa7c_a0129418",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 1188,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-17T06:26:06Z",
+      "side": 1,
+      "message": "if (rBox \u003d\u003d (weld::ComboBox\u0026)mxFilterLb)\n{\n.\n.\n.\n}\n\nIt says that ComboBoxes cannot be comapred",
+      "parentUuid": "d2fb0f92_847f5ab3",
+      "revId": "823ee7192f4f89b1c2c590be649efab998eca05e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6a8c7ee0_fd845ff5",
         "filename": "sfx2/source/dialog/templdlg.cxx",
         "patchSetId": 23
