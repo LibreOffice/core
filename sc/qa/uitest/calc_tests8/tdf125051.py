@@ -31,13 +31,9 @@ class tdf125051(UITestCase):
         xDialog = self.xUITest.getTopFocusWindow()  #Spelling dialog
         #open options
         optionsBtn = xDialog.getChild("options")
-        def handle_options_dlg(dialog):
-            #print(dialog.getChildren())
-            xCancelBtn = dialog.getChild("cancel")
-            self.ui_test.close_dialog_through_button(xCancelBtn)
 
-        self.ui_test.execute_blocking_action(optionsBtn.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_options_dlg)
+        with self.ui_test.execute_blocking_action(optionsBtn.executeAction, args=('CLICK', ()), close_button="cancel"):
+            pass
 
         closeBtn = xDialog.getChild("close")    #close Spelling dialog
         self.ui_test.close_dialog_through_button(closeBtn)

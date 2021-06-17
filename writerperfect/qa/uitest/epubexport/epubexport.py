@@ -15,11 +15,6 @@ import uno
 class EPUBExportTest(UITestCase):
 
     def testUIComponent(self):
-        def handleDialog(dialog):
-            # Select the second entry to request EPUB2, not EPUB3.
-            dialog.getChild("versionlb").executeAction("SELECT", mkPropertyValues({"POS": "1"}))
-            dialog.getChild("ok").executeAction("CLICK", tuple())
-
         uiComponent = self.ui_test._xContext.ServiceManager.createInstanceWithContext("com.sun.star.comp.Writer.EPUBExportUIComponent", self.ui_test._xContext)
 
         # Make sure we get what we asked for.
@@ -28,7 +23,9 @@ class EPUBExportTest(UITestCase):
         # Just make sure this doesn't fail.
         uiComponent.setTitle(str())
 
-        self.ui_test.execute_blocking_action(action=uiComponent.execute, dialog_handler=handleDialog)
+        with self.ui_test.execute_blocking_action(action=uiComponent.execute) as dialog:
+            # Select the second entry to request EPUB2, not EPUB3.
+            dialog.getChild("versionlb").executeAction("SELECT", mkPropertyValues({"POS": "1"}))
         propertyValues = uiComponent.getPropertyValues()
         filterData = [i.Value for i in propertyValues if i.Name == "FilterData"][0]
         epubVersion = [i.Value for i in filterData if i.Name == "EPUBVersion"][0]
@@ -53,30 +50,24 @@ class EPUBExportTest(UITestCase):
         self.assertEqual(30, epubVersion)
 
     def testDialogVersionInput(self):
-        def handleDialog(dialog):
-            versionlb = get_state_as_dict(dialog.getChild("versionlb"))
-            # Log the state of the versionlb widget and exit.
-            positions.append(versionlb["SelectEntryPos"])
-            dialog.getChild("ok").executeAction("CLICK", tuple())
-
         uiComponent = self.ui_test._xContext.ServiceManager.createInstanceWithContext("com.sun.star.comp.Writer.EPUBExportUIComponent", self.ui_test._xContext)
         positions = []
         for version in (20, 30):
             filterData = (PropertyValue(Name="EPUBVersion", Value=version),)
             propertyValues = (PropertyValue(Name="FilterData", Value=uno.Any("[]com.sun.star.beans.PropertyValue", filterData)),)
             uiComponent.setPropertyValues(propertyValues)
-            self.ui_test.execute_blocking_action(action=uiComponent.execute, dialog_handler=handleDialog)
+            with self.ui_test.execute_blocking_action(action=uiComponent.execute) as dialog:
+                versionlb = get_state_as_dict(dialog.getChild("versionlb"))
+                # Log the state of the versionlb widget and exit.
+                positions.append(versionlb["SelectEntryPos"])
         # Make sure that initializing with 2 different versions results in 2 different widget states.
         self.assertEqual(2, len(set(positions)))
 
     def testCoverImage(self):
-        def handleDialog(dialog):
-            dialog.getChild("coverpath").executeAction("TYPE", mkPropertyValues({"TEXT": "cover.png"}))
-            dialog.getChild("ok").executeAction("CLICK", tuple())
-
         uiComponent = self.ui_test._xContext.ServiceManager.createInstanceWithContext("com.sun.star.comp.Writer.EPUBExportUIComponent", self.ui_test._xContext)
 
-        self.ui_test.execute_blocking_action(action=uiComponent.execute, dialog_handler=handleDialog)
+        with self.ui_test.execute_blocking_action(action=uiComponent.execute) as dialog:
+            dialog.getChild("coverpath").executeAction("TYPE", mkPropertyValues({"TEXT": "cover.png"}))
         propertyValues = uiComponent.getPropertyValues()
         filterData = [i.Value for i in propertyValues if i.Name == "FilterData"][0]
         # The RVNGCoverImage key was missing, EPUBExportDialog::OKClickHdl() did not set it.
@@ -84,13 +75,10 @@ class EPUBExportTest(UITestCase):
         self.assertEqual("cover.png", coverImage)
 
     def testMediaDir(self):
-        def handleDialog(dialog):
-            dialog.getChild("mediadir").executeAction("TYPE", mkPropertyValues({"TEXT": "file:///foo/bar"}))
-            dialog.getChild("ok").executeAction("CLICK", tuple())
-
         uiComponent = self.ui_test._xContext.ServiceManager.createInstanceWithContext("com.sun.star.comp.Writer.EPUBExportUIComponent", self.ui_test._xContext)
 
-        self.ui_test.execute_blocking_action(action=uiComponent.execute, dialog_handler=handleDialog)
+        with self.ui_test.execute_blocking_action(action=uiComponent.execute) as dialog:
+            dialog.getChild("mediadir").executeAction("TYPE", mkPropertyValues({"TEXT": "file:///foo/bar"}))
         propertyValues = uiComponent.getPropertyValues()
         filterData = [i.Value for i in propertyValues if i.Name == "FilterData"][0]
         # The RVNGMediaDir key was missing, EPUBExportDialog::OKClickHdl() did not set it.
@@ -98,14 +86,11 @@ class EPUBExportTest(UITestCase):
         self.assertEqual("file:///foo/bar", mediaDir)
 
     def testFixedLayout(self):
-        def handleDialog(dialog):
-            # Select the second entry to request fixed, not reflowable layout.
-            dialog.getChild("layoutlb").executeAction("SELECT", mkPropertyValues({"POS": "1"}))
-            dialog.getChild("ok").executeAction("CLICK", tuple())
-
         uiComponent = self.ui_test._xContext.ServiceManager.createInstanceWithContext("com.sun.star.comp.Writer.EPUBExportUIComponent", self.ui_test._xContext)
 
-        self.ui_test.execute_blocking_action(action=uiComponent.execute, dialog_handler=handleDialog)
+        with self.ui_test.execute_blocking_action(action=uiComponent.execute) as dialog:
+            # Select the second entry to request fixed, not reflowable layout.
+            dialog.getChild("layoutlb").executeAction("SELECT", mkPropertyValues({"POS": "1"}))
         propertyValues = uiComponent.getPropertyValues()
         filterData = [i.Value for i in propertyValues if i.Name == "FilterData"][0]
         # The EPUBLayoutMethod key was missing, EPUBExportDialog::OKClickHdl() did not set it.
@@ -114,17 +99,15 @@ class EPUBExportTest(UITestCase):
         self.assertEqual(1, layout)
 
     def testMeta(self):
-        def handleDialog(dialog):
+        uiComponent = self.ui_test._xContext.ServiceManager.createInstanceWithContext("com.sun.star.comp.Writer.EPUBExportUIComponent", self.ui_test._xContext)
+
+        with self.ui_test.execute_blocking_action(action=uiComponent.execute) as dialog:
             dialog.getChild("identifier").executeAction("TYPE", mkPropertyValues({"TEXT": "baddcafe-e394-4cd6-9b83-7172794612e5"}))
             dialog.getChild("title").executeAction("TYPE", mkPropertyValues({"TEXT": "unknown title from ui"}))
             dialog.getChild("author").executeAction("TYPE", mkPropertyValues({"TEXT": "unknown author from ui"}))
             dialog.getChild("language").executeAction("TYPE", mkPropertyValues({"TEXT": "sk"}))
             dialog.getChild("date").executeAction("TYPE", mkPropertyValues({"TEXT": "2013-11-20T17:16:07Z"}))
-            dialog.getChild("ok").executeAction("CLICK", tuple())
 
-        uiComponent = self.ui_test._xContext.ServiceManager.createInstanceWithContext("com.sun.star.comp.Writer.EPUBExportUIComponent", self.ui_test._xContext)
-
-        self.ui_test.execute_blocking_action(action=uiComponent.execute, dialog_handler=handleDialog)
         propertyValues = uiComponent.getPropertyValues()
         filterData = [i.Value for i in propertyValues if i.Name == "FilterData"][0]
         # These keys were missing, EPUBExportDialog::OKClickHdl() did not set them.
