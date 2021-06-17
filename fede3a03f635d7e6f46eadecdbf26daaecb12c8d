@@ -34,6 +34,24 @@
       "revId": "fede3a03f635d7e6f46eadecdbf26daaecb12c8d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0e9d012_dcaa737e",
+        "filename": "vcl/source/outdev/textline.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1038,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-06-17T10:37:04Z",
+      "side": 1,
+      "message": "Yes, OutputDevice could use some kind of DrawTiledBitmap(), I have that in my Skia TODO, as I\u0027ve already encountered a number of places that would benefit from it. Well, somewhen ... or feel free to implement it, I can dig up the list of all the places I\u0027ve found.\n\nHowever, as far as this specific code goes, it\u0027s practically irrelevant for Skia. This is slow with Cairo, Skia performs much better (see my comment in T28612).",
+      "parentUuid": "3c308a28_15a0aad9",
+      "revId": "fede3a03f635d7e6f46eadecdbf26daaecb12c8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
