@@ -3437,6 +3437,8 @@ sal_uInt32 ImpEditEngine::GetTextHeightNTP() const
 tools::Long ImpEditEngine::Calc1ColumnTextHeight(tools::Long* pHeightNTP)
 {
     tools::Long nHeight = 0;
+    if (pHeightNTP)
+        *pHeightNTP = 0;
     // Pretend that we have ~infinite height to get total height
     comphelper::ValueRestorationGuard aGuard(nCurTextHeight,
                                              std::numeric_limits<tools::Long>::max());
@@ -3467,6 +3469,8 @@ tools::Long ImpEditEngine::CalcTextHeight(tools::Long* pHeightNTP)
     tools::Long nTentativeColHeight = mnMinColumnWrapHeight;
     tools::Long nWantedIncrease = 0;
     tools::Long nCurrentTextHeight;
+    if (pHeightNTP)
+        *pHeightNTP = 0;
 
     // This does the necessary column balancing for the case when the text does not fit min height.
     // When the height of column (taken from nCurTextHeight) is too small, the last column will
