@@ -120,8 +120,10 @@ class ManualCalcTests(UITestCase):
         def enter_text(cell, text):
             enter_text_to_cell(xGridWin, cell, text)
 
-        self.ui_test.execute_blocking_action(enter_text, "ok", args=("A1", "abc"))
-        self.ui_test.execute_blocking_action(enter_text, "ok", args=("B6", "2.18"))
+        with self.ui_test.execute_blocking_action(enter_text, args=("A1", "abc")):
+            pass
+        with self.ui_test.execute_blocking_action(enter_text, args=("B6", "2.18")):
+            pass
 
         enter_text_to_cell(xGridWin, "C2", "24")
 
