@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "743d7825_cba083e2",
+        "filename": "vcl/source/outdev/textline.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1038,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-06-17T07:32:34Z",
+      "side": 1,
+      "message": "this loop looks like something that should be GPU accelerate-able",
+      "revId": "fede3a03f635d7e6f46eadecdbf26daaecb12c8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
