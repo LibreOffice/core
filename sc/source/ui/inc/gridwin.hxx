@@ -461,7 +461,7 @@ public:
     void            DeleteAutoFillOverlay();
     void            UpdateAutoFillOverlay();
     void            DeleteDragRectOverlay();
-    void            UpdateDragRectOverlay();
+    void            UpdateDragRectOverlay(bool bDragOver = false);
     void            DeleteHeaderOverlay();
     void            UpdateHeaderOverlay();
     void            DeleteShrinkOverlay();
