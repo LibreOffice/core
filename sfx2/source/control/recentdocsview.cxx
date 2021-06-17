@@ -130,6 +130,7 @@ RecentDocsView::RecentDocsView(std::unique_ptr<weld::ScrolledWindow> xWindow, st
     , maWelcomeLine1(SfxResId(STR_WELCOME_LINE1))
     , maWelcomeLine2(SfxResId(STR_WELCOME_LINE2))
     , mpLoadRecentFile(nullptr)
+    , m_nExecuteHdlId(nullptr)
 {
     tools::Rectangle aScreen = Application::GetScreenPosSizePixel(Application::GetDisplayBuiltInScreen());
     mnItemMaxSize = std::min(aScreen.GetWidth(),aScreen.GetHeight()) > 800 ? 256 : 192;
@@ -148,6 +149,8 @@ RecentDocsView::RecentDocsView(std::unique_ptr<weld::ScrolledWindow> xWindow, st
 
 RecentDocsView::~RecentDocsView()
 {
+    Application::RemoveUserEvent(m_nExecuteHdlId);
+    m_nExecuteHdlId = nullptr;
     if (mpLoadRecentFile)
     {
         mpLoadRecentFile->pView = nullptr;
@@ -401,7 +404,7 @@ void RecentDocsView::PostLoadRecentUsedFile(LoadRecentFile* pLoadRecentFile)
 {
     assert(!mpLoadRecentFile);
     mpLoadRecentFile = pLoadRecentFile;
-    Application::PostUserEvent(LINK(nullptr, RecentDocsView, ExecuteHdl_Impl), pLoadRecentFile);
+    m_nExecuteHdlId = Application::PostUserEvent(LINK(this, RecentDocsView, ExecuteHdl_Impl), pLoadRecentFile);
 }
 
 void RecentDocsView::DispatchedLoadRecentUsedFile()
@@ -409,8 +412,9 @@ void RecentDocsView::DispatchedLoadRecentUsedFile()
     mpLoadRecentFile = nullptr;
 }
 
-IMPL_STATIC_LINK( RecentDocsView, ExecuteHdl_Impl, void*, p, void )
+IMPL_LINK( RecentDocsView, ExecuteHdl_Impl, void*, p, void )
 {
+    m_nExecuteHdlId = nullptr;
     LoadRecentFile* pLoadRecentFile = static_cast<LoadRecentFile*>(p);
     try
     {
