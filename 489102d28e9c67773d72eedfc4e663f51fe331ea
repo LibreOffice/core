@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "47174c57_1bc13497",
+        "filename": "sc/source/ui/miscdlgs/dataproviderdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2021-06-17T00:44:25Z",
+      "side": 0,
+      "message": "The dataproviderentry.ui file should be unused now and can be removed.",
+      "revId": "489102d28e9c67773d72eedfc4e663f51fe331ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
