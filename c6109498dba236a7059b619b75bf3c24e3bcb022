@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "860571ed_722a8c5f",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 894,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-17T15:29:22Z",
+      "side": 1,
+      "message": "Of course - but note that this line will be executed always when you pass mxTreeBox - unselecting everything in mxCharTreeBox.",
+      "parentUuid": "1ba118c2_b189ff9e",
+      "revId": "c6109498dba236a7059b619b75bf3c24e3bcb022",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3da34a83_05c1bb2d",
         "filename": "sfx2/source/dialog/templdlg.cxx",
         "patchSetId": 30
@@ -276,6 +294,24 @@
       "side": 1,
       "message": "27 is the number of CS",
       "parentUuid": "78cfddc9_10555bfd",
+      "revId": "c6109498dba236a7059b619b75bf3c24e3bcb022",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b54a78e9_f0910987",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 2482,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-17T15:29:22Z",
+      "side": 1,
+      "message": "Should we disallow user from adding more CS? :-)",
+      "parentUuid": "ea753f6b_955cf46c",
       "revId": "c6109498dba236a7059b619b75bf3c24e3bcb022",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
