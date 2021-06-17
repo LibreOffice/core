@@ -158,6 +158,24 @@
     },
     {
       "key": {
+        "uuid": "774ce446_6f5afa18",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 1188,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-17T06:38:09Z",
+      "side": 1,
+      "message": "mxFilterLb is not weld::ComboBox\u0026, it\u0027s std::unique_ptr\u003cweld::ComboBox\u003e. You need to use std::unique_ptr\u0027s methods/operators to get the object pointer to by the smart pointer object; namely comparing pointers fits your task here:\n\n    if (\u0026rBox \u003d\u003d mxFilterLb.get())\n\nbecause you don\u0027t need to check if they are two different objects with equal members, and only need to check if they are exactly same object in memory.",
+      "parentUuid": "5f4ffa7c_a0129418",
+      "revId": "823ee7192f4f89b1c2c590be649efab998eca05e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6a8c7ee0_fd845ff5",
         "filename": "sfx2/source/dialog/templdlg.cxx",
         "patchSetId": 23
