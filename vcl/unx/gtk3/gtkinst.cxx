@@ -22298,6 +22298,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/similaritysearchdialog.ui" &&
         rUIFile != "cui/ui/specialcharacters.ui" &&
         rUIFile != "cui/ui/spelloptionsdialog.ui" &&
+        rUIFile != "cui/ui/spinbox.ui" &&
         rUIFile != "cui/ui/textflowpage.ui" &&
         rUIFile != "cui/ui/thesaurus.ui" &&
         rUIFile != "cui/ui/tipofthedaydialog.ui" &&
@@ -22422,6 +22423,8 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/swriter/ui/autotext.ui" &&
         rUIFile != "modules/swriter/ui/bibliographyentry.ui" &&
         rUIFile != "modules/swriter/ui/bulletsandnumbering.ui" &&
+        rUIFile != "modules/swriter/ui/businessdatapage.ui" &&
+        rUIFile != "modules/swriter/ui/cardmediumpage.ui" &&
         rUIFile != "modules/swriter/ui/characterproperties.ui" &&
         rUIFile != "modules/swriter/ui/charurlpage.ui" &&
         rUIFile != "modules/swriter/ui/columndialog.ui" &&
@@ -22446,6 +22449,9 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/swriter/ui/insertfootnote.ui" &&
         rUIFile != "modules/swriter/ui/insertsectiondialog.ui" &&
         rUIFile != "modules/swriter/ui/inserttable.ui" &&
+        rUIFile != "modules/swriter/ui/labeldialog.ui" &&
+        rUIFile != "modules/swriter/ui/labelformatpage.ui" &&
+        rUIFile != "modules/swriter/ui/labeloptionspage.ui" &&
         rUIFile != "modules/swriter/ui/linenumbering.ui" &&
         rUIFile != "modules/swriter/ui/newuserindexdialog.ui" &&
         rUIFile != "modules/swriter/ui/numberingnamedialog.ui" &&
@@ -22456,8 +22462,10 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/swriter/ui/paradialog.ui" &&
         rUIFile != "modules/swriter/ui/printeroptions.ui" &&
         rUIFile != "modules/swriter/ui/printoptionspage.ui" &&
+        rUIFile != "modules/swriter/ui/privateuserpage.ui" &&
         rUIFile != "modules/swriter/ui/renameautotextdialog.ui" &&
         rUIFile != "modules/swriter/ui/renameobjectdialog.ui" &&
+        rUIFile != "modules/swriter/ui/savelabeldialog.ui" &&
         rUIFile != "modules/swriter/ui/sectionpage.ui" &&
         rUIFile != "modules/swriter/ui/statisticsinfopage.ui" &&
         rUIFile != "modules/swriter/ui/templatedialog8.ui" &&
