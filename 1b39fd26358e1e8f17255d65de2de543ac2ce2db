@@ -111,6 +111,24 @@
       "revId": "1b39fd26358e1e8f17255d65de2de543ac2ce2db",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "179515f0_bb90925e",
+        "filename": "sd/qa/uitest/impress_tests/customSlideShow.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-06-17T11:48:59Z",
+      "side": 1,
+      "message": "Yes, I checked all the existing cases and in all of them, a button is used to close the dialog, either with the parameter dialog_element or the normal way",
+      "parentUuid": "cb19e5c9_13fc3d03",
+      "revId": "1b39fd26358e1e8f17255d65de2de543ac2ce2db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
