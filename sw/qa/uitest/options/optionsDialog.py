@@ -22,14 +22,10 @@ class optionsDialog(UITestCase):
 
         xMoreIconsBtn = xDialog.getChild("btnMoreIcons")
 
-        def handle_more_icons_dlg(dialog):
+        with self.ui_test.execute_blocking_action(xMoreIconsBtn.executeAction, args=('CLICK', ()), close_button="buttonClose") as dialog:
             # Check it doesn't crash while opening it
             xCloseBtn = dialog.getChild("buttonClose")
             self.ui_test.wait_until_property_is_updated(xCloseBtn, "Enabled", "true")
-            self.ui_test.close_dialog_through_button(xCloseBtn)
-
-        self.ui_test.execute_blocking_action(xMoreIconsBtn.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_more_icons_dlg)
 
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)

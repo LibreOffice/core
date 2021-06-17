@@ -27,13 +27,8 @@ class goalSeek(UITestCase):
         xvaredit.executeAction("TYPE", mkPropertyValues({"TEXT":"B1"}))
         xOKBtn = xDialog.getChild("ok")
 
-        def handle_OK_dlg(dialog):
-            print(dialog.getChildren())
-            xYesButn = dialog.getChild("yes")
-            self.ui_test.close_dialog_through_button(xYesButn)
+        self.ui_test.execute_blocking_action(xOKBtn.executeAction, args=('CLICK', ()), close_button="yes")
 
-        self.ui_test.execute_blocking_action(xOKBtn.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_OK_dlg)
         #verify
         self.assertEqual(get_cell_by_position(document, 0, 1, 0).getValue(), 200000)
         self.assertEqual(get_cell_by_position(document, 0, 1, 3).getValue(), 15000)

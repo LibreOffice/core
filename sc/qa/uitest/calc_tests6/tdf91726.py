@@ -22,29 +22,17 @@ class tdf91726(UITestCase):
         xDialog = self.xUITest.getTopFocusWindow()
         #add new style "Default"
         xadd = xDialog.getChild("add")
-        def handle_name_dlg(dialog):
+        with self.ui_test.execute_blocking_action(xadd.executeAction, args=('CLICK', ()), close_button="cancel") as dialog:
             nameEntry = dialog.getChild("name_entry")
             nameEntry.executeAction("TYPE", mkPropertyValues({"TEXT":"Default"}))
             xOKBtn = dialog.getChild("ok")
-            def handle_error_dlg(dialog2):
-                #Error message: You have entered an invalid name.
-                #AutoFormat could not be created.
-                #Try again using a different name.
-                xOKBtn2 = dialog2.getChild("ok")
-                self.ui_test.close_dialog_through_button(xOKBtn2)
 
-            self.ui_test.execute_blocking_action(xOKBtn.executeAction, args=('CLICK', ()),
-                    dialog_handler=handle_error_dlg)
+            self.ui_test.execute_blocking_action(xOKBtn.executeAction, args=('CLICK', ()))
 
             xDialog = self.xUITest.getTopFocusWindow()
             nameEntry = xDialog.getChild("name_entry")
             #back to name dialog, LO should not crash
             self.assertEqual(get_state_as_dict(nameEntry)["Text"], "Default")
-            xCanceltn = xDialog.getChild("cancel")
-            self.ui_test.close_dialog_through_button(xCanceltn)
-
-        self.ui_test.execute_blocking_action(xadd.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_name_dlg)
 
         xCanceltn = xDialog.getChild("cancel")
         self.ui_test.close_dialog_through_button(xCanceltn)

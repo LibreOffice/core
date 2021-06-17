@@ -23,8 +23,7 @@ class tdf113252(UITestCase):
 
         #Click Button Organizer
         xorganize = xDialog.getChild("organize")
-        def handle_macro_dlg(dialog):
-
+        with self.ui_test.execute_blocking_action(xorganize.executeAction, args=('CLICK', ()), close_button="close") as dialog:
             xTabs = dialog.getChild("tabcontrol")
             select_pos(xTabs, "0")
             select_pos(xTabs, "1")
@@ -33,8 +32,6 @@ class tdf113252(UITestCase):
             xCloseBtn = dialog.getChild("close")
             xCloseBtn.executeAction("CLICK", tuple())
 
-        self.ui_test.execute_blocking_action(xorganize.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_macro_dlg)
         #Click button Close in the next dialog -> crash.
 
         xClose = xDialog.getChild("close")

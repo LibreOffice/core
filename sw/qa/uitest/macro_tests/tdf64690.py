@@ -58,15 +58,10 @@ class tdf64690(UITestCase):
             selection.executeAction("CLICK", tuple())
         self.assertEqual("true", get_state_as_dict(selection)['Selected'])
 
-        def handle_confirmation_dlg(dialog):
-            xOKBtn = dialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
-
         replaceall = xDialog.getChild("replaceall")
 
         # Without the fix in place, this test would have hung here
-        self.ui_test.execute_blocking_action(replaceall.executeAction, args=('CLICK', ()),
-            dialog_handler=handle_confirmation_dlg)
+        self.ui_test.execute_blocking_action(replaceall.executeAction, args=('CLICK', ()))
 
         xcloseBtn = xDialog.getChild("close")
         self.ui_test.close_dialog_through_button(xcloseBtn)

@@ -53,7 +53,7 @@ class tdf119661(UITestCase):
         xBreakLink = xDialog.getChild(sBreakLink)
 
         self.ui_test.execute_blocking_action(xBreakLink.executeAction,
-            args=("CLICK", tuple()), dialog_element="yes")
+            args=("CLICK", tuple()), close_button="yes")
 
         xClose = xDialog.getChild("close")
         self.ui_test.close_dialog_through_button(xClose)

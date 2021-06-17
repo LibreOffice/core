@@ -29,12 +29,7 @@ class tdf116996(UITestCase):
 
         xOKBtn = xDialogOpt.getChild("ok")
 
-        def handle_confirm_dlg(dialog):
-            xLaterBtn = dialog.getChild("no")
-            self.ui_test.close_dialog_through_button(xLaterBtn)
-
-        self.ui_test.execute_blocking_action(xOKBtn.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_confirm_dlg)
+        self.ui_test.execute_blocking_action(xOKBtn.executeAction, args=('CLICK', ()), close_button="no")
 
         #reopen options dialog and verify
         self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
@@ -50,12 +45,7 @@ class tdf116996(UITestCase):
         xexperimental.executeAction("CLICK", tuple())       #disable experimental features
         xOKBtn = xDialogOpt.getChild("ok")
 
-        def handle_confirm_dlg(dialog):
-            xLaterBtn = dialog.getChild("no")
-            self.ui_test.close_dialog_through_button(xLaterBtn)
-
-        self.ui_test.execute_blocking_action(xOKBtn.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_confirm_dlg)
+        self.ui_test.execute_blocking_action(xOKBtn.executeAction, args=('CLICK', ()), close_button="no")
 
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
