@@ -475,12 +475,17 @@ const cairo_font_options_t* GtkInstance::GetCairoFontOptions()
 {
 #if !GTK_CHECK_VERSION(4, 0, 0)
     const cairo_font_options_t* pCairoFontOptions = gdk_screen_get_font_options(gdk_screen_get_default());
+#else
+    auto pDefaultWin = ImplGetDefaultWindow();
+    assert(pDefaultWin);
+    SalFrame* pDefaultFrame = pDefaultWin->ImplGetFrame();
+    GtkSalFrame* pGtkFrame = dynamic_cast<GtkSalFrame*>(pDefaultFrame);
+    assert(pGtkFrame);
+    const cairo_font_options_t* pCairoFontOptions = pGtkFrame->get_font_options();
+#endif
     if (!m_pLastCairoFontOptions && pCairoFontOptions)
         m_pLastCairoFontOptions = cairo_font_options_copy(pCairoFontOptions);
     return pCairoFontOptions;
-#else
-    return nullptr;
-#endif
 }
 
 const cairo_font_options_t* GtkInstance::GetLastSeenCairoFontOptions() const

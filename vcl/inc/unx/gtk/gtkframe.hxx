@@ -181,6 +181,7 @@ class GtkSalFrame final : public SalFrame
     GtkFixed*                       m_pFixedContainer;
     GtkDrawingArea*                 m_pDrawingArea;
     GtkEventControllerKey*          m_pKeyController;
+    gulong                          m_nSettingChangedSignalId;
 #endif
 #if !GTK_CHECK_VERSION(4, 0, 0)
     GdkWindow*                      m_pForeignParent;
@@ -612,6 +613,8 @@ public:
 #endif
     static OUString             GetPreeditDetails(GtkIMContext* pIMContext, std::vector<ExtTextInputAttr>& rInputFlags, sal_Int32& rCursorPos, sal_uInt8& rCursorFlags);
     static Selection            CalcDeleteSurroundingSelection(const OUString& rSurroundingText, sal_Int32 nCursorIndex, int nOffset, int nChars);
+
+    const cairo_font_options_t* get_font_options();
 
     void DisallowCycleFocusOut();
     bool IsCycleFocusOutDisallowed() const;
