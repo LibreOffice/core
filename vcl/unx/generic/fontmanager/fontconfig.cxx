@@ -17,6 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifdef __GNUC__
+// gcc 10.2.0 gets unhappy about one of the OString inside PrintFont at line 656
+// I have to turn it off here because the warning actually occurs inside rtl::OString
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
+
 #include <memory>
 #include <string_view>
 
