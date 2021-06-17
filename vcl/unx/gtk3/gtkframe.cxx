@@ -705,6 +705,8 @@ GtkSalFrame::~GtkSalFrame()
         gtk_widget_destroy( GTK_WIDGET(m_pEventBox) );
     if( m_pTopLevelGrid )
         gtk_widget_destroy( GTK_WIDGET(m_pTopLevelGrid) );
+#else
+    g_signal_handler_disconnect(G_OBJECT(gtk_widget_get_display(pEventWidget)), m_nSettingChangedSignalId);
 #endif
     {
         SolarMutexGuard aGuard;
@@ -940,7 +942,7 @@ void GtkSalFrame::InitCommon()
 #endif
 
 #if GTK_CHECK_VERSION(4,0,0)
-    g_signal_connect(G_OBJECT(gtk_widget_get_display(pEventWidget)), "setting-changed", G_CALLBACK(signalStyleUpdated), this);
+    m_nSettingChangedSignalId = g_signal_connect(G_OBJECT(gtk_widget_get_display(pEventWidget)), "setting-changed", G_CALLBACK(signalStyleUpdated), this);
 #else
     // use pEventWidget instead of m_pWindow to avoid infinite event loop under Linux Mint Mate 18.3
     g_signal_connect(G_OBJECT(pEventWidget), "style-updated", G_CALLBACK(signalStyleUpdated), this);
@@ -4076,8 +4078,20 @@ gboolean GtkSalFrame::signalDelete(GtkWidget*, GdkEvent*, gpointer frame)
 }
 #endif
 
+const cairo_font_options_t* GtkSalFrame::get_font_options()
+{
+    GtkWidget* pWidget = getMouseEventWidget();
 #if GTK_CHECK_VERSION(4, 0, 0)
-void GtkSalFrame::signalStyleUpdated(GtkWidget*, const gchar* pSetting, gpointer frame)
+    PangoContext* pContext = gtk_widget_get_pango_context(pWidget);
+    assert(pContext);
+    return pango_cairo_context_get_font_options(pContext);
+#else
+    return gdk_screen_get_font_options(gtk_widget_get_screen(pWidget));
+#endif
+}
+
+#if GTK_CHECK_VERSION(4, 0, 0)
+void GtkSalFrame::signalStyleUpdated(GtkWidget*, const gchar* /*pSetting*/, gpointer frame)
 #else
 void GtkSalFrame::signalStyleUpdated(GtkWidget*, gpointer frame)
 #endif
@@ -4087,17 +4101,12 @@ void GtkSalFrame::signalStyleUpdated(GtkWidget*, gpointer frame)
     // note: settings changed for multiple frames is avoided in winproc.cxx ImplHandleSettings
     GtkSalFrame::getDisplay()->SendInternalEvent( pThis, nullptr, SalEvent::SettingsChanged );
 
-#if GTK_CHECK_VERSION(4, 0, 0)
-    OString sSetting(pSetting);
-    if (sSetting.startsWith("gtk-xft"))
-        GtkSalFrame::getDisplay()->SendInternalEvent( pThis, nullptr, SalEvent::FontChanged );
-#endif
+    // a plausible alternative might be to send SalEvent::FontChanged if pSetting starts with "gtk-xft"
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     // fire off font-changed when the system cairo font hints change
     GtkInstance *pInstance = static_cast<GtkInstance*>(GetSalData()->m_pInstance);
     const cairo_font_options_t* pLastCairoFontOptions = pInstance->GetLastSeenCairoFontOptions();
-    const cairo_font_options_t* pCurrentCairoFontOptions = gdk_screen_get_font_options(gdk_screen_get_default());
+    const cairo_font_options_t* pCurrentCairoFontOptions = pThis->get_font_options();
     bool bFontSettingsChanged = true;
     if (pLastCairoFontOptions && pCurrentCairoFontOptions)
         bFontSettingsChanged = !cairo_font_options_equal(pLastCairoFontOptions, pCurrentCairoFontOptions);
@@ -4108,7 +4117,6 @@ void GtkSalFrame::signalStyleUpdated(GtkWidget*, gpointer frame)
         pInstance->ResetLastSeenCairoFontOptions(pCurrentCairoFontOptions);
         GtkSalFrame::getDisplay()->SendInternalEvent( pThis, nullptr, SalEvent::FontChanged );
     }
-#endif
 }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
