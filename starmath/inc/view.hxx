@@ -166,7 +166,7 @@ class SmGraphicController final : public SfxControllerItem
     SmGraphicWidget &rGraphic;
 public:
     SmGraphicController(SmGraphicWidget &, sal_uInt16, SfxBindings & );
-    virtual void StateChanged(sal_uInt16             nSID,
+    virtual void StateChangedAtToolBoxControl(sal_uInt16             nSID,
                               SfxItemState       eState,
                               const SfxPoolItem* pState) override;
 };
@@ -178,7 +178,7 @@ class SmEditController final : public SfxControllerItem
 public:
     SmEditController(SmEditWindow &, sal_uInt16, SfxBindings  & );
 
-    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState) override;
+    virtual void StateChangedAtToolBoxControl(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState) override;
 };
 
 class SmCmdBoxWindow : public SfxDockingWindow

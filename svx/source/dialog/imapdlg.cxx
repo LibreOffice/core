@@ -67,7 +67,7 @@ SvxIMapDlgItem::SvxIMapDlgItem( SvxIMapDlg& rIMapDlg, SfxBindings& rBindings ) :
 {
 }
 
-void SvxIMapDlgItem::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/,
+void SvxIMapDlgItem::StateChangedAtToolBoxControl( sal_uInt16 nSID, SfxItemState /*eState*/,
                                    const SfxPoolItem* pItem )
 {
     if ( ( nSID == SID_IMAP_EXEC ) && pItem )

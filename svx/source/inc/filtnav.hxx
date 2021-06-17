@@ -321,7 +321,7 @@ public:
     virtual void dispose() override;
 
     void UpdateContent( FmFormShell const * pFormShell );
-    void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
+    void StateChangedAtToolBoxControl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
     void FillInfo( SfxChildWinInfo& rInfo ) const override;
 };
 

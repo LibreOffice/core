@@ -782,11 +782,11 @@ SmGraphicController::SmGraphicController(SmGraphicWidget &rSmGraphic,
 {
 }
 
-void SmGraphicController::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState)
+void SmGraphicController::StateChangedAtToolBoxControl(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState)
 {
     rGraphic.SetTotalSize();
     rGraphic.Invalidate();
-    SfxControllerItem::StateChanged (nSID, eState, pState);
+    SfxControllerItem::StateChangedAtToolBoxControl (nSID, eState, pState);
 }
 
 /**************************************************************************/
@@ -798,13 +798,13 @@ SmEditController::SmEditController(SmEditWindow &rSmEdit,
 {
 }
 
-void SmEditController::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState)
+void SmEditController::StateChangedAtToolBoxControl(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState)
 {
     const SfxStringItem *pItem =  dynamic_cast<const SfxStringItem*>( pState);
 
     if ((pItem != nullptr) && (rEdit.GetText() != pItem->GetValue()))
         rEdit.SetText(pItem->GetValue());
-    SfxControllerItem::StateChanged (nSID, eState, pState);
+    SfxControllerItem::StateChangedAtToolBoxControl (nSID, eState, pState);
 }
 
 /**************************************************************************/

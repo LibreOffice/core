@@ -28,7 +28,7 @@ private:
 
 public:
     virtual void Command(const CommandEvent& rCEvt) override;
-    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
+    virtual void StateChangedAtStatusBarControl(sal_uInt16 nSID, SfxItemState eState,
                               const SfxPoolItem* pState) override;
     virtual void Paint(const UserDrawEvent& rEvt) override;
 

@@ -62,7 +62,7 @@ public:
     void                SetId( sal_uInt16 nItemId );
     sal_uInt16          GetId() const { return nId; }
 
-    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
+    virtual void        StateChangedAtToolBoxControl( sal_uInt16 nSID, SfxItemState eState,
                                       const SfxPoolItem* pState );
 
     virtual void        GetControlState( sal_uInt16 nSID, boost::property_tree::ptree& );
@@ -84,7 +84,7 @@ class SFX2_DLLPUBLIC SfxStatusForwarder final : public SfxControllerItem
 {
     SfxControllerItem*      pMaster;
 
-    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
+    virtual void        StateChangedAtToolBoxControl( sal_uInt16 nSID, SfxItemState eState,
                                       const SfxPoolItem* pState ) override;
 
 public:

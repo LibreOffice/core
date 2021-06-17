@@ -78,7 +78,7 @@ friend struct SfxTbxCtrlFactory;
 
 protected:
     // old SfxToolBoxControl methods
-    virtual void               StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void               StateChangedAtToolBoxControl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     virtual void               Select( sal_uInt16 nSelectModifier );
 
     virtual void               DoubleClick();

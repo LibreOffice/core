@@ -47,7 +47,7 @@ SvxLineWidthToolBoxControl::~SvxLineWidthToolBoxControl()
 {
 }
 
-void SvxLineWidthToolBoxControl::StateChanged(
+void SvxLineWidthToolBoxControl::StateChangedAtToolBoxControl(
     sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
     SvxMetricField* pFld = static_cast<SvxMetricField*>(

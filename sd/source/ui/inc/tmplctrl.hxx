@@ -26,7 +26,7 @@ public:
     SdTemplateControl( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar& rStb );
     virtual ~SdTemplateControl() override;
 
-    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
+    virtual void    StateChangedAtStatusBarControl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
     virtual void    Paint( const UserDrawEvent& rEvt ) override;
 
     SFX_DECL_STATUSBAR_CONTROL();

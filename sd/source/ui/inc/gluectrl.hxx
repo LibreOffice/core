@@ -56,7 +56,7 @@ private:
     static sal_uInt16 GetEscDirPos(SdrEscapeDirection nEscDir);
 
 public:
-    virtual void StateChanged(sal_uInt16 nSId, SfxItemState eState,
+    virtual void StateChangedAtToolBoxControl(sal_uInt16 nSId, SfxItemState eState,
                               const SfxPoolItem* pState) override;
     virtual VclPtr<InterimItemWindow> CreateItemWindow(vcl::Window* pParent) override;
 

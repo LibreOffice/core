@@ -65,7 +65,7 @@ StyleStatusListener::StyleStatusListener(
     ReBind();
 }
 
-void StyleStatusListener::StateChanged(SfxItemState /*eState*/, const SfxPoolItem* pState)
+void StyleStatusListener::StateChangedAtStatusListener(SfxItemState /*eState*/, const SfxPoolItem* pState)
 {
     const SfxTemplateItem* pStateItem = dynamic_cast<const SfxTemplateItem*>(pState);
     if (pStateItem)

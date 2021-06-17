@@ -62,7 +62,7 @@ SfxStatusListener::~SfxStatusListener()
 }
 
 // old sfx controller item C++ API
-void SfxStatusListener::StateChanged( SfxItemState, const SfxPoolItem* )
+void SfxStatusListener::StateChangedAtStatusListener( SfxItemState, const SfxPoolItem* )
 {
     // must be implemented by sub class
 }
@@ -220,7 +220,7 @@ void SAL_CALL SfxStatusListener::statusChanged( const FeatureStateEvent& rEvent)
         }
     }
 
-    StateChanged( eState, pItem.get() );
+    StateChangedAtStatusListener( eState, pItem.get() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -129,7 +129,7 @@ public:
     static OUString getSlaveCommand( const css::util::URL& rURL );
 
     void                StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, SfxSlotServer const * pServ );
-    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
+    virtual void        StateChangedAtToolBoxControl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
     void                setMasterSlaveCommand( bool bSet );
     /// @throws css::uno::RuntimeException
     void       dispatch( const css::util::URL& aURL,

@@ -39,7 +39,7 @@ public:
                                 MediaToolBoxControl( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbX );
                                 virtual ~MediaToolBoxControl() override;
 
-    virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
+    virtual void                StateChangedAtToolBoxControl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
     virtual VclPtr<InterimItemWindow> CreateItemWindow( vcl::Window* pParent ) override;
 
 private:

@@ -64,7 +64,7 @@ LibBoxControl::LibBoxControl(sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTb
 {
 }
 
-void LibBoxControl::StateChanged(sal_uInt16, SfxItemState eState, const SfxPoolItem* pState)
+void LibBoxControl::StateChangedAtToolBoxControl(sal_uInt16, SfxItemState eState, const SfxPoolItem* pState)
 {
     LibBox* pBox = static_cast<LibBox*>(GetToolBox().GetItemWindow(GetId()));
 
@@ -364,7 +364,7 @@ LanguageBoxControl::LanguageBoxControl(sal_uInt16 nSlotId, ToolBoxItemId nId, To
 {
 }
 
-void LanguageBoxControl::StateChanged(sal_uInt16, SfxItemState eState, const SfxPoolItem* pItem)
+void LanguageBoxControl::StateChangedAtToolBoxControl(sal_uInt16, SfxItemState eState, const SfxPoolItem* pItem)
 {
     if (LanguageBox* pBox = static_cast<LanguageBox*>(GetToolBox().GetItemWindow(GetId())))
     {

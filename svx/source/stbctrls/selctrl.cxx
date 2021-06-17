@@ -112,7 +112,7 @@ SvxSelectionModeControl::SvxSelectionModeControl( sal_uInt16 _nSlotId,
     GetStatusBar().SetQuickHelpText(GetId(), u"");
 }
 
-void SvxSelectionModeControl::StateChanged( sal_uInt16, SfxItemState eState,
+void SvxSelectionModeControl::StateChangedAtStatusBarControl( sal_uInt16, SfxItemState eState,
                                             const SfxPoolItem* pState )
 {
     mbFeatureEnabled = SfxItemState::DEFAULT == eState;

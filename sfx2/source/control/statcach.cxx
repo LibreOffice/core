@@ -136,7 +136,7 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const css::frame::FeatureStateE
         for ( SfxControllerItem *pCtrl = pCache->GetItemLink();
             pCtrl;
             pCtrl = pCtrl->GetItemLink() )
-            pCtrl->StateChanged( nId, eState, pItem.get() );
+            pCtrl->StateChangedAtToolBoxControl( nId, eState, pItem.get() );
     }
 }
 
@@ -372,11 +372,11 @@ void SfxStateCache::SetVisibleState( bool bShow )
         for ( SfxControllerItem *pCtrl = pController;
                 pCtrl;
                 pCtrl = pCtrl->GetItemLink() )
-            pCtrl->StateChanged( nId, eState, pState );
+            pCtrl->StateChangedAtToolBoxControl( nId, eState, pState );
     }
 
     if ( pInternalController )
-        pInternalController->StateChanged( nId, eState, pState );
+        pInternalController->StateChangedAtToolBoxControl( nId, eState, pState );
 
     if ( bDeleteItem )
         delete pState;
@@ -420,7 +420,7 @@ void SfxStateCache::SetState_Impl
             for ( SfxControllerItem *pCtrl = pController;
                 pCtrl;
                 pCtrl = pCtrl->GetItemLink() )
-                pCtrl->StateChanged( nId, eState, pState );
+                pCtrl->StateChangedAtToolBoxControl( nId, eState, pState );
         }
 
         if ( pInternalController )
@@ -462,7 +462,7 @@ void SfxStateCache::SetCachedState( bool bAlways )
         for ( SfxControllerItem *pCtrl = pController;
             pCtrl;
             pCtrl = pCtrl->GetItemLink() )
-            pCtrl->StateChanged( nId, eLastState, pLastItem );
+            pCtrl->StateChangedAtToolBoxControl( nId, eLastState, pLastItem );
     }
 
     if ( pInternalController )

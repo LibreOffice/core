@@ -59,7 +59,7 @@ class FmPropBrw final : public SfxModelessDialogController, public SfxController
     css::uno::Reference< css::frame::XController >
                     m_xBrowserController;
 
-    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState) override;
+    virtual void StateChangedAtToolBoxControl(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState) override;
     virtual void FillInfo( SfxChildWinInfo& rInfo ) const override;
     virtual void Close() override;
 
