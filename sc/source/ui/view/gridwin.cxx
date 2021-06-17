@@ -3609,7 +3609,7 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
     if ( rEvt.mbLeaving )
     {
         bDragRect = false;
-        UpdateDragRectOverlay();
+        UpdateDragRectOverlay(true);
         return rEvt.mnAction;
     }
 
@@ -3622,7 +3622,7 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
             if (bDragRect)
             {
                 bDragRect = false;
-                UpdateDragRectOverlay();
+                UpdateDragRectOverlay(true);
             }
             return DND_ACTION_NONE;
         }
@@ -3639,7 +3639,7 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
                 if (bDragRect)          // Remove rectangle
                 {
                     bDragRect = false;
-                    UpdateDragRectOverlay();
+                    UpdateDragRectOverlay(true);
                 }
 
                 //! highlight chart? (selection border?)
@@ -3689,7 +3689,7 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
             if (bDragRect)
             {
                 bDragRect = false;
-                UpdateDragRectOverlay();
+                UpdateDragRectOverlay(true);
             }
             return DND_ACTION_NONE;
         }
@@ -3752,7 +3752,7 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
                 if ( bDragRect )
                 {
                     bDragRect = false;
-                    UpdateDragRectOverlay();
+                    UpdateDragRectOverlay(true);
                 }
                 return DND_ACTION_NONE;
             }
@@ -3782,7 +3782,7 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
                     if ( bDragRect )
                     {
                         bDragRect = false;
-                        UpdateDragRectOverlay();
+                        UpdateDragRectOverlay(true);
                     }
                     return DND_ACTION_NONE;
                 }
@@ -3812,7 +3812,7 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
             bDragRect = true;
             meDragInsertMode = eDragInsertMode;
 
-            UpdateDragRectOverlay();
+            UpdateDragRectOverlay(true);
         }
     }
 
@@ -6457,8 +6457,11 @@ void ScGridWindow::DeleteDragRectOverlay()
     mpOODragRect.reset();
 }
 
-void ScGridWindow::UpdateDragRectOverlay()
+void ScGridWindow::UpdateDragRectOverlay(bool bDragOver)
 {
+    if (comphelper::LibreOfficeKit::isActive() && bDragOver)
+        return;
+
     MapMode aDrawMode = GetDrawMapMode();
     MapMode aOldMode = GetMapMode();
     if ( aOldMode != aDrawMode )
