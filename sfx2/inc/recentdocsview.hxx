@@ -17,6 +17,7 @@
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
+struct ImplSVEvent;
 namespace com::sun::star::frame { class XDispatch; }
 
 namespace sfx2
@@ -92,7 +93,7 @@ private:
 
     bool isAcceptedFile(const OUString &rURL) const;
 
-    DECL_STATIC_LINK( RecentDocsView, ExecuteHdl_Impl, void*, void );
+    DECL_LINK( ExecuteHdl_Impl, void*, void );
 
     tools::Long mnItemMaxSize;
     size_t mnLastMouseDownItem;
@@ -103,6 +104,7 @@ private:
     OUString maWelcomeLine2;
 
     sfx2::LoadRecentFile* mpLoadRecentFile;
+    ImplSVEvent* m_nExecuteHdlId;
 };
 
 } // namespace sfx2
