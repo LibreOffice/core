@@ -16,6 +16,24 @@
       "revId": "fede3a03f635d7e6f46eadecdbf26daaecb12c8d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c308a28_15a0aad9",
+        "filename": "vcl/source/outdev/textline.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1038,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-17T08:42:11Z",
+      "side": 1,
+      "message": "On this level there is nothing we can do about GPU acceleration - Ideally skia vulkan should have the image in the GPU memory so rendering each segment should be extremely fast.\n\nAs for this - I would really like to have the gist of the algorithm outside of OutputDevice.\n\nAnother thing that comes into my mind is that instead of converting it to a BitmapEx, we could use the VirtualDevice directly, which should be even faster as blitting devices is more direct.\n\nAlso I see the width is fixed at 256 - how can this match the wave so it results in a seamlessly continuous pattern without a visible transition between tiles...",
+      "parentUuid": "743d7825_cba083e2",
+      "revId": "fede3a03f635d7e6f46eadecdbf26daaecb12c8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
