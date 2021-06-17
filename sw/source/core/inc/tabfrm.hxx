@@ -196,9 +196,9 @@ public:
     {
         return m_bSplitRowDisabled;
     }
-    void SetSplitRowDisabled()
+    void SetSplitRowDisabled( bool bDisable )
     {
-        m_bSplitRowDisabled = true;
+        m_bSplitRowDisabled = bDisable;
     }
 
     // #i26945#
