@@ -54,6 +54,8 @@ public:
     {
         rSpinButton.signal_value_changed();
     }
+
+    static void trigger_closed(weld::Popover& rPopover) { rPopover.signal_closed(); }
 };
 
 namespace jsdialog

@@ -397,6 +397,18 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
                 }
             }
         }
+        else if (sControlType == "popover")
+        {
+            auto pPopover = dynamic_cast<weld::Popover*>(pWidget);
+            if (pPopover)
+            {
+                if (sAction == "close")
+                {
+                    LOKTrigger::trigger_closed(*pPopover);
+                    return true;
+                }
+            }
+        }
         else if (sControlType == "radiobutton")
         {
             auto pRadioButton = dynamic_cast<weld::RadioButton*>(pWidget);

@@ -2335,6 +2335,8 @@ public:
 
 class VCL_DLLPUBLIC Popover : virtual public Container
 {
+    friend class ::LOKTrigger;
+
 private:
     Link<weld::Popover&, void> m_aCloseHdl;
 
