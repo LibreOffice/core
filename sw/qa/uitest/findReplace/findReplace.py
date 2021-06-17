@@ -71,18 +71,12 @@ class findReplace(UITestCase):
         searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
 
         format = xDialog.getChild("format")
-        def handle_format_dlg(dialog):
-            #print(dialog.getChildren())
+        with self.ui_test.execute_blocking_action(format.executeAction, args=('CLICK', ())) as dialog:
             xTabs = dialog.getChild("tabcontrol")
             select_pos(xTabs, "0")
             xSizeFont = dialog.getChild("westsizelb-cjk")
             xSizeFont.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
             xSizeFont.executeAction("TYPE", mkPropertyValues({"TEXT":"16"}))    #set font size 16
-            xOkBtn = dialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOkBtn)
-
-        self.ui_test.execute_blocking_action(format.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_format_dlg)
 
         # Verify these didn't get set again through SvxSearchController::StateChanged, timer-
         # triggered from SfxBindings::NextJob while executing the Format dialog above:

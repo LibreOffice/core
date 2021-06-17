@@ -30,12 +30,8 @@ class tdf57274(UITestCase):
         xLink.executeAction("CLICK", tuple())
         xOkBtn = xDialog.getChild("ok")
         # self.ui_test.close_dialog_through_button(xOkBtn)
-        def handle_confirm_dlg(dialog):
-            xOKBtn = dialog.getChild("yes")
-            self.ui_test.close_dialog_through_button(xOKBtn)
 
-        self.ui_test.execute_blocking_action(xOkBtn.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_confirm_dlg)
+        self.ui_test.execute_blocking_action(xOkBtn.executeAction, args=('CLICK', ()), close_button="yes")
         #we would expect a reference to cell E6 here and a zero being displayed, but the cell is also simply blank.
         self.assertEqual(get_cell_by_position(document, 0, 4, 10).getValue(), 0)
         self.assertEqual(get_cell_by_position(document, 0, 4, 10).getFormula(), "=$Sheet1.$E$6")

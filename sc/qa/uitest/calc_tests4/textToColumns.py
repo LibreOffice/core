@@ -56,14 +56,10 @@ class CalcTextToColumns(UITestCase):
         #Does an overwrite warning come up? If not file an Issue.
         #Tag the 'Do not show warning again' checkbox and press Ok.
         xOK = xDialog.getChild("ok")
-        def handle_warn_dlg(dialog):
-            xyesBtn = dialog.getChild("yes")
+        with self.ui_test.execute_blocking_action(xOK.executeAction, args=('CLICK', ()), close_button="yes") as dialog:
             xask = dialog.getChild("ask")
             xask.executeAction("CLICK", tuple())
-            self.ui_test.close_dialog_through_button(xyesBtn)
 
-        self.ui_test.execute_blocking_action(xOK.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_warn_dlg)
         #Verify
         self.assertEqual(get_cell_by_position(document, 0, 0, 0).getValue(), 1)
         self.assertEqual(get_cell_by_position(document, 0, 0, 1).getValue(), 2)
@@ -150,12 +146,9 @@ class CalcTextToColumns(UITestCase):
             xComma.executeAction("CLICK", tuple())
         # Click Ok
         xOK = xDialog.getChild("ok")
-        def handle_warn_dlg(dialog):
-            xyesBtn = dialog.getChild("yes")
-            self.ui_test.close_dialog_through_button(xyesBtn)
 
-        self.ui_test.execute_blocking_action(xOK.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_warn_dlg)
+        self.ui_test.execute_blocking_action(xOK.executeAction, args=('CLICK', ()), close_button="yes")
+
         #Verify
         self.assertEqual(get_cell_by_position(document, 0, 0, 0).getValue(), 1)
         self.assertEqual(get_cell_by_position(document, 0, 0, 1).getValue(), 2)
@@ -226,12 +219,9 @@ class CalcTextToColumns(UITestCase):
             xSemicolon.executeAction("CLICK", tuple())
         # Click Ok
         xOK = xDialog.getChild("ok")
-        def handle_warn_dlg(dialog):
-            xyesBtn = dialog.getChild("yes")
-            self.ui_test.close_dialog_through_button(xyesBtn)
 
-        self.ui_test.execute_blocking_action(xOK.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_warn_dlg)
+        self.ui_test.execute_blocking_action(xOK.executeAction, args=('CLICK', ()), close_button="yes")
+
         #Verify
         self.assertEqual(get_cell_by_position(document, 0, 0, 0).getValue(), 1)
         self.assertEqual(get_cell_by_position(document, 0, 0, 1).getValue(), 2)
@@ -303,12 +293,9 @@ class CalcTextToColumns(UITestCase):
         # xspace.executeAction("CLICK", tuple())
         # Click Ok
         xOK = xDialog.getChild("ok")
-        def handle_warn_dlg(dialog):
-            xyesBtn = dialog.getChild("yes")
-            self.ui_test.close_dialog_through_button(xyesBtn)
 
-        self.ui_test.execute_blocking_action(xOK.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_warn_dlg)
+        self.ui_test.execute_blocking_action(xOK.executeAction, args=('CLICK', ()), close_button="yes")
+
         #Verify
         self.assertEqual(get_cell_by_position(document, 0, 0, 0).getValue(), 1)
         self.assertEqual(get_cell_by_position(document, 0, 0, 1).getValue(), 2)
@@ -386,12 +373,9 @@ class CalcTextToColumns(UITestCase):
         xinputother.executeAction("TYPE", mkPropertyValues({"TEXT":"|"}))
         # Click Ok
         xOK = xDialog.getChild("ok")
-        def handle_warn_dlg(dialog):
-            xyesBtn = dialog.getChild("yes")
-            self.ui_test.close_dialog_through_button(xyesBtn)
 
-        self.ui_test.execute_blocking_action(xOK.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_warn_dlg)
+        self.ui_test.execute_blocking_action(xOK.executeAction, args=('CLICK', ()), close_button="yes")
+
         #Verify
         self.assertEqual(get_cell_by_position(document, 0, 0, 0).getValue(), 1)
         self.assertEqual(get_cell_by_position(document, 0, 0, 1).getValue(), 2)
@@ -470,12 +454,9 @@ class CalcTextToColumns(UITestCase):
         xinputother.executeAction("TYPE", mkPropertyValues({"TEXT":"|"}))
         # Click Ok
         xOK = xDialog.getChild("ok")
-        def handle_warn_dlg(dialog):
-            xyesBtn = dialog.getChild("yes")
-            self.ui_test.close_dialog_through_button(xyesBtn)
 
-        self.ui_test.execute_blocking_action(xOK.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_warn_dlg)
+        self.ui_test.execute_blocking_action(xOK.executeAction, args=('CLICK', ()), close_button="yes")
+
         #Verify
         self.assertEqual(get_cell_by_position(document, 0, 0, 0).getValue(), 1)
         self.assertEqual(get_cell_by_position(document, 0, 0, 1).getValue(), 2)

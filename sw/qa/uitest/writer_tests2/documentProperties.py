@@ -43,12 +43,7 @@ class documentProperties(UITestCase):
 #digital signature
         xDigSignBtn = xDialog.getChild("signature")
 
-        def handle_sign_dlg(dialog):
-            xNoBtn = dialog.getChild("no")
-            self.ui_test.close_dialog_through_button(xNoBtn)
-
-        self.ui_test.execute_blocking_action(xDigSignBtn.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_sign_dlg)
+        self.ui_test.execute_blocking_action(xDigSignBtn.executeAction, args=('CLICK', ()), close_button="no")
 
         xTabs = xDialog.getChild("tabcontrol")
         select_pos(xTabs, "1")     #tab Description
@@ -75,16 +70,12 @@ class documentProperties(UITestCase):
         xRecordChangesCheckbox = xDialog.getChild("recordchanges")
         xRecordChangesCheckbox.executeAction("CLICK", tuple())
         xProtectBtn = xDialog.getChild("protect")
-        def handle_protect_dlg(dialog):
-            xOkBtn = dialog.getChild("ok")
+
+        with self.ui_test.execute_blocking_action(xProtectBtn.executeAction, args=('CLICK', ())) as dialog:
             xPasswordText = dialog.getChild("pass1ed")
             xPasswordText.executeAction("TYPE", mkPropertyValues({"TEXT":"password"}))
             xConfirmText = dialog.getChild("confirm1ed")
             xConfirmText.executeAction("TYPE", mkPropertyValues({"TEXT":"password"}))
-            self.ui_test.close_dialog_through_button(xOkBtn)
-
-        self.ui_test.execute_blocking_action(xProtectBtn.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_protect_dlg)
 
         select_pos(xTabs, "2")     #tab Custom properties
 

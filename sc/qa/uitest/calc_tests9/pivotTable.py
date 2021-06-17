@@ -46,40 +46,22 @@ class pivotTable(UITestCase):
         def handle_dataField_dialog(dialog):
             optionBtn = dialog.getChild("options")
 
-            def handle_options_dialog_first_time(dialog2):
+            with self.ui_test.execute_blocking_action(optionBtn.executeAction, args=('CLICK', ())) as dialog2:
                 xEmptyLine = dialog2.getChild("emptyline")
 
                 xEmptyLine.executeAction("CLICK", tuple())
                 self.assertEqual('true', get_state_as_dict(xEmptyLine)['Selected'])
 
-                xOKBtn = dialog2.getChild("ok")
-                xOKBtn.executeAction("CLICK", tuple())
-
-            def handle_options_dialog_second_time(dialog2):
+            with self.ui_test.execute_blocking_action(optionBtn.executeAction, args=('CLICK', ()), close_button="cancel") as dialog2:
                 xEmptyLine = dialog2.getChild("emptyline")
 
                 xEmptyLine.executeAction("CLICK", tuple())
                 self.assertEqual('false', get_state_as_dict(xEmptyLine)['Selected'])
 
-                xCancelBtn = dialog2.getChild("cancel")
-                xCancelBtn.executeAction("CLICK", tuple())
-
-            def handle_options_dialog_third_time(dialog2):
+            with self.ui_test.execute_blocking_action(optionBtn.executeAction, args=('CLICK', ())) as dialog2:
                 xEmptyLine = dialog2.getChild("emptyline")
 
                 self.assertEqual('true', get_state_as_dict(xEmptyLine)['Selected'])
-
-                xOKBtn = dialog2.getChild("ok")
-                xOKBtn.executeAction("CLICK", tuple())
-
-            self.ui_test.execute_blocking_action(optionBtn.executeAction, args=('CLICK', ()),
-                    dialog_handler=handle_options_dialog_first_time)
-
-            self.ui_test.execute_blocking_action(optionBtn.executeAction, args=('CLICK', ()),
-                    dialog_handler=handle_options_dialog_second_time)
-
-            self.ui_test.execute_blocking_action(optionBtn.executeAction, args=('CLICK', ()),
-                    dialog_handler=handle_options_dialog_third_time)
 
             xOkBtn = dialog.getChild("ok")
             self.ui_test.close_dialog_through_button(xOkBtn)

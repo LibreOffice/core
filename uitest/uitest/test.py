@@ -192,8 +192,8 @@ class UITest(object):
         if frames:
             frames[0].activate()
 
-    def execute_blocking_action(self, action, dialog_element=None,
-            args=(), dialog_handler=None, printNames=False):
+    @contextmanager
+    def execute_blocking_action(self, action, args=(), close_button="ok", printNames=False):
         """Executes an action which blocks while a dialog is shown.
 
         Click a button or perform some other action on the dialog when it
@@ -202,11 +202,7 @@ class UITest(object):
         Args:
             action(callable): Will be called to show a dialog, and is expected
                 to block while the dialog is shown.
-            dialog_element(str, optional): The name of a button on the dialog
-                which will be clicked when the dialog is shown.
             args(tuple, optional): The arguments to be passed to `action`
-            dialog_handler(callable, optional): Will be called when the dialog
-                is shown, with the dialog object passed as a parameter.
             printNames: print all received event names
         """
 
@@ -217,15 +213,13 @@ class UITest(object):
             # we are not necessarily opening a dialog, so wait much longer
             while time_ < 10 * MAX_WAIT:
                 if event.executed:
-                    xDlg = self._xUITest.getTopFocusWindow()
-                    if dialog_element:
-                        xUIElement = xDlg.getChild(dialog_element)
-                        xUIElement.executeAction("CLICK", tuple())
-                    if dialog_handler:
-                        dialog_handler(xDlg)
-                    thread.join()
+                    xDialog = self._xUITest.getTopFocusWindow()
+                    try:
+                        yield xDialog
+                    finally:
+                        self.close_dialog_through_button(xDialog.getChild(close_button))
+                        thread.join()
                     return
-
                 time_ += DEFAULT_SLEEP
                 time.sleep(DEFAULT_SLEEP)
         raise DialogNotExecutedException("did not execute a dialog for a blocking action")
