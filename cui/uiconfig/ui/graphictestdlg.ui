@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.38.2 -->
+<interface domain="cui">
+  <requires lib="gtk+" version="3.20"/>
+  <object class="GtkDialog" id="GraphicTestsDialog">
+    <property name="can-focus">False</property>
+    <property name="title" translatable="yes" context="graphictestdlg|GraphicTestsDialog">Run Graphics Tests</property>
+    <property name="resizable">False</property>
+    <property name="modal">True</property>
+    <property name="default-width">500</property>
+    <property name="default-height">450</property>
+    <property name="type-hint">dialog</property>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="gptest-main">
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="gptestbtnrun">
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
+            <child>
+              <object class="GtkButton" id="gptestrunbtn">
+                <property name="label" translatable="yes" context="graphictestdlg|gptestrunbtn">Run tests</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes" context="graphictestdlg|gptestrunbtn">Run the graphics tests</property>
+                <property name="margin-top">5</property>
+                <property name="margin-bottom">5</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="gptestbtnclose">
+                <property name="label" translatable="yes" context="graphictestdlg|gptestbtnclose">Close</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="halign">start</property>
+                <property name="valign">start</property>
+                <property name="margin-top">5</property>
+                <property name="margin-bottom">5</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="gptest_label">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="tooltip-text" translatable="yes" context="graphictestdlg|gptest_label">Helps to determine the efficiency of LibreOffice's graphics rendering by running some tests under the hood and providing their results in the log.</property>
+            <property name="margin-start">400</property>
+            <property name="margin-top">10</property>
+            <property name="label" translatable="yes" context="graphictestdlg|gptest_label">What's this?</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="gptest_label1">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-end">400</property>
+            <property name="margin-top">10</property>
+            <property name="label" translatable="yes" context="graphictestdlg|gptest_label1">Results log:</property>
+            <property name="justify">center</property>
+            <accessibility>
+              <relation type="label-for" target="gptestresults"/>
+            </accessibility>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow" id="gpscrollerwindow1">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="shadow-type">in</property>
+            <child>
+              <object class="GtkTextView" id="gptestresults">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="pixels-above-lines">1</property>
+                <property name="pixels-below-lines">1</property>
+                <property name="editable">False</property>
+                <property name="wrap-mode">word-char</property>
+                <property name="left-margin">10</property>
+                <property name="right-margin">10</property>
+                <property name="top-margin">10</property>
+                <property name="bottom-margin">10</property>
+                <property name="indent">2</property>
+                <accessibility>
+                  <relation type="labelled-by" target="gptest_label1"/>
+                </accessibility>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">3</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="-5">gptestrunbtn</action-widget>
+      <action-widget response="-7">gptestbtnclose</action-widget>
+    </action-widgets>
+  </object>
+</interface>
