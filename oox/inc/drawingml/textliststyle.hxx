@@ -54,7 +54,7 @@ public:
     void setHasListStyleOnImport() { mbHasListStyleOnImport = true; }
     /** Returns whether the lstStyle tag was non-empty on import
      *
-     *  @return true if list style has it's own noninherited properties.
+     *  @return true if list style has its own noninherited properties.
      */
     bool hasListStyleOnImport() const { return mbHasListStyleOnImport; }
 
