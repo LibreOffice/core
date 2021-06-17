@@ -24,7 +24,7 @@
 
 class SwWrtShell;
 
-class SwSplitTableDlg : public weld::GenericDialogController
+class SwSplitTableDlg final : public weld::GenericDialogController
 {
 private:
     std::unique_ptr<weld::RadioButton> m_xHorzBox;

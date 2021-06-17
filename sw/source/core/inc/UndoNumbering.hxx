@@ -26,7 +26,7 @@
 #include <rtl/ustring.hxx>
 #include <numrule.hxx>
 
-class SwUndoInsNum : public SwUndo, private SwUndRng
+class SwUndoInsNum final : public SwUndo, private SwUndRng
 {
     SwNumRule m_aNumRule;
     std::unique_ptr<SwHistory> m_pHistory;
@@ -56,7 +56,7 @@ public:
 
 };
 
-class SwUndoDelNum : public SwUndo, private SwUndRng
+class SwUndoDelNum final : public SwUndo, private SwUndRng
 {
     struct NodeLevel
     {
@@ -80,7 +80,7 @@ public:
     SwHistory* GetHistory() { return m_pHistory.get(); }
 };
 
-class SwUndoMoveNum : public SwUndo, private SwUndRng
+class SwUndoMoveNum final : public SwUndo, private SwUndRng
 {
     sal_uLong m_nNewStart;
     tools::Long m_nOffset;
@@ -95,7 +95,7 @@ public:
     void SetStartNode( sal_uLong nValue ) { m_nNewStart = nValue; }
 };
 
-class SwUndoNumUpDown : public SwUndo, private SwUndRng
+class SwUndoNumUpDown final : public SwUndo, private SwUndRng
 {
     short m_nOffset;
 
@@ -107,7 +107,7 @@ public:
     virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 };
 
-class SwUndoNumOrNoNum : public SwUndo
+class SwUndoNumOrNoNum final : public SwUndo
 {
     sal_uLong m_nIndex;
     bool mbNewNum, mbOldNum;
@@ -121,7 +121,7 @@ public:
     virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 };
 
-class SwUndoNumRuleStart : public SwUndo
+class SwUndoNumRuleStart final : public SwUndo
 {
     sal_uLong m_nIndex;
     sal_uInt16 m_nOldStart, m_nNewStart;

@@ -25,7 +25,7 @@
 
 class SwDoc;
 
-class SwUndoPageDesc : public SwUndo
+class SwUndoPageDesc final : public SwUndo
 {
     SwPageDescExt m_aOld, m_aNew;
     SwDoc * m_pDoc;
@@ -45,7 +45,7 @@ public:
     virtual SwRewriter GetRewriter() const override;
 };
 
-class SwUndoPageDescCreate : public SwUndo
+class SwUndoPageDescCreate final : public SwUndo
 {
     const SwPageDesc * m_pDesc;
     SwPageDescExt m_aNew;
@@ -64,7 +64,7 @@ public:
     virtual SwRewriter GetRewriter() const override;
 };
 
-class SwUndoPageDescDelete : public SwUndo
+class SwUndoPageDescDelete final : public SwUndo
 {
     SwPageDescExt m_aOld;
     SwDoc * m_pDoc;

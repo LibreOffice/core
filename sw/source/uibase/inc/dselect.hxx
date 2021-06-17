@@ -22,7 +22,7 @@
 #include "drawbase.hxx"
 
 // draw rectangle
-class DrawSelection : public SwDrawBase
+class DrawSelection final : public SwDrawBase
 {
 public:
     DrawSelection(SwWrtShell* pSh, SwEditWin* pWin, SwView* pView);

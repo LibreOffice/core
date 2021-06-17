@@ -24,7 +24,7 @@
 
 class SwDoc;
 
-class SwURLStateChanged : public SfxListener
+class SwURLStateChanged final : public SfxListener
 {
     SwDoc& m_rDoc;
 

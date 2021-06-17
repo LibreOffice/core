@@ -25,7 +25,7 @@
 class SwNumRule;
 namespace rtl { class OUString; }
 
-class NumberingPreview : public weld::CustomWidgetController
+class NumberingPreview final : public weld::CustomWidgetController
 {
     const SwNumRule*    pActNum;
     vcl::Font           aStdFont;

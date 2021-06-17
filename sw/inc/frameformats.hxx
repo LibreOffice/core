@@ -44,7 +44,7 @@ typedef boost::multi_index_container<
     SwFrameFormatsBase;
 
 /// Specific frame formats (frames, DrawObjects).
-class SW_DLLPUBLIC SwFrameFormats : public SwFormatsBase
+class SW_DLLPUBLIC SwFrameFormats final : public SwFormatsBase
 {
     // function updating ByName index via modify
     friend void SwFrameFormat::SetName(const OUString&, bool);

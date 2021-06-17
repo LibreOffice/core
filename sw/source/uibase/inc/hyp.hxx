@@ -26,7 +26,7 @@
 
 class SwView;
 
-class SW_DLLPUBLIC SwHyphWrapper : public SvxSpellWrapper {
+class SW_DLLPUBLIC SwHyphWrapper final : public SvxSpellWrapper {
 private:
     SwView* pView;
     sal_uInt16      nPageCount;     // page count for progress view
@@ -35,7 +35,6 @@ private:
     bool            bAutomatic : 1; // insert separators without further inquiry
     bool            bInfoBox : 1;   // display info-box when ending
 
-protected:
     virtual void SpellStart( SvxSpellArea eSpell ) override;
     virtual void SpellContinue() override;
     virtual void SpellEnd( ) override;

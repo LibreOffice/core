@@ -30,7 +30,7 @@ namespace sw {
     class MetaFieldManager;
 }
 
-class SwTextCharFormat : public SwTextAttrEnd
+class SwTextCharFormat final : public SwTextAttrEnd
 {
     SwTextNode * m_pTextNode;
     sal_uInt16 m_nSortNumber;

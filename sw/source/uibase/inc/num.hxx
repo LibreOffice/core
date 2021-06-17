@@ -27,7 +27,7 @@ class SwWrtShell;
 class SvxBrushItem;
 class SwOutlineTabDialog;
 
-class SwNumPositionTabPage : public SfxTabPage
+class SwNumPositionTabPage final : public SfxTabPage
 {
     std::unique_ptr<SwNumRule> pActNum;
     SwNumRule*          pSaveNum;

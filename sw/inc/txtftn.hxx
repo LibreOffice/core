@@ -28,7 +28,7 @@ class SwNodes;
 class SwDoc;
 class SwRootFrame;
 
-class SW_DLLPUBLIC SwTextFootnote : public SwTextAttr
+class SW_DLLPUBLIC SwTextFootnote final : public SwTextAttr
 {
     std::unique_ptr<SwNodeIndex> m_pStartNode;
     SwTextNode * m_pTextNode;

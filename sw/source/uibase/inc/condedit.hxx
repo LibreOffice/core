@@ -25,7 +25,7 @@
 
 class ConditionEdit;
 
-class SW_DLLPUBLIC ConditionEditDropTarget : public DropTargetHelper
+class SW_DLLPUBLIC ConditionEditDropTarget final : public DropTargetHelper
 {
 private:
     ConditionEdit& m_rEdit;

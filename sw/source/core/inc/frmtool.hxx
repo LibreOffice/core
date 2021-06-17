@@ -294,7 +294,7 @@ public:
 
 // WARNING! If more attributes should be cached also adjust the method
 //          Modify::Modify!
-class SwBorderAttrs : public SwCacheObj
+class SwBorderAttrs final : public SwCacheObj
 {
     const SwAttrSet      &m_rAttrSet;
     const SvxULSpaceItem &m_rUL;

@@ -19,7 +19,7 @@ Word count status bar control for Writer.
 logic whatsoever. The actual updating of the word count string happens in
 SwView::StateStatusLine (see sw/source/ui/uiview/view2.cxx).
 */
-class SwWordCountStatusBarControl : public SfxStatusBarControl
+class SwWordCountStatusBarControl final : public SfxStatusBarControl
 {
 public:
     SFX_DECL_STATUSBAR_CONTROL();

@@ -31,7 +31,7 @@
 #include "wrtsh.hxx"
 #include <tblafmt.hxx>
 
-class AutoFormatPreview : public weld::CustomWidgetController
+class AutoFormatPreview final : public weld::CustomWidgetController
 {
 public:
     AutoFormatPreview();

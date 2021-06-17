@@ -22,7 +22,7 @@
  * floating properties.
  *
  */
-class UnfloatTableButton : public SwFrameMenuButtonBase
+class UnfloatTableButton final : public SwFrameMenuButtonBase
 {
     std::unique_ptr<weld::Button> m_xPushButton;
     OUString m_sLabel;

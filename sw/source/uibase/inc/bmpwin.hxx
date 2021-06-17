@@ -25,7 +25,7 @@
 #include <vcl/graph.hxx>
 
 // extended page for graphics
-class BmpWindow : public weld::CustomWidgetController
+class BmpWindow final : public weld::CustomWidgetController
 {
 private:
     Graphic     aGraphic;

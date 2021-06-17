@@ -22,7 +22,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/childwin.hxx>
 
-class SwSyncBtnDlg : public SfxModelessDialogController
+class SwSyncBtnDlg final : public SfxModelessDialogController
 {
     std::unique_ptr<weld::Button> m_xSyncBtn;
 
@@ -33,7 +33,7 @@ public:
     virtual ~SwSyncBtnDlg() override;
 };
 
-class SwSyncChildWin : public SfxChildWindow
+class SwSyncChildWin final : public SfxChildWindow
 {
 public:
     SwSyncChildWin(vcl::Window*,

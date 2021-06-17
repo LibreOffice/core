@@ -348,7 +348,7 @@ public:
 };
 
 /// SwTableLine is one table row in the document model.
-class SW_DLLPUBLIC SwTableLine: public SwClient     // Client of FrameFormat.
+class SW_DLLPUBLIC SwTableLine final : public SwClient     // Client of FrameFormat.
 {
     SwTableBoxes m_aBoxes;
     SwTableBox *m_pUpper;
@@ -389,7 +389,7 @@ public:
 };
 
 /// SwTableBox is one table cell in the document model.
-class SW_DLLPUBLIC SwTableBox: public SwClient      //Client of FrameFormat.
+class SW_DLLPUBLIC SwTableBox final : public SwClient      //Client of FrameFormat.
 {
     friend class SwNodes;           // Transpose index.
     friend void DelBoxNode(SwTableSortBoxes const &);  // Delete StartNode* !

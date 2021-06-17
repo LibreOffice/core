@@ -21,9 +21,8 @@
 
 #include <sfx2/stbitem.hxx>
 
-class SwTemplateControl : public SfxStatusBarControl
+class SwTemplateControl final : public SfxStatusBarControl
 {
-protected:
     virtual void Command(const CommandEvent& rCEvt) override;
 
 public:

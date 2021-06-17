@@ -30,7 +30,7 @@
 
 namespace com::sun::star::io { class XInputStream; }
 
-class SwXFilterOptions : public ::cppu::WeakImplHelper<
+class SwXFilterOptions final : public ::cppu::WeakImplHelper<
                             css::beans::XPropertyAccess,
                             css::ui::dialogs::XExecutableDialog,
                             css::document::XImporter,

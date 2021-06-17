@@ -32,12 +32,12 @@ class IntlWrapper;
 /** Pagedescriptor
  Client of SwPageDesc that is "described" by the attribute. */
 
-class SW_DLLPUBLIC SwFormatPageDesc : public SfxPoolItem, public SwClient
+class SW_DLLPUBLIC SwFormatPageDesc final : public SfxPoolItem, public SwClient
 {
     ::std::optional<sal_uInt16> m_oNumOffset;          ///< Offset page number.
     sw::BroadcastingModify* m_pDefinedIn;       /**< Points to the object in which the
                                  attribute was set (ContentNode/Format). */
-protected:
+
     virtual void SwClientNotify( const SwModify&, const SfxHint& rHint ) override;
 
 public:

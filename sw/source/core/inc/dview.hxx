@@ -29,7 +29,7 @@ class SwFlyFrame;
 class SwAnchoredObject;
 class SdrUndoManager;
 
-class SwDrawView : public FmFormView
+class SwDrawView final : public FmFormView
 {
     Point           m_aAnchorPoint;       // anchor position
     SwViewShellImp      &m_rImp;               // a view is always part of a shell
@@ -68,7 +68,6 @@ class SwDrawView : public FmFormView
     void MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
                             const std::vector<SdrObject*>& _rMovedChildObjs ) const;
 
-protected:
     // add custom handles (used by other apps, e.g. AnchorPos)
     virtual void AddCustomHdl() override;
 

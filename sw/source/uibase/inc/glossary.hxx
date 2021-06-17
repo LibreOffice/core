@@ -39,7 +39,7 @@ class SwOneExampleFrame;
 
 const short RET_EDIT = 100;
 
-class SwGlossaryDlg : public SfxDialogController
+class SwGlossaryDlg final : public SfxDialogController
 {
     friend class SwNewGlosNameDlg;
 

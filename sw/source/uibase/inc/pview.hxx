@@ -43,7 +43,7 @@ class SvtAccessibilityOptions;
 class SwPagePreviewLayout;
 
 // Delete member <mnVirtPage> and its accessor
-class SAL_DLLPUBLIC_RTTI SwPagePreviewWin : public vcl::Window
+class SAL_DLLPUBLIC_RTTI SwPagePreviewWin final : public vcl::Window
 {
     SwViewShell* mpViewShell;
     sal_uInt16 mnSttPage;
@@ -158,7 +158,7 @@ public:
 /**
  * View of a document
  */
-class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
+class SW_DLLPUBLIC SwPagePreview final : public SfxViewShell
 {
     // ViewWindow and handle to core
     // current dispatcher shell
@@ -217,7 +217,6 @@ class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
     SAL_DLLPRIVATE void ExecPgUpAndPgDown( const bool  _bPgUp,
                              SfxRequest* _pReq );
 
-protected:
     virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize, bool inplaceEditModeChange ) override;
     virtual void    OuterResizePixel( const Point &rOfs, const Size &rSize ) override;
 

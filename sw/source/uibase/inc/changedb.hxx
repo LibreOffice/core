@@ -28,7 +28,7 @@ class SwWrtShell;
 struct SwDBData;
 
 // exchange database at fields
-class SwChangeDBDlg : public SfxDialogController
+class SwChangeDBDlg final : public SfxDialogController
 {
     SwWrtShell      *pSh;
 

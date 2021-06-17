@@ -25,7 +25,7 @@
 
 class SwWrtShell;
 struct SpellState;
-class SwSpellDialogChildWindow
+class SwSpellDialogChildWindow final
     : public svx::SpellDialogChildWindow
 {
     bool            m_bIsGrammarCheckingOn;
@@ -37,7 +37,6 @@ class SwSpellDialogChildWindow
     bool            SpellDrawText_Impl(SwWrtShell& rSh, svx::SpellPortions& rPortions);
     void            LockFocusNotification(bool bLock);
 
-protected:
     virtual svx::SpellPortions GetNextWrongSentence(bool bRecheck) override;
     virtual void ApplyChangedSentence(const svx::SpellPortions& rChanged, bool bRecheck) override;
     virtual void AddAutoCorrection(const OUString& rOld, const OUString& rNew, LanguageType eLanguage) override;

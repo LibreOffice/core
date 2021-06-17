@@ -189,7 +189,7 @@ public:
     const SwView*   GetView() const{return pView;}
 };
 
-class SwInputChild : public SfxChildWindow
+class SwInputChild final : public SfxChildWindow
 {
     SfxDispatcher*  pDispatch;
 public:

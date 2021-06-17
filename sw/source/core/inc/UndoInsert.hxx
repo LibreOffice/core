@@ -37,7 +37,7 @@ class SwDoc;
 namespace sw { class DocumentContentOperationsManager; }
 enum class MirrorGraph;
 
-class SwUndoInsert: public SwUndo, private SwUndoSaveContent
+class SwUndoInsert final : public SwUndo, private SwUndoSaveContent
 {
     /// start of Content in UndoNodes for Redo
     std::unique_ptr<SwNodeIndex> m_pUndoNodeIndex;
@@ -92,7 +92,7 @@ SwRewriter
 MakeUndoReplaceRewriter(sal_uLong const occurrences,
     OUString const& sOld, OUString const& sNew);
 
-class SwUndoReplace
+class SwUndoReplace final
     : public SwUndo
 {
 public:
@@ -132,7 +132,7 @@ private:
     std::unique_ptr<Impl> m_pImpl;
 };
 
-class SwUndoReRead : public SwUndo
+class SwUndoReRead final : public SwUndo
 {
     std::unique_ptr<Graphic> mpGraphic;
     std::optional<OUString> maNm;
@@ -152,7 +152,7 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 };
 
-class SwUndoInsertLabel : public SwUndo
+class SwUndoInsertLabel final : public SwUndo
 {
     union {
         struct {

@@ -27,7 +27,7 @@
 
 class IntlWrapper;
 
-class SW_DLLPUBLIC SwFormatLineNumber: public SfxPoolItem
+class SW_DLLPUBLIC SwFormatLineNumber final : public SfxPoolItem
 {
     sal_uLong m_nStartValue   :24; ///< Starting value for the paragraph. 0 == no starting value.
     bool      m_bCountLines   :1;  ///< Also count lines of paragraph.

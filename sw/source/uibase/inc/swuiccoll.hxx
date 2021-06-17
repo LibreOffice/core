@@ -26,7 +26,7 @@
 class SwWrtShell;
 class SwFormat;
 
-class SwCondCollPage : public SfxTabPage
+class SwCondCollPage final : public SfxTabPage
 {
     std::vector<OUString> m_aStrArr;
 

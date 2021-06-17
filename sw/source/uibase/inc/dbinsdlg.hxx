@@ -76,7 +76,7 @@ class SwInsDBColumns : public o3tl::sorted_vector<std::unique_ptr<SwInsDBColumn>
 {
 };
 
-class SwInsertDBColAutoPilot : public SfxDialogController, public utl::ConfigItem
+class SwInsertDBColAutoPilot final : public SfxDialogController, public utl::ConfigItem
 {
     SwInsDBColumns  aDBColumns;
     const SwDBData  aDBData;

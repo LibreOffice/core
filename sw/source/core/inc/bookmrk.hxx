@@ -119,14 +119,14 @@ namespace sw::mark {
             css::uno::WeakReference< css::text::XTextContent> m_wXBookmark;
         };
 
-        class NavigatorReminder
+        class NavigatorReminder final
             : public MarkBase
         {
         public:
             NavigatorReminder(const SwPaM& rPaM);
         };
 
-        class UnoMark
+        class UnoMark final
             : public MarkBase
         {
         public:
@@ -235,7 +235,7 @@ namespace sw::mark {
             IFieldmark::parameter_map_t m_vParams;
         };
 
-        class TextFieldmark
+        class TextFieldmark final
             : public Fieldmark
         {
         public:
@@ -255,7 +255,7 @@ namespace sw::mark {
         };
 
         /// Fieldmark representing a checkbox form field.
-        class CheckboxFieldmark
+        class CheckboxFieldmark final
             : virtual public ICheckboxFieldmark
             , public NonTextFieldmark
         {
@@ -281,7 +281,7 @@ namespace sw::mark {
         };
 
         /// Fieldmark representing a drop-down form field.
-        class DropDownFieldmark
+        class DropDownFieldmark final
             : public FieldmarkWithDropDownButton
         {
         public:
@@ -302,7 +302,7 @@ namespace sw::mark {
         };
 
         /// Fieldmark representing a date form field.
-        class DateFieldmark
+        class DateFieldmark final
             : virtual public IDateFieldmark
             , public FieldmarkWithDropDownButton
         {

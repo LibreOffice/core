@@ -20,7 +20,7 @@
 
 #include <sfx2/basedlgs.hxx>
 
-class SwInsertAbstractDlg : public SfxDialogController
+class SwInsertAbstractDlg final : public SfxDialogController
 {
     std::unique_ptr<weld::SpinButton> m_xLevelNF;
     std::unique_ptr<weld::SpinButton> m_xParaNF;

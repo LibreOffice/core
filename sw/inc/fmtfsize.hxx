@@ -40,7 +40,7 @@ enum class SwFrameSize
                     (can be exceeded but not be less). */
 };
 
-class SW_DLLPUBLIC SwFormatFrameSize: public SvxSizeItem
+class SW_DLLPUBLIC SwFormatFrameSize final : public SvxSizeItem
 {
     SwFrameSize m_eFrameHeightType;
     SwFrameSize m_eFrameWidthType;

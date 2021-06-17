@@ -57,7 +57,7 @@ public:
     void SetLastTableBox( const SwTableBox* pBox )    { m_pLastTableBox = pBox; }
 };
 
-class SAL_DLLPUBLIC_RTTI SwTableFormula
+class SW_DLLPUBLIC SwTableFormula
 {
 typedef void (SwTableFormula::*FnScanFormula)( const SwTable&, OUStringBuffer&,
                                                 OUString&, OUString*, void* ) const;
@@ -121,7 +121,7 @@ public:
     SwTableFormula & operator =(SwTableFormula &&) = default;
 
     /// create from the internal formula (for CORE) the external formula (for UI)
-    SW_DLLPUBLIC void PtrToBoxNm( const SwTable* pTable );
+    void PtrToBoxNm( const SwTable* pTable );
     /// create from the external formula the internal
     void BoxNmToPtr( const SwTable* pTable );
     /// create from the external/internal formula the relative formula

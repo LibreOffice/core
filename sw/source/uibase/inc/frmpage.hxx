@@ -35,7 +35,7 @@ struct FrameMap;
 struct SwPosition;
 
 // frame dialog
-class SwFramePage: public SfxTabPage
+class SwFramePage final : public SfxTabPage
 {
     bool            m_bAtHorzPosModified;
     bool            m_bAtVertPosModified;
@@ -192,7 +192,7 @@ public:
     void            EnableVerticalPositioning( bool bEnable );
 };
 
-class SwGrfExtPage : public SfxTabPage
+class SwGrfExtPage final : public SfxTabPage
 {
     OUString        aFilterName;
     OUString        aGrfName, aNewGrfName;
@@ -240,7 +240,7 @@ public:
     virtual DeactivateRC DeactivatePage(SfxItemSet *pSet) override;
 };
 
-class SwFrameURLPage : public SfxTabPage
+class SwFrameURLPage final : public SfxTabPage
 {
     // hyperlink
     std::unique_ptr<weld::Entry> m_xURLED;
@@ -264,7 +264,7 @@ public:
     virtual void Reset(const SfxItemSet *rSet) override;
 };
 
-class SwFrameAddPage : public SfxTabPage
+class SwFrameAddPage final : public SfxTabPage
 {
     SwWrtShell*   m_pWrtSh;
 

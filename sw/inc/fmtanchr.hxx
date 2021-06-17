@@ -31,7 +31,7 @@ struct SwPosition;
 class IntlWrapper;
 
 /// FlyAnchors
-class SW_DLLPUBLIC SwFormatAnchor: public SfxPoolItem
+class SW_DLLPUBLIC SwFormatAnchor final : public SfxPoolItem
 {
     std::unique_ptr<SwPosition> m_pContentAnchor; /**< 0 for page-bound frames.
                                                      Index for paragraph-bound frames.

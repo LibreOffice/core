@@ -23,7 +23,7 @@ class IDateFieldmark;
 /// Dialog to specify the properties of date form field
 namespace sw
 {
-class DateFormFieldDialog : public weld::GenericDialogController
+class DateFormFieldDialog final : public weld::GenericDialogController
 {
 private:
     sw::mark::IDateFieldmark* m_pDateField;

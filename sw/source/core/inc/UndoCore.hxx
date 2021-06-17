@@ -40,7 +40,7 @@ namespace sw {
     class IShellCursorSupplier;
 }
 
-class SwRedlineSaveData: public SwUndRng, public SwRedlineData, private SwUndoSaveSection
+class SwRedlineSaveData final : public SwUndRng, public SwRedlineData, private SwUndoSaveSection
 {
 public:
     SwRedlineSaveData(
@@ -80,7 +80,7 @@ public:
 };
 
 namespace sw {
-class UndoRedoContext
+class UndoRedoContext final
     : public SfxUndoContext
 {
 public:
@@ -113,7 +113,7 @@ private:
     SdrMarkList * m_pMarkList;
 };
 
-class RepeatContext
+class RepeatContext final
     : public SfxRepeatTarget
 {
 public:
@@ -141,7 +141,7 @@ private:
 
 } // namespace sw
 
-class SwUndoFormatColl : public SwUndo, private SwUndRng
+class SwUndoFormatColl final : public SwUndo, private SwUndRng
 {
     OUString maFormatName;
     std::unique_ptr<SwHistory> mpHistory;
@@ -184,7 +184,7 @@ public:
 
 };
 
-class SwUndoSetFlyFormat : public SwUndo, public SwClient
+class SwUndoSetFlyFormat final : public SwUndo, public SwClient
 {
     SwFrameFormat* m_pFrameFormat;                  // saved FlyFormat
     const OUString m_DerivedFromFormatName;
@@ -209,7 +209,7 @@ public:
     virtual SwRewriter GetRewriter() const override;
 };
 
-class SwUndoOutlineLeftRight : public SwUndo, private SwUndRng
+class SwUndoOutlineLeftRight final : public SwUndo, private SwUndRng
 {
     short m_nOffset;
 

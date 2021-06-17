@@ -33,7 +33,7 @@ class SwDrawFrameFormat;
 class SwDoc;
 
 // Undo for Draw Objects
-class SwSdrUndo : public SwUndo
+class SwSdrUndo final : public SwUndo
 {
     std::unique_ptr<SdrUndoAction> m_pSdrUndo;
     std::unique_ptr<SdrMarkList> m_pMarkList; // MarkList for all selected SdrObjects
@@ -49,7 +49,7 @@ public:
     virtual OUString GetComment() const override;
 };
 
-class SwUndoDrawGroup : public SwUndo
+class SwUndoDrawGroup final : public SwUndo
 {
     std::unique_ptr<SwUndoGroupObjImpl[]> m_pObjArray;
     sal_uInt16 m_nSize;
@@ -78,7 +78,7 @@ public:
 // - Existing class <SwUndoDrawUnGroup> takes over the part for the formats.
 // - New class <SwUndoDrawUnGroupConnectToLayout> takes over the part for
 //   contact object.
-class SwUndoDrawUnGroup : public SwUndo
+class SwUndoDrawUnGroup final : public SwUndo
 {
     std::unique_ptr<SwUndoGroupObjImpl[]> m_pObjArray;
     sal_uInt16 m_nSize;
@@ -95,7 +95,7 @@ public:
     void AddObj(sal_uInt16 nPos, SwDrawFrameFormat*);
 };
 
-class SwUndoDrawUnGroupConnectToLayout : public SwUndo
+class SwUndoDrawUnGroupConnectToLayout final : public SwUndo
 {
 private:
     std::vector<std::pair<SwDrawFrameFormat*, SdrObject*>> m_aDrawFormatsAndObjs;
@@ -111,7 +111,7 @@ public:
     void AddFormatAndObj(SwDrawFrameFormat* pDrawFrameFormat, SdrObject* pDrawObject);
 };
 
-class SwUndoDrawDelete : public SwUndo
+class SwUndoDrawDelete final : public SwUndo
 {
     std::unique_ptr<SwUndoGroupObjImpl[]> m_pObjArray;
     std::unique_ptr<SdrMarkList> m_pMarkList; // MarkList for all selected SdrObjects

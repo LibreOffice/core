@@ -26,7 +26,7 @@
 #include "chldwrap.hxx"
 class AbstractSwFieldDlg;
 
-class SwFieldDlgWrapper : public SwChildWinWrapper
+class SwFieldDlgWrapper final : public SwChildWinWrapper
 {
     ScopedVclPtr<AbstractSwFieldDlg> pDlgInterface;
 public:
@@ -40,7 +40,7 @@ public:
 };
 
 // field dialog only showing database page to support mail merge
-class SwFieldDataOnlyDlgWrapper : public SwChildWinWrapper
+class SwFieldDataOnlyDlgWrapper final : public SwChildWinWrapper
 {
     ScopedVclPtr<AbstractSwFieldDlg> pDlgInterface;
 public:

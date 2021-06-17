@@ -25,7 +25,7 @@
 class SwView;
 class SwWrtShell;
 
-class SwLineNumberingDlg : public SfxDialogController
+class SwLineNumberingDlg final : public SfxDialogController
 {
 private:
     SwWrtShell* m_pSh;

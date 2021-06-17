@@ -30,7 +30,7 @@ class IntlWrapper;
  /** Header, for PageFormats
  Client of FrameFormat describing the header. */
 
-class SW_DLLPUBLIC SwFormatHeader: public SfxPoolItem, public SwClient
+class SW_DLLPUBLIC SwFormatHeader final : public SfxPoolItem, public SwClient
 {
     bool m_bActive;       ///< Only for controlling (creation of content).
 
@@ -61,7 +61,7 @@ public:
  /**Footer, for pageformats
  Client of FrameFormat describing the footer */
 
-class SW_DLLPUBLIC SwFormatFooter: public SfxPoolItem, public SwClient
+class SW_DLLPUBLIC SwFormatFooter final : public SfxPoolItem, public SwClient
 {
     bool m_bActive;       // Only for controlling (creation of content).
 

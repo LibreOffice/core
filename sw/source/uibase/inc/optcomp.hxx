@@ -27,7 +27,7 @@
 class SwWrtShell;
 struct SwCompatibilityOptPage_Impl;
 
-class SwCompatibilityOptPage : public SfxTabPage
+class SwCompatibilityOptPage final : public SfxTabPage
 {
 private:
     // config item
