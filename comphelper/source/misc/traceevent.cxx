@@ -118,16 +118,6 @@ void ProfileZone::addRecording()
                              + OUString::number(osl_getThreadIdentifier(nullptr)) + "},");
 }
 
-void ProfileZone::stopConsole()
-{
-    TimeValue systemTime;
-    osl_getSystemTime(&systemTime);
-    long long nEndTime
-        = static_cast<long long>(systemTime.Seconds) * 1000000 + systemTime.Nanosec / 1000;
-    std::cerr << "comphelper::ProfileZone: " << m_sName << " finished in "
-              << (nEndTime - m_nCreateTime) / 1000 << " ms" << std::endl;
-}
-
 } // namespace comphelper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
