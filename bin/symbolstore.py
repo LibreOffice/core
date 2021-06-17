@@ -452,12 +452,17 @@ class Dumper:
                             if filename.startswith("cvs"):
                                 (ver, checkout, source_file, revision) = filename.split(":", 3)
                                 sourceFileStream += sourcepath + "*MYSERVER*" + source_file + '*' + revision + "\r\n"
-                            f.write("FILE %s %s\n" % (index, filename))
+                            f.write("FILE %s %s\r\n" % (index, filename))
                         else:
                             # pass through all other lines unchanged
                             f.write(line)
                     f.close()
-                    cmd.close()
+                    command_exit = cmd.close()
+                    if command_exit:
+                        if command_exit == 11:
+                            print >> sys.stderr, "INFO: dump_syms segfault while processing {}, retrying".format(file)
+                            return self.ProcessFile(file)
+                        raise Exception("ERROR - dump_syms error while processing {} (exit code {})".format(file, command_exit))
                     # we output relative paths so callers can get a list of what
                     # was generated
                     print rel_path
@@ -468,6 +473,7 @@ class Dumper:
                         result = self.SourceServerIndexing(debug_file, guid, sourceFileStream, cvs_root)
                     result = True
             except StopIteration:
+                print >> sys.stderr, "WARN: dump_syms - no debug info extracted for {}".format(file)
                 pass
             except:
                 print >> sys.stderr, "Unexpected error: ", sys.exc_info()[0]
@@ -483,11 +489,29 @@ class Dumper_Win32(Dumper):
     def ShouldProcess(self, file):
         """This function will allow processing of pdb files that have dll
         or exe files with the same base name next to them."""
-        if file.endswith(".pdb"):
-            (path,ext) = os.path.splitext(file)
-            if os.path.isfile(path + ".exe") or os.path.isfile(path + ".dll") or os.path.isfile(path + ".bin"):
-                return True
-        return False
+
+        skip_extensions = [
+           ".bat", ".class", ".config", ".css", ".glsl", ".hrc", ".ini", ".jar", ".mo", ".msu",
+           ".ods", ".png", ".py", ".pyc", ".rdb", ".rst", ".sh", ".svg", ".ttf", ".txt", ".xml",
+        ]
+        (path,ext) = os.path.splitext(file)
+        basename = os.path.basename(file)
+        if ext in skip_extensions:
+           return False
+        elif os.path.getsize(file) == 21:
+           # content is the "invalid - merged lib" stub
+           return False
+        elif basename.startswith("LICENSE") or basename.startswith("README"):
+           return False
+        elif basename == "msvcp140.dll" or basename == "vcruntime140.dll":
+           return False
+        elif basename.startswith("wininst-") or basename == "fetch_macholib" or basename == "command_template":
+           # ignore python distutils stubs and scripts
+           return False
+        elif ext == "":
+           print >> sys.stderr, "INFO: Skipping {}, has no extension".format(file)
+           return False
+        return True
 
     def FixFilenameCase(self, file):
         """Recent versions of Visual C++ put filenames into
