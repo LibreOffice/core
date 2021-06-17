@@ -3410,6 +3410,8 @@ sal_uInt32 ImpEditEngine::GetTextHeightNTP() const
 tools::Long ImpEditEngine::Calc1ColumnTextHeight(tools::Long* pHeightNTP)
 {
     tools::Long nHeight = 0;
+    if (pHeightNTP)
+        *pHeightNTP = 0;
     // Pretend that we have ~infinite height to get total height
     comphelper::ValueRestorationGuard aGuard(nCurTextHeight,
                                              std::numeric_limits<tools::Long>::max());
