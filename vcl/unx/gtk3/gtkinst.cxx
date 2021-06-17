@@ -17053,7 +17053,6 @@ private:
     GtkWidget* m_pMenuWindow;
     GtkTreeModel* m_pTreeModel;
 //    GtkCellRenderer* m_pButtonTextRenderer;
-//    GtkCellRenderer* m_pMenuTextRenderer;
     GtkWidget* m_pEntry;
     GtkEditable* m_pEditable;
 //    GtkCellView* m_pCellView;
@@ -18122,6 +18121,16 @@ public:
             }
         }
         SAL_WARN_IF(!m_pMenuWindow, "vcl.gtk", "GtkInstanceComboBox: couldn't find popup menu");
+
+        GtkCellLayout* pCellLayout = GTK_CELL_LAYOUT(m_pComboBox);
+        GList* cells = gtk_cell_layout_get_cells(pCellLayout);
+        guint i = g_list_length(cells) - 1;;
+        // reorder the cell renderers
+        for (GList* pRenderer = g_list_first(cells); pRenderer; pRenderer = g_list_next(pRenderer))
+        {
+            GtkCellRenderer* pCellRenderer = GTK_CELL_RENDERER(pRenderer->data);
+            gtk_cell_layout_reorder(pCellLayout, pCellRenderer, i--);
+        }
 
         if (gtk_combo_box_get_has_entry(m_pComboBox))
         {
