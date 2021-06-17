@@ -40,7 +40,7 @@ private:
     bool m_bUseValueOutside = false;
 };
 
-class BitmapErodeFilter : public BitmapBasicMorphologyFilter
+class BitmapErodeFilter final : public BitmapBasicMorphologyFilter
 {
 public:
     BitmapErodeFilter(sal_Int32 nRadius)
@@ -53,7 +53,7 @@ public:
     }
 };
 
-class BitmapDilateFilter : public BitmapBasicMorphologyFilter
+class BitmapDilateFilter final : public BitmapBasicMorphologyFilter
 {
 public:
     BitmapDilateFilter(sal_Int32 nRadius)

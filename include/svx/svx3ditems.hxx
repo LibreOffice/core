@@ -61,13 +61,13 @@ inline SfxBoolItem makeSvx3DDoubleSidedItem(bool bVal) {
 
 // #i28528#
 // Added extra Item (Bool) for chart2 to be able to show reduced line geometry
-class Svx3DReducedLineGeometryItem : public SfxBoolItem {
+class Svx3DReducedLineGeometryItem final : public SfxBoolItem {
 public:
     Svx3DReducedLineGeometryItem(bool bVal = false);
     Svx3DReducedLineGeometryItem* Clone(SfxItemPool * = nullptr) const override;
 };
 
-class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) Svx3DNormalsKindItem : public SfxUInt16Item {
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) Svx3DNormalsKindItem final : public SfxUInt16Item {
 public:
     Svx3DNormalsKindItem(sal_uInt16 nVal = 0);
 
@@ -81,7 +81,7 @@ inline SfxBoolItem makeSvx3DNormalsInvertItem(bool bVal) {
     return SfxBoolItem(SDRATTR_3DOBJ_NORMALS_INVERT, bVal);
 }
 
-class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) Svx3DTextureProjectionXItem : public SfxUInt16Item {
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) Svx3DTextureProjectionXItem final : public SfxUInt16Item {
 public:
     Svx3DTextureProjectionXItem(sal_uInt16 nVal = 0);
 
@@ -91,7 +91,7 @@ public:
     SVX_DLLPRIVATE virtual Svx3DTextureProjectionXItem* Clone(SfxItemPool* pPool = nullptr) const override;
 };
 
-class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) Svx3DTextureProjectionYItem : public SfxUInt16Item {
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) Svx3DTextureProjectionYItem final : public SfxUInt16Item {
 public:
     Svx3DTextureProjectionYItem(sal_uInt16 nVal = 0);
 
@@ -142,7 +142,7 @@ inline SfxBoolItem makeSvx3DTextureFilterItem(bool bVal) {
 }
 
 // Svx3D _3DSCENE_ Items
-class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) Svx3DPerspectiveItem : public SfxUInt16Item {
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) Svx3DPerspectiveItem final : public SfxUInt16Item {
 public:
     Svx3DPerspectiveItem(ProjectionType nVal = ProjectionType::Perspective);
 
@@ -268,7 +268,7 @@ inline SfxUInt16Item makeSvx3DShadowSlantItem(sal_uInt16 nVal) {
     return SfxUInt16Item(SDRATTR_3DSCENE_SHADOW_SLANT, nVal);
 }
 
-class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) Svx3DShadeModeItem : public SfxUInt16Item {
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) Svx3DShadeModeItem final : public SfxUInt16Item {
 public:
     Svx3DShadeModeItem(sal_uInt16 nVal = 2);
 
@@ -280,35 +280,35 @@ public:
 
 
 // #107245# Item to replace bExtrudeSmoothed and bLatheSmoothed
-class Svx3DSmoothNormalsItem : public SfxBoolItem {
+class Svx3DSmoothNormalsItem final : public SfxBoolItem {
 public:
     Svx3DSmoothNormalsItem(bool bVal = true);
     Svx3DSmoothNormalsItem* Clone(SfxItemPool * = nullptr) const override;
 };
 
 // #107245# Item to replace bExtrudeSmoothFrontBack and bLatheSmoothFrontBack
-class Svx3DSmoothLidsItem : public SfxBoolItem {
+class Svx3DSmoothLidsItem final : public SfxBoolItem {
 public:
     Svx3DSmoothLidsItem(bool bVal = false);
     Svx3DSmoothLidsItem* Clone(SfxItemPool * = nullptr) const override;
 };
 
 // #107245# Item to replace bExtrudeCharacterMode and bLatheCharacterMode
-class Svx3DCharacterModeItem : public SfxBoolItem {
+class Svx3DCharacterModeItem final : public SfxBoolItem {
 public:
     Svx3DCharacterModeItem(bool bVal = false);
     Svx3DCharacterModeItem* Clone(SfxItemPool * = nullptr) const override;
 };
 
 // #107245# Item to replace bExtrudeCloseFront and bLatheCloseFront
-class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) Svx3DCloseFrontItem : public SfxBoolItem {
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) Svx3DCloseFrontItem final : public SfxBoolItem {
 public:
     Svx3DCloseFrontItem(bool bVal = true);
     Svx3DCloseFrontItem* Clone(SfxItemPool * = nullptr) const override;
 };
 
 // #107245# Item to replace bExtrudeCloseBack and bLatheCloseBack
-class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) Svx3DCloseBackItem : public SfxBoolItem {
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) Svx3DCloseBackItem final : public SfxBoolItem {
 public:
     Svx3DCloseBackItem(bool bVal = true);
     Svx3DCloseBackItem* Clone(SfxItemPool * = nullptr) const override;

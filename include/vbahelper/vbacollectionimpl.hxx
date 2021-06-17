@@ -152,7 +152,7 @@ public:
 typedef std::vector< css::uno::Reference< OneIfc > >  XNamedVec;
 private:
 
-    class XNamedEnumerationHelper : public EnumerationHelper_BASE
+    class XNamedEnumerationHelper final : public EnumerationHelper_BASE
     {
         XNamedVec mXNamedVec;
         typename XNamedVec::iterator mIt;

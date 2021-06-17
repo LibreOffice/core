@@ -34,7 +34,7 @@ namespace com::sun::star::script { struct ModuleInfo; }
 
 class SbMethod;
 
-class BASIC_DLLPUBLIC StarBASIC : public SbxObject
+class BASIC_DLLPUBLIC StarBASIC final : public SbxObject
 {
     friend class SbiScanner;
     friend class SbiExpression; // Access to RTL
@@ -58,17 +58,12 @@ class BASIC_DLLPUBLIC StarBASIC : public SbxObject
     SbxObjectRef pVBAGlobals;
 
     BASIC_DLLPRIVATE void implClearDependingVarsOnDelete( StarBASIC* pDeletedBasic );
-
-protected:
     bool                                CError( ErrCode, const OUString&, sal_Int32, sal_Int32, sal_Int32 );
-private:
     BASIC_DLLPRIVATE bool               RTError( ErrCode, const OUString& rMsg, sal_Int32, sal_Int32, sal_Int32 );
     BASIC_DLLPRIVATE BasicDebugFlags    BreakPoint( sal_Int32 nLine, sal_Int32 nCol1, sal_Int32 nCol2 );
     BASIC_DLLPRIVATE BasicDebugFlags    StepPoint( sal_Int32 nLine, sal_Int32 nCol1, sal_Int32 nCol2 );
     virtual bool LoadData( SvStream&, sal_uInt16 ) override;
     virtual bool StoreData( SvStream& ) const override;
-
-protected:
     bool             ErrorHdl();
     BasicDebugFlags  BreakHdl();
     virtual ~StarBASIC() override;

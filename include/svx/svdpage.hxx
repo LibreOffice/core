@@ -307,7 +307,7 @@ public:
 };
 
 // class SdrPageProperties
-class SVXCORE_DLLPUBLIC SdrPageProperties : public SfxListener, public svl::StyleSheetUser
+class SVXCORE_DLLPUBLIC SdrPageProperties final : public SfxListener, public svl::StyleSheetUser
 {
 private:
     // data

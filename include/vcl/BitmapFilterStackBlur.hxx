@@ -15,7 +15,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapFilter.hxx>
 
-class VCL_DLLPUBLIC BitmapFilterStackBlur : public BitmapFilter
+class VCL_DLLPUBLIC BitmapFilterStackBlur final : public BitmapFilter
 {
     sal_Int32 mnRadius;
 

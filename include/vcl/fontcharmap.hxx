@@ -32,7 +32,7 @@ class OutputDevice;
 typedef tools::SvRef<ImplFontCharMap> ImplFontCharMapRef;
 typedef tools::SvRef<FontCharMap> FontCharMapRef;
 
-class VCL_DLLPUBLIC FontCharMap : public SvRefBase
+class VCL_DLLPUBLIC FontCharMap final : public SvRefBase
 {
 public:
     /** A new FontCharMap is created based on a "default" map, which includes

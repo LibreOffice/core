@@ -139,7 +139,7 @@ typedef tools::SvRef<SbModule> SbModuleRef;
 typedef std::vector<SbModuleRef> SbModules;
 
 // Object class for instances of class modules
-class UNLESS_MERGELIBS(BASIC_DLLPUBLIC) SbClassModuleObject : public SbModule
+class UNLESS_MERGELIBS(BASIC_DLLPUBLIC) SbClassModuleObject final : public SbModule
 {
     SbModule*   mpClassModule;
     bool        mbInitializeEventDone;
