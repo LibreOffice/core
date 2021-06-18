@@ -32,6 +32,7 @@
 #include <sal/types.h>
 #include <com/sun/star/graphic/XGraphicProvider2.hpp>
 #include <com/sun/star/graphic/XGraphicMapper.hpp>
+#include <vcl/vclptr.hxx>
 
 struct WmfExternal;
 
@@ -46,6 +47,7 @@ namespace com::sun::star {
     namespace graphic { class XGraphicProvider; }
     namespace uno { class XComponentContext; }
 }
+class OutputDevice;
 
 namespace oox {
 
@@ -105,6 +107,7 @@ public:
     /** Converts the passed size from 1/100 mm to AppFont units. */
     css::awt::Size convertHmmToAppFont( const css::awt::Size& rHmm ) const;
 
+
     // Graphics and graphic objects  ------------------------------------------
 
     /** Imports a graphic from the passed input stream. */
@@ -134,7 +137,7 @@ private:
 
     css::uno::Reference< css::uno::XComponentContext > mxContext;
     css::uno::Reference< css::graphic::XGraphicProvider2 > mxGraphicProvider;
-    css::uno::Reference< css::awt::XUnitConversion > mxUnitConversion;
+    VclPtr<OutputDevice> mxDefaultOutputDevice;
     css::awt::DeviceInfo maDeviceInfo; ///< Current output device info.
     ::std::map< sal_Int32, ::Color >  maSystemPalette;  ///< Maps system colors (XML tokens) to RGB color values.
     StorageRef          mxStorage;                  ///< Storage containing embedded graphics.

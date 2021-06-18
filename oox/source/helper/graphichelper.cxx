@@ -35,6 +35,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <tools/gen.hxx>
+#include <tools/diagnose_ex.h>
 #include <comphelper/sequence.hxx>
 #include <oox/helper/containerhelper.hxx>
 #include <oox/helper/propertyset.hxx>
@@ -60,7 +61,7 @@ sal_Int32 lclConvertScreenPixelToHmm( double fPixel, double fPixelPerHmm )
 
 } // namespace
 
-GraphicHelper::GraphicHelper( const Reference< XComponentContext >& rxContext, const Reference< XFrame >& rxTargetFrame, const StorageRef& rxStorage ) :
+GraphicHelper::GraphicHelper( const Reference< XComponentContext >& rxContext, const Reference< XFrame >& /*rxTargetFrame*/, const StorageRef& rxStorage ) :
     mxContext( rxContext ),
     mxStorage( rxStorage )
 {
@@ -100,35 +101,15 @@ GraphicHelper::GraphicHelper( const Reference< XComponentContext >& rxContext, c
     maSystemPalette[ XML_windowFrame ]              = Color(0x000000);
     maSystemPalette[ XML_windowText ]               = Color(0x000000);
 
-    // if no target frame has been passed (e.g. OLE objects), try to fallback to the active frame
-    // TODO: we need some mechanism to keep and pass the parent frame
-    Reference< XFrame > xFrame = rxTargetFrame;
-    if( !xFrame.is() && mxContext.is() ) try
-    {
-        Reference< XDesktop2 > xFramesSupp = Desktop::create( mxContext );
-        xFrame = xFramesSupp->getActiveFrame();
-    }
-    catch( Exception& )
-    {
-    }
-
-    // get the metric of the output device
-    OSL_ENSURE( xFrame.is(), "GraphicHelper::GraphicHelper - cannot get target frame" );
-    // some default just in case, 100 000 is 1 meter in MM100
-    Size aDefault = Application::GetDefaultDevice()->LogicToPixel(Size(100000, 100000), MapMode(MapUnit::Map100thMM));
+    // Note that we cannot try to get DeviceInfo from the current frame here,
+    // because there might not be a current frame yet
+    mxDefaultOutputDevice = Application::GetDefaultDevice();
+    maDeviceInfo = mxDefaultOutputDevice->GetDeviceInfo();
+    // 100 000 is 1 meter in MM100.
+    // various unit tests rely on these values being exactly this and not the "true" values
+    Size aDefault = mxDefaultOutputDevice->LogicToPixel(Size(100000, 100000), MapMode(MapUnit::Map100thMM));
     maDeviceInfo.PixelPerMeterX = aDefault.Width();
     maDeviceInfo.PixelPerMeterY = aDefault.Height();
-    if( xFrame.is() ) try
-    {
-        Reference< awt::XDevice > xDevice( xFrame->getContainerWindow(), UNO_QUERY_THROW );
-        mxUnitConversion.set( xDevice, UNO_QUERY );
-        OSL_ENSURE( mxUnitConversion.is(), "GraphicHelper::GraphicHelper - cannot get unit converter" );
-        maDeviceInfo = xDevice->getInfo();
-    }
-    catch( Exception& )
-    {
-        OSL_FAIL( "GraphicHelper::GraphicHelper - cannot get output device info" );
-    }
     mfPixelPerHmmX = maDeviceInfo.PixelPerMeterX / 100000.0;
     mfPixelPerHmmY = maDeviceInfo.PixelPerMeterY / 100000.0;
 }
@@ -215,29 +196,38 @@ awt::Size GraphicHelper::convertHmmToScreenPixel( const awt::Size& rHmm ) const
 
 awt::Point GraphicHelper::convertHmmToAppFont( const awt::Point& rHmm ) const
 {
-    if( mxUnitConversion.is() ) try
+    try
     {
         awt::Point aPixel = convertHmmToScreenPixel( rHmm );
-        return mxUnitConversion->convertPointToLogic( aPixel, css::util::MeasureUnit::APPFONT );
+        MapMode aMode(MapUnit::MapAppFont);
+        ::Point aVCLPoint(aPixel.X, aPixel.Y);
+        ::Point aDevPoint = mxDefaultOutputDevice->PixelToLogic(aVCLPoint, aMode );
+        return awt::Point(aDevPoint.X(), aDevPoint.Y());
     }
     catch( Exception& )
     {
+        DBG_UNHANDLED_EXCEPTION("oox");
     }
     return awt::Point( 0, 0 );
 }
 
 awt::Size GraphicHelper::convertHmmToAppFont( const awt::Size& rHmm ) const
 {
-    if( mxUnitConversion.is() ) try
+    try
     {
         awt::Size aPixel = convertHmmToScreenPixel( rHmm );
-        return mxUnitConversion->convertSizeToLogic( aPixel, css::util::MeasureUnit::APPFONT );
+        MapMode aMode(MapUnit::MapAppFont);
+        ::Size aVCLSize(aPixel.Width, aPixel.Height);
+        ::Size aDevSz = mxDefaultOutputDevice->PixelToLogic(aVCLSize, aMode );
+        return awt::Size(aDevSz.Width(), aDevSz.Height());
     }
     catch( Exception& )
     {
+        DBG_UNHANDLED_EXCEPTION("oox");
     }
     return awt::Size( 0, 0 );
 }
+
 
 // Graphics and graphic objects  ----------------------------------------------
 
