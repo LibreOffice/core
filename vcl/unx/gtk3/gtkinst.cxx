@@ -22267,6 +22267,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/hyphenate.ui" &&
         rUIFile != "cui/ui/insertfloatingframe.ui" &&
         rUIFile != "cui/ui/insertoleobject.ui" &&
+        rUIFile != "cui/ui/insertrowcolumn.ui" &&
         rUIFile != "cui/ui/macroassigndialog.ui" &&
         rUIFile != "cui/ui/macroassignpage.ui" &&
         rUIFile != "cui/ui/macroselectordialog.ui" &&
@@ -22429,6 +22430,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/swriter/ui/charurlpage.ui" &&
         rUIFile != "modules/swriter/ui/columndialog.ui" &&
         rUIFile != "modules/swriter/ui/columnpage.ui" &&
+        rUIFile != "modules/swriter/ui/columnwidth.ui" &&
         rUIFile != "modules/swriter/ui/dropcapspage.ui" &&
         rUIFile != "modules/swriter/ui/editcategories.ui" &&
         rUIFile != "modules/swriter/ui/endnotepage.ui" &&
@@ -22465,6 +22467,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/swriter/ui/privateuserpage.ui" &&
         rUIFile != "modules/swriter/ui/renameautotextdialog.ui" &&
         rUIFile != "modules/swriter/ui/renameobjectdialog.ui" &&
+        rUIFile != "modules/swriter/ui/rowheight.ui" &&
         rUIFile != "modules/swriter/ui/savelabeldialog.ui" &&
         rUIFile != "modules/swriter/ui/sectionpage.ui" &&
         rUIFile != "modules/swriter/ui/statisticsinfopage.ui" &&
