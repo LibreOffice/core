@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "03e4a8b7_4cd24339",
+        "filename": "cui/source/inc/GraphicsTestsdlg.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-18T08:11:08Z",
+      "side": 1,
+      "message": "rename to GraphicTestDialog.hxx - don\u0027t abbreviate words. This was needed in the past so some files are like that, but today you can have very long filenames so this isn\u0027t a problem anymore.",
+      "revId": "0dd55ebe21093bbe148c1f6857b83ebc1babea2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8fd66a42_b3b51924",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-18T08:11:08Z",
+      "side": 1,
+      "message": "Technically you could just create and run the dialog here and you wouldn\u0027t need to add a whole new .uno:GraphicTestDialog command for it, but I don\u0027t dislike this and you\u0027ve already put in the effort.",
+      "revId": "0dd55ebe21093bbe148c1f6857b83ebc1babea2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
