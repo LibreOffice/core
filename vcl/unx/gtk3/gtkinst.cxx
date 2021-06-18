@@ -8916,7 +8916,7 @@ class GtkInstanceToggleButton : public GtkInstanceButton, public virtual weld::T
 protected:
     GtkToggleButton* m_pToggleButton;
     gulong m_nToggledSignalId;
-
+private:
     static void signalToggled(GtkToggleButton*, gpointer widget)
     {
         GtkInstanceToggleButton* pThis = static_cast<GtkInstanceToggleButton*>(widget);
@@ -9222,18 +9222,9 @@ private:
     GtkWidget* m_pPopover;
     gulong m_nSignalId;
 #if GTK_CHECK_VERSION(4, 0, 0)
-    gulong m_nToggleSignalId;
+    gulong m_nToggledSignalId;
     std::unique_ptr<vcl::Font> m_xFont;
     WidgetBackground m_aCustomBackground;
-#endif
-
-#if GTK_CHECK_VERSION(4, 0, 0)
-    static void signalMenuButtonToggled(GtkToggleButton*, gpointer widget)
-    {
-        GtkInstanceMenuButton* pThis = static_cast<GtkInstanceMenuButton*>(widget);
-        SolarMutexGuard aGuard;
-        pThis->signal_toggled();
-    }
 #endif
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
@@ -9500,16 +9491,16 @@ private:
     }
 #endif
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     static void signalFlagsChanged(GtkToggleButton* pToggleButton, GtkStateFlags flags, gpointer widget)
     {
+        GtkInstanceMenuButton* pThis = static_cast<GtkInstanceMenuButton*>(widget);
         bool bOldChecked = flags & GTK_STATE_FLAG_CHECKED;
         bool bNewChecked = gtk_widget_get_state_flags(GTK_WIDGET(pToggleButton)) & GTK_STATE_FLAG_CHECKED;
         if (bOldChecked == bNewChecked)
             return;
-        signalToggled(pToggleButton, widget);
+        SolarMutexGuard aGuard;
+        pThis->signal_toggled();
     }
-#endif
 
 public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
@@ -9538,9 +9529,7 @@ public:
         // happens before "toggled"
         g_signal_handler_disconnect(m_pToggleButton, m_nToggledSignalId);
         m_nToggledSignalId = g_signal_connect(m_pToggleButton, "state-flags-changed", G_CALLBACK(signalFlagsChanged), this);
-#endif
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
         m_pLabel = gtk_bin_get_child(GTK_BIN(m_pMenuButton));
         find_image(GTK_WIDGET(m_pMenuButton), &m_pImage);
         m_pBox = formatMenuButton(m_pLabel);
@@ -9548,7 +9537,7 @@ public:
         GtkWidget* pToggleButton = gtk_widget_get_first_child(GTK_WIDGET(m_pMenuButton));
         assert(GTK_IS_TOGGLE_BUTTON(pToggleButton));
         m_pMenuButtonToggleButton = GTK_TOGGLE_BUTTON(pToggleButton);
-        m_nToggleSignalId = g_signal_connect(m_pMenuButtonToggleButton, "toggled", G_CALLBACK(signalMenuButtonToggled), this);
+        m_nToggledSignalId = g_signal_connect(m_pMenuButtonToggleButton, "state-flags-changed", G_CALLBACK(signalFlagsChanged), this);
         GtkWidget* pChild = gtk_button_get_child(GTK_BUTTON(pToggleButton));
         m_pBox = GTK_IS_BOX(pChild) ? GTK_BOX(pChild) : nullptr;
         m_pLabel = m_pBox ? gtk_widget_get_first_child(GTK_WIDGET(m_pBox)) : nullptr;
@@ -10005,21 +9994,21 @@ public:
 #if GTK_CHECK_VERSION(4, 0, 0)
     virtual void disable_notify_events() override
     {
-        g_signal_handler_block(m_pMenuButtonToggleButton, m_nToggleSignalId);
+        g_signal_handler_block(m_pMenuButtonToggleButton, m_nToggledSignalId);
         GtkInstanceWidget::disable_notify_events();
     }
 
     virtual void enable_notify_events() override
     {
         GtkInstanceWidget::enable_notify_events();
-        g_signal_handler_unblock(m_pMenuButtonToggleButton, m_nToggleSignalId);
+        g_signal_handler_unblock(m_pMenuButtonToggleButton, m_nToggledSignalId);
     }
 #endif
 
     virtual ~GtkInstanceMenuButton() override
     {
 #if GTK_CHECK_VERSION(4, 0, 0)
-        g_signal_handler_disconnect(m_pMenuButtonToggleButton, m_nToggleSignalId);
+        g_signal_handler_disconnect(m_pMenuButtonToggleButton, m_nToggledSignalId);
         g_object_unref(m_pActionGroup);
         g_object_unref(m_pHiddenActionGroup);
 #else
