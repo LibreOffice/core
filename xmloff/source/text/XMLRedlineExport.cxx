@@ -43,6 +43,8 @@
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <unotools/securityoptions.hxx>
+#include <tools/date.hxx>
+#include <tools/datetime.hxx>
 
 
 using namespace ::com::sun::star;
@@ -459,13 +461,13 @@ void XMLRedlineExport::ExportChangeInfo(
     aAny >>= aDateTime;
     {
         OUStringBuffer sBuf;
-        ::sax::Converter::convertDateTime(sBuf, aDateTime, nullptr);
+        ::sax::Converter::convertDateTime(sBuf, bRemovePersonalInfo
+                ? util::DateTime(0, 0, 0, 0, 1, 1, 1970, true) // Epoch time
+                : aDateTime, nullptr);
         SvXMLElementExport aDateElem( rExport, XML_NAMESPACE_DC,
                                           XML_DATE, true,
                                           false );
-        rExport.Characters(bRemovePersonalInfo
-                ? "1970-01-01T00:00:00"
-                :  sBuf.makeStringAndClear());
+        rExport.Characters(sBuf.makeStringAndClear());
     }
 
     // comment as <text:p> sequence
@@ -504,10 +506,10 @@ void XMLRedlineExport::ExportChangeInfo(
             util::DateTime aDateTime;
             rVal.Value >>= aDateTime;
             OUStringBuffer sBuf;
-            ::sax::Converter::convertDateTime(sBuf, aDateTime, nullptr);
-            rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_CHG_DATE_TIME, bRemovePersonalInfo
-                    ? "1970-01-01T00:00:00"
-                    : sBuf.makeStringAndClear());
+            ::sax::Converter::convertDateTime(sBuf, bRemovePersonalInfo
+                    ? util::DateTime(0, 0, 0, 0, 1, 1, 1970, true) // Epoch time
+                    : aDateTime, nullptr);
+            rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_CHG_DATE_TIME, sBuf.makeStringAndClear());
         }
         else if( rVal.Name == "RedlineType" )
         {
