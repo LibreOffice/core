@@ -68,17 +68,6 @@
 #include <svx/drawitem.hxx>
 #include <editeng/eeitem.hxx>
 
-// The Format names in the list of all names have the
-// following family as their first character:
-
-#define cCHAR       u'c'
-#define cPARA       u'p'
-#define cFRAME      u'f'
-#define cPAGE       u'g'
-#define cNUMRULE    u'n'
-#define cTABSTYLE   u't'
-#define cCELLSTYLE  u'b'
-
 using namespace com::sun::star;
 
 // At the names' publication, this character is removed again and the
@@ -374,35 +363,7 @@ sal_uInt32 SwStyleSheetIterator::SwPoolFormatList::FindName(SfxStyleFamily eFam,
 {
     if(!maImpl.empty())
     {
-        sal_Unicode cStyle(0);
-        switch( eFam )
-        {
-        case SfxStyleFamily::Char:
-            cStyle = cCHAR;
-            break;
-        case SfxStyleFamily::Para:
-            cStyle = cPARA;
-            break;
-        case SfxStyleFamily::Frame:
-            cStyle = cFRAME;
-            break;
-        case SfxStyleFamily::Page:
-            cStyle = cPAGE;
-            break;
-        case SfxStyleFamily::Pseudo:
-            cStyle = cNUMRULE;
-            break;
-        case SfxStyleFamily::Table:
-            cStyle = cTABSTYLE;
-            break;
-        case SfxStyleFamily::Cell:
-            cStyle = cCELLSTYLE;
-            break;
-        default:
-            cStyle = ' ';
-            break;
-        }
-        UniqueHash::const_iterator it = maUnique.find(std::pair<char,OUString>{cStyle, rName});
+        UniqueHash::const_iterator it = maUnique.find(std::pair<SfxStyleFamily,OUString>{eFam, rName});
         if (it != maUnique.end())
         {
             sal_uInt32 nIdx = it->second;
@@ -435,14 +396,14 @@ void SwStyleSheetIterator::SwPoolFormatList::RemoveName(SfxStyleFamily eFam,
 }
 
 // Add Strings to the list of templates
-void SwStyleSheetIterator::SwPoolFormatList::Append( char cChar, const OUString& rStr )
+void SwStyleSheetIterator::SwPoolFormatList::Append( SfxStyleFamily eFam, const OUString& rStr )
 {
-    UniqueHash::const_iterator it = maUnique.find(std::pair<char,OUString>{cChar, rStr});
+    UniqueHash::const_iterator it = maUnique.find(std::pair<SfxStyleFamily,OUString>{eFam, rStr});
     if (it != maUnique.end())
         return;
 
-    maUnique.emplace(std::pair<char,OUString>{cChar, rStr}, static_cast<sal_uInt32>(maImpl.size()));
-    maImpl.push_back(std::pair<char,OUString>{cChar, rStr});
+    maUnique.emplace(std::pair<SfxStyleFamily,OUString>{eFam, rStr}, static_cast<sal_uInt32>(maImpl.size()));
+    maImpl.push_back(std::pair<SfxStyleFamily,OUString>{eFam, rStr});
 }
 
 // UI-sided implementation of StyleSheets
@@ -2195,18 +2156,10 @@ SwTableAutoFormat* SwDocStyleSheet::GetTableFormat()
 // re-generate Name AND Family from String
 // First() and Next() (see below) insert an identification letter at Pos.1
 
-void SwDocStyleSheet::PresetNameAndFamily(char cFamily, const OUString& rName)
+void SwDocStyleSheet::PresetNameAndFamily(SfxStyleFamily eFamily, const OUString& rName)
 {
-    switch( cFamily )
-    {
-    case cPARA:     nFamily = SfxStyleFamily::Para; break;
-    case cFRAME:    nFamily = SfxStyleFamily::Frame; break;
-    case cPAGE:     nFamily = SfxStyleFamily::Page; break;
-    case cNUMRULE:  nFamily = SfxStyleFamily::Pseudo; break;
-    case cTABSTYLE: nFamily = SfxStyleFamily::Table; break;
-    default:        nFamily = SfxStyleFamily::Char; break;
-    }
-    aName = rName;
+    this->nFamily = eFamily;
+    this->aName = rName;
 }
 
 // Is the format physically present yet
@@ -2741,7 +2694,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                     continue;
             }
 
-            m_aLst.Append( cCHAR, pFormat == rDoc.GetDfltCharFormat()
+            m_aLst.Append( SfxStyleFamily::Char, pFormat == rDoc.GetDfltCharFormat()
                         ? SwResId(STR_POOLCHR_STANDARD)
                         : pFormat->GetName() );
         }
@@ -2752,21 +2705,21 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
             if( ! rDoc.getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) )
                 AppendStyleList(SwStyleNameMapper::GetChrFormatUINameArray(),
                                 bIsSearchUsed, bSearchHidden, bOnlyHidden,
-                                SwGetPoolIdFromName::ChrFmt, cCHAR);
+                                SwGetPoolIdFromName::ChrFmt, SfxStyleFamily::Char);
             else
             {
-                m_aLst.Append( cCHAR, SwStyleNameMapper::GetChrFormatUINameArray()[
+                m_aLst.Append( SfxStyleFamily::Char, SwStyleNameMapper::GetChrFormatUINameArray()[
                         RES_POOLCHR_INET_NORMAL - RES_POOLCHR_BEGIN ] );
-                m_aLst.Append( cCHAR, SwStyleNameMapper::GetChrFormatUINameArray()[
+                m_aLst.Append( SfxStyleFamily::Char, SwStyleNameMapper::GetChrFormatUINameArray()[
                         RES_POOLCHR_INET_VISIT - RES_POOLCHR_BEGIN ] );
-                m_aLst.Append( cCHAR, SwStyleNameMapper::GetChrFormatUINameArray()[
+                m_aLst.Append( SfxStyleFamily::Char, SwStyleNameMapper::GetChrFormatUINameArray()[
                         RES_POOLCHR_ENDNOTE - RES_POOLCHR_BEGIN ] );
-                m_aLst.Append( cCHAR, SwStyleNameMapper::GetChrFormatUINameArray()[
+                m_aLst.Append( SfxStyleFamily::Char, SwStyleNameMapper::GetChrFormatUINameArray()[
                         RES_POOLCHR_FOOTNOTE - RES_POOLCHR_BEGIN ] );
             }
             AppendStyleList(SwStyleNameMapper::GetHTMLChrFormatUINameArray(),
                                 bIsSearchUsed, bSearchHidden, bOnlyHidden,
-                                SwGetPoolIdFromName::ChrFmt, cCHAR);
+                                SwGetPoolIdFromName::ChrFmt, SfxStyleFamily::Char);
         }
     }
 
@@ -2870,30 +2823,30 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                         continue;
                 }
             }
-            m_aLst.Append( cPARA, pColl->GetName() );
+            m_aLst.Append( SfxStyleFamily::Para, pColl->GetName() );
         }
 
         bAll = ( nSMask & SfxStyleSearchBits::AllVisible ) == SfxStyleSearchBits::AllVisible;
         if ( bAll || (nSMask & ~SfxStyleSearchBits::Used) == SfxStyleSearchBits::SwText )
             AppendStyleList(SwStyleNameMapper::GetTextUINameArray(),
-                            bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::TxtColl, cPARA );
+                            bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::TxtColl, SfxStyleFamily::Para );
         if ( bAll || (nSMask & ~SfxStyleSearchBits::Used) == SfxStyleSearchBits::SwChapter )
             AppendStyleList(SwStyleNameMapper::GetDocUINameArray(),
-                            bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::TxtColl, cPARA ) ;
+                            bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::TxtColl, SfxStyleFamily::Para ) ;
         if ( bAll || (nSMask & ~SfxStyleSearchBits::Used) == SfxStyleSearchBits::SwList )
             AppendStyleList(SwStyleNameMapper::GetListsUINameArray(),
-                            bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::TxtColl, cPARA ) ;
+                            bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::TxtColl, SfxStyleFamily::Para ) ;
         if ( bAll || (nSMask & ~SfxStyleSearchBits::Used) == SfxStyleSearchBits::SwIndex )
             AppendStyleList(SwStyleNameMapper::GetRegisterUINameArray(),
-                            bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::TxtColl, cPARA ) ;
+                            bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::TxtColl, SfxStyleFamily::Para ) ;
         if ( bAll || (nSMask & ~SfxStyleSearchBits::Used) == SfxStyleSearchBits::SwExtra )
             AppendStyleList(SwStyleNameMapper::GetExtraUINameArray(),
-                            bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::TxtColl, cPARA ) ;
+                            bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::TxtColl, SfxStyleFamily::Para ) ;
         if ( bAll || (nSMask & ~SfxStyleSearchBits::Used) == SfxStyleSearchBits::SwCondColl )
         {
             if( !bIsSearchUsed ||
                 rDoc.getIDocumentStylePoolAccess().IsPoolTextCollUsed( RES_POOLCOLL_TEXT ))
-                m_aLst.Append( cPARA, SwStyleNameMapper::GetTextUINameArray()[
+                m_aLst.Append( SfxStyleFamily::Para, SwStyleNameMapper::GetTextUINameArray()[
                         RES_POOLCOLL_TEXT - RES_POOLCOLL_TEXT_BEGIN ] );
         }
         if ( bAll ||
@@ -2902,7 +2855,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                         (SfxStyleSearchBits::SwHtml | SfxStyleSearchBits::UserDefined) )
         {
             AppendStyleList(SwStyleNameMapper::GetHTMLUINameArray(),
-                            bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::TxtColl, cPARA ) ;
+                            bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::TxtColl, SfxStyleFamily::Para ) ;
             if( !bAll )
             {
                 // then also the ones, that we are mapping:
@@ -2931,7 +2884,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                     if( !bIsSearchUsed || rDoc.getIDocumentStylePoolAccess().IsPoolTextCollUsed( *pPoolIds ) )
                     {
                         s = SwStyleNameMapper::GetUIName( *pPoolIds, s );
-                        m_aLst.Append( cPARA, s);
+                        m_aLst.Append( SfxStyleFamily::Para, s);
                     }
                     ++pPoolIds;
                 }
@@ -2966,13 +2919,13 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                 }
             }
 
-            m_aLst.Append( cFRAME, pFormat->GetName() );
+            m_aLst.Append( SfxStyleFamily::Frame, pFormat->GetName() );
         }
 
         // PoolFormat
         if ( bAll )
             AppendStyleList(SwStyleNameMapper::GetFrameFormatUINameArray(),
-                                    bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::FrmFmt, cFRAME);
+                                    bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::FrmFmt, SfxStyleFamily::Frame);
     }
 
     if( nSearchFamily == SfxStyleFamily::Page ||
@@ -2997,11 +2950,11 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
             if ( nSrchMask == SfxStyleSearchBits::Hidden && !rDesc.IsHidden( ) )
                 continue;
 
-            m_aLst.Append( cPAGE, rDesc.GetName() );
+            m_aLst.Append( SfxStyleFamily::Page, rDesc.GetName() );
         }
         if ( bAll )
             AppendStyleList(SwStyleNameMapper::GetPageDescUINameArray(),
-                            bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::PageDesc, cPAGE);
+                            bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::PageDesc, SfxStyleFamily::Page);
     }
 
     if( nSearchFamily == SfxStyleFamily::Pseudo ||
@@ -3027,12 +2980,12 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                         continue;
                 }
 
-                m_aLst.Append( cNUMRULE, rRule.GetName() );
+                m_aLst.Append( SfxStyleFamily::Pseudo, rRule.GetName() );
             }
         }
         if ( bAll )
             AppendStyleList(SwStyleNameMapper::GetNumRuleUINameArray(),
-                            bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::NumRule, cNUMRULE);
+                            bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::NumRule, SfxStyleFamily::Pseudo);
     }
 
     if( nSearchFamily == SfxStyleFamily::Table ||
@@ -3057,7 +3010,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                     continue;
             }
 
-            m_aLst.Append( cTABSTYLE, rTableStyle.GetName() );
+            m_aLst.Append( SfxStyleFamily::Table, rTableStyle.GetName() );
         }
     }
 
@@ -3078,13 +3031,13 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                     OUString sBoxFormatName;
                     SwStyleNameMapper::FillProgName(rTableStyle.GetName(), sBoxFormatName, SwGetPoolIdFromName::TabStyle);
                     sBoxFormatName += rTableStyle.GetTableTemplateCellSubName(rBoxFormat);
-                    m_aLst.Append( cCELLSTYLE, sBoxFormatName );
+                    m_aLst.Append( SfxStyleFamily::Cell, sBoxFormatName );
                 }
             }
         }
         const SwCellStyleTable& rCellStyles = rDoc.GetCellStyles();
         for(size_t i = 0; i < rCellStyles.size(); ++i)
-            m_aLst.Append( cCELLSTYLE, rCellStyles[i].GetName() );
+            m_aLst.Append( SfxStyleFamily::Cell, rCellStyles[i].GetName() );
     }
 
     if(!m_aLst.empty())
@@ -3139,7 +3092,7 @@ SfxStyleSheetBase* SwStyleSheetIterator::Find(const OUString& rName)
 
 void SwStyleSheetIterator::AppendStyleList(const std::vector<OUString>& rList,
                                             bool bTestUsed, bool bTestHidden, bool bOnlyHidden,
-                                            SwGetPoolIdFromName nSection, char cType )
+                                            SwGetPoolIdFromName nSection, SfxStyleFamily eFamily )
 {
     SwDoc& rDoc = static_cast<SwDocStyleSheetPool*>(pBasePool)->GetDoc();
     bool bUsed = false;
@@ -3190,7 +3143,7 @@ void SwStyleSheetIterator::AppendStyleList(const std::vector<OUString>& rList,
 
         bool bMatchHidden = ( bTestHidden && ( bHidden || !bOnlyHidden ) ) || ( !bTestHidden && ( !bHidden || bUsed ) );
         if ( ( !bTestUsed && bMatchHidden ) || ( bTestUsed && bUsed ) )
-            m_aLst.Append( cType, i );
+            m_aLst.Append( eFamily, i );
     }
 }
 

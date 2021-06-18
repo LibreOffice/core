@@ -115,7 +115,7 @@ public:
     /** Preset the members without physical access.
      Used by StyleSheetPool. */
     void                    PresetName(const OUString& rName)  { aName   = rName; }
-    void                    PresetNameAndFamily(char cFamily, const OUString& rName);
+    void                    PresetNameAndFamily(SfxStyleFamily eFamily, const OUString& rName);
     void                    PresetParent(const OUString& rName){ aParent = rName; }
     void                    PresetFollow(const OUString& rName){ aFollow = rName; }
 
@@ -143,9 +143,9 @@ public:
 
 namespace std {
 template<>
-struct hash<std::pair<char,OUString>>
+struct hash<std::pair<SfxStyleFamily,OUString>>
 {
-    std::size_t operator()(std::pair<char,OUString> const & pair) const
+    std::size_t operator()(std::pair<SfxStyleFamily,OUString> const & pair) const
     { return static_cast<std::size_t>(pair.first) ^ std::size_t(pair.second.hashCode()); }
 };
 }
@@ -157,19 +157,19 @@ class SwStyleSheetIterator final : public SfxStyleSheetIterator, public SfxListe
     // Local helper class.
     class SwPoolFormatList
     {
-        std::vector<std::pair<char, OUString>> maImpl;
-        typedef std::unordered_map<std::pair<char, OUString>, sal_uInt32> UniqueHash;
+        std::vector<std::pair<SfxStyleFamily, OUString>> maImpl;
+        typedef std::unordered_map<std::pair<SfxStyleFamily, OUString>, sal_uInt32> UniqueHash;
         UniqueHash maUnique;
         void rehash();
     public:
         SwPoolFormatList() {}
-        void Append( char cChar, const OUString& rStr );
+        void Append( SfxStyleFamily eFam, const OUString& rStr );
         void clear() { maImpl.clear(); maUnique.clear(); }
         size_t size() { return maImpl.size(); }
         bool empty() { return maImpl.empty(); }
         sal_uInt32 FindName(SfxStyleFamily eFam, const OUString& rName);
         void RemoveName(SfxStyleFamily eFam, const OUString& rName);
-        const std::pair<char,OUString> &operator[](sal_uInt32 nIdx) { return maImpl[ nIdx ]; }
+        const std::pair<SfxStyleFamily,OUString> &operator[](sal_uInt32 nIdx) { return maImpl[ nIdx ]; }
     };
 
     rtl::Reference< SwDocStyleSheet > mxIterSheet;
@@ -183,7 +183,7 @@ class SwStyleSheetIterator final : public SfxStyleSheetIterator, public SfxListe
                                         bool        bTestHidden,
                                         bool        bOnlyHidden,
                                         SwGetPoolIdFromName nSection,
-                                        char        cType);
+                                        SfxStyleFamily eFamily);
 
 public:
     SwStyleSheetIterator(SwDocStyleSheetPool& rBase,
