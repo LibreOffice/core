@@ -83,10 +83,17 @@ public:
 
     void handleTextNode(SwTextNode* pTextNode)
     {
+        sal_Int64 nParentIndex = -1;
+        if (!maNodeStack.empty() && maNodeStack.back())
+        {
+            nParentIndex = maNodeStack.back()->GetIndex();
+        }
         const OUString& rString
             = pTextNode->GetText().replaceAll(OUStringChar(CH_TXTATR_BREAKWORD), "");
         m_rXmlWriter.startElement("paragraph");
         m_rXmlWriter.attribute("index", pTextNode->GetIndex());
+        if (nParentIndex >= 0)
+            m_rXmlWriter.attribute("parent", nParentIndex);
         m_rXmlWriter.content(rString);
         m_rXmlWriter.endElement();
     }
