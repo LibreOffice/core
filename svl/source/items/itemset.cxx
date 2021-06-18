@@ -1478,7 +1478,11 @@ std::unique_ptr<SfxItemSet> SfxAllItemSet::Clone(bool bItems, SfxItemPool *pToPo
         std::unique_ptr<SfxAllItemSet> pNewSet(new SfxAllItemSet( *pToPool ));
         if ( bItems )
             pNewSet->Set( *this );
-        return pNewSet;
+#if HAVE_P1155R3
+            return pNewSet;
+#else
+            return std::move(pNewSet);
+#endif
     }
     else
         return std::unique_ptr<SfxItemSet>(bItems ? new SfxAllItemSet(*this) : new SfxAllItemSet(*m_pPool));
