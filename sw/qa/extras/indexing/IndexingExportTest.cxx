@@ -30,12 +30,14 @@ public:
     void testIndexingExport_Images();
     void testIndexingExport_OLE();
     void testIndexingExport_Shapes();
+    void testIndexingExport_Tables();
 
     CPPUNIT_TEST_SUITE(IndexingExportTest);
     CPPUNIT_TEST(testIndexingExport_Paragraphs);
     CPPUNIT_TEST(testIndexingExport_Images);
     CPPUNIT_TEST(testIndexingExport_OLE);
     CPPUNIT_TEST(testIndexingExport_Shapes);
+    CPPUNIT_TEST(testIndexingExport_Tables);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -148,6 +150,68 @@ void IndexingExportTest::testIndexingExport_Shapes()
     assertXPathContent(pXmlDoc, "/indexing/shape[3]/paragraph[1]", "This is a TextBox - Para1");
     assertXPathContent(pXmlDoc, "/indexing/shape[3]/paragraph[2]", "Para2");
     assertXPathContent(pXmlDoc, "/indexing/shape[3]/paragraph[3]", "Para3");
+}
+
+void IndexingExportTest::testIndexingExport_Tables()
+{
+    SwDoc* pDoc = createDoc("IndexingExport_Tables.odt");
+    CPPUNIT_ASSERT(pDoc);
+
+    SvMemoryStream aMemoryStream;
+    sw::IndexingExport aIndexingExport(aMemoryStream, pDoc);
+    aIndexingExport.runExport();
+    aMemoryStream.Seek(0);
+
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aMemoryStream);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/indexing");
+
+    assertXPath(pXmlDoc, "/indexing/table[1]", "name", "Table1");
+    assertXPathContent(pXmlDoc, "/indexing/table[1]/paragraph[1]", "A");
+    assertXPathContent(pXmlDoc, "/indexing/table[1]/paragraph[2]", "B");
+    assertXPathContent(pXmlDoc, "/indexing/table[1]/paragraph[3]", "1");
+    assertXPathContent(pXmlDoc, "/indexing/table[1]/paragraph[4]", "2");
+
+    assertXPath(pXmlDoc, "/indexing/table[2]", "name", "Table2");
+    assertXPathContent(pXmlDoc, "/indexing/table[2]/paragraph[1]", "A");
+    assertXPathContent(pXmlDoc, "/indexing/table[2]/paragraph[2]", "B");
+    assertXPathContent(pXmlDoc, "/indexing/table[2]/paragraph[3]", "C");
+    assertXPathContent(pXmlDoc, "/indexing/table[2]/paragraph[4]", "1");
+    assertXPathContent(pXmlDoc, "/indexing/table[2]/paragraph[5]", "10");
+    assertXPathContent(pXmlDoc, "/indexing/table[2]/paragraph[6]", "100");
+    assertXPathContent(pXmlDoc, "/indexing/table[2]/paragraph[7]", "2");
+    assertXPathContent(pXmlDoc, "/indexing/table[2]/paragraph[8]", "20");
+    assertXPathContent(pXmlDoc, "/indexing/table[2]/paragraph[9]", "200");
+    assertXPathContent(pXmlDoc, "/indexing/table[2]/paragraph[10]", "3");
+    assertXPathContent(pXmlDoc, "/indexing/table[2]/paragraph[11]", "30");
+    assertXPathContent(pXmlDoc, "/indexing/table[2]/paragraph[12]", "300");
+    assertXPathContent(pXmlDoc, "/indexing/table[2]/paragraph[13]", "4");
+    assertXPathContent(pXmlDoc, "/indexing/table[2]/paragraph[14]", "40");
+    assertXPathContent(pXmlDoc, "/indexing/table[2]/paragraph[15]", "400");
+
+    assertXPath(pXmlDoc, "/indexing/table[3]", "name", "WeirdTable");
+    assertXPathContent(pXmlDoc, "/indexing/table[3]/paragraph[1]", "A1");
+    assertXPathContent(pXmlDoc, "/indexing/table[3]/paragraph[2]", "B1");
+    assertXPathContent(pXmlDoc, "/indexing/table[3]/paragraph[3]", "C1");
+    assertXPathContent(pXmlDoc, "/indexing/table[3]/paragraph[4]", "D1");
+    assertXPathContent(pXmlDoc, "/indexing/table[3]/paragraph[5]", "A2B2");
+    assertXPathContent(pXmlDoc, "/indexing/table[3]/paragraph[6]", "C2D2");
+    assertXPathContent(pXmlDoc, "/indexing/table[3]/paragraph[7]", "A3B3C3D3");
+    assertXPathContent(pXmlDoc, "/indexing/table[3]/paragraph[8]", "A4-1");
+    assertXPathContent(pXmlDoc, "/indexing/table[3]/paragraph[9]", "A4-2");
+    assertXPathContent(pXmlDoc, "/indexing/table[3]/paragraph[10]", "B4-1");
+    assertXPathContent(pXmlDoc, "/indexing/table[3]/paragraph[11]", "C4-1");
+    assertXPathContent(pXmlDoc, "/indexing/table[3]/paragraph[12]", "D4-1");
+    assertXPathContent(pXmlDoc, "/indexing/table[3]/paragraph[13]", "D4-2");
+    assertXPathContent(pXmlDoc, "/indexing/table[3]/paragraph[14]", "");
+    assertXPathContent(pXmlDoc, "/indexing/table[3]/paragraph[15]", "");
+    assertXPathContent(pXmlDoc, "/indexing/table[3]/paragraph[16]", "B4-2");
+    assertXPathContent(pXmlDoc, "/indexing/table[3]/paragraph[17]", "C4-2");
+    assertXPathContent(pXmlDoc, "/indexing/table[3]/paragraph[18]", "");
+    assertXPathContent(pXmlDoc, "/indexing/table[3]/paragraph[19]", "");
+    assertXPathContent(pXmlDoc, "/indexing/table[3]/paragraph[20]", "A5B5C5");
+    assertXPathContent(pXmlDoc, "/indexing/table[3]/paragraph[21]", "D5");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(IndexingExportTest);
