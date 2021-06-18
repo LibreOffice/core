@@ -8915,7 +8915,6 @@ class GtkInstanceToggleButton : public GtkInstanceButton, public virtual weld::T
 {
 protected:
     GtkToggleButton* m_pToggleButton;
-private:
     gulong m_nToggledSignalId;
 
     static void signalToggled(GtkToggleButton*, gpointer widget)
@@ -9235,7 +9234,9 @@ private:
         SolarMutexGuard aGuard;
         pThis->signal_toggled();
     }
-#else
+#endif
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
     static void signalMenuButtonToggled(GtkWidget*, gpointer widget)
     {
         GtkInstanceMenuButton* pThis = static_cast<GtkInstanceMenuButton*>(widget);
@@ -9499,6 +9500,17 @@ private:
     }
 #endif
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
+    static void signalFlagsChanged(GtkToggleButton* pToggleButton, GtkStateFlags flags, gpointer widget)
+    {
+        bool bOldChecked = flags & GTK_STATE_FLAG_CHECKED;
+        bool bNewChecked = gtk_widget_get_state_flags(GTK_WIDGET(pToggleButton)) & GTK_STATE_FLAG_CHECKED;
+        if (bOldChecked == bNewChecked)
+            return;
+        signalToggled(pToggleButton, widget);
+    }
+#endif
+
 public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
     GtkInstanceMenuButton(GtkMenuButton* pMenuButton, GtkWidget* pMenuAlign, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
@@ -9520,6 +9532,14 @@ public:
         , m_aCustomBackground(GTK_WIDGET(pMenuButton))
 #endif
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        // tdf#142924 "toggled" is to late to use to populate changes to the menu,
+        // so use "state-flag-changed" on GTK_STATE_FLAG_CHECKED instead which
+        // happens before "toggled"
+        g_signal_handler_disconnect(m_pToggleButton, m_nToggledSignalId);
+        m_nToggledSignalId = g_signal_connect(m_pToggleButton, "state-flags-changed", G_CALLBACK(signalFlagsChanged), this);
+#endif
+
 #if !GTK_CHECK_VERSION(4, 0, 0)
         m_pLabel = gtk_bin_get_child(GTK_BIN(m_pMenuButton));
         find_image(GTK_WIDGET(m_pMenuButton), &m_pImage);
