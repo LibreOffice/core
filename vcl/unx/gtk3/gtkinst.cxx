@@ -9229,14 +9229,14 @@ private:
 #endif
 
 #if GTK_CHECK_VERSION(4, 0, 0)
-    static void signalToggled(GtkToggleButton*, gpointer widget)
+    static void signalMenuButtonToggled(GtkToggleButton*, gpointer widget)
     {
         GtkInstanceMenuButton* pThis = static_cast<GtkInstanceMenuButton*>(widget);
         SolarMutexGuard aGuard;
         pThis->signal_toggled();
     }
 #else
-    static void signalToggled(GtkWidget*, gpointer widget)
+    static void signalMenuButtonToggled(GtkWidget*, gpointer widget)
     {
         GtkInstanceMenuButton* pThis = static_cast<GtkInstanceMenuButton*>(widget);
         SolarMutexGuard aGuard;
@@ -9528,7 +9528,7 @@ public:
         GtkWidget* pToggleButton = gtk_widget_get_first_child(GTK_WIDGET(m_pMenuButton));
         assert(GTK_IS_TOGGLE_BUTTON(pToggleButton));
         m_pMenuButtonToggleButton = GTK_TOGGLE_BUTTON(pToggleButton);
-        m_nToggleSignalId = g_signal_connect(m_pMenuButtonToggleButton, "toggled", G_CALLBACK(signalToggled), this);
+        m_nToggleSignalId = g_signal_connect(m_pMenuButtonToggleButton, "toggled", G_CALLBACK(signalMenuButtonToggled), this);
         GtkWidget* pChild = gtk_button_get_child(GTK_BUTTON(pToggleButton));
         m_pBox = GTK_IS_BOX(pChild) ? GTK_BOX(pChild) : nullptr;
         m_pLabel = m_pBox ? gtk_widget_get_first_child(GTK_WIDGET(m_pBox)) : nullptr;
@@ -9900,7 +9900,7 @@ public:
                 gtk_window_set_type_hint(m_pMenuHack, GDK_WINDOW_TYPE_HINT_COMBO);
                 gtk_window_set_modal(m_pMenuHack, true);
                 gtk_window_set_resizable(m_pMenuHack, false);
-                m_nSignalId = g_signal_connect(GTK_TOGGLE_BUTTON(m_pMenuButton), "toggled", G_CALLBACK(signalToggled), this);
+                m_nSignalId = g_signal_connect(GTK_TOGGLE_BUTTON(m_pMenuButton), "toggled", G_CALLBACK(signalMenuButtonToggled), this);
                 g_signal_connect(m_pMenuHack, "grab-broken-event", G_CALLBACK(signalGrabBroken), this);
                 g_signal_connect(m_pMenuHack, "button-release-event", G_CALLBACK(signalButtonRelease), this);
                 g_signal_connect(m_pMenuHack, "key-press-event", G_CALLBACK(keyPress), this);
