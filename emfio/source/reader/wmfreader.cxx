@@ -1304,7 +1304,7 @@ namespace emfio
                                  .ReadUInt32( nRemainingSize ).ReadUInt32( nEMFTotalSize ); // the nRemainingSize is not mentioned in MSDN documentation
                                                                       // but it seems to be required to read in data produced by OLE
 
-                            if( nComType == 0x01 && nVersion == 0x10000 && nComRecCount )
+                            if( nComType == 0x01 && nVersion == 0x10000 && nFlags == 0x0 && nComRecCount )
                             {
                                 if( !mnEMFRec)
                                 {   // first EMF comment
