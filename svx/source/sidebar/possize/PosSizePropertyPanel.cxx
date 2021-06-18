@@ -218,7 +218,7 @@ void PosSizePropertyPanel::Initialize()
     mxCbxScale->connect_toggled( LINK( this, PosSizePropertyPanel, ClickAutoHdl ) );
 
     //rotation control
-    mxCtrlDial->SetLinkedField(mxMtrAngle.get());
+    mxCtrlDial->SetLinkedField(mxMtrAngle.get(), 2);
     mxCtrlDial->SetModifyHdl(LINK( this, PosSizePropertyPanel, RotationHdl));
 
     //use same logic as DialControl_Impl::SetSize
