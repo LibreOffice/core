@@ -108,7 +108,8 @@ template <auto initFunc> struct TablePair
             return s_aProgMap;
         }
 
-        const LanguageTag& rCurrentLanguage = SvtSysLocale().GetUILanguageTag();
+        SvtSysLocale aSysLocale;
+        const LanguageTag& rCurrentLanguage = aSysLocale.GetUILanguageTag();
         static std::map<LanguageTag, NameToIdHash> s_aUIMap;
 
         auto it = s_aUIMap.find(rCurrentLanguage);
