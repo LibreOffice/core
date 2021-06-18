@@ -2694,9 +2694,9 @@ DECLARE_ODFEXPORT_TEST(testReferenceLanguage, "referencelanguage.odt")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     // Test loext:reference-language attribute of reference fields
     // (used from LibreOffice 6.1, and proposed for next ODF)
-    const char* aFieldTexts[] = { "A 2", "Az Isten", "Az 50-esek",
+    OUString const aFieldTexts[] = { "A 2", "Az Isten", "Az 50-esek",
         "A 2018-asok", "Az egyebek", "A fejezetek",
-        reinterpret_cast<char const *>(u8"Az „Őseinket...”"), "a 2",
+        u"Az „Őseinket...”", "a 2",
         "Az v", "az 1", "Az e", "az 1",
         "Az (5)", "az 1", "A 2", "az 1" };
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
@@ -2718,7 +2718,7 @@ DECLARE_ODFEXPORT_TEST(testReferenceLanguage, "referencelanguage.odt")
             uno::Any aLang = xPropertySet->getPropertyValue("ReferenceFieldLanguage");
             CPPUNIT_ASSERT_EQUAL(true, aLang == aHu || aLang == ahu);
             uno::Reference<text::XTextContent> xField(aField, uno::UNO_QUERY);
-            CPPUNIT_ASSERT_EQUAL(OUString::fromUtf8(aFieldTexts[i]), xField->getAnchor()->getString());
+            CPPUNIT_ASSERT_EQUAL(aFieldTexts[i], xField->getAnchor()->getString());
         }
     }
 }
@@ -2804,9 +2804,9 @@ DECLARE_ODFEXPORT_TEST(testSpellOutNumberingTypes, "spellout-numberingtypes.odt"
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // ordinal indicator, ordinal and cardinal number numbering styles (from LibreOffice 6.1)
-    static const char* const aFieldTexts[] = { "1st", "Erste", "Eins",  "1.", "Premier", "Un", "1ᵉʳ", "First", "One" };
+    OUString const aFieldTexts[] = { "1st", "Erste", "Eins",  "1.", "Premier", "Un", u"1ᵉʳ", "First", "One" };
     // fallback for old platforms without std::codecvt and std::regex supports
-    static const char* const aFieldTextFallbacks[] = { "Ordinal-number 1", "Ordinal 1", "1" };
+    OUString const aFieldTextFallbacks[] = { "Ordinal-number 1", "Ordinal 1", "1" };
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     // update text field content
     uno::Reference<util::XRefreshable>(xTextFieldsSupplier->getTextFields(), uno::UNO_QUERY_THROW)->refresh();
@@ -2821,8 +2821,8 @@ DECLARE_ODFEXPORT_TEST(testSpellOutNumberingTypes, "spellout-numberingtypes.odt"
         if (xServiceInfo->supportsService("com.sun.star.text.textfield.PageNumber"))
         {
             uno::Reference<text::XTextContent> xField(aField, uno::UNO_QUERY);
-            CPPUNIT_ASSERT_EQUAL(true, OUString::fromUtf8(aFieldTexts[i]).equals(xField->getAnchor()->getString()) ||
-                           OUString::fromUtf8(aFieldTextFallbacks[i%3]).equals(xField->getAnchor()->getString()));
+            CPPUNIT_ASSERT_EQUAL(true, aFieldTexts[i].equals(xField->getAnchor()->getString()) ||
+                           aFieldTextFallbacks[i%3].equals(xField->getAnchor()->getString()));
         }
     }
 }
