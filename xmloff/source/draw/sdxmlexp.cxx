@@ -2580,12 +2580,12 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
 
                 {
                     // date time
-                    css::util::DateTime aDate( xAnnotation->getDateTime() );
+                    css::util::DateTime aDate( bRemovePersonalInfo
+                            ? css::util::DateTime(0, 0, 0, 0, 1, 1, 1970, true) // Epoch time
+                            : xAnnotation->getDateTime() );
                     ::sax::Converter::convertDateTime(sStringBuffer, aDate, nullptr, true);
                     SvXMLElementExport aDateElem( *this, XML_NAMESPACE_DC, XML_DATE, true, false );
-                    Characters( bRemovePersonalInfo
-                            ? "1970-01-01T00:00::00"
-                            : sStringBuffer.makeStringAndClear() );
+                    Characters( sStringBuffer.makeStringAndClear() );
                 }
 
                 css::uno::Reference < css::text::XText > xText( xAnnotation->getTextRange() );
