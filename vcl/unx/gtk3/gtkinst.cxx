@@ -9204,7 +9204,7 @@ private:
     GtkImage* m_pImage;
 #else
     GtkPicture* m_pImage;
-    GtkToggleButton* m_pToggleButton;
+    GtkToggleButton* m_pMenuButtonToggleButton;
     o3tl::sorted_vector<OString> m_aInsertedActions; // must outlive m_aActionEntries
     std::map<OString, OString> m_aIdToAction;
     std::set<OString> m_aHiddenIds;
@@ -9527,8 +9527,8 @@ public:
 #else
         GtkWidget* pToggleButton = gtk_widget_get_first_child(GTK_WIDGET(m_pMenuButton));
         assert(GTK_IS_TOGGLE_BUTTON(pToggleButton));
-        m_pToggleButton = GTK_TOGGLE_BUTTON(pToggleButton);
-        m_nToggleSignalId = g_signal_connect(m_pToggleButton, "toggled", G_CALLBACK(signalToggled), this);
+        m_pMenuButtonToggleButton = GTK_TOGGLE_BUTTON(pToggleButton);
+        m_nToggleSignalId = g_signal_connect(m_pMenuButtonToggleButton, "toggled", G_CALLBACK(signalToggled), this);
         GtkWidget* pChild = gtk_button_get_child(GTK_BUTTON(pToggleButton));
         m_pBox = GTK_IS_BOX(pChild) ? GTK_BOX(pChild) : nullptr;
         m_pLabel = m_pBox ? gtk_widget_get_first_child(GTK_WIDGET(m_pBox)) : nullptr;
@@ -9985,21 +9985,21 @@ public:
 #if GTK_CHECK_VERSION(4, 0, 0)
     virtual void disable_notify_events() override
     {
-        g_signal_handler_block(m_pToggleButton, m_nToggleSignalId);
+        g_signal_handler_block(m_pMenuButtonToggleButton, m_nToggleSignalId);
         GtkInstanceWidget::disable_notify_events();
     }
 
     virtual void enable_notify_events() override
     {
         GtkInstanceWidget::enable_notify_events();
-        g_signal_handler_unblock(m_pToggleButton, m_nToggleSignalId);
+        g_signal_handler_unblock(m_pMenuButtonToggleButton, m_nToggleSignalId);
     }
 #endif
 
     virtual ~GtkInstanceMenuButton() override
     {
 #if GTK_CHECK_VERSION(4, 0, 0)
-        g_signal_handler_disconnect(m_pToggleButton, m_nToggleSignalId);
+        g_signal_handler_disconnect(m_pMenuButtonToggleButton, m_nToggleSignalId);
         g_object_unref(m_pActionGroup);
         g_object_unref(m_pHiddenActionGroup);
 #else
