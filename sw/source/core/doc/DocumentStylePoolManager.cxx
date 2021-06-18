@@ -2582,7 +2582,8 @@ lcl_NewUINameArray(const char** pIds, const size_t nLen, const size_t nSvxIds = 
 
 const std::vector<OUString>& SwStyleNameMapper::GetTextUINameArray()
 {
-    const LanguageTag& rCurrentLanguage = SvtSysLocale().GetUILanguageTag();
+    SvtSysLocale aSysLocale;
+    const LanguageTag& rCurrentLanguage = aSysLocale.GetUILanguageTag();
     static std::map<LanguageTag, std::vector<OUString>> s_aTextUINameArray;
 
     auto it = s_aTextUINameArray.find(rCurrentLanguage);
@@ -2595,7 +2596,8 @@ const std::vector<OUString>& SwStyleNameMapper::GetTextUINameArray()
 
 const std::vector<OUString>& SwStyleNameMapper::GetListsUINameArray()
 {
-    const LanguageTag& rCurrentLanguage = SvtSysLocale().GetUILanguageTag();
+    SvtSysLocale aSysLocale;
+    const LanguageTag& rCurrentLanguage = aSysLocale.GetUILanguageTag();
     static std::map<LanguageTag, std::vector<OUString>> s_aListsUINameArray;
 
     auto it = s_aListsUINameArray.find(rCurrentLanguage);
@@ -2608,7 +2610,8 @@ const std::vector<OUString>& SwStyleNameMapper::GetListsUINameArray()
 
 const std::vector<OUString>& SwStyleNameMapper::GetExtraUINameArray()
 {
-    const LanguageTag& rCurrentLanguage = SvtSysLocale().GetUILanguageTag();
+    SvtSysLocale aSysLocale;
+    const LanguageTag& rCurrentLanguage = aSysLocale.GetUILanguageTag();
     static std::map<LanguageTag, std::vector<OUString>> s_aExtraUINameArray;
 
     auto it = s_aExtraUINameArray.find(rCurrentLanguage);
@@ -2621,7 +2624,8 @@ const std::vector<OUString>& SwStyleNameMapper::GetExtraUINameArray()
 
 const std::vector<OUString>& SwStyleNameMapper::GetRegisterUINameArray()
 {
-    const LanguageTag& rCurrentLanguage = SvtSysLocale().GetUILanguageTag();
+    SvtSysLocale aSysLocale;
+    const LanguageTag& rCurrentLanguage = aSysLocale.GetUILanguageTag();
     static std::map<LanguageTag, std::vector<OUString>> s_aRegisterUINameArray;
 
     auto it = s_aRegisterUINameArray.find(rCurrentLanguage);
@@ -2634,7 +2638,8 @@ const std::vector<OUString>& SwStyleNameMapper::GetRegisterUINameArray()
 
 const std::vector<OUString>& SwStyleNameMapper::GetDocUINameArray()
 {
-    const LanguageTag& rCurrentLanguage = SvtSysLocale().GetUILanguageTag();
+    SvtSysLocale aSysLocale;
+    const LanguageTag& rCurrentLanguage = aSysLocale.GetUILanguageTag();
     static std::map<LanguageTag, std::vector<OUString>> s_aDocUINameArray;
 
     auto it = s_aDocUINameArray.find(rCurrentLanguage);
@@ -2647,7 +2652,8 @@ const std::vector<OUString>& SwStyleNameMapper::GetDocUINameArray()
 
 const std::vector<OUString>& SwStyleNameMapper::GetHTMLUINameArray()
 {
-    const LanguageTag& rCurrentLanguage = SvtSysLocale().GetUILanguageTag();
+    SvtSysLocale aSysLocale;
+    const LanguageTag& rCurrentLanguage = aSysLocale.GetUILanguageTag();
     static std::map<LanguageTag, std::vector<OUString>> s_aHTMLUINameArray;
 
     auto it = s_aHTMLUINameArray.find(rCurrentLanguage);
@@ -2660,7 +2666,8 @@ const std::vector<OUString>& SwStyleNameMapper::GetHTMLUINameArray()
 
 const std::vector<OUString>& SwStyleNameMapper::GetFrameFormatUINameArray()
 {
-    const LanguageTag& rCurrentLanguage = SvtSysLocale().GetUILanguageTag();
+    SvtSysLocale aSysLocale;
+    const LanguageTag& rCurrentLanguage = aSysLocale.GetUILanguageTag();
     static std::map<LanguageTag, std::vector<OUString>> s_aFrameFormatUINameArray;
 
     auto it = s_aFrameFormatUINameArray.find(rCurrentLanguage);
@@ -2673,7 +2680,8 @@ const std::vector<OUString>& SwStyleNameMapper::GetFrameFormatUINameArray()
 
 const std::vector<OUString>& SwStyleNameMapper::GetChrFormatUINameArray()
 {
-    const LanguageTag& rCurrentLanguage = SvtSysLocale().GetUILanguageTag();
+    SvtSysLocale aSysLocale;
+    const LanguageTag& rCurrentLanguage = aSysLocale.GetUILanguageTag();
     static std::map<LanguageTag, std::vector<OUString>> s_aChrFormatUINameArray;
 
     auto it = s_aChrFormatUINameArray.find(rCurrentLanguage);
@@ -2686,7 +2694,8 @@ const std::vector<OUString>& SwStyleNameMapper::GetChrFormatUINameArray()
 
 const std::vector<OUString>& SwStyleNameMapper::GetHTMLChrFormatUINameArray()
 {
-    const LanguageTag& rCurrentLanguage = SvtSysLocale().GetUILanguageTag();
+    SvtSysLocale aSysLocale;
+    const LanguageTag& rCurrentLanguage = aSysLocale.GetUILanguageTag();
     static std::map<LanguageTag, std::vector<OUString>> s_aHTMLChrFormatUINameArray;
 
     auto it = s_aHTMLChrFormatUINameArray.find(rCurrentLanguage);
@@ -2699,7 +2708,8 @@ const std::vector<OUString>& SwStyleNameMapper::GetHTMLChrFormatUINameArray()
 
 const std::vector<OUString>& SwStyleNameMapper::GetPageDescUINameArray()
 {
-    const LanguageTag& rCurrentLanguage = SvtSysLocale().GetUILanguageTag();
+    SvtSysLocale aSysLocale;
+    const LanguageTag& rCurrentLanguage = aSysLocale.GetUILanguageTag();
     static std::map<LanguageTag, std::vector<OUString>> s_aPageDescUINameArray;
 
     auto it = s_aPageDescUINameArray.find(rCurrentLanguage);
@@ -2712,7 +2722,8 @@ const std::vector<OUString>& SwStyleNameMapper::GetPageDescUINameArray()
 
 const std::vector<OUString>& SwStyleNameMapper::GetNumRuleUINameArray()
 {
-    const LanguageTag& rCurrentLanguage = SvtSysLocale().GetUILanguageTag();
+    SvtSysLocale aSysLocale;
+    const LanguageTag& rCurrentLanguage = aSysLocale.GetUILanguageTag();
     static std::map<LanguageTag, std::vector<OUString>> s_aNumRuleUINameArray;
 
     auto it = s_aNumRuleUINameArray.find(rCurrentLanguage);
@@ -2725,7 +2736,8 @@ const std::vector<OUString>& SwStyleNameMapper::GetNumRuleUINameArray()
 
 const std::vector<OUString>& SwStyleNameMapper::GetTableStyleUINameArray()
 {
-    const LanguageTag& rCurrentLanguage = SvtSysLocale().GetUILanguageTag();
+    SvtSysLocale aSysLocale;
+    const LanguageTag& rCurrentLanguage = aSysLocale.GetUILanguageTag();
     static std::map<LanguageTag, std::vector<OUString>> s_aTableStyleUINameArray;
 
     auto it = s_aTableStyleUINameArray.find(rCurrentLanguage);
