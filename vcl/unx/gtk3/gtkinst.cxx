@@ -22309,6 +22309,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/specialcharacters.ui" &&
         rUIFile != "cui/ui/spelloptionsdialog.ui" &&
         rUIFile != "cui/ui/spinbox.ui" &&
+        rUIFile != "cui/ui/splitcellsdialog.ui" &&
         rUIFile != "cui/ui/textflowpage.ui" &&
         rUIFile != "cui/ui/thesaurus.ui" &&
         rUIFile != "cui/ui/tipofthedaydialog.ui" &&
@@ -22430,6 +22431,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/smath/ui/smathsettings.ui" &&
         rUIFile != "modules/smath/ui/spacingdialog.ui" &&
         rUIFile != "modules/smath/ui/symdefinedialog.ui" &&
+        rUIFile != "modules/swriter/ui/autoformattable.ui" &&
         rUIFile != "modules/swriter/ui/autotext.ui" &&
         rUIFile != "modules/swriter/ui/bibliographyentry.ui" &&
         rUIFile != "modules/swriter/ui/bulletsandnumbering.ui" &&
@@ -22440,6 +22442,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/swriter/ui/columndialog.ui" &&
         rUIFile != "modules/swriter/ui/columnpage.ui" &&
         rUIFile != "modules/swriter/ui/columnwidth.ui" &&
+        rUIFile != "modules/swriter/ui/converttexttable.ui" &&
         rUIFile != "modules/swriter/ui/dropcapspage.ui" &&
         rUIFile != "modules/swriter/ui/editcategories.ui" &&
         rUIFile != "modules/swriter/ui/endnotepage.ui" &&
@@ -22448,6 +22451,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/swriter/ui/footnoteareapage.ui" &&
         rUIFile != "modules/swriter/ui/footnotepage.ui" &&
         rUIFile != "modules/swriter/ui/footnotesendnotestabpage.ui" &&
+        rUIFile != "modules/swriter/ui/formattablepage.ui" &&
         rUIFile != "modules/swriter/ui/framedialog.ui" &&
         rUIFile != "modules/swriter/ui/frmaddpage.ui" &&
         rUIFile != "modules/swriter/ui/frmtypepage.ui" &&
@@ -22479,7 +22483,12 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/swriter/ui/rowheight.ui" &&
         rUIFile != "modules/swriter/ui/savelabeldialog.ui" &&
         rUIFile != "modules/swriter/ui/sectionpage.ui" &&
+        rUIFile != "modules/swriter/ui/sortdialog.ui" &&
+        rUIFile != "modules/swriter/ui/splittable.ui" &&
         rUIFile != "modules/swriter/ui/statisticsinfopage.ui" &&
+        rUIFile != "modules/swriter/ui/tablecolumnpage.ui" &&
+        rUIFile != "modules/swriter/ui/tableproperties.ui" &&
+        rUIFile != "modules/swriter/ui/tabletextflowpage.ui" &&
         rUIFile != "modules/swriter/ui/templatedialog8.ui" &&
         rUIFile != "modules/swriter/ui/textgridpage.ui" &&
         rUIFile != "modules/swriter/ui/titlepage.ui" &&
