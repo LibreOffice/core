@@ -18,6 +18,8 @@
 #include <svx/svdotext.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
+#include <swtable.hxx>
+#include <deque>
 
 namespace sw
 {
@@ -25,6 +27,8 @@ class IndexingNodeHandler : public ModelTraverseHandler
 {
 private:
     tools::XmlWriter& m_rXmlWriter;
+
+    std::deque<SwNode*> maNodeStack;
 
 public:
     IndexingNodeHandler(tools::XmlWriter& rXmlWriter)
@@ -45,6 +49,15 @@ public:
         else if (pNode->IsTextNode())
         {
             handleTextNode(pNode->GetTextNode());
+        }
+        else if (pNode->IsTableNode())
+        {
+            handleTableNode(pNode->GetTableNode());
+        }
+
+        if (pNode->IsEndNode())
+        {
+            handleEndNode(pNode->GetEndNode());
         }
     }
 
@@ -102,6 +115,27 @@ public:
         }
 
         m_rXmlWriter.endElement();
+    }
+
+    void handleTableNode(SwTableNode* pTableNode)
+    {
+        const SwTableFormat* pFormat = pTableNode->GetTable().GetFrameFormat();
+        OUString sName = pFormat->GetName();
+
+        m_rXmlWriter.startElement("table");
+        m_rXmlWriter.attribute("index", pTableNode->GetIndex());
+        m_rXmlWriter.attribute("name", sName);
+
+        maNodeStack.push_back(pTableNode);
+    }
+
+    void handleEndNode(SwEndNode* pEndNode)
+    {
+        if (!maNodeStack.empty() && pEndNode->StartOfSectionNode() == maNodeStack.back())
+        {
+            maNodeStack.pop_back();
+            m_rXmlWriter.endElement();
+        }
     }
 };
 
