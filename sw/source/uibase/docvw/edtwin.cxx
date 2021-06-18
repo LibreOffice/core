@@ -6442,8 +6442,12 @@ void SwEditWin::SetUseInputLanguage( bool bNew )
 
 OUString SwEditWin::GetSurroundingText() const
 {
-    OUString sReturn;
     SwWrtShell& rSh = m_rView.GetWrtShell();
+
+    if (rSh.HasDrawView() && rSh.GetDrawView()->IsTextEdit())
+        return rSh.GetDrawView()->GetTextEditOutlinerView()->GetSurroundingText();
+
+    OUString sReturn;
     if( rSh.HasSelection() && !rSh.IsMultiSelection() && rSh.IsSelOnePara() )
         rSh.GetSelectedText( sReturn, ParaBreakType::ToOnlyCR  );
     else if( !rSh.HasSelection() )
@@ -6475,6 +6479,10 @@ OUString SwEditWin::GetSurroundingText() const
 Selection SwEditWin::GetSurroundingTextSelection() const
 {
     SwWrtShell& rSh = m_rView.GetWrtShell();
+
+    if (rSh.HasDrawView() && rSh.GetDrawView()->IsTextEdit())
+        return rSh.GetDrawView()->GetTextEditOutlinerView()->GetSurroundingTextSelection();
+
     if( rSh.HasSelection() )
     {
         OUString sReturn;
@@ -6509,6 +6517,9 @@ Selection SwEditWin::GetSurroundingTextSelection() const
 bool SwEditWin::DeleteSurroundingText(const Selection& rSelection)
 {
     SwWrtShell& rSh = m_rView.GetWrtShell();
+
+    if (rSh.HasDrawView() && rSh.GetDrawView()->IsTextEdit())
+        return rSh.GetDrawView()->GetTextEditOutlinerView()->DeleteSurroundingText(rSelection);
 
     if (rSh.HasSelection())
         return false;
