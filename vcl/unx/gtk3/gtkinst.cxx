@@ -9489,6 +9489,39 @@ private:
             g_action_map_remove_action(G_ACTION_MAP(m_pActionGroup), m_aIdToAction[id].getStr());
         }
     }
+
+    bool remove_id(GMenuModel* pMenuModel, const OString& rId)
+    {
+        for (int i = 0, nCount = g_menu_model_get_n_items(pMenuModel); i < nCount; ++i)
+        {
+            OString sTarget;
+            char *id;
+            if (g_menu_model_get_item_attribute(pMenuModel, i, "target", "s", &id))
+            {
+                sTarget = OString(id);
+                g_free(id);
+            }
+
+            if (sTarget == rId)
+            {
+                g_menu_remove(G_MENU(pMenuModel), i);
+                return true;
+            }
+
+            if (GMenuModel* pSectionModel = g_menu_model_get_item_link(pMenuModel, i, G_MENU_LINK_SECTION))
+            {
+                if (remove_id(pSectionModel, rId))
+                    return true;
+            }
+            if (GMenuModel* pSubMenuModel = g_menu_model_get_item_link(pMenuModel, i, G_MENU_LINK_SUBMENU))
+            {
+                if (remove_id(pSubMenuModel, rId))
+                    return true;
+            }
+        }
+        return false;
+    }
+
 #endif
 
     static void signalFlagsChanged(GtkToggleButton* pToggleButton, GtkStateFlags flags, gpointer widget)
@@ -9755,8 +9788,13 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         MenuHelper::remove_item(rId);
 #else
-        (void)rId;
-        std::abort();
+        GtkPopover* pPopover = gtk_menu_button_get_popover(m_pMenuButton);
+        if (GMenuModel* pMenuModel = GTK_IS_POPOVER_MENU(pPopover) ?
+                                     gtk_popover_menu_get_menu_model(GTK_POPOVER_MENU(pPopover)) :
+                                     nullptr)
+        {
+            remove_id(pMenuModel, rId);
+        }
 #endif
     }
 
@@ -22241,6 +22279,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
 {
 #if GTK_CHECK_VERSION(4, 0, 0)
     if (rUIFile != "cui/ui/aboutdialog.ui" &&
+        rUIFile != "cui/ui/accelconfigpage.ui" &&
         rUIFile != "cui/ui/acorexceptpage.ui" &&
         rUIFile != "cui/ui/acoroptionspage.ui" &&
         rUIFile != "cui/ui/acorreplacepage.ui" &&
@@ -22255,12 +22294,15 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/charnamepage.ui" &&
         rUIFile != "cui/ui/colorpage.ui" &&
         rUIFile != "cui/ui/colorpickerdialog.ui" &&
+        rUIFile != "cui/ui/customizedialog.ui" &&
         rUIFile != "cui/ui/editdictionarydialog.ui" &&
         rUIFile != "cui/ui/effectspage.ui" &&
         rUIFile != "cui/ui/eventassigndialog.ui" &&
         rUIFile != "cui/ui/eventassignpage.ui" &&
+        rUIFile != "cui/ui/eventsconfigpage.ui" &&
         rUIFile != "cui/ui/fontfeaturesdialog.ui" &&
         rUIFile != "cui/ui/fontfragment.ui" &&
+        rUIFile != "cui/ui/formatnumberdialog.ui" &&
         rUIFile != "cui/ui/gradientpage.ui" &&
         rUIFile != "cui/ui/hatchpage.ui" &&
         rUIFile != "cui/ui/hangulhanjaadddialog.ui" &&
@@ -22280,7 +22322,9 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/macroassigndialog.ui" &&
         rUIFile != "cui/ui/macroassignpage.ui" &&
         rUIFile != "cui/ui/macroselectordialog.ui" &&
+        rUIFile != "cui/ui/menuassignpage.ui" &&
         rUIFile != "cui/ui/namedialog.ui" &&
+        rUIFile != "cui/ui/numberingformatpage.ui" &&
         rUIFile != "cui/ui/numberingoptionspage.ui" &&
         rUIFile != "cui/ui/numberingpositionpage.ui" &&
         rUIFile != "cui/ui/objectnamedialog.ui" &&
@@ -22303,6 +22347,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/qrcodegen.ui" &&
         rUIFile != "cui/ui/scriptorganizer.ui" &&
         rUIFile != "cui/ui/searchattrdialog.ui" &&
+        rUIFile != "cui/ui/searchformatdialog.ui" &&
         rUIFile != "cui/ui/selectpathdialog.ui" &&
         rUIFile != "cui/ui/signatureline.ui" &&
         rUIFile != "cui/ui/similaritysearchdialog.ui" &&
@@ -22318,6 +22363,8 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/twolinespage.ui" &&
         rUIFile != "cui/ui/wordcompletionpage.ui" &&
         rUIFile != "cui/ui/zoomdialog.ui" &&
+        rUIFile != "desktop/ui/extensionmanager.ui" &&
+        rUIFile != "desktop/ui/updatedialog.ui" &&
         rUIFile != "filter/ui/pdfgeneralpage.ui" &&
         rUIFile != "filter/ui/pdfsecuritypage.ui" &&
         rUIFile != "filter/ui/pdfsignpage.ui" &&
@@ -22447,6 +22494,13 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/swriter/ui/editcategories.ui" &&
         rUIFile != "modules/swriter/ui/endnotepage.ui" &&
         rUIFile != "modules/swriter/ui/exchangedatabases.ui" &&
+        rUIFile != "modules/swriter/ui/fielddialog.ui" &&
+        rUIFile != "modules/swriter/ui/flddbpage.ui" &&
+        rUIFile != "modules/swriter/ui/flddocumentpage.ui" &&
+        rUIFile != "modules/swriter/ui/flddocinfopage.ui" &&
+        rUIFile != "modules/swriter/ui/fldfuncpage.ui" &&
+        rUIFile != "modules/swriter/ui/fldrefpage.ui" &&
+        rUIFile != "modules/swriter/ui/fldvarpage.ui" &&
         rUIFile != "modules/swriter/ui/footendnotedialog.ui" &&
         rUIFile != "modules/swriter/ui/footnoteareapage.ui" &&
         rUIFile != "modules/swriter/ui/footnotepage.ui" &&
