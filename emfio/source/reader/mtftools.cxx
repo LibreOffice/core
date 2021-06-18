@@ -1985,6 +1985,8 @@ namespace emfio
                 {   // patterns aren't well supported yet
                     WMFRasterOp nOldRop = SetRasterOp( WMFRasterOp::NONE );  // in this case nRasterOperation is either 0 or 0xff
                     UpdateFillStyle();
+
+        SAL_INFO("emfio", "\t\t DIB: if ( (nUsed & 1) && (( nUsed & 2 ) == 0) && nWinRop != PATINVERT )");
                     DrawRect( aRect, false );
                     SetRasterOp( nOldRop );
                 }
@@ -2010,7 +2012,13 @@ namespace emfio
                                 {
                                     Bitmap aMask( pSave->aBmpEx.GetBitmap() ); aMask.Invert();
                                     BitmapEx aBmpEx( pSave2->aBmpEx.GetBitmap(), aMask );
+
+                                    basegfx::B2DHomMatrix aMatrix(maXForm.eM11, maXForm.eM12, 0,
+                                                                  maXForm.eM21, maXForm.eM22, 0);
+                                    aBmpEx = aBmpEx.getTransformed(aMatrix, basegfx::B2DRange(aRect.getX(), aRect.getX() + aRect.getHeight(), aRect.getY(), aRect.getY() + aRect.getWidth() ), 100.0 );
                                     ImplDrawBitmap( aPos, aSize, aBmpEx );
+
+        SAL_INFO("emfio", "\t\t DIB: if ( ( nWinRop == SRCPAINT ) && ( pSave2->nWinRop == SRCAND ) ) )");
                                     bDrawn = true;
                                     i++;
                                 }
@@ -2019,6 +2027,8 @@ namespace emfio
                                 // is inverted
                                 else if ( ( nWinRop == SRCAND ) && ( pSave2->nWinRop == SRCPAINT ) )
                                 {
+
+        SAL_INFO("emfio", "\t\t DIB: else if ( ( nWinRop == SRCAND ) && ( pSave2->nWinRop == SRCPAINT ) ) )");
                                     const Bitmap & rMask( pSave->aBmpEx.GetBitmap() );
                                     BitmapEx aBmpEx( pSave2->aBmpEx.GetBitmap(), rMask );
                                     ImplDrawBitmap( aPos, aSize, aBmpEx );
@@ -2028,6 +2038,7 @@ namespace emfio
                                 // tdf#90539
                                 else if ( ( nWinRop == SRCAND ) && ( pSave2->nWinRop == SRCINVERT ) )
                                 {
+        SAL_INFO("emfio", "\t\t DIB: lse if ( ( nWinRop == SRCAND ) && ( pSave2->nWinRop == SRCINVERT ) ))");
                                     const Bitmap & rMask( pSave->aBmpEx.GetBitmap() );
                                     BitmapEx aBmpEx( pSave2->aBmpEx.GetBitmap(), rMask );
                                     ImplDrawBitmap( aPos, aSize, aBmpEx );
@@ -2056,6 +2067,8 @@ namespace emfio
                                 else
                                 {
                                     SetRasterOp( WMFRasterOp::XorPen );
+
+        SAL_INFO("emfio", "\t\t DIB: 0x1 ");
                                     ImplDrawBitmap( aPos, aSize, BitmapEx(aBitmap) );
                                     SetRasterOp( WMFRasterOp::CopyPen );
                                     Bitmap  aMask( aBitmap );
@@ -2073,6 +2086,7 @@ namespace emfio
                             case 0x7 :
                             case 0x8 :
                             {
+        SAL_INFO("emfio", "\t\t DIB: 0x7 ");
                                 Bitmap  aMask( aBitmap );
                                 if ( ( nUsed & 1 ) && ( nRasterOperation & 0xb0 ) == 0xb0 )     // pattern used
                                 {
@@ -2092,6 +2106,8 @@ namespace emfio
                             case 0x4 :
                             case 0xb :
                             {
+
+        SAL_INFO("emfio", "\t\t DIB: 0x4 ");
                                 SetRasterOp( WMFRasterOp::Not );
                                 DrawRect( aRect, false );
                                 SetRasterOp( WMFRasterOp::CopyPen );
@@ -2112,6 +2128,8 @@ namespace emfio
                             case 0x2 :
                             case 0xd :
                             {
+
+        SAL_INFO("emfio", "\t\t DIB: 0x2 ");
                                 Bitmap  aMask( aBitmap );
                                 aMask.Invert();
                                 BitmapEx aBmpEx( aBitmap, aMask );
@@ -2128,6 +2146,8 @@ namespace emfio
                             case 0x6 :
                             case 0x9 :
                             {
+
+        SAL_INFO("emfio", "\t\t DIB: 0x6 ");
                                 SetRasterOp( WMFRasterOp::XorPen );
                                 ImplDrawBitmap( aPos, aSize, BitmapEx(aBitmap) );
                                 if ( nOperation == 0x9 )
@@ -2140,7 +2160,9 @@ namespace emfio
 
                             case 0x0 :  // WHITENESS
                             case 0xf :  // BLACKNESS
-                            {                                                   // in this case nRasterOperation is either 0 or 0xff
+                            {
+
+        SAL_INFO("emfio", "\t\t DIB: 0x0 ");                                       // in this case nRasterOperation is either 0 or 0xff
                                 maFillStyle = WinMtfFillStyle( Color( nRasterOperation, nRasterOperation, nRasterOperation ) );
                                 UpdateFillStyle();
                                 DrawRect( aRect, false );
@@ -2150,6 +2172,8 @@ namespace emfio
                             case 0x3 :  // only source is used
                             case 0xc :
                             {
+
+        SAL_INFO("emfio", "\t\t DIB: 0x3 ");
                                 if ( nRasterOperation == 0x33 )
                                     aBitmap.Invert();
                                 if (pSave->m_bForceAlpha)
@@ -2165,6 +2189,8 @@ namespace emfio
 
                             case 0x5 :  // only destination is used
                             {
+
+        SAL_INFO("emfio", "\t\t DIB: 0x5 ");
                                 SetRasterOp( WMFRasterOp::Not );
                                 DrawRect( aRect, false );
                             }
