@@ -388,6 +388,7 @@
                 <property name="hexpand">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebarpossize|rotation|tooltip_text">Select the angle for rotation.</property>
                 <property name="hexpand">True</property>
+                <property name="digits">2</property>
                 <property name="adjustment">adjustmentSpinDegrees</property>
                 <property name="wrap">True</property>
                 <property name="truncate-multiline">True</property>
