@@ -574,7 +574,8 @@ UICommandDescription::UICommandDescription(const Reference< XComponentContext >&
     , m_aPrivateResourceURL(PRIVATE_RESOURCE_URL)
     , m_xContext(rxContext)
 {
-    const LanguageTag& rCurrentLanguage = SvtSysLocale().GetUILanguageTag();
+    SvtSysLocale aSysLocale;
+    const LanguageTag& rCurrentLanguage = aSysLocale.GetUILanguageTag();
 
     ensureGenericUICommandsForLanguage(rCurrentLanguage);
 
@@ -605,6 +606,8 @@ void UICommandDescription::impl_fillElements(const char* _pName)
     m_xModuleManager.set( ModuleManager::create( m_xContext ) );
     const Sequence< OUString > aElementNames = m_xModuleManager->getElementNames();
 
+    SvtSysLocale aSysLocale;
+
     for ( OUString const & aModuleIdentifier : aElementNames )
     {
         Sequence< PropertyValue > aSeq;
@@ -624,7 +627,7 @@ void UICommandDescription::impl_fillElements(const char* _pName)
             m_aModuleToCommandFileMap.emplace( aModuleIdentifier, aCommandStr );
 
             // Create second mapping Command File ==> commands instance
-            const LanguageTag& rCurrentLanguage = SvtSysLocale().GetUILanguageTag();
+            const LanguageTag& rCurrentLanguage = aSysLocale.GetUILanguageTag();
             auto& rMap = m_aUICommandsHashMap[rCurrentLanguage];
             UICommandsHashMap::iterator pIter = rMap.find( aCommandStr );
             if ( pIter == rMap.end() )
@@ -635,7 +638,8 @@ void UICommandDescription::impl_fillElements(const char* _pName)
 
 Any SAL_CALL UICommandDescription::getByName( const OUString& aName )
 {
-    const LanguageTag& rCurrentLanguage = SvtSysLocale().GetUILanguageTag();
+    SvtSysLocale aSysLocale;
+    const LanguageTag& rCurrentLanguage = aSysLocale.GetUILanguageTag();
     Any a;
 
     osl::MutexGuard g(rBHelper.rMutex);
