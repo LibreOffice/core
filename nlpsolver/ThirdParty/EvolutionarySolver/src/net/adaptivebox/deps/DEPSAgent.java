@@ -35,6 +35,7 @@ package net.adaptivebox.deps;
 import net.adaptivebox.deps.behavior.AbsGTBehavior;
 import net.adaptivebox.deps.behavior.DEGTBehavior;
 import net.adaptivebox.deps.behavior.PSGTBehavior;
+import net.adaptivebox.global.RandomGenerator;
 import net.adaptivebox.goodness.IGoodnessCompareEngine;
 import net.adaptivebox.knowledge.ILibEngine;
 import net.adaptivebox.knowledge.Library;
@@ -91,7 +92,7 @@ public class DEPSAgent implements ILibEngine {
   }
 
   private AbsGTBehavior getGTBehavior() {
-    if (Math.random() < switchP) {
+    if (RandomGenerator.doubleZeroOneRandom() < switchP) {
       return deGTBehavior;
     } else {
       return psGTBehavior;
