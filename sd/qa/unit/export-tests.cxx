@@ -66,6 +66,7 @@ public:
     void testImageWithSpecialID();
     void testTdf62176();
     void testTransparentBackground();
+    void testTdf142716();
     void testEmbeddedPdf();
     void testEmbeddedText();
     void testTransparenText();
@@ -110,6 +111,7 @@ public:
     CPPUNIT_TEST(testImageWithSpecialID);
     CPPUNIT_TEST(testTdf62176);
     CPPUNIT_TEST(testTransparentBackground);
+    CPPUNIT_TEST(testTdf142716);
     CPPUNIT_TEST(testEmbeddedPdf);
     CPPUNIT_TEST(testEmbeddedText);
     CPPUNIT_TEST(testTransparenText);
@@ -283,6 +285,22 @@ void SdExportTest::testTransparentBackground()
 
     const SdrTextObj *pObj2 = dynamic_cast<SdrTextObj *>( pPage->GetObj( 1 ) );
     checkFontAttributes<Color, SvxColorItem>( pObj2, COL_YELLOW, EE_CHAR_BKGCOLOR);
+
+    xDocShRef->DoClose();
+}
+
+void SdExportTest::testTdf142716()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf142716.pptx"), PPTX);
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
+
+    const SdrPage *pPage = GetPage( 1, xDocShRef );
+    const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>( pPage->GetObj( 0 ) );
+
+    OUString sText = pObj->GetOutlinerParaObject()->GetTextObject().GetText(0);
+
+    // Without fix "yyy" part will be lost.
+    CPPUNIT_ASSERT_EQUAL( OUString( "xxx and yyy" ), sText);
 
     xDocShRef->DoClose();
 }

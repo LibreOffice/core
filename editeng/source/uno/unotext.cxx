@@ -1739,13 +1739,6 @@ void SAL_CALL SvxUnoTextBase::insertString( const uno::Reference< text::XTextRan
     if( !xRange.is() )
         return;
 
-    if (GetEditSource())
-    {
-        ESelection aSelection;
-        ::GetSelection( aSelection, GetEditSource()->GetTextForwarder() );
-        SetSelection( aSelection );
-    }
-
     SvxUnoTextRangeBase* pRange = comphelper::getUnoTunnelImplementation<SvxUnoTextRange>( xRange );
     if(!pRange)
         return;
@@ -1761,6 +1754,13 @@ void SAL_CALL SvxUnoTextBase::insertString( const uno::Reference< text::XTextRan
     pRange->setString( aString );
 
     pRange->CollapseToEnd();
+
+    if (GetEditSource())
+    {
+        ESelection aSelection;
+        ::GetSelection( aSelection, GetEditSource()->GetTextForwarder() );
+        SetSelection( aSelection );
+    }
 }
 
 void SAL_CALL SvxUnoTextBase::insertControlCharacter( const uno::Reference< text::XTextRange >& xRange, sal_Int16 nControlCharacter, sal_Bool bAbsorb )
