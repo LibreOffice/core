@@ -56,8 +56,11 @@ public:
         {
             handleTableNode(pNode->GetTableNode());
         }
-
-        if (pNode->IsEndNode())
+        else if (pNode->IsSectionNode())
+        {
+            handleSectionNode(pNode->GetSectionNode());
+        }
+        else if (pNode->IsEndNode())
         {
             handleEndNode(pNode->GetEndNode());
         }
@@ -136,6 +139,15 @@ public:
         m_rXmlWriter.attribute("name", sName);
 
         maNodeStack.push_back(pTableNode);
+    }
+
+    void handleSectionNode(SwSectionNode* pSectionNode)
+    {
+        m_rXmlWriter.startElement("section");
+        m_rXmlWriter.attribute("index", pSectionNode->GetIndex());
+        m_rXmlWriter.attribute("name", pSectionNode->GetSection().GetSectionName());
+
+        maNodeStack.push_back(pSectionNode);
     }
 
     void handleEndNode(SwEndNode* pEndNode)

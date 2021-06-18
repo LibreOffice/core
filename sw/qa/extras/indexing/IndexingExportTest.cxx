@@ -31,6 +31,7 @@ public:
     void testIndexingExport_OLE();
     void testIndexingExport_Shapes();
     void testIndexingExport_Tables();
+    void testIndexingExport_Sections();
 
     CPPUNIT_TEST_SUITE(IndexingExportTest);
     CPPUNIT_TEST(testIndexingExport_Paragraphs);
@@ -38,6 +39,7 @@ public:
     CPPUNIT_TEST(testIndexingExport_OLE);
     CPPUNIT_TEST(testIndexingExport_Shapes);
     CPPUNIT_TEST(testIndexingExport_Tables);
+    CPPUNIT_TEST(testIndexingExport_Sections);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -212,6 +214,35 @@ void IndexingExportTest::testIndexingExport_Tables()
     assertXPathContent(pXmlDoc, "/indexing/table[3]/paragraph[19]", "");
     assertXPathContent(pXmlDoc, "/indexing/table[3]/paragraph[20]", "A5B5C5");
     assertXPathContent(pXmlDoc, "/indexing/table[3]/paragraph[21]", "D5");
+}
+
+void IndexingExportTest::testIndexingExport_Sections()
+{
+    SwDoc* pDoc = createDoc("IndexingExport_Sections.odt");
+    CPPUNIT_ASSERT(pDoc);
+
+    SvMemoryStream aMemoryStream;
+    sw::IndexingExport aIndexingExport(aMemoryStream, pDoc);
+    aIndexingExport.runExport();
+    aMemoryStream.Seek(0);
+
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aMemoryStream);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/indexing");
+
+    assertXPath(pXmlDoc, "/indexing/section[1]", "name", "Section1");
+    assertXPathContent(pXmlDoc, "/indexing/section[1]/paragraph[1]",
+                       "This is a paragraph in a Section1");
+    assertXPathContent(pXmlDoc, "/indexing/section[1]/paragraph[2]", "Section1 - Paragraph 2");
+    assertXPathContent(pXmlDoc, "/indexing/section[1]/paragraph[3]", "Section1 - Paragraph 3");
+
+    assertXPath(pXmlDoc, "/indexing/section[2]", "name", "Section2");
+    assertXPathContent(pXmlDoc, "/indexing/section[2]/paragraph[1]", "Section2 - Paragraph 1");
+    assertXPathContent(pXmlDoc, "/indexing/section[2]/paragraph[2]", "Section2 - Paragraph 2");
+
+    assertXPathContent(pXmlDoc, "/indexing/paragraph[1]", "This is a paragraph outside sections");
+    assertXPathContent(pXmlDoc, "/indexing/paragraph[2]", "This is a paragraph outside sections");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(IndexingExportTest);
