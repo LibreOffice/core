@@ -35,9 +35,8 @@ void XmpMetadata::write()
     mpMemoryStream = std::make_unique<SvMemoryStream>(4096 /*Initial*/, 64 /*Resize*/);
 
     // Header
-    mpMemoryStream->WriteOString("<?xpacket begin=\"");
-    mpMemoryStream->WriteOString(OUStringToOString(u"\xFEFF", RTL_TEXTENCODING_UTF8));
-    mpMemoryStream->WriteOString("\" id=\"W5M0MpCehiHzreSzNTczkc9d\"?>\n");
+    mpMemoryStream->WriteOString(
+        OStringLiteral(u8"<?xpacket begin=\"\uFEFF\" id=\"W5M0MpCehiHzreSzNTczkc9d\"?>\n"));
 
     {
         tools::XmlWriter aXmlWriter(mpMemoryStream.get());
