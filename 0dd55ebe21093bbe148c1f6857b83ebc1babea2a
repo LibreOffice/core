@@ -33,6 +33,24 @@
       "revId": "0dd55ebe21093bbe148c1f6857b83ebc1babea2a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70264929_60c73503",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-06-18T08:45:47Z",
+      "side": 1,
+      "message": "Just let me know if it needs to be reverted and be changed to direct calling.",
+      "parentUuid": "8fd66a42_b3b51924",
+      "revId": "0dd55ebe21093bbe148c1f6857b83ebc1babea2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
