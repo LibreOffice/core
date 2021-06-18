@@ -9524,7 +9524,7 @@ public:
 #endif
     {
 #if !GTK_CHECK_VERSION(4, 0, 0)
-        // tdf#142924 "toggled" is to late to use to populate changes to the menu,
+        // tdf#142924 "toggled" is too late to use to populate changes to the menu,
         // so use "state-flag-changed" on GTK_STATE_FLAG_CHECKED instead which
         // happens before "toggled"
         g_signal_handler_disconnect(m_pToggleButton, m_nToggledSignalId);
