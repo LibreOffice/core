@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "15df09a5_87edeb06",
+        "filename": "vcl/headless/svpinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-18T13:06:43Z",
+      "side": 1,
+      "message": "Should the release be done after the cond.set?",
+      "revId": "050ec504dbe3b061594109f2da1abb87ca8a474f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
