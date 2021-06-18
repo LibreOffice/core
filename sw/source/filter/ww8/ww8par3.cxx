@@ -1936,6 +1936,12 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
 
                 // reset/blank the indent
                 m_pCurrentColl->SetFormatAttr(SvxLRSpaceItem(RES_LR_SPACE));
+
+                // These sprmPIlfos are supposed to indicate "cancel" numbering.
+                // Since m_nLFOPosition is "data - 1", then zero becomes USHRT_MAX
+                // which is no good since that indicates "unspecified, available for inheritance".
+                // So instead use USHRT_MAX-1 for indicating an explicit "cancel numbering".
+                RegisterNumFormat(USHRT_MAX-1, MAXLEVEL);
             }
             else if (SwTextNode* pTextNode = m_pPaM->GetNode().GetTextNode())
             {
