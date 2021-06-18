@@ -2860,7 +2860,7 @@ void SwTiledRenderingTest::testDropDownFormFieldButtonNoSelection()
     }
 }
 
-static void lcl_extractHandleParameters(const OString& selection, int& id, int& x, int& y)
+static void lcl_extractHandleParameters(const OString& selection, sal_Int32& id, sal_Int32& x, sal_Int32& y)
 {
     OString extraInfo = selection.copy(selection.indexOf("{"));
     std::stringstream aStream(extraInfo.getStr());
@@ -2892,10 +2892,10 @@ void SwTiledRenderingTest::testMoveShapeHandle()
 
     CPPUNIT_ASSERT(!m_ShapeSelection.isEmpty());
     {
-        int id, x, y;
+        sal_Int32 id, x, y;
         lcl_extractHandleParameters(m_ShapeSelection, id, x ,y);
-        int oldX = x;
-        int oldY = y;
+        sal_Int32 oldX = x;
+        sal_Int32 oldY = y;
         uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
         {
             {"HandleNum", uno::makeAny(id)},

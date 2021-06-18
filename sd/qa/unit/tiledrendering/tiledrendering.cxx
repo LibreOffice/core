@@ -2627,7 +2627,7 @@ void SdTiledRenderingTest::testSlideDuplicateUndo()
 namespace
 {
 
-void lcl_extractHandleParameters(const OString& selection, int& id, int& x, int& y)
+void lcl_extractHandleParameters(const OString& selection, sal_uInt32& id, sal_uInt32& x, sal_uInt32& y)
 {
     OString extraInfo = selection.copy(selection.indexOf("{"));
     std::stringstream aStream(extraInfo.getStr());
@@ -2660,10 +2660,10 @@ void SdTiledRenderingTest::testMoveShapeHandle()
 
     CPPUNIT_ASSERT(!aView1.m_ShapeSelection.isEmpty());
     {
-        int id, x, y;
+        sal_uInt32 id, x, y;
         lcl_extractHandleParameters(aView1.m_ShapeSelection, id, x ,y);
-        int oldX = x;
-        int oldY = y;
+        sal_uInt32 oldX = x;
+        sal_uInt32 oldY = y;
         uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
         {
             {"HandleNum", uno::makeAny(id)},

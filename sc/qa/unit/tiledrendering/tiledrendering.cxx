@@ -460,13 +460,13 @@ struct EditCursorMessage final {
         std::string aVal = aTree.get_child("refpoint").get_value<std::string>();
 
         uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(aVal.c_str()));
-        CPPUNIT_ASSERT_EQUAL(2, aSeq.getLength());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aSeq.getLength());
         m_aRefPoint.setX(aSeq[0].toInt32());
         m_aRefPoint.setY(aSeq[1].toInt32());
 
         aVal = aTree.get_child("relrect").get_value<std::string>();
         aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(aVal.c_str()));
-        CPPUNIT_ASSERT_EQUAL(4, aSeq.getLength());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aSeq.getLength());
         m_aRelRect.setX(aSeq[0].toInt32());
         m_aRelRect.setY(aSeq[1].toInt32());
         m_aRelRect.setWidth(aSeq[2].toInt32());
@@ -512,7 +512,7 @@ struct TextSelectionMessage
             std::string("0, 0") :
             aStr.substr(nRefDelimStart + 2, aStr.length() - 2 - nRefDelimStart);
         uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(aRefPointString.c_str()));
-        CPPUNIT_ASSERT_EQUAL(2, aSeq.getLength());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aSeq.getLength());
         m_aRefPoint.setX(aSeq[0].toInt32());
         m_aRefPoint.setY(aSeq[1].toInt32());
 
@@ -525,7 +525,7 @@ struct TextSelectionMessage
             std::string aRectString = aRectListString.substr(nStart, nEnd - nStart);
             {
                 aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(aRectString.c_str()));
-                CPPUNIT_ASSERT_EQUAL(4, aSeq.getLength());
+                CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aSeq.getLength());
                 tools::Rectangle aRect;
                 aRect.setX(aSeq[0].toInt32());
                 aRect.setY(aSeq[1].toInt32());
@@ -818,7 +818,7 @@ void ScTiledRenderingTest::testViewLock()
     CPPUNIT_ASSERT(!aView1.m_bViewLock);
 }
 
-void lcl_extractHandleParameters(const OString& selection, int& id, int& x, int& y)
+void lcl_extractHandleParameters(const OString& selection, sal_uInt32& id, sal_uInt32& x, sal_uInt32& y)
 {
     OString extraInfo = selection.copy(selection.indexOf("{"));
     std::stringstream aStream(extraInfo.getStr());
@@ -847,10 +847,10 @@ void ScTiledRenderingTest::testMoveShapeHandle()
 
     CPPUNIT_ASSERT(!aView1.m_ShapeSelection.isEmpty());
     {
-        int id, x, y;
+        sal_uInt32 id, x, y;
         lcl_extractHandleParameters(aView1.m_ShapeSelection, id, x ,y);
-        int oldX = x;
-        int oldY = y;
+        sal_uInt32 oldX = x;
+        sal_uInt32 oldY = y;
         uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
         {
             {"HandleNum", uno::makeAny(id)},
