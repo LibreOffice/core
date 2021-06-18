@@ -4,8 +4,8 @@
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkImage" id="image7">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">open-menu-symbolic</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">open-menu-symbolic</property>
     <property name="icon_size">2</property>
   </object>
   <object class="GtkMenu" id="menu">
@@ -212,16 +212,16 @@
         <child>
           <object class="GtkMenuButton" id="menubutton">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="popup">menu</property>
-            <property name="image">image7</property>
-            <property name="always_show_image">True</property>
-            <property name="relief">none</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
             <property name="valign">start</property>
             <property name="margin-end">10</property>
             <property name="margin-top">5</property>
-            <property name="use_popover">False</property>
+            <property name="image">image7</property>
+            <property name="relief">none</property>
+            <property name="always-show-image">True</property>
+            <property name="popup">menu</property>
+            <property name="use-popover">False</property>
             <style>
               <class name="small-button"/>
             </style>
