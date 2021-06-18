@@ -8916,7 +8916,7 @@ class GtkInstanceToggleButton : public GtkInstanceButton, public virtual weld::T
 protected:
     GtkToggleButton* m_pToggleButton;
 private:
-    gulong m_nSignalId;
+    gulong m_nToggledSignalId;
 
     static void signalToggled(GtkToggleButton*, gpointer widget)
     {
@@ -8928,7 +8928,7 @@ public:
     GtkInstanceToggleButton(GtkToggleButton* pButton, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceButton(GTK_BUTTON(pButton), pBuilder, bTakeOwnership)
         , m_pToggleButton(pButton)
-        , m_nSignalId(g_signal_connect(m_pToggleButton, "toggled", G_CALLBACK(signalToggled), this))
+        , m_nToggledSignalId(g_signal_connect(m_pToggleButton, "toggled", G_CALLBACK(signalToggled), this))
     {
     }
 
@@ -8968,19 +8968,19 @@ public:
 
     virtual void disable_notify_events() override
     {
-        g_signal_handler_block(m_pToggleButton, m_nSignalId);
+        g_signal_handler_block(m_pToggleButton, m_nToggledSignalId);
         GtkInstanceButton::disable_notify_events();
     }
 
     virtual void enable_notify_events() override
     {
         GtkInstanceButton::enable_notify_events();
-        g_signal_handler_unblock(m_pToggleButton, m_nSignalId);
+        g_signal_handler_unblock(m_pToggleButton, m_nToggledSignalId);
     }
 
     virtual ~GtkInstanceToggleButton() override
     {
-        g_signal_handler_disconnect(m_pToggleButton, m_nSignalId);
+        g_signal_handler_disconnect(m_pToggleButton, m_nToggledSignalId);
     }
 };
 
