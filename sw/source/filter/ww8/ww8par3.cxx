@@ -1936,6 +1936,10 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
 
                 // reset/blank the indent
                 m_pCurrentColl->SetFormatAttr(SvxLRSpaceItem(RES_LR_SPACE));
+
+                // LFO 0 is supposed to indicate "cancel", but nothing in the existing code
+                // acknowledges that special meaning. So instead use USHRT_MAX-1 for that purpose.
+                RegisterNumFormat(USHRT_MAX-1, MAXLEVEL);
             }
             else if (SwTextNode* pTextNode = m_pPaM->GetNode().GetTextNode())
             {
