@@ -1736,6 +1736,7 @@ void SAL_CALL SvxUnoTextBase::insertString( const uno::Reference< text::XTextRan
     if( !xRange.is() )
         return;
 
+<<<<<<< HEAD   (4e2c8c Use FontList::GetFirstFontMetric instead of custom iteration)
     ESelection aSelection;
     if (GetEditSource())
     {
@@ -1743,6 +1744,8 @@ void SAL_CALL SvxUnoTextBase::insertString( const uno::Reference< text::XTextRan
         SetSelection( aSelection );
     }
 
+=======
+>>>>>>> CHANGE (e837f5 tdf#142716 Update selection after any text is inserted.)
     SvxUnoTextRangeBase* pRange = comphelper::getUnoTunnelImplementation<SvxUnoTextRange>( xRange );
     if(pRange)
     {
@@ -1757,6 +1760,19 @@ void SAL_CALL SvxUnoTextBase::insertString( const uno::Reference< text::XTextRan
         pRange->setString( aString );
 
         pRange->CollapseToEnd();
+<<<<<<< HEAD   (4e2c8c Use FontList::GetFirstFontMetric instead of custom iteration)
+=======
+
+    pRange->setString( aString );
+
+    pRange->CollapseToEnd();
+
+    if (GetEditSource())
+    {
+        ESelection aSelection;
+        ::GetSelection( aSelection, GetEditSource()->GetTextForwarder() );
+        SetSelection( aSelection );
+>>>>>>> CHANGE (e837f5 tdf#142716 Update selection after any text is inserted.)
     }
 }
 
