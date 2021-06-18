@@ -398,6 +398,13 @@ OUString convertHatchStyle(HatchStyle eStyle)
     return OUString();
 }
 
+OUString convertLanguageTypeToString(LanguageType rLanguageType)
+{
+    std::stringstream ss;
+    ss << std::hex << std::setfill ('0') << std::setw(4) << rLanguageType.get();
+    return "#" + OUString::createFromAscii(ss.str().c_str());
+}
+
 OUString convertWallpaperStyleToString(WallpaperStyle eWallpaperStyle)
 {
     switch (eWallpaperStyle)
@@ -1345,7 +1352,17 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
             break;
 
             //case MetaActionType::LAYOUTMODE:
-            //case MetaActionType::TEXTLANGUAGE:
+            case MetaActionType::TEXTLANGUAGE:
+            {
+                const MetaTextLanguageAction* pMetaTextLanguageAction = static_cast<MetaTextLanguageAction*>(pAction);
+
+                rWriter.startElement(sCurrentElementTag);
+
+                rWriter.attribute("language", convertLanguageTypeToString(pMetaTextLanguageAction->GetTextLanguage()));
+
+                rWriter.endElement();
+            }
+            break;
 
             case MetaActionType::OVERLINECOLOR:
             {

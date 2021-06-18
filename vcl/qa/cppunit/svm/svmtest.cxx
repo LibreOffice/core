@@ -193,7 +193,7 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
     //void checkLayoutMode(const GDIMetaFile& rMetaFile);
     void testLayoutMode();
 
-    //void checkTextLanguage(const GDIMetaFile& rMetaFile);
+    void checkTextLanguage(const GDIMetaFile& rMetaFile);
     void testTextLanguage();
 
 public:
@@ -2111,8 +2111,31 @@ void SvmTest::testComment()
 void SvmTest::testLayoutMode()
 {}
 
+void SvmTest::checkTextLanguage(const GDIMetaFile& rMetaFile)
+{
+    xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
+
+    assertXPathAttrs(pDoc, "/metafile/textlanguage[1]", {
+        {"language", "#0408"}
+    });
+
+    assertXPathAttrs(pDoc, "/metafile/textlanguage[2]", {
+        {"language", "#00ff"}
+    });
+}
+
 void SvmTest::testTextLanguage()
-{}
+{
+    GDIMetaFile aGDIMetaFile;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
+
+    pVirtualDev->SetDigitLanguage(LANGUAGE_GREEK);
+    pVirtualDev->SetDigitLanguage(LANGUAGE_NONE);
+
+    checkTextLanguage(writeAndReadStream(aGDIMetaFile));
+    checkTextLanguage(readFile(u"textlanguage.svm"));
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SvmTest);
 
