@@ -28,6 +28,7 @@
 
 #include <memory>
 #include <ndole.hxx>
+#include <unotools/securityoptions.hxx>
 
 class DocxAttributeOutput;
 class DocxExportFilter;
@@ -113,6 +114,9 @@ class DocxExport : public MSWordExportBase
 
     /// Pointer to the Frame of a floating table it is nested in
     const ww8::Frame *m_pFloatingTableFrame = nullptr;
+
+    /// Map authors to remove personal info
+    std::unique_ptr<SvtSecurityMapPersonalInfo> m_pAuthorIDs;
 
 public:
 
@@ -295,6 +299,9 @@ public:
     void SetFS(::sax_fastparser::FSHelperPtr const & mpFS);
 
     void SetFloatingTableFrame(const ww8::Frame* pF) { m_pFloatingTableFrame = pF; }
+
+    // Get author id to remove personal info
+    size_t GetInfoID( const OUString sPersonalInfo ) const { return m_pAuthorIDs->GetInfoID(sPersonalInfo); }
 
 private:
     DocxExport( const DocxExport& ) = delete;
