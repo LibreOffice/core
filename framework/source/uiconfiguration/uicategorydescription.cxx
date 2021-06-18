@@ -365,7 +365,8 @@ public:
 UICategoryDescription::UICategoryDescription( const Reference< XComponentContext >& rxContext ) :
     UICommandDescription(rxContext,true)
 {
-    const LanguageTag& rCurrentLanguage = SvtSysLocale().GetUILanguageTag();
+    SvtSysLocale aSysLocale;
+    const LanguageTag& rCurrentLanguage = aSysLocale.GetUILanguageTag();
     Reference< XNameAccess > xEmpty;
     OUString aGenericCategories( "GenericCategories" );
     m_xGenericUICommands[rCurrentLanguage] = new ConfigurationAccess_UICategory( aGenericCategories, xEmpty, rxContext );
