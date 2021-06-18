@@ -9220,7 +9220,7 @@ private:
     WidgetBackground m_aCustomBackground;
 #endif
 
-    static void signalToggled(GtkWidget*, gpointer widget)
+    static void signalMenuButtonToggled(GtkWidget*, gpointer widget)
     {
         GtkInstanceMenuButton* pThis = static_cast<GtkInstanceMenuButton*>(widget);
         SolarMutexGuard aGuard;
@@ -9852,7 +9852,7 @@ public:
                 gtk_window_set_type_hint(m_pMenuHack, GDK_WINDOW_TYPE_HINT_COMBO);
                 gtk_window_set_modal(m_pMenuHack, true);
                 gtk_window_set_resizable(m_pMenuHack, false);
-                m_nSignalId = g_signal_connect(GTK_TOGGLE_BUTTON(m_pMenuButton), "toggled", G_CALLBACK(signalToggled), this);
+                m_nSignalId = g_signal_connect(GTK_TOGGLE_BUTTON(m_pMenuButton), "toggled", G_CALLBACK(signalMenuButtonToggled), this);
                 g_signal_connect(m_pMenuHack, "grab-broken-event", G_CALLBACK(signalGrabBroken), this);
                 g_signal_connect(m_pMenuHack, "button-release-event", G_CALLBACK(signalButtonRelease), this);
                 g_signal_connect(m_pMenuHack, "key-press-event", G_CALLBACK(keyPress), this);
