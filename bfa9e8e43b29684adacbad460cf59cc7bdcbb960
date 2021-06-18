@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "07a8752c_fcb38b91",
+        "filename": "cui/source/dialogs/GraphicTestsDialog.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-06-18T11:09:52Z",
+      "side": 1,
+      "message": "Would something like this be fine to display at the log?",
+      "range": {
+        "startLine": 26,
+        "startChar": 4,
+        "endLine": 50,
+        "endChar": 5
+      },
+      "revId": "bfa9e8e43b29684adacbad460cf59cc7bdcbb960",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
