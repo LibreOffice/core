@@ -2740,7 +2740,8 @@ static bool IsNextOnSamePage(SwPageFrame const& rPage,
 /// Calculate the offsets arising because of FlyFrames
 bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
                                long& rLeftOffset,
-                               long& rRightOffset ) const
+                               long& rRightOffset,
+                               SwTwips *const pSpaceBelowBottom) const
 {
     bool bInvalidatePrtArea = false;
     const SwPageFrame *pPage = FindPageFrame();
@@ -2760,9 +2761,17 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
         long nPrtPos = aRectFnSet.GetTop(getFrameArea());
         nPrtPos = aRectFnSet.YInc( nPrtPos, rUpper );
         SwRect aRect( getFrameArea() );
-        long nYDiff = aRectFnSet.YDiff( aRectFnSet.GetTop(getFramePrintArea()), rUpper );
-        if( nYDiff > 0 )
-            aRectFnSet.AddBottom( aRect, -nYDiff );
+        if (pSpaceBelowBottom)
+        {   // set to space below table frame
+            aRectFnSet.SetTopAndHeight(aRect, aRectFnSet.GetBottom(aRect), *pSpaceBelowBottom);
+        }
+        else
+        {
+            long nYDiff = aRectFnSet.YDiff( aRectFnSet.GetTop(getFramePrintArea()), rUpper );
+            if (nYDiff > 0)
+                aRectFnSet.AddBottom( aRect, -nYDiff );
+        }
+
         for ( size_t i = 0; i < pPage->GetSortedObjs()->size(); ++i )
         {
             SwAnchoredObject* pAnchoredObj = (*pPage->GetSortedObjs())[i];
@@ -2797,8 +2806,9 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
                     aFlyRect.IsOver( aRect ) &&
                     // fly isn't lower of table and
                     // anchor character frame of fly isn't lower of table
-                    ( !IsAnLower( pFly ) &&
-                      ( !pAnchorCharFrame || !IsAnLower( pAnchorCharFrame ) ) ) &&
+                    (pSpaceBelowBottom // not if in ShouldBwdMoved
+                     || (!IsAnLower( pFly ) &&
+                          (!pAnchorCharFrame || !IsAnLower(pAnchorCharFrame)))) &&
                     // table isn't lower of fly
                     !pFly->IsAnLower( this ) &&
                     // fly is lower of fly, the table is in
@@ -2853,6 +2863,20 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
                         {
                             if (aRectFnSet.YDiff( nPrtPos, nBottom ) < 0)
                                 nPrtPos = nBottom;
+                            // tdf#116501 subtract flys blocking space from below
+                            // TODO this may not work ideally for multiple flys
+                            if (pSpaceBelowBottom
+                                && aRectFnSet.YDiff(aRectFnSet.GetBottom(aRect), nBottom) < 0)
+                            {
+                                if (aRectFnSet.YDiff(aRectFnSet.GetTop(aRect), aRectFnSet.GetTop(aFlyRect)) < 0)
+                                {
+                                    aRectFnSet.SetBottom(aRect, aRectFnSet.GetTop(aFlyRect));
+                                }
+                                else
+                                {
+                                    aRectFnSet.SetHeight(aRect, 0);
+                                }
+                            }
                             bInvalidatePrtArea = true;
                         }
                     }
@@ -2880,6 +2904,10 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
             }
         }
         rUpper = aRectFnSet.YDiff( nPrtPos, aRectFnSet.GetTop(getFrameArea()) );
+        if (pSpaceBelowBottom)
+        {
+            *pSpaceBelowBottom = aRectFnSet.GetHeight(aRect);
+        }
     }
 
     return bInvalidatePrtArea;
@@ -2915,7 +2943,7 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
     //   are right or left aligned, those set the minimum for the borders.
     long nTmpRight = -1000000,
          nLeftOffset  = 0;
-    if( CalcFlyOffsets( nUpper, nLeftOffset, nTmpRight ) )
+    if (CalcFlyOffsets(nUpper, nLeftOffset, nTmpRight, nullptr))
     {
         setFramePrintAreaValid(false);
     }
@@ -3549,6 +3577,14 @@ bool SwTabFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool, bool &rReformat
                     const SwViewShell *pSh = getRootFrame()->GetCurrShell();
                     if( pSh && pSh->GetViewOptions()->getBrowseMode() )
                         nSpace += pNewUpper->Grow( LONG_MAX, true );
+                    if (0 < nSpace && GetPrecede())
+                    {
+                        SwTwips nUpperDummy(0);
+                        long nLeftOffsetDummy(0), nRightOffsetDummy(0);
+                        // tdf#116501 check for no-wrap fly overlap
+                        static_cast<const SwTabFrame*>(GetPrecede())->CalcFlyOffsets(
+                            nUpperDummy, nLeftOffsetDummy, nRightOffsetDummy, &nSpace);
+                    }
                 }
             }
             else if (!m_bLockBackMove)

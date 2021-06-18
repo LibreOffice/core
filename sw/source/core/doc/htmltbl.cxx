@@ -363,7 +363,7 @@ sal_uInt16 SwHTMLTableLayout::GetBrowseWidthByTabFrame(
     SwTwips nUpperDummy = 0;
     long nRightOffset = 0,
          nLeftOffset  = 0;
-    rTabFrame.CalcFlyOffsets( nUpperDummy, nLeftOffset, nRightOffset );
+    rTabFrame.CalcFlyOffsets(nUpperDummy, nLeftOffset, nRightOffset, nullptr);
     nWidth -= (nLeftOffset + nRightOffset);
 
     return static_cast<sal_uInt16>(std::min(nWidth, SwTwips(SAL_MAX_UINT16)));
