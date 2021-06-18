@@ -402,12 +402,14 @@ REM ----------------------------------------------------------------------------
 Public Function GetDocument(Optional ByVal WindowName As Variant) As Variant
 &apos;&apos;&apos; Returns a SFDocuments.Document object referring to the active window or the given window
 &apos;&apos;&apos;	Args:
-&apos;&apos;&apos;		WindowName: see definitions. If absent the active window is considered
+&apos;&apos;&apos;		WindowName:	when a string, see definitions. If absent the active window is considered.
+&apos;&apos;&apos;					when an object, must be a UNO object of types
+&apos;&apos;&apos;					   com.sun.star.lang.XComponent or com.sun.star.comp.dba.ODatabaseDocument
 &apos;&apos;&apos;	Exceptions:
 &apos;&apos;&apos;		DOCUMENTERROR		The targeted window could not be found
 &apos;&apos;&apos;	Examples:
 &apos;&apos;&apos;		Dim oDoc As Object
-&apos;&apos;&apos;			Set oDoc = ui.GetDocument
+&apos;&apos;&apos;			Set oDoc = ui.GetDocument	&apos;	or Set oDoc = ui.GetDcument(ThisComponent)
 &apos;&apos;&apos;			oDoc.Save()
 
 Dim oDocument As Object			&apos;	Return value
@@ -420,7 +422,10 @@ Const cstSubArgs = &quot;[WindowName]&quot;
 Check:
 	If IsMissing(WindowName) Or IsEmpty(WindowName) Then WindowName = &quot;&quot;
 	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not SF_Utils._Validate(WindowName, &quot;WindowName&quot;, Array(V_STRING, V_OBJECT)) Then GoTo Finally
+		If VarType(WindowName) = V_STRING Then
 			If Not SF_Utils._ValidateFile(WindowName, &quot;WindowName&quot;, , True) Then GoTo Finally
+		End If
 	End If
 
 Try:
