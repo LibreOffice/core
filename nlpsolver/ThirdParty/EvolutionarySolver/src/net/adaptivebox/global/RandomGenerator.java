@@ -23,12 +23,27 @@
 package net.adaptivebox.global;
 
 import java.util.Random;
+import java.security.SecureRandom;
 
 public class RandomGenerator {
   /**
    * Pseudo-random number generator instance.
    */
   private static Random PRNG = new Random();
+
+  /**
+   * Switch between weaker, but faster pseudo-random number generator and
+   * stronger, but slower.
+   *
+   * @param stronger activation of secure pseudo random generator flag
+   */
+  public static void useStrongerGenerator(boolean stronger) {
+    if(stronger == true) {
+      PRNG = new SecureRandom();
+    } else {
+      PRNG = new Random();
+    }
+  }
 
   /**
    * This function returns a random integer number between the lowLimit and
@@ -53,6 +68,15 @@ public class RandomGenerator {
   public static double doubleRangeRandom(double lowLimit, double upLimit) {
     double num = lowLimit + PRNG.nextDouble() * (upLimit - lowLimit);
     return num;
+  }
+
+  /**
+   * This function returns a random float number between the zero (inclusive) and one (exclusive).
+   *
+   * @return double value in the range [0, 1)
+   */
+  public static double doubleZeroOneRandom() {
+    return PRNG.nextDouble();
   }
 
   public static int[] randomSelection(int maxNum, int times) {

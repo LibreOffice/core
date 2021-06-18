@@ -55,6 +55,7 @@
 
 package net.adaptivebox.deps.behavior;
 
+import net.adaptivebox.global.RandomGenerator;
 import net.adaptivebox.goodness.IGoodnessCompareEngine;
 import net.adaptivebox.knowledge.Library;
 import net.adaptivebox.knowledge.SearchPoint;
@@ -102,14 +103,14 @@ public class PSGTBehavior extends AbsGTBehavior {
 
     int DIMENSION = designSpace.getDimension();
     for (int b = 0; b < DIMENSION; b++) {
-      if (Math.random() < CL) {
+      if (RandomGenerator.doubleZeroOneRandom() < CL) {
         designSpace.mutationAt(trailPointLocation, b);
         continue;
       }
 
       double deltaxb = weight * (pcurrent_t_location[b] - pold_t_location[b])
-            + c1 * Math.random() * (pbest_t_location[b] - pcurrent_t_location[b])
-            + c2 * Math.random() * (gbest_t_location[b] - pcurrent_t_location[b]);
+            + c1 * RandomGenerator.doubleZeroOneRandom() * (pbest_t_location[b] - pcurrent_t_location[b])
+            + c2 * RandomGenerator.doubleZeroOneRandom() * (gbest_t_location[b] - pcurrent_t_location[b]);
 
       // limitation for delta_x
       double deltaxbm = 0.5 * designSpace.getMagnitudeIn(b);

@@ -88,7 +88,7 @@ public class DEGTBehavior extends AbsGTBehavior implements ILibEngine {
 
     /* Handle first part of the trial vector. */
     for (int index = 0; index < guaranteeIndex; index++) {
-      if (CR <= Math.random()) {
+      if (CR <= RandomGenerator.doubleZeroOneRandom()) {
         trailVector[index] = locaclVector[index];
         continue;
       }
@@ -101,7 +101,7 @@ public class DEGTBehavior extends AbsGTBehavior implements ILibEngine {
 
     /* Handle second part of the trial vector. */
     for (int index = guaranteeIndex + 1; index < DIMENSION; index++) {
-      if (CR <= Math.random()) {
+      if (CR <= RandomGenerator.doubleZeroOneRandom()) {
         trailVector[index] = locaclVector[index];
         continue;
       }
