@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "00e65fc0_6155e193",
+        "filename": "sw/qa/extras/tiledrendering/tiledrendering.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2863,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-06-18T07:33:44Z",
+      "side": 1,
+      "message": "I think this should be sal_uInt32, not sal_Int32",
+      "revId": "9325f2a9ca5eeefbd10c1ceac8673f47a14f719e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
