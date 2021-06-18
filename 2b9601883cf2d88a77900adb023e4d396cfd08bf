@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ffc3358_100ca6f9",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3059,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-06-18T15:14:48Z",
+      "side": 1,
+      "message": "What was the aim of this change?",
+      "range": {
+        "startLine": 3059,
+        "startChar": 8,
+        "endLine": 3059,
+        "endChar": 77
+      },
+      "revId": "2b9601883cf2d88a77900adb023e4d396cfd08bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf0c0128_c59a767c",
+        "filename": "sc/source/filter/excel/excrecds.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-06-18T15:14:48Z",
+      "side": 1,
+      "message": "What does 500 mean? Touching these undocumented lines is a good reason to document it for the future developments.",
+      "range": {
+        "startLine": 736,
+        "startChar": 0,
+        "endLine": 737,
+        "endChar": 50
+      },
+      "revId": "2b9601883cf2d88a77900adb023e4d396cfd08bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a401488_e8908ca3",
+        "filename": "sc/source/filter/excel/excrecds.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-06-18T15:14:48Z",
+      "side": 1,
+      "message": "Don\u0027t we want to handle all possible operations on dates? I.e. \u003c, \u003c\u003d, \u003e, \u003e\u003d, and not equal?",
+      "range": {
+        "startLine": 744,
+        "startChar": 56,
+        "endLine": 744,
+        "endChar": 78
+      },
+      "revId": "2b9601883cf2d88a77900adb023e4d396cfd08bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
