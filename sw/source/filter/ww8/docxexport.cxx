@@ -1798,7 +1798,8 @@ DocxExport::DocxExport(DocxExportFilter& rFilter, SwDoc& rDocument,
       m_nActiveXControls( 0 ),
       m_nHeadersFootersInSection(0),
       m_bDocm(bDocm),
-      m_bTemplate(bTemplate)
+      m_bTemplate(bTemplate),
+      m_pAuthorIDs(new SvtSecurityMapPersonalInfo)
 {
     // Write the document properties
     WriteProperties( );
