@@ -36,6 +36,7 @@ Private ConsoleDialog		As Object	&apos; SFDialogs.Dialog object
 Private ConsoleControl		As Object	&apos; SFDialogs.DialogControl object
 Private DisplayEnabled		As Boolean	&apos; When True, display of console or error messages is allowed
 Private StopWhenError		As Boolean	&apos; When True, process stops after error &gt; &quot;WARNING&quot;
+Private TriggeredByPython	As Boolean	&apos; When True, the actual user script is a Python script
 Private DebugMode			As Boolean	&apos; When True, log enter/exit each official Sub
 
 &apos;	Progress and status bars
@@ -98,6 +99,7 @@ Private Sub Class_Initialize()
 	Set ConsoleControl = Nothing
 	DisplayEnabled = True
 	StopWhenError = True
+	TriggeredByPython = False
 	DebugMode = False
 	Set ProgressBarDialog = Nothing
 	Set ProgressBarText = Nothing
@@ -605,8 +607,8 @@ Try:
 									&amp;	&quot;%1: &apos;Basic&apos; or &apos;Python&apos;\n&quot; _
 									&amp;	&quot;%2: An identifier\n&quot; _
 									&amp;	&quot;%3: A string\n&quot; _
-									&amp;	&quot;%2: An identifier\n&quot; _
-									&amp;	&quot;%3: A string&quot; _
+									&amp;	&quot;%4: An identifier\n&quot; _
+									&amp;	&quot;%5: A string&quot; _
 					)
 	&apos;	SF_Session.ExecuteBasicScript
 			.AddText(	Context := &quot;SCRIPTEXEC&quot; _
@@ -971,6 +973,7 @@ Public Sub _StackReset()
 	MainFunction = &quot;&quot;
 	MainFunctionArgs = &quot;&quot;
 	StackLevel = 0
+	TriggeredByPython = False
 
 End Sub		&apos;		ScriptForge.SF_Root._StackReset
 
