@@ -23,6 +23,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,breakpad,\
 	external/breakpad/0001-Handle-race-between-ExceptionHandler-SignalHandler-a.patch.1 \
 	external/breakpad/c++20-allocator.patch \
 	external/breakpad/breakpad-dump_syms.patch.1 \
+	external/breakpad/breakpad-no-env.patch.1 \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_files,breakpad,src/tools/windows/dump_syms,\
