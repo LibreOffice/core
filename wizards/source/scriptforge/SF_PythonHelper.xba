@@ -472,17 +472,17 @@ REM ----------------------------------------------------------------------------
 Public Function PyInputBox(ByVal Msg As Variant _
 								, ByVal Title As Variant _
 								, ByVal Default As Variant _
-								, Optional ByVal XPos As Variant _
-								, Optional ByVal YPos As Variant _
+								, Optional ByVal XPosTwips As Variant _
+								, Optional ByVal YPosTwips As Variant _
 								) As String
 &apos;&apos;&apos;	Convenient function to replicate InputBox() in Python scripts
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		Msg: String expression displayed as the message in the dialog box
 &apos;&apos;&apos;		Title: String expression displayed in the title bar of the dialog box
 &apos;&apos;&apos;		Default: String expression displayed in the text box as default if no other input is given
-&apos;&apos;&apos;		XPos: Integer expression that specifies the horizontal position of the dialog
-&apos;&apos;&apos;		YPos: Integer expression that specifies the vertical position of the dialog
-&apos;&apos;&apos;			If XPos and YPos are omitted, the dialog is centered on the screen
+&apos;&apos;&apos;		XPosTwips: Integer expression that specifies the horizontal position of the dialog
+&apos;&apos;&apos;		YPosTwips: Integer expression that specifies the vertical position of the dialog
+&apos;&apos;&apos;			If XPosTwips and YPosTwips are omitted, the dialog is centered on the screen
 &apos;&apos;&apos;			The position is specified in twips.
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		The entered value or &quot;&quot; if the user pressed the Cancel button
@@ -491,20 +491,20 @@ Public Function PyInputBox(ByVal Msg As Variant _
 
 Dim sInput As String		&apos;	Return value
 Const cstThisSub = &quot;Basic.InputBox&quot;
-Const cstSubArgs = &quot;msg, [title=&apos;&apos;], [default=&apos;&apos;], [xpos], [ypos]&quot;
+Const cstSubArgs = &quot;msg, [title=&apos;&apos;], [default=&apos;&apos;], [xpostwips], [ypostwips]&quot;
 
 	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
 	sInput = &quot;&quot;
 
 Check:
-	If IsMissing(YPos) Then YPos = 1
+	If IsMissing(YPosTwips) Then YPosTwips = 1
 	SF_Utils._EnterFunction(cstThisSub, cstSubArgs)
 
 Try:
-	If IsMissing(XPos) Then
+	If IsMissing(XPosTwips) Then
 		sInput = InputBox(Msg, Title, Default)
 	Else
-		sInput = InputBox(Msg, Title, Default, XPos, YPos)
+		sInput = InputBox(Msg, Title, Default, XPosTwips, YPosTwips)
 	End If
 
 Finally:
