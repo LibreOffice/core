@@ -32,6 +32,7 @@
 #include <sal/types.h>
 #include <com/sun/star/graphic/XGraphicProvider2.hpp>
 #include <com/sun/star/graphic/XGraphicMapper.hpp>
+#include <vcl/outdev.hxx>
 #include <vcl/vclptr.hxx>
 
 struct WmfExternal;
@@ -47,7 +48,6 @@ namespace com::sun::star {
     namespace graphic { class XGraphicProvider; }
     namespace uno { class XComponentContext; }
 }
-class OutputDevice;
 
 namespace oox {
 
