@@ -24,6 +24,7 @@
 #include <View.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/unolingu.hxx>
+#include <o3tl/deleter.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/fmview.hxx>
 #include <editeng/outliner.hxx>
@@ -145,8 +146,8 @@ View::~View()
     while(PaintWindowCount())
     {
         // remove all registered OutDevs
-        // coverity[fun_call_w_exception : SUPPRESS] - cid#485150 silence Uncaught exception
-        DeleteWindowFromPaintView(GetFirstOutputDevice() /*GetWin(0)*/);
+        // cid#1485150 silence Uncaught exception
+        suppress_fun_call_w_exception(DeleteWindowFromPaintView(GetFirstOutputDevice()));
     }
 }
 
