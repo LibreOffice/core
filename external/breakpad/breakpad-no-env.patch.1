@@ -1,0 +1,13 @@
+diff -ur breakpad.org/src/client/linux/minidump_writer/minidump_writer.cc breakpad/src/client/linux/minidump_writer/minidump_writer.cc
+--- breakpad.org/src/client/linux/minidump_writer/minidump_writer.cc	2021-06-19 15:32:57.258078847 +0200
++++ breakpad/src/client/linux/minidump_writer/minidump_writer.cc	2021-06-19 15:35:07.014082452 +0200
+@@ -289,7 +289,8 @@
+     dir.CopyIndex(dir_index++, &dirent);
+ 
+     dirent.stream_type = MD_LINUX_ENVIRON;
+-    if (!WriteProcFile(&dirent.location, GetCrashThread(), "environ"))
++    // don't include the user's env
++    if (true || !WriteProcFile(&dirent.location, GetCrashThread(), "environ"))
+       NullifyDirectoryEntry(&dirent);
+     dir.CopyIndex(dir_index++, &dirent);
+ 
