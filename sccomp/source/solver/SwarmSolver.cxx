@@ -233,7 +233,7 @@ public:
 
     virtual OUString SAL_CALL getPropertyDescription(const OUString& rPropertyName) override
     {
-        const char* pResId = nullptr;
+        const char* pResId = "";
         switch (getInfoHelper().getHandleByName(rPropertyName))
         {
             case PROP_NONNEGATIVE:
