@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f6e49edb_50331974",
+        "filename": "oox/source/drawingml/textliststyle.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1002376
+      },
+      "writtenOn": "2021-06-19T20:59:32Z",
+      "side": 1,
+      "message": "This should be just false.",
+      "range": {
+        "startLine": 35,
+        "startChar": 29,
+        "endLine": 35,
+        "endChar": 58
+      },
+      "revId": "18c7d8d42bbf5db68a60035ae1c0a3a6239041c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3f3b4dd_19cb08dc",
+        "filename": "oox/source/drawingml/textliststyle.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1002376
+      },
+      "writtenOn": "2021-06-19T20:59:32Z",
+      "side": 1,
+      "message": "Don\u0027t need this line.",
+      "revId": "18c7d8d42bbf5db68a60035ae1c0a3a6239041c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
