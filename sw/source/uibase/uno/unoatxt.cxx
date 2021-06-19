@@ -491,7 +491,9 @@ sal_Int32 SwXAutoTextGroup::getCount()
 uno::Any SwXAutoTextGroup::getByIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
-    std::unique_ptr<SwTextBlocks> pGlosGroup(pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName) : nullptr);
+    if (!pGlossaries)
+        throw uno::RuntimeException();
+    std::unique_ptr<SwTextBlocks> pGlosGroup(pGlossaries->GetGroupDoc(m_sGroupName));
     if (!pGlosGroup || pGlosGroup->GetError())
         throw uno::RuntimeException();
     const sal_uInt16 nCount = pGlosGroup->GetCount();
