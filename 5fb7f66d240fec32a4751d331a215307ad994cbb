@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "561e49c8_0d0211fb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-19T07:30:12Z",
+      "side": 1,
+      "message": "It\u0027s rather simplification of OString construction ;)",
+      "revId": "5fb7f66d240fec32a4751d331a215307ad994cbb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
