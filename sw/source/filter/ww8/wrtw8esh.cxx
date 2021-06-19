@@ -974,9 +974,9 @@ void WW8Export::AppendFlyInFlys(const ww8::Frame& rFrameFormat,
         return ;
     PlcDrawObj *pDrwO;
     if (TXT_HDFT == m_nTextTyp)
-        pDrwO = m_pHFSdrObjs;
+        pDrwO = m_pHFSdrObjs.get();
     else
-        pDrwO = m_pSdrObjs;
+        pDrwO = m_pSdrObjs.get();
 
     if (rFrameFormat.IsInline())
     {
@@ -2212,18 +2212,18 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
     CloseContainer();   // ESCHER_DggContainer
 
     sal_uInt8 i = 2;     // for header/footer and the other
-    PlcDrawObj *pSdrObjs = rWrt.m_pHFSdrObjs;
-    pTextBxs = rWrt.m_pHFTextBxs;
+    PlcDrawObj *pSdrObjs = rWrt.m_pHFSdrObjs.get();
+    pTextBxs = rWrt.m_pHFTextBxs.get();
 
     // if no header/footer -> skip over
     if (!pSdrObjs->size())
     {
         --i;
-        pSdrObjs = rWrt.m_pSdrObjs;
-        pTextBxs = rWrt.m_pTextBxs;
+        pSdrObjs = rWrt.m_pSdrObjs.get();
+        pTextBxs = rWrt.m_pTextBxs.get();
     }
 
-    for( ; i--; pSdrObjs = rWrt.m_pSdrObjs, pTextBxs = rWrt.m_pTextBxs )
+    for( ; i--; pSdrObjs = rWrt.m_pSdrObjs.get(), pTextBxs = rWrt.m_pTextBxs.get() )
     {
         // "dummy char" (or any Count ?) - why? Only Microsoft knows it.
         GetStream().WriteChar( i );
@@ -2232,7 +2232,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
 
         EnterGroup();
 
-        sal_uLong nSecondShapeId = pSdrObjs == rWrt.m_pSdrObjs ? GenerateShapeId() : 0;
+        sal_uLong nSecondShapeId = pSdrObjs == rWrt.m_pSdrObjs.get() ? GenerateShapeId() : 0;
 
         // write now all Writer-/DrawObjects
         DrawObjPointerVector aSorted;

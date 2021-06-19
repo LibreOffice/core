@@ -1657,7 +1657,7 @@ sal_uInt16 WW8Export::AddRedlineAuthor( std::size_t nId )
 {
     if( !m_pRedlAuthors )
     {
-        m_pRedlAuthors = new WW8_WrtRedlineAuthor;
+        m_pRedlAuthors.reset(new WW8_WrtRedlineAuthor);
         m_pRedlAuthors->AddName("Unknown");
     }
     return m_pRedlAuthors->AddName( SW_MOD()->GetRedlineAuthor( nId ) );
@@ -3500,15 +3500,15 @@ ErrCode WW8Export::ExportDocument_Impl()
 
     pFootnote.reset(new WW8_WrPlcFootnoteEdn( TXT_FTN ));                      // Footnotes
     pEdn.reset(new WW8_WrPlcFootnoteEdn( TXT_EDN ));                      // Endnotes
-    m_pAtn = new WW8_WrPlcAnnotations;                                 // PostIts
+    m_pAtn.reset(new WW8_WrPlcAnnotations);                                 // PostIts
     m_pFactoids.reset(new WW8_WrtFactoids); // Smart tags.
-    m_pTextBxs = new WW8_WrPlcTextBoxes( TXT_TXTBOX );
-    m_pHFTextBxs = new WW8_WrPlcTextBoxes( TXT_HFTXTBOX );
+    m_pTextBxs.reset(new WW8_WrPlcTextBoxes( TXT_TXTBOX ));
+    m_pHFTextBxs.reset(new WW8_WrPlcTextBoxes( TXT_HFTXTBOX ));
 
-    m_pSdrObjs = new MainTextPlcDrawObj;   // Draw-/Fly-Objects for main text
-    m_pHFSdrObjs = new HdFtPlcDrawObj;    // Draw-/Fly-Objects for header/footer
+    m_pSdrObjs.reset(new MainTextPlcDrawObj);   // Draw-/Fly-Objects for main text
+    m_pHFSdrObjs.reset(new HdFtPlcDrawObj);    // Draw-/Fly-Objects for header/footer
 
-    m_pBkmks = new WW8_WrtBookmarks;                          // Bookmarks
+    m_pBkmks.reset(new WW8_WrtBookmarks);                          // Bookmarks
     GetWriter().CreateBookmarkTable();
 
     m_pPapPlc.reset(new WW8_WrPlcPn( *this, PAP, pFib->m_fcMin ));
@@ -3526,7 +3526,7 @@ ErrCode WW8Export::ExportDocument_Impl()
     m_pMagicTable.reset(new WW8_WrMagicTable);
 
     m_pGrf.reset(new SwWW8WrGrf( *this ));
-    m_pPiece = new WW8_WrPct( pFib->m_fcMin );
+    m_pPiece.reset(new WW8_WrPct( pFib->m_fcMin ));
     pDop.reset(new WW8Dop);
 
     pDop->fRevMarking = bool( RedlineFlags::On & m_nOrigRedlineFlags );
@@ -3613,16 +3613,16 @@ ErrCode WW8Export::ExportDocument_Impl()
     m_pPapPlc.reset();
     pSepx.reset();
 
-    delete m_pRedlAuthors;
-    delete m_pSdrObjs;
-    delete m_pHFSdrObjs;
-    delete m_pTextBxs;
-    delete m_pHFTextBxs;
-    delete m_pAtn;
+    m_pRedlAuthors.reset();
+    m_pSdrObjs.reset();
+    m_pHFSdrObjs.reset();
+    m_pTextBxs.reset();
+    m_pHFTextBxs.reset();
+    m_pAtn.reset();
     pEdn.reset();
     pFootnote.reset();
-    delete m_pBkmks;
-    delete m_pPiece;
+    m_pBkmks.reset();
+    m_pPiece.reset();
     pDop.reset();
     pFib.reset();
     GetWriter().SetStream( nullptr );
@@ -3847,10 +3847,7 @@ ErrCode SwWW8Writer::Write( SwPaM& rPaM, SfxMedium& rMed,
 MSWordExportBase::MSWordExportBase( SwDoc& rDocument, std::shared_ptr<SwUnoCursor> & pCurrentPam, SwPaM* pOriginalPam )
     : m_aMainStg(sMainStream)
     , m_pISet(nullptr)
-    , m_pPiece(nullptr)
     , m_pTopNodeOfHdFtPage(nullptr)
-    , m_pBkmks(nullptr)
-    , m_pRedlAuthors(nullptr)
     , m_pTableInfo(std::make_shared<ww8::WW8TableInfo>())
     , m_nCharFormatStart(0)
     , m_nFormatCollStart(0)
@@ -3863,17 +3860,12 @@ MSWordExportBase::MSWordExportBase( SwDoc& rDocument, std::shared_ptr<SwUnoCurso
     , m_pCurrentPageDesc(nullptr)
     , m_bFirstTOCNodeWithSection(false)
     , m_pChpIter(nullptr)
-    , m_pAtn(nullptr)
-    , m_pTextBxs(nullptr)
-    , m_pHFTextBxs(nullptr)
     , m_pParentFrame(nullptr)
     , m_pFlyOffset(nullptr)
     , m_eNewAnchorType(RndStdIds::FLY_AS_CHAR)
     , m_pStyAttr(nullptr)
     , m_pOutFormatNode(nullptr)
     , m_pCurrentStyle(nullptr)
-    , m_pSdrObjs(nullptr)
-    , m_pHFSdrObjs(nullptr)
     , m_pEscher(nullptr)
     , m_nTextTyp(0)
     , m_bStyDef(false)

@@ -455,7 +455,7 @@ public:
     std::vector<const SwTOXType*> m_aTOXArr;
     const SfxItemSet* m_pISet;    // for double attributes
     const SwFrameFormat* m_pFirstPageFormat = nullptr;
-    WW8_WrPct*  m_pPiece;         // Pointer to Piece-Table
+    std::unique_ptr<WW8_WrPct>  m_pPiece;         // Pointer to Piece-Table
     std::unique_ptr<SwNumRuleTable> m_pUsedNumTable;  // all used NumRules
     /// overriding numdef index -> (existing numdef index, abstractnumdef index)
     std::map<size_t, std::pair<size_t, size_t>> m_OverridingNums;
@@ -468,8 +468,8 @@ public:
 
     const SwTextNode *m_pTopNodeOfHdFtPage; ///< Top node of host page when in hd/ft
     std::stack< sal_Int32 > m_aCurrentCharPropStarts; ///< To remember the position in a run.
-    WW8_WrtBookmarks* m_pBkmks;
-    WW8_WrtRedlineAuthor* m_pRedlAuthors;
+    std::unique_ptr<WW8_WrtBookmarks> m_pBkmks;
+    std::unique_ptr<WW8_WrtRedlineAuthor> m_pRedlAuthors;
     std::shared_ptr<NfKeywordTable> m_pKeyMap;
     std::unique_ptr<SvxMSExportOLEObjects> m_pOLEExp;
     std::unique_ptr<SwMSConvertControls> m_pOCXExp;
@@ -499,9 +499,9 @@ public:
     std::unique_ptr<WW8_WrPlcPn> m_pChpPlc;
     MSWordAttrIter* m_pChpIter;
     std::unique_ptr<MSWordStyles> m_pStyles;
-    WW8_WrPlcAnnotations* m_pAtn;
+    std::unique_ptr<WW8_WrPlcAnnotations> m_pAtn;
     std::unique_ptr<WW8_WrtFactoids> m_pFactoids;
-    WW8_WrPlcTextBoxes *m_pTextBxs, *m_pHFTextBxs;
+    std::unique_ptr<WW8_WrPlcTextBoxes> m_pTextBxs, m_pHFTextBxs;
 
     struct LinkedTextboxInfo        //help analyze textbox flow links
     {
@@ -537,8 +537,8 @@ public:
     const sw::BroadcastingModify* m_pOutFormatNode;    // write Format or Node
     const SwFormat *m_pCurrentStyle;     // iff bStyDef=true, then this store the current style
 
-    MainTextPlcDrawObj *m_pSdrObjs;   // Draw-/Fly-Objects
-    HdFtPlcDrawObj *m_pHFSdrObjs;     // Draw-/Fly-Objects in header or footer
+    std::unique_ptr<MainTextPlcDrawObj> m_pSdrObjs;   // Draw-/Fly-Objects
+    std::unique_ptr<HdFtPlcDrawObj> m_pHFSdrObjs;     // Draw-/Fly-Objects in header or footer
 
     SwEscherEx* m_pEscher;            // escher export class
     // #i43447# - removed
