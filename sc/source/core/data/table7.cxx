@@ -109,7 +109,8 @@ void ScTable::DeleteBeforeCopyFromClip(
     ScRange aClipRange = rCxt.getClipDoc()->GetClipParam().getWholeRange();
     SCCOL nClipCol = aClipRange.aStart.Col();
     {
-        for (SCCOL nCol = aRange.mnCol1; nCol <= aRange.mnCol2; ++nCol, ++nClipCol)
+        const SCCOL nMaxCol2 = std::min<SCCOL>( aRange.mnCol2, aCol.size() - 1 );
+        for (SCCOL nCol = aRange.mnCol1; nCol <= nMaxCol2; ++nCol, ++nClipCol)
         {
             if (nClipCol > aClipRange.aEnd.Col())
                 nClipCol = aClipRange.aStart.Col(); // loop through columns.
