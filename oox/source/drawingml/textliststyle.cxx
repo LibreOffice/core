@@ -37,6 +37,7 @@ TextListStyle::~TextListStyle()
 }
 
 TextListStyle::TextListStyle(const TextListStyle& rStyle)
+    : mbHasListStyleOnImport(false)
 {
     assert(rStyle.maListStyle.size() == 9);
     assert(rStyle.maAggregationListStyle.size() == 9);
