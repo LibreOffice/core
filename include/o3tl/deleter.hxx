@@ -17,6 +17,33 @@
 #include <com/sun/star/uno/Exception.hpp>
 #include <sal/log.hxx>
 
+#if defined(__COVERITY__)
+#define suppress_fun_call_w_exception(expr)                                                        \
+    do                                                                                             \
+    {                                                                                              \
+        try                                                                                        \
+        {                                                                                          \
+            expr;                                                                                  \
+        }                                                                                          \
+        catch (const css::uno::Exception& ex)                                                      \
+        {                                                                                          \
+            SAL_WARN("vcl.app", "Fatal exception: " << exceptionToString(ex));                     \
+            std::terminate();                                                                      \
+        }                                                                                          \
+        catch (const std::exception& e)                                                            \
+        {                                                                                          \
+            SAL_WARN("vcl.app", "Fatal exception: " << e.what());                                  \
+            std::terminate();                                                                      \
+        }                                                                                          \
+    } while (false)
+#else
+#define suppress_fun_call_w_exception(expr)                                                        \
+    do                                                                                             \
+    {                                                                                              \
+        expr;                                                                                      \
+    } while (false)
+#endif
+
 namespace o3tl
 {
 /** To markup std::unique_ptr that coverity warns might throw exceptions
@@ -25,27 +52,7 @@ namespace o3tl
 */
 template <typename T> struct default_delete
 {
-    void operator()(T* p) noexcept
-    {
-#if defined(__COVERITY__)
-        try
-        {
-            delete p;
-        }
-        catch (const css::uno::Exception& ex)
-        {
-            SAL_WARN("vcl.app", "Fatal exception: " << exceptionToString(ex));
-            std::terminate();
-        }
-        catch (const std::exception& e)
-        {
-            SAL_WARN("vcl.app", "Fatal exception: " << e.what());
-            std::terminate();
-        }
-#else
-        delete p;
-#endif
-    }
+    void operator()(T* p) noexcept { suppress_fun_call_w_exception(delete p); }
 };
 
 struct free_delete

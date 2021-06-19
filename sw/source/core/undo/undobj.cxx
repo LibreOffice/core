@@ -42,6 +42,7 @@
 #include <docsh.hxx>
 #include <view.hxx>
 #include <frameformats.hxx>
+#include <o3tl/deleter.hxx>
 #include <sal/log.hxx>
 
 // This class saves the Pam as integers and can recompose those into a PaM
@@ -1208,7 +1209,8 @@ SwUndoSaveSection::~SwUndoSaveSection()
     {
         // SaveSection saves the content in the PostIt section.
         SwNodes& rUNds = m_pMovedStart->GetNode().GetNodes();
-        rUNds.Delete( *m_pMovedStart, m_nMoveLen );
+        // cid#1486004 Uncaught exception
+        suppress_fun_call_w_exception(rUNds.Delete(*m_pMovedStart, m_nMoveLen));
 
         m_pMovedStart.reset();
     }
