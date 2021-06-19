@@ -138,8 +138,7 @@ bool ScPDFExportTest::hasTextInPdf(const std::shared_ptr<utl::TempFile>& pPDFFil
     CPPUNIT_ASSERT(pStream);
 
     // get file size
-    pStream->Seek(STREAM_SEEK_TO_END);
-    const std::size_t nFileSize = pStream->Tell();
+    const std::size_t nFileSize = pStream->TellEnd();
     if (nFileSize == 0)
         return false;
 

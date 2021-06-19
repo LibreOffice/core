@@ -740,7 +740,7 @@ bool TransferableHelper::SetGraphic( const Graphic& rGraphic )
         TypeSerializer aSerializer(aMemStm);
         aSerializer.writeGraphic(rGraphic);
 
-        maAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Seek( STREAM_SEEK_TO_END ) );
+        maAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.TellEnd() );
     }
 
     return maAny.hasValue();
@@ -753,7 +753,7 @@ bool TransferableHelper::SetImageMap( const ImageMap& rIMap )
 
     aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
     rIMap.Write( aMemStm );
-    maAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Seek( STREAM_SEEK_TO_END ) );
+    maAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.TellEnd() );
 
     return maAny.hasValue();
 }
@@ -868,7 +868,7 @@ bool TransferableHelper::SetINetImage( const INetImage& rINtImg,
     aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
     rINtImg.Write( aMemStm, SotExchange::GetFormat( rFlavor ) );
 
-    maAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Seek( STREAM_SEEK_TO_END ) );
+    maAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.TellEnd() );
 
     return maAny.hasValue();
 }

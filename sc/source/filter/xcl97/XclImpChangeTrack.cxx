@@ -52,8 +52,7 @@ XclImpChangeTrack::XclImpChangeTrack( const XclImpRoot& rRoot, const XclImpStrea
     if( !xInStrm.is() )
         return;
 
-    xInStrm->Seek( STREAM_SEEK_TO_END );
-    sal_uInt64 const nStreamLen = xInStrm->Tell();
+    sal_uInt64 const nStreamLen = xInStrm->TellEnd();
     if( (xInStrm->GetErrorCode() == ERRCODE_NONE) && (nStreamLen != STREAM_SEEK_TO_END) )
     {
         xInStrm->Seek( STREAM_SEEK_TO_BEGIN );
