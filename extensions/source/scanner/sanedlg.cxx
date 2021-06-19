@@ -871,8 +871,7 @@ void SaneDlg::AcquirePreview()
     else
     {
 #if OSL_DEBUG_LEVEL > 0
-        xTransporter->getStream().Seek( STREAM_SEEK_TO_END );
-        SAL_INFO("extensions.scanner", "Previewbitmapstream contains " << xTransporter->getStream().Tell() << "bytes");
+        SAL_INFO("extensions.scanner", "Previewbitmapstream contains " << xTransporter->getStream().TellEnd() << "bytes");
 #endif
         xTransporter->getStream().Seek( STREAM_SEEK_TO_BEGIN );
         mxPreview->SetBitmap(xTransporter->getStream());

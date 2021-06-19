@@ -1318,8 +1318,7 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
 {
     if ( m_bOk )
     {
-        rStCtrl.Seek( STREAM_SEEK_TO_END );
-        nStreamLen = rStCtrl.Tell();
+        nStreamLen = rStCtrl.TellEnd();
 
         // try to allocate the UserEditAtom via CurrentUserAtom
         sal_uInt32 nCurrentUserEdit = rParam.aCurrentUserAtom.nCurrentUserEdit;

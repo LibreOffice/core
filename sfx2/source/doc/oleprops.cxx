@@ -1018,8 +1018,7 @@ void SfxOleSection::ImplSave( SvStream& rStrm )
         SaveProperty( rStrm, *prop.second, nPropPosPos );
 
     // write section size (first field in section header)
-    rStrm.Seek( STREAM_SEEK_TO_END );
-    sal_uInt32 nSectSize = static_cast< sal_uInt32 >( rStrm.Tell() - mnStartPos );
+    sal_uInt32 nSectSize = static_cast< sal_uInt32 >( rStrm.TellEnd() - mnStartPos );
     rStrm.Seek( mnStartPos );
     rStrm.WriteUInt32( nSectSize );
 }
