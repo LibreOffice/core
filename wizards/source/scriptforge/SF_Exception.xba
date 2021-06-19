@@ -716,7 +716,7 @@ Try:
 		vLocation = Split(_SF_.MainFunction, &quot;.&quot;)
 		If UBound(vLocation) &lt; 2 Then vLocation = SF_Array.Prepend(vLocation, &quot;ScriptForge&quot;)
 		sLocation = L10N.GetText(&quot;VALIDATESOURCE&quot;, vLocation(0), vLocation(1), vLocation(2)) _
-					&amp; &quot;\n&quot; &amp; L10N.GetText(&quot;VALIDATEARGS&quot;, _SF_.MainFunctionArgs)
+					&amp; &quot;\n&quot; &amp; L10N.GetText(&quot;VALIDATEARGS&quot;, _RightCaseArgs(_SF_.MainFunctionArgs))
 	Else
 		sLocation = &quot;&quot;
 	End If
@@ -724,10 +724,12 @@ Try:
 	With L10N
 		Select Case UCase(ErrorCode)
 			Case MISSINGARGERROR	&apos;	SF_Utils._Validate(Name)
+				pvArgs(0) = _RightCase(pvArgs(0))
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, pvArgs(0)) _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEMISSING&quot;, pvArgs(0))
 			Case ARGUMENTERROR		&apos;	SF_Utils._Validate(Value, Name, Types, Values, Regex, Class)
+				pvArgs(1) = _RightCase(pvArgs(1))
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, pvArgs(1)) _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATIONRULES&quot;)
@@ -737,6 +739,7 @@ Try:
 				If Len(pvArgs(5)) &gt; 0 Then sMessage = sMessage &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATECLASS&quot;, pvArgs(1), pvArgs(5))
 				sMessage = sMessage &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEACTUAL&quot;, pvArgs(1), pvArgs(0))
 			Case ARRAYERROR	&apos;	SF_Utils._ValidateArray(Value, Name, Dimensions, Types, NotNull)
+				pvArgs(1) = _RightCase(pvArgs(1))
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, pvArgs(1)) _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATIONRULES&quot;) _
@@ -746,6 +749,7 @@ Try:
 				If pvArgs(4) Then sMessage = sMessage &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATENOTNULL&quot;, pvArgs(1))
 				sMessage = sMessage &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEACTUAL&quot;, pvArgs(1), pvArgs(0))
 			Case FILEERROR		&apos;	SF_Utils._ValidateFile(Value, Name, WildCards)
+				pvArgs(1) = _RightCase(pvArgs(1))
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, pvArgs(1)) _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATIONRULES&quot;) _
@@ -782,57 +786,70 @@ Try:
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, pvArgs(0)) _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;INVALIDKEY&quot;)
 			Case UNKNOWNFILEERROR		&apos;	SF_FileSystem.CopyFile/MoveFile/DeleteFile/CreateScriptService(&quot;L10N&quot;)(ArgName, Filename)
+				pvArgs(0) = _RightCase(pvArgs(0))
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, pvArgs(0)) _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;UNKNOWNFILE&quot;, pvArgs(0), pvArgs(1))
 			Case UNKNOWNFOLDERERROR		&apos;	SF_FileSystem.CopyFolder/MoveFolder/DeleteFolder/Files/SubFolders(ArgName, Filename)
+				pvArgs(0) = _RightCase(pvArgs(0))
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, pvArgs(0)) _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;UNKNOWNFOLDER&quot;, pvArgs(0), pvArgs(1))
 			Case NOTAFILEERROR			&apos;	SF_FileSystem.CopyFile/MoveFile/DeleteFile(ArgName, Filename)
+				pvArgs(0) = _RightCase(pvArgs(0))
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, pvArgs(0)) _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;NOTAFILE&quot;, pvArgs(0), pvArgs(1))
 			Case NOTAFOLDERERROR		&apos;	SF_FileSystem.CopyFolder/MoveFolder/DeleteFolder/Files/SubFolders(ArgName, Filename)
+				pvArgs(0) = _RightCase(pvArgs(0))
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, pvArgs(0)) _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;NOTAFOLDER&quot;, pvArgs(0), pvArgs(1))
 			Case OVERWRITEERROR		&apos;	SF_FileSystem.Copy+Move/File+Folder/CreateTextFile/OpenTextFile(ArgName, Filename)
+				pvArgs(0) = _RightCase(pvArgs(0))
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, pvArgs(0)) _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;OVERWRITE&quot;, pvArgs(0), pvArgs(1))
 			Case READONLYERROR		&apos;	SF_FileSystem.Copy+Move+Delete/File+Folder(ArgName, Filename)
+				pvArgs(0) = _RightCase(pvArgs(0))
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, pvArgs(0)) _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;READONLY&quot;, pvArgs(0), pvArgs(1))
 			Case NOFILEMATCHERROR	&apos;	SF_FileSystem.Copy+Move+Delete/File+Folder(ArgName, Filename)
+				pvArgs(0) = _RightCase(pvArgs(0))
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, pvArgs(0)) _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;NOFILEMATCH&quot;, pvArgs(0), pvArgs(1))
 			Case FOLDERCREATIONERROR	&apos;	SF_FileSystem.CreateFolder(ArgName, Filename)
+				pvArgs(0) = _RightCase(pvArgs(0))
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, pvArgs(0)) _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;FOLDERCREATION&quot;, pvArgs(0), pvArgs(1))
 			Case UNKNOWNSERVICEERROR	&apos;	SF_Services.CreateScriptService(ArgName, Value, Library, Service)
+				pvArgs(0) = _RightCase(pvArgs(0))
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, pvArgs(0)) _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;UNKNOWNSERVICE&quot;, pvArgs(0), pvArgs(1), pvArgs(2), pvArgs(3))
 			Case SERVICESNOTLOADEDERROR	&apos;	SF_Services.CreateScriptService(ArgName, Value, Library)
+				pvArgs(0) = _RightCase(pvArgs(0))
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, pvArgs(0)) _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;SERVICESNOTLOADED&quot;, pvArgs(0), pvArgs(1), pvArgs(2))
 			Case CALCFUNCERROR			&apos;	SF_Session.ExecuteCalcFunction(CalcFunction)
 				sMessage = sLocation _
-					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, &quot;CalcFunction&quot;) _
+					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, _RightCase(&quot;CalcFunction&quot;)) _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;CALCFUNC&quot;, pvArgs(0))
 			Case NOSCRIPTERROR			&apos;	SF_Session._GetScript(Language, &quot;Scope&quot;, Scope, &quot;Script&quot;, Script)
+				pvArgs(1) = _RightCase(pvArgs(1))	:	pvArgs(3) = _RightCase(pvArgs(3))
 				sMessage = sLocation _
-					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, &quot;Script&quot;) _
+					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, _RightCase(&quot;Script&quot;)) _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;NOSCRIPT&quot;, pvArgs(0), pvArgs(1), pvArgs(2), pvArgs(3), pvArgs(4))
 			Case SCRIPTEXECERROR			&apos;	SF_Session.ExecuteBasicScript(&quot;Script&quot;, Script, Cause)
+				pvArgs(0) = _RightCase(pvArgs(0))
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;SCRIPTEXEC&quot;, pvArgs(0), pvArgs(1), pvArgs(2))
 			Case WRONGEMAILERROR		&apos;	SF_Session.SendMail(Arg, Email)
+				pvArgs(0) = _RightCase(pvArgs(0))
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, pvArgs(0)) _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;WRONGEMAIL&quot;, pvArgs(1))
@@ -849,42 +866,54 @@ Try:
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;ENDOFFILE&quot;, pvArgs(0))
 			Case DOCUMENTERROR			&apos;	SF_UI.GetDocument(ArgName, WindowName)
+				pvArgs(0) = _RightCase(pvArgs(0))
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, pvArgs(0)) _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;DOCUMENT&quot;, pvArgs(0), pvArgs(1))
 			Case DOCUMENTCREATIONERROR	&apos;	SF_UI.Create(Arg1Name, DocumentType, Arg2Name, TemplateFile)
+				pvArgs(0) = _RightCase(pvArgs(0))	:	pvArgs(2) = _RightCase(pvArgs(2))
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;DOCUMENTCREATION&quot;, pvArgs(0), pvArgs(1), pvArgs(2), pvArgs(3))
 			Case DOCUMENTOPENERROR		&apos;	SF_UI.OpenDocument(Arg1Name, FileName, Arg2Name, Password, Arg3Name, FilterName)
+				pvArgs(0) = _RightCase(pvArgs(0))	:	pvArgs(2) = _RightCase(pvArgs(2))	:	pvArgs(4) = _RightCase(pvArgs(4))
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;DOCUMENTOPEN&quot;, pvArgs(0), pvArgs(1), pvArgs(2), pvArgs(3), pvArgs(4), pvArgs(5))
 			Case BASEDOCUMENTOPENERROR	&apos;	SF_UI.OpenBaseDocument(Arg1Name, FileName, Arg2Name, RegistrationName)
+				pvArgs(0) = _RightCase(pvArgs(0))	:	pvArgs(2) = _RightCase(pvArgs(2))
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;BASEDOCUMENTOPEN&quot;, pvArgs(0), pvArgs(1), pvArgs(2), pvArgs(3))
 			Case DOCUMENTDEADERROR	&apos;	SF_Document._IsStillAlive(FileName)
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;DOCUMENTDEAD&quot;, pvArgs(0))
 			Case DOCUMENTSAVEERROR		&apos;	SF_Document.Save(Arg1Name, FileName)
+				pvArgs(0) = _RightCase(pvArgs(0))
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;DOCUMENTSAVE&quot;, pvArgs(0), pvArgs(1))
 			Case DOCUMENTSAVEASERROR	&apos;	SF_Document.SaveAs(Arg1Name, FileName, Arg2, Overwrite, Arg3, FilterName)
+				pvArgs(0) = _RightCase(pvArgs(0))	:	pvArgs(2) = _RightCase(pvArgs(2))	:	pvArgs(4) = _RightCase(pvArgs(4))
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;DOCUMENTSAVEAS&quot;, pvArgs(0), pvArgs(1), pvArgs(2), pvArgs(3), pvArgs(4), pvArgs(5))
 			Case DOCUMENTREADONLYERROR	&apos;	SF_Document.update property(&quot;Document&quot;, FileName)
+				pvArgs(0) = _RightCase(pvArgs(0))
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;DOCUMENTREADONLY&quot;, pvArgs(0), pvArgs(1))
 			Case DBCONNECTERROR	&apos;	SF_Base.GetDatabase(&quot;User&quot;, User, &quot;Password&quot;, Password, FileName)
+				pvArgs(0) = _RightCase(pvArgs(0))	:	pvArgs(2) = _RightCase(pvArgs(2))
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;DBCONNECT&quot;, pvArgs(0), pvArgs(1), pvArgs(2), pvArgs(3), pvArgs(4))
 			Case CALCADDRESSERROR		&apos;	SF_Calc._ParseAddress(Address, &quot;Range&quot;/&quot;Sheet&quot;, Scope, Document)
+				pvArgs(0) = _RightCase(pvArgs(0))	:	pvArgs(2) = _RightCase(pvArgs(2))
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, pvArgs(0)) _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;CALCADDRESS&quot; &amp; Iif(pvArgs(0) = &quot;Sheet&quot;, &quot;1&quot;, &quot;2&quot;), pvArgs(0), pvArgs(1), pvArgs(2), pvArgs(3))
 			Case DUPLICATESHEETERROR	&apos;	SF_Calc.InsertSheet(arg, SheetName, Document)
+				pvArgs(0) = _RightCase(pvArgs(2))	:	pvArgs(0) = _RightCase(pvArgs(2))
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, pvArgs(0)) _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;DUPLICATESHEET&quot;, pvArgs(0), pvArgs(1), pvArgs(2), pvArgs(3))
-			Case OFFSETADDRESSERROR		&apos;	SF_Calc.RangeOffset(&quot;range&quot;, Range, &quot;Rows&quot;, Rows, &quot;Columns&quot;, Columns, &quot;Height&quot;, Height, &quot;Width&quot;, Width, &quot;Document, Document)
+			Case OFFSETADDRESSERROR		&apos;	SF_Calc.RangeOffset(&quot;Range&quot;, Range, &quot;Rows&quot;, Rows, &quot;Columns&quot;, Columns, &quot;Height&quot;, Height, &quot;Width&quot;, Width, &quot;Document, Document)
+				pvArgs(0) = _RightCase(pvArgs(0))	:	pvArgs(2) = _RightCase(pvArgs(2))	:	pvArgs(4) = _RightCase(pvArgs(4))
+				pvArgs(6) = _RightCase(pvArgs(6))	:	pvArgs(8) = _RightCase(pvArgs(8))	:	pvArgs(10) = _RightCase(pvArgs(10))
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;OFFSETADDRESS&quot;, pvArgs(0), pvArgs(1), pvArgs(2), pvArgs(3), pvArgs(4) _
 									, pvArgs(5), pvArgs(6), pvArgs(7), pvArgs(8), pvArgs(9), pvArgs(10), pvArgs(11))
@@ -907,6 +936,8 @@ Try:
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;FORMCONTROLTYPE&quot;, pvArgs(0), pvArgs(1), pvArgs(2), pvArgs(3))
 			Case DIALOGNOTFOUNDERROR	&apos;	SF_Dialog._NewDialog(Service, DialogName, WindowName)
+				pvArgs(0) = _RightCase(pvArgs(0))	:	pvArgs(2) = _RightCase(pvArgs(2))	:	pvArgs(4) = _RightCase(pvArgs(4))
+				pvArgs(6) = _RightCase(pvArgs(6))
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;DIALOGNOTFOUND&quot;, pvArgs(0), pvArgs(1), pvArgs(2), pvArgs(3), pvArgs(4) _
 									, pvArgs(5), pvArgs(6), pvArgs(7))
@@ -1187,6 +1218,62 @@ Private Function _Repr() As String
 	_Repr = &quot;[Exception]: &quot; &amp; _Number &amp; &quot; (&quot; &amp; _Description &amp; &quot;)&quot;
 
 End Function	&apos;	ScriptForge.SF_Exception._Repr
+
+REM -----------------------------------------------------------------------------
+Private Function _RightCase(psString As String) As String
+&apos;&apos;&apos;	Return the input argument in lower case only when the procedure in execution
+&apos;&apos;&apos;	has been triggered from a Python script
+&apos;&apos;&apos;	Indeed, Python requires lower case arguments
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		psString: probably an identifier in ProperCase
+&apos;&apos;&apos;	Return:
+&apos;&apos;&apos;		The input argument in lower case or left unchanged depending on the execution context
+
+Try:
+	If _SF_.TriggeredByPython Then _RightCase = LCase(psString) Else _RightCase = psString
+
+Finally:
+	Exit Function
+End Function	&apos;	ScriptForge.SF_Exception._RightCase
+
+REM -----------------------------------------------------------------------------
+Private Function _RightCaseArgs(psString As String) As String
+&apos;&apos;&apos;	Return the input argument unchanged when the execution context is Basic
+&apos;&apos;&apos;	When it is Python, the argument names are lowercased.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		psString: one of the cstSubArgs strings located in each official method
+&apos;&apos;&apos;	Return:
+&apos;&apos;&apos;		The input string in which the argument names are put in lower case when called from Python scripts
+
+Dim sSubArgs As String				&apos;	Return value
+Dim vArgs As Variant				&apos;	Input string split on the comma character
+Dim sSingleArg As String			&apos;	Single vArgs item
+Dim vSingleArgs As Variant			&apos;	vSingleArg split on equal sign
+Dim i As Integer
+
+Const cstComma = &quot;,&quot;
+Const cstEqual = &quot;=&quot;
+
+Try:
+	If Len(psString) = 0 Then
+		sSubArgs = &quot;&quot;
+	ElseIf _SF_.TriggeredByPython Then
+		vArgs = SF_String.SplitNotQuoted(psString, cstComma, QuoteChar := &quot;&quot;&quot;&quot;)
+		For i = 0 To UBound(vArgs)
+			sSingleArg = vArgs(i)
+			vSingleArgs = Split(sSingleArg, cstEqual)
+			vSingleArgs(0) = LCase(vSingleArgs(0))
+			vArgs(i) = join(vSingleArgs, cstEqual)
+		Next i
+		sSubArgs = Join(vArgs, cstComma)
+	Else
+		sSubArgs = psString
+	End If
+
+Finally:
+	_RightCaseArgs = sSubArgs
+	Exit Function
+End Function	&apos;	ScriptForge.SF_Exception._RightCaseArgs
 
 REM ============================================ END OF SCRIPTFORGE.SF_EXCEPTION
 </script:module>

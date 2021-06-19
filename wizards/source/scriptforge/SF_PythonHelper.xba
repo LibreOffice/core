@@ -675,11 +675,14 @@ Try:
 	&apos;		may be considered as properties when no argument
 &apos;			Requires Python and Basic update in the concerned library but is transparent for this dispatcher
 
-	&apos;	Initialize Python persistent storage at 1st call
-	
-	If IsEmpty(_SF_.PythonStorage) Then _SF_._InitPythonStorage()
-	&apos;	Reset any error
-	_SF_._Stackreset()
+	With _SF_
+		&apos;	Initialize Python persistent storage at 1st call
+		If IsEmpty(.PythonStorage) Then ._InitPythonStorage()
+		&apos;	Reset any error
+		._Stackreset()
+		&apos;	Set Python trigger to manage signatures in error messages
+		.TriggeredByPython = True
+	End With
 
 	Select case VarType(BasicObject)
 		Case V_STRING
@@ -865,6 +868,7 @@ Try:
 	_PythonDispatcher = vReturnArray
 		
 Finally:
+	_SF_.TriggeredByPython = False		&apos;	Reset normal state
 	Exit Function
 Catch:
 	GoTo Finally
