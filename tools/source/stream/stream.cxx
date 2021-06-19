@@ -1677,15 +1677,6 @@ SvMemoryStream::~SvMemoryStream()
     }
 }
 
-sal_uInt64 SvMemoryStream::GetSize()
-{
-    Flush();
-    sal_uInt64 const nTemp = Tell();
-    sal_uInt64 const nLength = Seek( STREAM_SEEK_TO_END );
-    Seek( nTemp );
-    return nLength;
-}
-
 void SvMemoryStream::SetBuffer( void* pNewBuf, std::size_t nCount,
                                  std::size_t nEOF )
 {

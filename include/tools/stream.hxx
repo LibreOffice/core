@@ -658,7 +658,7 @@ public:
 
     virtual void    ResetError() override;
 
-    sal_uInt64      GetSize();
+    sal_uInt64      GetSize() { return TellEnd(); }
     std::size_t     GetEndOfData() const { return nEndOfData; }
     const void*     GetData() { Flush(); return pBuf; }
 
