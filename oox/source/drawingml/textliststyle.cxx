@@ -32,6 +32,7 @@ TextListStyle::~TextListStyle()
 }
 
 TextListStyle::TextListStyle(const TextListStyle& rStyle)
+    : mbHasListStyleOnImport(false)
 {
     for ( size_t i = 0; i < NUM_TEXT_LIST_STYLE_ENTRIES; i++ )
     {
