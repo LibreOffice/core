@@ -32,6 +32,7 @@ TextListStyle::~TextListStyle()
 }
 
 TextListStyle::TextListStyle(const TextListStyle& rStyle)
+    : mbHasListStyleOnImport(rStyle.mbHasListStyleOnImport)
 {
     for ( size_t i = 0; i < NUM_TEXT_LIST_STYLE_ENTRIES; i++ )
     {
@@ -44,6 +45,7 @@ TextListStyle& TextListStyle::operator=(const TextListStyle& rStyle)
 {
     if(this != &rStyle)
     {
+        mbHasListStyleOnImport = rStyle.mbHasListStyleOnImport;
         for ( size_t i = 0; i < NUM_TEXT_LIST_STYLE_ENTRIES; i++ )
         {
             maListStyle[i] = rStyle.maListStyle[i];
