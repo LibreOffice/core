@@ -23,6 +23,7 @@
 
 #include <drawingml/graphicproperties.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/outdev.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/Gradient.hpp>

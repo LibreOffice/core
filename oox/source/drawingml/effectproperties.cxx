@@ -13,6 +13,7 @@
 #include <oox/token/properties.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
+#include <vcl/outdev.hxx>
 
 namespace oox::drawingml {
 

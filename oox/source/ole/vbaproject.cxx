@@ -45,6 +45,7 @@
 #include <oox/ole/vbainputstream.hxx>
 #include <oox/ole/vbamodule.hxx>
 #include <oox/token/properties.hxx>
+#include <vcl/outdev.hxx>
 
 namespace oox::ole {
 

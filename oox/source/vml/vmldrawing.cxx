@@ -38,6 +38,7 @@
 #include <oox/vml/vmlshapecontainer.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>
+#include <vcl/outdev.hxx>
 
 namespace oox::vml {
 

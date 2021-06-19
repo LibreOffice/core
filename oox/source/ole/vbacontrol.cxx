@@ -31,6 +31,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <tools/UnitConversion.hxx>
+#include <vcl/outdev.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/binaryinputstream.hxx>

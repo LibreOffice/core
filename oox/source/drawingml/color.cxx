@@ -27,6 +27,7 @@
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
+#include <vcl/outdev.hxx>
 
 namespace oox::drawingml {
 

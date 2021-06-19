@@ -44,6 +44,7 @@
 #include <tools/globname.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
+#include <vcl/outdev.hxx>
 
 namespace oox::ole {
 

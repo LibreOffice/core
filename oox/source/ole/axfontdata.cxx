@@ -21,6 +21,7 @@
 #include <oox/ole/olehelper.hxx>
 #include <oox/ole/axbinaryreader.hxx>
 #include <oox/ole/axbinarywriter.hxx>
+#include <vcl/outdev.hxx>
 
 namespace oox::ole {
 

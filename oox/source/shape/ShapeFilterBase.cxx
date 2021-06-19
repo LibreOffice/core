@@ -23,6 +23,7 @@
 #include <oox/helper/graphichelper.hxx>
 #include <oox/ole/vbaproject.hxx>
 #include <oox/drawingml/theme.hxx>
+#include <vcl/outdev.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>

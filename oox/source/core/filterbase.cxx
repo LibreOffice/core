@@ -36,6 +36,7 @@
 #include <osl/diagnose.h>
 #include <rtl/instance.hxx>
 #include <rtl/uri.hxx>
+#include <vcl/outdev.hxx>
 #include <memory>
 #include <set>
 

@@ -27,6 +27,7 @@
 #include <oox/token/tokens.hxx>
 #include <vcl/GraphicExternalLink.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/outdev.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

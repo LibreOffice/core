@@ -30,6 +30,7 @@
 #include <oox/token/tokens.hxx>
 
 #include <osl/diagnose.h>
+#include <vcl/outdev.hxx>
 
 namespace oox::ole {
 

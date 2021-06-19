@@ -23,6 +23,7 @@
 #include <oox/ole/olehelper.hxx>
 
 #include <osl/diagnose.h>
+#include <vcl/outdev.hxx>
 
 namespace oox::ole {
 

@@ -31,6 +31,7 @@
 #include <oox/helper/containerhelper.hxx>
 #include <oox/helper/graphichelper.hxx>
 #include <oox/token/tokens.hxx>
+#include <vcl/outdev.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
