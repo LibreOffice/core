@@ -158,8 +158,7 @@ LtcBenContainer::LtcBenContainer(LwpSvStream * pStream)
     : cNextAvailObjectID(0)
 {
     cpStream = pStream;
-    pStream->Seek(STREAM_SEEK_TO_END);
-    m_ulLength = pStream->Tell();
+    m_ulLength = pStream->TellEnd();
     pStream->Seek(STREAM_SEEK_TO_BEGIN);
 }
 

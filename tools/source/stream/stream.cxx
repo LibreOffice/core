@@ -254,11 +254,7 @@ ErrCode SvLockBytes::Stat(SvLockBytesStat * pStat) const
     }
 
     if (pStat)
-    {
-        sal_uInt64 const nPos = m_pStream->Tell();
-        pStat->nSize = m_pStream->Seek(STREAM_SEEK_TO_END);
-        m_pStream->Seek(nPos);
-    }
+        pStat->nSize = m_pStream->TellEnd();
     return ERRCODE_NONE;
 }
 

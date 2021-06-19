@@ -84,9 +84,8 @@ static bool SwWw8ReadScaling(tools::Long& rX, tools::Long& rY, tools::SvRef<SotS
         StreamMode::STD_READ );
     SotStorageStream* pS = xSrc3.get();
     pS->SetEndian( SvStreamEndian::LITTLE );
-    pS->Seek( STREAM_SEEK_TO_END );
 
-    OSL_ENSURE( pS->Tell() >=  76, "+OLE-PIC-Stream is shorter than 76 Byte" );
+    OSL_ENSURE( pS->TellEnd() >=  76, "+OLE-PIC-Stream is shorter than 76 Byte" );
 
     sal_Int32 nOrgWidth,
           nOrgHeight,
@@ -406,9 +405,8 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
         if (bOleOk)
         {
             sal_uLong nOldPos = m_pDataStream->Tell();
-            m_pDataStream->Seek(STREAM_SEEK_TO_END);
             SvStream *pTmpData = nullptr;
-            if (m_nObjLocFc < m_pDataStream->Tell())
+            if (m_nObjLocFc < m_pDataStream->TellEnd())
             {
                 pTmpData = m_pDataStream;
                 pTmpData->Seek( m_nObjLocFc );
