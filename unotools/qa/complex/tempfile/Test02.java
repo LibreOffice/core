@@ -37,47 +37,38 @@ public class Test02 {
         m_aTestHelper = new TestHelper( "Test02: ");
     }
 
-    public boolean test() {
+    public boolean test() throws Exception {
         Object oTempFile = null;
         XTempFile xTempFile = null;
         String sFileURL = null;
         //create a temporary file.
-        try {
-            oTempFile = m_xMSF.createInstance( "com.sun.star.io.TempFile" );
-            xTempFile = UnoRuntime.queryInterface(XTempFile.class, oTempFile);
-            m_aTestHelper.Message( "Tempfile created." );
-            UnoRuntime.queryInterface(XTruncate.class, oTempFile);
-        } catch(Exception e) {
-            m_aTestHelper.Error( "Cannot create TempFile. exception: " + e );
-            return false;
-        }
-        try {
-            //write something.
-            byte pBytesIn[] = new byte[9];
-            byte pBytesOut[][] = new byte[1][9];
-            Random oRandom = new Random();
-            oRandom.nextBytes( pBytesIn );
-            m_aTestHelper.WriteBytesWithStream( pBytesIn, xTempFile );
+        oTempFile = m_xMSF.createInstance( "com.sun.star.io.TempFile" );
+        xTempFile = UnoRuntime.queryInterface(XTempFile.class, oTempFile);
+        m_aTestHelper.Message( "Tempfile created." );
+        UnoRuntime.queryInterface(XTruncate.class, oTempFile);
 
-            //get the URL.
-            sFileURL = m_aTestHelper.GetTempFileURL( xTempFile );
+        //write something.
+        byte pBytesIn[] = new byte[9];
+        byte pBytesOut[][] = new byte[1][9];
+        Random oRandom = new Random();
+        oRandom.nextBytes( pBytesIn );
+        m_aTestHelper.WriteBytesWithStream( pBytesIn, xTempFile );
 
-            //let the service not to remove the URL.
-            m_aTestHelper.SetTempFileRemove( xTempFile, false );
+        //get the URL.
+        sFileURL = m_aTestHelper.GetTempFileURL( xTempFile );
 
-            //close the tempfile by closing input and output.
-            m_aTestHelper.CloseTempFile( xTempFile );
+        //let the service not to remove the URL.
+        m_aTestHelper.SetTempFileRemove( xTempFile, false );
 
-            //check that the file is still available.
-            m_aTestHelper.ReadDirectlyFromTempFile( pBytesOut, pBytesIn.length + 1, m_xSFA, sFileURL );
-            for ( int i = 0; i < pBytesIn.length; i++ ) {
-                if ( pBytesOut[0][i] != pBytesIn[i] ) {
-                    m_aTestHelper.Error( "Tempfile contains false data!" );
-                }
+        //close the tempfile by closing input and output.
+        m_aTestHelper.CloseTempFile( xTempFile );
+
+        //check that the file is still available.
+        m_aTestHelper.ReadDirectlyFromTempFile( pBytesOut, pBytesIn.length + 1, m_xSFA, sFileURL );
+        for ( int i = 0; i < pBytesIn.length; i++ ) {
+            if ( pBytesOut[0][i] != pBytesIn[i] ) {
+                throw new Exception( "Tempfile contains false data!" );
             }
-        } catch ( Exception e) {
-            m_aTestHelper.Error("Exception: " + e);
-            return false;
         }
         return true;
     }

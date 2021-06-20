@@ -46,7 +46,7 @@ public class TempFileUnitTest
         }
         catch ( Exception e )
         {
-            fail ( "Cannot get simple file access! Exception: " + e);
+            fail ( "Cannot get simple file access!" + e);
         }
         if ( m_xSFA == null ) {
             fail ( "Cannot get simple file access!" );
@@ -58,12 +58,12 @@ public class TempFileUnitTest
         m_xSFA = null;
     }
 
-    @Test public void ExecuteTest01() {
+    @Test public void ExecuteTest01() throws Exception {
         Test01 aTest = new Test01( m_xMSF, m_xSFA );
         assertTrue( "Test01 failed!", aTest.test() );
     }
 
-    @Test public void ExecuteTest02() {
+    @Test public void ExecuteTest02() throws Exception {
         Test02 aTest = new Test02( m_xMSF, m_xSFA );
         assertTrue( "Test02 failed!", aTest.test() );
     }

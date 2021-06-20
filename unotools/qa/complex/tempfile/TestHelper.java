@@ -17,181 +17,103 @@
  */
 package complex.tempfile;
 
-
-
 import com.sun.star.io.*;
-
+import com.sun.star.uno.*;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.ucb.XSimpleFileAccess;
-
+import java.io.*;
 
 public class TestHelper {
 
     private String m_sTestPrefix;
 
     public TestHelper( String sTestPrefix ) {
-
         m_sTestPrefix = sTestPrefix;
     }
+
     public void SetTempFileRemove( XTempFile xTempFile, boolean b ) {
-        try {
-            xTempFile.setRemoveFile( b );
-        } catch( Exception e ) {
-            Error( "Cannot set TempFileRemove. exception: " + e );
-        }
+        xTempFile.setRemoveFile( b );
     }
 
-    public String GetTempFileURL ( XTempFile xTempFile ) {
-        String sTempFileURL = null;
-        try {
-            sTempFileURL = AnyConverter.toString( xTempFile.getUri() );
-        } catch (Exception e) {
-            Error ( "Cannot get TempFileURL. exception: " + e );
-        }
+    public String GetTempFileURL ( XTempFile xTempFile ) throws java.lang.Exception {
+        String sTempFileURL = AnyConverter.toString( xTempFile.getUri() );
         if ( sTempFileURL == null || sTempFileURL.equals("") ) {
-            Error ( "Temporary file not valid." );
+            throw new java.lang.Exception( "Temporary file not valid." );
         }
         return sTempFileURL;
     }
 
-    public String GetTempFileName( XTempFile xTempFile ) {
-        String sTempFileName = null;
-        try {
-            sTempFileName = AnyConverter.toString( xTempFile.getResourceName() );
-        } catch ( Exception e ) {
-            Error( "Cannot get TempFileName. exception: " + e );
-        }
+    public String GetTempFileName( XTempFile xTempFile ) throws java.lang.Exception {
+        String sTempFileName = AnyConverter.toString( xTempFile.getResourceName() );
         if ( sTempFileName == null || sTempFileName.equals("") ) {
-            Error( "Temporary file not valid." );
+            throw new java.lang.Exception( "Temporary file not valid." );
         }
         return sTempFileName;
     }
 
-    public boolean CompareFileNameAndURL ( String sTempFileName, String sTempFileURL ) {
-        boolean bRet = false;
-        try {
-            bRet = sTempFileURL.endsWith( sTempFileName.replaceAll( "\\\\" , "/" ) );
-            Message ( "Compare file name and URL: " +
-                    ( bRet ? "OK." : "ERROR: FILE NAME AND URL DO NOT MATCH." ) );
-        }
-        catch ( Exception e ) {
-            Error ( "exception: " + e);
-        }
+    public boolean CompareFileNameAndURL ( String sTempFileName, String sTempFileURL ) throws java.lang.Exception {
+        boolean bRet = sTempFileURL.endsWith( sTempFileName.replaceAll( "\\\\" , "/" ) );
+        if (!bRet)
+            throw new java.lang.Exception("FILE NAME AND URL DO NOT MATCH." );
         return bRet;
     }
 
-    public void WriteBytesWithStream( byte [] pBytes, XTempFile xTempFile ) {
-        try {
-            XOutputStream xOutTemp = xTempFile.getOutputStream();
-            if ( xOutTemp == null ) {
-                Error( "Cannot get output stream." );
-            } else {
-                xOutTemp.writeBytes( pBytes );
-                Message ( "Write to tempfile successfully." );
-            }
-        } catch ( Exception e ) {
-            Error( "Cannot write to stream. exception: " + e );
-        }
+    public void WriteBytesWithStream( byte [] pBytes, XTempFile xTempFile ) throws java.lang.Exception {
+        XOutputStream xOutTemp = xTempFile.getOutputStream();
+        if ( xOutTemp == null )
+            throw new java.lang.Exception( "Cannot get output stream." );
+        xOutTemp.writeBytes( pBytes );
+        xOutTemp.flush();
+        Message ( "Write " + pBytes.length + " bytes to tempfile successfully." );
     }
 
-    public void ReadBytesWithStream( byte [][] pBytes, int nBytes, XTempFile xTempFile ) {
-        try {
-            XInputStream xInTemp = xTempFile.getInputStream();
-            if ( xInTemp == null ) {
-                Error( "Cannot get input stream from tempfile." );
-            } else {
-                xInTemp.readBytes( pBytes, nBytes );
-                Message ( "Read from tempfile successfully." );
-            }
-        } catch ( Exception e ) {
-            Error( "Cannot read from stream. exception: " + e );
-        }
+    public void ReadBytesWithStream( byte [][] pBytes, int nBytes, XTempFile xTempFile ) throws java.lang.Exception {
+        XInputStream xInTemp = xTempFile.getInputStream();
+        if ( xInTemp == null )
+            throw new java.lang.Exception( "Cannot get input stream from tempfile." );
+        int n = xInTemp.readBytes( pBytes, nBytes );
+        Message ( "Read " + n + " bytes from tempfile successfully." );
     }
+
     public void ReadDirectlyFromTempFile( byte [][] pBytes, int nBytes,  XSimpleFileAccess xSFA, String sTempFileURL )
+         throws java.lang.Exception
     {
-        try
-        {
-            if ( xSFA != null ) {
-                XInputStream xInTemp = xSFA.openFileRead( sTempFileURL );
-                if ( xInTemp != null )
-                {
-                    xInTemp.readBytes( pBytes, nBytes );
-                    xInTemp.closeInput();
-                    Message ( "Read directly from tempfile successfully." );
-                } else {
-                    Error ( "Cannot create input stream from URL." );
-                }
-            }
-        }
-        catch ( Exception e)
-        {
-            Error( "Exception caught in TestHelper." +
-                    "ReadDirectlyFromTempFile(). exception: " + e );
-        }
+        XInputStream xInTemp = xSFA.openFileRead( sTempFileURL );
+        if ( xInTemp == null )
+            throw new java.lang.Exception("Cannot create input stream from URL.");
+        int n = xInTemp.readBytes( pBytes, nBytes );
+        xInTemp.closeInput();
+        Message ( "Read " + n + " bytes directly from tempfile successfully. " + sTempFileURL );
     }
 
-    public void CloseTempFile( XTempFile xTempFile ) {
+    public void CloseTempFile( XTempFile xTempFile ) throws java.lang.Exception {
         XOutputStream xOutTemp = null;
         XInputStream xInTemp = null;
-        try {
-            xOutTemp = xTempFile.getOutputStream();
-            if ( xOutTemp == null ) {
-                Error( "Cannot get output stream." );
-            }
-        } catch ( Exception e ) {
-            Error( "Cannot get output stream. exception:" + e );
+        xOutTemp = xTempFile.getOutputStream();
+        if ( xOutTemp == null ) {
+            throw new java.lang.Exception( "Cannot get output stream." );
         }
-        try {
-            xOutTemp.closeOutput();
-        } catch( Exception e ) {
-            Error( "Cannot close output stream. exception:" + e );
+        xOutTemp.closeOutput();
+        xInTemp = xTempFile.getInputStream();
+        if ( xInTemp == null ) {
+            throw new java.lang.Exception( "Cannot get input stream." );
         }
-        try {
-            xInTemp = xTempFile.getInputStream();
-            if ( xInTemp == null ) {
-                Error( "Cannot get input stream." );
-            }
-        } catch ( Exception e ) {
-            Error( "Cannot get input stream. exception:" + e );
-        }
-        try {
-            xInTemp.closeInput();
-            Message ( "Tempfile closed successfully." );
-        } catch( Exception e ) {
-            Error( "Cannot close input stream. exception:" + e );
-        }
+        xInTemp.closeInput();
+        Message ( "Tempfile closed successfully." );
     }
 
-    public void KillTempFile ( String sTempFileURL, XSimpleFileAccess xSFA ) {
-        try {
-            if ( sTempFileURL != null && xSFA != null ) {
-                xSFA.kill( sTempFileURL );
-                Message ( "Tempfile killed successfully." );
-            }
-        }
-        catch ( Exception e ) {
-            Error ( "Exception caught in TestHelper." +
-                    "KillTempFile(): " + e);
-        }
+    public void KillTempFile ( String sTempFileURL, XSimpleFileAccess xSFA ) throws com.sun.star.uno.Exception {
+        xSFA.kill( sTempFileURL );
+        Message ( "Tempfile killed successfully." );
     }
 
-    public boolean IfTempFileExists( XSimpleFileAccess xSFA, String sTempFileURL ) {
+    public boolean IfTempFileExists( XSimpleFileAccess xSFA, String sTempFileURL )
+        throws com.sun.star.uno.Exception
+    {
         boolean bRet = false;
-        try {
-            if ( sTempFileURL != null && xSFA != null ) {
-                bRet = xSFA.exists( sTempFileURL );
-                Message ( "Tempfile " + ( bRet ? "still " : "no longer " ) + "exists." );
-            }
-        }
-        catch( Exception e ) {
-            Error( "Exception caught in TestHelper." +
-                    "IfTempFileExists(): " + e );
-        }
+        bRet = xSFA.exists( sTempFileURL );
+        Message ( "Tempfile " + ( bRet ? "still " : "no longer " ) + "exists." );
         return bRet;
-    }
-
-    public void Error( String sError ) {
-        System.out.println( m_sTestPrefix + "Error: " + sError );
     }
 
     public void Message( String sMessage ) {
