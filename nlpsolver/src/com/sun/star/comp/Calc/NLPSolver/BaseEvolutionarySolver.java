@@ -34,6 +34,7 @@ import com.sun.star.sheet.SolverConstraintOperator;
 import com.sun.star.uno.XComponentContext;
 import java.util.ArrayList;
 import net.adaptivebox.global.BasicBound;
+import net.adaptivebox.global.RandomGenerator;
 import net.adaptivebox.goodness.ACRComparator;
 import net.adaptivebox.goodness.BCHComparator;
 import net.adaptivebox.goodness.IGoodnessCompareEngine;
@@ -53,6 +54,7 @@ public abstract class BaseEvolutionarySolver extends BaseNLPSolver {
         registerProperty(m_useACRComperator);
 
         registerProperty(m_useRandomStartingPoint);
+        registerProperty(m_useStrongerPRNG);
 
         registerProperty(m_required);
         registerProperty(m_tolerance);
@@ -168,6 +170,7 @@ public abstract class BaseEvolutionarySolver extends BaseNLPSolver {
     private final PropertyInfo<Double> m_variableRangeThreshold = new PropertyInfo<Double>("VariableRangeThreshold", 3.0, "Variable Bounds Threshold (when guessing)"); //to approximate the variable bounds
     private final PropertyInfo<Boolean> m_useACRComperator = new PropertyInfo<Boolean>("UseACRComparator", false, "Use ACR Comparator (instead of BCH)");
     private final PropertyInfo<Boolean> m_useRandomStartingPoint = new PropertyInfo<Boolean>("UseRandomStartingPoint", false, "Use Random starting point");
+    private final PropertyInfo<Boolean> m_useStrongerPRNG = new PropertyInfo<Boolean>("UseStrongerPRNG", false, "Use a stronger random generator (slower)");
     protected PropertyInfo<Integer> m_required = new PropertyInfo<Integer>("StagnationLimit", 70, "Stagnation Limit");
     protected PropertyInfo<Double> m_tolerance = new PropertyInfo<Double>("Tolerance", 1e-6, "Stagnation Tolerance");
     private final PropertyInfo<Boolean> m_enhancedSolverStatus = new PropertyInfo<Boolean>("EnhancedSolverStatus", true, "Show enhanced solver status");
@@ -324,6 +327,8 @@ public abstract class BaseEvolutionarySolver extends BaseNLPSolver {
 
         m_envCompareEngine = new BCHComparator();
         m_specCompareEngine = m_useACRComperator.getValue() ? new ACRComparator(m_library, m_learningCycles.getValue()) : new BCHComparator();
+
+        RandomGenerator.useStrongerGenerator( m_useStrongerPRNG.getValue() );
     }
 
     protected void applySolution() {
