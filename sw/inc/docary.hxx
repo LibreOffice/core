@@ -45,6 +45,7 @@ class SwFormatsBase
 public:
     virtual size_t GetFormatCount() const = 0;
     virtual SwFormat* GetFormat(size_t idx) const = 0;
+    virtual SwFormat* FindFormatByName(std::string_view name) const;
     virtual ~SwFormatsBase() {};
 
     SwFormatsBase() = default;
