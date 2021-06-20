@@ -27,6 +27,7 @@
 #include <svl/itempool.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/debug.hxx>
+#include <unotools/configmgr.hxx>
 
 #include <comphelper/string.hxx>
 
@@ -633,6 +634,10 @@ SvxRTFItemStackType* SvxRTFParser::GetAttrSet_()
     xNew->SetRTFDefaults( GetRTFDefaults() );
 
     aAttrStack.push_back( std::move(xNew) );
+
+    if (aAttrStack.size() > 1024 && utl::ConfigManager::IsFuzzing())
+        throw std::range_error("ecStackOverflow");
+
     bNewGroup = false;
     return aAttrStack.back().get();
 }
