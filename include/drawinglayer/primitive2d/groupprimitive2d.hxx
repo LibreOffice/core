@@ -22,7 +22,7 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-
+#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 
 // GroupPrimitive2D class
 

@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <drawinglayer/primitive2d/BufferedDecompositionPrimitive2D.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 namespace drawinglayer::primitive2d

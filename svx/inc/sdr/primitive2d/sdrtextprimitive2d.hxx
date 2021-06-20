@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_INC_SDR_PRIMITIVE2D_SDRTEXTPRIMITIVE2D_HXX
 #define INCLUDED_SVX_INC_SDR_PRIMITIVE2D_SDRTEXTPRIMITIVE2D_HXX
 
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <drawinglayer/primitive2d/BufferedDecompositionPrimitive2D.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
