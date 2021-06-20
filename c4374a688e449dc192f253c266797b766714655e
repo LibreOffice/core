@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "80c2f057_1a2eea95",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 2808,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2021-06-20T20:40:33Z",
+      "side": 1,
+      "message": "I\u0027m not quite sure what to put in this file. The below doesn\u0027t seem like it is quite right. \n\nIf I cd to external/poppler_data and use make, the files are deployed (or cleaned, etc) as expected. But if I run make from the top level directory, it\u0027s like the makefile in external/poppler_data never gets called.\n\nI appreciate any advice that can be provided. I\u0027m not familiar with the gbuild system and it has been a bit frustrating trying to figure some of this stuff out.",
+      "revId": "c4374a688e449dc192f253c266797b766714655e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
