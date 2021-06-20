@@ -425,7 +425,19 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportCalcRTF(SvStream &rStream)
     aDocument.EnableExecuteLink(false);
     aDocument.SetInsertingFromOtherDoc(true);
     ScRange aRange;
-    return ScFormatFilter::Get().ScImportRTF(rStream, OUString(), &aDocument, aRange) == ERRCODE_NONE;
+
+    bool bRet;
+
+    try
+    {
+        bRet = ScFormatFilter::Get().ScImportRTF(rStream, OUString(), &aDocument, aRange) == ERRCODE_NONE;
+    }
+    catch (const std::range_error&)
+    {
+        return false;
+    }
+
+    return bRet;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportXLS(SvStream& rStream)
