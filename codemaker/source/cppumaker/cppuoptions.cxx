@@ -21,8 +21,6 @@
 #include <string.h>
 
 #include "cppuoptions.hxx"
-#include <osl/thread.h>
-#include <osl/process.h>
 
 #ifdef SAL_UNX
 #define SEPARATOR '/'
