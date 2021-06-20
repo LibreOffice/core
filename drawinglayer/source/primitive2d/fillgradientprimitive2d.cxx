@@ -326,7 +326,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(FillGradientPrimitive2D, PRIMITIVE2D_ID_FILLGRADIENTPRIMITIVE2D)
+        sal_uInt32 FillGradientPrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_FILLGRADIENTPRIMITIVE2D;
+        }
 
 } // end of namespace
 

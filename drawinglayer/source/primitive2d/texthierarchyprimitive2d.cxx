@@ -32,7 +32,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(TextHierarchyLinePrimitive2D, PRIMITIVE2D_ID_TEXTHIERARCHYLINEPRIMITIVE2D)
+        sal_uInt32 TextHierarchyLinePrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_TEXTHIERARCHYLINEPRIMITIVE2D;
+        }
 
 
         TextHierarchyParagraphPrimitive2D::TextHierarchyParagraphPrimitive2D(
@@ -56,7 +59,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(TextHierarchyParagraphPrimitive2D, PRIMITIVE2D_ID_TEXTHIERARCHYPARAGRAPHPRIMITIVE2D)
+        sal_uInt32 TextHierarchyParagraphPrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_TEXTHIERARCHYPARAGRAPHPRIMITIVE2D;
+        }
 
 
 
@@ -66,7 +72,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(TextHierarchyBulletPrimitive2D, PRIMITIVE2D_ID_TEXTHIERARCHYBULLETPRIMITIVE2D)
+        sal_uInt32 TextHierarchyBulletPrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_TEXTHIERARCHYBULLETPRIMITIVE2D;
+        }
 
 
         TextHierarchyBlockPrimitive2D::TextHierarchyBlockPrimitive2D(const Primitive2DContainer& rChildren)
@@ -75,7 +84,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(TextHierarchyBlockPrimitive2D, PRIMITIVE2D_ID_TEXTHIERARCHYBLOCKPRIMITIVE2D)
+        sal_uInt32 TextHierarchyBlockPrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_TEXTHIERARCHYBLOCKPRIMITIVE2D;
+        }
 
 
         TextHierarchyFieldPrimitive2D::TextHierarchyFieldPrimitive2D(
@@ -119,14 +131,22 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(TextHierarchyFieldPrimitive2D, PRIMITIVE2D_ID_TEXTHIERARCHYFIELDPRIMITIVE2D)
+        sal_uInt32 TextHierarchyFieldPrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_TEXTHIERARCHYFIELDPRIMITIVE2D;
+        }
+
+
         TextHierarchyEditPrimitive2D::TextHierarchyEditPrimitive2D(const Primitive2DContainer& rChildren)
         :   GroupPrimitive2D(rChildren)
         {
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(TextHierarchyEditPrimitive2D, PRIMITIVE2D_ID_TEXTHIERARCHYEDITPRIMITIVE2D)
+        sal_uInt32 TextHierarchyEditPrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_TEXTHIERARCHYEDITPRIMITIVE2D;
+        }
 
 } // end of namespace
 

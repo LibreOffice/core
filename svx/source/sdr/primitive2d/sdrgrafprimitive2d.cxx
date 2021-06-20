@@ -158,7 +158,10 @@ bool SdrGrafPrimitive2D::isTransparent() const
 }
 
 // provide unique ID
-ImplPrimitive2DIDBlock(SdrGrafPrimitive2D, PRIMITIVE2D_ID_SDRGRAFPRIMITIVE2D)
+sal_uInt32 SdrGrafPrimitive2D::getPrimitive2DID() const
+{
+    return PRIMITIVE2D_ID_SDRGRAFPRIMITIVE2D;
+}
 
 } // end of namespace
 

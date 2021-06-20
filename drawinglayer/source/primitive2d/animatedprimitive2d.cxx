@@ -81,7 +81,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(AnimatedSwitchPrimitive2D, PRIMITIVE2D_ID_ANIMATEDSWITCHPRIMITIVE2D)
+        sal_uInt32 AnimatedSwitchPrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_ANIMATEDSWITCHPRIMITIVE2D;
+        }
 
 } // end of namespace drawinglayer::primitive2d
 
@@ -109,7 +112,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(AnimatedBlinkPrimitive2D, PRIMITIVE2D_ID_ANIMATEDBLINKPRIMITIVE2D)
+        sal_uInt32 AnimatedBlinkPrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_ANIMATEDBLINKPRIMITIVE2D;
+        }
 
 } // end of namespace drawinglayer::primitive2d
 
@@ -189,8 +195,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(AnimatedInterpolatePrimitive2D, PRIMITIVE2D_ID_ANIMATEDINTERPOLATEPRIMITIVE2D)
-
+        sal_uInt32 AnimatedInterpolatePrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_ANIMATEDINTERPOLATEPRIMITIVE2D;
+        }
 } // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

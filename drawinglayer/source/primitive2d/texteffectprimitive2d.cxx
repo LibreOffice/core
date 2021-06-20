@@ -230,7 +230,10 @@ void TextEffectPrimitive2D::get2DDecomposition(
 }
 
 // provide unique ID
-ImplPrimitive2DIDBlock(TextEffectPrimitive2D, PRIMITIVE2D_ID_TEXTEFFECTPRIMITIVE2D)
+sal_uInt32 TextEffectPrimitive2D::getPrimitive2DID() const
+{
+    return PRIMITIVE2D_ID_TEXTEFFECTPRIMITIVE2D;
+}
 
 } // end of namespace
 

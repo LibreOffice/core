@@ -598,7 +598,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(SvgLinearGradientPrimitive2D, PRIMITIVE2D_ID_SVGLINEARGRADIENTPRIMITIVE2D)
+        sal_uInt32 SvgLinearGradientPrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_SVGLINEARGRADIENTPRIMITIVE2D;
+        }
 
 } // end of namespace drawinglayer::primitive2d
 
@@ -846,7 +849,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(SvgRadialGradientPrimitive2D, PRIMITIVE2D_ID_SVGRADIALGRADIENTPRIMITIVE2D)
+        sal_uInt32 SvgRadialGradientPrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_SVGRADIALGRADIENTPRIMITIVE2D;
+        }
 
 } // end of namespace drawinglayer::primitive2d
 
@@ -937,7 +943,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(SvgLinearAtomPrimitive2D, PRIMITIVE2D_ID_SVGLINEARATOMPRIMITIVE2D)
+        sal_uInt32 SvgLinearAtomPrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_SVGLINEARATOMPRIMITIVE2D;
+        }
 
 } // end of namespace drawinglayer::primitive2d
 
@@ -1082,7 +1091,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(SvgRadialAtomPrimitive2D, PRIMITIVE2D_ID_SVGRADIALATOMPRIMITIVE2D)
+        sal_uInt32 SvgRadialAtomPrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_SVGRADIALATOMPRIMITIVE2D;
+        }
 
 } // end of namespace
 

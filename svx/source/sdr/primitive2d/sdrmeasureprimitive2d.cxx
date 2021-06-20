@@ -488,7 +488,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(SdrMeasurePrimitive2D, PRIMITIVE2D_ID_SDRMEASUREPRIMITIVE2D)
+        sal_uInt32 SdrMeasurePrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_SDRMEASUREPRIMITIVE2D;
+        }
 
 } // end of namespace
 

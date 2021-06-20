@@ -238,7 +238,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(SwVirtFlyDrawObjPrimitive, PRIMITIVE2D_ID_SWVIRTFLYDRAWOBJPRIMITIVE2D)
+        sal_uInt32 SwVirtFlyDrawObjPrimitive::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_SWVIRTFLYDRAWOBJPRIMITIVE2D;
+        }
 
 } // end of namespace drawinglayer::primitive2d
 

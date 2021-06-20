@@ -141,7 +141,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(Embedded3DPrimitive2D, PRIMITIVE2D_ID_EMBEDDED3DPRIMITIVE2D)
+        sal_uInt32 Embedded3DPrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_EMBEDDED3DPRIMITIVE2D;
+        }
 
 } // end of namespace
 

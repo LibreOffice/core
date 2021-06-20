@@ -57,7 +57,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(ModifiedColorPrimitive2D, PRIMITIVE2D_ID_MODIFIEDCOLORPRIMITIVE2D)
+        sal_uInt32 ModifiedColorPrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_MODIFIEDCOLORPRIMITIVE2D;
+        }
 
 } // end of namespace
 

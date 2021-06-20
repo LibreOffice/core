@@ -71,7 +71,7 @@ sal_Int64 SAL_CALL BitmapPrimitive2D::estimateUsage()
 }
 
 // provide unique ID
-ImplPrimitive2DIDBlock(BitmapPrimitive2D, PRIMITIVE2D_ID_BITMAPPRIMITIVE2D)
+sal_uInt32 BitmapPrimitive2D::getPrimitive2DID() const { return PRIMITIVE2D_ID_BITMAPPRIMITIVE2D; }
 
 } // end of namespace
 

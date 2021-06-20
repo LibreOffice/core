@@ -120,7 +120,10 @@ bool OverlayStaticRectanglePrimitive::operator==(const BasePrimitive2D& rPrimiti
     return false;
 }
 
-ImplPrimitive2DIDBlock(OverlayStaticRectanglePrimitive, PRIMITIVE2D_ID_OVERLAYRECTANGLEPRIMITIVE)
+sal_uInt32 OverlayStaticRectanglePrimitive::getPrimitive2DID() const
+{
+    return PRIMITIVE2D_ID_OVERLAYRECTANGLEPRIMITIVE;
+}
 
 
 
@@ -203,7 +206,10 @@ ImplPrimitive2DIDBlock(OverlayStaticRectanglePrimitive, PRIMITIVE2D_ID_OVERLAYRE
             return false;
         }
 
-        ImplPrimitive2DIDBlock(OverlayBitmapExPrimitive, PRIMITIVE2D_ID_OVERLAYBITMAPEXPRIMITIVE)
+        sal_uInt32 OverlayBitmapExPrimitive::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_OVERLAYBITMAPEXPRIMITIVE;
+        }
 
 
 
@@ -265,7 +271,10 @@ ImplPrimitive2DIDBlock(OverlayStaticRectanglePrimitive, PRIMITIVE2D_ID_OVERLAYRE
             return false;
         }
 
-        ImplPrimitive2DIDBlock(OverlayCrosshairPrimitive, PRIMITIVE2D_ID_OVERLAYCROSSHAIRPRIMITIVE)
+        sal_uInt32 OverlayCrosshairPrimitive::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_OVERLAYCROSSHAIRPRIMITIVE;
+        }
 
 
 
@@ -392,7 +401,10 @@ ImplPrimitive2DIDBlock(OverlayStaticRectanglePrimitive, PRIMITIVE2D_ID_OVERLAYRE
             return false;
         }
 
-        ImplPrimitive2DIDBlock(OverlayRectanglePrimitive, PRIMITIVE2D_ID_OVERLAYRECTANGLEPRIMITIVE)
+        sal_uInt32 OverlayRectanglePrimitive::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_OVERLAYRECTANGLEPRIMITIVE;
+        }
 
 
 
@@ -497,7 +509,10 @@ ImplPrimitive2DIDBlock(OverlayStaticRectanglePrimitive, PRIMITIVE2D_ID_OVERLAYRE
             return false;
         }
 
-        ImplPrimitive2DIDBlock(OverlayHelplineStripedPrimitive, PRIMITIVE2D_ID_OVERLAYHELPLINESTRIPEDPRIMITIVE)
+        sal_uInt32 OverlayHelplineStripedPrimitive::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_OVERLAYHELPLINESTRIPEDPRIMITIVE;
+        }
 
 
 
@@ -582,7 +597,10 @@ ImplPrimitive2DIDBlock(OverlayStaticRectanglePrimitive, PRIMITIVE2D_ID_OVERLAYRE
             return false;
         }
 
-        ImplPrimitive2DIDBlock(OverlayRollingRectanglePrimitive, PRIMITIVE2D_ID_OVERLAYROLLINGRECTANGLEPRIMITIVE)
+        sal_uInt32 OverlayRollingRectanglePrimitive::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_OVERLAYROLLINGRECTANGLEPRIMITIVE;
+        }
 
 } // end of namespace
 

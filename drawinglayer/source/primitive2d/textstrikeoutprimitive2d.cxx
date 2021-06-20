@@ -130,9 +130,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(TextCharacterStrikeoutPrimitive2D, PRIMITIVE2D_ID_TEXTCHARACTERSTRIKEOUTPRIMITIVE2D)
-
-
+        sal_uInt32 TextCharacterStrikeoutPrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_TEXTCHARACTERSTRIKEOUTPRIMITIVE2D;
+        }
 
         void TextGeometryStrikeoutPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
@@ -248,7 +249,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(TextGeometryStrikeoutPrimitive2D, PRIMITIVE2D_ID_TEXTGEOMETRYSTRIKEOUTPRIMITIVE2D)
+        sal_uInt32 TextGeometryStrikeoutPrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_TEXTGEOMETRYSTRIKEOUTPRIMITIVE2D;
+        }
 
 } // end of namespace
 

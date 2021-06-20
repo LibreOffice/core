@@ -302,7 +302,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(BorderLinePrimitive2D, PRIMITIVE2D_ID_BORDERLINEPRIMITIVE2D)
+        sal_uInt32 BorderLinePrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_BORDERLINEPRIMITIVE2D;
+        }
 
         Primitive2DReference tryMergeBorderLinePrimitive2D(
             const BorderLinePrimitive2D* pCandidateA,

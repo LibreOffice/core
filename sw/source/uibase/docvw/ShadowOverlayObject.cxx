@@ -155,7 +155,10 @@ bool ShadowPrimitive::operator==( const drawinglayer::primitive2d::BasePrimitive
     return false;
 }
 
-ImplPrimitive2DIDBlock(ShadowPrimitive, PRIMITIVE2D_ID_SWSIDEBARSHADOWPRIMITIVE)
+sal_uInt32 ShadowPrimitive::getPrimitive2DID() const
+{
+    return PRIMITIVE2D_ID_SWSIDEBARSHADOWPRIMITIVE;
+}
 
 /* static */ std::unique_ptr<ShadowOverlayObject> ShadowOverlayObject::CreateShadowOverlayObject( SwView const & rDocView )
 {

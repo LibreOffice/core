@@ -52,7 +52,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(StructureTagPrimitive2D, PRIMITIVE2D_ID_STRUCTURETAGPRIMITIVE2D)
+        sal_uInt32 StructureTagPrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_STRUCTURETAGPRIMITIVE2D;
+        }
 
 } // end of namespace
 

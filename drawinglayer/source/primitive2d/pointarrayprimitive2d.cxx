@@ -69,7 +69,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(PointArrayPrimitive2D, PRIMITIVE2D_ID_POINTARRAYPRIMITIVE2D)
+        sal_uInt32 PointArrayPrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_POINTARRAYPRIMITIVE2D;
+        }
 
 } // end of namespace
 

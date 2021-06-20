@@ -62,7 +62,10 @@ void SoftEdgePrimitive2D::get2DDecomposition(
     rVisitor.append(xRef);
 }
 
-ImplPrimitive2DIDBlock(SoftEdgePrimitive2D, PRIMITIVE2D_ID_SOFTEDGEPRIMITIVE2D)
+sal_uInt32 SoftEdgePrimitive2D::getPrimitive2DID() const
+{
+    return PRIMITIVE2D_ID_SOFTEDGEPRIMITIVE2D;
+}
 
 } // end of namespace
 

@@ -300,7 +300,10 @@ basegfx::B2DRange TextSimplePortionPrimitive2D::getB2DRange(
 }
 
 // provide unique ID
-ImplPrimitive2DIDBlock(TextSimplePortionPrimitive2D, PRIMITIVE2D_ID_TEXTSIMPLEPORTIONPRIMITIVE2D)
+sal_uInt32 TextSimplePortionPrimitive2D::getPrimitive2DID() const
+{
+    return PRIMITIVE2D_ID_TEXTSIMPLEPORTIONPRIMITIVE2D;
+}
 
 } // end of namespace
 

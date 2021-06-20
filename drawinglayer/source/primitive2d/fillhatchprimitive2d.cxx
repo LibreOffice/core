@@ -191,7 +191,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(FillHatchPrimitive2D, PRIMITIVE2D_ID_FILLHATCHPRIMITIVE2D)
+        sal_uInt32 FillHatchPrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_FILLHATCHPRIMITIVE2D;
+        }
 
 } // end of namespace
 

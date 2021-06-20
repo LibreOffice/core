@@ -211,7 +211,10 @@ GraphicPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInform
 }
 
 // provide unique ID
-ImplPrimitive2DIDBlock(GraphicPrimitive2D, PRIMITIVE2D_ID_GRAPHICPRIMITIVE2D)
+sal_uInt32 GraphicPrimitive2D::getPrimitive2DID() const
+{
+    return PRIMITIVE2D_ID_GRAPHICPRIMITIVE2D;
+}
 
 } // end of namespace
 

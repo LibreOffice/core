@@ -4830,7 +4830,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(SwBorderRectanglePrimitive2D, PRIMITIVE2D_ID_SWBORDERRECTANGLERIMITIVE)
+        sal_uInt32 SwBorderRectanglePrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_SWBORDERRECTANGLERIMITIVE;
+        }
 
 } // end of namespace drawinglayer::primitive2d
 

@@ -77,10 +77,13 @@ PolygonHairlinePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rView
 }
 
 // provide unique ID
-ImplPrimitive2DIDBlock(PolygonHairlinePrimitive2D, PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D)
+sal_uInt32 PolygonHairlinePrimitive2D::getPrimitive2DID() const
+{
+    return PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D;
+}
 
-    void PolygonMarkerPrimitive2D::create2DDecomposition(
-        Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
+void PolygonMarkerPrimitive2D::create2DDecomposition(
+    Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
 {
     // calculate logic DashLength
     const basegfx::B2DVector aDashVector(rViewInformation.getInverseObjectToViewTransformation()
@@ -197,7 +200,10 @@ void PolygonMarkerPrimitive2D::get2DDecomposition(
 }
 
 // provide unique ID
-ImplPrimitive2DIDBlock(PolygonMarkerPrimitive2D, PRIMITIVE2D_ID_POLYGONMARKERPRIMITIVE2D)
+sal_uInt32 PolygonMarkerPrimitive2D::getPrimitive2DID() const
+{
+    return PRIMITIVE2D_ID_POLYGONMARKERPRIMITIVE2D;
+}
 
 } // end of namespace
 
@@ -377,11 +383,13 @@ PolygonStrokePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewIn
 }
 
 // provide unique ID
-ImplPrimitive2DIDBlock(PolygonStrokePrimitive2D, PRIMITIVE2D_ID_POLYGONSTROKEPRIMITIVE2D)
+sal_uInt32 PolygonStrokePrimitive2D::getPrimitive2DID() const
+{
+    return PRIMITIVE2D_ID_POLYGONSTROKEPRIMITIVE2D;
+}
 
-    void PolygonWavePrimitive2D::create2DDecomposition(
-        Primitive2DContainer& rContainer,
-        const geometry::ViewInformation2D& /*rViewInformation*/) const
+void PolygonWavePrimitive2D::create2DDecomposition(
+    Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
 {
     if (!getB2DPolygon().count())
         return;
@@ -478,11 +486,13 @@ PolygonWavePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInfo
 }
 
 // provide unique ID
-ImplPrimitive2DIDBlock(PolygonWavePrimitive2D, PRIMITIVE2D_ID_POLYGONWAVEPRIMITIVE2D)
+sal_uInt32 PolygonWavePrimitive2D::getPrimitive2DID() const
+{
+    return PRIMITIVE2D_ID_POLYGONWAVEPRIMITIVE2D;
+}
 
-    void PolygonStrokeArrowPrimitive2D::create2DDecomposition(
-        Primitive2DContainer& rContainer,
-        const geometry::ViewInformation2D& /*rViewInformation*/) const
+void PolygonStrokeArrowPrimitive2D::create2DDecomposition(
+    Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
 {
     // copy local polygon, it may be changed
     basegfx::B2DPolygon aLocalPolygon(getB2DPolygon());
@@ -596,7 +606,10 @@ basegfx::B2DRange PolygonStrokeArrowPrimitive2D::getB2DRange(
 }
 
 // provide unique ID
-ImplPrimitive2DIDBlock(PolygonStrokeArrowPrimitive2D, PRIMITIVE2D_ID_POLYGONSTROKEARROWPRIMITIVE2D)
+sal_uInt32 PolygonStrokeArrowPrimitive2D::getPrimitive2DID() const
+{
+    return PRIMITIVE2D_ID_POLYGONSTROKEARROWPRIMITIVE2D;
+}
 
 } // end of namespace
 
