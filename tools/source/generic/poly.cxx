@@ -57,7 +57,7 @@
 static double ImplGetParameter( const Point& rCenter, const Point& rPt, double fWR, double fHR )
 {
     const tools::Long nDX = rPt.X() - rCenter.X();
-    double fAngle = atan2( o3tl::saturating_toggle_sign(rPt.Y()) + rCenter.Y(), ( ( nDX == 0 ) ? 0.000000001 : nDX ) );
+    double fAngle = atan2( -rPt.Y() + rCenter.Y(), ( ( nDX == 0 ) ? 0.000000001 : nDX ) );
 
     return atan2(fWR*sin(fAngle), fHR*cos(fAngle));
 }
@@ -236,8 +236,8 @@ ImplPolygon::ImplPolygon( const tools::Rectangle& rBound, const Point& rStart, c
         // tdf#142268 Get Top Left corner of rectangle (the rectangle is not always correctly created)
         const auto aBoundLeft = rBound.Left() < aCenter.X() ? rBound.Left() : rBound.Right();
         const auto aBoundTop = rBound.Top() < aCenter.Y() ? rBound.Top() : rBound.Bottom();
-        const auto nRadX = o3tl::saturating_sub(aCenter.X(), aBoundLeft);
-        const auto nRadY = o3tl::saturating_sub(aCenter.Y(), aBoundTop);
+        const auto nRadX = aCenter.X() - aBoundLeft;
+        const auto nRadY = aCenter.Y() - aBoundTop;
         sal_uInt16  nPoints;
 
         tools::Long nRadXY;
@@ -255,7 +255,7 @@ ImplPolygon::ImplPolygon( const tools::Rectangle& rBound, const Point& rStart, c
         }
 
 
-        if (nRadX > 32 && nRadY > 32 && o3tl::saturating_add(nRadX, nRadY) < 8192)
+        if( ( nRadX > 32 ) && ( nRadY > 32 ) && ( nRadX + nRadY ) < 8192 )
             nPoints >>= 1;
 
         // compute threshold
