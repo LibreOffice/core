@@ -42,7 +42,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(HiddenGeometryPrimitive2D, PRIMITIVE2D_ID_HIDDENGEOMETRYPRIMITIVE2D)
+        sal_uInt32 HiddenGeometryPrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_HIDDENGEOMETRYPRIMITIVE2D;
+        }
 
 } // end of namespace
 

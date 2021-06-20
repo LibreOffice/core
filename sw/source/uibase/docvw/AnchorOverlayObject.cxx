@@ -174,7 +174,10 @@ bool AnchorPrimitive::operator==( const drawinglayer::primitive2d::BasePrimitive
     return false;
 }
 
-ImplPrimitive2DIDBlock(AnchorPrimitive, PRIMITIVE2D_ID_SWSIDEBARANCHORPRIMITIVE)
+sal_uInt32 AnchorPrimitive::getPrimitive2DID() const
+{
+    return PRIMITIVE2D_ID_SWSIDEBARANCHORPRIMITIVE;
+}
 
 /*static*/ std::unique_ptr<AnchorOverlayObject> AnchorOverlayObject::CreateAnchorOverlayObject(
                                                        SwView const & rDocView,

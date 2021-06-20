@@ -131,7 +131,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(SdrEllipsePrimitive2D, PRIMITIVE2D_ID_SDRELLIPSEPRIMITIVE2D)
+        sal_uInt32 SdrEllipsePrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_SDRELLIPSEPRIMITIVE2D;
+        }
 
 
 
@@ -254,7 +257,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(SdrEllipseSegmentPrimitive2D, PRIMITIVE2D_ID_SDRELLIPSESEGMENTPRIMITIVE2D)
+        sal_uInt32 SdrEllipseSegmentPrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_SDRELLIPSESEGMENTPRIMITIVE2D;
+        }
 
 } // end of namespace
 

@@ -27,15 +27,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <basegfx/range/b2drange.hxx>
 
-/** defines ImplPrimitive2DIDBlock
-    Added to be able to simply change identification stuff later, e.g. add
-    an identification string and/or ID to the interface and to the implementation
-    ATM used to delclare implement getPrimitive2DID()
-*/
-
-#define ImplPrimitive2DIDBlock(TheClass, TheID)                                                    \
-    sal_uInt32 TheClass::getPrimitive2DID() const { return TheID; }
-
 namespace drawinglayer::geometry
 {
 class ViewInformation2D;

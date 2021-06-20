@@ -281,7 +281,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(TextLinePrimitive2D, PRIMITIVE2D_ID_TEXTLINEPRIMITIVE2D)
+        sal_uInt32 TextLinePrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_TEXTLINEPRIMITIVE2D;
+        }
 
 } // end of namespace
 

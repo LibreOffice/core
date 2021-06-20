@@ -281,7 +281,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(SdrContourTextPrimitive2D, PRIMITIVE2D_ID_SDRCONTOURTEXTPRIMITIVE2D)
+        sal_uInt32 SdrContourTextPrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_SDRCONTOURTEXTPRIMITIVE2D;
+        }
 
 
 
@@ -330,7 +333,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(SdrPathTextPrimitive2D, PRIMITIVE2D_ID_SDRPATHTEXTPRIMITIVE2D)
+        sal_uInt32 SdrPathTextPrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_SDRPATHTEXTPRIMITIVE2D;
+        }
 
 
 
@@ -396,7 +402,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(SdrBlockTextPrimitive2D, PRIMITIVE2D_ID_SDRBLOCKTEXTPRIMITIVE2D)
+        sal_uInt32 SdrBlockTextPrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_SDRBLOCKTEXTPRIMITIVE2D;
+        }
 
 
 
@@ -437,8 +446,11 @@ namespace drawinglayer::primitive2d
              return new SdrAutoFitTextPrimitive2D(getSdrText(), getOutlinerParaObject(), rTransform * getTextRangeTransform(), getWordWrap());
          }
 
-         // provide unique ID
-         ImplPrimitive2DIDBlock(SdrAutoFitTextPrimitive2D, PRIMITIVE2D_ID_SDRAUTOFITTEXTPRIMITIVE2D)
+        // provide unique ID
+        sal_uInt32 SdrAutoFitTextPrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_SDRAUTOFITTEXTPRIMITIVE2D;
+        }
 
 
 
@@ -477,7 +489,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(SdrChainedTextPrimitive2D, PRIMITIVE2D_ID_SDRCHAINEDTEXTPRIMITIVE2D)
+        sal_uInt32 SdrChainedTextPrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_SDRCHAINEDTEXTPRIMITIVE2D;
+        }
 
 
         void SdrStretchTextPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const
@@ -522,7 +537,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(SdrStretchTextPrimitive2D, PRIMITIVE2D_ID_SDRSTRETCHTEXTPRIMITIVE2D)
+        sal_uInt32 SdrStretchTextPrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_SDRSTRETCHTEXTPRIMITIVE2D;
+        }
 
 } // end of namespace
 

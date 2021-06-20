@@ -93,7 +93,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(DiscreteBitmapPrimitive2D, PRIMITIVE2D_ID_DISCRETEBITMAPPRIMITIVE2D)
+        sal_uInt32 DiscreteBitmapPrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_DISCRETEBITMAPPRIMITIVE2D;
+        }
 
 } // end of namespace
 

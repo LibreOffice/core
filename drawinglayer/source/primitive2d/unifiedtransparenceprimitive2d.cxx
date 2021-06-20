@@ -102,7 +102,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(UnifiedTransparencePrimitive2D, PRIMITIVE2D_ID_UNIFIEDTRANSPARENCEPRIMITIVE2D)
+        sal_uInt32 UnifiedTransparencePrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_UNIFIEDTRANSPARENCEPRIMITIVE2D;
+        }
 
 } // end of namespace
 

@@ -75,7 +75,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(EpsPrimitive2D, PRIMITIVE2D_ID_EPSPRIMITIVE2D)
+        sal_uInt32 EpsPrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_EPSPRIMITIVE2D;
+        }
 
 } // end of namespace
 

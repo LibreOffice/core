@@ -392,7 +392,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(TextDecoratedPortionPrimitive2D, PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D)
+        sal_uInt32 TextDecoratedPortionPrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D;
+        }
 
 } // end of namespace
 

@@ -167,7 +167,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(SdrOle2Primitive2D, PRIMITIVE2D_ID_SDROLE2PRIMITIVE2D)
+        sal_uInt32 SdrOle2Primitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_SDROLE2PRIMITIVE2D;
+        }
 
 } // end of namespace
 

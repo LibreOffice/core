@@ -96,7 +96,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(WrongSpellPrimitive2D, PRIMITIVE2D_ID_WRONGSPELLPRIMITIVE2D)
+        sal_uInt32 WrongSpellPrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_WRONGSPELLPRIMITIVE2D;
+        }
 
 } // end of namespace
 

@@ -55,7 +55,7 @@ GlowPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation
 }
 
 // provide unique ID
-ImplPrimitive2DIDBlock(GlowPrimitive2D, PRIMITIVE2D_ID_GLOWPRIMITIVE2D)
+sal_uInt32 GlowPrimitive2D::getPrimitive2DID() const { return PRIMITIVE2D_ID_GLOWPRIMITIVE2D; }
 
 } // end of namespace
 

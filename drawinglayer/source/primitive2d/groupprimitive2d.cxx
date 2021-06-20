@@ -69,7 +69,10 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(GroupPrimitive2D, PRIMITIVE2D_ID_GROUPPRIMITIVE2D)
+        sal_uInt32 GroupPrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_GROUPPRIMITIVE2D;
+        }
 
 } // end of namespace
 

@@ -1568,8 +1568,10 @@ namespace sdr::contact {
             m_aTransformation, xControlModel, rControl.getControl() ) );
     }
 
-
-    ImplPrimitive2DIDBlock( LazyControlCreationPrimitive2D, PRIMITIVE2D_ID_SDRCONTROLPRIMITIVE2D )
+    sal_uInt32 LazyControlCreationPrimitive2D::getPrimitive2DID() const
+    {
+        return PRIMITIVE2D_ID_SDRCONTROLPRIMITIVE2D;
+    }
 
     ViewObjectContactOfUnoControl::ViewObjectContactOfUnoControl( ObjectContact& _rObjectContact, ViewContactOfUnoControl& _rViewContact )
         :ViewObjectContactOfSdrObj( _rObjectContact, _rViewContact )
