@@ -660,12 +660,22 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
                     if (!m_bSymbol && bDoingSymbol)
                     {
                         bDoingSymbol = false;
-                        OUStringBuffer sTemp;
-                        comphelper::string::padToLength(sTemp,
-                            nTextStart - nStartReplace, cReplaceSymbol);
-                        m_pDrawEditEngine->QuickInsertText(sTemp.makeStringAndClear(),
-                            GetESelection(*m_pDrawEditEngine, nStartReplace - nStartCp,
-                            nTextStart - nStartCp ) );
+
+                        ESelection aReplaceSel(GetESelection(*m_pDrawEditEngine, nStartReplace - nStartCp,
+                            nTextStart - nStartCp));
+
+                        sal_Int32 nParaCount = m_pDrawEditEngine->GetParagraphCount();
+                        bool bBadSelection = aReplaceSel.nStartPara >= nParaCount || aReplaceSel.nEndPara >= nParaCount;
+
+                        SAL_WARN_IF(bBadSelection, "sw.ww8", "editengine has different amount of text than expected");
+
+                        if (!bBadSelection)
+                        {
+                            OUStringBuffer sTemp;
+                            comphelper::string::padToLength(sTemp,
+                                nTextStart - nStartReplace, cReplaceSymbol);
+                            m_pDrawEditEngine->QuickInsertText(sTemp.makeStringAndClear(), aReplaceSel);
+                        }
                     }
                 }
             }
