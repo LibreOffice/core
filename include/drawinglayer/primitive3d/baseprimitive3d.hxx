@@ -32,7 +32,7 @@
 /** defines for DeclPrimitive3DIDBlock and ImplPrimitive3DIDBlock
     Added to be able to simply change identification stuff later, e.g. add
     an identification string and/or ID to the interface and to the implementation
-    ATM used to delclare implement getPrimitive3DID()
+    ATM used to declare implement getPrimitive3DID()
  */
 
 #define DeclPrimitive3DIDBlock() \

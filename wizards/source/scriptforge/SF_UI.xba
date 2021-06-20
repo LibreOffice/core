@@ -409,7 +409,7 @@ Public Function GetDocument(Optional ByVal WindowName As Variant) As Variant
 &apos;&apos;&apos;		DOCUMENTERROR		The targeted window could not be found
 &apos;&apos;&apos;	Examples:
 &apos;&apos;&apos;		Dim oDoc As Object
-&apos;&apos;&apos;			Set oDoc = ui.GetDocument	&apos;	or Set oDoc = ui.GetDcument(ThisComponent)
+&apos;&apos;&apos;			Set oDoc = ui.GetDocument	&apos;	or Set oDoc = ui.GetDocument(ThisComponent)
 &apos;&apos;&apos;			oDoc.Save()
 
 Dim oDocument As Object			&apos;	Return value
