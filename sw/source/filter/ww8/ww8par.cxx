@@ -6056,23 +6056,25 @@ const OUString* SwWW8ImplReader::GetAnnotationAuthor(sal_uInt16 nIdx)
         m_xAtnNames.emplace();
         SvStream& rStrm = *m_pTableStream;
 
-        tools::Long nOldPos = rStrm.Tell();
-        rStrm.Seek( m_xWwFib->m_fcGrpStAtnOwners );
-
-        tools::Long nRead = 0, nCount = m_xWwFib->m_lcbGrpStAtnOwners;
-        while (nRead < nCount && rStrm.good())
+        auto nOldPos = rStrm.Tell();
+        bool bValidPos = checkSeek(rStrm, m_xWwFib->m_fcGrpStAtnOwners);
+        if (bValidPos)
         {
-            if( m_bVer67 )
+            tools::Long nRead = 0, nCount = m_xWwFib->m_lcbGrpStAtnOwners;
+            while (nRead < nCount && rStrm.good())
             {
-                m_xAtnNames->push_back(read_uInt8_PascalString(rStrm,
-                    RTL_TEXTENCODING_MS_1252));
-                nRead += m_xAtnNames->rbegin()->getLength() + 1; // Length + sal_uInt8 count
-            }
-            else
-            {
-                m_xAtnNames->push_back(read_uInt16_PascalString(rStrm));
-                // Unicode: double the length + sal_uInt16 count
-                nRead += (m_xAtnNames->rbegin()->getLength() + 1)*2;
+                if( m_bVer67 )
+                {
+                    m_xAtnNames->push_back(read_uInt8_PascalString(rStrm,
+                        RTL_TEXTENCODING_MS_1252));
+                    nRead += m_xAtnNames->rbegin()->getLength() + 1; // Length + sal_uInt8 count
+                }
+                else
+                {
+                    m_xAtnNames->push_back(read_uInt16_PascalString(rStrm));
+                    // Unicode: double the length + sal_uInt16 count
+                    nRead += (m_xAtnNames->rbegin()->getLength() + 1)*2;
+                }
             }
         }
         rStrm.Seek( nOldPos );
