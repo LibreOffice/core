@@ -32,9 +32,6 @@ OTempFileService::OTempFileService(css::uno::Reference< css::uno::XComponentCont
 , mbRemoveFile( true )
 , mbInClosed( false )
 , mbOutClosed( false )
-, mnCachedPos( 0 )
-, mbHasCachedPos( false )
-
 {
     mpTempFile.reset(new utl::TempFile());
     mpTempFile->EnableKillingFile();
@@ -126,18 +123,6 @@ sal_Int32 SAL_CALL OTempFileService::readBytes( css::uno::Sequence< sal_Int8 >& 
 
     if (nRead < o3tl::make_unsigned(aData.getLength()))
         aData.realloc( nRead );
-
-    if ( sal::static_int_cast<sal_uInt32>(nBytesToRead) > nRead )
-    {
-        // usually that means that the stream was read till the end
-        // TODO/LATER: it is better to get rid of this optimization by avoiding using of multiple temporary files ( there should be only one temporary file? )
-        mnCachedPos = mpStream->Tell();
-        mbHasCachedPos = true;
-
-        mpStream = nullptr;
-        if ( mpTempFile )
-            mpTempFile->CloseStream();
-    }
 
     return nRead;
 }
@@ -233,17 +218,6 @@ void SAL_CALL OTempFileService::closeOutput(  )
 
     mbOutClosed = true;
 
-    // TODO/LATER: it is better to get rid of this optimization by avoiding using of multiple temporary files ( there should be only one temporary file? )
-    if ( mpStream )
-    {
-        mnCachedPos = mpStream->Tell();
-        mbHasCachedPos = true;
-
-        mpStream = nullptr;
-        if ( mpTempFile )
-            mpTempFile->CloseStream();
-    }
-
     if ( mbInClosed )
     {
         // stream will be deleted by TempFile implementation
@@ -260,23 +234,7 @@ void OTempFileService::checkError () const
 void OTempFileService::checkConnected ()
 {
     if (!mpStream && mpTempFile)
-    {
         mpStream = mpTempFile->GetStream( StreamMode::STD_READWRITE );
-        if ( mpStream && mbHasCachedPos )
-        {
-            mpStream->Seek( sal::static_int_cast<std::size_t>(mnCachedPos) );
-            if ( mpStream->SvStream::GetError () == ERRCODE_NONE )
-            {
-                mbHasCachedPos = false;
-                mnCachedPos = 0;
-            }
-            else
-            {
-                mpStream = nullptr;
-                mpTempFile->CloseStream();
-            }
-        }
-    }
 
     if (!mpStream)
         throw css::io::NotConnectedException ( OUString(), static_cast < css::uno::XWeak * > (this ) );
