@@ -581,38 +581,10 @@ void Bootstrap_Impl::expandValue(
 
 namespace {
 
-struct bootstrap_map {
-    typedef std::unordered_map<
-        OUString, Bootstrap_Impl * > t;
-
-    bootstrap_map(const bootstrap_map&) = delete;
-    bootstrap_map& operator=(const bootstrap_map&) = delete;
-
-    // get and release must only be called properly synchronized via some mutex
-    // (e.g., osl::Mutex::getGlobalMutex()):
-
-    static t * get()
-    {
-        if (!m_map)
-            m_map = new t;
-
-        return m_map;
-    }
-
-    static void release()
-    {
-        if (m_map != nullptr && m_map->empty())
-        {
-            delete m_map;
-            m_map = nullptr;
-        }
-    }
-
-private:
-    static t * m_map;
-};
-
-bootstrap_map::t * bootstrap_map::m_map = nullptr;
+// This map must only be called properly synchronized via some mutex
+// (e.g., osl::Mutex::getGlobalMutex()):
+typedef std::unordered_map< OUString, Bootstrap_Impl * > bootstrap_map_t;
+bootstrap_map_t bootstrap_map;
 
 }
 
@@ -633,21 +605,18 @@ rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open(rtl_uString * pIniName)
 
     Bootstrap_Impl * that;
     osl::ResettableMutexGuard guard(osl::Mutex::getGlobalMutex());
-    bootstrap_map::t* p_bootstrap_map = bootstrap_map::get();
-    bootstrap_map::t::const_iterator iFind(p_bootstrap_map->find(iniName));
-    if (iFind == p_bootstrap_map->end())
+    auto iFind(bootstrap_map.find(iniName));
+    if (iFind == bootstrap_map.end())
     {
-        bootstrap_map::release();
         guard.clear();
         that = new Bootstrap_Impl(iniName);
         guard.reset();
-        p_bootstrap_map = bootstrap_map::get();
-        iFind = p_bootstrap_map->find(iniName);
-        if (iFind == p_bootstrap_map->end())
+        iFind = bootstrap_map.find(iniName);
+        if (iFind == bootstrap_map.end())
         {
             ++that->_nRefCount;
-            ::std::pair< bootstrap_map::t::iterator, bool > insertion(
-                p_bootstrap_map->emplace(iniName, that));
+            ::std::pair< bootstrap_map_t::iterator, bool > insertion(
+                bootstrap_map.emplace(iniName, that));
             OSL_ASSERT(insertion.second);
         }
         else
@@ -675,23 +644,21 @@ void SAL_CALL rtl_bootstrap_args_close(rtlBootstrapHandle handle) SAL_THROW_EXTE
     Bootstrap_Impl * that = static_cast< Bootstrap_Impl * >( handle );
 
     osl::MutexGuard guard(osl::Mutex::getGlobalMutex());
-    bootstrap_map::t* p_bootstrap_map = bootstrap_map::get();
-    OSL_ASSERT(p_bootstrap_map->find(that->_iniName)->second == that);
+    OSL_ASSERT(bootstrap_map.find(that->_iniName)->second == that);
     --that->_nRefCount;
 
     if (that->_nRefCount != 0)
         return;
 
     std::size_t const nLeaking = 8; // only hold up to 8 files statically
-    if (p_bootstrap_map->size() > nLeaking)
+    if (bootstrap_map.size() > nLeaking)
     {
-        ::std::size_t erased = p_bootstrap_map->erase( that->_iniName );
+        ::std::size_t erased = bootstrap_map.erase( that->_iniName );
         if (erased != 1) {
             OSL_ASSERT( false );
         }
         delete that;
     }
-    bootstrap_map::release();
 }
 
 sal_Bool SAL_CALL rtl_bootstrap_get_from_handle(
