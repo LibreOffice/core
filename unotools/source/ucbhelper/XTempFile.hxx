@@ -55,9 +55,6 @@ protected:
     bool mbInClosed;
     bool mbOutClosed;
 
-    sal_Int64 mnCachedPos;
-    bool mbHasCachedPos;
-
     void checkError () const;
     void checkConnected ();
 
