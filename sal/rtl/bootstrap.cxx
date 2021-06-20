@@ -37,6 +37,7 @@
 #include <rtl/malformeduriexception.hxx>
 #include <rtl/uri.hxx>
 #include <sal/log.hxx>
+#include <o3tl/lru_map.hxx>
 
 #include <vector>
 #include <algorithm>
@@ -588,21 +589,35 @@ bootstrap_map_t bootstrap_map;
 
 rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open(rtl_uString * pIniName)
 {
-    OUString iniName( pIniName );
+    static o3tl::lru_map<OUString,OUString> fileUrlLookupCache(16);
+
+    OUString originalIniName( pIniName );
+    OUString iniName;
+
+    osl::ResettableMutexGuard guard(osl::Mutex::getGlobalMutex());
+    auto cacheIt = fileUrlLookupCache.find(originalIniName);
+    bool foundInCache = cacheIt != fileUrlLookupCache.end();
+    if (foundInCache)
+        iniName = cacheIt->second;
+    guard.clear();
 
     // normalize path
-    FileStatus status(osl_FileStatus_Mask_FileURL);
-    DirectoryItem dirItem;
-    if (DirectoryItem::get(iniName, dirItem) != DirectoryItem::E_None ||
-        dirItem.getFileStatus(status) != DirectoryItem::E_None)
+    if (!foundInCache)
     {
-        return nullptr;
+        FileStatus status(osl_FileStatus_Mask_FileURL);
+        DirectoryItem dirItem;
+        if (DirectoryItem::get(originalIniName, dirItem) != DirectoryItem::E_None ||
+            dirItem.getFileStatus(status) != DirectoryItem::E_None)
+        {
+            return nullptr;
+        }
+        iniName = status.getFileURL();
     }
 
-    iniName = status.getFileURL();
-
+    guard.reset();
+    if (!foundInCache)
+        fileUrlLookupCache.insert({originalIniName, iniName});
     Bootstrap_Impl * that;
-    osl::ResettableMutexGuard guard(osl::Mutex::getGlobalMutex());
     auto iFind(bootstrap_map.find(iniName));
     if (iFind == bootstrap_map.end())
     {
