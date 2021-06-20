@@ -16,6 +16,23 @@
       "revId": "c4374a688e449dc192f253c266797b766714655e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9407812_523de4de",
+        "filename": "sdext/source/pdfimport/xpdfwrapper/wrapper_gpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2021-06-20T23:26:30Z",
+      "side": 1,
+      "message": "It appears that std::filesystem is a little too bleeding edge for our platforms, so I will rewrite this block using std::string.",
+      "revId": "c4374a688e449dc192f253c266797b766714655e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
