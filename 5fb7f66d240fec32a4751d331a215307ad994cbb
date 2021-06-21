@@ -16,6 +16,24 @@
       "revId": "5fb7f66d240fec32a4751d331a215307ad994cbb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35c71839_bd0ce1fd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-21T07:49:13Z",
+      "side": 1,
+      "message": "yes, I realized that only after submitting it, too :)",
+      "parentUuid": "561e49c8_0d0211fb",
+      "revId": "5fb7f66d240fec32a4751d331a215307ad994cbb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
