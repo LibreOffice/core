@@ -973,8 +973,8 @@ void FilterCache::impl_validateAndOptimize()
 
     for (auto const& elem : m_lTypes)
     {
-        OUString sType = elem.first;
-        CacheItem aType = elem.second;
+        const OUString & sType = elem.first;
+        const CacheItem & aType = elem.second;
 
         // get its registration for file Extensions AND(!) URLPattern ...
         // It doesn't matter if these items exists or if our
@@ -984,15 +984,21 @@ void FilterCache::impl_validateAndOptimize()
         // from this cache!
         css::uno::Sequence< OUString > lExtensions;
         css::uno::Sequence< OUString > lURLPattern;
-        aType[PROPNAME_EXTENSIONS] >>= lExtensions;
-        aType[PROPNAME_URLPATTERN] >>= lURLPattern;
+        auto it = aType.find(PROPNAME_EXTENSIONS);
+        if (it != aType.end())
+            it->second >>= lExtensions;
+        it = aType.find(PROPNAME_URLPATTERN);
+        if (it != aType.end())
+            it->second >>= lURLPattern;
         sal_Int32 ce = lExtensions.getLength();
         sal_Int32 cu = lURLPattern.getLength();
 
 #if OSL_DEBUG_LEVEL > 0
 
         OUString sInternalTypeNameCheck;
-        aType[PROPNAME_NAME] >>= sInternalTypeNameCheck;
+        it = aType.find(PROPNAME_NAME);
+        if (it != aType.end())
+            it->second >>= sInternalTypeNameCheck;
         if (sInternalTypeNameCheck != sType)
         {
             sLog.append("Warning\t:\t" "The type \"" + sType + "\" does support the property \"Name\" correctly.\n");
@@ -1015,7 +1021,9 @@ void FilterCache::impl_validateAndOptimize()
         // preferred type is usable in the same manner then every
         // other type!
         bool bPreferred = false;
-        aType[PROPNAME_PREFERRED] >>= bPreferred;
+        it = aType.find(PROPNAME_PREFERRED);
+        if (it != aType.end())
+            it->second >>= bPreferred;
 
         const OUString* pExtensions = lExtensions.getConstArray();
         for (sal_Int32 e=0; e<ce; ++e)
@@ -1057,7 +1065,9 @@ void FilterCache::impl_validateAndOptimize()
             continue;
 
         OUString sPrefFilter;
-        aType[PROPNAME_PREFERREDFILTER] >>= sPrefFilter;
+        it = aType.find(PROPNAME_PREFERREDFILTER);
+        if (it != aType.end())
+            it->second >>= sPrefFilter;
         if (sPrefFilter.isEmpty())
         {
             // OK - there is no filter for this type. But that's not an error.
