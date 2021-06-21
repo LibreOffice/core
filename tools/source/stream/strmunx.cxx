@@ -197,6 +197,7 @@ SvFileStream::SvFileStream( const OUString& rFileName, StreamMode nOpenMode )
 {
     bIsOpen             = false;
     m_isWritable        = false;
+    mbDontFlushOnClose  = false;
     pInstanceData.reset(new StreamData);
 
     SetBufferSize( 1024 );
@@ -214,6 +215,7 @@ SvFileStream::SvFileStream()
 {
     bIsOpen             = false;
     m_isWritable        = false;
+    mbDontFlushOnClose  = false;
     pInstanceData.reset(new StreamData);
     SetBufferSize( 1024 );
 }
@@ -457,7 +459,8 @@ void SvFileStream::Close()
     if ( IsOpen() )
     {
         SAL_INFO("tools", "Closing " << aFilename);
-        Flush();
+        if ( !mbDontFlushOnClose )
+            Flush();
         osl_closeFile( pInstanceData->rHandle );
         pInstanceData->rHandle = nullptr;
     }
