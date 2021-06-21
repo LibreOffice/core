@@ -422,7 +422,13 @@ SvStream* TempFile::GetStream( StreamMode eMode )
     if (!pStream)
     {
         if (!aName.isEmpty())
-            pStream.reset(new SvFileStream(aName, eMode | StreamMode::TEMPORARY));
+        {
+            StreamMode otherFlags = StreamMode::TEMPORARY;
+            // if we're going to delete this file, no point in flushing it when closing
+            if (bKillingFileEnabled)
+                otherFlags |= StreamMode::DONT_FLUSH_ON_CLOSE;
+            pStream.reset(new SvFileStream(aName, eMode | otherFlags));
+        }
         else
             pStream.reset(new SvMemoryStream(nullptr, 0, eMode));
     }
