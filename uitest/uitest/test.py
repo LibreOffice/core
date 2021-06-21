@@ -92,6 +92,15 @@ class UITest(object):
         with self.wait_until_component_loaded():
             return self.get_desktop().loadComponentFromURL(url, "_default", 0, tuple())
 
+    # Calls UITest.close_doc at exit
+    @contextmanager
+    def load_file2(self, url):
+        component = self.load_file(url)
+        try:
+            yield component
+        finally:
+            self.close_doc()
+
     def execute_dialog_through_command(self, command, printNames=False):
         with EventListener(self._xContext, "DialogExecute", printNames=printNames) as event:
             if not self._xUITest.executeDialog(command):
