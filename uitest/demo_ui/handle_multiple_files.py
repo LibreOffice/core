@@ -15,14 +15,13 @@ class HandleFiles(UITestCase):
 
     def test_load_file(self):
 
-        calc_file = self.ui_test.load_file(get_url_for_data_file("test.ods"))
+        with self.ui_test.load_file(get_url_for_data_file("test.ods")) as calc_file:
 
-        calc_file2 = self.ui_test.load_file(get_url_for_data_file("test2.ods"))
+            calc_file2 = self.ui_test.load_file(get_url_for_data_file("test2.ods"))
 
-        frames = self.ui_test.get_frames()
-        self.assertEqual(len(frames), 2)
+            frames = self.ui_test.get_frames()
+            self.assertEqual(len(frames), 2)
 
-        self.ui_test.close_doc()
 
         frames = self.ui_test.get_frames()
         self.assertEqual(len(frames), 1)
@@ -36,14 +35,13 @@ class HandleFiles(UITestCase):
         self.ui_test.close_doc()
 
     def test_select_frame(self):
-        calc_file = self.ui_test.load_file(get_url_for_data_file("test.ods"))
+        with self.ui_test.load_file(get_url_for_data_file("test.ods")) as calc_file:
 
-        calc_file2 = self.ui_test.load_file(get_url_for_data_file("test2.ods"))
-        frames = self.ui_test.get_frames()
-        self.assertEqual(len(frames), 2)
-        frames[0].activate()
+            calc_file2 = self.ui_test.load_file(get_url_for_data_file("test2.ods"))
+            frames = self.ui_test.get_frames()
+            self.assertEqual(len(frames), 2)
+            frames[0].activate()
 
-        self.ui_test.close_doc()
 
         frames = self.ui_test.get_frames()
         self.assertEqual(len(frames), 1)

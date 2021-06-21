@@ -11,15 +11,6 @@ from contextlib import contextmanager
 
 # Calls UITest.close_doc at exit
 @contextmanager
-def load_file(testCase, url):
-    component = testCase.ui_test.load_file(url)
-    try:
-        yield component
-    finally:
-        testCase.ui_test.close_doc()
-
-# Calls UITest.close_doc at exit
-@contextmanager
 def create_doc_in_start_center(testCase, app):
     testCase.ui_test.create_doc_in_start_center(app)
     component = testCase.ui_test.get_component()
