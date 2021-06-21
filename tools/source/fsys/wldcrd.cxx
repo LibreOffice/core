@@ -25,7 +25,7 @@
  * '?' in pWild mean match exactly one character.
  *
  */
-bool WildCard::ImpMatch( const char *pWild, const char *pStr )
+bool WildCard::ImpMatch( const sal_Unicode *pWild, const sal_Unicode *pStr )
 {
     int    pos=0;
     int    flag=0;
@@ -88,8 +88,7 @@ bool WildCard::ImpMatch( const char *pWild, const char *pStr )
 
 bool WildCard::Matches( std::u16string_view rString ) const
 {
-    OString aTmpWild = aWildString;
-    OString aString(OUStringToOString(rString, osl_getThreadTextEncoding()));
+    OUString aTmpWild = aWildString;
 
     sal_Int32 nSepPos;
 
@@ -98,13 +97,13 @@ bool WildCard::Matches( std::u16string_view rString ) const
         while ( (nSepPos = aTmpWild.indexOf(cSepSymbol)) != -1 )
         {
             // Check all split wildcards
-            if ( ImpMatch( aTmpWild.copy( 0, nSepPos ).getStr(), aString.getStr() ) )
+            if ( ImpMatch( aTmpWild.subView( 0, nSepPos ).data(), rString.data() ) )
                 return true;
             aTmpWild = aTmpWild.copy(nSepPos + 1); // remove separator
         }
     }
 
-    return ImpMatch( aTmpWild.getStr(), aString.getStr() );
+    return ImpMatch( aTmpWild.getStr(), rString.data() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

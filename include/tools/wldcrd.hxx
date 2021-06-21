@@ -30,10 +30,10 @@
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC WildCard
 {
 private:
-    OString aWildString;
+    OUString aWildString;
     char cSepSymbol;
 
-    static bool ImpMatch( const char *pWild, const char *pStr );
+    static bool ImpMatch( const sal_Unicode *pWild, const sal_Unicode *pStr );
 
 public:
     WildCard()
@@ -43,19 +43,19 @@ public:
     }
 
     WildCard(std::u16string_view rWildCard, const char cSeparator = '\0')
-        : aWildString(OUStringToOString(rWildCard, osl_getThreadTextEncoding()))
+        : aWildString(rWildCard)
         , cSepSymbol(cSeparator)
     {
     }
 
     OUString getGlob() const
     {
-        return OStringToOUString(aWildString, osl_getThreadTextEncoding());
+        return aWildString;
     }
 
     void setGlob(std::u16string_view rString)
     {
-        aWildString = OUStringToOString(rString, osl_getThreadTextEncoding());
+        aWildString = rString;
     }
 
     bool Matches( std::u16string_view rStr ) const;
