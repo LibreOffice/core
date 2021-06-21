@@ -83,10 +83,8 @@ bool ZipPackageFolder::LookForUnexpectedODF12Streams( std::u16string_view aPath 
 {
     bool bHasUnexpected = false;
 
-    for (const auto& [rShortName, rxInfo] : maContents)
+    for (const auto& [rShortName, rInfo] : maContents)
     {
-        const ZipContentInfo &rInfo = *rxInfo;
-
         if ( rInfo.bFolder )
         {
             if ( aPath == u"META-INF/" )
@@ -140,10 +138,8 @@ void ZipPackageFolder::setChildStreamsTypeByExtension( const beans::StringPair& 
     else
         aExt = "." + aPair.First;
 
-    for (const auto& [rShortName, rxInfo] : maContents)
+    for (const auto& [rShortName, rInfo] : maContents)
     {
-        const ZipContentInfo &rInfo = *rxInfo;
-
         if ( rInfo.bFolder )
             rInfo.pFolder->setChildStreamsTypeByExtension( aPair );
         else
@@ -219,7 +215,7 @@ ZipContentInfo& ZipPackageFolder::doGetByName( const OUString& aName )
     ContentHash::iterator aIter = maContents.find ( aName );
     if ( aIter == maContents.end())
         throw NoSuchElementException(THROW_WHERE );
-    return *aIter->second;
+    return aIter->second;
 }
 
 uno::Any SAL_CALL ZipPackageFolder::getByName( const OUString& aName )
@@ -314,10 +310,10 @@ void ZipPackageFolder::saveContents(
     {
         // let the "mimetype" stream in root folder be stored as the first stream if it is zip format
         ContentHash::const_iterator aIter = maContents.find ( aMimeTypeStreamName );
-        if ( aIter != maContents.end() && !(*aIter).second->bFolder )
+        if ( aIter != maContents.end() && !(*aIter).second.bFolder )
         {
             bMimeTypeStreamStored = true;
-            if( !aIter->second->pStream->saveChild(
+            if( !aIter->second.pStream->saveChild(
                 rPath + aIter->first, rManList, rZipOut, rEncryptionKey, nPBKDF2IterationCount, rRandomPool ))
             {
                 throw uno::RuntimeException( THROW_WHERE );
@@ -325,10 +321,8 @@ void ZipPackageFolder::saveContents(
         }
     }
 
-    for (const auto& [rShortName, rxInfo] : maContents)
+    for (const auto& [rShortName, rInfo] : maContents)
     {
-        const ZipContentInfo &rInfo = *rxInfo;
-
         if ( !bMimeTypeStreamStored || rShortName != aMimeTypeStreamName )
         {
             if (rInfo.bFolder)
@@ -396,9 +390,9 @@ uno::Any SAL_CALL ZipPackageFolder::getPropertyValue( const OUString& PropertyNa
 void ZipPackageFolder::doInsertByName ( ZipPackageEntry *pEntry, bool bSetParent )
 {
     if ( pEntry->IsFolder() )
-        maContents[pEntry->getName()] = std::make_unique<ZipContentInfo>(static_cast<ZipPackageFolder*>(pEntry));
+        maContents.emplace(pEntry->getName(), ZipContentInfo(static_cast<ZipPackageFolder*>(pEntry)));
     else
-        maContents[pEntry->getName()] = std::make_unique<ZipContentInfo>(static_cast<ZipPackageStream*>(pEntry));
+        maContents.emplace(pEntry->getName(), ZipContentInfo(static_cast<ZipPackageStream*>(pEntry)));
     if ( bSetParent )
         pEntry->setParent ( *this );
 }
