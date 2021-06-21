@@ -22324,6 +22324,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/macroselectordialog.ui" &&
         rUIFile != "cui/ui/menuassignpage.ui" &&
         rUIFile != "cui/ui/namedialog.ui" &&
+        rUIFile != "cui/ui/newlibdialog.ui" &&
         rUIFile != "cui/ui/numberingformatpage.ui" &&
         rUIFile != "cui/ui/numberingoptionspage.ui" &&
         rUIFile != "cui/ui/numberingpositionpage.ui" &&
@@ -22489,6 +22490,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/swriter/ui/columndialog.ui" &&
         rUIFile != "modules/swriter/ui/columnpage.ui" &&
         rUIFile != "modules/swriter/ui/columnwidth.ui" &&
+        rUIFile != "modules/swriter/ui/comboboxfragment.ui" &&
         rUIFile != "modules/swriter/ui/converttexttable.ui" &&
         rUIFile != "modules/swriter/ui/dropcapspage.ui" &&
         rUIFile != "modules/swriter/ui/editcategories.ui" &&
@@ -22543,7 +22545,9 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/swriter/ui/tablecolumnpage.ui" &&
         rUIFile != "modules/swriter/ui/tableproperties.ui" &&
         rUIFile != "modules/swriter/ui/tabletextflowpage.ui" &&
+        rUIFile != "modules/swriter/ui/templatedialog2.ui" &&
         rUIFile != "modules/swriter/ui/templatedialog8.ui" &&
+        rUIFile != "modules/swriter/ui/templatedialog16.ui" &&
         rUIFile != "modules/swriter/ui/textgridpage.ui" &&
         rUIFile != "modules/swriter/ui/titlepage.ui" &&
         rUIFile != "modules/swriter/ui/watermarkdialog.ui" &&
