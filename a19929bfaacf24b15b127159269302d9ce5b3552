@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e4caa0f7_32bbfa12",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-21T10:52:31Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 10,
+        "startChar": 37,
+        "endLine": 10,
+        "endChar": 39
+      },
+      "revId": "a19929bfaacf24b15b127159269302d9ce5b3552",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e387eb78_76cc3698",
+        "filename": "sal/rtl/bootstrap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-21T10:52:31Z",
+      "side": 1,
+      "message": "I would prefer `!foundInCache` here; your code needlessly implies that either cacheIt-\u003esecond can never be empty, or that an empty cacheIt-\u003esecond requires re-doing the FileStatus check.",
+      "range": {
+        "startLine": 607,
+        "startChar": 8,
+        "endLine": 607,
+        "endChar": 25
+      },
+      "revId": "a19929bfaacf24b15b127159269302d9ce5b3552",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
