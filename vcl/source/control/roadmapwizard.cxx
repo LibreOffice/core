@@ -319,16 +319,6 @@ namespace vcl
             }
         }
 
-        // can we advance from the current page?
-        bool bCurrentPageCanAdvance = true;
-        TabPage* pCurrentPage = GetPage( getCurrentState() );
-        if ( pCurrentPage )
-        {
-            const IWizardPageController* pController = nullptr;
-            OSL_ENSURE( pController != nullptr, "RoadmapWizard::implUpdateRoadmap: no controller for the current page!" );
-            bCurrentPageCanAdvance = !pController || pController->canAdvance();
-        }
-
         // now, we have to remove all items after nCurrentStatePathIndex, and insert the items from the active
         // path, up to (excluding) nUpperStepBoundary
         RoadmapTypes::ItemIndex nLoopUntil = ::std::max( nUpperStepBoundary, m_xRoadmapImpl->pRoadmap->GetItemCount() );
@@ -376,13 +366,7 @@ namespace vcl
                 );
             }
 
-            // if the item is *after* the current state, but the current page does not
-            // allow advancing, the disable the state. This relieves derived classes
-            // from disabling all future states just because the current state does not
-            // (yet) allow advancing.
-            const bool bUnconditionedDisable = !bCurrentPageCanAdvance && ( nItemIndex > nCurrentStatePathIndex );
-            const bool bEnable = !bUnconditionedDisable && ( m_xRoadmapImpl->aDisabledStates.find( nState ) == m_xRoadmapImpl->aDisabledStates.end() );
-
+            const bool bEnable = m_xRoadmapImpl->aDisabledStates.find( nState ) == m_xRoadmapImpl->aDisabledStates.end();
             m_xRoadmapImpl->pRoadmap->EnableRoadmapItem( m_xRoadmapImpl->pRoadmap->GetItemID( nItemIndex ), bEnable );
         }
 
