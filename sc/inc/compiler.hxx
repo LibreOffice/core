@@ -172,7 +172,7 @@ public:
     formula::FormulaToken* CreateToken(ScSheetLimits& rLimits) const;   // create typified token
 };
 
-class SC_DLLPUBLIC ScCompiler : public formula::FormulaCompiler
+class SC_DLLPUBLIC ScCompiler final : public formula::FormulaCompiler
 {
 public:
 

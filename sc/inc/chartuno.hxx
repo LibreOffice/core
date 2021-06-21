@@ -97,7 +97,7 @@ typedef ::cppu::WeakComponentImplHelper<
 typedef ::comphelper::OPropertyContainer ScChartObj_PBase;
 typedef ::comphelper::OPropertyArrayUsageHelper< ScChartObj > ScChartObj_PABase;
 
-class ScChartObj : public ::cppu::BaseMutex
+class ScChartObj final : public ::cppu::BaseMutex
                   ,public ScChartObj_Base
                   ,public ScChartObj_PBase
                   ,public ScChartObj_PABase
@@ -111,7 +111,6 @@ private:
     void    Update_Impl( const ScRangeListRef& rRanges, bool bColHeaders, bool bRowHeaders );
     void    GetData_Impl( ScRangeListRef& rRanges, bool& rColHeaders, bool& rRowHeaders ) const;
 
-protected:
     // ::comphelper::OPropertySetHelper
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;

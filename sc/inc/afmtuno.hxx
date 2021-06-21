@@ -83,7 +83,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ScAutoFormatObj : public ::cppu::WeakImplHelper<
+class ScAutoFormatObj final : public ::cppu::WeakImplHelper<
                             css::container::XIndexAccess,
                             css::container::XEnumerationAccess,
                             css::container::XNamed,
@@ -150,7 +150,7 @@ public:
     UNO3_GETIMPLEMENTATION_DECL(ScAutoFormatObj)
 };
 
-class ScAutoFormatFieldObj : public ::cppu::WeakImplHelper<
+class ScAutoFormatFieldObj final : public ::cppu::WeakImplHelper<
                                 css::beans::XPropertySet,
                                 css::lang::XServiceInfo >
 {

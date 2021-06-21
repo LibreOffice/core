@@ -28,7 +28,7 @@
 // SVX_IMAPINFO_ID = 2
 #define SC_UD_MACRODATA     3
 
-class SC_DLLPUBLIC ScDrawObjData : public SdrObjUserData
+class SC_DLLPUBLIC ScDrawObjData final : public SdrObjUserData
 {
 public:
     enum Type { CellNote, ValidationCircle, DetectiveArrow, DrawingObject };
@@ -65,7 +65,7 @@ private:
     tools::Rectangle maShapeRect;
 };
 
-class SAL_DLLPUBLIC_RTTI ScMacroInfo : public SdrObjUserData
+class SAL_DLLPUBLIC_RTTI ScMacroInfo final : public SdrObjUserData
 {
 public:
                     ScMacroInfo();

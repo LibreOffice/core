@@ -758,7 +758,7 @@ public:
     virtual sal_Int16 SAL_CALL resetActionLocks() override;
 };
 
-class SAL_DLLPUBLIC_RTTI ScTableSheetObj : public ScCellRangeObj,
+class SC_DLLPUBLIC ScTableSheetObj final : public ScCellRangeObj,
                         public css::sheet::XSpreadsheet,
                         public css::container::XNamed,
                         public css::sheet::XSheetPageBreak,
@@ -787,7 +787,6 @@ private:
     SCTAB                   GetTab_Impl() const;
     void                    PrintAreaUndo_Impl( std::unique_ptr<ScPrintRangeSaver> pOldRanges );
 
-protected:
     virtual const SfxItemPropertyMap& GetItemPropertyMap() override;
     virtual void GetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry,
                                 css::uno::Any& ) override;
