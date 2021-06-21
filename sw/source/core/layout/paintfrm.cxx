@@ -2423,10 +2423,11 @@ void SwTabFramePainter::HandleFrame(const SwLayoutFrame& rLayoutFrame, const SwR
     const SwFrame* pLower = rLayoutFrame.Lower();
     while ( pLower )
     {
-        const SwLayoutFrame* pLowerLayFrame = dynamic_cast<const SwLayoutFrame*>(pLower);
-        if ( pLowerLayFrame && !pLowerLayFrame->IsTabFrame() )
+        if (pLower->IsLayoutFrame() && !pLower->IsTabFrame())
+        {
+            const SwLayoutFrame* pLowerLayFrame = static_cast<const SwLayoutFrame*>(pLower);
             HandleFrame(*pLowerLayFrame, rPaintArea);
-
+        }
         pLower = pLower->GetNext();
     }
 }
