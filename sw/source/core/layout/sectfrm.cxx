@@ -1241,10 +1241,9 @@ class ExtraFormatToPositionObjs
                     pAnchoredObj->SetClearedEnvironment( false );
                 }
             }
-            SwLayoutFrame* pLayoutFrame = dynamic_cast<SwLayoutFrame*>(&rFrame);
-            if ( pLayoutFrame != nullptr )
+            if ( rFrame.IsLayoutFrame() )
             {
-                SwFrame* pLowerFrame = pLayoutFrame->GetLower();
+                SwFrame* pLowerFrame = rFrame.GetLower();
                 while ( pLowerFrame != nullptr )
                 {
                     InitObjs( *pLowerFrame );

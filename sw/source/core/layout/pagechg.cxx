@@ -2085,7 +2085,7 @@ static void lcl_MoveAllLowers( SwFrame* pFrame, const Point& rOffset )
     lcl_MoveAllLowerObjs( pFrame, rOffset );
 
     // finally, for layout frames we have to call this function recursively:
-    if ( dynamic_cast< const SwLayoutFrame *>( pFrame ) !=  nullptr )
+    if ( pFrame && pFrame->IsLayoutFrame() )
     {
         SwFrame* pLowerFrame = pFrame->GetLower();
         while ( pLowerFrame )
