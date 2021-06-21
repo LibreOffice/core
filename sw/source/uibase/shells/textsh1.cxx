@@ -48,6 +48,8 @@
 #include <IDocumentSettingAccess.hxx>
 #include <charfmt.hxx>
 #include <svx/SmartTagItem.hxx>
+#include <svx/xflgrit.hxx>
+#include <svx/xflhtit.hxx>
 #include <fmtinfmt.hxx>
 #include <wrtsh.hxx>
 #include <wview.hxx>
@@ -999,7 +1001,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             // create needed items for XPropertyList entries from the DrawModel so that
             // the Area TabPage can access them
             // Do this after GetCurAttr, this resets the ItemSet content again
-            const SwDrawModel* pDrawModel = GetView().GetDocShell()->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
+            SwDrawModel* pDrawModel = GetView().GetDocShell()->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
 
             aCoreSet.Put(SvxColorListItem(pDrawModel->GetColorList(), SID_COLOR_TABLE));
             aCoreSet.Put(SvxGradientListItem(pDrawModel->GetGradientList(), SID_GRADIENT_LIST));
@@ -1074,7 +1076,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 rReq.Ignore(); // the 'old' request is not relevant any more
 
                 auto vCursors = CopyPaMRing(*pPaM); // tdf#134439 make a copy to use at later apply
-                pDlg->StartExecuteAsync([pDlg, &rWrtSh, pRequest, nDefDist, vCursors](sal_Int32 nResult){
+                pDlg->StartExecuteAsync([pDlg, &rWrtSh, pDrawModel, pRequest, nDefDist, vCursors](sal_Int32 nResult){
                     if (nResult == RET_OK)
                     {
                         // Apply defaults if necessary.
@@ -1102,6 +1104,23 @@ void SwTextShell::Execute(SfxRequest &rReq)
                             if (static_cast<const SwFormatDrop*>(pItem2)->GetCharFormat())
                                 sCharStyleName = static_cast<const SwFormatDrop*>(pItem2)->GetCharFormat()->GetName();
                             pSet->Put(SfxStringItem(FN_DROP_CHAR_STYLE_NAME, sCharStyleName));
+                        }
+
+                        const XFillGradientItem* pTempGradItem = pSet->GetItem<XFillGradientItem>(XATTR_FILLGRADIENT);
+                        if (pTempGradItem && pTempGradItem->GetName().isEmpty())
+                        {
+                            // MigrateItemSet guarantees unique gradient names
+                            SfxItemSet aMigrateSet(rWrtSh.GetView().GetPool(), svl::Items<XATTR_FILLGRADIENT, XATTR_FILLGRADIENT>{});
+                            aMigrateSet.Put(XFillGradientItem("gradient", pTempGradItem->GetGradientValue()));
+                            SdrModel::MigrateItemSet(&aMigrateSet, pSet, pDrawModel);
+                        }
+
+                        const XFillHatchItem* pTempHatchItem = pSet->GetItem<XFillHatchItem>(XATTR_FILLHATCH);
+                        if (pTempHatchItem && pTempHatchItem->GetName().isEmpty())
+                        {
+                            SfxItemSet aMigrateSet(rWrtSh.GetView().GetPool(), svl::Items<XATTR_FILLHATCH, XATTR_FILLHATCH>{});
+                            aMigrateSet.Put(XFillHatchItem("hatch", pTempHatchItem->GetHatchValue()));
+                            SdrModel::MigrateItemSet(&aMigrateSet, pSet, pDrawModel);
                         }
 
                         sw_ParagraphDialogResult(pSet, rWrtSh, *pRequest, vCursors->front().get());
