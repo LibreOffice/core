@@ -1513,9 +1513,9 @@ SwTwips SwFrame::Grow( SwTwips nDist, bool bTst, bool bInfo )
             return static_cast<SwSectionFrame*>(this)->Grow_( nDist, bTst );
         else
         {
-            const SwCellFrame* pThisCell = dynamic_cast<const SwCellFrame*>(this);
-            if ( pThisCell )
+            if (IsCellFrame())
             {
+                const SwCellFrame* pThisCell = static_cast<const SwCellFrame*>(this);
                 const SwTabFrame* pTab = FindTabFrame();
 
                 // NEW TABLES
@@ -1523,7 +1523,6 @@ SwTwips SwFrame::Grow( SwTwips nDist, bool bTst, bool bInfo )
                      pThisCell->GetLayoutRowSpan() < 1 )
                     return 0;
             }
-
             const SwTwips nReal = GrowFrame( nDist, bTst, bInfo );
             if( !bTst )
             {
@@ -1552,9 +1551,9 @@ SwTwips SwFrame::Shrink( SwTwips nDist, bool bTst, bool bInfo )
             return static_cast<SwSectionFrame*>(this)->Shrink_( nDist, bTst );
         else
         {
-            const SwCellFrame* pThisCell = dynamic_cast<const SwCellFrame*>(this);
-            if ( pThisCell )
+            if (IsCellFrame())
             {
+                const SwCellFrame* pThisCell = static_cast<const SwCellFrame*>(this);
                 const SwTabFrame* pTab = FindTabFrame();
 
                 // NEW TABLES
@@ -1562,7 +1561,6 @@ SwTwips SwFrame::Shrink( SwTwips nDist, bool bTst, bool bInfo )
                      pThisCell->GetLayoutRowSpan() < 1 )
                     return 0;
             }
-
             SwRectFnSet aRectFnSet(this);
             SwTwips nReal = aRectFnSet.GetHeight(getFrameArea());
             ShrinkFrame( nDist, bTst, bInfo );
@@ -2688,16 +2686,18 @@ SwTwips SwLayoutFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
                     // A cell with a row span of > 1 is allowed to grow the
                     // line containing the end of the row span if it is
                     // located in the same table frame:
-                    const SwCellFrame* pThisCell = dynamic_cast<const SwCellFrame*>(this);
-                    if ( pThisCell && pThisCell->GetLayoutRowSpan() > 1 )
+                    if (IsCellFrame())
                     {
-                        SwCellFrame& rEndCell = const_cast<SwCellFrame&>(pThisCell->FindStartEndOfRowSpanCell( false ));
-                        if ( -1 == rEndCell.GetTabBox()->getRowSpan() )
-                            pToGrow = rEndCell.GetUpper();
-                        else
-                            pToGrow = nullptr;
+                        const SwCellFrame* pThisCell = static_cast<const SwCellFrame*>(this);
+                        if ( pThisCell->GetLayoutRowSpan() > 1 )
+                        {
+                            SwCellFrame& rEndCell = const_cast<SwCellFrame&>(pThisCell->FindStartEndOfRowSpanCell( false ));
+                            if ( -1 == rEndCell.GetTabBox()->getRowSpan() )
+                                pToGrow = rEndCell.GetUpper();
+                            else
+                                pToGrow = nullptr;
+                        }
                     }
-
                     nGrow = pToGrow ? pToGrow->Grow( nReal, bTst, bInfo ) : 0;
                 }
 
@@ -2905,12 +2905,15 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
     {
         SwTwips nShrink = nReal;
         SwFrame* pToShrink = GetUpper();
-        const SwCellFrame* pThisCell = dynamic_cast<const SwCellFrame*>(this);
         // NEW TABLES
-        if ( pThisCell && pThisCell->GetLayoutRowSpan() > 1 )
+        if ( IsCellFrame() )
         {
-            SwCellFrame& rEndCell = const_cast<SwCellFrame&>(pThisCell->FindStartEndOfRowSpanCell( false ));
-            pToShrink = rEndCell.GetUpper();
+            const SwCellFrame* pThisCell = static_cast<const SwCellFrame*>(this);
+            if ( pThisCell->GetLayoutRowSpan() > 1 )
+            {
+                SwCellFrame& rEndCell = const_cast<SwCellFrame&>(pThisCell->FindStartEndOfRowSpanCell( false ));
+                pToShrink = rEndCell.GetUpper();
+            }
         }
 
         nReal = pToShrink ? pToShrink->Shrink( nShrink, bTst, bInfo ) : 0;

@@ -688,9 +688,9 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
 
         if ( bRowSpan )
         {
-            const SwCellFrame* pThisCell = dynamic_cast<const SwCellFrame*>(pFrame);
-            if ( pThisCell )
+            if ( pFrame->IsCellFrame() )
             {
+                const SwCellFrame* pThisCell = static_cast<const SwCellFrame*>(pFrame);
                 nVal =  pThisCell->GetTabBox()->getRowSpan();
                 if ( nVal > 1 )
                     mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::PDFWriter::RowSpan, nVal );

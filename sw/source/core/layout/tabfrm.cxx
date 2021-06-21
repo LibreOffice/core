@@ -1431,15 +1431,17 @@ void SwInvalidateAll( SwFrame *pFrame, tools::Long nBottom )
         {
             // NEW TABLES
             SwLayoutFrame* pToInvalidate = static_cast<SwLayoutFrame*>(pFrame);
-            SwCellFrame* pThisCell = dynamic_cast<SwCellFrame*>(pFrame);
-            if ( pThisCell && pThisCell->GetTabBox()->getRowSpan() < 1 )
+            if (pFrame->IsCellFrame())
             {
-                pToInvalidate = & const_cast<SwCellFrame&>(pThisCell->FindStartEndOfRowSpanCell( true ));
-                pToInvalidate->InvalidatePos_();
-                pToInvalidate->InvalidateSize_();
-                pToInvalidate->InvalidatePrt_();
+                SwCellFrame* pThisCell = static_cast<SwCellFrame*>(pFrame);
+                if ( pThisCell->GetTabBox()->getRowSpan() < 1 )
+                {
+                    pToInvalidate = & const_cast<SwCellFrame&>(pThisCell->FindStartEndOfRowSpanCell( true ));
+                    pToInvalidate->InvalidatePos_();
+                    pToInvalidate->InvalidateSize_();
+                    pToInvalidate->InvalidatePrt_();
+                }
             }
-
             if ( pToInvalidate->Lower() )
                 ::SwInvalidateAll( pToInvalidate->Lower(), nBottom);
         }
@@ -1596,14 +1598,17 @@ static bool lcl_InnerCalcLayout( SwFrame *pFrame,
                 bRet |= lcl_InnerCalcLayout( static_cast<SwLayoutFrame*>(pFrame)->Lower(), nBottom);
 
             // NEW TABLES
-            SwCellFrame* pThisCell = dynamic_cast<SwCellFrame*>(pFrame);
-            if ( pThisCell && pThisCell->GetTabBox()->getRowSpan() < 1 )
+            if (pFrame->IsCellFrame())
             {
-                SwCellFrame& rToCalc = const_cast<SwCellFrame&>(pThisCell->FindStartEndOfRowSpanCell( true ));
-                bRet |= !rToCalc.isFrameAreaDefinitionValid();
-                rToCalc.Calc(pRenderContext);
-                if ( rToCalc.Lower() )
-                    bRet |= lcl_InnerCalcLayout( rToCalc.Lower(), nBottom);
+                SwCellFrame* pThisCell = static_cast<SwCellFrame*>(pFrame);
+                if ( pThisCell->GetTabBox()->getRowSpan() < 1 )
+                {
+                    SwCellFrame& rToCalc = const_cast<SwCellFrame&>(pThisCell->FindStartEndOfRowSpanCell( true ));
+                    bRet |= !rToCalc.isFrameAreaDefinitionValid();
+                    rToCalc.Calc(pRenderContext);
+                    if ( rToCalc.Lower() )
+                        bRet |= lcl_InnerCalcLayout( rToCalc.Lower(), nBottom);
+                }
             }
         }
         pFrame = pFrame->GetNext();
