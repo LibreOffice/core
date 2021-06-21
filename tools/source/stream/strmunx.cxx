@@ -457,7 +457,8 @@ void SvFileStream::Close()
     if ( IsOpen() )
     {
         SAL_INFO("tools", "Closing " << aFilename);
-        Flush();
+        if ( !(m_eStreamMode & StreamMode::DONT_FLUSH_ON_CLOSE) )
+            Flush();
         osl_closeFile( pInstanceData->rHandle );
         pInstanceData->rHandle = nullptr;
     }

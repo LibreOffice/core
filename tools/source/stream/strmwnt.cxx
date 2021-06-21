@@ -377,7 +377,8 @@ void SvFileStream::Close()
             nLockCounter = 1;
             UnlockFile();
         }
-        Flush();
+        if ( !(m_eStreamMode & StreamMode::DONT_FLUSH_ON_CLOSE) )
+            Flush();
         CloseHandle( pInstanceData->hFile );
     }
     bIsOpen     = false;
