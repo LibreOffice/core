@@ -32,10 +32,10 @@
 #include <sal/types.h>
 #include <com/sun/star/graphic/XGraphicProvider2.hpp>
 #include <com/sun/star/graphic/XGraphicMapper.hpp>
-#include <vcl/outdev.hxx> // Workaround for MSVC bug - can't forward-declare OutputDevice
 #include <vcl/vclptr.hxx>
 
 struct WmfExternal;
+class OutputDevice;
 
 namespace com::sun::star {
     namespace awt { struct Point; }
@@ -63,6 +63,13 @@ public:
                             const css::uno::Reference< css::frame::XFrame >& rxTargetFrame,
                             const StorageRef& rxStorage );
     virtual             ~GraphicHelper();
+
+    // Avoid implicitly defined copy constructors/assignments for the DLLPUBLIC class (this may
+    // require definition of forward-declared classes used internally in places using GraphicHelper)
+    GraphicHelper(const GraphicHelper&);
+    GraphicHelper(GraphicHelper&&);
+    GraphicHelper& operator=(const GraphicHelper&);
+    GraphicHelper& operator=(GraphicHelper&&);
 
     // System colors and predefined colors ------------------------------------
 

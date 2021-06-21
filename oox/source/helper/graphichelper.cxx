@@ -118,6 +118,11 @@ GraphicHelper::~GraphicHelper()
 {
 }
 
+GraphicHelper::GraphicHelper(const GraphicHelper&) = default;
+GraphicHelper::GraphicHelper(GraphicHelper&&) = default;
+GraphicHelper& GraphicHelper::operator=(const GraphicHelper&) = default;
+GraphicHelper& GraphicHelper::operator=(GraphicHelper&&) = default;
+
 // System colors and predefined colors ----------------------------------------
 
 ::Color GraphicHelper::getSystemColor( sal_Int32 nToken, ::Color nDefaultRgb ) const
