@@ -716,7 +716,7 @@ void read_async_completed(GObject* source, GAsyncResult* res, gpointer data)
             aVector.resize(aVector.size() + nBlockSize);
         }
 
-        pRes->aSeq = Sequence<sal_Int8>(aVector.data(), total);
+        pRes->aVector.resize(total);
         g_object_unref(pResult);
     }
 
@@ -781,7 +781,8 @@ public:
                                  &aRes);
         while (!aRes.bDone)
             pInstance->DoYield(true, false);
-        aRet <<= aRes.aSeq;
+        Sequence<sal_Int8> aSeq(aRes.aVector.data(), aRes.aVector.size());
+        aRet <<= aSeq;
 #else
         GtkSelectionData* data = gtk_clipboard_wait_for_contents(clipboard,
                                                                  it->second);
@@ -3057,10 +3058,10 @@ private:
     }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    static void signalDragLeave(GtkWidget *pWidget, GdkDragContext *context, guint time, gpointer widget)
+    static void signalDragLeave(GtkWidget *pWidget, GdkDragContext* /*context*/, guint /*time*/, gpointer widget)
     {
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
-        pThis->m_xDropTarget->signalDragLeave(pWidget, context, time);
+        pThis->m_xDropTarget->signalDragLeave(pWidget);
         if (pThis->m_bDraggedOver)
         {
             pThis->m_bDraggedOver = false;

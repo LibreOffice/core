@@ -64,8 +64,11 @@ struct text_transfer_result
 
 struct read_transfer_result
 {
-    css::uno::Sequence<sal_Int8> aSeq;
+    enum { BlockSize = 8192 };
+    size_t nRead = 0;
     bool bDone = false;
+
+    std::vector<sal_Int8> aVector;
 };
 
 #endif
@@ -131,9 +134,7 @@ class GtkInstDropTarget final : public cppu::WeakComponentImplHelper<css::datatr
     GtkSalFrame* m_pFrame;
     GtkDnDTransferable* m_pFormatConversionRequest;
     bool m_bActive;
-#if !GTK_CHECK_VERSION(4, 0, 0)
     bool m_bInDrag;
-#endif
     sal_Int8 m_nDefaultActions;
     std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> m_aListeners;
 public:
@@ -169,10 +170,17 @@ public:
     }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    gboolean signalDragDrop(GtkWidget* pWidget, GdkDragContext* context, gint x, gint y, guint time);
     gboolean signalDragMotion(GtkWidget* pWidget, GdkDragContext* context, gint x, gint y, guint time);
+    gboolean signalDragDrop(GtkWidget* pWidget, GdkDragContext* context, gint x, gint y, guint time);
+#else
+    GdkDragAction signalDragMotion(GtkWidget *pWidget, GtkDropTargetAsync *context, GdkDrop *drop, double x, double y);
+    gboolean signalDragDrop(GtkDropTargetAsync *context, GdkDrop *drop, double x, double y);
+#endif
+
+    void signalDragLeave(GtkWidget* pWidget);
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
     void signalDragDropReceived(GtkWidget* pWidget, GdkDragContext* context, gint x, gint y, GtkSelectionData* data, guint ttype, guint time);
-    void signalDragLeave(GtkWidget* pWidget, GdkDragContext* context, guint time);
 #endif
 };
 
