@@ -20,22 +20,21 @@ class regression(UITestCase):
         self._regression_check(data_groupedby_column = True)
 
     def _regression_check(self, data_groupedby_column = True):
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("regression.ods"))
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
+        with self.ui_test.load_file(get_url_for_data_file("regression.ods")) as calc_doc:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            document = self.ui_test.get_component()
 
-        # Initially the final check status is "FALSE" (failed).
-        self.assertEqual(get_cell_by_position(document, 14, 1, 6).getString(), "FALSE",
-                         "Check status must be FALSE before the test")
-        self._do_regression(regression_type = "LINEAR", data_groupedby_column = data_groupedby_column, calc_intercept = True)
-        self._do_regression(regression_type = "LINEAR", data_groupedby_column = data_groupedby_column, calc_intercept = False)
-        self._do_regression(regression_type = "LOG", data_groupedby_column = data_groupedby_column)
-        self._do_regression(regression_type = "POWER", data_groupedby_column = data_groupedby_column)
-        self.assertEqual(get_cell_by_position(document, 14, 1, 6).getString(), "TRUE",
-                         "One of more of the checks failed for data_groupedby_column = {}, manually try with the document".
-                         format(data_groupedby_column))
-        self.ui_test.close_doc()
+            # Initially the final check status is "FALSE" (failed).
+            self.assertEqual(get_cell_by_position(document, 14, 1, 6).getString(), "FALSE",
+                             "Check status must be FALSE before the test")
+            self._do_regression(regression_type = "LINEAR", data_groupedby_column = data_groupedby_column, calc_intercept = True)
+            self._do_regression(regression_type = "LINEAR", data_groupedby_column = data_groupedby_column, calc_intercept = False)
+            self._do_regression(regression_type = "LOG", data_groupedby_column = data_groupedby_column)
+            self._do_regression(regression_type = "POWER", data_groupedby_column = data_groupedby_column)
+            self.assertEqual(get_cell_by_position(document, 14, 1, 6).getString(), "TRUE",
+                             "One of more of the checks failed for data_groupedby_column = {}, manually try with the document".
+                             format(data_groupedby_column))
 
     def _do_regression(self, regression_type, data_groupedby_column = True, calc_intercept = True):
         assert(regression_type == "LINEAR" or regression_type == "LOG" or regression_type == "POWER")

@@ -10,34 +10,33 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 class tdf113284(UITestCase):
 
    def test_tdf113284(self):
-    writer_doc = self.ui_test.load_file(get_url_for_data_file("tdf113284.odt"))
-    document = self.ui_test.get_component()
-    xWriterDoc = self.xUITest.getTopFocusWindow()
-    xWriterEdit = xWriterDoc.getChild("writer_edit")
+    with self.ui_test.load_file(get_url_for_data_file("tdf113284.odt")) as writer_doc:
+        document = self.ui_test.get_component()
+        xWriterDoc = self.xUITest.getTopFocusWindow()
+        xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-    xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
-    xToolkit.processEventsToIdle()
+        xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+        xToolkit.processEventsToIdle()
 
-    xPageCount = document.CurrentController.PageCount
-    self.ui_test.execute_dialog_through_command(".uno:GotoPage")
-    xDialog = self.xUITest.getTopFocusWindow()
-    xPageText = xDialog.getChild("page")
-    xPageText.executeAction("TYPE", mkPropertyValues({"TEXT":str(xPageCount)})) # goto last page
-    xOkBtn = xDialog.getChild("ok")
-    self.ui_test.close_dialog_through_button(xOkBtn)
+        xPageCount = document.CurrentController.PageCount
+        self.ui_test.execute_dialog_through_command(".uno:GotoPage")
+        xDialog = self.xUITest.getTopFocusWindow()
+        xPageText = xDialog.getChild("page")
+        xPageText.executeAction("TYPE", mkPropertyValues({"TEXT":str(xPageCount)})) # goto last page
+        xOkBtn = xDialog.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOkBtn)
 
-    xToolkit.processEventsToIdle()
+        xToolkit.processEventsToIdle()
 
-    self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], str(xPageCount))
-    self.ui_test.execute_dialog_through_command(".uno:EditCurIndex")  #open index dialog
-    xDiagIndex = self.xUITest.getTopFocusWindow()
-    xCancBtn = xDiagIndex.getChild("cancel")
-    self.ui_test.close_dialog_through_button(xCancBtn)   # close dialog
+        self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], str(xPageCount))
+        self.ui_test.execute_dialog_through_command(".uno:EditCurIndex")  #open index dialog
+        xDiagIndex = self.xUITest.getTopFocusWindow()
+        xCancBtn = xDiagIndex.getChild("cancel")
+        self.ui_test.close_dialog_through_button(xCancBtn)   # close dialog
 
-    #page count  is not constant
-    #self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "66")    #page 66 start of the Index
-    #pagecount unchanged
-    self.assertEqual(document.CurrentController.PageCount, xPageCount)
+        #page count  is not constant
+        #self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "66")    #page 66 start of the Index
+        #pagecount unchanged
+        self.assertEqual(document.CurrentController.PageCount, xPageCount)
 
-    self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

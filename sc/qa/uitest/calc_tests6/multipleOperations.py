@@ -61,6 +61,7 @@ class multipleOperations(UITestCase):
         self.assertEqual(get_cell_by_position(document, 0, 4, 10).getValue(), 30000)
 
         self.ui_test.close_doc()
+
    def test_multiple_operations_several_formulas(self):
         self.ui_test.create_doc_in_start_center("calc")
         xCalcDoc = self.xUITest.getTopFocusWindow()

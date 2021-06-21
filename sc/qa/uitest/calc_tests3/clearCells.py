@@ -147,6 +147,7 @@ class clearCells(UITestCase):
         self.assertEqual(get_cell_by_position(document, 0, 0, 1).getValue() , 0)
 
         self.ui_test.close_doc()
+
     def test_clear_cells_formulas(self):
         calc_doc = self.ui_test.create_doc_in_start_center("calc")
         xCalcDoc = self.xUITest.getTopFocusWindow()

@@ -112,6 +112,7 @@ class ConfigureDialog(UITestCase):
         # Open the New Menu Dialog with id = 0
         xDialog = self.xUITest.getTopFocusWindow()
         xmenugearbtn=xDialog.getChild("menugearbtn")
+
         def show_dialog0():
             xmenugearbtn.executeAction("OPENFROMLIST", mkPropertyValues({"POS": "0" }))
         with self.ui_test.execute_blocking_action( action=show_dialog0, close_button="cancel"):
@@ -120,6 +121,7 @@ class ConfigureDialog(UITestCase):
         # Open the Rename Menu Dialog with id = 2
         xDialog = self.xUITest.getTopFocusWindow()
         xmenugearbtn=xDialog.getChild("menugearbtn")
+
         def show_dialog2():
             xmenugearbtn.executeAction("OPENFROMLIST", mkPropertyValues({"POS": "2"}))
         with self.ui_test.execute_blocking_action( action=show_dialog2, close_button="cancel"):
