@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "38299cef_bcb8eaaa",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 2809,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2021-06-21T12:54:39Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "4ae9ca42_7b494950",
+      "revId": "224ed36acdcaa2a4c3ec7c1f82e4eba5ecb083a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "92529c99_7ea7f4b8",
         "filename": "RepositoryExternal.mk",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "224ed36acdcaa2a4c3ec7c1f82e4eba5ecb083a1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c34d1d4_5c890afe",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 2816,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2021-06-21T12:54:39Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "92529c99_7ea7f4b8",
+      "revId": "224ed36acdcaa2a4c3ec7c1f82e4eba5ecb083a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "e782394e_43817ff4",
+        "filename": "external/Module_external.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2021-06-21T12:54:39Z",
+      "side": 1,
+      "message": "I have merged the POPPLER_DATA module into POPPLER.",
+      "parentUuid": "c4c29fb3_2a6398ae",
+      "revId": "224ed36acdcaa2a4c3ec7c1f82e4eba5ecb083a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4cbd9a90_1d17195c",
         "filename": "external/poppler_data/ExternalPackage_poppler_data.mk",
         "patchSetId": 3
@@ -67,6 +121,24 @@
       "revId": "224ed36acdcaa2a4c3ec7c1f82e4eba5ecb083a1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aad51d76_66616204",
+        "filename": "external/poppler_data/ExternalPackage_poppler_data.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2021-06-21T12:54:39Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4cbd9a90_1d17195c",
+      "revId": "224ed36acdcaa2a4c3ec7c1f82e4eba5ecb083a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "bd1ba86a_2ccb6a5b",
+        "filename": "external/poppler_data/ExternalPackage_poppler_data.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2021-06-21T12:54:39Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "599c7f2e_522cec8a",
+      "revId": "224ed36acdcaa2a4c3ec7c1f82e4eba5ecb083a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "636aafc9_67a39f2d",
         "filename": "external/poppler_data/ExternalPackage_poppler_data.mk",
         "patchSetId": 3
@@ -104,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "f9d27f5c_81f5d4bd",
+        "filename": "external/poppler_data/ExternalPackage_poppler_data.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2021-06-21T12:54:39Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "636aafc9_67a39f2d",
+      "revId": "224ed36acdcaa2a4c3ec7c1f82e4eba5ecb083a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "de90205b_9a77d148",
         "filename": "external/poppler_data/ExternalPackage_poppler_data.mk",
         "patchSetId": 3
@@ -118,6 +226,24 @@
       "revId": "224ed36acdcaa2a4c3ec7c1f82e4eba5ecb083a1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6f8a7bd_308f44c9",
+        "filename": "external/poppler_data/ExternalPackage_poppler_data.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2021-06-21T12:54:39Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "de90205b_9a77d148",
+      "revId": "224ed36acdcaa2a4c3ec7c1f82e4eba5ecb083a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -155,6 +281,24 @@
     },
     {
       "key": {
+        "uuid": "80f0e6c7_269b5aea",
+        "filename": "sdext/source/pdfimport/xpdfwrapper/wrapper_gpl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2021-06-21T12:54:39Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a3cee1e1_b852b576",
+      "revId": "224ed36acdcaa2a4c3ec7c1f82e4eba5ecb083a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c5689890_9e6f2062",
         "filename": "solenv/flatpak-manifest.in",
         "patchSetId": 3
@@ -169,6 +313,24 @@
       "revId": "224ed36acdcaa2a4c3ec7c1f82e4eba5ecb083a1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4fb3823_f5da86ff",
+        "filename": "solenv/flatpak-manifest.in",
+        "patchSetId": 3
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2021-06-21T12:54:39Z",
+      "side": 1,
+      "message": ":-)",
+      "parentUuid": "c5689890_9e6f2062",
+      "revId": "224ed36acdcaa2a4c3ec7c1f82e4eba5ecb083a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
