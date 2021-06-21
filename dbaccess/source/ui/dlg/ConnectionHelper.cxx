@@ -151,7 +151,7 @@ namespace dbaui
             {
                 try
                 {
-                    Reference< XFolderPicker2 > xFolderPicker = FolderPicker::create(m_xORB);
+                    Reference< XFolderPicker2 > xFolderPicker = sfx2::createFolderPicker(m_xORB, GetFrameWeld());
 
                     bool bDoBrowse = false;
                     OUString sOldPath = getURLNoPrefix();

@@ -37,6 +37,7 @@
 #include <com/sun/star/configuration/ReadWriteAccess.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <sfx2/filedlghelper.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <osl/file.hxx>
 #include <osl/security.hxx>
@@ -336,7 +337,7 @@ IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, ExtrasCheckHdl_Impl, weld::Toggleable&, 
 IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, FileDialogHdl_Impl, weld::Button&, void)
 {
     uno::Reference < uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-    uno::Reference < ui::dialogs::XFolderPicker2 >  xFolderPicker = ui::dialogs::FolderPicker::create(xContext);
+    uno::Reference < ui::dialogs::XFolderPicker2 >  xFolderPicker = sfx2::createFolderPicker(xContext, GetFrameWeld());
 
     OUString aURL;
     if( osl::FileBase::E_None != osl::FileBase::getFileURLFromSystemPath(m_xDestPath->get_label(), aURL) )

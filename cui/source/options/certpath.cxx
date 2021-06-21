@@ -10,6 +10,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <osl/file.hxx>
 #include <osl/security.hxx>
+#include <sfx2/filedlghelper.hxx>
 #include <tools/diagnose_ex.h>
 #include "certpath.hxx"
 
@@ -208,7 +209,8 @@ IMPL_LINK_NOARG(CertPathDialog, ManualHdl_Impl, weld::Button&, void)
 {
     try
     {
-        uno::Reference<ui::dialogs::XFolderPicker2> xFolderPicker = ui::dialogs::FolderPicker::create(comphelper::getProcessComponentContext());
+        uno::Reference<ui::dialogs::XFolderPicker2> xFolderPicker = sfx2::createFolderPicker(
+                comphelper::getProcessComponentContext(), m_xDialog.get());
 
         OUString sURL;
         if (!m_sManualPath.isEmpty())

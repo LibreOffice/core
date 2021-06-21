@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <osl/file.hxx>
+#include <sfx2/filedlghelper.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -87,7 +88,7 @@ void SvxMultiPathDialog::AppendEntry(const OUString& rText, const OUString& rId)
 IMPL_LINK_NOARG(SvxMultiPathDialog, AddHdl_Impl, weld::Button&, void)
 {
     Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-    Reference < XFolderPicker2 >  xFolderPicker = FolderPicker::create(xContext);
+    Reference < XFolderPicker2 >  xFolderPicker = sfx2::createFolderPicker(xContext, m_xDialog.get());
 
     if ( xFolderPicker->execute() != ExecutableDialogResults::OK )
         return;
@@ -117,7 +118,7 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, AddHdl_Impl, weld::Button&, void)
 IMPL_LINK_NOARG(SvxPathSelectDialog, AddHdl_Impl, weld::Button&, void)
 {
     Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-    Reference < XFolderPicker2 >  xFolderPicker = FolderPicker::create(xContext);
+    Reference < XFolderPicker2 >  xFolderPicker = sfx2::createFolderPicker(xContext, m_xDialog.get());
 
     if ( xFolderPicker->execute() != ExecutableDialogResults::OK )
         return;

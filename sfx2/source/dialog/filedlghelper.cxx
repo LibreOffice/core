@@ -25,10 +25,11 @@
 #include <sal/types.h>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
+#include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/FilePreviewImageFormats.hpp>
-#include <com/sun/star/ui/dialogs/ControlActions.hpp>
+#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XControlInformation.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
@@ -1129,6 +1130,11 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
 
     // add the event listener
     mxFileDlg->addFilePickerListener( this );
+}
+
+css::uno::Reference<css::ui::dialogs::XFolderPicker2> createFolderPicker(const css::uno::Reference<css::uno::XComponentContext>& rContext, weld::Window* /*pPreferredParent*/)
+{
+    return css::ui::dialogs::FolderPicker::create(rContext);
 }
 
 FileDialogHelper_Impl::~FileDialogHelper_Impl()

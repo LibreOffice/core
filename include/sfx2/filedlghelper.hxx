@@ -23,6 +23,7 @@
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
 #include <com/sun/star/uno/Sequence.hxx>
+
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <comphelper/documentconstants.hxx>
@@ -36,11 +37,13 @@
 namespace com::sun::star::ui::dialogs
 {
     class XFilePicker3;
+    class XFolderPicker2;
     struct FilePickerEvent;
     struct DialogClosedEvent;
 }
 namespace com::sun::star::awt { class XWindow; }
 namespace com::sun::star::uno { template <typename > class Reference; }
+namespace com::sun::star::uno { class XComponentContext; }
 namespace weld { class Window; }
 
 class Graphic;
@@ -242,6 +245,7 @@ ErrCode FileOpenDialog_Impl( weld::Window* pParent,
                              const OUString& rStandardDir,
                              const css::uno::Sequence< OUString >& rDenyList = css::uno::Sequence< OUString >());
 
+css::uno::Reference<css::ui::dialogs::XFolderPicker2> SFX2_DLLPUBLIC createFolderPicker(const css::uno::Reference<css::uno::XComponentContext>& rContext, weld::Window* pPreferredParent);
 
 ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, OUString const & aURL, SfxItemSet* pSet, const css::uno::Reference<css::awt::XWindow>& rParent);
 }

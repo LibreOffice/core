@@ -30,6 +30,7 @@
 #include <vcl/weld.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <unotools/pathoptions.hxx>
+#include <sfx2/filedlghelper.hxx>
 #include <sfx2/opengrf.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <svx/gallery1.hxx>
@@ -817,7 +818,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickSearchHdl, weld::Button&, void)
     {
         // setup folder picker
         css::uno::Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-        xFolderPicker = FolderPicker::create(xContext);
+        xFolderPicker = sfx2::createFolderPicker(xContext, GetFrameWeld());
 
         OUString  aDlgPathName( SvtPathOptions().GetGraphicPath() );
         xFolderPicker->setDisplayDirectory(aDlgPathName);

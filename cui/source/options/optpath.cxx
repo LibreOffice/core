@@ -540,7 +540,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl, weld::Button&, void)
         try
         {
             Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-            xFolderPicker = FolderPicker::create(xContext);
+            xFolderPicker = sfx2::createFolderPicker(xContext, GetFrameWeld());
 
             INetURLObject aURL( sWritable, INetProtocol::File );
             xFolderPicker->setDisplayDirectory( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );

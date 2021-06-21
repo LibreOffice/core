@@ -11,10 +11,11 @@
 
 #include <libepubgen/libepubgen.h>
 
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
-#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <comphelper/sequenceashashmap.hxx>
+#include <sfx2/filedlghelper.hxx>
 #include <sfx2/opengrf.hxx>
 #include <sax/tools/converter.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -186,7 +187,7 @@ IMPL_LINK_NOARG(EPUBExportDialog, CoverClickHdl, weld::Button&, void)
 IMPL_LINK_NOARG(EPUBExportDialog, MediaClickHdl, weld::Button&, void)
 {
     uno::Reference<ui::dialogs::XFolderPicker2> xFolderPicker
-        = ui::dialogs::FolderPicker::create(m_xContext);
+        = sfx2::createFolderPicker(m_xContext, m_xDialog.get());
     if (xFolderPicker->execute() != ui::dialogs::ExecutableDialogResults::OK)
         return;
 
