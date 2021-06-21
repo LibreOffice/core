@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ae9ca42_7b494950",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 2809,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-06-21T09:23:25Z",
+      "side": 1,
+      "message": "this doesn\u0027t make sense - do you mean ExternalProject__use_poppler_data ?\n\nthat would only be required in case the poppler build requires poppler-data, otherwise can be omitted.",
+      "revId": "224ed36acdcaa2a4c3ec7c1f82e4eba5ecb083a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92529c99_7ea7f4b8",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 2816,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-06-21T09:23:25Z",
+      "side": 1,
+      "message": "guess we need gb_LinkTarget_use_package,$(1),poppler_data around here",
+      "revId": "224ed36acdcaa2a4c3ec7c1f82e4eba5ecb083a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4c29fb3_2a6398ae",
+        "filename": "external/Module_external.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-06-21T09:23:25Z",
+      "side": 1,
+      "message": "there isn\u0027t anything that adds POPPLER_DATA to $BUILD_TYPE? but why put this into a separate module than poppler anyway...",
+      "revId": "224ed36acdcaa2a4c3ec7c1f82e4eba5ecb083a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4cbd9a90_1d17195c",
+        "filename": "external/poppler_data/ExternalPackage_poppler_data.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-06-21T09:23:25Z",
+      "side": 1,
+      "message": "this is unnecessary - gb_ExternalPackage_ExternalPackage already does the same",
+      "revId": "224ed36acdcaa2a4c3ec7c1f82e4eba5ecb083a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "599c7f2e_522cec8a",
+        "filename": "external/poppler_data/ExternalPackage_poppler_data.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-06-21T09:23:25Z",
+      "side": 1,
+      "message": "this is unnecessary. the module should be skipped completely in SYSTEM_POPPLER case so no need to check here.",
+      "revId": "224ed36acdcaa2a4c3ec7c1f82e4eba5ecb083a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "636aafc9_67a39f2d",
+        "filename": "external/poppler_data/ExternalPackage_poppler_data.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-06-21T09:23:25Z",
+      "side": 1,
+      "message": "this is unnecessary - the directory will be created if files are put there",
+      "revId": "224ed36acdcaa2a4c3ec7c1f82e4eba5ecb083a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de90205b_9a77d148",
+        "filename": "external/poppler_data/ExternalPackage_poppler_data.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-06-21T09:23:25Z",
+      "side": 1,
+      "message": "please prefix all local variable names with the module name like poppler_DISTFILES",
+      "revId": "224ed36acdcaa2a4c3ec7c1f82e4eba5ecb083a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "326a0775_ef08859f",
+        "filename": "external/poppler_data/Module_poppler_data.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-06-21T09:23:25Z",
+      "side": 1,
+      "message": "why do we need a separate module for this? adding it to poppler module would be easier",
+      "revId": "224ed36acdcaa2a4c3ec7c1f82e4eba5ecb083a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3cee1e1_b852b576",
+        "filename": "sdext/source/pdfimport/xpdfwrapper/wrapper_gpl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-06-21T09:23:25Z",
+      "side": 1,
+      "message": "i\u0027m afraid that this requires GCC 8 and currently GCC 7 is the baseline",
+      "revId": "224ed36acdcaa2a4c3ec7c1f82e4eba5ecb083a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5689890_9e6f2062",
+        "filename": "solenv/flatpak-manifest.in",
+        "patchSetId": 3
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-06-21T09:23:25Z",
+      "side": 1,
+      "message": "very good, i always forget to adapt this file :)",
+      "revId": "224ed36acdcaa2a4c3ec7c1f82e4eba5ecb083a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
