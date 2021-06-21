@@ -184,7 +184,7 @@ private:
     DataType        meType;
 };
 
-struct ScDBQueryParamInternal : public ScDBQueryParamBase, public ScQueryParamTable
+struct ScDBQueryParamInternal final : public ScDBQueryParamBase, public ScQueryParamTable
 {
     ScDBQueryParamInternal();
     virtual ~ScDBQueryParamInternal() override;

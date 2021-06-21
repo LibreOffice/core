@@ -225,7 +225,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ScDataPilotTableObj : public ScDataPilotDescriptorBase,
+class ScDataPilotTableObj final : public ScDataPilotDescriptorBase,
                             public css::sheet::XDataPilotTable2,
                             public css::util::XModifyBroadcaster
 {
@@ -391,7 +391,7 @@ typedef ::cppu::WeakImplHelper
 ScDataPilotFieldObjImpl;
 
 /** Implementation of a single DataPilot field. */
-class ScDataPilotFieldObj : public ScDataPilotChildObjBase, public ScDataPilotFieldObjImpl
+class ScDataPilotFieldObj final : public ScDataPilotChildObjBase, public ScDataPilotFieldObjImpl
 {
 public:
                         ScDataPilotFieldObj(
@@ -679,7 +679,7 @@ typedef ::cppu::WeakImplHelper
 >
 ScDataPilotItemObjImpl;
 
-class ScDataPilotItemObj : public ScDataPilotChildObjBase, public ScDataPilotItemObjImpl
+class ScDataPilotItemObj final : public ScDataPilotChildObjBase, public ScDataPilotItemObjImpl
 {
 public:
     explicit            ScDataPilotItemObj(

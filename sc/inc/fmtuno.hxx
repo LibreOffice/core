@@ -116,7 +116,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ScTableConditionalEntry : public cppu::WeakImplHelper<
+class ScTableConditionalEntry final : public cppu::WeakImplHelper<
                             css::sheet::XSheetCondition2,
                             css::sheet::XSheetConditionalEntry,
                             css::lang::XServiceInfo >

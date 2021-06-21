@@ -204,7 +204,7 @@ public:
     virtual void            PutData( const ScSubTotalParam& rParam ) override;
 };
 
-class ScSubTotalFieldObj : public cppu::WeakImplHelper<
+class ScSubTotalFieldObj final : public cppu::WeakImplHelper<
                                 css::sheet::XSubTotalField,
                                 css::lang::XServiceInfo >
 {
@@ -390,7 +390,7 @@ public:
     virtual void            PutData( const ScQueryParam& rParam ) override;
 };
 
-class ScDatabaseRangeObj : public cppu::WeakImplHelper<
+class ScDatabaseRangeObj final : public cppu::WeakImplHelper<
                                 css::sheet::XDatabaseRange,
                                 css::util::XRefreshable,
                                 css::container::XNamed,

@@ -134,7 +134,7 @@ public:
  *
  * ScHeaderFooterTextObj changes the text in a ScHeaderFooterContentObj.
  */
-class ScHeaderFooterTextObj : public cppu::WeakImplHelper<
+class ScHeaderFooterTextObj final : public cppu::WeakImplHelper<
                             css::text::XText,
                             css::text::XTextRangeMover,
                             css::container::XEnumerationAccess,

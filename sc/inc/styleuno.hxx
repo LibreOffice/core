@@ -98,7 +98,7 @@ private:
                               const css::uno::Sequence< css::beans::PropertyValue>& aOptions );
 };
 
-class ScStyleFamilyObj : public ::cppu::WeakImplHelper<
+class ScStyleFamilyObj final : public ::cppu::WeakImplHelper<
                             css::container::XNameContainer,
                             css::container::XIndexAccess,
                             css::beans::XPropertySet,
@@ -155,7 +155,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ScStyleObj : public ::cppu::WeakImplHelper<
+class ScStyleObj final : public ::cppu::WeakImplHelper<
                     css::style::XStyle,
                     css::beans::XPropertySet,
                     css::beans::XMultiPropertySet,

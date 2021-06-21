@@ -221,7 +221,7 @@ public:
 #endif
 };
 
-class ScDPDimensions : public cppu::WeakImplHelper<
+class ScDPDimensions final : public cppu::WeakImplHelper<
                             css::container::XNameAccess,
                             css::lang::XServiceInfo >
 {
@@ -255,7 +255,7 @@ public:
     ScDPDimension*  getByIndex(tools::Long nIndex) const;
 };
 
-class ScDPDimension : public cppu::WeakImplHelper<
+class ScDPDimension final : public cppu::WeakImplHelper<
                             css::sheet::XHierarchiesSupplier,
                             css::container::XNamed,
                             css::util::XCloneable,
@@ -339,7 +339,7 @@ public:
     const css::sheet::DataPilotFieldReference& GetReferenceValue() const { return aReferenceValue;}
 };
 
-class ScDPHierarchies : public cppu::WeakImplHelper<
+class ScDPHierarchies final : public cppu::WeakImplHelper<
                             css::container::XNameAccess,
                             css::lang::XServiceInfo >
 {
@@ -374,7 +374,7 @@ public:
     ScDPHierarchy*  getByIndex(tools::Long nIndex) const;
 };
 
-class ScDPHierarchy : public cppu::WeakImplHelper<
+class ScDPHierarchy final : public cppu::WeakImplHelper<
                             css::sheet::XLevelsSupplier,
                             css::container::XNamed,
                             css::lang::XServiceInfo >
@@ -405,7 +405,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ScDPLevels : public cppu::WeakImplHelper<
+class ScDPLevels final : public cppu::WeakImplHelper<
                             css::container::XNameAccess,
                             css::lang::XServiceInfo >
 {
@@ -439,7 +439,7 @@ public:
     ScDPLevel*      getByIndex(sal_Int32 nIndex) const;
 };
 
-class ScDPLevel : public cppu::WeakImplHelper<
+class ScDPLevel final : public cppu::WeakImplHelper<
                             css::sheet::XMembersSupplier,
                             css::container::XNamed,
                             css::sheet::XDataPilotMemberResults,
@@ -543,7 +543,7 @@ public:
 // hash map from name to index in the member array, for fast name access
 typedef std::unordered_map< OUString, sal_Int32 > ScDPMembersHashMap;
 
-class ScDPMembers : public cppu::WeakImplHelper<
+class ScDPMembers final : public cppu::WeakImplHelper<
                             css::sheet::XMembersAccess,
                             css::lang::XServiceInfo >
 {
@@ -591,7 +591,7 @@ private:
     css::uno::Sequence< OUString > getElementNames( bool bLocaleIndependent ) const;
 };
 
-class ScDPMember : public cppu::WeakImplHelper<
+class ScDPMember final : public cppu::WeakImplHelper<
                             css::container::XNamed,
                             css::beans::XPropertySet,
                             css::lang::XServiceInfo >
