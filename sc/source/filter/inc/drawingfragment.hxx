@@ -38,7 +38,7 @@ namespace oox::xls {
 
 // DrawingML
 
-class ShapeMacroAttacher : public ::oox::ole::VbaMacroAttacherBase
+class ShapeMacroAttacher final : public ::oox::ole::VbaMacroAttacherBase
 {
 public:
     explicit            ShapeMacroAttacher( const OUString& rMacroName,
@@ -51,7 +51,7 @@ private:
     css::uno::Reference< css::drawing::XShape > mxShape;
 };
 
-class Shape : public ::oox::drawingml::Shape, public WorksheetHelper
+class Shape final : public ::oox::drawingml::Shape, public WorksheetHelper
 {
 public:
     explicit            Shape(
@@ -59,17 +59,16 @@ public:
                             const AttributeList& rAttribs,
                             const char* pcServiceName );
 
-protected:
+private:
     virtual void        finalizeXShape(
                             ::oox::core::XmlFilterBase& rFilter,
                             const css::uno::Reference< css::drawing::XShapes >& rxShapes ) override;
 
-private:
     OUString     maMacroName;
 };
 
 /** Context handler for creation of shapes embedded in group shapes. */
-class GroupShapeContext : public ::oox::drawingml::ShapeGroupContext, public WorksheetHelper
+class GroupShapeContext final : public ::oox::drawingml::ShapeGroupContext, public WorksheetHelper
 {
 public:
     explicit            GroupShapeContext(
@@ -87,7 +86,7 @@ public:
                             const ::oox::drawingml::ShapePtr& rxParentShape,
                             ::oox::drawingml::ShapePtr* pxShape = nullptr );
 
-protected:
+private:
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext(
                             sal_Int32 nElement,
@@ -95,19 +94,18 @@ protected:
 };
 
 /** Fragment handler for a complete sheet drawing. */
-class DrawingFragment : public WorksheetFragmentBase
+class DrawingFragment final : public WorksheetFragmentBase
 {
 public:
     explicit            DrawingFragment(
                             const WorksheetHelper& rHelper,
                             const OUString& rFragmentPath );
 
-protected:
+private:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
     virtual void        onCharacters( const OUString& rChars ) override;
     virtual void        onEndElement() override;
 
-private:
     typedef ::std::unique_ptr< ShapeAnchor > ShapeAnchorRef;
 
     css::uno::Reference< css::drawing::XShapes >
@@ -118,7 +116,7 @@ private:
 
 // VML
 
-class VmlControlMacroAttacher : public ::oox::ole::VbaMacroAttacherBase
+class VmlControlMacroAttacher final : public ::oox::ole::VbaMacroAttacherBase
 {
 public:
     explicit            VmlControlMacroAttacher( const OUString& rMacroName,
@@ -135,7 +133,7 @@ private:
     sal_Int32           mnDropStyle;
 };
 
-class VmlDrawing : public ::oox::vml::Drawing, public WorksheetHelper
+class VmlDrawing final : public ::oox::vml::Drawing, public WorksheetHelper
 {
 public:
     explicit            VmlDrawing( const WorksheetHelper& rHelper );
@@ -189,14 +187,14 @@ private:
     ::oox::vml::TextFontModel maListBoxFont;
 };
 
-class VmlDrawingFragment : public ::oox::vml::DrawingFragment, public WorksheetHelper
+class VmlDrawingFragment final : public ::oox::vml::DrawingFragment, public WorksheetHelper
 {
 public:
     explicit            VmlDrawingFragment(
                             const WorksheetHelper& rHelper,
                             const OUString& rFragmentPath );
 
-protected:
+private:
     virtual void        finalizeImport() override;
 };
 

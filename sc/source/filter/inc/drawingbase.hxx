@@ -63,7 +63,7 @@ struct AnchorClientDataModel
 
 /** Contains the position of a shape in the spreadsheet. Supports different
     shape anchor modes (absolute, one-cell, two-cell). */
-class ShapeAnchor : public WorksheetHelper
+class ShapeAnchor final : public WorksheetHelper
 {
 public:
     enum AnchorType

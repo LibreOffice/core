@@ -72,7 +72,7 @@ public:
 /** Settings for a discrete filter, specifying a list of values to be shown in
     the filtered range.
  */
-class DiscreteFilter : public FilterSettingsBase
+class DiscreteFilter final : public FilterSettingsBase
 {
 public:
     explicit            DiscreteFilter( const WorkbookHelper& rHelper );
@@ -93,7 +93,7 @@ private:
 };
 
 /** Settings for a top-10 filter. */
-class Top10Filter : public FilterSettingsBase
+class Top10Filter final : public FilterSettingsBase
 {
 public:
     explicit            Top10Filter( const WorkbookHelper& rHelper );
@@ -113,7 +113,7 @@ private:
 };
 
 /** Settings for a color filter. */
-class ColorFilter : public FilterSettingsBase
+class ColorFilter final : public FilterSettingsBase
 {
 public:
     explicit ColorFilter(const WorkbookHelper& rHelper);
@@ -152,7 +152,7 @@ struct FilterCriterionModel
 /** Settings for a custom filter, specifying one or two comparison operators
     associated with some values.
  */
-class CustomFilter : public FilterSettingsBase
+class CustomFilter final : public FilterSettingsBase
 {
 public:
     explicit            CustomFilter( const WorkbookHelper& rHelper );
@@ -179,7 +179,7 @@ private:
 /** A column in a filtered range. Contains an object with specific filter
     settings for the cells in the column.
  */
-class FilterColumn : public WorkbookHelper
+class FilterColumn final : public WorkbookHelper
 {
 public:
     explicit            FilterColumn( const WorkbookHelper& rHelper );
@@ -208,7 +208,7 @@ private:
 
 // class SortCondition
 
-class SortCondition : public WorkbookHelper
+class SortCondition final : public WorkbookHelper
 {
 public:
     explicit SortCondition( const WorkbookHelper& rHelper );
@@ -222,7 +222,7 @@ public:
 
 // class AutoFilter
 
-class AutoFilter : public WorkbookHelper
+class AutoFilter final : public WorkbookHelper
 {
 public:
     explicit            AutoFilter( const WorkbookHelper& rHelper );
@@ -254,7 +254,7 @@ private:
     SortConditionVector maSortConditions;
 };
 
-class AutoFilterBuffer : public WorkbookHelper
+class AutoFilterBuffer final : public WorkbookHelper
 {
 public:
     explicit            AutoFilterBuffer( const WorkbookHelper& rHelper );

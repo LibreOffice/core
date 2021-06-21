@@ -92,7 +92,7 @@ inline SequenceInputStream& operator>>( SequenceInputStream& rStrm, BinRangeList
 
 /** Converter for cell addresses and cell ranges for OOXML and BIFF filters.
  */
-class AddressConverter : public WorkbookHelper
+class AddressConverter final : public WorkbookHelper
 {
 public:
     explicit            AddressConverter( const WorkbookHelper& rHelper );

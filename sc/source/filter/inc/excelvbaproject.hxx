@@ -28,18 +28,17 @@ namespace com::sun::star {
 namespace oox::xls {
 
 /** Special implementation of the VBA project for the Excel filters. */
-class ExcelVbaProject : public ::oox::ole::VbaProject
+class ExcelVbaProject final : public ::oox::ole::VbaProject
 {
 public:
     explicit            ExcelVbaProject(
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                             const css::uno::Reference< css::sheet::XSpreadsheetDocument >& rxDocument );
 
-protected:
+private:
     /** Adds dummy modules for sheets without imported code name. */
     virtual void        prepareImport() override;
 
-private:
     css::uno::Reference< css::sheet::XSpreadsheetDocument >
                         mxDocument;
 };
