@@ -14,55 +14,53 @@ class ConditionalFormatDlgTest(UITestCase):
 
     def test_tdf96453(self):
 
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf96453.ods"))
+        with self.ui_test.load_file(get_url_for_data_file("tdf96453.ods")) as calc_doc:
 
-        sheet = get_sheet_from_doc(calc_doc, 0)
-        conditional_format_list = get_conditional_format_from_sheet(sheet)
-        self.assertEqual(conditional_format_list.getLength(), 2)
+            sheet = get_sheet_from_doc(calc_doc, 0)
+            conditional_format_list = get_conditional_format_from_sheet(sheet)
+            self.assertEqual(conditional_format_list.getLength(), 2)
 
-        self.ui_test.execute_dialog_through_command(".uno:ConditionalFormatManagerDialog")
+            self.ui_test.execute_dialog_through_command(".uno:ConditionalFormatManagerDialog")
 
-        xCondFormatMgr = self.xUITest.getTopFocusWindow()
+            xCondFormatMgr = self.xUITest.getTopFocusWindow()
 
-        # check that we have exactly two conditional formats in the beginning
-        xList = xCondFormatMgr.getChild("CONTAINER")
-        list_state = get_state_as_dict(xList)
-        self.assertEqual(list_state['Children'], '2')
+            # check that we have exactly two conditional formats in the beginning
+            xList = xCondFormatMgr.getChild("CONTAINER")
+            list_state = get_state_as_dict(xList)
+            self.assertEqual(list_state['Children'], '2')
 
-        # remove one conditional format
-        xRemoveBtn = xCondFormatMgr.getChild("remove")
-        xRemoveBtn.executeAction("CLICK", tuple())
+            # remove one conditional format
+            xRemoveBtn = xCondFormatMgr.getChild("remove")
+            xRemoveBtn.executeAction("CLICK", tuple())
 
-        # check that the table only shows one
-        # but the document still contains two
-        list_state = get_state_as_dict(xList)
-        self.assertEqual(list_state['Children'], '1')
+            # check that the table only shows one
+            # but the document still contains two
+            list_state = get_state_as_dict(xList)
+            self.assertEqual(list_state['Children'], '1')
 
-        self.assertEqual(conditional_format_list.getLength(), 2)
+            self.assertEqual(conditional_format_list.getLength(), 2)
 
-        # add a new conditional format through the add button
-        xAddBtn = xCondFormatMgr.getChild("add")
-        self.ui_test.execute_dialog_through_action(xAddBtn, "CLICK", event_name = "ModelessDialogVisible")
+            # add a new conditional format through the add button
+            xAddBtn = xCondFormatMgr.getChild("add")
+            self.ui_test.execute_dialog_through_action(xAddBtn, "CLICK", event_name = "ModelessDialogVisible")
 
-        xCondFormatDlg = self.xUITest.getTopFocusWindow()
-        xCondFormatOkBtn = xCondFormatDlg.getChild("ok")
-        self.ui_test.close_dialog_through_button(xCondFormatOkBtn)
+            xCondFormatDlg = self.xUITest.getTopFocusWindow()
+            xCondFormatOkBtn = xCondFormatDlg.getChild("ok")
+            self.ui_test.close_dialog_through_button(xCondFormatOkBtn)
 
-        # we need to get a pointer again as the old window has been deleted
-        xCondFormatMgr = self.xUITest.getTopFocusWindow()
+            # we need to get a pointer again as the old window has been deleted
+            xCondFormatMgr = self.xUITest.getTopFocusWindow()
 
-        # check again that we now have 2 and not 3 entries in the list
-        # and still only 2 conditional formats in the document
-        xList = xCondFormatMgr.getChild("CONTAINER")
-        list_state = get_state_as_dict(xList)
-        self.assertEqual(list_state['Children'], '2')
+            # check again that we now have 2 and not 3 entries in the list
+            # and still only 2 conditional formats in the document
+            xList = xCondFormatMgr.getChild("CONTAINER")
+            list_state = get_state_as_dict(xList)
+            self.assertEqual(list_state['Children'], '2')
 
-        self.assertEqual(conditional_format_list.getLength(), 2)
+            self.assertEqual(conditional_format_list.getLength(), 2)
 
-        # close the conditional format manager
-        xCancelBtn = xCondFormatMgr.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCancelBtn)
-
-        self.ui_test.close_doc()
+            # close the conditional format manager
+            xCancelBtn = xCondFormatMgr.getChild("cancel")
+            self.ui_test.close_dialog_through_button(xCancelBtn)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

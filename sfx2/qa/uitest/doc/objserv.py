@@ -13,17 +13,15 @@ class Test(UITestCase):
 
     def testPdfSigning(self):
         # Start Impress.
-        impress_doc = self.ui_test.load_file(get_url_for_data_file("pdf-sign.pdf"))
-        doc = self.xUITest.getTopFocusWindow()
+        with self.ui_test.load_file(get_url_for_data_file("pdf-sign.pdf")) as impress_doc:
+            doc = self.xUITest.getTopFocusWindow()
 
-        # Now use File -> Digital signatures -> Digital signatures.
-        self.ui_test.execute_dialog_through_command(".uno:Signature")
-        xDialog = self.xUITest.getTopFocusWindow()
-        # Without the accompanying fix in place, this test would have failed with:
-        # uno.com.sun.star.uno.RuntimeException: Could not find child with id: close vcl/source/uitest/uiobject.cxx:452
-        self.ui_test.close_dialog_through_button(xDialog.getChild("close"))
-
-        self.ui_test.close_doc()
+            # Now use File -> Digital signatures -> Digital signatures.
+            self.ui_test.execute_dialog_through_command(".uno:Signature")
+            xDialog = self.xUITest.getTopFocusWindow()
+            # Without the accompanying fix in place, this test would have failed with:
+            # uno.com.sun.star.uno.RuntimeException: Could not find child with id: close vcl/source/uitest/uiobject.cxx:452
+            self.ui_test.close_dialog_through_button(xDialog.getChild("close"))
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

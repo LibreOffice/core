@@ -12,22 +12,22 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 
 class findSimilarities(UITestCase):
     def test_find_similarities(self):
-        writer_doc = self.ui_test.load_file(get_url_for_data_file("findReplace.odt"))
-        document = self.ui_test.get_component()
-        xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
-        #verify: we are on page 1
-        self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "1")
-        # search and replace dialog
-        #find = seco
-        self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        searchterm = xDialog.getChild("searchterm")
-        searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"seco"}))  #seco
-        # check similarities, button similarities, set values = 1; close dialog with OK
-        similarity = xDialog.getChild("similarity")
-        similaritybtn = xDialog.getChild("similaritybtn")
-        similarity.executeAction("CLICK", tuple())
+        with self.ui_test.load_file(get_url_for_data_file("findReplace.odt")) as writer_doc:
+            document = self.ui_test.get_component()
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xWriterDoc.getChild("writer_edit")
+            #verify: we are on page 1
+            self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "1")
+            # search and replace dialog
+            #find = seco
+            self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
+            xDialog = self.xUITest.getTopFocusWindow()
+            searchterm = xDialog.getChild("searchterm")
+            searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"seco"}))  #seco
+            # check similarities, button similarities, set values = 1; close dialog with OK
+            similarity = xDialog.getChild("similarity")
+            similaritybtn = xDialog.getChild("similaritybtn")
+            similarity.executeAction("CLICK", tuple())
         def handle_similarity_dlg(dialog):
             otherfld = dialog.getChild("otherfld")
             longerfld = dialog.getChild("longerfld")

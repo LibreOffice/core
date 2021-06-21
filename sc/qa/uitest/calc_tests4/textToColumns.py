@@ -15,47 +15,47 @@ class CalcTextToColumns(UITestCase):
 
     def test_text_to_columns_dot(self):
         #_Dot_as_Separator
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("text_to_columns_dot.ods"))
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
-        #Make sure that tools-options-StarOffice Calc-General-Input settings-Show overwrite warning when pasting data is tagged.
-        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
-        xDialogOpt = self.xUITest.getTopFocusWindow()
+        with self.ui_test.load_file(get_url_for_data_file("text_to_columns_dot.ods")) as calc_doc:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            document = self.ui_test.get_component()
+            #Make sure that tools-options-StarOffice Calc-General-Input settings-Show overwrite warning when pasting data is tagged.
+            self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
+            xDialogOpt = self.xUITest.getTopFocusWindow()
 
-        xPages = xDialogOpt.getChild("pages")
-        xWriterEntry = xPages.getChild('3')                 # Calc
-        xWriterEntry.executeAction("EXPAND", tuple())
-        xWriterGeneralEntry = xWriterEntry.getChild('0')
-        xWriterGeneralEntry.executeAction("SELECT", tuple())          #General / replwarncb
-        xreplwarncb = xDialogOpt.getChild("replwarncb")
-        print(get_state_as_dict(xreplwarncb)["Selected"])
-        if (get_state_as_dict(xreplwarncb)["Selected"]) == "false":
-            xreplwarncb.executeAction("CLICK", tuple())
-        print(get_state_as_dict(xreplwarncb)["Selected"])
-        xOKBtn = xDialogOpt.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+            xPages = xDialogOpt.getChild("pages")
+            xWriterEntry = xPages.getChild('3')                 # Calc
+            xWriterEntry.executeAction("EXPAND", tuple())
+            xWriterGeneralEntry = xWriterEntry.getChild('0')
+            xWriterGeneralEntry.executeAction("SELECT", tuple())          #General / replwarncb
+            xreplwarncb = xDialogOpt.getChild("replwarncb")
+            print(get_state_as_dict(xreplwarncb)["Selected"])
+            if (get_state_as_dict(xreplwarncb)["Selected"]) == "false":
+                xreplwarncb.executeAction("CLICK", tuple())
+            print(get_state_as_dict(xreplwarncb)["Selected"])
+            xOKBtn = xDialogOpt.getChild("ok")
+            self.ui_test.close_dialog_through_button(xOKBtn)
 
-        #Select A1:A5 on Sheet 'Dot_as_Separator'
-        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A5"}))
-        #Data - Text to Columns
-        self.ui_test.execute_dialog_through_command(".uno:TextToColumns")
-        xDialog = self.xUITest.getTopFocusWindow()
-        #Untag Tab as separator and tag other. Put a dot into the input field next to the other checkbox
-        xtab = xDialog.getChild("tab")
-        xcomma = xDialog.getChild("comma")
-        xsemicolon = xDialog.getChild("semicolon")
-        xspace = xDialog.getChild("space")
-        xother = xDialog.getChild("other")
-        xinputother = xDialog.getChild("inputother")
+            #Select A1:A5 on Sheet 'Dot_as_Separator'
+            gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A5"}))
+            #Data - Text to Columns
+            self.ui_test.execute_dialog_through_command(".uno:TextToColumns")
+            xDialog = self.xUITest.getTopFocusWindow()
+            #Untag Tab as separator and tag other. Put a dot into the input field next to the other checkbox
+            xtab = xDialog.getChild("tab")
+            xcomma = xDialog.getChild("comma")
+            xsemicolon = xDialog.getChild("semicolon")
+            xspace = xDialog.getChild("space")
+            xother = xDialog.getChild("other")
+            xinputother = xDialog.getChild("inputother")
 
-        if (get_state_as_dict(xother)["Selected"]) == "false":
-            xother.executeAction("CLICK", tuple())
-        xinputother.executeAction("TYPE", mkPropertyValues({"TEXT":"."}))
-        #Click Ok
-        #Does an overwrite warning come up? If not file an Issue.
-        #Tag the 'Do not show warning again' checkbox and press Ok.
-        xOK = xDialog.getChild("ok")
+            if (get_state_as_dict(xother)["Selected"]) == "false":
+                xother.executeAction("CLICK", tuple())
+            xinputother.executeAction("TYPE", mkPropertyValues({"TEXT":"."}))
+            #Click Ok
+            #Does an overwrite warning come up? If not file an Issue.
+            #Tag the 'Do not show warning again' checkbox and press Ok.
+            xOK = xDialog.getChild("ok")
         def handle_warn_dlg(dialog):
             xyesBtn = dialog.getChild("yes")
             xask = dialog.getChild("ask")
@@ -118,38 +118,38 @@ class CalcTextToColumns(UITestCase):
 
     def test_text_to_columns_comma(self):
         #Comma as Separator
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("text_to_columns_comma.ods"))
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
-        #Make sure that tools-options-StarOffice Calc-General-Input settings-Show overwrite warning when pasting data is tagged.
-        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
-        xDialogOpt = self.xUITest.getTopFocusWindow()
+        with self.ui_test.load_file(get_url_for_data_file("text_to_columns_comma.ods")) as calc_doc:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            document = self.ui_test.get_component()
+            #Make sure that tools-options-StarOffice Calc-General-Input settings-Show overwrite warning when pasting data is tagged.
+            self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
+            xDialogOpt = self.xUITest.getTopFocusWindow()
 
-        xPages = xDialogOpt.getChild("pages")
-        xWriterEntry = xPages.getChild('3')                 # Calc
-        xWriterEntry.executeAction("EXPAND", tuple())
-        xWriterGeneralEntry = xWriterEntry.getChild('0')
-        xWriterGeneralEntry.executeAction("SELECT", tuple())          #General / replwarncb
-        xreplwarncb = xDialogOpt.getChild("replwarncb")
-        print(get_state_as_dict(xreplwarncb)["Selected"])
-        if (get_state_as_dict(xreplwarncb)["Selected"]) == "false":
-            xreplwarncb.executeAction("CLICK", tuple())
-        print(get_state_as_dict(xreplwarncb)["Selected"])
-        xOKBtn = xDialogOpt.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+            xPages = xDialogOpt.getChild("pages")
+            xWriterEntry = xPages.getChild('3')                 # Calc
+            xWriterEntry.executeAction("EXPAND", tuple())
+            xWriterGeneralEntry = xWriterEntry.getChild('0')
+            xWriterGeneralEntry.executeAction("SELECT", tuple())          #General / replwarncb
+            xreplwarncb = xDialogOpt.getChild("replwarncb")
+            print(get_state_as_dict(xreplwarncb)["Selected"])
+            if (get_state_as_dict(xreplwarncb)["Selected"]) == "false":
+                xreplwarncb.executeAction("CLICK", tuple())
+            print(get_state_as_dict(xreplwarncb)["Selected"])
+            xOKBtn = xDialogOpt.getChild("ok")
+            self.ui_test.close_dialog_through_button(xOKBtn)
 
-        # Select A1:A5
-        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A5"}))
-        # Data - Text to Columns
-        self.ui_test.execute_dialog_through_command(".uno:TextToColumns")
-        xDialog = self.xUITest.getTopFocusWindow()
-        # Untag Tab as separator and tag comma.
-        xComma = xDialog.getChild("comma")
-        if (get_state_as_dict(xComma)["Selected"]) == "false":
-            xComma.executeAction("CLICK", tuple())
-        # Click Ok
-        xOK = xDialog.getChild("ok")
+            # Select A1:A5
+            gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A5"}))
+            # Data - Text to Columns
+            self.ui_test.execute_dialog_through_command(".uno:TextToColumns")
+            xDialog = self.xUITest.getTopFocusWindow()
+            # Untag Tab as separator and tag comma.
+            xComma = xDialog.getChild("comma")
+            if (get_state_as_dict(xComma)["Selected"]) == "false":
+                xComma.executeAction("CLICK", tuple())
+            # Click Ok
+            xOK = xDialog.getChild("ok")
         def handle_warn_dlg(dialog):
             xyesBtn = dialog.getChild("yes")
             self.ui_test.close_dialog_through_button(xyesBtn)
@@ -196,36 +196,36 @@ class CalcTextToColumns(UITestCase):
         self.ui_test.close_doc()
     def test_text_to_columns_semicolon(self):
         #Semicolon  as Separator
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("text_to_columns_semicolon.ods"))
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
-        #Make sure that tools-options-StarOffice Calc-General-Input settings-Show overwrite warning when pasting data is tagged.
-        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
-        xDialogOpt = self.xUITest.getTopFocusWindow()
+        with self.ui_test.load_file(get_url_for_data_file("text_to_columns_semicolon.ods")) as calc_doc:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            document = self.ui_test.get_component()
+            #Make sure that tools-options-StarOffice Calc-General-Input settings-Show overwrite warning when pasting data is tagged.
+            self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
+            xDialogOpt = self.xUITest.getTopFocusWindow()
 
-        xPages = xDialogOpt.getChild("pages")
-        xWriterEntry = xPages.getChild('3')                 # Calc
-        xWriterEntry.executeAction("EXPAND", tuple())
-        xWriterGeneralEntry = xWriterEntry.getChild('0')
-        xWriterGeneralEntry.executeAction("SELECT", tuple())          #General / replwarncb
-        xreplwarncb = xDialogOpt.getChild("replwarncb")
-        if (get_state_as_dict(xreplwarncb)["Selected"]) == "false":
-            xreplwarncb.executeAction("CLICK", tuple())
-        xOKBtn = xDialogOpt.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+            xPages = xDialogOpt.getChild("pages")
+            xWriterEntry = xPages.getChild('3')                 # Calc
+            xWriterEntry.executeAction("EXPAND", tuple())
+            xWriterGeneralEntry = xWriterEntry.getChild('0')
+            xWriterGeneralEntry.executeAction("SELECT", tuple())          #General / replwarncb
+            xreplwarncb = xDialogOpt.getChild("replwarncb")
+            if (get_state_as_dict(xreplwarncb)["Selected"]) == "false":
+                xreplwarncb.executeAction("CLICK", tuple())
+            xOKBtn = xDialogOpt.getChild("ok")
+            self.ui_test.close_dialog_through_button(xOKBtn)
 
-        # Select A1:A5 on Sheet
-        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A5"}))
-        # Data - Text to Columns
-        self.ui_test.execute_dialog_through_command(".uno:TextToColumns")
-        xDialog = self.xUITest.getTopFocusWindow()
-        # Untag comma as separator and tag Semicolon
-        xSemicolon = xDialog.getChild("semicolon")
-        if (get_state_as_dict(xSemicolon)["Selected"]) == "false":
-            xSemicolon.executeAction("CLICK", tuple())
-        # Click Ok
-        xOK = xDialog.getChild("ok")
+            # Select A1:A5 on Sheet
+            gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A5"}))
+            # Data - Text to Columns
+            self.ui_test.execute_dialog_through_command(".uno:TextToColumns")
+            xDialog = self.xUITest.getTopFocusWindow()
+            # Untag comma as separator and tag Semicolon
+            xSemicolon = xDialog.getChild("semicolon")
+            if (get_state_as_dict(xSemicolon)["Selected"]) == "false":
+                xSemicolon.executeAction("CLICK", tuple())
+            # Click Ok
+            xOK = xDialog.getChild("ok")
         def handle_warn_dlg(dialog):
             xyesBtn = dialog.getChild("yes")
             self.ui_test.close_dialog_through_button(xyesBtn)
@@ -272,37 +272,37 @@ class CalcTextToColumns(UITestCase):
 
     def test_text_to_columns_space(self):
         #Space as Separator
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("text_to_columns_space.ods"))
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
-        #Make sure that tools-options-StarOffice Calc-General-Input settings-Show overwrite warning when pasting data is tagged.
-        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
-        xDialogOpt = self.xUITest.getTopFocusWindow()
+        with self.ui_test.load_file(get_url_for_data_file("text_to_columns_space.ods")) as calc_doc:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            document = self.ui_test.get_component()
+            #Make sure that tools-options-StarOffice Calc-General-Input settings-Show overwrite warning when pasting data is tagged.
+            self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
+            xDialogOpt = self.xUITest.getTopFocusWindow()
 
-        xPages = xDialogOpt.getChild("pages")
-        xWriterEntry = xPages.getChild('3')                 # Calc
-        xWriterEntry.executeAction("EXPAND", tuple())
-        xWriterGeneralEntry = xWriterEntry.getChild('0')
-        xWriterGeneralEntry.executeAction("SELECT", tuple())          #General / replwarncb
-        xreplwarncb = xDialogOpt.getChild("replwarncb")
-        if (get_state_as_dict(xreplwarncb)["Selected"]) == "false":
-            xreplwarncb.executeAction("CLICK", tuple())
-        xOKBtn = xDialogOpt.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+            xPages = xDialogOpt.getChild("pages")
+            xWriterEntry = xPages.getChild('3')                 # Calc
+            xWriterEntry.executeAction("EXPAND", tuple())
+            xWriterGeneralEntry = xWriterEntry.getChild('0')
+            xWriterGeneralEntry.executeAction("SELECT", tuple())          #General / replwarncb
+            xreplwarncb = xDialogOpt.getChild("replwarncb")
+            if (get_state_as_dict(xreplwarncb)["Selected"]) == "false":
+                xreplwarncb.executeAction("CLICK", tuple())
+            xOKBtn = xDialogOpt.getChild("ok")
+            self.ui_test.close_dialog_through_button(xOKBtn)
 
-        # Select A1:A5 on Sheet
-        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A5"}))
-        # Data - Text to Columns
-        self.ui_test.execute_dialog_through_command(".uno:TextToColumns")
-        xDialog = self.xUITest.getTopFocusWindow()
-        # Untag comma as separator and tag Semicolon
-        xSpace = xDialog.getChild("space")
-        if (get_state_as_dict(xSpace)["Selected"]) == "false":
-            xSpace.executeAction("CLICK", tuple())
-        # xspace.executeAction("CLICK", tuple())
-        # Click Ok
-        xOK = xDialog.getChild("ok")
+            # Select A1:A5 on Sheet
+            gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A5"}))
+            # Data - Text to Columns
+            self.ui_test.execute_dialog_through_command(".uno:TextToColumns")
+            xDialog = self.xUITest.getTopFocusWindow()
+            # Untag comma as separator and tag Semicolon
+            xSpace = xDialog.getChild("space")
+            if (get_state_as_dict(xSpace)["Selected"]) == "false":
+                xSpace.executeAction("CLICK", tuple())
+            # xspace.executeAction("CLICK", tuple())
+            # Click Ok
+            xOK = xDialog.getChild("ok")
         def handle_warn_dlg(dialog):
             xyesBtn = dialog.getChild("yes")
             self.ui_test.close_dialog_through_button(xyesBtn)
@@ -349,43 +349,43 @@ class CalcTextToColumns(UITestCase):
 
     def test_text_to_columns_pipe(self):
         #Space as Separator
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("text_to_columns_pipe.ods"))
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
-        #Make sure that tools-options-StarOffice Calc-General-Input settings-Show overwrite warning when pasting data is tagged.
-        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
-        xDialogOpt = self.xUITest.getTopFocusWindow()
+        with self.ui_test.load_file(get_url_for_data_file("text_to_columns_pipe.ods")) as calc_doc:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            document = self.ui_test.get_component()
+            #Make sure that tools-options-StarOffice Calc-General-Input settings-Show overwrite warning when pasting data is tagged.
+            self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
+            xDialogOpt = self.xUITest.getTopFocusWindow()
 
-        xPages = xDialogOpt.getChild("pages")
-        xWriterEntry = xPages.getChild('3')                 # Calc
-        xWriterEntry.executeAction("EXPAND", tuple())
-        xWriterGeneralEntry = xWriterEntry.getChild('0')
-        xWriterGeneralEntry.executeAction("SELECT", tuple())          #General / replwarncb
-        xreplwarncb = xDialogOpt.getChild("replwarncb")
-        if (get_state_as_dict(xreplwarncb)["Selected"]) == "false":
-            xreplwarncb.executeAction("CLICK", tuple())
-        xOKBtn = xDialogOpt.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+            xPages = xDialogOpt.getChild("pages")
+            xWriterEntry = xPages.getChild('3')                 # Calc
+            xWriterEntry.executeAction("EXPAND", tuple())
+            xWriterGeneralEntry = xWriterEntry.getChild('0')
+            xWriterGeneralEntry.executeAction("SELECT", tuple())          #General / replwarncb
+            xreplwarncb = xDialogOpt.getChild("replwarncb")
+            if (get_state_as_dict(xreplwarncb)["Selected"]) == "false":
+                xreplwarncb.executeAction("CLICK", tuple())
+            xOKBtn = xDialogOpt.getChild("ok")
+            self.ui_test.close_dialog_through_button(xOKBtn)
 
-        # Select A1:A5 on Sheet
-        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A5"}))
-        # Data - Text to Columns
-        self.ui_test.execute_dialog_through_command(".uno:TextToColumns")
-        xDialog = self.xUITest.getTopFocusWindow()
-        # Untag comma as separator and tag Semicolon
-        xtab = xDialog.getChild("tab")
-        xcomma = xDialog.getChild("comma")
-        xsemicolon = xDialog.getChild("semicolon")
-        xspace = xDialog.getChild("space")
-        xother = xDialog.getChild("other")
-        xinputother = xDialog.getChild("inputother")
-        xSpace = xDialog.getChild("space")
-        if (get_state_as_dict(xother)["Selected"]) == "false":
-            xother.executeAction("CLICK", tuple())
-        xinputother.executeAction("TYPE", mkPropertyValues({"TEXT":"|"}))
-        # Click Ok
-        xOK = xDialog.getChild("ok")
+            # Select A1:A5 on Sheet
+            gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A5"}))
+            # Data - Text to Columns
+            self.ui_test.execute_dialog_through_command(".uno:TextToColumns")
+            xDialog = self.xUITest.getTopFocusWindow()
+            # Untag comma as separator and tag Semicolon
+            xtab = xDialog.getChild("tab")
+            xcomma = xDialog.getChild("comma")
+            xsemicolon = xDialog.getChild("semicolon")
+            xspace = xDialog.getChild("space")
+            xother = xDialog.getChild("other")
+            xinputother = xDialog.getChild("inputother")
+            xSpace = xDialog.getChild("space")
+            if (get_state_as_dict(xother)["Selected"]) == "false":
+                xother.executeAction("CLICK", tuple())
+            xinputother.executeAction("TYPE", mkPropertyValues({"TEXT":"|"}))
+            # Click Ok
+            xOK = xDialog.getChild("ok")
         def handle_warn_dlg(dialog):
             xyesBtn = dialog.getChild("yes")
             self.ui_test.close_dialog_through_button(xyesBtn)
@@ -432,44 +432,44 @@ class CalcTextToColumns(UITestCase):
 
     def test_text_to_columns_pipespace(self):
         #Space as Separator
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("text_to_columns_pipe_space.ods"))
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
-        #Make sure that tools-options-StarOffice Calc-General-Input settings-Show overwrite warning when pasting data is tagged.
-        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
-        xDialogOpt = self.xUITest.getTopFocusWindow()
+        with self.ui_test.load_file(get_url_for_data_file("text_to_columns_pipe_space.ods")) as calc_doc:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            document = self.ui_test.get_component()
+            #Make sure that tools-options-StarOffice Calc-General-Input settings-Show overwrite warning when pasting data is tagged.
+            self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
+            xDialogOpt = self.xUITest.getTopFocusWindow()
 
-        xPages = xDialogOpt.getChild("pages")
-        xWriterEntry = xPages.getChild('3')                 # Calc
-        xWriterEntry.executeAction("EXPAND", tuple())
-        xWriterGeneralEntry = xWriterEntry.getChild('0')
-        xWriterGeneralEntry.executeAction("SELECT", tuple())          #General / replwarncb
-        xreplwarncb = xDialogOpt.getChild("replwarncb")
-        if (get_state_as_dict(xreplwarncb)["Selected"]) == "false":
-            xreplwarncb.executeAction("CLICK", tuple())
-        xOKBtn = xDialogOpt.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+            xPages = xDialogOpt.getChild("pages")
+            xWriterEntry = xPages.getChild('3')                 # Calc
+            xWriterEntry.executeAction("EXPAND", tuple())
+            xWriterGeneralEntry = xWriterEntry.getChild('0')
+            xWriterGeneralEntry.executeAction("SELECT", tuple())          #General / replwarncb
+            xreplwarncb = xDialogOpt.getChild("replwarncb")
+            if (get_state_as_dict(xreplwarncb)["Selected"]) == "false":
+                xreplwarncb.executeAction("CLICK", tuple())
+            xOKBtn = xDialogOpt.getChild("ok")
+            self.ui_test.close_dialog_through_button(xOKBtn)
 
-        # Select A1:A5 on Sheet
-        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A5"}))
-        # Data - Text to Columns
-        self.ui_test.execute_dialog_through_command(".uno:TextToColumns")
-        xDialog = self.xUITest.getTopFocusWindow()
-        #
-        xtab = xDialog.getChild("tab")
-        xcomma = xDialog.getChild("comma")
-        xsemicolon = xDialog.getChild("semicolon")
-        xspace = xDialog.getChild("space")
-        xother = xDialog.getChild("other")
-        xinputother = xDialog.getChild("inputother")
-        if (get_state_as_dict(xspace)["Selected"]) == "false":
-            xspace.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xother)["Selected"]) == "false":
-            xother.executeAction("CLICK", tuple())
-        xinputother.executeAction("TYPE", mkPropertyValues({"TEXT":"|"}))
-        # Click Ok
-        xOK = xDialog.getChild("ok")
+            # Select A1:A5 on Sheet
+            gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A5"}))
+            # Data - Text to Columns
+            self.ui_test.execute_dialog_through_command(".uno:TextToColumns")
+            xDialog = self.xUITest.getTopFocusWindow()
+            #
+            xtab = xDialog.getChild("tab")
+            xcomma = xDialog.getChild("comma")
+            xsemicolon = xDialog.getChild("semicolon")
+            xspace = xDialog.getChild("space")
+            xother = xDialog.getChild("other")
+            xinputother = xDialog.getChild("inputother")
+            if (get_state_as_dict(xspace)["Selected"]) == "false":
+                xspace.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xother)["Selected"]) == "false":
+                xother.executeAction("CLICK", tuple())
+            xinputother.executeAction("TYPE", mkPropertyValues({"TEXT":"|"}))
+            # Click Ok
+            xOK = xDialog.getChild("ok")
         def handle_warn_dlg(dialog):
             xyesBtn = dialog.getChild("yes")
             self.ui_test.close_dialog_through_button(xyesBtn)

@@ -15,33 +15,34 @@ class pivotTable(UITestCase):
         # This is basically a test for cf93998eb5abc193d95ae5433bf4dfd11a9d62d8
         # Without the fix in place, this test would have crashed
 
-        self.ui_test.load_file(get_url_for_data_file("basicPivotTable.ods"))
+        with self.ui_test.load_file(get_url_for_data_file("basicPivotTable.ods"))
+:
 
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
 
-        gridwin.executeAction("SELECT", mkPropertyValues({"TABLE": "1"}))
+            gridwin.executeAction("SELECT", mkPropertyValues({"TABLE": "1"}))
 
-        self.xUITest.executeCommand(".uno:GoUp")
+            self.xUITest.executeCommand(".uno:GoUp")
 
 
-        self.ui_test.execute_dialog_through_command(".uno:DataDataPilotRun")
+            self.ui_test.execute_dialog_through_command(".uno:DataDataPilotRun")
 
-        xDialog = self.xUITest.getTopFocusWindow()
+            xDialog = self.xUITest.getTopFocusWindow()
 
-        xFields = xDialog.getChild("listbox-fields")
-        self.assertEqual(2, len(xFields.getChildren()))
-        self.assertEqual("qtX", get_state_as_dict(xFields.getChild('0'))['Text'])
-        self.assertEqual("qtY", get_state_as_dict(xFields.getChild('1'))['Text'])
+            xFields = xDialog.getChild("listbox-fields")
+            self.assertEqual(2, len(xFields.getChildren()))
+            self.assertEqual("qtX", get_state_as_dict(xFields.getChild('0'))['Text'])
+            self.assertEqual("qtY", get_state_as_dict(xFields.getChild('1'))['Text'])
 
-        xColumns = xDialog.getChild("listbox-column")
-        self.assertEqual(1, len(xColumns.getChildren()))
-        self.assertEqual("Data", get_state_as_dict(xColumns.getChild('0'))['Text'])
+            xColumns = xDialog.getChild("listbox-column")
+            self.assertEqual(1, len(xColumns.getChildren()))
+            self.assertEqual("Data", get_state_as_dict(xColumns.getChild('0'))['Text'])
 
-        xPage = xDialog.getChild("listbox-page")
-        self.assertEqual(1, len(xPage.getChildren()))
-        xPageChild = xPage.getChild('0')
-        self.assertEqual("qtX", get_state_as_dict(xPageChild)['Text'])
+            xPage = xDialog.getChild("listbox-page")
+            self.assertEqual(1, len(xPage.getChildren()))
+            xPageChild = xPage.getChild('0')
+            self.assertEqual("qtX", get_state_as_dict(xPageChild)['Text'])
 
         def handle_dataField_dialog(dialog):
             optionBtn = dialog.getChild("options")

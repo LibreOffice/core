@@ -183,23 +183,22 @@ def main():
     if args.document is not None:
         output_line = "        pathmodule = importlib.import_module(\"uitest.path\")\n" + \
         "        doc_path = pathmodule.get_srcdir_url() + \"" + args.document + "\"\n" + \
-        "        MainDoc = self.ui_test.load_file(doc_path)\n" + \
-        "        MainWindow = self.xUITest.getTopFocusWindow()\n"
-        output_stream.write(output_line)
-    line_number = 0
-    while line_number < len(log_lines):
-        if line_number == len(log_lines)-1 or \
-            get_coupling_type(log_lines[line_number],log_lines[line_number + 1]) == "NOT_A_COUPLE":
-            test_line = get_test_line_from_one_log_line(log_lines[line_number])
-            output_stream.write(test_line)
-            line_number += 1
-        elif get_coupling_type(log_lines[line_number],log_lines[line_number + 1]) == "REDUNDANT_COUPLE":
-            line_number += 1
-        else:
-            test_line = get_test_line_from_two_log_lines(log_lines[line_number],log_lines[line_number + 1])
-            output_stream.write(test_line)
-            line_number += 2
-    output_stream.write("        self.ui_test.close_doc()")
+        with self.ui_test.load_file(doc_path)\n" + \ as "        MainDoc:
+            "        MainWindow = self.xUITest.getTopFocusWindow()\n"
+            output_stream.write(output_line)
+        line_number = 0
+        while line_number < len(log_lines):
+            if line_number == len(log_lines)-1 or \
+                get_coupling_type(log_lines[line_number],log_lines[line_number + 1]) == "NOT_A_COUPLE":
+                test_line = get_test_line_from_one_log_line(log_lines[line_number])
+                output_stream.write(test_line)
+                line_number += 1
+            elif get_coupling_type(log_lines[line_number],log_lines[line_number + 1]) == "REDUNDANT_COUPLE":
+                line_number += 1
+            else:
+                test_line = get_test_line_from_two_log_lines(log_lines[line_number],log_lines[line_number + 1])
+                output_stream.write(test_line)
+                line_number += 2
     output_stream.write("\n\n# vim: set shiftwidth=4 softtabstop=4 expandtab:")
     output_stream.close()
 

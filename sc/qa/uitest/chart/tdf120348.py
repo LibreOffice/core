@@ -14,49 +14,48 @@ class tdf120348(UITestCase):
 
    def test_tdf120348(self):
 
-    calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf120348.ods"))
-    xCalcDoc = self.xUITest.getTopFocusWindow()
-    gridwin = xCalcDoc.getChild("grid_window")
-    document = self.ui_test.get_component()
+    with self.ui_test.load_file(get_url_for_data_file("tdf120348.ods")) as calc_doc:
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        gridwin = xCalcDoc.getChild("grid_window")
+        document = self.ui_test.get_component()
 
-    xFirstMatrix = []
-    for row in range(1, 159):
-        xRow = []
-        for column in range(5, 9):
-            xRow.append(round(get_cell_by_position(document, 0, column, row).getValue(), 5))
-        xFirstMatrix.append(xRow)
+        xFirstMatrix = []
+        for row in range(1, 159):
+            xRow = []
+            for column in range(5, 9):
+                xRow.append(round(get_cell_by_position(document, 0, column, row).getValue(), 5))
+            xFirstMatrix.append(xRow)
 
-    gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 2"}))
+        gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 2"}))
 
-    self.xUITest.executeCommand(".uno:Copy")
+        self.xUITest.executeCommand(".uno:Copy")
 
-    self.xUITest.executeCommand(".uno:CloseDoc")
+        self.xUITest.executeCommand(".uno:CloseDoc")
 
-    self.ui_test.create_doc_in_start_center("calc")
-    xCalcDoc = self.xUITest.getTopFocusWindow()
-    gridwin = xCalcDoc.getChild("grid_window")
-    document = self.ui_test.get_component()
+        self.ui_test.create_doc_in_start_center("calc")
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        gridwin = xCalcDoc.getChild("grid_window")
+        document = self.ui_test.get_component()
 
-    self.xUITest.executeCommand(".uno:Paste")
+        self.xUITest.executeCommand(".uno:Paste")
 
-    xData = document.Sheets[0].Charts[0].getEmbeddedObject().Data
+        xData = document.Sheets[0].Charts[0].getEmbeddedObject().Data
 
-    columnNames = ('Finland', 'Sweden', 'Poland', '')
-    self.assertEqual(columnNames, xData.ColumnDescriptions)
+        columnNames = ('Finland', 'Sweden', 'Poland', '')
+        self.assertEqual(columnNames, xData.ColumnDescriptions)
 
-    xSecondMatrix = []
-    for row in xData.Data:
-        xRow = []
-        for value in row:
-            xRow.append(round(value, 5))
-        xSecondMatrix.append(xRow)
+        xSecondMatrix = []
+        for row in xData.Data:
+            xRow = []
+            for value in row:
+                xRow.append(round(value, 5))
+            xSecondMatrix.append(xRow)
 
-    # Without the fix in place, this test would have failed with
-    # First differing element 51:
-    # [3.31618, 3.65089, 3.33626, 0.0]
-    # [3.31618, 3.65089, 0.0, 0.0]
+        # Without the fix in place, this test would have failed with
+        # First differing element 51:
+        # [3.31618, 3.65089, 3.33626, 0.0]
+        # [3.31618, 3.65089, 0.0, 0.0]
 
-    self.assertEqual(xFirstMatrix, xSecondMatrix)
+        self.assertEqual(xFirstMatrix, xSecondMatrix)
 
-    self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

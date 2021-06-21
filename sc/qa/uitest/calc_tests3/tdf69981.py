@@ -13,38 +13,38 @@ class tdf69981(UITestCase):
 
     def test_tdf69981_text_to_columns(self):
 
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf69981.ods"))
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
-        #Make sure that tools-options-StarOffice Calc-General-Input settings-Show overwrite warning when pasting data is tagged.
-        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
-        xDialogOpt = self.xUITest.getTopFocusWindow()
+        with self.ui_test.load_file(get_url_for_data_file("tdf69981.ods")) as calc_doc:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            document = self.ui_test.get_component()
+            #Make sure that tools-options-StarOffice Calc-General-Input settings-Show overwrite warning when pasting data is tagged.
+            self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
+            xDialogOpt = self.xUITest.getTopFocusWindow()
 
-        xPages = xDialogOpt.getChild("pages")
-        xWriterEntry = xPages.getChild('3')                 # Calc
-        xWriterEntry.executeAction("EXPAND", tuple())
-        xWriterGeneralEntry = xWriterEntry.getChild('0')
-        xWriterGeneralEntry.executeAction("SELECT", tuple())          #General / replwarncb
-        xreplwarncb = xDialogOpt.getChild("replwarncb")
-        if (get_state_as_dict(xreplwarncb)["Selected"]) == "false":
-            xreplwarncb.executeAction("CLICK", tuple())
-        xOKBtn = xDialogOpt.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+            xPages = xDialogOpt.getChild("pages")
+            xWriterEntry = xPages.getChild('3')                 # Calc
+            xWriterEntry.executeAction("EXPAND", tuple())
+            xWriterGeneralEntry = xWriterEntry.getChild('0')
+            xWriterGeneralEntry.executeAction("SELECT", tuple())          #General / replwarncb
+            xreplwarncb = xDialogOpt.getChild("replwarncb")
+            if (get_state_as_dict(xreplwarncb)["Selected"]) == "false":
+                xreplwarncb.executeAction("CLICK", tuple())
+            xOKBtn = xDialogOpt.getChild("ok")
+            self.ui_test.close_dialog_through_button(xOKBtn)
 
-        #Select A2:A7
-        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A2:A7"}))
-        #Data - Text to Columns
-        self.ui_test.execute_dialog_through_command(".uno:TextToColumns")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xtab = xDialog.getChild("tab")
-        xcomma = xDialog.getChild("comma")
-        xtab.executeAction("CLICK", tuple())
-        xcomma.executeAction("CLICK", tuple())
-        #Click Ok
-        #overwrite warning come up
-        #press Ok.
-        xOK = xDialog.getChild("ok")
+            #Select A2:A7
+            gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A2:A7"}))
+            #Data - Text to Columns
+            self.ui_test.execute_dialog_through_command(".uno:TextToColumns")
+            xDialog = self.xUITest.getTopFocusWindow()
+            xtab = xDialog.getChild("tab")
+            xcomma = xDialog.getChild("comma")
+            xtab.executeAction("CLICK", tuple())
+            xcomma.executeAction("CLICK", tuple())
+            #Click Ok
+            #overwrite warning come up
+            #press Ok.
+            xOK = xDialog.getChild("ok")
         def handle_warn_dlg(dialog):
             xyesBtn = dialog.getChild("yes")
             self.ui_test.close_dialog_through_button(xyesBtn)

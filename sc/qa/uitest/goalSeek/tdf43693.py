@@ -15,19 +15,19 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf43693(UITestCase):
     def test_tdf43693_goalSeek(self):
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf43693.ods"))
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
-        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "K248"}))
-        self.ui_test.execute_modeless_dialog_through_command(".uno:GoalSeekDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xformulaedit = xDialog.getChild("formulaedit")
-        xtarget = xDialog.getChild("target")
-        xvaredit = xDialog.getChild("varedit")
-        xtarget.executeAction("TYPE", mkPropertyValues({"TEXT":"0"}))
-        xvaredit.executeAction("TYPE", mkPropertyValues({"TEXT":"H5"}))
-        xOKBtn = xDialog.getChild("ok")
+        with self.ui_test.load_file(get_url_for_data_file("tdf43693.ods")) as calc_doc:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            document = self.ui_test.get_component()
+            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "K248"}))
+            self.ui_test.execute_modeless_dialog_through_command(".uno:GoalSeekDialog")
+            xDialog = self.xUITest.getTopFocusWindow()
+            xformulaedit = xDialog.getChild("formulaedit")
+            xtarget = xDialog.getChild("target")
+            xvaredit = xDialog.getChild("varedit")
+            xtarget.executeAction("TYPE", mkPropertyValues({"TEXT":"0"}))
+            xvaredit.executeAction("TYPE", mkPropertyValues({"TEXT":"H5"}))
+            xOKBtn = xDialog.getChild("ok")
         def handle_OK_dlg(dialog):
             xYesButn = dialog.getChild("yes")
             self.ui_test.close_dialog_through_button(xYesButn)
