@@ -704,9 +704,11 @@ SwFlyNotify::~SwFlyNotify()
     // further notifications/invalidations, if format is called by grow/shrink
     if ( !pFly->ConsiderObjWrapInfluenceOnObjPos() )
         return;
-    auto pFlyFreeFrame = dynamic_cast<SwFlyFreeFrame*>(pFly);
-    if (pFlyFreeFrame && pFlyFreeFrame->IsNoMoveOnCheckClip())
-        return;
+    if (pFly->IsFlyFreeFrame())
+    {
+        if (static_cast<SwFlyFreeFrame*>(pFly)->IsNoMoveOnCheckClip())
+            return;
+    }
 
     // #i54138# - suppress restart of the layout process
     // on changed frame height.
@@ -2911,7 +2913,7 @@ static void lcl_AddObjsToPage( SwFrame* _pFrame, SwPageFrame* _pPage )
         // anchored Writer fly frames from page
         if ( auto pFlyFrame = dynamic_cast<SwFlyFrame*>( pObj) )
         {
-            if ( dynamic_cast<const SwFlyFreeFrame*>( pObj) !=  nullptr )
+            if (pFlyFrame->IsFlyFreeFrame())
             {
                 _pPage->AppendFlyToPage( pFlyFrame );
             }
