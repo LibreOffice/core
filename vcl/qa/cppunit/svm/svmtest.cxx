@@ -190,7 +190,7 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
     void checkComment(const GDIMetaFile& rMetaFile);
     void testComment();
 
-    //void checkLayoutMode(const GDIMetaFile& rMetaFile);
+    void checkLayoutMode(const GDIMetaFile& rMetaFile);
     void testLayoutMode();
 
     void checkTextLanguage(const GDIMetaFile& rMetaFile);
@@ -2108,8 +2108,31 @@ void SvmTest::testComment()
     checkComment(readFile(u"comment.svm"));
 }
 
+void SvmTest::checkLayoutMode(const GDIMetaFile& rMetaFile)
+{
+    xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
+
+    assertXPathAttrs(pDoc, "/metafile/layoutmode[1]", {
+        {"textlayout", "#0004"}
+    });
+
+    assertXPathAttrs(pDoc, "/metafile/layoutmode[2]", {
+        {"textlayout", "#0001"}
+    });
+}
+
 void SvmTest::testLayoutMode()
-{}
+{
+    GDIMetaFile aGDIMetaFile;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
+
+    pVirtualDev->SetLayoutMode(ComplexTextLayoutFlags::TextOriginLeft);
+    pVirtualDev->SetLayoutMode(ComplexTextLayoutFlags::BiDiRtl);
+
+    checkLayoutMode(writeAndReadStream(aGDIMetaFile));
+    checkLayoutMode(readFile(u"layoutmode.svm"));
+}
 
 void SvmTest::checkTextLanguage(const GDIMetaFile& rMetaFile)
 {
