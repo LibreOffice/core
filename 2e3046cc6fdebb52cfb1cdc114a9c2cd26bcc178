@@ -16,6 +16,24 @@
       "revId": "2e3046cc6fdebb52cfb1cdc114a9c2cd26bcc178",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d38fbd2_4fa9f811",
+        "filename": "sal/rtl/bootstrap.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-06-21T10:50:50Z",
+      "side": 1,
+      "message": "change at https://gerrit.libreoffice.org/c/core/+/117573",
+      "parentUuid": "c8cb6830_ce3d90fa",
+      "revId": "2e3046cc6fdebb52cfb1cdc114a9c2cd26bcc178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
