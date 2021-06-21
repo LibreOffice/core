@@ -3437,6 +3437,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testBtlrTableRowSpan)
     assertXPathContent(pXmlDoc, "//textarray[1]/text", "USA");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testBIRT)
+{
+    // this looped
+    load(DATA_DIRECTORY, "birt_min.odt");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
