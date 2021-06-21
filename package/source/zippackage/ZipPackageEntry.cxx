@@ -25,7 +25,6 @@
 
 #include <ZipPackageFolder.hxx>
 #include <ZipPackageStream.hxx>
-#include "ContentInfo.hxx"
 
 #include <comphelper/storagehelper.hxx>
 
