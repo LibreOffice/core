@@ -349,8 +349,9 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
     if (aLocaleStr.isEmpty())
         aLocaleStr = officecfg::System::L10N::Locale::get();
 
+    static const OUStringLiteral EN_US = u"en-US";
     if (aLocaleStr.isEmpty())
-        aLocaleStr = OUString::intern(RTL_CONSTASCII_USTRINGPARAM("en-US"));
+        aLocaleStr = EN_US;
 
     // convert locale string to locale struct
     css::lang::Locale aSysLocale;

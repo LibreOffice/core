@@ -229,9 +229,10 @@ namespace connectivity
 
     OUString SQLError_Impl::impl_getSQLState( ErrorCondition _eCondition )
     {
+        static constexpr OUStringLiteral DEFAULT_STATE = u"S1000";
         OUString sState = lcl_getResourceState(_eCondition);
         if (sState.isEmpty())
-            sState = OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "S1000" ) );
+            sState = DEFAULT_STATE;
         return sState;
     }
 
