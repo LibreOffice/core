@@ -35,6 +35,7 @@
 #include <vcl/vclptr.hxx>
 
 struct WmfExternal;
+class OutputDevice;
 
 namespace com::sun::star {
     namespace awt { struct Point; }
@@ -63,6 +64,13 @@ public:
                             const css::uno::Reference< css::frame::XFrame >& rxTargetFrame,
                             const StorageRef& rxStorage );
     virtual             ~GraphicHelper();
+
+    // Avoid implicitly defined copy constructors/assignments for the DLLPUBLIC class (they may
+    // require forward-declared classes used internally to be defined in places using GraphicHelper)
+    GraphicHelper(const GraphicHelper&) = delete;
+    GraphicHelper(GraphicHelper&&) = delete;
+    GraphicHelper& operator=(const GraphicHelper&) = delete;
+    GraphicHelper& operator=(GraphicHelper&&) = delete;
 
     // System colors and predefined colors ------------------------------------
 
