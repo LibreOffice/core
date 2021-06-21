@@ -1339,7 +1339,7 @@
         <info>
           <desc>Specifies if minus signs should be replaced by dashes
           automatically.</desc>
-          <label>Replace dashes</label>
+          <label>Replace two dashes with unspaced EM-dash</label>
         </info>
         <value>true</value>
       </prop>
