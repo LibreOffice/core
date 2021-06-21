@@ -118,6 +118,30 @@
       "revId": "e6dfaf9f44f9939abc338c83b3024108431d0f69",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "551b1e1a_a7ae663a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-21T11:38:30Z",
+      "side": 1,
+      "message": "ah, no, something like\n\n  constexpr std::vector\u003cint\u003e v(10);\n\nisn\u0027t legal either",
+      "parentUuid": "bd12cfe7_f321faaa",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 22
+      },
+      "revId": "e6dfaf9f44f9939abc338c83b3024108431d0f69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
