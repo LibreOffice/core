@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c8cb6830_ce3d90fa",
+        "filename": "sal/rtl/bootstrap.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-21T07:33:52Z",
+      "side": 1,
+      "message": "The original comment was about bootstrap_map::get/release, which needed a mutex to guard access to the m_map member variable of any given instance of bootstrap_map.  The comment was not about the well-known fact how access to a std::unordered_map must be synchronized across threads.  I think it would be better to remove this comment now.",
+      "revId": "2e3046cc6fdebb52cfb1cdc114a9c2cd26bcc178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
