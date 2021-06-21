@@ -288,8 +288,10 @@ sal_uInt64 SvFileStream::SeekPos(sal_uInt64 const nPos)
 
 void SvFileStream::FlushData()
 {
-    // does not exist locally
-}
+    auto rc = osl_syncFile(pInstanceData->rHandle);
+    if (rc != osl_File_E_None)
+        SetError( ::GetSvError( rc ));
+ }
 
 bool SvFileStream::LockFile()
 {
