@@ -28,50 +28,47 @@ class Tdf117899(UITestCase):
     self.ui_test.close_dialog_through_button(xOKBtn)
 
   def test_tdf117899(self):
-    self.ui_test.load_file(get_url_for_data_file("tdf117899.ods"))
+    with self.ui_test.load_file(get_url_for_data_file("tdf117899.ods")):
 
-    self.execute_conditional_format_manager_dialog()
-
-    self.xUITest.executeCommand(".uno:SelectAll")
-
-    self.xUITest.executeCommand(".uno:Copy")
-
-    # Close the Calc document
-    self.xUITest.executeCommand(".uno:CloseDoc")
-
-    with TemporaryDirectory() as tempdir:
-        xFilePath = os.path.join(tempdir, "tdf117899-temp.ods")
-
-        self.ui_test.create_doc_in_start_center("writer")
-
-        # Paste as an OLE spreadsheet
-        formatProperty = mkPropertyValues({"SelectedFormat": 85})
-        self.xUITest.executeCommandWithParameters(".uno:ClipboardFormatItems", formatProperty)
-
-        # Save Copy as
-        self.ui_test.execute_dialog_through_command(".uno:ObjectMenue?VerbID:short=-8")
-        xDialog = self.xUITest.getTopFocusWindow()
-
-        xFileName = xDialog.getChild("file_name")
-        xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-        xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-        xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": xFilePath}))
-
-        xOpenBtn = xDialog.getChild("open")
-        self.ui_test.close_dialog_through_button(xOpenBtn)
-
-        # Close the Writer document
-        self.ui_test.close_doc()
-
-        self.ui_test.load_file(systemPathToFileUrl(xFilePath))
-
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-
-        # Without the fix in place, this test would have failed here
         self.execute_conditional_format_manager_dialog()
 
+        self.xUITest.executeCommand(".uno:SelectAll")
+
+        self.xUITest.executeCommand(".uno:Copy")
+
         # Close the Calc document
-        self.ui_test.close_doc()
+        self.xUITest.executeCommand(".uno:CloseDoc")
+
+        with TemporaryDirectory() as tempdir:
+            xFilePath = os.path.join(tempdir, "tdf117899-temp.ods")
+
+            self.ui_test.create_doc_in_start_center("writer")
+
+            # Paste as an OLE spreadsheet
+            formatProperty = mkPropertyValues({"SelectedFormat": 85})
+            self.xUITest.executeCommandWithParameters(".uno:ClipboardFormatItems", formatProperty)
+
+            # Save Copy as
+            self.ui_test.execute_dialog_through_command(".uno:ObjectMenue?VerbID:short=-8")
+            xDialog = self.xUITest.getTopFocusWindow()
+
+            xFileName = xDialog.getChild("file_name")
+            xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+            xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+            xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": xFilePath}))
+
+            xOpenBtn = xDialog.getChild("open")
+            self.ui_test.close_dialog_through_button(xOpenBtn)
+
+            # Close the Writer document
+            self.ui_test.close_doc()
+
+            with self.ui_test.load_file(systemPathToFileUrl(xFilePath)):
+
+                xCalcDoc = self.xUITest.getTopFocusWindow()
+                gridwin = xCalcDoc.getChild("grid_window")
+
+                # Without the fix in place, this test would have failed here
+                self.execute_conditional_format_manager_dialog()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

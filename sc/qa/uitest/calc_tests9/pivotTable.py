@@ -15,54 +15,52 @@ class pivotTable(UITestCase):
         # This is basically a test for cf93998eb5abc193d95ae5433bf4dfd11a9d62d8
         # Without the fix in place, this test would have crashed
 
-        self.ui_test.load_file(get_url_for_data_file("basicPivotTable.ods"))
+        with self.ui_test.load_file(get_url_for_data_file("basicPivotTable.ods")):
 
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
 
-        gridwin.executeAction("SELECT", mkPropertyValues({"TABLE": "1"}))
+            gridwin.executeAction("SELECT", mkPropertyValues({"TABLE": "1"}))
 
-        self.xUITest.executeCommand(".uno:GoUp")
+            self.xUITest.executeCommand(".uno:GoUp")
 
 
-        self.ui_test.execute_dialog_through_command(".uno:DataDataPilotRun")
+            self.ui_test.execute_dialog_through_command(".uno:DataDataPilotRun")
 
-        xDialog = self.xUITest.getTopFocusWindow()
+            xDialog = self.xUITest.getTopFocusWindow()
 
-        xFields = xDialog.getChild("listbox-fields")
-        self.assertEqual(2, len(xFields.getChildren()))
-        self.assertEqual("qtX", get_state_as_dict(xFields.getChild('0'))['Text'])
-        self.assertEqual("qtY", get_state_as_dict(xFields.getChild('1'))['Text'])
+            xFields = xDialog.getChild("listbox-fields")
+            self.assertEqual(2, len(xFields.getChildren()))
+            self.assertEqual("qtX", get_state_as_dict(xFields.getChild('0'))['Text'])
+            self.assertEqual("qtY", get_state_as_dict(xFields.getChild('1'))['Text'])
 
-        xColumns = xDialog.getChild("listbox-column")
-        self.assertEqual(1, len(xColumns.getChildren()))
-        self.assertEqual("Data", get_state_as_dict(xColumns.getChild('0'))['Text'])
+            xColumns = xDialog.getChild("listbox-column")
+            self.assertEqual(1, len(xColumns.getChildren()))
+            self.assertEqual("Data", get_state_as_dict(xColumns.getChild('0'))['Text'])
 
-        xPage = xDialog.getChild("listbox-page")
-        self.assertEqual(1, len(xPage.getChildren()))
-        xPageChild = xPage.getChild('0')
-        self.assertEqual("qtX", get_state_as_dict(xPageChild)['Text'])
+            xPage = xDialog.getChild("listbox-page")
+            self.assertEqual(1, len(xPage.getChildren()))
+            xPageChild = xPage.getChild('0')
+            self.assertEqual("qtX", get_state_as_dict(xPageChild)['Text'])
 
-        with self.ui_test.execute_blocking_action(xPageChild.executeAction, args=('DOUBLECLICK', ())) as dialog:
-            optionBtn = dialog.getChild("options")
+            with self.ui_test.execute_blocking_action(xPageChild.executeAction, args=('DOUBLECLICK', ())) as dialog:
+                optionBtn = dialog.getChild("options")
 
-            with self.ui_test.execute_blocking_action(optionBtn.executeAction, args=('CLICK', ())) as dialog2:
-                xEmptyLine = dialog2.getChild("emptyline")
+                with self.ui_test.execute_blocking_action(optionBtn.executeAction, args=('CLICK', ())) as dialog2:
+                    xEmptyLine = dialog2.getChild("emptyline")
 
-                xEmptyLine.executeAction("CLICK", tuple())
-                self.assertEqual('true', get_state_as_dict(xEmptyLine)['Selected'])
+                    xEmptyLine.executeAction("CLICK", tuple())
+                    self.assertEqual('true', get_state_as_dict(xEmptyLine)['Selected'])
 
-            with self.ui_test.execute_blocking_action(optionBtn.executeAction, args=('CLICK', ()), close_button="cancel") as dialog2:
-                xEmptyLine = dialog2.getChild("emptyline")
+                with self.ui_test.execute_blocking_action(optionBtn.executeAction, args=('CLICK', ()), close_button="cancel") as dialog2:
+                    xEmptyLine = dialog2.getChild("emptyline")
 
-                xEmptyLine.executeAction("CLICK", tuple())
-                self.assertEqual('false', get_state_as_dict(xEmptyLine)['Selected'])
+                    xEmptyLine.executeAction("CLICK", tuple())
+                    self.assertEqual('false', get_state_as_dict(xEmptyLine)['Selected'])
 
-            with self.ui_test.execute_blocking_action(optionBtn.executeAction, args=('CLICK', ())) as dialog2:
-                xEmptyLine = dialog2.getChild("emptyline")
+                with self.ui_test.execute_blocking_action(optionBtn.executeAction, args=('CLICK', ())) as dialog2:
+                    xEmptyLine = dialog2.getChild("emptyline")
 
-                self.assertEqual('true', get_state_as_dict(xEmptyLine)['Selected'])
-
-        self.ui_test.close_doc()
+                    self.assertEqual('true', get_state_as_dict(xEmptyLine)['Selected'])
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
