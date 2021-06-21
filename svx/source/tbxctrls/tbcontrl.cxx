@@ -3849,7 +3849,11 @@ ColorListBox::ColorListBox(std::unique_ptr<weld::MenuButton> pControl, weld::Win
 IMPL_LINK(ColorListBox, ToggleHdl, weld::ToggleButton&, rButton, void)
 {
     if (rButton.get_active())
-        getColorWindow()->GrabFocus();
+    {
+        ColorWindow* pColorWindow = getColorWindow();
+        if (pColorWindow && comphelper::LibreOfficeKit::isActive())
+            pColorWindow->GrabFocus();
+    }
 }
 
 ColorListBox::~ColorListBox()
