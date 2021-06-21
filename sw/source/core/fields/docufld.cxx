@@ -2167,9 +2167,9 @@ std::unique_ptr<SwFieldType> SwRefPageGetFieldType::Copy() const
 
 void SwRefPageGetFieldType::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
-    if(!pLegacy)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     auto const ModifyImpl = [this](SwRootFrame const*const pLayout)
     {
         // first collect all SetPageRefFields

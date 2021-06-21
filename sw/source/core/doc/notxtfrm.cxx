@@ -751,9 +751,9 @@ void SwNoTextFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint
         OnGraphicArrived();
         return;
     }
-    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
-    if(!pLegacy)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     sal_uInt16 nWhich = pLegacy->GetWhich();
 
     // #i73788#

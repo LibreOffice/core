@@ -118,9 +118,9 @@ struct SwCallMouseEvent final
 
     virtual void SwClientNotify(const SwModify& rMod, const SfxHint& rHint) override
     {
-        auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
-        if(!pLegacy)
+        if (rHint.GetId() != SfxHintId::SwLegacyModify)
             return;
+        auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
         assert(EVENT_OBJECT_IMAGE == eType || EVENT_OBJECT_URLITEM == eType || EVENT_OBJECT_IMAGEMAP == eType);
         SwClient::SwClientNotify(rMod, rHint);
         bool bClear = !GetRegisteredIn();

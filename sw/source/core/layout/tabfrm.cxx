@@ -3292,9 +3292,9 @@ SwTwips SwTabFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
 
 void SwTabFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
-    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
-    if(!pLegacy)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     SwTabFrameInvFlags eInvFlags = SwTabFrameInvFlags::NONE;
     bool bAttrSetChg = pLegacy->m_pNew && RES_ATTRSET_CHG == pLegacy->m_pNew->Which();
 
@@ -3926,9 +3926,9 @@ void SwRowFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
         ReinitializeFrameSizeAttrFlags();
         return;
     }
-    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
-    if(!pLegacy)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     if(!pLegacy->m_pNew)
     {
         // possibly not needed?
@@ -5440,8 +5440,9 @@ void SwCellFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         CheckDirChange();
         return;
     }
-    else if(auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
+    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
+        auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
         const SfxPoolItem* pVertOrientItem = nullptr;
         const SfxPoolItem* pProtectItem = nullptr;
         const SfxPoolItem* pFrameDirItem = nullptr;

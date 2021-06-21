@@ -509,8 +509,9 @@ void SwPageFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
         // here, the page might be destroyed:
         static_cast<SwRootFrame*>(GetUpper())->RemoveFootnotes(nullptr, false, true);
     }
-    else if(auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
+    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
+        auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
         if(auto pSh = getRootFrame()->GetCurrShell())
             pSh->SetFirstVisPageInvalid();
 

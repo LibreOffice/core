@@ -475,9 +475,9 @@ void SwTextFrame::CheckDirection( bool bVert )
 
 void SwFrame::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
-    if(!pLegacy)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     SwFrameInvFlags eInvFlags = SwFrameInvFlags::NONE;
 
     if(pLegacy->m_pOld && pLegacy->m_pNew && RES_ATTRSET_CHG == pLegacy->m_pNew->Which())
@@ -2332,9 +2332,9 @@ SwTwips SwContentFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
 
 void SwContentFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
-    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
-    if(!pLegacy)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     SwContentFrameInvFlags eInvFlags = SwContentFrameInvFlags::NONE;
     if(pLegacy->m_pNew && RES_ATTRSET_CHG == pLegacy->m_pNew->Which() && pLegacy->m_pOld)
     {

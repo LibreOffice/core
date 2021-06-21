@@ -154,8 +154,9 @@ SwTOXMark* SwTOXMark::Clone( SfxItemPool* ) const
 
 void SwTOXMark::Notify(const SfxHint& rHint)
 {
-    if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
+    if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
+        auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
         CallSwClientNotify(rHint);
         if (pLegacyHint->m_pOld && (RES_REMOVE_UNO_OBJECT == pLegacyHint->m_pOld->Which()))
             SetXTOXMark(css::uno::Reference<css::text::XDocumentIndexMark>(nullptr));

@@ -226,9 +226,9 @@ SwFormat::~SwFormat()
 
 void SwFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
-    if(!pLegacy)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
 
     std::unique_ptr<SwAttrSetChg> pOldClientChg, pNewClientChg;
     auto pDependsHint = std::make_unique<sw::LegacyModifyHint>(pLegacy->m_pOld, pLegacy->m_pNew);

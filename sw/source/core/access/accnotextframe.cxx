@@ -87,8 +87,9 @@ void SwAccessibleNoTextFrame::Notify(const SfxHint& rHint)
 {
     if(rHint.GetId() == SfxHintId::Dying)
         EndListeningAll();
-    else if(auto pLegacyModifyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
+    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
+        auto pLegacyModifyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
         const sal_uInt16 nWhich = pLegacyModifyHint->GetWhich();
         if (nWhich != RES_TITLE_CHANGED && nWhich != RES_DESCRIPTION_CHANGED)
             return;
