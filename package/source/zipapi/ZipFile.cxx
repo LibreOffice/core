@@ -805,9 +805,9 @@ void ZipFile::readLOC( ZipEntry &rEntry )
         if (nRead < aNameBuffer.getLength())
             aNameBuffer.realloc(nRead);
 
-        OUString sLOCPath = OUString::intern( reinterpret_cast<char *>(aNameBuffer.getArray()),
-                                                          aNameBuffer.getLength(),
-                                                          RTL_TEXTENCODING_UTF8 );
+        OUString sLOCPath( reinterpret_cast<char *>(aNameBuffer.getArray()),
+                           aNameBuffer.getLength(),
+                           RTL_TEXTENCODING_UTF8 );
 
         if ( rEntry.nPathLen == -1 ) // the file was created
         {
@@ -968,9 +968,9 @@ sal_Int32 ZipFile::readCEN()
                 throw ZipException("name too long");
 
             // read always in UTF8, some tools seem not to set UTF8 bit
-            aEntry.sPath = OUString::intern ( reinterpret_cast<char const *>(aMemGrabber.getCurrentPos()),
-                                                   aEntry.nPathLen,
-                                                   RTL_TEXTENCODING_UTF8 );
+            aEntry.sPath = OUString( reinterpret_cast<char const *>(aMemGrabber.getCurrentPos()),
+                                     aEntry.nPathLen,
+                                     RTL_TEXTENCODING_UTF8 );
 
             if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( aEntry.sPath, true ) )
                 throw ZipException("Zip entry has an invalid name." );
