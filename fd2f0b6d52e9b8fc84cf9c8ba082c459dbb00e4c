@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f379c61_d0333a2e",
+        "filename": "sw/qa/extras/ww8export/ww8export.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1312,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-06-21T08:13:52Z",
+      "side": 1,
+      "message": "hello,\nyou should add asserts between the dispatchCommands to check they are doing what you expect.\nFor instance, once you select all and cut, the number of pages should be 1 and should be no text in the document...",
+      "revId": "fd2f0b6d52e9b8fc84cf9c8ba082c459dbb00e4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
