@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "709467f0_af3275ca",
+        "filename": "sdext/Executable_xpdfimport.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2021-06-21T12:58:54Z",
+      "side": 1,
+      "message": "I have removed this commented-out code.",
+      "revId": "2979e6b4ab1f4a8564e8ecccd27d55a50de1b1fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
