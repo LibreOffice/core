@@ -15,31 +15,29 @@ import datetime
 class CalcTrackedChanges(UITestCase):
 
     def test_tdf131907(self):
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf131907.ods"))
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptChanges")
-        xTrackDlg = self.xUITest.getTopFocusWindow()
+        with self.ui_test.load_file(get_url_for_data_file("tdf131907.ods")) as calc_doc:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptChanges")
+            xTrackDlg = self.xUITest.getTopFocusWindow()
 
-        xChangesList = xTrackDlg.getChild("calcchanges")
-        self.assertEqual(1, len(xChangesList.getChildren()))
+            xChangesList = xTrackDlg.getChild("calcchanges")
+            self.assertEqual(1, len(xChangesList.getChildren()))
 
-        textStart = "Row inserted \tSheet1.1:1\t \t"
-        textEnd = "(Row 1:1 inserted)"
-        self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].startswith(textStart))
-        self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].endswith(textEnd))
+            textStart = "Row inserted \tSheet1.1:1\t \t"
+            textEnd = "(Row 1:1 inserted)"
+            self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].startswith(textStart))
+            self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].endswith(textEnd))
 
-        #it would crash here
-        xRejBtn = xTrackDlg.getChild("reject")
-        xRejBtn.executeAction("CLICK", tuple())
+            #it would crash here
+            xRejBtn = xTrackDlg.getChild("reject")
+            xRejBtn.executeAction("CLICK", tuple())
 
-        self.assertEqual(2, len(xChangesList.getChildren()))
-        self.assertEqual(get_state_as_dict(xChangesList.getChild('0'))["Text"], "Accepted")
-        self.assertEqual(get_state_as_dict(xChangesList.getChild('1'))["Text"], "Rejected")
+            self.assertEqual(2, len(xChangesList.getChildren()))
+            self.assertEqual(get_state_as_dict(xChangesList.getChild('0'))["Text"], "Accepted")
+            self.assertEqual(get_state_as_dict(xChangesList.getChild('1'))["Text"], "Rejected")
 
-        xCancBtn = xTrackDlg.getChild("close")
-        xCancBtn.executeAction("CLICK", tuple())
-
-        self.ui_test.close_doc()
+            xCancBtn = xTrackDlg.getChild("close")
+            xCancBtn.executeAction("CLICK", tuple())
 
     def test_tdf66263_Protect_Records(self):
         calc_doc = self.ui_test.create_doc_in_start_center("calc")
@@ -296,31 +294,29 @@ class CalcTrackedChanges(UITestCase):
 
     def test_tdf136062(self):
 
-        self.ui_test.load_file(get_url_for_data_file("tdf136062.ods"))
+        with self.ui_test.load_file(get_url_for_data_file("tdf136062.ods")):
 
-        self.xUITest.getTopFocusWindow()
+            self.xUITest.getTopFocusWindow()
 
-        self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptChanges")
-        xTrackDlg = self.xUITest.getTopFocusWindow()
+            self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptChanges")
+            xTrackDlg = self.xUITest.getTopFocusWindow()
 
-        xChangesList = xTrackDlg.getChild("calcchanges")
-        self.assertEqual(1, len(xChangesList.getChildren()))
+            xChangesList = xTrackDlg.getChild("calcchanges")
+            self.assertEqual(1, len(xChangesList.getChildren()))
 
-        xRejectAllBtn = xTrackDlg.getChild("rejectall")
-        xRejectBtn = xTrackDlg.getChild("reject")
-        xAcceptAllBtn = xTrackDlg.getChild("acceptall")
-        xAcceptBtn = xTrackDlg.getChild("accept")
+            xRejectAllBtn = xTrackDlg.getChild("rejectall")
+            xRejectBtn = xTrackDlg.getChild("reject")
+            xAcceptAllBtn = xTrackDlg.getChild("acceptall")
+            xAcceptBtn = xTrackDlg.getChild("accept")
 
-        # Without the fix in place, it would have failed with
-        # AssertionError: 'R~eject All' != 'R~eject All/Clear formatting'
-        self.assertEqual('R~eject All', get_state_as_dict(xRejectAllBtn)['Text'])
-        self.assertEqual('~Reject', get_state_as_dict(xRejectBtn)['Text'])
-        self.assertEqual('A~ccept All', get_state_as_dict(xAcceptAllBtn)['Text'])
-        self.assertEqual('~Accept', get_state_as_dict(xAcceptBtn)['Text'])
+            # Without the fix in place, it would have failed with
+            # AssertionError: 'R~eject All' != 'R~eject All/Clear formatting'
+            self.assertEqual('R~eject All', get_state_as_dict(xRejectAllBtn)['Text'])
+            self.assertEqual('~Reject', get_state_as_dict(xRejectBtn)['Text'])
+            self.assertEqual('A~ccept All', get_state_as_dict(xAcceptAllBtn)['Text'])
+            self.assertEqual('~Accept', get_state_as_dict(xAcceptBtn)['Text'])
 
-        xCancBtn = xTrackDlg.getChild("close")
-        xCancBtn.executeAction("CLICK", tuple())
-
-        self.ui_test.close_doc()
+            xCancBtn = xTrackDlg.getChild("close")
+            xCancBtn.executeAction("CLICK", tuple())
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

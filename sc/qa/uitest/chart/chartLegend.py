@@ -17,7 +17,7 @@ from uitest.uihelper import guarded
 
 class chartLegend(UITestCase):
    def test_chart_display_legend_dialog(self):
-    with guarded.load_file(self, get_url_for_data_file("tdf98390.ods")) as calc_doc:
+    with self.ui_test.load_file(get_url_for_data_file("tdf98390.ods")) as calc_doc:
       xCalcDoc = self.xUITest.getTopFocusWindow()
       gridwin = xCalcDoc.getChild("grid_window")
       document = self.ui_test.get_component()
@@ -77,7 +77,7 @@ class chartLegend(UITestCase):
 
    def test_legends_move_with_arrows_keys(self):
 
-    with guarded.load_file(self, get_url_for_data_file("dataLabels.ods")) as calc_doc:
+    with self.ui_test.load_file(get_url_for_data_file("dataLabels.ods")) as calc_doc:
       xCalcDoc = self.xUITest.getTopFocusWindow()
       gridwin = xCalcDoc.getChild("grid_window")
 

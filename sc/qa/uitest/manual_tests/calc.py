@@ -168,22 +168,20 @@ class ManualCalcTests(UITestCase):
 
     # http://manual-test.libreoffice.org/manage/case/151/
     def test_cell_recalc(self):
-        doc = self.ui_test.load_file(get_url_for_data_file("cell_recalc.ods"))
+        with self.ui_test.load_file(get_url_for_data_file("cell_recalc.ods")) as doc:
 
-        xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
-        xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "D2:D9"}))
-        self.xUITest.executeCommand(".uno:Cut")
+            xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
+            xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "D2:D9"}))
+            self.xUITest.executeCommand(".uno:Cut")
 
-        self.assertEqual(get_cell_by_position(doc, 0, 3, 15).getValue(), 0)
+            self.assertEqual(get_cell_by_position(doc, 0, 3, 15).getValue(), 0)
 
-        self.xUITest.executeCommand(".uno:Undo")
+            self.xUITest.executeCommand(".uno:Undo")
 
-        for i in range(1, 9):
-            self.assertTrue(get_cell_by_position(doc, 0, 3, i).getValue() != 0)
+            for i in range(1, 9):
+                self.assertTrue(get_cell_by_position(doc, 0, 3, i).getValue() != 0)
 
-        self.assertEqual(get_cell_by_position(doc, 0, 3, 15).getValue(), 195)
-
-        self.ui_test.close_doc()
+            self.assertEqual(get_cell_by_position(doc, 0, 3, 15).getValue(), 195)
 
     # http://manual-test.libreoffice.org/manage/case/143/
     def test_random_numbers(self):

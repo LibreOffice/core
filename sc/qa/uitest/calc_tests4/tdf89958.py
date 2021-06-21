@@ -13,50 +13,48 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf89958(UITestCase):
     def test_td89958_standard_filter(self):
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf89958.ods"))
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
-        #select A1-> Column .uno:SelectColumn
-        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
-        self.xUITest.executeCommand(".uno:SelectColumn")
+        with self.ui_test.load_file(get_url_for_data_file("tdf89958.ods")) as calc_doc:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            document = self.ui_test.get_component()
+            #select A1-> Column .uno:SelectColumn
+            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
+            self.xUITest.executeCommand(".uno:SelectColumn")
 
-        #Menu: Data->Filter->Standard Filter ...
-        #Field Name "Column A", Condition "Does not end with", Value: "CTORS"
-        self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xfield1 = xDialog.getChild("field1")
-        xval1 = xDialog.getChild("val1")
-        xcond1 = xDialog.getChild("cond1")
+            #Menu: Data->Filter->Standard Filter ...
+            #Field Name "Column A", Condition "Does not end with", Value: "CTORS"
+            self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
+            xDialog = self.xUITest.getTopFocusWindow()
+            xfield1 = xDialog.getChild("field1")
+            xval1 = xDialog.getChild("val1")
+            xcond1 = xDialog.getChild("cond1")
 
-        select_by_text(xfield1, "Column A")
-        select_by_text(xcond1, "Does not end with")
-        xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"CTORS"}))
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+            select_by_text(xfield1, "Column A")
+            select_by_text(xcond1, "Does not end with")
+            xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"CTORS"}))
+            xOKBtn = xDialog.getChild("ok")
+            self.ui_test.close_dialog_through_button(xOKBtn)
 
-        #Expected behaviours: A2 is not filtered as it does not end with "CTORS".
-        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
-        gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))
-        gridWinState = get_state_as_dict(gridwin)
-        self.assertEqual(gridWinState["CurrentRow"], "1")
-        gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))
-        gridWinState = get_state_as_dict(gridwin)
-        self.assertEqual(gridWinState["CurrentRow"], "3")
-#        #reopen filter and verify - doesn't works
-#        gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
-#        gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
-#        self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
-#        xDialog = self.xUITest.getTopFocusWindow()
-#        xfield1 = xDialog.getChild("field1")
-#        xval1 = xDialog.getChild("val1")
-#        xcond1 = xDialog.getChild("cond1")
-#        self.assertEqual(get_state_as_dict(xfield1)["SelectEntryText"], "Column A")
-#        self.assertEqual(get_state_as_dict(xval1)["Text"], "CTORS")
-#        self.assertEqual(get_state_as_dict(xcond1)["SelectEntryText"], "Does not end with")
-#        xCancelBtn = xDialog.getChild("cancel")
-#        self.ui_test.close_dialog_through_button(xCancelBtn)
-
-        self.ui_test.close_doc()
+            #Expected behaviours: A2 is not filtered as it does not end with "CTORS".
+            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
+            gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))
+            gridWinState = get_state_as_dict(gridwin)
+            self.assertEqual(gridWinState["CurrentRow"], "1")
+            gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))
+            gridWinState = get_state_as_dict(gridwin)
+            self.assertEqual(gridWinState["CurrentRow"], "3")
+    #        #reopen filter and verify - doesn't works
+    #        gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
+    #        gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
+    #        self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
+    #        xDialog = self.xUITest.getTopFocusWindow()
+    #        xfield1 = xDialog.getChild("field1")
+    #        xval1 = xDialog.getChild("val1")
+    #        xcond1 = xDialog.getChild("cond1")
+    #        self.assertEqual(get_state_as_dict(xfield1)["SelectEntryText"], "Column A")
+    #        self.assertEqual(get_state_as_dict(xval1)["Text"], "CTORS")
+    #        self.assertEqual(get_state_as_dict(xcond1)["SelectEntryText"], "Does not end with")
+    #        xCancelBtn = xDialog.getChild("cancel")
+    #        self.ui_test.close_dialog_through_button(xCancelBtn)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

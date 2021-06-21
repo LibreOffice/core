@@ -29,20 +29,18 @@ class Tdf104026(UITestCase):
     self.ui_test.close_dialog_through_button(xOKBtn)
 
   def test_tdf104026(self):
-    self.ui_test.load_file(get_url_for_data_file("tdf104026.ods"))
+    with self.ui_test.load_file(get_url_for_data_file("tdf104026.ods")):
 
-    self.execute_conditional_format_manager_dialog(6)
+        self.execute_conditional_format_manager_dialog(6)
 
-    xCalcDoc = self.xUITest.getTopFocusWindow()
-    gridwin = xCalcDoc.getChild("grid_window")
-    gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A2"}))
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        gridwin = xCalcDoc.getChild("grid_window")
+        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A2"}))
 
-    self.xUITest.executeCommand(".uno:DeleteRows")
+        self.xUITest.executeCommand(".uno:DeleteRows")
 
-    # Without the fix in place, this test would have failed with
-    # AssertionError: 'A2\tCell value != $Sheet1.$B2' != 'A2\tCell value != $Sheet1.$B#REF!'
-    self.execute_conditional_format_manager_dialog(5)
-
-    self.ui_test.close_doc()
+        # Without the fix in place, this test would have failed with
+        # AssertionError: 'A2\tCell value != $Sheet1.$B2' != 'A2\tCell value != $Sheet1.$B#REF!'
+        self.execute_conditional_format_manager_dialog(5)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
