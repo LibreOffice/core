@@ -439,6 +439,19 @@ OUString convertPixelFormatToString(vcl::PixelFormat ePixelFormat)
     return OUString();
 }
 
+OUString convertComplexTestLayoutFlags(ComplexTextLayoutFlags eComplexTestLayoutFlags)
+{
+    switch(eComplexTestLayoutFlags)
+    {
+        default:
+        case ComplexTextLayoutFlags::Default: return "#0000";
+        case ComplexTextLayoutFlags::BiDiRtl: return "#0001";
+        case ComplexTextLayoutFlags::BiDiStrong: return "#0002";
+        case ComplexTextLayoutFlags::TextOriginLeft: return "#0004";
+        case ComplexTextLayoutFlags::TextOriginRight: return "#0008";
+    }
+}
+
 OUString hex32(sal_uInt32 nNumber)
 {
     std::stringstream ss;
@@ -1351,7 +1364,18 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
             }
             break;
 
-            //case MetaActionType::LAYOUTMODE:
+            case MetaActionType::LAYOUTMODE:
+            {
+                const MetaLayoutModeAction* pMetaLayoutModeAction = static_cast<MetaLayoutModeAction*>(pAction);
+
+                rWriter.startElement(sCurrentElementTag);
+
+                rWriter.attribute("textlayout", convertComplexTestLayoutFlags(pMetaLayoutModeAction->GetLayoutMode()));
+
+                rWriter.endElement();
+            }
+            break;
+
             case MetaActionType::TEXTLANGUAGE:
             {
                 const MetaTextLanguageAction* pMetaTextLanguageAction = static_cast<MetaTextLanguageAction*>(pAction);
