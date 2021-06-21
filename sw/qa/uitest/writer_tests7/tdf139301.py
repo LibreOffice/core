@@ -12,58 +12,54 @@ class tdf139301(UITestCase):
     styles = ('Long Dash', 'Long Dash Dot', 'Long Dot', 'Double Dash', 'Double Dash Dot', 'Double Dash Dot Dot', 'Dash', 'Dash Dot', 'Dash Dot Dot', 'Dot')
 
     def test_tdf139301(self):
-        writer_doc = self.ui_test.load_file(get_url_for_data_file("tdf127166_prstDash_Word97.docx"))
+        with self.ui_test.load_file(get_url_for_data_file("tdf127166_prstDash_Word97.docx")) as writer_doc:
 
-        for i in range(len(self.styles)):
-            # select next line shape
-            writer_doc.getCurrentController().select(writer_doc.getDrawPage()[i])
+            for i in range(len(self.styles)):
+                # select next line shape
+                writer_doc.getCurrentController().select(writer_doc.getDrawPage()[i])
 
-            # wait for available line style setting
-            self.ui_test.wait_until_child_is_available('metricfield')
+                # wait for available line style setting
+                self.ui_test.wait_until_child_is_available('metricfield')
 
-            # line setting dialog window
-            self.ui_test.execute_dialog_through_command(".uno:FormatLine")
-            xFormatLineDlg = self.xUITest.getTopFocusWindow()
-            # get line style combo box
-            xLineStyle = xFormatLineDlg.getChild("LB_LINE_STYLE")
+                # line setting dialog window
+                self.ui_test.execute_dialog_through_command(".uno:FormatLine")
+                xFormatLineDlg = self.xUITest.getTopFocusWindow()
+                # get line style combo box
+                xLineStyle = xFormatLineDlg.getChild("LB_LINE_STYLE")
 
-            # check preset line style
-            style = get_state_as_dict(xLineStyle)['SelectEntryText']
+                # check preset line style
+                style = get_state_as_dict(xLineStyle)['SelectEntryText']
 
-            xOKBtn = xFormatLineDlg.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+                xOKBtn = xFormatLineDlg.getChild("ok")
+                self.ui_test.close_dialog_through_button(xOKBtn)
 
-            self.assertEqual(style, self.styles[i])
-
-        self.ui_test.close_doc()
+                self.assertEqual(style, self.styles[i])
 
     def test_round_cap(self):
-        writer_doc = self.ui_test.load_file(get_url_for_data_file("tdf127166_prstDash_round_cap.docx"))
+        with self.ui_test.load_file(get_url_for_data_file("tdf127166_prstDash_round_cap.docx")) as writer_doc:
 
-        style_name_extension = ' (Rounded)'
+            style_name_extension = ' (Rounded)'
 
-        for i in range(len(self.styles)):
-            # select next line shape
-            writer_doc.getCurrentController().select(writer_doc.getDrawPage()[i])
+            for i in range(len(self.styles)):
+                # select next line shape
+                writer_doc.getCurrentController().select(writer_doc.getDrawPage()[i])
 
-            # wait for available line style setting
-            self.ui_test.wait_until_child_is_available('metricfield')
+                # wait for available line style setting
+                self.ui_test.wait_until_child_is_available('metricfield')
 
-            # line setting dialog window
-            self.ui_test.execute_dialog_through_command(".uno:FormatLine")
-            xFormatLineDlg = self.xUITest.getTopFocusWindow()
-            # get line style combo box
-            xLineStyle = xFormatLineDlg.getChild("LB_LINE_STYLE")
+                # line setting dialog window
+                self.ui_test.execute_dialog_through_command(".uno:FormatLine")
+                xFormatLineDlg = self.xUITest.getTopFocusWindow()
+                # get line style combo box
+                xLineStyle = xFormatLineDlg.getChild("LB_LINE_STYLE")
 
-            # check preset line style
-            style = get_state_as_dict(xLineStyle)['SelectEntryText']
+                # check preset line style
+                style = get_state_as_dict(xLineStyle)['SelectEntryText']
 
-            xOKBtn = xFormatLineDlg.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+                xOKBtn = xFormatLineDlg.getChild("ok")
+                self.ui_test.close_dialog_through_button(xOKBtn)
 
-            self.assertEqual(style, self.styles[i] + style_name_extension)
-
-        self.ui_test.close_doc()
+                self.assertEqual(style, self.styles[i] + style_name_extension)
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

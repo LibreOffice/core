@@ -9,42 +9,40 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 
 class tdf131170(UITestCase):
     def test_DefineLabelRange(self):
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf131170.ods"))
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
+        with self.ui_test.load_file(get_url_for_data_file("tdf131170.ods")) as calc_doc:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
 
-        self.ui_test.execute_dialog_through_command(".uno:DefineLabelRange")
-        xDialog = self.xUITest.getTopFocusWindow()
+            self.ui_test.execute_dialog_through_command(".uno:DefineLabelRange")
+            xDialog = self.xUITest.getTopFocusWindow()
 
-        xRange = xDialog.getChild("range")
-        self.assertEqual(4, len(xRange.getChildren()))
-        self.assertEqual(get_state_as_dict(xRange.getChild('0'))["Text"].strip(), "--- Column ---")
-        self.assertEqual(get_state_as_dict(xRange.getChild('1'))["Text"].strip(), "$Sheet1.$I$6:$K$6 [AA, BB, CC]")
-        self.assertEqual(get_state_as_dict(xRange.getChild('2'))["Text"].strip(), "--- Row ---")
-        self.assertEqual(get_state_as_dict(xRange.getChild('3'))["Text"].strip(), "$Sheet1.$H$7:$H$9 [X, Y, Z]")
+            xRange = xDialog.getChild("range")
+            self.assertEqual(4, len(xRange.getChildren()))
+            self.assertEqual(get_state_as_dict(xRange.getChild('0'))["Text"].strip(), "--- Column ---")
+            self.assertEqual(get_state_as_dict(xRange.getChild('1'))["Text"].strip(), "$Sheet1.$I$6:$K$6 [AA, BB, CC]")
+            self.assertEqual(get_state_as_dict(xRange.getChild('2'))["Text"].strip(), "--- Row ---")
+            self.assertEqual(get_state_as_dict(xRange.getChild('3'))["Text"].strip(), "$Sheet1.$H$7:$H$9 [X, Y, Z]")
 
-        xDeleteBtn = xDialog.getChild("delete")
+            xDeleteBtn = xDialog.getChild("delete")
 
-        xRange.getChild('1').executeAction("SELECT", tuple())
-        with self.ui_test.execute_blocking_action(xDeleteBtn.executeAction, args=('CLICK', ()), close_button="yes"):
-            pass
+            xRange.getChild('1').executeAction("SELECT", tuple())
+            with self.ui_test.execute_blocking_action(xDeleteBtn.executeAction, args=('CLICK', ()), close_button="yes"):
+                pass
 
-        self.assertEqual(3, len(xRange.getChildren()))
-        self.assertEqual(get_state_as_dict(xRange.getChild('0'))["Text"].strip(), "--- Column ---")
-        self.assertEqual(get_state_as_dict(xRange.getChild('1'))["Text"].strip(), "--- Row ---")
-        self.assertEqual(get_state_as_dict(xRange.getChild('2'))["Text"].strip(), "$Sheet1.$H$7:$H$9 [X, Y, Z]")
+            self.assertEqual(3, len(xRange.getChildren()))
+            self.assertEqual(get_state_as_dict(xRange.getChild('0'))["Text"].strip(), "--- Column ---")
+            self.assertEqual(get_state_as_dict(xRange.getChild('1'))["Text"].strip(), "--- Row ---")
+            self.assertEqual(get_state_as_dict(xRange.getChild('2'))["Text"].strip(), "$Sheet1.$H$7:$H$9 [X, Y, Z]")
 
-        xRange.getChild('2').executeAction("SELECT", tuple())
-        with self.ui_test.execute_blocking_action(xDeleteBtn.executeAction, args=('CLICK', ()), close_button="yes"):
-            pass
+            xRange.getChild('2').executeAction("SELECT", tuple())
+            with self.ui_test.execute_blocking_action(xDeleteBtn.executeAction, args=('CLICK', ()), close_button="yes"):
+                pass
 
-        self.assertEqual(2, len(xRange.getChildren()))
-        self.assertEqual(get_state_as_dict(xRange.getChild('0'))["Text"].strip(), "--- Column ---")
-        self.assertEqual(get_state_as_dict(xRange.getChild('1'))["Text"].strip(), "--- Row ---")
+            self.assertEqual(2, len(xRange.getChildren()))
+            self.assertEqual(get_state_as_dict(xRange.getChild('0'))["Text"].strip(), "--- Column ---")
+            self.assertEqual(get_state_as_dict(xRange.getChild('1'))["Text"].strip(), "--- Row ---")
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
-
-        self.ui_test.close_doc()
+            xOKBtn = xDialog.getChild("ok")
+            self.ui_test.close_dialog_through_button(xOKBtn)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -11,27 +11,25 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 class tdf135693(UITestCase):
 
     def test_tdf135693(self):
-        writer_doc = self.ui_test.load_file(get_url_for_data_file("tdf135693.odt"))
+        with self.ui_test.load_file(get_url_for_data_file("tdf135693.odt")) as writer_doc:
 
-        self.xUITest.getTopFocusWindow()
+            self.xUITest.getTopFocusWindow()
 
-        self.xUITest.executeCommand(".uno:GoRight")
-        self.xUITest.executeCommand(".uno:GoDown")
+            self.xUITest.executeCommand(".uno:GoRight")
+            self.xUITest.executeCommand(".uno:GoDown")
 
-        # Without the fix in place, this would have crashed here
-        self.ui_test.execute_dialog_through_command(".uno:TableDialog")
+            # Without the fix in place, this would have crashed here
+            self.ui_test.execute_dialog_through_command(".uno:TableDialog")
 
-        xTableDlg = self.xUITest.getTopFocusWindow()
+            xTableDlg = self.xUITest.getTopFocusWindow()
 
-        xTabs = xTableDlg.getChild("tabcontrol")
-        select_pos(xTabs, "0")
+            xTabs = xTableDlg.getChild("tabcontrol")
+            select_pos(xTabs, "0")
 
-        # Check we are in the right table
-        self.assertEqual("Table1", get_state_as_dict(xTabs.getChild('name'))['Text'])
+            # Check we are in the right table
+            self.assertEqual("Table1", get_state_as_dict(xTabs.getChild('name'))['Text'])
 
-        xok = xTableDlg.getChild("ok")
-        self.ui_test.close_dialog_through_button(xok)
-
-        self.ui_test.close_doc()
+            xok = xTableDlg.getChild("ok")
+            self.ui_test.close_dialog_through_button(xok)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

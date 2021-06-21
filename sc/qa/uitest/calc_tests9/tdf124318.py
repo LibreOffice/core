@@ -12,24 +12,22 @@ class tdf124318(UITestCase):
 
     def test_tdf124318(self):
 
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf124318.xls"))
+        with self.ui_test.load_file(get_url_for_data_file("tdf124318.xls")) as calc_doc:
 
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
 
-        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B4"}))
+            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B4"}))
 
-        self.ui_test.execute_dialog_through_action(gridwin, "TYPE", mkPropertyValues({"KEYCODE": "CTRL+k"}))
-        xDialog = self.xUITest.getTopFocusWindow()
+            self.ui_test.execute_dialog_through_action(gridwin, "TYPE", mkPropertyValues({"KEYCODE": "CTRL+k"}))
+            xDialog = self.xUITest.getTopFocusWindow()
 
-        # Without the fix in place, this test would have failed with
-        # AssertionError: 'mobile/identification/authentification' !=
-        # 'mobile/identification/authentification%00塹\uf481ᴻ䡿ⲯ嶂藄挧%00%00ꮥ%00'
-        self.assertEqual("mobile/identification/authentification",
-                get_state_as_dict(xDialog.getChild("target"))['Text'].split(".fr/")[1])
-        self.assertEqual("mobile/identification/authentification",
-                get_state_as_dict(xDialog.getChild("indication"))['Text'].split(".fr/")[1])
-
-        self.ui_test.close_doc()
+            # Without the fix in place, this test would have failed with
+            # AssertionError: 'mobile/identification/authentification' !=
+            # 'mobile/identification/authentification%00塹\uf481ᴻ䡿ⲯ嶂藄挧%00%00ꮥ%00'
+            self.assertEqual("mobile/identification/authentification",
+                    get_state_as_dict(xDialog.getChild("target"))['Text'].split(".fr/")[1])
+            self.assertEqual("mobile/identification/authentification",
+                    get_state_as_dict(xDialog.getChild("indication"))['Text'].split(".fr/")[1])
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
