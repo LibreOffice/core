@@ -333,7 +333,7 @@
 #define RID_SVXSTR_BOLD_UNDER                       NC_("RID_SVXSTR_BOLD_UNDER", "Automatic *bold*, /italic/, -strikeout- and _underline_")
 #define RID_SVXSTR_NO_DBL_SPACES                    NC_("RID_SVXSTR_NO_DBL_SPACES", "Ignore double spaces")
 #define RID_SVXSTR_DETECT_URL                       NC_("RID_SVXSTR_DETECT_URL", "URL Recognition")
-#define RID_SVXSTR_DASH                             NC_("RID_SVXSTR_DASH", "Replace dashes")
+#define RID_SVXSTR_DASH                             NC_("RID_SVXSTR_DASH", "Replace two dashes -- with unspaced em dash —")
 #define RID_SVXSTR_CORRECT_ACCIDENTAL_CAPS_LOCK     NC_("RID_SVXSTR_CORRECT_ACCIDENTAL_CAPS_LOCK", "Correct accidental use of cAPS LOCK key")
 #define RID_SVXSTR_NON_BREAK_SPACE                  NC_("RID_SVXSTR_NON_BREAK_SPACE", "Add non-breaking space before specific punctuation marks in French text")
 #define RID_SVXSTR_ORDINAL                          NC_("RID_SVXSTR_ORDINAL", "Format ordinal numbers suffixes (1st -> 1^st)")

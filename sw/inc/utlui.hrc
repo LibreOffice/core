@@ -35,7 +35,7 @@ const char* RID_SHELLRES_AUTOFMTSTRS[] =
     NC_("RID_SHELLRES_AUTOFMTSTRS", "Automatic *bold*"),
     NC_("RID_SHELLRES_AUTOFMTSTRS", "Replace 1/2 ... with ½ ..."),
     NC_("RID_SHELLRES_AUTOFMTSTRS", "URL recognition"),
-    NC_("RID_SHELLRES_AUTOFMTSTRS", "Replace dashes"),
+    NC_("RID_SHELLRES_AUTOFMTSTRS", "Replace two dashes -- with unspaced em dash —"),
     NC_("RID_SHELLRES_AUTOFMTSTRS", "Replace 1st... with 1^st..."),
     NC_("RID_SHELLRES_AUTOFMTSTRS", "Combine single line paragraphs"),
     NC_("RID_SHELLRES_AUTOFMTSTRS", "Set \"Text body\" Style"),

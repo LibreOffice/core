@@ -827,8 +827,6 @@
   <block-list:block block-list:abbreviated-name=":!:" block-list:name="❕"/>
   <block-list:block block-list:abbreviated-name=":!?:" block-list:name="⁉"/>
   <block-list:block block-list:abbreviated-name=":':" block-list:name="’"/>
-  <block-list:block block-list:abbreviated-name=":---:" block-list:name="—"/>
-  <block-list:block block-list:abbreviated-name=":--:" block-list:name="–"/>
   <block-list:block block-list:abbreviated-name=":-:" block-list:name="−"/>
   <block-list:block block-list:abbreviated-name=":.:" block-list:name="…"/>
   <block-list:block block-list:abbreviated-name=":/:" block-list:name="∕"/>
