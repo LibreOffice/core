@@ -11,15 +11,14 @@ from uitest.uihelper.common import get_url_for_data_file
 
 class tdf120731(UITestCase):
    def test_tdf120731_crash_open_char_dialog(self):
-        writer_doc = self.ui_test.load_file(get_url_for_data_file("tdf120731.odt"))
-        document = self.ui_test.get_component()
-        xWriterDoc = self.xUITest.getTopFocusWindow()
+        with self.ui_test.load_file(get_url_for_data_file("tdf120731.odt")) as writer_doc:
+            document = self.ui_test.get_component()
+            xWriterDoc = self.xUITest.getTopFocusWindow()
 
-        self.xUITest.executeCommand(".uno:SelectAll")
-        self.ui_test.execute_dialog_through_command(".uno:FontDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xOK = xDialog.getChild("ok")
-        xOK.executeAction("CLICK", tuple())
-        self.assertEqual(document.Text.String[0:5], "Lorem")
-        self.ui_test.close_doc()
+            self.xUITest.executeCommand(".uno:SelectAll")
+            self.ui_test.execute_dialog_through_command(".uno:FontDialog")
+            xDialog = self.xUITest.getTopFocusWindow()
+            xOK = xDialog.getChild("ok")
+            xOK.executeAction("CLICK", tuple())
+            self.assertEqual(document.Text.String[0:5], "Lorem")
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

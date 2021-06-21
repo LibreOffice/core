@@ -13,13 +13,12 @@ from uitest.uihelper.calc import enter_text_to_cell
 
 class sheetToTable(UITestCase):
     def test_sheet_to_table_without_hidden_rows(self):
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("hiddenRow.ods"))
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        self.xUITest.executeCommand(".uno:SelectAll")
-        self.xUITest.executeCommand(".uno:Copy")
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
-        self.ui_test.close_doc()
+        with self.ui_test.load_file(get_url_for_data_file("hiddenRow.ods")) as calc_doc:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            self.xUITest.executeCommand(".uno:SelectAll")
+            self.xUITest.executeCommand(".uno:Copy")
+            gridwin = xCalcDoc.getChild("grid_window")
+            document = self.ui_test.get_component()
         writer_doc = self.ui_test.load_file(get_url_for_data_file("tableToText.odt"))
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
@@ -35,13 +34,12 @@ class sheetToTable(UITestCase):
         self.ui_test.close_doc()
 
     def test_tdf138688(self):
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("hiddenRow.ods"))
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        self.xUITest.executeCommand(".uno:SelectAll")
-        self.xUITest.executeCommand(".uno:Copy")
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
-        self.ui_test.close_doc()
+        with self.ui_test.load_file(get_url_for_data_file("hiddenRow.ods")) as calc_doc:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            self.xUITest.executeCommand(".uno:SelectAll")
+            self.xUITest.executeCommand(".uno:Copy")
+            gridwin = xCalcDoc.getChild("grid_window")
+            document = self.ui_test.get_component()
         writer_doc = self.ui_test.load_file(get_url_for_data_file("tableToText.odt"))
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
@@ -84,17 +82,16 @@ class sheetToTable(UITestCase):
 
         self.ui_test.close_doc()
 
-        writer_doc = self.ui_test.load_file(get_url_for_data_file("tdf129083.odt"))
-        document = self.ui_test.get_component()
-        xWriterDoc = self.xUITest.getTopFocusWindow()
+        with self.ui_test.load_file(get_url_for_data_file("tdf129083.odt")) as writer_doc:
+            document = self.ui_test.get_component()
+            xWriterDoc = self.xUITest.getTopFocusWindow()
 
-        self.xUITest.executeCommand(".uno:Paste")
+            self.xUITest.executeCommand(".uno:Paste")
 
-        self.assertEqual(document.TextTables.getCount(), 1)
-        table = document.getTextTables()[0]
-        self.assertEqual(len(table.getRows()), 4)
-        self.assertEqual(table.getCellByName("A1").getString(), "Test 1")
-        self.assertEqual(table.getCellByName("A2").getString(), "Test 2")
-        self.assertEqual(table.getCellByName("A3").getString(), "Test 3")
-        self.assertEqual(table.getCellByName("A4").getString(), "Test 4")
-        self.ui_test.close_doc()
+            self.assertEqual(document.TextTables.getCount(), 1)
+            table = document.getTextTables()[0]
+            self.assertEqual(len(table.getRows()), 4)
+            self.assertEqual(table.getCellByName("A1").getString(), "Test 1")
+            self.assertEqual(table.getCellByName("A2").getString(), "Test 2")
+            self.assertEqual(table.getCellByName("A3").getString(), "Test 3")
+            self.assertEqual(table.getCellByName("A4").getString(), "Test 4")
