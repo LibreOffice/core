@@ -79,9 +79,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
 
-#define CH_HYPH     "-"
+constexpr OUStringLiteral CH_HYPH = u"-";
 
-#define WRONG_SHOW_MIN       5
+constexpr tools::Long WRONG_SHOW_MIN = 5;
 
 namespace {
 
