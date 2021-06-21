@@ -1397,8 +1397,9 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
     SwClient::SwClientNotify(rMod, rHint); // needed as SwContact::SwClientNotify doesn't explicitly call SwClient::SwClientNotify
     SwContact::SwClientNotify(rMod, rHint);
-    if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
+    if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
+        auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
         SAL_WARN_IF(mbDisconnectInProgress, "sw.core", "<SwDrawContact::Modify(..)> called during disconnection.");
 
         const SfxPoolItem* pNew = pLegacyHint->m_pNew;

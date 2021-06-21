@@ -116,6 +116,7 @@ enum class SfxHintId {
     SwSectionFrameMoveAndDelete,
     SwNavigatorUpdateTracking,
     SwNavigatorSelectOutlinesWithSelections,
+    SwLegacyModify,
 
     ThisIsAnSdrHint // used to avoid dynamic_cast
 };

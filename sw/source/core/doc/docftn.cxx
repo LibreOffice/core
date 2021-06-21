@@ -227,8 +227,9 @@ void SwEndNoteInfo::UpdateFormatOrAttr()
 
 void SwEndNoteInfo::SwClientNotify( const SwModify& rModify, const SfxHint& rHint)
 {
-    if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
+    if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
+        auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
         switch(pLegacyHint->GetWhich())
         {
             case RES_ATTRSET_CHG:

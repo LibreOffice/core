@@ -155,9 +155,9 @@ SwFormatFootnote* SwFormatFootnote::Clone( SfxItemPool* ) const
 
 void SwFormatFootnote::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
-    if(!pLegacy)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     CallSwClientNotify(rHint);
     if(RES_REMOVE_UNO_OBJECT == pLegacy->GetWhich())
         SetXFootnote(css::uno::Reference<css::text::XFootnote>(nullptr));

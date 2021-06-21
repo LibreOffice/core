@@ -160,9 +160,9 @@ SwCharFormat* SwTextINetFormat::GetCharFormat()
 
 void SwTextINetFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
-    if(!pLegacy)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     const auto nWhich = pLegacy->GetWhich();
     OSL_ENSURE(isCHRATR(nWhich) || (RES_OBJECTDYING == nWhich)
             || (RES_ATTRSET_CHG == nWhich) || (RES_FMT_CHG == nWhich),
@@ -201,9 +201,9 @@ SwTextRuby::~SwTextRuby()
 
 void SwTextRuby::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
-    if(!pLegacy)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     const auto nWhich = pLegacy->GetWhich();
     SAL_WARN_IF( !isCHRATR(nWhich)
             && (RES_OBJECTDYING == nWhich)

@@ -700,8 +700,10 @@ void SwUndoSetFlyFormat::PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem )
 
 void SwUndoSetFlyFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
-    if(!pLegacy || !pLegacy->m_pOld)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
+        return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(!pLegacy->m_pOld)
         return;
     const sal_uInt16 nWhich = pLegacy->m_pOld->Which();
     if(nWhich < POOLATTR_END)

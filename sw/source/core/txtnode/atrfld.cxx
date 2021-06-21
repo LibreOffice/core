@@ -241,8 +241,9 @@ void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
         pPaM->Move( fnMoveForward );
         rDoc.getIDocumentContentOperations().DeleteRange( *pPaM );
         rDoc.getIDocumentContentOperations().InsertString( *pPaM, aEntry );
-    } else if (const auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>( &rHint ))
+    } else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
+        auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
         if( !mpTextField )
             return;
         UpdateTextNode(pLegacyHint->m_pOld, pLegacyHint->m_pNew);

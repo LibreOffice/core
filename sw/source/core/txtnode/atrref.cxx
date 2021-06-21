@@ -56,9 +56,9 @@ SwFormatRefMark* SwFormatRefMark::Clone( SfxItemPool* ) const
 
 void SwFormatRefMark::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
-    if(!pLegacy)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     CallSwClientNotify(rHint);
     if(RES_REMOVE_UNO_OBJECT == pLegacy->GetWhich())
         SetXRefMark(css::uno::Reference<css::text::XTextContent>(nullptr));

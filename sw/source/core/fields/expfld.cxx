@@ -273,9 +273,11 @@ std::unique_ptr<SwFieldType> SwGetExpFieldType::Copy() const
 
 void SwGetExpFieldType::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
+        return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     // do not expand anything else
-    if(!pLegacy || (pLegacy->GetWhich() != RES_DOCPOS_UPDATE))
+    if(pLegacy->GetWhich() != RES_DOCPOS_UPDATE)
         return;
     CallSwClientNotify(rHint);
 }
