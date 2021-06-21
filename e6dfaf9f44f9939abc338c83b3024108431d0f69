@@ -70,6 +70,30 @@
       "revId": "e6dfaf9f44f9939abc338c83b3024108431d0f69",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ce8c17b2_a29db825",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-21T11:07:35Z",
+      "side": 1,
+      "message": "while the contrived\n\n  std::size_t f(std::size_t n) {\n    std::vector\u003cint\u003e v(n); // destroyed within f\n    for (std::size_t i \u003d 0; i !\u003d n; ++i) v[i] \u003d i;\n    return v[n - 1];\n  }\n  constexpr auto x \u003d f(10);\n\nis ok in C++20,\n\n  std::vector\u003cint\u003e f(std::size_t n) {\n    std::vector\u003cint\u003e v(n); // \"escapes\" f\n    for (std::size_t i \u003d 0; i !\u003d n; ++i) v[i] \u003d i;\n    return v;\n  }\n  constexpr auto x \u003d f(10);\n\nisn\u0027t",
+      "parentUuid": "3e72a617_f78cbabb",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 22
+      },
+      "revId": "e6dfaf9f44f9939abc338c83b3024108431d0f69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
