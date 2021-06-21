@@ -49,7 +49,7 @@ enum class StreamMode {
     NOCREATE                 = 0x0004,  ///< 1 == Don't create file
     TRUNC                    = 0x0008,  ///< Truncate _existing_ file to zero length
     COPY_ON_SYMLINK          = 0x0010,  ///< copy-on-write for symlinks (Unix)
-    TEMPORARY                = 0x0020,  ///< temporary file attribute (Windows)
+    TEMPORARY                = 0x0020,  ///< temporary file attribute (Windows-only)
 // sharing options
     SHARE_DENYNONE           = 0x0100,
     SHARE_DENYREAD           = 0x0200,  // overrides denynone
@@ -586,6 +586,7 @@ private:
     sal_uInt16      nLockCounter;
 #endif
     bool            bIsOpen;
+    bool            mbDontFlushOnClose; ///< used to avoid flushing when closing temporary files
 
     SvFileStream (const SvFileStream&) = delete;
     SvFileStream & operator= (const SvFileStream&) = delete;
@@ -612,6 +613,7 @@ public:
     bool            IsOpen() const { return bIsOpen; }
 
     const OUString& GetFileName() const { return aFilename; }
+    void            SetDontFlushOnClose(bool b) { mbDontFlushOnClose = b; }
 };
 
 // MemoryStream
