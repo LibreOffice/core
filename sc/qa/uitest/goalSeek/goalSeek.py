@@ -13,26 +13,25 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class goalSeek(UITestCase):
     def test_goalSeek(self):
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("goalSeek.ods"))
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
-        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B4"}))
-        self.ui_test.execute_modeless_dialog_through_command(".uno:GoalSeekDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xformulaedit = xDialog.getChild("formulaedit")
-        xtarget = xDialog.getChild("target")
-        xvaredit = xDialog.getChild("varedit")
-        xtarget.executeAction("TYPE", mkPropertyValues({"TEXT":"15000"}))
-        xvaredit.executeAction("TYPE", mkPropertyValues({"TEXT":"B1"}))
-        xOKBtn = xDialog.getChild("ok")
+        with self.ui_test.load_file(get_url_for_data_file("goalSeek.ods")) as calc_doc:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            document = self.ui_test.get_component()
+            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B4"}))
+            self.ui_test.execute_modeless_dialog_through_command(".uno:GoalSeekDialog")
+            xDialog = self.xUITest.getTopFocusWindow()
+            xformulaedit = xDialog.getChild("formulaedit")
+            xtarget = xDialog.getChild("target")
+            xvaredit = xDialog.getChild("varedit")
+            xtarget.executeAction("TYPE", mkPropertyValues({"TEXT":"15000"}))
+            xvaredit.executeAction("TYPE", mkPropertyValues({"TEXT":"B1"}))
+            xOKBtn = xDialog.getChild("ok")
 
-        with self.ui_test.execute_blocking_action(xOKBtn.executeAction, args=('CLICK', ()), close_button="yes"):
-            pass
+            with self.ui_test.execute_blocking_action(xOKBtn.executeAction, args=('CLICK', ()), close_button="yes"):
+                pass
 
-        #verify
-        self.assertEqual(get_cell_by_position(document, 0, 1, 0).getValue(), 200000)
-        self.assertEqual(get_cell_by_position(document, 0, 1, 3).getValue(), 15000)
-        self.ui_test.close_doc()
+            #verify
+            self.assertEqual(get_cell_by_position(document, 0, 1, 0).getValue(), 200000)
+            self.assertEqual(get_cell_by_position(document, 0, 1, 3).getValue(), 15000)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

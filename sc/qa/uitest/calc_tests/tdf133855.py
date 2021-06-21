@@ -13,38 +13,36 @@ class tdf133855(UITestCase):
 
     def test_tdf133855(self):
 
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf133855.ods"))
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        document = self.ui_test.get_component()
+        with self.ui_test.load_file(get_url_for_data_file("tdf133855.ods")) as calc_doc:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            document = self.ui_test.get_component()
 
-        results = ['A', 'B', 'C', 'D', 'E', 'F']
+            results = ['A', 'B', 'C', 'D', 'E', 'F']
 
-        # Conditional formatted dropdown list
-        for i in range(len(results)):
-            gridwin = xCalcDoc.getChild("grid_window")
-            gridwin.executeAction("LAUNCH", mkPropertyValues({"SELECTMENU": "", "COL": "6", "ROW": "5"}))
+            # Conditional formatted dropdown list
+            for i in range(len(results)):
+                gridwin = xCalcDoc.getChild("grid_window")
+                gridwin.executeAction("LAUNCH", mkPropertyValues({"SELECTMENU": "", "COL": "6", "ROW": "5"}))
 
-            #Select the TreeList UI Object
-            xWin = self.xUITest.getTopFocusWindow()
-            xlist = xWin.getChild("list")
+                #Select the TreeList UI Object
+                xWin = self.xUITest.getTopFocusWindow()
+                xlist = xWin.getChild("list")
 
-            xListItem = xlist.getChild( str(i) )
-            xListItem.executeAction("DOUBLECLICK" , mkPropertyValues({}) )
-            self.assertEqual(get_cell_by_position(document, 0, 6, 5).getString(), results[i])
+                xListItem = xlist.getChild( str(i) )
+                xListItem.executeAction("DOUBLECLICK" , mkPropertyValues({}) )
+                self.assertEqual(get_cell_by_position(document, 0, 6, 5).getString(), results[i])
 
-        # normal dropdown list
-        for i in range(len(results)):
-            gridwin = xCalcDoc.getChild("grid_window")
-            gridwin.executeAction("LAUNCH", mkPropertyValues({"SELECTMENU": "", "COL": "6", "ROW": "6"}))
+            # normal dropdown list
+            for i in range(len(results)):
+                gridwin = xCalcDoc.getChild("grid_window")
+                gridwin.executeAction("LAUNCH", mkPropertyValues({"SELECTMENU": "", "COL": "6", "ROW": "6"}))
 
-            #Select the TreeList UI Object
-            xWin = self.xUITest.getTopFocusWindow()
-            xlist = xWin.getChild("list")
+                #Select the TreeList UI Object
+                xWin = self.xUITest.getTopFocusWindow()
+                xlist = xWin.getChild("list")
 
-            xListItem = xlist.getChild( str(i) )
-            xListItem.executeAction("DOUBLECLICK" , mkPropertyValues({}) )
-            self.assertEqual(get_cell_by_position(document, 0, 6, 6).getString(), results[i])
-
-        self.ui_test.close_doc()
+                xListItem = xlist.getChild( str(i) )
+                xListItem.executeAction("DOUBLECLICK" , mkPropertyValues({}) )
+                self.assertEqual(get_cell_by_position(document, 0, 6, 6).getString(), results[i])
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
