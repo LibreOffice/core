@@ -621,6 +621,7 @@ void SwFootnoteFrame::Paste(  SwFrame* pParent, SwFrame* pSibling )
         SwFlowFrame::CastFlowFrame( GetPrev()->GetLower())->
             MoveSubTree( this, GetLower() );
         SwFrame *pDel = GetPrev();
+        assert(pDel != this);
         pDel->Cut();
         SwFrame::DestroyFrame(pDel);
     }
@@ -630,6 +631,7 @@ void SwFootnoteFrame::Paste(  SwFrame* pParent, SwFrame* pSibling )
                 "Footnote without content?" );
         SwFlowFrame::CastFlowFrame( GetNext()->GetLower() )->MoveSubTree( this );
         SwFrame *pDel = GetNext();
+        assert(pDel != this);
         pDel->Cut();
         SwFrame::DestroyFrame(pDel);
     }
