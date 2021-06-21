@@ -13,17 +13,16 @@ from uitest.uihelper.common import get_url_for_data_file
 
 class tdf101165(UITestCase):
     def test_tdf101165_autofilter(self):
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf101165.ods"))
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
+        with self.ui_test.load_file(get_url_for_data_file("tdf101165.ods")) as calc_doc:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            document = self.ui_test.get_component()
 
-        gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "0"}))
-        xFloatWindow = self.xUITest.getFloatWindow()
-        xAll = xFloatWindow.getChild("toggle_all")
-        xAll.executeAction("CLICK", tuple())
+            gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "0"}))
+            xFloatWindow = self.xUITest.getFloatWindow()
+            xAll = xFloatWindow.getChild("toggle_all")
+            xAll.executeAction("CLICK", tuple())
 
-        self.assertEqual(get_cell_by_position(document, 1, 0, 1).getValue(), 6494)
+            self.assertEqual(get_cell_by_position(document, 1, 0, 1).getValue(), 6494)
 
-        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

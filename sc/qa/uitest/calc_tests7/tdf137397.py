@@ -13,29 +13,27 @@ class tdf137397(UITestCase):
 
     def test_tdf137397(self):
 
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf137397.ods"))
+        with self.ui_test.load_file(get_url_for_data_file("tdf137397.ods")) as calc_doc:
 
-        change_measurement_unit(self, 'Centimeter')
+            change_measurement_unit(self, 'Centimeter')
 
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        xGridWin = xCalcDoc.getChild("grid_window")
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            xGridWin = xCalcDoc.getChild("grid_window")
 
-        xGridWin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Shape"}))
+            xGridWin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Shape"}))
 
-        self.xUITest.executeCommand(".uno:Sidebar")
-        xGridWin.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "TextPropertyPanel"}))
+            self.xUITest.executeCommand(".uno:Sidebar")
+            xGridWin.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "TextPropertyPanel"}))
 
-        xChild = self.ui_test.wait_until_child_is_available('selectwidth')
-        self.assertEqual(get_state_as_dict(xChild)['Text'], '6.00 cm')
+            xChild = self.ui_test.wait_until_child_is_available('selectwidth')
+            self.assertEqual(get_state_as_dict(xChild)['Text'], '6.00 cm')
 
-        # Without the fix in place, this test would have failed with
-        # AssertionError: '-14,585,309.84 cm' != '2.00 cm'
-        xChild = self.ui_test.wait_until_child_is_available('selectheight')
-        self.assertEqual(get_state_as_dict(xChild)['Text'], '2.00 cm')
+            # Without the fix in place, this test would have failed with
+            # AssertionError: '-14,585,309.84 cm' != '2.00 cm'
+            xChild = self.ui_test.wait_until_child_is_available('selectheight')
+            self.assertEqual(get_state_as_dict(xChild)['Text'], '2.00 cm')
 
 
-        self.xUITest.executeCommand(".uno:Sidebar")
-
-        self.ui_test.close_doc()
+            self.xUITest.executeCommand(".uno:Sidebar")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
