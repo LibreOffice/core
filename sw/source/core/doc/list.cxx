@@ -23,68 +23,8 @@
 #include <numrule.hxx>
 #include <ndarr.hxx>
 #include <node.hxx>
-#include <pam.hxx>
-#include <SwNodeNum.hxx>
 
-// implementation class for SwList
-class SwListImpl
-{
-    public:
-        SwListImpl( const OUString& sListId,
-                    SwNumRule& rDefaultListStyle,
-                    const SwNodes& rNodes );
-        ~SwListImpl() COVERITY_NOEXCEPT_FALSE;
-
-        const OUString& GetListId() const { return msListId;}
-
-        const OUString& GetDefaultListStyleName() const { return msDefaultListStyleName;}
-
-        bool HasNodes() const;
-
-        void InsertListItem( SwNodeNum& rNodeNum, bool isHiddenRedlines,
-                             const int nLevel );
-        static void RemoveListItem( SwNodeNum& rNodeNum );
-
-        void InvalidateListTree();
-        void ValidateListTree();
-
-        void MarkListLevel( const int nListLevel,
-                            const bool bValue );
-
-        bool IsListLevelMarked( const int nListLevel ) const;
-
-        // unique identifier of the list
-        const OUString msListId;
-        // default list style for the list items, identified by the list style name
-        OUString msDefaultListStyleName;
-
-        // list trees for certain document ranges
-        struct tListTreeForRange
-        {
-            /// tree always corresponds to document model
-            std::unique_ptr<SwNodeNum> pRoot;
-            /// Tree that is missing those nodes that are merged or hidden
-            /// by delete redlines; this is only used if there is a layout
-            /// that has IsHideRedlines() enabled.
-            /// A second tree is needed because not only are the numbers in
-            /// the nodes different, the structure of the tree may be different
-            /// as well, if a high-level node is hidden its children go under
-            /// the previous node on the same level.
-            /// The nodes of pRootRLHidden are a subset of the nodes of pRoot.
-            std::unique_ptr<SwNodeNum> pRootRLHidden;
-            /// top-level SwNodes section
-            std::unique_ptr<SwPaM> pSection;
-            tListTreeForRange(std::unique_ptr<SwNodeNum> p1, std::unique_ptr<SwNodeNum> p2, std::unique_ptr<SwPaM> p3)
-                : pRoot(std::move(p1)), pRootRLHidden(std::move(p2)), pSection(std::move(p3)) {}
-        };
-        std::vector<tListTreeForRange> maListTrees;
-
-        int mnMarkedListLevel;
-
-        void NotifyItemsOnListLevel( const int nLevel );
-};
-
-SwListImpl::SwListImpl( const OUString& sListId,
+SwList::SwList( const OUString& sListId,
                         SwNumRule& rDefaultListStyle,
                         const SwNodes& rNodes )
     : msListId( sListId ),
@@ -114,7 +54,7 @@ SwListImpl::SwListImpl( const OUString& sListId,
     while ( pNode != &rNodes.GetEndOfContent() );
 }
 
-SwListImpl::~SwListImpl() COVERITY_NOEXCEPT_FALSE
+SwList::~SwList() COVERITY_NOEXCEPT_FALSE
 {
     for ( auto& rNumberTree : maListTrees )
     {
@@ -123,7 +63,7 @@ SwListImpl::~SwListImpl() COVERITY_NOEXCEPT_FALSE
     }
 }
 
-bool SwListImpl::HasNodes() const
+bool SwList::HasNodes() const
 {
     for (auto const& rNumberTree : maListTrees)
     {
@@ -135,7 +75,7 @@ bool SwListImpl::HasNodes() const
     return false;
 }
 
-void SwListImpl::InsertListItem( SwNodeNum& rNodeNum, bool const isHiddenRedlines,
+void SwList::InsertListItem( SwNodeNum& rNodeNum, bool const isHiddenRedlines,
                                  const int nLevel )
 {
     const SwPosition aPosOfNodeNum( rNodeNum.GetPosition() );
@@ -159,12 +99,12 @@ void SwListImpl::InsertListItem( SwNodeNum& rNodeNum, bool const isHiddenRedline
     }
 }
 
-void SwListImpl::RemoveListItem( SwNodeNum& rNodeNum )
+void SwList::RemoveListItem( SwNodeNum& rNodeNum )
 {
     rNodeNum.RemoveMe();
 }
 
-void SwListImpl::InvalidateListTree()
+void SwList::InvalidateListTree()
 {
     for ( const auto& rNumberTree : maListTrees )
     {
@@ -173,7 +113,7 @@ void SwListImpl::InvalidateListTree()
     }
 }
 
-void SwListImpl::ValidateListTree()
+void SwList::ValidateListTree()
 {
     for ( auto& rNumberTree : maListTrees )
     {
@@ -182,7 +122,7 @@ void SwListImpl::ValidateListTree()
     }
 }
 
-void SwListImpl::MarkListLevel( const int nListLevel,
+void SwList::MarkListLevel( const int nListLevel,
                                 const bool bValue )
 {
     if ( bValue )
@@ -213,12 +153,12 @@ void SwListImpl::MarkListLevel( const int nListLevel,
     }
 }
 
-bool SwListImpl::IsListLevelMarked( const int nListLevel ) const
+bool SwList::IsListLevelMarked( const int nListLevel ) const
 {
     return nListLevel == mnMarkedListLevel;
 }
 
-void SwListImpl::NotifyItemsOnListLevel( const int nLevel )
+void SwList::NotifyItemsOnListLevel( const int nLevel )
 {
     for ( auto& rNumberTree : maListTrees )
     {
@@ -227,67 +167,9 @@ void SwListImpl::NotifyItemsOnListLevel( const int nLevel )
     }
 }
 
-SwList::SwList( const OUString& sListId,
-                SwNumRule& rDefaultListStyle,
-                const SwNodes& rNodes )
-    : mpListImpl( new SwListImpl( sListId, rDefaultListStyle, rNodes ) )
-{
-}
-
-SwList::~SwList()
-{
-}
-
-bool SwList::HasNodes() const
-{
-    return mpListImpl->HasNodes();
-}
-
-const OUString & SwList::GetListId() const
-{
-    return mpListImpl->GetListId();
-}
-
-const OUString & SwList::GetDefaultListStyleName() const
-{
-    return mpListImpl->GetDefaultListStyleName();
-}
-
 void SwList::SetDefaultListStyleName(OUString const& rNew)
 {
-    mpListImpl->msDefaultListStyleName = rNew;
-}
-
-void SwList::InsertListItem( SwNodeNum& rNodeNum, bool const isHiddenRedlines,
-                             const int nLevel )
-{
-    mpListImpl->InsertListItem( rNodeNum, isHiddenRedlines, nLevel );
-}
-
-void SwList::RemoveListItem( SwNodeNum& rNodeNum )
-{
-    SwListImpl::RemoveListItem( rNodeNum );
-}
-
-void SwList::InvalidateListTree()
-{
-    mpListImpl->InvalidateListTree();
-}
-
-void SwList::ValidateListTree()
-{
-    mpListImpl->ValidateListTree();
-}
-
-void SwList::MarkListLevel( const int nListLevel,
-                                  const bool bValue )
-{
-    mpListImpl->MarkListLevel( nListLevel, bValue );
-}
-
-bool SwList::IsListLevelMarked( const int nListLevel ) const
-{
-    return mpListImpl->IsListLevelMarked( nListLevel );
+    msDefaultListStyleName = rNew;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

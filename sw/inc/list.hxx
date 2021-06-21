@@ -22,15 +22,14 @@
 
 #include <o3tl/deleter.hxx>
 #include <rtl/ustring.hxx>
+#include "SwNodeNum.hxx"
+#include "pam.hxx"
 #include <memory>
 
 #include "swdllapi.h"
 
 class SwNumRule;
 class SwNodes;
-class SwNodeNum;
-
-class SwListImpl;
 
 class SwList
 {
@@ -40,9 +39,10 @@ class SwList
                 const SwNodes& rNodes );
         ~SwList();
 
-        const OUString & GetListId() const;
+        const OUString & GetListId() const { return msListId; }
 
-        SW_DLLPUBLIC const OUString & GetDefaultListStyleName() const;
+        const OUString & GetDefaultListStyleName() const { return msDefaultListStyleName; }
+
         void SetDefaultListStyleName(OUString const&);
 
         void InsertListItem( SwNodeNum& rNodeNum,
@@ -64,7 +64,35 @@ class SwList
         SwList( const SwList& ) = delete;
         SwList& operator=( const SwList& ) = delete;
 
-        std::unique_ptr<SwListImpl, o3tl::default_delete<SwListImpl>> mpListImpl;
+        void NotifyItemsOnListLevel( const int nLevel );
+
+        // unique identifier of the list
+        const OUString msListId;
+        // default list style for the list items, identified by the list style name
+        OUString msDefaultListStyleName;
+
+        // list trees for certain document ranges
+        struct tListTreeForRange
+        {
+            /// tree always corresponds to document model
+            std::unique_ptr<SwNodeNum> pRoot;
+            /// Tree that is missing those nodes that are merged or hidden
+            /// by delete redlines; this is only used if there is a layout
+            /// that has IsHideRedlines() enabled.
+            /// A second tree is needed because not only are the numbers in
+            /// the nodes different, the structure of the tree may be different
+            /// as well, if a high-level node is hidden its children go under
+            /// the previous node on the same level.
+            /// The nodes of pRootRLHidden are a subset of the nodes of pRoot.
+            std::unique_ptr<SwNodeNum> pRootRLHidden;
+            /// top-level SwNodes section
+            std::unique_ptr<SwPaM> pSection;
+            tListTreeForRange(std::unique_ptr<SwNodeNum> p1, std::unique_ptr<SwNodeNum> p2, std::unique_ptr<SwPaM> p3)
+                : pRoot(std::move(p1)), pRootRLHidden(std::move(p2)), pSection(std::move(p3)) {}
+        };
+        std::vector<tListTreeForRange> maListTrees;
+
+        int mnMarkedListLevel;
 };
 #endif // INCLUDED_SW_INC_LIST_HXX
 
