@@ -264,6 +264,24 @@
     },
     {
       "key": {
+        "uuid": "f5d56213_b5a27402",
+        "filename": "external/poppler_data/Module_poppler_data.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2021-06-21T12:55:07Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "326a0775_ef08859f",
+      "revId": "224ed36acdcaa2a4c3ec7c1f82e4eba5ecb083a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a3cee1e1_b852b576",
         "filename": "sdext/source/pdfimport/xpdfwrapper/wrapper_gpl.cxx",
         "patchSetId": 3
