@@ -117,9 +117,9 @@ SwTextFormatColl::~SwTextFormatColl()
 }
 void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 {
-    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
-    if(!pLegacy)
-       return;
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
+        return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     if(GetDoc()->IsInDtor())
     {
         SwFormatColl::SwClientNotify(rModify, rHint);

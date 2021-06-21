@@ -215,9 +215,12 @@ OUString SwUserFieldType::GetName() const
 
 void SwUserFieldType::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
-    if (pLegacy && !pLegacy->m_pOld && !pLegacy->m_pNew)
-        m_bValidValue = false;
+    if (rHint.GetId() == SfxHintId::SwLegacyModify)
+    {
+        auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
+        if (!pLegacy->m_pOld && !pLegacy->m_pNew)
+            m_bValidValue = false;
+    }
 
     CallSwClientNotify(rHint);
     // update input fields that might be connected to the user field

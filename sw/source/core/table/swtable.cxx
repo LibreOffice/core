@@ -315,9 +315,9 @@ static void lcl_ModifyBoxes( SwTableBoxes &rBoxes, const tools::Long nOld,
 
 void SwTable::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
-    if(!pLegacy)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     // catch SSize changes, to adjust the lines/boxes
     const sal_uInt16 nWhich = pLegacy->GetWhich();
     const SwFormatFrameSize* pNewSize = nullptr, *pOldSize = nullptr;
@@ -2172,9 +2172,9 @@ static void ChgNumToText( SwTableBox& rBox, sal_uLong nFormat )
 // for detection of modifications (mainly TableBoxAttribute)
 void SwTableBoxFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
-    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
-    if(!pLegacy)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     if(IsModifyLocked() || !GetDoc() || GetDoc()->IsInDtor())
     {
         SwFrameFormat::SwClientNotify(rMod, rHint);

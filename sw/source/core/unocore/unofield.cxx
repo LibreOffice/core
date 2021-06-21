@@ -2629,8 +2629,9 @@ void SwXTextField::Impl::Notify(const SfxHint& rHint)
 
     if(rHint.GetId() == SfxHintId::Dying)
         Invalidate();
-    else if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
+    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
+        auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
         switch(pLegacyHint->m_pOld ? pLegacyHint->m_pOld->Which() : 0)
         {
             case RES_REMOVE_UNO_OBJECT:

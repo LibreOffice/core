@@ -660,8 +660,9 @@ bool SwFlyFrame::FrameSizeChg( const SwFormatFrameSize &rFrameSize )
 
 void SwFlyFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
-    if(auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
+    if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
+        auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
         SwFlyFrameInvFlags eInvFlags = SwFlyFrameInvFlags::NONE;
         if(pLegacy->m_pNew && pLegacy->m_pOld && RES_ATTRSET_CHG == pLegacy->m_pNew->Which())
         {

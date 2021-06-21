@@ -5314,8 +5314,9 @@ void SwTextNode::TriggerNodeUpdate(const sw::LegacyModifyHint& rHint)
 
 void SwTextNode::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
 {
-    if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
+    if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
+        auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
         TriggerNodeUpdate(*pLegacyHint);
     }
     else if (dynamic_cast<const SwAttrHint*>(&rHint))

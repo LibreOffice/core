@@ -2567,8 +2567,9 @@ void SwSectionFrame::CalcEndAtEndFlag()
 
 void SwSectionFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
-    if(const auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
+    if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
+        auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
         SwSectionFrameInvFlags eInvFlags = SwSectionFrameInvFlags::NONE;
         if(pLegacy->m_pNew && RES_ATTRSET_CHG == pLegacy->m_pNew->Which())
         {

@@ -132,9 +132,9 @@ SwAutoCompleteClient& SwAutoCompleteClient::operator=(const SwAutoCompleteClient
 
 void SwAutoCompleteClient::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
-    if(!pLegacy)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     switch(pLegacy->GetWhich())
     {
         case RES_REMOVE_UNO_OBJECT:

@@ -114,9 +114,9 @@ void SwLineNumberInfo::SetCharFormat( SwCharFormat *pChFormat )
 
 void SwLineNumberInfo::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
-    if(!pLegacy)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     CheckRegistration( pLegacy->m_pOld );
     SwDoc *pDoc = static_cast<SwCharFormat*>(GetRegisteredIn())->GetDoc();
     SwRootFrame* pRoot = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();

@@ -93,9 +93,9 @@ void SwFlyInContentFrame::SetRefPoint( const Point& rPoint,
 
 void SwFlyInContentFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
-    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
-    if(!pLegacy)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     std::pair<std::unique_ptr<SwAttrSetChg>, std::unique_ptr<SwAttrSetChg>> aTweakedChgs;
     std::pair<const SfxPoolItem*, const SfxPoolItem*> aSuperArgs(nullptr, nullptr);
     switch(pLegacy->GetWhich())

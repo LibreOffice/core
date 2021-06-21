@@ -410,9 +410,9 @@ void SwSection::SetEditInReadonly(bool const bFlag)
 
 void SwSection::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
-    if(!pLegacy)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     auto pOld = pLegacy->m_pOld;
     auto pNew = pLegacy->m_pNew;
     bool bUpdateFootnote = false;
@@ -733,9 +733,9 @@ void SwSectionFormat::MakeFrames()
 
 void SwSectionFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
-    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
-    if(!pLegacy)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     sal_uInt16 nWhich = pLegacy->GetWhich();
     auto pOld = pLegacy->m_pOld;
     auto pNew = pLegacy->m_pNew;

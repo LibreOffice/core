@@ -67,8 +67,9 @@ void SwAccessibleTextFrame::Notify(const SfxHint& rHint)
 {
     if(rHint.GetId() == SfxHintId::Dying)
         EndListeningAll();
-    else if(auto pLegacyModifyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
+    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
+        auto pLegacyModifyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
         const sal_uInt16 nWhich = pLegacyModifyHint->GetWhich();
         const SwFlyFrame* pFlyFrame = static_cast<const SwFlyFrame*>(GetFrame());
         switch(nWhich)

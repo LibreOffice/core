@@ -1979,8 +1979,9 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
     sw::RedlineUnDelText const* pRedlineUnDelText(nullptr);
 
     sal_uInt16 nWhich = 0;
-    if (auto const pHint = dynamic_cast<sw::LegacyModifyHint const*>(&rHint))
+    if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
+        auto pHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
         pOld = pHint->m_pOld;
         pNew = pHint->m_pNew;
         nWhich = pHint->GetWhich();

@@ -1095,9 +1095,9 @@ void SwGetRefFieldType::UpdateGetReferences()
 
 void SwGetRefFieldType::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
-    if(!pLegacy)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     if(!pLegacy->m_pNew && !pLegacy->m_pOld)
         // update to all GetReference fields
         // hopefully, this codepath is soon dead code, and

@@ -1107,8 +1107,9 @@ void SwContentNode::UpdateAttr(const SwUpdateAttr& rUpdate)
 
 void SwContentNode::SwClientNotify( const SwModify&, const SfxHint& rHint)
 {
-    if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
+    if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
+        auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
         const sal_uInt16 nWhich = pLegacyHint->GetWhich();
         InvalidateInSwCache(nWhich);
 
