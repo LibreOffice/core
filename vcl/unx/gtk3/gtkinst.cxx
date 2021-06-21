@@ -2677,15 +2677,23 @@ protected:
 
     void ensure_drag_begin_end()
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         if (!m_nDragBeginSignalId)
         {
             // using "after" due to https://gitlab.gnome.org/GNOME/pygobject/issues/251
+#if GTK_CHECK_VERSION(4, 0, 0)
+            m_nDragBeginSignalId = g_signal_connect_after(get_drag_controller(), "drag-begin", G_CALLBACK(signalDragBegin), this);
+#else
             m_nDragBeginSignalId = g_signal_connect_after(m_pWidget, "drag-begin", G_CALLBACK(signalDragBegin), this);
+#endif
         }
         if (!m_nDragEndSignalId)
+        {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            m_nDragEndSignalId = g_signal_connect(get_drag_controller(), "drag-end", G_CALLBACK(signalDragEnd), this);
+#else
             m_nDragEndSignalId = g_signal_connect(m_pWidget, "drag-end", G_CALLBACK(signalDragEnd), this);
 #endif
+        }
     }
 
 private:
@@ -2736,6 +2744,7 @@ private:
     GtkEventController* m_pFocusController;
     GtkEventController* m_pClickController;
     GtkEventController* m_pMotionController;
+    GtkEventController* m_pDragController;
 #endif
 
     rtl::Reference<GtkInstDropTarget> m_xDropTarget;
@@ -3053,11 +3062,13 @@ private:
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
         pThis->m_xDropTarget->signalDragDropReceived(pWidget, context, x, y, data, ttype, time);
     }
+#endif
 
     virtual void drag_ended()
     {
     }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     static void signalDragLeave(GtkWidget *pWidget, GdkDragContext *context, guint time, gpointer widget)
     {
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
@@ -3068,13 +3079,17 @@ private:
             pThis->drag_ended();
         }
     }
+#endif
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+    static void signalDragBegin(GtkDragSource* context, GdkDrag*, gpointer widget)
+#else
     static void signalDragBegin(GtkWidget*, GdkDragContext* context, gpointer widget)
+#endif
     {
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
         pThis->signal_drag_begin(context);
     }
-#endif
 
     void ensure_drag_source()
     {
@@ -3098,8 +3113,11 @@ private:
         return false;
     }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+    void signal_drag_begin(GtkDragSource* context)
+#else
     void signal_drag_begin(GdkDragContext* context)
+#endif
     {
         bool bUnsetDragIcon(false);
         if (do_signal_drag_begin(bUnsetDragIcon))
@@ -3122,21 +3140,26 @@ private:
             return;
         m_xDragSource->setActiveDragSource();
     }
-#endif
 
     virtual void do_signal_drag_end()
     {
     }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+    static void signalDragEnd(GtkGestureDrag* /*gesture*/, double /*offset_x*/, double /*offset_y*/, gpointer widget)
+#else
     static void signalDragEnd(GtkWidget* /*widget*/, GdkDragContext* context, gpointer widget)
+#endif
     {
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
         pThis->do_signal_drag_end();
+#if !GTK_CHECK_VERSION(4, 0, 0)
         if (pThis->m_xDragSource.is())
             pThis->m_xDragSource->dragEnd(context);
+#endif
     }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     static gboolean signalDragFailed(GtkWidget* /*widget*/, GdkDragContext* /*context*/, GtkDragResult /*result*/, gpointer widget)
     {
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
@@ -3239,6 +3262,7 @@ public:
         , m_pFocusController(nullptr)
         , m_pClickController(nullptr)
         , m_pMotionController(nullptr)
+        , m_pDragController(nullptr)
 #endif
     {
         if (!bTakeOwnership)
@@ -3769,6 +3793,18 @@ public:
         }
         return m_pMotionController;
     }
+
+    GtkEventController* get_drag_controller()
+    {
+        if (!m_pDragController)
+        {
+            GtkDragSource* pDrag = gtk_drag_source_new();
+            m_pDragController = GTK_EVENT_CONTROLLER(pDrag);
+            gtk_widget_add_controller(m_pWidget, m_pDragController);
+        }
+        return m_pDragController;
+    }
+
 #endif
 
 
@@ -3980,9 +4016,21 @@ public:
         if (m_nDragLeaveSignalId)
             g_signal_handler_disconnect(m_pWidget, m_nDragLeaveSignalId);
         if (m_nDragEndSignalId)
+        {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            g_signal_handler_disconnect(get_drag_controller(), m_nDragEndSignalId);
+#else
             g_signal_handler_disconnect(m_pWidget, m_nDragEndSignalId);
+#endif
+        }
         if (m_nDragBeginSignalId)
+        {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            g_signal_handler_disconnect(get_drag_controller(), m_nDragBeginSignalId);
+#else
             g_signal_handler_disconnect(m_pWidget, m_nDragBeginSignalId);
+#endif
+        }
         if (m_nDragFailedSignalId)
             g_signal_handler_disconnect(m_pWidget, m_nDragFailedSignalId);
         if (m_nDragDataDeleteignalId)
@@ -14971,7 +15019,6 @@ public:
         }
     }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     virtual void drag_ended() override
     {
         m_bInDrag = false;
@@ -14989,7 +15036,6 @@ public:
         // unhighlight the row
         gtk_tree_view_set_drag_dest_row(m_pTreeView, nullptr, GTK_TREE_VIEW_DROP_BEFORE);
     }
-#endif
 
     virtual int vadjustment_get_value() const override
     {
