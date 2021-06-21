@@ -13,65 +13,64 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf96432(UITestCase):
    def test_tdf96432_chart_crash_transparency_error_bar_dialog(self):
-    calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf96432.ods"))
-    xCalcDoc = self.xUITest.getTopFocusWindow()
-    gridwin = xCalcDoc.getChild("grid_window")
+    with self.ui_test.load_file(get_url_for_data_file("tdf96432.ods")) as calc_doc:
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        gridwin = xCalcDoc.getChild("grid_window")
 
-    document = self.ui_test.get_component()
-    xDataSeries = document.Sheets[0].Charts[0].getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries
-    self.assertEqual(0, xDataSeries[0].ErrorBarY.LineTransparence)
+        document = self.ui_test.get_component()
+        xDataSeries = document.Sheets[0].Charts[0].getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries
+        self.assertEqual(0, xDataSeries[0].ErrorBarY.LineTransparence)
 
-    gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
-    gridwin.executeAction("ACTIVATE", tuple())
-    xChartMainTop = self.xUITest.getTopFocusWindow()
-    xChartMain = xChartMainTop.getChild("chart_window")
+        gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
+        gridwin.executeAction("ACTIVATE", tuple())
+        xChartMainTop = self.xUITest.getTopFocusWindow()
+        xChartMain = xChartMainTop.getChild("chart_window")
 
-    #Right-click on the chart; from the pop-up menu select "Format Y bars
-    # The program presents dialog "Format Y bars", tab "Line".
-    xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
-    self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "FormatYErrorBars"}))
-    xDialog = self.xUITest.getTopFocusWindow()
-    #Click on tab "Line".
-    tabcontrol = xDialog.getChild("tabcontrol")
-    select_pos(tabcontrol, "1")
-    #Type a non-zero integer into the "Transparency:" Edit Field, or use the up arrow to select one
-    xTransparency = xDialog.getChild("MTR_LINE_TRANSPARENT")
-    xTransparency.executeAction("UP", tuple())
-    xOKBtn = xDialog.getChild("ok")
-    self.ui_test.close_dialog_through_button(xOKBtn)
+        #Right-click on the chart; from the pop-up menu select "Format Y bars
+        # The program presents dialog "Format Y bars", tab "Line".
+        xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
+        self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "FormatYErrorBars"}))
+        xDialog = self.xUITest.getTopFocusWindow()
+        #Click on tab "Line".
+        tabcontrol = xDialog.getChild("tabcontrol")
+        select_pos(tabcontrol, "1")
+        #Type a non-zero integer into the "Transparency:" Edit Field, or use the up arrow to select one
+        xTransparency = xDialog.getChild("MTR_LINE_TRANSPARENT")
+        xTransparency.executeAction("UP", tuple())
+        xOKBtn = xDialog.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOKBtn)
 
-    #verify - we didn't crash
-    gridwin.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))
+        #verify - we didn't crash
+        gridwin.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))
 
-    xDataSeries = document.Sheets[0].Charts[0].getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries
-    self.assertEqual(5, xDataSeries[0].ErrorBarY.LineTransparence)
+        xDataSeries = document.Sheets[0].Charts[0].getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries
+        self.assertEqual(5, xDataSeries[0].ErrorBarY.LineTransparence)
 
-    #reopen and try again
-    gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
-    gridwin.executeAction("ACTIVATE", tuple())
-    xChartMainTop = self.xUITest.getTopFocusWindow()
-    xChartMain = xChartMainTop.getChild("chart_window")
+        #reopen and try again
+        gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
+        gridwin.executeAction("ACTIVATE", tuple())
+        xChartMainTop = self.xUITest.getTopFocusWindow()
+        xChartMain = xChartMainTop.getChild("chart_window")
 
-    #Right-click on the chart; from the pop-up menu select "Format Y bars
-    # The program presents dialog "Format Y bars", tab "Line".
-    xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
-    self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "FormatYErrorBars"}))
-    xDialog = self.xUITest.getTopFocusWindow()
-    #Click on tab "Line".
-    tabcontrol = xDialog.getChild("tabcontrol")
-    select_pos(tabcontrol, "1")
-    #Type a non-zero integer into the "Transparency:" Edit Field, or use the up arrow to select one
-    xTransparency = xDialog.getChild("MTR_LINE_TRANSPARENT")
-    self.assertEqual(get_state_as_dict(xTransparency)["Text"][0], "5")
-    xTransparency.executeAction("UP", tuple())
-    xOKBtn = xDialog.getChild("ok")
-    self.ui_test.close_dialog_through_button(xOKBtn)
+        #Right-click on the chart; from the pop-up menu select "Format Y bars
+        # The program presents dialog "Format Y bars", tab "Line".
+        xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
+        self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "FormatYErrorBars"}))
+        xDialog = self.xUITest.getTopFocusWindow()
+        #Click on tab "Line".
+        tabcontrol = xDialog.getChild("tabcontrol")
+        select_pos(tabcontrol, "1")
+        #Type a non-zero integer into the "Transparency:" Edit Field, or use the up arrow to select one
+        xTransparency = xDialog.getChild("MTR_LINE_TRANSPARENT")
+        self.assertEqual(get_state_as_dict(xTransparency)["Text"][0], "5")
+        xTransparency.executeAction("UP", tuple())
+        xOKBtn = xDialog.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOKBtn)
 
-    #verify - we didn't crash
-    gridwin.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))
+        #verify - we didn't crash
+        gridwin.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))
 
-    xDataSeries = document.Sheets[0].Charts[0].getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries
-    self.assertEqual(10, xDataSeries[0].ErrorBarY.LineTransparence)
+        xDataSeries = document.Sheets[0].Charts[0].getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries
+        self.assertEqual(10, xDataSeries[0].ErrorBarY.LineTransparence)
 
-    self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

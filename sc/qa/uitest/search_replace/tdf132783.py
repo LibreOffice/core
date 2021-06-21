@@ -11,25 +11,23 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf132783(UITestCase):
 
    def test_tdf132783(self):
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf132783.ods"))
+        with self.ui_test.load_file(get_url_for_data_file("tdf132783.ods")) as calc_doc:
 
-        for i in range(5):
-            self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xSearchTerm = xDialog.getChild("searchterm")
+            for i in range(5):
+                self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
+                xDialog = self.xUITest.getTopFocusWindow()
+                xSearchTerm = xDialog.getChild("searchterm")
 
-            xSearchTerm.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
+                xSearchTerm.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
 
-            xSearch = xDialog.getChild("search")
-            xSearch.executeAction("CLICK", tuple())
+                xSearch = xDialog.getChild("search")
+                xSearch.executeAction("CLICK", tuple())
 
-            xcloseBtn = xDialog.getChild("close")
-            self.ui_test.close_dialog_through_button(xcloseBtn)
+                xcloseBtn = xDialog.getChild("close")
+                self.ui_test.close_dialog_through_button(xcloseBtn)
 
-            xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
-            self.assertEqual(get_state_as_dict(xGridWin)["CurrentRow"], "1")
-            self.assertEqual(get_state_as_dict(xGridWin)["CurrentColumn"], str( 96 + i))
-
-        self.ui_test.close_doc()
+                xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
+                self.assertEqual(get_state_as_dict(xGridWin)["CurrentRow"], "1")
+                self.assertEqual(get_state_as_dict(xGridWin)["CurrentColumn"], str( 96 + i))
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

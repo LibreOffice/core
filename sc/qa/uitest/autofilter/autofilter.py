@@ -14,122 +14,116 @@ from uitest.uihelper.calc import enter_text_to_cell
 class AutofilterTest(UITestCase):
 
     def test_tdf106214(self):
-        doc = self.ui_test.load_file(get_url_for_data_file("autofilter.ods"))
+        with self.ui_test.load_file(get_url_for_data_file("autofilter.ods")) as doc:
 
-        xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
-        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+            xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
+            xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
 
-        xFloatWindow = self.xUITest.getFloatWindow()
-        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xFloatWindow = self.xUITest.getFloatWindow()
+            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
 
-        xTreeList = xCheckListMenu.getChild("check_tree_box")
-        xFirstEntry = xTreeList.getChild("0")
+            xTreeList = xCheckListMenu.getChild("check_tree_box")
+            xFirstEntry = xTreeList.getChild("0")
 
-        xFirstEntry.executeAction("CLICK", tuple())
+            xFirstEntry.executeAction("CLICK", tuple())
 
-        xOkBtn = xFloatWindow.getChild("ok")
-        xOkBtn.executeAction("CLICK", tuple())
+            xOkBtn = xFloatWindow.getChild("ok")
+            xOkBtn.executeAction("CLICK", tuple())
 
-        self.assertFalse(is_row_hidden(doc, 0))
-        self.assertFalse(is_row_hidden(doc, 1))
-        self.assertFalse(is_row_hidden(doc, 2))
-        self.assertTrue(is_row_hidden(doc, 3))
-        self.assertFalse(is_row_hidden(doc, 4))
-
-        self.ui_test.close_doc()
+            self.assertFalse(is_row_hidden(doc, 0))
+            self.assertFalse(is_row_hidden(doc, 1))
+            self.assertFalse(is_row_hidden(doc, 2))
+            self.assertTrue(is_row_hidden(doc, 3))
+            self.assertFalse(is_row_hidden(doc, 4))
 
     def test_filter_multiple_rows(self):
-        doc = self.ui_test.load_file(get_url_for_data_file("autofilter.ods"))
+        with self.ui_test.load_file(get_url_for_data_file("autofilter.ods")) as doc:
 
-        xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
-        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "2", "ROW": "0"}))
-        xFloatWindow = self.xUITest.getFloatWindow()
-        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
+            xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "2", "ROW": "0"}))
+            xFloatWindow = self.xUITest.getFloatWindow()
+            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
 
-        xTreeList = xCheckListMenu.getChild("check_list_box")
-        xFirstEntry = xTreeList.getChild("1")
+            xTreeList = xCheckListMenu.getChild("check_list_box")
+            xFirstEntry = xTreeList.getChild("1")
 
-        xFirstEntry.executeAction("CLICK", tuple())
+            xFirstEntry.executeAction("CLICK", tuple())
 
-        xOkBtn = xFloatWindow.getChild("ok")
-        xOkBtn.executeAction("CLICK", tuple())
+            xOkBtn = xFloatWindow.getChild("ok")
+            xOkBtn.executeAction("CLICK", tuple())
 
-        self.assertFalse(is_row_hidden(doc, 0))
-        self.assertFalse(is_row_hidden(doc, 1))
-        self.assertTrue(is_row_hidden(doc, 2))
-        self.assertTrue(is_row_hidden(doc, 3))
-        self.assertFalse(is_row_hidden(doc, 4))
+            self.assertFalse(is_row_hidden(doc, 0))
+            self.assertFalse(is_row_hidden(doc, 1))
+            self.assertTrue(is_row_hidden(doc, 2))
+            self.assertTrue(is_row_hidden(doc, 3))
+            self.assertFalse(is_row_hidden(doc, 4))
 
     def test_tdf133160(self):
-        doc = self.ui_test.load_file(get_url_for_data_file("tdf133160.ods"))
+        with self.ui_test.load_file(get_url_for_data_file("tdf133160.ods")) as doc:
 
-        xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
-        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "3"}))
-        xFloatWindow = self.xUITest.getFloatWindow()
-        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
-        xTreeList = xCheckListMenu.getChild("check_list_box")
-        size1 = int(get_state_as_dict(xTreeList)["Size"].split('x')[0])
-        xOkBtn = xFloatWindow.getChild("cancel")
-        xOkBtn.executeAction("CLICK", tuple())
+            xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
+            xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "3"}))
+            xFloatWindow = self.xUITest.getFloatWindow()
+            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xTreeList = xCheckListMenu.getChild("check_list_box")
+            size1 = int(get_state_as_dict(xTreeList)["Size"].split('x')[0])
+            xOkBtn = xFloatWindow.getChild("cancel")
+            xOkBtn.executeAction("CLICK", tuple())
 
-        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "2", "ROW": "3"}))
-        xFloatWindow = self.xUITest.getFloatWindow()
-        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
-        xTreeList = xCheckListMenu.getChild("check_list_box")
-        size2 = int(get_state_as_dict(xTreeList)["Size"].split('x')[0])
-        xOkBtn = xFloatWindow.getChild("cancel")
-        xOkBtn.executeAction("CLICK", tuple())
+            xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "2", "ROW": "3"}))
+            xFloatWindow = self.xUITest.getFloatWindow()
+            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xTreeList = xCheckListMenu.getChild("check_list_box")
+            size2 = int(get_state_as_dict(xTreeList)["Size"].split('x')[0])
+            xOkBtn = xFloatWindow.getChild("cancel")
+            xOkBtn.executeAction("CLICK", tuple())
 
-        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "3", "ROW": "3"}))
-        xFloatWindow = self.xUITest.getFloatWindow()
-        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
-        xTreeList = xCheckListMenu.getChild("check_list_box")
-        size3 = int(get_state_as_dict(xTreeList)["Size"].split('x')[0])
-        xOkBtn = xFloatWindow.getChild("cancel")
-        xOkBtn.executeAction("CLICK", tuple())
+            xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "3", "ROW": "3"}))
+            xFloatWindow = self.xUITest.getFloatWindow()
+            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xTreeList = xCheckListMenu.getChild("check_list_box")
+            size3 = int(get_state_as_dict(xTreeList)["Size"].split('x')[0])
+            xOkBtn = xFloatWindow.getChild("cancel")
+            xOkBtn.executeAction("CLICK", tuple())
 
-        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "4", "ROW": "3"}))
-        xFloatWindow = self.xUITest.getFloatWindow()
-        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
-        xTreeList = xCheckListMenu.getChild("check_list_box")
-        size4 = int(get_state_as_dict(xTreeList)["Size"].split('x')[0])
+            xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "4", "ROW": "3"}))
+            xFloatWindow = self.xUITest.getFloatWindow()
+            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xTreeList = xCheckListMenu.getChild("check_list_box")
+            size4 = int(get_state_as_dict(xTreeList)["Size"].split('x')[0])
 
-        xOkBtn = xFloatWindow.getChild("cancel")
-        xOkBtn.executeAction("CLICK", tuple())
+            xOkBtn = xFloatWindow.getChild("cancel")
+            xOkBtn.executeAction("CLICK", tuple())
 
-        self.assertTrue(size1 < size2) # for me they were size1=176 size2=212 size3=459 size4=1012
-        self.assertTrue(size2 < size3) # size1 is the minimum window width,  size2 based on its column width
-        self.assertTrue(size3 < size4) # size3 is a long text width
-        self.assertTrue(size4 < 1500)  # size4 is the maximum window width with a really long text
-
-        self.ui_test.close_doc()
+            self.assertTrue(size1 < size2) # for me they were size1=176 size2=212 size3=459 size4=1012
+            self.assertTrue(size2 < size3) # size1 is the minimum window width,  size2 based on its column width
+            self.assertTrue(size3 < size4) # size3 is a long text width
+            self.assertTrue(size4 < 1500)  # size4 is the maximum window width with a really long text
 
     def test_tdf134351(self):
-        doc = self.ui_test.load_file(get_url_for_data_file("autofilter.ods"))
+        with self.ui_test.load_file(get_url_for_data_file("autofilter.ods")) as doc:
 
-        xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
-        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+            xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
+            xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
 
-        xFloatWindow = self.xUITest.getFloatWindow()
-        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xFloatWindow = self.xUITest.getFloatWindow()
+            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
 
-        xTreeList = xCheckListMenu.getChild("check_tree_box")
+            xTreeList = xCheckListMenu.getChild("check_tree_box")
 
-        self.assertEqual(2, len(xTreeList.getChildren()))
-        self.assertTrue(get_state_as_dict(xTreeList.getChild('0'))['IsSelected'])
-        self.assertTrue(get_state_as_dict(xTreeList.getChild('1'))['IsSelected'])
+            self.assertEqual(2, len(xTreeList.getChildren()))
+            self.assertTrue(get_state_as_dict(xTreeList.getChild('0'))['IsSelected'])
+            self.assertTrue(get_state_as_dict(xTreeList.getChild('1'))['IsSelected'])
 
-        xOkBtn = xFloatWindow.getChild("ok")
-        xOkBtn.executeAction("CLICK", tuple())
+            xOkBtn = xFloatWindow.getChild("ok")
+            xOkBtn.executeAction("CLICK", tuple())
 
-        self.assertFalse(is_row_hidden(doc, 0))
-        # Without the fix in place, this test would have failed here
-        self.assertFalse(is_row_hidden(doc, 1))
-        self.assertFalse(is_row_hidden(doc, 2))
-        self.assertFalse(is_row_hidden(doc, 3))
-        self.assertFalse(is_row_hidden(doc, 4))
-
-        self.ui_test.close_doc()
+            self.assertFalse(is_row_hidden(doc, 0))
+            # Without the fix in place, this test would have failed here
+            self.assertFalse(is_row_hidden(doc, 1))
+            self.assertFalse(is_row_hidden(doc, 2))
+            self.assertFalse(is_row_hidden(doc, 3))
+            self.assertFalse(is_row_hidden(doc, 4))
 
     def test_differentSearches(self):
         self.ui_test.create_doc_in_start_center("calc")
@@ -229,165 +223,153 @@ class AutofilterTest(UITestCase):
         self.ui_test.close_doc()
 
     def test_tdf116818(self):
-        doc = self.ui_test.load_file(get_url_for_data_file("tdf116818.xlsx"))
+        with self.ui_test.load_file(get_url_for_data_file("tdf116818.xlsx")) as doc:
 
-        xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
+            xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
 
-        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
-        xFloatWindow = self.xUITest.getFloatWindow()
-        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
-        xTreeList = xCheckListMenu.getChild("check_tree_box")
-        self.assertEqual(3, len(xTreeList.getChildren()))
-        xOkBtn = xFloatWindow.getChild("cancel")
-        xOkBtn.executeAction("CLICK", tuple())
+            xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+            xFloatWindow = self.xUITest.getFloatWindow()
+            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xTreeList = xCheckListMenu.getChild("check_tree_box")
+            self.assertEqual(3, len(xTreeList.getChildren()))
+            xOkBtn = xFloatWindow.getChild("cancel")
+            xOkBtn.executeAction("CLICK", tuple())
 
-        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "0"}))
-        xFloatWindow = self.xUITest.getFloatWindow()
-        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
-        xTreeList = xCheckListMenu.getChild("check_list_box")
-        self.assertEqual(5, len(xTreeList.getChildren()))
-        xOkBtn = xFloatWindow.getChild("cancel")
-        xOkBtn.executeAction("CLICK", tuple())
+            xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "0"}))
+            xFloatWindow = self.xUITest.getFloatWindow()
+            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xTreeList = xCheckListMenu.getChild("check_list_box")
+            self.assertEqual(5, len(xTreeList.getChildren()))
+            xOkBtn = xFloatWindow.getChild("cancel")
+            xOkBtn.executeAction("CLICK", tuple())
 
-        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "2", "ROW": "0"}))
-        xFloatWindow = self.xUITest.getFloatWindow()
-        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
-        xTreeList = xCheckListMenu.getChild("check_list_box")
-        self.assertEqual(3, len(xTreeList.getChildren()))
-        xOkBtn = xFloatWindow.getChild("cancel")
-        xOkBtn.executeAction("CLICK", tuple())
-
-        self.ui_test.close_doc()
+            xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "2", "ROW": "0"}))
+            xFloatWindow = self.xUITest.getFloatWindow()
+            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xTreeList = xCheckListMenu.getChild("check_list_box")
+            self.assertEqual(3, len(xTreeList.getChildren()))
+            xOkBtn = xFloatWindow.getChild("cancel")
+            xOkBtn.executeAction("CLICK", tuple())
 
     def test_tdf140469(self):
-        doc = self.ui_test.load_file(get_url_for_data_file("tdf140469.xlsx"))
+        with self.ui_test.load_file(get_url_for_data_file("tdf140469.xlsx")) as doc:
 
-        xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
+            xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
 
-        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "0"}))
-        xFloatWindow = self.xUITest.getFloatWindow()
-        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
-        xTreeList = xCheckListMenu.getChild("check_list_box")
-        self.assertEqual(9, len(xTreeList.getChildren()))
-        xOkBtn = xFloatWindow.getChild("cancel")
-        xOkBtn.executeAction("CLICK", tuple())
-
-        self.ui_test.close_doc()
+            xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "0"}))
+            xFloatWindow = self.xUITest.getFloatWindow()
+            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xTreeList = xCheckListMenu.getChild("check_list_box")
+            self.assertEqual(9, len(xTreeList.getChildren()))
+            xOkBtn = xFloatWindow.getChild("cancel")
+            xOkBtn.executeAction("CLICK", tuple())
 
     def test_tdf140462(self):
-        doc = self.ui_test.load_file(get_url_for_data_file("tdf140462.ods"))
+        with self.ui_test.load_file(get_url_for_data_file("tdf140462.ods")) as doc:
 
-        xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
+            xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
 
-        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
-        xFloatWindow = self.xUITest.getFloatWindow()
-        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
-        xTreeList = xCheckListMenu.getChild("check_tree_box")
-        self.assertEqual(3, len(xTreeList.getChildren()))
-        xOkBtn = xFloatWindow.getChild("cancel")
-        xOkBtn.executeAction("CLICK", tuple())
+            xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+            xFloatWindow = self.xUITest.getFloatWindow()
+            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xTreeList = xCheckListMenu.getChild("check_tree_box")
+            self.assertEqual(3, len(xTreeList.getChildren()))
+            xOkBtn = xFloatWindow.getChild("cancel")
+            xOkBtn.executeAction("CLICK", tuple())
 
-        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "0"}))
-        xFloatWindow = self.xUITest.getFloatWindow()
-        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
-        xTreeList = xCheckListMenu.getChild("check_list_box")
-        self.assertEqual(3, len(xTreeList.getChildren()))
-        xOkBtn = xFloatWindow.getChild("cancel")
-        xOkBtn.executeAction("CLICK", tuple())
+            xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "0"}))
+            xFloatWindow = self.xUITest.getFloatWindow()
+            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xTreeList = xCheckListMenu.getChild("check_list_box")
+            self.assertEqual(3, len(xTreeList.getChildren()))
+            xOkBtn = xFloatWindow.getChild("cancel")
+            xOkBtn.executeAction("CLICK", tuple())
 
-        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "2", "ROW": "0"}))
-        xFloatWindow = self.xUITest.getFloatWindow()
-        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
-        xTreeList = xCheckListMenu.getChild("check_list_box")
-        self.assertEqual(4, len(xTreeList.getChildren()))
-        xOkBtn = xFloatWindow.getChild("cancel")
-        xOkBtn.executeAction("CLICK", tuple())
-
-        self.ui_test.close_doc()
+            xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "2", "ROW": "0"}))
+            xFloatWindow = self.xUITest.getFloatWindow()
+            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xTreeList = xCheckListMenu.getChild("check_list_box")
+            self.assertEqual(4, len(xTreeList.getChildren()))
+            xOkBtn = xFloatWindow.getChild("cancel")
+            xOkBtn.executeAction("CLICK", tuple())
 
     def test_tdf137626(self):
-        doc = self.ui_test.load_file(get_url_for_data_file("tdf137626.xlsx"))
+        with self.ui_test.load_file(get_url_for_data_file("tdf137626.xlsx")) as doc:
 
-        xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
+            xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
 
-        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "0"}))
-        xFloatWindow = self.xUITest.getFloatWindow()
-        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
-        xTreeList = xCheckListMenu.getChild("check_list_box")
-        self.assertEqual(3, len(xTreeList.getChildren()))
-        xOkBtn = xFloatWindow.getChild("cancel")
-        xOkBtn.executeAction("CLICK", tuple())
-
-        self.ui_test.close_doc()
+            xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "0"}))
+            xFloatWindow = self.xUITest.getFloatWindow()
+            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xTreeList = xCheckListMenu.getChild("check_list_box")
+            self.assertEqual(3, len(xTreeList.getChildren()))
+            xOkBtn = xFloatWindow.getChild("cancel")
+            xOkBtn.executeAction("CLICK", tuple())
 
     def test_time_value(self):
-        doc = self.ui_test.load_file(get_url_for_data_file("time_value.xlsx"))
+        with self.ui_test.load_file(get_url_for_data_file("time_value.xlsx")) as doc:
 
-        xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
+            xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
 
-        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
-        xFloatWindow = self.xUITest.getFloatWindow()
-        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
-        xTreeList = xCheckListMenu.getChild("check_list_box")
-        self.assertEqual(5, len(xTreeList.getChildren()))
-        self.assertEqual('true', get_state_as_dict(xTreeList.getChild('0'))['IsChecked'])
-        self.assertEqual('false', get_state_as_dict(xTreeList.getChild('1'))['IsChecked'])
-        self.assertEqual('true', get_state_as_dict(xTreeList.getChild('2'))['IsChecked'])
-        self.assertEqual('false', get_state_as_dict(xTreeList.getChild('3'))['IsChecked'])
-        self.assertEqual('true', get_state_as_dict(xTreeList.getChild('4'))['IsChecked'])
-        xOkBtn = xFloatWindow.getChild("cancel")
-        xOkBtn.executeAction("CLICK", tuple())
+            xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+            xFloatWindow = self.xUITest.getFloatWindow()
+            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xTreeList = xCheckListMenu.getChild("check_list_box")
+            self.assertEqual(5, len(xTreeList.getChildren()))
+            self.assertEqual('true', get_state_as_dict(xTreeList.getChild('0'))['IsChecked'])
+            self.assertEqual('false', get_state_as_dict(xTreeList.getChild('1'))['IsChecked'])
+            self.assertEqual('true', get_state_as_dict(xTreeList.getChild('2'))['IsChecked'])
+            self.assertEqual('false', get_state_as_dict(xTreeList.getChild('3'))['IsChecked'])
+            self.assertEqual('true', get_state_as_dict(xTreeList.getChild('4'))['IsChecked'])
+            xOkBtn = xFloatWindow.getChild("cancel")
+            xOkBtn.executeAction("CLICK", tuple())
 
-        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "0"}))
-        xFloatWindow = self.xUITest.getFloatWindow()
-        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
-        xTreeList = xCheckListMenu.getChild("check_list_box")
-        self.assertEqual(2, len(xTreeList.getChildren()))
-        xOkBtn = xFloatWindow.getChild("cancel")
-        xOkBtn.executeAction("CLICK", tuple())
-
-        self.ui_test.close_doc()
+            xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "0"}))
+            xFloatWindow = self.xUITest.getFloatWindow()
+            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xTreeList = xCheckListMenu.getChild("check_list_box")
+            self.assertEqual(2, len(xTreeList.getChildren()))
+            xOkBtn = xFloatWindow.getChild("cancel")
+            xOkBtn.executeAction("CLICK", tuple())
 
     def test_tdf140968(self):
-        doc = self.ui_test.load_file(get_url_for_data_file("tdf140968.xlsx"))
+        with self.ui_test.load_file(get_url_for_data_file("tdf140968.xlsx")) as doc:
 
-        xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
+            xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
 
-        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
-        xFloatWindow = self.xUITest.getFloatWindow()
-        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
-        xTreeList = xCheckListMenu.getChild("check_list_box")
-        self.assertEqual(5, len(xTreeList.getChildren()))
-        self.assertEqual("0.000", get_state_as_dict(xTreeList.getChild('0'))['Text'])
-        self.assertEqual("0.046", get_state_as_dict(xTreeList.getChild('1'))['Text'])
-        self.assertEqual("0.365", get_state_as_dict(xTreeList.getChild('2'))['Text'])
-        self.assertEqual("0.500", get_state_as_dict(xTreeList.getChild('3'))['Text'])
-        self.assertEqual("0.516", get_state_as_dict(xTreeList.getChild('4'))['Text'])
+            xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+            xFloatWindow = self.xUITest.getFloatWindow()
+            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xTreeList = xCheckListMenu.getChild("check_list_box")
+            self.assertEqual(5, len(xTreeList.getChildren()))
+            self.assertEqual("0.000", get_state_as_dict(xTreeList.getChild('0'))['Text'])
+            self.assertEqual("0.046", get_state_as_dict(xTreeList.getChild('1'))['Text'])
+            self.assertEqual("0.365", get_state_as_dict(xTreeList.getChild('2'))['Text'])
+            self.assertEqual("0.500", get_state_as_dict(xTreeList.getChild('3'))['Text'])
+            self.assertEqual("0.516", get_state_as_dict(xTreeList.getChild('4'))['Text'])
 
-        self.assertEqual('false', get_state_as_dict(xTreeList.getChild('0'))['IsChecked'])
-        self.assertEqual('true', get_state_as_dict(xTreeList.getChild('1'))['IsChecked'])
-        self.assertEqual('false', get_state_as_dict(xTreeList.getChild('2'))['IsChecked'])
-        self.assertEqual('true', get_state_as_dict(xTreeList.getChild('3'))['IsChecked'])
-        self.assertEqual('true', get_state_as_dict(xTreeList.getChild('4'))['IsChecked'])
+            self.assertEqual('false', get_state_as_dict(xTreeList.getChild('0'))['IsChecked'])
+            self.assertEqual('true', get_state_as_dict(xTreeList.getChild('1'))['IsChecked'])
+            self.assertEqual('false', get_state_as_dict(xTreeList.getChild('2'))['IsChecked'])
+            self.assertEqual('true', get_state_as_dict(xTreeList.getChild('3'))['IsChecked'])
+            self.assertEqual('true', get_state_as_dict(xTreeList.getChild('4'))['IsChecked'])
 
-        xFirstEntry = xTreeList.getChild("0")
-        xFirstEntry.executeAction("CLICK", tuple())
-        xFirstEntry = xTreeList.getChild("1")
-        xFirstEntry.executeAction("CLICK", tuple())
+            xFirstEntry = xTreeList.getChild("0")
+            xFirstEntry.executeAction("CLICK", tuple())
+            xFirstEntry = xTreeList.getChild("1")
+            xFirstEntry.executeAction("CLICK", tuple())
 
-        xOkBtn = xFloatWindow.getChild("ok")
-        xOkBtn.executeAction("CLICK", tuple())
+            xOkBtn = xFloatWindow.getChild("ok")
+            xOkBtn.executeAction("CLICK", tuple())
 
-        self.assertFalse(is_row_hidden(doc, 0))
-        self.assertTrue(is_row_hidden(doc, 1))
-        self.assertTrue(is_row_hidden(doc, 2))
-        self.assertTrue(is_row_hidden(doc, 3))
-        self.assertTrue(is_row_hidden(doc, 4))
-        self.assertFalse(is_row_hidden(doc, 5))
-        self.assertFalse(is_row_hidden(doc, 6))
-        self.assertFalse(is_row_hidden(doc, 7))
-
-        self.ui_test.close_doc()
+            self.assertFalse(is_row_hidden(doc, 0))
+            self.assertTrue(is_row_hidden(doc, 1))
+            self.assertTrue(is_row_hidden(doc, 2))
+            self.assertTrue(is_row_hidden(doc, 3))
+            self.assertTrue(is_row_hidden(doc, 4))
+            self.assertFalse(is_row_hidden(doc, 5))
+            self.assertFalse(is_row_hidden(doc, 6))
+            self.assertFalse(is_row_hidden(doc, 7))
 
     def test_tdf142350(self):
         self.ui_test.create_doc_in_start_center("calc")
@@ -440,64 +422,61 @@ class AutofilterTest(UITestCase):
         self.ui_test.close_doc()
 
     def test_tdf138438(self):
-        doc = self.ui_test.load_file(get_url_for_data_file("tdf138438.ods"))
+        with self.ui_test.load_file(get_url_for_data_file("tdf138438.ods")) as doc:
 
-        xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
+            xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
 
-        # Top 10 filer
-        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "0"}))
-        xFloatWindow = self.xUITest.getFloatWindow()
-        xMenu = xFloatWindow.getChild("menu")
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
+            # Top 10 filer
+            xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "0"}))
+            xFloatWindow = self.xUITest.getFloatWindow()
+            xMenu = xFloatWindow.getChild("menu")
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
 
-        self.assertFalse(is_row_hidden(doc, 0))
-        self.assertTrue(is_row_hidden(doc, 1))
-        self.assertTrue(is_row_hidden(doc, 2))
-        self.assertFalse(is_row_hidden(doc, 3))
-        self.assertFalse(is_row_hidden(doc, 4))
-        self.assertFalse(is_row_hidden(doc, 5))
-        self.assertFalse(is_row_hidden(doc, 6))
-        self.assertTrue(is_row_hidden(doc, 7))
-        self.assertFalse(is_row_hidden(doc, 8))
-
-        self.ui_test.close_doc()
+            self.assertFalse(is_row_hidden(doc, 0))
+            self.assertTrue(is_row_hidden(doc, 1))
+            self.assertTrue(is_row_hidden(doc, 2))
+            self.assertFalse(is_row_hidden(doc, 3))
+            self.assertFalse(is_row_hidden(doc, 4))
+            self.assertFalse(is_row_hidden(doc, 5))
+            self.assertFalse(is_row_hidden(doc, 6))
+            self.assertTrue(is_row_hidden(doc, 7))
+            self.assertFalse(is_row_hidden(doc, 8))
 
     def test_tdf142402(self):
-        doc = self.ui_test.load_file(get_url_for_data_file("tdf140968.xlsx"))
+        with self.ui_test.load_file(get_url_for_data_file("tdf140968.xlsx")) as doc:
 
-        xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
+            xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
 
-        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
-        xFloatWindow = self.xUITest.getFloatWindow()
-        #Choose Standard Filter... button
-        xMenu = xFloatWindow.getChild("menu")
+            xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+            xFloatWindow = self.xUITest.getFloatWindow()
+            #Choose Standard Filter... button
+            xMenu = xFloatWindow.getChild("menu")
 
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
 
-        xDialog = self.xUITest.getTopFocusWindow()
-        xval1 = xDialog.getChild("val1")
+            xDialog = self.xUITest.getTopFocusWindow()
+            xval1 = xDialog.getChild("val1")
 
-        select_by_text(xval1, "0.365")
+            select_by_text(xval1, "0.365")
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+            xOKBtn = xDialog.getChild("ok")
+            self.ui_test.close_dialog_through_button(xOKBtn)
 
-        self.assertFalse(is_row_hidden(doc, 0))
-        self.assertFalse(is_row_hidden(doc, 1))
-        self.assertTrue(is_row_hidden(doc, 2))
-        self.assertTrue(is_row_hidden(doc, 3))
-        self.assertTrue(is_row_hidden(doc, 4))
-        self.assertTrue(is_row_hidden(doc, 5))
-        self.assertTrue(is_row_hidden(doc, 6))
+            self.assertFalse(is_row_hidden(doc, 0))
+            self.assertFalse(is_row_hidden(doc, 1))
+            self.assertTrue(is_row_hidden(doc, 2))
+            self.assertTrue(is_row_hidden(doc, 3))
+            self.assertTrue(is_row_hidden(doc, 4))
+            self.assertTrue(is_row_hidden(doc, 5))
+            self.assertTrue(is_row_hidden(doc, 6))
 
-        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -13,27 +13,25 @@ from libreoffice.calc.document import get_cell_by_position
 
 class tdf102525(UITestCase):
     def test_tdf102525_F4_key_array_formula(self):
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf102525.ods"))
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
+        with self.ui_test.load_file(get_url_for_data_file("tdf102525.ods")) as calc_doc:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            document = self.ui_test.get_component()
 
-        #select B1:B4
-        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "B1:B4"}))
-        #F4
-        gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "F4"}))
-        #verify
-        self.assertEqual(get_cell_by_position(document, 0, 1, 0).getValue(), 2)
-        self.assertEqual(get_cell_by_position(document, 0, 1, 0).getFormula(), "{=IF($A$1:$A$4>2;1;2)}")
-        self.assertEqual(get_cell_by_position(document, 0, 1, 1).getValue(), 2)
-        self.assertEqual(get_cell_by_position(document, 0, 1, 2).getValue(), 1)
-        self.assertEqual(get_cell_by_position(document, 0, 1, 3).getValue(), 1)
-        #Undo
-        self.xUITest.executeCommand(".uno:Undo")
-        #verify
-        self.assertEqual(get_cell_by_position(document, 0, 1, 0).getValue(), 2)
-        self.assertEqual(get_cell_by_position(document, 0, 1, 0).getFormula(), "{=IF(A1:A4>2;1;2)}")
-
-        self.ui_test.close_doc()
+            #select B1:B4
+            gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "B1:B4"}))
+            #F4
+            gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "F4"}))
+            #verify
+            self.assertEqual(get_cell_by_position(document, 0, 1, 0).getValue(), 2)
+            self.assertEqual(get_cell_by_position(document, 0, 1, 0).getFormula(), "{=IF($A$1:$A$4>2;1;2)}")
+            self.assertEqual(get_cell_by_position(document, 0, 1, 1).getValue(), 2)
+            self.assertEqual(get_cell_by_position(document, 0, 1, 2).getValue(), 1)
+            self.assertEqual(get_cell_by_position(document, 0, 1, 3).getValue(), 1)
+            #Undo
+            self.xUITest.executeCommand(".uno:Undo")
+            #verify
+            self.assertEqual(get_cell_by_position(document, 0, 1, 0).getValue(), 2)
+            self.assertEqual(get_cell_by_position(document, 0, 1, 0).getFormula(), "{=IF(A1:A4>2;1;2)}")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

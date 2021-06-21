@@ -48,37 +48,35 @@ class writerWordCount(UITestCase):
 
     def test_tdf68347(self):
         #Bug 68347 - Incorrect word count in a document with recorded changes
-        writer_doc = self.ui_test.load_file(get_url_for_data_file("tdf68347.odt"))
-        xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
-        document = self.ui_test.get_component()
+        with self.ui_test.load_file(get_url_for_data_file("tdf68347.odt")) as writer_doc:
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xWriterDoc.getChild("writer_edit")
+            document = self.ui_test.get_component()
 
-        xWriterEdit.executeAction("SELECT", mkPropertyValues({"START_POS": "24", "END_POS": "39"})) #select two words
+            xWriterEdit.executeAction("SELECT", mkPropertyValues({"START_POS": "24", "END_POS": "39"})) #select two words
 
-        self.ui_test.execute_modeless_dialog_through_command(".uno:WordCountDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xselectwords = xDialog.getChild("selectwords")
-        xdocwords = xDialog.getChild("docwords")
-        xselectchars = xDialog.getChild("selectchars")
-        xdocchars = xDialog.getChild("docchars")
-        xselectcharsnospaces = xDialog.getChild("selectcharsnospaces")
-        xdoccharsnospaces = xDialog.getChild("doccharsnospaces")
-        xselectcjkchars = xDialog.getChild("selectcjkchars")
-        xdoccjkchars = xDialog.getChild("doccjkchars")
+            self.ui_test.execute_modeless_dialog_through_command(".uno:WordCountDialog")
+            xDialog = self.xUITest.getTopFocusWindow()
+            xselectwords = xDialog.getChild("selectwords")
+            xdocwords = xDialog.getChild("docwords")
+            xselectchars = xDialog.getChild("selectchars")
+            xdocchars = xDialog.getChild("docchars")
+            xselectcharsnospaces = xDialog.getChild("selectcharsnospaces")
+            xdoccharsnospaces = xDialog.getChild("doccharsnospaces")
+            xselectcjkchars = xDialog.getChild("selectcjkchars")
+            xdoccjkchars = xDialog.getChild("doccjkchars")
 
-        self.assertEqual(get_state_as_dict(xselectwords)["Text"], "4")
-        self.assertEqual(get_state_as_dict(xdocwords)["Text"], "12")
-        self.assertEqual(get_state_as_dict(xselectchars)["Text"], "15")
-        self.assertEqual(get_state_as_dict(xdocchars)["Text"], "54")
-        self.assertEqual(get_state_as_dict(xselectcharsnospaces)["Text"], "12")
-        #bug Bug 117703 Word Count: Wrong result for "Characters excluding spaces"
-        #self.assertEqual(get_state_as_dict(xdoccharsnospaces)["Text"], "44")
-        self.assertEqual(get_state_as_dict(xselectcjkchars)["Text"], "0")
-        self.assertEqual(get_state_as_dict(xdoccjkchars)["Text"], "0")
-        xCloseBtn = xDialog.getChild("close")
-        self.ui_test.close_dialog_through_button(xCloseBtn)
-
-        self.ui_test.close_doc()
+            self.assertEqual(get_state_as_dict(xselectwords)["Text"], "4")
+            self.assertEqual(get_state_as_dict(xdocwords)["Text"], "12")
+            self.assertEqual(get_state_as_dict(xselectchars)["Text"], "15")
+            self.assertEqual(get_state_as_dict(xdocchars)["Text"], "54")
+            self.assertEqual(get_state_as_dict(xselectcharsnospaces)["Text"], "12")
+            #bug Bug 117703 Word Count: Wrong result for "Characters excluding spaces"
+            #self.assertEqual(get_state_as_dict(xdoccharsnospaces)["Text"], "44")
+            self.assertEqual(get_state_as_dict(xselectcjkchars)["Text"], "0")
+            self.assertEqual(get_state_as_dict(xdoccjkchars)["Text"], "0")
+            xCloseBtn = xDialog.getChild("close")
+            self.ui_test.close_dialog_through_button(xCloseBtn)
 
     def test_tdf91100(self):
         self.ui_test.create_doc_in_start_center("writer")
@@ -93,32 +91,30 @@ class writerWordCount(UITestCase):
         self.ui_test.close_doc()
 
     def test_tdf58050(self):
-        writer_doc = self.ui_test.load_file(get_url_for_data_file("tdf58050.html"))
+        with self.ui_test.load_file(get_url_for_data_file("tdf58050.html")) as writer_doc:
 
-        self.ui_test.execute_modeless_dialog_through_command(".uno:WordCountDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
+            self.ui_test.execute_modeless_dialog_through_command(".uno:WordCountDialog")
+            xDialog = self.xUITest.getTopFocusWindow()
 
-        xselectwords = xDialog.getChild("selectwords")
-        xdocwords = xDialog.getChild("docwords")
-        xselectchars = xDialog.getChild("selectchars")
-        xdocchars = xDialog.getChild("docchars")
-        xselectcharsnospaces = xDialog.getChild("selectcharsnospaces")
-        xdoccharsnospaces = xDialog.getChild("doccharsnospaces")
-        xselectcjkchars = xDialog.getChild("selectcjkchars")
-        xdoccjkchars = xDialog.getChild("doccjkchars")
+            xselectwords = xDialog.getChild("selectwords")
+            xdocwords = xDialog.getChild("docwords")
+            xselectchars = xDialog.getChild("selectchars")
+            xdocchars = xDialog.getChild("docchars")
+            xselectcharsnospaces = xDialog.getChild("selectcharsnospaces")
+            xdoccharsnospaces = xDialog.getChild("doccharsnospaces")
+            xselectcjkchars = xDialog.getChild("selectcjkchars")
+            xdoccjkchars = xDialog.getChild("doccjkchars")
 
-        self.assertEqual(get_state_as_dict(xselectwords)["Text"], "0")
-        self.assertEqual(get_state_as_dict(xdocwords)["Text"], "3")
-        self.assertEqual(get_state_as_dict(xselectchars)["Text"], "0")
-        self.assertEqual(get_state_as_dict(xdocchars)["Text"], "14")
-        self.assertEqual(get_state_as_dict(xselectcharsnospaces)["Text"], "0")
-        self.assertEqual(get_state_as_dict(xdoccharsnospaces)["Text"], "12")
-        self.assertEqual(get_state_as_dict(xselectcjkchars)["Text"], "0")
-        self.assertEqual(get_state_as_dict(xdoccjkchars)["Text"], "0")
-        xCloseBtn = xDialog.getChild("close")
-        self.ui_test.close_dialog_through_button(xCloseBtn)
-
-        self.ui_test.close_doc()
+            self.assertEqual(get_state_as_dict(xselectwords)["Text"], "0")
+            self.assertEqual(get_state_as_dict(xdocwords)["Text"], "3")
+            self.assertEqual(get_state_as_dict(xselectchars)["Text"], "0")
+            self.assertEqual(get_state_as_dict(xdocchars)["Text"], "14")
+            self.assertEqual(get_state_as_dict(xselectcharsnospaces)["Text"], "0")
+            self.assertEqual(get_state_as_dict(xdoccharsnospaces)["Text"], "12")
+            self.assertEqual(get_state_as_dict(xselectcjkchars)["Text"], "0")
+            self.assertEqual(get_state_as_dict(xdoccjkchars)["Text"], "0")
+            xCloseBtn = xDialog.getChild("close")
+            self.ui_test.close_dialog_through_button(xCloseBtn)
 
     def test_word_count_interpunction_counted_tdf56975_a(self):
 
@@ -243,84 +239,82 @@ class writerWordCount(UITestCase):
         self.ui_test.close_doc()
 
     def test_tdf51816(self):
-        writer_doc = self.ui_test.load_file(get_url_for_data_file("tdf51816.odt"))
-        xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
-        document = self.ui_test.get_component()
-        #1. Open attached document
-        #2. Tools> Word count
-        self.ui_test.execute_modeless_dialog_through_command(".uno:WordCountDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xselectwords = xDialog.getChild("selectwords")
-        xdocwords = xDialog.getChild("docwords")
-        xselectchars = xDialog.getChild("selectchars")
-        xdocchars = xDialog.getChild("docchars")
-        xselectcharsnospaces = xDialog.getChild("selectcharsnospaces")
-        xdoccharsnospaces = xDialog.getChild("doccharsnospaces")
-        xselectcjkchars = xDialog.getChild("selectcjkchars")
-        xdoccjkchars = xDialog.getChild("doccjkchars")
+        with self.ui_test.load_file(get_url_for_data_file("tdf51816.odt")) as writer_doc:
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xWriterDoc.getChild("writer_edit")
+            document = self.ui_test.get_component()
+            #1. Open attached document
+            #2. Tools> Word count
+            self.ui_test.execute_modeless_dialog_through_command(".uno:WordCountDialog")
+            xDialog = self.xUITest.getTopFocusWindow()
+            xselectwords = xDialog.getChild("selectwords")
+            xdocwords = xDialog.getChild("docwords")
+            xselectchars = xDialog.getChild("selectchars")
+            xdocchars = xDialog.getChild("docchars")
+            xselectcharsnospaces = xDialog.getChild("selectcharsnospaces")
+            xdoccharsnospaces = xDialog.getChild("doccharsnospaces")
+            xselectcjkchars = xDialog.getChild("selectcjkchars")
+            xdoccjkchars = xDialog.getChild("doccjkchars")
 
-        #3. Click after "At nunc" then <Ctrl><Shift><Left>
-        self.xUITest.executeCommand(".uno:GoRight")
-        self.xUITest.executeCommand(".uno:GoRight")
-        self.xUITest.executeCommand(".uno:GoRight")
-        self.xUITest.executeCommand(".uno:GoRight")
-        self.xUITest.executeCommand(".uno:GoRight")
-        self.xUITest.executeCommand(".uno:GoRight")
-        self.xUITest.executeCommand(".uno:GoRight")
-        self.xUITest.executeCommand(".uno:WordLeftSel")
+            #3. Click after "At nunc" then <Ctrl><Shift><Left>
+            self.xUITest.executeCommand(".uno:GoRight")
+            self.xUITest.executeCommand(".uno:GoRight")
+            self.xUITest.executeCommand(".uno:GoRight")
+            self.xUITest.executeCommand(".uno:GoRight")
+            self.xUITest.executeCommand(".uno:GoRight")
+            self.xUITest.executeCommand(".uno:GoRight")
+            self.xUITest.executeCommand(".uno:GoRight")
+            self.xUITest.executeCommand(".uno:WordLeftSel")
 
-        #needs to wait, because Word count dialog is already open and it takes time to refresh the counter
-        #Expected result : Words 1 & Characters 4 #Actual result : Words 0 & Characters 0
-        self.ui_test.wait_until_property_is_updated(xselectwords, "Text", "1")
-        self.assertEqual(get_state_as_dict(xselectwords)["Text"], "1")
-        self.assertEqual(get_state_as_dict(xselectchars)["Text"], "4")
+            #needs to wait, because Word count dialog is already open and it takes time to refresh the counter
+            #Expected result : Words 1 & Characters 4 #Actual result : Words 0 & Characters 0
+            self.ui_test.wait_until_property_is_updated(xselectwords, "Text", "1")
+            self.assertEqual(get_state_as_dict(xselectwords)["Text"], "1")
+            self.assertEqual(get_state_as_dict(xselectchars)["Text"], "4")
 
-        #4. Click after "At nunc" then <Shift><Home>
-        self.xUITest.executeCommand(".uno:StartOfParaSel")
+            #4. Click after "At nunc" then <Shift><Home>
+            self.xUITest.executeCommand(".uno:StartOfParaSel")
 
-        #needs to wait, because Word count dialog is already open and it takes time to refresh the counter
-        #Expected result : Words 2 & Characters 7 & excluding space 6  #Actual result : Words 0 & Characters 0
-        self.ui_test.wait_until_property_is_updated(xselectwords, "Text", "2")
-        self.assertEqual(get_state_as_dict(xselectwords)["Text"], "2")
-        self.assertEqual(get_state_as_dict(xselectchars)["Text"], "7")
+            #needs to wait, because Word count dialog is already open and it takes time to refresh the counter
+            #Expected result : Words 2 & Characters 7 & excluding space 6  #Actual result : Words 0 & Characters 0
+            self.ui_test.wait_until_property_is_updated(xselectwords, "Text", "2")
+            self.assertEqual(get_state_as_dict(xselectwords)["Text"], "2")
+            self.assertEqual(get_state_as_dict(xselectchars)["Text"], "7")
 
-        self.assertEqual(get_state_as_dict(xselectcharsnospaces)["Text"], "6")
+            self.assertEqual(get_state_as_dict(xselectcharsnospaces)["Text"], "6")
 
-        xCloseBtn = xDialog.getChild("close")
-        self.ui_test.close_dialog_through_button(xCloseBtn)
-        self.ui_test.close_doc()
+            xCloseBtn = xDialog.getChild("close")
+            self.ui_test.close_dialog_through_button(xCloseBtn)
 
     def test_tdf117703(self):
-        self.ui_test.load_file(get_url_for_data_file("tdf117703.odt"))
-        self.xUITest.getTopFocusWindow()
+        with self.ui_test.load_file(get_url_for_data_file("tdf117703.odt")):
+            self.xUITest.getTopFocusWindow()
 
-        self.xUITest.executeCommand(".uno:SelectAll")
+            self.xUITest.executeCommand(".uno:SelectAll")
 
-        self.ui_test.execute_modeless_dialog_through_command(".uno:WordCountDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
+            self.ui_test.execute_modeless_dialog_through_command(".uno:WordCountDialog")
+            xDialog = self.xUITest.getTopFocusWindow()
 
-        xselectwords = xDialog.getChild("selectwords")
-        xdocwords = xDialog.getChild("docwords")
-        xselectchars = xDialog.getChild("selectchars")
-        xdocchars = xDialog.getChild("docchars")
-        xselectcharsnospaces = xDialog.getChild("selectcharsnospaces")
-        xdoccharsnospaces = xDialog.getChild("doccharsnospaces")
-        xselectcjkchars = xDialog.getChild("selectcjkchars")
-        xdoccjkchars = xDialog.getChild("doccjkchars")
+            xselectwords = xDialog.getChild("selectwords")
+            xdocwords = xDialog.getChild("docwords")
+            xselectchars = xDialog.getChild("selectchars")
+            xdocchars = xDialog.getChild("docchars")
+            xselectcharsnospaces = xDialog.getChild("selectcharsnospaces")
+            xdoccharsnospaces = xDialog.getChild("doccharsnospaces")
+            xselectcjkchars = xDialog.getChild("selectcjkchars")
+            xdoccjkchars = xDialog.getChild("doccjkchars")
 
-        self.assertEqual(get_state_as_dict(xselectwords)["Text"], "12")
-        self.assertEqual(get_state_as_dict(xdocwords)["Text"], "12")
-        self.assertEqual(get_state_as_dict(xselectchars)["Text"], "54")
-        self.assertEqual(get_state_as_dict(xdocchars)["Text"], "54")
+            self.assertEqual(get_state_as_dict(xselectwords)["Text"], "12")
+            self.assertEqual(get_state_as_dict(xdocwords)["Text"], "12")
+            self.assertEqual(get_state_as_dict(xselectchars)["Text"], "54")
+            self.assertEqual(get_state_as_dict(xdocchars)["Text"], "54")
 
-        # Without the fix in place it would have failed with: AssertionError: '0' != '44'
-        self.assertEqual(get_state_as_dict(xselectcharsnospaces)["Text"], "44")
-        self.assertEqual(get_state_as_dict(xdoccharsnospaces)["Text"], "44")
-        self.assertEqual(get_state_as_dict(xselectcjkchars)["Text"], "0")
-        self.assertEqual(get_state_as_dict(xdoccjkchars)["Text"], "0")
-        xCloseBtn = xDialog.getChild("close")
-        self.ui_test.close_dialog_through_button(xCloseBtn)
+            # Without the fix in place it would have failed with: AssertionError: '0' != '44'
+            self.assertEqual(get_state_as_dict(xselectcharsnospaces)["Text"], "44")
+            self.assertEqual(get_state_as_dict(xdoccharsnospaces)["Text"], "44")
+            self.assertEqual(get_state_as_dict(xselectcjkchars)["Text"], "0")
+            self.assertEqual(get_state_as_dict(xdoccjkchars)["Text"], "0")
+            xCloseBtn = xDialog.getChild("close")
+            self.ui_test.close_dialog_through_button(xCloseBtn)
 
-        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
