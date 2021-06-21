@@ -16,6 +16,24 @@
       "revId": "6a144f3233994270e7671b05d89abeca79e5f0d0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00ed0a14_b622e0a3",
+        "filename": "sw/qa/uitest/writer_tests7/tdf90401.py",
+        "patchSetId": 16
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-06-21T08:54:49Z",
+      "side": 1,
+      "message": "Looking at \"DialogClosed\" I see it is emitted by Dialog::dispose in vcl/source/window/dialog.cxx:634 so \"DialogClosed\" is really \"DialogDestroyed\" and is sent when the dialog is destroyed not when a dialog is visually closed\n\nThis \"Security Options and Warnings\" dialog is created and run by SvxSecurityTabPage::SecurityOptionsHdl cui/source/options/optinet2.cxx but its not destroyed after its \"run\" is complete like dialogs often are, its left around until its parent page is destroyed",
+      "parentUuid": "526a9c96_d23a0bcf",
+      "revId": "6a144f3233994270e7671b05d89abeca79e5f0d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
