@@ -23,6 +23,7 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <HashMaps.hxx>
+#include "ContentInfo.hxx"
 
 class ZipPackageFolderEnumeration final
     : public cppu::WeakImplHelper<css::container::XEnumeration, css::lang::XServiceInfo>
