@@ -32,6 +32,7 @@
 #include <com/sun/star/xml/crypto/CipherID.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <comphelper/refcountedmutex.hxx>
+#include <rtl/ref.hxx>
 
 #include "HashMaps.hxx"
 #include <osl/file.h>

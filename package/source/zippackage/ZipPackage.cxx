@@ -60,7 +60,6 @@
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
 #include <cppuhelper/implbase.hxx>
-#include "ContentInfo.hxx"
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/random.h>
