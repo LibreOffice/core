@@ -12,29 +12,27 @@ from uitest.uihelper.common import change_measurement_unit
 class tdf99711(UITestCase):
     def test_tdf99711(self):
 
-        writer_doc = self.ui_test.load_file(get_url_for_data_file("shape.odt"))
+        with self.ui_test.load_file(get_url_for_data_file("shape.odt")) as writer_doc:
 
-        #set measurement to millimeters
-        change_measurement_unit(self, "Millimeter")
+            #set measurement to millimeters
+            change_measurement_unit(self, "Millimeter")
 
-        xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-        self.xUITest.executeCommand(".uno:JumpToNextFrame")
+            self.xUITest.executeCommand(".uno:JumpToNextFrame")
 
-        self.xUITest.executeCommand(".uno:Sidebar")
-        xWriterEdit.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "TextPropertyPanel"}))
+            self.xUITest.executeCommand(".uno:Sidebar")
+            xWriterEdit.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "TextPropertyPanel"}))
 
-        #wait until the sidebar is available
-        xChild = self.ui_test.wait_until_child_is_available('selectwidth')
-        self.assertEqual(get_state_as_dict(xChild)['Text'], '10.00 mm')
+            #wait until the sidebar is available
+            xChild = self.ui_test.wait_until_child_is_available('selectwidth')
+            self.assertEqual(get_state_as_dict(xChild)['Text'], '10.00 mm')
 
-        xChild = self.ui_test.wait_until_child_is_available('selectheight')
-        self.assertEqual(get_state_as_dict(xChild)['Text'], '10.00 mm')
+            xChild = self.ui_test.wait_until_child_is_available('selectheight')
+            self.assertEqual(get_state_as_dict(xChild)['Text'], '10.00 mm')
 
-        self.xUITest.executeCommand(".uno:Sidebar")
-
-        self.ui_test.close_doc()
+            self.xUITest.executeCommand(".uno:Sidebar")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
 

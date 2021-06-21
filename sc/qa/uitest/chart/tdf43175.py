@@ -11,38 +11,36 @@ from uitest.uihelper.common import get_url_for_data_file
 class Tdf43175(UITestCase):
 
     def test_tdf43175(self):
-        self.ui_test.load_file(get_url_for_data_file("tdf43175.ods"))
+        with self.ui_test.load_file(get_url_for_data_file("tdf43175.ods")):
 
-        self.xUITest.executeCommand(".uno:TableSelectAll")
+            self.xUITest.executeCommand(".uno:TableSelectAll")
 
-        self.ui_test.execute_dialog_through_command(".uno:Move")
-        xDialog = self.xUITest.getTopFocusWindow()
-        insertBefore = xDialog.getChild("insertBefore")
+            self.ui_test.execute_dialog_through_command(".uno:Move")
+            xDialog = self.xUITest.getTopFocusWindow()
+            insertBefore = xDialog.getChild("insertBefore")
 
-        # Select - move to end position -
-        xTreeEntry = insertBefore.getChild('2')
-        xTreeEntry.executeAction("SELECT", tuple())
+            # Select - move to end position -
+            xTreeEntry = insertBefore.getChild('2')
+            xTreeEntry.executeAction("SELECT", tuple())
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+            xOKBtn = xDialog.getChild("ok")
+            self.ui_test.close_dialog_through_button(xOKBtn)
 
-        document = self.ui_test.get_component()
+            document = self.ui_test.get_component()
 
-        aSheetNames = ['Blad1', 'Blad2', 'Blad1_2', 'Blad2_2']
+            aSheetNames = ['Blad1', 'Blad2', 'Blad1_2', 'Blad2_2']
 
-        self.assertEqual(4, document.Sheets.getCount())
-        for i in range(4):
-            self.assertEqual(aSheetNames[i], document.Sheets[i].Name)
+            self.assertEqual(4, document.Sheets.getCount())
+            for i in range(4):
+                self.assertEqual(aSheetNames[i], document.Sheets[i].Name)
 
-            xChart = document.Sheets[i].Charts[0]
-            xDataSeries = xChart.getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries
-            self.assertEqual(1, len(xDataSeries))
+                xChart = document.Sheets[i].Charts[0]
+                xDataSeries = xChart.getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries
+                self.assertEqual(1, len(xDataSeries))
 
-            # Without the fix in place, this test would have failed with
-            # AssertionError: '$Blad1_2.$A$1:$A$5' != '$Blad1.$A$1:$A$5'
-            aExpectedRangeName = '$' + aSheetNames[i] + '.$A$1:$A$5'
-            self.assertEqual(aExpectedRangeName, xDataSeries[0].DataSequences[0].Values.SourceRangeRepresentation)
-
-        self.ui_test.close_doc()
+                # Without the fix in place, this test would have failed with
+                # AssertionError: '$Blad1_2.$A$1:$A$5' != '$Blad1.$A$1:$A$5'
+                aExpectedRangeName = '$' + aSheetNames[i] + '.$A$1:$A$5'
+                self.assertEqual(aExpectedRangeName, xDataSeries[0].DataSequences[0].Values.SourceRangeRepresentation)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

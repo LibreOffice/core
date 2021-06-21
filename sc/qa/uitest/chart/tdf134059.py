@@ -39,30 +39,28 @@ class Tdf134059(UITestCase):
     gridwin.executeAction("DESELECT", mkPropertyValues({"OBJECT": "Object 1"}))
 
   def test_tdf134059(self):
-    calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf134059.ods"))
-    xCalcDoc = self.xUITest.getTopFocusWindow()
-    gridwin = xCalcDoc.getChild("grid_window")
-    document = self.ui_test.get_component()
+    with self.ui_test.load_file(get_url_for_data_file("tdf134059.ods")) as calc_doc:
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        gridwin = xCalcDoc.getChild("grid_window")
+        document = self.ui_test.get_component()
 
-    self.assertSeriesNames(gridwin)
+        self.assertSeriesNames(gridwin)
 
-    # Hide row 10
-    gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A10"}))
-    self.ui_test._xUITest.executeCommand(".uno:HideRow")
+        # Hide row 10
+        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A10"}))
+        self.ui_test._xUITest.executeCommand(".uno:HideRow")
 
-    row = get_row(calc_doc, 9)
-    self.assertFalse(row.getPropertyValue("IsVisible"))
+        row = get_row(calc_doc, 9)
+        self.assertFalse(row.getPropertyValue("IsVisible"))
 
-    # Without the fix in place, this test would have failed with
-    # AssertionError: 'Col. 1' != 'Column C'
-    self.assertSeriesNames(gridwin)
+        # Without the fix in place, this test would have failed with
+        # AssertionError: 'Col. 1' != 'Column C'
+        self.assertSeriesNames(gridwin)
 
-    self.xUITest.executeCommand(".uno:Undo")
+        self.xUITest.executeCommand(".uno:Undo")
 
-    self.assertTrue(row.getPropertyValue("IsVisible"))
+        self.assertTrue(row.getPropertyValue("IsVisible"))
 
-    self.assertSeriesNames(gridwin)
-
-    self.ui_test.close_doc()
+        self.assertSeriesNames(gridwin)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -11,18 +11,17 @@ from uitest.uihelper.common import get_url_for_data_file
 
 class tdf124818(UITestCase):
    def test_tdf124818_crash_select_all_and_switch_spreadsheet(self):
-    calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf124818.xls"))
-    xCalcDoc = self.xUITest.getTopFocusWindow()
-    gridwin = xCalcDoc.getChild("grid_window")
-    document = self.ui_test.get_component()
+    with self.ui_test.load_file(get_url_for_data_file("tdf124818.xls")) as calc_doc:
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        gridwin = xCalcDoc.getChild("grid_window")
+        document = self.ui_test.get_component()
 
-    #Select all ( Ctrl + A );Go to sheet Graph2;Select all;Crash
-    self.xUITest.executeCommand(".uno:SelectAll")
-    self.xUITest.executeCommand(".uno:JumpToPrevTable")
-    self.xUITest.executeCommand(".uno:SelectAll")
+        #Select all ( Ctrl + A );Go to sheet Graph2;Select all;Crash
+        self.xUITest.executeCommand(".uno:SelectAll")
+        self.xUITest.executeCommand(".uno:JumpToPrevTable")
+        self.xUITest.executeCommand(".uno:SelectAll")
 
-    #verify; no crashes
-    self.assertEqual(document.Sheets.getCount(), 3)
+        #verify; no crashes
+        self.assertEqual(document.Sheets.getCount(), 3)
 
-    self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

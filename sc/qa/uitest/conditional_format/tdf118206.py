@@ -14,30 +14,29 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 #Bug 118206 - [GTK3] Calc hangs copying/cutting a conditional format column
 class tdf118206(UITestCase):
     def test_tdf118206(self):
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf118206.xlsx"))
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
-        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
-        self.xUITest.executeCommand(".uno:SelectColumn")
-        self.xUITest.executeCommand(".uno:Copy")
-        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B1"}))
-        self.xUITest.executeCommand(".uno:SelectColumn")
-        self.xUITest.executeCommand(".uno:Paste")
+        with self.ui_test.load_file(get_url_for_data_file("tdf118206.xlsx")) as calc_doc:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            document = self.ui_test.get_component()
+            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
+            self.xUITest.executeCommand(".uno:SelectColumn")
+            self.xUITest.executeCommand(".uno:Copy")
+            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B1"}))
+            self.xUITest.executeCommand(".uno:SelectColumn")
+            self.xUITest.executeCommand(".uno:Paste")
 
-        #verify
-        self.assertEqual(get_cell_by_position(document, 0, 1, 0).getString(), "On Back Order")
-        self.assertEqual(get_cell_by_position(document, 0, 1, 1).getValue(), 0)
-        self.assertEqual(get_cell_by_position(document, 0, 1, 7).getValue(), 1)
+            #verify
+            self.assertEqual(get_cell_by_position(document, 0, 1, 0).getString(), "On Back Order")
+            self.assertEqual(get_cell_by_position(document, 0, 1, 1).getValue(), 0)
+            self.assertEqual(get_cell_by_position(document, 0, 1, 7).getValue(), 1)
 
-        #Undo
-        self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "On Back Order")
-        self.assertEqual(get_cell_by_position(document, 0, 0, 1).getValue(), 0)
-        self.assertEqual(get_cell_by_position(document, 0, 0, 7).getValue(), 1)
-        self.assertEqual(get_cell_by_position(document, 0, 1, 0).getString(), "")
-        self.assertEqual(get_cell_by_position(document, 0, 1, 1).getString(), "")
-        self.assertEqual(get_cell_by_position(document, 0, 1, 7).getString(), "")
-        self.ui_test.close_doc()
+            #Undo
+            self.xUITest.executeCommand(".uno:Undo")
+            self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "On Back Order")
+            self.assertEqual(get_cell_by_position(document, 0, 0, 1).getValue(), 0)
+            self.assertEqual(get_cell_by_position(document, 0, 0, 7).getValue(), 1)
+            self.assertEqual(get_cell_by_position(document, 0, 1, 0).getString(), "")
+            self.assertEqual(get_cell_by_position(document, 0, 1, 1).getString(), "")
+            self.assertEqual(get_cell_by_position(document, 0, 1, 7).getString(), "")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
