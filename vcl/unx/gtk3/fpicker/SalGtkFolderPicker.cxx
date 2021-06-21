@@ -47,6 +47,7 @@ SalGtkFolderPicker::SalGtkFolderPicker( const uno::Reference< uno::XComponentCon
         OUStringToOString( getResString( FOLDERPICKER_TITLE ), RTL_TEXTENCODING_UTF8 ).getStr(),
         nullptr, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, getCancelText().getStr(), GTK_RESPONSE_CANCEL,
         getOKText().getStr(), GTK_RESPONSE_ACCEPT, nullptr );
+    gtk_window_set_modal(GTK_WINDOW(m_pDialog), true);
 
     gtk_dialog_set_default_response( GTK_DIALOG (m_pDialog), GTK_RESPONSE_ACCEPT );
 #if !GTK_CHECK_VERSION(4, 0, 0)

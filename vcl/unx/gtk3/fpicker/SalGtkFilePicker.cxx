@@ -121,6 +121,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
                                         "title", OUStringToOString(aFilePickerTitle, RTL_TEXTENCODING_UTF8).getStr(),
                                         "action", GTK_FILE_CHOOSER_ACTION_OPEN,
                                         nullptr));
+    gtk_window_set_modal(GTK_WINDOW(m_pDialog), true);
     gtk_dialog_set_default_response( GTK_DIALOG (m_pDialog), GTK_RESPONSE_ACCEPT );
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
