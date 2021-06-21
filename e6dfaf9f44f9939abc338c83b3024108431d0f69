@@ -46,6 +46,30 @@
       "revId": "e6dfaf9f44f9939abc338c83b3024108431d0f69",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3e72a617_f78cbabb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-21T10:31:53Z",
+      "side": 1,
+      "message": "I must confess that I don\u0027t quite understand the restrictions applied on constexpr constructor of vector, and thus don\u0027t understand the problem. I need to work with this constexpr vector a little, to grasp it 😊\n\nThanks for the pointer!",
+      "parentUuid": "ea2ed7e5_ca08db84",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 22
+      },
+      "revId": "e6dfaf9f44f9939abc338c83b3024108431d0f69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
