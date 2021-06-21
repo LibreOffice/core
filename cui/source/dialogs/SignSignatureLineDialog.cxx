@@ -17,6 +17,7 @@
 
 #include <comphelper/graphicmimetype.hxx>
 #include <comphelper/processfactory.hxx>
+#include <sfx2/filedlghelper.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/xoutbmp.hxx>
 #include <utility>
@@ -121,8 +122,9 @@ SignSignatureLineDialog::SignSignatureLineDialog(weld::Widget* pParent, Referenc
 IMPL_LINK_NOARG(SignSignatureLineDialog, loadImage, weld::Button&, void)
 {
     Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
-    Reference<XFilePicker3> xFilePicker
-        = FilePicker::createWithMode(xContext, TemplateDescription::FILEOPEN_PREVIEW);
+    sfx2::FileDialogHelper aHelper(TemplateDescription::FILEOPEN_PREVIEW, FileDialogFlags::NONE,
+                                   m_xDialog.get());
+    Reference<XFilePicker3> xFilePicker = aHelper.GetFilePicker();
     if (!xFilePicker->execute())
         return;
 
