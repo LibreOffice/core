@@ -18,28 +18,27 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf81696(UITestCase):
 
     def test_tdf81696_sort_cell_conditional_formatting(self):
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf81696.ods"))
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
+        with self.ui_test.load_file(get_url_for_data_file("tdf81696.ods")) as calc_doc:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            document = self.ui_test.get_component()
 
-        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B3"}))
-        #Open sort dialog by DATA - SORT,Just sort it by Column A, ascending. (it's default)
-        self.ui_test.execute_dialog_through_command(".uno:DataSort")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xTabs = xDialog.getChild("tabcontrol")
-        xleftright = xDialog.getChild("leftright")
-        select_pos(xTabs, "0")
+            gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B3"}))
+            #Open sort dialog by DATA - SORT,Just sort it by Column A, ascending. (it's default)
+            self.ui_test.execute_dialog_through_command(".uno:DataSort")
+            xDialog = self.xUITest.getTopFocusWindow()
+            xTabs = xDialog.getChild("tabcontrol")
+            xleftright = xDialog.getChild("leftright")
+            select_pos(xTabs, "0")
 
-        xOK = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOK)
-        #verify
-        self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "A")
-        self.assertEqual(get_cell_by_position(document, 0, 1, 0).getString(), "B")
-        self.assertEqual(get_cell_by_position(document, 0, 0, 1).getValue(), 1)
-        self.assertEqual(get_cell_by_position(document, 0, 1, 1).getValue(), 2)
-        self.assertEqual(get_cell_by_position(document, 0, 0, 2).getValue(), 2)
-        self.assertEqual(get_cell_by_position(document, 0, 1, 2).getValue(), 1)
+            xOK = xDialog.getChild("ok")
+            self.ui_test.close_dialog_through_button(xOK)
+            #verify
+            self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "A")
+            self.assertEqual(get_cell_by_position(document, 0, 1, 0).getString(), "B")
+            self.assertEqual(get_cell_by_position(document, 0, 0, 1).getValue(), 1)
+            self.assertEqual(get_cell_by_position(document, 0, 1, 1).getValue(), 2)
+            self.assertEqual(get_cell_by_position(document, 0, 0, 2).getValue(), 2)
+            self.assertEqual(get_cell_by_position(document, 0, 1, 2).getValue(), 1)
 
-        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

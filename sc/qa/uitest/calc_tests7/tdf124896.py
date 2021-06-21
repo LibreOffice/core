@@ -11,18 +11,17 @@ from uitest.uihelper.common import get_url_for_data_file
 
 class tdf124896(UITestCase):
    def test_tdf124896_crash_delete_sheet(self):
-    calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf124896.ods"))
-    xCalcDoc = self.xUITest.getTopFocusWindow()
-    gridwin = xCalcDoc.getChild("grid_window")
-    document = self.ui_test.get_component()
+    with self.ui_test.load_file(get_url_for_data_file("tdf124896.ods")) as calc_doc:
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        gridwin = xCalcDoc.getChild("grid_window")
+        document = self.ui_test.get_component()
 
-    # Remove X Bar R Chart (2) sheet
-    self.ui_test.execute_dialog_through_command(".uno:Remove")  #delete sheet
-    xDialog = self.xUITest.getTopFocusWindow()
-    xOKButton = xDialog.getChild("yes")
-    xOKButton.executeAction("CLICK", tuple())
-    #verify; no crashes
-    self.assertEqual(document.Sheets.getCount(), 2)
+        # Remove X Bar R Chart (2) sheet
+        self.ui_test.execute_dialog_through_command(".uno:Remove")  #delete sheet
+        xDialog = self.xUITest.getTopFocusWindow()
+        xOKButton = xDialog.getChild("yes")
+        xOKButton.executeAction("CLICK", tuple())
+        #verify; no crashes
+        self.assertEqual(document.Sheets.getCount(), 2)
 
-    self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
