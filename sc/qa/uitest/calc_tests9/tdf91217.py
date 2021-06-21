@@ -17,24 +17,22 @@ class tdf91217(UITestCase):
     def test_tdf91217_crash_deleting_rows(self):
         # FIXME disable this will it's clear what existing problem did this test uncover.
         return
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf91217.ods"))
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
-        #Select rows 76-1125 in sheet 3 (Daily), right click, Delete Rows.  Instant crash.
-        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A76:A1125"}))
-        self.xUITest.executeCommand(".uno:SelectRow")
-        #delete rows
-        self.xUITest.executeCommand(".uno:DeleteRows")
-        #A1 should be "Dist"
-        self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "Dist")
-        #- Undo-redo
-        self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "Dist")
+        with self.ui_test.load_file(get_url_for_data_file("tdf91217.ods")) as calc_doc:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            document = self.ui_test.get_component()
+            #Select rows 76-1125 in sheet 3 (Daily), right click, Delete Rows.  Instant crash.
+            gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A76:A1125"}))
+            self.xUITest.executeCommand(".uno:SelectRow")
+            #delete rows
+            self.xUITest.executeCommand(".uno:DeleteRows")
+            #A1 should be "Dist"
+            self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "Dist")
+            #- Undo-redo
+            self.xUITest.executeCommand(".uno:Undo")
+            self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "Dist")
 
-        self.xUITest.executeCommand(".uno:Redo")
-        self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "Dist")
-
-        self.ui_test.close_doc()
+            self.xUITest.executeCommand(".uno:Redo")
+            self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "Dist")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

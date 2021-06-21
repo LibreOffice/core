@@ -15,39 +15,33 @@ class HandleFiles(UITestCase):
 
     def test_load_file(self):
 
-        calc_file = self.ui_test.load_file(get_url_for_data_file("test.ods"))
+        with self.ui_test.load_file(get_url_for_data_file("test.ods")) as calc_file:
 
-        calc_file2 = self.ui_test.load_file(get_url_for_data_file("test2.ods"))
+            with self.ui_test.load_file(get_url_for_data_file("test2.ods")):
 
-        frames = self.ui_test.get_frames()
-        self.assertEqual(len(frames), 2)
+                frames = self.ui_test.get_frames()
+                self.assertEqual(len(frames), 2)
 
-        self.ui_test.close_doc()
+            frames = self.ui_test.get_frames()
+            self.assertEqual(len(frames), 1)
 
-        frames = self.ui_test.get_frames()
-        self.assertEqual(len(frames), 1)
-
-        # this is currently still necessary as otherwise
-        # the command is not forwarded to the correct frame
-        # TODO: provide an additional event that we can use
-        #       and get rid of the sleep
-        time.sleep(1)
-
-        self.ui_test.close_doc()
+            # this is currently still necessary as otherwise
+            # the command is not forwarded to the correct frame
+            # TODO: provide an additional event that we can use
+            #       and get rid of the sleep
+            time.sleep(1)
 
     def test_select_frame(self):
-        calc_file = self.ui_test.load_file(get_url_for_data_file("test.ods"))
+        with self.ui_test.load_file(get_url_for_data_file("test.ods")) as calc_file:
 
-        calc_file2 = self.ui_test.load_file(get_url_for_data_file("test2.ods"))
-        frames = self.ui_test.get_frames()
-        self.assertEqual(len(frames), 2)
-        frames[0].activate()
+            with self.ui_test.load_file(get_url_for_data_file("test2.ods")):
+                frames = self.ui_test.get_frames()
+                self.assertEqual(len(frames), 2)
+                frames[0].activate()
 
-        self.ui_test.close_doc()
+            frames = self.ui_test.get_frames()
+            self.assertEqual(len(frames), 1)
 
-        frames = self.ui_test.get_frames()
-        self.assertEqual(len(frames), 1)
-
-        self.assertTrue(frames[0].getTitle().startswith("test2.ods"))
+            self.assertTrue(frames[0].getTitle().startswith("test2.ods"))
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

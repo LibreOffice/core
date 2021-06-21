@@ -12,25 +12,24 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 
 class tdf124586(UITestCase):
    def test_tdf124586_crash_switch_outline_numbering(self):
-        writer_doc = self.ui_test.load_file(get_url_for_data_file("tdf124586.odt"))
-        document = self.ui_test.get_component()
-        xWriterDoc = self.xUITest.getTopFocusWindow()
+        with self.ui_test.load_file(get_url_for_data_file("tdf124586.odt")) as writer_doc:
+            document = self.ui_test.get_component()
+            xWriterDoc = self.xUITest.getTopFocusWindow()
 
-        #Goto Tools > Chapter Numbering.
-        self.ui_test.execute_dialog_through_command(".uno:ChapterNumberingDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xstyle = xDialog.getChild("style")
-        select_by_text(xstyle, "MyHeading")
-        xOK = xDialog.getChild("ok")
-        xOK.executeAction("CLICK", tuple())
+            #Goto Tools > Chapter Numbering.
+            self.ui_test.execute_dialog_through_command(".uno:ChapterNumberingDialog")
+            xDialog = self.xUITest.getTopFocusWindow()
+            xstyle = xDialog.getChild("style")
+            select_by_text(xstyle, "MyHeading")
+            xOK = xDialog.getChild("ok")
+            xOK.executeAction("CLICK", tuple())
 
-        self.assertEqual(document.Text.String[0:8], "Schritte")
+            self.assertEqual(document.Text.String[0:8], "Schritte")
 
-        self.ui_test.execute_dialog_through_command(".uno:ChapterNumberingDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xstyle = xDialog.getChild("style")
-        self.assertEqual(get_state_as_dict(xstyle)["SelectEntryText"], "MyHeading")
-        xOK = xDialog.getChild("ok")
-        xOK.executeAction("CLICK", tuple())
-        self.ui_test.close_doc()
+            self.ui_test.execute_dialog_through_command(".uno:ChapterNumberingDialog")
+            xDialog = self.xUITest.getTopFocusWindow()
+            xstyle = xDialog.getChild("style")
+            self.assertEqual(get_state_as_dict(xstyle)["SelectEntryText"], "MyHeading")
+            xOK = xDialog.getChild("ok")
+            xOK.executeAction("CLICK", tuple())
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

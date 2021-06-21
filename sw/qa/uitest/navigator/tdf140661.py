@@ -41,21 +41,19 @@ class tdf140661(UITestCase):
 
     def test_tdf140661(self):
 
-        writer_doc = self.ui_test.load_file(get_url_for_data_file("tdf140661.odt"))
+        with self.ui_test.load_file(get_url_for_data_file("tdf140661.odt")) as writer_doc:
 
-        self.launch_navigator(True)
+            self.launch_navigator(True)
 
-        # Select the shape and ungroup it
-        self.xUITest.executeCommand(".uno:JumpToNextFrame")
+            # Select the shape and ungroup it
+            self.xUITest.executeCommand(".uno:JumpToNextFrame")
 
-        self.ui_test.wait_until_child_is_available('metricfield')
+            self.ui_test.wait_until_child_is_available('metricfield')
 
-        self.xUITest.executeCommand(".uno:FormatUngroup")
+            self.xUITest.executeCommand(".uno:FormatUngroup")
 
-        # Without the fix in place, this test would have failed with
-        # AssertionError: 12 != 0
-        self.launch_navigator(False)
-
-        self.ui_test.close_doc()
+            # Without the fix in place, this test would have failed with
+            # AssertionError: 12 != 0
+            self.launch_navigator(False)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

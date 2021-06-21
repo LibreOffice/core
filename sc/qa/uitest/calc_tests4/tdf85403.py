@@ -13,25 +13,23 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf85403(UITestCase):
     def test_tdf85403_text_to_columns(self):
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf85403.ods"))
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
+        with self.ui_test.load_file(get_url_for_data_file("tdf85403.ods")) as calc_doc:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            document = self.ui_test.get_component()
 
-        #'123 in A1, SUM(A1) in B1, result is 0 as expected,
-        #now select A1 and use data->text to columns->ok and B1 is not updated,
-        #putting a new SUM(A1) in C1 will show 123
-        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
-        # Data - Text to Columns
-        self.ui_test.execute_dialog_through_command(".uno:TextToColumns")
-        xDialog = self.xUITest.getTopFocusWindow()
-        # Click Ok
-        xOK = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOK)
+            #'123 in A1, SUM(A1) in B1, result is 0 as expected,
+            #now select A1 and use data->text to columns->ok and B1 is not updated,
+            #putting a new SUM(A1) in C1 will show 123
+            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
+            # Data - Text to Columns
+            self.ui_test.execute_dialog_through_command(".uno:TextToColumns")
+            xDialog = self.xUITest.getTopFocusWindow()
+            # Click Ok
+            xOK = xDialog.getChild("ok")
+            self.ui_test.close_dialog_through_button(xOK)
 
-        #Verify
-        self.assertEqual(get_cell_by_position(document, 0, 1, 0).getValue(), 123)
-
-        self.ui_test.close_doc()
+            #Verify
+            self.assertEqual(get_cell_by_position(document, 0, 1, 0).getValue(), 123)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
