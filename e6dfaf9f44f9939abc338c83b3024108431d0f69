@@ -22,6 +22,30 @@
       "revId": "e6dfaf9f44f9939abc338c83b3024108431d0f69",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea2ed7e5_ca08db84",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-21T10:15:59Z",
+      "side": 1,
+      "message": "That only works in C++20 for vector instances that do not escape the constexpr function.  (See \u003chttp://www.open-std.org/jtc1/sc22/wg21/docs/papers/2019/p0784r6.html\u003e \"P0784R6: More constexpr containers\": \"non-transient allocation was removed from the feature set.\")",
+      "parentUuid": "9c84cd0c_12c7842b",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 22
+      },
+      "revId": "e6dfaf9f44f9939abc338c83b3024108431d0f69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
