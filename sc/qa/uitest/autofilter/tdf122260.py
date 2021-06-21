@@ -59,29 +59,27 @@ class tdf122260(UITestCase):
         return valuesCount
 
     def test_tdf122260_autofilter(self):
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf122260.ods"))
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        self.assertIsNotNone(gridwin)
+        with self.ui_test.load_file(get_url_for_data_file("tdf122260.ods")) as calc_doc:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            self.assertIsNotNone(gridwin)
 
-        # filter out b1
-        self.check_value_in_AutoFilter(gridwin, "1", "0")
-        # filter out a2 (as a1 is filtered out a2 is the first item)
-        self.check_value_in_AutoFilter(gridwin, "0", "0")
-        # return back a2 (as a1 is filtered out a2 is the first item)
-        self.check_value_in_AutoFilter(gridwin, "0", "0")
+            # filter out b1
+            self.check_value_in_AutoFilter(gridwin, "1", "0")
+            # filter out a2 (as a1 is filtered out a2 is the first item)
+            self.check_value_in_AutoFilter(gridwin, "0", "0")
+            # return back a2 (as a1 is filtered out a2 is the first item)
+            self.check_value_in_AutoFilter(gridwin, "0", "0")
 
-        # check rows visibility
-        # row-0 is row with headers
-        self.assertTrue(is_row_hidden(calc_doc, 1))
-        self.assertFalse(is_row_hidden(calc_doc, 2))
-        self.assertFalse(is_row_hidden(calc_doc, 3))
-        self.assertFalse(is_row_hidden(calc_doc, 4))
+            # check rows visibility
+            # row-0 is row with headers
+            self.assertTrue(is_row_hidden(calc_doc, 1))
+            self.assertFalse(is_row_hidden(calc_doc, 2))
+            self.assertFalse(is_row_hidden(calc_doc, 3))
+            self.assertFalse(is_row_hidden(calc_doc, 4))
 
-        # check if "b1" is accessible in filter of the column-b
-        # (so all values of the column B are available)
-        self.assertEqual(4, self.get_values_count_in_AutoFilter(gridwin, "1"))
-
-        self.ui_test.close_doc()
+            # check if "b1" is accessible in filter of the column-b
+            # (so all values of the column B are available)
+            self.assertEqual(4, self.get_values_count_in_AutoFilter(gridwin, "1"))
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

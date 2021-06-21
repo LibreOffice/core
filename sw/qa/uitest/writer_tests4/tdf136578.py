@@ -11,22 +11,20 @@ class tdf136578(UITestCase):
 
     def test_tdf136578(self):
 
-        self.ui_test.load_file(get_url_for_data_file("tdf136578.odt"))
+        with self.ui_test.load_file(get_url_for_data_file("tdf136578.odt")):
 
-        document = self.ui_test.get_component()
-        self.assertEqual(document.CurrentController.PageCount, 2)
+            document = self.ui_test.get_component()
+            self.assertEqual(document.CurrentController.PageCount, 2)
 
-        xPageBreak = self.ui_test.wait_until_child_is_available('PageBreak')
-        xPageBreak.executeAction("DELETE", tuple())
+            xPageBreak = self.ui_test.wait_until_child_is_available('PageBreak')
+            xPageBreak.executeAction("DELETE", tuple())
 
-        # Without the fix in place, this test would have failed with
-        # AssertionError: 1 != 2
-        self.assertEqual(document.CurrentController.PageCount, 1)
+            # Without the fix in place, this test would have failed with
+            # AssertionError: 1 != 2
+            self.assertEqual(document.CurrentController.PageCount, 1)
 
-        self.xUITest.executeCommand(".uno:Undo")
+            self.xUITest.executeCommand(".uno:Undo")
 
-        self.assertEqual(document.CurrentController.PageCount, 2)
-
-        self.ui_test.close_doc()
+            self.assertEqual(document.CurrentController.PageCount, 2)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

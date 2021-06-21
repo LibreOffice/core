@@ -127,35 +127,32 @@ class textCase(UITestCase):
 
     def test_tdf119155_Capitalize_Every_Word(self):
         #Bug 119155 - Freeze after command format->text->Capitalize Every Word
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf119155.xlsx"))
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
-        #1. Open attached file
-        #2. Select cells from C2 to C14
-        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "C2:C14"}))
-        #3. Go to menu: Format->Text->Capitalize Every Word
-        self.xUITest.executeCommand(".uno:ChangeCaseToTitleCase")
-        #Actual Results:Freezes LibreOffice
-        self.assertEqual(get_cell_by_position(document, 0, 2, 1).getString(), "Collagene Expert Targeted Wrinkle Corrector Unboxed 10 Ml")
-        self.assertEqual(get_cell_by_position(document, 0, 2, 13).getString(), "Vitamina Suractivee Hand Cream 400 Ml")
-
-        self.ui_test.close_doc()
+        with self.ui_test.load_file(get_url_for_data_file("tdf119155.xlsx")) as calc_doc:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            document = self.ui_test.get_component()
+            #1. Open attached file
+            #2. Select cells from C2 to C14
+            gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "C2:C14"}))
+            #3. Go to menu: Format->Text->Capitalize Every Word
+            self.xUITest.executeCommand(".uno:ChangeCaseToTitleCase")
+            #Actual Results:Freezes LibreOffice
+            self.assertEqual(get_cell_by_position(document, 0, 2, 1).getString(), "Collagene Expert Targeted Wrinkle Corrector Unboxed 10 Ml")
+            self.assertEqual(get_cell_by_position(document, 0, 2, 13).getString(), "Vitamina Suractivee Hand Cream 400 Ml")
 
     def test_tdf119162_Cycle_Case(self):
         #Bug 119162 - Format > Text > Cycle Case on attached example file hangs Calc reproducibly
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf119162.xls"))
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
-        #1.Open the attached .xls file
-        #2. Select column A
-        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
-        #3. Select [Format] > [Text] > [Cycle Case]
-        self.xUITest.executeCommand(".uno:ChangeCaseRotateCase")
-        self.xUITest.executeCommand(".uno:ChangeCaseToLower")
-        #Actual Results:Freezes LibreOffice
-        self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "test\n")
+        with self.ui_test.load_file(get_url_for_data_file("tdf119162.xls")) as calc_doc:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            document = self.ui_test.get_component()
+            #1.Open the attached .xls file
+            #2. Select column A
+            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
+            #3. Select [Format] > [Text] > [Cycle Case]
+            self.xUITest.executeCommand(".uno:ChangeCaseRotateCase")
+            self.xUITest.executeCommand(".uno:ChangeCaseToLower")
+            #Actual Results:Freezes LibreOffice
+            self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "test\n")
 
-        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

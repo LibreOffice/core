@@ -21,82 +21,83 @@ class tdf90401(UITestCase):
 
         # load a test document with a tracked change, and add a comment
 
-        writer_doc = self.ui_test.load_file(get_url_for_data_file('redline-autocorrect.fodt'))
-        xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild('writer_edit')
+        with self.ui_test.load_file(get_url_for_data_file('redline-autocorrect.fodt')) as writer_doc:
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xWriterDoc.getChild('writer_edit')
 
-        document = self.ui_test.get_component()
-        selection = self.xUITest.executeCommand('.uno:SelectAll')
-        self.xUITest.executeCommand('.uno:InsertAnnotation')
+            document = self.ui_test.get_component()
+            selection = self.xUITest.executeCommand('.uno:SelectAll')
+            self.xUITest.executeCommand('.uno:InsertAnnotation')
 
-        # enable remove personal info security option
+            # enable remove personal info security option
 
-        self.ui_test.execute_dialog_through_command('.uno:OptionsTreeDialog')  #optionsdialog
-        xDialog = self.xUITest.getTopFocusWindow()
-
-        xPages = xDialog.getChild('pages')
-        xGenEntry = xPages.getChild('0')
-        xSecurityPage = xGenEntry.getChild('6')
-        xSecurityPage.executeAction('SELECT', tuple())
-        # Click Button Options...
-        xOptions = xDialog.getChild('options')
-
-        with self.ui_test.execute_blocking_action(xOptions.executeAction, args=('CLICK', ()), close_button="") as dialog:
-            xRemovePersonal = dialog.getChild('removepersonal')
-            xRemovePersonal.executeAction('CLICK', tuple())
-            xOkBtn = dialog.getChild('ok')
-            # FIXME: we can't use close_dialog_through_button here, the dialog doesn't emit the
-            # event DialogClosed after closing
-            xOkBtn.executeAction('CLICK', tuple())
-
-        xOKBtn = xDialog.getChild('ok')
-        self.ui_test.close_dialog_through_button(xOKBtn)
-
-        # save and reload the document to remove personal info
-
-        with TemporaryDirectory() as tempdir:
-            xFilePath = os.path.join(tempdir, 'tdf90401-tmp.fodt')
-
-            # Save Copy as
-            self.ui_test.execute_dialog_through_command('.uno:SaveAs')
+            self.ui_test.execute_dialog_through_command('.uno:OptionsTreeDialog')  #optionsdialog
             xDialog = self.xUITest.getTopFocusWindow()
 
-            xFileName = xDialog.getChild('file_name')
-            xFileName.executeAction('TYPE', mkPropertyValues({'KEYCODE':'CTRL+A'}))
-            xFileName.executeAction('TYPE', mkPropertyValues({'KEYCODE':'BACKSPACE'}))
-            xFileName.executeAction('TYPE', mkPropertyValues({'TEXT': xFilePath}))
+            xPages = xDialog.getChild('pages')
+            xGenEntry = xPages.getChild('0')
+            xSecurityPage = xGenEntry.getChild('6')
+            xSecurityPage.executeAction('SELECT', tuple())
+            # Click Button Options...
+            xOptions = xDialog.getChild('options')
 
-            xOpenBtn = xDialog.getChild('open')
-            self.ui_test.close_dialog_through_button(xOpenBtn)
+            with self.ui_test.execute_blocking_action(xOptions.executeAction, args=('CLICK', ()), close_button="") as dialog:
+                xRemovePersonal = dialog.getChild('removepersonal')
+                xRemovePersonal.executeAction('CLICK', tuple())
+                xOkBtn = dialog.getChild('ok')
+                # FIXME: we can't use close_dialog_through_button here, the dialog doesn't emit the
+                # event DialogClosed after closing
+                xOkBtn.executeAction('CLICK', tuple())
 
-            # Close the Writer document
-            self.ui_test.close_doc()
+            xOKBtn = xDialog.getChild('ok')
+            self.ui_test.close_dialog_through_button(xOKBtn)
 
-            self.ui_test.load_file(systemPathToFileUrl(xFilePath))
-            document = self.ui_test.get_component()
+            # save and reload the document to remove personal info
 
-            # check removed personal info on comments
+            with TemporaryDirectory() as tempdir:
+                xFilePath = os.path.join(tempdir, 'tdf90401-tmp.fodt')
 
-            textfields = document.getTextFields()
-            author = ""
-            year = -1
-            for textfield in textfields:
-                if textfield.supportsService("com.sun.star.text.TextField.Annotation"):
-                    author = textfield.Author
-                    year = textfield.Date.Year
-            # This was 'Unknown Author'
-            self.assertEqual(author, 'Author2')
-            # This was 2021
-            self.assertEqual(year, 0)
+                # Save Copy as
+                self.ui_test.execute_dialog_through_command('.uno:SaveAs')
+                xDialog = self.xUITest.getTopFocusWindow()
 
-            # check removed personal info on tracked changes
+                xFileName = xDialog.getChild('file_name')
+                xFileName.executeAction('TYPE', mkPropertyValues({'KEYCODE':'CTRL+A'}))
+                xFileName.executeAction('TYPE', mkPropertyValues({'KEYCODE':'BACKSPACE'}))
+                xFileName.executeAction('TYPE', mkPropertyValues({'TEXT': xFilePath}))
 
-            self.ui_test.execute_modeless_dialog_through_command('.uno:AcceptTrackedChanges')
-            xTrackDlg = self.xUITest.getTopFocusWindow()
-            xTreeList = xTrackDlg.getChild('writerchanges')
-            state = get_state_as_dict(xTreeList)
-            # This was 'NL\t11/03/2020 19:19:05\t', containing personal info
-            self.assertEqual(state['SelectEntryText'], 'Author1\t01/01/1970 00:00:00\t')
+                xOpenBtn = xDialog.getChild('open')
+                self.ui_test.close_dialog_through_button(xOpenBtn)
 
-        self.ui_test.close_doc()
+                # Close the Writer document
+                self.ui_test.close_doc()
+
+                with self.ui_test.load_file(systemPathToFileUrl(xFilePath)):
+                    document = self.ui_test.get_component()
+
+                    # check removed personal info on comments
+
+                    textfields = document.getTextFields()
+                    author = ""
+                    year = -1
+                    for textfield in textfields:
+                        if textfield.supportsService("com.sun.star.text.TextField.Annotation"):
+                            author = textfield.Author
+                            year = textfield.Date.Year
+                    # This was 'Unknown Author'
+                    self.assertEqual(author, 'Author2')
+                    # This was 2021
+                    self.assertEqual(year, 0)
+
+                    # check removed personal info on tracked changes
+
+                    self.ui_test.execute_modeless_dialog_through_command('.uno:AcceptTrackedChanges')
+                    xTrackDlg = self.xUITest.getTopFocusWindow()
+                    xTreeList = xTrackDlg.getChild('writerchanges')
+                    state = get_state_as_dict(xTreeList)
+                    # This was 'NL\t11/03/2020 19:19:05\t', containing personal info
+                    self.assertEqual(state['SelectEntryText'], 'Author1\t01/01/1970 00:00:00\t')
+
+                    self.ui_test.close_doc()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

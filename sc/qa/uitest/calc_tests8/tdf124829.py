@@ -18,18 +18,17 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf124829(UITestCase):
     def test_tdf124829_Crash_cutting_undo_sheet_external_links(self):
         #numberingformatpage.ui
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf124829.ods"))
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
+        with self.ui_test.load_file(get_url_for_data_file("tdf124829.ods")) as calc_doc:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            document = self.ui_test.get_component()
 
-        self.xUITest.executeCommand(".uno:SelectAll")
-        self.xUITest.executeCommand(".uno:Cut")
-        for i in range(40):
-            self.xUITest.executeCommand(".uno:Undo")
+            self.xUITest.executeCommand(".uno:SelectAll")
+            self.xUITest.executeCommand(".uno:Cut")
+            for i in range(40):
+                self.xUITest.executeCommand(".uno:Undo")
 
-        #verify; no crashes
-        self.assertEqual(document.Sheets.getCount(), 6)
+            #verify; no crashes
+            self.assertEqual(document.Sheets.getCount(), 6)
 
-        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
