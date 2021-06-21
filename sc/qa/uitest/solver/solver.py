@@ -14,39 +14,38 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class solver(UITestCase):
     def test_solver(self):
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("solver.ods"))
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
-        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B4"}))
-        self.ui_test.execute_modeless_dialog_through_command(".uno:SolverDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xtargetedit = xDialog.getChild("targetedit")
-        xvalue = xDialog.getChild("value")
-        xvalueedit = xDialog.getChild("valueedit")
-        xchangeedit = xDialog.getChild("changeedit")
-        xref1edit = xDialog.getChild("ref1edit")
-        xval1edit = xDialog.getChild("val1edit")
-        xref2edit = xDialog.getChild("ref2edit")
-        xval2edit = xDialog.getChild("val2edit")
-        xop2list = xDialog.getChild("op2list")
+        with self.ui_test.load_file(get_url_for_data_file("solver.ods")) as calc_doc:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            document = self.ui_test.get_component()
+            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B4"}))
+            self.ui_test.execute_modeless_dialog_through_command(".uno:SolverDialog")
+            xDialog = self.xUITest.getTopFocusWindow()
+            xtargetedit = xDialog.getChild("targetedit")
+            xvalue = xDialog.getChild("value")
+            xvalueedit = xDialog.getChild("valueedit")
+            xchangeedit = xDialog.getChild("changeedit")
+            xref1edit = xDialog.getChild("ref1edit")
+            xval1edit = xDialog.getChild("val1edit")
+            xref2edit = xDialog.getChild("ref2edit")
+            xval2edit = xDialog.getChild("val2edit")
+            xop2list = xDialog.getChild("op2list")
 
-        xvalue.executeAction("CLICK", tuple())
-        xvalueedit.executeAction("TYPE", mkPropertyValues({"TEXT":"1000"}))
-        xchangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"C2"}))
-        xref1edit.executeAction("TYPE", mkPropertyValues({"TEXT":"C2"}))
-        xval1edit.executeAction("TYPE", mkPropertyValues({"TEXT":"C4"}))
-        xref2edit.executeAction("TYPE", mkPropertyValues({"TEXT":"C4"}))
-        select_by_text(xop2list, "=>")
+            xvalue.executeAction("CLICK", tuple())
+            xvalueedit.executeAction("TYPE", mkPropertyValues({"TEXT":"1000"}))
+            xchangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"C2"}))
+            xref1edit.executeAction("TYPE", mkPropertyValues({"TEXT":"C2"}))
+            xval1edit.executeAction("TYPE", mkPropertyValues({"TEXT":"C4"}))
+            xref2edit.executeAction("TYPE", mkPropertyValues({"TEXT":"C4"}))
+            select_by_text(xop2list, "=>")
 
-        xval2edit.executeAction("TYPE", mkPropertyValues({"TEXT":"0"}))
-        xOKBtn = xDialog.getChild("ok")
+            xval2edit.executeAction("TYPE", mkPropertyValues({"TEXT":"0"}))
+            xOKBtn = xDialog.getChild("ok")
 
-        with self.ui_test.execute_blocking_action(xOKBtn.executeAction, args=('CLICK', ())):
-            pass
+            with self.ui_test.execute_blocking_action(xOKBtn.executeAction, args=('CLICK', ())):
+                pass
 
-        #verify
-        self.assertEqual(get_cell_by_position(document, 0, 1, 1).getValue(), 400)
-        self.ui_test.close_doc()
+            #verify
+            self.assertEqual(get_cell_by_position(document, 0, 1, 1).getValue(), 400)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

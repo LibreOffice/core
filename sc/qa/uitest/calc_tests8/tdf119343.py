@@ -18,19 +18,18 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf119343(UITestCase):
     def test_tdf119343_copy_paste_formula(self):
         #numberingformatpage.ui
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf119343.ods"))
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
+        with self.ui_test.load_file(get_url_for_data_file("tdf119343.ods")) as calc_doc:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            document = self.ui_test.get_component()
 
-        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "M295"}))
-        self.xUITest.executeCommand(".uno:Copy")
-        gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))
-        self.xUITest.executeCommand(".uno:Paste")
-        #verify
-        self.assertEqual(get_cell_by_position(document, 0, 12, 295).getString(), "Q11005355")
-        self.assertEqual(get_cell_by_position(document, 0, 12, 294).getString(), "Q1099565")
-        self.assertEqual(get_cell_by_position(document, 0, 12, 293).getString(), "Q108420")
+            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "M295"}))
+            self.xUITest.executeCommand(".uno:Copy")
+            gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))
+            self.xUITest.executeCommand(".uno:Paste")
+            #verify
+            self.assertEqual(get_cell_by_position(document, 0, 12, 295).getString(), "Q11005355")
+            self.assertEqual(get_cell_by_position(document, 0, 12, 294).getString(), "Q1099565")
+            self.assertEqual(get_cell_by_position(document, 0, 12, 293).getString(), "Q108420")
 
-        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
