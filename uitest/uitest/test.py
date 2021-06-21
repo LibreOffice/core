@@ -88,9 +88,14 @@ class UITest(object):
                 time_ += DEFAULT_SLEEP
                 time.sleep(DEFAULT_SLEEP)
 
+    # Calls UITest.close_doc at exit
+    @contextmanager
     def load_file(self, url):
-        with self.wait_until_component_loaded():
-            return self.get_desktop().loadComponentFromURL(url, "_default", 0, tuple())
+        try:
+            with self.wait_until_component_loaded():
+                yield self.get_desktop().loadComponentFromURL(url, "_default", 0, tuple())
+        finally:
+            self.close_doc()
 
     def execute_dialog_through_command(self, command, printNames=False):
         with EventListener(self._xContext, "DialogExecute", printNames=printNames) as event:

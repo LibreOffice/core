@@ -12,33 +12,31 @@ from uitest.uihelper.common import get_url_for_data_file
 
 class tdf138546(UITestCase):
     def test_tdf138546(self):
-        self.ui_test.load_file(get_url_for_data_file("tdf138546.odt"))
-        xWriterDoc = self.xUITest.getTopFocusWindow()
+        with self.ui_test.load_file(get_url_for_data_file("tdf138546.odt")):
+            xWriterDoc = self.xUITest.getTopFocusWindow()
 
-        change_measurement_unit(self, "Centimeter")
+            change_measurement_unit(self, "Centimeter")
 
-        #dialog Columns
-        self.ui_test.execute_dialog_through_command(".uno:FormatColumns")
-        xDialog = self.xUITest.getTopFocusWindow()
+            #dialog Columns
+            self.ui_test.execute_dialog_through_command(".uno:FormatColumns")
+            xDialog = self.xUITest.getTopFocusWindow()
 
-        colsnf = xDialog.getChild("colsnf")
-        width1mf = xDialog.getChild("width1mf")
-        self.assertEqual(get_state_as_dict(colsnf)["Text"], "2")
-        self.assertEqual((get_state_as_dict(width1mf)["Text"])[0:3], "2.0") #2.00 cm
-        xOKBtn = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+            colsnf = xDialog.getChild("colsnf")
+            width1mf = xDialog.getChild("width1mf")
+            self.assertEqual(get_state_as_dict(colsnf)["Text"], "2")
+            self.assertEqual((get_state_as_dict(width1mf)["Text"])[0:3], "2.0") #2.00 cm
+            xOKBtn = xDialog.getChild("cancel")
+            self.ui_test.close_dialog_through_button(xOKBtn)
 
-        self.ui_test.execute_dialog_through_command(".uno:PageDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        tabcontrol = xDialog.getChild("tabcontrol")
-        select_pos(tabcontrol, "7") #Columns
-        colsnf = xDialog.getChild("colsnf")
-        width1mf = xDialog.getChild("width1mf")
-        self.assertEqual(get_state_as_dict(colsnf)["Text"], "2")
-        self.assertEqual((get_state_as_dict(width1mf)["Text"])[0:3], "2.0") #2.00 cm
-        xOKBtn = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xOKBtn)
-
-        self.ui_test.close_doc()
+            self.ui_test.execute_dialog_through_command(".uno:PageDialog")
+            xDialog = self.xUITest.getTopFocusWindow()
+            tabcontrol = xDialog.getChild("tabcontrol")
+            select_pos(tabcontrol, "7") #Columns
+            colsnf = xDialog.getChild("colsnf")
+            width1mf = xDialog.getChild("width1mf")
+            self.assertEqual(get_state_as_dict(colsnf)["Text"], "2")
+            self.assertEqual((get_state_as_dict(width1mf)["Text"])[0:3], "2.0") #2.00 cm
+            xOKBtn = xDialog.getChild("cancel")
+            self.ui_test.close_dialog_through_button(xOKBtn)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

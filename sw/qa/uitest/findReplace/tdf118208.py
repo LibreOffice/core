@@ -14,64 +14,62 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 class tdf118208(UITestCase):
 
     def test_tdf118208_search_dialog_format_crash(self):
-        writer_doc = self.ui_test.load_file(get_url_for_data_file("tdf118208.odt"))
-        document = self.ui_test.get_component()
-        xWriterDoc = self.xUITest.getTopFocusWindow()
-        # 1. Open the attached file.
-        # 2. Press ctrl-H to show the search and replace dialog.
-        # 3. Press the "Format..."  button.
-        #Libreoffice immediately crashed.
-        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.load_file(get_url_for_data_file("tdf118208.odt")) as writer_doc:
+            document = self.ui_test.get_component()
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            # 1. Open the attached file.
+            # 2. Press ctrl-H to show the search and replace dialog.
+            # 3. Press the "Format..."  button.
+            #Libreoffice immediately crashed.
+            self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
+            xDialog = self.xUITest.getTopFocusWindow()
 
-        xPages = xDialog.getChild("pages")
-        xLanguageEntry = xPages.getChild('2')                 # Language Settings
-        xLanguageEntry.executeAction("EXPAND", tuple())
-        xxLanguageEntryGeneralEntry = xLanguageEntry.getChild('0')
-        xxLanguageEntryGeneralEntry.executeAction("SELECT", tuple())          #Language
+            xPages = xDialog.getChild("pages")
+            xLanguageEntry = xPages.getChild('2')                 # Language Settings
+            xLanguageEntry.executeAction("EXPAND", tuple())
+            xxLanguageEntryGeneralEntry = xLanguageEntry.getChild('0')
+            xxLanguageEntryGeneralEntry.executeAction("SELECT", tuple())          #Language
 
-        asianlanguage = xDialog.getChild("asiansupport")
-        complexlanguage = xDialog.getChild("ctlsupport")
-        if (get_state_as_dict(asianlanguage)["Selected"]) == "true":
-            asianlanguage.executeAction("CLICK", tuple())
-        if (get_state_as_dict(complexlanguage)["Selected"]) == "true":
-            complexlanguage.executeAction("CLICK", tuple())
+            asianlanguage = xDialog.getChild("asiansupport")
+            complexlanguage = xDialog.getChild("ctlsupport")
+            if (get_state_as_dict(asianlanguage)["Selected"]) == "true":
+                asianlanguage.executeAction("CLICK", tuple())
+            if (get_state_as_dict(complexlanguage)["Selected"]) == "true":
+                complexlanguage.executeAction("CLICK", tuple())
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+            xOKBtn = xDialog.getChild("ok")
+            self.ui_test.close_dialog_through_button(xOKBtn)
 
-        self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
+            self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
+            xDialog = self.xUITest.getTopFocusWindow()
 
-        format = xDialog.getChild("format")
+            format = xDialog.getChild("format")
 
-        with self.ui_test.execute_blocking_action(format.executeAction, args=('CLICK', ())):
-            pass
+            with self.ui_test.execute_blocking_action(format.executeAction, args=('CLICK', ())):
+                pass
 
-        #verify
-        self.assertEqual(document.Text.String[0:14], "Aaaaaaaaaaaaaa")
-        xcloseBtn = xDialog.getChild("close")
-        self.ui_test.close_dialog_through_button(xcloseBtn)
+            #verify
+            self.assertEqual(document.Text.String[0:14], "Aaaaaaaaaaaaaa")
+            xcloseBtn = xDialog.getChild("close")
+            self.ui_test.close_dialog_through_button(xcloseBtn)
 
-        #enable lang support again
-        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
-        xDialog = self.xUITest.getTopFocusWindow()
+            #enable lang support again
+            self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
+            xDialog = self.xUITest.getTopFocusWindow()
 
-        xPages = xDialog.getChild("pages")
-        xLanguageEntry = xPages.getChild('2')                 # Language Settings
-        xLanguageEntry.executeAction("EXPAND", tuple())
-        xxLanguageEntryGeneralEntry = xLanguageEntry.getChild('0')
-        xxLanguageEntryGeneralEntry.executeAction("SELECT", tuple())          #Language
+            xPages = xDialog.getChild("pages")
+            xLanguageEntry = xPages.getChild('2')                 # Language Settings
+            xLanguageEntry.executeAction("EXPAND", tuple())
+            xxLanguageEntryGeneralEntry = xLanguageEntry.getChild('0')
+            xxLanguageEntryGeneralEntry.executeAction("SELECT", tuple())          #Language
 
-        asianlanguage = xDialog.getChild("asiansupport")
-        complexlanguage = xDialog.getChild("ctlsupport")
-        if (get_state_as_dict(asianlanguage)["Selected"]) == "false":
-            asianlanguage.executeAction("CLICK", tuple())
-        if (get_state_as_dict(complexlanguage)["Selected"]) == "false":
-            complexlanguage.executeAction("CLICK", tuple())
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
-
-        self.ui_test.close_doc()
+            asianlanguage = xDialog.getChild("asiansupport")
+            complexlanguage = xDialog.getChild("ctlsupport")
+            if (get_state_as_dict(asianlanguage)["Selected"]) == "false":
+                asianlanguage.executeAction("CLICK", tuple())
+            if (get_state_as_dict(complexlanguage)["Selected"]) == "false":
+                complexlanguage.executeAction("CLICK", tuple())
+            xOKBtn = xDialog.getChild("ok")
+            self.ui_test.close_dialog_through_button(xOKBtn)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

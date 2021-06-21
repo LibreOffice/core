@@ -10,17 +10,15 @@ from uitest.uihelper.common import get_url_for_data_file
 class tdf134243(UITestCase):
 
     def test_tdf134243(self):
-        writer_doc = self.ui_test.load_file(get_url_for_data_file("tdf134243.odt"))
+        with self.ui_test.load_file(get_url_for_data_file("tdf134243.odt")) as writer_doc:
 
-        # Without the fix in place, it would hung launching the mailmerge wizard
-        self.ui_test.execute_dialog_through_command(".uno:MailMergeWizard")
+            # Without the fix in place, it would hung launching the mailmerge wizard
+            self.ui_test.execute_dialog_through_command(".uno:MailMergeWizard")
 
-        xDialog = self.xUITest.getTopFocusWindow()
+            xDialog = self.xUITest.getTopFocusWindow()
 
-        xCancelBtn = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCancelBtn)
-
-        self.ui_test.close_doc()
+            xCancelBtn = xDialog.getChild("cancel")
+            self.ui_test.close_dialog_through_button(xCancelBtn)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
 
