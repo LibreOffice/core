@@ -1,0 +1,234 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a7f727d0_e43014db",
+        "filename": "include/oox/export/DMLPresetShapeExport.hxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-06-21T10:09:28Z",
+      "side": 1,
+      "message": "It\u0027s better to put unused codes in comments, and uncomment them, if needed, to avoid redundant code paths and help code reading.\n\n\"not used yet\" -\u003e \"TODO\"\n\n\"futher\" -\u003e \"further\"",
+      "range": {
+        "startLine": 64,
+        "startChar": 3,
+        "endLine": 74,
+        "endChar": 45
+      },
+      "revId": "754c93d1e70ff437917ccd6a9ee48eb628a711c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f40d0daa_0dd95357",
+        "filename": "include/oox/export/DMLPresetShapeExport.hxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-06-21T10:09:28Z",
+      "side": 1,
+      "message": "typo (approximate value)",
+      "range": {
+        "startLine": 114,
+        "startChar": 24,
+        "endLine": 114,
+        "endChar": 36
+      },
+      "revId": "754c93d1e70ff437917ccd6a9ee48eb628a711c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "630d11a9_64ad6700",
+        "filename": "oox/source/export/DMLPresetShapeExport.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-06-21T10:09:28Z",
+      "side": 1,
+      "message": "LibreOffice coding standard prefers \"Shape\" for readability.",
+      "range": {
+        "startLine": 41,
+        "startChar": 41,
+        "endLine": 41,
+        "endChar": 44
+      },
+      "revId": "754c93d1e70ff437917ccd6a9ee48eb628a711c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5be737b_b4ae17c1",
+        "filename": "oox/source/export/DMLPresetShapeExport.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-06-21T10:09:28Z",
+      "side": 1,
+      "message": "is",
+      "range": {
+        "startLine": 257,
+        "startChar": 26,
+        "endLine": 257,
+        "endChar": 27
+      },
+      "revId": "754c93d1e70ff437917ccd6a9ee48eb628a711c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae362418_e50c0357",
+        "filename": "oox/source/export/DMLPresetShapeExport.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-06-21T10:09:28Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 257,
+        "startChar": 82,
+        "endLine": 257,
+        "endChar": 96
+      },
+      "revId": "754c93d1e70ff437917ccd6a9ee48eb628a711c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c29385f_783ccba8",
+        "filename": "oox/source/export/DMLPresetShapeExport.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-06-21T10:09:28Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 270,
+        "startChar": 58,
+        "endLine": 270,
+        "endChar": 68
+      },
+      "revId": "754c93d1e70ff437917ccd6a9ee48eb628a711c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da3f93c6_74e8cda6",
+        "filename": "oox/source/export/DMLPresetShapeExport.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 1007,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-06-21T10:09:28Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 1007,
+        "startChar": 45,
+        "endLine": 1007,
+        "endChar": 56
+      },
+      "revId": "754c93d1e70ff437917ccd6a9ee48eb628a711c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6ed63a6_e83ffd2c",
+        "filename": "oox/source/export/shapes.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 836,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-06-21T10:09:28Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 836,
+        "startChar": 21,
+        "endLine": 836,
+        "endChar": 30
+      },
+      "revId": "754c93d1e70ff437917ccd6a9ee48eb628a711c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33a4cb4d_8d4a7672",
+        "filename": "oox/source/export/shapes.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 848,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-06-21T10:09:28Z",
+      "side": 1,
+      "message": "Could you modify this to avoid the big diff, please? It\u0027s a big help for all future reviewers.\n\nif ( bPresetWriteSuccessful )\n{\n    // already exported\n}\nelse if (bHasHandles \u0026\u0026 bCustGeom)",
+      "range": {
+        "startLine": 846,
+        "startChar": 0,
+        "endLine": 848,
+        "endChar": 37
+      },
+      "revId": "754c93d1e70ff437917ccd6a9ee48eb628a711c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34fb210f_fe495d6d",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport16.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-06-21T10:09:28Z",
+      "side": 1,
+      "message": "have",
+      "range": {
+        "startLine": 154,
+        "startChar": 43,
+        "endLine": 154,
+        "endChar": 46
+      },
+      "revId": "754c93d1e70ff437917ccd6a9ee48eb628a711c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
