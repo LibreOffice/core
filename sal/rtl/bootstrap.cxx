@@ -581,8 +581,6 @@ void Bootstrap_Impl::expandValue(
 
 namespace {
 
-// This map must only be called properly synchronized via some mutex
-// (e.g., osl::Mutex::getGlobalMutex()):
 typedef std::unordered_map< OUString, Bootstrap_Impl * > bootstrap_map_t;
 bootstrap_map_t bootstrap_map;
 
