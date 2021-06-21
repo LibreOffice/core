@@ -2730,9 +2730,9 @@ bool SwFlyFrame::GetContour( tools::PolyPolygon&   rContour,
                 bRet = true;
             }
         }
-        else
+        else if (IsFlyFreeFrame())
         {
-            const SwFlyFreeFrame* pSwFlyFreeFrame(dynamic_cast< const SwFlyFreeFrame* >(this));
+            const SwFlyFreeFrame* pSwFlyFreeFrame(static_cast< const SwFlyFreeFrame* >(this));
 
             if(nullptr != pSwFlyFreeFrame &&
                 pSwFlyFreeFrame->supportsAutoContour() &&
@@ -2751,9 +2751,8 @@ bool SwFlyFrame::GetContour( tools::PolyPolygon&   rContour,
 
         if(bRet && 0 != rContour.Count())
         {
-            const SwFlyFreeFrame* pSwFlyFreeFrame(dynamic_cast< const SwFlyFreeFrame* >(this));
-
-            if(nullptr != pSwFlyFreeFrame && pSwFlyFreeFrame->isTransformableSwFrame())
+            if (IsFlyFreeFrame() &&
+                static_cast< const SwFlyFreeFrame* >(this)->isTransformableSwFrame())
             {
                 // Need to adapt contour to transformation
                 basegfx::B2DVector aScale, aTranslate;

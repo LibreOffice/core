@@ -279,9 +279,10 @@ void SwNoTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect cons
     // size instead of scaling it
     if ( pGrfNd && rNoTNd.getIDocumentSettingAccess()->get( DocumentSettingId::CLIPPED_PICTURES ) )
     {
-        const SwFlyFreeFrame *pFly = dynamic_cast< const SwFlyFreeFrame* >( FindFlyFrame() );
-        if( pFly )
+        auto pFindFly = FindFlyFrame();
+        if (pFindFly && pFindFly->IsFlyFreeFrame())
         {
+            const SwFlyFreeFrame *pFly = static_cast< const SwFlyFreeFrame* >( pFindFly );
             bool bGetUnclippedFrame=true;
             const SfxPoolItem* pItem;
             if( pFly->GetFormat() && SfxItemState::SET == pFly->GetFormat()->GetItemState(RES_BOX, false, &pItem) )
