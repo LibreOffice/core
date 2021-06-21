@@ -260,7 +260,11 @@ class GtkSalFrame final : public SalFrame
     static gboolean     signalTooltipQuery(GtkWidget*, gint x, gint y,
                                      gboolean keyboard_mode, GtkTooltip *tooltip,
                                      gpointer frame);
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+    static GdkDragAction signalDragMotion(GtkDropTargetAsync *dest, GdkDrop *drop, double x, double y, gpointer frame);
+    static void         signalDragLeave(GtkDropTargetAsync *dest, GdkDrop *drop, gpointer frame);
+    static gboolean     signalDragDrop(GtkDropTargetAsync* context, GdkDrop* drop, double x, double y, gpointer frame);
+#else
     static gboolean     signalDragMotion(GtkWidget *widget, GdkDragContext *context, gint x, gint y,
                                          guint time, gpointer frame);
     static gboolean     signalDragDrop(GtkWidget* widget, GdkDragContext *context, gint x, gint y,
