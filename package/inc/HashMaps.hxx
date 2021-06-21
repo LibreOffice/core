@@ -32,7 +32,7 @@ typedef std::unordered_map < OUString,
                         ZipPackageFolder * > FolderHash;
 
 typedef std::unordered_map < OUString,
-                        std::unique_ptr<ZipContentInfo> > ContentHash;
+                             ZipContentInfo > ContentHash;
 
 typedef std::unordered_map < OUString,
                         ZipEntry > EntryHash;
