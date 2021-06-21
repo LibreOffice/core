@@ -1351,7 +1351,18 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
             }
             break;
 
-            //case MetaActionType::LAYOUTMODE:
+            case MetaActionType::LAYOUTMODE:
+            {
+                const MetaLayoutModeAction* pMetaLayoutModeAction = static_cast<MetaLayoutModeAction*>(pAction);
+
+                rWriter.startElement(sCurrentElementTag);
+
+                rWriter.attribute("textlayout", convertComplexTestLayoutFlags(pMetaLayoutModeAction->GetLayoutMode()));
+
+                rWriter.endElement();
+            }
+            break;
+
             case MetaActionType::TEXTLANGUAGE:
             {
                 const MetaTextLanguageAction* pMetaTextLanguageAction = static_cast<MetaTextLanguageAction*>(pAction);
