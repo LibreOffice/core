@@ -13,43 +13,42 @@ from uitest.uihelper.common import get_url_for_data_file
 
 class tdf130770(UITestCase):
     def test_tdf130770_autofilter(self):
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf130770.ods"))
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
+        with self.ui_test.load_file(get_url_for_data_file("tdf130770.ods")) as calc_doc:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            document = self.ui_test.get_component()
 
-        # 1. open attached file and check initial state
-        self.assertFalse(is_row_hidden(calc_doc, 0))
-        self.assertFalse(is_row_hidden(calc_doc, 1))
-        self.assertTrue(is_row_hidden(calc_doc, 2))
-        self.assertFalse(is_row_hidden(calc_doc, 3))
-        self.assertFalse(is_row_hidden(calc_doc, 4))
+            # 1. open attached file and check initial state
+            self.assertFalse(is_row_hidden(calc_doc, 0))
+            self.assertFalse(is_row_hidden(calc_doc, 1))
+            self.assertTrue(is_row_hidden(calc_doc, 2))
+            self.assertFalse(is_row_hidden(calc_doc, 3))
+            self.assertFalse(is_row_hidden(calc_doc, 4))
 
-        # 2. open filter of column A  and cancel
-        gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
-        xFloatWindow = self.xUITest.getFloatWindow()
+            # 2. open filter of column A  and cancel
+            gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+            xFloatWindow = self.xUITest.getFloatWindow()
 
-        xOkBtn = xFloatWindow.getChild("cancel")
-        xOkBtn.executeAction("CLICK", tuple())
+            xOkBtn = xFloatWindow.getChild("cancel")
+            xOkBtn.executeAction("CLICK", tuple())
 
-        self.assertFalse(is_row_hidden(calc_doc, 0))
-        self.assertFalse(is_row_hidden(calc_doc, 1))
-        self.assertTrue(is_row_hidden(calc_doc, 2))
-        self.assertFalse(is_row_hidden(calc_doc, 3))
-        self.assertFalse(is_row_hidden(calc_doc, 4))
+            self.assertFalse(is_row_hidden(calc_doc, 0))
+            self.assertFalse(is_row_hidden(calc_doc, 1))
+            self.assertTrue(is_row_hidden(calc_doc, 2))
+            self.assertFalse(is_row_hidden(calc_doc, 3))
+            self.assertFalse(is_row_hidden(calc_doc, 4))
 
-        # 3. open filter of column A  and just click OK
-        gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
-        xFloatWindow = self.xUITest.getFloatWindow()
+            # 3. open filter of column A  and just click OK
+            gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+            xFloatWindow = self.xUITest.getFloatWindow()
 
-        xOkBtn = xFloatWindow.getChild("ok")
-        xOkBtn.executeAction("CLICK", tuple())
+            xOkBtn = xFloatWindow.getChild("ok")
+            xOkBtn.executeAction("CLICK", tuple())
 
-        self.assertFalse(is_row_hidden(calc_doc, 0))
-        self.assertFalse(is_row_hidden(calc_doc, 1))
-        self.assertTrue(is_row_hidden(calc_doc, 2))
-        self.assertFalse(is_row_hidden(calc_doc, 3))
-        self.assertTrue(is_row_hidden(calc_doc, 4)) # filtered out
+            self.assertFalse(is_row_hidden(calc_doc, 0))
+            self.assertFalse(is_row_hidden(calc_doc, 1))
+            self.assertTrue(is_row_hidden(calc_doc, 2))
+            self.assertFalse(is_row_hidden(calc_doc, 3))
+            self.assertTrue(is_row_hidden(calc_doc, 4)) # filtered out
 
-        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -11,42 +11,41 @@ from uitest.uihelper.common import get_url_for_data_file
 class tdf137803(UITestCase):
     def test_tdf137803(self):
         # load the sample file
-        self.ui_test.load_file(get_url_for_data_file("tdf137803.odt"))
-        document = self.ui_test.get_component()
+        with self.ui_test.load_file(get_url_for_data_file("tdf137803.odt")):
+            document = self.ui_test.get_component()
 
-        # select the shape
-        self.xUITest.executeCommand(".uno:JumpToNextFrame")
-        self.ui_test.wait_until_child_is_available('metricfield')
+            # select the shape
+            self.xUITest.executeCommand(".uno:JumpToNextFrame")
+            self.ui_test.wait_until_child_is_available('metricfield')
 
-        # open textattrs dialog
-        self.ui_test.execute_dialog_through_command(".uno:TextAttributes")
-        TextDialog = self.xUITest.getTopFocusWindow();
+            # open textattrs dialog
+            self.ui_test.execute_dialog_through_command(".uno:TextAttributes")
+            TextDialog = self.xUITest.getTopFocusWindow();
 
-        # check autosize on
-        TSB_AUTOGROW_SIZE = TextDialog.getChild('TSB_AUTOGROW_SIZE')
-        TSB_AUTOGROW_SIZE.executeAction("CLICK",tuple())
-        ok = TextDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(ok)
+            # check autosize on
+            TSB_AUTOGROW_SIZE = TextDialog.getChild('TSB_AUTOGROW_SIZE')
+            TSB_AUTOGROW_SIZE.executeAction("CLICK",tuple())
+            ok = TextDialog.getChild("ok")
+            self.ui_test.close_dialog_through_button(ok)
 
-        # get the shape
-        drawPage = document.getDrawPages().getByIndex(0)
-        shape = drawPage.getByIndex(0)
+            # get the shape
+            drawPage = document.getDrawPages().getByIndex(0)
+            shape = drawPage.getByIndex(0)
 
-        # and the textbox
-        frame = shape.getText()
+            # and the textbox
+            frame = shape.getText()
 
-        # get the positions
-        shapeYPos = shape.getPropertyValue("VertOrientPosition")
-        frameYPos = frame.getPropertyValue("VertOrientPosition")
-        shpsize = shape.getSize().Height
+            # get the positions
+            shapeYPos = shape.getPropertyValue("VertOrientPosition")
+            frameYPos = frame.getPropertyValue("VertOrientPosition")
+            shpsize = shape.getSize().Height
 
-        xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
-        xToolkit.processEventsToIdle()
+            xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+            xToolkit.processEventsToIdle()
 
-        # without the fix, at this point the textbox falls apart so this won't be passed
-        self.assertLess(frameYPos, shapeYPos + shpsize)
+            # without the fix, at this point the textbox falls apart so this won't be passed
+            self.assertLess(frameYPos, shapeYPos + shpsize)
 
-        # close the doc
-        self.ui_test.close_doc()
+            # close the doc
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -13,45 +13,43 @@ class tdf137446(UITestCase):
 
     def test_tdf137446(self):
 
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf137446.ods"))
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
+        with self.ui_test.load_file(get_url_for_data_file("tdf137446.ods")) as calc_doc:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
 
-        change_measurement_unit(self, "Centimeter")
+            change_measurement_unit(self, "Centimeter")
 
-        gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "lineObject"}))
+            gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "lineObject"}))
 
-        self.ui_test.execute_dialog_through_command(".uno:TransformDialog")
+            self.ui_test.execute_dialog_through_command(".uno:TransformDialog")
 
-        xDialog = self.xUITest.getTopFocusWindow()
+            xDialog = self.xUITest.getTopFocusWindow()
 
-        self.assertEqual('10', get_state_as_dict(xDialog.getChild('MTR_FLD_WIDTH'))['Value'])
-        self.assertEqual('0', get_state_as_dict(xDialog.getChild('MTR_FLD_HEIGHT'))['Value'])
-        self.assertEqual('5.51', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_X'))['Value'])
-        self.assertEqual('2.55', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_Y'))['Value'])
-        self.assertEqual('0', get_state_as_dict(xDialog.getChild('NF_ANGLE'))['Value'])
+            self.assertEqual('10', get_state_as_dict(xDialog.getChild('MTR_FLD_WIDTH'))['Value'])
+            self.assertEqual('0', get_state_as_dict(xDialog.getChild('MTR_FLD_HEIGHT'))['Value'])
+            self.assertEqual('5.51', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_X'))['Value'])
+            self.assertEqual('2.55', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_Y'))['Value'])
+            self.assertEqual('0', get_state_as_dict(xDialog.getChild('NF_ANGLE'))['Value'])
 
 
-        xDialog.getChild('MTR_FLD_WIDTH').executeAction("UP", tuple())
+            xDialog.getChild('MTR_FLD_WIDTH').executeAction("UP", tuple())
 
-        xOkBtn = xDialog.getChild("ok")
-        xOkBtn.executeAction("CLICK", tuple())
+            xOkBtn = xDialog.getChild("ok")
+            xOkBtn.executeAction("CLICK", tuple())
 
-        self.ui_test.execute_dialog_through_command(".uno:TransformDialog")
+            self.ui_test.execute_dialog_through_command(".uno:TransformDialog")
 
-        xDialog = self.xUITest.getTopFocusWindow()
+            xDialog = self.xUITest.getTopFocusWindow()
 
-        self.assertEqual('10.1', get_state_as_dict(xDialog.getChild('MTR_FLD_WIDTH'))['Value'])
-        self.assertEqual('0', get_state_as_dict(xDialog.getChild('MTR_FLD_HEIGHT'))['Value'])
-        self.assertEqual('5.51', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_X'))['Value'])
-        self.assertEqual('2.55', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_Y'))['Value'])
+            self.assertEqual('10.1', get_state_as_dict(xDialog.getChild('MTR_FLD_WIDTH'))['Value'])
+            self.assertEqual('0', get_state_as_dict(xDialog.getChild('MTR_FLD_HEIGHT'))['Value'])
+            self.assertEqual('5.51', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_X'))['Value'])
+            self.assertEqual('2.55', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_Y'))['Value'])
 
-        # Without the fix in place, this test would have failed with AssertionError: '0' != '180'
-        self.assertEqual('0', get_state_as_dict(xDialog.getChild('NF_ANGLE'))['Value'])
+            # Without the fix in place, this test would have failed with AssertionError: '0' != '180'
+            self.assertEqual('0', get_state_as_dict(xDialog.getChild('NF_ANGLE'))['Value'])
 
-        xOkBtn = xDialog.getChild("ok")
-        xOkBtn.executeAction("CLICK", tuple())
-
-        self.ui_test.close_doc()
+            xOkBtn = xDialog.getChild("ok")
+            xOkBtn.executeAction("CLICK", tuple())
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

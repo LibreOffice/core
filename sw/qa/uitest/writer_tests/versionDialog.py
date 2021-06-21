@@ -14,29 +14,27 @@ class versionDialog(UITestCase):
 
     def test_tdf131931(self):
 
-        writer_doc = self.ui_test.load_file(get_url_for_data_file("tdf131931.odt"))
+        with self.ui_test.load_file(get_url_for_data_file("tdf131931.odt")) as writer_doc:
 
-        document = self.ui_test.get_component()
-        xWriterDoc = self.xUITest.getTopFocusWindow()
+            document = self.ui_test.get_component()
+            xWriterDoc = self.xUITest.getTopFocusWindow()
 
-        self.ui_test.execute_dialog_through_command(".uno:VersionDialog")
+            self.ui_test.execute_dialog_through_command(".uno:VersionDialog")
 
-        xVersionDialog = self.xUITest.getTopFocusWindow()
+            xVersionDialog = self.xUITest.getTopFocusWindow()
 
-        versiondList = xVersionDialog.getChild("versions")
+            versiondList = xVersionDialog.getChild("versions")
 
-        text = "04/06/2020 15:18\t\tHELLO"
-        self.assertEqual(1, len(versiondList.getChildren()))
-        self.assertEqual(get_state_as_dict(versiondList.getChild('0'))["Text"].strip(), text)
+            text = "04/06/2020 15:18\t\tHELLO"
+            self.assertEqual(1, len(versiondList.getChildren()))
+            self.assertEqual(get_state_as_dict(versiondList.getChild('0'))["Text"].strip(), text)
 
-        xDeleteBtn = xVersionDialog.getChild("delete")
-        xDeleteBtn.executeAction("CLICK", tuple())
+            xDeleteBtn = xVersionDialog.getChild("delete")
+            xDeleteBtn.executeAction("CLICK", tuple())
 
-        self.assertEqual(0, len(versiondList.getChildren()))
+            self.assertEqual(0, len(versiondList.getChildren()))
 
-        xCloseBtn = xVersionDialog.getChild("close")
-        xCloseBtn.executeAction("CLICK", tuple())
-
-        self.ui_test.close_doc()
+            xCloseBtn = xVersionDialog.getChild("close")
+            xCloseBtn.executeAction("CLICK", tuple())
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

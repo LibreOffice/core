@@ -151,105 +151,101 @@ class trackedchanges(UITestCase):
         self.ui_test.close_doc()
 
     def test_list_of_changes(self):
-        self.ui_test.load_file(get_url_for_data_file("trackedChanges.odt"))
-        xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
-        document = self.ui_test.get_component()
+        with self.ui_test.load_file(get_url_for_data_file("trackedChanges.odt")):
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xWriterDoc.getChild("writer_edit")
+            document = self.ui_test.get_component()
 
-        listText = [
-                "Unknown Author\t01/24/2020 16:19:32\t",
-                "Unknown Author\t01/24/2020 16:19:35\t",
-                "Unknown Author\t01/24/2020 16:19:39\t",
-                "Unknown Author\t01/24/2020 16:19:39\t",
-                "Xisco Fauli\t01/27/2020 17:42:55\t"]
+            listText = [
+                    "Unknown Author\t01/24/2020 16:19:32\t",
+                    "Unknown Author\t01/24/2020 16:19:35\t",
+                    "Unknown Author\t01/24/2020 16:19:39\t",
+                    "Unknown Author\t01/24/2020 16:19:39\t",
+                    "Xisco Fauli\t01/27/2020 17:42:55\t"]
 
-        self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges")
-        xTrackDlg = self.xUITest.getTopFocusWindow()
-        changesList = xTrackDlg.getChild("writerchanges")
+            self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges")
+            xTrackDlg = self.xUITest.getTopFocusWindow()
+            changesList = xTrackDlg.getChild("writerchanges")
 
-        resultsAccept = [
-            "The tennis ball is a small ball. The baskedtball is much bigger.",
-            "The tennis ball is a small ball. The baskedtball is much bigger.",
-            "The tennis ball is a small ball. The baskedtball is much bigger.",
-            "The tennis ball is a small ball. The basketball is much bigger.",
-            "The tennis ball is a small ball. The basketball is much bigger.",
-            "The tennis ball is a small ball. The basketball is much bigger."]
+            resultsAccept = [
+                "The tennis ball is a small ball. The baskedtball is much bigger.",
+                "The tennis ball is a small ball. The baskedtball is much bigger.",
+                "The tennis ball is a small ball. The baskedtball is much bigger.",
+                "The tennis ball is a small ball. The basketball is much bigger.",
+                "The tennis ball is a small ball. The basketball is much bigger.",
+                "The tennis ball is a small ball. The basketball is much bigger."]
 
-        for i in range(len(listText)):
-            self.assertEqual(document.Text.String.strip(), resultsAccept[i])
-            self.assertEqual(get_state_as_dict(changesList.getChild('0'))["Text"], listText[i] )
-            xAccBtn = xTrackDlg.getChild("accept")
-            xAccBtn.executeAction("CLICK", tuple())
+            for i in range(len(listText)):
+                self.assertEqual(document.Text.String.strip(), resultsAccept[i])
+                self.assertEqual(get_state_as_dict(changesList.getChild('0'))["Text"], listText[i] )
+                xAccBtn = xTrackDlg.getChild("accept")
+                xAccBtn.executeAction("CLICK", tuple())
 
-        self.assertEqual(document.Text.String.strip(), resultsAccept[5])
-        #List is empty
-        self.assertFalse('0' in changesList.getChildren())
+            self.assertEqual(document.Text.String.strip(), resultsAccept[5])
+            #List is empty
+            self.assertFalse('0' in changesList.getChildren())
 
-        for i in reversed(range(len(listText))):
-            xUndoBtn = xTrackDlg.getChild("undo")
-            xUndoBtn.executeAction("CLICK", tuple())
-            self.assertEqual(document.Text.String.strip(), resultsAccept[i])
-            self.assertEqual(get_state_as_dict(changesList.getChild('0'))["Text"], listText[i] )
+            for i in reversed(range(len(listText))):
+                xUndoBtn = xTrackDlg.getChild("undo")
+                xUndoBtn.executeAction("CLICK", tuple())
+                self.assertEqual(document.Text.String.strip(), resultsAccept[i])
+                self.assertEqual(get_state_as_dict(changesList.getChild('0'))["Text"], listText[i] )
 
-        resultsReject = [
-            "The tennis ball is a small ball. The baskedtball is much bigger.",
-            "The tenis ball is a small ball. The baskedtball is much bigger.",
-            "The tenis ball is a small bal. The baskedtball is much bigger.",
-            "The tenis ball is a small bal. The baskedtball is much bigger.",
-            "The tenis ball is a small bal. The baskedball is much bigger.",
-            "The tenis ball is a small bal. The baskedball is much biger."]
+            resultsReject = [
+                "The tennis ball is a small ball. The baskedtball is much bigger.",
+                "The tenis ball is a small ball. The baskedtball is much bigger.",
+                "The tenis ball is a small bal. The baskedtball is much bigger.",
+                "The tenis ball is a small bal. The baskedtball is much bigger.",
+                "The tenis ball is a small bal. The baskedball is much bigger.",
+                "The tenis ball is a small bal. The baskedball is much biger."]
 
-        for i in range(len(listText)):
-            self.assertEqual(document.Text.String.strip(), resultsReject[i])
-            self.assertEqual(get_state_as_dict(changesList.getChild('0'))["Text"], listText[i] )
-            xAccBtn = xTrackDlg.getChild("reject")
-            xAccBtn.executeAction("CLICK", tuple())
+            for i in range(len(listText)):
+                self.assertEqual(document.Text.String.strip(), resultsReject[i])
+                self.assertEqual(get_state_as_dict(changesList.getChild('0'))["Text"], listText[i] )
+                xAccBtn = xTrackDlg.getChild("reject")
+                xAccBtn.executeAction("CLICK", tuple())
 
-        self.assertEqual(document.Text.String.strip(), resultsReject[5])
-        #List is empty
-        self.assertFalse('0' in changesList.getChildren())
+            self.assertEqual(document.Text.String.strip(), resultsReject[5])
+            #List is empty
+            self.assertFalse('0' in changesList.getChildren())
 
-        for i in reversed(range(len(listText))):
-            xUndoBtn = xTrackDlg.getChild("undo")
-            xUndoBtn.executeAction("CLICK", tuple())
-            self.assertEqual(document.Text.String.strip(), resultsReject[i])
-            self.assertEqual(get_state_as_dict(changesList.getChild('0'))["Text"], listText[i] )
+            for i in reversed(range(len(listText))):
+                xUndoBtn = xTrackDlg.getChild("undo")
+                xUndoBtn.executeAction("CLICK", tuple())
+                self.assertEqual(document.Text.String.strip(), resultsReject[i])
+                self.assertEqual(get_state_as_dict(changesList.getChild('0'))["Text"], listText[i] )
 
-        xcloseBtn = xTrackDlg.getChild("close")
-        xcloseBtn.executeAction("CLICK", tuple())
-
-        self.ui_test.close_doc()
+            xcloseBtn = xTrackDlg.getChild("close")
+            xcloseBtn.executeAction("CLICK", tuple())
 
     def test_tdf135018(self):
-        self.ui_test.load_file(get_url_for_data_file("tdf135018.odt"))
-        xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
-        document = self.ui_test.get_component()
+        with self.ui_test.load_file(get_url_for_data_file("tdf135018.odt")):
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xWriterDoc.getChild("writer_edit")
+            document = self.ui_test.get_component()
 
-        self.assertEqual(5, document.CurrentController.PageCount)
+            self.assertEqual(5, document.CurrentController.PageCount)
 
-        self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges")
-        xTrackDlg = self.xUITest.getTopFocusWindow()
-        changesList = xTrackDlg.getChild("writerchanges")
-        self.assertEqual(147, len(changesList.getChildren()))
+            self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges")
+            xTrackDlg = self.xUITest.getTopFocusWindow()
+            changesList = xTrackDlg.getChild("writerchanges")
+            self.assertEqual(147, len(changesList.getChildren()))
 
-        # Without the fix in place, it would have crashed here
-        xAccBtn = xTrackDlg.getChild("acceptall")
-        xAccBtn.executeAction("CLICK", tuple())
+            # Without the fix in place, it would have crashed here
+            xAccBtn = xTrackDlg.getChild("acceptall")
+            xAccBtn.executeAction("CLICK", tuple())
 
-        self.assertEqual(0, len(changesList.getChildren()))
+            self.assertEqual(0, len(changesList.getChildren()))
 
-        xUndoBtn = xTrackDlg.getChild("undo")
-        xUndoBtn.executeAction("CLICK", tuple())
+            xUndoBtn = xTrackDlg.getChild("undo")
+            xUndoBtn.executeAction("CLICK", tuple())
 
-        self.assertEqual(147, len(changesList.getChildren()))
+            self.assertEqual(147, len(changesList.getChildren()))
 
-        xcloseBtn = xTrackDlg.getChild("close")
-        xcloseBtn.executeAction("CLICK", tuple())
+            xcloseBtn = xTrackDlg.getChild("close")
+            xcloseBtn.executeAction("CLICK", tuple())
 
-        # Check the changes are shown after opening the Manage Tracked Changes dialog
-        self.assertGreater(document.CurrentController.PageCount, 5)
-
-        self.ui_test.close_doc()
+            # Check the changes are shown after opening the Manage Tracked Changes dialog
+            self.assertGreater(document.CurrentController.PageCount, 5)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

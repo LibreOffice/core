@@ -81,18 +81,16 @@ class tdf141297(UITestCase):
             # Close the Writer document
             self.ui_test.close_doc()
 
-            self.ui_test.load_file(systemPathToFileUrl(xFilePath))
+            with self.ui_test.load_file(systemPathToFileUrl(xFilePath)):
 
-            self.xUITest.executeCommand(".uno:ManageLinks")
+                self.xUITest.executeCommand(".uno:ManageLinks")
 
-            # Since the image is no longer linked, the link dialog is not open.
-            # Without the fix in place, this dialog would have been opened
-            xMainWin = self.xUITest.getTopFocusWindow()
-            self.assertTrue(sLinks not in xMainWin.getChildren())
-            self.assertTrue(sFileName not in xMainWin.getChildren())
-            self.assertTrue(sBreakLink not in xMainWin.getChildren())
-            self.assertTrue("impress_win" in xMainWin.getChildren())
-
-            self.ui_test.close_doc()
+                # Since the image is no longer linked, the link dialog is not open.
+                # Without the fix in place, this dialog would have been opened
+                xMainWin = self.xUITest.getTopFocusWindow()
+                self.assertTrue(sLinks not in xMainWin.getChildren())
+                self.assertTrue(sFileName not in xMainWin.getChildren())
+                self.assertTrue(sBreakLink not in xMainWin.getChildren())
+                self.assertTrue("impress_win" in xMainWin.getChildren())
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

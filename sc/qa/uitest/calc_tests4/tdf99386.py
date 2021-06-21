@@ -14,18 +14,16 @@ class tdf99386(UITestCase):
 
     def test_td99386_undo_merged_cell_needs_hard_recalculate(self):
 
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf99386.ods"))
+        with self.ui_test.load_file(get_url_for_data_file("tdf99386.ods")) as calc_doc:
 
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        xGridWindow = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            xGridWindow = xCalcDoc.getChild("grid_window")
+            document = self.ui_test.get_component()
 
-        xGridWindow.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B1"})) #select cells
-        self.xUITest.executeCommand(".uno:ToggleMergeCells") # merge cells
-        self.xUITest.executeCommand(".uno:Undo")
+            xGridWindow.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B1"})) #select cells
+            self.xUITest.executeCommand(".uno:ToggleMergeCells") # merge cells
+            self.xUITest.executeCommand(".uno:Undo")
 
-        self.assertEqual(get_cell_by_position(document, 0, 1, 1).getString(), "This")
-
-        self.ui_test.close_doc()
+            self.assertEqual(get_cell_by_position(document, 0, 1, 1).getString(), "This")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
