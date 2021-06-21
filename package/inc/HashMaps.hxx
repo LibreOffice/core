@@ -20,19 +20,13 @@
 #define INCLUDED_PACKAGE_INC_HASHMAPS_HXX
 
 #include "ZipEntry.hxx"
-#include <rtl/ref.hxx>
 #include <unordered_map>
-
-#include <memory>
 
 class ZipPackageFolder;
 struct ZipContentInfo;
 
 typedef std::unordered_map < OUString,
                         ZipPackageFolder * > FolderHash;
-
-typedef std::unordered_map < OUString,
-                        std::unique_ptr<ZipContentInfo> > ContentHash;
 
 typedef std::unordered_map < OUString,
                         ZipEntry > EntryHash;

@@ -18,7 +18,6 @@
  */
 
 #include "ZipPackageFolderEnumeration.hxx"
-#include "ContentInfo.hxx"
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
 
@@ -47,7 +46,7 @@ uno::Any SAL_CALL ZipPackageFolderEnumeration::nextElement()
     uno::Any aAny;
     if (aIterator == rContents.end())
         throw container::NoSuchElementException(THROW_WHERE);
-    aAny <<= (*aIterator).second->xTunnel;
+    aAny <<= (*aIterator).second.xTunnel;
     ++aIterator;
     return aAny;
 }
