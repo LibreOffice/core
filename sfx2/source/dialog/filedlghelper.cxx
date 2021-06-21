@@ -785,7 +785,7 @@ ErrCode FileDialogHelper_Impl::getGraphic( Graphic& rGraphic ) const
     return nRet;
 }
 
-static bool lcl_isSystemFilePicker( const uno::Reference< XFilePicker3 >& _rxFP )
+static bool lcl_isSystemFilePicker( const uno::Reference< XExecutableDialog >& _rxFP )
 {
     try
     {
@@ -1132,9 +1132,34 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     mxFileDlg->addFilePickerListener( this );
 }
 
-css::uno::Reference<css::ui::dialogs::XFolderPicker2> createFolderPicker(const css::uno::Reference<css::uno::XComponentContext>& rContext, weld::Window* /*pPreferredParent*/)
+css::uno::Reference<css::ui::dialogs::XFolderPicker2> createFolderPicker(const css::uno::Reference<css::uno::XComponentContext>& rContext, weld::Window* pPreferredParent)
 {
-    return css::ui::dialogs::FolderPicker::create(rContext);
+    auto xRet = css::ui::dialogs::FolderPicker::create(rContext);
+
+    // see FileDialogHelper_Impl::FileDialogHelper_Impl (above) for args to FilePicker
+    // reuse the same arguments for FolderPicker
+    if (pPreferredParent && lcl_isSystemFilePicker(xRet))
+    {
+        uno::Reference< XInitialization > xInit(xRet, UNO_QUERY);
+        if (xInit.is())
+        {
+            Sequence<Any> aInitArguments(2);
+
+            aInitArguments[0] <<= sal_Int32(0);
+            aInitArguments[1] <<= pPreferredParent->GetXWindow();
+
+            try
+            {
+                xInit->initialize(aInitArguments);
+            }
+            catch (const Exception&)
+            {
+                OSL_FAIL( "createFolderPicker: could not initialize the picker!" );
+            }
+        }
+    }
+
+    return xRet;
 }
 
 FileDialogHelper_Impl::~FileDialogHelper_Impl()

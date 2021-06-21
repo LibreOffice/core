@@ -27,7 +27,7 @@
 
 class SalGtkFolderPicker :
     public SalGtkPicker,
-    public cppu::WeakImplHelper< css::ui::dialogs::XFolderPicker2 >
+    public cppu::WeakImplHelper<css::ui::dialogs::XFolderPicker2, css::lang::XInitialization>
 {
     public:
 
@@ -49,6 +49,10 @@ class SalGtkFolderPicker :
         virtual OUString SAL_CALL getDirectory( ) override;
 
         virtual void SAL_CALL setDescription( const OUString& rDescription ) override;
+
+        // XInitialization
+
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
         // XCancellable
 
