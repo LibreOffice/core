@@ -42,7 +42,7 @@ struct CommentModel
     explicit            CommentModel();
 };
 
-class Comment : public WorksheetHelper
+class Comment final : public WorksheetHelper
 {
 public:
     explicit            Comment( const WorksheetHelper& rHelper );
@@ -66,7 +66,7 @@ private:
 
 typedef std::shared_ptr< Comment > CommentRef;
 
-class CommentsBuffer : public WorksheetHelper
+class CommentsBuffer final : public WorksheetHelper
 {
 public:
     explicit            CommentsBuffer( const WorksheetHelper& rHelper );

@@ -25,7 +25,7 @@ namespace oox::xls {
 
 class WorkbookGlobals;
 
-class ExcelFilter : public ::oox::core::XmlFilterBase
+class ExcelFilter final : public ::oox::core::XmlFilterBase
 {
 public:
     /// @throws css::uno::RuntimeException

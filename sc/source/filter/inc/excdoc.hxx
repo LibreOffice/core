@@ -35,7 +35,7 @@ class XclExpChangeTrack;
 
 class XclExpCellTable;
 
-class ExcTable : public XclExpRecordBase, public XclExpRoot
+class ExcTable final : public XclExpRecordBase, public XclExpRoot
 {
 private:
     typedef XclExpRecordList< ExcBundlesheetBase >  ExcBoundsheetList;
@@ -71,7 +71,7 @@ public:
     void                        WriteXml( XclExpXmlStream& );
 };
 
-class ExcDocument : protected XclExpRoot
+class ExcDocument final : protected XclExpRoot
 {
 friend class ExcTable;
 

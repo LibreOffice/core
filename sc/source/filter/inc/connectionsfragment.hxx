@@ -25,30 +25,29 @@ namespace oox::xls {
 
 class Connection;
 
-class ConnectionContext : public WorkbookContextBase
+class ConnectionContext final : public WorkbookContextBase
 {
 public:
     explicit            ConnectionContext( WorkbookFragmentBase& rParent, Connection& rConnection );
 
-protected:
+private:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
     virtual void        onStartElement( const AttributeList& rAttribs ) override;
 
     virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) override;
     virtual void        onStartRecord( SequenceInputStream& rStrm ) override;
 
-private:
     Connection&         mrConnection;
 };
 
-class ConnectionsFragment : public WorkbookFragmentBase
+class ConnectionsFragment final : public WorkbookFragmentBase
 {
 public:
     explicit            ConnectionsFragment(
                             const WorkbookHelper& rHelper,
                             const OUString& rFragmentPath );
 
-protected:
+private:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
     virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) override;
 

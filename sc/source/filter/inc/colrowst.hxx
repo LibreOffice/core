@@ -35,7 +35,7 @@ namespace o3tl {
 }
 
 
-class XclImpColRowSettings : protected XclImpRoot
+class XclImpColRowSettings final : protected XclImpRoot
 {
 public:
     explicit            XclImpColRowSettings( const XclImpRoot& rRoot );

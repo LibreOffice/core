@@ -91,7 +91,7 @@ struct ColorScaleRuleModelEntry
         mbNum(false) {}
 };
 
-class ColorScaleRule : public WorksheetHelper
+class ColorScaleRule final : public WorksheetHelper
 {
 public:
     ColorScaleRule( const CondFormat& rFormat );
@@ -108,7 +108,7 @@ private:
     sal_uInt32 mnCol;
 };
 
-class DataBarRule : public WorksheetHelper
+class DataBarRule final : public WorksheetHelper
 {
 public:
     DataBarRule( const CondFormat& rFormat );
@@ -127,7 +127,7 @@ private:
     std::unique_ptr<ColorScaleRuleModelEntry> mpLowerLimit;
 };
 
-class IconSetRule : public WorksheetHelper
+class IconSetRule final : public WorksheetHelper
 {
 public:
     IconSetRule( const WorksheetHelper& rParent );
@@ -146,7 +146,7 @@ private:
 };
 
 /** Represents a single rule in a conditional formatting. */
-class CondFormatRule : public WorksheetHelper
+class CondFormatRule final : public WorksheetHelper
 {
 public:
     explicit            CondFormatRule( const CondFormat& rCondFormat, ScConditionalFormat* pFormat );
@@ -196,7 +196,7 @@ struct CondFormatModel
 class CondFormatBuffer;
 
 /** Represents a conditional formatting object with a list of affected cell ranges. */
-class CondFormat : public WorksheetHelper
+class CondFormat final : public WorksheetHelper
 {
 friend class CondFormatBuffer;
 public:
@@ -289,7 +289,7 @@ private:
 typedef std::shared_ptr< CondFormat > CondFormatRef;
 typedef std::shared_ptr< ExtCfDataBarRule > ExtCfDataBarRuleRef;
 
-class CondFormatBuffer : public WorksheetHelper
+class CondFormatBuffer final : public WorksheetHelper
 {
 public:
     explicit            CondFormatBuffer( const WorksheetHelper& rHelper );
