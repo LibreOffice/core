@@ -60,6 +60,12 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTdf128195)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3529), nTxtBottom);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testBIRT)
+{
+    // this looped
+    load(DATA_DIRECTORY, "birt_min.odt");
+}
+
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testBorderCollapseCompat)
 {
     // Load a document with a border conflict: top cell has a dotted bottom border, bottom cell has
