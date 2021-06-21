@@ -25,6 +25,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/string.hxx>
 #include <svtools/imagemgr.hxx>
+#include <sfx2/filedlghelper.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
@@ -1078,7 +1079,7 @@ IMPL_LINK_NOARG(BrokenRecoveryDialog, SaveButtonHdl, weld::Button&, void)
 void BrokenRecoveryDialog::impl_askForSavePath()
 {
     css::uno::Reference< css::ui::dialogs::XFolderPicker2 > xFolderPicker =
-        css::ui::dialogs::FolderPicker::create( m_pCore->getComponentContext() );
+        sfx2::createFolderPicker(m_pCore->getComponentContext(), m_xDialog.get());
 
     INetURLObject aURL(m_sSavePath, INetProtocol::File);
     xFolderPicker->setDisplayDirectory(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE));

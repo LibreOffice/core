@@ -34,6 +34,7 @@
 #include <mailmergehelper.hxx>
 #include <mailmrge.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/filedlghelper.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <com/sun/star/container/XContainerQuery.hpp>
@@ -570,7 +571,7 @@ OUString SwMailMergeDlg::GetTargetURL() const
 IMPL_LINK_NOARG(SwMailMergeDlg, InsertPathHdl, weld::Button&, void)
 {
     uno::Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-    uno::Reference < XFolderPicker2 > xFP = FolderPicker::create(xContext);
+    uno::Reference < XFolderPicker2 > xFP = sfx2::createFolderPicker(xContext, m_xDialog.get());
     xFP->setDisplayDirectory( GetURLfromPath() );
     if( xFP->execute() == RET_OK ) {
         INetURLObject aURL(xFP->getDirectory());

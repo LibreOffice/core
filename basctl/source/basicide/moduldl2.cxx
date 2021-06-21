@@ -1117,7 +1117,7 @@ void LibPage::ExportAsBasic( const OUString& aLibName )
 {
     // Folder picker
     Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-    Reference< XFolderPicker2 > xFolderPicker = FolderPicker::create(xContext);
+    Reference< XFolderPicker2 > xFolderPicker = sfx2::createFolderPicker(xContext, m_pDialog->getDialog());
     Reference< task::XInteractionHandler2 > xHandler( task::InteractionHandler::createWithParent(xContext, nullptr) );
 
     xFolderPicker->setTitle(IDEResId(RID_STR_EXPORTBASIC));

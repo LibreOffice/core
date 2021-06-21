@@ -1053,7 +1053,7 @@ void SfxTemplateManagerDlg::OnTemplateImportCategory(std::u16string_view sCatego
 void SfxTemplateManagerDlg::OnTemplateExport()
 {
     uno::Reference<XComponentContext> xContext(comphelper::getProcessComponentContext());
-    uno::Reference<XFolderPicker2> xFolderPicker = FolderPicker::create(xContext);
+    uno::Reference<XFolderPicker2> xFolderPicker = sfx2::createFolderPicker(xContext, m_xDialog.get());
 
     xFolderPicker->setDisplayDirectory(SvtPathOptions().GetWorkPath());
 

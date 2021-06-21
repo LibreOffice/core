@@ -153,7 +153,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, AddHdl_Impl, weld::Button&, void)
     try
     {
         Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-        xFolderPicker = FolderPicker::create(xContext);
+        xFolderPicker = sfx2::createFolderPicker(xContext, GetFrameWeld());
 
         OUString sWorkFolder = SvtPathOptions().GetWorkPath();
         xFolderPicker->setDisplayDirectory( sWorkFolder );
@@ -825,7 +825,7 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl, weld::Button&, void)
 IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddPathHdl_Impl, weld::Button&, void)
 {
     Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-    Reference < XFolderPicker2 > xFolderPicker = FolderPicker::create(xContext);
+    Reference < XFolderPicker2 > xFolderPicker = sfx2::createFolderPicker(xContext, m_xDialog.get());
 
     OUString sOldFolder;
     if (m_xPathList->count_selected_rows() > 0)

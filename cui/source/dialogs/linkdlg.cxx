@@ -29,6 +29,7 @@
 #include <vcl/weldutils.hxx>
 
 #include <strings.hrc>
+#include <sfx2/filedlghelper.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/linksrc.hxx>
 #include <sfx2/lnkbase.hxx>
@@ -297,7 +298,8 @@ IMPL_LINK_NOARG(SvBaseLinksDlg, ChangeSourceClickHdl, weld::Button&, void)
     {
         try
         {
-            uno::Reference<ui::dialogs::XFolderPicker2> xFolderPicker = ui::dialogs::FolderPicker::create(comphelper::getProcessComponentContext());
+            uno::Reference<ui::dialogs::XFolderPicker2> xFolderPicker = sfx2::createFolderPicker(
+                    comphelper::getProcessComponentContext(), m_xDialog.get());
 
             OUString sType, sFile, sLinkName;
             OUString sFilter;

@@ -19,6 +19,7 @@
 
 #include <hldocntp.hxx>
 #include <osl/file.hxx>
+#include <sfx2/filedlghelper.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/docfilt.hxx>
 #include <svl/stritem.hxx>
@@ -405,7 +406,7 @@ IMPL_LINK_NOARG(SvxHyperlinkNewDocTp, ClickNewHdl_Impl, weld::Button&, void)
 {
     DisableClose( true );
     uno::Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-    uno::Reference < XFolderPicker2 >  xFolderPicker = FolderPicker::create(xContext);
+    uno::Reference < XFolderPicker2 >  xFolderPicker = sfx2::createFolderPicker(xContext, mpDialog->getDialog());
 
     OUString            aStrURL;
     OUString            aTempStrURL( m_xCbbPath->get_active_text() );

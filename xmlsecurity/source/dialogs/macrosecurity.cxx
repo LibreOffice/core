@@ -34,6 +34,7 @@
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#include <sfx2/filedlghelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <unotools/datetime.hxx>
@@ -264,7 +265,7 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, AddLocPBHdl, weld::Button&, void)
     try
     {
         uno::Reference < uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-        uno::Reference < ui::dialogs::XFolderPicker2 > xFolderPicker = ui::dialogs::FolderPicker::create(xContext);
+        uno::Reference < ui::dialogs::XFolderPicker2 > xFolderPicker = sfx2::createFolderPicker(xContext, m_pDlg->getDialog());
 
         short nRet = xFolderPicker->execute();
 
