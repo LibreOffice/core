@@ -23,15 +23,41 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include "HashMaps.hxx"
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include "ZipPackageEntry.hxx"
 #include <cppuhelper/implbase.hxx>
 
 #include <string_view>
+#include <unordered_map>
 #include <vector>
 
 class ZipOutputStream;
 struct ZipEntry;
+class ZipPackageFolder;
+class ZipPackageStream;
+
+struct ZipContentInfo
+{
+    css::uno::Reference < css::lang::XUnoTunnel > xTunnel;
+    bool bFolder;
+    union
+    {
+        ZipPackageFolder *pFolder;
+        ZipPackageStream *pStream;
+    };
+    ZipContentInfo( ZipPackageStream * pNewStream );
+    ZipContentInfo( ZipPackageFolder * pNewFolder );
+    ZipContentInfo( const ZipContentInfo& );
+    ZipContentInfo( ZipContentInfo&& );
+    ZipContentInfo& operator=( const ZipContentInfo& );
+    ZipContentInfo& operator=( ZipContentInfo&& );
+
+    ~ZipContentInfo();
+};
+
+typedef std::unordered_map < OUString,
+                             ZipContentInfo > ContentHash;
 
 class ZipPackageFolder : public cppu::ImplInheritanceHelper
 <
