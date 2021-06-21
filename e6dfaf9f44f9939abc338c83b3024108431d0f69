@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9c84cd0c_12c7842b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-21T06:10:09Z",
+      "side": 1,
+      "message": "It\u0027s interesting, that e.g. std::vector is able to have constexpr ctor taking length (in C++20) - so maybe it will be possible to also use some smart trick in C++20 to overcome this downside?",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 22
+      },
+      "revId": "e6dfaf9f44f9939abc338c83b3024108431d0f69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
