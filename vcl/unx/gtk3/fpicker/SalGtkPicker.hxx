@@ -55,6 +55,7 @@ class SalGtkPicker
         virtual ~SalGtkPicker();
     protected:
         osl::Mutex m_rbHelperMtx;
+        GtkWidget  *m_pParentWidget;
         GtkWidget  *m_pDialog;
     protected:
         /// @throws css::uno::RuntimeException
@@ -71,6 +72,8 @@ class SalGtkPicker
 
         // to instantiate own services
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
+
+        static GtkWidget* GetParentWidget(const css::uno::Sequence<css::uno::Any>& rArguments);
 
         static OUString getResString( sal_Int32 aId );
 };

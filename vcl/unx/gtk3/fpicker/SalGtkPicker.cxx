@@ -226,7 +226,9 @@ IMPL_STATIC_LINK(RunDialog, TerminateDesktop, void*, p, void)
 }
 
 SalGtkPicker::SalGtkPicker( const uno::Reference<uno::XComponentContext>& xContext )
-    : m_pDialog( nullptr ), m_xContext( xContext )
+    : m_pParentWidget(nullptr)
+    , m_pDialog(nullptr)
+    , m_xContext(xContext)
 {
 }
 

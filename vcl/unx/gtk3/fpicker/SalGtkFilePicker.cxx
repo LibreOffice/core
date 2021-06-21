@@ -83,7 +83,6 @@ void SalGtkFilePicker::InitialMapping()
 SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext >& xContext ) :
     SalGtkPicker( xContext ),
     SalGtkFilePicker_Base( m_rbHelperMtx ),
-    m_pParentWidget ( nullptr ),
     m_pVBox ( nullptr ),
     mnHID_FolderChange( 0 ),
     mnHID_SelectionChange( 0 ),
@@ -1589,6 +1588,38 @@ sal_Bool SAL_CALL SalGtkFilePicker::getShowState()
     return mbPreviewState;
 }
 
+GtkWidget* SalGtkPicker::GetParentWidget(const uno::Sequence<uno::Any>& rArguments)
+{
+    GtkWidget* pParentWidget = nullptr;
+
+    css::uno::Reference<css::awt::XWindow> xParentWindow;
+    if (rArguments.getLength() > 1)
+    {
+        rArguments[1] >>= xParentWindow;
+    }
+
+    if (xParentWindow.is())
+    {
+        if (SalGtkXWindow* pGtkXWindow = dynamic_cast<SalGtkXWindow*>(xParentWindow.get()))
+            pParentWidget = pGtkXWindow->getGtkWidget();
+        else
+        {
+            css::uno::Reference<css::awt::XSystemDependentWindowPeer> xSysDepWin(xParentWindow, css::uno::UNO_QUERY);
+            if (xSysDepWin.is())
+            {
+                css::uno::Sequence<sal_Int8> aProcessIdent(16);
+                rtl_getGlobalProcessId(reinterpret_cast<sal_uInt8*>(aProcessIdent.getArray()));
+                uno::Any aAny = xSysDepWin->getWindowHandle(aProcessIdent, css::lang::SystemDependent::SYSTEM_XWINDOW);
+                css::awt::SystemDependentXWindow tmp;
+                aAny >>= tmp;
+                pParentWidget = GetGtkSalData()->GetGtkDisplay()->findGtkWidgetForNativeHandle(tmp.WindowHandle);
+            }
+        }
+    }
+
+    return pParentWidget;
+}
+
 // XInitialization
 
 void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArguments )
@@ -1611,30 +1642,7 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
     sal_Int16 templateId = -1;
     aAny >>= templateId;
 
-    css::uno::Reference<css::awt::XWindow> xParentWindow;
-    if (aArguments.getLength() > 1)
-    {
-        aArguments[1] >>= xParentWindow;
-    }
-
-    if (xParentWindow.is())
-    {
-        if (SalGtkXWindow* pGtkXWindow = dynamic_cast<SalGtkXWindow*>(xParentWindow.get()))
-            m_pParentWidget = pGtkXWindow->getGtkWidget();
-        else
-        {
-            css::uno::Reference<css::awt::XSystemDependentWindowPeer> xSysDepWin(xParentWindow, css::uno::UNO_QUERY);
-            if (xSysDepWin.is())
-            {
-                css::uno::Sequence<sal_Int8> aProcessIdent(16);
-                rtl_getGlobalProcessId(reinterpret_cast<sal_uInt8*>(aProcessIdent.getArray()));
-                aAny = xSysDepWin->getWindowHandle(aProcessIdent, css::lang::SystemDependent::SYSTEM_XWINDOW);
-                css::awt::SystemDependentXWindow tmp;
-                aAny >>= tmp;
-                m_pParentWidget = GetGtkSalData()->GetGtkDisplay()->findGtkWidgetForNativeHandle(tmp.WindowHandle);
-            }
-        }
-    }
+    m_pParentWidget = GetParentWidget(aArguments);
 
     GtkFileChooserAction eAction = GTK_FILE_CHOOSER_ACTION_OPEN;
     OString sOpen = getOpenText();

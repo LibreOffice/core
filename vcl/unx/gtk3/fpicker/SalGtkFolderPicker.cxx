@@ -156,8 +156,12 @@ sal_Int16 SAL_CALL SalGtkFolderPicker::execute()
 
     uno::Reference<frame::XDesktop> xDesktop = frame::Desktop::create(m_xContext);
 
-    GtkWindow *pParent = RunDialog::GetTransientFor();
-    fprintf(stderr, "transient is %p\n", pParent);
+    GtkWindow *pParent = GTK_WINDOW(m_pParentWidget);
+    if (!pParent)
+    {
+        SAL_WARN( "vcl.gtk", "no parent widget set");
+        pParent = RunDialog::GetTransientFor();
+    }
     if (pParent)
         gtk_window_set_transient_for(GTK_WINDOW(m_pDialog), pParent);
     rtl::Reference<RunDialog> pRunDialog = new RunDialog(m_pDialog, xToolkit, xDesktop);
@@ -177,6 +181,13 @@ sal_Int16 SAL_CALL SalGtkFolderPicker::execute()
     gtk_widget_hide(m_pDialog);
 
     return retVal;
+}
+
+// XInitialization
+
+void SAL_CALL SalGtkFolderPicker::initialize(const uno::Sequence<uno::Any>& aArguments)
+{
+    m_pParentWidget = GetParentWidget(aArguments);
 }
 
 // XCancellable
