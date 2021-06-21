@@ -2484,9 +2484,9 @@ void SwCursorShell::SwClientNotify(const SwModify&, const SfxHint& rHint)
         m_aGrfArrivedLnk.Call(*this);
         return;
     }
-    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
-    if(!pLegacy)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     auto nWhich = pLegacy->GetWhich();
     if(!nWhich)
         nWhich = sal::static_int_cast<sal_uInt16>(RES_MSG_BEGIN);

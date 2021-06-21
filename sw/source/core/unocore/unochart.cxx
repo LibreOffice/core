@@ -2171,7 +2171,7 @@ void SwChartDataSequence::Notify( const SfxHint& rHint)
         m_pTableCursor.reset(nullptr);
         dispose();
     }
-    else if (dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
+    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
         setModified( true );
     }

@@ -699,8 +699,9 @@ void SwFormatPageDesc::SwClientNotify(const SwModify&, const SfxHint& rHint)
             // there could be an Undo-copy
             RegisterToPageDesc(*pDesc);
     }
-    else if(auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
+    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
+        auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
         if(RES_OBJECTDYING == pLegacy->GetWhich())
         {
             m_pDefinedIn = nullptr;
@@ -2625,9 +2626,9 @@ bool SwFrameFormat::supportsFullDrawingLayerFillAttributeSet() const
 
 void SwFrameFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
-    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
-    if(!pLegacy)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     const sal_uInt16 nNewWhich = pLegacy->m_pNew ? pLegacy->m_pNew->Which() : 0;
     const SwAttrSetChg* pNewAttrSetChg = nullptr;
     const SwFormatHeader* pH = nullptr;

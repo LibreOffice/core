@@ -86,8 +86,10 @@ SwFormatCharFormat* SwFormatCharFormat::Clone( SfxItemPool* ) const
 // forward to the TextAttribute
 void SwFormatCharFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
-    if(m_pTextAttribute && pLegacy)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
+        return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(m_pTextAttribute)
         m_pTextAttribute->TriggerNodeUpdate(*pLegacy);
 }
 
@@ -671,9 +673,9 @@ void Meta::NotifyChangeTextNode(SwTextNode *const pTextNode)
 
 void Meta::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
-    if(!pLegacy)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     CallSwClientNotify(rHint);
     GetNotifier().Broadcast(SfxHint(SfxHintId::DataChanged));
     if(RES_REMOVE_UNO_OBJECT == pLegacy->GetWhich())

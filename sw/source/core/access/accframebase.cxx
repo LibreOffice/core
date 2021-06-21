@@ -213,8 +213,9 @@ void SwAccessibleFrameBase::Notify(const SfxHint& rHint)
     {
         EndListeningAll();
     }
-    else if(auto pLegacyModifyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
+    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
+        auto pLegacyModifyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
         const sal_uInt16 nWhich = pLegacyModifyHint->GetWhich();
         const SwFlyFrame* pFlyFrame = static_cast<const SwFlyFrame*>(GetFrame());
         if(nWhich == RES_NAME_CHANGED && pFlyFrame)

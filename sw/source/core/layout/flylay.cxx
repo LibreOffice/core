@@ -728,8 +728,10 @@ SwFlyLayFrame::SwFlyLayFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame 
 
 void SwFlyLayFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
-    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
-    if(!pLegacy || !pLegacy->m_pNew)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
+        return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(!pLegacy->m_pNew)
         return;
     const auto pAnch = GetAnchorFromPoolItem(*pLegacy->m_pNew);
 

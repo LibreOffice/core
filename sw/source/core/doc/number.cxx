@@ -280,9 +280,9 @@ void SwNumFormat::SetCharFormat( SwCharFormat* pChFormat)
 
 void SwNumFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
-    if(!pLegacy)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     // Look for the NumRules object in the Doc where this NumFormat is set.
     // The format does not need to exist!
     const SwCharFormat* pFormat = nullptr;

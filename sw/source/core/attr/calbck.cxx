@@ -37,8 +37,9 @@ namespace sw
         { return m_pToTell == nullptr || m_pToTell->GetInfo( rInfo ); }
     void ListenerEntry::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
     {
-        if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
+        if (rHint.GetId() == SfxHintId::SwLegacyModify)
         {
+            auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
             if (pLegacyHint->m_pNew && pLegacyHint->m_pNew->Which() == RES_OBJECTDYING)
             {
                 auto pModifyChanged = CheckRegistration(pLegacyHint->m_pOld);
@@ -119,8 +120,10 @@ void SwClient::CheckRegistrationFormat(SwFormat& rOld)
 
 void SwClient::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    if(auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
-        CheckRegistration(pLegacyHint->m_pOld);
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
+        return;
+    auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
+    CheckRegistration(pLegacyHint->m_pOld);
 };
 
 void SwClient::StartListeningToSameModifyAs(const SwClient& other)
@@ -300,16 +303,16 @@ sw::ClientIteratorBase* sw::ClientIteratorBase::s_pClientIters = nullptr;
 
 void SwModify::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    if(dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
-    {
-        DBG_TESTSOLARMUTEX();
-        if(IsModifyLocked())
-            return;
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
+        return;
 
-        LockModify();
-        CallSwClientNotify(rHint);
-        UnlockModify();
-    }
+    DBG_TESTSOLARMUTEX();
+    if(IsModifyLocked())
+        return;
+
+    LockModify();
+    CallSwClientNotify(rHint);
+    UnlockModify();
 }
 
 void SwModify::CallSwClientNotify( const SfxHint& rHint ) const

@@ -1387,8 +1387,10 @@ SwRegHistory::SwRegHistory( const SwNode& rNd, SwHistory* pHst )
 
 void SwRegHistory::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
-    if ( !(m_pHistory && pLegacyHint && pLegacyHint->m_pNew && pLegacyHint->m_pOld != pLegacyHint->m_pNew) )
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
+        return;
+    auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
+    if ( !(m_pHistory && pLegacyHint->m_pNew && pLegacyHint->m_pOld != pLegacyHint->m_pNew) )
         return;
 
     if ( pLegacyHint->m_pNew->Which() < POOLATTR_END )

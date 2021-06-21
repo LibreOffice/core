@@ -64,8 +64,10 @@ SwUndoFormatAttrHelper::SwUndoFormatAttrHelper(SwFormat& rFormat, bool bSvDrwPt)
 
 void SwUndoFormatAttrHelper::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
-    if(!pLegacy || !pLegacy->m_pOld)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
+        return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(!pLegacy->m_pOld)
         return;
     assert(pLegacy->m_pOld->Which() != RES_OBJECTDYING);
     if(!pLegacy->m_pNew)
