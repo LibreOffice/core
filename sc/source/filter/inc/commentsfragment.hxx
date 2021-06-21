@@ -24,13 +24,13 @@
 
 namespace oox::xls {
 
-class CommentsFragment : public WorksheetFragmentBase
+class CommentsFragment final : public WorksheetFragmentBase
 {
 public:
     explicit            CommentsFragment(
                             const WorksheetHelper& rHelper,
                             const OUString& rFragmentPath );
-protected:
+private:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
     virtual void        onCharacters( const OUString& rChars ) override;
     virtual void        onEndElement() override;
@@ -40,13 +40,11 @@ protected:
 
     virtual const ::oox::core::RecordInfo* getRecordInfos() const override;
 
-private:
     /** Imports comment data from the comment element. */
     void                importComment( const AttributeList& rAttribs );
     /** Imports comment data from the COMMENT record. */
     void                importComment( SequenceInputStream& rStrm );
 
-private:
     CommentRef          mxComment;
 };
 

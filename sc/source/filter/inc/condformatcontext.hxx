@@ -26,7 +26,7 @@ namespace oox::xls {
 
 class CondFormatContext;
 
-class ColorScaleContext : public WorksheetContextBase
+class ColorScaleContext final : public WorksheetContextBase
 {
 public:
     explicit ColorScaleContext( CondFormatContext& rFragment, CondFormatRuleRef const & xRule );
@@ -38,7 +38,7 @@ private:
     CondFormatRuleRef mxRule;
 };
 
-class DataBarContext : public WorksheetContextBase
+class DataBarContext final : public WorksheetContextBase
 {
 public:
     explicit DataBarContext( CondFormatContext& rFormat, CondFormatRuleRef const & xRule );
@@ -50,7 +50,7 @@ private:
     CondFormatRuleRef mxRule;
 };
 
-class IconSetContext : public WorksheetContextBase
+class IconSetContext final : public WorksheetContextBase
 {
 public:
     explicit IconSetContext( WorksheetContextBase& rParent, IconSetRule* pIconSet );
@@ -65,12 +65,12 @@ private:
     OUString maChars;
 };
 
-class CondFormatContext : public WorksheetContextBase
+class CondFormatContext final : public WorksheetContextBase
 {
 public:
     explicit            CondFormatContext( WorksheetFragmentBase& rFragment );
 
-protected:
+private:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
     virtual void        onStartElement( const AttributeList& rAttribs ) override;
     virtual void        onCharacters( const OUString& rChars ) override;
@@ -80,7 +80,6 @@ protected:
     virtual void        onStartRecord( SequenceInputStream& rStrm ) override;
     virtual void        onEndRecord() override;
 
-private:
     CondFormatRef       mxCondFmt;
     CondFormatRuleRef   mxRule;
 };

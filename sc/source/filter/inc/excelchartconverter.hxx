@@ -24,7 +24,7 @@
 
 namespace oox::xls {
 
-class ExcelChartConverter : public ::oox::drawingml::chart::ChartConverter, public WorkbookHelper
+class ExcelChartConverter final : public ::oox::drawingml::chart::ChartConverter, public WorkbookHelper
 {
 public:
     explicit            ExcelChartConverter( const WorkbookHelper& rHelper );

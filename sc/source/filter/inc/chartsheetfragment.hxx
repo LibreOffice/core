@@ -23,14 +23,14 @@
 
 namespace oox::xls {
 
-class ChartsheetFragment : public WorksheetFragmentBase
+class ChartsheetFragment final : public WorksheetFragmentBase
 {
 public:
     explicit            ChartsheetFragment(
                             const WorksheetHelper& rHelper,
                             const OUString& rFragmentPath );
 
-protected:
+private:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
     virtual void        onCharacters( const OUString& rChars ) override;
 
@@ -40,7 +40,6 @@ protected:
     virtual void        initializeImport() override;
     virtual void        finalizeImport() override;
 
-private:
     /** Imports the relation identifier for the DrawingML part. */
     void                importDrawing( const AttributeList& rAttribs );
     /** Imports the DRAWING record containing the relation identifier for the DrawingML part. */

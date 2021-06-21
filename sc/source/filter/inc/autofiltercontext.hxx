@@ -28,89 +28,84 @@ class AutoFilter;
 class FilterColumn;
 class FilterSettingsBase;
 
-class FilterSettingsContext : public WorksheetContextBase
+class FilterSettingsContext final : public WorksheetContextBase
 {
 public:
     explicit            FilterSettingsContext( WorksheetContextBase& rParent, FilterSettingsBase& rFilterSettings );
 
-protected:
+private:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
     virtual void        onStartElement( const AttributeList& rAttribs ) override;
 
     virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) override;
     virtual void        onStartRecord( SequenceInputStream& rStrm ) override;
 
-private:
     FilterSettingsBase& mrFilterSettings;
 };
 
-class FilterColumnContext : public WorksheetContextBase
+class FilterColumnContext final : public WorksheetContextBase
 {
 public:
     explicit            FilterColumnContext( WorksheetContextBase& rParent, FilterColumn& rFilterColumn );
 
-protected:
+private:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
     virtual void        onStartElement( const AttributeList& rAttribs ) override;
 
     virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) override;
     virtual void        onStartRecord( SequenceInputStream& rStrm ) override;
 
-private:
     FilterColumn&       mrFilterColumn;
 };
 
 // class SortConditionContext
 
-class SortConditionContext : public WorksheetContextBase
+class SortConditionContext final : public WorksheetContextBase
 {
 public:
     explicit            SortConditionContext( WorksheetContextBase& rFragment, SortCondition& rSortCondition );
 
-protected:
+private:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
     virtual void        onStartElement( const AttributeList& rAttribs ) override;
 
     virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) override;
     virtual void        onStartRecord( SequenceInputStream& rStrm ) override;
 
-private:
     SortCondition&      mrSortCondition;
 };
 
 // class SortStateContext
 
-class SortStateContext : public WorksheetContextBase
+class SortStateContext final : public WorksheetContextBase
 {
 public:
     explicit            SortStateContext( WorksheetContextBase& rFragment, AutoFilter& rAutoFilter );
 
-protected:
+private:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
     virtual void        onStartElement( const AttributeList& rAttribs ) override;
 
     virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) override;
     virtual void        onStartRecord( SequenceInputStream& rStrm ) override;
 
-private:
     AutoFilter&         mrAutoFilter;
 };
 
 // class AutoFilterContext
 
-class AutoFilterContext : public WorksheetContextBase
+class AutoFilterContext final : public WorksheetContextBase
 {
 public:
     explicit            AutoFilterContext( WorksheetFragmentBase& rFragment, AutoFilter& rAutoFilter );
 
-protected:
+private:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
     virtual void        onStartElement( const AttributeList& rAttribs ) override;
 
     virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) override;
     virtual void        onStartRecord( SequenceInputStream& rStrm ) override;
 
-private:
     AutoFilter&         mrAutoFilter;
 };
 

@@ -92,7 +92,7 @@ struct ConnectionModel
 };
 
 /** An external data connection (database, web query, etc.). */
-class Connection : public WorkbookHelper
+class Connection final : public WorkbookHelper
 {
 public:
     explicit            Connection( const WorkbookHelper& rHelper );
@@ -128,7 +128,7 @@ private:
 
 typedef std::shared_ptr< Connection > ConnectionRef;
 
-class ConnectionsBuffer : public WorkbookHelper
+class ConnectionsBuffer final : public WorkbookHelper
 {
 public:
     explicit            ConnectionsBuffer( const WorkbookHelper& rHelper );

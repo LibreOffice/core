@@ -83,7 +83,7 @@ protected:
     OUString            maCalcName;     /// Final name used in the Calc document.
 };
 
-class DefinedName : public DefinedNameBase
+class DefinedName final : public DefinedNameBase
 {
 public:
     explicit            DefinedName( const WorkbookHelper& rHelper );
@@ -131,7 +131,7 @@ private:
 
 typedef std::shared_ptr< DefinedName > DefinedNameRef;
 
-class DefinedNamesBuffer : public WorkbookHelper
+class DefinedNamesBuffer final : public WorkbookHelper
 {
 public:
     explicit            DefinedNamesBuffer( const WorkbookHelper& rHelper );
