@@ -64,6 +64,7 @@
 #include <chrdlgmodes.hxx>
 #include <fmtcol.hxx>
 #include <cellatr.hxx>
+#include <edimp.hxx>
 #include <edtwin.hxx>
 #include <fldmgr.hxx>
 #include <strings.hrc>
@@ -1124,6 +1125,27 @@ void SwTextShell::Execute(SfxRequest &rReq)
             }
             if ( pRule )
             {
+                // When merging with a different list, also remove any restart-numbering.
+                const SwPaM& rCursor = *rWrtSh.GetCursor();
+                // if IsMultiSelection - check each selected paragraph separately.
+                SwPamRanges aRangeArr(rCursor);
+                SwPaM aRingPaM(*rCursor.GetPoint());
+                for (size_t n = 0; n < aRangeArr.Count(); ++n)
+                {
+                    aRangeArr.SetPam(n, aRingPaM);
+                    aRingPaM.Normalize();
+                    const SwNodeIndex nEnd = aRingPaM.GetMark()->nNode;
+                    for (SwNodeIndex nPara = aRingPaM.GetPoint()->nNode; nPara <= nEnd; ++nPara)
+                    {
+                        SwPaM aPaM(nPara);
+                        if (!rWrtSh.IsNumRuleStart(&aPaM))
+                            continue;
+                        // Only remove restart-numbering if the rule is actually going to change.
+                        if (SwDoc::GetNumRuleAtPos(*aPaM.GetPoint(), rWrtSh.GetLayout()) != pRule)
+                            rWrtSh.SetNumRuleStart(false, &aPaM);
+                    }
+                }
+
                 rWrtSh.SetCurNumRule( *pRule, false, sContinuedListId );
             }
         }
