@@ -16,6 +16,24 @@
       "revId": "6ef69234cf9138000a1dcf483114ea7c792fe3ed",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a06d9d7_3e23eced",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 1941,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-22T09:26:43Z",
+      "side": 0,
+      "message": "Please look at this my comment above. It was pointing you the very relevant code long ago; please whenever you get a reply, build a habit of walking through *every* comment, and acting on every one: you may change something and just mark it \"resolved\"; or you may add a comment to the comment - a disagreement, a request for clarification, etc - so *every* comment should finally get \"resolved\" state.\n\nSpecifically, here we see that bCustomPreview is used immediately to initialize the custom renderer for the box columns - and that custom rendered is only used when we have \"preview\" activated. This is the heart of the preview - and you ignored my comment pointing to it.",
+      "parentUuid": "7a578b4a_bf60ed59",
+      "revId": "6ef69234cf9138000a1dcf483114ea7c792fe3ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
