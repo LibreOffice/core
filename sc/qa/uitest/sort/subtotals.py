@@ -17,36 +17,34 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 class Subtotals(UITestCase):
 
     def test_tdf114720(self):
-        calc_doc = self.ui_test.create_doc_in_start_center("calc")
-        XcalcDoc = self.xUITest.getTopFocusWindow()
-        document = self.ui_test.get_component()
-        gridwin = XcalcDoc.getChild("grid_window")
+        with self.ui_test.create_doc_in_start_center("calc"):
+            XcalcDoc = self.xUITest.getTopFocusWindow()
+            document = self.ui_test.get_component()
+            gridwin = XcalcDoc.getChild("grid_window")
 
-        enter_text_to_cell(gridwin, "A1", "1")
-        enter_text_to_cell(gridwin, "A2", "1")
-        enter_text_to_cell(gridwin, "A3", "1")
-        enter_text_to_cell(gridwin, "A4", "1")
-        enter_text_to_cell(gridwin, "A5", "1")
-        enter_text_to_cell(gridwin, "A6", "1")
-        enter_text_to_cell(gridwin, "A7", "1")
-        enter_text_to_cell(gridwin, "A8", "1")
-        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A9"}))
+            enter_text_to_cell(gridwin, "A1", "1")
+            enter_text_to_cell(gridwin, "A2", "1")
+            enter_text_to_cell(gridwin, "A3", "1")
+            enter_text_to_cell(gridwin, "A4", "1")
+            enter_text_to_cell(gridwin, "A5", "1")
+            enter_text_to_cell(gridwin, "A6", "1")
+            enter_text_to_cell(gridwin, "A7", "1")
+            enter_text_to_cell(gridwin, "A8", "1")
+            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A9"}))
 
-        self.ui_test.execute_dialog_through_command(".uno:DataSubTotals")
-        xDialog = self.xUITest.getTopFocusWindow()
+            self.ui_test.execute_dialog_through_command(".uno:DataSubTotals")
+            xDialog = self.xUITest.getTopFocusWindow()
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
-        self.assertEqual(get_cell_by_position(document, 0, 0, 7).getValue(), 1)
-        self.assertEqual(get_cell_by_position(document, 0, 0, 8).getString(), "")
+            xOKBtn = xDialog.getChild("ok")
+            self.ui_test.close_dialog_through_button(xOKBtn)
+            self.assertEqual(get_cell_by_position(document, 0, 0, 7).getValue(), 1)
+            self.assertEqual(get_cell_by_position(document, 0, 0, 8).getString(), "")
 
-        # check cancel button
-        self.ui_test.execute_dialog_through_command(".uno:DataSubTotals")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xCancelBtn = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCancelBtn)
-
-        self.ui_test.close_doc()
+            # check cancel button
+            self.ui_test.execute_dialog_through_command(".uno:DataSubTotals")
+            xDialog = self.xUITest.getTopFocusWindow()
+            xCancelBtn = xDialog.getChild("cancel")
+            self.ui_test.close_dialog_through_button(xCancelBtn)
 
     def test_tdf88792(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf88792.ods")) as calc_doc:

@@ -49,7 +49,7 @@ class tdf126248(UITestCase):
 
     def test_tdf126248(self):
 
-        with guarded.create_doc_in_start_center(self, "calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
 
             self.changeLocalSetting("Chinese (traditional)")
 

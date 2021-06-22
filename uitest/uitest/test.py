@@ -147,6 +147,8 @@ class UITest(object):
         self.close_dialog_through_button(xCancelBtn)
         return True
 
+    # Calls UITest.close_doc at exit
+    @contextmanager
     def create_doc_in_start_center(self, app):
         xStartCenter = self._xUITest.getTopFocusWindow()
         try:
@@ -165,6 +167,10 @@ class UITest(object):
                 if event.executed:
                     frames = self.get_frames()
                     self.get_desktop().setActiveFrame(frames[0])
+                    try:
+                        yield
+                    finally:
+                        self.close_doc()
                     return
                 time_ += DEFAULT_SLEEP
                 time.sleep(DEFAULT_SLEEP)

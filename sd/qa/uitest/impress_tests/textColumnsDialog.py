@@ -16,7 +16,7 @@ from uitest.uihelper import guarded
 class textColumnsDialog(UITestCase):
 
     def test_textColumnsDialog(self):
-        with guarded.create_doc_in_start_center(self, "impress") as document:
+        with self.ui_test.create_doc_in_start_center("impress"):
 
             xTemplateDlg = self.xUITest.getTopFocusWindow()
             xCancelBtn = xTemplateDlg.getChild("close")
@@ -25,8 +25,9 @@ class textColumnsDialog(UITestCase):
             change_measurement_unit(self, 'Centimeter')
 
             xImpressDoc = self.xUITest.getTopFocusWindow()
-
             xEditWin = xImpressDoc.getChild("impress_win")
+            document = self.ui_test.get_component()
+
             xEditWin.executeAction("SELECT", mkPropertyValues({"OBJECT":"Unnamed Drawinglayer object 1"}))
             self.assertEqual("com.sun.star.drawing.SvxShapeCollection", document.CurrentSelection.getImplementationName())
 

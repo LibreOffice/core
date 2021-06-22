@@ -21,7 +21,7 @@ class tdf114710(UITestCase):
 
             self.xUITest.executeCommand(".uno:CloseDoc")
 
-            self.ui_test.create_doc_in_start_center("writer")
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             self.xUITest.getTopFocusWindow()
 

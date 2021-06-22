@@ -15,79 +15,77 @@ from uitest.uihelper.common import get_state_as_dict
 
 class tdf141559(UITestCase):
     def test_tdf141559_clear_filter(self):
-        self.ui_test.create_doc_in_start_center("calc")
-        document = self.ui_test.get_component()
-        calcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = calcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("calc"):
+            document = self.ui_test.get_component()
+            calcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = calcDoc.getChild("grid_window")
+            document = self.ui_test.get_component()
 
-        enter_text_to_cell(gridwin, "A1", "A")
-        enter_text_to_cell(gridwin, "A2", "1")
-        enter_text_to_cell(gridwin, "A3", "2")
-        enter_text_to_cell(gridwin, "A4", "3")
+            enter_text_to_cell(gridwin, "A1", "A")
+            enter_text_to_cell(gridwin, "A2", "1")
+            enter_text_to_cell(gridwin, "A3", "2")
+            enter_text_to_cell(gridwin, "A4", "3")
 
-        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A4"}))
+            gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A4"}))
 
-        self.xUITest.executeCommand(".uno:DataFilterAutoFilter")
+            self.xUITest.executeCommand(".uno:DataFilterAutoFilter")
 
-        gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
-        xFloatWindow = self.xUITest.getFloatWindow()
-        #Choose Standard Filter... button
-        xMenu = xFloatWindow.getChild("menu")
+            gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+            xFloatWindow = self.xUITest.getFloatWindow()
+            #Choose Standard Filter... button
+            xMenu = xFloatWindow.getChild("menu")
 
-        # check last item: 'Standard Filter...' (new menu item 'Clear Filter' is optional)
-        nLastIdx = int(get_state_as_dict(xMenu)['Children']) - 1
-        self.assertEqual(10, nLastIdx)
-        self.assertEqual('Standard Filter...', get_state_as_dict(xMenu.getChild(str(nLastIdx)))['Text'])
+            # check last item: 'Standard Filter...' (new menu item 'Clear Filter' is optional)
+            nLastIdx = int(get_state_as_dict(xMenu)['Children']) - 1
+            self.assertEqual(10, nLastIdx)
+            self.assertEqual('Standard Filter...', get_state_as_dict(xMenu.getChild(str(nLastIdx)))['Text'])
 
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        self.assertEqual("Standard Filter...", get_state_as_dict(xMenu)['SelectEntryText'])
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            self.assertEqual("Standard Filter...", get_state_as_dict(xMenu)['SelectEntryText'])
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
 
-        xDialog = self.xUITest.getTopFocusWindow()
-        xfield1 = xDialog.getChild("field1")
-        xcond1 = xDialog.getChild("cond1")
-        xval1 = xDialog.getChild("val1")
+            xDialog = self.xUITest.getTopFocusWindow()
+            xfield1 = xDialog.getChild("field1")
+            xcond1 = xDialog.getChild("cond1")
+            xval1 = xDialog.getChild("val1")
 
-        select_by_text(xfield1, "A")
-        select_by_text(xcond1, ">")
-        xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+            select_by_text(xfield1, "A")
+            select_by_text(xcond1, ">")
+            xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
+            xOKBtn = xDialog.getChild("ok")
+            self.ui_test.close_dialog_through_button(xOKBtn)
 
-        row = get_row(document, 1)
-        self.assertFalse(row.getPropertyValue("IsVisible"))
+            row = get_row(document, 1)
+            self.assertFalse(row.getPropertyValue("IsVisible"))
 
-        gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
-        xFloatWindow = self.xUITest.getFloatWindow()
-        #Choose Clear Filter button
-        xMenu = xFloatWindow.getChild("menu")
+            gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+            xFloatWindow = self.xUITest.getFloatWindow()
+            #Choose Clear Filter button
+            xMenu = xFloatWindow.getChild("menu")
 
-        # check last item: 'Clear Filter'
-        nLastIdx = int(get_state_as_dict(xMenu)['Children']) - 1
-        self.assertEqual(11, nLastIdx)
-        self.assertEqual('Clear Filter', get_state_as_dict(xMenu.getChild(str(nLastIdx)))['Text'])
+            # check last item: 'Clear Filter'
+            nLastIdx = int(get_state_as_dict(xMenu)['Children']) - 1
+            self.assertEqual(11, nLastIdx)
+            self.assertEqual('Clear Filter', get_state_as_dict(xMenu.getChild(str(nLastIdx)))['Text'])
 
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        # Use new menu item "Clear Filter" to remove the standard filter condition
-        self.assertEqual("Clear Filter", get_state_as_dict(xMenu)['SelectEntryText'])
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            # Use new menu item "Clear Filter" to remove the standard filter condition
+            self.assertEqual("Clear Filter", get_state_as_dict(xMenu)['SelectEntryText'])
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
 
-        self.assertTrue(row.getPropertyValue("IsVisible"))
-
-        self.ui_test.close_doc()
+            self.assertTrue(row.getPropertyValue("IsVisible"))
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

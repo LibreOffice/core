@@ -38,7 +38,7 @@ class tdf136011(UITestCase):
 
             self.xUITest.executeCommand(".uno:CloseDoc")
 
-            self.ui_test.create_doc_in_start_center("calc")
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             document = self.ui_test.get_component()
