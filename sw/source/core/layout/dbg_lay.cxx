@@ -720,8 +720,8 @@ void SwImplProtocol::Record_( const SwFrame* pFrame, PROT nFunction, DbgAction n
             {
                 aOut.append(' ');
                 aOut.append(static_cast<sal_Int64>(lcl_GetFrameId(static_cast<SwFrame*>(pParam))));
-                            }
-                            break;
+            }
+            break;
         case PROT::FileInit: FileInit();
                             aOut.append("Initialize");
                             break;

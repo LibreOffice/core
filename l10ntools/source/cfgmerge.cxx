@@ -206,7 +206,7 @@ void CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                     case CFG_TEXT_START: {
                         if ( sCurrentResTyp != sTokenName ) {
                             WorkOnResourceEnd();
-                         }
+                        }
                         sCurrentResTyp = sTokenName;
 
                         OString sTemp = sToken.copy( sToken.indexOf( "xml:lang=" ));

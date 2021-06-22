@@ -462,7 +462,7 @@ ScCaptionPtr::ScCaptionPtr( SdrCaptionObj* p ) :
     if (p)
     {
         newHead();
-     }
+    }
 }
 
 ScCaptionPtr::ScCaptionPtr( const ScCaptionPtr& r ) :
@@ -805,7 +805,7 @@ void ScCaptionPtr::dissolve()
         ScCaptionPtr* p = pThat->mpNext;
         pThat->clear();
         pThat = p;
-     }
+    }
     assert(!mpHead && !mpNext && !mpCaption);       // should had been cleared during list walk
     delete pHead;
 }

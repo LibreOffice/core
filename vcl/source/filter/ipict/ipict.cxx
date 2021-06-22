@@ -1180,7 +1180,7 @@ void PictReader::ReadHeader()
     sal_uInt32 nOffset;
     int confidence[2] = { 0, 0};
     for ( st = 0; st < 3 + 513; st++ )
-      {
+    {
         int actualConfid = 20; // the actual confidence
         pPict->ResetError();
         if (st < 2) nOffset = nStartPos+st*512;
@@ -1227,11 +1227,11 @@ void PictReader::ReadHeader()
         if (sBuf[0] != 0x00) continue; // unrecoverable error
         int numZero = 0;
         do
-          {
-        numZero++;
-        pPict->SeekRel(-1);
-        pPict->ReadBytes(sBuf, 2);
-          }
+        {
+            numZero++;
+            pPict->SeekRel(-1);
+            pPict->ReadBytes(sBuf, 2);
+        }
         while ( sBuf[0] == 0x00 && numZero < 10);
         actualConfid -= (numZero-1); // extra nop are dubious
         if (!pPict->good()) continue;
@@ -1252,30 +1252,30 @@ void PictReader::ReadHeader()
         if (!pPict->good()) continue;
 
         if ( nExtVer == -2 ) // extended version 2 picture
-          {
-        sal_Int32 nHResFixed, nVResFixed;
-        pPict->ReadInt32( nHResFixed ).ReadInt32( nVResFixed );
-        pPict->ReadInt16( y1 ).ReadInt16( x1 ).ReadInt16( y2 ).ReadInt16( x2 ); // reading the optimal bounding rect
-        if (x1 > x2 || y1 > y2) continue; // bad bdbox
-        if (st < 2 && actualConfid != 20) { confidence[st] = actualConfid; continue; }
+        {
+            sal_Int32 nHResFixed, nVResFixed;
+            pPict->ReadInt32( nHResFixed ).ReadInt32( nVResFixed );
+            pPict->ReadInt16( y1 ).ReadInt16( x1 ).ReadInt16( y2 ).ReadInt16( x2 ); // reading the optimal bounding rect
+            if (x1 > x2 || y1 > y2) continue; // bad bdbox
+            if (st < 2 && actualConfid != 20) { confidence[st] = actualConfid; continue; }
 
-        double fHRes = nHResFixed;
-        fHRes /= 65536;
-        double fVRes = nVResFixed;
-        fVRes /= 65536;
-        aHRes /= fHRes;
-        aVRes /= fVRes;
-        aBoundingRect=tools::Rectangle( x1,y1, x2, y2 );
-        pPict->SeekRel( 4 ); // 4 bytes reserved
-        return;
-          }
+            double fHRes = nHResFixed;
+            fHRes /= 65536;
+            double fVRes = nVResFixed;
+            fVRes /= 65536;
+            aHRes /= fHRes;
+            aVRes /= fVRes;
+            aBoundingRect=tools::Rectangle( x1,y1, x2, y2 );
+            pPict->SeekRel( 4 ); // 4 bytes reserved
+            return;
+        }
         else if (nExtVer == -1 ) { // basic version 2 picture
           if (st < 2 && actualConfid != 20) { confidence[st] = actualConfid; continue; }
           pPict->SeekRel( 16); // bdbox(4 fixed number)
           pPict->SeekRel(4); // 4 bytes reserved
           return;
         }
-      }
+    }
     pPict->SetError(SVSTREAM_FILEFORMAT_ERROR);
 }
 

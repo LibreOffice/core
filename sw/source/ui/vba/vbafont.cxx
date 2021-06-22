@@ -158,7 +158,7 @@ SwVbaFont::getColorIndex()
     sal_Int32 nElems = mxPalette->getCount();
     sal_Int32 nIndex = 0;
     for ( sal_Int32 count=0; count<nElems; ++count )
-           {
+    {
         sal_Int32 nPaletteColor = 0;
         mxPalette->getByIndex( count ) >>= nPaletteColor;
         if ( nPaletteColor == nColor )

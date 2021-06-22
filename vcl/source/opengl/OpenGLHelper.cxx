@@ -633,7 +633,7 @@ const char* OpenGLHelper::GLErrorString(GLenum errorCode)
         {
             return errors[i].string;
         }
-     }
+    }
 
     return nullptr;
 }

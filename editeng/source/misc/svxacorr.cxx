@@ -834,7 +834,7 @@ bool SvxAutoCorrect::FnChgWeightUnderl( SvxAutoCorrDoc& rDoc, const OUString& rT
                           SID_ATTR_CHAR_UNDERLINE,
                           aSvxUnderlineItem);
         }
-      }
+    }
 
     return -1 != nFndPos;
 }
