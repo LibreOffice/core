@@ -1658,7 +1658,7 @@ void ExcelToSc8::GetAbsRefs( ScRangeList& r, XclImpStream& aIn, std::size_t nLen
                 {// nFactor -> skip bytes or words    AttrChoose
                     nData++;
                     nSeek = nData * 2;
-            }
+                }
             }
                 break;
         }

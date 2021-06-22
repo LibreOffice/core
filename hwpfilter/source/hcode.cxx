@@ -563,9 +563,9 @@ static hchar jaso2ks(hchar hh)
 {
     for (size_t i = 0; i < SAL_N_ELEMENTS(jaso_hh_code); i++)
         if (hh == jaso_hh_code[i])
-    {
-        return sal::static_int_cast<hchar>(0xa4a1 + i);
-    }
+        {
+            return sal::static_int_cast<hchar>(0xa4a1 + i);
+        }
     return 0;
 }
 
@@ -1050,7 +1050,7 @@ int hcharconv(hchar ch, hchar *dest, int codeType)
                 else
                      dest[0] =  0xA1E0;
                 return 1;
-          }
+        }
           //printf("hcharconv Special[%04x]\n",ch);
         dest[0] = ch;
         return 1;
@@ -1085,16 +1085,16 @@ int kssm_hangul_to_ucs2(hchar ch, hchar *dest)
              dest[0] = 0x25a1; // empty square.
              return 1;
          }
-     }
-     else if ( choseong == 1 && jongseong == 1 ){ /* Vowel */
+    }
+    else if ( choseong == 1 && jongseong == 1 ){ /* Vowel */
          dest[0] = joongseong_to_unicode[joongseong];
          return 1;
-     }
-     else if ( joongseong == 2 && jongseong == 1 ){  /* Consonant */
+    }
+    else if ( joongseong == 2 && jongseong == 1 ){  /* Consonant */
         dest[0] = choseong_to_unicode[choseong];
         return 1;
     }
-     else if( choseong > 20 || choseong == 0 ||
+    else if( choseong > 20 || choseong == 0 ||
              joongseong == 17 || joongseong == 24 ||
              joongseong == 25 || joongseong > 29 ||
              jongseong == 0 || jongseong == 18 ||

@@ -7074,7 +7074,7 @@ void SwLayoutFrame::RefreshExtraData( const SwRect &rRect ) const
                          pFly->getFrameArea().Bottom() >= rRect.Top() )
                         pFly->RefreshExtraData( rRect );
                 }
-        }
+            }
         pCnt = pCnt->GetNextContentFrame();
     }
 }

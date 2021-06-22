@@ -36,13 +36,13 @@ hud_awareness_method_call (GDBusConnection       * /* connection */,
   HudAwarenessHandle *handle = static_cast<HudAwarenessHandle*>(user_data);
 
   if (g_str_equal (method_name, "HudActiveChanged"))
-    {
+  {
       gboolean active;
 
       g_variant_get (parameters, "(b)", &active);
 
       (* handle->callback) (active, handle->user_data);
-    }
+  }
 
   g_dbus_method_invocation_return_value (invocation, nullptr);
 }
@@ -65,7 +65,7 @@ hud_awareness_register (GDBusConnection       *connection,
   vtable.method_call = hud_awareness_method_call;
 
   if G_UNLIKELY (iface == nullptr)
-    {
+  {
       GError *local_error = nullptr;
 
       info = g_dbus_node_info_new_for_xml ("<node>"
@@ -80,17 +80,17 @@ hud_awareness_register (GDBusConnection       *connection,
       g_assert_no_error (local_error);
       iface = g_dbus_node_info_lookup_interface (info, "com.canonical.hud.Awareness");
       g_assert (iface != nullptr);
-    }
+  }
 
   handle = static_cast<HudAwarenessHandle*>(g_malloc (sizeof (HudAwarenessHandle)));
 
   object_id = g_dbus_connection_register_object (connection, object_path, iface, &vtable, handle, &g_free, error);
 
   if (object_id == 0)
-    {
+  {
       g_free (handle);
       return 0;
-    }
+  }
 
   handle->connection = g_object_ref(connection);
   handle->callback = callback;

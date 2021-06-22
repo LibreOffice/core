@@ -3607,8 +3607,8 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
 
                                 uno::Reference< report::XReportComponent> xTextfield(pControl[1]->getUnoShape(),uno::UNO_QUERY_THROW);
                                 xTextfield->setPositionY(aTextfield.Top());
+                            }
                         }
-                    }
                     }
                 }
                 // not sure where the ownership of these passes too...

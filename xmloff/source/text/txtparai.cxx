@@ -2062,7 +2062,7 @@ XMLNumberedParaContext::XMLNumberedParaContext(
     XMLTextListsHelper& rTextListsHelper(
         i_rImport.GetTextImport()->GetTextListHelper() );
     if (m_ListId.isEmpty())
-      {
+    {
         SAL_WARN_IF(0 <= i_rImport.GetODFVersion().compareTo(u"1.2"), "xmloff.text", "invalid numbered-paragraph: no list-id (1.2)");
         m_ListId = rTextListsHelper.GetNumberedParagraphListId(m_Level,
             StyleName);

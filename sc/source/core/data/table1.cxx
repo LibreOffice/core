@@ -516,7 +516,7 @@ bool ScTable::GetCellArea( SCCOL& rEndCol, SCROW& rEndRow ) const
     SCCOL nMaxX = 0;
     SCROW nMaxY = 0;
     for (SCCOL i=0; i<aCol.size(); i++)
-        {
+    {
             if (!aCol[i].IsEmptyData())
             {
                 bFound = true;
@@ -539,7 +539,7 @@ bool ScTable::GetCellArea( SCCOL& rEndCol, SCROW& rEndRow ) const
                     nMaxX = i;
                 }
             }
-        }
+    }
 
     rEndCol = nMaxX;
     rEndRow = nMaxY;

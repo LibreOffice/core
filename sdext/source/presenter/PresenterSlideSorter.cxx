@@ -692,11 +692,11 @@ geometry::RealRectangle2D PresenterSlideSorter::PlaceScrollBars (
     Reference<container::XIndexAccess> xSlides (mxSlideShowController, UNO_QUERY_THROW);
     bIsScrollBarNeeded = mpLayout->IsScrollBarNeeded(xSlides->getCount());
     if (mpVerticalScrollBar)
-        {
+    {
             if (bIsScrollBarNeeded)
-                {
+            {
                     if(AllSettings::GetLayoutRTL())
-                        {
+                    {
                             mpVerticalScrollBar->SetPosSize(geometry::RealRectangle2D(
                                                                                       rUpperBox.X1,
                                                                                       rUpperBox.Y1,
@@ -710,9 +710,9 @@ geometry::RealRectangle2D PresenterSlideSorter::PlaceScrollBars (
                                                              rUpperBox.Y1,
                                                              rUpperBox.X2,
                                                              rUpperBox.Y2);
-                        }
+                    }
                     else
-                        {
+                    {
                             // if it's not RTL place vertical scroll bar at right border.
                             mpVerticalScrollBar->SetPosSize(geometry::RealRectangle2D(
                                                                                       rUpperBox.X2 - mpVerticalScrollBar->GetSize(),
@@ -727,11 +727,11 @@ geometry::RealRectangle2D PresenterSlideSorter::PlaceScrollBars (
                                                              rUpperBox.Y1,
                                                              rUpperBox.X2 - mpVerticalScrollBar->GetSize() - gnHorizontalGap,
                                                              rUpperBox.Y2);
-                        }
-                }
+                    }
+            }
             else
                 mpVerticalScrollBar->SetVisible(false);
-        }
+    }
     return rUpperBox;
 }
 
@@ -1202,34 +1202,34 @@ geometry::RealPoint2D PresenterSlideSorter::Layout::GetLocalPosition(
     const geometry::RealPoint2D& rWindowPoint) const
 {
     if(AllSettings::GetLayoutRTL())
-        {
+    {
             return css::geometry::RealPoint2D(
                                               -rWindowPoint.X  + maBoundingBox.X2 + mnHorizontalOffset,
                                               rWindowPoint.Y - maBoundingBox.Y1 + mnVerticalOffset);
-        }
+    }
     else
-        {
+    {
             return css::geometry::RealPoint2D(
                                               rWindowPoint.X - maBoundingBox.X1 + mnHorizontalOffset,
                                               rWindowPoint.Y - maBoundingBox.Y1 + mnVerticalOffset);
-        }
+    }
 }
 
 geometry::RealPoint2D PresenterSlideSorter::Layout::GetWindowPosition(
     const geometry::RealPoint2D& rLocalPoint) const
 {
     if(AllSettings::GetLayoutRTL())
-        {
+    {
             return css::geometry::RealPoint2D(
                                               -rLocalPoint.X + mnHorizontalOffset + maBoundingBox.X2,
                                               rLocalPoint.Y - mnVerticalOffset + maBoundingBox.Y1);
-        }
+    }
     else
-        {
+    {
             return css::geometry::RealPoint2D(
                                               rLocalPoint.X - mnHorizontalOffset + maBoundingBox.X1,
                                               rLocalPoint.Y - mnVerticalOffset + maBoundingBox.Y1);
-        }
+    }
 }
 
 sal_Int32 PresenterSlideSorter::Layout::GetColumn (

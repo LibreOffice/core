@@ -160,26 +160,26 @@ XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFam
         aStemBuffer.append( rFamilyData.maStrPrefix );
 
         if (!rParentName.isEmpty())
-            {
-                aStemBuffer.append("-");
-                aStemBuffer.append(rParentName);
-            }
+        {
+            aStemBuffer.append("-");
+            aStemBuffer.append(rParentName);
+        }
 
         // Create a name based on the properties used
         for(XMLPropertyState const & rState : maProperties)
-            {
-                if (rState.mnIndex == -1)
-                    continue;
-                OUString sXMLName(rFamilyData.mxMapper->getPropertySetMapper()->GetEntryXMLName(rState.mnIndex));
-                if (sXMLName.isEmpty())
-                    continue;
-                aStemBuffer.append("-");
-                aStemBuffer.append(static_cast<sal_Int32>(rFamilyData.mxMapper->getPropertySetMapper()->GetEntryNameSpace(rState.mnIndex)));
-                aStemBuffer.append(":");
-                aStemBuffer.append(sXMLName);
-                aStemBuffer.append("=");
-                aStemBuffer.append(any2string(rState.maValue));
-            }
+        {
+            if (rState.mnIndex == -1)
+                continue;
+            OUString sXMLName(rFamilyData.mxMapper->getPropertySetMapper()->GetEntryXMLName(rState.mnIndex));
+            if (sXMLName.isEmpty())
+                continue;
+            aStemBuffer.append("-");
+            aStemBuffer.append(static_cast<sal_Int32>(rFamilyData.mxMapper->getPropertySetMapper()->GetEntryNameSpace(rState.mnIndex)));
+            aStemBuffer.append(":");
+            aStemBuffer.append(sXMLName);
+            aStemBuffer.append("=");
+            aStemBuffer.append(any2string(rState.maValue));
+        }
 
 #if 0
         // Finally append an incremental counter in an attempt to make identical

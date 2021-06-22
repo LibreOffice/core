@@ -395,8 +395,8 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
     const sal_Int32 nColumnCount = xtableColumnsIndexAccess->getCount();
     for( sal_Int32 nColumn = 0; nColumn < nColumnCount; ++nColumn )
     {
-         Reference< XPropertySet > xColumnProperties( xtableColumnsIndexAccess->getByIndex(nColumn) , UNO_QUERY );
-         if ( xColumnProperties.is() )
+        Reference< XPropertySet > xColumnProperties( xtableColumnsIndexAccess->getByIndex(nColumn) , UNO_QUERY );
+        if ( xColumnProperties.is() )
         {
             // table:style-name
             if( rTableInfo )
@@ -411,8 +411,8 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
             // have identical properties. If yes, attr table:number-columns-repeated
             // has to be written.
             SvXMLElementExport tableColumnElement( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_COLUMN, true, true );
-         }
-     }
+        }
+    }
  }
 
 // ODF export for a table cell.

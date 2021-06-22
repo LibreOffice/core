@@ -62,9 +62,13 @@ sal_Int32 SAL_CALL BreakIterator_th::previousCharacters( const OUString& Text,
             if (m_aNextCellIndex[nStartPos-1] == 0) // not a CTL character
                 return BreakIterator_Unicode::previousCharacters(Text, nStartPos, rLocale,
                     nCharacterIteratorMode, nCount, nDone);
-            else while (nCount > 0 && m_aNextCellIndex[nStartPos - 1] > 0) {
-                nCount--; nDone++;
-                nStartPos = m_aPreviousCellIndex[nStartPos - 1];
+            else
+            {
+                while (nCount > 0 && m_aNextCellIndex[nStartPos - 1] > 0)
+                {
+                    nCount--; nDone++;
+                    nStartPos = m_aPreviousCellIndex[nStartPos - 1];
+                }
             }
         } else
             nStartPos = 0;
@@ -89,9 +93,13 @@ sal_Int32 SAL_CALL BreakIterator_th::nextCharacters(const OUString& Text,
             if (m_aNextCellIndex[nStartPos] == 0) // not a CTL character
                 return BreakIterator_Unicode::nextCharacters(Text, nStartPos, rLocale,
                     nCharacterIteratorMode, nCount, nDone);
-            else while (nCount > 0 && m_aNextCellIndex[nStartPos] > 0) {
-                nCount--; nDone++;
-                nStartPos = m_aNextCellIndex[nStartPos];
+            else
+            {
+                while (nCount > 0 && m_aNextCellIndex[nStartPos] > 0)
+                {
+                    nCount--; nDone++;
+                    nStartPos = m_aNextCellIndex[nStartPos];
+                }
             }
         } else
             nStartPos = len;

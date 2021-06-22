@@ -442,10 +442,10 @@ void XMLFilterTestDialog::doExport( const Reference< XComponent >& xComp )
                 aSourceData[i++].Value <<= true;
 
                 if( bUseDocType )
-                    {
-                        aSourceData[i  ].Name = "DocType_Public";
-                        aSourceData[i++].Value <<= m_xFilterInfo->maDocType;
-                    }
+                {
+                    aSourceData[i  ].Name = "DocType_Public";
+                    aSourceData[i++].Value <<= m_xFilterInfo->maDocType;
+                }
 
                 Reference< XExportFilter > xExporter( mxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.documentconversion.XSLTFilter", mxContext ), UNO_QUERY );
                 Reference< XDocumentHandler > xHandler( xExporter, UNO_QUERY );

@@ -129,8 +129,8 @@ void SwXMLTableItemMapper_Impl::handleSpecialItem(
                         AddAttribute( rEntry.nNameSpace, rEntry.eLocalName,
                                       sValue, rNamespaceMap, rAttrList );
                     }
-               }
-           }
+                }
+            }
         }
         break;
 
