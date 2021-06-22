@@ -2763,6 +2763,7 @@ static void doc_iniUnoCommands ()
         OUString(".uno:IncrementIndent"),
         OUString(".uno:Italic"),
         OUString(".uno:JustifyPara"),
+        OUString(".uno:JumpToMark"),
         OUString(".uno:OutlineFont"),
         OUString(".uno:LeftPara"),
         OUString(".uno:LanguageStatus"),
