@@ -769,7 +769,7 @@ void SwFormat::RemoveAllUnos()
 SwFormatsBase::~SwFormatsBase()
 {}
 
-SwFormat* SwFormatsBase::FindFormatByName( std::u16string_view rName ) const
+SwFormat* SwFormatsBase::FindFormatByName( const OUString& rName ) const
 {
     SwFormat* pFnd = nullptr;
     for( size_t n = 0; n < GetFormatCount(); ++n )

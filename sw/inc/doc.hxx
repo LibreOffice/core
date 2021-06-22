@@ -761,13 +761,13 @@ public:
     SwFrameFormat  *MakeFrameFormat(const OUString &rFormatName, SwFrameFormat *pDerivedFrom,
                           bool bBroadcast = false, bool bAuto = true);
     void       DelFrameFormat( SwFrameFormat *pFormat, bool bBroadcast = false );
-    SwFrameFormat* FindFrameFormatByName( std::u16string_view rName ) const;
+    SwFrameFormat* FindFrameFormatByName( const OUString& rName ) const;
 
     SwCharFormat *MakeCharFormat(const OUString &rFormatName, SwCharFormat *pDerivedFrom,
                            bool bBroadcast = false );
     void       DelCharFormat(size_t nFormat, bool bBroadcast = false);
     void       DelCharFormat(SwCharFormat const * pFormat, bool bBroadcast = false);
-    SwCharFormat* FindCharFormatByName( std::u16string_view rName ) const
+    SwCharFormat* FindCharFormatByName( const OUString& rName ) const
         {   return mpCharFormatTable->FindFormatByName(rName); }
 
     // Formatcollections (styles)
@@ -795,7 +795,7 @@ public:
                        const bool bReset = true,
                        const bool bResetListAttrs = false,
                        SwRootFrame const* pLayout = nullptr);
-    SwTextFormatColl* FindTextFormatCollByName( std::u16string_view rName ) const
+    SwTextFormatColl* FindTextFormatCollByName( const OUString& rName ) const
         {   return mpTextFormatCollTable->FindFormatByName(rName); }
 
     void ChkCondColls();
@@ -813,7 +813,7 @@ public:
     SwFrameFormat& GetTableFrameFormat(size_t nFormat, bool bUsed ) const;
     SwTableFormat* MakeTableFrameFormat(const OUString &rFormatName, SwFrameFormat *pDerivedFrom);
     void        DelTableFrameFormat( SwTableFormat* pFormat );
-    SwTableFormat* FindTableFormatByName( std::u16string_view rName, bool bAll = false ) const;
+    SwTableFormat* FindTableFormatByName( const OUString& rName, bool bAll = false ) const;
 
     /** Access to frames.
     Iterate over Flys - for Basic-Collections. */
@@ -1269,7 +1269,7 @@ public:
                         const SwTable* pCpyTable, bool bCpyName = false,
                         bool bCorrPos = false );
 
-    void UnProtectCells( std::u16string_view rTableName );
+    void UnProtectCells( const OUString& rTableName );
     bool UnProtectCells( const SwSelBoxes& rBoxes );
     void UnProtectTables( const SwPaM& rPam );
     bool HasTableAnyProtection( const SwPosition* pPos,
@@ -1286,7 +1286,7 @@ public:
                         sal_uInt16 nMode = 0 );
 
     // Make charts of given table update.
-    void UpdateCharts( std::u16string_view rName ) const;
+    void UpdateCharts( const OUString& rName ) const;
 
     // Update all charts, for that exists any table.
     void UpdateAllCharts()          { DoUpdateAllCharts(); }

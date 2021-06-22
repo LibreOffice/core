@@ -395,7 +395,7 @@ void SwEditShell::SetChartName( const OUString &rName )
     pONd->SetChartTableName( rName );
 }
 
-void SwEditShell::UpdateCharts( std::u16string_view rName )
+void SwEditShell::UpdateCharts( const OUString& rName )
 {
     GetDoc()->UpdateCharts( rName );
 }

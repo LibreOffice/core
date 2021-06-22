@@ -731,7 +731,7 @@ void SwDoc::DelTableFrameFormat( SwTableFormat *pFormat )
     delete pFormat;
 }
 
-SwFrameFormat* SwDoc::FindFrameFormatByName( std::u16string_view rName ) const
+SwFrameFormat* SwDoc::FindFrameFormatByName( const OUString& rName ) const
 {
     return mpFrameFormatTable->FindFormatByName( rName );
 }
@@ -2065,20 +2065,36 @@ SwFrameFormats::~SwFrameFormats()
 SwFrameFormats::const_iterator SwFrameFormats::find( const value_type& x ) const
 {
     ByTypeAndName::iterator it = m_TypeAndNameIndex.find(
-        boost::make_tuple(x->Which(), x->GetName(), x) );
+        boost::make_tuple(x->GetName(), x->Which(), x) );
     return m_Array.project<0>( it );
 }
 
 SwFrameFormats::ByTypeAndName::const_iterator
 SwFrameFormats::findByTypeAndName( sal_uInt16 type, const OUString& name ) const
 {
-    return m_TypeAndNameIndex.find( boost::make_tuple(type, name) );
+    return m_TypeAndNameIndex.find( boost::make_tuple(name, type) );
 }
 
 SwFrameFormats::ByTypeAndName::const_iterator
 SwFrameFormats::findSimilar( const value_type& x ) const
 {
     return findByTypeAndName( x->Which(), x->GetName() );
+}
+
+std::pair<SwFrameFormats::ByTypeAndName::const_iterator, SwFrameFormats::ByTypeAndName::const_iterator>
+SwFrameFormats::findRangeByName( const OUString& rName ) const
+{
+    auto it = m_TypeAndNameIndex.lower_bound( boost::make_tuple(rName, sal_uInt16(0)) );
+    auto itEnd = m_TypeAndNameIndex.lower_bound( boost::make_tuple(rName, SAL_MAX_UINT16) );
+    return { it, itEnd };
+}
+
+SwFrameFormat* SwFrameFormats::FindFormatByName( const OUString& rName ) const
+{
+    auto it = m_TypeAndNameIndex.lower_bound( boost::make_tuple(rName, sal_uInt16(0)) );
+    if (it != m_TypeAndNameIndex.end() && (*it)->GetName() == rName)
+        return *it;
+    return nullptr;
 }
 
 void SwFrameFormats::DeleteAndDestroyAll( bool keepDefault )
