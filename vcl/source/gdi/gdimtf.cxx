@@ -747,11 +747,15 @@ void GDIMetaFile::Clip( const tools::Rectangle& i_rClipRect )
             ( MetaActionType::PUSH == nType ) ||
             ( MetaActionType::POP == nType ) )
         {
+
+        SAL_WARN("emfio", " MetaActionType::MAPMODE " );
             pAct->Execute( aMapVDev.get() );
             aCurRect = OutputDevice::LogicToLogic( i_rClipRect, GetPrefMapMode(), aMapVDev->GetMapMode() );
         }
         else if( nType == MetaActionType::CLIPREGION )
         {
+
+        SAL_WARN("emfio", " MetaActionType::CLIPREGION " );
             MetaClipRegionAction* pOldAct = static_cast<MetaClipRegionAction*>(pAct);
             vcl::Region aNewReg( aCurRect );
             if( pOldAct->IsClipping() )
