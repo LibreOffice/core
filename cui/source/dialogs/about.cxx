@@ -93,13 +93,9 @@ AboutDialog::AboutDialog(weld::Window *pParent)
   const tools::Long nWidth(m_pCopyrightLabel->get_preferred_size().getWidth());
   BitmapEx aBackgroundBitmap;
 
-  if (SfxApplication::loadBrandSvg(Application::GetSettings()
-                                           .GetStyleSettings()
-                                           .GetDialogColor()
-                                           .IsDark()
-                                       ? "shell/logo_inverted"
-                                       : "shell/logo",
-                                   aBackgroundBitmap, nWidth * 0.8)) {
+  bool bIsDark = Application::GetSettings().GetStyleSettings().GetDialogColor().IsDark();
+
+  if (SfxApplication::loadBrandSvg(bIsDark ? "shell/logo_inverted" : "shell/logo", aBackgroundBitmap, nWidth * 0.8)) {
     ScopedVclPtr<VirtualDevice> m_pVirDev =
         m_pBrandImage->create_virtual_device();
     m_pVirDev->SetOutputSizePixel(aBackgroundBitmap.GetSizePixel());
@@ -107,7 +103,7 @@ AboutDialog::AboutDialog(weld::Window *pParent)
     m_pBrandImage->set_image(m_pVirDev.get());
     m_pVirDev.disposeAndClear();
   }
-  if (SfxApplication::loadBrandSvg("shell/about", aBackgroundBitmap, nWidth * 0.9)) {
+  if (SfxApplication::loadBrandSvg(bIsDark ? "shell/about_inverted" : "shell/about", aBackgroundBitmap, nWidth * 0.9)) {
     ScopedVclPtr<VirtualDevice> m_pVirDev =
         m_pAboutImage->create_virtual_device();
     m_pVirDev->SetOutputSizePixel(aBackgroundBitmap.GetSizePixel());
