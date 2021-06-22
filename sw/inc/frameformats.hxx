@@ -49,17 +49,18 @@ class SW_DLLPUBLIC SwFrameFormats final : public SwFormatsBase
     // function updating ByName index via modify
     friend void SwFrameFormat::SetName(const OUString&, bool);
 
+public:
     typedef SwFrameFormatsBase::nth_index<0>::type ByPos;
     typedef SwFrameFormatsBase::nth_index<1>::type ByTypeAndName;
     typedef ByPos::iterator iterator;
 
+private:
     SwFrameFormatsBase m_Array;
     ByPos& m_PosIndex;
     ByTypeAndName& m_TypeAndNameIndex;
 
 public:
     typedef ByPos::const_iterator const_iterator;
-    typedef ByTypeAndName::const_iterator const_range_iterator;
     typedef SwFrameFormatsBase::size_type size_type;
     typedef SwFrameFormatsBase::value_type value_type;
 
@@ -83,19 +84,12 @@ public:
     // There is also ContainsFormat, if you don't need the position.
     const_iterator find(const value_type& x) const;
 
-    // As this array is non-unique related to type and name,
-    // we always get ranges for the "key" values.
-    std::pair<const_range_iterator, const_range_iterator> rangeFind(sal_uInt16 type,
-                                                                    const OUString& name) const;
+    ByTypeAndName::const_iterator findByTypeAndName(sal_uInt16 type, const OUString& name) const;
     // Convenience function, which just uses type and name!
     // To look for the exact object use find.
-    std::pair<const_range_iterator, const_range_iterator> rangeFind(const value_type& x) const;
+    ByTypeAndName::const_iterator findSimilar(const value_type& x) const;
     // So we can actually check for end()
-    const_range_iterator rangeEnd() const { return m_TypeAndNameIndex.end(); }
-    const_iterator rangeProject(const_range_iterator const& position)
-    {
-        return m_Array.project<0>(position);
-    }
+    ByTypeAndName::const_iterator typeAndNameEnd() const { return m_TypeAndNameIndex.end(); }
 
     const value_type& operator[](size_t index_) const { return m_PosIndex.operator[](index_); }
     const value_type& front() const { return m_PosIndex.front(); }
