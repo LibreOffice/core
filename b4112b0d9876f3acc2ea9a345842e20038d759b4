@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4d675c44_2cb0f113",
+        "filename": "basic/source/comp/exprnode.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-22T11:35:42Z",
+      "side": 0,
+      "message": "Please avoid formatting-onlu changes. Please re-add this line, so that the only changed pieces in your commit are functional pieces, and no unrelated re-formatting.",
+      "revId": "b4112b0d9876f3acc2ea9a345842e20038d759b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

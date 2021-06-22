@@ -1,0 +1,129 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a9496854_842c76e7",
+        "filename": "basic/source/comp/exprnode.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-22T11:35:42Z",
+      "side": 1,
+      "message": "Why do you need this condition here? The conditions below already only allow SbxSINGLE/SbxDOUBLE/SbxLONG.\n\nAlso note the comment below regarding unnecessary/undesirable splitting conditions.",
+      "range": {
+        "startLine": 220,
+        "startChar": 5,
+        "endLine": 220,
+        "endChar": 24
+      },
+      "revId": "0cc8dd6085359da8d1b0fdb810c5a6c9796a951c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "874a2a3e_e48bddec",
+        "filename": "basic/source/comp/exprnode.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-22T11:35:42Z",
+      "side": 1,
+      "message": "Why did you need this change? The code only sets bCheckType in cases where the eType is kept as it was set initially - namely, SbxDOUBLE.\n\nAdditionally, why this change in order (a) and formatting (b)?\n\nThe (a) could be warranted in cases when the change makes it faster - e.g., you re-order the comparisons to have faster operations first, so that slower operations only execute when faster ones passed. Not in this case.\n\nThe (b) is totally undesirable. We don\u0027t break lines like that. The condition - all three parts - nicely fit the 100-character line limit we have.",
+      "revId": "0cc8dd6085359da8d1b0fdb810c5a6c9796a951c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da9ea3a7_32ad53da",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2828,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-22T11:35:42Z",
+      "side": 1,
+      "message": "Please remove the new empty line",
+      "revId": "0cc8dd6085359da8d1b0fdb810c5a6c9796a951c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37747488_32fde079",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2835,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-22T11:35:42Z",
+      "side": 1,
+      "message": "Please remove the empty line",
+      "revId": "0cc8dd6085359da8d1b0fdb810c5a6c9796a951c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ffd3f6e5_f48f32a9",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2845,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-22T11:35:42Z",
+      "side": 1,
+      "message": "I assume this should be backward-compatible. Older versions reading such a string would just ignore this case, and proceed with double.",
+      "revId": "0cc8dd6085359da8d1b0fdb810c5a6c9796a951c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "384a0d94_7028fba4",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2849,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-22T11:35:42Z",
+      "side": 1,
+      "message": "Please revert the formatting change of this line",
+      "revId": "0cc8dd6085359da8d1b0fdb810c5a6c9796a951c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a79cc41_0b1fc942",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2852,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-22T11:35:42Z",
+      "side": 1,
+      "message": "I\u0027m surprised that this was required. I\u0027d expect that just calling SbxVariable constructor with the correct type should already do the required effect?",
+      "revId": "0cc8dd6085359da8d1b0fdb810c5a6c9796a951c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
