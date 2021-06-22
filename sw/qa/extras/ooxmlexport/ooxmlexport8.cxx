@@ -390,13 +390,13 @@ note that the indexes may get off as the implementation evolves, C++ code search
     for( int i = 0;
          i < numbering.getLength();
          ++i )
-        {
+    {
         if( numbering[ i ].Name == "NumberingType" )
-            {
+        {
             numbering[ i ].Value >>= numberingType;
             break;
-            }
         }
+    }
     CPPUNIT_ASSERT_EQUAL( style::NumberingType::ARABIC, numberingType );
 }
 

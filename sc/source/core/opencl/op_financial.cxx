@@ -666,8 +666,8 @@ void OpDuration_ADD::GenSlidingWindowFunction(std::stringstream& ss,
             ss << "        arg" << j << " = ";
             ss << vSubArguments[j]->GenSlidingWindowDeclRef();
             ss << ";\n";
-            }
         }
+    }
     ss << "    int nNullDate = GetNullDate();\n";
     ss << "    tmp = GetDuration( nNullDate, (int)arg0, (int)arg1, arg2,";
     ss << " arg3, (int)arg4, (int)arg5);\n";
@@ -4428,7 +4428,7 @@ tmpCur3);
         ss<< "    int buffer_fv_len = ";
         ss<< tmpCurDVR3->GetArrayLength();
         ss << ";\n";
-        }
+    }
 
     if(vSubArguments.size()>4)
     {

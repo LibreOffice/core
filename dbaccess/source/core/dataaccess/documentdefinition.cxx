@@ -883,7 +883,7 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
                 _rxEnvironment );
         // Unreachable
         OSL_FAIL( "unreachable" );
-      }
+    }
 
     OSL_ENSURE( !m_pImpl->m_aProps.sPersistentName.isEmpty(),
         "ODocumentDefinition::onCommandOpenSomething: no persistent name - cannot load!" );

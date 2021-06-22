@@ -3081,7 +3081,7 @@ void OpCorrel::GenSlidingWindowFunction(
             ss << "vYSum += pow(arg1 - vYMean, 2);\n\t\t\t";
             ss << "vSum += (arg0 - vXMean)*(arg1 - vYMean);\n\t\t";
             ss << "}\n\t\t";
-   } else if (pCurDVRX->IsStartFixed() && !pCurDVRX->IsEndFixed()) {
+    } else if (pCurDVRX->IsStartFixed() && !pCurDVRX->IsEndFixed()) {
             ss << "0; i < gid0 + " << nCurWindowSizeX << "; i++) {\n\t\t\t";
             ss << "arg0 = " << vSubArguments[0]
                 ->GenSlidingWindowDeclRef(true) << ";\n\t\t\t";
@@ -4127,7 +4127,7 @@ void OpPermut::GenSlidingWindowFunction(
        if (i)
          ss << ",";
        vSubArguments[i]->GenSlidingWindowDecl(ss);
-     }
+    }
     ss << ") {\n";
     ss <<"    int gid0=get_global_id(0);\n";
     ss <<"    double inA;\n";
@@ -7353,7 +7353,7 @@ void OpDevSq::GenSlidingWindowFunction(std::stringstream& ss,
             if (i)
                 ss << ",";
             vSubArguments[i]->GenSlidingWindowDecl(ss);
-            }
+        }
         ss << ") {\n";
         ss << "    int gid0 = get_global_id(0);\n";
         ss << "    double vSum = 0.0;\n";
@@ -7418,7 +7418,7 @@ void OpDevSq::GenSlidingWindowFunction(std::stringstream& ss,
             ss << "        vSum += arg" << i << ";\n";
             ss << "    }\n";
         }
-}
+        }
         else if (pCur->GetType() == formula::svSingleVectorRef)
         {
             const formula::SingleVectorRefToken* pTVR =
@@ -7449,7 +7449,7 @@ void OpDevSq::GenSlidingWindowFunction(std::stringstream& ss,
             ss << "    cnt++;\n";
             ss << "    vSum += arg" << i << ";\n";
         }
-            }
+        }
         ss << "    vMean = vSum / cnt;\n";
         ss << "    vSum = 0.0;\n";
         for(size_t k = 0; k < vSubArguments.size(); k++ )
@@ -7502,7 +7502,7 @@ void OpDevSq::GenSlidingWindowFunction(std::stringstream& ss,
             ss << "        vSum += pow( arg" << k << " - vMean, 2 );\n";
             ss << "    }\n";
         }
-            }
+        }
         else if (pCur->GetType() == formula::svSingleVectorRef)
         {
             const formula::SingleVectorRefToken* pTVR =
@@ -7529,7 +7529,7 @@ void OpDevSq::GenSlidingWindowFunction(std::stringstream& ss,
             ss << vSubArguments[k]->GenSlidingWindowDeclRef() << ";\n";
             ss << "    vSum += pow( arg" << k << " - vMean, 2 );\n";
         }
-            }
+        }
         ss << "    return vSum;\n";
         ss << "}";
 }

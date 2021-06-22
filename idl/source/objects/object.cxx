@@ -115,7 +115,7 @@ bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
             if( pS->GetSlotId().GetValue() != rAttr.GetSlotId().GetValue() )
             {
                 throw SvParseException( rInStm, "Attribute's " + pS->GetName() + " with different id's");
-             }
+            }
         }
         else
         {
@@ -125,7 +125,7 @@ bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
             {
                 OString aStr = "Attribute " + pS->GetName() + " and Attribute " + rAttr.GetName() + " with equal id's";
                 throw SvParseException(rInStm, aStr);
-             }
+            }
         }
     }
     SvMetaClass * pSC = aSuperClass.get();

@@ -313,7 +313,7 @@ void XRMResExport::WorkOnDesc(
         file.close();
         memblock[size] = '\0';
         rText = OString(memblock.get());
-     }
+    }
     WorkOnText( rOpenTag, rText );
     EndOfText( rOpenTag, rOpenTag );
 }

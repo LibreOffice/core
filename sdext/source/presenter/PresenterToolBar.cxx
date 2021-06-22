@@ -1872,10 +1872,10 @@ void PresentationTimeLabel::TimeHasChanged (const oslDateTime& rCurrentTime)
     //the presentation was paused for in order to continue the
     //timer from the same position
     if(!isPaused())
-	{
-		TimeValue pauseTime = getPauseTimeValue();
-		if(pauseTime.Seconds != 0 || pauseTime.Nanosec != 0)
-		{
+    {
+        TimeValue pauseTime = getPauseTimeValue();
+        if(pauseTime.Seconds != 0 || pauseTime.Nanosec != 0)
+        {
             TimeValue incrementValue(0, 0);
             incrementValue.Seconds = aCurrentTimeValue.Seconds - pauseTime.Seconds;
             if(pauseTime.Nanosec > aCurrentTimeValue.Nanosec)

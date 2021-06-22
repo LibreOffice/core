@@ -200,24 +200,24 @@ static uno::Reference< excel::XRange > lcl_makeXRangeFromSheetCellRanges( const 
     const uno::Sequence< table::CellRangeAddress  > sAddresses = xLocSheetCellRanges->getRangeAddresses();
     ScRangeList aCellRanges;
     if ( sAddresses.hasElements() )
-           {
-    for ( const auto& rAddress : sAddresses )
     {
-        ScRange refRange;
-        ScUnoConversion::FillScRange( refRange, rAddress );
-        aCellRanges.push_back( refRange );
-    }
-    // Single range
-    if ( aCellRanges.size() == 1 )
-    {
-        uno::Reference< table::XCellRange > xTmpRange( new ScCellRangeObj( pDoc, aCellRanges.front() ) );
-        xRange = new ScVbaRange( xParent, xContext, xTmpRange );
-    }
-    else
-    {
-        uno::Reference< sheet::XSheetCellRangeContainer > xRanges( new ScCellRangesObj( pDoc, aCellRanges ) );
-        xRange = new ScVbaRange( xParent, xContext, xRanges );
-    }
+        for ( const auto& rAddress : sAddresses )
+        {
+            ScRange refRange;
+            ScUnoConversion::FillScRange( refRange, rAddress );
+            aCellRanges.push_back( refRange );
+        }
+        // Single range
+        if ( aCellRanges.size() == 1 )
+        {
+            uno::Reference< table::XCellRange > xTmpRange( new ScCellRangeObj( pDoc, aCellRanges.front() ) );
+            xRange = new ScVbaRange( xParent, xContext, xTmpRange );
+        }
+        else
+        {
+            uno::Reference< sheet::XSheetCellRangeContainer > xRanges( new ScCellRangesObj( pDoc, aCellRanges ) );
+            xRange = new ScVbaRange( xParent, xContext, xRanges );
+        }
     }
     return xRange;
 }

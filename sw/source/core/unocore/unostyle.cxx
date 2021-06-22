@@ -3729,7 +3729,7 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
                     OSL_FAIL( "Illegal argument" );
                 }
             }
-         }
+        }
 
         // clear parent again
         aSet.SetParent(nullptr);

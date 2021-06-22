@@ -964,10 +964,10 @@ public:
             {
                 mnFilteredRows++;
                 continue;
-}
+            }
 
             if (mbAsLink && mnFlags == InsertDeleteFlags::ALL)
-{
+            {
                 //  with InsertDeleteFlags::ALL, also create links (formulas) for empty cells
                 setLink(nRow);
                 continue;
@@ -1043,12 +1043,12 @@ void ScTable::TransposeColPatterns(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol,
                                    SCROW nRow2, SCROW nCombinedStartRow, bool bIncludeFiltered,
                                    const std::vector<SCROW>& rFilteredRows, SCROW nRowDestOffset)
 {
-        SCROW nAttrRow1 = {}; // spurious -Werror=maybe-uninitialized
-        SCROW nAttrRow2 = {}; // spurious -Werror=maybe-uninitialized
-        const ScPatternAttr* pPattern;
-        std::unique_ptr<ScAttrIterator> pAttrIter(aCol[nCol].CreateAttrIterator( nRow1, nRow2 ));
-        while ( (pPattern = pAttrIter->Next( nAttrRow1, nAttrRow2 )) != nullptr )
-        {
+    SCROW nAttrRow1 = {}; // spurious -Werror=maybe-uninitialized
+    SCROW nAttrRow2 = {}; // spurious -Werror=maybe-uninitialized
+    const ScPatternAttr* pPattern;
+    std::unique_ptr<ScAttrIterator> pAttrIter(aCol[nCol].CreateAttrIterator( nRow1, nRow2 ));
+    while ( (pPattern = pAttrIter->Next( nAttrRow1, nAttrRow2 )) != nullptr )
+    {
             if ( !IsDefaultItem( pPattern ) )
             {
                 const SfxItemSet& rSet = pPattern->GetItemSet();

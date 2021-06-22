@@ -1525,7 +1525,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const OUString& rString )
                     }
                     else
                         pErrorId = STR_INVALIDNAME;
-                 }
+                }
             }
             else if (aPosData.Flags & MemberResultFlags::GRANDTOTAL)
             {
