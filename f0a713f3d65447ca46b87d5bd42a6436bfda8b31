@@ -16,6 +16,24 @@
       "revId": "f0a713f3d65447ca46b87d5bd42a6436bfda8b31",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7114173b_d68fe21d",
+        "filename": "cui/inc/strings.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-06-22T06:03:28Z",
+      "side": 1,
+      "message": "IIRC I used initially what Writer makes out of two dashes; now the symbol is copy/pasted from Wikipedia. Cannot distinguish between — and – (en/em).",
+      "parentUuid": "310e6cd7_01e1a413",
+      "revId": "f0a713f3d65447ca46b87d5bd42a6436bfda8b31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
