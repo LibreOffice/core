@@ -672,26 +672,11 @@ namespace vcl
         if ( isTravelingSuspended() )
             return;
         RoadmapWizardTravelSuspension aTravelGuard( *this );
-        if (!prepareLeaveCurrentState(WizardTypes::eFinish))
-        {
-            return;
-        }
         Finish( RET_OK );
-    }
-
-    bool RoadmapWizard::prepareLeaveCurrentState( WizardTypes::CommitPageReason _eReason )
-    {
-        IWizardPageController* pController = nullptr;
-        ENSURE_OR_RETURN( pController != nullptr, "RoadmapWizard::prepareLeaveCurrentState: no controller for the current page!", true );
-        return pController->commitPage( _eReason );
     }
 
     bool RoadmapWizard::skipBackwardUntil( WizardTypes::WizardState _nTargetState )
     {
-        // allowed to leave the current page?
-        if (!prepareLeaveCurrentState(WizardTypes::eTravelBackward))
-            return false;
-
         // don't travel directly on m_xWizardImpl->aStateHistory, in case something goes wrong
         std::stack< WizardTypes::WizardState > aTravelVirtually = m_xWizardImpl->aStateHistory;
         std::stack< WizardTypes::WizardState > aOldStateHistory = m_xWizardImpl->aStateHistory;
@@ -715,10 +700,6 @@ namespace vcl
     bool RoadmapWizard::skipUntil( WizardTypes::WizardState _nTargetState )
     {
         WizardTypes::WizardState nCurrentState = getCurrentState();
-
-        // allowed to leave the current page?
-        if ( !prepareLeaveCurrentState( nCurrentState < _nTargetState ? WizardTypes::eTravelForward : WizardTypes::eTravelBackward ) )
-            return false;
 
         // don't travel directly on m_xWizardImpl->aStateHistory, in case something goes wrong
         std::stack< WizardTypes::WizardState > aTravelVirtually = m_xWizardImpl->aStateHistory;
@@ -753,10 +734,6 @@ namespace vcl
 
     void RoadmapWizard::travelNext()
     {
-        // allowed to leave the current page?
-        if ( !prepareLeaveCurrentState( WizardTypes::eTravelForward ) )
-            return;
-
         // determine the next state to travel to
         WizardTypes::WizardState nCurrentState = getCurrentState();
         WizardTypes::WizardState nNextState = determineNextState(nCurrentState);
@@ -775,10 +752,6 @@ namespace vcl
     void RoadmapWizard::travelPrevious()
     {
         DBG_ASSERT(!m_xWizardImpl->aStateHistory.empty(), "RoadmapWizard::travelPrevious: have no previous page!");
-
-        // allowed to leave the current page?
-        if ( !prepareLeaveCurrentState( WizardTypes::eTravelBackward ) )
-            return;
 
         // the next state to switch to
         WizardTypes::WizardState nPreviousState = m_xWizardImpl->aStateHistory.top();
