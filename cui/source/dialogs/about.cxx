@@ -98,13 +98,9 @@ AboutDialog::AboutDialog(weld::Window *pParent)
   const tools::Long nWidth(m_pCopyrightLabel->get_preferred_size().getWidth());
   BitmapEx aBackgroundBitmap;
 
-  if (SfxApplication::loadBrandSvg(Application::GetSettings()
-                                           .GetStyleSettings()
-                                           .GetDialogColor()
-                                           .IsDark()
-                                       ? "shell/logo_inverted"
-                                       : "shell/logo",
-                                   aBackgroundBitmap, nWidth * 0.8)) {
+  bool bIsDark = Application::GetSettings().GetStyleSettings().GetDialogColor().IsDark();
+
+  if (SfxApplication::loadBrandSvg(bIsDark ? "shell/logo_inverted" : "shell/logo", aBackgroundBitmap, nWidth * 0.8)) {
     // Eliminate white background when Skia is disabled by not drawing the
     // background bitmap to a VirtualDevice. On most platforms, non-Skia
     // VirtualDevices will be filled with a solid color when drawing
@@ -112,7 +108,7 @@ AboutDialog::AboutDialog(weld::Window *pParent)
     Graphic aGraphic(aBackgroundBitmap);
     m_pBrandImage->set_image(aGraphic.GetXGraphic());
   }
-  if (SfxApplication::loadBrandSvg("shell/about", aBackgroundBitmap, nWidth * 0.9)) {
+  if (SfxApplication::loadBrandSvg(bIsDark ? "shell/about_inverted" : "shell/about", aBackgroundBitmap, nWidth * 0.9)) {
     // Eliminate white background when Skia is disabled by not drawing the
     // background bitmap to a VirtualDevice. On most platforms, non-Skia
     // VirtualDevices will be filled with a solid color when drawing
