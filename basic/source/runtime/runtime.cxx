@@ -2840,10 +2840,20 @@ void SbiRuntime::StepLOADNC( sal_uInt32 nOp1 )
             case '&': eType = SbxLONG; break;
             case '!': eType = SbxSINGLE; break;
             case '@': eType = SbxCURRENCY; break;
+            // tdf#142460 - properly handle boolean values in string pool
+            case 'b': eType = SbxBOOL; break;
         }
     }
+
     SbxVariable* p = new SbxVariable( eType );
-    p->PutDouble( n );
+
+    if ( eType == SbxBOOL ) {
+        // tdf#142460 - properly handle boolean values in string pool
+        p->PutBool(bool(n));
+    } else {
+        p->PutDouble( n );
+    }
+
     // tdf#133913 - create variable with Variant/Type in order to prevent type conversion errors
     p->ResetFlag( SbxFlagBits::Fixed );
     PushVar( p );
