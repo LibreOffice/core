@@ -29,41 +29,39 @@ class CalcChartEditUIDemo(UITestCase):
 
     def test_select_secondary_axis(self):
 
-        self.ui_test.create_doc_in_start_center("calc")
+        with self.ui_test.create_doc_in_start_center("calc"):
 
-        self.fill_spreadsheet()
+            self.fill_spreadsheet()
 
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        xGridWindow = xCalcDoc.getChild("grid_window")
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            xGridWindow = xCalcDoc.getChild("grid_window")
 
-        self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart")
+            self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart")
 
-        xChartDlg = self.xUITest.getTopFocusWindow()
+            xChartDlg = self.xUITest.getTopFocusWindow()
 
-        xNextBtn = xChartDlg.getChild("finish")
-        self.ui_test.close_dialog_through_button(xNextBtn)
+            xNextBtn = xChartDlg.getChild("finish")
+            self.ui_test.close_dialog_through_button(xNextBtn)
 
-        xGridWindow.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))
+            xGridWindow.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))
 
-        xGridWindow.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
+            xGridWindow.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
 
-        xGridWindow.executeAction("ACTIVATE", tuple())
+            xGridWindow.executeAction("ACTIVATE", tuple())
 
-        xChartMainTop = self.xUITest.getTopFocusWindow()
-        xChartMain = xChartMainTop.getChild("chart_window")
+            xChartMainTop = self.xUITest.getTopFocusWindow()
+            xChartMain = xChartMainTop.getChild("chart_window")
 
-        xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
-        self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "FormatDataSeries"}))
+            xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
+            self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "FormatDataSeries"}))
 
-        xSeriesFormatDlg = self.xUITest.getTopFocusWindow()
-        xAxis2 = xSeriesFormatDlg.getChild("RBT_OPT_AXIS_2")
-        xAxis2.executeAction("CLICK", tuple())
+            xSeriesFormatDlg = self.xUITest.getTopFocusWindow()
+            xAxis2 = xSeriesFormatDlg.getChild("RBT_OPT_AXIS_2")
+            xAxis2.executeAction("CLICK", tuple())
 
-        xCancelBtn = xSeriesFormatDlg.getChild("ok")
-        xCancelBtn.executeAction("CLICK", tuple())
+            xCancelBtn = xSeriesFormatDlg.getChild("ok")
+            xCancelBtn.executeAction("CLICK", tuple())
 
-        xGridWindow.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))
-
-        self.ui_test.close_doc()
+            xGridWindow.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

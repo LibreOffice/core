@@ -180,18 +180,17 @@ class mergedRowsColumns(UITestCase):
             self.xUITest.executeCommand(".uno:Undo")
 
     def test_move_merged_cells(self):
-        self.ui_test.create_doc_in_start_center("calc")
-        xTopWindow = self.xUITest.getTopFocusWindow()
-        gridwin = xTopWindow.getChild("grid_window")
+        with self.ui_test.create_doc_in_start_center("calc"):
+            xTopWindow = self.xUITest.getTopFocusWindow()
+            gridwin = xTopWindow.getChild("grid_window")
 
-        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "B1:C1"}))
-        self.xUITest.executeCommand(".uno:ToggleMergeCells")
-        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "D1"}))
-        self.xUITest.executeCommand(".uno:GoLeft")
-        self.xUITest.executeCommand(".uno:GoLeft")
-        self.assertEqual(get_state_as_dict(gridwin)["CurrentColumn"], "0")
-        self.assertEqual(get_state_as_dict(gridwin)["CurrentRow"], "0")     #position A1
+            gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "B1:C1"}))
+            self.xUITest.executeCommand(".uno:ToggleMergeCells")
+            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "D1"}))
+            self.xUITest.executeCommand(".uno:GoLeft")
+            self.xUITest.executeCommand(".uno:GoLeft")
+            self.assertEqual(get_state_as_dict(gridwin)["CurrentColumn"], "0")
+            self.assertEqual(get_state_as_dict(gridwin)["CurrentRow"], "0")     #position A1
 
-        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
 

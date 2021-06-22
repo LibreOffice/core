@@ -16,31 +16,29 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class protectSpreadsheet(UITestCase):
     def test_protect_spreadsheet(self):
-        calc_doc = self.ui_test.create_doc_in_start_center("calc")
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
-        #enter password
-        self.ui_test.execute_dialog_through_command(".uno:ToolProtectionDocument")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xpass1ed = xDialog.getChild("pass1ed")
-        xconfirm1ed = xDialog.getChild("confirm1ed")
+        with self.ui_test.create_doc_in_start_center("calc"):
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            document = self.ui_test.get_component()
+            #enter password
+            self.ui_test.execute_dialog_through_command(".uno:ToolProtectionDocument")
+            xDialog = self.xUITest.getTopFocusWindow()
+            xpass1ed = xDialog.getChild("pass1ed")
+            xconfirm1ed = xDialog.getChild("confirm1ed")
 
-        xpass1ed.executeAction("TYPE", mkPropertyValues({"TEXT":"aa"}))
-        xconfirm1ed.executeAction("TYPE", mkPropertyValues({"TEXT":"aa"}))
+            xpass1ed.executeAction("TYPE", mkPropertyValues({"TEXT":"aa"}))
+            xconfirm1ed.executeAction("TYPE", mkPropertyValues({"TEXT":"aa"}))
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
-        #Verify
-        self.ui_test.execute_dialog_through_command(".uno:ToolProtectionDocument")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xpass1ed = xDialog.getChild("pass1ed")
+            xOKBtn = xDialog.getChild("ok")
+            self.ui_test.close_dialog_through_button(xOKBtn)
+            #Verify
+            self.ui_test.execute_dialog_through_command(".uno:ToolProtectionDocument")
+            xDialog = self.xUITest.getTopFocusWindow()
+            xpass1ed = xDialog.getChild("pass1ed")
 
-        xpass1ed.executeAction("TYPE", mkPropertyValues({"TEXT":"aa"}))
+            xpass1ed.executeAction("TYPE", mkPropertyValues({"TEXT":"aa"}))
 
-        xCancelBtn = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCancelBtn)
-
-        self.ui_test.close_doc()
+            xCancelBtn = xDialog.getChild("cancel")
+            self.ui_test.close_dialog_through_button(xCancelBtn)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

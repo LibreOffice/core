@@ -9,17 +9,16 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class dataform(UITestCase):
     def test_dataform(self):
-        calc_doc = self.ui_test.create_doc_in_start_center("calc")
+        with self.ui_test.create_doc_in_start_center("calc"):
 
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A10"}))
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A10"}))
 
-        self.ui_test.execute_dialog_through_command(".uno:DataForm")
-        xDialog = self.xUITest.getTopFocusWindow()
+            self.ui_test.execute_dialog_through_command(".uno:DataForm")
+            xDialog = self.xUITest.getTopFocusWindow()
 
-        xCloseBtn = xDialog.getChild("close")
-        self.ui_test.close_dialog_through_button(xCloseBtn)
-        self.ui_test.close_doc()
+            xCloseBtn = xDialog.getChild("close")
+            self.ui_test.close_dialog_through_button(xCloseBtn)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

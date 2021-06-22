@@ -12,57 +12,54 @@ from uitest.uihelper.common import type_text
 class WriterSort(UITestCase):
 
    def test_sort(self):
-        self.ui_test.create_doc_in_start_center("writer")
-        document = self.ui_test.get_component()
-        xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
+        with self.ui_test.create_doc_in_start_center("writer"):
+            document = self.ui_test.get_component()
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-        type_text(xWriterEdit, "a")
-        xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
-        type_text(xWriterEdit, "c")
-        xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
-        type_text(xWriterEdit, "v")
+            type_text(xWriterEdit, "a")
+            xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
+            type_text(xWriterEdit, "c")
+            xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
+            type_text(xWriterEdit, "v")
 
-        selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
-        #Tools - Sort
-        self.ui_test.execute_dialog_through_command(".uno:SortDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xDown = xDialog.getChild("down1")
-        xDown.executeAction("CLICK", tuple())
-        xOK = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOK)
-        #check
-        self.assertEqual(document.Text.String[0:1], "v")
-
-        self.ui_test.close_doc()
+            selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
+            #Tools - Sort
+            self.ui_test.execute_dialog_through_command(".uno:SortDialog")
+            xDialog = self.xUITest.getTopFocusWindow()
+            xDown = xDialog.getChild("down1")
+            xDown.executeAction("CLICK", tuple())
+            xOK = xDialog.getChild("ok")
+            self.ui_test.close_dialog_through_button(xOK)
+            #check
+            self.assertEqual(document.Text.String[0:1], "v")
 
    def test_sort_numerical(self):
-        self.ui_test.create_doc_in_start_center("writer")
-        document = self.ui_test.get_component()
-        xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
+        with self.ui_test.create_doc_in_start_center("writer"):
+            document = self.ui_test.get_component()
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-        type_text(xWriterEdit, "1;2;3")
-        xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
-        type_text(xWriterEdit, "2;8;3")
+            type_text(xWriterEdit, "1;2;3")
+            xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
+            type_text(xWriterEdit, "2;8;3")
 
-        selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
-        #Tools - Sort
-        self.ui_test.execute_dialog_through_command(".uno:SortDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xDown = xDialog.getChild("down1")
-        xcolsb1 = xDialog.getChild("colsb1")
-        xtypelb1 = xDialog.getChild("typelb1")
-        xcharacter = xDialog.getChild("character")
-        xseparator = xDialog.getChild("separator")
-        xDown.executeAction("CLICK", tuple())
-        select_by_text(xtypelb1, "Numerical")
-        xcharacter.executeAction("CLICK", tuple())
-        xseparator.executeAction("TYPE", mkPropertyValues({"TEXT":";"}))
-        xOK = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOK)
-        #check
-        self.assertEqual(document.Text.String[0:5], "2;8;3")
+            selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
+            #Tools - Sort
+            self.ui_test.execute_dialog_through_command(".uno:SortDialog")
+            xDialog = self.xUITest.getTopFocusWindow()
+            xDown = xDialog.getChild("down1")
+            xcolsb1 = xDialog.getChild("colsb1")
+            xtypelb1 = xDialog.getChild("typelb1")
+            xcharacter = xDialog.getChild("character")
+            xseparator = xDialog.getChild("separator")
+            xDown.executeAction("CLICK", tuple())
+            select_by_text(xtypelb1, "Numerical")
+            xcharacter.executeAction("CLICK", tuple())
+            xseparator.executeAction("TYPE", mkPropertyValues({"TEXT":";"}))
+            xOK = xDialog.getChild("ok")
+            self.ui_test.close_dialog_through_button(xOK)
+            #check
+            self.assertEqual(document.Text.String[0:5], "2;8;3")
 
-        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
