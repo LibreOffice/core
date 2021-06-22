@@ -351,6 +351,12 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs, const SalLayoutGlyphsIm
         maFeatures.push_back({ HB_TAG('k','e','r','n'), 0, 0, static_cast<unsigned int>(-1) });
     }
 
+    if (rFontSelData.GetPitch() == PITCH_FIXED)
+    {
+        SAL_INFO("vcl.harfbuzz", "Disabling ligatures for font: " << rFontSelData.maTargetName);
+        maFeatures.push_back({ HB_TAG('l','i','g','a'), 0, 0, static_cast<unsigned int>(-1) });
+    }
+
     ParseFeatures(rFontSelData.maTargetName);
 
     double nXScale = 0;
