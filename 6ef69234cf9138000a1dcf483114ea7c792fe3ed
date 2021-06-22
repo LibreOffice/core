@@ -52,6 +52,24 @@
       "revId": "6ef69234cf9138000a1dcf483114ea7c792fe3ed",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d828dff6_9910535b",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 1941,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-22T11:44:26Z",
+      "side": 0,
+      "message": "Please note that I pointed you to \"bCustomPreview is used immediately to initialize the custom renderer for the box columns\". The keywords \"custom\", \"renderer\", and \"columns\" point to set_column_custom_renderer code below :-)\n\nBy the way, please describe what do you *think* your code does that you suggested in the comment above.",
+      "parentUuid": "38936b5d_ed4a1d9a",
+      "revId": "6ef69234cf9138000a1dcf483114ea7c792fe3ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
