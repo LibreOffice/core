@@ -733,7 +733,7 @@ void SwDoc::DelTableFrameFormat( SwTableFormat *pFormat )
 
 SwFrameFormat* SwDoc::FindFrameFormatByName( std::u16string_view rName ) const
 {
-    return static_cast<SwFrameFormat*>(FindFormatByName( static_cast<SwFormatsBase&>(*mpFrameFormatTable), rName ));
+    return mpFrameFormatTable->FindFormatByName( rName );
 }
 
 /// Create the formats
@@ -1231,7 +1231,7 @@ SwTextFormatColl* SwDoc::CopyTextColl( const SwTextFormatColl& rColl )
 /// copy the graphic nodes
 SwGrfFormatColl* SwDoc::CopyGrfColl( const SwGrfFormatColl& rColl )
 {
-    SwGrfFormatColl* pNewColl = static_cast<SwGrfFormatColl*>(FindFormatByName( static_cast<SwFormatsBase const &>(*mpGrfFormatCollTable), rColl.GetName() ));
+    SwGrfFormatColl* pNewColl = mpGrfFormatCollTable->FindFormatByName( rColl.GetName() );
     if( pNewColl )
         return pNewColl;
 
@@ -1269,7 +1269,7 @@ void SwDoc::CopyFormatArr( const SwFormatsBase& rSourceArr,
         if( pSrc->IsDefault() || pSrc->IsAuto() )
             continue;
 
-        if( nullptr == FindFormatByName( rDestArr, pSrc->GetName() ) )
+        if( nullptr == rDestArr.FindFormatByName( pSrc->GetName() ) )
         {
             if( RES_CONDTXTFMTCOLL == pSrc->Which() )
                 MakeCondTextFormatColl( pSrc->GetName(), static_cast<SwTextFormatColl*>(&rDfltFormat) );
@@ -1286,7 +1286,7 @@ void SwDoc::CopyFormatArr( const SwFormatsBase& rSourceArr,
         if( pSrc->IsDefault() || pSrc->IsAuto() )
             continue;
 
-        pDest = FindFormatByName( rDestArr, pSrc->GetName() );
+        pDest = rDestArr.FindFormatByName( pSrc->GetName() );
         pDest->SetAuto(false);
         pDest->DelDiffs( *pSrc );
 
@@ -1320,7 +1320,7 @@ void SwDoc::CopyFormatArr( const SwFormatsBase& rSourceArr,
         pDest->SetPoolHlpFileId( UCHAR_MAX );
 
         if( pSrc->DerivedFrom() )
-            pDest->SetDerivedFrom( FindFormatByName( rDestArr,
+            pDest->SetDerivedFrom( rDestArr.FindFormatByName(
                                         pSrc->DerivedFrom()->GetName() ) );
         if( RES_TXTFMTCOLL == pSrc->Which() ||
             RES_CONDTXTFMTCOLL == pSrc->Which() )
@@ -1328,8 +1328,8 @@ void SwDoc::CopyFormatArr( const SwFormatsBase& rSourceArr,
             SwTextFormatColl* pSrcColl = static_cast<SwTextFormatColl*>(pSrc),
                         * pDstColl = static_cast<SwTextFormatColl*>(pDest);
             if( &pSrcColl->GetNextTextFormatColl() != pSrcColl )
-                pDstColl->SetNextTextFormatColl( *static_cast<SwTextFormatColl*>(FindFormatByName(
-                    rDestArr, pSrcColl->GetNextTextFormatColl().GetName() ) ) );
+                pDstColl->SetNextTextFormatColl(
+                    *static_cast<SwTextFormatColl*>(rDestArr.FindFormatByName( pSrcColl->GetNextTextFormatColl().GetName() )) );
 
             if(pSrcColl->IsAssignedToListLevelOfOutlineStyle())
                 pDstColl->AssignToListLevelOfOutlineStyle(pSrcColl->GetAssignedOutlineStyleLevel());
@@ -1624,22 +1624,6 @@ void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
     }
 
     getIDocumentState().SetModified();
-}
-
-SwFormat* SwDoc::FindFormatByName( const SwFormatsBase& rFormatArr,
-                                   std::u16string_view rName )
-{
-    SwFormat* pFnd = nullptr;
-    for( size_t n = 0; n < rFormatArr.GetFormatCount(); ++n )
-    {
-        // Does the Doc already contain the template?
-        if( rFormatArr.GetFormat(n)->HasName( rName ) )
-        {
-            pFnd = rFormatArr.GetFormat(n);
-            break;
-        }
-    }
-    return pFnd;
 }
 
 void SwDoc::MoveLeftMargin(const SwPaM& rPam, bool bRight, bool bModulus,

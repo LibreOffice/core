@@ -209,7 +209,7 @@ SwFormat* SwUndoFormatAttr::GetFormat( const SwDoc& rDoc )
         return rDoc.FindTextFormatCollByName(m_sFormatName);
 
     case RES_GRFFMTCOLL:
-        return SwDoc::FindFormatByName(*rDoc.GetGrfFormatColls(), m_sFormatName);
+        return rDoc.GetGrfFormatColls()->FindFormatByName(m_sFormatName);
 
     case RES_CHRFMT:
         return rDoc.FindCharFormatByName(m_sFormatName);
@@ -244,10 +244,10 @@ SwFormat* SwUndoFormatAttr::GetFormat( const SwDoc& rDoc )
     case RES_DRAWFRMFMT:
     case RES_FLYFRMFMT:
         {
-            SwFormat * pFormat = SwDoc::FindFormatByName(*rDoc.GetSpzFrameFormats(), m_sFormatName);
+            SwFormat * pFormat = rDoc.GetSpzFrameFormats()->FindFormatByName(m_sFormatName);
             if (pFormat)
                 return pFormat;
-            pFormat = SwDoc::FindFormatByName(*rDoc.GetFrameFormats(), m_sFormatName);
+            pFormat = rDoc.GetFrameFormats()->FindFormatByName(m_sFormatName);
             if (pFormat)
                 return pFormat;
         }

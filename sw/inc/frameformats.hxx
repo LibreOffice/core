@@ -112,6 +112,12 @@ public:
 
     bool newDefault(const value_type& x);
     void newDefault(const_iterator const& position);
+
+    // Override return type to reduce casting
+    virtual SwFrameFormat* FindFormatByName(std::u16string_view rName) const override
+    {
+        return static_cast<SwFrameFormat*>(SwFormatsBase::FindFormatByName(rName));
+    }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

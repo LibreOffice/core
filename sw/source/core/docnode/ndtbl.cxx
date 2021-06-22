@@ -3949,7 +3949,7 @@ SwTableFormat* SwDoc::FindTableFormatByName( std::u16string_view rName, bool bAl
 {
     const SwFormat* pRet = nullptr;
     if( bAll )
-        pRet = FindFormatByName( *mpTableFrameFormatTable, rName );
+        pRet = mpTableFrameFormatTable->FindFormatByName( rName );
     else
     {
         // Only the ones set in the Doc
