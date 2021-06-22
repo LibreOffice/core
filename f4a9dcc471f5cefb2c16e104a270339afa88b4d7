@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bde52f4a_0e348a7f",
+        "filename": "sc/qa/uitest/calc_tests9/tdf142395.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-22T09:06:43Z",
+      "side": 1,
+      "message": "In my slow ASan+UBSan build on a slow machine, the above apparently doesn\u0027t get the \"Text Import\" dialog, which apparently doesn\u0027t show yet.  (What I observe is that the python.bin process is already at tearDown, while the soffice.bin process hangs yielding in AbstractScImportAsciiDlg_Impl::Execute, waiting for input.)  Some synchronization appears to be missing, so that this Python test code waits for the \"Text Import\" dialog to show up.",
+      "revId": "f4a9dcc471f5cefb2c16e104a270339afa88b4d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
