@@ -13,6 +13,8 @@
 #include <vcl/test/GraphicsRenderTests.hxx>
 #include <tools/stream.hxx>
 
+#include <unordered_map>
+
 #define SHOULD_ASSERT                                                                              \
     (aOutDevTest.getRenderBackendName() != "qt5" && aOutDevTest.getRenderBackendName() != "qt5svp" \
      && aOutDevTest.getRenderBackendName() != "gtk3svp"                                            \
@@ -21,20 +23,18 @@
      && aOutDevTest.getRenderBackendName() != "genpsp"                                             \
      && aOutDevTest.getRenderBackendName() != "win")
 
-void GraphicsRenderTests::updateResult(vcl::test::TestResult const result, OString atestname)
+OUString GraphicsRenderTests::returnTestStatus(vcl::test::TestResult const result)
 {
     switch (result)
     {
         case vcl::test::TestResult::Passed:
-            m_aPassed.push_back(atestname);
-            return;
+            return "PASSED";
         case vcl::test::TestResult::PassedWithQuirks:
-            m_aQuirky.push_back(atestname);
-            return;
+            return "QUIRKY";
         case vcl::test::TestResult::Failed:
-            m_aFailed.push_back(atestname);
-            return;
+            return "FAILED";
     }
+    return "SKIPPED";
 }
 
 void GraphicsRenderTests::testDrawRectWithRectangle()
@@ -42,763 +42,879 @@ void GraphicsRenderTests::testDrawRectWithRectangle()
     vcl::test::OutputDeviceTestRect aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(false);
     m_aCurGraphicsBackend = aOutDevTest.getRenderBackendName();
+    OUString atestName = "testDrawRectWithRectangle";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawRectWithRectangle");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
-    updateResult(eResult, "testDrawRectWithRectangle");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawRectWithPixel()
 {
     vcl::test::OutputDeviceTestPixel aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(false);
+    OUString atestName = "testDrawRectWithPixel";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawRectWithPixel");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
-    updateResult(eResult, "testDrawRectWithPixel");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawRectWithLine()
 {
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(false);
+    OUString atestName = "testDrawRectWithLine";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawRectWithLine");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
-    updateResult(eResult, "testDrawRectWithLine");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawRectWithPolygon()
 {
     vcl::test::OutputDeviceTestPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(false);
+    OUString atestName = "testDrawRectWithPolygon";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawRectWithPolygon");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
-    updateResult(eResult, "testDrawRectWithPolygon");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawRectWithPolyLine()
 {
     vcl::test::OutputDeviceTestPolyLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(false);
+    OUString atestName = "testDrawRectWithPolyLine";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawRectWithPolyLine");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
-    updateResult(eResult, "testDrawRectWithPolyLine");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawRectWithPolyLineB2D()
 {
     vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(false);
+    OUString atestName = "testDrawRectWithPolyLineB2D";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawRectWithPolyLineB2D");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
-    updateResult(eResult, "testDrawRectWithPolyLineB2D");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawRectWithPolyPolygon()
 {
     vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(false);
+    OUString atestName = "testDrawRectWithPolyPolygon";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawRectWithPolyPolygon");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
-    updateResult(eResult, "testDrawRectWithPolyPolygon");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawRectWithPolyPolygonB2D()
 {
     vcl::test::OutputDeviceTestPolyPolygonB2D aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(false);
+    OUString atestName = "testDrawRectWithPolyPolygonB2D";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawRectWithPolyPolygonB2D");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
-    updateResult(eResult, "testDrawRectWithPolyPolygonB2D");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawRectAAWithRectangle()
 {
     vcl::test::OutputDeviceTestRect aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(true);
+    OUString atestName = "testDrawRectAAWithRectangle";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawRectAAWithRectangle");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
-    updateResult(eResult, "testDrawRectAAWithRectangle");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawRectAAWithPixel()
 {
     vcl::test::OutputDeviceTestPixel aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(true);
+    OUString atestName = "testDrawRectAAWithPixel";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawRectAAWithPixel");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
-    updateResult(eResult, "testDrawRectAAWithPixel");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawRectAAWithLine()
 {
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(true);
+    OUString atestName = "testDrawRectAAWithLine";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawRectAAWithLine");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
-    updateResult(eResult, "testDrawRectAAWithLine");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawRectAAWithPolygon()
 {
     vcl::test::OutputDeviceTestPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(true);
+    OUString atestName = "testDrawRectAAWithPolygon";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawRectAAWithPolygon");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
-    updateResult(eResult, "testDrawRectAAWithPolygon");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawRectAAWithPolyLine()
 {
     vcl::test::OutputDeviceTestPolyLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(true);
+    OUString atestName = "testDrawRectAAWithPolyLine";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawRectAAWithPolyLine");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
-    updateResult(eResult, "testDrawRectAAWithPolyLine");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawRectAAWithPolyLineB2D()
 {
     vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(true);
+    OUString atestName = "testDrawRectAAWithPolyLineB2D";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawRectAAWithPolyLineB2D");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
-    updateResult(eResult, "testDrawRectAAWithPolyLineB2D");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawRectAAWithPolyPolygon()
 {
     vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(true);
+    OUString atestName = "testDrawRectAAWithPolyPolygon";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawRectAAWithPolyPolygon");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
-    updateResult(eResult, "testDrawRectAAWithPolyPolygon");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawRectAAWithPolyPolygonB2D()
 {
     vcl::test::OutputDeviceTestPolyPolygonB2D aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(true);
+    OUString atestName = "testDrawRectAAWithPolyPolygonB2D";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawRectAAWithPolyPolygonB2D");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
-    updateResult(eResult, "testDrawRectAAWithPolyPolygonB2D");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawFilledRectWithRectangle()
 {
     vcl::test::OutputDeviceTestRect aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupFilledRectangle(false);
+    OUString atestName = "testDrawFilledRectWithRectangle";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawFilledRectWithRectangle");
-        m_aSkipped.push_back("testDrawFilledRectWithRectangleWithAA");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, false);
-    updateResult(eResult, "testDrawFilledRectWithRectangle");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    atestName += "WithAA";
     aBitmap = aOutDevTest.setupFilledRectangle(true);
     eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true);
-    updateResult(eResult, "testDrawFilledRectWithRectangleWithAA");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawFilledRectWithPolygon()
 {
     vcl::test::OutputDeviceTestPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupFilledRectangle(false);
+    OUString atestName = "testDrawFilledRectWithPolygon";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawFilledRectWithPolygon");
-        m_aSkipped.push_back("testDrawFilledRectWithPolygonWithAA");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, false);
-    updateResult(eResult, "testDrawFilledRectWithPolygon");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    atestName += "WithAA";
     aBitmap = aOutDevTest.setupFilledRectangle(true);
     eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true);
-    updateResult(eResult, "testDrawFilledRectWithPolygonWithAA");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawFilledRectWithPolyPolygon()
 {
     vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupFilledRectangle(false);
+    OUString atestName = "testDrawFilledRectWithPolyPolygon";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawFilledRectWithPolyPolygon");
-        m_aSkipped.push_back("testDrawFilledRectWithPolyPolygonWithAA");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, false);
-    updateResult(eResult, "testDrawFilledRectWithPolyPolygon");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    atestName += "WithAA";
     aBitmap = aOutDevTest.setupFilledRectangle(true);
     eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true);
-    updateResult(eResult, "testDrawFilledRectWithPolyPolygonWithAA");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawFilledRectWithPolyPolygon2D()
 {
     vcl::test::OutputDeviceTestPolyPolygonB2D aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupFilledRectangle(false);
+    OUString atestName = "testDrawFilledRectWithPolyPolygon2D";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawFilledRectWithPolyPolygon2D");
-        m_aSkipped.push_back("testDrawFilledRectWithPolyPolygon2DWithAA");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, false);
-    updateResult(eResult, "testDrawFilledRectWithPolyPolygon2D");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    atestName += "WithAA";
     aBitmap = aOutDevTest.setupFilledRectangle(true);
     eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true);
-    updateResult(eResult, "testDrawFilledRectWithPolyPolygon2DWithAA");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawDiamondWithPolygon()
 {
     vcl::test::OutputDeviceTestPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDiamond();
+    OUString atestName = "testDrawDiamondWithPolygon";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawDiamondWithPolygon");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkDiamond(aBitmap);
-    updateResult(eResult, "testDrawDiamondWithPolygon");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawDiamondWithLine()
 {
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDiamond();
+    OUString atestName = "testDrawDiamondWithLine";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawDiamondWithLine");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkDiamond(aBitmap);
-    updateResult(eResult, "testDrawDiamondWithLine");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawDiamondWithPolyline()
 {
     vcl::test::OutputDeviceTestPolyLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDiamond();
+    OUString atestName = "testDrawDiamondWithPolyline";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawDiamondWithPolyline");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkDiamond(aBitmap);
-    updateResult(eResult, "testDrawDiamondWithPolyline");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawDiamondWithPolylineB2D()
 {
     vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDiamond();
+    OUString atestName = "testDrawDiamondWithPolylineB2D";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawDiamondWithPolylineB2D");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkDiamond(aBitmap);
-    updateResult(eResult, "testDrawDiamondWithPolylineB2D");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawInvertWithRectangle()
 {
     vcl::test::OutputDeviceTestRect aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupInvert_NONE();
+    OUString atestName = "testDrawInvertWithRectangle";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawInvertWithRectangle");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestCommon::checkInvertRectangle(aBitmap);
-    updateResult(eResult, "testDrawInvertWithRectangle");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawInvertN50WithRectangle()
 {
     vcl::test::OutputDeviceTestRect aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupInvert_N50();
+    OUString atestName = "testDrawInvertN50WithRectangle";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawInvertN50WithRectangle");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestCommon::checkInvertN50Rectangle(aBitmap);
-    updateResult(eResult, "testDrawInvertN50WithRectangle");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawInvertTrackFrameWithRectangle()
 {
     vcl::test::OutputDeviceTestRect aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupInvert_TrackFrame();
+    OUString atestName = "testDrawInvertTrackFrameWithRectangle";
     if (!(SHOULD_ASSERT && aOutDevTest.getRenderBackendName() != "svp"))
     {
-        m_aSkipped.push_back("testDrawInvertTrackFrameWithRectangle");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestCommon::checkInvertTrackFrameRectangle(aBitmap);
-    updateResult(eResult, "testDrawInvertTrackFrameWithRectangle");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawBezierWithPolylineB2D()
 {
     vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupBezier();
+    OUString atestName = "testDrawBezierWithPolylineB2D";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawBezierWithPolylineB2D");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkBezier(aBitmap);
-    updateResult(eResult, "testDrawBezierWithPolylineB2D");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawBezierAAWithPolylineB2D()
 {
     vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupAABezier();
+    OUString atestName = "testDrawBezierAAWithPolylineB2D";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawBezierAAWithPolylineB2D");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkBezier(aBitmap);
-    updateResult(eResult, "testDrawBezierAAWithPolylineB2D");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawBitmap()
 {
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDrawBitmap();
+    OUString atestName = "testDrawBitmap";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawBitmap");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestBitmap::checkTransformedBitmap(aBitmap);
-    updateResult(eResult, "testDrawBitmap");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawTransformedBitmap()
 {
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDrawTransformedBitmap();
+    OUString atestName = "testDrawTransformedBitmap";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawTransformedBitmap");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestBitmap::checkTransformedBitmap(aBitmap);
-    updateResult(eResult, "testDrawTransformedBitmap");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawBitmapExWithAlpha()
 {
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDrawBitmapExWithAlpha();
+    OUString atestName = "testDrawBitmapExWithAlpha";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawBitmapExWithAlpha");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestBitmap::checkBitmapExWithAlpha(aBitmap);
-    updateResult(eResult, "testDrawBitmapExWithAlpha");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawMask()
 {
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDrawMask();
+    OUString atestName = "testDrawMask";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawMask");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestBitmap::checkMask(aBitmap);
-    updateResult(eResult, "testDrawMask");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawBlend()
 {
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
     BitmapEx aBitmapEx = aOutDevTest.setupDrawBlend();
+    OUString atestName = "testDrawBlend";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawBlend");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestBitmap::checkBlend(aBitmapEx);
-    updateResult(eResult, "testDrawBlend");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmapEx.GetBitmap() : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawXor()
 {
     vcl::test::OutputDeviceTestAnotherOutDev aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupXOR();
+    OUString atestName = "testDrawXor";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawXor");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestAnotherOutDev::checkXOR(aBitmap);
-    updateResult(eResult, "testDrawXor");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testClipRectangle()
 {
     vcl::test::OutputDeviceTestClip aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupClipRectangle();
+    OUString atestName = "testClipRectangle";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testClipRectangle");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestClip::checkClip(aBitmap);
-    updateResult(eResult, "testClipRectangle");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testClipPolygon()
 {
     vcl::test::OutputDeviceTestClip aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupClipPolygon();
+    OUString atestName = "testClipPolygon";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testClipPolygon");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestClip::checkClip(aBitmap);
-    updateResult(eResult, "testClipPolygon");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testClipPolyPolygon()
 {
     vcl::test::OutputDeviceTestClip aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupClipPolyPolygon();
+    OUString atestName = "testClipPolyPolygon";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testClipPolyPolygon");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestClip::checkClip(aBitmap);
-    updateResult(eResult, "testClipPolyPolygon");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testClipB2DPolyPolygon()
 {
     vcl::test::OutputDeviceTestClip aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupClipB2DPolyPolygon();
+    OUString atestName = "testClipB2DPolyPolygon";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testClipB2DPolyPolygon");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestClip::checkClip(aBitmap);
-    updateResult(eResult, "testClipB2DPolyPolygon");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDrawOutDev()
 {
     vcl::test::OutputDeviceTestAnotherOutDev aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDrawOutDev();
+    OUString atestName = "testDrawOutDev";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDrawOutDev");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestAnotherOutDev::checkDrawOutDev(aBitmap);
-    updateResult(eResult, "testDrawOutDev");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testDashedLine()
 {
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDashedLine();
+    OUString atestName = "testDashedLine";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testDashedLine");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkDashedLine(aBitmap);
-    updateResult(eResult, "testDashedLine");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testLinearGradient()
 {
     vcl::test::OutputDeviceTestGradient aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLinearGradient();
+    OUString atestName = "testLinearGradient";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testLinearGradient");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestGradient::checkLinearGradient(aBitmap);
-    updateResult(eResult, "testLinearGradient");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testLinearGradientAngled()
 {
     vcl::test::OutputDeviceTestGradient aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLinearGradientAngled();
+    OUString atestName = "testLinearGradientAngled";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testLinearGradientAngled");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestGradient::checkLinearGradientAngled(aBitmap);
-    updateResult(eResult, "testLinearGradientAngled");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testLinearGradientBorder()
 {
     vcl::test::OutputDeviceTestGradient aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLinearGradientBorder();
+    OUString atestName = "testLinearGradientBorder";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testLinearGradientBorder");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestGradient::checkLinearGradientBorder(aBitmap);
-    updateResult(eResult, "testLinearGradientBorder");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testLinearGradientIntensity()
 {
     vcl::test::OutputDeviceTestGradient aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLinearGradientIntensity();
+    OUString atestName = "testLinearGradientIntensity";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testLinearGradientIntensity");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestGradient::checkLinearGradientIntensity(aBitmap);
-    updateResult(eResult, "testLinearGradientIntensity");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testLinearGradientSteps()
 {
     vcl::test::OutputDeviceTestGradient aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLinearGradientSteps();
+    OUString atestName = "testLinearGradientSteps";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testLinearGradientSteps");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestGradient::checkLinearGradientSteps(aBitmap);
-    updateResult(eResult, "testLinearGradientSteps");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testAxialGradient()
 {
     vcl::test::OutputDeviceTestGradient aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupAxialGradient();
+    OUString atestName = "testAxialGradient";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testAxialGradient");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestGradient::checkAxialGradient(aBitmap);
-    updateResult(eResult, "testAxialGradient");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testRadialGradient()
 {
     vcl::test::OutputDeviceTestGradient aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRadialGradient();
+    OUString atestName = "testRadialGradient";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testRadialGradient");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestGradient::checkRadialGradient(aBitmap);
-    updateResult(eResult, "testRadialGradient");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testRadialGradientOfs()
 {
     vcl::test::OutputDeviceTestGradient aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRadialGradientOfs();
+    OUString atestName = "testRadialGradientOfs";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testRadialGradientOfs");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestGradient::checkRadialGradientOfs(aBitmap);
-    updateResult(eResult, "testRadialGradientOfs");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testLineJoinBevel()
 {
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLineJoinBevel();
+    OUString atestName = "testLineJoinBevel";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testLineJoinBevel");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkLineJoinBevel(aBitmap);
-    updateResult(eResult, "testLineJoinBevel");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testLineJoinRound()
 {
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLineJoinRound();
+    OUString atestName = "testLineJoinRound";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testLineJoinRound");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkLineJoinRound(aBitmap);
-    updateResult(eResult, "testLineJoinRound");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testLineJoinMiter()
 {
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLineJoinMiter();
+    OUString atestName = "testLineJoinMiter";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testLineJoinMiter");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkLineJoinMiter(aBitmap);
-    updateResult(eResult, "testLineJoinMiter");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testLineJoinNone()
 {
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLineJoinNone();
+    OUString atestName = "testLineJoinNone";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testLineJoinNone");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkLineJoinNone(aBitmap);
-    updateResult(eResult, "testLineJoinNone");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testLineCapRound()
 {
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLineCapRound();
+    OUString atestName = "testLineCapRound";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testLineCapRound");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkLineCapRound(aBitmap);
-    updateResult(eResult, "testLineCapRound");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testLineCapSquare()
 {
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLineCapSquare();
+    OUString atestName = "testLineCapSquare";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testLineCapSquare");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkLineCapSquare(aBitmap);
-    updateResult(eResult, "testLineCapSquare");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::testLineCapButt()
 {
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLineCapButt();
+    OUString atestName = "testLineCapButt";
     if (!SHOULD_ASSERT)
     {
-        m_aSkipped.push_back("testLineCapButt");
+        appendTestResult(atestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkLineCapButt(aBitmap);
-    updateResult(eResult, "testLineCapButt");
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
 void GraphicsRenderTests::runALLTests()
@@ -861,54 +977,93 @@ void GraphicsRenderTests::runALLTests()
     testLineCapButt();
 }
 
-void GraphicsRenderTests::run()
+void GraphicsRenderTests::appendTestResult(OUString aTestName, OUString aTestStatus,
+                                           Bitmap aTestBitmap)
 {
+    m_aTestResult.push_back(VclTestResult(aTestName, aTestStatus, aTestBitmap));
+}
+
+std::vector<VclTestResult>& GraphicsRenderTests::getTestResults() { return m_aTestResult; }
+
+OUString GraphicsRenderTests::getResultString()
+{
+    std::vector<int> testResults(4);
+    for (VclTestResult& test : m_aTestResult)
+    {
+        if (test.getStatus() == "PASSED")
+        {
+            testResults[0]++;
+        }
+        else if (test.getStatus() == "QUIRKY")
+        {
+            testResults[1]++;
+        }
+        else if (test.getStatus() == "FAILED")
+        {
+            testResults[2]++;
+        }
+        else
+        {
+            testResults[3]++;
+        }
+    }
+    OUString resultString = "Graphics Backend used: " + m_aCurGraphicsBackend
+                            + "\nPassed Tests : " + OUString::number(testResults[0])
+                            + "\nQuirky Tests : " + OUString::number(testResults[1])
+                            + "\nFailed Tests : " + OUString::number(testResults[2])
+                            + "\nSkipped Tests : " + OUString::number(testResults[3]) + "\n";
+    return resultString;
+}
+
+void GraphicsRenderTests::run(bool storeResultBitmap)
+{
+    m_aStoreResultantBitmap = storeResultBitmap;
     runALLTests();
     //Storing the test's results in the main user installation directory.
     OUString aUserInstallPath;
     ::utl::Bootstrap::locateUserInstallation(aUserInstallPath);
     SvFileStream logFile(aUserInstallPath + "/user/GraphicsRenderTests.log",
                          StreamMode::WRITE | StreamMode::TRUNC);
-    OUString atemp = "Graphic Backend used: " + m_aCurGraphicsBackend;
-    logFile.WriteLine(OUStringToOString(atemp, RTL_TEXTENCODING_UTF8));
-    logFile.WriteLine("Passed tests : " + std::to_string(m_aPassed.size()));
-    logFile.WriteLine("Quirky tests : " + std::to_string(m_aQuirky.size()));
-    logFile.WriteLine("Failed tests : " + std::to_string(m_aFailed.size()));
-    logFile.WriteLine("Skipped tests : " + std::to_string(m_aSkipped.size()));
-    logFile.WriteLine("\n---Name of the tests that failed---");
-    if (m_aFailed.size() > 0)
+    std::unordered_map<OUString, std::vector<OUString>> aTests;
+    for (VclTestResult& tests : m_aTestResult)
     {
-        for (const class OString& tests : m_aFailed)
+        aTests[tests.getStatus()].push_back(tests.getTestName());
+    }
+    OUString writeResult = getResultString() + "\n---Name of the tests that failed---\n";
+    if (static_cast<int>(aTests["FAILED"].size()) > 0)
+    {
+        for (const class OUString& tests : aTests["FAILED"])
         {
-            logFile.WriteLine(tests);
+            writeResult += tests + "\n";
         }
     }
     else
     {
-        logFile.WriteLine("No test has been failed.");
+        writeResult += "No test has been failed.\n";
     }
-    logFile.WriteLine("\n---Name of the tests that were Quirky---");
-    if (m_aQuirky.size() > 0)
+    writeResult += "\n---Name of the tests that were Quirky---\n";
+    if (static_cast<int>(aTests["QUIRKY"].size()) > 0)
     {
-        for (const class OString& tests : m_aQuirky)
+        for (const class OUString& tests : aTests["QUIRKY"])
         {
-            logFile.WriteLine(tests);
+            writeResult += tests + "\n";
         }
     }
     else
     {
-        logFile.WriteLine("No test was Quirky.");
+        writeResult += "No test was Quirky.\n";
     }
-    logFile.WriteLine("\n---Name of the tests that were Skipped---");
-    if (m_aSkipped.size() > 0)
+    writeResult += "\n---Name of the tests that were Skipped---\n";
+    if (static_cast<int>(aTests["SKIPPED"].size()) > 0)
     {
-        for (const class OString& tests : m_aSkipped)
+        for (const class OUString& tests : aTests["SKIPPED"])
         {
-            logFile.WriteLine(tests);
+            writeResult += tests + "\n";
         }
     }
     else
     {
-        logFile.WriteLine("No test was Skipped.");
+        writeResult += "No test was Skipped.";
     }
+    logFile.WriteOString(OUStringToOString(writeResult, RTL_TEXTENCODING_UTF8));
 }
