@@ -2129,23 +2129,26 @@ void XMLShapeExport::ImpExportLineShape(
     // create base position
     awt::Point aBasePosition(FRound(aTRTranslate.getX()), FRound(aTRTranslate.getY()));
 
-    // get the two points
-    uno::Any aAny(xPropSet->getPropertyValue("Geometry"));
-    if (auto pSourcePolyPolygon
-            = o3tl::tryAccess<drawing::PointSequenceSequence>(aAny))
+    if (xPropSet->getPropertySetInfo()->hasPropertyByName("Geometry"))
     {
-        if (pSourcePolyPolygon->getLength() > 0)
+        // get the two points
+        uno::Any aAny(xPropSet->getPropertyValue("Geometry"));
+        if (auto pSourcePolyPolygon
+                = o3tl::tryAccess<drawing::PointSequenceSequence>(aAny))
         {
-            const drawing::PointSequence& rInnerSequence = (*pSourcePolyPolygon)[0];
-            if (rInnerSequence.hasElements())
+            if (pSourcePolyPolygon->getLength() > 0)
             {
-                const awt::Point& rPoint = rInnerSequence[0];
-                aStart = awt::Point(rPoint.X + aBasePosition.X, rPoint.Y + aBasePosition.Y);
-            }
-            if (rInnerSequence.getLength() > 1)
-            {
-                const awt::Point& rPoint = rInnerSequence[1];
-                aEnd = awt::Point(rPoint.X + aBasePosition.X, rPoint.Y + aBasePosition.Y);
+                const drawing::PointSequence& rInnerSequence = (*pSourcePolyPolygon)[0];
+                if (rInnerSequence.hasElements())
+                {
+                    const awt::Point& rPoint = rInnerSequence[0];
+                    aStart = awt::Point(rPoint.X + aBasePosition.X, rPoint.Y + aBasePosition.Y);
+                }
+                if (rInnerSequence.getLength() > 1)
+                {
+                    const awt::Point& rPoint = rInnerSequence[1];
+                    aEnd = awt::Point(rPoint.X + aBasePosition.X, rPoint.Y + aBasePosition.Y);
+                }
             }
         }
     }
