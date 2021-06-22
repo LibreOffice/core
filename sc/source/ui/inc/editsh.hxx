@@ -42,6 +42,12 @@ private:
     bool        bPastePossible;
     bool        bIsInsertMode;
 
+    // tdf#140361 at context menu popup time set if the EditHyperlink entry
+    // should be disabled and use that state if queried about it if
+    // EditHyperlink is dispatched from the menu. So ignoring where the mouse
+    // currently happens to be when the menu was dismissed.
+    std::optional<bool> moAtContextMenu_DisableEditHyperlink;
+
     const SvxURLField* GetURLField();
     ScInputHandler* GetMyInputHdl();
 
@@ -73,6 +79,12 @@ public:
     void    GetUndoState(SfxItemSet &rSet);
 
     OUString GetSelectionText( bool bWholeWord );
+
+    /// return true if "Edit Hyperlink" in context menu should be disabled
+    bool ShouldDisableEditHyperlink() const;
+    /// force "Edit Hyperlink" to true, with the expectation that SID_EDIT_HYPERLINK is
+    /// later Invalidated to reset it back to its natural value
+    void EnableEditHyperlink();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

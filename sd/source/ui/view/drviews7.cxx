@@ -282,7 +282,7 @@ void DrawViewShell::GetMarginProperties( SfxItemSet &rSet )
     }
 }
 
-bool DrawViewShell::ShouldDisableEditHyperlink()
+bool DrawViewShell::ShouldDisableEditHyperlink() const
 {
     if (!mpDrawView)
         return true;
