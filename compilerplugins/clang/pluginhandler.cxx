@@ -13,6 +13,7 @@
 #include <system_error>
 #include <utility>
 
+#include "compat.hxx"
 #include "plugin.hxx"
 #include "pluginhandler.hxx"
 
@@ -392,7 +393,7 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
         bool bOk = false;
         std::error_code ec;
         std::unique_ptr<raw_fd_ostream> ostream(
-            new raw_fd_ostream(filename, ec, sys::fs::F_None));
+            new raw_fd_ostream(filename, ec, compat::OF_None));
         if( !ec)
         {
             it->second.write( *ostream );
