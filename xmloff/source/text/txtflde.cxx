@@ -523,21 +523,21 @@ enum FieldIdEnum XMLTextFieldExport::MapFieldName(
             break;
 
         case FIELD_ID_DOCINFO_CREATION_TIME:
-             if (GetBoolProperty(gsPropertyIsDate, xPropSet))
+            if (GetBoolProperty(gsPropertyIsDate, xPropSet))
             {
                 nToken = FIELD_ID_DOCINFO_CREATION_DATE;
             }
             break;
 
         case FIELD_ID_DOCINFO_PRINT_TIME:
-             if (GetBoolProperty(gsPropertyIsDate, xPropSet))
+            if (GetBoolProperty(gsPropertyIsDate, xPropSet))
             {
                 nToken = FIELD_ID_DOCINFO_PRINT_DATE;
             }
             break;
 
         case FIELD_ID_DOCINFO_SAVE_TIME:
-             if (GetBoolProperty(gsPropertyIsDate, xPropSet))
+            if (GetBoolProperty(gsPropertyIsDate, xPropSet))
             {
                 nToken = FIELD_ID_DOCINFO_SAVE_DATE;
             }

@@ -96,7 +96,7 @@ bool GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel )
             // recall to read as XML
             bRet = GallerySvDrawImport( aMemStm, rModel );
         }
-     }
+    }
     else
     {
         // read as XML

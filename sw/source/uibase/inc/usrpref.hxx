@@ -177,7 +177,7 @@ public:
             if(bSet && m_eFieldUpdateFlags == AUTOUPD_OFF)
             {
                 m_eFieldUpdateFlags = AUTOUPD_FIELD_ONLY;
-             }
+            }
             else if(!bSet)
             {
                 m_eFieldUpdateFlags = AUTOUPD_OFF;
@@ -197,11 +197,11 @@ public:
             if(bSet)
             {
                 m_eFieldUpdateFlags = AUTOUPD_FIELD_AND_CHARTS;
-             }
-             else if(m_eFieldUpdateFlags == AUTOUPD_FIELD_AND_CHARTS)
-             {
+            }
+            else if(m_eFieldUpdateFlags == AUTOUPD_FIELD_AND_CHARTS)
+            {
                 m_eFieldUpdateFlags = AUTOUPD_FIELD_ONLY;
-             }
+            }
         };
     bool IsUpdateCharts()const {return m_eFieldUpdateFlags == AUTOUPD_FIELD_AND_CHARTS; }
 

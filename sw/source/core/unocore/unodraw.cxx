@@ -350,7 +350,7 @@ uno::Reference< drawing::XShape > SwFmDrawPage::CreateShape( SdrObject *pObj ) c
                 return xRet;
             }
         }
-     }
+    }
     else
     {
         // own block - temporary object has to be destroyed before

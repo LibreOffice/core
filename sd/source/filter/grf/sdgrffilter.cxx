@@ -294,7 +294,7 @@ bool SdGRFFilter::Export()
                             static_cast< SdGRFFilter_ImplInteractionHdl* >( xInteractionHandler.get() )->GetErrorCode(),
                                             rGraphicFilter.GetLastError().nStreamError );
                 }
-             }
+            }
         }
     }
     return bRet;

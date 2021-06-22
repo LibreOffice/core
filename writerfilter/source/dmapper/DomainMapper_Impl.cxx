@@ -3962,7 +3962,7 @@ void DomainMapper_Impl::SetNumberFormat( const OUString& rCommand,
             uno::Reference< util::XNumberFormatter> xFormatter(util::NumberFormatter::create(m_xComponentContext), uno::UNO_QUERY_THROW);
             xFormatter->attachNumberFormatsSupplier( xNumberSupplier );
             nKey = xFormatter->detectNumberFormat( 0, rCommand );
-         }
+        }
         else
         {
             nKey = xNumberSupplier->getNumberFormats()->addNewConverted( sFormat, aUSLocale, aCurrentLocale );
@@ -6584,7 +6584,7 @@ void DomainMapper_Impl::PopFieldContext()
            if(xFieldProperties.is())
               SetNumberFormat( pContext->GetResult(), xFieldProperties, true );
            SetFieldResult( pContext->GetResult() );
-         }
+        }
 
         //insert the field, TC or TOC
         uno::Reference< text::XTextAppend >  xTextAppend;

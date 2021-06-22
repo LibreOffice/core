@@ -113,7 +113,7 @@ bool ChartTypeHelper::isSupportingAreaProperties( const uno::Reference< XChartTy
     //@todo ask charttype itself --> need model change first
     if(xChartType.is())
     {
-         if(nDimensionCount==2)
+        if(nDimensionCount==2)
         {
             OUString aChartTypeName = xChartType->getChartType();
             if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_LINE) )

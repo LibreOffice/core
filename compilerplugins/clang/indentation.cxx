@@ -15,6 +15,7 @@
 #include <iostream>
 #include <fstream>
 #include <set>
+#include <unordered_set>
 #include "plugin.hxx"
 
 /*
@@ -65,9 +66,17 @@ public:
     bool PostTraverseSwitchStmt(SwitchStmt*, bool);
     bool TraverseSwitchStmt(SwitchStmt*);
     bool VisitSwitchStmt(SwitchStmt const*);
+    bool VisitIfStmt(IfStmt const*);
+    bool VisitForStmt(ForStmt const*);
+    bool VisitWhileStmt(WhileStmt const*);
+    bool VisitDoStmt(DoStmt const*);
+    bool VisitCXXForRangeStmt(CXXForRangeStmt const*);
 
 private:
+    void checkCompoundStmtBraces(const Stmt* parentStmt, const CompoundStmt*);
+
     std::vector<const Stmt*> switchStmtBodies;
+    std::unordered_set<const Stmt*> chainedSet;
 };
 
 bool Indentation::PreTraverseSwitchStmt(SwitchStmt* switchStmt)
@@ -258,7 +267,138 @@ bool Indentation::VisitCompoundStmt(CompoundStmt const* compoundStmt)
                 }
             }
     }
+
     return true;
+}
+
+bool Indentation::VisitIfStmt(IfStmt const* ifStmt)
+{
+    if (ignoreLocation(ifStmt))
+        return true;
+
+    // TODO - ignore chained if statements for now
+    if (auto chained = ifStmt->getElse())
+        chainedSet.insert(chained);
+    if (chainedSet.find(ifStmt) != chainedSet.end())
+        return true;
+
+    if (auto compoundStmt = dyn_cast_or_null<CompoundStmt>(ifStmt->getThen()))
+        checkCompoundStmtBraces(ifStmt, compoundStmt);
+    // TODO - needs to be checked against the line that contains the else keyword, but not against the parent
+    //    if (auto compoundStmt = dyn_cast_or_null<CompoundStmt>(ifStmt->getElse()))
+    //        checkCompoundStmtBraces(ifStmt, compoundStmt);
+    return true;
+}
+
+bool Indentation::VisitForStmt(ForStmt const* forStmt)
+{
+    if (ignoreLocation(forStmt))
+        return true;
+    if (chainedSet.find(forStmt) != chainedSet.end())
+        return true;
+    if (auto compoundStmt = dyn_cast_or_null<CompoundStmt>(forStmt->getBody()))
+        checkCompoundStmtBraces(forStmt, compoundStmt);
+    return true;
+}
+
+bool Indentation::VisitWhileStmt(WhileStmt const* whileStmt)
+{
+    if (ignoreLocation(whileStmt))
+        return true;
+    if (chainedSet.find(whileStmt) != chainedSet.end())
+        return true;
+    if (auto compoundStmt = dyn_cast_or_null<CompoundStmt>(whileStmt->getBody()))
+        checkCompoundStmtBraces(whileStmt, compoundStmt);
+    return true;
+}
+
+bool Indentation::VisitDoStmt(DoStmt const* doStmt)
+{
+    if (ignoreLocation(doStmt))
+        return true;
+    if (chainedSet.find(doStmt) != chainedSet.end())
+        return true;
+    if (auto compoundStmt = dyn_cast_or_null<CompoundStmt>(doStmt->getBody()))
+        checkCompoundStmtBraces(doStmt, compoundStmt);
+    return true;
+}
+
+bool Indentation::VisitCXXForRangeStmt(CXXForRangeStmt const* cxxForRangeStmt)
+{
+    if (ignoreLocation(cxxForRangeStmt))
+        return true;
+    if (chainedSet.find(cxxForRangeStmt) != chainedSet.end())
+        return true;
+    if (auto compoundStmt = dyn_cast_or_null<CompoundStmt>(cxxForRangeStmt->getBody()))
+        checkCompoundStmtBraces(cxxForRangeStmt, compoundStmt);
+    return true;
+}
+
+void Indentation::checkCompoundStmtBraces(const Stmt* parentStmt, const CompoundStmt* compoundStmt)
+{
+    auto& SM = compiler.getSourceManager();
+    bool invalid1 = false;
+    bool invalid2 = false;
+
+    auto parentBeginLoc = compat::getBeginLoc(parentStmt);
+    unsigned parentColumn = SM.getPresumedColumnNumber(parentBeginLoc, &invalid1);
+    if (invalid1)
+        return;
+
+    auto startBraceLoc = compat::getBeginLoc(compoundStmt);
+    auto endBraceLoc = compat::getEndLoc(compoundStmt);
+    unsigned beginColumn = SM.getPresumedColumnNumber(startBraceLoc, &invalid1);
+    unsigned beginLine = SM.getPresumedLineNumber(startBraceLoc, &invalid2);
+    if (invalid1 || invalid2)
+        return;
+    unsigned endColumn = SM.getPresumedColumnNumber(endBraceLoc, &invalid1);
+    unsigned endLine = SM.getPresumedLineNumber(endBraceLoc, &invalid2);
+    if (invalid1 || invalid2)
+        return;
+    if (beginLine == endLine)
+        return;
+
+    // check for code to the left of the starting brace
+    bool foundCodeToLeft = false;
+    {
+        const char* p1 = SM.getCharacterData(startBraceLoc);
+        --p1;
+        while (*p1 && *p1 != '\n')
+        {
+            if (*p1 != ' ')
+            {
+                foundCodeToLeft = true;
+                break;
+            }
+            --p1;
+        }
+    }
+
+    // if we found code to the left of the start brace, that means the end-brace needs
+    // to line up with the start of the parent statement
+    if (foundCodeToLeft)
+    {
+        if (parentColumn != endColumn)
+        {
+            report(DiagnosticsEngine::Warning, "end brace not aligned with beginning of statement",
+                   endBraceLoc);
+            report(DiagnosticsEngine::Note, "statement beginning here", parentBeginLoc);
+        }
+    }
+    else
+    {
+        if (parentColumn != beginColumn)
+        {
+            report(DiagnosticsEngine::Warning,
+                   "start brace not aligned with beginning of parent statement", startBraceLoc);
+            report(DiagnosticsEngine::Note, "statement beginning here", parentBeginLoc);
+        }
+        else if (beginColumn != endColumn)
+        {
+            report(DiagnosticsEngine::Warning, "start and end brace not aligned", endBraceLoc);
+            report(DiagnosticsEngine::Note, "start brace here", startBraceLoc);
+        }
+    }
 }
 
 bool Indentation::VisitSwitchStmt(SwitchStmt const* switchStmt)

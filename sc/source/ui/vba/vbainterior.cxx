@@ -166,7 +166,7 @@ ScVbaInterior::GetColorIndex( const sal_Int32 nColor )
     sal_Int32 nElems = xIndex->getCount();
     sal_Int32 nIndex = -1;
     for ( sal_Int32 count=0; count<nElems; ++count )
-           {
+    {
         sal_Int32 nPaletteColor = 0;
         xIndex->getByIndex( count ) >>= nPaletteColor;
         if ( nPaletteColor == nColor )

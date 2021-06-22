@@ -344,7 +344,7 @@ void PreviewRenderer::PaintFrame()
         mpPreviewDevice->SetFillColor();
         mpPreviewDevice->DrawRect(aPaintRectangle);
         mpPreviewDevice->EnableMapMode();
-     }
+    }
 }
 
 void PreviewRenderer::SetupOutputSize (

@@ -308,7 +308,7 @@ static bool LoadCommonHeader(HWPDrawingObject * hdo, unsigned short * link_info)
             return true;
         else
             return false;
-     }
+    }
 
     if (size <= common_size)
           return true;

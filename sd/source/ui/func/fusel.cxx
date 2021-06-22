@@ -743,13 +743,13 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                     * If 3D-rotation bodies are about to be created,
                     * end creation now
                     **********************************************************/
-                     Degree100 nAngle1  = GetAngle(aPnt - mpView->GetRef1());
-                     nAngle1 -= 27000_deg100;
-                     nAngle1 = NormAngle36000(nAngle1);
-                     bool bMirrorSide1 = nAngle1 < 18000_deg100;
+                    Degree100 nAngle1  = GetAngle(aPnt - mpView->GetRef1());
+                    nAngle1 -= 27000_deg100;
+                    nAngle1 = NormAngle36000(nAngle1);
+                    bool bMirrorSide1 = nAngle1 < 18000_deg100;
 
-                     if (bMirrorSide0 != bMirrorSide1)
-                     {
+                    if (bMirrorSide0 != bMirrorSide1)
+                    {
                          bSuppressChangesOfSelection = true;
                          mpWindow->EnterWait();
                          mpView->End3DCreation();

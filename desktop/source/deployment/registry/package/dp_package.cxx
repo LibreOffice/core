@@ -285,7 +285,7 @@ BackendImpl::BackendImpl(
         dbFile = makeURL(dbFile, "backenddb.xml");
         m_backendDb.reset(
             new ExtensionBackendDb(getComponentContext(), dbFile));
-   }
+    }
 }
 
 
