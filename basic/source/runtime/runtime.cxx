@@ -2840,6 +2840,8 @@ void SbiRuntime::StepLOADNC( sal_uInt32 nOp1 )
             case '&': eType = SbxLONG; break;
             case '!': eType = SbxSINGLE; break;
             case '@': eType = SbxCURRENCY; break;
+            // tdf#142460 - properly handle boolean values in string pool
+            case 'b': eType = SbxBOOL; break;
         }
     }
     SbxVariable* p = new SbxVariable( eType );

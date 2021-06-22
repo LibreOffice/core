@@ -40,6 +40,9 @@
 // Version 13: tdf#94617 store methods nStart information greater than sal_Int16 limit
 //             tdf#57113 store UTF-16 strings after legacy 1-byte-encoded strings in pool (no
 //                       version number bump for backward compatibility; relies on magic number)
+//             tdf#142460: properly handle boolean values in string pool (no
+//                       version number bump for backward compatibility; relies on
+//                       new integer type suffix 'b')
 //
 
 #define B_LEGACYVERSION 0x00000011
