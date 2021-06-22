@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6e58055e_732bc03a",
+        "filename": "oox/source/export/DMLPresetShapeExport.cxx",
+        "patchSetId": 26
+      },
+      "lineNbr": 1007,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-06-22T10:53:55Z",
+      "side": 1,
+      "message": "Could you fix also the yesterday word list, please?",
+      "range": {
+        "startLine": 1007,
+        "startChar": 45,
+        "endLine": 1007,
+        "endChar": 56
+      },
+      "revId": "a4feb43c75dfde553ab1a77487936041cec59d85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
