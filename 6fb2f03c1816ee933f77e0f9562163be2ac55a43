@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a6e1e59d_e1c88c74",
+        "filename": "sdext/source/pdfimport/xpdfwrapper/wrapper_gpl.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-06-22T09:31:20Z",
+      "side": 1,
+      "message": "i was wondering what the point of this was, but apparently dirname(3) writes into its argument :-/",
+      "revId": "6fb2f03c1816ee933f77e0f9562163be2ac55a43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40eb7c47_1cbe4d11",
+        "filename": "sdext/source/pdfimport/xpdfwrapper/wrapper_gpl.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-06-22T09:31:20Z",
+      "side": 1,
+      "message": "does dirname exist in MSVC?\n\nif not, maybe use string::find_last_of instead?\n\nhttps://www.cplusplus.com/reference/string/string/find_last_of/",
+      "revId": "6fb2f03c1816ee933f77e0f9562163be2ac55a43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "544cd734_b2e66d75",
+        "filename": "sdext/source/pdfimport/xpdfwrapper/wrapper_gpl.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-06-22T09:31:20Z",
+      "side": 1,
+      "message": "this will add up to datadir_path_len bytes to the target - fortunately we know that there are only (datadir_path_len - exec_path_len) bytes in the source so it\u0027s going to fit, but this is a bit obfuscated :)",
+      "revId": "6fb2f03c1816ee933f77e0f9562163be2ac55a43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
