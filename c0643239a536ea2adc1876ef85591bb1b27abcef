@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0474a64f_683f6d38",
+        "filename": "filter/source/config/cache/filtercache.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 977,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-22T09:33:11Z",
+      "side": 1,
+      "message": "It\u0027s even clearer to use structured binding:\n\n    for (auto const\u0026 [ sType, aType ] : m_lTypes)",
+      "revId": "c0643239a536ea2adc1876ef85591bb1b27abcef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
