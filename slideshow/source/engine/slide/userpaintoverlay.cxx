@@ -354,7 +354,7 @@ namespace slideshow::internal
                         mrScreenUpdater.notifyUpdate(rxView,true);
                     }
 
-        }
+                }
                 else
                 {
                     if( !mbIsLastPointValid )

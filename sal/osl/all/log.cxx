@@ -184,24 +184,24 @@ std::pair<bool, bool> getTimestampFlags(char const *selector)
     bool outputTimestamp = false;
     bool outputRelativeTimer = false;
     for (char const* p = selector; p && *p;)
-        {
+    {
             if (*p++ == '+')
-                {
-                    char const * p1 = p;
-                    while (*p1 != '.' && *p1 != '+' && *p1 != '-' && *p1 != '\0') {
-                        ++p1;
-                    }
-                    if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("TIMESTAMP")))
-                        outputTimestamp = true;
-                    else if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("RELATIVETIMER")))
-                        outputRelativeTimer = true;
-                    char const * p2 = p1;
-                    while (*p2 != '+' && *p2 != '-' && *p2 != '\0') {
-                        ++p2;
-                    }
-                    p = p2;
+            {
+                char const * p1 = p;
+                while (*p1 != '.' && *p1 != '+' && *p1 != '-' && *p1 != '\0') {
+                    ++p1;
                 }
-        }
+                if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("TIMESTAMP")))
+                    outputTimestamp = true;
+                else if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("RELATIVETIMER")))
+                    outputRelativeTimer = true;
+                char const * p2 = p1;
+                while (*p2 != '+' && *p2 != '-' && *p2 != '\0') {
+                    ++p2;
+                }
+                p = p2;
+            }
+    }
     return std::pair(outputTimestamp, outputRelativeTimer);
 }
 

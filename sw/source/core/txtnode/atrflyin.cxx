@@ -266,7 +266,7 @@ SwFlyInContentFrame *SwTextFlyCnt::GetFlyFrame_( const SwFrame *pCurrFrame )
         while ( pFirst->IsFollow() )
             pFirst = pFirst->FindMaster();
         do
-            {
+        {
                 SwTextFrame *pTmp = pFirst;
                 do
                 {   if( static_cast<SwFlyFrame*>(pFrame)->GetAnchorFrame() == static_cast<SwFrame*>(pTmp) )

@@ -3470,7 +3470,7 @@ void ChartExport::_exportAxis(
                     pFS->singleElement(FSNS( XML_c, XML_dispUnitsLbl ));
                     pFS->endElement( FSNS( XML_c, XML_dispUnits ) );
                 }
-             }
+            }
         }
     }
 

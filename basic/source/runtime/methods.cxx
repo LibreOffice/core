@@ -431,25 +431,25 @@ void SbRtl_CurDir(StarBASIC * pBasic, SbxArray & rPar, bool bWrite)
     int nSize = PATH_INCR;
     std::unique_ptr<char[]> pMem;
     while( true )
-      {
+    {
         pMem.reset(new char[nSize]);
         if( !pMem )
-          {
+        {
             StarBASIC::Error( ERRCODE_BASIC_NO_MEMORY );
             return;
-          }
+        }
         if( getcwd( pMem.get(), nSize-1 ) != nullptr )
-          {
+        {
             rPar.Get(0)->PutString(OUString::createFromAscii(pMem.get()));
             return;
-          }
+        }
         if( errno != ERANGE )
-          {
+        {
             StarBASIC::Error( ERRCODE_BASIC_INTERNAL_ERROR );
             return;
-          }
+        }
         nSize += PATH_INCR;
-      };
+    };
 
 #endif
 }

@@ -882,7 +882,7 @@ void ViewShellManager::Implementation::CreateShells()
                 }
             }
         }
-   }
+    }
 }
 
 void ViewShellManager::Implementation::CreateTargetStack (ShellStack& rStack) const

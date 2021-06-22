@@ -468,10 +468,10 @@ bool JobData::hasCorrectContext(const OUString& rModuleIdent) const
     {
         sal_Int32 nIndex = m_sContext.indexOf( rModuleIdent );
         if ( nIndex >= 0 && ( nIndex+nModuleIdLen <= nContextLen ))
-    {
-        OUString sContextModule = m_sContext.copy( nIndex, nModuleIdLen );
-        return sContextModule == rModuleIdent;
-    }
+        {
+            OUString sContextModule = m_sContext.copy( nIndex, nModuleIdLen );
+            return sContextModule == rModuleIdent;
+        }
     }
 
     return false;

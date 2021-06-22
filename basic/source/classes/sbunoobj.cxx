@@ -2132,7 +2132,7 @@ void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         aMember.setValue( aAnyValue );
                     }
                     return;
-               }
+                }
                 // take over the value from Uno to Sbx
                 Any aAnyValue = sbxToUnoValue( pVar, pProp->aUnoProp.Type, &pProp->aUnoProp );
                 try
@@ -4565,7 +4565,7 @@ bool SbModule::createCOMWrapperForIface( Any& o_rRetAny, SbClassModuleObject* pP
                 break;
             }
         }
-     }
+    }
 
     return bSuccess;
 }

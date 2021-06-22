@@ -4224,7 +4224,7 @@ namespace osl_Directory
                 {
                     bOk3 = true;
                 }
-           }
+            }
 
             // close a directory
             nError1 = testDirectory.close();
