@@ -1106,6 +1106,8 @@ emscripten)
     using_freetype_fontconfig=yes
     using_x11=no
     test_openldap=no
+    test_qt5=yes
+    test_system_freetype=no
     enable_compiler_plugins=no
     enable_wasm_strip=yes
     with_system_zlib=no
