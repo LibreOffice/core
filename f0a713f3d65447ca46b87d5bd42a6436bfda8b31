@@ -52,6 +52,24 @@
       "revId": "f0a713f3d65447ca46b87d5bd42a6436bfda8b31",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43be17af_f708aeef",
+        "filename": "cui/inc/strings.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-06-22T14:35:43Z",
+      "side": 1,
+      "message": "Ah, I see. Then it is indeed better to let it ambiguous in the label. The help has a table about the different cases.",
+      "parentUuid": "036b7eb9_d63ef4c2",
+      "revId": "f0a713f3d65447ca46b87d5bd42a6436bfda8b31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
