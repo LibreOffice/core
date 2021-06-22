@@ -10,26 +10,25 @@ from uitest.uihelper.common import type_text
 class insertEndnote(UITestCase):
 
    def test_insert_endnote(self):
-        self.ui_test.create_doc_in_start_center("writer")
-        document = self.ui_test.get_component()
-        xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
+        with self.ui_test.create_doc_in_start_center("writer"):
+            document = self.ui_test.get_component()
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-        self.xUITest.executeCommand(".uno:InsertEndnote")
+            self.xUITest.executeCommand(".uno:InsertEndnote")
 
-        type_text(xWriterEdit, "LibreOffice")
+            type_text(xWriterEdit, "LibreOffice")
 
-        self.assertEqual(document.Endnotes[0].String, "LibreOffice")
-        self.assertEqual(document.Endnotes.getCount(), 1)
-        self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(document.Endnotes[0].String, "")
-        self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(document.Endnotes.getCount(), 0)
-        self.xUITest.executeCommand(".uno:Redo")
-        self.assertEqual(document.Endnotes[0].String, "")
-        self.assertEqual(document.Endnotes.getCount(), 1)
-        self.xUITest.executeCommand(".uno:Redo")
-        self.assertEqual(document.Endnotes[0].String, "LibreOffice")
+            self.assertEqual(document.Endnotes[0].String, "LibreOffice")
+            self.assertEqual(document.Endnotes.getCount(), 1)
+            self.xUITest.executeCommand(".uno:Undo")
+            self.assertEqual(document.Endnotes[0].String, "")
+            self.xUITest.executeCommand(".uno:Undo")
+            self.assertEqual(document.Endnotes.getCount(), 0)
+            self.xUITest.executeCommand(".uno:Redo")
+            self.assertEqual(document.Endnotes[0].String, "")
+            self.assertEqual(document.Endnotes.getCount(), 1)
+            self.xUITest.executeCommand(".uno:Redo")
+            self.assertEqual(document.Endnotes[0].String, "LibreOffice")
 
-        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

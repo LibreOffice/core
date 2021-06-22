@@ -13,39 +13,33 @@ class GridWinTest(UITestCase):
 
     def test_select_cell(self):
 
-        self.ui_test.create_doc_in_start_center("calc")
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        xGridWindow = xCalcDoc.getChild("grid_window")
+        with self.ui_test.create_doc_in_start_center("calc"):
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            xGridWindow = xCalcDoc.getChild("grid_window")
 
-        selectProps = mkPropertyValues({"CELL": "B10"})
-        xGridWindow.executeAction("SELECT", selectProps)
-
-        self.ui_test.close_doc()
+            selectProps = mkPropertyValues({"CELL": "B10"})
+            xGridWindow.executeAction("SELECT", selectProps)
 
     def test_select_range(self):
 
-        self.ui_test.create_doc_in_start_center("calc")
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        xGridWindow = xCalcDoc.getChild("grid_window")
+        with self.ui_test.create_doc_in_start_center("calc"):
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            xGridWindow = xCalcDoc.getChild("grid_window")
 
-        selectProps = mkPropertyValues({"RANGE": "B10:C20"})
-        xGridWindow.executeAction("SELECT", selectProps)
-
-        self.ui_test.close_doc()
+            selectProps = mkPropertyValues({"RANGE": "B10:C20"})
+            xGridWindow.executeAction("SELECT", selectProps)
 
     def test_extend_range(self):
 
-        self.ui_test.create_doc_in_start_center("calc")
-        xTopWindow = self.xUITest.getTopFocusWindow()
+        with self.ui_test.create_doc_in_start_center("calc"):
+            xTopWindow = self.xUITest.getTopFocusWindow()
 
-        xGridWindow = xTopWindow.getChild("grid_window")
+            xGridWindow = xTopWindow.getChild("grid_window")
 
-        selectProps = mkPropertyValues({"RANGE": "B10:C20"})
-        xGridWindow.executeAction("SELECT", selectProps)
+            selectProps = mkPropertyValues({"RANGE": "B10:C20"})
+            xGridWindow.executeAction("SELECT", selectProps)
 
-        select2Props = mkPropertyValues({"RANGE": "D3:F5", "EXTEND": "true"})
-        xGridWindow.executeAction("SELECT", select2Props)
-
-        self.ui_test.close_doc()
+            select2Props = mkPropertyValues({"RANGE": "D3:F5", "EXTEND": "true"})
+            xGridWindow.executeAction("SELECT", select2Props)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

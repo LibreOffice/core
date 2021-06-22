@@ -95,30 +95,28 @@ class findReplace(UITestCase):
 
         #Bug 39022 - find-replace->$1, not pattern
     def test_tdf39022_replace_regexp(self):
-        writer_doc = self.ui_test.create_doc_in_start_center("writer")
-        document = self.ui_test.get_component()
-        xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
-        type_text(xWriterEdit, "test number1 testnot")
+        with self.ui_test.create_doc_in_start_center("writer"):
+            document = self.ui_test.get_component()
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xWriterDoc.getChild("writer_edit")
+            type_text(xWriterEdit, "test number1 testnot")
 
-        self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        searchterm = xDialog.getChild("searchterm")
-        searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"T(est|other)\\>"}))   #find
-        replaceterm = xDialog.getChild("replaceterm")
-        replaceterm.executeAction("TYPE", mkPropertyValues({"TEXT":"replaced$1"})) #replace
-        regexp = xDialog.getChild("regexp")
-        regexp.executeAction("CLICK", tuple())   #regular expressions
-        replaceall = xDialog.getChild("replaceall")
-        replaceall.executeAction("CLICK", tuple())
-        #verify
-        self.assertEqual(document.Text.String[0:27], "replacedest number1 testnot")
-        regexp.executeAction("CLICK", tuple())
+            self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
+            xDialog = self.xUITest.getTopFocusWindow()
+            searchterm = xDialog.getChild("searchterm")
+            searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"T(est|other)\\>"}))   #find
+            replaceterm = xDialog.getChild("replaceterm")
+            replaceterm.executeAction("TYPE", mkPropertyValues({"TEXT":"replaced$1"})) #replace
+            regexp = xDialog.getChild("regexp")
+            regexp.executeAction("CLICK", tuple())   #regular expressions
+            replaceall = xDialog.getChild("replaceall")
+            replaceall.executeAction("CLICK", tuple())
+            #verify
+            self.assertEqual(document.Text.String[0:27], "replacedest number1 testnot")
+            regexp.executeAction("CLICK", tuple())
 
-        xcloseBtn = xDialog.getChild("close")
-        self.ui_test.close_dialog_through_button(xcloseBtn)
-
-        self.ui_test.close_doc()
+            xcloseBtn = xDialog.getChild("close")
+            self.ui_test.close_dialog_through_button(xcloseBtn)
 
         #tdf116242  ţ ț
     def test_tdf116242_replace_t_with_cedilla(self):
@@ -170,34 +168,32 @@ class findReplace(UITestCase):
             self.ui_test.close_dialog_through_button(xcloseBtn)
 
     def test_tdf136577(self):
-        self.ui_test.create_doc_in_start_center("writer")
+        with self.ui_test.create_doc_in_start_center("writer"):
 
-        xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-        document = self.ui_test.get_component()
+            document = self.ui_test.get_component()
 
-        type_text(xWriterEdit, "x")
+            type_text(xWriterEdit, "x")
 
-        self.assertEqual(document.Text.String, "x")
+            self.assertEqual(document.Text.String, "x")
 
-        self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
+            self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
+            xDialog = self.xUITest.getTopFocusWindow()
 
-        searchterm = xDialog.getChild("searchterm")
-        searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"x"}))
+            searchterm = xDialog.getChild("searchterm")
+            searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"x"}))
 
 
-        replaceall = xDialog.getChild("replaceall")
-        replaceall.executeAction("CLICK", tuple())
+            replaceall = xDialog.getChild("replaceall")
+            replaceall.executeAction("CLICK", tuple())
 
-        self.assertEqual(document.Text.String, "")
+            self.assertEqual(document.Text.String, "")
 
-        self.xUITest.executeCommand(".uno:Undo")
+            self.xUITest.executeCommand(".uno:Undo")
 
-        # Without the fix in place, this test would have failed with AssertionError: '' != 'x'
-        self.assertEqual(document.Text.String, "x")
-
-        self.ui_test.close_doc()
+            # Without the fix in place, this test would have failed with AssertionError: '' != 'x'
+            self.assertEqual(document.Text.String, "x")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

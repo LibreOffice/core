@@ -12,21 +12,20 @@ from uitest.uihelper.common import get_state_as_dict
 class shareSpreadsheet(UITestCase):
 
    def test_share_spreadsheet(self):
-        self.ui_test.create_doc_in_start_center("calc")
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        xGridWindow = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("calc"):
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            xGridWindow = xCalcDoc.getChild("grid_window")
+            document = self.ui_test.get_component()
 
-        #dialog shareSpreadsheet
-        self.ui_test.execute_dialog_through_command(".uno:ShareDocument")
-        xDialog = self.xUITest.getTopFocusWindow()
+            #dialog shareSpreadsheet
+            self.ui_test.execute_dialog_through_command(".uno:ShareDocument")
+            xDialog = self.xUITest.getTopFocusWindow()
 
-        share = xDialog.getChild("share")
-        share.executeAction("CLICK", tuple())
-        users = xDialog.getChild("users")
-        self.assertEqual(get_state_as_dict(users)["Children"], "1")
-        xCancelBtn = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCancelBtn)
+            share = xDialog.getChild("share")
+            share.executeAction("CLICK", tuple())
+            users = xDialog.getChild("users")
+            self.assertEqual(get_state_as_dict(users)["Children"], "1")
+            xCancelBtn = xDialog.getChild("cancel")
+            self.ui_test.close_dialog_through_button(xCancelBtn)
 
-        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

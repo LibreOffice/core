@@ -23,7 +23,7 @@ class Tdf113571(UITestCase):
             # Close the document
             self.xUITest.executeCommand(".uno:CloseDoc")
 
-            self.ui_test.create_doc_in_start_center("writer")
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             self.xUITest.executeCommand(".uno:PasteUnformatted")
 
