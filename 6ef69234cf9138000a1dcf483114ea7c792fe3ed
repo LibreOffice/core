@@ -34,6 +34,24 @@
       "revId": "6ef69234cf9138000a1dcf483114ea7c792fe3ed",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38936b5d_ed4a1d9a",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 1941,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-22T11:02:39Z",
+      "side": 0,
+      "message": "Hii\n\nIf I change my code as : \n\nstd::shared_ptr\u003ccomphelper::ConfigurationChanges\u003e Charbatch( comphelper::ConfigurationChanges::create() );\n\nbool bCharCustomPreview \u003d mxCharPreviewCheckbox-\u003eget_active();\n\nofficecfg::Office::Common::StylesAndFormatting::Preview::set(bCharCustomPreview, Charbatch);\n\nthen also, its working identical to patchset 32..",
+      "parentUuid": "2a06d9d7_3e23eced",
+      "revId": "6ef69234cf9138000a1dcf483114ea7c792fe3ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
