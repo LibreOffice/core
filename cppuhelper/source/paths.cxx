@@ -35,7 +35,7 @@
 
 namespace {
 
-#ifndef ANDROID
+#if !(defined ANDROID || defined EMSCRIPTEN)
 OUString get_this_libpath() {
     static OUString s_uri = []() {
         OUString uri;
@@ -54,7 +54,7 @@ OUString get_this_libpath() {
 }
 
 OUString cppu::getUnoIniUri() {
-#if defined ANDROID
+#if defined ANDROID || defined EMSCRIPTEN
     // Wouldn't it be lovely to avoid this ugly hard-coding.
     // The problem is that the 'create_bootstrap_macro_expander_factory()'
     // required for bootstrapping services, calls cppu::get_unorc directly
