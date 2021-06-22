@@ -769,15 +769,16 @@ void SalDisplay::ModifierMapping()
     {
         KeyCode aNumLock = XKeysymToKeycode( pDisp_, XK_Num_Lock );
 
-        if( aNumLock ) for( int i = ShiftMapIndex; i <= Mod5MapIndex; i++ )
-        {
-            if( pXModMap->modifiermap[i*pXModMap->max_keypermod] == aNumLock )
+        if( aNumLock )
+            for( int i = ShiftMapIndex; i <= Mod5MapIndex; i++ )
             {
-                bNumLockFromXS_ = False;
-                nNumLockIndex_  = i;
-                break;
+                if( pXModMap->modifiermap[i*pXModMap->max_keypermod] == aNumLock )
+                {
+                    bNumLockFromXS_ = False;
+                    nNumLockIndex_  = i;
+                    break;
+                }
             }
-        }
     }
 
     XFreeModifiermap( pXModMap );

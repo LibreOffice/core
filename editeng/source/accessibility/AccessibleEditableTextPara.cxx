@@ -1923,7 +1923,7 @@ namespace accessibility
 
                 //while ( preWordStart > 0 && aBoundary.startPos == curWordStart)
                 while ( (preWordStart >= 0 && !bWord ) || ( aBoundary.endPos > curWordStart ) )
-                    {
+                {
                     preWordStart--;
                     bWord = implGetWordBoundary( sText, aBoundary, preWordStart );
                 }

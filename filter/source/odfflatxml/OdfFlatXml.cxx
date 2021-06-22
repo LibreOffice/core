@@ -120,13 +120,13 @@ OdfFlatXml::importer(
 
     sal_Int32 paramCount = sourceData.getLength();
     for (sal_Int32 paramIdx = 0; paramIdx < paramCount; paramIdx++)
-        {
-            paramName = sourceData[paramIdx].Name;
-            if ( paramName == "InputStream" )
-                sourceData[paramIdx].Value >>= inputStream;
-            else if ( paramName == "URL" )
-                sourceData[paramIdx].Value >>= url;
-        }
+    {
+        paramName = sourceData[paramIdx].Name;
+        if ( paramName == "InputStream" )
+            sourceData[paramIdx].Value >>= inputStream;
+        else if ( paramName == "URL" )
+            sourceData[paramIdx].Value >>= url;
+    }
 
     OSL_ASSERT(inputStream.is());
     if (!inputStream.is())
@@ -179,13 +179,13 @@ OdfFlatXml::importer(
 
     sal_Int32 paramCount = sourceData.getLength();
     for (sal_Int32 paramIdx = 0; paramIdx < paramCount; paramIdx++)
-        {
-            paramName = sourceData[paramIdx].Name;
-            if ( paramName == "InputStream" )
-                sourceData[paramIdx].Value >>= inputStream;
-            else if ( paramName == "URL" )
-                sourceData[paramIdx].Value >>= url;
-        }
+    {
+        paramName = sourceData[paramIdx].Name;
+        if ( paramName == "InputStream" )
+            sourceData[paramIdx].Value >>= inputStream;
+        else if ( paramName == "URL" )
+            sourceData[paramIdx].Value >>= url;
+    }
 
     OSL_ASSERT(inputStream.is());
     if (!inputStream.is())
@@ -226,17 +226,17 @@ OdfFlatXml::exporter(const Sequence< PropertyValue >& sourceData,
     // Read output stream and target URL from the parameters given in sourceData.
     sal_Int32 paramCount = sourceData.getLength();
     for (sal_Int32 paramIdx = 0; paramIdx < paramCount; paramIdx++)
-        {
-            paramName = sourceData[paramIdx].Name;
-            if ( paramName == "OutputStream" )
-                sourceData[paramIdx].Value >>= outputStream;
-        }
+    {
+        paramName = sourceData[paramIdx].Name;
+        if ( paramName == "OutputStream" )
+            sourceData[paramIdx].Value >>= outputStream;
+    }
 
     if (!getDelegate().is())
-        {
-            Reference< XDocumentHandler > saxWriter = Writer::create(m_xContext);
-            setDelegate(saxWriter);
-        }
+    {
+        Reference< XDocumentHandler > saxWriter = Writer::create(m_xContext);
+        setDelegate(saxWriter);
+    }
     // get data source interface ...
     Reference<XActiveDataSource> dataSource(getDelegate(), UNO_QUERY);
     OSL_ASSERT(dataSource.is());

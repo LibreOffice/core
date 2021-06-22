@@ -89,7 +89,8 @@ SdrObjListIter::SdrObjListIter( const SdrMarkList& rMarkList, SdrIterMode eMode 
 }
 
 void SdrObjListIter::ImpProcessObjectList(const SdrObjList& rObjList, SdrIterMode eMode)
-{    for(size_t nIdx(0), nCount(rObjList.GetObjCount()); nIdx < nCount; ++nIdx)
+{
+    for(size_t nIdx(0), nCount(rObjList.GetObjCount()); nIdx < nCount; ++nIdx)
     {
         const SdrObject* pSdrObject(mbUseZOrder
             ? rObjList.GetObj(nIdx)

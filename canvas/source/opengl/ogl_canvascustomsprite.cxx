@@ -217,7 +217,7 @@ namespace oglcanvas
                         glVertex2d(
                             rCandidate.getC().getX(),
                             rCandidate.getC().getY());
-                     }
+                    }
                     glEnd();
                 }
                 else

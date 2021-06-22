@@ -806,7 +806,7 @@ lcl_ExportHints(
             switch( nAttrWhich )
             {
                 case RES_TXTATR_FIELD:
-                   if(!bRightMoveForbidden)
+                    if(!bRightMoveForbidden)
                     {
                         pUnoCursor->Right(1);
                         if( *pUnoCursor->GetMark() == *pUnoCursor->GetPoint() )
@@ -1066,7 +1066,7 @@ static void lcl_FillRedlineArray(
         if( pRedline->HasMark() && pRedline->End()->nNode == nOwnNode )
             rRedArr.insert( std::make_shared<SwXRedlinePortion_Impl>(
                 pRedline, false ) );
-   }
+    }
 }
 
 static void lcl_FillSoftPageBreakArray(

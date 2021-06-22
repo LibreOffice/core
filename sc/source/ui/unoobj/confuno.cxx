@@ -584,7 +584,7 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPr
                     break;
                 }
              }
-         }
+        }
     }
 
     else

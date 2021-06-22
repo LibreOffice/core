@@ -3325,7 +3325,7 @@ std::unique_ptr<SwAccessibleSelectedParas_Impl> SwAccessibleMap::BuildSelectedPa
                     // loop on all text frames registered at the text node.
                     SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pTextNode);
                     for( SwTextFrame* pTextFrame = aIter.First(); pTextFrame; pTextFrame = aIter.Next() )
-                        {
+                    {
                             uno::WeakReference < XAccessible > xWeakAcc;
                             SwAccessibleContextMap_Impl::iterator aMapIter =
                                                     mpFrameMap->find( pTextFrame );
@@ -3348,10 +3348,10 @@ std::unique_ptr<SwAccessibleSelectedParas_Impl> SwAccessibleMap::BuildSelectedPa
                                 // sw_redlinehide: should be idempotent for multiple nodes in a merged para
                                 pRetSelectedParas->emplace( xWeakAcc, aDataEntry );
                             }
-                        }
                     }
                 }
             }
+        }
 
         // prepare next turn: get next cursor in ring
         pCursor = pCursor->GetNext();

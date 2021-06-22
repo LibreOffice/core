@@ -2437,15 +2437,15 @@ SwDSParam* SwDBManager::FindDSData(const SwDBData& rData, bool bCreate)
             rData.sCommand == pParam->sCommand &&
             (rData.nCommandType == -1 || rData.nCommandType == pParam->nCommandType ||
             (bCreate && pParam->nCommandType == -1)))
-            {
-                // calls from the calculator may add a connection with an invalid commandtype
-                //later added "real" data base connections have to re-use the already available
-                //DSData and set the correct CommandType
-                if(bCreate && pParam->nCommandType == -1)
-                    pParam->nCommandType = rData.nCommandType;
-                pFound = pParam;
-                break;
-            }
+        {
+            // calls from the calculator may add a connection with an invalid commandtype
+            //later added "real" data base connections have to re-use the already available
+            //DSData and set the correct CommandType
+            if(bCreate && pParam->nCommandType == -1)
+                pParam->nCommandType = rData.nCommandType;
+            pFound = pParam;
+            break;
+        }
     }
     if(bCreate && !pFound)
     {
