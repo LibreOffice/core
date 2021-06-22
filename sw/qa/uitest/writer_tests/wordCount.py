@@ -69,7 +69,7 @@ class writerWordCount(UITestCase):
             self.assertEqual(get_state_as_dict(xselectchars)["Text"], "15")
             self.assertEqual(get_state_as_dict(xdocchars)["Text"], "54")
             self.assertEqual(get_state_as_dict(xselectcharsnospaces)["Text"], "12")
-            #bug Bug 117703 Word Count: Wrong result for "Characters excluding spaces"
+            #Bug 117703 Word Count: Wrong result for "Characters excluding spaces"
             #self.assertEqual(get_state_as_dict(xdoccharsnospaces)["Text"], "44")
             self.assertEqual(get_state_as_dict(xselectcjkchars)["Text"], "0")
             self.assertEqual(get_state_as_dict(xdoccjkchars)["Text"], "0")
