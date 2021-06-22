@@ -67,9 +67,6 @@
             <property name="margin-top">10</property>
             <property name="label" translatable="yes" context="graphictestdlg|gptest_label1">Results log:</property>
             <property name="justify">center</property>
-            <accessibility>
-              <relation type="label-for" target="gptestresults"/>
-            </accessibility>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -83,21 +80,919 @@
             <property name="can-focus">True</property>
             <property name="shadow-type">in</property>
             <child>
-              <object class="GtkTextView" id="gptestresults">
+              <object class="GtkViewport">
                 <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="pixels-above-lines">3</property>
-                <property name="pixels-below-lines">3</property>
-                <property name="editable">False</property>
-                <property name="wrap-mode">word-char</property>
-                <property name="left-margin">10</property>
-                <property name="right-margin">10</property>
-                <property name="top-margin">10</property>
-                <property name="bottom-margin">10</property>
-                <property name="indent">2</property>
-                <accessibility>
-                  <relation type="labelled-by" target="gptest_label1"/>
-                </accessibility>
+                <property name="can-focus">False</property>
+                <child>
+                  <object class="GtkBox" id="gptest_btnbx">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkButton" id="test_label_1">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_1">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_2">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_2">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_3">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_3">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_4">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_4">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_5">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_5">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">4</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_6">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_6">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">5</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_7">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_7">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">6</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_8">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_8">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">7</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_9">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_9">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">8</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_10">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_10">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">9</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_11">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_11">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">10</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_12">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_12">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">11</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_13">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_13">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">12</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_14">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_14">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">13</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_15">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_15">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">14</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_16">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_16">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">15</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_17">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_17">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">16</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_18">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_18">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">17</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_19">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_19">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">18</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_20">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_20">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">19</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_21">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_21">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">20</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_22">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_22">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">21</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_23">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_23">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">22</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_24">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_24">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">23</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_25">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_25">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">24</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_26">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_26">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">25</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_27">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_27">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">26</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_28">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_28">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">27</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_29">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_29">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">28</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_30">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_30">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">29</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_31">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_31">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">30</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_32">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_32">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">31</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_33">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_33">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">32</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_34">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_34">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">33</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_35">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_35">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">34</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_36">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_36">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">35</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_37">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_37">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">36</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_38">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_38">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">37</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_39">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_39">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">38</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_40">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_40">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">39</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_41">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_41">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">40</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_42">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_42">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">41</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_43">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_43">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">42</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_44">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_44">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">43</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_45">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_45">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">44</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_46">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_46">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">45</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_47">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_47">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">46</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_48">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_48">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">47</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_49">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_49">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">48</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_50">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_50">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">49</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_51">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_51">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">50</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_52">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_52">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">51</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_53">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_53">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">52</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_54">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_54">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">53</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_55">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_55">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">54</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_56">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_56">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">55</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_57">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_57">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">56</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_58">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_58">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">57</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_59">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_59">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">58</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_label_60">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_60">testName</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">59</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
           </object>

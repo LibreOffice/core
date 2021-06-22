@@ -8,15 +8,25 @@
  */
 #pragma once
 
+#include <vcl/bitmapex.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/test/GraphicsRenderTests.hxx>
+#include <ImageViewerDialog.hxx>
+
+#include <map>
+#include <vector>
 
 class GraphicsTestsDialog : public weld::GenericDialogController
 {
-    std::unique_ptr<weld::TextView> m_xResultLog;
+    std::unique_ptr<weld::Label> m_xResultLog;
     std::unique_ptr<weld::Button> m_xDownloadResults;
 
+    std::vector<std::unique_ptr<weld::Button>> m_xTestLabels;
+
+    std::map<OString, Bitmap> m_xResultImage;
+    std::map<OString, bool> m_xSkippedTests;
+
     DECL_STATIC_LINK(GraphicsTestsDialog, HandleDownloadRequest, weld::Button&, void);
+    DECL_LINK(HandleResultViewRequest, weld::Button&, void);
 
 public:
     GraphicsTestsDialog(weld::Window* pParent);
