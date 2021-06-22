@@ -680,22 +680,10 @@ GdkClipboard* clipboard_get(SelectionType eSelection)
 
 #if GTK_CHECK_VERSION(4, 0, 0)
 
-struct text_paste_result
-{
-    OUString sText;
-    bool bDone = false;
-};
-
-struct read_paste_result
-{
-    Sequence<sal_Int8> aSeq;
-    bool bDone = false;
-};
-
 void text_async_completed(GObject* source, GAsyncResult* res, gpointer data)
 {
     GdkClipboard* clipboard = GDK_CLIPBOARD(source);
-    text_paste_result* pRes = static_cast<text_paste_result*>(data);
+    text_transfer_result* pRes = static_cast<text_transfer_result*>(data);
 
     gchar* pText = gdk_clipboard_read_text_finish(clipboard, res, nullptr);
     pRes->sText = OUString(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
@@ -709,7 +697,7 @@ void text_async_completed(GObject* source, GAsyncResult* res, gpointer data)
 void read_async_completed(GObject* source, GAsyncResult* res, gpointer data)
 {
     GdkClipboard* clipboard = GDK_CLIPBOARD(source);
-    read_paste_result* pRes = static_cast<read_paste_result*>(data);
+    read_transfer_result* pRes = static_cast<read_transfer_result*>(data);
 
     if (GInputStream* pResult = gdk_clipboard_read_finish(clipboard, res, nullptr, nullptr))
     {
@@ -768,7 +756,7 @@ public:
             aRet <<= aStr.replaceAll("\r\n", "\n");
 #else
             SalInstance* pInstance = GetSalData()->m_pInstance;
-            text_paste_result aRes;
+            text_transfer_result aRes;
             gdk_clipboard_read_text_async(clipboard, nullptr, text_async_completed, &aRes);
             while (!aRes.bDone)
                 pInstance->DoYield(true, false);
@@ -783,7 +771,7 @@ public:
 
 #if GTK_CHECK_VERSION(4, 0, 0)
         SalInstance* pInstance = GetSalData()->m_pInstance;
-        read_paste_result aRes;
+        read_transfer_result aRes;
         const char *mime_types[] = { it->second.getStr(), nullptr };
         gdk_clipboard_read_async(clipboard,
                                  mime_types,

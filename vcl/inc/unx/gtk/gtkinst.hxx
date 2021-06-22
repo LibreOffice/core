@@ -55,6 +55,19 @@ class GtkSalFrame;
 
 #if GTK_CHECK_VERSION(4, 0, 0)
 gint gtk_dialog_run(GtkDialog *dialog);
+
+struct text_transfer_result
+{
+    OUString sText;
+    bool bDone = false;
+};
+
+struct read_transfer_result
+{
+    css::uno::Sequence<sal_Int8> aSeq;
+    bool bDone = false;
+};
+
 #endif
 
 struct VclToGtkHelper
