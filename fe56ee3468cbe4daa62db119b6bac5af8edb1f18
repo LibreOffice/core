@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "15b751c1_b8ce2082",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 32
+      },
+      "lineNbr": 2475,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-22T09:17:51Z",
+      "side": 1,
+      "message": "Hii\n\nWhen I click on ShowPreview button, I expected it to show the Character Styles preview as they are shown in Character Styles toolbar. But it\u0027s not getting getting displayed in that way it is supposed to.. All the character styles names are displayed at this point while loading but still show preview button doesn\u0027t work the proper way.. Does it has something to do with set_item_active?",
+      "revId": "fe56ee3468cbe4daa62db119b6bac5af8edb1f18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
