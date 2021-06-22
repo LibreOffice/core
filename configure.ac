@@ -5378,7 +5378,7 @@ if test "$enable_xmlhelp" = yes; then
     AC_MSG_RESULT([yes])
 else
     if test "$with_help" = yes; then
-        add_warning "Building the XML help, but LO with disabled xmlhelp support. Generated help can't be accesssed from this LO build!"
+        add_warning "Building the XML help, but LO with disabled xmlhelp support. Generated help can't be accessed from this LO build!"
     fi
     AC_MSG_RESULT([no])
 fi
