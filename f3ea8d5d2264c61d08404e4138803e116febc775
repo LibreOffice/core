@@ -16,6 +16,24 @@
       "revId": "f3ea8d5d2264c61d08404e4138803e116febc775",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6435fbd2_1cf1c089",
+        "filename": "include/oox/export/DMLPresetShapeExport.hxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-06-22T14:56:06Z",
+      "side": 1,
+      "message": "thank you :)",
+      "parentUuid": "708f7a59_7d82f508",
+      "revId": "f3ea8d5d2264c61d08404e4138803e116febc775",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
