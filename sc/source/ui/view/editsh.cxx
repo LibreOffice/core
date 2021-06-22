@@ -616,14 +616,13 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 }
             }
             break;
-
-            case SID_OPEN_HYPERLINK:
-                {
-                    const SvxURLField* pURLField = GetURLField();
-                    if ( pURLField )
-                        ScGlobal::OpenURL( pURLField->GetURL(), pURLField->GetTargetFrame(), true );
-                    return;
-                }
+        case SID_OPEN_HYPERLINK:
+            {
+                const SvxURLField* pURLField = GetURLField();
+                if ( pURLField )
+                    ScGlobal::OpenURL( pURLField->GetURL(), pURLField->GetTargetFrame(), true );
+                return;
+            }
         case SID_EDIT_HYPERLINK:
             {
                 // Ensure the field is selected first
