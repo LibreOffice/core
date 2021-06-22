@@ -46,6 +46,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools, public unotest:
     uno::Reference<lang::XComponent> mxComponent;
 
     void testPolyPolygon();
+    void TestDrawImagePointsTypeBitmap();
     void TestDrawString();
     void TestDrawStringAlign();
     void TestDrawStringTransparent();
@@ -87,6 +88,7 @@ public:
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testPolyPolygon);
+    CPPUNIT_TEST(TestDrawImagePointsTypeBitmap);
     CPPUNIT_TEST(TestDrawString);
     CPPUNIT_TEST(TestDrawStringAlign);
     CPPUNIT_TEST(TestDrawStringTransparent);
@@ -188,6 +190,38 @@ void Test::testPolyPolygon()
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/pointarray[1]/point", "x", "2574");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/pointarray[1]/point", "y", "1129");
 
+}
+
+void Test::TestDrawImagePointsTypeBitmap()
+{
+    // tdf#142941 EMF+ file with ObjectTypeImage, FillRects, DrawImagePoints ,records
+    // The test is checking the position of displaying bitmap with too large SrcRect
+
+    Primitive2DSequence aSequence
+        = parseEmf(u"/emfio/qa/cppunit/emf/data/TestDrawImagePointsTypeBitmap.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument
+        = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    CPPUNIT_ASSERT(pDocument);
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor", "color", "#0080ff");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap", "xy11", "5346");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap", "xy12", "0");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap", "xy13", "5558");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap", "xy21", "0");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap", "xy22", "4716");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/bitmap", "xy23", "5564");
+    assertXPath(
+        pDocument, "/primitive2D/metafile/transform/bitmap/data[2]", "row",
+        "020202,ffffff,ffffff,ffffff,fefefe,ffffff,ffffff,fefefe,ffffff,ffffff,f8f8f8,ffffff,"
+        "fdfdfd,ffffff,ffffff,fdfdfd,ffffff,ffffff,ffffff,fbfbfb,010101,ffffff,fefefe,ffffff,"
+        "ffffff,fbfbfb,ffffff,fdfdfd,fcfcfc,fdfdfd,ffffff,ffffff,ffffff,ffffff,ffffff,ffffff,"
+        "ffffff,ffffff,ffffff,ffffff,020202,fdfdfd,ffffff,ffffff,fefefe,ffffff,ffffff,ffffff,"
+        "ffffff,fbfbfb,fefefe,ffffff,fcfcfc,ffffff,fdfdfd,ffffff,ffffff,ffffff,ffffff,fbfbfb,"
+        "010101,ffffff,fefefe,ffffff,ffffff,ffffff,fcfcfc,ffffff,fafafa,ffffff,ffffff,fefefe,"
+        "ffffff,fdfdfd,fefefe,fefefe,ffffff,ffffff,fdfdfd,fffbfb,1e0000,8f4347,b13a3e,b82d32,"
+        "bb3438,b73237,b63338,b33035,b63338");
 }
 
 void Test::TestDrawString()

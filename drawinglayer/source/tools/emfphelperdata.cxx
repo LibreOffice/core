@@ -1443,7 +1443,8 @@ namespace emfplushelper
                             EMFPImage& image = *static_cast<EMFPImage *>(maEMFPObjects[flags & 0xff].get());
                             float sx, sy, sw, sh;
                             ReadRectangle(rMS, sx, sy, sw, sh);
-                            ::tools::Rectangle aSource(Point(sx, sy), Size(sw, sh));
+
+                            ::tools::Rectangle aSource(Point(sx, sy), Size(sw + 1, sh + 1));
                             SAL_INFO("drawinglayer.emf", "EMF+\t " << (type == EmfPlusRecordTypeDrawImagePoints ? "DrawImagePoints" : "DrawImage") << " source rectangle: " << sx << "," << sy << " " << sw << "x" << sh);
                             ::basegfx::B2DPoint aDstPoint;
                             ::basegfx::B2DSize aDstSize;
@@ -1464,10 +1465,43 @@ namespace emfplushelper
                                     ReadPoint(rMS, x2, y2, flags); // upper-right
                                     ReadPoint(rMS, x3, y3, flags); // lower-left
 
-                                    SAL_INFO("drawinglayer.emf", "EMF+\t destination points: P1:" << x1 << "," << y1 << " P2:" << x2 << "," << y2 << " P3:" << x3 << "," << y3);
+                                    SAL_INFO("drawinglayer.emf",
+                                             "EMF+\t destination points: " << x1 << "," << y1 << " "
+                                                                           << x2 << "," << y2 << " "
+                                                                           << x3 << "," << y3);
+                                    float xDstShift = x1;
+                                    float yDstShift = y2;
+                                    float xDstSize = x2 - x1;
+                                    float yDstSize = y3 - y1;
+                                    if (image.type == ImageDataTypeBitmap)
+                                    {
+                                        const Size aSize(image.graphic.GetBitmapEx().GetSizePixel());
+                                        if (sx < 0)
+                                        {
+                                            // If src position is negative then we need shift image to right
+                                            xDstShift = xDstShift + ((-sx) / sw) * (x2 - x1);
+                                            if (sx + sw <= aSize.Width())
+                                                xDstSize = ((sw + sx) / sw) * xDstSize;
+                                            else
+                                                xDstSize = (aSize.Width() / sw) * xDstSize;
+                                        }
+                                        else if (sx + sw > aSize.Width())
+                                            // If the src image is smaller that what we want to cut, then we need to scale down
+                                            xDstSize = ((aSize.Width() - sx) / sw) * xDstSize;
 
-                                    aDstPoint = ::basegfx::B2DPoint(x1, y1);
-                                    aDstSize = ::basegfx::B2DSize(x2 - x1, y3 - y1);
+                                        if (sy < 0)
+                                        {
+                                            yDstShift = yDstShift + ((-sy) / sh) * (y3 - y1);
+                                            if (sy + sh <= aSize.Height())
+                                                yDstSize = ((sh + sy) / sh) * yDstSize;
+                                            else
+                                                yDstSize = (aSize.Height() / sh) * yDstSize;
+                                        }
+                                        else if (sy + sh > aSize.Height())
+                                            yDstSize = ((aSize.Height() - sy) / sh) * yDstSize;
+                                    }
+                                    aDstPoint = ::basegfx::B2DPoint(xDstShift, yDstShift);
+                                    aDstSize = ::basegfx::B2DSize(xDstSize, yDstSize);
                                     fShearX = x3 - x1;
                                     fShearY = y2 - y1;
                                 }
