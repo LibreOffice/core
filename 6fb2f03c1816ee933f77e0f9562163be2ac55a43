@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "707aae19_21e9ca63",
+        "filename": "external/poppler/ExternalPackage_poppler_data.mk",
+        "patchSetId": 13
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2021-06-22T13:14:53Z",
+      "side": 1,
+      "message": "Now that I have added the license info to license.xml, should I still copy over these license files?",
+      "revId": "6fb2f03c1816ee933f77e0f9562163be2ac55a43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a6e1e59d_e1c88c74",
         "filename": "sdext/source/pdfimport/xpdfwrapper/wrapper_gpl.cxx",
         "patchSetId": 13
@@ -16,6 +33,24 @@
       "revId": "6fb2f03c1816ee933f77e0f9562163be2ac55a43",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06058ea8_8422d7bd",
+        "filename": "sdext/source/pdfimport/xpdfwrapper/wrapper_gpl.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2021-06-22T13:14:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a6e1e59d_e1c88c74",
+      "revId": "6fb2f03c1816ee933f77e0f9562163be2ac55a43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -36,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "68b7653d_4e7bb07a",
+        "filename": "sdext/source/pdfimport/xpdfwrapper/wrapper_gpl.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2021-06-22T13:14:53Z",
+      "side": 1,
+      "message": "OK",
+      "parentUuid": "40eb7c47_1cbe4d11",
+      "revId": "6fb2f03c1816ee933f77e0f9562163be2ac55a43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "544cd734_b2e66d75",
         "filename": "sdext/source/pdfimport/xpdfwrapper/wrapper_gpl.cxx",
         "patchSetId": 13
@@ -50,6 +103,24 @@
       "revId": "6fb2f03c1816ee933f77e0f9562163be2ac55a43",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d47e8dd_02d69029",
+        "filename": "sdext/source/pdfimport/xpdfwrapper/wrapper_gpl.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2021-06-22T13:14:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "544cd734_b2e66d75",
+      "revId": "6fb2f03c1816ee933f77e0f9562163be2ac55a43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
