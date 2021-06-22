@@ -187,3 +187,7 @@ LibreOffice.VC.VC.opendb
 
 # lockfile config header
 /solenv/lockfile/autoconf.h
+
+# Android builds
+/android/jniLibs/
+/android/obj/
