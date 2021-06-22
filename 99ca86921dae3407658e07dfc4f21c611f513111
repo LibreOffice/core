@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "34dcf280_d8b8650f",
+        "filename": "cui/source/dialogs/about.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1002126
+      },
+      "writtenOn": "2021-06-22T13:47:44Z",
+      "side": 1,
+      "message": "does not work and I don\u0027t know why probably because it\u0027s expecting other data type (char array maybe?)",
+      "range": {
+        "startLine": 104,
+        "startChar": 35,
+        "endLine": 104,
+        "endChar": 48
+      },
+      "revId": "99ca86921dae3407658e07dfc4f21c611f513111",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
