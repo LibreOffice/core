@@ -765,4 +765,23 @@ void SwFormat::RemoveAllUnos()
     SwPtrMsgPoolItem aMsgHint(RES_REMOVE_UNO_OBJECT, this);
     SwClientNotify(*this, sw::LegacyModifyHint(&aMsgHint, &aMsgHint));
 }
+
+SwFormatsBase::~SwFormatsBase()
+{}
+
+SwFormat* SwFormatsBase::FindFormatByName( std::u16string_view rName ) const
+{
+    SwFormat* pFnd = nullptr;
+    for( size_t n = 0; n < GetFormatCount(); ++n )
+    {
+        // Does the Doc already contain the template?
+        if( GetFormat(n)->HasName( rName ) )
+        {
+            pFnd = GetFormat(n);
+            break;
+        }
+    }
+    return pFnd;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

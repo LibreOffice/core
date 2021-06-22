@@ -758,8 +758,6 @@ public:
     // Remove all language dependencies from all existing formats
     void RemoveAllFormatLanguageDependencies();
 
-    static SwFormat* FindFormatByName(const SwFormatsBase& rFormatArr, std::u16string_view rName);
-
     SwFrameFormat  *MakeFrameFormat(const OUString &rFormatName, SwFrameFormat *pDerivedFrom,
                           bool bBroadcast = false, bool bAuto = true);
     void       DelFrameFormat( SwFrameFormat *pFormat, bool bBroadcast = false );
@@ -770,7 +768,7 @@ public:
     void       DelCharFormat(size_t nFormat, bool bBroadcast = false);
     void       DelCharFormat(SwCharFormat const * pFormat, bool bBroadcast = false);
     SwCharFormat* FindCharFormatByName( std::u16string_view rName ) const
-        {   return static_cast<SwCharFormat*>(FindFormatByName( *mpCharFormatTable, rName )); }
+        {   return mpCharFormatTable->FindFormatByName(rName); }
 
     // Formatcollections (styles)
     // TXT
@@ -798,7 +796,7 @@ public:
                        const bool bResetListAttrs = false,
                        SwRootFrame const* pLayout = nullptr);
     SwTextFormatColl* FindTextFormatCollByName( std::u16string_view rName ) const
-        {   return static_cast<SwTextFormatColl*>(FindFormatByName( *mpTextFormatCollTable, rName )); }
+        {   return mpTextFormatCollTable->FindFormatByName(rName); }
 
     void ChkCondColls();
 

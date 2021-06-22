@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_INC_DOCARY_HXX
 #define INCLUDED_SW_INC_DOCARY_HXX
 
+#include <map>
 #include <vector>
 #include <type_traits>
 #include <o3tl/sorted_vector.hxx>
@@ -40,12 +41,15 @@ struct SwPosition;
 enum class RedlineType : sal_uInt16;
 
 /** provides some methods for generic operations on lists that contain SwFormat* subclasses. */
-class SwFormatsBase
+class SW_DLLPUBLIC SwFormatsBase
 {
 public:
     virtual size_t GetFormatCount() const = 0;
     virtual SwFormat* GetFormat(size_t idx) const = 0;
-    virtual ~SwFormatsBase() {};
+    virtual ~SwFormatsBase();
+
+    // default linear search implementation, some subclasses will override with a more efficient search
+    virtual SwFormat* FindFormatByName(std::u16string_view rName) const;
 
     SwFormatsBase() = default;
     SwFormatsBase(SwFormatsBase const &) = default;
@@ -164,6 +168,10 @@ public:
         Value p = dynamic_cast<Value>(const_cast<SwFormat*>(pFormat));
         return p != nullptr && SwVectorModifyBase<Value>::IsAlive(p);
     }
+
+    // Override return type to reduce casting
+    virtual Value FindFormatByName(std::u16string_view rName) const override
+    { return static_cast<Value>(SwFormatsBase::FindFormatByName(rName)); }
 };
 
 class SwGrfFormatColls final : public SwFormatsModifyBase<SwGrfFormatColl*>
