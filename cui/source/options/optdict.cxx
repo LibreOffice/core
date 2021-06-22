@@ -623,7 +623,7 @@ bool SvxEditDictionaryDialog::NewDelHdl(const weld::Widget* pBtn)
                 nAddRes = linguistic::AddEntryToDic( xDic,
                             aNewWord, bIsNegEntry,
                             aRplcText, false );
-             }
+            }
         }
         if (DictionaryError::NONE != nAddRes)
             SvxDicError(m_xDialog.get(), nAddRes);

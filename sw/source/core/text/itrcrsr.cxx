@@ -935,7 +935,7 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
                             {
                                 nX -= GetInfo().GetFont()->GetRightBorderSpace();
                             }
-                         }
+                        }
                     }
                     bWidth = false;
                     break;

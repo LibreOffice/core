@@ -843,16 +843,16 @@ static const SwFrame * lcl_CalcDownDist( SwDistance &rRet,
                     {
                         if( pLay->IsVertical() )
                         {
-                             if ( pLay->IsVertLR() )
-                              {
+                            if ( pLay->IsVertLR() )
+                            {
                                  nFrameTop = pLay->getFrameArea().Left();
                                  nPrtHeight = pLay->getFramePrintArea().Width();
-                             }
-                             else
-                             {
+                            }
+                            else
+                            {
                                  nFrameTop = pLay->getFrameArea().Left() + pLay->getFrameArea().Width();
                                  nPrtHeight = pLay->getFramePrintArea().Width();
-                             }
+                            }
                         }
                         else
                         {

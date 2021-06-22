@@ -735,7 +735,7 @@ namespace svgio::svgreader
                 // Extract known viewport data
                 // bXXXIsAbsolute tracks whether relative values could be resolved to absolute values
                 if (getParent())
-                    {
+                {
                     // If width or height is not provided, the default 100% is used, see SVG 1.1 section 5.1.2
                     // value 0.0 here is only to initialize variable
                     bool bWidthIsAbsolute(getWidth().isSet() && SvgUnit::percent != getWidth().getUnit());

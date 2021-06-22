@@ -262,7 +262,7 @@ oslFileError SAL_CALL osl_getFileStatus(oslDirectoryItem Item, oslFileStatus* pS
              | RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT));
         assert(ok); (void)ok;
         pStat->uValidFields |= osl_FileStatus_Mask_FileName;
-       }
+    }
     return osl_File_E_None;
 }
 

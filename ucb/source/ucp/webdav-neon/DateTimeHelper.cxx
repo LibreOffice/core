@@ -107,7 +107,7 @@ bool DateTimeHelper::ISO8601_To_DateTime (const OUString& s,
                 dateTime.Seconds = aDateTime.Seconds;
 
                 return true;
-             }
+            }
         }
     }
 

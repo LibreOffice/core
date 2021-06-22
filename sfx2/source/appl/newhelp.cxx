@@ -2055,7 +2055,7 @@ bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
         {
             // do nothing disables the writer accelerators
             bDone = true;
-         }
+        }
         else if ( rKeyCode.IsMod1() && ( KEY_F4 == nKey || KEY_W == nKey ) )
         {
             // <CTRL><F4> or <CTRL><W> -> close top frame

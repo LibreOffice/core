@@ -1670,7 +1670,8 @@ OUString SAL_CALL ScDataPilotFieldObj::getName()
                 aName = *pLayoutName;
             else
                 aName = pDim->GetName();
-        }                                                                }
+        }
+    }
     return aName;
 }
 

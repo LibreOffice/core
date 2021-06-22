@@ -160,7 +160,7 @@ ContextHandlerRef PPTShapeContext::onCreateContext( sal_Int32 aElementToken, con
                               }
                           }
                     }
-                  }
+                }
 
             }
             break;

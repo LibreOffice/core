@@ -440,7 +440,7 @@ bool SbiScanner::NextSym()
             {
                 GenError( ERRCODE_BASIC_SYNTAX );
             }
-       }
+        }
     }
 
     // Hex/octal number? Read in and convert:

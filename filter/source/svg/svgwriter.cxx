@@ -2876,7 +2876,7 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
 
             SvXMLElementExport aRefElem( mrExport, XML_NAMESPACE_NONE, "use", true, true );
             return;
-         }
+        }
     }
 
     BitmapEx aBmpEx( rBmpEx );

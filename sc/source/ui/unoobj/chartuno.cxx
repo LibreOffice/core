@@ -482,7 +482,7 @@ void ScChartObj::GetData_Impl( ScRangeListRef& rRanges, bool& rColHeaders, bool&
             }
             bFound = true;
         }
-     }
+    }
     if( !bFound )
     {
         rRanges = nullptr;

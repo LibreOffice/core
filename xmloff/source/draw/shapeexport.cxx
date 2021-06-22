@@ -1809,8 +1809,8 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
 
             if( nFound & Found::SPEED && eEffect != presentation::AnimationEffect_NONE )
             {
-                 if( eSpeed != presentation::AnimationSpeed_MEDIUM )
-                    {
+                if( eSpeed != presentation::AnimationSpeed_MEDIUM )
+                {
                     SvXMLUnitConverter::convertEnum( msBuffer, eSpeed, aXML_AnimationSpeed_EnumMap );
                     mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_SPEED, msBuffer.makeStringAndClear() );
                 }
@@ -1852,7 +1852,7 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
 
                 SvXMLElementExport aElem( mrExport, XML_NAMESPACE_PRESENTATION, XML_SOUND, true, true );
             }
-       }
+        }
     }
     else if( aClickEventType == gsStarBasic )
     {

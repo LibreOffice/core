@@ -485,7 +485,7 @@ static PointerStyle lcl_msoPointerToLOPointer( tools::Long msoPointerStyle )
         {
             aPointer = styles[ i ].loPointStyle;
             break;
-         }
+        }
     }
     return aPointer;
 }
