@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include <drawinglayer/primitive2d/BufferedDecompositionPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive2d/Tools.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <basegfx/utils/canvastools.hxx>
@@ -102,29 +102,6 @@ BasePrimitive2D::getRange(const uno::Sequence<beans::PropertyValue>& rViewParame
 sal_Int64 SAL_CALL BasePrimitive2D::estimateUsage()
 {
     return 0; // for now ignore the objects themselves
-}
-
-BufferedDecompositionPrimitive2D::BufferedDecompositionPrimitive2D()
-    : BasePrimitive2D()
-    , maBuffered2DDecomposition()
-{
-}
-
-void BufferedDecompositionPrimitive2D::get2DDecomposition(
-    Primitive2DDecompositionVisitor& rVisitor,
-    const geometry::ViewInformation2D& rViewInformation) const
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-
-    if (getBuffered2DDecomposition().empty())
-    {
-        Primitive2DContainer aNewSequence;
-        create2DDecomposition(aNewSequence, rViewInformation);
-        const_cast<BufferedDecompositionPrimitive2D*>(this)->setBuffered2DDecomposition(
-            aNewSequence);
-    }
-
-    rVisitor.append(getBuffered2DDecomposition());
 }
 
 } // end of namespace drawinglayer::primitive2d
