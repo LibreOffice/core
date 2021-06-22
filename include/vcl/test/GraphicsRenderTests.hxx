@@ -15,21 +15,23 @@
 #include <vcl/test/TestResult.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
+#include <unordered_map>
 #include <vector>
 
 class VCL_PLUGIN_PUBLIC GraphicsRenderTests
 {
-public:
+    bool m_aStoreResultantBitmap;
     //For storing the results correspondingly to the tests.
-    std::vector<OString> m_aPassed;
-    std::vector<OString> m_aQuirky;
-    std::vector<OString> m_aFailed;
+    std::vector<OUString> m_aPassed;
+    std::vector<OUString> m_aQuirky;
+    std::vector<OUString> m_aFailed;
     //For storing Skipped tests.
-    std::vector<OString> m_aSkipped;
+    std::vector<OUString> m_aSkipped;
+    //For storing the resultant bitmap correspondingly to the tests.
+    std::unordered_map<OUString, Bitmap> m_aResultantBitmap;
     //For storing the current graphics Backend in use.
     OUString m_aCurGraphicsBackend;
 
-private:
     void testDrawRectWithRectangle();
     void testDrawRectWithPixel();
     void testDrawRectWithLine();
@@ -86,9 +88,15 @@ private:
     void testLineCapRound();
     void testLineCapSquare();
     void testLineCapButt();
-    void updateResult(vcl::test::TestResult const result, OString atestname);
+    void updateResult(vcl::test::TestResult const result, OUString atestname);
     void runALLTests();
 
 public:
-    void run();
+    std::vector<OUString>& getPassedTests();
+    std::vector<OUString>& getQuirkyTests();
+    std::vector<OUString>& getFailedTests();
+    std::vector<OUString>& getSkippedTests();
+    std::unordered_map<OUString, Bitmap>& getResultBitmaps();
+    OUString getResultString();
+    void run(bool storeResultBitmap = false);
 };

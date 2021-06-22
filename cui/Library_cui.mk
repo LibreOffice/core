@@ -139,6 +139,7 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/dialogs/postdlg \
     cui/source/dialogs/QrCodeGenDialog \
     cui/source/dialogs/GraphicTestsDialog \
+    cui/source/dialogs/ImageViewerDialog \
     cui/source/dialogs/scriptdlg \
     cui/source/dialogs/SignatureLineDialogBase \
     cui/source/dialogs/SignatureLineDialog \

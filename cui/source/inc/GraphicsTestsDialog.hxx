@@ -8,17 +8,41 @@
  */
 #pragma once
 
+#include <vcl/bitmapex.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/test/GraphicsRenderTests.hxx>
+#include <tools/link.hxx>
+
+#include "ImageViewerDialog.hxx"
+
+class GraphicTestEntry final
+{
+private:
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Container> m_xContainer;
+    std::unique_ptr<weld::Label> m_xTestLabel;
+    std::unique_ptr<weld::Button> m_xTestButton;
+
+    weld::Dialog* m_xParentDialog;
+
+    Bitmap m_xResultBitmap;
+
+public:
+    DECL_LINK(HandleResultViewRequest, weld::Button&, void);
+    GraphicTestEntry(weld::Container* pParent, weld::Dialog* pDialog, OUString aTestName,
+                     OUString aTestStatus, Bitmap aTestBitmap);
+    weld::Widget* get_widget() const { return m_xContainer.get(); }
+};
 
 class GraphicsTestsDialog : public weld::GenericDialogController
 {
     std::unique_ptr<weld::TextView> m_xResultLog;
     std::unique_ptr<weld::Button> m_xDownloadResults;
+    std::unique_ptr<weld::Box> m_xContainerBox;
 
     DECL_STATIC_LINK(GraphicsTestsDialog, HandleDownloadRequest, weld::Button&, void);
 
 public:
     GraphicsTestsDialog(weld::Window* pParent);
-    void runGraphicsTestandUpdateLog();
+    virtual short run() override;
 };
