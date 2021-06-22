@@ -13,49 +13,48 @@ from libreoffice.calc.document import get_cell_by_position
 class tdf118308(UITestCase):
 
     def test_tdf118308(self):
-        calc_doc = self.ui_test.create_doc_in_start_center("calc")
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("calc"):
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            document = self.ui_test.get_component()
 
-        enter_text_to_cell(gridwin, "A1", "A")
-        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
-        self.xUITest.executeCommand(".uno:Copy")
+            enter_text_to_cell(gridwin, "A1", "A")
+            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
+            self.xUITest.executeCommand(".uno:Copy")
 
-        self.ui_test.execute_dialog_through_command(".uno:CloseDoc")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xDiscardBtn = xDialog.getChild("discard")
-        self.ui_test.close_dialog_through_button(xDiscardBtn)
+            self.ui_test.execute_dialog_through_command(".uno:CloseDoc")
+            xDialog = self.xUITest.getTopFocusWindow()
+            xDiscardBtn = xDialog.getChild("discard")
+            self.ui_test.close_dialog_through_button(xDiscardBtn)
 
-        calc_doc = self.ui_test.create_doc_in_start_center("calc")
+        with self.ui_test.create_doc_in_start_center("calc"):
 
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            document = self.ui_test.get_component()
 
-        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
+            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
 
-        self.ui_test.execute_dialog_through_command(".uno:PasteSpecial")
-        xDialog = self.xUITest.getTopFocusWindow()
+            self.ui_test.execute_dialog_through_command(".uno:PasteSpecial")
+            xDialog = self.xUITest.getTopFocusWindow()
 
-        # Without the fix in place, this test would have failed here
-        # since a different dialog would have been opened and the children
-        # wouldn't have been found
-        xText = xDialog.getChild("text")
-        xNumbers = xDialog.getChild("numbers")
-        xDatetime = xDialog.getChild("datetime")
-        xFormats = xDialog.getChild("formats")
+            # Without the fix in place, this test would have failed here
+            # since a different dialog would have been opened and the children
+            # wouldn't have been found
+            xText = xDialog.getChild("text")
+            xNumbers = xDialog.getChild("numbers")
+            xDatetime = xDialog.getChild("datetime")
+            xFormats = xDialog.getChild("formats")
 
-        self.assertEqual("true", get_state_as_dict(xText)["Selected"])
-        self.assertEqual("true", get_state_as_dict(xNumbers)["Selected"])
-        self.assertEqual("true", get_state_as_dict(xDatetime)["Selected"])
-        self.assertEqual("false", get_state_as_dict(xFormats)["Selected"])
+            self.assertEqual("true", get_state_as_dict(xText)["Selected"])
+            self.assertEqual("true", get_state_as_dict(xNumbers)["Selected"])
+            self.assertEqual("true", get_state_as_dict(xDatetime)["Selected"])
+            self.assertEqual("false", get_state_as_dict(xFormats)["Selected"])
 
-        xOkBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOkBtn)
+            xOkBtn = xDialog.getChild("ok")
+            self.ui_test.close_dialog_through_button(xOkBtn)
 
-        self.assertEqual("A", get_cell_by_position(document, 0, 0, 0).getString())
-        self.ui_test.close_doc()
+            self.assertEqual("A", get_cell_by_position(document, 0, 0, 0).getString())
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
 

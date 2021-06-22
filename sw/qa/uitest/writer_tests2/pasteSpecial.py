@@ -10,32 +10,30 @@ from uitest.uihelper.common import type_text
 class PasteSpecial(UITestCase):
 
    def test_pasteSpecial(self):
-        self.ui_test.create_doc_in_start_center("writer")
-        document = self.ui_test.get_component()
-        xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
+        with self.ui_test.create_doc_in_start_center("writer"):
+            document = self.ui_test.get_component()
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-        type_text(xWriterEdit, "test")
+            type_text(xWriterEdit, "test")
 
-        for i in range(5):
-            self.xUITest.executeCommand(".uno:SelectAll")
-            self.xUITest.executeCommand(".uno:Copy")
+            for i in range(5):
+                self.xUITest.executeCommand(".uno:SelectAll")
+                self.xUITest.executeCommand(".uno:Copy")
 
-            self.ui_test.execute_dialog_through_command(".uno:PasteSpecial")
-            xDialog = self.xUITest.getTopFocusWindow()
+                self.ui_test.execute_dialog_through_command(".uno:PasteSpecial")
+                xDialog = self.xUITest.getTopFocusWindow()
 
-            xList = xDialog.getChild('list')
-            xChild = xList.getChild(str(i))
+                xList = xDialog.getChild('list')
+                xChild = xList.getChild(str(i))
 
-            xChild.executeAction("SELECT", tuple())
+                xChild.executeAction("SELECT", tuple())
 
-            xOkBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOkBtn)
+                xOkBtn = xDialog.getChild("ok")
+                self.ui_test.close_dialog_through_button(xOkBtn)
 
-            self.xUITest.executeCommand(".uno:Undo")
+                self.xUITest.executeCommand(".uno:Undo")
 
-            self.assertEqual(document.Text.String, "test")
-
-        self.ui_test.close_doc()
+                self.assertEqual(document.Text.String, "test")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

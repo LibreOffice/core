@@ -18,67 +18,63 @@ class HyperlinkDialog(UITestCase):
 
     def test_hyperlink_dialog_vertical_tab(self):
 
-        self.ui_test.create_doc_in_start_center("writer")
-        MainWindow = self.xUITest.getTopFocusWindow()
+        with self.ui_test.create_doc_in_start_center("writer"):
+            MainWindow = self.xUITest.getTopFocusWindow()
 
-        self.ui_test.execute_dialog_through_command(".uno:HyperlinkDialog")
-        xDialog  = self.xUITest.getTopFocusWindow()
+            self.ui_test.execute_dialog_through_command(".uno:HyperlinkDialog")
+            xDialog  = self.xUITest.getTopFocusWindow()
 
-        # Test the vertical tab
-        xtab=xDialog.getChild("tabcontrol")
-        self.assertEqual(get_state_as_dict(xtab)["PageCount"], "4")
+            # Test the vertical tab
+            xtab=xDialog.getChild("tabcontrol")
+            self.assertEqual(get_state_as_dict(xtab)["PageCount"], "4")
 
-        xtab.executeAction("SELECT", mkPropertyValues({"POS": "0"}))
-        self.assertEqual(get_state_as_dict(xtab)["CurrPageTitel"], "~Internet")
-        self.assertEqual(get_state_as_dict(xtab)["CurrPagePos"], "0")
+            xtab.executeAction("SELECT", mkPropertyValues({"POS": "0"}))
+            self.assertEqual(get_state_as_dict(xtab)["CurrPageTitel"], "~Internet")
+            self.assertEqual(get_state_as_dict(xtab)["CurrPagePos"], "0")
 
-        xtab.executeAction("SELECT", mkPropertyValues({"POS": "1"}))
-        self.assertEqual(get_state_as_dict(xtab)["CurrPageTitel"], "~Mail")
-        self.assertEqual(get_state_as_dict(xtab)["CurrPagePos"], "1")
+            xtab.executeAction("SELECT", mkPropertyValues({"POS": "1"}))
+            self.assertEqual(get_state_as_dict(xtab)["CurrPageTitel"], "~Mail")
+            self.assertEqual(get_state_as_dict(xtab)["CurrPagePos"], "1")
 
-        xtab.executeAction("SELECT", mkPropertyValues({"POS": "2"}))
-        self.assertEqual(get_state_as_dict(xtab)["CurrPageTitel"], "~Document")
-        self.assertEqual(get_state_as_dict(xtab)["CurrPagePos"], "2")
+            xtab.executeAction("SELECT", mkPropertyValues({"POS": "2"}))
+            self.assertEqual(get_state_as_dict(xtab)["CurrPageTitel"], "~Document")
+            self.assertEqual(get_state_as_dict(xtab)["CurrPagePos"], "2")
 
-        xtab.executeAction("SELECT", mkPropertyValues({"POS": "3"}))
-        self.assertEqual(get_state_as_dict(xtab)["CurrPageTitel"], "~New Document")
-        self.assertEqual(get_state_as_dict(xtab)["CurrPagePos"], "3")
+            xtab.executeAction("SELECT", mkPropertyValues({"POS": "3"}))
+            self.assertEqual(get_state_as_dict(xtab)["CurrPageTitel"], "~New Document")
+            self.assertEqual(get_state_as_dict(xtab)["CurrPagePos"], "3")
 
-        xcancel = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xcancel)
-
-        self.ui_test.close_doc()
+            xcancel = xDialog.getChild("cancel")
+            self.ui_test.close_dialog_through_button(xcancel)
 
     def test_insert_hyperlink(self):
 
-        self.ui_test.create_doc_in_start_center("writer")
-        xMainWindow = self.xUITest.getTopFocusWindow()
+        with self.ui_test.create_doc_in_start_center("writer"):
+            xMainWindow = self.xUITest.getTopFocusWindow()
 
-        self.ui_test.execute_dialog_through_command(".uno:HyperlinkDialog")
-        xDialog  = self.xUITest.getTopFocusWindow()
+            self.ui_test.execute_dialog_through_command(".uno:HyperlinkDialog")
+            xDialog  = self.xUITest.getTopFocusWindow()
 
-        # insert link
-        xtab=xDialog.getChild("tabcontrol")
-        xtab.executeAction("SELECT", mkPropertyValues({"POS": "0"}))
+            # insert link
+            xtab=xDialog.getChild("tabcontrol")
+            xtab.executeAction("SELECT", mkPropertyValues({"POS": "0"}))
 
-        xtarget = xDialog.getChild("target")
-        xtarget.executeAction("TYPE", mkPropertyValues({"TEXT": "http://www.libreoffice.org/"}))
-        self.assertEqual(get_state_as_dict(xtarget)["Text"], "http://www.libreoffice.org/")
+            xtarget = xDialog.getChild("target")
+            xtarget.executeAction("TYPE", mkPropertyValues({"TEXT": "http://www.libreoffice.org/"}))
+            self.assertEqual(get_state_as_dict(xtarget)["Text"], "http://www.libreoffice.org/")
 
-        xindication = xDialog.getChild("indication")
-        xindication.executeAction("TYPE", mkPropertyValues({"TEXT": "link"}))
-        self.assertEqual(get_state_as_dict(xindication)["Text"], "link")
+            xindication = xDialog.getChild("indication")
+            xindication.executeAction("TYPE", mkPropertyValues({"TEXT": "link"}))
+            self.assertEqual(get_state_as_dict(xindication)["Text"], "link")
 
-        xok = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xok)
+            xok = xDialog.getChild("ok")
+            self.ui_test.close_dialog_through_button(xok)
 
-        # Check that the link is added
-        xMainWindow = self.xUITest.getTopFocusWindow()
-        xedit = xMainWindow.getChild("writer_edit")
-        xedit.executeAction("SELECT", mkPropertyValues({"START_POS": "0", "END_POS": "4"}))
-        self.assertEqual(get_state_as_dict(xedit)["SelectedText"], "link")
-
-        self.ui_test.close_doc()
+            # Check that the link is added
+            xMainWindow = self.xUITest.getTopFocusWindow()
+            xedit = xMainWindow.getChild("writer_edit")
+            xedit.executeAction("SELECT", mkPropertyValues({"START_POS": "0", "END_POS": "4"}))
+            self.assertEqual(get_state_as_dict(xedit)["SelectedText"], "link")
 
     def test_tdf141166(self):
         # Skip this test for --with-help=html and --with-help=online, as that would fail with a
@@ -95,19 +91,18 @@ class HyperlinkDialog(UITestCase):
         if re.compile(r'XMLHELP\b').search(os.getenv('BUILD_TYPE')):
             return
 
-        self.ui_test.create_doc_in_start_center("writer")
-        xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
+        with self.ui_test.create_doc_in_start_center("writer"):
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-        self.ui_test.execute_dialog_through_command(".uno:HyperlinkDialog")
-        xDialog  = self.xUITest.getTopFocusWindow()
-        xHelp = xDialog.getChild("help")
-        xHelp.executeAction('FOCUS', tuple())
+            self.ui_test.execute_dialog_through_command(".uno:HyperlinkDialog")
+            xDialog  = self.xUITest.getTopFocusWindow()
+            xHelp = xDialog.getChild("help")
+            xHelp.executeAction('FOCUS', tuple())
 
-        # Without the fix in place, this test would have crashed here
-        with self.ui_test.execute_blocking_action(xHelp.executeAction,
-                args=("CLICK", tuple()), close_button="cancel"):
-            pass
+            # Without the fix in place, this test would have crashed here
+            with self.ui_test.execute_blocking_action(xHelp.executeAction,
+                    args=("CLICK", tuple()), close_button="cancel"):
+                pass
 
-        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

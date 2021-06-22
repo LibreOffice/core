@@ -15,22 +15,20 @@ class tdf124295(UITestCase):
 
     def test_tdf124295(self):
         # Open spreadsheet and insert chart
-        self.ui_test.create_doc_in_start_center("calc")
-        self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart")
-        xChartDlg = self.xUITest.getTopFocusWindow()
+        with self.ui_test.create_doc_in_start_center("calc"):
+            self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart")
+            xChartDlg = self.xUITest.getTopFocusWindow()
 
-        # Click 3D look check button
-        x3DCheckBtn = xChartDlg.getChild("3dlook")
-        x3DCheckBtn.executeAction("CLICK", tuple())
+            # Click 3D look check button
+            x3DCheckBtn = xChartDlg.getChild("3dlook")
+            x3DCheckBtn.executeAction("CLICK", tuple())
 
-        x3DSchemeLstBox = xChartDlg.getChild("3dscheme")
-        # Without the fix in place, this test would have failed with:
-        # AssertionError: 'Realistic' != ''
-        self.assertEqual("Realistic", get_state_as_dict(x3DSchemeLstBox)["SelectEntryText"])
+            x3DSchemeLstBox = xChartDlg.getChild("3dscheme")
+            # Without the fix in place, this test would have failed with:
+            # AssertionError: 'Realistic' != ''
+            self.assertEqual("Realistic", get_state_as_dict(x3DSchemeLstBox)["SelectEntryText"])
 
-        xCancelBtn = xChartDlg.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCancelBtn)
-
-        self.ui_test.close_doc()
+            xCancelBtn = xChartDlg.getChild("cancel")
+            self.ui_test.close_dialog_through_button(xCancelBtn)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
