@@ -37,7 +37,7 @@ class SwList
         SwList( const OUString& sListId,
                 SwNumRule& rDefaultListStyle,
                 const SwNodes& rNodes );
-        ~SwList();
+        ~SwList() COVERITY_NOEXCEPT_FALSE;
 
         const OUString & GetListId() const { return msListId; }
 
