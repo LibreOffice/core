@@ -94,7 +94,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testShadowScaleOrigin)
     // i.e. the shadow origin was not the top right corner for scaling (larger x position, so it was
     // visible on the right of the shape as well).
     CPPUNIT_ASSERT_EQUAL(-705., std::round(fShadowX));
-    CPPUNIT_ASSERT_EQUAL(-685., std::round(fShadowY));
+    CPPUNIT_ASSERT_EQUAL(-684., std::round(fShadowY));
 }
 
 CPPUNIT_TEST_FIXTURE(SdrTest, testZeroWidthTextWrap)

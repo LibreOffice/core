@@ -112,7 +112,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testSemiTransparentText)
     // i.e. the text was just plain red, not semi-transparent.
     double fTransparence = getXPath(pDocument, "//unifiedtransparence", "transparence").toDouble();
     CPPUNIT_ASSERT_EQUAL(nTransparence,
-                         static_cast<sal_Int16>(basegfx::fround(fTransparence * 100)));
+                         static_cast<sal_Int16>(basegfx::fround(fTransparence)));
 }
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testHandlePathObjScale)
