@@ -83,6 +83,8 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/gallerytitledialog \
 	cui/uiconfig/ui/galleryupdateprogress \
 	cui/uiconfig/ui/graphictestdlg \
+	cui/uiconfig/ui/graphictestentry \
+	cui/uiconfig/ui/imageviewer \
 	cui/uiconfig/ui/hangulhanjaadddialog \
 	cui/uiconfig/ui/hangulhanjaeditdictdialog \
 	cui/uiconfig/ui/hangulhanjaconversiondialog \
