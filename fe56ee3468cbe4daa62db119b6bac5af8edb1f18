@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "193afb82_27e99539",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 32
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-22T20:44:52Z",
+      "side": 1,
+      "message": "Hii\n\nOne error I noticed while running the application is that when we click on right button in the character styles tree view, the popup_menu launches at paragraph styles tree view..\n\nI think PrepareMenu and ShowMenu in line 328 are responsible for this..These functions check if mxTreeView is visible and if found visible, it pops up the popup menu on the mouse position in the respective treeview..\nHowever, in the new scenario, both mxTreeView and mxCharTreeView are visible at the same time..\nPlease tell me that how to decide which treeview\u0027s iterator to select in PrepareMenu (in line number 336) ?",
+      "range": {
+        "startLine": 320,
+        "startChar": 4,
+        "endLine": 320,
+        "endChar": 42
+      },
+      "revId": "fe56ee3468cbe4daa62db119b6bac5af8edb1f18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "15b751c1_b8ce2082",
         "filename": "sfx2/source/dialog/templdlg.cxx",
         "patchSetId": 32
