@@ -18,10 +18,12 @@
  */
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/text/XTextColumns.hpp>
 
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -32,6 +34,7 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <svl/hint.hxx>
+#include <svl/intitem.hxx>
 #include <svl/itemset.hxx>
 
 #include <svx/xflbmtit.hxx>
@@ -41,6 +44,7 @@
 #include <svx/unoshprp.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/svdpool.hxx>
+#include <svx/sdmetitm.hxx>
 #include <svx/sdtaaitm.hxx>
 #include <svx/sdtacitm.hxx>
 #include <svx/sdtayitm.hxx>
@@ -998,6 +1002,23 @@ void SAL_CALL SdStyleSheet::setPropertyValue( const OUString& aPropertyName, con
         {
             rStyleSet.Put( XFillBmpStretchItem( eMode == BitmapMode_STRETCH ) );
             rStyleSet.Put( XFillBmpTileItem( eMode == BitmapMode_REPEAT ) );
+            return;
+        }
+        throw IllegalArgumentException();
+    }
+
+    if (pEntry->nWID == OWN_ATTR_TEXTCOLUMNS)
+    {
+        if (css::uno::Reference<css::text::XTextColumns> xColumns; aValue >>= xColumns)
+        {
+            rStyleSet.Put(SfxInt16Item(SDRATTR_TEXTCOLUMNS_NUMBER, xColumns->getColumnCount()));
+            if (css::uno::Reference<css::beans::XPropertySet> xPropSet{ xColumns,
+                                                                        css::uno::UNO_QUERY })
+            {
+                auto aVal = xPropSet->getPropertyValue("AutomaticDistance");
+                if (sal_Int32 nSpacing; aVal >>= nSpacing)
+                    rStyleSet.Put(SdrMetricItem(SDRATTR_TEXTCOLUMNS_SPACING, nSpacing));
+            }
             return;
         }
         throw IllegalArgumentException();
