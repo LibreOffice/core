@@ -1142,82 +1142,83 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
     if (!::dbtools::getConnection(Reference< XRowSet > (getDataSource(),UNO_QUERY)).is())
         return nAction;
 
-    if ( IsDropFormatSupported( SotClipboardFormatId::STRING ) ) do
-    {   // odd construction, but spares us a lot of (explicit ;) goto's
+    if ( IsDropFormatSupported( SotClipboardFormatId::STRING ) )
+        do
+        {   // odd construction, but spares us a lot of (explicit ;) goto's
 
-        if (!GetEmptyRow().is())
-            // without an empty row we're not in update mode
-            break;
-
-        const sal_Int32   nRow = GetRowAtYPosPixel(rEvt.maPosPixel.Y(), false);
-        const sal_uInt16  nCol = GetColumnId(GetColumnAtXPosPixel(rEvt.maPosPixel.X()));
-
-        sal_Int32 nCorrectRowCount = GetRowCount();
-        if (GetOptions() & DbGridControlOptions::Insert)
-            --nCorrectRowCount; // there is an empty row for inserting records
-        if (IsCurrentAppending())
-            --nCorrectRowCount; // the current data record doesn't really exist, we are appending a new one
-
-        if ( (nCol == BROWSER_INVALIDID) || (nRow >= nCorrectRowCount) || (nCol == 0) )
-            // no valid cell under the mouse cursor
-            break;
-
-        tools::Rectangle aRect = GetCellRect(nRow, nCol, false);
-        if (!aRect.IsInside(rEvt.maPosPixel))
-            // not dropped within a cell (a cell isn't as wide as the column - the are small spaces)
-            break;
-
-        if ((IsModified() || (GetCurrentRow().is() && GetCurrentRow()->IsModified())) && (GetCurrentPos() != nRow))
-            // there is a current and modified row or cell and he text is to be dropped into another one
-            break;
-
-        CellControllerRef xCurrentController = Controller();
-        if (xCurrentController.is() && xCurrentController->IsValueChangedFromSaved() && ((nRow != GetCurRow()) || (nCol != GetCurColumnId())))
-            // the current controller is modified and the user wants to drop in another cell -> no chance
-            // (when leaving the modified cell an error may occur - this is deadly while dragging)
-            break;
-
-        Reference< XPropertySet >  xField = getField(GetModelColumnPos(nCol));
-        if (!xField.is())
-            // the column is not valid bound (for instance a binary field)
-            break;
-
-        try
-        {
-            if (::comphelper::getBOOL(xField->getPropertyValue(PROPERTY_ISREADONLY)))
+            if (!GetEmptyRow().is())
+                // without an empty row we're not in update mode
                 break;
-        }
-        catch (const Exception& )
-        {
-            // assume RO
-            break;
-        }
 
-        try
-        {
-            // assume that text can be dropped into a field if the column has a css::awt::XTextComponent interface
-            Reference< XIndexAccess >  xColumnControls(static_cast<css::form::XGridPeer*>(GetPeer()), UNO_QUERY);
-            if (xColumnControls.is())
+            const sal_Int32   nRow = GetRowAtYPosPixel(rEvt.maPosPixel.Y(), false);
+            const sal_uInt16  nCol = GetColumnId(GetColumnAtXPosPixel(rEvt.maPosPixel.X()));
+
+            sal_Int32 nCorrectRowCount = GetRowCount();
+            if (GetOptions() & DbGridControlOptions::Insert)
+                --nCorrectRowCount; // there is an empty row for inserting records
+            if (IsCurrentAppending())
+                --nCorrectRowCount; // the current data record doesn't really exist, we are appending a new one
+
+            if ( (nCol == BROWSER_INVALIDID) || (nRow >= nCorrectRowCount) || (nCol == 0) )
+                // no valid cell under the mouse cursor
+                break;
+
+            tools::Rectangle aRect = GetCellRect(nRow, nCol, false);
+            if (!aRect.IsInside(rEvt.maPosPixel))
+                // not dropped within a cell (a cell isn't as wide as the column - the are small spaces)
+                break;
+
+            if ((IsModified() || (GetCurrentRow().is() && GetCurrentRow()->IsModified())) && (GetCurrentPos() != nRow))
+                // there is a current and modified row or cell and he text is to be dropped into another one
+                break;
+
+            CellControllerRef xCurrentController = Controller();
+            if (xCurrentController.is() && xCurrentController->IsValueChangedFromSaved() && ((nRow != GetCurRow()) || (nCol != GetCurColumnId())))
+                // the current controller is modified and the user wants to drop in another cell -> no chance
+                // (when leaving the modified cell an error may occur - this is deadly while dragging)
+                break;
+
+            Reference< XPropertySet >  xField = getField(GetModelColumnPos(nCol));
+            if (!xField.is())
+                // the column is not valid bound (for instance a binary field)
+                break;
+
+            try
             {
-                Reference< css::awt::XTextComponent >  xColControl(
-                    xColumnControls->getByIndex(GetViewColumnPos(nCol)),
-                    css::uno::UNO_QUERY);
-                if (xColControl.is())
-                {
-                    m_bActivatingForDrop = true;
-                    GoToRowColumnId(nRow, nCol);
-                    m_bActivatingForDrop = false;
+                if (::comphelper::getBOOL(xField->getPropertyValue(PROPERTY_ISREADONLY)))
+                    break;
+            }
+            catch (const Exception& )
+            {
+                // assume RO
+                break;
+            }
 
-                    nAction = DND_ACTION_COPY;
+            try
+            {
+                // assume that text can be dropped into a field if the column has a css::awt::XTextComponent interface
+                Reference< XIndexAccess >  xColumnControls(static_cast<css::form::XGridPeer*>(GetPeer()), UNO_QUERY);
+                if (xColumnControls.is())
+                {
+                    Reference< css::awt::XTextComponent >  xColControl(
+                        xColumnControls->getByIndex(GetViewColumnPos(nCol)),
+                        css::uno::UNO_QUERY);
+                    if (xColControl.is())
+                    {
+                        m_bActivatingForDrop = true;
+                        GoToRowColumnId(nRow, nCol);
+                        m_bActivatingForDrop = false;
+
+                        nAction = DND_ACTION_COPY;
+                    }
                 }
             }
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("dbaccess");
-        }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION("dbaccess");
+            }
 
-    } while (false);
+        } while (false);
 
     if(nAction != DND_ACTION_COPY && GetEmptyRow().is())
     {

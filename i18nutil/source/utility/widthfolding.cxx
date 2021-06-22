@@ -115,82 +115,82 @@ OUString widthfolding::compose_ja_voiced_sound_marks (const OUString& inStr, sal
   // This conversion algorithm requires at least one character.
   if (nCount > 0) {
 
-  // .. .. KA         VOICE .. ..
-  //       ^          ^
-  //       previousChar   currentChar
-  //       ^
-  //       position
-  //
-  // will be converted to
-  // .. .. GA       .. ..
+      // .. .. KA         VOICE .. ..
+      //       ^          ^
+      //       previousChar   currentChar
+      //       ^
+      //       position
+      //
+      // will be converted to
+      // .. .. GA       .. ..
 
-  sal_Int32 *p = nullptr;
-  sal_Int32 position = 0;
-  if (useOffset) {
-      // Allocate nCount length to offset argument.
-      offset.realloc( nCount );
-      p = offset.getArray();
-      position = startPos;
-  }
-
-  //
-  sal_Unicode previousChar = *src ++;
-  sal_Unicode currentChar;
-
-  // Composition: KA + voice-mark --> GA
-  while (-- nCount > 0) {
-    currentChar = *src ++;
-    // see http://charts.unicode.org/Web/U3040.html Hiragana (U+3040..U+309F)
-    // see http://charts.unicode.org/Web/U30A0.html Katakana (U+30A0..U+30FF)
-    // 0x3099 COMBINING KATAKANA-HIRAGANA VOICED SOUND MARK
-    // 0x309a COMBINING KATAKANA-HIRAGANA SEMI-VOICED SOUND MARK
-    // 0x309b KATAKANA-HIRAGANA VOICED SOUND MARK
-    // 0x309c KATAKANA-HIRAGANA SEMI-VOICED SOUND MARK
-    int j = currentChar - 0x3099; // 0x3099, 0x309a, 0x309b, 0x309c ?
-
-    if (2 <= j && j <= 3) // 0x309b or 0x309c
-        j -= 2;
-
-    if (0 <= j && j <= 1) {
-      // 0 addresses a code point regarding 0x3099 or 0x309b (voiced sound mark),
-      // 1 is 0x309a or 0x309c (semi-voiced sound mark)
-      int i = int(previousChar - 0x3040); // i acts as an index of array
-      bool bCompose = false;
-
-      if (0 <= i && i <= (0x30ff - 0x3040) && composition_table[i][j])
-        bCompose = true;
-
-      // not to use combined KATAKANA LETTER VU
-      if ( previousChar == 0x30a6 && (nFlags & WIDTHFOLDING_DONT_USE_COMBINED_VU) )
-        bCompose = false;
-
-      if( bCompose ){
-        if (useOffset) {
-            position ++;
-            *p ++ = position ++;
-        }
-        *dst ++ =  composition_table[i][j];
-        previousChar = *src ++;
-        nCount --;
-        continue;
+      sal_Int32 *p = nullptr;
+      sal_Int32 position = 0;
+      if (useOffset) {
+          // Allocate nCount length to offset argument.
+          offset.realloc( nCount );
+          p = offset.getArray();
+          position = startPos;
       }
-    }
-    if (useOffset)
-        *p ++ = position ++;
-    *dst ++ = previousChar;
-    previousChar = currentChar;
+
+      //
+      sal_Unicode previousChar = *src ++;
+      sal_Unicode currentChar;
+
+      // Composition: KA + voice-mark --> GA
+      while (-- nCount > 0) {
+        currentChar = *src ++;
+        // see http://charts.unicode.org/Web/U3040.html Hiragana (U+3040..U+309F)
+        // see http://charts.unicode.org/Web/U30A0.html Katakana (U+30A0..U+30FF)
+        // 0x3099 COMBINING KATAKANA-HIRAGANA VOICED SOUND MARK
+        // 0x309a COMBINING KATAKANA-HIRAGANA SEMI-VOICED SOUND MARK
+        // 0x309b KATAKANA-HIRAGANA VOICED SOUND MARK
+        // 0x309c KATAKANA-HIRAGANA SEMI-VOICED SOUND MARK
+        int j = currentChar - 0x3099; // 0x3099, 0x309a, 0x309b, 0x309c ?
+
+        if (2 <= j && j <= 3) // 0x309b or 0x309c
+            j -= 2;
+
+        if (0 <= j && j <= 1) {
+          // 0 addresses a code point regarding 0x3099 or 0x309b (voiced sound mark),
+          // 1 is 0x309a or 0x309c (semi-voiced sound mark)
+          int i = int(previousChar - 0x3040); // i acts as an index of array
+          bool bCompose = false;
+
+          if (0 <= i && i <= (0x30ff - 0x3040) && composition_table[i][j])
+            bCompose = true;
+
+          // not to use combined KATAKANA LETTER VU
+          if ( previousChar == 0x30a6 && (nFlags & WIDTHFOLDING_DONT_USE_COMBINED_VU) )
+            bCompose = false;
+
+          if( bCompose ){
+            if (useOffset) {
+                position ++;
+                *p ++ = position ++;
+            }
+            *dst ++ =  composition_table[i][j];
+            previousChar = *src ++;
+            nCount --;
+            continue;
+          }
+        }
+        if (useOffset)
+            *p ++ = position ++;
+        *dst ++ = previousChar;
+        previousChar = currentChar;
+      }
+
+      if (nCount == 0) {
+        if (useOffset)
+            *p = position;
+        *dst ++ = previousChar;
+      }
+
+      *dst = u'\0';
+
+      newStr->length = sal_Int32(dst - newStr->buffer);
   }
-
-  if (nCount == 0) {
-    if (useOffset)
-        *p = position;
-    *dst ++ = previousChar;
-  }
-
-  *dst = u'\0';
-
-  newStr->length = sal_Int32(dst - newStr->buffer);
- }
   if (useOffset)
       offset.realloc(newStr->length);
   return OUString(newStr, SAL_NO_ACQUIRE); // take ownership

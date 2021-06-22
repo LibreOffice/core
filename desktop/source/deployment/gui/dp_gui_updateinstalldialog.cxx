@@ -421,7 +421,7 @@ void UpdateInstallDialog::Thread::installExtensions()
                 m_dialog.m_xStatusbar->set_percentage(
                 (sal::static_int_cast<sal_uInt16>(100) * count) /
                 sal::static_int_cast<sal_uInt16>(m_aVecUpdateData.size()));
-             }
+            }
             m_dialog.m_xFt_extension_name->set_label(updateData.aInstalledPackage->getDisplayName());
         }
         bool bError = false;

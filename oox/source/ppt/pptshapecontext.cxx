@@ -133,7 +133,7 @@ ContextHandlerRef PPTShapeContext::onCreateContext( sal_Int32 aElementToken, con
                                   break;
                         }
                         if ( nFirstPlaceholder )
-                          {
+                        {
                               oox::drawingml::ShapePtr pPlaceholder;
                               if ( eShapeLocation == Layout )       // for layout objects the referenced object can be found within the same shape tree
                               {
@@ -158,9 +158,9 @@ ContextHandlerRef PPTShapeContext::onCreateContext( sal_Int32 aElementToken, con
                                       pPPTShape->setReferenced( true );
                                   pPPTShapePtr->setPlaceholder( pPlaceholder );
                               }
-                          }
+                        }
                     }
-                  }
+                }
 
             }
             break;

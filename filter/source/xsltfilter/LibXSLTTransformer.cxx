@@ -217,9 +217,9 @@ namespace XSLT
         css::uno::Reference<XInputStream> xis = m_transformer->getInputStream();
         n = xis->readBytes(m_readBuf, len);
         if (n > 0)
-            {
-                memcpy(buffer, m_readBuf.getArray(), n);
-            }
+        {
+            memcpy(buffer, m_readBuf.getArray(), n);
+        }
         return n;
     }
 

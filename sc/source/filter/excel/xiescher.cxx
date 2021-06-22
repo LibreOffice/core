@@ -3686,7 +3686,7 @@ SdrObject* XclImpDffConverter::ProcessObj( SvStream& rDffStrm, DffObjData& rDffO
             but that should not have any effect for grouped objects. */
         if( !bIsTopLevel )
             xDrawObj->PostProcessSdrObject( *this, *xSdrObj );
-     }
+    }
 
     return xSdrObj.release();
 }

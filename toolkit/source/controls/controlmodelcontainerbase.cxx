@@ -514,7 +514,7 @@ void ControlModelContainerBase::insertByName( const OUString& aName, const Any& 
     {
         Reference< beans::XPropertySet > xProps( xM, UNO_QUERY );
         if ( xProps.is() )
-            {
+        {
 
                 Reference< beans::XPropertySetInfo > xPropInfo = xProps->getPropertySetInfo();
 
@@ -530,7 +530,7 @@ void ControlModelContainerBase::insertByName( const OUString& aName, const Any& 
 
                     xProps->setPropertyValue(  sImageSourceProperty , aUrl );
                 }
-            }
+        }
     }
 
 

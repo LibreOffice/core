@@ -291,17 +291,17 @@ void NotebookBar::UpdateBackground()
     Wallpaper aWallpaper(aPersona);
     aWallpaper.SetStyle(WallpaperStyle::TopRight);
     if (!aPersona.IsEmpty())
-        {
-            SetBackground(aWallpaper);
-            UpdatePersonaSettings();
-            GetOutDev()->SetSettings( PersonaSettings );
-        }
+    {
+        SetBackground(aWallpaper);
+        UpdatePersonaSettings();
+        GetOutDev()->SetSettings( PersonaSettings );
+    }
     else
-        {
-            SetBackground(rStyleSettings.GetDialogColor());
-            UpdateDefaultSettings();
-            GetOutDev()->SetSettings( DefaultSettings );
-        }
+    {
+        SetBackground(rStyleSettings.GetDialogColor());
+        UpdateDefaultSettings();
+        GetOutDev()->SetSettings( DefaultSettings );
+    }
 
     Invalidate(tools::Rectangle(Point(0,0), GetSizePixel()));
 }

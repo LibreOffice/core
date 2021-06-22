@@ -2123,8 +2123,11 @@ void SvxTableController::getSelectedCells( CellPos& rFirst, CellPos& rLast )
         rLast.mnCol = std::max( maCursorFirstPos.mnCol, maCursorLastPos.mnCol );
         rLast.mnRow = std::max( maCursorFirstPos.mnRow, maCursorLastPos.mnRow );
 
+        if( !mxTable.is() )
+            return;
+
         bool bExt = false;
-        if( mxTable.is() ) do
+        do
         {
             bExt = false;
             for( sal_Int32 nRow = rFirst.mnRow; nRow <= rLast.mnRow && !bExt; nRow++ )

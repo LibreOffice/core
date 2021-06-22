@@ -2324,35 +2324,35 @@ void SwEnhancedPDFExportHelper::MakeHeaderFooterLinks( vcl::PDFExtOutDevData& rP
 
     SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(rTNd);
     for ( SwTextFrame* pTmpFrame = aIter.First(); pTmpFrame; pTmpFrame = aIter.Next() )
+    {
+        // Add offset to current page:
+        const SwPageFrame* pPageFrame = pTmpFrame->FindPageFrame();
+        SwRect aHFLinkRect( rLinkRect );
+        aHFLinkRect.Pos() = pPageFrame->getFrameArea().Pos() + aOffset;
+
+        // #i97135# the gcc_x64 optimizer gets aHFLinkRect != rLinkRect wrong
+        // fool it by comparing the position only (the width and height are the
+        // same anyway)
+        if ( aHFLinkRect.Pos() != rLinkRect.Pos() )
         {
-            // Add offset to current page:
-            const SwPageFrame* pPageFrame = pTmpFrame->FindPageFrame();
-            SwRect aHFLinkRect( rLinkRect );
-            aHFLinkRect.Pos() = pPageFrame->getFrameArea().Pos() + aOffset;
+            // Link PageNums
+            std::vector<sal_Int32> aHFLinkPageNums = CalcOutputPageNums( aHFLinkRect );
 
-            // #i97135# the gcc_x64 optimizer gets aHFLinkRect != rLinkRect wrong
-            // fool it by comparing the position only (the width and height are the
-            // same anyway)
-            if ( aHFLinkRect.Pos() != rLinkRect.Pos() )
+            for (sal_Int32 aHFLinkPageNum : aHFLinkPageNums)
             {
-                // Link PageNums
-                std::vector<sal_Int32> aHFLinkPageNums = CalcOutputPageNums( aHFLinkRect );
+                // Link Export
+                tools::Rectangle aRect(SwRectToPDFRect(pPageFrame, aHFLinkRect.SVRect()));
+                const sal_Int32 nHFLinkId =
+                    rPDFExtOutDevData.CreateLink(aRect, aHFLinkPageNum);
 
-                for (sal_Int32 aHFLinkPageNum : aHFLinkPageNums)
-                {
-                    // Link Export
-                    tools::Rectangle aRect(SwRectToPDFRect(pPageFrame, aHFLinkRect.SVRect()));
-                    const sal_Int32 nHFLinkId =
-                        rPDFExtOutDevData.CreateLink(aRect, aHFLinkPageNum);
-
-                    // Connect Link and Destination:
-                    if ( bIntern )
-                        rPDFExtOutDevData.SetLinkDest( nHFLinkId, nDestId );
-                    else
-                        rPDFExtOutDevData.SetLinkURL( nHFLinkId, rURL );
-                }
+                // Connect Link and Destination:
+                if ( bIntern )
+                    rPDFExtOutDevData.SetLinkDest( nHFLinkId, nDestId );
+                else
+                    rPDFExtOutDevData.SetLinkURL( nHFLinkId, rURL );
             }
         }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

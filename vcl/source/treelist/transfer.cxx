@@ -2171,7 +2171,7 @@ TransferableDataHelper TransferableDataHelper::CreateFromPrimarySelection()
     TransferableDataHelper   aRet;
 
     if( xSelection.is() )
-       {
+    {
            SolarMutexReleaser aReleaser;
 
            try
@@ -2179,15 +2179,15 @@ TransferableDataHelper TransferableDataHelper::CreateFromPrimarySelection()
                    Reference< XTransferable > xTransferable( xSelection->getContents() );
 
                    if( xTransferable.is() )
-                       {
+                   {
                            aRet = TransferableDataHelper( xTransferable );
                            aRet.mxClipboard = xSelection;
-                       }
+                   }
                }
            catch( const css::uno::Exception& )
                {
                }
-       }
+    }
 
     return aRet;
 }

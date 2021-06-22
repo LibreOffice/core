@@ -227,7 +227,7 @@ namespace dbaui
                                           [](const Type& type)
                                           { return type == cppu::UnoType<XScriptInvocationContext>::get(); } );
             aTypes.realloc( std::distance(aTypes.begin(), newEnd) );
-       }
+        }
         return aTypes;
     }
 

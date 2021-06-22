@@ -981,10 +981,10 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 {
                     SwRootFrame* pLayout = getRootFrame();
                     if( pLayout && pLayout->IsAnyShellAccessible() )
-                {
-                    pSh->Imp()->DisposeAccessibleFrame( this );
-                    pSh->Imp()->AddAccessibleFrame( this );
-                }
+                    {
+                        pSh->Imp()->DisposeAccessibleFrame( this );
+                        pSh->Imp()->AddAccessibleFrame( this );
+                    }
                 }
                 // #i28701# - perform reorder of object lists
                 // at anchor frame and at page frame.

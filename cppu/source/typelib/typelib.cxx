@@ -1655,7 +1655,7 @@ extern "C" sal_Int32 typelib_typedescription_getAlignedUnoSize(
                     // inherit structs extends the base struct.
                     nStructSize = pTmp->pBaseTypeDescription->aBase.nSize;
                     rMaxIntegralTypeSize = pTmp->pBaseTypeDescription->aBase.nAlignment;
-                 }
+                }
                 for( sal_Int32 i = 0; i < pTmp->nMembers; i++ )
                 {
                     typelib_TypeDescription * pMemberType = nullptr;

@@ -456,7 +456,7 @@ void SwTextFrame::AdjustFrame( const SwTwips nChgHght, bool bHasToFit )
             else
                 nRstHeight = getFrameArea().Left() + getFrameArea().Width() -
                             ( GetUpper()->getFrameArea().Left() + GetUpper()->getFramePrintArea().Left() );
-         }
+        }
         else
             nRstHeight = GetUpper()->getFrameArea().Top()
                        + GetUpper()->getFramePrintArea().Top()

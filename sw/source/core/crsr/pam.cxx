@@ -846,9 +846,9 @@ SwContentNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFnCollection const & 
                         pNd->FindSectionNode()->GetSection().IsProtect()
                     )
                   )
-                    {
-                        pNd = nullptr;
-                    }
+                {
+                    pNd = nullptr;
+                }
             }
         }
 

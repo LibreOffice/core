@@ -191,7 +191,7 @@ namespace accessibility
         if (aHint)
         {
             Broadcast(*aHint);
-         }
+        }
     }
 
 } // end of namespace accessibility

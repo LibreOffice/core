@@ -929,10 +929,10 @@ namespace basegfx
 
                             if(aOrientation == B2VectorOrientation::Neutral)
                             {
-                                   // they are parallel or empty; if they are both not zero and point
-                                   // in opposite direction, a half-circle is needed
-                                   if(!aTangentPrev.equalZero() && !aTangentEdge.equalZero())
-                                   {
+                                // they are parallel or empty; if they are both not zero and point
+                                // in opposite direction, a half-circle is needed
+                                if(!aTangentPrev.equalZero() && !aTangentEdge.equalZero())
+                                {
                                     const double fAngle(fabs(aTangentPrev.angle(aTangentEdge)));
 
                                     if(fTools::equal(fAngle, F_PI))

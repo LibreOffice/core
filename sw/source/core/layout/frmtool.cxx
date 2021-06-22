@@ -3459,9 +3459,9 @@ void Notify_Background( const SdrObject* pObj,
                         pFly->getFrameArea().Top() <= rRect.Bottom() &&
                         pFly->getFrameArea().Right() >= rRect.Left() &&
                         pFly->getFrameArea().Left() <= rRect.Right() )
-                     {
+                    {
                         pFly->InvalidateSize();
-                     }
+                    }
                 }
                 // Flys above myself might sidestep if they have an automatic
                 // alignment. This happens independently of my attributes since

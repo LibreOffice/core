@@ -94,7 +94,7 @@ OUString Databases::expandURL( const OUString& aURL, const Reference< uno::XComp
         xFac = uri::UriReferenceFactory::create( xContext );
 
         xMacroExpander = util::theMacroExpander::get(xContext);
-     }
+    }
 
     OUString aRetURL = aURL;
     if( xMacroExpander.is() )
@@ -112,7 +112,7 @@ OUString Databases::expandURL( const OUString& aURL, const Reference< uno::XComp
                 aRetURL = sxUri->expand( xMacroExpander );
             }
         }
-     }
+    }
     return aRetURL;
 }
 

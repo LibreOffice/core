@@ -291,7 +291,7 @@ void HWPFile::TagsRead()
             return;
         if (size <= 0 && tag > 0){
             continue;
-          }
+        }
 
         if (tag == FILETAG_END_OF_COMPRESSED ||
             tag == FILETAG_END_OF_UNCOMPRESSED)

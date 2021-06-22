@@ -67,9 +67,8 @@ Reference< XNameAccess > SAL_CALL  OEvoabCatalog::getTables(  )
 
         try
         {
-                if (!m_pTables) {
-                        refreshTables();
-                        }
+            if (!m_pTables)
+                refreshTables();
         }
         catch( const RuntimeException& )
         {

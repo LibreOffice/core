@@ -552,7 +552,7 @@ void CachableContentProperties::addProperties(
     {
         if ( isCachable( rProp.Name, rProp.IsCaseSensitive ) )
             m_aProps.addProperty( rProp );
-     }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

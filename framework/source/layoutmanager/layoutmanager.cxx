@@ -1626,8 +1626,8 @@ sal_Bool SAL_CALL LayoutManager::requestElement( const OUString& rResourceURL )
 
         if ( pToolbarManager && bComponentAttached )
         {
-                bNotify   = pToolbarManager->requestToolbar( rResourceURL );
-            }
+            bNotify   = pToolbarManager->requestToolbar( rResourceURL );
+        }
     }
     else if ( aElementType.equalsIgnoreAsciiCase("dockingwindow"))
     {

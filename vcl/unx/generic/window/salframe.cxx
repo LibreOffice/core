@@ -1042,7 +1042,7 @@ void X11SalFrame::SetIcon( sal_uInt16 nIcon )
                                             GetDisplay()->GetRootWindow( m_nXScreen ),
                                             &nCount );
             for( int i = 0; i < nCount && !bGnomeIconSize; i++ )
-             {
+            {
                 char* pName = XGetAtomName( GetXDisplay(), pProps[i] );
                 if( pName )
                 {
@@ -1050,7 +1050,7 @@ void X11SalFrame::SetIcon( sal_uInt16 nIcon )
                         bGnomeIconSize = true;
                     XFree( pName );
                 }
-             }
+            }
             if( pProps )
                 XFree( pProps );
         }

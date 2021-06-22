@@ -1172,7 +1172,7 @@ void PresenterController::SwitchMonitors()
 void PresenterController::ExitPresenter()
 {
     if( mxController.is() )
-        {
+    {
             Reference< XPresentationSupplier > xPS( mxController->getModel(), UNO_QUERY );
             if( xPS.is() )
             {
@@ -1180,7 +1180,7 @@ void PresenterController::ExitPresenter()
                 if( xP.is() )
                     xP->end();
             }
-        }
+    }
 }
 
 } // end of namespace ::sdext::presenter

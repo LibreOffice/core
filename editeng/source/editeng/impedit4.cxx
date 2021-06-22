@@ -148,9 +148,8 @@ EditPaM ImpEditEngine::ReadRTF( SvStream& rInput, EditSelection aSel )
     // dependent on a secondary.
     SfxItemPool* pPool = &aEditDoc.GetItemPool();
     while (pPool->GetSecondaryPool() && pPool->GetName() != "EditEngineItemPool")
-   {
+    {
         pPool = pPool->GetSecondaryPool();
-
     }
 
     DBG_ASSERT(pPool && pPool->GetName() == "EditEngineItemPool",
@@ -1505,7 +1504,7 @@ bool ImpEditEngine::HasConvertibleTextPortion( LanguageType nSrcLang )
                              editeng::HangulHanjaConversion::IsChinese( nSrcLang ));
             if (bHasConvTxt)
                 return bHasConvTxt;
-       }
+        }
     }
 
     return bHasConvTxt;

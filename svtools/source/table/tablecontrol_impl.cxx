@@ -1525,14 +1525,14 @@ namespace svt::table
                         m_aSelectedRows.clear();
                         m_aSelectedRows.push_back(m_nCurRow);
                         invalidateRow( m_nCurRow );
-                        }
+                    }
                     else
                     {
                         //a region is already selected, prevRow is last selected row and the row beneath - nextRow - should be selected
                         int prevRow = getRowSelectedNumber(m_aSelectedRows, m_nCurRow);
                         int nextRow = getRowSelectedNumber(m_aSelectedRows, m_nCurRow+1);
                         if(prevRow>-1)
-                         {
+                        {
                              //if m_nCurRow isn't the last one, can move down, otherwise not
                              if(m_nCurRow<m_nRowCount-1)
                                  m_nCurRow++;

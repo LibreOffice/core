@@ -448,9 +448,9 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( const uno::
 
             if( xEnumAccess.is() )
             {
-                 uno::Reference< container::XEnumeration >  xPortionEnum( xEnumAccess->createEnumeration() );
-                 if( xPortionEnum.is() )
-                 {
+                uno::Reference< container::XEnumeration >  xPortionEnum( xEnumAccess->createEnumeration() );
+                if( xPortionEnum.is() )
+                {
                     while(xPortionEnum->hasMoreElements())
                     {
                         uno::Reference< text::XTextRange >  xPortion( xPortionEnum->nextElement(), uno::UNO_QUERY );

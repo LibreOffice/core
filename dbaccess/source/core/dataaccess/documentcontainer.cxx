@@ -413,7 +413,7 @@ Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 Com
                                                     aOpenCommand,
                                                     Environment );
             aRet <<= xSet;
-          }
+        }
         else
         {
             // Unsupported.

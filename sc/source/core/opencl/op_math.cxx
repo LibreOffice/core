@@ -875,13 +875,13 @@ void OpAverageIfs::GenSlidingWindowFunction(std::stringstream &ss,
     tmpss << "    tmp += tmp0;\n";
     tmpss << "    count++;\n";
     for(size_t j=1;j<vSubArguments.size();j+=2,m--)
-     {
+    {
         for(int n = 0;n<m+1;n++)
         {
             tmpss << "    ";
         }
         tmpss<< "}\n";
-     }
+    }
 
     UnrollDoubleVector(ss,tmpss,pCurDVR,nCurWindowSize);
 

@@ -786,7 +786,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
                 // Then send args
                 bSentArgs = send_args(fd, pCwdPath);
-           }
+            }
 
             close(fd);
         }

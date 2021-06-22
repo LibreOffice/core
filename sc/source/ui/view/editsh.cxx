@@ -356,7 +356,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                         sInput.iterateCodePoints(&nUtf16Pos);
                         if( nUtf16Pos > aSel.nEndPos )
                             aSel.nEndPos = nUtf16Pos;
-                   }
+                    }
 
                     ToggleUnicodeCodepoint aToggle;
                     while( nUtf16Pos && aToggle.AllowMoreInput( sInput[nUtf16Pos-1]) )

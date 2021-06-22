@@ -146,7 +146,7 @@ AstDeclaration* AstScope::lookupByName(const OString& scopedName)
              // have to look in the inherited interfaces as well.
             if ( !pDecl && m_nodeType == NT_interface )
                 pDecl = lookupInInherited(scopedName);
-       }
+        }
     }
 
     if ( bFindFirstScope && (firstScope != scopedName) )

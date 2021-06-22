@@ -908,9 +908,9 @@ void DataBrowser::RemoveColumn()
 
 void DataBrowser::InsertRow()
 {
-     sal_Int32 nRowIdx = GetCurRow();
+    sal_Int32 nRowIdx = GetCurRow();
 
-     if( nRowIdx >= 0 && m_apDataBrowserModel)
+    if( nRowIdx >= 0 && m_apDataBrowserModel)
     {
         // save changes made to edit-field
         if( IsModified() )
@@ -923,9 +923,9 @@ void DataBrowser::InsertRow()
 
 void DataBrowser::RemoveRow()
 {
-     sal_Int32 nRowIdx = GetCurRow();
+    sal_Int32 nRowIdx = GetCurRow();
 
-     if( nRowIdx >= 0 && m_apDataBrowserModel)
+    if( nRowIdx >= 0 && m_apDataBrowserModel)
     {
         // save changes made to edit-field
         if( IsModified() )

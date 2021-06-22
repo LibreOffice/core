@@ -1089,7 +1089,7 @@ void SdPage::DestroyDefaultPresObj(PresObjKind eObjKind)
         const char* sPageKind = PageKindVector[mePageKind];
 
         if (mePageKind == PageKind::Standard)
-         {
+        {
             getPresObjProp( *this , "PRESOBJ_TITLE" ,sPageKind, propvalue);
             aTitlePos.AdjustX(::tools::Long( aTitleSize.Width() * propvalue[2] ) );
             aTitlePos.AdjustY(::tools::Long( aTitleSize.Height() * propvalue[3] ) );
@@ -1560,7 +1560,7 @@ static void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDe
                                 }
                             }
                          }
-                     }
+                    }
                 }
                 break;
             case PresObjKind::Chart:

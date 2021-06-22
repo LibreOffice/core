@@ -45,7 +45,7 @@ static bool lcl_IsURLButton( SdrObject* pObject )
 
     SdrUnoObj* pUnoCtrl = dynamic_cast<SdrUnoObj*>( pObject );
     if (pUnoCtrl && SdrInventor::FmForm == pUnoCtrl->GetObjInventor())
-       {
+    {
         const uno::Reference<awt::XControlModel>& xControlModel = pUnoCtrl->GetUnoControlModel();
         OSL_ENSURE( xControlModel.is(), "uno control without model" );
         if ( xControlModel.is() )
@@ -61,7 +61,7 @@ static bool lcl_IsURLButton( SdrObject* pObject )
                 if ( (aAny >>= eTmp) && eTmp == form::FormButtonType_URL )
                     bRet = true;
             }
-         }
+        }
     }
 
     return bRet;

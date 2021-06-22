@@ -760,7 +760,7 @@ void SvtFileDialog::OpenHdl_Impl(void const * pVoid)
             m_aContent.disableInteractionHandler();
         else if ( eInterActionHandlerType == SmartContent::IHT_DEFAULT )
             m_aContent.enableDefaultInteractionHandler();
-     }
+    }
 
     if  (   !bIsFolder                              // no existent folder
         &&  m_xImpl->m_xCbAutoExtension             // auto extension is enabled in general

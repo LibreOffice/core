@@ -797,18 +797,18 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles()
                         bool bChangeFilter = true;
                         if ( m_pFilterVector)
                             for (auto const& filter : *m_pFilterVector)
-                        {
-                            if( lcl_matchFilter( filter.getFilter(), "*." + sExtension ) )
                             {
-                                if( aNewFilter.isEmpty() )
-                                    aNewFilter = filter.getTitle();
+                                if( lcl_matchFilter( filter.getFilter(), "*." + sExtension ) )
+                                {
+                                    if( aNewFilter.isEmpty() )
+                                        aNewFilter = filter.getTitle();
 
-                                if( aOldFilter == filter.getTitle() )
-                                    bChangeFilter = false;
+                                    if( aOldFilter == filter.getTitle() )
+                                        bChangeFilter = false;
 
-                                bExtensionTypedIn = true;
+                                    bExtensionTypedIn = true;
+                                }
                             }
-                        }
                         if( bChangeFilter && bExtensionTypedIn )
                         {
                             gchar* pCurrentName = gtk_file_chooser_get_current_name(GTK_FILE_CHOOSER(m_pDialog));

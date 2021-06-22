@@ -1507,7 +1507,7 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
                             // check if next character is Reh or Yeh-like
                             sal_Unicode cNextCh = rWord[ nIdx + 1 ];
                             if ( isRehChar ( cNextCh ) || isYehChar ( cNextCh ))
-                           {
+                            {
                                 SAL_WARN_IF( 0 == cPrevCh, "sw.core", "No previous character" );
                                 // check if character is connectable to previous character,
                                 if ( lcl_ConnectToPrev( cCh, cPrevCh ) )

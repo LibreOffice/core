@@ -412,11 +412,11 @@ void OpFV::GenSlidingWindowFunction(std::stringstream& ss,
     ss << "    double arg4 = " << GetBottom() << ";\n";
     unsigned j = vSubArguments.size();
     while (j--)
-        {
+    {
         FormulaToken* pCur = vSubArguments[j]->GetFormulaToken();
         assert(pCur);
         if(pCur->GetType() == formula::svSingleVectorRef)
-            {
+        {
             const formula::SingleVectorRefToken* pSVR =
             static_cast< const formula::SingleVectorRefToken* >(pCur);
             ss << "    if(gid0 >= " << pSVR->GetArrayLength() << " || isnan(";
@@ -427,8 +427,8 @@ void OpFV::GenSlidingWindowFunction(std::stringstream& ss,
             ss << "        arg" << j << " = ";
             ss << vSubArguments[j]->GenSlidingWindowDeclRef();
             ss << ";\n";
-            }
         }
+    }
     ss << "    tmp = GetFV(arg0, arg1, arg2, arg3, arg4);\n";
     ss << "    return tmp;\n";
     ss << "}";
@@ -463,11 +463,11 @@ void OpIPMT::GenSlidingWindowFunction(std::stringstream& ss,
     ss << "    double arg5 = " << GetBottom() << ";\n";
     unsigned j = vSubArguments.size();
     while (j--)
-        {
+    {
         FormulaToken* pCur = vSubArguments[j]->GetFormulaToken();
         assert(pCur);
         if(pCur->GetType() == formula::svSingleVectorRef)
-            {
+        {
             const formula::SingleVectorRefToken* pSVR =
             static_cast< const formula::SingleVectorRefToken* >(pCur);
             ss << "    if(gid0 >= " << pSVR->GetArrayLength() << " || isnan(";
@@ -478,8 +478,8 @@ void OpIPMT::GenSlidingWindowFunction(std::stringstream& ss,
             ss << "        arg" << j << " = ";
             ss << vSubArguments[j]->GenSlidingWindowDeclRef();
             ss << ";\n";
-            }
         }
+    }
     ss << "    double pmt ;\n";
     ss << "    if(arg0 == 0.0)\n";
     ss << "        return 0;\n";
@@ -666,8 +666,8 @@ void OpDuration_ADD::GenSlidingWindowFunction(std::stringstream& ss,
             ss << "        arg" << j << " = ";
             ss << vSubArguments[j]->GenSlidingWindowDeclRef();
             ss << ";\n";
-            }
         }
+    }
     ss << "    int nNullDate = GetNullDate();\n";
     ss << "    tmp = GetDuration( nNullDate, (int)arg0, (int)arg1, arg2,";
     ss << " arg3, (int)arg4, (int)arg5);\n";
@@ -4428,7 +4428,7 @@ tmpCur3);
         ss<< "    int buffer_fv_len = ";
         ss<< tmpCurDVR3->GetArrayLength();
         ss << ";\n";
-        }
+    }
 
     if(vSubArguments.size()>4)
     {

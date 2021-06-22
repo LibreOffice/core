@@ -114,7 +114,7 @@ BackendImpl::BackendImpl(
         OUString dbFile = makeURL(getCachePath(), "backenddb.xml");
         m_backendDb.reset(
             new ExecutableBackendDb(getComponentContext(), dbFile));
-   }
+    }
 }
 
 // XServiceInfo

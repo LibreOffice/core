@@ -823,7 +823,7 @@ void OSQLParser::killThousandSeparator(OSQLParseNode* pLiteral)
         }
         else
             pLiteral->m_aNodeValue = pLiteral->m_aNodeValue.replace(',', sal_Unicode());
-        }
+    }
 }
 
 OSQLParseNode* OSQLParser::convertNode(sal_Int32 nType, OSQLParseNode* pLiteral)

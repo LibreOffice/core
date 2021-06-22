@@ -148,10 +148,10 @@ namespace
     void set_file_size(const struct stat& file_stat, oslFileStatus* pStat)
     {
         if (S_ISREG(file_stat.st_mode))
-           {
-               pStat->uFileSize     = file_stat.st_size;
-               pStat->uValidFields |= osl_FileStatus_Mask_FileSize;
-           }
+        {
+            pStat->uFileSize     = file_stat.st_size;
+            pStat->uValidFields |= osl_FileStatus_Mask_FileSize;
+        }
     }
 
     /* we only need to call stat or lstat if one of the
@@ -262,7 +262,7 @@ oslFileError SAL_CALL osl_getFileStatus(oslDirectoryItem Item, oslFileStatus* pS
              | RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT));
         assert(ok); (void)ok;
         pStat->uValidFields |= osl_FileStatus_Mask_FileName;
-       }
+    }
     return osl_File_E_None;
 }
 

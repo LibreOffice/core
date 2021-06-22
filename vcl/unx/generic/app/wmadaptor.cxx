@@ -764,7 +764,7 @@ bool WMAdaptor::getNetWmName()
                 && aRealType == XA_WINDOW
                 && nFormat == 32
                 && nItems != 0 )
-                {
+            {
                     if ( ! GetGenericUnixSalData()->ErrorTrapPop( false ) )
                     {
                         GetGenericUnixSalData()->ErrorTrapPush();
@@ -850,7 +850,7 @@ bool WMAdaptor::getNetWmName()
                         }
                         GetGenericUnixSalData()->ErrorTrapPush();
                     }
-                }
+            }
 
             GetGenericUnixSalData()->ErrorTrapPop();
         }

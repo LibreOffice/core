@@ -138,7 +138,7 @@ namespace sdr::animation
                 mnDeltaTime = 0;
                 triggerEvents();
                 checkTimeout();
-             }
+            }
         }
 
         void Scheduler::InsertEvent(Event& rNew)

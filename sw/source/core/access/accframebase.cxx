@@ -95,7 +95,7 @@ SwNodeType SwAccessibleFrameBase::GetNodeType( const SwFlyFrame *pFlyFrame )
     SwNodeType nType = SwNodeType::Text;
     if( pFlyFrame->Lower() )
     {
-         if( pFlyFrame->Lower()->IsNoTextFrame() )
+        if( pFlyFrame->Lower()->IsNoTextFrame() )
         {
             const SwNoTextFrame *const pContentFrame =
                 static_cast<const SwNoTextFrame *>(pFlyFrame->Lower());

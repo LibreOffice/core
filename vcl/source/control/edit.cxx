@@ -1579,7 +1579,7 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                     else if ( bGoRight && ( aSel.Max() < maText.getLength() ) )
                     {
                         if ( bWord )
-                           {
+                        {
                             i18n::Boundary aBoundary = xBI->nextWord( maText.toString(), aSel.Max(),
                                     GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
                             aSel.Max() = aBoundary.startPos;

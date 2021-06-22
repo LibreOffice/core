@@ -201,7 +201,7 @@ sal_Int16 SvFilterOptionsDialog::execute()
             aInternalFilterName = aInternalFilterName.replaceFirst( "calc_", "" );
             aInternalFilterName = aInternalFilterName.replaceFirst( "writer_", "" );
             break;
-       }
+        }
         else if ( rName == "Graphic" )
         {
             rProp.Value >>= xGraphic;

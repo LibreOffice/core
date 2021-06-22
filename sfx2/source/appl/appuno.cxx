@@ -1272,7 +1272,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                         continue;
                     if (nId == SID_REPLACEABLE)
                         continue;
-               }
+                }
 
                 OString aDbg = "Unknown item detected: " + OString::number(static_cast<sal_Int32>(nId));
                 DBG_ASSERT(nArg<nFormalArgs, aDbg.getStr());

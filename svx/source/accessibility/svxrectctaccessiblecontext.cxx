@@ -488,7 +488,7 @@ Reference<XAccessibleRelationSet> SAL_CALL SvxRectCtlChildAccessibleContext::get
 {
     rtl::Reference<utl::AccessibleRelationSetHelper> pRelationSetHelper = new utl::AccessibleRelationSetHelper;
     if( mxParent.is() )
-      {
+    {
         uno::Sequence< uno::Reference< uno::XInterface > > aSequence { mxParent };
         pRelationSetHelper->AddRelation( css::accessibility::AccessibleRelation( css::accessibility::AccessibleRelationType::MEMBER_OF, aSequence ) );
     }

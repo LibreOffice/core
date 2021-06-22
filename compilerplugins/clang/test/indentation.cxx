@@ -48,6 +48,16 @@ void top1(int x) {
     }
 
     if (x)
+    { // expected-note {{start brace here [loplugin:indentation]}}
+        foo();
+     } // expected-error {{start and end brace not aligned [loplugin:indentation]}}
+
+    if (x) // expected-note {{statement beginning here [loplugin:indentation]}}
+     { // expected-error {{start brace not aligned with beginning of parent statement [loplugin:indentation]}}
+        foo();
+     }
+
+    if (x)
         ;
     else
     foo(); // expected-error {{else body should be indented [loplugin:indentation]}}

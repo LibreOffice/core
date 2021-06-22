@@ -261,7 +261,7 @@ OUString EmbeddedFontsHelper::fontFileUrl( std::u16string_view familyName, FontF
     for( int i = 0;
          i < fontInfo->Count();
          ++i )
-     {
+    {
         PhysicalFontFace* f = fontInfo->Get( i );
         if( f->GetFamilyName() == familyName )
         {

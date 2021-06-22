@@ -126,7 +126,7 @@ uno::Reference< uno::XInterface > CheckDataPilotTable::init()
         {
             oSheet->getCellByPosition(i, j)->setValue(i * (j + 1));
             oSheet2->getCellByPosition(i, j)->setValue(i * (j + 2));
-         }
+        }
     }
 
     // change a value of a cell and check the change in the data pilot

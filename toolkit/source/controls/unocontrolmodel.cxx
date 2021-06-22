@@ -1277,7 +1277,7 @@ void UnoControlModel::setFastPropertyValue( sal_Int32 nPropId, const css::uno::A
         aGuard.clear();
         setFastPropertyValues( 1, &nDescriptorId, &aNewValue, 1 );
         fire( &nPropId, &aNewSingleValue, &aOldSingleValue, 1, false );
-       }
+    }
     else
         setFastPropertyValues( 1, &nPropId, &rValue, 1 );
 }

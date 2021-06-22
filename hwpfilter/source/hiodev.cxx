@@ -235,7 +235,7 @@ size_t HStreamIODev::skipBlock(size_t size)
                 }
                 return size - remain;
           }
-     }
+    }
     return _stream->skipBytes(size);
 }
 

@@ -1083,20 +1083,20 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
     bool bTableFound = true;
     sal_Int32 nLength = types.getLength();
     if(nLength)
-        {
-            bTableFound = false;
+    {
+        bTableFound = false;
 
-            const OUString* pBegin = types.getConstArray();
-            const OUString* pEnd = pBegin + nLength;
-            for(;pBegin != pEnd;++pBegin)
-                {
-                    if(*pBegin == aTable)
-                        {
-                            bTableFound = true;
-                            break;
-                        }
-                }
+        const OUString* pBegin = types.getConstArray();
+        const OUString* pEnd = pBegin + nLength;
+        for(;pBegin != pEnd;++pBegin)
+        {
+            if(*pBegin == aTable)
+            {
+                bTableFound = true;
+                break;
+            }
         }
+    }
     if(!bTableFound)
         return pResult;
 

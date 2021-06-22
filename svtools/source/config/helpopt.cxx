@@ -142,7 +142,7 @@ void  SvtHelpOptions_Impl::Load(const uno::Sequence< OUString>& rPropertyNames)
             OUString aTmpStr;
             sal_Int32 nTmpInt = 0;
             if ( pValues[nProp] >>= bTmp )
-              {
+            {
                 switch ( static_cast< HelpProperty >(
                     comphelper::findValue(aInternalPropertyNames, rPropertyNames[nProp]) ) )
                 {

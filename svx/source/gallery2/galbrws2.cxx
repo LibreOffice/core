@@ -1154,7 +1154,7 @@ void GalleryBrowser2::Execute(std::string_view rIdent)
             weld::Widget* pParent = GetViewWindow();
             TransferableDataHelper aDataHelper(TransferableDataHelper::CreateFromClipboard(pParent->get_clipboard()));
             mpCurTheme->InsertTransferable( aDataHelper.GetTransferable(), mnCurActionPos );
-         }
+        }
     }
 }
 

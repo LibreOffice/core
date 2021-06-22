@@ -1105,9 +1105,9 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& r
     // use the font's shortened name if needed
     if ( aSearchShortName != aSearchName )
     {
-       PhysicalFontFamily* pFoundData = ImplFindFontFamilyBySearchName( aSearchShortName );
-       if( pFoundData )
-       {
+        PhysicalFontFamily* pFoundData = ImplFindFontFamilyBySearchName( aSearchShortName );
+        if( pFoundData )
+        {
 #ifdef UNX
             /* #96738# don't use mincho as a replacement for "MS Mincho" on X11: Mincho is
             a korean bitmap font that is not suitable here. Use the font replacement table,

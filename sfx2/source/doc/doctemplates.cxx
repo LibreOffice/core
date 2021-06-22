@@ -845,7 +845,7 @@ OUString SfxDocTplService_Impl::CreateNewUniqueFileWithPrefix( const OUString& a
 
     uno::Reference< XCommandEnvironment > aQuietEnv;
     if ( Content::create( aDirPath.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aQuietEnv, comphelper::getProcessComponentContext(), aParent ) )
-       {
+    {
         for ( sal_Int32 nInd = 0; nInd < 32000; nInd++ )
         {
             Content aNewFile;
