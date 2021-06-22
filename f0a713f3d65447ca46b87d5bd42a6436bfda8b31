@@ -34,6 +34,24 @@
       "revId": "f0a713f3d65447ca46b87d5bd42a6436bfda8b31",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "036b7eb9_d63ef4c2",
+        "filename": "cui/inc/strings.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-22T08:16:49Z",
+      "side": 1,
+      "message": "But regardless of whether it is an em or an en dash, the description is not accurate anyway, as what gets replaced is apparently sometimes an em and sometimes an en dash, as has been discussed in the comments before:  \"Ah, our implementation apparently distinguishes cases like \u0027foo--bar\u0027 (introducing an em dash) from cases like \u00271--2\u0027 (introducing an en dash).\" and \"I prefer the ambiguity, if you will, of the current name of the option. Being overly pedantic/specific complicates localization [...]\"",
+      "parentUuid": "7114173b_d68fe21d",
+      "revId": "f0a713f3d65447ca46b87d5bd42a6436bfda8b31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
