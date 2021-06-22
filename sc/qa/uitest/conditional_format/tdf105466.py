@@ -15,21 +15,19 @@ class tdf105466(UITestCase):
     @unittest.skip("issue with floating windows")
     def test_changing_conditional_format(self):
 
-        self.ui_test.create_doc_in_start_center("calc")
+        with self.ui_test.create_doc_in_start_center("calc"):
 
-        self.ui_test.execute_modeless_dialog_through_command(".uno:ConditionalFormatDialog")
+            self.ui_test.execute_modeless_dialog_through_command(".uno:ConditionalFormatDialog")
 
-        for i in range(0,4):
-            with self.subTest(i = i):
-                xCondFormatDlg = self.xUITest.getTopFocusWindow()
-                xTypeLstBox = xCondFormatDlg.getChild("type")
-                xTypeLstBox.executeAction("SELECT", mkPropertyValues({"POS": str(i)}))
+            for i in range(0,4):
+                with self.subTest(i = i):
+                    xCondFormatDlg = self.xUITest.getTopFocusWindow()
+                    xTypeLstBox = xCondFormatDlg.getChild("type")
+                    xTypeLstBox.executeAction("SELECT", mkPropertyValues({"POS": str(i)}))
 
-        xCondFormatDlg = self.xUITest.getTopFocusWindow()
-        xOkBtn = xCondFormatDlg.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOkBtn)
-
-        self.ui_test.close_doc()
+            xCondFormatDlg = self.xUITest.getTopFocusWindow()
+            xOkBtn = xCondFormatDlg.getChild("ok")
+            self.ui_test.close_dialog_through_button(xOkBtn)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
 

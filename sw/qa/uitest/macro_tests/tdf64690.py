@@ -13,63 +13,61 @@ class tdf64690(UITestCase):
 
     def test_tdf64690(self):
 
-        self.ui_test.create_doc_in_start_center("writer")
+        with self.ui_test.create_doc_in_start_center("writer"):
 
-        self.ui_test.execute_dialog_through_command(".uno:MacroDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
+            self.ui_test.execute_dialog_through_command(".uno:MacroDialog")
+            xDialog = self.xUITest.getTopFocusWindow()
 
-        xEditBtn = xDialog.getChild("edit")
-        xEditBtn.executeAction("CLICK", tuple())
+            xEditBtn = xDialog.getChild("edit")
+            xEditBtn.executeAction("CLICK", tuple())
 
-        xMacroWin = self.xUITest.getTopFocusWindow()
-        xEditWin = xMacroWin.getChild('EditorWindow')
+            xMacroWin = self.xUITest.getTopFocusWindow()
+            xEditWin = xMacroWin.getChild('EditorWindow')
 
-        self.xUITest.executeCommand(".uno:SelectAll")
-        xEditWin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+            self.xUITest.executeCommand(".uno:SelectAll")
+            xEditWin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
 
-        self.assertEqual("\n", get_state_as_dict(xEditWin)['Text'])
+            self.assertEqual("\n", get_state_as_dict(xEditWin)['Text'])
 
-        xEditWin.executeAction("TYPE", mkPropertyValues({"TEXT":"'abc"}))
-        xEditWin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
-        xEditWin.executeAction("TYPE", mkPropertyValues({"TEXT":"'def"}))
+            xEditWin.executeAction("TYPE", mkPropertyValues({"TEXT":"'abc"}))
+            xEditWin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
+            xEditWin.executeAction("TYPE", mkPropertyValues({"TEXT":"'def"}))
 
-        self.assertEqual("'abc\n'def\n", get_state_as_dict(xEditWin)['Text'])
+            self.assertEqual("'abc\n'def\n", get_state_as_dict(xEditWin)['Text'])
 
-        self.xUITest.executeCommand(".uno:SelectAll")
+            self.xUITest.executeCommand(".uno:SelectAll")
 
-        self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
+            self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
+            xDialog = self.xUITest.getTopFocusWindow()
 
-        searchterm = xDialog.getChild("searchterm")
-        searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-        searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-        searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"."}))
+            searchterm = xDialog.getChild("searchterm")
+            searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+            searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+            searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"."}))
 
-        replaceterm = xDialog.getChild("replaceterm")
-        replaceterm.executeAction("TYPE", mkPropertyValues({"TEXT":"ABC"}))
+            replaceterm = xDialog.getChild("replaceterm")
+            replaceterm.executeAction("TYPE", mkPropertyValues({"TEXT":"ABC"}))
 
-        regexp = xDialog.getChild("regexp")
-        if get_state_as_dict(regexp)['Selected'] == 'false':
-            regexp.executeAction("CLICK", tuple())
-        self.assertEqual("true", get_state_as_dict(regexp)['Selected'])
+            regexp = xDialog.getChild("regexp")
+            if get_state_as_dict(regexp)['Selected'] == 'false':
+                regexp.executeAction("CLICK", tuple())
+            self.assertEqual("true", get_state_as_dict(regexp)['Selected'])
 
-        selection = xDialog.getChild("selection")
-        if get_state_as_dict(selection)['Selected'] == 'false':
-            selection.executeAction("CLICK", tuple())
-        self.assertEqual("true", get_state_as_dict(selection)['Selected'])
+            selection = xDialog.getChild("selection")
+            if get_state_as_dict(selection)['Selected'] == 'false':
+                selection.executeAction("CLICK", tuple())
+            self.assertEqual("true", get_state_as_dict(selection)['Selected'])
 
-        replaceall = xDialog.getChild("replaceall")
+            replaceall = xDialog.getChild("replaceall")
 
-        # Without the fix in place, this test would have hung here
-        with self.ui_test.execute_blocking_action(replaceall.executeAction, args=('CLICK', ())):
-            pass
+            # Without the fix in place, this test would have hung here
+            with self.ui_test.execute_blocking_action(replaceall.executeAction, args=('CLICK', ())):
+                pass
 
-        xcloseBtn = xDialog.getChild("close")
-        self.ui_test.close_dialog_through_button(xcloseBtn)
+            xcloseBtn = xDialog.getChild("close")
+            self.ui_test.close_dialog_through_button(xcloseBtn)
 
-        self.assertEqual("ABCABCABCABC\nABCABCABCABC\n", get_state_as_dict(xEditWin)['Text'])
-
-        self.ui_test.close_doc()
+            self.assertEqual("ABCABCABCABC\nABCABCABCABC\n", get_state_as_dict(xEditWin)['Text'])
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

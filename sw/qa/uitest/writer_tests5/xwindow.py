@@ -76,101 +76,100 @@ class XWindow(UITestCase):
     def test_listeners(self):
         global mouseListenerCount
 
-        self.ui_test.create_doc_in_start_center("writer")
-        xDoc = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer"):
+            xDoc = self.ui_test.get_component()
 
-        # create new mouse listener
-        xFrame = xDoc.getCurrentController().getFrame()
-        self.assertIsNotNone(xFrame)
-        xWindow = xFrame.getContainerWindow()
-        self.assertIsNotNone(xWindow)
+            # create new mouse listener
+            xFrame = xDoc.getCurrentController().getFrame()
+            self.assertIsNotNone(xFrame)
+            xWindow = xFrame.getContainerWindow()
+            self.assertIsNotNone(xWindow)
 
-        # add new mouse listener
-        xMouseListener = XMouseListenerExtended()
-        self.assertIsNotNone(xMouseListener)
-        xWindow.addMouseListener(xMouseListener)
-        self.assertEqual(1, mouseListenerCount)
+            # add new mouse listener
+            xMouseListener = XMouseListenerExtended()
+            self.assertIsNotNone(xMouseListener)
+            xWindow.addMouseListener(xMouseListener)
+            self.assertEqual(1, mouseListenerCount)
 
-        # add new key listener
-        xKeyListener = XKeyListenerExtended()
-        self.assertIsNotNone(xKeyListener)
-        xWindow.addKeyListener(xKeyListener)
+            # add new key listener
+            xKeyListener = XKeyListenerExtended()
+            self.assertIsNotNone(xKeyListener)
+            xWindow.addKeyListener(xKeyListener)
 
-        # create dummy mouse event
-        xMouseEvent = MouseEvent()
-        xMouseEvent.Modifiers = 0
-        xMouseEvent.Buttons = MouseButton.LEFT
-        xMouseEvent.X = 10
-        xMouseEvent.Y = 10
-        xMouseEvent.ClickCount = 1
-        xMouseEvent.PopupTrigger = False
-        xMouseEvent.Source = xWindow
+            # create dummy mouse event
+            xMouseEvent = MouseEvent()
+            xMouseEvent.Modifiers = 0
+            xMouseEvent.Buttons = MouseButton.LEFT
+            xMouseEvent.X = 10
+            xMouseEvent.Y = 10
+            xMouseEvent.ClickCount = 1
+            xMouseEvent.PopupTrigger = False
+            xMouseEvent.Source = xWindow
 
-        xMouseEvent2 = MouseEvent()
-        xMouseEvent2.Modifiers = 0
-        xMouseEvent2.Buttons = MouseButton.LEFT
-        xMouseEvent2.X = 300
-        xMouseEvent2.Y = 300
-        xMouseEvent2.ClickCount = 1
-        xMouseEvent2.PopupTrigger = False
-        xMouseEvent2.Source = xWindow
+            xMouseEvent2 = MouseEvent()
+            xMouseEvent2.Modifiers = 0
+            xMouseEvent2.Buttons = MouseButton.LEFT
+            xMouseEvent2.X = 300
+            xMouseEvent2.Y = 300
+            xMouseEvent2.ClickCount = 1
+            xMouseEvent2.PopupTrigger = False
+            xMouseEvent2.Source = xWindow
 
-        # send mouse event
-        xToolkitRobot = xWindow.getToolkit()
-        self.assertIsNotNone(xToolkitRobot)
+            # send mouse event
+            xToolkitRobot = xWindow.getToolkit()
+            self.assertIsNotNone(xToolkitRobot)
 
-        # Click in the menubar/toolbar area
-        xToolkitRobot.mouseMove(xMouseEvent)
-        xToolkitRobot.mousePress(xMouseEvent)
-        xToolkitRobot.mouseRelease(xMouseEvent)
+            # Click in the menubar/toolbar area
+            xToolkitRobot.mouseMove(xMouseEvent)
+            xToolkitRobot.mousePress(xMouseEvent)
+            xToolkitRobot.mouseRelease(xMouseEvent)
 
-        # Click into the document content
-        xToolkitRobot.mousePress(xMouseEvent2)
-        xToolkitRobot.mouseRelease(xMouseEvent2)
+            # Click into the document content
+            xToolkitRobot.mousePress(xMouseEvent2)
+            xToolkitRobot.mouseRelease(xMouseEvent2)
 
-        # send key press event
-        xKeyEvent = KeyEvent()
-        xKeyEvent.Modifiers = 0
-        xKeyEvent.KeyCode = 70
-        xKeyEvent.KeyChar = 70
-        xKeyEvent.Source = xWindow
+            # send key press event
+            xKeyEvent = KeyEvent()
+            xKeyEvent.Modifiers = 0
+            xKeyEvent.KeyCode = 70
+            xKeyEvent.KeyChar = 70
+            xKeyEvent.Source = xWindow
 
-        xToolkitRobot.keyPress(xKeyEvent)
-        xToolkitRobot.keyRelease(xKeyEvent)
+            xToolkitRobot.keyPress(xKeyEvent)
+            xToolkitRobot.keyRelease(xKeyEvent)
 
-        # Wait for async events to be processed
-        xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
-        xToolkit.processEventsToIdle()
+            # Wait for async events to be processed
+            xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+            xToolkit.processEventsToIdle()
 
-        # remove mouse listener
-        xWindow.removeMouseListener(xMouseListener)
-        self.assertEqual(1, mouseListenerCount)
-        del xMouseListener
+            # remove mouse listener
+            xWindow.removeMouseListener(xMouseListener)
+            self.assertEqual(1, mouseListenerCount)
+            del xMouseListener
 
-        # remove key listener
-        xWindow.removeKeyListener(xKeyListener)
-        del xKeyListener
+            # remove key listener
+            xWindow.removeKeyListener(xKeyListener)
+            del xKeyListener
 
-        global keymousePressedEventsIntercepted
-        # Not expected any interceptions
-        self.assertEqual(0, keymousePressedEventsIntercepted)
+            global keymousePressedEventsIntercepted
+            # Not expected any interceptions
+            self.assertEqual(0, keymousePressedEventsIntercepted)
 
-        global keymouseReleasedEventsIntercepted
-        # Not expected any interceptions
-        self.assertEqual(0, keymouseReleasedEventsIntercepted)
+            global keymouseReleasedEventsIntercepted
+            # Not expected any interceptions
+            self.assertEqual(0, keymouseReleasedEventsIntercepted)
 
-        global mousePressedEventsIntercepted
-        self.assertEqual(0, mousePressedEventsIntercepted)
+            global mousePressedEventsIntercepted
+            self.assertEqual(0, mousePressedEventsIntercepted)
 
-        global mouseReleasedEventsIntercepted
-        self.assertEqual(0, mouseReleasedEventsIntercepted)
+            global mouseReleasedEventsIntercepted
+            self.assertEqual(0, mouseReleasedEventsIntercepted)
 
-        global mouseEventsIntercepted
-        # Not expected 3 interceptions
-        self.assertEqual(0, mouseEventsIntercepted)
+            global mouseEventsIntercepted
+            # Not expected 3 interceptions
+            self.assertEqual(0, mouseEventsIntercepted)
 
-        # close document
-        self.ui_test.close_doc()
+            # close document
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

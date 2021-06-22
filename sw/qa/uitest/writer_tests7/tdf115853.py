@@ -15,30 +15,28 @@ from uitest.uihelper.common import select_pos
 class tdf115853(UITestCase):
 
     def test_tdf115853(self):
-        self.ui_test.create_doc_in_start_center("writer")
-        self.ui_test.execute_dialog_through_command(".uno:SetDocumentProperties")
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.create_doc_in_start_center("writer"):
+            self.ui_test.execute_dialog_through_command(".uno:SetDocumentProperties")
+            xDialog = self.xUITest.getTopFocusWindow()
 
-        xTabs = xDialog.getChild("tabcontrol")
+            xTabs = xDialog.getChild("tabcontrol")
 
-        select_pos(xTabs, "2")
+            select_pos(xTabs, "2")
 
-        xAddBtn = xDialog.getChild("add")
-        xAddBtn.executeAction("CLICK", tuple())
+            xAddBtn = xDialog.getChild("add")
+            xAddBtn.executeAction("CLICK", tuple())
 
-        xNameBox1 = xDialog.getChild("namebox1")
-        xNameBox1.executeAction("TYPE", mkPropertyValues({"TEXT":"Text"}))
+            xNameBox1 = xDialog.getChild("namebox1")
+            xNameBox1.executeAction("TYPE", mkPropertyValues({"TEXT":"Text"}))
 
-        xAddBtn = xDialog.getChild("add")
-        xAddBtn.executeAction("CLICK", tuple())
+            xAddBtn = xDialog.getChild("add")
+            xAddBtn.executeAction("CLICK", tuple())
 
-        # Without the fix in place, this test would have failed with
-        # AssertionError: 'Text' != ''
-        self.assertEqual("Text", get_state_as_dict(xNameBox1)['Text'])
+            # Without the fix in place, this test would have failed with
+            # AssertionError: 'Text' != ''
+            self.assertEqual("Text", get_state_as_dict(xNameBox1)['Text'])
 
-        xOkBtn = xDialog.getChild("ok")
-        xOkBtn.executeAction("CLICK", tuple())
-
-        self.ui_test.close_doc()
+            xOkBtn = xDialog.getChild("ok")
+            xOkBtn.executeAction("CLICK", tuple())
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

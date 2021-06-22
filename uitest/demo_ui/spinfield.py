@@ -14,62 +14,56 @@ class SpinFieldTest(UITestCase):
 
     def test_up(self):
 
-        self.ui_test.create_doc_in_start_center("calc")
+        with self.ui_test.create_doc_in_start_center("calc"):
 
-        self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
-        xCellsDlg = self.xUITest.getTopFocusWindow()
+            self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
+            xCellsDlg = self.xUITest.getTopFocusWindow()
 
-        xDecimalPlaces = xCellsDlg.getChild("leadzerosed")
-        xDecimalPlaces.executeAction("UP", tuple())
+            xDecimalPlaces = xCellsDlg.getChild("leadzerosed")
+            xDecimalPlaces.executeAction("UP", tuple())
 
-        decimal_places_state = get_state_as_dict(xDecimalPlaces)
-        assert(decimal_places_state["Text"] == "2")
+            decimal_places_state = get_state_as_dict(xDecimalPlaces)
+            assert(decimal_places_state["Text"] == "2")
 
-        okBtn = xCellsDlg.getChild("ok")
-        self.ui_test.close_dialog_through_button(okBtn)
-
-        self.ui_test.close_doc()
+            okBtn = xCellsDlg.getChild("ok")
+            self.ui_test.close_dialog_through_button(okBtn)
 
     def test_down(self):
 
-        self.ui_test.create_doc_in_start_center("calc")
+        with self.ui_test.create_doc_in_start_center("calc"):
 
-        self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
-        xCellsDlg = self.xUITest.getTopFocusWindow()
+            self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
+            xCellsDlg = self.xUITest.getTopFocusWindow()
 
-        xDecimalPlaces = xCellsDlg.getChild("leadzerosed")
-        xDecimalPlaces.executeAction("UP", tuple())
-        xDecimalPlaces.executeAction("UP", tuple())
+            xDecimalPlaces = xCellsDlg.getChild("leadzerosed")
+            xDecimalPlaces.executeAction("UP", tuple())
+            xDecimalPlaces.executeAction("UP", tuple())
 
-        decimal_places_state = get_state_as_dict(xDecimalPlaces)
-        assert(decimal_places_state["Text"] == "3")
+            decimal_places_state = get_state_as_dict(xDecimalPlaces)
+            assert(decimal_places_state["Text"] == "3")
         
-        xDecimalPlaces.executeAction("DOWN", tuple())
+            xDecimalPlaces.executeAction("DOWN", tuple())
 
-        decimal_places_state = get_state_as_dict(xDecimalPlaces)
-        assert(decimal_places_state["Text"] == "2")
+            decimal_places_state = get_state_as_dict(xDecimalPlaces)
+            assert(decimal_places_state["Text"] == "2")
 
-        okBtn = xCellsDlg.getChild("ok")
-        self.ui_test.close_dialog_through_button(okBtn)
-
-        self.ui_test.close_doc()
+            okBtn = xCellsDlg.getChild("ok")
+            self.ui_test.close_dialog_through_button(okBtn)
 
     def test_text(self):
 
-        self.ui_test.create_doc_in_start_center("calc")
+        with self.ui_test.create_doc_in_start_center("calc"):
 
-        self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
-        xCellsDlg = self.xUITest.getTopFocusWindow()
+            self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
+            xCellsDlg = self.xUITest.getTopFocusWindow()
         
-        xDecimalPlaces = xCellsDlg.getChild("leadzerosed")
-        type_text(xDecimalPlaces, "4")
+            xDecimalPlaces = xCellsDlg.getChild("leadzerosed")
+            type_text(xDecimalPlaces, "4")
 
-        decimal_places_state = get_state_as_dict(xDecimalPlaces)
-        assert(decimal_places_state["Text"] == "41")
+            decimal_places_state = get_state_as_dict(xDecimalPlaces)
+            assert(decimal_places_state["Text"] == "41")
 
-        okBtn = xCellsDlg.getChild("ok")
-        self.ui_test.close_dialog_through_button(okBtn)
-
-        self.ui_test.close_doc()
+            okBtn = xCellsDlg.getChild("ok")
+            self.ui_test.close_dialog_through_button(okBtn)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
