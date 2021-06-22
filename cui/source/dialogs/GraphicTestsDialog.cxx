@@ -8,14 +8,23 @@
  */
 
 #include <GraphicsTestsDialog.hxx>
+#include <vcl/test/GraphicsRenderTests.hxx>
 
 GraphicsTestsDialog::GraphicsTestsDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "cui/ui/graphictestdlg.ui", "GraphicTestsDialog")
-    , m_xResultLog(m_xBuilder->weld_text_view("gptestresults"))
+    , m_xResultLog(m_xBuilder->weld_text_view("gptest_txtVW"))
     , m_xDownloadResults(m_xBuilder->weld_button("gptest_downld"))
 {
-    m_xResultLog->set_text("Running tests...");
     m_xDownloadResults->connect_clicked(LINK(this, GraphicsTestsDialog, HandleDownloadRequest));
+    for (int i = 1; i <= 60; i++)
+    {
+        OString labelID("test_label_" + std::to_string(i));
+        OString buttonID("test_button_" + std::to_string(i));
+        m_xTestLabels.push_back(m_xBuilder->weld_label(labelID));
+        m_xTestButtons.push_back(m_xBuilder->weld_button(buttonID));
+        m_xTestButtons.back()->connect_clicked(
+            LINK(this, GraphicsTestsDialog, HandleResultViewRequest));
+    }
     runGraphicsTestandUpdateLog();
 }
 
@@ -32,19 +41,31 @@ void GraphicsTestsDialog::runGraphicsTestandUpdateLog()
     OString writeResults;
     for (const class OString& tests : TestObject.m_aPassed)
     {
-        writeResults += tests + " [PASSED]\n";
+        m_xTestLabels[testNumber]->set_label(tests);
+        m_xTestButtons[testNumber]->set_label("[PASSED]");
+        m_xTestButtons[testNumber]->set_tooltip_text(tests);
+        m_xTestButtons[testNumber++]->set_background(COL_LIGHTGREEN);
     }
-    for (const class OString& tests : TestObject.m_aQuirky)
+    for (class OUString& tests : TestObject.getQuirkyTests())
     {
-        writeResults += tests + " [QUIRKY]\n";
+        m_xTestLabels[testNumber]->set_label(tests);
+        m_xTestButtons[testNumber]->set_label("[QUIRKY]");
+        m_xTestButtons[testNumber]->set_tooltip_text(tests);
+        m_xTestButtons[testNumber++]->set_background(COL_YELLOW);
     }
-    for (const class OString& tests : TestObject.m_aFailed)
+    for (class OUString& tests : TestObject.getFailedTests())
     {
-        writeResults += tests + " [FAILED]\n";
+        m_xTestLabels[testNumber]->set_label(tests);
+        m_xTestButtons[testNumber]->set_label("[FAILED]");
+        m_xTestButtons[testNumber]->set_tooltip_text(tests);
+        m_xTestButtons[testNumber++]->set_background(COL_LIGHTRED);
     }
-    for (const class OString& tests : TestObject.m_aSkipped)
+    for (class OUString& tests : TestObject.getSkippedTests())
     {
-        writeResults += tests + " [SKIPPED]\n";
+        m_xTestLabels[testNumber]->set_label(tests);
+        m_xTestButtons[testNumber]->set_label("[SKIPPED]");
+        m_xTestButtons[testNumber]->set_tooltip_text(tests);
+        m_xTestButtons[testNumber++]->set_background(COL_LIGHTGRAYBLUE);
     }
     m_xResultLog->set_text(atemp + OStringToOUString(writeResults, RTL_TEXTENCODING_UTF8));
 }
@@ -52,4 +73,18 @@ void GraphicsTestsDialog::runGraphicsTestandUpdateLog()
 IMPL_STATIC_LINK_NOARG(GraphicsTestsDialog, HandleDownloadRequest, weld::Button&, void)
 {
     //TODO: Enter code for downloading the results to user's system.
+    return;
+}
+
+IMPL_LINK(GraphicsTestsDialog, HandleResultViewRequest, weld::Button&, rButton, void)
+{
+    //Will launch the Imageviewer with the corresponding test Bitmap and test title.
+    OUString atitle = rButton.get_tooltip_text();
+    if (rButton.get_label() == "[SKIPPED]")
+    {
+        return;
+    }
+    std::unique_ptr<ImageViewerDialog> m_ImgVwDialog(
+        new ImageViewerDialog(m_xDialog.get(), BitmapEx(m_xResultImage[atitle]), atitle));
+    m_ImgVwDialog->run();
 }
