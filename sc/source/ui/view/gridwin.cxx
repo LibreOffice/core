@@ -3382,7 +3382,7 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
                 SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
                 rBindings.Invalidate(SID_ATTR_TRANSFORM_POS_X);
                 rBindings.Invalidate(SID_ATTR_TRANSFORM_POS_Y);
-             }
+            }
             return;
         }
 

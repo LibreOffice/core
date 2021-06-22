@@ -680,7 +680,7 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
                aDirItem.getFileStatus( aFileStatus ) == osl::FileBase::E_None &&
                aFileStatus.isValid( osl_FileStatus_Mask_FileURL ) &&
                aFileStatus.isValid( osl_FileStatus_Mask_FileName ) )
-          {
+        {
             aFileUrl = aFileStatus.getFileURL();
             aFileName = aFileStatus.getFileName();
             int idx_ = aFileName.lastIndexOf( '.' );
@@ -694,7 +694,7 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
                 ( str[idx_ + 2] == 'r' || str[idx_ + 2] == 'R' )    &&
                 ( str[idx_ + 3] == 'e' || str[idx_ + 3] == 'E' )    &&
                 ( str[idx_ + 4] == 'e' || str[idx_ + 4] == 'E' ) )
-              {
+            {
                 OUString baseName = aFileName.copy(0,idx_).toAsciiLowerCase();
                 if(! showBasic && baseName == "sbasic" )
                   continue;
@@ -709,8 +709,8 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
                     configData.vFileURL.push_back( aFileUrl );
                     aFile.close();
                 }
-              }
-          }
+            }
+        }
         aDirectory.close();
     }
 
@@ -806,8 +806,8 @@ TVChildTarget::getBooleanKey(const Reference<
                              XHierarchicalNameAccess >& xHierAccess,
                              const char* key)
 {
-  bool ret = false;
-  if( xHierAccess.is() )
+    bool ret = false;
+    if( xHierAccess.is() )
     {
       Any aAny;
       try
@@ -821,7 +821,7 @@ TVChildTarget::getBooleanKey(const Reference<
         }
       aAny >>= ret;
     }
-  return ret;
+    return ret;
 }
 
 void TVChildTarget::subst( OUString& instpath )
@@ -1088,7 +1088,7 @@ OUString TreeFileIterator::expandURL( const OUString& aURL )
         xFac = uri::UriReferenceFactory::create( m_xContext );
 
         xMacroExpander = util::theMacroExpander::get(m_xContext);
-     }
+    }
 
     OUString aRetURL = aURL;
     Reference< uri::XUriReference > uriRef;

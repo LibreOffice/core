@@ -170,12 +170,12 @@ ContentProvider::createDocumentContentIdentifier(
 {
     // model -> id -> content identifier -> queryContent
     if ( !m_xDocsMgr.is() )
-     {
+    {
         throw lang::IllegalArgumentException(
             "No Document Manager!",
             static_cast< cppu::OWeakObject * >( this ),
             1 );
-     }
+    }
 
     OUString aDocId = tdoc_ucp::OfficeDocumentsManager::queryDocumentId(xModel);
     if ( aDocId.isEmpty() )

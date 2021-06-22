@@ -196,7 +196,7 @@ void SwWrtShell::InsertByWord( const OUString & rStr)
     bool bDelim = GetAppCharClass().isLetterNumeric( rStr, 0 );
     sal_Int32 nPos = 0, nStt = 0;
     for( ; nPos < rStr.getLength(); nPos++ )
-       {
+    {
         bool bTmpDelim = GetAppCharClass().isLetterNumeric( rStr, nPos );
         if( bTmpDelim != bDelim )
         {

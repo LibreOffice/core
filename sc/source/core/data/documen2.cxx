@@ -835,7 +835,7 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
 
                 if (pValidationList)
                     pValidationList->UpdateInsertTab(aCxt);
-           }
+            }
             else
                 bValid = false;
         }

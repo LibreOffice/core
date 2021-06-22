@@ -731,7 +731,7 @@ void SfxShell::BroadcastContextForActivation (const bool bIsActivated)
             pImpl->maContextChangeBroadcaster.Activate(pViewFrame->GetFrame().GetFrameInterface());
         else
             pImpl->maContextChangeBroadcaster.Deactivate(pViewFrame->GetFrame().GetFrameInterface());
-   }
+    }
 }
 
 bool SfxShell::SetContextBroadcasterEnabled (const bool bIsEnabled)

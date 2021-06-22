@@ -2516,7 +2516,7 @@ void SdrPowerPointImport::SetPageNum( sal_uInt16 nPageNum, PptPageKind eKind )
                     pMasterPersist = &(*pPageList)[ nMasterIndex ];
             }
             m_pPPTStyleSheet = pMasterPersist->xStyleSheet.get();
-         }
+        }
     }
     if ( !m_pPPTStyleSheet )
         m_pPPTStyleSheet = m_pDefaultSheet;

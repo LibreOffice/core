@@ -1005,7 +1005,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx const * pPresSettings )
                     beans::PropertyState_DIRECT_VALUE );
 
             if( mbUsePen )
-             {
+            {
                 aProperties.emplace_back( "UserPaintColor" ,
                         // User paint color is black by default.
                         -1, Any( mnUserPaintColor ),

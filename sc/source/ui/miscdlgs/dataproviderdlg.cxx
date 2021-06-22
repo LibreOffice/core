@@ -677,7 +677,7 @@ std::shared_ptr<sc::DataTransformation> ScDateTimeTransformation::getTransformat
 
         // translate from 1-based column notations to internal Calc one
         aColumns.insert(nCol - 1);
-}
+    }
     switch (nPos)
     {
         case 0:

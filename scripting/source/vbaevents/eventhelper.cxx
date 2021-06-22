@@ -923,9 +923,9 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet )
                 {
                     TOOLS_WARN_EXCEPTION("scripting", "event script raised" );
                 }
-           }
-       }
-   }
+            }
+        }
+    }
 }
 
 namespace {

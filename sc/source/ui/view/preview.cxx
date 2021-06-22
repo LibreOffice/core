@@ -1230,7 +1230,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                     bBottomRulerChange = false;
                     bHeaderRulerChange = false;
                     bFooterRulerChange = false;
-                 }
+                }
             }
             bTopRulerMove = false;
             bBottomRulerMove = false;

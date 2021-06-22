@@ -92,7 +92,7 @@ using namespace com::sun::star;
                 OSL_ENSURE( ( *(j->GetPoint()) != *(j->GetMark()) ) ||
                             ( j->GetContentIdx() != nullptr ),
                             ERROR_PREFIX "empty redline" );
-             }
+            }
 
             // verify proper redline sorting
             for( size_t n = 1; n < rTable.size(); ++n )

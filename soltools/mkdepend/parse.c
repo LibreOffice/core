@@ -179,7 +179,7 @@ int deftype (char *line, struct filepointer *filep, struct inclist * file,
               return ELIFFALSE;
           else
               return ELIFGUESSFALSE;
-          }
+        }
         else
         {
           debug(0,("true...\n"));

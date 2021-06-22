@@ -773,7 +773,7 @@ void SvxXMLNumRuleExport::exportOutline()
             // style:name="..."
             GetExport().CheckAttrList();
             if ( !sOutlineStyleName.isEmpty() )
-             {
+            {
                 bool bEncoded = false;
                 GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NAME,
                                 GetExport().EncodeStyleName( sOutlineStyleName,

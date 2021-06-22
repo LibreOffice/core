@@ -1182,11 +1182,11 @@ void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans
     for (const beans::PropertyValue& rValue : rArguments)
     {
         if (rValue.Name == ".uno:SpellOnline" && rValue.Value.has<bool>())
-         {
+        {
             ScDocOptions options = GetDocument()->GetDocOptions();
             options.SetAutoSpell(rValue.Value.get<bool>());
             GetDocument()->SetDocOptions(options);
-         }
+        }
     }
 
     // show us the text exactly

@@ -126,7 +126,7 @@ void FreeTypeTextRenderImpl::GetDevFontList( PhysicalFontCollection* pFontCollec
         aDFA.IncreaseQualityBy( 4096 );
         const OString& rFileName = rMgr.getFontFileSysPath( aInfo.m_nID );
         rFreetypeManager.AddFontFile(rFileName, nFaceNum, nVariantNum, aInfo.m_nID, aDFA);
-   }
+    }
 
     // announce glyphcache fonts
     rFreetypeManager.AnnounceFonts(pFontCollection);

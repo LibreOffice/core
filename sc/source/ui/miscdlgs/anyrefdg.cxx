@@ -133,7 +133,7 @@ void ScFormulaReferenceHelper::ShowSimpleReference(const OUString& rStr)
             ScRange const & rRangeEntry = aRangeList[ i ];
             Color aColName = ScRangeFindList::GetColorName( i );
             pTabViewShell->AddHighlightRange( rRangeEntry, aColName );
-       }
+        }
     }
 }
 

@@ -247,7 +247,7 @@ OUString GetEnglishSearchFontName(const OUString& rInName)
 
                 rName[ i ] = c;
 
-           }
+            }
             else
             {
                 // Only Fontnames with None-Ascii-Characters must be translated

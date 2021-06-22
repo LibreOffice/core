@@ -95,7 +95,7 @@ IndexBitSet::~IndexBitSet()
 sal_uInt16 IndexBitSet::GetFreeIndex()
 {
   for(sal_uInt16 i=0;i<SAL_MAX_UINT16;i++)
-    if(!Contains(i))
+      if(!Contains(i))
       {
         *this|=i;
         return i;

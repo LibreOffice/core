@@ -431,11 +431,11 @@ OUString OSingleSelectQueryComposer::impl_getColumnRealName_throw(const Referenc
         || !m_aCurrentColumns[SelectColumns]
         || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_NAME)
         )
-        {
-            OUString sError(DBA_RES(RID_STR_COLUMN_UNKNOWN_PROP));
-            SQLException aErr(sError.replaceAll("%value", PROPERTY_NAME),*this,SQLSTATE_GENERAL,1000,Any() );
-            throw SQLException(DBA_RES(RID_STR_COLUMN_NOT_VALID),*this,SQLSTATE_GENERAL,1000,makeAny(aErr) );
-        }
+    {
+        OUString sError(DBA_RES(RID_STR_COLUMN_UNKNOWN_PROP));
+        SQLException aErr(sError.replaceAll("%value", PROPERTY_NAME),*this,SQLSTATE_GENERAL,1000,Any() );
+        throw SQLException(DBA_RES(RID_STR_COLUMN_NOT_VALID),*this,SQLSTATE_GENERAL,1000,makeAny(aErr) );
+    }
 
     OUString aName, aNewName;
     column->getPropertyValue(PROPERTY_NAME)         >>= aName;
@@ -501,11 +501,11 @@ OUString OSingleSelectQueryComposer::impl_getColumnNameOrderBy_throw(const Refer
         || !m_aCurrentColumns[SelectColumns]
         || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_NAME)
         )
-        {
-            OUString sError(DBA_RES(RID_STR_COLUMN_UNKNOWN_PROP));
-            SQLException aErr(sError.replaceAll("%value", PROPERTY_NAME),*this,SQLSTATE_GENERAL,1000,Any() );
-            throw SQLException(DBA_RES(RID_STR_COLUMN_NOT_VALID),*this,SQLSTATE_GENERAL,1000,makeAny(aErr) );
-        }
+    {
+        OUString sError(DBA_RES(RID_STR_COLUMN_UNKNOWN_PROP));
+        SQLException aErr(sError.replaceAll("%value", PROPERTY_NAME),*this,SQLSTATE_GENERAL,1000,Any() );
+        throw SQLException(DBA_RES(RID_STR_COLUMN_NOT_VALID),*this,SQLSTATE_GENERAL,1000,makeAny(aErr) );
+    }
 
     OUString aName;
     column->getPropertyValue(PROPERTY_NAME)         >>= aName;

@@ -2259,7 +2259,7 @@ OUString lcl_GetPercentString(const ImpSvNumberformatInfo &rInfo, sal_uInt16 nCn
             i = nCnt;
             if( bStringFound )
                 aPercentString.insert( 0, "\"" );
-      }
+        }
     }
     return aPercentString.makeStringAndClear();
 }

@@ -253,7 +253,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
                         pWrong = pNode->GetGrammarCheck();
                     if (pWrong)
                         bIsWrong = pWrong->InWrongWord(nBegin,nLen) && !pNode->IsSymbolAt(nBegin);
-                 }
+                }
             }
         }
 

@@ -1739,8 +1739,8 @@ FormulaToken* FormulaTokenArrayPlainIterator::GetNextReferenceOrName()
                     // added to avoid warnings
                 }
              }
-         }
-     }
+        }
+    }
     return nullptr;
 }
 

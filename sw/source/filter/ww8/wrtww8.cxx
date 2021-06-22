@@ -2378,9 +2378,9 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
 
     ww8::GridColsPtr pGridCols = GetGridCols( pTableTextNodeInfoInner );
     for ( const auto nCol : *pGridCols )
-     {
+    {
          m_rWW8Export.InsUInt16( o3tl::narrowing<sal_uInt16>(nCol) + nTableOffset );
-     }
+    }
 
      /* TCs */
     ww8::RowSpansPtr pRowSpans = pTableTextNodeInfoInner->getRowSpansOfRow();

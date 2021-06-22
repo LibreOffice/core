@@ -135,8 +135,8 @@ void SdModule::Execute(SfxRequest& rReq)
                         break;
                     default:
                         break;
-                    }
                 }
+            }
 
         }
         break;

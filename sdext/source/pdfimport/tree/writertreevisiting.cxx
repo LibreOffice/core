@@ -201,7 +201,7 @@ void WriterXmlEmitter::fillFrameProps( DrawElement&       rElem,
             aBuf.append( ' ' );
             aBuf.append( convertPixelToUnitString( rel_y ) );
             aBuf.append( " )" );
-         }
+        }
 
         rProps[ "draw:transform" ] = aBuf.makeStringAndClear();
     }

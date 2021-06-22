@@ -426,17 +426,17 @@ void LwpPara::RegisterStyle()
     else //use named style
     {
         if (m_pIndentOverride)
+        {
+            if (m_pIndentOverride->IsUseRelative() && GetParent())
             {
-                if (m_pIndentOverride->IsUseRelative() && GetParent())
-                {
-                    xOverStyle.reset(new XFParaStyle);
-                    *xOverStyle = *pBaseStyle;
-                    OverrideIndent(nullptr,m_pIndentOverride.get(),xOverStyle.get());
-                    if (!m_ParentStyleName.isEmpty())
-                        xOverStyle->SetParentStyleName(m_ParentStyleName);
-                    m_StyleName = pXFStyleManager->AddStyle(std::move(xOverStyle)).m_pStyle->GetStyleName();
-                }
+                xOverStyle.reset(new XFParaStyle);
+                *xOverStyle = *pBaseStyle;
+                OverrideIndent(nullptr,m_pIndentOverride.get(),xOverStyle.get());
+                if (!m_ParentStyleName.isEmpty())
+                    xOverStyle->SetParentStyleName(m_ParentStyleName);
+                m_StyleName = pXFStyleManager->AddStyle(std::move(xOverStyle)).m_pStyle->GetStyleName();
             }
+        }
     }
 
     if (IsInCell())

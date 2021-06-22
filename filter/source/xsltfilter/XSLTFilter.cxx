@@ -316,16 +316,16 @@ namespace XSLT
         css::uno::Reference<XInputStream> xInputStream;
         css::uno::Reference<XInteractionHandler> xInterActionHandler;
         for (sal_Int32 i = 0; i < nLength; i++)
-            {
-                aName = aSourceData[i].Name;
-                Any value = aSourceData[i].Value;
-                if ( aName == "InputStream" )
-                    value >>= xInputStream;
-                else if ( aName == "URL" )
-                    value >>= aURL;
-                else if ( aName == "InteractionHandler" )
-                    value >>= xInterActionHandler;
-            }
+        {
+            aName = aSourceData[i].Name;
+            Any value = aSourceData[i].Value;
+            if ( aName == "InputStream" )
+                value >>= xInputStream;
+            else if ( aName == "URL" )
+                value >>= aURL;
+            else if ( aName == "InteractionHandler" )
+                value >>= xInterActionHandler;
+        }
         OSL_ASSERT(xInputStream.is());
         if (!xInputStream.is())
             return false;
@@ -350,7 +350,7 @@ namespace XSLT
         OSL_ASSERT(xInputStream.is());
         OSL_ASSERT(m_tcontrol.is());
         if (xHandler.is() && xInputStream.is() && m_tcontrol.is())
-            {
+        {
                 try
                     {
                         css::uno::Reference<css::io::XSeekable> xSeek(xInputStream, UNO_QUERY);
@@ -430,11 +430,11 @@ namespace XSLT
                         TOOLS_WARN_EXCEPTION("filter.xslt", "");
                         return false;
                     }
-            }
+        }
         else
-            {
-                return false;
-            }
+        {
+            return false;
+        }
     }
 
     sal_Bool
@@ -456,16 +456,16 @@ namespace XSLT
         css::uno::Reference<XInputStream> xInputStream;
         css::uno::Reference<XInteractionHandler> xInterActionHandler;
         for (sal_Int32 i = 0; i < nLength; i++)
-            {
-                aName = aSourceData[i].Name;
-                Any value = aSourceData[i].Value;
-                if ( aName == "InputStream" )
-                    value >>= xInputStream;
-                else if ( aName == "URL" )
-                    value >>= aURL;
-                else if ( aName == "InteractionHandler" )
-                    value >>= xInterActionHandler;
-            }
+        {
+            aName = aSourceData[i].Name;
+            Any value = aSourceData[i].Value;
+            if ( aName == "InputStream" )
+                value >>= xInputStream;
+            else if ( aName == "URL" )
+                value >>= aURL;
+            else if ( aName == "InteractionHandler" )
+                value >>= xInterActionHandler;
+        }
         OSL_ASSERT(xInputStream.is());
         if (!xInputStream.is())
             return false;
@@ -490,7 +490,7 @@ namespace XSLT
         OSL_ASSERT(xInputStream.is());
         OSL_ASSERT(m_tcontrol.is());
         if (xFastParser.is() && xInputStream.is() && m_tcontrol.is())
-            {
+        {
                 try
                     {
                         css::uno::Reference<css::io::XSeekable> xSeek(xInputStream, UNO_QUERY);
@@ -556,11 +556,11 @@ namespace XSLT
                         TOOLS_WARN_EXCEPTION("filter.xslt", "");
                         return false;
                     }
-            }
+        }
         else
-            {
-                return false;
-            }
+        {
+            return false;
+        }
     }
 
     sal_Bool
@@ -582,23 +582,23 @@ namespace XSLT
         // css::uno::Reference<XOutputStream> rOutputStream;
         sal_Int32 nLength = aSourceData.getLength();
         for (sal_Int32 i = 0; i < nLength; i++)
-            {
-                aName = aSourceData[i].Name;
-                if ( aName == "DocType_Public" )
-                    aSourceData[i].Value >>= aDoctypePublic;
-                else if ( aName == "OutputStream" )
-                    aSourceData[i].Value >>= m_rOutputStream;
-                else if ( aName == "URL" )
-                    aSourceData[i].Value >>= sURL;
-            }
+        {
+            aName = aSourceData[i].Name;
+            if ( aName == "DocType_Public" )
+                aSourceData[i].Value >>= aDoctypePublic;
+            else if ( aName == "OutputStream" )
+                aSourceData[i].Value >>= m_rOutputStream;
+            else if ( aName == "URL" )
+                aSourceData[i].Value >>= sURL;
+        }
 
         if (!getDelegate().is())
-            {
-                // get the document writer
-                setDelegate(css::uno::Reference<XExtendedDocumentHandler>(
-                                Writer::create(m_xContext),
-                                UNO_QUERY_THROW));
-            }
+        {
+            // get the document writer
+            setDelegate(css::uno::Reference<XExtendedDocumentHandler>(
+                            Writer::create(m_xContext),
+                            UNO_QUERY_THROW));
+        }
 
         // create transformer
         Sequence<Any> args(4);
@@ -624,7 +624,7 @@ namespace XSLT
         OSL_ASSERT(m_rOutputStream.is());
         OSL_ASSERT(m_tcontrol.is());
         if (m_tcontrol.is() && m_rOutputStream.is())
-            {
+        {
                 // we want to be notified when the processing is done...
                 m_tcontrol->addListener(new XSLTFilterStreamListener(*this));
 
@@ -648,11 +648,11 @@ namespace XSLT
                 // we will start the transformation as soon as we receive the startDocument
                 // event.
                 return true;
-            }
+        }
         else
-            {
-                return false;
-            }
+        {
+            return false;
+        }
     }
 
     // for the DocumentHandler implementation, we just proxy the

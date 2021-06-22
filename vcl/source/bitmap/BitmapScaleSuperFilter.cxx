@@ -319,7 +319,7 @@ void scaleUp(const ScaleContext &rCtx, tools::Long nStartY, tools::Long nEndY)
 
             ScaleFunction::generateComponent(pColorPtr0, pColorPtr1, nTempFX, nComponents2);
             ScaleFunction::calculateDestination(pScanDest, nTempFY, nComponents1, nComponents2);
-         }
+        }
     }
 }
 

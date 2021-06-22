@@ -5604,7 +5604,7 @@ void VCLXNumericField::setDecimalDigits( sal_Int16 Value )
         double n = getValue();
         pNumericFormatter->SetDecimalDigits( Value );
         setValue( n );
-       }
+    }
 }
 
 sal_Int16 VCLXNumericField::getDecimalDigits()

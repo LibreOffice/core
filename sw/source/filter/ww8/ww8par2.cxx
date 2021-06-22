@@ -2699,7 +2699,7 @@ void WW8TabDesc::MergeCells()
                     // (that can be a newly created or another group)
                     UpdateTableMergeGroup( rCell, pActMGroup, m_pTabBox, i );
                 }
-            }
+        }
     }
 }
 

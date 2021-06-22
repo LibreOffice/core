@@ -521,7 +521,7 @@ void syncRepositories(
             restarter->requestRestart(xCmdEnv.is() ? xCmdEnv->getInteractionHandler() :
                                       Reference<task::XInteractionHandler>());
         }
-     }
+    }
 #endif
 }
 

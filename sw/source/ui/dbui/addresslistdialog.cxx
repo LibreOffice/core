@@ -310,12 +310,12 @@ IMPL_LINK_NOARG(SwAddressListDialog, RemoveHdl_Impl, weld::Button&, void)
     m_xListLB->remove(nEntry);
     // If this was the last item, disable the Remove & Edit buttons and enable Create
     if (m_xListLB->n_children() < 1 )
-        {
+    {
         m_xRemovePB->set_sensitive(false);
         m_xEditPB->set_sensitive(false);
         m_xFilterPB->set_sensitive(false);
         m_xCreateListPB->set_sensitive(true);
-        }
+    }
 
 
 }

@@ -273,7 +273,7 @@ const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext( XmlStyl
         IndicesType::iterator aFind = pIndices->find(aIndex);
         if( aFind != pIndices->end() )
             pStyle = aFind->GetStyle();
-   }
+    }
     else
     {
         for( size_t i = 0; !pStyle && i < aStyles.size(); i++ )

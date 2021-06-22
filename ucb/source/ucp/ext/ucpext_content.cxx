@@ -243,7 +243,7 @@ namespace ucb::ucp::ext
             {
                 Reference< XDynamicResultSet > xSet = new ResultSet( m_xContext, this, aOpenCommand, i_rEnvironment );
                 aRet <<= xSet;
-              }
+            }
 
             if ( aOpenCommand.Sink.is() )
             {
