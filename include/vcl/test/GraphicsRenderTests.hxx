@@ -17,19 +17,35 @@
 
 #include <vector>
 
+class VCL_PLUGIN_PUBLIC VclTestResult
+{
+    OUString m_aTestName;
+    //For storing the result of the test.
+    OUString m_aTestStatus;
+    //For storing the resultant bitmap correspondingly to the test.
+    Bitmap m_aResultantBitmap;
+
+public:
+    VclTestResult(OUString atestName, OUString atestStatus, Bitmap atestBitmap)
+        : m_aTestName(atestName)
+        , m_aTestStatus(atestStatus)
+        , m_aResultantBitmap(atestBitmap)
+    {
+    }
+    OUString getTestName() { return m_aTestName; }
+    OUString getStatus() { return m_aTestStatus; }
+    Bitmap getBitmap() { return m_aResultantBitmap; }
+};
+
 class VCL_PLUGIN_PUBLIC GraphicsRenderTests
 {
-public:
-    //For storing the results correspondingly to the tests.
-    std::vector<OString> m_aPassed;
-    std::vector<OString> m_aQuirky;
-    std::vector<OString> m_aFailed;
-    //For storing Skipped tests.
-    std::vector<OString> m_aSkipped;
+    bool m_aStoreResultantBitmap;
+
+    //For storing the test's info
+    std::vector<VclTestResult> m_aTestResult;
     //For storing the current graphics Backend in use.
     OUString m_aCurGraphicsBackend;
 
-private:
     void testDrawRectWithRectangle();
     void testDrawRectWithPixel();
     void testDrawRectWithLine();
@@ -86,9 +102,12 @@ private:
     void testLineCapRound();
     void testLineCapSquare();
     void testLineCapButt();
-    void updateResult(vcl::test::TestResult const result, OString atestname);
+    OUString returnTestStatus(vcl::test::TestResult const result);
     void runALLTests();
+    void appendTestResult(OUString aTestName, OUString aTestStatus, Bitmap aTestBitmap = Bitmap());
 
 public:
-    void run();
+    std::vector<VclTestResult>& getTestResults();
+    OUString getResultString();
+    void run(bool storeResultBitmap = false);
 };
