@@ -30,8 +30,9 @@
 // We don't allow duplicated object entries!
 struct type_name_key
     : boost::multi_index::composite_key<
-          SwFrameFormat*, boost::multi_index::const_mem_fun<SwFormat, sal_uInt16, &SwFormat::Which>,
+          SwFrameFormat*,
           boost::multi_index::const_mem_fun<SwFormat, const OUString&, &SwFormat::GetName>,
+          boost::multi_index::const_mem_fun<SwFormat, sal_uInt16, &SwFormat::Which>,
           boost::multi_index::identity<SwFrameFormat*> // the actual object pointer
           >
 {
@@ -88,6 +89,9 @@ public:
     // Convenience function, which just uses type and name!
     // To look for the exact object use find.
     ByTypeAndName::const_iterator findSimilar(const value_type& x) const;
+    // search for formats by name
+    std::pair<ByTypeAndName::const_iterator, ByTypeAndName::const_iterator>
+    findRangeByName(const OUString& name) const;
     // So we can actually check for end()
     ByTypeAndName::const_iterator typeAndNameEnd() const { return m_TypeAndNameIndex.end(); }
 
@@ -114,10 +118,7 @@ public:
     void newDefault(const_iterator const& position);
 
     // Override return type to reduce casting
-    virtual SwFrameFormat* FindFormatByName(std::u16string_view rName) const override
-    {
-        return static_cast<SwFrameFormat*>(SwFormatsBase::FindFormatByName(rName));
-    }
+    virtual SwFrameFormat* FindFormatByName(const OUString& rName) const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

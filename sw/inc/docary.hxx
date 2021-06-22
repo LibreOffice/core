@@ -49,7 +49,7 @@ public:
     virtual ~SwFormatsBase();
 
     // default linear search implementation, some subclasses will override with a more efficient search
-    virtual SwFormat* FindFormatByName(std::u16string_view rName) const;
+    virtual SwFormat* FindFormatByName(const OUString& rName) const;
 
     SwFormatsBase() = default;
     SwFormatsBase(SwFormatsBase const &) = default;
@@ -170,7 +170,7 @@ public:
     }
 
     // Override return type to reduce casting
-    virtual Value FindFormatByName(std::u16string_view rName) const override
+    virtual Value FindFormatByName(const OUString& rName) const override
     { return static_cast<Value>(SwFormatsBase::FindFormatByName(rName)); }
 };
 

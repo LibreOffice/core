@@ -3945,17 +3945,18 @@ OUString SwDoc::GetUniqueTableName() const
     return aName + OUString::number( ++nNum );
 }
 
-SwTableFormat* SwDoc::FindTableFormatByName( std::u16string_view rName, bool bAll ) const
+SwTableFormat* SwDoc::FindTableFormatByName( const OUString& rName, bool bAll ) const
 {
     const SwFormat* pRet = nullptr;
     if( bAll )
         pRet = mpTableFrameFormatTable->FindFormatByName( rName );
     else
     {
+        auto [it, itEnd] = mpTableFrameFormatTable->findRangeByName(rName);
         // Only the ones set in the Doc
-        for( size_t n = 0; n < mpTableFrameFormatTable->size(); ++n )
+        for( ; it != itEnd; ++it )
         {
-            const SwFrameFormat* pFormat = (*mpTableFrameFormatTable)[ n ];
+            const SwFrameFormat* pFormat = *it;
             if( !pFormat->IsDefault() && IsUsed( *pFormat ) &&
                 pFormat->GetName() == rName )
             {
@@ -4441,7 +4442,7 @@ bool SwDoc::UnProtectTableCells( SwTable& rTable )
     return bChgd;
 }
 
-void SwDoc::UnProtectCells( std::u16string_view rName )
+void SwDoc::UnProtectCells( const OUString& rName )
 {
     SwTableFormat* pFormat = FindTableFormatByName( rName );
     if( pFormat )

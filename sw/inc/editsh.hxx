@@ -290,7 +290,7 @@ public:
     SwCharFormat* GetCurCharFormat() const;
     void FillByEx(SwCharFormat*);
     SwCharFormat* MakeCharFormat( const OUString& rName );
-    SwCharFormat* FindCharFormatByName( std::u16string_view rName ) const;
+    SwCharFormat* FindCharFormatByName( const OUString& rName ) const;
 
     /* FormatCollections (new) - Explaining the general naming pattern:
      * GetXXXCount() returns the count of xxx in the document.
@@ -333,7 +333,7 @@ public:
     SwTextFormatColl *MakeTextFormatColl(const OUString &rFormatCollName,
         SwTextFormatColl *pDerivedFrom = nullptr);
     void FillByEx(SwTextFormatColl*);
-    SwTextFormatColl* FindTextFormatCollByName( std::u16string_view rName ) const;
+    SwTextFormatColl* FindTextFormatCollByName( const OUString& rName ) const;
 
     /// @return "Auto-Collection" with given Id. If it does not exist create it.
     SwTextFormatColl* GetTextCollFromPool( sal_uInt16 nId );
@@ -677,7 +677,7 @@ public:
     void SetChartName( const OUString &rName );
 
     /// Update content of all charts for table with given name.
-    void UpdateCharts( std::u16string_view rName );
+    void UpdateCharts( const OUString& rName );
 
     OUString GetCurWord() const;
 
