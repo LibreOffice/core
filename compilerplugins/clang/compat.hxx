@@ -346,6 +346,12 @@ inline bool isPtrMemOp(clang::BinaryOperatorKind op) {
 #endif
 }
 
+#if CLANG_VERSION >= 70000
+constexpr llvm::sys::fs::OpenFlags OF_None = llvm::sys::fs::OF_None;
+#else
+constexpr llvm::sys::fs::OpenFlags OF_None = llvm::sys::fs::F_None;
+#endif
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
