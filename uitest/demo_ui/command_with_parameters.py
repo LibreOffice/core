@@ -12,13 +12,11 @@ class CommandWithParametersTest(UITestCase):
 
     def test_text_color_change(self):
 
-        self.ui_test.create_doc_in_start_center("writer")
+        with self.ui_test.create_doc_in_start_center("writer"):
 
-        self.xUITest.executeCommandWithParameters(".uno:Color",
-            mkPropertyValues({"Color": 16776960}))
-        xWriterEdit = self.xUITest.getTopFocusWindow().getChild("writer_edit")
-        type_text(xWriterEdit, "LibreOffice")
-
-        self.ui_test.close_doc()
+            self.xUITest.executeCommandWithParameters(".uno:Color",
+                mkPropertyValues({"Color": 16776960}))
+            xWriterEdit = self.xUITest.getTopFocusWindow().getChild("writer_edit")
+            type_text(xWriterEdit, "LibreOffice")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

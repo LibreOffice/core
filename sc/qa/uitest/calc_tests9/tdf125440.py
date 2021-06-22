@@ -22,20 +22,20 @@ class Tdf1254400(UITestCase):
             # Close the document
             self.xUITest.executeCommand(".uno:CloseDoc")
 
-            calc_doc = self.ui_test.create_doc_in_start_center("calc")
+            with self.ui_test.create_doc_in_start_center("calc"):
 
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
+                xCalcDoc = self.xUITest.getTopFocusWindow()
+                gridwin = xCalcDoc.getChild("grid_window")
+                document = self.ui_test.get_component()
 
-            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
+                gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
 
-            self.xUITest.executeCommand(".uno:PasteUnformatted")
+                self.xUITest.executeCommand(".uno:PasteUnformatted")
 
-            # Without the fix in place, this test would have failed with
-            # AssertionError: 'Row' != '"Row"'
-            self.assertEqual("Row", get_cell_by_position(document, 0, 0, 0).getString())
-            self.assertEqual("", get_cell_by_position(document, 0, 1, 0).getString())
-            self.assertEqual("", get_cell_by_position(document, 0, 2, 0).getString())
-            self.assertEqual("50", get_cell_by_position(document, 0, 3, 0).getString())
+                # Without the fix in place, this test would have failed with
+                # AssertionError: 'Row' != '"Row"'
+                self.assertEqual("Row", get_cell_by_position(document, 0, 0, 0).getString())
+                self.assertEqual("", get_cell_by_position(document, 0, 1, 0).getString())
+                self.assertEqual("", get_cell_by_position(document, 0, 2, 0).getString())
+                self.assertEqual("50", get_cell_by_position(document, 0, 3, 0).getString())
 

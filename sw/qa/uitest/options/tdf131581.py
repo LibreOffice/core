@@ -10,29 +10,27 @@ from uitest.framework import UITestCase
 class tdf131581(UITestCase):
 
     def test_tdf131581(self):
-        self.ui_test.create_doc_in_start_center("writer")
+        with self.ui_test.create_doc_in_start_center("writer"):
 
-        self.xUITest.getTopFocusWindow()
+            self.xUITest.getTopFocusWindow()
 
-        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")
-        xDialogOpt = self.xUITest.getTopFocusWindow()
+            self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")
+            xDialogOpt = self.xUITest.getTopFocusWindow()
 
-        xPages = xDialogOpt.getChild("pages")
-        xLOEntry = xPages.getChild('0')
-        xLOEntry.executeAction("EXPAND", tuple())
-        xAdvancedEntry = xLOEntry.getChild('10')
-        xAdvancedEntry.executeAction("SELECT", tuple())
+            xPages = xDialogOpt.getChild("pages")
+            xLOEntry = xPages.getChild('0')
+            xLOEntry.executeAction("EXPAND", tuple())
+            xAdvancedEntry = xLOEntry.getChild('10')
+            xAdvancedEntry.executeAction("SELECT", tuple())
 
-        xExpertBtn = xDialogOpt.getChild("expertconfig")
+            xExpertBtn = xDialogOpt.getChild("expertconfig")
 
-        with self.ui_test.execute_blocking_action(xExpertBtn.executeAction, args=('CLICK', ())) as dialog:
-            # Without the fix in place, this would have hung
-            xSearchBtn = dialog.getChild("searchButton")
-            xSearchBtn.executeAction("CLICK", tuple())
+            with self.ui_test.execute_blocking_action(xExpertBtn.executeAction, args=('CLICK', ())) as dialog:
+                # Without the fix in place, this would have hung
+                xSearchBtn = dialog.getChild("searchButton")
+                xSearchBtn.executeAction("CLICK", tuple())
 
-        xOKBtn = xDialogOpt.getChild("ok")
-        xOKBtn.executeAction("CLICK", tuple())
-
-        self.ui_test.close_doc()
+            xOKBtn = xDialogOpt.getChild("ok")
+            xOKBtn.executeAction("CLICK", tuple())
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
