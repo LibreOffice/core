@@ -115,6 +115,26 @@ OUString ScTabViewShell::GetSelectionText( bool bWholeWord )
     return aStrSelection;
 }
 
+bool ScTabViewShell::ShouldDisableEditHyperlink() const
+{
+    bool bRet = false;
+
+    if (pEditShell && pEditShell.get() == GetMySubShell())
+    {
+        bRet = pEditShell->ShouldDisableEditHyperlink();
+    }
+
+    return bRet;
+}
+
+void ScTabViewShell::EnableEditHyperlink()
+{
+    if (pEditShell && pEditShell.get() == GetMySubShell())
+    {
+        pEditShell->EnableEditHyperlink();
+    }
+}
+
 void ScTabViewShell::InsertURL( const OUString& rName, const OUString& rURL, const OUString& rTarget,
                                 sal_uInt16 nMode )
 {

@@ -497,7 +497,10 @@ private:
     void ConfigureAppBackgroundColor( svtools::ColorConfig* pColorConfig = nullptr );
 
     /// return true if "Edit Hyperlink" in context menu should be disabled
-    bool ShouldDisableEditHyperlink();
+    bool ShouldDisableEditHyperlink() const;
+    /// force "Edit Hyperlink" to true, with the expectation that SID_EDIT_HYPERLINK is
+    /// later Invalidated to reset it back to its natural value
+    void EnableEditHyperlink();
 
     // The colour of the area behind the slide (used to be called "Wiese")
     Color mnAppBackgroundColor;
