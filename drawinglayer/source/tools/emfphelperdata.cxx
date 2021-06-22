@@ -456,12 +456,14 @@ namespace emfplushelper
             color = Color(ColorAlpha, (brushIndexOrColor >> 24), (brushIndexOrColor >> 16) & 0xff,
                           (brushIndexOrColor >> 8) & 0xff, brushIndexOrColor & 0xff);
         }
-        else // we use a pen
+        else // we use a brush
         {
-            const EMFPPen* pen = static_cast<EMFPPen*>(maEMFPObjects[brushIndexOrColor & 0xff].get());
-            if (pen)
+            const EMFPBrush* brush = static_cast<EMFPBrush*>(maEMFPObjects[brushIndexOrColor & 0xff].get());
+            if (brush)
             {
-                color = pen->GetColor();
+                color = brush->GetColor();
+                if (brush->type != BrushTypeSolidColor)
+                    SAL_WARN("drawinglayer.emf", "EMF+\t\t TODO Brush other than solid color is not supported");
             }
         }
         return color;
@@ -1525,161 +1527,152 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeDrawString:
                     {
-                        sal_uInt32 brushId;
-                        sal_uInt32 formatId;
-                        sal_uInt32 stringLength;
+                        sal_uInt32 brushId, formatId, stringLength;
                         rMS.ReadUInt32(brushId).ReadUInt32(formatId).ReadUInt32(stringLength);
                         SAL_INFO("drawinglayer.emf", "EMF+\t FontId: " << OUString::number(flags & 0xFF));
                         SAL_INFO("drawinglayer.emf", "EMF+\t BrushId: " << BrushIDToString(flags, brushId));
                         SAL_INFO("drawinglayer.emf", "EMF+\t FormatId: " << formatId);
                         SAL_INFO("drawinglayer.emf", "EMF+\t Length: " << stringLength);
 
-                        if (flags & 0x8000)
+                        // read the layout rectangle
+                        float lx, ly, lw, lh;
+                        rMS.ReadFloat(lx).ReadFloat(ly).ReadFloat(lw).ReadFloat(lh);
+
+                        SAL_INFO("drawinglayer.emf", "EMF+\t DrawString layoutRect: " << lx << "," << ly << " - " << lw << "x" << lh);
+                        // parse the string
+                        const OUString text = read_uInt16s_ToOUString(rMS, stringLength);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t DrawString string: " << text);
+                        // get the stringFormat from the Object table ( this is OPTIONAL and may be nullptr )
+                        const EMFPStringFormat *stringFormat = dynamic_cast<EMFPStringFormat*>(maEMFPObjects[formatId & 0xff].get());
+                        // get the font from the flags
+                        const EMFPFont *font = static_cast< EMFPFont* >( maEMFPObjects[flags & 0xff].get() );
+                        if (!font)
                         {
-                            // read the layout rectangle
-                            float lx, ly, lw, lh;
-                            rMS.ReadFloat(lx).ReadFloat(ly).ReadFloat(lw).ReadFloat(lh);
+                            break;
+                        }
+                        mrPropertyHolders.Current().setFont(vcl::Font(font->family, Size(font->emSize, font->emSize)));
 
-                            SAL_INFO("drawinglayer.emf", "EMF+\t DrawString layoutRect: " << lx << "," << ly << " - " << lw << "x" << lh);
-                            // parse the string
-                            const OUString text = read_uInt16s_ToOUString(rMS, stringLength);
-                            SAL_INFO("drawinglayer.emf", "EMF+\t DrawString string: " << text);
-                            // get the stringFormat from the Object table ( this is OPTIONAL and may be nullptr )
-                            const EMFPStringFormat *stringFormat = dynamic_cast<EMFPStringFormat*>(maEMFPObjects[formatId & 0xff].get());
-                            // get the font from the flags
-                            const EMFPFont *font = static_cast< EMFPFont* >( maEMFPObjects[flags & 0xff].get() );
-                            if (!font)
+                        drawinglayer::attribute::FontAttribute fontAttribute(
+                            font->family,                                          // font family
+                            "",                                                    // (no) font style
+                            font->Bold() ? 8u : 1u,                                // weight: 8 = bold
+                            font->family == "SYMBOL",                              // symbol
+                            stringFormat && stringFormat->DirectionVertical(),     // vertical
+                            font->Italic(),                                        // italic
+                            false,                                                 // monospaced
+                            false,                                                 // outline = false, no such thing in MS-EMFPLUS
+                            stringFormat && stringFormat->DirectionRightToLeft(),  // right-to-left
+                            false);                                                // BiDiStrong
+
+                        css::lang::Locale locale;
+                        double stringAlignmentHorizontalOffset = 0.0;
+                        if (stringFormat)
+                        {
+                            SAL_WARN_IF(stringFormat->DirectionRightToLeft(), "drawinglayer.emf", "EMF+\t DrawString Alignment TODO For a right-to-left layout rectangle, the origin should be at the upper right.");
+                            if (stringFormat->stringAlignment == StringAlignmentNear)
+                            // Alignment is to the left side of the layout rectangle (lx, ly, lw, lh)
                             {
-                                break;
-                            }
-                            mrPropertyHolders.Current().setFont(vcl::Font(font->family, Size(font->emSize, font->emSize)));
-
-                            drawinglayer::attribute::FontAttribute fontAttribute(
-                                font->family,                                          // font family
-                                "",                                                    // (no) font style
-                                font->Bold() ? 8u : 1u,                                // weight: 8 = bold
-                                font->family == "SYMBOL",                              // symbol
-                                stringFormat && stringFormat->DirectionVertical(),     // vertical
-                                font->Italic(),                                        // italic
-                                false,                                                 // monospaced
-                                false,                                                 // outline = false, no such thing in MS-EMFPLUS
-                                stringFormat && stringFormat->DirectionRightToLeft(),  // right-to-left
-                                false);                                                // BiDiStrong
-
-                            css::lang::Locale locale;
-                            double stringAlignmentHorizontalOffset = 0.0;
-                            if (stringFormat)
+                                stringAlignmentHorizontalOffset = stringFormat->leadingMargin * font->emSize;
+                            } else if (stringFormat->stringAlignment == StringAlignmentCenter)
+                            // Alignment is centered between the origin and extent of the layout rectangle
                             {
-                                SAL_WARN_IF(stringFormat->DirectionRightToLeft(), "drawinglayer.emf", "EMF+\t DrawString Alignment TODO For a right-to-left layout rectangle, the origin should be at the upper right.");
-                                if (stringFormat->stringAlignment == StringAlignmentNear)
-                                // Alignment is to the left side of the layout rectangle (lx, ly, lw, lh)
-                                {
-                                    stringAlignmentHorizontalOffset = stringFormat->leadingMargin * font->emSize;
-                                } else if (stringFormat->stringAlignment == StringAlignmentCenter)
-                                // Alignment is centered between the origin and extent of the layout rectangle
-                                {
-                                    stringAlignmentHorizontalOffset = 0.5 * lw + stringFormat->leadingMargin * font->emSize - 0.3 * font->emSize * stringLength;
-                                } else if (stringFormat->stringAlignment == StringAlignmentFar)
-                                // Alignment is to the right side of the layout rectangle
-                                {
-                                    stringAlignmentHorizontalOffset = lw - stringFormat->trailingMargin * font->emSize - 0.6 * font->emSize * stringLength;
-                                }
-
-                                LanguageTag aLanguageTag(static_cast< LanguageType >(stringFormat->language));
-                                locale = aLanguageTag.getLocale();
-                            }
-                            else
+                                stringAlignmentHorizontalOffset = 0.5 * lw + stringFormat->leadingMargin * font->emSize - 0.3 * font->emSize * stringLength;
+                            } else if (stringFormat->stringAlignment == StringAlignmentFar)
+                            // Alignment is to the right side of the layout rectangle
                             {
-                                // By default LeadingMargin is 1/6 inch
-                                // TODO for typographic fonts set value to 0.
-                                stringAlignmentHorizontalOffset = 16.0;
-
-                                // use system default
-                                locale = Application::GetSettings().GetLanguageTag().getLocale();
+                                stringAlignmentHorizontalOffset = lw - stringFormat->trailingMargin * font->emSize - 0.6 * font->emSize * stringLength;
                             }
 
-                            const basegfx::B2DHomMatrix transformMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(
-                                        ::basegfx::B2DSize(font->emSize, font->emSize),
-                                        ::basegfx::B2DPoint(lx + stringAlignmentHorizontalOffset, ly + font->emSize));
-
-                            Color uncorrectedColor = EMFPGetBrushColorOrARGBColor(flags, brushId);
-                            Color color;
-
-                            if (mbSetTextContrast)
-                            {
-                                const auto gammaVal = mnTextContrast / 1000;
-                                const basegfx::BColorModifier_gamma gamma(gammaVal);
-
-                                // gamma correct transparency color
-                                sal_uInt16 alpha = uncorrectedColor.GetAlpha();
-                                alpha = std::clamp(std::pow(alpha, 1.0 / gammaVal), 0.0, 1.0) * 255;
-
-                                basegfx::BColor modifiedColor(gamma.getModifiedColor(uncorrectedColor.getBColor()));
-                                color.SetRed(modifiedColor.getRed() * 255);
-                                color.SetGreen(modifiedColor.getGreen() * 255);
-                                color.SetBlue(modifiedColor.getBlue() * 255);
-                                color.SetAlpha(alpha);
-                            }
-                            else
-                            {
-                                color = uncorrectedColor;
-                            }
-
-                            mrPropertyHolders.Current().setTextColor(color.getBColor());
-                            mrPropertyHolders.Current().setTextColorActive(true);
-
-                            if (color.GetAlpha() > 0)
-                            {
-                                std::vector<double> emptyVector;
-                                rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> pBaseText;
-                                if (font->Underline() || font->Strikeout())
-                                {
-                                    pBaseText = new drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D(
-                                                transformMatrix,
-                                                text,
-                                                0,             // text always starts at 0
-                                                stringLength,
-                                                emptyVector,   // EMF-PLUS has no DX-array
-                                                fontAttribute,
-                                                locale,
-                                                color.getBColor(),
-                                                COL_TRANSPARENT,
-                                                color.getBColor(),
-                                                color.getBColor(),
-                                                drawinglayer::primitive2d::TEXT_LINE_NONE,
-                                                font->Underline() ? drawinglayer::primitive2d::TEXT_LINE_SINGLE : drawinglayer::primitive2d::TEXT_LINE_NONE,
-                                                false,
-                                                font->Strikeout() ? drawinglayer::primitive2d::TEXT_STRIKEOUT_SINGLE : drawinglayer::primitive2d::TEXT_STRIKEOUT_NONE);
-                                }
-                                else
-                                {
-                                    pBaseText = new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
-                                                transformMatrix,
-                                                text,
-                                                0,             // text always starts at 0
-                                                stringLength,
-                                                emptyVector,   // EMF-PLUS has no DX-array
-                                                fontAttribute,
-                                                locale,
-                                                color.getBColor());
-                                }
-                                drawinglayer::primitive2d::Primitive2DReference aPrimitiveText(pBaseText);
-                                if (color.IsTransparent())
-                                {
-                                    aPrimitiveText = new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
-                                                drawinglayer::primitive2d::Primitive2DContainer { aPrimitiveText },
-                                                (255 - color.GetAlpha()) / 255.0);
-                                }
-
-                                mrTargetHolders.Current().append(
-                                            new drawinglayer::primitive2d::TransformPrimitive2D(
-                                                maMapTransform,
-                                                drawinglayer::primitive2d::Primitive2DContainer { aPrimitiveText } ));
-                            }
+                            LanguageTag aLanguageTag(static_cast< LanguageType >(stringFormat->language));
+                            locale = aLanguageTag.getLocale();
                         }
                         else
                         {
-                            SAL_WARN("drawinglayer.emf", "EMF+\t DrawString TODO - drawing with brush not yet supported");
+                            // By default LeadingMargin is 1/6 inch
+                            // TODO for typographic fonts set value to 0.
+                            stringAlignmentHorizontalOffset = 16.0;
+
+                            // use system default
+                            locale = Application::GetSettings().GetLanguageTag().getLocale();
+                        }
+
+                        const basegfx::B2DHomMatrix transformMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(
+                                    ::basegfx::B2DSize(font->emSize, font->emSize),
+                                    ::basegfx::B2DPoint(lx + stringAlignmentHorizontalOffset, ly + font->emSize));
+
+                        Color uncorrectedColor = EMFPGetBrushColorOrARGBColor(flags, brushId);
+                        Color color;
+
+                        if (mbSetTextContrast)
+                        {
+                            const auto gammaVal = mnTextContrast / 1000;
+                            const basegfx::BColorModifier_gamma gamma(gammaVal);
+
+                            // gamma correct transparency color
+                            sal_uInt16 alpha = uncorrectedColor.GetAlpha();
+                            alpha = std::clamp(std::pow(alpha, 1.0 / gammaVal), 0.0, 1.0) * 255;
+
+                            basegfx::BColor modifiedColor(gamma.getModifiedColor(uncorrectedColor.getBColor()));
+                            color.SetRed(modifiedColor.getRed() * 255);
+                            color.SetGreen(modifiedColor.getGreen() * 255);
+                            color.SetBlue(modifiedColor.getBlue() * 255);
+                            color.SetAlpha(alpha);
+                        }
+                        else
+                        {
+                            color = uncorrectedColor;
+                        }
+
+                        mrPropertyHolders.Current().setTextColor(color.getBColor());
+                        mrPropertyHolders.Current().setTextColorActive(true);
+
+                        if (color.GetAlpha() > 0)
+                        {
+                            std::vector<double> emptyVector;
+                            rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> pBaseText;
+                            if (font->Underline() || font->Strikeout())
+                            {
+                                pBaseText = new drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D(
+                                            transformMatrix,
+                                            text,
+                                            0,             // text always starts at 0
+                                            stringLength,
+                                            emptyVector,   // EMF-PLUS has no DX-array
+                                            fontAttribute,
+                                            locale,
+                                            color.getBColor(), // Font Color
+                                            COL_TRANSPARENT,   // Fill Color
+                                            color.getBColor(), // OverlineColor
+                                            color.getBColor(), // TextlineColor
+                                            drawinglayer::primitive2d::TEXT_LINE_NONE,
+                                            font->Underline() ? drawinglayer::primitive2d::TEXT_LINE_SINGLE : drawinglayer::primitive2d::TEXT_LINE_NONE,
+                                            false,
+                                            font->Strikeout() ? drawinglayer::primitive2d::TEXT_STRIKEOUT_SINGLE : drawinglayer::primitive2d::TEXT_STRIKEOUT_NONE);
+                            }
+                            else
+                            {
+                                pBaseText = new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                                            transformMatrix,
+                                            text,
+                                            0,             // text always starts at 0
+                                            stringLength,
+                                            emptyVector,   // EMF-PLUS has no DX-array
+                                            fontAttribute,
+                                            locale,
+                                            color.getBColor());
+                            }
+                            drawinglayer::primitive2d::Primitive2DReference aPrimitiveText(pBaseText);
+                            if (color.IsTransparent())
+                            {
+                                aPrimitiveText = new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
+                                            drawinglayer::primitive2d::Primitive2DContainer { aPrimitiveText },
+                                            (255 - color.GetAlpha()) / 255.0);
+                            }
+
+                            mrTargetHolders.Current().append(
+                                        new drawinglayer::primitive2d::TransformPrimitive2D(
+                                            maMapTransform,
+                                            drawinglayer::primitive2d::Primitive2DContainer { aPrimitiveText } ));
                         }
                         break;
                     }
