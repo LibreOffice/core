@@ -70,6 +70,24 @@
       "revId": "6ef69234cf9138000a1dcf483114ea7c792fe3ed",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1bd42fae_e9a18ac7",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 1941,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-22T12:38:35Z",
+      "side": 0,
+      "message": "Oh okay.. I thought you were pointing towards using bCharCustomPreview, which I was already using in patch 32 :) \n\nIn patch 32 I have added the following lines:\n\nmxCharTreeBox-\u003eclear();\nmxCharTreeBox-\u003eset_column_custom_renderer(0, bCharCustomPreview); \n\nI am unable to understand that what is going wrong here.. \n\nThe way that the character styles are displayed is getting changed but it is not the way it is getting changed in original character styles",
+      "parentUuid": "d828dff6_9910535b",
+      "revId": "6ef69234cf9138000a1dcf483114ea7c792fe3ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
