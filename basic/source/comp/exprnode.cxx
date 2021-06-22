@@ -216,7 +216,8 @@ void SbiExprNode::FoldConstants(SbiParser* pParser)
     else if (pLeft && pRight)
         FoldConstantsBinaryNode(pParser);
 
-    if( eNodeType == SbxNUMVAL )
+    if( eNodeType == SbxNUMVAL
+     && eType != SbxBOOL )
     {
         // Potentially convolve in INTEGER (because of better opcode)?
         if( eType == SbxSINGLE || eType == SbxDOUBLE )
@@ -412,7 +413,9 @@ void SbiExprNode::FoldConstantsBinaryNode(SbiParser* pParser)
             pParser->Error( ERRCODE_BASIC_MATH_OVERFLOW );
 
         // Recover the data type to kill rounding error
-        if( bCheckType && bBothInt
+        if( eType != SbxBOOL
+         && bBothInt
+         && bCheckType
          && nVal >= SbxMINLNG && nVal <= SbxMAXLNG )
         {
             // Decimal place away
@@ -422,7 +425,6 @@ void SbiExprNode::FoldConstantsBinaryNode(SbiParser* pParser)
                   ? SbxINTEGER : SbxLONG;
         }
     }
-
 }
 void SbiExprNode::FoldConstantsUnaryNode(SbiParser* pParser)
 {
