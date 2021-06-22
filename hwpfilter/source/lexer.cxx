@@ -1085,7 +1085,7 @@ YY_DECL
     int yy_act;
 
     if ( yy_init )
-        {
+    {
         yy_init = 0;
 
 #ifdef YY_USER_INIT
@@ -1106,10 +1106,10 @@ YY_DECL
                 yy_create_buffer( yyin, YY_BUF_SIZE );
 
         yy_load_buffer_state();
-        }
+    }
 
     while ( true )     /* loops until end-of-file is reached */
-        {
+    {
         yy_cp = yy_c_buf_p;
 
         /* Support of yytext. */
@@ -1123,32 +1123,32 @@ YY_DECL
         yy_current_state = yy_start;
 yy_match:
         do
-            {
+        {
             YY_CHAR yy_c = sal::static_int_cast<YY_CHAR>(yy_ec[YY_SC_TO_UI(*yy_cp)]);
             if ( yy_accept[yy_current_state] )
-                {
+            {
                 yy_last_accepting_state = yy_current_state;
                 yy_last_accepting_cpos = yy_cp;
-                }
+            }
             while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
-                {
+            {
                 yy_current_state = static_cast<int>(yy_def[yy_current_state]);
                 if ( yy_current_state >= 994 )
                     yy_c = sal::static_int_cast<YY_CHAR>(yy_meta[static_cast<unsigned int>(yy_c)]);
-                }
+            }
             yy_current_state = yy_nxt[yy_base[yy_current_state] + static_cast<unsigned int>(yy_c)];
             ++yy_cp;
-            }
+        }
         while ( yy_base[yy_current_state] != 1315 );
 
 yy_find_action:
         yy_act = yy_accept[yy_current_state];
         if ( yy_act == 0 )
-            { /* have to back up */
+        { /* have to back up */
             yy_cp = yy_last_accepting_cpos;
             yy_current_state = yy_last_accepting_state;
             yy_act = yy_accept[yy_current_state];
-            }
+        }
 
         YY_DO_BEFORE_ACTION;
 
@@ -1362,7 +1362,7 @@ case YY_STATE_EOF(INITIAL):
         YY_RESTORE_YY_MORE_OFFSET
 
         if ( yy_current_buffer->yy_buffer_status == YY_BUFFER_NEW )
-            {
+        {
             /* We're scanning a new file or input source.  It's
              * possible that this happened because the user
              * just pointed yyin at a new source and called
@@ -1375,7 +1375,7 @@ case YY_STATE_EOF(INITIAL):
             yy_n_chars = yy_current_buffer->yy_n_chars;
             yy_current_buffer->yy_input_file = yyin;
             yy_current_buffer->yy_buffer_status = YY_BUFFER_NORMAL;
-            }
+        }
 
         /* Note that here we test for yy_c_buf_p "<=" to the position
          * of the first EOB in the buffer, since yy_c_buf_p will
@@ -1385,7 +1385,7 @@ case YY_STATE_EOF(INITIAL):
          * in input().
          */
         if ( yy_c_buf_p <= &yy_current_buffer->yy_ch_buf[yy_n_chars] )
-            { /* This was really a NUL. */
+        { /* This was really a NUL. */
             yy_state_type yy_next_state;
 
             yy_c_buf_p = yytext_ptr + yy_amount_of_matched_text;
@@ -1406,19 +1406,19 @@ case YY_STATE_EOF(INITIAL):
             yy_bp = yytext_ptr + YY_MORE_ADJ;
 
             if ( yy_next_state )
-                {
+            {
                 /* Consume the NUL. */
                 yy_cp = ++yy_c_buf_p;
                 yy_current_state = yy_next_state;
                 goto yy_match;
-                }
+            }
 
             else
-                {
+            {
                 yy_cp = yy_c_buf_p;
                 goto yy_find_action;
-                }
             }
+        }
 
         else switch ( yy_get_next_buffer() )
             {
@@ -1427,7 +1427,7 @@ case YY_STATE_EOF(INITIAL):
                 yy_did_buffer_switch_on_eof = 0;
 
                 if ( yywrap() )
-                    {
+                {
                     /* Note: because we've taken care in
                      * yy_get_next_buffer() to have set up
                      * yytext, we can now set up
@@ -1441,13 +1441,13 @@ case YY_STATE_EOF(INITIAL):
 
                     yy_act = YY_STATE_EOF(YY_START);
                     goto do_action;
-                    }
+                }
 
                 else
-                    {
+                {
                     if ( ! yy_did_buffer_switch_on_eof )
                         YY_NEW_FILE;
-                    }
+                }
                 }
                 break;
 
@@ -1480,7 +1480,7 @@ case YY_STATE_EOF(INITIAL):
         YY_FATAL_ERROR(
             "fatal flex scanner internal error--no action found" );
     } /* end of action switch */
-        } /* end of scanning one token */
+    } /* end of scanning one token */
     } /* end of yylex */
 
 
@@ -1504,23 +1504,23 @@ static int yy_get_next_buffer()
         "fatal flex scanner internal error--end of buffer missed" );
 
     if ( yy_current_buffer->yy_fill_buffer == 0 )
-        { /* Don't try to fill the buffer, so this is an EOF. */
+    { /* Don't try to fill the buffer, so this is an EOF. */
         if ( yy_c_buf_p - yytext_ptr - YY_MORE_ADJ == 1 )
-            {
+        {
             /* We matched a single character, the EOB, so
              * treat this as a final EOF.
              */
             return EOB_ACT_END_OF_FILE;
-            }
+        }
 
         else
-            {
+        {
             /* We matched some text prior to the EOB, first
              * process it.
              */
             return EOB_ACT_LAST_MATCH;
-            }
         }
+    }
 
     /* Try to read more data. */
 
@@ -1537,12 +1537,12 @@ static int yy_get_next_buffer()
         yy_current_buffer->yy_n_chars = yy_n_chars = 0;
 
     else
-        {
+    {
         int num_to_read =
             yy_current_buffer->yy_buf_size - number_to_move - 1;
 
         while ( num_to_read <= 0 )
-            { /* Not enough room in the buffer - grow it. */
+        { /* Not enough room in the buffer - grow it. */
 #ifdef YY_USES_REJECT
             YY_FATAL_ERROR(
 "input buffer overflow, can't enlarge buffer because scanner uses REJECT" );
@@ -1555,7 +1555,7 @@ static int yy_get_next_buffer()
                 static_cast<int>(yy_c_buf_p - b->yy_ch_buf);
 
             if ( b->yy_is_our_buffer )
-                {
+            {
                 int new_size = b->yy_buf_size * 2;
 
                 if ( new_size <= 0 )
@@ -1567,7 +1567,7 @@ static int yy_get_next_buffer()
                     /* Include room in for 2 EOB chars. */
                     yy_flex_realloc( static_cast<void *>(b->yy_ch_buf),
                              b->yy_buf_size + 2 ));
-                }
+            }
             else
                 /* Can't grow it, we don't own it. */
                 b->yy_ch_buf = nullptr;
@@ -1581,7 +1581,7 @@ static int yy_get_next_buffer()
             num_to_read = yy_current_buffer->yy_buf_size -
                         number_to_move - 1;
 #endif
-            }
+        }
 
         if ( num_to_read > YY_READ_BUF_SIZE )
             num_to_read = YY_READ_BUF_SIZE;
@@ -1591,23 +1591,23 @@ static int yy_get_next_buffer()
             yy_n_chars, num_to_read );
 
         yy_current_buffer->yy_n_chars = yy_n_chars;
-        }
+    }
 
     if ( yy_n_chars == 0 )
-        {
+    {
         if ( number_to_move == YY_MORE_ADJ )
-            {
+        {
             ret_val = EOB_ACT_END_OF_FILE;
             yyrestart( yyin );
-            }
+        }
 
         else
-            {
+        {
             ret_val = EOB_ACT_LAST_MATCH;
             yy_current_buffer->yy_buffer_status =
                 YY_BUFFER_EOF_PENDING;
-            }
         }
+    }
 
     else
         ret_val = EOB_ACT_CONTINUE_SCAN;
@@ -1632,21 +1632,21 @@ static yy_state_type yy_get_previous_state()
     yy_current_state = yy_start;
 
     for ( yy_cp = yytext_ptr + YY_MORE_ADJ; yy_cp < yy_c_buf_p; ++yy_cp )
-        {
+    {
         YY_CHAR yy_c = sal::static_int_cast<YY_CHAR>(*yy_cp ? yy_ec[YY_SC_TO_UI(*yy_cp)] : 1);
         if ( yy_accept[yy_current_state] )
-            {
+        {
             yy_last_accepting_state = yy_current_state;
             yy_last_accepting_cpos = yy_cp;
-            }
+        }
         while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
-            {
+        {
             yy_current_state = static_cast<int>(yy_def[yy_current_state]);
             if ( yy_current_state >= 994 )
                 yy_c = sal::static_int_cast<YY_CHAR>(yy_meta[static_cast<unsigned int>(yy_c)]);
-            }
-        yy_current_state = yy_nxt[yy_base[yy_current_state] + static_cast<unsigned int>(yy_c)];
         }
+        yy_current_state = yy_nxt[yy_base[yy_current_state] + static_cast<unsigned int>(yy_c)];
+    }
 
     return yy_current_state;
     }
@@ -1670,16 +1670,16 @@ yy_state_type yy_current_state;
 
     YY_CHAR yy_c = 1;
     if ( yy_accept[yy_current_state] )
-        {
+    {
         yy_last_accepting_state = yy_current_state;
         yy_last_accepting_cpos = yy_cp;
-        }
+    }
     while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
-        {
+    {
         yy_current_state = static_cast<int>(yy_def[yy_current_state]);
         if ( yy_current_state >= 994 )
             yy_c = sal::static_int_cast<YY_CHAR>(yy_meta[static_cast<unsigned int>(yy_c)]);
-        }
+    }
     yy_current_state = yy_nxt[yy_base[yy_current_state] + static_cast<unsigned int>(yy_c)];
     yy_is_jam = (yy_current_state == 993);
 
@@ -1712,12 +1712,12 @@ YY_BUFFER_STATE new_buffer;
         return;
 
     if ( yy_current_buffer )
-        {
+    {
         /* Flush out information for old buffer. */
         *yy_c_buf_p = yy_hold_char;
         yy_current_buffer->yy_buf_pos = yy_c_buf_p;
         yy_current_buffer->yy_n_chars = yy_n_chars;
-        }
+    }
 
     yy_current_buffer = new_buffer;
     yy_load_buffer_state();

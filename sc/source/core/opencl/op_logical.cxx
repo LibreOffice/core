@@ -71,19 +71,19 @@ void OpAnd::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "0; i < " << nCurWindowSize << "; i++) {\n";
             }
             if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
-                {
+            {
             ss <<"    if(isnan("<<vSubArguments[j]->GenSlidingWindowDeclRef();
             ss <<")||i+gid0>="<<pCurDVR->GetArrayLength();
             ss <<")\n";
             ss <<"        tmp = 1;\n    else\n";
-                }
+            }
             else
-                {
+            {
             ss <<"    if(isnan("<<vSubArguments[j]->GenSlidingWindowDeclRef();
             ss <<")||i>="<<pCurDVR->GetArrayLength();
             ss <<")\n";
             ss <<"        tmp = 1;\n    else\n";
-                }
+            }
             ss <<"        tmp = ";
             ss <<vSubArguments[j]->GenSlidingWindowDeclRef()<<";\n";
             ss <<"    tmp"<<j<<" = tmp"<<j<<" && tmp;\n";
@@ -156,19 +156,19 @@ void OpOr::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "0; i < " << nCurWindowSize << "; i++) {\n";
             }
             if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
-                {
+            {
             ss <<"    if(isnan("<<vSubArguments[j]->GenSlidingWindowDeclRef();
             ss <<")||i+gid0>="<<pCurDVR->GetArrayLength();
             ss <<")\n";
             ss <<"        tmp = 0;\n    else\n";
-                }
+            }
             else
-                {
+            {
             ss <<"    if(isnan("<<vSubArguments[j]->GenSlidingWindowDeclRef();
             ss <<")||i>="<<pCurDVR->GetArrayLength();
             ss <<")\n";
             ss <<"        tmp = 0;\n    else\n";
-                }
+            }
             ss <<"        tmp = ";
             ss <<vSubArguments[j]->GenSlidingWindowDeclRef()<<";\n";
             ss <<"    tmp"<<j<<" = tmp"<<j<<" || tmp;\n";
@@ -272,19 +272,19 @@ void OpXor::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "0; i < " << nCurWindowSize << "; i++) {\n";
             }
             if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
-                {
+            {
             ss <<"    if(isnan("<<rArg->GenSlidingWindowDeclRef();
             ss <<")||i+gid0>="<<pCurDVR->GetArrayLength();
             ss <<")\n";
             ss <<"        tmp = 0;\n    else\n";
-                }
+            }
             else
-                {
+            {
             ss <<"    if(isnan("<<rArg->GenSlidingWindowDeclRef();
             ss <<")||i>="<<pCurDVR->GetArrayLength();
             ss <<")\n";
             ss <<"        tmp = 0;\n    else\n";
-                }
+            }
             ss <<"        tmp = ";
             ss <<rArg->GenSlidingWindowDeclRef()<<";\n";
             ss <<"    tmp0 = (tmp != 0);\n";

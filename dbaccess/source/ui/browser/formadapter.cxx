@@ -1376,7 +1376,7 @@ void SbaXFormAdapter::implInsert(const Any& aElement, sal_Int32 nIndex, const OU
     if (!xElementSet.is())
     {
         throw css::lang::IllegalArgumentException();
-     }
+    }
     OUString sName;
     try
     {
@@ -1545,7 +1545,7 @@ void SAL_CALL SbaXFormAdapter::replaceByIndex(sal_Int32 _rIndex, const Any& Elem
     if (!xElementSet.is())
     {
         throw css::lang::IllegalArgumentException();
-     }
+    }
     OUString sName;
     try
     {

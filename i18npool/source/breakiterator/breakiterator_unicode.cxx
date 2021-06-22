@@ -145,77 +145,52 @@ void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocal
         else
             icuBI->mpValue.reset();
 
-        if (!bInMap && rule) do {
-            const uno::Sequence< OUString > breakRules = LocaleDataImpl::get()->getBreakIteratorRules(rLocale);
-
-            status = U_ZERO_ERROR;
-            udata_setAppData("OpenOffice", OpenOffice_dat, &status);
-            if ( !U_SUCCESS(status) ) throw uno::RuntimeException();
-
-            std::shared_ptr<OOoRuleBasedBreakIterator> rbi;
-
-            if (breakRules.getLength() > breakType && !breakRules[breakType].isEmpty())
+        if (!bInMap && rule)
+            do
             {
-                // langtag;rule;breakType
-                const OString aBIMapRuleTypeKey( aLangtagStr + ";" + rule + ";" + OString::number(breakType));
-                aMapIt = theBIMap.find( aBIMapRuleTypeKey);
-                bInMap = (aMapIt != theBIMap.end());
-                if (bInMap)
-                {
-                    icuBI->mpValue = aMapIt->second;
-                    icuBI->maBIMapKey = aBIMapGlobalKey;
-                    theBIMap.insert( std::make_pair( aBIMapGlobalKey, icuBI->mpValue));
-                    break;  // do
-                }
-
-                rbi = std::make_shared<OOoRuleBasedBreakIterator>(udata_open("OpenOffice", "brk",
-                    OUStringToOString(breakRules[breakType], RTL_TEXTENCODING_ASCII_US).getStr(), &status), status);
-
-                if (U_SUCCESS(status))
-                {
-                    icuBI->mpValue = std::make_shared<BI_ValueData>();
-                    icuBI->mpValue->mpBreakIterator = rbi;
-                    theBIMap.insert( std::make_pair( aBIMapRuleTypeKey, icuBI->mpValue));
-                }
-                else
-                {
-                    rbi.reset();
-                }
-            }
-            //use icu's breakiterator for Thai, Tibetan and Dzongkha
-            else if (rLocale.Language != "th" && rLocale.Language != "lo" && rLocale.Language != "bo" && rLocale.Language != "dz" && rLocale.Language != "km")
-            {
-                // language;rule (not langtag, unless we'd actually load such)
-                OString aLanguage( LanguageTag( rLocale).getLanguage().toUtf8());
-                const OString aBIMapRuleKey( aLanguage + ";" + rule);
-                aMapIt = theBIMap.find( aBIMapRuleKey);
-                bInMap = (aMapIt != theBIMap.end());
-                if (bInMap)
-                {
-                    icuBI->mpValue = aMapIt->second;
-                    icuBI->maBIMapKey = aBIMapGlobalKey;
-                    theBIMap.insert( std::make_pair( aBIMapGlobalKey, icuBI->mpValue));
-                    break;  // do
-                }
+                const uno::Sequence< OUString > breakRules = LocaleDataImpl::get()->getBreakIteratorRules(rLocale);
 
                 status = U_ZERO_ERROR;
-                OString aUDName = OString::Concat(rule) + "_" + aLanguage;
-                UDataMemory* pUData = udata_open("OpenOffice", "brk", aUDName.getStr(), &status);
-                if( U_SUCCESS(status) )
-                    rbi = std::make_shared<OOoRuleBasedBreakIterator>( pUData, status);
-                if ( U_SUCCESS(status) )
-                {
-                    icuBI->mpValue = std::make_shared<BI_ValueData>();
-                    icuBI->mpValue->mpBreakIterator = rbi;
-                    theBIMap.insert( std::make_pair( aBIMapRuleKey, icuBI->mpValue));
-                }
-                else
-                {
-                    rbi.reset();
+                udata_setAppData("OpenOffice", OpenOffice_dat, &status);
+                if ( !U_SUCCESS(status) ) throw uno::RuntimeException();
 
-                    // ;rule (only)
-                    const OString aBIMapRuleOnlyKey( OString::Concat(";") + rule);
-                    aMapIt = theBIMap.find( aBIMapRuleOnlyKey);
+                std::shared_ptr<OOoRuleBasedBreakIterator> rbi;
+
+                if (breakRules.getLength() > breakType && !breakRules[breakType].isEmpty())
+                {
+                    // langtag;rule;breakType
+                    const OString aBIMapRuleTypeKey( aLangtagStr + ";" + rule + ";" + OString::number(breakType));
+                    aMapIt = theBIMap.find( aBIMapRuleTypeKey);
+                    bInMap = (aMapIt != theBIMap.end());
+                    if (bInMap)
+                    {
+                        icuBI->mpValue = aMapIt->second;
+                        icuBI->maBIMapKey = aBIMapGlobalKey;
+                        theBIMap.insert( std::make_pair( aBIMapGlobalKey, icuBI->mpValue));
+                        break;  // do
+                    }
+
+                    rbi = std::make_shared<OOoRuleBasedBreakIterator>(udata_open("OpenOffice", "brk",
+                        OUStringToOString(breakRules[breakType], RTL_TEXTENCODING_ASCII_US).getStr(), &status), status);
+
+                    if (U_SUCCESS(status))
+                    {
+                        icuBI->mpValue = std::make_shared<BI_ValueData>();
+                        icuBI->mpValue->mpBreakIterator = rbi;
+                        theBIMap.insert( std::make_pair( aBIMapRuleTypeKey, icuBI->mpValue));
+                    }
+                    else
+                    {
+                        rbi.reset();
+                    }
+                }
+                //use icu's breakiterator for Thai, Tibetan and Dzongkha
+                else if (rLocale.Language != "th" && rLocale.Language != "lo" && rLocale.Language != "bo" && rLocale.Language != "dz" && rLocale.Language != "km")
+                {
+                    // language;rule (not langtag, unless we'd actually load such)
+                    OString aLanguage( LanguageTag( rLocale).getLanguage().toUtf8());
+                    const OString aBIMapRuleKey( aLanguage + ";" + rule);
+                    aMapIt = theBIMap.find( aBIMapRuleKey);
                     bInMap = (aMapIt != theBIMap.end());
                     if (bInMap)
                     {
@@ -226,78 +201,107 @@ void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocal
                     }
 
                     status = U_ZERO_ERROR;
-                    pUData = udata_open("OpenOffice", "brk", rule, &status);
+                    OString aUDName = OString::Concat(rule) + "_" + aLanguage;
+                    UDataMemory* pUData = udata_open("OpenOffice", "brk", aUDName.getStr(), &status);
                     if( U_SUCCESS(status) )
                         rbi = std::make_shared<OOoRuleBasedBreakIterator>( pUData, status);
                     if ( U_SUCCESS(status) )
                     {
                         icuBI->mpValue = std::make_shared<BI_ValueData>();
                         icuBI->mpValue->mpBreakIterator = rbi;
-                        theBIMap.insert( std::make_pair( aBIMapRuleOnlyKey, icuBI->mpValue));
+                        theBIMap.insert( std::make_pair( aBIMapRuleKey, icuBI->mpValue));
                     }
                     else
                     {
                         rbi.reset();
+
+                        // ;rule (only)
+                        const OString aBIMapRuleOnlyKey( OString::Concat(";") + rule);
+                        aMapIt = theBIMap.find( aBIMapRuleOnlyKey);
+                        bInMap = (aMapIt != theBIMap.end());
+                        if (bInMap)
+                        {
+                            icuBI->mpValue = aMapIt->second;
+                            icuBI->maBIMapKey = aBIMapGlobalKey;
+                            theBIMap.insert( std::make_pair( aBIMapGlobalKey, icuBI->mpValue));
+                            break;  // do
+                        }
+
+                        status = U_ZERO_ERROR;
+                        pUData = udata_open("OpenOffice", "brk", rule, &status);
+                        if( U_SUCCESS(status) )
+                            rbi = std::make_shared<OOoRuleBasedBreakIterator>( pUData, status);
+                        if ( U_SUCCESS(status) )
+                        {
+                            icuBI->mpValue = std::make_shared<BI_ValueData>();
+                            icuBI->mpValue->mpBreakIterator = rbi;
+                            theBIMap.insert( std::make_pair( aBIMapRuleOnlyKey, icuBI->mpValue));
+                        }
+                        else
+                        {
+                            rbi.reset();
+                        }
                     }
                 }
-            }
-            if (rbi) {
-#if (U_ICU_VERSION_MAJOR_NUM < 58)
-                // ICU 58 made RuleBasedBreakIterator::setBreakType() private
-                // instead of protected, so the old workaround of
-                // https://ssl.icu-project.org/trac/ticket/5498
-                // doesn't work anymore. However, they also claim to have fixed
-                // the cause that an initial fBreakType==-1 would lead to an
-                // endless loop under some circumstances.
-                // Let's see ...
-                switch (rBreakType) {
-                    case LOAD_CHARACTER_BREAKITERATOR: rbi->publicSetBreakType(UBRK_CHARACTER); break;
-                    case LOAD_WORD_BREAKITERATOR: rbi->publicSetBreakType(UBRK_WORD); break;
-                    case LOAD_SENTENCE_BREAKITERATOR: rbi->publicSetBreakType(UBRK_SENTENCE); break;
-                    case LOAD_LINE_BREAKITERATOR: rbi->publicSetBreakType(UBRK_LINE); break;
+                if (rbi) {
+    #if (U_ICU_VERSION_MAJOR_NUM < 58)
+                    // ICU 58 made RuleBasedBreakIterator::setBreakType() private
+                    // instead of protected, so the old workaround of
+                    // https://ssl.icu-project.org/trac/ticket/5498
+                    // doesn't work anymore. However, they also claim to have fixed
+                    // the cause that an initial fBreakType==-1 would lead to an
+                    // endless loop under some circumstances.
+                    // Let's see ...
+                    switch (rBreakType) {
+                        case LOAD_CHARACTER_BREAKITERATOR: rbi->publicSetBreakType(UBRK_CHARACTER); break;
+                        case LOAD_WORD_BREAKITERATOR: rbi->publicSetBreakType(UBRK_WORD); break;
+                        case LOAD_SENTENCE_BREAKITERATOR: rbi->publicSetBreakType(UBRK_SENTENCE); break;
+                        case LOAD_LINE_BREAKITERATOR: rbi->publicSetBreakType(UBRK_LINE); break;
+                    }
+    #endif
                 }
-#endif
-            }
-        } while (false);
+            } while (false);
 
-        if (!icuBI->mpValue || !icuBI->mpValue->mpBreakIterator) do {
-            // langtag;;;rBreakType (empty rule; empty breakType)
-            const OString aBIMapLocaleTypeKey( aLangtagStr + ";;;" + OString::number(rBreakType));
-            aMapIt = theBIMap.find( aBIMapLocaleTypeKey);
-            bInMap = (aMapIt != theBIMap.end());
-            if (bInMap)
+        if (!icuBI->mpValue || !icuBI->mpValue->mpBreakIterator)
+            do
             {
-                icuBI->mpValue = aMapIt->second;
-                icuBI->maBIMapKey = aBIMapGlobalKey;
-                theBIMap.insert( std::make_pair( aBIMapGlobalKey, icuBI->mpValue));
-                break;  // do
-            }
+                // langtag;;;rBreakType (empty rule; empty breakType)
+                const OString aBIMapLocaleTypeKey( aLangtagStr + ";;;" + OString::number(rBreakType));
+                aMapIt = theBIMap.find( aBIMapLocaleTypeKey);
+                bInMap = (aMapIt != theBIMap.end());
+                if (bInMap)
+                {
+                    icuBI->mpValue = aMapIt->second;
+                    icuBI->maBIMapKey = aBIMapGlobalKey;
+                    theBIMap.insert( std::make_pair( aBIMapGlobalKey, icuBI->mpValue));
+                    break;  // do
+                }
 
-            icu::Locale icuLocale( LanguageTagIcu::getIcuLocale( LanguageTag( rLocale)));
-            std::shared_ptr< icu::BreakIterator > pBI;
+                icu::Locale icuLocale( LanguageTagIcu::getIcuLocale( LanguageTag( rLocale)));
+                std::shared_ptr< icu::BreakIterator > pBI;
 
-            status = U_ZERO_ERROR;
-            switch (rBreakType) {
-                case LOAD_CHARACTER_BREAKITERATOR:
-                    pBI.reset( icu::BreakIterator::createCharacterInstance(icuLocale, status) );
-                    break;
-                case LOAD_WORD_BREAKITERATOR:
-                    pBI.reset( icu::BreakIterator::createWordInstance(icuLocale, status) );
-                    break;
-                case LOAD_SENTENCE_BREAKITERATOR:
-                    pBI.reset( icu::BreakIterator::createSentenceInstance(icuLocale, status) );
-                    break;
-                case LOAD_LINE_BREAKITERATOR:
-                    pBI.reset( icu::BreakIterator::createLineInstance(icuLocale, status) );
-                    break;
-            }
-            if ( !U_SUCCESS(status) || !pBI ) {
-                throw uno::RuntimeException();
-            }
-            icuBI->mpValue = std::make_shared<BI_ValueData>();
-            icuBI->mpValue->mpBreakIterator = pBI;
-            theBIMap.insert( std::make_pair( aBIMapLocaleTypeKey, icuBI->mpValue));
-        } while (false);
+                status = U_ZERO_ERROR;
+                switch (rBreakType) {
+                    case LOAD_CHARACTER_BREAKITERATOR:
+                        pBI.reset( icu::BreakIterator::createCharacterInstance(icuLocale, status) );
+                        break;
+                    case LOAD_WORD_BREAKITERATOR:
+                        pBI.reset( icu::BreakIterator::createWordInstance(icuLocale, status) );
+                        break;
+                    case LOAD_SENTENCE_BREAKITERATOR:
+                        pBI.reset( icu::BreakIterator::createSentenceInstance(icuLocale, status) );
+                        break;
+                    case LOAD_LINE_BREAKITERATOR:
+                        pBI.reset( icu::BreakIterator::createLineInstance(icuLocale, status) );
+                        break;
+                }
+                if ( !U_SUCCESS(status) || !pBI ) {
+                    throw uno::RuntimeException();
+                }
+                icuBI->mpValue = std::make_shared<BI_ValueData>();
+                icuBI->mpValue->mpBreakIterator = pBI;
+                theBIMap.insert( std::make_pair( aBIMapLocaleTypeKey, icuBI->mpValue));
+            } while (false);
         if (!icuBI->mpValue || !icuBI->mpValue->mpBreakIterator) {
             throw uno::RuntimeException();
         }

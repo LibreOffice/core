@@ -164,7 +164,7 @@ bool sw_frmitems_setXMLBorder( std::unique_ptr<SvxBorderLine>& rpLine,
         ( bHasStyle &&
           ((table::BorderLineStyle::SOLID == nStyle && rpLine->GetDistance()) ||
             (table::BorderLineStyle::DOUBLE == nStyle && !rpLine->GetDistance())) ) )
-   {
+    {
        bool bDouble = (bHasWidth && table::BorderLineStyle::DOUBLE == nStyle ) ||
            rpLine->GetDistance();
 
@@ -190,7 +190,7 @@ bool sw_frmitems_setXMLBorder( std::unique_ptr<SvxBorderLine>& rpLine,
            }
        }
        sw_frmitems_setXMLBorderStyle( *rpLine, nStyle );
-   }
+    }
 
     // set color
     if( bHasColor )

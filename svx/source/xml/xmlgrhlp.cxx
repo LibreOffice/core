@@ -343,7 +343,7 @@ Graphic SvXMLGraphicOutputStream::GetGraphic()
     {
         mpOStm.reset();
         mpTmp.reset();
-     }
+    }
     return aGraphic;
 }
 

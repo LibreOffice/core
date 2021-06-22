@@ -108,17 +108,17 @@ static SfxObjectShell* findShellForUrl( const OUString& sMacroURLOrPath )
                     << " and we look for " << aURL);
             OUString aName = xModel->getURL() ;
             if (aName.isEmpty())
+            {
+                uno::Reference< frame::XFrame > xFrame( xModel->getCurrentController()->getFrame(), uno::UNO_SET_THROW );
+                uno::Reference< beans::XPropertySet > xProps( xFrame, uno::UNO_QUERY_THROW );
+                xProps->getPropertyValue("Title") >>= aName;
+                aName = aName.getToken(0, '-').trim();
+                if( sMacroURLOrPath.lastIndexOf( aName ) >= 0 )
                 {
-                    uno::Reference< frame::XFrame > xFrame( xModel->getCurrentController()->getFrame(), uno::UNO_SET_THROW );
-                    uno::Reference< beans::XPropertySet > xProps( xFrame, uno::UNO_QUERY_THROW );
-                    xProps->getPropertyValue("Title") >>= aName;
-                    aName = aName.getToken(0, '-').trim();
-                    if( sMacroURLOrPath.lastIndexOf( aName ) >= 0 )
-                    {
-                        pFoundShell = pShell;
-                        break;
-                    }
+                    pFoundShell = pShell;
+                    break;
                 }
+            }
 
             if ( sMacroURLOrPath.endsWithIgnoreAsciiCase( ".dot" ) )
             {

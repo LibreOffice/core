@@ -187,7 +187,7 @@ BitmapEx CreateFromData( sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHe
                     xMaskAcc->SetPixelOnData(pMaskScanLine, x, BitmapColor(*p));
                     p += 4;
                 }
-             }
+            }
         }
     }
     if (nBitCount == 32)

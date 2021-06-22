@@ -579,20 +579,21 @@ void PropRead::Read()
     {
         mbStatus = false;
     }
-    else for ( sal_uInt32 i = 0; i < nSections; i++ )
-    {
-        mpSvStream->ReadBytes(aSectCLSID.data(), aSectCLSID.size());
-        sal_uInt32 nSectionOfs(0);
-        mpSvStream->ReadUInt32( nSectionOfs );
-        sal_uInt32 nCurrent = mpSvStream->Tell();
-        if (checkSeek(*mpSvStream, nSectionOfs))
+    else
+        for ( sal_uInt32 i = 0; i < nSections; i++ )
         {
-            Section aSection(aSectCLSID.data());
-            aSection.Read(mpSvStream.get());
-            maSections.push_back(std::make_unique<Section>(aSection));
+            mpSvStream->ReadBytes(aSectCLSID.data(), aSectCLSID.size());
+            sal_uInt32 nSectionOfs(0);
+            mpSvStream->ReadUInt32( nSectionOfs );
+            sal_uInt32 nCurrent = mpSvStream->Tell();
+            if (checkSeek(*mpSvStream, nSectionOfs))
+            {
+                Section aSection(aSectCLSID.data());
+                aSection.Read(mpSvStream.get());
+                maSections.push_back(std::make_unique<Section>(aSection));
+            }
+            mpSvStream->Seek( nCurrent );
         }
-        mpSvStream->Seek( nCurrent );
-    }
 }
 
 PropRead& PropRead::operator=( const PropRead& rPropRead )
