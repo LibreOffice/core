@@ -13,42 +13,40 @@ class tdf137729(UITestCase):
 
     def test_tdf137729(self):
 
-        self.ui_test.create_doc_in_start_center("impress")
+        with self.ui_test.create_doc_in_start_center("impress"):
 
-        xTemplateDlg = self.xUITest.getTopFocusWindow()
-        xCancelBtn = xTemplateDlg.getChild("close")
-        self.ui_test.close_dialog_through_button(xCancelBtn)
+            xTemplateDlg = self.xUITest.getTopFocusWindow()
+            xCancelBtn = xTemplateDlg.getChild("close")
+            self.ui_test.close_dialog_through_button(xCancelBtn)
 
-        self.ui_test.execute_dialog_through_command(".uno:PageSetup")
+            self.ui_test.execute_dialog_through_command(".uno:PageSetup")
 
-        xPageSetupDlg = self.xUITest.getTopFocusWindow()
-        tabcontrol = xPageSetupDlg.getChild("tabcontrol")
-        select_pos(tabcontrol, "1")
+            xPageSetupDlg = self.xUITest.getTopFocusWindow()
+            tabcontrol = xPageSetupDlg.getChild("tabcontrol")
+            select_pos(tabcontrol, "1")
 
-        xBtn = xPageSetupDlg.getChild('btnhatch')
-        xBtn.executeAction("CLICK", tuple())
+            xBtn = xPageSetupDlg.getChild('btnhatch')
+            xBtn.executeAction("CLICK", tuple())
 
-        xDistance = xPageSetupDlg.getChild('distancemtr')
-        xDistance.executeAction("UP", tuple())
+            xDistance = xPageSetupDlg.getChild('distancemtr')
+            xDistance.executeAction("UP", tuple())
 
-        xOkBtn = xPageSetupDlg.getChild("ok")
-        xOkBtn.executeAction("CLICK", tuple())
+            xOkBtn = xPageSetupDlg.getChild("ok")
+            xOkBtn.executeAction("CLICK", tuple())
 
-        document = self.ui_test.get_component()
-        self.assertEqual(
-          document.DrawPages.getByIndex(0).Background.FillHatch.Style, SINGLE )
-        self.assertEqual(
-          document.DrawPages.getByIndex(0).Background.FillHatch.Color, 0)
-        self.assertEqual(
-          document.DrawPages.getByIndex(0).Background.FillHatch.Distance, 152)
-        self.assertEqual(
-          document.DrawPages.getByIndex(0).Background.FillHatch.Angle, 0)
+            document = self.ui_test.get_component()
+            self.assertEqual(
+              document.DrawPages.getByIndex(0).Background.FillHatch.Style, SINGLE )
+            self.assertEqual(
+              document.DrawPages.getByIndex(0).Background.FillHatch.Color, 0)
+            self.assertEqual(
+              document.DrawPages.getByIndex(0).Background.FillHatch.Distance, 152)
+            self.assertEqual(
+              document.DrawPages.getByIndex(0).Background.FillHatch.Angle, 0)
 
-        # Without the patch in place, this test would have failed with
-        # AssertionError: '' != 'hatch'
-        self.assertEqual(
-          document.DrawPages.getByIndex(0).Background.FillHatchName, 'hatch')
-
-        self.ui_test.close_doc()
+            # Without the patch in place, this test would have failed with
+            # AssertionError: '' != 'hatch'
+            self.assertEqual(
+              document.DrawPages.getByIndex(0).Background.FillHatchName, 'hatch')
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

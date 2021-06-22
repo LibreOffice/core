@@ -12,68 +12,66 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class StylesSidebar(UITestCase):
 
    def test_load_styles_from_template(self):
-        self.ui_test.create_doc_in_start_center("writer")
+        with self.ui_test.create_doc_in_start_center("writer"):
 
-        self.ui_test.execute_dialog_through_command(".uno:LoadStyles")
+            self.ui_test.execute_dialog_through_command(".uno:LoadStyles")
 
-        xDialog = self.xUITest.getTopFocusWindow()
+            xDialog = self.xUITest.getTopFocusWindow()
 
-        xText = xDialog.getChild("text")
-        xNumbering = xDialog.getChild("numbering")
-        xFrame = xDialog.getChild("frame")
-        xPages = xDialog.getChild("pages")
+            xText = xDialog.getChild("text")
+            xNumbering = xDialog.getChild("numbering")
+            xFrame = xDialog.getChild("frame")
+            xPages = xDialog.getChild("pages")
 
-        self.assertEqual('true', get_state_as_dict(xText)['Selected'])
-        self.assertEqual('false', get_state_as_dict(xNumbering)['Selected'])
-        self.assertEqual('false', get_state_as_dict(xFrame)['Selected'])
-        self.assertEqual('false', get_state_as_dict(xPages)['Selected'])
+            self.assertEqual('true', get_state_as_dict(xText)['Selected'])
+            self.assertEqual('false', get_state_as_dict(xNumbering)['Selected'])
+            self.assertEqual('false', get_state_as_dict(xFrame)['Selected'])
+            self.assertEqual('false', get_state_as_dict(xPages)['Selected'])
 
-        xNumbering.executeAction("CLICK", tuple())
-        xFrame.executeAction("CLICK", tuple())
-        xPages.executeAction("CLICK", tuple())
+            xNumbering.executeAction("CLICK", tuple())
+            xFrame.executeAction("CLICK", tuple())
+            xPages.executeAction("CLICK", tuple())
 
-        self.assertEqual('true', get_state_as_dict(xText)['Selected'])
-        self.assertEqual('true', get_state_as_dict(xNumbering)['Selected'])
-        self.assertEqual('true', get_state_as_dict(xFrame)['Selected'])
-        self.assertEqual('true', get_state_as_dict(xPages)['Selected'])
+            self.assertEqual('true', get_state_as_dict(xText)['Selected'])
+            self.assertEqual('true', get_state_as_dict(xNumbering)['Selected'])
+            self.assertEqual('true', get_state_as_dict(xFrame)['Selected'])
+            self.assertEqual('true', get_state_as_dict(xPages)['Selected'])
 
-        xFileName = xDialog.getChild("fromfile")
-        xFileName.executeAction("CLICK", tuple())
+            xFileName = xDialog.getChild("fromfile")
+            xFileName.executeAction("CLICK", tuple())
 
-        xOpenDialog = self.xUITest.getTopFocusWindow()
-        xFileName = xOpenDialog.getChild("file_name")
-        xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": get_url_for_data_file("customStyles.odt")}))
+            xOpenDialog = self.xUITest.getTopFocusWindow()
+            xFileName = xOpenDialog.getChild("file_name")
+            xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": get_url_for_data_file("customStyles.odt")}))
 
-        xOpenBtn = xOpenDialog.getChild("open")
-        xOpenBtn.executeAction("CLICK", tuple())
+            xOpenBtn = xOpenDialog.getChild("open")
+            xOpenBtn.executeAction("CLICK", tuple())
 
-        xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-        self.xUITest.executeCommand(".uno:Sidebar")
-        xWriterEdit.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "StyleListPanel"}))
+            self.xUITest.executeCommand(".uno:Sidebar")
+            xWriterEdit.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "StyleListPanel"}))
 
-        xFilter = xWriterEdit.getChild('filter')
-        select_by_text(xFilter, "Custom Styles")
+            xFilter = xWriterEdit.getChild('filter')
+            select_by_text(xFilter, "Custom Styles")
 
-        expectedResults = ["customParagraphStyle", "customCharacterStyle", "customFrameStyle",
-                "customPageStyle", "customNumberingStyle"]
+            expectedResults = ["customParagraphStyle", "customCharacterStyle", "customFrameStyle",
+                    "customPageStyle", "customNumberingStyle"]
 
-        for i in range(5):
-            xLeft = xWriterEdit.getChild('left')
+            for i in range(5):
+                xLeft = xWriterEdit.getChild('left')
 
-            #change to another style type
-            xLeft.executeAction("CLICK", mkPropertyValues({"POS": str( i )}))
+                #change to another style type
+                xLeft.executeAction("CLICK", mkPropertyValues({"POS": str( i )}))
 
-            xFlatView = xWriterEdit.getChild("flatview")
+                xFlatView = xWriterEdit.getChild("flatview")
 
-            self.assertEqual(1, len(xFlatView.getChildren()))
+                self.assertEqual(1, len(xFlatView.getChildren()))
 
-            xFlatView.getChild('0').executeAction("SELECT", tuple())
-            self.assertEqual(expectedResults[i], get_state_as_dict(xFlatView)['SelectEntryText'])
+                xFlatView.getChild('0').executeAction("SELECT", tuple())
+                self.assertEqual(expectedResults[i], get_state_as_dict(xFlatView)['SelectEntryText'])
 
-        self.xUITest.executeCommand(".uno:Sidebar")
-
-        self.ui_test.close_doc()
+            self.xUITest.executeCommand(".uno:Sidebar")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

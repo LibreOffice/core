@@ -16,47 +16,45 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class protectSheet(UITestCase):
     def test_protect_sheet(self):
-        calc_doc = self.ui_test.create_doc_in_start_center("calc")
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
-        #enter password - lock
-        self.ui_test.execute_dialog_through_command(".uno:Protect")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xprotect = xDialog.getChild("protect")
-        xpassword1 = xDialog.getChild("password1")
-        xpassword2 = xDialog.getChild("password2")
+        with self.ui_test.create_doc_in_start_center("calc"):
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            document = self.ui_test.get_component()
+            #enter password - lock
+            self.ui_test.execute_dialog_through_command(".uno:Protect")
+            xDialog = self.xUITest.getTopFocusWindow()
+            xprotect = xDialog.getChild("protect")
+            xpassword1 = xDialog.getChild("password1")
+            xpassword2 = xDialog.getChild("password2")
 
-        if (get_state_as_dict(xprotect)["Selected"]) == "false":
-            xprotect.executeAction("CLICK", tuple())
-        xpassword1.executeAction("TYPE", mkPropertyValues({"TEXT":"aa"}))
-        xpassword2.executeAction("TYPE", mkPropertyValues({"TEXT":"aa"}))
+            if (get_state_as_dict(xprotect)["Selected"]) == "false":
+                xprotect.executeAction("CLICK", tuple())
+            xpassword1.executeAction("TYPE", mkPropertyValues({"TEXT":"aa"}))
+            xpassword2.executeAction("TYPE", mkPropertyValues({"TEXT":"aa"}))
 
-        xOKBtn = xDialog.getChild("ok")
-#        self.ui_test.close_dialog_through_button(xOKBtn)
-        xOKBtn.executeAction("CLICK", tuple())
-        #Unlock
+            xOKBtn = xDialog.getChild("ok")
+    #        self.ui_test.close_dialog_through_button(xOKBtn)
+            xOKBtn.executeAction("CLICK", tuple())
+            #Unlock
 
-        self.ui_test.execute_dialog_through_command(".uno:Protect")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xpass1ed = xDialog.getChild("pass1ed")
+            self.ui_test.execute_dialog_through_command(".uno:Protect")
+            xDialog = self.xUITest.getTopFocusWindow()
+            xpass1ed = xDialog.getChild("pass1ed")
 
-        xpass1ed.executeAction("TYPE", mkPropertyValues({"TEXT":"aa"}))
+            xpass1ed.executeAction("TYPE", mkPropertyValues({"TEXT":"aa"}))
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
-        #Verify - the sheet is unlocked
-        enter_text_to_cell(gridwin, "B2", "A")
-        self.assertEqual(get_cell_by_position(document, 0, 1, 1).getString(), "A")
+            xOKBtn = xDialog.getChild("ok")
+            self.ui_test.close_dialog_through_button(xOKBtn)
+            #Verify - the sheet is unlocked
+            enter_text_to_cell(gridwin, "B2", "A")
+            self.assertEqual(get_cell_by_position(document, 0, 1, 1).getString(), "A")
 
-        # test cancel button
-        self.ui_test.execute_dialog_through_command(".uno:Protect")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xCancelBtn = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCancelBtn)
-        enter_text_to_cell(gridwin, "B2", "B")
-        self.assertEqual(get_cell_by_position(document, 0, 1, 1).getString(), "B")
-
-        self.ui_test.close_doc()
+            # test cancel button
+            self.ui_test.execute_dialog_through_command(".uno:Protect")
+            xDialog = self.xUITest.getTopFocusWindow()
+            xCancelBtn = xDialog.getChild("cancel")
+            self.ui_test.close_dialog_through_button(xCancelBtn)
+            enter_text_to_cell(gridwin, "B2", "B")
+            self.assertEqual(get_cell_by_position(document, 0, 1, 1).getString(), "B")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
