@@ -183,3 +183,7 @@ LibreOffice.VC.VC.opendb
 /a.wasm
 /a.out.js
 /a.out.wasm
+
+# Android builds
+/android/jniLibs/
+/android/obj/
