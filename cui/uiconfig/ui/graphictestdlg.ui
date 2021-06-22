@@ -8,11 +8,13 @@
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="default-width">500</property>
-    <property name="default-height">450</property>
+    <property name="default-height">550</property>
     <property name="type-hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="gptest-main">
         <property name="can-focus">False</property>
+        <property name="margin-top">4</property>
+        <property name="margin-bottom">4</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <child internal-child="action_area">
@@ -41,7 +43,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="position">2</property>
+            <property name="position">1</property>
           </packing>
         </child>
         <child>
@@ -60,51 +62,100 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="gptest_label1">
+          <object class="GtkScrolledWindow">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="shadow-type">in</property>
+            <child>
+              <object class="GtkViewport">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <child>
+                  <object class="GtkTextView" id="gptest_txtVW">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="pixels-above-lines">2</property>
+                    <property name="pixels-below-lines">2</property>
+                    <property name="editable">False</property>
+                    <property name="left-margin">2</property>
+                    <property name="right-margin">2</property>
+                    <property name="top-margin">2</property>
+                    <property name="bottom-margin">2</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="gptest_log"/>
+                    </accessibility>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="gptest_log">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="margin-end">400</property>
-            <property name="margin-top">10</property>
-            <property name="label" translatable="yes" context="graphictestdlg|gptest_label1">Results log:</property>
-            <property name="justify">center</property>
+            <property name="halign">start</property>
+            <property name="margin-start">5</property>
+            <property name="label" translatable="yes" context="graphictestdlg|gptest_log">Result Log:</property>
             <accessibility>
-              <relation type="label-for" target="gptestresults"/>
+              <relation type="label-for" target="gptest_txtVW"/>
             </accessibility>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
-          <object class="GtkScrolledWindow" id="gpscrollerwindow1">
+          <object class="GtkLabel" id="gptest_detail">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-top">20</property>
+            <property name="margin-bottom">10</property>
+            <property name="label" translatable="yes" context="graphictestdlg|gptest_detail">Test Details</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow" id="gptest_scrollwindow1">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="shadow-type">in</property>
             <child>
-              <object class="GtkTextView" id="gptestresults">
+              <object class="GtkViewport">
                 <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="pixels-above-lines">3</property>
-                <property name="pixels-below-lines">3</property>
-                <property name="editable">False</property>
-                <property name="wrap-mode">word-char</property>
-                <property name="left-margin">10</property>
-                <property name="right-margin">10</property>
-                <property name="top-margin">10</property>
-                <property name="bottom-margin">10</property>
-                <property name="indent">2</property>
-                <accessibility>
-                  <relation type="labelled-by" target="gptest_label1"/>
-                </accessibility>
+                <property name="can-focus">False</property>
+                <child>
+                  <object class="GtkBox" id="gptest_box">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="hexpand">True</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">5</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
           <packing>
             <property name="expand">True</property>
             <property name="fill">True</property>
-            <property name="position">3</property>
+            <property name="position">5</property>
           </packing>
         </child>
       </object>
