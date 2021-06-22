@@ -23,7 +23,6 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include "ZipPackageEntry.hxx"
 #include <cppuhelper/implbase.hxx>
