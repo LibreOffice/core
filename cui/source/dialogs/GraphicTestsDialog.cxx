@@ -8,51 +8,87 @@
  */
 
 #include <GraphicsTestsDialog.hxx>
+#include <vcl/test/GraphicsRenderTests.hxx>
 
 GraphicsTestsDialog::GraphicsTestsDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "cui/ui/graphictestdlg.ui", "GraphicTestsDialog")
-    , m_xResultLog(m_xBuilder->weld_text_view("gptestresults"))
+    , m_xResultLog(m_xBuilder->weld_label("gptest_label1"))
     , m_xDownloadResults(m_xBuilder->weld_button("gptest_downld"))
 {
-    m_xResultLog->set_text("Running tests...");
     m_xDownloadResults->connect_clicked(LINK(this, GraphicsTestsDialog, HandleDownloadRequest));
+    for (int i = 1; i <= 60; i++)
+    {
+        OUString atemp = "test_label_" + OUString::number(i);
+        m_xTestLabels.push_back(
+            m_xBuilder->weld_button(OUStringToOString(atemp, RTL_TEXTENCODING_UTF8)));
+        m_xTestLabels.back()->connect_clicked(
+            LINK(this, GraphicsTestsDialog, HandleResultViewRequest));
+    }
     runGraphicsTestandUpdateLog();
 }
 
 void GraphicsTestsDialog::runGraphicsTestandUpdateLog()
 {
     GraphicsRenderTests TestObject;
-    TestObject.run();
-    OString writeResults;
-    OUString awriteResults
-        = "    --General Info--\nGraphics Backend used : " + TestObject.m_aCurGraphicsBackend
-          + "\nPassed Tests : " + OUString::number(TestObject.m_aPassed.size())
-          + "\nQuirky Tests : " + OUString::number(TestObject.m_aQuirky.size())
-          + "\nFailed Tests : " + OUString::number(TestObject.m_aFailed.size())
-          + "\nSkipped Tests : " + OUString::number(TestObject.m_aSkipped.size());
-    writeResults = OUStringToOString(awriteResults, RTL_TEXTENCODING_UTF8);
-    writeResults += "\n\n    --Test Details--\n";
-    for (const class OString& tests : TestObject.m_aPassed)
+    TestObject.run(true);
+    OUString aResultLog = "Graphics Backend used: " + TestObject.m_aCurGraphicsBackend
+                          + "\nPassed Tests : " + OUString::number(TestObject.m_aPassed.size())
+                          + "\nQuirky Tests : " + OUString::number(TestObject.m_aQuirky.size())
+                          + "\nFailed Tests : " + OUString::number(TestObject.m_aFailed.size())
+                          + "\nSkipped Tests : " + OUString::number(TestObject.m_aSkipped.size())
+                          + "\n(Click any test to view its resultant bitmap)";
+    m_xResultLog->set_tooltip_text(aResultLog);
+    m_xResultImage = TestObject.m_aResultantBitmap;
+    int testNumber = 0;
+    for (class OString& tests : TestObject.m_aPassed)
     {
-        writeResults += tests + " [PASSED]\n";
+        OString atemp = tests;
+        tests += " [PASSED]";
+        m_xResultImage[tests] = TestObject.m_aResultantBitmap[atemp];
+        m_xTestLabels[testNumber++]->set_label(
+            OUString::intern(tests.getStr(), tests.getLength(), RTL_TEXTENCODING_UTF8));
     }
-    for (const class OString& tests : TestObject.m_aQuirky)
+    for (class OString& tests : TestObject.m_aQuirky)
     {
-        writeResults += tests + " [QUIRKY]\n";
+        OString atemp = tests;
+        tests += " [QUIRKY]";
+        m_xResultImage[tests] = TestObject.m_aResultantBitmap[atemp];
+        m_xTestLabels[testNumber++]->set_label(
+            OUString::intern(tests.getStr(), tests.getLength(), RTL_TEXTENCODING_UTF8));
     }
-    for (const class OString& tests : TestObject.m_aFailed)
+    for (class OString& tests : TestObject.m_aFailed)
     {
-        writeResults += tests + " [FAILED]\n";
+        OString atemp = tests;
+        tests += " [FAILED]";
+        m_xResultImage[tests] = TestObject.m_aResultantBitmap[atemp];
+        m_xTestLabels[testNumber++]->set_label(
+            OUString::intern(tests.getStr(), tests.getLength(), RTL_TEXTENCODING_UTF8));
     }
-    for (const class OString& tests : TestObject.m_aSkipped)
+    for (class OString& tests : TestObject.m_aSkipped)
     {
-        writeResults += tests + " [SKIPPED]\n";
+        tests += " [SKIPPED]";
+        m_xSkippedTests[tests] = true;
+        m_xTestLabels[testNumber++]->set_label(
+            OUString::intern(tests.getStr(), tests.getLength(), RTL_TEXTENCODING_UTF8));
     }
-    m_xResultLog->set_text(
-        OUString::intern(writeResults.getStr(), writeResults.getLength(), RTL_TEXTENCODING_UTF8));
 }
 
 IMPL_STATIC_LINK_NOARG(GraphicsTestsDialog, HandleDownloadRequest, weld::Button&, void)
 {
     //TODO: Enter code for downloading the results to user's system.
+    return;
+}
+
+IMPL_LINK(GraphicsTestsDialog, HandleResultViewRequest, weld::Button&, rButton, void)
+{
+    //Will launch the Imageviewer with the corresponding test Bitmap and test title.
+    OUString atitle = rButton.get_label();
+    OString atemp = OUStringToOString(atitle, RTL_TEXTENCODING_UTF8).getStr();
+    if (m_xSkippedTests[atemp])
+    {
+        return;
+    }
+    std::unique_ptr<ImageViewerDialog> m_ImgVwDialog(
+        new ImageViewerDialog(m_xDialog.get(), BitmapEx(m_xResultImage[atemp]), atitle));
+    m_ImgVwDialog->run();
 }

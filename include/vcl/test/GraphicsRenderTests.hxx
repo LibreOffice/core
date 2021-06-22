@@ -15,17 +15,21 @@
 #include <vcl/test/TestResult.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
+#include <map>
 #include <vector>
 
 class VCL_PLUGIN_PUBLIC GraphicsRenderTests
 {
 public:
+    bool m_aStoreResultantBitmap;
     //For storing the results correspondingly to the tests.
     std::vector<OString> m_aPassed;
     std::vector<OString> m_aQuirky;
     std::vector<OString> m_aFailed;
     //For storing Skipped tests.
     std::vector<OString> m_aSkipped;
+    //For storing the resultant bitmap correspondingly to the tests.
+    std::map<OString, Bitmap> m_aResultantBitmap;
     //For storing the current graphics Backend in use.
     OUString m_aCurGraphicsBackend;
 
@@ -90,5 +94,5 @@ private:
     void runALLTests();
 
 public:
-    void run();
+    void run(bool storeResultBitmap = false);
 };
