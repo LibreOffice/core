@@ -1438,7 +1438,8 @@ namespace emfplushelper
                             EMFPImage& image = *static_cast<EMFPImage *>(maEMFPObjects[flags & 0xff].get());
                             float sx, sy, sw, sh;
                             ReadRectangle(rMS, sx, sy, sw, sh);
-                            ::tools::Rectangle aSource(Point(sx, sy), Size(sw, sh));
+
+                            ::tools::Rectangle aSource(Point(sx, sy), Size(sw + 1, sh + 1));
                             SAL_INFO("drawinglayer.emf", "EMF+\t " << (type == EmfPlusRecordTypeDrawImagePoints ? "DrawImagePoints" : "DrawImage") << " source rectangle: " << sx << "," << sy << " " << sw << "x" << sh);
                             ::basegfx::B2DPoint aDstPoint;
                             ::basegfx::B2DSize aDstSize;
@@ -1461,8 +1462,32 @@ namespace emfplushelper
 
                                     SAL_INFO("drawinglayer.emf", "EMF+\t destination points: P1:" << x1 << "," << y1 << " P2:" << x2 << "," << y2 << " P3:" << x3 << "," << y3);
 
-                                    aDstPoint = ::basegfx::B2DPoint(x1, y1);
-                                    aDstSize = ::basegfx::B2DSize(x2 - x1, y3 - y1);
+                                    float xShift = 0.0;
+                                    float yShift = 0.0;
+                                    float xRatio = 1.0;
+                                    float yRatio = 1.0;
+                                    if (sx < 0)
+                                    {
+                                        xRatio = ( sw + sx ) / sw;
+                                        xShift = ( -sx ) / sw;
+                                    }
+                                    if (sy < 0)
+                                    {
+                                        yRatio = ( sh + sy ) / sh;
+                                        yShift = ( -sy ) / sh;
+                                    }
+                                    /*if (sx + sw > imageSizeX)
+                                    {
+                                        xRatio = ( sw + sx ) / sw;
+                                        xShift = ( -sx ) / sw;
+                                    }
+                                    if (sy  + sh > imageSizeY)
+                                    {
+                                        yRatio = ( sh + sy ) / sh;
+                                        yShift = ( -sy ) / sh;
+                                    }*/
+                                    aDstPoint = ::basegfx::B2DPoint(x1 + ( xShift * ( x2 - x1 ) ), y1 + ( yShift  * ( x2 - x1 ) ) );
+                                    aDstSize = ::basegfx::B2DSize( xRatio * ( x2 - x1 ), yRatio * ( y3 - y1 ) );
                                     fShearX = x3 - x1;
                                     fShearY = y2 - y1;
                                 }
@@ -1481,14 +1506,17 @@ namespace emfplushelper
                                 aDstSize = ::basegfx::B2DSize(dw, dh);
                             }
 
+                                SAL_INFO("drawinglayer.emf", "EMF+\t maMapTransform: " << maMapTransform );
                             const basegfx::B2DHomMatrix aTransformMatrix = maMapTransform *
                                     basegfx::B2DHomMatrix(
-                                        /* Row 0, Column 0 */ aDstSize.getX(),
+                                        /* Row 0, Column 0 */ aDstSize.getX(),// * 0.9,// * 2,
                                         /* Row 0, Column 1 */ fShearX,
                                         /* Row 0, Column 2 */ aDstPoint.getX(),
                                         /* Row 1, Column 0 */ fShearY,
-                                        /* Row 1, Column 1 */ aDstSize.getY(),
-                                        /* Row 1, Column 2 */ aDstPoint.getY());
+                                        /* Row 1, Column 1 */ aDstSize.getY(),// * 0.5,// * 3,
+                                        /* Row 1, Column 2 */ aDstPoint.getY() ) ;
+
+                                SAL_INFO("drawinglayer.emf", "EMF+\t aTransformMatrix: " << aTransformMatrix );
 
                             if (image.type == ImageDataTypeBitmap)
                             {
@@ -1512,7 +1540,12 @@ namespace emfplushelper
                             else if (image.type == ImageDataTypeMetafile)
                             {
                                 GDIMetaFile aGDI(image.graphic.GetGDIMetaFile());
+                                //aGDI.GetPrefSize().getHeight()
+
+                                //::tools::Rectangle aSource2(Map(Point(sx, sy)), Size(sw, sh));
                                 aGDI.Clip(aSource);
+                                Size aSize(aGDI.GetPrefSize());
+                                SAL_INFO("drawinglayer.emf", "EMF+\t Metafile size: " << aSize.Width() << "x" << aSize.Height() );//<< " mapMode X: "  << "(" << aGDI.GetPrefMapMode().GetScaleX().GetNumerator() << "/" << aGDI.GetPrefMapMode().GetScaleX().GetDenominator() << ")" << " mapMode Y: "  << "(" << aGDI.GetPrefMapMode().GetScaleY().GetNumerator() << "/" << aGDI.GetPrefMapMode().GetScaleY().GetDenominator() << ")" );
                                 mrTargetHolders.Current().append(
                                         new drawinglayer::primitive2d::MetafilePrimitive2D(aTransformMatrix, aGDI));
                             }
