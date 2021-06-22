@@ -159,18 +159,6 @@ namespace vcl
         /// will be called when a new page is about to be displayed
         void                enterState(WizardTypes::WizardState _nState);
 
-        /** will be called when the current state is about to be left for the given reason
-
-            The base implementation in this class will simply call <member>OWizardPage::commitPage</member>
-            for the current page, and return whatever this call returns.
-
-            @param _eReason
-                The reason why the state is to be left.
-            @return
-                <TRUE/> if and only if the page is allowed to be left
-        */
-        static bool         prepareLeaveCurrentState( WizardTypes::CommitPageReason eReason );
-
         /** determine the next state to travel from the given one
 
             This method ensures that traveling happens along the active path.
