@@ -734,7 +734,7 @@ void SchXMLDataPointContext::startFastElement (sal_Int32 /*Element*/,
             // Deprecated. New documents use the chart:data-label element
             // instead in order to store custom label text.
             case XML_ELEMENT(LO_EXT, XML_CUSTOM_LABEL_FIELD):
-             if (!mbHasLabelParagraph)
+                if (!mbHasLabelParagraph)
                 {
                     sCustomLabelField = aIter.toString();
                     mDataPoint.mCustomLabels.push_back(sCustomLabelField);

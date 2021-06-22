@@ -71,10 +71,10 @@ bool WW8Glossary::HasBareGraphicEnd(SwDoc *pDoc,SwNodeIndex const &rIdx)
             ((RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId()) ||
              (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId())) &&
             rIdx == pAPos->nNode.GetIndex() )
-            {
-                bRet=true;
-                break;
-            }
+        {
+            bRet=true;
+            break;
+        }
     }
     return bRet;
 }

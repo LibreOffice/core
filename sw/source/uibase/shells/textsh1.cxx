@@ -1889,7 +1889,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                             }
                             else
                                 bIsPhysical = false;
-                       }
+                        }
                     }
                 }
 

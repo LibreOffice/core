@@ -276,7 +276,7 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
 
             if( pCursorShell->IsTableMode() )
                 lcl_PaMCorrRel1( pCursorShell->GetTableCrs(), pOldNode, aNewPos, nCntIdx );
-       }
+        }
     }
 
     rDoc.cleanupUnoCursorTable();

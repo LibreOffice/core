@@ -183,7 +183,7 @@ void HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile* pMergeDataFile 
         s_ResData.sFilename  =  sHelpFile;
 
         ProcessHelp( aLangHM , sLanguage, &s_ResData , pMergeDataFile );
-     }
+    }
 
     file->Write(sPath);
 }

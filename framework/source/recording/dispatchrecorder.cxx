@@ -392,9 +392,8 @@ sal_Int32 SAL_CALL DispatchRecorder::getCount()
 
 css::uno::Any SAL_CALL DispatchRecorder::getByIndex(sal_Int32 idx)
 {
-    if (idx >= static_cast<sal_Int32>(m_aStatements.size())) {
+    if (idx >= static_cast<sal_Int32>(m_aStatements.size()))
         throw css::lang::IndexOutOfBoundsException( "Dispatch recorder out of bounds"  );
-   }
 
     Any element(&m_aStatements[idx],
         cppu::UnoType<css::frame::DispatchStatement>::get());
@@ -411,11 +410,9 @@ void SAL_CALL DispatchRecorder::replaceByIndex(sal_Int32 idx, const css::uno::An
                           Reference< XInterface >(), 2 );
     }
 
-    if (idx >= static_cast<sal_Int32>(m_aStatements.size())) {
-                throw css::lang::IndexOutOfBoundsException(
+    if (idx >= static_cast<sal_Int32>(m_aStatements.size()))
+        throw css::lang::IndexOutOfBoundsException(
                         "Dispatch recorder out of bounds"  );
-
-        }
 
     auto pStatement = o3tl::doAccess<css::frame::DispatchStatement>(element);
 

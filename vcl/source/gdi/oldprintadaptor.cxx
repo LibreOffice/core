@@ -103,10 +103,10 @@ Sequence< PropertyValue > OldStylePrintAdaptor::getPageParameters( int i_nPage )
 void OldStylePrintAdaptor::printPage( int i_nPage ) const
 {
     if( i_nPage < int(mpData->maPages.size()) )
-   {
-       mpData->maPages[ i_nPage ].maPage.WindStart();
-       mpData->maPages[ i_nPage ].maPage.Play(*getPrinter());
-   }
+    {
+        mpData->maPages[ i_nPage ].maPage.WindStart();
+        mpData->maPages[ i_nPage ].maPage.Play(*getPrinter());
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

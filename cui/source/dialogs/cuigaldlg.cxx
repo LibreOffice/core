@@ -762,7 +762,7 @@ void TPGalleryThemeProperties::FillFilterList()
                 aExtensions += ";";
             aExtensions += aWildcard + aFilter.second.getToken( 0, ';', nIndex );
         }
-     }
+    }
 #endif
 
 #if defined(_WIN32)

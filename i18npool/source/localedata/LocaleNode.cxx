@@ -75,11 +75,12 @@ const LocaleNode* LocaleNode::getRoot() const
 const LocaleNode * LocaleNode::findNode ( const char *name) const {
     if (aName.equalsAscii(name))
         return this;
-    for (size_t i = 0; i< children.size(); i++)  {
+    for (size_t i = 0; i< children.size(); i++)
+    {
         const LocaleNode *n=children[i]->findNode(name);
         if (n)
             return n;
-        }
+    }
     return nullptr;
 }
 

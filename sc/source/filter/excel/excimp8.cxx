@@ -360,7 +360,7 @@ void ImportExcel8::ReadBasic()
                 aVbaPrj.setOleOverridesSink( xOleNameOverrideSink );
                 aVbaPrj.importVbaProject( *vbaStg );
                 GetObjectManager().SetOleNameOverrideInfo( xOleNameOverrideSink );
-             }
+            }
         }
         catch( uno::Exception& )
         {

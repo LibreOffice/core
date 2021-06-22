@@ -388,7 +388,7 @@ ScHeaderEditEngine& XclRoot::GetHFEditEngine() const
         pEditSet->Put( aItemSet.Get( ATTR_CJK_FONT_HEIGHT ).CloneSetWhich(EE_CHAR_FONTHEIGHT_CJK) );
         pEditSet->Put( aItemSet.Get( ATTR_CTL_FONT_HEIGHT ).CloneSetWhich(EE_CHAR_FONTHEIGHT_CTL) );
         rEE.SetDefaults( std::move(pEditSet) );    // takes ownership
-   }
+    }
     return *mrData.mxHFEditEngine;
 }
 

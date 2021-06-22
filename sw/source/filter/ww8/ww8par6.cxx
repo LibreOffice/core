@@ -3063,7 +3063,7 @@ void SwWW8ImplReader::Read_BoldUsw( sal_uInt16 nId, const sal_uInt8* pData, shor
                 pSI->m_n81Flags |= nMask;         // set flag
             else
                 pSI->m_n81Flags &= ~nMask;        // delete flag
-       }
+        }
     }
     else
     {

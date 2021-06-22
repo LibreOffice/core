@@ -2935,12 +2935,12 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
         {
             if( n > 0 )
                 if( para->GetCharShape(n)->index != para->GetCharShape(n-1)->index && !infield )
-                    {
+                {
                          if( !pstart ) {STARTP;}
                          if( !tstart ) {STARTT;}
                          makeChars(str);
                          ENDT;
-                    }
+                }
             if( para->hhstr[n]->hh == CH_SPACE )
                 firstspace = 0;
             else
@@ -3749,7 +3749,7 @@ void HwpReader::makeHyperText(TxtBox * hbox)
                   OUString(tmp2.c_str(), tmp2.size()+1, RTL_TEXTENCODING_EUC_KR));
 
           }
-     }
+    }
     else
     {
         padd("xlink:type", sXML_CDATA, "simple");
@@ -4297,8 +4297,9 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                                 padd("draw:start-angle", sXML_CDATA, Double2Str(start_angle * 180. / PI));
                                 padd("draw:end-angle", sXML_CDATA, Double2Str(end_angle * 180. / PI));
 
-                            }
-                            else{
+                    }
+                    else
+                    {
                             if( drawobj->u.line_arc.flip == 0 )
                             {
                                  padd("draw:start-angle", sXML_CDATA, "270");
@@ -4420,7 +4421,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
 
                                   oustr.append(ascii(buf));
                               }
-                          }
+                    }
 
                     padd("svg:d", sXML_CDATA, oustr.makeStringAndClear());
 

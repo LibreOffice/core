@@ -1282,14 +1282,14 @@ void SVGTextWriter::startTextShape()
         // if text is rotated, set transform matrix at text element
         const vcl::Font& rFont = mpVDev->GetFont();
         if( rFont.GetOrientation() )
-            {
-                Point   aRot( maTextPos );
-                OUString aTransform = "rotate(" +
-                    OUString::number( rFont.GetOrientation().get() * -0.1 ) + " " +
-                    OUString::number( aRot.X() ) + " " +
-                    OUString::number( aRot.Y() ) + ")";
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTransform, aTransform );
-            }
+        {
+            Point   aRot( maTextPos );
+            OUString aTransform = "rotate(" +
+                OUString::number( rFont.GetOrientation().get() * -0.1 ) + " " +
+                OUString::number( aRot.X() ) + " " +
+                OUString::number( aRot.Y() ) + ")";
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTransform, aTransform );
+        }
 
         mpTextShapeElem.reset(new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemText, true, mbIWS ));
         startTextParagraph();
@@ -2876,7 +2876,7 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
 
             SvXMLElementExport aRefElem( mrExport, XML_NAMESPACE_NONE, "use", true, true );
             return;
-         }
+        }
     }
 
     BitmapEx aBmpEx( rBmpEx );

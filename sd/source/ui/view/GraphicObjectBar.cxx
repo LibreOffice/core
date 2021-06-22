@@ -130,7 +130,7 @@ void GraphicObjectBar::ExecuteFilter( SfxRequest const & rReq )
                         return;
                     }
                 }
-        }
+            }
     }
 
     Invalidate();

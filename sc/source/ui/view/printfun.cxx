@@ -2544,10 +2544,10 @@ tools::Long ScPrintFunc::CountNotePages()
                 if (rDoc.HasColNotes(nCol, nPrintTab))
                 {
                     for ( SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow )
-                        {
-                            if ( rDoc.HasNote(nCol, nRow, nPrintTab) )
-                                aNotePosList.emplace_back( nCol, nRow, nPrintTab );
-                        }
+                    {
+                        if ( rDoc.HasNote(nCol, nRow, nPrintTab) )
+                            aNotePosList.emplace_back( nCol, nRow, nPrintTab );
+                    }
                 }
             }
         }

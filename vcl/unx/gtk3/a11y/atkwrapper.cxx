@@ -661,7 +661,7 @@ atk_object_wrapper_get_type()
   static GType type = 0;
 
   if (!type)
-    {
+  {
       static const GTypeInfo typeInfo =
       {
         sizeof (AtkObjectWrapperClass),
@@ -678,7 +678,7 @@ atk_object_wrapper_get_type()
       type = g_type_register_static (ATK_TYPE_OBJECT,
                                      "OOoAtkObj",
                                      &typeInfo, GTypeFlags(0)) ;
-    }
+  }
   return type;
 }
 
