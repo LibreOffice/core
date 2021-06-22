@@ -216,7 +216,8 @@ void SbiExprNode::FoldConstants(SbiParser* pParser)
     else if (pLeft && pRight)
         FoldConstantsBinaryNode(pParser);
 
-    if( eNodeType == SbxNUMVAL )
+    if( eNodeType == SbxNUMVAL
+     && eType != SbxBOOL )
     {
         // Potentially convolve in INTEGER (because of better opcode)?
         if( eType == SbxSINGLE || eType == SbxDOUBLE )
@@ -262,7 +263,7 @@ void SbiExprNode::FoldConstantsBinaryNode(SbiParser* pParser)
         }
         else
         {
-            eType = SbxDOUBLE;
+            eType = SbxBOOL;
             eNodeType = SbxNUMVAL;
             int eRes = rr.compareTo( rl );
             switch( eTok )
@@ -365,22 +366,22 @@ void SbiExprNode::FoldConstantsBinaryNode(SbiParser* pParser)
                 nVal = nl - nr; break;
             case EQ:
                 nVal = ( nl == nr ) ? SbxTRUE : SbxFALSE;
-                eType = SbxINTEGER; break;
+                eType = SbxBOOL; break;
             case NE:
                 nVal = ( nl != nr ) ? SbxTRUE : SbxFALSE;
-                eType = SbxINTEGER; break;
+                eType = SbxBOOL; break;
             case LT:
                 nVal = ( nl <  nr ) ? SbxTRUE : SbxFALSE;
-                eType = SbxINTEGER; break;
+                eType = SbxBOOL; break;
             case GT:
                 nVal = ( nl >  nr ) ? SbxTRUE : SbxFALSE;
-                eType = SbxINTEGER; break;
+                eType = SbxBOOL; break;
             case LE:
                 nVal = ( nl <= nr ) ? SbxTRUE : SbxFALSE;
-                eType = SbxINTEGER; break;
+                eType = SbxBOOL; break;
             case GE:
                 nVal = ( nl >= nr ) ? SbxTRUE : SbxFALSE;
-                eType = SbxINTEGER; break;
+                eType = SbxBOOL; break;
             case IDIV:
                 if( !lr )
                 {
@@ -412,7 +413,9 @@ void SbiExprNode::FoldConstantsBinaryNode(SbiParser* pParser)
             pParser->Error( ERRCODE_BASIC_MATH_OVERFLOW );
 
         // Recover the data type to kill rounding error
-        if( bCheckType && bBothInt
+        if( eType != SbxBOOL
+         && bBothInt
+         && bCheckType
          && nVal >= SbxMINLNG && nVal <= SbxMAXLNG )
         {
             // Decimal place away
@@ -422,7 +425,6 @@ void SbiExprNode::FoldConstantsBinaryNode(SbiParser* pParser)
                   ? SbxINTEGER : SbxLONG;
         }
     }
-
 }
 void SbiExprNode::FoldConstantsUnaryNode(SbiParser* pParser)
 {

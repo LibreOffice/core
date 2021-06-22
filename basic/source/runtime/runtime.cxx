@@ -2825,12 +2825,14 @@ void SbiRuntime::StepLOADNC( sal_uInt32 nOp1 )
     {
         aStr = aStr.replaceAt(iComma, 1, ".");
     }
+
     sal_Int32 nParseEnd = 0;
     rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
     double n = ::rtl::math::stringToDouble( aStr, '.', ',', &eStatus, &nParseEnd );
 
     // tdf#131296 - retrieve data type put in SbiExprNode::Gen
     SbxDataType eType = SbxDOUBLE;
+
     if ( nParseEnd < aStr.getLength() )
     {
         switch ( aStr[nParseEnd] )
@@ -2840,10 +2842,18 @@ void SbiRuntime::StepLOADNC( sal_uInt32 nOp1 )
             case '&': eType = SbxLONG; break;
             case '!': eType = SbxSINGLE; break;
             case '@': eType = SbxCURRENCY; break;
+            case 'b': eType = SbxBOOL; break;
         }
     }
-    SbxVariable* p = new SbxVariable( eType );
-    p->PutDouble( n );
+
+    SbxVariable *p = new SbxVariable( eType );
+
+    if ( eType == SbxBOOL ) {
+        p->PutBool( n );
+    } else {
+        p->PutDouble( n );
+    }
+
     // tdf#133913 - create variable with Variant/Type in order to prevent type conversion errors
     p->ResetFlag( SbxFlagBits::Fixed );
     PushVar( p );

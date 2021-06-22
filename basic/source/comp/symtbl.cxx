@@ -66,6 +66,7 @@ short SbiStringPool::Add( double n, SbxDataType t )
     char buf[40]{};
     switch( t )
     {
+        case SbxBOOL: snprintf( buf, sizeof(buf), "%db", static_cast<short>(n) ); break;
         // tdf#131296 - store numeric value including its type character
         // See GetSuffixType in basic/source/comp/scanner.cxx for type characters
         case SbxINTEGER: snprintf( buf, sizeof(buf), "%d%%", static_cast<short>(n) ); break;
