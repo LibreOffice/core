@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "708f7a59_7d82f508",
+        "filename": "include/oox/export/DMLPresetShapeExport.hxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-06-22T14:50:51Z",
+      "side": 1,
+      "message": "Typo keept -\u003e kept",
+      "revId": "f3ea8d5d2264c61d08404e4138803e116febc775",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
