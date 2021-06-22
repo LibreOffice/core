@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ae95c547_02c6117a",
+        "filename": "external/poppler/ExternalPackage_poppler_data.mk",
+        "patchSetId": 13
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-06-22T15:54:40Z",
+      "side": 1,
+      "message": "hmmmm... it looks like the only thing for which we ship separate license files is bundled UNO Extensions, and this isn\u0027t an extension, so i guess we can get rid of them here.",
+      "parentUuid": "707aae19_21e9ca63",
+      "revId": "6fb2f03c1816ee933f77e0f9562163be2ac55a43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a6e1e59d_e1c88c74",
         "filename": "sdext/source/pdfimport/xpdfwrapper/wrapper_gpl.cxx",
         "patchSetId": 13
