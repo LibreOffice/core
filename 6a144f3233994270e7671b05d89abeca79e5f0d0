@@ -34,6 +34,24 @@
       "revId": "6a144f3233994270e7671b05d89abeca79e5f0d0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7f9b0c7_20597e59",
+        "filename": "sw/qa/uitest/writer_tests7/tdf90401.py",
+        "patchSetId": 16
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-06-22T08:28:01Z",
+      "side": 1,
+      "message": "Hi Caolán,\nthanks for the information. Will adapt the comment accordingly then.",
+      "parentUuid": "00ed0a14_b622e0a3",
+      "revId": "6a144f3233994270e7671b05d89abeca79e5f0d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
