@@ -1393,27 +1393,26 @@ OUString SwDoc::GetUniqueDrawObjectName() const
 
 const SwFlyFrameFormat* SwDoc::FindFlyByName( const OUString& rName, SwNodeType nNdTyp ) const
 {
-    auto range = GetSpzFrameFormats()->rangeFind( RES_FLYFRMFMT, rName );
-    for( auto it = range.first; it != range.second; it++ )
+    auto it = GetSpzFrameFormats()->findByTypeAndName( RES_FLYFRMFMT, rName );
+    if( it == GetSpzFrameFormats()->typeAndNameEnd() )
+        return nullptr;
+
+    const SwFrameFormat* pFlyFormat = *it;
+    assert( RES_FLYFRMFMT == pFlyFormat->Which() && pFlyFormat->GetName() == rName );
+    const SwNodeIndex* pIdx = pFlyFormat->GetContent().GetContentIdx();
+    if( pIdx && pIdx->GetNode().GetNodes().IsDocNodes() )
     {
-        const SwFrameFormat* pFlyFormat = *it;
-        if( RES_FLYFRMFMT != pFlyFormat->Which() || pFlyFormat->GetName() != rName )
-            continue;
-        const SwNodeIndex* pIdx = pFlyFormat->GetContent().GetContentIdx();
-        if( pIdx && pIdx->GetNode().GetNodes().IsDocNodes() )
+        if( nNdTyp != SwNodeType::NONE )
         {
-            if( nNdTyp != SwNodeType::NONE )
-            {
-                // query for the right NodeType
-                const SwNode* pNd = GetNodes()[ pIdx->GetIndex()+1 ];
-                if( nNdTyp == SwNodeType::Text
-                        ? !pNd->IsNoTextNode()
-                        : nNdTyp == pNd->GetNodeType() )
-                    return static_cast<const SwFlyFrameFormat*>(pFlyFormat);
-            }
-            else
+            // query for the right NodeType
+            const SwNode* pNd = GetNodes()[ pIdx->GetIndex()+1 ];
+            if( nNdTyp == SwNodeType::Text
+                    ? !pNd->IsNoTextNode()
+                    : nNdTyp == pNd->GetNodeType() )
                 return static_cast<const SwFlyFrameFormat*>(pFlyFormat);
         }
+        else
+            return static_cast<const SwFlyFrameFormat*>(pFlyFormat);
     }
     return nullptr;
 }

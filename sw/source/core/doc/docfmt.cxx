@@ -2085,16 +2085,16 @@ SwFrameFormats::const_iterator SwFrameFormats::find( const value_type& x ) const
     return m_Array.project<0>( it );
 }
 
-std::pair<SwFrameFormats::const_range_iterator,SwFrameFormats::const_range_iterator>
-SwFrameFormats::rangeFind( sal_uInt16 type, const OUString& name ) const
+SwFrameFormats::ByTypeAndName::const_iterator
+SwFrameFormats::findByTypeAndName( sal_uInt16 type, const OUString& name ) const
 {
-    return m_TypeAndNameIndex.equal_range( boost::make_tuple(type, name) );
+    return m_TypeAndNameIndex.find( boost::make_tuple(type, name) );
 }
 
-std::pair<SwFrameFormats::const_range_iterator,SwFrameFormats::const_range_iterator>
-SwFrameFormats::rangeFind( const value_type& x ) const
+SwFrameFormats::ByTypeAndName::const_iterator
+SwFrameFormats::findSimilar( const value_type& x ) const
 {
-    return rangeFind( x->Which(), x->GetName() );
+    return findByTypeAndName( x->Which(), x->GetName() );
 }
 
 void SwFrameFormats::DeleteAndDestroyAll( bool keepDefault )
