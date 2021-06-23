@@ -28,6 +28,10 @@
 
 class CommandEvent;
 
+namespace vcl {
+    class Window;
+}
+
 // Timerticks
 #define SELENG_DRAGDROP_TIMEOUT     400
 #define SELENG_AUTOREPEAT_INTERVAL  50
@@ -92,6 +96,13 @@ public:
                         SelectionEngine( vcl::Window* pWindow,
                                          FunctionSet* pFunctions = nullptr );
                         ~SelectionEngine();
+                        // Avoid implicitly defined copy constructors/assignments for the
+                        // DLLPUBLIC class (they may require forward-declared classes used
+                        // internally to be defined in places using SelectionEngine)
+                        SelectionEngine(const SelectionEngine&) = delete;
+                        SelectionEngine(SelectionEngine&&) = delete;
+                        SelectionEngine& operator=(const SelectionEngine&) = delete;
+                        SelectionEngine& operator=(SelectionEngine&&) = delete;
 
     // true: Event was processed by Selection Engine
     bool                SelMouseButtonDown( const MouseEvent& rMEvt );

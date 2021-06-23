@@ -24,7 +24,6 @@
 #include <cstddef>
 
 #include <vcl/textdata.hxx>
-#include <vcl/window.hxx>
 #include "textdat2.hxx"
 
 

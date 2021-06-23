@@ -23,7 +23,6 @@
 #include <vcl/i18nhelp.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/window.hxx>
 #include <sal/log.hxx>
 
 #include <optional>
