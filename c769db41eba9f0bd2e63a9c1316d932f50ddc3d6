@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "78c555df_e8342881",
+        "filename": "sc/qa/uitest/calc_tests9/tdf142395.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-23T08:02:59Z",
+      "side": 1,
+      "message": "this variable no longer has a value, or am I missing something?",
+      "range": {
+        "startLine": 28,
+        "startChar": 25,
+        "endLine": 28,
+        "endChar": 32
+      },
+      "revId": "c769db41eba9f0bd2e63a9c1316d932f50ddc3d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
