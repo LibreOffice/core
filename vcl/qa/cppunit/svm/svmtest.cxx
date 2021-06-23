@@ -183,7 +183,7 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
     //void checkFloatTransparent(const GDIMetaFile& rMetaFile);
     void testFloatTransparent();
 
-    //void checkEPS(const GDIMetaFile& rMetaFile);
+    void checkEPS(const GDIMetaFile& rMetaFile);
     void testEPS();
 
     void checkRefPoint(const GDIMetaFile& rMetaFile);
@@ -2035,8 +2035,81 @@ void SvmTest::testTransparent()
 void SvmTest::testFloatTransparent()
 {}
 
+void SvmTest::checkEPS(const GDIMetaFile& rMetaFile)
+{
+    xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
+
+    assertXPathAttrs(pDoc, "/metafile/eps[1]", {
+        {"x", "1"},
+        {"y", "8"},
+        {"width", "2"},
+        {"height", "7"}
+    });
+
+    assertXPathAttrs(pDoc, "/metafile/eps[1]/gfxlink[1]", {
+        {"width", "3"},
+        {"height", "6"},
+        {"type", "EpsBuffer"},
+        {"userid", "12345"},
+        {"datasize", "3"},
+        {"data", "616263"},
+        {"native", "false"},
+        {"emf", "false"},
+        {"validmapmode", "true"}
+    });
+
+    assertXPathAttrs(pDoc, "/metafile/eps[1]/gfxlink[1]/prefmapmode[1]", {
+        {"mapunit", "Map100thInch"},
+        {"x", "0"},
+        {"y", "1"},
+        {"scalex", "(1/2)"},
+        {"scaley", "(2/3)"}
+    });
+
+    assertXPathAttrs(pDoc, "/metafile/eps[1]/metafile[1]/point[1]", {
+        {"x", "1"},
+        {"y", "8"}
+    });
+
+    assertXPathAttrs(pDoc, "/metafile/eps[1]/metafile[1]/point[2]", {
+        {"x", "2"},
+        {"y", "7"}
+    });
+}
+
 void SvmTest::testEPS()
-{}
+{
+    GDIMetaFile aGDIMetaFile;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
+
+    sal_uInt32 nDataSize = 3;
+    std::unique_ptr<sal_uInt8[]> pBuffer (new sal_uInt8[nDataSize]);
+    pBuffer[0] = 'a';
+    pBuffer[1] = 'b';
+    pBuffer[2] = 'c';
+
+    MapMode aMapMode1(MapUnit::Map100thInch);
+    aMapMode1.SetOrigin(Point(0, 1));
+    aMapMode1.SetScaleX(Fraction(1, 2));
+    aMapMode1.SetScaleY(Fraction(2, 3));
+
+    GDIMetaFile aGDIMetaFile1;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev1;
+    setupBaseVirtualDevice(*pVirtualDev1, aGDIMetaFile1);
+
+    pVirtualDev1->DrawPixel(Point(1, 8));
+    pVirtualDev1->DrawPixel(Point(2, 7));
+
+    GfxLink aGfxLink(std::move(pBuffer), nDataSize, GfxLinkType::EpsBuffer);
+    aGfxLink.SetPrefMapMode(aMapMode1);
+    aGfxLink.SetUserId(12345);
+    aGfxLink.SetPrefSize(Size(3, 6));
+    pVirtualDev->DrawEPS(Point(1, 8), Size(2, 7), aGfxLink, &aGDIMetaFile1);
+
+    checkEPS(writeAndReadStream(aGDIMetaFile));
+    checkEPS(readFile(u"eps.svm"));
+}
 
 void SvmTest::checkRefPoint(const GDIMetaFile& rMetaFile)
 {

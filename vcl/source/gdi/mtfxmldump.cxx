@@ -452,6 +452,27 @@ OUString convertComplexTestLayoutFlags(ComplexTextLayoutFlags eComplexTestLayout
     }
 }
 
+OUString convertGfxLinkTypeToString(GfxLinkType eGfxLinkType)
+{
+    switch(eGfxLinkType)
+    {
+        case GfxLinkType::EpsBuffer: return "EpsBuffer";
+        case GfxLinkType::NativeBmp: return "NativeBmp";
+        case GfxLinkType::NativeGif: return "NativeGif";
+        case GfxLinkType::NativeJpg: return "NativeJpg";
+        case GfxLinkType::NativeMet: return "NativeMet";
+        case GfxLinkType::NativeMov: return "NativeMov";
+        case GfxLinkType::NativePct: return "NativePct";
+        case GfxLinkType::NativePdf: return "NativePdf";
+        case GfxLinkType::NativePng: return "NativePng";
+        case GfxLinkType::NativeSvg: return "NativeSvg";
+        case GfxLinkType::NativeTif: return "NativeTif";
+        case GfxLinkType::NativeWmf: return "NativeWmf";
+        case GfxLinkType::NONE: return "None";
+    }
+    return OUString();
+}
+
 OUString hex32(sal_uInt32 nNumber)
 {
     std::stringstream ss;
@@ -506,6 +527,14 @@ void writeRectangle(tools::XmlWriter& rWriter, tools::Rectangle const& rRectangl
         rWriter.attribute("bottom", OString("empty"));
     else
         rWriter.attribute("bottom", rRectangle.Bottom());
+}
+
+void writeMapMode(tools::XmlWriter& rWriter, MapMode const& rMapMode)
+{
+    rWriter.attribute("mapunit", convertMapUnitToString( rMapMode.GetMapUnit() ));
+    writePoint(rWriter, rMapMode.GetOrigin());
+    rWriter.attribute("scalex", convertFractionToString(rMapMode.GetScaleX()));
+    rWriter.attribute("scaley", convertFractionToString(rMapMode.GetScaleY()));
 }
 
 void writeLineInfo(tools::XmlWriter& rWriter, LineInfo const& rLineInfo)
@@ -1282,7 +1311,35 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
             }
             break;
 
-            //case MetaActionType::EPS:
+            case MetaActionType::EPS:
+            {
+                MetaEPSAction* pMetaEPSAction = static_cast<MetaEPSAction*>(pAction);
+                rWriter.startElement(sCurrentElementTag);
+
+                writePoint(rWriter, pMetaEPSAction->GetPoint());
+                writeSize(rWriter, pMetaEPSAction->GetSize());
+
+                rWriter.startElement("gfxlink");
+                writeSize(rWriter, pMetaEPSAction->GetLink().GetPrefSize());
+                rWriter.attribute("type", convertGfxLinkTypeToString(pMetaEPSAction->GetLink().GetType()));
+                rWriter.attribute("userid", pMetaEPSAction->GetLink().GetUserId());
+                rWriter.attribute("datasize", pMetaEPSAction->GetLink().GetDataSize());
+                rWriter.attribute("data", toHexString(pMetaEPSAction->GetLink().GetData(), pMetaEPSAction->GetLink().GetDataSize()));
+                rWriter.attribute("native", pMetaEPSAction->GetLink().IsNative() ? "true" : "false");
+                rWriter.attribute("emf", pMetaEPSAction->GetLink().IsEMF() ? "true" : "false");
+                rWriter.attribute("validmapmode", pMetaEPSAction->GetLink().IsPrefMapModeValid() ? "true" : "false");
+                rWriter.startElement("prefmapmode");
+                writeMapMode(rWriter, pMetaEPSAction->GetLink().GetPrefMapMode());
+                rWriter.endElement();
+                rWriter.endElement();
+
+                rWriter.startElement("metafile");
+                writeXml(pMetaEPSAction->GetSubstitute(), rWriter);
+                rWriter.endElement();
+
+                rWriter.endElement();
+            }
+            break;
 
             case MetaActionType::REFPOINT:
             {
