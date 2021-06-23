@@ -315,6 +315,8 @@ protected:
     virtual void    GetFocus() override;
     virtual void    LoseFocus() override;
 
+    virtual WindowHitTest    ImplHitTest( const Point& rFramePos ) override;
+
     virtual void    RequestHelp( const HelpEvent& rEvt ) override;
 
     virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
