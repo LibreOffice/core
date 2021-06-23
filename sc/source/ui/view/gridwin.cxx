@@ -1440,6 +1440,14 @@ bool ScGridWindow::TestMouse( const MouseEvent& rMEvt, bool bAction )
     return bNewPointer;
 }
 
+WindowHitTest ScGridWindow::ImplHitTest( const Point& rFramePos )
+{
+    if (comphelper::LibreOfficeKit::isActive())
+        return WindowHitTest::Inside;
+
+    return Window::ImplHitTest(rFramePos);
+}
+
 void ScGridWindow::LogicMouseButtonDown(const MouseEvent& rMouseEvent)
 {
     MouseButtonDown(rMouseEvent);
