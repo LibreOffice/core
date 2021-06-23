@@ -13,11 +13,9 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf68113(UITestCase):
     def test_tdf68113_empty_notempty_button(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWin = calcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             enter_text_to_cell(xGridWin, "A1", "A")
             enter_text_to_cell(xGridWin, "A2", "1")

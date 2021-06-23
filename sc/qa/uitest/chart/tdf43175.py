@@ -11,7 +11,7 @@ from uitest.uihelper.common import get_url_for_data_file
 class Tdf43175(UITestCase):
 
     def test_tdf43175(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf43175.ods")):
+        with self.ui_test.load_file(get_url_for_data_file("tdf43175.ods")) as document:
 
             self.xUITest.executeCommand(".uno:TableSelectAll")
 
@@ -25,8 +25,6 @@ class Tdf43175(UITestCase):
 
             xOKBtn = xDialog.getChild("ok")
             self.ui_test.close_dialog_through_button(xOKBtn)
-
-            document = self.ui_test.get_component()
 
             aSheetNames = ['Blad1', 'Blad2', 'Blad1_2', 'Blad2_2']
 

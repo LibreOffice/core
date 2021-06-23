@@ -16,10 +16,9 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class protectSpreadsheet(UITestCase):
     def test_protect_spreadsheet(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #enter password
             self.ui_test.execute_dialog_through_command(".uno:ToolProtectionDocument")
             xDialog = self.xUITest.getTopFocusWindow()

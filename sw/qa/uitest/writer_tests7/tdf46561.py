@@ -26,8 +26,8 @@ class tdf46561(UITestCase):
         self.assertEqual(right, xHeaderTextRight)
 
     def test_tdf46561(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf46561.odt")):
-            self.document = self.ui_test.get_component()
+        with self.ui_test.load_file(get_url_for_data_file("tdf46561.odt")) as document:
+            self.document = document
             self.check_header_texts(master="right", first="1st", left="left", right="right")
 
             xWriterDoc = self.xUITest.getTopFocusWindow()

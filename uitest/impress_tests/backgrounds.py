@@ -13,8 +13,7 @@ from com.sun.star.drawing.RectanglePoint import MIDDLE_MIDDLE
 
 class ImpressBackgrounds(UITestCase):
 
-    def checkDefaultBackground(self, btn):
-        document = self.ui_test.get_component()
+    def checkDefaultBackground(self, btn, document):
         if btn == 'btnnone':
             self.assertEqual(document.DrawPages.getByIndex(0).Background, None)
         elif btn == 'btncolor':
@@ -105,7 +104,7 @@ class ImpressBackgrounds(UITestCase):
 
     def test_background_dialog(self):
 
-        with self.ui_test.create_doc_in_start_center("impress"):
+        with self.ui_test.create_doc_in_start_center("impress") as document:
 
             xTemplateDlg = self.xUITest.getTopFocusWindow()
             xCancelBtn = xTemplateDlg.getChild("close")
@@ -127,7 +126,7 @@ class ImpressBackgrounds(UITestCase):
                 xOkBtn = xPageSetupDlg.getChild("ok")
                 xOkBtn.executeAction("CLICK", tuple())
 
-                self.checkDefaultBackground(button)
+                self.checkDefaultBackground(button, document)
 
                 self.ui_test.execute_dialog_through_command(".uno:PageSetup")
 
@@ -141,6 +140,6 @@ class ImpressBackgrounds(UITestCase):
                 xOkBtn = xPageSetupDlg.getChild("ok")
                 xOkBtn.executeAction("CLICK", tuple())
 
-                self.checkDefaultBackground('btnnone')
+                self.checkDefaultBackground('btnnone', document)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

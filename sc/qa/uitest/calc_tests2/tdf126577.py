@@ -12,10 +12,9 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf126577(UITestCase):
 
     def test_tdf126577(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A20"}))
 

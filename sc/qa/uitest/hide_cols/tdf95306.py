@@ -20,14 +20,13 @@ def get_column_hidden(doc, index):
 class HideDisjointColumns(UITestCase):
 
     def test_hide_columns(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xTopWindow = self.xUITest.getTopFocusWindow()
 
             gridwin = xTopWindow.getChild("grid_window")
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B1"}))
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "D1", "EXTEND":"true"}))
 
-            document = self.ui_test.get_component()
             self.assertFalse(get_column_hidden(document, 1))
             self.assertFalse(get_column_hidden(document, 3))
             self.ui_test._xUITest.executeCommand(".uno:HideColumn")

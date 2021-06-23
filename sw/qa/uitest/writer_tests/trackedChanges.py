@@ -12,7 +12,7 @@ class trackedchanges(UITestCase):
 
     def test_tdf91270(self):
 
-        with self.ui_test.create_doc_in_start_center("writer"):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
@@ -30,8 +30,7 @@ class trackedchanges(UITestCase):
 
     def test_tracked_changes_accept(self):
 
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
 
@@ -50,8 +49,7 @@ class trackedchanges(UITestCase):
 
     def test_tracked_changes_acceptall(self):
 
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
 
@@ -67,13 +65,11 @@ class trackedchanges(UITestCase):
             xCancBtn = xTrackDlg.getChild("close")
             xCancBtn.executeAction("CLICK", tuple())
 
-
             self.assertEqual(document.Text.String[0:16], "Test LibreOffice")
 
     def test_tracked_changes_reject(self):
 
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
 
@@ -93,8 +89,7 @@ class trackedchanges(UITestCase):
 
     def test_tracked_changes_rejectall(self):
 
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
 
@@ -114,8 +109,7 @@ class trackedchanges(UITestCase):
 
     def test_tracked_changes_zprev_next(self):
 
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
 
@@ -143,10 +137,9 @@ class trackedchanges(UITestCase):
             self.assertEqual(document.Text.String[0:30], "Test LibreOffice Test2 Test4")
 
     def test_list_of_changes(self):
-        with self.ui_test.load_file(get_url_for_data_file("trackedChanges.odt")):
+        with self.ui_test.load_file(get_url_for_data_file("trackedChanges.odt")) as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
-            document = self.ui_test.get_component()
 
             listText = [
                     "Unknown Author\t01/24/2020 16:19:32\t",
@@ -211,10 +204,9 @@ class trackedchanges(UITestCase):
             xcloseBtn.executeAction("CLICK", tuple())
 
     def test_tdf135018(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf135018.odt")):
+        with self.ui_test.load_file(get_url_for_data_file("tdf135018.odt")) as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
-            document = self.ui_test.get_component()
 
             self.assertEqual(5, document.CurrentController.PageCount)
 

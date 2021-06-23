@@ -17,7 +17,7 @@ class TestSwuiidxmrk(UITestCase):
     def test_bibliography_page_number_insert(self):
 
         # Given an empty Writer document:
-        with self.ui_test.create_doc_in_start_center("writer"):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
             self.ui_test.execute_modeless_dialog_through_command(".uno:InsertAuthoritiesEntry")
             insert_entry = self.xUITest.getTopFocusWindow()
@@ -40,7 +40,6 @@ class TestSwuiidxmrk(UITestCase):
             self.ui_test.close_dialog_through_button(close)
 
             # Then make sure the URL contains that page number:
-            document = self.ui_test.get_component()
             paragraphs = document.Text.createEnumeration()
             paragraph = paragraphs.nextElement()
             portions = paragraph.createEnumeration()

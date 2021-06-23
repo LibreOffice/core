@@ -14,9 +14,8 @@ class tdf78133(UITestCase):
 
     def test_tdf78133_options_app_colors(self):
 
-        with self.ui_test.create_doc_in_start_center("writer"):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
-            document = self.ui_test.get_component()
             #New text document
             #open option, go to App colors
             self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog

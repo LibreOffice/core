@@ -16,10 +16,9 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class movingAverage(UITestCase):
     def test_moving_average_column(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #fill data
             enter_text_to_cell(gridwin, "A1", "1")
             enter_text_to_cell(gridwin, "A2", "0")
@@ -110,10 +109,9 @@ class movingAverage(UITestCase):
             self.ui_test.close_dialog_through_button(xCancelBtn)
 
     def test_moving_average_row(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #fill data
             enter_text_to_cell(gridwin, "A1", "1")
             enter_text_to_cell(gridwin, "A2", "0")

@@ -15,11 +15,10 @@ from uitest.uihelper.common import select_pos
 class specialCharacter(UITestCase):
 
     def test_special_character(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
-            document = self.ui_test.get_component()
 
             self.ui_test.execute_dialog_through_command(".uno:InsertSymbol")  # specialCharacter dialog
             xDialog = self.xUITest.getTopFocusWindow()

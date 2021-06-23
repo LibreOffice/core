@@ -10,13 +10,12 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class Tdf118883(UITestCase):
 
    def test_tdf118883(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
             # Insert shape with Ctrl key
             xArgs = mkPropertyValues({"KeyModifier": 8192})
             self.xUITest.executeCommandWithParameters(".uno:BasicShapes.rectangle", xArgs)
 
-            document = self.ui_test.get_component()
             self.assertEqual(1, document.DrawPage.getCount())
 
             self.xUITest.executeCommand(".uno:Copy")
@@ -26,11 +25,10 @@ class Tdf118883(UITestCase):
             xDiscardBtn = xDialog.getChild("discard")
             self.ui_test.close_dialog_through_button(xDiscardBtn)
 
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
 
             self.xUITest.executeCommand(".uno:Paste")
 
-            document = self.ui_test.get_component()
 
             # Without the fix in place, this test would have failed with
             # AssertionError: 1 != 0

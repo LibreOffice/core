@@ -13,10 +13,9 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf79983(UITestCase):
     def test_tdf79983_sort_list_case_sensitive(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             enter_text_to_cell(gridwin, "A1", "AAA")
             enter_text_to_cell(gridwin, "A2", "BBB")

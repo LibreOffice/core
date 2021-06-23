@@ -21,7 +21,7 @@ class ManualCalcTests(UITestCase):
         # This test is to check that paste special combined with some options and link is ok.
         # Refers to tdf#84810
 
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
 
             # Write text to cell A1
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
@@ -45,7 +45,6 @@ class ManualCalcTests(UITestCase):
             self.ui_test.close_dialog_through_button(xOkBtn)
 
             # Assert successful paste
-            document = self.ui_test.get_component()
             self.assertEqual(get_cell_by_position(document, 0, 0, 2).getString(), "abcd")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
