@@ -22,6 +22,30 @@
       "revId": "1feb59c3dd9e5f714ce894f8de31bbb6869c9f3b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "653aa65d_52513713",
+        "filename": "sw/source/core/doc/docfmt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2088,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-06-23T08:41:55Z",
+      "side": 1,
+      "message": "thanks for spotting that!\n\nfix at https://gerrit.libreoffice.org/c/core/+/117697",
+      "parentUuid": "87a5ae8d_184e55d5",
+      "range": {
+        "startLine": 2088,
+        "startChar": 36,
+        "endLine": 2088,
+        "endChar": 47
+      },
+      "revId": "1feb59c3dd9e5f714ce894f8de31bbb6869c9f3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
