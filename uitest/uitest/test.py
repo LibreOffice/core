@@ -49,6 +49,13 @@ class UITest(object):
             if component is not None:
                 return component
 
+    def wait_for_top_focus_window(self, id):
+        while True:
+            win = self._xUITest.getTopFocusWindow()
+            if get_state_as_dict(win)['ID'] == id:
+                return win
+            time.sleep(DEFAULT_SLEEP)
+
     def wait_until_child_is_available(self, childName):
         time_ = 0
         xChild = None
