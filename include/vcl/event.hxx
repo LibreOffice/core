@@ -296,6 +296,14 @@ public:
                             NotifyEvent( MouseNotifyEvent nEventType,
                                          vcl::Window* pWindow,
                                          const void* pEvent = nullptr );
+                            ~NotifyEvent();
+                            // Avoid implicitly defined copy constructors/assignments for the
+                            // DLLPUBLIC class (they may require forward-declared classes used
+                            // internally to be defined in places using NotifyEvent)
+                            NotifyEvent(const NotifyEvent&) = delete;
+                            NotifyEvent(NotifyEvent&&) = delete;
+                            NotifyEvent& operator=(const NotifyEvent&) = delete;
+                            NotifyEvent& operator=(NotifyEvent&&) = delete;
 
     MouseNotifyEvent        GetType() const { return mnEventType; }
     vcl::Window*            GetWindow() const { return mpWindow; }
