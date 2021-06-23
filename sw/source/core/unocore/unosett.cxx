@@ -1589,21 +1589,10 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
             }
             else if (pLocalDoc)
             {
-                const SwCharFormats* pFormats = pLocalDoc->GetCharFormats();
-                const size_t nChCount = pFormats->size();
-
                 SwCharFormat* pCharFormat = nullptr;
                 if (!sCharFormatName.isEmpty())
                 {
-                    for(size_t j = 0; j< nChCount; ++j)
-                    {
-                        SwCharFormat* pTmp = (*pFormats)[j];
-                        if(pTmp->GetName() == sCharFormatName)
-                        {
-                            pCharFormat = pTmp;
-                            break;
-                        }
-                    }
+                    pCharFormat = pLocalDoc->FindCharFormatByName(sCharFormatName);
                     if(!pCharFormat)
                     {
 
