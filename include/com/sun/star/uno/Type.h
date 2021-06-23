@@ -119,6 +119,10 @@ public:
     */
     inline Type( const Type & rType );
 
+#if defined LIBO_INTERNAL_ONLY
+    inline Type( Type && );
+#endif
+
     /** Destructor: Releases acquired C type description reference.
     */
     ~Type()
@@ -130,6 +134,10 @@ public:
         @return this type
     */
     inline Type & SAL_CALL operator = ( const Type & rType );
+
+#if defined LIBO_INTERNAL_ONLY
+    inline Type & SAL_CALL operator = ( Type && );
+#endif
 
     /** Gets the type class of set type.
 
