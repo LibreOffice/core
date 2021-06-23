@@ -789,6 +789,326 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
     return bRet;
 }
 
+static bool ImplHandleMouseEvent2( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent nSVEvent, bool bMouseLeave,
+                            tools::Long nX, tools::Long nY, sal_uInt64 nMsgTime,
+                            sal_uInt16 nCode, MouseEventModifiers nMode )
+{
+    Point       aMousePos( nX, nY );
+    VclPtr<vcl::Window> pChild;
+    bool        bRet(false);
+    sal_uInt16  nClicks(0);
+    ImplFrameData* pWinFrameData = xWindow->ImplGetFrameData();
+    sal_uInt16      nOldCode = pWinFrameData->mnMouseCode;
+
+    // we need a mousemove event, before we get a mousebuttondown or a
+    // mousebuttonup event
+    if ( (nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN) || (nSVEvent == MouseNotifyEvent::MOUSEBUTTONUP) )
+    {
+        if ( (pWinFrameData->mnLastMouseX != nX) ||
+             (pWinFrameData->mnLastMouseY != nY) )
+        {
+            sal_uInt16 nMoveCode = nCode & ~(MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE);
+            ImplHandleMouseEvent2(xWindow, MouseNotifyEvent::MOUSEMOVE, false, nX, nY, nMsgTime, nMoveCode, nMode);
+        }
+    }
+
+    // update frame data
+    pWinFrameData->mnBeforeLastMouseX = pWinFrameData->mnLastMouseX;
+    pWinFrameData->mnBeforeLastMouseY = pWinFrameData->mnLastMouseY;
+    pWinFrameData->mnLastMouseX = nX;
+    pWinFrameData->mnLastMouseY = nY;
+    pWinFrameData->mnMouseCode  = nCode;
+    MouseEventModifiers const nTmpMask = MouseEventModifiers::SYNTHETIC | MouseEventModifiers::MODIFIERCHANGED;
+    pWinFrameData->mnMouseMode  = nMode & ~nTmpMask;
+    if ( bMouseLeave )
+        pWinFrameData->mbMouseIn = false;
+    else
+        pWinFrameData->mbMouseIn = true;
+
+    // find mouse window
+    {
+        if ( bMouseLeave )
+            pChild = nullptr;
+        else
+            pChild = xWindow->ImplFindWindow( aMousePos );
+    }
+
+    // test this because mouse events are buffered in the remote version
+    // and size may not be in sync
+    if ( !pChild && !bMouseLeave )
+        return false;
+
+    // determine mouse event data
+    if ( nSVEvent == MouseNotifyEvent::MOUSEMOVE )
+    {
+        // check if MouseMove belongs to same window and if the
+        // status did not change
+        if ( pChild )
+        {
+            Point aChildMousePos = pChild->ImplFrameToOutput( aMousePos );
+            if ( !bMouseLeave &&
+                 (pChild == pWinFrameData->mpMouseMoveWin) &&
+                 (aChildMousePos.X() == pWinFrameData->mnLastMouseWinX) &&
+                 (aChildMousePos.Y() == pWinFrameData->mnLastMouseWinY) &&
+                 (nOldCode == pWinFrameData->mnMouseCode) )
+            {
+                // set mouse pointer anew, as it could have changed
+                // due to the mode switch
+                ImplSetMousePointer( pChild );
+                return false;
+            }
+
+            pWinFrameData->mnLastMouseWinX = aChildMousePos.X();
+            pWinFrameData->mnLastMouseWinY = aChildMousePos.Y();
+        }
+
+        // mouse click
+        nClicks = pWinFrameData->mnClickCount;
+
+        // call Start-Drag handler if required
+        // Warning: should be called before Move, as otherwise during
+        // fast mouse movements the applications move to the selection state
+        vcl::Window* pMouseDownWin = pWinFrameData->mpMouseDownWin;
+        if ( pMouseDownWin )
+        {
+            // check for matching StartDrag mode. We only compare
+            // the status of the mouse buttons, such that e. g. Mod1 can
+            // change immediately to the copy mode
+            const MouseSettings& rMSettings = pMouseDownWin->GetSettings().GetMouseSettings();
+            if ( (nCode & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)) ==
+                 (MouseSettings::GetStartDragCode() & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)) )
+            {
+                if ( !pMouseDownWin->ImplGetFrameData()->mbStartDragCalled )
+                {
+                    tools::Long nDragW  = rMSettings.GetStartDragWidth();
+                    tools::Long nDragH  = rMSettings.GetStartDragHeight();
+
+                    //long nMouseX = nX;
+                    //long nMouseY = nY;
+                    tools::Long nMouseX = aMousePos.X(); // #106074# use the possibly re-mirrored coordinates (RTL) ! nX,nY are unmodified !
+                    tools::Long nMouseY = aMousePos.Y();
+
+                    if ( (((nMouseX-nDragW) > pMouseDownWin->ImplGetFrameData()->mnFirstMouseX) ||
+                           ((nMouseX+nDragW) < pMouseDownWin->ImplGetFrameData()->mnFirstMouseX)) ||
+                         (((nMouseY-nDragH) > pMouseDownWin->ImplGetFrameData()->mnFirstMouseY) ||
+                           ((nMouseY+nDragH) < pMouseDownWin->ImplGetFrameData()->mnFirstMouseY)) )
+                    {
+                        pMouseDownWin->ImplGetFrameData()->mbStartDragCalled  = true;
+
+                        // Check if drag source provides its own recognizer
+                        if( pMouseDownWin->ImplGetFrameData()->mbInternalDragGestureRecognizer )
+                        {
+                            // query DropTarget from child window
+                            css::uno::Reference< css::datatransfer::dnd::XDragGestureRecognizer > xDragGestureRecognizer(
+                                    pMouseDownWin->ImplGetWindowImpl()->mxDNDListenerContainer,
+                                    css::uno::UNO_QUERY );
+
+                            if( xDragGestureRecognizer.is() )
+                            {
+                                // retrieve mouse position relative to mouse down window
+                                Point relLoc = pMouseDownWin->ImplFrameToOutput( Point(
+                                    pMouseDownWin->ImplGetFrameData()->mnFirstMouseX,
+                                    pMouseDownWin->ImplGetFrameData()->mnFirstMouseY ) );
+
+                                // create a UNO mouse event out of the available data
+                                css::awt::MouseEvent aMouseEvent( static_cast < css::uno::XInterface * > ( nullptr ),
+#ifdef MACOSX
+                                    nCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD3),
+#else
+                                    nCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2),
+#endif
+                                    nCode & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE),
+                                    nMouseX,
+                                    nMouseY,
+                                    nClicks,
+                                    false );
+
+                                SolarMutexReleaser aReleaser;
+
+                                // FIXME: where do I get Action from ?
+                                css::uno::Reference< css::datatransfer::dnd::XDragSource > xDragSource = pMouseDownWin->GetDragSource();
+
+                                if( xDragSource.is() )
+                                {
+                                    static_cast < DNDListenerContainer * > ( xDragGestureRecognizer.get() )->fireDragGestureEvent( 0,
+                                        relLoc.X(), relLoc.Y(), xDragSource, css::uno::makeAny( aMouseEvent ) );
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else
+                pMouseDownWin->ImplGetFrameData()->mbStartDragCalled  = true;
+        }
+
+        // test for mouseleave and mouseenter
+        VclPtr<vcl::Window> pMouseMoveWin = pWinFrameData->mpMouseMoveWin;
+        if ( pChild != pMouseMoveWin )
+        {
+            if ( pMouseMoveWin )
+            {
+                Point       aLeaveMousePos = pMouseMoveWin->ImplFrameToOutput( aMousePos );
+                MouseEvent  aMLeaveEvt( aLeaveMousePos, nClicks, nMode | MouseEventModifiers::LEAVEWINDOW, nCode, nCode );
+                NotifyEvent aNLeaveEvt( MouseNotifyEvent::MOUSEMOVE, pMouseMoveWin, &aMLeaveEvt );
+                pWinFrameData->mbInMouseMove = true;
+                pMouseMoveWin->ImplGetWinData()->mbMouseOver = false;
+
+                // A MouseLeave can destroy this window
+                if ( !ImplCallPreNotify( aNLeaveEvt ) )
+                {
+                    pMouseMoveWin->MouseMove( aMLeaveEvt );
+                    if( !pMouseMoveWin->isDisposed() )
+                        aNLeaveEvt.GetWindow()->ImplNotifyKeyMouseCommandEventListeners( aNLeaveEvt );
+                }
+
+                pWinFrameData->mpMouseMoveWin = nullptr;
+                pWinFrameData->mbInMouseMove = false;
+
+                if ( pChild && pChild->isDisposed() )
+                    pChild = nullptr;
+                if ( pMouseMoveWin->isDisposed() )
+                    return true;
+            }
+
+            nMode |= MouseEventModifiers::ENTERWINDOW;
+        }
+        pWinFrameData->mpMouseMoveWin = pChild;
+        if( pChild )
+            pChild->ImplGetWinData()->mbMouseOver = true;
+
+        // MouseLeave
+        if ( !pChild )
+            return false;
+    }
+    else
+    {
+        if (pChild)
+        {
+            // mouse click
+            if ( nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN )
+            {
+                const MouseSettings& rMSettings = pChild->GetSettings().GetMouseSettings();
+                sal_uInt64 nDblClkTime = rMSettings.GetDoubleClickTime();
+                tools::Long    nDblClkW    = rMSettings.GetDoubleClickWidth();
+                tools::Long    nDblClkH    = rMSettings.GetDoubleClickHeight();
+                //long    nMouseX     = nX;
+                //long    nMouseY     = nY;
+                tools::Long nMouseX = aMousePos.X();   // #106074# use the possibly re-mirrored coordinates (RTL) ! nX,nY are unmodified !
+                tools::Long nMouseY = aMousePos.Y();
+
+                if ( (pChild == pChild->ImplGetFrameData()->mpMouseDownWin) &&
+                     (nCode == pChild->ImplGetFrameData()->mnFirstMouseCode) &&
+                     ((nMsgTime-pChild->ImplGetFrameData()->mnMouseDownTime) < nDblClkTime) &&
+                     ((nMouseX-nDblClkW) <= pChild->ImplGetFrameData()->mnFirstMouseX) &&
+                     ((nMouseX+nDblClkW) >= pChild->ImplGetFrameData()->mnFirstMouseX) &&
+                     ((nMouseY-nDblClkH) <= pChild->ImplGetFrameData()->mnFirstMouseY) &&
+                     ((nMouseY+nDblClkH) >= pChild->ImplGetFrameData()->mnFirstMouseY) )
+                {
+                    pChild->ImplGetFrameData()->mnClickCount++;
+                    pChild->ImplGetFrameData()->mbStartDragCalled  = true;
+                }
+                else
+                {
+                    pChild->ImplGetFrameData()->mpMouseDownWin     = pChild;
+                    pChild->ImplGetFrameData()->mnClickCount       = 1;
+                    pChild->ImplGetFrameData()->mnFirstMouseX      = nMouseX;
+                    pChild->ImplGetFrameData()->mnFirstMouseY      = nMouseY;
+                    pChild->ImplGetFrameData()->mnFirstMouseCode   = nCode;
+                    pChild->ImplGetFrameData()->mbStartDragCalled  = (nCode & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)) !=
+                                                                     (MouseSettings::GetStartDragCode() & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE));
+                }
+                pChild->ImplGetFrameData()->mnMouseDownTime = nMsgTime;
+            }
+            nClicks = pChild->ImplGetFrameData()->mnClickCount;
+        }
+    }
+
+    SAL_WARN_IF( !pChild, "vcl", "ImplHandleMouseEvent2: pChild == NULL" );
+
+    if (!pChild)
+        return false;
+
+    // create mouse event
+    Point aChildPos = pChild->ImplFrameToOutput( aMousePos );
+    MouseEvent aMEvt( aChildPos, nClicks, nMode, nCode, nCode );
+
+    NotifyEvent aNEvt( nSVEvent, pChild, &aMEvt );
+    if ( nSVEvent == MouseNotifyEvent::MOUSEMOVE )
+        pChild->ImplGetFrameData()->mbInMouseMove = true;
+
+    if ( ImplCallPreNotify( aNEvt ) || pChild->isDisposed() )
+        bRet = true;
+    else
+    {
+        bRet = false;
+        if ( nSVEvent == MouseNotifyEvent::MOUSEMOVE )
+        {
+        }
+        else if ( nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN )
+        {
+            pChild->ImplGetWindowImpl()->mbMouseButtonDown = false;
+            pChild->MouseButtonDown( aMEvt );
+        }
+        else
+        {
+            pChild->ImplGetWindowImpl()->mbMouseButtonUp = false;
+            pChild->MouseButtonUp( aMEvt );
+        }
+
+        assert(aNEvt.GetWindow() == pChild);
+
+        if (!pChild->isDisposed())
+            pChild->ImplNotifyKeyMouseCommandEventListeners( aNEvt );
+    }
+
+    if (pChild->isDisposed())
+        return true;
+
+    if ( nSVEvent == MouseNotifyEvent::MOUSEMOVE )
+        pChild->ImplGetWindowImpl()->mpFrameData->mbInMouseMove = false;
+
+    if ( nSVEvent == MouseNotifyEvent::MOUSEMOVE )
+    {
+        bRet = true;
+    }
+    else if ( !bRet )
+    {
+        if ( nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN )
+        {
+            if ( !pChild->ImplGetWindowImpl()->mbMouseButtonDown )
+                bRet = true;
+        }
+        else
+        {
+            if ( !pChild->ImplGetWindowImpl()->mbMouseButtonUp )
+                bRet = true;
+        }
+    }
+
+    if ( nSVEvent == MouseNotifyEvent::MOUSEMOVE )
+    {
+        // set new mouse pointer
+        if ( !bMouseLeave )
+            ImplSetMousePointer( pChild );
+    }
+    else if ( (nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN) || (nSVEvent == MouseNotifyEvent::MOUSEBUTTONUP) )
+    {
+        // Command-Events
+        if ( /*!bRet &&*/ (nClicks == 1) && (nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN) &&
+             (nCode == MOUSE_MIDDLE) )
+        {
+            MouseMiddleButtonAction nMiddleAction = pChild->GetSettings().GetMouseSettings().GetMiddleButtonAction();
+            if ( nMiddleAction == MouseMiddleButtonAction::AutoScroll )
+                bRet = !ImplCallCommand( pChild, CommandEventId::StartAutoScroll, nullptr, true, &aChildPos );
+            else if ( nMiddleAction == MouseMiddleButtonAction::PasteSelection )
+                bRet = !ImplCallCommand( pChild, CommandEventId::PasteSelection, nullptr, true, &aChildPos );
+        }
+    }
+
+    return bRet;
+}
+
 static vcl::Window* ImplGetKeyInputWindow( vcl::Window* pWindow )
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -2054,6 +2374,14 @@ static bool ImplHandleSalMouseLeave( vcl::Window* pWindow, SalMouseEvent const *
                                  ImplGetMouseMoveMode( pEvent ) );
 }
 
+static bool ImplHandleSalMouseLeave2( vcl::Window* pWindow, SalMouseEvent const * pEvent )
+{
+    return ImplHandleMouseEvent2( pWindow, MouseNotifyEvent::MOUSEMOVE, true,
+                                  pEvent->mnX, pEvent->mnY,
+                                  pEvent->mnTime, pEvent->mnCode,
+                                  ImplGetMouseMoveMode( pEvent ) );
+}
+
 static bool ImplHandleSalMouseMove( vcl::Window* pWindow, SalMouseEvent const * pEvent )
 {
     return ImplHandleMouseEvent( pWindow, MouseNotifyEvent::MOUSEMOVE, false,
@@ -2062,9 +2390,30 @@ static bool ImplHandleSalMouseMove( vcl::Window* pWindow, SalMouseEvent const * 
                                  ImplGetMouseMoveMode( pEvent ) );
 }
 
+static bool ImplHandleSalMouseMove2( vcl::Window* pWindow, SalMouseEvent const * pEvent )
+{
+    return ImplHandleMouseEvent2( pWindow, MouseNotifyEvent::MOUSEMOVE, false,
+                                  pEvent->mnX, pEvent->mnY,
+                                  pEvent->mnTime, pEvent->mnCode,
+                                  ImplGetMouseMoveMode( pEvent ) );
+}
+
 static bool ImplHandleSalMouseButtonDown( vcl::Window* pWindow, SalMouseEvent const * pEvent )
 {
     return ImplHandleMouseEvent( pWindow, MouseNotifyEvent::MOUSEBUTTONDOWN, false,
+                                 pEvent->mnX, pEvent->mnY,
+                                 pEvent->mnTime,
+#ifdef MACOSX
+                 pEvent->mnButton | (pEvent->mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD3)),
+#else
+                                 pEvent->mnButton | (pEvent->mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2)),
+#endif
+                                 ImplGetMouseButtonMode( pEvent ) );
+}
+
+static bool ImplHandleSalMouseButtonDown2( vcl::Window* pWindow, SalMouseEvent const * pEvent )
+{
+    return ImplHandleMouseEvent2( pWindow, MouseNotifyEvent::MOUSEBUTTONDOWN, false,
                                  pEvent->mnX, pEvent->mnY,
                                  pEvent->mnTime,
 #ifdef MACOSX
@@ -2086,6 +2435,19 @@ static bool ImplHandleSalMouseButtonUp( vcl::Window* pWindow, SalMouseEvent cons
                                  pEvent->mnButton | (pEvent->mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2)),
 #endif
                                  ImplGetMouseButtonMode( pEvent ) );
+}
+
+static bool ImplHandleSalMouseButtonUp2( vcl::Window* pWindow, SalMouseEvent const * pEvent )
+{
+    return ImplHandleMouseEvent2( pWindow, MouseNotifyEvent::MOUSEBUTTONUP, false,
+                                  pEvent->mnX, pEvent->mnY,
+                                  pEvent->mnTime,
+#ifdef MACOSX
+                 pEvent->mnButton | (pEvent->mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD3)),
+#else
+                                  pEvent->mnButton | (pEvent->mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2)),
+#endif
+                                  ImplGetMouseButtonMode( pEvent ) );
 }
 
 static bool ImplHandleMenuEvent( vcl::Window const * pWindow, SalMenuEvent* pEvent, SalEvent nEvent )
@@ -2660,6 +3022,82 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
         break;
         default:
             SAL_WARN( "vcl.layout", "ImplWindowFrameProc(): unknown event (" << static_cast<int>(nEvent) << ")" );
+            break;
+    }
+
+    return bRet;
+}
+
+bool ImplWindowFrameProc2( vcl::Window* _pWindow, SalEvent nEvent, const void* pEvent )
+{
+    bool bRet = false;
+    VclPtr<vcl::Window> pWindow( _pWindow );
+
+    DBG_TESTSOLARMUTEX();
+
+    if( !pWindow )
+        return false;
+
+    switch ( nEvent )
+    {
+        case SalEvent::MouseMove:
+            bRet = ImplHandleSalMouseMove2( pWindow, static_cast<SalMouseEvent const *>(pEvent) );
+            break;
+        case SalEvent::ExternalMouseMove:
+        {
+            MouseEvent const * pMouseEvt = static_cast<MouseEvent const *>(pEvent);
+            SalMouseEvent   aSalMouseEvent;
+
+            aSalMouseEvent.mnTime = tools::Time::GetSystemTicks();
+            aSalMouseEvent.mnX = pMouseEvt->GetPosPixel().X();
+            aSalMouseEvent.mnY = pMouseEvt->GetPosPixel().Y();
+            aSalMouseEvent.mnButton = 0;
+            aSalMouseEvent.mnCode = pMouseEvt->GetButtons() | pMouseEvt->GetModifier();
+            bRet = ImplHandleSalMouseMove2( pWindow, &aSalMouseEvent );
+        }
+        break;
+        case SalEvent::MouseLeave:
+            bRet = ImplHandleSalMouseLeave2( pWindow, static_cast<SalMouseEvent const *>(pEvent) );
+            break;
+        case SalEvent::MouseButtonDown:
+            bRet = ImplHandleSalMouseButtonDown2( pWindow, static_cast<SalMouseEvent const *>(pEvent) );
+            break;
+        case SalEvent::ExternalMouseButtonDown:
+        {
+            MouseEvent const * pMouseEvt = static_cast<MouseEvent const *>(pEvent);
+            SalMouseEvent   aSalMouseEvent;
+
+            aSalMouseEvent.mnTime = tools::Time::GetSystemTicks();
+            aSalMouseEvent.mnX = pMouseEvt->GetPosPixel().X();
+            aSalMouseEvent.mnY = pMouseEvt->GetPosPixel().Y();
+            aSalMouseEvent.mnButton = pMouseEvt->GetButtons();
+            aSalMouseEvent.mnCode = pMouseEvt->GetButtons() | pMouseEvt->GetModifier();
+
+            bRet = ImplHandleSalMouseButtonDown2( pWindow, &aSalMouseEvent );
+        }
+        break;
+        case SalEvent::MouseButtonUp:
+            bRet = ImplHandleSalMouseButtonUp2( pWindow, static_cast<SalMouseEvent const *>(pEvent) );
+            break;
+        case SalEvent::ExternalMouseButtonUp:
+        {
+            MouseEvent const * pMouseEvt = static_cast<MouseEvent const *>(pEvent);
+            SalMouseEvent   aSalMouseEvent;
+
+            aSalMouseEvent.mnTime = tools::Time::GetSystemTicks();
+            aSalMouseEvent.mnX = pMouseEvt->GetPosPixel().X();
+            aSalMouseEvent.mnY = pMouseEvt->GetPosPixel().Y();
+            aSalMouseEvent.mnButton = pMouseEvt->GetButtons();
+            aSalMouseEvent.mnCode = pMouseEvt->GetButtons() | pMouseEvt->GetModifier();
+
+            bRet = ImplHandleSalMouseButtonUp2( pWindow, &aSalMouseEvent );
+        }
+        break;
+        case SalEvent::MouseActivate:
+            bRet = false;
+            break;
+        default:
+            SAL_WARN( "vcl.layout", "ImplWindowMouseProc(): unknown event (" << static_cast<int>(nEvent) << ")" );
             break;
     }
 
