@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "9c6d71c5_5d491f6e",
+        "filename": "cui/source/dialogs/GraphicTestsDialog.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-06-23T10:28:47Z",
+      "side": 1,
+      "message": "But would removing it here be neccesary given that I\u0027ve removed this m_xResultLog variable in the recent patch?",
+      "parentUuid": "b76c0bd4_d5cc5d83",
+      "range": {
+        "startLine": 52,
+        "startChar": 18,
+        "endLine": 52,
+        "endChar": 24
+      },
+      "revId": "c797bb30e27265458994d0e296c5f5ad2f5d98c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "51a7f880_78b841cf",
         "filename": "include/vcl/test/GraphicsRenderTests.hxx",
         "patchSetId": 4
@@ -91,6 +115,30 @@
       "revId": "c797bb30e27265458994d0e296c5f5ad2f5d98c9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b887716c_44d7fec2",
+        "filename": "include/vcl/test/GraphicsRenderTests.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-06-23T10:28:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "51a7f880_78b841cf",
+      "range": {
+        "startLine": 23,
+        "startChar": 3,
+        "endLine": 30,
+        "endChar": 35
+      },
+      "revId": "c797bb30e27265458994d0e296c5f5ad2f5d98c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
