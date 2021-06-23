@@ -123,33 +123,21 @@ protected:
     }
 };
 
-// An AsyncEvent generates a 'b' (begin) event when constructed and an 'e' (end) event when it
-// itself or its nesting parent (if there is one) is destructed (or earlier, if requested)
+// An AsyncEvent generates an 'S' (start) event when constructed and a 'F' (finish) event when it
+// is destructed.
 
-// There are two kinds of async event pairs: Freestanding ones that are not related to other events
-// at all, and nested ones that have to be nested between the 'b' and 'e' events of a parent Async
-// event.
+// The Trace Event specification claims that these event types are deprecated and replaces by
+// nestable 'b' (begin) and 'e' (end) events, but Chrome does not seem to support those.
 
-// To generate a pair of 'b' and 'e' events, create an AsyncEvent object using the AsyncEvent(const
-// char* sName) constructor when you want the 'b' event to be generated, and destroy it when you
-// want the corresponding 'e' event to be generated.
-
-// To generate a pair of 'b' and 'e' events that is nested inside an outer 'b' and 'e' event pair,
-// create an AsyncEvent object using the createWithParent() function. It returns a weak reference
-// (weak_ptr) to the AsyncEvent. The parent keeps a strong reference (shared_ptr) to it.
-
-// The 'e' event will be generated when the parent is about to go away, before the parent's 'e'
-// event. When the parent has gone away, the weak reference will have expired. You can also generate
-// it explicitly by calling the finish() function. (But in that case you could as well have used a
-// freestanding AsyncEvent object, I think.)
+// To generate a pair of 'S' and 'F' events, create an AsyncEvent object using the AsyncEvent(const
+// char* sName) constructor when you want the 'S' event to be generated, and destroy it when you
+// want the corresponding 'F' event to be generated.
 
 class COMPHELPER_DLLPUBLIC AsyncEvent : public NamedEvent,
                                         public std::enable_shared_from_this<AsyncEvent>
 {
     static int s_nIdCounter;
     int m_nId;
-    std::vector<std::shared_ptr<AsyncEvent>> m_aChildren;
-    std::weak_ptr<AsyncEvent> m_pParent;
     bool m_bBeginRecorded;
 
     AsyncEvent(const char* sName, int nId, const std::map<OUString, OUString>& args)
@@ -161,12 +149,12 @@ class COMPHELPER_DLLPUBLIC AsyncEvent : public NamedEvent,
         {
             long long nNow = getNow();
 
-            // Generate a "Begin " (type b) event
+            // Generate a "Start" (type S) event
             TraceEvent::addRecording("{"
                                      "\"name\":\""
                                      + OUString(m_sName, strlen(m_sName), RTL_TEXTENCODING_UTF8)
                                      + "\","
-                                       "\"ph\":\"b\""
+                                       "\"ph\":\"S\""
                                        ","
                                        "\"id\":"
                                      + OUString::number(m_nId) + m_sArgs
@@ -189,21 +177,13 @@ class COMPHELPER_DLLPUBLIC AsyncEvent : public NamedEvent,
         {
             m_bBeginRecorded = false;
 
-            // In case somebody is holding on to a hard reference to a child we need to tell the
-            // children to finish up explicitly, we can't rely on our pointers to them being the
-            // only ones.
-            for (auto& i : m_aChildren)
-                i->generateEnd();
-
-            m_aChildren.clear();
-
             long long nNow = getNow();
-            // Generate a "Env " (type e) event
+            // Generate a "Finish" (type F) event
             TraceEvent::addRecording("{"
                                      "\"name\":\""
                                      + OUString(m_sName, strlen(m_sName), RTL_TEXTENCODING_UTF8)
                                      + "\","
-                                       "\"ph\":\"e\""
+                                       "\"ph\":\"F\""
                                        ","
                                        "\"id\":"
                                      + OUString::number(m_nId) + m_sArgs
@@ -228,35 +208,7 @@ public:
 
     ~AsyncEvent() { generateEnd(); }
 
-    static std::weak_ptr<AsyncEvent>
-    createWithParent(const char* sName, std::shared_ptr<AsyncEvent> pParent,
-                     const std::map<OUString, OUString>& args = std::map<OUString, OUString>())
-    {
-        std::shared_ptr<AsyncEvent> pResult;
-
-        if (s_bRecording && pParent->m_bBeginRecorded)
-        {
-            pResult.reset(new AsyncEvent(sName, pParent->m_nId, args));
-            pParent->m_aChildren.push_back(pResult);
-            pResult->m_pParent = pParent;
-        }
-
-        return pResult;
-    }
-
-    void finish()
-    {
-        generateEnd();
-
-        auto pParent = m_pParent.lock();
-        if (!pParent)
-            return;
-
-        pParent->m_aChildren.erase(std::remove(pParent->m_aChildren.begin(),
-                                               pParent->m_aChildren.end(), shared_from_this()),
-                                   pParent->m_aChildren.end());
-        m_pParent.reset();
-    }
+    void finish() { generateEnd(); }
 };
 
 } // namespace comphelper
