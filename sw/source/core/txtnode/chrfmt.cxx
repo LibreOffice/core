@@ -20,7 +20,7 @@
 #include <libxml/xmlwriter.h>
 
 #include <charfmt.hxx>
-#include <docary.hxx>
+#include <charformats.hxx>
 
 void SwCharFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
@@ -37,6 +37,81 @@ void SwCharFormats::dumpAsXml(xmlTextWriterPtr pWriter) const
     for (size_t i = 0; i < size(); ++i)
         GetFormat(i)->dumpAsXml(pWriter);
     (void)xmlTextWriterEndElement(pWriter);
+}
+
+SwCharFormats::SwCharFormats()
+    : m_PosIndex(m_Array.get<0>())
+    , m_NameIndex(m_Array.get<1>())
+{
+}
+
+SwCharFormats::~SwCharFormats()
+{
+    // default char format is owned by SwDoc
+    DeleteAndDestroyAll(true);
+}
+
+SwCharFormats::const_iterator SwCharFormats::find(const SwCharFormat* x) const
+{
+    ByName::iterator it
+        = m_NameIndex.find(boost::make_tuple(x->GetName(), const_cast<SwCharFormat*>(x)));
+    return m_Array.project<0>(it);
+}
+
+SwCharFormats::ByName::const_iterator SwCharFormats::findByName(const OUString& name) const
+{
+    return m_NameIndex.find(boost::make_tuple(name));
+}
+
+SwCharFormat* SwCharFormats::FindFormatByName(const OUString& rName) const
+{
+    auto it = findByName(rName);
+    if (it != m_NameIndex.end())
+        return *it;
+    return nullptr;
+}
+
+void SwCharFormats::DeleteAndDestroyAll(bool keepDefault)
+{
+    if (empty())
+        return;
+    const int _offset = keepDefault ? 1 : 0;
+    for (const_iterator it = begin() + _offset; it != end(); ++it)
+    {
+        assert(!(*it)->HasName(u"Character style"));
+        delete *it;
+    }
+    if (_offset)
+        m_PosIndex.erase(begin() + _offset, end());
+    else
+        m_Array.clear();
+}
+
+void SwCharFormats::insert(SwCharFormat* x)
+{
+    assert(!ContainsFormat(x));
+    m_PosIndex.push_back(x);
+}
+
+void SwCharFormats::erase(const_iterator const& position) { m_PosIndex.erase(position); }
+
+bool SwCharFormats::ContainsFormat(SwCharFormat* x) const { return find(x) != end(); }
+
+bool SwCharFormats::IsAlive(SwCharFormat const* const p) const { return find(p) != end(); }
+
+/** Need to call this when the format name changes */
+void SwCharFormats::SetFormatNameAndReindex(SwCharFormat* v, const OUString& sNewName)
+{
+    auto it = find(v);
+    erase(it);
+    v->SetName(sNewName);
+    insert(v);
+}
+
+size_t SwCharFormats::GetPos(const SwCharFormat* p) const
+{
+    auto it = find(p);
+    return it == end() ? SIZE_MAX : it - begin();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

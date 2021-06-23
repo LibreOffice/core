@@ -891,7 +891,7 @@ uno::Any XStyleFamily::getByName(const OUString& rName)
         throw uno::RuntimeException();
     SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName, m_rEntry.m_eFamily);
     if(!pBase)
-        throw container::NoSuchElementException();
+        throw container::NoSuchElementException(rName);
     uno::Reference<style::XStyle> xStyle = FindStyle(sStyleName);
     if(!xStyle.is())
         xStyle = m_rEntry.m_fCreateStyle(m_pBasePool, m_pDocShell, m_rEntry.m_eFamily == SfxStyleFamily::Frame ? pBase->GetName() : sStyleName);
