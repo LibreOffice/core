@@ -18,19 +18,21 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf54197(UITestCase):
 
     def test_tdf54197_CTRL_D_input_line_change(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
-            # 1. go to cell A1 enter any text
-            enter_text_to_cell(gridwin, "A1", "t")
-            # 2. go to cell A2 press Ctrl+D
-            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A2"}))
-            self.xUITest.executeCommand(".uno:FillDown")
-            # The same text as above is displayed at cell A2, BUT input line is still blank
-            self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "t")
-            self.assertEqual(get_cell_by_position(document, 0, 0, 1).getString(), "t")
-            xInputWin = xCalcDoc.getChild("sc_input_window")
-            self.assertEqual(get_state_as_dict(xInputWin)["Text"], "t")
+        calc_doc = self.ui_test.create_doc_in_start_center("calc")
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        gridwin = xCalcDoc.getChild("grid_window")
+        document = self.ui_test.get_component()
+        # 1. go to cell A1 enter any text
+        enter_text_to_cell(gridwin, "A1", "t")
+        # 2. go to cell A2 press Ctrl+D
+        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A2"}))
+        self.xUITest.executeCommand(".uno:FillDown")
+        # The same text as above is displayed at cell A2, BUT input line is still blank
+        self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "t")
+        self.assertEqual(get_cell_by_position(document, 0, 0, 1).getString(), "t")
+        xInputWin = xCalcDoc.getChild("sc_input_window")
+        self.assertEqual(get_state_as_dict(xInputWin)["Text"], "t")
+
+        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

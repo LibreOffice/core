@@ -26,49 +26,57 @@ class WriterInsertBreakDialog(UITestCase):
 
     def test_insert_line_break(self):
 
-        with self.ui_test.create_doc_in_start_center("writer"):
+        self.ui_test.create_doc_in_start_center("writer")
 
-            xDialog = self.launch_dialog_and_select_option("linerb")
-            xOkBtn = xDialog.getChild("ok")
-            xOkBtn.executeAction("CLICK", tuple())
+        xDialog = self.launch_dialog_and_select_option("linerb")
+        xOkBtn = xDialog.getChild("ok")
+        xOkBtn.executeAction("CLICK", tuple())
 
-            self.getPages(1)
+        self.getPages(1)
+
+        self.ui_test.close_doc()
 
     def test_insert_column_break(self):
 
-        with self.ui_test.create_doc_in_start_center("writer"):
+        self.ui_test.create_doc_in_start_center("writer")
 
-            xDialog = self.launch_dialog_and_select_option("columnrb")
-            xOkBtn = xDialog.getChild("ok")
-            xOkBtn.executeAction("CLICK", tuple())
+        xDialog = self.launch_dialog_and_select_option("columnrb")
+        xOkBtn = xDialog.getChild("ok")
+        xOkBtn.executeAction("CLICK", tuple())
 
-            self.getPages(1)
+        self.getPages(1)
+
+        self.ui_test.close_doc()
 
     def test_insert_page_break(self):
 
-        with self.ui_test.create_doc_in_start_center("writer"):
+        self.ui_test.create_doc_in_start_center("writer")
 
-            for i in range(9):
-                with self.subTest(i=i):
-                    xDialog = self.launch_dialog_and_select_option("pagerb")
+        for i in range(9):
+            with self.subTest(i=i):
+                xDialog = self.launch_dialog_and_select_option("pagerb")
 
-                    xStyleList = xDialog.getChild("stylelb")
-                    xStyleList.executeAction("SELECT", mkPropertyValues({"POS": str(i)}))
+                xStyleList = xDialog.getChild("stylelb")
+                xStyleList.executeAction("SELECT", mkPropertyValues({"POS": str(i)}))
 
-                    xOkBtn = xDialog.getChild("ok")
-                    xOkBtn.executeAction("CLICK", tuple())
+                xOkBtn = xDialog.getChild("ok")
+                xOkBtn.executeAction("CLICK", tuple())
 
-                    self.getPages(i + 2)
+                self.getPages(i + 2)
+
+        self.ui_test.close_doc()
 
     def test_cancel_button_insert_line_break_dialog(self):
 
-        with self.ui_test.create_doc_in_start_center("writer"):
+        self.ui_test.create_doc_in_start_center("writer")
 
-            self.ui_test.execute_dialog_through_command(".uno:InsertBreak")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xCancelBtn = xDialog.getChild("cancel")
-            self.ui_test.close_dialog_through_button(xCancelBtn)
+        self.ui_test.execute_dialog_through_command(".uno:InsertBreak")
+        xDialog = self.xUITest.getTopFocusWindow()
+        xCancelBtn = xDialog.getChild("cancel")
+        self.ui_test.close_dialog_through_button(xCancelBtn)
 
-            self.getPages(1)
+        self.getPages(1)
+
+        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

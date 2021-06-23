@@ -20,21 +20,23 @@ def get_column_hidden(doc, index):
 class HideDisjointColumns(UITestCase):
 
     def test_hide_columns(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
-            xTopWindow = self.xUITest.getTopFocusWindow()
+        self.ui_test.create_doc_in_start_center("calc")
+        xTopWindow = self.xUITest.getTopFocusWindow()
 
-            gridwin = xTopWindow.getChild("grid_window")
-            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B1"}))
-            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "D1", "EXTEND":"true"}))
+        gridwin = xTopWindow.getChild("grid_window")
+        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B1"}))
+        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "D1", "EXTEND":"true"}))
 
-            doc = self.ui_test.get_component()
-            self.assertFalse(get_column_hidden(doc, 1))
-            self.assertFalse(get_column_hidden(doc, 3))
-            self.ui_test._xUITest.executeCommand(".uno:HideColumn")
-            self.assertTrue(get_column_hidden(doc, 1))
-            self.assertTrue(get_column_hidden(doc, 3))
-            self.ui_test._xUITest.executeCommand(".uno:Undo")
-            self.assertFalse(get_column_hidden(doc, 1))
-            self.assertFalse(get_column_hidden(doc, 3))
+        doc = self.ui_test.get_component()
+        self.assertFalse(get_column_hidden(doc, 1))
+        self.assertFalse(get_column_hidden(doc, 3))
+        self.ui_test._xUITest.executeCommand(".uno:HideColumn")
+        self.assertTrue(get_column_hidden(doc, 1))
+        self.assertTrue(get_column_hidden(doc, 3))
+        self.ui_test._xUITest.executeCommand(".uno:Undo")
+        self.assertFalse(get_column_hidden(doc, 1))
+        self.assertFalse(get_column_hidden(doc, 3))
+
+        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

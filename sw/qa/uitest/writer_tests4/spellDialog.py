@@ -59,46 +59,46 @@ frog, dogg, catt"""
         # This automates the steps described in the bug report tdf#46852
 
         # Step 1: Create a document with repetitious misspelled words
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
-            cursor = document.getCurrentController().getViewCursor()
-            # Inserted text must be en_US, so make sure to set language in current location
-            cursor.CharLocale = Locale("en", "US", "")
-            input_text = self.TDF46852_INPUT.replace('\n', '\r') # \r = para break
-            document.Text.insertString(cursor, input_text, False)
+        self.ui_test.create_doc_in_start_center("writer")
+        document = self.ui_test.get_component()
+        cursor = document.getCurrentController().getViewCursor()
+        # Inserted text must be en_US, so make sure to set language in current location
+        cursor.CharLocale = Locale("en", "US", "")
+        input_text = self.TDF46852_INPUT.replace('\n', '\r') # \r = para break
+        document.Text.insertString(cursor, input_text, False)
 
-            # Step 2: Place cursor on 4th line after second "frogg"
-            cursor.goUp(2, False)
-            cursor.goLeft(1, False)
+        # Step 2: Place cursor on 4th line after second "frogg"
+        cursor.goUp(2, False)
+        cursor.goLeft(1, False)
 
-            # Step 3: Initiate spellchecking, and make sure "Check grammar" is
-            # unchecked
-            spell_dialog = self.launch_dialog()
-            checkgrammar = spell_dialog.getChild('checkgrammar')
-            if get_state_as_dict(checkgrammar)['Selected'] == 'true':
-                checkgrammar.executeAction('CLICK', ())
-            self.assertTrue(get_state_as_dict(checkgrammar)['Selected'] == 'false')
+        # Step 3: Initiate spellchecking, and make sure "Check grammar" is
+        # unchecked
+        spell_dialog = self.launch_dialog()
+        checkgrammar = spell_dialog.getChild('checkgrammar')
+        if get_state_as_dict(checkgrammar)['Selected'] == 'true':
+            checkgrammar.executeAction('CLICK', ())
+        self.assertTrue(get_state_as_dict(checkgrammar)['Selected'] == 'false')
 
-            # Step 4: Repetitively click on "Correct all" for each misspelling
-            #         prompt until end of document is reached.
-            changeall = spell_dialog.getChild('changeall')
-            changeall.executeAction("CLICK", ())
-            changeall.executeAction("CLICK", ())
-            # The third time we click on changeall, the click action is going to
-            # block while two message boxes are shown, so we need to do this third
-            # click specially
-            # Use empty close_button to open consecutive dialogs
+        # Step 4: Repetitively click on "Correct all" for each misspelling
+        #         prompt until end of document is reached.
+        changeall = spell_dialog.getChild('changeall')
+        changeall.executeAction("CLICK", ())
+        changeall.executeAction("CLICK", ())
+        # The third time we click on changeall, the click action is going to
+        # block while two message boxes are shown, so we need to do this third
+        # click specially
+        # Use empty close_button to open consecutive dialogs
+        with self.ui_test.execute_blocking_action(
+                changeall.executeAction, args=('CLICK', ()), close_button="") as dialog:
+            # Step 5: Confirm to "Continue check at beginning of document"
+            xYesBtn = dialog.getChild("yes")
+
             with self.ui_test.execute_blocking_action(
-                    changeall.executeAction, args=('CLICK', ()), close_button="") as dialog:
-                # Step 5: Confirm to "Continue check at beginning of document"
-                xYesBtn = dialog.getChild("yes")
+                    xYesBtn.executeAction, args=('CLICK', ())):
+                pass
 
-                with self.ui_test.execute_blocking_action(
-                        xYesBtn.executeAction, args=('CLICK', ())):
-                    pass
-
-            output_text = document.Text.getString().replace('\r\n', '\n')
-            self.assertTrue(re.match(self.TDF46852_REGEX, output_text))
+        output_text = document.Text.getString().replace('\r\n', '\n')
+        self.assertTrue(re.match(self.TDF46852_REGEX, output_text))
 
     def test_tdf66043(self):
         supported_locale = self.is_supported_locale("en", "US")

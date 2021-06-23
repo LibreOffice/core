@@ -15,30 +15,32 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf125051(UITestCase):
     def test_tdf125051_crash_spelling_dialog(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
-            enter_text_to_cell(gridwin, "A1", "text")
-            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
-            self.ui_test.execute_dialog_through_command(".uno:SpellDialog")
-            xDialog = self.xUITest.getTopFocusWindow()  #Spelling dialog
+        calc_doc = self.ui_test.create_doc_in_start_center("calc")
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        gridwin = xCalcDoc.getChild("grid_window")
+        document = self.ui_test.get_component()
+        enter_text_to_cell(gridwin, "A1", "text")
+        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
+        self.ui_test.execute_dialog_through_command(".uno:SpellDialog")
+        xDialog = self.xUITest.getTopFocusWindow()  #Spelling dialog
 
-            xDialog2 = self.xUITest.getTopFocusWindow()   # info dialog "The spellcheck of this sheet has been completed.-> OK"
-            okBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(okBtn)
+        xDialog2 = self.xUITest.getTopFocusWindow()   # info dialog "The spellcheck of this sheet has been completed.-> OK"
+        okBtn = xDialog.getChild("ok")
+        self.ui_test.close_dialog_through_button(okBtn)
 
-            xDialog = self.xUITest.getTopFocusWindow()  #Spelling dialog
-            #open options
-            optionsBtn = xDialog.getChild("options")
+        xDialog = self.xUITest.getTopFocusWindow()  #Spelling dialog
+        #open options
+        optionsBtn = xDialog.getChild("options")
 
-            with self.ui_test.execute_blocking_action(optionsBtn.executeAction, args=('CLICK', ()), close_button="cancel"):
-                pass
+        with self.ui_test.execute_blocking_action(optionsBtn.executeAction, args=('CLICK', ()), close_button="cancel"):
+            pass
 
-            closeBtn = xDialog.getChild("close")    #close Spelling dialog
-            self.ui_test.close_dialog_through_button(closeBtn)
+        closeBtn = xDialog.getChild("close")    #close Spelling dialog
+        self.ui_test.close_dialog_through_button(closeBtn)
 
-            #verify, we didn't crash
-            self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "text")
+        #verify, we didn't crash
+        self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "text")
+
+        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

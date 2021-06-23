@@ -13,14 +13,16 @@ class CheckBoxTest(UITestCase):
 
     def test_toggle_checkbox(self):
 
-        with self.ui_test.create_doc_in_start_center("calc"):
+        self.ui_test.create_doc_in_start_center("calc")
 
-            self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
-            xCellsDlg = self.xUITest.getTopFocusWindow()
-            xNegativeNumRedCB = xCellsDlg.getChild("negnumred")
-            xNegativeNumRedCB.executeAction("CLICK",tuple())
+        self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
+        xCellsDlg = self.xUITest.getTopFocusWindow()
+        xNegativeNumRedCB = xCellsDlg.getChild("negnumred")
+        xNegativeNumRedCB.executeAction("CLICK",tuple())
 
-            okBtn = xCellsDlg.getChild("ok")
-            self.ui_test.close_dialog_through_button(okBtn)
+        okBtn = xCellsDlg.getChild("ok")
+        self.ui_test.close_dialog_through_button(okBtn)
+
+        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

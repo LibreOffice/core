@@ -11,16 +11,18 @@ from uitest.framework import UITestCase
 class CharDialogText(UITestCase):
 
     def test_select_char(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        self.ui_test.create_doc_in_start_center("calc")
 
-            self.ui_test.execute_dialog_through_command(".uno:InsertSymbol")
-            xCharDialog = self.xUITest.getTopFocusWindow()
+        self.ui_test.execute_dialog_through_command(".uno:InsertSymbol")
+        xCharDialog = self.xUITest.getTopFocusWindow()
 
-            xCharSet = xCharDialog.getChild("showcharset")
+        xCharSet = xCharDialog.getChild("showcharset")
 
-            xCharSet.executeAction("SELECT", mkPropertyValues({"COLUMN": "2", "ROW": "2"}))
+        xCharSet.executeAction("SELECT", mkPropertyValues({"COLUMN": "2", "ROW": "2"}))
 
-            xCancelBtn = xCharDialog.getChild("cancel")
-            self.ui_test.close_dialog_through_button(xCancelBtn)
+        xCancelBtn = xCharDialog.getChild("cancel")
+        self.ui_test.close_dialog_through_button(xCancelBtn)
+
+        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -15,19 +15,21 @@ class CheckBoxTest(UITestCase):
 
     def test_get_json(self):
 
-        with self.ui_test.create_doc_in_start_center("calc"):
+        self.ui_test.create_doc_in_start_center("calc")
 
-            self.ui_test.execute_dialog_through_command(".uno:About")
+        self.ui_test.execute_dialog_through_command(".uno:About")
 
-            xAboutDlg = self.xUITest.getTopFocusWindow()
+        xAboutDlg = self.xUITest.getTopFocusWindow()
 
-            json_string = xAboutDlg.getHierarchy()
-            print(json_string)
-            json_content = json.loads(json_string)
-            print(json_content)
-            print(json.dumps(json_content, indent=4))
+        json_string = xAboutDlg.getHierarchy()
+        print(json_string)
+        json_content = json.loads(json_string)
+        print(json_content)
+        print(json.dumps(json_content, indent=4))
 
-            closeBtn = xAboutDlg.getChild("btnClose")
-            self.ui_test.close_dialog_through_button(closeBtn)
+        closeBtn = xAboutDlg.getChild("btnClose")
+        self.ui_test.close_dialog_through_button(closeBtn)
+
+        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -98,4 +98,6 @@ class tdf90401(UITestCase):
                     # This was 'NL\t11/03/2020 19:19:05\t', containing personal info
                     self.assertEqual(state['SelectEntryText'], 'Author1\t01/01/1970 00:00:00\t')
 
+                    self.ui_test.close_doc()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
