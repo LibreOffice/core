@@ -735,10 +735,37 @@ sal_uInt8 WW8Export::GetNumId( sal_uInt16 eNumType )
     case SVX_NUM_CHARS_LOWER_LETTER_N:  nRet = 4;       break;
     case SVX_NUM_ROMAN_UPPER:           nRet = 1;       break;
     case SVX_NUM_ROMAN_LOWER:           nRet = 2;       break;
+    case style::NumberingType::TEXT_NUMBER: nRet = 5; break;
+    case style::NumberingType::TEXT_CARDINAL: nRet = 6; break;
+    case style::NumberingType::TEXT_ORDINAL: nRet = 7; break;
+    case style::NumberingType::AIU_HALFWIDTH_JA: nRet = 12; break;
+    case style::NumberingType::IROHA_HALFWIDTH_JA: nRet = 13; break;
+    case style::NumberingType::FULLWIDTH_ARABIC: nRet = 14; break;
+    case style::NumberingType::NUMBER_TRADITIONAL_JA: nRet = 16; break;
+    case style::NumberingType::CIRCLE_NUMBER: nRet = 18; break;
+    case style::NumberingType::AIU_FULLWIDTH_JA: nRet = 20; break;
+    case style::NumberingType::IROHA_FULLWIDTH_JA: nRet = 21; break;
 
     case SVX_NUM_BITMAP:
     case SVX_NUM_CHAR_SPECIAL:          nRet = 23;      break;
-
+    case style::NumberingType::HANGUL_SYLLABLE_KO: nRet = 24; break;// ganada
+    case style::NumberingType::HANGUL_JAMO_KO: nRet = 25; break;// chosung
+    case style::NumberingType::HANGUL_CIRCLED_SYLLABLE_KO: nRet = 24; break;
+    case style::NumberingType::HANGUL_CIRCLED_JAMO_KO: nRet = 25; break;
+    case style::NumberingType::TIAN_GAN_ZH: nRet = 30; break;
+    case style::NumberingType::DI_ZI_ZH: nRet = 31; break;
+    case style::NumberingType::NUMBER_UPPER_ZH_TW: nRet = 34;break;
+    case style::NumberingType::NUMBER_UPPER_ZH: nRet = 38; break;
+    case style::NumberingType::NUMBER_HANGUL_KO: nRet = 41; break;
+    case style::NumberingType::NUMBER_UPPER_KO: nRet = 44; break;
+    case style::NumberingType::NUMBER_HEBREW: nRet = 45; break;
+    case style::NumberingType::CHARS_ARABIC: nRet = 46; break;
+    case style::NumberingType::CHARS_HEBREW: nRet = 47; break;
+    case style::NumberingType::CHARS_ARABIC_ABJAD: nRet = 48; break;
+    case style::NumberingType::CHARS_NEPALI: nRet = 49; break;
+    case style::NumberingType::CHARS_THAI: nRet = 53; break;
+    case style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_RU: nRet = 58; break;
+    case style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_RU: nRet = 59; break;
     // nothing, WW does the same (undocumented)
     case SVX_NUM_NUMBER_NONE:           nRet = 0xff;    break;
     case SVX_NUM_SYMBOL_CHICAGO:

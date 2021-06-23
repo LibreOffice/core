@@ -602,16 +602,12 @@ sal_Int16 ConvertNumberingType(const sal_Int32 nFmt, const sal_Int16 nDefault)
     }
 /*  TODO: Lots of additional values are available - some are supported in the I18 framework
     NS_ooxml::LN_Value_ST_NumberFormat_hex = 91685;
-    NS_ooxml::LN_Value_ST_NumberFormat_decimalFullWidth = 91691;
     NS_ooxml::LN_Value_ST_NumberFormat_decimalHalfWidth = 91692;
     NS_ooxml::LN_Value_ST_NumberFormat_japaneseDigitalTenThousand = 91694;
     NS_ooxml::LN_Value_ST_NumberFormat_decimalEnclosedFullstop = 91703;
     NS_ooxml::LN_Value_ST_NumberFormat_decimalEnclosedParen = 91704;
     NS_ooxml::LN_Value_ST_NumberFormat_ideographZodiacTraditional = 91709;
     NS_ooxml::LN_Value_ST_NumberFormat_taiwaneseDigital = 91713;
-    NS_ooxml::LN_Value_ST_NumberFormat_chineseLegalSimplified = 91715;
-    NS_ooxml::LN_Value_ST_NumberFormat_chineseCountingThousand = 91716;
-    NS_ooxml::LN_Value_ST_NumberFormat_koreanLegal = 91719;
     NS_ooxml::LN_Value_ST_NumberFormat_vietnameseCounting = 91721;
     NS_ooxml::LN_Value_ST_NumberFormat_numberInDash = 91725;
     NS_ooxml::LN_Value_ST_NumberFormat_hindiConsonants = 91731;

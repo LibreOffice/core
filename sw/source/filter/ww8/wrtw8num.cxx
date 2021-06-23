@@ -238,24 +238,13 @@ void MSWordExportBase::NumberingDefinitions()
 /**
  * Converts the SVX numbering type to MSONFC.
  *
- * This is used for paragraph numbering purposes.
+ * This is used for special paragraph numbering considerations.
  */
-static sal_uInt8 GetLevelNFC(  sal_uInt16 eNumType, const SfxItemSet *pOutSet)
+static sal_uInt8 GetLevelNFC(sal_uInt16 eNumType, const SfxItemSet* pOutSet, sal_uInt8 nDefault)
 {
-    sal_uInt8 nRet = 0;
+    sal_uInt8 nRet = nDefault;
     switch( eNumType )
     {
-    case SVX_NUM_CHARS_UPPER_LETTER:
-    case SVX_NUM_CHARS_UPPER_LETTER_N:  nRet = 3;       break;
-    case SVX_NUM_CHARS_LOWER_LETTER:
-    case SVX_NUM_CHARS_LOWER_LETTER_N:  nRet = 4;       break;
-    case SVX_NUM_ROMAN_UPPER:           nRet = 1;       break;
-    case SVX_NUM_ROMAN_LOWER:           nRet = 2;       break;
-
-    case SVX_NUM_BITMAP:
-    case SVX_NUM_CHAR_SPECIAL:         nRet = 23;      break;
-    case SVX_NUM_FULL_WIDTH_ARABIC: nRet = 14; break;
-    case SVX_NUM_CIRCLE_NUMBER: nRet = 18;break;
     case SVX_NUM_NUMBER_LOWER_ZH:
         nRet = 35;
         if ( pOutSet ) {
@@ -266,27 +255,14 @@ static sal_uInt8 GetLevelNFC(  sal_uInt16 eNumType, const SfxItemSet *pOutSet)
             }
         }
         break;
-    case SVX_NUM_NUMBER_UPPER_ZH: nRet = 38; break;
-    case SVX_NUM_NUMBER_UPPER_ZH_TW: nRet = 34;break;
-    case SVX_NUM_TIAN_GAN_ZH: nRet = 30; break;
-    case SVX_NUM_DI_ZI_ZH: nRet = 31; break;
-    case SVX_NUM_NUMBER_TRADITIONAL_JA: nRet = 16; break;
-    case SVX_NUM_AIU_FULLWIDTH_JA: nRet = 20; break;
-    case SVX_NUM_AIU_HALFWIDTH_JA: nRet = 12; break;
-    case SVX_NUM_IROHA_FULLWIDTH_JA: nRet = 21; break;
-    case SVX_NUM_IROHA_HALFWIDTH_JA: nRet = 13; break;
-    case style::NumberingType::HANGUL_SYLLABLE_KO: nRet = 24; break;// ganada
-    case style::NumberingType::HANGUL_JAMO_KO: nRet = 25; break;// chosung
-    case style::NumberingType::HANGUL_CIRCLED_SYLLABLE_KO: nRet = 24; break;
-    case style::NumberingType::HANGUL_CIRCLED_JAMO_KO: nRet = 25; break;
-    case style::NumberingType::NUMBER_HANGUL_KO: nRet = 41; break;
-    case style::NumberingType::NUMBER_UPPER_KO: nRet = 44; break;
-    case SVX_NUM_NUMBER_NONE:           nRet = 0xff;    break;
-    // No SVX_NUM_SYMBOL_CHICAGO here: LVLF can't contain 0x09, msonfcChiManSty.
-    case SVX_NUM_ARABIC_ZERO:
-        // 0x16, msonfcArabicLZ
-        nRet = 22;
+
+    // LVLF can't contain 0x08, msonfcHex.
+    case style::NumberingType::SYMBOL_CHICAGO:
+        // No SVX_NUM_SYMBOL_CHICAGO here: LVLF can't contain 0x09, msonfcChiManSty.
+        nRet = 0;
         break;
+    // LVLF can't contain 0x0F / 15, msonfcSbChar / decimalHalfWidth.
+    // LVLF can't contain 0x13 / 19, msonfcDArabic / decimalFullWidth2
     }
     return nRet;
 }
@@ -311,7 +287,8 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
     m_rWW8Export.pTableStrm->WriteUInt32( nStart );
 
     // Type
-    m_rWW8Export.pTableStrm->WriteUChar( GetLevelNFC( nNumberingType ,pOutSet) );
+    sal_uInt8 nNumId = GetLevelNFC(nNumberingType, pOutSet, WW8Export::GetNumId(nNumberingType));
+    m_rWW8Export.pTableStrm->WriteUChar(nNumId);
 
     // Justification
     sal_uInt8 nAlign;
