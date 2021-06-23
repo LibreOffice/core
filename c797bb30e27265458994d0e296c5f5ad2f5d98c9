@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e29d7c79_1acd82ae",
+        "filename": "cui/source/dialogs/GraphicTestsDialog.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-23T07:14:48Z",
+      "side": 1,
+      "message": "why OString? an why not OUString? I hope you know the difference....",
+      "range": {
+        "startLine": 26,
+        "startChar": 4,
+        "endLine": 26,
+        "endChar": 11
+      },
+      "revId": "c797bb30e27265458994d0e296c5f5ad2f5d98c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ab75001_0d26c294",
+        "filename": "cui/source/dialogs/GraphicTestsDialog.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-23T07:14:48Z",
+      "side": 1,
+      "message": "Also awriteResults? what does awrite means?",
+      "range": {
+        "startLine": 27,
+        "startChar": 13,
+        "endLine": 27,
+        "endChar": 26
+      },
+      "revId": "c797bb30e27265458994d0e296c5f5ad2f5d98c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b76c0bd4_d5cc5d83",
+        "filename": "cui/source/dialogs/GraphicTestsDialog.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-23T07:14:48Z",
+      "side": 1,
+      "message": "don\u0027t use intern....",
+      "range": {
+        "startLine": 52,
+        "startChar": 18,
+        "endLine": 52,
+        "endChar": 24
+      },
+      "revId": "c797bb30e27265458994d0e296c5f5ad2f5d98c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51a7f880_78b841cf",
+        "filename": "include/vcl/test/GraphicsRenderTests.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-23T07:14:48Z",
+      "side": 1,
+      "message": "you would want getters for this, not make the member variables public",
+      "range": {
+        "startLine": 23,
+        "startChar": 3,
+        "endLine": 30,
+        "endChar": 35
+      },
+      "revId": "c797bb30e27265458994d0e296c5f5ad2f5d98c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
