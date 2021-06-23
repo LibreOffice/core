@@ -16,6 +16,24 @@
       "revId": "648e4106cc002ff5b8184a8c104f93cb06e4b540",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55cc1f70_d01418c0",
+        "filename": "sdext/source/pdfimport/xpdfwrapper/wrapper_gpl.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-06-23T11:10:31Z",
+      "side": 1,
+      "message": "i had actually thought of that but then i thought if we have a unit test for this then it\u0027s not going to break without anybody noticing, so keep it simple...",
+      "parentUuid": "c16dc71e_5a91ce36",
+      "revId": "648e4106cc002ff5b8184a8c104f93cb06e4b540",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
