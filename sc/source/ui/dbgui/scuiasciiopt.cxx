@@ -435,6 +435,8 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, const OUString& aDatNa
     // *** Separator characters ***
     lcl_FillCombo( *mxCbTextSep, gaTextSepList, mcTextSep );
     mxCbTextSep->set_entry_text(sTextSeparators);
+    // tdf#69207 - use selected text delimiter to parse the provided data
+    mcTextSep = lcl_CharFromCombo(*mxCbTextSep, gaTextSepList);
 
     Link<weld::Toggleable&,void> aSeparatorClickHdl =LINK( this, ScImportAsciiDlg, SeparatorClickHdl );
     mxCbTextSep->connect_changed( LINK( this, ScImportAsciiDlg, SeparatorComboBoxHdl ) );
