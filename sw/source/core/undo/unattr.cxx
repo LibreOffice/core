@@ -139,7 +139,7 @@ void SwUndoFormatAttr::Init( const SwFormat & rFormat )
                 m_nNodeIndex = pTable->GetTabSortBoxes()[ 0 ]->GetSttNd()
                                ->FindTableNode()->GetIndex();
             }
-        } else if (pDoc->GetSections().ContainsFormat(&rFormat)) {
+        } else if (dynamic_cast<const SwSectionFormat*>(&rFormat)) {
             m_nNodeIndex = rFormat.GetContent().GetContentIdx()->GetIndex();
         } else if ( dynamic_cast< const SwTableBoxFormat* >( &rFormat ) !=  nullptr ) {
             SwTableBox * pTableBox = SwIterator<SwTableBox,SwFormat>( rFormat ).First();

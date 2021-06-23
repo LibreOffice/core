@@ -164,9 +164,8 @@ public:
 
     /// check if given format is contained here
     /// @precond pFormat must not have been deleted
-    bool ContainsFormat(SwFormat const*const pFormat) const {
-        Value p = dynamic_cast<Value>(const_cast<SwFormat*>(pFormat));
-        return p != nullptr && SwVectorModifyBase<Value>::IsAlive(p);
+    bool ContainsFormat(Value pFormat) const {
+        return SwVectorModifyBase<Value>::IsAlive(pFormat);
     }
 
     // Override return type to reduce casting
