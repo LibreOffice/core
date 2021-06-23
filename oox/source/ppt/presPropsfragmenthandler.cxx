@@ -13,11 +13,16 @@
 #include <com/sun/star/presentation/XCustomPresentationSupplier.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
+#include <com/sun/star/drawing/XDrawPages.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/ppt/presPropsfragmenthandler.hxx>
 #include <oox/token/namespaces.hxx>
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 
 namespace oox::ppt
 {
@@ -47,6 +52,16 @@ void PresPropsFragmentHandler::finalizeImport()
         xPresentationProps->setPropertyValue("CustomShow",
                                              css::uno::Any(aNameSeq[m_sId.toInt32()]));
     }
+
+    if (!m_sSt.isEmpty())
+    {
+        Reference<drawing::XDrawPagesSupplier> xDPS(getFilter().getModel(), uno::UNO_QUERY_THROW);
+        Reference<drawing::XDrawPages> xDrawPages(xDPS->getDrawPages(), uno::UNO_SET_THROW);
+        Reference<drawing::XDrawPage> xDrawPage;
+        xDrawPages->getByIndex(m_sSt.toInt32() - 1) >>= xDrawPage;
+        Reference<container::XNamed> xNamed(xDrawPage, uno::UNO_QUERY_THROW);
+        xPresentationProps->setPropertyValue("FirstPage", uno::Any(xNamed->getName()));
+    }
 }
 
 core::ContextHandlerRef PresPropsFragmentHandler::onCreateContext(sal_Int32 aElementToken,
@@ -61,6 +76,9 @@ core::ContextHandlerRef PresPropsFragmentHandler::onCreateContext(sal_Int32 aEle
             return this;
         case PPT_TOKEN(custShow):
             m_sId = rAttribs.getString(XML_id).get();
+            return this;
+        case PPT_TOKEN(sldRg):
+            m_sSt = rAttribs.getString(XML_st).get();
             return this;
     }
     return this;

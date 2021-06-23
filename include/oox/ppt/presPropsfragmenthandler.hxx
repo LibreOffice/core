@@ -33,6 +33,7 @@ public:
 private:
     bool m_bLoop = false;
     OUString m_sId;
+    OUString m_sSt;
 };
 } // namespace ppt
 } // namespace oox
