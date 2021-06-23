@@ -24,43 +24,45 @@
 
 namespace emfio
 {
-    class EmfReader : public MtfTools
-    {
-    private:
-        sal_uInt32   mnRecordCount;
+class EmfReader : public MtfTools
+{
+private:
+    sal_uInt32 mnRecordCount;
 
-        bool        mbRecordPath : 1;
-        bool        mbEMFPlus : 1;
-        bool        mbEMFPlusDualMode : 1;
-        /// Another format is read already, can ignore actual EMF data.
-        bool mbReadOtherGraphicFormat = false;
-        basegfx::B2DTuple maSizeHint;
-        bool mbEnableEMFPlus = true;
+    bool mbRecordPath : 1;
+    bool mbEMFPlus : 1;
+    bool mbEMFPlusDualMode : 1;
+    /// Another format is read already, can ignore actual EMF data.
+    bool mbReadOtherGraphicFormat = false;
+    basegfx::B2DTuple maSizeHint;
+    bool mbEnableEMFPlus = true;
 
-        bool        ReadHeader();
-        // reads and converts the rectangle
-        static tools::Rectangle ReadRectangle(sal_Int32, sal_Int32, sal_Int32, sal_Int32);
+    bool ReadHeader();
+    // reads and converts the rectangle
+    static tools::Rectangle ReadRectangle(sal_Int32, sal_Int32, sal_Int32, sal_Int32);
 
-    public:
-        EmfReader(SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile);
-        ~EmfReader();
+public:
+    EmfReader(SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile);
+    ~EmfReader();
 
-        bool ReadEnhWMF();
-        void ReadGDIComment(sal_uInt32 nCommentId);
-        /// Parses EMR_COMMENT_MULTIFORMATS.
-        void ReadMultiformatsComment();
-        void SetSizeHint(const basegfx::B2DTuple& rSizeHint) { maSizeHint = rSizeHint; }
-        void SetEnableEMFPlus(bool bEnableEMFPlus) { mbEnableEMFPlus = bEnableEMFPlus; }
+    bool ReadEnhWMF();
+    void ReadGDIComment(sal_uInt32 nCommentId);
+    /// Parses EMR_COMMENT_MULTIFORMATS.
+    void ReadMultiformatsComment();
+    void SetSizeHint(const basegfx::B2DTuple& rSizeHint) { maSizeHint = rSizeHint; }
+    void SetEnableEMFPlus(bool bEnableEMFPlus) { mbEnableEMFPlus = bEnableEMFPlus; }
 
-    private:
-        template <class T> void ReadAndDrawPolyPolygon(sal_uInt32 nNextPos);
-        template <class T> void ReadAndDrawPolyLine(sal_uInt32 nNextPos);
-        template <class T> tools::Polygon ReadPolygon(sal_uInt32 nStartIndex, sal_uInt32 nPoints, sal_uInt32 nNextPos);
-        template <class T> tools::Polygon ReadPolygonWithSkip(const bool skipFirst, sal_uInt32 nNextPos);
+private:
+    template <class T> void ReadAndDrawPolyPolygon(sal_uInt32 nNextPos);
+    template <class T> void ReadAndDrawPolyLine(sal_uInt32 nNextPos);
+    template <class T>
+    tools::Polygon ReadPolygon(sal_uInt32 nStartIndex, sal_uInt32 nPoints, sal_uInt32 nNextPos);
+    template <class T>
+    tools::Polygon ReadPolygonWithSkip(const bool skipFirst, sal_uInt32 nNextPos);
 
-        tools::Rectangle ReadRectangle();
-        void ReadEMFPlusComment(sal_uInt32 length, bool& bHaveDC);
-    };
+    tools::Rectangle ReadRectangle();
+    void ReadEMFPlusComment(sal_uInt32 length, bool& bHaveDC);
+};
 }
 
 #endif
