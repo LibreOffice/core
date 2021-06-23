@@ -16,7 +16,7 @@ class ManualCalcTests(UITestCase):
     # http://manual-test.libreoffice.org/manage/case/189/
     def test_define_database_range(self):
 
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
 
             # Select range A1:D10
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
@@ -54,7 +54,7 @@ class ManualCalcTests(UITestCase):
 
     # http://manual-test.libreoffice.org/manage/case/190/
     def test_sort_data(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
 
             # Insert data
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
@@ -78,7 +78,6 @@ class ManualCalcTests(UITestCase):
             xOkBtn = xSortDlg.getChild("ok")
             self.ui_test.close_dialog_through_button(xOkBtn)
 
-            document = self.ui_test.get_component()
 
             self.assertEqual(get_cell_by_position(document, 0, 1, 0).getValue(), 0)
             self.assertEqual(get_cell_by_position(document, 0, 1, 1).getValue(), 3)
@@ -93,7 +92,7 @@ class ManualCalcTests(UITestCase):
 
     # http://manual-test.libreoffice.org/manage/case/191/
     def test_validation(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
 
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
             xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C10"}))
@@ -125,7 +124,7 @@ class ManualCalcTests(UITestCase):
 
     # http://manual-test.libreoffice.org/manage/case/187/
     def test_transpose(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
 
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
             enter_text_to_cell(xGridWin, "B3", "abcd")
@@ -152,7 +151,6 @@ class ManualCalcTests(UITestCase):
             xOkBtn = xPasteSpecialDlg.getChild("ok")
             self.ui_test.close_dialog_through_button(xOkBtn)
 
-            document = self.ui_test.get_component()
             self.assertEqual(get_cell_by_position(document, 0, 2, 1).getString(), "abcd")
             self.assertEqual(get_cell_by_position(document, 0, 2, 2).getValue(), 35)
             self.assertEqual(get_cell_by_position(document, 0, 3, 1).getString(), "edfg")
@@ -177,7 +175,7 @@ class ManualCalcTests(UITestCase):
 
     # http://manual-test.libreoffice.org/manage/case/143/
     def test_random_numbers(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
 
             xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "A2:A10"}))
@@ -197,7 +195,6 @@ class ManualCalcTests(UITestCase):
             xApplyBtn = xRandomNumberDlg.getChild("apply")
             xApplyBtn.executeAction("CLICK", tuple())
 
-            doc = self.ui_test.get_component()
 
             def check_random_values():
                 for i in range(1, 9):

@@ -19,9 +19,7 @@ class WriterInsertBreakDialog(UITestCase):
 
         return xDialog
 
-    def getPages(self, total):
-        document = self.ui_test.get_component()
-
+    def getPages(self, total, document):
         self.assertEqual(document.CurrentController.PageCount, total)
 
     def test_insert_line_break(self):
@@ -32,7 +30,7 @@ class WriterInsertBreakDialog(UITestCase):
             xOkBtn = xDialog.getChild("ok")
             xOkBtn.executeAction("CLICK", tuple())
 
-            self.getPages(1)
+            self.getPages(1, document)
 
     def test_insert_column_break(self):
 
@@ -42,7 +40,7 @@ class WriterInsertBreakDialog(UITestCase):
             xOkBtn = xDialog.getChild("ok")
             xOkBtn.executeAction("CLICK", tuple())
 
-            self.getPages(1)
+            self.getPages(1, document)
 
     def test_insert_page_break(self):
 
@@ -58,7 +56,7 @@ class WriterInsertBreakDialog(UITestCase):
                     xOkBtn = xDialog.getChild("ok")
                     xOkBtn.executeAction("CLICK", tuple())
 
-                    self.getPages(i + 2)
+                    self.getPages(i + 2, document)
 
     def test_cancel_button_insert_line_break_dialog(self):
 
@@ -69,6 +67,6 @@ class WriterInsertBreakDialog(UITestCase):
             xCancelBtn = xDialog.getChild("cancel")
             self.ui_test.close_dialog_through_button(xCancelBtn)
 
-            self.getPages(1)
+            self.getPages(1, document)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

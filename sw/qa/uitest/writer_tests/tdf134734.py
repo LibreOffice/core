@@ -13,8 +13,7 @@ import importlib
 
 class TestClass(UITestCase):
     def test_master_page_background(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
             # set margins and fill color
             self.ui_test.execute_dialog_through_command(".uno:PageDialog")

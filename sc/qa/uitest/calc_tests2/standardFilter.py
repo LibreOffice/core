@@ -133,10 +133,9 @@ class standardFilter(UITestCase):
             self.assertEqual(get_cell_by_position(calc_doc, 1, 7, 2).getValue(), 4)
 
     def test_standard_filter_case_sensitive(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             enter_text_to_cell(gridwin, "A1", "first")
             enter_text_to_cell(gridwin, "B1", "second")
@@ -180,10 +179,9 @@ class standardFilter(UITestCase):
             self.ui_test.close_dialog_through_button(xOKBtn)
 
     def test_standard_filter_regular_expression(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             enter_text_to_cell(gridwin, "A1", "first")
             enter_text_to_cell(gridwin, "B1", "second")
@@ -233,10 +231,9 @@ class standardFilter(UITestCase):
             self.ui_test.close_dialog_through_button(xOKBtn)
 
     def test_standard_filter_condition_contains(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             enter_text_to_cell(gridwin, "A1", "first")
             enter_text_to_cell(gridwin, "B1", "second")
@@ -287,10 +284,9 @@ class standardFilter(UITestCase):
 
         #from testcasespecification OOo
     def test_standard_filter_condition_contains2(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             enter_text_to_cell(gridwin, "A1", "A")
             enter_text_to_cell(gridwin, "B1", "B")
@@ -351,10 +347,9 @@ class standardFilter(UITestCase):
             self.ui_test.close_dialog_through_button(xCancelBtn)
 
     def test_standard_filter_condition_does_not_contains(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             enter_text_to_cell(gridwin, "A1", "A")
             enter_text_to_cell(gridwin, "B1", "B")
@@ -415,10 +410,9 @@ class standardFilter(UITestCase):
             self.ui_test.close_dialog_through_button(xCancelBtn)
 
     def test_standard_filter_condition_Begins_with(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             enter_text_to_cell(gridwin, "A1", "A")
             enter_text_to_cell(gridwin, "B1", "B")
@@ -479,10 +473,9 @@ class standardFilter(UITestCase):
             self.ui_test.close_dialog_through_button(xCancelBtn)
 
     def test_standard_filter_condition_Does_not_begin_with(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             enter_text_to_cell(gridwin, "A1", "A")
             enter_text_to_cell(gridwin, "B1", "B")
@@ -543,10 +536,9 @@ class standardFilter(UITestCase):
             self.ui_test.close_dialog_through_button(xCancelBtn)
 
     def test_standard_filter_condition_Ends_with(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             enter_text_to_cell(gridwin, "A1", "A")
             enter_text_to_cell(gridwin, "B1", "B")
@@ -607,10 +599,9 @@ class standardFilter(UITestCase):
             self.ui_test.close_dialog_through_button(xCancelBtn)
 
     def test_standard_filter_condition_Does_not_end_with(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             enter_text_to_cell(gridwin, "A1", "A")
             enter_text_to_cell(gridwin, "B1", "B")

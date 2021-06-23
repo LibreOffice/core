@@ -12,10 +12,9 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 #randomnumbergenerator.ui
 class fillRandomNumber(UITestCase):
     def test_fill_random_number(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A2"}))
             self.ui_test.execute_modeless_dialog_through_command(".uno:RandomNumberGeneratorDialog")
             xDialog = self.xUITest.getTopFocusWindow()

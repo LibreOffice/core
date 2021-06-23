@@ -12,7 +12,7 @@ class tdf125449(UITestCase):
 
     def test_tdf125449(self):
 
-        with self.ui_test.create_doc_in_start_center("impress"):
+        with self.ui_test.create_doc_in_start_center("impress") as document:
 
             xTemplateDlg = self.xUITest.getTopFocusWindow()
             xCancelBtn = xTemplateDlg.getChild("close")
@@ -33,7 +33,6 @@ class tdf125449(UITestCase):
             xOkBtn = xPageSetupDlg.getChild("ok")
             xOkBtn.executeAction("CLICK", tuple())
 
-            document = self.ui_test.get_component()
             self.assertEqual(
               document.DrawPages.getByIndex(0).Background.FillGradient.Style, LINEAR)
             self.assertEqual(

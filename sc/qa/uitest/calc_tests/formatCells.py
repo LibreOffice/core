@@ -14,10 +14,9 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class formatCell(UITestCase):
     def test_format_cell_numbers_tab(self):
         #numberingformatpage.ui
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #select cell A1
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
             #format - cell
@@ -73,10 +72,9 @@ class formatCell(UITestCase):
 
     def test_format_cell_font_tab(self):
         #numberingformatpage.ui
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #select cell A1
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
             #format - cell
@@ -129,10 +127,9 @@ class formatCell(UITestCase):
 
     def test_format_cell_font_effects_tab(self):
         #numberingformatpage.ui
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #select cell A1
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
             #format - cell
@@ -182,10 +179,9 @@ class formatCell(UITestCase):
             self.ui_test.close_dialog_through_button(xCanc)
 
     def test_format_cell_alignment_tab(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #select cell A1
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
             #format - cell
@@ -237,10 +233,9 @@ class formatCell(UITestCase):
             xOK.executeAction("CLICK", tuple())
 
     def test_format_cell_asian_typography_tab(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #select cell A1
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
             #format - cell
@@ -266,10 +261,9 @@ class formatCell(UITestCase):
 
     def test_minimal_border_width(self):
         #borderpage.ui, tdf#137790
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             #set points pt measurement
             change_measurement_unit(self, "Point")
@@ -317,10 +311,9 @@ class formatCell(UITestCase):
 
     def test_format_cell_borders_tab(self):
         #borderpage.ui
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             #set points pt measurement
             change_measurement_unit(self, "Point")
@@ -382,10 +375,9 @@ class formatCell(UITestCase):
 
     def test_format_cell_cell_protection_tab(self):
         #cellprotectionpage.ui
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #select cell A1
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
             #format - cell
@@ -422,10 +414,9 @@ class formatCell(UITestCase):
             self.ui_test.close_dialog_through_button(xOKBtn)
 
     def test_tdf130762(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #select cell A1
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
             #format - cell

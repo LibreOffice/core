@@ -27,7 +27,7 @@ class Tdf140257(UITestCase):
     self.ui_test.close_dialog_through_button(xOKBtn)
 
   def test_tdf140257(self):
-    with self.ui_test.create_doc_in_start_center("writer"):
+    with self.ui_test.create_doc_in_start_center("writer") as document:
         xMainWindow = self.xUITest.getTopFocusWindow()
         xWriterEdit = xMainWindow.getChild("writer_edit")
 
@@ -59,7 +59,6 @@ class Tdf140257(UITestCase):
 
         self.xUITest.executeCommand(".uno:Sidebar")
 
-        document = self.ui_test.get_component()
         cursor = document.getCurrentController().getViewCursor()
 
         # Use Adding Selection

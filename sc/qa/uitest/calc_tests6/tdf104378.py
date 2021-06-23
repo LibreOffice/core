@@ -11,7 +11,7 @@ from libreoffice.calc.document import get_cell_by_position
 class tdf104378(UITestCase):
 
     def test_tdf104378(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
@@ -23,7 +23,6 @@ class tdf104378(UITestCase):
             xOKBtn = xDialog.getChild('ok')
             self.ui_test.close_dialog_through_button(xOKBtn)
 
-            document = self.ui_test.get_component()
 
             # Without the fix in place, this test would have failed with
             # - 远程MySQL連接遠程MySQL連接遠程MySQL連接

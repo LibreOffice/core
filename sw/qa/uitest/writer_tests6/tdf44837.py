@@ -12,10 +12,9 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf44837(UITestCase):
 
     def test_tdf448373_Replace_All_clears_current_selection(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
-            document = self.ui_test.get_component()
 
             type_text(xWriterEdit, "asd asd")
             self.xUITest.executeCommand(".uno:SelectAll")

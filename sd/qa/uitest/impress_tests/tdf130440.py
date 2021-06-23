@@ -10,14 +10,13 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf129346(UITestCase):
 
    def test_run(self):
-        with self.ui_test.create_doc_in_start_center("impress"):
+        with self.ui_test.create_doc_in_start_center("impress") as document:
             xTemplateDlg = self.xUITest.getTopFocusWindow()
             xCancelBtn = xTemplateDlg.getChild("close")
             self.ui_test.close_dialog_through_button(xCancelBtn)
 
             xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
 
-            document = self.ui_test.get_component()
             self.assertEqual(document.CurrentController.getCurrentPage().Number, 1)
             self.xUITest.executeCommand(".uno:DuplicatePage")
             xToolkit.processEventsToIdle()

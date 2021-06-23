@@ -12,7 +12,7 @@ class tdf140863(UITestCase):
 
     def test_tdf140863(self):
 
-        with self.ui_test.create_doc_in_start_center("writer"):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
             # Insert one section
             self.ui_test.execute_dialog_through_command(".uno:InsertSection")
@@ -30,7 +30,6 @@ class tdf140863(UITestCase):
             self.xUITest.executeCommand(".uno:InsertPagebreak")
             self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "2")
 
-            document = self.ui_test.get_component()
             self.assertEqual(1, len(document.TextSections))
             self.assertTrue(document.TextSections.Section1.IsVisible)
 

@@ -11,10 +11,9 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class moveCopySheet(UITestCase):
     def test_copy_move_sheet(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #default - 1 sheet; select the sheet (is selected), dialog move/copy sheet
             self.ui_test.execute_dialog_through_command(".uno:Move")
             xDialog = self.xUITest.getTopFocusWindow()

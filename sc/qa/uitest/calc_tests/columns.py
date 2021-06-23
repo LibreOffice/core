@@ -11,10 +11,9 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class CalcColumns(UITestCase):
     def test_column_width(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             change_measurement_unit(self, "Centimeter")
 
@@ -51,10 +50,9 @@ class CalcColumns(UITestCase):
             self.ui_test.close_dialog_through_button(xCancel)
 
     def test_column_width_two_columns(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             change_measurement_unit(self, "Centimeter")
 
@@ -90,10 +88,9 @@ class CalcColumns(UITestCase):
             self.ui_test.close_dialog_through_button(xOK)
 
     def test_column_width_copy(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             change_measurement_unit(self, "Centimeter")
 
@@ -127,10 +124,9 @@ class CalcColumns(UITestCase):
             self.ui_test.close_dialog_through_button(xOK)
 
     def test_column_hide_show(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #select A3
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "C1"}))
             self.xUITest.executeCommand(".uno:HideColumn") #uno command moves focus one cell down
@@ -154,10 +150,9 @@ class CalcColumns(UITestCase):
             self.assertEqual(gridWinState["CurrentColumn"], "2")
 
     def test_column_test_move(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #select C1
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "C1"}))
             gridWinState = get_state_as_dict(gridwin)
@@ -173,10 +168,9 @@ class CalcColumns(UITestCase):
             self.assertEqual(gridWinState["CurrentColumn"], "2")
 
     def test_tdf117522_column_width_insert_left(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             change_measurement_unit(self, "Centimeter")
 

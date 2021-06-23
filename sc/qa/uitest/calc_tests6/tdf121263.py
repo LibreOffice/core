@@ -13,9 +13,8 @@ from uitest.uihelper.common import get_state_as_dict
 class tdf121263(UITestCase):
 
     def test_tdf121263_hide_more_sheets(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xTopWindow = self.xUITest.getTopFocusWindow()
-            document = self.ui_test.get_component()
             gridwin = xTopWindow.getChild("grid_window")
 
             self.ui_test.execute_dialog_through_command(".uno:Insert")  #insert sheet

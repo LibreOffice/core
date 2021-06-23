@@ -11,14 +11,13 @@ class tdf79236(UITestCase):
 
     def test_paragraph(self):
 
-        with self.ui_test.create_doc_in_start_center("writer"):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
 
             type_text(xWriterEdit, "Test for tdf79236")
 
-            document = self.ui_test.get_component()
 
             selection = self.xUITest.executeCommand(".uno:SelectAll")
 

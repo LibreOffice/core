@@ -13,10 +13,9 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf92423(UITestCase):
     def test_tdf92423_text_to_columns(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             #Make sure that tools-options-StarOffice Calc-General-Input settings-Show overwrite warning when pasting data is tagged.
             self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog

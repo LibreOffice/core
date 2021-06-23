@@ -14,7 +14,7 @@ class Test(UITestCase):
 
     def testSvxCharEffectsPage(self):
         # Start Impress.
-        with self.ui_test.create_doc_in_start_center("impress"):
+        with self.ui_test.create_doc_in_start_center("impress") as document:
             template = self.xUITest.getTopFocusWindow()
             self.ui_test.close_dialog_through_button(template.getChild("close"))
             doc = self.xUITest.getTopFocusWindow()
@@ -36,8 +36,7 @@ class Test(UITestCase):
             self.ui_test.close_dialog_through_button(xDialog.getChild("ok"))
 
             # Verify the result.
-            component = self.ui_test.get_component()
-            drawPage = component.getDrawPages().getByIndex(0)
+            drawPage = document.getDrawPages().getByIndex(0)
             shape = drawPage.getByIndex(0)
 
             # Without the accompanying fix in place, this test would have failed with:
@@ -48,7 +47,7 @@ class Test(UITestCase):
 
     def testSvxCharEffectsPageWriter(self):
         # Start Writer.
-        with self.ui_test.create_doc_in_start_center("writer"):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             doc = self.xUITest.getTopFocusWindow()
             editWin = doc.getChild("writer_edit")
             # Type a character and select it.
@@ -72,14 +71,13 @@ class Test(UITestCase):
             self.ui_test.close_dialog_through_button(xDialog.getChild("ok"))
 
             # Verify the result.
-            component = self.ui_test.get_component()
-            paragraph = component.Text.createEnumeration().nextElement()
+            paragraph = document.Text.createEnumeration().nextElement()
 
             self.assertEqual(paragraph.CharTransparence, 5)
 
     def testSvxCharEffectsPageWriterAutomatic(self):
         # Start Writer.
-        with self.ui_test.create_doc_in_start_center("writer"):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             doc = self.xUITest.getTopFocusWindow()
             editWin = doc.getChild("writer_edit")
 

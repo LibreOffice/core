@@ -14,8 +14,7 @@ from uitest.uihelper.common import select_by_text
 class formatCharacter(UITestCase):
 
    def test_format_character_tab_font(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             self.ui_test.execute_dialog_through_command(".uno:FontDialog")
@@ -62,8 +61,7 @@ class formatCharacter(UITestCase):
             self.ui_test.close_dialog_through_button(xCanc)
 
    def test_format_character_tab_font_effects(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             self.ui_test.execute_dialog_through_command(".uno:FontDialog")
@@ -119,8 +117,7 @@ class formatCharacter(UITestCase):
             self.ui_test.close_dialog_through_button(xCanc)
 
    def test_format_character_tab_hyperlink(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             self.ui_test.execute_dialog_through_command(".uno:FontDialog")
@@ -166,8 +163,7 @@ class formatCharacter(UITestCase):
             self.ui_test.close_dialog_through_button(xCanc)
 
    def test_format_character_tab_asian_layout(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             self.ui_test.execute_dialog_through_command(".uno:FontDialog")
@@ -192,8 +188,7 @@ class formatCharacter(UITestCase):
             self.ui_test.close_dialog_through_button(xCanc)
 
    def test_format_character_tab_position(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             self.ui_test.execute_dialog_through_command(".uno:FontDialog")
@@ -243,8 +238,7 @@ class formatCharacter(UITestCase):
             self.ui_test.close_dialog_through_button(xCanc)
 
    def test_format_character_tab_position_scalewidthsb(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             self.ui_test.execute_dialog_through_command(".uno:FontDialog")

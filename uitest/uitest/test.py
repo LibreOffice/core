@@ -167,8 +167,9 @@ class UITest(object):
                 if event.executed:
                     frames = self.get_frames()
                     self.get_desktop().setActiveFrame(frames[0])
+                    component = self.get_component()
                     try:
-                        yield
+                        yield component
                     finally:
                         self.close_doc()
                     return
