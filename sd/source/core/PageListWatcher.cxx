@@ -92,7 +92,7 @@ SdPage* ImpPageListWatcher::GetSdPage(PageKind ePgKind, sal_uInt32 nPgNum)
                 pRetval = maPageVectorStandard[nPgNum];
             else
             {
-                SAL_WARN( "sd.core",
+                SAL_INFO( "sd.core",
                           "ImpPageListWatcher::GetSdPage(PageKind::Standard): page number " << nPgNum << " >= " << maPageVectorStandard.size() );
             }
             break;
@@ -103,14 +103,14 @@ SdPage* ImpPageListWatcher::GetSdPage(PageKind ePgKind, sal_uInt32 nPgNum)
                 pRetval = maPageVectorNotes[nPgNum];
             else
             {
-                SAL_WARN( "sd.core",
+                SAL_INFO( "sd.core",
                           "ImpPageListWatcher::GetSdPage(PageKind::Notes): page number " << nPgNum << " >= " << maPageVectorNotes.size() );
             }
             break;
         }
         case PageKind::Handout:
         {
-//          #11420# for models used to transfer drawing shapes via clipboard it's ok to not have a handout page
+            // #11420# for models used to transfer drawing shapes via clipboard it's ok to not have a handout page
             DBG_ASSERT(nPgNum == 0, "ImpPageListWatcher::GetSdPage: access to non existing handout page (!)");
             if (nPgNum == 0)
                 pRetval = mpHandoutPage;
