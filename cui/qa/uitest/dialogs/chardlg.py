@@ -36,8 +36,8 @@ class Test(UITestCase):
             self.ui_test.close_dialog_through_button(xDialog.getChild("ok"))
 
             # Verify the result.
-            component = self.ui_test.get_component()
-            drawPage = component.getDrawPages().getByIndex(0)
+            document = self.ui_test.get_component()
+            drawPage = document.getDrawPages().getByIndex(0)
             shape = drawPage.getByIndex(0)
 
             # Without the accompanying fix in place, this test would have failed with:
@@ -72,8 +72,8 @@ class Test(UITestCase):
             self.ui_test.close_dialog_through_button(xDialog.getChild("ok"))
 
             # Verify the result.
-            component = self.ui_test.get_component()
-            paragraph = component.Text.createEnumeration().nextElement()
+            document = self.ui_test.get_component()
+            paragraph = document.Text.createEnumeration().nextElement()
 
             self.assertEqual(paragraph.CharTransparence, 5)
 

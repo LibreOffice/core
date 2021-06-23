@@ -16,8 +16,8 @@ class Tdf118883(UITestCase):
             xArgs = mkPropertyValues({"KeyModifier": 8192})
             self.xUITest.executeCommandWithParameters(".uno:BasicShapes.rectangle", xArgs)
 
-            writer_document = self.ui_test.get_component()
-            self.assertEqual(1, writer_document.DrawPage.getCount())
+            document = self.ui_test.get_component()
+            self.assertEqual(1, document.DrawPage.getCount())
 
             self.xUITest.executeCommand(".uno:Copy")
 
@@ -30,10 +30,10 @@ class Tdf118883(UITestCase):
 
             self.xUITest.executeCommand(".uno:Paste")
 
-            calc_document = self.ui_test.get_component()
+            document = self.ui_test.get_component()
 
             # Without the fix in place, this test would have failed with
             # AssertionError: 1 != 0
-            self.assertEqual(1, calc_document.DrawPages[0].getCount())
+            self.assertEqual(1, document.DrawPages[0].getCount())
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

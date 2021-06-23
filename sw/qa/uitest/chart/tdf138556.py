@@ -47,8 +47,8 @@ class tdf138556( UITestCase ):
             self.ui_test.close_dialog_through_button( xOKBtn )
 
             #Check Number of Sequences
-            xDocument = self.ui_test.get_component()
-            nSequences = len( xDocument.FirstDiagram.
+            document = self.ui_test.get_component()
+            nSequences = len( document.FirstDiagram.
                 CoordinateSystems[0].ChartTypes[0].DataSeries[0].DataSequences )
             self.assertEqual( nSequences, 3 )
 

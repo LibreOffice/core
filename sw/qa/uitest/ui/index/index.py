@@ -40,8 +40,8 @@ class TestSwuiidxmrk(UITestCase):
             self.ui_test.close_dialog_through_button(close)
 
             # Then make sure the URL contains that page number:
-            component = self.ui_test.get_component()
-            paragraphs = component.Text.createEnumeration()
+            document = self.ui_test.get_component()
+            paragraphs = document.Text.createEnumeration()
             paragraph = paragraphs.nextElement()
             portions = paragraph.createEnumeration()
             portion = portions.nextElement()

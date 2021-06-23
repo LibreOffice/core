@@ -61,7 +61,7 @@ class classification(UITestCase):
             header = document.StyleFamilies.PageStyles.Standard.HeaderText.createEnumeration().nextElement()
             self.assertEqual(header.String, "Confidential")
 
-            controller = self.ui_test.get_component().getCurrentController()
+            controller = document.getCurrentController()
             self.assertTrue(controller.hasInfobar("classification"))
 
             #verify watermark
@@ -130,7 +130,7 @@ class classification(UITestCase):
             xOKBtn = xDialog.getChild("ok")
             self.ui_test.close_dialog_through_button(xOKBtn)
 
-            controller = self.ui_test.get_component().getCurrentController()
+            controller = document.getCurrentController()
             self.assertEqual(document.Text.String[0:6], "(Conf)")
             self.assertFalse(controller.hasInfobar("classification"))
             self.assertFalse(document.StyleFamilies.PageStyles.Standard.HeaderIsOn)
@@ -160,7 +160,7 @@ class classification(UITestCase):
             xOKBtn = xDialog.getChild("ok")
             self.ui_test.close_dialog_through_button(xOKBtn)
 
-            controller = self.ui_test.get_component().getCurrentController()
+            controller = document.getCurrentController()
             self.assertEqual(document.Text.String[0:6], "(AAIO)")
             self.assertFalse(controller.hasInfobar("classification"))
             self.assertFalse(document.StyleFamilies.PageStyles.Standard.HeaderIsOn)

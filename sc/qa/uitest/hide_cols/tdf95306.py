@@ -27,14 +27,14 @@ class HideDisjointColumns(UITestCase):
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B1"}))
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "D1", "EXTEND":"true"}))
 
-            doc = self.ui_test.get_component()
-            self.assertFalse(get_column_hidden(doc, 1))
-            self.assertFalse(get_column_hidden(doc, 3))
+            document = self.ui_test.get_component()
+            self.assertFalse(get_column_hidden(document, 1))
+            self.assertFalse(get_column_hidden(document, 3))
             self.ui_test._xUITest.executeCommand(".uno:HideColumn")
-            self.assertTrue(get_column_hidden(doc, 1))
-            self.assertTrue(get_column_hidden(doc, 3))
+            self.assertTrue(get_column_hidden(document, 1))
+            self.assertTrue(get_column_hidden(document, 3))
             self.ui_test._xUITest.executeCommand(".uno:Undo")
-            self.assertFalse(get_column_hidden(doc, 1))
-            self.assertFalse(get_column_hidden(doc, 3))
+            self.assertFalse(get_column_hidden(document, 1))
+            self.assertFalse(get_column_hidden(document, 3))
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

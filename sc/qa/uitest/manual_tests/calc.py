@@ -197,7 +197,7 @@ class ManualCalcTests(UITestCase):
             xApplyBtn = xRandomNumberDlg.getChild("apply")
             xApplyBtn.executeAction("CLICK", tuple())
 
-            doc = self.ui_test.get_component()
+            document = self.ui_test.get_component()
 
             def check_random_values():
                 for i in range(1, 9):
