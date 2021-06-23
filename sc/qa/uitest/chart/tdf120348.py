@@ -17,13 +17,12 @@ class tdf120348(UITestCase):
     with self.ui_test.load_file(get_url_for_data_file("tdf120348.ods")) as calc_doc:
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
 
         xFirstMatrix = []
         for row in range(1, 159):
             xRow = []
             for column in range(5, 9):
-                xRow.append(round(get_cell_by_position(document, 0, column, row).getValue(), 5))
+                xRow.append(round(get_cell_by_position(calc_doc, 0, column, row).getValue(), 5))
             xFirstMatrix.append(xRow)
 
         gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 2"}))

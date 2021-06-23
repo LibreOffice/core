@@ -14,11 +14,11 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 class tdf40427(UITestCase):
 
   def test_tdf40427(self):
-    with self.ui_test.load_file(get_url_for_data_file("tdf40427_SectionPositions.odt")):
+    with self.ui_test.load_file(get_url_for_data_file("tdf40427_SectionPositions.odt")) as document:
         xMainWindow = self.xUITest.getTopFocusWindow()
         xWriterEdit = xMainWindow.getChild("writer_edit")
 
-        self.assertEqual(2, self.ui_test.get_component().CurrentController.PageCount)
+        self.assertEqual(2, document.CurrentController.PageCount)
 
         # Make sure that the view is 2 pages side-by-side - look at dialog View-Zoom-Zoom
         self.ui_test.execute_dialog_through_command(".uno:Zoom")

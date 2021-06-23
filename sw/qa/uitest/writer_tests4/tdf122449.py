@@ -15,7 +15,6 @@ class tdf122449(UITestCase):
 
     def test_tdf122449_crash_edit_index_entry(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf122449.odt")) as writer_doc:
-            document = self.ui_test.get_component()
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             #search word Autocorrect (second find)   .uno:SearchDialog

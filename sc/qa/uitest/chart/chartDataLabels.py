@@ -22,7 +22,6 @@ class chartDataLabels(UITestCase):
     with self.ui_test.load_file(get_url_for_data_file("tdf98390.ods")) as calc_doc:
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
 
         gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
         gridwin.executeAction("ACTIVATE", tuple())
@@ -30,7 +29,7 @@ class chartDataLabels(UITestCase):
         xChartMain = xChartMainTop.getChild("chart_window")
         xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
 
-        xDataSeries = document.Sheets[0].Charts[0].getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries
+        xDataSeries = calc_doc.Sheets[0].Charts[0].getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries
         self.assertFalse(xDataSeries[0].Label.ShowNumber)
         self.assertFalse(xDataSeries[0].Label.ShowCategoryName)
         self.assertFalse(xDataSeries[0].Label.ShowLegendSymbol)
@@ -115,7 +114,6 @@ class chartDataLabels(UITestCase):
     with self.ui_test.load_file(get_url_for_data_file("dataLabels.ods")) as calc_doc:
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
 
         gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
         gridwin.executeAction("ACTIVATE", tuple())
@@ -123,7 +121,7 @@ class chartDataLabels(UITestCase):
         xChartMain = xChartMainTop.getChild("chart_window")
         xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
 
-        xDataSeries = document.Sheets[0].Charts[0].getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries
+        xDataSeries = calc_doc.Sheets[0].Charts[0].getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries
         self.assertTrue(xDataSeries[0].Label.ShowNumber)
         self.assertFalse(xDataSeries[0].Label.ShowNumberInPercent)
         self.assertIsNone(xDataSeries[0].PercentageNumberFormat)
@@ -171,7 +169,7 @@ class chartDataLabels(UITestCase):
             self.assertEqual(get_state_as_dict(valueAsPercentage)["Selected"], "true")
 
 
-        xNumberFormats = document.Sheets[0].Charts[0].getEmbeddedObject().getNumberFormats()
+        xNumberFormats = calc_doc.Sheets[0].Charts[0].getEmbeddedObject().getNumberFormats()
         xLocale = Locale('en', 'US', '')
         xFormat = xNumberFormats.queryKey("#,#00.0%;[RED]-#,#00.0%", xLocale, True)
 
@@ -217,7 +215,6 @@ class chartDataLabels(UITestCase):
     with self.ui_test.load_file(get_url_for_data_file("tdf131291.ods")) as calc_doc:
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
 
         gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
         gridwin.executeAction("ACTIVATE", tuple())
@@ -225,7 +222,7 @@ class chartDataLabels(UITestCase):
         xChartMain = xChartMainTop.getChild("chart_window")
         xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
 
-        xDataSeries = document.Sheets[0].Charts[0].getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries
+        xDataSeries = calc_doc.Sheets[0].Charts[0].getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries
         self.assertTrue(xDataSeries[0].Label.ShowNumber)
         self.assertFalse(xDataSeries[0].Label.ShowNumberInPercent)
 
@@ -253,7 +250,7 @@ class chartDataLabels(UITestCase):
                 self.assertEqual(get_state_as_dict(formatted)["Text"], "[$$-409]#,##0.00;[RED]-[$$-409]#,##0.00")
 
 
-        xNumberFormats = document.Sheets[0].Charts[0].getEmbeddedObject().getNumberFormats()
+        xNumberFormats = calc_doc.Sheets[0].Charts[0].getEmbeddedObject().getNumberFormats()
         xLocale = Locale()
         xFormat = xNumberFormats.queryKey("[$$-409]#,##0.00;[RED]-[$$-409]#,##0.00", xLocale, True)
 

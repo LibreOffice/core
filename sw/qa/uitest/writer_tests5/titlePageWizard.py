@@ -13,8 +13,7 @@ from uitest.uihelper.common import get_url_for_data_file
 # and inserting at the very end of the document.
 class tdf138907(UITestCase):
     def test_tdf138907(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf138907_titlePageDialog.odt")):
-            document = self.ui_test.get_component()
+        with self.ui_test.load_file(get_url_for_data_file("tdf138907_titlePageDialog.odt")) as document:
 
             # Confirm the starting state. Just a page break, without a valid restart page number on page 2
             self.assertEqual(document.CurrentController.PageCount, 5)

@@ -21,7 +21,6 @@ class tdf124829(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf124829.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             self.xUITest.executeCommand(".uno:SelectAll")
             self.xUITest.executeCommand(".uno:Cut")
@@ -29,6 +28,6 @@ class tdf124829(UITestCase):
                 self.xUITest.executeCommand(".uno:Undo")
 
             #verify; no crashes
-            self.assertEqual(document.Sheets.getCount(), 6)
+            self.assertEqual(calc_doc.Sheets.getCount(), 6)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

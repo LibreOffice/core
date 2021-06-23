@@ -18,7 +18,6 @@ class tdf39959(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf39959.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             # 1. Open a new document
             # 2. Enter "asdf" in A1
@@ -43,9 +42,9 @@ class tdf39959(UITestCase):
             self.ui_test.close_dialog_through_button(xcloseBtn)
 
             #verify Sheet2.A1 = "bbb"
-            self.assertEqual(get_cell_by_position(document, 1, 0, 0).getString(), "bbb ")
-            self.assertEqual(get_cell_by_position(document, 1, 0, 2).getString(), "abc")
+            self.assertEqual(get_cell_by_position(calc_doc, 1, 0, 0).getString(), "bbb ")
+            self.assertEqual(get_cell_by_position(calc_doc, 1, 0, 2).getString(), "abc")
             #Undo
             self.xUITest.executeCommand(".uno:Undo")
-            self.assertEqual(get_cell_by_position(document, 1, 0, 0).getString(), "asdf ")
+            self.assertEqual(get_cell_by_position(calc_doc, 1, 0, 0).getString(), "asdf ")
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

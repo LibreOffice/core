@@ -16,19 +16,18 @@ class tdf91425(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf91425.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #1) Open test file provided in report
             #2) Move mouse pointer over Column A header, the right mouse button click
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
             #3) Insert columns left
             self.xUITest.executeCommand(".uno:InsertColumnsBefore")
             #verify
-            self.assertEqual(get_cell_by_position(document, 0, 3, 0).getString(), "C")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 3, 0).getString(), "C")
             #undo
             self.xUITest.executeCommand(".uno:Undo")
-            self.assertEqual(get_cell_by_position(document, 0, 2, 0).getString(), "C")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 2, 0).getString(), "C")
             #redo
             self.xUITest.executeCommand(".uno:Redo")
-            self.assertEqual(get_cell_by_position(document, 0, 3, 0).getString(), "C")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 3, 0).getString(), "C")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

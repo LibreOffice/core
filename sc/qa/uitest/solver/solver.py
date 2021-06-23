@@ -17,7 +17,6 @@ class solver(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("solver.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B4"}))
             self.ui_test.execute_modeless_dialog_through_command(".uno:SolverDialog")
             xDialog = self.xUITest.getTopFocusWindow()
@@ -46,6 +45,6 @@ class solver(UITestCase):
                 pass
 
             #verify
-            self.assertEqual(get_cell_by_position(document, 0, 1, 1).getValue(), 400)
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 1).getValue(), 400)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

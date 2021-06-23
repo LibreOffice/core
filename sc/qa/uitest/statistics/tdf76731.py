@@ -20,7 +20,6 @@ class anova(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf76731.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #1. Open the attached sample document in Calc.
             #2. Select the data range, i.e. A1:C5.
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C5"}))
@@ -46,22 +45,22 @@ class anova(UITestCase):
             xOKBtn = xDialog.getChild("ok")
             self.ui_test.close_dialog_through_button(xOKBtn)
             #Verify, Table of results is shown, "F critical" cell has "#NAME?" error value.
-            self.assertEqual(get_cell_by_position(document, 0, 5, 0).getString(), "ANOVA - Single Factor")
-            self.assertEqual(get_cell_by_position(document, 0, 5, 1).getString(), "Alpha")
-            self.assertEqual(get_cell_by_position(document, 0, 5, 3).getString(), "Groups")
-            self.assertEqual(get_cell_by_position(document, 0, 5, 4).getString(), "Column 1")
-            self.assertEqual(get_cell_by_position(document, 0, 5, 5).getString(), "Column 2")
-            self.assertEqual(get_cell_by_position(document, 0, 5, 6).getString(), "Column 3")
-            self.assertEqual(get_cell_by_position(document, 0, 5, 8).getString(), "Source of Variation")
-            self.assertEqual(get_cell_by_position(document, 0, 5, 9).getString(), "Between Groups")
-            self.assertEqual(get_cell_by_position(document, 0, 5, 10).getString(), "Within Groups")
-            self.assertEqual(get_cell_by_position(document, 0, 5, 11).getString(), "Total")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 5, 0).getString(), "ANOVA - Single Factor")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 5, 1).getString(), "Alpha")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 5, 3).getString(), "Groups")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 5, 4).getString(), "Column 1")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 5, 5).getString(), "Column 2")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 5, 6).getString(), "Column 3")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 5, 8).getString(), "Source of Variation")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 5, 9).getString(), "Between Groups")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 5, 10).getString(), "Within Groups")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 5, 11).getString(), "Total")
 
-            self.assertEqual(get_cell_by_position(document, 0, 11, 8).getString(), "F critical")
-            self.assertEqual(round(get_cell_by_position(document, 0, 11, 9).getValue(),9), 3.885293835)
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 11, 8).getString(), "F critical")
+            self.assertEqual(round(get_cell_by_position(calc_doc, 0, 11, 9).getValue(),9), 3.885293835)
 
             #undo
             self.xUITest.executeCommand(".uno:Undo")
-            self.assertEqual(get_cell_by_position(document, 0, 5, 0).getString(), "")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 5, 0).getString(), "")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

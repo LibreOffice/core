@@ -12,7 +12,6 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, typ
 class findReplace(UITestCase):
     def test_find_writer(self):
         with self.ui_test.load_file(get_url_for_data_file("findReplace.odt")) as writer_doc:
-            document = self.ui_test.get_component()
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
@@ -51,7 +50,7 @@ class findReplace(UITestCase):
             replace.executeAction("CLICK", tuple())
             replace.executeAction("CLICK", tuple())   #click twice Replace button
             #verify
-            self.assertEqual(document.Text.String[0:19], "Replace first first")
+            self.assertEqual(writer_doc.Text.String[0:19], "Replace first first")
 
             #now replace first (uncheck match case) with word "aaa" - click once Replace All button, check "Replace aaa aaa"
             replaceterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
@@ -61,7 +60,7 @@ class findReplace(UITestCase):
             replaceall = xDialog.getChild("replaceall")
             replaceall.executeAction("CLICK", tuple())
             #verify
-            self.assertEqual(document.Text.String[0:15], "Replace aaa aaa")
+            self.assertEqual(writer_doc.Text.String[0:15], "Replace aaa aaa")
 
             #now delete strings in textbox Find and textbox Replace, click button Format, select  Size=16 pt, Close OK, Find Next; verify Page=2;
             #click No format button; close dialog
@@ -123,7 +122,6 @@ class findReplace(UITestCase):
         #tdf116242  ţ ț
     def test_tdf116242_replace_t_with_cedilla(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf116242.odt")) as writer_doc:
-            document = self.ui_test.get_component()
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
@@ -138,7 +136,7 @@ class findReplace(UITestCase):
             replaceall = xDialog.getChild("replaceall")
             replaceall.executeAction("CLICK", tuple())
             #verify
-            self.assertEqual(document.Text.String[0:13], "țoootdf116242")
+            self.assertEqual(writer_doc.Text.String[0:13], "țoootdf116242")
 
             xcloseBtn = xDialog.getChild("close")
             self.ui_test.close_dialog_through_button(xcloseBtn)
@@ -146,7 +144,6 @@ class findReplace(UITestCase):
         #Bug 98417 - FIND & REPLACE: Add 'Find Previous' button
     def test_tdf98417_find_previous_writer(self):
         with self.ui_test.load_file(get_url_for_data_file("findReplace.odt")) as writer_doc:
-            document = self.ui_test.get_component()
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")

@@ -15,7 +15,6 @@ class tdf133855(UITestCase):
 
         with self.ui_test.load_file(get_url_for_data_file("tdf133855.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
-            document = self.ui_test.get_component()
 
             results = ['A', 'B', 'C', 'D', 'E', 'F']
 
@@ -30,7 +29,7 @@ class tdf133855(UITestCase):
 
                 xListItem = xlist.getChild( str(i) )
                 xListItem.executeAction("DOUBLECLICK" , mkPropertyValues({}) )
-                self.assertEqual(get_cell_by_position(document, 0, 6, 5).getString(), results[i])
+                self.assertEqual(get_cell_by_position(calc_doc, 0, 6, 5).getString(), results[i])
 
             # normal dropdown list
             for i in range(len(results)):
@@ -43,6 +42,6 @@ class tdf133855(UITestCase):
 
                 xListItem = xlist.getChild( str(i) )
                 xListItem.executeAction("DOUBLECLICK" , mkPropertyValues({}) )
-                self.assertEqual(get_cell_by_position(document, 0, 6, 6).getString(), results[i])
+                self.assertEqual(get_cell_by_position(calc_doc, 0, 6, 6).getString(), results[i])
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

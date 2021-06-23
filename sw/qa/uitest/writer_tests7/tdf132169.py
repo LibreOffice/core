@@ -35,8 +35,7 @@ class tdf132169(UITestCase):
 
             xLineMetric.executeAction("UP", tuple())
 
-            document = self.ui_test.get_component()
-            drawPage = document.getDrawPages().getByIndex(0)
+            drawPage = writer_doc.getDrawPages().getByIndex(0)
             shape = drawPage.getByIndex(0)
 
             #Without the fix in place, it would have been 310

@@ -19,7 +19,6 @@ class Subtotals(UITestCase):
     def test_tdf107267(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf107267.ods")) as calc_doc:
             XcalcDoc = self.xUITest.getTopFocusWindow()
-            document = self.ui_test.get_component()
             gridwin = XcalcDoc.getChild("grid_window")
             # 1. Open the test file
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:F123"}))
@@ -65,12 +64,12 @@ class Subtotals(UITestCase):
             self.ui_test.close_dialog_through_button(xOKBtn)
 
             #verify
-            self.assertEqual(get_cell_by_position(document, 0, 0, 141).getString(), "Grand Average")
-            self.assertEqual(get_cell_by_position(document, 0, 0, 142).getString(), "Grand Min")
-            self.assertEqual(get_cell_by_position(document, 0, 0, 143).getString(), "Grand Max")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 141).getString(), "Grand Average")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 142).getString(), "Grand Min")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 143).getString(), "Grand Max")
 
-            self.assertEqual(round(get_cell_by_position(document, 0, 5, 141).getValue(), 13), 3.3852459016393)
-            self.assertEqual(get_cell_by_position(document, 0, 5, 142).getValue(), 0)
-            self.assertEqual(get_cell_by_position(document, 0, 5, 143).getValue(), 26)
+            self.assertEqual(round(get_cell_by_position(calc_doc, 0, 5, 141).getValue(), 13), 3.3852459016393)
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 5, 142).getValue(), 0)
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 5, 143).getValue(), 26)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

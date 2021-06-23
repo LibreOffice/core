@@ -19,11 +19,10 @@ class chartArea(UITestCase):
     with self.ui_test.load_file(get_url_for_data_file("chartArea.ods")) as calc_doc:
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
 
         change_measurement_unit(self, "Centimeter")
 
-        xArea = document.Sheets[0].Charts[0].getEmbeddedObject().Area
+        xArea = calc_doc.Sheets[0].Charts[0].getEmbeddedObject().Area
         self.assertEqual(xArea.LineWidth, 0)
         self.assertEqual(xArea.LineTransparence, 0)
         self.assertEqual(hex(xArea.FillColor), '0xffffff')

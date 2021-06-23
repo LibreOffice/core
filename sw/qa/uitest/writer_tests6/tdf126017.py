@@ -13,7 +13,6 @@ from uitest.uihelper.common import get_url_for_data_file
 class tdf126017(UITestCase):
    def test_tdf126017_crash_after_undo(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf126017.odt")) as writer_doc:
-            document = self.ui_test.get_component()
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             #go to TOC
@@ -45,6 +44,6 @@ class tdf126017(UITestCase):
             self.xUITest.executeCommand(".uno:Undo")
             self.xUITest.executeCommand(".uno:Undo")
 
-            self.assertEqual(document.Text.String.replace('\r\n', '\n')[1:7], "CRASHY")
+            self.assertEqual(writer_doc.Text.String.replace('\r\n', '\n')[1:7], "CRASHY")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

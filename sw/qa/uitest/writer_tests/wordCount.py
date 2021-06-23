@@ -51,7 +51,6 @@ class writerWordCount(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf68347.odt")) as writer_doc:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
-            document = self.ui_test.get_component()
 
             xWriterEdit.executeAction("SELECT", mkPropertyValues({"START_POS": "24", "END_POS": "39"})) #select two words
 
@@ -242,7 +241,6 @@ class writerWordCount(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf51816.odt")) as writer_doc:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
-            document = self.ui_test.get_component()
             #1. Open attached document
             #2. Tools> Word count
             self.ui_test.execute_modeless_dialog_through_command(".uno:WordCountDialog")

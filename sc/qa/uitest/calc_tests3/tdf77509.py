@@ -16,7 +16,6 @@ class tdf77509(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf77509.xls")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #1. Open attachment: Consolidate-test.xls
             #2. Select any empty cell, eg. cell D1
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "D1"}))
@@ -46,30 +45,30 @@ class tdf77509(UITestCase):
             xOKBtn = xDialog.getChild("ok")
             self.ui_test.close_dialog_through_button(xOKBtn)
             #verify
-            self.assertEqual("A 1", get_cell_by_position(document, 0, 3, 0).getString())
-            self.assertEqual("AB 1", get_cell_by_position(document, 0, 3, 1).getString())
-            self.assertEqual("AB 12", get_cell_by_position(document, 0, 3, 2).getString())
-            self.assertEqual("AB 123", get_cell_by_position(document, 0, 3, 3).getString())
-            self.assertEqual("ABC 1", get_cell_by_position(document, 0, 3, 4).getString())
+            self.assertEqual("A 1", get_cell_by_position(calc_doc, 0, 3, 0).getString())
+            self.assertEqual("AB 1", get_cell_by_position(calc_doc, 0, 3, 1).getString())
+            self.assertEqual("AB 12", get_cell_by_position(calc_doc, 0, 3, 2).getString())
+            self.assertEqual("AB 123", get_cell_by_position(calc_doc, 0, 3, 3).getString())
+            self.assertEqual("ABC 1", get_cell_by_position(calc_doc, 0, 3, 4).getString())
 
-            self.assertEqual(1, get_cell_by_position(document, 0, 4, 0).getValue())
-            self.assertEqual(2, get_cell_by_position(document, 0, 4, 1).getValue())
-            self.assertEqual(2, get_cell_by_position(document, 0, 4, 2).getValue())
-            self.assertEqual(1, get_cell_by_position(document, 0, 4, 3).getValue())
-            self.assertEqual(1, get_cell_by_position(document, 0, 4, 4).getValue())
+            self.assertEqual(1, get_cell_by_position(calc_doc, 0, 4, 0).getValue())
+            self.assertEqual(2, get_cell_by_position(calc_doc, 0, 4, 1).getValue())
+            self.assertEqual(2, get_cell_by_position(calc_doc, 0, 4, 2).getValue())
+            self.assertEqual(1, get_cell_by_position(calc_doc, 0, 4, 3).getValue())
+            self.assertEqual(1, get_cell_by_position(calc_doc, 0, 4, 4).getValue())
 
             self.xUITest.executeCommand(".uno:Undo")
 
-            self.assertEqual("", get_cell_by_position(document, 0, 3, 0).getString())
-            self.assertEqual("", get_cell_by_position(document, 0, 3, 1).getString())
-            self.assertEqual("", get_cell_by_position(document, 0, 3, 2).getString())
-            self.assertEqual("", get_cell_by_position(document, 0, 3, 3).getString())
-            self.assertEqual("", get_cell_by_position(document, 0, 3, 4).getString())
+            self.assertEqual("", get_cell_by_position(calc_doc, 0, 3, 0).getString())
+            self.assertEqual("", get_cell_by_position(calc_doc, 0, 3, 1).getString())
+            self.assertEqual("", get_cell_by_position(calc_doc, 0, 3, 2).getString())
+            self.assertEqual("", get_cell_by_position(calc_doc, 0, 3, 3).getString())
+            self.assertEqual("", get_cell_by_position(calc_doc, 0, 3, 4).getString())
 
-            self.assertEqual(0, get_cell_by_position(document, 0, 4, 0).getValue())
-            self.assertEqual(0, get_cell_by_position(document, 0, 4, 1).getValue())
-            self.assertEqual(0, get_cell_by_position(document, 0, 4, 2).getValue())
-            self.assertEqual(0, get_cell_by_position(document, 0, 4, 3).getValue())
-            self.assertEqual(0, get_cell_by_position(document, 0, 4, 4).getValue())
+            self.assertEqual(0, get_cell_by_position(calc_doc, 0, 4, 0).getValue())
+            self.assertEqual(0, get_cell_by_position(calc_doc, 0, 4, 1).getValue())
+            self.assertEqual(0, get_cell_by_position(calc_doc, 0, 4, 2).getValue())
+            self.assertEqual(0, get_cell_by_position(calc_doc, 0, 4, 3).getValue())
+            self.assertEqual(0, get_cell_by_position(calc_doc, 0, 4, 4).getValue())
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

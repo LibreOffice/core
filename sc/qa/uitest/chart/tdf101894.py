@@ -17,9 +17,8 @@ class tdf101894(UITestCase):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
 
-        document = self.ui_test.get_component()
 
-        xChart = document.Sheets[0].Charts[0]
+        xChart = calc_doc.Sheets[0].Charts[0]
         xDataSeries = xChart.getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries
 
         self.assertEqual(4, len(xDataSeries))
@@ -56,7 +55,7 @@ class tdf101894(UITestCase):
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
 
-        xChart = document.Sheets[0].Charts[0]
+        xChart = calc_doc.Sheets[0].Charts[0]
         xDataSeries = xChart.getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries
 
         self.assertEqual(4, len(xDataSeries))

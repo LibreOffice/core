@@ -25,7 +25,6 @@ class tdf90401(UITestCase):
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild('writer_edit')
 
-            document = self.ui_test.get_component()
             selection = self.xUITest.executeCommand('.uno:SelectAll')
             self.xUITest.executeCommand('.uno:InsertAnnotation')
 
@@ -72,12 +71,11 @@ class tdf90401(UITestCase):
                 # Close the Writer document
                 self.ui_test.close_doc()
 
-                with self.ui_test.load_file(systemPathToFileUrl(xFilePath)):
-                    document = self.ui_test.get_component()
+                with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as writer_doc2:
 
                     # check removed personal info on comments
 
-                    textfields = document.getTextFields()
+                    textfields = writer_doc2.getTextFields()
                     author = ""
                     year = -1
                     for textfield in textfields:
