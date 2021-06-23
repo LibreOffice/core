@@ -12,10 +12,9 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 #Bug 104117 - Crash in Calc when selecting "Uniform Integer" with an max value "100000000000000" in "Random Number Generator
 class tdf104117(UITestCase):
     def test_tdf104117(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A2"}))
             self.ui_test.execute_modeless_dialog_through_command(".uno:RandomNumberGeneratorDialog")
             xDialog = self.xUITest.getTopFocusWindow()

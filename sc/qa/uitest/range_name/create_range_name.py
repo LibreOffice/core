@@ -17,7 +17,7 @@ class CreateRangeNameTest(UITestCase):
 
     def test_create_range_name(self):
 
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
 
             calcDoc = self.xUITest.getTopFocusWindow()
             xPosWindow = calcDoc.getChild('pos_window')
@@ -37,7 +37,7 @@ class CreateRangeNameTest(UITestCase):
 
     def test_create_range_name_from_ui(self):
 
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
 
             calcDoc = self.xUITest.getTopFocusWindow()
             gridwin = calcDoc.getChild("grid_window")
@@ -60,7 +60,6 @@ class CreateRangeNameTest(UITestCase):
             calcDoc = self.xUITest.getTopFocusWindow()
             gridwin = calcDoc.getChild("grid_window")
 
-            document = self.ui_test.get_component()
             enter_text_to_cell(gridwin, "A2", "=SUM(RANGE1)")
             self.assertEqual(3.0, get_cell_by_position(document, 0, 0, 1).getValue())
 
@@ -89,7 +88,7 @@ class CreateRangeNameTest(UITestCase):
 
     def test_create_local_range_name(self):
 
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
 
             calcDoc = self.xUITest.getTopFocusWindow()
             xPosWindow = calcDoc.getChild('pos_window')
@@ -133,7 +132,6 @@ class CreateRangeNameTest(UITestCase):
             # use return key to paste the name range
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
 
-            document = self.ui_test.get_component()
             self.assertEqual("1", get_cell_by_position(document, 0, 1, 0).getString())
             self.assertEqual("=localRangeName", get_cell_by_position(document, 0, 1, 0).getFormula())
 

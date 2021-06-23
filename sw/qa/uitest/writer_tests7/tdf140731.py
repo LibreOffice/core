@@ -11,7 +11,7 @@ from uitest.uihelper.common import type_text
 
 class tdf140731(UITestCase):
     def test_tdf140731(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             type_text(xWriterEdit, 'Lorem')
@@ -30,7 +30,6 @@ class tdf140731(UITestCase):
             self.xUITest.executeCommand(".uno:TrackChanges")
             xWriterEdit.executeAction("SELECT", mkPropertyValues({"START_POS": "1", "END_POS": "1000"}))
             self.xUITest.executeCommand(".uno:ChangeCaseToTitleCase")
-            document = self.ui_test.get_component()
             self.assertTrue(document.Redlines.createEnumeration().hasMoreElements())
 
             #Removing all the redlines.

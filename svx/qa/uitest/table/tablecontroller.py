@@ -14,7 +14,7 @@ class SvxTableControllerTest(UITestCase):
 
     def testOnFormatTable(self):
         # Create an Impress document with a single table in it.
-        with self.ui_test.create_doc_in_start_center("impress"):
+        with self.ui_test.create_doc_in_start_center("impress") as document:
             template = self.xUITest.getTopFocusWindow()
             self.ui_test.close_dialog_through_button(template.getChild("close"))
             self.xUITest.executeCommand(".uno:SelectAll")
@@ -32,8 +32,7 @@ class SvxTableControllerTest(UITestCase):
             self.ui_test.close_dialog_through_button(tableDialog.getChild("ok"))
 
             # Check if the shadow was enabled.
-            component = self.ui_test.get_component()
-            drawPage = component.getDrawPages().getByIndex(0)
+            drawPage = document.getDrawPages().getByIndex(0)
             shape = drawPage.getByIndex(0)
             # Without the accompanying fix in place, this test would have failed with:
             # AssertionError: False != True
@@ -44,7 +43,7 @@ class SvxTableControllerTest(UITestCase):
 
     def testUndoCrash(self):
         # Given an Impress document with a single table in it:
-        with self.ui_test.create_doc_in_start_center("impress"):
+        with self.ui_test.create_doc_in_start_center("impress") as document:
             template = self.xUITest.getTopFocusWindow()
             self.ui_test.close_dialog_through_button(template.getChild("close"))
             self.xUITest.executeCommand(".uno:SelectAll")

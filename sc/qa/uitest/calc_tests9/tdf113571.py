@@ -23,11 +23,10 @@ class Tdf113571(UITestCase):
             # Close the document
             self.xUITest.executeCommand(".uno:CloseDoc")
 
-        with self.ui_test.create_doc_in_start_center("writer"):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
             self.xUITest.executeCommand(".uno:PasteUnformatted")
 
-            document = self.ui_test.get_component()
 
             # Without the fix in place, this test would have failed with
             # AssertionError: '<?xml version="1.0" encoding="UTF-8"?>\n<[34 chars]est>' !=

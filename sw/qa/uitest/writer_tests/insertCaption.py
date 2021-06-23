@@ -11,8 +11,7 @@ from uitest.uihelper.common import select_pos
 class insertCaption(UITestCase):
 
    def test_insert_caption(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             self.ui_test.execute_dialog_through_command(".uno:InsertFrame")   #  insert frame
             xDialogFr = self.xUITest.getTopFocusWindow()
 

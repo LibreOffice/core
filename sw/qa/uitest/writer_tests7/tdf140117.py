@@ -13,10 +13,9 @@ from uitest.uihelper.common import get_url_for_data_file
 class tdf140117(UITestCase):
     def test_tdf140117(self):
         # load the sample file
-        with self.ui_test.load_file(get_url_for_data_file("tdf140117.fodt")):
+        with self.ui_test.load_file(get_url_for_data_file("tdf140117.fodt")) as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
-            document = self.ui_test.get_component()
 
             for i in range(3):
                     xWriterEdit.executeAction("GOTO", mkPropertyValues({"PAGE": "2"}))

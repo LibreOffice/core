@@ -18,10 +18,9 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf67346(UITestCase):
 
     def test_tdf67346_undo_paste_text_input_line(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             # type 'Apple' in A1
             enter_text_to_cell(gridwin, "A1", "Apple")
             # input line: copy the text from there

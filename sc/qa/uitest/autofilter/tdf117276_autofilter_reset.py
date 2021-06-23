@@ -49,8 +49,7 @@ class tdf117276_autofilter_reset(UITestCase):
         self.assertEqual(2, self.get_values_count_in_AutoFilter(xGridWindow, "1"))
 
     def test_run(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = calcDoc.getChild("grid_window")
 

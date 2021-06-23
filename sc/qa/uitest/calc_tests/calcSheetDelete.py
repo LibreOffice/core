@@ -13,11 +13,10 @@ class calcSheetDelete(UITestCase):
 
     def test_tdf114228_insert_and_delete_sheet(self):
 
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
 
             xCalcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             xGridWindow.executeAction("SELECT", mkPropertyValues({"CELL": "L12"}))
             nrSheets = document.Sheets.getCount()  #default number
@@ -42,8 +41,7 @@ class calcSheetDelete(UITestCase):
 
     def test_tdf43078_insert_and_delete_sheet_insert_text(self):
 
-        with self.ui_test.create_doc_in_start_center("calc"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("calc") as document:
 
             nrSheets = document.Sheets.getCount()  #default number of sheets
 
@@ -75,11 +73,10 @@ class calcSheetDelete(UITestCase):
 
     def test_delete_more_sheets_at_once(self):
 
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
 
             xCalcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             nrSheets = document.Sheets.getCount()  #default number
             i = 0
             while i < 6:
@@ -108,11 +105,10 @@ class calcSheetDelete(UITestCase):
 
     def test_tdf105105_delete_lots_of_sheets_at_once(self):
 
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
 
             xCalcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             nrSheets = document.Sheets.getCount()  #default number
             i = 0
             while i < 100:

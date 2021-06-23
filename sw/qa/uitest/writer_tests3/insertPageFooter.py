@@ -9,9 +9,7 @@ from uitest.framework import UITestCase
 
 class WriterInsertPageFooter(UITestCase):
 
-    def insert_footer(self):
-        document = self.ui_test.get_component()
-
+    def insert_footer(self, document):
         self.assertEqual(
             document.StyleFamilies.PageStyles.Standard.FooterIsOn, False)
 
@@ -21,9 +19,7 @@ class WriterInsertPageFooter(UITestCase):
         self.assertEqual(
             document.StyleFamilies.PageStyles.Standard.FooterIsOn, True)
 
-    def delete_footer(self):
-        document = self.ui_test.get_component()
-
+    def delete_footer(self, document):
         self.assertEqual(
             document.StyleFamilies.PageStyles.Standard.FooterIsOn, True)
 
@@ -39,16 +35,16 @@ class WriterInsertPageFooter(UITestCase):
             document.StyleFamilies.PageStyles.Standard.FooterIsOn, False)
 
     def test_footer(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
-            self.insert_footer()
+            self.insert_footer(document)
 
-            self.delete_footer()
+            self.delete_footer(document)
 
     def test_tdf107427(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
-            self.insert_footer()
+            self.insert_footer(document)
 
             self.ui_test.execute_dialog_through_command(".uno:InsertTable")
 
@@ -57,14 +53,12 @@ class WriterInsertPageFooter(UITestCase):
             xOkBtn = xInsertDlg.getChild("ok")
             xOkBtn.executeAction("CLICK", tuple())
 
-            document = self.ui_test.get_component()
-
             tables = document.getTextTables()
             self.assertEqual(len(tables[0].getRows()), 2)
             self.assertEqual(len(tables[0].getColumns()), 2)
 
             self.xUITest.executeCommand(".uno:SelectAll")
 
-            self.delete_footer()
+            self.delete_footer(document)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

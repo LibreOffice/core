@@ -17,7 +17,7 @@ class tdf138556( UITestCase ):
 
     def test_stock_chart13_insert_series( self ):
         #Start LibreOffice Writer
-        with self.ui_test.create_doc_in_start_center( "writer" ):
+        with self.ui_test.create_doc_in_start_center( "writer" ) as document:
             xMainTop = self.xUITest.getTopFocusWindow()
 
             #Insert Chart
@@ -47,8 +47,7 @@ class tdf138556( UITestCase ):
             self.ui_test.close_dialog_through_button( xOKBtn )
 
             #Check Number of Sequences
-            xDocument = self.ui_test.get_component()
-            nSequences = len( xDocument.FirstDiagram.
+            nSequences = len( document.FirstDiagram.
                 CoordinateSystems[0].ChartTypes[0].DataSeries[0].DataSequences )
             self.assertEqual( nSequences, 3 )
 

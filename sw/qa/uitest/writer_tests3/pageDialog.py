@@ -27,8 +27,7 @@ class WriterPageDialog(UITestCase):
         xButton = dialog.getChild(button)
         xButton.executeAction("CLICK", tuple())
 
-    def check_default_area(self, btn):
-        document = self.ui_test.get_component()
+    def check_default_area(self, btn, document):
         if btn == 'btnnone':
             self.assertEqual(
                 document.StyleFamilies.PageStyles.Standard.BackColor, -1)
@@ -122,7 +121,7 @@ class WriterPageDialog(UITestCase):
 
     def test_area_tab(self):
 
-        with self.ui_test.create_doc_in_start_center("writer"):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
             buttons = ['btnbitmap', 'btncolor', 'btngradient', 'btnhatch', 'btnpattern']
             for index, button in enumerate(buttons):
@@ -133,7 +132,7 @@ class WriterPageDialog(UITestCase):
 
                 self.click_button(xDialog, 'ok')
 
-                self.check_default_area(button)
+                self.check_default_area(button, document)
 
                 xDialog = self.launch_dialog_and_select_tab(2)
 
@@ -141,7 +140,7 @@ class WriterPageDialog(UITestCase):
 
                 self.click_button(xDialog, 'ok')
 
-                self.check_default_area('btnnone')
+                self.check_default_area('btnnone', document)
 
     def test_paper_format(self):
 
@@ -151,7 +150,7 @@ class WriterPageDialog(UITestCase):
             "C5 Envelope", "C4 Envelope", "#6¾ Envelope", "#7¾ (Monarch) Envelope",
             "#9 Envelope", "#10 Envelope", "#11 Envelope", "#12 Envelope", "Japanese Postcard"]
 
-        with self.ui_test.create_doc_in_start_center("writer"):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
             for i in range(30):
                 with self.subTest(i=i):
@@ -167,9 +166,8 @@ class WriterPageDialog(UITestCase):
 
     def test_orientation(self):
 
-        with self.ui_test.create_doc_in_start_center("writer"):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
-            document = self.ui_test.get_component()
 
             self.assertEqual(
                 document.StyleFamilies.PageStyles.Standard.IsLandscape, False)
@@ -197,9 +195,8 @@ class WriterPageDialog(UITestCase):
         lTextDirection = ['Left-to-right (horizontal)', 'Right-to-left (horizontal)',
             'Right-to-left (vertical)', 'Left-to-right (vertical)']
 
-        with self.ui_test.create_doc_in_start_center("writer"):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
-            document = self.ui_test.get_component()
 
             for i in range(4):
                 with self.subTest(i=i):
@@ -217,7 +214,7 @@ class WriterPageDialog(UITestCase):
                         document.StyleFamilies.PageStyles.Standard.WritingMode, i)
 
     def test_cancel_button_page_dialog(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
             self.ui_test.execute_dialog_through_command(".uno:PageDialog")
             xDialog = self.xUITest.getTopFocusWindow()
