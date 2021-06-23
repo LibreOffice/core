@@ -18,7 +18,6 @@ class tdf99069(UITestCase):
     with self.ui_test.load_file(get_url_for_data_file("tdf99069.ods")) as calc_doc:
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
         #(1) Download and open example.ods attached to tdf#97266  with cell B1 active.
         #(2) In tool bar, click the chart icon.  Program presents Chart Wizard.
         self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart")
@@ -61,6 +60,6 @@ class tdf99069(UITestCase):
 
             #verify - we didn't crash
         gridwin.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))
-        self.assertEqual(get_cell_by_position(document, 0, 0, 0).getValue(), 0.529084)
+        self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 0).getValue(), 0.529084)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -18,12 +18,11 @@ class tdf99386(UITestCase):
 
             xCalcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             xGridWindow.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B1"})) #select cells
             self.xUITest.executeCommand(".uno:ToggleMergeCells") # merge cells
             self.xUITest.executeCommand(".uno:Undo")
 
-            self.assertEqual(get_cell_by_position(document, 0, 1, 1).getString(), "This")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 1).getString(), "This")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

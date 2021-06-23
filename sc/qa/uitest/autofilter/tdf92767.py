@@ -15,7 +15,6 @@ class tdf92767(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf92767.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             for i in range(0,25):
                 self.assertFalse(is_row_hidden(calc_doc, i))

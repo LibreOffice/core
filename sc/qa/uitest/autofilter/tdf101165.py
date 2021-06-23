@@ -16,13 +16,12 @@ class tdf101165(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf101165.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "0"}))
             xFloatWindow = self.xUITest.getFloatWindow()
             xAll = xFloatWindow.getChild("toggle_all")
             xAll.executeAction("CLICK", tuple())
 
-            self.assertEqual(get_cell_by_position(document, 1, 0, 1).getValue(), 6494)
+            self.assertEqual(get_cell_by_position(calc_doc, 1, 0, 1).getValue(), 6494)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

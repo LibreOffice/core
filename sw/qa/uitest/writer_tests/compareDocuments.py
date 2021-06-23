@@ -18,7 +18,6 @@ class compareDocuments(UITestCase):
 
         with self.ui_test.load_file(get_url_for_data_file("tdf130960.odt")) as writer_doc:
 
-            document = self.ui_test.get_component()
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             self.ui_test.execute_dialog_through_command(".uno:CompareDocuments")
@@ -51,7 +50,6 @@ class compareDocuments(UITestCase):
 
         with self.ui_test.load_file(get_url_for_data_file("tdf137855.odt")) as writer_doc:
 
-            document = self.ui_test.get_component()
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             self.ui_test.execute_dialog_through_command(".uno:CompareDocuments")

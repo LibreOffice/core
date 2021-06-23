@@ -151,10 +151,9 @@ class trackedchanges(UITestCase):
         self.ui_test.close_doc()
 
     def test_list_of_changes(self):
-        with self.ui_test.load_file(get_url_for_data_file("trackedChanges.odt")):
+        with self.ui_test.load_file(get_url_for_data_file("trackedChanges.odt")) as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
-            document = self.ui_test.get_component()
 
             listText = [
                     "Unknown Author\t01/24/2020 16:19:32\t",
@@ -219,10 +218,9 @@ class trackedchanges(UITestCase):
             xcloseBtn.executeAction("CLICK", tuple())
 
     def test_tdf135018(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf135018.odt")):
+        with self.ui_test.load_file(get_url_for_data_file("tdf135018.odt")) as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
-            document = self.ui_test.get_component()
 
             self.assertEqual(5, document.CurrentController.PageCount)
 

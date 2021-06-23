@@ -13,9 +13,8 @@ class autofilter(UITestCase):
 
    def test_tdf115046(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf115046.ods")) as calc_doc:
-            document = self.ui_test.get_component()
             #autofilter exist
-            self.assertEqual(document.getPropertyValue("UnnamedDatabaseRanges").getByTable(0).AutoFilter, True)
+            self.assertEqual(calc_doc.getPropertyValue("UnnamedDatabaseRanges").getByTable(0).AutoFilter, True)
 
             self.ui_test.execute_dialog_through_command(".uno:DataSort")
             xDialog = self.xUITest.getTopFocusWindow()
@@ -23,7 +22,7 @@ class autofilter(UITestCase):
             xcancBtn = xDialog.getChild("cancel")
             self.ui_test.close_dialog_through_button(xcancBtn)
             #autofilter still exist
-            self.assertEqual(document.getPropertyValue("UnnamedDatabaseRanges").getByTable(0).AutoFilter, True)
+            self.assertEqual(calc_doc.getPropertyValue("UnnamedDatabaseRanges").getByTable(0).AutoFilter, True)
 
    def test_tdf94055(self):
         self.ui_test.create_doc_in_start_center("calc")
@@ -58,11 +57,10 @@ class autofilter(UITestCase):
         #tdf77479.ods
    def test_tdf77479(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf77479.ods")) as calc_doc:
-            document = self.ui_test.get_component()
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = calcDoc.getChild("grid_window")
             #autofilter exist
-            self.assertEqual(document.getPropertyValue("UnnamedDatabaseRanges").getByTable(0).AutoFilter, True)
+            self.assertEqual(calc_doc.getPropertyValue("UnnamedDatabaseRanges").getByTable(0).AutoFilter, True)
 
             xGridWindow.executeAction("SELECT", mkPropertyValues({"RANGE": "A2:E6"}))
 
@@ -71,12 +69,11 @@ class autofilter(UITestCase):
             xOKBtn = xDialog.getChild("ok")
             self.ui_test.close_dialog_through_button(xOKBtn)
             #autofilter still exist
-            self.assertEqual(document.getPropertyValue("UnnamedDatabaseRanges").getByTable(0).AutoFilter, True)
+            self.assertEqual(calc_doc.getPropertyValue("UnnamedDatabaseRanges").getByTable(0).AutoFilter, True)
 
         #112656
    def test_tdf112656(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf112656.ods")) as calc_doc:
-            document = self.ui_test.get_component()
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = calcDoc.getChild("grid_window")
 
@@ -91,7 +88,6 @@ class autofilter(UITestCase):
         #tdf81124
    def test_tdf81124(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf81124.ods")) as calc_doc:
-            document = self.ui_test.get_component()
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = calcDoc.getChild("grid_window")
 
@@ -114,7 +110,6 @@ class autofilter(UITestCase):
 #tdf73565
    def test_tdf73565(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf73565.ods")) as calc_doc:
-            document = self.ui_test.get_component()
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = calcDoc.getChild("grid_window")
 
@@ -130,7 +125,6 @@ class autofilter(UITestCase):
         #tdf65505
    def test_tdf65505(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf81124.ods")) as calc_doc:
-            document = self.ui_test.get_component()
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = calcDoc.getChild("grid_window")
 
@@ -146,7 +140,6 @@ class autofilter(UITestCase):
 #tdf74857
    def test_tdf74857(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf74857.ods")) as calc_doc:
-            document = self.ui_test.get_component()
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = calcDoc.getChild("grid_window")
 
@@ -158,7 +151,6 @@ class autofilter(UITestCase):
         #tdf35294
    def test_tdf35294(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf35294.ods")) as calc_doc:
-            document = self.ui_test.get_component()
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = calcDoc.getChild("grid_window")
 
@@ -187,7 +179,6 @@ class autofilter(UITestCase):
         #tdf55712
    def test_tdf55712(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf55712.ods")) as calc_doc:
-            document = self.ui_test.get_component()
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = calcDoc.getChild("grid_window")
 

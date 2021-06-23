@@ -12,7 +12,6 @@ from uitest.uihelper.common import get_url_for_data_file
 class tdf120731(UITestCase):
    def test_tdf120731_crash_open_char_dialog(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf120731.odt")) as writer_doc:
-            document = self.ui_test.get_component()
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             self.xUITest.executeCommand(".uno:SelectAll")
@@ -20,5 +19,5 @@ class tdf120731(UITestCase):
             xDialog = self.xUITest.getTopFocusWindow()
             xOK = xDialog.getChild("ok")
             xOK.executeAction("CLICK", tuple())
-            self.assertEqual(document.Text.String[0:5], "Lorem")
+            self.assertEqual(writer_doc.Text.String[0:5], "Lorem")
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

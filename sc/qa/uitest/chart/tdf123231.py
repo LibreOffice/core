@@ -18,7 +18,6 @@ class tdf123231(UITestCase):
     with self.ui_test.load_file(get_url_for_data_file("tdf93506.ods")) as calc_doc:
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
 
         #Change regression Type to Power
         gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))

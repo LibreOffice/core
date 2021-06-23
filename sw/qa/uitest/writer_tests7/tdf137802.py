@@ -13,11 +13,10 @@ class tdf137802(UITestCase):
 
     def test_tdf137802(self):
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf137802.odt")):
+        with self.ui_test.load_file(get_url_for_data_file("tdf137802.odt")) as document:
 
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
-            document = self.ui_test.get_component()
 
             self.assertEqual(document.DrawPage.getCount(), 2)
             self.assertEqual(AT_PARAGRAPH, document.DrawPage.getByIndex(0).AnchorType)

@@ -13,7 +13,6 @@ from uitest.uihelper.common import select_pos
 class tdf123547(UITestCase):
    def test_tdf123547_numbering_dialog_crash(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf123547.docx")) as writer_doc:
-            document = self.ui_test.get_component()
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             self.ui_test.execute_dialog_through_command(".uno:ChapterNumberingDialog")
@@ -23,6 +22,6 @@ class tdf123547(UITestCase):
             xokbtn = xDialog.getChild("ok")
             self.ui_test.close_dialog_through_button(xokbtn)
             #verify we didn't crash
-            self.assertEqual(document.CurrentController.PageCount, 1)
+            self.assertEqual(writer_doc.CurrentController.PageCount, 1)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

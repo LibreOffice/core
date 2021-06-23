@@ -18,7 +18,6 @@ class standardFilter(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("standardFilter.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C8"}))
 
             self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
@@ -67,7 +66,6 @@ class standardFilter(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("standardFilter.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C8"}))
 
             self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
@@ -89,21 +87,20 @@ class standardFilter(UITestCase):
             xOKBtn = xDialog.getChild("ok")
             self.ui_test.close_dialog_through_button(xOKBtn)
             #verify
-            self.assertEqual(get_cell_by_position(document, 0, 5, 0).getString(), "a")
-            self.assertEqual(get_cell_by_position(document, 0, 6, 0).getString(), "b")
-            self.assertEqual(get_cell_by_position(document, 0, 7, 0).getString(), "c")
-            self.assertEqual(get_cell_by_position(document, 0, 5, 1).getValue(), 1)
-            self.assertEqual(get_cell_by_position(document, 0, 6, 1).getValue(), 2)
-            self.assertEqual(get_cell_by_position(document, 0, 7, 1).getValue(), 3)
-            self.assertEqual(get_cell_by_position(document, 0, 5, 2).getValue(), 2)
-            self.assertEqual(get_cell_by_position(document, 0, 6, 2).getValue(), 3)
-            self.assertEqual(get_cell_by_position(document, 0, 7, 2).getValue(), 4)
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 5, 0).getString(), "a")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 6, 0).getString(), "b")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 7, 0).getString(), "c")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 5, 1).getValue(), 1)
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 6, 1).getValue(), 2)
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 7, 1).getValue(), 3)
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 5, 2).getValue(), 2)
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 6, 2).getValue(), 3)
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 7, 2).getValue(), 4)
 
     def test_standard_filter_copy_result_next_sheet(self):
         with self.ui_test.load_file(get_url_for_data_file("standardFilter.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C8"}))
 
             self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
@@ -125,15 +122,15 @@ class standardFilter(UITestCase):
             xOKBtn = xDialog.getChild("ok")
             self.ui_test.close_dialog_through_button(xOKBtn)
             #verify
-            self.assertEqual(get_cell_by_position(document, 1, 5, 0).getString(), "a")
-            self.assertEqual(get_cell_by_position(document, 1, 6, 0).getString(), "b")
-            self.assertEqual(get_cell_by_position(document, 1, 7, 0).getString(), "c")
-            self.assertEqual(get_cell_by_position(document, 1, 5, 1).getValue(), 1)
-            self.assertEqual(get_cell_by_position(document, 1, 6, 1).getValue(), 2)
-            self.assertEqual(get_cell_by_position(document, 1, 7, 1).getValue(), 3)
-            self.assertEqual(get_cell_by_position(document, 1, 5, 2).getValue(), 2)
-            self.assertEqual(get_cell_by_position(document, 1, 6, 2).getValue(), 3)
-            self.assertEqual(get_cell_by_position(document, 1, 7, 2).getValue(), 4)
+            self.assertEqual(get_cell_by_position(calc_doc, 1, 5, 0).getString(), "a")
+            self.assertEqual(get_cell_by_position(calc_doc, 1, 6, 0).getString(), "b")
+            self.assertEqual(get_cell_by_position(calc_doc, 1, 7, 0).getString(), "c")
+            self.assertEqual(get_cell_by_position(calc_doc, 1, 5, 1).getValue(), 1)
+            self.assertEqual(get_cell_by_position(calc_doc, 1, 6, 1).getValue(), 2)
+            self.assertEqual(get_cell_by_position(calc_doc, 1, 7, 1).getValue(), 3)
+            self.assertEqual(get_cell_by_position(calc_doc, 1, 5, 2).getValue(), 2)
+            self.assertEqual(get_cell_by_position(calc_doc, 1, 6, 2).getValue(), 3)
+            self.assertEqual(get_cell_by_position(calc_doc, 1, 7, 2).getValue(), 4)
 
     def test_standard_filter_case_sensitive(self):
         calc_doc = self.ui_test.create_doc_in_start_center("calc")

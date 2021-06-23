@@ -13,7 +13,6 @@ from uitest.uihelper.common import get_url_for_data_file
 class tableToText(UITestCase):
     def test_table_to_text(self):
         with self.ui_test.load_file(get_url_for_data_file("tableToText.odt")) as writer_doc:
-            document = self.ui_test.get_component()
             xWriterDoc = self.xUITest.getTopFocusWindow()
             #dialog Table to text - Tabs; verify
             self.ui_test.execute_dialog_through_command(".uno:ConvertTableToText")
@@ -23,11 +22,11 @@ class tableToText(UITestCase):
             xOKBtn = xDialog.getChild("ok")
             self.ui_test.close_dialog_through_button(xOKBtn)
             #verify
-            self.assertEqual(document.Text.String[0:3], "a\ta")
-            self.assertEqual(document.TextTables.getCount(), 0)
+            self.assertEqual(writer_doc.Text.String[0:3], "a\ta")
+            self.assertEqual(writer_doc.TextTables.getCount(), 0)
             #undo
             self.xUITest.executeCommand(".uno:Undo")
-            self.assertEqual(document.TextTables.getCount(), 1)
+            self.assertEqual(writer_doc.TextTables.getCount(), 1)
 
             #dialog Table to text - Paragraph; verify
             self.ui_test.execute_dialog_through_command(".uno:ConvertTableToText")
@@ -37,11 +36,11 @@ class tableToText(UITestCase):
             xOKBtn = xDialog.getChild("ok")
             self.ui_test.close_dialog_through_button(xOKBtn)
             #verify
-            self.assertEqual(document.Text.String.replace('\r\n', '\n')[0:4], "a\na\n")
-            self.assertEqual(document.TextTables.getCount(), 0)
+            self.assertEqual(writer_doc.Text.String.replace('\r\n', '\n')[0:4], "a\na\n")
+            self.assertEqual(writer_doc.TextTables.getCount(), 0)
             #undo
             self.xUITest.executeCommand(".uno:Undo")
-            self.assertEqual(document.TextTables.getCount(), 1)
+            self.assertEqual(writer_doc.TextTables.getCount(), 1)
 
             #dialog Table to text - Semicolons; verify
             self.ui_test.execute_dialog_through_command(".uno:ConvertTableToText")
@@ -51,11 +50,11 @@ class tableToText(UITestCase):
             xOKBtn = xDialog.getChild("ok")
             self.ui_test.close_dialog_through_button(xOKBtn)
             #verify
-            self.assertEqual(document.Text.String.replace('\r\n', '\n')[0:6], "a;a\n;\n")
-            self.assertEqual(document.TextTables.getCount(), 0)
+            self.assertEqual(writer_doc.Text.String.replace('\r\n', '\n')[0:6], "a;a\n;\n")
+            self.assertEqual(writer_doc.TextTables.getCount(), 0)
             #undo
             self.xUITest.executeCommand(".uno:Undo")
-            self.assertEqual(document.TextTables.getCount(), 1)
+            self.assertEqual(writer_doc.TextTables.getCount(), 1)
 
             #dialog Table to text - other; verify
             self.ui_test.execute_dialog_through_command(".uno:ConvertTableToText")
@@ -69,10 +68,10 @@ class tableToText(UITestCase):
             xOKBtn = xDialog.getChild("ok")
             self.ui_test.close_dialog_through_button(xOKBtn)
             #verify
-            self.assertEqual(document.Text.String.replace('\r\n', '\n')[0:6], "a:a\n:\n")
-            self.assertEqual(document.TextTables.getCount(), 0)
+            self.assertEqual(writer_doc.Text.String.replace('\r\n', '\n')[0:6], "a:a\n:\n")
+            self.assertEqual(writer_doc.TextTables.getCount(), 0)
             #undo
             self.xUITest.executeCommand(".uno:Undo")
-            self.assertEqual(document.TextTables.getCount(), 1)
+            self.assertEqual(writer_doc.TextTables.getCount(), 1)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

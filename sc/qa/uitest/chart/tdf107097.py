@@ -18,13 +18,12 @@ class tdf107097(UITestCase):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
 
-        document = self.ui_test.get_component()
 
         xFirstMatrix = []
         for row in range(6, 18):
             xRow = []
             for column in range(3, 7):
-                xRow.append(get_cell_by_position(document, 1, column, row).getValue())
+                xRow.append(get_cell_by_position(calc_doc, 1, column, row).getValue())
             xFirstMatrix.append(xRow)
 
         gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))

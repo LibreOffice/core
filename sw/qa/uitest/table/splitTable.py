@@ -12,7 +12,6 @@ from uitest.uihelper.common import get_url_for_data_file
 class splitTable(UITestCase):
     def test_split_table(self):
         with self.ui_test.load_file(get_url_for_data_file("splitTable.odt")) as writer_doc:
-            document = self.ui_test.get_component()
             xWriterDoc = self.xUITest.getTopFocusWindow()
             #go to row 2
             self.xUITest.executeCommand(".uno:GoDown")
@@ -25,17 +24,16 @@ class splitTable(UITestCase):
             copyheading.executeAction("CLICK", tuple())
             xOKBtn = xDialog.getChild("ok")
             self.ui_test.close_dialog_through_button(xOKBtn)
-            self.assertEqual(document.TextTables.getCount(), 2)
-            tables = document.getTextTables()
+            self.assertEqual(writer_doc.TextTables.getCount(), 2)
+            tables = writer_doc.getTextTables()
             self.assertEqual(len(tables[0].getRows()), 2)
             self.assertEqual(len(tables[1].getRows()), 5)
             #undo -> verify 1 tables
             self.xUITest.executeCommand(".uno:Undo")
-            self.assertEqual(document.TextTables.getCount(), 1)
+            self.assertEqual(writer_doc.TextTables.getCount(), 1)
 
         #dialog Split table, check Custom heading, OK -> verify 2 tables, 1st has 2 rows, second has 4 rows
         with self.ui_test.load_file(get_url_for_data_file("splitTable.odt")) as writer_doc:
-            document = self.ui_test.get_component()
             xWriterDoc = self.xUITest.getTopFocusWindow()
             #go to row 2
             self.xUITest.executeCommand(".uno:GoDown")
@@ -47,17 +45,16 @@ class splitTable(UITestCase):
             customheading.executeAction("CLICK", tuple())
             xOKBtn = xDialog.getChild("ok")
             self.ui_test.close_dialog_through_button(xOKBtn)
-            self.assertEqual(document.TextTables.getCount(), 2)
-            tables = document.getTextTables()
+            self.assertEqual(writer_doc.TextTables.getCount(), 2)
+            tables = writer_doc.getTextTables()
             self.assertEqual(len(tables[0].getRows()), 2)
             self.assertEqual(len(tables[1].getRows()), 4)
             #undo -> verify 1 tables
             self.xUITest.executeCommand(".uno:Undo")
-            self.assertEqual(document.TextTables.getCount(), 1)
+            self.assertEqual(writer_doc.TextTables.getCount(), 1)
 
         #dialog Split table, check No heading, OK -> verify 2 tables, 1st has 2 rows, second has 4 rows
         with self.ui_test.load_file(get_url_for_data_file("splitTable.odt")) as writer_doc:
-            document = self.ui_test.get_component()
             xWriterDoc = self.xUITest.getTopFocusWindow()
             #go to row 2
             self.xUITest.executeCommand(".uno:GoDown")
@@ -69,12 +66,12 @@ class splitTable(UITestCase):
             noheading.executeAction("CLICK", tuple())
             xOKBtn = xDialog.getChild("ok")
             self.ui_test.close_dialog_through_button(xOKBtn)
-            self.assertEqual(document.TextTables.getCount(), 2)
-            tables = document.getTextTables()
+            self.assertEqual(writer_doc.TextTables.getCount(), 2)
+            tables = writer_doc.getTextTables()
             self.assertEqual(len(tables[0].getRows()), 2)
             self.assertEqual(len(tables[1].getRows()), 4)
             #undo -> verify 1 tables
             self.xUITest.executeCommand(".uno:Undo")
-            self.assertEqual(document.TextTables.getCount(), 1)
+            self.assertEqual(writer_doc.TextTables.getCount(), 1)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

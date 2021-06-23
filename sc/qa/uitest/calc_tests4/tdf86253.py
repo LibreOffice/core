@@ -14,7 +14,6 @@ class tdf86253(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf86253.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             #* Copy A1, then paste special only "formatting" to C1:C17;
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))

@@ -13,9 +13,7 @@ class tdf134439(UITestCase):
 
     def test_tdf134439(self):
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf134439.odt")):
-
-            document = self.ui_test.get_component()
+        with self.ui_test.load_file(get_url_for_data_file("tdf134439.odt")) as document:
 
             self.assertEqual(document.CurrentController.PageCount, 3)
 

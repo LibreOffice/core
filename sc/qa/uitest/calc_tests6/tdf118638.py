@@ -18,7 +18,6 @@ class Subtotals(UITestCase):
     def test_tdf118638_subtotal_format(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf118638.ods")) as calc_doc:
             XcalcDoc = self.xUITest.getTopFocusWindow()
-            document = self.ui_test.get_component()
             gridwin = XcalcDoc.getChild("grid_window")
             # Open the test file
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B15"}))
@@ -44,13 +43,13 @@ class Subtotals(UITestCase):
             self.ui_test.close_dialog_through_button(xOKBtn)
 
             #verify
-            self.assertEqual(get_cell_by_position(document, 0, 0, 15).getString(), "5408 Sum")
-            self.assertEqual(get_cell_by_position(document, 0, 0, 16).getString(), "Grand Sum")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 15).getString(), "5408 Sum")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 16).getString(), "Grand Sum")
 
-            self.assertEqual(round(get_cell_by_position(document, 0, 1, 15).getValue(),12), 238.89)
-            self.assertEqual(round(get_cell_by_position(document, 0, 1, 16).getValue(),12), 238.89)
+            self.assertEqual(round(get_cell_by_position(calc_doc, 0, 1, 15).getValue(),12), 238.89)
+            self.assertEqual(round(get_cell_by_position(calc_doc, 0, 1, 16).getValue(),12), 238.89)
 
-            self.assertEqual(get_cell_by_position(document, 0, 1, 15).getString(), "$238.89")
-            self.assertEqual(get_cell_by_position(document, 0, 1, 16).getString(), "$238.89")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 15).getString(), "$238.89")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 16).getString(), "$238.89")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -19,7 +19,6 @@ class tdf123520(UITestCase):
     with self.ui_test.load_file(get_url_for_data_file("tdf123520.ods")) as calc_doc:
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
 
         gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
         gridwin.executeAction("ACTIVATE", tuple())

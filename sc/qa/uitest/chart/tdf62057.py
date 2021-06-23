@@ -16,18 +16,17 @@ class tdf62057(UITestCase):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
 
-        document = self.ui_test.get_component()
 
         xDataMatrix = []
         for column in range(1, 3):
             xColumn = []
             for row in range(0, 6):
-                xColumn.append(round(get_cell_by_position(document, 0, column, row).getValue(), 5))
+                xColumn.append(round(get_cell_by_position(calc_doc, 0, column, row).getValue(), 5))
             xDataMatrix.append(xColumn)
 
         xRowDescriptions = []
         for row in range(0, 6):
-            xRowDescriptions.append(get_cell_by_position(document, 0, 0, row).getString())
+            xRowDescriptions.append(get_cell_by_position(calc_doc, 0, 0, row).getString())
 
         gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
 

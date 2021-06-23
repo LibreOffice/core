@@ -17,7 +17,6 @@ class tdf118206(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf118206.xlsx")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
             self.xUITest.executeCommand(".uno:SelectColumn")
             self.xUITest.executeCommand(".uno:Copy")
@@ -26,17 +25,17 @@ class tdf118206(UITestCase):
             self.xUITest.executeCommand(".uno:Paste")
 
             #verify
-            self.assertEqual(get_cell_by_position(document, 0, 1, 0).getString(), "On Back Order")
-            self.assertEqual(get_cell_by_position(document, 0, 1, 1).getValue(), 0)
-            self.assertEqual(get_cell_by_position(document, 0, 1, 7).getValue(), 1)
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 0).getString(), "On Back Order")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 1).getValue(), 0)
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 7).getValue(), 1)
 
             #Undo
             self.xUITest.executeCommand(".uno:Undo")
-            self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "On Back Order")
-            self.assertEqual(get_cell_by_position(document, 0, 0, 1).getValue(), 0)
-            self.assertEqual(get_cell_by_position(document, 0, 0, 7).getValue(), 1)
-            self.assertEqual(get_cell_by_position(document, 0, 1, 0).getString(), "")
-            self.assertEqual(get_cell_by_position(document, 0, 1, 1).getString(), "")
-            self.assertEqual(get_cell_by_position(document, 0, 1, 7).getString(), "")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 0).getString(), "On Back Order")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 1).getValue(), 0)
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 7).getValue(), 1)
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 0).getString(), "")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 1).getString(), "")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 7).getString(), "")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

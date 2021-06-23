@@ -16,7 +16,6 @@ class tdf89958(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf89958.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #select A1-> Column .uno:SelectColumn
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
             self.xUITest.executeCommand(".uno:SelectColumn")

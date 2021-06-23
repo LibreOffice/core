@@ -19,11 +19,10 @@ class chartWall(UITestCase):
     with self.ui_test.load_file(get_url_for_data_file("tdf122398.ods")) as calc_doc:
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
 
         change_measurement_unit(self, "Centimeter")
 
-        xWall = document.Sheets[0].Charts[0].getEmbeddedObject().getFirstDiagram().Wall
+        xWall = calc_doc.Sheets[0].Charts[0].getEmbeddedObject().getFirstDiagram().Wall
         self.assertEqual(xWall.LineWidth, 0)
         self.assertEqual(xWall.LineTransparence, 0)
         self.assertEqual(hex(xWall.FillColor), '0xe6e6e6')
