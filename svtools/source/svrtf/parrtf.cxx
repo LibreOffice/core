@@ -20,6 +20,8 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
+#include <comphelper/scopeguard.hxx>
+
 #include <rtl/character.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/tencinfo.h>
@@ -583,9 +585,12 @@ SvParserState SvRTFParser::CallParser()
     if( '{' == GetNextToken() && RTF_RTF == GetNextToken() )
     {
         AddFirstRef();
+        // call ReleaseRef at end of this scope, even in the face of exceptions
+        comphelper::ScopeGuard g([this] {
+            if( SvParserState::Pending != eState )
+                ReleaseRef();       // now parser is not needed anymore
+        });
         Continue( 0 );
-        if( SvParserState::Pending != eState )
-            ReleaseRef();       // now parser is not needed anymore
     }
     else
         eState = SvParserState::Error;
