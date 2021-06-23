@@ -872,7 +872,7 @@ SwNumRule& SwNumRule::CopyNumRule( SwDoc& rDoc, const SwNumRule& rNumRule )
     {
         Set( n, rNumRule.maFormats[ n ].get() );
         if( maFormats[ n ] && maFormats[ n ]->GetCharFormat() &&
-            !rDoc.GetCharFormats()->IsAlive(maFormats[n]->GetCharFormat()))
+            !rDoc.GetCharFormats()->ContainsFormat(maFormats[n]->GetCharFormat()))
         {
             // If we copy across different Documents, then copy the
             // corresponding CharFormat into the new Document.

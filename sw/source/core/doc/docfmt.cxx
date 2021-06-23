@@ -845,7 +845,7 @@ SwCharFormat *SwDoc::MakeCharFormat( const OUString &rFormatName,
                                bool bBroadcast )
 {
     SwCharFormat *pFormat = new SwCharFormat( GetAttrPool(), rFormatName, pDerivedFrom );
-    mpCharFormatTable->push_back( pFormat );
+    mpCharFormatTable->insert( pFormat );
     pFormat->SetAuto(false);
     getIDocumentState().SetModified();
 
@@ -1942,7 +1942,11 @@ void SwDoc::RenameFormat(SwFormat & rFormat, const OUString & sNewName,
         }
     }
 
-    rFormat.SetName(sNewName);
+    // name change means the o3tl::sorted_array is not property sorted
+    if (rFormat.Which() == RES_CHRFMT)
+        mpCharFormatTable->SetFormatNameAndReindex(static_cast<SwCharFormat*>(&rFormat), sNewName);
+    else
+        rFormat.SetName(sNewName);
 
     if (bBroadcast)
         BroadcastStyleOperation(sNewName, eFamily, SfxHintId::StyleSheetModified);
