@@ -16,7 +16,6 @@ class tdf117276(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf117276.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             # 1. open attached file
             # 2. open filter of column B (Fabrikat) and deselect (Citroen, Fiat, Ford, Opel, Peugeot, Renault, Tesla)
             gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "0"}))

@@ -19,7 +19,6 @@ class tdf54018(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf54018.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             #click top left columns / rows heading field to select all cells
             self.xUITest.executeCommand(".uno:SelectAll")
@@ -36,12 +35,12 @@ class tdf54018(UITestCase):
             self.ui_test.close_dialog_through_button(xOKBtn)
             #Bug: When progress bar reaches 40% LibO Stops responding
             #Verify
-            self.assertEqual(get_cell_by_position(document, 0, 1, 0).getString(), "7")
-            self.assertEqual(get_cell_by_position(document, 0, 1, 1).getString(), "6")
-            self.assertEqual(get_cell_by_position(document, 0, 1, 2).getString(), "5")
-            self.assertEqual(get_cell_by_position(document, 0, 1, 3).getString(), "4")
-            self.assertEqual(get_cell_by_position(document, 0, 1, 4).getString(), "3")
-            self.assertEqual(get_cell_by_position(document, 0, 1, 5).getString(), "2")
-            self.assertEqual(get_cell_by_position(document, 0, 1, 6).getString(), "1")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 0).getString(), "7")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 1).getString(), "6")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 2).getString(), "5")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 3).getString(), "4")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 4).getString(), "3")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 5).getString(), "2")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 6).getString(), "1")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

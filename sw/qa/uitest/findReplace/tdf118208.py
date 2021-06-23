@@ -15,7 +15,6 @@ class tdf118208(UITestCase):
 
     def test_tdf118208_search_dialog_format_crash(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf118208.odt")) as writer_doc:
-            document = self.ui_test.get_component()
             xWriterDoc = self.xUITest.getTopFocusWindow()
             # 1. Open the attached file.
             # 2. Press ctrl-H to show the search and replace dialog.
@@ -49,7 +48,7 @@ class tdf118208(UITestCase):
                 pass
 
             #verify
-            self.assertEqual(document.Text.String[0:14], "Aaaaaaaaaaaaaa")
+            self.assertEqual(writer_doc.Text.String[0:14], "Aaaaaaaaaaaaaa")
             xcloseBtn = xDialog.getChild("close")
             self.ui_test.close_dialog_through_button(xcloseBtn)
 

@@ -39,7 +39,6 @@ class textToTable(UITestCase):
 
     def test_text_to_table_header(self):
         with self.ui_test.load_file(get_url_for_data_file("textToTable.odt")) as writer_doc:
-            document = self.ui_test.get_component()
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             #open file; select all text ; dialog Text to table - other ":"; verify
@@ -57,13 +56,13 @@ class textToTable(UITestCase):
             xOKBtn = xDialog.getChild("ok")
             self.ui_test.close_dialog_through_button(xOKBtn)
             #verify
-            self.assertEqual(document.TextTables.getCount(), 1)
-            tables = document.getTextTables()
+            self.assertEqual(writer_doc.TextTables.getCount(), 1)
+            tables = writer_doc.getTextTables()
             self.assertEqual(len(tables[0].getRows()), 4)
             self.assertEqual(len(tables[0].getColumns()), 3)
             #undo
             self.xUITest.executeCommand(".uno:Undo")
-            self.assertEqual(document.TextTables.getCount(), 0)
-            self.assertEqual(document.Text.String[0:5], "A:B:C")
+            self.assertEqual(writer_doc.TextTables.getCount(), 0)
+            self.assertEqual(writer_doc.Text.String[0:5], "A:B:C")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

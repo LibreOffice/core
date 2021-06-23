@@ -14,7 +14,6 @@ class dropDownFormFieldDialog(UITestCase):
 
         # open a file with an empty form field
         with self.ui_test.load_file(get_url_for_data_file("empty_drop_down_form_field.odt")) as writer_doc:
-            document = self.ui_test.get_component()
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             # open the dialog (cursor is at the field)
@@ -70,7 +69,6 @@ class dropDownFormFieldDialog(UITestCase):
 
         # open a file with an empty form field
         with self.ui_test.load_file(get_url_for_data_file("empty_drop_down_form_field.odt")) as writer_doc:
-            document = self.ui_test.get_component()
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             # open the dialog (cursor is at the field)
@@ -147,7 +145,6 @@ class dropDownFormFieldDialog(UITestCase):
 
         # open a file with an empty form field
         with self.ui_test.load_file(get_url_for_data_file("empty_drop_down_form_field.odt")) as writer_doc:
-            document = self.ui_test.get_component()
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             # open the dialog (cursor is at the field)
@@ -237,7 +234,6 @@ class dropDownFormFieldDialog(UITestCase):
         for file in files:
             # open a file with a drop-down for field with items and selection
             with self.ui_test.load_file(get_url_for_data_file(file)) as writer_doc:
-                document = self.ui_test.get_component()
                 xWriterDoc = self.xUITest.getTopFocusWindow()
 
                 # open the dialog (cursor is at the field)

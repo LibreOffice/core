@@ -16,11 +16,10 @@ class tdf133630(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("chartArea.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             change_measurement_unit(self, "Centimeter")
 
-            xCS = document.Sheets[0].Charts[0].getEmbeddedObject().getFirstDiagram().CoordinateSystems[0]
+            xCS = calc_doc.Sheets[0].Charts[0].getEmbeddedObject().getFirstDiagram().CoordinateSystems[0]
             self.assertEqual(0, xCS.getAxisByDimension(0, 0).LineWidth)
             self.assertEqual(80, xCS.ChartTypes[0].DataSeries[0].LineWidth)
 

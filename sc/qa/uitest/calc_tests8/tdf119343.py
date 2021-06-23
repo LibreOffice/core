@@ -21,15 +21,14 @@ class tdf119343(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf119343.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "M295"}))
             self.xUITest.executeCommand(".uno:Copy")
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))
             self.xUITest.executeCommand(".uno:Paste")
             #verify
-            self.assertEqual(get_cell_by_position(document, 0, 12, 295).getString(), "Q11005355")
-            self.assertEqual(get_cell_by_position(document, 0, 12, 294).getString(), "Q1099565")
-            self.assertEqual(get_cell_by_position(document, 0, 12, 293).getString(), "Q108420")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 12, 295).getString(), "Q11005355")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 12, 294).getString(), "Q1099565")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 12, 293).getString(), "Q108420")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
