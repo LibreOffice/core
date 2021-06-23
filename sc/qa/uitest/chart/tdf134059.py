@@ -21,20 +21,17 @@ class Tdf134059(UITestCase):
 
     xPage = xChartMain.getChild("CID/Page=")
 
-    self.ui_test.execute_dialog_through_action(xPage, "COMMAND", mkPropertyValues({"COMMAND": "DataRanges"}))
-    xDialog = self.xUITest.getTopFocusWindow()
+    with self.ui_test.execute_dialog_through_action(xPage, "COMMAND", mkPropertyValues({"COMMAND": "DataRanges"})) as xDialog:
 
-    xTabs = xDialog.getChild("tabcontrol")
-    select_pos(xTabs, "1")
+        xTabs = xDialog.getChild("tabcontrol")
+        select_pos(xTabs, "1")
 
-    xSeries = xDialog.getChild("LB_SERIES")
-    self.assertEqual(3, len(xSeries.getChildren()))
-    self.assertEqual("Col. 1", get_state_as_dict(xSeries.getChild('0'))['Text'])
-    self.assertEqual("Col. 2", get_state_as_dict(xSeries.getChild('1'))['Text'])
-    self.assertEqual("Col. 3", get_state_as_dict(xSeries.getChild('2'))['Text'])
+        xSeries = xDialog.getChild("LB_SERIES")
+        self.assertEqual(3, len(xSeries.getChildren()))
+        self.assertEqual("Col. 1", get_state_as_dict(xSeries.getChild('0'))['Text'])
+        self.assertEqual("Col. 2", get_state_as_dict(xSeries.getChild('1'))['Text'])
+        self.assertEqual("Col. 3", get_state_as_dict(xSeries.getChild('2'))['Text'])
 
-    xOKBtn = xDialog.getChild("ok")
-    self.ui_test.close_dialog_through_button(xOKBtn)
 
     gridwin.executeAction("DESELECT", mkPropertyValues({"OBJECT": "Object 1"}))
 

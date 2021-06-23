@@ -42,11 +42,8 @@ class ConditionalFormatDlgTest(UITestCase):
 
             # add a new conditional format through the add button
             xAddBtn = xCondFormatMgr.getChild("add")
-            self.ui_test.execute_dialog_through_action(xAddBtn, "CLICK", event_name = "ModelessDialogVisible")
-
-            xCondFormatDlg = self.xUITest.getTopFocusWindow()
-            xCondFormatOkBtn = xCondFormatDlg.getChild("ok")
-            self.ui_test.close_dialog_through_button(xCondFormatOkBtn)
+            with self.ui_test.execute_dialog_through_action(xAddBtn, "CLICK", event_name = "ModelessDialogVisible"):
+                pass
 
             # we need to get a pointer again as the old window has been deleted
             xCondFormatMgr = self.xUITest.getTopFocusWindow()

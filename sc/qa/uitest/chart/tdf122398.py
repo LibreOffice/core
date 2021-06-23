@@ -28,34 +28,31 @@ class tdf122398(UITestCase):
         xChartMainTop = self.xUITest.getTopFocusWindow()
         xChartMain = xChartMainTop.getChild("chart_window")
         xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
-        self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "DiagramAxisX"}))  # X Axis...
-        xDialog = self.xUITest.getTopFocusWindow()
-        #Click on tab "Scale".
-        tabcontrol = xDialog.getChild("tabcontrol")
-        select_pos(tabcontrol, "0")
+        with self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "DiagramAxisX"})) as xDialog:
+            #Click on tab "Scale".
+            tabcontrol = xDialog.getChild("tabcontrol")
+            select_pos(tabcontrol, "0")
 
-        autoMinimum = xDialog.getChild("CBX_AUTO_MIN")
-        autoMaximum = xDialog.getChild("CBX_AUTO_MAX")
-        majorInterval = xDialog.getChild("CBX_AUTO_STEP_MAIN")
-        minorInterval = xDialog.getChild("CBX_AUTO_STEP_HELP")
-        minimum = xDialog.getChild("EDT_MIN")
-        maximum = xDialog.getChild("EDT_MAX")
-        major = xDialog.getChild("EDT_STEP_MAIN")
-        minor = xDialog.getChild("MT_STEPHELP")
+            autoMinimum = xDialog.getChild("CBX_AUTO_MIN")
+            autoMaximum = xDialog.getChild("CBX_AUTO_MAX")
+            majorInterval = xDialog.getChild("CBX_AUTO_STEP_MAIN")
+            minorInterval = xDialog.getChild("CBX_AUTO_STEP_HELP")
+            minimum = xDialog.getChild("EDT_MIN")
+            maximum = xDialog.getChild("EDT_MAX")
+            major = xDialog.getChild("EDT_STEP_MAIN")
+            minor = xDialog.getChild("MT_STEPHELP")
 
-        autoMinimum.executeAction("CLICK", tuple())
-        autoMaximum.executeAction("CLICK", tuple())
-        majorInterval.executeAction("CLICK", tuple())
-        minorInterval.executeAction("CLICK", tuple())
-        #In a chart that contains an axis with a date datatype, the UI does not allow specifying
-        #a minimum or maximum value greater than 09/04/1900 (i.e., April 9, 1900)
-        minimum.executeAction("CLEAR", tuple())
-        minimum.executeAction("TYPE", mkPropertyValues({"TEXT":"01.01.2018"}))
-        maximum.executeAction("DOWN", tuple()) #29.04.2018
-        major.executeAction("UP", tuple())   #21
-        minor.executeAction("DOWN", tuple())  #1
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+            autoMinimum.executeAction("CLICK", tuple())
+            autoMaximum.executeAction("CLICK", tuple())
+            majorInterval.executeAction("CLICK", tuple())
+            minorInterval.executeAction("CLICK", tuple())
+            #In a chart that contains an axis with a date datatype, the UI does not allow specifying
+            #a minimum or maximum value greater than 09/04/1900 (i.e., April 9, 1900)
+            minimum.executeAction("CLEAR", tuple())
+            minimum.executeAction("TYPE", mkPropertyValues({"TEXT":"01.01.2018"}))
+            maximum.executeAction("DOWN", tuple()) #29.04.2018
+            major.executeAction("UP", tuple())   #21
+            minor.executeAction("DOWN", tuple())  #1
 
         #reopen and verify
         gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
@@ -63,31 +60,28 @@ class tdf122398(UITestCase):
         xChartMainTop = self.xUITest.getTopFocusWindow()
         xChartMain = xChartMainTop.getChild("chart_window")
         xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
-        self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "DiagramAxisX"}))
-        xDialog = self.xUITest.getTopFocusWindow()
-        #Click on tab "Scale".
-        tabcontrol = xDialog.getChild("tabcontrol")
-        select_pos(tabcontrol, "0")
+        with self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "DiagramAxisX"})) as xDialog:
+            #Click on tab "Scale".
+            tabcontrol = xDialog.getChild("tabcontrol")
+            select_pos(tabcontrol, "0")
 
-        autoMinimum = xDialog.getChild("CBX_AUTO_MIN")
-        autoMaximum = xDialog.getChild("CBX_AUTO_MAX")
-        majorInterval = xDialog.getChild("CBX_AUTO_STEP_MAIN")
-        minorInterval = xDialog.getChild("CBX_AUTO_STEP_HELP")
-        minimum = xDialog.getChild("EDT_MIN")
-        maximum = xDialog.getChild("EDT_MAX")
-        major = xDialog.getChild("EDT_STEP_MAIN")
-        minor = xDialog.getChild("MT_STEPHELP")
+            autoMinimum = xDialog.getChild("CBX_AUTO_MIN")
+            autoMaximum = xDialog.getChild("CBX_AUTO_MAX")
+            majorInterval = xDialog.getChild("CBX_AUTO_STEP_MAIN")
+            minorInterval = xDialog.getChild("CBX_AUTO_STEP_HELP")
+            minimum = xDialog.getChild("EDT_MIN")
+            maximum = xDialog.getChild("EDT_MAX")
+            major = xDialog.getChild("EDT_STEP_MAIN")
+            minor = xDialog.getChild("MT_STEPHELP")
 
-        self.assertEqual(get_state_as_dict(autoMinimum)["Selected"], "false")
-        self.assertEqual(get_state_as_dict(autoMaximum)["Selected"], "false")
-        self.assertEqual(get_state_as_dict(majorInterval)["Selected"], "false")
-        self.assertEqual(get_state_as_dict(minorInterval)["Selected"], "false")
-        self.assertEqual(get_state_as_dict(minimum)["Text"], "01.01.2018")
-        self.assertEqual(get_state_as_dict(maximum)["Text"], "29.04.2018")
-        self.assertEqual(get_state_as_dict(major)["Text"], "21")
-        self.assertEqual(get_state_as_dict(minor)["Text"], "1")
+            self.assertEqual(get_state_as_dict(autoMinimum)["Selected"], "false")
+            self.assertEqual(get_state_as_dict(autoMaximum)["Selected"], "false")
+            self.assertEqual(get_state_as_dict(majorInterval)["Selected"], "false")
+            self.assertEqual(get_state_as_dict(minorInterval)["Selected"], "false")
+            self.assertEqual(get_state_as_dict(minimum)["Text"], "01.01.2018")
+            self.assertEqual(get_state_as_dict(maximum)["Text"], "29.04.2018")
+            self.assertEqual(get_state_as_dict(major)["Text"], "21")
+            self.assertEqual(get_state_as_dict(minor)["Text"], "1")
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

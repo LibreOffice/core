@@ -53,14 +53,11 @@ class CalcChartEditUIDemo(UITestCase):
         xChartMain = xChartMainTop.getChild("chart_window")
 
         xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
-        self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "FormatDataSeries"}))
 
-        xSeriesFormatDlg = self.xUITest.getTopFocusWindow()
-        xAxis2 = xSeriesFormatDlg.getChild("RBT_OPT_AXIS_2")
-        xAxis2.executeAction("CLICK", tuple())
+        with self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "FormatDataSeries"})) as xSeriesFormatDlg:
 
-        xCancelBtn = xSeriesFormatDlg.getChild("ok")
-        xCancelBtn.executeAction("CLICK", tuple())
+            xAxis2 = xSeriesFormatDlg.getChild("RBT_OPT_AXIS_2")
+            xAxis2.executeAction("CLICK", tuple())
 
         xGridWindow.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))
 

@@ -29,17 +29,14 @@ class tdf131041(UITestCase):
         self.assertEqual(get_state_as_dict(xHeaderOn)["Selected"], "true")
         self.assertEqual(get_state_as_dict(xMoreBtn)["Enabled"], "true")
 
-        self.ui_test.execute_dialog_through_action(xMoreBtn, "CLICK")
+        with self.ui_test.execute_dialog_through_action(xMoreBtn, "CLICK") as xBorderDlg:
 
-        xBorderDlg = self.xUITest.getTopFocusWindow()
 
-        #modify any property
-        bottomft = xBorderDlg.getChild("bottommf")
-        bottomft.executeAction("UP", tuple())
+            #modify any property
+            bottomft = xBorderDlg.getChild("bottommf")
+            bottomft.executeAction("UP", tuple())
 
-        #it would crash here
-        okBtn = xBorderDlg.getChild("ok")
-        self.ui_test.close_dialog_through_button(okBtn)
+            #it would crash here
 
         xDialog = self.xUITest.getTopFocusWindow()
         okBtn = xDialog.getChild("ok")

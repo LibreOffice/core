@@ -18,19 +18,16 @@ class tdf135636(UITestCase):
             self.assertEqual(document.CurrentController.PageCount, 2)
 
             xPageBreak = self.ui_test.wait_until_child_is_available('PageBreak')
-            self.ui_test.execute_dialog_through_action(xPageBreak, "EDIT")
+            with self.ui_test.execute_dialog_through_action(xPageBreak, "EDIT") as xDialog:
 
-            xDialog = self.xUITest.getTopFocusWindow()
 
-            xBreak = xDialog.getChild("break")
-            self.assertEqual("true", get_state_as_dict(xBreak)["Selected"])
+                xBreak = xDialog.getChild("break")
+                self.assertEqual("true", get_state_as_dict(xBreak)["Selected"])
 
-            xBreak.executeAction("CLICK", tuple())
+                xBreak.executeAction("CLICK", tuple())
 
-            self.assertEqual("false", get_state_as_dict(xBreak)["Selected"])
+                self.assertEqual("false", get_state_as_dict(xBreak)["Selected"])
 
-            okBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(okBtn)
 
             # Without the fix in place, this test would have failed with
             # AssertionError: 2 != 1

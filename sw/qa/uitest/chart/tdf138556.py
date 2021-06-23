@@ -28,23 +28,15 @@ class tdf138556( UITestCase ):
 
         #Change Chart Type to Stock 1
         #TODO: test other subtypes
-        self.ui_test.execute_dialog_through_action( xChart, "COMMAND",
-            mkPropertyValues({ "COMMAND" : "DiagramType" }))
-        xDialog = self.xUITest.getTopFocusWindow()
-        xChartType = xDialog.getChild( "charttype" )
-        xStockType = xChartType.getChild( "8" )
-        xStockType.executeAction( "SELECT", tuple())
-        xOKBtn = xDialog.getChild( "ok" )
-        self.ui_test.close_dialog_through_button( xOKBtn )
+        with self.ui_test.execute_dialog_through_action( xChart, "COMMAND", mkPropertyValues({ "COMMAND" : "DiagramType" })) as xDialog:
+            xChartType = xDialog.getChild( "charttype" )
+            xStockType = xChartType.getChild( "8" )
+            xStockType.executeAction( "SELECT", tuple())
 
         #Insert Data Series
-        self.ui_test.execute_dialog_through_action( xChart, "COMMAND",
-            mkPropertyValues({ "COMMAND" : "DiagramData" }))
-        xDialog = self.xUITest.getTopFocusWindow()
-        xToolbar = xDialog.getChild( "toolbar" )
-        xToolbar.executeAction( "CLICK", mkPropertyValues({ "POS" : "1" }))
-        xOKBtn = xDialog.getChild( "close" )
-        self.ui_test.close_dialog_through_button( xOKBtn )
+        with self.ui_test.execute_dialog_through_action( xChart, "COMMAND", mkPropertyValues({ "COMMAND" : "DiagramData" }), close_button="close") as xDialog:
+            xToolbar = xDialog.getChild( "toolbar" )
+            xToolbar.executeAction( "CLICK", mkPropertyValues({ "POS" : "1" }))
 
         #Check Number of Sequences
         xDocument = self.ui_test.get_component()

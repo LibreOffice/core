@@ -11,7 +11,6 @@ from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, type_text
-from uitest.uihelper import guarded
 
 #Chart Display Legend dialog
 
@@ -27,7 +26,7 @@ class chartLegend(UITestCase):
       xChartMainTop = self.xUITest.getTopFocusWindow()
       xChartMain = xChartMainTop.getChild("chart_window")
       xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
-      with guarded.execute_dialog_through_action(self, xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "InsertMenuLegend"})) as xDialog:
+      with self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "InsertMenuLegend"})) as xDialog:
         left = xDialog.getChild("left")
         right = xDialog.getChild("right")
         top = xDialog.getChild("top")
@@ -41,7 +40,7 @@ class chartLegend(UITestCase):
       xChartMainTop = self.xUITest.getTopFocusWindow()
       xChartMain = xChartMainTop.getChild("chart_window")
       xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
-      with guarded.execute_dialog_through_action(self, xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "InsertMenuLegend"})) as xDialog:
+      with self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "InsertMenuLegend"})) as xDialog:
         left = xDialog.getChild("left")
         right = xDialog.getChild("right")
         top = xDialog.getChild("top")
@@ -61,7 +60,7 @@ class chartLegend(UITestCase):
       xChartMainTop = self.xUITest.getTopFocusWindow()
       xChartMain = xChartMainTop.getChild("chart_window")
       xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
-      with guarded.execute_dialog_through_action(self, xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "InsertMenuLegend"})) as xDialog:
+      with self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "InsertMenuLegend"})) as xDialog:
         left = xDialog.getChild("left")
         right = xDialog.getChild("right")
         top = xDialog.getChild("top")
@@ -92,7 +91,7 @@ class chartLegend(UITestCase):
       xLegends = xChartMain.getChild("CID/D=0:Legend=")
       xLegends.executeAction("SELECT", tuple())
 
-      with guarded.execute_dialog_through_action(self, xLegends, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"})) as xDialog:
+      with self.ui_test.execute_dialog_through_action(xLegends, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"})) as xDialog:
         self.assertEqual("4.61", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
         self.assertEqual("1.53", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
 
@@ -100,7 +99,7 @@ class chartLegend(UITestCase):
       xChartMain.executeAction("TYPE", mkPropertyValues({"KEYCODE": "LEFT"}))
 
       # Check the position has changed after moving the label using the arrows keys
-      with guarded.execute_dialog_through_action(self, xLegends, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"})) as xDialog:
+      with self.ui_test.execute_dialog_through_action(xLegends, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"})) as xDialog:
         self.assertEqual("4.51", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
         self.assertEqual("1.43", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
 
