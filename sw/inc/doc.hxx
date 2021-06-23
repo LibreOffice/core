@@ -37,6 +37,7 @@
 #include "frmfmt.hxx"
 #include "charfmt.hxx"
 #include "docary.hxx"
+#include "charformats.hxx"
 #include "pagedesc.hxx"
 #include "tblenum.hxx"
 #include "ndarr.hxx"

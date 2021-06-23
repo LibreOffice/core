@@ -113,6 +113,8 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::document;
 
+constexpr OUStringLiteral DEFAULT_CHAR_FORMAT_NAME = u"Character style";
+
 /*
  * global functions...
  */
@@ -223,7 +225,7 @@ SwDoc::SwDoc()
     mpDfltFrameFormat( new SwFrameFormat( GetAttrPool(), "Frameformat", nullptr ) ),
     mpEmptyPageFormat( new SwFrameFormat( GetAttrPool(), "Empty Page", mpDfltFrameFormat.get() ) ),
     mpColumnContFormat( new SwFrameFormat( GetAttrPool(), "Columncontainer", mpDfltFrameFormat.get() ) ),
-    mpDfltCharFormat( new SwCharFormat( GetAttrPool(), "Character style", nullptr ) ),
+    mpDfltCharFormat( new SwCharFormat( GetAttrPool(), DEFAULT_CHAR_FORMAT_NAME, nullptr ) ),
     mpDfltTextFormatColl( new SwTextFormatColl( GetAttrPool(), "Paragraph style" ) ),
     mpDfltGrfFormatColl( new SwGrfFormatColl( GetAttrPool(), "Graphikformatvorlage" ) ),
     mpFrameFormatTable( new SwFrameFormats() ),
@@ -296,7 +298,7 @@ SwDoc::SwDoc()
      */
     /* Formats */
     mpFrameFormatTable->push_back(mpDfltFrameFormat.get());
-    mpCharFormatTable->push_back(mpDfltCharFormat.get());
+    mpCharFormatTable->insert(mpDfltCharFormat.get());
 
     /* FormatColls */
     // TXT
@@ -531,7 +533,6 @@ SwDoc::~SwDoc()
      * now.
      */
     mpFrameFormatTable->erase( mpFrameFormatTable->begin() );
-    mpCharFormatTable->erase( mpCharFormatTable->begin() );
 
 #if HAVE_FEATURE_DBCONNECTIVITY
     // On load, SwDBManager::setEmbeddedName() may register a data source.
@@ -728,7 +729,7 @@ void SwDoc::ClearDoc()
         mpTextFormatCollTable->DeleteAndDestroy(2, mpTextFormatCollTable->size());
     mpTextFormatCollTable->DeleteAndDestroy(1, mpTextFormatCollTable->size());
     mpGrfFormatCollTable->DeleteAndDestroy(1, mpGrfFormatCollTable->size());
-    mpCharFormatTable->DeleteAndDestroy(1, mpCharFormatTable->size());
+    mpCharFormatTable->DeleteAndDestroyAll(/*keepDefault*/true);
 
     if( getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
