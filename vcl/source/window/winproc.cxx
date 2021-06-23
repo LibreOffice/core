@@ -804,6 +804,128 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
     return bRet;
 }
 
+bool ImplLOKHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent nEvent, bool /*bMouseLeave*/,
+                             tools::Long nX, tools::Long nY, sal_uInt64 /*nMsgTime*/,
+                             sal_uInt16 nCode, MouseEventModifiers nMode, sal_uInt16 nClicks)
+{
+    Point aMousePos(nX, nY);
+
+    if (!xWindow)
+        return false;
+
+    if (xWindow->isDisposed())
+        return false;
+
+    ImplFrameData* pFrameData = xWindow->ImplGetFrameData();
+    if (!pFrameData)
+        return false;
+
+    Point aWinPos = xWindow->ImplFrameToOutput(aMousePos);
+
+    pFrameData->mnLastMouseX = nX;
+    pFrameData->mnLastMouseY = nY;
+    pFrameData->mnClickCount = nClicks;
+    pFrameData->mnMouseCode = nCode;
+    pFrameData->mbMouseIn = false;
+
+    vcl::Window* pDownWin = pFrameData->mpMouseDownWin;
+    if (pDownWin && nEvent == MouseNotifyEvent::MOUSEMOVE)
+    {
+        const MouseSettings& aSettings = pDownWin->GetSettings().GetMouseSettings();
+        if ((nCode & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)) ==
+            (MouseSettings::GetStartDragCode() & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)) )
+        {
+            if (!pFrameData->mbStartDragCalled)
+            {
+                tools::Long nDragWidth = aSettings.GetStartDragWidth();
+                tools::Long nDragHeight = aSettings.GetStartDragHeight();
+                tools::Long nMouseX = aMousePos.X();
+                tools::Long nMouseY = aMousePos.Y();
+
+                if ((((nMouseX - nDragWidth) > pFrameData->mnFirstMouseX) ||
+                     ((nMouseX + nDragWidth) < pFrameData->mnFirstMouseX)) ||
+                    (((nMouseY - nDragHeight) > pFrameData->mnFirstMouseY) ||
+                     ((nMouseY + nDragHeight) < pFrameData->mnFirstMouseY)))
+                {
+                    pFrameData->mbStartDragCalled  = true;
+
+                    if (pFrameData->mbInternalDragGestureRecognizer)
+                    {
+                        // query DropTarget from child window
+                        css::uno::Reference< css::datatransfer::dnd::XDragGestureRecognizer > xDragGestureRecognizer(
+                            pDownWin->ImplGetWindowImpl()->mxDNDListenerContainer,
+                            css::uno::UNO_QUERY );
+
+                        if (xDragGestureRecognizer.is())
+                        {
+                            // create a UNO mouse event out of the available data
+                            css::awt::MouseEvent aEvent(
+                                static_cast < css::uno::XInterface * > ( nullptr ),
+ #ifdef MACOSX
+                                nCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD3),
+ #else
+                                nCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2),
+ #endif
+                                nCode & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE),
+                                nMouseX,
+                                nMouseY,
+                                nClicks,
+                                false);
+                            css::uno::Reference< css::datatransfer::dnd::XDragSource > xDragSource =
+                                pDownWin->GetDragSource();
+
+                            if (xDragSource.is())
+                            {
+                                static_cast<DNDListenerContainer *>(xDragGestureRecognizer.get())->
+                                    fireDragGestureEvent(
+                                        0,
+                                        aWinPos.X(),
+                                        aWinPos.Y(),
+                                        xDragSource,
+                                        css::uno::makeAny(aEvent));
+                            }
+                        }
+                    }
+                }
+            }
+            else pFrameData->mbStartDragCalled = true;
+        }
+    }
+
+    MouseEvent aMouseEvent(aWinPos, nClicks, nMode, nCode, nCode);
+    if (nEvent == MouseNotifyEvent::MOUSEMOVE)
+    {
+        xWindow->MouseMove(aMouseEvent);
+    }
+    else if (nEvent == MouseNotifyEvent::MOUSEBUTTONDOWN)
+    {
+        pFrameData->mpMouseDownWin = xWindow;
+        pFrameData->mnFirstMouseX = aMousePos.X();
+        pFrameData->mnFirstMouseY = aMousePos.Y();
+
+        xWindow->MouseButtonDown(aMouseEvent);
+    }
+    else
+    {
+        pFrameData->mpMouseDownWin = nullptr;
+        pFrameData->mpMouseMoveWin = nullptr;
+        pFrameData->mbStartDragCalled = false;
+        xWindow->MouseButtonUp(aMouseEvent);
+    }
+
+    if (nEvent == MouseNotifyEvent::MOUSEBUTTONDOWN)
+    {
+         // ContextMenu
+         if ( (nCode == MouseSettings::GetContextMenuCode()) &&
+              (nClicks == MouseSettings::GetContextMenuClicks()) )
+         {
+            ImplCallCommand(xWindow, CommandEventId::ContextMenu, nullptr, true, &aWinPos);
+         }
+    }
+
+    return true;
+}
+
 static vcl::Window* ImplGetKeyInputWindow( vcl::Window* pWindow )
 {
     ImplSVData* pSVData = ImplGetSVData();
