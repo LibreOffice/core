@@ -86,15 +86,15 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testShadowScaleOrigin)
     // Examine the created primitives.
     drawinglayer::Primitive2dXmlDump aDumper;
     xmlDocUniquePtr pDocument = aDumper.dumpAndParse(xPrimitiveSequence);
-    double fShadowX = getXPath(pDocument, "//shadow/transform", "xy13").toDouble();
-    double fShadowY = getXPath(pDocument, "//shadow/transform", "xy23").toDouble();
+    sal_Int32 fShadowX = getXPath(pDocument, "//shadow/transform", "xy13").toInt32();
+    sal_Int32 fShadowY = getXPath(pDocument, "//shadow/transform", "xy23").toInt32();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: -705
     // - Actual  : -158
     // i.e. the shadow origin was not the top right corner for scaling (larger x position, so it was
     // visible on the right of the shape as well).
-    CPPUNIT_ASSERT_EQUAL(-705., std::round(fShadowX));
-    CPPUNIT_ASSERT_EQUAL(-685., std::round(fShadowY));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-705), fShadowX);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-684), fShadowY);
 }
 
 CPPUNIT_TEST_FIXTURE(SdrTest, testZeroWidthTextWrap)
