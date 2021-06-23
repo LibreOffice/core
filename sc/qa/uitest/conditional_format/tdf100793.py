@@ -37,31 +37,28 @@ class tdf100793(UITestCase):
 
             #3) Click Edit & try to change to intended one, F18:K33
             xEditBtn = xCondFormatMgr.getChild("edit")
-            self.ui_test.execute_dialog_through_action(xEditBtn, "CLICK", event_name = "ModelessDialogVisible")
-            xCondFormatDlg = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_dialog_through_action(xEditBtn, "CLICK", event_name = "ModelessDialogVisible") as xCondFormatDlg:
 
-            #modify textbox
-            xedassign = xCondFormatDlg.getChild("edassign")
-            #go at the beginning
-            xedassign.executeAction("TYPE", mkPropertyValues({"KEYCODE": "END"}))
-            xedassign.executeAction("TYPE", mkPropertyValues({"KEYCODE": "HOME"}))
-            # 11x right
-            xedassign.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
-            xedassign.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
-            xedassign.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
-            xedassign.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
-            xedassign.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
-            xedassign.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
-            xedassign.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
-            xedassign.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
-            xedassign.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
-            xedassign.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
-            xedassign.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
-            #now I'm at F18 - write :K33
-            xedassign.executeAction("TYPE", mkPropertyValues({"TEXT":":K33"}))
+                #modify textbox
+                xedassign = xCondFormatDlg.getChild("edassign")
+                #go at the beginning
+                xedassign.executeAction("TYPE", mkPropertyValues({"KEYCODE": "END"}))
+                xedassign.executeAction("TYPE", mkPropertyValues({"KEYCODE": "HOME"}))
+                # 11x right
+                xedassign.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
+                xedassign.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
+                xedassign.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
+                xedassign.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
+                xedassign.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
+                xedassign.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
+                xedassign.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
+                xedassign.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
+                xedassign.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
+                xedassign.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
+                xedassign.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
+                #now I'm at F18 - write :K33
+                xedassign.executeAction("TYPE", mkPropertyValues({"TEXT":":K33"}))
 
-            xCondFormatOkBtn = xCondFormatDlg.getChild("ok")
-            self.ui_test.close_dialog_through_button(xCondFormatOkBtn)
 
             # we need to get a pointer again as the old window has been deleted
             xCondFormatMgr = self.xUITest.getTopFocusWindow()
@@ -82,12 +79,9 @@ class tdf100793(UITestCase):
             self.ui_test.execute_dialog_through_command(".uno:ConditionalFormatManagerDialog")
             xCondFormatMgr = self.xUITest.getTopFocusWindow()
             xEditBtn = xCondFormatMgr.getChild("edit")
-            self.ui_test.execute_dialog_through_action(xEditBtn, "CLICK", event_name = "ModelessDialogVisible")
-            xCondFormatDlg = self.xUITest.getTopFocusWindow()
-            xedassign = xCondFormatDlg.getChild("edassign")
-            self.assertEqual(get_state_as_dict(xedassign)["Text"], "G18:K29,F18:K33,F20:F29")
-            xCondFormatOkBtn = xCondFormatDlg.getChild("ok")
-            self.ui_test.close_dialog_through_button(xCondFormatOkBtn)
+            with self.ui_test.execute_dialog_through_action(xEditBtn, "CLICK", event_name = "ModelessDialogVisible") as xCondFormatDlg:
+                xedassign = xCondFormatDlg.getChild("edassign")
+                self.assertEqual(get_state_as_dict(xedassign)["Text"], "G18:K29,F18:K33,F20:F29")
             xCondFormatMgr = self.xUITest.getTopFocusWindow()
             xCancelBtn = xCondFormatMgr.getChild("cancel")
             self.ui_test.close_dialog_through_button(xCancelBtn)

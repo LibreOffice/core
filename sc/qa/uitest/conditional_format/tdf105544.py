@@ -32,11 +32,8 @@ class tdf105544(UITestCase):
             #select B3:B37 range and click edit, then click yes
             xList.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))  #2nd position in the list
             xEditBtn = xCondFormatMgr.getChild("edit")
-            self.ui_test.execute_dialog_through_action(xEditBtn, "CLICK", event_name = "ModelessDialogVisible")
-            xCondFormatDlg = self.xUITest.getTopFocusWindow()
-
-            xCondFormatOkBtn = xCondFormatDlg.getChild("ok")
-            self.ui_test.close_dialog_through_button(xCondFormatOkBtn)
+            with self.ui_test.execute_dialog_through_action(xEditBtn, "CLICK", event_name = "ModelessDialogVisible"):
+                pass
 
             # we need to get a pointer again as the old window has been deleted
             xCondFormatMgr = self.xUITest.getTopFocusWindow()
