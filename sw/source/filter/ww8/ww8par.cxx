@@ -6004,9 +6004,10 @@ void SwWW8ImplReader::SetOutlineStyles()
             continue;
         }
 
+        const sal_uInt8 nLvl = pStyleInf->m_nListLevel == MAXLEVEL ? 0 : pStyleInf->m_nListLevel;
         if (m_pChosenWW8OutlineStyle != nullptr
             && pStyleInf->mnWW8OutlineLevel < WW8ListManager::nMaxLevel
-            && pStyleInf->mnWW8OutlineLevel == pStyleInf->m_nListLevel)
+            && pStyleInf->mnWW8OutlineLevel == nLvl)
         {
             // LibreOffice's Chapter Numbering only works when outlineLevel == listLevel
             const SwNumFormat& rRule
