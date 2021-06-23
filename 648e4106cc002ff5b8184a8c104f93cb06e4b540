@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c16dc71e_5a91ce36",
+        "filename": "sdext/source/pdfimport/xpdfwrapper/wrapper_gpl.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-23T10:49:01Z",
+      "side": 1,
+      "message": "An alternative to constructing that path here from argv[0] could be to construct in on the LibreOffice side (using code similar to e.g. LiblangtagDataRef::setupDataPath in i18nlangtag/source/languagetag/languagetag.cxx) and pass it to this program as argv[1], say.  The heuristic that LIBO_SHARE_FOLDER is at .. relative to this exectuable is rather brittle, and only true by accident e.g. on macOS (where LibreOffice.app has a layout quite different from the other platforms).",
+      "revId": "648e4106cc002ff5b8184a8c104f93cb06e4b540",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
