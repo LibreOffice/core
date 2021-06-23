@@ -122,6 +122,7 @@ public:
     virtual void setUp() override;
 
     void testDocumentLayout();
+    void testTdf142913();
     void testTdf142590();
     void testCustomSlideShow();
     void testInternalHyperlink();
@@ -242,6 +243,7 @@ public:
     CPPUNIT_TEST_SUITE(SdImportTest);
 
     CPPUNIT_TEST(testDocumentLayout);
+    CPPUNIT_TEST(testTdf142913);
     CPPUNIT_TEST(testTdf142590);
     CPPUNIT_TEST(testCustomSlideShow);
     CPPUNIT_TEST(testInternalHyperlink);
@@ -436,6 +438,23 @@ void SdImportTest::testDocumentLayout()
                 OUString(m_directories.getPathFromSrc( u"/sd/qa/unit/data/" ) + OUString::createFromAscii( aFilesToCompare[i].pDump )),
                 i == nUpdateMe );
     }
+}
+
+void SdImportTest::testTdf142913()
+{
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf142913.pptx"), PPTX);
+
+    uno::Reference<presentation::XPresentationSupplier> xPresentationSupplier(
+        xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xPresentationProps(xPresentationSupplier->getPresentation(),
+        uno::UNO_QUERY_THROW);
+
+    OUString sFirstPage = xPresentationProps->getPropertyValue("FirstPage").get<OUString>();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Second"), sFirstPage);
+
+    xDocShRef->DoClose();
 }
 
 void SdImportTest::testTdf142590()
