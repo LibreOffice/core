@@ -82,6 +82,13 @@ inline Type::Type( const Type & rType )
     ::typelib_typedescriptionreference_acquire( _pType );
 }
 
+#if defined LIBO_INTERNAL_ONLY
+inline Type::Type( Type && rType )
+{
+    std::swap(_pType, rType._pType);
+}
+#endif
+
 inline ::rtl::OUString Type::getTypeName() const
 {
     return ::rtl::OUString( _pType->pTypeName );
@@ -92,6 +99,14 @@ inline Type & Type::operator = ( const Type & rType )
     ::typelib_typedescriptionreference_assign( &_pType, rType._pType );
     return *this;
 }
+
+#if defined LIBO_INTERNAL_ONLY
+inline Type & Type::operator = ( Type && rType )
+{
+    std::swap(_pType, rType._pType);
+    return *this;
+}
+#endif
 
 
 template< class T >
