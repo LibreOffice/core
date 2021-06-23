@@ -30,17 +30,15 @@ class tdf140754(UITestCase):
             xOKBtn = xDialogOpt.getChild("ok")
             self.ui_test.close_dialog_through_button(xOKBtn)
 
-            document = self.ui_test.get_component()
 
-            self.assertEqual(0, get_cell_by_position(document, 0, 0, 30).getValue())
-            self.assertEqual(0, get_cell_by_position(document, 0, 0, 82).getValue())
-            self.assertEqual(1, get_cell_by_position(document, 0, 0, 238).getValue())
-            self.assertEqual(28, get_cell_by_position(document, 0, 0, 265).getValue())
-            self.assertEqual(28, get_cell_by_position(document, 0, 0, 1370).getValue())
+            self.assertEqual(0, get_cell_by_position(calc_doc, 0, 0, 30).getValue())
+            self.assertEqual(0, get_cell_by_position(calc_doc, 0, 0, 82).getValue())
+            self.assertEqual(1, get_cell_by_position(calc_doc, 0, 0, 238).getValue())
+            self.assertEqual(28, get_cell_by_position(calc_doc, 0, 0, 265).getValue())
+            self.assertEqual(28, get_cell_by_position(calc_doc, 0, 0, 1370).getValue())
 
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "2", "ROW": "0"}))
             xFloatWindow = self.xUITest.getFloatWindow()
@@ -55,11 +53,11 @@ class tdf140754(UITestCase):
             xOkBtn = xFloatWindow.getChild("ok")
             xOkBtn.executeAction("CLICK", tuple())
 
-            self.assertEqual(0, get_cell_by_position(document, 0, 0, 30).getValue())
-            self.assertEqual(1, get_cell_by_position(document, 0, 0, 82).getValue())
-            self.assertEqual(39, get_cell_by_position(document, 0, 0, 238).getValue())
-            self.assertEqual(66, get_cell_by_position(document, 0, 0, 265).getValue())
-            self.assertEqual(282, get_cell_by_position(document, 0, 0, 1370).getValue())
+            self.assertEqual(0, get_cell_by_position(calc_doc, 0, 0, 30).getValue())
+            self.assertEqual(1, get_cell_by_position(calc_doc, 0, 0, 82).getValue())
+            self.assertEqual(39, get_cell_by_position(calc_doc, 0, 0, 238).getValue())
+            self.assertEqual(66, get_cell_by_position(calc_doc, 0, 0, 265).getValue())
+            self.assertEqual(282, get_cell_by_position(calc_doc, 0, 0, 1370).getValue())
 
             gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "6", "ROW": "0"}))
             xFloatWindow = self.xUITest.getFloatWindow()
@@ -73,10 +71,10 @@ class tdf140754(UITestCase):
             xOkBtn = xFloatWindow.getChild("ok")
             xOkBtn.executeAction("CLICK", tuple())
 
-            self.assertEqual(1, get_cell_by_position(document, 0, 0, 30).getValue())
-            self.assertEqual(11, get_cell_by_position(document, 0, 0, 82).getValue())
-            self.assertEqual(69, get_cell_by_position(document, 0, 0, 238).getValue())
-            self.assertEqual(96, get_cell_by_position(document, 0, 0, 265).getValue())
-            self.assertEqual(411, get_cell_by_position(document, 0, 0, 1370).getValue())
+            self.assertEqual(1, get_cell_by_position(calc_doc, 0, 0, 30).getValue())
+            self.assertEqual(11, get_cell_by_position(calc_doc, 0, 0, 82).getValue())
+            self.assertEqual(69, get_cell_by_position(calc_doc, 0, 0, 238).getValue())
+            self.assertEqual(96, get_cell_by_position(calc_doc, 0, 0, 265).getValue())
+            self.assertEqual(411, get_cell_by_position(calc_doc, 0, 0, 1370).getValue())
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

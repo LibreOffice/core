@@ -15,7 +15,6 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf134881(UITestCase):
     def test_tdf134881(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf134881_colProportionalAdjust.odt")) as writer_doc:
-            document = self.ui_test.get_component()
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             change_measurement_unit(self, "Centimeter")

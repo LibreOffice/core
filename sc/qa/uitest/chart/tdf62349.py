@@ -18,7 +18,6 @@ class tdf62349(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf62349.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #3: select all data cells C5:H9
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "C5:H9"}))
             # 4: create a chart with insert/chart menu
@@ -36,6 +35,6 @@ class tdf62349(UITestCase):
             self.xUITest.executeCommand(".uno:Copy")
             self.xUITest.executeCommand(".uno:Paste")
             #check we didn't crash
-            self.assertEqual(get_cell_by_position(document, 0, 2, 5).getString(), "group1")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 2, 5).getString(), "group1")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

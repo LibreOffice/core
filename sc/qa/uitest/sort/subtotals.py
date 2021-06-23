@@ -51,7 +51,6 @@ class Subtotals(UITestCase):
     def test_tdf88792(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf88792.ods")) as calc_doc:
             XcalcDoc = self.xUITest.getTopFocusWindow()
-            document = self.ui_test.get_component()
             gridwin = XcalcDoc.getChild("grid_window")
 
             # go to cell A1
@@ -75,12 +74,11 @@ class Subtotals(UITestCase):
             xOKBtn = xDialog.getChild("ok")
             self.ui_test.close_dialog_through_button(xOKBtn)
 
-            self.assertEqual(get_cell_by_position(document, 0, 3, 5).getValue(), 28000)
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 3, 5).getValue(), 28000)
 
     def test_tdf88735(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf88735.ods")) as calc_doc:
             XcalcDoc = self.xUITest.getTopFocusWindow()
-            document = self.ui_test.get_component()
             gridwin = XcalcDoc.getChild("grid_window")
             # 1 select all cells
             self.xUITest.executeCommand(".uno:SelectAll")#use uno command Menu Edit->Select All
@@ -97,13 +95,12 @@ class Subtotals(UITestCase):
             xCancelBtn = xDialog.getChild("cancel")
             self.ui_test.close_dialog_through_button(xCancelBtn)
 
-            self.assertEqual(get_cell_by_position(document, 0, 0, 8).getString(), "z")
-            self.assertEqual(get_cell_by_position(document, 0, 1, 8).getValue(), 8)
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 8).getString(), "z")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 8).getValue(), 8)
 
     def test_tdf56958(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf56958.ods")) as calc_doc:
             XcalcDoc = self.xUITest.getTopFocusWindow()
-            document = self.ui_test.get_component()
             gridwin = XcalcDoc.getChild("grid_window")
             # 1. Open the test file
             # 2. Data->Subtotals
@@ -146,12 +143,11 @@ class Subtotals(UITestCase):
             # 13. Click OK
             xOKBtn = xDialog.getChild("ok")
             self.ui_test.close_dialog_through_button(xOKBtn)
-            self.assertEqual(get_cell_by_position(document, 0, 2, 1).getValue(), -0.25)
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 2, 1).getValue(), -0.25)
 
     def test_tdf55734(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf55734.ods")) as calc_doc:
             XcalcDoc = self.xUITest.getTopFocusWindow()
-            document = self.ui_test.get_component()
             gridwin = XcalcDoc.getChild("grid_window")
             # 1. Open attached document
             # 2. Place cursor in cell outside of subtotals range (e.g. B7)
@@ -166,7 +162,7 @@ class Subtotals(UITestCase):
             xOKBtn = xDialog.getChild("ok")
             self.ui_test.close_dialog_through_button(xOKBtn)
 
-            self.assertEqual(get_cell_by_position(document, 0, 0, 1).getValue(), 1)
-            self.assertEqual(get_cell_by_position(document, 0, 1, 1).getValue(), 2)
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 1).getValue(), 1)
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 1).getValue(), 2)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

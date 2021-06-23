@@ -14,7 +14,6 @@ class tdf114710(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf114710.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:O7"}))
             self.xUITest.executeCommand(".uno:Copy")

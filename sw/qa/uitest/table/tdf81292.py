@@ -13,7 +13,6 @@ class tdf81292(UITestCase):
 
    def test_tdf81292_table_sort(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf81292.odt")) as writer_doc:
-            document = self.ui_test.get_component()
             xWriterDoc = self.xUITest.getTopFocusWindow()
             #select whole table
             self.xUITest.executeCommand(".uno:SelectTable")
@@ -25,7 +24,7 @@ class tdf81292(UITestCase):
             xOK = xDialog.getChild("ok")
             self.ui_test.close_dialog_through_button(xOK)
             #verify
-            tables = document.getTextTables()
+            tables = writer_doc.getTextTables()
             table = tables[0]
             tableText = table.getCellByName("B3")
             b3 = tableText.getString()

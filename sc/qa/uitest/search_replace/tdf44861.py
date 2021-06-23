@@ -18,7 +18,6 @@ class tdf44861(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf44861.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             # 2. ctrl-h, in dialog
             # Search: ([0-9]{2})([0-9]{2})
             # Replace: $1.$2
@@ -42,10 +41,10 @@ class tdf44861(UITestCase):
             self.ui_test.close_dialog_through_button(xcloseBtn)
 
             #Expected: instead of 1345-1430 appears 13.45-14.30
-            self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "13.45-14.30")
-            self.assertEqual(get_cell_by_position(document, 0, 0, 1).getString(), "13.45-14.30")
-            self.assertEqual(get_cell_by_position(document, 0, 0, 2).getString(), "14.50-15.30")
-            self.assertEqual(get_cell_by_position(document, 0, 0, 3).getString(), "12.55-13.35")
-            self.assertEqual(get_cell_by_position(document, 0, 0, 4).getString(), "12.30-13.40")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 0).getString(), "13.45-14.30")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 1).getString(), "13.45-14.30")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 2).getString(), "14.50-15.30")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 3).getString(), "12.55-13.35")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 4).getString(), "12.30-13.40")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

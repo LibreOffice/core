@@ -13,7 +13,6 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 class tdf126627(UITestCase):
     def test_tdf126627_crash_undo_deletion(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf126627.odt")) as writer_doc:
-            document = self.ui_test.get_component()
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
@@ -35,7 +34,7 @@ class tdf126627(UITestCase):
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "BACKSPACE"}))
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "BACKSPACE"}))
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "BACKSPACE"}))
-            self.assertEqual(document.Text.String[0:6], "foobar")
+            self.assertEqual(writer_doc.Text.String[0:6], "foobar")
             #4. Undo once-> Crash
             self.xUITest.executeCommand(".uno:Undo")
             #verify that we have now two words

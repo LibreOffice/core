@@ -14,7 +14,6 @@ class tdf124818(UITestCase):
     with self.ui_test.load_file(get_url_for_data_file("tdf124818.xls")) as calc_doc:
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
 
         #Select all ( Ctrl + A );Go to sheet Graph2;Select all;Crash
         self.xUITest.executeCommand(".uno:SelectAll")
@@ -22,6 +21,6 @@ class tdf124818(UITestCase):
         self.xUITest.executeCommand(".uno:SelectAll")
 
         #verify; no crashes
-        self.assertEqual(document.Sheets.getCount(), 3)
+        self.assertEqual(calc_doc.Sheets.getCount(), 3)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

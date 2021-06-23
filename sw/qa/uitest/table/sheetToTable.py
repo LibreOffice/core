@@ -19,12 +19,11 @@ class sheetToTable(UITestCase):
             self.xUITest.executeCommand(".uno:Copy")
 
         with self.ui_test.load_file(get_url_for_data_file("tableToText.odt")) as writer_doc:
-            document = self.ui_test.get_component()
             xWriterDoc = self.xUITest.getTopFocusWindow()
             self.xUITest.executeCommand(".uno:Paste")
             #verify (don't copy hidden cells)
-            self.assertEqual(document.TextTables.getCount(), 1)
-            table = document.getTextTables()[0]
+            self.assertEqual(writer_doc.TextTables.getCount(), 1)
+            table = writer_doc.getTextTables()[0]
             # This was 3 (copied hidden row)
             self.assertEqual(len(table.getRows()), 2)
             self.assertEqual(table.getCellByName("A1").getString(), "1")
@@ -38,7 +37,6 @@ class sheetToTable(UITestCase):
             self.xUITest.executeCommand(".uno:Copy")
 
         with self.ui_test.load_file(get_url_for_data_file("tableToText.odt")) as writer_doc:
-            document = self.ui_test.get_component()
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             # set numbering in the paragraph after the table
@@ -52,8 +50,8 @@ class sheetToTable(UITestCase):
             self.xUITest.executeCommand(".uno:Paste")
 
             #verify also tdf#124646 (don't copy hidden cells)
-            self.assertEqual(document.TextTables.getCount(), 1)
-            table = document.getTextTables()[0]
+            self.assertEqual(writer_doc.TextTables.getCount(), 1)
+            table = writer_doc.getTextTables()[0]
             # This was 3 (copied hidden row)
             self.assertEqual(len(table.getRows()), 2)
             self.assertEqual(table.getCellByName("A1").getString(), "1")
@@ -79,13 +77,12 @@ class sheetToTable(UITestCase):
         self.ui_test.close_doc()
 
         with self.ui_test.load_file(get_url_for_data_file("tdf129083.odt")) as writer_doc:
-            document = self.ui_test.get_component()
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             self.xUITest.executeCommand(".uno:Paste")
 
-            self.assertEqual(document.TextTables.getCount(), 1)
-            table = document.getTextTables()[0]
+            self.assertEqual(writer_doc.TextTables.getCount(), 1)
+            table = writer_doc.getTextTables()[0]
             self.assertEqual(len(table.getRows()), 4)
             self.assertEqual(table.getCellByName("A1").getString(), "Test 1")
             self.assertEqual(table.getCellByName("A2").getString(), "Test 2")
