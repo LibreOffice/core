@@ -539,9 +539,25 @@ SvxNumType WW8ListManager::GetSvxNumTypeFromMSONFC(sal_uInt16 nNFC)
             // actually: ORDINAL
             nType = SVX_NUM_ARABIC;
             break;
+        case 6: // cardinalText
+            nType = SVX_NUM_TEXT_CARDINAL;
+            break;
+        case 7: // ordinalText
+            nType = SVX_NUM_TEXT_ORDINAL;
+            break;
+        //case 8: // hex
+
         case 9:
             // 0x09, msonfcChiManSty
             nType = SVX_NUM_SYMBOL_CHICAGO;
+            break;
+        //case 15: // decimalHalfWidth
+        //case 17: // japaneseDigitalTenThousand
+
+        case 18: // decimalEnclosedCircle
+        case 28: // decimalEnclosedCircleChinese
+        case 29: // ideographEnclosedCircle
+            nType = SVX_NUM_CIRCLE_NUMBER;
             break;
         case 22:
             // 0x16, msonfcArabicLZ
@@ -558,12 +574,17 @@ SvxNumType WW8ListManager::GetSvxNumTypeFromMSONFC(sal_uInt16 nNFC)
         case 19:
             nType = SVX_NUM_FULL_WIDTH_ARABIC;
             break;
+        //case 26: // decimalEnclosedFullstop
+        //case 27: // decimalEnclosedParen
+
         case 30:
             nType = SVX_NUM_TIAN_GAN_ZH;
             break;
-        case 31:
+        case 31: // ideographZodiac
+        case 32: // ideographZodiacTraditional
             nType = SVX_NUM_DI_ZI_ZH;
             break;
+        case 33: // taiwaneseCounting
         case 35:
         case 36:
         case 37:
@@ -578,6 +599,7 @@ SvxNumType WW8ListManager::GetSvxNumTypeFromMSONFC(sal_uInt16 nNFC)
             nType = SVX_NUM_NUMBER_UPPER_ZH;
             break;
         case 10:
+        case 16: // japaneseLegal
             nType = SVX_NUM_NUMBER_TRADITIONAL_JA;
             break;
         case 20:
@@ -598,13 +620,48 @@ SvxNumType WW8ListManager::GetSvxNumTypeFromMSONFC(sal_uInt16 nNFC)
         case 25:
             nType = SVX_NUM_HANGUL_JAMO_KO;
             break;
-        case 41:
+        //case 40: // decimal (Chinese)
+
+        case 41: // koreanDigital
+        case 42: // koreanCounting
+        case 43: // koreanLegal
             nType = SVX_NUM_NUMBER_HANGUL_KO;
             break;
-        //case 42:
-        //case 43:
-        case 44:
+        case 44: // koreanDigital2
             nType = SVX_NUM_NUMBER_UPPER_KO;
+            break;
+        case 45: // hebrew1
+            nType = SVX_NUM_NUMBER_HEBREW;
+            break;
+        case 46: // arabicAlpha
+            nType = SVX_NUM_CHARS_ARABIC;
+            break;
+        case 47: // hebrew2
+            nType = SVX_NUM_CHARS_HEBREW;
+            break;
+        case 48: // arabicAbjad
+            nType = SVX_NUM_CHARS_ARABIC_ABJAD;
+            break;
+        case 49: // hindiVowels
+            nType = SVX_NUM_CHARS_NEPALI; // DOCX imports as NEPAL and exports as PERSIAN
+            break;
+        //case 50: // hindiConsonants
+        //case 51: // hindiNumbers
+        //case 52: // hindiCounting
+
+        case 53: // thaiLetters
+            nType = SVX_NUM_CHARS_THAI;
+            break;
+        //case 54: // thaiNumbers
+        //case 55: // thaiCounting
+        //case 56: // vietnameseCounting
+        //case 57: // numberInDash
+
+        case 58: // russianLower
+            nType = SVX_NUM_CHARS_CYRILLIC_LOWER_LETTER_RU;
+            break;
+        case 59: // russianUpper
+            nType =SVX_NUM_CHARS_CYRILLIC_UPPER_LETTER_RU;
             break;
         default:
             nType = SVX_NUM_ARABIC;
