@@ -23,9 +23,8 @@ class Tdf142395(UITestCase):
         xOpenBtn = xOpenDialog.getChild("open")
         xOpenBtn.executeAction("CLICK", tuple())
 
-        xDialog = self.xUITest.getTopFocusWindow()
-
         # Remove the text delimiter
+        xTextDelimiter = self.ui_test.wait_until_child_is_available('textdelimiter')
         xTextDelimiter = xDialog.getChild("textdelimiter")
         xTextDelimiter.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
         xTextDelimiter.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
