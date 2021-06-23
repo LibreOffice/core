@@ -3033,7 +3033,7 @@ void SwXTextTable::setName(const OUString& rName)
             }
         }
 
-        pFormat->SetName( rName );
+        pFormat->SetName1( rName );
 
         SwStartNode *pStNd;
         SwNodeIndex aIdx( *pFormat->GetDoc()->GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );

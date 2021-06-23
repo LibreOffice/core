@@ -720,7 +720,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     {
         if (pFormat->GetName().isEmpty())
         {
-            pFormat->SetName(pSvxShape->GetSdrObject()->GetName(), false);
+            pFormat->SetName1(pSvxShape->GetSdrObject()->GetName(), false);
         }
         pShape->SetFrameFormat(pFormat);
     }

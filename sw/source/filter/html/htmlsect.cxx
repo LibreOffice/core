@@ -782,7 +782,7 @@ void SwHTMLParser::InsertFlyFrame( const SfxItemSet& rItemSet,
     SwFlyFrameFormat* pFlyFormat = m_xDoc->MakeFlySection( eAnchorId, m_pPam->GetPoint(),
                                                     &rItemSet );
     if( !rName.isEmpty() )
-        pFlyFormat->SetName( rName );
+        pFlyFormat->SetName1( rName );
 
     RegisterFlyFrame( pFlyFormat );
 

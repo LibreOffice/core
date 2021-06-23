@@ -662,7 +662,7 @@ bool SwHTMLParser::InsertEmbed()
 
     // set name at FrameFormat
     if( !aName.isEmpty() )
-        pFlyFormat->SetName( aName );
+        pFlyFormat->SetName1( aName );
 
     // set the alternative text
     SwNoTextNode *pNoTextNd =
