@@ -18,7 +18,6 @@
  */
 
 #include <vcl/event.hxx>
-#include <vcl/window.hxx>
 
 KeyEvent KeyEvent::LogicalTextDirectionality (TextDirectionality eMode) const
 {

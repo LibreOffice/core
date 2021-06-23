@@ -20,7 +20,6 @@
 
 #include <tools/link.hxx>
 #include <vcl/uitest/uiobject.hxx>
-#include <vcl/window.hxx>
 
 class Timer;
 
