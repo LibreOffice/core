@@ -23,13 +23,9 @@ class tdf142851(UITestCase):
             xChartMain = xChartMainTop.getChild("chart_window")
             xChart = xChartMain.getChild("CID/Page=")
 
-            self.ui_test.execute_dialog_through_action(xChart, "COMMAND",
-                mkPropertyValues({"COMMAND" : "DiagramType"}))
-            xDialog = self.xUITest.getTopFocusWindow()
-            chartTypeVisible = get_state_as_dict(xDialog.getChild("charttype"))['Visible']
-            subTypeVisible = get_state_as_dict(xDialog.getChild("subtype"))['Visible']
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+            with self.ui_test.execute_dialog_through_action(xChart, "COMMAND", mkPropertyValues({"COMMAND" : "DiagramType"})) as xDialog:
+                chartTypeVisible = get_state_as_dict(xDialog.getChild("charttype"))['Visible']
+                subTypeVisible = get_state_as_dict(xDialog.getChild("subtype"))['Visible']
 
             self.assertEqual('true', chartTypeVisible)
             self.assertEqual('true', subTypeVisible)

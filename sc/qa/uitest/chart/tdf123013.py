@@ -24,16 +24,13 @@ class tdf123013(UITestCase):
         xChartMainTop = self.xUITest.getTopFocusWindow()
         xChartMain = xChartMainTop.getChild("chart_window")
         xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
-        self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "FormatTrendline"}))
-        xDialog = self.xUITest.getTopFocusWindow()
-        #Click on tab "Type".
-        tabcontrol = xDialog.getChild("tabcontrol")
-        select_pos(tabcontrol, "0")
-        #add name
-        xentryname = xDialog.getChild("entry_name")
-        xentryname.executeAction("TYPE", mkPropertyValues({"TEXT":"Tline"}))
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+        with self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "FormatTrendline"})) as xDialog:
+            #Click on tab "Type".
+            tabcontrol = xDialog.getChild("tabcontrol")
+            select_pos(tabcontrol, "0")
+            #add name
+            xentryname = xDialog.getChild("entry_name")
+            xentryname.executeAction("TYPE", mkPropertyValues({"TEXT":"Tline"}))
 
         #reopen and try again
         gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
@@ -44,15 +41,12 @@ class tdf123013(UITestCase):
         #Right-click on the chart; from the pop-up menu select "Format Y bars
         # The program presents dialog "Format Y bars", tab "Line".
         xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
-        self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "FormatTrendline"}))
-        xDialog = self.xUITest.getTopFocusWindow()
-        #Click on tab "Type".
-        tabcontrol = xDialog.getChild("tabcontrol")
-        select_pos(tabcontrol, "0")
-        #add name
-        xentryname = xDialog.getChild("entry_name")
-        self.assertEqual(get_state_as_dict(xentryname)["Text"], "Tline")
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+        with self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "FormatTrendline"})) as xDialog:
+            #Click on tab "Type".
+            tabcontrol = xDialog.getChild("tabcontrol")
+            select_pos(tabcontrol, "0")
+            #add name
+            xentryname = xDialog.getChild("entry_name")
+            self.assertEqual(get_state_as_dict(xentryname)["Text"], "Tline")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
