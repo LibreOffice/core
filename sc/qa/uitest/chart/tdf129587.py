@@ -26,30 +26,27 @@ class tdf129587(UITestCase):
         xChartMain = xChartMainTop.getChild("chart_window")
 
         xSeriesObj =  xChartMain.getChild("CID/MultiClick/D=0:CS=0:CT=0:Series=0:ErrorsY=")
-        self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "FormatYErrorBars"}))
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "FormatYErrorBars"})) as xDialog:
 
-        tabcontrol = xDialog.getChild("tabcontrol")
-        select_pos(tabcontrol, "0")
+            tabcontrol = xDialog.getChild("tabcontrol")
+            select_pos(tabcontrol, "0")
 
-        xPerBtn = xDialog.getChild("RB_PERCENT")
-        xPerBtn.executeAction("CLICK", tuple())
+            xPerBtn = xDialog.getChild("RB_PERCENT")
+            xPerBtn.executeAction("CLICK", tuple())
 
-        xPosField = xDialog.getChild("MF_POSITIVE")
-        xNegField = xDialog.getChild("MF_NEGATIVE")
+            xPosField = xDialog.getChild("MF_POSITIVE")
+            xNegField = xDialog.getChild("MF_NEGATIVE")
 
-        self.assertEqual("0%", get_state_as_dict(xPosField)['Text'])
-        self.assertEqual("0%", get_state_as_dict(xNegField)['Text'])
+            self.assertEqual("0%", get_state_as_dict(xPosField)['Text'])
+            self.assertEqual("0%", get_state_as_dict(xNegField)['Text'])
 
-        #Increase value by one
-        xPosField.executeAction("UP", tuple())
+            #Increase value by one
+            xPosField.executeAction("UP", tuple())
 
-        #Both fields are updated because 'Same value for both' is enabled
-        self.assertEqual("1%", get_state_as_dict(xPosField)['Text'])
-        self.assertEqual("1%", get_state_as_dict(xNegField)['Text'])
+            #Both fields are updated because 'Same value for both' is enabled
+            self.assertEqual("1%", get_state_as_dict(xPosField)['Text'])
+            self.assertEqual("1%", get_state_as_dict(xNegField)['Text'])
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
 
         #Without the fix in place, it would have crashed here
         xDataSeries = document.Sheets[0].Charts[0].getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries

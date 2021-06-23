@@ -44,23 +44,20 @@ class tdf99069(UITestCase):
             #(6) Right-click on the chart; from the pop-up menu select "Data
             # Ranges...".  The program presents dialog "Data Ranges", tab "Data Range".
             xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
-            self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "DataRanges"}))
-            xDialog = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "DataRanges"}), close_button="cancel") as xDialog:
 
-            #(7) Click on tab "Data Series".  (Actually, tab "Data Range" crashes,
-            # too.  This step is just a remnant of what I was doing when I
-            # stumbled over the bug.)
-            notebook = xDialog.getChild("tabcontrol")
-            select_pos(notebook, "0")
-            select_pos(notebook, "1")
+                #(7) Click on tab "Data Series".  (Actually, tab "Data Range" crashes,
+                # too.  This step is just a remnant of what I was doing when I
+                # stumbled over the bug.)
+                notebook = xDialog.getChild("tabcontrol")
+                select_pos(notebook, "0")
+                select_pos(notebook, "1")
 
-            #(8) Click <Cancel>.  In the versions that I deemed bad while
-            # bibisecting, the program crashed here five times out of seven.
-            # The other two attempts, both on daily bibisect version 2016-02-18,
-            # crashed after I closed the Data Ranges dialog an additional three
-            # times, one of those times using by typing <Esc>.
-            xCancelBtn = xDialog.getChild("cancel")
-            self.ui_test.close_dialog_through_button(xCancelBtn)
+                #(8) Click <Cancel>.  In the versions that I deemed bad while
+                # bibisecting, the program crashed here five times out of seven.
+                # The other two attempts, both on daily bibisect version 2016-02-18,
+                # crashed after I closed the Data Ranges dialog an additional three
+                # times, one of those times using by typing <Esc>.
 
             #verify - we didn't crash
         gridwin.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))

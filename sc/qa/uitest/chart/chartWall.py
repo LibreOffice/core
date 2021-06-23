@@ -34,20 +34,17 @@ class chartWall(UITestCase):
         xChartMainTop = self.xUITest.getTopFocusWindow()
         xChartMain = xChartMainTop.getChild("chart_window")
         xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
-        self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "DiagramWall"}))
-        xDialog = self.xUITest.getTopFocusWindow()
-        #Click on tab "Borders".
-        tabcontrol = xDialog.getChild("tabcontrol")
-        select_pos(tabcontrol, "0")
+        with self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "DiagramWall"})) as xDialog:
+            #Click on tab "Borders".
+            tabcontrol = xDialog.getChild("tabcontrol")
+            select_pos(tabcontrol, "0")
 
-        xWidth = xDialog.getChild("MTR_FLD_LINE_WIDTH")
-        transparency = xDialog.getChild("MTR_LINE_TRANSPARENT")
+            xWidth = xDialog.getChild("MTR_FLD_LINE_WIDTH")
+            transparency = xDialog.getChild("MTR_LINE_TRANSPARENT")
 
-        xWidth.executeAction("UP", tuple())
-        transparency.executeAction("UP", tuple())
+            xWidth.executeAction("UP", tuple())
+            transparency.executeAction("UP", tuple())
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
 
         self.assertEqual(xWall.LineWidth, 100)
         self.assertEqual(xWall.LineTransparence, 5)
@@ -60,48 +57,45 @@ class chartWall(UITestCase):
         xChartMainTop = self.xUITest.getTopFocusWindow()
         xChartMain = xChartMainTop.getChild("chart_window")
         xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
-        self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "DiagramWall"}))
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "DiagramWall"})) as xDialog:
 
-        tabcontrol = xDialog.getChild("tabcontrol")
-        select_pos(tabcontrol, "0")
-        xWidth = xDialog.getChild("MTR_FLD_LINE_WIDTH")
-        transparency = xDialog.getChild("MTR_LINE_TRANSPARENT")
+            tabcontrol = xDialog.getChild("tabcontrol")
+            select_pos(tabcontrol, "0")
+            xWidth = xDialog.getChild("MTR_FLD_LINE_WIDTH")
+            transparency = xDialog.getChild("MTR_LINE_TRANSPARENT")
 
-        self.assertEqual(get_state_as_dict(xWidth)["Text"], "0.10 cm")
-        self.assertEqual(get_state_as_dict(transparency)["Text"], "5%")
+            self.assertEqual(get_state_as_dict(xWidth)["Text"], "0.10 cm")
+            self.assertEqual(get_state_as_dict(transparency)["Text"], "5%")
 
-        self.assertEqual(xWall.LineWidth, 100)
-        self.assertEqual(xWall.LineTransparence, 5)
-        self.assertEqual(hex(xWall.FillColor), '0xe6e6e6')
-        self.assertEqual(xWall.FillTransparence, 0)
+            self.assertEqual(xWall.LineWidth, 100)
+            self.assertEqual(xWall.LineTransparence, 5)
+            self.assertEqual(hex(xWall.FillColor), '0xe6e6e6')
+            self.assertEqual(xWall.FillTransparence, 0)
 
-        #Click on tab "Area"
-        tabcontrol = xDialog.getChild("tabcontrol")
-        select_pos(tabcontrol, "1")
+            #Click on tab "Area"
+            tabcontrol = xDialog.getChild("tabcontrol")
+            select_pos(tabcontrol, "1")
 
-        btncolor = xDialog.getChild("btncolor")
-        btncolor.executeAction("CLICK", tuple())
+            btncolor = xDialog.getChild("btncolor")
+            btncolor.executeAction("CLICK", tuple())
 
-        rCustom = xDialog.getChild("R_custom")
-        gCustom = xDialog.getChild("G_custom")
-        bCustom = xDialog.getChild("B_custom")
+            rCustom = xDialog.getChild("R_custom")
+            gCustom = xDialog.getChild("G_custom")
+            bCustom = xDialog.getChild("B_custom")
 
-        rCustom.executeAction("CLEAR", tuple())
-        rCustom.executeAction("TYPE", mkPropertyValues({"TEXT":"35"}))
-        rCustom.executeAction("UP", tuple())
-        rCustom.executeAction("DOWN", tuple())  #without this save data doesn't works
-        self.assertEqual(get_state_as_dict(rCustom)["Text"], "35")
-        gCustom.executeAction("CLEAR", tuple())
-        gCustom.executeAction("TYPE", mkPropertyValues({"TEXT":"169"}))
-        gCustom.executeAction("UP", tuple())
-        gCustom.executeAction("DOWN", tuple())  #without this save data doesn't works
-        bCustom.executeAction("CLEAR", tuple())
-        bCustom.executeAction("TYPE", mkPropertyValues({"TEXT":"211"}))
-        bCustom.executeAction("UP", tuple())
-        bCustom.executeAction("DOWN", tuple())  #without this save data doesn't works
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+            rCustom.executeAction("CLEAR", tuple())
+            rCustom.executeAction("TYPE", mkPropertyValues({"TEXT":"35"}))
+            rCustom.executeAction("UP", tuple())
+            rCustom.executeAction("DOWN", tuple())  #without this save data doesn't works
+            self.assertEqual(get_state_as_dict(rCustom)["Text"], "35")
+            gCustom.executeAction("CLEAR", tuple())
+            gCustom.executeAction("TYPE", mkPropertyValues({"TEXT":"169"}))
+            gCustom.executeAction("UP", tuple())
+            gCustom.executeAction("DOWN", tuple())  #without this save data doesn't works
+            bCustom.executeAction("CLEAR", tuple())
+            bCustom.executeAction("TYPE", mkPropertyValues({"TEXT":"211"}))
+            bCustom.executeAction("UP", tuple())
+            bCustom.executeAction("DOWN", tuple())  #without this save data doesn't works
 
         self.assertEqual(xWall.LineWidth, 100)
         self.assertEqual(xWall.LineTransparence, 5)
@@ -114,35 +108,32 @@ class chartWall(UITestCase):
         xChartMainTop = self.xUITest.getTopFocusWindow()
         xChartMain = xChartMainTop.getChild("chart_window")
         xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
-        self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "DiagramWall"}))
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "DiagramWall"})) as xDialog:
 
-        tabcontrol = xDialog.getChild("tabcontrol")
-        select_pos(tabcontrol, "1")
+            tabcontrol = xDialog.getChild("tabcontrol")
+            select_pos(tabcontrol, "1")
 
-        rCustom = xDialog.getChild("R_custom")
-        gCustom = xDialog.getChild("G_custom")
-        bCustom = xDialog.getChild("B_custom")
+            rCustom = xDialog.getChild("R_custom")
+            gCustom = xDialog.getChild("G_custom")
+            bCustom = xDialog.getChild("B_custom")
 
-        self.assertEqual(get_state_as_dict(rCustom)["Text"], "35")
-        self.assertEqual(get_state_as_dict(gCustom)["Text"], "169")
-        self.assertEqual(get_state_as_dict(bCustom)["Text"], "211")
+            self.assertEqual(get_state_as_dict(rCustom)["Text"], "35")
+            self.assertEqual(get_state_as_dict(gCustom)["Text"], "169")
+            self.assertEqual(get_state_as_dict(bCustom)["Text"], "211")
 
-        self.assertEqual(xWall.LineWidth, 100)
-        self.assertEqual(xWall.LineTransparence, 5)
-        self.assertEqual(hex(xWall.FillColor), '0x23a9d3')
-        self.assertEqual(xWall.FillTransparence, 0)
+            self.assertEqual(xWall.LineWidth, 100)
+            self.assertEqual(xWall.LineTransparence, 5)
+            self.assertEqual(hex(xWall.FillColor), '0x23a9d3')
+            self.assertEqual(xWall.FillTransparence, 0)
 
-        #change tab "Transparency"
-        select_pos(tabcontrol, "2")
-        transparency = xDialog.getChild("RBT_TRANS_LINEAR")
-        transparencyPercent = xDialog.getChild("MTR_TRANSPARENT")  #51%
+            #change tab "Transparency"
+            select_pos(tabcontrol, "2")
+            transparency = xDialog.getChild("RBT_TRANS_LINEAR")
+            transparencyPercent = xDialog.getChild("MTR_TRANSPARENT")  #51%
 
-        transparency.executeAction("CLICK", tuple())
-        transparencyPercent.executeAction("UP", tuple())
+            transparency.executeAction("CLICK", tuple())
+            transparencyPercent.executeAction("UP", tuple())
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
 
         self.assertEqual(xWall.LineWidth, 100)
         self.assertEqual(xWall.LineTransparence, 5)
@@ -155,25 +146,22 @@ class chartWall(UITestCase):
         xChartMainTop = self.xUITest.getTopFocusWindow()
         xChartMain = xChartMainTop.getChild("chart_window")
         xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
-        self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "DiagramWall"}))
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "DiagramWall"})) as xDialog:
 
-        tabcontrol = xDialog.getChild("tabcontrol")
-        select_pos(tabcontrol, "2")
+            tabcontrol = xDialog.getChild("tabcontrol")
+            select_pos(tabcontrol, "2")
 
-        transparency = xDialog.getChild("RBT_TRANS_LINEAR")
-        transparencyPercent = xDialog.getChild("MTR_TRANSPARENT")  #51%
+            transparency = xDialog.getChild("RBT_TRANS_LINEAR")
+            transparencyPercent = xDialog.getChild("MTR_TRANSPARENT")  #51%
 
-        self.assertEqual(get_state_as_dict(transparency)["Checked"], "true")
-        self.assertEqual(get_state_as_dict(transparencyPercent)["Text"], "51%")
+            self.assertEqual(get_state_as_dict(transparency)["Checked"], "true")
+            self.assertEqual(get_state_as_dict(transparencyPercent)["Text"], "51%")
 
-        self.assertEqual(xWall.LineWidth, 100)
-        self.assertEqual(xWall.LineTransparence, 5)
-        self.assertEqual(hex(xWall.FillColor), '0x23a9d3')
-        self.assertEqual(xWall.FillTransparence, 51)
+            self.assertEqual(xWall.LineWidth, 100)
+            self.assertEqual(xWall.LineTransparence, 5)
+            self.assertEqual(hex(xWall.FillColor), '0x23a9d3')
+            self.assertEqual(xWall.FillTransparence, 51)
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
 
         self.assertEqual(xWall.LineWidth, 100)
         self.assertEqual(xWall.LineTransparence, 5)

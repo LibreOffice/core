@@ -23,23 +23,20 @@ class tdf134439(UITestCase):
             self.assertEqual("Chap 1", xCursor.PageStyleName)
 
             xPageBreak = self.ui_test.wait_until_child_is_available('PageBreak')
-            self.ui_test.execute_dialog_through_action(xPageBreak, "EDIT")
+            with self.ui_test.execute_dialog_through_action(xPageBreak, "EDIT") as xDialog:
 
-            xDialog = self.xUITest.getTopFocusWindow()
 
-            self.assertEqual("Page", get_state_as_dict(xDialog.getChild("comboBreakType"))["SelectEntryText"])
-            self.assertEqual("Before", get_state_as_dict(xDialog.getChild("comboBreakPosition"))["SelectEntryText"])
+                self.assertEqual("Page", get_state_as_dict(xDialog.getChild("comboBreakType"))["SelectEntryText"])
+                self.assertEqual("Before", get_state_as_dict(xDialog.getChild("comboBreakPosition"))["SelectEntryText"])
 
-            xPageStyle = xDialog.getChild("comboPageStyle")
-            self.assertEqual("Chap 2", get_state_as_dict(xPageStyle)["SelectEntryText"])
+                xPageStyle = xDialog.getChild("comboPageStyle")
+                self.assertEqual("Chap 2", get_state_as_dict(xPageStyle)["SelectEntryText"])
 
-            select_by_text(xPageStyle, "Chap 3")
+                select_by_text(xPageStyle, "Chap 3")
 
-            self.assertEqual("Chap 3", get_state_as_dict(xPageStyle)["SelectEntryText"])
+                self.assertEqual("Chap 3", get_state_as_dict(xPageStyle)["SelectEntryText"])
 
-            # tdf#116070: Without the fix in place, this test would have crashed here
-            okBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(okBtn)
+                # tdf#116070: Without the fix in place, this test would have crashed here
 
             # Without the fix in place, this test would have failed with
             # AssertionError: 'Chap 1' != 'Chap 3'
