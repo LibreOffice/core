@@ -1827,7 +1827,9 @@ void SwWW8ImplReader::RegisterNumFormatOnTextNode(sal_uInt16 nCurrentLFO,
     {
         // Now this is either not a part of Chapter Numbering,
         // or else it is using a different numRule than the one copied to Chapter Numbering.
-        pTextNd->SetAttr(SwNumRuleItem(pRule->GetName()));
+        OUString sName = pRule == m_pChosenWW8OutlineStyle ? m_rDoc.GetOutlineNumRule()->GetName()
+                                                           : pRule->GetName();
+        pTextNd->SetAttr(SwNumRuleItem(sName));
     }
     pTextNd->SetAttrListLevel(nCurrentLevel);
 
