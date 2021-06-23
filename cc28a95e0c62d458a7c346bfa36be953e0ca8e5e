@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "30350392_cdacbab3",
+        "filename": "xmloff/source/style/xmlnumi.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-06-23T10:39:05Z",
+      "side": 1,
+      "message": "probably should recognize STYLE namespace here too? would work in case there are no changes during TC process...",
+      "revId": "cc28a95e0c62d458a7c346bfa36be953e0ca8e5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e150cc08_c8121ce4",
+        "filename": "xmloff/source/style/xmlnumi.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-06-23T10:39:05Z",
+      "side": 1,
+      "message": "is this really needed? shouldn\u0027t the writer code just use the prefix/suffix in this case?",
+      "revId": "cc28a95e0c62d458a7c346bfa36be953e0ca8e5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84cb0982_cfe07112",
+        "filename": "xmloff/source/style/xmlnumi.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-06-23T10:39:05Z",
+      "side": 1,
+      "message": "uh, the levels are base 16 ? are you sure? that wasn\u0027t clear from OOXML spec, it just says \"number\"",
+      "revId": "cc28a95e0c62d458a7c346bfa36be953e0ca8e5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
