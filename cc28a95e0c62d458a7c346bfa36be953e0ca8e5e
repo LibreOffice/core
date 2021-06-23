@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "840b6a59_015326ba",
+        "filename": "xmloff/source/style/xmlnumi.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2021-06-23T11:48:16Z",
+      "side": 1,
+      "message": "Seems premature for me, but relying on your opinion: i have no idea about standardizing routines.",
+      "parentUuid": "30350392_cdacbab3",
+      "revId": "cc28a95e0c62d458a7c346bfa36be953e0ca8e5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e150cc08_c8121ce4",
         "filename": "xmloff/source/style/xmlnumi.cxx",
         "patchSetId": 16
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "32b311f2_4e7f4a4b",
+        "filename": "xmloff/source/style/xmlnumi.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2021-06-23T11:48:16Z",
+      "side": 1,
+      "message": "Yeah, need to check this: since there is a conversion to/from list format in SvxNumberFormat this older part may be redundant. I\u0027ll check...",
+      "parentUuid": "e150cc08_c8121ce4",
+      "revId": "cc28a95e0c62d458a7c346bfa36be953e0ca8e5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "84cb0982_cfe07112",
         "filename": "xmloff/source/style/xmlnumi.cxx",
         "patchSetId": 16
@@ -47,6 +83,24 @@
       "writtenOn": "2021-06-23T10:39:05Z",
       "side": 1,
       "message": "uh, the levels are base 16 ? are you sure? that wasn\u0027t clear from OOXML spec, it just says \"number\"",
+      "revId": "cc28a95e0c62d458a7c346bfa36be953e0ca8e5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6559f80d_43ae29c9",
+        "filename": "xmloff/source/style/xmlnumi.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2021-06-23T11:48:16Z",
+      "side": 1,
+      "message": "Problem is that OOXML has 9 levels max, but ODF - 10. \"%10\" is bit harder to parse and there is a ambiguity in \"%10\": it is first level and \"0\" as a suffix or 10\"? So usage of hex for such case (i think rather rare case) maybe a solution?",
+      "parentUuid": "84cb0982_cfe07112",
       "revId": "cc28a95e0c62d458a7c346bfa36be953e0ca8e5e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
