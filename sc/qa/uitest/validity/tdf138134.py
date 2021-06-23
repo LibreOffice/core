@@ -15,44 +15,46 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class DetectiveCircle(UITestCase):
 
     def test_delete_circle_at_formula(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
-            enter_text_to_cell(gridwin, "A1", "1")
-            enter_text_to_cell(gridwin, "A2", "3")
-            enter_text_to_cell(gridwin, "A3", "=SUM(A1:A2)")
+        calc_doc = self.ui_test.create_doc_in_start_center("calc")
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        gridwin = xCalcDoc.getChild("grid_window")
+        document = self.ui_test.get_component()
+        enter_text_to_cell(gridwin, "A1", "1")
+        enter_text_to_cell(gridwin, "A2", "3")
+        enter_text_to_cell(gridwin, "A3", "=SUM(A1:A2)")
 
-            #Select the cells to be validated
-            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A3"}))
-            #Apply Data > Validity ... > Whole Numbers
-            self.ui_test.execute_dialog_through_command(".uno:Validation")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xTabs = xDialog.getChild("tabcontrol")
-            select_pos(xTabs, "0")
-            xallow = xDialog.getChild("allow")
-            xallowempty = xDialog.getChild("allowempty")
-            xdata = xDialog.getChild("data")
-            xmin = xDialog.getChild("min")
-            xmax = xDialog.getChild("max")
+        #Select the cells to be validated
+        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A3"}))
+        #Apply Data > Validity ... > Whole Numbers
+        self.ui_test.execute_dialog_through_command(".uno:Validation")
+        xDialog = self.xUITest.getTopFocusWindow()
+        xTabs = xDialog.getChild("tabcontrol")
+        select_pos(xTabs, "0")
+        xallow = xDialog.getChild("allow")
+        xallowempty = xDialog.getChild("allowempty")
+        xdata = xDialog.getChild("data")
+        xmin = xDialog.getChild("min")
+        xmax = xDialog.getChild("max")
 
-            select_by_text(xallow, "Whole Numbers")
-            xallowempty.executeAction("CLICK", tuple())
-            select_by_text(xdata, "equal")
-            xmin.executeAction("TYPE", mkPropertyValues({"TEXT":"5"}))
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+        select_by_text(xallow, "Whole Numbers")
+        xallowempty.executeAction("CLICK", tuple())
+        select_by_text(xdata, "equal")
+        xmin.executeAction("TYPE", mkPropertyValues({"TEXT":"5"}))
+        xOKBtn = xDialog.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOKBtn)
 
-            self.xUITest.executeCommand(".uno:ShowInvalid")
+        self.xUITest.executeCommand(".uno:ShowInvalid")
 
-            detectiveCircle1 = document.Sheets.getByName("Sheet1").DrawPage.getCount()
-            #There should be 1 detective circle object!
-            self.assertEqual(detectiveCircle1, 1)
+        detectiveCircle1 = document.Sheets.getByName("Sheet1").DrawPage.getCount()
+        #There should be 1 detective circle object!
+        self.assertEqual(detectiveCircle1, 1)
 
-            enter_text_to_cell(gridwin, "A1", "2")
+        enter_text_to_cell(gridwin, "A1", "2")
 
-            detectiveCircle2 = document.Sheets.getByName("Sheet1").DrawPage.getCount()
-            #There should not be a detective circle object!
-            self.assertEqual(detectiveCircle2, 0)
+        detectiveCircle2 = document.Sheets.getByName("Sheet1").DrawPage.getCount()
+        #There should not be a detective circle object!
+        self.assertEqual(detectiveCircle2, 0)
+
+        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

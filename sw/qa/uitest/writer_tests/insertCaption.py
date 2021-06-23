@@ -11,61 +11,63 @@ from uitest.uihelper.common import select_pos
 class insertCaption(UITestCase):
 
    def test_insert_caption(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
-            self.ui_test.execute_dialog_through_command(".uno:InsertFrame")   #  insert frame
-            xDialogFr = self.xUITest.getTopFocusWindow()
+        self.ui_test.create_doc_in_start_center("writer")
+        document = self.ui_test.get_component()
+        self.ui_test.execute_dialog_through_command(".uno:InsertFrame")   #  insert frame
+        xDialogFr = self.xUITest.getTopFocusWindow()
 
-            xWidth = xDialogFr.getChild("width")
-            xWidth.executeAction("UP", tuple())
-            xWidth.executeAction("UP", tuple())
+        xWidth = xDialogFr.getChild("width")
+        xWidth.executeAction("UP", tuple())
+        xWidth.executeAction("UP", tuple())
 
-            xHeight = xDialogFr.getChild("height")
-            xHeight.executeAction("UP", tuple())
-            xHeight.executeAction("UP", tuple())
+        xHeight = xDialogFr.getChild("height")
+        xHeight.executeAction("UP", tuple())
+        xHeight.executeAction("UP", tuple())
 
-            xOkBtn=xDialogFr.getChild("ok")
-            xOkBtn.executeAction("CLICK", tuple())
+        xOkBtn=xDialogFr.getChild("ok")
+        xOkBtn.executeAction("CLICK", tuple())
 
-            self.assertEqual(document.TextFrames.getCount(), 1)
+        self.assertEqual(document.TextFrames.getCount(), 1)
 
-            self.ui_test.execute_dialog_through_command(".uno:InsertCaptionDialog")   #  caption
-            xDialogCaption = self.xUITest.getTopFocusWindow()
+        self.ui_test.execute_dialog_through_command(".uno:InsertCaptionDialog")   #  caption
+        xDialogCaption = self.xUITest.getTopFocusWindow()
 
-            xCapt = xDialogCaption.getChild("caption_edit")
-            xCapt.executeAction("TYPE", mkPropertyValues({"TEXT":"Caption"}))
+        xCapt = xDialogCaption.getChild("caption_edit")
+        xCapt.executeAction("TYPE", mkPropertyValues({"TEXT":"Caption"}))
 
-            xOkBtn=xDialogCaption.getChild("ok")
-            xOkBtn.executeAction("CLICK", tuple())
+        xOkBtn=xDialogCaption.getChild("ok")
+        xOkBtn.executeAction("CLICK", tuple())
 
-            xFrame = document.TextFrames[0]
+        xFrame = document.TextFrames[0]
 
-            self.assertEqual(document.TextFrames[0].Text.String.replace('\r\n', '\n'), "\nText 1: Caption")
+        self.assertEqual(document.TextFrames[0].Text.String.replace('\r\n', '\n'), "\nText 1: Caption")
 
-            self.ui_test.execute_dialog_through_command(".uno:InsertCaptionDialog")   # 2nd caption
-            xDialogCaption = self.xUITest.getTopFocusWindow()
-            xCapt = xDialogCaption.getChild("caption_edit")
-            xCapt.executeAction("TYPE", mkPropertyValues({"TEXT":"Caption2"}))
-            xSep = xDialogCaption.getChild("separator_edit")
-            xSep.executeAction("TYPE", mkPropertyValues({"TEXT":"-"}))
+        self.ui_test.execute_dialog_through_command(".uno:InsertCaptionDialog")   # 2nd caption
+        xDialogCaption = self.xUITest.getTopFocusWindow()
+        xCapt = xDialogCaption.getChild("caption_edit")
+        xCapt.executeAction("TYPE", mkPropertyValues({"TEXT":"Caption2"}))
+        xSep = xDialogCaption.getChild("separator_edit")
+        xSep.executeAction("TYPE", mkPropertyValues({"TEXT":"-"}))
 
-            xOkBtn=xDialogCaption.getChild("ok")
-            xOkBtn.executeAction("CLICK", tuple())
+        xOkBtn=xDialogCaption.getChild("ok")
+        xOkBtn.executeAction("CLICK", tuple())
 
-            self.assertEqual(document.TextFrames[0].Text.String.replace('\r\n', '\n'), "\nText 1: Caption\nText 2-: Caption2")
+        self.assertEqual(document.TextFrames[0].Text.String.replace('\r\n', '\n'), "\nText 1: Caption\nText 2-: Caption2")
 
-            self.ui_test.execute_dialog_through_command(".uno:InsertCaptionDialog")   # 3. caption
-            xDialogCaption = self.xUITest.getTopFocusWindow()
-            xCapt = xDialogCaption.getChild("caption_edit")
-            xCapt.executeAction("TYPE", mkPropertyValues({"TEXT":"Caption3"}))
-            xSep = xDialogCaption.getChild("separator_edit")
-            xSep.executeAction("TYPE", mkPropertyValues({"TEXT":"-"}))
-            xPos = xDialogCaption.getChild("position")
-            select_pos(xPos, "1")
+        self.ui_test.execute_dialog_through_command(".uno:InsertCaptionDialog")   # 3. caption
+        xDialogCaption = self.xUITest.getTopFocusWindow()
+        xCapt = xDialogCaption.getChild("caption_edit")
+        xCapt.executeAction("TYPE", mkPropertyValues({"TEXT":"Caption3"}))
+        xSep = xDialogCaption.getChild("separator_edit")
+        xSep.executeAction("TYPE", mkPropertyValues({"TEXT":"-"}))
+        xPos = xDialogCaption.getChild("position")
+        select_pos(xPos, "1")
 
-            xOkBtn=xDialogCaption.getChild("ok")
-            xOkBtn.executeAction("CLICK", tuple())
+        xOkBtn=xDialogCaption.getChild("ok")
+        xOkBtn.executeAction("CLICK", tuple())
 
-            self.assertEqual(document.TextFrames[0].Text.String.replace('\r\n', '\n'), "\nText 1: Caption\nText 2-: Caption2\nText 3--: Caption3")
+        self.assertEqual(document.TextFrames[0].Text.String.replace('\r\n', '\n'), "\nText 1: Caption\nText 2-: Caption2\nText 3--: Caption3")
+
+        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

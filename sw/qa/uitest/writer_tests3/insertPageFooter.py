@@ -39,32 +39,35 @@ class WriterInsertPageFooter(UITestCase):
             document.StyleFamilies.PageStyles.Standard.FooterIsOn, False)
 
     def test_footer(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
+        self.ui_test.create_doc_in_start_center("writer")
 
-            self.insert_footer()
+        self.insert_footer()
 
-            self.delete_footer()
+        self.delete_footer()
+
+        self.ui_test.close_doc()
 
     def test_tdf107427(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
+        self.ui_test.create_doc_in_start_center("writer")
 
-            self.insert_footer()
+        self.insert_footer()
 
-            self.ui_test.execute_dialog_through_command(".uno:InsertTable")
+        self.ui_test.execute_dialog_through_command(".uno:InsertTable")
 
-            xInsertDlg = self.xUITest.getTopFocusWindow()
+        xInsertDlg = self.xUITest.getTopFocusWindow()
 
-            xOkBtn = xInsertDlg.getChild("ok")
-            xOkBtn.executeAction("CLICK", tuple())
+        xOkBtn = xInsertDlg.getChild("ok")
+        xOkBtn.executeAction("CLICK", tuple())
 
-            document = self.ui_test.get_component()
+        document = self.ui_test.get_component()
 
-            tables = document.getTextTables()
-            self.assertEqual(len(tables[0].getRows()), 2)
-            self.assertEqual(len(tables[0].getColumns()), 2)
+        tables = document.getTextTables()
+        self.assertEqual(len(tables[0].getRows()), 2)
+        self.assertEqual(len(tables[0].getColumns()), 2)
 
-            self.xUITest.executeCommand(".uno:SelectAll")
+        self.xUITest.executeCommand(".uno:SelectAll")
 
-            self.delete_footer()
+        self.delete_footer()
 
+        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

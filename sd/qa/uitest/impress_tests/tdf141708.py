@@ -10,22 +10,23 @@ class tdf141708(UITestCase):
 
     def test_tdf141708(self):
 
-        with self.ui_test.create_doc_in_start_center("impress"):
+        self.ui_test.create_doc_in_start_center("impress")
 
-            xTemplateDlg = self.xUITest.getTopFocusWindow()
-            xCancelBtn = xTemplateDlg.getChild("close")
-            self.ui_test.close_dialog_through_button(xCancelBtn)
+        xTemplateDlg = self.xUITest.getTopFocusWindow()
+        xCancelBtn = xTemplateDlg.getChild("close")
+        self.ui_test.close_dialog_through_button(xCancelBtn)
 
-            self.xUITest.executeCommand(".uno:Navigator")
+        self.xUITest.executeCommand(".uno:Navigator")
 
-            self.xUITest.executeCommand(".uno:CloseDoc")
+        self.xUITest.executeCommand(".uno:CloseDoc")
 
-        with self.ui_test.create_doc_in_start_center("impress"):
+        self.ui_test.create_doc_in_start_center("impress")
 
-            xTemplateDlg = self.xUITest.getTopFocusWindow()
-            xCancelBtn = xTemplateDlg.getChild("close")
-            self.ui_test.close_dialog_through_button(xCancelBtn)
+        xTemplateDlg = self.xUITest.getTopFocusWindow()
+        xCancelBtn = xTemplateDlg.getChild("close")
+        self.ui_test.close_dialog_through_button(xCancelBtn)
 
-            # Without the fix in place, this test would have crashed here
+        # Without the fix in place, this test would have crashed here
+        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

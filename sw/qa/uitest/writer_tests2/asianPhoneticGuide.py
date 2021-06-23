@@ -11,30 +11,31 @@ from uitest.uihelper.common import select_by_text
 class asianPhoneticGuide(UITestCase):
 
    def test_asian_phonetic_guide(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
-            xWriterDoc = self.xUITest.getTopFocusWindow()
+        self.ui_test.create_doc_in_start_center("writer")
+        document = self.ui_test.get_component()
+        xWriterDoc = self.xUITest.getTopFocusWindow()
 
-            self.ui_test.execute_modeless_dialog_through_command(".uno:RubyDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
+        self.ui_test.execute_modeless_dialog_through_command(".uno:RubyDialog")
+        xDialog = self.xUITest.getTopFocusWindow()
 
-            xLeft1ED = xDialog.getChild("Left1ED")
-            xRight1ED = xDialog.getChild("Right1ED")
-            xadjustlb = xDialog.getChild("adjustlb")
-            xpositionlb = xDialog.getChild("positionlb")
-            xstylelb = xDialog.getChild("stylelb")
+        xLeft1ED = xDialog.getChild("Left1ED")
+        xRight1ED = xDialog.getChild("Right1ED")
+        xadjustlb = xDialog.getChild("adjustlb")
+        xpositionlb = xDialog.getChild("positionlb")
+        xstylelb = xDialog.getChild("stylelb")
 
-            xLeft1ED.executeAction("TYPE", mkPropertyValues({"TEXT":"a"}))
-            xRight1ED.executeAction("TYPE", mkPropertyValues({"TEXT":"w"}))
-            select_by_text(xadjustlb, "Right")
-            select_by_text(xpositionlb, "Right")
-            select_by_text(xstylelb, "Quotation")
+        xLeft1ED.executeAction("TYPE", mkPropertyValues({"TEXT":"a"}))
+        xRight1ED.executeAction("TYPE", mkPropertyValues({"TEXT":"w"}))
+        select_by_text(xadjustlb, "Right")
+        select_by_text(xpositionlb, "Right")
+        select_by_text(xstylelb, "Quotation")
 
-            xApplyBtn = xDialog.getChild("ok")
-            xApplyBtn.executeAction("CLICK", tuple())
+        xApplyBtn = xDialog.getChild("ok")
+        xApplyBtn.executeAction("CLICK", tuple())
 
-            xCloseBtn = xDialog.getChild("close")
-            self.ui_test.close_dialog_through_button(xCloseBtn)
+        xCloseBtn = xDialog.getChild("close")
+        self.ui_test.close_dialog_through_button(xCloseBtn)
 
-            self.assertEqual(document.Text.String[0:1], "a")
+        self.assertEqual(document.Text.String[0:1], "a")
+        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

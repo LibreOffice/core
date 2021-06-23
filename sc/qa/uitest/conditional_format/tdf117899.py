@@ -42,23 +42,26 @@ class Tdf117899(UITestCase):
         with TemporaryDirectory() as tempdir:
             xFilePath = os.path.join(tempdir, "tdf117899-temp.ods")
 
-            with self.ui_test.create_doc_in_start_center("writer"):
+            self.ui_test.create_doc_in_start_center("writer")
 
-                # Paste as an OLE spreadsheet
-                formatProperty = mkPropertyValues({"SelectedFormat": 85})
-                self.xUITest.executeCommandWithParameters(".uno:ClipboardFormatItems", formatProperty)
+            # Paste as an OLE spreadsheet
+            formatProperty = mkPropertyValues({"SelectedFormat": 85})
+            self.xUITest.executeCommandWithParameters(".uno:ClipboardFormatItems", formatProperty)
 
-                # Save Copy as
-                self.ui_test.execute_dialog_through_command(".uno:ObjectMenue?VerbID:short=-8")
-                xDialog = self.xUITest.getTopFocusWindow()
+            # Save Copy as
+            self.ui_test.execute_dialog_through_command(".uno:ObjectMenue?VerbID:short=-8")
+            xDialog = self.xUITest.getTopFocusWindow()
 
-                xFileName = xDialog.getChild("file_name")
-                xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-                xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-                xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": xFilePath}))
+            xFileName = xDialog.getChild("file_name")
+            xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+            xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+            xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": xFilePath}))
 
-                xOpenBtn = xDialog.getChild("open")
-                self.ui_test.close_dialog_through_button(xOpenBtn)
+            xOpenBtn = xDialog.getChild("open")
+            self.ui_test.close_dialog_through_button(xOpenBtn)
+
+            # Close the Writer document
+            self.ui_test.close_doc()
 
             with self.ui_test.load_file(systemPathToFileUrl(xFilePath)):
 

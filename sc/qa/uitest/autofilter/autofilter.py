@@ -126,97 +126,101 @@ class AutofilterTest(UITestCase):
             self.assertFalse(is_row_hidden(doc, 4))
 
     def test_differentSearches(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
-            document = self.ui_test.get_component()
-            calcDoc = self.xUITest.getTopFocusWindow()
+        self.ui_test.create_doc_in_start_center("calc")
+        document = self.ui_test.get_component()
+        calcDoc = self.xUITest.getTopFocusWindow()
 
-            xGridWindow = calcDoc.getChild("grid_window")
-            enter_text_to_cell(xGridWindow, "A1", "X")
-            enter_text_to_cell(xGridWindow, "A2", "11")
-            enter_text_to_cell(xGridWindow, "A3", "22")
-            xGridWindow.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A3"}))
+        xGridWindow = calcDoc.getChild("grid_window")
+        enter_text_to_cell(xGridWindow, "A1", "X")
+        enter_text_to_cell(xGridWindow, "A2", "11")
+        enter_text_to_cell(xGridWindow, "A3", "22")
+        xGridWindow.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A3"}))
 
-            self.xUITest.executeCommand(".uno:DataFilterAutoFilter")
+        self.xUITest.executeCommand(".uno:DataFilterAutoFilter")
 
-            xGridWindow.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+        xGridWindow.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
 
-            xFloatWindow = self.xUITest.getFloatWindow()
+        xFloatWindow = self.xUITest.getFloatWindow()
 
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
 
-            xList = xCheckListMenu.getChild("check_list_box")
+        xList = xCheckListMenu.getChild("check_list_box")
 
-            self.assertEqual(2, len(xList.getChildren()))
-            self.assertEqual("11", get_state_as_dict(xList.getChild('0'))['Text'])
-            self.assertEqual("22", get_state_as_dict(xList.getChild('1'))['Text'])
+        self.assertEqual(2, len(xList.getChildren()))
+        self.assertEqual("11", get_state_as_dict(xList.getChild('0'))['Text'])
+        self.assertEqual("22", get_state_as_dict(xList.getChild('1'))['Text'])
 
-            xSearchEdit = xFloatWindow.getChild("search_edit")
-            xSearchEdit.executeAction("TYPE", mkPropertyValues({"TEXT" : "11"}))
+        xSearchEdit = xFloatWindow.getChild("search_edit")
+        xSearchEdit.executeAction("TYPE", mkPropertyValues({"TEXT" : "11"}))
 
-            self.assertEqual(1, len(xList.getChildren()))
-            self.assertEqual("11", get_state_as_dict(xList.getChild('0'))['Text'])
+        self.assertEqual(1, len(xList.getChildren()))
+        self.assertEqual("11", get_state_as_dict(xList.getChild('0'))['Text'])
 
-            xOkBtn = xFloatWindow.getChild("ok")
-            xOkBtn.executeAction("CLICK", tuple())
+        xOkBtn = xFloatWindow.getChild("ok")
+        xOkBtn.executeAction("CLICK", tuple())
 
-            self.assertFalse(is_row_hidden(document, 0))
-            self.assertFalse(is_row_hidden(document, 1))
-            self.assertTrue(is_row_hidden(document, 2))
+        self.assertFalse(is_row_hidden(document, 0))
+        self.assertFalse(is_row_hidden(document, 1))
+        self.assertTrue(is_row_hidden(document, 2))
 
-            xGridWindow.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+        xGridWindow.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
 
-            xFloatWindow = self.xUITest.getFloatWindow()
+        xFloatWindow = self.xUITest.getFloatWindow()
 
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
 
-            xList = xCheckListMenu.getChild("check_list_box")
+        xList = xCheckListMenu.getChild("check_list_box")
 
-            self.assertEqual(2, len(xList.getChildren()))
-            self.assertEqual("11", get_state_as_dict(xList.getChild('0'))['Text'])
-            self.assertEqual("22", get_state_as_dict(xList.getChild('1'))['Text'])
+        self.assertEqual(2, len(xList.getChildren()))
+        self.assertEqual("11", get_state_as_dict(xList.getChild('0'))['Text'])
+        self.assertEqual("22", get_state_as_dict(xList.getChild('1'))['Text'])
 
-            xSearchEdit = xFloatWindow.getChild("search_edit")
-            xSearchEdit.executeAction("TYPE", mkPropertyValues({"TEXT" : "22"}))
+        xSearchEdit = xFloatWindow.getChild("search_edit")
+        xSearchEdit.executeAction("TYPE", mkPropertyValues({"TEXT" : "22"}))
 
-            self.assertEqual(1, len(xList.getChildren()))
-            self.assertEqual("22", get_state_as_dict(xList.getChild('0'))['Text'])
+        self.assertEqual(1, len(xList.getChildren()))
+        self.assertEqual("22", get_state_as_dict(xList.getChild('0'))['Text'])
 
-            xOkBtn = xFloatWindow.getChild("ok")
-            xOkBtn.executeAction("CLICK", tuple())
+        xOkBtn = xFloatWindow.getChild("ok")
+        xOkBtn.executeAction("CLICK", tuple())
 
 
-            self.assertFalse(is_row_hidden(document, 0))
-            self.assertTrue(is_row_hidden(document, 1))
-            self.assertFalse(is_row_hidden(document, 2))
+        self.assertFalse(is_row_hidden(document, 0))
+        self.assertTrue(is_row_hidden(document, 1))
+        self.assertFalse(is_row_hidden(document, 2))
+
+        self.ui_test.close_doc()
 
     def test_tdf89244(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
+        calc_doc = self.ui_test.create_doc_in_start_center("calc")
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        gridwin = xCalcDoc.getChild("grid_window")
+        document = self.ui_test.get_component()
 
-            enter_text_to_cell(gridwin, "A1", "AAA")
-            enter_text_to_cell(gridwin, "A3", "BBB")
-            gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A2"}))
+        enter_text_to_cell(gridwin, "A1", "AAA")
+        enter_text_to_cell(gridwin, "A3", "BBB")
+        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A2"}))
 
-            self.xUITest.executeCommand(".uno:MergeCells")
+        self.xUITest.executeCommand(".uno:MergeCells")
 
-            self.xUITest.executeCommand(".uno:DataFilterAutoFilter")
+        self.xUITest.executeCommand(".uno:DataFilterAutoFilter")
 
-            gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+        gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
 
-            xFloatWindow = self.xUITest.getFloatWindow()
+        xFloatWindow = self.xUITest.getFloatWindow()
 
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
 
-            xList = xCheckListMenu.getChild("check_list_box")
+        xList = xCheckListMenu.getChild("check_list_box")
 
-            self.assertEqual(2, len(xList.getChildren()))
-            self.assertEqual("(empty)", get_state_as_dict(xList.getChild('0'))['Text'])
-            self.assertEqual("BBB", get_state_as_dict(xList.getChild('1'))['Text'])
+        self.assertEqual(2, len(xList.getChildren()))
+        self.assertEqual("(empty)", get_state_as_dict(xList.getChild('0'))['Text'])
+        self.assertEqual("BBB", get_state_as_dict(xList.getChild('1'))['Text'])
 
-            xOkBtn = xFloatWindow.getChild("ok")
-            xOkBtn.executeAction("CLICK", tuple())
+        xOkBtn = xFloatWindow.getChild("ok")
+        xOkBtn.executeAction("CLICK", tuple())
+
+        self.ui_test.close_doc()
 
     def test_tdf116818(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf116818.xlsx")) as doc:
@@ -368,52 +372,54 @@ class AutofilterTest(UITestCase):
             self.assertFalse(is_row_hidden(doc, 7))
 
     def test_tdf142350(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
-            document = self.ui_test.get_component()
-            calcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = calcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
+        self.ui_test.create_doc_in_start_center("calc")
+        document = self.ui_test.get_component()
+        calcDoc = self.xUITest.getTopFocusWindow()
+        gridwin = calcDoc.getChild("grid_window")
+        document = self.ui_test.get_component()
 
-            enter_text_to_cell(gridwin, "A1", "A")
-            enter_text_to_cell(gridwin, "A2", "0")
-            enter_text_to_cell(gridwin, "A3", "")
-            enter_text_to_cell(gridwin, "A4", "1")
+        enter_text_to_cell(gridwin, "A1", "A")
+        enter_text_to_cell(gridwin, "A2", "0")
+        enter_text_to_cell(gridwin, "A3", "")
+        enter_text_to_cell(gridwin, "A4", "1")
 
-            gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A4"}))
+        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A4"}))
 
-            self.xUITest.executeCommand(".uno:DataFilterAutoFilter")
+        self.xUITest.executeCommand(".uno:DataFilterAutoFilter")
 
-            gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
-            xFloatWindow = self.xUITest.getFloatWindow()
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
-            xList = xCheckListMenu.getChild("check_list_box")
+        gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+        xFloatWindow = self.xUITest.getFloatWindow()
+        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+        xList = xCheckListMenu.getChild("check_list_box")
 
-            # tdf140745 show (empty) entry on top of the checkbox list
-            self.assertEqual(3, len(xList.getChildren()))
-            self.assertEqual("(empty)", get_state_as_dict(xList.getChild('0'))['Text'])
-            self.assertEqual("0", get_state_as_dict(xList.getChild('1'))['Text'])
-            self.assertEqual("1", get_state_as_dict(xList.getChild('2'))['Text'])
+        # tdf140745 show (empty) entry on top of the checkbox list
+        self.assertEqual(3, len(xList.getChildren()))
+        self.assertEqual("(empty)", get_state_as_dict(xList.getChild('0'))['Text'])
+        self.assertEqual("0", get_state_as_dict(xList.getChild('1'))['Text'])
+        self.assertEqual("1", get_state_as_dict(xList.getChild('2'))['Text'])
 
-            xEntry = xList.getChild("0")
-            xEntry.executeAction("CLICK", tuple())
+        xEntry = xList.getChild("0")
+        xEntry.executeAction("CLICK", tuple())
 
-            xOkButton = xFloatWindow.getChild("ok")
-            xOkButton.executeAction("CLICK", tuple())
+        xOkButton = xFloatWindow.getChild("ok")
+        xOkButton.executeAction("CLICK", tuple())
 
-            self.assertFalse(is_row_hidden(document, 1))
-            self.assertTrue(is_row_hidden(document, 2))
-            self.assertFalse(is_row_hidden(document, 3))
+        self.assertFalse(is_row_hidden(document, 1))
+        self.assertTrue(is_row_hidden(document, 2))
+        self.assertFalse(is_row_hidden(document, 3))
 
-            gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
-            xFloatWindow = self.xUITest.getFloatWindow()
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
-            xList = xCheckListMenu.getChild("check_list_box")
-            self.assertEqual(3, len(xList.getChildren()))
-            self.assertEqual('false', get_state_as_dict(xList.getChild('0'))['IsChecked'])
-            self.assertEqual('true', get_state_as_dict(xList.getChild('1'))['IsChecked'])
-            self.assertEqual('true', get_state_as_dict(xList.getChild('2'))['IsChecked'])
-            xCloseButton = xFloatWindow.getChild("cancel")
-            xCloseButton.executeAction("CLICK", tuple())
+        gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+        xFloatWindow = self.xUITest.getFloatWindow()
+        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+        xList = xCheckListMenu.getChild("check_list_box")
+        self.assertEqual(3, len(xList.getChildren()))
+        self.assertEqual('false', get_state_as_dict(xList.getChild('0'))['IsChecked'])
+        self.assertEqual('true', get_state_as_dict(xList.getChild('1'))['IsChecked'])
+        self.assertEqual('true', get_state_as_dict(xList.getChild('2'))['IsChecked'])
+        xCloseButton = xFloatWindow.getChild("cancel")
+        xCloseButton.executeAction("CLICK", tuple())
+
+        self.ui_test.close_doc()
 
     def test_tdf138438(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf138438.ods")) as doc:
