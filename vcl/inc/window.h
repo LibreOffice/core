@@ -96,6 +96,8 @@ bool isEnabledInLayout(const vcl::Window *pWindow);
 
 bool ImplWindowFrameProc( vcl::Window* pInst, SalEvent nEvent, const void* pEvent );
 
+bool ImplWindowFrameProc2( vcl::Window* pInst, SalEvent nEvent, const void* pEvent );
+
 struct ImplWinData
 {
     std::optional<OUString>
