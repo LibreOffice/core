@@ -42,197 +42,188 @@ using namespace ::com::sun::star;
 
 namespace emfio::emfreader
 {
-        namespace {
+namespace
+{
+class XEmfParser : public ::cppu::WeakAggImplHelper2<graphic::XEmfParser, lang::XServiceInfo>
+{
+private:
+    uno::Reference<uno::XComponentContext> context_;
+    basegfx::B2DTuple maSizeHint;
 
-        class XEmfParser : public ::cppu::WeakAggImplHelper2< graphic::XEmfParser, lang::XServiceInfo >
+public:
+    explicit XEmfParser(uno::Reference<uno::XComponentContext> const& context);
+    XEmfParser(const XEmfParser&) = delete;
+    XEmfParser& operator=(const XEmfParser&) = delete;
+
+    // XEmfParser
+    virtual uno::Sequence<uno::Reference<::graphic::XPrimitive2D>> SAL_CALL getDecomposition(
+        const uno::Reference<::io::XInputStream>& xEmfStream, const OUString& aAbsolutePath,
+        const uno::Sequence<::beans::PropertyValue>& rProperties) override;
+    void SAL_CALL setSizeHint(const geometry::RealPoint2D& rSize) override;
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString&) override;
+    virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+};
+
+}
+
+XEmfParser::XEmfParser(uno::Reference<uno::XComponentContext> const& context)
+    : context_(context)
+{
+}
+
+uno::Sequence<uno::Reference<::graphic::XPrimitive2D>>
+XEmfParser::getDecomposition(const uno::Reference<::io::XInputStream>& xEmfStream,
+                             const OUString& /*aAbsolutePath*/,
+                             const uno::Sequence<::beans::PropertyValue>& rProperties)
+{
+    drawinglayer::primitive2d::Primitive2DContainer aRetval;
+
+    if (xEmfStream.is())
+    {
+        WmfExternal aExternalHeader;
+        const bool bExternalHeaderUsed(aExternalHeader.setSequence(rProperties));
+        bool bEnableEMFPlus = true;
+        comphelper::SequenceAsHashMap aMap(rProperties);
+        auto it = aMap.find("EMFPlusEnable");
+        if (it != aMap.end())
         {
-        private:
-            uno::Reference< uno::XComponentContext > context_;
-            basegfx::B2DTuple maSizeHint;
-
-        public:
-            explicit XEmfParser(
-                uno::Reference< uno::XComponentContext > const & context);
-            XEmfParser(const XEmfParser&) = delete;
-            XEmfParser& operator=(const XEmfParser&) = delete;
-
-            // XEmfParser
-            virtual uno::Sequence< uno::Reference< ::graphic::XPrimitive2D > > SAL_CALL getDecomposition(
-                const uno::Reference< ::io::XInputStream >& xEmfStream,
-                const OUString& aAbsolutePath,
-                const uno::Sequence< ::beans::PropertyValue >& rProperties) override;
-            void SAL_CALL setSizeHint(const geometry::RealPoint2D& rSize) override;
-
-            // XServiceInfo
-            virtual OUString SAL_CALL getImplementationName() override;
-            virtual sal_Bool SAL_CALL supportsService(const OUString&) override;
-            virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-        };
-
-        }
-
-        XEmfParser::XEmfParser(
-            uno::Reference< uno::XComponentContext > const & context):
-            context_(context)
-        {
-        }
-
-        uno::Sequence< uno::Reference< ::graphic::XPrimitive2D > > XEmfParser::getDecomposition(
-            const uno::Reference< ::io::XInputStream >& xEmfStream,
-            const OUString& /*aAbsolutePath*/,
-            const uno::Sequence< ::beans::PropertyValue >& rProperties)
-        {
-            drawinglayer::primitive2d::Primitive2DContainer aRetval;
-
-            if (xEmfStream.is())
+            bool bValue;
+            if (it->second >>= bValue)
             {
-                WmfExternal aExternalHeader;
-                const bool bExternalHeaderUsed(aExternalHeader.setSequence(rProperties));
-                bool bEnableEMFPlus = true;
-                comphelper::SequenceAsHashMap aMap(rProperties);
-                auto it = aMap.find("EMFPlusEnable");
-                if (it != aMap.end())
+                bEnableEMFPlus = bValue;
+            }
+        }
+
+        // rough check - import and conv to primitive
+        GDIMetaFile aMtf;
+        std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream(xEmfStream));
+        sal_uInt32 nOrgPos = pStream->Tell();
+
+        SvStreamEndian nOrigNumberFormat = pStream->GetEndian();
+        pStream->SetEndian(SvStreamEndian::LITTLE);
+
+        sal_uInt32 nMetaType(0);
+        if (checkSeek(*pStream, 0x28))
+            pStream->ReadUInt32(nMetaType);
+        pStream->Seek(nOrgPos);
+
+        bool bReadError(false);
+
+        try
+        {
+            if (nMetaType == 0x464d4520)
+            {
+                // read and get possible failure/error, ReadEnhWMF returns success
+                emfio::EmfReader aReader(*pStream, aMtf);
+                aReader.SetSizeHint(maSizeHint);
+                if (!bEnableEMFPlus)
                 {
-                    bool bValue;
-                    if (it->second >>= bValue)
-                    {
-                        bEnableEMFPlus = bValue;
-                    }
+                    aReader.SetEnableEMFPlus(bEnableEMFPlus);
                 }
-
-                // rough check - import and conv to primitive
-                GDIMetaFile aMtf;
-                std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream(xEmfStream));
-                sal_uInt32 nOrgPos = pStream->Tell();
-
-                SvStreamEndian nOrigNumberFormat = pStream->GetEndian();
-                pStream->SetEndian(SvStreamEndian::LITTLE);
-
-                sal_uInt32 nMetaType(0);
-                if (checkSeek(*pStream, 0x28))
-                    pStream->ReadUInt32(nMetaType);
-                pStream->Seek(nOrgPos);
-
-                bool bReadError(false);
-
-                try
-                {
-                    if (nMetaType == 0x464d4520)
-                    {
-                        // read and get possible failure/error, ReadEnhWMF returns success
-                        emfio::EmfReader aReader(*pStream, aMtf);
-                        aReader.SetSizeHint(maSizeHint);
-                        if (!bEnableEMFPlus)
-                        {
-                            aReader.SetEnableEMFPlus(bEnableEMFPlus);
-                        }
-                        bReadError = !aReader.ReadEnhWMF();
-                    }
-                    else
-                    {
-                        emfio::WmfReader aReader(*pStream, aMtf, bExternalHeaderUsed ? &aExternalHeader : nullptr);
-                        if (!bEnableEMFPlus)
-                            aReader.SetEnableEMFPlus(bEnableEMFPlus);
-                        aReader.ReadWMF();
-
-                        // Need to check for ErrCode at stream to not lose former work.
-                        // This may contain important information and will behave the
-                        // same as before. When we have an error, do not create content
-                        ErrCode aErrCode(pStream->GetError());
-
-                        bReadError = aErrCode.IsError();
-                    }
-                }
-                catch (...)
-                {
-                    bReadError = true;
-                }
-
-                pStream->SetEndian(nOrigNumberFormat);
-
-                if (!bReadError)
-                {
-                    Size aSize(aMtf.GetPrefSize());
-
-                    if (aMtf.GetPrefMapMode().GetMapUnit() == MapUnit::MapPixel)
-                    {
-                        aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, MapMode(MapUnit::Map100thMM));
-                    }
-                    else
-                    {
-                        aSize = OutputDevice::LogicToLogic(aSize, aMtf.GetPrefMapMode(), MapMode(MapUnit::Map100thMM));
-                    }
-
-                    // use size
-                    const basegfx::B2DHomMatrix aMetafileTransform(
-                        basegfx::utils::createScaleB2DHomMatrix(
-                            aSize.Width(),
-                            aSize.Height()));
-
-                    // ...and create a single MetafilePrimitive2D containing the Metafile.
-                    // CAUTION: Currently, ReadWindowMetafile uses the local VectorGraphicData
-                    // and a MetafileAccessor hook at the MetafilePrimitive2D inside of
-                    // ImpGraphic::ImplGetGDIMetaFile to get the Metafile. Thus, the first
-                    // and only primitive in this case *has to be* a MetafilePrimitive2D.
-                    aRetval.push_back(
-                        new drawinglayer::primitive2d::MetafilePrimitive2D(
-                            aMetafileTransform,
-                            aMtf));
-
-                    // // force to use decomposition directly to get rid of the metafile
-                    // const css::uno::Sequence< css::beans::PropertyValue > aViewParameters;
-                    // drawinglayer::primitive2d::MetafilePrimitive2D aMetafilePrimitive2D(
-                    //     aMetafileTransform,
-                    //     aMtf);
-                    // aRetval.append(aMetafilePrimitive2D.getDecomposition(aViewParameters));
-
-                    // if (aRetval.empty())
-                    // {
-                    //     // for test, just create some graphic data that will get visualized
-                    //     const basegfx::B2DRange aRange(1000, 1000, 5000, 5000);
-                    //     const basegfx::BColor aColor(1.0, 0.0, 0.0);
-                    //     const basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(aRange));
-                    //
-                    //     aRetval.push_back(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aOutline), aColor));
-                    // }
-                }
+                bReadError = !aReader.ReadEnhWMF();
             }
             else
             {
-                SAL_WARN("emfio", "Invalid stream (!)");
+                emfio::WmfReader aReader(*pStream, aMtf,
+                                         bExternalHeaderUsed ? &aExternalHeader : nullptr);
+                if (!bEnableEMFPlus)
+                    aReader.SetEnableEMFPlus(bEnableEMFPlus);
+                aReader.ReadWMF();
+
+                // Need to check for ErrCode at stream to not lose former work.
+                // This may contain important information and will behave the
+                // same as before. When we have an error, do not create content
+                ErrCode aErrCode(pStream->GetError());
+
+                bReadError = aErrCode.IsError();
+            }
+        }
+        catch (...)
+        {
+            bReadError = true;
+        }
+
+        pStream->SetEndian(nOrigNumberFormat);
+
+        if (!bReadError)
+        {
+            Size aSize(aMtf.GetPrefSize());
+
+            if (aMtf.GetPrefMapMode().GetMapUnit() == MapUnit::MapPixel)
+            {
+                aSize = Application::GetDefaultDevice()->PixelToLogic(aSize,
+                                                                      MapMode(MapUnit::Map100thMM));
+            }
+            else
+            {
+                aSize = OutputDevice::LogicToLogic(aSize, aMtf.GetPrefMapMode(),
+                                                   MapMode(MapUnit::Map100thMM));
             }
 
-            return comphelper::containerToSequence(aRetval);
-        }
+            // use size
+            const basegfx::B2DHomMatrix aMetafileTransform(
+                basegfx::utils::createScaleB2DHomMatrix(aSize.Width(), aSize.Height()));
 
-        void XEmfParser::setSizeHint(const geometry::RealPoint2D& rSize)
-        {
-            maSizeHint.setX(rSize.X);
-            maSizeHint.setY(rSize.Y);
-        }
+            // ...and create a single MetafilePrimitive2D containing the Metafile.
+            // CAUTION: Currently, ReadWindowMetafile uses the local VectorGraphicData
+            // and a MetafileAccessor hook at the MetafilePrimitive2D inside of
+            // ImpGraphic::ImplGetGDIMetaFile to get the Metafile. Thus, the first
+            // and only primitive in this case *has to be* a MetafilePrimitive2D.
+            aRetval.push_back(
+                new drawinglayer::primitive2d::MetafilePrimitive2D(aMetafileTransform, aMtf));
 
-        OUString SAL_CALL XEmfParser::getImplementationName()
-        {
-            return "emfio::emfreader::XEmfParser";
-        }
+            // // force to use decomposition directly to get rid of the metafile
+            // const css::uno::Sequence< css::beans::PropertyValue > aViewParameters;
+            // drawinglayer::primitive2d::MetafilePrimitive2D aMetafilePrimitive2D(
+            //     aMetafileTransform,
+            //     aMtf);
+            // aRetval.append(aMetafilePrimitive2D.getDecomposition(aViewParameters));
 
-        sal_Bool SAL_CALL XEmfParser::supportsService(const OUString& rServiceName)
-        {
-            return cppu::supportsService(this, rServiceName);
+            // if (aRetval.empty())
+            // {
+            //     // for test, just create some graphic data that will get visualized
+            //     const basegfx::B2DRange aRange(1000, 1000, 5000, 5000);
+            //     const basegfx::BColor aColor(1.0, 0.0, 0.0);
+            //     const basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(aRange));
+            //
+            //     aRetval.push_back(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aOutline), aColor));
+            // }
         }
+    }
+    else
+    {
+        SAL_WARN("emfio", "Invalid stream (!)");
+    }
 
-        uno::Sequence< OUString > SAL_CALL XEmfParser::getSupportedServiceNames()
-        {
-            return { "com.sun.star.graphic.EmfTools" };
-        }
+    return comphelper::containerToSequence(aRetval);
+}
+
+void XEmfParser::setSizeHint(const geometry::RealPoint2D& rSize)
+{
+    maSizeHint.setX(rSize.X);
+    maSizeHint.setY(rSize.Y);
+}
+
+OUString SAL_CALL XEmfParser::getImplementationName() { return "emfio::emfreader::XEmfParser"; }
+
+sal_Bool SAL_CALL XEmfParser::supportsService(const OUString& rServiceName)
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+uno::Sequence<OUString> SAL_CALL XEmfParser::getSupportedServiceNames()
+{
+    return { "com.sun.star.graphic.EmfTools" };
+}
 
 } // end of namespace emfio::emfreader
 
-
-
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-emfio_emfreader_XEmfParser_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+emfio_emfreader_XEmfParser_get_implementation(css::uno::XComponentContext* context,
+                                              css::uno::Sequence<css::uno::Any> const&)
 {
     return cppu::acquire(new emfio::emfreader::XEmfParser(context));
 }
