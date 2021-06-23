@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "918bb715_c1240fe5",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2037,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-23T15:30:23Z",
+      "side": 1,
+      "message": "This comment is in fact not addressed at all, despite marked \"Resolved\".",
+      "parentUuid": "e70e6bdf_07876c8e",
+      "revId": "60d4b0e8b17eb86fbf31dbed6c47c64e7f8443d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4c90875f_82e18fba",
         "filename": "sc/source/ui/view/gridwin4.cxx",
         "patchSetId": 3

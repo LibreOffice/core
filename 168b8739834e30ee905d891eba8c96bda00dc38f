@@ -89,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "07a31301_f8a7d720",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1240,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-23T15:30:23Z",
+      "side": 1,
+      "message": "So in the end, the proposal from Jan-Marek in the beginning would make sense, to use an idle instead of timer?",
+      "parentUuid": "182df220_3f683c3e",
+      "revId": "168b8739834e30ee905d891eba8c96bda00dc38f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "460e3ad5_fd6556de",
         "filename": "sc/source/ui/view/tabview5.cxx",
         "patchSetId": 14
