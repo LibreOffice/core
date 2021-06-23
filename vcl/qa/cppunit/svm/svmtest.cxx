@@ -180,7 +180,7 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
     void checkTransparent(const GDIMetaFile& rMetaFile);
     void testTransparent();
 
-    //void checkFloatTransparent(const GDIMetaFile& rMetaFile);
+    void checkFloatTransparent(const GDIMetaFile& rMetaFile);
     void testFloatTransparent();
 
     void checkEPS(const GDIMetaFile& rMetaFile);
@@ -2032,8 +2032,62 @@ void SvmTest::testTransparent()
     checkTransparent(readFile(u"transparent.svm"));
 }
 
+void SvmTest::checkFloatTransparent(const GDIMetaFile& rMetaFile)
+{
+    xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
+
+    assertXPathAttrs(pDoc, "/metafile/floattransparent[1]", {
+        {"x", "1"},
+        {"y", "2"},
+        {"width", "3"},
+        {"height", "4"},
+        {"transparent", "true"}
+    });
+
+    assertXPathAttrs(pDoc, "/metafile/floattransparent[1]/gradient[1]", {
+        {"style", "Linear"},
+        {"startcolor", "#ffffff"},
+        {"endcolor", "#000000"},
+        {"angle", "0"},
+        {"border", "0"},
+        {"offsetx", "50"},
+        {"offsety", "50"},
+        {"startintensity", "100"},
+        {"endintensity", "100"},
+        {"steps", "0"}
+    });
+
+    assertXPathAttrs(pDoc, "/metafile/floattransparent[1]/metafile[1]/point[1]", {
+        {"x", "1"},
+        {"y", "8"}
+    });
+
+    assertXPathAttrs(pDoc, "/metafile/floattransparent[1]/metafile[1]/point[2]", {
+        {"x", "2"},
+        {"y", "7"}
+    });
+}
+
 void SvmTest::testFloatTransparent()
-{}
+{
+    GDIMetaFile aGDIMetaFile;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
+
+    GDIMetaFile aGDIMetaFile1;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev1;
+    setupBaseVirtualDevice(*pVirtualDev1, aGDIMetaFile1);
+
+    pVirtualDev1->DrawPixel(Point(1, 8));
+    pVirtualDev1->DrawPixel(Point(2, 7));
+
+    Gradient aGradient(GradientStyle::Linear, COL_WHITE, COL_BLACK);
+
+    pVirtualDev->DrawTransparent(aGDIMetaFile1, Point(1, 2), Size(3, 4), aGradient);
+
+    checkFloatTransparent(writeAndReadStream(aGDIMetaFile));
+    checkFloatTransparent(readFile(u"floattransparent.svm"));
+}
 
 void SvmTest::checkEPS(const GDIMetaFile& rMetaFile)
 {
