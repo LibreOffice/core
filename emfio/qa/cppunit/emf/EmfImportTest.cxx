@@ -48,6 +48,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools, public unotest:
     void testPolyPolygon();
     void TestDrawString();
     void TestDrawStringTransparent();
+    void TestDrawStringWithBrush();
     void TestDrawLine();
     void TestLinearGradient();
     void TestTextMapMode();
@@ -87,6 +88,7 @@ public:
     CPPUNIT_TEST(testPolyPolygon);
     CPPUNIT_TEST(TestDrawString);
     CPPUNIT_TEST(TestDrawStringTransparent);
+    CPPUNIT_TEST(TestDrawStringWithBrush);
     CPPUNIT_TEST(TestDrawLine);
     CPPUNIT_TEST(TestLinearGradient);
     CPPUNIT_TEST(TestTextMapMode);
@@ -189,10 +191,9 @@ void Test::testPolyPolygon()
 void Test::TestDrawString()
 {
 #if HAVE_MORE_FONTS
-    // This unit checks for a correct import of an EMF+ file with only one DrawString Record
+    // EMF+ file with only one DrawString Record
     // Since the text is undecorated the optimal choice is a simpletextportion primitive
 
-    // first, get the sequence of primitives and dump it
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestDrawString.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
@@ -212,17 +213,15 @@ void Test::TestDrawString()
 void Test::TestDrawStringTransparent()
 {
 #if HAVE_MORE_FONTS
-    // This unit checks for a correct import of an EMF+ file with one DrawString Record with transparency
+    // EMF+ file with one DrawString Record with transparency
 
-    // first, get the sequence of primitives and dump it
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestDrawStringTransparent.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
     CPPUNIT_ASSERT (pDocument);
 
-    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform/unifiedtransparence", "transparence", "0.498039215686275");
-
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform/unifiedtransparence", "transparence", "50");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform/unifiedtransparence/textsimpleportion", "height", "24");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform/unifiedtransparence/textsimpleportion", "x", "66");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform/unifiedtransparence/textsimpleportion", "y", "74");
@@ -232,12 +231,27 @@ void Test::TestDrawStringTransparent()
 #endif
 }
 
+void Test::TestDrawStringWithBrush()
+{
+    // tdf#142975 EMF+ with records: DrawString, Brush and Font
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestDrawStringWithBrush.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    CPPUNIT_ASSERT (pDocument);
+    assertXPath(pDocument, "/primitive2D/metafile/transform/transform/textdecoratedportion", "xy11", "20");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/transform/textdecoratedportion", "xy13", "16");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/transform/textdecoratedportion", "xy22", "20");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/transform/textdecoratedportion", "xy33", "1");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/transform/textdecoratedportion", "text", "0123456789ABCDEF");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/transform/textdecoratedportion", "fontcolor", "#a50021");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/transform/textdecoratedportion", "familyname", "TIMES NEW ROMAN");
+}
+
 void Test::TestDrawLine()
 {
-    // This unit checks for a correct import of an EMF+ file with only one DrawLine Record
+    // EMF+ with records: DrawLine
     // The line is colored and has a specified width, therefore a polypolygonstroke primitive is the optimal choice
-
-    // first, get the sequence of primitives and dump it
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestDrawLine.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
@@ -251,18 +265,18 @@ void Test::TestDrawLine()
 
 void Test::TestLinearGradient()
 {
-    // This unit checks for a correct import of an EMF+ file with LinearGradient brush
+    // EMF+ file with LinearGradient brush
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestLinearGradient.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
     CPPUNIT_ASSERT (pDocument);
 
-    assertXPath(pDocument, "/primitive2D/metafile/transform", "xy11", "1.0000656512605");
+    assertXPath(pDocument, "/primitive2D/metafile/transform", "xy11", "1");
     assertXPath(pDocument, "/primitive2D/metafile/transform", "xy12", "0");
     assertXPath(pDocument, "/primitive2D/metafile/transform", "xy13", "0");
     assertXPath(pDocument, "/primitive2D/metafile/transform", "xy21", "0");
-    assertXPath(pDocument, "/primitive2D/metafile/transform", "xy22", "1.00013140604468");
+    assertXPath(pDocument, "/primitive2D/metafile/transform", "xy22", "1");
     assertXPath(pDocument, "/primitive2D/metafile/transform", "xy23", "0");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polypolygon", "height", "7610");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polypolygon", "width", "15232");
@@ -284,7 +298,7 @@ void Test::TestLinearGradient()
 
 void Test::TestTextMapMode()
 {
-    // Check import of EMF image with records: SETMAPMODE with MM_TEXT MapMode, POLYLINE16, EXTCREATEPEN, EXTTEXTOUTW
+    // EMF with records: SETMAPMODE with MM_TEXT MapMode, POLYLINE16, EXTCREATEPEN, EXTTEXTOUTW
     // MM_TEXT is mapped to one device pixel. Positive x is to the right; positive y is down.
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TextMapMode.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
@@ -318,7 +332,7 @@ void Test::TestTextMapMode()
 
 void Test::TestEnglishMapMode()
 {
-    // Check import of EMF image with records: SETMAPMODE with MM_ENGLISH MapMode, STROKEANDFILLPATH, EXTTEXTOUTW, SETTEXTALIGN, STRETCHDIBITS
+    // EMF image with records: SETMAPMODE with MM_ENGLISH MapMode, STROKEANDFILLPATH, EXTTEXTOUTW, SETTEXTALIGN, STRETCHDIBITS
     // MM_LOENGLISH is mapped to 0.01 inch. Positive x is to the right; positive y is up.M
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/test_mm_hienglish_ref.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
@@ -351,7 +365,7 @@ void Test::TestEnglishMapMode()
 
 void Test::TestRectangleWithModifyWorldTransform()
 {
-    // Check import of EMF image with records: EXTCREATEPEN, SELECTOBJECT, MODIFYWORLDTRANSFORM, RECTANGLE
+    // EMF image with records: EXTCREATEPEN, SELECTOBJECT, MODIFYWORLDTRANSFORM, RECTANGLE
 
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestRectangleWithModifyWorldTransform.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
@@ -452,7 +466,7 @@ void Test::TestEllipseXformIntersectClipRect()
 
 void Test::TestDrawPolyLine16WithClip()
 {
-    // Check import of EMF image with records:
+    // EMF image with records:
     // CREATEBRUSHINDIRECT, FILLRGN, BEGINPATH, POLYGON16, SELECTCLIPPATH, MODIFYWORLDTRANSFORM, SELECTOBJECT
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestDrawPolyLine16WithClip.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
