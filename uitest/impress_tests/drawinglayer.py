@@ -13,7 +13,7 @@ from uitest.framework import UITestCase
 class ImpressDrawinglayerTest(UITestCase):
 
     def test_move_object(self):
-        with self.ui_test.create_doc_in_start_center("impress"):
+        with self.ui_test.create_doc_in_start_center("impress") as document:
 
             xTemplateDlg = self.xUITest.getTopFocusWindow()
             xCancelBtn = xTemplateDlg.getChild("close")
@@ -23,7 +23,6 @@ class ImpressDrawinglayerTest(UITestCase):
 
             xImpressDoc = self.xUITest.getTopFocusWindow()
 
-            document = self.ui_test.get_component()
             self.assertEqual(1400, document.DrawPages[0].getByIndex(0).Position.X)
             self.assertEqual(628, document.DrawPages[0].getByIndex(0).Position.Y)
             self.assertEqual(1400, document.DrawPages[0].getByIndex(1).Position.X)
@@ -62,7 +61,7 @@ class ImpressDrawinglayerTest(UITestCase):
             self.assertIsNone(document.CurrentSelection)
 
     def test_resize_object(self):
-        with self.ui_test.create_doc_in_start_center("impress"):
+        with self.ui_test.create_doc_in_start_center("impress") as document:
 
             xTemplateDlg = self.xUITest.getTopFocusWindow()
             xCancelBtn = xTemplateDlg.getChild("close")
@@ -72,7 +71,6 @@ class ImpressDrawinglayerTest(UITestCase):
 
             xImpressDoc = self.xUITest.getTopFocusWindow()
 
-            document = self.ui_test.get_component()
             self.assertEqual(25199, document.DrawPages[0].getByIndex(0).Size.Width)
             self.assertEqual(2629, document.DrawPages[0].getByIndex(0).Size.Height)
             self.assertEqual(25199, document.DrawPages[0].getByIndex(1).Size.Width)
@@ -111,7 +109,7 @@ class ImpressDrawinglayerTest(UITestCase):
             self.assertIsNone(document.CurrentSelection)
 
     def test_rotate_object(self):
-        with self.ui_test.create_doc_in_start_center("impress"):
+        with self.ui_test.create_doc_in_start_center("impress") as document:
 
             xTemplateDlg = self.xUITest.getTopFocusWindow()
             xCancelBtn = xTemplateDlg.getChild("close")
@@ -119,7 +117,6 @@ class ImpressDrawinglayerTest(UITestCase):
 
             xImpressDoc = self.xUITest.getTopFocusWindow()
 
-            document = self.ui_test.get_component()
             self.assertEqual(25199, document.DrawPages[0].getByIndex(0).Size.Width)
             self.assertEqual(2629, document.DrawPages[0].getByIndex(0).Size.Height)
             self.assertEqual(25199, document.DrawPages[0].getByIndex(1).Size.Width)

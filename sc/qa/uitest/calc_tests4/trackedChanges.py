@@ -40,11 +40,10 @@ class CalcTrackedChanges(UITestCase):
             xCancBtn.executeAction("CLICK", tuple())
 
     def test_tdf66263_Protect_Records(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             self.ui_test.wait_until_child_is_available("grid_window")
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             self.xUITest.executeCommand(".uno:TraceChangeMode")
             #protect dialog
             self.ui_test.execute_dialog_through_command(".uno:ProtectTraceChangeMode")
@@ -65,11 +64,10 @@ class CalcTrackedChanges(UITestCase):
 
     def test_tracked_changes_accept(self):
 
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             self.ui_test.wait_until_child_is_available("grid_window")
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #track changes;  enter text to cell
             self.xUITest.executeCommand(".uno:TraceChangeMode")
             enter_text_to_cell(gridwin, "A1", "Test LibreOffice")
@@ -119,11 +117,10 @@ class CalcTrackedChanges(UITestCase):
 
     def test_tracked_changes_acceptall(self):
 
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             self.ui_test.wait_until_child_is_available("grid_window")
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #track changes;  enter text to cell
             self.xUITest.executeCommand(".uno:TraceChangeMode")
             enter_text_to_cell(gridwin, "A1", "Test LibreOffice")
@@ -165,11 +162,10 @@ class CalcTrackedChanges(UITestCase):
 
     def test_tracked_changes_reject(self):
 
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             self.ui_test.wait_until_child_is_available("grid_window")
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #track changes;  enter text to cell
             self.xUITest.executeCommand(".uno:TraceChangeMode")
             enter_text_to_cell(gridwin, "A1", "Test LibreOffice")
@@ -231,11 +227,10 @@ class CalcTrackedChanges(UITestCase):
 
     def test_tracked_changes_rejectall(self):
 
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             self.ui_test.wait_until_child_is_available("grid_window")
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #track changes;  enter text to cell
             self.xUITest.executeCommand(".uno:TraceChangeMode")
             enter_text_to_cell(gridwin, "A1", "Test LibreOffice")

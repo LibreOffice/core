@@ -12,10 +12,9 @@ class tdf51352(UITestCase):
 
     def test_convert_nested_table_to_text_tdf51352(self):
 
-        with self.ui_test.create_doc_in_start_center("writer"):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
-            document = self.ui_test.get_component()
             #1. New a text document
             #2. Insert a table and then in one cell create another table
             #-insert a table (by default 2x2)

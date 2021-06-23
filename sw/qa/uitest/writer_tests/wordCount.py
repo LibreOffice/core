@@ -13,10 +13,9 @@ class writerWordCount(UITestCase):
 
     def test_word_count_dialog(self):
 
-        with self.ui_test.create_doc_in_start_center("writer"):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
-            document = self.ui_test.get_component()
 
             type_text(xWriterEdit, "Test for word count dialog") #type text
             xWriterEdit.executeAction("SELECT", mkPropertyValues({"START_POS": "0", "END_POS": "8"})) #select two words
@@ -76,9 +75,8 @@ class writerWordCount(UITestCase):
             self.ui_test.close_dialog_through_button(xCloseBtn)
 
     def test_tdf91100(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
-            document = self.ui_test.get_component()
 
             self.ui_test.execute_modeless_dialog_through_command(".uno:WordCountDialog")
             xDialog = self.xUITest.getTopFocusWindow()
@@ -113,10 +111,9 @@ class writerWordCount(UITestCase):
 
     def test_word_count_interpunction_counted_tdf56975_a(self):
 
-        with self.ui_test.create_doc_in_start_center("writer"):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
-            document = self.ui_test.get_component()
             #Open writer, enter "Testing one two! Test?"
             type_text(xWriterEdit, "Testing one two! Test?")
             #-> LO says: 4 words. SUCCESS! :)
@@ -145,10 +142,9 @@ class writerWordCount(UITestCase):
 
     def test_word_count_interpunction_counted_tdf56975_b(self):
 
-        with self.ui_test.create_doc_in_start_center("writer"):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
-            document = self.ui_test.get_component()
             #1. Create a new text document.
             #2. Type-in the words:
             #     This is a test sentence.

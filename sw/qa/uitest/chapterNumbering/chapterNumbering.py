@@ -17,8 +17,7 @@ from uitest.uihelper.common import change_measurement_unit
 class WriterChapterNumbering(UITestCase):
 
     def test_chapter_numbering_dialog(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
             change_measurement_unit(self, "Millimeter")
 

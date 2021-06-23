@@ -14,8 +14,7 @@ from uitest.uihelper.common import change_measurement_unit
 class WriterLineNumbering(UITestCase):
 
     def test_line_numbering_dialog(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
             change_measurement_unit(self, "Centimeter")
 
@@ -80,8 +79,7 @@ class WriterLineNumbering(UITestCase):
             self.ui_test.close_dialog_through_button(xCancelBtn)
 
     def test_tdf86185(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
             self.ui_test.execute_dialog_through_command(".uno:LineNumberingDialog")
             xDialog = self.xUITest.getTopFocusWindow()

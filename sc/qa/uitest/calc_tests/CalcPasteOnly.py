@@ -13,9 +13,8 @@ from uitest.uihelper.calc import enter_text_to_cell
 class CalcPasteOnly(UITestCase):
 
     def test_paste_only(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xTopWindow = self.xUITest.getTopFocusWindow()
-            document = self.ui_test.get_component()
             gridwin = xTopWindow.getChild("grid_window")
 
             enter_text_to_cell(gridwin, "A1", "=SUM(A2:A3)")

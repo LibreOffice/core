@@ -15,10 +15,9 @@ from uitest.debug import sleep
 #Bug 53920 - EDITING: Data Validity Cell Range not being applied to multiple selected cells
 class tdf53920(UITestCase):
     def test_tdf53920_validity_multiple_cells(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
             #. Provide the desired values in a range of cells
             enter_text_to_cell(gridwin, "C1", "A")

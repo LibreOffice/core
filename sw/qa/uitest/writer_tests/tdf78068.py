@@ -12,8 +12,7 @@ from uitest.uihelper.common import select_pos
 class tdf78068(UITestCase):
 
    def test_tdf78068_format_paragraph_crash(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             #- add some text

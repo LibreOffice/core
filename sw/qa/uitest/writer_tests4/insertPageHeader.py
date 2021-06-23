@@ -8,9 +8,7 @@ from uitest.framework import UITestCase
 
 class WriterInsertPageHeader(UITestCase):
 
-    def insert_header(self):
-        document = self.ui_test.get_component()
-
+    def insert_header(self, document):
         self.assertEqual(
             document.StyleFamilies.PageStyles.Standard.HeaderIsOn, False)
 
@@ -20,9 +18,7 @@ class WriterInsertPageHeader(UITestCase):
         self.assertEqual(
             document.StyleFamilies.PageStyles.Standard.HeaderIsOn, True)
 
-    def delete_header(self):
-        document = self.ui_test.get_component()
-
+    def delete_header(self, document):
         self.assertEqual(
             document.StyleFamilies.PageStyles.Standard.HeaderIsOn, True)
 
@@ -38,16 +34,16 @@ class WriterInsertPageHeader(UITestCase):
             document.StyleFamilies.PageStyles.Standard.HeaderIsOn, False)
 
     def test_header(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
-            self.insert_header()
+            self.insert_header(document)
 
-            self.delete_header()
+            self.delete_header(document)
 
     def test_tdf107427(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
-            self.insert_header()
+            self.insert_header(document)
 
             self.ui_test.execute_dialog_through_command(".uno:InsertTable")
 
@@ -56,7 +52,6 @@ class WriterInsertPageHeader(UITestCase):
             xOkBtn = xInsertDlg.getChild("ok")
             xOkBtn.executeAction("CLICK", tuple())
 
-            document = self.ui_test.get_component()
 
             tables = document.getTextTables()
             self.assertEqual(len(tables[0].getRows()), 2)
@@ -64,5 +59,5 @@ class WriterInsertPageHeader(UITestCase):
 
             self.xUITest.executeCommand(".uno:SelectAll")
 
-            self.delete_header()
+            self.delete_header(document)
 

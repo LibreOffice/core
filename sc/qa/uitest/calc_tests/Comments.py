@@ -10,10 +10,9 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class Comments(UITestCase):
     def test_comment(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             # Select Cell D8
             gridwin.executeAction("SELECT", mkPropertyValues({"TABLE": "0"}))

@@ -16,10 +16,9 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class correlation(UITestCase):
     def test_statistic_correlation_column(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #fill data
             enter_text_to_cell(gridwin, "A1", "Maths")
             enter_text_to_cell(gridwin, "A2", "47")
@@ -105,10 +104,9 @@ class correlation(UITestCase):
             self.ui_test.close_dialog_through_button(xCancelBtn)
 
     def test_statistic_correlation_row(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #fill data
             enter_text_to_cell(gridwin, "A1", "Maths")
             enter_text_to_cell(gridwin, "A2", "Physics")

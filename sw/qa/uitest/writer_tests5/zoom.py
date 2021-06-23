@@ -11,8 +11,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class writerZoom(UITestCase):
     def test_zoom_writer(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             #dialog View-Zoom-Zoom
             self.ui_test.execute_dialog_through_command(".uno:Zoom")

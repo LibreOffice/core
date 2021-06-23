@@ -21,13 +21,11 @@ class tdf126306(UITestCase):
             self.assertEqual(bVisible, value)
 
     def test_run(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWin = calcDoc.getChild("grid_window")
 
             default_values = [25, 1023, 17, 9, 19, 0, 107, 89, 8, 453, 33, 3, 25, 204]
-            document = self.ui_test.get_component()
 
             for i, value in enumerate(default_values, start=2):
                 enter_text_to_cell(xGridWin, "A" + str(i), str(value))

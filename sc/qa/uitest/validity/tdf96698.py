@@ -14,10 +14,9 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 #Bug 96698 - Data => Validity => Custom (like Excel) is missing
 class tdf96698(UITestCase):
     def test_tdf96698_validity_custom_formula(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             #A general validity check for the entered new content of the active cell - especially for text
             #with a custom formula like in Excel is not possible.

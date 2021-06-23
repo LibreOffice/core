@@ -11,10 +11,9 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class CalcRows(UITestCase):
     def test_row_height(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             change_measurement_unit(self, "Centimeter")
 
@@ -51,10 +50,9 @@ class CalcRows(UITestCase):
             self.ui_test.close_dialog_through_button(xCancel)
 
     def test_row_height_two_rows(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             change_measurement_unit(self, "Centimeter")
 
@@ -91,10 +89,9 @@ class CalcRows(UITestCase):
 
     def test_tdf89140_row_height_copy(self):
         #Bug 89140 - Calc row paste doesn't keep row height
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             change_measurement_unit(self, "Centimeter")
 
@@ -128,10 +125,9 @@ class CalcRows(UITestCase):
             self.ui_test.close_dialog_through_button(xOK)
 
     def test_row_hide_show(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #select A3
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A3"}))
             self.xUITest.executeCommand(".uno:HideRow") #uno command moves focus one cell down
@@ -155,10 +151,9 @@ class CalcRows(UITestCase):
             self.assertEqual(gridWinState["CurrentRow"], "2")
 
     def test_row_test_move(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #select A3
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A3"}))
             gridWinState = get_state_as_dict(gridwin)
@@ -174,10 +169,9 @@ class CalcRows(UITestCase):
             self.assertEqual(gridWinState["CurrentRow"], "2")
 
     def test_row_height_insert_below(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             change_measurement_unit(self, "Centimeter")
 

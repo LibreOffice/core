@@ -10,9 +10,8 @@ class tdf93068(UITestCase):
 
     def test_tdf93068(self):
 
-        with self.ui_test.create_doc_in_start_center("writer"):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
-            document = self.ui_test.get_component()
 
             self.xUITest.getTopFocusWindow()
 
