@@ -23,7 +23,7 @@ class Tdf57841(UITestCase):
         xOpenBtn = xOpenDialog.getChild("open")
         xOpenBtn.executeAction("CLICK", tuple())
 
-        xDialog = self.xUITest.getTopFocusWindow()
+        xDialog = self.ui_test.wait_for_top_focus_window('TextImportCsvDialog')
         self.assertEqual('true', get_state_as_dict(xDialog.getChild("tab"))['Selected'])
         self.assertEqual('true', get_state_as_dict(xDialog.getChild("comma"))['Selected'])
         self.assertEqual('true', get_state_as_dict(xDialog.getChild("semicolon"))['Selected'])
