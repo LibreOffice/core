@@ -630,7 +630,8 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                         continue; // don't hide it, just skip it
                     }
                     OUString aEntry(comphelper::string::stripStart(
-                        m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(i, m_pWrtShell->GetLayout()), ' '));
+                        m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(
+                                            i, m_pWrtShell->GetLayout(), true, false, false), ' '));
                     aEntry = SwNavigationPI::CleanEntry(aEntry);
                     std::unique_ptr<SwOutlineContent> pCnt(new SwOutlineContent(this, aEntry, i, nLevel,
                                                         m_pWrtShell->IsOutlineMovable( i ), nPos ));
