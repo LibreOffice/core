@@ -28,52 +28,52 @@ struct WmfExternal;
 
 namespace emfio
 {
-    class WmfReader : public MtfTools
-    {
-    private:
-        sal_uInt16      mnUnitsPerInch;
-        sal_uInt32      mnRecSize;
+class WmfReader : public MtfTools
+{
+private:
+    sal_uInt16 mnUnitsPerInch;
+    sal_uInt32 mnRecSize;
 
-        // embedded EMF data
-        std::unique_ptr<SvMemoryStream> mpEMFStream;
+    // embedded EMF data
+    std::unique_ptr<SvMemoryStream> mpEMFStream;
 
-        // total number of comment records containing EMF data
-        sal_uInt32      mnEMFRecCount;
+    // total number of comment records containing EMF data
+    sal_uInt32 mnEMFRecCount;
 
-        // number of EMF records read
-        sal_uInt32      mnEMFRec;
+    // number of EMF records read
+    sal_uInt32 mnEMFRec;
 
-        // total size of embedded EMF data
-        sal_uInt32      mnEMFSize;
+    // total size of embedded EMF data
+    sal_uInt32 mnEMFSize;
 
-        sal_uInt32      mnSkipActions;
+    sal_uInt32 mnSkipActions;
 
-        // eventually handed over external header
-        const WmfExternal* mpExternalHeader;
+    // eventually handed over external header
+    const WmfExternal* mpExternalHeader;
 
-        bool mbEnableEMFPlus = true;
+    bool mbEnableEMFPlus = true;
 
-        // reads header of the WMF-Datei
-        bool            ReadHeader();
+    // reads header of the WMF-Datei
+    bool ReadHeader();
 
-        // reads parameters of the record with the functionnumber nFunction.
-        void            ReadRecordParams(sal_uInt32 nRecordSize, sal_uInt16 nFunction);
+    // reads parameters of the record with the functionnumber nFunction.
+    void ReadRecordParams(sal_uInt32 nRecordSize, sal_uInt16 nFunction);
 
-        Point           ReadPoint();                // reads and converts a point (first X then Y)
-        Point           ReadYX();                   // reads and converts a point (first Y then X)
-        tools::Rectangle       ReadRectangle();            // reads and converts a rectangle
-        Size            ReadYXExt();
-        void            GetPlaceableBound(tools::Rectangle& rSize, SvStream* pStrm);
+    Point ReadPoint(); // reads and converts a point (first X then Y)
+    Point ReadYX(); // reads and converts a point (first Y then X)
+    tools::Rectangle ReadRectangle(); // reads and converts a rectangle
+    Size ReadYXExt();
+    void GetPlaceableBound(tools::Rectangle& rSize, SvStream* pStrm);
 
-    public:
-        WmfReader(SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile, const WmfExternal* pExternalHeader);
+public:
+    WmfReader(SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile, const WmfExternal* pExternalHeader);
 
-        // read WMF file from stream and fill the GDIMetaFile
-        void ReadWMF();
+    // read WMF file from stream and fill the GDIMetaFile
+    void ReadWMF();
 
-        // Allows disabling EMF+ if EMF is embedded in this WMF.
-        void SetEnableEMFPlus(bool bEnableEMFPlus) { mbEnableEMFPlus = bEnableEMFPlus; }
-    };
+    // Allows disabling EMF+ if EMF is embedded in this WMF.
+    void SetEnableEMFPlus(bool bEnableEMFPlus) { mbEnableEMFPlus = bEnableEMFPlus; }
+};
 }
 
 #endif
