@@ -21,6 +21,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTLISTSMANAGER_HXX
 
 #include <IDocumentListsAccess.hxx>
+#include <o3tl/deleter.hxx>
 #include <memory>
 #include <unordered_map>
 
@@ -29,7 +30,6 @@ class SwDoc;
 
 namespace sw
 {
-
 
 class DocumentListsManager final : public IDocumentListsAccess
 {
@@ -57,8 +57,9 @@ class DocumentListsManager final : public IDocumentListsAccess
 
         SwDoc& m_rDoc;
 
+        typedef std::unique_ptr<SwList, o3tl::default_delete<SwList>> SwListPtr;
         // container to hold the lists of the text document
-        std::unordered_map<OUString, std::unique_ptr<SwList>> maLists;
+        std::unordered_map<OUString, SwListPtr> maLists;
         // relation between list style and its default list
         std::unordered_map<OUString, SwList*> maListStyleLists;
 
