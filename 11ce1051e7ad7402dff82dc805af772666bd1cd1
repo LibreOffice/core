@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a18f21ce_c883d99b",
+        "filename": "cui/source/dialogs/GraphicTestsDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-06-23T10:33:34Z",
+      "side": 1,
+      "message": "Should I not use this intern method here like to you pointed out in the previous patch? If so, please suggest as me as to what should be preferred instead. Thanks!",
+      "range": {
+        "startLine": 57,
+        "startChar": 22,
+        "endLine": 57,
+        "endChar": 28
+      },
+      "revId": "11ce1051e7ad7402dff82dc805af772666bd1cd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
