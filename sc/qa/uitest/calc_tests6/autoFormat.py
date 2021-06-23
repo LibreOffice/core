@@ -11,10 +11,9 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class autoFormat(UITestCase):
     def test_autoformat_styles(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #select A1:C5
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C5"}))
             #AutoFormat Styles

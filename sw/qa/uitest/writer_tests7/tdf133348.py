@@ -10,12 +10,11 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf133348(UITestCase):
     def test_tdf133348(self):
 
-        with self.ui_test.create_doc_in_start_center("writer"):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-            document = self.ui_test.get_component()
 
             selection = self.xUITest.executeCommand(".uno:SelectAll")
             xArgs = mkPropertyValues({"Text": "C1"})

@@ -15,8 +15,7 @@ from uitest.uihelper.common import change_measurement_unit
 class formatBulletsNumbering(UITestCase):
 
    def test_bullets_and_numbering_dialog_tab_position(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             change_measurement_unit(self, "Millimeter")
@@ -56,8 +55,7 @@ class formatBulletsNumbering(UITestCase):
             self.ui_test.close_dialog_through_button(xcancbtn)
 
    def test_bullets_and_numbering_dialog_tab_position2(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog")
@@ -81,8 +79,7 @@ class formatBulletsNumbering(UITestCase):
             self.ui_test.close_dialog_through_button(xcancbtn)
 
    def test_bullets_and_numbering_dialog_tab_customize(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog")
@@ -158,8 +155,7 @@ class formatBulletsNumbering(UITestCase):
             self.ui_test.close_dialog_through_button(xcancbtn)
 
    def test_bullets_and_numbering_tab_move(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
 
@@ -198,8 +194,7 @@ class formatBulletsNumbering(UITestCase):
             self.ui_test.close_dialog_through_button(xcancbtn)
 
    def test_bullets_and_numbering_button_move(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             change_measurement_unit(self, "Millimeter")
@@ -237,8 +232,7 @@ class formatBulletsNumbering(UITestCase):
             self.ui_test.close_dialog_through_button(xcancbtn)
 
    def test_bullets_and_numbering_selection(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             # Test Bullet Page

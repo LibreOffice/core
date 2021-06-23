@@ -12,10 +12,9 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf117367(UITestCase):
     def test_tdf117367_merge_cells_radio_buttons(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             enter_text_to_cell(gridwin, "A1", "AAA")
             enter_text_to_cell(gridwin, "A2", "BBB")

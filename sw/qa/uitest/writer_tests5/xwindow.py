@@ -76,11 +76,10 @@ class XWindow(UITestCase):
     def test_listeners(self):
         global mouseListenerCount
 
-        with self.ui_test.create_doc_in_start_center("writer"):
-            xDoc = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
             # create new mouse listener
-            xFrame = xDoc.getCurrentController().getFrame()
+            xFrame = document.getCurrentController().getFrame()
             self.assertIsNotNone(xFrame)
             xWindow = xFrame.getContainerWindow()
             self.assertIsNotNone(xWindow)

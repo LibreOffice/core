@@ -10,8 +10,7 @@ from uitest.uihelper.common import select_pos, get_state_as_dict
 class tdf131041(UITestCase):
 
     def test_run(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
             self.ui_test.execute_dialog_through_command(".uno:PageDialog")
             xDialog = self.xUITest.getTopFocusWindow()

@@ -12,7 +12,7 @@ class WriterInsertTableDialog(UITestCase):
 
     def test_tdf104158(self):
 
-        with self.ui_test.create_doc_in_start_center("writer"):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
             self.ui_test.execute_dialog_through_command(".uno:InsertTable")
             xDialog = self.xUITest.getTopFocusWindow()
@@ -37,7 +37,6 @@ class WriterInsertTableDialog(UITestCase):
             xOkBtn = xDialog.getChild("ok")
             xOkBtn.executeAction("CLICK", tuple())
 
-            document = self.ui_test.get_component()
 
             tables = document.getTextTables()
 
@@ -53,13 +52,12 @@ class WriterInsertTableDialog(UITestCase):
             xOkBtn.executeAction("CLICK", tuple())
 
     def test_cancel_button_insert_table_dialog(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             self.ui_test.execute_dialog_through_command(".uno:InsertTable")
             Dialog = self.xUITest.getTopFocusWindow()
             CancelBtn = Dialog.getChild("cancel")
             self.ui_test.close_dialog_through_button(CancelBtn)
 
-            document = self.ui_test.get_component()
             tables = document.getTextTables()
             self.assertEqual(len(tables), 0)
 

@@ -11,8 +11,7 @@ from com.sun.star.lang import IndexOutOfBoundsException
 class insertQrCode(UITestCase):
 
    def test_insert_qr_code(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             # cancel the dialog without doing anything
@@ -49,8 +48,7 @@ class insertQrCode(UITestCase):
             self.assertEqual(document.DrawPage.getByIndex(0).QRCodeProperties.Border, 1)
 
    def test_insert_qr_code_gen2(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             self.ui_test.execute_dialog_through_command(".uno:InsertQrCode")

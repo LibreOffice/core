@@ -30,10 +30,9 @@ class tdf100517(UITestCase):
         self.ui_test.close_dialog_through_button(xOk)
 
     def test_tdf100517(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             enter_text_to_cell(gridwin, "A1", "Text 2")
             enter_text_to_cell(gridwin, "A2", "Text 3")

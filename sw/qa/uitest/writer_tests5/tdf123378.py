@@ -12,8 +12,7 @@ class tdf123378(UITestCase):
    def test_tdf123378_print_sets_modified(self):
         # FIXME unstable test
         return
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             self.xUITest.executeCommand(".uno:Print")

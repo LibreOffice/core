@@ -13,8 +13,7 @@ from uitest.uihelper.common import get_state_as_dict
 
 class tdf119462(UITestCase):
     def test_tdf119462_find_format(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             #1. Choose Edit > Find and Replace
             self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")

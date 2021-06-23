@@ -18,10 +18,9 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class CalcSorting(UITestCase):
 
     def test_Sortingbuttons_detect_columnheaders(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #In column A enter: Number; 3; 4; 6; 2 / In column B enter: Misc; s; d; f; g
             enter_text_to_cell(gridwin, "A1", "Number")
             enter_text_to_cell(gridwin, "A2", "3")
@@ -73,10 +72,9 @@ class CalcSorting(UITestCase):
             self.assertEqual(get_cell_by_position(document, 0, 1, 0).getString(), "Misc")
 
     def test_Sortingbuttons_list_has_not_columnheaders(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #In column A enter: 5; 3; 4; 6; 2 / In column B enter: e; s; d; f; g
             enter_text_to_cell(gridwin, "A1", "5")
             enter_text_to_cell(gridwin, "A2", "3")
@@ -112,10 +110,9 @@ class CalcSorting(UITestCase):
             self.ui_test.close_dialog_through_button(xCanc)
 
     def test_Sorting_default_to_selected_column(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #In column A enter: Number; 3; 4; 6; 2 / In column B enter: Misc; s; d; f; g
             enter_text_to_cell(gridwin, "A1", "Number")
             enter_text_to_cell(gridwin, "A2", "3")
@@ -151,10 +148,9 @@ class CalcSorting(UITestCase):
             self.assertEqual(get_cell_by_position(document, 0, 1, 4).getString(), "s")
 
     def test_Sorting_default_to_selected_TAB_A_column(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #In column A enter: Number; 3; 4; 6; 2 / In column B enter: Misc; s; d; f; g
             enter_text_to_cell(gridwin, "A1", "Number")
             enter_text_to_cell(gridwin, "A2", "3")
@@ -181,10 +177,9 @@ class CalcSorting(UITestCase):
             self.assertEqual(get_cell_by_position(document, 0, 0, 4).getValue(), 6)
 
     def test_Sorting_default_to_selected_TAB_B_column(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #In column A enter: Number; 3; 4; 6; 2 / In column B enter: Misc; s; d; f; g
             enter_text_to_cell(gridwin, "A1", "Number")
             enter_text_to_cell(gridwin, "A2", "3")
@@ -210,10 +205,9 @@ class CalcSorting(UITestCase):
             self.assertEqual(get_cell_by_position(document, 0, 1, 4).getString(), "s")
 
     def test_Sorting_sort_criteria(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #In column A enter: Number; 3; 4; 6; 2 / In column B enter: Misc; s; d; f; g
             enter_text_to_cell(gridwin, "A1", "Number")
             enter_text_to_cell(gridwin, "A2", "3")

@@ -15,11 +15,9 @@ from uitest.uihelper.common import get_state_as_dict
 
 class tdf141559(UITestCase):
     def test_tdf141559_clear_filter(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             calcDoc = self.xUITest.getTopFocusWindow()
             gridwin = calcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             enter_text_to_cell(gridwin, "A1", "A")
             enter_text_to_cell(gridwin, "A2", "1")

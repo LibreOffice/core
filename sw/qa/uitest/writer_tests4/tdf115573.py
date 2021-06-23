@@ -15,8 +15,7 @@ class tdf115573(UITestCase):
         tableText.setString( text )
 
    def test_tdf115573_Table_loses_formatting_inserting_row_before(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             #insert table 2x2
             self.ui_test.execute_dialog_through_command(".uno:InsertTable")
@@ -45,8 +44,7 @@ class tdf115573(UITestCase):
             self.ui_test.close_dialog_through_button(xCloseBtn)
 
    def test_tdf115573_Table_loses_formatting_inserting_row_after(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             #insert table 2x2
             self.ui_test.execute_dialog_through_command(".uno:InsertTable")
@@ -75,8 +73,7 @@ class tdf115573(UITestCase):
             self.ui_test.close_dialog_through_button(xCloseBtn)
 
    def test_tdf115573_Table_loses_formatting_inserting_column_left(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             #insert table 2x2
             self.ui_test.execute_dialog_through_command(".uno:InsertTable")
@@ -100,8 +97,7 @@ class tdf115573(UITestCase):
             self.ui_test.close_dialog_through_button(xCloseBtn)
 
    def test_tdf115573_Table_loses_formatting_inserting_column_right(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             #insert table 2x2
             self.ui_test.execute_dialog_through_command(".uno:InsertTable")

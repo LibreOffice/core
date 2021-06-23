@@ -94,8 +94,7 @@ class findReplace(UITestCase):
 
         #Bug 39022 - find-replace->$1, not pattern
     def test_tdf39022_replace_regexp(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             type_text(xWriterEdit, "test number1 testnot")
@@ -165,12 +164,11 @@ class findReplace(UITestCase):
             self.ui_test.close_dialog_through_button(xcloseBtn)
 
     def test_tdf136577(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-            document = self.ui_test.get_component()
 
             type_text(xWriterEdit, "x")
 
