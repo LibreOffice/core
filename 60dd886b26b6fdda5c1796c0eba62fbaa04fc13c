@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "149e0993_276ba3bf",
+        "filename": "include/vcl/outdev.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-06-23T15:21:17Z",
+      "side": 1,
+      "message": "How do we manage the size of the cache ? we don\u0027t want it to grow infinitely; ~4 items would probably suffice as a size, perhaps after that size we just clear it and start again instead of trying to work out which one to expire \u003d)",
+      "revId": "60dd886b26b6fdda5c1796c0eba62fbaa04fc13c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "199d15b3_750a1400",
+        "filename": "include/vcl/outdev.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-06-23T15:21:17Z",
+      "side": 1,
+      "message": "It\u0027s not a huge bitmap, but this \u0027getCropped\u0027 will allocate an entirely new bitmap and copy its pixels across, before we then composite that onto the output-device and then free it again. That seems like needless allocator thrash.\n\nWe should be able to render just a sub-part of a bitmap onto the outputdevice quite easily - there is this TwoRects thing IIRC.",
+      "revId": "60dd886b26b6fdda5c1796c0eba62fbaa04fc13c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce3199a8_1f732ab4",
+        "filename": "vcl/source/outdev/textline.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1027,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-06-23T15:21:17Z",
+      "side": 1,
+      "message": "So the TwoRects here on the full Bitmap would be more efficient I think.",
+      "revId": "60dd886b26b6fdda5c1796c0eba62fbaa04fc13c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18b0542c_70a48fd5",
+        "filename": "vcl/source/outdev/textline.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1034,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-06-23T15:21:17Z",
+      "side": 1,
+      "message": "out of interest - do we see this re-enter and want a grey/white/black wiggly line and re-use the above ? \u003d) if so we may want a 6-8 item cache to be safe.",
+      "revId": "60dd886b26b6fdda5c1796c0eba62fbaa04fc13c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
