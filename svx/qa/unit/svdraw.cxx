@@ -110,9 +110,9 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testSemiTransparentText)
     // - Actual  : 0
     // - XPath '//unifiedtransparence' number of nodes is incorrect
     // i.e. the text was just plain red, not semi-transparent.
-    double fTransparence = getXPath(pDocument, "//unifiedtransparence", "transparence").toDouble();
-    CPPUNIT_ASSERT_EQUAL(nTransparence,
-                         static_cast<sal_Int16>(basegfx::fround(fTransparence * 100)));
+    sal_Int16 fTransparence
+        = getXPath(pDocument, "//unifiedtransparence", "transparence").toInt32();
+    CPPUNIT_ASSERT_EQUAL(nTransparence, fTransparence);
 }
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testHandlePathObjScale)
