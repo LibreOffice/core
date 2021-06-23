@@ -13,7 +13,6 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 class tdf124586(UITestCase):
    def test_tdf124586_crash_switch_outline_numbering(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf124586.odt")) as writer_doc:
-            document = self.ui_test.get_component()
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             #Goto Tools > Chapter Numbering.
@@ -24,7 +23,7 @@ class tdf124586(UITestCase):
             xOK = xDialog.getChild("ok")
             xOK.executeAction("CLICK", tuple())
 
-            self.assertEqual(document.Text.String[0:8], "Schritte")
+            self.assertEqual(writer_doc.Text.String[0:8], "Schritte")
 
             self.ui_test.execute_dialog_through_command(".uno:ChapterNumberingDialog")
             xDialog = self.xUITest.getTopFocusWindow()

@@ -18,7 +18,6 @@ class tdf37341(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf37341.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "F111"}))
             self.ui_test.execute_modeless_dialog_through_command(".uno:GoalSeekDialog")
             xDialog = self.xUITest.getTopFocusWindow()
@@ -33,6 +32,6 @@ class tdf37341(UITestCase):
                 pass
 
             #verify
-            self.assertEqual(get_cell_by_position(document, 0, 4, 6).getValue() > 0, True)
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 4, 6).getValue() > 0, True)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

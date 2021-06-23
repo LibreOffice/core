@@ -19,7 +19,6 @@ class tdf119954(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf119954.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #* new document
             #* in A1 enter 1
             #* in C3 enter 2
@@ -58,18 +57,18 @@ class tdf119954(UITestCase):
 
             enter_text_to_cell(gridwin, "B2", "=bbb")
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
-            self.assertEqual(get_cell_by_position(document, 0, 1, 1).getValue(), 2)
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 1).getValue(), 2)
 
             enter_text_to_cell(gridwin, "C2", "=aaa")
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
-            self.assertEqual(get_cell_by_position(document, 0, 2, 1).getValue(), 1)
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 2, 1).getValue(), 1)
 
             self.xUITest.executeCommand(".uno:Undo")
             self.xUITest.executeCommand(".uno:Undo")
-            self.assertEqual(get_cell_by_position(document, 0, 2, 1).getValue(), 0)
-            self.assertEqual(get_cell_by_position(document, 0, 1, 1).getValue(), 0)
-            self.assertEqual(get_cell_by_position(document, 0, 1, 2).getFormula(), "")
-            self.assertEqual(get_cell_by_position(document, 0, 1, 1).getFormula(), "")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 2, 1).getValue(), 0)
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 1).getValue(), 0)
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 2).getFormula(), "")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 1).getFormula(), "")
 
             # check cancel button
             self.ui_test.execute_modeless_dialog_through_command(".uno:DefineDBName")

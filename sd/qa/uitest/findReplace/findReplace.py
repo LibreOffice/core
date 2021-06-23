@@ -14,13 +14,12 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, typ
 class findReplace(UITestCase):
     def test_find_impress(self):
         with self.ui_test.load_file(get_url_for_data_file("findReplace.odp")) as impress_doc:
-            document = self.ui_test.get_component()
             # print(dir(document))
             # xPages= document.CurrentController.getCurrentPage().Number
             # print(xPages)
 
             # check current slide is 1
-            self.assertEqual(document.CurrentController.getCurrentPage().Number, 1)
+            self.assertEqual(impress_doc.CurrentController.getCurrentPage().Number, 1)
 
             # search for string "second"
             self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
@@ -31,7 +30,7 @@ class findReplace(UITestCase):
             xsearch.executeAction("CLICK", tuple())
 
             # verify we moved to slide 2
-            self.assertEqual(document.CurrentController.getCurrentPage().Number, 2)
+            self.assertEqual(impress_doc.CurrentController.getCurrentPage().Number, 2)
 
             # search for string "third"
             searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
@@ -40,7 +39,7 @@ class findReplace(UITestCase):
             xsearch.executeAction("CLICK", tuple())
 
             #verify we moved to slide 3
-            self.assertEqual(document.CurrentController.getCurrentPage().Number, 3)  #3rd slide
+            self.assertEqual(impress_doc.CurrentController.getCurrentPage().Number, 3)  #3rd slide
 
             # close the dialog
             xcloseBtn = xDialog.getChild("close")
@@ -104,7 +103,7 @@ class findReplace(UITestCase):
             xsearch.executeAction("CLICK", tuple())
             xcloseBtn = xDialog.getChild("close")
             self.ui_test.close_dialog_through_button(xcloseBtn)
-            self.assertEqual(document.CurrentController.getCurrentPage().Number, 2)
+            self.assertEqual(impress_doc.CurrentController.getCurrentPage().Number, 2)
             #now check if text "Replace aaa aaa" is on first slide
             self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
             xDialog = self.xUITest.getTopFocusWindow()
@@ -115,7 +114,7 @@ class findReplace(UITestCase):
             searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"Replace aaa aaa"}))
             backsearch.executeAction("CLICK", tuple())
             #verify
-            self.assertEqual(document.CurrentController.getCurrentPage().Number, 1)  #1st slide
+            self.assertEqual(impress_doc.CurrentController.getCurrentPage().Number, 1)  #1st slide
 
             xcloseBtn = xDialog.getChild("close")
             self.ui_test.close_dialog_through_button(xcloseBtn)

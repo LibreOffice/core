@@ -24,11 +24,10 @@ class tdf98690(UITestCase):
     with self.ui_test.create_doc_in_start_center("calc"):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
 
         self.xUITest.executeCommand(".uno:Paste")
 
-        xData = document.Sheets[0].Charts[0].getEmbeddedObject().Data
+        xData = calc_doc.Sheets[0].Charts[0].getEmbeddedObject().Data
 
         aExpectedRowDescriptions = tuple(str(i) for i in range(1, 14))
         aExpectedColumnDescriptions = ('Column D Column D', 'cc_girder2', 'Column S Column S',

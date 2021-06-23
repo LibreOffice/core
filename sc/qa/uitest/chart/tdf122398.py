@@ -18,7 +18,6 @@ class tdf122398(UITestCase):
     with self.ui_test.load_file(get_url_for_data_file("tdf122398.ods")) as calc_doc:
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
 
         #Open attached file. Set chart into edit mode. Select x-axis and then Format Selection.
         #Disable the Automatic for min and max. You cannot change the values at all, neither with direct

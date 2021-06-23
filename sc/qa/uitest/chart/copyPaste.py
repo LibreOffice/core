@@ -17,9 +17,8 @@ class CopyPaste(UITestCase):
   @unittest.skipIf(platform.system() == "Windows", "Fails on Windows: tdf#142635")
   def test_copy_paste_chart_with_dot_in_sheet_name(self):
     with self.ui_test.load_file(get_url_for_data_file("chartWithDotInSheetName.ods")) as calc_doc:
-        document = self.ui_test.get_component()
 
-        xChart = document.Sheets[0].Charts[0]
+        xChart = calc_doc.Sheets[0].Charts[0]
         xDataSeries = xChart.getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries
 
         self.assertEqual(4, len(xDataSeries))
@@ -40,7 +39,6 @@ class CopyPaste(UITestCase):
         self.xUITest.executeCommand(".uno:CloseDoc")
 
     with self.ui_test.create_doc_in_start_center("calc"):
-        document = self.ui_test.get_component()
 
         # Rename the sheet to match the same name as the first document
         self.ui_test.execute_dialog_through_command(".uno:RenameTable")
@@ -55,7 +53,7 @@ class CopyPaste(UITestCase):
 
         self.xUITest.executeCommand(".uno:Paste")
 
-        xChart = document.Sheets[0].Charts[0]
+        xChart = calc_doc.Sheets[0].Charts[0]
         xDataSeries = xChart.getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries
 
         self.assertEqual(4, len(xDataSeries))

@@ -26,7 +26,6 @@ class Tdf1254400(UITestCase):
 
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
 
@@ -34,8 +33,8 @@ class Tdf1254400(UITestCase):
 
             # Without the fix in place, this test would have failed with
             # AssertionError: 'Row' != '"Row"'
-            self.assertEqual("Row", get_cell_by_position(document, 0, 0, 0).getString())
-            self.assertEqual("", get_cell_by_position(document, 0, 1, 0).getString())
-            self.assertEqual("", get_cell_by_position(document, 0, 2, 0).getString())
-            self.assertEqual("50", get_cell_by_position(document, 0, 3, 0).getString())
+            self.assertEqual("Row", get_cell_by_position(writer_doc, 0, 0, 0).getString())
+            self.assertEqual("", get_cell_by_position(writer_doc, 0, 1, 0).getString())
+            self.assertEqual("", get_cell_by_position(writer_doc, 0, 2, 0).getString())
+            self.assertEqual("50", get_cell_by_position(writer_doc, 0, 3, 0).getString())
 

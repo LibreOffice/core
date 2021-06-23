@@ -25,7 +25,6 @@ class tdf136011(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf136011.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             xExpectedResults = []
             for category in xCategories:
@@ -41,11 +40,10 @@ class tdf136011(UITestCase):
         with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             self.xUITest.executeCommand(".uno:Paste")
 
-            xData = document.Sheets[0].Charts[0].getEmbeddedObject().Data
+            xData = calc_doc.Sheets[0].Charts[0].getEmbeddedObject().Data
 
             self.assertEqual(xColumnNames, list(xData.ColumnDescriptions))
 

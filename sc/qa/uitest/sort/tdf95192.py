@@ -17,7 +17,6 @@ class tdf95192(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf95192.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
 
@@ -31,15 +30,15 @@ class tdf95192(UITestCase):
             xOk = xDialog.getChild("ok")
             self.ui_test.close_dialog_through_button(xOk)
             #Verify
-            self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "Sal. Capra 1/17")
-            self.assertEqual(get_cell_by_position(document, 0, 0, 1).getString(), "Sal. Capra 1/20")
-            self.assertEqual(get_cell_by_position(document, 0, 0, 2).getString(), "Sal. Oregina 1/2")
-            self.assertEqual(get_cell_by_position(document, 0, 0, 41).getString(), "Vico Chiuso Cinque Santi 18/10")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 0).getString(), "Sal. Capra 1/17")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 1).getString(), "Sal. Capra 1/20")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 2).getString(), "Sal. Oregina 1/2")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 41).getString(), "Vico Chiuso Cinque Santi 18/10")
             #UNDO
             self.xUITest.executeCommand(".uno:Undo")
             #Verify
-            self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "Sal. Oregina 1/2")
-            self.assertEqual(get_cell_by_position(document, 0, 0, 1).getString(), "Via A. Centurione 11/7")
-            self.assertEqual(get_cell_by_position(document, 0, 0, 41).getString(), "Vico Chiuso Cinque Santi 18/10")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 0).getString(), "Sal. Oregina 1/2")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 1).getString(), "Via A. Centurione 11/7")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 41).getString(), "Vico Chiuso Cinque Santi 18/10")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

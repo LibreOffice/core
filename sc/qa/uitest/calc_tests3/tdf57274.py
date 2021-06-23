@@ -17,7 +17,6 @@ class tdf57274(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf57274.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             #* Source Cells, range B6..E6
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "B6:E6"}))
@@ -35,7 +34,7 @@ class tdf57274(UITestCase):
                 pass
 
             #we would expect a reference to cell E6 here and a zero being displayed, but the cell is also simply blank.
-            self.assertEqual(get_cell_by_position(document, 0, 4, 10).getValue(), 0)
-            self.assertEqual(get_cell_by_position(document, 0, 4, 10).getFormula(), "=$Sheet1.$E$6")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 4, 10).getValue(), 0)
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 4, 10).getFormula(), "=$Sheet1.$E$6")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

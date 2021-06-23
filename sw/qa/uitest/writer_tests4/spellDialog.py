@@ -105,7 +105,6 @@ frog, dogg, catt"""
         if not supported_locale:
             self.skipTest("no dictionary support for en_US available")
         with self.ui_test.load_file(get_url_for_data_file("tdf66043.fodt")) as writer_doc:
-            document = self.ui_test.get_component()
             # Step 1: Initiate spellchecking, and make sure "Check grammar" is
             # unchecked
             spell_dialog = self.launch_dialog()
@@ -122,7 +121,7 @@ frog, dogg, catt"""
             xCloseBtn = spell_dialog.getChild("close")
             xCloseBtn.executeAction("CLICK", tuple())
 
-            output_text = document.Text.getString().replace('\r\n', '\n')
+            output_text = writer_doc.Text.getString().replace('\r\n', '\n')
             # This was "gooodgood baaad eeend" ("goood" is a deletion,
             # "good" is an insertion by fixing the first misspelling),
             # but now "goood" is not a misspelling because it is accepted

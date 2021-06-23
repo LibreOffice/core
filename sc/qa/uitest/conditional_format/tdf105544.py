@@ -18,7 +18,6 @@ class tdf105544(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf105544.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #2. select B3. Format> conditional formatting> manage
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B3"}))
             self.ui_test.execute_dialog_through_command(".uno:ConditionalFormatManagerDialog")
