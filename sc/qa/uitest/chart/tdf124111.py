@@ -25,24 +25,21 @@ class tdf124111(UITestCase):
         xChartMainTop = self.xUITest.getTopFocusWindow()
         xChartMain = xChartMainTop.getChild("chart_window")
         xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
-        self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "DiagramAxisX"}))  # X Axis...
-        xDialog = self.xUITest.getTopFocusWindow()
-        #Click on tab "positioning".
-        tabcontrol = xDialog.getChild("tabcontrol")
-        select_pos(tabcontrol, "1")
+        with self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "DiagramAxisX"})) as xDialog:
+            #Click on tab "positioning".
+            tabcontrol = xDialog.getChild("tabcontrol")
+            select_pos(tabcontrol, "1")
 
-        crossAxis = xDialog.getChild("LB_CROSSES_OTHER_AXIS_AT")
-        crossAxisValue = xDialog.getChild("EDT_CROSSES_OTHER_AXIS_AT") #only available when crossAxis = Value
-        placeLabels = xDialog.getChild("LB_PLACE_LABELS")
-        innerMajorTick = xDialog.getChild("CB_TICKS_INNER")
-        outerMajorTick = xDialog.getChild("CB_TICKS_OUTER")
-        innerMinorTick = xDialog.getChild("CB_MINOR_INNER")
-        outerMinorTick = xDialog.getChild("CB_MINOR_OUTER")
-        placeMarks = xDialog.getChild("LB_PLACE_TICKS")
-        crossAxisValue.executeAction("DOWN", tuple())  #-1
+            crossAxis = xDialog.getChild("LB_CROSSES_OTHER_AXIS_AT")
+            crossAxisValue = xDialog.getChild("EDT_CROSSES_OTHER_AXIS_AT") #only available when crossAxis = Value
+            placeLabels = xDialog.getChild("LB_PLACE_LABELS")
+            innerMajorTick = xDialog.getChild("CB_TICKS_INNER")
+            outerMajorTick = xDialog.getChild("CB_TICKS_OUTER")
+            innerMinorTick = xDialog.getChild("CB_MINOR_INNER")
+            outerMinorTick = xDialog.getChild("CB_MINOR_OUTER")
+            placeMarks = xDialog.getChild("LB_PLACE_TICKS")
+            crossAxisValue.executeAction("DOWN", tuple())  #-1
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
 
         #reopen and verify tab "positioning".
         gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
@@ -50,24 +47,21 @@ class tdf124111(UITestCase):
         xChartMainTop = self.xUITest.getTopFocusWindow()
         xChartMain = xChartMainTop.getChild("chart_window")
         xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
-        self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "DiagramAxisX"}))
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "DiagramAxisX"})) as xDialog:
 
-        tabcontrol = xDialog.getChild("tabcontrol")
-        select_pos(tabcontrol, "1")
+            tabcontrol = xDialog.getChild("tabcontrol")
+            select_pos(tabcontrol, "1")
 
-        crossAxis = xDialog.getChild("LB_CROSSES_OTHER_AXIS_AT")
-        crossAxisValue = xDialog.getChild("EDT_CROSSES_OTHER_AXIS_AT") #only available when crossAxis = Value
-        placeLabels = xDialog.getChild("LB_PLACE_LABELS")
-        innerMajorTick = xDialog.getChild("CB_TICKS_INNER")
-        outerMajorTick = xDialog.getChild("CB_TICKS_OUTER")
-        innerMinorTick = xDialog.getChild("CB_MINOR_INNER")
-        outerMinorTick = xDialog.getChild("CB_MINOR_OUTER")
-        placeMarks = xDialog.getChild("LB_PLACE_TICKS")
+            crossAxis = xDialog.getChild("LB_CROSSES_OTHER_AXIS_AT")
+            crossAxisValue = xDialog.getChild("EDT_CROSSES_OTHER_AXIS_AT") #only available when crossAxis = Value
+            placeLabels = xDialog.getChild("LB_PLACE_LABELS")
+            innerMajorTick = xDialog.getChild("CB_TICKS_INNER")
+            outerMajorTick = xDialog.getChild("CB_TICKS_OUTER")
+            innerMinorTick = xDialog.getChild("CB_MINOR_INNER")
+            outerMinorTick = xDialog.getChild("CB_MINOR_OUTER")
+            placeMarks = xDialog.getChild("LB_PLACE_TICKS")
 
-        self.assertEqual(get_state_as_dict(crossAxis)["SelectEntryText"], "Value")
-        self.assertEqual(get_state_as_dict(crossAxisValue)["Text"], "-1")
+            self.assertEqual(get_state_as_dict(crossAxis)["SelectEntryText"], "Value")
+            self.assertEqual(get_state_as_dict(crossAxisValue)["Text"], "-1")
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

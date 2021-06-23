@@ -33,25 +33,22 @@ class chartTitles(UITestCase):
         xChartMainTop = self.xUITest.getTopFocusWindow()
         xChartMain = xChartMainTop.getChild("chart_window")
         xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
-        self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "InsertMenuTitles"}))
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "InsertMenuTitles"})) as xDialog:
 
-        maintitle = xDialog.getChild("maintitle")
-        subtitle = xDialog.getChild("subtitle")
-        primaryXaxis = xDialog.getChild("primaryXaxis")
-        primaryYaxis = xDialog.getChild("primaryYaxis")
-        secondaryXaxis = xDialog.getChild("secondaryXaxis")
-        secondaryYaxis = xDialog.getChild("secondaryYaxis")
+            maintitle = xDialog.getChild("maintitle")
+            subtitle = xDialog.getChild("subtitle")
+            primaryXaxis = xDialog.getChild("primaryXaxis")
+            primaryYaxis = xDialog.getChild("primaryYaxis")
+            secondaryXaxis = xDialog.getChild("secondaryXaxis")
+            secondaryYaxis = xDialog.getChild("secondaryYaxis")
 
-        maintitle.executeAction("TYPE", mkPropertyValues({"TEXT":"A"}))
-        subtitle.executeAction("TYPE", mkPropertyValues({"TEXT":"B"}))
-        primaryXaxis.executeAction("TYPE", mkPropertyValues({"TEXT":"C"}))
-        primaryYaxis.executeAction("TYPE", mkPropertyValues({"TEXT":"D"}))
-        secondaryXaxis.executeAction("TYPE", mkPropertyValues({"TEXT":"E"}))
-        secondaryYaxis.executeAction("TYPE", mkPropertyValues({"TEXT":"F"}))
+            maintitle.executeAction("TYPE", mkPropertyValues({"TEXT":"A"}))
+            subtitle.executeAction("TYPE", mkPropertyValues({"TEXT":"B"}))
+            primaryXaxis.executeAction("TYPE", mkPropertyValues({"TEXT":"C"}))
+            primaryYaxis.executeAction("TYPE", mkPropertyValues({"TEXT":"D"}))
+            secondaryXaxis.executeAction("TYPE", mkPropertyValues({"TEXT":"E"}))
+            secondaryYaxis.executeAction("TYPE", mkPropertyValues({"TEXT":"F"}))
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
 
         self.assertTrue(document.Sheets[0].Charts[0].getEmbeddedObject().HasMainTitle)
         self.assertTrue(document.Sheets[0].Charts[0].getEmbeddedObject().HasSubTitle)
@@ -68,25 +65,22 @@ class chartTitles(UITestCase):
         xChartMainTop = self.xUITest.getTopFocusWindow()
         xChartMain = xChartMainTop.getChild("chart_window")
         xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
-        self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "InsertMenuTitles"}))
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "InsertMenuTitles"})) as xDialog:
 
-        maintitle = xDialog.getChild("maintitle")
-        subtitle = xDialog.getChild("subtitle")
-        primaryXaxis = xDialog.getChild("primaryXaxis")
-        primaryYaxis = xDialog.getChild("primaryYaxis")
-        secondaryXaxis = xDialog.getChild("secondaryXaxis")
-        secondaryYaxis = xDialog.getChild("secondaryYaxis")
+            maintitle = xDialog.getChild("maintitle")
+            subtitle = xDialog.getChild("subtitle")
+            primaryXaxis = xDialog.getChild("primaryXaxis")
+            primaryYaxis = xDialog.getChild("primaryYaxis")
+            secondaryXaxis = xDialog.getChild("secondaryXaxis")
+            secondaryYaxis = xDialog.getChild("secondaryYaxis")
 
-        self.assertEqual(get_state_as_dict(maintitle)["Text"], "A")
-        self.assertEqual(get_state_as_dict(subtitle)["Text"], "B")
-        self.assertEqual(get_state_as_dict(primaryXaxis)["Text"], "C")
-        self.assertEqual(get_state_as_dict(primaryYaxis)["Text"], "D")
-        self.assertEqual(get_state_as_dict(secondaryXaxis)["Text"], "E")
-        self.assertEqual(get_state_as_dict(secondaryYaxis)["Text"], "F")
+            self.assertEqual(get_state_as_dict(maintitle)["Text"], "A")
+            self.assertEqual(get_state_as_dict(subtitle)["Text"], "B")
+            self.assertEqual(get_state_as_dict(primaryXaxis)["Text"], "C")
+            self.assertEqual(get_state_as_dict(primaryYaxis)["Text"], "D")
+            self.assertEqual(get_state_as_dict(secondaryXaxis)["Text"], "E")
+            self.assertEqual(get_state_as_dict(secondaryYaxis)["Text"], "F")
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
 
    def test_title_move_with_arrows_keys(self):
 
@@ -105,26 +99,20 @@ class chartTitles(UITestCase):
         xTitle = xChartMain.getChild("CID/Title=")
         xTitle.executeAction("SELECT", tuple())
 
-        self.ui_test.execute_dialog_through_action(xTitle, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"}))
+        with self.ui_test.execute_dialog_through_action(xTitle, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"})) as xDialog:
 
-        xDialog = self.xUITest.getTopFocusWindow()
-        self.assertEqual("3.52", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
-        self.assertEqual("0.3", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
+            self.assertEqual("3.52", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
+            self.assertEqual("0.3", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
 
-        xOkBtn = xDialog.getChild("ok")
-        xOkBtn.executeAction("CLICK", tuple())
 
         xChartMain.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
         xChartMain.executeAction("TYPE", mkPropertyValues({"KEYCODE": "LEFT"}))
 
-        self.ui_test.execute_dialog_through_action(xTitle, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"}))
+        with self.ui_test.execute_dialog_through_action(xTitle, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"})) as xDialog:
 
-        # Check the position has changed after moving the title using the arrows keys
-        xDialog = self.xUITest.getTopFocusWindow()
-        self.assertEqual("3.42", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
-        self.assertEqual("0.2", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
+            # Check the position has changed after moving the title using the arrows keys
+            self.assertEqual("3.42", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
+            self.assertEqual("0.2", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
 
-        xOkBtn = xDialog.getChild("ok")
-        xOkBtn.executeAction("CLICK", tuple())
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

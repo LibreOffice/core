@@ -25,21 +25,18 @@ class chartGrids(UITestCase):
         xChartMainTop = self.xUITest.getTopFocusWindow()
         xChartMain = xChartMainTop.getChild("chart_window")
         xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
-        self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "InsertMenuGrids"}))
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "InsertMenuGrids"})) as xDialog:
 
-        primaryX = xDialog.getChild("primaryX")
-        primaryY = xDialog.getChild("primaryY")
-        secondaryX = xDialog.getChild("secondaryX")
-        secondaryY = xDialog.getChild("secondaryY")
+            primaryX = xDialog.getChild("primaryX")
+            primaryY = xDialog.getChild("primaryY")
+            secondaryX = xDialog.getChild("secondaryX")
+            secondaryY = xDialog.getChild("secondaryY")
 
-        primaryX.executeAction("CLICK", tuple())
-        primaryY.executeAction("CLICK", tuple())
-        secondaryX.executeAction("CLICK", tuple())
-        secondaryY.executeAction("CLICK", tuple())
+            primaryX.executeAction("CLICK", tuple())
+            primaryY.executeAction("CLICK", tuple())
+            secondaryX.executeAction("CLICK", tuple())
+            secondaryY.executeAction("CLICK", tuple())
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
 
         #reopen and verify Grids dialog
         gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
@@ -47,26 +44,23 @@ class chartGrids(UITestCase):
         xChartMainTop = self.xUITest.getTopFocusWindow()
         xChartMain = xChartMainTop.getChild("chart_window")
         xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
-        self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "InsertMenuGrids"}))
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "InsertMenuGrids"})) as xDialog:
 
-        primaryX = xDialog.getChild("primaryX")
-        primaryY = xDialog.getChild("primaryY")
-        secondaryX = xDialog.getChild("secondaryX")
-        secondaryY = xDialog.getChild("secondaryY")
+            primaryX = xDialog.getChild("primaryX")
+            primaryY = xDialog.getChild("primaryY")
+            secondaryX = xDialog.getChild("secondaryX")
+            secondaryY = xDialog.getChild("secondaryY")
 
-        self.assertEqual(get_state_as_dict(primaryX)["Selected"], "false")
-        self.assertEqual(get_state_as_dict(primaryY)["Selected"], "false")
-        self.assertEqual(get_state_as_dict(secondaryX)["Selected"], "false")
-        self.assertEqual(get_state_as_dict(secondaryY)["Selected"], "false")
+            self.assertEqual(get_state_as_dict(primaryX)["Selected"], "false")
+            self.assertEqual(get_state_as_dict(primaryY)["Selected"], "false")
+            self.assertEqual(get_state_as_dict(secondaryX)["Selected"], "false")
+            self.assertEqual(get_state_as_dict(secondaryY)["Selected"], "false")
 
-        primaryX.executeAction("CLICK", tuple())
-        primaryY.executeAction("CLICK", tuple())
-        secondaryX.executeAction("CLICK", tuple())
-        secondaryY.executeAction("CLICK", tuple())
+            primaryX.executeAction("CLICK", tuple())
+            primaryY.executeAction("CLICK", tuple())
+            secondaryX.executeAction("CLICK", tuple())
+            secondaryY.executeAction("CLICK", tuple())
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
 
         #reopen and verify Grids dialog
         gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
@@ -74,20 +68,17 @@ class chartGrids(UITestCase):
         xChartMainTop = self.xUITest.getTopFocusWindow()
         xChartMain = xChartMainTop.getChild("chart_window")
         xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
-        self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "InsertMenuGrids"}))
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "InsertMenuGrids"})) as xDialog:
 
-        primaryX = xDialog.getChild("primaryX")
-        primaryY = xDialog.getChild("primaryY")
-        secondaryX = xDialog.getChild("secondaryX")
-        secondaryY = xDialog.getChild("secondaryY")
+            primaryX = xDialog.getChild("primaryX")
+            primaryY = xDialog.getChild("primaryY")
+            secondaryX = xDialog.getChild("secondaryX")
+            secondaryY = xDialog.getChild("secondaryY")
 
-        self.assertEqual(get_state_as_dict(primaryX)["Selected"], "true")
-        self.assertEqual(get_state_as_dict(primaryY)["Selected"], "true")
-        self.assertEqual(get_state_as_dict(secondaryX)["Selected"], "true")
-        self.assertEqual(get_state_as_dict(secondaryY)["Selected"], "true")
+            self.assertEqual(get_state_as_dict(primaryX)["Selected"], "true")
+            self.assertEqual(get_state_as_dict(primaryY)["Selected"], "true")
+            self.assertEqual(get_state_as_dict(secondaryX)["Selected"], "true")
+            self.assertEqual(get_state_as_dict(secondaryY)["Selected"], "true")
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -26,19 +26,16 @@ class tdf123231(UITestCase):
         xChartMainTop = self.xUITest.getTopFocusWindow()
         xChartMain = xChartMainTop.getChild("chart_window")
         xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
-        self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "FormatTrendline"}))
-        xDialog = self.xUITest.getTopFocusWindow()
-        #Click on tab "Type".
-        tabcontrol = xDialog.getChild("tabcontrol")
-        select_pos(tabcontrol, "0")
-        logarithmic = xDialog.getChild("logarithmic")  #type regression logarithmic
-        exponential = xDialog.getChild("exponential")  #type regression exponential
-        power = xDialog.getChild("exponential")  #type regression power
+        with self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "FormatTrendline"})) as xDialog:
+            #Click on tab "Type".
+            tabcontrol = xDialog.getChild("tabcontrol")
+            select_pos(tabcontrol, "0")
+            logarithmic = xDialog.getChild("logarithmic")  #type regression logarithmic
+            exponential = xDialog.getChild("exponential")  #type regression exponential
+            power = xDialog.getChild("exponential")  #type regression power
 
-        power.executeAction("CLICK", tuple())   #set power
+            power.executeAction("CLICK", tuple())   #set power
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
 
         #reopen dialog and close dialog
         gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
@@ -46,17 +43,14 @@ class tdf123231(UITestCase):
         xChartMainTop = self.xUITest.getTopFocusWindow()
         xChartMain = xChartMainTop.getChild("chart_window")
         xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
-        self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "FormatTrendline"}))
-        xDialog = self.xUITest.getTopFocusWindow()
-        #Click on tab "Type".
-        tabcontrol = xDialog.getChild("tabcontrol")
-        select_pos(tabcontrol, "0")
-        logarithmic = xDialog.getChild("logarithmic")  #type regression logarithmic
-        exponential = xDialog.getChild("exponential")  #type regression exponential
-        power = xDialog.getChild("exponential")  #type regression power
-        self.assertEqual(get_state_as_dict(power)["Checked"], "true")
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+        with self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "FormatTrendline"})) as xDialog:
+            #Click on tab "Type".
+            tabcontrol = xDialog.getChild("tabcontrol")
+            select_pos(tabcontrol, "0")
+            logarithmic = xDialog.getChild("logarithmic")  #type regression logarithmic
+            exponential = xDialog.getChild("exponential")  #type regression exponential
+            power = xDialog.getChild("exponential")  #type regression power
+            self.assertEqual(get_state_as_dict(power)["Checked"], "true")
 
         #reopen and verify Power
         gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
@@ -64,19 +58,16 @@ class tdf123231(UITestCase):
         xChartMainTop = self.xUITest.getTopFocusWindow()
         xChartMain = xChartMainTop.getChild("chart_window")
         xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
-        self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "FormatTrendline"}))
-        xDialog = self.xUITest.getTopFocusWindow()
-        #Click on tab "Type".
-        tabcontrol = xDialog.getChild("tabcontrol")
-        select_pos(tabcontrol, "0")
+        with self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "FormatTrendline"})) as xDialog:
+            #Click on tab "Type".
+            tabcontrol = xDialog.getChild("tabcontrol")
+            select_pos(tabcontrol, "0")
 
-        logarithmic = xDialog.getChild("logarithmic")  #type regression logarithmic
-        exponential = xDialog.getChild("exponential")  #type regression exponential
-        power = xDialog.getChild("exponential")  #type regression power
+            logarithmic = xDialog.getChild("logarithmic")  #type regression logarithmic
+            exponential = xDialog.getChild("exponential")  #type regression exponential
+            power = xDialog.getChild("exponential")  #type regression power
 
-        self.assertEqual(get_state_as_dict(power)["Checked"], "true")
+            self.assertEqual(get_state_as_dict(power)["Checked"], "true")
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

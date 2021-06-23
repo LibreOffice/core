@@ -128,7 +128,9 @@ class UITest(object):
 
         raise DialogNotExecutedException(command)
 
-    def execute_dialog_through_action(self, ui_object, action, parameters = None, event_name = "DialogExecute"):
+    # Calls UITest.close_dialog_through_button at exit
+    @contextmanager
+    def execute_dialog_through_action(self, ui_object, action, parameters = None, event_name = "DialogExecute", close_button = "ok"):
         if parameters is None:
             parameters = tuple()
 
@@ -137,7 +139,11 @@ class UITest(object):
             time_ = 0
             while time_ < MAX_WAIT:
                 if event.executed:
-                    time.sleep(DEFAULT_SLEEP)
+                    xDialog = self._xUITest.getTopFocusWindow()
+                    try:
+                        yield xDialog
+                    finally:
+                        self.close_dialog_through_button(xDialog.getChild(close_button))
                     return
                 time_ += DEFAULT_SLEEP
                 time.sleep(DEFAULT_SLEEP)
