@@ -17,8 +17,7 @@ class tdf96432(UITestCase):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
 
-        document = self.ui_test.get_component()
-        xDataSeries = document.Sheets[0].Charts[0].getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries
+        xDataSeries = calc_doc.Sheets[0].Charts[0].getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries
         self.assertEqual(0, xDataSeries[0].ErrorBarY.LineTransparence)
 
         gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
@@ -43,7 +42,7 @@ class tdf96432(UITestCase):
         #verify - we didn't crash
         gridwin.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))
 
-        xDataSeries = document.Sheets[0].Charts[0].getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries
+        xDataSeries = calc_doc.Sheets[0].Charts[0].getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries
         self.assertEqual(5, xDataSeries[0].ErrorBarY.LineTransparence)
 
         #reopen and try again
@@ -70,7 +69,7 @@ class tdf96432(UITestCase):
         #verify - we didn't crash
         gridwin.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))
 
-        xDataSeries = document.Sheets[0].Charts[0].getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries
+        xDataSeries = calc_doc.Sheets[0].Charts[0].getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries
         self.assertEqual(10, xDataSeries[0].ErrorBarY.LineTransparence)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -22,7 +22,6 @@ class tdf123479(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf123479.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #Select D14:D16
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "D14:D16"}))
             #Open Formula Wizard (Ctrl+F2)
@@ -40,6 +39,6 @@ class tdf123479(UITestCase):
             xOk = xDialog.getChild("ok")
             self.ui_test.close_dialog_through_button(xOk)
             #verify; no crashes
-            self.assertEqual(get_cell_by_position(document, 0, 1, 0).getString(), "Pass/Fail")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 0).getString(), "Pass/Fail")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

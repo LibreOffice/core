@@ -14,7 +14,6 @@ class tdf124896(UITestCase):
     with self.ui_test.load_file(get_url_for_data_file("tdf124896.ods")) as calc_doc:
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
 
         # Remove X Bar R Chart (2) sheet
         self.ui_test.execute_dialog_through_command(".uno:Remove")  #delete sheet
@@ -22,6 +21,6 @@ class tdf124896(UITestCase):
         xOKButton = xDialog.getChild("yes")
         xOKButton.executeAction("CLICK", tuple())
         #verify; no crashes
-        self.assertEqual(document.Sheets.getCount(), 2)
+        self.assertEqual(calc_doc.Sheets.getCount(), 2)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

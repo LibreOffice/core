@@ -11,8 +11,7 @@ from uitest.uihelper.common import get_url_for_data_file
 class tdf137803(UITestCase):
     def test_tdf137803(self):
         # load the sample file
-        with self.ui_test.load_file(get_url_for_data_file("tdf137803.odt")):
-            document = self.ui_test.get_component()
+        with self.ui_test.load_file(get_url_for_data_file("tdf137803.odt")) as document:
 
             # select the shape
             self.xUITest.executeCommand(".uno:JumpToNextFrame")

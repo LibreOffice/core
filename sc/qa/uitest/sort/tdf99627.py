@@ -18,7 +18,6 @@ class tdf99627(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf99627.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
 
@@ -35,12 +34,12 @@ class tdf99627(UITestCase):
             xOk = xDialog.getChild("ok")
             self.ui_test.close_dialog_through_button(xOk)
             #Verify
-            self.assertEqual(get_cell_by_position(document, 0, 0, 1).getString(), "2998")
-            self.assertEqual(get_cell_by_position(document, 0, 0, 2998).getString(), "1")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 1).getString(), "2998")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 2998).getString(), "1")
             #UNDO
             self.xUITest.executeCommand(".uno:Undo")
             #Verify
-            self.assertEqual(get_cell_by_position(document, 0, 0, 1).getString(), "1")
-            self.assertEqual(get_cell_by_position(document, 0, 0, 2998).getString(), "2998")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 1).getString(), "1")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 2998).getString(), "2998")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

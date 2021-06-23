@@ -20,7 +20,6 @@ class tdf49531(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf49531.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #select A3:C147
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A3:C147"}))
 
@@ -46,16 +45,16 @@ class tdf49531(UITestCase):
             xOk = xDialog.getChild("ok")
             self.ui_test.close_dialog_through_button(xOk)
             #Verify
-            self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "x")
-            self.assertEqual(get_cell_by_position(document, 0, 0, 1).getString(), "0")
-            self.assertEqual(get_cell_by_position(document, 0, 2, 2).getValue(), 111)
-            self.assertEqual(get_cell_by_position(document, 0, 2, 3).getValue(), 48)
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 0).getString(), "x")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 1).getString(), "0")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 2, 2).getValue(), 111)
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 2, 3).getValue(), 48)
             # UNDO Bug 49520 - EDITING: CRASH when undo sort with chart
             self.xUITest.executeCommand(".uno:Undo")
             # Verify
-            self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "x")
-            self.assertEqual(get_cell_by_position(document, 0, 0, 1).getString(), "0")
-            self.assertEqual(get_cell_by_position(document, 0, 2, 2).getValue(), 2)
-            self.assertEqual(get_cell_by_position(document, 0, 2, 3).getValue(), 3)
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 0).getString(), "x")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 1).getString(), "0")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 2, 2).getValue(), 2)
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 2, 3).getValue(), 3)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

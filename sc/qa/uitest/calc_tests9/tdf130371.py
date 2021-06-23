@@ -15,7 +15,6 @@ class namedRanges(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf130371.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             text1 = "value\t$Sheet2.$B$2\tSheet2"
             text2 = "value\t$Sheet3.$B$2\tSheet3"

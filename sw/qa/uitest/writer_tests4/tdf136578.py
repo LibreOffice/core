@@ -11,9 +11,8 @@ class tdf136578(UITestCase):
 
     def test_tdf136578(self):
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf136578.odt")):
+        with self.ui_test.load_file(get_url_for_data_file("tdf136578.odt")) as document:
 
-            document = self.ui_test.get_component()
             self.assertEqual(document.CurrentController.PageCount, 2)
 
             xPageBreak = self.ui_test.wait_until_child_is_available('PageBreak')

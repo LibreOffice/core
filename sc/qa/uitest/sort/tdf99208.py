@@ -19,7 +19,6 @@ class tdf99208(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf99208.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #select A3:C245
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C245"}))
 
@@ -48,15 +47,15 @@ class tdf99208(UITestCase):
             xOk = xDialog.getChild("ok")
             self.ui_test.close_dialog_through_button(xOk)
             #Verify Expected: Values column B sorted ascending, column "control" unsorted
-            self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "FODMAP")
-            self.assertEqual(get_cell_by_position(document, 0, 0, 1).getString(), "agave")
-            self.assertEqual(get_cell_by_position(document, 0, 0, 2).getString(), "almond milk")
-            self.assertEqual(get_cell_by_position(document, 0, 0, 244).getString(), "zucchini")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 0).getString(), "FODMAP")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 1).getString(), "agave")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 2).getString(), "almond milk")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 244).getString(), "zucchini")
             # UNDO
             self.xUITest.executeCommand(".uno:Undo")
             # Verify
-            self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "FODMAP")
-            self.assertEqual(get_cell_by_position(document, 0, 0, 1).getString(), "beef (grass fed, no breadcrumbs)")
-            self.assertEqual(get_cell_by_position(document, 0, 0, 244).getString(), "salsa")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 0).getString(), "FODMAP")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 1).getString(), "beef (grass fed, no breadcrumbs)")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 244).getString(), "salsa")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
