@@ -759,11 +759,28 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
         return;
 
     // Calc operates in pixels...
-    const Point aPosition(nX * pViewData->GetPPTX(), nY * pViewData->GetPPTY());
-    LokMouseEventData aMouseEventData(nType, aPosition, nCount, MouseEventModifiers::SIMPLECLICK,
-                                      nButtons, nModifier);
-    aMouseEventData.maLogicPosition = aPointHMM;
-    SfxLokHelper::postMouseEventAsync(pGridWindow, aMouseEventData);
+    const Point aPosition(nX * pViewData->GetPPTX() + pGridWindow->GetOutOffXPixel(),
+                          nY * pViewData->GetPPTY() + pGridWindow->GetOutOffYPixel());
+
+    VclEventId aEvent = VclEventId::NONE;
+    MouseEvent aData(aPosition, nCount, MouseEventModifiers::SIMPLECLICK, nButtons, nModifier);
+    aData.setLogicPosition(aPointHMM);
+    switch (nType)
+    {
+        case LOK_MOUSEEVENT_MOUSEBUTTONDOWN:
+            aEvent = VclEventId::WindowMouseButtonDown;
+            break;
+        case LOK_MOUSEEVENT_MOUSEBUTTONUP:
+            aEvent = VclEventId::WindowMouseButtonUp;
+            break;
+        case LOK_MOUSEEVENT_MOUSEMOVE:
+            aEvent = VclEventId::WindowMouseMove;
+            break;
+        default:
+            break;
+    }
+
+    Application::LOKHandleMouseEvent(aEvent, pGridWindow, &aData);
 }
 
 void ScModelObj::setTextSelection(int nType, int nX, int nY)
