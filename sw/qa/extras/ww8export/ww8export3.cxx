@@ -813,6 +813,14 @@ DECLARE_WW8EXPORT_TEST(testTdf106541_inheritOutlineNumbering, "tdf106541_inherit
     CPPUNIT_ASSERT_EQUAL(OUString("1.1"), getProperty<OUString>(xPara, "ListLabelString"));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf104239_sharedOutlineNumId, "tdf104239_sharedOutlineNumId.doc")
+{
+    // The list should show both level 1 and level 2 digits.  It really ought to be "2.1."
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(5, "Principes"), uno::UNO_QUERY);
+    // This was ".1." previously.
+    CPPUNIT_ASSERT(3 < getProperty<OUString>(xPara, "ListLabelString").getLength());
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf120394, "tdf120394.doc")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
