@@ -4236,6 +4236,7 @@ void read_async_completed(GObject* source, GAsyncResult* res, gpointer user_data
 
     if (bFinished)
     {
+        g_object_unref(stream);
         pRes->aVector.resize(pRes->nRead);
         pRes->bDone = true;
         g_main_context_wakeup(nullptr);
