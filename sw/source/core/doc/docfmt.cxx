@@ -2085,7 +2085,7 @@ std::pair<SwFrameFormats::ByTypeAndName::const_iterator, SwFrameFormats::ByTypeA
 SwFrameFormats::findRangeByName( const OUString& rName ) const
 {
     auto it = m_TypeAndNameIndex.lower_bound( boost::make_tuple(rName, sal_uInt16(0)) );
-    auto itEnd = m_TypeAndNameIndex.lower_bound( boost::make_tuple(rName, SAL_MAX_UINT16) );
+    auto itEnd = m_TypeAndNameIndex.upper_bound( boost::make_tuple(rName, SAL_MAX_UINT16) );
     return { it, itEnd };
 }
 
