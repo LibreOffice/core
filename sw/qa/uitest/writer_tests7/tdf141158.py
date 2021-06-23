@@ -10,10 +10,9 @@ import time
 class TestTdf141158(UITestCase):
     def test_tdf141158(self):
         # load the desired bugdoc
-        with self.ui_test.load_file(get_url_for_data_file("TestHiddenHeadersFooters.docx")):
+        with self.ui_test.load_file(get_url_for_data_file("TestHiddenHeadersFooters.docx")) as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
-            document = self.ui_test.get_component()
             # open the page styles dialog and select the headers tab
             self.xUITest.executeCommand(".uno:PageStyleName")
             TemplateDialog8 = self.xUITest.getTopFocusWindow()

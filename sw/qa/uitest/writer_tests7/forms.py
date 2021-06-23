@@ -125,13 +125,12 @@ class Forms(UITestCase):
     def test_tdf139486(self):
 
         # Reuse file from another test
-        with self.ui_test.load_file(get_url_for_data_file("tdf140198.odt")):
+        with self.ui_test.load_file(get_url_for_data_file("tdf140198.odt")) as document:
 
             change_measurement_unit(self, "Centimeter")
 
             self.xUITest.executeCommand(".uno:JumpToNextFrame")
 
-            document = self.ui_test.get_component()
             drawPage = document.getDrawPages().getByIndex(0)
             shape = drawPage.getByIndex(0)
             self.assertEqual(13996, shape.getSize().Width)

@@ -25,8 +25,7 @@ class tdf125104(UITestCase):
         self.ui_test.close_dialog_through_button(okBtn)
 
     def test_tdf125104_pageFormat_numbering(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
             # insert page numbers on multiple pages
             self.xUITest.executeCommand(".uno:InsertPageNumberField")

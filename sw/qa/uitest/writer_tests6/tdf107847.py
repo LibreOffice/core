@@ -11,8 +11,7 @@ from uitest.uihelper.common import select_pos
 class tdf107847(UITestCase):
 
    def test_tdf_107847_macro_tab_crash(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             self.ui_test.execute_dialog_through_command(".uno:InsertFrame")   #  insert frame

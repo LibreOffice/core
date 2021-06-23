@@ -12,10 +12,9 @@ from libreoffice.calc.document import get_cell_by_position
 class tdf69450(UITestCase):
 
     def test_tdf69450(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             #add text to A1 and B1
             enter_text_to_cell(gridwin, "A1", "A")

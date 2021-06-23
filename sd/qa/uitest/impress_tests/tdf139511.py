@@ -12,7 +12,7 @@ from uitest.uihelper.common import change_measurement_unit
 class tdf139511(UITestCase):
 
    def test_tdf139511(self):
-        with self.ui_test.create_doc_in_start_center("impress"):
+        with self.ui_test.create_doc_in_start_center("impress") as document:
             xTemplateDlg = self.xUITest.getTopFocusWindow()
             xCancelBtn = xTemplateDlg.getChild("close")
             self.ui_test.close_dialog_through_button(xCancelBtn)
@@ -21,7 +21,6 @@ class tdf139511(UITestCase):
 
             self.xUITest.executeCommand(".uno:InsertTable?Columns:short=4&Rows:short=4")
 
-            document = self.ui_test.get_component()
             self.assertEqual(8004, document.DrawPages[0].getByIndex(2).BoundRect.Height)
             self.assertEqual(14104, document.DrawPages[0].getByIndex(2).BoundRect.Width)
 
@@ -43,7 +42,6 @@ class tdf139511(UITestCase):
             xOkBtn = xDialog.getChild("ok")
             xOkBtn.executeAction("CLICK", tuple())
 
-            document = self.ui_test.get_component()
 
             # Without the fix in place, this test would have failed with
             # AssertionError: 5005 != 8004

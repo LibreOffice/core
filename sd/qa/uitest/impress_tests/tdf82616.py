@@ -13,7 +13,7 @@ from uitest.framework import UITestCase
 class Tdf82616(UITestCase):
 
     def test_tdf82616(self):
-        with self.ui_test.create_doc_in_start_center("impress"):
+        with self.ui_test.create_doc_in_start_center("impress") as document:
 
             xTemplateDlg = self.xUITest.getTopFocusWindow()
             xCancelBtn = xTemplateDlg.getChild("close")
@@ -23,7 +23,6 @@ class Tdf82616(UITestCase):
 
             xImpressDoc = self.xUITest.getTopFocusWindow()
 
-            document = self.ui_test.get_component()
             self.assertEqual(1400, document.DrawPages[0].getByIndex(0).Position.X)
             self.assertEqual(628, document.DrawPages[0].getByIndex(0).Position.Y)
             self.assertEqual(1400, document.DrawPages[0].getByIndex(1).Position.X)

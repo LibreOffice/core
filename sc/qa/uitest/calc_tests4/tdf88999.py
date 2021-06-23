@@ -14,10 +14,9 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf88999(UITestCase):
     def test_tdf88999_scientific_format_decimal_value(self):
         #numberingformatpage.ui
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             enter_text_to_cell(gridwin, "A1", "1e-2")
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B1"}))
             #select cell A1

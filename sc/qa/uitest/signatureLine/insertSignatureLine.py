@@ -15,10 +15,9 @@ from com.sun.star.lang import IndexOutOfBoundsException
 class insertSignatureLineCalc(UITestCase):
 
    def test_insert_signature_line_calc(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             # cancel the dialog without doing anything
             self.ui_test.execute_dialog_through_command(".uno:InsertSignatureLine")
@@ -60,10 +59,9 @@ class insertSignatureLineCalc(UITestCase):
             self.assertEqual(document.Sheets.getByIndex(0).DrawPage.getByIndex(0).SignatureLineSigningInstructions, "Instructions")
 
    def test_insert_signature_line2_calc(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             self.ui_test.execute_dialog_through_command(".uno:InsertSignatureLine")
             xDialog = self.xUITest.getTopFocusWindow()

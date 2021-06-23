@@ -13,10 +13,9 @@ from uitest.uihelper.calc import enter_text_to_cell
 
 class tdf125030(UITestCase):
     def test_tdf125030_repeat_crash(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #enter data
             enter_text_to_cell(gridwin, "A1", "aaaa")
             enter_text_to_cell(gridwin, "B1", "bbbb")

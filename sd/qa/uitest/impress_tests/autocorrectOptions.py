@@ -14,11 +14,10 @@ from uitest.uihelper.common import select_pos
 class autocorrectOptions(UITestCase):
 
    def test_autocorrect_options_impress(self):
-        with self.ui_test.create_doc_in_start_center("impress"):
+        with self.ui_test.create_doc_in_start_center("impress") as document:
             xTemplateDlg = self.xUITest.getTopFocusWindow()
             xCancelBtn = xTemplateDlg.getChild("close")
             self.ui_test.close_dialog_through_button(xCancelBtn)
-            document = self.ui_test.get_component()
 
             self.ui_test.execute_dialog_through_command(".uno:AutoCorrectDlg")
             xDialog = self.xUITest.getTopFocusWindow()

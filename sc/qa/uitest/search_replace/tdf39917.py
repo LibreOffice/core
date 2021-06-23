@@ -18,10 +18,9 @@ from uitest.debug import sleep
 
 class tdf39917(UITestCase):
    def test_tdf39917_find_replace_R1C1(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
             #* Tools --> Options --> Calc --> Formula -->  Syntax = Excel R1C1
             self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
             xDialogOpt = self.xUITest.getTopFocusWindow()

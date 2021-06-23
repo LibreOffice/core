@@ -13,10 +13,9 @@ from uitest.uihelper.calc import enter_text_to_cell
 class scenarios(UITestCase):
 
    def test_scenarios(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             #fill B1:B4  with 1, select B1:B4;
             enter_text_to_cell(xGridWindow, "B1", "1")

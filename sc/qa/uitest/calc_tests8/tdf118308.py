@@ -13,10 +13,9 @@ from libreoffice.calc.document import get_cell_by_position
 class tdf118308(UITestCase):
 
     def test_tdf118308(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             enter_text_to_cell(gridwin, "A1", "A")
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
@@ -27,11 +26,10 @@ class tdf118308(UITestCase):
             xDiscardBtn = xDialog.getChild("discard")
             self.ui_test.close_dialog_through_button(xDiscardBtn)
 
-        with self.ui_test.create_doc_in_start_center("calc"):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
 
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
 
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
 
