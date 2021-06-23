@@ -2137,7 +2137,7 @@ static void ImplHandleUserEvent( ImplSVEvent* pSVEvent )
     }
 }
 
-static MouseEventModifiers ImplGetMouseMoveMode( SalMouseEvent const * pEvent )
+MouseEventModifiers ImplGetMouseMoveMode( SalMouseEvent const * pEvent )
 {
     MouseEventModifiers nMode = MouseEventModifiers::NONE;
     if ( !pEvent->mnCode )
@@ -2149,7 +2149,7 @@ static MouseEventModifiers ImplGetMouseMoveMode( SalMouseEvent const * pEvent )
     return nMode;
 }
 
-static MouseEventModifiers ImplGetMouseButtonMode( SalMouseEvent const * pEvent )
+MouseEventModifiers ImplGetMouseButtonMode( SalMouseEvent const * pEvent )
 {
     MouseEventModifiers nMode = MouseEventModifiers::NONE;
     if ( pEvent->mnButton == MOUSE_LEFT )
