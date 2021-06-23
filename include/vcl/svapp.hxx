@@ -741,6 +741,9 @@ public:
     */
     static ImplSVEvent *        PostKeyEvent( VclEventId nEvent, vcl::Window *pWin, KeyEvent const * pKeyEvent );
 
+
+    static bool                 LOKHandleMouseEvent( VclEventId nEvent, vcl::Window *pWin, const MouseEvent* pEvent );
+
     /** Send mouse event
 
      @param     nEvent          Event ID for mouse event
