@@ -898,6 +898,40 @@ ImplSVEvent* Application::PostGestureEvent(VclEventId nEvent, vcl::Window* pWin,
     return nEventId;
 }
 
+bool Application::HandleMouseEvent( VclEventId nEvent, vcl::Window* pWindow, void* pEvent )
+{
+    if (!pWindow)
+        return false;
+
+    SalEvent nSalEvent;
+    switch( nEvent )
+    {
+        case VclEventId::WindowMouseMove:
+            nSalEvent = SalEvent::ExternalMouseMove;
+        break;
+
+        case VclEventId::WindowMouseButtonDown:
+            nSalEvent = SalEvent::ExternalMouseButtonDown;
+        break;
+
+        case VclEventId::WindowMouseButtonUp:
+            nSalEvent = SalEvent::ExternalMouseButtonUp;
+        break;
+
+        default:
+            nSalEvent = SalEvent::NONE;
+        break;
+    }
+
+    if (nSalEvent == SalEvent::NONE)
+        return false;
+
+    ImplWindowFrameProc2(pWindow, nSalEvent, pEvent);
+
+    return true;
+}
+
+
 ImplSVEvent* Application::PostMouseEvent( VclEventId nEvent, vcl::Window *pWin, MouseEvent const * pMouseEvent )
 {
     const SolarMutexGuard aGuard;
