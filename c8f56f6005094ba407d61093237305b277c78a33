@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "33d58385_ee3b9145",
+        "filename": "sw/source/filter/ww8/ww8par3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1764,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-06-23T16:50:41Z",
+      "side": 1,
+      "message": "I could not generate an example document like this. I made a DOCX that ONLY defined numId in the body, and left the listLevel to be inherited from the Title style. But when I saved it using Word 2016 into DOC format, it copied the listLevel to the body\u0027s sprmPIlvl.\n\nSo this is probably a moot concern.",
+      "revId": "c8f56f6005094ba407d61093237305b277c78a33",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
