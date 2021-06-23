@@ -30,6 +30,7 @@
 #include <vcl/settings.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <salwtype.hxx>
 
 #include <optional>
 #include <list>
@@ -95,6 +96,10 @@ bool isVisibleInLayout(const vcl::Window *pWindow);
 bool isEnabledInLayout(const vcl::Window *pWindow);
 
 bool ImplWindowFrameProc( vcl::Window* pInst, SalEvent nEvent, const void* pEvent );
+
+MouseEventModifiers ImplGetMouseMoveMode( SalMouseEvent const * pEvent );
+
+MouseEventModifiers ImplGetMouseButtonMode( SalMouseEvent const * pEvent );
 
 struct ImplWinData
 {

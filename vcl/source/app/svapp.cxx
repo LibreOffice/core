@@ -898,6 +898,81 @@ ImplSVEvent* Application::PostGestureEvent(VclEventId nEvent, vcl::Window* pWin,
     return nEventId;
 }
 
+bool Application::HandleMouseEvent( VclEventId nEvent, vcl::Window* pWindow, void* pEvent )
+{
+    bool bSuccess = false;
+    SalMouseEvent aMouseEvent;
+    SalMouseEvent const* pMouseEvent = static_cast<SalMouseEvent const *>(pEvent);
+
+    if (!pWindow)
+        return false;
+
+    SalEvent nSalEvent;
+    switch ( nEvent )
+    {
+        case VclEventId::WindowMouseMove:
+            nSalEvent = SalEvent::ExternalMouseMove;
+            break;
+
+        case VclEventId::WindowMouseButtonDown:
+            nSalEvent = SalEvent::ExternalMouseButtonDown;
+            break;
+
+        case VclEventId::WindowMouseButtonUp:
+            nSalEvent = SalEvent::ExternalMouseButtonUp;
+            break;
+
+        default:
+            nSalEvent = SalEvent::NONE;
+            break;
+    }
+
+    if (nSalEvent == SalEvent::NONE)
+        return bSuccess;
+
+    switch (nSalEvent)
+    {
+        case SalEvent::MouseMove:
+            bSuccess = ImplHandleMouseEvent2(pWindow, MouseNotifyEvent::MOUSEMOVE, false,
+                                             pMouseEvent->mnX, pMouseEvent->mnY,
+                                             pMouseEvent->mnTime, pMouseEvent->mnCode,
+                                             ImplGetMouseMoveMode(pMouseEvent));
+            break;
+        case SalEvent::MouseButtonDown:
+            bSuccess = ImplHandleMouseEvent2(pWindow, MouseNotifyEvent::MOUSEBUTTONDOWN, false,
+                                             pMouseEvent->mnX, pMouseEvent->mnY,
+                                             pMouseEvent->mnTime,
+#ifdef MACOSX
+                                             pMouseEvent->mnButton |
+                                             (pMouseEvent->mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD3)),
+#else
+                                             pMouseEvent->mnButton |
+                                             (pMouseEvent->mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2)),
+#endif
+                                             ImplGetMouseButtonMode(pMouseEvent));
+            break;
+        case SalEvent::MouseButtonUp:
+            bSuccess = ImplHandleMouseEvent2(pWindow, MouseNotifyEvent::MOUSEBUTTONUP, false,
+                                             pMouseEvent->mnX, pMouseEvent->mnY,
+                                             pMouseEvent->mnTime,
+#ifdef MACOSX
+                                             pMouseEvent->mnButton |
+                                             (pMouseEvent->mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD3)),
+#else
+                                             pMouseEvent->mnButton |
+                                             (pMouseEvent->mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2)),
+#endif
+                                             ImplGetMouseButtonMode(pMouseEvent));
+            break;
+        default:
+            SAL_WARN( "vcl.layout", "Application::HandleMouseEvent unknown event (" << static_cast<int>(nEvent) << ")" );
+            break;
+    }
+
+    return bSuccess;
+}
+
+
 ImplSVEvent* Application::PostMouseEvent( VclEventId nEvent, vcl::Window *pWin, MouseEvent const * pMouseEvent )
 {
     const SolarMutexGuard aGuard;
