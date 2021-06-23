@@ -150,9 +150,9 @@ void SwDoc::SetTableName( SwFrameFormat& rTableFormat, const OUString &rNewName 
     }
 
     if( !bNameFound )
-        rTableFormat.SetName( rNewName, true );
+        rTableFormat.SetName1( rNewName, true );
     else
-        rTableFormat.SetName( GetUniqueTableName(), true );
+        rTableFormat.SetName1( GetUniqueTableName(), true );
 
     SwStartNode *pStNd;
     SwNodeIndex aIdx( *GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );

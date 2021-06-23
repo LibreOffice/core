@@ -296,7 +296,7 @@ SwDoc::SwDoc()
      */
     /* Formats */
     mpFrameFormatTable->push_back(mpDfltFrameFormat.get());
-    mpCharFormatTable->push_back(mpDfltCharFormat.get());
+    mpCharFormatTable->insert(mpDfltCharFormat.get());
 
     /* FormatColls */
     // TXT
@@ -728,7 +728,13 @@ void SwDoc::ClearDoc()
         mpTextFormatCollTable->DeleteAndDestroy(2, mpTextFormatCollTable->size());
     mpTextFormatCollTable->DeleteAndDestroy(1, mpTextFormatCollTable->size());
     mpGrfFormatCollTable->DeleteAndDestroy(1, mpGrfFormatCollTable->size());
-    mpCharFormatTable->DeleteAndDestroy(1, mpCharFormatTable->size());
+    for (auto it = mpCharFormatTable->begin(); it != mpCharFormatTable->end(); )
+    {
+        if ((*it)->GetName() == "Standard")
+            ++it;
+        else
+            it = mpCharFormatTable->erase(it);
+    }
 
     if( getIDocumentLayoutAccess().GetCurrentViewShell() )
     {

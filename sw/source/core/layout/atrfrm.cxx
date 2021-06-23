@@ -2557,7 +2557,7 @@ SwFrameFormat::~SwFrameFormat()
     }
 }
 
-void SwFrameFormat::SetName( const OUString& rNewName, bool bBroadcast )
+void SwFrameFormat::SetName1( const OUString& rNewName, bool bBroadcast )
 {
     if (m_ffList != nullptr) {
         SwFrameFormats::iterator it = m_ffList->find( this );
@@ -2577,7 +2577,7 @@ void SwFrameFormat::SetName( const OUString& rNewName, bool bBroadcast )
         }
     }
     else
-        SwFormat::SetName( rNewName, bBroadcast );
+        SwFormat::SetName1( rNewName, bBroadcast );
 }
 
 void SwFrameFormat::SetOtherTextBoxFormat( SwFrameFormat *pFormat )

@@ -395,14 +395,14 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
         if( !m_rDoc.IsCopyIsMove() || &m_rDoc != pSrcDoc )
         {
             if( m_rDoc.IsInReading() || m_rDoc.IsInMailMerge() )
-                pDest->SetName( OUString() );
+                pDest->SetName1( OUString() );
             else
             {
                 // Test first if the name is already taken, if so generate a new one.
                 SwNodeType nNdTyp = aRg.aStart.GetNode().GetNodeType();
 
                 OUString sOld( pDest->GetName() );
-                pDest->SetName( OUString() );
+                pDest->SetName1( OUString() );
                 if( m_rDoc.FindFlyByName( sOld, nNdTyp ) )     // found one
                     switch( nNdTyp )
                     {
@@ -411,7 +411,7 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
                     default:                 sOld = m_rDoc.GetUniqueFrameName();    break;
                     }
 
-                pDest->SetName( sOld );
+                pDest->SetName1( sOld );
             }
         }
 
@@ -499,7 +499,7 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
         // Format name should have unique name. Let's use object name as a fallback
         SdrObject *pObj = pDest->FindSdrObject();
         if (pObj)
-            pDest->SetName(pObj->GetName());
+            pDest->SetName1(pObj->GetName());
     }
 
     return pDest;

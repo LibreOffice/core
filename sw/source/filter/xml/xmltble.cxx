@@ -300,14 +300,14 @@ bool SwXMLTableFrameFormatsSort_Impl::AddRow( SwFrameFormat& rFrameFormat,
             continue;
 
         // found!
-        rFrameFormat.SetName( pTestFormat->GetName() );
+        rFrameFormat.SetName1( pTestFormat->GetName() );
         bInsert = false;
         break;
     }
 
     if( bInsert )
     {
-        rFrameFormat.SetName( OUString::Concat(rNamePrefix) + "." + OUString::number(nLine+1) );
+        rFrameFormat.SetName1( OUString::Concat(rNamePrefix) + "." + OUString::number(nLine+1) );
         if ( i != aFormatList.end() ) ++i;
         aFormatList.insert( i, &rFrameFormat );
     }
@@ -490,14 +490,14 @@ bool SwXMLTableFrameFormatsSort_Impl::AddCell( SwFrameFormat& rFrameFormat,
             continue;
 
         // found!
-        rFrameFormat.SetName( pTestFormat->GetName() );
+        rFrameFormat.SetName1( pTestFormat->GetName() );
         bInsert = false;
         break;
     }
 
     if( bInsert )
     {
-        rFrameFormat.SetName( lcl_xmltble_appendBoxPrefix( rNamePrefix, nCol, nRow, bTop ) );
+        rFrameFormat.SetName1( lcl_xmltble_appendBoxPrefix( rNamePrefix, nCol, nRow, bTop ) );
         if ( i != aFormatList.end() ) ++i;
         aFormatList.insert( i, &rFrameFormat );
     }
@@ -1104,7 +1104,7 @@ static void lcl_xmltble_ClearName_Box( SwTableBox* pBox )
     {
         SwFrameFormat *pFrameFormat = pBox->GetFrameFormat();
         if( pFrameFormat && !pFrameFormat->GetName().isEmpty() )
-            pFrameFormat->SetName( OUString() );
+            pFrameFormat->SetName1( OUString() );
     }
 }
 

@@ -689,7 +689,7 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj const * pTextObj,
 
                     OUString aObjectName(pObject->GetName());
                     if (aObjectName.isEmpty() || !m_rDoc.FindFlyByName(aObjectName, GetNodeType(*pRet)))
-                        pRet->SetName(aObjectName);
+                        pRet->SetName1(aObjectName);
                     else
                         m_aGrfNameGenerator.SetUniqueGraphName(pRet, aObjectName);
 

@@ -173,6 +173,104 @@ public:
     { return static_cast<Value>(SwFormatsBase::FindFormatByName(rName)); }
 };
 
+struct SwFormatCompare
+{
+    bool operator() ( const SwFormat *lhs, const SwFormat *rhs ) const
+    {
+        return lhs->GetName() < rhs->GetName();
+    }
+};
+
+template<typename Value>
+class SwFormatsModifyMapBase : public SwFormatsBase
+{
+protected:
+    enum class DestructorPolicy {
+        KeepElements,
+        FreeElements,
+    };
+private:
+    typename o3tl::sorted_vector<Value, SwFormatCompare> mvVals;
+    const DestructorPolicy mPolicy;
+
+protected:
+    // default destructor deletes all contained elements
+    SwFormatsModifyMapBase(DestructorPolicy policy = DestructorPolicy::FreeElements)
+        : mPolicy(policy) {}
+
+public:
+    // free any remaining child objects based on mPolicy
+    virtual ~SwFormatsModifyMapBase()
+    {
+        if (mPolicy == DestructorPolicy::FreeElements)
+            for(auto it = mvVals.begin(); it != mvVals.end(); ++it)
+                delete *it;
+    }
+
+    virtual size_t GetFormatCount() const override
+        { return mvVals.size(); }
+
+    virtual Value GetFormat(size_t idx) const override
+        { return mvVals[idx]; }
+
+    size_t GetPos(const SwFormat *p) const
+    {
+        auto it = std::find(mvVals.begin(), mvVals.end(), p);
+        return it == mvVals.end() ? SIZE_MAX : it - mvVals.begin();
+    }
+
+    /// check if given format is contained here
+    /// @precond pFormat must not have been deleted
+    bool ContainsFormat(SwFormat const* pFormat) const {
+        Value p = static_cast<Value>(const_cast<SwFormat*>(pFormat));
+        return std::find(mvVals.begin(), mvVals.end(), p) != mvVals.end();
+    }
+
+    virtual Value FindFormatByName(std::u16string_view rName) const override
+    {
+        // use a custom find implementation to avoid constructing a temporary SwFormat
+        struct CustomFind {
+            bool operator()(Value v, std::u16string_view rName) const
+            {
+                return v->GetName() < rName;
+            }
+        };
+        auto it = std::lower_bound(mvVals.begin(), mvVals.end(), rName, CustomFind());
+        if (it == mvVals.end() || !(*it)->HasName(rName))
+            return nullptr;
+        return *it;
+    }
+
+    /** Need to call this when the format name changes */
+    void SetFormatNameAndReindex(Value v, const OUString& sNewName)
+    {
+        auto it = mvVals.find(v);
+        mvVals.erase(it);
+        v->SetName1(sNewName);
+        mvVals.insert(v);
+    }
+
+    void DeleteAndDestroy(int aStartIdx, int aEndIdx)
+    {
+        if (aEndIdx < aStartIdx)
+            return;
+        for (auto it = mvVals.begin() + aStartIdx;
+             it != mvVals.begin() + aEndIdx; ++it)
+            delete *it;
+        mvVals.erase( mvVals.begin() + aStartIdx, mvVals.begin() + aEndIdx);
+    }
+
+    typedef typename o3tl::sorted_vector<Value, SwFormatCompare>::size_type size_type;
+    typedef typename o3tl::sorted_vector<Value, SwFormatCompare>::const_iterator const_iterator;
+
+    const_iterator begin() const { return mvVals.begin(); }
+    const_iterator end() const { return mvVals.end(); }
+    size_t size() const { return mvVals.size(); }
+    Value operator[](size_type nPos) const { return mvVals[nPos]; }
+    const_iterator erase(const_iterator aIt) { return mvVals.erase(aIt); }
+    void insert(Value v) { mvVals.insert(v); }
+};
+
 class SwGrfFormatColls final : public SwFormatsModifyBase<SwGrfFormatColl*>
 {
 public:
@@ -187,7 +285,7 @@ public:
     SwFrameFormatsV() : SwFormatsModifyBase( DestructorPolicy::KeepElements ) {}
 };
 
-class SwCharFormats final : public SwFormatsModifyBase<SwCharFormat*>
+class SwCharFormats final : public SwFormatsModifyMapBase<SwCharFormat*>
 {
 public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const;

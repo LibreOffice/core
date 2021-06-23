@@ -143,7 +143,7 @@ SwFormat &SwFormat::operator=(const SwFormat& rFormat)
     return *this;
 }
 
-void SwFormat::SetName( const OUString& rNewName, bool bBroadcast )
+void SwFormat::SetName1( const OUString& rNewName, bool bBroadcast )
 {
     OSL_ENSURE( !IsDefault(), "SetName: Defaultformat" );
     if( bBroadcast )

@@ -845,7 +845,7 @@ SwCharFormat *SwDoc::MakeCharFormat( const OUString &rFormatName,
                                bool bBroadcast )
 {
     SwCharFormat *pFormat = new SwCharFormat( GetAttrPool(), rFormatName, pDerivedFrom );
-    mpCharFormatTable->push_back( pFormat );
+    mpCharFormatTable->insert( pFormat );
     pFormat->SetAuto(false);
     getIDocumentState().SetModified();
 
@@ -1708,7 +1708,7 @@ bool SwDoc::DontExpandFormat( const SwPosition& rPos, bool bFlag )
 SwTableBoxFormat* SwDoc::MakeTableBoxFormat()
 {
     SwTableBoxFormat* pFormat = new SwTableBoxFormat( GetAttrPool(), mpDfltFrameFormat.get() );
-    pFormat->SetName("TableBox" + OUString::number(reinterpret_cast<sal_IntPtr>(pFormat)));
+    pFormat->SetName1("TableBox" + OUString::number(reinterpret_cast<sal_IntPtr>(pFormat)));
     getIDocumentState().SetModified();
     return pFormat;
 }
@@ -1716,7 +1716,7 @@ SwTableBoxFormat* SwDoc::MakeTableBoxFormat()
 SwTableLineFormat* SwDoc::MakeTableLineFormat()
 {
     SwTableLineFormat* pFormat = new SwTableLineFormat( GetAttrPool(), mpDfltFrameFormat.get() );
-    pFormat->SetName("TableLine" + OUString::number(reinterpret_cast<sal_IntPtr>(pFormat)));
+    pFormat->SetName1("TableLine" + OUString::number(reinterpret_cast<sal_IntPtr>(pFormat)));
     getIDocumentState().SetModified();
     return pFormat;
 }
@@ -1926,7 +1926,11 @@ void SwDoc::RenameFormat(SwFormat & rFormat, const OUString & sNewName,
         }
     }
 
-    rFormat.SetName(sNewName);
+    // name change means the o3tl::sorted_array is not property sorted
+    if (rFormat.Which() == RES_CHRFMT)
+        mpCharFormatTable->SetFormatNameAndReindex(static_cast<SwCharFormat*>(&rFormat), sNewName);
+    else
+        rFormat.SetName1(sNewName);
 
     if (bBroadcast)
         BroadcastStyleOperation(sNewName, eFamily, SfxHintId::StyleSheetModified);
