@@ -898,6 +898,69 @@ ImplSVEvent* Application::PostGestureEvent(VclEventId nEvent, vcl::Window* pWin,
     return nEventId;
 }
 
+bool Application::HandleMouseEvent( VclEventId nEvent, vcl::Window* pWindow, void* pEvent )
+{
+    bool bSuccess = false;
+    SalMouseEvent aMouseEvent;
+    MouseEvent const * pMouseEvent = static_cast<MouseEvent const *>(pEvent);
+
+    if (!pWindow)
+        return false;
+
+    aMouseEvent.mnTime = tools::Time::GetSystemTicks();
+    aMouseEvent.mnX = pMouseEvent->GetPosPixel().X();
+    aMouseEvent.mnY = pMouseEvent->GetPosPixel().Y();
+    aMouseEvent.mnCode = pMouseEvent->GetButtons() | pMouseEvent->GetModifier();
+
+    switch (nEvent)
+    {
+        case VclEventId::WindowMouseMove:
+            aMouseEvent.mnButton = 0;
+            bSuccess = ImplHandleMouseEvent2(pWindow, MouseNotifyEvent::MOUSEMOVE, false,
+                                         aMouseEvent.mnX, aMouseEvent.mnY,
+                                         aMouseEvent.mnTime, aMouseEvent.mnCode,
+                                         ImplGetMouseMoveMode(&aMouseEvent));
+        break;
+
+        case VclEventId::WindowMouseButtonDown:
+            aMouseEvent.mnButton = pMouseEvent->GetButtons();
+            bSuccess = ImplHandleMouseEvent2(pWindow, MouseNotifyEvent::MOUSEBUTTONDOWN, false,
+                                             aMouseEvent.mnX, aMouseEvent.mnY,
+                                             aMouseEvent.mnTime,
+#ifdef MACOSX
+                                             aMouseEvent.mnButton |
+                                             (aMouseEvent.mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD3)),
+#else
+                                             aMouseEvent.mnButton |
+                                             (aMouseEvent.mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2)),
+#endif
+                                             ImplGetMouseButtonMode(&aMouseEvent));
+            break;
+
+        case VclEventId::WindowMouseButtonUp:
+            aMouseEvent.mnButton = pMouseEvent->GetButtons();
+            bSuccess = ImplHandleMouseEvent2(pWindow, MouseNotifyEvent::MOUSEBUTTONUP, false,
+                                             aMouseEvent.mnX, aMouseEvent.mnY,
+                                             aMouseEvent.mnTime,
+#ifdef MACOSX
+                                             aMouseEvent.mnButton |
+                                             (aMouseEvent.mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD3)),
+#else
+                                             aMouseEvent.mnButton |
+                                             (aMouseEvent.mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2)),
+#endif
+                                             ImplGetMouseButtonMode(&aMouseEvent));
+            break;
+
+        default:
+            SAL_WARN( "vcl.layout", "Application::HandleMouseEvent unknown event (" << static_cast<int>(nEvent) << ")" );
+            break;
+    }
+
+    return bSuccess;
+}
+
+
 ImplSVEvent* Application::PostMouseEvent( VclEventId nEvent, vcl::Window *pWin, MouseEvent const * pMouseEvent )
 {
     const SolarMutexGuard aGuard;
