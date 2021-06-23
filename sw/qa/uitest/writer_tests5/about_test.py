@@ -11,13 +11,15 @@ class AboutDlgTest(UITestCase):
 
     def test_about_dlg(self):
 
-        with self.ui_test.create_doc_in_start_center("writer"):
+        self.ui_test.create_doc_in_start_center("writer")
 
-            self.ui_test.execute_dialog_through_command(".uno:About")
+        self.ui_test.execute_dialog_through_command(".uno:About")
 
-            xAboutDlg = self.xUITest.getTopFocusWindow()
+        xAboutDlg = self.xUITest.getTopFocusWindow()
 
-            xCloseBtn = xAboutDlg.getChild("btnClose")
-            self.ui_test.close_dialog_through_button(xCloseBtn)
+        xCloseBtn = xAboutDlg.getChild("btnClose")
+        self.ui_test.close_dialog_through_button(xCloseBtn)
+
+        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

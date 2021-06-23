@@ -10,47 +10,48 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf129346(UITestCase):
 
    def test_run(self):
-        with self.ui_test.create_doc_in_start_center("impress"):
-            xTemplateDlg = self.xUITest.getTopFocusWindow()
-            xCancelBtn = xTemplateDlg.getChild("close")
-            self.ui_test.close_dialog_through_button(xCancelBtn)
+        self.ui_test.create_doc_in_start_center("impress")
+        xTemplateDlg = self.xUITest.getTopFocusWindow()
+        xCancelBtn = xTemplateDlg.getChild("close")
+        self.ui_test.close_dialog_through_button(xCancelBtn)
 
-            xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+        xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
 
-            document = self.ui_test.get_component()
-            self.assertEqual(document.CurrentController.getCurrentPage().Number, 1)
-            self.xUITest.executeCommand(".uno:DuplicatePage")
-            xToolkit.processEventsToIdle()
-            self.assertEqual(document.CurrentController.getCurrentPage().Number, 2)
+        document = self.ui_test.get_component()
+        self.assertEqual(document.CurrentController.getCurrentPage().Number, 1)
+        self.xUITest.executeCommand(".uno:DuplicatePage")
+        xToolkit.processEventsToIdle()
+        self.assertEqual(document.CurrentController.getCurrentPage().Number, 2)
 
-            xDoc = self.xUITest.getTopFocusWindow()
-            xEdit = xDoc.getChild("impress_win")
-            xEdit.executeAction("TYPE", mkPropertyValues({"TEXT":"test"}))
+        xDoc = self.xUITest.getTopFocusWindow()
+        xEdit = xDoc.getChild("impress_win")
+        xEdit.executeAction("TYPE", mkPropertyValues({"TEXT":"test"}))
 
-            self.xUITest.executeCommand(".uno:Undo")
-            xToolkit.processEventsToIdle()
-            self.assertEqual(document.CurrentController.getCurrentPage().Number, 2)
+        self.xUITest.executeCommand(".uno:Undo")
+        xToolkit.processEventsToIdle()
+        self.assertEqual(document.CurrentController.getCurrentPage().Number, 2)
 
-            self.xUITest.executeCommand(".uno:Undo")
-            xToolkit.processEventsToIdle()
-            self.assertEqual(document.CurrentController.getCurrentPage().Number, 2)
+        self.xUITest.executeCommand(".uno:Undo")
+        xToolkit.processEventsToIdle()
+        self.assertEqual(document.CurrentController.getCurrentPage().Number, 2)
 
-            self.xUITest.executeCommand(".uno:Undo")
-            xToolkit.processEventsToIdle()
-            self.assertEqual(document.CurrentController.getCurrentPage().Number, 1)
+        self.xUITest.executeCommand(".uno:Undo")
+        xToolkit.processEventsToIdle()
+        self.assertEqual(document.CurrentController.getCurrentPage().Number, 1)
 
-            self.xUITest.executeCommand(".uno:Redo")
-            xToolkit.processEventsToIdle()
-            self.assertEqual(document.CurrentController.getCurrentPage().Number, 2)
+        self.xUITest.executeCommand(".uno:Redo")
+        xToolkit.processEventsToIdle()
+        self.assertEqual(document.CurrentController.getCurrentPage().Number, 2)
 
-            self.xUITest.executeCommand(".uno:Redo")
+        self.xUITest.executeCommand(".uno:Redo")
 
-            xDoc = self.xUITest.getTopFocusWindow()
-            xEdit = xDoc.getChild("impress_win")
-            xEdit.executeAction("TYPE", mkPropertyValues({"TEXT":"test"}))
+        xDoc = self.xUITest.getTopFocusWindow()
+        xEdit = xDoc.getChild("impress_win")
+        xEdit.executeAction("TYPE", mkPropertyValues({"TEXT":"test"}))
 
-            xToolkit.processEventsToIdle()
-            #Without the accompanying fix in place, it would fail with AssertionError: 2 != 1
-            self.assertEqual(document.CurrentController.getCurrentPage().Number, 2)
+        xToolkit.processEventsToIdle()
+        #Without the accompanying fix in place, it would fail with AssertionError: 2 != 1
+        self.assertEqual(document.CurrentController.getCurrentPage().Number, 2)
+        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

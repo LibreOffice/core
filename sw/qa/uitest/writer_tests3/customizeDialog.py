@@ -15,113 +15,120 @@ class ConfigureDialog(UITestCase):
 
     def test_open_ConfigureDialog_writer(self):
 
-        with self.ui_test.create_doc_in_start_center("writer"):
-            self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
+        self.ui_test.create_doc_in_start_center("writer")
+        self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog")
+        xDialog = self.xUITest.getTopFocusWindow()
 
-            xcancBtn = xDialog.getChild("cancel")
-            xcancBtn.executeAction("CLICK", tuple())
+        xcancBtn = xDialog.getChild("cancel")
+        xcancBtn.executeAction("CLICK", tuple())
+
+        self.ui_test.close_doc()
 
     def test_search_filter(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
+        self.ui_test.create_doc_in_start_center("writer")
+        self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog")
+        xDialog = self.xUITest.getTopFocusWindow()
 
-            xfunc = xDialog.getChild("functions")
-            xSearch = xDialog.getChild("searchEntry")
+        xfunc = xDialog.getChild("functions")
+        xSearch = xDialog.getChild("searchEntry")
 
-            initialEntryCount = get_state_as_dict(xfunc)["Children"]
-            self.assertTrue(initialEntryCount != 0)
+        initialEntryCount = get_state_as_dict(xfunc)["Children"]
+        self.assertTrue(initialEntryCount != 0)
 
-            xSearch.executeAction("TYPE", mkPropertyValues({"TEXT":"format"}))
+        xSearch.executeAction("TYPE", mkPropertyValues({"TEXT":"format"}))
 
-            # Wait for the search/filter op to be completed
-            timeout = time.time() + 1
-            while time.time() < timeout:
-                filteredEntryCount = get_state_as_dict(xfunc)["Children"]
-                if filteredEntryCount != initialEntryCount:
-                    break
-                time.sleep(0.1)
+        # Wait for the search/filter op to be completed
+        timeout = time.time() + 1
+        while time.time() < timeout:
+            filteredEntryCount = get_state_as_dict(xfunc)["Children"]
+            if filteredEntryCount != initialEntryCount:
+                break
+            time.sleep(0.1)
 
-            self.assertTrue(filteredEntryCount < initialEntryCount)
+        self.assertTrue(filteredEntryCount < initialEntryCount)
 
-            xSearch.executeAction("CLEAR", tuple())
+        xSearch.executeAction("CLEAR", tuple())
 
-            # Wait for the search/filter op to be completed
-            timeout = time.time() + 1
-            while time.time() < timeout:
-                finalEntryCount = get_state_as_dict(xfunc)["Children"]
-                if finalEntryCount != filteredEntryCount:
-                    break
-                time.sleep(0.1)
+        # Wait for the search/filter op to be completed
+        timeout = time.time() + 1
+        while time.time() < timeout:
+            finalEntryCount = get_state_as_dict(xfunc)["Children"]
+            if finalEntryCount != filteredEntryCount:
+                break
+            time.sleep(0.1)
 
-            self.assertEqual(initialEntryCount, finalEntryCount)
+        self.assertEqual(initialEntryCount, finalEntryCount)
 
 
-            xcancBtn = xDialog.getChild("cancel")  #button Cancel
-            xcancBtn.executeAction("CLICK", tuple())  #click the button
+        xcancBtn = xDialog.getChild("cancel")  #button Cancel
+        xcancBtn.executeAction("CLICK", tuple())  #click the button
+
+        self.ui_test.close_doc()
 
     def test_category_listbox(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
+        self.ui_test.create_doc_in_start_center("writer")
+        self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog")
+        xDialog = self.xUITest.getTopFocusWindow()
 
-            xFunc = xDialog.getChild("functions")
-            xCategory = xDialog.getChild("commandcategorylist")
+        xFunc = xDialog.getChild("functions")
+        xCategory = xDialog.getChild("commandcategorylist")
 
-            initialEntryCount = get_state_as_dict(xFunc)["Children"]
-            self.assertTrue(initialEntryCount != 0)
+        initialEntryCount = get_state_as_dict(xFunc)["Children"]
+        self.assertTrue(initialEntryCount != 0)
 
-            select_pos(xCategory, "1")
-            filteredEntryCount = get_state_as_dict(xFunc)["Children"]
-            self.assertTrue(filteredEntryCount < initialEntryCount)
+        select_pos(xCategory, "1")
+        filteredEntryCount = get_state_as_dict(xFunc)["Children"]
+        self.assertTrue(filteredEntryCount < initialEntryCount)
 
-            select_pos(xCategory, "0")
-            finalEntryCount = get_state_as_dict(xFunc)["Children"]
-            self.assertEqual(initialEntryCount, finalEntryCount)
+        select_pos(xCategory, "0")
+        finalEntryCount = get_state_as_dict(xFunc)["Children"]
+        self.assertEqual(initialEntryCount, finalEntryCount)
 
-            xcancBtn = xDialog.getChild("cancel")  #button Cancel
-            xcancBtn.executeAction("CLICK", tuple())  #click the button
+        xcancBtn = xDialog.getChild("cancel")  #button Cancel
+        xcancBtn.executeAction("CLICK", tuple())  #click the button
+
+        self.ui_test.close_doc()
 
     def test_tdf133862(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
+        self.ui_test.create_doc_in_start_center("writer")
 
-            self.xUITest.executeCommand(".uno:InsertObjectStarMath")
+        self.xUITest.executeCommand(".uno:InsertObjectStarMath")
 
-            # Without the fix in place, calling customize dialog after inserting
-            # a formula object would crash
-            self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
+        # Without the fix in place, calling customize dialog after inserting
+        # a formula object would crash
+        self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog")
+        xDialog = self.xUITest.getTopFocusWindow()
 
-            xcancBtn = xDialog.getChild("cancel")
-            xcancBtn.executeAction("CLICK", tuple())
+        xcancBtn = xDialog.getChild("cancel")
+        xcancBtn.executeAction("CLICK", tuple())
+
+        self.ui_test.close_doc()
 
     def test_gear_button_menu(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
+        self.ui_test.create_doc_in_start_center("writer")
 
-            self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog")
+        self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog")
 
-            # Open the New Menu Dialog with id = 0
-            xDialog = self.xUITest.getTopFocusWindow()
-            xmenugearbtn=xDialog.getChild("menugearbtn")
+        # Open the New Menu Dialog with id = 0
+        xDialog = self.xUITest.getTopFocusWindow()
+        xmenugearbtn=xDialog.getChild("menugearbtn")
+        def show_dialog0():
+            xmenugearbtn.executeAction("OPENFROMLIST", mkPropertyValues({"POS": "0" }))
+        with self.ui_test.execute_blocking_action( action=show_dialog0, close_button="cancel"):
+            pass
 
-            def show_dialog0():
-                xmenugearbtn.executeAction("OPENFROMLIST", mkPropertyValues({"POS": "0" }))
+        # Open the Rename Menu Dialog with id = 2
+        xDialog = self.xUITest.getTopFocusWindow()
+        xmenugearbtn=xDialog.getChild("menugearbtn")
+        def show_dialog2():
+            xmenugearbtn.executeAction("OPENFROMLIST", mkPropertyValues({"POS": "2"}))
+        with self.ui_test.execute_blocking_action( action=show_dialog2, close_button="cancel"):
+            pass
 
-            with self.ui_test.execute_blocking_action( action=show_dialog0, close_button="cancel"):
-                pass
+        xDialog = self.xUITest.getTopFocusWindow()
+        xcancBtn = xDialog.getChild("cancel")
+        self.ui_test.close_dialog_through_button(xcancBtn)
 
-            # Open the Rename Menu Dialog with id = 2
-            xDialog = self.xUITest.getTopFocusWindow()
-            xmenugearbtn=xDialog.getChild("menugearbtn")
-            def show_dialog2():
-                xmenugearbtn.executeAction("OPENFROMLIST", mkPropertyValues({"POS": "2"}))
-
-            with self.ui_test.execute_blocking_action( action=show_dialog2, close_button="cancel"):
-                pass
-
-            xDialog = self.xUITest.getTopFocusWindow()
-            xcancBtn = xDialog.getChild("cancel")
-            self.ui_test.close_dialog_through_button(xcancBtn)
+        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -13,29 +13,30 @@ from uitest.uihelper.common import get_state_as_dict
 
 class tdf106099(UITestCase):
     def test_tdf106099_find_format_underline(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            document = self.ui_test.get_component()
-            xWriterDoc = self.xUITest.getTopFocusWindow()
-            #Find and replace
-            self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            #2. Choose Format
-            format = xDialog.getChild("format")
-            with self.ui_test.execute_blocking_action(format.executeAction, args=('CLICK', ())) as dialog:
-                #Font effects - Underline Single. OK.
-                xTabs = dialog.getChild("tabcontrol")
-                select_pos(xTabs, "1")          #tab font effects
-                underlinelb = dialog.getChild("underlinelb")
-                select_by_text(underlinelb, "Single")
+        writer_doc = self.ui_test.create_doc_in_start_center("writer")
+        document = self.ui_test.get_component()
+        xWriterDoc = self.xUITest.getTopFocusWindow()
+        #Find and replace
+        self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
+        xDialog = self.xUITest.getTopFocusWindow()
+        #2. Choose Format
+        format = xDialog.getChild("format")
+        with self.ui_test.execute_blocking_action(format.executeAction, args=('CLICK', ())) as dialog:
+            #Font effects - Underline Single. OK.
+            xTabs = dialog.getChild("tabcontrol")
+            select_pos(xTabs, "1")          #tab font effects
+            underlinelb = dialog.getChild("underlinelb")
+            select_by_text(underlinelb, "Single")
 
-            #verify label searchdesc
-            searchdesc = xDialog.getChild("searchdesc")
-            print(get_state_as_dict(searchdesc))
-            self.assertEqual(get_state_as_dict(searchdesc)["Text"], "Single underline")
-            noformat = xDialog.getChild("noformat")
-            noformat.executeAction("CLICK", tuple())   #click No format button
-            self.assertEqual(get_state_as_dict(searchdesc)["Text"], "")
-            xcloseBtn = xDialog.getChild("close")
-            self.ui_test.close_dialog_through_button(xcloseBtn)
+        #verify label searchdesc
+        searchdesc = xDialog.getChild("searchdesc")
+        print(get_state_as_dict(searchdesc))
+        self.assertEqual(get_state_as_dict(searchdesc)["Text"], "Single underline")
+        noformat = xDialog.getChild("noformat")
+        noformat.executeAction("CLICK", tuple())   #click No format button
+        self.assertEqual(get_state_as_dict(searchdesc)["Text"], "")
+        xcloseBtn = xDialog.getChild("close")
+        self.ui_test.close_dialog_through_button(xcloseBtn)
 
+        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

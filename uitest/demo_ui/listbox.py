@@ -14,22 +14,26 @@ class ListBoxTest(UITestCase):
 
     def test_select_entry_pos(self):
 
-        with self.ui_test.create_doc_in_start_center("calc"):
+        self.ui_test.create_doc_in_start_center("calc")
 
-            self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
-            xCellsDlg = self.xUITest.getTopFocusWindow()
+        self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
+        xCellsDlg = self.xUITest.getTopFocusWindow()
 
-            xOkBtn = xCellsDlg.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOkBtn)
+        xOkBtn = xCellsDlg.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOkBtn)
+
+        self.ui_test.close_doc()
 
     def test_select_entry_text(self):
 
-        with self.ui_test.create_doc_in_start_center("calc"):
+        self.ui_test.create_doc_in_start_center("calc")
 
-            self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
-            xCellsDlg = self.xUITest.getTopFocusWindow()
+        self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
+        xCellsDlg = self.xUITest.getTopFocusWindow()
 
-            xOkBtn = xCellsDlg.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOkBtn)
+        xOkBtn = xCellsDlg.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOkBtn)
+
+        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

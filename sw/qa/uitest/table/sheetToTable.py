@@ -61,20 +61,22 @@ class sheetToTable(UITestCase):
             self.assertEqual(table.getCellByName("A2").getString(), "3")
 
     def test_tdf129083(self):
-        with self.ui_test.create_doc_in_start_center("calc"):
+        calc_doc = self.ui_test.create_doc_in_start_center("calc")
 
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        gridwin = xCalcDoc.getChild("grid_window")
+        document = self.ui_test.get_component()
 
-            enter_text_to_cell(gridwin, "A1", "Test 1")
-            enter_text_to_cell(gridwin, "A2", "Test 2")
-            enter_text_to_cell(gridwin, "A3", "Test 3")
-            enter_text_to_cell(gridwin, "A4", "Test 4")
+        enter_text_to_cell(gridwin, "A1", "Test 1")
+        enter_text_to_cell(gridwin, "A2", "Test 2")
+        enter_text_to_cell(gridwin, "A3", "Test 3")
+        enter_text_to_cell(gridwin, "A4", "Test 4")
 
-            gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A4"}))
+        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A4"}))
 
-            self.xUITest.executeCommand(".uno:Copy")
+        self.xUITest.executeCommand(".uno:Copy")
+
+        self.ui_test.close_doc()
 
         with self.ui_test.load_file(get_url_for_data_file("tdf129083.odt")) as writer_doc:
             document = self.ui_test.get_component()
