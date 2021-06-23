@@ -20,6 +20,8 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <inscldlg.hxx>
+#include <worksheethelper.hxx>
+#include <viewsettings.hxx>
 
 static sal_uInt8 nInsItemChecked = 0;
 
@@ -29,7 +31,13 @@ ScInsertCellDlg::ScInsertCellDlg(weld::Window* pParent, bool bDisallowCellMove)
     , m_xBtnCellsRight(m_xBuilder->weld_radio_button("right"))
     , m_xBtnInsRow(m_xBuilder->weld_radio_button("rows"))
     , m_xBtnInsCol(m_xBuilder->weld_radio_button("cols"))
+    , m_xLbCellsRight(m_xBuilder->weld_label("right"))
 {
+//    const oox::xls::WorksheetHelper& rSheetHelper();
+
+    if (getSheetViewSettings().isSheetRightToLeft())
+        m_xLbCellsRight->set_label("Shift RTL"); //TODO: using strings.hrc
+
     if (bDisallowCellMove)
     {
         m_xBtnCellsDown->set_sensitive(false);
