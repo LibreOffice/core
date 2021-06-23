@@ -38,6 +38,7 @@
 #define SCSTR_FILTER_TEXT_COLOR                     NC_("SCSTR_FILTER_TEXT_COLOR", "Text color")
 #define SCSTR_FILTER_BACKGROUND_COLOR               NC_("SCSTR_FILTER_BACKGROUND_COLOR", "Background color")
 #define SCSTR_NONAME                                NC_("SCSTR_NONAME", "unnamed")
+#define SCSTR_INSERT_RTL                            NC_("SCSTR_INSERT_RTL", "Shift cells left")
 // "%1 is replaced to column letter, such as 'Column A'"
 #define SCSTR_COLUMN                                NC_("SCSTR_COLUMN", "Column %1")
 // "%1 is replaced to row number, such as 'Row 1'"
