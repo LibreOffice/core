@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "87a5ae8d_184e55d5",
+        "filename": "sw/source/core/doc/docfmt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2088,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-23T08:12:17Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be upper_bound, to guarantee the \"first element with the key *greater than*\", in case there\u0027s a SAL_MAX_UINT16 index in the multi_index?",
+      "range": {
+        "startLine": 2088,
+        "startChar": 36,
+        "endLine": 2088,
+        "endChar": 47
+      },
+      "revId": "1feb59c3dd9e5f714ce894f8de31bbb6869c9f3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
