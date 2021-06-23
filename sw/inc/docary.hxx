@@ -187,12 +187,6 @@ public:
     SwFrameFormatsV() : SwFormatsModifyBase( DestructorPolicy::KeepElements ) {}
 };
 
-class SwCharFormats final : public SwFormatsModifyBase<SwCharFormat*>
-{
-public:
-    void dumpAsXml(xmlTextWriterPtr pWriter) const;
-};
-
 class SwTextFormatColls final : public SwFormatsModifyBase<SwTextFormatColl*>
 {
 public:
