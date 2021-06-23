@@ -1068,7 +1068,7 @@ static bool lcl_PutString(
     else if ( nColFormat != SC_COL_STANDARD ) // Datumformats
     {
         const sal_uInt16 nMaxNumberParts = 7; // Y-M-D h:m:s.t
-        sal_Int32 nLen = rStr.getLength();
+        const sal_Int32 nLen = rStr.getLength();
         sal_Int32 nStart[nMaxNumberParts];
         sal_Int32 nEnd[nMaxNumberParts];
 
@@ -1224,6 +1224,36 @@ static bool lcl_PutString(
                     double fV = rtl::math::stringToDouble( aT, cDec, 0, &eStatus );
                     if (eStatus == rtl_math_ConversionStatus_Ok)
                         fFrac = fV / 86400.0;
+                }
+                sal_Int32 nPos;
+                if (nFound > 3 && 1 <= nHour && nHour <= 12  // nHour 0 and >=13 can't be AM/PM
+                        && (nPos = nEnd[nFound-1] + 1) < nLen)
+                {
+                    // Dreaded AM/PM may be following.
+                    while (nPos < nLen && rStr[nPos] == ' ')
+                        ++nPos;
+                    if (nPos < nLen)
+                    {
+                        sal_Int32 nStop = nPos;
+                        while (nStop < nLen && rStr[nStop] != ' ')
+                            ++nStop;
+                        OUString aAmPm = rStr.copy( nPos, nStop - nPos);
+                        // For AM only 12 needs to be treated, whereas for PM
+                        // it must not. Check both, locale and second/English
+                        // strings.
+                        if (nHour == 12 &&
+                                (rTransliteration.isEqual( aAmPm, pFormatter->GetLocaleData()->getTimeAM()) ||
+                                 (pSecondTransliteration && pSecondTransliteration->isEqual( aAmPm, "AM"))))
+                        {
+                            nHour = 0;
+                        }
+                        else if (nHour < 12 &&
+                                (rTransliteration.isEqual( aAmPm, pFormatter->GetLocaleData()->getTimePM()) ||
+                                 (pSecondTransliteration && pSecondTransliteration->isEqual( aAmPm, "PM"))))
+                        {
+                            nHour += 12;
+                        }
+                    }
                 }
                 pCalendar->setValue( i18n::CalendarFieldIndex::HOUR, nHour );
                 pCalendar->setValue( i18n::CalendarFieldIndex::MINUTE, nMinute );
