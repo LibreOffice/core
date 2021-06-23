@@ -932,10 +932,13 @@ void XStyleFamily::insertByName(const OUString& rName, const uno::Any& rElement)
         throw uno::RuntimeException();
     OUString sStyleName;
     SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.m_aPoolId);
-    SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName, m_rEntry.m_eFamily);
-    SfxStyleSheetBase* pUINameBase = m_pBasePool->Find(sStyleName, m_rEntry.m_eFamily);
-    if(pBase || pUINameBase)
-        throw container::ElementExistException();
+    if (!m_pDocShell->GetDoc()->IsInWriterfilterImport())
+    {
+        SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName, m_rEntry.m_eFamily);
+        SfxStyleSheetBase* pUINameBase = m_pBasePool->Find(sStyleName, m_rEntry.m_eFamily);
+        if(pBase || pUINameBase)
+            throw container::ElementExistException();
+    }
     if(rElement.getValueType().getTypeClass() != uno::TypeClass_INTERFACE)
         throw lang::IllegalArgumentException();
     if (SwGetPoolIdFromName::CellStyle == m_rEntry.m_aPoolId)
