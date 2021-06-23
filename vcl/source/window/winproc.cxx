@@ -55,6 +55,7 @@
 #include <brdwin.hxx>
 #include <dndlistenercontainer.hxx>
 
+#include <com/sun/star/script/XDirectInvocation.hpp>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>
@@ -814,17 +815,19 @@ static bool ImplHandleMouseEvent2( const VclPtr<vcl::Window>& xWindow, MouseNoti
         css::uno::Reference<css::datatransfer::dnd::XDropTarget> xDropTarget(
             pDragWin->ImplGetWindowImpl()->mxDNDListenerContainer, css::uno::UNO_QUERY);
 
-        if ((nCode & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)) !=
+        if (!xDropTarget.is() ||
+            !xDropTargetDragContext.is() ||
+            (nCode & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)) !=
             (MouseSettings::GetStartDragCode() & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)))
         {
-            pDragWin->ImplGetFrameData()->mnMouseMode = MouseEventModifiers::NONE;
-            return false;
-        }
+            const OUString aMethod("dragend");
+            const css::uno::Sequence<css::uno::Any> aParam;
+            css::uno::Reference<css::script::XDirectInvocation> xInvoke(pDragWin->GetDragSource(),
+                                                                        css::uno::UNO_QUERY);
 
-        if (!xDropTargetDragContext.is() ||
-            !xDropTarget.is())
-        {
-            // cancel dragdrop
+            if (xInvoke.is())
+                xInvoke->directInvoke(aMethod, aParam);
+
             pDragWin->ImplGetFrameData()->mnMouseMode = MouseEventModifiers::NONE;
             return false;
         }
