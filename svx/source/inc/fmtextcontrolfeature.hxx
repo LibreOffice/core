@@ -35,7 +35,7 @@ namespace svx
     typedef ::cppu::WeakImplHelper <   css::frame::XStatusListener
                                     >   FmTextControlFeature_Base;
 
-    class FmTextControlFeature : public FmTextControlFeature_Base
+    class FmTextControlFeature final : public FmTextControlFeature_Base
     {
     private:
         css::uno::Reference< css::frame::XDispatch >
@@ -75,10 +75,9 @@ namespace svx
         /// releases any resources associated with this instance
         void    dispose();
 
-    protected:
+    private:
         virtual ~FmTextControlFeature() override;
 
-    protected:
         // XStatusListener
         virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& State ) override;
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;

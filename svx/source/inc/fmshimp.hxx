@@ -94,12 +94,12 @@ namespace weld {
 
 // a class iterating through all fields of a form which are bound to a field
 // sub forms are ignored, grid columns (where the grid is a direct child of the form) are included
-class FmXBoundFormFieldIterator : public ::comphelper::IndexAccessIterator
+class FmXBoundFormFieldIterator final : public ::comphelper::IndexAccessIterator
 {
 public:
     FmXBoundFormFieldIterator(const css::uno::Reference< css::uno::XInterface>& _rStartingPoint) : ::comphelper::IndexAccessIterator(_rStartingPoint) { }
 
-protected:
+private:
     virtual bool ShouldHandleElement(const css::uno::Reference< css::uno::XInterface>& _rElement) override;
     virtual bool ShouldStepInto(const css::uno::Reference< css::uno::XInterface>& _rContainer) const override;
 };
@@ -541,7 +541,7 @@ inline bool FmXFormShell::IsSelectionUpdatePending_Lock() const
 // = for that object is omitted.
 // =
 
-class SearchableControlIterator : public ::comphelper::IndexAccessIterator
+class SearchableControlIterator final : public ::comphelper::IndexAccessIterator
 {
     OUString         m_sCurrentValue;
         // the current value of the ControlSource css::beans::Property
@@ -549,7 +549,6 @@ class SearchableControlIterator : public ::comphelper::IndexAccessIterator
 public:
     const OUString& getCurrentValue() const { return m_sCurrentValue; }
 
-public:
     SearchableControlIterator(css::uno::Reference< css::uno::XInterface> const & xStartingPoint);
 
     virtual bool ShouldHandleElement(const css::uno::Reference< css::uno::XInterface>& rElement) override;

@@ -22,7 +22,7 @@
 #include <svx/svddef.hxx>
 #include <svx/sdmetitm.hxx>
 
-class SdrOnePositionXItem: public SdrMetricItem {
+class SdrOnePositionXItem final : public SdrMetricItem {
 public:
     SdrOnePositionXItem(tools::Long nPosX=0): SdrMetricItem(SDRATTR_ONEPOSITIONX,nPosX) {}
     virtual SdrOnePositionXItem* Clone(SfxItemPool*) const override
@@ -31,7 +31,7 @@ public:
     }
 };
 
-class SdrOnePositionYItem: public SdrMetricItem {
+class SdrOnePositionYItem final : public SdrMetricItem {
 public:
     SdrOnePositionYItem(tools::Long nPosY=0): SdrMetricItem(SDRATTR_ONEPOSITIONY,nPosY) {}
     virtual SdrOnePositionYItem* Clone(SfxItemPool*) const override
@@ -40,7 +40,7 @@ public:
     }
 };
 
-class SdrOneSizeWidthItem: public SdrMetricItem {
+class SdrOneSizeWidthItem final : public SdrMetricItem {
 public:
     SdrOneSizeWidthItem(tools::Long nWdt=0): SdrMetricItem(SDRATTR_ONESIZEWIDTH,nWdt)  {}
     virtual SdrOneSizeWidthItem* Clone(SfxItemPool*) const override
@@ -49,7 +49,7 @@ public:
     }
 };
 
-class SdrOneSizeHeightItem: public SdrMetricItem {
+class SdrOneSizeHeightItem final : public SdrMetricItem {
 public:
     SdrOneSizeHeightItem(tools::Long nHgt=0): SdrMetricItem(SDRATTR_ONESIZEHEIGHT,nHgt)  {}
     virtual SdrOneSizeHeightItem* Clone(SfxItemPool*) const override

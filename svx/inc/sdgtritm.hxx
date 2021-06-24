@@ -28,7 +28,7 @@
 // SdrGrafTransparenceItem -
 
 
-class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SdrGrafTransparenceItem : public SdrPercentItem
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SdrGrafTransparenceItem final : public SdrPercentItem
 {
 public:
 

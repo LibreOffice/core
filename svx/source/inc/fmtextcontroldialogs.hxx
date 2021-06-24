@@ -26,7 +26,7 @@
 namespace svx
 {
 
-    class TextControlCharAttribDialog : public SfxTabDialogController
+    class TextControlCharAttribDialog final : public SfxTabDialogController
     {
     private:
         SvxFontListItem m_aFontList;
@@ -34,11 +34,11 @@ namespace svx
     public:
         TextControlCharAttribDialog(weld::Window* pParent, const SfxItemSet& rCoreSet, const SvxFontListItem& rFontList);
 
-    protected:
+    private:
         virtual void PageCreated(const OString& rId, SfxTabPage& _rPage) override;
     };
 
-    class TextControlParaAttribDialog : public SfxTabDialogController
+    class TextControlParaAttribDialog final : public SfxTabDialogController
     {
     public:
         TextControlParaAttribDialog(weld::Window* pParent, const SfxItemSet& rCoreSet);

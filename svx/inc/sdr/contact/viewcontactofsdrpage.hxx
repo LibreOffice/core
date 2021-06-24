@@ -149,7 +149,7 @@ public:
     bool getFront() const { return mbFront; }
 };
 
-class ViewContactOfSdrPage : public ViewContact
+class ViewContactOfSdrPage final : public ViewContact
 {
     // the owner of this ViewContact. Set from constructor and not
     // to be changed in any way.
@@ -168,7 +168,6 @@ class ViewContactOfSdrPage : public ViewContact
     ViewContactOfGrid                               maViewContactOfGridFront;
     ViewContactOfHelplines                          maViewContactOfHelplinesFront;
 
-protected:
     // Create an Object-Specific ViewObjectContact, set ViewContact and
     // ObjectContact. Always needs to return something. Default is to create
     // a standard ViewObjectContact containing the given ObjectContact and *this
@@ -192,7 +191,7 @@ public:
     // React on changes of the object of this ViewContact
     virtual void ActionChanged() override;
 
-protected:
+private:
     // This method is responsible for creating the graphical visualisation data
     // ONLY based on model data
     virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;

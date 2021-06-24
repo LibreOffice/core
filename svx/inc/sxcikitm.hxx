@@ -23,7 +23,7 @@
 #include <svl/eitem.hxx>
 #include <svx/svdocirc.hxx>
 
-class SdrCircKindItem: public SfxEnumItem<SdrCircKind> {
+class SdrCircKindItem final : public SfxEnumItem<SdrCircKind> {
 public:
     SdrCircKindItem(SdrCircKind eKind=SdrCircKind::Full): SfxEnumItem(SDRATTR_CIRCKIND, eKind) {}
     virtual SdrCircKindItem* Clone(SfxItemPool* pPool=nullptr) const override;

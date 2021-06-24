@@ -170,7 +170,7 @@ class IRecoveryUpdateListener
 };
 
 
-class RecoveryCore : public ::cppu::WeakImplHelper< css::frame::XStatusListener >
+class RecoveryCore final : public ::cppu::WeakImplHelper< css::frame::XStatusListener >
 {
 
     // types, const
@@ -281,7 +281,7 @@ class RecoveryCore : public ::cppu::WeakImplHelper< css::frame::XStatusListener 
         css::util::URL impl_getParsedURL(const OUString& sURL);
 };
 
-class PluginProgress : public ::cppu::WeakImplHelper<css::task::XStatusIndicator, css::lang::XComponent>
+class PluginProgress final : public ::cppu::WeakImplHelper<css::task::XStatusIndicator, css::lang::XComponent>
 {
 // member
 private:
@@ -308,7 +308,7 @@ public:
     virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener) override;
 };
 
-class SaveDialog : public weld::GenericDialogController
+class SaveDialog final : public weld::GenericDialogController
 {
 // member
 private:
@@ -339,7 +339,7 @@ public:
     DECL_LINK(OKButtonHdl, weld::Button&, void);
 };
 
-class SaveProgressDialog : public weld::GenericDialogController
+class SaveProgressDialog final : public weld::GenericDialogController
                          , public IRecoveryUpdateListener
 {
     // member
@@ -379,7 +379,7 @@ class SaveProgressDialog : public weld::GenericDialogController
         virtual void end() override;
 };
 
-class RecoveryDialog : public weld::GenericDialogController
+class RecoveryDialog final : public weld::GenericDialogController
                      , public IRecoveryUpdateListener
 {
     // member
@@ -442,7 +442,7 @@ class RecoveryDialog : public weld::GenericDialogController
 };
 
 
-class BrokenRecoveryDialog : public weld::GenericDialogController
+class BrokenRecoveryDialog final : public weld::GenericDialogController
 {
 // member
 private:

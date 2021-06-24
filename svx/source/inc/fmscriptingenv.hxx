@@ -35,7 +35,7 @@ namespace svxform
     /** describes the interface implemented by a component which handles scripting requirements
         in a form/control environment.
     */
-    class FormScriptingEnvironment : public ::salhelper::SimpleReferenceObject
+    class FormScriptingEnvironment final : public ::salhelper::SimpleReferenceObject
     {
     friend class FormScriptListener;
     public:

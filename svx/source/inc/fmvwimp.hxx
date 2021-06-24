@@ -129,7 +129,7 @@ private:
 
 class SdrModel;
 
-class FmXFormView : public ::cppu::WeakImplHelper<
+class FmXFormView final : public ::cppu::WeakImplHelper<
                             css::form::XFormControllerListener,
                             css::awt::XFocusListener,
                             css::container::XContainerListener>
@@ -172,7 +172,6 @@ class FmXFormView : public ::cppu::WeakImplHelper<
 
     css::uno::Reference<css::awt::XWindow> GetParentWindow() const;
 
-protected:
     FmXFormView( FmFormView* _pView );
     virtual ~FmXFormView() override;
 

@@ -86,7 +86,7 @@ namespace svx
         virtual Size GetItemSize(const Size& rImageSize) const = 0;
     };
 
-    class VclToolboxButtonColorUpdater : public ToolboxButtonColorUpdaterBase
+    class VclToolboxButtonColorUpdater final : public ToolboxButtonColorUpdaterBase
     {
     public:
         VclToolboxButtonColorUpdater(sal_uInt16 nSlotId, ToolBoxItemId nTbxBtnId, ToolBox* ptrTbx, bool bWideButton,
@@ -106,7 +106,7 @@ namespace svx
         virtual Size GetItemSize(const Size& rImageSize) const override;
     };
 
-    class ToolboxButtonColorUpdater : public ToolboxButtonColorUpdaterBase
+    class ToolboxButtonColorUpdater final : public ToolboxButtonColorUpdaterBase
     {
     public:
         ToolboxButtonColorUpdater(sal_uInt16 nSlotId, const OString& rTbxBtnId, weld::Toolbar* ptrTbx, bool bWideButton,

@@ -29,7 +29,7 @@ namespace com::sun::star {
     namespace container { class XNameContainer; }
 }
 
-class SvxXMLXTableImport : public SvXMLImport
+class SvxXMLXTableImport final : public SvXMLImport
 {
 public:
     SvxXMLXTableImport(
@@ -43,11 +43,10 @@ public:
                       const css::uno::Reference < css::embed::XStorage > &xStorage,
                       const css::uno::Reference< css::container::XNameContainer >& xTable,
                       bool *bOptLoadedFromStorage ) noexcept;
-protected:
+private:
     virtual SvXMLImportContext *CreateFastContext( sal_Int32 Element,
         const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-private:
     const css::uno::Reference< css::container::XNameContainer > & mrTable;
 };
 

@@ -22,7 +22,7 @@
 #include <svx/svddef.hxx>
 #include <svx/sdmetitm.hxx>
 
-class SdrLogicSizeWidthItem: public SdrMetricItem {
+class SdrLogicSizeWidthItem final : public SdrMetricItem {
 public:
     SdrLogicSizeWidthItem(tools::Long nWdt=0): SdrMetricItem(SDRATTR_LOGICSIZEWIDTH,nWdt)  {}
     virtual SdrLogicSizeWidthItem* Clone(SfxItemPool*) const override
@@ -31,7 +31,7 @@ public:
     }
 };
 
-class SdrLogicSizeHeightItem: public SdrMetricItem {
+class SdrLogicSizeHeightItem final : public SdrMetricItem {
 public:
     SdrLogicSizeHeightItem(tools::Long nHgt=0): SdrMetricItem(SDRATTR_LOGICSIZEHEIGHT,nHgt)  {}
     virtual SdrLogicSizeHeightItem* Clone(SfxItemPool*) const override

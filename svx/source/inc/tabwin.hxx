@@ -31,7 +31,7 @@
 class FmFormShell;
 struct ColumnInfo;
 
-class FmFieldWin : public SfxModelessDialogController
+class FmFieldWin final : public SfxModelessDialogController
                  , public SfxControllerItem
                  , public ::comphelper::OPropertyChangeListener
 {
@@ -70,16 +70,15 @@ public:
 
     bool    createSelectionControls( );
 
-protected:
+private:
     // FmXChangeListener
     virtual void _propertyChanged(const css::beans::PropertyChangeEvent& evt) override;
 
-protected:
     using SfxControllerItem::GetBindings;
 };
 
 
-class FmFieldWinMgr : public SfxChildWindow
+class FmFieldWinMgr final : public SfxChildWindow
 {
 public:
     FmFieldWinMgr(vcl::Window *pParent, sal_uInt16 nId,
