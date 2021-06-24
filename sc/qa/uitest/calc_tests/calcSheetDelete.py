@@ -33,6 +33,8 @@ class calcSheetDelete(UITestCase):
         xDialog = self.xUITest.getTopFocusWindow()
         xOKButton = xDialog.getChild("yes")
         xOKButton.executeAction("CLICK", tuple())
+        xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+        xToolkit.processEventsToIdle()
 
         self.assertEqual(document.Sheets.getCount(), nrSheets)
         self.xUITest.executeCommand(".uno:Undo")
@@ -58,6 +60,8 @@ class calcSheetDelete(UITestCase):
         xDialog = self.xUITest.getTopFocusWindow()
         xOKButton = xDialog.getChild("ok")
         xOKButton.executeAction("CLICK", tuple())
+        xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+        xToolkit.processEventsToIdle()
 
         self.assertEqual(document.Sheets.getCount(), nrSheets + 2)
         xCalcDoc = self.xUITest.getTopFocusWindow()
@@ -104,6 +108,8 @@ class calcSheetDelete(UITestCase):
         xOKButton = xDialog.getChild("yes")
         xOKButton.executeAction("CLICK", tuple())
 
+        xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+        xToolkit.processEventsToIdle()
         self.assertEqual(document.Sheets.getCount(), nrSheets)
         self.xUITest.executeCommand(".uno:Undo")
         self.assertEqual(document.Sheets.getCount(), nrSheets + 6)
@@ -127,6 +133,8 @@ class calcSheetDelete(UITestCase):
             xOKButton = xDialog.getChild("ok")
             xOKButton.executeAction("CLICK", tuple())
             i = i + 1
+        xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+        xToolkit.processEventsToIdle()
         self.assertEqual(document.Sheets.getCount(), nrSheets + 100)
 
         i = 0
