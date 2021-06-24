@@ -1074,7 +1074,7 @@ void GtkSalFrame::InitCommon()
     m_bFullscreen       = false;
     m_bSpanMonitorsWhenFullscreen = false;
 #if GTK_CHECK_VERSION(4,0,0)
-    m_nState            = GDK_TOPLEVEL_STATE_MAXIMIZED;
+    m_nState            = static_cast<GdkToplevelState>(0);
 #else
     m_nState            = GDK_WINDOW_STATE_WITHDRAWN;
 #endif
