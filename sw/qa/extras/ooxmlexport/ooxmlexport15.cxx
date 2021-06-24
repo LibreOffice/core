@@ -919,6 +919,16 @@ DECLARE_OOXMLEXPORT_TEST(TestTdf132483, "tdf132483.docx")
         text::RelOrientation::PAGE_FRAME , nHRelPos);
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(TestTdf143028, "fail_bracePair.odt")
+{
+    auto pExportXml = parseExport();
+
+    CPPUNIT_ASSERT_EQUAL(1, getXPathNode(
+        pExportXml, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/"
+                    "a:graphic/a:graphicData/wps:wsp/wps:spPr/a:xfrm")->nodesetval->nodeNr);
+
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testRelativeAnchorHeightFromBottomMarginNoFooter,
                          "tdf133070_testRelativeAnchorHeightFromBottomMarginNoFooter.docx")
 {
