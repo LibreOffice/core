@@ -46,6 +46,30 @@
       "revId": "11ce1051e7ad7402dff82dc805af772666bd1cd1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf0402ba_df518a78",
+        "filename": "cui/source/dialogs/GraphicTestsDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-06-24T07:48:49Z",
+      "side": 1,
+      "message": "Well, I think in order to prevent the conversion(which I think is really repeating itself in many places) the storage type of the GraphicRenderTests vector should be changed to OUString. By doing so,the way we currently write the test results to the file would change accordingly then.",
+      "parentUuid": "c3bebb4d_45ca4cac",
+      "range": {
+        "startLine": 57,
+        "startChar": 22,
+        "endLine": 57,
+        "endChar": 28
+      },
+      "revId": "11ce1051e7ad7402dff82dc805af772666bd1cd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
