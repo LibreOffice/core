@@ -1438,7 +1438,12 @@ void ScGridWindow::MouseButtonDown( const MouseEvent& rMEvt )
         nButtonDown = rMEvt.GetButtons();
         FakeButtonUp();
 
-        if ( IsTracking() )
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            if (IsLocalTracking())
+                LocalEndTracking();
+        }
+        else if (IsTracking())
             EndTracking();      // normally done in VCL as part of MouseButtonUp handling
     }
     nNestedButtonState = ScNestedButtonState::NONE;
@@ -1697,7 +1702,10 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
         bRFMouse = true;        // the other variables are initialized above
 
         rState.mbActivatePart = true; // always activate ?
-        StartTracking();
+        if (comphelper::LibreOfficeKit::isActive())
+            LocalStartTracking();
+        else
+            StartTracking();
         return;
     }
 
@@ -1717,7 +1725,10 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
         if (nPagebreakMouse)
         {
             bPagebreakDrawn = false;
-            StartTracking();
+            if (comphelper::LibreOfficeKit::isActive())
+                LocalStartTracking();
+            else
+                StartTracking();
             PagebreakMove( rMEvt, false );
             return;
         }
@@ -1867,7 +1878,10 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
             //  Tracking instead of CaptureMouse, so it can be canceled cleanly
             //! Someday SelectionEngine should call StartTracking on its own!?!
             ReleaseMouse();
-            StartTracking();
+            if (comphelper::LibreOfficeKit::isActive())
+                LocalStartTracking();
+            else
+                StartTracking();
         }
         mrViewData.GetMarkData().SetMarking(true);
         return;
