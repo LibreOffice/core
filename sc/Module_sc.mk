@@ -249,6 +249,7 @@ $(eval $(call gb_Module_add_uicheck_targets,sc,\
 	UITest_calc_tests3 \
 	UITest_calc_tests4 \
 	UITest_calc_tests6 \
+	UITest_csv_dialog \
 	UITest_statistics \
 	UITest_solver \
 	UITest_goalSeek \
