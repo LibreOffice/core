@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8ae1d018_52aa8221",
+        "filename": "oox/source/ppt/pptshape.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-06-24T11:49:22Z",
+      "side": 1,
+      "message": "This condition is not enough, if TitleText is part of the other original titles. For example\n\n\"The Slide\"\n\"The\"\n\nwill be\n\n\"The Slide\"\n\"The (2)\"",
+      "range": {
+        "startLine": 358,
+        "startChar": 43,
+        "endLine": 358,
+        "endChar": 83
+      },
+      "revId": "9b30f9875777f1ffbbc44f23b6b43105a8431c2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b49e213_d2ee8580",
+        "filename": "oox/source/ppt/pptshape.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-06-24T11:49:22Z",
+      "side": 1,
+      "message": "bool",
+      "range": {
+        "startLine": 358,
+        "startChar": 24,
+        "endLine": 358,
+        "endChar": 33
+      },
+      "revId": "9b30f9875777f1ffbbc44f23b6b43105a8431c2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5adfe1f5_051b5ef3",
+        "filename": "oox/source/ppt/pptshape.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-06-24T11:49:22Z",
+      "side": 1,
+      "message": "because aTitleText can be empty or longer, than 64 characters (which we don\u0027t want to handle)\n\nelse if (nCount \u003e 1)",
+      "range": {
+        "startLine": 370,
+        "startChar": 20,
+        "endLine": 370,
+        "endChar": 24
+      },
+      "revId": "9b30f9875777f1ffbbc44f23b6b43105a8431c2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
