@@ -136,6 +136,7 @@ struct ImplFrameData
     VclPtr<vcl::Window> mpFocusWin;             //< focus window (is also set, when frame doesn't have the focus)
     VclPtr<vcl::Window> mpMouseMoveWin;         //< last window, where MouseMove() called
     VclPtr<vcl::Window> mpMouseDownWin;         //< last window, where MouseButtonDown() called
+    VclPtr<vcl::Window> mpTrackWin;             //< window, that is in tracking mode
     std::vector<VclPtr<vcl::Window> > maOwnerDrawList;    //< List of system windows with owner draw decoration
     std::shared_ptr<vcl::font::PhysicalFontCollection> mxFontCollection;   //< Font-List for this frame
     std::shared_ptr<ImplFontCache> mxFontCache; //< Font-Cache for this frame
@@ -393,6 +394,7 @@ public:
     const vcl::ILibreOfficeKitNotifier* mpLOKNotifier; ///< To emit the LOK callbacks eg. for dialog tunneling.
     vcl::LOKWindowId mnLOKWindowId; ///< ID of this specific window.
     bool mbLOKParentNotifier;
+    bool mbUseFrameData;
 };
 
 namespace vcl

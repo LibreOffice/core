@@ -241,17 +241,30 @@ IMPL_LINK( Window, ImplTrackTimerHdl, Timer*, pTimer, void )
     Tracking( aTEvt );
 }
 
+void Window::SetUseFrameData(bool bUseFrameData)
+{
+    if (mpWindowImpl)
+        mpWindowImpl->mbUseFrameData = bUseFrameData;
+}
+
 void Window::StartTracking( StartTrackingFlags nFlags )
 {
-    ImplSVData* pSVData = ImplGetSVData();
+    if (!mpWindowImpl)
+        return;
 
-    if ( pSVData->mpWinData->mpTrackWin.get() != this )
+    ImplSVData* pSVData = ImplGetSVData();
+    VclPtr<vcl::Window> pTrackWin = mpWindowImpl->mbUseFrameData ?
+        mpWindowImpl->mpFrameData->mpTrackWin :
+        pSVData->mpWinData->mpTrackWin;
+
+    if ( pTrackWin.get() != this )
     {
-        if ( pSVData->mpWinData->mpTrackWin )
-            pSVData->mpWinData->mpTrackWin->EndTracking( TrackingEventFlags::Cancel );
+        if ( pTrackWin )
+            pTrackWin->EndTracking( TrackingEventFlags::Cancel );
     }
 
-    if ( nFlags & (StartTrackingFlags::ScrollRepeat | StartTrackingFlags::ButtonRepeat) )
+    if ( !mpWindowImpl->mbUseFrameData &&
+         (nFlags & (StartTrackingFlags::ScrollRepeat | StartTrackingFlags::ButtonRepeat)) )
     {
         pSVData->mpWinData->mpTrackTimer = new AutoTimer("vcl::Window pSVData->mpWinData->mpTrackTimer");
 
@@ -263,38 +276,51 @@ void Window::StartTracking( StartTrackingFlags nFlags )
         pSVData->mpWinData->mpTrackTimer->Start();
     }
 
-    pSVData->mpWinData->mpTrackWin   = this;
-    pSVData->mpWinData->mnTrackFlags = nFlags;
-    CaptureMouse();
+    if (mpWindowImpl->mbUseFrameData)
+    {
+        mpWindowImpl->mpFrameData->mpTrackWin = this;
+    }
+    else
+    {
+        pSVData->mpWinData->mpTrackWin   = this;
+        pSVData->mpWinData->mnTrackFlags = nFlags;
+        CaptureMouse();
+    }
 }
 
 void Window::EndTracking( TrackingEventFlags nFlags )
 {
-    ImplSVData* pSVData = ImplGetSVData();
-
-    if ( pSVData->mpWinData->mpTrackWin.get() != this )
+    if (!mpWindowImpl)
         return;
 
-    if ( pSVData->mpWinData->mpTrackTimer )
+    ImplSVData* pSVData = ImplGetSVData();
+    VclPtr<vcl::Window> pTrackWin = mpWindowImpl->mbUseFrameData ?
+        mpWindowImpl->mpFrameData->mpTrackWin :
+        pSVData->mpWinData->mpTrackWin;
+
+    if ( pTrackWin.get() != this )
+        return;
+
+    if ( !mpWindowImpl->mbUseFrameData && pSVData->mpWinData->mpTrackTimer )
     {
         delete pSVData->mpWinData->mpTrackTimer;
         pSVData->mpWinData->mpTrackTimer = nullptr;
     }
 
-    pSVData->mpWinData->mpTrackWin    = nullptr;
+    mpWindowImpl->mpFrameData->mpTrackWin = pSVData->mpWinData->mpTrackWin = nullptr;
     pSVData->mpWinData->mnTrackFlags  = StartTrackingFlags::NONE;
     ReleaseMouse();
 
     // call EndTracking if required
-    if (!mpWindowImpl || !mpWindowImpl->mpFrameData)
-        return;
-
-    Point           aMousePos( mpWindowImpl->mpFrameData->mnLastMouseX, mpWindowImpl->mpFrameData->mnLastMouseY );
-    if( GetOutDev()->ImplIsAntiparallel() )
+    if (mpWindowImpl->mpFrameData)
     {
-        // re-mirror frame pos at pChild
-        const OutputDevice *pOutDev = GetOutDev();
-        pOutDev->ReMirror( aMousePos );
+        Point           aMousePos( mpWindowImpl->mpFrameData->mnLastMouseX, mpWindowImpl->mpFrameData->mnLastMouseY );
+        if( GetOutDev()->ImplIsAntiparallel() )
+        {
+            // re-mirror frame pos at pChild
+            const OutputDevice *pOutDev = GetOutDev();
+            pOutDev->ReMirror( aMousePos );
+        }
     }
 
     MouseEvent      aMEvt( ImplFrameToOutput( aMousePos ),
@@ -311,7 +337,9 @@ void Window::EndTracking( TrackingEventFlags nFlags )
 
 bool Window::IsTracking() const
 {
-    return mpWindowImpl && (ImplGetSVData()->mpWinData->mpTrackWin == this);
+    return (mpWindowImpl->mbUseFrameData ?
+            mpWindowImpl->mpFrameData->mpTrackWin == this :
+            ImplGetSVData()->mpWinData->mpTrackWin == this);
 }
 
 void Window::StartAutoScroll( StartAutoScrollFlags nFlags )

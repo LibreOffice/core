@@ -895,9 +895,16 @@ bool ImplLOKHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, MouseNotifyEven
     MouseEvent aMouseEvent(aWinPos, nClicks, nMode, nCode, nCode);
     if (nEvent == MouseNotifyEvent::MOUSEMOVE)
     {
-        xWindow->MouseMove(aMouseEvent);
+        if (pFrameData->mpTrackWin)
+        {
+            TrackingEvent aTrackingEvent(aMouseEvent);
+            pFrameData->mpTrackWin->Tracking(aTrackingEvent);
+        }
+        else
+            xWindow->MouseMove(aMouseEvent);
     }
-    else if (nEvent == MouseNotifyEvent::MOUSEBUTTONDOWN)
+    else if (nEvent == MouseNotifyEvent::MOUSEBUTTONDOWN &&
+        !pFrameData->mpTrackWin)
     {
         pFrameData->mpMouseDownWin = xWindow;
         pFrameData->mnFirstMouseX = aMousePos.X();
@@ -907,6 +914,11 @@ bool ImplLOKHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, MouseNotifyEven
     }
     else
     {
+        if (pFrameData->mpTrackWin)
+        {
+            pFrameData->mpTrackWin->EndTracking();
+        }
+
         pFrameData->mpMouseDownWin = nullptr;
         pFrameData->mpMouseMoveWin = nullptr;
         pFrameData->mbStartDragCalled = false;
