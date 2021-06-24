@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0c225a93_7ad3a2da",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3889,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-24T06:48:28Z",
+      "side": 1,
+      "message": "Eike: Sorry to write in this old and unrelated change, but I just came across this line, and figured that this change is changing lines ~close to the interesting one.\n\nThis specific line (from 2004) looks plain wrong: it adds a *time in seconds* (time in days multiplied by 86400) to *date in days*; it might only happen to succeed because likely the rounded and truncated time part is likely always 0?",
+      "revId": "e2e47898180e547cad7ccde1e5890385d573e551",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
