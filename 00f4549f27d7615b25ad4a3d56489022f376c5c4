@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4dace7c3_a8fed492",
+        "filename": "include/vcl/outdev.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-24T01:08:51Z",
+      "side": 1,
+      "message": "Why not put this into its own file? or at least into the cxx file as it is local to the implementation.\n\nAlso use o3tl::hash_combine if available or boost::hash_combine instead of your own hash function.\n\nInstead of unordered_map it would be better to use unordered_set - now you hash 2 times. Your hash to create a key and then again the unordered_map will hash the key again. unordered_map and unordered_set accept a hash function as parameter (or alternatively add a template specialization for std::hash for your key type). Ideally would be to use o3tl::lru_map which just takes care for limiting of the cache size. Take a look at ControlCacheKey and ControlCacheHashFunction (in master).",
+      "revId": "00f4549f27d7615b25ad4a3d56489022f376c5c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
