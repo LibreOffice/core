@@ -326,9 +326,8 @@ bool SelectionEngine::SelMouseMove( const MouseEvent& rMEvt )
         return true;
 
     aWTimer.SetTimeout( nUpdateInterval );
-    if (!comphelper::LibreOfficeKit::isActive())
-        // Generating fake mouse moves does not work with LOK.
-        aWTimer.Start();
+    aWTimer.Start();
+
     if ( eSelMode != SelectionMode::Single )
     {
         if ( !(nFlags & SelectionEngineFlags::HAS_ANCH) )
