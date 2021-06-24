@@ -53,6 +53,7 @@ XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, 
     OUString sContentLeft( bFooter ? OUString(SC_UNO_PAGE_LEFTFTRCONT) : OUString(SC_UNO_PAGE_LEFTHDRCONT) );
     OUString sContentFirst( bFooter ? OUString(SC_UNO_PAGE_FIRSTFTRCONT) : OUString(SC_UNO_PAGE_FIRSTHDRCONT) );
     OUString sShareContent( bFooter ? OUString(SC_UNO_PAGE_FTRSHARED) : OUString(SC_UNO_PAGE_HDRSHARED) );
+    OUString sShareFirstContent( bFooter ? OUString(SC_UNO_PAGE_FIRSTFTRSHARED) : OUString(SC_UNO_PAGE_FIRSTHDRSHARED) );
     bool bDisplay( true );
     for( auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ) )
     {
@@ -61,10 +62,9 @@ XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, 
         else
             XMLOFF_WARN_UNKNOWN("sc", aIter);
     }
+    bool bOn(::cppu::any2bool(xPropSet->getPropertyValue( sOn )));
     if( bLeft )
     {
-        bool bOn(::cppu::any2bool(xPropSet->getPropertyValue( sOn )));
-
         if( bOn && bDisplay )
         {
             if( ::cppu::any2bool(xPropSet->getPropertyValue( sShareContent )) )
@@ -80,16 +80,22 @@ XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, 
     }
     else
     {
-        bool bOn(::cppu::any2bool(xPropSet->getPropertyValue( sOn )));
         if ( bOn != bDisplay )
             xPropSet->setPropertyValue( sOn, uno::makeAny(bDisplay) );
     }
     if (bLeft)
+    {
         sCont = sContentLeft;
+    }
     else if (bFirst)
+    {
         sCont = sContentFirst;
+        xPropSet->setPropertyValue( sShareFirstContent, uno::makeAny(!bDisplay) );
+    }
     else
+    {
         sCont = sContent;
+    }
     xPropSet->getPropertyValue( sCont ) >>= xHeaderFooterContent;
 }
 
