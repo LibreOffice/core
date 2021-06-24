@@ -460,10 +460,13 @@ public:
         m_pDragSource = nullptr;
     }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    void startDrag(gint nButton, gint nDragOriginX, gint nDragOriginY,
-                   GdkDragAction sourceActions, GtkTargetList* pTargetList);
+    void startDrag(const css::datatransfer::dnd::DragGestureEvent& rEvent,
+#if GTK_CHECK_VERSION(4, 0, 0)
+                   const std::vector<OString>& rGtkTargets,
+#else
+                   const std::vector<GtkTargetEntry>& rGtkTargets,
 #endif
+                   GdkDragAction sourceActions);
 
     void closePopup();
 

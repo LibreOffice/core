@@ -869,6 +869,7 @@ class VclGtkClipboard :
     std::vector< Reference<css::datatransfer::clipboard::XClipboardListener> > m_aListeners;
 #if GTK_CHECK_VERSION(4, 0, 0)
     std::vector<OString> m_aGtkTargets;
+    ClipboardContent* m_pClipboardContent;
 #else
     std::vector<GtkTargetEntry> m_aGtkTargets;
 #endif
@@ -920,16 +921,7 @@ public:
     virtual void SAL_CALL removeClipboardListener(
         const Reference< css::datatransfer::clipboard::XClipboardListener >& listener ) override;
 
-#if GTK_CHECK_VERSION(4, 0, 0)
-    GdkContentFormats* ref_formats();
-    void write_mime_type_async(GdkContentProvider* provider,
-                               const char* mime_type,
-                               GOutputStream* stream,
-                               int io_priority,
-                               GCancellable* cancellable,
-                               GAsyncReadyCallback callback,
-                               gpointer user_data);
-#else
+#if !GTK_CHECK_VERSION(4, 0, 0)
     void ClipboardGet(GtkSelectionData *selection_data, guint info);
 #endif
     void OwnerPossiblyChanged(GdkClipboard *clipboard);
@@ -956,6 +948,109 @@ sal_Bool VclGtkClipboard::supportsService( const OUString& ServiceName )
     return cppu::supportsService(this, ServiceName);
 }
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+
+G_BEGIN_DECLS
+
+#define CLIPBOARD_CONTENT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), clipboard_content_get_type(), ClipboardContent))
+
+struct _ClipboardContent
+{
+    GdkContentProvider parent;
+    VclToGtkHelper* m_pConversionHelper;
+    css::datatransfer::XTransferable* m_pContents;
+    VclGtkClipboard* clipboard;
+};
+
+struct _ClipboardContentClass
+{
+    GdkContentProviderClass parent_class;
+};
+
+G_DEFINE_TYPE(ClipboardContent, clipboard_content, GDK_TYPE_CONTENT_PROVIDER)
+
+static void clipboard_content_write_mime_type_async(GdkContentProvider* provider,
+                                                    const char* mime_type,
+                                                    GOutputStream* stream,
+                                                    int io_priority,
+                                                    GCancellable* cancellable,
+                                                    GAsyncReadyCallback callback,
+                                                    gpointer user_data)
+{
+    ClipboardContent* self = CLIPBOARD_CONTENT(provider);
+    if (!self->m_pContents)
+        return;
+    // tdf#129809 take a reference in case m_aContents is replaced during this
+    // call
+    Reference<datatransfer::XTransferable> xCurrentContents(self->m_pContents);
+    self->m_pConversionHelper->setSelectionData(xCurrentContents, provider, mime_type,
+                                                stream, io_priority, cancellable,
+                                                callback, user_data);
+}
+
+static gboolean clipboard_content_write_mime_type_finish(GdkContentProvider*,
+                                                         GAsyncResult* result,
+                                                         GError** error)
+{
+    return g_task_propagate_boolean(G_TASK(result), error);
+}
+
+static GdkContentFormats* clipboard_content_ref_formats(GdkContentProvider *provider)
+{
+    ClipboardContent* self = CLIPBOARD_CONTENT(provider);
+    Reference<datatransfer::XTransferable> xCurrentContents(self->m_pContents);
+    if (!xCurrentContents)
+        return nullptr;
+
+    auto aFormats = xCurrentContents->getTransferDataFlavors();
+    std::vector<OString> aGtkTargets(self->m_pConversionHelper->FormatsToGtk(aFormats));
+
+    GdkContentFormatsBuilder* pBuilder = gdk_content_formats_builder_new();
+    for (const auto& rFormat : aGtkTargets)
+        gdk_content_formats_builder_add_mime_type(pBuilder, rFormat.getStr());
+    return gdk_content_formats_builder_free_to_formats(pBuilder);
+}
+
+static void clipboard_content_detach_clipboard(GdkContentProvider *provider, GdkClipboard*)
+{
+    ClipboardContent *content = CLIPBOARD_CONTENT(provider);
+    return content->clipboard->ClipboardClear();
+}
+
+static void clipboard_content_class_init(ClipboardContentClass* klass)
+{
+  GdkContentProviderClass *provider_class = GDK_CONTENT_PROVIDER_CLASS(klass);
+
+  provider_class->ref_formats = clipboard_content_ref_formats;
+  provider_class->detach_clipboard = clipboard_content_detach_clipboard;
+  provider_class->write_mime_type_async = clipboard_content_write_mime_type_async;
+  provider_class->write_mime_type_finish = clipboard_content_write_mime_type_finish;
+}
+
+static void clipboard_content_init(ClipboardContent*)
+{
+}
+
+static void clipboard_content_set_transferable(ClipboardContent* pContent, css::datatransfer::XTransferable* pTransferable)
+{
+    pContent->m_pContents = pTransferable;
+}
+
+static GdkContentProvider* clipboard_content_new(VclToGtkHelper* pConversionHelper,
+                                                 css::datatransfer::XTransferable* pTransferable,
+                                                 VclGtkClipboard* pClipboard)
+{
+    ClipboardContent *content = CLIPBOARD_CONTENT(g_object_new(clipboard_content_get_type(), nullptr));
+    content->m_pConversionHelper = pConversionHelper;
+    content->m_pContents = pTransferable;
+    content->clipboard = pClipboard;
+    return GDK_CONTENT_PROVIDER(content);
+}
+
+G_END_DECLS
+
+#endif
+
 Reference< css::datatransfer::XTransferable > VclGtkClipboard::getContents()
 {
     if (!m_aContents.is())
@@ -963,29 +1058,15 @@ Reference< css::datatransfer::XTransferable > VclGtkClipboard::getContents()
         //tdf#93887 This is the system clipboard/selection. We fetch it when we are not
         //the owner of the clipboard and have not already fetched it.
         m_aContents = new GtkClipboardTransferable(m_eSelection);
+#if GTK_CHECK_VERSION(4, 0, 0)
+        if (m_pClipboardContent)
+            clipboard_content_set_transferable(m_pClipboardContent, m_aContents.get());
+#endif
     }
     return m_aContents;
 }
 
-#if GTK_CHECK_VERSION(4, 0, 0)
-void VclGtkClipboard::write_mime_type_async(GdkContentProvider* provider,
-                                            const char* mime_type,
-                                            GOutputStream* stream,
-                                            int io_priority,
-                                            GCancellable* cancellable,
-                                            GAsyncReadyCallback callback,
-                                            gpointer user_data)
-{
-    if (!m_aContents.is())
-        return;
-    // tdf#129809 take a reference in case m_aContents is replaced during this
-    // call
-    Reference<datatransfer::XTransferable> xCurrentContents(m_aContents);
-    m_aConversionHelper.setSelectionData(xCurrentContents, provider, mime_type,
-                                         stream, io_priority, cancellable,
-                                         callback, user_data);
-}
-#else
+#if !GTK_CHECK_VERSION(4, 0, 0)
 void VclGtkClipboard::ClipboardGet(GtkSelectionData *selection_data, guint info)
 {
     if (!m_aContents.is())
@@ -995,9 +1076,7 @@ void VclGtkClipboard::ClipboardGet(GtkSelectionData *selection_data, guint info)
     Reference<datatransfer::XTransferable> xCurrentContents(m_aContents);
     m_aConversionHelper.setSelectionData(xCurrentContents, selection_data, info);
 }
-#endif
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
 namespace
 {
     const OString& getPID()
@@ -1318,6 +1397,9 @@ VclGtkClipboard::VclGtkClipboard(SelectionType eSelection)
         (m_aMutex)
     , m_eSelection(eSelection)
     , m_pSetClipboardEvent(nullptr)
+#if GTK_CHECK_VERSION(4, 0, 0)
+    , m_pClipboardContent(nullptr)
+#endif
 {
     GdkClipboard* clipboard = clipboard_get(m_eSelection);
 #if GTK_CHECK_VERSION(4, 0, 0)
@@ -1350,6 +1432,7 @@ VclGtkClipboard::~VclGtkClipboard()
     {
 #if GTK_CHECK_VERSION(4, 0, 0)
         gdk_clipboard_set_content(clipboard, nullptr);
+        m_pClipboardContent = nullptr;
 #else
         gtk_clipboard_clear(clipboard);
 #endif
@@ -1423,97 +1506,12 @@ void VclGtkClipboard::SyncGtkClipboard()
     }
 }
 
-#if GTK_CHECK_VERSION(4, 0, 0)
-
-G_BEGIN_DECLS
-
-#define CLIPBOARD_CONTENT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), clipboard_content_get_type(), ClipboardContent))
-
-struct _ClipboardContent
-{
-    GdkContentProvider parent;
-    VclGtkClipboard* clipboard;
-};
-
-struct _ClipboardContentClass
-{
-    GdkContentProviderClass parent_class;
-};
-
-G_DEFINE_TYPE(ClipboardContent, clipboard_content, GDK_TYPE_CONTENT_PROVIDER)
-
-static void clipboard_content_write_mime_type_async(GdkContentProvider* provider,
-                                                    const char* mime_type,
-                                                    GOutputStream* stream,
-                                                    int io_priority,
-                                                    GCancellable* cancellable,
-                                                    GAsyncReadyCallback callback,
-                                                    gpointer user_data)
-{
-    ClipboardContent *content = CLIPBOARD_CONTENT(provider);
-    content->clipboard->write_mime_type_async(provider, mime_type, stream, io_priority,
-                                              cancellable, callback, user_data);
-}
-
-static gboolean clipboard_content_write_mime_type_finish(GdkContentProvider*,
-                                                         GAsyncResult* result,
-                                                         GError** error)
-{
-    return g_task_propagate_boolean(G_TASK(result), error);
-}
-
-static GdkContentFormats* clipboard_content_ref_formats(GdkContentProvider *provider)
-{
-    ClipboardContent *content = CLIPBOARD_CONTENT(provider);
-    return content->clipboard->ref_formats();
-}
-
-static void clipboard_content_detach_clipboard(GdkContentProvider *provider, GdkClipboard*)
-{
-    ClipboardContent *content = CLIPBOARD_CONTENT(provider);
-    return content->clipboard->ClipboardClear();
-}
-
-static void clipboard_content_class_init(ClipboardContentClass* klass)
-{
-  GdkContentProviderClass *provider_class = GDK_CONTENT_PROVIDER_CLASS(klass);
-
-  provider_class->ref_formats = clipboard_content_ref_formats;
-  provider_class->detach_clipboard = clipboard_content_detach_clipboard;
-  provider_class->write_mime_type_async = clipboard_content_write_mime_type_async;
-  provider_class->write_mime_type_finish = clipboard_content_write_mime_type_finish;
-}
-
-static void clipboard_content_init(ClipboardContent*)
-{
-}
-
-static GdkContentProvider* clipboard_content_new(VclGtkClipboard* pClipboard)
-{
-    ClipboardContent *content = CLIPBOARD_CONTENT(g_object_new(clipboard_content_get_type(), nullptr));
-    content->clipboard = pClipboard;
-    return GDK_CONTENT_PROVIDER(content);
-}
-
-G_END_DECLS
-
-#endif
-
-#if GTK_CHECK_VERSION(4, 0, 0)
-GdkContentFormats* VclGtkClipboard::ref_formats()
-{
-    GdkContentFormatsBuilder* pBuilder = gdk_content_formats_builder_new();
-    for (const auto& rFormat : m_aGtkTargets)
-        gdk_content_formats_builder_add_mime_type(pBuilder, rFormat.getStr());
-    return gdk_content_formats_builder_free_to_formats(pBuilder);
-}
-#endif
-
 void VclGtkClipboard::SetGtkClipboard()
 {
     GdkClipboard* clipboard = clipboard_get(m_eSelection);
 #if GTK_CHECK_VERSION(4, 0, 0)
-    gdk_clipboard_set_content(clipboard, clipboard_content_new(this));
+    m_pClipboardContent = CLIPBOARD_CONTENT(clipboard_content_new(&m_aConversionHelper, m_aContents.get(), this));
+    gdk_clipboard_set_content(clipboard, GDK_CONTENT_PROVIDER(m_pClipboardContent));
 #else
     gtk_clipboard_set_with_data(clipboard, m_aGtkTargets.data(), m_aGtkTargets.size(),
                                 ClipboardGetFunc, ClipboardClearFunc, this);
@@ -1535,6 +1533,10 @@ void VclGtkClipboard::setContents(
     Reference< datatransfer::clipboard::XClipboardOwner > xOldOwner( m_aOwner );
     Reference< datatransfer::XTransferable > xOldContents( m_aContents );
     m_aContents = xTrans;
+#if GTK_CHECK_VERSION(4, 0, 0)
+    if (m_pClipboardContent)
+        clipboard_content_set_transferable(m_pClipboardContent, m_aContents.get());
+#endif
     m_aOwner = xClipboardOwner;
 
     std::vector< Reference< datatransfer::clipboard::XClipboardListener > > aListeners( m_aListeners );
@@ -1545,6 +1547,7 @@ void VclGtkClipboard::setContents(
     {
 #if GTK_CHECK_VERSION(4, 0, 0)
         gdk_clipboard_set_content(clipboard, nullptr);
+        m_pClipboardContent = nullptr;
 #else
         gtk_clipboard_clear(clipboard);
 #endif
@@ -2423,7 +2426,6 @@ namespace
 
 namespace {
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
 GdkDragAction VclToGdk(sal_Int8 dragOperation)
 {
     GdkDragAction eRet(static_cast<GdkDragAction>(0));
@@ -2435,7 +2437,6 @@ GdkDragAction VclToGdk(sal_Int8 dragOperation)
         eRet = static_cast<GdkDragAction>(eRet | GDK_ACTION_LINK);
     return eRet;
 }
-#endif
 
 GtkWindow* get_active_window()
 {

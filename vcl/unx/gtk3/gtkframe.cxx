@@ -4186,7 +4186,6 @@ void GtkSalFrame::signalWindowState(GdkToplevel* pSurface, GParamSpec*, gpointer
 
 namespace
 {
-#if !GTK_CHECK_VERSION(4,0,0)
     GdkDragAction VclToGdk(sal_Int8 dragOperation)
     {
         GdkDragAction eRet(static_cast<GdkDragAction>(0));
@@ -4198,7 +4197,6 @@ namespace
             eRet = static_cast<GdkDragAction>(eRet | GDK_ACTION_LINK);
         return eRet;
     }
-#endif
 
     sal_Int8 GdkToVcl(GdkDragAction dragOperation)
     {
@@ -5514,63 +5512,74 @@ void GtkInstDragSource::setActiveDragSource()
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
 std::vector<GtkTargetEntry> GtkInstDragSource::FormatsToGtk(const css::uno::Sequence<css::datatransfer::DataFlavor> &rFormats)
+#else
+std::vector<OString> GtkInstDragSource::FormatsToGtk(const css::uno::Sequence<css::datatransfer::DataFlavor> &rFormats)
+#endif
 {
     return m_aConversionHelper.FormatsToGtk(rFormats);
 }
-#endif
 
 void GtkInstDragSource::startDrag(const datatransfer::dnd::DragGestureEvent& rEvent,
-                              sal_Int8 sourceActions, sal_Int32 /*cursor*/, sal_Int32 /*image*/,
-                              const css::uno::Reference<css::datatransfer::XTransferable>& rTrans,
-                              const css::uno::Reference<css::datatransfer::dnd::XDragSourceListener>& rListener)
+                                  sal_Int8 sourceActions, sal_Int32 /*cursor*/, sal_Int32 /*image*/,
+                                  const css::uno::Reference<css::datatransfer::XTransferable>& rTrans,
+                                  const css::uno::Reference<css::datatransfer::dnd::XDragSourceListener>& rListener)
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
+    fprintf(stderr, "startdrag\n");
     set_datatransfer(rTrans, rListener);
 
     if (m_pFrame)
     {
         auto aFormats = m_xTrans->getTransferDataFlavors();
-        std::vector<GtkTargetEntry> aGtkTargets(FormatsToGtk(aFormats));
-        GtkTargetList *pTargetList = gtk_target_list_new(aGtkTargets.data(), aGtkTargets.size());
-
-        gint nDragButton = 1; // default to left button
-        css::awt::MouseEvent aEvent;
-        if (rEvent.Event >>= aEvent)
-        {
-            if (aEvent.Buttons & css::awt::MouseButton::LEFT )
-                nDragButton = 1;
-            else if (aEvent.Buttons & css::awt::MouseButton::RIGHT)
-                nDragButton = 3;
-            else if (aEvent.Buttons & css::awt::MouseButton::MIDDLE)
-                nDragButton = 2;
-        }
+        auto aGtkTargets = FormatsToGtk(aFormats);
 
         setActiveDragSource();
 
-        m_pFrame->startDrag(nDragButton, rEvent.DragOriginX, rEvent.DragOriginY,
-                            VclToGdk(sourceActions), pTargetList);
+        m_pFrame->startDrag(rEvent, aGtkTargets, VclToGdk(sourceActions));
 
-        gtk_target_list_unref(pTargetList);
+#if !GTK_CHECK_VERSION(4, 0, 0)
         for (auto &a : aGtkTargets)
             g_free(a.target);
+#endif
     }
     else
         dragFailed();
-#else
-    (void)rEvent;
-    (void)sourceActions;
-    (void)rTrans;
-    (void)rListener;
-#endif
 }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-void GtkSalFrame::startDrag(gint nButton, gint nDragOriginX, gint nDragOriginY,
-                            GdkDragAction sourceActions, GtkTargetList* pTargetList)
+void GtkSalFrame::startDrag(const css::datatransfer::dnd::DragGestureEvent& rEvent,
+#if GTK_CHECK_VERSION(4, 0, 0)
+                            const std::vector<OString>& rGtkTargets,
+#else
+                            const std::vector<GtkTargetEntry>& rGtkTargets,
+#endif
+                            GdkDragAction sourceActions)
 {
     SolarMutexGuard aGuard;
 
     assert(m_pDragSource);
+
+#if GTK_CHECK_VERSION(4, 0, 0)
+
+    GdkSeat *pSeat = gdk_display_get_default_seat(getGdkDisplay());
+    GdkDrag* pDrag = gdk_drag_begin(widget_get_surface(getMouseEventWidget()),
+                                    gdk_seat_get_pointer(pSeat),
+                                    nullptr,
+//                                    GdkContentProvider *content,
+                                    sourceActions,
+                                    rEvent.DragOriginX, rEvent.DragOriginY);
+#else
+    GtkTargetList *pTargetList = gtk_target_list_new(rGtkTargets.data(), rGtkTargets.size());
+
+    gint nDragButton = 1; // default to left button
+    css::awt::MouseEvent aEvent;
+    if (rEvent.Event >>= aEvent)
+    {
+        if (aEvent.Buttons & css::awt::MouseButton::LEFT )
+            nDragButton = 1;
+        else if (aEvent.Buttons & css::awt::MouseButton::RIGHT)
+            nDragButton = 3;
+        else if (aEvent.Buttons & css::awt::MouseButton::MIDDLE)
+            nDragButton = 2;
+    }
 
     GdkEvent aFakeEvent;
     memset(&aFakeEvent, 0, sizeof(GdkEvent));
@@ -5580,15 +5589,18 @@ void GtkSalFrame::startDrag(gint nButton, gint nDragOriginX, gint nDragOriginY,
     GdkDeviceManager* pDeviceManager = gdk_display_get_device_manager(getGdkDisplay());
     aFakeEvent.button.device = gdk_device_manager_get_client_pointer(pDeviceManager);
 
-    GdkDragContext *pContext = gtk_drag_begin_with_coordinates(getMouseEventWidget(),
-                                                               pTargetList,
-                                                               sourceActions,
-                                                               nButton,
-                                                               &aFakeEvent,
-                                                               nDragOriginX,
-                                                               nDragOriginY);
+    GdkDragContext *pDrag = gtk_drag_begin_with_coordinates(getMouseEventWidget(),
+                                                            pTargetList,
+                                                            sourceActions,
+                                                            nDragButton,
+                                                            &aFakeEvent,
+                                                            rEvent.DragOriginX,
+                                                            rEvent.DragOriginY);
 
-    if (!pContext)
+    gtk_target_list_unref(pTargetList);
+#endif
+
+    if (!pDrag)
         m_pDragSource->dragFailed();
 }
 
@@ -5605,6 +5617,7 @@ void GtkInstDragSource::dragFailed()
     }
 }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 gboolean GtkSalFrame::signalDragFailed(GtkWidget* /*widget*/, GdkDragContext* /*context*/, GtkDragResult /*result*/, gpointer frame)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
