@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2396241c_3ab42a88",
+        "filename": "oox/source/export/DMLPresetShapeExport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-06-24T12:49:03Z",
+      "side": 1,
+      "message": "X --\u003e Y",
+      "revId": "2adb1d16cb3e13306e53d3f47d17854a1639bcb8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
