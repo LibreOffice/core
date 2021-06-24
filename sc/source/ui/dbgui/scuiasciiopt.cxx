@@ -644,13 +644,9 @@ void ScImportAsciiDlg::SaveParameters()
 
 void ScImportAsciiDlg::SetSeparators()
 {
-    OString sString(OUStringToOString(maFieldSeparators,
-        RTL_TEXTENCODING_MS_1252));
-    const char *aSep = sString.getStr();
-    sal_Int32 len = maFieldSeparators.getLength();
-    for (int i = 0; i < len; ++i)
+    for (sal_Int32 i = 0; i < maFieldSeparators.getLength(); ++i)
     {
-        switch( aSep[i] )
+        switch (maFieldSeparators[i])
         {
             case '\t':  mxCkbTab->set_active(true);        break;
             case ';':   mxCkbSemicolon->set_active(true);  break;
@@ -658,7 +654,7 @@ void ScImportAsciiDlg::SetSeparators()
             case ' ':   mxCkbSpace->set_active(true);      break;
             default:
                 mxCkbOther->set_active(true);
-                mxEdOther->set_text(mxEdOther->get_text() + OUStringChar(aSep[i]));
+                mxEdOther->set_text(mxEdOther->get_text() + OUStringChar(maFieldSeparators[i]));
         }
     }
 }
