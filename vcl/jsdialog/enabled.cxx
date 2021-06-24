@@ -61,7 +61,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
 
 bool isBuilderEnabledForPopup(std::u16string_view rUIFile)
 {
-    if (rUIFile == u"svx/ui/colorwindow.ui")
+    if (rUIFile == u"svx/ui/colorwindow.ui" || rUIFile == u"modules/scalc/ui/floatinglinestyle.ui")
         return true;
 
     return false;

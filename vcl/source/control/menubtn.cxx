@@ -265,23 +265,6 @@ void MenuButton::SetCurItemId(){
     msCurItemIdent = mpMenu->GetCurItemIdent();
 }
 
-void MenuButton::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
-{
-    Button::DumpAsPropertyTree(rJsonWriter);
-    if (mpFloatingWindow)
-    {
-        auto aPopup = rJsonWriter.startNode("popup");
-        if (InPopupMode())
-            mpFloatingWindow->DumpAsPropertyTree(rJsonWriter);
-        else
-            rJsonWriter.put("action", "close");
-
-        VclPtr<vcl::Window> pParentWithNotifier = mpFloatingWindow->GetParentWithLOKNotifier();
-        if (pParentWithNotifier)
-            rJsonWriter.put("id", pParentWithNotifier->GetLOKWindowId());
-    }
-}
-
 //class MenuToggleButton ----------------------------------------------------
 
 MenuToggleButton::MenuToggleButton( vcl::Window* pParent, WinBits nWinBits )
