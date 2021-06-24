@@ -4225,37 +4225,6 @@ namespace {
 
 #if GTK_CHECK_VERSION(4, 0, 0)
 
-void read_async_completed(GObject* source, GAsyncResult* res, gpointer user_data)
-{
-    GInputStream* stream = G_INPUT_STREAM(source);
-    read_transfer_result* pRes = static_cast<read_transfer_result*>(user_data);
-
-    gsize bytes_read = g_input_stream_read_finish(stream, res, nullptr);
-
-    bool bFinished = bytes_read == 0;
-
-    if (bFinished)
-    {
-        g_object_unref(stream);
-        pRes->aVector.resize(pRes->nRead);
-        pRes->bDone = true;
-        g_main_context_wakeup(nullptr);
-        return;
-    }
-
-    pRes->nRead += bytes_read;
-
-    pRes->aVector.resize(pRes->nRead + read_transfer_result::BlockSize);
-
-    g_input_stream_read_async(stream,
-                              pRes->aVector.data() + pRes->nRead,
-                              read_transfer_result::BlockSize,
-                              G_PRIORITY_DEFAULT,
-                              nullptr,
-                              read_async_completed,
-                              user_data);
-}
-
 void read_drop_async_completed(GObject* source, GAsyncResult* res, gpointer user_data)
 {
     GdkDrop* drop = GDK_DROP(source);
@@ -4277,7 +4246,7 @@ void read_drop_async_completed(GObject* source, GAsyncResult* res, gpointer user
                               pRes->aVector.size(),
                               G_PRIORITY_DEFAULT,
                               nullptr,
-                              read_async_completed,
+                              read_transfer_result::read_block_async_completed,
                               user_data);
 }
 #endif
