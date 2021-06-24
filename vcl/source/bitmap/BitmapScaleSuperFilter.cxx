@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/profilezone.hxx>
 #include <comphelper/threadpool.hxx>
 
 #include <tools/helpers.hxx>
@@ -127,6 +128,7 @@ public:
 
 void scaleUp32bit(ScaleContext &rCtx, long nStartY, long nEndY)
 {
+    comphelper::ProfileZone pz("BitmapScaleSuperFilter::scaleUp32bit");
     const int nColorComponents = 4;
 
     const long nStartX = 0;
@@ -261,6 +263,7 @@ void scaleUpPaletteGeneral(ScaleContext &rCtx, long nStartY, long nEndY)
 
 void scaleUp24bit(ScaleContext &rCtx, long nStartY, long nEndY)
 {
+    comphelper::ProfileZone pz("BitmapScaleSuperFilter::scaleUp24bit");
     const int nColorComponents = 3;
 
     const long nStartX = 0;
@@ -351,6 +354,7 @@ void scaleUpNonPaletteGeneral(ScaleContext &rCtx, long nStartY, long nEndY)
 
 void scaleDown32bit(ScaleContext &rCtx, long nStartY, long nEndY)
 {
+    comphelper::ProfileZone pz("BitmapScaleSuperFilter::scaleDown32bit");
     const int constColorComponents = 4;
 
     const long nStartX = 0;
@@ -746,6 +750,7 @@ void scaleDownPaletteGeneral(ScaleContext &rCtx, long nStartY, long nEndY)
 
 void scaleDown24bit(ScaleContext &rCtx, long nStartY, long nEndY)
 {
+    comphelper::ProfileZone pz("BitmapScaleSuperFilter::scaleDown24bit");
     const int constColorComponents = 3;
 
     const long nStartX = 0;
