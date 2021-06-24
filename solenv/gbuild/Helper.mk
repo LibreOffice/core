@@ -328,12 +328,6 @@ $(if $(filter $(1) $(1)_%,$(WITH_LOCALES)),$(2))
 endef
 endif
 
-define gb_Helper_optional_for_host
-$(if $(filter build,$(gb_Side)), \
-	$(if $(filter $(1),$(BUILD_TYPE_FOR_HOST)),$(2)), \
-	$(call gb_Output_error,gb_Helper_optional_for_host: Use only when gb_Side=build))
-endef
-
 define gb_Helper_print_on_error
 $(if $(gb_QUIET_EXTERNAL), \
     $(if $(2), \

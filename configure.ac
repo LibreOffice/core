@@ -5346,8 +5346,12 @@ else
     AC_MSG_RESULT([no])
 fi
 
+AC_MSG_CHECKING([if we need to build the help index tooling])
 if test "$with_help" = yes -o "$enable_extension_integration" != no; then
     BUILD_TYPE="$BUILD_TYPE HELPTOOLS"
+    AC_MSG_RESULT([yes])
+else
+    AC_MSG_RESULT([no])
 fi
 
 AC_MSG_CHECKING([whether to enable xapian-omega support for online help])
@@ -5475,6 +5479,8 @@ if test "$cross_compiling" = "yes"; then
     test -n "$TARFILE_LOCATION" && sub_conf_opts="$sub_conf_opts --with-external-tar=$TARFILE_LOCATION"
     test "$with_system_icu_for_build" = "yes" -o "$with_system_icu_for_build" = "force" && sub_conf_opts="$sub_conf_opts --with-system-icu"
     test "$with_galleries" = "no" -o -z "$WITH_GALLERY_BUILD" && sub_conf_opts="$sub_conf_opts --with-galleries=no --disable-database-connectivity"
+    test -n "$with_help" -a "$with_help" != "no" && sub_conf_opts="$sub_conf_opts --with-help=$with_help"
+    test "$enable_extensions" = yes || sub_conf_opts="$sub_conf_opts --disable-extensions"
     test "$enable_wasm_strip" = "yes" && sub_conf_opts="$sub_conf_opts --enable-wasm-strip"
     sub_conf_opts="$sub_conf_opts $with_build_platform_configure_options"
 
@@ -5483,7 +5489,6 @@ if test "$cross_compiling" = "yes"; then
         --build="$build_alias" \
         --disable-cairo-canvas \
         --disable-cups \
-        --disable-extensions \
         --disable-firebird-sdbc \
         --disable-gpgmepp \
         --disable-gstreamer-1-0 \
@@ -5524,6 +5529,7 @@ if test "$cross_compiling" = "yes"; then
         GLM
         GRAPHITE
         HARFBUZZ
+        HELPTOOLS
         ICU
         LCMS2
         LIBJPEG_TURBO
