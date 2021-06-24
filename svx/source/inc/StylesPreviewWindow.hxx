@@ -29,7 +29,7 @@
 class StylesPreviewWindow_Base;
 
 /// Listener for style selection
-class StyleStatusListener : public SfxStatusListener
+class StyleStatusListener final : public SfxStatusListener
 {
     StylesPreviewWindow_Base* m_pPreviewControl;
 
@@ -42,7 +42,7 @@ public:
 };
 
 /// Listener for styles creation or modification
-class StylePoolChangeListener : public SfxListener
+class StylePoolChangeListener final : public SfxListener
 {
     StylesPreviewWindow_Base* m_pPreviewControl;
     SfxStyleSheetBasePool* m_pStyleSheetPool;
@@ -109,7 +109,7 @@ private:
     bool Command(const CommandEvent& rEvent);
 };
 
-class StylesPreviewWindow_Impl : public InterimItemWindow, public StylesPreviewWindow_Base
+class StylesPreviewWindow_Impl final : public InterimItemWindow, public StylesPreviewWindow_Base
 {
 public:
     StylesPreviewWindow_Impl(

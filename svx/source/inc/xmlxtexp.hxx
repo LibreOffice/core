@@ -31,7 +31,7 @@ namespace com::sun::star {
     namespace xml::sax { class XDocumentHandler; }
 }
 
-class SvxXMLXTableExportComponent : public SvXMLExport
+class SvxXMLXTableExportComponent final : public SvXMLExport
 {
 public:
     SvxXMLXTableExportComponent(

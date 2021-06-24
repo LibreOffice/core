@@ -377,13 +377,12 @@ protected:
 };
 
 
-class DbTextField : public DbLimitedLengthField
+class DbTextField final : public DbLimitedLengthField
 {
     std::unique_ptr<::svt::IEditImplementation> m_pEdit;
     std::unique_ptr<::svt::IEditImplementation> m_pPainterImplementation;
     bool                    m_bIsSimpleEdit;
 
-protected:
     virtual ~DbTextField( ) override;
 
 public:
@@ -400,7 +399,7 @@ public:
                         const css::uno::Reference< css::sdb::XColumn >& _rxField,
                         const css::uno::Reference< css::util::XNumberFormatter >& _rxFormatter ) override;
 
-protected:
+private:
     // DbCellControl
     virtual bool        commitControl( ) override;
     virtual void        updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
@@ -432,7 +431,7 @@ private:
 };
 
 
-class DbCheckBox : public DbCellControl
+class DbCheckBox final : public DbCellControl
 {
 public:
     DbCheckBox(DbGridColumn& _rColumn);
@@ -445,14 +444,14 @@ public:
                           const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
     virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
 
-protected:
+private:
     // DbCellControl
     virtual bool        commitControl( ) override;
     virtual void        updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
 };
 
 
-class DbComboBox : public DbCellControl
+class DbComboBox final : public DbCellControl
 {
 
 public:
@@ -465,7 +464,7 @@ public:
 
     void SetList(const css::uno::Any& rItems);
 
-protected:
+private:
     // DbCellControl
     virtual bool        commitControl( ) override;
     virtual void        updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
@@ -477,7 +476,7 @@ protected:
 };
 
 
-class DbListBox     :public DbCellControl
+class DbListBox final : public DbCellControl
 {
     bool              m_bBound  : 1;
     css::uno::Sequence< OUString > m_aValueList;
@@ -492,7 +491,7 @@ public:
 
     void SetList(const css::uno::Any& rItems);
 
-protected:
+private:
     // DbCellControl
     virtual bool        commitControl( ) override;
     virtual void        updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
@@ -504,7 +503,7 @@ protected:
 };
 
 
-class DbPatternField : public DbCellControl
+class DbPatternField final : public DbCellControl
 {
 public:
     DbPatternField( DbGridColumn& _rColumn, const css::uno::Reference<css::uno::XComponentContext>& _rContext );
@@ -513,17 +512,15 @@ public:
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
     virtual ::svt::CellControllerRef CreateController() const override;
 
-protected:
+private:
     /// DbCellControl
     virtual bool        commitControl( ) override;
     virtual void        updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
 
     virtual void        implAdjustGenericFieldSetting( const css::uno::Reference< css::beans::XPropertySet >& _rxModel ) override;
 
-private:
     OUString  impl_formatText(const OUString& _rText);
 
-private:
     ::std::unique_ptr< ::dbtools::FormattedColumnValue >  m_pValueFormatter;
     ::std::unique_ptr< ::dbtools::FormattedColumnValue >  m_pPaintFormatter;
     css::uno::Reference<css::uno::XComponentContext>    m_xContext;
@@ -552,14 +549,14 @@ protected:
                         ) = 0;
 };
 
-class DbDateField : public DbSpinField
+class DbDateField final : public DbSpinField
 {
 public:
     DbDateField(DbGridColumn& _rColumn);
     virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
 
-protected:
+private:
     // DbCellControl
     virtual bool        commitControl( ) override;
     virtual void        updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
@@ -575,14 +572,14 @@ protected:
     virtual void    implAdjustGenericFieldSetting( const css::uno::Reference< css::beans::XPropertySet >& _rxModel ) override;
 };
 
-class DbTimeField : public DbSpinField
+class DbTimeField final : public DbSpinField
 {
 public:
     DbTimeField(DbGridColumn& _rColumn);
     virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
 
-protected:
+private:
     // DbCellControl
     virtual bool        commitControl( ) override;
     virtual void        updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
@@ -598,14 +595,14 @@ protected:
     virtual void    implAdjustGenericFieldSetting( const css::uno::Reference< css::beans::XPropertySet >& _rxModel ) override;
 };
 
-class DbCurrencyField : public DbSpinField
+class DbCurrencyField final : public DbSpinField
 {
 public:
     DbCurrencyField(DbGridColumn& _rColumn);
     virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
 
-protected:
+private:
     // DbCellControl
     virtual bool        commitControl( ) override;
     virtual void        updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
@@ -621,7 +618,7 @@ protected:
     virtual void    implAdjustGenericFieldSetting( const css::uno::Reference< css::beans::XPropertySet >& _rxModel ) override;
 };
 
-class DbNumericField : public DbSpinField
+class DbNumericField final : public DbSpinField
 {
 public:
     DbNumericField(DbGridColumn& _rColumn);
@@ -629,7 +626,7 @@ public:
     virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
 
-protected:
+private:
     // DbCellControl
     virtual bool        commitControl( ) override;
     virtual void        updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
@@ -900,7 +897,7 @@ private:
 typedef ::cppu::ImplHelper2 <   css::awt::XCheckBox
                             ,   css::awt::XButton
                             >   FmXCheckBoxCell_Base;
-class FmXCheckBoxCell : public FmXDataCell,
+class FmXCheckBoxCell final : public FmXDataCell,
                         public FmXCheckBoxCell_Base
 {
     ::comphelper::OInterfaceContainerHelper2   m_aItemListeners;
@@ -910,7 +907,6 @@ class FmXCheckBoxCell : public FmXDataCell,
 
     DECL_LINK(ModifyHdl, LinkParamNone*, void);
 
-protected:
     virtual ~FmXCheckBoxCell() override;
 
 public:

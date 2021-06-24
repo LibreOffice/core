@@ -22,7 +22,7 @@
 #include <svx/svddef.hxx>
 #include <svx/sdmetitm.hxx>
 
-class SdrMoveXItem: public SdrMetricItem {
+class SdrMoveXItem final : public SdrMetricItem {
 public:
     SdrMoveXItem(): SdrMetricItem(SDRATTR_MOVEX,0)        {}
     SdrMoveXItem* Clone(SfxItemPool*) const override
@@ -31,7 +31,7 @@ public:
     }
 };
 
-class SdrMoveYItem: public SdrMetricItem {
+class SdrMoveYItem final : public SdrMetricItem {
 public:
     SdrMoveYItem(): SdrMetricItem(SDRATTR_MOVEY,0)        {}
     SdrMoveYItem* Clone(SfxItemPool*) const override

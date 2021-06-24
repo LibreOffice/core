@@ -22,7 +22,7 @@
 #include <svx/svddef.hxx>
 #include <svx/sdangitm.hxx>
 
-class SdrRotateOneItem: public SdrAngleItem {
+class SdrRotateOneItem final : public SdrAngleItem {
 public:
     SdrRotateOneItem(): SdrAngleItem(SDRATTR_ROTATEONE,0_deg100) {}
     SdrRotateOneItem* Clone(SfxItemPool*) const override

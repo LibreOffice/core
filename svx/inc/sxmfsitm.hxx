@@ -23,7 +23,7 @@
 
 // Format string (similar to Calc), e.g. "#.###,00km"
 // overwrites SdrMeasureUnitItem and SdrMeasureShowUnitItem
-class SdrMeasureFormatStringItem: public SfxStringItem {
+class SdrMeasureFormatStringItem final : public SfxStringItem {
 public:
     SdrMeasureFormatStringItem()                   : SfxStringItem() { SetWhich(SDRATTR_MEASUREFORMATSTRING); }
     virtual SdrMeasureFormatStringItem* Clone(SfxItemPool*) const override

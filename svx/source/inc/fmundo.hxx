@@ -43,7 +43,7 @@ class FmFormModel;
 class FmFormObj;
 class SdrObject;
 
-class FmUndoPropertyAction: public SdrUndoAction
+class FmUndoPropertyAction final : public SdrUndoAction
 {
     css::uno::Reference< css::beans::XPropertySet> xObj;
     OUString               aPropertyName;
@@ -97,7 +97,7 @@ private:
     Action          m_eAction;
 };
 
-class FmUndoModelReplaceAction : public SdrUndoAction
+class FmUndoModelReplaceAction final : public SdrUndoAction
 {
     css::uno::Reference< css::awt::XControlModel> m_xReplaced;
     SdrUnoObj*          m_pObject;

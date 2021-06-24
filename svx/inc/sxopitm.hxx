@@ -22,7 +22,7 @@
 #include <svx/svddef.hxx>
 #include <svx/sdynitm.hxx>
 
-class SdrObjPrintableItem: public SdrYesNoItem {
+class SdrObjPrintableItem final : public SdrYesNoItem {
 public:
     SdrObjPrintableItem(bool bOn=false): SdrYesNoItem(SDRATTR_OBJPRINTABLE,bOn) {}
     virtual SdrObjPrintableItem* Clone(SfxItemPool*) const override
@@ -31,7 +31,7 @@ public:
     }
 };
 
-class SdrObjVisibleItem: public SdrYesNoItem {
+class SdrObjVisibleItem final : public SdrYesNoItem {
 public:
     SdrObjVisibleItem(bool bOn=true): SdrYesNoItem(SDRATTR_OBJVISIBLE,bOn) {}
     virtual SdrObjVisibleItem* Clone(SfxItemPool*) const override

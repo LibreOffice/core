@@ -71,7 +71,7 @@ namespace svx
         ~IContextRequestObserver() {}
     };
 
-    class FmTextControlShell :public IFocusObserver
+    class FmTextControlShell final : public IFocusObserver
                              ,public IContextRequestObserver
     {
     private:
@@ -135,7 +135,7 @@ namespace svx
 
         void    Invalidate( SfxSlotId _nSlot );
 
-    protected:
+    private:
         // IFocusObserver
         virtual void    focusGained( const css::awt::FocusEvent& _rEvent ) override;
         virtual void    focusLost( const css::awt::FocusEvent& _rEvent ) override;
@@ -148,7 +148,6 @@ namespace svx
         void    executeSelectAll( );
         void    executeClipboardSlot( SfxSlotId _nSlot );
 
-    private:
         bool    isControllerListening() const { return !m_aControlObservers.empty(); }
 
         rtl::Reference<FmTextControlFeature>
