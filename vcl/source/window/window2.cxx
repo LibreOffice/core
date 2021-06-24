@@ -262,9 +262,18 @@ void Window::StartTracking( StartTrackingFlags nFlags )
         pSVData->mpWinData->mpTrackTimer->Start();
     }
 
-    pSVData->mpWinData->mpTrackWin   = this;
+    pSVData->mpWinData->mpTrackWin = this;
     pSVData->mpWinData->mnTrackFlags = nFlags;
     CaptureMouse();
+}
+
+void Window::LocalStartTracking( StartTrackingFlags /*nFlags*/ )
+{
+    if (mpWindowImpl->mpFrameData->mpTrackWin &&
+        mpWindowImpl->mpFrameData->mpTrackWin.get() != this)
+        mpWindowImpl->mpFrameData->mpTrackWin->EndTracking( TrackingEventFlags::Cancel );
+
+    mpWindowImpl->mpFrameData->mpTrackWin = this;
 }
 
 void Window::EndTracking( TrackingEventFlags nFlags )
@@ -280,7 +289,7 @@ void Window::EndTracking( TrackingEventFlags nFlags )
         pSVData->mpWinData->mpTrackTimer = nullptr;
     }
 
-    pSVData->mpWinData->mpTrackWin    = nullptr;
+    pSVData->mpWinData->mpTrackWin = nullptr;
     pSVData->mpWinData->mnTrackFlags  = StartTrackingFlags::NONE;
     ReleaseMouse();
 
@@ -307,9 +316,48 @@ void Window::EndTracking( TrackingEventFlags nFlags )
     }
 }
 
+void Window::LocalEndTracking( TrackingEventFlags nFlags )
+{
+    if (!mpWindowImpl)
+        return;
+
+    if (mpWindowImpl->mpFrameData->mpTrackWin &&
+        mpWindowImpl->mpFrameData->mpTrackWin.get() != this)
+        return;
+
+    mpWindowImpl->mpFrameData->mpTrackWin = nullptr;
+
+    // call EndTracking if required
+    {
+        Point aMousePos( mpWindowImpl->mpFrameData->mnLastMouseX, mpWindowImpl->mpFrameData->mnLastMouseY );
+        if( GetOutDev()->ImplIsAntiparallel() )
+        {
+            // re-mirror frame pos at pChild
+            const OutputDevice *pOutDev = GetOutDev();
+            pOutDev->ReMirror( aMousePos );
+        }
+
+        MouseEvent      aMEvt( ImplFrameToOutput( aMousePos ),
+                               mpWindowImpl->mpFrameData->mnClickCount, MouseEventModifiers::NONE,
+                               mpWindowImpl->mpFrameData->mnMouseCode,
+                               mpWindowImpl->mpFrameData->mnMouseCode );
+        TrackingEvent   aTEvt( aMEvt, nFlags | TrackingEventFlags::End );
+        // CompatTracking effectively
+        if (!mpWindowImpl || mpWindowImpl->mbInDispose)
+            return Window::Tracking( aTEvt );
+        else
+            return Tracking( aTEvt );
+    }
+}
+
 bool Window::IsTracking() const
 {
     return (ImplGetSVData()->mpWinData->mpTrackWin == this);
+}
+
+bool Window::IsLocalTracking() const
+{
+    return (mpWindowImpl->mpFrameData->mpTrackWin == this);
 }
 
 void Window::StartAutoScroll( StartAutoScrollFlags nFlags )
