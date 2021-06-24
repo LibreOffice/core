@@ -2995,16 +2995,13 @@ void ScGridWindow::Tracking( const TrackingEvent& rTEvt )
     }
     else if ( rTEvt.IsTrackingEnded() )
     {
-        if ( !comphelper::LibreOfficeKit::isActive() )
-        {
-            // MouseButtonUp always with matching buttons (eg for test tool, # 63148 #)
-            // The tracking event will indicate if it was completed and not canceled.
-            MouseEvent aUpEvt( rMEvt.GetPosPixel(), rMEvt.GetClicks(),
-                                rMEvt.GetMode(), nButtonDown, rMEvt.GetModifier() );
-            MouseButtonUp( aUpEvt );
-        }
+        // MouseButtonUp always with matching buttons (eg for test tool, # 63148 #)
+        // The tracking event will indicate if it was completed and not canceled.
+        MouseEvent aUpEvt( rMEvt.GetPosPixel(), rMEvt.GetClicks(),
+                            rMEvt.GetMode(), nButtonDown, rMEvt.GetModifier() );
+        MouseButtonUp( aUpEvt );
     }
-    else if ( !comphelper::LibreOfficeKit::isActive() )
+    else
         MouseMove( rMEvt );
 }
 
