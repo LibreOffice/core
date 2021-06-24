@@ -27,6 +27,7 @@ import subprocess
 import sys
 import threading
 import yaml
+import argparse
 
 
 def ignoreRemoval(include, toAdd, absFileName, moduleRules):
@@ -212,7 +213,7 @@ def processIWYUOutput(iwyuOutput, moduleRules, fileName):
     return len(toRemove)
 
 
-def run_tool(task_queue, failed_files):
+def run_tool(task_queue, failed_files, dontstop):
     while True:
         invocation, moduleRules = task_queue.get()
         if not len(failed_files):
@@ -223,7 +224,8 @@ def run_tool(task_queue, failed_files):
                 print("ERROR: A file is probably not self contained, check this commands output:\n" + invocation)
             elif retcode > 0:
                 print("ERROR: The following command found unused includes:\n" + invocation)
-                failed_files.append(invocation)
+                if not dontstop:
+                    failed_files.append(invocation)
         task_queue.task_done()
 
 
@@ -240,14 +242,15 @@ def isInUnoIncludeFile(path):
             or path.startswith("include/uno/")
 
 
-def tidy(compileCommands, paths):
+def tidy(compileCommands, paths, dontstop):
     return_code = 0
+
     try:
         max_task = multiprocessing.cpu_count()
         task_queue = queue.Queue(max_task)
         failed_files = []
         for _ in range(max_task):
-            t = threading.Thread(target=run_tool, args=(task_queue, failed_files))
+            t = threading.Thread(target=run_tool, args=(task_queue, failed_files, dontstop))
             t.daemon = True
             t.start()
 
@@ -300,8 +303,16 @@ def tidy(compileCommands, paths):
 
 
 def main(argv):
+    parser = argparse.ArgumentParser(description='Check source files for unneeded includes.')
+    parser.add_argument('--dontstop', action='store_true',
+                    help='Don\'t stop on errors. Useful for periodic re-check of large amount of files')
+    parser.add_argument('Files' , nargs='*',
+                    help='The files to be checked')
+
+    args = parser.parse_args()
+
     if not len(argv):
-        print("usage: find-unneeded-includes [FILE]...")
+        parser.print_help()
         return
 
     try:
@@ -311,7 +322,7 @@ def main(argv):
         print ("File 'compile_commands.json' does not exist, please run:\nmake vim-ide-integration")
         sys.exit(-1)
 
-    tidy(compileCommands, paths=argv)
+    tidy(compileCommands, paths=args.Files, dontstop=args.dontstop)
 
 if __name__ == '__main__':
     main(sys.argv[1:])
