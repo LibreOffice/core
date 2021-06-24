@@ -39,7 +39,7 @@ namespace sdr::contact {
 
     //= ViewContactOfUnoControl
 
-    class ViewContactOfUnoControl : public ViewContactOfSdrObj
+    class ViewContactOfUnoControl final : public ViewContactOfSdrObj
     {
     public:
         // access to SdrObject
@@ -57,14 +57,12 @@ namespace sdr::contact {
         css::uno::Reference< css::awt::XControl >
             getTemporaryControlForWindow( const vcl::Window& _rWindow, css::uno::Reference< css::awt::XControlContainer >& _inout_ControlContainer ) const;
 
-    protected:
+    private:
         virtual ViewObjectContact& CreateObjectSpecificViewObjectContact( ObjectContact& _rObjectContact ) override;
 
-    private:
         ViewContactOfUnoControl( const ViewContactOfUnoControl& ) = delete;
         ViewContactOfUnoControl& operator=( const ViewContactOfUnoControl& ) = delete;
 
-    protected:
         // This method is responsible for creating the graphical visualisation data
         // ONLY based on model data
         virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;

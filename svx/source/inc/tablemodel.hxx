@@ -50,7 +50,7 @@ protected:
 
 typedef ::cppu::WeakComponentImplHelper< css::table::XTable, css::util::XBroadcaster > TableModelBase;
 
-class TableModel : public ::cppu::BaseMutex,
+class TableModel final : public ::cppu::BaseMutex,
                    public TableModelBase,
                    public ICellRange
 {
@@ -135,7 +135,7 @@ public:
     virtual void SAL_CALL lockBroadcasts() override;
     virtual void SAL_CALL unlockBroadcasts() override;
 
-protected:
+private:
     void notifyModification();
 
     void insertColumns( sal_Int32 nIndex, sal_Int32 nCount );

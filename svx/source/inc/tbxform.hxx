@@ -33,7 +33,7 @@ private:
     SfxToolBoxControl* m_pController;
 };
 
-class SvxFmTbxCtlAbsRec : public SfxToolBoxControl
+class SvxFmTbxCtlAbsRec final : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -47,7 +47,7 @@ public:
                                               const SfxPoolItem* pState) override;
 };
 
-class SvxFmTbxCtlRecText : public SfxToolBoxControl
+class SvxFmTbxCtlRecText final : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -58,7 +58,7 @@ public:
     virtual VclPtr<InterimItemWindow> CreateItemWindow(vcl::Window* pParent) override;
 };
 
-class SvxFmTbxCtlRecFromText : public SfxToolBoxControl
+class SvxFmTbxCtlRecFromText final : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -71,7 +71,7 @@ public:
 
 class LabelItemWindow;
 
-class SvxFmTbxCtlRecTotal : public SfxToolBoxControl
+class SvxFmTbxCtlRecTotal final : public SfxToolBoxControl
 {
     VclPtr<LabelItemWindow> m_xFixedText;
 
@@ -86,14 +86,14 @@ public:
                                               const SfxPoolItem* pState) override;
 };
 
-class SvxFmTbxNextRec : public SfxToolBoxControl
+class SvxFmTbxNextRec final : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
     SvxFmTbxNextRec(sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx);
 };
 
-class SvxFmTbxPrevRec : public SfxToolBoxControl
+class SvxFmTbxPrevRec final : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();

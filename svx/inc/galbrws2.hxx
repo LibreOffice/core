@@ -67,7 +67,7 @@ struct DispatchInfo;
 
 namespace svx::sidebar { class GalleryControl; }
 
-class GalleryBrowser2 : public SfxListener
+class GalleryBrowser2 final : public SfxListener
 {
     friend class GalleryBrowser;
     friend class svx::sidebar::GalleryControl;
@@ -158,7 +158,7 @@ public:
     DECL_STATIC_LINK( GalleryBrowser2, AsyncDispatch_Impl, void*, void );
 };
 
-class GalleryDragDrop : public DropTargetHelper
+class GalleryDragDrop final : public DropTargetHelper
 {
 private:
     GalleryBrowser2* m_pParent;

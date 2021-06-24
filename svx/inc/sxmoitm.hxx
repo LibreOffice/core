@@ -24,7 +24,7 @@
 
 // Overlap of the measure line over the measure helper lines
 // Only of the measure arrows are on the outside
-class SdrMeasureOverhangItem : public SdrMetricItem
+class SdrMeasureOverhangItem final : public SdrMetricItem
 {
 public:
     SdrMeasureOverhangItem(tools::Long nVal)

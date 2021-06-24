@@ -187,7 +187,7 @@ namespace svxform
         return m_aCurrentFormats;
     }
 
-    class OControlExchange : public OLocalExchange, public OControlTransferData
+    class OControlExchange final : public OLocalExchange, public OControlTransferData
     {
     public:
         OControlExchange( );
@@ -201,12 +201,12 @@ namespace svxform
         inline static bool  hasControlPathFormat( const DataFlavorExVector& _rFormats );
         inline static bool  hasHiddenControlModelsFormat( const DataFlavorExVector& _rFormats );
 
-    protected:
+    private:
         virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
         virtual void        AddSupportedFormats() override;
     };
 
-    class OControlExchangeHelper : public OLocalExchangeHelper
+    class OControlExchangeHelper final : public OLocalExchangeHelper
     {
     public:
         OControlExchangeHelper() : OLocalExchangeHelper() { }
@@ -214,7 +214,7 @@ namespace svxform
         OControlExchange* operator->() const { return static_cast< OControlExchange* >( m_xTransferable.get() ); }
         OControlExchange& operator*() const { return *static_cast< OControlExchange* >( m_xTransferable.get() ); }
 
-    protected:
+    private:
         virtual rtl::Reference<OLocalExchange> createExchange() const override;
     };
 

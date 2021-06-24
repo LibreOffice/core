@@ -166,7 +166,7 @@ namespace svxform
         }
     };
 
-    class DataTreeDropTarget : public DropTargetHelper
+    class DataTreeDropTarget final : public DropTargetHelper
     {
     private:
         virtual sal_Int8 AcceptDrop(const AcceptDropEvent& rEvt) override;
@@ -176,7 +176,7 @@ namespace svxform
         DataTreeDropTarget(weld::TreeView& rWidget);
     };
 
-    class XFormsPage : public BuilderPage
+    class XFormsPage final : public BuilderPage
     {
     private:
         MethodString                m_aMethodString;
@@ -313,12 +313,11 @@ namespace svxform
         void                        DisableNotify( bool _bDisable ) { m_bIsNotifyDisabled = _bDisable; }
     };
 
-    class DataNavigator : public SfxDockingWindow, public SfxControllerItem
+    class DataNavigator final : public SfxDockingWindow, public SfxControllerItem
     {
     private:
         std::unique_ptr<DataNavigatorWindow> m_xDataWin;
 
-    protected:
         virtual Size                CalcDockingSize( SfxChildAlignment ) override;
         virtual SfxChildAlignment   CheckAlignment( SfxChildAlignment, SfxChildAlignment ) override;
 
@@ -333,7 +332,7 @@ namespace svxform
                                                   const SfxPoolItem* pState ) override;
     };
 
-    class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) DataNavigatorManager : public SfxChildWindow
+    class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) DataNavigatorManager final : public SfxChildWindow
     {
     public:
         SVX_DLLPRIVATE DataNavigatorManager( vcl::Window* pParent, sal_uInt16 nId,
@@ -341,7 +340,7 @@ namespace svxform
         SFX_DECL_CHILDWINDOW( DataNavigatorManager );
     };
 
-    class AddDataItemDialog : public weld::GenericDialogController
+    class AddDataItemDialog final : public weld::GenericDialogController
     {
     private:
         css::uno::Reference< css::xforms::XFormsUIHelper1 >
@@ -397,7 +396,7 @@ namespace svxform
         void                InitText( DataItemType _eType );
     };
 
-    class AddConditionDialog : public weld::GenericDialogController
+    class AddConditionDialog final : public weld::GenericDialogController
     {
     private:
         Idle                           m_aResultIdle;
@@ -432,7 +431,7 @@ namespace svxform
         }
     };
 
-    class NamespaceItemDialog : public weld::GenericDialogController
+    class NamespaceItemDialog final : public weld::GenericDialogController
     {
     private:
         AddConditionDialog* m_pConditionDlg;
@@ -458,7 +457,7 @@ namespace svxform
         virtual ~NamespaceItemDialog() override;
     };
 
-    class ManageNamespaceDialog : public weld::GenericDialogController
+    class ManageNamespaceDialog final : public weld::GenericDialogController
     {
     private:
         AddConditionDialog* m_pConditionDlg;
@@ -483,7 +482,7 @@ namespace svxform
         OUString GetURL() const { return m_xUrlED->get_text(); }
     };
 
-    class AddSubmissionDialog : public weld::GenericDialogController
+    class AddSubmissionDialog final : public weld::GenericDialogController
     {
     private:
         MethodString         m_aMethodString;
@@ -524,7 +523,7 @@ namespace svxform
         const css::uno::Reference< css::xforms::XSubmission >& GetNewSubmission() const { return m_xNewSubmission; }
     };
 
-    class AddModelDialog : public weld::GenericDialogController
+    class AddModelDialog final : public weld::GenericDialogController
     {
     private:
         std::unique_ptr<weld::Entry> m_xNameED;
@@ -542,7 +541,7 @@ namespace svxform
         void             SetModifyDoc( const bool bModify ) { m_xModifyCB->set_active(bModify); }
     };
 
-    class AddInstanceDialog : public weld::GenericDialogController
+    class AddInstanceDialog final : public weld::GenericDialogController
     {
     private:
         OUString                m_sAllFilterName;
@@ -568,7 +567,7 @@ namespace svxform
         void             SetLinkInstance( bool bLink ) { m_xLinkInstanceCB->set_active(bLink); }
     };
 
-    class LinkedInstanceWarningBox : public weld::MessageDialogController
+    class LinkedInstanceWarningBox final : public weld::MessageDialogController
     {
     public:
         LinkedInstanceWarningBox(weld::Widget* pParent);

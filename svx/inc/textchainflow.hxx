@@ -83,7 +83,7 @@ private:
 };
 
 // NOTE: EditingTextChainFlow might be strongly coupled with behavior in SdrTextObj::onChainingEvent
-class EditingTextChainFlow : public TextChainFlow
+class EditingTextChainFlow final : public TextChainFlow
 {
 public:
     EditingTextChainFlow(SdrTextObj*);
@@ -91,12 +91,11 @@ public:
 
     //virtual void ExecuteOverflow(SdrOutliner *, SdrOutliner *) override;
 
-protected:
+private:
     virtual void impLeaveOnlyNonOverflowingText(SdrOutliner*) override;
 
     virtual void impSetFlowOutlinerParams(SdrOutliner*, SdrOutliner*) override;
 
-private:
     void impBroadcastCursorInfo() const;
 };
 

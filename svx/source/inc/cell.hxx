@@ -42,7 +42,7 @@ namespace sdr::properties { class TextProperties; }
 namespace sdr::table {
 
 
-class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) Cell :  public SdrText,
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) Cell final : public SdrText,
                 public SvxUnoTextBase,
                 public css::table::XMergeableCell,
                 public css::awt::XLayoutConstrains,
@@ -99,8 +99,8 @@ public:
 
     // XInterface
     SVX_DLLPRIVATE virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& Type ) override;
-    SVX_DLLPRIVATE virtual void SAL_CALL acquire() noexcept override;
-    SVX_DLLPRIVATE virtual void SAL_CALL release() noexcept override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
     // XTypeProvider
     SVX_DLLPRIVATE virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
@@ -114,7 +114,7 @@ public:
     // XMergeableCell
     SVX_DLLPRIVATE virtual ::sal_Int32 SAL_CALL getRowSpan() override;
     SVX_DLLPRIVATE virtual ::sal_Int32 SAL_CALL getColumnSpan() override;
-    SVX_DLLPRIVATE virtual sal_Bool SAL_CALL isMerged() override;
+    virtual sal_Bool SAL_CALL isMerged() override;
 
     // XCell
     SVX_DLLPRIVATE virtual OUString SAL_CALL getFormula() override;
@@ -181,13 +181,12 @@ public:
 
     void dumpAsXml(xmlTextWriterPtr pWriter, sal_Int32 nRow, sal_Int32 nCol) const;
 
-protected:
+private:
     SVX_DLLPRIVATE virtual const SfxItemSet& GetObjectItemSet() override;
     SVX_DLLPRIVATE void SetObjectItem(const SfxPoolItem& rItem);
 
     SVX_DLLPRIVATE static css::uno::Any GetAnyForItem( SfxItemSet const & aSet, const SfxItemPropertyMapEntry* pMap );
 
-private:
     /// @throws css::uno::RuntimeException
     SVX_DLLPRIVATE Cell( SdrTableObj& rTableObj );
     SVX_DLLPRIVATE virtual ~Cell() noexcept override;

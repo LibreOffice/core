@@ -33,7 +33,7 @@ namespace svx::sidebar {
 
 /** This panel provides buttons for inserting shapes into a document.
 */
-class DefaultShapesPanel
+class DefaultShapesPanel final
     : public PanelLayout, public SvxShapeCommandsMap
 {
 public:

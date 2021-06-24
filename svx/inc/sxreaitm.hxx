@@ -23,7 +23,7 @@
 
 #include "sxfiitm.hxx"
 
-class SdrResizeXAllItem: public SdrFractionItem {
+class SdrResizeXAllItem final : public SdrFractionItem {
 public:
     SdrResizeXAllItem(): SdrFractionItem(SDRATTR_RESIZEXALL,Fraction(1,1)) {}
     virtual SdrResizeXAllItem* Clone(SfxItemPool*) const override
@@ -32,7 +32,7 @@ public:
     }
 };
 
-class SdrResizeYAllItem: public SdrFractionItem {
+class SdrResizeYAllItem final : public SdrFractionItem {
 public:
     SdrResizeYAllItem(): SdrFractionItem(SDRATTR_RESIZEYALL,Fraction(1,1)) {}
     virtual SdrResizeYAllItem* Clone(SfxItemPool*) const override

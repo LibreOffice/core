@@ -22,7 +22,7 @@
 #include <svx/svddef.hxx>
 #include <svx/sdangitm.hxx>
 
-class SdrShearAngleItem : public SdrAngleItem
+class SdrShearAngleItem final : public SdrAngleItem
 {
 public:
     SdrShearAngleItem(Degree100 nAngle = 0_deg100)

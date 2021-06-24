@@ -36,7 +36,7 @@ namespace svxform
         css::frame::XFrameActionListener,
         css::xml::dom::events::XEventListener > DataListener_t;
 
-    class DataListener : public DataListener_t
+    class DataListener final : public DataListener_t
     {
     private:
         DataNavigatorWindow* m_pNaviWin;
@@ -44,7 +44,7 @@ namespace svxform
     public:
         DataListener( DataNavigatorWindow* pNaviWin );
 
-    protected:
+    private:
         virtual ~DataListener() override;
 
     public:

@@ -128,9 +128,8 @@ namespace svx
         A <em>feature</em> is for instance moving the form associated with the controller
         to a certain position, or reloading the form, and so on.</p>
     */
-    class FormControllerHelper : public FormControllerHelper_Base
+    class FormControllerHelper final : public FormControllerHelper_Base
     {
-    protected:
         IControllerFeatureInvalidation* m_pInvalidationCallback;
         css::uno::Reference< css::form::runtime::XFormOperations >
                                         m_xFormOperations;
@@ -174,7 +173,7 @@ namespace svx
         */
         void        dispose();
 
-    protected:
+    private:
         /// dtor
         virtual ~FormControllerHelper() override;
 
@@ -188,7 +187,6 @@ namespace svx
         // XEventListener
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
-    private:
         enum FormOperation { EXECUTE, EXECUTE_ARGS, COMMIT_CONTROL, COMMIT_RECORD };
 
         bool    impl_operateForm_nothrow(

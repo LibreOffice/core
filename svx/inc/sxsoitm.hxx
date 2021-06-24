@@ -22,7 +22,7 @@
 #include <svx/svddef.hxx>
 #include <svx/sdangitm.hxx>
 
-class SdrHorzShearOneItem: public SdrAngleItem {
+class SdrHorzShearOneItem final : public SdrAngleItem {
 public:
     SdrHorzShearOneItem(): SdrAngleItem(SDRATTR_HORZSHEARONE,0_deg100) {}
     SdrHorzShearOneItem* Clone(SfxItemPool*) const override
@@ -31,7 +31,7 @@ public:
     }
 };
 
-class SdrVertShearOneItem: public SdrAngleItem {
+class SdrVertShearOneItem final : public SdrAngleItem {
 public:
     SdrVertShearOneItem(): SdrAngleItem(SDRATTR_VERTSHEARONE,0_deg100) {}
     SdrVertShearOneItem* Clone(SfxItemPool*) const override
