@@ -2921,7 +2921,10 @@ void ScTabView::ActivatePart( ScSplitPos eWhich )
         // (SelectionEngine calls CaptureMouse for SetWindow)
         //! someday SelectionEngine itself should call StartTracking!?!
         pGridWin[eWhich]->ReleaseMouse();
-        pGridWin[eWhich]->StartTracking();
+        if (comphelper::LibreOfficeKit::isActive())
+            pGridWin[eWhich]->LocalStartTracking();
+        else
+            pGridWin[eWhich]->StartTracking();
     }
 
     if ( bTopCap && pColBar[eNewH] )
