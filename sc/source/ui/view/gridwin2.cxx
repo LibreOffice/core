@@ -178,7 +178,10 @@ void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& 
             {
                 bDPMouse = true;
                 DPTestMouse( rMEvt, true );
-                StartTracking();
+                if (comphelper::LibreOfficeKit::isActive())
+                    LocalStartTracking();
+                else
+                    StartTracking();
             }
         }
         else if ( pDPObj->IsFilterButton(aPos) )

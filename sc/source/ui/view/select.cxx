@@ -31,6 +31,7 @@
 #include <markdata.hxx>
 #include <gridwin.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <comphelper/lok.hxx>
 
 #if defined(_WIN32)
 #define SC_SELENG_REFMODE_UPDATE_INTERVAL_MIN 65
@@ -202,8 +203,14 @@ void ScViewFunctionSet::BeginDrag()
     pTransferObj->SetDragSource( pDocSh, rMark );
 
     vcl::Window* pWindow = pViewData->GetActiveWin();
-    if ( pWindow->IsTracking() )
-        pWindow->EndTracking( TrackingEventFlags::Cancel );    // abort selecting
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        if (pWindow->IsLocalTracking())
+            pWindow->LocalEndTracking(TrackingEventFlags::Cancel);
+    }
+    else if (pWindow->IsTracking())
+        pWindow->EndTracking(TrackingEventFlags::Cancel);    // abort selecting
 
     SC_MOD()->SetDragObject( pTransferObj.get(), nullptr );      // for internal D&D
     pTransferObj->StartDrag( pWindow, nDragActions );
