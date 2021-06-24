@@ -34,6 +34,7 @@
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
+#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
@@ -1568,25 +1569,35 @@ namespace emfplushelper
 
                         css::lang::Locale locale;
                         double stringAlignmentHorizontalOffset = 0.0;
+                        double stringAlignmentVerticalOffset = font->emSize;
                         if (stringFormat)
                         {
-                            SAL_WARN_IF(stringFormat->DirectionRightToLeft(), "drawinglayer.emf", "EMF+\t DrawString Alignment TODO For a right-to-left layout rectangle, the origin should be at the upper right.");
-                            if (stringFormat->stringAlignment == StringAlignmentNear)
-                            // Alignment is to the left side of the layout rectangle (lx, ly, lw, lh)
-                            {
-                                stringAlignmentHorizontalOffset = stringFormat->leadingMargin * font->emSize;
-                            } else if (stringFormat->stringAlignment == StringAlignmentCenter)
-                            // Alignment is centered between the origin and extent of the layout rectangle
-                            {
-                                stringAlignmentHorizontalOffset = 0.5 * lw + stringFormat->leadingMargin * font->emSize - 0.3 * font->emSize * stringLength;
-                            } else if (stringFormat->stringAlignment == StringAlignmentFar)
-                            // Alignment is to the right side of the layout rectangle
-                            {
-                                stringAlignmentHorizontalOffset = lw - stringFormat->trailingMargin * font->emSize - 0.6 * font->emSize * stringLength;
-                            }
-
-                            LanguageTag aLanguageTag(static_cast< LanguageType >(stringFormat->language));
+                            LanguageTag aLanguageTag(static_cast<LanguageType>(stringFormat->language));
                             locale = aLanguageTag.getLocale();
+                            drawinglayer::primitive2d::TextLayouterDevice aTextLayouter;
+
+                            aTextLayouter.setFontAttribute(fontAttribute, font->emSize,
+                                font->emSize, locale);
+
+                            double fTextWidth = aTextLayouter.getTextWidth(text, 0, stringLength);
+                            SAL_WARN_IF(stringFormat->DirectionRightToLeft(), "drawinglayer.emf",
+                                        "EMF+\t DrawString Alignment TODO For a right-to-left layout rectangle, the origin should be at the upper right.");
+                            if (stringFormat->stringAlignment == StringAlignmentNear)
+                                // Alignment is to the left side of the layout rectangle (lx, ly, lw, lh)
+                                stringAlignmentHorizontalOffset = stringFormat->leadingMargin * font->emSize;
+                            else if (stringFormat->stringAlignment == StringAlignmentCenter)
+                                // Alignment is centered between the origin and extent of the layout rectangle
+                                stringAlignmentHorizontalOffset = 0.5 * lw + (stringFormat->leadingMargin - stringFormat->trailingMargin) * font->emSize - 0.5 * fTextWidth;
+                            else if (stringFormat->stringAlignment == StringAlignmentFar)
+                                // Alignment is to the right side of the layout rectangle
+                                stringAlignmentHorizontalOffset = lw - stringFormat->trailingMargin * font->emSize - fTextWidth;
+
+                            if (stringFormat->lineAlign == StringAlignmentNear)
+                                stringAlignmentVerticalOffset = font->emSize;
+                            else if (stringFormat->lineAlign == StringAlignmentCenter)
+                                stringAlignmentVerticalOffset = 0.5 * lh + 0.5 * font->emSize;
+                            else if (stringFormat->lineAlign == StringAlignmentFar)
+                                stringAlignmentVerticalOffset = lh;
                         }
                         else
                         {
@@ -1600,7 +1611,8 @@ namespace emfplushelper
 
                         const basegfx::B2DHomMatrix transformMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(
                                     ::basegfx::B2DSize(font->emSize, font->emSize),
-                                    ::basegfx::B2DPoint(lx + stringAlignmentHorizontalOffset, ly + font->emSize));
+                                    ::basegfx::B2DPoint(lx + stringAlignmentHorizontalOffset,
+                                                        ly + stringAlignmentVerticalOffset));
 
                         Color uncorrectedColor = EMFPGetBrushColorOrARGBColor(flags, brushId);
                         Color color;
