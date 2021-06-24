@@ -4257,7 +4257,6 @@ class GtkDropTargetDropContext : public cppu::WeakImplHelper<css::datatransfer::
     GdkDragContext *m_pContext;
     guint m_nTime;
 #else
-    GtkDropTargetAsync* m_pContext;
     GdkDrop* m_pDrop;
 #endif
 public:
@@ -4266,9 +4265,8 @@ public:
         : m_pContext(pContext)
         , m_nTime(nTime)
 #else
-    GtkDropTargetDropContext(GtkDropTargetAsync* pContext, GdkDrop* pDrop)
-        : m_pContext(pContext)
-        , m_pDrop(pDrop)
+    GtkDropTargetDropContext(GdkDrop* pDrop)
+        : m_pDrop(pDrop)
 #endif
     {
     }
@@ -4291,7 +4289,7 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gdk_drag_status(m_pContext, static_cast<GdkDragAction>(0), m_nTime);
 #else
-        gtk_drop_target_async_reject_drop(m_pContext, m_pDrop);
+        gdk_drop_status(m_pDrop, gdk_drop_get_actions(m_pDrop), static_cast<GdkDragAction>(0));
 #endif
     }
 
@@ -4493,7 +4491,7 @@ gboolean GtkInstDropTarget::signalDragDrop(GtkDropTargetAsync* context, GdkDrop*
 #if !GTK_CHECK_VERSION(4, 0, 0)
     aEvent.Context = new GtkDropTargetDropContext(context, time);
 #else
-    aEvent.Context = new GtkDropTargetDropContext(context, drop);
+    aEvent.Context = new GtkDropTargetDropContext(drop);
 #endif
     aEvent.LocationX = x;
     aEvent.LocationY = y;
@@ -4549,7 +4547,6 @@ class GtkDropTargetDragContext : public cppu::WeakImplHelper<css::datatransfer::
     GdkDragContext *m_pContext;
     guint m_nTime;
 #else
-    GtkDropTargetAsync* m_pContext;
     GdkDrop* m_pDrop;
 #endif
 public:
@@ -4558,9 +4555,8 @@ public:
         : m_pContext(pContext)
         , m_nTime(nTime)
 #else
-    GtkDropTargetDragContext(GtkDropTargetAsync* pContext, GdkDrop* pDrop)
-        : m_pContext(pContext)
-        , m_pDrop(pDrop)
+    GtkDropTargetDragContext(GdkDrop* pDrop)
+        : m_pDrop(pDrop)
 #endif
     {
     }
@@ -4579,7 +4575,7 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gdk_drag_status(m_pContext, static_cast<GdkDragAction>(0), m_nTime);
 #else
-        gtk_drop_target_async_reject_drop(m_pContext, m_pDrop);
+        gdk_drop_status(m_pDrop, gdk_drop_get_actions(m_pDrop), static_cast<GdkDragAction>(0));
 #endif
     }
 };
@@ -4650,7 +4646,7 @@ GdkDragAction GtkInstDropTarget::signalDragMotion(GtkDropTargetAsync *context, G
 #if !GTK_CHECK_VERSION(4,0,0)
     rtl::Reference<GtkDropTargetDragContext> pContext = new GtkDropTargetDragContext(context, time);
 #else
-    rtl::Reference<GtkDropTargetDragContext> pContext = new GtkDropTargetDragContext(context, pDrop);
+    rtl::Reference<GtkDropTargetDragContext> pContext = new GtkDropTargetDragContext(pDrop);
 #endif
     //preliminary accept the Drag and select the preferred action, the fire_* will
     //inform the original caller of our choice and the callsite can decide
@@ -4690,6 +4686,10 @@ GdkDragAction GtkInstDropTarget::signalDragMotion(GtkDropTargetAsync *context, G
 
 #if !GTK_CHECK_VERSION(4,0,0)
     gdk_drag_status(context, eAction, time);
+#else
+    gdk_drop_status(pDrop,
+                    static_cast<GdkDragAction>(eAction | gdk_drop_get_actions(pDrop)),
+                    eAction);
 #endif
     aEvent.Context = pContext;
     aEvent.LocationX = x;
