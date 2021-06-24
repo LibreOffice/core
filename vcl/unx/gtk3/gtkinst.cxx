@@ -1429,9 +1429,6 @@ G_BEGIN_DECLS
 
 #define CLIPBOARD_CONTENT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), clipboard_content_get_type(), ClipboardContent))
 
-typedef struct _ClipboardContent ClipboardContent;
-typedef struct _ClipboardContentClass ClipboardContentClass;
-
 struct _ClipboardContent
 {
     GdkContentProvider parent;
@@ -1442,8 +1439,6 @@ struct _ClipboardContentClass
 {
     GdkContentProviderClass parent_class;
 };
-
-GType clipboard_content_get_type();
 
 G_DEFINE_TYPE(ClipboardContent, clipboard_content, GDK_TYPE_CONTENT_PROVIDER)
 

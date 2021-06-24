@@ -7,14 +7,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-// make gtk4 plug advertise correctly as gtk4
-#define GTK_TOOLKIT_NAME "gtk4"
+#pragma once
 
-#include "contentprovider.hxx"
-#include "convert3to4.hxx"
-#include "notifyinglayout.hxx"
-#include "surfacepaintable.hxx"
+#include <gtk/gtk.h>
 
-#include "../gtk3/gtkinst.cxx"
+G_BEGIN_DECLS
+
+G_DECLARE_FINAL_TYPE(ClipboardContent, clipboard_content, CLIPBOARD, CONTENT, GdkContentProvider)
+
+G_END_DECLS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
