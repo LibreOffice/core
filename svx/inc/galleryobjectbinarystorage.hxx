@@ -22,7 +22,7 @@
 #include <tools/urlobj.hxx>
 #include <svx/galleryobjectstorage.hxx>
 
-class GalleryObjectBinaryStorage : public GalleryObjectStorage
+class GalleryObjectBinaryStorage final : public GalleryObjectStorage
 {
 private:
     INetURLObject m_aURL;

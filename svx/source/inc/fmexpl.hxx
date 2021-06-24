@@ -52,7 +52,7 @@ class SdrMarkList;
 
 
 class FmEntryData;
-class FmNavInsertedHint : public SfxHint
+class FmNavInsertedHint final : public SfxHint
 {
     FmEntryData* pEntryData;
     sal_uInt32 nPos;
@@ -66,7 +66,7 @@ public:
 };
 
 
-class FmNavModelReplacedHint : public SfxHint
+class FmNavModelReplacedHint final : public SfxHint
 {
     FmEntryData* pEntryData;    // the data of the entry that has got a new model
 
@@ -78,7 +78,7 @@ public:
 };
 
 
-class FmNavRemovedHint : public SfxHint
+class FmNavRemovedHint final : public SfxHint
 {
     FmEntryData* pEntryData;
 
@@ -90,7 +90,7 @@ public:
 };
 
 
-class FmNavNameChangedHint : public SfxHint
+class FmNavNameChangedHint final : public SfxHint
 {
     FmEntryData*    pEntryData;
     OUString          aNewName;
@@ -104,7 +104,7 @@ public:
 };
 
 
-class FmNavClearedHint : public SfxHint
+class FmNavClearedHint final : public SfxHint
 {
 public:
     FmNavClearedHint();
@@ -112,7 +112,7 @@ public:
 };
 
 
-class FmNavViewMarksChanged : public SfxHint
+class FmNavViewMarksChanged final : public SfxHint
 {
     FmFormView* pView;
 public:
@@ -201,7 +201,7 @@ public:
 
 typedef std::set<FmEntryData*> FmEntryDataArray;
 
-class FmNavRequestSelectHint : public SfxHint
+class FmNavRequestSelectHint final : public SfxHint
 {
     FmEntryDataArray    m_arredToSelect;
     bool                m_bMixedSelection;
@@ -219,7 +219,7 @@ public:
 };
 
 
-class FmFormData : public FmEntryData
+class FmFormData final : public FmEntryData
 {
     css::uno::Reference< css::form::XForm >           m_xForm;
 
@@ -235,7 +235,7 @@ public:
 };
 
 
-class FmControlData : public FmEntryData
+class FmControlData final : public FmEntryData
 {
     css::uno::Reference< css::form::XFormComponent >  m_xFormComponent;
 
@@ -298,7 +298,7 @@ namespace svxform
         void Remove( const css::uno::Reference< css::uno::XInterface >& _rxElement );
     };
 
-    class NavigatorTreeModel : public SfxBroadcaster
+    class NavigatorTreeModel final : public SfxBroadcaster
                            ,public SfxListener
     {
         friend class NavigatorTree;
@@ -358,7 +358,7 @@ namespace svxform
 
     class NavigatorTree;
 
-    class NavigatorTreeDropTarget : public DropTargetHelper
+    class NavigatorTreeDropTarget final : public DropTargetHelper
     {
     private:
         NavigatorTree& m_rTreeView;
@@ -514,12 +514,11 @@ namespace svxform
         bool    doingKeyboardCut( ) const { return m_bKeyboardCut; }
     };
 
-    class NavigatorFrame : public SfxDockingWindow, public SfxControllerItem
+    class NavigatorFrame final : public SfxDockingWindow, public SfxControllerItem
     {
     private:
         std::unique_ptr<NavigatorTree> m_xNavigatorTree;
 
-    protected:
         virtual bool Close() override;
         virtual void GetFocus() override;
         virtual Size CalcDockingSize( SfxChildAlignment ) override;
@@ -538,7 +537,7 @@ namespace svxform
         void FillInfo( SfxChildWinInfo& rInfo ) const override;
     };
 
-    class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) NavigatorFrameManager : public SfxChildWindow
+    class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) NavigatorFrameManager final : public SfxChildWindow
     {
     public:
         SVX_DLLPRIVATE NavigatorFrameManager( vcl::Window *pParent, sal_uInt16 nId, SfxBindings *pBindings,

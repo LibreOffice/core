@@ -67,12 +67,11 @@ namespace svx
     /** The table implementation of the vcl control.
     */
 
-    class SvxShowCharSetAcc : public ::comphelper::OAccessibleSelectionHelper,
+    class SvxShowCharSetAcc final : public ::comphelper::OAccessibleSelectionHelper,
                               public OAccessibleHelper_Base
     {
         ::std::vector< css::uno::Reference< css::accessibility::XAccessible > > m_aChildren;
         SvxShowCharSet*             m_pParent; // the vcl control
-    protected:
         virtual void SAL_CALL disposing() override;
     public:
         SvxShowCharSetAcc(SvxShowCharSet* pParent);
@@ -131,7 +130,7 @@ namespace svx
         }
 
         void clearCharSetControl() { m_pParent = nullptr; }
-    protected:
+    private:
 
         virtual ~SvxShowCharSetAcc() override;
 
@@ -158,12 +157,12 @@ namespace svx
 
     /** The child implementation of the table.
     */
-    class SvxShowCharSetItemAcc : public ::comphelper::OAccessibleComponentHelper,
+    class SvxShowCharSetItemAcc final : public ::comphelper::OAccessibleComponentHelper,
                                   public OAccessibleHelper_Base_3
     {
     private:
         SvxShowCharSetItem* mpParent;
-    protected:
+
         virtual ~SvxShowCharSetItemAcc() override;
 
         // OCommonAccessibleComponent

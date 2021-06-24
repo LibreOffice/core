@@ -25,7 +25,7 @@
 
 // Turn text automatically in wright position (automatic UpsideDown).
 // TextUpsideDown stays active and turns the text again if sal_True.
-class SdrMeasureTextAutoAngleItem: public SdrYesNoItem {
+class SdrMeasureTextAutoAngleItem final : public SdrYesNoItem {
 public:
     SdrMeasureTextAutoAngleItem(bool bOn=true): SdrYesNoItem(SDRATTR_MEASURETEXTAUTOANGLE,bOn) {}
     virtual SdrMeasureTextAutoAngleItem* Clone(SfxItemPool*) const override

@@ -26,7 +26,7 @@
 // SdrGrafInvertItem -
 
 
-class SdrGrafInvertItem : public SdrOnOffItem
+class SdrGrafInvertItem final : public SdrOnOffItem
 {
 public:
 

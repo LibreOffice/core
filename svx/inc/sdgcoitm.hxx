@@ -28,7 +28,7 @@
 // SdrGrafRedItem -
 
 
-class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SdrGrafRedItem : public SdrSignedPercentItem
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SdrGrafRedItem final : public SdrSignedPercentItem
 {
 public:
 
@@ -42,7 +42,7 @@ public:
 // SdrGrafGreenItem -
 
 
-class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SdrGrafGreenItem : public SdrSignedPercentItem
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SdrGrafGreenItem final : public SdrSignedPercentItem
 {
 public:
 
@@ -56,7 +56,7 @@ public:
 // SdrGrafBlueItem -
 
 
-class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SdrGrafBlueItem : public SdrSignedPercentItem
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SdrGrafBlueItem final : public SdrSignedPercentItem
 {
 public:
 

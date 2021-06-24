@@ -30,7 +30,7 @@
 
 namespace drawinglayer::primitive2d
     {
-        class SdrCustomShapePrimitive2D : public BufferedDecompositionPrimitive2D
+        class SdrCustomShapePrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             attribute::SdrEffectsTextAttribute           maSdrSTAttribute;
@@ -47,7 +47,6 @@ namespace drawinglayer::primitive2d
 
             basegfx::B2DHomMatrix maTransform;
 
-        protected:
             // local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const override;
 

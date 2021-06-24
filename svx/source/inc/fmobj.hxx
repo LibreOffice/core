@@ -28,7 +28,7 @@
 
 // FmFormObj
 
-class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) FmFormObj : public SdrUnoObj
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) FmFormObj final : public SdrUnoObj
 {
     FmFormObj( const FmFormObj& ) = delete;
 
@@ -47,7 +47,6 @@ class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) FmFormObj : public SdrUnoObj
                             // the last ref device we know, as set at the model
                             // only to be used for comparison with the current ref device!
 
-protected:
     // protected destructor
     SAL_DLLPRIVATE virtual ~FmFormObj() override;
 
@@ -97,11 +96,10 @@ public:
 
     SAL_DLLPRIVATE virtual void SetUnoControlModel( const css::uno::Reference< css::awt::XControlModel >& _rxModel ) override;
 
-protected:
+private:
     SAL_DLLPRIVATE virtual bool        EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd ) override;
     SAL_DLLPRIVATE virtual void        BrkCreate( SdrDragStat& rStat ) override;
 
-private:
     /** isolates the control model from its form component hierarchy, i.e. removes it from
         its parent.
     */

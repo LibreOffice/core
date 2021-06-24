@@ -22,7 +22,7 @@
 #include <svx/svddef.hxx>
 #include <svx/sdmetitm.hxx>
 
-class SdrTransformRef1XItem: public SdrMetricItem {
+class SdrTransformRef1XItem final : public SdrMetricItem {
 public:
     SdrTransformRef1XItem(tools::Long nHgt=0): SdrMetricItem(SDRATTR_TRANSFORMREF1X,nHgt)  {}
     virtual SdrTransformRef1XItem* Clone(SfxItemPool*) const override
@@ -31,7 +31,7 @@ public:
     }
 };
 
-class SdrTransformRef1YItem: public SdrMetricItem {
+class SdrTransformRef1YItem final : public SdrMetricItem {
 public:
     SdrTransformRef1YItem(tools::Long nHgt=0): SdrMetricItem(SDRATTR_TRANSFORMREF1Y,nHgt)  {}
     virtual SdrTransformRef1YItem* Clone(SfxItemPool*) const override
@@ -40,7 +40,7 @@ public:
     }
 };
 
-class SdrTransformRef2XItem: public SdrMetricItem {
+class SdrTransformRef2XItem final : public SdrMetricItem {
 public:
     SdrTransformRef2XItem(tools::Long nHgt=0): SdrMetricItem(SDRATTR_TRANSFORMREF2X,nHgt)  {}
     virtual SdrTransformRef2XItem* Clone(SfxItemPool*) const override
@@ -49,7 +49,7 @@ public:
     }
 };
 
-class SdrTransformRef2YItem: public SdrMetricItem {
+class SdrTransformRef2YItem final : public SdrMetricItem {
 public:
     SdrTransformRef2YItem(tools::Long nHgt=0): SdrMetricItem(SDRATTR_TRANSFORMREF2Y,nHgt)  {}
     virtual SdrTransformRef2YItem* Clone(SfxItemPool*) const override

@@ -80,7 +80,7 @@ public:
 };
 
 // Item representing the forms and subforms
-class FmFormItem : public FmParentData
+class FmFormItem final : public FmParentData
 {
     css::uno::Reference< css::form::runtime::XFormController >    m_xController;
     css::uno::Reference< css::form::runtime::XFilterController >  m_xFilterController;
@@ -105,7 +105,7 @@ public:
     virtual OUString GetImage() const override;
 };
 
-class FmFilterItems : public FmParentData
+class FmFilterItems final : public FmParentData
 {
 public:
     FmFilterItems(FmFormItem* pParent, const OUString& rText ) : FmParentData(pParent, rText) {}
@@ -114,7 +114,7 @@ public:
     virtual OUString GetImage() const override;
 };
 
-class FmFilterItem : public FmFilterData
+class FmFilterItem final : public FmFilterData
 {
     OUString      m_aFieldName;
     sal_Int32     m_nComponentIndex;
@@ -174,7 +174,7 @@ private:
 };
 
 
-class OFilterItemExchange : public OLocalExchange
+class OFilterItemExchange final : public OLocalExchange
 {
     ::std::vector<FmFilterItem*>    m_aDraggedEntries;
     FmFormItem*             m_pFormItem;        // ensure that we drop on the same form
@@ -191,7 +191,7 @@ public:
 
     void setFormItem( FmFormItem* _pItem ) { m_pFormItem = _pItem; }
 
-protected:
+private:
     virtual void AddSupportedFormats() override;
 };
 
@@ -200,7 +200,7 @@ inline bool OFilterItemExchange::hasFormat( const DataFlavorExVector& _rFormats 
     return OLocalExchange::hasFormat( _rFormats, getFormatId() );
 }
 
-class OFilterExchangeHelper : public OLocalExchangeHelper
+class OFilterExchangeHelper final : public OLocalExchangeHelper
 {
 public:
     OFilterExchangeHelper() : OLocalExchangeHelper() { }
@@ -208,13 +208,13 @@ public:
     OFilterItemExchange* operator->() const { return static_cast<OFilterItemExchange*>(m_xTransferable.get()); }
     OFilterItemExchange& operator*() const { return *static_cast<OFilterItemExchange*>(m_xTransferable.get()); }
 
-protected:
+private:
     virtual rtl::Reference<OLocalExchange> createExchange() const override;
 };
 
 class FmFilterNavigator;
 
-class FmFilterNavigatorDropTarget : public DropTargetHelper
+class FmFilterNavigatorDropTarget final : public DropTargetHelper
 {
 private:
     FmFilterNavigator& m_rTreeView;
@@ -301,12 +301,11 @@ private:
     bool getNextEntry(weld::TreeIter& rEntry);
 };
 
-class FmFilterNavigatorWin : public SfxDockingWindow, public SfxControllerItem
+class FmFilterNavigatorWin final : public SfxDockingWindow, public SfxControllerItem
 {
 private:
     std::unique_ptr<FmFilterNavigator> m_xNavigatorTree;
 
-protected:
     virtual bool Close() override;
     virtual void GetFocus() override;
     virtual Size CalcDockingSize( SfxChildAlignment ) override;
@@ -325,7 +324,7 @@ public:
     void FillInfo( SfxChildWinInfo& rInfo ) const override;
 };
 
-class FmFilterNavigatorWinMgr : public SfxChildWindow
+class FmFilterNavigatorWinMgr final : public SfxChildWindow
 {
 public:
     FmFilterNavigatorWinMgr( vcl::Window *pParent, sal_uInt16 nId, SfxBindings *pBindings,
