@@ -4617,8 +4617,7 @@ GdkDragAction GtkSalFrame::signalDragMotion(GtkDropTargetAsync *dest, GdkDrop *d
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
     if (!pThis->m_pDropTarget)
         return GdkDragAction(0);
-    GtkWidget *pEventWidget = pThis->getMouseEventWidget();
-    return pThis->m_pDropTarget->signalDragMotion(pEventWidget, dest, drop, x, y);
+    return pThis->m_pDropTarget->signalDragMotion(dest, drop, x, y);
 }
 #else
 gboolean GtkSalFrame::signalDragMotion(GtkWidget *pWidget, GdkDragContext *context, gint x, gint y, guint time, gpointer frame)
@@ -4633,15 +4632,16 @@ gboolean GtkSalFrame::signalDragMotion(GtkWidget *pWidget, GdkDragContext *conte
 #if !GTK_CHECK_VERSION(4,0,0)
 gboolean GtkInstDropTarget::signalDragMotion(GtkWidget *pWidget, GdkDragContext *context, gint x, gint y, guint time)
 #else
-GdkDragAction GtkInstDropTarget::signalDragMotion(GtkWidget *pWidget, GtkDropTargetAsync *context, GdkDrop *drop, double x, double y)
+GdkDragAction GtkInstDropTarget::signalDragMotion(GtkDropTargetAsync *context, GdkDrop *pDrop, double x, double y)
 #endif
 {
     if (!m_bInDrag)
     {
+        GtkWidget* pHighlightWidget = GTK_WIDGET(m_pFrame->getFixedContainer());
 #if !GTK_CHECK_VERSION(4,0,0)
-        gtk_drag_highlight(pWidget);
+        gtk_drag_highlight(pHighlightWidget);
 #else
-        gtk_widget_set_state_flags(pWidget, GTK_STATE_FLAG_DROP_ACTIVE, false);
+        gtk_widget_set_state_flags(pHighlightWidget, GTK_STATE_FLAG_DROP_ACTIVE, false);
 #endif
     }
 
@@ -4650,7 +4650,7 @@ GdkDragAction GtkInstDropTarget::signalDragMotion(GtkWidget *pWidget, GtkDropTar
 #if !GTK_CHECK_VERSION(4,0,0)
     rtl::Reference<GtkDropTargetDragContext> pContext = new GtkDropTargetDragContext(context, time);
 #else
-    rtl::Reference<GtkDropTargetDragContext> pContext = new GtkDropTargetDragContext(context, drop);
+    rtl::Reference<GtkDropTargetDragContext> pContext = new GtkDropTargetDragContext(context, pDrop);
 #endif
     //preliminary accept the Drag and select the preferred action, the fire_* will
     //inform the original caller of our choice and the callsite can decide
@@ -4713,7 +4713,7 @@ GdkDragAction GtkInstDropTarget::signalDragMotion(GtkWidget *pWidget, GtkDropTar
 #if !GTK_CHECK_VERSION(4,0,0)
             xTransferable = new GtkDnDTransferable(context, time, pWidget, this);
 #else
-            xTransferable = new GtkDnDTransferable(drop);
+            xTransferable = new GtkDnDTransferable(pDrop);
 #endif
         }
         css::uno::Sequence<css::datatransfer::DataFlavor> aFormats = xTransferable->getTransferDataFlavors();
@@ -4739,16 +4739,15 @@ void GtkSalFrame::signalDragLeave(GtkDropTargetAsync* /*dest*/, GdkDrop* /*drop*
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
     if (!pThis->m_pDropTarget)
         return;
-    GtkWidget *pEventWidget = pThis->getMouseEventWidget();
-    pThis->m_pDropTarget->signalDragLeave(pEventWidget);
+    pThis->m_pDropTarget->signalDragLeave();
 }
 #else
-void GtkSalFrame::signalDragLeave(GtkWidget *pWidget, GdkDragContext* /*context*/, guint /*time*/, gpointer frame)
+void GtkSalFrame::signalDragLeave(GtkWidget*, GdkDragContext* /*context*/, guint /*time*/, gpointer frame)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
     if (!pThis->m_pDropTarget)
         return;
-    pThis->m_pDropTarget->signalDragLeave(pWidget);
+    pThis->m_pDropTarget->signalDragLeave();
 }
 #endif
 
@@ -4761,14 +4760,15 @@ static gboolean lcl_deferred_dragExit(gpointer user_data)
     return false;
 }
 
-void GtkInstDropTarget::signalDragLeave(GtkWidget* pWidget)
+void GtkInstDropTarget::signalDragLeave()
 {
     m_bInDrag = false;
 
+    GtkWidget* pHighlightWidget = GTK_WIDGET(m_pFrame->getFixedContainer());
 #if !GTK_CHECK_VERSION(4,0,0)
-    gtk_drag_unhighlight(pWidget);
+    gtk_drag_unhighlight(pHighlightWidget);
 #else
-    gtk_widget_unset_state_flags(pWidget, GTK_STATE_FLAG_DROP_ACTIVE);
+    gtk_widget_unset_state_flags(pHighlightWidget, GTK_STATE_FLAG_DROP_ACTIVE);
 #endif
 
     // defer fire_dragExit, since gtk also sends a drag-leave before the drop, while
