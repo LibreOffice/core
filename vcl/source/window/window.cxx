@@ -740,6 +740,7 @@ WindowImpl::WindowImpl( WindowType nType )
     mpLOKNotifier                       = nullptr;
     mnLOKWindowId                       = 0;
     mbLOKParentNotifier                 = false;
+    mbUseFrameData                      = false;
 }
 
 WindowImpl::~WindowImpl()
@@ -774,6 +775,7 @@ ImplFrameData::ImplFrameData( vcl::Window *pWindow )
     mpFocusWin         = nullptr;
     mpMouseMoveWin     = nullptr;
     mpMouseDownWin     = nullptr;
+    mpTrackWin         = nullptr;
     mxFontCollection   = pSVData->maGDIData.mxScreenFontList;
     mxFontCache        = pSVData->maGDIData.mxScreenFontCache;
     mnFocusId          = nullptr;
