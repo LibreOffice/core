@@ -398,6 +398,11 @@ Dim vNodePath As Variant
 					Set .PathSubstitution = CreateUnoService(&quot;com.sun.star.util.PathSubstitution&quot;)
 				End If
 				Set _GetUNOService = .PathSubstitution
+			Case &quot;PrinterServer&quot;
+				If IsEmpty(.PrinterServer) Or IsNull(.PrinterServer) Then
+					Set .PrinterServer = CreateUnoService(&quot;com.sun.star.awt.PrinterServer&quot;)
+				End If
+				Set _GetUNOService = .PrinterServer
 			Case &quot;ScriptProvider&quot;
 				If IsMissing(pvArg) Then pvArg = SF_Session.SCRIPTISAPPLICATION
 				Select Case LCase(pvArg)

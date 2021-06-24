@@ -59,6 +59,7 @@ Private DispatchHelper		As Object	&apos; com.sun.star.frame.DispatchHelper
 Private TextSearch			As Object	&apos; com.sun.star.util.TextSearch
 Private SearchOptions		As Object	&apos; com.sun.star.util.SearchOptions
 Private Locale				As Object	&apos; com.sun.star.lang.Locale
+Private PrinterServer		As Object	&apos; com.sun.star.awt.PrinterServer
 Private CharacterClass		As Object	&apos; com.sun.star.i18n.CharacterClassification
 Private FileAccess			As Object	&apos; com.sun.star.ucb.SimpleFileAccess
 Private FilterFactory		As Object	&apos; com.sun.star.document.FilterFactory
@@ -116,6 +117,7 @@ Private Sub Class_Initialize()
 	Set TextSearch = Nothing
 	Set SearchOptions = Nothing
 	Set Locale = Nothing
+	Set PrinterServer = Nothing
 	Set CharacterClass = Nothing
 	Set FileAccess = Nothing
 	Set FilterFactory = Nothing
