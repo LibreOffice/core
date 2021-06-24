@@ -52,6 +52,24 @@
       "revId": "e2e47898180e547cad7ccde1e5890385d573e551",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71140d59_f44e27a7",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3889,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-24T10:35:04Z",
+      "side": 1,
+      "message": "But the situation here is:\n\n1. A number like \u0027123.99999999999999\u0027 arrives in fNumber\n2. fTime gets \u0027round(0.99999999999999 * 86400, nCntPost)\u0027 \u003e\u003d 86400 (I don\u0027t believe that multiplying a fractinal part by 86400 and rounding might ever result in \u003e86400 - but even if...);\n3. fTime gets 86400 subtracted - so it\u0027s some value in seconds in the next day;\n4. fNumber gets \u0027floor(123.99999999999999 + 0.5)+fTime\u0027, where floor(123.99999999999999 + 0.5) is 124 - we are in the next day already!\n5. and if fTime was e.g. 1, then we will arrive to 125 here? Any non-0 second value would be wrong here.",
+      "parentUuid": "da0d8dff_b99a97b7",
+      "revId": "e2e47898180e547cad7ccde1e5890385d573e551",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
