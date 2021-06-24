@@ -131,15 +131,22 @@ DMLPresetShapeExporter::RadiusAdjustmentValue
 DMLPresetShapeExporter::GetAdjustmentPointRadiusValue(sal_Int32 nPoint)
 {
     RadiusAdjustmentValue aRet;
-    auto aValPos = GetHandleValueOfModificationPoint(nPoint, u"Position")
-                       .get<EnhancedCustomShapeParameterPair>();
-    aRet.nMinVal = GetHandleValueOfModificationPoint(nPoint, u"RadiusRangeMinimum")
-                       .get<EnhancedCustomShapeParameter>()
-                       .Value.get<double>();
-    aRet.nMaxVal = GetHandleValueOfModificationPoint(nPoint, u"RadiusRangeMaximum")
-                       .get<EnhancedCustomShapeParameter>()
-                       .Value.get<double>();
-    aRet.nCurrVal = GetAdjustmentValues()[aValPos.First.Value.get<long>()].Value.get<double>();
+    try
+    {
+        auto aValPos = GetHandleValueOfModificationPoint(nPoint, u"Position")
+                           .get<EnhancedCustomShapeParameterPair>();
+        aRet.nMinVal = GetHandleValueOfModificationPoint(nPoint, u"RadiusRangeMinimum")
+                           .get<EnhancedCustomShapeParameter>()
+                           .Value.get<double>();
+        aRet.nMaxVal = GetHandleValueOfModificationPoint(nPoint, u"RadiusRangeMaximum")
+                           .get<EnhancedCustomShapeParameter>()
+                           .Value.get<double>();
+        aRet.nCurrVal = GetAdjustmentValues()[aValPos.First.Value.get<long>()].Value.get<double>();
+    }
+    catch (...)
+    {
+        // Do nothing.
+    }
     return aRet;
 };
 
@@ -147,11 +154,18 @@ DMLPresetShapeExporter::AngleAdjustmentValue
 DMLPresetShapeExporter::GetAdjustmentPointAngleValue(sal_Int32 nPoint)
 {
     AngleAdjustmentValue aRet;
-    auto aValPos = GetHandleValueOfModificationPoint(nPoint, u"Position")
-                       .get<EnhancedCustomShapeParameterPair>();
-    aRet.nMinVal = 0;
-    aRet.nMaxVal = 360;
-    aRet.nCurrVal = GetAdjustmentValues()[aValPos.Second.Value.get<long>()].Value.get<double>();
+    try
+    {
+        auto aValPos = GetHandleValueOfModificationPoint(nPoint, u"Position")
+                           .get<EnhancedCustomShapeParameterPair>();
+        aRet.nMinVal = 0;
+        aRet.nMaxVal = 360;
+        aRet.nCurrVal = GetAdjustmentValues()[aValPos.Second.Value.get<long>()].Value.get<double>();
+    }
+    catch (...)
+    {
+        // Do nothing.
+    }
     return aRet;
 };
 
@@ -159,15 +173,22 @@ DMLPresetShapeExporter::XAdjustmentValue
 DMLPresetShapeExporter::GetAdjustmentPointXValue(sal_Int32 nPoint)
 {
     XAdjustmentValue aRet;
-    auto aValPos = GetHandleValueOfModificationPoint(nPoint, u"Position")
-                       .get<EnhancedCustomShapeParameterPair>();
-    aRet.nMinVal = GetHandleValueOfModificationPoint(nPoint, u"RangeXMinimum")
-                       .get<EnhancedCustomShapeParameter>()
-                       .Value.get<double>();
-    aRet.nMaxVal = GetHandleValueOfModificationPoint(nPoint, u"RangeXMaximum")
-                       .get<EnhancedCustomShapeParameter>()
-                       .Value.get<double>();
-    aRet.nCurrVal = GetAdjustmentValues()[aValPos.First.Value.get<long>()].Value.get<double>();
+    try
+    {
+        auto aValPos = GetHandleValueOfModificationPoint(nPoint, u"Position")
+                           .get<EnhancedCustomShapeParameterPair>();
+        aRet.nMinVal = GetHandleValueOfModificationPoint(nPoint, u"RangeXMinimum")
+                           .get<EnhancedCustomShapeParameter>()
+                           .Value.get<double>();
+        aRet.nMaxVal = GetHandleValueOfModificationPoint(nPoint, u"RangeXMaximum")
+                           .get<EnhancedCustomShapeParameter>()
+                           .Value.get<double>();
+        aRet.nCurrVal = GetAdjustmentValues()[aValPos.First.Value.get<long>()].Value.get<double>();
+    }
+    catch (...)
+    {
+        // Do nothing.
+    }
     return aRet;
 };
 
@@ -175,15 +196,22 @@ DMLPresetShapeExporter::YAdjustmentValue
 DMLPresetShapeExporter::GetAdjustmentPointYValue(sal_Int32 nPoint)
 {
     YAdjustmentValue aRet;
-    auto aValPos = GetHandleValueOfModificationPoint(nPoint, u"Position")
-                       .get<EnhancedCustomShapeParameterPair>();
-    aRet.nMinVal = GetHandleValueOfModificationPoint(nPoint, u"RangeYMinimum")
-                       .get<EnhancedCustomShapeParameter>()
-                       .Value.get<double>();
-    aRet.nMaxVal = GetHandleValueOfModificationPoint(nPoint, u"RangeYMinimum")
-                       .get<EnhancedCustomShapeParameter>()
-                       .Value.get<double>();
-    aRet.nCurrVal = GetAdjustmentValues()[aValPos.Second.Value.get<long>()].Value.get<double>();
+    try
+    {
+        auto aValPos = GetHandleValueOfModificationPoint(nPoint, u"Position")
+                           .get<EnhancedCustomShapeParameterPair>();
+        aRet.nMinVal = GetHandleValueOfModificationPoint(nPoint, u"RangeYMinimum")
+                           .get<EnhancedCustomShapeParameter>()
+                           .Value.get<double>();
+        aRet.nMaxVal = GetHandleValueOfModificationPoint(nPoint, u"RangeXMaximum")
+                           .get<EnhancedCustomShapeParameter>()
+                           .Value.get<double>();
+        aRet.nCurrVal = GetAdjustmentValues()[aValPos.Second.Value.get<long>()].Value.get<double>();
+    }
+    catch (...)
+    {
+        // Do nothing.
+    }
     return aRet;
 };
 
@@ -393,29 +421,37 @@ bool DMLPresetShapeExporter::WriteShapeWithAVlist()
         }
         if (sShapeType == "bevel")
         {
+            auto aPoint1 = GetAdjustmentPointXValue(0);
+            if (!aPoint1.nCurrVal.has_value() || !aPoint1.nMaxVal.has_value()
+                || !aPoint1.nMinVal.has_value())
+                return false;
             m_pDMLexporter->WriteShapeTransformation(m_xShape, XML_a, IsXFlipped(), IsYFlipped(),
                                                      false, false);
-            auto aPoint1 = GetAdjustmentPointXValue(0);
+
             tools::Long nVal1
-                = std::lround(aPoint1.nCurrVal / (aPoint1.nMaxVal - aPoint1.nMinVal) * 50000);
+                = std::lround(*aPoint1.nCurrVal / (*aPoint1.nMaxVal - *aPoint1.nMinVal) * 50000);
             return StartAVListWriting()
                    && WriteAV(u"adj", OUString(u"val " + OUString::number(nVal1)))
                    && EndAVListWriting();
         }
         if (sShapeType == "blockArc")
         {
-            m_pDMLexporter->WriteShapeTransformation(m_xShape, XML_a, IsXFlipped(), IsYFlipped(),
-                                                     false, false);
             auto aPointR = GetAdjustmentPointRadiusValue(0);
             auto aPointA = GetAdjustmentPointAngleValue(0);
+            if (!aPointA.nCurrVal.has_value() || !aPointA.nMaxVal.has_value()
+                || !aPointA.nMinVal.has_value() || !aPointR.nCurrVal.has_value()
+                || !aPointR.nMaxVal.has_value() || !aPointR.nMinVal.has_value())
+                return false;
+            m_pDMLexporter->WriteShapeTransformation(m_xShape, XML_a, IsXFlipped(), IsYFlipped(),
+                                                     false, false);
             tools::Long nVal1
-                = std::lround((aPointA.nCurrVal < 0 ? 360 + aPointA.nCurrVal : aPointA.nCurrVal)
-                              / (aPointA.nMaxVal - aPointA.nMinVal) * nConstOfMaxDegreeOf60th);
+                = std::lround((*aPointA.nCurrVal < 0 ? 360 + *aPointA.nCurrVal : *aPointA.nCurrVal)
+                              / (*aPointA.nMaxVal - *aPointA.nMinVal) * nConstOfMaxDegreeOf60th);
             tools::Long nVal2 = std::lround(
-                (aPointA.nCurrVal > 180 ? 360 - aPointA.nCurrVal : 180 - aPointA.nCurrVal)
-                / (aPointA.nMaxVal - aPointA.nMinVal) * nConstOfMaxDegreeOf60th);
+                (*aPointA.nCurrVal > 180 ? 360 - *aPointA.nCurrVal : 180 - *aPointA.nCurrVal)
+                / (*aPointA.nMaxVal - *aPointA.nMinVal) * nConstOfMaxDegreeOf60th);
             tools::Long nVal3 = std::lround(
-                50000 - (aPointR.nCurrVal / (aPointR.nMaxVal - aPointR.nMinVal) * 50000));
+                50000 - (*aPointR.nCurrVal / (*aPointR.nMaxVal - *aPointR.nMinVal) * 50000));
             return StartAVListWriting()
                    && WriteAV(u"adj1", OUString(u"val " + OUString::number(nVal1)))
                    && WriteAV(u"adj2", OUString(u"val " + OUString::number(nVal2)))
@@ -439,22 +475,30 @@ bool DMLPresetShapeExporter::WriteShapeWithAVlist()
         }
         if (sShapeType == "bracePair")
         {
+            auto aPoint1 = GetAdjustmentPointYValue(0);
+            if (!aPoint1.nCurrVal.has_value() || !aPoint1.nMaxVal.has_value()
+                || !aPoint1.nMinVal.has_value())
+                return false;
+
             m_pDMLexporter->WriteShapeTransformation(m_xShape, XML_a, IsXFlipped(), IsYFlipped(),
                                                      false, false);
-            auto aPoint1 = GetAdjustmentPointXValue(0);
             tools::Long nVal1
-                = std::lround(aPoint1.nCurrVal / (aPoint1.nMaxVal - aPoint1.nMinVal) * 25000);
+                = std::lround(*aPoint1.nCurrVal / (*aPoint1.nMaxVal - *aPoint1.nMinVal) * 25000);
             return StartAVListWriting()
                    && WriteAV(u"adj", OUString(u"val " + OUString::number(nVal1)))
                    && EndAVListWriting();
         }
         if (sShapeType == "bracketPair")
         {
+            auto aPoint1 = GetAdjustmentPointYValue(0);
+            if (!aPoint1.nCurrVal.has_value() || !aPoint1.nMaxVal.has_value()
+                || !aPoint1.nMinVal.has_value())
+                return false;
+
             m_pDMLexporter->WriteShapeTransformation(m_xShape, XML_a, IsXFlipped(), IsYFlipped(),
                                                      false, false);
-            auto aPoint1 = GetAdjustmentPointYValue(0);
             tools::Long nVal1
-                = std::lround(aPoint1.nCurrVal / (aPoint1.nMaxVal - aPoint1.nMinVal) * 50000);
+                = std::lround(*aPoint1.nCurrVal / (*aPoint1.nMaxVal - *aPoint1.nMinVal) * 50000);
             return StartAVListWriting()
                    && WriteAV(u"adj", OUString(u"val " + OUString::number(nVal1)))
                    && EndAVListWriting();
@@ -811,13 +855,17 @@ bool DMLPresetShapeExporter::WriteShapeWithAVlist()
         }
         if (sShapeType == "hexagon")
         {
+            auto aPoint1 = GetAdjustmentPointXValue(0);
+            if (!aPoint1.nCurrVal.has_value() || !aPoint1.nMaxVal.has_value()
+                || !aPoint1.nMinVal.has_value())
+                return false;
+
             m_pDMLexporter->WriteShapeTransformation(m_xShape, XML_a, IsXFlipped(), IsYFlipped(),
                                                      false, false);
-            auto aPoint1 = GetAdjustmentPointXValue(0);
             tools::Long nMaxVal = 50000 * m_xShape->getSize().Width
                                   / std::min(m_xShape->getSize().Width, m_xShape->getSize().Height);
             tools::Long nVal1
-                = std::lround(aPoint1.nCurrVal / (aPoint1.nMaxVal - aPoint1.nMinVal) * nMaxVal);
+                = std::lround(*aPoint1.nCurrVal / (*aPoint1.nMaxVal - *aPoint1.nMinVal) * nMaxVal);
             return StartAVListWriting()
                    && WriteAV(u"adj", OUString(u"val " + OUString::number(nVal1)))
                    && WriteAV(u"vf", OUString(u"val " + OUString::number(115470)))
@@ -960,24 +1008,32 @@ bool DMLPresetShapeExporter::WriteShapeWithAVlist()
         }
         if (sShapeType == "octagon")
         {
+            auto aPoint1 = GetAdjustmentPointXValue(0);
+            if (!aPoint1.nCurrVal.has_value() || !aPoint1.nMaxVal.has_value()
+                || !aPoint1.nMinVal.has_value())
+                return false;
+
             m_pDMLexporter->WriteShapeTransformation(m_xShape, XML_a, IsXFlipped(), IsYFlipped(),
                                                      false, false);
-            auto aPoint1 = GetAdjustmentPointXValue(0);
             tools::Long nVal1
-                = std::lround(aPoint1.nCurrVal / (aPoint1.nMaxVal - aPoint1.nMinVal) * 50000);
+                = std::lround(*aPoint1.nCurrVal / (*aPoint1.nMaxVal - *aPoint1.nMinVal) * 50000);
             return StartAVListWriting()
                    && WriteAV(u"adj", OUString(u"val " + OUString::number(nVal1)))
                    && EndAVListWriting();
         }
         if (sShapeType == "parallelogram")
         {
+            auto aPoint1 = GetAdjustmentPointXValue(0);
+            if (!aPoint1.nCurrVal.has_value() || !aPoint1.nMaxVal.has_value()
+                || !aPoint1.nMinVal.has_value())
+                return false;
+
             m_pDMLexporter->WriteShapeTransformation(m_xShape, XML_a, IsXFlipped(), IsYFlipped(),
                                                      false, false);
-            auto aPoint1 = GetAdjustmentPointXValue(0);
             tools::Long nMaxVal = 100000 * m_xShape->getSize().Width
                                   / std::min(m_xShape->getSize().Width, m_xShape->getSize().Height);
             tools::Long nVal1
-                = std::lround(aPoint1.nCurrVal / (aPoint1.nMaxVal - aPoint1.nMinVal) * nMaxVal);
+                = std::lround(*aPoint1.nCurrVal / (*aPoint1.nMaxVal - *aPoint1.nMinVal) * nMaxVal);
             return StartAVListWriting()
                    && WriteAV(u"adj", OUString(u"val " + OUString::number(nVal1)))
                    && EndAVListWriting();
@@ -1009,11 +1065,15 @@ bool DMLPresetShapeExporter::WriteShapeWithAVlist()
         }
         if (sShapeType == "plus")
         {
+            auto aPoint1 = GetAdjustmentPointXValue(0);
+            if (!aPoint1.nCurrVal.has_value() || !aPoint1.nMaxVal.has_value()
+                || !aPoint1.nMinVal.has_value())
+                return false;
+
             m_pDMLexporter->WriteShapeTransformation(m_xShape, XML_a, IsXFlipped(), IsYFlipped(),
                                                      false, false);
-            auto aPoint1 = GetAdjustmentPointXValue(0);
             tools::Long nVal1
-                = std::lround(aPoint1.nCurrVal / (aPoint1.nMaxVal - aPoint1.nMinVal) * 50000);
+                = std::lround(*aPoint1.nCurrVal / (*aPoint1.nMaxVal - *aPoint1.nMinVal) * 50000);
             return StartAVListWriting()
                    && WriteAV(u"adj", OUString(u"val " + OUString::number(nVal1)))
                    && EndAVListWriting();
@@ -1080,19 +1140,28 @@ bool DMLPresetShapeExporter::WriteShapeWithAVlist()
         }
         if (sShapeType == "roundRect")
         {
-            m_pDMLexporter->WriteShapeTransformation(m_xShape, XML_a, IsXFlipped(), IsYFlipped(),
-                                                     false, false);
             tools::Long nVal1 = 0;
             if (m_xShape->getSize().Width >= m_xShape->getSize().Height)
             {
                 auto aPointX = GetAdjustmentPointXValue(0);
-                nVal1 = std::lround(aPointX.nCurrVal / (aPointX.nMaxVal - aPointX.nMinVal) * 50000);
+                if (!aPointX.nCurrVal.has_value() || !aPointX.nMaxVal.has_value()
+                    || !aPointX.nMinVal.has_value())
+                    return false;
+                nVal1 = std::lround(*aPointX.nCurrVal / (*aPointX.nMaxVal - *aPointX.nMinVal)
+                                    * 50000);
             }
             else
             {
                 auto aPointY = GetAdjustmentPointYValue(0);
-                nVal1 = std::lround(aPointY.nCurrVal / (aPointY.nMaxVal - aPointY.nMinVal) * 50000);
+                if (!aPointY.nCurrVal.has_value() || !aPointY.nMaxVal.has_value()
+                    || !aPointY.nMinVal.has_value())
+                    return false;
+                nVal1 = std::lround(*aPointY.nCurrVal / (*aPointY.nMaxVal - *aPointY.nMinVal)
+                                    * 50000);
             }
+
+            m_pDMLexporter->WriteShapeTransformation(m_xShape, XML_a, IsXFlipped(), IsYFlipped(),
+                                                     false, false);
             return StartAVListWriting()
                    && WriteAV(u"adj", OUString(u"val " + OUString::number(nVal1)))
                    && EndAVListWriting();
@@ -1214,12 +1283,16 @@ bool DMLPresetShapeExporter::WriteShapeWithAVlist()
         }
         if (sShapeType == "triangle")
         {
+            auto aPoint1 = GetAdjustmentPointXValue(0);
+            if (!aPoint1.nCurrVal.has_value() || !aPoint1.nMaxVal.has_value()
+                || !aPoint1.nMinVal.has_value())
+                return false;
+
             m_pDMLexporter->WriteShapeTransformation(m_xShape, XML_a, IsXFlipped(), IsYFlipped(),
                                                      false, false);
-            auto aPoint1 = GetAdjustmentPointXValue(0);
             tools::Long nMaxVal = 100000;
             tools::Long nVal1
-                = std::lround(aPoint1.nCurrVal / (aPoint1.nMaxVal - aPoint1.nMinVal) * nMaxVal);
+                = std::lround(*aPoint1.nCurrVal / (*aPoint1.nMaxVal - *aPoint1.nMinVal) * nMaxVal);
             return StartAVListWriting()
                    && WriteAV(u"adj", OUString(u"val " + OUString::number(nVal1)))
                    && EndAVListWriting();
