@@ -34,6 +34,24 @@
       "revId": "e2e47898180e547cad7ccde1e5890385d573e551",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b00aa36_82c015c9",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3889,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-06-24T10:30:52Z",
+      "side": 1,
+      "message": "Or rather a value between 0 and 1.",
+      "parentUuid": "da0d8dff_b99a97b7",
+      "revId": "e2e47898180e547cad7ccde1e5890385d573e551",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
