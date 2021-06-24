@@ -15044,7 +15044,7 @@ public:
             GtkWidget* pWidget = GTK_WIDGET(m_pTreeView);
             GtkWidget* pParent = gtk_widget_get_parent(pWidget);
 #if GTK_CHECK_VERSION(4, 0, 0)
-            gtk_widget_unset_state_flags(pWidget, GTK_STATE_FLAG_DROP_ACTIVE);
+            gtk_widget_unset_state_flags(pParent, GTK_STATE_FLAG_DROP_ACTIVE);
 #else
             gtk_drag_unhighlight(pParent);
 #endif
