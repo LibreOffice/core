@@ -23,16 +23,20 @@
 
 #include <drawinglayer/tools/primitive2dxmldump.hxx>
 #include <rtl/ustring.hxx>
+#include <vcl/virdev.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdorect.hxx>
 #include <svx/unopage.hxx>
-#include <vcl/virdev.hxx>
+#include <svx/unoapi.hxx>
+#include <svx/svdview.hxx>
+#include <svx/xlineit0.hxx>
+#include <svx/xlnstwit.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <sfx2/viewsh.hxx>
-#include <svx/svdview.hxx>
-#include <svx/unoapi.hxx>
+#include <svl/itempool.hxx>
 
 #include <sdr/contact/objectcontactofobjlistpainter.hxx>
 
@@ -240,6 +244,85 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testTextEditEmptyGrabBag)
     // i.e. the grab-bag was still around after modifying the shape, and that grab-bag contained the
     // old text.
     CPPUNIT_ASSERT(!aGrabBag.hasElements());
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObject)
+{
+    std::unique_ptr<SdrModel> pModel(new SdrModel(nullptr, nullptr, true));
+    pModel->GetItemPool().FreezeIdRanges();
+
+    rtl::Reference<SdrPage> pPage(new SdrPage(*pModel, false));
+    pPage->SetSize(Size(1000, 1000));
+    pModel->InsertPage(pPage.get(), 0);
+
+    tools::Rectangle aSize(Point(), Size(100, 100));
+    auto* pRectangle = new SdrRectObj(*pModel, aSize);
+    pPage->NbcInsertObject(pRectangle);
+    pRectangle->SetMergedItem(XLineStyleItem(drawing::LineStyle_SOLID));
+    pRectangle->SetMergedItem(XLineStartWidthItem(200));
+
+    ScopedVclPtrInstance<VirtualDevice> aVirtualDevice;
+    aVirtualDevice->SetOutputSize(Size(2000, 2000));
+
+    SdrView aView(*pModel, aVirtualDevice);
+    aView.hideMarkHandles();
+    aView.ShowSdrPage(pPage.get());
+
+    sdr::contact::ObjectContactOfObjListPainter aObjectContact(*aVirtualDevice,
+                                                               { pPage->GetObj(0) }, nullptr);
+    const sdr::contact::ViewObjectContact& rDrawPageVOContact
+        = pPage->GetViewContact().GetViewObjectContact(aObjectContact);
+
+    sdr::contact::DisplayInfo aDisplayInfo;
+    drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence
+        = rDrawPageVOContact.getPrimitive2DSequenceHierarchy(aDisplayInfo);
+
+    drawinglayer::Primitive2dXmlDump aDumper;
+    xmlDocUniquePtr pXmlDoc = aDumper.dumpAndParse(xPrimitiveSequence);
+
+    assertXPath(pXmlDoc, "/primitive2D", 1);
+
+    OString aBasePath("/primitive2D/sdrrectangle/polypolygoncolor");
+    assertXPath(pXmlDoc, aBasePath, "color", "#729fcf");
+
+    assertXPath(pXmlDoc, aBasePath + "/polypolygon", "height",
+                "99"); // weird Rectangle is created with size 100
+    assertXPath(pXmlDoc, aBasePath + "/polypolygon", "width", "99");
+    assertXPath(pXmlDoc, aBasePath + "/polypolygon", "minx", "0");
+    assertXPath(pXmlDoc, aBasePath + "/polypolygon", "miny", "0");
+    assertXPath(pXmlDoc, aBasePath + "/polypolygon", "maxx", "99");
+    assertXPath(pXmlDoc, aBasePath + "/polypolygon", "maxy", "99");
+
+    aBasePath = "/primitive2D/sdrrectangle/polypolygoncolor/polypolygon/polygon";
+
+    assertXPath(pXmlDoc, aBasePath + "/point", 5);
+    assertXPath(pXmlDoc, aBasePath + "/point[1]", "x", "49.5"); // hmm, weird, why?
+    assertXPath(pXmlDoc, aBasePath + "/point[1]", "y", "99");
+    assertXPath(pXmlDoc, aBasePath + "/point[2]", "x", "0");
+    assertXPath(pXmlDoc, aBasePath + "/point[2]", "y", "99");
+    assertXPath(pXmlDoc, aBasePath + "/point[3]", "x", "0");
+    assertXPath(pXmlDoc, aBasePath + "/point[3]", "y", "0");
+    assertXPath(pXmlDoc, aBasePath + "/point[4]", "x", "99");
+    assertXPath(pXmlDoc, aBasePath + "/point[4]", "y", "0");
+    assertXPath(pXmlDoc, aBasePath + "/point[5]", "x", "99");
+    assertXPath(pXmlDoc, aBasePath + "/point[5]", "y", "99");
+
+    aBasePath = "/primitive2D/sdrrectangle/polygonstroke";
+    assertXPath(pXmlDoc, aBasePath, 1);
+
+    assertXPath(pXmlDoc, aBasePath + "/line", "color", "#3465a4");
+    assertXPath(pXmlDoc, aBasePath + "/line", "width", "0");
+    assertXPath(pXmlDoc, aBasePath + "/line", "linejoin", "Round");
+    assertXPath(pXmlDoc, aBasePath + "/line", "linecap", "BUTT");
+
+    assertXPathContent(pXmlDoc, aBasePath + "/polygon", "49.5,99 0,99 0,0 99,0 99,99");
+
+    assertXPath(pXmlDoc, aBasePath + "/stroke", "fulldotdashlen", "0");
+
+    pPage->RemoveObject(0);
+
+    SdrObject* pObject(pRectangle);
+    SdrObject::Free(pObject);
 }
 }
 
