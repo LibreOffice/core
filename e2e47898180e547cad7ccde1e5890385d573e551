@@ -16,6 +16,24 @@
       "revId": "e2e47898180e547cad7ccde1e5890385d573e551",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da0d8dff_b99a97b7",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3889,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-06-24T10:21:00Z",
+      "side": 1,
+      "message": "It looks like / I think / I do not recall, that the idea was that fTime here after 86400 was subtracted is either 0 or 1.",
+      "parentUuid": "0c225a93_7ad3a2da",
+      "revId": "e2e47898180e547cad7ccde1e5890385d573e551",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
