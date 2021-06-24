@@ -191,9 +191,7 @@ class GtkInstDragSource final : public cppu::WeakComponentImplHelper<css::datatr
     GtkSalFrame* m_pFrame;
     css::uno::Reference<css::datatransfer::dnd::XDragSourceListener> m_xListener;
     css::uno::Reference<css::datatransfer::XTransferable> m_xTrans;
-#if !GTK_CHECK_VERSION(4, 0, 0)
     VclToGtkHelper m_aConversionHelper;
-#endif
 public:
     GtkInstDragSource()
         : WeakComponentImplHelper(m_aMutex)
@@ -204,7 +202,9 @@ public:
     void set_datatransfer(const css::uno::Reference<css::datatransfer::XTransferable>& rTrans,
                           const css::uno::Reference<css::datatransfer::dnd::XDragSourceListener>& rListener);
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+    std::vector<OString> FormatsToGtk(const css::uno::Sequence<css::datatransfer::DataFlavor> &rFormats);
+#else
     std::vector<GtkTargetEntry> FormatsToGtk(const css::uno::Sequence<css::datatransfer::DataFlavor> &rFormats);
 #endif
 
