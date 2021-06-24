@@ -23,7 +23,7 @@
 #include <svl/hint.hxx>
 #include <rtl/ustring.hxx>
 
-class SfxOpenUrlHint : public SfxHint
+class SfxOpenUrlHint final : public SfxHint
 {
     OUString msDocumentURL;
 

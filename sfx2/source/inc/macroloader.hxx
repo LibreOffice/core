@@ -39,7 +39,7 @@
 
 class SfxObjectShell;
 
-class SfxMacroLoader : public cppu::WeakImplHelper<
+class SfxMacroLoader final : public cppu::WeakImplHelper<
                                        css::frame::XDispatchProvider,
                                        css::frame::XNotifyingDispatch,
                                        css::frame::XSynchronousDispatch,

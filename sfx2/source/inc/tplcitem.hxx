@@ -25,14 +25,14 @@
 struct ImplSVEvent;
 class SfxCommonTemplateDialog_Impl;
 
-class SfxTemplateControllerItem : public SfxControllerItem {
+class SfxTemplateControllerItem final : public SfxControllerItem
+{
     SfxCommonTemplateDialog_Impl &rTemplateDlg;
     sal_uInt8 nWaterCanState;
     ImplSVEvent* nUserEventId;
 
     DECL_LINK(SetWaterCanStateHdl_Impl, void*, void);
 
-protected:
     virtual void StateChangedAtToolBoxControl(sal_uInt16, SfxItemState, const SfxPoolItem* pState) override;
 
 public:

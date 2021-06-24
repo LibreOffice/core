@@ -136,7 +136,7 @@ public:
     void                        OnApplicationBasicManagerCreated( BasicManager& _rManager );
 };
 
-class SfxDdeTriggerTopic_Impl : public DdeTopic
+class SfxDdeTriggerTopic_Impl final : public DdeTopic
 {
 #if defined(_WIN32)
 public:

@@ -12,7 +12,7 @@
 
 #include <templateviewitem.hxx>
 
-struct TemplateSearchViewItem : public TemplateViewItem
+struct TemplateSearchViewItem final : public TemplateViewItem
 {
     TemplateSearchViewItem(ThumbnailViewBase& rView, sal_uInt16 nId)
         : TemplateViewItem(rView, nId)

@@ -27,7 +27,7 @@ class SfxViewFrame;
 struct SfxVersionInfo;
 
 class SfxVersionTableDtor;
-class SfxVersionDialog : public SfxDialogController
+class SfxVersionDialog final : public SfxDialogController
 {
     SfxViewFrame* m_pViewFrame;
     bool m_bIsSaveVersionOnClose;
@@ -54,7 +54,7 @@ public:
     bool IsSaveVersionOnClose() const { return m_bIsSaveVersionOnClose; }
 };
 
-class SfxViewVersionDialog_Impl : public SfxDialogController
+class SfxViewVersionDialog_Impl final : public SfxDialogController
 {
 private:
     SfxVersionInfo& m_rInfo;
@@ -72,7 +72,7 @@ public:
     SfxViewVersionDialog_Impl(weld::Window* pParent, SfxVersionInfo& rInfo, bool bEdit);
 };
 
-class SfxCmisVersionsDialog : public SfxDialogController
+class SfxCmisVersionsDialog final : public SfxDialogController
 {
     SfxViewFrame* m_pViewFrame;
     std::unique_ptr<SfxVersionTableDtor> m_pTable;

@@ -258,7 +258,7 @@ public:
 class ToolbarDropTarget;
 class DropTargetHelper;
 
-class SfxTemplateDialog_Impl :  public SfxCommonTemplateDialog_Impl
+class SfxTemplateDialog_Impl final : public SfxCommonTemplateDialog_Impl
 {
 private:
     friend class SfxTemplateControllerItem;
@@ -276,7 +276,6 @@ private:
     DECL_LINK(ToolBoxRSelect, const OString&, void);
     DECL_LINK(ToolMenuSelectHdl, const OString&, void);
 
-protected:
     virtual void EnableEdit( bool ) override;
     virtual void EnableItem(const OString& rMesId, bool bCheck = true) override;
     virtual void CheckItem(const OString& rMesId, bool bCheck = true) override;
