@@ -440,6 +440,7 @@ ScGridWindow::ScGridWindow( vcl::Window* pParent, ScViewData& rData, ScSplitPos 
             OSL_FAIL("GridWindow: wrong position");
     }
 
+    SetUseFrameData(comphelper::LibreOfficeKit::isActive());
     SetBackground();
 
     SetMapMode(mrViewData.GetLogicMode(eWhich));
