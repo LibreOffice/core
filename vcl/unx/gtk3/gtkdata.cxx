@@ -141,15 +141,14 @@ GdkCursor* GtkSalDisplay::getFromSvg(OUString const & name, int nXHot, int nYHot
         break
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-#define MAP_BUILTIN( vcl_name, gdk_name ) \
+#define MAP_BUILTIN( vcl_name, gdk3_name, css_name ) \
     case vcl_name: \
-        pCursor = gdk_cursor_new_for_display( m_pGdkDisplay, gdk_name ); \
+        pCursor = gdk_cursor_new_for_display( m_pGdkDisplay, gdk3_name ); \
         break
 #else
-// TODO, the rest of these
-#define MAP_BUILTIN( vcl_name, gdk_name ) \
+#define MAP_BUILTIN( vcl_name, gdk3_name, css_name ) \
     case vcl_name: \
-        pCursor = gdk_cursor_new_from_name("normal", nullptr); \
+        pCursor = gdk_cursor_new_from_name(css_name, nullptr); \
         break
 #endif
 
@@ -161,45 +160,55 @@ GdkCursor *GtkSalDisplay::getCursor( PointerStyle ePointerStyle )
 
         switch( ePointerStyle )
         {
-            MAP_BUILTIN( PointerStyle::Arrow, GDK_LEFT_PTR );
-            MAP_BUILTIN( PointerStyle::Text, GDK_XTERM );
-            MAP_BUILTIN( PointerStyle::Help, GDK_QUESTION_ARROW );
-            MAP_BUILTIN( PointerStyle::Cross, GDK_CROSSHAIR );
-            MAP_BUILTIN( PointerStyle::Wait, GDK_WATCH );
+            MAP_BUILTIN( PointerStyle::Arrow, GDK_LEFT_PTR, "default" );
+            MAP_BUILTIN( PointerStyle::Text, GDK_XTERM, "text" );
+            MAP_BUILTIN( PointerStyle::Help, GDK_QUESTION_ARROW, "help" );
+            MAP_BUILTIN( PointerStyle::Cross, GDK_CROSSHAIR, "crosshair" );
+            MAP_BUILTIN( PointerStyle::Wait, GDK_WATCH, "wait" );
 
-            MAP_BUILTIN( PointerStyle::NSize, GDK_SB_V_DOUBLE_ARROW );
-            MAP_BUILTIN( PointerStyle::SSize, GDK_SB_V_DOUBLE_ARROW );
-            MAP_BUILTIN( PointerStyle::WSize, GDK_SB_H_DOUBLE_ARROW );
-            MAP_BUILTIN( PointerStyle::ESize, GDK_SB_H_DOUBLE_ARROW );
+            MAP_BUILTIN( PointerStyle::NSize, GDK_SB_V_DOUBLE_ARROW, "n-resize" );
+            MAP_BUILTIN( PointerStyle::SSize, GDK_SB_V_DOUBLE_ARROW, "s-resize" );
+            MAP_BUILTIN( PointerStyle::WSize, GDK_SB_H_DOUBLE_ARROW, "w-resize" );
+            MAP_BUILTIN( PointerStyle::ESize, GDK_SB_H_DOUBLE_ARROW, "e-resize" );
 
-            MAP_BUILTIN( PointerStyle::NWSize, GDK_TOP_LEFT_CORNER );
-            MAP_BUILTIN( PointerStyle::NESize, GDK_TOP_RIGHT_CORNER );
-            MAP_BUILTIN( PointerStyle::SWSize, GDK_BOTTOM_LEFT_CORNER );
-            MAP_BUILTIN( PointerStyle::SESize, GDK_BOTTOM_RIGHT_CORNER );
+            MAP_BUILTIN( PointerStyle::NWSize, GDK_TOP_LEFT_CORNER, "nw-resize" );
+            MAP_BUILTIN( PointerStyle::NESize, GDK_TOP_RIGHT_CORNER, "ne-resize" );
+            MAP_BUILTIN( PointerStyle::SWSize, GDK_BOTTOM_LEFT_CORNER, "sw-resize" );
+            MAP_BUILTIN( PointerStyle::SESize, GDK_BOTTOM_RIGHT_CORNER, "se-resize" );
 
-            MAP_BUILTIN( PointerStyle::WindowNSize, GDK_TOP_SIDE );
-            MAP_BUILTIN( PointerStyle::WindowSSize, GDK_BOTTOM_SIDE );
-            MAP_BUILTIN( PointerStyle::WindowWSize, GDK_LEFT_SIDE );
-            MAP_BUILTIN( PointerStyle::WindowESize, GDK_RIGHT_SIDE );
+            MAP_BUILTIN( PointerStyle::WindowNSize, GDK_TOP_SIDE, "n-resize" );
+            MAP_BUILTIN( PointerStyle::WindowSSize, GDK_BOTTOM_SIDE, "s-resize" );
+            MAP_BUILTIN( PointerStyle::WindowWSize, GDK_LEFT_SIDE, "w-resize" );
+            MAP_BUILTIN( PointerStyle::WindowESize, GDK_RIGHT_SIDE, "e-resize" );
 
-            MAP_BUILTIN( PointerStyle::WindowNWSize, GDK_TOP_LEFT_CORNER );
-            MAP_BUILTIN( PointerStyle::WindowNESize, GDK_TOP_RIGHT_CORNER );
-            MAP_BUILTIN( PointerStyle::WindowSWSize, GDK_BOTTOM_LEFT_CORNER );
-            MAP_BUILTIN( PointerStyle::WindowSESize, GDK_BOTTOM_RIGHT_CORNER );
+            MAP_BUILTIN( PointerStyle::WindowNWSize, GDK_TOP_LEFT_CORNER, "nw-resize" );
+            MAP_BUILTIN( PointerStyle::WindowNESize, GDK_TOP_RIGHT_CORNER, "ne-resize" );
+            MAP_BUILTIN( PointerStyle::WindowSWSize, GDK_BOTTOM_LEFT_CORNER, "sw-resize" );
+            MAP_BUILTIN( PointerStyle::WindowSESize, GDK_BOTTOM_RIGHT_CORNER, "se-resize" );
 
-            MAP_BUILTIN( PointerStyle::HSizeBar, GDK_SB_H_DOUBLE_ARROW );
-            MAP_BUILTIN( PointerStyle::VSizeBar, GDK_SB_V_DOUBLE_ARROW );
+            MAP_BUILTIN( PointerStyle::HSizeBar, GDK_SB_H_DOUBLE_ARROW, "col-resize" );
+            MAP_BUILTIN( PointerStyle::VSizeBar, GDK_SB_V_DOUBLE_ARROW, "row-resize" );
 
-            MAP_BUILTIN( PointerStyle::RefHand, GDK_HAND2 );
-            MAP_BUILTIN( PointerStyle::Hand, GDK_HAND2 );
-            MAP_BUILTIN( PointerStyle::Pen, GDK_PENCIL );
+            MAP_BUILTIN( PointerStyle::RefHand, GDK_HAND2, "grab" );
+            MAP_BUILTIN( PointerStyle::Hand, GDK_HAND2, "grab" );
 
-            MAP_BUILTIN( PointerStyle::HSplit, GDK_SB_H_DOUBLE_ARROW );
-            MAP_BUILTIN( PointerStyle::VSplit, GDK_SB_V_DOUBLE_ARROW );
+#if !GTK_CHECK_VERSION(4, 0, 0)
+            MAP_BUILTIN( PointerStyle::Pen, GDK_PENCIL, "" );
+#else
+            MAKE_CURSOR( PointerStyle::Pen, pen_, RID_CURSOR_PEN );
+#endif
 
-            MAP_BUILTIN( PointerStyle::Move, GDK_FLEUR );
+            MAP_BUILTIN( PointerStyle::HSplit, GDK_SB_H_DOUBLE_ARROW, "col-resize" );
+            MAP_BUILTIN( PointerStyle::VSplit, GDK_SB_V_DOUBLE_ARROW, "row-resize" );
 
+            MAP_BUILTIN( PointerStyle::Move, GDK_FLEUR, "move" );
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
             MAKE_CURSOR( PointerStyle::Null, null, RID_CURSOR_NULL );
+#else
+            MAP_BUILTIN( PointerStyle::Null, 0, "none" );
+#endif
+
             MAKE_CURSOR( PointerStyle::Magnify, magnify_, RID_CURSOR_MAGNIFY );
             MAKE_CURSOR( PointerStyle::Fill, fill_, RID_CURSOR_FILL );
             MAKE_CURSOR( PointerStyle::MoveData, movedata_, RID_CURSOR_MOVE_DATA );
@@ -208,7 +217,13 @@ GdkCursor *GtkSalDisplay::getCursor( PointerStyle ePointerStyle )
             MAKE_CURSOR( PointerStyle::CopyFile, copyfile_, RID_CURSOR_COPY_FILE );
             MAKE_CURSOR( PointerStyle::MoveFiles, movefiles_, RID_CURSOR_MOVE_FILES );
             MAKE_CURSOR( PointerStyle::CopyFiles, copyfiles_, RID_CURSOR_COPY_FILES );
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
             MAKE_CURSOR( PointerStyle::NotAllowed, nodrop_, RID_CURSOR_NOT_ALLOWED );
+#else
+            MAP_BUILTIN( PointerStyle::NotAllowed, 0, "not-allowed" );
+#endif
+
             MAKE_CURSOR( PointerStyle::Rotate, rotate_, RID_CURSOR_ROTATE );
             MAKE_CURSOR( PointerStyle::HShear, hshear_, RID_CURSOR_H_SHEAR );
             MAKE_CURSOR( PointerStyle::VShear, vshear_, RID_CURSOR_V_SHEAR );
