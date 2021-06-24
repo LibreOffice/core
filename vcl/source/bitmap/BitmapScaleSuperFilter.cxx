@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/profilezone.hxx>
 #include <comphelper/threadpool.hxx>
 #include <tools/helpers.hxx>
 
@@ -165,6 +166,7 @@ template <size_t nSize> struct ScaleFunc
 template <int nColorBits>
 void scaleDown (const ScaleContext &rCtx, tools::Long nStartY, tools::Long nEndY)
 {
+    comphelper::ProfileZone pz("BitmapScaleSuperFilter::scaleDown");
     constexpr int nColorComponents = nColorBits / 8;
     static_assert(nColorComponents * 8 == nColorBits, "nColorBits must be divisible by 8");
     using ScaleFunction = ScaleFunc<nColorComponents>;
@@ -280,6 +282,7 @@ void scaleDown (const ScaleContext &rCtx, tools::Long nStartY, tools::Long nEndY
 template <int nColorBits>
 void scaleUp(const ScaleContext &rCtx, tools::Long nStartY, tools::Long nEndY)
 {
+    comphelper::ProfileZone pz("BitmapScaleSuperFilter::scaleUp");
     constexpr int nColorComponents = nColorBits / 8;
     static_assert(nColorComponents * 8 == nColorBits, "nColorBits must be divisible by 8");
     using ScaleFunction = ScaleFunc<nColorComponents>;
