@@ -528,7 +528,6 @@ bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
         {
             if (bSkipPoll)
                 pMutex->m_NonMainWaitingYieldCond.set(); // wake up other threads
-            SolarMutexReleaser aReleaser;
         }
     }
     else // !IsMainThread()
