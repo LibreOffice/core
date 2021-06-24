@@ -1531,6 +1531,11 @@
             <key>CFBundleURLSchemes</key>
             <array>
                 <string>vnd.libreoffice.command</string>
+                <string>ms-word</string>
+                <string>ms-powerpoint</string>
+                <string>ms-excel</string>
+                <string>ms-visio</string>
+                <string>ms-access</string>
             </array>
         </dict>
         <dict>
