@@ -696,6 +696,17 @@ void read_transfer_result::read_block_async_completed(GObject* source, GAsyncRes
                               read_block_async_completed,
                               user_data);
 }
+
+OUString read_transfer_result::get_as_string() const
+{
+    const char* pStr = reinterpret_cast<const char*>(aVector.data());
+    return OUString(pStr, aVector.size(), RTL_TEXTENCODING_UTF8).replaceAll("\r\n", "\n");
+}
+
+css::uno::Sequence<sal_Int8> read_transfer_result::get_as_sequence() const
+{
+    return css::uno::Sequence<sal_Int8>(aVector.data(), aVector.size());
+}
 #endif
 
 namespace {
@@ -810,16 +821,9 @@ public:
             pInstance->DoYield(true, false);
 
         if (aFlavor.MimeType == "text/plain;charset=utf-8")
-        {
-            const char* pStr = reinterpret_cast<const char*>(aRes.aVector.data());
-            OUString aStr(pStr, aRes.aVector.size(), RTL_TEXTENCODING_UTF8);
-            aRet <<= aStr.replaceAll("\r\n", "\n");
-        }
+            aRet <<= aRes.get_as_string();
         else
-        {
-            auto aSeq = css::uno::Sequence<sal_Int8>(aRes.aVector.data(), aRes.aVector.size());
-            aRet <<= aSeq;
-        }
+            aRet <<= aRes.get_as_sequence();
 #endif
         return aRet;
     }
