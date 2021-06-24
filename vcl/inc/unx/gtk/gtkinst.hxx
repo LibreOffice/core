@@ -172,11 +172,11 @@ public:
     gboolean signalDragMotion(GtkWidget* pWidget, GdkDragContext* context, gint x, gint y, guint time);
     gboolean signalDragDrop(GtkWidget* pWidget, GdkDragContext* context, gint x, gint y, guint time);
 #else
-    GdkDragAction signalDragMotion(GtkWidget *pWidget, GtkDropTargetAsync *context, GdkDrop *drop, double x, double y);
+    GdkDragAction signalDragMotion(GtkDropTargetAsync *context, GdkDrop *drop, double x, double y);
     gboolean signalDragDrop(GtkDropTargetAsync *context, GdkDrop *drop, double x, double y);
 #endif
 
-    void signalDragLeave(GtkWidget* pWidget);
+    void signalDragLeave();
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
     void signalDragDropReceived(GtkWidget* pWidget, GdkDragContext* context, gint x, gint y, GtkSelectionData* data, guint ttype, guint time);
