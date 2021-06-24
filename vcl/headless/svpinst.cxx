@@ -490,7 +490,7 @@ bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
             else
                 nTimeoutMicroS = -1; // wait until something happens
 
-            SolarMutexReleaser aReleaser;
+            sal_uInt32 nAcquireCount = ReleaseYieldMutexAll();
 
             if (pSVData->mpPollCallback)
             {
@@ -523,12 +523,11 @@ bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
                 }
                 // here no need to check m_Request because Acquire will do it
             }
+            AcquireYieldMutex( nAcquireCount );
         }
-        else
+        else if (bSkipPoll)
         {
-            if (bSkipPoll)
-                pMutex->m_NonMainWaitingYieldCond.set(); // wake up other threads
-            SolarMutexReleaser aReleaser;
+            pMutex->m_NonMainWaitingYieldCond.set(); // wake up other threads
         }
     }
     else // !IsMainThread()
@@ -545,8 +544,9 @@ bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
         {
             // block & release YieldMutex until the main thread does something
             pMutex->m_NonMainWaitingYieldCond.reset();
-            SolarMutexReleaser aReleaser;
+            sal_uInt32 nAcquireCount = ReleaseYieldMutexAll();
             pMutex->m_NonMainWaitingYieldCond.wait();
+            AcquireYieldMutex( nAcquireCount );
         }
     }
 
