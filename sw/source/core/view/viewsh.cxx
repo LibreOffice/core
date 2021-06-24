@@ -1939,15 +1939,6 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
     tools::Rectangle aOutRect(Point(tilePosX, tilePosY),
                               rDevice.PixelToLogic(Size(contextWidth, contextHeight)));
 
-    // Make the requested area visible -- we can't use MakeVisible as that will
-    // only scroll the contents, but won't zoom/resize if needed.
-    // Without this, items/text that are outside the visible area (in the SwView)
-    // won't be painted when rendering tiles (at least when using either the
-    // tiledrendering app, or the gtktiledviewer) -- although ultimately we
-    // probably want to fix things so that the SwView's area doesn't affect
-    // tiled rendering?
-    VisPortChgd(SwRect(aOutRect));
-
     // Invoke SwLayAction if layout is not yet ready.
     CheckInvalidForPaint(aOutRect);
 
