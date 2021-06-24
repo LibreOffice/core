@@ -1033,6 +1033,15 @@ static bool ImplHandleMouseEvent2( const VclPtr<vcl::Window>& xWindow, MouseNoti
     Point aChildPos = pChild->ImplFrameToOutput( aMousePos );
     MouseEvent aMEvt( aChildPos, nClicks, nMode, nCode, nCode );
 
+    // tracking window gets the mouse events
+    if (pWinFrameData->mpTrackWin)
+        pChild = pWinFrameData->mpTrackWin;
+
+    SAL_WARN_IF( !pChild, "vcl", "ImplHandleMouseEvent: pChild is NULL" );
+
+    if (!pChild)
+        return false;
+
     NotifyEvent aNEvt( nSVEvent, pChild, &aMEvt );
     if ( nSVEvent == MouseNotifyEvent::MOUSEMOVE )
         pChild->ImplGetFrameData()->mbInMouseMove = true;
@@ -1044,16 +1053,35 @@ static bool ImplHandleMouseEvent2( const VclPtr<vcl::Window>& xWindow, MouseNoti
         bRet = false;
         if ( nSVEvent == MouseNotifyEvent::MOUSEMOVE )
         {
+            if (pWinFrameData->mpTrackWin)
+            {
+                TrackingEvent aTEvt( aMEvt );
+                pChild->Tracking( aTEvt );
+                bRet = true;
+            }
         }
         else if ( nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN )
         {
-            pChild->ImplGetWindowImpl()->mbMouseButtonDown = false;
-            pChild->MouseButtonDown( aMEvt );
+            if (pWinFrameData->mpTrackWin)
+                bRet = true;
+            else
+            {
+                pChild->ImplGetWindowImpl()->mbMouseButtonDown = false;
+                pChild->MouseButtonDown( aMEvt );
+            }
         }
         else
         {
-            pChild->ImplGetWindowImpl()->mbMouseButtonUp = false;
-            pChild->MouseButtonUp( aMEvt );
+            if (pWinFrameData->mpTrackWin)
+            {
+                pChild->LocalEndTracking();
+                bRet = true;
+            }
+            else
+            {
+                pChild->ImplGetWindowImpl()->mbMouseButtonUp = false;
+                pChild->MouseButtonUp( aMEvt );
+            }
         }
 
         assert(aNEvt.GetWindow() == pChild);
