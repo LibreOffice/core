@@ -16,13 +16,6 @@ from com.sun.star.uno import RuntimeException
 
 from libreoffice.uno.eventlistener import EventListener
 
-class DialogNotExecutedException(Exception):
-    def __init__(self, command):
-        self.command = command
-
-    def __str__(self):
-        return "Dialog not executed for: " + self.command
-
 class UITest(object):
 
     def __init__(self, xUITest, xContext):
@@ -58,27 +51,27 @@ class UITest(object):
 
     def wait_until_child_is_available(self, childName):
         time_ = 0
-        xChild = None
 
         while time_ < MAX_WAIT:
             xDialog = self._xUITest.getTopFocusWindow()
             if childName in xDialog.getChildren():
-                xChild = xDialog.getChild(childName)
-                break
+                return xDialog.getChild(childName)
             else:
                 time_ += DEFAULT_SLEEP
                 time.sleep(DEFAULT_SLEEP)
 
-        return xChild
+        raise Exception("Child not found: " + childName)
 
     def wait_until_property_is_updated(self, element, propertyName, value):
         time_ = 0
         while time_ < MAX_WAIT:
             if get_state_as_dict(element)[propertyName] == value:
-                break
+                return
             else:
                 time_ += DEFAULT_SLEEP
                 time.sleep(DEFAULT_SLEEP)
+
+        raise Exception("Property not updated: " + childName)
 
     @contextmanager
     def wait_until_component_loaded(self):
@@ -91,9 +84,11 @@ class UITest(object):
                     if len(frames) == 1:
                         self.get_desktop().setActiveFrame(frames[0])
                     time.sleep(DEFAULT_SLEEP)
-                    break
+                    return
                 time_ += DEFAULT_SLEEP
                 time.sleep(DEFAULT_SLEEP)
+
+        raise Exception("Component not loaded")
 
     # Calls UITest.close_doc at exit
     @contextmanager
@@ -107,7 +102,7 @@ class UITest(object):
     def execute_dialog_through_command(self, command, printNames=False):
         with EventListener(self._xContext, "DialogExecute", printNames=printNames) as event:
             if not self._xUITest.executeDialog(command):
-                raise DialogNotExecutedException(command)
+                raise Exception("Dialog not executed for: " + command)
             while True:
                 if event.executed:
                     time.sleep(DEFAULT_SLEEP)
@@ -117,7 +112,7 @@ class UITest(object):
     def execute_modeless_dialog_through_command(self, command, printNames=False):
         with EventListener(self._xContext, "ModelessDialogVisible", printNames = printNames) as event:
             if not self._xUITest.executeCommand(command):
-                raise DialogNotExecutedException(command)
+                raise Exception("Dialog not executed for: " + command)
             time_ = 0
             while time_ < MAX_WAIT:
                 if event.executed:
@@ -126,7 +121,7 @@ class UITest(object):
                 time_ += DEFAULT_SLEEP
                 time.sleep(DEFAULT_SLEEP)
 
-        raise DialogNotExecutedException(command)
+        raise Exception("Dialog not executed for: " + command)
 
     # Calls UITest.close_dialog_through_button at exit
     @contextmanager
@@ -147,7 +142,7 @@ class UITest(object):
                     return
                 time_ += DEFAULT_SLEEP
                 time.sleep(DEFAULT_SLEEP)
-        raise DialogNotExecutedException(action)
+        raise Exception("Dialog not executed for: " + action)
 
     def _handle_crash_reporter(self):
         xCrashReportDlg = self._xUITest.getTopFocusWindow()
@@ -244,6 +239,6 @@ class UITest(object):
                     return
                 time_ += DEFAULT_SLEEP
                 time.sleep(DEFAULT_SLEEP)
-        raise DialogNotExecutedException("did not execute a dialog for a blocking action")
+        raise Exception("Did not execute a dialog for a blocking action")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
