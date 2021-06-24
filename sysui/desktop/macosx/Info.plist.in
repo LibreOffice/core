@@ -1519,27 +1519,18 @@
     <array>
         <dict>
             <key>CFBundleURLName</key>
-            <string>@PRODUCTNAME@ CMIS</string>
-            <key>CFBundleURLSchemes</key>
-            <array>
-                <string>vnd.libreoffice.cmis</string>
-            </array>
-        </dict>
-        <dict>
-            <key>CFBundleURLName</key>
             <string>@PRODUCTNAME@</string>
             <key>CFBundleURLSchemes</key>
             <array>
-                <string>vnd.libreoffice.command</string>
-            </array>
-        </dict>
-        <dict>
-            <key>CFBundleURLName</key>
-            <string>@PRODUCTNAME@ WebDav</string>
-            <key>CFBundleURLSchemes</key>
-            <array>
                 <string>vnd.sun.star.webdav</string>
-				<string>vnd.sun.star.webdavs</string>
+                <string>vnd.sun.star.webdavs</string>
+                <string>vnd.libreoffice.cmis</string>
+                <string>vnd.libreoffice.command</string>
+                <string>ms-word</string>
+                <string>ms-powerpoint</string>
+                <string>ms-excel</string>
+                <string>ms-visio</string>
+                <string>ms-access</string>
             </array>
         </dict>
     </array>
