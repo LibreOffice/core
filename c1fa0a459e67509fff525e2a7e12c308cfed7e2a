@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "07ee4319_1d3da209",
+        "filename": "oox/source/export/DMLPresetShapeExport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-06-24T11:37:39Z",
+      "side": 1,
+      "message": "RangeYMinimum --\u003e RangeYMaximum",
+      "revId": "c1fa0a459e67509fff525e2a7e12c308cfed7e2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c864279_d0d6297b",
+        "filename": "oox/source/export/DMLPresetShapeExport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-06-24T11:37:39Z",
+      "side": 1,
+      "message": "GetAdjustmentPointXValue --\u003e GetAdjustmentPointYValue",
+      "revId": "c1fa0a459e67509fff525e2a7e12c308cfed7e2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
