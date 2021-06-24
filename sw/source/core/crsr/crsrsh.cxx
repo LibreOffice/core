@@ -72,6 +72,7 @@
 #include <tabcol.hxx>
 #include <wrtsh.hxx>
 #include <undobj.hxx>
+#include <view.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <hints.hxx>
 
@@ -2051,9 +2052,11 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
 
 void SwCursorShell::sendLOKCursorUpdates()
 {
-    SwWrtShell* pShell = GetDoc()->GetDocShell()->GetWrtShell();
-    if (!pShell)
+    SwView* pView = static_cast<SwView*>(GetSfxViewShell());
+    if (!pView || !pView->GetWrtShellPtr())
         return;
+
+    SwWrtShell* pShell = &pView->GetWrtShell();
 
     SwFrame* pCurrentFrame = GetCurrFrame();
     SelectionType eType = pShell->GetSelectionType();
