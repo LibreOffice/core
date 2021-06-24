@@ -69,6 +69,8 @@ struct read_transfer_result
     bool bDone = false;
 
     std::vector<sal_Int8> aVector;
+
+    static void read_block_async_completed(GObject* source, GAsyncResult* res, gpointer user_data);
 };
 
 #endif

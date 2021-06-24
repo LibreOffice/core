@@ -665,6 +665,39 @@ sal_Bool SAL_CALL GtkTransferable::isDataFlavorSupported(const css::datatransfer
     return std::any_of(aAll.begin(), aAll.end(), DataFlavorEq(rFlavor));
 }
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+void read_transfer_result::read_block_async_completed(GObject* source, GAsyncResult* res, gpointer user_data)
+{
+    GInputStream* stream = G_INPUT_STREAM(source);
+    read_transfer_result* pRes = static_cast<read_transfer_result*>(user_data);
+
+    gsize bytes_read = g_input_stream_read_finish(stream, res, nullptr);
+
+    bool bFinished = bytes_read == 0;
+
+    if (bFinished)
+    {
+        g_object_unref(stream);
+        pRes->aVector.resize(pRes->nRead);
+        pRes->bDone = true;
+        g_main_context_wakeup(nullptr);
+        return;
+    }
+
+    pRes->nRead += bytes_read;
+
+    pRes->aVector.resize(pRes->nRead + read_transfer_result::BlockSize);
+
+    g_input_stream_read_async(stream,
+                              pRes->aVector.data() + pRes->nRead,
+                              read_transfer_result::BlockSize,
+                              G_PRIORITY_DEFAULT,
+                              nullptr,
+                              read_block_async_completed,
+                              user_data);
+}
+#endif
+
 namespace {
 
 GdkClipboard* clipboard_get(SelectionType eSelection)
@@ -694,35 +727,29 @@ void text_async_completed(GObject* source, GAsyncResult* res, gpointer data)
     g_main_context_wakeup(nullptr);
 }
 
-void read_async_completed(GObject* source, GAsyncResult* res, gpointer data)
+void read_clipboard_async_completed(GObject* source, GAsyncResult* res, gpointer user_data)
 {
     GdkClipboard* clipboard = GDK_CLIPBOARD(source);
-    read_transfer_result* pRes = static_cast<read_transfer_result*>(data);
+    read_transfer_result* pRes = static_cast<read_transfer_result*>(user_data);
 
-    if (GInputStream* pResult = gdk_clipboard_read_finish(clipboard, res, nullptr, nullptr))
+    GInputStream* pResult = gdk_clipboard_read_finish(clipboard, res, nullptr, nullptr);
+
+    if (!pResult)
     {
-        const int nBlockSize = 8192;
-        std::vector<sal_Int8> aVector(nBlockSize);
-        gsize total = 0;
-
-        while (true)
-        {
-            gsize bytes_read;
-            if (!g_input_stream_read_all(pResult, aVector.data() + total, nBlockSize, &bytes_read, nullptr, nullptr))
-                break;
-            total += bytes_read;
-            if (bytes_read < nBlockSize)
-                break;
-            aVector.resize(aVector.size() + nBlockSize);
-        }
-
-        pRes->aVector.resize(total);
-        g_object_unref(pResult);
+        pRes->bDone = true;
+        g_main_context_wakeup(nullptr);
+        return;
     }
 
-    pRes->bDone = true;
+    pRes->aVector.resize(read_transfer_result::BlockSize);
 
-    g_main_context_wakeup(nullptr);
+    g_input_stream_read_async(pResult,
+                              pRes->aVector.data(),
+                              pRes->aVector.size(),
+                              G_PRIORITY_DEFAULT,
+                              nullptr,
+                              read_transfer_result::read_block_async_completed,
+                              user_data);
 }
 
 #endif
@@ -773,14 +800,17 @@ public:
         SalInstance* pInstance = GetSalData()->m_pInstance;
         read_transfer_result aRes;
         const char *mime_types[] = { it->second.getStr(), nullptr };
+
         gdk_clipboard_read_async(clipboard,
                                  mime_types,
                                  G_PRIORITY_DEFAULT,
                                  nullptr,
-                                 read_async_completed,
+                                 read_clipboard_async_completed,
                                  &aRes);
+
         while (!aRes.bDone)
             pInstance->DoYield(true, false);
+
         Sequence<sal_Int8> aSeq(aRes.aVector.data(), aRes.aVector.size());
         aRet <<= aSeq;
 #else
