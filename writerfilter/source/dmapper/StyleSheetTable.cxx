@@ -270,6 +270,7 @@ struct StyleSheetTable_Impl
     uno::Reference< text::XTextDocument>    m_xTextDocument;
     uno::Reference< beans::XPropertySet>    m_xTextDefaults;
     std::vector< StyleSheetEntryPtr >       m_aStyleSheetEntries;
+    std::map< OUString, StyleSheetEntryPtr > m_aStyleSheetEntriesMap;
     StyleSheetEntryPtr                      m_pCurrentEntry;
     PropertyMapPtr                          m_pDefaultParaProps, m_pDefaultCharProps;
     OUString                                m_sDefaultParaStyleName; //WW8 name
@@ -809,6 +810,7 @@ void StyleSheetTable::lcl_entry(writerfilter::Reference<Properties>::Pointer_t r
     {
         m_pImpl->m_pCurrentEntry->sConvertedStyleName = ConvertStyleName( m_pImpl->m_pCurrentEntry->sStyleName );
         m_pImpl->m_aStyleSheetEntries.push_back( m_pImpl->m_pCurrentEntry );
+        m_pImpl->m_aStyleSheetEntriesMap.emplace( m_pImpl->m_pCurrentEntry->sStyleIdentifierD, m_pImpl->m_pCurrentEntry );
     }
     else
     {
@@ -1111,16 +1113,14 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                                     if (rVal.Name == "customStyle" && rVal.Value == true)
                                     {
                                         OUString sBaseId = pEntry->sBaseStyleIdentifier;
-                                        for (const auto& aSheetProps : m_pImpl->m_aStyleSheetEntries)
+                                        auto findIt = m_pImpl->m_aStyleSheetEntriesMap.find(sBaseId);
+                                        if (findIt != m_pImpl->m_aStyleSheetEntriesMap.end())
                                         {
-                                            if (aSheetProps->sStyleIdentifierD == sBaseId)
-                                            {
-                                                StyleSheetPropertyMap& rStyleSheetProps
-                                                    = dynamic_cast<StyleSheetPropertyMap&>(*aSheetProps->pProperties);
-                                                pStyleSheetProperties->SetListLevel(rStyleSheetProps.GetListLevel());
-                                                pStyleSheetProperties->SetOutlineLevel(rStyleSheetProps.GetOutlineLevel());
-                                                break;
-                                            }
+                                            const auto& aSheetProps  = findIt->second;
+                                            StyleSheetPropertyMap& rStyleSheetProps
+                                                = dynamic_cast<StyleSheetPropertyMap&>(*aSheetProps->pProperties);
+                                            pStyleSheetProperties->SetListLevel(rStyleSheetProps.GetListLevel());
+                                            pStyleSheetProperties->SetOutlineLevel(rStyleSheetProps.GetOutlineLevel());
                                         }
                                     }
                                 }
@@ -1300,18 +1300,12 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
 }
 
 
-StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByISTD(std::u16string_view sIndex)
+StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByISTD(const OUString& sIndex)
 {
-    StyleSheetEntryPtr pRet;
-    for(const StyleSheetEntryPtr & rpEntry : m_pImpl->m_aStyleSheetEntries)
-    {
-        if( rpEntry->sStyleIdentifierD == sIndex)
-        {
-            pRet = rpEntry;
-            break;
-        }
-    }
-    return pRet;
+    auto findIt = m_pImpl->m_aStyleSheetEntriesMap.find(sIndex);
+    if (findIt != m_pImpl->m_aStyleSheetEntriesMap.end())
+        return findIt->second;
+    return StyleSheetEntryPtr();
 }
 
 
@@ -1346,12 +1340,9 @@ OUString StyleSheetTable::ConvertStyleName( const OUString& rWWName, bool bExten
     if( bExtendedSearch )
     {
         //search for the rWWName in the IdentifierD of the existing styles and convert the sStyleName member
-        //TODO: performance issue - put styles list into a map sorted by its sStyleIdentifierD members
-        for( const auto& rStyleSheetEntryPtr : m_pImpl->m_aStyleSheetEntries )
-        {
-            if( rWWName == rStyleSheetEntryPtr->sStyleIdentifierD )
-                sRet = rStyleSheetEntryPtr->sStyleName;
-        }
+        auto findIt = m_pImpl->m_aStyleSheetEntriesMap.find(rWWName);
+        if (findIt != m_pImpl->m_aStyleSheetEntriesMap.end())
+            sRet = findIt->second->sStyleName;
     }
 
     // create a map only once
