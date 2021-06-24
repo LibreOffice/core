@@ -4500,7 +4500,7 @@ gboolean GtkInstDropTarget::signalDragDrop(GtkDropTargetAsync* context, GdkDrop*
 #if !GTK_CHECK_VERSION(4, 0, 0)
     aEvent.DropAction = GdkToVcl(gdk_drag_context_get_selected_action(context));
 #else
-    aEvent.DropAction = GdkToVcl(getPreferredDragAction(GdkToVcl(gtk_drop_target_async_get_actions(context))));
+    aEvent.DropAction = GdkToVcl(getPreferredDragAction(GdkToVcl(gdk_drop_get_actions(drop))));
 #endif
     // ACTION_DEFAULT is documented as...
     // 'This means the user did not press any key during the Drag and Drop operation
@@ -4515,7 +4515,7 @@ gboolean GtkInstDropTarget::signalDragDrop(GtkDropTargetAsync* context, GdkDrop*
     GdkModifierType mask;
     gdk_window_get_pointer(widget_get_surface(pWidget), nullptr, nullptr, &mask);
 #else
-    aEvent.SourceActions = GdkToVcl(gtk_drop_target_async_get_actions(context));
+    aEvent.SourceActions = GdkToVcl(gdk_drop_get_actions(drop));
     GdkModifierType mask = gtk_event_controller_get_current_event_state(GTK_EVENT_CONTROLLER(context));
 #endif
     if (!(mask & (GDK_CONTROL_MASK | GDK_SHIFT_MASK)))
@@ -4660,7 +4660,7 @@ GdkDragAction GtkInstDropTarget::signalDragMotion(GtkDropTargetAsync *context, G
     GdkModifierType mask;
     gdk_window_get_pointer(widget_get_surface(pWidget), nullptr, nullptr, &mask);
 #else
-    sal_Int8 nSourceActions = GdkToVcl(gtk_drop_target_async_get_actions(context));
+    sal_Int8 nSourceActions = GdkToVcl(gdk_drop_get_actions(pDrop));
     GdkModifierType mask = gtk_event_controller_get_current_event_state(GTK_EVENT_CONTROLLER(context));
 #endif
 
