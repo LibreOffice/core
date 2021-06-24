@@ -713,20 +713,6 @@ GdkClipboard* clipboard_get(SelectionType eSelection)
 
 #if GTK_CHECK_VERSION(4, 0, 0)
 
-void text_async_completed(GObject* source, GAsyncResult* res, gpointer data)
-{
-    GdkClipboard* clipboard = GDK_CLIPBOARD(source);
-    text_transfer_result* pRes = static_cast<text_transfer_result*>(data);
-
-    gchar* pText = gdk_clipboard_read_text_finish(clipboard, res, nullptr);
-    pRes->sText = OUString(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
-    g_free(pText);
-
-    pRes->bDone = true;
-
-    g_main_context_wakeup(nullptr);
-}
-
 void read_clipboard_async_completed(GObject* source, GAsyncResult* res, gpointer user_data)
 {
     GdkClipboard* clipboard = GDK_CLIPBOARD(source);
@@ -772,31 +758,43 @@ public:
 
     virtual css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override
     {
+        css::datatransfer::DataFlavor aFlavor(rFlavor);
+        if (aFlavor.MimeType == "text/plain;charset=utf-16")
+            aFlavor.MimeType = "text/plain;charset=utf-8";
+
+        auto it = m_aMimeTypeToGtkType.find(aFlavor.MimeType);
+        if (it == m_aMimeTypeToGtkType.end())
+            return css::uno::Any();
+
         css::uno::Any aRet;
+
         GdkClipboard* clipboard = clipboard_get(m_eSelection);
-        if (rFlavor.MimeType == "text/plain;charset=utf-16")
-        {
+
 #if !GTK_CHECK_VERSION(4, 0, 0)
+        if (aFlavor.MimeType == "text/plain;charset=utf-8")
+        {
             gchar *pText = gtk_clipboard_wait_for_text(clipboard);
             OUString aStr(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
             g_free(pText);
             aRet <<= aStr.replaceAll("\r\n", "\n");
-#else
-            SalInstance* pInstance = GetSalData()->m_pInstance;
-            text_transfer_result aRes;
-            gdk_clipboard_read_text_async(clipboard, nullptr, text_async_completed, &aRes);
-            while (!aRes.bDone)
-                pInstance->DoYield(true, false);
-            aRet <<= aRes.sText.replaceAll("\r\n", "\n");
-#endif
             return aRet;
         }
-
-        auto it = m_aMimeTypeToGtkType.find(rFlavor.MimeType);
-        if (it == m_aMimeTypeToGtkType.end())
-            return css::uno::Any();
-
-#if GTK_CHECK_VERSION(4, 0, 0)
+        else
+        {
+            GtkSelectionData* data = gtk_clipboard_wait_for_contents(clipboard,
+                                                                     it->second);
+            if (!data)
+            {
+                return css::uno::Any();
+            }
+            gint length;
+            const guchar *rawdata = gtk_selection_data_get_data_with_length(data,
+                                                                            &length);
+            Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(rawdata), length);
+            gtk_selection_data_free(data);
+            aRet <<= aSeq;
+        }
+#else
         SalInstance* pInstance = GetSalData()->m_pInstance;
         read_transfer_result aRes;
         const char *mime_types[] = { it->second.getStr(), nullptr };
@@ -811,21 +809,17 @@ public:
         while (!aRes.bDone)
             pInstance->DoYield(true, false);
 
-        Sequence<sal_Int8> aSeq(aRes.aVector.data(), aRes.aVector.size());
-        aRet <<= aSeq;
-#else
-        GtkSelectionData* data = gtk_clipboard_wait_for_contents(clipboard,
-                                                                 it->second);
-        if (!data)
+        if (aFlavor.MimeType == "text/plain;charset=utf-8")
         {
-            return css::uno::Any();
+            const char* pStr = reinterpret_cast<const char*>(aRes.aVector.data());
+            OUString aStr(pStr, aRes.aVector.size(), RTL_TEXTENCODING_UTF8);
+            aRet <<= aStr.replaceAll("\r\n", "\n");
         }
-        gint length;
-        const guchar *rawdata = gtk_selection_data_get_data_with_length(data,
-                                                                        &length);
-        Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(rawdata), length);
-        gtk_selection_data_free(data);
-        aRet <<= aSeq;
+        else
+        {
+            auto aSeq = css::uno::Sequence<sal_Int8>(aRes.aVector.data(), aRes.aVector.size());
+            aRet <<= aSeq;
+        }
 #endif
         return aRet;
     }

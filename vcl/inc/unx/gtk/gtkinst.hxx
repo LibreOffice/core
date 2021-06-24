@@ -56,12 +56,6 @@ class GtkSalFrame;
 #if GTK_CHECK_VERSION(4, 0, 0)
 gint gtk_dialog_run(GtkDialog *dialog);
 
-struct text_transfer_result
-{
-    OUString sText;
-    bool bDone = false;
-};
-
 struct read_transfer_result
 {
     enum { BlockSize = 8192 };
