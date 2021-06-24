@@ -62,7 +62,7 @@ bool isBuilderEnabled(const OUString& rUIFile, bool bMobile)
 
 bool isBuilderEnabledForPopup(const OUString& rUIFile)
 {
-    if (rUIFile == "svx/ui/colorwindow.ui")
+    if (rUIFile == "svx/ui/colorwindow.ui" || rUIFile == "modules/scalc/ui/floatinglinestyle.ui")
         return true;
 
     return false;

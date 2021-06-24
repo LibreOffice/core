@@ -79,6 +79,7 @@ public:
     PopupMenu*      GetPopupMenu() const { return mpMenu; }
 
     void            SetPopover(Window* pWindow);
+    Window*         GetPopover() { return mpFloatingWindow.get(); }
 
     OString const & GetCurItemIdent() const { return msCurItemIdent; }
 
@@ -88,8 +89,6 @@ public:
     virtual FactoryFunction GetUITestFactory() const override;
 
     void SetCurItemId();
-
-    void DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
 
 };
 
