@@ -22,6 +22,30 @@
       "revId": "11ce1051e7ad7402dff82dc805af772666bd1cd1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3bebb4d_45ca4cac",
+        "filename": "cui/source/dialogs/GraphicTestsDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-24T03:13:20Z",
+      "side": 1,
+      "message": "As I said there .. never use intern. It doesn\u0027t do what you think it does. Conversion from OString to OUString should be done with OStringToOUString and the other way with OUStringToOString. \n\nBut then also you shouldn\u0027t need to convert from one to the other all the time... this is wrong and if you have to, then maybe something else is wrong. OUString is the standard one that is used in LO.",
+      "parentUuid": "a18f21ce_c883d99b",
+      "range": {
+        "startLine": 57,
+        "startChar": 22,
+        "endLine": 57,
+        "endChar": 28
+      },
+      "revId": "11ce1051e7ad7402dff82dc805af772666bd1cd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
