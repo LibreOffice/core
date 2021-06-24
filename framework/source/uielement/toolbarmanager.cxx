@@ -1416,6 +1416,8 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                 if (( nType == css::ui::ItemType::DEFAULT ) && !aCommandURL.isEmpty() )
                 {
                     auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(aCommandURL, m_aModuleIdentifier);
+                    if (!aProperties.hasElements()) // E.g., user-provided macro command?
+                        aProperties = aProps; // Use existing info, including user-provided Label
                     OUString aString(vcl::CommandInfoProvider::GetLabelForCommand(aProperties));
 
                     ToolBoxItemBits nItemBits = ConvertStyleToToolboxItemBits( nStyle );
