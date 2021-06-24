@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "7df08f75_0de9b778",
+        "filename": "xmloff/source/style/xmlnumi.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-06-24T09:36:21Z",
+      "side": 1,
+      "message": "i think it\u0027s better to add STYLE *import*: if the proposal is accepted without changes, it will just work in the earliest LO release that has the feature; if the attribute is renamed then it needs changing anyway, so i dont see a downside.",
+      "parentUuid": "840b6a59_015326ba",
+      "revId": "cc28a95e0c62d458a7c346bfa36be953e0ca8e5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e150cc08_c8121ce4",
         "filename": "xmloff/source/style/xmlnumi.cxx",
         "patchSetId": 16
@@ -101,6 +119,24 @@
       "side": 1,
       "message": "Problem is that OOXML has 9 levels max, but ODF - 10. \"%10\" is bit harder to parse and there is a ambiguity in \"%10\": it is first level and \"0\" as a suffix or 10\"? So usage of hex for such case (i think rather rare case) maybe a solution?",
       "parentUuid": "84cb0982_cfe07112",
+      "revId": "cc28a95e0c62d458a7c346bfa36be953e0ca8e5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e357dc4_b1644fb1",
+        "filename": "xmloff/source/style/xmlnumi.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-06-24T09:36:21Z",
+      "side": 1,
+      "message": "hmm ... i\u0027m not sure that there is a level max in ODF - the 10 is probably a Writer/EditEngine implementation limit.\n\ni have not found any indication that there is a maximum list level in ODF 1.3 part 3 :(",
+      "parentUuid": "6559f80d_43ae29c9",
       "revId": "cc28a95e0c62d458a7c346bfa36be953e0ca8e5e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
