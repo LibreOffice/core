@@ -217,18 +217,14 @@ namespace emfplushelper
         SAL_INFO("drawinglayer.emf", "EMF+\t\tTabStopCount: " << tabStopCount);
         SAL_INFO("drawinglayer.emf", "EMF+\t\tRangeCount: " << rangeCount);
 
-        SAL_WARN_IF(stringAlignment != StringAlignment::StringAlignmentNear, "drawinglayer.emf", "EMF+\t TODO EMFPStringFormat:StringAlignment");
-        SAL_WARN_IF(lineAlign != StringAlignment::StringAlignmentNear, "drawinglayer.emf", "EMF+\t TODO EMFPStringFormat:lineAlign");
         SAL_WARN_IF(digitSubstitution != StringDigitSubstitution::StringDigitSubstitutionNone,
-                        "drawinglayer.emf", "EMF+\t TODO EMFPStringFormat:digitSubstitution");
+                    "drawinglayer.emf", "EMF+\t TODO EMFPStringFormat:digitSubstitution");
         SAL_WARN_IF(firstTabOffset != 0.0, "drawinglayer.emf", "EMF+\t TODO EMFPStringFormat:firstTabOffset");
         SAL_WARN_IF(hotkeyPrefix != HotkeyPrefix::HotkeyPrefixNone, "drawinglayer.emf", "EMF+\t TODO EMFPStringFormat:hotkeyPrefix");
-        SAL_WARN_IF(leadingMargin != 0.0, "drawinglayer.emf", "EMF+\t TODO EMFPStringFormat:leadingMargin");
-        SAL_WARN_IF(trailingMargin != 0.0, "drawinglayer.emf", "EMF+\t TODO EMFPStringFormat:trailingMargin");
         SAL_WARN_IF(tracking != 1.0, "drawinglayer.emf", "EMF+\t TODO EMFPStringFormat:tracking");
         SAL_WARN_IF(trimming != StringTrimming::StringTrimmingNone, "drawinglayer.emf", "EMF+\t TODO EMFPStringFormat:trimming");
         SAL_WARN_IF(tabStopCount, "drawinglayer.emf", "EMF+\t TODO EMFPStringFormat:tabStopCount");
-        SAL_WARN_IF(rangeCount, "drawinglayer.emf", "EMF+\t TODO EMFPStringFormat:StringFormatData");
+        SAL_WARN_IF(rangeCount != 0, "drawinglayer.emf", "EMF+\t TODO EMFPStringFormat:StringFormatData");
     }
 }
 
