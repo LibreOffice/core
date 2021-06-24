@@ -4492,45 +4492,12 @@ GtkInstDragSource* GtkInstDragSource::g_ActiveDragSource;
 
 #if GTK_CHECK_VERSION(4, 0, 0)
 
-struct GrabBag
-{
-    GtkInstDropTarget* m_pDropTarget;
-    GtkDropTargetAsync* m_pContext;
-    GdkDrop* m_pDrop;
-    double m_nX;
-    double m_nY;
-
-    GrabBag(GtkInstDropTarget* pDropTarget,
-            GtkDropTargetAsync* pContext,
-            GdkDrop* pDrop,
-            double nX,
-            double nY)
-        : m_pDropTarget(pDropTarget)
-        , m_pContext(pContext)
-        , m_pDrop(pDrop)
-        , m_nX(nX)
-        , m_nY(nY)
-    {
-    }
-};
-
-static gboolean lcl_deferred_dragDrop(gpointer user_data)
-{
-    GrabBag* pGrabBag = static_cast<GrabBag*>(user_data);
-    pGrabBag->m_pDropTarget->signalDragDrop(pGrabBag->m_pContext, pGrabBag->m_pDrop, pGrabBag->m_nX, pGrabBag->m_nY);
-    g_object_unref(pGrabBag->m_pDrop);
-    return false;
-}
-
 gboolean GtkSalFrame::signalDragDrop(GtkDropTargetAsync* context, GdkDrop* drop, double x, double y, gpointer frame)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
     if (!pThis->m_pDropTarget)
         return false;
-    g_object_ref(drop);
-    g_idle_add(lcl_deferred_dragDrop, new GrabBag(pThis->m_pDropTarget, context, drop, x, y));
-//    return pThis->m_pDropTarget->signalDragDrop(context, drop, x, y);
-    return true;
+    return pThis->m_pDropTarget->signalDragDrop(context, drop, x, y);
 }
 #else
 gboolean GtkSalFrame::signalDragDrop(GtkWidget* pWidget, GdkDragContext* context, gint x, gint y, guint time, gpointer frame)
