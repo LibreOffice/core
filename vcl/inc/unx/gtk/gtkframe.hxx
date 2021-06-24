@@ -61,6 +61,8 @@ class GtkDnDTransferable;
 
 class GtkSalMenu;
 
+struct VclToGtkHelper;
+
 class GtkSalFrame final : public SalFrame
 {
     struct IMHandler
@@ -264,6 +266,10 @@ class GtkSalFrame final : public SalFrame
     static GdkDragAction signalDragMotion(GtkDropTargetAsync *dest, GdkDrop *drop, double x, double y, gpointer frame);
     static void         signalDragLeave(GtkDropTargetAsync *dest, GdkDrop *drop, gpointer frame);
     static gboolean     signalDragDrop(GtkDropTargetAsync* context, GdkDrop* drop, double x, double y, gpointer frame);
+
+    static void         signalDragFailed(GdkDrag* drag, GdkDragCancelReason reason, gpointer frame);
+    static void         signalDragDelete(GdkDrag* drag, gpointer frame);
+    static void         signalDragEnd(GdkDrag* drag, gpointer frame);
 #else
     static gboolean     signalDragMotion(GtkWidget *widget, GdkDragContext *context, gint x, gint y,
                                          guint time, gpointer frame);
@@ -460,10 +466,10 @@ public:
         m_pDragSource = nullptr;
     }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    void startDrag(gint nButton, gint nDragOriginX, gint nDragOriginY,
-                   GdkDragAction sourceActions, GtkTargetList* pTargetList);
-#endif
+    void startDrag(const css::datatransfer::dnd::DragGestureEvent& rEvent,
+                   const css::uno::Reference<css::datatransfer::XTransferable>& rTrans,
+                   VclToGtkHelper& rConversionHelper,
+                   GdkDragAction sourceActions);
 
     void closePopup();
 

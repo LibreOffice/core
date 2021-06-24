@@ -197,8 +197,6 @@ bool ReservedId::VisitNamedDecl(NamedDecl const * decl) {
                 // connectivity/source/inc/ado/Awrapadox.hxx, MS SDK adoctint.h
             && s != "_ADOUser"
                 // connectivity/source/inc/ado/Awrapadox.hxx, MS SDK adoctint.h
-            && s != "_ClipboardContent" // vcl/unx/gtk3/gtkinst.cxx
-            && s != "_ClipboardContentClass" // vcl/unx/gtk3/gtkinst.cxx
             && s != "_FcPattern" // vcl/inc/unx/fc_fontoptions.hxx
             && s != "_GdkDisplay"
                 // vcl/unx/gtk/xid_fullscreen_on_all_monitors.c
@@ -212,6 +210,8 @@ bool ReservedId::VisitNamedDecl(NamedDecl const * decl) {
             && s != "_NotifyingLayout" // vcl/unx/gtk4/notifyinglayout.cxx
             && s != "_SurfacePaintable" // vcl/unx/gtk3/gtkinst.cxx
             && s != "_SurfacePaintableClass" // vcl/unx/gtk3/gtkinst.cxx
+            && s != "_TransferableContent" // vcl/unx/gtk4/transferableprovider.cxx
+            && s != "_TransferableContentClass" // vcl/unx/gtk4/transferableprovider.cxx
             && s != "_XRegion" // vcl/unx/generic/gdi/x11cairotextrender.cxx
             && s != "_XTrap") // vcl/unx/generic/gdi/xrender_peer.hxx
         {
