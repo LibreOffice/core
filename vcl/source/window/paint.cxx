@@ -541,17 +541,6 @@ PaintHelper::~PaintHelper()
     }
 
     ImplFrameData* pFrameData = m_pWindow->mpWindowImpl->mpFrameData;
-    if ( m_nPaintFlags & (ImplPaintFlags::PaintAllChildren | ImplPaintFlags::PaintChildren) )
-    {
-        // Paint from the bottom child window and frontward.
-        vcl::Window* pTempWindow = pWindowImpl->mpLastChild;
-        while (pTempWindow)
-        {
-            if (pTempWindow->mpWindowImpl->mbVisible)
-                pTempWindow->ImplCallPaint(m_pChildRegion.get(), m_nPaintFlags);
-            pTempWindow = pTempWindow->mpWindowImpl->mpPrev;
-        }
-    }
 
     if ( pWindowImpl->mpWinData && pWindowImpl->mbTrackVisible && (pWindowImpl->mpWinData->mnTrackFlags & ShowTrackFlags::TrackWindow) )
         /* #98602# need to invert the tracking rect AFTER
