@@ -142,6 +142,7 @@ public:
     void testPivotCacheAfterExportXLSX();
     void testTdf114969XLSX();
     void testTdf115192XLSX();
+    void testTdf142764();
     void testTdf91634XLSX();
     void testTdf115159();
     void testTdf112567();
@@ -237,6 +238,7 @@ public:
     CPPUNIT_TEST(testPivotCacheAfterExportXLSX);
     CPPUNIT_TEST(testTdf114969XLSX);
     CPPUNIT_TEST(testTdf115192XLSX);
+    CPPUNIT_TEST(testTdf142764);
     CPPUNIT_TEST(testTdf91634XLSX);
     CPPUNIT_TEST(testTdf115159);
     CPPUNIT_TEST(testTdf112567);
@@ -1209,6 +1211,23 @@ void ScExportTest2::testTdf115192XLSX()
                 "External");
 
     xDocSh->DoClose();
+}
+
+void ScExportTest2::testTdf142764()
+{
+    ScDocShellRef xShell = loadDoc(u"tdf142764.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xShell);
+
+    auto pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+
+    xmlDocUniquePtr pSheet
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pSheet);
+
+    assertXPath(pSheet, "/x:worksheet/x:headerFooter", "differentOddEven", "true");
+    assertXPath(pSheet, "/x:worksheet/x:headerFooter", "differentFirst", "true");
+
+    xShell->DoClose();
 }
 
 void ScExportTest2::testTdf91634XLSX()
