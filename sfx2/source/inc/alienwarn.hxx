@@ -21,7 +21,7 @@
 
 #include <vcl/weld.hxx>
 
-class SfxAlienWarningDialog : public weld::MessageDialogController
+class SfxAlienWarningDialog final : public weld::MessageDialogController
 {
 private:
     std::unique_ptr<weld::Button> m_xKeepCurrentBtn;

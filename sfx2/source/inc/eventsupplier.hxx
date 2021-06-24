@@ -39,7 +39,7 @@ class SfxObjectShell;
 class SvxMacro;
 
 
-class SfxEvents_Impl : public ::cppu::WeakImplHelper< css::container::XNameReplace, css::document::XEventListener  >
+class SfxEvents_Impl final : public ::cppu::WeakImplHelper< css::container::XNameReplace, css::document::XEventListener  >
 {
     css::uno::Sequence< OUString >     maEventNames;
     css::uno::Sequence< css::uno::Any >                 maEventData;

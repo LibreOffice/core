@@ -24,7 +24,7 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/weldutils.hxx>
 
-class SfxRecordingFloatWrapper_Impl : public SfxChildWindow
+class SfxRecordingFloatWrapper_Impl final : public SfxChildWindow
 {
     SfxBindings*        pBindings;
 public:
@@ -38,7 +38,7 @@ public:
     virtual bool        QueryClose() override;
 };
 
-class SfxRecordingFloat_Impl : public SfxModelessDialogController
+class SfxRecordingFloat_Impl final : public SfxModelessDialogController
 {
     std::unique_ptr<weld::Toolbar> m_xToolbar;
     std::unique_ptr<ToolbarUnoDispatcher> m_xDispatcher;

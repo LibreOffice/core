@@ -95,7 +95,7 @@ namespace sfx2
     //= DocumentUndoManager
 
     struct DocumentUndoManager_Impl;
-    class DocumentUndoManager   :public ::cppu::WeakImplHelper<css::document::XUndoManager>
+    class DocumentUndoManager final : public ::cppu::WeakImplHelper<css::document::XUndoManager>
                                 ,public SfxModelSubComponent
     {
         friend struct DocumentUndoManager_Impl;

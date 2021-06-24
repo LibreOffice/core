@@ -29,7 +29,7 @@ namespace com::sun::star::frame { class XFrame; }
 
 // class SfxPartChildWnd_Impl -----------------------------------
 
-class SfxPartChildWnd_Impl : public SfxChildWindow
+class SfxPartChildWnd_Impl final : public SfxChildWindow
 {
 public:
     SfxPartChildWnd_Impl( vcl::Window* pParent, sal_uInt16 nId,
@@ -44,9 +44,8 @@ public:
 
 // class SfxExplorerDockWnd_Impl -----------------------------------------
 
-class SfxPartDockWnd_Impl : public SfxDockingWindow
+class SfxPartDockWnd_Impl final : public SfxDockingWindow
 {
-protected:
     virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
 
 public:

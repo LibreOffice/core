@@ -38,7 +38,7 @@ struct SfxDock_Impl
     bool              bHide;     // SplitWindow had this window
 };
 
-class SfxSplitWindow : public SplitWindow
+class SfxSplitWindow final : public SplitWindow
 {
 friend class SfxEmptySplitWin_Impl;
 
@@ -63,8 +63,6 @@ private:
     void                SetFadeIn_Impl( bool );
     void                SaveConfig_Impl();
     void                FadeOut_Impl();
-
-protected:
 
     virtual void        StartSplit() override;
     virtual void        SplitResize() override;
