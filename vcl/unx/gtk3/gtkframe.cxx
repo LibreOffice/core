@@ -1055,8 +1055,8 @@ void GtkSalFrame::InitCommon()
 #endif
 #if !GTK_CHECK_VERSION(4,0,0)
     g_signal_connect( G_OBJECT(m_pWindow), "configure-event", G_CALLBACK(signalConfigure), this );
-    g_signal_connect( G_OBJECT(m_pWindow), "window-state-event", G_CALLBACK(signalWindowState), this );
 #endif
+
 #if !GTK_CHECK_VERSION(4,0,0)
     g_signal_connect( G_OBJECT(m_pWindow), "key-press-event", G_CALLBACK(signalKey), this );
     g_signal_connect( G_OBJECT(m_pWindow), "key-release-event", G_CALLBACK(signalKey), this );
@@ -1109,6 +1109,13 @@ void GtkSalFrame::InitCommon()
 
     // realize the window, we need an XWindow id
     gtk_widget_realize( m_pWindow );
+
+#if !GTK_CHECK_VERSION(4,0,0)
+    g_signal_connect(G_OBJECT(m_pWindow), "window-state-event", G_CALLBACK(signalWindowState), this);
+#else
+    GdkSurface* gdkWindow = widget_get_surface(m_pWindow);
+    g_signal_connect(G_OBJECT(gdkWindow), "notify::state", G_CALLBACK(signalWindowState), this);
+#endif
 
     //system data
     m_aSystemData.SetWindowHandle(GetNativeWindowHandle(m_pWindow));
@@ -4144,31 +4151,36 @@ gboolean GtkSalFrame::signalWindowState( GtkWidget*, GdkEvent* pEvent, gpointer 
         pThis->m_aRestorePosSize = GetPosAndSize(GTK_WINDOW(pThis->m_pWindow));
     }
 
-#if !GTK_CHECK_VERSION(4,0,0)
     if ((pEvent->window_state.new_window_state & GDK_WINDOW_STATE_WITHDRAWN) &&
         !(pThis->m_nState & GDK_WINDOW_STATE_WITHDRAWN))
     {
         if (pThis->isFloatGrabWindow())
             pThis->closePopup();
     }
-#endif
 
     pThis->m_nState = pEvent->window_state.new_window_state;
 
-#if OSL_DEBUG_LEVEL > 1
-    SAL_INFO_IF((pEvent->window_state.changed_mask &
-                GDK_WINDOW_STATE_FULLSCREEN),
-            "vcl.gtk3", "window "
-            << pThis
-            << " "
-            << ((pEvent->window_state.new_window_state &
-                    GDK_WINDOW_STATE_FULLSCREEN) ?
-                "enters" :
-                "leaves")
-            << " full screen state.");
-#endif
-
     return false;
+}
+#else
+void GtkSalFrame::signalWindowState(GdkToplevel* pSurface, GParamSpec*, gpointer frame)
+{
+    GdkToplevelState eNewWindowState = gdk_toplevel_get_state(pSurface);
+
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    if( (pThis->m_nState & GDK_TOPLEVEL_STATE_MINIMIZED) != (eNewWindowState & GDK_TOPLEVEL_STATE_MINIMIZED) )
+    {
+        GtkSalFrame::getDisplay()->SendInternalEvent( pThis, nullptr, SalEvent::Resize );
+        pThis->TriggerPaintEvent();
+    }
+
+    if ((eNewWindowState & GDK_TOPLEVEL_STATE_MAXIMIZED) &&
+        !(pThis->m_nState & GDK_TOPLEVEL_STATE_MAXIMIZED))
+    {
+        pThis->m_aRestorePosSize = GetPosAndSize(GTK_WINDOW(pThis->m_pWindow));
+    }
+
+    pThis->m_nState = eNewWindowState;
 }
 #endif
 
