@@ -65,6 +65,9 @@ struct read_transfer_result
     std::vector<sal_Int8> aVector;
 
     static void read_block_async_completed(GObject* source, GAsyncResult* res, gpointer user_data);
+
+    OUString get_as_string() const;
+    css::uno::Sequence<sal_Int8> get_as_sequence() const;
 };
 
 #endif

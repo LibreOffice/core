@@ -4417,16 +4417,9 @@ public:
             pInstance->DoYield(true, false);
 
         if (aFlavor.MimeType == "text/plain;charset=utf-8")
-        {
-            const char* pStr = reinterpret_cast<const char*>(aRes.aVector.data());
-            OUString aStr(pStr, aRes.aVector.size(), RTL_TEXTENCODING_UTF8);
-            aRet <<= aStr.replaceAll("\r\n", "\n");
-        }
+            aRet <<= aRes.get_as_string();
         else
-        {
-            auto aSeq = css::uno::Sequence<sal_Int8>(aRes.aVector.data(), aRes.aVector.size());
-            aRet <<= aSeq;
-        }
+            aRet <<= aRes.get_as_sequence();
 #endif
         return aRet;
     }
