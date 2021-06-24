@@ -70,6 +70,24 @@
       "revId": "e2e47898180e547cad7ccde1e5890385d573e551",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "796f109a_e3340dd1",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3889,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-24T10:37:21Z",
+      "side": 1,
+      "message": "\u003e Or rather a value between 0 and 1.\n\nIf it was 0.25 (0.25 seconds!), it would mean that the resulting fNumber (date + time!) will become 124.25, i.e. day 124 plus 6 hours?",
+      "parentUuid": "71140d59_f44e27a7",
+      "revId": "e2e47898180e547cad7ccde1e5890385d573e551",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
