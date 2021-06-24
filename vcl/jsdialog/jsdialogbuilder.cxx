@@ -101,6 +101,8 @@ OUString extractActionType(const ActionDataMap& rData)
 void JSDialogNotifyIdle::sendMessage(jsdialog::MessageType eType, VclPtr<vcl::Window> pWindow,
                                      std::unique_ptr<ActionDataMap> pData)
 {
+    m_aQueueMutex.acquire();
+
     // we want only the latest update of same type
     // TODO: also if we met full update - previous updates are not valid
     auto it = m_aMessageQueue.begin();
@@ -123,6 +125,8 @@ void JSDialogNotifyIdle::sendMessage(jsdialog::MessageType eType, VclPtr<vcl::Wi
 
     JSDialogMessageInfo aMessage(eType, pWindow, std::move(pData));
     m_aMessageQueue.push_back(aMessage);
+
+    m_aQueueMutex.release();
 }
 
 std::unique_ptr<tools::JsonWriter> JSDialogNotifyIdle::generateFullUpdate() const
@@ -210,9 +214,56 @@ JSDialogNotifyIdle::generateActionMessage(VclPtr<vcl::Window> pWindow,
     return aJsonWriter;
 }
 
+std::unique_ptr<tools::JsonWriter>
+JSDialogNotifyIdle::generatePopupMessage(VclPtr<vcl::Window> pWindow, OUString sParentId,
+                                         OUString sCloseId) const
+{
+    std::unique_ptr<tools::JsonWriter> aJsonWriter(new tools::JsonWriter());
+
+    if (!pWindow || !m_aNotifierWindow)
+        return aJsonWriter;
+
+    pWindow->DumpAsPropertyTree(*aJsonWriter);
+
+    aJsonWriter->put("jsontype", "dialog");
+    aJsonWriter->put("type", "modalpopup");
+    aJsonWriter->put("cancellable", true);
+    aJsonWriter->put("popupParent", sParentId);
+    aJsonWriter->put("clickToClose", sCloseId);
+    aJsonWriter->put("id", pWindow->GetLOKWindowId());
+
+    return aJsonWriter;
+}
+
+std::unique_ptr<tools::JsonWriter>
+JSDialogNotifyIdle::generateClosePopupMessage(OUString sWindowId) const
+{
+    std::unique_ptr<tools::JsonWriter> aJsonWriter(new tools::JsonWriter());
+
+    if (!m_aNotifierWindow)
+        return aJsonWriter;
+
+    aJsonWriter->put("jsontype", "dialog");
+    aJsonWriter->put("action", "close");
+    aJsonWriter->put("id", sWindowId);
+
+    return aJsonWriter;
+}
+
 void JSDialogNotifyIdle::Invoke()
 {
-    for (auto& rMessage : m_aMessageQueue)
+    bool bAcquired = m_aQueueMutex.acquire();
+
+    if (!bAcquired)
+        SAL_WARN("vcl", "JSDialogNotifyIdle::Invoke : mutex cannot be acquired");
+
+    std::deque<JSDialogMessageInfo> aMessageQueue(std::move(m_aMessageQueue));
+    m_aMessageQueue = std::deque<JSDialogMessageInfo>();
+    clearQueue();
+
+    m_aQueueMutex.release();
+
+    for (auto& rMessage : aMessageQueue)
     {
         jsdialog::MessageType eType = rMessage.m_eType;
 
@@ -233,10 +284,21 @@ void JSDialogNotifyIdle::Invoke()
             case jsdialog::MessageType::Action:
                 send(*generateActionMessage(rMessage.m_pWindow, std::move(rMessage.m_pData)));
                 break;
+
+            case jsdialog::MessageType::Popup:
+            {
+                OUString sParentId = (*rMessage.m_pData)[PARENT_ID];
+                OUString sWindowId = (*rMessage.m_pData)[WINDOW_ID];
+                OUString sCloseId = (*rMessage.m_pData)[CLOSE_ID];
+
+                if (!sParentId.isEmpty())
+                    send(*generatePopupMessage(rMessage.m_pWindow, sParentId, sCloseId));
+                else if (!sWindowId.isEmpty())
+                    send(*generateClosePopupMessage(sWindowId));
+                break;
+            }
         }
     }
-
-    clearQueue();
 }
 
 void JSDialogNotifyIdle::clearQueue() { m_aMessageQueue.clear(); }
@@ -275,6 +337,23 @@ void JSDialogSender::sendUpdate(VclPtr<vcl::Window> pWindow, bool bForce)
 void JSDialogSender::sendAction(VclPtr<vcl::Window> pWindow, std::unique_ptr<ActionDataMap> pData)
 {
     mpIdleNotify->sendMessage(jsdialog::MessageType::Action, pWindow, std::move(pData));
+    mpIdleNotify->Start();
+}
+
+void JSDialogSender::sendPopup(VclPtr<vcl::Window> pWindow, OUString sParentId, OUString sCloseId)
+{
+    std::unique_ptr<ActionDataMap> pData = std::make_unique<ActionDataMap>();
+    (*pData)[PARENT_ID] = sParentId;
+    (*pData)[CLOSE_ID] = sCloseId;
+    mpIdleNotify->sendMessage(jsdialog::MessageType::Popup, pWindow, std::move(pData));
+    mpIdleNotify->Start();
+}
+
+void JSDialogSender::sendClosePopup(vcl::LOKWindowId nWindowId)
+{
+    std::unique_ptr<ActionDataMap> pData = std::make_unique<ActionDataMap>();
+    (*pData)[WINDOW_ID] = OUString::number(nWindowId);
+    mpIdleNotify->sendMessage(jsdialog::MessageType::Popup, nullptr, std::move(pData));
     mpIdleNotify->Start();
 }
 
@@ -919,9 +998,10 @@ std::unique_ptr<weld::Popover> JSInstanceBuilder::weld_popover(const OString& id
 
         if (VclPtr<vcl::Window> pWin = pDockingWindow->GetParentWithLOKNotifier())
         {
-            pDockingWindow->SetLOKNotifier(pWin->GetLOKNotifier());
-            m_aParentDialog = pDockingWindow;
-            m_aWindowToRelease = pDockingWindow;
+            vcl::Window* pPopupRoot = pDockingWindow->GetChild(0);
+            pPopupRoot->SetLOKNotifier(pWin->GetLOKNotifier());
+            m_aParentDialog = pPopupRoot;
+            m_aWindowToRelease = pPopupRoot;
             m_nWindowId = m_aParentDialog->GetLOKWindowId();
             InsertWindowToMap(m_nWindowId);
             initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
@@ -1251,6 +1331,32 @@ JSToolbar::JSToolbar(JSDialogSender* pSender, ::ToolBox* pToolbox, SalInstanceBu
 {
 }
 
+void JSToolbar::set_menu_item_active(const OString& rIdent, bool bActive)
+{
+    SalInstanceToolbar::set_menu_item_active(rIdent, bActive);
+
+    ToolBoxItemId nItemId = m_xToolBox->GetItemId(OUString::fromUtf8(rIdent));
+    VclPtr<vcl::Window> pFloat = m_aFloats[nItemId];
+
+    if (pFloat)
+    {
+        // See WeldToolbarPopup : include/svtools/toolbarmenu.hxx
+        // TopLevel (Popover) -> Container -> main container of the popup
+        vcl::Window* pPopupRoot = pFloat->GetChild(0);
+        if (pPopupRoot)
+            pPopupRoot = pPopupRoot->GetChild(0);
+
+        if (pPopupRoot)
+        {
+            if (bActive)
+                sendPopup(pPopupRoot, m_xToolBox->get_id(),
+                          OStringToOUString(rIdent, RTL_TEXTENCODING_ASCII_US));
+            else
+                sendClosePopup(pPopupRoot->GetLOKWindowId());
+        }
+    }
+}
+
 JSTextView::JSTextView(JSDialogSender* pSender, ::VclMultiLineEdit* pTextView,
                        SalInstanceBuilder* pBuilder, bool bTakeOwnership)
     : JSWidget<SalInstanceTextView, ::VclMultiLineEdit>(pSender, pTextView, pBuilder,
@@ -1494,10 +1600,18 @@ void JSMenuButton::set_image(const css::uno::Reference<css::graphic::XGraphic>& 
     sendUpdate();
 }
 
-void JSMenuButton::set_active(bool active)
+void JSMenuButton::set_active(bool bActive)
 {
-    SalInstanceMenuButton::set_active(active);
-    sendUpdate();
+    SalInstanceMenuButton::set_active(bActive);
+
+    VclPtr<vcl::Window> pPopup = m_xMenuButton->GetPopover();
+    if (pPopup)
+    {
+        if (bActive)
+            sendPopup(pPopup->GetChild(0), m_xMenuButton->get_id(), m_xMenuButton->get_id());
+        else
+            sendClosePopup(pPopup->GetChild(0)->GetLOKWindowId());
+    }
 }
 
 JSPopover::JSPopover(JSDialogSender* pSender, DockingWindow* pDockingWindow,

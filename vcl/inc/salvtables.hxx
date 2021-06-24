@@ -1189,7 +1189,7 @@ public:
 
 class SalInstanceToolbar : public SalInstanceWidget, public virtual weld::Toolbar
 {
-private:
+protected:
     VclPtr<ToolBox> m_xToolBox;
     std::map<ToolBoxItemId, VclPtr<vcl::Window>> m_aFloats;
     std::map<ToolBoxItemId, VclPtr<PopupMenu>> m_aMenus;
@@ -1841,7 +1841,7 @@ public:
 
 class SalInstanceMenuButton : public SalInstanceButton, public virtual weld::MenuButton
 {
-private:
+protected:
     VclPtr<::MenuButton> m_xMenuButton;
     sal_uInt16 m_nLastId;
 

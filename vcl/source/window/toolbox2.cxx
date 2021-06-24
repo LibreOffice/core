@@ -1749,11 +1749,15 @@ void ToolBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
             }
             else
             {
-                if (!IsItemVisible(nId))
-                    continue;
                 rJsonWriter.put("type", "toolitem");
                 rJsonWriter.put("text", GetItemText(nId));
                 rJsonWriter.put("command", GetItemCommand(nId));
+                if (!IsItemVisible(nId))
+                    rJsonWriter.put("visible", false);
+                if (GetItemBits(nId) & ToolBoxItemBits::DROPDOWN)
+                    rJsonWriter.put("dropdown", true);
+                if (!IsItemEnabled(nId))
+                    rJsonWriter.put("enabled", false);
             }
         }
     }

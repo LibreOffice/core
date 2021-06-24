@@ -9,9 +9,10 @@
 
 #pragma once
 
+#include <comphelper/string.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/jsdialog/executor.hxx>
-#include <comphelper/string.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/builder.hxx>
@@ -29,6 +30,9 @@
 #include <unordered_map>
 
 #define ACTION_TYPE "action_type"
+#define PARENT_ID "parent_id"
+#define WINDOW_ID "id"
+#define CLOSE_ID "close_id"
 
 class ToolBox;
 class ComboBox;
@@ -46,7 +50,8 @@ enum MessageType
     FullUpdate,
     WidgetUpdate,
     Close,
-    Action
+    Action,
+    Popup
 };
 }
 
@@ -102,6 +107,7 @@ class JSDialogNotifyIdle final : public Idle
     bool m_bForce;
 
     std::deque<JSDialogMessageInfo> m_aMessageQueue;
+    osl::Mutex m_aQueueMutex;
 
 public:
     JSDialogNotifyIdle(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
@@ -121,6 +127,9 @@ private:
     std::unique_ptr<tools::JsonWriter> generateCloseMessage() const;
     std::unique_ptr<tools::JsonWriter>
     generateActionMessage(VclPtr<vcl::Window> pWindow, std::unique_ptr<ActionDataMap> pData) const;
+    std::unique_ptr<tools::JsonWriter>
+    generatePopupMessage(VclPtr<vcl::Window> pWindow, OUString sParentId, OUString sCloseId) const;
+    std::unique_ptr<tools::JsonWriter> generateClosePopupMessage(OUString sWindowId) const;
 };
 
 class JSDialogSender
@@ -141,6 +150,8 @@ public:
     void sendClose();
     void sendUpdate(VclPtr<vcl::Window> pWindow, bool bForce = false);
     virtual void sendAction(VclPtr<vcl::Window> pWindow, std::unique_ptr<ActionDataMap> pData);
+    virtual void sendPopup(VclPtr<vcl::Window> pWindow, OUString sParentId, OUString sCloseId);
+    virtual void sendClosePopup(vcl::LOKWindowId nWindowId);
     void flush() { mpIdleNotify->Invoke(); }
 
 protected:
@@ -288,6 +299,10 @@ public:
     virtual void sendFullUpdate(bool bForce = false) = 0;
 
     virtual void sendAction(std::unique_ptr<ActionDataMap> pData) = 0;
+
+    virtual void sendPopup(vcl::Window* pPopup, OUString sParentId, OUString sCloseId) = 0;
+
+    virtual void sendClosePopup(vcl::LOKWindowId nWindowId) = 0;
 };
 
 template <class BaseInstanceClass, class VclClass>
@@ -394,6 +409,18 @@ public:
     {
         if (!m_bIsFreezed && m_pSender && pData)
             m_pSender->sendAction(BaseInstanceClass::m_xWidget, std::move(pData));
+    }
+
+    virtual void sendPopup(vcl::Window* pPopup, OUString sParentId, OUString sCloseId) override
+    {
+        if (!m_bIsFreezed && m_pSender)
+            m_pSender->sendPopup(pPopup, sParentId, sCloseId);
+    }
+
+    virtual void sendClosePopup(vcl::LOKWindowId nWindowId) override
+    {
+        if (!m_bIsFreezed && m_pSender)
+            m_pSender->sendClosePopup(nWindowId);
     }
 };
 
@@ -531,9 +558,13 @@ public:
 
 class JSToolbar final : public JSWidget<SalInstanceToolbar, ::ToolBox>
 {
+    std::map<sal_uInt16, weld::Widget*> m_pPopovers;
+
 public:
     JSToolbar(JSDialogSender* pSender, ::ToolBox* pToolbox, SalInstanceBuilder* pBuilder,
               bool bTakeOwnership);
+
+    virtual void set_menu_item_active(const OString& rIdent, bool bActive) override;
 };
 
 class JSTextView final : public JSWidget<SalInstanceTextView, ::VclMultiLineEdit>
