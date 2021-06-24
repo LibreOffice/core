@@ -16,6 +16,24 @@
       "revId": "b9ea3467383ccdfe4be842e61267256f281487ee",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7a48290_02b2512e",
+        "filename": "vcl/headless/svpinst.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-06-24T07:58:09Z",
+      "side": 1,
+      "message": "Just quoting from a previous comment:\n\n\u003e We had this kind of code with a Sleep + SwitchToThread on Windows (git log -G SwitchToThread -p vcl/win/app/salinst.cxx) and I removed it. What we should have is an event loop per thread, not this crazy \"Idle on the main thread\" stuff with conditionals. Just what everybody else today does. Then other threads could simply lock the SolarMutex, if they need to do stuff, but otherwise sleep on their own empty event queue. No unneeded wakeups via the conditionals, like the current VCL DoYield implementations do.",
+      "parentUuid": "a0d1e502_b3a25f3d",
+      "revId": "b9ea3467383ccdfe4be842e61267256f281487ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
