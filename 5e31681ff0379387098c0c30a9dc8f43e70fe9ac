@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3be83278_3bd8062f",
+        "filename": "basic/qa/vba_tests/booltypename.vb",
+        "patchSetId": 6
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-24T11:56:15Z",
+      "side": 1,
+      "message": "These seem to not changed from copied values above? :-)",
+      "range": {
+        "startLine": 32,
+        "startChar": 49,
+        "endLine": 32,
+        "endChar": 57
+      },
+      "revId": "5e31681ff0379387098c0c30a9dc8f43e70fe9ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1e42698_3287f7dc",
+        "filename": "basic/qa/vba_tests/booltypename.vb",
+        "patchSetId": 6
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-24T11:56:15Z",
+      "side": 1,
+      "message": "This seems to be a copy-paste leftover - did you forget to rename it to the current sub name?",
+      "range": {
+        "startLine": 36,
+        "startChar": 33,
+        "endLine": 36,
+        "endChar": 49
+      },
+      "revId": "5e31681ff0379387098c0c30a9dc8f43e70fe9ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b48e60c9_b3e36d0d",
+        "filename": "basic/source/inc/filefmt.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-24T11:56:15Z",
+      "side": 1,
+      "message": "Thanks - just what is needed!",
+      "revId": "5e31681ff0379387098c0c30a9dc8f43e70fe9ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
