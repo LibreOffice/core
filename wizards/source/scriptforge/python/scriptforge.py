@@ -1194,7 +1194,8 @@ class SFScriptForge:
         servicesynonyms = ('platform', 'scriptforge.platform')
         serviceproperties = dict(Architecture = False, ComputerName = False, CPUCount = False, CurrentUser = False,
                                  Locale = False, Machine = False, OfficeVersion = False, OSName = False,
-                                 OSPlatform = False, OSRelease = False, OSVersion = False, Processor = False)
+                                 OSPlatform = False, OSRelease = False, OSVersion = False, Printers = False,
+                                 Processor = False, PythonVersion = False)
         # Python helper functions
         py = ScriptForge.pythonhelpermodule + '$' + '_SF_Platform'
 
@@ -1237,6 +1238,10 @@ class SFScriptForge:
         @property
         def Processor(self):
             return self.SIMPLEEXEC(self.py, 'Processor')
+
+        @property
+        def PythonVersion(self):
+            return self.SIMPLEEXEC(self.py, 'PythonVersion')
 
     # #########################################################################
     # SF_Session CLASS
