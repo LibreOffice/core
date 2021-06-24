@@ -762,9 +762,12 @@ sal_uInt8 WW8Export::GetNumId( sal_uInt16 eNumType )
     case style::NumberingType::CHARS_ARABIC: nRet = 46; break;
     case style::NumberingType::CHARS_HEBREW: nRet = 47; break;
     case style::NumberingType::CHARS_ARABIC_ABJAD: nRet = 48; break;
+    case style::NumberingType::CHARS_PERSIAN:
     case style::NumberingType::CHARS_NEPALI: nRet = 49; break;
     case style::NumberingType::CHARS_THAI: nRet = 53; break;
+    case style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_N_RU:
     case style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_RU: nRet = 58; break;
+    case style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_N_RU:
     case style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_RU: nRet = 59; break;
     // nothing, WW does the same (undocumented)
     case SVX_NUM_NUMBER_NONE:           nRet = 0xff;    break;
@@ -2631,6 +2634,15 @@ void AttributeOutputBase::GetNumberPara( OUString& rStr, const SwField& rField )
             break;
         case SVX_NUM_ROMAN_LOWER:
             rStr += "\\* roman ";
+            break;
+        case SVX_NUM_TEXT_NUMBER:
+            rStr += "\\* Ordinal ";
+            break;
+        case SVX_NUM_TEXT_ORDINAL:
+            rStr += "\\* Ordtext ";
+            break;
+        case SVX_NUM_TEXT_CARDINAL:
+            rStr += "\\* Cardtext ";
             break;
         default:
             OSL_ENSURE(rField.GetFormat() == SVX_NUM_ARABIC,
