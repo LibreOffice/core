@@ -3291,7 +3291,8 @@ sal_Int32 SvNumberformat::ImpUseMonthCase( int & io_nState, const ImpSvNumFor& r
             case NF_KEY_MMMMM:
                 if ((i < nCount-1 &&
                      rInfo.nTypeArray[i+1] == NF_SYMBOLTYPE_STRING &&
-                     // Literal following, not space nor comma.
+                     // Literal following, not empty, space nor comma.
+                     !rInfo.sStrArray[i+1].isEmpty() &&
                      rInfo.sStrArray[i+1][0] != ' ' && rInfo.sStrArray[i+1][0] != ',') ||
                     (i > 0 && rInfo.nTypeArray[i-1] == NF_SYMBOLTYPE_STRING &&
                      ((nLen = rInfo.sStrArray[i-1].getLength()) > 0) &&
