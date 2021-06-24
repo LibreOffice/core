@@ -1091,8 +1091,11 @@ public:
     void                                InvertTracking( const tools::Rectangle& rRect, ShowTrackFlags nFlags );
 
     void                                StartTracking( StartTrackingFlags nFlags = StartTrackingFlags::NONE );
+    void                                LocalStartTracking( StartTrackingFlags nFlags = StartTrackingFlags::NONE );
     void                                EndTracking( TrackingEventFlags nFlags = TrackingEventFlags::NONE );
+    void                                LocalEndTracking( TrackingEventFlags nFlags = TrackingEventFlags::NONE );
     bool                                IsTracking() const;
+    bool                                IsLocalTracking() const;
 
     void                                StartAutoScroll( StartAutoScrollFlags nFlags );
     void                                EndAutoScroll();

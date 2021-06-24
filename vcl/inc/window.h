@@ -134,6 +134,7 @@ struct ImplFrameData
     VclPtr<vcl::Window> mpFocusWin;             //< focus window (is also set, when frame doesn't have the focus)
     VclPtr<vcl::Window> mpMouseMoveWin;         //< last window, where MouseMove() called
     VclPtr<vcl::Window> mpMouseDownWin;         //< last window, where MouseButtonDown() called
+    VclPtr<vcl::Window> mpTrackWin;             //< window, that is in tracking mode
     std::vector<VclPtr<vcl::Window> > maOwnerDrawList;    //< List of system windows with owner draw decoration
     std::shared_ptr<PhysicalFontCollection> mxFontCollection;   //< Font-List for this frame
     std::shared_ptr<ImplFontCache> mxFontCache; //< Font-Cache for this frame
