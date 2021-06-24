@@ -641,7 +641,7 @@ SvxNumType WW8ListManager::GetSvxNumTypeFromMSONFC(sal_uInt16 nNFC)
             nType = SVX_NUM_CHARS_ARABIC_ABJAD;
             break;
         case 49: // hindiVowels
-            nType = SVX_NUM_CHARS_NEPALI; // DOCX imports as NEPAL and exports as PERSIAN
+            nType = SVX_NUM_CHARS_NEPALI;
             break;
         //case 50: // hindiConsonants
         //case 51: // hindiNumbers

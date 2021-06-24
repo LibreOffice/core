@@ -6938,7 +6938,8 @@ static OString lcl_ConvertNumberingType(sal_Int16 nNumberingType, const SfxItemS
         case style::NumberingType::CHARS_ARABIC: aType="arabicAlpha"; break;
         case style::NumberingType::CHARS_ARABIC_ABJAD: aType="arabicAbjad"; break;
         case style::NumberingType::CHARS_THAI: aType="thaiLetters"; break;
-        case style::NumberingType::CHARS_PERSIAN: aType="hindiVowels"; break;
+        case style::NumberingType::CHARS_PERSIAN:
+        case style::NumberingType::CHARS_NEPALI: aType="hindiVowels"; break;
         case style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_RU:
         case style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_N_RU: aType = "russianUpper"; break;
         case style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_RU:
@@ -6969,7 +6970,6 @@ static OString lcl_ConvertNumberingType(sal_Int16 nNumberingType, const SfxItemS
         case style::NumberingType::CHARS_GREEK_LOWER_LETTER:
         case style::NumberingType::PAGE_DESCRIPTOR:
         case style::NumberingType::TRANSLITERATION:
-        case style::NumberingType::CHARS_NEPALI:
         case style::NumberingType::CHARS_KHMER:
         case style::NumberingType::CHARS_LAO:
         case style::NumberingType::CHARS_TIBETAN:

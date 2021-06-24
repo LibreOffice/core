@@ -359,6 +359,9 @@ static SvxNumType GetNumTypeFromName(const OUString& rStr,
     bool bAllowPageDesc = false)
 {
     SvxNumType eTyp = bAllowPageDesc ? SVX_NUM_PAGEDESC : SVX_NUM_ARABIC;
+    if (rStr.isEmpty())
+        return eTyp;
+
     if( rStr.startsWithIgnoreAsciiCase( "Arabi" ) )  // Arabisch, Arabic
         eTyp = SVX_NUM_ARABIC;
     else if( rStr.startsWith( "misch" ) )    // r"omisch
