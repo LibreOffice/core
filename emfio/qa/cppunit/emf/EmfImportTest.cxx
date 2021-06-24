@@ -47,6 +47,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools, public unotest:
 
     void testPolyPolygon();
     void TestDrawString();
+    void TestDrawStringAlign();
     void TestDrawStringTransparent();
     void TestDrawStringWithBrush();
     void TestDrawLine();
@@ -87,6 +88,7 @@ public:
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testPolyPolygon);
     CPPUNIT_TEST(TestDrawString);
+    CPPUNIT_TEST(TestDrawStringAlign);
     CPPUNIT_TEST(TestDrawStringTransparent);
     CPPUNIT_TEST(TestDrawStringWithBrush);
     CPPUNIT_TEST(TestDrawLine);
@@ -207,6 +209,96 @@ void Test::TestDrawString()
     assertXPath(pDocument, "/primitive2D/metafile/transform/transform/textsimpleportion", "text", "TEST");
     assertXPath(pDocument, "/primitive2D/metafile/transform/transform/textsimpleportion", "fontcolor", "#000000");
     assertXPath(pDocument, "/primitive2D/metafile/transform/transform/textsimpleportion", "familyname", "CALIBRI");
+#endif
+}
+
+void Test::TestDrawStringAlign()
+{
+#if HAVE_MORE_FONTS
+    // EMF+ DrawString with alignment (StringAlignmentNear, StringAlignmentFar, StringAlignmentCenter)
+    // It seems Arial font is replaced with Liberation Sans. These numbers are valid for Liberation Sans.
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestDrawStringAlign.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    CPPUNIT_ASSERT(pDocument);
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform", 9);
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[1]/textsimpleportion",
+                "width", "12");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[1]/textsimpleportion",
+                "height", "12");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[1]/textsimpleportion",
+                "x", "12");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[1]/textsimpleportion",
+                "y", "22");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[1]/textsimpleportion",
+                "text", "HLVT");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[1]/textsimpleportion",
+                "fontcolor", "#000000");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[1]/textsimpleportion",
+                "familyname", "ARIAL");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[2]/textsimpleportion",
+                "width", "12");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[2]/textsimpleportion",
+                "height", "12");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[2]/textsimpleportion",
+                "x", "143");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[2]/textsimpleportion",
+                "y", "22");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[2]/textsimpleportion",
+                "text", "HCVT");
+
+    // TODO Make the position of the text the same across the platforms (Arial vs Liberation Sans).
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[3]/textsimpleportion",
+                "x", "276");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[3]/textsimpleportion",
+                "y", "22");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[3]/textsimpleportion",
+                "text", "HRVT");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[4]/textsimpleportion",
+                "x", "12");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[4]/textsimpleportion",
+                "y", "66");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[4]/textsimpleportion",
+                "text", "HLVC");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[5]/textsimpleportion",
+                "x", "142");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[5]/textsimpleportion",
+                "y", "66");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[5]/textsimpleportion",
+                "text", "HCVC");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[6]/textsimpleportion",
+                "x", "274");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[6]/textsimpleportion",
+                "y", "66");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[6]/textsimpleportion",
+                "text", "HRVC");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[7]/textsimpleportion",
+                "x", "12");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[7]/textsimpleportion",
+                "y", "110");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[7]/textsimpleportion",
+                "text", "HLVB");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[8]/textsimpleportion",
+                "x", "143");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[8]/textsimpleportion",
+                "y", "110");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[8]/textsimpleportion",
+                "text", "HCVB");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[9]/textsimpleportion",
+                "x", "275");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[9]/textsimpleportion",
+                "y", "110");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[9]/textsimpleportion",
+                "text", "HRVB");
 #endif
 }
 
