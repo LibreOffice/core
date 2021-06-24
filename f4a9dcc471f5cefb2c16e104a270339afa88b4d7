@@ -16,6 +16,24 @@
       "revId": "f4a9dcc471f5cefb2c16e104a270339afa88b4d7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8834fe6d_2b653535",
+        "filename": "sc/qa/uitest/calc_tests9/tdf142395.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-24T06:13:15Z",
+      "side": 1,
+      "message": "addressed with \u003chttps://git.libreoffice.org/core/+/6805efdecb240fad8c82a5c1756a2a0e92f12b7d%5E%21\u003e \"uitest: blind fix for failure in slow machines\"",
+      "parentUuid": "bde52f4a_0e348a7f",
+      "revId": "f4a9dcc471f5cefb2c16e104a270339afa88b4d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
