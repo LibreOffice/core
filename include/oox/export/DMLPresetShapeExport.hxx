@@ -86,9 +86,9 @@ public:
 private:
     struct AdjustmentPointValueBase
     {
-        double nMaxVal;
-        double nMinVal;
-        double nCurrVal;
+        std::optional<double> nMaxVal;
+        std::optional<double> nMinVal;
+        std::optional<double> nCurrVal;
     };
 
     typedef AdjustmentPointValueBase RadiusAdjustmentValue;
