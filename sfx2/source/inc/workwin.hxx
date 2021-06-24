@@ -147,7 +147,7 @@ enum class SfxDockingConfig
 #define SFX_SPLITWINDOWS_MAX    4
 
 
-class LayoutManagerListener : public ::cppu::WeakImplHelper<
+class LayoutManagerListener final : public ::cppu::WeakImplHelper<
                                          css::frame::XLayoutManagerListener,
                                          css::lang::XComponent >
 {

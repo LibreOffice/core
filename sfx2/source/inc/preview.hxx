@@ -24,7 +24,7 @@
 class SfxObjectShell;
 class GDIMetaFile;
 
-class SfxPreviewWin_Impl : public weld::CustomWidgetController
+class SfxPreviewWin_Impl final : public weld::CustomWidgetController
 {
 private:
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;

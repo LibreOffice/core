@@ -11,7 +11,7 @@
 
 #include <sfx2/templatelocalview.hxx>
 
-class TemplateDefaultView : public TemplateLocalView
+class TemplateDefaultView final : public TemplateLocalView
 {
 public:
     TemplateDefaultView(std::unique_ptr<weld::ScrolledWindow> xWindow,

@@ -101,7 +101,7 @@ public:
     SfxDispatcher*          GetDispatcher_Impl();
 };
 
-class SfxDispatchController_Impl : public SfxControllerItem
+class SfxDispatchController_Impl final : public SfxControllerItem
 {
     css::util::URL              aDispatchURL;
     SfxDispatcher*              pDispatcher;

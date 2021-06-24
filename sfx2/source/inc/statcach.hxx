@@ -34,7 +34,7 @@
 
 class SfxControllerItem;
 class SfxDispatcher;
-class BindDispatch_Impl :   public ::cppu::WeakImplHelper< css::frame::XStatusListener >
+class BindDispatch_Impl final : public ::cppu::WeakImplHelper< css::frame::XStatusListener >
 {
 friend class SfxStateCache;
     css::uno::Reference< css::frame::XDispatch >   xDisp;

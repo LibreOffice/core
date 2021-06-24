@@ -25,7 +25,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
-class FilterOptionsContinuation : public comphelper::OInteraction< css::document::XInteractionFilterOptions >
+class FilterOptionsContinuation final : public comphelper::OInteraction< css::document::XInteractionFilterOptions >
 {
     css::uno::Sequence< css::beans::PropertyValue > rProperties;
 
@@ -34,7 +34,7 @@ public:
     virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getFilterOptions(  ) override;
 };
 
-class RequestFilterOptions : public ::cppu::WeakImplHelper< css::task::XInteractionRequest >
+class RequestFilterOptions final : public ::cppu::WeakImplHelper< css::task::XInteractionRequest >
 {
     css::uno::Any m_aRequest;
 

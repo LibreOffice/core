@@ -30,7 +30,7 @@ class BasicManager;
 
 /** helper class which holds and manipulates a BasicManager
 */
-class SfxBasicManagerHolder
+class SfxBasicManagerHolder final
     : public SfxListener
 {
 private:

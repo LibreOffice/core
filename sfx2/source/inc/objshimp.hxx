@@ -37,7 +37,7 @@ class SfxViewFrame;
 
 class SfxBasicManagerHolder;
 
-class AutoReloadTimer_Impl : public Timer
+class AutoReloadTimer_Impl final : public Timer
 {
     OUString          aUrl;
     SfxObjectShell*   pObjSh;
@@ -48,7 +48,7 @@ public:
     virtual void Invoke() override;
 };
 
-struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
+struct SfxObjectShell_Impl final : public ::sfx2::IMacroDocumentAccess
 {
     std::unique_ptr<::comphelper::EmbeddedObjectContainer> mxObjectContainer;
     SfxBasicManagerHolder aBasicManager;
