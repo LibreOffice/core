@@ -82,16 +82,6 @@ inline Type::Type( const Type & rType )
     ::typelib_typedescriptionreference_acquire( _pType );
 }
 
-#if defined LIBO_INTERNAL_ONLY
-inline Type::Type( Type && rType )
-    : _pType( rType._pType )
-{
-    rType._pType = reinterpret_cast< const ::com::sun::star::uno::Type * >(
-        ::typelib_static_type_getByTypeClass( typelib_TypeClass_VOID ) )->getTypeLibType();
-    ::typelib_typedescriptionreference_acquire( rType._pType );
-}
-#endif
-
 inline ::rtl::OUString Type::getTypeName() const
 {
     return ::rtl::OUString( _pType->pTypeName );

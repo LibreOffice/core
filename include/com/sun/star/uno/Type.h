@@ -119,10 +119,6 @@ public:
     */
     inline Type( const Type & rType );
 
-#if defined LIBO_INTERNAL_ONLY
-    inline Type( Type && );
-#endif
-
     /** Destructor: Releases acquired C type description reference.
     */
     ~Type()
