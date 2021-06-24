@@ -191,9 +191,7 @@ class GtkInstDragSource final : public cppu::WeakComponentImplHelper<css::datatr
     GtkSalFrame* m_pFrame;
     css::uno::Reference<css::datatransfer::dnd::XDragSourceListener> m_xListener;
     css::uno::Reference<css::datatransfer::XTransferable> m_xTrans;
-#if !GTK_CHECK_VERSION(4, 0, 0)
     VclToGtkHelper m_aConversionHelper;
-#endif
 public:
     GtkInstDragSource()
         : WeakComponentImplHelper(m_aMutex)
@@ -232,7 +230,9 @@ public:
 
     void dragFailed();
     void dragDelete();
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+    void dragEnd(GdkDrag* drag);
+#else
     void dragEnd(GdkDragContext* context);
     void dragDataGet(GtkSelectionData *data, guint info);
 #endif

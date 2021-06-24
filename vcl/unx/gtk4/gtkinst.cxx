@@ -10,10 +10,10 @@
 // make gtk4 plug advertise correctly as gtk4
 #define GTK_TOOLKIT_NAME "gtk4"
 
-#include "contentprovider.hxx"
 #include "convert3to4.hxx"
 #include "notifyinglayout.hxx"
 #include "surfacepaintable.hxx"
+#include "transferableprovider.hxx"
 
 #include "../gtk3/gtkinst.cxx"
 
