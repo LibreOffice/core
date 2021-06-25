@@ -168,11 +168,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP_(ULONG) EmbedProviderFactory_Impl::Release()
     return nCount;
 }
 
-COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedProviderFactory_Impl::CreateInstance(IUnknown* punkOuter,
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedProviderFactory_Impl::CreateInstance(IUnknown*,
                                                                             REFIID riid, void** ppv)
 {
-    punkOuter = nullptr;
-
     IUnknown* pEmbedDocument = static_cast<IUnknown*>(static_cast<IPersistStorage*>( new EmbedDocument_Impl( m_xFactory, &m_guid ) ));
 
     return pEmbedDocument->QueryInterface( riid, ppv );
