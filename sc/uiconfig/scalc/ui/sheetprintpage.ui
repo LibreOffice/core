@@ -137,7 +137,6 @@
                   <object class="GtkSpinButton" id="spinED_PAGENO">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="max_length">5</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustmentFirstPage</property>
                     <accessibility>
