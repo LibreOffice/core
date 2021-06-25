@@ -2600,6 +2600,57 @@ void DomainMapper_Impl::appendGlossaryEntry()
     appendTextSectionAfter(m_xGlossaryEntryStart);
 }
 
+void DomainMapper_Impl::ConvertHeaderFooterToTextFrame(bool bDynamicHeightTop, bool bDynamicHeightBottom)
+{
+    while (!m_aHeaderFooterTextAppendStack.empty())
+    {
+        auto aFooterHeader = m_aHeaderFooterTextAppendStack.top();
+        if (aFooterHeader.second && !bDynamicHeightTop || !aFooterHeader.second && !bDynamicHeightBottom)
+        {
+            uno::Reference< text::XTextAppend > xTextAppend = aFooterHeader.first.xTextAppend;
+            uno::Reference< text::XTextCursor > xCursor = xTextAppend->createTextCursor();
+            uno::Reference< text::XTextRange > xRangeStart, xRangeEnd;
+
+            xRangeStart = xCursor->getStart();
+            xCursor->gotoEnd(false);
+            xRangeEnd = xCursor->getStart();
+
+            std::vector<beans::PropertyValue> aFrameProperties;
+
+            aFrameProperties.push_back(comphelper::makePropertyValue("TextWrap", css::text::WrapTextMode_THROUGH));
+            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HORI_ORIENT), text::HoriOrientation::LEFT));
+            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_OPAQUE), false));
+            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_WIDTH_TYPE), text::SizeType::MIN));
+            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_SIZE_TYPE), text::SizeType::MIN));
+
+            // Explicitly remove borders and spacing
+            uno::Any aEmptyBorder = uno::makeAny(table::BorderLine2());
+            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_BOTTOM_BORDER), aEmptyBorder));
+            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_LEFT_BORDER), aEmptyBorder));
+            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_RIGHT_BORDER), aEmptyBorder));
+            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_TOP_BORDER), aEmptyBorder));
+            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_BOTTOM_BORDER_DISTANCE), static_cast<sal_Int32>(0)));
+            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_LEFT_BORDER_DISTANCE), static_cast<sal_Int32>(0)));
+            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_RIGHT_BORDER_DISTANCE), static_cast<sal_Int32>(0)));
+            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_TOP_BORDER_DISTANCE), static_cast<sal_Int32>(0)));
+            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_BOTTOM_MARGIN), static_cast<sal_Int32>(0)));
+            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_LEFT_MARGIN), static_cast<sal_Int32>(0)));
+            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_RIGHT_MARGIN), static_cast<sal_Int32>(0)));
+            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_TOP_MARGIN), static_cast<sal_Int32>(0)));
+
+            // If it is a footer, then orient the frame to the bottom
+            if (!aFooterHeader.second)
+                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT), text::VertOrientation::BOTTOM));
+
+            uno::Reference<text::XTextAppendAndConvert> xBodyText(
+                xRangeStart->getText(), uno::UNO_QUERY);
+            xBodyText->convertToTextFrame(xRangeStart, xRangeEnd,
+                comphelper::containerToSequence(aFrameProperties));
+        }
+        m_aHeaderFooterTextAppendStack.pop();
+    }
+}
+
 void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType)
 {
     m_bSaveParaHadField = m_bParaHadField;
@@ -2662,6 +2713,11 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
                 m_bIsNewDoc
                     ? uno::Reference<text::XTextCursor>()
                     : xText->createTextCursorByRange(xText->getStart())));
+            m_aHeaderFooterTextAppendStack.push(std::make_pair(TextAppendContext(uno::Reference< text::XTextAppend >(xText, uno::UNO_QUERY_THROW),
+                m_bIsNewDoc
+                    ? uno::Reference<text::XTextCursor>()
+                    : xText->createTextCursorByRange(xText->getStart())),
+                bHeader));
             m_bDiscardHeaderFooter = false; // set only on success!
         }
         // If we have *hidden* header footer
