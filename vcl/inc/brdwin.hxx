@@ -73,7 +73,7 @@ namespace o3tl {
     template<> struct typed_flags<BorderWindowTitleType> : is_typed_flags<BorderWindowTitleType, 0x001f> {};
 };
 
-class ImplBorderWindow : public vcl::Window
+class ImplBorderWindow final : public vcl::Window
 {
     friend class vcl::Window;
     friend class vcl::WindowOutputDevice;
@@ -242,7 +242,7 @@ public:
     virtual void            DrawWindow(vcl::RenderContext& rRenderContext, const Point* pOffset = nullptr) override;
 };
 
-class ImplSmallBorderWindowView : public ImplBorderWindowView
+class ImplSmallBorderWindowView final : public ImplBorderWindowView
 {
     VclPtr<ImplBorderWindow> mpBorderWindow;
     VclPtr<OutputDevice>     mpOutDev;
@@ -264,7 +264,7 @@ public:
     virtual void            DrawWindow(vcl::RenderContext& rRenderContext, const Point* pOffset = nullptr) override;
 };
 
-class ImplStdBorderWindowView : public ImplBorderWindowView
+class ImplStdBorderWindowView final : public ImplBorderWindowView
 {
     ImplBorderFrameData     maFrameData;
 

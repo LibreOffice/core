@@ -62,7 +62,7 @@ namespace vcl
         <code>n2</code>, which share at least the first <code>k</code> states (where <code>k</code>
         is at least 1), and an arbitrary number of other states.
     */
-    class RoadmapWizard : public Dialog
+    class RoadmapWizard final : public Dialog
     {
     private:
         Idle                    maWizardLayoutIdle;
@@ -84,7 +84,6 @@ namespace vcl
         // here (e.g. committing page data) depend on having full control over page traveling.
         // So use the travelXXX methods if you need to travel
 
-    protected:
         tools::Long                LogicalCoordinateToPixel(int iCoordinate);
         /**sets the number of buttons which should be left-aligned. Normally, buttons are right-aligned.
 
@@ -151,7 +150,7 @@ namespace vcl
 
         FactoryFunction GetUITestFactory() const override;
 
-    protected:
+    private:
 
         /// to override to create new pages
         VclPtr<TabPage>     createPage(WizardTypes::WizardState nState);
@@ -235,7 +234,6 @@ namespace vcl
         */
         OUString  getStateDisplayName(WizardTypes::WizardState nState) const;
 
-    private:
         DECL_LINK( OnRoadmapItemSelected, LinkParamNone*, void );
 
         /** updates the roadmap control to show the given path, as far as possible
@@ -255,10 +253,9 @@ namespace vcl
         void                   resumeTraveling( AccessGuard );
         bool                   isTravelingSuspended() const;
 
-    protected:
+    private:
         void GetOrCreatePage(const WizardTypes::WizardState i_nState);
 
-    private:
         void             ImplCalcSize( Size& rSize );
         void             ImplPosCtrls();
         void             ImplPosTabPage();

@@ -28,7 +28,7 @@ typedef tools::SvRef<ImplFontCharMap> ImplFontCharMapRef;
 
 class CmapResult;
 
-class ImplFontCharMap : public SvRefBase
+class ImplFontCharMap final : public SvRefBase
 {
 public:
     explicit            ImplFontCharMap( const CmapResult& );

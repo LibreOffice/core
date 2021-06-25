@@ -35,7 +35,7 @@ struct FPtrHash
     { return reinterpret_cast<size_t>(pPtr); }
 };
 
-class CUPSManager : public PrinterInfoManager
+class CUPSManager final : public PrinterInfoManager
 {
     std::unordered_map< FILE*, OString, FPtrHash >         m_aSpoolFiles;
     int                                                    m_nDests;

@@ -24,7 +24,7 @@
 
 #include "Qt5Frame.hxx"
 
-class Qt5MainWindow : public QMainWindow
+class Qt5MainWindow final : public QMainWindow
 {
     Q_OBJECT
 

@@ -34,7 +34,7 @@ namespace vcl {
 
 namespace vcl
 {
-    class PrintDialog : public weld::GenericDialogController
+    class PrintDialog final : public weld::GenericDialogController
     {
         friend class MoreOptionsDialog;
     public:
