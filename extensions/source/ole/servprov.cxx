@@ -137,7 +137,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP_(ULONG) OneInstanceOleWrapper::Release()
     return refCount;
 }
 
-COM_DECLSPEC_NOTHROW STDMETHODIMP OneInstanceOleWrapper::CreateInstance(IUnknown* punkOuter,
+COM_DECLSPEC_NOTHROW STDMETHODIMP OneInstanceOleWrapper::CreateInstance(IUnknown*,
                                                                         REFIID riid, void** ppv)
 {
     comphelper::Automation::AutomationInvokedZone aAutomationActive;
@@ -145,7 +145,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP OneInstanceOleWrapper::CreateInstance(IUnknown
     SAL_INFO("extensions.olebridge", "OneInstanceOleWrapper::CreateInstance(" << riid << ")");
 
     HRESULT ret = ResultFromScode(E_UNEXPECTED);
-    punkOuter = nullptr;
 
     const Reference<XInterface>& xInst = m_xInstFunction();
     if (xInst.is())
