@@ -21,7 +21,7 @@
 
 #include <vcl/toolkit/vclmedit.hxx>
 
-class MultiLineEdit : public VclMultiLineEdit
+class MultiLineEdit final : public VclMultiLineEdit
 {
 public:
     MultiLineEdit( vcl::Window* pParent, WinBits nWinStyle );

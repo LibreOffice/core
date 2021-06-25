@@ -38,7 +38,7 @@ class UnoTreeListEntry;
 class TreeControlPeer;
 class UnoTreeListBoxImpl;
 
-class TreeControlPeer : public ::cppu::ImplInheritanceHelper< VCLXWindow, css::awt::tree::XTreeControl, css::awt::tree::XTreeDataModelListener >
+class TreeControlPeer final : public ::cppu::ImplInheritanceHelper< VCLXWindow, css::awt::tree::XTreeControl, css::awt::tree::XTreeDataModelListener >
 {
     typedef std::map<css::uno::Reference<css::awt::tree::XTreeNode>, UnoTreeListEntry*> TreeNodeMap;
 

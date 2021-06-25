@@ -237,7 +237,7 @@ public:
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 };
 
-class VCLXMultiLineEdit :   public css::awt::XTextComponent,
+class VCLXMultiLineEdit final : public css::awt::XTextComponent,
                             public css::awt::XTextArea,
                             public css::awt::XTextLayoutConstrains,
                             public VCLXWindow
@@ -246,7 +246,6 @@ private:
     TextListenerMultiplexer maTextListeners;
     LineEnd                 meLineEndType;
 
-protected:
     void                ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
 
 public:
@@ -720,7 +719,7 @@ protected:
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 };
 
-class SVTXCurrencyField : public css::awt::XCurrencyField, public SVTXFormattedField
+class SVTXCurrencyField final : public css::awt::XCurrencyField, public SVTXFormattedField
 {
 public:
                     SVTXCurrencyField();
@@ -763,7 +762,7 @@ public:
 
 
 
-class SVTXNumericField : public css::awt::XNumericField, public SVTXFormattedField
+class SVTXNumericField final : public css::awt::XNumericField, public SVTXFormattedField
 {
 public:
                     SVTXNumericField();
@@ -799,7 +798,7 @@ public:
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override;
 };
 
-class SVTXDateField : public VCLXDateField
+class SVTXDateField final : public VCLXDateField
 {
 public:
                     SVTXDateField();
