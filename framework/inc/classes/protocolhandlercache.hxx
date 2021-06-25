@@ -125,7 +125,7 @@ class HandlerCache final
     @devstatus      ready to use
     @threadsafe     no
 */
-class HandlerCFGAccess : public ::utl::ConfigItem
+class HandlerCFGAccess final : public ::utl::ConfigItem
 {
     private:
         HandlerCache* m_pCache;

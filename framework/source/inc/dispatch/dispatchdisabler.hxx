@@ -31,7 +31,7 @@ namespace framework {
  * of functionality included, and disabling elements remotely one
  * by one performs poorly.
  */
-class DispatchDisabler : public ::cppu::WeakImplHelper<
+class DispatchDisabler final : public ::cppu::WeakImplHelper<
                                         css::lang::XInitialization,
                                         css::container::XNameContainer,
                                         css::frame::XDispatchProviderInterceptor,

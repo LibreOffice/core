@@ -26,7 +26,7 @@
 namespace framework
 {
 
-class FrameworkStatusBar : public StatusBar
+class FrameworkStatusBar final : public StatusBar
 {
     public:
 

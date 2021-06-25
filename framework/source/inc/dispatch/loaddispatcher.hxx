@@ -33,7 +33,7 @@ namespace framework{
                 non-visible components (by using the mechanism of ContentHandler)
                 or visible-components (by using the mechanism of FrameLoader).
  */
-class LoadDispatcher : public  ::cppu::WeakImplHelper< css::frame::XNotifyingDispatch,          // => XDispatch => XInterface
+class LoadDispatcher final : public  ::cppu::WeakImplHelper< css::frame::XNotifyingDispatch,          // => XDispatch => XInterface
                                                         css::frame::XSynchronousDispatch >
 {
 
