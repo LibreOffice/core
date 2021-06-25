@@ -470,7 +470,7 @@ HRESULT STDMETHODCALLTYPE CThumbviewer::GetLocation(
 
 HRESULT STDMETHODCALLTYPE CThumbviewer::GetClassID(CLSID* pClassID)
 {
-    pClassID = const_cast<CLSID*>(&CLSID_THUMBVIEWER_HANDLER);
+    *pClassID = CLSID_THUMBVIEWER_HANDLER;
     return S_OK;
 }
 
