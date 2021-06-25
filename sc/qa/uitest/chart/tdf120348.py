@@ -30,32 +30,30 @@ class tdf120348(UITestCase):
 
         self.xUITest.executeCommand(".uno:Copy")
 
-        self.xUITest.executeCommand(".uno:CloseDoc")
+        with self.ui_test.load_empty_file("calc") as calc_document:
 
-        self.ui_test.create_doc_in_start_center("calc")
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
 
-        self.xUITest.executeCommand(".uno:Paste")
+            self.xUITest.executeCommand(".uno:Paste")
 
-        xData = document.Sheets[0].Charts[0].getEmbeddedObject().Data
+            xData = calc_document.Sheets[0].Charts[0].getEmbeddedObject().Data
 
-        columnNames = ('Finland', 'Sweden', 'Poland', '')
-        self.assertEqual(columnNames, xData.ColumnDescriptions)
+            columnNames = ('Finland', 'Sweden', 'Poland', '')
+            self.assertEqual(columnNames, xData.ColumnDescriptions)
 
-        xSecondMatrix = []
-        for row in xData.Data:
-            xRow = []
-            for value in row:
-                xRow.append(round(value, 5))
-            xSecondMatrix.append(xRow)
+            xSecondMatrix = []
+            for row in xData.Data:
+                xRow = []
+                for value in row:
+                    xRow.append(round(value, 5))
+                xSecondMatrix.append(xRow)
 
-        # Without the fix in place, this test would have failed with
-        # First differing element 51:
-        # [3.31618, 3.65089, 3.33626, 0.0]
-        # [3.31618, 3.65089, 0.0, 0.0]
+            # Without the fix in place, this test would have failed with
+            # First differing element 51:
+            # [3.31618, 3.65089, 3.33626, 0.0]
+            # [3.31618, 3.65089, 0.0, 0.0]
 
-        self.assertEqual(xFirstMatrix, xSecondMatrix)
+            self.assertEqual(xFirstMatrix, xSecondMatrix)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
