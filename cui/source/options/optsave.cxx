@@ -91,6 +91,8 @@ SvxSaveTabPage::SvxSaveTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xODFWarningFI(m_xBuilder->weld_widget("odfwarning_image"))
     , m_xODFWarningFT(m_xBuilder->weld_label("odfwarning_label"))
 {
+    m_xAutoSaveEdit->set_max_length(2);
+
     m_xODFVersionLB->set_id(0, OUString::number(SvtSaveOptions::ODFVER_011)); // 1.0/1.1
     m_xODFVersionLB->set_id(1, OUString::number(SvtSaveOptions::ODFVER_012)); // 1.2
     m_xODFVersionLB->set_id(2, OUString::number(SvtSaveOptions::ODFVER_012_EXT_COMPAT)); // 1.2 Extended (compatibility mode)
