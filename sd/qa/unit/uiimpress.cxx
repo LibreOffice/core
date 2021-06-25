@@ -49,6 +49,7 @@
 #include <sdpage.hxx>
 #include <unomodel.hxx>
 #include <osl/thread.hxx>
+#include <slideshow.hxx>
 
 using namespace ::com::sun::star;
 
@@ -715,6 +716,22 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSearchAllInDocumentAndNotes)
     dispatchCommand(mxComponent, ".uno:ExecuteSearch", aPropertyValues);
 
     Scheduler::ProcessEventsToIdle();
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf142589)
+{
+    mxComponent = loadFromDesktop("private:factory/simpress",
+                                  "com.sun.star.presentation.PresentationDocument");
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+
+    SfxRequest aRequest(pViewShell->GetViewFrame(), SID_PRESENTATION);
+    pImpressDocument->GetDoc()->getPresentationSettings().mbCustomShow = true;
+    pImpressDocument->GetDoc()->getPresentationSettings().mbStartCustomShow = true;
+    sd::slideshowhelp::ShowSlideShow(aRequest, *pImpressDocument->GetDoc());
+    CPPUNIT_ASSERT_EQUAL(false, pImpressDocument->GetDoc()->getPresentationSettings().mbCustomShow);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
