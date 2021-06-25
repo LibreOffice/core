@@ -46,6 +46,7 @@
 #include <fmtcntnt.hxx>
 #include <ftnfrm.hxx>
 #include <tabfrm.hxx>
+#include <rowfrm.hxx>
 #include <flyfrm.hxx>
 #include <sectfrm.hxx>
 #include <fmtclds.hxx>
@@ -1171,6 +1172,7 @@ void SwContentFrame::Cut()
         }
     }
 
+    SwTabFrame* pMasterTab(nullptr);
     pFrame = GetIndNext();
     if( pFrame )
     {
@@ -1251,11 +1253,9 @@ void SwContentFrame::Cut()
             if ( IsInTab() )
             {
                 SwTabFrame* pThisTab = FindTabFrame();
-                SwTabFrame* pMasterTab = pThisTab && pThisTab->IsFollow() ? pThisTab->FindMaster() : nullptr;
-                if ( pMasterTab )
+                if (pThisTab && pThisTab->IsFollow())
                 {
-                    pMasterTab->InvalidatePos_();
-                    pMasterTab->SetRemoveFollowFlowLinePending( true );
+                    pMasterTab = pThisTab->FindMaster();
                 }
             }
         }
@@ -1264,7 +1264,17 @@ void SwContentFrame::Cut()
     SwLayoutFrame *pUp = GetUpper();
     RemoveFromLayout();
     if ( !pUp )
+    {
+        assert(!pMasterTab);
         return;
+    }
+
+    if (pMasterTab
+        && !pMasterTab->GetFollow()->GetFirstNonHeadlineRow()->ContainsContent())
+    {   // only do this if there's no content in other cells of the row!
+        pMasterTab->InvalidatePos_();
+        pMasterTab->SetRemoveFollowFlowLinePending(true);
+    }
 
     SwSectionFrame *pSct = nullptr;
     if ( !pUp->Lower() &&
