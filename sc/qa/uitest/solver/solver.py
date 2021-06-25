@@ -41,7 +41,8 @@ class solver(UITestCase):
             xval2edit.executeAction("TYPE", mkPropertyValues({"TEXT":"0"}))
             xOKBtn = xDialog.getChild("ok")
 
-            with self.ui_test.execute_blocking_action(xOKBtn.executeAction, args=('CLICK', ())):
+            with self.ui_test.execute_blocking_action(
+                    xOKBtn.executeAction, args=('CLICK', ()), id='SolverSuccessDialog'):
                 pass
 
             #verify
