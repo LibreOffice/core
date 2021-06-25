@@ -383,10 +383,8 @@ uno::Reference< XCertificate > SecurityEnvironment_MSCryptImpl::getCertificate( 
     CERT_INFO certInfo ;
 
     // for correct encoding
-    sal_uInt16 encoding ;
     rtl_Locale *pLocale = nullptr ;
     osl_getProcessLocale( &pLocale ) ;
-    encoding = osl_getTextEncodingFromLocale( pLocale ) ;
 
     //Create cert info from issue and serial
     LPCWSTR pszName = o3tl::toW( issuerName.getStr() );
