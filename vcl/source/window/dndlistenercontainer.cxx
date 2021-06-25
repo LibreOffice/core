@@ -448,4 +448,40 @@ void SAL_CALL DNDListenerContainer::dropComplete( sal_Bool success )
     }
 }
 
+/*
+ *  GenericDropTargetDropContext
+ */
+
+GenericDropTargetDropContext::GenericDropTargetDropContext()
+{
+}
+
+void GenericDropTargetDropContext::acceptDrop( sal_Int8 /*dragOperation*/ )
+{
+}
+
+void GenericDropTargetDropContext::rejectDrop()
+{
+}
+
+void GenericDropTargetDropContext::dropComplete( sal_Bool /*success*/ )
+{
+}
+
+/*
+ *  GenericDropTargetDragContext
+ */
+
+GenericDropTargetDragContext::GenericDropTargetDragContext()
+{
+}
+
+void GenericDropTargetDragContext::acceptDrag( sal_Int8 /*dragOperation*/ )
+{
+}
+
+void GenericDropTargetDragContext::rejectDrag()
+{
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
