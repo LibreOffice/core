@@ -48,7 +48,7 @@ class OutputDevice;
 #include <unordered_set>
 #endif
 
-#define DEGREE_CHAR u'\x00B0'   /* U+00B0 DEGREE SIGN */
+constexpr const sal_Unicode DEGREE_CHAR = u'\x00B0'; /* U+00B0 DEGREE SIGN */
 
 class SdrOutliner;
 class SdrLayerAdmin;
@@ -162,7 +162,7 @@ private:
     std::unordered_set< const SdrObject* >  maAllIncarnatedObjects;
 #endif
 protected:
-    std::vector<rtl::Reference<SdrPage>> maMaPag;     // master pages
+    std::vector<rtl::Reference<SdrPage>> maMasterPages;
     std::vector<rtl::Reference<SdrPage>> maPages;
     std::function<void(std::unique_ptr<SdrUndoAction>)> m_aUndoLink;  // link to a NotifyUndo-Handler
     Size           m_aMaxObjSize; // e.g. for auto-growing text
@@ -176,8 +176,7 @@ protected:
 
     std::unique_ptr<SdrLayerAdmin> m_pLayerAdmin;
     rtl::Reference<SfxItemPool> m_pItemPool;
-    comphelper::IEmbeddedHelper*
-                    m_pEmbeddedHelper; // helper for embedded objects to get rid of the SfxObjectShell
+    comphelper::IEmbeddedHelper* m_pEmbeddedHelper; // helper for embedded objects to get rid of the SfxObjectShell
     std::unique_ptr<SdrOutliner> m_pDrawOutliner;  // an Outliner for outputting text
     std::unique_ptr<SdrOutliner> m_pHitTestOutliner;// an Outliner for the HitTest
     std::unique_ptr<SdrOutliner> m_pChainingOutliner; // an Outliner for chaining overflowing text
