@@ -109,7 +109,8 @@ PresentationSettings::PresentationSettings()
     mbFullScreen( true ),
     mbAnimationAllowed( true ),
     mnPauseTimeout( 0 ),
-    mbShowPauseLogo( false )
+    mbShowPauseLogo( false ),
+    mbStartCustomShow( false )
 {
 }
 

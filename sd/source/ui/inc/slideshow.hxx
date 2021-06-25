@@ -208,7 +208,7 @@ private:
 
 namespace slideshowhelp
 {
-    void ShowSlideShow(SfxRequest const & rReq, SdDrawDocument &rDoc);
+    SD_DLLPUBLIC void ShowSlideShow(SfxRequest const& rReq, SdDrawDocument& rDoc);
 }
 
 }
