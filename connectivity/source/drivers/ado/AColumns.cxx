@@ -74,15 +74,6 @@ sdbcx::ObjectType OColumns::appendObject( const OUString&, const Reference< XPro
 
     WpADOColumn aColumn = pColumn->getColumnImpl();
 
-#if OSL_DEBUG_LEVEL > 0
-    sal_Int32 nPrecision;
-    sal_Int32 nScale;
-    sal_Int32 nType;
-    nPrecision = aColumn.get_Precision();
-    nScale = aColumn.get_NumericScale();
-    nType = ADOS::MapADOType2Jdbc(aColumn.get_Type());
-#endif
-
     OUString sTypeName;
     pColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)) >>= sTypeName;
 
