@@ -227,7 +227,8 @@ class UITest(object):
             frames[0].activate()
 
     @contextmanager
-    def execute_blocking_action(self, action, args=(), close_button="ok", printNames=False):
+    def execute_blocking_action(
+            self, action, args=(), close_button="ok", printNames=False, id=None):
         """Executes an action which blocks while a dialog is shown.
 
         Click a button or perform some other action on the dialog when it
@@ -250,7 +251,10 @@ class UITest(object):
             # we are not necessarily opening a dialog, so wait much longer
             while time_ < 10 * MAX_WAIT:
                 if event.executed:
-                    xDialog = self._xUITest.getTopFocusWindow()
+                    if id:
+                        xDialog = self.wait_for_top_focus_window(id)
+                    else:
+                        xDialog = self._xUITest.getTopFocusWindow()
                     try:
                         yield xDialog
                     finally:
