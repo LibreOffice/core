@@ -7014,6 +7014,10 @@ static gpointer custom_cell_renderer_surface_parent_class;
 static GType custom_cell_renderer_surface_get_type();
 static void custom_cell_renderer_surface_class_init(CustomCellRendererSurfaceClass *klass);
 
+static void custom_cell_renderer_surface_init(GTypeInstance * instance, gpointer) {
+    new(&CUSTOM_CELL_RENDERER_SURFACE(instance)->device) VclPtr<VirtualDevice>;
+}
+
 GType custom_cell_renderer_surface_get_type()
 {
     static GType type = 0;
@@ -7030,7 +7034,7 @@ GType custom_cell_renderer_surface_get_type()
             nullptr, /* class data */
             sizeof (CustomCellRendererSurface), /* instance size */
             0,       /* nb preallocs */
-            nullptr, /* instance init */
+            &custom_cell_renderer_surface_init, /* instance init */
             nullptr  /* value table */
         };
 
@@ -7105,6 +7109,7 @@ static void custom_cell_renderer_surface_finalize(GObject *object)
 
     g_free(cellsurface->id);
     cellsurface->device.disposeAndClear();
+    cellsurface->device.~VclPtr<VirtualDevice>();
 
     G_OBJECT_CLASS(custom_cell_renderer_surface_parent_class)->finalize(object);
 }
