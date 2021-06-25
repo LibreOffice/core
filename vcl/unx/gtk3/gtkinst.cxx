@@ -22294,6 +22294,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/bitmaptabpage.ui" &&
         rUIFile != "cui/ui/borderpage.ui" &&
         rUIFile != "cui/ui/breaknumberoption.ui" &&
+        rUIFile != "cui/ui/cellalignment.ui" &&
         rUIFile != "cui/ui/charnamepage.ui" &&
         rUIFile != "cui/ui/colorpage.ui" &&
         rUIFile != "cui/ui/colorpickerdialog.ui" &&
@@ -22426,9 +22427,12 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/BasicIDE/ui/newlibdialog.ui" &&
         rUIFile != "modules/BasicIDE/ui/organizedialog.ui" &&
         rUIFile != "modules/scalc/ui/advancedfilterdialog.ui" &&
+        rUIFile != "modules/scalc/ui/analysisofvariancedialog.ui" &&
+        rUIFile != "modules/scalc/ui/cellprotectionpage.ui" &&
         rUIFile != "modules/scalc/ui/checkwarningdialog.ui" &&
         rUIFile != "modules/scalc/ui/colwidthdialog.ui" &&
         rUIFile != "modules/scalc/ui/consolidatedialog.ui" &&
+        rUIFile != "modules/scalc/ui/correlationdialog.ui" &&
         rUIFile != "modules/scalc/ui/dataform.ui" &&
         rUIFile != "modules/scalc/ui/dataformfragment.ui" &&
         rUIFile != "modules/scalc/ui/datastreams.ui" &&
@@ -22439,6 +22443,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/scalc/ui/doubledialog.ui" &&
         rUIFile != "modules/scalc/ui/erroralerttabpage.ui" &&
         rUIFile != "modules/scalc/ui/externaldata.ui" &&
+        rUIFile != "modules/scalc/ui/formatcellsdialog.ui" &&
         rUIFile != "modules/scalc/ui/goalseekdlg.ui" &&
         rUIFile != "modules/scalc/ui/groupdialog.ui" &&
         rUIFile != "modules/scalc/ui/inputstringdialog.ui" &&
