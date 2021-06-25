@@ -654,7 +654,7 @@ void ScImportAsciiDlg::SetSeparators()
             case ' ':   mxCkbSpace->set_active(true);      break;
             default:
                 mxCkbOther->set_active(true);
-                mxEdOther->set_text(mxEdOther->get_text() + OUStringChar(maFieldSeparators[i]));
+                mxEdOther->set_text(mxEdOther->get_text() + maFieldSeparators[i]);
         }
     }
 }
