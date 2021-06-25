@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <atomic>
 #include <memory>
 #include "uiobject_uno.hxx"
 #include <utility>
@@ -56,7 +59,7 @@ class ExecuteWrapper
 {
     std::function<void()> mFunc;
     Link<Timer*, void> mHandler;
-    volatile bool mbSignal;
+    std::atomic<bool> mbSignal;
 
 public:
 
