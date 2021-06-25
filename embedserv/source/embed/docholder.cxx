@@ -883,12 +883,12 @@ void DocumentHolder::resizeWin( const SIZEL& rNewSize )
                 POINT aOldOffset;
                 aOldOffset.x = aOldSize.cx;
                 aOldOffset.y = aOldSize.cy;
-                bool bIsOk = LPtoDP( hdc, &aOldOffset, 1 );
+                LPtoDP( hdc, &aOldOffset, 1 );
 
                 POINT aNewOffset;
                 aNewOffset.x = rNewSize.cx;
                 aNewOffset.y = rNewSize.cy;
-                bIsOk = LPtoDP( hdc, &aNewOffset, 1 );
+                LPtoDP( hdc, &aNewOffset, 1 );
 
                 ReleaseDC( nullptr, hdc );
 
