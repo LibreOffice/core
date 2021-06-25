@@ -1653,6 +1653,10 @@ namespace slideshowhelp
             //use it whether or not we've been asked to
             //start from the current or first slide
             xPresentation->start();
+
+            // if the custom show not set by default, only show it.
+            if (rDoc.getPresentationSettings().mbStartCustomShow)
+                rDoc.getPresentationSettings().mbCustomShow = false;
         }
         else if (SID_PRESENTATION_CURRENT_SLIDE == rReq.GetSlot())
         {

@@ -141,6 +141,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
     {
         bValuesChanged = true;
         rPresentationSettings.mbCustomShow = bValue;
+        rPresentationSettings.mbStartCustomShow = false;
     }
 
     bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_ENDLESS, SfxBoolItem );

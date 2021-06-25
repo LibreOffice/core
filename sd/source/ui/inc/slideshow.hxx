@@ -32,6 +32,7 @@
 #include <editeng/unoipset.hxx>
 
 #include <memory>
+#include <sddllapi.h>
 
 namespace com::sun::star {
     namespace drawing {
@@ -208,7 +209,7 @@ private:
 
 namespace slideshowhelp
 {
-    void ShowSlideShow(SfxRequest const & rReq, SdDrawDocument &rDoc);
+    SD_DLLPUBLIC void ShowSlideShow(SfxRequest const& rReq, SdDrawDocument& rDoc);
 }
 
 }

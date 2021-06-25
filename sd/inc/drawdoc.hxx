@@ -108,6 +108,7 @@ namespace sd
         bool mbAnimationAllowed;
         sal_Int32 mnPauseTimeout;
         bool mbShowPauseLogo;
+        bool mbStartCustomShow;
 
         PresentationSettings();
     };
