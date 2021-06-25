@@ -55,21 +55,32 @@ void FuCustomShowDlg::DoExecute( SfxRequest& )
     vcl::Window* pWin = mpViewShell->GetActiveWindow();
     ScopedVclPtr<AbstractSdCustomShowDlg> pDlg( pFact->CreateSdCustomShowDlg(pWin ? pWin->GetFrameWeld() : nullptr, *mpDoc) );
     sal_uInt16 nRet = pDlg->Execute();
-    if( pDlg->IsModified() )
-    {
-        mpDoc->SetChanged();
-        sd::PresentationSettings& rSettings = mpDoc->getPresentationSettings();
-        rSettings.mbCustomShow = pDlg->IsCustomShow();
-    }
-    pDlg.disposeAndClear();
+    mpDoc->SetChanged();
+    sd::PresentationSettings& rSettings = mpDoc->getPresentationSettings();
 
     if( nRet == RET_YES )
     {
+        // If the custom show is not set by default
+        if (!rSettings.mbCustomShow)
+        {
+            rSettings.mbStartCustomShow = true;
+            rSettings.mbCustomShow = pDlg->IsCustomShow();
+        }
+
         mpViewShell->SetStartShowWithDialog(true);
 
         mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_PRESENTATION,
                 SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
     }
+    if (nRet == RET_OK)
+    {
+        if (!pDlg->IsCustomShow())
+        {
+            rSettings.mbCustomShow = false;
+            rSettings.mbAll = true;
+        }
+    }
+    pDlg.disposeAndClear();
 }
 
 } // end of namespace
