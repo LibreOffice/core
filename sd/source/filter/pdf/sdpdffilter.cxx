@@ -77,12 +77,17 @@ bool SdPdfFilter::Import()
 
         // Create the page and insert the Graphic.
         SdPage* pPage = mrDocument.GetSdPage(nPageNumber, PageKind::Standard);
+        if (!pPage) // failed to duplicate page, out of memory?
+            return false;
 
         // Make the page size match the rendered image.
         pPage->SetSize(aSizeHMM);
 
         SdrGrafObj* pSdrGrafObj = new SdrGrafObj(pPage->getSdrModelFromSdrPage(), rGraphic,
                                                  tools::Rectangle(Point(), aSizeHMM));
+        if (!pSdrGrafObj) // out of memory
+            return false;
+
         pSdrGrafObj->SetResizeProtect(true);
         pSdrGrafObj->SetMoveProtect(true);
 
