@@ -82,95 +82,80 @@ struct SdrModelImpl
 {
     SfxUndoManager* mpUndoManager;
     SdrUndoFactory* mpUndoFactory;
-
     bool mbAnchoredTextOverflowLegacy; // tdf#99729 compatibility flag
+
+    SdrModelImpl()
+        : mpUndoManager(nullptr)
+        , mpUndoFactory(nullptr)
+        , mbAnchoredTextOverflowLegacy(false)
+    {}
 };
 
 
-SdrModel::SdrModel(
-    SfxItemPool* pPool,
-    ::comphelper::IEmbeddedHelper* _pEmbeddedHelper,
-    bool bDisablePropertyFiles)
-:
-#ifdef DBG_UTIL
-    // SdrObjectLifetimeWatchDog:
-    maAllIncarnatedObjects(),
-#endif
-    maMaPag(),
-    maPages()
+SdrModel::SdrModel(SfxItemPool* pPool, comphelper::IEmbeddedHelper* pEmbeddedHelper, bool bDisablePropertyFiles)
+    : m_aObjUnit(SdrEngineDefaults::GetMapFraction())
+    , m_eObjUnit(SdrEngineDefaults::GetMapUnit())
+    , m_eUIUnit(FieldUnit::MM)
+    , m_aUIScale(Fraction(1,1))
+    , m_nUIUnitDecimalMark(0)
+    , m_pLayerAdmin(new SdrLayerAdmin)
+    , m_pItemPool(pPool)
+    , m_pEmbeddedHelper(pEmbeddedHelper)
+    , mnDefTextHgt(SdrEngineDefaults::GetFontHeight())
+    , m_pRefOutDev(nullptr)
+    , m_pDefaultStyleSheet(nullptr)
+    , mpDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj(nullptr)
+    , m_pLinkManager(nullptr)
+    , m_nUndoLevel(0)
+    , m_bIsWriter(true)
+    , mbUndoEnabled(true)
+    , mbChanged(false)
+    , m_bPagNumsDirty(false)
+    , m_bMPgNumsDirty(false)
+    , m_bTransportContainer(false)
+    , m_bReadOnly(false)
+    , m_bTransparentTextFrames(false)
+    , m_bSwapGraphics(false)
+    , m_bPasteResize(false)
+    , m_bStarDrawPreviewMode(false)
+    , mbDisableTextEditUsesCommonUndoManager(false)
+    , m_nDefaultTabulator(0)
+    , m_nMaxUndoCount(16)
+    , m_pTextChain(new TextChain)
+    , mpImpl(new SdrModelImpl)
+    , mnCharCompressType(CharCompressType::NONE)
+    , mnHandoutPageCount(0)
+    , mbModelLocked(false)
+    , mbKernAsianPunctuation(false)
+    , mbAddExtLeading(false)
+    , mbInDestruction(false)
 {
-    mpImpl.reset(new SdrModelImpl);
-    mpImpl->mpUndoManager=nullptr;
-    mpImpl->mpUndoFactory=nullptr;
-    mpImpl->mbAnchoredTextOverflowLegacy = false;
-    mbInDestruction = false;
-    m_aObjUnit=SdrEngineDefaults::GetMapFraction();
-    m_eObjUnit=SdrEngineDefaults::GetMapUnit();
-    m_eUIUnit=FieldUnit::MM;
-    m_aUIScale=Fraction(1,1);
-    m_nUIUnitDecimalMark=0;
-    m_pLayerAdmin=nullptr;
-    m_pItemPool=pPool;
-    m_bIsWriter=true;
-    m_pEmbeddedHelper=_pEmbeddedHelper;
-    m_pDrawOutliner=nullptr;
-    m_pHitTestOutliner=nullptr;
-    m_pRefOutDev=nullptr;
-    m_pDefaultStyleSheet=nullptr;
-    mpDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj = nullptr;
-    m_pLinkManager=nullptr;
-    m_nMaxUndoCount=16;
-    m_pCurrentUndoGroup=nullptr;
-    m_nUndoLevel=0;
-    mbUndoEnabled=true;
-    mbChanged = false;
-    m_bPagNumsDirty=false;
-    m_bMPgNumsDirty=false;
-    m_bTransportContainer = false;
-    m_bSwapGraphics=false;
-    m_bPasteResize=false;
-    m_bReadOnly=false;
-    m_nDefaultTabulator=0;
-    m_bTransparentTextFrames=false;
-    m_bStarDrawPreviewMode = false;
-    mpForbiddenCharactersTable = nullptr;
-    mbModelLocked = false;
-    mpOutlinerCache = nullptr;
-    mbKernAsianPunctuation = false;
-    mbAddExtLeading = false;
-    mnHandoutPageCount = 0;
-
-    mbDisableTextEditUsesCommonUndoManager = false;
-
     if (!utl::ConfigManager::IsFuzzing())
-        mnCharCompressType = static_cast<CharCompressType>(officecfg::Office::Common::AsianLayout::CompressCharacterDistance::
-            get());
-    else
-        mnCharCompressType = CharCompressType::NONE;
-
-    if ( pPool == nullptr )
     {
-        m_pItemPool=new SdrItemPool(nullptr);
+        mnCharCompressType = static_cast<CharCompressType>(
+            officecfg::Office::Common::AsianLayout::CompressCharacterDistance::get());
+    }
+
+    if (m_pItemPool == nullptr)
+    {
+        m_pItemPool = new SdrItemPool(nullptr);
         // Outliner doesn't have its own Pool, so use the EditEngine's
         rtl::Reference<SfxItemPool> pOutlPool=EditEngine::CreatePool();
         // OutlinerPool as SecondaryPool of SdrPool
         m_pItemPool->SetSecondaryPool(pOutlPool.get());
         // remember that I created both pools myself
-        m_bIsWriter=false;
+        m_bIsWriter = false;
     }
     m_pItemPool->SetDefaultMetric(m_eObjUnit);
 
 // using static SdrEngineDefaults only if default SvxFontHeight item is not available
     const SfxPoolItem* pPoolItem = m_pItemPool->GetPoolDefaultItem( EE_CHAR_FONTHEIGHT );
-    if ( pPoolItem )
+    if (pPoolItem)
         mnDefTextHgt = static_cast<const SvxFontHeightItem*>(pPoolItem)->GetHeight();
-    else
-        mnDefTextHgt = SdrEngineDefaults::GetFontHeight();
 
     m_pItemPool->SetPoolDefaultItem( makeSdrTextWordWrapItem( false ) );
 
     SetTextDefaults();
-    m_pLayerAdmin.reset(new SdrLayerAdmin);
     m_pLayerAdmin->SetModel(this);
     ImpSetUIUnit();
 
@@ -187,16 +172,11 @@ SdrModel::SdrModel(
     m_pChainingOutliner = SdrMakeOutliner( OutlinerMode::TextObject, *this );
     ImpSetOutlinerDefaults(m_pChainingOutliner.get(), true);
 
-    // Make a TextChain
-    m_pTextChain.reset(new TextChain);
-    /* End Text Chaining related code */
-
     ImpCreateTables(bDisablePropertyFiles || utl::ConfigManager::IsFuzzing());
 }
 
 SdrModel::~SdrModel()
 {
-
     mbInDestruction = true;
 
     Broadcast(SdrHint(SdrHintKind::ModelCleared));
@@ -591,7 +571,7 @@ void SdrModel::ClearModel(bool bCalledFromDestructor)
     {
         DeleteMasterPage( static_cast<sal_uInt16>(i) );
     }
-    maMaPag.clear();
+    maMasterPages.clear();
     MasterPageListChanged();
 
     m_pLayerAdmin->ClearLayers();
@@ -1175,10 +1155,10 @@ void SdrModel::RecalcPageNums(bool bMaster)
 {
     if(bMaster)
     {
-        sal_uInt16 nCount=sal_uInt16(maMaPag.size());
+        sal_uInt16 nCount=sal_uInt16(maMasterPages.size());
         sal_uInt16 i;
         for (i=0; i<nCount; i++) {
-            SdrPage* pPg = maMaPag[i].get();
+            SdrPage* pPg = maMasterPages[i].get();
             pPg->SetPageNum(i);
         }
         m_bMPgNumsDirty=false;
@@ -1197,9 +1177,11 @@ void SdrModel::RecalcPageNums(bool bMaster)
 
 void SdrModel::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
 {
-    sal_uInt16 nCount=GetPageCount();
-    if (nPos>nCount) nPos=nCount;
-    maPages.insert(maPages.begin()+nPos,pPage);
+    sal_uInt16 nCount = GetPageCount();
+    if (nPos > nCount)
+        nPos = nCount;
+
+    maPages.insert(maPages.begin() + nPos, pPage);
     PageListChanged();
     pPage->SetInserted();
     pPage->SetPageNum(nPos);
@@ -1250,7 +1232,7 @@ void SdrModel::InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos)
 {
     sal_uInt16 nCount=GetMasterPageCount();
     if (nPos>nCount) nPos=nCount;
-    maMaPag.insert(maMaPag.begin()+nPos,pPage);
+    maMasterPages.insert(maMasterPages.begin()+nPos,pPage);
     MasterPageListChanged();
     pPage->SetInserted();
     pPage->SetPageNum(nPos);
@@ -1271,8 +1253,8 @@ void SdrModel::DeleteMasterPage(sal_uInt16 nPgNum)
 
 rtl::Reference<SdrPage> SdrModel::RemoveMasterPage(sal_uInt16 nPgNum)
 {
-    rtl::Reference<SdrPage> pRetPg = std::move(maMaPag[nPgNum]);
-    maMaPag.erase(maMaPag.begin()+nPgNum);
+    rtl::Reference<SdrPage> pRetPg = std::move(maMasterPages[nPgNum]);
+    maMasterPages.erase(maMasterPages.begin()+nPgNum);
     MasterPageListChanged();
 
     if(pRetPg)
@@ -1297,12 +1279,12 @@ rtl::Reference<SdrPage> SdrModel::RemoveMasterPage(sal_uInt16 nPgNum)
 
 void SdrModel::MoveMasterPage(sal_uInt16 nPgNum, sal_uInt16 nNewPos)
 {
-    rtl::Reference<SdrPage> pPg = std::move(maMaPag[nPgNum]);
-    maMaPag.erase(maMaPag.begin()+nPgNum);
+    rtl::Reference<SdrPage> pPg = std::move(maMasterPages[nPgNum]);
+    maMasterPages.erase(maMasterPages.begin()+nPgNum);
     MasterPageListChanged();
     if (pPg) {
         pPg->SetInserted(false);
-        maMaPag.insert(maMaPag.begin()+nNewPos,pPg);
+        maMasterPages.insert(maMasterPages.begin()+nNewPos,pPg);
         MasterPageListChanged();
     }
     m_bMPgNumsDirty=true;
@@ -1478,7 +1460,7 @@ void SdrModel::Merge(SdrModel& rSourceModel,
                     // Now append all of them to the end of the DstModel.
                     // Don't use InsertMasterPage(), because everything is
                     // inconsistent until all are in.
-                    maMaPag.insert(maMaPag.begin()+nDstMasterPageCnt, pPg);
+                    maMasterPages.insert(maMasterPages.begin()+nDstMasterPageCnt, pPg);
                     MasterPageListChanged();
                     pPg->SetInserted();
                     m_bMPgNumsDirty=true;
@@ -1833,19 +1815,19 @@ TextChain *SdrModel::GetTextChain() const
 
 const SdrPage* SdrModel::GetMasterPage(sal_uInt16 nPgNum) const
 {
-    DBG_ASSERT(nPgNum < maMaPag.size(), "SdrModel::GetMasterPage: Access out of range (!)");
-    return maMaPag[nPgNum].get();
+    DBG_ASSERT(nPgNum < maMasterPages.size(), "SdrModel::GetMasterPage: Access out of range (!)");
+    return maMasterPages[nPgNum].get();
 }
 
 SdrPage* SdrModel::GetMasterPage(sal_uInt16 nPgNum)
 {
-    DBG_ASSERT(nPgNum < maMaPag.size(), "SdrModel::GetMasterPage: Access out of range (!)");
-    return maMaPag[nPgNum].get();
+    DBG_ASSERT(nPgNum < maMasterPages.size(), "SdrModel::GetMasterPage: Access out of range (!)");
+    return maMasterPages[nPgNum].get();
 }
 
 sal_uInt16 SdrModel::GetMasterPageCount() const
 {
-    return sal_uInt16(maMaPag.size());
+    return sal_uInt16(maMasterPages.size());
 }
 
 void SdrModel::MasterPageListChanged()
