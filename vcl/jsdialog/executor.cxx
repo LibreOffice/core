@@ -231,6 +231,12 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
                         *pToolbar, OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US));
                     return true;
                 }
+                else if (sAction == "togglemenu")
+                {
+                    pToolbar->set_menu_item_active(
+                        OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US), true);
+                    return true;
+                }
             }
         }
         else if (sControlType == "edit")

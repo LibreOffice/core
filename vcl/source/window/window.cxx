@@ -3346,6 +3346,9 @@ const char* windowTypeName(WindowType nWindowType)
 
 void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
+    if (!mpWindowImpl)
+        return;
+
     rJsonWriter.put("id", get_id());  // TODO could be missing - sort out
     rJsonWriter.put("type", windowTypeName(GetType()));
     rJsonWriter.put("text", GetText());
