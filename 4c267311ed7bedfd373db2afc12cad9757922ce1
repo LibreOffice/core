@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5dd008ca_c8440f58",
+        "filename": "sd/source/filter/pdf/sdpdffilter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-06-25T14:15:49Z",
+      "side": 1,
+      "message": "new doesn\u0027t return nullptr on failure though",
+      "revId": "4c267311ed7bedfd373db2afc12cad9757922ce1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
