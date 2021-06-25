@@ -130,11 +130,16 @@ There are three types of events, with different priority:
 They should be processed according to the following code:
 
 ```
-bool DoYield( bool bWait, bool bAllCurrent )
+bool ImplYield(bool bWait, bool bAllCurrent)
 {
+    DBG_TESTSOLARMUTEX();
+    assert(IsMainThread());
+
     bool bWasEvent = ProcessUserEvents( bAllCurrent );
     if ( !bAllCurrent && bWasEvent )
         return true;
+
+    SolarMutexReleaser();
     bWasEvent = ProcessSystemEvents( bAllCurrent, &bWasSchedulerEvent ) || bWasEvent;
     if ( !bWasSchedulerEvent && IsSchedulerEvent() )
     {

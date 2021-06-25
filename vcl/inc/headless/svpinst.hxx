@@ -101,6 +101,7 @@ class VCL_DLLPUBLIC SvpSalInstance : public SalGenericInstance, public SalUserEv
 
     virtual void            TriggerUserEventProcessing() override;
     virtual void            ProcessEvent( SalUserEvent aEvent ) override;
+    bool ImplYield(bool bWait, bool bHandleAllCurrentEvents);
 
 public:
     static SvpSalInstance*  s_pDefaultInstance;

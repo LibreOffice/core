@@ -2729,16 +2729,17 @@ static gboolean timeout_wakeup(void *)
 // integrate our mainloop with LOK's
 static int lok_poll_callback(void*, int timeoutUs)
 {
-    if (timeoutUs)
+    bool bWasEvent(false);
+    if (timeoutUs > 0)
     {
         guint timeout = g_timeout_add(timeoutUs / 1000, timeout_wakeup, nullptr);
-        g_main_context_iteration(nullptr, true);
+        bWasEvent = g_main_context_iteration(nullptr, true);
         g_source_remove(timeout);
     }
     else
-        g_main_context_iteration(nullptr, FALSE);
+        bWasEvent = g_main_context_iteration(nullptr, timeoutUs < 0);
 
-    return 0;
+    return bWasEvent ? 1 : 0;
 }
 
 // thread-safe wakeup of our mainloop
