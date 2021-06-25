@@ -31,14 +31,13 @@ namespace com::sun::star {
 
 // export class for a complete chart document
 
-class SchXMLExport : public SvXMLExport
+class SchXMLExport final : public SvXMLExport
 {
 private:
     rtl::Reference<SchXMLAutoStylePoolP> maAutoStylePool;
 
     rtl::Reference<SchXMLExportHelper> maExportHelper;
 
-protected:
     virtual ErrCode exportDoc( enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID ) override;
 
     virtual void ExportAutoStyles_() override;

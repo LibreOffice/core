@@ -26,7 +26,7 @@
     Reads/writes numeric properties with special handling for "void" value
     (i.e., void property will be written as "auto")
 */
-class XMLNumberWithAutoForVoidPropHdl : public XMLPropertyHandler
+class XMLNumberWithAutoForVoidPropHdl final : public XMLPropertyHandler
 {
 public:
     explicit XMLNumberWithAutoForVoidPropHdl() {}
