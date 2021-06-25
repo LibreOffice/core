@@ -30,10 +30,9 @@
 typedef ::cppu::ImplHelper1 <
     css::accessibility::XAccessibleSelection > VCLXAccessibleMenu_BASE;
 
-class VCLXAccessibleMenu :  public VCLXAccessibleMenuItem,
+class VCLXAccessibleMenu final : public VCLXAccessibleMenuItem,
                             public VCLXAccessibleMenu_BASE
 {
-protected:
     virtual bool        IsFocused() override;
     virtual bool        IsPopupMenuOpen() override;
     sal_Int32           implGetSelectedAccessibleChildCount();

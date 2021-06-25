@@ -191,7 +191,7 @@ private:
     The instance holds its XAccessibleContext with a hard reference, while
     the context holds this instance weak.
 */
-class AccessibleBrowseBoxAccess:
+class AccessibleBrowseBoxAccess final :
     public cppu::WeakImplHelper<css::accessibility::XAccessible>,
     public ::vcl::IAccessibleBrowseBox
 {
@@ -212,7 +212,7 @@ public:
     /// returns the AccessibleContext belonging to this Accessible
     AccessibleBrowseBox*            getContext() { return m_xContext.get(); }
 
-protected:
+private:
     virtual ~AccessibleBrowseBoxAccess() override;
 
     // XAccessible
