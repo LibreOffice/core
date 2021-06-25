@@ -21,7 +21,7 @@
 
 #include <xmloff/xmlprmap.hxx>
 
-class XMLPageMasterPropSetMapper : public XMLPropertySetMapper
+class XMLPageMasterPropSetMapper final : public XMLPropertySetMapper
 {
 public:
     explicit XMLPageMasterPropSetMapper();
