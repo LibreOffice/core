@@ -420,6 +420,8 @@ SectionPropertyMap::SectionPropertyMap( bool bIsFirstSection )
     , m_nLnc(NS_ooxml::LN_Value_ST_LineNumberRestart_newPage)
     , m_ndxaLnn( 0 )
     , m_nLnnMin( 0 )
+    , m_bDynamicHeightTop( true )
+    , m_bDynamicHeightBottom( true )
     , m_bDefaultHeaderLinkToPrevious( true )
     , m_bEvenPageHeaderLinkToPrevious( true )
     , m_bFirstPageHeaderLinkToPrevious( true )
@@ -957,28 +959,25 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
     bool bCopyFirstToFollow = bFirstPage && m_bTitlePage && m_aFollowPageStyle.is();
 
     sal_Int32 nTopMargin = m_nTopMargin;
-    sal_Int32 nHeaderTop = m_nHeaderTop;
+    sal_Int32 nHeaderHeight = m_nHeaderTop;
     if ( HasHeader( bFirstPage ) )
     {
-        nTopMargin = nHeaderTop;
-        if ( m_nTopMargin > 0 && m_nTopMargin > nHeaderTop )
-            nHeaderTop = m_nTopMargin - nHeaderTop;
-        else
-            nHeaderTop = 0;
+        nTopMargin = m_nHeaderTop;
+        nHeaderHeight = m_nTopMargin - m_nHeaderTop;
 
         // minimum header height 1mm
-        if ( nHeaderTop < MIN_HEAD_FOOT_HEIGHT )
-            nHeaderTop = MIN_HEAD_FOOT_HEIGHT;
+        if ( nHeaderHeight < MIN_HEAD_FOOT_HEIGHT )
+            nHeaderHeight = MIN_HEAD_FOOT_HEIGHT;
     }
 
+    Insert(PROP_HEADER_IS_DYNAMIC_HEIGHT, uno::makeAny(m_bDynamicHeightTop));
+    Insert(PROP_HEADER_DYNAMIC_SPACING, uno::makeAny(m_bDynamicHeightTop));
+    Insert(PROP_HEADER_BODY_DISTANCE, uno::makeAny(nHeaderHeight - MIN_HEAD_FOOT_HEIGHT));
+    Insert(PROP_HEADER_HEIGHT, uno::makeAny(nHeaderHeight));
+    // looks like PROP_HEADER_HEIGHT = height of the header + space between the header, and the body
 
-    if ( m_nTopMargin >= 0 ) //fixed height header -> see WW8Par6.hxx
+    if ( m_bDynamicHeightTop ) //fixed height header -> see WW8Par6.hxx
     {
-        Insert( PROP_HEADER_IS_DYNAMIC_HEIGHT, uno::makeAny( true ) );
-        Insert( PROP_HEADER_DYNAMIC_SPACING, uno::makeAny( true ) );
-        Insert( PROP_HEADER_BODY_DISTANCE, uno::makeAny( nHeaderTop - MIN_HEAD_FOOT_HEIGHT ) );// ULSpace.Top()
-        Insert( PROP_HEADER_HEIGHT, uno::makeAny( nHeaderTop ) );
-
         if (bCopyFirstToFollow && HasHeader(/*bFirstPage=*/true))
         {
             m_aFollowPageStyle->setPropertyValue("HeaderDynamicSpacing",
@@ -987,36 +986,25 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
                                                  getProperty(PROP_HEADER_HEIGHT)->second);
         }
     }
-    else
-    {
-        //todo: old filter fakes a frame into the header/footer to support overlapping
-        //current setting is completely wrong!
-        Insert( PROP_HEADER_HEIGHT, uno::makeAny( nHeaderTop ) );
-        Insert( PROP_HEADER_BODY_DISTANCE, uno::makeAny( m_nTopMargin - nHeaderTop ) );
-        Insert( PROP_HEADER_IS_DYNAMIC_HEIGHT, uno::makeAny( false ) );
-        Insert( PROP_HEADER_DYNAMIC_SPACING, uno::makeAny( false ) );
-    }
 
     sal_Int32 nBottomMargin = m_nBottomMargin;
-    sal_Int32 nHeaderBottom = m_nHeaderBottom;
+    sal_Int32 nFooterHeight = m_nHeaderBottom;
     if ( HasFooter( bFirstPage ) )
     {
-        nBottomMargin = nHeaderBottom;
-        if ( m_nBottomMargin > 0 && m_nBottomMargin > nHeaderBottom )
-            nHeaderBottom = m_nBottomMargin - nHeaderBottom;
-        else
-            nHeaderBottom = 0;
-        if ( nHeaderBottom < MIN_HEAD_FOOT_HEIGHT )
-            nHeaderBottom = MIN_HEAD_FOOT_HEIGHT;
+        nBottomMargin = m_nHeaderBottom;
+        nFooterHeight = m_nBottomMargin - m_nHeaderBottom;
+
+        // minimum footer height 1mm
+        if ( nFooterHeight < MIN_HEAD_FOOT_HEIGHT )
+            nFooterHeight = MIN_HEAD_FOOT_HEIGHT;
     }
 
-    if ( m_nBottomMargin >= 0 ) //fixed height footer -> see WW8Par6.hxx
+    Insert(PROP_FOOTER_IS_DYNAMIC_HEIGHT, uno::makeAny(m_bDynamicHeightBottom));
+    Insert(PROP_FOOTER_DYNAMIC_SPACING, uno::makeAny(m_bDynamicHeightBottom));
+    Insert(PROP_FOOTER_BODY_DISTANCE, uno::makeAny(nFooterHeight - MIN_HEAD_FOOT_HEIGHT));
+    Insert(PROP_FOOTER_HEIGHT, uno::makeAny(nFooterHeight));
+    if (m_bDynamicHeightBottom) //fixed height footer -> see WW8Par6.hxx
     {
-        Insert( PROP_FOOTER_IS_DYNAMIC_HEIGHT, uno::makeAny( true ) );
-        Insert( PROP_FOOTER_DYNAMIC_SPACING, uno::makeAny( true ) );
-        Insert( PROP_FOOTER_BODY_DISTANCE, uno::makeAny( nHeaderBottom - MIN_HEAD_FOOT_HEIGHT ) );
-        Insert( PROP_FOOTER_HEIGHT, uno::makeAny( nHeaderBottom ) );
-
         if (bCopyFirstToFollow && HasFooter(/*bFirstPage=*/true))
         {
             m_aFollowPageStyle->setPropertyValue("FooterDynamicSpacing",
@@ -1024,15 +1012,6 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
             m_aFollowPageStyle->setPropertyValue("FooterHeight",
                                                  getProperty(PROP_FOOTER_HEIGHT)->second);
         }
-    }
-    else
-    {
-        //todo: old filter fakes a frame into the header/footer to support overlapping
-        //current setting is completely wrong!
-        Insert( PROP_FOOTER_IS_DYNAMIC_HEIGHT, uno::makeAny( false ) );
-        Insert( PROP_FOOTER_DYNAMIC_SPACING, uno::makeAny( false ) );
-        Insert( PROP_FOOTER_HEIGHT, uno::makeAny( m_nBottomMargin - nHeaderBottom ) );
-        Insert( PROP_FOOTER_BODY_DISTANCE, uno::makeAny( nHeaderBottom ) );
     }
 
     //now set the top/bottom margin for the follow page style
@@ -1109,6 +1088,13 @@ void SectionPropertyMap::HandleMarginsHeaderFooter( bool bFirstPage, DomainMappe
     */
     CopyLastHeaderFooter( bFirstPage, rDM_Impl );
     PrepareHeaderFooterProperties( bFirstPage );
+
+    // tdf#119952: If top/bottom margin was negative during docx import,
+    // then the header/footer and the body could be on top of each other
+    // writer is unable to display both of them in the same position, but can be simulated
+    // by moving the header/footer text into a flyframe anchored to the header/footer,
+    // leaving an empty dummy header/footer.
+    rDM_Impl.ConvertHeaderFooterToTextFrame(m_bDynamicHeightTop, m_bDynamicHeightBottom);
 }
 
 bool SectionPropertyMap::FloatingTableConversion( const DomainMapper_Impl& rDM_Impl, FloatingTableInfo& rInfo )
