@@ -738,22 +738,39 @@ sal_uInt16 XclTokenArray::GetSize() const
     return limit_cast< sal_uInt16 >( maTokVec.size() );
 }
 
-void XclTokenArray::ReadSize( XclImpStream& rStrm )
+sal_uInt16 XclTokenArray::ReadSize(XclImpStream& rStrm)
 {
-    sal_uInt16 nSize = rStrm.ReaduInt16();
-    maTokVec.resize( nSize );
+    return rStrm.ReaduInt16();
 }
 
-void XclTokenArray::ReadArray( XclImpStream& rStrm )
+void XclTokenArray::ReadArray(sal_uInt16 nSize, XclImpStream& rStrm)
 {
-    if( !maTokVec.empty() )
-        rStrm.Read(maTokVec.data(), GetSize());
+    maTokVec.resize(0);
+
+    const std::size_t nMaxBuffer = 4096;
+    std::size_t nBytesLeft = nSize;
+    std::size_t nTotalRead = 0;
+
+    while (true)
+    {
+        if (!nBytesLeft)
+            break;
+        std::size_t nReadRequest = o3tl::sanitizing_min(nBytesLeft, nMaxBuffer);
+        maTokVec.resize(maTokVec.size() + nReadRequest);
+        auto nRead = rStrm.Read(maTokVec.data() + nTotalRead, nReadRequest);
+        nTotalRead += nRead;
+        if (nRead != nReadRequest)
+        {
+            maTokVec.resize(nTotalRead);
+            break;
+        }
+        nBytesLeft -= nRead;
+    }
 }
 
 void XclTokenArray::Read( XclImpStream& rStrm )
 {
-    ReadSize( rStrm );
-    ReadArray( rStrm );
+    ReadArray(ReadSize(rStrm), rStrm);
 }
 
 void XclTokenArray::WriteSize( XclExpStream& rStrm ) const

@@ -2017,9 +2017,9 @@ void XclImpControlHelper::DoProcessControl( ScfPropertySet& ) const
 void XclImpControlHelper::ReadRangeList( ScRangeList& rScRanges, XclImpStream& rStrm )
 {
     XclTokenArray aXclTokArr;
-    aXclTokArr.ReadSize( rStrm );
+    sal_uInt16 nSize = XclTokenArray::ReadSize(rStrm);
     rStrm.Ignore( 4 );
-    aXclTokArr.ReadArray( rStrm );
+    aXclTokArr.ReadArray(nSize, rStrm);
     mrRoot.GetFormulaCompiler().CreateRangeList( rScRanges, EXC_FMLATYPE_CONTROL, aXclTokArr, rStrm );
 }
 
