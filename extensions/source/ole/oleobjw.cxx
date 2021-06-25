@@ -26,6 +26,7 @@
 #include <osl/thread.h>
 
 #include <memory>
+#include <string_view>
 #include <com/sun/star/script/CannotConvertException.hpp>
 #include <com/sun/star/script/FailReason.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
@@ -1428,7 +1429,8 @@ uno::Any SAL_CALL IUnknownWrapper::directInvoke( const OUString& aName, const un
                 break;
             case DISP_E_EXCEPTION:
                     message = OUString::Concat("[automation bridge]: ")
-                        + o3tl::toU(excepinfo.bstrDescription);
+                        + std::u16string_view(o3tl::toU(excepinfo.bstrDescription),
+                            ::SysStringLen(excepinfo.bstrDescription));
                     throw InvocationTargetException(message, Reference<XInterface>(), Any());
                     break;
             case DISP_E_MEMBERNOTFOUND:
@@ -2049,7 +2051,8 @@ Any  IUnknownWrapper::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
             break;
         case DISP_E_EXCEPTION:
                 message = OUString::Concat("[automation bridge]: ")
-                    + o3tl::toU(excepinfo.bstrDescription);
+                    + std::u16string_view(o3tl::toU(excepinfo.bstrDescription),
+                                    ::SysStringLen(excepinfo.bstrDescription));
 
                 throw InvocationTargetException(message, Reference<XInterface>(), Any());
             break;
