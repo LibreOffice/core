@@ -447,11 +447,9 @@ void EmbedDocument_Impl::notify( bool bDataChanged )
 
 void EmbedDocument_Impl::Deactivate()
 {
-    HRESULT hr = S_OK;
-
     if ( m_pDocHolder->HasFrame() )
     {
-        hr = SaveObject();
+        SaveObject();
         m_pDocHolder->CloseFrame();
         OLENotifyDeactivation();
     }
