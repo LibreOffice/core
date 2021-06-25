@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "393aa8e4_226c1cb3",
+        "filename": "oox/source/ppt/pptshape.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-06-25T13:13:35Z",
+      "side": 1,
+      "message": "OUString sRest;\nif ( sSlideName.startsWith(aTitleText, \u0026sRest) \u0026\u0026 (sRest.isEmpty() || (sRest.startsWith(\" (\") \u0026\u0026 sRest.endsWith(\")\") \u0026\u0026 sRest.copy(2, sRest.getLength() - 3).toInt32 \u003e 0))\n    nCount++;\n\n...\n\nif ( bUseTitleAsSlideName )\n{\n   Reference\u003ccontainer::XNamed\u003e xName(rSlidePersist.getPage(), UNO_QUERY_THROW);\n   xName-\u003esetName(aTitleText + (nCount \u003d\u003d 1 \n                     ? \"\"\n                     : \" (\" + OUString::number(nCount) + \")\" );\n\nOUString documentation: https://api.libreoffice.org/docs/cpp/ref/a00774.html",
+      "range": {
+        "startLine": 360,
+        "startChar": 24,
+        "endLine": 383,
+        "endChar": 21
+      },
+      "revId": "5b408fde36c5e83ddbd671b016d8ca9be8d5393e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
