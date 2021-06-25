@@ -320,7 +320,6 @@ void SalAbort( const OUString& rErrorText, bool bDumpCore )
         GetSalData()->m_pInstance->BeforeAbort(rErrorText, bDumpCore);
 
 #if defined _WIN32
-    (void) bDumpCore;
     if( rErrorText.isEmpty() )
     {
         // make sure crash reporter is triggered
