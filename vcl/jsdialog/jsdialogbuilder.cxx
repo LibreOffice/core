@@ -306,11 +306,16 @@ void JSDialogNotifyIdle::clearQueue() { m_aMessageQueue.clear(); }
 JSDialogSender::~JSDialogSender() COVERITY_NOEXCEPT_FALSE
 {
     sendClose();
-    mpIdleNotify->Stop();
+
+    if (mpIdleNotify)
+        mpIdleNotify->Stop();
 }
 
 void JSDialogSender::sendFullUpdate(bool bForce)
 {
+    if (!mpIdleNotify)
+        return;
+
     if (bForce)
         mpIdleNotify->forceUpdate();
 
@@ -320,6 +325,9 @@ void JSDialogSender::sendFullUpdate(bool bForce)
 
 void JSDialogSender::sendClose()
 {
+    if (!mpIdleNotify)
+        return;
+
     mpIdleNotify->clearQueue();
     mpIdleNotify->sendMessage(jsdialog::MessageType::Close, nullptr);
     flush();
@@ -327,6 +335,9 @@ void JSDialogSender::sendClose()
 
 void JSDialogSender::sendUpdate(VclPtr<vcl::Window> pWindow, bool bForce)
 {
+    if (!mpIdleNotify)
+        return;
+
     if (bForce)
         mpIdleNotify->forceUpdate();
 
@@ -336,12 +347,18 @@ void JSDialogSender::sendUpdate(VclPtr<vcl::Window> pWindow, bool bForce)
 
 void JSDialogSender::sendAction(VclPtr<vcl::Window> pWindow, std::unique_ptr<ActionDataMap> pData)
 {
+    if (!mpIdleNotify)
+        return;
+
     mpIdleNotify->sendMessage(jsdialog::MessageType::Action, pWindow, std::move(pData));
     mpIdleNotify->Start();
 }
 
 void JSDialogSender::sendPopup(VclPtr<vcl::Window> pWindow, OUString sParentId, OUString sCloseId)
 {
+    if (!mpIdleNotify)
+        return;
+
     std::unique_ptr<ActionDataMap> pData = std::make_unique<ActionDataMap>();
     (*pData)[PARENT_ID] = sParentId;
     (*pData)[CLOSE_ID] = sCloseId;
@@ -351,6 +368,9 @@ void JSDialogSender::sendPopup(VclPtr<vcl::Window> pWindow, OUString sParentId, 
 
 void JSDialogSender::sendClosePopup(vcl::LOKWindowId nWindowId)
 {
+    if (!mpIdleNotify)
+        return;
+
     std::unique_ptr<ActionDataMap> pData = std::make_unique<ActionDataMap>();
     (*pData)[WINDOW_ID] = OUString::number(nWindowId);
     mpIdleNotify->sendMessage(jsdialog::MessageType::Popup, nullptr, std::move(pData));
@@ -1355,6 +1375,12 @@ void JSToolbar::set_menu_item_active(const OString& rIdent, bool bActive)
                 sendClosePopup(pPopupRoot->GetLOKWindowId());
         }
     }
+}
+
+void JSToolbar::set_item_sensitive(const OString& rIdent, bool bSensitive)
+{
+    SalInstanceToolbar::set_item_sensitive(rIdent, bSensitive);
+    sendUpdate();
 }
 
 JSTextView::JSTextView(JSDialogSender* pSender, ::VclMultiLineEdit* pTextView,
