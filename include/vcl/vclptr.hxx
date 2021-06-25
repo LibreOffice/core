@@ -101,7 +101,7 @@ public:
     }
 
 #if defined(DBG_UTIL) && !defined(_WIN32)
-    virtual ~VclPtr()
+    ~VclPtr()
     {
         assert(m_rInnerRef.get() == nullptr || vclmain::isAlive());
         // We can be one of the intermediate counts, but if we are the last
