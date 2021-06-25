@@ -85,8 +85,6 @@ bool SdPdfFilter::Import()
 
         SdrGrafObj* pSdrGrafObj = new SdrGrafObj(pPage->getSdrModelFromSdrPage(), rGraphic,
                                                  tools::Rectangle(Point(), aSizeHMM));
-        if (!pSdrGrafObj) // out of memory
-            return false;
 
         pSdrGrafObj->SetResizeProtect(true);
         pSdrGrafObj->SetMoveProtect(true);
