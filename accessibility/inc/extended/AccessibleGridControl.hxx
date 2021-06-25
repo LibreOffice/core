@@ -163,7 +163,7 @@ private:
     the context holds this instance weak.</p>
 */
 
-class AccessibleGridControlAccess :
+class AccessibleGridControlAccess final :
      public ::cppu::WeakImplHelper< css::accessibility::XAccessible >
     ,public ::vcl::table::IAccessibleTableControl
 {
@@ -181,7 +181,7 @@ public:
     /// returns the AccessibleContext belonging to this Accessible
     AccessibleGridControl*            getContext()  { return m_xContext.get(); }
 
-protected:
+private:
     virtual ~AccessibleGridControlAccess() override;
 
     // XAccessible

@@ -313,7 +313,7 @@ private:
 typedef std::unordered_map< OUString,
                          css::beans::PropertyValue > tPropValMap;
 
-class Document: public ::VCLXAccessibleComponent, public ::SfxListener
+class Document final : public ::VCLXAccessibleComponent, public ::SfxListener
 {
 public:
     Document(::VCLXWindow * pVclXWindow, ::TextEngine & rEngine,
