@@ -822,6 +822,34 @@ DECLARE_WW8EXPORT_TEST(testTdf106541_inheritChapterNumberingB, "tdf106541_inheri
     CPPUNIT_ASSERT_EQUAL(OUString("1.1"), getProperty<OUString>(xPara, "ListLabelString"));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf104239_chapterNumberTortureTest, "tdf104239_chapterNumberTortureTest.doc")
+{
+    // There is no point in identifying what the wrong values where in this test,
+    //because EVERYTHING was wrong, and MANY different fixes are required to solve the problems.
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(1, "No numId in style or paragraph"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
+    xPara.set(getParagraph(2, "Paragraph cancels numbering(0)"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
+    xPara.set(getParagraph(3, "First numbered line"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("1st.i.a.1.I"), getProperty<OUString>(xPara, "ListLabelString"));
+    xPara.set(getParagraph(7, "inheritOnly: inherit outlineLvl and listLvl."), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("2nd.ii"), getProperty<OUString>(xPara, "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), getProperty<sal_Int16>(xPara, "NumberingLevel")); // Level 2
+    xPara.set(getParagraph(9, "outline with Body listLvl(9)."), uno::UNO_QUERY);
+    if (!mbExported)
+        CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
+    xPara.set(getParagraph(10, "outline with Body listLvl(9) #2."), uno::UNO_QUERY);
+    if (!mbExported)
+        CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
+    xPara.set(getParagraph(11, "direct formatting - Body listLvl(9)."), uno::UNO_QUERY);
+    //CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
+    xPara.set(getParagraph(12, "direct numId, inherit listLvl."), uno::UNO_QUERY);
+    //CPPUNIT_ASSERT_EQUAL(OUString("2nd.ii.a.1.I"), getProperty<OUString>(xPara, "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(4), getProperty<sal_Int16>(xPara, "NumberingLevel")); // Level 5
+    xPara.set(getParagraph(13, "Style numId0 cancels inherited numbering."), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf106541_inheritOutlineNumbering, "tdf106541_inheritOutlineNumbering.doc")
 {
     // The level and numbering are inherited from Level2.

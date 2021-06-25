@@ -5916,6 +5916,7 @@ void SwWW8ImplReader::SetOutlineStyles()
     {
         sal_uInt16 nStyle = 0;
         std::map<const SwNumRule*, int> aWW8ListStyleCounts;
+        std::map<const SwNumRule*, bool> aPreventUseAsChapterNumbering;
         for (SwWW8StyInf& rSI : m_vColl)
         {
             // Copy inherited numbering info since LO drops inheritance after ChapterNumbering
@@ -5925,7 +5926,18 @@ void SwWW8ImplReader::SetOutlineStyles()
                 && m_vColl[rSI.m_nBase].HasWW8OutlineLevel())
             {
                 if (rSI.m_nLFOIndex == USHRT_MAX)
+                {
                     rSI.m_nLFOIndex = m_vColl[rSI.m_nBase].m_nLFOIndex;
+
+                    // When ANYTHING is wrong or strange, prohibit eligibility for ChapterNumbering.
+                    // A style never inherits numbering from Chapter Numbering.
+                    if (rSI.m_nLFOIndex != USHRT_MAX)
+                    {
+                        const SwNumRule* pNumRule = m_vColl[rSI.m_nBase].m_pOutlineNumrule;
+                        if (pNumRule)
+                            aPreventUseAsChapterNumbering[pNumRule] = true;
+                    }
+                }
                 if (rSI.m_nListLevel == MAXLEVEL)
                     rSI.m_nListLevel = m_vColl[rSI.m_nBase].m_nListLevel;
                 if (rSI.mnWW8OutlineLevel == MAXLEVEL)
@@ -5943,6 +5955,13 @@ void SwWW8ImplReader::SetOutlineStyles()
             if (bReRegister)
                 RegisterNumFormatOnStyle(nStyle);
 
+            // When ANYTHING is wrong or strange, prohibit eligibility for ChapterNumbering.
+            if (rSI.IsWW8BuiltInHeadingStyle() && rSI.m_nListLevel != rSI.mnWW8OutlineLevel
+                && rSI.IsOutlineNumbered())
+            {
+                aPreventUseAsChapterNumbering[rSI.m_pOutlineNumrule] = true;
+            }
+
             ++nStyle; // increment before the first "continue";
 
             if (!rSI.IsWW8BuiltInHeadingStyle() || !rSI.HasWW8OutlineLevel())
@@ -5955,6 +5974,9 @@ void SwWW8ImplReader::SetOutlineStyles()
             const SwNumRule* pWW8ListStyle = rSI.GetOutlineNumrule();
             if (pWW8ListStyle != nullptr)
             {
+                if (aPreventUseAsChapterNumbering[pWW8ListStyle])
+                    continue;
+
                 std::map<const SwNumRule*, int>::iterator aCountIter
                     = aWW8ListStyleCounts.find(pWW8ListStyle);
                 if (aCountIter == aWW8ListStyleCounts.end())
