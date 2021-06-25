@@ -24,7 +24,7 @@
 #include "IPrioritable.hxx"
 #include "NotebookbarPopup.hxx"
 
-class DropdownBox : public VclHBox, public vcl::IPrioritable
+class DropdownBox final : public VclHBox, public vcl::IPrioritable
 {
 private:
     bool m_bInFullView;

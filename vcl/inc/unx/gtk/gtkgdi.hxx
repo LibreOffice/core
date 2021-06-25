@@ -93,11 +93,10 @@ enum class GtkControlPart
     SeparatorMenuItemSeparator,
 };
 
-class GtkSalGraphics : public SvpSalGraphics
+class GtkSalGraphics final : public SvpSalGraphics
 {
     GtkSalFrame * const mpFrame;
 
-protected:
 #if !GTK_CHECK_VERSION(4, 0, 0)
     bool isNativeControlSupported(ControlType, ControlPart) override;
     virtual bool        drawNativeControl( ControlType nType, ControlPart nPart,

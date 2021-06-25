@@ -22,7 +22,7 @@
 #include "NotebookbarPopup.hxx"
 #include "PriorityHBox.hxx"
 
-class PriorityMergedHBox : public PriorityHBox
+class PriorityMergedHBox final : public PriorityHBox
 {
 private:
     VclPtr<PushButton> m_pButton;
