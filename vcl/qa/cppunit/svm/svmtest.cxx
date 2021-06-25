@@ -166,7 +166,9 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
     void checkMapMode(const GDIMetaFile& rMetaFile);
     void testMapMode();
 
+#if HAVE_MORE_FONTS && !defined(_WIN32)
     void checkFont(const GDIMetaFile& rMetaFile);
+#endif
     void testFont();
 
     void checkPushPop(const GDIMetaFile& rMetaFile);
@@ -1890,6 +1892,7 @@ void SvmTest::testMapMode()
     checkMapMode(readFile(u"mapmode.svm"));
 }
 
+#if HAVE_MORE_FONTS && !defined(_WIN32)
 void SvmTest::checkFont(const GDIMetaFile& rMetafile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetafile);
@@ -1905,6 +1908,7 @@ void SvmTest::checkFont(const GDIMetaFile& rMetafile)
         {"vertical", "true"},
     });
 }
+#endif
 
 void SvmTest::testFont()
 {
