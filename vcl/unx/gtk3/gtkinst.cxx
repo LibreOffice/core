@@ -10404,13 +10404,12 @@ public:
 #else
         gulong nSignalId = g_signal_connect_swapped(G_OBJECT(m_pMenu), "deactivate", G_CALLBACK(g_main_loop_quit), pLoop);
 
-        gtk_menu_attach_to_widget(m_pMenu, pWidget, nullptr);
-
 #if GTK_CHECK_VERSION(3,22,0)
         if (gtk_check_version(3, 22, 0) == nullptr)
         {
             GdkRectangle aRect;
             pWidget = getPopupRect(pWidget, rRect, aRect);
+            gtk_menu_attach_to_widget(m_pMenu, pWidget, nullptr);
 
             // Send a keyboard event through gtk_main_do_event to toggle any active tooltip offs
             // before trying to launch the menu
@@ -10432,6 +10431,8 @@ public:
         (void) rRect;
 #endif
         {
+            gtk_menu_attach_to_widget(m_pMenu, pWidget, nullptr);
+
             guint nButton;
             guint32 nTime;
 
@@ -10441,7 +10442,8 @@ public:
             GdkEvent *pEvent = gtk_get_current_event();
             if (pEvent)
             {
-                gdk_event_get_button(pEvent, &nButton);
+                if (!gdk_event_get_button(pEvent, &nButton))
+                    nButton = 0;
                 nTime = gdk_event_get_time(pEvent);
             }
             else
