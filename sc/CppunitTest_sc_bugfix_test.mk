@@ -120,4 +120,11 @@ $(eval $(call gb_CppunitTest_use_components,sc_bugfix_test,\
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_bugfix_test))
 
+ifeq ($(OS),WNT)
+# gpgme-w32spawn.exe is needed in workdir/LinkTarget/Executable
+$(eval $(call gb_CppunitTest_use_packages,sc_bugfix_test,\
+    $(call gb_Helper_optional,GPGMEPP,gpgmepp)\
+))
+endif
+
 # vim: set noet sw=4 ts=4:
