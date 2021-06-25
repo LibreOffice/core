@@ -342,64 +342,38 @@ SvpSalYieldMutex::~SvpSalYieldMutex()
 
 void SvpSalYieldMutex::doAcquire(sal_uInt32 const nLockCount)
 {
+    SalYieldMutex::doAcquire(nLockCount);
+
     SvpSalInstance *const pInst = static_cast<SvpSalInstance *>(GetSalData()->m_pInstance);
     if (pInst && pInst->IsMainThread())
     {
-        if (m_bNoYieldLock)
-            return;
-
-        do
+        SvpRequest request = SvpRequest::NONE;
         {
-            SvpRequest request = SvpRequest::NONE;
+            std::unique_lock<std::mutex> g(m_WakeUpMainMutex);
+            m_wakeUpMain = false;
+            std::swap(m_Request, request);
+        }
+        if (request != SvpRequest::NONE)
+        {
+            // nested Yield on behalf of another thread
+            bool const bEvents = pInst->DoYield(false, request == SvpRequest::MainThreadDispatchAllEvents);
+            if (write(m_FeedbackFDs[1], &bEvents, sizeof(bool)) != sizeof(bool))
             {
-                std::unique_lock<std::mutex> g(m_WakeUpMainMutex);
-                if (m_aMutex.tryToAcquire()) {
-                    // if there's a request, the other thread holds m_aMutex
-                    assert(m_Request == SvpRequest::NONE);
-                    m_wakeUpMain = false;
-                    break;
-                }
-                m_WakeUpMainCond.wait(g, [this]() { return m_wakeUpMain; });
-                m_wakeUpMain = false;
-                std::swap(m_Request, request);
-            }
-            if (request != SvpRequest::NONE)
-            {
-                // nested Yield on behalf of another thread
-                assert(!m_bNoYieldLock);
-                m_bNoYieldLock = true;
-                bool const bEvents = pInst->DoYield(false, request == SvpRequest::MainThreadDispatchAllEvents);
-                m_bNoYieldLock = false;
-                if (write(m_FeedbackFDs[1], &bEvents, sizeof(bool)) != sizeof(bool))
-                {
-                    SAL_WARN("vcl.headless", "Could not write: " << strerror(errno));
-                    std::abort();
-                }
+                SAL_WARN("vcl.headless", "Could not write: " << strerror(errno));
+                std::abort();
             }
         }
-        while (true);
     }
-    else
-    {
-        m_aMutex.acquire();
-    }
-    ++m_nCount;
-    SalYieldMutex::doAcquire(nLockCount - 1);
 }
 
 sal_uInt32 SvpSalYieldMutex::doRelease(bool const bUnlockAll)
 {
     SvpSalInstance *const pInst = static_cast<SvpSalInstance *>(GetSalData()->m_pInstance);
     if (pInst && pInst->IsMainThread())
-    {
-        if (m_bNoYieldLock)
-            return 1;
-        else
-            return SalYieldMutex::doRelease(bUnlockAll);
-    }
+        return SalYieldMutex::doRelease(bUnlockAll);
+
     sal_uInt32 nCount;
     {
-        // read m_nCount before doRelease
         bool const isReleased(bUnlockAll || m_nCount == 1);
         nCount = comphelper::SolarMutex::doRelease( bUnlockAll );
 
@@ -419,14 +393,6 @@ sal_uInt32 SvpSalYieldMutex::doRelease(bool const bUnlockAll)
         }
     }
     return nCount;
-}
-
-bool SvpSalYieldMutex::IsCurrentThread() const
-{
-    if (GetSalData()->m_pInstance->IsMainThread() && m_bNoYieldLock)
-        return true;
-    else
-        return SalYieldMutex::IsCurrentThread();
 }
 
 bool SvpSalInstance::IsMainThread() const
@@ -535,7 +501,8 @@ bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
     {
         int nRet;
         {
-            // TODO: use a SolarMutexReleaser here and drop the m_bNoYieldLock usage
+            SolarMutexReleaser aReleaser;
+            std::unique_lock<std::mutex> g(pMutex->m_NonMainSignalYieldMutex);
             Wakeup(bHandleAllCurrentEvents
                 ? SvpRequest::MainThreadDispatchAllEvents
                 : SvpRequest::MainThreadDispatchOneEvent);
