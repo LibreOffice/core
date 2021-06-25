@@ -12,7 +12,7 @@
 
 #include <salvd.hxx>
 
-class X11SkiaSalVirtualDevice : public SalVirtualDevice
+class X11SkiaSalVirtualDevice final : public SalVirtualDevice
 {
     SalDisplay* mpDisplay;
     std::unique_ptr<X11SalGraphics> mpGraphics;

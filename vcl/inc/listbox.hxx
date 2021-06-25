@@ -171,7 +171,7 @@ public:
     sal_Int32       FindFirstSelectable( sal_Int32  nPos, bool bForward = true );
 };
 
-class ImplListBoxWindow : public Control, public vcl::ISearchableStringList
+class ImplListBoxWindow final : public Control, public vcl::ISearchableStringList
 {
 private:
     std::unique_ptr<ImplEntryList> mpEntryList;     ///< EntryList
@@ -232,7 +232,6 @@ private:
 
     vcl::QuickSelectionEngine maQuickSelectionEngine;
 
-protected:
     virtual void    KeyInput( const KeyEvent& rKEvt ) override;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    MouseMove( const MouseEvent& rMEvt ) override;
@@ -366,14 +365,14 @@ public:
     using Control::ImplInitSettings;
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
-protected:
+private:
     // ISearchableStringList
     virtual vcl::StringEntryIdentifier    CurrentEntry( OUString& _out_entryText ) const override;
     virtual vcl::StringEntryIdentifier    NextEntry( vcl::StringEntryIdentifier _currentEntry, OUString& _out_entryText ) const override;
     virtual void                            SelectEntry( vcl::StringEntryIdentifier _entry ) override;
 };
 
-class ImplListBox : public Control
+class ImplListBox final : public Control
 {
 private:
     VclPtr<ImplListBoxWindow> maLBWindow;
@@ -388,7 +387,6 @@ private:
 
     Link<ImplListBox*,void>   maScrollHdl;    // because it is needed by ImplListBoxWindow itself
 
-protected:
     virtual void        GetFocus() override;
     virtual void        StateChanged( StateChangedType nType ) override;
 
@@ -494,7 +492,7 @@ public:
     void SetEdgeBlending(bool bNew);
 };
 
-class ImplListBoxFloatingWindow : public FloatingWindow
+class ImplListBoxFloatingWindow final : public FloatingWindow
 {
 private:
     VclPtr<ImplListBox> mpImplLB;
@@ -503,7 +501,6 @@ private:
     sal_Int32       mnPopupModeStartSaveSelection;
     bool            mbAutoWidth;
 
-protected:
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
 
 public:
@@ -531,7 +528,7 @@ public:
     virtual void    Resize() override;
 };
 
-class ImplWin : public Control
+class ImplWin final : public Control
 {
 private:
 
@@ -546,7 +543,6 @@ private:
     bool            mbEdgeBlending : 1;
 
     void ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout = false);
-protected:
     virtual void  FillLayoutData() const override;
 
 public:
@@ -580,7 +576,7 @@ public:
 
 };
 
-class ImplBtn : public PushButton
+class ImplBtn final : public PushButton
 {
 private:
     Link<void*,void> maMBDownHdl;

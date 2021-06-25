@@ -26,11 +26,10 @@
 
 class Qt5Frame;
 
-class VCLPLUG_QT5_PUBLIC Qt5SvpGraphics : public SvpSalGraphics, public Qt5GraphicsBase
+class VCLPLUG_QT5_PUBLIC Qt5SvpGraphics final : public SvpSalGraphics, public Qt5GraphicsBase
 {
     Qt5Frame* const m_pFrame;
 
-protected:
     void handleDamage(const tools::Rectangle&) override;
 
 public:

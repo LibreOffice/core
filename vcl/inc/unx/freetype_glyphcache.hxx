@@ -111,7 +111,7 @@ bool FreetypeFontFace::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilit
     return mpFreetypeFontInfo->GetFontCapabilities(rFontCapabilities);
 }
 
-class SAL_DLLPUBLIC_RTTI FreetypeFontInstance : public LogicalFontInstance
+class SAL_DLLPUBLIC_RTTI FreetypeFontInstance final : public LogicalFontInstance
 {
     friend rtl::Reference<LogicalFontInstance> FreetypeFontFace::CreateFontInstance(const FontSelectPattern&) const;
 
@@ -120,7 +120,6 @@ class SAL_DLLPUBLIC_RTTI FreetypeFontInstance : public LogicalFontInstance
     virtual hb_font_t* ImplInitHbFont() override;
     virtual bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const override;
 
-protected:
     explicit FreetypeFontInstance(const PhysicalFontFace& rPFF, const FontSelectPattern& rFSP);
 
 public:

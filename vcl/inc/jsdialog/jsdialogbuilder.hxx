@@ -89,7 +89,7 @@ public:
     }
 };
 
-class JSDialogNotifyIdle : public Idle
+class JSDialogNotifyIdle final : public Idle
 {
     // used to send message
     VclPtr<vcl::Window> m_aNotifierWindow;
@@ -183,7 +183,7 @@ public:
     void fire_dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde);
 };
 
-class JSInstanceBuilder : public SalInstanceBuilder, public JSDialogSender
+class JSInstanceBuilder final : public SalInstanceBuilder, public JSDialogSender
 {
     sal_uInt64 m_nWindowId;
     /// used in case of tab pages where dialog is not a direct top level
@@ -368,7 +368,7 @@ public:
     }
 };
 
-class JSDialog : public JSWidget<SalInstanceDialog, ::Dialog>
+class JSDialog final : public JSWidget<SalInstanceDialog, ::Dialog>
 {
 public:
     JSDialog(JSDialogSender* pSender, ::Dialog* pDialog, SalInstanceBuilder* pBuilder,
@@ -379,7 +379,7 @@ public:
     virtual void response(int response) override;
 };
 
-class JSLabel : public JSWidget<SalInstanceLabel, FixedText>
+class JSLabel final : public JSWidget<SalInstanceLabel, FixedText>
 {
 public:
     JSLabel(JSDialogSender* pSender, FixedText* pLabel, SalInstanceBuilder* pBuilder,
@@ -387,14 +387,14 @@ public:
     virtual void set_label(const OUString& rText) override;
 };
 
-class JSButton : public JSWidget<SalInstanceButton, ::Button>
+class JSButton final : public JSWidget<SalInstanceButton, ::Button>
 {
 public:
     JSButton(JSDialogSender* pSender, ::Button* pButton, SalInstanceBuilder* pBuilder,
              bool bTakeOwnership);
 };
 
-class JSEntry : public JSWidget<SalInstanceEntry, ::Edit>
+class JSEntry final : public JSWidget<SalInstanceEntry, ::Edit>
 {
 public:
     JSEntry(JSDialogSender* pSender, ::Edit* pEntry, SalInstanceBuilder* pBuilder,
@@ -403,7 +403,7 @@ public:
     void set_text_without_notify(const OUString& rText);
 };
 
-class JSListBox : public JSWidget<SalInstanceComboBoxWithoutEdit, ::ListBox>
+class JSListBox final : public JSWidget<SalInstanceComboBoxWithoutEdit, ::ListBox>
 {
 public:
     JSListBox(JSDialogSender* pSender, ::ListBox* pListBox, SalInstanceBuilder* pBuilder,
@@ -414,7 +414,7 @@ public:
     virtual void set_active(int pos) override;
 };
 
-class JSComboBox : public JSWidget<SalInstanceComboBoxWithEdit, ::ComboBox>
+class JSComboBox final : public JSWidget<SalInstanceComboBoxWithEdit, ::ComboBox>
 {
 public:
     JSComboBox(JSDialogSender* pSender, ::ComboBox* pComboBox, SalInstanceBuilder* pBuilder,
@@ -426,7 +426,7 @@ public:
     virtual void set_active(int pos) override;
 };
 
-class JSNotebook : public JSWidget<SalInstanceNotebook, ::TabControl>
+class JSNotebook final : public JSWidget<SalInstanceNotebook, ::TabControl>
 {
 public:
     JSNotebook(JSDialogSender* pSender, ::TabControl* pControl, SalInstanceBuilder* pBuilder,
@@ -441,7 +441,7 @@ public:
     virtual void insert_page(const OString& rIdent, const OUString& rLabel, int nPos) override;
 };
 
-class JSSpinButton : public JSWidget<SalInstanceSpinButton, ::FormattedField>
+class JSSpinButton final : public JSWidget<SalInstanceSpinButton, ::FormattedField>
 {
 public:
     JSSpinButton(JSDialogSender* pSender, ::FormattedField* pSpin, SalInstanceBuilder* pBuilder,
@@ -450,7 +450,7 @@ public:
     virtual void set_value(int value) override;
 };
 
-class JSMessageDialog : public JSWidget<SalInstanceMessageDialog, ::MessageDialog>
+class JSMessageDialog final : public JSWidget<SalInstanceMessageDialog, ::MessageDialog>
 {
     std::unique_ptr<JSDialogSender> m_pOwnedSender;
     std::unique_ptr<JSButton> m_pOK;
@@ -472,7 +472,7 @@ public:
     virtual void response(int response) override;
 };
 
-class JSCheckButton : public JSWidget<SalInstanceCheckButton, ::CheckBox>
+class JSCheckButton final : public JSWidget<SalInstanceCheckButton, ::CheckBox>
 {
 public:
     JSCheckButton(JSDialogSender* pSender, ::CheckBox* pCheckBox, SalInstanceBuilder* pBuilder,
@@ -481,7 +481,7 @@ public:
     virtual void set_active(bool active) override;
 };
 
-class JSDrawingArea : public JSWidget<SalInstanceDrawingArea, VclDrawingArea>
+class JSDrawingArea final : public JSWidget<SalInstanceDrawingArea, VclDrawingArea>
 {
 public:
     JSDrawingArea(JSDialogSender* pSender, VclDrawingArea* pDrawingArea,
@@ -492,14 +492,14 @@ public:
     virtual void queue_draw_area(int x, int y, int width, int height) override;
 };
 
-class JSToolbar : public JSWidget<SalInstanceToolbar, ::ToolBox>
+class JSToolbar final : public JSWidget<SalInstanceToolbar, ::ToolBox>
 {
 public:
     JSToolbar(JSDialogSender* pSender, ::ToolBox* pToolbox, SalInstanceBuilder* pBuilder,
               bool bTakeOwnership);
 };
 
-class JSTextView : public JSWidget<SalInstanceTextView, ::VclMultiLineEdit>
+class JSTextView final : public JSWidget<SalInstanceTextView, ::VclMultiLineEdit>
 {
 public:
     JSTextView(JSDialogSender* pSender, ::VclMultiLineEdit* pTextView, SalInstanceBuilder* pBuilder,
@@ -507,7 +507,7 @@ public:
     virtual void set_text(const OUString& rText) override;
 };
 
-class JSTreeView : public JSWidget<SalInstanceTreeView, ::SvTabListBox>
+class JSTreeView final : public JSWidget<SalInstanceTreeView, ::SvTabListBox>
 {
 public:
     JSTreeView(JSDialogSender* pSender, ::SvTabListBox* pTextView, SalInstanceBuilder* pBuilder,
@@ -546,7 +546,7 @@ public:
     void drag_end();
 };
 
-class JSExpander : public JSWidget<SalInstanceExpander, ::VclExpander>
+class JSExpander final : public JSWidget<SalInstanceExpander, ::VclExpander>
 {
 public:
     JSExpander(JSDialogSender* pSender, ::VclExpander* pExpander, SalInstanceBuilder* pBuilder,
@@ -555,7 +555,7 @@ public:
     virtual void set_expanded(bool bExpand) override;
 };
 
-class JSIconView : public JSWidget<SalInstanceIconView, ::IconView>
+class JSIconView final : public JSWidget<SalInstanceIconView, ::IconView>
 {
 public:
     JSIconView(JSDialogSender* pSender, ::IconView* pIconView, SalInstanceBuilder* pBuilder,
@@ -571,7 +571,7 @@ public:
     virtual void unselect(int pos) override;
 };
 
-class JSRadioButton : public JSWidget<SalInstanceRadioButton, ::RadioButton>
+class JSRadioButton final : public JSWidget<SalInstanceRadioButton, ::RadioButton>
 {
 public:
     JSRadioButton(JSDialogSender* pSender, ::RadioButton* pRadioButton,

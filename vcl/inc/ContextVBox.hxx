@@ -27,7 +27,7 @@
  * This control can be used in the notebookbar .ui files
  */
 
-class ContextVBox : public VclVBox, public NotebookbarContextControl
+class ContextVBox final : public VclVBox, public NotebookbarContextControl
 {
 public:
     explicit ContextVBox(vcl::Window* pParent);

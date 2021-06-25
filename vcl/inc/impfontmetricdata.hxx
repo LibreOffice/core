@@ -35,7 +35,7 @@ class OutputDevice;
 class FontSelectPattern;
 class LogicalFontInstance;
 
-class VCL_DLLPUBLIC ImplFontMetricData : public FontAttributes, public SvRefBase
+class VCL_DLLPUBLIC ImplFontMetricData final : public FontAttributes, public SvRefBase
 {
 public:
     explicit        ImplFontMetricData( const FontSelectPattern& );

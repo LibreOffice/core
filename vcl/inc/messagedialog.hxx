@@ -15,7 +15,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/toolkit/fixed.hxx>
 
-class MessageDialog : public Dialog
+class MessageDialog final : public Dialog
 {
 private:
     VclButtonsType m_eButtonsType;

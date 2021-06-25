@@ -13,7 +13,7 @@
 #include <com/sun/star/awt/XPopupMenu.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 
-class ManagedMenuButton : public MenuButton
+class ManagedMenuButton final : public MenuButton
 {
 public:
     ManagedMenuButton(vcl::Window* pParent, WinBits nStyle);

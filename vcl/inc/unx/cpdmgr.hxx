@@ -55,7 +55,7 @@ struct CPDPrinter
     GDBusProxy* backend;
 };
 
-class CPDManager : public PrinterInfoManager
+class CPDManager final : public PrinterInfoManager
 {
 #if ENABLE_DBUS && ENABLE_GIO
     GDBusConnection * m_pConnection = nullptr;
