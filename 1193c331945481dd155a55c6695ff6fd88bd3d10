@@ -166,6 +166,30 @@
       "revId": "1193c331945481dd155a55c6695ff6fd88bd3d10",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf26d0df_1511ef71",
+        "filename": "extensions/source/ole/oleobjw.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1432,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-25T08:15:01Z",
+      "side": 0,
+      "message": "\u003chttps://gerrit.libreoffice.org/c/core/+/117836\u003e \"Add back computation of excepinfo.bstrDescription length\"",
+      "parentUuid": "5f6ff0b7_a799c9c8",
+      "range": {
+        "startLine": 1432,
+        "startChar": 30,
+        "endLine": 1432,
+        "endChar": 70
+      },
+      "revId": "1193c331945481dd155a55c6695ff6fd88bd3d10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

@@ -46,6 +46,30 @@
       "revId": "eebd84b337506c8fff151493f9b51bd127dbc89f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "403d30a8_2417b675",
+        "filename": "basic/source/runtime/dllmgr-x64.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-25T08:15:01Z",
+      "side": 1,
+      "message": "\u003chttps://gerrit.libreoffice.org/c/core/+/117835\u003e \"No need for a std::string_view here\"",
+      "parentUuid": "bbabe2ca_8952358d",
+      "range": {
+        "startLine": 500,
+        "startChar": 22,
+        "endLine": 500,
+        "endChar": 38
+      },
+      "revId": "eebd84b337506c8fff151493f9b51bd127dbc89f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
