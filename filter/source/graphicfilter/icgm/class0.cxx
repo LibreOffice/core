@@ -49,13 +49,13 @@ void CGM::ImplDoClass0()
         break;
         case 0x03 : /*Begin Picture*/
         {
-            ImplDefaultReplacement();
-            ImplSetMapMode();
             if ( mbPicture )
                 mbStatus = false;
             else
             {
                 *pCopyOfE = *pElement;
+                ImplDefaultReplacement();
+                ImplSetMapMode();
                 mbPicture = mbFirstOutPut = true;
                 mbFigure = false;
                 mnAct4PostReset = 0;
