@@ -933,13 +933,14 @@ static bool ImplHandleMouseEvent2( const VclPtr<vcl::Window>& xWindow, MouseNoti
                                     static_cast < DNDListenerContainer * > ( xDragGestureRecognizer.get() )->fireDragGestureEvent( 0,
                                         relLoc.X(), relLoc.Y(), xDragSource, css::uno::makeAny( aMouseEvent ) );
                                 }
+
                             }
                         }
                     }
                 }
             }
             else
-                pMouseDownWin->ImplGetFrameData()->mbStartDragCalled  = true;
+                pMouseDownWin->ImplGetFrameData()->mbStartDragCalled = false;
         }
 
         // test for mouseleave and mouseenter
@@ -1006,7 +1007,6 @@ static bool ImplHandleMouseEvent2( const VclPtr<vcl::Window>& xWindow, MouseNoti
                      ((nMouseY+nDblClkH) >= pChild->ImplGetFrameData()->mnFirstMouseY) )
                 {
                     pChild->ImplGetFrameData()->mnClickCount++;
-                    pChild->ImplGetFrameData()->mbStartDragCalled  = true;
                 }
                 else
                 {
@@ -1015,8 +1015,6 @@ static bool ImplHandleMouseEvent2( const VclPtr<vcl::Window>& xWindow, MouseNoti
                     pChild->ImplGetFrameData()->mnFirstMouseX      = nMouseX;
                     pChild->ImplGetFrameData()->mnFirstMouseY      = nMouseY;
                     pChild->ImplGetFrameData()->mnFirstMouseCode   = nCode;
-                    pChild->ImplGetFrameData()->mbStartDragCalled  = (nCode & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)) !=
-                                                                     (MouseSettings::GetStartDragCode() & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE));
                 }
                 pChild->ImplGetFrameData()->mnMouseDownTime = nMsgTime;
             }
@@ -1082,6 +1080,8 @@ static bool ImplHandleMouseEvent2( const VclPtr<vcl::Window>& xWindow, MouseNoti
                 pChild->ImplGetWindowImpl()->mbMouseButtonUp = false;
                 pChild->MouseButtonUp( aMEvt );
             }
+
+            pChild->ImplGetFrameData()->mbStartDragCalled = false;
         }
 
         assert(aNEvt.GetWindow() == pChild);
