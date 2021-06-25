@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f27146a6_bcf81527",
+        "filename": "oox/source/ppt/pptshape.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-06-25T15:05:17Z",
+      "side": 1,
+      "message": "I suggest to put these to the next\n\nif ( bUseTitleAsSlideName )\n\notherwise we will count the empty and too long titles, too.",
+      "range": {
+        "startLine": 354,
+        "startChar": 0,
+        "endLine": 364,
+        "endChar": 21
+      },
+      "revId": "173089c471988145c34edcd0d2a5f8ba53367f5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
