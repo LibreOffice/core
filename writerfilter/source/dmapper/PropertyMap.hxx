@@ -271,6 +271,9 @@ private:
     sal_Int32                                       m_ndxaLnn;
     sal_Int32                                       m_nLnnMin;
 
+    bool                                            m_bDynamicHeightTop;
+    bool                                            m_bDynamicHeightBottom;
+
     std::vector<css::uno::Reference<css::drawing::XShape>>    m_xRelativeWidthShapes;
 
     // The "Link To Previous" flag indicates whether the header/footer
@@ -378,8 +381,8 @@ public:
     sal_Int32 GetLeftMargin() const        { return m_nLeftMargin; }
     void SetRightMargin( sal_Int32 nSet )  { m_nRightMargin = nSet; }
     sal_Int32 GetRightMargin() const       { return m_nRightMargin; }
-    void SetTopMargin( sal_Int32 nSet )    { m_nTopMargin = nSet; }
-    void SetBottomMargin( sal_Int32 nSet ) { m_nBottomMargin = nSet; }
+    void SetTopMargin(sal_Int32 nSet)      { m_bDynamicHeightTop = nSet >= 0; m_nTopMargin = std::abs(nSet); }
+    void SetBottomMargin( sal_Int32 nSet ) { m_bDynamicHeightBottom = nSet >= 0; m_nBottomMargin = std::abs(nSet); }
     void SetHeaderTop( sal_Int32 nSet )    { m_nHeaderTop = nSet; }
     void SetHeaderBottom( sal_Int32 nSet ) { m_nHeaderBottom = nSet; }
     void SetGutterMargin( sal_Int32 nGutterMargin ) { m_nGutterMargin = nGutterMargin; }
