@@ -32,6 +32,8 @@ public:
     void testIndexingExport_Shapes();
     void testIndexingExport_Tables();
     void testIndexingExport_Sections();
+    void testIndexingExport_Fontwork();
+    void testIndexingExport_Header_Footer();
 
     CPPUNIT_TEST_SUITE(IndexingExportTest);
     CPPUNIT_TEST(testIndexingExport_Paragraphs);
@@ -40,6 +42,8 @@ public:
     CPPUNIT_TEST(testIndexingExport_Shapes);
     CPPUNIT_TEST(testIndexingExport_Tables);
     CPPUNIT_TEST(testIndexingExport_Sections);
+    CPPUNIT_TEST(testIndexingExport_Fontwork);
+    CPPUNIT_TEST(testIndexingExport_Header_Footer);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -243,6 +247,48 @@ void IndexingExportTest::testIndexingExport_Sections()
 
     assertXPathContent(pXmlDoc, "/indexing/paragraph[1]", "This is a paragraph outside sections");
     assertXPathContent(pXmlDoc, "/indexing/paragraph[2]", "This is a paragraph outside sections");
+}
+
+void IndexingExportTest::testIndexingExport_Fontwork()
+{
+    SwDoc* pDoc = createDoc("IndexingExport_Fontwork.odt");
+    CPPUNIT_ASSERT(pDoc);
+
+    SvMemoryStream aMemoryStream;
+    sw::IndexingExport aIndexingExport(aMemoryStream, pDoc);
+    aIndexingExport.runExport();
+    aMemoryStream.Seek(0);
+
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aMemoryStream);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/indexing");
+
+    assertXPath(pXmlDoc, "/indexing/shape[1]", "name", "Gray");
+
+    assertXPathContent(pXmlDoc, "/indexing/shape[1]/paragraph[1]", "Fontwork Text 1");
+    assertXPathContent(pXmlDoc, "/indexing/shape[1]/paragraph[2]", "Fontwork Text 2");
+}
+
+void IndexingExportTest::testIndexingExport_Header_Footer()
+{
+    SwDoc* pDoc = createDoc("IndexingExport_Header_Footer.odt");
+    CPPUNIT_ASSERT(pDoc);
+
+    SvMemoryStream aMemoryStream;
+    sw::IndexingExport aIndexingExport(aMemoryStream, pDoc);
+    aIndexingExport.runExport();
+    aMemoryStream.Seek(0);
+
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aMemoryStream);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/indexing");
+
+    assertXPathContent(pXmlDoc, "/indexing/paragraph[1]", "Header Text");
+    assertXPathContent(pXmlDoc, "/indexing/paragraph[2]", "Footer Text");
+    assertXPathContent(pXmlDoc, "/indexing/paragraph[3]", "Paragraph 1");
+    assertXPathContent(pXmlDoc, "/indexing/paragraph[4]", "Paragraph 2");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(IndexingExportTest);
