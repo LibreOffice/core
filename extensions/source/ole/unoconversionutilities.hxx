@@ -2108,7 +2108,6 @@ template<class T>
 Sequence<Any> UnoConversionUtilities<T>::createOleArrayWrapperOfDim(SAFEARRAY* pArray,
               unsigned int dimCount, unsigned int actDim, LONG* index, VARTYPE type, const Type& unotype)
 {
-    HRESULT hr= S_OK;
     LONG lBound;
     LONG uBound;
     LONG nCountElements;
@@ -2158,7 +2157,7 @@ Sequence<Any> UnoConversionUtilities<T>::createOleArrayWrapperOfDim(SAFEARRAY* p
                     SafeArrayGetElement(pArray, index, &V_DATE(&variant));
                     break;
                 case VT_BSTR:
-                    hr= SafeArrayGetElement(pArray, index, &V_BSTR(&variant));
+                    SafeArrayGetElement(pArray, index, &V_BSTR(&variant));
                     break;
                 case VT_DISPATCH:
                     SafeArrayGetElement(pArray, index, &V_DISPATCH(&variant));
