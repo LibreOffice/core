@@ -340,38 +340,6 @@ void lcl_adjustBorderDistance(TableInfo& rInfo, const table::BorderLine2& rLeftB
     rInfo.nRightBorderDistance = nActualR;
 }
 
-void lcl_fillEmptyFrameProperties(std::vector<beans::PropertyValue>& rFrameProperties)
-{
-    // fill empty frame properties to create an invisible frame around the table:
-    // hide frame borders and zero inner and outer frame margins
-    beans::PropertyValue aValue;
-    aValue.Name = getPropertyName( PROP_ANCHOR_TYPE );
-    aValue.Value <<= text::TextContentAnchorType_AS_CHARACTER;
-    rFrameProperties.push_back(aValue);
-
-    table::BorderLine2 aEmptyBorder;
-    static const std::vector<std::u16string_view> aBorderNames
-        = { u"TopBorder", u"LeftBorder", u"BottomBorder", u"RightBorder" };
-    for (size_t i = 0; i < aBorderNames.size(); ++i)
-    {
-        beans::PropertyValue aBorderValue;
-        aBorderValue.Name = aBorderNames[i];
-        aBorderValue.Value <<= aEmptyBorder;
-        rFrameProperties.push_back(aBorderValue);
-    }
-    static const std::vector<std::u16string_view> aMarginNames
-        = { u"TopBorderDistance", u"LeftBorderDistance",
-            u"BottomBorderDistance", u"RightBorderDistance",
-            u"TopMargin", u"LeftMargin", u"BottomMargin", u"RightMargin" };
-    for (size_t i = 0; i < aMarginNames.size(); ++i)
-    {
-        beans::PropertyValue aMarginValue;
-        aMarginValue.Name = aMarginNames[i];
-        aMarginValue.Value <<= sal_Int32(10);
-        rFrameProperties.push_back(aMarginValue);
-    }
-}
-
 }
 
 TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo & rInfo,
@@ -1440,8 +1408,10 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
         uno::Reference<text::XTextRange> xStart;
         uno::Reference<text::XTextRange> xEnd;
 
-        if ( bConvertToFloating )
-            lcl_fillEmptyFrameProperties(aFrameProperties);
+        // fill empty frame properties to create an invisible frame around the table:
+        // hide frame borders and zero inner and outer frame margins
+        if (bConvertToFloating)
+            DomainMapper_Impl::fillEmptyFrameProperties(aFrameProperties, true);
 
         // OOXML table style may contain paragraph properties, apply these on cell paragraphs
         if ( m_aTableRanges[0].hasElements() && m_aTableRanges[0][0].hasElements() )
