@@ -16,6 +16,24 @@
       "revId": "eb0878364a7ecac25b53f0ac006962a1a13aaba5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5fb29245_f913c599",
+        "filename": "libreofficekit/source/gtk/lokdocview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2739,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-06-25T16:54:43Z",
+      "side": 1,
+      "message": "I\u0027ll upload a new revision, once Jenkins has finished a build.",
+      "parentUuid": "2fad4d6e_0aa8d41c",
+      "revId": "eb0878364a7ecac25b53f0ac006962a1a13aaba5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
