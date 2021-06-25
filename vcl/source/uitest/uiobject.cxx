@@ -16,6 +16,7 @@
 #include <vcl/event.hxx>
 #include <vcl/toolkit/floatwin.hxx>
 #include <vcl/menu.hxx>
+#include <vcl/scheduler.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/toolkit/lstbox.hxx>
@@ -622,6 +623,7 @@ void ButtonUIObject::execute(const OUString& rAction,
             return;
         }
         mxButton->Click();
+        Scheduler::ProcessEventsToIdle();
     }
     else
         WindowUIObject::execute(rAction, rParameters);
