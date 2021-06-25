@@ -1357,6 +1357,12 @@ void JSToolbar::set_menu_item_active(const OString& rIdent, bool bActive)
     }
 }
 
+void JSToolbar::set_item_sensitive(const OString& rIdent, bool bSensitive)
+{
+    SalInstanceToolbar::set_item_sensitive(rIdent, bSensitive);
+    sendUpdate();
+}
+
 JSTextView::JSTextView(JSDialogSender* pSender, ::VclMultiLineEdit* pTextView,
                        SalInstanceBuilder* pBuilder, bool bTakeOwnership)
     : JSWidget<SalInstanceTextView, ::VclMultiLineEdit>(pSender, pTextView, pBuilder,
