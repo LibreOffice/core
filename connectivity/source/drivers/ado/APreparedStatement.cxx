@@ -145,7 +145,6 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  )
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-    SQLWarning  warning;
     clearWarnings ();
 
     // Call SQLExecute
@@ -154,12 +153,10 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  )
         CHECK_RETURN(m_Command.Execute(m_RecordsAffected,m_Parameters,adCmdUnknown,&pSet))
         m_RecordSet = WpADORecordset(pSet);
     }
-    catch (SQLWarning& ex)
+    catch (SQLWarning&)
     {
-        // Save pointer to warning and save with ResultSet
+        //TODO: Save pointer to warning and save with ResultSet
         // object once it is created.
-
-        warning = ex;
     }
     return m_RecordSet.IsValid();
 }

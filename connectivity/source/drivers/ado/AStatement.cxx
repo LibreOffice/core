@@ -441,8 +441,6 @@ sal_Bool SAL_CALL OStatement_Base::getMoreResults(  )
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
 
-    SQLWarning  warning;
-
     // clear previous warnings
 
     clearWarnings ();
@@ -456,13 +454,11 @@ sal_Bool SAL_CALL OStatement_Base::getMoreResults(  )
         if(m_RecordSet.IsValid() && m_RecordSet.NextRecordset(aRecordsAffected,&pSet) && pSet)
             assignRecordSet( pSet );
     }
-    catch (SQLWarning &ex)
+    catch (SQLWarning &)
     {
 
-        // Save pointer to warning and save with ResultSet
+        //TODO: Save pointer to warning and save with ResultSet
         // object once it is created.
-
-        warning = ex;
     }
     return m_RecordSet.IsValid();
 }
