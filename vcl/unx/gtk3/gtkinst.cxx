@@ -22454,6 +22454,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/scalc/ui/movecopysheet.ui" &&
         rUIFile != "modules/scalc/ui/optimalcolwidthdialog.ui" &&
         rUIFile != "modules/scalc/ui/optimalrowheightdialog.ui" &&
+        rUIFile != "modules/scalc/ui/pagetemplatedialog.ui" &&
         rUIFile != "modules/scalc/ui/pastespecial.ui" &&
         rUIFile != "modules/scalc/ui/pivottablelayoutdialog.ui" &&
         rUIFile != "modules/scalc/ui/printareasdialog.ui" &&
@@ -22462,6 +22463,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/scalc/ui/rowheightdialog.ui" &&
         rUIFile != "modules/scalc/ui/samplingdialog.ui" &&
         rUIFile != "modules/scalc/ui/sharedocumentdlg.ui" &&
+        rUIFile != "modules/scalc/ui/sheetprintpage.ui" &&
         rUIFile != "modules/scalc/ui/selectrange.ui" &&
         rUIFile != "modules/scalc/ui/selectsource.ui" &&
         rUIFile != "modules/scalc/ui/showsheetdialog.ui" &&
