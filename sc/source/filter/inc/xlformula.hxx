@@ -391,9 +391,9 @@ public:
     bool         IsVolatile() const { return mbVolatile; }
 
     /** Reads the size field of the token array. */
-    void                ReadSize( XclImpStream& rStrm );
+    static sal_uInt16   ReadSize(XclImpStream& rStrm);
     /** Reads the tokens of the token array (without size field). */
-    void                ReadArray( XclImpStream& rStrm );
+    void                ReadArray(sal_uInt16 nSize, XclImpStream& rStrm);
     /** Reads size field and the tokens. */
     void                Read( XclImpStream& rStrm );
 
