@@ -74,8 +74,8 @@ class UITest(object):
         raise Exception("Property not updated: " + childName)
 
     @contextmanager
-    def wait_until_component_loaded(self):
-        with EventListener(self._xContext, "OnLoad") as event:
+    def wait_until_component_loaded(self, eventName="OnLoad"):
+        with EventListener(self._xContext, eventName) as event:
             yield
             time_ = 0
             while time_ < MAX_WAIT:
@@ -96,6 +96,15 @@ class UITest(object):
         try:
             with self.wait_until_component_loaded():
                 yield self.get_desktop().loadComponentFromURL(url, "_default", 0, tuple())
+        finally:
+            self.close_doc()
+
+    # Calls UITest.close_doc at exit
+    @contextmanager
+    def load_empty_file(self, app):
+        try:
+            with self.wait_until_component_loaded("OnNew"):
+                yield self.get_desktop().loadComponentFromURL("private:factory/s" + app, "_blank", 0, tuple())
         finally:
             self.close_doc()
 
