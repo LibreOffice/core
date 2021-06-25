@@ -41,6 +41,7 @@
 #include <fmtsrnd.hxx>
 #include <ftnfrm.hxx>
 #include <tabfrm.hxx>
+#include <rowfrm.hxx>
 #include <flyfrms.hxx>
 #include <sectfrm.hxx>
 #include <fmtclds.hxx>
@@ -1144,6 +1145,7 @@ void SwContentFrame::Cut()
         }
     }
 
+    SwTabFrame* pMasterTab(nullptr);
     if( nullptr != (pFrame = GetIndNext()) )
     {
         // The old follow may have calculated a gap to the predecessor which
@@ -1207,11 +1209,9 @@ void SwContentFrame::Cut()
             if ( IsInTab() )
             {
                 SwTabFrame* pThisTab = FindTabFrame();
-                SwTabFrame* pMasterTab = pThisTab && pThisTab->IsFollow() ? pThisTab->FindMaster() : nullptr;
-                if ( pMasterTab )
+                if (pThisTab && pThisTab->IsFollow())
                 {
-                    pMasterTab->InvalidatePos_();
-                    pMasterTab->SetRemoveFollowFlowLinePending( true );
+                    pMasterTab = pThisTab->FindMaster();
                 }
             }
         }
@@ -1219,8 +1219,17 @@ void SwContentFrame::Cut()
     //Remove first, then shrink the upper.
     SwLayoutFrame *pUp = GetUpper();
     RemoveFromLayout();
+    assert(pUp || !pMasterTab);
     if ( pUp )
     {
+        if (pMasterTab
+            && !pMasterTab->GetFollow()->GetFirstNonHeadlineRow()->ContainsContent())
+        {   // only do this if there's no content in other cells of the row!
+            pMasterTab->InvalidatePos_();
+            pMasterTab->SetRemoveFollowFlowLinePending(true);
+        }
+
+
         SwSectionFrame *pSct = nullptr;
         if ( !pUp->Lower() &&
              ( ( pUp->IsFootnoteFrame() && !pUp->IsColLocked() ) ||
