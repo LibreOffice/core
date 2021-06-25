@@ -26,6 +26,7 @@
 
 #include <unotools/localedatawrapper.hxx>
 
+#include <dndeventdispatcher.hxx>
 #include <comphelper/lok.hxx>
 #include <vcl/QueueInfo.hxx>
 #include <vcl/timer.hxx>
@@ -55,6 +56,7 @@
 #include <brdwin.hxx>
 #include <dndlistenercontainer.hxx>
 
+#include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>
 
@@ -799,6 +801,63 @@ bool ImplHandleMouseEvent2( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent
     sal_uInt16  nClicks(0);
     ImplFrameData* pWinFrameData = xWindow->ImplGetFrameData();
     sal_uInt16      nOldCode = pWinFrameData->mnMouseCode;
+
+    vcl::Window* pDragWin = pWinFrameData->mpMouseDownWin;
+    if (pDragWin && pDragWin->ImplGetFrameData()->mbStartDragCalled &&
+        nSVEvent == MouseNotifyEvent::MOUSEMOVE)
+    {
+        css::uno::Reference<css::datatransfer::dnd::XDropTargetDragContext> xDropTargetDragContext =
+            new GenericDropTargetDragContext();
+        css::uno::Reference<css::datatransfer::dnd::XDropTarget> xDropTarget(
+            pDragWin->ImplGetWindowImpl()->mxDNDListenerContainer, css::uno::UNO_QUERY);
+
+        if (!xDropTargetDragContext.is() ||
+            !xDropTarget.is() ||
+            (nCode & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)) ==
+            (MouseSettings::GetStartDragCode() & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)))
+        {
+            // cancel dragdrop
+            pDragWin->ImplGetFrameData()->mbStartDragCalled = false;
+            return false;
+        }
+
+        Point dragOverPos = pDragWin->ImplFrameToOutput(aMousePos);
+        static_cast<DNDListenerContainer *>(xDropTarget.get())->fireDragOverEvent(
+            xDropTargetDragContext,
+            css::datatransfer::dnd::DNDConstants::ACTION_MOVE,
+            dragOverPos.X(),
+            dragOverPos.Y(),
+            (css::datatransfer::dnd::DNDConstants::ACTION_COPY |
+             css::datatransfer::dnd::DNDConstants::ACTION_MOVE |
+             css::datatransfer::dnd::DNDConstants::ACTION_LINK));
+
+        return true;
+    }
+
+    if (pDragWin && pDragWin->ImplGetFrameData()->mbStartDragCalled &&
+        nSVEvent == MouseNotifyEvent::MOUSEBUTTONUP)
+    {
+        css::uno::Reference<css::datatransfer::dnd::XDropTargetDropContext> xDropTargetDropContext =
+            new GenericDropTargetDropContext();
+        css::uno::Reference<css::datatransfer::dnd::XDropTarget> xDropTarget(
+            pDragWin->ImplGetWindowImpl()->mxDNDListenerContainer, css::uno::UNO_QUERY);
+
+        if (xDropTargetDropContext.is() && xDropTarget.is())
+        {
+            Point dragOverPos = pDragWin->ImplFrameToOutput(aMousePos);
+            static_cast<DNDListenerContainer *>(xDropTarget.get())->fireDropEvent(
+                xDropTargetDropContext,
+                css::datatransfer::dnd::DNDConstants::ACTION_MOVE,
+                dragOverPos.X(),
+                dragOverPos.Y(),
+                (css::datatransfer::dnd::DNDConstants::ACTION_COPY |
+                 css::datatransfer::dnd::DNDConstants::ACTION_MOVE |
+                 css::datatransfer::dnd::DNDConstants::ACTION_LINK),
+                css::uno::Reference<css::datatransfer::XTransferable>());
+        }
+
+        pDragWin->ImplGetFrameData()->mbStartDragCalled = false;
+    }
 
     // we need a mousemove event, before we get a mousebuttondown or a
     // mousebuttonup event
