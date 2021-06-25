@@ -2717,6 +2717,22 @@ private:
         if (SwapForRTL())
             aPos.setX(gtk_widget_get_allocated_width(m_pWidget) - 1 - aPos.X());
 
+        if (n_press == 1)
+        {
+            GdkEventSequence* pSequence = gtk_gesture_single_get_current_sequence(GTK_GESTURE_SINGLE(pGesture));
+            GdkEvent* pEvent = gtk_gesture_get_last_event(GTK_GESTURE(pGesture), pSequence);
+            if (gdk_event_triggers_context_menu(pEvent))
+            {
+                //if handled for context menu, stop processing
+                CommandEvent aCEvt(aPos, CommandEventId::ContextMenu, true);
+                if (signal_popup_menu(aCEvt))
+                {
+                    gtk_gesture_set_state(GTK_GESTURE(pGesture), GTK_EVENT_SEQUENCE_CLAIMED);
+                    return;
+                }
+            }
+        }
+
         GdkModifierType eType = gtk_event_controller_get_current_event_state(GTK_EVENT_CONTROLLER(pGesture));
         int nButton = gtk_gesture_single_get_current_button(GTK_GESTURE_SINGLE(pGesture));
 
@@ -10367,17 +10383,28 @@ public:
 
         GtkInstanceWidget* pGtkWidget = dynamic_cast<GtkInstanceWidget*>(pParent);
         assert(pGtkWidget);
-
-#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkWidget* pWidget = pGtkWidget->getWidget();
-        gtk_menu_attach_to_widget(m_pMenu, pWidget, nullptr);
 
         //run in a sub main loop because we need to keep vcl PopupMenu alive to use
         //it during DispatchCommand, returning now to the outer loop causes the
         //launching PopupMenu to be destroyed, instead run the subloop here
         //until the gtk menu is destroyed
         GMainLoop* pLoop = g_main_loop_new(nullptr, true);
+
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gulong nSignalId = g_signal_connect_swapped(G_OBJECT(m_pMenu), "closed", G_CALLBACK(g_main_loop_quit), pLoop);
+
+        GdkRectangle aRect;
+        pWidget = getPopupRect(pWidget, rRect, aRect);
+
+        GtkWidget* pOrigParent = gtk_widget_get_parent(GTK_WIDGET(m_pMenu));
+        gtk_widget_set_parent(GTK_WIDGET(m_pMenu), pWidget);
+        gtk_popover_set_pointing_to(GTK_POPOVER(m_pMenu), &aRect);
+        gtk_popover_popup(GTK_POPOVER(m_pMenu));
+#else
         gulong nSignalId = g_signal_connect_swapped(G_OBJECT(m_pMenu), "deactivate", G_CALLBACK(g_main_loop_quit), pLoop);
+
+        gtk_menu_attach_to_widget(m_pMenu, pWidget, nullptr);
 
 #if GTK_CHECK_VERSION(3,22,0)
         if (gtk_check_version(3, 22, 0) == nullptr)
@@ -10425,12 +10452,17 @@ public:
 
             gtk_menu_popup(m_pMenu, nullptr, nullptr, nullptr, nullptr, nButton, nTime);
         }
+#endif
 
         if (g_main_loop_is_running(pLoop))
             main_loop_run(pLoop);
 
         g_main_loop_unref(pLoop);
         g_signal_handler_disconnect(m_pMenu, nSignalId);
+
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_widget_unparent(GTK_WIDGET(m_pMenu));
+#else
         gtk_menu_detach(m_pMenu);
 #endif
 
@@ -22292,6 +22324,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/macroassignpage.ui" &&
         rUIFile != "cui/ui/macroselectordialog.ui" &&
         rUIFile != "cui/ui/menuassignpage.ui" &&
+        rUIFile != "cui/ui/movemenu.ui" &&
         rUIFile != "cui/ui/namedialog.ui" &&
         rUIFile != "cui/ui/newlibdialog.ui" &&
         rUIFile != "cui/ui/numberingformatpage.ui" &&
