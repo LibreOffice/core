@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_CORE_TEXT_ITRTXT_HXX
-#define INCLUDED_SW_SOURCE_CORE_TEXT_ITRTXT_HXX
+#pragma once
+
 #include <swtypes.hxx>
 #include "itratr.hxx"
 #include "inftxt.hxx"
@@ -335,6 +335,6 @@ inline SwTwips SwTextMargin::Left() const
     return (mnDropLines >= m_nLineNr && 1 != m_nLineNr) ? mnFirst + mnDropLeft : mnLeft;
 }
 
-#endif
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
