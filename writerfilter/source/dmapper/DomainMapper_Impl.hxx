@@ -467,6 +467,7 @@ private:
     std::stack<TextAppendContext>                                                   m_aTextAppendStack;
     std::stack<AnchoredContext>                                                     m_aAnchoredStack;
     std::stack<HeaderFooterContext>                                                 m_aHeaderFooterStack;
+    std::stack<std::pair<TextAppendContext, bool>>                                  m_aHeaderFooterTextAppendStack;
     std::deque<FieldContextPtr> m_aFieldStack;
     bool m_bForceGenericFields;
     bool                                                                            m_bSetUserFieldContent;
@@ -820,6 +821,8 @@ public:
 
     void PopPageHeaderFooter();
     bool IsInHeaderFooter() const { return m_eInHeaderFooterImport != HeaderFooterImportState::none; }
+    void ConvertHeaderFooterToTextFrame(bool, bool);
+    static void fillEmptyFrameProperties(std::vector<css::beans::PropertyValue>& rFrameProperties, bool bSetAnchorToChar);
 
     bool IsInTOC() const { return m_bStartTOC; }
 
