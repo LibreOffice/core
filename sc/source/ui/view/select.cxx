@@ -204,9 +204,13 @@ void ScViewFunctionSet::BeginDrag()
 
     vcl::Window* pWindow = pViewData->GetActiveWin();
 
-    if ((comphelper::LibreOfficeKit::isActive() && pWindow->IsLocalTracking()) ||
-        pWindow->IsTracking())
-        pWindow->EndTracking( TrackingEventFlags::Cancel );    // abort selecting
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        if (pWindow->IsLocalTracking())
+            pWindow->LocalEndTracking(TrackingEventFlags::Cancel);
+    }
+    else if (pWindow->IsTracking())
+        pWindow->EndTracking(TrackingEventFlags::Cancel);    // abort selecting
 
     SC_MOD()->SetDragObject( pTransferObj.get(), nullptr );      // for internal D&D
     pTransferObj->StartDrag( pWindow, nDragActions );
