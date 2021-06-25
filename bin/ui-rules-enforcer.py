@@ -224,6 +224,22 @@ def remove_spin_button_input_purpose(current):
     if input_purpose != None:
       current.remove(input_purpose)
 
+def remove_spin_button_max_length(current):
+  max_length = None
+  isspinbutton = current.get('class') == "GtkSpinButton"
+  for child in current:
+    remove_spin_button_max_length(child)
+    if not isspinbutton:
+        continue
+    if child.tag == "property":
+      attributes = child.attrib
+      if attributes.get("name") == "max_length" or attributes.get("name") == "max-length":
+        max_length = child
+
+  if isspinbutton:
+    if max_length != None:
+      current.remove(max_length)
+
 def remove_track_visited_links(current):
   track_visited_links = None
   islabel = current.get('class') == "GtkLabel"
@@ -366,6 +382,7 @@ replace_image_stock(root)
 remove_check_button_align(root)
 remove_check_button_relief(root)
 remove_spin_button_input_purpose(root)
+remove_spin_button_max_length(root)
 remove_track_visited_links(root)
 remove_expander_label_fill(root)
 remove_expander_spacing(root)
