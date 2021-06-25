@@ -1496,8 +1496,12 @@ void ScGridWindow::MouseButtonDown( const MouseEvent& rMEvt )
         nButtonDown = rMEvt.GetButtons();
         FakeButtonUp();
 
-        if ((comphelper::LibreOfficeKit::isActive() && IsLocalTracking()) ||
-            IsTracking())
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            if (IsLocalTracking())
+                LocalEndTracking();
+        }
+        else if (IsTracking())
             EndTracking();      // normally done in VCL as part of MouseButtonUp handling
     }
     nNestedButtonState = ScNestedButtonState::NONE;
