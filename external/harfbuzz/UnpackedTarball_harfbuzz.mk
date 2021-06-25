@@ -20,6 +20,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,harfbuzz,0))
 $(eval $(call gb_UnpackedTarball_add_patches,harfbuzz, \
     external/harfbuzz/ubsan.patch \
     external/harfbuzz/icu-65-api-macros-with-semicolon.patch.1 \
+    external/harfbuzz/Wunused-but-set-variable.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
