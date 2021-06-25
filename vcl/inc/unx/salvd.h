@@ -31,7 +31,7 @@
 class SalDisplay;
 class X11SalGraphics;
 
-class X11SalVirtualDevice : public SalVirtualDevice
+class X11SalVirtualDevice final : public SalVirtualDevice
 {
     SalDisplay      *pDisplay_;
     std::unique_ptr<X11SalGraphics> pGraphics_;

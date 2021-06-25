@@ -29,7 +29,7 @@
 class MenuItemList;
 class GtkSalMenuItem;
 
-class GtkSalMenu : public SalMenu
+class GtkSalMenu final : public SalMenu
 {
 private:
     std::vector< GtkSalMenuItem* >  maItems;
@@ -141,7 +141,7 @@ public:
     virtual void ApplyPersona() override;
 };
 
-class GtkSalMenuItem : public SalMenuItem
+class GtkSalMenuItem final : public SalMenuItem
 {
 public:
     GtkSalMenuItem( const SalItemParams* );

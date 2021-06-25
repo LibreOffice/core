@@ -23,9 +23,8 @@
 #include <unx/cairotextrender.hxx>
 #include <unx/salgdi.h>
 
-class X11CairoTextRender : public CairoTextRender
+class X11CairoTextRender final : public CairoTextRender
 {
-protected:
     X11SalGraphics& mrParent;
 
 public:

@@ -210,7 +210,7 @@ public:
     sal_uLong    m_nTimeoutMS;
 };
 
-class DocumentFocusListener :
+class DocumentFocusListener final :
     public ::cppu::WeakImplHelper< css::accessibility::XAccessibleEventListener >
 {
 
@@ -304,7 +304,7 @@ public:
 
 class GtkSalFrame;
 
-class GtkSalDisplay : public SalGenericDisplay
+class GtkSalDisplay final : public SalGenericDisplay
 {
     GtkSalSystem*                   m_pSys;
     GdkDisplay*                     m_pGdkDisplay;

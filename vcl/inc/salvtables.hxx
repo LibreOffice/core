@@ -133,7 +133,7 @@ public:
     virtual ~SalInstanceBuilder() override;
 };
 
-class SAL_DLLPUBLIC_RTTI SalInstanceMenu : public weld::Menu
+class SAL_DLLPUBLIC_RTTI SalInstanceMenu final : public weld::Menu
 {
 private:
     VclPtr<PopupMenu> m_xMenu;
@@ -1329,7 +1329,7 @@ public:
     virtual ~SalInstanceTextView() override;
 };
 
-struct SalInstanceTreeIter : public weld::TreeIter
+struct SalInstanceTreeIter final : public weld::TreeIter
 {
     SalInstanceTreeIter(const SalInstanceTreeIter* pOrig)
         : iter(pOrig ? pOrig->iter : nullptr)
