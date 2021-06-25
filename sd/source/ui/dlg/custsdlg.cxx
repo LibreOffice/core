@@ -38,7 +38,6 @@ SdCustomShowDlg::SdCustomShowDlg(weld::Window* pWindow, SdDrawDocument& rDrawDoc
     , pCustomShowList(nullptr)
     , bModified(false)
     , m_xLbCustomShows(m_xBuilder->weld_tree_view("customshowlist"))
-    , m_xCbxUseCustomShow(m_xBuilder->weld_check_button("usecustomshows"))
     , m_xBtnNew(m_xBuilder->weld_button("new"))
     , m_xBtnEdit(m_xBuilder->weld_button("edit"))
     , m_xBtnRemove(m_xBuilder->weld_button("delete"))
@@ -55,7 +54,6 @@ SdCustomShowDlg::SdCustomShowDlg(weld::Window* pWindow, SdDrawDocument& rDrawDoc
     m_xBtnEdit->connect_clicked( aLink );
     m_xBtnRemove->connect_clicked( aLink );
     m_xBtnCopy->connect_clicked( aLink );
-    m_xCbxUseCustomShow->connect_toggled(LINK(this, SdCustomShowDlg, ToggleButtonHdl));
     m_xLbCustomShows->connect_changed( LINK( this, SdCustomShowDlg, SelectListBoxHdl ) );
 
     m_xBtnStartShow->connect_clicked( LINK( this, SdCustomShowDlg, StartShowHdl ) ); // for test
@@ -76,8 +74,6 @@ SdCustomShowDlg::SdCustomShowDlg(weld::Window* pWindow, SdDrawDocument& rDrawDoc
         pCustomShowList->Seek( nPosToSelect );
     }
 
-    m_xCbxUseCustomShow->set_active(pCustomShowList && rDoc.getPresentationSettings().mbCustomShow);
-
     CheckState();
 }
 
@@ -93,16 +89,10 @@ void SdCustomShowDlg::CheckState()
     m_xBtnEdit->set_sensitive( bEnable );
     m_xBtnRemove->set_sensitive( bEnable );
     m_xBtnCopy->set_sensitive( bEnable );
-    m_xCbxUseCustomShow->set_sensitive( bEnable );
-    m_xBtnStartShow->set_sensitive(true);
+    m_xBtnStartShow->set_sensitive(bEnable);
 
     if (bEnable && pCustomShowList)
         pCustomShowList->Seek( nPos );
-}
-
-IMPL_LINK( SdCustomShowDlg, ToggleButtonHdl, weld::Toggleable&, r, void )
-{
-    SelectHdl(&r);
 }
 
 IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, weld::Button&, r, void )
@@ -241,10 +231,6 @@ void SdCustomShowDlg::SelectHdl(void const *p)
 
         bModified = true;
     }
-    else if( p == m_xCbxUseCustomShow.get() )
-    {
-        bModified = true;
-    }
 
     CheckState();
 }
@@ -258,7 +244,10 @@ IMPL_LINK_NOARG(SdCustomShowDlg, StartShowHdl, weld::Button&, void)
 // CheckState
 bool SdCustomShowDlg::IsCustomShow() const
 {
-    return (m_xCbxUseCustomShow->get_sensitive() && m_xCbxUseCustomShow->get_active());
+    if (!pCustomShowList->empty())
+        return true;
+    else
+        return false;
 }
 
 // SdDefineCustomShowDlg

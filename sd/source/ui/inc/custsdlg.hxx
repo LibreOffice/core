@@ -33,7 +33,6 @@ private:
     bool            bModified;
 
     std::unique_ptr<weld::TreeView> m_xLbCustomShows;
-    std::unique_ptr<weld::CheckButton> m_xCbxUseCustomShow;
     std::unique_ptr<weld::Button> m_xBtnNew;
     std::unique_ptr<weld::Button> m_xBtnEdit;
     std::unique_ptr<weld::Button> m_xBtnRemove;
@@ -45,7 +44,6 @@ private:
     void            CheckState();
 
     DECL_LINK( ClickButtonHdl, weld::Button&, void );
-    DECL_LINK( ToggleButtonHdl, weld::Toggleable&, void );
     DECL_LINK( SelectListBoxHdl, weld::TreeView&, void );
     DECL_LINK( StartShowHdl, weld::Button&, void );
     void SelectHdl(void const *);
