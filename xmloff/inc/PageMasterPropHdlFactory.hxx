@@ -21,7 +21,7 @@
 
 #include <xmloff/prhdlfac.hxx>
 
-class XMLPageMasterPropHdlFactory : public XMLPropertyHandlerFactory
+class XMLPageMasterPropHdlFactory final : public XMLPropertyHandlerFactory
 {
 public:
     XMLPageMasterPropHdlFactory();
