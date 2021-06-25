@@ -36,21 +36,18 @@ class tdf136011(UITestCase):
 
             self.xUITest.executeCommand(".uno:Copy")
 
-            self.xUITest.executeCommand(".uno:CloseDoc")
+            with self.ui_test.load_empty_file("calc") as calc_document:
+                xCalcDoc = self.xUITest.getTopFocusWindow()
+                gridwin = xCalcDoc.getChild("grid_window")
 
-            self.ui_test.create_doc_in_start_center("calc")
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
-            document = self.ui_test.get_component()
+                self.xUITest.executeCommand(".uno:Paste")
 
-            self.xUITest.executeCommand(".uno:Paste")
+                xData = calc_document.Sheets[0].Charts[0].getEmbeddedObject().Data
 
-            xData = document.Sheets[0].Charts[0].getEmbeddedObject().Data
+                self.assertEqual(xColumnNames, list(xData.ColumnDescriptions))
 
-            self.assertEqual(xColumnNames, list(xData.ColumnDescriptions))
-
-            # Without the fix in place, the numbers in the categories in chart
-            # 'Object 2' wouldn't have been pasted to the new document
-            self.assertEqual(xExpectedResults, list(xData.RowDescriptions))
+                # Without the fix in place, the numbers in the categories in chart
+                # 'Object 2' wouldn't have been pasted to the new document
+                self.assertEqual(xExpectedResults, list(xData.RowDescriptions))
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

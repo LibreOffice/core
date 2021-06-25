@@ -36,32 +36,28 @@ class Tdf117899(UITestCase):
 
         self.xUITest.executeCommand(".uno:Copy")
 
-        # Close the Calc document
-        self.xUITest.executeCommand(".uno:CloseDoc")
-
         with TemporaryDirectory() as tempdir:
             xFilePath = os.path.join(tempdir, "tdf117899-temp.ods")
 
-            self.ui_test.create_doc_in_start_center("writer")
+            with self.ui_test.load_empty_file("writer"):
 
-            # Paste as an OLE spreadsheet
-            formatProperty = mkPropertyValues({"SelectedFormat": 85})
-            self.xUITest.executeCommandWithParameters(".uno:ClipboardFormatItems", formatProperty)
+                self.xUITest.getTopFocusWindow()
 
-            # Save Copy as
-            self.ui_test.execute_dialog_through_command(".uno:ObjectMenue?VerbID:short=-8")
-            xDialog = self.xUITest.getTopFocusWindow()
+                # Paste as an OLE spreadsheet
+                formatProperty = mkPropertyValues({"SelectedFormat": 85})
+                self.xUITest.executeCommandWithParameters(".uno:ClipboardFormatItems", formatProperty)
 
-            xFileName = xDialog.getChild("file_name")
-            xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-            xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": xFilePath}))
+                # Save Copy as
+                self.ui_test.execute_dialog_through_command(".uno:ObjectMenue?VerbID:short=-8")
+                xDialog = self.xUITest.getTopFocusWindow()
 
-            xOpenBtn = xDialog.getChild("open")
-            self.ui_test.close_dialog_through_button(xOpenBtn)
+                xFileName = xDialog.getChild("file_name")
+                xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": xFilePath}))
 
-            # Close the Writer document
-            self.ui_test.close_doc()
+                xOpenBtn = xDialog.getChild("open")
+                self.ui_test.close_dialog_through_button(xOpenBtn)
 
             with self.ui_test.load_file(systemPathToFileUrl(xFilePath)):
 
