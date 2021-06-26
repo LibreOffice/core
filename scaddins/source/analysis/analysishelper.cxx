@@ -732,16 +732,14 @@ OUString ConvertFromDec( double fNum, double fMin, double fMax, sal_uInt16 nBase
     return aRet;
 }
 
-// implementation moved to module sal, see #i97091#
 double Erf( double x )
 {
-    return ::rtl::math::erf(x);
+    return std::erf(x);
 }
 
-// implementation moved to module sal, see #i97091#
 double Erfc( double x )
 {
-    return ::rtl::math::erfc(x);
+    return std::erfc(x);
 }
 
 static bool IsNum( sal_Unicode c )

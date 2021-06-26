@@ -231,13 +231,6 @@ inline double approxValue(double fValue)
     return rtl_math_approxValue(fValue);
 }
 
-/** A wrapper around rtl_math_expm1.
- */
-inline double expm1(double fValue)
-{
-    return rtl_math_expm1(fValue);
-}
-
 /** A wrapper around rtl_math_log1p.
  */
 inline double log1p(double fValue)
@@ -250,20 +243,6 @@ inline double log1p(double fValue)
 inline double atanh(double fValue)
 {
     return rtl_math_atanh(fValue);
-}
-
-/** A wrapper around rtl_math_erf.
- */
-inline double erf(double fValue)
-{
-    return rtl_math_erf(fValue);
-}
-
-/** A wrapper around rtl_math_erfc.
- */
-inline double erfc(double fValue)
-{
-    return rtl_math_erfc(fValue);
 }
 
 /** A wrapper around rtl_math_asinh.
