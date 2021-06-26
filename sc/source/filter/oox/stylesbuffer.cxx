@@ -1181,9 +1181,10 @@ void Alignment::finalizeImport()
     if (maModel.mnVerAlign == XML_distributed)
         maApiData.mnVerJustifyMethod = css::table::CellJustifyMethod::DISTRIBUTE;
 
-    /*  indentation: expressed as number of blocks of 3 space characters in
-        OOXML. */
-    sal_Int32 nIndent = getUnitConverter().scaleToMm100( 3.0 * maModel.mnIndent, Unit::Space );
+    // tdf#130104: do not increase cell indent by 3 times upon FILEOPEN.
+    // FIXME: in OOXML, the number of spaces to indent = indent value * 3. an indent value of '1' means that
+    // the text begins 3 space widths (of the normal style font) from the edge of the cell.
+    sal_Int32 nIndent = getUnitConverter().scaleToMm100( maModel.mnIndent, Unit::Space );
     if( (0 <= nIndent) && (nIndent <= SAL_MAX_INT16) )
         maApiData.mnIndent = static_cast< sal_Int16 >( nIndent );
 
