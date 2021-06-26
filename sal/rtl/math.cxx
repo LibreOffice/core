@@ -1390,11 +1390,6 @@ bool SAL_CALL rtl_math_approxEqual(double a, double b) SAL_THROW_EXTERN_C()
     return (d < a * e48 && d < b * e48);
 }
 
-double SAL_CALL rtl_math_expm1(double fValue) SAL_THROW_EXTERN_C()
-{
-    return expm1(fValue);
-}
-
 double SAL_CALL rtl_math_log1p(double fValue) SAL_THROW_EXTERN_C()
 {
 #ifdef __APPLE__
@@ -1411,18 +1406,6 @@ double SAL_CALL rtl_math_atanh(double fValue) SAL_THROW_EXTERN_C()
 #endif
 {
    return 0.5 * rtl_math_log1p(2.0 * fValue / (1.0-fValue));
-}
-
-/** Parent error function (erf) */
-double SAL_CALL rtl_math_erf(double x) SAL_THROW_EXTERN_C()
-{
-    return erf(x);
-}
-
-/** Parent complementary error function (erfc) */
-double SAL_CALL rtl_math_erfc(double x) SAL_THROW_EXTERN_C()
-{
-    return erfc(x);
 }
 
 /** improved accuracy of asinh for |x| large and for x near zero
