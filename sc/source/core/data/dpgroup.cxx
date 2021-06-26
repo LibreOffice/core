@@ -171,14 +171,13 @@ bool ScDPGroupDateFilter::match( const ScDPItemData & rCellData ) const
             // (do as in the cell functions, ScInterpreter::ScGetHour() etc.)
 
             sal_uInt16 nHour, nMinute, nSecond;
-            double fFractionOfSecond;
-            tools::Time::GetClock( rCellData.GetValue(), nHour, nMinute, nSecond, fFractionOfSecond, 0);
+            tools::Time::GetClock(rCellData.GetValue(), nHour, nMinute, nSecond);
 
             switch (nGroupType)
             {
                 case DataPilotFieldGroupBy::HOURS:
                 {
-                    if (nHour == nValue)
+                    if ((nHour % 24) == nValue)
                         return true;
                 }
                 break;

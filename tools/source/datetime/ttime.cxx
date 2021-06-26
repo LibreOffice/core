@@ -270,75 +270,61 @@ double tools::Time::GetTimeInDays() const
 }
 
 // static
+sal_Int64 tools::Time::TimeToMS(const double fTimeInDays, bool bRoundToSecond)
+{
+    // Limit valid millisecond range to integers range representable in double,
+    // which corresponds to more than +/-23000 years from epoch.
+    constexpr double nMaxMS = sal_Int64(1) << 53;
+    constexpr double nMinMS = -nMaxMS;
+
+    const double fMs = bRoundToSecond ? std::round(fTimeInDays * tools::Time::secondPerDay) * 1000
+                                      : std::round(fTimeInDays * tools::Time::milliSecPerDay);
+    // Clamp to avoid sal_Int64 overflow (UB)
+    if (fMs >= nMaxMS)
+        return std::numeric_limits<sal_Int64>::max();
+    if (fMs <= nMinMS)
+        return std::numeric_limits<sal_Int64>::min();
+    return fMs;
+}
+
+// static
 void tools::Time::GetClock( double fTimeInDays,
                             sal_uInt16& nHour, sal_uInt16& nMinute, sal_uInt16& nSecond,
-                            double& fFractionOfSecond, int nFractionDecimals )
+                            sal_uInt16* pMillisecond, int nFractionDecimals ) // OFFICE-4094
 {
-    const double fTime = fTimeInDays - rtl::math::approxFloor(fTimeInDays); // date part absent
+    // Drop date part; the result is strictly non-negative
+    const sal_Int64 nMs = TimeToMS(fTimeInDays - std::floor(fTimeInDays), !pMillisecond);
 
-    // If 0 then full day (or no day), shortcut.
-    // If < 0 then approxFloor() effectively returned the ceiling (note this
-    // also holds for negative fTimeInDays values) because of a near identical
-    // value, shortcut this to a full day as well.
-    // If >= 1.0 (actually == 1.0) then fTimeInDays is a negative small value
-    // not significant for a representable time and approxFloor() returned -1,
-    // shortcut to 0:0:0, otherwise it would become 24:0:0.
-    if (fTime <= 0.0 || fTime >= 1.0)
+    // If 0 then no day, shortcut. If overflow, also return 0.
+    if (nMs == 0)
     {
         nHour = nMinute = nSecond = 0;
-        fFractionOfSecond = 0.0;
+        if (pMillisecond)
+            *pMillisecond = 0;
+        return;
+    }
+    // If equal to milliSecPerDay, then it was inside the last half-ms of a day, and rounded up;
+    // return 24:0:0 to indicate that date should be increased.
+    if (nMs == milliSecPerDay)
+    {
+        nHour = 24;
+        nMinute = nSecond = 0;
+        if (pMillisecond)
+            *pMillisecond = 0;
         return;
     }
 
-    // In seconds, including milli and nano.
-    const double fRawSeconds = fTime * tools::Time::secondPerDay;
-
-    // Round to nanoseconds most, which is the highest resolution this could be
-    // influenced by, but if the original value included a date round to at
-    // most 14 significant digits (including adding 4 for *86400), otherwise we
-    // might end up with a fake precision of h:m:s.999999986 which in fact
-    // should had been h:m:s+1
-    // BUT, leave at least 2 decimals to round. Which shouldn't be a problem in
-    // practice because class Date can calculate only 8-digit days for it's
-    // sal_Int16 year range, which exactly leaves us with 14-4-8=2.
-    int nDec = 9;
-    const double fAbsTimeInDays = fabs( fTimeInDays);
-    if (fAbsTimeInDays >= 1.0)
+    nHour = nMs / (1000 * 60 * 60);
+    nMinute = (nMs / (1000 * 60)) % 60;
+    nSecond = (nMs / 1000) % 60;
+    if (pMillisecond)
     {
-        const int nDig = static_cast<int>(ceil( log10( fAbsTimeInDays)));
-        nDec = std::clamp( 10 - nDig, 2, 9 );
+        *pMillisecond = nMs % 1000;
+        if (nFractionDecimals == 1)
+            *pMillisecond = *pMillisecond / 100 * 100;
+        else if (nFractionDecimals == 2)
+            *pMillisecond = *pMillisecond / 10 * 10;
     }
-    double fSeconds = rtl::math::round( fRawSeconds, nDec);
-
-    // If this ended up as a full day the original value was very very close
-    // but not quite. Take that.
-    if (fSeconds >= tools::Time::secondPerDay)
-        fSeconds = fRawSeconds;
-
-    // Now do not round values (specifically not up), but truncate to the next
-    // magnitude, so 23:59:59.99 is still 23:59:59 and not 24:00:00 (or even
-    // 00:00:00 which Excel does).
-    nHour = fSeconds / tools::Time::secondPerHour;
-    fSeconds -= nHour * tools::Time::secondPerHour;
-    nMinute = fSeconds / tools::Time::secondPerMinute;
-    fSeconds -= nMinute * tools::Time::secondPerMinute;
-    nSecond = fSeconds;
-    fSeconds -= nSecond;
-
-    assert(fSeconds < 1.0);     // or back to the drawing board...
-
-    if (nFractionDecimals > 0)
-    {
-        // Do not simply round the fraction, otherwise .999 would end up as .00
-        // again. Truncate instead if rounding would round up into an integer
-        // value.
-        fFractionOfSecond = rtl::math::round( fSeconds, nFractionDecimals);
-        if (fFractionOfSecond >= 1.0)
-            fFractionOfSecond = rtl::math::pow10Exp( std::trunc(
-                        rtl::math::pow10Exp( fSeconds, nFractionDecimals)), -nFractionDecimals);
-    }
-    else
-        fFractionOfSecond = fSeconds;
 }
 
 Time& tools::Time::operator =( const tools::Time& rTime )
