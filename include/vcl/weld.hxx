@@ -76,6 +76,7 @@ namespace weld
 {
 class Container;
 class DialogController;
+class StyleList;
 
 class VCL_DLLPUBLIC Widget
 {
@@ -2451,6 +2452,7 @@ public:
     virtual std::unique_ptr<FormattedSpinButton> weld_formatted_spin_button(const OString& id) = 0;
     virtual std::unique_ptr<ComboBox> weld_combo_box(const OString& id) = 0;
     virtual std::unique_ptr<TreeView> weld_tree_view(const OString& id) = 0;
+    std::unique_ptr<StyleList> weld_style_view(const OString& id);
     virtual std::unique_ptr<IconView> weld_icon_view(const OString& id) = 0;
     virtual std::unique_ptr<Label> weld_label(const OString& id) = 0;
     virtual std::unique_ptr<TextView> weld_text_view(const OString& id) = 0;
