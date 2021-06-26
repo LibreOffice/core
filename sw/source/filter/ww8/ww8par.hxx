@@ -1376,7 +1376,8 @@ private:
     bool m_bCareLastParaEndInToc;
     cp_set m_aTOXEndCps;
 
-    bool m_bNotifyMacroEventRead:1;
+    bool m_bNotifyMacroEventRead;
+    bool m_bFuzzing;
 
     const SprmReadInfo& GetSprmReadInfo(sal_uInt16 nId) const;
 

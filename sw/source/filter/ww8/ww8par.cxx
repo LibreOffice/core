@@ -3281,6 +3281,12 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const OUString& rAddString
     if (rAddString.isEmpty())
         return;
 
+    if (m_bFuzzing)
+    {
+        simpleAddTextToParagraph(rAddString);
+        return;
+    }
+
     uno::Reference<i18n::XBreakIterator> xBI(g_pBreakIt->GetBreakIter());
     assert(xBI.is());
 
@@ -4306,6 +4312,7 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_bCareLastParaEndInToc(false)
     , m_aTOXEndCps()
     , m_bNotifyMacroEventRead(false)
+    , m_bFuzzing(utl::ConfigManager::IsFuzzing())
 {
     m_pStrm->SetEndian( SvStreamEndian::LITTLE );
     m_aApos.push_back(false);
@@ -4880,7 +4887,7 @@ void WW8Customizations::Import( SwDocShell* pShell )
 
 void SwWW8ImplReader::ReadGlobalTemplateSettings( std::u16string_view sCreatedFrom, const uno::Reference< container::XNameContainer >& xPrjNameCache )
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (m_bFuzzing)
         return;
 
     SvtPathOptions aPathOpt;
@@ -5196,7 +5203,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
             }
 
 #if HAVE_FEATURE_SCRIPTING
-            if (!utl::ConfigManager::IsFuzzing())
+            if (!m_bFuzzing)
             {
                 BasicManager *pBasicMan = m_pDocShell->GetBasicManager();
                 if (pBasicMan)
