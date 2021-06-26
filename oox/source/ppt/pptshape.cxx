@@ -90,7 +90,7 @@ static const char* lclDebugSubType( sal_Int32 nType )
 
 namespace
 {
-bool ShapeHasNoVisualPropertiesOnImport(oox::ppt::PPTShape& rPPTShape)
+bool ShapeHasNoVisualPropertiesOnImport(const oox::ppt::PPTShape& rPPTShape)
 {
     return  !rPPTShape.hasNonInheritedShapeProperties()
             && !rPPTShape.hasShapeStyleRefs()
@@ -124,6 +124,23 @@ oox::drawingml::TextListStylePtr PPTShape::getSubTypeTextListStyle( const SlideP
     }
 
     return pTextListStyle;
+}
+
+bool PPTShape::IsPlaceHolderCandidate(const SlidePersist& rSlidePersist) const
+{
+    if (meShapeLocation != Slide)
+        return false;
+    if (rSlidePersist.isNotesPage())
+        return false;
+    auto pTextBody = getTextBody();
+    if (!pTextBody)
+        return false;
+    auto rParagraphs = pTextBody->getParagraphs();
+    if (rParagraphs.size() != 1)
+        return false;
+    if (rParagraphs.front()->getRuns().size() != 1)
+        return false;
+    return ShapeHasNoVisualPropertiesOnImport(*this);
 }
 
 void PPTShape::addShape(
@@ -193,10 +210,7 @@ void PPTShape::addShape(
                 }
                 break;
                 case XML_dt :
-                    if ( meShapeLocation == Slide && !rSlidePersist.isNotesPage()
-                         && getTextBody()->getParagraphs().size() == 1
-                         && getTextBody()->getParagraphs().front()->getRuns().size() == 1
-                         && ShapeHasNoVisualPropertiesOnImport(*this) )
+                    if (IsPlaceHolderCandidate(rSlidePersist))
                     {
                         TextRunPtr& pTextRun = getTextBody()->getParagraphs().front()->getRuns().front();
                         oox::drawingml::TextField* pTextField = dynamic_cast<oox::drawingml::TextField*>(pTextRun.get());
@@ -232,10 +246,7 @@ void PPTShape::addShape(
                     bClearText = true;
                 break;
                 case XML_ftr :
-                    if ( meShapeLocation == Slide && !rSlidePersist.isNotesPage()
-                         && getTextBody()->getParagraphs().size() == 1
-                         && getTextBody()->getParagraphs().front()->getRuns().size() == 1
-                         && ShapeHasNoVisualPropertiesOnImport(*this) )
+                    if (IsPlaceHolderCandidate(rSlidePersist))
                     {
                         const OUString& rFooterText = getTextBody()->toString();
 
@@ -253,10 +264,7 @@ void PPTShape::addShape(
                     bClearText = true;
                 break;
                 case XML_sldNum :
-                    if (meShapeLocation == Slide && !rSlidePersist.isNotesPage()
-                        && getTextBody()->getParagraphs().size() == 1
-                        && getTextBody()->getParagraphs().front()->getRuns().size() == 1
-                        && ShapeHasNoVisualPropertiesOnImport(*this))
+                    if (IsPlaceHolderCandidate(rSlidePersist))
                     {
                         TextRunPtr& pTextRun
                             = getTextBody()->getParagraphs().front()->getRuns().front();
