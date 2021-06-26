@@ -356,12 +356,12 @@ void SwXTextPortion::GetPropertyValue(
             {
                 if(!pSet)
                 {
+                    static const WhichRangesLiteral ranges { {
+                            {RES_CHRATR_BEGIN, RES_FRMATR_END - 1},
+                            {RES_UNKNOWNATR_CONTAINER,
+                                RES_UNKNOWNATR_CONTAINER} } };
                     pSet = std::make_unique<SfxItemSet>(
-                        pUnoCursor->GetDoc().GetAttrPool(),
-                        svl::Items<
-                            RES_CHRATR_BEGIN, RES_FRMATR_END - 1,
-                            RES_UNKNOWNATR_CONTAINER,
-                                RES_UNKNOWNATR_CONTAINER>{});
+                        pUnoCursor->GetDoc().GetAttrPool(), ranges);
                     SwUnoCursorHelper::GetCursorAttr(*pUnoCursor, *pSet);
                 }
                 m_pPropSet->getPropertyValue(rEntry, *pSet, rVal);

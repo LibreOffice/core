@@ -211,16 +211,15 @@ SfxItemSet& SdStyleSheet::GetItemSet()
         // we create the ItemSet 'on demand' if necessary
         if (!pSet)
         {
-            pSet = new SfxItemSet(
-                GetPool()->GetPool(),
-                svl::Items<
-                    XATTR_LINE_FIRST, XATTR_LINE_LAST,
-                    XATTR_FILL_FIRST, XATTR_FILL_LAST,
-                    SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,
-                    SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_WORDWRAP,
-                    SDRATTR_EDGE_FIRST, SDRATTR_MEASURE_LAST,
-                    SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
-                    EE_PARA_START, EE_CHAR_END>{});
+            static const WhichRangesLiteral ranges { {
+                    {XATTR_LINE_FIRST, XATTR_LINE_LAST},
+                    {XATTR_FILL_FIRST, XATTR_FILL_LAST},
+                    {SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST},
+                    {SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_WORDWRAP},
+                    {SDRATTR_EDGE_FIRST, SDRATTR_MEASURE_LAST},
+                    {SDRATTR_3D_FIRST, SDRATTR_3D_LAST},
+                    {EE_PARA_START, EE_CHAR_END} } };
+            pSet = new SfxItemSet(GetPool()->GetPool(), ranges);
             bMySet = true;
         }
 
@@ -231,16 +230,15 @@ SfxItemSet& SdStyleSheet::GetItemSet()
     {
         if (!pSet)
         {
-            pSet = new SfxItemSet(
-                GetPool()->GetPool(),
-                svl::Items<
-                    XATTR_LINE_FIRST, XATTR_LINE_LAST,
-                    XATTR_FILL_FIRST, XATTR_FILL_LAST,
-                    SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,
-                    SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_XMLATTRIBUTES,
-                    SDRATTR_TEXT_WORDWRAP, SDRATTR_TEXT_WORDWRAP,
-                    SDRATTR_TABLE_FIRST, SDRATTR_TABLE_LAST,
-                    EE_PARA_START, EE_CHAR_END>{});
+            static const WhichRangesLiteral ranges { {
+                    {XATTR_LINE_FIRST, XATTR_LINE_LAST},
+                    {XATTR_FILL_FIRST, XATTR_FILL_LAST},
+                    {SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST},
+                    {SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_XMLATTRIBUTES},
+                    {SDRATTR_TEXT_WORDWRAP, SDRATTR_TEXT_WORDWRAP},
+                    {SDRATTR_TABLE_FIRST, SDRATTR_TABLE_LAST},
+                    {EE_PARA_START, EE_CHAR_END} } };
+            pSet = new SfxItemSet(GetPool()->GetPool(), ranges);
             bMySet = true;
         }
 
@@ -262,16 +260,15 @@ SfxItemSet& SdStyleSheet::GetItemSet()
         {
             if (!pSet)
             {
-                pSet = new SfxItemSet(
-                    GetPool()->GetPool(),
-                    svl::Items<
-                        XATTR_LINE_FIRST, XATTR_LINE_LAST,
-                        XATTR_FILL_FIRST, XATTR_FILL_LAST,
-                        SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,
-                        SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_WORDWRAP,
-                        SDRATTR_EDGE_FIRST, SDRATTR_MEASURE_LAST,
-                        SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
-                        EE_PARA_START, EE_CHAR_END>{});
+                static const WhichRangesLiteral ranges { {
+                        {XATTR_LINE_FIRST, XATTR_LINE_LAST},
+                        {XATTR_FILL_FIRST, XATTR_FILL_LAST},
+                        {SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST},
+                        {SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_WORDWRAP},
+                        {SDRATTR_EDGE_FIRST, SDRATTR_MEASURE_LAST},
+                        {SDRATTR_3D_FIRST, SDRATTR_3D_LAST},
+                        {EE_PARA_START, EE_CHAR_END} } };
+                pSet = new SfxItemSet(GetPool()->GetPool(), ranges);
                 bMySet = true;
             }
 
@@ -1024,7 +1021,7 @@ void SAL_CALL SdStyleSheet::setPropertyValue( const OUString& aPropertyName, con
         throw IllegalArgumentException();
     }
 
-    SfxItemSet aSet( GetPool()->GetPool(),   {{pEntry->nWID, pEntry->nWID}});
+    SfxItemSet aSet( GetPool()->GetPool(), pEntry->nWID, pEntry->nWID);
     aSet.Put( rStyleSet );
 
     if( !aSet.Count() )
@@ -1130,7 +1127,7 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName )
     }
     else
     {
-        SfxItemSet aSet( GetPool()->GetPool(),   {{pEntry->nWID, pEntry->nWID}});
+        SfxItemSet aSet( GetPool()->GetPool(), pEntry->nWID, pEntry->nWID);
 
         const SfxPoolItem* pItem;
         SfxItemSet& rStyleSet = GetItemSet();
@@ -1328,7 +1325,7 @@ Any SAL_CALL SdStyleSheet::getPropertyDefault( const OUString& aPropertyName )
     else
     {
         SfxItemPool& rMyPool = GetPool()->GetPool();
-        SfxItemSet aSet( rMyPool,   {{pEntry->nWID, pEntry->nWID}});
+        SfxItemSet aSet( rMyPool, pEntry->nWID, pEntry->nWID);
         aSet.Put( rMyPool.GetDefaultItem( pEntry->nWID ) );
         aRet = SvxItemPropertySet_getPropertyValue( pEntry, aSet );
     }

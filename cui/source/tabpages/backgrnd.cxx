@@ -36,12 +36,12 @@ using namespace css;
 #define TBL_DEST_ROW    1
 #define TBL_DEST_TBL    2
 
-const sal_uInt16 SvxBkgTabPage::pPageRanges[] =
+static const WhichRangesLiteral ranges {
 {
-    SID_ATTR_BRUSH, SID_ATTR_BRUSH,
-    SID_ATTR_BRUSH_CHAR, SID_ATTR_BRUSH_CHAR,
-    0
-};
+    {SID_ATTR_BRUSH, SID_ATTR_BRUSH},
+    {SID_ATTR_BRUSH_CHAR, SID_ATTR_BRUSH_CHAR},
+} };
+const WhichRangesContainer SvxBkgTabPage::pPageRanges(ranges);
 
 static sal_uInt16 lcl_GetTableDestSlot(sal_Int32 nTblDest)
 {

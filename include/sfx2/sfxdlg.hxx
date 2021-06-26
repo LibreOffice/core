@@ -63,7 +63,7 @@ protected:
     virtual ~SfxAbstractTabDialog() override = default;
 public:
     virtual void                SetCurPageId( const OString &rName ) = 0;
-    virtual const sal_uInt16*   GetInputRanges( const SfxItemPool& ) = 0;
+    virtual WhichRangesContainer GetInputRanges( const SfxItemPool& ) = 0;
     virtual void                SetInputSet( const SfxItemSet* pInSet ) = 0;
 };
 

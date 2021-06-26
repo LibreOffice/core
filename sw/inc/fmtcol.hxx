@@ -36,13 +36,13 @@ class SAL_DLLPUBLIC_RTTI SwFormatColl: public SwFormat
 {
 protected:
     SwFormatColl( SwAttrPool& rPool, const char* pFormatName,
-                const sal_uInt16* pWhichRanges, SwFormatColl* pDerFrom,
+                const WhichRangesContainer& pWhichRanges, SwFormatColl* pDerFrom,
                 sal_uInt16 nFormatWhich )
           : SwFormat( rPool, pFormatName, pWhichRanges, pDerFrom, nFormatWhich )
     { SetAuto(false); }
 
     SwFormatColl( SwAttrPool& rPool, const OUString &rFormatName,
-                const sal_uInt16* pWhichRanges, SwFormatColl* pDerFrom,
+                const WhichRangesContainer& pWhichRanges, SwFormatColl* pDerFrom,
                 sal_uInt16 nFormatWhich )
           : SwFormat( rPool, rFormatName, pWhichRanges, pDerFrom, nFormatWhich )
     { SetAuto(false); }

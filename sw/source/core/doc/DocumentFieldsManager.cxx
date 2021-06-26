@@ -853,8 +853,9 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                     }
 
                     SwFrameFormat* pFormat = pBox->ClaimFrameFormat();
-                    SfxItemSet aTmp( m_rDoc.GetAttrPool(),
-                                    svl::Items<RES_BOXATR_BEGIN,RES_BOXATR_END-1>{} );
+                    static const WhichRangesLiteral ranges { {
+                                    {RES_BOXATR_BEGIN,RES_BOXATR_END-1} } };
+                    SfxItemSet aTmp( m_rDoc.GetAttrPool(), ranges );
 
                     if( pCalc->IsCalcError() )
                         nValue = DBL_MAX;

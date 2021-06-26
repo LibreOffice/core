@@ -72,7 +72,7 @@ private:
     const SfxItemSet*       pSet;
     std::unique_ptr<SfxItemSet>     pOutSet;
     std::unique_ptr<SfxItemSet>     pExampleSet;
-    std::unique_ptr<sal_uInt16[]>   pRanges;
+    WhichRangesContainer   pRanges;
 
     SvxHlinkCtrl        maCtrl;         ///< Controller
     std::unique_ptr<SfxItemSet> mpItemSet;
@@ -120,7 +120,7 @@ public:
     void                ShowPage( const OString& rId );
 
     /// gives via map converted local slots if applicable
-    const sal_uInt16*   GetInputRanges( const SfxItemPool& );
+    WhichRangesContainer GetInputRanges( const SfxItemPool& );
     void                SetInputSet( const SfxItemSet* pInSet );
 
     void                Start();

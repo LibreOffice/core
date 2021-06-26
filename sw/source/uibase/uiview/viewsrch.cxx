@@ -388,23 +388,22 @@ void SwView::ExecSearch(SfxRequest& rReq)
         case FID_SEARCH_SEARCHSET:
         case FID_SEARCH_REPLACESET:
         {
-            static const sal_uInt16 aNormalAttr[] =
+            static const WhichRangesLiteral aNormalAttr(
             {
-/* 0 */         RES_CHRATR_CASEMAP,     RES_CHRATR_CASEMAP,
-/* 2 */         RES_CHRATR_COLOR,       RES_CHRATR_POSTURE,
-/* 4 */         RES_CHRATR_SHADOWED,    RES_CHRATR_WORDLINEMODE,
-/* 6 */         RES_CHRATR_BLINK,       RES_CHRATR_BLINK,
-/* 8 */         RES_CHRATR_BACKGROUND,  RES_CHRATR_BACKGROUND,
-/*10 */         RES_CHRATR_ROTATE,      RES_CHRATR_ROTATE,
-/*12 */         RES_CHRATR_SCALEW,      RES_CHRATR_RELIEF,
-/*14 */         RES_CHRATR_OVERLINE,    RES_CHRATR_OVERLINE,
-/*16 */         RES_PARATR_LINESPACING, RES_PARATR_HYPHENZONE,
-/*18 */         RES_PARATR_REGISTER,    RES_PARATR_REGISTER,
-/*20 */         RES_PARATR_VERTALIGN,   RES_PARATR_VERTALIGN,
-/*22 */         RES_LR_SPACE,           RES_UL_SPACE,
-/*24 */         SID_ATTR_PARA_MODEL,    SID_ATTR_PARA_KEEP,
-/*26 */         0
-            };
+/* 0 */         {RES_CHRATR_CASEMAP,     RES_CHRATR_CASEMAP},
+/* 2 */         {RES_CHRATR_COLOR,       RES_CHRATR_POSTURE},
+/* 4 */         {RES_CHRATR_SHADOWED,    RES_CHRATR_WORDLINEMODE},
+/* 6 */         {RES_CHRATR_BLINK,       RES_CHRATR_BLINK},
+/* 8 */         {RES_CHRATR_BACKGROUND,  RES_CHRATR_BACKGROUND},
+/*10 */         {RES_CHRATR_ROTATE,      RES_CHRATR_ROTATE},
+/*12 */         {RES_CHRATR_SCALEW,      RES_CHRATR_RELIEF},
+/*14 */         {RES_CHRATR_OVERLINE,    RES_CHRATR_OVERLINE},
+/*16 */         {RES_PARATR_LINESPACING, RES_PARATR_HYPHENZONE},
+/*18 */         {RES_PARATR_REGISTER,    RES_PARATR_REGISTER},
+/*20 */         {RES_PARATR_VERTALIGN,   RES_PARATR_VERTALIGN},
+/*22 */         {RES_LR_SPACE,           RES_UL_SPACE},
+/*24 */         {SID_ATTR_PARA_MODEL,    SID_ATTR_PARA_KEEP},
+            });
 
             SfxItemSet aSet(m_pWrtShell->GetAttrPool(), aNormalAttr);
 
@@ -740,12 +739,11 @@ sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
 
     m_pWrtShell->SttSelect();
 
-    static const sal_uInt16 aSearchAttrRange[] = {
-        RES_CHRATR_BEGIN, RES_CHRATR_END-1,
-        RES_PARATR_BEGIN, RES_PARATR_END-1,
-        RES_FRMATR_BEGIN, RES_FRMATR_END-1,
-        SID_ATTR_PARA_MODEL, SID_ATTR_PARA_KEEP,
-        0 };
+    static const WhichRangesLiteral aSearchAttrRange({
+        {RES_CHRATR_BEGIN, RES_CHRATR_END-1},
+        {RES_PARATR_BEGIN, RES_PARATR_END-1},
+        {RES_FRMATR_BEGIN, RES_FRMATR_END-1},
+        {SID_ATTR_PARA_MODEL, SID_ATTR_PARA_KEEP} });
 
     SfxItemSet aSrchSet( m_pWrtShell->GetAttrPool(), aSearchAttrRange);
     if( s_xSearchList && s_xSearchList->Count() )

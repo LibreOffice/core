@@ -32,12 +32,11 @@
 
 constexpr FieldUnit eDefUnit = FieldUnit::MM_100TH;
 
-const sal_uInt16 SvxTabulatorTabPage::pRanges[] =
+static const WhichRangesLiteral ranges {
 {
-    SID_ATTR_TABSTOP,
-    SID_ATTR_TABSTOP_OFFSET,
-    0
-};
+    {SID_ATTR_TABSTOP, SID_ATTR_TABSTOP_OFFSET}
+} };
+const WhichRangesContainer SvxTabulatorTabPage::pRanges(ranges);
 
 static void FillUpWithDefTabs_Impl( tools::Long nDefDist, SvxTabStopItem& rTabs )
 {

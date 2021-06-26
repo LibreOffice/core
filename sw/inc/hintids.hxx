@@ -23,6 +23,7 @@
 #include <svx/xdef.hxx>
 #include "swdllapi.h"
 #include <svl/typedwhich.hxx>
+#include <svl/whichranges.hxx>
 #include <vector>
 
 class SfxStringItem;
@@ -550,32 +551,32 @@ sal_Unicode GetCharOfTextAttr(const SwTextAttr& rAttr);
 // all Sets defined in init.cxx
 
 // AttrSet-Range for the 3 Break-Attribute
-extern sal_uInt16 const aBreakSetRange[];
+extern WhichRangesContainer const aBreakSetRange;
 // AttrSet-Range for TextFormatColl
-extern sal_uInt16 const aTextFormatCollSetRange[];
+extern WhichRangesContainer const aTextFormatCollSetRange;
 // AttrSet-Range for GrfFormatColl
-extern sal_uInt16 const aGrfFormatCollSetRange[];
+extern WhichRangesContainer const aGrfFormatCollSetRange;
 // AttrSet-Range for TextNode
-SW_DLLPUBLIC extern sal_uInt16 const aTextNodeSetRange[];
+SW_DLLPUBLIC extern WhichRangesContainer const aTextNodeSetRange;
 // AttrSet-Range for NoTextNode
-extern sal_uInt16 const aNoTextNodeSetRange[];
+extern WhichRangesContainer const aNoTextNodeSetRange;
 // AttrSet-Range for SwTable
-extern sal_uInt16 const aTableSetRange[];
+extern WhichRangesContainer const aTableSetRange;
 // AttrSet-Range for SwTableLine
-extern sal_uInt16 const aTableLineSetRange[];
+extern WhichRangesContainer const aTableLineSetRange;
 // AttrSet-Range for SwTableBox
-extern sal_uInt16 const aTableBoxSetRange[];
+extern WhichRangesContainer const aTableBoxSetRange;
 // AttrSet-Range for SwFrameFormat
-SW_DLLPUBLIC extern sal_uInt16 const aFrameFormatSetRange[];
+SW_DLLPUBLIC extern WhichRangesContainer const aFrameFormatSetRange;
 // AttrSet-Range for SwCharFormat
-extern sal_uInt16 const aCharFormatSetRange[];
+extern WhichRangesContainer const aCharFormatSetRange;
 // AttrSet-Range for the autostyles
-extern sal_uInt16 const aCharAutoFormatSetRange[];
+extern WhichRangesContainer const aCharAutoFormatSetRange;
 // AttrSet-Range for SwPageDescFormat
-extern sal_uInt16 const aPgFrameFormatSetRange[];
+extern WhichRangesContainer const aPgFrameFormatSetRange;
 
 // check if ID is InRange of AttrSet-Ids
-bool IsInRange(const sal_uInt16* pRange, const sal_uInt16 nId);
+bool IsInRange(const WhichRangesContainer& pRange, const sal_uInt16 nId);
 
 #endif
 

@@ -282,9 +282,11 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                     rRect.Right() - rPageRect.Right() + aLongLR.GetRight() :
                     rPageRect.Left() + aLongLR.GetLeft() - rRect.Left();
 
-                SfxItemSet aSet( GetPool(), svl::Items<RES_FRM_SIZE, RES_FRM_SIZE,
-                                            RES_VERT_ORIENT, RES_HORI_ORIENT,
-                                            RES_COL, RES_COL>{} );
+                static const WhichRangesLiteral ranges { {
+                        {RES_FRM_SIZE, RES_FRM_SIZE},
+                        {RES_VERT_ORIENT, RES_HORI_ORIENT},
+                        {RES_COL, RES_COL} } };
+                SfxItemSet aSet( GetPool(), ranges );
 
                 if(bVerticalFrame)
                 {
@@ -375,7 +377,10 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 SvxLRSpaceItem aLRTmp = pSectFormat->GetLRSpace();
                 aLRTmp.SetLeft(aLRTmp.GetLeft() + nLeftDiff);
                 aLRTmp.SetRight(aLRTmp.GetRight() + nRightDiff);
-                SfxItemSet aSet(rSh.GetAttrPool(), svl::Items<RES_LR_SPACE, RES_LR_SPACE, RES_COL, RES_COL>{});
+                static const WhichRangesLiteral ranges { {
+                        {RES_LR_SPACE, RES_LR_SPACE},
+                        {RES_COL, RES_COL} } };
+                SfxItemSet aSet(rSh.GetAttrPool(), ranges);
                 aSet.Put(aLRTmp);
                 //change the first/last column
                 if(bSect)
@@ -431,8 +436,10 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 const tools::Long nDeltaY = rPageRect.Top() + aLongULSpace.GetUpper() - rRect.Top();
                 const tools::Long nHeight = nPageHeight - (aLongULSpace.GetUpper() + aLongULSpace.GetLower());
 
-                SfxItemSet aSet( GetPool(), svl::Items<RES_FRM_SIZE, RES_FRM_SIZE,
-                                            RES_VERT_ORIENT, RES_HORI_ORIENT>{} );
+                static const WhichRangesLiteral ranges { {
+                        {RES_FRM_SIZE, RES_FRM_SIZE},
+                        {RES_VERT_ORIENT, RES_HORI_ORIENT} } };
+                SfxItemSet aSet( GetPool(), ranges );
                 //which of the orientation attributes is to be put depends on the frame's environment
                 bool bRTL;
                 bool bVertL2R;
@@ -488,7 +495,10 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 SvxLRSpaceItem aLR = pSectFormat->GetLRSpace();
                 aLR.SetLeft(aLR.GetLeft() + nLeftDiff);
                 aLR.SetRight(aLR.GetRight() + nRightDiff);
-                SfxItemSet aSet(rSh.GetAttrPool(), svl::Items<RES_LR_SPACE, RES_LR_SPACE, RES_COL, RES_COL>{});
+                static const WhichRangesLiteral ranges { {
+                        {RES_LR_SPACE, RES_LR_SPACE},
+                        {RES_COL, RES_COL} } };
+                SfxItemSet aSet(rSh.GetAttrPool(), ranges);
                 aSet.Put(aLR);
                 //change the first/last column
                 if(bSect)
@@ -628,7 +638,8 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
             const SvxTabStopItem& rDefTabs = rSh.GetDefault(RES_PARATR_TABSTOP);
 
             // Default tab at pos 0
-            SfxItemSet aSet( GetPool(), svl::Items<RES_LR_SPACE, RES_LR_SPACE>{} );
+            static const WhichRangesLiteral ranges { { {RES_LR_SPACE, RES_LR_SPACE} } };
+            SfxItemSet aSet( GetPool(), ranges );
             rSh.GetCurAttr( aSet );
             const SvxLRSpaceItem& rLR = aSet.Get(RES_LR_SPACE);
 
@@ -644,7 +655,8 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
             SwTextFormatColl* pColl = rSh.GetCurTextFormatColl();
             if( pColl && pColl->IsAutoUpdateFormat() )
             {
-                SfxItemSet aTmp(GetPool(), svl::Items<RES_PARATR_TABSTOP, RES_PARATR_TABSTOP>{});
+                static const WhichRangesLiteral ranges { { {RES_PARATR_TABSTOP, RES_PARATR_TABSTOP} } };
+                SfxItemSet aTmp(GetPool(), ranges);
                 aTmp.Put(aTabStops);
                 rSh.AutoUpdatePara( pColl, aTmp );
             }
@@ -663,8 +675,8 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
             const bool bRemove = aRemoveItem.GetValue();
 
 
-
-            SfxItemSet aItemSet(GetPool(), svl::Items<RES_PARATR_TABSTOP, RES_PARATR_TABSTOP>{});
+            static const WhichRangesLiteral ranges { { {RES_PARATR_TABSTOP, RES_PARATR_TABSTOP} } };
+            SfxItemSet aItemSet(GetPool(), ranges);
             rSh.GetCurAttr(aItemSet);
             SvxTabStopItem aTabStopItem(aItemSet.Get(RES_PARATR_TABSTOP));
             lcl_EraseDefTabs(aTabStopItem);
@@ -706,7 +718,8 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
         const SfxPoolItem *fLineIndent, *pLeftIndent, *pRightIndent;
         if (pReqArgs)
         {
-            SfxItemSet aLRSpaceSet( GetPool(), svl::Items<RES_LR_SPACE, RES_LR_SPACE>{} );
+            static const WhichRangesLiteral ranges { { {RES_LR_SPACE, RES_LR_SPACE} } };
+            SfxItemSet aLRSpaceSet( GetPool(), ranges );
             rSh.GetCurAttr( aLRSpaceSet );
             SvxLRSpaceItem aParaMargin( aLRSpaceSet.Get( RES_LR_SPACE ) );
 
@@ -731,7 +744,8 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
     }
     case SID_HANGING_INDENT:
     {
-        SfxItemSet aLRSpaceSet( GetPool(), svl::Items<RES_LR_SPACE, RES_LR_SPACE>{} );
+        static const WhichRangesLiteral ranges { { {RES_LR_SPACE, RES_LR_SPACE} } };
+        SfxItemSet aLRSpaceSet( GetPool(), ranges );
         rSh.GetCurAttr( aLRSpaceSet );
         SvxLRSpaceItem aParaMargin( aLRSpaceSet.Get( RES_LR_SPACE ) );
 
@@ -761,7 +775,8 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
             {
                 // --> #i42922# Mouse move of numbering label
                 // has to consider the left indent of the paragraph
-                SfxItemSet aSet( GetPool(), svl::Items<RES_LR_SPACE, RES_LR_SPACE>{} );
+                static const WhichRangesLiteral ranges { { {RES_LR_SPACE, RES_LR_SPACE} } };
+                SfxItemSet aSet( GetPool(), ranges );
                 rSh.GetCurAttr( aSet );
                 const SvxLRSpaceItem& rLR = aSet.Get(RES_LR_SPACE);
 
@@ -774,7 +789,8 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
             }
             else if( pColl && pColl->IsAutoUpdateFormat() )
             {
-                SfxItemSet aSet(GetPool(), svl::Items<RES_LR_SPACE, RES_LR_SPACE>{});
+                static const WhichRangesLiteral ranges { { {RES_LR_SPACE, RES_LR_SPACE} } };
+                SfxItemSet aSet(GetPool(), ranges);
                 aSet.Put(aParaMargin);
                 rSh.AutoUpdatePara( pColl, aSet);
             }
@@ -783,7 +799,8 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
 
             if ( aParaMargin.GetTextFirstLineOffset() < 0 )
             {
-                SfxItemSet aSet( GetPool(), svl::Items<RES_PARATR_TABSTOP, RES_PARATR_TABSTOP>{} );
+                static const WhichRangesLiteral ranges { { {RES_PARATR_TABSTOP, RES_PARATR_TABSTOP} } };
+                SfxItemSet aSet( GetPool(), ranges );
 
                 rSh.GetCurAttr( aSet );
                 const SvxTabStopItem&  rTabStops = aSet.Get(RES_PARATR_TABSTOP);
@@ -810,7 +827,8 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
 
                     if( pColl && pColl->IsAutoUpdateFormat())
                     {
-                        SfxItemSet aSetTmp(GetPool(), svl::Items<RES_PARATR_TABSTOP, RES_PARATR_TABSTOP>{});
+                        static const WhichRangesLiteral ranges { { {RES_PARATR_TABSTOP, RES_PARATR_TABSTOP} } };
+                        SfxItemSet aSetTmp(GetPool(), ranges);
                         aSetTmp.Put(*aTabStops);
                         rSh.AutoUpdatePara( pColl, aSetTmp );
                     }
@@ -833,7 +851,8 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
             SwTextFormatColl* pColl = rSh.GetCurTextFormatColl();
             if( pColl && pColl->IsAutoUpdateFormat() )
             {
-                SfxItemSet aSet(GetPool(), svl::Items<RES_UL_SPACE, RES_UL_SPACE>{});
+                static const WhichRangesLiteral ranges { { {RES_UL_SPACE, RES_UL_SPACE} } };
+                SfxItemSet aSet(GetPool(), ranges);
                 aSet.Put(aParaMargin);
                 rSh.AutoUpdatePara( pColl, aSet);
             }
@@ -844,7 +863,8 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
     case SID_PARASPACE_INCREASE:
     case SID_PARASPACE_DECREASE:
         {
-            SfxItemSet aULSpaceSet( GetPool(), svl::Items<RES_UL_SPACE, RES_UL_SPACE>{} );
+            static const WhichRangesLiteral ranges { { {RES_UL_SPACE, RES_UL_SPACE} } };
+            SfxItemSet aULSpaceSet( GetPool(), ranges );
             rSh.GetCurAttr( aULSpaceSet );
             SvxULSpaceItem aULSpace( aULSpaceSet.Get( RES_UL_SPACE ) );
             sal_uInt16 nUpper = aULSpace.GetUpper();
@@ -966,7 +986,8 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 if ( bFrameSelection || nFrameType & FrameTypeFlags::FLY_ANY || bSect)
                 {
                     SwSectionFormat *pSectFormat = nullptr;
-                    SfxItemSet aSet( GetPool(), svl::Items<RES_COL, RES_COL>{} );
+                    static const WhichRangesLiteral ranges { { {RES_COL, RES_COL} } };
+                    SfxItemSet aSet( GetPool(), ranges );
                     if(bSect)
                     {
                         SwSection *pSect = rSh.GetAnySection();
@@ -1383,8 +1404,10 @@ void SwView::StateTabWin(SfxItemSet& rSet)
     SvxLRSpaceItem aPageLRSpace( rDesc.GetMaster().GetLRSpace() );
     SwapPageMargin( rDesc, aPageLRSpace );
 
-    SfxItemSet aCoreSet( GetPool(), svl::Items<RES_PARATR_TABSTOP, RES_PARATR_TABSTOP,
-                                    RES_LR_SPACE,        RES_UL_SPACE>{} );
+    static const WhichRangesLiteral ranges { {
+            {RES_PARATR_TABSTOP, RES_PARATR_TABSTOP},
+            {RES_LR_SPACE,        RES_UL_SPACE} } };
+    SfxItemSet aCoreSet( GetPool(), ranges );
     // get also the list level indent values merged as LR-SPACE item, if needed.
     rSh.GetCurAttr( aCoreSet, true );
     const SelectionType nSelType = rSh.GetSelectionType();
@@ -1718,7 +1741,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         aDistLR.SetRight(rBox.GetDistance(SvxBoxItemLine::RIGHT));
 
                         //add the paragraph border distance
-                        SfxItemSet aCoreSet1( GetPool(), svl::Items<RES_BOX, RES_BOX>{} );
+                        static const WhichRangesLiteral ranges { { {RES_BOX, RES_BOX} } };
+                        SfxItemSet aCoreSet1( GetPool(), ranges );
                         rSh.GetCurAttr( aCoreSet1 );
                         const SvxBoxItem& rParaBox = aCoreSet1.Get(RES_BOX);
                         aDistLR.SetLeft(aDistLR.GetLeft() + rParaBox.GetDistance(SvxBoxItemLine::LEFT));
@@ -1732,9 +1756,10 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     ( rSh.GetTableFormat() && !bFrameSelection &&
                     !(nFrameType & FrameTypeFlags::COLSECT ) ) )
                 {
-                    SfxItemSet aCoreSet2( GetPool(),
-                                            svl::Items<RES_BOX, RES_BOX,
-                                            SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER>{} );
+                    static const WhichRangesLiteral ranges { {
+                            {RES_BOX, RES_BOX},
+                            {SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER} } };
+                    SfxItemSet aCoreSet2( GetPool(), ranges );
                     SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
                     aBoxInfo.SetTable(false);
                     aBoxInfo.SetDist(true);
@@ -1745,7 +1770,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     aDistLR.SetRight(rBox.GetDistance(SvxBoxItemLine::RIGHT));
 
                     //add the border distance of the paragraph
-                    SfxItemSet aCoreSet1( GetPool(), svl::Items<RES_BOX, RES_BOX>{} );
+                    static const WhichRangesLiteral ranges2 { { {RES_BOX, RES_BOX} } };
+                    SfxItemSet aCoreSet1( GetPool(), ranges2 );
                     rSh.GetCurAttr( aCoreSet1 );
                     const SvxBoxItem& rParaBox = aCoreSet1.Get(RES_BOX);
                     aDistLR.SetLeft(aDistLR.GetLeft() + rParaBox.GetDistance(SvxBoxItemLine::LEFT));
@@ -1785,7 +1811,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     }
 
                     //add the border distance of the paragraph
-                    SfxItemSet aCoreSetTmp( GetPool(), svl::Items<RES_BOX, RES_BOX>{} );
+                    static const WhichRangesLiteral ranges { { {RES_BOX, RES_BOX} } };
+                    SfxItemSet aCoreSetTmp( GetPool(), ranges );
                     rSh.GetCurAttr( aCoreSetTmp );
                     const SvxBoxItem& rParaBox = aCoreSetTmp.Get(RES_BOX);
                     aDistLR.SetLeft(aDistLR.GetLeft() + rParaBox.GetDistance(SvxBoxItemLine::LEFT));

@@ -782,8 +782,9 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                             if( dynamic_cast< E3dObject *>( pPickObj ) !=  nullptr && dynamic_cast< E3dObject *>( pObj ) !=  nullptr )
                             {
                                 // handle 3D attribute in addition
-                                SfxItemSet aNewSet( mrDoc.GetPool(), svl::Items<SID_ATTR_3D_START, SID_ATTR_3D_END>{} );
-                                SfxItemSet aOldSet( mrDoc.GetPool(), svl::Items<SID_ATTR_3D_START, SID_ATTR_3D_END>{} );
+                                static const WhichRangesLiteral ranges { { {SID_ATTR_3D_START, SID_ATTR_3D_END} } };
+                                SfxItemSet aNewSet( mrDoc.GetPool(), ranges );
+                                SfxItemSet aOldSet( mrDoc.GetPool(), ranges );
 
                                 aOldSet.Put(pPickObj->GetMergedItemSet());
                                 aNewSet.Put( pObj->GetMergedItemSet() );

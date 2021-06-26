@@ -48,16 +48,16 @@ namespace sdr::properties
 {
         SfxItemSet TextProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return SfxItemSet(rPool,
-
+            static const WhichRangesLiteral ranges { {
                 // range from SdrAttrObj
-                svl::Items<SDRATTR_START, SDRATTR_SHADOW_LAST,
-                SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
-                SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
-                SDRATTR_TEXTCOLUMNS_FIRST, SDRATTR_TEXTCOLUMNS_LAST,
+                {SDRATTR_START, SDRATTR_SHADOW_LAST},
+                {SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST},
+                {SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION},
+                {SDRATTR_TEXTCOLUMNS_FIRST, SDRATTR_TEXTCOLUMNS_LAST},
 
                 // range from SdrTextObj
-                EE_ITEMS_START, EE_ITEMS_END>{});
+                {EE_ITEMS_START, EE_ITEMS_END} } };
+            return SfxItemSet(rPool, ranges);
         }
 
         TextProperties::TextProperties(SdrObject& rObj)
@@ -478,7 +478,8 @@ namespace sdr::properties
 
                                 if(bHasURL)
                                 {
-                                    SfxItemSet aColorSet(*aSet.GetPool(), svl::Items<EE_CHAR_COLOR, EE_CHAR_COLOR>{} );
+                                    static const WhichRangesLiteral ranges { { {EE_CHAR_COLOR, EE_CHAR_COLOR} } };
+                                    SfxItemSet aColorSet(*aSet.GetPool(), ranges);
                                     aColorSet.Put(aSet, false);
 
                                     ESelection aSel(nPara, 0);

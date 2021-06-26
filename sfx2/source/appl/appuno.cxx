@@ -1118,11 +1118,10 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
     if ( rSet.Count() != nItems )
     {
         // detect unknown item and present error message
-        const sal_uInt16 *pRanges = rSet.GetRanges();
-        while ( *pRanges )
+        for ( auto const & rPair : rSet.GetRanges() )
         {
-            sal_uInt16 nStartWhich = *pRanges++;
-            sal_uInt16 nEndWhich = *pRanges++;
+            sal_uInt16 nStartWhich = rPair.first;
+            sal_uInt16 nEndWhich = rPair.second;
             for(sal_uInt16 nId = nStartWhich; nId <= nEndWhich; ++nId)
             {
                 if ( rSet.GetItemState(nId) < SfxItemState::SET ) //???

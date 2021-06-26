@@ -144,14 +144,14 @@ friend class SwDropCapsPict;
     DECL_LINK(SelectHdl, weld::ComboBox&, void);
     DECL_LINK(WholeWordHdl, weld::Toggleable&, void);
 
-    static const sal_uInt16 aPageRg[];
+    static const WhichRangesContainer aPageRg;
 
 public:
     SwDropCapsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet);
     virtual ~SwDropCapsPage() override;
 
     static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rSet);
-    static const sal_uInt16* GetRanges() { return aPageRg; }
+    static WhichRangesContainer GetRanges() { return aPageRg; }
 
 
     virtual bool FillItemSet(      SfxItemSet *rSet) override;

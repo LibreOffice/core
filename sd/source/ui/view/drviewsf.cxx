@@ -613,7 +613,8 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 SfxItemSet aEditAttr( GetDoc()->GetPool() );
                 mpDrawView->GetAttributes( aEditAttr );
 
-                SfxItemSet aNewAttr( GetPool(), svl::Items<EE_ITEMS_START, EE_ITEMS_END>{} );
+                static const WhichRangesLiteral ranges { { {EE_ITEMS_START, EE_ITEMS_END} } };
+                SfxItemSet aNewAttr( GetPool(), ranges );
                 aNewAttr.Put( aEditAttr, false );
 
                 std::unique_ptr<SvxNumRule> pNumRule;

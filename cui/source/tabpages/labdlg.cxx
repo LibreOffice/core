@@ -49,20 +49,15 @@
 
 // static ----------------------------------------------------------------
 
-const sal_uInt16 SvxCaptionTabPage::pCaptionRanges[] =
+static const WhichRangesLiteral captionRanges {
 {
-    SDRATTR_CAPTIONTYPE,
-    SDRATTR_CAPTIONFIXEDANGLE,
-    SDRATTR_CAPTIONANGLE,
-    SDRATTR_CAPTIONGAP,
-    SDRATTR_CAPTIONESCDIR,
-    SDRATTR_CAPTIONESCISREL,
-    SDRATTR_CAPTIONESCREL,
-    SDRATTR_CAPTIONESCABS,
-    SDRATTR_CAPTIONLINELEN,
-    SDRATTR_CAPTIONFITLINELEN,
-    0
-};
+    {SDRATTR_CAPTIONTYPE, SDRATTR_CAPTIONFIXEDANGLE},
+    {SDRATTR_CAPTIONANGLE, SDRATTR_CAPTIONGAP},
+    {SDRATTR_CAPTIONESCDIR, SDRATTR_CAPTIONESCISREL},
+    {SDRATTR_CAPTIONESCREL, SDRATTR_CAPTIONESCABS},
+    {SDRATTR_CAPTIONLINELEN, SDRATTR_CAPTIONFITLINELEN},
+} };
+const WhichRangesContainer SvxCaptionTabPage::pCaptionRanges(captionRanges);
 
 SvxCaptionTabPage::SvxCaptionTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
     : SfxTabPage(pPage, pController, "cui/ui/calloutpage.ui", "CalloutPage", &rInAttrs)

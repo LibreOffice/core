@@ -115,10 +115,11 @@ SwASCIIParser::SwASCIIParser(SwDoc& rD, const SwPaM& rCursor, SvStream& rIn, boo
     m_pPam.reset(new SwPaM(*rCursor.GetPoint()));
     m_pArr.reset(new char[ASC_BUFFLEN + 2]);
 
-    m_pItemSet = std::make_unique<SfxItemSet>(
-        m_rDoc.GetAttrPool(),
-        svl::Items<RES_CHRATR_FONT, RES_CHRATR_LANGUAGE, RES_CHRATR_CJK_FONT,
-                   RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_LANGUAGE>{});
+    static const WhichRangesLiteral ranges { {
+            {RES_CHRATR_FONT, RES_CHRATR_LANGUAGE},
+            {RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_LANGUAGE},
+            {RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_LANGUAGE} } };
+    m_pItemSet = std::make_unique<SfxItemSet>(m_rDoc.GetAttrPool(), ranges);
 
     // set defaults from the options
     if (m_rOpt.GetLanguage())
