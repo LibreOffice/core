@@ -90,7 +90,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/appl/appchild \
     sfx2/source/appl/appdata \
     sfx2/source/appl/appdde \
-	sfx2/source/appl/appdispatchprovider \
+    sfx2/source/appl/appdispatchprovider \
     sfx2/source/appl/appinit \
     sfx2/source/appl/appmain \
     sfx2/source/appl/appmisc \
@@ -111,7 +111,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/appl/linkmgr2 \
     sfx2/source/appl/linksrc \
     sfx2/source/appl/lnkbase2 \
-	sfx2/source/appl/macroloader \
+    sfx2/source/appl/macroloader \
     sfx2/source/appl/module \
     sfx2/source/appl/newhelp \
     sfx2/source/appl/opengrf \
@@ -139,8 +139,8 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/control/bindings \
     sfx2/source/control/ctrlitem \
     sfx2/source/control/ctrlfactoryimpl \
-	sfx2/source/control/dispatch \
-	sfx2/source/control/itemdel \
+    sfx2/source/control/dispatch \
+    sfx2/source/control/itemdel \
     sfx2/source/control/minfitem \
     sfx2/source/control/msg \
     sfx2/source/control/msgpool \
@@ -152,7 +152,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/control/shell \
     sfx2/source/control/sorgitm \
     sfx2/source/control/statcach \
-	sfx2/source/control/templatedefaultview \
+    sfx2/source/control/templatedefaultview \
     sfx2/source/control/templateviewitem \
     sfx2/source/control/templatelocalview \
     sfx2/source/control/templatecontaineritem \
@@ -204,6 +204,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/dialog/styledlg \
     sfx2/source/dialog/tabdlg \
     sfx2/source/dialog/templdlg \
+    sfx2/source/dialog/StyleList \
     sfx2/source/dialog/titledockwin \
     sfx2/source/dialog/tplcitem \
     sfx2/source/dialog/tplpitem \
