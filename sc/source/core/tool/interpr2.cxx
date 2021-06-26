@@ -139,28 +139,23 @@ void ScInterpreter::ScGetDay()
 void ScInterpreter::ScGetMin()
 {
     sal_uInt16 nHour, nMinute, nSecond;
-    double fFractionOfSecond;
-    tools::Time::GetClock( GetDouble(), nHour, nMinute, nSecond, fFractionOfSecond, 0);
+    tools::Time::GetClock(GetDouble(), nHour, nMinute, nSecond);
     PushDouble( nMinute);
 }
 
 void ScInterpreter::ScGetSec()
 {
     sal_uInt16 nHour, nMinute, nSecond;
-    double fFractionOfSecond;
-    tools::Time::GetClock( GetDouble(), nHour, nMinute, nSecond, fFractionOfSecond, 0);
-    if ( fFractionOfSecond >= 0.5 )
-        nSecond = ( nSecond + 1 ) % 60;
+    tools::Time::GetClock(GetDouble(), nHour, nMinute, nSecond);
     PushDouble( nSecond );
 
 }
 
 void ScInterpreter::ScGetHour()
 {
-    sal_uInt16 nHour, nMinute, nSecond;
-    double fFractionOfSecond;
-    tools::Time::GetClock( GetDouble(), nHour, nMinute, nSecond, fFractionOfSecond, 0);
-    PushDouble( nHour);
+    sal_uInt16 nHour, nMinute, nSecond, nMs;
+    tools::Time::GetClock(GetDouble(), nHour, nMinute, nSecond);
+    PushDouble(nHour % 24); // GetClock may return 24 to indicate rounding up
 }
 
 void ScInterpreter::ScGetDateValue()
