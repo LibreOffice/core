@@ -595,47 +595,47 @@ void SvParser<T>::Continue( T )
 {
 }
 
-void BuildWhichTable( std::vector<sal_uInt16> &rWhichMap,
+void BuildWhichTable( std::vector<WhichPair> &rWhichMap,
                       sal_uInt16 const *pWhichIds,
                       sal_uInt16 nWhichIds )
 {
-    sal_uInt16 aNewRange[2];
+    WhichPair aNewRange;
 
     for( sal_uInt16 nCnt = 0; nCnt < nWhichIds; ++nCnt, ++pWhichIds )
         if( *pWhichIds )
         {
-            aNewRange[0] = aNewRange[1] = *pWhichIds;
+            aNewRange.first = aNewRange.second = *pWhichIds;
             bool bIns = true;
 
             // search position
-            for ( sal_uInt16 nOfs = 0; rWhichMap[nOfs]; nOfs += 2 )
+            for ( sal_uInt16 nOfs = 0; nOfs < rWhichMap.size(); ++nOfs )
             {
-                if( *pWhichIds < rWhichMap[nOfs] - 1 )
+                if( *pWhichIds < rWhichMap[nOfs].first - 1 )
                 {
                     // new range before
-                    rWhichMap.insert( rWhichMap.begin() + nOfs, aNewRange, aNewRange + 2 );
+                    rWhichMap.insert( rWhichMap.begin() + nOfs, aNewRange );
                     bIns = false;
                     break;
                 }
-                else if( *pWhichIds == rWhichMap[nOfs] - 1 )
+                else if( *pWhichIds == rWhichMap[nOfs].first - 1 )
                 {
                     // extend range downwards
-                    rWhichMap[nOfs] = *pWhichIds;
+                    rWhichMap[nOfs].first = *pWhichIds;
                     bIns = false;
                     break;
                 }
-                else if( *pWhichIds == rWhichMap[nOfs+1] + 1 )
+                else if( *pWhichIds == rWhichMap[nOfs].second + 1 )
                 {
-                    if( rWhichMap[nOfs+2] != 0 && rWhichMap[nOfs+2] == *pWhichIds + 1 )
+                    if( nOfs < rWhichMap.size() - 1 && rWhichMap[nOfs+1].first == *pWhichIds + 1 )
                     {
                         // merge with next field
-                        rWhichMap[nOfs+1] = rWhichMap[nOfs+3];
-                        rWhichMap.erase( rWhichMap.begin() + nOfs + 2,
-                                rWhichMap.begin() + nOfs + 4 );
+                        rWhichMap[nOfs].second = rWhichMap[nOfs+1].second;
+                        rWhichMap.erase( rWhichMap.begin() + nOfs + 1,
+                                rWhichMap.begin() + nOfs + 2 );
                     }
                     else
                         // extend range upwards
-                        rWhichMap[nOfs+1] = *pWhichIds;
+                        rWhichMap[nOfs].second = *pWhichIds;
                     bIns = false;
                     break;
                 }
@@ -645,7 +645,7 @@ void BuildWhichTable( std::vector<sal_uInt16> &rWhichMap,
             if( bIns )
             {
                 rWhichMap.insert( rWhichMap.begin() + rWhichMap.size() - 1,
-                        aNewRange, aNewRange + 2 );
+                        aNewRange );
             }
         }
 }

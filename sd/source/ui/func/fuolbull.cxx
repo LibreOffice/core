@@ -79,12 +79,9 @@ void FuBulletAndPosition::DoExecute( SfxRequest& rReq )
     SfxItemSet aEditAttr( mpDoc->GetPool() );
     mpView->GetAttributes( aEditAttr );
 
-    static const sal_uInt16 aAttrMap[] =
-    {
-        EE_PARA_NUMBULLET,
-        EE_PARA_BULLET,
-        0
-    };
+    static const WhichRangesLiteral aAttrMap { {
+        {EE_PARA_NUMBULLET, EE_PARA_BULLET},
+    } };
 
     SfxItemSet aNewAttr( mpViewShell->GetPool(), aAttrMap );
     aNewAttr.Put( aEditAttr, false );
@@ -124,7 +121,8 @@ void FuBulletAndPosition::SetCurrentBulletsNumbering(SfxRequest& rReq)
         return;
     }
 
-    SfxItemSet aNewAttr( mpViewShell->GetPool(), svl::Items<EE_ITEMS_START, EE_ITEMS_END>{} );
+    static const WhichRangesLiteral ranges { { {EE_ITEMS_START, EE_ITEMS_END} } };
+    SfxItemSet aNewAttr( mpViewShell->GetPool(), ranges );
     {
         SfxItemSet aEditAttr( mpDoc->GetPool() );
         mpView->GetAttributes( aEditAttr );
@@ -240,7 +238,8 @@ void FuBulletAndPosition::SetCurrentBulletsNumbering(SfxRequest& rReq)
 
     if (bInMasterView && pNumRule)
     {
-        SfxItemSet aSetAttr( mpViewShell->GetPool(), svl::Items<EE_ITEMS_START, EE_ITEMS_END>{} );
+        static const WhichRangesLiteral ranges2 { { {EE_ITEMS_START, EE_ITEMS_END} } };
+        SfxItemSet aSetAttr( mpViewShell->GetPool(), ranges2 );
         aSetAttr.Put(SvxNumBulletItem( *pNumRule, nNumItemId ));
         mpView->SetAttributes(aSetAttr);
     }

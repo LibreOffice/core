@@ -1266,21 +1266,19 @@ namespace //local functions originally from docfmt.cxx
         // - The attribute in rChgSet does not belong to one of the above categories
         if ( !bCharAttr && !bOtherAttr )
         {
-            SfxItemSet* pTmpCharItemSet = new SfxItemSet(
-                rDoc.GetAttrPool(),
-                svl::Items<
-                    RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
-                    RES_TXTATR_AUTOFMT, RES_TXTATR_CHARFMT,
-                    RES_TXTATR_UNKNOWN_CONTAINER,
-                        RES_TXTATR_UNKNOWN_CONTAINER>{});
+            static const WhichRangesLiteral ranges { {
+                    {RES_CHRATR_BEGIN, RES_CHRATR_END - 1},
+                    {RES_TXTATR_AUTOFMT, RES_TXTATR_CHARFMT},
+                    {RES_TXTATR_UNKNOWN_CONTAINER,
+                        RES_TXTATR_UNKNOWN_CONTAINER} } };
+            SfxItemSet* pTmpCharItemSet = new SfxItemSet(rDoc.GetAttrPool(), ranges);
 
-            SfxItemSet* pTmpOtherItemSet = new SfxItemSet(
-                rDoc.GetAttrPool(),
-                svl::Items<
-                    RES_PARATR_BEGIN, RES_GRFATR_END - 1,
-                    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1,
+            static const WhichRangesLiteral otherRanges { {
+                    {RES_PARATR_BEGIN, RES_GRFATR_END - 1},
+                    {RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1},
                     // FillAttribute support:
-                    XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
+                    {XATTR_FILL_FIRST, XATTR_FILL_LAST} } };
+            SfxItemSet* pTmpOtherItemSet = new SfxItemSet(rDoc.GetAttrPool(), otherRanges);
 
             pTmpCharItemSet->Put( rChgSet );
             pTmpOtherItemSet->Put( rChgSet );
@@ -1369,8 +1367,9 @@ namespace //local functions originally from docfmt.cxx
             // Attributes without an end do not have a range
             if ( !bCharAttr && !bOtherAttr )
             {
-                SfxItemSet aTextSet( rDoc.GetAttrPool(),
-                            svl::Items<RES_TXTATR_NOEND_BEGIN, RES_TXTATR_NOEND_END-1>{} );
+                static const WhichRangesLiteral ranges { {
+                            {RES_TXTATR_NOEND_BEGIN, RES_TXTATR_NOEND_END-1} } };
+                SfxItemSet aTextSet( rDoc.GetAttrPool(), ranges );
                 aTextSet.Put( rChgSet );
                 if( aTextSet.Count() )
                 {
@@ -1400,12 +1399,11 @@ namespace //local functions originally from docfmt.cxx
             {
                 // CharFormat and URL attributes are treated separately!
                 // TEST_TEMP ToDo: AutoFormat!
-                SfxItemSet aTextSet(
-                    rDoc.GetAttrPool(),
-                    svl::Items<
-                        RES_TXTATR_REFMARK, RES_TXTATR_METAFIELD,
-                        RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY,
-                        RES_TXTATR_INPUTFIELD, RES_TXTATR_INPUTFIELD>{});
+                static const WhichRangesLiteral ranges { {
+                        {RES_TXTATR_REFMARK, RES_TXTATR_METAFIELD},
+                        {RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY},
+                        {RES_TXTATR_INPUTFIELD, RES_TXTATR_INPUTFIELD} } };
+                SfxItemSet aTextSet(rDoc.GetAttrPool(), ranges);
 
                 aTextSet.Put( rChgSet );
                 if( aTextSet.Count() )
@@ -1538,16 +1536,17 @@ namespace //local functions originally from docfmt.cxx
             }
         }
 
-        SfxItemSet firstSet(rDoc.GetAttrPool(),
-                svl::Items<RES_PAGEDESC, RES_BREAK>{});
+        static const WhichRangesLiteral ranges { { {RES_PAGEDESC, RES_BREAK} } };
+        SfxItemSet firstSet(rDoc.GetAttrPool(), ranges);
         if (pOtherSet && pOtherSet->Count())
         {   // actually only RES_BREAK is possible here...
             firstSet.Put(*pOtherSet);
         }
-        SfxItemSet propsSet(rDoc.GetAttrPool(),
-            svl::Items<RES_PARATR_BEGIN, RES_PAGEDESC,
-                       RES_BREAK+1, RES_FRMATR_END,
-                       XATTR_FILL_FIRST, XATTR_FILL_LAST+1>{});
+        static const WhichRangesLiteral propsRanges { {
+                {RES_PARATR_BEGIN, RES_PAGEDESC},
+                {RES_BREAK+1, RES_FRMATR_END},
+                {XATTR_FILL_FIRST, XATTR_FILL_LAST+1} } };
+        SfxItemSet propsSet(rDoc.GetAttrPool(), propsRanges);
         if (pOtherSet && pOtherSet->Count())
         {
             propsSet.Put(*pOtherSet);
@@ -3346,7 +3345,7 @@ bool DocumentContentOperationsManager::InsertPoolItem(
         pUndoAttr.reset(new SwUndoAttr( rRg, rHt, nFlags ));
     }
 
-    SfxItemSet aSet( m_rDoc.GetAttrPool(), {{rHt.Which(), rHt.Which()}} );
+    SfxItemSet aSet( m_rDoc.GetAttrPool(), rHt.Which(), rHt.Which() );
     aSet.Put( rHt );
     const bool bRet = lcl_InsAttr(m_rDoc, rRg, aSet, nFlags, pUndoAttr.get(), pLayout, ppNewTextAttr);
 
@@ -4321,9 +4320,10 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
             if( !sRepl.isEmpty() )
             {
                 // Apply the first character's attributes to the ReplaceText
-                SfxItemSet aSet( m_rDoc.GetAttrPool(),
-                            svl::Items<RES_CHRATR_BEGIN,     RES_TXTATR_WITHEND_END - 1,
-                            RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1>{} );
+                static const WhichRangesLiteral ranges { {
+                            {RES_CHRATR_BEGIN, RES_TXTATR_WITHEND_END - 1},
+                            {RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1} } };
+                SfxItemSet aSet( m_rDoc.GetAttrPool(), ranges );
                 pTextNd->GetParaAttr( aSet, nStt+1, nStt+1 );
 
                 aSet.ClearItem( RES_TXTATR_REFMARK );

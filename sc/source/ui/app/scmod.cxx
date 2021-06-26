@@ -349,7 +349,8 @@ void ScModule::Execute( SfxRequest& rReq )
                         bSet = !GetDocOptions().IsAutoSpell();
                 }
 
-                SfxItemSet aSet( GetPool(), svl::Items<SID_AUTOSPELL_CHECK, SID_AUTOSPELL_CHECK>{} );
+                static const WhichRangesLiteral ranges { { {SID_AUTOSPELL_CHECK, SID_AUTOSPELL_CHECK} } };
+                SfxItemSet aSet( GetPool(), ranges );
                 aSet.Put( SfxBoolItem( SID_AUTOSPELL_CHECK, bSet ) );
                 ModifyOptions( aSet );
                 rReq.Done();
@@ -1867,31 +1868,30 @@ std::unique_ptr<SfxItemSet> ScModule::CreateItemSet( sal_uInt16 nId )
     std::unique_ptr<SfxItemSet> pRet;
     if(SID_SC_EDITOPTIONS == nId)
     {
-        pRet = std::make_unique<SfxItemSet>(
-            GetPool(),
-            svl::Items<
+        static const WhichRangesLiteral ranges { {
                 // TP_USERLISTS:
-                SCITEM_USERLIST, SCITEM_USERLIST,
+                {SCITEM_USERLIST, SCITEM_USERLIST},
                 // TP_GRID:
-                SID_ATTR_GRID_OPTIONS, SID_ATTR_GRID_OPTIONS,
-                SID_ATTR_METRIC, SID_ATTR_METRIC,
-                SID_ATTR_DEFTABSTOP, SID_ATTR_DEFTABSTOP,
+                {SID_ATTR_GRID_OPTIONS, SID_ATTR_GRID_OPTIONS},
+                {SID_ATTR_METRIC, SID_ATTR_METRIC},
+                {SID_ATTR_DEFTABSTOP, SID_ATTR_DEFTABSTOP},
                 // TP_INPUT:
-                SID_SC_INPUT_LEGACY_CELL_SELECTION, SID_SC_OPT_SORT_REF_UPDATE,
+                {SID_SC_INPUT_LEGACY_CELL_SELECTION, SID_SC_OPT_SORT_REF_UPDATE},
                 // TP_FORMULA, TP_DEFAULTS:
-                SID_SCFORMULAOPTIONS, SID_SCDEFAULTSOPTIONS,
+                {SID_SCFORMULAOPTIONS, SID_SCDEFAULTSOPTIONS},
                 // TP_VIEW, TP_CALC:
-                SID_SCVIEWOPTIONS, SID_SCDOCOPTIONS,
+                {SID_SCVIEWOPTIONS, SID_SCDOCOPTIONS},
                 // TP_INPUT:
-                SID_SC_INPUT_ENTER_PASTE_MODE, SID_SC_INPUT_ENTER_PASTE_MODE,
+                {SID_SC_INPUT_ENTER_PASTE_MODE, SID_SC_INPUT_ENTER_PASTE_MODE},
                 // TP_PRINT:
-                SID_SCPRINTOPTIONS, SID_SCPRINTOPTIONS,
+                {SID_SCPRINTOPTIONS, SID_SCPRINTOPTIONS},
                 // TP_INPUT:
-                SID_SC_INPUT_SELECTION, SID_SC_INPUT_MARK_HEADER,
-                SID_SC_INPUT_TEXTWYSIWYG, SID_SC_INPUT_TEXTWYSIWYG,
-                SID_SC_INPUT_REPLCELLSWARN, SID_SC_INPUT_REPLCELLSWARN,
+                {SID_SC_INPUT_SELECTION, SID_SC_INPUT_MARK_HEADER},
+                {SID_SC_INPUT_TEXTWYSIWYG, SID_SC_INPUT_TEXTWYSIWYG},
+                {SID_SC_INPUT_REPLCELLSWARN, SID_SC_INPUT_REPLCELLSWARN},
                 // TP_VIEW:
-                SID_SC_OPT_SYNCZOOM, SID_SC_OPT_KEY_BINDING_COMPAT>{});
+                {SID_SC_OPT_SYNCZOOM, SID_SC_OPT_KEY_BINDING_COMPAT} } };
+        pRet = std::make_unique<SfxItemSet>(GetPool(), ranges);
 
         const ScAppOptions& rAppOpt = GetAppOptions();
 

@@ -191,7 +191,8 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     convertTwipToMm100(rSh.GetAnyCurRect(CurRectType::FlyEmbedded).Width()),
                     convertTwipToMm100(rSh.GetAnyCurRect(CurRectType::FlyEmbedded).Height()));
 
-                SfxItemSet aSet( rSh.GetAttrPool(), svl::Items<RES_GRFATR_MIRRORGRF, RES_GRFATR_CROPGRF>{} );
+                static const WhichRangesLiteral ranges { { {RES_GRFATR_MIRRORGRF,RES_GRFATR_CROPGRF} } };
+                SfxItemSet aSet( rSh.GetAttrPool(), ranges );
                 rSh.GetCurAttr( aSet );
                 SwMirrorGrf aMirror( aSet.Get(RES_GRFATR_MIRRORGRF) );
                 SwCropGrf aCrop( aSet.Get(RES_GRFATR_CROPGRF) );
@@ -258,32 +259,31 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             const SwViewOption* pVOpt = rSh.GetViewOptions();
             SwViewOption aUsrPref( *pVOpt );
 
-            SfxItemSet aSet(
-                GetPool(),
-                svl::Items<
-                    RES_FRMATR_BEGIN, RES_GRFATR_CROPGRF,
+            static const WhichRangesLiteral ranges { {
+                    {RES_FRMATR_BEGIN, RES_GRFATR_CROPGRF},
                     // FillAttribute support:
-                    XATTR_FILL_FIRST, XATTR_FILL_LAST,
-                    SID_DOCFRAME, SID_DOCFRAME,
-                    SID_REFERER, SID_REFERER,
-                    SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
-                    SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE, // 10051
+                    {XATTR_FILL_FIRST, XATTR_FILL_LAST},
+                    {SID_DOCFRAME, SID_DOCFRAME},
+                    {SID_REFERER, SID_REFERER},
+                    {SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER},
+                    {SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE}, // 10051
                     // RotGrfFlyFrame: Need RotationAngle now
-                    SID_ATTR_TRANSFORM_ANGLE, SID_ATTR_TRANSFORM_ANGLE, // 10095
+                    {SID_ATTR_TRANSFORM_ANGLE, SID_ATTR_TRANSFORM_ANGLE}, // 10095
                     // Items to hand over XPropertyList things like
                     // XColorList, XHatchList, XGradientList, and XBitmapList to
                     // the Area TabPage:
-                    SID_COLOR_TABLE, SID_PATTERN_LIST,  //10179
-                    SID_HTML_MODE, SID_HTML_MODE,   //10414
-                    SID_ATTR_GRAF_KEEP_ZOOM, SID_ATTR_GRAF_KEEP_ZOOM,   //10882
-                    SID_ATTR_GRAF_FRMSIZE, SID_ATTR_GRAF_GRAPHIC,   // 10884
+                    {SID_COLOR_TABLE, SID_PATTERN_LIST},  //10179
+                    {SID_HTML_MODE, SID_HTML_MODE},   //10414
+                    {SID_ATTR_GRAF_KEEP_ZOOM, SID_ATTR_GRAF_KEEP_ZOOM},   //10882
+                    {SID_ATTR_GRAF_FRMSIZE, SID_ATTR_GRAF_GRAPHIC},   // 10884
                     // contains SID_ATTR_GRAF_FRMSIZE_PERCENT
-                    FN_GET_PRINT_AREA, FN_GET_PRINT_AREA,
-                    FN_PARAM_GRF_CONNECT, FN_PARAM_GRF_CONNECT,
-                    FN_PARAM_GRF_DIALOG, FN_PARAM_GRF_DIALOG,
-                    FN_SET_FRM_NAME, FN_KEEP_ASPECT_RATIO,
-                    FN_SET_FRM_ALT_NAME, FN_SET_FRM_ALT_NAME,
-                    FN_UNO_DESCRIPTION, FN_UNO_DESCRIPTION>{});
+                    {FN_GET_PRINT_AREA, FN_GET_PRINT_AREA},
+                    {FN_PARAM_GRF_CONNECT, FN_PARAM_GRF_CONNECT},
+                    {FN_PARAM_GRF_DIALOG, FN_PARAM_GRF_DIALOG},
+                    {FN_SET_FRM_NAME, FN_KEEP_ASPECT_RATIO},
+                    {FN_SET_FRM_ALT_NAME, FN_SET_FRM_ALT_NAME},
+                    {FN_UNO_DESCRIPTION, FN_UNO_DESCRIPTION} } };
+            SfxItemSet aSet(GetPool(), ranges);
 
             // create needed items for XPropertyList entries from the DrawModel so that
             // the Area TabPage can access them
@@ -366,8 +366,8 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
             // get Mirror and Crop
             {
-                SfxItemSet aTmpSet( rSh.GetAttrPool(),
-                                svl::Items<RES_GRFATR_MIRRORGRF, RES_GRFATR_CROPGRF>{} );
+                static const WhichRangesLiteral ranges { { {RES_GRFATR_MIRRORGRF, RES_GRFATR_CROPGRF} } };
+                SfxItemSet aTmpSet( rSh.GetAttrPool(), ranges );
 
                 rSh.GetCurAttr( aTmpSet );
                 aSet.Put( aTmpSet );
@@ -390,7 +390,8 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             {   // RotGrfFlyFrame: Add current RotationAngle value, convert from
                 // RES_GRFATR_ROTATION to SID_ATTR_TRANSFORM_ANGLE. Do not forget to
                 // convert from 10th degrees to 100th degrees
-                SfxItemSet aTmpSet( rSh.GetAttrPool(), svl::Items<RES_GRFATR_ROTATION, RES_GRFATR_ROTATION>{} );
+                static const WhichRangesLiteral ranges { { {RES_GRFATR_ROTATION, RES_GRFATR_ROTATION} } };
+                SfxItemSet aTmpSet( rSh.GetAttrPool(), ranges );
                 rSh.GetCurAttr( aTmpSet );
                 const SwRotationGrf& rRotation = aTmpSet.Get(RES_GRFATR_ROTATION);
                 nCurrentRotation = rRotation.GetValue();
@@ -437,11 +438,10 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 if(pFormat && pFormat->IsAutoUpdateFormat())
                 {
                     pFormat->SetFormatAttr(*pSet);
-                    SfxItemSet aShellSet(
-                        GetPool(),
-                        svl::Items<
-                            RES_FRM_SIZE, RES_FRM_SIZE,
-                            RES_SURROUND, RES_ANCHOR>{});
+                    static const WhichRangesLiteral ranges { {
+                            {RES_FRM_SIZE, RES_FRM_SIZE},
+                            {RES_SURROUND, RES_ANCHOR} } };
+                    SfxItemSet aShellSet(GetPool(), ranges);
                     aShellSet.Put(*pSet);
                     aMgr.SetAttrSet(aShellSet);
                 }
@@ -518,8 +518,9 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     aMgr.SetRotation(nCurrentRotation, aNewRotation, aUnrotatedSize);
                 }
 
-                SfxItemSet aGrfSet( rSh.GetAttrPool(), svl::Items<RES_GRFATR_BEGIN,
-                                                       RES_GRFATR_END-1>{} );
+                static const WhichRangesLiteral ranges { { {RES_GRFATR_BEGIN,
+                                                       RES_GRFATR_END-1} } };
+                SfxItemSet aGrfSet( rSh.GetAttrPool(), ranges );
                 aGrfSet.Put( *pSet );
                 if( aGrfSet.Count() )
                     rSh.SetAttrSet( aGrfSet );
@@ -532,7 +533,8 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
         case FN_GRAPHIC_MIRROR_ON_EVEN_PAGES:
         {
-            SfxItemSet aSet(rSh.GetAttrPool(), svl::Items<RES_GRFATR_MIRRORGRF, RES_GRFATR_MIRRORGRF>{});
+            static const WhichRangesLiteral ranges { { {RES_GRFATR_MIRRORGRF, RES_GRFATR_MIRRORGRF} } };
+            SfxItemSet aSet(rSh.GetAttrPool(), ranges);
             rSh.GetCurAttr( aSet );
             SwMirrorGrf aGrf(aSet.Get(RES_GRFATR_MIRRORGRF));
             aGrf.SetGrfToggle(!aGrf.IsGrfToggle());
@@ -563,8 +565,9 @@ void SwGrfShell::ExecAttr( SfxRequest const &rReq )
     if (GraphicType::Bitmap == nGrfType ||
         GraphicType::GdiMetafile == nGrfType)
     {
-        SfxItemSet aGrfSet( GetShell().GetAttrPool(), svl::Items<RES_GRFATR_BEGIN,
-                                                      RES_GRFATR_END -1>{} );
+        static const WhichRangesLiteral ranges { { {RES_GRFATR_BEGIN,
+                                                      RES_GRFATR_END -1} } };
+        SfxItemSet aGrfSet( GetShell().GetAttrPool(), ranges );
         const SfxItemSet *pArgs = rReq.GetArgs();
         const SfxPoolItem* pItem;
         sal_uInt16 nSlot = rReq.GetSlot();
@@ -933,7 +936,8 @@ void SwGrfShell::ExecuteRotation(SfxRequest const &rReq)
         return;
 
     SwWrtShell& rShell = GetShell();
-    SfxItemSet aSet( rShell.GetAttrPool(), svl::Items<RES_GRFATR_ROTATION, RES_GRFATR_ROTATION>{} );
+    static const WhichRangesLiteral ranges { { {RES_GRFATR_ROTATION, RES_GRFATR_ROTATION} } };
+    SfxItemSet aSet( rShell.GetAttrPool(), ranges );
     rShell.GetCurAttr( aSet );
     const SwRotationGrf& rRotation = aSet.Get(RES_GRFATR_ROTATION);
     SwFlyFrameAttrMgr aMgr(false, &rShell, rShell.IsFrameSelected() ? Frmmgr_Type::NONE : Frmmgr_Type::GRF, nullptr);
@@ -978,7 +982,8 @@ void SwGrfShell::GetAttrStateForRotation(SfxItemSet &rSet)
             case SID_ROTATE_GRAPHIC_RESET:
             {
                 // RotGrfFlyFrame: disable when already no rotation
-                SfxItemSet aSet( rShell.GetAttrPool(), svl::Items<RES_GRFATR_ROTATION, RES_GRFATR_ROTATION>{} );
+                static const WhichRangesLiteral ranges { { {RES_GRFATR_ROTATION, RES_GRFATR_ROTATION} } };
+                SfxItemSet aSet( rShell.GetAttrPool(), ranges );
                 rShell.GetCurAttr( aSet );
                 const SwRotationGrf& rRotation = aSet.Get(RES_GRFATR_ROTATION);
                 bDisable = (0_deg10 == rRotation.GetValue());
@@ -988,7 +993,8 @@ void SwGrfShell::GetAttrStateForRotation(SfxItemSet &rSet)
             {
                 // RotGrfFlyFrame: get rotation value from RES_GRFATR_ROTATION and copy to rSet as
                 // SID_ATTR_TRANSFORM_ANGLE, convert from 10th degrees to 100th degrees
-                SfxItemSet aSet( rShell.GetAttrPool(), svl::Items<RES_GRFATR_ROTATION, RES_GRFATR_ROTATION>{} );
+                static const WhichRangesLiteral ranges { { {RES_GRFATR_ROTATION, RES_GRFATR_ROTATION} } };
+                SfxItemSet aSet( rShell.GetAttrPool(), ranges );
                 rShell.GetCurAttr( aSet );
                 const SwRotationGrf& rRotation = aSet.Get(RES_GRFATR_ROTATION);
                 rSet.Put(SdrAngleItem(SID_ATTR_TRANSFORM_ANGLE, toDegree100(rRotation.GetValue())));

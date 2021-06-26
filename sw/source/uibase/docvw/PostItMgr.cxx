@@ -1671,7 +1671,10 @@ void SwPostItMgr::ExecuteFormatAllDialog(SwView& rView)
     OutlinerView* pOLV = pWin->GetOutlinerView();
     SfxItemSet aEditAttr(pOLV->GetAttribs());
     SfxItemPool* pPool(SwAnnotationShell::GetAnnotationPool(rView));
-    SfxItemSet aDlgAttr(*pPool, svl::Items<XATTR_FILLSTYLE, XATTR_FILLCOLOR, EE_ITEMS_START, EE_ITEMS_END>{});
+    static const WhichRangesLiteral ranges { {
+            {XATTR_FILLSTYLE, XATTR_FILLCOLOR},
+            {EE_ITEMS_START, EE_ITEMS_END} } };
+    SfxItemSet aDlgAttr(*pPool, ranges);
     aDlgAttr.Put(aEditAttr);
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwCharDlg(rView.GetFrameWeld(), rView, aDlgAttr, SwCharDlgMode::Ann));

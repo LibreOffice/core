@@ -40,7 +40,7 @@ public:
     virtual ~AllAxisItemConverter() override;
 
 protected:
-    virtual const sal_uInt16 * GetWhichPairs() const override;
+    virtual WhichRangesContainer GetWhichPairs() const override;
 };
 
 class AllGridItemConverter : public MultipleItemConverter
@@ -54,7 +54,7 @@ public:
     virtual ~AllGridItemConverter() override;
 
 protected:
-    virtual const sal_uInt16 * GetWhichPairs() const override;
+    virtual WhichRangesContainer GetWhichPairs() const override;
 };
 
 class AllDataLabelItemConverter : public MultipleItemConverter
@@ -69,7 +69,7 @@ public:
     virtual ~AllDataLabelItemConverter() override;
 
 protected:
-    virtual const sal_uInt16 * GetWhichPairs() const override;
+    virtual WhichRangesContainer GetWhichPairs() const override;
 };
 
 class AllTitleItemConverter : public MultipleItemConverter
@@ -83,7 +83,7 @@ public:
     virtual ~AllTitleItemConverter() override;
 
 protected:
-    virtual const sal_uInt16 * GetWhichPairs() const override;
+    virtual WhichRangesContainer GetWhichPairs() const override;
 };
 
 class AllSeriesStatisticsConverter : public MultipleItemConverter
@@ -94,7 +94,7 @@ public:
     virtual ~AllSeriesStatisticsConverter() override;
 
 protected:
-    virtual const sal_uInt16 * GetWhichPairs() const override;
+    virtual WhichRangesContainer GetWhichPairs() const override;
 };
 
 } // namespace chart::wrapper

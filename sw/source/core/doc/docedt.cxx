@@ -307,19 +307,14 @@ void SaveRedlEndPosForRestore::Restore()
 }
 
 /// Convert list of ranges of whichIds to a corresponding list of whichIds
-static std::vector<sal_uInt16> lcl_RangesToVector(const sal_uInt16 * pRanges)
+static std::vector<sal_uInt16> lcl_RangesToVector(const WhichRangesContainer& pRanges)
 {
     std::vector<sal_uInt16> aResult;
 
-    int i = 0;
-    while (pRanges[i] != 0)
+    for (auto aRange : pRanges)
     {
-        OSL_ENSURE(pRanges[i+1] != 0, "malformed ranges");
-
-        for (sal_uInt16 j = pRanges[i]; j <= pRanges[i+1]; j++)
+        for (sal_uInt16 j = aRange.first; j <= aRange.second ; j++)
             aResult.push_back(j);
-
-        i += 2;
     }
 
     return aResult;

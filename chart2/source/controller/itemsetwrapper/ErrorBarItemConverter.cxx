@@ -110,7 +110,7 @@ bool ErrorBarItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;
 }
 
-const sal_uInt16 * ErrorBarItemConverter::GetWhichPairs() const
+WhichRangesContainer ErrorBarItemConverter::GetWhichPairs() const
 {
     // must span all used items!
     return nErrorBarWhichPairs;

@@ -140,12 +140,12 @@ XOutdevItemPool::XOutdevItemPool(SfxItemPool* _pMaster)
     rPoolDefaults[XATTR_FORMTXTSHDWTRANSP  -XATTR_START] = new XFormTextShadowTranspItem;
 
     // create SetItems
+    static const WhichRangesLiteral lineRanges { { {XATTR_LINE_FIRST, XATTR_LINE_LAST} } };
     rPoolDefaults[XATTRSET_LINE - XATTR_START] = new XLineAttrSetItem(
-        std::make_unique<SfxItemSet>(
-            *_pMaster, svl::Items<XATTR_LINE_FIRST, XATTR_LINE_LAST>{}));
+        std::make_unique<SfxItemSet>(*_pMaster, lineRanges));
+    static const WhichRangesLiteral fillRanges { { {XATTR_FILL_FIRST, XATTR_FILL_LAST} } };
     rPoolDefaults[XATTRSET_FILL - XATTR_START] = new XFillAttrSetItem(
-        std::make_unique<SfxItemSet>(
-            *_pMaster, svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{}));
+        std::make_unique<SfxItemSet>(*_pMaster, fillRanges));
 
     // create ItemInfos
     for(sal_uInt16 i(GetFirstWhich()); i <= GetLastWhich(); i++)

@@ -38,10 +38,9 @@
 
 using namespace ::com::sun::star;
 
-const sal_uInt16 SwFootNotePage::aPageRg[] = {
-    FN_PARAM_FTN_INFO, FN_PARAM_FTN_INFO,
-    0
-};
+static const WhichRangesLiteral ranges { {
+    {FN_PARAM_FTN_INFO, FN_PARAM_FTN_INFO} } };
+const WhichRangesContainer SwFootNotePage::aPageRg(ranges);
 
 // handler to switch between the different possibilities how the footnote
 // region's height can be set.

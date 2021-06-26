@@ -350,7 +350,8 @@ SwDoc::SwDoc()
     // pass empty item set containing the paragraph's list attributes
     // as ignorable items to the stype manager.
     {
-        SfxItemSet aIgnorableParagraphItems( GetAttrPool(), svl::Items<RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1>{});
+        static const WhichRangesLiteral ranges { { {RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1} } };
+        SfxItemSet aIgnorableParagraphItems( GetAttrPool(), ranges );
         mpStyleAccess = createStyleManager( &aIgnorableParagraphItems );
     }
 
@@ -844,23 +845,21 @@ void SwDoc::InitTOXTypes()
 void SwDoc::ReplaceDefaults(const SwDoc& rSource)
 {
     // copy property defaults
-    const sal_uInt16 aRangeOfDefaults[] =
-    {
-        RES_CHRATR_BEGIN, RES_CHRATR_END-1,
-        RES_PARATR_BEGIN, RES_PARATR_END-1,
-        RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
-        RES_FRMATR_BEGIN, RES_FRMATR_END-1,
-        RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
-        XATTR_START, XATTR_END-1,
-        0
-    };
+    static const WhichRangesLiteral aRangeOfDefaults { {
+        {RES_CHRATR_BEGIN, RES_CHRATR_END-1},
+        {RES_PARATR_BEGIN, RES_PARATR_END-1},
+        {RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1},
+        {RES_FRMATR_BEGIN, RES_FRMATR_END-1},
+        {RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1},
+        {XATTR_START, XATTR_END-1},
+    } };
 
     SfxItemSet aNewDefaults(GetAttrPool(), aRangeOfDefaults);
 
-    for (auto nRange = 0; aRangeOfDefaults[nRange] != 0; nRange += 2)
+    for (const auto & rRange : aRangeOfDefaults.ranges)
     {
-        for (sal_uInt16 nWhich = aRangeOfDefaults[nRange];
-             nWhich <= aRangeOfDefaults[nRange + 1]; ++nWhich)
+        for (sal_uInt16 nWhich = rRange.first;
+             nWhich <= rRange.second; ++nWhich)
         {
             const SfxPoolItem& rSourceAttr =
                 rSource.mpAttrPool->GetDefaultItem(nWhich);

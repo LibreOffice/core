@@ -123,8 +123,8 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
                 if( !rCalcPara.IsStackOverflow() )
                 {
                     SwFrameFormat* pFormat = pBox->ClaimFrameFormat();
-                    SfxItemSet aTmp( pDoc->GetAttrPool(),
-                                        svl::Items<RES_BOXATR_BEGIN,RES_BOXATR_END-1>{} );
+                    static const WhichRangesLiteral ranges { { {RES_BOXATR_BEGIN, RES_BOXATR_END-1} } };
+                    SfxItemSet aTmp( pDoc->GetAttrPool(), ranges );
                     aTmp.Put( SwTableBoxValue( nRet ) );
                     if( SfxItemState::SET != pFormat->GetItemState( RES_BOXATR_FORMAT ))
                         aTmp.Put( SwTableBoxNumFormat( 0 ));

@@ -648,7 +648,7 @@ public:
     virtual bool  StartExecuteAsync(AsyncContext &rCtx) override;
     virtual void                SetCurPageId( const OString &rName ) override;
     virtual const SfxItemSet*   GetOutputItemSet() const override;
-    virtual const sal_uInt16*   GetInputRanges( const SfxItemPool& pItem ) override;
+    virtual WhichRangesContainer GetInputRanges( const SfxItemPool& pItem ) override;
     virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
     virtual void        SetText( const OUString& rStr ) override;
 

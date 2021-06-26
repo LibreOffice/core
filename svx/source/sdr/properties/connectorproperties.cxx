@@ -32,16 +32,15 @@ namespace sdr::properties
         // create a new itemset
         SfxItemSet ConnectorProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return SfxItemSet(
-                rPool,
-                svl::Items<
+            static const WhichRangesLiteral ranges { {
                     // Ranges from SdrAttrObj, SdrEdgeObj:
-                    SDRATTR_START, SDRATTR_SHADOW_LAST,
-                    SDRATTR_MISC_FIRST, SDRATTR_EDGE_LAST,
-                    SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
-                    SDRATTR_TEXTCOLUMNS_FIRST, SDRATTR_TEXTCOLUMNS_LAST,
+                    {SDRATTR_START, SDRATTR_SHADOW_LAST},
+                    {SDRATTR_MISC_FIRST, SDRATTR_EDGE_LAST},
+                    {SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION},
+                    {SDRATTR_TEXTCOLUMNS_FIRST, SDRATTR_TEXTCOLUMNS_LAST},
                     // Range from SdrTextObj:
-                    EE_ITEMS_START, EE_ITEMS_END>{});
+                    {EE_ITEMS_START, EE_ITEMS_END} } };
+            return SfxItemSet(rPool, ranges);
         }
 
         ConnectorProperties::ConnectorProperties(SdrObject& rObj)

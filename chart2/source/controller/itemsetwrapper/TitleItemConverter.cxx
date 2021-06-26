@@ -55,7 +55,7 @@ public:
         const uno::Reference< beans::XPropertySet > & xParentProp );
 
 protected:
-    virtual const sal_uInt16 * GetWhichPairs() const override;
+    virtual WhichRangesContainer GetWhichPairs() const override;
 };
 
 } // anonymous namespace
@@ -83,7 +83,7 @@ FormattedStringsConverter::FormattedStringsConverter(
     }
 }
 
-const sal_uInt16 * FormattedStringsConverter::GetWhichPairs() const
+WhichRangesContainer FormattedStringsConverter::GetWhichPairs() const
 {
     return nCharacterPropertyWhichPairs;
 }
@@ -139,7 +139,7 @@ bool TitleItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;
 }
 
-const sal_uInt16 * TitleItemConverter::GetWhichPairs() const
+WhichRangesContainer TitleItemConverter::GetWhichPairs() const
 {
     // must span all used items!
     return nTitleWhichPairs;

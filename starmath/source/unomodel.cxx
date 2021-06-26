@@ -603,16 +603,17 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                 sal_uInt32 nSize = aSequence.getLength();
                 SvMemoryStream aStream ( aSequence.getArray(), nSize, StreamMode::READ );
                 aStream.Seek ( STREAM_SEEK_TO_BEGIN );
-                auto pItemSet = std::make_unique<SfxItemSet>( SmDocShell::GetPool(), svl::Items<
-                    SID_PRINTTITLE,      SID_PRINTTITLE,
-                    SID_PRINTTEXT,       SID_PRINTTEXT,
-                    SID_PRINTFRAME,      SID_PRINTFRAME,
-                    SID_PRINTSIZE,       SID_PRINTSIZE,
-                    SID_PRINTZOOM,       SID_PRINTZOOM,
-                    SID_NO_RIGHT_SPACES, SID_NO_RIGHT_SPACES,
-                    SID_SAVE_ONLY_USED_SYMBOLS, SID_SAVE_ONLY_USED_SYMBOLS,
-                    SID_AUTO_CLOSE_BRACKETS,    SID_AUTO_CLOSE_BRACKETS,
-                    SID_SMEDITWINDOWZOOM,       SID_SMEDITWINDOWZOOM>{} );
+                static const WhichRangesLiteral ranges { {
+                    {SID_PRINTTITLE,      SID_PRINTTITLE},
+                    {SID_PRINTTEXT,       SID_PRINTTEXT},
+                    {SID_PRINTFRAME,      SID_PRINTFRAME},
+                    {SID_PRINTSIZE,       SID_PRINTSIZE},
+                    {SID_PRINTZOOM,       SID_PRINTZOOM},
+                    {SID_NO_RIGHT_SPACES, SID_NO_RIGHT_SPACES},
+                    {SID_SAVE_ONLY_USED_SYMBOLS, SID_SAVE_ONLY_USED_SYMBOLS},
+                    {SID_AUTO_CLOSE_BRACKETS,    SID_AUTO_CLOSE_BRACKETS},
+                    {SID_SMEDITWINDOWZOOM,       SID_SMEDITWINDOWZOOM} } };
+                auto pItemSet = std::make_unique<SfxItemSet>( SmDocShell::GetPool(), ranges);
                 SmModule *pp = SM_MOD();
                 pp->GetConfig()->ConfigToItemSet(*pItemSet);
                 VclPtr<SfxPrinter> pPrinter = SfxPrinter::Create ( aStream, std::move(pItemSet) );

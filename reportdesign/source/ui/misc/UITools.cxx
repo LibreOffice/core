@@ -721,11 +721,8 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
 
     OSL_ASSERT( pDefaults.size() == SAL_N_ELEMENTS(aItemInfos) );
 
-    static const sal_uInt16 pRanges[] =
-    {
-        XATTR_FILL_FIRST, ITEMID_WEIGHT_COMPLEX,
-        0
-    };
+    static const WhichRangesLiteral pRanges { {
+        {XATTR_FILL_FIRST, ITEMID_WEIGHT_COMPLEX} } };
 
     rtl::Reference<SfxItemPool> pPool(new SfxItemPool("ReportCharProperties", XATTR_FILL_FIRST,ITEMID_WEIGHT_COMPLEX, aItemInfos, &pDefaults));
     // not needed for font height pPool->SetDefaultMetric( MapUnit::Map100thMM );  // ripped, don't understand why
@@ -776,7 +773,7 @@ bool openAreaDialog( const uno::Reference<report::XShape >& _xShape,const uno::R
     try
     {
         SfxItemPool& rItemPool = pModel->GetItemPool();
-        SfxItemSet aDescriptor( rItemPool, {{rItemPool.GetFirstWhich(),rItemPool.GetLastWhich()}} );
+        SfxItemSet aDescriptor( rItemPool, rItemPool.GetFirstWhich(),rItemPool.GetLastWhich() );
         lcl_fillShapeToItems(_xShape, aDescriptor);
 
         {   // want the dialog to be destroyed before our set

@@ -42,6 +42,7 @@
 /**
  * Constructor of Tab dialog: appends pages to the dialog
  */
+static const WhichRangesLiteral ranges { { {SID_PARAM_NUM_PRESET, SID_PARAM_CUR_NUM_LEVEL} } };
 SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg(SfxObjectShell const * pDocSh,
                                 weld::Window* pParent,
                                 bool bBackground,
@@ -51,28 +52,27 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg(SfxObjectShell const * pDocSh,
     : SfxTabDialogController(pParent, "modules/sdraw/ui/drawprtldialog.ui", "DrawPRTLDialog")
     , mpDocShell(pDocSh)
     , ePO(_ePO)
-    , aInputSet(*rStyleBase.GetItemSet().GetPool(), svl::Items<SID_PARAM_NUM_PRESET, SID_PARAM_CUR_NUM_LEVEL>{})
+    , aInputSet(*rStyleBase.GetItemSet().GetPool(), ranges)
 {
     const SfxItemSet* pOrgSet(&rStyleBase.GetItemSet());
 
     if( IS_OUTLINE(ePO))
     {
         // Unfortunately, the Itemsets of our style sheets are not discrete...
-        const sal_uInt16* pPtr = pOrgSet->GetRanges();
+        const WhichRangesContainer& pPtr = pOrgSet->GetRanges();
         sal_uInt16 p1, p2;
-        while( *pPtr )
+        for( sal_Int32 i = 0; i < pPtr.size(); ++i )
         {
-            p1 = pPtr[0];
-            p2 = pPtr[1];
+            p1 = pPtr[i].first;
+            p2 = pPtr[i].second;
 
             // first, we make it discrete
-            while(pPtr[2] && (pPtr[2] - p2 == 1))
+            while(i < pPtr.size() - 1 && (pPtr[i+1].first - p2 == 1))
             {
-                p2 = pPtr[3];
-                pPtr += 2;
+                p2 = pPtr[i+1].second;
+                ++i;
             }
             aInputSet.MergeRange( p1, p2 );
-            pPtr += 2;
         }
 
         aInputSet.Put( rStyleBase.GetItemSet() );

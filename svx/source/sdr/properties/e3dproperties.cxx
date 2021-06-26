@@ -30,15 +30,16 @@ namespace sdr::properties
         // create a new itemset
         SfxItemSet E3dProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return SfxItemSet(rPool,
-
+            static const WhichRangesLiteral ranges { {
                 // ranges from SdrAttrObj
-                svl::Items<SDRATTR_START, SDRATTR_SHADOW_LAST,
-                SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
-                SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
+                {SDRATTR_START, SDRATTR_SHADOW_LAST},
+                {SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST},
+                {SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION},
 
                 // ranges from E3dObject, contains object and scene because of GetMergedItemSet()
-                SDRATTR_3D_FIRST, SDRATTR_3D_LAST>{});
+                {SDRATTR_3D_FIRST, SDRATTR_3D_LAST} } };
+
+            return SfxItemSet(rPool, ranges);
         }
 
         E3dProperties::E3dProperties(SdrObject& rObj)
