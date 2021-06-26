@@ -498,8 +498,7 @@ void ScInterpreter::ScErf()
     sal_uInt8 nParamCount = GetByte();
     if (MustHaveParamCount( nParamCount, 1 ) )
     {
-        double x = GetDouble();
-        PushDouble( ::rtl::math::erf( x ) );
+        PushDouble( std::erf( GetDouble() ) );
     }
 }
 
@@ -508,8 +507,7 @@ void ScInterpreter::ScErfc()
     sal_uInt8 nParamCount = GetByte();
     if (MustHaveParamCount( nParamCount, 1 ) )
     {
-        double x = GetDouble();
-        PushDouble( ::rtl::math::erfc( x ) );
+        PushDouble( std::erfc( GetDouble() ) );
     }
 }
 
