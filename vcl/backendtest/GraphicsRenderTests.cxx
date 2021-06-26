@@ -23,6 +23,23 @@
      && aOutDevTest.getRenderBackendName() != "genpsp"                                             \
      && aOutDevTest.getRenderBackendName() != "win")
 
+namespace
+{
+void exportBitmapToImage(OUString const& rImageName, Bitmap& rBitmap)
+{
+    rBitmap.Scale(Size(500, 500), BmpScaleFlag::Fast);
+    SvFileStream aStream(rImageName, StreamMode::WRITE | StreamMode::TRUNC);
+    GraphicFilter::GetGraphicFilter().compressAsPNG(BitmapEx(rBitmap), aStream);
+}
+void exportBitmapExToImage(OUString const& rImageName, BitmapEx& rBitmapEx)
+{
+    BitmapEx aBitmapEx(rBitmapEx);
+    aBitmapEx.Scale(Size(500, 500), BmpScaleFlag::Fast);
+    SvFileStream aStream(rImageName, StreamMode::WRITE | StreamMode::TRUNC);
+    GraphicFilter::GetGraphicFilter().compressAsPNG(aBitmapEx, aStream);
+}
+}
+
 OUString GraphicsRenderTests::returnTestStatus(vcl::test::TestResult const result)
 {
     switch (result)
@@ -51,6 +68,10 @@ void GraphicsRenderTests::testDrawRectWithRectangle()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDrawRectWithPixel()
@@ -66,6 +87,10 @@ void GraphicsRenderTests::testDrawRectWithPixel()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDrawRectWithLine()
@@ -81,6 +106,10 @@ void GraphicsRenderTests::testDrawRectWithLine()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDrawRectWithPolygon()
@@ -96,6 +125,10 @@ void GraphicsRenderTests::testDrawRectWithPolygon()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDrawRectWithPolyLine()
@@ -111,6 +144,10 @@ void GraphicsRenderTests::testDrawRectWithPolyLine()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDrawRectWithPolyLineB2D()
@@ -126,6 +163,10 @@ void GraphicsRenderTests::testDrawRectWithPolyLineB2D()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDrawRectWithPolyPolygon()
@@ -141,6 +182,10 @@ void GraphicsRenderTests::testDrawRectWithPolyPolygon()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDrawRectWithPolyPolygonB2D()
@@ -156,6 +201,10 @@ void GraphicsRenderTests::testDrawRectWithPolyPolygonB2D()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDrawRectAAWithRectangle()
@@ -171,6 +220,10 @@ void GraphicsRenderTests::testDrawRectAAWithRectangle()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDrawRectAAWithPixel()
@@ -186,6 +239,10 @@ void GraphicsRenderTests::testDrawRectAAWithPixel()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDrawRectAAWithLine()
@@ -201,6 +258,10 @@ void GraphicsRenderTests::testDrawRectAAWithLine()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDrawRectAAWithPolygon()
@@ -216,6 +277,10 @@ void GraphicsRenderTests::testDrawRectAAWithPolygon()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDrawRectAAWithPolyLine()
@@ -231,6 +296,10 @@ void GraphicsRenderTests::testDrawRectAAWithPolyLine()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDrawRectAAWithPolyLineB2D()
@@ -246,6 +315,10 @@ void GraphicsRenderTests::testDrawRectAAWithPolyLineB2D()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDrawRectAAWithPolyPolygon()
@@ -261,6 +334,10 @@ void GraphicsRenderTests::testDrawRectAAWithPolyPolygon()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDrawRectAAWithPolyPolygonB2D()
@@ -276,6 +353,10 @@ void GraphicsRenderTests::testDrawRectAAWithPolyPolygonB2D()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDrawFilledRectWithRectangle()
@@ -292,11 +373,19 @@ void GraphicsRenderTests::testDrawFilledRectWithRectangle()
         = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, false);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
     atestName += "WithAA";
     aBitmap = aOutDevTest.setupFilledRectangle(true);
     eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDrawFilledRectWithPolygon()
@@ -313,11 +402,19 @@ void GraphicsRenderTests::testDrawFilledRectWithPolygon()
         = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, false);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
     atestName += "WithAA";
     aBitmap = aOutDevTest.setupFilledRectangle(true);
     eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDrawFilledRectWithPolyPolygon()
@@ -334,11 +431,19 @@ void GraphicsRenderTests::testDrawFilledRectWithPolyPolygon()
         = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, false);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
     atestName += "WithAA";
     aBitmap = aOutDevTest.setupFilledRectangle(true);
     eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDrawFilledRectWithPolyPolygon2D()
@@ -355,11 +460,19 @@ void GraphicsRenderTests::testDrawFilledRectWithPolyPolygon2D()
         = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, false);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
     atestName += "WithAA";
     aBitmap = aOutDevTest.setupFilledRectangle(true);
     eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDrawDiamondWithPolygon()
@@ -375,6 +488,10 @@ void GraphicsRenderTests::testDrawDiamondWithPolygon()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkDiamond(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDrawDiamondWithLine()
@@ -390,6 +507,10 @@ void GraphicsRenderTests::testDrawDiamondWithLine()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkDiamond(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDrawDiamondWithPolyline()
@@ -405,6 +526,10 @@ void GraphicsRenderTests::testDrawDiamondWithPolyline()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkDiamond(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDrawDiamondWithPolylineB2D()
@@ -420,6 +545,10 @@ void GraphicsRenderTests::testDrawDiamondWithPolylineB2D()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkDiamond(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDrawInvertWithRectangle()
@@ -436,6 +565,10 @@ void GraphicsRenderTests::testDrawInvertWithRectangle()
         = vcl::test::OutputDeviceTestCommon::checkInvertRectangle(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDrawInvertN50WithRectangle()
@@ -452,6 +585,10 @@ void GraphicsRenderTests::testDrawInvertN50WithRectangle()
         = vcl::test::OutputDeviceTestCommon::checkInvertN50Rectangle(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDrawInvertTrackFrameWithRectangle()
@@ -468,6 +605,10 @@ void GraphicsRenderTests::testDrawInvertTrackFrameWithRectangle()
         = vcl::test::OutputDeviceTestCommon::checkInvertTrackFrameRectangle(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDrawBezierWithPolylineB2D()
@@ -483,6 +624,10 @@ void GraphicsRenderTests::testDrawBezierWithPolylineB2D()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkBezier(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDrawBezierAAWithPolylineB2D()
@@ -498,6 +643,10 @@ void GraphicsRenderTests::testDrawBezierAAWithPolylineB2D()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkBezier(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDrawBitmap()
@@ -514,6 +663,10 @@ void GraphicsRenderTests::testDrawBitmap()
         = vcl::test::OutputDeviceTestBitmap::checkTransformedBitmap(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDrawTransformedBitmap()
@@ -530,6 +683,10 @@ void GraphicsRenderTests::testDrawTransformedBitmap()
         = vcl::test::OutputDeviceTestBitmap::checkTransformedBitmap(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDrawBitmapExWithAlpha()
@@ -546,6 +703,10 @@ void GraphicsRenderTests::testDrawBitmapExWithAlpha()
         = vcl::test::OutputDeviceTestBitmap::checkBitmapExWithAlpha(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDrawMask()
@@ -561,6 +722,10 @@ void GraphicsRenderTests::testDrawMask()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestBitmap::checkMask(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDrawBlend()
@@ -576,6 +741,10 @@ void GraphicsRenderTests::testDrawBlend()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestBitmap::checkBlend(aBitmapEx);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmapEx.GetBitmap() : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+    }
 }
 
 void GraphicsRenderTests::testDrawXor()
@@ -591,6 +760,10 @@ void GraphicsRenderTests::testDrawXor()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestAnotherOutDev::checkXOR(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testClipRectangle()
@@ -606,6 +779,10 @@ void GraphicsRenderTests::testClipRectangle()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestClip::checkClip(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testClipPolygon()
@@ -621,6 +798,10 @@ void GraphicsRenderTests::testClipPolygon()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestClip::checkClip(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testClipPolyPolygon()
@@ -636,6 +817,10 @@ void GraphicsRenderTests::testClipPolyPolygon()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestClip::checkClip(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testClipB2DPolyPolygon()
@@ -651,6 +836,10 @@ void GraphicsRenderTests::testClipB2DPolyPolygon()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestClip::checkClip(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDrawOutDev()
@@ -667,6 +856,10 @@ void GraphicsRenderTests::testDrawOutDev()
         = vcl::test::OutputDeviceTestAnotherOutDev::checkDrawOutDev(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testDashedLine()
@@ -682,6 +875,10 @@ void GraphicsRenderTests::testDashedLine()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkDashedLine(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testLinearGradient()
@@ -698,6 +895,10 @@ void GraphicsRenderTests::testLinearGradient()
         = vcl::test::OutputDeviceTestGradient::checkLinearGradient(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testLinearGradientAngled()
@@ -714,6 +915,10 @@ void GraphicsRenderTests::testLinearGradientAngled()
         = vcl::test::OutputDeviceTestGradient::checkLinearGradientAngled(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testLinearGradientBorder()
@@ -730,6 +935,10 @@ void GraphicsRenderTests::testLinearGradientBorder()
         = vcl::test::OutputDeviceTestGradient::checkLinearGradientBorder(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testLinearGradientIntensity()
@@ -746,6 +955,10 @@ void GraphicsRenderTests::testLinearGradientIntensity()
         = vcl::test::OutputDeviceTestGradient::checkLinearGradientIntensity(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testLinearGradientSteps()
@@ -762,6 +975,10 @@ void GraphicsRenderTests::testLinearGradientSteps()
         = vcl::test::OutputDeviceTestGradient::checkLinearGradientSteps(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testAxialGradient()
@@ -778,6 +995,10 @@ void GraphicsRenderTests::testAxialGradient()
         = vcl::test::OutputDeviceTestGradient::checkAxialGradient(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testRadialGradient()
@@ -794,6 +1015,10 @@ void GraphicsRenderTests::testRadialGradient()
         = vcl::test::OutputDeviceTestGradient::checkRadialGradient(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testRadialGradientOfs()
@@ -825,6 +1050,10 @@ void GraphicsRenderTests::testLineJoinBevel()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkLineJoinBevel(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testLineJoinRound()
@@ -840,6 +1069,10 @@ void GraphicsRenderTests::testLineJoinRound()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkLineJoinRound(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testLineJoinMiter()
@@ -855,6 +1088,10 @@ void GraphicsRenderTests::testLineJoinMiter()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkLineJoinMiter(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testLineJoinNone()
@@ -870,6 +1107,10 @@ void GraphicsRenderTests::testLineJoinNone()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkLineJoinNone(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testLineCapRound()
@@ -885,6 +1126,10 @@ void GraphicsRenderTests::testLineCapRound()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkLineCapRound(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testLineCapSquare()
@@ -900,6 +1145,10 @@ void GraphicsRenderTests::testLineCapSquare()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkLineCapSquare(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::testLineCapButt()
@@ -915,6 +1164,10 @@ void GraphicsRenderTests::testLineCapButt()
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkLineCapButt(aBitmap);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
 }
 
 void GraphicsRenderTests::runALLTests()
@@ -1018,11 +1271,18 @@ OUString GraphicsRenderTests::getResultString()
 void GraphicsRenderTests::run(bool storeResultBitmap)
 {
     m_aStoreResultantBitmap = storeResultBitmap;
+    ::utl::Bootstrap::locateUserInstallation(m_aUserInstallPath);
+    if (storeResultBitmap)
+    {
+        m_aUserInstallPath += "/user/GraphicTestResults/";
+    }
+    else
+    {
+        m_aUserInstallPath += "/user/";
+    }
     runALLTests();
     //Storing the test's results in the main user installation directory.
-    OUString aUserInstallPath;
-    ::utl::Bootstrap::locateUserInstallation(aUserInstallPath);
-    SvFileStream logFile(aUserInstallPath + "/user/GraphicsRenderTests.log",
+    SvFileStream logFile(m_aUserInstallPath + "GraphicsRenderTests.log",
                          StreamMode::WRITE | StreamMode::TRUNC);
     std::unordered_map<OUString, std::vector<OUString>> aTests;
     for (VclTestResult& tests : m_aTestResult)

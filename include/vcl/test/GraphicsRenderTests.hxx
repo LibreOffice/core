@@ -45,6 +45,8 @@ class VCL_PLUGIN_PUBLIC GraphicsRenderTests
     std::vector<VclTestResult> m_aTestResult;
     //For storing the current graphics Backend in use.
     OUString m_aCurGraphicsBackend;
+    //Location where the results should be stored.
+    OUString m_aUserInstallPath;
 
     void testDrawRectWithRectangle();
     void testDrawRectWithPixel();
