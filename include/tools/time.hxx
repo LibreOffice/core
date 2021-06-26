@@ -54,9 +54,11 @@ public:
     static const sal_Int64 minutePerHour = 60;
     static const sal_Int64 secondPerMinute = 60;
     static const sal_Int64 nanoSecPerSec = 1000000000;
+    static const sal_Int64 milliSecPerSec = 1000;
     static const sal_Int64 nanoSecPerMinute = nanoSecPerSec * secondPerMinute;
     static const sal_Int64 nanoSecPerHour = nanoSecPerSec * secondPerMinute * minutePerHour;
     static const sal_Int64 nanoSecPerDay = nanoSecPerSec * secondPerMinute * minutePerHour * hourPerDay;
+    static const sal_Int64 milliSecPerDay = milliSecPerSec * secondPerMinute * minutePerHour * hourPerDay;
     static const sal_Int64 secondPerHour = secondPerMinute * minutePerHour;
     static const sal_Int64 secondPerDay  = secondPerMinute * minutePerHour * hourPerDay;
     static const sal_Int64 minutePerDay  = minutePerHour * hourPerDay;
@@ -104,24 +106,27 @@ public:
                     /// 12 hours == 0.5 days
     double          GetTimeInDays() const;
 
+    static sal_Int64 TimeToMS(double fTimeInDays);
+
     /** Get the wall clock time particles for a (date+)time value.
 
         Does the necessary rounding and truncating to obtain hour, minute,
         second and fraction of second from a double time value (time in days,
-        0.5 == 12h) such that individual values are not rounded up, i.e.
-        x:59:59.999 does not yield x+1:0:0.00
+        0.5 == 12h). The whole time value is rounded to nearest millisecond,
+        i.e. x:59:59.9999 yields x+1:0:0.00
 
-        A potential date component (fTimeInDays >= 1.0) is discarded.
+        A potential date component (fTimeInDays >= 1.0) is discarded. When
+        the fractionsl time part round up to the full day, 24:0:0:000 is
+        returned.
 
         @param  nFractionDecimals
-                If > 0 fFractionOfSecond is truncated to that amount of
-                decimals.
-                Else fFractionOfSecond returns the full remainder of the
-                fractional second.
+                If > 0 nMillisecond is truncated to that amount of significant
+                digits: value of 2 makes 999 ms to become 990; value of 1
+                makes it 900.
      */
     static void     GetClock( double fTimeInDays,
                               sal_uInt16& nHour, sal_uInt16& nMinute, sal_uInt16& nSecond,
-                              double& fFractionOfSecond, int nFractionDecimals );
+                              sal_uInt16& nMillisecond, int nFractionDecimals );
 
     bool            IsEqualIgnoreNanoSec( const tools::Time& rTime ) const;
 

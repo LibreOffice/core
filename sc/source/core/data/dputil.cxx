@@ -314,14 +314,13 @@ sal_Int32 ScDPUtil::getDatePartValue(
         // handle time
         // (do as in the cell functions, ScInterpreter::ScGetHour() etc.)
 
-        sal_uInt16 nHour, nMinute, nSecond;
-        double fFractionOfSecond;
-        tools::Time::GetClock( fValue, nHour, nMinute, nSecond, fFractionOfSecond, 0);
+        sal_uInt16 nHour, nMinute, nSecond, nMs;
+        tools::Time::GetClock(fValue, nHour, nMinute, nSecond, nMs, 0);
 
         switch (nDatePart)
         {
             case sheet::DataPilotFieldGroupBy::HOURS:
-                nResult = nHour;
+                nResult = nHour % 24;
                 break;
             case sheet::DataPilotFieldGroupBy::MINUTES:
                 nResult = nMinute;
