@@ -2523,12 +2523,12 @@ void SfxViewFrame::StateView_Impl
         // I'm just on reload and am yielding myself ...
         return;
 
-    const sal_uInt16 *pRanges = rSet.GetRanges();
-    assert(pRanges && "Set with no Range");
-    while ( *pRanges )
+    const WhichRangesContainer & pRanges = rSet.GetRanges();
+    assert(!pRanges.empty() && "Set with no Range");
+    for ( auto pRange : pRanges )
     {
-        sal_uInt16 nStartWhich = *pRanges++;
-        sal_uInt16 nEndWhich = *pRanges++;
+        sal_uInt16 nStartWhich = pRange.first;
+        sal_uInt16 nEndWhich = pRange.second;
         for ( sal_uInt16 nWhich = nStartWhich; nWhich <= nEndWhich; ++nWhich )
         {
             switch(nWhich)
@@ -3049,11 +3049,11 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
 
 void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
 {
-    const sal_uInt16 *pRanges = rSet.GetRanges();
-    DBG_ASSERT(pRanges && *pRanges, "Set without range");
-    while ( *pRanges )
+    const WhichRangesContainer & pRanges = rSet.GetRanges();
+    DBG_ASSERT(!pRanges.empty(), "Set without range");
+    for ( auto pRange : pRanges )
     {
-        for(sal_uInt16 nWhich = *pRanges++; nWhich <= *pRanges; ++nWhich)
+        for(sal_uInt16 nWhich = pRange.first; nWhich <= pRange.second; ++nWhich)
         {
             switch(nWhich)
             {
@@ -3151,8 +3151,6 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                     break;
             }
         }
-
-        ++pRanges;
     }
 }
 

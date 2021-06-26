@@ -2022,8 +2022,10 @@ bool SwFEShell::ImpEndCreate()
         }
     }
 
-    SfxItemSet aSet( GetDoc()->GetAttrPool(), svl::Items<RES_FRM_SIZE, RES_FRM_SIZE,
-                                            RES_SURROUND, RES_ANCHOR>{} );
+    static const WhichRangesLiteral ranges { {
+            {RES_FRM_SIZE, RES_FRM_SIZE},
+            {RES_SURROUND, RES_ANCHOR} } };
+    SfxItemSet aSet( GetDoc()->GetAttrPool(), ranges );
     aSet.Put( aAnch );
 
     // OD 2004-03-30 #i26791# - determine relative object position
@@ -2097,7 +2099,8 @@ bool SwFEShell::ImpEndCreate()
             ::GetHtmlMode( GetDoc()->GetDocShell() ) &&
             nullptr != ( pFlyFrame = GetSelectedFlyFrame() ))
         {
-            SfxItemSet aHtmlSet( GetDoc()->GetAttrPool(), svl::Items<RES_VERT_ORIENT, RES_HORI_ORIENT>{} );
+            static const WhichRangesLiteral ranges { { {RES_VERT_ORIENT, RES_HORI_ORIENT} } };
+            SfxItemSet aHtmlSet( GetDoc()->GetAttrPool(), ranges );
             // horizontal orientation:
             const bool bLeftFrame = aFlyRect.Left() <
                                       pAnch->getFrameArea().Left() + pAnch->getFramePrintArea().Left(),
@@ -2834,8 +2837,10 @@ void SwFEShell::CheckUnboundObjects()
             // First the action here, to assure GetCharRect delivers current values.
             StartAllAction();
 
-            SfxItemSet aSet( GetAttrPool(), svl::Items<RES_FRM_SIZE, RES_FRM_SIZE,
-                                            RES_SURROUND, RES_ANCHOR>{} );
+            static const WhichRangesLiteral ranges { {
+                    {RES_FRM_SIZE, RES_FRM_SIZE},
+                    {RES_SURROUND, RES_ANCHOR} } };
+            SfxItemSet aSet( GetAttrPool(), ranges );
             aSet.Put( aAnch );
             aSet.Put( SwFormatSurround( css::text::WrapTextMode_THROUGH ) );
             SwFrameFormat* pFormat = getIDocumentLayoutAccess().MakeLayoutFormat( RndStdIds::DRAW_OBJECT, &aSet );
@@ -3196,7 +3201,8 @@ void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rect
 
             if(bMarquee)
             {
-                SfxItemSet aSet(pDrawModel->GetItemPool(), svl::Items<SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST>{});
+                static const WhichRangesLiteral ranges { { {SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST} } };
+                SfxItemSet aSet(pDrawModel->GetItemPool(), ranges);
                 aSet.Put( makeSdrTextAutoGrowWidthItem( false ) );
                 aSet.Put( makeSdrTextAutoGrowHeightItem( false ) );
                 aSet.Put( SdrTextAniKindItem( SdrTextAniKind::Slide ) );

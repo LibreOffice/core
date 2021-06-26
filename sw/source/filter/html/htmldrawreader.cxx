@@ -82,8 +82,8 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
     // to the visible layer.
     pNewDrawObj->SetLayer( m_xDoc->getIDocumentDrawModelAccess().GetInvisibleHeavenId() );
 
-    SfxItemSet aFrameSet( m_xDoc->GetAttrPool(),
-                        svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1>{} );
+    static const WhichRangesLiteral ranges { { {RES_FRMATR_BEGIN, RES_FRMATR_END-1} } };
+    SfxItemSet aFrameSet( m_xDoc->GetAttrPool(), ranges );
     if( !IsNewDoc() )
         Reader::ResetFrameFormatAttrs( aFrameSet );
 
@@ -368,10 +368,9 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
         eAniDir = SdrTextAniDirection::Right;
 
     // re set the attributes needed for scrolling
-    sal_uInt16 const aWhichMap[] { XATTR_FILL_FIRST,   XATTR_FILL_LAST,
-                                   SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
-                                   EE_CHAR_START,      EE_CHAR_END,
-                                   0 };
+    static WhichRangesLiteral const aWhichMap( { { XATTR_FILL_FIRST,   XATTR_FILL_LAST},
+                                   {SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST},
+                                   {EE_CHAR_START,      EE_CHAR_END} });
     SfxItemSet aItemSet( pModel->GetItemPool(), aWhichMap );
     aItemSet.Put( makeSdrTextAutoGrowWidthItem( false ) );
     aItemSet.Put( makeSdrTextAutoGrowHeightItem( true ) );

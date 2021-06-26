@@ -32,20 +32,20 @@ CPPUNIT_TEST_FIXTURE(StylePoolTest, testIterationOrder)
     pPool->SetDefaults(&aDefaults);
     {
         // Set up parents in mixed order to make sure we do not sort by pointer address.
-        SfxItemSet aParent1(*pPool, svl::Items<1, 1>{});
-        SfxItemSet aChild1(*pPool, svl::Items<1, 1>{});
+        SfxItemSet aParent1(*pPool, { { { 1, 1 } } });
+        SfxItemSet aChild1(*pPool, { { { 1, 1 } } });
         aChild1.SetParent(&aParent1);
         SfxStringItem aItem1(1, "Item1");
         aChild1.Put(aItem1);
 
-        SfxItemSet aParent3(*pPool, svl::Items<1, 1>{});
-        SfxItemSet aChild3(*pPool, svl::Items<1, 1>{});
+        SfxItemSet aParent3(*pPool, { { { 1, 1 } } });
+        SfxItemSet aChild3(*pPool, { { { 1, 1 } } });
         aChild3.SetParent(&aParent3);
         SfxStringItem aItem3(1, "Item3");
         aChild3.Put(aItem3);
 
-        SfxItemSet aParent2(*pPool, svl::Items<1, 1>{});
-        SfxItemSet aChild2(*pPool, svl::Items<1, 1>{});
+        SfxItemSet aParent2(*pPool, { { { 1, 1 } } });
+        SfxItemSet aChild2(*pPool, { { { 1, 1 } } });
         aChild2.SetParent(&aParent2);
         SfxStringItem aItem2(1, "Item2");
         aChild2.Put(aItem2);

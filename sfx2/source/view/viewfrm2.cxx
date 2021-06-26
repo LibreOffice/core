@@ -267,11 +267,11 @@ void SfxViewFrame::GetState_Impl( SfxItemSet &rSet )
     if ( !pDocSh )
         return;
 
-    const sal_uInt16 *pRanges = rSet.GetRanges();
-    DBG_ASSERT(pRanges, "Set without Range");
-    while ( *pRanges )
+    const WhichRangesContainer & pRanges = rSet.GetRanges();
+    DBG_ASSERT(!pRanges.empty(), "Set without Range");
+    for ( auto pRange : pRanges )
     {
-        for ( sal_uInt16 nWhich = *pRanges++; nWhich <= *pRanges; ++nWhich )
+        for ( sal_uInt16 nWhich = pRange.first; nWhich <= pRange.second; ++nWhich )
         {
             switch(nWhich)
             {
@@ -314,7 +314,6 @@ void SfxViewFrame::GetState_Impl( SfxItemSet &rSet )
                 OSL_FAIL( "invalid message-id" );
             }
         }
-        ++pRanges;
     }
 }
 

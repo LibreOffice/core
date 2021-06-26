@@ -22,7 +22,8 @@ namespace
     bool lcl_GetPageDesc(SwWrtShell& rSh, sal_uInt16 &rPageNo, std::unique_ptr<const SwFormatPageDesc>* ppPageFormatDesc)
     {
         bool bRet = false;
-        SfxItemSet aSet(rSh.GetAttrPool(), svl::Items<RES_PAGEDESC, RES_PAGEDESC>{});
+        static const WhichRangesLiteral ranges { { {RES_PAGEDESC, RES_PAGEDESC} } };
+        SfxItemSet aSet(rSh.GetAttrPool(), ranges);
         if (rSh.GetCurAttr(aSet))
         {
             const SfxPoolItem* pItem(nullptr);

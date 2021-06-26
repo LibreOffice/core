@@ -400,8 +400,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
             const SfxStringItem* pStringItem = rReq.GetArg<SfxStringItem>(SID_CONFIG);
 
-            SfxItemSet aSet(
-                GetPool(), svl::Items<SID_CONFIG, SID_CONFIG>{} );
+            static const WhichRangesLiteral ranges { { {SID_CONFIG, SID_CONFIG} } } ;
+            SfxItemSet aSet(GetPool(), ranges );
 
             if ( pStringItem )
             {
@@ -1072,11 +1072,11 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
 void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
 {
-    const sal_uInt16 *pRanges = rSet.GetRanges();
-    DBG_ASSERT(pRanges && *pRanges, "Set without range");
-    while ( *pRanges )
+    const WhichRangesContainer & pRanges = rSet.GetRanges();
+    DBG_ASSERT(!pRanges.empty(), "Set without range");
+    for ( auto pRange : pRanges )
     {
-        for(sal_uInt16 nWhich = *pRanges++; nWhich <= *pRanges; ++nWhich)
+        for(sal_uInt16 nWhich = pRange.first; nWhich <= pRange.second; ++nWhich)
         {
             switch(nWhich)
             {
@@ -1270,8 +1270,6 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                     break;
             }
         }
-
-        ++pRanges;
     }
 }
 
@@ -1612,7 +1610,8 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         case SID_AUTO_CORRECT_DLG:
         {
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-            SfxItemSet aSet(GetPool(), svl::Items<SID_AUTO_CORRECT_DLG, SID_AUTO_CORRECT_DLG>{});
+            static const WhichRangesLiteral ranges { { {SID_AUTO_CORRECT_DLG, SID_AUTO_CORRECT_DLG} } };
+            SfxItemSet aSet(GetPool(), ranges);
             const SfxPoolItem* pItem=nullptr;
             const SfxItemSet* pSet = rReq.GetArgs();
             SfxItemPool* pSetPool = pSet ? pSet->GetPool() : nullptr;

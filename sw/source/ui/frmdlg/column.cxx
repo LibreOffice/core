@@ -98,9 +98,10 @@ SwColumnDlg::SwColumnDlg(weld::Window* pParent, SwWrtShell& rSh)
     m_nSelectionWidth = aRect.Width();
 
     SfxItemSet* pColPgSet = nullptr;
-    static svl::Items<RES_FRM_SIZE, RES_FRM_SIZE,
-                      RES_COL, RES_COL,
-                      RES_COLUMNBALANCE, RES_FRAMEDIR> const aSectIds;
+    static WhichRangesLiteral const aSectIds { {
+            {RES_FRM_SIZE, RES_FRM_SIZE},
+            {RES_COL, RES_COL},
+            {RES_COLUMNBALANCE, RES_FRAMEDIR} } };
 
     const SwSection* pCurrSection = m_rWrtShell.GetCurrSection();
     const sal_uInt16 nFullSectCnt = m_rWrtShell.GetFullSelectedSectionCount();
@@ -134,12 +135,11 @@ SwColumnDlg::SwColumnDlg(weld::Window* pParent, SwWrtShell& rSh)
     const SwPageDesc* pPageDesc = m_rWrtShell.GetSelectedPageDescs();
     if( pPageDesc )
     {
-        m_pPageSet.reset( new SfxItemSet(
-            m_rWrtShell.GetAttrPool(),
-            svl::Items<
-                RES_FRM_SIZE, RES_FRM_SIZE,
-                RES_LR_SPACE, RES_LR_SPACE,
-                RES_COL, RES_COL>{}) );
+        static const WhichRangesLiteral ranges { {
+                {RES_FRM_SIZE, RES_FRM_SIZE},
+                {RES_LR_SPACE, RES_LR_SPACE},
+                {RES_COL, RES_COL} } };
+        m_pPageSet.reset( new SfxItemSet( m_rWrtShell.GetAttrPool(), ranges ) );
 
         const SwFrameFormat &rFormat = pPageDesc->GetMaster();
         m_nPageWidth = rFormat.GetFrameSize().GetSize().Width();
@@ -295,7 +295,8 @@ IMPL_LINK_NOARG(SwColumnDlg, OkHdl, weld::Button&, void)
     }
     if(m_pFrameSet && SfxItemState::SET == m_pFrameSet->GetItemState(RES_COL) && m_bFrameChanged)
     {
-        SfxItemSet aTmp(*m_pFrameSet->GetPool(), svl::Items<RES_COL, RES_COL>{});
+        static const WhichRangesLiteral ranges { { {RES_COL, RES_COL} } };
+        SfxItemSet aTmp(*m_pFrameSet->GetPool(), ranges);
         aTmp.Put(*m_pFrameSet);
         m_rWrtShell.StartAction();
         m_rWrtShell.Push();
@@ -351,10 +352,8 @@ sal_uInt16 GetMaxWidth( SwColMgr const * pColMgr, sal_uInt16 nCols )
     return nMax;
 }
 
-const sal_uInt16 SwColumnPage::aPageRg[] = {
-    RES_COL, RES_COL,
-    0
-};
+static const WhichRangesLiteral ranges { { {RES_COL, RES_COL} } };
+const WhichRangesContainer SwColumnPage::aPageRg(ranges);
 
 void SwColumnPage::ResetColWidth()
 {

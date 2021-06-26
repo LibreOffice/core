@@ -764,26 +764,26 @@ SfxItemPool* SfxItemPool::GetMasterPool() const
  */
 void SfxItemPool::FreezeIdRanges()
 {
-    assert(!pImpl->mpPoolRanges && "pool already frozen, cannot freeze twice");
+    assert(pImpl->mpPoolRanges.empty() && "pool already frozen, cannot freeze twice");
     FillItemIdRanges_Impl( pImpl->mpPoolRanges );
 }
 
 
-void SfxItemPool::FillItemIdRanges_Impl( std::unique_ptr<sal_uInt16[]>& pWhichRanges ) const
+void SfxItemPool::FillItemIdRanges_Impl( WhichRangesContainer& pWhichRanges ) const
 {
-    DBG_ASSERT( !pImpl->mpPoolRanges, "GetFrozenRanges() would be faster!" );
+    DBG_ASSERT( pImpl->mpPoolRanges.empty(), "GetFrozenRanges() would be faster!" );
 
     pWhichRanges.reset();
 
     // Merge all ranges, keeping them sorted
     for (const SfxItemPool* pPool = this; pPool; pPool = pPool->pImpl->mpSecondary.get())
-        pWhichRanges = svl::detail::MergeRange(pWhichRanges.get(), pPool->pImpl->mnStart,
+        pWhichRanges = svl::detail::MergeRange(pWhichRanges, pPool->pImpl->mnStart,
                                                pPool->pImpl->mnEnd);
 }
 
-const sal_uInt16* SfxItemPool::GetFrozenIdRanges() const
+const WhichRangesContainer& SfxItemPool::GetFrozenIdRanges() const
 {
-    return pImpl->mpPoolRanges.get();
+    return pImpl->mpPoolRanges;
 }
 
 const SfxPoolItem *SfxItemPool::GetItem2Default(sal_uInt16 nWhich) const

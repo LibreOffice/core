@@ -76,7 +76,7 @@ bool LegendItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;
 }
 
-const sal_uInt16 * LegendItemConverter::GetWhichPairs() const
+WhichRangesContainer LegendItemConverter::GetWhichPairs() const
 {
     // must span all used items!
     return nLegendWhichPairs;

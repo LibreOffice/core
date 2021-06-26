@@ -32,15 +32,14 @@ namespace sdr::properties
         // create a new itemset
         SfxItemSet CaptionProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return SfxItemSet(
-                rPool,
-                svl::Items<
+            static const WhichRangesLiteral ranges { {
                     // Ranges from SdrAttrObj, SdrCaptionObj:
-                    SDRATTR_START, SDRATTR_MISC_LAST,
-                    SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
-                    SDRATTR_TEXTCOLUMNS_FIRST, SDRATTR_TEXTCOLUMNS_LAST,
+                    {SDRATTR_START, SDRATTR_MISC_LAST},
+                    {SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION},
+                    {SDRATTR_TEXTCOLUMNS_FIRST, SDRATTR_TEXTCOLUMNS_LAST},
                     // Range from SdrTextObj:
-                    EE_ITEMS_START, EE_ITEMS_END>{});
+                    {EE_ITEMS_START, EE_ITEMS_END} } };
+            return SfxItemSet( rPool, ranges );
         }
 
         CaptionProperties::CaptionProperties(SdrObject& rObj)

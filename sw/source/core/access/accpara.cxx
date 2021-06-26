@@ -1448,15 +1448,17 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
     std::optional<SfxItemSet> pSet;
     if ( !bOnlyCharAttrs )
     {
-        pSet.emplace( const_cast<SwAttrPool&>(pTextNode->GetDoc().GetAttrPool()),
-                               svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
-                               RES_PARATR_BEGIN, RES_PARATR_END - 1,
-                               RES_FRMATR_BEGIN, RES_FRMATR_END - 1>{} );
+        static const WhichRangesLiteral ranges { {
+                {RES_CHRATR_BEGIN, RES_CHRATR_END - 1},
+                {RES_PARATR_BEGIN, RES_PARATR_END - 1},
+                {RES_FRMATR_BEGIN, RES_FRMATR_END - 1} } };
+        pSet.emplace( const_cast<SwAttrPool&>(pTextNode->GetDoc().GetAttrPool()), ranges );
     }
     else
     {
-        pSet.emplace( const_cast<SwAttrPool&>(pTextNode->GetDoc().GetAttrPool()),
-                               svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1>{} );
+        static const WhichRangesLiteral ranges { {
+                { RES_CHRATR_BEGIN, RES_CHRATR_END - 1 } } };
+        pSet.emplace( const_cast<SwAttrPool&>(pTextNode->GetDoc().GetAttrPool()), ranges );
     }
     // #i82637# - From the perspective of the a11y API the default character
     // attributes are the character attributes, which are set at the paragraph style
@@ -1466,9 +1468,10 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
     // get default paragraph attributes, if needed, and merge these into <pSet>
     if ( !bOnlyCharAttrs )
     {
-        SfxItemSet aParaSet( const_cast<SwAttrPool&>(pTextNode->GetDoc().GetAttrPool()),
-                             svl::Items<RES_PARATR_BEGIN, RES_PARATR_END - 1,
-                             RES_FRMATR_BEGIN, RES_FRMATR_END - 1>{} );
+        static const WhichRangesLiteral ranges { {
+                {RES_PARATR_BEGIN, RES_PARATR_END - 1},
+                {RES_FRMATR_BEGIN, RES_FRMATR_END - 1} } };
+        SfxItemSet aParaSet( const_cast<SwAttrPool&>(pTextNode->GetDoc().GetAttrPool()), ranges );
         pTextNode->SwContentNode::GetAttr( aParaSet );
         pSet->Put( aParaSet );
     }
@@ -1477,8 +1480,8 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
             "<SwAccessibleParagraph::_getDefaultAttributesImpl(..)> - missing paragraph style. Serious defect!" );
     if ( pTextNode->GetTextColl() )
     {
-        SfxItemSet aCharSet( const_cast<SwAttrPool&>(pTextNode->GetDoc().GetAttrPool()),
-                             svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1>{} );
+        static const WhichRangesLiteral ranges { { { RES_CHRATR_BEGIN, RES_CHRATR_END - 1 } } };
+        SfxItemSet aCharSet( const_cast<SwAttrPool&>(pTextNode->GetDoc().GetAttrPool()), ranges );
         SetPutRecursive( aCharSet, pTextNode->GetTextColl()->GetAttrSet() );
         pSet->Put( aCharSet );
     }
@@ -1645,8 +1648,8 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
     }
 
     // retrieve character attributes for the created PaM <pPaM>
-    SfxItemSet aSet( pPaM->GetDoc().GetAttrPool(),
-                     svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END -1>{} );
+    static const WhichRangesLiteral ranges { { { RES_CHRATR_BEGIN, RES_CHRATR_END - 1 } } };
+    SfxItemSet aSet( pPaM->GetDoc().GetAttrPool(), ranges );
     // #i82637#
     // From the perspective of the a11y API the character attributes, which
     // are set at the automatic paragraph style of the paragraph, are treated
@@ -1656,16 +1659,16 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
     {
         if ( pTextNode->HasSwAttrSet() )
         {
-            SfxItemSet aAutomaticParaStyleCharAttrs( pPaM->GetDoc().GetAttrPool(),
-                                                     svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END -1>{} );
+            static const WhichRangesLiteral ranges { { { RES_CHRATR_BEGIN, RES_CHRATR_END - 1 } } };
+            SfxItemSet aAutomaticParaStyleCharAttrs( pPaM->GetDoc().GetAttrPool(), ranges );
             aAutomaticParaStyleCharAttrs.Put( *(pTextNode->GetpSwAttrSet()), false );
             aSet.Put( aAutomaticParaStyleCharAttrs );
         }
     }
     // get character attributes at <pPaM> and merge these into <aSet>
     {
-        SfxItemSet aCharAttrsAtPaM( pPaM->GetDoc().GetAttrPool(),
-                                    svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END -1>{} );
+        static const WhichRangesLiteral ranges { { { RES_CHRATR_BEGIN, RES_CHRATR_END - 1 } } };
+        SfxItemSet aCharAttrsAtPaM( pPaM->GetDoc().GetAttrPool(), ranges );
         SwUnoCursorHelper::GetCursorAttr(*pPaM, aCharAttrsAtPaM, true);
         aSet.Put( aCharAttrsAtPaM );
     }
@@ -1753,14 +1756,15 @@ void SwAccessibleParagraph::_getSupplementalAttributesImpl(
 {
     SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
     const SwTextNode *const pTextNode(pFrame->GetTextNodeForParaProps());
+    static const WhichRangesLiteral ranges { {
+                {RES_PARATR_LINESPACING, RES_PARATR_ADJUST},
+                {RES_PARATR_TABSTOP, RES_PARATR_TABSTOP},
+                {RES_PARATR_NUMRULE, RES_PARATR_NUMRULE},
+                {RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1},
+                {RES_LR_SPACE, RES_UL_SPACE} } };
     SfxItemSet aSet(
             const_cast<SwAttrPool&>(pTextNode->GetDoc().GetAttrPool()),
-            svl::Items<
-                RES_PARATR_LINESPACING, RES_PARATR_ADJUST,
-                RES_PARATR_TABSTOP, RES_PARATR_TABSTOP,
-                RES_PARATR_NUMRULE, RES_PARATR_NUMRULE,
-                RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1,
-                RES_LR_SPACE, RES_UL_SPACE>{});
+            ranges );
 
     if ( pTextNode->HasBullet() || pTextNode->HasNumber() )
     {

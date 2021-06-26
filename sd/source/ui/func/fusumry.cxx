@@ -193,7 +193,8 @@ void FuSummaryPage::DoExecute( SfxRequest& )
         return;
 
     // remove hard break- and character attributes
-    SfxItemSet aEmptyEEAttr(mpDoc->GetPool(), svl::Items<EE_ITEMS_START, EE_ITEMS_END>{});
+    static const WhichRangesLiteral ranges { { {EE_ITEMS_START, EE_ITEMS_END} } };
+    SfxItemSet aEmptyEEAttr(mpDoc->GetPool(), ranges);
     sal_Int32 nParaCount = pOutl->GetParagraphCount();
 
     for (sal_Int32 nPara = 0; nPara < nParaCount; nPara++)

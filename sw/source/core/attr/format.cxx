@@ -38,7 +38,7 @@
 using namespace com::sun::star;
 
 SwFormat::SwFormat( SwAttrPool& rPool, const char* pFormatNm,
-              const sal_uInt16* pWhichRanges, SwFormat *pDrvdFrame,
+              const WhichRangesContainer& pWhichRanges, SwFormat *pDrvdFrame,
               sal_uInt16 nFormatWhich ) :
     m_aFormatName( OUString::createFromAscii(pFormatNm) ),
     m_aSet( rPool, pWhichRanges ),
@@ -59,7 +59,7 @@ SwFormat::SwFormat( SwAttrPool& rPool, const char* pFormatNm,
 }
 
 SwFormat::SwFormat( SwAttrPool& rPool, const OUString& rFormatNm,
-              const sal_uInt16* pWhichRanges, SwFormat* pDrvdFrame,
+              const WhichRangesContainer& pWhichRanges, SwFormat* pDrvdFrame,
               sal_uInt16 nFormatWhich ) :
     m_aFormatName( rFormatNm ),
     m_aSet( rPool, pWhichRanges ),
@@ -459,7 +459,8 @@ bool SwFormat::SetFormatAttr( const SfxPoolItem& rAttr )
     {
         // FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
         SAL_INFO("sw.core", "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
-        SfxItemSet aTempSet(*m_aSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
+        static const WhichRangesLiteral ranges { { {XATTR_FILL_FIRST, XATTR_FILL_LAST} } };
+        SfxItemSet aTempSet(*m_aSet.GetPool(), ranges);
         const SvxBrushItem& rSource = rAttr.StaticWhichCast(RES_BACKGROUND);
 
         // fill a local ItemSet with the attributes corresponding as good as possible

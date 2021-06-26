@@ -455,7 +455,8 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                 const SfxBoolItem* pItem = rReq.GetArg<SfxBoolItem>(SID_ENABLE_HYPHENATION);
                 if( pItem )
                 {
-                    SfxItemSet aSet( GetPool(), svl::Items<EE_PARA_HYPHENATE, EE_PARA_HYPHENATE>{} );
+                    static const WhichRangesLiteral ranges { { {EE_PARA_HYPHENATE, EE_PARA_HYPHENATE} } };
+                    SfxItemSet aSet( GetPool(), ranges );
                     bool bValue = pItem->GetValue();
                     aSet.Put( SfxBoolItem( EE_PARA_HYPHENATE, bValue ) );
                     pView->SetAttributes( aSet );

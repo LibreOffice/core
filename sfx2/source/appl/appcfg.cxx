@@ -114,15 +114,15 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
     bool bRet = false;
     SfxItemPool &rPool = GetPool();
 
-    const sal_uInt16 *pRanges = rSet.GetRanges();
+    const WhichRangesContainer& pRanges = rSet.GetRanges();
     SvtSaveOptions aSaveOptions;
     SvtHelpOptions aHelpOptions;
     SvtSecurityOptions  aSecurityOptions;
     SvtMiscOptions aMiscOptions;
 
-    while ( *pRanges )
+    for (auto pRange : pRanges)
     {
-        for(sal_uInt16 nWhich = *pRanges++; nWhich <= *pRanges; ++nWhich)
+        for(sal_uInt16 nWhich = pRange.first; nWhich <= pRange.second; ++nWhich)
         {
             switch(nWhich)
             {
@@ -390,7 +390,6 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
             }
             SAL_WARN_IF(!bRet, "sfx.appl", "Putting options failed!");
         }
-        pRanges++;
     }
 }
 

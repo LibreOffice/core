@@ -661,7 +661,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testToxmarkLinks)
     { // ToC toxmark
         pWrtShell->Down(false);
         SfxItemSet aSet(pWrtShell->GetAttrPool(),
-                        svl::Items<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT>{});
+                        { { { RES_TXTATR_INETFMT, RES_TXTATR_INETFMT } } });
         pWrtShell->GetCurAttr(aSet);
         CPPUNIT_ASSERT(aSet.HasItem(RES_TXTATR_INETFMT));
         pWrtShell->Push();
@@ -676,7 +676,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testToxmarkLinks)
     { // ToC heading
         pWrtShell->Down(false);
         SfxItemSet aSet(pWrtShell->GetAttrPool(),
-                        svl::Items<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT>{});
+                        { { { RES_TXTATR_INETFMT, RES_TXTATR_INETFMT } } });
         pWrtShell->GetCurAttr(aSet);
         CPPUNIT_ASSERT(aSet.HasItem(RES_TXTATR_INETFMT));
         pWrtShell->Push();
@@ -696,7 +696,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testToxmarkLinks)
     { // UD1 toxmark 1
         pWrtShell->Down(false);
         SfxItemSet aSet(pWrtShell->GetAttrPool(),
-                        svl::Items<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT>{});
+                        { { { RES_TXTATR_INETFMT, RES_TXTATR_INETFMT } } });
         pWrtShell->GetCurAttr(aSet);
         CPPUNIT_ASSERT(aSet.HasItem(RES_TXTATR_INETFMT));
         pWrtShell->Push();
@@ -711,7 +711,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testToxmarkLinks)
     { // UD1 toxmark 2 (with same text)
         pWrtShell->Down(false);
         SfxItemSet aSet(pWrtShell->GetAttrPool(),
-                        svl::Items<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT>{});
+                        { { { RES_TXTATR_INETFMT, RES_TXTATR_INETFMT } } });
         pWrtShell->GetCurAttr(aSet);
         CPPUNIT_ASSERT(aSet.HasItem(RES_TXTATR_INETFMT));
         pWrtShell->Push();
@@ -726,7 +726,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testToxmarkLinks)
     { // UD heading
         pWrtShell->Down(false);
         SfxItemSet aSet(pWrtShell->GetAttrPool(),
-                        svl::Items<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT>{});
+                        { { { RES_TXTATR_INETFMT, RES_TXTATR_INETFMT } } });
         pWrtShell->GetCurAttr(aSet);
         CPPUNIT_ASSERT(aSet.HasItem(RES_TXTATR_INETFMT));
         pWrtShell->Push();
@@ -746,7 +746,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testToxmarkLinks)
     { // UD2 toxmark, with same text as those in other UD
         pWrtShell->Down(false);
         SfxItemSet aSet(pWrtShell->GetAttrPool(),
-                        svl::Items<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT>{});
+                        { { { RES_TXTATR_INETFMT, RES_TXTATR_INETFMT } } });
         pWrtShell->GetCurAttr(aSet);
         CPPUNIT_ASSERT(aSet.HasItem(RES_TXTATR_INETFMT));
         pWrtShell->Push();

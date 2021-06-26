@@ -1416,8 +1416,8 @@ void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
                 if( dynamic_cast<const SwVirtFlyDrawObj*>( pOldObj) !=  nullptr )
                 {
                     // store attributes, then set SdrObject
-                    SfxItemSet aFrameSet( mxDoc->GetAttrPool(),
-                                            svl::Items<RES_SURROUND, RES_ANCHOR>{} );
+                    static const WhichRangesLiteral ranges { { {RES_SURROUND, RES_ANCHOR} } };
+                    SfxItemSet aFrameSet( mxDoc->GetAttrPool(), ranges );
                     aFrameSet.Set( pFormat->GetAttrSet() );
 
                     Point aNullPt;
@@ -1594,7 +1594,8 @@ bool SwFEShell::Paste(const Graphic &rGrf, const OUString& rURL)
         {
             pView->AddUndo(std::make_unique<SdrUndoAttrObj>(*pObj));
 
-            SfxItemSet aSet(pView->GetModel()->GetItemPool(), svl::Items<XATTR_FILLSTYLE, XATTR_FILLBITMAP>{});
+            static const WhichRangesLiteral ranges { { {XATTR_FILLSTYLE, XATTR_FILLBITMAP} } };
+            SfxItemSet aSet(pView->GetModel()->GetItemPool(), ranges);
 
             aSet.Put(XFillStyleItem(drawing::FillStyle_BITMAP));
             aSet.Put(XFillBitmapItem(OUString(), rGrf));

@@ -32,10 +32,8 @@
 
 #include <swuiccoll.hxx>
 
-const sal_uInt16 SwCondCollPage::m_aPageRg[] = {
-    FN_COND_COLL, FN_COND_COLL,
-    0
-};
+static const WhichRangesLiteral ranges { { {FN_COND_COLL, FN_COND_COLL} } };
+const WhichRangesContainer SwCondCollPage::m_aPageRg(ranges);
 
 SwCondCollPage::SwCondCollPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet)
     : SfxTabPage(pPage, pController, "modules/swriter/ui/conditionpage.ui", "ConditionPage", &rSet)

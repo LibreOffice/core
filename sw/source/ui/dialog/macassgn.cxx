@@ -104,7 +104,10 @@ bool SwMacroAssignDlg::INetFormatDlg(weld::Window* pParent, SwWrtShell& rSh,
                                      std::unique_ptr<SvxMacroItem>& rpINetItem )
 {
     bool bRet = false;
-    SfxItemSet aSet( rSh.GetAttrPool(), svl::Items<RES_FRMMACRO, RES_FRMMACRO, SID_EVENTCONFIG, SID_EVENTCONFIG>{} );
+    static const WhichRangesLiteral ranges { {
+        {RES_FRMMACRO, RES_FRMMACRO},
+        {SID_EVENTCONFIG, SID_EVENTCONFIG} } };
+    SfxItemSet aSet( rSh.GetAttrPool(), ranges );
     SvxMacroItem aItem( RES_FRMMACRO );
     if( !rpINetItem )
         rpINetItem.reset(new SvxMacroItem( RES_FRMMACRO ));

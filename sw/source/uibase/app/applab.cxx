@@ -68,8 +68,8 @@ static const SwFrameFormat *lcl_InsertBCText( SwWrtShell& rSh, const SwLabItem& 
                         SwFrameFormat &rFormat,
                         sal_uInt16 nCol, sal_uInt16 nRow )
 {
-    SfxItemSet aSet(
-        rSh.GetAttrPool(), svl::Items<RES_VERT_ORIENT, RES_ANCHOR>{});
+    static const WhichRangesLiteral ranges { { {RES_VERT_ORIENT, RES_ANCHOR} } };
+    SfxItemSet aSet(rSh.GetAttrPool(), ranges);
     sal_uInt16 nPhyPageNum, nVirtPageNum;
     rSh.GetPageNum( nPhyPageNum, nVirtPageNum );
 
@@ -104,8 +104,8 @@ static const SwFrameFormat *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem&
                         SwFrameFormat &rFormat, SwFieldMgr& rFieldMgr,
                         sal_uInt16 nCol, sal_uInt16 nRow, bool bLast )
 {
-    SfxItemSet aSet(
-        rSh.GetAttrPool(), svl::Items<RES_VERT_ORIENT, RES_ANCHOR>{});
+    static const WhichRangesLiteral ranges { { {RES_VERT_ORIENT, RES_ANCHOR} } };
+    SfxItemSet aSet(rSh.GetAttrPool(), ranges);
     sal_uInt16 nPhyPageNum, nVirtPageNum;
     rSh.GetPageNum( nPhyPageNum, nVirtPageNum );
 
@@ -148,7 +148,8 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
     SwLabCfgItem aLabCfg(bLabel);
 
     // Move up Dialog
-    SfxItemSet aSet( GetPool(), svl::Items<FN_LABEL, FN_LABEL>{} );
+    static const WhichRangesLiteral ranges { { {FN_LABEL, FN_LABEL} } };
+    SfxItemSet aSet( GetPool(), ranges );
     aSet.Put( aLabCfg.GetItem() );
 
     SwAbstractDialogFactory* pDialogFactory = SwAbstractDialogFactory::Create();

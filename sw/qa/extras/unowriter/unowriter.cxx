@@ -696,8 +696,8 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testDeleteFlyAtCharAtStart)
     // insert fly anchored at start of body text
     pWrtShell->ClearMark();
     pWrtShell->SttEndDoc(true);
-    SfxItemSet frameSet(pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END - 1>{});
-    SfxItemSet grfSet(pDoc->GetAttrPool(), svl::Items<RES_GRFATR_BEGIN, RES_GRFATR_END - 1>{});
+    SfxItemSet frameSet(pDoc->GetAttrPool(), { { { RES_FRMATR_BEGIN, RES_FRMATR_END - 1 } } });
+    SfxItemSet grfSet(pDoc->GetAttrPool(), { { { RES_GRFATR_BEGIN, RES_GRFATR_END - 1 } } });
     SwFormatAnchor anchor(RndStdIds::FLY_AT_CHAR);
     frameSet.Put(anchor);
     GraphicObject grf;

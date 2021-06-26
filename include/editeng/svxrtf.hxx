@@ -82,7 +82,7 @@ struct SvxRTFStyleType
     sal_uInt16 nBasedOn;
     sal_uInt8 nOutlineNo;
 
-    SvxRTFStyleType( SfxItemPool& rPool, const sal_uInt16* pWhichRange );
+    SvxRTFStyleType( SfxItemPool& rPool, const WhichRangesContainer& pWhichRange );
 };
 
 
@@ -165,7 +165,7 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
 
     RTFPlainAttrMapIds aPlainMap;
     RTFPardAttrMapIds aPardMap;
-    std::vector<sal_uInt16> aWhichMap;
+    std::vector<WhichPair> aWhichMap;
 
     std::optional<EditPosition> mxInsertPosition;
     SfxItemPool* pAttrPool;
@@ -301,11 +301,11 @@ class SvxRTFItemStackType
     SvxRTFItemStackType(SvxRTFItemStackType const&) = delete;
     void operator=(SvxRTFItemStackType const&) = delete;
 
-    SvxRTFItemStackType( SfxItemPool&, const sal_uInt16* pWhichRange,
+    SvxRTFItemStackType( SfxItemPool&, const WhichRangesContainer& pWhichRange,
                             const EditPosition& );
 
     static std::unique_ptr<SvxRTFItemStackType> createSvxRTFItemStackType(
-        SfxItemPool&, const sal_uInt16* pWhichRange, const EditPosition&);
+        SfxItemPool&, const WhichRangesContainer& pWhichRange, const EditPosition&);
 
     void Add(std::unique_ptr<SvxRTFItemStackType>);
     void Compress( const SvxRTFParser& );

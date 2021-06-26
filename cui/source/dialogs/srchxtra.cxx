@@ -105,7 +105,7 @@ void SvxSearchFormatDialog::PageCreated(const OString& rId, SfxTabPage& rPage)
 }
 
 SvxSearchAttributeDialog::SvxSearchAttributeDialog(weld::Window* pParent,
-    SearchAttrItemList& rLst, const sal_uInt16* pWhRanges)
+    SearchAttrItemList& rLst, const WhichRangesContainer& pWhRanges)
     : GenericDialogController(pParent, "cui/ui/searchattrdialog.ui", "SearchAttrDialog")
     , rList(rLst)
     , m_xAttrLB(m_xBuilder->weld_tree_view("treeview"))

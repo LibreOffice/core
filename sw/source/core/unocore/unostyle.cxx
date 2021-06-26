@@ -1612,7 +1612,7 @@ void SwXStyle::SetPropertyValue<HINT_BEGIN>(const SfxItemPropertyMapEntry& rEntr
 {
     // default ItemSet handling
     SfxItemSet& rStyleSet = o_rStyleBase.GetItemSet();
-    SfxItemSet aSet(*rStyleSet.GetPool(), {{rEntry.nWID, rEntry.nWID}});
+    SfxItemSet aSet(*rStyleSet.GetPool(), rEntry.nWID, rEntry.nWID);
     aSet.SetParent(&rStyleSet);
     rPropSet.setPropertyValue(rEntry, rValue, aSet);
     rStyleSet.Put(aSet);
@@ -1721,7 +1721,7 @@ void SwXStyle::SetPropertyValue<sal_uInt16(RES_PAPER_BIN)>(const SfxItemProperty
     if(nBin == std::numeric_limits<printeridx_t>::max())
         throw lang::IllegalArgumentException();
     SfxItemSet& rStyleSet = o_rStyleBase.GetItemSet();
-    SfxItemSet aSet(*rStyleSet.GetPool(), {{rEntry.nWID, rEntry.nWID}});
+    SfxItemSet aSet(*rStyleSet.GetPool(), rEntry.nWID, rEntry.nWID);
     aSet.SetParent(&rStyleSet);
     rPropSet.setPropertyValue(rEntry, uno::makeAny(static_cast<sal_Int8>(nBin == std::numeric_limits<printeridx_t>::max()-1 ? -1 : nBin)), aSet);
     rStyleSet.Put(aSet);
@@ -2646,7 +2646,8 @@ void SAL_CALL SwXStyle::setPropertiesToDefault(const uno::Sequence<OUString>& aP
         {
             //
             SwDoc* pDoc = pTargetFormat->GetDoc();
-            SfxItemSet aSet(pDoc->GetAttrPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
+            static const WhichRangesLiteral ranges { { {XATTR_FILL_FIRST, XATTR_FILL_LAST} } };
+            SfxItemSet aSet(pDoc->GetAttrPool(), ranges);
             aSet.SetParent(&pTargetFormat->GetAttrSet());
 
             aSet.ClearItem(XATTR_FILLBMP_STRETCH);
@@ -2908,16 +2909,17 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
                     else if(pEntry->nWID == SID_ATTR_PAGE_ON && rValues[nProp].get<bool>())
                     {
                         // Header/footer gets switched on, create defaults and the needed SfxSetItem
-                        SfxItemSet aTempSet(*aBaseImpl.GetItemSet().GetPool(),
-                            svl::Items<RES_FRMATR_BEGIN,RES_FRMATR_END - 1,            // [82
+                        static const WhichRangesLiteral ranges { {
+                            {RES_FRMATR_BEGIN,RES_FRMATR_END - 1},            // [82
 
                             // FillAttribute support
-                            XATTR_FILL_FIRST, XATTR_FILL_LAST,              // [1014
+                            {XATTR_FILL_FIRST, XATTR_FILL_LAST},              // [1014
 
-                            SID_ATTR_BORDER_INNER,SID_ATTR_BORDER_INNER,    // [10023
-                            SID_ATTR_PAGE_SIZE,SID_ATTR_PAGE_SIZE,          // [10051
-                            SID_ATTR_PAGE_ON,SID_ATTR_PAGE_SHARED,          // [10060
-                            SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST>{});
+                            {SID_ATTR_BORDER_INNER,SID_ATTR_BORDER_INNER},    // [10023
+                            {SID_ATTR_PAGE_SIZE,SID_ATTR_PAGE_SIZE},          // [10051
+                            {SID_ATTR_PAGE_ON,SID_ATTR_PAGE_SHARED},          // [10060
+                            {SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST} } };
+                        SfxItemSet aTempSet(*aBaseImpl.GetItemSet().GetPool(), ranges);
 
                         // set correct parent to get the XFILL_NONE FillStyle as needed
                         aTempSet.SetParent(&GetDoc()->GetDfltFrameFormat()->GetAttrSet());
@@ -3346,7 +3348,7 @@ void SwXFrameStyle::SetItem(sal_uInt16 eAtr, const SfxPoolItem& rItem)
         return;
     rtl::Reference<SwDocStyleSheet> xStyle(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
     SfxItemSet& rStyleSet = xStyle->GetItemSet();
-    SfxItemSet aSet(*rStyleSet.GetPool(), {{sal_uInt16(eAtr), sal_uInt16(eAtr)}});
+    SfxItemSet aSet(*rStyleSet.GetPool(), sal_uInt16(eAtr), sal_uInt16(eAtr));
     aSet.Put(rItem);
     xStyle->SetItemSet(aSet);
 }
@@ -3530,13 +3532,13 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
         throw uno::RuntimeException();
     }
 
-    const sal_uInt16* pRange = nullptr;
+    const WhichRangesContainer* pRange = nullptr;
     const SfxItemPropertySet* pPropSet = nullptr;
     switch( m_eFamily )
     {
         case IStyleAccess::AUTO_STYLE_CHAR:
         {
-            pRange = aCharAutoFormatSetRange;
+            pRange = &aCharAutoFormatSetRange;
             pPropSet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_CHAR_AUTO_STYLE);
             break;
         }
@@ -3548,7 +3550,7 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
         }
         case IStyleAccess::AUTO_STYLE_PARA:
         {
-            pRange = aTextNodeSetRange; // checked, already added support for [XATTR_FILL_FIRST, XATTR_FILL_LAST]
+            pRange = &aTextNodeSetRange; // checked, already added support for [XATTR_FILL_FIRST, XATTR_FILL_LAST]
             pPropSet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_PARA_AUTO_STYLE);
             break;
         }
@@ -3558,7 +3560,7 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
     if( !pPropSet)
         throw uno::RuntimeException();
 
-    SwAttrSet aSet( m_pDocShell->GetDoc()->GetAttrPool(), pRange );
+    SwAttrSet aSet( m_pDocShell->GetDoc()->GetAttrPool(), pRange ? *pRange : WhichRangesContainer() );
     const bool bTakeCareOfDrawingLayerFillStyle(IStyleAccess::AUTO_STYLE_PARA == m_eFamily);
 
     if(!bTakeCareOfDrawingLayerFillStyle)
@@ -3788,7 +3790,8 @@ SwAutoStylesEnumImpl::SwAutoStylesEnumImpl( SwDoc& rInitDoc, IStyleAccess::SwAut
             std::pair< sal_uInt16, text::RubyAdjust > aPair( pRubyItem->GetPosition(), pRubyItem->GetAdjustment() );
             if ( aRubyMap.insert( aPair ).second )
             {
-                auto pItemSet = std::make_shared<SfxItemSet>( rAttrPool, svl::Items<RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY>{} );
+                static const WhichRangesLiteral ranges { { {RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY} } };
+                auto pItemSet = std::make_shared<SfxItemSet>( rAttrPool, ranges );
                 pItemSet->Put( *pRubyItem );
                 mAutoStyles.push_back( pItemSet );
             }

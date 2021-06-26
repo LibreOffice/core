@@ -64,11 +64,10 @@ bool ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
                                                 SfxItemSet& rOutSet )
 {
     SfxItemPool* pArgPool = rArgs.GetPool();
-    SfxItemSet aNewAttr(
-        *pArgPool,
-        svl::Items<
-            EE_ITEMS_START, EE_ITEMS_END,
-            SID_ATTR_PARA_PAGEBREAK, SID_ATTR_PARA_WIDOWS>{});
+    static const WhichRangesLiteral ranges { {
+            {EE_ITEMS_START, EE_ITEMS_END},
+            {SID_ATTR_PARA_PAGEBREAK, SID_ATTR_PARA_WIDOWS} } };
+    SfxItemSet aNewAttr(*pArgPool, ranges);
     aNewAttr.Put( rArgs );
 
     // Values have been taken over once to show the dialog.

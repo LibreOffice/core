@@ -33,16 +33,12 @@
 
 using namespace com::sun::star;
 
-const sal_uInt16 SvxTransparenceTabPage::pTransparenceRanges[] =
-{
-    XATTR_FILLTRANSPARENCE,
-    XATTR_FILLTRANSPARENCE,
-    SDRATTR_SHADOWTRANSPARENCE,
-    SDRATTR_SHADOWTRANSPARENCE,
-    XATTR_FILLFLOATTRANSPARENCE,
-    XATTR_FILLFLOATTRANSPARENCE,
-    0
-};
+static const WhichRangesLiteral ranges { {
+    {XATTR_FILLTRANSPARENCE, XATTR_FILLTRANSPARENCE},
+    {SDRATTR_SHADOWTRANSPARENCE, SDRATTR_SHADOWTRANSPARENCE},
+    {XATTR_FILLFLOATTRANSPARENCE, XATTR_FILLFLOATTRANSPARENCE},
+} };
+const WhichRangesContainer SvxTransparenceTabPage::pTransparenceRanges(ranges);
 
 /*************************************************************************
 |*

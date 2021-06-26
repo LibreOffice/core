@@ -60,16 +60,13 @@
 // #i19922# - tdf#126051 see svx/source/dialog/hdft.cxx and sw/source/uibase/sidebar/PageMarginControl.hxx
 const tools::Long MINBODY = 56;  // 1mm in twips rounded
 
-const sal_uInt16 SvxPageDescPage::pRanges[] =
+static const WhichRangesLiteral ranges {
 {
-    SID_ATTR_BORDER_OUTER,
-    SID_ATTR_BORDER_SHADOW,
-    SID_ATTR_LRSPACE,
-    SID_ATTR_PAGE_SHARED,
-    SID_SWREGISTER_COLLECTION,
-    SID_SWREGISTER_MODE,
-    0
-};
+    {SID_ATTR_BORDER_OUTER, SID_ATTR_BORDER_SHADOW},
+    {SID_ATTR_LRSPACE, SID_ATTR_PAGE_SHARED},
+    {SID_SWREGISTER_COLLECTION, SID_SWREGISTER_MODE},
+} };
+const WhichRangesContainer SvxPageDescPage::pRanges(ranges);
 // ------- Mapping page layout ------------------------------------------
 
 const SvxPageUsage aArr[] =
@@ -1161,7 +1158,8 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
                 {
                     // create FillAttributes from SvxBrushItem
                     const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rTmpSet.Get(nWhich));
-                    SfxItemSet aTempSet(*rTmpSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
+                    static const WhichRangesLiteral ranges { { {XATTR_FILL_FIRST, XATTR_FILL_LAST} } };
+                    SfxItemSet aTempSet(*rTmpSet.GetPool(), ranges);
 
                     setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
                     aHeaderFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(aTempSet);
@@ -1197,7 +1195,8 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
                 {
                     // create FillAttributes from SvxBrushItem
                     const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rTmpSet.Get(nWhich));
-                    SfxItemSet aTempSet(*rTmpSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
+                    static const WhichRangesLiteral ranges { { {XATTR_FILL_FIRST, XATTR_FILL_LAST} } };
+                    SfxItemSet aTempSet(*rTmpSet.GetPool(), ranges);
 
                     setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
                     aFooterFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(aTempSet);
@@ -1223,7 +1222,8 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
         {
             // create FillAttributes from SvxBrushItem
             const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(*pItem);
-            SfxItemSet aTempSet(*rSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
+            static const WhichRangesLiteral ranges { { {XATTR_FILL_FIRST, XATTR_FILL_LAST} } };
+            SfxItemSet aTempSet(*rSet.GetPool(), ranges);
 
             setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
             aPageFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(aTempSet);
@@ -1287,7 +1287,8 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
             {
                 // aBspWin.SetHdColor(rItem.GetColor());
                 const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rHeaderSet.Get(nWhich));
-                SfxItemSet aTempSet(*rHeaderSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
+                static const WhichRangesLiteral ranges { { {XATTR_FILL_FIRST, XATTR_FILL_LAST} } };
+                SfxItemSet aTempSet(*rHeaderSet.GetPool(), ranges);
 
                 setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
                 aHeaderFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(aTempSet);
@@ -1342,7 +1343,8 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
         {
             // aBspWin.SetFtColor(rItem.GetColor());
             const SvxBrushItem& rItem = static_cast<const SvxBrushItem&>(rFooterSet.Get(nWhich));
-            SfxItemSet aTempSet(*rFooterSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
+            static const WhichRangesLiteral ranges { { {XATTR_FILL_FIRST, XATTR_FILL_LAST} } };
+            SfxItemSet aTempSet(*rFooterSet.GetPool(), ranges);
 
             setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
             aFooterFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(aTempSet);
