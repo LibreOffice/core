@@ -138,18 +138,18 @@ void ScInterpreter::ScGetDay()
 
 void ScInterpreter::ScGetMin()
 {
-    sal_uInt16 nHour, nMinute, nSecond;
-    double fFractionOfSecond;
-    tools::Time::GetClock( GetDouble(), nHour, nMinute, nSecond, fFractionOfSecond, 0);
+    sal_uInt16 nHour, nMinute, nSecond, nMs;
+    tools::Time::GetClock(GetDouble(), nHour, nMinute, nSecond, nMs, 0);
+    if (nMs >= 500 && nSecond == 59)
+        nMinute = (nMinute + 1) % 60; // OFFICE-4094
     PushDouble( nMinute);
 }
 
 void ScInterpreter::ScGetSec()
 {
-    sal_uInt16 nHour, nMinute, nSecond;
-    double fFractionOfSecond;
-    tools::Time::GetClock( GetDouble(), nHour, nMinute, nSecond, fFractionOfSecond, 0);
-    if ( fFractionOfSecond >= 0.5 )
+    sal_uInt16 nHour, nMinute, nSecond, nMs;
+    tools::Time::GetClock(GetDouble(), nHour, nMinute, nSecond, nMs, 0);
+    if (nMs >= 500)
         nSecond = ( nSecond + 1 ) % 60;
     PushDouble( nSecond );
 
@@ -157,10 +157,11 @@ void ScInterpreter::ScGetSec()
 
 void ScInterpreter::ScGetHour()
 {
-    sal_uInt16 nHour, nMinute, nSecond;
-    double fFractionOfSecond;
-    tools::Time::GetClock( GetDouble(), nHour, nMinute, nSecond, fFractionOfSecond, 0);
-    PushDouble( nHour);
+    sal_uInt16 nHour, nMinute, nSecond, nMs;
+    tools::Time::GetClock(GetDouble(), nHour, nMinute, nSecond, nMs, 0);
+    if (nMs >= 500 && nSecond == 59 && nMinute == 59) // OFFICE-4094
+        ++nHour;
+    PushDouble(nHour % 24); // GetClock may return 24 to indicate rounding up
 }
 
 void ScInterpreter::ScGetDateValue()
