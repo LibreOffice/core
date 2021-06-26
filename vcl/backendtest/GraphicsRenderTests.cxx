@@ -21,6 +21,16 @@
      && aOutDevTest.getRenderBackendName() != "genpsp"                                             \
      && aOutDevTest.getRenderBackendName() != "win")
 
+namespace
+{
+void exportImage(Bitmap aBitmap, const OUString& imageName)
+{
+    aBitmap.Scale(Size(500, 500), BmpScaleFlag::Fast);
+    SvFileStream aStream(imageName + ".png", StreamMode::WRITE | StreamMode::TRUNC);
+    GraphicFilter::GetGraphicFilter().compressAsPNG(BitmapEx(aBitmap), aStream);
+}
+}
+
 void GraphicsRenderTests::updateResult(vcl::test::TestResult const result, OUString atestname)
 {
     switch (result)
@@ -51,6 +61,7 @@ void GraphicsRenderTests::testDrawRectWithRectangle()
     updateResult(eResult, "testDrawRectWithRectangle");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawRectWithRectangle");
         m_aResultantBitmap["testDrawRectWithRectangle"] = aBitmap;
     }
 }
@@ -68,6 +79,7 @@ void GraphicsRenderTests::testDrawRectWithPixel()
     updateResult(eResult, "testDrawRectWithPixel");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawRectWithPixel");
         m_aResultantBitmap["testDrawRectWithPixel"] = aBitmap;
     }
 }
@@ -85,6 +97,7 @@ void GraphicsRenderTests::testDrawRectWithLine()
     updateResult(eResult, "testDrawRectWithLine");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawRectWithLine");
         m_aResultantBitmap["testDrawRectWithLine"] = aBitmap;
     }
 }
@@ -102,6 +115,7 @@ void GraphicsRenderTests::testDrawRectWithPolygon()
     updateResult(eResult, "testDrawRectWithPolygon");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawRectWithPolygon");
         m_aResultantBitmap["testDrawRectWithPolygon"] = aBitmap;
     }
 }
@@ -119,6 +133,7 @@ void GraphicsRenderTests::testDrawRectWithPolyLine()
     updateResult(eResult, "testDrawRectWithPolyLine");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawRectWithPolyLine");
         m_aResultantBitmap["testDrawRectWithPolyLine"] = aBitmap;
     }
 }
@@ -136,6 +151,7 @@ void GraphicsRenderTests::testDrawRectWithPolyLineB2D()
     updateResult(eResult, "testDrawRectWithPolyLineB2D");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawRectWithPolyLineB2D");
         m_aResultantBitmap["testDrawRectWithPolyLineB2D"] = aBitmap;
     }
 }
@@ -153,6 +169,7 @@ void GraphicsRenderTests::testDrawRectWithPolyPolygon()
     updateResult(eResult, "testDrawRectWithPolyPolygon");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawRectWithPolyPolygon");
         m_aResultantBitmap["testDrawRectWithPolyPolygon"] = aBitmap;
     }
 }
@@ -170,6 +187,7 @@ void GraphicsRenderTests::testDrawRectWithPolyPolygonB2D()
     updateResult(eResult, "testDrawRectWithPolyPolygonB2D");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawRectWithPolyPolygonB2D");
         m_aResultantBitmap["testDrawRectWithPolyPolygonB2D"] = aBitmap;
     }
 }
@@ -187,6 +205,7 @@ void GraphicsRenderTests::testDrawRectAAWithRectangle()
     updateResult(eResult, "testDrawRectAAWithRectangle");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawRectAAWithRectangle");
         m_aResultantBitmap["testDrawRectAAWithRectangle"] = aBitmap;
     }
 }
@@ -204,6 +223,7 @@ void GraphicsRenderTests::testDrawRectAAWithPixel()
     updateResult(eResult, "testDrawRectAAWithPixel");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawRectAAWithPixel");
         m_aResultantBitmap["testDrawRectAAWithPixel"] = aBitmap;
     }
 }
@@ -221,6 +241,7 @@ void GraphicsRenderTests::testDrawRectAAWithLine()
     updateResult(eResult, "testDrawRectAAWithLine");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawRectAAWithLine");
         m_aResultantBitmap["testDrawRectAAWithLine"] = aBitmap;
     }
 }
@@ -238,6 +259,7 @@ void GraphicsRenderTests::testDrawRectAAWithPolygon()
     updateResult(eResult, "testDrawRectAAWithPolygon");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawRectAAWithPolygon");
         m_aResultantBitmap["testDrawRectAAWithPolygon"] = aBitmap;
     }
 }
@@ -255,6 +277,7 @@ void GraphicsRenderTests::testDrawRectAAWithPolyLine()
     updateResult(eResult, "testDrawRectAAWithPolyLine");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawRectAAWithPolyLine");
         m_aResultantBitmap["testDrawRectAAWithPolyLine"] = aBitmap;
     }
 }
@@ -272,6 +295,7 @@ void GraphicsRenderTests::testDrawRectAAWithPolyLineB2D()
     updateResult(eResult, "testDrawRectAAWithPolyLineB2D");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawRectAAWithPolyLineB2D");
         m_aResultantBitmap["testDrawRectAAWithPolyLineB2D"] = aBitmap;
     }
 }
@@ -289,6 +313,7 @@ void GraphicsRenderTests::testDrawRectAAWithPolyPolygon()
     updateResult(eResult, "testDrawRectAAWithPolyPolygon");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawRectAAWithPolyPolygon");
         m_aResultantBitmap["testDrawRectAAWithPolyPolygon"] = aBitmap;
     }
 }
@@ -306,6 +331,7 @@ void GraphicsRenderTests::testDrawRectAAWithPolyPolygonB2D()
     updateResult(eResult, "testDrawRectAAWithPolyPolygonB2D");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawRectAAWithPolyPolygonB2D");
         m_aResultantBitmap["testDrawRectAAWithPolyPolygonB2D"] = aBitmap;
     }
 }
@@ -325,6 +351,7 @@ void GraphicsRenderTests::testDrawFilledRectWithRectangle()
     updateResult(eResult, "testDrawFilledRectWithRectangle");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawFilledRectWithRectangle");
         m_aResultantBitmap["testDrawFilledRectWithRectangle"] = aBitmap;
     }
     aBitmap = aOutDevTest.setupFilledRectangle(true);
@@ -332,6 +359,7 @@ void GraphicsRenderTests::testDrawFilledRectWithRectangle()
     updateResult(eResult, "testDrawFilledRectWithRectangleWithAA");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawFilledRectWithRectangleWithAA");
         m_aResultantBitmap["testDrawFilledRectWithRectangleWithAA"] = aBitmap;
     }
 }
@@ -351,6 +379,7 @@ void GraphicsRenderTests::testDrawFilledRectWithPolygon()
     updateResult(eResult, "testDrawFilledRectWithPolygon");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawFilledRectWithPolygon");
         m_aResultantBitmap["testDrawFilledRectWithPolygon"] = aBitmap;
     }
     aBitmap = aOutDevTest.setupFilledRectangle(true);
@@ -358,6 +387,7 @@ void GraphicsRenderTests::testDrawFilledRectWithPolygon()
     updateResult(eResult, "testDrawFilledRectWithPolygonWithAA");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawFilledRectWithPolygonWithAA");
         m_aResultantBitmap["testDrawFilledRectWithPolygonWithAA"] = aBitmap;
     }
 }
@@ -377,6 +407,7 @@ void GraphicsRenderTests::testDrawFilledRectWithPolyPolygon()
     updateResult(eResult, "testDrawFilledRectWithPolyPolygon");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawFilledRectWithPolyPolygon");
         m_aResultantBitmap["testDrawFilledRectWithPolyPolygon"] = aBitmap;
     }
     aBitmap = aOutDevTest.setupFilledRectangle(true);
@@ -384,6 +415,7 @@ void GraphicsRenderTests::testDrawFilledRectWithPolyPolygon()
     updateResult(eResult, "testDrawFilledRectWithPolyPolygonWithAA");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawFilledRectWithPolyPolygonWithAA");
         m_aResultantBitmap["testDrawFilledRectWithPolyPolygonWithAA"] = aBitmap;
     }
 }
@@ -403,6 +435,7 @@ void GraphicsRenderTests::testDrawFilledRectWithPolyPolygon2D()
     updateResult(eResult, "testDrawFilledRectWithPolyPolygon2D");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawFilledRectWithPolyPolygon2D");
         m_aResultantBitmap["testDrawFilledRectWithPolyPolygon2D"] = aBitmap;
     }
     aBitmap = aOutDevTest.setupFilledRectangle(true);
@@ -410,6 +443,7 @@ void GraphicsRenderTests::testDrawFilledRectWithPolyPolygon2D()
     updateResult(eResult, "testDrawFilledRectWithPolyPolygon2DWithAA");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawFilledRectWithPolyPolygon2DWithAA");
         m_aResultantBitmap["testDrawFilledRectWithPolyPolygon2DWithAA"] = aBitmap;
     }
 }
@@ -427,6 +461,7 @@ void GraphicsRenderTests::testDrawDiamondWithPolygon()
     updateResult(eResult, "testDrawDiamondWithPolygon");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawDiamondWithPolygon");
         m_aResultantBitmap["testDrawDiamondWithPolygon"] = aBitmap;
     }
 }
@@ -444,6 +479,7 @@ void GraphicsRenderTests::testDrawDiamondWithLine()
     updateResult(eResult, "testDrawDiamondWithLine");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawDiamondWithLine");
         m_aResultantBitmap["testDrawDiamondWithLine"] = aBitmap;
     }
 }
@@ -461,6 +497,7 @@ void GraphicsRenderTests::testDrawDiamondWithPolyline()
     updateResult(eResult, "testDrawDiamondWithPolyline");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawDiamondWithPolyline");
         m_aResultantBitmap["testDrawDiamondWithPolyline"] = aBitmap;
     }
 }
@@ -478,6 +515,7 @@ void GraphicsRenderTests::testDrawDiamondWithPolylineB2D()
     updateResult(eResult, "testDrawDiamondWithPolylineB2D");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawDiamondWithPolylineB2D");
         m_aResultantBitmap["testDrawDiamondWithPolylineB2D"] = aBitmap;
     }
 }
@@ -496,6 +534,7 @@ void GraphicsRenderTests::testDrawInvertWithRectangle()
     updateResult(eResult, "testDrawInvertWithRectangle");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawInvertWithRectangle");
         m_aResultantBitmap["testDrawInvertWithRectangle"] = aBitmap;
     }
 }
@@ -514,6 +553,7 @@ void GraphicsRenderTests::testDrawInvertN50WithRectangle()
     updateResult(eResult, "testDrawInvertN50WithRectangle");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawInvertN50WithRectangle");
         m_aResultantBitmap["testDrawInvertN50WithRectangle"] = aBitmap;
     }
 }
@@ -532,6 +572,7 @@ void GraphicsRenderTests::testDrawInvertTrackFrameWithRectangle()
     updateResult(eResult, "testDrawInvertTrackFrameWithRectangle");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawInvertTrackFrameWithRectangle");
         m_aResultantBitmap["testDrawInvertTrackFrameWithRectangle"] = aBitmap;
     }
 }
@@ -549,6 +590,7 @@ void GraphicsRenderTests::testDrawBezierWithPolylineB2D()
     updateResult(eResult, "testDrawBezierWithPolylineB2D");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawBezierWithPolylineB2D");
         m_aResultantBitmap["testDrawBezierWithPolylineB2D"] = aBitmap;
     }
 }
@@ -566,6 +608,7 @@ void GraphicsRenderTests::testDrawBezierAAWithPolylineB2D()
     updateResult(eResult, "testDrawBezierAAWithPolylineB2D");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawBezierAAWithPolylineB2D");
         m_aResultantBitmap["testDrawBezierAAWithPolylineB2D"] = aBitmap;
     }
 }
@@ -584,6 +627,7 @@ void GraphicsRenderTests::testDrawBitmap()
     updateResult(eResult, "testDrawBitmap");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawBitmap");
         m_aResultantBitmap["testDrawBitmap"] = aBitmap;
     }
 }
@@ -602,6 +646,7 @@ void GraphicsRenderTests::testDrawTransformedBitmap()
     updateResult(eResult, "testDrawTransformedBitmap");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawTransformedBitmap");
         m_aResultantBitmap["testDrawTransformedBitmap"] = aBitmap;
     }
 }
@@ -620,6 +665,7 @@ void GraphicsRenderTests::testDrawBitmapExWithAlpha()
     updateResult(eResult, "testDrawBitmapExWithAlpha");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawBitmapExWithAlpha");
         m_aResultantBitmap["testDrawBitmapExWithAlpha"] = aBitmap;
     }
 }
@@ -637,6 +683,7 @@ void GraphicsRenderTests::testDrawMask()
     updateResult(eResult, "testDrawMask");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawMask");
         m_aResultantBitmap["testDrawMask"] = aBitmap;
     }
 }
@@ -654,6 +701,7 @@ void GraphicsRenderTests::testDrawBlend()
     updateResult(eResult, "testDrawBlend");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmapEx.GetBitmap(), m_aUserInstallPath + "testDrawBlend");
         m_aResultantBitmap["testDrawBlend"] = aBitmapEx.GetBitmap();
     }
 }
@@ -671,6 +719,7 @@ void GraphicsRenderTests::testDrawXor()
     updateResult(eResult, "testDrawXor");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawXor");
         m_aResultantBitmap["testDrawXor"] = aBitmap;
     }
 }
@@ -688,6 +737,7 @@ void GraphicsRenderTests::testClipRectangle()
     updateResult(eResult, "testClipRectangle");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testClipRectangle");
         m_aResultantBitmap["testClipRectangle"] = aBitmap;
     }
 }
@@ -705,6 +755,7 @@ void GraphicsRenderTests::testClipPolygon()
     updateResult(eResult, "testClipPolygon");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testClipPolygon");
         m_aResultantBitmap["testClipPolygon"] = aBitmap;
     }
 }
@@ -722,6 +773,7 @@ void GraphicsRenderTests::testClipPolyPolygon()
     updateResult(eResult, "testClipPolyPolygon");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testClipPolyPolygon");
         m_aResultantBitmap["testClipPolyPolygon"] = aBitmap;
     }
 }
@@ -739,6 +791,7 @@ void GraphicsRenderTests::testClipB2DPolyPolygon()
     updateResult(eResult, "testClipB2DPolyPolygon");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testClipB2DPolyPolygon");
         m_aResultantBitmap["testClipB2DPolyPolygon"] = aBitmap;
     }
 }
@@ -757,6 +810,7 @@ void GraphicsRenderTests::testDrawOutDev()
     updateResult(eResult, "testDrawOutDev");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawOutDev");
         m_aResultantBitmap["testDrawOutDev"] = aBitmap;
     }
 }
@@ -774,6 +828,7 @@ void GraphicsRenderTests::testDashedLine()
     updateResult(eResult, "testDashedLine");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testDashedLine");
         m_aResultantBitmap["testDashedLine"] = aBitmap;
     }
 }
@@ -792,6 +847,7 @@ void GraphicsRenderTests::testLinearGradient()
     updateResult(eResult, "testLinearGradient");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testLinearGradient");
         m_aResultantBitmap["testLinearGradient"] = aBitmap;
     }
 }
@@ -810,6 +866,7 @@ void GraphicsRenderTests::testLinearGradientAngled()
     updateResult(eResult, "testLinearGradientAngled");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testLinearGradientAngled");
         m_aResultantBitmap["testLinearGradientAngled"] = aBitmap;
     }
 }
@@ -828,6 +885,7 @@ void GraphicsRenderTests::testLinearGradientBorder()
     updateResult(eResult, "testLinearGradientBorder");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testLinearGradientBorder");
         m_aResultantBitmap["testLinearGradientBorder"] = aBitmap;
     }
 }
@@ -846,6 +904,7 @@ void GraphicsRenderTests::testLinearGradientIntensity()
     updateResult(eResult, "testLinearGradientIntensity");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testLinearGradientIntensity");
         m_aResultantBitmap["testLinearGradientIntensity"] = aBitmap;
     }
 }
@@ -864,6 +923,7 @@ void GraphicsRenderTests::testLinearGradientSteps()
     updateResult(eResult, "testLinearGradientSteps");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testLinearGradientSteps");
         m_aResultantBitmap["testLinearGradientSteps"] = aBitmap;
     }
 }
@@ -882,6 +942,7 @@ void GraphicsRenderTests::testAxialGradient()
     updateResult(eResult, "testAxialGradient");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testAxialGradient");
         m_aResultantBitmap["testAxialGradient"] = aBitmap;
     }
 }
@@ -900,6 +961,7 @@ void GraphicsRenderTests::testRadialGradient()
     updateResult(eResult, "testRadialGradient");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testRadialGradient");
         m_aResultantBitmap["testRadialGradient"] = aBitmap;
     }
 }
@@ -918,6 +980,7 @@ void GraphicsRenderTests::testRadialGradientOfs()
     updateResult(eResult, "testRadialGradientOfs");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testRadialGradientOfs");
         m_aResultantBitmap["testRadialGradientOfs"] = aBitmap;
     }
 }
@@ -935,6 +998,7 @@ void GraphicsRenderTests::testLineJoinBevel()
     updateResult(eResult, "testLineJoinBevel");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testLineJoinBevel");
         m_aResultantBitmap["testLineJoinBevel"] = aBitmap;
     }
 }
@@ -952,6 +1016,7 @@ void GraphicsRenderTests::testLineJoinRound()
     updateResult(eResult, "testLineJoinRound");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testLineJoinRound");
         m_aResultantBitmap["testLineJoinRound"] = aBitmap;
     }
 }
@@ -969,6 +1034,7 @@ void GraphicsRenderTests::testLineJoinMiter()
     updateResult(eResult, "testLineJoinMiter");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testLineJoinMiter");
         m_aResultantBitmap["testLineJoinMiter"] = aBitmap;
     }
 }
@@ -986,6 +1052,7 @@ void GraphicsRenderTests::testLineJoinNone()
     updateResult(eResult, "testLineJoinNone");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testLineJoinNone");
         m_aResultantBitmap["testLineJoinNone"] = aBitmap;
     }
 }
@@ -1003,6 +1070,7 @@ void GraphicsRenderTests::testLineCapRound()
     updateResult(eResult, "testLineCapRound");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testLineCapRound");
         m_aResultantBitmap["testLineCapRound"] = aBitmap;
     }
 }
@@ -1020,6 +1088,7 @@ void GraphicsRenderTests::testLineCapSquare()
     updateResult(eResult, "testLineCapSquare");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testLineCapSquare");
         m_aResultantBitmap["testLineCapSquare"] = aBitmap;
     }
 }
@@ -1037,6 +1106,7 @@ void GraphicsRenderTests::testLineCapButt()
     updateResult(eResult, "testLineCapButt");
     if (m_aStoreResultantBitmap)
     {
+        exportImage(aBitmap, m_aUserInstallPath + "testLineCapButt");
         m_aResultantBitmap["testLineCapButt"] = aBitmap;
     }
 }
@@ -1124,11 +1194,18 @@ std::map<OUString, Bitmap> GraphicsRenderTests::getResultBitmaps() { return m_aR
 void GraphicsRenderTests::run(bool storeResultBitmap)
 {
     m_aStoreResultantBitmap = storeResultBitmap;
+    ::utl::Bootstrap::locateUserInstallation(m_aUserInstallPath);
+    if (storeResultBitmap)
+    {
+        m_aUserInstallPath += "/user/GraphicTestResults/";
+    }
+    else
+    {
+        m_aUserInstallPath += "/user/";
+    }
     runALLTests();
     //Storing the test's results in the main user installation directory.
-    OUString aUserInstallPath;
-    ::utl::Bootstrap::locateUserInstallation(aUserInstallPath);
-    SvFileStream logFile(aUserInstallPath + "/user/GraphicsRenderTests.log",
+    SvFileStream logFile(m_aUserInstallPath + "GraphicsRenderTests.log",
                          StreamMode::WRITE | StreamMode::TRUNC);
     OUString writeResult = getResultString() + "\n---Name of the tests that failed---\n";
     if (m_aFailed.size() > 0)
@@ -1154,7 +1231,7 @@ void GraphicsRenderTests::run(bool storeResultBitmap)
     {
         writeResult += "No test was Quirky.\n";
     }
-    writeResult += "\n---Name of the tests that were Skipped---";
+    writeResult += "\n---Name of the tests that were Skipped---\n";
     if (m_aSkipped.size() > 0)
     {
         for (const class OUString& tests : m_aSkipped)
