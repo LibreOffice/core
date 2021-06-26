@@ -994,7 +994,7 @@ double ScInterpreter::GetBetaDist(double fXin, double fAlpha, double fBeta)
         return pow(fXin, fAlpha);
     if (fAlpha == 1.0)
     //            1.0 - pow(1.0-fX,fBeta) is not accurate enough
-        return -::rtl::math::expm1(fBeta * ::rtl::math::log1p(-fXin));
+        return -std::expm1(fBeta * ::rtl::math::log1p(-fXin));
     //FIXME: need special algorithm for fX near fP for large fA,fB
     double fResult;
     // I use always continued fraction, power series are neither
