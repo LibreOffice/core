@@ -219,10 +219,11 @@ void SwWrtShell::Insert( const OUString &rStr )
          bCallIns = m_bIns /*|| bHasSel*/;
     bool bDeleted = false;
 
-    typedef svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_RSID - 1,
-                       RES_CHRATR_RSID + 1, RES_CHRATR_END - 1,
-                       RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT> CharItems;
-    SfxItemSet aCharAttrSet(GetAttrPool(), CharItems{});
+    static const WhichRangesLiteral aCharItems( {
+        {RES_CHRATR_BEGIN, RES_CHRATR_RSID - 1},
+        {RES_CHRATR_RSID + 1, RES_CHRATR_END - 1},
+        {RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT} });
+    SfxItemSet aCharAttrSet(GetAttrPool(), aCharItems);
 
     if( bHasSel || ( !m_bIns && SelectHiddenRange() ) )
     {
@@ -1617,16 +1618,15 @@ void SwWrtShell::QuickUpdateStyle()
 void SwWrtShell::AutoUpdatePara(SwTextFormatColl* pColl, const SfxItemSet& rStyleSet, SwPaM* pPaM )
 {
     SwPaM* pCursor = pPaM ? pPaM : GetCursor( );
-    SfxItemSet aCoreSet(
-        GetAttrPool(),
-        svl::Items<
-            RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
-            RES_PARATR_BEGIN, RES_PARATR_END - 1,
-            RES_FRMATR_BEGIN, RES_FRMATR_END - 1,
-            SID_ATTR_TABSTOP_DEFAULTS,SID_ATTR_TABSTOP_OFFSET,
-            SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
-            SID_ATTR_PARA_MODEL, SID_ATTR_PARA_KEEP,
-            SID_ATTR_PARA_PAGENUM, SID_ATTR_PARA_PAGENUM>{});
+    static const WhichRangesLiteral ranges { {
+            {RES_CHRATR_BEGIN, RES_CHRATR_END - 1},
+            {RES_PARATR_BEGIN, RES_PARATR_END - 1},
+            {RES_FRMATR_BEGIN, RES_FRMATR_END - 1},
+            {SID_ATTR_TABSTOP_DEFAULTS,SID_ATTR_TABSTOP_OFFSET},
+            {SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER},
+            {SID_ATTR_PARA_MODEL, SID_ATTR_PARA_KEEP},
+            {SID_ATTR_PARA_PAGENUM, SID_ATTR_PARA_PAGENUM} } };
+    SfxItemSet aCoreSet(GetAttrPool(), ranges);
     GetPaMAttr( pCursor, aCoreSet );
     bool bReset = false;
     SfxItemIter aParaIter( aCoreSet );

@@ -110,18 +110,18 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
 
         // remove unused attribute RES_LR_SPACE
         // add list attributes
-        SfxItemSet aSavedAttrsSet(
-            rDoc.GetAttrPool(),
-            svl::Items<
-                RES_PARATR_NUMRULE, RES_PARATR_NUMRULE,
-                RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1,
-                RES_PAGEDESC, RES_BREAK>{});
+        static const WhichRangesLiteral ranges { {
+                {RES_PARATR_NUMRULE, RES_PARATR_NUMRULE},
+                {RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1},
+                {RES_PAGEDESC, RES_BREAK} } };
+        SfxItemSet aSavedAttrsSet(rDoc.GetAttrPool(), ranges);
         const SfxItemSet* pAttrSetOfNode = pNode->GetpSwAttrSet();
 
         std::vector<sal_uInt16> aClearWhichIds;
         // restoring all paragraph list attributes
         {
-            SfxItemSet aListAttrSet( rDoc.GetAttrPool(), svl::Items<RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1>{} );
+            static const WhichRangesLiteral listRanges { { {RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1} } };
+            SfxItemSet aListAttrSet( rDoc.GetAttrPool(), listRanges );
             aListAttrSet.Set(*pAttrSetOfNode);
             if ( aListAttrSet.Count() )
             {
@@ -319,10 +319,11 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
             pStt, pEnd, pHst, nullptr, pLayout);
 
     // mst: not including META here; it seems attrs with CH_TXTATR are omitted
-    SfxItemSet aDelSet(GetAttrPool(), svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
-                                                 RES_TXTATR_INETFMT, RES_TXTATR_UNKNOWN_CONTAINER,
-                                                 RES_PARATR_BEGIN, RES_FRMATR_END - 1,
-                                                 RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1>{});
+    static const WhichRangesLiteral ranges { {
+            {RES_TXTATR_INETFMT, RES_TXTATR_UNKNOWN_CONTAINER},
+            {RES_PARATR_BEGIN, RES_FRMATR_END - 1},
+            {RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1} } };
+    SfxItemSet aDelSet(GetAttrPool(), ranges);
     for( auto it = rAttrs.rbegin(); it != rAttrs.rend(); ++it )
     {
         if( POOLATTR_END > *it )
@@ -414,7 +415,8 @@ void SwDoc::UpdateRsid( const SwPaM &rRg, const sal_Int32 nLen )
     const sal_Int32 nStart(rRg.GetPoint()->nContent.GetIndex() - nLen);
     SvxRsidItem aRsid( mnRsid, RES_CHRATR_RSID );
 
-    SfxItemSet aSet(GetAttrPool(), svl::Items<RES_CHRATR_RSID, RES_CHRATR_RSID>{});
+    static const WhichRangesLiteral ranges { { {RES_CHRATR_RSID, RES_CHRATR_RSID} } };
+    SfxItemSet aSet(GetAttrPool(), ranges);
     aSet.Put(aRsid);
     bool const bRet(pTextNode->SetAttr(aSet, nStart,
         rRg.GetPoint()->nContent.GetIndex()));
@@ -450,7 +452,7 @@ bool SwDoc::UpdateParRsid( SwTextNode *pTextNode, sal_uInt32 nVal )
 /// If Undo is enabled, the old values is added to the Undo history.
 void SwDoc::SetAttr( const SfxPoolItem& rAttr, SwFormat& rFormat )
 {
-    SfxItemSet aSet( GetAttrPool(), {{rAttr.Which(), rAttr.Which()}} );
+    SfxItemSet aSet( GetAttrPool(), rAttr.Which(), rAttr.Which() );
     aSet.Put( rAttr );
     SetAttr( aSet, rFormat );
 }
@@ -526,7 +528,7 @@ static bool lcl_SetNewDefTabStops( SwTwips nOldWidth, SwTwips nNewWidth,
 /// If Undo is enabled, the old value is added to the Undo history.
 void SwDoc::SetDefault( const SfxPoolItem& rAttr )
 {
-    SfxItemSet aSet( GetAttrPool(), {{rAttr.Which(), rAttr.Which()}} );
+    SfxItemSet aSet( GetAttrPool(), rAttr.Which(), rAttr.Which() );
     aSet.Put( rAttr );
     SetDefault( aSet );
 }
@@ -1834,19 +1836,17 @@ void SwDoc::SetFormatItemByAutoFormat( const SwPaM& rPam, const SfxItemSet& rSet
     }
 
     const sal_Int32 nEnd(rPam.End()->nContent.GetIndex());
-    std::vector<sal_uInt16> whichIds;
+    std::vector<WhichPair> whichIds;
     SfxItemIter iter(rSet);
     for (SfxPoolItem const* pItem = iter.GetCurItem(); pItem; pItem = iter.NextItem())
     {
-        whichIds.push_back(pItem->Which());
-        whichIds.push_back(pItem->Which());
+        whichIds.push_back({pItem->Which(), pItem->Which()});
     }
-    whichIds.push_back(0);
-    SfxItemSet currentSet(GetAttrPool(), whichIds.data());
+    SfxItemSet currentSet(GetAttrPool(), WhichRangesContainer( whichIds.data(), whichIds.size() ) );
     pTNd->GetParaAttr(currentSet, nEnd, nEnd);
-    for (size_t i = 0; whichIds[i]; i += 2)
+    for (auto const & rPair : whichIds)
     {   // yuk - want to explicitly set the pool defaults too :-/
-        currentSet.Put(currentSet.Get(whichIds[i]));
+        currentSet.Put(currentSet.Get(rPair.first));
     }
 
     getIDocumentContentOperations().InsertItemSet( rPam, rSet, SetAttrMode::DONTEXPAND );

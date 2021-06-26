@@ -2677,10 +2677,8 @@ namespace pcr
         try
         {
             // create the itemset for the dialog
-            SfxItemSet aCoreSet(
-                SfxGetpApp()->GetPool(),
-                svl::Items<
-                    SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_INFO>{});
+            static const WhichRangesLiteral ranges { { {SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_INFO} } };
+            SfxItemSet aCoreSet(SfxGetpApp()->GetPool(), ranges);
                 // ripped this somewhere ... don't understand it :(
 
             // get the number formats supplier

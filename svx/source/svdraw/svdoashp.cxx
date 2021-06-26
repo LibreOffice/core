@@ -1387,10 +1387,10 @@ void SdrObjCustomShape::AdaptTextMinSize()
     if (!bChanged)
        return;
 
-    SfxItemSet aSet(
-        *GetObjectItemSet().GetPool(),
-        svl::Items<SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,
-        SDRATTR_TEXT_MINFRAMEWIDTH, SDRATTR_TEXT_AUTOGROWWIDTH>{}); // contains SDRATTR_TEXT_MAXFRAMEWIDTH
+    static const WhichRangesLiteral ranges { {
+        {SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT},
+        {SDRATTR_TEXT_MINFRAMEWIDTH, SDRATTR_TEXT_AUTOGROWWIDTH} } }; // contains SDRATTR_TEXT_MAXFRAMEWIDTH
+    SfxItemSet aSet(*GetObjectItemSet().GetPool(), ranges);
 
     if(bResizeShapeToFitText)
     {
@@ -2215,11 +2215,12 @@ void SdrObjCustomShape::SetVerticalWriting( bool bVertical )
     tools::Rectangle aObjectRect = GetLogicRect();
 
     // prepare ItemSet to set exchanged width and height items
-    SfxItemSet aNewSet(*rSet.GetPool(),
-        svl::Items<SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,
+    static const WhichRangesLiteral ranges { {
+        {SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT},
         // Expanded item ranges to also support horizontal and vertical adjust.
-        SDRATTR_TEXT_VERTADJUST, SDRATTR_TEXT_VERTADJUST,
-        SDRATTR_TEXT_AUTOGROWWIDTH, SDRATTR_TEXT_HORZADJUST>{});
+        {SDRATTR_TEXT_VERTADJUST, SDRATTR_TEXT_VERTADJUST},
+        {SDRATTR_TEXT_AUTOGROWWIDTH, SDRATTR_TEXT_HORZADJUST} } };
+    SfxItemSet aNewSet(*rSet.GetPool(), ranges);
 
     aNewSet.Put(rSet);
 

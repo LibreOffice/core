@@ -820,7 +820,8 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
 
     // does the selection provide a unique presentation layout?
     // if not, the templates must not be edited
-    SfxItemSet aSet(*rSet.GetPool(), svl::Items<SID_STATUS_LAYOUT, SID_STATUS_LAYOUT>{});
+    static const WhichRangesLiteral ranges { { {SID_STATUS_LAYOUT, SID_STATUS_LAYOUT} } };
+    SfxItemSet aSet(*rSet.GetPool(), ranges);
     GetStatusBarState(aSet);
     OUString aTest = static_cast<const SfxStringItem&>(aSet.Get(SID_STATUS_LAYOUT)).GetValue();
     if (aTest.isEmpty())
@@ -1466,7 +1467,8 @@ void OutlineViewShell::GetAttrState( SfxItemSet& rSet )
                 SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem.get());
                 if (pFamilyItem && static_cast<SfxStyleFamily>(pFamilyItem->GetValue()) == SfxStyleFamily::Pseudo)
                 {
-                    SfxItemSet aSet(*rSet.GetPool(), svl::Items<SID_STATUS_LAYOUT, SID_STATUS_LAYOUT>{});
+                    static const WhichRangesLiteral ranges { { {SID_STATUS_LAYOUT, SID_STATUS_LAYOUT} } };
+                    SfxItemSet aSet(*rSet.GetPool(), ranges);
                     GetStatusBarState(aSet);
                     OUString aRealStyle = static_cast<const SfxStringItem&>(aSet.Get(SID_STATUS_LAYOUT)).GetValue();
                     if (aRealStyle.isEmpty())

@@ -34,7 +34,7 @@ const sal_uInt16 CAPTYPE_BITMAPS_COUNT = 3;
 class SvxCaptionTabPage : public SfxTabPage
 {
 private:
-    static const sal_uInt16 pCaptionRanges[];
+    static const WhichRangesContainer pCaptionRanges;
 
     Image           m_aBmpCapTypes[CAPTYPE_BITMAPS_COUNT];
 
@@ -81,7 +81,7 @@ public:
     virtual ~SvxCaptionTabPage() override;
 
     static std::unique_ptr<SfxTabPage>  Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
-    static const sal_uInt16*  GetRanges() { return pCaptionRanges; }
+    static WhichRangesContainer GetRanges() { return pCaptionRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* ) override;
     virtual void        Reset( const SfxItemSet * ) override;

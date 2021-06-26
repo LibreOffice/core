@@ -3003,9 +3003,11 @@ XLineAttrSetItem::XLineAttrSetItem( std::unique_ptr<SfxItemSet>&& pItemSet ) :
 {
 }
 
+const WhichRangesLiteral ranges { { {XATTR_LINE_FIRST, XATTR_LINE_LAST} } };
+
 XLineAttrSetItem::XLineAttrSetItem( SfxItemPool* pItemPool ) :
     SfxSetItem( XATTRSET_LINE,
-        std::make_unique<SfxItemSet>( *pItemPool, svl::Items<XATTR_LINE_FIRST, XATTR_LINE_LAST>{}))
+        std::make_unique<SfxItemSet>( *pItemPool, ranges))
 {
 }
 
@@ -3031,9 +3033,11 @@ XFillAttrSetItem::XFillAttrSetItem( std::unique_ptr<SfxItemSet>&& pItemSet ) :
 {
 }
 
+const WhichRangesLiteral fillAttrRanges { { {XATTR_FILL_FIRST, XATTR_FILL_LAST} } };
+
 XFillAttrSetItem::XFillAttrSetItem( SfxItemPool* pItemPool ) :
     SfxSetItem( XATTRSET_FILL,
-        std::make_unique<SfxItemSet>( *pItemPool, svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{}))
+        std::make_unique<SfxItemSet>( *pItemPool, fillAttrRanges ))
 {
 }
 

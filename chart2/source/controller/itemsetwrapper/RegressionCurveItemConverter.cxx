@@ -116,7 +116,7 @@ bool RegressionCurveItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;
 }
 
-const sal_uInt16 * RegressionCurveItemConverter::GetWhichPairs() const
+WhichRangesContainer RegressionCurveItemConverter::GetWhichPairs() const
 {
     // must span all used items!
     return nRegressionCurveWhichPairs;

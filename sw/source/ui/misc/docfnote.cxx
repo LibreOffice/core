@@ -54,7 +54,8 @@ void SwFootNoteOptionDlg::PageCreated(const OString& /*rId*/, SfxTabPage &rPage)
 
 IMPL_LINK(SwFootNoteOptionDlg, OkHdl, weld::Button&, rBtn, void)
 {
-    SfxItemSet aDummySet(rSh.GetAttrPool(), svl::Items<1, 1>{} );
+    static const WhichRangesLiteral ranges { { {1, 1} } };
+    SfxItemSet aDummySet(rSh.GetAttrPool(), ranges );
     SfxTabPage *pPage = GetTabPage("footnotes");
     if ( pPage )
         pPage->FillItemSet( &aDummySet );

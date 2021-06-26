@@ -985,7 +985,8 @@ void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
         return;
 
     rSh.StartAction();
-    SfxItemSet aSet(GetPool(), svl::Items<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT>{});
+    static const WhichRangesLiteral ranges { { {RES_TXTATR_INETFMT, RES_TXTATR_INETFMT} } };
+    SfxItemSet aSet(GetPool(), ranges);
     rSh.GetCurAttr( aSet );
 
     const SfxPoolItem* pItem;

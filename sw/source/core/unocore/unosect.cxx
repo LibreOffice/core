@@ -357,14 +357,13 @@ SwXTextSection::attach(const uno::Reference< text::XTextRange > & xTextRange)
     aSect.SetProtectFlag(m_pImpl->m_pProps->m_bProtect);
     aSect.SetEditInReadonlyFlag(m_pImpl->m_pProps->m_bEditInReadonly);
 
-    SfxItemSet aSet(
-        pDoc->GetAttrPool(),
-        svl::Items<
-            RES_LR_SPACE, RES_LR_SPACE,
-            RES_BACKGROUND, RES_BACKGROUND,
-            RES_COL, RES_COL,
-            RES_FTN_AT_TXTEND, RES_FRAMEDIR,
-            RES_UNKNOWNATR_CONTAINER,RES_UNKNOWNATR_CONTAINER>{});
+    static const WhichRangesLiteral ranges { {
+            {RES_LR_SPACE, RES_LR_SPACE},
+            {RES_BACKGROUND, RES_BACKGROUND},
+            {RES_COL, RES_COL},
+            {RES_FTN_AT_TXTEND, RES_FRAMEDIR},
+            {RES_UNKNOWNATR_CONTAINER,RES_UNKNOWNATR_CONTAINER} } };
+    SfxItemSet aSet(pDoc->GetAttrPool(), ranges);
     if (m_pImpl->m_pProps->m_pBrushItem)
     {
         aSet.Put(*m_pImpl->m_pProps->m_pBrushItem);
@@ -836,7 +835,7 @@ void SwXTextSection::Impl::SetPropertyValues_Impl(
                 if (pFormat)
                 {
                     const SfxItemSet& rOldAttrSet = pFormat->GetAttrSet();
-                    pItemSet.reset( new SfxItemSet(*rOldAttrSet.GetPool(), {{pEntry->nWID, pEntry->nWID}}));
+                    pItemSet.reset( new SfxItemSet(*rOldAttrSet.GetPool(), pEntry->nWID, pEntry->nWID));
                     pItemSet->Put(rOldAttrSet);
                     m_rPropSet.setPropertyValue(*pEntry,
                             pValues[nProperty], *pItemSet);
@@ -1568,7 +1567,7 @@ SwXTextSection::setPropertyToDefault(const OUString& rPropertyName)
                 if (pFormat)
                 {
                     const SfxItemSet& rOldAttrSet = pFormat->GetAttrSet();
-                    pNewAttrSet.reset( new SfxItemSet(*rOldAttrSet.GetPool(), {{pEntry->nWID, pEntry->nWID}}));
+                    pNewAttrSet.reset( new SfxItemSet(*rOldAttrSet.GetPool(), pEntry->nWID, pEntry->nWID));
                     pNewAttrSet->ClearItem(pEntry->nWID);
                 }
                 else

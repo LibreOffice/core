@@ -226,7 +226,7 @@ void SvxHpLinkDlg::ResetPageImpl ()
 |
 \**********************************************************************/
 
-const sal_uInt16* SvxHpLinkDlg::GetInputRanges( const SfxItemPool& )
+WhichRangesContainer SvxHpLinkDlg::GetInputRanges( const SfxItemPool& )
 {
     if ( pSet )
     {
@@ -234,13 +234,10 @@ const sal_uInt16* SvxHpLinkDlg::GetInputRanges( const SfxItemPool& )
         return pSet->GetRanges();
     }
 
-    if ( pRanges )
-        return pRanges.get();
+    if ( !pRanges.empty() )
+        return pRanges;
 
-    pRanges.reset(new sal_uInt16[1]);
-    pRanges[0] = 0;
-
-    return pRanges.get();
+    return WhichRangesContainer();
 }
 
 

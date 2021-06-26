@@ -464,9 +464,12 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
     if(mpRemember2DAttributes)
         mpRemember2DAttributes->ClearItem();
     else
-        mpRemember2DAttributes = std::make_unique<SfxItemSet>(*rAttrs.GetPool(),
-            svl::Items<SDRATTR_START, SDRATTR_SHADOW_LAST,
-            SDRATTR_3D_FIRST, SDRATTR_3D_LAST>{});
+    {
+        static const WhichRangesLiteral ranges { {
+            {SDRATTR_START, SDRATTR_SHADOW_LAST},
+            {SDRATTR_3D_FIRST, SDRATTR_3D_LAST} } };
+        mpRemember2DAttributes = std::make_unique<SfxItemSet>(*rAttrs.GetPool(), ranges);
+    }
 
     SfxWhichIter aIter(*mpRemember2DAttributes);
     sal_uInt16 nWhich(aIter.FirstWhich());
@@ -2746,7 +2749,8 @@ void Svx3DWin::UpdatePreview()
     }
 
     // Get Itemset
-    SfxItemSet aSet( pModel->GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END>{});
+    static const WhichRangesLiteral ranges { { {SDRATTR_START, SDRATTR_END} } };
+    SfxItemSet aSet( pModel->GetItemPool(), ranges);
 
     // Get Attributes and set the preview
     GetAttr( aSet );

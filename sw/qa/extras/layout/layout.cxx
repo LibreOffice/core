@@ -226,7 +226,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
     pWrtShell->SplitNode(false);
     pWrtShell->Insert("baz");
     SfxItemSet flySet(pDoc->GetAttrPool(),
-                      svl::Items<RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR>{});
+                      { { { RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR } } });
     SwFormatAnchor anchor(RndStdIds::FLY_AT_CHAR);
     pWrtShell->StartOfSection(false);
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
@@ -557,7 +557,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
     pWrtShell->SplitNode(false);
     pWrtShell->Insert("baz");
     SfxItemSet flySet(pDoc->GetAttrPool(),
-                      svl::Items<RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR>{});
+                      { { { RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR } } });
     SwFormatAnchor anchor(RndStdIds::FLY_AT_CHAR);
     pWrtShell->StartOfSection(false);
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
@@ -910,7 +910,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
     CPPUNIT_ASSERT(pWrtShell->IsCursorInFootnote());
 
     SfxItemSet flySet(pDoc->GetAttrPool(),
-                      svl::Items<RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR>{});
+                      { { { RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR } } });
     SwFormatFrameSize size(SwFrameSize::Minimum, 1000, 1000);
     flySet.Put(size); // set a size, else we get 1 char per line...
     SwFormatAnchor anchor(RndStdIds::FLY_AT_CHAR);
@@ -1436,7 +1436,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
     pWrtShell->SplitNode(false);
     pWrtShell->Insert("baz");
     SfxItemSet flySet(pDoc->GetAttrPool(),
-                      svl::Items<RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR>{});
+                      { { { RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR } } });
     SwFormatFrameSize size(SwFrameSize::Minimum, 1000, 1000);
     flySet.Put(size); // set a size, else we get 1 char per line...
     pWrtShell->StartOfSection(false);
@@ -1900,7 +1900,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysAtFlys)
     pWrtShell->SplitNode(false);
     pWrtShell->Insert("baz");
     SfxItemSet flySet(pDoc->GetAttrPool(),
-                      svl::Items<RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR>{});
+                      { { { RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR } } });
     SwFormatFrameSize size(SwFrameSize::Minimum, 1000, 1000);
     flySet.Put(size); // set a size, else we get 1 char per line...
     pWrtShell->StartOfSection(false);
@@ -3232,7 +3232,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf124770)
     // Set font to italic 20pt Liberation Serif.
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SfxItemSet aTextSet(pWrtShell->GetView().GetPool(),
-                        svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1>{});
+                        { { { RES_CHRATR_BEGIN, RES_CHRATR_END - 1 } } });
     SvxFontItem aFont(RES_CHRATR_FONT);
     aFont.SetFamilyName("Liberation Serif");
     aTextSet.Put(aFont);

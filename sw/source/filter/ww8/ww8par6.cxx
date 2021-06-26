@@ -2140,9 +2140,10 @@ void WW8SwFlyPara::BoxUpWidth( tools::Long nInWidth )
 // The class WW8FlySet is derived from SfxItemSet and does not
 // provide more, but is easier to handle for me.
 // WW8FlySet-ctor for Apos and graphics Apos
+const WhichRangesLiteral ranges { { {RES_FRMATR_BEGIN,RES_FRMATR_END-1} } };
 WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
     const WW8SwFlyPara* pFS, bool bGraf)
-    : SfxItemSet(rReader.m_rDoc.GetAttrPool(),svl::Items<RES_FRMATR_BEGIN,RES_FRMATR_END-1>{})
+    : SfxItemSet(rReader.m_rDoc.GetAttrPool(), ranges)
 {
     Reader::ResetFrameFormatAttrs(*this);    // remove distance/border
                                             // position
@@ -2195,9 +2196,10 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
 }
 
 // WW8FlySet-ctor for character bound graphics
+const WhichRangesLiteral flySetRanges { { {RES_FRMATR_BEGIN,RES_FRMATR_END-1} } };
 WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM,
     const WW8_PIC& rPic, tools::Long nWidth, tools::Long nHeight )
-    : SfxItemSet(rReader.m_rDoc.GetAttrPool(),svl::Items<RES_FRMATR_BEGIN,RES_FRMATR_END-1>{})
+    : SfxItemSet(rReader.m_rDoc.GetAttrPool(), flySetRanges)
 {
     Init(rReader, pPaM);
 
@@ -2247,10 +2249,12 @@ void WW8FlySet::Init(const SwWW8ImplReader& rReader, const SwPaM* pPaM)
         Put(SwFormatVertOrient(0, text::VertOrientation::TOP, text::RelOrientation::FRAME));
 }
 
+const WhichRangesLiteral chrRanges { { {RES_CHRATR_BEGIN,RES_CHRATR_END-1} } };
+const WhichRangesLiteral parRanges { { {RES_PARATR_BEGIN,RES_PARATR_END-1} } };
 WW8DupProperties::WW8DupProperties(SwDoc &rDoc, SwWW8FltControlStack *pStack)
     : pCtrlStck(pStack),
-    aChrSet(rDoc.GetAttrPool(), svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1>{} ),
-    aParSet(rDoc.GetAttrPool(), svl::Items<RES_PARATR_BEGIN, RES_PARATR_END - 1>{} )
+    aChrSet(rDoc.GetAttrPool(), chrRanges ),
+    aParSet(rDoc.GetAttrPool(), parRanges )
 {
     //Close any open character properties and duplicate them inside the
     //first table cell
@@ -2449,7 +2453,8 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *p
     if (IsDropCap())
     {
         m_bDropCap = true;
-        m_xCurrentItemSet.reset(new SfxItemSet(m_rDoc.GetAttrPool(), svl::Items<RES_CHRATR_BEGIN, RES_PARATR_END - 1>{}));
+        static const WhichRangesLiteral ranges { { {RES_CHRATR_BEGIN, RES_PARATR_END - 1} } };
+        m_xCurrentItemSet.reset(new SfxItemSet(m_rDoc.GetAttrPool(), ranges));
         return false;
     }
 

@@ -1483,7 +1483,7 @@ const SfxPoolItem* SwWW8FltControlStack::GetFormatAttr(const SwPosition& rPos,
             if (pNd->IsTextNode())
             {
                 const sal_Int32 nPos = rPos.nContent.GetIndex();
-                m_xScratchSet.reset(new SfxItemSet(m_rDoc.GetAttrPool(), {{nWhich, nWhich}}));
+                m_xScratchSet.reset(new SfxItemSet(m_rDoc.GetAttrPool(), nWhich, nWhich));
                 if (pNd->GetTextNode()->GetParaAttr(*m_xScratchSet, nPos, nPos))
                     pItem = m_xScratchSet->GetItem(nWhich);
             }
@@ -2191,7 +2191,8 @@ void SwWW8ImplReader::Read_HdFtTextAsHackedFrame(WW8_CP nStart, WW8_CP nLen,
     m_pPaM->GetPoint()->nContent.Assign(m_pPaM->GetContentNode(), 0);
 
     // tdf#122425: Explicitly remove borders and spacing
-    SfxItemSet aFlySet(m_rDoc.GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END - 1>{});
+    static const WhichRangesLiteral ranges { { {RES_FRMATR_BEGIN, RES_FRMATR_END-1} } };
+    SfxItemSet aFlySet(m_rDoc.GetAttrPool(), ranges);
     Reader::ResetFrameFormatAttrs(aFlySet);
 
     SwFlyFrameFormat* pFrame
@@ -4359,8 +4360,10 @@ void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
             // Only handle shape if it is a background shape
             if (aData.begin()->get()->nFlags & ShapeFlag::Background)
             {
-                SfxItemSet aSet(rFormat.GetDoc()->GetAttrPool(),
-                                svl::Items<RES_BACKGROUND, RES_BACKGROUND,XATTR_START, XATTR_END>{});
+                static const WhichRangesLiteral ranges { {
+                        {RES_BACKGROUND, RES_BACKGROUND},
+                        {XATTR_START, XATTR_END} } };
+                SfxItemSet aSet(rFormat.GetDoc()->GetAttrPool(), ranges);
                 mrReader.MatchSdrItemsIntoFlySet(pObject, aSet, mso_lineSimple,
                                                  mso_lineSolid, mso_sptRectangle, aRect);
                 if ( aSet.HasItem(RES_BACKGROUND) )

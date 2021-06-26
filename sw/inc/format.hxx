@@ -67,8 +67,8 @@ class SW_DLLPUBLIC SwFormat : public sw::BorderCacheOwner, public sw::Broadcasti
 
 protected:
     SwFormat( SwAttrPool& rPool, const char* pFormatNm,
-            const sal_uInt16* pWhichRanges, SwFormat *pDrvdFrame, sal_uInt16 nFormatWhich );
-    SwFormat( SwAttrPool& rPool, const OUString &rFormatNm, const sal_uInt16* pWhichRanges,
+            const WhichRangesContainer& pWhichRanges, SwFormat *pDrvdFrame, sal_uInt16 nFormatWhich );
+    SwFormat( SwAttrPool& rPool, const OUString &rFormatNm, const WhichRangesContainer& pWhichRanges,
             SwFormat *pDrvdFrame, sal_uInt16 nFormatWhich );
     SwFormat( const SwFormat& rFormat );
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;

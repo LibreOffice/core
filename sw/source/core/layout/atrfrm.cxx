@@ -2516,8 +2516,8 @@ SwFrameFormat::SwFrameFormat(
     const char* pFormatNm,
     SwFrameFormat *pDrvdFrame,
     sal_uInt16 nFormatWhich,
-    const sal_uInt16* pWhichRange)
-:   SwFormat(rPool, pFormatNm, (pWhichRange ? pWhichRange : aFrameFormatSetRange), pDrvdFrame, nFormatWhich),
+    const WhichRangesContainer& pWhichRange)
+:   SwFormat(rPool, pFormatNm, (!pWhichRange.empty() ? pWhichRange : aFrameFormatSetRange), pDrvdFrame, nFormatWhich),
     m_wXObject(),
     maFillAttributes(),
     m_ffList(nullptr),
@@ -2530,8 +2530,8 @@ SwFrameFormat::SwFrameFormat(
     const OUString &rFormatNm,
     SwFrameFormat *pDrvdFrame,
     sal_uInt16 nFormatWhich,
-    const sal_uInt16* pWhichRange)
-:   SwFormat(rPool, rFormatNm, (pWhichRange ? pWhichRange : aFrameFormatSetRange), pDrvdFrame, nFormatWhich),
+    const WhichRangesContainer& pWhichRange)
+:   SwFormat(rPool, rFormatNm, (!pWhichRange.empty() ? pWhichRange : aFrameFormatSetRange), pDrvdFrame, nFormatWhich),
     m_wXObject(),
     maFillAttributes(),
     m_ffList(nullptr),

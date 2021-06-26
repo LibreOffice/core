@@ -1889,8 +1889,8 @@ static void lcl_CopyBoxToDoc(FndBox_ const& rFndBox, CpyPara *const pCpyPara)
 
                 // We can also copy formulas and values, if we copy the content
                 {
-                    SfxItemSet aBoxAttrSet( pCpyPara->rDoc.GetAttrPool(),
-                                            svl::Items<RES_BOXATR_FORMAT, RES_BOXATR_VALUE>{} );
+                    static const WhichRangesLiteral ranges { { {RES_BOXATR_FORMAT, RES_BOXATR_VALUE} } };
+                    SfxItemSet aBoxAttrSet( pCpyPara->rDoc.GetAttrPool(), ranges );
                     aBoxAttrSet.Put(rFndBox.GetBox()->GetFrameFormat()->GetAttrSet());
                     if( aBoxAttrSet.Count() )
                     {

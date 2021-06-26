@@ -1156,13 +1156,13 @@ static void ImpPageChange(SdrPage& rSdrPage)
     rSdrPage.getSdrModelFromSdrPage().Broadcast(aHint);
 }
 
+const WhichRangesLiteral ranges { { { XATTR_FILL_FIRST, XATTR_FILL_LAST } } };
+
 SdrPageProperties::SdrPageProperties(SdrPage& rSdrPage)
 :   SfxListener(),
     mpSdrPage(&rSdrPage),
     mpStyleSheet(nullptr),
-    maProperties(
-        mpSdrPage->getSdrModelFromSdrPage().GetItemPool(),
-        svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{})
+    maProperties(mpSdrPage->getSdrModelFromSdrPage().GetItemPool(), ranges)
 {
     if(!rSdrPage.IsMasterPage())
     {

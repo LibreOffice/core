@@ -65,65 +65,41 @@ using namespace ::com::sun::star;
 
 // static ----------------------------------------------------------------
 
-const sal_uInt16 SvxCharNamePage::pNameRanges[] =
-{
-    SID_ATTR_CHAR_FONT,
-    SID_ATTR_CHAR_WEIGHT,
-    SID_ATTR_CHAR_FONTHEIGHT,
-    SID_ATTR_CHAR_FONTHEIGHT,
-    SID_ATTR_CHAR_COLOR,
-    SID_ATTR_CHAR_COLOR,
-    SID_ATTR_CHAR_LANGUAGE,
-    SID_ATTR_CHAR_LANGUAGE,
-    SID_ATTR_CHAR_CJK_FONT,
-    SID_ATTR_CHAR_CJK_WEIGHT,
-    SID_ATTR_CHAR_CTL_FONT,
-    SID_ATTR_CHAR_CTL_WEIGHT,
-    0
-};
+const WhichRangesLiteral nameRanges { {
+    {SID_ATTR_CHAR_FONT, SID_ATTR_CHAR_WEIGHT},
+    {SID_ATTR_CHAR_FONTHEIGHT, SID_ATTR_CHAR_FONTHEIGHT},
+    {SID_ATTR_CHAR_COLOR, SID_ATTR_CHAR_COLOR},
+    {SID_ATTR_CHAR_LANGUAGE, SID_ATTR_CHAR_LANGUAGE},
+    {SID_ATTR_CHAR_CJK_FONT, SID_ATTR_CHAR_CJK_WEIGHT},
+    {SID_ATTR_CHAR_CTL_FONT, SID_ATTR_CHAR_CTL_WEIGHT},
+} };
+const WhichRangesContainer SvxCharNamePage::pNameRanges(nameRanges);
 
-const sal_uInt16 SvxCharEffectsPage::pEffectsRanges[] =
-{
-    SID_ATTR_CHAR_SHADOWED,
-    SID_ATTR_CHAR_UNDERLINE,
-    SID_ATTR_CHAR_COLOR,
-    SID_ATTR_CHAR_COLOR,
-    SID_ATTR_CHAR_CASEMAP,
-    SID_ATTR_CHAR_CASEMAP,
-    SID_ATTR_FLASH,
-    SID_ATTR_FLASH,
-    SID_ATTR_CHAR_EMPHASISMARK,
-    SID_ATTR_CHAR_EMPHASISMARK,
-    SID_ATTR_CHAR_RELIEF,
-    SID_ATTR_CHAR_RELIEF,
-    SID_ATTR_CHAR_HIDDEN,
-    SID_ATTR_CHAR_HIDDEN,
-    SID_ATTR_CHAR_OVERLINE,
-    SID_ATTR_CHAR_OVERLINE,
-    0
-};
+const WhichRangesLiteral effectsRanges { {
+    {SID_ATTR_CHAR_SHADOWED, SID_ATTR_CHAR_UNDERLINE},
+    {SID_ATTR_CHAR_COLOR, SID_ATTR_CHAR_COLOR},
+    {SID_ATTR_CHAR_CASEMAP, SID_ATTR_CHAR_CASEMAP},
+    {SID_ATTR_FLASH, SID_ATTR_FLASH},
+    {SID_ATTR_CHAR_EMPHASISMARK, SID_ATTR_CHAR_EMPHASISMARK},
+    {SID_ATTR_CHAR_RELIEF, SID_ATTR_CHAR_RELIEF},
+    {SID_ATTR_CHAR_HIDDEN, SID_ATTR_CHAR_HIDDEN},
+    {SID_ATTR_CHAR_OVERLINE, SID_ATTR_CHAR_OVERLINE},
+} };
+const WhichRangesContainer SvxCharEffectsPage::pEffectsRanges(effectsRanges);
 
-const sal_uInt16 SvxCharPositionPage::pPositionRanges[] =
-{
-    SID_ATTR_CHAR_KERNING,
-    SID_ATTR_CHAR_KERNING,
-    SID_ATTR_CHAR_ESCAPEMENT,
-    SID_ATTR_CHAR_ESCAPEMENT,
-    SID_ATTR_CHAR_AUTOKERN,
-    SID_ATTR_CHAR_AUTOKERN,
-    SID_ATTR_CHAR_ROTATED,
-    SID_ATTR_CHAR_SCALEWIDTH,
-    SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,
-    SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,
-    0
-};
+const WhichRangesLiteral positionRanges { {
+    {SID_ATTR_CHAR_KERNING, SID_ATTR_CHAR_KERNING},
+    {SID_ATTR_CHAR_ESCAPEMENT, SID_ATTR_CHAR_ESCAPEMENT},
+    {SID_ATTR_CHAR_AUTOKERN, SID_ATTR_CHAR_AUTOKERN},
+    {SID_ATTR_CHAR_ROTATED, SID_ATTR_CHAR_SCALEWIDTH},
+    {SID_ATTR_CHAR_WIDTH_FIT_TO_LINE, SID_ATTR_CHAR_WIDTH_FIT_TO_LINE},
+} };
+const WhichRangesContainer SvxCharPositionPage::pPositionRanges(positionRanges);
 
-const sal_uInt16 SvxCharTwoLinesPage::pTwoLinesRanges[] =
-{
-    SID_ATTR_CHAR_TWO_LINES,
-    SID_ATTR_CHAR_TWO_LINES,
-    0
-};
+const WhichRangesLiteral twoLineRanges { {
+    {SID_ATTR_CHAR_TWO_LINES, SID_ATTR_CHAR_TWO_LINES},
+} };
+const WhichRangesContainer SvxCharTwoLinesPage::pTwoLinesRanges(twoLineRanges);
 
 // C-Function ------------------------------------------------------------
 

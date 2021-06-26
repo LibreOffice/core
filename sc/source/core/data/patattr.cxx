@@ -81,8 +81,9 @@ ScPatternAttr::ScPatternAttr( std::unique_ptr<SfxItemSet>&& pItemSet )
 {
 }
 
+const WhichRangesLiteral ranges { { {ATTR_PATTERN_START, ATTR_PATTERN_END} } };
 ScPatternAttr::ScPatternAttr( SfxItemPool* pItemPool )
-    :   SfxSetItem  ( ATTR_PATTERN, std::make_unique<SfxItemSet>( *pItemPool, svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>{} ) ),
+    :   SfxSetItem  ( ATTR_PATTERN, std::make_unique<SfxItemSet>( *pItemPool, ranges ) ),
         pStyle      ( nullptr ),
         mnKey(0)
 {

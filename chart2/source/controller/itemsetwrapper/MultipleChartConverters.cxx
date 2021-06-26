@@ -65,7 +65,7 @@ AllAxisItemConverter::~AllAxisItemConverter()
 {
 }
 
-const sal_uInt16 * AllAxisItemConverter::GetWhichPairs() const
+WhichRangesContainer AllAxisItemConverter::GetWhichPairs() const
 {
     // must span all used items!
     return nAllAxisWhichPairs;
@@ -92,7 +92,7 @@ AllGridItemConverter::~AllGridItemConverter()
 {
 }
 
-const sal_uInt16 * AllGridItemConverter::GetWhichPairs() const
+WhichRangesContainer AllGridItemConverter::GetWhichPairs() const
 {
     // must span all used items!
     return nGridWhichPairs;
@@ -129,7 +129,7 @@ AllDataLabelItemConverter::~AllDataLabelItemConverter()
 {
 }
 
-const sal_uInt16 * AllDataLabelItemConverter::GetWhichPairs() const
+WhichRangesContainer AllDataLabelItemConverter::GetWhichPairs() const
 {
     // must span all used items!
     return nDataLabelWhichPairs;
@@ -158,7 +158,7 @@ AllTitleItemConverter::~AllTitleItemConverter()
 {
 }
 
-const sal_uInt16 * AllTitleItemConverter::GetWhichPairs() const
+WhichRangesContainer AllTitleItemConverter::GetWhichPairs() const
 {
     // must span all used items!
     return nTitleWhichPairs;
@@ -183,7 +183,7 @@ AllSeriesStatisticsConverter::AllSeriesStatisticsConverter(
 AllSeriesStatisticsConverter::~AllSeriesStatisticsConverter()
 {}
 
-const sal_uInt16 * AllSeriesStatisticsConverter::GetWhichPairs() const
+WhichRangesContainer AllSeriesStatisticsConverter::GetWhichPairs() const
 {
     // must span all used items!
     return nStatWhichPairs;

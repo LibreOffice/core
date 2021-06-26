@@ -4588,8 +4588,9 @@ void TestFormula::testFormulaRefUpdateValidity()
     sal_uLong nIndex = m_pDoc->AddValidationEntry(aData);
     SfxUInt32Item aItem(ATTR_VALIDDATA, nIndex);
 
+    static const WhichRangesLiteral ranges { { {ATTR_PATTERN_START, ATTR_PATTERN_END} } };
     ScPatternAttr aNewAttrs(
-        std::make_unique<SfxItemSet>(*m_pDoc->GetPool(), svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>{}));
+        std::make_unique<SfxItemSet>(*m_pDoc->GetPool(), ranges));
     aNewAttrs.GetItemSet().Put(aItem);
 
     m_pDoc->ApplyPattern(0, 1, 0, aNewAttrs);

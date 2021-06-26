@@ -118,7 +118,8 @@ void TextObjectBar::GetCharState( SfxItemSet& rSet )
     SfxItemSet  aCharAttrSet( mpView->GetDoc().GetPool() );
     mpView->GetAttributes( aCharAttrSet );
 
-    SfxItemSet aNewAttr( mpViewShell->GetPool(),svl::Items<EE_ITEMS_START,EE_ITEMS_END>{});
+    static const WhichRangesLiteral ranges { { {EE_ITEMS_START, EE_ITEMS_END} } };
+    SfxItemSet aNewAttr( mpViewShell->GetPool(), ranges );
 
     aNewAttr.Put(aCharAttrSet, false);
     rSet.Put(aNewAttr, false);

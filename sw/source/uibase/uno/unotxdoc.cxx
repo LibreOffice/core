@@ -740,14 +740,12 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
     //try attribute search first
     if(pSearch->HasSearchAttributes()||pSearch->HasReplaceAttributes())
     {
-        SfxItemSet aSearch(m_pDocShell->GetDoc()->GetAttrPool(),
-                            svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END-1,
-                            RES_PARATR_BEGIN, RES_PARATR_END-1,
-                            RES_FRMATR_BEGIN, RES_FRMATR_END-1>{});
-        SfxItemSet aReplace(m_pDocShell->GetDoc()->GetAttrPool(),
-                            svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END-1,
-                            RES_PARATR_BEGIN, RES_PARATR_END-1,
-                            RES_FRMATR_BEGIN, RES_FRMATR_END-1>{});
+        static const WhichRangesLiteral ranges { {
+                {RES_CHRATR_BEGIN, RES_CHRATR_END-1},
+                {RES_PARATR_BEGIN, RES_PARATR_END-1},
+                {RES_FRMATR_BEGIN, RES_FRMATR_END-1} } };
+        SfxItemSet aSearch(m_pDocShell->GetDoc()->GetAttrPool(), ranges);
+        SfxItemSet aReplace(m_pDocShell->GetDoc()->GetAttrPool(), ranges);
         pSearch->FillSearchItemSet(aSearch);
         pSearch->FillReplaceItemSet(aReplace);
         bool bCancel;
@@ -869,13 +867,12 @@ SwUnoCursor* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor >
         //try attribute search first
         if(pSearch->HasSearchAttributes())
         {
-            SfxItemSet aSearch(
-                m_pDocShell->GetDoc()->GetAttrPool(),
-                svl::Items<
-                    RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
-                    RES_TXTATR_INETFMT, RES_TXTATR_CHARFMT,
-                    RES_PARATR_BEGIN, RES_PARATR_END - 1,
-                    RES_FRMATR_BEGIN, RES_FRMATR_END - 1>{});
+            static const WhichRangesLiteral ranges { {
+                    {RES_CHRATR_BEGIN, RES_CHRATR_END - 1},
+                    {RES_TXTATR_INETFMT, RES_TXTATR_CHARFMT},
+                    {RES_PARATR_BEGIN, RES_PARATR_END - 1},
+                    {RES_FRMATR_BEGIN, RES_FRMATR_END - 1} } };
+            SfxItemSet aSearch(m_pDocShell->GetDoc()->GetAttrPool(), ranges);
             pSearch->FillSearchItemSet(aSearch);
             bool bCancel;
             nResult = static_cast<sal_Int32>(pUnoCursor->FindAttrs(aSearch, !pSearch->m_bStyles,

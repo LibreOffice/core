@@ -408,6 +408,30 @@ void SwStyleSheetIterator::SwPoolFormatList::Append( SfxStyleFamily eFam, const 
 
 // UI-sided implementation of StyleSheets
 // uses the Core-Engine
+const WhichRangesLiteral ranges { {
+        {RES_CHRATR_BEGIN, RES_CHRATR_END - 1},
+        {RES_PARATR_BEGIN, RES_FRMATR_END - 1},
+        {RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1},
+        // FillAttribute support:
+        {XATTR_FILL_FIRST, XATTR_FILL_LAST},
+        {SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER},
+        {SID_ATTR_PAGE, SID_ATTR_PAGE_EXT1},
+        {SID_ATTR_PAGE_HEADERSET, SID_ATTR_PAGE_FOOTERSET},
+        {SID_ATTR_PARA_MODEL, SID_ATTR_PARA_MODEL},
+        // Items to hand over XPropertyList things like XColorList,
+        // XHatchList, XGradientList, and XBitmapList to the Area TabPage:
+        {SID_COLOR_TABLE, SID_PATTERN_LIST},
+        {SID_SWREGISTER_COLLECTION, SID_SWREGISTER_COLLECTION},
+        {SID_ATTR_PARA_PAGENUM, SID_ATTR_PARA_PAGENUM},
+        {SID_SWREGISTER_MODE, SID_SWREGISTER_MODE},
+        {SID_ATTR_BRUSH_CHAR, SID_ATTR_BRUSH_CHAR},
+        {SID_ATTR_NUMBERING_RULE, SID_ATTR_NUMBERING_RULE},
+        {SID_ATTR_CHAR_GRABBAG, SID_ATTR_CHAR_GRABBAG},
+        {SID_ATTR_AUTO_STYLE_UPDATE, SID_ATTR_AUTO_STYLE_UPDATE},
+        {FN_PARAM_FTN_INFO, FN_PARAM_FTN_INFO},
+        {FN_KEEP_ASPECT_RATIO, FN_KEEP_ASPECT_RATIO},
+        {FN_COND_COLL, FN_COND_COLL} } };
+
 SwDocStyleSheet::SwDocStyleSheet(   SwDoc&                rDocument,
                                     SwDocStyleSheetPool&  rPool) :
 
@@ -420,31 +444,7 @@ SwDocStyleSheet::SwDocStyleSheet(   SwDoc&                rDocument,
     m_pTableFormat(nullptr),
     m_pBoxFormat(nullptr),
     m_rDoc(rDocument),
-    m_aCoreSet(
-        rPool.GetPool(),
-        svl::Items<
-            RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
-            RES_PARATR_BEGIN, RES_FRMATR_END - 1,
-            RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1,
-            // FillAttribute support:
-            XATTR_FILL_FIRST, XATTR_FILL_LAST,
-            SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
-            SID_ATTR_PAGE, SID_ATTR_PAGE_EXT1,
-            SID_ATTR_PAGE_HEADERSET, SID_ATTR_PAGE_FOOTERSET,
-            SID_ATTR_PARA_MODEL, SID_ATTR_PARA_MODEL,
-            // Items to hand over XPropertyList things like XColorList,
-            // XHatchList, XGradientList, and XBitmapList to the Area TabPage:
-            SID_COLOR_TABLE, SID_PATTERN_LIST,
-            SID_SWREGISTER_COLLECTION, SID_SWREGISTER_COLLECTION,
-            SID_ATTR_PARA_PAGENUM, SID_ATTR_PARA_PAGENUM,
-            SID_SWREGISTER_MODE, SID_SWREGISTER_MODE,
-            SID_ATTR_BRUSH_CHAR, SID_ATTR_BRUSH_CHAR,
-            SID_ATTR_NUMBERING_RULE, SID_ATTR_NUMBERING_RULE,
-            SID_ATTR_CHAR_GRABBAG, SID_ATTR_CHAR_GRABBAG,
-            SID_ATTR_AUTO_STYLE_UPDATE, SID_ATTR_AUTO_STYLE_UPDATE,
-            FN_PARAM_FTN_INFO, FN_PARAM_FTN_INFO,
-            FN_KEEP_ASPECT_RATIO, FN_KEEP_ASPECT_RATIO,
-            FN_COND_COLL, FN_COND_COLL>{}),
+    m_aCoreSet(rPool.GetPool(), ranges),
     m_bPhysical(false)
 {
     nHelpId = UCHAR_MAX;
