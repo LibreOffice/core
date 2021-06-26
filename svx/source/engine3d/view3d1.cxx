@@ -91,10 +91,10 @@ static void Imp_E3dView_InorderRun3DObjects(const SdrObject* pObj, sal_uInt32& r
 SfxItemSet E3dView::Get3DAttributes() const
 {
     // Creating itemset with corresponding field
-    SfxItemSet aSet(
-        mpModel->GetItemPool(),
-        svl::Items<SDRATTR_START,      SDRATTR_END,
-        SID_ATTR_3D_INTERN, SID_ATTR_3D_INTERN>{});
+    static const WhichRangesLiteral ranges { {
+            {SDRATTR_START,      SDRATTR_END},
+            {SID_ATTR_3D_INTERN, SID_ATTR_3D_INTERN} } };
+    SfxItemSet aSet(mpModel->GetItemPool(), ranges);
 
     sal_uInt32 nSelectedItems(0);
 
@@ -118,7 +118,8 @@ SfxItemSet E3dView::Get3DAttributes() const
     if(!nSelectedItems)
     {
         // Get defaults and apply
-        SfxItemSet aDefaultSet(mpModel->GetItemPool(), svl::Items<SDRATTR_3D_FIRST, SDRATTR_3D_LAST>{});
+        static const WhichRangesLiteral defaultRanges { { {SDRATTR_3D_FIRST, SDRATTR_3D_LAST} } };
+        SfxItemSet aDefaultSet(mpModel->GetItemPool(), defaultRanges);
         GetAttributes(aDefaultSet);
         aSet.Put(aDefaultSet);
 
@@ -158,7 +159,8 @@ void E3dView::Set3DAttributes( const SfxItemSet& rAttr)
     if(!nSelectedItems)
     {
         // Set defaults
-        SfxItemSet aDefaultSet(mpModel->GetItemPool(), svl::Items<SDRATTR_3D_FIRST, SDRATTR_3D_LAST>{});
+        static const WhichRangesLiteral ranges { { {SDRATTR_3D_FIRST, SDRATTR_3D_LAST} } };
+        SfxItemSet aDefaultSet(mpModel->GetItemPool(), ranges);
         aDefaultSet.Put(rAttr);
         SetAttributes(aDefaultSet);
     }

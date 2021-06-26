@@ -60,7 +60,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseDochdlTest, testComplexSelection)
     pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
     SfxItemSet aSet(pWrtShell->GetView().GetPool(),
-                    svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1>{});
+                    { { { RES_CHRATR_BEGIN, RES_CHRATR_END - 1 } } });
     // Bold, italic, underline.
     aSet.Put(SvxWeightItem(WEIGHT_BOLD, RES_CHRATR_WEIGHT));
     aSet.Put(SvxPostureItem(ITALIC_NORMAL, RES_CHRATR_POSTURE));

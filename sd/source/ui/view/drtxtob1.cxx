@@ -357,7 +357,8 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             SvxLRSpaceItem aLRSpace = static_cast<const SvxLRSpaceItem&>(pArgs->Get(
                 GetPool().GetWhich(SID_ATTR_PARA_LRSPACE)));
 
-            SfxItemSet aEditAttr( GetPool(), svl::Items<EE_PARA_LRSPACE, EE_PARA_LRSPACE>{} );
+            static const WhichRangesLiteral ranges { { {EE_PARA_LRSPACE, EE_PARA_LRSPACE} } };
+            SfxItemSet aEditAttr( GetPool(), ranges );
             aLRSpace.SetWhich( EE_PARA_LRSPACE );
 
             aEditAttr.Put( aLRSpace );
@@ -369,7 +370,8 @@ void TextObjectBar::Execute( SfxRequest &rReq )
 
         case SID_HANGING_INDENT:
         {
-            SfxItemSet aLRSpaceSet( GetPool(), svl::Items<EE_PARA_LRSPACE, EE_PARA_LRSPACE>{} );
+            static const WhichRangesLiteral ranges { { {EE_PARA_LRSPACE, EE_PARA_LRSPACE} } };
+            SfxItemSet aLRSpaceSet( GetPool(), ranges );
             mpView->GetAttributes( aLRSpaceSet );
             SvxLRSpaceItem aParaMargin( aLRSpaceSet.Get( EE_PARA_LRSPACE ) );
 
@@ -417,7 +419,8 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             // tdf#131571: SdrEndTextEdit invalidates pTextEditOutlinerView, the pointer retrieved for pOLV
             // so reinitialize pOLV
             pOLV=mpView->GetTextEditOutlinerView();
-            SfxItemSet aAttr( mpView->GetDoc().GetPool(), svl::Items<SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION>{} );
+            static const WhichRangesLiteral ranges { { {SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION} } };
+            SfxItemSet aAttr( mpView->GetDoc().GetPool(), ranges );
             aAttr.Put( SvxWritingModeItem(
                 nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ?
                     css::text::WritingMode_LR_TB : css::text::WritingMode_TB_RL,

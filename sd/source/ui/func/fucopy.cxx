@@ -74,8 +74,8 @@ void FuCopy::DoExecute( SfxRequest& rReq )
 
     if( !pArgs )
     {
-        SfxItemSet aSet( mpViewShell->GetPool(),
-                            svl::Items<ATTR_COPY_START, ATTR_COPY_END>{} );
+        static const WhichRangesLiteral ranges { { {ATTR_COPY_START, ATTR_COPY_END} } };
+        SfxItemSet aSet( mpViewShell->GetPool(), ranges );
 
         // indicate color attribute
         SfxItemSet aAttr( mpDoc->GetPool() );
@@ -204,7 +204,8 @@ void FuCopy::DoExecute( SfxRequest& rReq )
 
         if( ( 1 == i ) && bColor )
         {
-            SfxItemSet aNewSet( mpViewShell->GetPool(), svl::Items<XATTR_FILLSTYLE, XATTR_FILLCOLOR>{} );
+            static const WhichRangesLiteral ranges { { {XATTR_FILLSTYLE, XATTR_FILLCOLOR} } };
+            SfxItemSet aNewSet( mpViewShell->GetPool(), ranges );
             aNewSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
             aNewSet.Put( XFillColorItem( OUString(), aStartColor ) );
             mpView->SetAttributes( aNewSet );
@@ -266,7 +267,8 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             sal_uInt8 nGreen = aStartColor.GetGreen() + static_cast<sal_uInt8>( ( static_cast<::tools::Long>(aEndColor.GetGreen()) - static_cast<::tools::Long>(aStartColor.GetGreen()) ) *  static_cast<::tools::Long>(i) / static_cast<::tools::Long>(nNumber) );
             sal_uInt8 nBlue = aStartColor.GetBlue() + static_cast<sal_uInt8>( ( static_cast<::tools::Long>(aEndColor.GetBlue()) - static_cast<::tools::Long>(aStartColor.GetBlue()) ) * static_cast<::tools::Long>(i) / static_cast<::tools::Long>(nNumber) );
             Color aNewColor( nRed, nGreen, nBlue );
-            SfxItemSet aNewSet( mpViewShell->GetPool(), svl::Items<XATTR_FILLSTYLE, XATTR_FILLCOLOR>{} );
+            static const WhichRangesLiteral ranges { { {XATTR_FILLSTYLE, XATTR_FILLCOLOR} } };
+            SfxItemSet aNewSet( mpViewShell->GetPool(), ranges );
             aNewSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
             aNewSet.Put( XFillColorItem( OUString(), aNewColor ) );
             mpView->SetAttributes( aNewSet );

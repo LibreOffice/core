@@ -185,7 +185,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf101534)
     // Go to the second paragraph, assert that we have margins as direct
     // formatting.
     pWrtShell->Down(/*bSelect=*/false);
-    SfxItemSet aSet(pWrtShell->GetAttrPool(), svl::Items<RES_LR_SPACE, RES_LR_SPACE>{});
+    SfxItemSet aSet(pWrtShell->GetAttrPool(), { { { RES_LR_SPACE, RES_LR_SPACE } } });
     pWrtShell->GetCurAttr(aSet);
     CPPUNIT_ASSERT(aSet.HasItem(RES_LR_SPACE));
 
@@ -632,7 +632,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137245)
         SwFormatAnchor anchor(RndStdIds::FLY_AT_PARA);
         anchor.SetAnchor(pWrtShell->GetCursor()->GetPoint());
         SfxItemSet flySet(pDoc->GetAttrPool(),
-                          svl::Items<RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR>{});
+                          { { { RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR } } });
         flySet.Put(anchor);
         SwFormatFrameSize size(SwFrameSize::Minimum, 1000, 1000);
         flySet.Put(size); // set a size, else we get 1 char per line...
@@ -643,7 +643,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137245)
         SwFormatAnchor anchor(RndStdIds::FLY_AT_CHAR);
         anchor.SetAnchor(pWrtShell->GetCursor()->GetPoint());
         SfxItemSet flySet(pDoc->GetAttrPool(),
-                          svl::Items<RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR>{});
+                          { { { RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR } } });
         flySet.Put(anchor);
         SwFormatFrameSize size(SwFrameSize::Minimum, 1000, 1000);
         flySet.Put(size); // set a size, else we get 1 char per line...
@@ -660,7 +660,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137245)
         SwFormatAnchor anchor(RndStdIds::FLY_AT_PARA);
         anchor.SetAnchor(pWrtShell->GetCursor()->GetPoint());
         SfxItemSet flySet(pDoc->GetAttrPool(),
-                          svl::Items<RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR>{});
+                          { { { RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR } } });
         flySet.Put(anchor);
         SwFormatFrameSize size(SwFrameSize::Minimum, 1000, 1000);
         flySet.Put(size); // set a size, else we get 1 char per line...
@@ -671,7 +671,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137245)
         SwFormatAnchor anchor(RndStdIds::FLY_AT_CHAR);
         anchor.SetAnchor(pWrtShell->GetCursor()->GetPoint());
         SfxItemSet flySet(pDoc->GetAttrPool(),
-                          svl::Items<RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR>{});
+                          { { { RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR } } });
         flySet.Put(anchor);
         SwFormatFrameSize size(SwFrameSize::Minimum, 1000, 1000);
         flySet.Put(size); // set a size, else we get 1 char per line...
@@ -691,7 +691,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137245)
 
     // check that the AutoFormat did something
     pWrtShell->SttEndDoc(true);
-    SfxItemSet set{ pDoc->GetAttrPool(), svl::Items<RES_BOX, RES_BOX>{} };
+    SfxItemSet set{ pDoc->GetAttrPool(), { { { RES_BOX, RES_BOX } } } };
     pWrtShell->GetCurParAttr(set);
     CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, set.GetItemState(RES_BOX, false));
 }
@@ -730,7 +730,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf131912)
 
     {
         SfxItemSet flySet(pDoc->GetAttrPool(),
-                          svl::Items<RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR>{});
+                          { { { RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR } } });
         SwFormatAnchor anchor(RndStdIds::FLY_AT_CHAR);
         pWrtShell->StartOfSection(false);
         pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 2, /*bBasicCall=*/false);
@@ -1235,7 +1235,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf109376_redline)
     SwFormatAnchor anchor(RndStdIds::FLY_AT_PARA);
     anchor.SetAnchor(pWrtShell->GetCursor()->GetPoint());
     SfxItemSet flySet(pDoc->GetAttrPool(),
-                      svl::Items<RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR>{});
+                      { { { RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR } } });
     flySet.Put(anchor);
     SwFormatFrameSize size(SwFrameSize::Minimum, 1000, 1000);
     flySet.Put(size); // set a size, else we get 1 char per line...
@@ -1286,7 +1286,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf109376)
     SwFormatAnchor anchor(RndStdIds::FLY_AT_PARA);
     anchor.SetAnchor(pWrtShell->GetCursor()->GetPoint());
     SfxItemSet flySet(pDoc->GetAttrPool(),
-                      svl::Items<RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR>{});
+                      { { { RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR } } });
     flySet.Put(anchor);
     SwFormatFrameSize size(SwFrameSize::Minimum, 1000, 1000);
     flySet.Put(size); // set a size, else we get 1 char per line...

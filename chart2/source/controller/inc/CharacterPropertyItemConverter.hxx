@@ -42,7 +42,7 @@ public:
     virtual ~CharacterPropertyItemConverter() override;
 
 private:
-    virtual const sal_uInt16* GetWhichPairs() const override;
+    virtual WhichRangesContainer GetWhichPairs() const override;
     virtual bool GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const override;
     virtual void FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const override;
     virtual bool ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet & rItemSet ) override;

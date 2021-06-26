@@ -1797,7 +1797,7 @@ void SvxRTFParser::SetDefault( int nToken, int nValue )
     if( !bNewDoc )
         return;
 
-    SfxItemSet aTmp( *pAttrPool, aWhichMap.data() );
+    SfxItemSet aTmp( *pAttrPool, WhichRangesContainer( aWhichMap.data(), aWhichMap.size() ) );
     bool bOldFlag = bIsLeftToRightDef;
     bIsLeftToRightDef = true;
     switch( nToken )

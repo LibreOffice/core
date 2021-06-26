@@ -490,12 +490,11 @@ Printer* SmDocShell::GetPrt()
     }
     else if (!mpPrinter)
     {
-        auto pOptions = std::make_unique<SfxItemSet>(
-            GetPool(),
-            svl::Items<
-                SID_PRINTTITLE, SID_PRINTZOOM,
-                SID_NO_RIGHT_SPACES, SID_SAVE_ONLY_USED_SYMBOLS,
-                SID_AUTO_CLOSE_BRACKETS, SID_AUTO_CLOSE_BRACKETS>{});
+        static const WhichRangesLiteral ranges { {
+                {SID_PRINTTITLE, SID_PRINTZOOM},
+                {SID_NO_RIGHT_SPACES, SID_SAVE_ONLY_USED_SYMBOLS},
+                {SID_AUTO_CLOSE_BRACKETS, SID_AUTO_CLOSE_BRACKETS} } };
+        auto pOptions = std::make_unique<SfxItemSet>(GetPool(), ranges);
         SmModule *pp = SM_MOD();
         pp->GetConfig()->ConfigToItemSet(*pOptions);
         mpPrinter = VclPtr<SfxPrinter>::Create(std::move(pOptions));

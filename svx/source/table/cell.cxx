@@ -179,18 +179,18 @@ namespace sdr::properties
         // create a new itemset
         SfxItemSet CellProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return SfxItemSet(rPool,
-
+            static const WhichRangesLiteral ranges { {
                 // range from SdrAttrObj
-                svl::Items<SDRATTR_START, SDRATTR_SHADOW_LAST,
-                SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
-                SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
+                {SDRATTR_START, SDRATTR_SHADOW_LAST},
+                {SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST},
+                {SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION},
 
                 // range for SdrTableObj
-                SDRATTR_TABLE_FIRST, SDRATTR_TABLE_LAST,
+                {SDRATTR_TABLE_FIRST, SDRATTR_TABLE_LAST},
 
                 // range from SdrTextObj
-                EE_ITEMS_START, EE_ITEMS_END>{});
+                {EE_ITEMS_START, EE_ITEMS_END} } };
+            return SfxItemSet(rPool, ranges);
         }
 
         const svx::ITextProvider& CellProperties::getTextProvider() const
@@ -360,8 +360,8 @@ namespace sdr::properties
                 bool bAutoGrowHeight = rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT).GetValue();
 
                 // prepare ItemSet to set exchanged width and height items
-                SfxItemSet aNewSet(*rSet.GetPool(),
-                    svl::Items<SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT>{});
+                static const WhichRangesLiteral ranges { { {SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT} } };
+                SfxItemSet aNewSet(*rSet.GetPool(), ranges);
 
                 aNewSet.Put(rSet);
                 aNewSet.Put(makeSdrTextAutoGrowWidthItem(bAutoGrowHeight));
@@ -1117,7 +1117,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
         }
         default:
         {
-            SfxItemSet aSet(GetObject().getSdrModelFromSdrObject().GetItemPool(), {{pMap->nWID, pMap->nWID}});
+            SfxItemSet aSet(GetObject().getSdrModelFromSdrObject().GetItemPool(), pMap->nWID, pMap->nWID);
             aSet.Put(mpProperties->GetItem(pMap->nWID));
 
             bool bSpecial = false;
@@ -1237,7 +1237,7 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName )
         }
         default:
         {
-            SfxItemSet aSet(GetObject().getSdrModelFromSdrObject().GetItemPool(), {{pMap->nWID, pMap->nWID}});
+            SfxItemSet aSet(GetObject().getSdrModelFromSdrObject().GetItemPool(), pMap->nWID, pMap->nWID);
             aSet.Put(mpProperties->GetItem(pMap->nWID));
 
             Any aAny;
@@ -1565,7 +1565,7 @@ Any SAL_CALL Cell::getPropertyDefault( const OUString& aPropertyName )
         {
             if( SfxItemPool::IsWhich(pMap->nWID) )
             {
-                SfxItemSet aSet(GetObject().getSdrModelFromSdrObject().GetItemPool(), {{pMap->nWID, pMap->nWID}});
+                SfxItemSet aSet(GetObject().getSdrModelFromSdrObject().GetItemPool(), pMap->nWID, pMap->nWID);
                 aSet.Put(GetObject().getSdrModelFromSdrObject().GetItemPool().GetDefaultItem(pMap->nWID));
                 return GetAnyForItem( aSet, pMap );
             }

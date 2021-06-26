@@ -403,12 +403,11 @@ namespace
 
             // using Undo, remove direct paragraph formatting of the "To" paragraph,
             // and apply here direct paragraph formatting of the "From" paragraph
-            SfxItemSet aTmp(
-                rDoc.GetAttrPool(),
-                svl::Items<
-                    RES_PARATR_BEGIN, RES_PARATR_END - 3, // skip RSID and GRABBAG
-                    RES_PARATR_LIST_BEGIN, RES_UL_SPACE,  // skip PAGEDESC and BREAK
-                    RES_CNTNT, RES_FRMATR_END - 1>{});
+            static const WhichRangesLiteral ranges { {
+                    {RES_PARATR_BEGIN, RES_PARATR_END - 3}, // skip RSID and GRABBAG
+                    {RES_PARATR_LIST_BEGIN, RES_UL_SPACE},  // skip PAGEDESC and BREAK
+                    {RES_CNTNT, RES_FRMATR_END - 1} } };
+            SfxItemSet aTmp(rDoc.GetAttrPool(), ranges);
             SfxItemSet aTmp2(aTmp);
 
             pToNode->GetParaAttr(aTmp, 0, 0);

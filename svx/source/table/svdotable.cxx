@@ -128,18 +128,18 @@ void TableProperties::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNe
 // create a new itemset
 SfxItemSet TableProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
 {
-    return SfxItemSet(rPool,
-
+    static const WhichRangesLiteral ranges { {
         // range from SdrAttrObj
-        svl::Items<SDRATTR_START, SDRATTR_SHADOW_LAST,
-        SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
-        SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
+        {SDRATTR_START, SDRATTR_SHADOW_LAST},
+        {SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST},
+        {SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION},
 
         // range for SdrTableObj
-        SDRATTR_TABLE_FIRST, SDRATTR_TABLE_LAST,
+        {SDRATTR_TABLE_FIRST, SDRATTR_TABLE_LAST},
 
         // range from SdrTextObj
-        EE_ITEMS_START, EE_ITEMS_END>{});
+        {EE_ITEMS_START, EE_ITEMS_END} } };
+    return SfxItemSet(rPool, ranges);
 }
 
 namespace {

@@ -128,7 +128,7 @@ bool AxisItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;
 }
 
-const sal_uInt16 * AxisItemConverter::GetWhichPairs() const
+WhichRangesContainer AxisItemConverter::GetWhichPairs() const
 {
     // must span all used items!
     return nAxisWhichPairs;

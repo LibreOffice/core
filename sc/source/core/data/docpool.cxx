@@ -203,13 +203,15 @@ ScDocumentPool::ScDocumentPool()
     SvxFontItem* pCtlFont = getDefaultFontItem(nCtlLang, DefaultFontType::CTL_SPREADSHEET, ATTR_CTL_FONT);
 
     SvxBoxInfoItem* pGlobalBorderInnerAttr = new SvxBoxInfoItem( ATTR_BORDER_INNER );
-    auto pSet = std::make_unique<SfxItemSet>( *this, svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>{} );
-    SfxItemSet      aSetItemItemSet( *this,
-                                     svl::Items<ATTR_BACKGROUND, ATTR_BACKGROUND,
-                                     ATTR_BORDER,     ATTR_SHADOW,
-                                     ATTR_LRSPACE,    ATTR_ULSPACE,
-                                     ATTR_PAGE_SIZE,  ATTR_PAGE_SIZE,
-                                     ATTR_PAGE_ON,    ATTR_PAGE_SHARED_FIRST>{} );
+    static const WhichRangesLiteral ranges1 { { {ATTR_PATTERN_START, ATTR_PATTERN_END} } };
+    auto pSet = std::make_unique<SfxItemSet>( *this, ranges1 );
+    static const WhichRangesLiteral ranges2 { {
+            {ATTR_BACKGROUND, ATTR_BACKGROUND},
+            {ATTR_BORDER,     ATTR_SHADOW},
+            {ATTR_LRSPACE,    ATTR_ULSPACE},
+            {ATTR_PAGE_SIZE,  ATTR_PAGE_SIZE},
+            {ATTR_PAGE_ON,    ATTR_PAGE_SHARED_FIRST} } };
+    SfxItemSet      aSetItemItemSet( *this, ranges2 );
 
     pGlobalBorderInnerAttr->SetLine(nullptr, SvxBoxInfoItemLine::HORI);
     pGlobalBorderInnerAttr->SetLine(nullptr, SvxBoxInfoItemLine::VERT);

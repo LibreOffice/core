@@ -23,31 +23,31 @@
 
 SfxWhichIter::SfxWhichIter( const SfxItemSet& rSet ):
     pStart(rSet.GetRanges()),
-    pRanges(pStart),
+    pRanges(pStart.begin()),
     nOffset(0)
 {
 }
 
 sal_uInt16 SfxWhichIter::NextWhich()
 {
-    if ( 0 == pRanges[0] )
+    if ( pRanges >= (pStart.begin() + pStart.size()) )
         return 0;
 
-    const sal_uInt16 nLastWhich = pRanges[0] + nOffset;
+    const sal_uInt16 nLastWhich = pRanges->first + nOffset;
     ++nOffset;
-    if (pRanges[1] == nLastWhich)
+    if (pRanges->second == nLastWhich)
     {
-        pRanges += 2;
+        ++pRanges;
         nOffset = 0;
     }
-    return pRanges[0] + nOffset;
+    return pRanges->first + nOffset;
 }
 
 sal_uInt16 SfxWhichIter::FirstWhich()
 {
-    pRanges = pStart;
+    pRanges = pStart.begin();
     nOffset = 0;
-    return pRanges[0];
+    return pRanges->first;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

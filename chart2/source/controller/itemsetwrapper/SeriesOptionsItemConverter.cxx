@@ -160,7 +160,7 @@ SeriesOptionsItemConverter::~SeriesOptionsItemConverter()
 {
 }
 
-const sal_uInt16 * SeriesOptionsItemConverter::GetWhichPairs() const
+WhichRangesContainer SeriesOptionsItemConverter::GetWhichPairs() const
 {
     // must span all used items!
     return nSeriesOptionsWhichPairs;

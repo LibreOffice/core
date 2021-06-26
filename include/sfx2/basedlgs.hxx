@@ -31,6 +31,7 @@ class SfxChildWindow;
 struct SfxChildWinInfo;
 class SfxItemSet;
 class Timer;
+struct WhichRangesContainer;
 
 class SFX2_DLLPUBLIC SfxDialogController : public weld::GenericDialogController
 {
@@ -82,7 +83,7 @@ public:
     SfxBindings&            GetBindings() const { return *m_pBindings; }
 };
 
-typedef const sal_uInt16* (*GetTabPageRanges)(); // provides international Which values
+typedef WhichRangesContainer (*GetTabPageRanges)(); // provides international Which values
 
 class SFX2_DLLPUBLIC SfxOkDialogController : public SfxDialogController
 {

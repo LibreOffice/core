@@ -138,12 +138,13 @@ static bool lcl_HasThickLine( const SdrObject& rObj )
     return rObj.GetMergedItem(XATTR_LINEWIDTH).GetValue() > 0;
 }
 
+const WhichRangesLiteral ranges { { {SDRATTR_START, SDRATTR_END} } };
 ScDetectiveData::ScDetectiveData( SdrModel* pModel ) :
-    aBoxSet( pModel->GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END>{} ),
-    aArrowSet( pModel->GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END>{} ),
-    aToTabSet( pModel->GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END>{} ),
-    aFromTabSet( pModel->GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END>{} ),
-    aCircleSet( pModel->GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END>{} ),
+    aBoxSet( pModel->GetItemPool(), ranges ),
+    aArrowSet( pModel->GetItemPool(), ranges ),
+    aToTabSet( pModel->GetItemPool(), ranges ),
+    aFromTabSet( pModel->GetItemPool(), ranges ),
+    aCircleSet( pModel->GetItemPool(), ranges ),
     nMaxLevel(0)
 {
 
@@ -197,8 +198,11 @@ ScDetectiveData::ScDetectiveData( SdrModel* pModel ) :
     aCircleSet.Put( XLineWidthItem( 55 ) ); // 54 = 1 Pixel
 }
 
+const WhichRangesLiteral commentRanges { {
+    {SDRATTR_START, SDRATTR_END},
+    {EE_ITEMS_START, EE_ITEMS_END} } };
 ScCommentData::ScCommentData( ScDocument& rDoc, SdrModel* pModel ) :
-    aCaptionSet( pModel->GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END, EE_ITEMS_START, EE_ITEMS_END>{} )
+    aCaptionSet( pModel->GetItemPool(), commentRanges )
 {
     basegfx::B2DPolygon aTriangle;
     aTriangle.append(basegfx::B2DPoint(10.0, 0.0));

@@ -162,7 +162,7 @@ public:
     virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
     virtual void                SetCurPageId( const OString &rName ) override;
     virtual const SfxItemSet*   GetOutputItemSet() const override;
-    virtual const sal_uInt16*   GetInputRanges( const SfxItemPool& pItem ) override;
+    virtual WhichRangesContainer GetInputRanges( const SfxItemPool& pItem ) override;
     virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
     virtual void        SetText( const OUString& rStr ) override;
 
@@ -383,7 +383,7 @@ public:
     virtual void SetValidateFramePosLink( const Link<SvxSwFrameValidation&,void>& rLink ) override;
     virtual void                SetCurPageId( const OString& rName ) override;
     virtual const SfxItemSet*   GetOutputItemSet() const override;
-    virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem ) override;
+    virtual WhichRangesContainer GetInputRanges( const SfxItemPool& pItem ) override;
     virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
     virtual void        SetText( const OUString& rStr ) override;
 };
@@ -401,7 +401,7 @@ public:
     virtual void SetValidateFramePosLink( const Link<SvxSwFrameValidation&,void>& rLink ) override;
     virtual void                SetCurPageId( const OString& rName ) override;
     virtual const SfxItemSet*   GetOutputItemSet() const override;
-    virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem ) override;
+    virtual WhichRangesContainer GetInputRanges( const SfxItemPool& pItem ) override;
     virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
     virtual void        SetText( const OUString& rStr ) override;
 };
@@ -576,7 +576,7 @@ public:
     virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
     virtual void SetCurPageId(const OString& rName) override;
     virtual const SfxItemSet* GetOutputItemSet() const override;
-    virtual const sal_uInt16* GetInputRanges(const SfxItemPool& pItem) override;
+    virtual WhichRangesContainer GetInputRanges( const SfxItemPool& pItem ) override;
     virtual void SetInputSet(const SfxItemSet* pInSet) override;
     virtual void SetText(const OUString& rStr) override;
 };
@@ -851,7 +851,7 @@ public:
 
     virtual VclPtr<VclAbstractDialog>      CreateSvxSearchAttributeDialog(weld::Window* pParent,
                                             SearchAttrItemList& rLst,
-                                            const sal_uInt16* pWhRanges) override;
+                                            const WhichRangesContainer& pWhRanges) override;
     virtual VclPtr<AbstractSvxSearchSimilarityDialog> CreateSvxSearchSimilarityDialog( weld::Window* pParent,
                                                             bool bRelax,
                                                             sal_uInt16 nOther,

@@ -253,7 +253,8 @@ sal_uInt16 SwWW8ImplReader::End_Footnote()
             {
                 // Allow MSO to emulate LO footnote text starting at left margin - only meaningful with hanging indent
                 sal_Int32 nFirstLineIndent=0;
-                SfxItemSet aSet( m_rDoc.GetAttrPool(), svl::Items<RES_LR_SPACE, RES_LR_SPACE>{} );
+                static const WhichRangesLiteral ranges { { {RES_LR_SPACE, RES_LR_SPACE} } };
+                SfxItemSet aSet( m_rDoc.GetAttrPool(), ranges );
                 if ( pTNd->GetAttr(aSet) )
                 {
                     const SvxLRSpaceItem* pLRSpace = aSet.GetItem<SvxLRSpaceItem>(RES_LR_SPACE);
@@ -1763,6 +1764,7 @@ static wwTableSprm GetTableSprm(sal_uInt16 nId, ww::WordVersion eVer)
     return sprmNil;
 }
 
+const WhichRangesLiteral ranges { { {RES_FRMATR_BEGIN,RES_FRMATR_END-1} } };
 WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
     m_pIo(pIoClass),
     m_pFirstBand(nullptr),
@@ -1792,7 +1794,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
     m_pTable(nullptr),
     m_pParentPos(nullptr),
     m_pFlyFormat(nullptr),
-    m_aItemSet(m_pIo->m_rDoc.GetAttrPool(),svl::Items<RES_FRMATR_BEGIN,RES_FRMATR_END-1>{})
+    m_aItemSet(m_pIo->m_rDoc.GetAttrPool(), ranges)
 {
     m_pIo->m_bCurrentAND_fNumberAcross = false;
 
@@ -3433,8 +3435,8 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
             && !m_aTableStack.empty() && !InEqualApo(nNewInTable) )
         {
             m_xTableDesc->m_pParentPos = new SwPosition(*m_pPaM->GetPoint());
-            SfxItemSet aItemSet(m_rDoc.GetAttrPool(),
-                                svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1>{});
+            static const WhichRangesLiteral ranges { { {RES_FRMATR_BEGIN, RES_FRMATR_END-1} } };
+            SfxItemSet aItemSet(m_rDoc.GetAttrPool(), ranges);
             // #i33818# - anchor the Writer fly frame for the nested table at-character.
             // #i45301#
             SwFormatAnchor aAnchor( eAnchor );

@@ -289,7 +289,7 @@ bool DataPointItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;
 }
 
-const sal_uInt16 * DataPointItemConverter::GetWhichPairs() const
+WhichRangesContainer DataPointItemConverter::GetWhichPairs() const
 {
     // must span all used items!
     if( m_bDataSeries )

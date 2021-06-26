@@ -61,19 +61,18 @@ namespace sdr::properties
 
         SfxItemSet CustomShapeProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return SfxItemSet(
-                rPool,
-                svl::Items<
+            static const WhichRangesLiteral ranges { {
                     // Ranges from SdrAttrObj:
-                    SDRATTR_START, SDRATTR_SHADOW_LAST,
-                    SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
-                    SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
+                    {SDRATTR_START, SDRATTR_SHADOW_LAST},
+                    {SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST},
+                    {SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION},
                     // Graphic attributes, 3D properties, CustomShape
                     // properties:
-                    SDRATTR_GRAF_FIRST, SDRATTR_CUSTOMSHAPE_LAST,
-                    SDRATTR_GLOW_FIRST, SDRATTR_TEXTCOLUMNS_LAST,
+                    {SDRATTR_GRAF_FIRST, SDRATTR_CUSTOMSHAPE_LAST},
+                    {SDRATTR_GLOW_FIRST, SDRATTR_TEXTCOLUMNS_LAST},
                     // Range from SdrTextObj:
-                    EE_ITEMS_START, EE_ITEMS_END>{});
+                    {EE_ITEMS_START, EE_ITEMS_END} } };
+            return SfxItemSet(rPool, ranges);
         }
 
         bool CustomShapeProperties::AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem ) const

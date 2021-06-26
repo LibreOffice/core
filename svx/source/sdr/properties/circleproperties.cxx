@@ -34,17 +34,16 @@ namespace sdr::properties
         // create a new itemset
         SfxItemSet CircleProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return SfxItemSet(
-                rPool,
-                svl::Items<
+            static const WhichRangesLiteral ranges { {
                     // Ranges from SdrAttrObj, SdrCircObj
-                    SDRATTR_START, SDRATTR_SHADOW_LAST,
-                    SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
-                    SDRATTR_CIRC_FIRST, SDRATTR_CIRC_LAST,
-                    SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
-                    SDRATTR_TEXTCOLUMNS_FIRST, SDRATTR_TEXTCOLUMNS_LAST,
+                    {SDRATTR_START, SDRATTR_SHADOW_LAST},
+                    {SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST},
+                    {SDRATTR_CIRC_FIRST, SDRATTR_CIRC_LAST},
+                    {SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION},
+                    {SDRATTR_TEXTCOLUMNS_FIRST, SDRATTR_TEXTCOLUMNS_LAST},
                     // Range from SdrTextObj:
-                    EE_ITEMS_START, EE_ITEMS_END>{});
+                    {EE_ITEMS_START, EE_ITEMS_END} } };
+            return SfxItemSet(rPool, ranges);
         }
 
         CircleProperties::CircleProperties(SdrObject& rObj)

@@ -1588,7 +1588,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         SdPage* pPage = GetActualPage();
         if (pPage != nullptr && GetDoc() != nullptr)
         {
-            SfxItemSet aMergedAttr(GetDoc()->GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
+            static const WhichRangesLiteral ranges { { {XATTR_FILL_FIRST, XATTR_FILL_LAST} } };
+            SfxItemSet aMergedAttr(GetDoc()->GetPool(), ranges);
             SdStyleSheet* pStyleSheet = pPage->getPresentationStyle(HID_PSEUDOSHEET_BACKGROUND);
             MergePageBackgroundFilling(pPage, pStyleSheet, meEditMode == EditMode::MasterPage, aMergedAttr);
             if (drawing::FillStyle_BITMAP == aMergedAttr.Get(XATTR_FILLSTYLE).GetValue())
@@ -1836,7 +1837,8 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
                     XFillGradientItem aGradientItem( XGradient::fromJSON(pJSON->GetValue()) );
 
                     // MigrateItemSet guarantees unique gradient names
-                    SfxItemSet aMigrateSet( mpDrawView->GetModel()->GetItemPool(), svl::Items<XATTR_FILLGRADIENT, XATTR_FILLGRADIENT>{} );
+                    static const WhichRangesLiteral ranges { { {XATTR_FILLGRADIENT, XATTR_FILLGRADIENT} } };
+                    SfxItemSet aMigrateSet( mpDrawView->GetModel()->GetItemPool(), ranges );
                     aMigrateSet.Put( aGradientItem );
                     SdrModel::MigrateItemSet( &aMigrateSet, pTempSet.get(), mpDrawView->GetModel() );
 
@@ -1848,7 +1850,8 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
                     XFillGradientItem aGradientItem( pArgs->Get( XATTR_FILLGRADIENT ) );
 
                     // MigrateItemSet guarantees unique gradient names
-                    SfxItemSet aMigrateSet( mpDrawView->GetModel()->GetItemPool(), svl::Items<XATTR_FILLGRADIENT, XATTR_FILLGRADIENT>{} );
+                    static const WhichRangesLiteral ranges { { {XATTR_FILLGRADIENT, XATTR_FILLGRADIENT} } };
+                    SfxItemSet aMigrateSet( mpDrawView->GetModel()->GetItemPool(), ranges );
                     aMigrateSet.Put( aGradientItem );
                     SdrModel::MigrateItemSet( &aMigrateSet, pTempSet.get(), mpDrawView->GetModel() );
 
