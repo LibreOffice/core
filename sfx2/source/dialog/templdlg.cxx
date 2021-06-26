@@ -65,6 +65,7 @@
 
 #include <sfx2/StyleManager.hxx>
 #include <sfx2/StylePreviewRenderer.hxx>
+#include <StyleList.hxx>
 
 using namespace css;
 using namespace css::beans;
@@ -1037,6 +1038,13 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
         aStyle = pState->GetStyleName();
     SelectStyle(aStyle, false);
     EnableDelete();
+
+    if (mxCharTreeBox->get_visible())
+    {
+        weld::StyleList::setStyleFamily(SfxStyleFamily::Char);
+        weld::StyleList::setPreview();
+        weld::StyleList::setFilter();
+    }
 }
 
 bool SfxCommonTemplateDialog_Impl::HasSelectedStyle() const
