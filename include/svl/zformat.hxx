@@ -718,6 +718,10 @@ private:
     // line string where extra trailing "0" are discarded.
     SVL_DLLPRIVATE sal_uInt16 ImpGetFractionOfSecondString( OUStringBuffer& rBuf, double fFractionOfSecond,
             int nFractionDecimals, bool bAddOneRoundingDecimal, sal_uInt16 nIx, sal_uInt16 nMinimumInputLineDecimals );
+    SVL_DLLPRIVATE sal_uInt16 ImpGetFractionOfSecondString(OUStringBuffer& rBuf,
+                                                           sal_uInt16 nMilliSecond,
+                                                           int nFractionDecimals, sal_uInt16 nIx,
+                                                           sal_uInt16 nMinimumInputLineDecimals);
 
     // transliterate according to NativeNumber
     SVL_DLLPRIVATE OUString impTransliterateImpl(const OUString& rStr, const SvNumberNatNum& rNum) const;
