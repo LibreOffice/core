@@ -5981,9 +5981,6 @@ void SwWW8ImplReader::SetOutlineStyles()
             const SwNumRule* pWW8ListStyle = rSI.GetOutlineNumrule();
             if (pWW8ListStyle != nullptr)
             {
-                if (aPreventUseAsChapterNumbering[pWW8ListStyle])
-                    continue;
-
                 std::map<const SwNumRule*, int>::iterator aCountIter
                     = aWW8ListStyleCounts.find(pWW8ListStyle);
                 if (aCountIter == aWW8ListStyleCounts.end())
@@ -6000,6 +5997,9 @@ void SwWW8ImplReader::SetOutlineStyles()
         int nCurrentMaxCount = 0;
         for (const auto& rEntry : aWW8ListStyleCounts)
         {
+            if (aPreventUseAsChapterNumbering[rEntry.first])
+                continue;
+
             if (rEntry.second > nCurrentMaxCount)
             {
                 nCurrentMaxCount = rEntry.second;
