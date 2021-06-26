@@ -61,10 +61,11 @@ DocShell::~DocShell()
 
 SfxPrinter* DocShell::GetPrinter( bool bCreate )
 {
+    static const WhichRangesLiteral ranges { { {SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN} } };
     if ( !pPrinter && bCreate )
         pPrinter.disposeAndReset(VclPtr<SfxPrinter>::Create(std::make_unique<SfxItemSet>(
-            GetPool(), svl::Items<SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN>{}
-        )));
+            GetPool(), ranges )
+        ));
 
     return pPrinter.get();
 }

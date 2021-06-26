@@ -42,7 +42,7 @@ class SvxSearchAttributeDialog : public weld::GenericDialogController
 {
 public:
     SvxSearchAttributeDialog(weld::Window* pParent, SearchAttrItemList& rLst,
-                             const sal_uInt16* pWhRanges);
+                             const WhichRangesContainer& pWhRanges);
     virtual ~SvxSearchAttributeDialog() override;
 
 private:

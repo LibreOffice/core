@@ -75,12 +75,11 @@
 
 namespace ValidListType = css::sheet::TableValidationVisibility;
 
-const sal_uInt16 ScTPValidationValue::pValueRanges[] =
-{
-    FID_VALID_LISTTYPE, FID_VALID_LISTTYPE,
-    FID_VALID_MODE, FID_VALID_ERRTEXT,
-    0
-};
+static const WhichRangesLiteral ranges { {
+    {FID_VALID_LISTTYPE, FID_VALID_LISTTYPE},
+    {FID_VALID_MODE, FID_VALID_ERRTEXT},
+} };
+const WhichRangesContainer ScTPValidationValue::pValueRanges(ranges);
 
 ScValidationDlg::ScValidationDlg(weld::Window* pParent, const SfxItemSet* pArgSet,
     ScTabViewShell *pTabViewSh)

@@ -44,7 +44,7 @@ public:
     virtual bool ApplyItemSet( const SfxItemSet & rItemSet ) override;
 
 protected:
-    virtual const sal_uInt16 * GetWhichPairs() const override;
+    virtual WhichRangesContainer GetWhichPairs() const override;
     virtual bool GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const override;
 
     virtual void FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const override;

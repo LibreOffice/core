@@ -634,7 +634,8 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
 
             case SID_HYPERLINK_GETLINK:
                 {
-                    SfxItemSet aSet(GetPool(), svl::Items<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT>{});
+                    static const WhichRangesLiteral ranges { { {RES_TXTATR_INETFMT, RES_TXTATR_INETFMT} } };
+                    SfxItemSet aSet(GetPool(), ranges);
                     rSh.GetCurAttr( aSet );
 
                     SvxHyperlinkItem aHLinkItem;
@@ -837,15 +838,16 @@ SwTextShell::~SwTextShell()
 
 SfxItemSet SwTextShell::CreateInsertFrameItemSet(SwFlyFrameAttrMgr& rMgr)
 {
-    SfxItemSet aSet(GetPool(), svl::Items<
-        RES_FRMATR_BEGIN,       RES_FRMATR_END-1,
-        XATTR_FILL_FIRST,       XATTR_FILL_LAST, // tdf#95003
-        SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,
-        SID_ATTR_PAGE_SIZE,     SID_ATTR_PAGE_SIZE,
-        SID_COLOR_TABLE,        SID_PATTERN_LIST,
-        SID_HTML_MODE,          SID_HTML_MODE,
-        FN_GET_PRINT_AREA,      FN_GET_PRINT_AREA,
-        FN_SET_FRM_NAME,        FN_SET_FRM_NAME>{});
+    static const WhichRangesLiteral ranges { {
+        {RES_FRMATR_BEGIN,       RES_FRMATR_END-1},
+        {XATTR_FILL_FIRST,       XATTR_FILL_LAST}, // tdf#95003
+        {SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER},
+        {SID_ATTR_PAGE_SIZE,     SID_ATTR_PAGE_SIZE},
+        {SID_COLOR_TABLE,        SID_PATTERN_LIST},
+        {SID_HTML_MODE,          SID_HTML_MODE},
+        {FN_GET_PRINT_AREA,      FN_GET_PRINT_AREA},
+        {FN_SET_FRM_NAME,        FN_SET_FRM_NAME} } };
+    SfxItemSet aSet(GetPool(), ranges);
     aSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
 
     // For the Area tab page.
@@ -893,9 +895,11 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
     }
 
     SwWrtShell &rSh = GetShell();
-    SfxItemSet aSet( GetPool(), svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONT,
-                                RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONT,
-                                RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONT>{} );
+    static const WhichRangesLiteral ranges { {
+            {RES_CHRATR_FONT, RES_CHRATR_FONT},
+            {RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONT},
+            {RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONT} } };
+    SfxItemSet aSet( GetPool(), ranges );
     rSh.GetCurAttr( aSet );
     SvtScriptType nScript = rSh.GetScriptType();
 
@@ -985,9 +989,11 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
         aNewFontItem->SetPitch(   aNewFont.GetPitch());
         aNewFontItem->SetCharSet( aNewFont.GetCharSet() );
 
-        SfxItemSet aRestoreSet( GetPool(), svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONT,
-                                           RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONT,
-                                           RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONT>{} );
+        static const WhichRangesLiteral ranges { {
+                {RES_CHRATR_FONT, RES_CHRATR_FONT},
+                {RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONT},
+                {RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONT} } };
+        SfxItemSet aRestoreSet( GetPool(), ranges );
 
         nScript = g_pBreakIt->GetAllScriptsOfText( aChars );
         if( SvtScriptType::LATIN & nScript )

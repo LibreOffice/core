@@ -501,7 +501,8 @@ VclPtr<InterimItemWindow> SvxGrafModeToolBoxControl::CreateItemWindow( vcl::Wind
 void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
 {
     SfxItemPool&    rPool = rView.GetModel()->GetItemPool();
-    SfxItemSet      aSet( rPool, svl::Items<SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST>{} );
+    static const WhichRangesLiteral ranges { { {SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST} } };
+    SfxItemSet      aSet( rPool, ranges );
     OUString        aUndoStr;
     const bool      bUndo = rView.IsUndoEnabled();
 
@@ -618,7 +619,8 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                 if( ( pObj->GetGraphicType() != GraphicType::NONE ) &&
                     ( pObj->GetGraphicType() != GraphicType::Default ) )
                 {
-                    SfxItemSet          aGrfAttr( rPool, svl::Items<SDRATTR_GRAFCROP, SDRATTR_GRAFCROP>{} );
+                    static const WhichRangesLiteral ranges { { {SDRATTR_GRAFCROP, SDRATTR_GRAFCROP} } };
+                    SfxItemSet          aGrfAttr( rPool, ranges );
                     const MapUnit       eOldMetric = rPool.GetMetric( 0 );
                     const MapMode       aMap100( MapUnit::Map100thMM );
                     const MapMode       aMapTwip( MapUnit::MapTwip );
@@ -626,13 +628,12 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                     aGrfAttr.Put(pObj->GetMergedItemSet());
                     rPool.SetDefaultMetric( MapUnit::MapTwip );
 
-                    SfxItemSet  aCropDlgAttr(
-                        rPool,
-                        svl::Items<
-                            SDRATTR_GRAFCROP, SDRATTR_GRAFCROP,
-                            SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE,
-                            SID_ATTR_GRAF_CROP, SID_ATTR_GRAF_FRMSIZE,
-                            SID_ATTR_GRAF_GRAPHIC, SID_ATTR_GRAF_GRAPHIC>{});
+                    static const WhichRangesLiteral cropDialogRanges { {
+                            {SDRATTR_GRAFCROP, SDRATTR_GRAFCROP},
+                            {SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE},
+                            {SID_ATTR_GRAF_CROP, SID_ATTR_GRAF_FRMSIZE},
+                            {SID_ATTR_GRAF_GRAPHIC, SID_ATTR_GRAF_GRAPHIC} } };
+                    SfxItemSet  aCropDlgAttr(rPool, cropDialogRanges);
 
                     aCropDlgAttr.Put( SvxBrushItem( pObj->GetGraphic(), GPOS_MM, SID_ATTR_GRAF_GRAPHIC ) );
                     aCropDlgAttr.Put( SvxSizeItem( SID_ATTR_PAGE_SIZE,

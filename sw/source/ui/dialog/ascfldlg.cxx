@@ -195,9 +195,10 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( weld::Window* pParent, SwDocShell& rDocSh,
             VclPtr<SfxPrinter> pPrt = pDoc ? pDoc->getIDocumentDeviceAccess().getPrinter(false) : nullptr;
             if( !pPrt )
             {
-                auto pSet = std::make_unique<SfxItemSet>( rDocSh.GetPool(),
-                            svl::Items<SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
-                            SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC>{} );
+                static const WhichRangesLiteral ranges { {
+                            {SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN},
+                            {SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC} } };
+                auto pSet = std::make_unique<SfxItemSet>( rDocSh.GetPool(), ranges );
                 pPrt = VclPtr<SfxPrinter>::Create( std::move(pSet) );
                 bDelPrinter = true;
             }

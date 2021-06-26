@@ -223,7 +223,7 @@ StatisticsItemConverter::~StatisticsItemConverter()
 {
 }
 
-const sal_uInt16 * StatisticsItemConverter::GetWhichPairs() const
+WhichRangesContainer StatisticsItemConverter::GetWhichPairs() const
 {
     // must span all used items!
     return nStatWhichPairs;

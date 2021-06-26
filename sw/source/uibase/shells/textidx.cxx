@@ -92,16 +92,15 @@ void SwTextShell::ExecIdx(SfxRequest const &rReq)
         }
         case FN_INSERT_MULTI_TOX:
         {
-            SfxItemSet aSet(
-                GetPool(),
-                svl::Items<
-                    RES_FRM_SIZE, RES_FRM_SIZE,
-                    RES_LR_SPACE, RES_LR_SPACE,
-                    RES_BACKGROUND, RES_BACKGROUND,
-                    RES_COL, RES_COL,
-                    XATTR_FILL_FIRST, XATTR_FILL_LAST,
-                    SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE,
-                    FN_PARAM_TOX_TYPE, FN_PARAM_TOX_TYPE>{});
+            static const WhichRangesLiteral ranges { {
+                    {RES_FRM_SIZE, RES_FRM_SIZE},
+                    {RES_LR_SPACE, RES_LR_SPACE},
+                    {RES_BACKGROUND, RES_BACKGROUND},
+                    {RES_COL, RES_COL},
+                    {XATTR_FILL_FIRST, XATTR_FILL_LAST},
+                    {SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE},
+                    {FN_PARAM_TOX_TYPE, FN_PARAM_TOX_TYPE} } };
+            SfxItemSet aSet(GetPool(), ranges);
             SwWrtShell& rSh = GetShell();
             SwRect aRect;
             rSh.CalcBoundRect(aRect, RndStdIds::FLY_AS_CHAR);

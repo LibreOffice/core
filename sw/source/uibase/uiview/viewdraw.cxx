@@ -735,8 +735,9 @@ bool SwView::IsDrawTextHyphenate()
     SdrView *pSdrView = m_pWrtShell->GetDrawView();
     bool bHyphenate = false;
 
-    SfxItemSet aNewAttr( pSdrView->GetModel()->GetItemPool(),
-                            svl::Items<EE_PARA_HYPHENATE, EE_PARA_HYPHENATE>{} );
+    static const WhichRangesLiteral ranges { {
+            {EE_PARA_HYPHENATE, EE_PARA_HYPHENATE} } };
+    SfxItemSet aNewAttr( pSdrView->GetModel()->GetItemPool(), ranges );
     pSdrView->GetAttributes( aNewAttr );
     if( aNewAttr.GetItemState( EE_PARA_HYPHENATE ) >= SfxItemState::DEFAULT )
         bHyphenate = aNewAttr.Get( EE_PARA_HYPHENATE ).GetValue();
@@ -749,7 +750,9 @@ void SwView::HyphenateDrawText()
     SdrView *pSdrView = m_pWrtShell->GetDrawView();
     bool bHyphenate = IsDrawTextHyphenate();
 
-    SfxItemSet aSet( GetPool(), svl::Items<EE_PARA_HYPHENATE, EE_PARA_HYPHENATE>{} );
+    static const WhichRangesLiteral ranges { {
+            {EE_PARA_HYPHENATE, EE_PARA_HYPHENATE} } };
+    SfxItemSet aSet( GetPool(), ranges );
     aSet.Put( SfxBoolItem( EE_PARA_HYPHENATE, !bHyphenate ) );
     pSdrView->SetAttributes( aSet );
     GetViewFrame()->GetBindings().Invalidate(FN_HYPHENATE_OPT_DLG);

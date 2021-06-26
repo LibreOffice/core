@@ -33,12 +33,11 @@
 
 #include <connect.hxx>
 
-const sal_uInt16 SvxConnectionPage::pRanges[] =
+static const WhichRangesLiteral ranges {
 {
-    SDRATTR_EDGE_FIRST,
-    SDRATTR_EDGE_LAST,
-    0
-};
+    {SDRATTR_EDGE_FIRST, SDRATTR_EDGE_LAST},
+} };
+const WhichRangesContainer SvxConnectionPage::pRanges(ranges);
 
 /*************************************************************************
 |*

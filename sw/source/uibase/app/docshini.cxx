@@ -620,19 +620,18 @@ void SwDocShell::SubInitNew()
 
     bool bWeb = dynamic_cast< const SwWebDocShell *>( this ) !=  nullptr;
 
-    sal_uInt16 nRange[] =   {
-        RES_CHRATR_COLOR, RES_CHRATR_COLOR,
-        RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE,
-        RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_LANGUAGE,
-        RES_CHRATR_CTL_LANGUAGE, RES_CHRATR_CTL_LANGUAGE,
-        RES_PARATR_ADJUST, RES_PARATR_ADJUST,
-        0, 0, 0  };
+    WhichPair nRange[] = {
+        {RES_CHRATR_COLOR, RES_CHRATR_COLOR},
+        {RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE},
+        {RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_LANGUAGE},
+        {RES_CHRATR_CTL_LANGUAGE, RES_CHRATR_CTL_LANGUAGE},
+        {RES_PARATR_ADJUST, RES_PARATR_ADJUST},
+        {0, 0}  };
     if(!bWeb)
     {
-        nRange[ SAL_N_ELEMENTS(nRange) - 3 ] = RES_PARATR_TABSTOP;
-        nRange[ SAL_N_ELEMENTS(nRange) - 2 ] = RES_PARATR_HYPHENZONE;
+        nRange[ SAL_N_ELEMENTS(nRange) - 1 ] = {RES_PARATR_TABSTOP, RES_PARATR_HYPHENZONE};
     }
-    SfxItemSet aDfltSet( m_xDoc->GetAttrPool(), nRange );
+    SfxItemSet aDfltSet( m_xDoc->GetAttrPool(), WhichRangesContainer(nRange, bWeb ? SAL_N_ELEMENTS(nRange) - 1 : SAL_N_ELEMENTS(nRange)) );
 
     //! get lingu options without loading lingu DLL
     SvtLinguOptions aLinguOpt;

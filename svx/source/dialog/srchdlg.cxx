@@ -127,7 +127,7 @@ struct SearchDlg_Impl
 {
     bool        bSaveToModule  : 1,
                 bFocusOnSearch : 1;
-    std::unique_ptr<sal_uInt16[]> pRanges;
+    WhichRangesContainer pRanges;
     Timer       aSelectionTimer;
 
     uno::Reference< frame::XDispatch > xCommand1Dispatch;
@@ -1053,19 +1053,8 @@ void SvxSearchDialog::InitAttrList_Impl( const SfxItemSet* pSSet,
     if ( !pSSet && !pRSet )
         return;
 
-    if ( !pImpl->pRanges && pSSet )
-    {
-        const sal_uInt16* pPtr = pSSet->GetRanges();
-        const sal_uInt16* pTmp = pPtr;
-
-        while( *pPtr )
-        {
-            pPtr += 2;
-        }
-        sal_sSize nCnt = pPtr - pTmp + 1;
-        pImpl->pRanges.reset( new sal_uInt16[nCnt] );
-        memcpy( pImpl->pRanges.get(), pTmp, sizeof(sal_uInt16) * nCnt );
-    }
+    if ( pImpl->pRanges.empty() && pSSet )
+        pImpl->pRanges = pSSet->GetRanges();
 
     bool bSetOptimalLayoutSize = false;
 
@@ -1945,11 +1934,11 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl, weld::Button&, void)
 
     DBG_ASSERT( pSh, "no DocShell" );
 
-    if ( !pSh || !pImpl->pRanges )
+    if ( !pSh || pImpl->pRanges.empty() )
         return;
 
     SfxItemPool& rPool = pSh->GetPool();
-    SfxItemSet aSet(rPool, pImpl->pRanges.get());
+    SfxItemSet aSet(rPool, pImpl->pRanges);
 
     aSet.MergeRange(SID_ATTR_PARA_MODEL, SID_ATTR_PARA_MODEL);
 
@@ -2066,11 +2055,11 @@ IMPL_LINK_NOARG(SvxSearchDialog, NoFormatHdl_Impl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SvxSearchDialog, AttributeHdl_Impl, weld::Button&, void)
 {
-    if ( !pSearchList || !pImpl->pRanges )
+    if ( !pSearchList || pImpl->pRanges.empty() )
         return;
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSvxSearchAttributeDialog(m_xDialog.get(), *pSearchList, pImpl->pRanges.get()));
+    ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSvxSearchAttributeDialog(m_xDialog.get(), *pSearchList, pImpl->pRanges));
     executeSubDialog(pDlg.get());
     PaintAttrText_Impl();
 }

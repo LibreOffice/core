@@ -1431,7 +1431,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
     SwFormatsBase* pArray[ 2 ];
     sal_uInt16 nArrCnt = 1;
     const char* pRCId = nullptr;
-    sal_uInt16 const * pWhichRange = nullptr;
+    WhichRangesContainer const * pWhichRange = nullptr;
 
     switch( nId & (COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID) )
     {
@@ -1439,7 +1439,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
         {
             pArray[0] = m_rDoc.GetCharFormats();
             pDeriveFormat = m_rDoc.GetDfltCharFormat();
-            pWhichRange = aCharFormatSetRange;
+            pWhichRange = &aCharFormatSetRange;
 
             if (nId >= RES_POOLCHR_HTML_BEGIN && nId < RES_POOLCHR_HTML_END)
                 pRCId = STR_POOLCHR_HTML_ARY[nId - RES_POOLCHR_HTML_BEGIN];
@@ -1459,7 +1459,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
             pArray[1] = m_rDoc.GetSpzFrameFormats();
             pDeriveFormat = m_rDoc.GetDfltFrameFormat();
             nArrCnt = 2;
-            pWhichRange = aFrameFormatSetRange;
+            pWhichRange = &aFrameFormatSetRange;
 
             // Fault: unknown Format, but a FrameFormat
             //             -> return the first one
@@ -1491,7 +1491,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
         }
 
     OUString aNm(SwResId(pRCId));
-    SwAttrSet aSet( m_rDoc.GetAttrPool(), pWhichRange );
+    SwAttrSet aSet( m_rDoc.GetAttrPool(), *pWhichRange );
 
     {
         bool bIsModified = m_rDoc.getIDocumentState().IsModified();

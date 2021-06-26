@@ -25,6 +25,7 @@ namespace o3tl { using std::span; }
 #include <cassert>
 #include <cstddef>
 #include <iterator>
+#include <algorithm>
 
 namespace o3tl {
 
@@ -76,6 +77,11 @@ public:
 
     constexpr pointer data() const noexcept { return data_; }
 
+    constexpr bool operator==(span<T> const & other) const
+    {
+        return size_ == other.size_ &&
+            std::equal(data_, data_ + size_, other.data_, other.data_ + other.size_);
+    }
 private:
     pointer    data_;
     size_type size_;

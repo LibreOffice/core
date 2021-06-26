@@ -740,13 +740,12 @@ SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const OUString& rBaseURL,
     aItemIds.nLanguageCTL = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_LANGUAGE, false );
     aItemIds.nDirection = rPool.GetTrueWhich( SID_ATTR_FRAMEDIRECTION, false );
 
-    m_aWhichMap.insert( m_aWhichMap.begin(), 0 );
     BuildWhichTable( m_aWhichMap, reinterpret_cast<sal_uInt16 *>(&aItemIds),
                              sizeof(aItemIds) / sizeof(sal_uInt16) );
     if( pWhichIds && nWhichIds )
         BuildWhichTable( m_aWhichMap, pWhichIds, nWhichIds );
 
-    m_pSheetItemSet.reset( new SfxItemSet( rPool, m_aWhichMap.data() ) );
+    m_pSheetItemSet.reset( new SfxItemSet( rPool, WhichRangesContainer(m_aWhichMap.data(), m_aWhichMap.size()) ) );
     m_pSheetPropInfo.reset( new SvxCSS1PropertyInfo );
 }
 

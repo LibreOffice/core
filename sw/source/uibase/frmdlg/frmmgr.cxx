@@ -46,20 +46,19 @@
 
 using namespace ::com::sun::star;
 
-static sal_uInt16 aFrameMgrRange[] = {
-                            RES_FRMATR_BEGIN, RES_FRMATR_END-1, // 87-129
+static const WhichRangesLiteral aFrameMgrRange( {
+                            {RES_FRMATR_BEGIN, RES_FRMATR_END-1}, // 87-129
 
                             // RotGrfFlyFrame: Support here, but seems not to be
                             // added in range of m_pOwnSh->GetFlyFrameAttr result
                             // (see below). Tried to find, but could not identify
-                            RES_GRFATR_ROTATION, RES_GRFATR_ROTATION, // 132
+                            {RES_GRFATR_ROTATION, RES_GRFATR_ROTATION}, // 132
 
                             // FillAttribute support
-                            XATTR_FILL_FIRST, XATTR_FILL_LAST, // 1014-1033
+                            {XATTR_FILL_FIRST, XATTR_FILL_LAST}, // 1014-1033
 
-                            SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
-                            FN_SET_FRM_NAME, FN_SET_FRM_NAME,
-                            0};
+                            {SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER},
+                            {FN_SET_FRM_NAME, FN_SET_FRM_NAME}} );
 
 // determine frame attributes via Shell
 SwFlyFrameAttrMgr::SwFlyFrameAttrMgr( bool bNew, SwWrtShell* pSh, Frmmgr_Type nType, const SvGlobalName* pName ) :
@@ -169,7 +168,8 @@ void SwFlyFrameAttrMgr::UpdateFlyFrame()
     const SfxPoolItem *pGItem, *pItem;
     if( SfxItemState::SET == m_aSet.GetItemState( RES_ANCHOR, false, &pItem ))
     {
-        SfxItemSet aGetSet( *m_aSet.GetPool(), svl::Items<RES_ANCHOR, RES_ANCHOR>{} );
+        static const WhichRangesLiteral ranges { { {RES_ANCHOR, RES_ANCHOR} } };
+        SfxItemSet aGetSet( *m_aSet.GetPool(), ranges );
         if( m_pOwnSh->GetFlyFrameAttr( aGetSet ) && 1 == aGetSet.Count() &&
             SfxItemState::SET == aGetSet.GetItemState( RES_ANCHOR, false, &pGItem )
             && static_cast<const SwFormatAnchor*>(pGItem)->GetAnchorId() ==

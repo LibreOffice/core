@@ -798,7 +798,8 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
                 if ( pOutView )
                     pOutView->Paint( tools::Rectangle() );
 
-                SfxItemSet aEmptyAttr( *aEditAttr.GetPool(), svl::Items<EE_ITEMS_START, EE_ITEMS_END>{} );
+                static const WhichRangesLiteral ranges { { {EE_ITEMS_START, EE_ITEMS_END} } };
+                SfxItemSet aEmptyAttr( *aEditAttr.GetPool(), ranges );
                 pView->SetAttributes( aEmptyAttr, true );
 
                 if ( pOutView )
@@ -922,7 +923,8 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
         sal_uInt16 nId = SID_ATTR_PARA_LRSPACE;
         const SvxLRSpaceItem& rItem = static_cast<const SvxLRSpaceItem&>(
             pArgs->Get( nId ));
-        SfxItemSet aAttr( GetPool(), svl::Items<EE_PARA_LRSPACE, EE_PARA_LRSPACE>{} );
+        static const WhichRangesLiteral ranges { { {EE_PARA_LRSPACE, EE_PARA_LRSPACE} } };
+        SfxItemSet aAttr( GetPool(), ranges );
         nId = EE_PARA_LRSPACE;
         SvxLRSpaceItem aLRSpaceItem( rItem.GetLeft(),
             rItem.GetRight(), rItem.GetTextLeft(),
@@ -934,7 +936,8 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
     {
         SvxLineSpacingItem aLineSpaceItem = static_cast<const SvxLineSpacingItem&>(pArgs->Get(
                                                             GetPool().GetWhich(nSlot)));
-        SfxItemSet aAttr( GetPool(), svl::Items<EE_PARA_SBL, EE_PARA_SBL>{} );
+        static const WhichRangesLiteral ranges { { {EE_PARA_SBL, EE_PARA_SBL} } };
+        SfxItemSet aAttr( GetPool(), ranges );
         aAttr.Put( aLineSpaceItem );
         pView->SetAttributes( aAttr );
     }
@@ -942,7 +945,8 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
     {
         SvxULSpaceItem aULSpaceItem = static_cast<const SvxULSpaceItem&>(pArgs->Get(
                                                             GetPool().GetWhich(nSlot)));
-        SfxItemSet aAttr( GetPool(), svl::Items<EE_PARA_ULSPACE, EE_PARA_ULSPACE>{} );
+        static const WhichRangesLiteral ranges { { {EE_PARA_ULSPACE, EE_PARA_ULSPACE} } };
+        SfxItemSet aAttr( GetPool(), ranges );
         aULSpaceItem.SetWhich(EE_PARA_ULSPACE);
         aAttr.Put( aULSpaceItem );
         pView->SetAttributes( aAttr );

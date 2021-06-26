@@ -75,13 +75,13 @@ class ScValidationDlg;
 /** The tab page "Criteria" from the Validation dialog. */
 class ScTPValidationValue : public ScRefHandlerCaller, public SfxTabPage
 {
-    static const sal_uInt16 pValueRanges[];
+    static const WhichRangesContainer pValueRanges;
 public:
     explicit                    ScTPValidationValue(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet);
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rArgSet );
     virtual                     ~ScTPValidationValue() override;
 
-    static const sal_uInt16*    GetRanges() { return pValueRanges; }
+    static WhichRangesContainer GetRanges() { return pValueRanges; }
 
     virtual bool                FillItemSet( SfxItemSet* rArgSet ) override;
     virtual void                Reset( const SfxItemSet* rArgSet ) override;

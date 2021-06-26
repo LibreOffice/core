@@ -28,7 +28,7 @@ class SdrView;
 class SvxMeasurePage : public SvxTabPage
 {
 private:
-    static const sal_uInt16 pRanges[];
+    static const WhichRangesContainer pRanges;
 
     const SfxItemSet&   rOutAttrs;
     SfxItemSet          aAttrSet;
@@ -70,7 +70,7 @@ public:
     virtual ~SvxMeasurePage() override;
 
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
-    static const sal_uInt16* GetRanges() { return pRanges; }
+    static WhichRangesContainer GetRanges() { return pRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* ) override;
     virtual void        Reset( const SfxItemSet * ) override;

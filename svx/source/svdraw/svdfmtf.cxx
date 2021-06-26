@@ -110,9 +110,12 @@ ImpSdrGDIMetaFileImport::ImpSdrGDIMetaFileImport(
     mpVD->SetLineColor();
     mpVD->SetFillColor();
     maOldLineColor.SetRed( mpVD->GetLineColor().GetRed() + 1 );
-    mpLineAttr = std::make_unique<SfxItemSet>(rModel.GetItemPool(), svl::Items<XATTR_LINE_FIRST, XATTR_LINE_LAST>{});
-    mpFillAttr = std::make_unique<SfxItemSet>(rModel.GetItemPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
-    mpTextAttr = std::make_unique<SfxItemSet>(rModel.GetItemPool(), svl::Items<EE_ITEMS_START, EE_ITEMS_END>{});
+    static const WhichRangesLiteral lineRanges { { {XATTR_LINE_FIRST, XATTR_LINE_LAST} } };
+    mpLineAttr = std::make_unique<SfxItemSet>(rModel.GetItemPool(), lineRanges);
+    static const WhichRangesLiteral fillRanges { { {XATTR_FILL_FIRST, XATTR_FILL_LAST} } };
+    mpFillAttr = std::make_unique<SfxItemSet>(rModel.GetItemPool(), fillRanges);
+    static const WhichRangesLiteral textRanges { { {EE_ITEMS_START, EE_ITEMS_END} } };
+    mpTextAttr = std::make_unique<SfxItemSet>(rModel.GetItemPool(), textRanges);
     checkClip();
 }
 
@@ -723,7 +726,8 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaRoundRectAction const & rAct)
     SetAttributes(pRect);
     tools::Long nRad=(rAct.GetHorzRound()+rAct.GetVertRound())/2;
     if (nRad!=0) {
-        SfxItemSet aSet(*mpLineAttr->GetPool(), svl::Items<SDRATTR_CORNER_RADIUS, SDRATTR_CORNER_RADIUS>{});
+        static const WhichRangesLiteral ranges { { {SDRATTR_CORNER_RADIUS, SDRATTR_CORNER_RADIUS} } };
+        SfxItemSet aSet(*mpLineAttr->GetPool(), ranges);
         aSet.Put(SdrMetricItem(SDRATTR_CORNER_RADIUS, nRad));
         pRect->SetMergedItemSet(aSet);
     }
@@ -1049,7 +1053,8 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const OUString& rSt
 
     if (!aFnt.IsTransparent())
     {
-        SfxItemSet aAttr(*mpFillAttr->GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
+        static const WhichRangesLiteral ranges { { {XATTR_FILL_FIRST, XATTR_FILL_LAST} } };
+        SfxItemSet aAttr(*mpFillAttr->GetPool(), ranges);
         aAttr.Put(XFillStyleItem(drawing::FillStyle_SOLID));
         aAttr.Put(XFillColorItem(OUString(), aFnt.GetFillColor()));
         pText->SetMergedItemSet(aAttr);

@@ -91,9 +91,11 @@ const XParaPortion& XParaPortionList::operator [](size_t i) const
     return *maList[i];
 }
 
+const WhichRangesLiteral ranges { { {EE_PARA_START, EE_PARA_START} } };
+
 ContentInfo::ContentInfo( SfxItemPool& rPool ) :
     eFamily(SfxStyleFamily::Para),
-    aParaAttribs(rPool, svl::Items<EE_PARA_START, EE_CHAR_END>{})
+    aParaAttribs(rPool, ranges)
 {
 }
 
@@ -102,7 +104,7 @@ ContentInfo::ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse 
     maText(rCopyFrom.maText),
     aStyle(rCopyFrom.aStyle),
     eFamily(rCopyFrom.eFamily),
-    aParaAttribs(rPoolToUse, svl::Items<EE_PARA_START, EE_CHAR_END>{})
+    aParaAttribs(rPoolToUse, ranges)
 {
     // this should ensure that the Items end up in the correct Pool!
     aParaAttribs.Set( rCopyFrom.GetParaAttribs() );

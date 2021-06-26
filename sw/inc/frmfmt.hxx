@@ -88,14 +88,14 @@ protected:
         const char* pFormatNm,
         SwFrameFormat *pDrvdFrame,
         sal_uInt16 nFormatWhich = RES_FRMFMT,
-        const sal_uInt16* pWhichRange = nullptr);
+        const WhichRangesContainer& pWhichRange = {});
 
     SwFrameFormat(
         SwAttrPool& rPool,
         const OUString &rFormatNm,
         SwFrameFormat *pDrvdFrame,
         sal_uInt16 nFormatWhich = RES_FRMFMT,
-        const sal_uInt16* pWhichRange = nullptr);
+        const WhichRangesContainer& pWhichRange = {});
 
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 

@@ -122,9 +122,10 @@ void Svx3DPreviewControl::Construct()
     // invalidate SnapRects of objects
     mpScene->SetRectsDirty();
 
-    SfxItemSet aSet( mpModel->GetItemPool(),
-        svl::Items<XATTR_LINESTYLE, XATTR_LINESTYLE,
-        XATTR_FILL_FIRST, XATTR_FILLBITMAP>{} );
+    static const WhichRangesLiteral ranges { {
+        {XATTR_LINESTYLE, XATTR_LINESTYLE},
+        {XATTR_FILL_FIRST, XATTR_FILLBITMAP} } };
+    SfxItemSet aSet( mpModel->GetItemPool(), ranges );
     aSet.Put( XLineStyleItem( drawing::LineStyle_NONE ) );
     aSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
     aSet.Put( XFillColorItem( "", COL_WHITE ) );
@@ -180,7 +181,8 @@ void Svx3DPreviewControl::SetObjectType(SvxPreviewObjectType nType)
     if(mnObjectType == nType && mp3DObj)
         return;
 
-    SfxItemSet aSet(mpModel->GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END>{});
+    static const WhichRangesLiteral ranges { { {SDRATTR_START, SDRATTR_END} } };
+    SfxItemSet aSet(mpModel->GetItemPool(), ranges);
     mnObjectType = nType;
 
     if( mp3DObj )
