@@ -19,6 +19,7 @@
 #include <unotools/configmgr.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
+#include <svx/FileExportedDialog.hxx>
 
 #include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -269,38 +270,6 @@ IMPL_LINK(SafeModeDialog, DialogBtnHdl, weld::Button&, rBtn, void)
     }
 }
 
-namespace {
-    class ProfileExportedDialog : public weld::GenericDialogController
-    {
-    private:
-        std::unique_ptr<weld::Button> m_xButton;
-
-        DECL_LINK(OpenHdl, weld::Button&, void);
-    public:
-        explicit ProfileExportedDialog(weld::Window* pParent);
-    };
-
-    ProfileExportedDialog::ProfileExportedDialog(weld::Window* pParent)
-        : GenericDialogController(pParent, "svx/ui/profileexporteddialog.ui", "ProfileExportedDialog")
-        , m_xButton(m_xBuilder->weld_button("ok"))
-    {
-        m_xButton->connect_clicked(LINK(this, ProfileExportedDialog, OpenHdl));
-    }
-
-    IMPL_LINK_NOARG(ProfileExportedDialog, OpenHdl, weld::Button&, void)
-    {
-        const OUString uri(comphelper::BackupFileHelper::getUserProfileURL());
-        css::uno::Reference< css::system::XSystemShellExecute > exec(
-        css::system::SystemShellExecute::create(comphelper::getProcessComponentContext()));
-        try {
-            exec->execute(uri, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY);
-        } catch (const css::uno::Exception &) {
-            TOOLS_WARN_EXCEPTION("svx.dialog", "opening <" << uri << "> failed:");
-        }
-        m_xDialog->response(RET_OK);
-    }
-}
-
 IMPL_LINK(SafeModeDialog, CreateZipBtnHdl, weld::Button&, /*rBtn*/, void)
 {
     const OUString zipFileURL(comphelper::BackupFileHelper::getUserProfileURL() + "/libreoffice-profile.zip");
@@ -320,7 +289,7 @@ IMPL_LINK(SafeModeDialog, CreateZipBtnHdl, weld::Button&, /*rBtn*/, void)
         return;
     }
 
-    ProfileExportedDialog aDialog(m_xDialog.get());
+    FileExportedDialog aDialog(m_xDialog.get(),"Your user profile has been exported as 'libreoffice-profile.zip'.");
     aDialog.run();
 }
 
