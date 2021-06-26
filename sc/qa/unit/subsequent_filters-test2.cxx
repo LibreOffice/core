@@ -1427,7 +1427,7 @@ void ScFiltersTest2::testTdf125099()
     ScDocument& rDoc = xDocSh->GetDocument();
 
     CPPUNIT_ASSERT_EQUAL(OUString("03:53:46"), rDoc.GetString(ScAddress(0, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("03:23:59"), rDoc.GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("03:24:00"), rDoc.GetString(ScAddress(0, 1, 0)));
 
     xDocSh->DoHardRecalc();
 

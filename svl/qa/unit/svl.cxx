@@ -1652,7 +1652,7 @@ void Test::testUserDefinedNumberFormats()
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         // Two decimals.
         sCode =     "MM:SS.00";
-        sExpected = "23:53.61";
+        sExpected = "23:53.60";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         // Three decimals.
         sCode =     "MM:SS.000";
@@ -1664,7 +1664,7 @@ void Test::testUserDefinedNumberFormats()
         sExpected = "1900-01-02 23:53.6";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         sCode =     "YYYY-MM-DD MM:SS.00";
-        sExpected = "1900-01-02 23:53.61";
+        sExpected = "1900-01-02 23:53.60";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         sCode =     "YYYY-MM-DD MM:SS.000";
         sExpected = "1900-01-02 23:53.605";
