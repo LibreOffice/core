@@ -41,6 +41,8 @@ class SfxTemplateControllerItem;
 
 #include <vcl/idle.hxx>
 
+#include <StyleList.hxx>
+
 class SfxStyleFamilyItem;
 class SfxTemplateItem;
 class SfxBindings;
@@ -49,6 +51,10 @@ class SfxStyleSheetBasePool;
 class StyleTreeListBox_Impl;
 class SfxTemplateDialog_Impl;
 class SfxCommonTemplateDialog_Impl;
+
+namespace weld {
+    class StyleList;
+}
 
 namespace com::sun::star::frame {
     class XModuleManager2;
@@ -93,13 +99,11 @@ protected:
 
     std::optional<SfxStyleFamilies> mxStyleFamilies;
     std::array<std::unique_ptr<SfxTemplateItem>, MAX_FAMILIES> pFamilyState;
-    SfxStyleSheetBasePool* pStyleSheetPool;
     SfxObjectShell* pCurObjShell;
     css::uno::Reference<css::frame::XModuleManager2> xModuleManager;
     DeletionWatcher* m_pDeletionWatcher;
 
-    std::unique_ptr<weld::TreeView> mxFmtLb;
-    std::unique_ptr<weld::TreeView> mxTreeBox;
+    StyleList m_aStyleList;
     std::unique_ptr<weld::CheckButton> mxPreviewCheckbox;
     std::unique_ptr<weld::ComboBox> mxFilterLb;
     std::unique_ptr<TreeViewDropTarget> m_xTreeView1DropTargetHelper;
@@ -123,7 +127,6 @@ protected:
     bool bNewByExampleDisabled :1;
     bool bUpdateByExampleDisabled :1;
     bool bTreeDrag :1;
-    bool bAllowReParentDrop:1;
     bool bHierarchical :1;
     bool m_bWantHierarchical :1;
     bool bBindingUpdate :1;
@@ -138,15 +141,12 @@ protected:
     DECL_LINK(PopupTreeMenuHdl, const CommandEvent&, bool);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
-    DECL_LINK(OnAsyncExecuteDrop, void *, void);
     DECL_LINK(DragBeginHdl, bool&, bool);
     DECL_LINK(CustomRenderHdl, weld::TreeView::render_args, void);
     DECL_STATIC_LINK(SfxCommonTemplateDialog_Impl, CustomGetSizeHdl, weld::TreeView::get_size_args, Size);
 
     void DropHdl(const OUString& rStyle, const OUString& rParent);
 
-    virtual void EnableItem(const OString& /*rMesId*/, bool /*bCheck*/ = true)
-    {}
     virtual void CheckItem(const OString& /*rMesId*/, bool /*bCheck*/ = true)
     {}
     virtual bool IsCheckedItem(const OString& /*rMesId*/ )
@@ -171,7 +171,6 @@ protected:
                       sal_uInt16* pIdx = nullptr, const sal_uInt16* pModifier = nullptr );
 
     void UpdateStyles_Impl(StyleFlags nFlags);
-    const SfxStyleFamilyItem* GetFamilyItem_Impl() const;
     bool IsInitialized() const
     {
         return nActFamily != 0xffff;
@@ -187,15 +186,9 @@ protected:
 
     void SelectStyle(const OUString& rStyle, bool bIsCallback);
     void UpdateStyleDependents();
-    bool HasSelectedStyle() const;
-    void GetSelectedStyle() const;
     void FillTreeBox();
     void Update_Impl();
     void UpdateFamily_Impl();
-
-    // In which FamilyState do I have to look, in order to get the
-    // information of the ith Family in the pStyleFamilies.
-    sal_uInt16 StyleNrToInfoOffset( sal_uInt16 i );
 
     void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -212,6 +205,7 @@ protected:
 
 public:
 
+    DECL_LINK(OnAsyncExecuteDrop, void *, void);
     SfxCommonTemplateDialog_Impl(SfxBindings* pB, weld::Container*, weld::Builder* pBuilder);
     virtual ~SfxCommonTemplateDialog_Impl() override;
 
@@ -238,11 +232,11 @@ public:
     {
         bCanShow = b;
     }
-
+    virtual void EnableItem(const OString& /*rMesId*/, bool /*bCheck*/ = true)
+    {}
     void EnableTreeDrag(bool b);
     void EnableExample_Impl(sal_uInt16 nId, bool bEnable);
     SfxStyleFamily GetActualFamily() const;
-    OUString GetSelectedEntry() const;
 
     SfxObjectShell* GetObjectShell() const
     {
@@ -277,7 +271,6 @@ private:
     DECL_LINK(ToolMenuSelectHdl, const OString&, void);
 
     virtual void EnableEdit( bool ) override;
-    virtual void EnableItem(const OString& rMesId, bool bCheck = true) override;
     virtual void CheckItem(const OString& rMesId, bool bCheck = true) override;
     virtual bool IsCheckedItem(const OString& rMesId) override;
     virtual void InsertFamilyItem(sal_uInt16 nId, const SfxStyleFamilyItem& rItem) override;
@@ -294,6 +287,7 @@ public:
     sal_Int8 AcceptToolbarDrop(const AcceptDropEvent& rEvt, const DropTargetHelper& rHelper);
 
     void Initialize();
+    virtual void EnableItem(const OString& rMesId, bool bCheck = true) override;
 };
 
 #endif // INCLUDED_SFX2_SOURCE_INC_TEMPLDGI_HXX
