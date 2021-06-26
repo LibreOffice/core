@@ -1,0 +1,228 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#pragma once
+
+#include <sal/config.h>
+
+class SfxObjectShell;
+class SfxStyleFamilyItem;
+class SfxTemplateItem;
+class SfxCommonTemplateDialog_Impl;
+
+enum class StyleFlags
+{
+    NONE = 0,
+    UpdateFamilyList = 1,
+    UpdateFamily = 2
+};
+
+namespace o3tl
+{
+template <> struct typed_flags<StyleFlags> : is_typed_flags<StyleFlags, 3>
+{
+};
+}
+
+class TreeViewDropTarget;
+
+constexpr int MAX_FAMILIES = 6;
+
+class StyleList
+{
+    friend class TreeViewDropTarget;
+
+public:
+    StyleList(weld::Builder* pBuilder, std::optional<SfxStyleFamilies> mxFamilies,
+              SfxBindings* pBindings, SfxCommonTemplateDialog_Impl * m_Parent, SfxModule* m_Module);
+
+    ~StyleList();
+
+    void setStyleFamily(SfxStyleFamily family);
+    void setPreview(bool bPreview);
+    void setFilter(weld::ComboBox& combobox);
+
+    sal_Int8 ExecuteDrop(const ExecuteDropEvent& rEvt);
+
+    void SetObjectShell(SfxObjectShell* shell) { m_pCurObjShell = shell; }
+    void UpdateFamily_Impl();
+
+    void MenuSelect(const OString& rIdent);
+    int getSelectedRowsM_xFmtlb() { return m_xFmtLb->count_selected_rows(); }
+
+    void PrepareMenu(const Point& rPos);
+    weld::TreeView* ReturnVisibleTreeview()
+    {
+        return m_xTreeBox->get_visible() ? m_xTreeBox.get() : m_xFmtLb.get();
+    }
+
+    void ReadResource();
+
+    size_t getM_xStyleFamilySize() { return m_xStyleFamilies->size(); }
+    void stylist_impl_clear()
+    {
+        m_xStyleFamilies.reset();
+        for (auto& i : m_pFamilyState)
+         i.reset();
+    }
+    bool IsSafeForWaterCan() const;
+    void SelectStyle(const OUString& rStr, bool bIsCallback);
+
+    std::unique_ptr<SfxTemplateItem> NthElem(sal_uInt16 idx)
+    {
+        if (m_pFamilyState[idx])
+            return m_pFamilyState[idx];
+        return nullptr;
+    }
+    void GetSelectedStyle() const;
+    OUString GetSelectedEntry() const;
+    const SfxStyleFamilyItem* GetFamilyItem_Impl() const;
+
+    bool bCanNewGetter_updateFamImpl()
+    {
+        return m_xTreeBox->get_visible() || m_xFmtLb->count_selected_rows() <= 1;
+    }
+
+    bool bTreeDragSetter_updateFam_Impl() { return true; }
+    void UpdateFamImpl();
+
+    void bNewByExampleDisabledsetter(bool m_newByExampleDisabled)
+    {
+        m_bNewByExampleDisabled = m_newByExampleDisabled;
+    }
+    void nActFamilySetter(bool m_ActFam)
+    {
+        m_nActFamily = m_ActFam;
+    }
+
+    DECL_LINK(MenuSelectAsyncHdl, void*, void);
+
+    OString SetRIndent(OString m_LastItemIndent)
+    {
+        sLastItemIdent = m_LastItemIndent;
+    }
+
+    void for_preview_hdl(bool bCustomPreview)
+    {
+
+        m_xFmtLb->clear();
+        m_xFmtLb->set_column_custom_renderer(0, bCustomPreview);
+        m_xTreeBox->clear();
+        m_xTreeBox->set_column_custom_renderer(0, bCustomPreview);
+    }
+
+    void EnableDel(bool b) { m_bCanDel = b; }
+
+    void connect_selected(const Link<StyleList&, void>& rLink) { m_aSelectHdl = rLink; }
+
+    void ExecuteAction();
+
+    void Initialize();
+
+    void SetWantHierarchical(bool WantHierarchical)
+    {
+        m_bWantHierarchical = WantHierarchical;
+    }
+
+    void SetbHierarchical(bool bHierarchical) { m_bHierarchical = bHierarchical; }
+
+    bool HasSelectedStyle() const;
+
+    void SetHierarchical();
+    void SetFilter();
+    void UpdateStyles_Impl(StyleFlags nFlags);
+
+private:
+
+    void FillTreeBox(SfxStyleFamily eFam);
+    OUString getDefaultStyleName(const SfxStyleFamily eFam);
+    sal_Int8 AcceptDrop(const AcceptDropEvent& rEvt, const DropTargetHelper& rHelper);
+    SfxStyleFamily GetActualFamily() const;
+    void DropHdl(const OUString& rStyle, const OUString& rParent);
+    void FilterSelect(sal_uInt16 nEntry, bool bForce);
+    void EnableTreeDrag(bool bEnable);
+    // In which FamilyState do I have to look, in order to get the
+    // information of the ith Family in the pStyleFamilies.
+    sal_uInt16 StyleNrToInfoOffset(sal_uInt16 i);
+    void EnableDelete();
+
+    SfxObjectShell* GetObjectShell() const { return m_pCurObjShell; }
+    void NAppFilter(SfxStyleSearchBits filter) { m_nAppFilter = filter; }
+    void NActFilter(sal_uInt16 filter) { m_nActFilter = filter; }
+
+    void NewHdl();
+    void EditHdl();
+    void DeleteHdl();
+    void HideHdl();
+    void ShowHdl();
+
+    void Update_Impl();
+
+    void Selected_Hdl() { m_aSelectHdl.Call(*this); }
+
+    bool m_bHierarchical : 1;
+    bool m_bWantHierarchical;
+
+    bool m_bAllowReParentDrop : 1;
+    bool m_bNewByExampleDisabled : 1;
+    bool m_bUpdateByExampleDisabled : 1;
+    bool m_bDontUpdate : 1;
+    bool m_bTreeDrag : 1;
+    bool m_bCanEdit : 1;
+    bool m_bCanHide : 1;
+    bool m_bCanShow : 1;
+    bool m_bCanNew : 1;
+    bool m_bUpdateFamily : 1;
+    bool m_bCanDel : 1;
+    bool m_bBindingUpdate : 1;
+    SfxStyleSheetBasePool* m_pStyleSheetPool;
+    sal_uInt16 m_nActFilter;
+    std::unique_ptr<weld::TreeView> m_xFmtLb;
+    std::unique_ptr<weld::TreeView> m_xTreeBox;
+
+    std::unique_ptr<weld::Builder> mxMenuBuilder;
+    std::unique_ptr<weld::Menu> mxMenu;
+
+    std::optional<SfxStyleFamilies> m_xStyleFamilies;
+    std::array<std::unique_ptr<SfxTemplateItem>, MAX_FAMILIES> m_pFamilyState;
+    std::unique_ptr<weld::ComboBox> m_xFilterLb;
+    std::unique_ptr<weld::CheckButton> m_xPreviewCheckbox;
+    SfxObjectShell* m_pCurObjShell;
+    sal_uInt16 m_nActFamily;
+    SfxStyleSearchBits m_nAppFilter;
+
+    std::unique_ptr<TreeViewDropTarget> m_xTreeView1DropTargetHelper;
+    std::unique_ptr<TreeViewDropTarget> m_xTreeView2DropTargetHelper;
+
+    SfxCommonTemplateDialog_Impl* m_pParentDialog;
+    SfxBindings* m_pBindings;
+
+    Link<StyleList&, void> m_aSelectHdl;
+
+protected:
+
+    std::unique_ptr<weld::Builder> mxMenuBuilder;
+    std::unique_ptr<weld::Menu> mxMenu;
+    OString sLastItemIdent;
+    SfxModule* m_Module;
+    sal_uInt16 m_nModifier;
+
+    DECL_LINK(DragBeginHdl, bool&, bool);
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+    DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
+    DECL_LINK(CustomRenderHdl, weld::TreeView::render_args, void);
+    DECL_LINK(PopupFlatMenuHdl, const CommandEvent&, bool);
+    DECL_LINK(FmtSelectHdl, weld::TreeView&, void);
+    DECL_LINK(TreeListApplyHdl, weld::TreeView&, bool);
+    DECL_LINK(MousePressHdl, const MouseEvent&, bool);
+    DECL_STATIC_LINK(StyleList, CustomGetSizeHdl, weld::TreeView::get_size_args, Size);
+
+    void ShowMenu(const CommandEvent& rCEvt);
+    void CreateContextMenu();
+};
