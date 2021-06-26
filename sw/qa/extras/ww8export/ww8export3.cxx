@@ -790,6 +790,22 @@ DECLARE_WW8EXPORT_TEST(testTdf106541_cancelOutline, "tdf106541_cancelOutline.doc
     CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf104239_chapterNumbering, "tdf104239_chapterNumbering.doc")
+{
+    uno::Reference<text::XChapterNumberingSupplier> xNumberingSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xNumberingRules = xNumberingSupplier->getChapterNumberingRules();
+
+    comphelper::SequenceAsHashMap hashMap(xNumberingRules->getByIndex(0));
+    CPPUNIT_ASSERT(hashMap["HeadingStyleName"].get<OUString>().match("Heading 1"));
+    sal_uInt16 nNumberingType = style::NumberingType::CHARS_UPPER_LETTER_N;
+    CPPUNIT_ASSERT_EQUAL(nNumberingType, hashMap["NumberingType"].get<sal_uInt16>());
+
+    hashMap = xNumberingRules->getByIndex(5);
+    CPPUNIT_ASSERT(hashMap["HeadingStyleName"].get<OUString>().match("Heading 6"));
+    nNumberingType = style::NumberingType::ARABIC;
+    CPPUNIT_ASSERT_EQUAL(nNumberingType, hashMap["NumberingType"].get<sal_uInt16>());
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf106541_inheritChapterNumbering, "tdf106541_inheritChapterNumbering.doc")
 {
     // The level and numbering are inherited from Heading 1.
