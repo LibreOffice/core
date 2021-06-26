@@ -3044,31 +3044,75 @@ sal_uInt16 SvNumberformat::ImpGetFractionOfSecondString( OUStringBuffer& rBuf, d
     return static_cast<sal_uInt16>(nFractionDecimals);
 }
 
-bool SvNumberformat::ImpGetTimeOutput(double fNumber,
+sal_uInt16 SvNumberformat::ImpGetFractionOfSecondString(OUStringBuffer& rBuf,
+                                                        sal_uInt16 nMilliSecond,
+                                                        int nFractionDecimals, sal_uInt16 nIx,
+                                                        sal_uInt16 nMinimumInputLineDecimals)
+{
+    assert(nMilliSecond < 1000);
+
+    if (!nFractionDecimals)
+        return 0;
+
+    sal_uInt16 nRemainder = nMilliSecond % 100;
+    int nCorrection = nFractionDecimals == 1 && nRemainder >= 50 ? 1 : 0;
+    rBuf.append(OUString::number(nMilliSecond / 100 + nCorrection));
+    if (nFractionDecimals > 1)
+    {
+        nMilliSecond = nRemainder;
+        nRemainder = nMilliSecond % 10;
+        nCorrection = nFractionDecimals == 2 && nRemainder >= 5 ? 1 : 0;
+        rBuf.append(OUString::number(nMilliSecond / 10 + nCorrection));
+        if (nFractionDecimals > 2)
+        {
+            rBuf.append(OUString::number(nRemainder));
+            for (int i = rBuf.getLength(); i < nFractionDecimals; ++i)
+                rBuf.append('0');
+        }
+    }
+
+    if (nMinimumInputLineDecimals)
+    {
+        if (rBuf.getLength() > nMinimumInputLineDecimals)
+            rBuf.stripEnd('0');
+        for (sal_Int32 index = rBuf.getLength(); index < nMinimumInputLineDecimals; ++index)
+            rBuf.append('0');
+        impTransliterate(rBuf, NumFor[nIx].GetNatNum());
+        nFractionDecimals = rBuf.getLength();
+    }
+    else
+    {
+        impTransliterate(rBuf, NumFor[nIx].GetNatNum());
+    }
+    return static_cast<sal_uInt16>(nFractionDecimals);
+}
+
+namespace
+{
+constexpr sal_Int64 msPerDay = tools::Time::secondPerDay * 1000;
+
+sal_Int64 TimeToMs(const double fNumber)
+{
+    return std::round(fNumber * msPerDay);
+}
+}
+
+bool SvNumberformat::ImpGetTimeOutput(const double fNumber,
                                       sal_uInt16 nIx,
                                       OUStringBuffer& sBuff)
 {
     using namespace ::com::sun::star::i18n;
     bool bCalendarSet = false;
-    const double fNumberOrig = fNumber;
     bool bRes = false;
     bool bSign = false;
-    if (fNumber < 0.0)
-    {
-        fNumber = -fNumber;
-        if (nIx == 0)
-        {
-            bSign = true;
-        }
-    }
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     bool bInputLine;
     sal_Int32 nCntPost;
     if ( rScan.GetStandardPrec() == SvNumberFormatter::INPUTSTRING_PRECISION &&
-         0 < rInfo.nCntPost && rInfo.nCntPost < 7 )
-    {   // round at 7 decimals (+5 of 86400 == 12 significant digits)
+         0 < rInfo.nCntPost && rInfo.nCntPost < 3 )
+    {   // round at 3 decimals (+5 of 86400 == 8 significant digits)
         bInputLine = true;
-        nCntPost = 7;
+        nCntPost = 3;
     }
     else
     {
@@ -3079,51 +3123,65 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
     OUStringBuffer sSecStr;
     sal_Int32 nSecPos = 0; // For figure by figure processing
     sal_uInt32 nHour, nMin, nSec;
+    sal_Int64 nMs = TimeToMs(fNumber);
+    if (nMs == std::numeric_limits<sal_Int64>::max() || nMs == std::numeric_limits<sal_Int64>::min())
+    {
+        sBuff = ImpSvNumberformatScan::sErrStr;
+        return false;
+    }
     if (!rInfo.bThousand) // No [] format
     {
-        sal_uInt16 nCHour, nCMinute, nCSecond;
-        double fFractionOfSecond;
-        tools::Time::GetClock( fNumberOrig, nCHour, nCMinute, nCSecond, fFractionOfSecond, nCntPost);
-        nHour = nCHour;
-        nMin = nCMinute;
-        nSec = nCSecond;
-        nCntPost = ImpGetFractionOfSecondString( sSecStr, fFractionOfSecond, nCntPost, true, nIx,
-                (bInputLine ? rInfo.nCntPost : 0));
+        nMs %= msPerDay;
+        if (nMs < 0)
+            nMs += msPerDay;
+        nHour = nMs / (1000 * 60 * 60);
+        nMin = (nMs / (1000 * 60)) % 60;
+        nSec = (nMs / 1000) % 60;
+        nCntPost = ImpGetFractionOfSecondString(sSecStr, nMs % 1000, nCntPost, nIx,
+                                                (bInputLine ? rInfo.nCntPost : 0));
     }
     else
     {
-        const double fTime = rtl::math::round( fNumber * 86400.0, int(nCntPost));
-        if (bSign && fTime == 0.0)
+        if (nMs < 0)
         {
-            bSign = false; // Not -00:00:00
+            bSign = true;
+            nMs = -nMs;
         }
-        if (fTime > D_MAX_U_INT32)
-        {
-            sBuff = ImpSvNumberformatScan::sErrStr;
-            return false;
-        }
-        sal_uInt32 nSeconds = static_cast<sal_uInt32>(fTime);
-
-        nCntPost = ImpGetFractionOfSecondString( sSecStr, fTime - nSeconds, nCntPost, false, nIx,
-                (bInputLine ? rInfo.nCntPost : 0));
+        nCntPost = ImpGetFractionOfSecondString(sSecStr, nMs % 1000, nCntPost, nIx,
+            (bInputLine ? rInfo.nCntPost : 0));
 
         if (rInfo.nThousand == 3) // [ss]
         {
+            if (nMs > sal_Int64(std::numeric_limits<sal_uInt32>::max()) * 1000)
+            {
+                sBuff = ImpSvNumberformatScan::sErrStr;
+                return false;
+            }
             nHour = 0;
             nMin = 0;
-            nSec = nSeconds;
+            nSec = nMs / 1000;
         }
         else if (rInfo.nThousand == 2) // [mm]:ss
         {
+            if (nMs > sal_Int64(std::numeric_limits<sal_uInt32>::max()) * 1000 * 60)
+            {
+                sBuff = ImpSvNumberformatScan::sErrStr;
+                return false;
+            }
             nHour = 0;
-            nMin = nSeconds / 60;
-            nSec = nSeconds % 60;
+            nMin = nMs / (1000 * 60);
+            nSec = (nMs / 1000) % 60;
         }
         else if (rInfo.nThousand == 1) // [hh]:mm:ss
         {
-            nHour = nSeconds / 3600;
-            nMin = (nSeconds%3600) / 60;
-            nSec = nSeconds%60;
+            if (nMs > sal_Int64(std::numeric_limits<sal_uInt32>::max()) * 1000 * 60 * 60)
+            {
+                sBuff = ImpSvNumberformatScan::sErrStr;
+                return false;
+            }
+            nHour = nMs / (1000 * 60 * 60);
+            nMin = (nMs / (1000 * 60)) % 60;
+            nSec = (nMs / 1000) % 60;
         }
         else
         {
@@ -3193,7 +3251,7 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
             if ( !bCalendarSet )
             {
                 double fDiff = DateTime(rScan.GetNullDate()) - GetCal().getEpochStart();
-                fDiff += fNumberOrig;
+                fDiff += fNumber;
                 GetCal().setLocalDateTime( fDiff );
                 bCalendarSet = true;
             }
@@ -3655,6 +3713,11 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
     CalendarWrapper& rCal = GetCal();
     double fDiff = DateTime(rScan.GetNullDate()) - rCal.getEpochStart();
     fNumber += fDiff;
+    if (TimeToMs(fNumber - floor(fNumber)) == msPerDay)
+    {
+        // result of fNumber==x.999999999... rounded up, use correct date
+        fNumber = floor(fNumber + 0.5);
+    }
     rCal.setLocalDateTime( fNumber );
     int nUseMonthCase = 0; // Not decided yet
     OUString aOrgCalendar; // empty => not changed yet
@@ -3938,13 +4001,12 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
         bInputLine = false;
         nCntPost = rInfo.nCntPost;
     }
-    double fTime = (fNumber - floor( fNumber )) * 86400.0;
-    fTime = ::rtl::math::round( fTime, int(nCntPost) );
-    if (fTime >= 86400.0)
+    sal_Int64 nMs = TimeToMs(fNumber - floor(fNumber)); // Always positive after the subtraction
+    if (nMs == msPerDay)
     {
         // result of fNumber==x.999999999... rounded up, use correct date/time
-        fTime -= 86400.0;
-        fNumber = floor( fNumber + 0.5) + fTime;
+        nMs = 0;
+        fNumber = floor(fNumber + 0.5);
     }
     rCal.setLocalDateTime( fNumber );
 
@@ -3965,48 +4027,32 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     OUStringBuffer sSecStr;
     sal_Int32 nSecPos = 0; // For figure by figure processing
     sal_uInt32 nHour, nMin, nSec;
-    if (!rInfo.bThousand) // No [] format
+    nCntPost = ImpGetFractionOfSecondString(sSecStr, nMs % 1000, nCntPost, nIx,
+                                            (bInputLine ? rInfo.nCntPost : 0));
+
+    if (!rInfo.bThousand || rInfo.nThousand == 1) // No [] format or [hh]:mm:ss
     {
-        sal_uInt16 nCHour, nCMinute, nCSecond;
-        double fFractionOfSecond;
-        tools::Time::GetClock( fNumber, nCHour, nCMinute, nCSecond, fFractionOfSecond, nCntPost);
-        nHour = nCHour;
-        nMin = nCMinute;
-        nSec = nCSecond;
-        nCntPost = ImpGetFractionOfSecondString( sSecStr, fFractionOfSecond, nCntPost, true, nIx,
-                (bInputLine ? rInfo.nCntPost : 0));
+        nHour = nMs / (1000 * 60 * 60);
+        nMin = (nMs / (1000 * 60)) % 60;
+        nSec = (nMs / 1000) % 60;
+    }
+    else if (rInfo.nThousand == 2) // [mm]:ss
+    {
+        nHour = 0;
+        nMin = nMs / (1000 * 60);
+        nSec = (nMs / 1000) % 60;
+    }
+    else if (rInfo.nThousand == 3) // [ss]
+    {
+        nHour = 0;
+        nMin = 0;
+        nSec = nMs / 1000;
     }
     else
     {
-        sal_uInt32 nSeconds = static_cast<sal_uInt32>(floor( fTime ));
-
-        nCntPost = ImpGetFractionOfSecondString( sSecStr, fTime - nSeconds, nCntPost, false, nIx,
-                (bInputLine ? rInfo.nCntPost : 0));
-
-        if (rInfo.nThousand == 3) // [ss]
-        {
-            nHour = 0;
-            nMin = 0;
-            nSec = nSeconds;
-        }
-        else if (rInfo.nThousand == 2) // [mm]:ss
-        {
-            nHour = 0;
-            nMin = nSeconds / 60;
-            nSec = nSeconds % 60;
-        }
-        else if (rInfo.nThousand == 1) // [hh]:mm:ss
-        {
-            nHour = nSeconds / 3600;
-            nMin = (nSeconds%3600) / 60;
-            nSec = nSeconds%60;
-        }
-        else
-        {
-            nHour = 0;  // TODO What should these values be?
-            nMin  = 0;
-            nSec  = 0;
-        }
+        nHour = 0;  // TODO What should these values be?
+        nMin  = 0;
+        nSec  = 0;
     }
     sal_Unicode cAmPm = ' '; // a or p
     if (rInfo.nCntExp) // AM/PM
