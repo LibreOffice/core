@@ -99,7 +99,8 @@ protected:
     DeletionWatcher* m_pDeletionWatcher;
 
     std::unique_ptr<weld::TreeView> mxFmtLb;
-    std::unique_ptr<weld::TreeView> mxTreeBox;
+    //std::unique_ptr<weld::TreeView> mxTreeBox;
+    std::unique_ptr<weld::StyleList> mxStyleList;
     std::unique_ptr<weld::CheckButton> mxPreviewCheckbox;
     std::unique_ptr<weld::ComboBox> mxFilterLb;
     std::unique_ptr<TreeViewDropTarget> m_xTreeView1DropTargetHelper;

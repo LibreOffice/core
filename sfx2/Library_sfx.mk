@@ -90,7 +90,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/appl/appchild \
     sfx2/source/appl/appdata \
     sfx2/source/appl/appdde \
-	sfx2/source/appl/appdispatchprovider \
+    sfx2/source/appl/appdispatchprovider \
     sfx2/source/appl/appinit \
     sfx2/source/appl/appmain \
     sfx2/source/appl/appmisc \
@@ -204,6 +204,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/dialog/styledlg \
     sfx2/source/dialog/tabdlg \
     sfx2/source/dialog/templdlg \
+	sfx2/source/dialog/StyleList \
     sfx2/source/dialog/titledockwin \
     sfx2/source/dialog/tplcitem \
     sfx2/source/dialog/tplpitem \

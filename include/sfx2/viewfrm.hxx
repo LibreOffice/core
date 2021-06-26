@@ -33,6 +33,7 @@
 namespace weld {
     class Button;
     class Window;
+    class StyleList;
 }
 class SvBorder;
 class SfxDispatcher;
