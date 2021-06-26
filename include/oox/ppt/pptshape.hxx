@@ -54,6 +54,8 @@ class PPTShape final : public oox::drawingml::Shape
     /// Set if spPr tag is non empty for the shape
     bool mbHasNoninheritedShapeProperties;
 
+    bool IsPlaceHolderCandidate(const SlidePersist& rSlidePersist) const;
+
 public:
 
     PPTShape( const oox::ppt::ShapeLocation eShapeLocation,
