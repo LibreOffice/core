@@ -222,7 +222,7 @@ do_checkout()
         fi
     done
     if [ -f .gitmodules ] ; then
-        git submodule update
+        git submodule update --progress
         if [ -n "$branch" ] ; then
             git submodule foreach git checkout -b "${branch}" HEAD || return $?
         fi
@@ -243,7 +243,7 @@ do_reset()
 {
     git reset "$@" || return $?
     if [ -f .gitmodules ] ; then
-        git submodule update || return $?
+        git submodule update --progress || return $?
     else
         # now that is the nasty case we moved prior to submodules
         # delete the submodules left over if any
@@ -277,9 +277,9 @@ do_init_modules()
     done
     for module in $SUBMODULES_CONFIGURED ; do
         if [ -n "$REFERENCED_GIT" ] ; then
-            git submodule update --reference "$REFERENCED_GIT/.git/modules/$module" "$module" || return $?
+            git submodule update --reference "$REFERENCED_GIT/.git/modules/$module" --progress "$module" || return $?
         else
-            git submodule update "$module" || return $?
+            git submodule update --progress "$module" || return $?
         fi
     done
     return 0
@@ -359,7 +359,7 @@ case "$COMMAND" in
         do_init_modules && refresh_all_hooks
         ;;
     fetch)
-        (git fetch "$@" && git submodule foreach git fetch "$@" ) && git submodule update
+        (git fetch "$@" && git submodule foreach git fetch "$@" ) && git submodule update --progress
 
         ;;
     grep)
@@ -367,7 +367,7 @@ case "$COMMAND" in
         do_git_cmd "${COMMAND}" "$@"
         ;;
     pull)
-        git pull "$@" && git submodule update && refresh_all_hooks
+        git pull "$@" && git submodule update --progress && refresh_all_hooks
         ;;
     push)
         git submodule foreach git push "$@"
