@@ -265,7 +265,7 @@ bool SwWW8ImplReader::ReadGrafFile(OUString& rFileName, std::unique_ptr<Graphic>
         return false;
 
     //skip duplicate graphics when fuzzing
-    if (utl::ConfigManager::IsFuzzing())
+    if (m_bFuzzing)
     {
         if (!m_aGrafPosSet.insert(nPosFc).second)
             return false;
