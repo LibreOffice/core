@@ -1808,6 +1808,13 @@ void SwWW8ImplReader::RegisterNumFormatOnTextNode(sal_uInt16 nCurrentLFO,
     if (!pTextNd)
         return;
 
+    // WW8ListManager::nMaxLevel indicates body text, cancelling an inherited numbering.
+    if (nCurrentLFO < USHRT_MAX && nCurrentLevel == WW8ListManager::nMaxLevel)
+    {
+        pTextNd->SetAttr(SwNumRuleItem(OUString()));
+        return;
+    }
+
     // Undefined listLevel is treated as the first level with valid numbering rule.
     // TODO:This doesn't allow for inheriting from a style(HOW?), but it matches previous behaviour.
     if (nCurrentLFO < USHRT_MAX && nCurrentLevel == MAXLEVEL)
