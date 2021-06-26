@@ -1107,10 +1107,9 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
-                        sal_uInt16 nHour, nMinute, nSecond;
-                        double fFractionOfSecond;
-                        tools::Time::GetClock( nVal, nHour, nMinute, nSecond, fFractionOfSecond, 0);
-                        rDoc.SetValue(rCol, nRow, 0, nHour);
+                        sal_uInt16 nHour, nMinute, nSecond, nMs;
+                        tools::Time::GetClock(nVal, nHour, nMinute, nSecond, nMs, 0);
+                        rDoc.SetValue(rCol, nRow, 0, nHour % 24);
                     }
                 }
             }
@@ -1124,9 +1123,8 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
-                        sal_uInt16 nHour, nMinute, nSecond;
-                        double fFractionOfSecond;
-                        tools::Time::GetClock( nVal, nHour, nMinute, nSecond, fFractionOfSecond, 0);
+                        sal_uInt16 nHour, nMinute, nSecond, nMs;
+                        tools::Time::GetClock(nVal, nHour, nMinute, nSecond, nMs, 0);
                         rDoc.SetValue(rCol, nRow, 0, nMinute);
                     }
                 }
@@ -1141,9 +1139,8 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
-                        sal_uInt16 nHour, nMinute, nSecond;
-                        double fFractionOfSecond;
-                        tools::Time::GetClock( nVal, nHour, nMinute, nSecond, fFractionOfSecond, 0);
+                        sal_uInt16 nHour, nMinute, nSecond, nMs;
+                        tools::Time::GetClock(nVal, nHour, nMinute, nSecond, nMs, 0);
                         rDoc.SetValue(rCol, nRow, 0, nSecond);
                     }
                 }

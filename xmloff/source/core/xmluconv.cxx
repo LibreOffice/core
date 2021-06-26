@@ -433,10 +433,10 @@ void SvXMLUnitConverter::convertDateTime( OUStringBuffer& rBuffer,
     const int nDigits = sal_Int16(fCount) + 4;  // +4 for *86400 in seconds
     const int nFractionDecimals = std::max( XML_MAXDIGITSCOUNT_TIME - nDigits, 0);
 
-    sal_uInt16 nHour, nMinute, nSecond;
-    double fFractionOfSecond;
+    sal_uInt16 nHour, nMinute, nSecond, nMs;
     // Pass the original date+time value for proper scaling and rounding.
-    tools::Time::GetClock( fDateTime, nHour, nMinute, nSecond, fFractionOfSecond, nFractionDecimals);
+    tools::Time::GetClock( fDateTime, nHour, nMinute, nSecond, nMs, nFractionDecimals);
+    nHour %= 24; // in case it returns 24, indicating rounding up to a whole day
 
     rBuffer.append( 'T');
     if (nHour < 10)
@@ -453,19 +453,11 @@ void SvXMLUnitConverter::convertDateTime( OUStringBuffer& rBuffer,
     if (!nFractionDecimals)
         return;
 
-    // nFractionDecimals+1 to not round up what GetClock() carefully
-    // truncated.
-    OUString aFraction( ::rtl::math::doubleToUString( fFractionOfSecond,
+    OUString aFraction(rtl::math::doubleToUString(nMs / 1000.0,
                 rtl_math_StringFormat_F,
-                nFractionDecimals + 1, '.', true));
-    const sal_Int32 nLen = aFraction.getLength();
-    if ( nLen > 2 )
-    {
-        // Truncate nFractionDecimals+1 digit if it was not rounded to zero.
-        const sal_Int32 nCount = nLen - 2 - static_cast<int>(nLen > nFractionDecimals + 2);
-        rBuffer.append( '.');
-        rBuffer.append( aFraction.subView(2, nCount));     // strip 0.
-    }
+                nFractionDecimals, '.', true));
+    if (aFraction.getLength() > 2)
+        rBuffer.append(aFraction.subView(1)); // strip 0.
 }
 
 /** convert ISO Date Time String to double */
