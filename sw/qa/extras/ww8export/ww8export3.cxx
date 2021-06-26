@@ -822,6 +822,12 @@ DECLARE_WW8EXPORT_TEST(testTdf106541_inheritChapterNumberingB, "tdf106541_inheri
     CPPUNIT_ASSERT_EQUAL(OUString("1.1"), getProperty<OUString>(xPara, "ListLabelString"));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf75748_inheritChapterNumberingC, "tdf75748_inheritChapterNumberingC.doc")
+{
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(5, "Inherited from Heading 3"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("II.B.1."), getProperty<OUString>(xPara, "ListLabelString"));
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf104239_chapterNumberTortureTest, "tdf104239_chapterNumberTortureTest.doc")
 {
     // There is no point in identifying what the wrong values where in this test,
