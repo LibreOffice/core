@@ -252,20 +252,6 @@ inline double atanh(double fValue)
     return rtl_math_atanh(fValue);
 }
 
-/** A wrapper around rtl_math_erf.
- */
-inline double erf(double fValue)
-{
-    return rtl_math_erf(fValue);
-}
-
-/** A wrapper around rtl_math_erfc.
- */
-inline double erfc(double fValue)
-{
-    return rtl_math_erfc(fValue);
-}
-
 /** A wrapper around rtl_math_asinh.
  */
 inline double asinh(double fValue)
