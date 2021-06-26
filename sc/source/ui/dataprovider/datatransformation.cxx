@@ -1108,9 +1108,8 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
                         sal_uInt16 nHour, nMinute, nSecond;
-                        double fFractionOfSecond;
-                        tools::Time::GetClock( nVal, nHour, nMinute, nSecond, fFractionOfSecond, 0);
-                        rDoc.SetValue(rCol, nRow, 0, nHour);
+                        tools::Time::GetClock(nVal, nHour, nMinute, nSecond);
+                        rDoc.SetValue(rCol, nRow, 0, nHour % 24);
                     }
                 }
             }
@@ -1125,8 +1124,7 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
                         sal_uInt16 nHour, nMinute, nSecond;
-                        double fFractionOfSecond;
-                        tools::Time::GetClock( nVal, nHour, nMinute, nSecond, fFractionOfSecond, 0);
+                        tools::Time::GetClock(nVal, nHour, nMinute, nSecond);
                         rDoc.SetValue(rCol, nRow, 0, nMinute);
                     }
                 }
@@ -1142,8 +1140,7 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
                         sal_uInt16 nHour, nMinute, nSecond;
-                        double fFractionOfSecond;
-                        tools::Time::GetClock( nVal, nHour, nMinute, nSecond, fFractionOfSecond, 0);
+                        tools::Time::GetClock(nVal, nHour, nMinute, nSecond);
                         rDoc.SetValue(rCol, nRow, 0, nSecond);
                     }
                 }

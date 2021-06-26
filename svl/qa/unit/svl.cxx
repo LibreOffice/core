@@ -1374,12 +1374,12 @@ void Test::testUserDefinedNumberFormats()
     }
     {  // tdf#95339: detect SSMM as second minute
         sCode =     "SS:MM:HH DD/MM/YY"; // Month not detected by Excel, but we do not follow that.
-        sExpected = "53:23:03 02/01/00";
+        sExpected = "54:23:03 02/01/00";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
     }
     {  // tdf#101147: detect SSMM as second month
         sCode =     "HH:MM:SS MM/DD";
-        sExpected = "03:23:53 01/02";
+        sExpected = "03:23:54 01/02";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
     }
     {  // tdf#123748
@@ -1395,7 +1395,7 @@ void Test::testUserDefinedNumberFormats()
         sExpected = "03:23 03 02/01";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         sCode =     "SS:DD-MM-YY SS:MM"; // 1st is month, because of previous DD; 2nd is minute as SS has not minute
-        sExpected = "53:02-01-00 53:23";
+        sExpected = "54:02-01-00 54:23";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
     }
     {  // tdf#99996: better algorithm for fraction representation
@@ -1652,7 +1652,7 @@ void Test::testUserDefinedNumberFormats()
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         // Two decimals.
         sCode =     "MM:SS.00";
-        sExpected = "23:53.61";
+        sExpected = "23:53.60";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         // Three decimals.
         sCode =     "MM:SS.000";
@@ -1664,7 +1664,7 @@ void Test::testUserDefinedNumberFormats()
         sExpected = "1900-01-02 23:53.6";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         sCode =     "YYYY-MM-DD MM:SS.00";
-        sExpected = "1900-01-02 23:53.61";
+        sExpected = "1900-01-02 23:53.60";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         sCode =     "YYYY-MM-DD MM:SS.000";
         sExpected = "1900-01-02 23:53.605";
@@ -1672,49 +1672,49 @@ void Test::testUserDefinedNumberFormats()
     }
     {   // tdf#33689 use English NfKeywords in non-English language
         eLang = LANGUAGE_DUTCH;
-        sExpected = "Dutch: 1900/01/02 03:23:53";
+        sExpected = "Dutch: 1900/01/02 03:23:54";
         sCode =     "\"Dutch:\" JJJJ/MM/DD UU:MM:SS";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         sCode =     "\"Dutch: \"YYYY/MM/DD HH:MM:SS";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         eLang = LANGUAGE_GERMAN;
-        sExpected = "German: 1900/01/02 03:23:53";
+        sExpected = "German: 1900/01/02 03:23:54";
         sCode =     "\"German: \"JJJJ/MM/TT HH:MM:SS";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         sCode =     "\"German: \"YYYY/MM/DD HH:MM:SS";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         eLang = LANGUAGE_FRENCH;
-        sExpected = "French: 1900/01/02 03:23:53";
+        sExpected = "French: 1900/01/02 03:23:54";
         sCode =     "\"French: \"AAAA/MM/JJ HH:MM:SS";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         sCode =     "\"French: \"YYYY/MM/DD HH:MM:SS";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         eLang = LANGUAGE_ITALIAN;
-        sExpected = "Italian: 1900/01/02 03:23:53";
+        sExpected = "Italian: 1900/01/02 03:23:54";
         sCode =     "\"Italian: \"AAAA/MM/GG HH:MM:SS";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         sCode =     "\"Italian: \"YYYY/MM/DD HH:MM:SS";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         eLang = LANGUAGE_PORTUGUESE;
-        sExpected = "Portuguese: 1900/01/02 03:23:53";
+        sExpected = "Portuguese: 1900/01/02 03:23:54";
         sCode =     "\"Portuguese: \"AAAA/MM/DD HH:MM:SS";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         sCode =     "\"Portuguese: \"YYYY/MM/DD HH:MM:SS";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         eLang = LANGUAGE_SPANISH_MODERN;
-        sExpected = "Spanish: 1900/01/02 03:23:53";
+        sExpected = "Spanish: 1900/01/02 03:23:54";
         sCode =     "\"Spanish: \"AAAA/MM/DD HH:MM:SS";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         sCode =     "\"Spanish: \"YYYY/MM/DD HH:MM:SS";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         eLang = LANGUAGE_DANISH;
-        sExpected = "Danish: 1900/01/02 03:23:53";
+        sExpected = "Danish: 1900/01/02 03:23:54";
         sCode =     "\"Danish: \"YYYY/MM/DD TT:MM:SS";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         sCode =     "\"Danish: \"YYYY/MM/DD HH:MM:SS";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         eLang = LANGUAGE_FINNISH;
-        sExpected = "Finnish: 1900/01/02 03:23:53";
+        sExpected = "Finnish: 1900/01/02 03:23:54";
         sCode =     "\"Finnish: \"VVVV/KK/PP TT:MM:SS";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         sCode =     "\"Finnish: \"YYYY/MM/DD HH:MM:SS";
