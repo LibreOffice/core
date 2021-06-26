@@ -145,6 +145,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/dialog/rubydialog \
     svx/source/dialog/rulritem \
     svx/source/dialog/SafeModeDialog \
+    svx/source/dialog/FileExportedDialog \
     svx/source/dialog/SafeModeUI \
     svx/source/dialog/SpellDialogChildWindow \
     svx/source/dialog/srchctrl \
