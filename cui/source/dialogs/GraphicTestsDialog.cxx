@@ -7,6 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <comphelper/backupfilehelper.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/DirectoryHelper.hxx>
+#include <osl/file.hxx>
+#include <unotools/ZipPackageHelper.hxx>
 #include <GraphicsTestsDialog.hxx>
 #include <vcl/test/GraphicsRenderTests.hxx>
 
@@ -48,6 +53,10 @@ GraphicsTestsDialog::GraphicsTestsDialog(weld::Window* pParent)
     , m_xDownloadResults(m_xBuilder->weld_button("gptest_downld"))
     , m_xContainerBox(m_xBuilder->weld_box("gptest_box"))
 {
+    OUString userProfile = comphelper::BackupFileHelper::getUserProfileURL();
+    m_xZipFileUrl = userProfile + "/GraphicTestResults.zip";
+    m_xCreateFolderUrl = userProfile + "/GraphicTestResults";
+    osl::Directory::create(m_xCreateFolderUrl);
     m_xDownloadResults->connect_clicked(LINK(this, GraphicsTestsDialog, HandleDownloadRequest));
 }
 
@@ -59,19 +68,41 @@ short GraphicsTestsDialog::run()
                           + "\n(Click on any test to view its resultant bitmap image)";
     m_xResultLog->set_text(aResultLog);
     sal_Int32 nTestNumber = 0;
-    for (VclTestResult& tests : aTestObject.getTestResults())
+    for (VclTestResult& test : aTestObject.getTestResults())
     {
         auto xGpTest = std::make_unique<GraphicTestEntry>(m_xContainerBox.get(), m_xDialog.get(),
-                                                          tests.getTestName(), tests.getStatus(),
-                                                          tests.getBitmap());
+                                                          test.getTestName(), test.getStatus(),
+                                                          test.getBitmap());
         m_xContainerBox->reorder_child(xGpTest->get_widget(), nTestNumber++);
         m_xGraphicTestEntries.push_back(std::move(xGpTest));
     }
     return GenericDialogController::run();
 }
 
-IMPL_STATIC_LINK_NOARG(GraphicsTestsDialog, HandleDownloadRequest, weld::Button&, void)
+IMPL_LINK_NOARG(GraphicsTestsDialog, HandleDownloadRequest, weld::Button&, void)
 {
-    //TODO: Enter code for downloading the results to user's system.
-    return;
+    osl::File::remove(m_xZipFileUrl); // Remove previous exports
+    try
+    {
+        utl::ZipPackageHelper aZipHelper(comphelper::getProcessComponentContext(), m_xZipFileUrl);
+        aZipHelper.addFolderWithContent(aZipHelper.getRootFolder(), m_xCreateFolderUrl);
+        aZipHelper.savePackage();
+    }
+    catch (const std::exception&)
+    {
+        std::unique_ptr<weld::MessageDialog> xBox(
+            Application::CreateMessageDialog(m_xDialog.get(), VclMessageType::Warning,
+                                             VclButtonsType::Ok, "Creation of Zip file failed!"));
+        xBox->run();
+        return;
+    }
+    FileExportedDialog aDialog(
+        m_xDialog.get(),
+        "The results have been successfully saved in the file 'GraphicTestResults.zip' !");
+    aDialog.run();
+}
+
+GraphicsTestsDialog::~GraphicsTestsDialog()
+{
+    comphelper::DirectoryHelper::deleteDirRecursively(m_xCreateFolderUrl);
 }
