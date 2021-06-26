@@ -10,6 +10,7 @@
 
 #include <vcl/bitmapex.hxx>
 #include <vcl/weld.hxx>
+#include <svx/FileExportedDialog.hxx>
 
 #include "ImageViewerDialog.hxx"
 
@@ -26,10 +27,14 @@ class GraphicsTestsDialog : public weld::GenericDialogController
 
     std::map<OUString, Bitmap> m_xResultImage;
 
-    DECL_STATIC_LINK(GraphicsTestsDialog, HandleDownloadRequest, weld::Button&, void);
+    OUString m_xZipFileUrl;
+    OUString m_xCreateFolderUrl;
+
+    DECL_LINK(HandleDownloadRequest, weld::Button&, void);
     DECL_LINK(HandleResultViewRequest, weld::Button&, void);
 
 public:
     GraphicsTestsDialog(weld::Window* pParent);
+    ~GraphicsTestsDialog();
     void runGraphicsTestandUpdateLog();
 };
