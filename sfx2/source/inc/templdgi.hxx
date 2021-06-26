@@ -41,6 +41,8 @@ class SfxTemplateControllerItem;
 
 #include <vcl/idle.hxx>
 
+#include <StyleList.hxx>
+
 class SfxStyleFamilyItem;
 class SfxTemplateItem;
 class SfxBindings;
@@ -49,19 +51,12 @@ class SfxStyleSheetBasePool;
 class StyleTreeListBox_Impl;
 class SfxTemplateDialog_Impl;
 class SfxCommonTemplateDialog_Impl;
+class StyleList;
+
 
 namespace com::sun::star::frame {
     class XModuleManager2;
 }
-
-enum class StyleFlags {
-    NONE=0, UpdateFamilyList=1, UpdateFamily=2
-};
-namespace o3tl {
-    template<> struct typed_flags<StyleFlags> : is_typed_flags<StyleFlags, 3> {};
-}
-
-class TreeViewDropTarget;
 
 class SfxCommonTemplateDialog_Impl : public SfxListener
 {
@@ -69,11 +64,9 @@ private:
     class DeletionWatcher;
     friend class DeletionWatcher;
 
-    void ReadResource();
-    void ClearResource();
     void impl_clear();
     DeletionWatcher* impl_setDeletionWatcher(DeletionWatcher* pNewWatcher);
-    OUString getDefaultStyleName( const SfxStyleFamily eFam );
+    OUString getDefaultStyleName(const SfxStyleFamily eFam);
 
 protected:
 #define MAX_FAMILIES            6
@@ -85,74 +78,40 @@ protected:
     std::array<std::unique_ptr<SfxTemplateControllerItem>, COUNT_BOUND_FUNC> pBoundItems;
 
     weld::Container* mpContainer;
-    std::unique_ptr<weld::Builder> mxMenuBuilder;
-    std::unique_ptr<weld::Menu> mxMenu;
-    OString sLastItemIdent;
     SfxModule* pModule;
     std::unique_ptr<Idle> pIdle;
 
     std::optional<SfxStyleFamilies> mxStyleFamilies;
-    std::array<std::unique_ptr<SfxTemplateItem>, MAX_FAMILIES> pFamilyState;
-    SfxStyleSheetBasePool* pStyleSheetPool;
     SfxObjectShell* pCurObjShell;
     css::uno::Reference<css::frame::XModuleManager2> xModuleManager;
     DeletionWatcher* m_pDeletionWatcher;
 
-    std::unique_ptr<weld::TreeView> mxFmtLb;
-    std::unique_ptr<weld::TreeView> mxTreeBox;
+    StyleList m_aStyleList;
     std::unique_ptr<weld::CheckButton> mxPreviewCheckbox;
     std::unique_ptr<weld::ComboBox> mxFilterLb;
-    std::unique_ptr<TreeViewDropTarget> m_xTreeView1DropTargetHelper;
-    std::unique_ptr<TreeViewDropTarget> m_xTreeView2DropTargetHelper;
 
     sal_uInt16 nActFamily; // Id in the ToolBox = Position - 1
     sal_uInt16 nActFilter; // FilterIdx
     SfxStyleSearchBits nAppFilter; // Filter, which has set the application (for automatic)
 
-    sal_uInt16 m_nModifier;
-    bool bDontUpdate :1;
-    bool bIsWater :1;
-    bool bUpdate :1;
-    bool bUpdateFamily :1;
-    bool bCanEdit :1;
-    bool bCanDel :1;
-    bool bCanNew :1;
-    bool bCanHide :1;
-    bool bCanShow :1;
-    bool bWaterDisabled :1;
-    bool bNewByExampleDisabled :1;
-    bool bUpdateByExampleDisabled :1;
-    bool bTreeDrag :1;
-    bool bAllowReParentDrop:1;
-    bool bHierarchical :1;
-    bool m_bWantHierarchical :1;
-    bool bBindingUpdate :1;
+    bool bIsWater : 1;
+    bool bUpdate : 1;
+    bool bUpdateFamily : 1;
+    bool bWaterDisabled : 1;
+    bool bNewByExampleDisabled : 1;
+    bool bUpdateByExampleDisabled : 1;
+    bool bTreeDrag : 1;
+    bool bHierarchical : 1;
+    bool m_bWantHierarchical : 1;
+    bool bCanEdit : 1;
+    bool bCanDel : 1;
+    bool bCanNew : 1;
+    bool bCanHide : 1;
+    bool bCanShow : 1;
 
     DECL_LINK(FilterSelectHdl, weld::ComboBox&, void );
-    DECL_LINK(FmtSelectHdl, weld::TreeView&, void);
-    DECL_LINK(TreeListApplyHdl, weld::TreeView&, bool);
-    DECL_LINK(MousePressHdl, const MouseEvent&, bool);
     DECL_LINK(TimeOut, Timer*, void );
     DECL_LINK(PreviewHdl, weld::Toggleable&, void);
-    DECL_LINK(PopupFlatMenuHdl, const CommandEvent&, bool);
-    DECL_LINK(PopupTreeMenuHdl, const CommandEvent&, bool);
-    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
-    DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
-    DECL_LINK(OnAsyncExecuteDrop, void *, void);
-    DECL_LINK(DragBeginHdl, bool&, bool);
-    DECL_LINK(CustomRenderHdl, weld::TreeView::render_args, void);
-    DECL_STATIC_LINK(SfxCommonTemplateDialog_Impl, CustomGetSizeHdl, weld::TreeView::get_size_args, Size);
-
-    void DropHdl(const OUString& rStyle, const OUString& rParent);
-
-    virtual void EnableItem(const OString& /*rMesId*/, bool /*bCheck*/ = true)
-    {}
-    virtual void CheckItem(const OString& /*rMesId*/, bool /*bCheck*/ = true)
-    {}
-    virtual bool IsCheckedItem(const OString& /*rMesId*/ )
-    {
-        return true;
-    }
 
     void InvalidateBindings();
     virtual void InsertFamilyItem(sal_uInt16 nId, const SfxStyleFamilyItem& rItem) = 0;
@@ -160,23 +119,6 @@ protected:
     virtual void ClearFamilyList() = 0;
     virtual void ReplaceUpdateButtonByMenu();
 
-    void NewHdl();
-    void EditHdl();
-    void DeleteHdl();
-    void HideHdl();
-    void ShowHdl();
-
-    bool Execute_Impl(sal_uInt16 nId, const OUString& rStr, const OUString& rRefStr,
-                      sal_uInt16 nFamily, SfxStyleSearchBits nMask = SfxStyleSearchBits::Auto,
-                      sal_uInt16* pIdx = nullptr, const sal_uInt16* pModifier = nullptr );
-
-    void UpdateStyles_Impl(StyleFlags nFlags);
-    const SfxStyleFamilyItem* GetFamilyItem_Impl() const;
-    bool IsInitialized() const
-    {
-        return nActFamily != 0xffff;
-    }
-    void EnableDelete();
     void Initialize();
     void EnableHierarchical(bool);
 
@@ -185,74 +127,99 @@ protected:
     void SetWaterCanState( const SfxBoolItem* pItem );
     bool IsSafeForWaterCan() const;
 
-    void SelectStyle(const OUString& rStyle, bool bIsCallback);
-    void UpdateStyleDependents();
-    bool HasSelectedStyle() const;
-    void GetSelectedStyle() const;
-    void FillTreeBox();
-    void Update_Impl();
-    void UpdateFamily_Impl();
-
-    // In which FamilyState do I have to look, in order to get the
-    // information of the ith Family in the pStyleFamilies.
-    sal_uInt16 StyleNrToInfoOffset( sal_uInt16 i );
-
     void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-    void FamilySelect( sal_uInt16 nId, bool bPreviewRefresh = false );
     void SetFamily(SfxStyleFamily nFamily);
     void ActionSelect(const OString& rId);
 
-    sal_Int32 LoadFactoryStyleFilter( SfxObjectShell const * i_pObjSh );
     void SaveFactoryStyleFilter( SfxObjectShell const * i_pObjSh, sal_Int32 i_nFilter );
-    SfxObjectShell* SaveSelection();
-
-    void PrepareMenu(const Point& rPos);
-    void ShowMenu(const CommandEvent& rCEvt);
 
 public:
+    void ReadResource();
+    void ClearResource();
+    bool IsInitialized() const { return nActFamily != 0xffff; }
 
+    bool Execute_Impl(sal_uInt16 nId, const OUString& rStr, const OUString& rRefStr,
+                      sal_uInt16 nFamily, SfxStyleSearchBits nMask = SfxStyleSearchBits::Auto,
+                      sal_uInt16* pIdx = nullptr, const sal_uInt16* pModifier = nullptr);
+
+    DECL_LINK(OnAsyncExecuteDrop, void*, void);
     SfxCommonTemplateDialog_Impl(SfxBindings* pB, weld::Container*, weld::Builder* pBuilder);
+    void FamilySelect(sal_uInt16 nId, bool bPreviewRefresh = false);
+    SfxObjectShell* SaveSelection();
     virtual ~SfxCommonTemplateDialog_Impl() override;
 
-    void MenuSelect(const OString& rIdent);
-    DECL_LINK( MenuSelectAsyncHdl, void*, void );
-
-    virtual void EnableEdit( bool b )
+    virtual void EnableEdit(bool b)
     {
         bCanEdit = b;
+        m_aStyleList.SetBCanedit(bCanEdit);
     }
-    void EnableDel( bool b )
+    void EnableDel(bool b)
     {
         bCanDel = b;
+        m_aStyleList.SetBCanDel(bCanDel);
     }
-    void EnableNew( bool b )
+    void EnableNew(bool b)
     {
         bCanNew = b;
+        m_aStyleList.SetBCannew(bCanNew);
     }
-    void EnableHide( bool b )
+    void EnableHide(bool b)
     {
         bCanHide = b;
+        m_aStyleList.SetBCanhide(bCanHide);
     }
-    void EnableShow( bool b )
+    void EnableShow(bool b)
     {
         bCanShow = b;
+        m_aStyleList.SetBCanshow(bCanShow);
     }
-
-    void EnableTreeDrag(bool b);
+    void EnableTreeDrag(bool bEnable);
+    virtual void EnableItem(const OString& /*rMesId*/, bool /*bCheck*/ = true) {}
     void EnableExample_Impl(sal_uInt16 nId, bool bEnable);
-    SfxStyleFamily GetActualFamily() const;
-    OUString GetSelectedEntry() const;
 
     SfxObjectShell* GetObjectShell() const
     {
         return pCurObjShell;
     }
 
-    sal_Int8 AcceptDrop(const AcceptDropEvent& rEvt, const DropTargetHelper& rHelper);
+    void SetObjectShell(SfxObjectShell* shell) { pCurObjShell = shell; }
+
+    virtual void CheckItem(const OString& /*rMesId*/, bool /*bCheck*/ = true) {}
+
     sal_Int8 ExecuteDrop(const ExecuteDropEvent& rEvt);
 
-    void CreateContextMenu();
+    void UpdateStyleDependents();
+    sal_Int32 LoadFactoryStyleFilter(SfxObjectShell const* i_pObjSh);
+
+    void UpdateStyles_Impl(StyleFlags nFlags);
+    void UpdateFamily_Impl();
+    void SelectStyle(const OUString& rStyle, bool bIsCallback);
+
+    //Setter for variable nAppFilter
+    void NAppFilter(SfxStyleSearchBits filter) { nAppFilter = filter; }
+
+    //Setter for variable nActFilter
+    void NActFilter(sal_uInt16 filter) { nActFilter = filter; }
+
+    //Setter for variable bUpdateFamily
+    void BUpdateFamily(bool b_updatefamily) { bUpdateFamily = b_updatefamily; }
+
+    virtual bool IsCheckedItem(const OString& /*rMesId*/) { return true; }
+
+    //Getter for variable bUpdate
+    bool bupdate() { return bUpdate; }
+
+    //Setter for variable bUpdate
+    void setBupdate(bool b) { bUpdate = b; }
+
+   //Setters for bCandel, Hide, Show, New
+    void SetBCanDel(bool candel) { bCanDel = candel; }
+    void SetBCanhide(bool canhide) { bCanHide = canhide; }
+    void SetBCanshow(bool canshow) { bCanShow = canshow; }
+    void SetBCannew(bool cannew) { bCanNew = cannew; }
+    void SetBCanedit(bool canedit) { bCanEdit = canedit; }
+
 };
 
 class ToolbarDropTarget;
@@ -277,9 +244,6 @@ private:
     DECL_LINK(ToolMenuSelectHdl, const OString&, void);
 
     virtual void EnableEdit( bool ) override;
-    virtual void EnableItem(const OString& rMesId, bool bCheck = true) override;
-    virtual void CheckItem(const OString& rMesId, bool bCheck = true) override;
-    virtual bool IsCheckedItem(const OString& rMesId) override;
     virtual void InsertFamilyItem(sal_uInt16 nId, const SfxStyleFamilyItem& rItem) override;
     virtual void EnableFamilyItem(sal_uInt16 nId, bool bEnabled) override;
     virtual void ClearFamilyList() override;
@@ -288,15 +252,19 @@ private:
 public:
     friend class SfxTemplateDialog;
 
-    SfxTemplateDialog_Impl( SfxBindings*, SfxTemplatePanelControl* pDlgWindow );
+    virtual void CheckItem(const OString& rMesId, bool bCheck = true) override;
+
+    SfxTemplateDialog_Impl(SfxBindings*, SfxTemplatePanelControl* pDlgWindow);
     virtual ~SfxTemplateDialog_Impl() override;
 
     sal_Int8 AcceptToolbarDrop(const AcceptDropEvent& rEvt, const DropTargetHelper& rHelper);
 
     void Initialize();
+    virtual void EnableItem(const OString& rMesId, bool bCheck = true) override;
+
+    virtual bool IsCheckedItem(const OString& rMesId) override;
 };
 
 #endif // INCLUDED_SFX2_SOURCE_INC_TEMPLDGI_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
