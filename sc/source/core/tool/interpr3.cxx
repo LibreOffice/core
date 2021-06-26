@@ -200,7 +200,7 @@ double ScInterpreter::phi(double x)
 
 double ScInterpreter::integralPhi(double x)
 { // Using gauss(x)+0.5 has severe cancellation errors for x<-4
-    return 0.5 * ::rtl::math::erfc(-x * 0.7071067811865475); // * 1/sqrt(2)
+    return 0.5 * std::erfc(-x * 0.7071067811865475); // * 1/sqrt(2)
 }
 
 double ScInterpreter::taylor(const double* pPolynom, sal_uInt16 nMax, double x)
@@ -994,7 +994,7 @@ double ScInterpreter::GetBetaDist(double fXin, double fAlpha, double fBeta)
         return pow(fXin, fAlpha);
     if (fAlpha == 1.0)
     //            1.0 - pow(1.0-fX,fBeta) is not accurate enough
-        return -::rtl::math::expm1(fBeta * ::rtl::math::log1p(-fXin));
+        return -std::expm1(fBeta * ::rtl::math::log1p(-fXin));
     //FIXME: need special algorithm for fX near fP for large fA,fB
     double fResult;
     // I use always continued fraction, power series are neither
