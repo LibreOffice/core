@@ -803,7 +803,7 @@ static sal_uInt16 lcl_isNonDefaultLanguage(LanguageType eBufferLanguage, SwView 
         }
         if(bLang)
         {
-            SfxItemSet aLangSet(rView.GetPool(), {{nWhich, nWhich}});
+            SfxItemSet aLangSet(rView.GetPool(), nWhich, nWhich);
             SwWrtShell& rSh = rView.GetWrtShell();
             rSh.GetCurAttr(aLangSet);
             if(SfxItemState::DEFAULT <= aLangSet.GetItemState(nWhich))
@@ -1027,14 +1027,13 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
         rSh.IsSelObjProtected( FlyProtectFlags::Pos ) != FlyProtectFlags::NONE )
         return;
 
-    SfxItemSet aSet(
-        rSh.GetAttrPool(),
-        svl::Items<
-            RES_FRM_SIZE, RES_FRM_SIZE,
-            RES_PROTECT, RES_PROTECT,
-            RES_VERT_ORIENT, RES_ANCHOR,
-            RES_COL, RES_COL,
-            RES_FOLLOW_TEXT_FLOW, RES_FOLLOW_TEXT_FLOW>{});
+    static const WhichRangesLiteral ranges { {
+            {RES_FRM_SIZE, RES_FRM_SIZE},
+            {RES_PROTECT, RES_PROTECT},
+            {RES_VERT_ORIENT, RES_ANCHOR},
+            {RES_COL, RES_COL},
+            {RES_FOLLOW_TEXT_FLOW, RES_FOLLOW_TEXT_FLOW} } };
+    SfxItemSet aSet(rSh.GetAttrPool(), ranges);
     rSh.GetFlyFrameAttr( aSet );
     RndStdIds eAnchorId = aSet.Get(RES_ANCHOR).GetAnchorId();
     Size aSnap;
@@ -2239,7 +2238,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             eKeyState = SwKeyState::GoIntoFly;
                         else
                         {
-                            SfxItemSet aSet(rSh.GetAttrPool(), svl::Items<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT>{});
+                            static const WhichRangesLiteral ranges { { {RES_TXTATR_INETFMT, RES_TXTATR_INETFMT} } };
+                            SfxItemSet aSet(rSh.GetAttrPool(), ranges);
                             rSh.GetCurAttr(aSet);
                             if(SfxItemState::SET == aSet.GetItemState(RES_TXTATR_INETFMT, false))
                             {

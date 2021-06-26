@@ -659,7 +659,10 @@ void IMapWindow::DoMacroAssign()
     if ( !pSdrObj )
         return;
 
-    SfxItemSet      aSet( *pIMapPool, svl::Items<SID_ATTR_MACROITEM, SID_ATTR_MACROITEM, SID_EVENTCONFIG, SID_EVENTCONFIG>{} );
+    static const WhichRangesLiteral ranges { {
+            {SID_ATTR_MACROITEM, SID_ATTR_MACROITEM},
+            {SID_EVENTCONFIG, SID_EVENTCONFIG} } };
+    SfxItemSet aSet( *pIMapPool, ranges );
 
     SfxEventNamesItem aNamesItem(SID_EVENTCONFIG);
     aNamesItem.AddEvent( "MouseOver", "", SvMacroItemId::OnMouseOver );

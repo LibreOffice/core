@@ -367,39 +367,33 @@ bool SearchOutlinerItems(const SfxItemSet& rSet, bool bInklDefaults, bool* pbOnl
     return bHas;
 }
 
-std::unique_ptr<sal_uInt16[]> RemoveWhichRange(const sal_uInt16* pOldWhichTable, sal_uInt16 nRangeBeg, sal_uInt16 nRangeEnd)
+WhichRangesContainer RemoveWhichRange(const WhichRangesContainer& pOldWhichTable, sal_uInt16 nRangeBeg, sal_uInt16 nRangeEnd)
 {
     // Six possible cases (per range):
     //         [Beg..End]          [nRangeBeg, nRangeEnd], to delete
     // [b..e]    [b..e]    [b..e]  Cases 1,3,2: doesn't matter, delete, doesn't matter  + Ranges
     // [b........e]  [b........e]  Cases 4,5  : shrink range                            | in
     // [b......................e]  Case  6    : splitting                               + pOldWhichTable
-    std::vector<sal_uInt16> buf;
-    for (auto p = pOldWhichTable; *p != 0; p += 2) {
-        auto const begin = p[0];
-        auto const end = p[1];
+    std::vector<WhichPair> buf;
+    for (const auto & rPair : pOldWhichTable) {
+        auto const begin = rPair.first;
+        auto const end = rPair.second;
         if (end < nRangeBeg || begin > nRangeEnd) { // cases 1, 2
-            buf.push_back(begin);
-            buf.push_back(end);
+            buf.push_back({begin, end});
         } else if (begin >= nRangeBeg && end <= nRangeEnd) { // case 3
             // drop
         } else if (end <= nRangeEnd) { // case 4
-            buf.push_back(begin);
-            buf.push_back(nRangeBeg - 1);
+            buf.push_back({begin, nRangeBeg - 1});
         } else if (begin >= nRangeBeg) { // case 5
-            buf.push_back(nRangeEnd + 1);
-            buf.push_back(end);
+            buf.push_back({nRangeEnd + 1, end});
         } else { // case 6
-            buf.push_back(begin);
-            buf.push_back(nRangeBeg - 1);
-            buf.push_back(nRangeEnd + 1);
-            buf.push_back(end);
+            buf.push_back({begin, nRangeBeg - 1});
+            buf.push_back({nRangeEnd + 1, end});
         }
     }
-    std::unique_ptr<sal_uInt16[]> pNewWhichTable(new sal_uInt16[buf.size() + 1]);
+    std::unique_ptr<WhichPair[]> pNewWhichTable(new WhichPair[buf.size()]);
     std::copy(buf.begin(), buf.end(), pNewWhichTable.get());
-    pNewWhichTable[buf.size()] = 0;
-    return pNewWhichTable;
+    return WhichRangesContainer(std::move(pNewWhichTable), buf.size());
 }
 
 

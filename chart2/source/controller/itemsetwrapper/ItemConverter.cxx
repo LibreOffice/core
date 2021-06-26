@@ -75,20 +75,18 @@ void ItemConverter::_disposing( const lang::EventObject& )
 
 void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
 {
-    const sal_uInt16 * pRanges = rOutItemSet.GetRanges();
+    const WhichRangesContainer& pRanges = rOutItemSet.GetRanges();
     tPropertyNameWithMemberId aProperty;
     SfxItemPool & rPool = GetItemPool();
 
-    assert(pRanges != nullptr);
+    assert(!pRanges.empty());
     OSL_ASSERT( m_xPropertySetInfo.is());
     OSL_ASSERT( m_xPropertySet.is());
 
-    while( (*pRanges) != 0)
+    for(const auto& rPair : pRanges)
     {
-        sal_uInt16 nBeg = *pRanges;
-        ++pRanges;
-        sal_uInt16 nEnd = *pRanges;
-        ++pRanges;
+        sal_uInt16 nBeg = rPair.first;
+        sal_uInt16 nEnd = rPair.second;
 
         OSL_ASSERT( nBeg <= nEnd );
         for( sal_uInt16 nWhich = nBeg; nWhich <= nEnd; ++nWhich )

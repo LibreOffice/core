@@ -156,8 +156,8 @@ void UnfloatTableButton::MouseButtonDown(const MouseEvent& /*rMEvt*/)
         if (pPageDesc)
         {
             // First set the existing page desc for the table node
-            SfxItemSet aSet(GetEditWin()->GetView().GetWrtShell().GetAttrPool(),
-                            svl::Items<RES_PAGEDESC, RES_PAGEDESC>{});
+            static const WhichRangesLiteral ranges{ { { RES_PAGEDESC, RES_PAGEDESC } } };
+            SfxItemSet aSet(GetEditWin()->GetView().GetWrtShell().GetAttrPool(), ranges);
             aSet.Put(SwFormatPageDesc(pPageDesc));
             SwPaM aPaMTable(*pTableNode);
             rDoc.getIDocumentContentOperations().InsertItemSet(

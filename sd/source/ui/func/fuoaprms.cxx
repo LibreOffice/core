@@ -336,7 +336,8 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
     if(!pArgs)
     {
         // fill ItemSet for dialog
-        SfxItemSet aSet(mpDoc->GetPool(), svl::Items<ATTR_ANIMATION_START, ATTR_ACTION_END>{});
+        static const WhichRangesLiteral ranges { { {ATTR_ANIMATION_START, ATTR_ACTION_END} } };
+        SfxItemSet aSet(mpDoc->GetPool(), ranges);
 
         // fill the set
         if (nAnimationSet == ATTR_SET)

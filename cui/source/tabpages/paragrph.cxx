@@ -51,32 +51,26 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 
-const sal_uInt16 SvxStdParagraphTabPage::pStdRanges[] =
+static const WhichRangesLiteral stdRanges {
 {
-    SID_ATTR_PARA_LINESPACE,        // 10033
-    SID_ATTR_PARA_LINESPACE,
-    SID_ATTR_LRSPACE,               // 10048 -
-    SID_ATTR_ULSPACE,               // 10049
-    SID_ATTR_PARA_REGISTER,         // 10413
-    SID_ATTR_PARA_REGISTER,
-    0
-};
+    {SID_ATTR_PARA_LINESPACE, SID_ATTR_PARA_LINESPACE}, // 10033
+    {SID_ATTR_LRSPACE, SID_ATTR_ULSPACE},              // 10048 - 10049
+    {SID_ATTR_PARA_REGISTER, SID_ATTR_PARA_REGISTER},  // 10413
+} };
+const WhichRangesContainer SvxStdParagraphTabPage::pStdRanges(stdRanges);
 
-const sal_uInt16 SvxParaAlignTabPage::pAlignRanges[] =
+static const WhichRangesLiteral alignRanges {
 {
-    SID_ATTR_PARA_ADJUST,           // 10027
-    SID_ATTR_PARA_ADJUST,
-    0
-};
+    {SID_ATTR_PARA_ADJUST, SID_ATTR_PARA_ADJUST}  // 10027
+} };
+const WhichRangesContainer SvxParaAlignTabPage::pAlignRanges(alignRanges);
 
-const sal_uInt16 SvxExtParagraphTabPage::pExtRanges[] =
+static const WhichRangesLiteral extRanges {
 {
-    SID_ATTR_PARA_PAGEBREAK,        // 10037 -
-    SID_ATTR_PARA_WIDOWS,           // 10041
-    SID_ATTR_PARA_MODEL,            // 10065 -
-    SID_ATTR_PARA_KEEP,             // 10066
-    0
-};
+    {SID_ATTR_PARA_PAGEBREAK, SID_ATTR_PARA_WIDOWS}, // 10037 - 10041
+    {SID_ATTR_PARA_MODEL, SID_ATTR_PARA_KEEP}        // 10065 - 10066
+} };
+const WhichRangesContainer SvxExtParagraphTabPage::pExtRanges(extRanges);
 
 #define MAX_DURCH 5670      // 10 cm makes sense as maximum interline lead
                             // according to BP
@@ -2229,14 +2223,13 @@ std::unique_ptr<SfxTabPage> SvxAsianTabPage::Create(weld::Container* pPage, weld
     return std::make_unique<SvxAsianTabPage>(pPage, pController, *rSet);
 }
 
-const sal_uInt16*     SvxAsianTabPage::GetRanges()
+WhichRangesContainer SvxAsianTabPage::GetRanges()
 {
-    static const sal_uInt16 pRanges[] =
+    static const WhichRangesLiteral ranges {
     {
-        SID_ATTR_PARA_SCRIPTSPACE, SID_ATTR_PARA_FORBIDDEN_RULES,
-        0
-    };
-    return pRanges;
+        {SID_ATTR_PARA_SCRIPTSPACE, SID_ATTR_PARA_FORBIDDEN_RULES},
+    } };
+    return ranges;
 }
 
 bool SvxAsianTabPage::FillItemSet( SfxItemSet* rSet )

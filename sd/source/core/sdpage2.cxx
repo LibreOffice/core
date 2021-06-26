@@ -447,8 +447,9 @@ SfxStyleSheet* SdPage::GetTextStyleSheetForObject( SdrObject* pObj ) const
 
 SfxItemSet* SdPage::getOrCreateItems()
 {
+    static const WhichRangesLiteral ranges { { {SDRATTR_XMLATTRIBUTES, SDRATTR_XMLATTRIBUTES} } };
     if( mpItems == nullptr )
-        mpItems = std::make_unique<SfxItemSet>( getSdrModelFromSdrPage().GetItemPool(), svl::Items<SDRATTR_XMLATTRIBUTES, SDRATTR_XMLATTRIBUTES>{} );
+        mpItems = std::make_unique<SfxItemSet>( getSdrModelFromSdrPage().GetItemPool(), ranges );
 
     return mpItems.get();
 }

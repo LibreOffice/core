@@ -660,7 +660,8 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
 
             // test if on this node there had been a pagebreak BEFORE the
             //     tox attribute was put on the stack
-            SfxItemSet aBkSet( m_rDoc.GetAttrPool(), svl::Items<RES_PAGEDESC, RES_BREAK>{} );
+            static const WhichRangesLiteral ranges { { {RES_PAGEDESC, RES_BREAK} } };
+            SfxItemSet aBkSet( m_rDoc.GetAttrPool(), ranges );
             SwContentNode* pNd = nullptr;
             if( !pTOXAttr->HadBreakItem() || !pTOXAttr->HadPageDescItem() )
             {

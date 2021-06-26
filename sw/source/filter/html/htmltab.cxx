@@ -1402,8 +1402,8 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
             {
                 bool bLock = pFrameFormat->GetDoc()->GetNumberFormatter()
                                      ->IsTextFormat( nNumFormat );
-                SfxItemSet aItemSet( *pFrameFormat->GetAttrSet().GetPool(),
-                                     svl::Items<RES_BOXATR_FORMAT, RES_BOXATR_VALUE>{} );
+                static const WhichRangesLiteral ranges { { {RES_BOXATR_FORMAT, RES_BOXATR_VALUE} } };
+                SfxItemSet aItemSet( *pFrameFormat->GetAttrSet().GetPool(), ranges );
                 SvxAdjust eAdjust = SvxAdjust::End;
                 SwContentNode *pCNd = nullptr;
                 if( !bLock )
@@ -2690,8 +2690,8 @@ SvxBrushItem* SwHTMLParser::CreateBrushItem( const Color *pColor,
 
     if( !rStyle.isEmpty() || !rId.isEmpty() || !rClass.isEmpty() )
     {
-        SfxItemSet aItemSet( m_xDoc->GetAttrPool(), svl::Items<RES_BACKGROUND,
-                                                  RES_BACKGROUND>{} );
+        static const WhichRangesLiteral ranges { { {RES_BACKGROUND, RES_BACKGROUND} } };
+        SfxItemSet aItemSet( m_xDoc->GetAttrPool(), ranges );
         SvxCSS1PropertyInfo aPropInfo;
 
         if( !rClass.isEmpty() )
@@ -3211,17 +3211,15 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             // the table has no content yet, this means the actual table needs
             // to be created first
 
-            static sal_uInt16 aWhichIds[] =
-            {
-                RES_PARATR_SPLIT,   RES_PARATR_SPLIT,
-                RES_PAGEDESC,       RES_PAGEDESC,
-                RES_BREAK,          RES_BREAK,
-                RES_BACKGROUND,     RES_BACKGROUND,
-                RES_KEEP,           RES_KEEP,
-                RES_LAYOUT_SPLIT,   RES_LAYOUT_SPLIT,
-                RES_FRAMEDIR,       RES_FRAMEDIR,
-                0
-            };
+            static WhichRangesLiteral aWhichIds { {
+                {RES_PARATR_SPLIT,   RES_PARATR_SPLIT},
+                {RES_PAGEDESC,       RES_PAGEDESC},
+                {RES_BREAK,          RES_BREAK},
+                {RES_BACKGROUND,     RES_BACKGROUND},
+                {RES_KEEP,           RES_KEEP},
+                {RES_LAYOUT_SPLIT,   RES_LAYOUT_SPLIT},
+                {RES_FRAMEDIR,       RES_FRAMEDIR},
+            } };
 
             SfxItemSet aItemSet( m_xDoc->GetAttrPool(), aWhichIds );
             SvxCSS1PropertyInfo aPropInfo;
@@ -3395,8 +3393,8 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 {
                     // the table should be put in a text frame
 
-                    SfxItemSet aFrameSet( m_xDoc->GetAttrPool(),
-                                        svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1>{} );
+                    static const WhichRangesLiteral ranges { { {RES_FRMATR_BEGIN, RES_FRMATR_END-1} } };
+                    SfxItemSet aFrameSet( m_xDoc->GetAttrPool(), ranges );
                     if( !pCurTable->IsNewDoc() )
                         Reader::ResetFrameFormatAttrs( aFrameSet );
 

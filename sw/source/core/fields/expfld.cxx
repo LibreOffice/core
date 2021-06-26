@@ -985,16 +985,14 @@ sal_Int32 SwGetExpField::GetReferenceTextPos( const SwFormatField& rFormat, SwDo
         // now check if sNodeText starts with a non-alphanumeric character plus blanks
         sal_uInt16 nSrcpt = g_pBreakIt->GetRealScriptOfText( sNodeText, 0 );
 
-        static const sal_uInt16 nIds[] =
-        {
-            RES_CHRATR_FONT, RES_CHRATR_FONT,
-            RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE,
-            RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONT,
-            RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_LANGUAGE,
-            RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONT,
-            RES_CHRATR_CTL_LANGUAGE, RES_CHRATR_CTL_LANGUAGE,
-            0
-        };
+        static const WhichRangesLiteral nIds { {
+            {RES_CHRATR_FONT, RES_CHRATR_FONT},
+            {RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE},
+            {RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONT},
+            {RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_LANGUAGE},
+            {RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONT},
+            {RES_CHRATR_CTL_LANGUAGE, RES_CHRATR_CTL_LANGUAGE},
+        } };
         SwAttrSet aSet(rDoc.GetAttrPool(), nIds);
         rTextNode.GetParaAttr(aSet, nRet, nRet+1);
 

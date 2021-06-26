@@ -1203,15 +1203,14 @@ bool SwHTMLWriter::HasScriptDependentItems( const SfxItemSet& rItemSet,
         {
             //sequence of (start, end) property ranges we want to
             //query
-            SfxItemSet aTstItemSet(
-                *pDCCharFormat->GetAttrSet().GetPool(),
-                svl::Items<
-                    RES_CHRATR_FONT, RES_CHRATR_FONT,
-                    RES_CHRATR_POSTURE, RES_CHRATR_POSTURE,
-                    RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT,
-                    RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONT,
-                    RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_FONT,
-                    RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT>{});
+            static const WhichRangesLiteral ranges { {
+                    {RES_CHRATR_FONT, RES_CHRATR_FONT},
+                    {RES_CHRATR_POSTURE, RES_CHRATR_POSTURE},
+                    {RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT},
+                    {RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONT},
+                    {RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_FONT},
+                    {RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT} } };
+            SfxItemSet aTstItemSet(*pDCCharFormat->GetAttrSet().GetPool(), ranges);
             aTstItemSet.Set( pDCCharFormat->GetAttrSet() );
             return HasScriptDependentItems( aTstItemSet, false );
         }
@@ -1254,11 +1253,12 @@ static bool OutCSS1Rule( SwHTMLWriter& rHTMLWrt, const OUString& rSelector,
 
             //sequence of (start, end) property ranges we want to
             //query
-            SfxItemSet aScriptItemSet( *rItemSet.GetPool(),
-                                       svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
-                                       RES_CHRATR_LANGUAGE, RES_CHRATR_POSTURE,
-                                       RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT,
-                                       RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_WEIGHT>{} );
+            static const WhichRangesLiteral ranges { {
+                   {RES_CHRATR_FONT, RES_CHRATR_FONTSIZE},
+                   {RES_CHRATR_LANGUAGE, RES_CHRATR_POSTURE},
+                   {RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT},
+                   {RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_WEIGHT} } };
+            SfxItemSet aScriptItemSet( *rItemSet.GetPool(), ranges);
             aScriptItemSet.Put( rItemSet );
 
             OUString aNewSelector = aSelector + ".western" + aPseudo;
@@ -1354,11 +1354,12 @@ static void OutCSS1DropCapRule(
                 OutCSS1_SwFormatDropAttrs( rHTMLWrt, rDrop );
             }
 
-            SfxItemSet aScriptItemSet( rHTMLWrt.m_pDoc->GetAttrPool(),
-                                       svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
-                                       RES_CHRATR_LANGUAGE, RES_CHRATR_POSTURE,
-                                       RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT,
-                                       RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_WEIGHT>{} );
+            static const WhichRangesLiteral ranges { {
+                   {RES_CHRATR_FONT, RES_CHRATR_FONTSIZE},
+                   {RES_CHRATR_LANGUAGE, RES_CHRATR_POSTURE},
+                   {RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT},
+                   {RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_WEIGHT} } };
+            SfxItemSet aScriptItemSet( rHTMLWrt.m_pDoc->GetAttrPool(), ranges );
             if( pDCCharFormat )
                 aScriptItemSet.Set( pDCCharFormat->GetAttrSet() );
 
@@ -1667,8 +1668,8 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
 
     // Export the distance-Attributes as normally
     const SwFrameFormat &rMaster = rPageDesc.GetMaster();
-    SfxItemSet aItemSet( *rMaster.GetAttrSet().GetPool(),
-                         svl::Items<RES_LR_SPACE, RES_UL_SPACE>{} );
+    static const WhichRangesLiteral ranges { { {RES_LR_SPACE, RES_UL_SPACE} } };
+    SfxItemSet aItemSet( *rMaster.GetAttrSet().GetPool(), ranges );
     aItemSet.Set( rMaster.GetAttrSet() );
 
     if( pRefPageDesc )

@@ -127,7 +127,7 @@ protected:
             0
         };
     */
-    virtual const sal_uInt16 * GetWhichPairs() const = 0;
+    virtual WhichRangesContainer GetWhichPairs() const = 0;
 
     /** implement this method to return a Property object for a given which id.
 

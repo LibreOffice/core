@@ -40,17 +40,16 @@ namespace sdr::properties
         // create a new itemset
         SfxItemSet MeasureProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return SfxItemSet(
-                rPool,
-                svl::Items<
+            static const WhichRangesLiteral ranges { {
                     // Ranges from SdrAttrObj, SdrMeasureObj:
-                    SDRATTR_START, SDRATTR_SHADOW_LAST,
-                    SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
-                    SDRATTR_MEASURE_FIRST, SDRATTR_MEASURE_LAST,
-                    SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
-                    SDRATTR_TEXTCOLUMNS_FIRST, SDRATTR_TEXTCOLUMNS_LAST,
+                    {SDRATTR_START, SDRATTR_SHADOW_LAST},
+                    {SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST},
+                    {SDRATTR_MEASURE_FIRST, SDRATTR_MEASURE_LAST},
+                    {SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION},
+                    {SDRATTR_TEXTCOLUMNS_FIRST, SDRATTR_TEXTCOLUMNS_LAST},
                     // Range from SdrTextObj:
-                    EE_ITEMS_START, EE_ITEMS_END>{});
+                    {EE_ITEMS_START, EE_ITEMS_END} } };
+            return SfxItemSet(rPool, ranges);
         }
 
         MeasureProperties::MeasureProperties(SdrObject& rObj)

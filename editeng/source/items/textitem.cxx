@@ -2404,9 +2404,10 @@ bool SvxCharReliefItem::QueryValue( css::uno::Any& rVal,
 |*    class SvxScriptSetItem
 *************************************************************************/
 
+const WhichRangesLiteral ranges { { {SID_ATTR_CHAR_FONT, SID_ATTR_CHAR_FONT} } };
+
 SvxScriptSetItem::SvxScriptSetItem( sal_uInt16 nSlotId, SfxItemPool& rPool )
-    : SfxSetItem( nSlotId, std::make_unique<SfxItemSet>( rPool,
-                        svl::Items<SID_ATTR_CHAR_FONT, SID_ATTR_CHAR_FONT>{} ))
+    : SfxSetItem( nSlotId, std::make_unique<SfxItemSet>( rPool, ranges ) )
 {
     sal_uInt16 nLatin, nAsian, nComplex;
     GetWhichIds( nLatin, nAsian, nComplex );

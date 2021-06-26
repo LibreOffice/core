@@ -72,7 +72,8 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
                                 Get( nWhich )).GetValue() ? STATE_ON : STATE_OFF;
     }
 
-    SfxItemSet aSet( GetPool(), svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END-1>{} );
+    static const WhichRangesLiteral ranges { { {RES_CHRATR_BEGIN, RES_CHRATR_END-1} } };
+    SfxItemSet aSet( GetPool(), ranges );
     if (STATE_TOGGLE == eState)
         rSh.GetCurAttr( aSet );
 
@@ -319,9 +320,10 @@ void SwTextShell::ExecParaAttr(SfxRequest &rReq)
     const SfxItemSet* pArgs = rReq.GetArgs();
 
     // Get both attributes immediately isn't more expensive!!
-    SfxItemSet aSet( GetPool(),
-        svl::Items<RES_PARATR_LINESPACING, RES_PARATR_ADJUST,
-        RES_FRAMEDIR, RES_FRAMEDIR>{} );
+    static const WhichRangesLiteral ranges { {
+        {RES_PARATR_LINESPACING, RES_PARATR_ADJUST},
+        {RES_FRAMEDIR, RES_FRAMEDIR} } };
+    SfxItemSet aSet( GetPool(), ranges );
 
     sal_uInt16 nSlot = rReq.GetSlot();
     switch (nSlot)
@@ -381,8 +383,9 @@ SET_LINESPACE:
         case SID_ATTR_PARA_LEFT_TO_RIGHT :
         case SID_ATTR_PARA_RIGHT_TO_LEFT :
         {
-            SfxItemSet aAdjustSet( GetPool(),
-                    svl::Items<RES_PARATR_ADJUST, RES_PARATR_ADJUST>{} );
+            static const WhichRangesLiteral ranges { {
+                    {RES_PARATR_ADJUST, RES_PARATR_ADJUST} } };
+            SfxItemSet aAdjustSet( GetPool(), ranges );
             GetShell().GetCurAttr(aAdjustSet);
             bool bChgAdjust = false;
             SfxItemState eAdjustState = aAdjustSet.GetItemState(RES_PARATR_ADJUST, false);
@@ -467,7 +470,8 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
             if( pItem )
             {
                 OUString sCharStyleName = static_cast<const SfxStringItem*>(pItem)->GetValue();
-                SfxItemSet aSet(GetPool(), svl::Items<RES_PARATR_DROP, RES_PARATR_DROP>{});
+                static const WhichRangesLiteral ranges { { {RES_PARATR_DROP, RES_PARATR_DROP} } };
+                SfxItemSet aSet(GetPool(), ranges);
                 rSh.GetCurAttr(aSet);
                 SwFormatDrop aDropItem(aSet.Get(RES_PARATR_DROP));
                 SwCharFormat* pFormat = nullptr;
@@ -487,8 +491,10 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
             }
             else
             {
-                SfxItemSet aSet(GetPool(), svl::Items<RES_PARATR_DROP, RES_PARATR_DROP,
-                                           HINT_END, HINT_END>{});
+                static const WhichRangesLiteral ranges { {
+                        {RES_PARATR_DROP, RES_PARATR_DROP},
+                        {HINT_END, HINT_END} } };
+                SfxItemSet aSet(GetPool(), ranges);
                 rSh.GetCurAttr(aSet);
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSwDropCapsDialog(GetView().GetFrameWeld(), aSet));
@@ -520,9 +526,10 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
         {
             if(pItem)
             {
-                SfxItemSet aCoreSet( GetPool(),
-                    svl::Items<RES_PAGEDESC,   RES_PAGEDESC,
-                    SID_ATTR_PARA_MODEL, SID_ATTR_PARA_MODEL>{});
+                static const WhichRangesLiteral ranges { {
+                    {RES_PAGEDESC,   RES_PAGEDESC},
+                    {SID_ATTR_PARA_MODEL, SID_ATTR_PARA_MODEL} } };
+                SfxItemSet aCoreSet( GetPool(), ranges );
                 aCoreSet.Put(*pItem);
                 SfxToSwPageDescAttr( rSh, aCoreSet);
                 rSh.SetAttrSet(aCoreSet);
@@ -806,9 +813,10 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
             break;
             case SID_ATTR_PARA_MODEL:
             {
-                SfxItemSet aTemp(GetPool(),
-                        svl::Items<RES_PAGEDESC,RES_PAGEDESC,
-                        SID_ATTR_PARA_MODEL,SID_ATTR_PARA_MODEL>{});
+                static const WhichRangesLiteral ranges { {
+                        {RES_PAGEDESC,RES_PAGEDESC},
+                        {SID_ATTR_PARA_MODEL,SID_ATTR_PARA_MODEL} } };
+                SfxItemSet aTemp(GetPool(), ranges);
                 aTemp.Put(aCoreSet);
                 ::SwToSfxPageDescAttr(aTemp);
                 rSet.Put(aTemp.Get(SID_ATTR_PARA_MODEL));
@@ -817,7 +825,8 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
             break;
             case RES_TXTATR_INETFMT:
             {
-                SfxItemSet aSet(GetPool(), svl::Items<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT>{});
+                static const WhichRangesLiteral ranges { { {RES_TXTATR_INETFMT, RES_TXTATR_INETFMT} } };
+                SfxItemSet aSet(GetPool(), ranges);
                 rSh.GetCurAttr(aSet);
                 const SfxPoolItem& rItem = aSet.Get(RES_TXTATR_INETFMT);
                 rSet.Put(rItem);

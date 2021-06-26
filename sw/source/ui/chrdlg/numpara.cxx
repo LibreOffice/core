@@ -32,10 +32,8 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewsh.hxx>
 
-const sal_uInt16 SwParagraphNumTabPage::aPageRg[] = {
-    FN_NUMBER_NEWSTART, FN_NUMBER_NEWSTART_AT,
-    0
-};
+static const WhichRangesLiteral ranges { { {FN_NUMBER_NEWSTART, FN_NUMBER_NEWSTART_AT} } };
+const WhichRangesContainer SwParagraphNumTabPage::aPageRg(ranges);
 
 SwParagraphNumTabPage::SwParagraphNumTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttr)
     : SfxTabPage(pPage, pController, "modules/swriter/ui/numparapage.ui", "NumParaPage", &rAttr)

@@ -53,7 +53,8 @@ namespace sdr::properties
             if(mxItemSet)
             {
                 // filter for SDRATTR_3DSCENE_ items, only keep those items
-                SfxItemSet aNew(*mxItemSet->GetPool(), svl::Items<SDRATTR_3DSCENE_FIRST, SDRATTR_3DSCENE_LAST>{});
+                static const WhichRangesLiteral ranges { { {SDRATTR_3DSCENE_FIRST, SDRATTR_3DSCENE_LAST} } };
+                SfxItemSet aNew(*mxItemSet->GetPool(), ranges);
                 aNew.Put(*mxItemSet);
                 mxItemSet->ClearItem();
                 mxItemSet->Put(aNew);

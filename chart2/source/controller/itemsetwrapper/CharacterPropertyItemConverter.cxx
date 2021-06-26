@@ -87,7 +87,7 @@ CharacterPropertyItemConverter::CharacterPropertyItemConverter(
 CharacterPropertyItemConverter::~CharacterPropertyItemConverter()
 {}
 
-const sal_uInt16 * CharacterPropertyItemConverter::GetWhichPairs() const
+WhichRangesContainer CharacterPropertyItemConverter::GetWhichPairs() const
 {
     return nCharacterPropertyWhichPairs;
 }

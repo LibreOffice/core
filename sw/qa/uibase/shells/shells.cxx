@@ -46,8 +46,8 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testTdf130179)
     SwDoc* pDoc = createSwDoc();
     IDocumentContentOperations& rIDCO = pDoc->getIDocumentContentOperations();
     SwCursorShell* pShell(pDoc->GetEditShell());
-    SfxItemSet aFrameSet(pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END - 1>{});
-    SfxItemSet aGrfSet(pDoc->GetAttrPool(), svl::Items<RES_GRFATR_BEGIN, RES_GRFATR_END - 1>{});
+    SfxItemSet aFrameSet(pDoc->GetAttrPool(), { { { RES_FRMATR_BEGIN, RES_FRMATR_END - 1 } } });
+    SfxItemSet aGrfSet(pDoc->GetAttrPool(), { { { RES_GRFATR_BEGIN, RES_GRFATR_END - 1 } } });
     SwFormatAnchor aAnchor(RndStdIds::FLY_AT_PARA);
     aFrameSet.Put(aAnchor);
     GraphicObject aGrf;

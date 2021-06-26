@@ -55,10 +55,8 @@ using namespace css;
 using namespace css::uno;
 using namespace css::lang;
 
-const sal_uInt16 SwDropCapsPage::aPageRg[] = {
-    RES_PARATR_DROP, RES_PARATR_DROP,
-    0
-};
+static const WhichRangesLiteral ranges { { {RES_PARATR_DROP, RES_PARATR_DROP} } };
+const WhichRangesContainer SwDropCapsPage::aPageRg(ranges);
 
 void SwDropCapsPict::SetText( const OUString& rT )
 {
@@ -174,7 +172,7 @@ bool SwDropCapsPict::GetNextScriptSegment(size_t &nIdx, sal_Int32 &start, sal_In
 
 void SwDropCapsPict::GetFontSettings( const SwDropCapsPage& _rPage, vcl::Font& _rFont, sal_uInt16 _nWhich )
 {
-    SfxItemSet aSet( _rPage.rSh.GetAttrPool(), {{_nWhich, _nWhich}});
+    SfxItemSet aSet( _rPage.rSh.GetAttrPool(), _nWhich, _nWhich);
     _rPage.rSh.GetCurAttr(aSet);
     SvxFontItem aFormatFont(static_cast<const SvxFontItem &>( aSet.Get(_nWhich)));
 

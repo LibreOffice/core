@@ -240,8 +240,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     SAL_WARN_IF(!pTextCursor, "sw.uno", "SwXTextCursor missing");
     SwDoc *pDoc = SwImport::GetDocFromXMLImport( rImport );
 
-    SfxItemSet aItemSet( pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN,
-                         RES_FRMATR_END>{} );
+    static const WhichRangesLiteral ranges { { {RES_FRMATR_BEGIN, RES_FRMATR_END} } };
+    SfxItemSet aItemSet( pDoc->GetAttrPool(), ranges );
     Size aTwipSize( 0, 0 );
     tools::Rectangle aVisArea( 0, 0, nWidth, nHeight );
     lcl_putHeightAndWidth( aItemSet, nHeight, nWidth,
@@ -552,8 +552,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
     OSL_ENSURE( pTextCursor, "SwXTextCursor missing" );
     SwDoc *pDoc = SwImport::GetDocFromXMLImport( rImport );
 
-    SfxItemSet aItemSet( pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN,
-                         RES_FRMATR_END>{} );
+    static const WhichRangesLiteral ranges { { {RES_FRMATR_BEGIN, RES_FRMATR_END} } };
+    SfxItemSet aItemSet( pDoc->GetAttrPool(), ranges );
     Size aTwipSize( 0, 0 );
     lcl_putHeightAndWidth( aItemSet, nHeight, nWidth,
                            &aTwipSize );
@@ -644,8 +644,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
     OSL_ENSURE( pTextCursor, "SwXTextCursor missing" );
     SwDoc *pDoc = pTextCursor->GetDoc();
 
-    SfxItemSet aItemSet( pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN,
-                         RES_FRMATR_END>{} );
+    static const WhichRangesLiteral ranges { { {RES_FRMATR_BEGIN, RES_FRMATR_END} } };
+    SfxItemSet aItemSet( pDoc->GetAttrPool(), ranges );
     lcl_putHeightAndWidth( aItemSet, nHeight, nWidth);
 
     SwApplet_Impl aAppletImpl ( aItemSet );
@@ -690,8 +690,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
     OSL_ENSURE( pTextCursor, "SwXTextCursor missing" );
     SwDoc *pDoc = pTextCursor->GetDoc();
 
-    SfxItemSet aItemSet( pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN,
-                         RES_FRMATR_END>{} );
+    static const WhichRangesLiteral ranges { { {RES_FRMATR_BEGIN, RES_FRMATR_END} } };
+    SfxItemSet aItemSet( pDoc->GetAttrPool(), ranges );
     lcl_putHeightAndWidth( aItemSet, nHeight, nWidth);
 
     // We'll need a (valid) URL, or we need a MIME type. If we don't have
@@ -771,8 +771,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
     OSL_ENSURE( pTextCursor, "SwXTextCursor missing" );
     SwDoc *pDoc = pTextCursor->GetDoc();
 
-    SfxItemSet aItemSet( pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN,
-                         RES_FRMATR_END>{} );
+    static const WhichRangesLiteral ranges { { {RES_FRMATR_BEGIN, RES_FRMATR_END} } };
+    SfxItemSet aItemSet( pDoc->GetAttrPool(), ranges );
     lcl_putHeightAndWidth( aItemSet, nHeight, nWidth);
 
     ScrollingMode eScrollMode = ScrollingMode::Auto;

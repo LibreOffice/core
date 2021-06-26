@@ -208,13 +208,14 @@ public:
 
 }
 
+static const WhichRangesLiteral ranges { { {RES_CHRATR_BEGIN, RES_TXTATR_END} } };
 SwAttrCheckArr::SwAttrCheckArr( const SfxItemSet& rSet, bool bFwd,
                                 bool bNoCollections )
     : m_nNodeStart(0)
     , m_nNodeEnd(0)
     , m_nFound(0)
     , m_nStackCount(0)
-    , m_aComapeSet( *rSet.GetPool(), svl::Items<RES_CHRATR_BEGIN, RES_TXTATR_END-1>{} )
+    , m_aComapeSet( *rSet.GetPool(), ranges )
     , m_bNoColls(bNoCollections)
     , m_bForward(bFwd)
 {
@@ -1054,8 +1055,8 @@ static bool FindAttrsImpl(SwPaM & rSearchPam,
 
     // check which text/char attributes are searched
     SwAttrCheckArr aCmpArr( rSet, bSrchForward, bNoColls );
-    SfxItemSet aOtherSet( rSearchPam.GetDoc().GetAttrPool(),
-                            svl::Items<RES_PARATR_BEGIN, RES_GRFATR_END-1>{} );
+    static const WhichRangesLiteral ranges { { {RES_PARATR_BEGIN, RES_GRFATR_END-1} } };
+    SfxItemSet aOtherSet( rSearchPam.GetDoc().GetAttrPool(), ranges );
     aOtherSet.Put( rSet, false );   // got all invalid items
 
     FnSearchAttr fnSearch = bSrchForward

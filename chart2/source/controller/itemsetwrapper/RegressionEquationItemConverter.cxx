@@ -85,7 +85,7 @@ bool RegressionEquationItemConverter::ApplyItemSet( const SfxItemSet & rItemSet 
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;
 }
 
-const sal_uInt16 * RegressionEquationItemConverter::GetWhichPairs() const
+WhichRangesContainer RegressionEquationItemConverter::GetWhichPairs() const
 {
     // must span all used items!
     return nRegEquationWhichPairs;

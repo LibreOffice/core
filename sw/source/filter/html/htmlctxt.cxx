@@ -476,8 +476,8 @@ bool SwHTMLParser::DoPositioning( SfxItemSet &rItemSet,
     // - there's a given width
     if( SwCSS1Parser::MayBePositioned( rPropInfo ) )
     {
-        SfxItemSet aFrameItemSet( m_xDoc->GetAttrPool(),
-                                svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1>{} );
+        static const WhichRangesLiteral ranges { { {RES_FRMATR_BEGIN, RES_FRMATR_END-1} } };
+        SfxItemSet aFrameItemSet( m_xDoc->GetAttrPool(), ranges );
         if( !IsNewDoc() )
             Reader::ResetFrameFormatAttrs(aFrameItemSet );
 
@@ -766,9 +766,9 @@ void SwHTMLParser::SplitPREListingXMP( HTMLAttrContext *pCntxt )
 
 SfxItemSet *HTMLAttrContext::GetFrameItemSet( SwDoc *pCreateDoc )
 {
+    static const WhichRangesLiteral ranges { { {RES_FRMATR_BEGIN, RES_FRMATR_END-1} } };
     if( !m_pFrameItemSet && pCreateDoc )
-        m_pFrameItemSet = std::make_unique<SfxItemSet>( pCreateDoc->GetAttrPool(),
-                        svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1>{} );
+        m_pFrameItemSet = std::make_unique<SfxItemSet>( pCreateDoc->GetAttrPool(), ranges );
     return m_pFrameItemSet.get();
 }
 

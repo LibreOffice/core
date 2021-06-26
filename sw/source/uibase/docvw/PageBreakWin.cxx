@@ -318,9 +318,8 @@ void SwPageBreakWin::execute(std::string_view rIdent)
 
         rNd.GetDoc().GetIDocumentUndoRedo( ).StartUndo( SwUndoId::UI_DELETE_PAGE_BREAK, nullptr );
 
-        SfxItemSet aSet(
-            GetEditWin()->GetView().GetWrtShell().GetAttrPool(),
-            svl::Items<RES_PAGEDESC, RES_BREAK>{});
+        static const WhichRangesLiteral ranges { { { RES_PAGEDESC, RES_BREAK } } };
+        SfxItemSet aSet(GetEditWin()->GetView().GetWrtShell().GetAttrPool(), ranges);
 
         aSet.Put( SwFormatPageDesc( nullptr ) );
         // This break could be from the current paragraph, if it has a PageBefore break.

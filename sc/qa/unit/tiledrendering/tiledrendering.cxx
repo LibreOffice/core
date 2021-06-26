@@ -1542,8 +1542,8 @@ void ScTiledRenderingTest::testDisableUndoRepair()
     SfxViewShell* pView2 = SfxViewShell::Current();
     CPPUNIT_ASSERT(pView1 != pView2);
     {
-        SfxItemSet aSet1(pView1->GetPool(), svl::Items<SID_UNDO, SID_UNDO>{});
-        SfxItemSet aSet2(pView2->GetPool(), svl::Items<SID_UNDO, SID_UNDO>{});
+        SfxItemSet aSet1(pView1->GetPool(), { { {SID_UNDO, SID_UNDO} } });
+        SfxItemSet aSet2(pView2->GetPool(), { { {SID_UNDO, SID_UNDO} } });
         pView1->GetSlotState(SID_UNDO, nullptr, &aSet1);
         pView2->GetSlotState(SID_UNDO, nullptr, &aSet2);
         CPPUNIT_ASSERT_EQUAL(SfxItemState::DISABLED, aSet1.GetItemState(SID_UNDO));
@@ -1558,8 +1558,8 @@ void ScTiledRenderingTest::testDisableUndoRepair()
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
     {
-        SfxItemSet aSet1(pView1->GetPool(), svl::Items<SID_UNDO, SID_UNDO>{});
-        SfxItemSet aSet2(pView2->GetPool(), svl::Items<SID_UNDO, SID_UNDO>{});
+        SfxItemSet aSet1(pView1->GetPool(), { { {SID_UNDO, SID_UNDO} } });
+        SfxItemSet aSet2(pView2->GetPool(), { { {SID_UNDO, SID_UNDO} } });
         pView1->GetSlotState(SID_UNDO, nullptr, &aSet1);
         pView2->GetSlotState(SID_UNDO, nullptr, &aSet2);
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aSet1.GetItemState(SID_UNDO));
@@ -1580,8 +1580,8 @@ void ScTiledRenderingTest::testDisableUndoRepair()
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
     {
-        SfxItemSet aSet1(pView1->GetPool(), svl::Items<SID_UNDO, SID_UNDO>{});
-        SfxItemSet aSet2(pView2->GetPool(), svl::Items<SID_UNDO, SID_UNDO>{});
+        SfxItemSet aSet1(pView1->GetPool(), { { {SID_UNDO, SID_UNDO} } });
+        SfxItemSet aSet2(pView2->GetPool(), { { {SID_UNDO, SID_UNDO} } });
         pView1->GetSlotState(SID_UNDO, nullptr, &aSet1);
         pView2->GetSlotState(SID_UNDO, nullptr, &aSet2);
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aSet1.GetItemState(SID_UNDO));

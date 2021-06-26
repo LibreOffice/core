@@ -241,7 +241,7 @@ bool TextLabelItemConverter::ApplyItemSet( const SfxItemSet& rItemSet )
     return ItemConverter::ApplyItemSet(rItemSet) || bResult;
 }
 
-const sal_uInt16* TextLabelItemConverter::GetWhichPairs() const
+WhichRangesContainer TextLabelItemConverter::GetWhichPairs() const
 {
     // must span all used items!
     return nTextLabelWhichPairs;

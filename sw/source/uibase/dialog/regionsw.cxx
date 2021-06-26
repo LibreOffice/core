@@ -38,16 +38,15 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
     SwWrtShell& rSh = GetShell();
     const SfxItemSet *pSet = rReq.GetArgs();
 
-    SfxItemSet aSet(
-        GetPool(),
-        svl::Items<
-            RES_FRM_SIZE, RES_FRM_SIZE,
-            RES_LR_SPACE, RES_LR_SPACE,
-            RES_BACKGROUND, RES_BACKGROUND,
-            RES_COL, RES_COL,
-            RES_FTN_AT_TXTEND, RES_FRAMEDIR,
-            XATTR_FILL_FIRST, XATTR_FILL_LAST,
-            SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE>{});
+    static const WhichRangesLiteral ranges { {
+            {RES_FRM_SIZE, RES_FRM_SIZE},
+            {RES_LR_SPACE, RES_LR_SPACE},
+            {RES_BACKGROUND, RES_BACKGROUND},
+            {RES_COL, RES_COL},
+            {RES_FTN_AT_TXTEND, RES_FRAMEDIR},
+            {XATTR_FILL_FIRST, XATTR_FILL_LAST},
+            {SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE} } };
+    SfxItemSet aSet(GetPool(), ranges);
 
     if (!pSet || pSet->Count()==0)
     {
@@ -154,14 +153,13 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
 
 void SwWrtShell::StartInsertRegionDialog(const SwSectionData& rSectionData)
 {
-    SfxItemSet aSet(
-        GetView().GetPool(),
-        svl::Items<
-            RES_FRM_SIZE, RES_FRM_SIZE,
-            RES_BACKGROUND, RES_BACKGROUND,
-            RES_COL, RES_COL,
-            XATTR_FILL_FIRST, XATTR_FILL_LAST,
-            SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE>{});
+    static const WhichRangesLiteral ranges { {
+            {RES_FRM_SIZE, RES_FRM_SIZE},
+            {RES_BACKGROUND, RES_BACKGROUND},
+            {RES_COL, RES_COL},
+            {XATTR_FILL_FIRST, XATTR_FILL_LAST},
+            {SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE} } };
+    SfxItemSet aSet(GetView().GetPool(), ranges);
     SwRect aRect;
     CalcBoundRect(aRect, RndStdIds::FLY_AS_CHAR);
     tools::Long nWidth = aRect.Width();

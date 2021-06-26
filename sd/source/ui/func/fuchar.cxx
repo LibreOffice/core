@@ -62,7 +62,10 @@ void FuChar::DoExecute( SfxRequest& rReq )
         SfxItemSet aEditAttr( mpDoc->GetPool() );
         mpView->GetAttributes( aEditAttr );
 
-        SfxItemSet aNewAttr(mpViewShell->GetPool(), svl::Items<XATTR_FILLSTYLE, XATTR_FILLCOLOR, EE_ITEMS_START, EE_ITEMS_END>{});
+        static const WhichRangesLiteral ranges { {
+                {XATTR_FILLSTYLE, XATTR_FILLCOLOR},
+                {EE_ITEMS_START, EE_ITEMS_END} } };
+        SfxItemSet aNewAttr(mpViewShell->GetPool(), ranges);
         aNewAttr.Put( aEditAttr, false );
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
