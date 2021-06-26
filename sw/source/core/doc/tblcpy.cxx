@@ -617,8 +617,8 @@ static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
     if( !pCpyBox )
         return;
 
-    SfxItemSet aBoxAttrSet( pCpyDoc->GetAttrPool(), svl::Items<RES_BOXATR_FORMAT,
-                                                    RES_BOXATR_VALUE>{} );
+    static const WhichRangesLiteral ranges { { {RES_BOXATR_FORMAT, RES_BOXATR_VALUE} } };
+    SfxItemSet aBoxAttrSet( pCpyDoc->GetAttrPool(), ranges );
     aBoxAttrSet.Put( pCpyBox->GetFrameFormat()->GetAttrSet() );
     if( !aBoxAttrSet.Count() )
         return;

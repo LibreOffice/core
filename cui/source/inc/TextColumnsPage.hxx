@@ -19,7 +19,7 @@
 class SvxTextColumnsPage : public SfxTabPage
 {
 private:
-    static const sal_uInt16 pRanges[];
+    static const WhichRangesContainer pRanges;
 
     std::unique_ptr<weld::SpinButton> m_xColumnsNumber;
     std::unique_ptr<weld::MetricSpinButton> m_xColumnsSpacing;
@@ -31,7 +31,7 @@ public:
 
     static std::unique_ptr<SfxTabPage>
     Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet*);
-    static const sal_uInt16* GetRanges() { return pRanges; }
+    static WhichRangesContainer GetRanges() { return pRanges; }
 
     virtual bool FillItemSet(SfxItemSet*) override;
     virtual void Reset(const SfxItemSet*) override;

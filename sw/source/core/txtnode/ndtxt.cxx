@@ -2019,12 +2019,11 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
                    pDest->HasSwAttrSet() ||
                    nLen != pDest->GetText().getLength()))
             {
-                SfxItemSet aCharSet(
-                    pDest->GetDoc().GetAttrPool(),
-                    svl::Items<
-                        RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
-                        RES_TXTATR_INETFMT, RES_TXTATR_CHARFMT,
-                        RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1>{} );
+                static const WhichRangesLiteral ranges { {
+                        {RES_CHRATR_BEGIN, RES_CHRATR_END - 1},
+                        {RES_TXTATR_INETFMT, RES_TXTATR_CHARFMT},
+                        {RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1} } };
+                SfxItemSet aCharSet(pDest->GetDoc().GetAttrPool(), ranges);
                 aCharSet.Put( *GetpSwAttrSet() );
                 if( aCharSet.Count() )
                 {
@@ -2062,12 +2061,11 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
                pDest->HasSwAttrSet() ||
                nLen != pDest->GetText().getLength()))
         {
-            SfxItemSet aCharSet(
-                pDest->GetDoc().GetAttrPool(),
-                svl::Items<
-                    RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
-                    RES_TXTATR_INETFMT, RES_TXTATR_CHARFMT,
-                    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1>{});
+            static const WhichRangesLiteral ranges { {
+                    {RES_CHRATR_BEGIN, RES_CHRATR_END - 1},
+                    {RES_TXTATR_INETFMT, RES_TXTATR_CHARFMT},
+                    {RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1} } };
+            SfxItemSet aCharSet(pDest->GetDoc().GetAttrPool(), ranges);
             aCharSet.Put( *GetpSwAttrSet() );
             if( aCharSet.Count() )
             {
@@ -2485,12 +2483,11 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
         if( nInitSize || hasSwAttrSet ||
             nLen != pDest->GetText().getLength())
         {
-            SfxItemSet aCharSet(
-                pDest->GetDoc().GetAttrPool(),
-                svl::Items<
-                    RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
-                    RES_TXTATR_INETFMT, RES_TXTATR_CHARFMT,
-                    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1>{});
+            static const WhichRangesLiteral ranges { {
+                    {RES_CHRATR_BEGIN, RES_CHRATR_END - 1},
+                    {RES_TXTATR_INETFMT, RES_TXTATR_CHARFMT},
+                    {RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1} } };
+            SfxItemSet aCharSet(pDest->GetDoc().GetAttrPool(), ranges);
             aCharSet.Put( *GetpSwAttrSet() );
             if( aCharSet.Count() )
                 pDest->SetAttr( aCharSet, nDestStart, nDestStart + nLen );
@@ -5192,7 +5189,8 @@ void SwTextNode::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 sal_uInt32 SwTextNode::GetRsid( sal_Int32 nStt, sal_Int32 nEnd ) const
 {
-    SfxItemSet aSet( const_cast<SfxItemPool&>(static_cast<SfxItemPool const &>(GetDoc().GetAttrPool())), svl::Items<RES_CHRATR_RSID, RES_CHRATR_RSID>{} );
+    static const WhichRangesLiteral ranges { { {RES_CHRATR_RSID, RES_CHRATR_RSID} } };
+    SfxItemSet aSet( const_cast<SfxItemPool&>(static_cast<SfxItemPool const &>(GetDoc().GetAttrPool())), ranges );
     if (GetParaAttr(aSet, nStt, nEnd))
     {
         const SvxRsidItem* pRsid = aSet.GetItem<SvxRsidItem>(RES_CHRATR_RSID);

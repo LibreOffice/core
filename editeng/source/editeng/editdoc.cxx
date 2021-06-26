@@ -1779,9 +1779,10 @@ void ContentNode::dumpAsXml(xmlTextWriterPtr pWriter) const
 }
 
 
+const WhichRangesLiteral ranges { { {EE_PARA_START, EE_CHAR_END} } };
 ContentAttribs::ContentAttribs( SfxItemPool& rPool )
 : pStyle(nullptr)
-, aAttribSet( rPool, svl::Items<EE_PARA_START, EE_CHAR_END>{} )
+, aAttribSet( rPool, ranges )
 {
 }
 
@@ -2013,7 +2014,8 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, S
 
 void EditDoc::CreateDefFont( bool bUseStyles )
 {
-    SfxItemSet aTmpSet( GetItemPool(), svl::Items<EE_PARA_START, EE_CHAR_END>{} );
+    static const WhichRangesLiteral ranges { { {EE_PARA_START, EE_CHAR_END} } };
+    SfxItemSet aTmpSet( GetItemPool(), ranges );
     CreateFont( aDefFont, aTmpSet );
     aDefFont.SetVertical( IsVertical() );
     aDefFont.SetOrientation( Degree10(IsVertical() ? (IsTopToBottom() ? 2700 : 900) : 0) );

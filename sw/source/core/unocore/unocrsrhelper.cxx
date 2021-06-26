@@ -1331,7 +1331,7 @@ void makeRedline( SwPaM const & rPaM,
             {
                 sal_uInt16 nStylePoolId = USHRT_MAX;
                 OUString sParaStyleName;
-                SfxItemSet aItemSet(rDoc.GetAttrPool(), nullptr);
+                SfxItemSet aItemSet(rDoc.GetAttrPool(), WhichRangesContainer());
                 for (const auto& [nWhich1, nWhich2] : aWhichPairs)
                     aItemSet.MergeRange(nWhich1, nWhich2);
 

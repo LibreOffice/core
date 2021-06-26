@@ -1005,8 +1005,8 @@ void ScViewFunc::ApplyAttr( const SfxPoolItem& rAttrItem, bool bAdjustBlockHeigh
         return;
     }
 
-    ScPatternAttr aNewAttrs( std::make_unique<SfxItemSet>( *GetViewData().GetDocument().GetPool(),
-                                            svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>{} ) );
+    static const WhichRangesLiteral ranges { { {ATTR_PATTERN_START, ATTR_PATTERN_END} } };
+    ScPatternAttr aNewAttrs( std::make_unique<SfxItemSet>( *GetViewData().GetDocument().GetPool(), ranges ) );
 
     aNewAttrs.GetItemSet().Put( rAttrItem );
     //  if justify is set (with Buttons), always indentation 0

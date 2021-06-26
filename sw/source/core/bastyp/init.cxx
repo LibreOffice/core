@@ -138,131 +138,128 @@ using namespace ::com::sun::star;
 // some ranges for sets in collections/ nodes
 
 // AttrSet range for the 2 break attributes
-sal_uInt16 const aBreakSetRange[] = {
-    RES_PAGEDESC, RES_BREAK,
-    0
-};
+const WhichRangesLiteral aBreakSetRange1 { {
+    {RES_PAGEDESC, RES_BREAK},
+} };
+const WhichRangesContainer aBreakSetRange(aBreakSetRange1);
 
 // AttrSet range for TextFormatColl
 // list attributes ( RES_PARATR_LIST_BEGIN - RES_PARATR_LIST_END ) are not
 // included in the paragraph style's itemset.
-sal_uInt16 const aTextFormatCollSetRange[] = {
-    RES_CHRATR_BEGIN, RES_CHRATR_END-1,
-    RES_PARATR_BEGIN, RES_PARATR_END-1,
-    RES_FRMATR_BEGIN, RES_FRMATR_END-1,
-    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
+const WhichRangesLiteral aTextFormatCollSetRange1 { {
+    {RES_CHRATR_BEGIN, RES_CHRATR_END-1},
+    {RES_PARATR_BEGIN, RES_PARATR_END-1},
+    {RES_FRMATR_BEGIN, RES_FRMATR_END-1},
+    {RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1},
 
     // FillAttribute support
-    XATTR_FILL_FIRST, XATTR_FILL_LAST,
-
-    0
-};
+    {XATTR_FILL_FIRST, XATTR_FILL_LAST},
+} };
+const WhichRangesContainer aTextFormatCollSetRange(aTextFormatCollSetRange1);
 
 // AttrSet range for GrfFormatColl
-sal_uInt16 const aGrfFormatCollSetRange[] = {
-    RES_FRMATR_BEGIN, RES_FRMATR_END-1,
-    RES_GRFATR_BEGIN, RES_GRFATR_END-1,
-    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
-    0
-};
+const WhichRangesLiteral aGrfFormatCollSetRange1 { {
+    {RES_FRMATR_BEGIN, RES_FRMATR_END-1},
+    {RES_GRFATR_BEGIN, RES_GRFATR_END-1},
+    {RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1},
+} };
+const WhichRangesContainer aGrfFormatCollSetRange(aGrfFormatCollSetRange1);
 
 // AttrSet range for TextNode
-sal_uInt16 const aTextNodeSetRange[] = {
-    RES_CHRATR_BEGIN, RES_CHRATR_END-1,
-    RES_PARATR_BEGIN, RES_PARATR_END-1,
-    RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
-    RES_FRMATR_BEGIN, RES_FRMATR_END-1,
-    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
+const WhichRangesLiteral aTextNodeSetRange1 { {
+    {RES_CHRATR_BEGIN, RES_CHRATR_END-1},
+    {RES_PARATR_BEGIN, RES_PARATR_END-1},
+    {RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1},
+    {RES_FRMATR_BEGIN, RES_FRMATR_END-1},
+    {RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1},
 
     // FillAttribute support (paragraph FillStyle)
-    XATTR_FILL_FIRST, XATTR_FILL_LAST,
-
-    0
-};
+    {XATTR_FILL_FIRST, XATTR_FILL_LAST},
+} };
+const WhichRangesContainer aTextNodeSetRange(aTextNodeSetRange1);
 
 // AttrSet range for NoTextNode
-sal_uInt16 const aNoTextNodeSetRange[] = {
-    RES_FRMATR_BEGIN, RES_FRMATR_END-1,
-    RES_GRFATR_BEGIN, RES_GRFATR_END-1,
-    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
-    0
-};
+const WhichRangesLiteral aNoTextNodeSetRange1 { {
+    {RES_FRMATR_BEGIN, RES_FRMATR_END-1},
+    {RES_GRFATR_BEGIN, RES_GRFATR_END-1},
+    {RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1},
+} };
+const WhichRangesContainer aNoTextNodeSetRange(aNoTextNodeSetRange1);
 
-sal_uInt16 const aTableSetRange[] = {
-    RES_FILL_ORDER,     RES_FRM_SIZE,
-    RES_LR_SPACE,       RES_BREAK,
-    RES_HORI_ORIENT,    RES_HORI_ORIENT,
-    RES_BACKGROUND,     RES_SHADOW,
-    RES_KEEP,           RES_KEEP,
-    RES_LAYOUT_SPLIT,   RES_LAYOUT_SPLIT,
-    RES_FRAMEDIR,       RES_FRAMEDIR,
+const WhichRangesLiteral aTableSetRange1 { {
+    {RES_FILL_ORDER,     RES_FRM_SIZE},
+    {RES_LR_SPACE,       RES_BREAK},
+    {RES_HORI_ORIENT,    RES_HORI_ORIENT},
+    {RES_BACKGROUND,     RES_SHADOW},
+    {RES_KEEP,           RES_KEEP},
+    {RES_LAYOUT_SPLIT,   RES_LAYOUT_SPLIT},
+    {RES_FRAMEDIR,       RES_FRAMEDIR},
     // #i29550#
-    RES_COLLAPSING_BORDERS, RES_COLLAPSING_BORDERS,
+    {RES_COLLAPSING_BORDERS, RES_COLLAPSING_BORDERS},
     // <-- collapsing
-    RES_FRMATR_GRABBAG, RES_FRMATR_GRABBAG,
-    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
-    0
-};
+    {RES_FRMATR_GRABBAG, RES_FRMATR_GRABBAG},
+    {RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1},
+} };
+const WhichRangesContainer aTableSetRange(aTableSetRange1);
 
-sal_uInt16 const aTableLineSetRange[] = {
-    RES_FILL_ORDER,     RES_FRM_SIZE,
+const WhichRangesLiteral aTableLineSetRange1 { {
+    {RES_FILL_ORDER,     RES_FRM_SIZE},
     // HasTextChangesOnly
-    RES_LR_SPACE,       RES_UL_SPACE,
-    RES_PRINT,          RES_PRINT,
-    RES_PROTECT,        RES_PROTECT,
-    RES_VERT_ORIENT,    RES_VERT_ORIENT,
-    RES_BACKGROUND,     RES_SHADOW,
-    RES_ROW_SPLIT,      RES_ROW_SPLIT,
-    RES_FRMATR_GRABBAG, RES_FRMATR_GRABBAG,
-    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
-    0
-};
+    {RES_LR_SPACE,       RES_UL_SPACE},
+    {RES_PRINT,          RES_PRINT},
+    {RES_PROTECT,        RES_PROTECT},
+    {RES_VERT_ORIENT,    RES_VERT_ORIENT},
+    {RES_BACKGROUND,     RES_SHADOW},
+    {RES_ROW_SPLIT,      RES_ROW_SPLIT},
+    {RES_FRMATR_GRABBAG, RES_FRMATR_GRABBAG},
+    {RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1},
+} };
+const WhichRangesContainer aTableLineSetRange(aTableLineSetRange1);
 
-sal_uInt16 const aTableBoxSetRange[] = {
-    RES_FILL_ORDER,     RES_FRM_SIZE,
-    RES_LR_SPACE,       RES_UL_SPACE,
-    RES_PROTECT,        RES_PROTECT,
-    RES_VERT_ORIENT,    RES_VERT_ORIENT,
-    RES_BACKGROUND,     RES_SHADOW,
-    RES_FRAMEDIR,       RES_FRAMEDIR,
-    RES_FRMATR_GRABBAG, RES_FRMATR_GRABBAG,
-    RES_BOXATR_BEGIN,   RES_BOXATR_END-1,
-    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
-    0
-};
+const WhichRangesLiteral aTableBoxSetRange1 { {
+    {RES_FILL_ORDER,     RES_FRM_SIZE},
+    {RES_LR_SPACE,       RES_UL_SPACE},
+    {RES_PROTECT,        RES_PROTECT},
+    {RES_VERT_ORIENT,    RES_VERT_ORIENT},
+    {RES_BACKGROUND,     RES_SHADOW},
+    {RES_FRAMEDIR,       RES_FRAMEDIR},
+    {RES_FRMATR_GRABBAG, RES_FRMATR_GRABBAG},
+    {RES_BOXATR_BEGIN,   RES_BOXATR_END-1},
+    {RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1},
+} };
+const WhichRangesContainer aTableBoxSetRange(aTableBoxSetRange1);
 
 // AttrSet range for SwFrameFormat
-sal_uInt16 const aFrameFormatSetRange[] = {
-    RES_FRMATR_BEGIN, RES_FRMATR_END-1,
-    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
+const WhichRangesLiteral aFrameFormatSetRange1 { {
+    {RES_FRMATR_BEGIN, RES_FRMATR_END-1},
+    {RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1},
 
     // FillAttribute support (TextFrame, OLE, Writer GraphicObject)
-    XATTR_FILL_FIRST, XATTR_FILL_LAST,
-
-    0
-};
+    {XATTR_FILL_FIRST, XATTR_FILL_LAST},
+} };
+const WhichRangesContainer aFrameFormatSetRange(aFrameFormatSetRange1);
 
 // AttrSet range for SwCharFormat
-sal_uInt16 const aCharFormatSetRange[] = {
-    RES_CHRATR_BEGIN, RES_CHRATR_END-1,
-    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
-    0
-};
+const WhichRangesLiteral aCharFormatSetRange1 { {
+    {RES_CHRATR_BEGIN, RES_CHRATR_END-1},
+    {RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1},
+} };
+const WhichRangesContainer aCharFormatSetRange(aCharFormatSetRange1);
 
 // AttrSet range for character autostyles
-sal_uInt16 const aCharAutoFormatSetRange[] = {
-    RES_CHRATR_BEGIN, RES_CHRATR_END-1,
-    RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
-    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
-    0
-};
+const WhichRangesLiteral aCharAutoFormatSetRange1 { {
+    {RES_CHRATR_BEGIN, RES_CHRATR_END-1},
+    {RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER},
+    {RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1},
+} };
+const WhichRangesContainer aCharAutoFormatSetRange(aCharAutoFormatSetRange1);
 
 // AttrSet range for SwPageDescFormat
-sal_uInt16 const aPgFrameFormatSetRange[] = {
-    RES_FRMATR_BEGIN, RES_FRMATR_END-1,
-    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
-    0
-};
+const WhichRangesLiteral aPgFrameFormatSetRange1 { {
+    {RES_FRMATR_BEGIN, RES_FRMATR_END-1},
+    {RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1},
+} };
+const WhichRangesContainer aPgFrameFormatSetRange(aPgFrameFormatSetRange1);
 
 // create table for accessing default format attributes
 SwDfltAttrTab aAttrTab( POOLATTR_END - POOLATTR_BEGIN, nullptr );

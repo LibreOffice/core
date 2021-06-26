@@ -29,12 +29,11 @@
 #include <svx/sdtayitm.hxx>
 #include <svtools/unitconv.hxx>
 
-const sal_uInt16 SvxTextAnimationPage::pRanges[] =
+static const WhichRangesLiteral ranges {
 {
-    SDRATTR_TEXT_ANIKIND,
-    SDRATTR_TEXT_ANIAMOUNT,
-    0
-};
+    {SDRATTR_TEXT_ANIKIND, SDRATTR_TEXT_ANIAMOUNT},
+} };
+const WhichRangesContainer SvxTextAnimationPage::pRanges(ranges);
 
 /*************************************************************************
 |*

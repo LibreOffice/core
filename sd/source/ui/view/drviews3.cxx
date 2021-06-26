@@ -714,7 +714,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
             {
                 const SvxTabStopItem& rItem = pArgs->Get( EE_PARA_TABS );
 
-                SfxItemSet aEditAttr( GetPool(), svl::Items<EE_PARA_TABS, EE_PARA_TABS>{} );
+                static const WhichRangesLiteral ranges { { {EE_PARA_TABS, EE_PARA_TABS} } };
+                SfxItemSet aEditAttr( GetPool(), ranges );
 
                 aEditAttr.Put( rItem );
                 mpDrawView->SetAttributes( aEditAttr );
@@ -728,7 +729,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 SvxLineSpacingItem aParaLineSP = static_cast<const SvxLineSpacingItem&>(pArgs->Get(
                     GetPool().GetWhich(SID_ATTR_PARA_LINESPACE)));
 
-                SfxItemSet aEditAttr( GetPool(), svl::Items<EE_PARA_SBL, EE_PARA_SBL>{} );
+                static const WhichRangesLiteral ranges { { {EE_PARA_SBL, EE_PARA_SBL} } };
+                SfxItemSet aEditAttr( GetPool(), ranges );
                 aParaLineSP.SetWhich( EE_PARA_SBL );
 
                 aEditAttr.Put( aParaLineSP );
@@ -740,7 +742,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
         case SID_ATTR_PARA_ADJUST_LEFT:
         {
             SvxAdjustItem aItem( SvxAdjust::Left, EE_PARA_JUST );
-            SfxItemSet aEditAttr( GetPool(), svl::Items<EE_PARA_JUST, EE_PARA_JUST>{} );
+            static const WhichRangesLiteral ranges { { {EE_PARA_JUST, EE_PARA_JUST} } };
+            SfxItemSet aEditAttr( GetPool(), ranges );
 
             aEditAttr.Put( aItem );
             mpDrawView->SetAttributes( aEditAttr );
@@ -751,7 +754,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
         case SID_ATTR_PARA_ADJUST_CENTER:
         {
             SvxAdjustItem aItem( SvxAdjust::Center, EE_PARA_JUST );
-            SfxItemSet aEditAttr( GetPool(), svl::Items<EE_PARA_JUST, EE_PARA_JUST>{} );
+            static const WhichRangesLiteral ranges { { {EE_PARA_JUST, EE_PARA_JUST} } };
+            SfxItemSet aEditAttr( GetPool(), ranges );
 
             aEditAttr.Put( aItem );
             mpDrawView->SetAttributes( aEditAttr );
@@ -762,7 +766,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
         case SID_ATTR_PARA_ADJUST_RIGHT:
         {
             SvxAdjustItem aItem( SvxAdjust::Right, EE_PARA_JUST );
-            SfxItemSet aEditAttr( GetPool(), svl::Items<EE_PARA_JUST, EE_PARA_JUST>{} );
+            static const WhichRangesLiteral ranges { { {EE_PARA_JUST, EE_PARA_JUST} } };
+            SfxItemSet aEditAttr( GetPool(), ranges );
 
             aEditAttr.Put( aItem );
             mpDrawView->SetAttributes( aEditAttr );
@@ -773,7 +778,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
         case SID_ATTR_PARA_ADJUST_BLOCK:
         {
             SvxAdjustItem aItem( SvxAdjust::Block, EE_PARA_JUST );
-            SfxItemSet aEditAttr( GetPool(), svl::Items<EE_PARA_JUST, EE_PARA_JUST>{} );
+            static const WhichRangesLiteral ranges { { {EE_PARA_JUST, EE_PARA_JUST} } };
+            SfxItemSet aEditAttr( GetPool(), ranges );
 
             aEditAttr.Put( aItem );
             mpDrawView->SetAttributes( aEditAttr );
@@ -786,7 +792,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
             {
                 SvxULSpaceItem aULSP = static_cast<const SvxULSpaceItem&>(pArgs->Get(
                     GetPool().GetWhich(SID_ATTR_PARA_ULSPACE)));
-                SfxItemSet aEditAttr( GetPool(), svl::Items<EE_PARA_ULSPACE, EE_PARA_ULSPACE>{} );
+                static const WhichRangesLiteral ranges { { {EE_PARA_ULSPACE, EE_PARA_ULSPACE} } };
+                SfxItemSet aEditAttr( GetPool(), ranges );
                 aULSP.SetWhich( EE_PARA_ULSPACE );
 
                 aEditAttr.Put( aULSP );
@@ -801,7 +808,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 SvxLRSpaceItem aLRSpace = static_cast<const SvxLRSpaceItem&>(pArgs->Get(
                     GetPool().GetWhich(SID_ATTR_PARA_LRSPACE)));
 
-                SfxItemSet aEditAttr( GetPool(), svl::Items<EE_PARA_LRSPACE, EE_PARA_LRSPACE>{} );
+                static const WhichRangesLiteral ranges { { {EE_PARA_LRSPACE, EE_PARA_LRSPACE} } };
+                SfxItemSet aEditAttr( GetPool(), ranges );
                 aLRSpace.SetWhich( EE_PARA_LRSPACE );
 
                 aEditAttr.Put( aLRSpace );
@@ -817,13 +825,11 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 const SvxLRSpaceItem& rItem = static_cast<const SvxLRSpaceItem&>(
                             pArgs->Get( nId ));
 
-                static const sal_uInt16 aWhichTable[]=
-                {
-                    EE_PARA_OUTLLEVEL, EE_PARA_OUTLLEVEL,
-                    EE_PARA_LRSPACE, EE_PARA_LRSPACE,
-                    EE_PARA_NUMBULLET, EE_PARA_NUMBULLET,
-                    0, 0
-                };
+                static const WhichRangesLiteral aWhichTable { {
+                    {EE_PARA_OUTLLEVEL, EE_PARA_OUTLLEVEL},
+                    {EE_PARA_LRSPACE, EE_PARA_LRSPACE},
+                    {EE_PARA_NUMBULLET, EE_PARA_NUMBULLET},
+                } };
 
                 SfxItemSet aEditAttr( GetDoc()->GetPool(),
                                       aWhichTable );
@@ -889,8 +895,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 }
 
                 // only put lrSpace item
-                SfxItemSet aEditAttrReduced( GetDoc()->GetPool(),
-                                             svl::Items<EE_PARA_LRSPACE, EE_PARA_LRSPACE>{} );
+                static const WhichRangesLiteral ranges { { {EE_PARA_LRSPACE, EE_PARA_LRSPACE} } };
+                SfxItemSet aEditAttrReduced( GetDoc()->GetPool(), ranges );
                 aEditAttrReduced.Put( aLRSpaceItem );
                 mpDrawView->SetAttributes( aEditAttrReduced );
 

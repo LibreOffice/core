@@ -428,7 +428,8 @@ XclExpStringRef lclCreateFormattedString(
 
     // font buffer and helper item set for edit engine -> Calc item conversion
     XclExpFontBuffer& rFontBuffer = rRoot.GetFontBuffer();
-    SfxItemSet aItemSet( *rRoot.GetDoc().GetPool(), svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>{} );
+    static const WhichRangesLiteral ranges { { {ATTR_PATTERN_START, ATTR_PATTERN_END} } };
+    SfxItemSet aItemSet( *rRoot.GetDoc().GetPool(), ranges );
 
     // script type handling
     Reference< XBreakIterator > xBreakIt = rRoot.GetDoc().GetBreakIterator();
@@ -682,7 +683,8 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
 
     OUString aText;
     sal_Int32 nHeight = 0;
-    SfxItemSet aItemSet( *GetDoc().GetPool(), svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>{} );
+    static const WhichRangesLiteral ranges { { {ATTR_PATTERN_START, ATTR_PATTERN_END} } };
+    SfxItemSet aItemSet( *GetDoc().GetPool(), ranges );
 
     // edit engine
     bool bOldUpdateMode = mrEE.GetUpdateMode();

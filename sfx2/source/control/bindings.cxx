@@ -987,7 +987,7 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
         {
             // The value is attached to a toggleable attribute (Bools)
             sal_uInt16 nWhich = pSlot->GetWhich(rPool);
-            SfxItemSet aSet(rPool, {{nWhich, nWhich}});
+            SfxItemSet aSet(rPool, nWhich, nWhich);
             SfxStateFunc pFunc = pSlot->GetStateFnc();
             (*pFunc)(pShell, aSet);
             const SfxPoolItem *pOldItem;
@@ -1167,7 +1167,7 @@ std::optional<SfxItemSet> SfxBindings::CreateSet_Impl
 
     // Create a Set from the ranges
     size_t i = 0;
-    SfxItemSet aSet(rPool, nullptr);
+    SfxItemSet aSet(rPool);
     while ( i < rFound.size() )
     {
         const sal_uInt16 nWhich1 = rFound[i].nWhichId;

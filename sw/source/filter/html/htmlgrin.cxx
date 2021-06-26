@@ -531,8 +531,8 @@ IMAGE_SETEVENT:
     if( HasStyleOptions( aStyle, aId, aClass ) )
         ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo );
 
-    SfxItemSet aFrameSet( m_xDoc->GetAttrPool(),
-                        svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1>{} );
+    static const WhichRangesLiteral ranges { { {RES_FRMATR_BEGIN, RES_FRMATR_END-1} } };
+    SfxItemSet aFrameSet( m_xDoc->GetAttrPool(), ranges );
     if( !IsNewDoc() )
         Reader::ResetFrameFormatAttrs( aFrameSet );
 

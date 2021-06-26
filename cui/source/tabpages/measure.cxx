@@ -36,12 +36,11 @@
 
 #include <measure.hxx>
 
-const sal_uInt16 SvxMeasurePage::pRanges[] =
+static const WhichRangesLiteral ranges {
 {
-    SDRATTR_MEASURE_FIRST,
-    SDRATTR_MEASURE_LAST,
-    0
-};
+    {SDRATTR_MEASURE_FIRST, SDRATTR_MEASURE_LAST},
+} };
+const WhichRangesContainer SvxMeasurePage::pRanges(ranges);
 
 /*************************************************************************
 |*

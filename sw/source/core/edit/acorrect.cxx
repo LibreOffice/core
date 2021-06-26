@@ -319,8 +319,8 @@ bool SwAutoCorrDoc::SetINetAttr( sal_Int32 nStt, sal_Int32 nEnd, const OUString&
     SwPaM aPam(pFrame->MapViewToModelPos(TextFrameIndex(nStt)),
                pFrame->MapViewToModelPos(TextFrameIndex(nEnd)));
 
-    SfxItemSet aSet( m_rEditSh.GetDoc()->GetAttrPool(),
-                        svl::Items<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT>{} );
+    static const WhichRangesLiteral ranges { { {RES_TXTATR_INETFMT, RES_TXTATR_INETFMT} } };
+    SfxItemSet aSet( m_rEditSh.GetDoc()->GetAttrPool(), ranges );
     aSet.Put( SwFormatINetFormat( rURL, OUString() ));
     m_rEditSh.GetDoc()->SetFormatItemByAutoFormat( aPam, aSet );
     if( m_bUndoIdInitialized )

@@ -333,11 +333,12 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
     {
         //sequence of (start, end) property ranges we want to
         //query
-        SfxItemSet aScriptItemSet( rWrt.m_pDoc->GetAttrPool(),
-                                   svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
-                                   RES_CHRATR_POSTURE, RES_CHRATR_POSTURE,
-                                   RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT,
-                                   RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_WEIGHT>{} );
+        static const WhichRangesLiteral ranges { {
+                {RES_CHRATR_FONT, RES_CHRATR_FONTSIZE},
+                {RES_CHRATR_POSTURE, RES_CHRATR_POSTURE},
+                {RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT},
+                {RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_WEIGHT} } };
+        SfxItemSet aScriptItemSet( rWrt.m_pDoc->GetAttrPool(), ranges );
         rTextNd.GetParaAttr(aScriptItemSet, nFieldPos, nFieldPos+1);
 
         sal_uInt16 aWesternWhichIds[4] =

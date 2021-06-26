@@ -323,11 +323,10 @@ void SwTextGridPage::SetLinesOrCharsRanges(weld::Label& rField, const sal_Int32 
     rField.set_label(aFieldStr);
 }
 
-const sal_uInt16* SwTextGridPage::GetRanges()
+WhichRangesContainer SwTextGridPage::GetRanges()
 {
-    static const sal_uInt16 aPageRg[] = {
-        RES_TEXTGRID, RES_TEXTGRID,
-        0};
+    static const WhichRangesLiteral aPageRg { {
+        {RES_TEXTGRID, RES_TEXTGRID} } };
     return aPageRg;
 }
 

@@ -349,8 +349,8 @@ lcl_setCharFormatSequence(SwPaM & rPam, uno::Any const& rValue)
         rPam.GetDoc().GetIDocumentUndoRedo().StartUndo(SwUndoId::START, nullptr);
         aStyle <<= aCharStyles.getConstArray()[nStyle];
         // create a local set and apply each format directly
-        SfxItemSet aSet(rPam.GetDoc().GetAttrPool(),
-                svl::Items<RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT>{});
+        static const WhichRangesLiteral ranges { { {RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT} } };
+        SfxItemSet aSet(rPam.GetDoc().GetAttrPool(), ranges);
         lcl_setCharStyle(rPam.GetDoc(), aStyle, aSet);
         // the first style should replace the current attributes,
         // all other have to be added
@@ -519,10 +519,11 @@ SwUnoCursorHelper::SetCursorPropertyValue(
                     // TODO create own map for this, it contains UNO_NAME_DISPLAY_NAME? or make property readable so ODF export can map it to a automatic style?
                     SfxItemPropertySet const& rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_CHAR_AUTO_STYLE));
                     SfxItemPropertyMap const& rMap(rPropSet.getPropertyMap());
-                    SfxItemSet items( rPam.GetDoc().GetAttrPool(),
-                        svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END-1,
-                            RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
-                            RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1>{} );
+                    static const WhichRangesLiteral ranges { {
+                            {RES_CHRATR_BEGIN, RES_CHRATR_END-1},
+                            {RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT},
+                            {RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1} } };
+                    SfxItemSet items( rPam.GetDoc().GetAttrPool(), ranges );
 
                     for (beans::NamedValue const & prop : std::as_const(props))
                     {
@@ -1722,11 +1723,10 @@ uno::Any SwUnoCursorHelper::GetPropertyValue(
 
     if (!bDone)
     {
-        SfxItemSet aSet(
-            rPaM.GetDoc().GetAttrPool(),
-            svl::Items<
-                RES_CHRATR_BEGIN, RES_FRMATR_END - 1,
-                RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER>{});
+        static const WhichRangesLiteral ranges { {
+                {RES_CHRATR_BEGIN, RES_FRMATR_END - 1},
+                {RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER} } };
+        SfxItemSet aSet(rPaM.GetDoc().GetAttrPool(), ranges);
         SwUnoCursorHelper::GetCursorAttr(rPaM, aSet);
 
         rPropSet.getPropertyValue(*pEntry, aSet, aAny);
@@ -1771,8 +1771,8 @@ void SwUnoCursorHelper::SetPropertyValues(
     OUString aUnknownExMsg, aPropertyVetoExMsg;
 
     // Build set of attributes we want to fetch
-    const sal_uInt16 zero = 0;
-    SfxItemSet aItemSet(rDoc.GetAttrPool(), &zero);
+    static const WhichRangesContainer zero;
+    SfxItemSet aItemSet(rDoc.GetAttrPool(), zero);
     std::vector<std::pair<const SfxItemPropertyMapEntry*, const uno::Any&>> aEntries;
     aEntries.reserve(rPropertyValues.getLength());
     for (const auto& rPropVal : rPropertyValues)
@@ -1903,22 +1903,25 @@ SwUnoCursorHelper::GetPropertyStates(
                     {
                         case SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION_TOLERANT:
                         case SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION:
-                            pSet.reset(
-                                new SfxItemSet( rPaM.GetDoc().GetAttrPool(),
-                                    svl::Items<RES_CHRATR_BEGIN,   RES_TXTATR_END>{} ));
+                        {
+                            static const WhichRangesLiteral ranges { {
+                                    {RES_CHRATR_BEGIN,   RES_TXTATR_END} } };
+                            pSet.reset(new SfxItemSet( rPaM.GetDoc().GetAttrPool(), ranges));
+                        }
                         break;
                         case SW_PROPERTY_STATE_CALLER_SINGLE_VALUE_ONLY:
                             pSet.reset(
                                 new SfxItemSet( rPaM.GetDoc().GetAttrPool(),
-                                    {{pEntry->nWID, pEntry->nWID}} ));
+                                    pEntry->nWID, pEntry->nWID ));
                         break;
                         default:
-                            pSet.reset( new SfxItemSet(
-                                rPaM.GetDoc().GetAttrPool(),
-                                svl::Items<
-                                    RES_CHRATR_BEGIN, RES_FRMATR_END - 1,
-                                    RES_UNKNOWNATR_CONTAINER,
-                                        RES_UNKNOWNATR_CONTAINER>{}));
+                        {
+                            static const WhichRangesLiteral ranges { {
+                                    {RES_CHRATR_BEGIN, RES_FRMATR_END - 1},
+                                    {RES_UNKNOWNATR_CONTAINER,
+                                        RES_UNKNOWNATR_CONTAINER} } };
+                            pSet.reset( new SfxItemSet( rPaM.GetDoc().GetAttrPool(), ranges ));
+                        }
                     }
                     // #i63870#
                     SwUnoCursorHelper::GetCursorAttr( rPaM, *pSet );

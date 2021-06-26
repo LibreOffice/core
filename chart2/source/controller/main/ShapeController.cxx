@@ -361,7 +361,7 @@ void ShapeController::executeDispatch_TransformDialog()
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         ScopedVclPtr< SfxAbstractTabDialog > pDlg(
             pFact->CreateCaptionDialog(pChartWindow, pDrawViewWrapper));
-        const sal_uInt16* pRange = pDlg->GetInputRanges( *aAttr.GetPool() );
+        const WhichRangesContainer& pRange = pDlg->GetInputRanges( *aAttr.GetPool() );
         SfxItemSet aCombAttr( *aAttr.GetPool(), pRange );
         aCombAttr.Put( aAttr );
         aCombAttr.Put( aGeoAttr );
@@ -533,11 +533,10 @@ void ShapeController::executeDispatch_ParagraphDialog()
     SfxItemSet aAttr( rPool );
     pDrawViewWrapper->GetAttributes( aAttr );
 
-    SfxItemSet aNewAttr(
-        rPool,
-        svl::Items<
-            EE_ITEMS_START, EE_ITEMS_END,
-            SID_ATTR_PARA_PAGEBREAK, SID_ATTR_PARA_WIDOWS>{});
+    static const WhichRangesLiteral ranges { {
+            {EE_ITEMS_START, EE_ITEMS_END},
+            {SID_ATTR_PARA_PAGEBREAK, SID_ATTR_PARA_WIDOWS} } };
+    SfxItemSet aNewAttr(rPool, ranges);
     aNewAttr.Put( aAttr );
     aNewAttr.Put( SvxHyphenZoneItem( false, SID_ATTR_PARA_HYPHENZONE ) );
     aNewAttr.Put( SvxFormatBreakItem( SvxBreak::NONE, SID_ATTR_PARA_PAGEBREAK ) );

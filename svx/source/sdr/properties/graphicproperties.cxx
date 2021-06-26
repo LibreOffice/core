@@ -57,20 +57,20 @@ namespace sdr::properties
         // create a new itemset
         SfxItemSet GraphicProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return SfxItemSet(rPool,
-
+            static const WhichRangesLiteral ranges { {
                 // range from SdrAttrObj
-                svl::Items<SDRATTR_START, SDRATTR_SHADOW_LAST,
-                SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
-                SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
+                {SDRATTR_START, SDRATTR_SHADOW_LAST},
+                {SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST},
+                {SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION},
 
                 // range from SdrGrafObj
-                SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST,
+                {SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST},
 
-                SDRATTR_GLOW_FIRST, SDRATTR_TEXTCOLUMNS_LAST,
+                {SDRATTR_GLOW_FIRST, SDRATTR_TEXTCOLUMNS_LAST},
 
                 // range from SdrTextObj
-                EE_ITEMS_START, EE_ITEMS_END>{});
+                {EE_ITEMS_START, EE_ITEMS_END} } };
+            return SfxItemSet(rPool, ranges);
         }
 
         GraphicProperties::GraphicProperties(SdrObject& rObj)

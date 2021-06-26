@@ -222,13 +222,13 @@ private:
 
 };
 
-sal_uInt16 const aSave_BoxContentSet[] = {
-    RES_CHRATR_COLOR, RES_CHRATR_CROSSEDOUT,
-    RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
-    RES_CHRATR_POSTURE, RES_CHRATR_POSTURE,
-    RES_CHRATR_SHADOWED, RES_CHRATR_WEIGHT,
-    RES_PARATR_ADJUST, RES_PARATR_ADJUST,
-    0 };
+WhichRangesLiteral const aSave_BoxContentSet { {
+    {RES_CHRATR_COLOR, RES_CHRATR_CROSSEDOUT},
+    {RES_CHRATR_FONT, RES_CHRATR_FONTSIZE},
+    {RES_CHRATR_POSTURE, RES_CHRATR_POSTURE},
+    {RES_CHRATR_SHADOWED, RES_CHRATR_WEIGHT},
+    {RES_PARATR_ADJUST, RES_PARATR_ADJUST},
+    } };
 
 SwUndoInsTable::SwUndoInsTable( const SwPosition& rPos, sal_uInt16 nCl, sal_uInt16 nRw,
                             sal_uInt16 nAdj, const SwInsertTableOptions& rInsTableOpts,
@@ -1243,12 +1243,8 @@ void SaveBox::RestoreAttr( SwTableBox& rBox, SaveTable& rSTable )
                     std::shared_ptr<SfxItemSet> pSet((*m_Ptrs.pContentAttrs)[nSet++]);
                     if( pSet )
                     {
-                        sal_uInt16 const *pRstAttr = aSave_BoxContentSet;
-                        while( *pRstAttr )
-                        {
-                            pCNd->ResetAttr( *pRstAttr, *(pRstAttr+1) );
-                            pRstAttr += 2;
-                        }
+                        for(auto const & rPair : aSave_BoxContentSet.ranges)
+                            pCNd->ResetAttr( rPair.first, rPair.second );
                         pCNd->SetAttr( *pSet );
                     }
                     else
@@ -2222,8 +2218,8 @@ void SwUndoTableNumFormat::RedoImpl(::sw::UndoRedoContext & rContext)
     SwFrameFormat* pBoxFormat = pBox->ClaimFrameFormat();
     if( m_bNewFormat || m_bNewFormula || m_bNewValue )
     {
-        SfxItemSet aBoxSet( rDoc.GetAttrPool(),
-                                svl::Items<RES_BOXATR_FORMAT, RES_BOXATR_VALUE>{} );
+        static const WhichRangesLiteral ranges { { {RES_BOXATR_FORMAT, RES_BOXATR_VALUE} } };
+        SfxItemSet aBoxSet( rDoc.GetAttrPool(), ranges );
 
         // Resetting attributes is not enough. In addition, take care that the
         // text will be also formatted correctly.
@@ -2251,8 +2247,8 @@ void SwUndoTableNumFormat::RedoImpl(::sw::UndoRedoContext & rContext)
     }
     else if( getSwDefaultTextFormat() != m_nFormatIdx )
     {
-        SfxItemSet aBoxSet( rDoc.GetAttrPool(),
-                            svl::Items<RES_BOXATR_FORMAT, RES_BOXATR_VALUE>{} );
+        static const WhichRangesLiteral ranges { { {RES_BOXATR_FORMAT, RES_BOXATR_VALUE} } };
+        SfxItemSet aBoxSet( rDoc.GetAttrPool(), ranges );
 
         aBoxSet.Put( SwTableBoxNumFormat( m_nFormatIdx ));
         aBoxSet.Put( SwTableBoxValue( m_fNum ));
@@ -2468,11 +2464,10 @@ void SwUndoTableCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
         aInsIdx = rBox.GetSttIdx() + 1;
         rDoc.GetNodes().Delete( aInsIdx );
 
-        SfxItemSet aTmpSet(
-            rDoc.GetAttrPool(),
-            svl::Items<
-                RES_VERT_ORIENT, RES_VERT_ORIENT,
-                RES_BOXATR_FORMAT, RES_BOXATR_VALUE>{});
+        static const WhichRangesLiteral ranges { {
+                {RES_VERT_ORIENT, RES_VERT_ORIENT},
+                {RES_BOXATR_FORMAT, RES_BOXATR_VALUE} } };
+        SfxItemSet aTmpSet(rDoc.GetAttrPool(), ranges);
         aTmpSet.Put( rBox.GetFrameFormat()->GetAttrSet() );
         if( aTmpSet.Count() )
         {
@@ -2489,11 +2484,11 @@ void SwUndoTableCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
 
         if( aTmpSet.Count() )
         {
+            static const WhichRangesLiteral ranges { {
+                    {RES_VERT_ORIENT, RES_VERT_ORIENT},
+                    {RES_BOXATR_FORMAT, RES_BOXATR_VALUE} } };
             pEntry->pBoxNumAttr = std::make_unique<SfxItemSet>(
-                rDoc.GetAttrPool(),
-                svl::Items<
-                    RES_VERT_ORIENT, RES_VERT_ORIENT,
-                    RES_BOXATR_FORMAT, RES_BOXATR_VALUE>{});
+                rDoc.GetAttrPool(), ranges );
             pEntry->pBoxNumAttr->Put( aTmpSet );
         }
 
@@ -2564,11 +2559,10 @@ void SwUndoTableCpyTable::RedoImpl(::sw::UndoRedoContext & rContext)
         aInsIdx = rBox.GetSttIdx() + 1;
         rDoc.GetNodes().Delete( aInsIdx );
 
-        SfxItemSet aTmpSet(
-            rDoc.GetAttrPool(),
-            svl::Items<
-                RES_VERT_ORIENT, RES_VERT_ORIENT,
-                RES_BOXATR_FORMAT, RES_BOXATR_VALUE>{});
+        static const WhichRangesLiteral ranges { {
+                {RES_VERT_ORIENT, RES_VERT_ORIENT},
+                {RES_BOXATR_FORMAT, RES_BOXATR_VALUE} } };
+        SfxItemSet aTmpSet(rDoc.GetAttrPool(), ranges);
         aTmpSet.Put( rBox.GetFrameFormat()->GetAttrSet() );
         if( aTmpSet.Count() )
         {
@@ -2584,11 +2578,11 @@ void SwUndoTableCpyTable::RedoImpl(::sw::UndoRedoContext & rContext)
 
         if( aTmpSet.Count() )
         {
+            static const WhichRangesLiteral ranges { {
+                    {RES_VERT_ORIENT, RES_VERT_ORIENT},
+                    {RES_BOXATR_FORMAT, RES_BOXATR_VALUE} } };
             pEntry->pBoxNumAttr = std::make_unique<SfxItemSet>(
-                rDoc.GetAttrPool(),
-                svl::Items<
-                    RES_VERT_ORIENT, RES_VERT_ORIENT,
-                    RES_BOXATR_FORMAT, RES_BOXATR_VALUE>{});
+                rDoc.GetAttrPool(), ranges);
             pEntry->pBoxNumAttr->Put( aTmpSet );
         }
 
@@ -2617,11 +2611,11 @@ void SwUndoTableCpyTable::AddBoxBefore( const SwTableBox& rBox, bool bDelContent
             pEntry->pUndo = std::make_unique<SwUndoDelete>( aPam, true );
     }
 
+    static const WhichRangesLiteral ranges { {
+            {RES_VERT_ORIENT, RES_VERT_ORIENT},
+            {RES_BOXATR_FORMAT, RES_BOXATR_VALUE} } };
     pEntry->pBoxNumAttr = std::make_unique<SfxItemSet>(
-        pDoc->GetAttrPool(),
-        svl::Items<
-            RES_VERT_ORIENT, RES_VERT_ORIENT,
-            RES_BOXATR_FORMAT, RES_BOXATR_VALUE>{});
+        pDoc->GetAttrPool(), ranges);
     pEntry->pBoxNumAttr->Put( rBox.GetFrameFormat()->GetAttrSet() );
     if( !pEntry->pBoxNumAttr->Count() )
     {

@@ -364,7 +364,7 @@ const SfxItemSet* CuiAbstractTabController_Impl::GetOutputItemSet() const
     return m_xDlg->GetOutputItemSet();
 }
 
-const sal_uInt16* CuiAbstractTabController_Impl::GetInputRanges(const SfxItemPool& pItem )
+WhichRangesContainer CuiAbstractTabController_Impl::GetInputRanges(const SfxItemPool& pItem )
 {
     return m_xDlg->GetInputRanges( pItem );
 }
@@ -665,7 +665,7 @@ const SfxItemSet* AbstractSvxTransformTabDialog_Impl::GetOutputItemSet() const
     return m_xDlg->GetOutputItemSet();
 }
 
-const sal_uInt16* AbstractSvxTransformTabDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
+WhichRangesContainer AbstractSvxTransformTabDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
 {
     return m_xDlg->GetInputRanges( pItem );
 }
@@ -697,7 +697,7 @@ const SfxItemSet* AbstractSvxCaptionDialog_Impl::GetOutputItemSet() const
     return m_xDlg->GetOutputItemSet();
 }
 
-const sal_uInt16* AbstractSvxCaptionDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
+WhichRangesContainer AbstractSvxCaptionDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
 {
     return m_xDlg->GetInputRanges( pItem );
 }
@@ -890,7 +890,7 @@ const SfxItemSet* AbstractSvxAreaTabDialog_Impl::GetOutputItemSet() const
     return m_xDlg->GetOutputItemSet();
 }
 
-const sal_uInt16* AbstractSvxAreaTabDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
+WhichRangesContainer AbstractSvxAreaTabDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
 {
     return m_xDlg->GetInputRanges( pItem );
 }
@@ -1189,7 +1189,7 @@ VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateTabItemDialog(wel
 
 VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateSvxSearchAttributeDialog(weld::Window* pParent,
                                             SearchAttrItemList& rLst,
-                                            const sal_uInt16* pWhRanges )
+                                            const WhichRangesContainer& pWhRanges )
 {
     return VclPtr<CuiAbstractController_Impl>::Create(std::make_unique<SvxSearchAttributeDialog>(pParent, rLst, pWhRanges));
 }
@@ -1391,12 +1391,13 @@ VclPtr<AbstractSvxPostItDialog> AbstractDialogFactory_Impl::CreateSvxPostItDialo
 
 namespace {
 
+static const WhichRangesLiteral ranges { { {SID_ATTR_MACROITEM, SID_ATTR_MACROITEM} } };
 class SvxMacroAssignDialog : public VclAbstractDialog
 {
 public:
     SvxMacroAssignDialog( weld::Window* _pParent, const Reference< XFrame >& _rxDocumentFrame, const bool _bUnoDialogMode,
             const Reference< XNameReplace >& _rxEvents, const sal_uInt16 _nInitiallySelectedEvent )
-        :m_aItems( SfxGetpApp()->GetPool(), svl::Items<SID_ATTR_MACROITEM, SID_ATTR_MACROITEM>{} )
+        :m_aItems( SfxGetpApp()->GetPool(), ranges )
     {
         m_aItems.Put( SfxBoolItem( SID_ATTR_MACROITEM, _bUnoDialogMode ) );
         m_xDialog.reset(new SvxMacroAssignDlg(_pParent, _rxDocumentFrame, m_aItems, _rxEvents, _nInitiallySelectedEvent));

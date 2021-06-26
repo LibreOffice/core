@@ -73,7 +73,7 @@ SwAttrPool::SwAttrPool( SwDoc* pD )
 
     pSdrPool->SetSecondaryPool(pEEgPool.get());
 
-    if(!GetFrozenIdRanges())
+    if(GetFrozenIdRanges().empty())
     {
         FreezeIdRanges();
     }
@@ -93,11 +93,11 @@ SwAttrPool::~SwAttrPool()
 }
 
 SwAttrSet::SwAttrSet( SwAttrPool& rPool, sal_uInt16 nWh1, sal_uInt16 nWh2 )
-    : SfxItemSet( rPool, {{nWh1, nWh2}} ), m_pOldSet( nullptr ), m_pNewSet( nullptr )
+    : SfxItemSet( rPool, nWh1, nWh2 ), m_pOldSet( nullptr ), m_pNewSet( nullptr )
 {
 }
 
-SwAttrSet::SwAttrSet( SwAttrPool& rPool, const sal_uInt16* nWhichPairTable )
+SwAttrSet::SwAttrSet( SwAttrPool& rPool, const WhichRangesContainer& nWhichPairTable )
     : SfxItemSet( rPool, nWhichPairTable ), m_pOldSet( nullptr ), m_pNewSet( nullptr )
 {
 }
@@ -430,14 +430,11 @@ void SwAttrSet::CopyToModify( sw::BroadcastingModify& rMod ) const
 }
 
 /// check if ID is in range of attribute set IDs
-bool IsInRange( const sal_uInt16* pRange, const sal_uInt16 nId )
+bool IsInRange( const WhichRangesContainer& pRange, const sal_uInt16 nId )
 {
-    while( *pRange )
-    {
-        if( *pRange <= nId && nId <= *(pRange+1) )
+    for(const auto & rPair : pRange)
+        if (rPair.first <= nId && nId <=  rPair.second)
             return true;
-        pRange += 2;
-    }
     return false;
 }
 

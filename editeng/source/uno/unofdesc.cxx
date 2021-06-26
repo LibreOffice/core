@@ -192,12 +192,11 @@ void SvxUnoFontDescriptor::setPropertyToDefault( SfxItemSet& rSet )
 
 uno::Any SvxUnoFontDescriptor::getPropertyDefault( SfxItemPool* pPool )
 {
-    SfxItemSet aSet(
-        *pPool,
-        svl::Items<
-            EE_CHAR_FONTINFO, EE_CHAR_FONTHEIGHT,
-            EE_CHAR_WEIGHT, EE_CHAR_ITALIC,
-            EE_CHAR_WLM, EE_CHAR_WLM>{});
+    static const WhichRangesLiteral ranges { {
+            {EE_CHAR_FONTINFO, EE_CHAR_FONTHEIGHT},
+            {EE_CHAR_WEIGHT, EE_CHAR_ITALIC},
+            {EE_CHAR_WLM, EE_CHAR_WLM} } };
+    SfxItemSet aSet( *pPool, ranges );
 
     uno::Any aAny;
 

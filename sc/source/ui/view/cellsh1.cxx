@@ -3272,7 +3272,8 @@ void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
 
     ScopedVclPtr<SfxAbstractTabDialog> pDlg;
     ScSubTotalParam aSubTotalParam;
-    SfxItemSet aArgSet( GetPool(), svl::Items<SCITEM_SUBTDATA, SCITEM_SUBTDATA>{} );
+    static const WhichRangesLiteral ranges { { {SCITEM_SUBTDATA, SCITEM_SUBTDATA} } };
+    SfxItemSet aArgSet( GetPool(), ranges );
 
     bool bAnonymous;
 
