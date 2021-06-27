@@ -88,6 +88,30 @@
     },
     {
       "key": {
+        "uuid": "a9e0d044_4d451f8e",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-27T17:59:13Z",
+      "side": 1,
+      "message": "It is unrelated to the StylesList.. Its the same treeview which we talked about on a previous meet( which is present in extra in UI)..",
+      "parentUuid": "f4d0bacb_1f3ad166",
+      "range": {
+        "startLine": 536,
+        "startChar": 6,
+        "endLine": 536,
+        "endChar": 15
+      },
+      "revId": "aedaa3e0a3f030d8ffe79bb0f67880def8216a54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e6d707fa_4b2255c4",
         "filename": "sfx2/source/inc/StyleList.hxx",
         "patchSetId": 4
