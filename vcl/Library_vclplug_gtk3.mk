@@ -100,6 +100,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gtk3,\
     vcl/unx/gtk3/fpicker/SalGtkFilePicker \
     vcl/unx/gtk3/fpicker/SalGtkFolderPicker \
     vcl/unx/gtk3/fpicker/SalGtkPicker \
+    vcl/unx/gtk3/customcellrenderer \
     vcl/unx/gtk3/gtkdata \
     vcl/unx/gtk3/gtkinst \
     vcl/unx/gtk3/gtksys \
