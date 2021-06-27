@@ -6983,13 +6983,13 @@ GType immobilized_viewport_get_type()
     return type;
 }
 
-#define CUSTOM_TYPE_CELL_RENDERER_SURFACE             (custom_cell_renderer_surface_get_type())
-#define CUSTOM_CELL_RENDERER_SURFACE(obj)             (G_TYPE_CHECK_INSTANCE_CAST((obj),  CUSTOM_TYPE_CELL_RENDERER_SURFACE, CustomCellRendererSurface))
-#define CUSTOM_IS_CELL_RENDERER_SURFACE(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), CUSTOM_TYPE_CELL_RENDERER_SURFACE))
+#define CUSTOM_TYPE_CELL_RENDERER             (custom_cell_renderer_get_type())
+#define CUSTOM_CELL_RENDERER(obj)             (G_TYPE_CHECK_INSTANCE_CAST((obj),  CUSTOM_TYPE_CELL_RENDERER, CustomCellRenderer))
+#define CUSTOM_IS_CELL_RENDERER(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), CUSTOM_TYPE_CELL_RENDERER))
 
 namespace {
 
-    struct CustomCellRendererSurface
+    struct CustomCellRenderer
     {
         GtkCellRendererText parent;
         VclPtr<VirtualDevice> device;
@@ -6997,7 +6997,7 @@ namespace {
         gpointer instance;
     };
 
-    struct CustomCellRendererSurfaceClass
+    struct CustomCellRendererClass
     {
         GtkCellRendererTextClass parent_class;
     };
@@ -7009,16 +7009,16 @@ namespace {
     };
 }
 
-static gpointer custom_cell_renderer_surface_parent_class;
+static gpointer custom_cell_renderer_parent_class;
 
-static GType custom_cell_renderer_surface_get_type();
-static void custom_cell_renderer_surface_class_init(CustomCellRendererSurfaceClass *klass);
+static GType custom_cell_renderer_get_type();
+static void custom_cell_renderer_class_init(CustomCellRendererClass *klass);
 
-static void custom_cell_renderer_surface_init(GTypeInstance * instance, gpointer) {
-    new(&CUSTOM_CELL_RENDERER_SURFACE(instance)->device) VclPtr<VirtualDevice>;
+static void custom_cell_renderer_init(GTypeInstance * instance, gpointer) {
+    new(&CUSTOM_CELL_RENDERER(instance)->device) VclPtr<VirtualDevice>;
 }
 
-GType custom_cell_renderer_surface_get_type()
+GType custom_cell_renderer_get_type()
 {
     static GType type = 0;
 
@@ -7026,32 +7026,32 @@ GType custom_cell_renderer_surface_get_type()
     {
         static const GTypeInfo tinfo =
         {
-            sizeof (CustomCellRendererSurfaceClass),
+            sizeof (CustomCellRendererClass),
             nullptr, /* base init */
             nullptr, /* base finalize */
-            reinterpret_cast<GClassInitFunc>(custom_cell_renderer_surface_class_init), /* class init */
+            reinterpret_cast<GClassInitFunc>(custom_cell_renderer_class_init), /* class init */
             nullptr, /* class finalize */
             nullptr, /* class data */
-            sizeof (CustomCellRendererSurface), /* instance size */
+            sizeof (CustomCellRenderer), /* instance size */
             0,       /* nb preallocs */
-            &custom_cell_renderer_surface_init, /* instance init */
+            &custom_cell_renderer_init, /* instance init */
             nullptr  /* value table */
         };
 
         // inherit from GtkCellRendererText so we can set the "text" property and get a11y support for that
-        type = g_type_register_static(GTK_TYPE_CELL_RENDERER_TEXT, "CustomCellRendererSurface",
+        type = g_type_register_static(GTK_TYPE_CELL_RENDERER_TEXT, "CustomCellRenderer",
                                       &tinfo, GTypeFlags(0));
     }
 
     return type;
 }
 
-static void custom_cell_renderer_surface_get_property(GObject *object,
+static void custom_cell_renderer_get_property(GObject *object,
                                                       guint param_id,
                                                       GValue *value,
                                                       GParamSpec *pspec)
 {
-    CustomCellRendererSurface *cellsurface = CUSTOM_CELL_RENDERER_SURFACE(object);
+    CustomCellRenderer *cellsurface = CUSTOM_CELL_RENDERER(object);
 
     switch (param_id)
     {
@@ -7062,17 +7062,17 @@ static void custom_cell_renderer_surface_get_property(GObject *object,
             g_value_set_pointer(value, cellsurface->instance);
             break;
         default:
-            G_OBJECT_CLASS(custom_cell_renderer_surface_parent_class)->get_property(object, param_id, value, pspec);
+            G_OBJECT_CLASS(custom_cell_renderer_parent_class)->get_property(object, param_id, value, pspec);
             break;
     }
 }
 
-static void custom_cell_renderer_surface_set_property(GObject *object,
+static void custom_cell_renderer_set_property(GObject *object,
                                                       guint param_id,
                                                       const GValue *value,
                                                       GParamSpec *pspec)
 {
-    CustomCellRendererSurface *cellsurface = CUSTOM_CELL_RENDERER_SURFACE(object);
+    CustomCellRenderer *cellsurface = CUSTOM_CELL_RENDERER(object);
 
     switch (param_id)
     {
@@ -7084,18 +7084,18 @@ static void custom_cell_renderer_surface_set_property(GObject *object,
             cellsurface->instance = g_value_get_pointer(value);
             break;
         default:
-            G_OBJECT_CLASS(custom_cell_renderer_surface_parent_class)->set_property(object, param_id, value, pspec);
+            G_OBJECT_CLASS(custom_cell_renderer_parent_class)->set_property(object, param_id, value, pspec);
             break;
     }
 }
 
-static bool custom_cell_renderer_surface_get_preferred_size(GtkCellRenderer *cell,
+static bool custom_cell_renderer_get_preferred_size(GtkCellRenderer *cell,
                                                             GtkOrientation orientation,
                                                             gint *minimum_size,
                                                             gint *natural_size);
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-static void custom_cell_renderer_surface_render(GtkCellRenderer* cell,
+static void custom_cell_renderer_render(GtkCellRenderer* cell,
                                                 cairo_t* cr,
                                                 GtkWidget* widget,
                                                 const GdkRectangle* background_area,
@@ -7103,47 +7103,47 @@ static void custom_cell_renderer_surface_render(GtkCellRenderer* cell,
                                                 GtkCellRendererState flags);
 #endif
 
-static void custom_cell_renderer_surface_finalize(GObject *object)
+static void custom_cell_renderer_finalize(GObject *object)
 {
-    CustomCellRendererSurface *cellsurface = CUSTOM_CELL_RENDERER_SURFACE(object);
+    CustomCellRenderer *cellsurface = CUSTOM_CELL_RENDERER(object);
 
     g_free(cellsurface->id);
     cellsurface->device.disposeAndClear();
     cellsurface->device.~VclPtr<VirtualDevice>();
 
-    G_OBJECT_CLASS(custom_cell_renderer_surface_parent_class)->finalize(object);
+    G_OBJECT_CLASS(custom_cell_renderer_parent_class)->finalize(object);
 }
 
-static void custom_cell_renderer_surface_get_preferred_width(GtkCellRenderer *cell,
+static void custom_cell_renderer_get_preferred_width(GtkCellRenderer *cell,
                                                              GtkWidget *widget,
                                                              gint *minimum_size,
                                                              gint *natural_size)
 {
-    if (!custom_cell_renderer_surface_get_preferred_size(cell, GTK_ORIENTATION_HORIZONTAL,
+    if (!custom_cell_renderer_get_preferred_size(cell, GTK_ORIENTATION_HORIZONTAL,
                                                          minimum_size, natural_size))
     {
         // fallback to parent if we're empty
-        GTK_CELL_RENDERER_CLASS(custom_cell_renderer_surface_parent_class)->get_preferred_width(cell,
+        GTK_CELL_RENDERER_CLASS(custom_cell_renderer_parent_class)->get_preferred_width(cell,
             widget, minimum_size, natural_size);
     }
 }
 
-static void custom_cell_renderer_surface_get_preferred_height(GtkCellRenderer *cell,
+static void custom_cell_renderer_get_preferred_height(GtkCellRenderer *cell,
                                                               GtkWidget *widget,
                                                               gint *minimum_size,
                                                               gint *natural_size)
 {
-    if (!custom_cell_renderer_surface_get_preferred_size(cell, GTK_ORIENTATION_VERTICAL,
+    if (!custom_cell_renderer_get_preferred_size(cell, GTK_ORIENTATION_VERTICAL,
                                                          minimum_size, natural_size))
     {
         // fallback to parent if we're empty
-        GTK_CELL_RENDERER_CLASS(custom_cell_renderer_surface_parent_class)->get_preferred_height(cell,
+        GTK_CELL_RENDERER_CLASS(custom_cell_renderer_parent_class)->get_preferred_height(cell,
             widget, minimum_size, natural_size);
     }
 
 }
 
-static void custom_cell_renderer_surface_get_preferred_height_for_width(GtkCellRenderer *cell,
+static void custom_cell_renderer_get_preferred_height_for_width(GtkCellRenderer *cell,
                                                                         GtkWidget *widget,
                                                                         gint /*width*/,
                                                                         gint *minimum_height,
@@ -7152,7 +7152,7 @@ static void custom_cell_renderer_surface_get_preferred_height_for_width(GtkCellR
     gtk_cell_renderer_get_preferred_height(cell, widget, minimum_height, natural_height);
 }
 
-static void custom_cell_renderer_surface_get_preferred_width_for_height(GtkCellRenderer *cell,
+static void custom_cell_renderer_get_preferred_width_for_height(GtkCellRenderer *cell,
                                                                         GtkWidget *widget,
                                                                         gint /*height*/,
                                                                         gint *minimum_width,
@@ -7161,25 +7161,25 @@ static void custom_cell_renderer_surface_get_preferred_width_for_height(GtkCellR
     gtk_cell_renderer_get_preferred_width(cell, widget, minimum_width, natural_width);
 }
 
-void custom_cell_renderer_surface_class_init(CustomCellRendererSurfaceClass *klass)
+void custom_cell_renderer_class_init(CustomCellRendererClass *klass)
 {
     GtkCellRendererClass *cell_class = GTK_CELL_RENDERER_CLASS(klass);
     GObjectClass *object_class = G_OBJECT_CLASS(klass);
 
     /* Hook up functions to set and get our custom cell renderer properties */
-    object_class->get_property = custom_cell_renderer_surface_get_property;
-    object_class->set_property = custom_cell_renderer_surface_set_property;
+    object_class->get_property = custom_cell_renderer_get_property;
+    object_class->set_property = custom_cell_renderer_set_property;
 
-    custom_cell_renderer_surface_parent_class = g_type_class_peek_parent(klass);
-    object_class->finalize = custom_cell_renderer_surface_finalize;
+    custom_cell_renderer_parent_class = g_type_class_peek_parent(klass);
+    object_class->finalize = custom_cell_renderer_finalize;
 
-    cell_class->get_preferred_width = custom_cell_renderer_surface_get_preferred_width;
-    cell_class->get_preferred_height = custom_cell_renderer_surface_get_preferred_height;
-    cell_class->get_preferred_width_for_height = custom_cell_renderer_surface_get_preferred_width_for_height;
-    cell_class->get_preferred_height_for_width = custom_cell_renderer_surface_get_preferred_height_for_width;
+    cell_class->get_preferred_width = custom_cell_renderer_get_preferred_width;
+    cell_class->get_preferred_height = custom_cell_renderer_get_preferred_height;
+    cell_class->get_preferred_width_for_height = custom_cell_renderer_get_preferred_width_for_height;
+    cell_class->get_preferred_height_for_width = custom_cell_renderer_get_preferred_height_for_width;
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    cell_class->render = custom_cell_renderer_surface_render;
+    cell_class->render = custom_cell_renderer_render;
 #endif
 
     g_object_class_install_property(object_class,
@@ -7202,9 +7202,9 @@ void custom_cell_renderer_surface_class_init(CustomCellRendererSurfaceClass *kla
 #endif
 }
 
-static GtkCellRenderer* custom_cell_renderer_surface_new()
+static GtkCellRenderer* custom_cell_renderer_new()
 {
-    return GTK_CELL_RENDERER(g_object_new(CUSTOM_TYPE_CELL_RENDERER_SURFACE, nullptr));
+    return GTK_CELL_RENDERER(g_object_new(CUSTOM_TYPE_CELL_RENDERER, nullptr));
 }
 
 static VclPolicyType GtkToVcl(GtkPolicyType eType)
@@ -13529,7 +13529,7 @@ public:
 
         if (bEnable)
         {
-            pRenderer = custom_cell_renderer_surface_new();
+            pRenderer = custom_cell_renderer_new();
             GValue value = G_VALUE_INIT;
             g_value_init(&value, G_TYPE_POINTER);
             g_value_set_pointer(&value, static_cast<gpointer>(this));
@@ -15091,7 +15091,7 @@ public:
             for (GList* pRenderer = g_list_first(pRenderers); pRenderer; pRenderer = g_list_next(pRenderer))
             {
                 GtkCellRenderer* pCellRenderer = GTK_CELL_RENDERER(pRenderer->data);
-                if (!CUSTOM_IS_CELL_RENDERER_SURFACE(pCellRenderer))
+                if (!CUSTOM_IS_CELL_RENDERER(pCellRenderer))
                     continue;
                 g_object_set_property(G_OBJECT(pCellRenderer), "instance", &value);
             }
@@ -15101,7 +15101,7 @@ public:
     }
 };
 
-void ensure_device(CustomCellRendererSurface *cellsurface, weld::Widget* pWidget)
+void ensure_device(CustomCellRenderer *cellsurface, weld::Widget* pWidget)
 {
     if (!cellsurface->device)
     {
@@ -18693,7 +18693,7 @@ public:
         gtk_cell_layout_clear(GTK_CELL_LAYOUT(pColumn));
         if (bOn)
         {
-            GtkCellRenderer *pRenderer = custom_cell_renderer_surface_new();
+            GtkCellRenderer *pRenderer = custom_cell_renderer_new();
             GValue value = G_VALUE_INIT;
             g_value_init(&value, G_TYPE_POINTER);
             g_value_set_pointer(&value, static_cast<gpointer>(this));
@@ -20471,7 +20471,7 @@ public:
         gtk_cell_layout_clear(GTK_CELL_LAYOUT(pColumn));
         if (bOn)
         {
-            GtkCellRenderer *pRenderer = custom_cell_renderer_surface_new();
+            GtkCellRenderer *pRenderer = custom_cell_renderer_new();
             GValue value = G_VALUE_INIT;
             g_value_init(&value, G_TYPE_POINTER);
             g_value_set_pointer(&value, static_cast<gpointer>(this));
@@ -20625,7 +20625,7 @@ public:
 
 }
 
-bool custom_cell_renderer_surface_get_preferred_size(GtkCellRenderer *cell,
+bool custom_cell_renderer_get_preferred_size(GtkCellRenderer *cell,
                                                      GtkOrientation orientation,
                                                      gint *minimum_size,
                                                      gint *natural_size)
@@ -20642,7 +20642,7 @@ bool custom_cell_renderer_surface_get_preferred_size(GtkCellRenderer *cell,
     g_value_init(&value, G_TYPE_POINTER);
     g_object_get_property(G_OBJECT(cell), "instance", &value);
 
-    CustomCellRendererSurface *cellsurface = CUSTOM_CELL_RENDERER_SURFACE(cell);
+    CustomCellRenderer *cellsurface = CUSTOM_CELL_RENDERER(cell);
 
     GtkInstanceWidget* pWidget = static_cast<GtkInstanceWidget*>(g_value_get_pointer(&value));
 
@@ -20678,7 +20678,7 @@ bool custom_cell_renderer_surface_get_preferred_size(GtkCellRenderer *cell,
 }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-void custom_cell_renderer_surface_render(GtkCellRenderer* cell,
+void custom_cell_renderer_render(GtkCellRenderer* cell,
                                          cairo_t* cr,
                                          GtkWidget* /*widget*/,
                                          const GdkRectangle* /*background_area*/,
@@ -20696,7 +20696,7 @@ void custom_cell_renderer_surface_render(GtkCellRenderer* cell,
     g_value_init(&value, G_TYPE_POINTER);
     g_object_get_property(G_OBJECT(cell), "instance", &value);
 
-    CustomCellRendererSurface *cellsurface = CUSTOM_CELL_RENDERER_SURFACE(cell);
+    CustomCellRenderer *cellsurface = CUSTOM_CELL_RENDERER(cell);
 
     GtkInstanceWidget* pWidget = static_cast<GtkInstanceWidget*>(g_value_get_pointer(&value));
 
