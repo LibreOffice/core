@@ -257,6 +257,24 @@
       "revId": "aedaa3e0a3f030d8ffe79bb0f67880def8216a54",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7cadc11_07513420",
+        "filename": "sfx2/uiconfig/ui/templatepanel.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-27T18:24:18Z",
+      "side": 1,
+      "message": "Okay.. But how is this UI file changing then? \"treeview\" which was previously managing the control is nowhere mentioned in this file",
+      "parentUuid": "6ffc847c_b453d7e4",
+      "revId": "aedaa3e0a3f030d8ffe79bb0f67880def8216a54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
