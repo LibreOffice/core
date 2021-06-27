@@ -364,57 +364,35 @@ inline bool isFinite(double d)
  */
 inline bool isInf(double d)
 {
-    // exponent==0x7ff fraction==0
-    return !SAL_MATH_FINITE(d) &&
-        (reinterpret_cast< sal_math_Double * >(&d)->inf_parts.fraction_hi == 0)
-        && (reinterpret_cast< sal_math_Double * >(&d)->inf_parts.fraction_lo
-            == 0);
+    return std::isinf(d);
 }
 
 /** Test on any QNAN or SNAN.
  */
 inline bool isNan(double d)
 {
-    // exponent==0x7ff fraction!=0
-    return !SAL_MATH_FINITE(d) && (
-        (reinterpret_cast< sal_math_Double * >(&d)->inf_parts.fraction_hi != 0)
-        || (reinterpret_cast< sal_math_Double * >(&d)->inf_parts.fraction_lo
-            != 0) );
+    return std::isnan(d);
 }
 
 /** If the sign bit is set.
  */
 inline bool isSignBitSet(double d)
 {
-    return reinterpret_cast< sal_math_Double * >(&d)->inf_parts.sign != 0;
+    return std::signbit(d);
 }
 
 /** Set to +INF if bNegative==false or -INF if bNegative==true.
  */
 inline void setInf(double * pd, bool bNegative)
 {
-    union
-    {
-        double sd;
-        sal_math_Double md;
-    };
-    md.w32_parts.msw = bNegative ? 0xFFF00000 : 0x7FF00000;
-    md.w32_parts.lsw = 0;
-    *pd = sd;
+    *pd = bNegative ? -std::numeric_limits<double>::infinity() : std::numeric_limits<double>::infinity();
 }
 
 /** Set a QNAN.
  */
 inline void setNan(double * pd)
 {
-    union
-    {
-        double sd;
-        sal_math_Double md;
-    };
-    md.w32_parts.msw = 0x7FFFFFFF;
-    md.w32_parts.lsw = 0xFFFFFFFF;
-    *pd = sd;
+    *pd = std::numeric_limits<double>::quiet_NaN();
 }
 
 /** If a value is a valid argument for sin(), cos(), tan().
