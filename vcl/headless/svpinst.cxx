@@ -62,6 +62,23 @@
 
 SvpSalInstance* SvpSalInstance::s_pDefaultInstance = nullptr;
 
+#ifndef NDEBUG
+static bool g_CheckedMutex = false;
+
+#define DBG_TESTSVPYIELDMUTEX() \
+do { \
+    if (!g_CheckedMutex) \
+    { \
+        assert(dynamic_cast<SvpSalYieldMutex*>(GetYieldMutex()) != nullptr \
+            && "This SvpSalInstance function requires use of SvpSalYieldMutex"); \
+        g_CheckedMutex = true; \
+    } \
+} while(false)
+
+#else // NDEBUG
+#define DBG_TESTSVPYIELDMUTEX() ((void)0)
+#endif
+
 #if !defined(ANDROID) && !defined(IOS)
 
 static void atfork_child()
@@ -158,23 +175,11 @@ void SvpSalInstance::TriggerUserEventProcessing()
     Wakeup();
 }
 
-#ifndef NDEBUG
-static bool g_CheckedMutex = false;
-#endif
-
 void SvpSalInstance::Wakeup(SvpRequest const request)
 {
-#ifndef NDEBUG
-    if (!g_CheckedMutex)
-    {
-        assert(dynamic_cast<SvpSalYieldMutex*>(GetYieldMutex()) != nullptr
-            && "This SvpSalInstance function requires use of SvpSalYieldMutex");
-        g_CheckedMutex = true;
-    }
-#endif
+    DBG_TESTSVPYIELDMUTEX();
 
     ImplSVData* pSVData = ImplGetSVData();
-
     if (pSVData->mpWakeCallback && pSVData->mpPollClosure)
         pSVData->mpWakeCallback(pSVData->mpPollClosure);
 
@@ -309,6 +314,8 @@ std::shared_ptr<SalBitmap> SvpSalInstance::CreateSalBitmap()
 
 void SvpSalInstance::ProcessEvent( SalUserEvent aEvent )
 {
+    DBG_TESTSVPYIELDMUTEX();
+
     aEvent.m_pFrame->CallCallback( aEvent.m_nEvent, aEvent.m_pData );
     if( aEvent.m_nEvent == SalEvent::Resize )
     {
@@ -316,14 +323,7 @@ void SvpSalInstance::ProcessEvent( SalUserEvent aEvent )
         const SvpSalFrame* pSvpFrame = static_cast<const SvpSalFrame*>( aEvent.m_pFrame);
         pSvpFrame->PostPaint();
     }
-#ifndef NDEBUG
-    if (!g_CheckedMutex)
-    {
-        assert(dynamic_cast<SvpSalYieldMutex*>(GetYieldMutex()) != nullptr
-            && "This SvpSalInstance function requires use of SvpSalYieldMutex");
-        g_CheckedMutex = true;
-    }
-#endif
+
     SvpSalYieldMutex *const pMutex(static_cast<SvpSalYieldMutex*>(GetYieldMutex()));
     pMutex->m_NonMainWaitingYieldCond.set();
 }
@@ -448,14 +448,7 @@ void SvpSalInstance::updateMainThread()
 
 bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
 {
-#ifndef NDEBUG
-    if (!g_CheckedMutex)
-    {
-        assert(dynamic_cast<SvpSalYieldMutex*>(GetYieldMutex()) != nullptr
-            && "This SvpSalInstance function requires use of SvpSalYieldMutex");
-        g_CheckedMutex = true;
-    }
-#endif
+    DBG_TESTSVPYIELDMUTEX();
 
     // first, process current user events
     bool bEvent = DispatchUserEvents(bHandleAllCurrentEvents);
