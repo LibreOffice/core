@@ -80,10 +80,11 @@ void Timer::Invoke( Timer *arg )
     maInvokeHandler.Call( arg );
 }
 
-void Timer::Start()
+void Timer::Start(const bool bSkipTimer)
 {
-    Task::Start();
-    Task::StartTimer( mnTimeout );
+    Task::Start(true);
+    if (!bSkipTimer)
+        Task::StartTimer(mnTimeout);
 }
 
 void Timer::SetTimeout( sal_uInt64 nNewTimeout )

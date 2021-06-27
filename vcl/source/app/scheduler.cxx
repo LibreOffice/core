@@ -542,7 +542,7 @@ void Task::SetDeletionFlags()
     mbActive = false;
 }
 
-void Task::Start()
+void Task::Start(const bool bSkipTimer)
 {
     ImplSVData *const pSVData = ImplGetSVData();
     ImplSchedulerContext &rSchedCtx = pSVData->maSchedCtx;
@@ -582,6 +582,9 @@ void Task::Start()
                   << " " << mpSchedulerData << "  restarted  " << *this );
 
     mpSchedulerData->mnUpdateTime  = tools::Time::GetSystemTicks();
+
+    if (!bSkipTimer)
+        Task::StartTimer(0);
 }
 
 void Task::Stop()

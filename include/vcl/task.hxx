@@ -85,7 +85,17 @@ public:
     // Call handler
     virtual void    Invoke() = 0;
 
-    virtual void    Start();
+    /**
+     * Schedules the task for execution
+     *
+     * If the timer is already active, it's reset!
+     * Check with Task::IsActive() to prevent reset.
+     *
+     * If you set bSkipTimer, the Task must call Task::StartTimer(...) to be correctly scheduled!
+     *
+     * @param bSkipTimer if true, don't re-schedule by calling Task::StartTimer(0).
+     */
+    virtual void Start(bool bSkipTimer = false);
     void            Stop();
 
     bool            IsActive() const { return mbActive; }

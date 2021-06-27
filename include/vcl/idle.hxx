@@ -46,7 +46,7 @@ protected:
 public:
     Idle( const char *pDebugName = nullptr );
 
-    virtual void  Start() override;
+    virtual void Start(bool bSkipTimer = false) override;
 };
 
 /**
