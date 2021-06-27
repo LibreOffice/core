@@ -79,11 +79,16 @@ static bool custom_cell_renderer_get_preferred_size(GtkCellRenderer* cell,
                                                     GtkOrientation orientation, gint* minimum_size,
                                                     gint* natural_size);
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+static void custom_cell_renderer_snapshot(GtkCellRenderer* cell, GtkSnapshot* snapshot,
+                                          GtkWidget* widget, const GdkRectangle* background_area,
+                                          const GdkRectangle* cell_area,
+                                          GtkCellRendererState flags);
+#endif
+
 static void custom_cell_renderer_render(GtkCellRenderer* cell, cairo_t* cr, GtkWidget* widget,
                                         const GdkRectangle* background_area,
                                         const GdkRectangle* cell_area, GtkCellRendererState flags);
-#endif
 
 static void custom_cell_renderer_finalize(GObject* object)
 {
@@ -155,7 +160,9 @@ void custom_cell_renderer_class_init(CustomCellRendererClass* klass)
     cell_class->get_preferred_height_for_width
         = custom_cell_renderer_get_preferred_height_for_width;
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+    cell_class->snapshot = custom_cell_renderer_snapshot;
+#else
     cell_class->render = custom_cell_renderer_render;
 #endif
 
@@ -223,7 +230,6 @@ bool custom_cell_renderer_get_preferred_size(GtkCellRenderer* cell, GtkOrientati
     return true;
 }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
 void custom_cell_renderer_render(GtkCellRenderer* cell, cairo_t* cr, GtkWidget* /*widget*/,
                                  const GdkRectangle* /*background_area*/,
                                  const GdkRectangle* cell_area, GtkCellRendererState flags)
@@ -271,6 +277,19 @@ void custom_cell_renderer_render(GtkCellRenderer* cell, cairo_t* cr, GtkWidget* 
     cairo_set_source_surface(cr, pSurface, cell_area->x, cell_area->y);
     cairo_paint(cr);
 }
+
+#if GTK_CHECK_VERSION(4, 0, 0)
+static void custom_cell_renderer_snapshot(GtkCellRenderer* cell, GtkSnapshot* snapshot,
+                                          GtkWidget* widget, const GdkRectangle* background_area,
+                                          const GdkRectangle* cell_area, GtkCellRendererState flags)
+{
+    graphene_rect_t rect = GRAPHENE_RECT_INIT(0.0f, 0.0f, static_cast<float>(cell_area->width),
+                                              static_cast<float>(cell_area->height));
+    cairo_t* cr = gtk_snapshot_append_cairo(GTK_SNAPSHOT(snapshot), &rect);
+    custom_cell_renderer_render(cell, cr, widget, background_area, cell_area, flags);
+    cairo_destroy(cr);
+}
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
