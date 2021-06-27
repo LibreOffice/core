@@ -55,7 +55,7 @@ double SAL_CALL DateScaling::doScaling( double value )
 {
     double fResult(value);
     if( std::isnan( value ) || std::isinf( value ) )
-        ::rtl::math::setNan( & fResult );
+        return std::numeric_limits<double>::quiet_NaN();
     else
     {
         Date aDate(m_aNullDate);
@@ -131,7 +131,7 @@ double SAL_CALL InverseDateScaling::doScaling( double value )
 {
     double fResult(value);
     if( std::isnan( value ) || std::isinf( value ) )
-        ::rtl::math::setNan( & fResult );
+        return std::numeric_limits<double>::quiet_NaN();
     else
     {
         switch( m_nTimeUnit )
