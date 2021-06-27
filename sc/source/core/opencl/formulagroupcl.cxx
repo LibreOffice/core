@@ -34,6 +34,8 @@
 
 #include <com/sun/star/sheet/FormulaLanguage.hpp>
 
+#include <cmath>
+
 // FIXME: The idea that somebody would bother to (now and then? once a year? once a month?) manually
 // edit a source file and change the value of some #defined constant and run some ill-defined
 // "correctness test" is of course ludicrous. Either things are checked in normal unit tests, in
