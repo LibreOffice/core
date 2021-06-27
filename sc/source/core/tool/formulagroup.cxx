@@ -118,11 +118,9 @@ void FormulaGroupContext::ensureNumArray( ColArray& rColArray, size_t nArrayLen 
     if (rColArray.mpNumArray)
         return;
 
-    double fNan;
-    rtl::math::setNan(&fNan);
-
     m_NumArrays.push_back(
-        std::make_unique<sc::FormulaGroupContext::NumArrayType>(nArrayLen, fNan));
+        std::make_unique<sc::FormulaGroupContext::NumArrayType>(nArrayLen,
+            std::numeric_limits<double>::quiet_NaN()));
     rColArray.mpNumArray = m_NumArrays.back().get();
 }
 

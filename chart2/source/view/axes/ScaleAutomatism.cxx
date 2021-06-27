@@ -109,8 +109,8 @@ ScaleAutomatism::ScaleAutomatism( const ScaleData& rSourceScale, const Date& rNu
 
 void ScaleAutomatism::resetValueRange( )
 {
-    ::rtl::math::setNan( &m_fValueMinimum );
-    ::rtl::math::setNan( &m_fValueMaximum );
+    m_fValueMinimum = std::numeric_limits<double>::quiet_NaN();
+    m_fValueMaximum = std::numeric_limits<double>::quiet_NaN();
 }
 
 void ScaleAutomatism::expandValueRange( double fMinimum, double fMaximum )

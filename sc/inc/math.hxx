@@ -52,16 +52,10 @@ inline double divide( const double& fNumerator, const double& fDenominator )
 {
     if (fDenominator == 0.0)
     {
-        double fVal;
         if (std::isfinite( fNumerator) && fNumerator != 0.0)
-        {
-            rtl::math::setInf( &fVal, std::signbit( fNumerator));
-        }
-        else
-        {
-            rtl::math::setNan( &fVal);
-        }
-        return fVal;
+            return std::signbit(fNumerator) ? -std::numeric_limits<double>::infinity()
+                                            :  std::numeric_limits<double>::infinity();
+        return std::numeric_limits<double>::quiet_NaN();
     }
     return fNumerator / fDenominator;
 }

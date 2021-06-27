@@ -2143,8 +2143,7 @@ void Test::testMatrix()
     pMat->PutDouble(2.3, 2, 1);
     pMat->PutDouble(-20, 2, 2);
 
-    double fNaN;
-    rtl::math::setNan(&fNaN);
+    static const double fNaN = std::numeric_limits<double>::quiet_NaN();
 
     std::vector<double> aDoubles;
     pMat->GetDoubleArray(aDoubles);

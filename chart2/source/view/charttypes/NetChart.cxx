@@ -32,16 +32,16 @@
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 
-#include <rtl/math.hxx>
 #include <osl/diagnose.h>
 
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <officecfg/Office/Compatibility.hxx>
 
+#include <cmath>
+
 namespace chart
 {
 using namespace ::com::sun::star;
-using namespace ::rtl::math;
 using namespace ::com::sun::star::chart2;
 
 NetChart::NetChart( const uno::Reference<XChartType>& xChartTypeModel
@@ -302,9 +302,9 @@ struct FormerPoint
         {}
     FormerPoint()
     {
-        ::rtl::math::setNan( &m_fX );
-        ::rtl::math::setNan( &m_fY );
-        ::rtl::math::setNan( &m_fZ );
+        m_fX = std::numeric_limits<double>::quiet_NaN();
+        m_fY = std::numeric_limits<double>::quiet_NaN();
+        m_fZ = std::numeric_limits<double>::quiet_NaN();
     }
 
     double m_fX;

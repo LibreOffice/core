@@ -738,11 +738,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(bool _bHasCategor
 
             aValue.fill( column.nResultSetPosition, column.nDataType, xRow );
             if ( aValue.isNull() )
-            {
-                double nValue;
-                ::rtl::math::setNan( &nValue );
-                aRow.push_back( nValue );
-            }
+                aRow.push_back( std::numeric_limits<double>::quiet_NaN() );
             else
                 aRow.push_back( aValue.getDouble() );
         }

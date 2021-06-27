@@ -859,14 +859,7 @@ void Formatter::SetValue(double dVal)
 double Formatter::GetValue()
 {
     if ( !ImplGetValue( m_dCurrentValue ) )
-    {
-        double dValue;
-        if (m_bEnableNaN)
-            ::rtl::math::setNan(&dValue);
-        else
-            dValue = m_dDefaultValue;
-        UpdateCurrentValue(dValue);
-    }
+        UpdateCurrentValue(m_bEnableNaN ? std::numeric_limits<double>::quiet_NaN() : m_dDefaultValue);
 
     m_ValueState = valueDouble;
     return m_dCurrentValue;

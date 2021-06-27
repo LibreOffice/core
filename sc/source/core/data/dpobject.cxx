@@ -1355,30 +1355,28 @@ public:
 
 double ScDPObject::GetPivotData(const OUString& rDataFieldName, std::vector<sheet::DataPilotFieldFilter>& rFilters)
 {
-    double fRet;
-    rtl::math::setNan(&fRet);
     if (!mbEnableGetPivotData)
-        return fRet;
+        return std::numeric_limits<double>::quiet_NaN();
 
     CreateObjects();
 
     std::vector<const ScDPSaveDimension*> aDataDims;
     pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_DATA, aDataDims);
     if (aDataDims.empty())
-        return fRet;
+        return std::numeric_limits<double>::quiet_NaN();
 
     std::vector<const ScDPSaveDimension*>::iterator it = std::find_if(
         aDataDims.begin(), aDataDims.end(),
         FindByName(ScGlobal::getCharClassPtr()->uppercase(rDataFieldName)));
 
     if (it == aDataDims.end())
-        return fRet;
+        return std::numeric_limits<double>::quiet_NaN();
 
     size_t nDataIndex = std::distance(aDataDims.begin(), it);
 
     uno::Reference<sheet::XDataPilotResults> xDPResults(xSource, uno::UNO_QUERY);
     if (!xDPResults.is())
-        return fRet;
+        return std::numeric_limits<double>::quiet_NaN();
 
     // Dimensions must be sorted in order of appearance, and row dimensions
     // must come before column dimensions.
@@ -1391,7 +1389,7 @@ double ScDPObject::GetPivotData(const OUString& rDataFieldName, std::vector<shee
 
     uno::Sequence<double> aRes = xDPResults->getFilteredResults(aFilters);
     if (static_cast<sal_Int32>(nDataIndex) >= aRes.getLength())
-        return fRet;
+        return std::numeric_limits<double>::quiet_NaN();
 
     return aRes[nDataIndex];
 }
