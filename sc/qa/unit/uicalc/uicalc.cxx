@@ -824,6 +824,21 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf133326)
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(2), pDoc->GetTableCount());
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126685)
+{
+    ScModelObj* pModelObj = createDoc("tdf126685.ods");
+
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {}); // test should crash here without the fix
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 0, 2)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf119793)
 {
     ScModelObj* pModelObj = createDoc("tdf119793.ods");
