@@ -44,33 +44,20 @@
 
 #include <dtoa.h>
 
-int const n10Count = 16;
-double const n10s[2][n10Count] = {
-    { 1e1, 1e2, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8,
-      1e9, 1e10, 1e11, 1e12, 1e13, 1e14, 1e15, 1e16 },
-    { 1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8,
-      1e-9, 1e-10, 1e-11, 1e-12, 1e-13, 1e-14, 1e-15, 1e-16 }
+constexpr int n10Count = 16;
+constexpr double n10s[n10Count*2+1] = {
+    1e-16, 1e-15, 1e-14, 1e-13, 1e-12, 1e-11, 1e-10, 1e-9,
+    1e-8, 1e-7, 1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1e0,
+    1e1, 1e2, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8,
+    1e9, 1e10, 1e11, 1e12, 1e13, 1e14, 1e15, 1e16 ,
 };
 
 // return pow(10.0,nExp) optimized for exponents in the interval [-16,16]
 static double getN10Exp(int nExp)
 {
-    if (nExp < 0)
-    {
-        // && -nExp > 0 necessary for std::numeric_limits<int>::min()
-        // because -nExp = nExp
-        if (-nExp <= n10Count && -nExp > 0)
-            return n10s[1][-nExp-1];
+    if (nExp < -n10Count || nExp > n10Count)
         return pow(10.0, static_cast<double>(nExp));
-    }
-    if (nExp > 0)
-    {
-        if (nExp <= n10Count)
-            return n10s[0][nExp-1];
-
-        return pow(10.0, static_cast<double>(nExp));
-    }
-    return 1.0;
+    return n10s[nExp + n10Count];
 }
 
 namespace {
