@@ -35,6 +35,8 @@
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <tools/diagnose_ex.h>
 
+#include <cmath>
+
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using namespace ::com::sun::star;

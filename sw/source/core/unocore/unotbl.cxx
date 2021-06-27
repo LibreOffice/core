@@ -20,6 +20,7 @@
 #include <tuple>
 #include <utility>
 #include <memory>
+#include <cmath>
 #include <vector>
 #include <limits>
 #include <algorithm>
@@ -93,7 +94,6 @@
 #include <SwStyleNameMapper.hxx>
 #include <frmatr.hxx>
 #include <sortopt.hxx>
-#include <rtl/math.hxx>
 #include <sal/log.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <comphelper/interfacecontainer2.hxx>

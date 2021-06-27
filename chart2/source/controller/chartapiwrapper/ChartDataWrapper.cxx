@@ -27,6 +27,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 
+#include <cmath>
 #include <float.h>
 #include <limits>
 #include <cmath>

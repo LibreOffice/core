@@ -33,7 +33,7 @@
 #include "sal/types.h"
 
 #include <cstddef>
-#include <math.h>
+#include <cmath>
 
 namespace rtl {
 
@@ -231,6 +231,8 @@ inline double approxValue(double fValue)
     return rtl_math_approxValue(fValue);
 }
 
+#ifndef LIBO_INTERNAL_ONLY
+
 /** A wrapper around rtl_math_expm1.
  */
 inline double expm1(double fValue)
@@ -279,6 +281,8 @@ inline double acosh(double fValue)
 {
     return rtl_math_acosh(fValue);
 }
+
+#endif
 
 /** A wrapper around rtl_math_approxEqual.
  */
@@ -348,6 +352,8 @@ inline double approxCeil(double a)
 {
     return ceil( approxValue( a ));
 }
+
+#ifndef LIBO_INTERNAL_ONLY
 
 /** Tests whether a value is neither INF nor NAN.
  */
@@ -463,6 +469,95 @@ inline double tan(double d)
     setNan( &d );
     return d;
 }
+
+#else
+
+/** If a value is a valid argument for sin(), cos(), tan().
+
+    IEEE 754 specifies that absolute values up to 2^64 (=1.844e19) for the
+    radian must be supported by trigonometric functions.  Unfortunately, at
+    least on x86 architectures, the FPU doesn't generate an error pattern for
+    values >2^64 but produces erroneous results instead and sets only the
+    "invalid operation" (IM) flag in the status word :-(  Thus the application
+    has to handle it itself.
+ */
+inline bool isValidArcArg(double d)
+{
+    return fabs(d) <= std::ldexp(1.0, 65);
+}
+
+/** Safe sin(), returns NAN if not valid.
+ */
+inline double sin(double d)
+{
+    if ( isValidArcArg( d ) )
+        return std::sin( d );
+    return std::numeric_limits<double>::quiet_NaN();
+}
+
+/** Safe cos(), returns NAN if not valid.
+ */
+inline double cos(double d)
+{
+    if ( isValidArcArg( d ) )
+        return std::cos( d );
+    return std::numeric_limits<double>::quiet_NaN();
+}
+
+/** Safe tan(), returns NAN if not valid.
+ */
+inline double tan(double d)
+{
+    if ( isValidArcArg( d ) )
+        return std::tan( d );
+    return std::numeric_limits<double>::quiet_NaN();
+}
+
+/** A wrapper around rtl_math_log1p.
+ */
+inline double log1p(double fValue)
+{
+#ifndef __APPLE__
+    return std::log1p(fValue);
+#else
+    return rtl_math_log1p(fValue);
+#endif
+}
+
+/** A wrapper around rtl_math_atanh.
+ */
+inline double atanh(double fValue)
+{
+#ifndef __APPLE__
+    return std::atanh(fValue);
+#else
+    return rtl_math_atanh(fValue);
+#endif
+}
+
+/** A wrapper around rtl_math_asinh.
+ */
+inline double asinh(double fValue)
+{
+#ifndef __APPLE__
+    return std::asinh(fValue);
+#else
+    return rtl_math_asinh(fValue);
+#endif
+}
+
+/** A wrapper around rtl_math_acosh.
+ */
+inline double acosh(double fValue)
+{
+#ifndef __APPLE__
+    return std::acosh(fValue);
+#else
+    return rtl_math_acosh(fValue);
+#endif
+}
+
+#endif
 
 }
 
