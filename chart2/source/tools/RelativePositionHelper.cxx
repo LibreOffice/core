@@ -237,9 +237,9 @@ awt::Point RelativePositionHelper::getCenterOfAnchoredObject(
 
     //take rotation into account:
     aResult.X += static_cast< sal_Int32 >(
-        ::rtl::math::round(    fXDelta * rtl::math::cos( fAnglePi ) + fYDelta * rtl::math::sin( fAnglePi ) ) );
+        ::rtl::math::round(    fXDelta * std::cos( fAnglePi ) + fYDelta * std::sin( fAnglePi ) ) );
     aResult.Y += static_cast< sal_Int32 >(
-        ::rtl::math::round(  - fXDelta * rtl::math::sin( fAnglePi ) + fYDelta * rtl::math::cos( fAnglePi ) ) );
+        ::rtl::math::round(  - fXDelta * std::sin( fAnglePi ) + fYDelta * std::cos( fAnglePi ) ) );
 
     return aResult;
 }
