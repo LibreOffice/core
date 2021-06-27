@@ -27,8 +27,10 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 
+#include <cmath>
 #include <float.h>
-#include <rtl/math.hxx>
+#include <limits>
+#include <cmath>
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
@@ -57,7 +59,7 @@ uno::Sequence< uno::Sequence< double > > lcl_getNANInsteadDBL_MIN( const uno::Se
             aRet[nOuter][nInner] = rData[nOuter][nInner];
             double& rValue = aRet[nOuter][nInner];
             if( rValue == DBL_MIN )
-                ::rtl::math::setNan( &rValue );
+                rValue = std::numeric_limits<double>::quiet_NaN();
         }
     }
     return aRet;

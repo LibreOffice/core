@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <limits>
 #include <memory>
 #include "xmlcelli.hxx"
 #include "xmlimprt.hxx"
@@ -117,7 +118,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     ScXMLImportContext( rImport ),
     mpEditEngine(GetScImport().GetEditEngine()),
     mnCurParagraph(0),
-    fValue(0.0),
+    fValue(std::numeric_limits<double>::quiet_NaN()),
     nMergedRows(1),
     nMatrixRows(0),
     nRepeatedRows(nTempRepeatedRows),
@@ -142,8 +143,6 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     mbHasStyle(false),
     mbPossibleEmptyDisplay(false)
 {
-    rtl::math::setNan(&fValue); // NaN by default
-
     rXMLImport.GetTables().AddColumn(bTempIsCovered);
 
     std::optional<OUString> xStyleName;

@@ -394,11 +394,11 @@ struct FormerBarPoint
         : m_fX(fX), m_fUpperY(fUpperY), m_fLowerY(fLowerY), m_fZ(fZ)
         {}
     FormerBarPoint()
+        : m_fX(std::numeric_limits<double>::quiet_NaN())
+        , m_fUpperY(std::numeric_limits<double>::quiet_NaN())
+        , m_fLowerY(std::numeric_limits<double>::quiet_NaN())
+        , m_fZ(std::numeric_limits<double>::quiet_NaN())
     {
-        ::rtl::math::setNan( &m_fX );
-        ::rtl::math::setNan( &m_fUpperY );
-        ::rtl::math::setNan( &m_fLowerY );
-        ::rtl::math::setNan( &m_fZ );
     }
 
     double m_fX;

@@ -21,6 +21,7 @@
 #include <RegressionCalculationHelper.hxx>
 #include <SpecialCharacters.hxx>
 
+#include <limits>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -30,12 +31,10 @@ namespace chart
 {
 
 PotentialRegressionCurveCalculator::PotentialRegressionCurveCalculator()
-    : m_fSlope(0.0)
-    , m_fIntercept(0.0)
+    : m_fSlope(std::numeric_limits<double>::quiet_NaN())
+    , m_fIntercept(std::numeric_limits<double>::quiet_NaN())
     , m_fSign(1.0)
 {
-    ::rtl::math::setNan( & m_fSlope );
-    ::rtl::math::setNan( & m_fIntercept );
 }
 
 PotentialRegressionCurveCalculator::~PotentialRegressionCurveCalculator()
@@ -61,9 +60,9 @@ void SAL_CALL PotentialRegressionCurveCalculator::recalculateRegression(
         nMax = aValues.first.size();
         if( nMax <= 1 )
         {
-            ::rtl::math::setNan( & m_fSlope );
-            ::rtl::math::setNan( & m_fIntercept );
-            ::rtl::math::setNan( & m_fCorrelationCoefficient );
+            m_fSlope = std::numeric_limits<double>::quiet_NaN();
+            m_fIntercept = std::numeric_limits<double>::quiet_NaN();
+            m_fCorrelationCoefficient = std::numeric_limits<double>::quiet_NaN();
             return;
         }
         m_fSign = -1.0;
@@ -101,16 +100,13 @@ void SAL_CALL PotentialRegressionCurveCalculator::recalculateRegression(
 
 double SAL_CALL PotentialRegressionCurveCalculator::getCurveValue( double x )
 {
-    double fResult;
-    ::rtl::math::setNan( & fResult );
-
     if( ! ( std::isnan( m_fSlope ) ||
             std::isnan( m_fIntercept )))
     {
-        fResult = m_fIntercept * pow( x, m_fSlope );
+        return m_fIntercept * pow( x, m_fSlope );
     }
 
-    return fResult;
+    return std::numeric_limits<double>::quiet_NaN();
 }
 
 uno::Sequence< geometry::RealPoint2D > SAL_CALL PotentialRegressionCurveCalculator::getCurveValues(

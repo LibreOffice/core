@@ -153,16 +153,10 @@ OUString ScDPUtil::getDateGroupName(
 double ScDPUtil::getNumGroupStartValue(double fValue, const ScDPNumGroupInfo& rInfo)
 {
     if (fValue < rInfo.mfStart && !rtl::math::approxEqual(fValue, rInfo.mfStart))
-    {
-        rtl::math::setInf(&fValue, true);
-        return fValue;
-    }
+        return -std::numeric_limits<double>::infinity();
 
     if (fValue > rInfo.mfEnd && !rtl::math::approxEqual(fValue, rInfo.mfEnd))
-    {
-        rtl::math::setInf(&fValue, false);
-        return fValue;
-    }
+        return std::numeric_limits<double>::infinity();
 
     double fDiff = fValue - rInfo.mfStart;
     double fDiv = rtl::math::approxFloor( fDiff / rInfo.mfStep );

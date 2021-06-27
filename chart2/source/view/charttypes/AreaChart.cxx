@@ -36,7 +36,6 @@
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 
-#include <rtl/math.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
@@ -45,10 +44,11 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <officecfg/Office/Compatibility.hxx>
 
+#include <limits>
+
 namespace chart
 {
 using namespace ::com::sun::star;
-using namespace ::rtl::math;
 using namespace ::com::sun::star::chart2;
 
 AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel
@@ -589,10 +589,10 @@ struct FormerPoint
         : m_fX(fX), m_fY(fY), m_fZ(fZ)
         {}
     FormerPoint()
+        : m_fX(std::numeric_limits<double>::quiet_NaN())
+        , m_fY(std::numeric_limits<double>::quiet_NaN())
+        , m_fZ(std::numeric_limits<double>::quiet_NaN())
     {
-        ::rtl::math::setNan( &m_fX );
-        ::rtl::math::setNan( &m_fY );
-        ::rtl::math::setNan( &m_fZ );
     }
 
     double m_fX;
