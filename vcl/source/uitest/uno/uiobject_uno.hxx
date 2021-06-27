@@ -17,19 +17,16 @@
 #include <memory>
 
 #include <vcl/uitest/uiobject.hxx>
+#include <vcl/task.hxx>
 
 typedef ::cppu::WeakComponentImplHelper <
     css::ui::test::XUIObject, css::lang::XServiceInfo
     > UIObjectBase;
 
-class UIObjectUnoObj : public cppu::BaseMutex,
-    public UIObjectBase
+class UIObjectUnoObj final : public cppu::BaseMutex,
+    public UIObjectBase, public Task
 {
-private:
-    std::unique_ptr<UIObject> mpObj;
-
 public:
-
     explicit UIObjectUnoObj(std::unique_ptr<UIObject> pObj);
     virtual ~UIObjectUnoObj() override;
 
@@ -50,6 +47,19 @@ public:
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     OUString SAL_CALL getHierarchy() override;
+
+    virtual sal_uInt64 UpdateMinPeriod(sal_uInt64) const override;
+    virtual void Invoke() override;
+
+private:
+    std::unique_ptr<UIObject> mpObj;
+
+    std::condition_variable cv;
+    std::mutex mMutex;
+    bool mReady;
+
+    OUString m_sAction;
+    StringMap m_aPropertyMap;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
