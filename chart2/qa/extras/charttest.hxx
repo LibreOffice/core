@@ -442,9 +442,6 @@ std::vector<std::vector<double> > getDataSeriesYValuesFromChartType( const Refer
     CPPUNIT_ASSERT(xDSCont.is());
     const Sequence<uno::Reference<chart2::XDataSeries> > aDataSeriesSeq = xDSCont->getDataSeries();
 
-    double fNan;
-    rtl::math::setNan(&fNan);
-
     std::vector<std::vector<double> > aRet;
     for (uno::Reference<chart2::XDataSeries> const & ds : aDataSeriesSeq)
     {
@@ -472,7 +469,7 @@ std::vector<std::vector<double> > getDataSeriesYValuesFromChartType( const Refer
                     if (any >>= fVal)
                         aValues.push_back(fVal);
                     else
-                        aValues.push_back(fNan);
+                        aValues.push_back(std::numeric_limits<double>::quiet_NaN());
                 }
                 aRet.push_back(aValues);
             }

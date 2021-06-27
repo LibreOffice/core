@@ -436,6 +436,8 @@ SAL_DLLPUBLIC double SAL_CALL rtl_math_approxValue(double fValue) SAL_THROW_EXTE
  */
 SAL_DLLPUBLIC bool SAL_CALL rtl_math_approxEqual(double a, double b) SAL_THROW_EXTERN_C();
 
+#ifndef LIBO_INTERNAL_ONLY
+
 /** Returns more accurate e^x-1 for x near 0 than calculating directly.
 
     expm1 is part of the C99 standard, but not provided by some compilers.
@@ -444,6 +446,26 @@ SAL_DLLPUBLIC bool SAL_CALL rtl_math_approxEqual(double a, double b) SAL_THROW_E
     The value x in the term e^x-1.
   */
 SAL_DLLPUBLIC double SAL_CALL rtl_math_expm1(double fValue) SAL_THROW_EXTERN_C();
+
+/** Returns values of the Errorfunction erf.
+
+    erf is part of the C99 standard, but not provided by some compilers.
+
+    @param fValue
+    The value x in the term erf(x).
+  */
+SAL_DLLPUBLIC double SAL_CALL rtl_math_erf(double fValue) SAL_THROW_EXTERN_C();
+
+/** Returns values of the complement Errorfunction erfc.
+
+    erfc is part of the C99 standard, but not provided by some compilers.
+
+    @param fValue
+    The value x in the term erfc(x).
+  */
+SAL_DLLPUBLIC double SAL_CALL rtl_math_erfc(double fValue) SAL_THROW_EXTERN_C();
+
+#endif
 
 /** Returns more accurate log(1+x) for x near 0 than calculating directly.
 
@@ -463,24 +485,6 @@ SAL_DLLPUBLIC double SAL_CALL rtl_math_log1p(double fValue) SAL_THROW_EXTERN_C()
     The value x in the term atanh(x).
   */
 SAL_DLLPUBLIC double SAL_CALL rtl_math_atanh(double fValue) SAL_THROW_EXTERN_C();
-
-/** Returns values of the Errorfunction erf.
-
-    erf is part of the C99 standard, but not provided by some compilers.
-
-    @param fValue
-    The value x in the term erf(x).
-  */
-SAL_DLLPUBLIC double SAL_CALL rtl_math_erf(double fValue) SAL_THROW_EXTERN_C();
-
-/** Returns values of the complement Errorfunction erfc.
-
-    erfc is part of the C99 standard, but not provided by some compilers.
-
-    @param fValue
-    The value x in the term erfc(x).
-  */
-SAL_DLLPUBLIC double SAL_CALL rtl_math_erfc(double fValue) SAL_THROW_EXTERN_C();
 
 /** Returns values of the inverse hyperbolic sine.
 
