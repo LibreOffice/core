@@ -20,9 +20,9 @@
 #ifndef INCLUDED_FORMULA_ERRORCODES_HXX
 #define INCLUDED_FORMULA_ERRORCODES_HXX
 
-#include <rtl/math.hxx>
-#include <sal/mathconf.h>
 #include <sal/types.h>
+#include <rtl/math.hxx>
+#include <cmath>
 
 #include <limits>
 
