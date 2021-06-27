@@ -33,15 +33,17 @@
 #include <tools/helpers.hxx>
 #include <rtl/math.hxx>
 
+#include <cmath>
+
 namespace chart
 {
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
 using ::com::sun::star::uno::Reference;
-using ::rtl::math::cos;
-using ::rtl::math::sin;
-using ::rtl::math::tan;
+using std::cos;
+using std::sin;
+using std::tan;
 
 namespace
 {
