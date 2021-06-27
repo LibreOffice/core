@@ -31,9 +31,9 @@ Idle::Idle( const char *pDebugName )
 {
 }
 
-void Idle::Start()
+void Idle::Start(const bool bStartTimer)
 {
-    Task::Start();
+    Task::Start(false);
 
     sal_uInt64 nPeriod = Scheduler::ImmediateTimeoutMs;
     if (Scheduler::GetDeterministicMode())
@@ -49,7 +49,8 @@ void Idle::Start()
         }
     }
 
-    Task::StartTimer(nPeriod);
+    if (bStartTimer)
+        Task::StartTimer(nPeriod);
 }
 
 sal_uInt64 Idle::UpdateMinPeriod( sal_uInt64 /* nTimeNow */ ) const
