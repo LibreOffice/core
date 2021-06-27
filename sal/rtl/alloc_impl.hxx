@@ -17,10 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_RTL_ALLOC_IMPL_HXX
-#define INCLUDED_SAL_RTL_ALLOC_IMPL_HXX
+#pragma once
 
 #include <sal/types.h>
+
+#if defined _WIN32
+#include <intrin.h>
+#endif
 
 /** Alignment macros
  */
@@ -51,96 +54,57 @@
 #define RTL_MEMORY_P2END(value, align) \
     (-(~static_cast<sal_IntPtr>(value) & -static_cast<sal_IntPtr>(align)))
 
-/** highbit(): log2() + 1
-    (complexity O(1))
-*/
-static inline unsigned int highbit(sal_Size n)
+/** Find highest bit 1-based: 01101010100
+  *                            ^
+  *                            |
+  *                            10
+  */
+inline unsigned int highbit(sal_Size n)
 {
-  unsigned int k = 1;
+    if (n == 0)
+        return 0;
 
-  if (n == 0)
-    return 0;
-  if constexpr (sizeof(n) >= 8)
-  {
-    if (n & 0xffffffff00000000)
-    {
-      k |= 32;
-      n >>= 32;
-    }
-  }
-  if (n & 0xffff0000)
-  {
-    k |= 16;
-    n >>= 16;
-  }
-  if (n & 0xff00)
-  {
-    k |= 8;
-    n >>= 8;
-  }
-  if (n & 0xf0)
-  {
-    k |= 4;
-    n >>= 4;
-  }
-  if (n & 0x0c)
-  {
-    k |= 2;
-    n >>= 2;
-  }
-  if (n & 0x02)
-    k++;
-
-  return k;
+#if defined _WIN32
+    unsigned long pos;
+#if defined _WIN64
+    return _BitScanReverse64(&pos, n) == 0 ? 0 : pos + 1;
+#else
+    return _BitScanReverse(&pos, n) == 0 ? 0 : pos + 1;
+#endif
+#else
+    if constexpr (sizeof(sal_Size) == sizeof(long long int))
+        return sizeof(sal_Size) * 8 - __builtin_clzll(n);
+    if constexpr (sizeof(sal_Size) == sizeof(long int))
+        return sizeof(sal_Size) * 8 - __builtin_clzl(n);
+    if constexpr (sizeof(sal_Size) <= sizeof(int))
+        return sizeof(sal_Size) * 8 - __builtin_clz(n);
+#endif
 }
 
-/** find first bit set
-    (complexity O(1))
-*/
-static inline unsigned int lowbit(sal_Size n)
+/** Find lowest bit 1-based: 01101010100
+  *                                  ^
+  *                                  |
+  *                                  3
+  */
+inline unsigned int lowbit(sal_Size n)
 {
-  unsigned int k = 1;
-
-  if (n == 0)
-    return 0;
-
-  if constexpr (sizeof(n) >= 8)
-  {
-    if (!(n & 0xffffffff))
-    {
-      k |= 32;
-      n >>= 32;
-    }
-  }
-
-  if (!(n & 0xffff))
-  {
-    k |= 16;
-    n >>= 16;
-  }
-
-  if (!(n & 0xff))
-  {
-    k |= 8;
-    n >>= 8;
-  }
-
-  if (!(n & 0xf))
-  {
-    k |= 4;
-    n >>= 4;
-  }
-
-  if (!(n & 0x3))
-  {
-    k |= 2;
-    n >>= 2;
-  }
-
-  if (!(n & 0x1))
-    k++;
-
-  return k;
+#if defined _WIN32
+    if (n == 0)
+        return 0;
+    unsigned long pos;
+#if defined _WIN64
+    return _BitScanReverse(&pos, n) == 0 ? 0 : pos + 1;
+#else
+    return _BitScanReverse64(&pos, n) == 0 ? 0 : pos + 1;
+#endif
+#else
+    if constexpr (sizeof(sal_Size) == sizeof(long long int))
+        return __builtin_ffsll(n);
+    if constexpr (sizeof(sal_Size) == sizeof(long int))
+        return __builtin_ffsl(n);
+    if constexpr (sizeof(sal_Size) <= sizeof(int))
+        return __builtin_ffs(n);
+#endif
 }
 
 /** Queue manipulation macros
@@ -213,7 +177,5 @@ typedef CRITICAL_SECTION rtl_memory_lock_type;
     @internal
 */
 #define RTL_CACHE_FLAG_NOMAGAZINE   (1 << 13) /* w/o magazine layer */
-
-#endif // INCLUDED_SAL_RTL_ALLOC_IMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
