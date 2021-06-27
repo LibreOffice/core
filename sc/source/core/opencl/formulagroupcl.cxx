@@ -17,7 +17,6 @@
 #include <formula/vectortoken.hxx>
 #include <scmatrix.hxx>
 #include <sal/log.hxx>
-#include <rtl/math.hxx>
 
 #include <opencl/openclwrapper.hxx>
 #include <opencl/OpenCLZone.hxx>
@@ -32,6 +31,8 @@
 #include "op_addin.hxx"
 
 #include <com/sun/star/sheet/FormulaLanguage.hpp>
+
+#include <cmath>
 
 // FIXME: The idea that somebody would bother to (now and then? once a year? once a month?) manually
 // edit a source file and change the value of some #defined constant and run some ill-defined
@@ -322,7 +323,7 @@ size_t VectorRef::Marshal( cl_kernel k, int argno, int, cl_program )
             throw OpenCLError("clEnqueueMapBuffer", err, __FILE__, __LINE__);
 
         for (size_t i = 0; i < szHostBuffer / sizeof(double); i++)
-            rtl::math::setNan(&pNanBuffer[i]);
+            pNanBuffer[i] = std::numeric_limits<double>::quiet_NaN();
         err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, mpClmem,
             pNanBuffer, 0, nullptr, nullptr);
         // FIXME: Is it intentional to not throw an OpenCLError even if the clEnqueueUnmapMemObject() fails?

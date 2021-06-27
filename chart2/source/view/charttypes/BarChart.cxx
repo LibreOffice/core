@@ -395,10 +395,10 @@ struct FormerBarPoint
         {}
     FormerBarPoint()
     {
-        ::rtl::math::setNan( &m_fX );
-        ::rtl::math::setNan( &m_fUpperY );
-        ::rtl::math::setNan( &m_fLowerY );
-        ::rtl::math::setNan( &m_fZ );
+        m_fX = std::numeric_limits<double>::quiet_NaN();
+        m_fUpperY = std::numeric_limits<double>::quiet_NaN();
+        m_fLowerY = std::numeric_limits<double>::quiet_NaN();
+        m_fZ = std::numeric_limits<double>::quiet_NaN();
     }
 
     double m_fX;

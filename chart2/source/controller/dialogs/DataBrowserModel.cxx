@@ -45,8 +45,7 @@
 #include <tools/diagnose_ex.h>
 #include <comphelper/property.hxx>
 
-#include <rtl/math.hxx>
-
+#include <cmath>
 #include <algorithm>
 
 using namespace ::com::sun::star;
@@ -582,8 +581,7 @@ DataBrowserModel::eCellType DataBrowserModel::getCellType( sal_Int32 nAtColumn )
 
 double DataBrowserModel::getCellNumber( sal_Int32 nAtColumn, sal_Int32 nAtRow )
 {
-    double fResult;
-    ::rtl::math::setNan( & fResult );
+    double fResult = std::numeric_limits<double>::quiet_NaN();
 
     tDataColumnVector::size_type nIndex( nAtColumn );
     if( nIndex < m_aColumns.size() &&
