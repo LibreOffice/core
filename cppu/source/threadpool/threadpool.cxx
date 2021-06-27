@@ -25,7 +25,6 @@
 #include <unordered_map>
 
 #include <osl/diagnose.h>
-#include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 #include <sal/log.hxx>
 
@@ -68,19 +67,19 @@ namespace cppu_threadpool
 
     void DisposedCallerAdmin::dispose( void const * nDisposeId )
     {
-        MutexGuard guard( m_mutex );
+        std::scoped_lock guard( m_mutex );
         m_vector.push_back( nDisposeId );
     }
 
     void DisposedCallerAdmin::destroy( void const * nDisposeId )
     {
-        MutexGuard guard( m_mutex );
+        std::scoped_lock guard( m_mutex );
         m_vector.erase(std::remove(m_vector.begin(), m_vector.end(), nDisposeId), m_vector.end());
     }
 
     bool DisposedCallerAdmin::isDisposed( void const * nDisposeId )
     {
-        MutexGuard guard( m_mutex );
+        std::scoped_lock guard( m_mutex );
         return (std::find(m_vector.begin(), m_vector.end(), nDisposeId) != m_vector.end());
     }
 
