@@ -120,9 +120,8 @@ lcl_SplineCalculation::lcl_SplineCalculation(
           m_fYpN( fYnFirstDerivation ),
           m_nKLow( 0 ),
           m_nKHigh( rSortedPoints.size() - 1 ),
-          m_fLastInterpolatedValue(0.0)
+          m_fLastInterpolatedValue(std::numeric_limits<double>::infinity())
 {
-    ::rtl::math::setInf( &m_fLastInterpolatedValue, false );
     Calculate();
 }
 
@@ -133,9 +132,8 @@ lcl_SplineCalculation::lcl_SplineCalculation(
           m_fYpN( 0.0 ),  /*dummy*/
           m_nKLow( 0 ),
           m_nKHigh( rSortedPoints.size() - 1 ),
-          m_fLastInterpolatedValue(0.0)
+          m_fLastInterpolatedValue(std::numeric_limits<double>::infinity())
 {
-    ::rtl::math::setInf( &m_fLastInterpolatedValue, false );
     CalculatePeriodic();
 }
 
@@ -600,10 +598,8 @@ void SplineCalculater::CalculateCubicSplines(
         }
         else // generate the kind "natural spline"
         {
-            double fInfty;
-            ::rtl::math::setInf( &fInfty, false );
-            double fXDerivation = fInfty;
-            double fYDerivation = fInfty;
+            double fXDerivation = std::numeric_limits<double>::infinity();
+            double fYDerivation = std::numeric_limits<double>::infinity();
             aSplineX.reset(new lcl_SplineCalculation( aInputX, fXDerivation, fXDerivation ));
             aSplineY.reset(new lcl_SplineCalculation( aInputY, fYDerivation, fYDerivation ));
         }

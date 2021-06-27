@@ -96,7 +96,7 @@ enum class FormulaError : sal_uInt16
 inline double CreateDoubleError( FormulaError nErr )
 {
     sal_math_Double smVal;
-    ::rtl::math::setNan( &smVal.value );
+    smVal.value = std::numeric_limits<double>::quiet_NaN();
     smVal.nan_parts.fraction_lo = static_cast<unsigned>(nErr);
     return smVal.value;
 }
