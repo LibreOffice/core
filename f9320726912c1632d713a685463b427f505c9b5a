@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6f4b0f44_1e4d8959",
+        "filename": "sfx2/Library_sfx.mk",
+        "patchSetId": 7
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-27T21:36:09Z",
+      "side": 1,
+      "message": "I don\u0027t know why it is happening by itself.. Tab gets inserted by default and when I remove it, it shows changes",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 142,
+        "endChar": 34
+      },
+      "revId": "f9320726912c1632d713a685463b427f505c9b5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
