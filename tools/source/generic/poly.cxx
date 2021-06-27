@@ -255,7 +255,7 @@ ImplPolygon::ImplPolygon( const tools::Rectangle& rBound, const Point& rStart, c
         }
 
 
-        if( ( nRadX > 32 ) && ( nRadY > 32 ) && ( nRadX + nRadY ) < 8192 )
+        if (nRadX > 32 && nRadY > 32 && o3tl::saturating_add(nRadX, nRadY) < 8192)
             nPoints >>= 1;
 
         // compute threshold
