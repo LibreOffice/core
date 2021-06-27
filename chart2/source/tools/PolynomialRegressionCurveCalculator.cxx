@@ -90,7 +90,7 @@ void SAL_CALL PolynomialRegressionCurveCalculator::recalculateRegression(
     const uno::Sequence< double >& aXValues,
     const uno::Sequence< double >& aYValues )
 {
-    rtl::math::setNan(&m_fCorrelationCoefficient);
+    m_fCorrelationCoefficient = std::numeric_limits<double>::quiet_NaN();
 
     RegressionCalculationHelper::tDoubleVectorPair aValues(
         RegressionCalculationHelper::cleanup( aXValues, aYValues, RegressionCalculationHelper::isValid()));
@@ -269,18 +269,13 @@ void SAL_CALL PolynomialRegressionCurveCalculator::recalculateRegression(
 
 double SAL_CALL PolynomialRegressionCurveCalculator::getCurveValue( double x )
 {
-    double fResult;
-    rtl::math::setNan(&fResult);
-
     if (mCoefficients.empty())
-    {
-        return fResult;
-    }
+        return std::numeric_limits<double>::quiet_NaN();
 
     sal_Int32 aNoCoefficients = static_cast<sal_Int32>(mCoefficients.size());
 
     // Horner's method
-    fResult = 0.0;
+    double fResult = 0.0;
     for (sal_Int32 i = aNoCoefficients - 1; i >= 0; i--)
     {
         fResult = mCoefficients[i] + (x * fResult);

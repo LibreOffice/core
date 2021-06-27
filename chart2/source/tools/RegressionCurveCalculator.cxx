@@ -37,17 +37,15 @@ namespace chart
 {
 
 RegressionCurveCalculator::RegressionCurveCalculator()
-    : m_fCorrelationCoefficient(0.0)
+    : m_fCorrelationCoefficient(std::numeric_limits<double>::quiet_NaN())
     , mDegree(2)
     , mForceIntercept(false)
-    , mInterceptValue(0.0)
+    , mInterceptValue(std::numeric_limits<double>::quiet_NaN())
     , mPeriod(2)
     , mXName("x")
     , mYName("f(x)")
     , mnMovingType(0)
 {
-    rtl::math::setNan( &m_fCorrelationCoefficient );
-    rtl::math::setNan( &mInterceptValue );
 }
 
 RegressionCurveCalculator::~RegressionCurveCalculator()

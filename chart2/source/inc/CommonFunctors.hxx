@@ -43,15 +43,13 @@ template< typename T >
 
 /** unary function to convert css::uno::Any into a double number.
 
-    <p>In case no number can be generated from the Any, NaN (see
-    rtl::math::SetNAN()) is returned.</p>
+    <p>In case no number can be generated from the Any, quiet NaN is returned.</p>
 */
 struct OOO_DLLPUBLIC_CHARTTOOLS AnyToDouble
 {
     double operator() ( const css::uno::Any & rAny )
     {
-        double fResult;
-        ::rtl::math::setNan( & fResult );
+        double fResult = std::numeric_limits<double>::quiet_NaN();
         rAny >>= fResult;
         return fResult;
     }
@@ -97,7 +95,7 @@ struct OOO_DLLPUBLIC_CHARTTOOLS OUStringToDouble
         double fResult = ::rtl::math::stringToDouble( rStr, '.', ',', & eConversionStatus );
 
         if( eConversionStatus != rtl_math_ConversionStatus_Ok )
-            ::rtl::math::setNan( & fResult );
+            return std::numeric_limits<double>::quiet_NaN();
 
         return fResult;
     }
