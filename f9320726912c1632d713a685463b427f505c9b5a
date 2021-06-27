@@ -69,6 +69,30 @@
       "revId": "f9320726912c1632d713a685463b427f505c9b5a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a947f9d1_a55d23fb",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-27T23:37:01Z",
+      "side": 1,
+      "message": "Hii\n\nI have resolved this error but while building the following error came :\n\n\nerror LNK2019: unresolved external symbol \"__declspec(dllimport) public: class std::unique_ptr\u003cclass weld::StyleList,struct std::default_delete\u003cclass weld::StyleList\u003e \u003e __cdecl weld::Builder::weld_\nstyle_view(class rtl::OString const \u0026)\" (__imp_?weld_style_view@Builder@weld@@QEAA?AV?$unique_ptr@VStyleList@weld@@U?$default_delete@VStyleList@weld@@@std@@@std@@AEBVOString@rtl@@@Z) referenced in function \"pub\nlic: __cdecl SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl(class SfxBindings *,class weld::Container *,class weld::Builder *)\" (??0SfxCommonTemplateDialog_Impl@@QEAA@PEAVSfxBindings@@PEAVContainer@\nweld@@PEAVBuilder@3@@Z)\nC:\\build\\instdir\\program\\sfxlo.dll : fatal error LNK1120: 1 unresolved externals\n\nmt.exe : general error c101008d: Failed to write the updated manifest to the resource of file \"C:/build/instdir/program/sfxlo.dll\". The system cannot find the file specified.\n\n\nI am unable to understand this error.. Please help me with it..",
+      "parentUuid": "e4a6e352_8de6d19b",
+      "range": {
+        "startLine": 536,
+        "startChar": 4,
+        "endLine": 536,
+        "endChar": 70
+      },
+      "revId": "f9320726912c1632d713a685463b427f505c9b5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
