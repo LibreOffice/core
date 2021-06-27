@@ -1150,10 +1150,7 @@ void PrintFontManager::Substitute(FontSelectPattern &rPattern, OUString& rMissin
                         }
                     }
                     if (!m_aCurrentRequests.empty())
-                    {
-                        m_aFontInstallerTimer.Stop();
                         m_aFontInstallerTimer.Start();
-                    }
                 }
                 rMissingCodes = sStillMissing;
             }

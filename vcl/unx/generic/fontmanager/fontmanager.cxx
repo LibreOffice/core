@@ -119,6 +119,7 @@ PrintFontManager::PrintFontManager()
 {
     m_aFontInstallerTimer.SetInvokeHandler(LINK(this, PrintFontManager, autoInstallFontLangSupport));
     m_aFontInstallerTimer.SetTimeout(5000);
+    m_aFontInstallerTimer.SetDebugName("PrintFontManager m_aFontInstallerTimer");
 }
 
 PrintFontManager::~PrintFontManager()
