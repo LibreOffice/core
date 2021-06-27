@@ -54,20 +54,19 @@
 /** highbit(): log2() + 1
     (complexity O(1))
 */
-static inline unsigned int highbit(sal_Size n)
+constexpr unsigned int highbit(sal_Size n)
 {
   unsigned int k = 1;
 
   if (n == 0)
     return 0;
-  if constexpr (sizeof(n) >= 8)
+#if SAL_TYPES_SIZEOFPOINTER == 8
+  if (n & 0xffffffff00000000)
   {
-    if (n & 0xffffffff00000000)
-    {
-      k |= 32;
-      n >>= 32;
-    }
+    k |= 32;
+    n >>= 32;
   }
+#endif
   if (n & 0xffff0000)
   {
     k |= 16;
@@ -97,21 +96,20 @@ static inline unsigned int highbit(sal_Size n)
 /** find first bit set
     (complexity O(1))
 */
-static inline unsigned int lowbit(sal_Size n)
+constexpr unsigned int lowbit(sal_Size n)
 {
   unsigned int k = 1;
 
   if (n == 0)
     return 0;
 
-  if constexpr (sizeof(n) >= 8)
+#if SAL_TYPES_SIZEOFPOINTER == 8
+  if (!(n & 0xffffffff))
   {
-    if (!(n & 0xffffffff))
-    {
-      k |= 32;
-      n >>= 32;
-    }
+    k |= 32;
+    n >>= 32;
   }
+#endif
 
   if (!(n & 0xffff))
   {
