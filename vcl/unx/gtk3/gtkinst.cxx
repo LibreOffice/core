@@ -10468,7 +10468,10 @@ public:
         g_signal_handler_disconnect(m_pMenu, nSignalId);
 
 #if GTK_CHECK_VERSION(4, 0, 0)
-        gtk_widget_unparent(GTK_WIDGET(m_pMenu));
+        if (!pOrigParent)
+            gtk_widget_unparent(GTK_WIDGET(m_pMenu));
+        else
+            gtk_widget_set_parent(GTK_WIDGET(m_pMenu), pOrigParent);
 #else
         gtk_menu_detach(m_pMenu);
 #endif
