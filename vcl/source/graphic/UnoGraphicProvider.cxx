@@ -429,7 +429,7 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
                 xRet = pUnoGraphic;
             }
             else{
-                SAL_WARN("svtools", "Could not create graphic: " << error);
+                SAL_WARN("svtools", "Could not create graphic for:" << aPath << " error: " << error);
             }
         }
     }
