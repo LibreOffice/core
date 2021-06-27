@@ -33,7 +33,7 @@
 #include "sal/types.h"
 
 #include <cstddef>
-#include <math.h>
+#include <cmath>
 
 namespace rtl {
 
@@ -428,10 +428,7 @@ inline void setNan(double * pd)
  */
 inline bool isValidArcArg(double d)
 {
-    return fabs(d)
-        <= (static_cast< double >(static_cast< unsigned long >(0x80000000))
-            * static_cast< double >(static_cast< unsigned long >(0x80000000))
-            * 2);
+    return std::fabs(d) <= std::ldexp(1.0,65);
 }
 
 /** Safe sin(), returns NAN if not valid.
