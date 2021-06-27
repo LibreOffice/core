@@ -443,7 +443,8 @@ std::unique_ptr<SvtGraphicStroke> VclMetafileProcessor2D::impTryToCreateSvtGraph
                 {
                     eJoin = SvtGraphicStroke::joinMiter;
                     // ATM 15 degrees is assumed
-                    fMiterLength /= rtl::math::sin(basegfx::deg2rad(15.0));
+                    // TODO and wait for P1383R0 and C++20's std::numbers::pi
+                    fMiterLength* std::sin(M_PI / 12);
                     break;
                 }
                 case basegfx::B2DLineJoin::Round:
