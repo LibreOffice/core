@@ -824,6 +824,22 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf133326)
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(2), pDoc->GetTableCount());
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126685)
+{
+    ScModelObj* pModelObj = createDoc("tdf126685.ods");
+
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {}); // test should crash here without the fix
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Control Height will change from 0.65 to 0.61 cm with 120dpi ..."), pDoc->GetString(ScAddress(3, 1, 1)));
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(3, 1, 1)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf119793)
 {
     ScModelObj* pModelObj = createDoc("tdf119793.ods");
