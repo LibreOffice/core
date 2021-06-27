@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9d0cacf2_246bc6e3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-27T17:48:50Z",
+      "side": 1,
+      "message": "Is this commit message relevant? IIUC this patch is for what we discussed on the last call - namely, factor out the StylesList control out of templdlg.cxx; so it would be appropriate to name it like\n\n  tdf#38194 related: introduce StylesList control",
+      "revId": "aedaa3e0a3f030d8ffe79bb0f67880def8216a54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1be0880e_6f2bc470",
+        "filename": "sfx2/Library_sfx.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-27T17:48:50Z",
+      "side": 1,
+      "message": "Please note that all other adjacent lines are indented by *four spaces*; so please replace the tab with the four spaces in the added line as well.",
+      "range": {
+        "startLine": 207,
+        "startChar": 0,
+        "endLine": 207,
+        "endChar": 1
+      },
+      "revId": "aedaa3e0a3f030d8ffe79bb0f67880def8216a54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c1ab8ca_42d5e121",
+        "filename": "sfx2/source/dialog/StyleList.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-27T17:48:50Z",
+      "side": 1,
+      "message": "It seems that there\u0027s a duplicate license header?",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 3
+      },
+      "revId": "aedaa3e0a3f030d8ffe79bb0f67880def8216a54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4d0bacb_1f3ad166",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-27T17:48:50Z",
+      "side": 1,
+      "message": "So I\u0027d expect this mxTreeBox to become StyleList (this would happen in the corresponding HXX).\n\nI see something called \"mxFmtLb\" above - is it also a control showing the styles list in some mode? Or is it unrelated to the styles list?",
+      "range": {
+        "startLine": 536,
+        "startChar": 6,
+        "endLine": 536,
+        "endChar": 15
+      },
+      "revId": "aedaa3e0a3f030d8ffe79bb0f67880def8216a54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6d707fa_4b2255c4",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-27T17:48:50Z",
+      "side": 1,
+      "message": "We now don\u0027t use old-style inclusion guards in HXX files - instead, we use\n\n  #pragma once",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 34
+      },
+      "revId": "aedaa3e0a3f030d8ffe79bb0f67880def8216a54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5e68e58_315594cd",
+        "filename": "sfx2/uiconfig/ui/templatepanel.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-27T17:48:50Z",
+      "side": 1,
+      "message": "IIRC we discussed that this change, where you factor out the new control, will not have any changes in .UI?",
+      "revId": "aedaa3e0a3f030d8ffe79bb0f67880def8216a54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
