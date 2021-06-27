@@ -436,6 +436,8 @@ SAL_DLLPUBLIC double SAL_CALL rtl_math_approxValue(double fValue) SAL_THROW_EXTE
  */
 SAL_DLLPUBLIC bool SAL_CALL rtl_math_approxEqual(double a, double b) SAL_THROW_EXTERN_C();
 
+#ifndef LIBO_INTERNAL_ONLY
+
 /** Returns more accurate e^x-1 for x near 0 than calculating directly.
 
     expm1 is part of the C99 standard, but not provided by some compilers.
@@ -499,6 +501,8 @@ SAL_DLLPUBLIC double SAL_CALL rtl_math_asinh(double fValue) SAL_THROW_EXTERN_C()
     The value x in the term acosh(x).
   */
 SAL_DLLPUBLIC double SAL_CALL rtl_math_acosh(double fValue) SAL_THROW_EXTERN_C();
+
+#endif
 
 #if defined __cplusplus
 }

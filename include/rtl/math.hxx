@@ -231,6 +231,12 @@ inline double approxValue(double fValue)
     return rtl_math_approxValue(fValue);
 }
 
+#ifdef LIBO_INTERNAL_ONLY
+static_assert(signbit(log1p(-0.0)));
+#endif
+
+#ifndef LIBO_INTERNAL_ONLY
+
 /** A wrapper around rtl_math_expm1.
  */
 inline double expm1(double fValue)
@@ -279,6 +285,8 @@ inline double acosh(double fValue)
 {
     return rtl_math_acosh(fValue);
 }
+
+#endif
 
 /** A wrapper around rtl_math_approxEqual.
  */
@@ -348,6 +356,8 @@ inline double approxCeil(double a)
 {
     return ceil( approxValue( a ));
 }
+
+#ifndef LIBO_INTERNAL_ONLY
 
 /** Tests whether a value is neither INF nor NAN.
  */
@@ -463,6 +473,8 @@ inline double tan(double d)
     setNan( &d );
     return d;
 }
+
+#endif
 
 }
 

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/math.hxx>
 
 #include <iterator>
 
@@ -42,6 +41,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <cmath>
 
 namespace com::sun::star::chart2 { class XChartDocument; }
 
@@ -1365,16 +1365,15 @@ uno::Sequence< OUString > SplitCategoriesProvider_ForComplexDescriptions::getStr
 // ____ XDateCategories ____
 Sequence< double > SAL_CALL InternalDataProvider::getDateCategories()
 {
-    double fNan = InternalDataProvider::getNotANumber();
-    double fValue = fNan;
     vector< vector< uno::Any > > aCategories( m_bDataInColumns ? m_aInternalData.getComplexRowLabels() : m_aInternalData.getComplexColumnLabels());
     sal_Int32 nCount = aCategories.size();
     Sequence< double > aDoubles( nCount );
     sal_Int32 nN=0;
     for (auto const& category : aCategories)
     {
+        double fValue;
         if( category.empty() || !(category[0]>>=fValue) )
-            fValue = fNan;
+            fValue = std::numeric_limits<double>::quiet_NaN();
         aDoubles[nN++]=fValue;
     }
     return aDoubles;
@@ -1487,18 +1486,6 @@ void SAL_CALL InternalDataProvider::removeChartDataChangeEventListener(
 {
 }
 
-double SAL_CALL InternalDataProvider::getNotANumber()
-{
-    double fNan;
-    ::rtl::math::setNan( & fNan );
-    return fNan;
-}
-
-sal_Bool SAL_CALL InternalDataProvider::isNotANumber( double nNumber )
-{
-    return std::isnan( nNumber )
-        || std::isinf( nNumber );
-}
 // lang::XInitialization:
 void SAL_CALL InternalDataProvider::initialize(const uno::Sequence< uno::Any > & _aArguments)
 {

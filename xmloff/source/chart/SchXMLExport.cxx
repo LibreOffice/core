@@ -629,8 +629,6 @@ uno::Sequence< OUString > lcl_DataSequenceToStringSequence(
 }
 ::std::vector< double > lcl_getAllValuesFromSequence( const Reference< chart2::data::XDataSequence > & xSeq )
 {
-    double fNan = 0.0;
-    ::rtl::math::setNan( &fNan );
     ::std::vector< double > aResult;
     if(!xSeq.is())
         return aResult;
@@ -810,11 +808,9 @@ lcl_TableData lcl_getDataForLocalTable(
 
         // resize data
         aResult.aDataInRows.resize( nNumRows );
-        double fNan = 0.0;
-        ::rtl::math::setNan( &fNan );
 
         for (auto& aData: aResult.aDataInRows)
-            aData.resize(nNumColumns, fNan);
+            aData.resize(nNumColumns, std::numeric_limits<double>::quiet_NaN());
         aResult.aColumnDescriptions.resize( nNumColumns );
         aResult.aComplexColumnDescriptions.realloc( nNumColumns );
         aResult.aRowDescriptions.resize( nNumRows );
