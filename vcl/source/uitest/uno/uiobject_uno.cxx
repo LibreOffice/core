@@ -9,33 +9,17 @@
 
 #include <sal/config.h>
 
-#include <atomic>
 #include <condition_variable>
-#include <memory>
 #include <mutex>
 #include "uiobject_uno.hxx"
 #include <utility>
 #include <cppuhelper/supportsservice.hxx>
-#include <tools/link.hxx>
+#include <vcl/scheduler.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/idle.hxx>
+#include <vcl/task.hxx>
 #include <vcl/window.hxx>
 
 #include <set>
-
-class Timer;
-
-namespace {
-
-struct Notifier {
-    std::condition_variable cv;
-    std::mutex mMutex;
-    bool mReady = false;
-
-    DECL_LINK( NotifyHdl, Timer*, void );
-};
-
-}
 
 UIObjectUnoObj::UIObjectUnoObj(std::unique_ptr<UIObject> pObj):
     UIObjectBase(m_aMutex),
@@ -59,100 +43,79 @@ css::uno::Reference<css::ui::test::XUIObject> SAL_CALL UIObjectUnoObj::getChild(
     return new UIObjectUnoObj(std::move(pObj));
 }
 
-IMPL_LINK_NOARG(Notifier, NotifyHdl, Timer*, void)
+namespace
 {
-    std::scoped_lock<std::mutex> lk(mMutex);
-    mReady = true;
-    cv.notify_all();
-}
-
-namespace {
-
-class ExecuteWrapper
+class ExecuteActionTask final : public Task
 {
-    std::function<void()> mFunc;
-    Link<Timer*, void> mHandler;
-    std::atomic<bool> mbSignal;
+    std::condition_variable m_CV;
+    std::mutex m_Mutex;
+    bool m_bReady = false;
+
+    OUString m_sAction;
+    UIObject& m_rUIobject;
+    StringMap m_PropertyMap;
+
+    virtual sal_uInt64 UpdateMinPeriod(sal_uInt64) const override;
+    virtual void Invoke() override;
 
 public:
-
-    ExecuteWrapper(std::function<void()> func, Link<Timer*, void> handler):
-        mFunc(std::move(func)),
-        mHandler(handler),
-        mbSignal(false)
-    {
-    }
-
-    void setSignal()
-    {
-        mbSignal = true;
-    }
-
-    DECL_LINK( ExecuteActionHdl, Timer*, void );
+    ExecuteActionTask(const OUString& rAction,
+                      const css::uno::Sequence<css::beans::PropertyValue>& rPropValues,
+                      UIObject& rUIobject);
+    void wait_for_invoke();
 };
 
-
-IMPL_LINK_NOARG(ExecuteWrapper, ExecuteActionHdl, Timer*, void)
+ExecuteActionTask::ExecuteActionTask(
+    const OUString& rAction, const css::uno::Sequence<css::beans::PropertyValue>& rPropValues,
+    UIObject& rUIobject)
+    : Task("UIObjectUnoObj::executeAction")
+    , m_sAction(rAction)
+    , m_rUIobject(rUIobject)
 {
+    for (const auto& rPropVal : rPropValues)
     {
-        Idle aIdle;
-        {
-            mFunc();
-            aIdle.SetDebugName("UI Test Idle Handler2");
-            aIdle.SetPriority(TaskPriority::LOWEST);
-            aIdle.SetInvokeHandler(mHandler);
-            aIdle.Start();
-        }
-
-        while (!mbSignal) {
-            Application::Reschedule();
-        }
+        OUString aVal;
+        if (!(rPropVal.Value >>= aVal))
+            continue;
+        m_PropertyMap[rPropVal.Name] = aVal;
     }
-    delete this;
 }
 
+sal_uInt64 ExecuteActionTask::UpdateMinPeriod(sal_uInt64) const
+{
+    return Scheduler::ImmediateTimeoutMs;
 }
+
+void ExecuteActionTask::Invoke()
+{
+    m_rUIobject.execute(m_sAction, m_PropertyMap);
+    {
+        std::lock_guard<std::mutex> lk(m_Mutex);
+        m_bReady = true;
+    }
+    m_CV.notify_one();
+}
+
+void ExecuteActionTask::wait_for_invoke()
+{
+    assert(!m_bReady);
+    std::unique_lock<std::mutex> lk(m_Mutex);
+    Start();
+    m_CV.wait(lk, [this] { return m_bReady; });
+}
+
+} // namespace
 
 void SAL_CALL UIObjectUnoObj::executeAction(const OUString& rAction, const css::uno::Sequence<css::beans::PropertyValue>& rPropValues)
 {
     if (!mpObj)
         throw css::uno::RuntimeException();
 
-    auto aIdle = std::make_unique<Idle>();
-    aIdle->SetDebugName("UI Test Idle Handler");
-    aIdle->SetPriority(TaskPriority::HIGHEST);
-
-    std::function<void()> func = [&rAction, &rPropValues, this](){
-
-        SolarMutexGuard aGuard;
-        StringMap aMap;
-        for (const auto& rPropVal : rPropValues)
-        {
-            OUString aVal;
-            if (!(rPropVal.Value >>= aVal))
-                continue;
-
-            aMap[rPropVal.Name] = aVal;
-        }
-        mpObj->execute(rAction, aMap);
-    };
-
-    Notifier notifier;
-    ExecuteWrapper* pWrapper = new ExecuteWrapper(func, LINK(&notifier, Notifier, NotifyHdl));
-    aIdle->SetInvokeHandler(LINK(pWrapper, ExecuteWrapper, ExecuteActionHdl));
-    {
-        SolarMutexGuard aGuard;
-        aIdle->Start();
-    }
-
-    {
-        std::unique_lock<std::mutex> lk(notifier.mMutex);
-        notifier.cv.wait(lk, [&notifier]{return notifier.mReady;});
-    }
-    pWrapper->setSignal();
+    ExecuteActionTask aTask(rAction, rPropValues, *mpObj.get());
+    aTask.wait_for_invoke();
 
     SolarMutexGuard aGuard;
-    aIdle.reset();
+    Scheduler::ProcessEventsToIdle();
 }
 
 css::uno::Sequence<css::beans::PropertyValue> UIObjectUnoObj::getState()
