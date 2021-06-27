@@ -747,8 +747,8 @@ bool ScDBQueryDataIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const ScM
 
 ScDBQueryDataIterator::Value::Value() :
     mnError(FormulaError::NONE), mbIsNumber(true)
+    , mfValue(std::numeric_limits<double>::quiet_NaN())
 {
-    ::rtl::math::setNan(&mfValue);
 }
 
 ScDBQueryDataIterator::ScDBQueryDataIterator(ScDocument& rDocument, const ScInterpreterContext& rContext, std::unique_ptr<ScDBQueryParamBase> pParam) :

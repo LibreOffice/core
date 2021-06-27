@@ -975,8 +975,6 @@ void lcl_switchToDateCategories( const Reference< XChartDocument >& xChartDoc, c
         {
             Sequence< Sequence< Any > > aAnyCategories( xDataAccess->getAnyRowDescriptions() );
             double fTest = 0.0;
-            double fNan = 0.0;
-            ::rtl::math::setNan( & fNan );
             sal_Int32 nN = aAnyCategories.getLength();
             for( ; nN--; )
             {
@@ -988,7 +986,7 @@ void lcl_switchToDateCategories( const Reference< XChartDocument >& xChartDoc, c
                     Any& rAny = rCat[0];
                     if( !(rAny>>=fTest) )
                     {
-                        rAny <<= fNan;
+                        rAny <<= std::numeric_limits<double>::quiet_NaN();
                     }
                 }
             }

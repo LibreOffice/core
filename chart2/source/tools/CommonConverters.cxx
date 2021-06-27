@@ -24,7 +24,6 @@
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
-#include <rtl/math.hxx>
 #include <osl/diagnose.h>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 
@@ -429,7 +428,7 @@ uno::Sequence< double > DataSequenceToDoubleSequence(
         for(sal_Int32 nN=aValues.getLength();nN--;)
         {
             if( !(aValues[nN] >>= aResult[nN]) )
-                ::rtl::math::setNan( &aResult[nN] );
+                aResult[nN] = std::numeric_limits<double>::quiet_NaN();
         }
     }
 
