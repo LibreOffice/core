@@ -41,6 +41,7 @@
 #include <float.h>
 #include <algorithm>
 #include <memory>
+#include <limits>
 #include <unordered_map>
 
 #include <com/sun/star/sheet/DataResultFlags.hpp>
@@ -1335,8 +1336,7 @@ void ScDPResultMember::FillMemberResults(
     OSL_ENSURE( rPos+nSize <= pSequences->getLength(), "bumm" );
 
     bool bIsNumeric = false;
-    double fValue;
-    rtl::math::setNan(&fValue);
+    double fValue = std::numeric_limits<double>::quiet_NaN();
     OUString aName;
     if ( pMemberName )          // if pMemberName != NULL, use instead of real member name
     {
@@ -1498,7 +1498,7 @@ void ScDPResultMember::FillMemberResults(
                 }
             }
 
-            rtl::math::setNan(&fValue); /* TODO: any numeric value to obtain? */
+            fValue = std::numeric_limits<double>::quiet_NaN(); /* TODO: any numeric value to obtain? */
             pArray[rPos].Name    = aName;
             pArray[rPos].Caption = aSubStr;
             pArray[rPos].Flags = ( pArray[rPos].Flags |

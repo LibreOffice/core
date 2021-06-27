@@ -22,7 +22,8 @@
 #include <svl/lstner.hxx>
 #include <svl/itemprop.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <rtl/math.hxx>
+
+#include <limits>
 
 class ScDocument;
 
@@ -44,12 +45,11 @@ struct ValueAndFormat
     sal_uInt32 m_nNumberFormat;
 
     explicit ValueAndFormat()
-        : m_fValue(0.0)
+        : m_fValue(std::numeric_limits<double>::quiet_NaN())
         , m_aString()
         , m_eType(ValueType::Empty)
         , m_nNumberFormat(0)
     {
-        rtl::math::setNan(&m_fValue);
     }
 
     explicit ValueAndFormat(double fValue, sal_uInt32 nNumberFormat)
@@ -60,12 +60,11 @@ struct ValueAndFormat
     {}
 
     explicit ValueAndFormat(OUString const & rString)
-        : m_fValue(0.0)
+        : m_fValue(std::numeric_limits<double>::quiet_NaN())
         , m_aString(rString)
         , m_eType(ValueType::String)
         , m_nNumberFormat(0)
     {
-        rtl::math::setNan(&m_fValue);
     }
 };
 

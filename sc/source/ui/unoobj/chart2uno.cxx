@@ -59,7 +59,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 
-#include <rtl/math.hxx>
+#include <limits>
 
 SC_SIMPLE_SERVICE_INFO( ScChart2DataProvider, "ScChart2DataProvider",
         "com.sun.star.chart2.data.DataProvider")
@@ -2323,10 +2323,10 @@ void ScChart2DataSource::AddLabeledSequence(const uno::Reference < chart2::data:
 
 // DataSequence ==============================================================
 
-ScChart2DataSequence::Item::Item() :
-    mfValue(0.0), mbIsValue(false)
+ScChart2DataSequence::Item::Item()
+    : mfValue(std::numeric_limits<double>::quiet_NaN())
+    , mbIsValue(false)
 {
-    ::rtl::math::setNan(&mfValue);
 }
 
 ScChart2DataSequence::HiddenRangeListener::HiddenRangeListener(ScChart2DataSequence& rParent) :
@@ -2907,15 +2907,12 @@ uno::Sequence< double > SAL_CALL ScChart2DataSequence::getNumericalData()
 
     BuildDataCache();
 
-    double fNAN;
-    ::rtl::math::setNan(&fNAN);
-
     sal_Int32 nCount = m_aDataArray.size();
     uno::Sequence<double> aSeq(nCount);
     double* pArr = aSeq.getArray();
     for (const Item& rItem : m_aDataArray)
     {
-        *pArr = rItem.mbIsValue ? rItem.mfValue : fNAN;
+        *pArr = rItem.mbIsValue ? rItem.mfValue : std::numeric_limits<double>::quiet_NaN();
         ++pArr;
     }
 
