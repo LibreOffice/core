@@ -422,12 +422,10 @@ Cell::Cell(
     }
 }
 
-
-Cell::~Cell() noexcept
+Cell::~Cell() COVERITY_NOEXCEPT_FALSE
 {
     dispose();
 }
-
 
 void Cell::dispose()
 {
