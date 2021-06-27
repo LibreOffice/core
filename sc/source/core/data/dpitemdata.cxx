@@ -167,14 +167,14 @@ void ScDPItemData::SetRangeStart(double fVal)
 void ScDPItemData::SetRangeFirst()
 {
     DisposeString();
-    rtl::math::setInf(&mfValue, true);
+    mfValue = -std::numeric_limits<double>::infinity();
     meType = RangeStart;
 }
 
 void ScDPItemData::SetRangeLast()
 {
     DisposeString();
-    rtl::math::setInf(&mfValue, false);
+    mfValue = std::numeric_limits<double>::infinity();
     meType = RangeStart;
 }
 
