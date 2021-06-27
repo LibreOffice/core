@@ -197,6 +197,8 @@ bool ReservedId::VisitNamedDecl(NamedDecl const * decl) {
                 // connectivity/source/inc/ado/Awrapadox.hxx, MS SDK adoctint.h
             && s != "_ADOUser"
                 // connectivity/source/inc/ado/Awrapadox.hxx, MS SDK adoctint.h
+            && s != "_CustomCellRenderer" // vcl/unx/gtk3/customcellrenderer.hxx
+            && s != "_CustomCellRendererClass" // vcl/unx/gtk3/customcellrenderer.cxx
             && s != "_FcPattern" // vcl/inc/unx/fc_fontoptions.hxx
             && s != "_GdkDisplay"
                 // vcl/unx/gtk/xid_fullscreen_on_all_monitors.c
