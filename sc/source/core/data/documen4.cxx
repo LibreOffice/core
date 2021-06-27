@@ -153,7 +153,7 @@ bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
                     while ( !bDoneHorMove && !bHorMoveError && nHorIter++ < nHorMaxIter )
                     {
                         double fHorAngle = fHorStepAngle * static_cast<double>( nHorIter );
-                        double fHorTangent = ::rtl::math::tan(basegfx::deg2rad(fHorAngle));
+                        double fHorTangent = std::tan(basegfx::deg2rad(fHorAngle));
 
                         sal_uInt16 nIdx = 0;
                         while( nIdx++ < 2 && !bDoneHorMove )
