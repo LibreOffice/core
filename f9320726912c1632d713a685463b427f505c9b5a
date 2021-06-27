@@ -45,6 +45,30 @@
       "revId": "f9320726912c1632d713a685463b427f505c9b5a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4a6e352_8de6d19b",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-27T21:46:40Z",
+      "side": 1,
+      "message": "Commenting on it because this error is present patchset 8 too..",
+      "parentUuid": "45060c4d_fbaed585",
+      "range": {
+        "startLine": 536,
+        "startChar": 4,
+        "endLine": 536,
+        "endChar": 70
+      },
+      "revId": "f9320726912c1632d713a685463b427f505c9b5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
