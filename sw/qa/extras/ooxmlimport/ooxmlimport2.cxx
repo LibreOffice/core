@@ -751,6 +751,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf129659)
     // don't crash on footnote with page break
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf104714)
+{
+    load(mpTestDocumentPath, "tdf104714.docx");
+    //expected behavior is to observe only 2 paragraphs. no extras to be added.
+    CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
+    //success if assertion is true.
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf129912)
 {
     load(mpTestDocumentPath, "tdf129912.docx");
