@@ -89,7 +89,7 @@ namespace cppu_threadpool {
         bool isDisposed( void const * nDisposeId );
 
     private:
-        ::osl::Mutex m_mutex;
+        std::mutex m_mutex;
         std::vector< void const * > m_vector;
     };
 
