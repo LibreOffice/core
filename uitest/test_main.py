@@ -110,10 +110,12 @@ if __name__ == '__main__':
     elif "--dir" in opts:
         test_suite = get_test_suite_for_dir(opts)
         test_name_limit = os.environ.get('UITEST_TEST_NAME', '')
-        print(test_name_limit_found)
-        if len(test_name_limit) > 0 and not test_name_limit_found:
-            print("UITEST_TEST_NAME '%s' does not match any test" % test_name_limit)
-            sys.exit(1)
+        if len(test_name_limit) > 0:
+            if not test_name_limit_found:
+                print("UITEST_TEST_NAME '%s' does not match any test" % test_name_limit)
+                sys.exit(1)
+            else:
+                print("UITEST_TEST_NAME '%s' active" % test_name_limit)
     elif "--file" in opts:
         test_suite = unittest.TestSuite()
         add_tests_for_file(opts['--file'], test_suite)
