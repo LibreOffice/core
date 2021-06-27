@@ -426,7 +426,7 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
     }
     else
     {
-        SwUndoId nBeingUndone;
+        SwUndoId nBeingUndone(SwUndoId::EMPTY);
         GetIDocumentUndoRedo().GetFirstRedoInfo(nullptr, &nBeingUndone);
         if (SwUndoId::HEADER_FOOTER == nBeingUndone)
         {
