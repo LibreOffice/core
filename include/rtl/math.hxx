@@ -32,8 +32,14 @@
 #include "sal/mathconf.h"
 #include "sal/types.h"
 
+#ifdef __cplusplus
 #include <cstddef>
+#include <cmath>
+#include <limits>
+#else
+#include <stddef.h>
 #include <math.h>
+#endif
 
 namespace rtl {
 
@@ -231,6 +237,8 @@ inline double approxValue(double fValue)
     return rtl_math_approxValue(fValue);
 }
 
+#ifndef LIBO_INTERNAL_ONLY
+
 /** A wrapper around rtl_math_expm1.
  */
 inline double expm1(double fValue)
@@ -238,19 +246,31 @@ inline double expm1(double fValue)
     return rtl_math_expm1(fValue);
 }
 
+#endif
+
 /** A wrapper around rtl_math_log1p.
  */
 inline double log1p(double fValue)
 {
+#if !defined LIBO_INTERNAL_ONLY || defined __APPLE__
     return rtl_math_log1p(fValue);
+#else
+    return std::log1p(fValue);
+#endif
 }
 
 /** A wrapper around rtl_math_atanh.
  */
 inline double atanh(double fValue)
 {
+#if !defined LIBO_INTERNAL_ONLY || defined __APPLE__
     return rtl_math_atanh(fValue);
+#else
+    return std::atanh(fValue);
+#endif
 }
+
+#ifndef LIBO_INTERNAL_ONLY
 
 /** A wrapper around rtl_math_erf.
  */
@@ -266,18 +286,28 @@ inline double erfc(double fValue)
     return rtl_math_erfc(fValue);
 }
 
+#endif
+
 /** A wrapper around rtl_math_asinh.
  */
 inline double asinh(double fValue)
 {
+#if !defined LIBO_INTERNAL_ONLY || defined __APPLE__
     return rtl_math_asinh(fValue);
+#else
+    return std::asinh(fValue);
+#endif
 }
 
 /** A wrapper around rtl_math_acosh.
  */
 inline double acosh(double fValue)
 {
+#if !defined LIBO_INTERNAL_ONLY || defined __APPLE__
     return rtl_math_acosh(fValue);
+#else
+    return std::acosh(fValue);
+#endif
 }
 
 /** A wrapper around rtl_math_approxEqual.
@@ -349,6 +379,8 @@ inline double approxCeil(double a)
     return ceil( approxValue( a ));
 }
 
+#ifndef LIBO_INTERNAL_ONLY
+
 /** Tests whether a value is neither INF nor NAN.
  */
 inline bool isFinite(double d)
@@ -417,6 +449,21 @@ inline void setNan(double * pd)
     *pd = sd;
 }
 
+#endif
+
+/** Get a QNAN.
+ */
+inline double getNan()
+{
+#ifndef LIBO_INTERNAL_ONLY
+    double pd;
+    setNan(pd);
+    return pd;
+#else
+    return std::numeric_limits<double>::quiet_NaN();
+#endif
+}
+
 /** If a value is a valid argument for sin(), cos(), tan().
 
     IEEE 754 specifies that absolute values up to 2^64 (=1.844e19) for the
@@ -428,10 +475,14 @@ inline void setNan(double * pd)
  */
 inline bool isValidArcArg(double d)
 {
+#ifndef LIBO_INTERNAL_ONLY
     return fabs(d)
         <= (static_cast< double >(static_cast< unsigned long >(0x80000000))
             * static_cast< double >(static_cast< unsigned long >(0x80000000))
             * 2);
+#else
+    return fabs(d) <= std::ldexp(1.0, 65);
+#endif
 }
 
 /** Safe sin(), returns NAN if not valid.
@@ -440,8 +491,7 @@ inline double sin(double d)
 {
     if ( isValidArcArg( d ) )
         return ::sin( d );
-    setNan( &d );
-    return d;
+    return getNan();
 }
 
 /** Safe cos(), returns NAN if not valid.
@@ -450,8 +500,7 @@ inline double cos(double d)
 {
     if ( isValidArcArg( d ) )
         return ::cos( d );
-    setNan( &d );
-    return d;
+    return getNan();
 }
 
 /** Safe tan(), returns NAN if not valid.
@@ -460,8 +509,7 @@ inline double tan(double d)
 {
     if ( isValidArcArg( d ) )
         return ::tan( d );
-    setNan( &d );
-    return d;
+    return getNan();
 }
 
 }
