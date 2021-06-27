@@ -25,40 +25,13 @@ enum
 };
 }
 
-static gpointer custom_cell_renderer_parent_class;
+G_DEFINE_TYPE(CustomCellRenderer, custom_cell_renderer, GTK_TYPE_CELL_RENDERER_TEXT)
 
-static void custom_cell_renderer_class_init(CustomCellRendererClass* klass);
-
-static void custom_cell_renderer_init(GTypeInstance* instance, gpointer)
+static void custom_cell_renderer_init(CustomCellRenderer* self)
 {
-    new (&CUSTOM_CELL_RENDERER(instance)->device) VclPtr<VirtualDevice>;
-}
-
-GType custom_cell_renderer_get_type()
-{
-    static GType type = 0;
-
-    if (!type)
-    {
-        static const GTypeInfo tinfo = {
-            sizeof(CustomCellRendererClass),
-            nullptr, /* base init */
-            nullptr, /* base finalize */
-            reinterpret_cast<GClassInitFunc>(custom_cell_renderer_class_init), /* class init */
-            nullptr, /* class finalize */
-            nullptr, /* class data */
-            sizeof(CustomCellRenderer), /* instance size */
-            0, /* nb preallocs */
-            &custom_cell_renderer_init, /* instance init */
-            nullptr /* value table */
-        };
-
-        // inherit from GtkCellRendererText so we can set the "text" property and get a11y support for that
-        type = g_type_register_static(GTK_TYPE_CELL_RENDERER_TEXT, "CustomCellRenderer", &tinfo,
-                                      GTypeFlags(0));
-    }
-
-    return type;
+    new (&self->device) VclPtr<VirtualDevice>;
+    // prevent loplugin:unreffun firing on macro generated function
+    (void)custom_cell_renderer_get_instance_private(self);
 }
 
 static void custom_cell_renderer_get_property(GObject* object, guint param_id, GValue* value,
