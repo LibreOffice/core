@@ -26,6 +26,7 @@
 #include <oox/export/utils.hxx>
 #include <drawingml/chart/typegroupconverter.hxx>
 
+#include <cmath>
 #include <cstdio>
 #include <limits>
 

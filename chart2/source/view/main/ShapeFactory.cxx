@@ -2632,11 +2632,11 @@ awt::Size ShapeFactory::getSizeAfterRotation(
             const double fAnglePi = basegfx::deg2rad(fRotationAngleDegree);
 
             aRet.Height = static_cast<sal_Int32>(
-                aSize.Width*rtl::math::sin( fAnglePi )
-                + aSize.Height*rtl::math::cos( fAnglePi ));
+                aSize.Width*std::sin( fAnglePi )
+                + aSize.Height*std::cos( fAnglePi ));
             aRet.Width = static_cast<sal_Int32>(
-                aSize.Width*rtl::math::cos( fAnglePi )
-                + aSize.Height*rtl::math::sin( fAnglePi ));
+                aSize.Width*std::cos( fAnglePi )
+                + aSize.Height*std::sin( fAnglePi ));
         }
     }
     return aRet;
