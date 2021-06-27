@@ -182,6 +182,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf140668, "tdf140668.docx")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf104714, "tdf104714.docx")
+{
+    //expected behavior is to observe only 2 paragraphs. no extras to be added.
+    CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
+    //without the fix, the expected value : 2 , observed value : 3.
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf138771, "tdf138771.docx")
 {
     // Don't crash when document is imported
