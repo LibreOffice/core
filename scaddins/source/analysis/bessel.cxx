@@ -325,12 +325,11 @@ double BesselK( double fNum, sal_Int32 nOrder )
 /// @throws NoConvergenceException
 static double Bessely0( double fX )
 {
-    if (fX <= 0)
+    if (fX <= 0 || !rtl::math::isValidArcArg(fX))
         throw IllegalArgumentException();
     const double fMaxIteration = 9000000.0; // should not be reached
     if (fX > 5.0e+6) // iteration is not considerable better then approximation
-        return sqrt(1/f_PI/fX)
-                *(rtl::math::sin(fX)-rtl::math::cos(fX));
+        return sqrt(1/f_PI/fX) * (std::sin(fX)-std::cos(fX));
     const double epsilon = 1.0e-15;
     const double EulerGamma = 0.57721566490153286060;
     double alpha = log(fX/2.0)+EulerGamma;
@@ -378,12 +377,11 @@ static double Bessely0( double fX )
 /// @throws NoConvergenceException
 static double Bessely1( double fX )
 {
-    if (fX <= 0)
+    if (fX <= 0 || !rtl::math::isValidArcArg(fX))
         throw IllegalArgumentException();
     const double fMaxIteration = 9000000.0; // should not be reached
     if (fX > 5.0e+6) // iteration is not considerable better then approximation
-        return - sqrt(1/f_PI/fX)
-                *(rtl::math::sin(fX)+rtl::math::cos(fX));
+        return - sqrt(1/f_PI/fX) * (std::sin(fX)+std::cos(fX));
     const double epsilon = 1.0e-15;
     const double EulerGamma = 0.57721566490153286060;
     double alpha = 1.0/fX;
