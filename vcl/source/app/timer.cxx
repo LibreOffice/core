@@ -80,10 +80,11 @@ void Timer::Invoke( Timer *arg )
     maInvokeHandler.Call( arg );
 }
 
-void Timer::Start()
+void Timer::Start(const bool bStartTimer)
 {
-    Task::Start();
-    Task::StartTimer( mnTimeout );
+    Task::Start(false);
+    if (bStartTimer)
+        Task::StartTimer(mnTimeout);
 }
 
 void Timer::SetTimeout( sal_uInt64 nNewTimeout )

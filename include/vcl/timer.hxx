@@ -58,13 +58,7 @@ public:
 
     void            SetTimeout( sal_uInt64 nTimeoutMs );
     sal_uInt64      GetTimeout() const { return mnTimeout; }
-    /**
-     * Activates the timer task
-     *
-     * If the timer is already active, it's reset!
-     * Check with Task::IsActive() to prevent reset.
-     */
-    virtual void    Start() override;
+    virtual void Start(bool bStartTimer = true) override;
 };
 
 /// An auto-timer is a multi-shot timer re-emitting itself at
