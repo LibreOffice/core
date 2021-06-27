@@ -22,6 +22,29 @@
       "revId": "f9320726912c1632d713a685463b427f505c9b5a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45060c4d_fbaed585",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-27T21:44:41Z",
+      "side": 1,
+      "message": "Hiii..\n\nThis line first showed the error that StyleList does not belong to weld. Along with it, it showed some constructor error. To resolve it, I made changes in viewfrm.cxx file.. Now, it shows the error that weld::Treeview cannot be converted to weld::StyleList.. But StyleList is a subclass of Treeview..\n\nPlease help me resolve this error..",
+      "range": {
+        "startLine": 536,
+        "startChar": 4,
+        "endLine": 536,
+        "endChar": 70
+      },
+      "revId": "f9320726912c1632d713a685463b427f505c9b5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
