@@ -191,6 +191,24 @@
       "revId": "aedaa3e0a3f030d8ffe79bb0f67880def8216a54",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ffc847c_b453d7e4",
+        "filename": "sfx2/uiconfig/ui/templatepanel.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-27T18:07:32Z",
+      "side": 1,
+      "message": "No we don\u0027t need the StyleList to appear in glade/UI. We will have the generic \"GtkTreeView\" there, and will only change things in the CXX/HXX, where we will have the new class that will manage the UI control.\n\nJust like currently we have something like\n\n\n  std::unique_ptr\u003cweld::TreeView\u003e mxTreeBox;\n  ...\n  mxTreeBox(pBuilder-\u003eweld_tree_view(\"treeview\"))\n  ...\n  mxTreeBox-\u003edoSomething1();\n  mxTreeBox-\u003edoSomething2();\n  mxTreeBox-\u003edoSomething3();\n  mxTreeBox-\u003edoSomething4();\n  mxTreeBox-\u003edoSomething5();\n  mxTreeBox-\u003edoSomething6();\n  ...\n\nwe will have instead\n\n  std::unique_ptr\u003cweld::StyleList\u003e mxStyleList;\n  ...\n  mxStyleList(pBuilder-\u003eweld_tree_view(\"treeview\"))\n  ...\n  mxStyleList-\u003edoSomethingSmart();\n  ...",
+      "parentUuid": "21114c21_e92b7860",
+      "revId": "aedaa3e0a3f030d8ffe79bb0f67880def8216a54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
