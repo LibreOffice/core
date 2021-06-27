@@ -311,6 +311,29 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf68290)
     lcl_AssertCurrentCursorPosition(12, 2);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf95554)
+{
+    ScModelObj* pModelObj = createDoc();
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    insertStringToCell(*pModelObj, "A1", "1");
+    insertStringToCell(*pModelObj, "A2", "2");
+    insertStringToCell(*pModelObj, "A3", "3");
+
+    goToCell("A1:A3");
+
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+
+    goToCell("B1");
+
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), pDoc->GetString(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2"), pDoc->GetString(ScAddress(1, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("3"), pDoc->GetString(ScAddress(1, 2, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf122232)
 {
     ScModelObj* pModelObj = createDoc("tdf122232.ods");
