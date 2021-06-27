@@ -228,8 +228,6 @@ check : unitcheck slowcheck
 	$(call gb_Output_announce_bell)
 
 debugrun :
-	export HEADLESS= && \
-	$(if $(filter svp,$(SAL_USE_VCLPLUGIN)),unset SAL_USE_VCLPLUGIN &&) \
 	$(call gb_Module_DEBUGRUNCOMMAND)
 
 help :
