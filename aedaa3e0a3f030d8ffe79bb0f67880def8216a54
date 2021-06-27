@@ -173,6 +173,24 @@
       "revId": "aedaa3e0a3f030d8ffe79bb0f67880def8216a54",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21114c21_e92b7860",
+        "filename": "sfx2/uiconfig/ui/templatepanel.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-27T18:02:16Z",
+      "side": 1,
+      "message": "For changes in .UI, StyleList should be present in glade.. Unfortunately it is not present now..",
+      "parentUuid": "a5e68e58_315594cd",
+      "revId": "aedaa3e0a3f030d8ffe79bb0f67880def8216a54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
