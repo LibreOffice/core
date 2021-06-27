@@ -160,6 +160,30 @@
     },
     {
       "key": {
+        "uuid": "af7b9ee6_38ef172c",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-27T18:16:49Z",
+      "side": 1,
+      "message": "mxTreeBox will change the implentation for the families includng list, table etc",
+      "parentUuid": "aa8f794c_fb930590",
+      "range": {
+        "startLine": 536,
+        "startChar": 6,
+        "endLine": 536,
+        "endChar": 15
+      },
+      "revId": "aedaa3e0a3f030d8ffe79bb0f67880def8216a54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e6d707fa_4b2255c4",
         "filename": "sfx2/source/inc/StyleList.hxx",
         "patchSetId": 4
