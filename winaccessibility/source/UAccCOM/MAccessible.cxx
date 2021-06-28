@@ -91,6 +91,24 @@ enum XInterfaceIndex {
     XI_NULL         = -1
 };
 
+template <class Interface>
+bool queryXInterface(XAccessible* pXAcc, XInterface** ppXI)
+{
+    if (!pXAcc)
+        return false;
+
+    Reference<XAccessibleContext> pRContext = pXAcc->getAccessibleContext();
+    if (!pRContext.is())
+        return false;
+
+    Reference<Interface> pRXI(pRContext, UNO_QUERY);
+    if (!pRXI.is())
+        return false;
+
+    *ppXI = pRXI.get();
+    return true;
+}
+
 }
 
 // IA2 states mapping, and name
@@ -144,25 +162,6 @@ short const UNO_STATES[] =
 };
 
 using namespace com::sun::star::accessibility::AccessibleRole;
-
-
-#define QUERYXINTERFACE(ainterface) \
-{                           \
-    if(pXAcc == nullptr)    \
-    return false;       \
-    pRContext = pXAcc->getAccessibleContext();  \
-    if( !pRContext.is() )   \
-{                       \
-    return false;       \
-}                       \
-    Reference<X##ainterface> pRXI(pRContext,UNO_QUERY);\
-    if( !pRXI.is() )        \
-{                       \
-    return false;       \
-}                       \
-    *ppXI = pRXI.get(); \
-    return true;            \
-}
 
 #define ISDESTROY() \
     if(m_isDestroy) \
@@ -2503,51 +2502,35 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_ActionDescription( const OLE
 
 bool CMAccessible::GetXInterfaceFromXAccessible(XAccessible* pXAcc, XInterface** ppXI, int index)
 {
-    Reference< XAccessibleContext > pRContext;
-
     switch(index)
     {
     case XI_COMPONENT:
-        QUERYXINTERFACE(AccessibleComponent)
-            break;
+        return queryXInterface<XAccessibleComponent>(pXAcc, ppXI);
     case XI_TEXT:
-        QUERYXINTERFACE(AccessibleText)
-            break;
+        return queryXInterface<XAccessibleText>(pXAcc, ppXI);
     case XI_EDITABLETEXT:
-        QUERYXINTERFACE(AccessibleEditableText)
-            break;
+        return queryXInterface<XAccessibleEditableText>(pXAcc, ppXI);
     case XI_TABLE:
-        QUERYXINTERFACE(AccessibleTable)
-            break;
+        return queryXInterface<XAccessibleTable>(pXAcc, ppXI);
     case XI_SELECTION:
-        QUERYXINTERFACE(AccessibleSelection)
-            break;
+        return queryXInterface<XAccessibleSelection>(pXAcc, ppXI);
     case XI_EXTENDEDCOMP:
-        QUERYXINTERFACE(AccessibleExtendedComponent)
-            break;
+        return queryXInterface<XAccessibleExtendedComponent>(pXAcc, ppXI);
     case XI_KEYBINDING:
-        QUERYXINTERFACE(AccessibleKeyBinding)
-            break;
+        return queryXInterface<XAccessibleKeyBinding>(pXAcc, ppXI);
     case XI_ACTION:
-        QUERYXINTERFACE(AccessibleAction)
-            break;
+        return queryXInterface<XAccessibleAction>(pXAcc, ppXI);
     case XI_VALUE:
-        QUERYXINTERFACE(AccessibleValue)
-            break;
+        return queryXInterface<XAccessibleValue>(pXAcc, ppXI);
     case XI_HYPERTEXT:
-        QUERYXINTERFACE(AccessibleHypertext)
-            break;
+        return queryXInterface<XAccessibleHypertext>(pXAcc, ppXI);
     case XI_HYPERLINK:
-        QUERYXINTERFACE(AccessibleHyperlink)
-            break;
+        return queryXInterface<XAccessibleHyperlink>(pXAcc, ppXI);
     case XI_IMAGE:
-        QUERYXINTERFACE(AccessibleImage)
-            break;
+        return queryXInterface<XAccessibleImage>(pXAcc, ppXI);
     default:
-        break;
+        return false;
     }
-
-    return false;
 }
 
 template<typename T> static HRESULT
