@@ -9745,6 +9745,7 @@ public:
         const gchar* pStr = g_variant_get_string(pParameter, &nLength);
         OString aStr(pStr, nLength);
         GtkInstanceMenuButton* pThis = static_cast<GtkInstanceMenuButton*>(widget);
+        SolarMutexGuard aGuard;
         pThis->signal_selected(aStr);
     }
 #else
