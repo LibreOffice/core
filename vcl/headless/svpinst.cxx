@@ -56,115 +56,31 @@
 #include <unx/salunxtime.h>
 #include <comphelper/lok.hxx>
 #include <tools/debug.hxx>
+#include <tools/time.hxx>
 
 SvpSalInstance* SvpSalInstance::s_pDefaultInstance = nullptr;
 
-#ifndef NDEBUG
-static bool g_CheckedMutex = false;
-
-#define DBG_TESTSVPYIELDMUTEX() \
-do { \
-    if (!g_CheckedMutex) \
-    { \
-        assert(dynamic_cast<SvpSalYieldMutex*>(GetYieldMutex()) != nullptr \
-            && "This SvpSalInstance function requires use of SvpSalYieldMutex"); \
-        g_CheckedMutex = true; \
-    } \
-} while(false)
-
-#else // NDEBUG
-#define DBG_TESTSVPYIELDMUTEX() ((void)0)
-#endif
-
-#if !defined(ANDROID) && !defined(IOS)
-
-static void atfork_child()
-{
-    if (SvpSalInstance::s_pDefaultInstance != nullptr)
-    {
-        SvpSalInstance::s_pDefaultInstance->CloseWakeupPipe(false);
-        SvpSalInstance::s_pDefaultInstance->CreateWakeupPipe(false);
-    }
-}
-
-#endif
-
 SvpSalInstance::SvpSalInstance( std::unique_ptr<SalYieldMutex> pMutex )
     : SalGenericInstance( std::move(pMutex) )
+    , m_WaitCondition(m_NonMainYieldMutex)
+    , m_EventCondition(m_NonMainYieldMutex)
+    , m_MainYieldCondition(m_MainYieldMutex)
 {
     m_aTimeout.tv_sec       = 0;
     m_aTimeout.tv_usec      = 0;
     m_nTimeoutMS            = 0;
 
     m_MainThread = osl::Thread::getCurrentIdentifier();
-    CreateWakeupPipe(true);
     if( s_pDefaultInstance == nullptr )
         s_pDefaultInstance = this;
-#if !defined(ANDROID) && !defined(IOS)
-    pthread_atfork(nullptr, nullptr, atfork_child);
-#endif
+
+    m_bSupportsOpenGL = false;
 }
 
 SvpSalInstance::~SvpSalInstance()
 {
     if( s_pDefaultInstance == this )
         s_pDefaultInstance = nullptr;
-    CloseWakeupPipe(true);
-}
-
-void SvpSalInstance::CloseWakeupPipe(bool log)
-{
-    SvpSalYieldMutex *const pMutex(dynamic_cast<SvpSalYieldMutex*>(GetYieldMutex()));
-    if (!pMutex)
-        return;
-    if (pMutex->m_FeedbackFDs[0] != -1)
-    {
-        if (log)
-        {
-            SAL_INFO("vcl.headless", "CloseWakeupPipe: Closing inherited feedback pipe: [" << pMutex->m_FeedbackFDs[0] << "," << pMutex->m_FeedbackFDs[1] << "]");
-        }
-        close (pMutex->m_FeedbackFDs[0]);
-        close (pMutex->m_FeedbackFDs[1]);
-        pMutex->m_FeedbackFDs[0] = pMutex->m_FeedbackFDs[1] = -1;
-    }
-}
-
-void SvpSalInstance::CreateWakeupPipe(bool log)
-{
-    SvpSalYieldMutex *const pMutex(dynamic_cast<SvpSalYieldMutex*>(GetYieldMutex()));
-    if (!pMutex)
-        return;
-    if (pipe (pMutex->m_FeedbackFDs) == -1)
-    {
-        if (log)
-        {
-            SAL_WARN("vcl.headless", "Could not create feedback pipe: " << strerror(errno));
-            std::abort();
-        }
-    }
-    else
-    {
-        if (log)
-        {
-            SAL_INFO("vcl.headless", "CreateWakeupPipe: Created feedback pipe: [" << pMutex->m_FeedbackFDs[0] << "," << pMutex->m_FeedbackFDs[1] << "]");
-        }
-
-        int flags;
-
-        // set close-on-exec descriptor flag.
-        if ((flags = fcntl (pMutex->m_FeedbackFDs[0], F_GETFD)) != -1)
-        {
-            flags |= FD_CLOEXEC;
-            (void) fcntl(pMutex->m_FeedbackFDs[0], F_SETFD, flags);
-        }
-        if ((flags = fcntl (pMutex->m_FeedbackFDs[1], F_GETFD)) != -1)
-        {
-            flags |= FD_CLOEXEC;
-            (void) fcntl(pMutex->m_FeedbackFDs[1], F_SETFD, flags);
-        }
-
-        // retain the default blocking I/O for feedback pipe
-    }
 }
 
 void SvpSalInstance::TriggerUserEventProcessing()
@@ -172,20 +88,21 @@ void SvpSalInstance::TriggerUserEventProcessing()
     Wakeup();
 }
 
-void SvpSalInstance::Wakeup(SvpRequest const request)
+void SvpSalInstance::Wakeup()
 {
-    DBG_TESTSVPYIELDMUTEX();
+    if (IsMainThread())
+        return;
 
-    ImplSVData* pSVData = ImplGetSVData();
-    if (pSVData->mpWakeCallback && pSVData->mpPollClosure)
-        pSVData->mpWakeCallback(pSVData->mpPollClosure);
-
-    SvpSalYieldMutex *const pMutex(static_cast<SvpSalYieldMutex*>(GetYieldMutex()));
-    std::scoped_lock<std::mutex> g(pMutex->m_WakeUpMainMutex);
-    if (request != SvpRequest::NONE)
-        pMutex->m_Request = request;
-    pMutex->m_wakeUpMain = true;
-    pMutex->m_WakeUpMainCond.notify_one();
+    if (vcl::lok::isUnipoll())
+    {
+        ImplSVData* pSVData = ImplGetSVData();
+        if (pSVData->mpWakeCallback && pSVData->mpPollClosure)
+            pSVData->mpWakeCallback(pSVData->mpPollClosure);
+    }
+    else
+    {
+        m_MainYieldCondition.notify_all();
+    }
 }
 
 bool SvpSalInstance::CheckTimeout( bool bExecuteTimers )
@@ -203,8 +120,6 @@ bool SvpSalInstance::CheckTimeout( bool bExecuteTimers )
                 // timed out, update timeout
                 m_aTimeout = aTimeOfDay;
                 m_aTimeout += m_nTimeoutMS;
-
-                osl::Guard< comphelper::SolarMutex > aGuard( GetYieldMutex() );
 
                 // notify
                 ImplSVData* pSVData = ImplGetSVData();
@@ -311,8 +226,6 @@ std::shared_ptr<SalBitmap> SvpSalInstance::CreateSalBitmap()
 
 void SvpSalInstance::ProcessEvent( SalUserEvent aEvent )
 {
-    DBG_TESTSVPYIELDMUTEX();
-
     aEvent.m_pFrame->CallCallback( aEvent.m_nEvent, aEvent.m_pData );
     if( aEvent.m_nEvent == SalEvent::Resize )
     {
@@ -320,109 +233,6 @@ void SvpSalInstance::ProcessEvent( SalUserEvent aEvent )
         const SvpSalFrame* pSvpFrame = static_cast<const SvpSalFrame*>( aEvent.m_pFrame);
         pSvpFrame->PostPaint();
     }
-
-    SvpSalYieldMutex *const pMutex(static_cast<SvpSalYieldMutex*>(GetYieldMutex()));
-    pMutex->m_NonMainWaitingYieldCond.set();
-}
-
-SvpSalYieldMutex::SvpSalYieldMutex()
-{
-#ifndef IOS
-    m_FeedbackFDs[0] = m_FeedbackFDs[1] = -1;
-#endif
-}
-
-SvpSalYieldMutex::~SvpSalYieldMutex()
-{
-}
-
-void SvpSalYieldMutex::doAcquire(sal_uInt32 const nLockCount)
-{
-    auto *const pInst = static_cast<SvpSalInstance*>(GetSalInstance());
-    if (pInst && pInst->IsMainThread())
-    {
-        if (m_bNoYieldLock)
-            return;
-
-        do
-        {
-            SvpRequest request = SvpRequest::NONE;
-            {
-                std::unique_lock<std::mutex> g(m_WakeUpMainMutex);
-                if (m_aMutex.tryToAcquire()) {
-                    // if there's a request, the other thread holds m_aMutex
-                    assert(m_Request == SvpRequest::NONE);
-                    m_wakeUpMain = false;
-                    break;
-                }
-                m_WakeUpMainCond.wait(g, [this]() { return m_wakeUpMain; });
-                m_wakeUpMain = false;
-                std::swap(m_Request, request);
-            }
-            if (request != SvpRequest::NONE)
-            {
-                // nested Yield on behalf of another thread
-                assert(!m_bNoYieldLock);
-                m_bNoYieldLock = true;
-                bool const bEvents = pInst->DoYield(false, request == SvpRequest::MainThreadDispatchAllEvents);
-                m_bNoYieldLock = false;
-                if (write(m_FeedbackFDs[1], &bEvents, sizeof(bool)) != sizeof(bool))
-                {
-                    SAL_WARN("vcl.headless", "Could not write: " << strerror(errno));
-                    std::abort();
-                }
-            }
-        }
-        while (true);
-    }
-    else
-    {
-        m_aMutex.acquire();
-    }
-    ++m_nCount;
-    SalYieldMutex::doAcquire(nLockCount - 1);
-}
-
-sal_uInt32 SvpSalYieldMutex::doRelease(bool const bUnlockAll)
-{
-    auto *const pInst = static_cast<SvpSalInstance*>(GetSalInstance());
-    if (pInst && pInst->IsMainThread())
-    {
-        if (m_bNoYieldLock)
-            return 1;
-        else
-            return SalYieldMutex::doRelease(bUnlockAll);
-    }
-    sal_uInt32 nCount;
-    {
-        // read m_nCount before doRelease
-        bool const isReleased(bUnlockAll || m_nCount == 1);
-        nCount = comphelper::SolarMutex::doRelease( bUnlockAll );
-
-        if (isReleased)
-        {
-            if (vcl::lok::isUnipoll())
-            {
-                if (pInst)
-                    pInst->Wakeup();
-            }
-            else
-            {
-                std::scoped_lock<std::mutex> g(m_WakeUpMainMutex);
-                m_wakeUpMain = true;
-                m_WakeUpMainCond.notify_one();
-            }
-        }
-    }
-    return nCount;
-}
-
-bool SvpSalYieldMutex::IsCurrentThread() const
-{
-    if (GetSalInstance()->IsMainThread() && m_bNoYieldLock)
-        return true;
-    else
-        return SalYieldMutex::IsCurrentThread();
 }
 
 bool SvpSalInstance::IsMainThread() const
@@ -439,25 +249,17 @@ void SvpSalInstance::updateMainThread()
     }
 }
 
-bool SvpSalInstance::ImplYield(bool bWait, bool bHandleAllCurrentEvents)
+bool SvpSalInstance::ImplYield(bool bWait)
 {
-    DBG_TESTSVPYIELDMUTEX();
     DBG_TESTSOLARMUTEX();
     assert(IsMainThread());
 
-    bool bWasEvent = DispatchUserEvents(bHandleAllCurrentEvents);
-    if (!bHandleAllCurrentEvents && bWasEvent)
-        return true;
-
-    bWasEvent = CheckTimeout() || bWasEvent;
-    const bool bMustSleep = bWait && !bWasEvent;
-
-    // This is wrong and must be removed!
-    // We always want to drop the SolarMutex on yield; that is the whole point of yield.
-    if (!bMustSleep)
-        return bWasEvent;
+    bool bWasEvent = DispatchUserEvents(true);
+    const bool bTimeout = CheckTimeout();
+    bWasEvent = bTimeout || bWasEvent;
 
     sal_Int64 nTimeoutMicroS = 0;
+    const bool bMustSleep = bWait && !bWasEvent;
     if (bMustSleep)
     {
         if (m_aTimeout.tv_sec) // Timer is started.
@@ -474,13 +276,21 @@ bool SvpSalInstance::ImplYield(bool bWait, bool bHandleAllCurrentEvents)
     }
 
     SolarMutexReleaser aReleaser;
+    m_bWasEvent = bWasEvent;
 
     if (vcl::lok::isUnipoll())
     {
         ImplSVData* pSVData = ImplGetSVData();
         if (pSVData->mpPollClosure)
         {
-            int nPollResult = pSVData->mpPollCallback(pSVData->mpPollClosure, nTimeoutMicroS);
+            int nPollResult = 0;
+            if (!bMustSleep || (nTimeoutMicroS != 0))
+                nPollResult = pSVData->mpPollCallback(pSVData->mpPollClosure, 0);
+            if (bMustSleep && nPollResult == 0)
+            {
+                m_EventCondition.notify_all();
+                nPollResult = pSVData->mpPollCallback(pSVData->mpPollClosure, nTimeoutMicroS);
+            }
             if (nPollResult < 0)
                 pSVData->maAppData.mbAppQuit = true;
             bWasEvent = bWasEvent || (nPollResult != 0);
@@ -488,59 +298,63 @@ bool SvpSalInstance::ImplYield(bool bWait, bool bHandleAllCurrentEvents)
     }
     else if (bMustSleep)
     {
-        SvpSalYieldMutex *const pMutex(static_cast<SvpSalYieldMutex*>(GetYieldMutex()));
-        std::unique_lock<std::mutex> g(pMutex->m_WakeUpMainMutex);
-        // wait for doRelease() or Wakeup() to set the condition
-        if (nTimeoutMicroS == -1)
+        assert(!bWasEvent);
+        if (nTimeoutMicroS == 0)
         {
-            pMutex->m_WakeUpMainCond.wait(g,
-                    [pMutex]() { return pMutex->m_wakeUpMain; });
+            m_EventCondition.notify_all();
+            return bWasEvent;
         }
+
+        auto wakeup = [this]() { m_EventCondition.notify_all(); return false; };
+
+        if (nTimeoutMicroS == -1)
+            m_MainYieldCondition.wait(wakeup);
         else
         {
             int nTimeoutMS = nTimeoutMicroS / 1000;
             if (nTimeoutMicroS % 1000)
                 nTimeoutMS += 1;
-            pMutex->m_WakeUpMainCond.wait_for(g,
-                    std::chrono::milliseconds(nTimeoutMS),
-                    [pMutex]() { return pMutex->m_wakeUpMain; });
+            m_MainYieldCondition.wait_for(std::chrono::milliseconds(nTimeoutMS), wakeup);
         }
-        // here no need to check m_Request because Acquire will do it
     }
+
+    if (bWasEvent)
+        m_WaitCondition.notify_all();
+    m_EventCondition.notify_all();
 
     return bWasEvent;
 }
 
-bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
+bool SvpSalInstance::DoYield(bool bWait, bool)
 {
-    DBG_TESTSVPYIELDMUTEX();
     DBG_TESTSOLARMUTEX();
 
     bool bWasEvent(false);
-    SvpSalYieldMutex *const pMutex(static_cast<SvpSalYieldMutex*>(GetYieldMutex()));
 
     if (IsMainThread())
-    {
-        bWasEvent = ImplYield(bWait, bHandleAllCurrentEvents);
-        if (bWasEvent)
-            pMutex->m_NonMainWaitingYieldCond.set(); // wake up other threads
-    }
+        bWasEvent = ImplYield(bWait);
     else
     {
-        // TODO: use a SolarMutexReleaser here and drop the m_bNoYieldLock usage
-        Wakeup(bHandleAllCurrentEvents
-                ? SvpRequest::MainThreadDispatchAllEvents
-                : SvpRequest::MainThreadDispatchOneEvent);
-
-        // blocking read (for synchronisation)
-        auto const nRet = read(pMutex->m_FeedbackFDs[0], &bWasEvent, sizeof(bool));
-        assert(nRet == 1); (void) nRet;
-        if (!bWasEvent && bWait)
+        SolarMutexReleaser aReleaser;
+        if (bWait)
         {
-            // block & release YieldMutex until the main thread does something
-            pMutex->m_NonMainWaitingYieldCond.reset();
-            SolarMutexReleaser aReleaser;
-            pMutex->m_NonMainWaitingYieldCond.wait();
+            m_WaitCondition.wait();
+            bWasEvent = true;
+        }
+        else
+        {
+            // prevent ABBA deadlock
+            std::unique_lock<std::mutex> g(m_MainYieldCondition.mutex());
+            const bool bIsSleeping = m_MainYieldCondition.isSleeping();
+            m_EventCondition.wait([bIsSleeping, &g]()
+            {
+                g.unlock();
+                return bIsSleeping;
+            });
+            if (bIsSleeping)
+                bWasEvent = false;
+            else
+                bWasEvent = m_bWasEvent;
         }
     }
 
