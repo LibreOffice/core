@@ -25,7 +25,7 @@ public:
 // plugin factory function
 SalInstance* svp_create_SalInstance()
 {
-    SvpSalInstance* pInstance = new SvpSalInstance( std::make_unique<SvpSalYieldMutex>() );
+    SvpSalInstance* pInstance = new SvpSalInstance(std::make_unique<SalYieldMutex>());
     new SvpSalData( pInstance );
     return pInstance;
 }
