@@ -2584,8 +2584,7 @@ static AggMapEntry g_CMAccessible_AggMap[] = {
     { &IID_IAccessibleAction, &createAggInstance<CAccAction>, XI_ACTION },
     { &IID_IAccessibleValue, &createAggInstance<CAccValue>, XI_VALUE },
     { &IID_IAccessibleHypertext, &createAggInstance<CAccHypertext>, XI_HYPERTEXT },
-    { &IID_IAccessibleHyperlink, &createAggInstance<CAccHyperLink>, XI_HYPERLINK },
-    { nullptr, nullptr, 0 },
+    { &IID_IAccessibleHyperlink, &createAggInstance<CAccHyperLink>, XI_HYPERLINK }
 };
 
 
@@ -2603,16 +2602,15 @@ HRESULT WINAPI CMAccessible::SmartQI(void* /*pv*/, REFIID iid, void** ppvObject)
         return E_FAIL;
     }
 
-    AggMapEntry * pMap = &g_CMAccessible_AggMap[0];
-    while(pMap && pMap->piid)
+    for (const AggMapEntry& rEntry : g_CMAccessible_AggMap)
     {
-        if (InlineIsEqualGUID(iid, *pMap->piid))
+        if (InlineIsEqualGUID(iid, *rEntry.piid))
         {
             SolarMutexGuard g;
 
             XInterface* pXI = nullptr;
             bool bFound = GetXInterfaceFromXAccessible(m_xAccessible.get(),
-                                &pXI, pMap->XIFIndex);
+                                &pXI, rEntry.XIFIndex);
             if(!bFound)
             {
                 return E_FAIL;
@@ -2625,11 +2623,11 @@ HRESULT WINAPI CMAccessible::SmartQI(void* /*pv*/, REFIID iid, void** ppvObject)
             }
             else
             {
-                HRESULT hr = pMap->pfnCreateInstance(*this, ppvObject);
+                HRESULT hr = rEntry.pfnCreateInstance(*this, ppvObject);
                 assert(hr == S_OK);
                 if(hr == S_OK)
                 {
-                    m_containedObjects.emplace(*pMap->piid, static_cast<IUnknown*>(*ppvObject));
+                    m_containedObjects.emplace(*rEntry.piid, static_cast<IUnknown*>(*ppvObject));
                     IUNOXWrapper* wrapper = nullptr;
                     static_cast<IUnknown*>(*ppvObject)->QueryInterface(IID_IUNOXWrapper, reinterpret_cast<void**>(&wrapper));
                     if(wrapper)
@@ -2643,7 +2641,6 @@ HRESULT WINAPI CMAccessible::SmartQI(void* /*pv*/, REFIID iid, void** ppvObject)
             }
             return E_FAIL;
         }
-        pMap++;
     }
     return E_FAIL;
 
