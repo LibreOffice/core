@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e27f37d5_68dc07cf",
+        "filename": "sfx2/uiconfig/ui/templatepanel.ui",
+        "patchSetId": 10
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-28T13:59:08Z",
+      "side": 1,
+      "message": "I will not try to review the change anymore, until you at least remove the .UI modification.",
+      "revId": "f68892979bb988cdfbd29e6a475fff19f1d84289",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
