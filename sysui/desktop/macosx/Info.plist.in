@@ -1520,6 +1520,8 @@
         <dict>
             <key>CFBundleURLName</key>
             <string>@PRODUCTNAME@ CMIS</string>
+            <key>CFBundleTypeRole</key>
+            <string>Editor</string>
             <key>CFBundleURLSchemes</key>
             <array>
                 <string>vnd.libreoffice.cmis</string>
@@ -1528,6 +1530,8 @@
         <dict>
             <key>CFBundleURLName</key>
             <string>@PRODUCTNAME@</string>
+            <key>CFBundleTypeRole</key>
+            <string>Editor</string>
             <key>CFBundleURLSchemes</key>
             <array>
                 <string>vnd.libreoffice.command</string>
@@ -1541,6 +1545,8 @@
         <dict>
             <key>CFBundleURLName</key>
             <string>@PRODUCTNAME@ WebDav</string>
+            <key>CFBundleTypeRole</key>
+            <string>Editor</string>
             <key>CFBundleURLSchemes</key>
             <array>
                 <string>vnd.sun.star.webdav</string>
