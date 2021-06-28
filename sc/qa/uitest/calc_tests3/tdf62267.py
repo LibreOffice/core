@@ -23,26 +23,21 @@ class tdf62267(UITestCase):
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
             self.xUITest.executeCommand(".uno:Copy")
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "C1"}))
-            self.ui_test.execute_dialog_through_command(".uno:PasteSpecial")
-            xDialog = self.xUITest.getTopFocusWindow()
-            #it's the default - text, numbers and dates
-            xOkBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOkBtn)
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:PasteSpecial") as xDialog:
+                #it's the default - text, numbers and dates
+                pass
 
             #--> Cell formatting should stay as before
-            self.ui_test.execute_dialog_through_command(".uno:ConditionalFormatManagerDialog")
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:ConditionalFormatManagerDialog", close_button="cancel") as xCondFormatMgr:
 
-            xCondFormatMgr = self.xUITest.getTopFocusWindow()
 
-            # check that we have exactly 1 conditional format
-            xList = xCondFormatMgr.getChild("CONTAINER")
-            list_state = get_state_as_dict(xList)
-            self.assertEqual(list_state['Children'], '1')
+                # check that we have exactly 1 conditional format
+                xList = xCondFormatMgr.getChild("CONTAINER")
+                list_state = get_state_as_dict(xList)
+                self.assertEqual(list_state['Children'], '1')
 
-            xTreeEntry = xList.getChild('0')
-            self.assertEqual(get_state_as_dict(xTreeEntry)["Text"], "A1\tCell value = 1")
+                xTreeEntry = xList.getChild('0')
+                self.assertEqual(get_state_as_dict(xTreeEntry)["Text"], "A1\tCell value = 1")
 
-            xCancelBtn = xCondFormatMgr.getChild("cancel")
-            self.ui_test.close_dialog_through_button(xCancelBtn)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

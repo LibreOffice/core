@@ -20,12 +20,10 @@ class tdf99069(UITestCase):
         gridwin = xCalcDoc.getChild("grid_window")
         #(1) Download and open example.ods attached to tdf#97266  with cell B1 active.
         #(2) In tool bar, click the chart icon.  Program presents Chart Wizard.
-        self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart")
-        xDialog = self.xUITest.getTopFocusWindow()
-        #(3) In Chart Wizard, click <Finish>.  The program closes the wizard;
-        # the chart shows a border with handles on each side and at each corner.
-        xFinishBtn = xDialog.getChild("finish")
-        self.ui_test.close_dialog_through_button(xFinishBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertObjectChart", close_button="finish"):
+            # the chart shows a border with handles on each side and at each corner.
+            pass
+
         for _ in range(0,5):
             #(4) Click outside the chart, for example in cell C23.  The borders
             #disappear from the chart and the program restores the menubar to

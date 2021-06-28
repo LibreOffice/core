@@ -19,20 +19,17 @@ class tdf126577(UITestCase):
 
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A20"}))
 
-        self.ui_test.execute_dialog_through_command(".uno:FillSeries")
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:FillSeries") as xDialog:
 
-        self.assertEqual("true", get_state_as_dict(xDialog.getChild("down"))['Checked'])
-        self.assertEqual("true", get_state_as_dict(xDialog.getChild("linear"))['Checked'])
+            self.assertEqual("true", get_state_as_dict(xDialog.getChild("down"))['Checked'])
+            self.assertEqual("true", get_state_as_dict(xDialog.getChild("linear"))['Checked'])
 
-        xStart = xDialog.getChild("startValue")
-        xStart.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
+            xStart = xDialog.getChild("startValue")
+            xStart.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
 
-        xEnd = xDialog.getChild("endValue")
-        xEnd.executeAction("TYPE", mkPropertyValues({"TEXT":"10"}))
+            xEnd = xDialog.getChild("endValue")
+            xEnd.executeAction("TYPE", mkPropertyValues({"TEXT":"10"}))
 
-        xOK = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOK)
 
         for i in range(10):
             self.assertEqual(str(i + 1), get_cell_by_position(document, 0, 0, i).getString())

@@ -14,14 +14,11 @@ class Tdf60468(UITestCase):
     def test_tdf60468(self):
 
         # Load file from Open dialog
-        self.ui_test.execute_dialog_through_command(".uno:Open")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Open", close_button="open") as xOpenDialog:
 
-        xOpenDialog = self.xUITest.getTopFocusWindow()
-        xFileName = xOpenDialog.getChild("file_name")
-        xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": get_url_for_data_file("tdf60468.csv")}))
+            xFileName = xOpenDialog.getChild("file_name")
+            xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": get_url_for_data_file("tdf60468.csv")}))
 
-        xOpenBtn = xOpenDialog.getChild("open")
-        xOpenBtn.executeAction("CLICK", tuple())
 
         xDialog = self.ui_test.wait_for_top_focus_window('TextImportCsvDialog')
         self.assertEqual('true', get_state_as_dict(xDialog.getChild("tab"))['Selected'])

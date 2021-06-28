@@ -22,36 +22,33 @@ class clearCells(UITestCase):
         enter_text_to_cell(gridwin, "A2", "1")
 
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A2"}))
-        self.ui_test.execute_dialog_through_command(".uno:Delete")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xdeleteall = xDialog.getChild("deleteall")
-        xtext = xDialog.getChild("text")
-        xdatetime = xDialog.getChild("datetime")
-        xcomments = xDialog.getChild("comments")
-        xobjects = xDialog.getChild("objects")
-        xnumbers = xDialog.getChild("numbers")
-        xformulas = xDialog.getChild("formulas")
-        xformats = xDialog.getChild("formats")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Delete") as xDialog:
+            xdeleteall = xDialog.getChild("deleteall")
+            xtext = xDialog.getChild("text")
+            xdatetime = xDialog.getChild("datetime")
+            xcomments = xDialog.getChild("comments")
+            xobjects = xDialog.getChild("objects")
+            xnumbers = xDialog.getChild("numbers")
+            xformulas = xDialog.getChild("formulas")
+            xformats = xDialog.getChild("formats")
 
-        if (get_state_as_dict(xdeleteall)["Selected"]) == "true":
-            xdeleteall.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xtext)["Selected"]) == "false":
-            xtext.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xdatetime)["Selected"]) == "true":
-            xdatetime.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xcomments)["Selected"]) == "true":
-            xcomments.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xobjects)["Selected"]) == "true":
-            xobjects.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xnumbers)["Selected"]) == "true":
-            xnumbers.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xformulas)["Selected"]) == "true":
-            xformulas.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xformats)["Selected"]) == "true":
-            xformats.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xdeleteall)["Selected"]) == "true":
+                xdeleteall.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xtext)["Selected"]) == "false":
+                xtext.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xdatetime)["Selected"]) == "true":
+                xdatetime.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xcomments)["Selected"]) == "true":
+                xcomments.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xobjects)["Selected"]) == "true":
+                xobjects.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xnumbers)["Selected"]) == "true":
+                xnumbers.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xformulas)["Selected"]) == "true":
+                xformulas.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xformats)["Selected"]) == "true":
+                xformats.executeAction("CLICK", tuple())
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
         #Verify
         self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString() , "")
         self.assertEqual(get_cell_by_position(document, 0, 0, 1).getValue() , 1)
@@ -67,36 +64,33 @@ class clearCells(UITestCase):
         enter_text_to_cell(gridwin, "A2", "1")
 
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A2"}))
-        self.ui_test.execute_dialog_through_command(".uno:Delete")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xdeleteall = xDialog.getChild("deleteall")
-        xtext = xDialog.getChild("text")
-        xdatetime = xDialog.getChild("datetime")
-        xcomments = xDialog.getChild("comments")
-        xobjects = xDialog.getChild("objects")
-        xnumbers = xDialog.getChild("numbers")
-        xformulas = xDialog.getChild("formulas")
-        xformats = xDialog.getChild("formats")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Delete") as xDialog:
+            xdeleteall = xDialog.getChild("deleteall")
+            xtext = xDialog.getChild("text")
+            xdatetime = xDialog.getChild("datetime")
+            xcomments = xDialog.getChild("comments")
+            xobjects = xDialog.getChild("objects")
+            xnumbers = xDialog.getChild("numbers")
+            xformulas = xDialog.getChild("formulas")
+            xformats = xDialog.getChild("formats")
 
-        if (get_state_as_dict(xdeleteall)["Selected"]) == "true":
-            xdeleteall.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xtext)["Selected"]) == "true":
-            xtext.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xdatetime)["Selected"]) == "false":
-            xdatetime.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xcomments)["Selected"]) == "true":
-            xcomments.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xobjects)["Selected"]) == "true":
-            xobjects.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xnumbers)["Selected"]) == "true":
-            xnumbers.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xformulas)["Selected"]) == "true":
-            xformulas.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xformats)["Selected"]) == "true":
-            xformats.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xdeleteall)["Selected"]) == "true":
+                xdeleteall.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xtext)["Selected"]) == "true":
+                xtext.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xdatetime)["Selected"]) == "false":
+                xdatetime.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xcomments)["Selected"]) == "true":
+                xcomments.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xobjects)["Selected"]) == "true":
+                xobjects.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xnumbers)["Selected"]) == "true":
+                xnumbers.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xformulas)["Selected"]) == "true":
+                xformulas.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xformats)["Selected"]) == "true":
+                xformats.executeAction("CLICK", tuple())
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
         #Verify
         self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString() , "")
         self.assertEqual(get_cell_by_position(document, 0, 0, 1).getValue() , 1)
@@ -112,36 +106,33 @@ class clearCells(UITestCase):
         enter_text_to_cell(gridwin, "A2", "1")
 
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A2"}))
-        self.ui_test.execute_dialog_through_command(".uno:Delete")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xdeleteall = xDialog.getChild("deleteall")
-        xtext = xDialog.getChild("text")
-        xdatetime = xDialog.getChild("datetime")
-        xcomments = xDialog.getChild("comments")
-        xobjects = xDialog.getChild("objects")
-        xnumbers = xDialog.getChild("numbers")
-        xformulas = xDialog.getChild("formulas")
-        xformats = xDialog.getChild("formats")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Delete") as xDialog:
+            xdeleteall = xDialog.getChild("deleteall")
+            xtext = xDialog.getChild("text")
+            xdatetime = xDialog.getChild("datetime")
+            xcomments = xDialog.getChild("comments")
+            xobjects = xDialog.getChild("objects")
+            xnumbers = xDialog.getChild("numbers")
+            xformulas = xDialog.getChild("formulas")
+            xformats = xDialog.getChild("formats")
 
-        if (get_state_as_dict(xdeleteall)["Selected"]) == "true":
-            xdeleteall.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xtext)["Selected"]) == "true":
-            xtext.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xdatetime)["Selected"]) == "true":
-            xdatetime.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xcomments)["Selected"]) == "true":
-            xcomments.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xobjects)["Selected"]) == "true":
-            xobjects.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xnumbers)["Selected"]) == "false":
-            xnumbers.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xformulas)["Selected"]) == "true":
-            xformulas.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xformats)["Selected"]) == "true":
-            xformats.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xdeleteall)["Selected"]) == "true":
+                xdeleteall.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xtext)["Selected"]) == "true":
+                xtext.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xdatetime)["Selected"]) == "true":
+                xdatetime.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xcomments)["Selected"]) == "true":
+                xcomments.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xobjects)["Selected"]) == "true":
+                xobjects.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xnumbers)["Selected"]) == "false":
+                xnumbers.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xformulas)["Selected"]) == "true":
+                xformulas.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xformats)["Selected"]) == "true":
+                xformats.executeAction("CLICK", tuple())
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
         #Verify
         self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString() , "aa")
         self.assertEqual(get_cell_by_position(document, 0, 0, 1).getValue() , 0)
@@ -156,36 +147,33 @@ class clearCells(UITestCase):
         enter_text_to_cell(gridwin, "A2", "=A1+1")
 
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A2"}))
-        self.ui_test.execute_dialog_through_command(".uno:Delete")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xdeleteall = xDialog.getChild("deleteall")
-        xtext = xDialog.getChild("text")
-        xdatetime = xDialog.getChild("datetime")
-        xcomments = xDialog.getChild("comments")
-        xobjects = xDialog.getChild("objects")
-        xnumbers = xDialog.getChild("numbers")
-        xformulas = xDialog.getChild("formulas")
-        xformats = xDialog.getChild("formats")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Delete") as xDialog:
+            xdeleteall = xDialog.getChild("deleteall")
+            xtext = xDialog.getChild("text")
+            xdatetime = xDialog.getChild("datetime")
+            xcomments = xDialog.getChild("comments")
+            xobjects = xDialog.getChild("objects")
+            xnumbers = xDialog.getChild("numbers")
+            xformulas = xDialog.getChild("formulas")
+            xformats = xDialog.getChild("formats")
 
-        if (get_state_as_dict(xdeleteall)["Selected"]) == "true":
-            xdeleteall.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xtext)["Selected"]) == "true":
-            xtext.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xdatetime)["Selected"]) == "true":
-            xdatetime.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xcomments)["Selected"]) == "true":
-            xcomments.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xobjects)["Selected"]) == "true":
-            xobjects.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xnumbers)["Selected"]) == "true":
-            xnumbers.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xformulas)["Selected"]) == "false":
-            xformulas.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xformats)["Selected"]) == "true":
-            xformats.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xdeleteall)["Selected"]) == "true":
+                xdeleteall.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xtext)["Selected"]) == "true":
+                xtext.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xdatetime)["Selected"]) == "true":
+                xdatetime.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xcomments)["Selected"]) == "true":
+                xcomments.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xobjects)["Selected"]) == "true":
+                xobjects.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xnumbers)["Selected"]) == "true":
+                xnumbers.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xformulas)["Selected"]) == "false":
+                xformulas.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xformats)["Selected"]) == "true":
+                xformats.executeAction("CLICK", tuple())
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
         #Verify
         self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString() , "1")
         self.assertEqual(get_cell_by_position(document, 0, 0, 1).getString() , "")
@@ -202,51 +190,45 @@ class clearCells(UITestCase):
 
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A2"}))
         self.xUITest.executeCommand(".uno:Bold")
-        self.ui_test.execute_dialog_through_command(".uno:Delete")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xdeleteall = xDialog.getChild("deleteall")
-        xtext = xDialog.getChild("text")
-        xdatetime = xDialog.getChild("datetime")
-        xcomments = xDialog.getChild("comments")
-        xobjects = xDialog.getChild("objects")
-        xnumbers = xDialog.getChild("numbers")
-        xformulas = xDialog.getChild("formulas")
-        xformats = xDialog.getChild("formats")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Delete") as xDialog:
+            xdeleteall = xDialog.getChild("deleteall")
+            xtext = xDialog.getChild("text")
+            xdatetime = xDialog.getChild("datetime")
+            xcomments = xDialog.getChild("comments")
+            xobjects = xDialog.getChild("objects")
+            xnumbers = xDialog.getChild("numbers")
+            xformulas = xDialog.getChild("formulas")
+            xformats = xDialog.getChild("formats")
 
-        if (get_state_as_dict(xdeleteall)["Selected"]) == "true":
-            xdeleteall.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xtext)["Selected"]) == "true":
-            xtext.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xdatetime)["Selected"]) == "true":
-            xdatetime.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xcomments)["Selected"]) == "true":
-            xcomments.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xobjects)["Selected"]) == "true":
-            xobjects.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xnumbers)["Selected"]) == "true":
-            xnumbers.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xformulas)["Selected"]) == "true":
-            xformulas.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xformats)["Selected"]) == "false":
-            xformats.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xdeleteall)["Selected"]) == "true":
+                xdeleteall.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xtext)["Selected"]) == "true":
+                xtext.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xdatetime)["Selected"]) == "true":
+                xdatetime.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xcomments)["Selected"]) == "true":
+                xcomments.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xobjects)["Selected"]) == "true":
+                xobjects.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xnumbers)["Selected"]) == "true":
+                xnumbers.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xformulas)["Selected"]) == "true":
+                xformulas.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xformats)["Selected"]) == "false":
+                xformats.executeAction("CLICK", tuple())
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
         #Verify
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
-        self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xTabs = xDialog.getChild("tabcontrol")
-        select_pos(xTabs, "1")  #tab Font
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatCellDialog") as xDialog:
+            xTabs = xDialog.getChild("tabcontrol")
+            select_pos(xTabs, "1")  #tab Font
 
-        xstylelb = xDialog.getChild("weststylelb-cjk")
-        print(get_state_as_dict(xstylelb))
+            xstylelb = xDialog.getChild("weststylelb-cjk")
+            print(get_state_as_dict(xstylelb))
 
 
-        self.assertEqual(get_state_as_dict(xstylelb)["Text"], "Regular")
+            self.assertEqual(get_state_as_dict(xstylelb)["Text"], "Regular")
 
-        xOK = xDialog.getChild("ok")
-        xOK.executeAction("CLICK", tuple())
 
         self.ui_test.close_doc()
 
@@ -260,22 +242,19 @@ class clearCells(UITestCase):
 
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A2"}))
         self.xUITest.executeCommand(".uno:Bold")
-        self.ui_test.execute_dialog_through_command(".uno:Delete")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xdeleteall = xDialog.getChild("deleteall")
-        xtext = xDialog.getChild("text")
-        xdatetime = xDialog.getChild("datetime")
-        xcomments = xDialog.getChild("comments")
-        xobjects = xDialog.getChild("objects")
-        xnumbers = xDialog.getChild("numbers")
-        xformulas = xDialog.getChild("formulas")
-        xformats = xDialog.getChild("formats")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Delete") as xDialog:
+            xdeleteall = xDialog.getChild("deleteall")
+            xtext = xDialog.getChild("text")
+            xdatetime = xDialog.getChild("datetime")
+            xcomments = xDialog.getChild("comments")
+            xobjects = xDialog.getChild("objects")
+            xnumbers = xDialog.getChild("numbers")
+            xformulas = xDialog.getChild("formulas")
+            xformats = xDialog.getChild("formats")
 
-        if (get_state_as_dict(xdeleteall)["Selected"]) == "false":
-            xdeleteall.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xdeleteall)["Selected"]) == "false":
+                xdeleteall.executeAction("CLICK", tuple())
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
         #Verify
         self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString() , "")
         self.assertEqual(get_cell_by_position(document, 0, 0, 1).getString() , "")
@@ -291,15 +270,12 @@ class clearCells(UITestCase):
         enter_text_to_cell(gridwin, "A2", "1")
 
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A2"}))
-        self.ui_test.execute_dialog_through_command(".uno:Delete")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xdeleteall = xDialog.getChild("deleteall")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Delete", close_button="cancel") as xDialog:
+            xdeleteall = xDialog.getChild("deleteall")
 
-        if (get_state_as_dict(xdeleteall)["Selected"]) == "false":
-            xdeleteall.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xdeleteall)["Selected"]) == "false":
+                xdeleteall.executeAction("CLICK", tuple())
 
-        xCancelBtn = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCancelBtn)
         #Verify
         self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString() , "aa")
         self.assertEqual(get_cell_by_position(document, 0, 0, 1).getString() , "1")

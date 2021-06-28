@@ -19,24 +19,21 @@ class tdf57465(UITestCase):
 
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "B1:G4"}))
 
-            self.ui_test.execute_dialog_through_command(".uno:DataSort")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xTabs = xDialog.getChild("tabcontrol")
-            select_pos(xTabs, "1")
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort") as xDialog:
+                xTabs = xDialog.getChild("tabcontrol")
+                select_pos(xTabs, "1")
 
-            xHeader = xDialog.getChild("header")
-            if (get_state_as_dict(xHeader)["Selected"]) == 'true':
-                xHeader.executeAction("CLICK", tuple())
+                xHeader = xDialog.getChild("header")
+                if (get_state_as_dict(xHeader)["Selected"]) == 'true':
+                    xHeader.executeAction("CLICK", tuple())
 
-            xLeftRight = xDialog.getChild("leftright")
-            xLeftRight.executeAction("CLICK", tuple())
+                xLeftRight = xDialog.getChild("leftright")
+                xLeftRight.executeAction("CLICK", tuple())
 
-            select_pos(xTabs, "0")
+                select_pos(xTabs, "0")
 
-            self.assertEqual("Row 1", get_state_as_dict(xDialog.getChild("sortlb"))['DisplayText'])
+                self.assertEqual("Row 1", get_state_as_dict(xDialog.getChild("sortlb"))['DisplayText'])
 
-            xOk = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOk)
 
             self.assertEqual("a", get_cell_by_position(calc_doc, 0, 1, 1).getString())
 

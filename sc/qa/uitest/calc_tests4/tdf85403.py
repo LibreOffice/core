@@ -22,11 +22,8 @@ class tdf85403(UITestCase):
             #putting a new SUM(A1) in C1 will show 123
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
             # Data - Text to Columns
-            self.ui_test.execute_dialog_through_command(".uno:TextToColumns")
-            xDialog = self.xUITest.getTopFocusWindow()
-            # Click Ok
-            xOK = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOK)
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:TextToColumns"):
+                pass
 
             #Verify
             self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 0).getValue(), 123)

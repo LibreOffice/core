@@ -93,10 +93,8 @@ class printRange(UITestCase):
         self.ui_test.close_dialog_through_button(xOK)
 
         #Copy sheet
-        self.ui_test.execute_dialog_through_command(".uno:Move")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xOK = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOK)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Move"):
+            pass
         #Verify Print Range dialog on new sheet
         self.ui_test.execute_modeless_dialog_through_command(".uno:EditPrintArea")
         xDialog = self.xUITest.getTopFocusWindow()

@@ -21,12 +21,9 @@ class tdf125051(UITestCase):
         document = self.ui_test.get_component()
         enter_text_to_cell(gridwin, "A1", "text")
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
-        self.ui_test.execute_dialog_through_command(".uno:SpellDialog")
-        xDialog = self.xUITest.getTopFocusWindow()  #Spelling dialog
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:SpellDialog") as xDialog2:
+            pass
 
-        xDialog2 = self.xUITest.getTopFocusWindow()   # info dialog "The spellcheck of this sheet has been completed.-> OK"
-        okBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(okBtn)
 
         xDialog = self.xUITest.getTopFocusWindow()  #Spelling dialog
         #open options

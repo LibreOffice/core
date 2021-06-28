@@ -54,16 +54,13 @@ class CalcSorting(UITestCase):
         #Select cell A3
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A3"}))
         #Open sort dialog by DATA - SORT /Switch to tabpage Options
-        self.ui_test.execute_dialog_through_command(".uno:DataSort")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xTabs = xDialog.getChild("tabcontrol")
-        select_pos(xTabs, "1")
-        #Verify that option "Range contains column labels" is set
-        xHeader = xDialog.getChild("header")
-        self.assertEqual(get_state_as_dict(xHeader)["Selected"], "true")
-        #Cancel dialog
-        xCanc = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCanc)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort", close_button="cancel") as xDialog:
+            xTabs = xDialog.getChild("tabcontrol")
+            select_pos(xTabs, "1")
+            #Verify that option "Range contains column labels" is set
+            xHeader = xDialog.getChild("header")
+            self.assertEqual(get_state_as_dict(xHeader)["Selected"], "true")
+            #Cancel dialog
         #Select Range A1:B5
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B5"}))
         #Press toolbarbutton for descending sorting
@@ -101,16 +98,13 @@ class CalcSorting(UITestCase):
         #Select cell B3
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B3"}))
         #Open sort dialog by DATA - SORT /Switch to tabpage Options
-        self.ui_test.execute_dialog_through_command(".uno:DataSort")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xTabs = xDialog.getChild("tabcontrol")
-        select_pos(xTabs, "1")
-        #Verify that option "Range contains column labels" is not set
-        xHeader = xDialog.getChild("header")
-        self.assertEqual(get_state_as_dict(xHeader)["Selected"], "false")
-        #Cancel dialog
-        xCanc = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCanc)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort", close_button="cancel") as xDialog:
+            xTabs = xDialog.getChild("tabcontrol")
+            select_pos(xTabs, "1")
+            #Verify that option "Range contains column labels" is not set
+            xHeader = xDialog.getChild("header")
+            self.assertEqual(get_state_as_dict(xHeader)["Selected"], "false")
+            #Cancel dialog
         self.ui_test.close_doc()
 
     def test_Sorting_default_to_selected_column(self):
@@ -236,68 +230,56 @@ class CalcSorting(UITestCase):
         #Select cell A3
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A3"}))
         #Open sort dialog by DATA - SORT
-        self.ui_test.execute_dialog_through_command(".uno:DataSort")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xTabs = xDialog.getChild("tabcontrol")
-        select_pos(xTabs, "0")
-        #Verify that the first sort criteria is set to "Number(ascending)"
-        xSortKey1 = xDialog.getChild("sortlb")
-        xAsc = xDialog.getChild("up")
-        self.assertEqual(get_state_as_dict(xSortKey1)["SelectEntryText"], "Number")
-        self.assertEqual(get_state_as_dict(xAsc)["Checked"], "true")
-        #Cancel dialog
-        xCanc = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCanc)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort", close_button="cancel") as xDialog:
+            xTabs = xDialog.getChild("tabcontrol")
+            select_pos(xTabs, "0")
+            #Verify that the first sort criteria is set to "Number(ascending)"
+            xSortKey1 = xDialog.getChild("sortlb")
+            xAsc = xDialog.getChild("up")
+            self.assertEqual(get_state_as_dict(xSortKey1)["SelectEntryText"], "Number")
+            self.assertEqual(get_state_as_dict(xAsc)["Checked"], "true")
+            #Cancel dialog
         #Select cell B3
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B3"}))
         #Open sort dialog by DATA - SORT
-        self.ui_test.execute_dialog_through_command(".uno:DataSort")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xTabs = xDialog.getChild("tabcontrol")
-        select_pos(xTabs, "0")
-        #Verify that the first sort criteria is set to "Misc (ascending)"
-        xSortKey1 = xDialog.getChild("sortlb")
-        xAsc = xDialog.getChild("up")
-        self.assertEqual(get_state_as_dict(xSortKey1)["SelectEntryText"], "Misc")
-        self.assertEqual(get_state_as_dict(xAsc)["Checked"], "true")
-        #Cancel dialog
-        xCanc = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCanc)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort", close_button="cancel") as xDialog:
+            xTabs = xDialog.getChild("tabcontrol")
+            select_pos(xTabs, "0")
+            #Verify that the first sort criteria is set to "Misc (ascending)"
+            xSortKey1 = xDialog.getChild("sortlb")
+            xAsc = xDialog.getChild("up")
+            self.assertEqual(get_state_as_dict(xSortKey1)["SelectEntryText"], "Misc")
+            self.assertEqual(get_state_as_dict(xAsc)["Checked"], "true")
+            #Cancel dialog
         #Select Range A1:B5
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B5"}))
         #Move the active cell inside the range to column A by using the TAB key
         gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "TAB"}))
         gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "TAB"}))
         #Open sort dialog by DATA - SORT
-        self.ui_test.execute_dialog_through_command(".uno:DataSort")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xTabs = xDialog.getChild("tabcontrol")
-        select_pos(xTabs, "0")
-        #Verify that the first sort criteria is set to "Number(ascending)"
-        xSortKey1 = xDialog.getChild("sortlb")
-        xAsc = xDialog.getChild("up")
-        self.assertEqual(get_state_as_dict(xSortKey1)["SelectEntryText"], "Number")
-        self.assertEqual(get_state_as_dict(xAsc)["Checked"], "true")
-        #Cancel dialog
-        xCanc = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCanc)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort", close_button="cancel") as xDialog:
+            xTabs = xDialog.getChild("tabcontrol")
+            select_pos(xTabs, "0")
+            #Verify that the first sort criteria is set to "Number(ascending)"
+            xSortKey1 = xDialog.getChild("sortlb")
+            xAsc = xDialog.getChild("up")
+            self.assertEqual(get_state_as_dict(xSortKey1)["SelectEntryText"], "Number")
+            self.assertEqual(get_state_as_dict(xAsc)["Checked"], "true")
+            #Cancel dialog
         #Select Range A1:B5
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B5"}))
         #Move the active cell inside the range to column B by using the TAB key
         gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "TAB"}))
         #Open sort dialog by DATA - SORT
-        self.ui_test.execute_dialog_through_command(".uno:DataSort")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xTabs = xDialog.getChild("tabcontrol")
-        select_pos(xTabs, "0")
-        #Verify that the first sort criteria is set to "Misc (ascending)"
-        xSortKey1 = xDialog.getChild("sortlb")
-        xAsc = xDialog.getChild("up")
-        self.assertEqual(get_state_as_dict(xSortKey1)["SelectEntryText"], "Misc")
-        self.assertEqual(get_state_as_dict(xAsc)["Checked"], "true")
-        #Cancel dialog
-        xCanc = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCanc)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort", close_button="cancel") as xDialog:
+            xTabs = xDialog.getChild("tabcontrol")
+            select_pos(xTabs, "0")
+            #Verify that the first sort criteria is set to "Misc (ascending)"
+            xSortKey1 = xDialog.getChild("sortlb")
+            xAsc = xDialog.getChild("up")
+            self.assertEqual(get_state_as_dict(xSortKey1)["SelectEntryText"], "Misc")
+            self.assertEqual(get_state_as_dict(xAsc)["Checked"], "true")
+            #Cancel dialog
 
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

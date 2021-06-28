@@ -29,14 +29,11 @@ class CalcNaturalSorting(UITestCase):
         enter_text_to_cell(gridwin, "A4", "MW180SSMOU456.994JIL4")
         enter_text_to_cell(gridwin, "A5", "MW101SSMOU456.996JIL4")
         #Open sort dialog by DATA - SORT
-        self.ui_test.execute_dialog_through_command(".uno:DataSort")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xTabs = xDialog.getChild("tabcontrol")
-        select_pos(xTabs, "0")
-        xNatural = xDialog.getChild("naturalsort")
-        xNatural.executeAction("CLICK", tuple())
-        xOk = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOk)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort") as xDialog:
+            xTabs = xDialog.getChild("tabcontrol")
+            select_pos(xTabs, "0")
+            xNatural = xDialog.getChild("naturalsort")
+            xNatural.executeAction("CLICK", tuple())
         #Verify
         self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "MW100SSMOU456.996JIL4")
         self.assertEqual(get_cell_by_position(document, 0, 0, 1).getString(), "MW101SSMOU456.996JIL4")
@@ -60,15 +57,12 @@ class CalcNaturalSorting(UITestCase):
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "D1:D4"}))
 
         #Open sort dialog by DATA - SORT
-        self.ui_test.execute_dialog_through_command(".uno:DataSort")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xTabs = xDialog.getChild("tabcontrol")
-        select_pos(xTabs, "1")
-        xNatural = xDialog.getChild("naturalsort")
-        if (get_state_as_dict(xNatural)["Selected"]) == "false":
-            xNatural.executeAction("CLICK", tuple())
-        xOk = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOk)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort") as xDialog:
+            xTabs = xDialog.getChild("tabcontrol")
+            select_pos(xTabs, "1")
+            xNatural = xDialog.getChild("naturalsort")
+            if (get_state_as_dict(xNatural)["Selected"]) == "false":
+                xNatural.executeAction("CLICK", tuple())
 
         self.assertEqual(get_cell_by_position(document, 0, 3, 0).getString(), "MW-1")
         self.assertEqual(get_cell_by_position(document, 0, 3, 1).getString(), "MW-2")
@@ -91,17 +85,14 @@ class CalcNaturalSorting(UITestCase):
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:D1"}))
 
         #Open sort dialog by DATA - SORT
-        self.ui_test.execute_dialog_through_command(".uno:DataSort")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xTabs = xDialog.getChild("tabcontrol")
-        xleftright = xDialog.getChild("leftright")
-        select_pos(xTabs, "1")
-        xNatural = xDialog.getChild("naturalsort")
-        xleftright.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xNatural)["Selected"]) == "false":
-            xNatural.executeAction("CLICK", tuple())
-        xOk = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOk)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort") as xDialog:
+            xTabs = xDialog.getChild("tabcontrol")
+            xleftright = xDialog.getChild("leftright")
+            select_pos(xTabs, "1")
+            xNatural = xDialog.getChild("naturalsort")
+            xleftright.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xNatural)["Selected"]) == "false":
+                xNatural.executeAction("CLICK", tuple())
 
         #Verify
         self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "MW-1")
