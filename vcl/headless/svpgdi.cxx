@@ -51,6 +51,7 @@
 #include <basegfx/utils/systemdependentdata.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <comphelper/lok.hxx>
+#include <comphelper/profilezone.hxx>
 #include <unx/gendata.hxx>
 #include <dlfcn.h>
 
@@ -259,6 +260,7 @@ namespace
             : m_bForceARGB32(bForceARGB32)
 #endif
         {
+            comphelper::ProfileZone pz("SourceHelper::SourceHelper");
             const SvpSalBitmap& rSrcBmp = static_cast<const SvpSalBitmap&>(rSourceBitmap);
 #ifdef HAVE_CAIRO_FORMAT_RGB24_888
             if ((rSrcBmp.GetBitCount() != 32 && rSrcBmp.GetBitCount() != 24) || bForceARGB32)
