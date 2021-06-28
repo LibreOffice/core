@@ -63,9 +63,6 @@ private:
     std::condition_variable cv;
     std::mutex mMutex;
     bool mReady;
-
-    OUString mAction;
-    css::uno::Sequence<css::beans::PropertyValue> mPropValues;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
