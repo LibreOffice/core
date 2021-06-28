@@ -56,6 +56,7 @@
 #include <twolines.hrc>
 #include <svl/intitem.hxx>
 #include <svx/flagsdef.hxx>
+#include <FontFeatures.hxx>
 #include <FontFeaturesDialog.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
@@ -237,6 +238,7 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
     , m_xCTLFontLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("ctllanglb")))
     , m_xCTLFontTypeFT(m_xBuilder->weld_label("ctlfontinfo"))
     , m_xCTLFontFeaturesButton(m_xBuilder->weld_button("ctl_features_button"))
+    , m_xVDev(*Application::GetDefaultDevice(), DeviceFormat::DEFAULT, DeviceFormat::DEFAULT)
 {
     m_xPreviewWin.reset(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWin));
 #ifdef IOS
@@ -505,6 +507,35 @@ void SvxCharNamePage::UpdatePreview_Impl()
     m_xCTLFontTypeFT->set_label(pFontList->GetFontMapText(aCTLFontMetric));
 
     m_aPreviewWin.Invalidate();
+}
+void SvxCharNamePage::EnableFeatureButton(const weld::Widget& rNameBox)
+{
+    OUString sFontName;
+    weld::Button* pButton= nullptr;
+if (m_xWestFontNameLB.get() == &rNameBox)
+    {
+        sFontName = m_xWestFontNameLB->get_active_text();
+        pButton= m_xWestFontFeaturesButton.get();
+    }
+    else if (m_xEastFontNameLB.get() == &rNameBox)
+    {
+        sFontName = m_xEastFontNameLB->get_active_text();
+        pButton=m_xEastFontFeaturesButton.get();
+    }
+    else if (m_xCTLFontNameLB.get() == &rNameBox)
+    {
+       sFontName = m_xCTLFontNameLB->get_active_text();
+      pButton= m_xCTLFontFeaturesButton.get();
+    }
+    else
+    {
+        SAL_WARN( "cui.tabpages", "invalid font name box" );
+        return;
+    }
+
+    bool  bEnable = !getFontFeatureList(sFontName, *m_xVDev).empty();
+
+    pButton->set_sensitive(bEnable);
 }
 
 void SvxCharNamePage::FillStyleBox_Impl(const weld::Widget& rNameBox)
@@ -827,6 +858,8 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
             m_xCTLFontTypeFT->set_label(sMapText);
             break;
     }
+
+    EnableFeatureButton(*pNameBox);
 
     // save these settings
     pNameBox->save_value();
@@ -1173,6 +1206,7 @@ void SvxCharNamePage::FontModifyHdl_Impl(const weld::Widget& rNameBox)
     {
         FillStyleBox_Impl(rNameBox);
         FillSizeBox_Impl(rNameBox);
+        EnableFeatureButton(rNameBox);
     }
 }
 
