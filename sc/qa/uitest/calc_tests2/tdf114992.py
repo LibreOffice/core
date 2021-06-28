@@ -15,10 +15,8 @@ class tdf114992(UITestCase):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
-            self.ui_test.execute_dialog_through_command(".uno:Remove")  #delete sheet
-            xDialog = self.xUITest.getTopFocusWindow()
-            xOKButton = xDialog.getChild("yes")
-            xOKButton.executeAction("CLICK", tuple())
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:Remove", close_button="yes"):
+                pass
 
             self.assertEqual(calc_doc.Sheets.getCount(), 1)
             self.xUITest.executeCommand(".uno:Undo")
