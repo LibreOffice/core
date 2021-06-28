@@ -23,7 +23,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
-#include <com/sun/star/xml/sax/XFastShapeContextHandler.hpp>
 #include <oox/mathml/importutils.hxx>
 #include <rtl/ref.hxx>
 #include "OOXMLParserState.hxx"
@@ -448,7 +447,7 @@ class OOXMLFastContextHandlerShape: public OOXMLFastContextHandlerProperties
     bool m_bShapeStarted;
     /// Is it necessary to pop the stack in the dtor?
     bool m_bShapeContextPushed;
-    css::uno::Reference<css::xml::sax::XFastShapeContextHandler> mrShapeContext;
+    rtl::Reference<oox::shape::ShapeContextHandler> mrShapeContext;
 
 public:
     explicit OOXMLFastContextHandlerShape(OOXMLFastContextHandler * pContext);

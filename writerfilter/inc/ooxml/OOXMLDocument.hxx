@@ -26,10 +26,10 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
-#include <com/sun/star/xml/sax/XFastShapeContextHandler.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
+#include <oox/shape/ShapeContextHandler.hxx>
 
 /**
    @file OOXMLDocument.hxx
@@ -211,8 +211,8 @@ public:
     virtual void setXNoteId(const sal_Int32 nId) = 0;
     virtual sal_Int32 getXNoteId() const = 0;
     virtual const OUString & getTarget() const = 0;
-    virtual css::uno::Reference<css::xml::sax::XFastShapeContextHandler> getShapeContext( ) = 0;
-    virtual void setShapeContext( css::uno::Reference<css::xml::sax::XFastShapeContextHandler> xContext ) = 0;
+    virtual rtl::Reference<oox::shape::ShapeContextHandler> getShapeContext( ) = 0;
+    virtual void setShapeContext( rtl::Reference<oox::shape::ShapeContextHandler> xContext ) = 0;
     /// Push context of drawingML shapes, so nested shapes are handled separately.
     virtual void pushShapeContext() = 0;
     /// Pop context of a previously pushed drawingML shape.
