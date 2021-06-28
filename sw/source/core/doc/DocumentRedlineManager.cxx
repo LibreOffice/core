@@ -195,6 +195,8 @@ void UpdateFramesForAddDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
                 {
                     frames.push_back(pFrame);
                 }
+                // set anchored objects as deleted
+                pFrame->SetDrawObjsAsDeleted(true);
             }
             if (frames.empty())
             {
@@ -289,6 +291,8 @@ void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
                 {
                     frames.push_back(pFrame);
                 }
+                // set anchored objects as not deleted
+                pFrame->SetDrawObjsAsDeleted(false);
             }
             if (frames.empty())
             {
