@@ -67,20 +67,17 @@ class CreateRangeNameTest(UITestCase):
         self.assertEqual(3.0, get_cell_by_position(document, 0, 0, 1).getValue())
 
         # Change the name
-        self.ui_test.execute_dialog_through_command(".uno:DefineName")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xNamesList = xDialog.getChild('names')
-        self.assertEqual(1, len(xNamesList.getChildren()))
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:DefineName") as xDialog:
+            xNamesList = xDialog.getChild('names')
+            self.assertEqual(1, len(xNamesList.getChildren()))
 
-        xName = xDialog.getChild('name')
-        self.assertEqual( 'RANGE1', get_state_as_dict(xName)["Text"])
+            xName = xDialog.getChild('name')
+            self.assertEqual( 'RANGE1', get_state_as_dict(xName)["Text"])
 
-        xName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-        xName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-        xName.executeAction("TYPE", mkPropertyValues({"TEXT":"RANGE2"}))
+            xName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+            xName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+            xName.executeAction("TYPE", mkPropertyValues({"TEXT":"RANGE2"}))
 
-        xOkBtn = xDialog.getChild("ok")
-        xOkBtn.executeAction("CLICK", tuple())
 
         # tdf#87474 check the formula is updated after changing the name
         self.assertEqual("=SUM(RANGE2)", get_cell_by_position(document, 0, 0, 1).getFormula())
@@ -123,16 +120,12 @@ class CreateRangeNameTest(UITestCase):
         # Use the name range in the current sheet
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B1"}))
 
-        self.ui_test.execute_dialog_through_command(".uno:InsertName")
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertName", close_button="paste") as xDialog:
 
-        xCtrl = xDialog.getChild('ctrl')
-        self.assertEqual(1, len(xCtrl.getChildren()))
-        self.assertEqual("localRangeName\t$Sheet1.$A$1\tSheet1", get_state_as_dict(xCtrl.getChild('0'))['Text'])
-        xCtrl.getChild('0').executeAction("SELECT", tuple())
-
-        xPasteBtn = xDialog.getChild("paste")
-        self.ui_test.close_dialog_through_button(xPasteBtn)
+            xCtrl = xDialog.getChild('ctrl')
+            self.assertEqual(1, len(xCtrl.getChildren()))
+            self.assertEqual("localRangeName\t$Sheet1.$A$1\tSheet1", get_state_as_dict(xCtrl.getChild('0'))['Text'])
+            xCtrl.getChild('0').executeAction("SELECT", tuple())
 
         # use return key to paste the name range
         gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
@@ -142,24 +135,18 @@ class CreateRangeNameTest(UITestCase):
         self.assertEqual("=localRangeName", get_cell_by_position(document, 0, 1, 0).getFormula())
 
         # Insert a new sheet
-        self.ui_test.execute_dialog_through_command(".uno:Insert")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xOKButton = xDialog.getChild("ok")
-        xOKButton.executeAction("CLICK", tuple())
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Insert"):
+            pass
 
         # Use the name range in the new sheet
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B1"}))
 
-        self.ui_test.execute_dialog_through_command(".uno:InsertName")
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertName", close_button="paste") as xDialog:
 
-        xCtrl = xDialog.getChild('ctrl')
-        self.assertEqual(1, len(xCtrl.getChildren()))
-        self.assertEqual("localRangeName\t$Sheet1.$A$1\tSheet1", get_state_as_dict(xCtrl.getChild('0'))['Text'])
-        xCtrl.getChild('0').executeAction("SELECT", tuple())
-
-        xPasteBtn = xDialog.getChild("paste")
-        self.ui_test.close_dialog_through_button(xPasteBtn)
+            xCtrl = xDialog.getChild('ctrl')
+            self.assertEqual(1, len(xCtrl.getChildren()))
+            self.assertEqual("localRangeName\t$Sheet1.$A$1\tSheet1", get_state_as_dict(xCtrl.getChild('0'))['Text'])
+            xCtrl.getChild('0').executeAction("SELECT", tuple())
 
         # use return key to paste the name range
         gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
@@ -171,16 +158,13 @@ class CreateRangeNameTest(UITestCase):
         # and AssertionError: '=Sheet1.localRangeName' != '=localrangename'
         self.assertEqual("=Sheet1.localRangeName", get_cell_by_position(document, 0, 1, 0).getFormula())
 
-        self.ui_test.execute_dialog_through_command(".uno:DefineName")
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:DefineName") as xDialog:
 
-        # tdf#138851: Without the fix in place, this test would have failed with
-        # AssertionError: 'Sheet1' != 'Document (Global)'
-        xScope = xDialog.getChild("scope")
-        self.assertEqual("Sheet1", get_state_as_dict(xScope)['SelectEntryText'])
+            # tdf#138851: Without the fix in place, this test would have failed with
+            # AssertionError: 'Sheet1' != 'Document (Global)'
+            xScope = xDialog.getChild("scope")
+            self.assertEqual("Sheet1", get_state_as_dict(xScope)['SelectEntryText'])
 
-        xOkBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOkBtn)
 
         self.ui_test.close_doc()
 

@@ -126,7 +126,8 @@ class UITest(object):
         try:
             yield xDialog
         finally:
-            self.close_dialog_through_button(xDialog.getChild(close_button))
+            if close_button:
+                self.close_dialog_through_button(xDialog.getChild(close_button))
 
     def execute_modeless_dialog_through_command(self, command, printNames=False):
         with EventListener(self._xContext, "ModelessDialogVisible", printNames = printNames) as event:

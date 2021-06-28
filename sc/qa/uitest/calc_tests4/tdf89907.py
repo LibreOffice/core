@@ -29,16 +29,13 @@ class tdf89907(UITestCase):
         #Optimal Width
         self.xUITest.executeCommand(".uno:SetOptimalColumnWidthDirect")
         # Data - Text to Columns
-        self.ui_test.execute_dialog_through_command(".uno:TextToColumns")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xother = xDialog.getChild("other")
-        xinputother = xDialog.getChild("inputother")
-        if (get_state_as_dict(xother)["Selected"]) == "false":
-            xother.executeAction("CLICK", tuple())
-        xinputother.executeAction("TYPE", mkPropertyValues({"TEXT":"."}))
-        # Click Ok
-        xOK = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOK)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:TextToColumns") as xDialog:
+            xother = xDialog.getChild("other")
+            xinputother = xDialog.getChild("inputother")
+            if (get_state_as_dict(xother)["Selected"]) == "false":
+                xother.executeAction("CLICK", tuple())
+            xinputother.executeAction("TYPE", mkPropertyValues({"TEXT":"."}))
+            # Click Ok
 
         #Verify
         self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "afasdfs")

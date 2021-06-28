@@ -16,11 +16,9 @@ class autofilter(UITestCase):
             #autofilter exist
             self.assertEqual(calc_doc.getPropertyValue("UnnamedDatabaseRanges").getByTable(0).AutoFilter, True)
 
-            self.ui_test.execute_dialog_through_command(".uno:DataSort")
-            xDialog = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort", close_button="cancel"):
+                pass
 
-            xcancBtn = xDialog.getChild("cancel")
-            self.ui_test.close_dialog_through_button(xcancBtn)
             #autofilter still exist
             self.assertEqual(calc_doc.getPropertyValue("UnnamedDatabaseRanges").getByTable(0).AutoFilter, True)
 
@@ -37,18 +35,15 @@ class autofilter(UITestCase):
         enter_text_to_cell(xGridWindow, "B3", "d")
         xGridWindow.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B1"}))
 
-        self.ui_test.execute_dialog_through_command(".uno:DataFilterAutoFilter")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xYesBtn = xDialog.getChild("yes")
-        self.ui_test.close_dialog_through_button(xYesBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataFilterAutoFilter", close_button="yes"):
+            pass
 
         xGridWindow.executeAction("SELECT", mkPropertyValues({"RANGE": "A2:A3"}))
         self.xUITest.executeCommand(".uno:SelectRow") #select two rows
 
-        self.ui_test.execute_dialog_through_command(".uno:DataSort")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort"):
+            pass
+
         #autofilter still exist
         self.assertEqual(document.getPropertyValue("UnnamedDatabaseRanges").getByTable(0).AutoFilter, True)
 
@@ -64,10 +59,9 @@ class autofilter(UITestCase):
 
             xGridWindow.executeAction("SELECT", mkPropertyValues({"RANGE": "A2:E6"}))
 
-            self.ui_test.execute_dialog_through_command(".uno:DataSort")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort"):
+                pass
+
             #autofilter still exist
             self.assertEqual(calc_doc.getPropertyValue("UnnamedDatabaseRanges").getByTable(0).AutoFilter, True)
 
